@@ -130,30 +130,6 @@ namespace Ipopt
     delta_aff_v_L_ = NULL;
     delta_aff_v_U_ = NULL;
 
-
-    /*
-    // create structures for the deltas (uninitialized)
-    delta_x_ = curr_x_->MakeNew();
-    delta_s_ = curr_s_->MakeNew();
-    delta_y_c_ = curr_y_c_->MakeNew();
-    delta_y_d_ = curr_y_d_->MakeNew();
-    delta_z_L_ = curr_z_L_->MakeNew();
-    delta_z_U_ = curr_z_U_->MakeNew();
-    delta_v_L_ = curr_v_L_->MakeNew();
-    delta_v_U_ = curr_v_U_->MakeNew();
-
-    // Initialize the steps to 0 (so that we can access them for
-    // example in IterationOutput before the first iteration)
-    delta_x_->Set(0.0);
-    delta_s_->Set(0.0);
-    delta_y_c_->Set(0.0);
-    delta_y_d_->Set(0.0);
-    delta_z_L_->Set(0.0);
-    delta_z_U_->Set(0.0);
-    delta_v_L_->Set(0.0);
-    delta_v_U_->Set(0.0);
-    */
-
     have_prototypes_ = true;
     have_deltas_ = false;
 
