@@ -179,3 +179,12 @@ bool MyNLP::eval_h(Index n, const Number* x, bool new_x,
   return true;
 }
 
+void MyNLP::finalize_solution(ApplicationReturnStatus status,
+			      Index n, const Number* x, const Number* z_L, const Number* z_U, 
+			      Index m, const Number* g, const Number* lambda,
+			      Number obj_value)
+{
+  // here is where we would store the solution to variables, or write to a file, etc
+  // so we could use the solution. Since the solution is displayed to the console,
+  // we currently do nothing here.
+}

@@ -16,25 +16,32 @@ extern "C"
 {
 #include "asl.h"
 #include "asl_pfgh.h"
+#include "getstub.h"
 }
 
 #include "AmplTNLP.hpp"
 #include "IpDenseVector.hpp"
 #include "IpGenTMatrix.hpp"
 #include "IpSymTMatrix.hpp"
-#include "getstub.h"
+#include "IpBlas.hpp"
 
 namespace Ipopt
 {
 
-  AmplTNLP::AmplTNLP(const SmartPtr<const Journalist>& jnlst, char**& argv, SmartPtr<AmplSuffixHandler> suffix_handler)
+  AmplTNLP::AmplTNLP(const SmartPtr<Journalist>& jnlst, char**& argv, SmartPtr<AmplSuffixHandler> suffix_handler)
       :
       TNLP(),
-      jnlst_(jnlst),
+      jnlst_(ConstPtr(jnlst)),
       asl_(NULL),
       obj_sign_(1),
       nz_h_full_(-1),
       non_const_x_(NULL),
+      x_sol_(NULL),
+      z_L_sol_(NULL),
+      z_U_sol_(NULL),
+      g_sol_(NULL),
+      obj_sol_(0.0),
+      lambda_sol_(NULL),
       objval_called_with_current_x_(false),
       conval_called_with_current_x_(false)
   {
@@ -177,6 +184,17 @@ namespace Ipopt
     }
 
     delete [] non_const_x_;
+    non_const_x_ = NULL;
+    delete [] x_sol_;
+    x_sol_ = NULL;
+    delete [] z_L_sol_;
+    z_L_sol_ = NULL;
+    delete [] z_U_sol_;
+    z_U_sol_ = NULL;
+    delete [] g_sol_;
+    g_sol_ = NULL;
+    delete [] lambda_sol_;
+    lambda_sol_ = NULL;
   }
 
   bool AmplTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, Index& nnz_h_lag)
@@ -380,6 +398,59 @@ namespace Ipopt
     return false;
   }
 
+  void AmplTNLP::finalize_solution(ApplicationReturnStatus status,
+                                   Index n, const Number* x, const Number* z_L, const Number* z_U,
+                                   Index m, const Number* g, const Number* lambda,
+                                   Number obj_value)
+  {
+    if (!x_sol_) {
+      x_sol_ = new Number[n];
+    }
+    if (!z_L_sol_) {
+      z_L_sol_ = new Number[n];
+    }
+    if (!z_U_sol_) {
+      z_U_sol_ = new Number[n];
+    }
+    if (!g_sol_) {
+      g_sol_ = new Number[m];
+    }
+    if (!lambda_sol_) {
+      lambda_sol_ = new Number[m];
+    }
+
+    IpBlasDcopy(n, x, 1, x_sol_, 1);
+    IpBlasDcopy(n, z_L, 1, z_L_sol_, 1);
+    IpBlasDcopy(n, z_U, 1, z_U_sol_, 1);
+    IpBlasDcopy(m, g, 1, g_sol_, 1);
+    IpBlasDcopy(m, lambda, 1, lambda_sol_, 1);
+    obj_sol_ = obj_value;
+
+    std::string message;
+    if (status == Solve_Succeeded) {
+      message = "Optimal Solution Found";
+    }
+    else if (status == Maximum_Iterations_Exceeded) {
+      message = "Maximum Iterations Exceeded";
+    }
+    else if (status == Solve_Failed) {
+      message = "Solve Failed";
+    }
+    else if (status == NonIpopt_Exception_Thrown) {
+      message = "Non-Ipopt Exception Thrown";
+    }
+    else if (status == Internal_Error) {
+      message = "Ipopt Internal Error";
+    }
+    else {
+      message = "Unkown Error";
+    }
+
+    // Write the .sol file
+    message = " \nEXIT: " + message;
+    write_solution_file(message.c_str());
+  }
+
   bool AmplTNLP::internal_objval(Number& obj_val)
   {
     ASL_pfgh* asl = asl_;
@@ -453,18 +524,18 @@ namespace Ipopt
     }
   }
 
-  void AmplTNLP::write_solution_file(const std::string& message,
-                                     Number* x, Number* y) const
+  void AmplTNLP::write_solution_file(const std::string& message) const
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl);
+    DBG_ASSERT(x_sol_ && lambda_sol_);
 
     // We need to copy the message into a non-const char array to make
     // it work with the AMPL C function.
     char* cmessage = new char[message.length()+1];
     strcpy(cmessage, message.c_str());
 
-    write_sol(cmessage, x, y, NULL);
+    write_sol(cmessage, x_sol_, lambda_sol_, NULL);
 
     delete [] cmessage;
   }

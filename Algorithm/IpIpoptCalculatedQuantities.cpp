@@ -2000,24 +2000,24 @@ namespace Ipopt
     if (!curr_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
       if (!trial_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
 
-	SmartPtr<const Vector> slack_x_L = curr_slack_x_L();
-	SmartPtr<const Vector> slack_x_U = curr_slack_x_U();
-	SmartPtr<const Vector> slack_s_L = curr_slack_s_L();
-	SmartPtr<const Vector> slack_s_U = curr_slack_s_U();
+        SmartPtr<const Vector> slack_x_L = curr_slack_x_L();
+        SmartPtr<const Vector> slack_x_U = curr_slack_x_U();
+        SmartPtr<const Vector> slack_s_L = curr_slack_s_L();
+        SmartPtr<const Vector> slack_s_U = curr_slack_s_U();
 
-	Index ncomps = z_L->Dim() + z_U->Dim() + v_L->Dim() + v_U->Dim();
+        Index ncomps = z_L->Dim() + z_U->Dim() + v_L->Dim() + v_U->Dim();
 
-	if (ncomps>0) {
-	  result = z_L->Dot(*slack_x_L);
-	  result += z_U->Dot(*slack_x_U);
-	  result += v_L->Dot(*slack_s_L);
-	  result += v_U->Dot(*slack_s_U);
+        if (ncomps>0) {
+          result = z_L->Dot(*slack_x_L);
+          result += z_U->Dot(*slack_x_U);
+          result += v_L->Dot(*slack_s_L);
+          result += v_U->Dot(*slack_s_U);
 
-	  result /= (Number)ncomps;
-	}
-	else {
-	  result = 0.;
-	}
+          result /= (Number)ncomps;
+        }
+        else {
+          result = 0.;
+        }
       }
 
       curr_avrg_compl_cache_.AddCachedResult(result, tdeps);
@@ -2052,24 +2052,24 @@ namespace Ipopt
     if (!trial_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
       if (!curr_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
 
-	SmartPtr<const Vector> slack_x_L = trial_slack_x_L();
-	SmartPtr<const Vector> slack_x_U = trial_slack_x_U();
-	SmartPtr<const Vector> slack_s_L = trial_slack_s_L();
-	SmartPtr<const Vector> slack_s_U = trial_slack_s_U();
+        SmartPtr<const Vector> slack_x_L = trial_slack_x_L();
+        SmartPtr<const Vector> slack_x_U = trial_slack_x_U();
+        SmartPtr<const Vector> slack_s_L = trial_slack_s_L();
+        SmartPtr<const Vector> slack_s_U = trial_slack_s_U();
 
-	Index ncomps = z_L->Dim() + z_U->Dim() + v_L->Dim() + v_U->Dim();
+        Index ncomps = z_L->Dim() + z_U->Dim() + v_L->Dim() + v_U->Dim();
 
-	if (ncomps>0) {
-	  result = z_L->Dot(*slack_x_L);
-	  result += z_U->Dot(*slack_x_U);
-	  result += v_L->Dot(*slack_s_L);
-	  result += v_U->Dot(*slack_s_U);
+        if (ncomps>0) {
+          result = z_L->Dot(*slack_x_L);
+          result += z_U->Dot(*slack_x_U);
+          result += v_L->Dot(*slack_s_L);
+          result += v_U->Dot(*slack_s_U);
 
-	  result /= (Number)ncomps;
-	}
-	else {
-	  result = 0.;
-	}
+          result /= (Number)ncomps;
+        }
+        else {
+          result = 0.;
+        }
       }
 
       trial_avrg_compl_cache_.AddCachedResult(result, tdeps);

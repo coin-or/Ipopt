@@ -11,41 +11,51 @@
 
 #include "IpReferenced.hpp"
 #include "IpSmartPtr.hpp"
+#include "IpJournalist.hpp"
 #include "IpTNLP.hpp"
 #include "IpNLP.hpp"
 
 namespace Ipopt
 {
-   enum ApplicationReturnStatus
-   {
-      Solve_Succeeded,
-      Maximum_Iterations_Exceeded,
-      Solve_Failed,
-      NonIpopt_Exception_Thrown,
-      Internal_Error
-   };
 
-   /** This is the main application class for making calls
-   *     to Ipopt. */
-   class IpoptApplication : public ReferencedObject
-   {
-   public:
-      IpoptApplication();
+  /** This is the main application class for making calls
+  *     to Ipopt. */
+  class IpoptApplication : public ReferencedObject
+  {
+  public:
+    IpoptApplication();
 
-      virtual ~IpoptApplication();
+    virtual ~IpoptApplication();
 
+    /**@name Solve methods */
+    //@{
+    /** Solve a problem that inherits from TNLP */
+    ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& nlp);
 
-      ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& nlp, 
-            const SmartPtr<OptionsList> additional_options = NULL);
+    /** Solve a problem that inherits from NLP */
+    ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp);
+    //@}
 
-      ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp,
-            const SmartPtr<OptionsList> additional_options = NULL);
+    /**@name Accessor methods */
+    //@{
+    /** Get the Journalist for printing output */
+    SmartPtr<Journalist> Jnlst()
+    {
+      return jnlst_;
+    }
 
-      /**@name Methods to set the options for the application */
-      //@{
-      //@}
+    /** Get the options list for setting options */
+    SmartPtr<OptionsList> Options()
+    {
+      return options_;
+    }
+    //@}
 
+    /**@name Methods to set the options for the application */
+    //@{
+    //@}
 
+  private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
      * These methods are not implemented and 
@@ -64,24 +74,25 @@ namespace Ipopt
     void operator=(const IpoptApplication&);
     //@}
 
-   /**@name Variables that customize the application behavior */
+    /**@name Variables that customize the application behavior */
     //@{
     /** Name of the file for detailed output */
-    std::string output_file_;
-    /** Print level of the file for detailed output */
-    EJournalLevel output_file_print_level_;
     /** Decide whether or not the PARAMS.DAT file should be read */
     bool read_params_dat_;
-    /** Decide whether or not to report the algorithm return status to the journalist */
-    bool report_solve_status_;
     /** Decide whether or not to report the solution to the journalist */
     bool report_solution_;
     /** Decide whether or not to force reporting of the solution to the console */
     bool force_report_solution_to_console_;
     /** Decide whether or not to report statistics */
     bool report_statistics_;
-   //@}
-   };
+    //@}
+
+    /** Journalist for reporting output */
+    SmartPtr<Journalist> jnlst_;
+
+    /** OptionsList used for the application */
+    SmartPtr<OptionsList> options_;
+  };
 } // namespace Ipopt
 
 #endif

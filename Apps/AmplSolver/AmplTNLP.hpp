@@ -34,7 +34,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
-    AmplTNLP(const SmartPtr<const Journalist>& jnlst, char**& argv, SmartPtr<AmplSuffixHandler> suffix_handler = NULL);
+    AmplTNLP(const SmartPtr<Journalist>& jnlst, char**& argv, SmartPtr<AmplSuffixHandler> suffix_handler = NULL);
 
     /** Default destructor */
     virtual ~AmplTNLP();
@@ -87,6 +87,14 @@ namespace Ipopt
                         Index* jCol, Number* values);
     //@}
 
+    /** @name Solution Methods */
+    //@{
+    virtual void finalize_solution(ApplicationReturnStatus status,
+                                   Index n, const Number* x, const Number* z_L, const Number* z_U,
+                                   Index m, const Number* g, const Number* lambda,
+                                   Number obj_value);
+    //@}
+
     /**@name Ampl specific methods */
     //@{
     ASL_pfgh* AmplSolverObject()
@@ -97,8 +105,7 @@ namespace Ipopt
     /** Write the solution file.  This is a wrapper for AMPL's
      *  write_sol.  TODO Maybe this should be at a different place, or
      *  collect the numbers itself? */
-    void write_solution_file(const std::string& message,
-                             Number* x, Number* y) const;
+    void write_solution_file(const std::string& message) const;
     //@}
 
   private:
@@ -121,6 +128,14 @@ namespace Ipopt
     //@{
     /** A non-const copy of x - this is kept up-to-date in apply_new_x */
     Number* non_const_x_;
+
+    /** Solution Vectors */
+    Number* x_sol_;
+    Number* z_L_sol_;
+    Number* z_U_sol_;
+    Number* g_sol_;
+    Number* lambda_sol_;
+    Number obj_sol_;
     //@}
 
     /**@name Flags to track internal state */

@@ -119,6 +119,15 @@ namespace Ipopt
                         Index* iRow, Index* jCol, Number* values)=0;
     //@}
 
+    /** @name Solution Methods */
+    //@{
+    /** This method is called when the algorithm is complete so the TNLP can store/write the solution */
+    virtual void finalize_solution(ApplicationReturnStatus status,
+				   Index n, const Number* x, const Number* z_L, const Number* z_U, 
+				   Index m, const Number* g, const Number* lambda,
+				   Number obj_value)=0;
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -137,11 +146,6 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const TNLP&);
     //@}
-
-    // CARL: I think we don't need this
-    //Number nlp_lower_bound_inf_;
-    //Number nlp_upper_bound_inf_;
-
   };
 
 } // namespace Ipopt

@@ -52,6 +52,12 @@ namespace Ipopt
                      Eval_Grad_F_CB eval_grad_f,
                      Eval_Jac_G_CB eval_jac_g,
                      Eval_H_CB eval_h,
+                     Number* x_sol,
+                     Number* z_L_sol,
+                     Number* z_U_sol,
+                     Number* g_sol,
+                     Number* lam_sol,
+                     Number* obj_sol,
                      UserDataPtr user_data);
 
     /** Default destructor */
@@ -100,6 +106,14 @@ namespace Ipopt
                         Number obj_factor, Index m, const Number* lambda,
                         bool new_lambda, Index nele_hess, Index* iRow,
                         Index* jCol, Number* values);
+    //@}
+
+    /** @name Solution Methods */
+    //@{
+    virtual void finalize_solution(ApplicationReturnStatus status,
+                                   Index n, const Number* x, const Number* z_L, const Number* z_U,
+                                   Index m, const Number* g, const Number* lambda,
+                                   Number obj_value);
     //@}
 
   private:
@@ -153,6 +167,14 @@ namespace Ipopt
 
     /** A non-const copy of x - this is kept up-to-date in apply_new_x */
     Number* non_const_x_;
+
+    /** Pointers to the user provided vectors for solution */
+    Number* x_sol_;
+    Number* z_L_sol_;
+    Number* z_U_sol_;
+    Number* g_sol_;
+    Number* lambda_sol_;
+    Number* obj_sol_;
 
     /** Internal function to update the internal and ampl state if the
      *  x value changes */

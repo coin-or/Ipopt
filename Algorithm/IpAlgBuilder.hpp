@@ -22,17 +22,17 @@ namespace Ipopt
   class AlgorithmBuilder
   {
   public:
-		/**@name Static methods for building Algorithm objects.
-		*		Most users will want to use BuildAlgorithmFromTNLP. 
-		*     The other methods are for more specialized algorithms
-		*/
-		//@{
-		//	static SmartPtr<IpoptAlgorithm> BuildAlgorithmFromTNLP(...)
-		
-		static SmartPtr<IpoptAlgorithm> BuildBasicAlgorithm(const Journalist& jnlst, 
-			const OptionsList& options,
-			const std::string& prefix);
-	  //@}
+    /**@name Static methods for building Algorithm objects.
+    *		Most users will want to use BuildAlgorithmFromTNLP. 
+    *     The other methods are for more specialized algorithms
+    */
+    //@{
+    //	static SmartPtr<IpoptAlgorithm> BuildAlgorithmFromTNLP(...)
+
+    static SmartPtr<IpoptAlgorithm> BuildBasicAlgorithm(const Journalist& jnlst,
+        const OptionsList& options,
+        const std::string& prefix);
+    //@}
   };
 } // namespace Ipopt
 

@@ -244,15 +244,15 @@ namespace Ipopt
       // regular primal-dual search direction, let's see if a step
       // including a higher-order correctior is already acceptable
       accept = TryCorrector(alpha_primal_test,
-			    alpha_primal,
-			    actual_delta_x,
-			    actual_delta_s,
-			    actual_delta_y_c,
-			    actual_delta_y_d,
-			    actual_delta_z_L,
-			    actual_delta_z_U,
-			    actual_delta_v_L,
-			    actual_delta_v_U);
+                            alpha_primal,
+                            actual_delta_x,
+                            actual_delta_s,
+                            actual_delta_y_c,
+                            actual_delta_y_d,
+                            actual_delta_z_L,
+                            actual_delta_z_U,
+                            actual_delta_v_L,
+                            actual_delta_v_U);
     }
     if (accept) {
       corr_taken = true;
@@ -263,60 +263,60 @@ namespace Ipopt
       // until step size becomes too small
 
       while (alpha_primal>alpha_min ||
-	     n_steps == 0) { // always allow the "full" step if it is
-			     // acceptable (even if alpha_primal<=alpha_min)
-	Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		       "Starting checks for alpha (primal) = %lf\n",
-		       alpha_primal);
+             n_steps == 0) { // always allow the "full" step if it is
+        // acceptable (even if alpha_primal<=alpha_min)
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "Starting checks for alpha (primal) = %lf\n",
+                       alpha_primal);
 
-	try {
-	  // Compute the primal trial point
-	  IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
-						   *actual_delta_x,
-						   *actual_delta_s);
+        try {
+          // Compute the primal trial point
+          IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
+              *actual_delta_x,
+              *actual_delta_s);
 
-	  if (magic_steps_) {
-	    PerformMagicStep();
-	  }
+          if (magic_steps_) {
+            PerformMagicStep();
+          }
 
-	  // If it is acceptable, stop the search
-	  accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
-	}
-	catch(IpoptNLP::Eval_Error& e) {
-	  e.ReportException(Jnlst());
-	  Jnlst().Printf(J_WARNING, J_MAIN,
-			 "Warning: Cutting back alpha due to evaluation error\n");
-	  accept = false;
-	}
+          // If it is acceptable, stop the search
+          accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
+        }
+        catch(IpoptNLP::Eval_Error& e) {
+          e.ReportException(Jnlst());
+          Jnlst().Printf(J_WARNING, J_MAIN,
+                         "Warning: Cutting back alpha due to evaluation error\n");
+          accept = false;
+        }
 
-	if (accept) {
-	  break;
-	}
+        if (accept) {
+          break;
+        }
 
-	Number theta_curr = IpCq().curr_constraint_violation();
-	Number theta_trial = IpCq().trial_constraint_violation();
-	if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
-	    theta_curr<=theta_trial && max_soc_>0) {
-	  // Try second order correction
-	  accept = TrySecondOrderCorrection(alpha_primal_test,
-					    alpha_primal,
-					    actual_delta_x,
-					    actual_delta_s,
-					    actual_delta_y_c,
-					    actual_delta_y_d,
-					    actual_delta_z_L,
-					    actual_delta_z_U,
-					    actual_delta_v_L,
-					    actual_delta_v_U);
-	}
-	if (accept) {
-	  soc_taken = true;
-	  break;
-	}
+        Number theta_curr = IpCq().curr_constraint_violation();
+        Number theta_trial = IpCq().trial_constraint_violation();
+        if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
+            theta_curr<=theta_trial && max_soc_>0) {
+          // Try second order correction
+          accept = TrySecondOrderCorrection(alpha_primal_test,
+                                            alpha_primal,
+                                            actual_delta_x,
+                                            actual_delta_s,
+                                            actual_delta_y_c,
+                                            actual_delta_y_d,
+                                            actual_delta_z_L,
+                                            actual_delta_z_U,
+                                            actual_delta_v_L,
+                                            actual_delta_v_U);
+        }
+        if (accept) {
+          soc_taken = true;
+          break;
+        }
 
-	// Point is not yet acceptable, try a shorter one
-	alpha_primal *= alpha_red_factor_;
-	n_steps++;
+        // Point is not yet acceptable, try a shorter one
+        alpha_primal *= alpha_red_factor_;
+        n_steps++;
       }
     }
 
@@ -324,9 +324,9 @@ namespace Ipopt
     // go to the restoration phase
     if (!accept) {
       if (IsValid(resto_phase_)) {
-	if (IpCq().curr_constraint_violation()==0.) {
-	  THROW_EXCEPTION(IpoptException, "Restoration phase called, but constraint violation is zero.");
-	}
+        if (IpCq().curr_constraint_violation()==0.) {
+          THROW_EXCEPTION(IpoptException, "Restoration phase called, but constraint violation is zero.");
+        }
 
         // Set the info fields for the first output line in the
         // restoration phase which reflects why the restoration phase
@@ -373,7 +373,7 @@ namespace Ipopt
     // Now compute values of the remaining variables into the trial points
     IpData().SetTrialEqMultipilersFromStep(alpha_primal,
                                            *actual_delta_y_c,
-					   *actual_delta_y_d);
+                                           *actual_delta_y_d);
     Number alpha_dual_max =
       IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
                                     *actual_delta_z_L, *actual_delta_z_U,
@@ -419,7 +419,8 @@ namespace Ipopt
     DBG_START_METH("FilterLineSearch::CheckAcceptabilityOfTrialPoint",
                    dbg_verbosity);
 
-    if (ls_always_accept_) return true;
+    if (ls_always_accept_)
+      return true;
 
     bool accept;
 
@@ -556,16 +557,16 @@ namespace Ipopt
 
   bool
   FilterLineSearch::TrySecondOrderCorrection(
-      Number alpha_primal_test,
-      Number& alpha_primal,
-      SmartPtr<const Vector>& actual_delta_x,
-      SmartPtr<const Vector>& actual_delta_s,
-      SmartPtr<const Vector>& actual_delta_y_c,
-      SmartPtr<const Vector>& actual_delta_y_d,
-      SmartPtr<const Vector>& actual_delta_z_L,
-      SmartPtr<const Vector>& actual_delta_z_U,
-      SmartPtr<const Vector>& actual_delta_v_L,
-      SmartPtr<const Vector>& actual_delta_v_U)
+    Number alpha_primal_test,
+    Number& alpha_primal,
+    SmartPtr<const Vector>& actual_delta_x,
+    SmartPtr<const Vector>& actual_delta_s,
+    SmartPtr<const Vector>& actual_delta_y_c,
+    SmartPtr<const Vector>& actual_delta_y_d,
+    SmartPtr<const Vector>& actual_delta_z_L,
+    SmartPtr<const Vector>& actual_delta_z_U,
+    SmartPtr<const Vector>& actual_delta_v_L,
+    SmartPtr<const Vector>& actual_delta_v_U)
   {
     DBG_START_METH("FilterLineSearch::TrySecondOrderCorrection",
                    dbg_verbosity);
@@ -583,18 +584,18 @@ namespace Ipopt
     c_soc->Copy(*IpCq().curr_c());
     dms_soc->Copy(*IpCq().curr_d_minus_s());
     while (count_soc<max_soc_ &&
-	   theta_trial<=kappa_soc_*theta_soc_old &&
-	   !accept) {
+           theta_trial<=kappa_soc_*theta_soc_old &&
+           !accept) {
       if (count_soc==0) {
-	theta_soc_old = theta_curr;
+        theta_soc_old = theta_curr;
       }
       else {
-	theta_soc_old = theta_trial;
+        theta_soc_old = theta_trial;
       }
 
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		     "Trying second order correction number %d\n",
-		     count_soc+1);
+                     "Trying second order correction number %d\n",
+                     count_soc+1);
 
       // Compute SOC constraint violation
       c_soc->Scal(alpha_primal_soc);
@@ -613,74 +614,74 @@ namespace Ipopt
       SmartPtr<Vector> delta_soc_v_U = actual_delta_v_U->MakeNew();
 
       SmartPtr<const Vector> rhs_grad_lag_x
-	= IpCq().curr_grad_lag_x();
+      = IpCq().curr_grad_lag_x();
       SmartPtr<const Vector> rhs_grad_lag_s
-	= IpCq().curr_grad_lag_s();
+      = IpCq().curr_grad_lag_s();
       SmartPtr<const Vector> rhs_rel_compl_x_L
-	= IpCq().curr_relaxed_compl_x_L();
+      = IpCq().curr_relaxed_compl_x_L();
       SmartPtr<const Vector> rhs_rel_compl_x_U
-	= IpCq().curr_relaxed_compl_x_U();
+      = IpCq().curr_relaxed_compl_x_U();
       SmartPtr<const Vector> rhs_rel_compl_s_L
-	= IpCq().curr_relaxed_compl_s_L();
+      = IpCq().curr_relaxed_compl_s_L();
       SmartPtr<const Vector> rhs_rel_compl_s_U
-	= IpCq().curr_relaxed_compl_s_U();
+      = IpCq().curr_relaxed_compl_s_U();
       pd_solver_->Solve(-1.0, 0.0,
-			*rhs_grad_lag_x,
-			*rhs_grad_lag_s,
-			*c_soc,
-			*dms_soc,
-			*rhs_rel_compl_x_L,
-			*rhs_rel_compl_x_U,
-			*rhs_rel_compl_s_L,
-			*rhs_rel_compl_s_U,
-			*delta_soc_x,
-			*delta_soc_s,
-			*delta_soc_y_c,
-			*delta_soc_y_d,
-			*delta_soc_z_L,
-			*delta_soc_z_U,
-			*delta_soc_v_L,
-			*delta_soc_v_U,
-			true);
+                        *rhs_grad_lag_x,
+                        *rhs_grad_lag_s,
+                        *c_soc,
+                        *dms_soc,
+                        *rhs_rel_compl_x_L,
+                        *rhs_rel_compl_x_U,
+                        *rhs_rel_compl_s_L,
+                        *rhs_rel_compl_s_U,
+                        *delta_soc_x,
+                        *delta_soc_s,
+                        *delta_soc_y_c,
+                        *delta_soc_y_d,
+                        *delta_soc_z_L,
+                        *delta_soc_z_U,
+                        *delta_soc_v_L,
+                        *delta_soc_v_U,
+                        true);
 
       // Compute step size
       alpha_primal_soc =
-	IpCq().primal_frac_to_the_bound(IpData().curr_tau(),
-					*delta_soc_x,
-					*delta_soc_s);
+        IpCq().primal_frac_to_the_bound(IpData().curr_tau(),
+                                        *delta_soc_x,
+                                        *delta_soc_s);
 
       // Check if trial point is acceptable
       try {
-	// Compute the primal trial point
-	IpData().SetTrialPrimalVariablesFromStep(alpha_primal_soc,
-						 *delta_soc_x,
-						 *delta_soc_s);
+        // Compute the primal trial point
+        IpData().SetTrialPrimalVariablesFromStep(alpha_primal_soc,
+            *delta_soc_x,
+            *delta_soc_s);
 
-	// in acceptance tests, use original step size!
-	accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
+        // in acceptance tests, use original step size!
+        accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
       }
       catch(IpoptNLP::Eval_Error& e) {
-	e.ReportException(Jnlst());
-	Jnlst().Printf(J_WARNING, J_MAIN, "Warning: SOC step rejected due to evaluation error\n");
-	accept = false;
+        e.ReportException(Jnlst());
+        Jnlst().Printf(J_WARNING, J_MAIN, "Warning: SOC step rejected due to evaluation error\n");
+        accept = false;
       }
 
       if (accept) {
-	Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Second order correction step accepted with %d corrections.\n", count_soc+1);
-	// Accept all SOC quantities
-	alpha_primal = alpha_primal_soc;
-	actual_delta_x = ConstPtr(delta_soc_x);
-	actual_delta_s = ConstPtr(delta_soc_s);
-	actual_delta_y_c = ConstPtr(delta_soc_y_c);
-	actual_delta_y_d = ConstPtr(delta_soc_y_d);
-	actual_delta_z_L = ConstPtr(delta_soc_z_L);
-	actual_delta_z_U = ConstPtr(delta_soc_z_U);
-	actual_delta_v_L = ConstPtr(delta_soc_v_L);
-	actual_delta_v_U = ConstPtr(delta_soc_v_U);
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Second order correction step accepted with %d corrections.\n", count_soc+1);
+        // Accept all SOC quantities
+        alpha_primal = alpha_primal_soc;
+        actual_delta_x = ConstPtr(delta_soc_x);
+        actual_delta_s = ConstPtr(delta_soc_s);
+        actual_delta_y_c = ConstPtr(delta_soc_y_c);
+        actual_delta_y_d = ConstPtr(delta_soc_y_d);
+        actual_delta_z_L = ConstPtr(delta_soc_z_L);
+        actual_delta_z_U = ConstPtr(delta_soc_z_U);
+        actual_delta_v_L = ConstPtr(delta_soc_v_L);
+        actual_delta_v_U = ConstPtr(delta_soc_v_U);
       }
       else {
-	count_soc++;
-	theta_trial = IpCq().trial_constraint_violation();
+        count_soc++;
+        theta_trial = IpCq().trial_constraint_violation();
       }
     }
     return accept;
@@ -688,16 +689,16 @@ namespace Ipopt
 
   bool
   FilterLineSearch::TryCorrector(
-      Number alpha_primal_test,
-      Number& alpha_primal,
-      SmartPtr<const Vector>& actual_delta_x,
-      SmartPtr<const Vector>& actual_delta_s,
-      SmartPtr<const Vector>& actual_delta_y_c,
-      SmartPtr<const Vector>& actual_delta_y_d,
-      SmartPtr<const Vector>& actual_delta_z_L,
-      SmartPtr<const Vector>& actual_delta_z_U,
-      SmartPtr<const Vector>& actual_delta_v_L,
-      SmartPtr<const Vector>& actual_delta_v_U)
+    Number alpha_primal_test,
+    Number& alpha_primal,
+    SmartPtr<const Vector>& actual_delta_x,
+    SmartPtr<const Vector>& actual_delta_s,
+    SmartPtr<const Vector>& actual_delta_y_c,
+    SmartPtr<const Vector>& actual_delta_y_d,
+    SmartPtr<const Vector>& actual_delta_z_L,
+    SmartPtr<const Vector>& actual_delta_z_U,
+    SmartPtr<const Vector>& actual_delta_v_L,
+    SmartPtr<const Vector>& actual_delta_v_U)
   {
     DBG_START_METH("FilterLineSearch::TryCorrector",
                    dbg_verbosity);
@@ -715,134 +716,133 @@ namespace Ipopt
     SmartPtr<Vector> delta_corr_v_U;
 
     switch (corrector_type_) {
-    case 1 :
-      {
-	// Standard MPC corrector
+      case 1 : {
+        // Standard MPC corrector
 
-	// ToDo: For now, recompute the affine scaling step.  Later we
-	// have to find a way so that it doesn't have to be recomputed
-	// of it has been obtained as a probing step
-	SmartPtr<Vector> delta_aff_x = actual_delta_x->MakeNew();
-	SmartPtr<Vector> delta_aff_s = actual_delta_s->MakeNew();
-	SmartPtr<Vector> delta_aff_y_c = actual_delta_y_c->MakeNew();
-	SmartPtr<Vector> delta_aff_y_d = actual_delta_y_d->MakeNew();
-	SmartPtr<Vector> delta_aff_z_L = actual_delta_z_L->MakeNew();
-	SmartPtr<Vector> delta_aff_z_U = actual_delta_z_U->MakeNew();
-	SmartPtr<Vector> delta_aff_v_L = actual_delta_v_L->MakeNew();
-	SmartPtr<Vector> delta_aff_v_U = actual_delta_v_U->MakeNew();
+        // ToDo: For now, recompute the affine scaling step.  Later we
+        // have to find a way so that it doesn't have to be recomputed
+        // of it has been obtained as a probing step
+        SmartPtr<Vector> delta_aff_x = actual_delta_x->MakeNew();
+        SmartPtr<Vector> delta_aff_s = actual_delta_s->MakeNew();
+        SmartPtr<Vector> delta_aff_y_c = actual_delta_y_c->MakeNew();
+        SmartPtr<Vector> delta_aff_y_d = actual_delta_y_d->MakeNew();
+        SmartPtr<Vector> delta_aff_z_L = actual_delta_z_L->MakeNew();
+        SmartPtr<Vector> delta_aff_z_U = actual_delta_z_U->MakeNew();
+        SmartPtr<Vector> delta_aff_v_L = actual_delta_v_L->MakeNew();
+        SmartPtr<Vector> delta_aff_v_U = actual_delta_v_U->MakeNew();
 
-	// Now solve the primal-dual system to get the step
-	pd_solver_->Solve(-1.0, 0.0,
-			  *IpCq().curr_grad_lag_x(),
-			  *IpCq().curr_grad_lag_s(),
-			  *IpCq().curr_c(),
-			  *IpCq().curr_d_minus_s(),
-			  *IpCq().curr_compl_x_L(),
-			  *IpCq().curr_compl_x_U(),
-			  *IpCq().curr_compl_s_L(),
-			  *IpCq().curr_compl_s_U(),
-			  *delta_aff_x,
-			  *delta_aff_s,
-			  *delta_aff_y_c,
-			  *delta_aff_y_d,
-			  *delta_aff_z_L,
-			  *delta_aff_z_U,
-			  *delta_aff_v_L,
-			  *delta_aff_v_U,
-			  true);
+        // Now solve the primal-dual system to get the step
+        pd_solver_->Solve(-1.0, 0.0,
+                          *IpCq().curr_grad_lag_x(),
+                          *IpCq().curr_grad_lag_s(),
+                          *IpCq().curr_c(),
+                          *IpCq().curr_d_minus_s(),
+                          *IpCq().curr_compl_x_L(),
+                          *IpCq().curr_compl_x_U(),
+                          *IpCq().curr_compl_s_L(),
+                          *IpCq().curr_compl_s_U(),
+                          *delta_aff_x,
+                          *delta_aff_s,
+                          *delta_aff_y_c,
+                          *delta_aff_y_d,
+                          *delta_aff_z_L,
+                          *delta_aff_z_U,
+                          *delta_aff_v_L,
+                          *delta_aff_v_U,
+                          true);
 
-	DBG_PRINT_VECTOR(2, "delta_aff_x", *delta_aff_x);
-	DBG_PRINT_VECTOR(2, "delta_aff_s", *delta_aff_s);
-	DBG_PRINT_VECTOR(2, "delta_aff_y_c", *delta_aff_y_c);
-	DBG_PRINT_VECTOR(2, "delta_aff_y_d", *delta_aff_y_d);
-	DBG_PRINT_VECTOR(2, "delta_aff_z_L", *delta_aff_z_L);
-	DBG_PRINT_VECTOR(2, "delta_aff_z_U", *delta_aff_z_U);
-	DBG_PRINT_VECTOR(2, "delta_aff_v_L", *delta_aff_v_L);
-	DBG_PRINT_VECTOR(2, "delta_aff_v_U", *delta_aff_v_U);
+        DBG_PRINT_VECTOR(2, "delta_aff_x", *delta_aff_x);
+        DBG_PRINT_VECTOR(2, "delta_aff_s", *delta_aff_s);
+        DBG_PRINT_VECTOR(2, "delta_aff_y_c", *delta_aff_y_c);
+        DBG_PRINT_VECTOR(2, "delta_aff_y_d", *delta_aff_y_d);
+        DBG_PRINT_VECTOR(2, "delta_aff_z_L", *delta_aff_z_L);
+        DBG_PRINT_VECTOR(2, "delta_aff_z_U", *delta_aff_z_U);
+        DBG_PRINT_VECTOR(2, "delta_aff_v_L", *delta_aff_v_L);
+        DBG_PRINT_VECTOR(2, "delta_aff_v_U", *delta_aff_v_U);
 
-	delta_corr_x = actual_delta_x->MakeNew();
-	delta_corr_s = actual_delta_s->MakeNew();
-	delta_corr_y_c = actual_delta_y_c->MakeNew();
-	delta_corr_y_d = actual_delta_y_d->MakeNew();
-	delta_corr_z_L = actual_delta_z_L->MakeNew();
-	delta_corr_z_U = actual_delta_z_U->MakeNew();
-	delta_corr_v_L = actual_delta_v_L->MakeNew();
-	delta_corr_v_U = actual_delta_v_U->MakeNew();
+        delta_corr_x = actual_delta_x->MakeNew();
+        delta_corr_s = actual_delta_s->MakeNew();
+        delta_corr_y_c = actual_delta_y_c->MakeNew();
+        delta_corr_y_d = actual_delta_y_d->MakeNew();
+        delta_corr_z_L = actual_delta_z_L->MakeNew();
+        delta_corr_z_U = actual_delta_z_U->MakeNew();
+        delta_corr_v_L = actual_delta_v_L->MakeNew();
+        delta_corr_v_U = actual_delta_v_U->MakeNew();
 
-	delta_corr_x->Copy(*actual_delta_x);
-	delta_corr_s->Copy(*actual_delta_s);
-	delta_corr_y_c->Copy(*actual_delta_y_c);
-	delta_corr_y_d->Copy(*actual_delta_y_d);
-	delta_corr_z_L->Copy(*actual_delta_z_L);
-	delta_corr_z_U->Copy(*actual_delta_z_U);
-	delta_corr_v_L->Copy(*actual_delta_v_L);
-	delta_corr_v_U->Copy(*actual_delta_v_U);
+        delta_corr_x->Copy(*actual_delta_x);
+        delta_corr_s->Copy(*actual_delta_s);
+        delta_corr_y_c->Copy(*actual_delta_y_c);
+        delta_corr_y_d->Copy(*actual_delta_y_d);
+        delta_corr_z_L->Copy(*actual_delta_z_L);
+        delta_corr_z_U->Copy(*actual_delta_z_U);
+        delta_corr_v_L->Copy(*actual_delta_v_L);
+        delta_corr_v_U->Copy(*actual_delta_v_U);
 
-	SmartPtr<Vector> rhs_x = actual_delta_x->MakeNew();
-	SmartPtr<Vector> rhs_s = actual_delta_s->MakeNew();
-	SmartPtr<Vector> rhs_c = actual_delta_y_c->MakeNew();
-	SmartPtr<Vector> rhs_d = actual_delta_y_d->MakeNew();
-	SmartPtr<Vector> rhs_compl_x_L = actual_delta_z_L->MakeNew();
-	SmartPtr<Vector> rhs_compl_x_U = actual_delta_z_U->MakeNew();
-	SmartPtr<Vector> rhs_compl_s_L = actual_delta_v_L->MakeNew();
-	SmartPtr<Vector> rhs_compl_s_U = actual_delta_v_U->MakeNew();
+        SmartPtr<Vector> rhs_x = actual_delta_x->MakeNew();
+        SmartPtr<Vector> rhs_s = actual_delta_s->MakeNew();
+        SmartPtr<Vector> rhs_c = actual_delta_y_c->MakeNew();
+        SmartPtr<Vector> rhs_d = actual_delta_y_d->MakeNew();
+        SmartPtr<Vector> rhs_compl_x_L = actual_delta_z_L->MakeNew();
+        SmartPtr<Vector> rhs_compl_x_U = actual_delta_z_U->MakeNew();
+        SmartPtr<Vector> rhs_compl_s_L = actual_delta_v_L->MakeNew();
+        SmartPtr<Vector> rhs_compl_s_U = actual_delta_v_U->MakeNew();
 
-	rhs_x->Set(0.);
-	rhs_s->Set(0.);
-	rhs_c->Set(0.);
-	rhs_d->Set(0.);
+        rhs_x->Set(0.);
+        rhs_s->Set(0.);
+        rhs_c->Set(0.);
+        rhs_d->Set(0.);
 
-	IpNLP().Px_L()->TransMultVector(-1., *delta_aff_x, 0., *rhs_compl_x_L);
-	rhs_compl_x_L->ElementWiseMultiply(*delta_aff_z_L);
-	IpNLP().Px_U()->TransMultVector(1., *delta_aff_x, 0., *rhs_compl_x_U);
-	rhs_compl_x_U->ElementWiseMultiply(*delta_aff_z_U);
-	IpNLP().Pd_L()->TransMultVector(-1., *delta_aff_s, 0., *rhs_compl_s_L);
-	rhs_compl_s_L->ElementWiseMultiply(*delta_aff_v_L);
-	IpNLP().Pd_U()->TransMultVector(1., *delta_aff_s, 0., *rhs_compl_s_U);
-	rhs_compl_s_U->ElementWiseMultiply(*delta_aff_v_U);
+        IpNLP().Px_L()->TransMultVector(-1., *delta_aff_x, 0., *rhs_compl_x_L);
+        rhs_compl_x_L->ElementWiseMultiply(*delta_aff_z_L);
+        IpNLP().Px_U()->TransMultVector(1., *delta_aff_x, 0., *rhs_compl_x_U);
+        rhs_compl_x_U->ElementWiseMultiply(*delta_aff_z_U);
+        IpNLP().Pd_L()->TransMultVector(-1., *delta_aff_s, 0., *rhs_compl_s_L);
+        rhs_compl_s_L->ElementWiseMultiply(*delta_aff_v_L);
+        IpNLP().Pd_U()->TransMultVector(1., *delta_aff_s, 0., *rhs_compl_s_U);
+        rhs_compl_s_U->ElementWiseMultiply(*delta_aff_v_U);
 
-	pd_solver_->Solve(1.0, 1.0,
-			  *rhs_x,
-			  *rhs_s,
-			  *rhs_c,
-			  *rhs_d,
-			  *rhs_compl_x_L,
-			  *rhs_compl_x_U,
-			  *rhs_compl_s_L,
-			  *rhs_compl_s_U,
-			  *delta_corr_x,
-			  *delta_corr_s,
-			  *delta_corr_y_c,
-			  *delta_corr_y_d,
-			  *delta_corr_z_L,
-			  *delta_corr_z_U,
-			  *delta_corr_v_L,
-			  *delta_corr_v_U,
-			  true);
+        pd_solver_->Solve(1.0, 1.0,
+                          *rhs_x,
+                          *rhs_s,
+                          *rhs_c,
+                          *rhs_d,
+                          *rhs_compl_x_L,
+                          *rhs_compl_x_U,
+                          *rhs_compl_s_L,
+                          *rhs_compl_s_U,
+                          *delta_corr_x,
+                          *delta_corr_s,
+                          *delta_corr_y_c,
+                          *delta_corr_y_d,
+                          *delta_corr_z_L,
+                          *delta_corr_z_U,
+                          *delta_corr_v_L,
+                          *delta_corr_v_U,
+                          true);
 
-	DBG_PRINT_VECTOR(2, "delta_corr_x", *delta_corr_x);
-	DBG_PRINT_VECTOR(2, "delta_corr_s", *delta_corr_s);
-	DBG_PRINT_VECTOR(2, "delta_corr_y_c", *delta_corr_y_c);
-	DBG_PRINT_VECTOR(2, "delta_corr_y_d", *delta_corr_y_d);
-	DBG_PRINT_VECTOR(2, "delta_corr_z_L", *delta_corr_z_L);
-	DBG_PRINT_VECTOR(2, "delta_corr_z_U", *delta_corr_z_U);
-	DBG_PRINT_VECTOR(2, "delta_corr_v_L", *delta_corr_v_L);
-	DBG_PRINT_VECTOR(2, "delta_corr_v_U", *delta_corr_v_U);
+        DBG_PRINT_VECTOR(2, "delta_corr_x", *delta_corr_x);
+        DBG_PRINT_VECTOR(2, "delta_corr_s", *delta_corr_s);
+        DBG_PRINT_VECTOR(2, "delta_corr_y_c", *delta_corr_y_c);
+        DBG_PRINT_VECTOR(2, "delta_corr_y_d", *delta_corr_y_d);
+        DBG_PRINT_VECTOR(2, "delta_corr_z_L", *delta_corr_z_L);
+        DBG_PRINT_VECTOR(2, "delta_corr_z_U", *delta_corr_z_U);
+        DBG_PRINT_VECTOR(2, "delta_corr_v_L", *delta_corr_v_L);
+        DBG_PRINT_VECTOR(2, "delta_corr_v_U", *delta_corr_v_U);
       }
       break;
-    default:
+      default:
       DBG_ASSERT("Unknown corrector_type value.");
     }
 
     // Compute step size
     Number alpha_primal_corr =
       IpCq().primal_frac_to_the_bound(IpData().curr_tau(),
-				      *delta_corr_x,
-				      *delta_corr_s);
+                                      *delta_corr_x,
+                                      *delta_corr_s);
     // Compute the primal trial point
     IpData().SetTrialPrimalVariablesFromStep(alpha_primal_corr,
-					     *delta_corr_x,
-					     *delta_corr_s);
+        *delta_corr_x,
+        *delta_corr_s);
 
     // Check if we want to not even try the filter criterion
     Number alpha_dual_max =
@@ -857,11 +857,11 @@ namespace Ipopt
     Number trial_avrg_compl = IpCq().trial_avrg_compl();
     Number curr_avrg_compl = IpCq().curr_avrg_compl();
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		   "avrg_compl(curr) = %e, avrg_compl(trial) = %e\n",
-		   curr_avrg_compl, trial_avrg_compl);
+                   "avrg_compl(curr) = %e, avrg_compl(trial) = %e\n",
+                   curr_avrg_compl, trial_avrg_compl);
     if (trial_avrg_compl>=2.*curr_avrg_compl) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		     "Rejecting corrector step, because trial compl is too large.\n" );
+                     "Rejecting corrector step, because trial compl is too large.\n" );
       return false;
     }
 
@@ -878,8 +878,8 @@ namespace Ipopt
 
     if (accept) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		     "Corrector step accepted with alpha_primal = %e\n",
-		     alpha_primal_corr);
+                     "Corrector step accepted with alpha_primal = %e\n",
+                     alpha_primal_corr);
       // Accept all SOC quantities
       alpha_primal = alpha_primal_corr;
       actual_delta_x = ConstPtr(delta_corr_x);
@@ -892,25 +892,25 @@ namespace Ipopt
       actual_delta_v_U = ConstPtr(delta_corr_v_U);
 
       if (Jnlst().ProduceOutput(J_MOREVECTOR, J_MAIN)) {
-	Jnlst().Printf(J_MOREVECTOR, J_MAIN,
-		       "*** Accepted corrector for Iteration: %d\n",
-		       IpData().iter_count());
-	Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-			    "delta_corr_x", *delta_corr_x);
-	Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-			    "delta_corr_s", *delta_corr_s);
-	Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-			    "delta_corr_y_c", *delta_corr_y_c);
-	Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-			    "delta_corr_y_d", *delta_corr_y_d);
-	Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-			    "delta_corr_z_L", *delta_corr_z_L);
-	Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-			    "delta_corr_z_U", *delta_corr_z_U);
-	Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-			    "delta_corr_v_L", *delta_corr_v_L);
-	Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-			    "delta_corr_v_U", *delta_corr_v_U);
+        Jnlst().Printf(J_MOREVECTOR, J_MAIN,
+                       "*** Accepted corrector for Iteration: %d\n",
+                       IpData().iter_count());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_corr_x", *delta_corr_x);
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_corr_s", *delta_corr_s);
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_corr_y_c", *delta_corr_y_c);
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_corr_y_d", *delta_corr_y_d);
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_corr_z_L", *delta_corr_z_L);
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_corr_z_U", *delta_corr_z_U);
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_corr_v_L", *delta_corr_v_L);
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_corr_v_U", *delta_corr_v_U);
       }
     }
 
@@ -924,8 +924,8 @@ namespace Ipopt
                    dbg_verbosity);
 
     DBG_PRINT((1,"Incoming barr = %e and constrviol %e\n",
-	       IpCq().trial_barrier_obj(),
-	       IpCq().trial_constraint_violation()));
+               IpCq().trial_barrier_obj(),
+               IpCq().trial_constraint_violation()));
     DBG_PRINT_VECTOR(2, "s in", *IpData().trial_s());
     DBG_PRINT_VECTOR(2, "d minus s in", *IpCq().trial_d_minus_s());
     DBG_PRINT_VECTOR(2, "slack_s_L in", *IpCq().trial_slack_s_L());
