@@ -189,17 +189,17 @@ namespace Ipopt
   inline
   Index ReferencedObject::ReferenceCount() const
   {
-    DBG_START_METH("ReferencedObject::ReferenceCount()", 0);
-    DBG_PRINT((1,"Returning reference_count_ = %d\n", reference_count_));
+    //    DBG_START_METH("ReferencedObject::ReferenceCount()", 0);
+    //    DBG_PRINT((1,"Returning reference_count_ = %d\n", reference_count_));
     return reference_count_;
   }
 
   inline
   void ReferencedObject::AddRef(const Referencer* referencer) const
   {
-    DBG_START_METH("ReferencedObject::AddRef(const Referencer* referencer)", 0);
+    //    DBG_START_METH("ReferencedObject::AddRef(const Referencer* referencer)", 0);
     reference_count_++;
-    DBG_PRINT((1, "New reference_count_ = %d\n", reference_count_));
+    //    DBG_PRINT((1, "New reference_count_ = %d\n", reference_count_));
 #     ifdef REF_DEBUG
 
     referencers_.push_back(referencer);
@@ -210,10 +210,10 @@ namespace Ipopt
   inline
   void ReferencedObject::ReleaseRef(const Referencer* referencer) const
   {
-    DBG_START_METH("ReferencedObject::ReleaseRef(const Referencer* referencer)",
-                   0);
+    //    DBG_START_METH("ReferencedObject::ReleaseRef(const Referencer* referencer)",
+    //                   0);
     reference_count_--;
-    DBG_PRINT((1, "New reference_count_ = %d\n", reference_count_));
+    //    DBG_PRINT((1, "New reference_count_ = %d\n", reference_count_));
 
 #     ifdef REF_DEBUG
 
