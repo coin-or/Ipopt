@@ -465,8 +465,8 @@ namespace Ipopt
     // Compute the right hand side for the augmented system formulation
     SmartPtr<Vector> augRhs_x = rhs_x.MakeNew();
     augRhs_x->Copy(rhs_x);
-    Px_L.AddMSinvZ(1.0, slack_x_L, rhs_zL, 1.0, *augRhs_x);
-    Px_U.AddMSinvZ(-1.0, slack_x_U, rhs_zU, 1.0, *augRhs_x);
+    Px_L.AddMSinvZ(1.0, slack_x_L, rhs_zL, *augRhs_x);
+    Px_U.AddMSinvZ(-1.0, slack_x_U, rhs_zU, *augRhs_x);
     /*
     AddPSinvZ(1.0, Px_L, slack_x_L, rhs_zL, 1.0, *augRhs_x);
     AddPSinvZ(-1.0, Px_U, slack_x_U, rhs_zU, 1.0, *augRhs_x);
@@ -474,8 +474,8 @@ namespace Ipopt
 
     SmartPtr<Vector> augRhs_s = rhs_s.MakeNew();
     augRhs_s->Copy(rhs_s);
-    Pd_L.AddMSinvZ(1.0, slack_s_L, rhs_vL, 1.0, *augRhs_s);
-    Pd_U.AddMSinvZ(-1.0, slack_s_U, rhs_vU, 1.0, *augRhs_s);
+    Pd_L.AddMSinvZ(1.0, slack_s_L, rhs_vL, *augRhs_s);
+    Pd_U.AddMSinvZ(-1.0, slack_s_U, rhs_vU, *augRhs_s);
     /*
     AddPSinvZ(1.0, Pd_L, slack_s_L, rhs_vL, 1.0, *augRhs_s);
     AddPSinvZ(-1.0, Pd_U, slack_s_U, rhs_vU, 1.0, *augRhs_s);
@@ -856,6 +856,7 @@ namespace Ipopt
     }
   }
 
+  /*
   void PDFullSpaceSolver::AddPSinvZ(Number alpha, const Matrix& P,
                                     const Vector& S, const Vector& Z,
                                     Number beta, Vector& X)
@@ -876,30 +877,20 @@ namespace Ipopt
     X.Axpy(1., R);
     X.ElementWiseDivide(S);
   }
+  */
 
   void PDFullSpaceSolver::AxpBy(Number alpha, const Vector& X,
                                 Number beta, Vector& Y)
   {
     if (beta==0.) {
-      // ToDo we probably want a "CopyScal" method on vectors
-      Y.Copy(X);
-      if (alpha!=1.) {
-	Y.Scal(alpha);
-      }
-    }
-    else {
-      /* ToDo make sure that we can call this with Y as argument!!! */
-      Y.AddTwoVectors(alpha, X, beta, Y);
-    }
-    /*
-    if (beta==0.) {
       Y.Set(0.);
     }
-    else {
+    else if (beta!=1.) {
       Y.Scal(beta);
     }
-    Y.Axpy(alpha, X);
-    */
+    if (alpha!=0.) {
+      Y.Axpy(alpha, X);
+    }
   }
 
 } // namespace Ipopt
