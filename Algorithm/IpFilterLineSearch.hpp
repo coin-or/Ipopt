@@ -252,20 +252,44 @@ namespace Ipopt
     //     allow for different relaxation parameters values
     static bool Compare_le(Number lhs, Number rhs, Number BasVal);
 
-    /** Compute search direction including a second order correction.
-     *  Here, c_soc and d_minus_s_soc are assumed to be computed
-     *  accoring to Eqn. (27) in paper.
+    /** Try a second order correction for the constraints.  If the
+     *  first trial step (with incoming alpha_primal) has been reject,
+     *  this tries up to max_soc_ second order corrections for the
+     *  constraints.  Here, alpha_primal_test is the step size that
+     *  has to be used in the filter acceptance tests.  On output
+     *  actual_delta_... has been set to the steps including the
+     *  second order correction if it has been accepted, otherwise it
+     *  is unchanged.  If the SOC step has been accepted, alpha_primal
+     *  has the fraction-to-the-boundary value for the SOC step on output.
+     *  The return value is true, if an SOC step has been accepted.
      */
-    void ComputeSecondOrderSearchDirection(const Vector& c_soc,
-                                           const Vector& d_minus_s_soc,
-                                           Vector& delta_soc_x,
-                                           Vector& delta_soc_s,
-                                           Vector& delta_soc_y_c,
-                                           Vector& delta_soc_y_d,
-                                           Vector& delta_soc_z_L,
-                                           Vector& delta_soc_z_U,
-                                           Vector& delta_soc_v_L,
-                                           Vector& delta_soc_v_U);
+    bool TrySecondOrderCorrection(Number alpha_primal_test,
+				  Number& alpha_primal,
+				  SmartPtr<const Vector>& actual_delta_x,
+				  SmartPtr<const Vector>& actual_delta_s,
+				  SmartPtr<const Vector>& actual_delta_y_c,
+				  SmartPtr<const Vector>& actual_delta_y_d,
+				  SmartPtr<const Vector>& actual_delta_z_L,
+				  SmartPtr<const Vector>& actual_delta_z_U,
+				  SmartPtr<const Vector>& actual_delta_v_L,
+				  SmartPtr<const Vector>& actual_delta_v_U);
+
+    /** Try higher order corrector (for fast local convergence).  In
+     *  contrast to a second order correction step, which tries to
+     *  make an unacceptable point acceptable by improving constraint
+     *  violation, this corrector step is tried even if the regular
+     *  primal-dual step is acceptable.
+     */
+    bool TryCorrector(Number alpha_primal_test,
+		      Number& alpha_primal,
+		      SmartPtr<const Vector>& actual_delta_x,
+		      SmartPtr<const Vector>& actual_delta_s,
+		      SmartPtr<const Vector>& actual_delta_y_c,
+		      SmartPtr<const Vector>& actual_delta_y_d,
+		      SmartPtr<const Vector>& actual_delta_z_L,
+		      SmartPtr<const Vector>& actual_delta_z_U,
+		      SmartPtr<const Vector>& actual_delta_v_L,
+		      SmartPtr<const Vector>& actual_delta_v_U);
 
     /** Perform magic steps.  Take the current values of the slacks in
      *  trial and replace them by better ones that lead to smaller
@@ -304,8 +328,13 @@ namespace Ipopt
      *  trial point is rejected. */
     Number obj_max_inc_;
 
-    /** Flag indication whether magic steps should be used. */
+    /** Flag indicating whether magic steps should be used. */
     bool magic_steps_;
+    /** Type of corrector steps that should be tried. */
+    Index corrector_type_;
+    /** Flag indicating whether the line search should always accept
+     *  the full (fraction-to-the-boundary) step. */
+    bool ls_always_accept_;
     //@}
 
     /** Filter with entries */
