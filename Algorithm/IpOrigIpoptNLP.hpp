@@ -33,13 +33,6 @@ namespace Ipopt
     virtual ~OrigIpoptNLP();
     //@}
 
-    /**@name OrigIpoptExceptions.
-     * ( may need to move some of these to IpoptNLP 
-    */
-    //@{
-    DECLARE_STD_EXCEPTION(TOO_FEW_DOF);
-    //@}
-
     /** Initialize - overloaded from IpoptNLP */
     virtual bool Initialize(const Journalist& jnlst,
                             const OptionsList& options,
