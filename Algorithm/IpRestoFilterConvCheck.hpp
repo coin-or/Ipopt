@@ -43,11 +43,6 @@ namespace Ipopt
     {}
     //@}
 
-    /**@name Exceptions */
-    //@{
-    DECLARE_STD_EXCEPTION(LOCALLY_INFEASIBILE);
-    //@}
-
     /** Set the object for the original filter line search. Here,
      *  filter_line_search must be the same strategy object to which
      *  the restoration phase object with this object is given.  This
