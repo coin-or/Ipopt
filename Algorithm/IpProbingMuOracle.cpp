@@ -89,7 +89,8 @@ namespace Ipopt
                       *step_z_L,
                       *step_z_U,
                       *step_v_L,
-                      *step_v_U
+                      *step_v_U,
+                      true           // don't need high accuracy
                      );
 
     /////////////////////////////////////////////////////////////
