@@ -158,6 +158,22 @@ namespace Ipopt
       kappa_soc_ = 0.99;
     }
 
+    if (options.GetNumericValue("obj_max_inc_", value, prefix)) {
+      ASSERT_EXCEPTION(value > 1., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"obj_max_inc_\": This value must be larger than 1.");
+      obj_max_inc_ = value;
+    }
+    else {
+      obj_max_inc_ = 5;
+    }
+
+    if (options.GetIntegerValue("magic_steps", ivalue, prefix)) {
+      magic_steps_ = (ivalue != 0);
+    }
+    else {
+      magic_steps_ = false;
+    }
+
     bool retvalue = true;
     if (IsValid(resto_phase_)) {
       retvalue = resto_phase_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
@@ -220,6 +236,10 @@ namespace Ipopt
         IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
             *delta_x, *delta_s);
 
+        if (magic_steps_) {
+          PerformMagicStep();
+        }
+
         // If it is acceptable, stop the search
         accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
       }
@@ -237,7 +257,7 @@ namespace Ipopt
       // Try second order correction
       Number theta_curr = IpCq().curr_constraint_violation();
       Number theta_trial = IpCq().trial_constraint_violation();
-      if (alpha_primal==alpha_primal_max &&
+      if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
           theta_curr<=theta_trial && max_soc_>0) {
         Index count_soc = 0;
         Number theta_soc_old = 0.;
@@ -521,8 +541,22 @@ namespace Ipopt
   {
     DBG_START_METH("FilterLineSearch::IsAcceptableToCurrentIterate",
                    dbg_verbosity);
-    Number curr_theta = IpCq().curr_constraint_violation();
     Number curr_barr = IpCq().curr_barrier_obj();
+
+    // Check if the barrier objective function is increasing to
+    // rapidly (according to option obj_max_inc)
+    if (trial_barr > curr_barr) {
+      Number basval = 1.;
+      if (fabs(curr_barr)>10.) {
+        basval = log10(fabs(curr_barr));
+      }
+      if (log10(trial_barr-curr_barr)>obj_max_inc_*basval) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Rejecting trial point because barrier objective function increasing too rapidly (from %27.15e to %27.15e)\n",curr_barr,trial_barr);
+        return false;
+      }
+    }
+
+    Number curr_theta = IpCq().curr_constraint_violation();
     DBG_PRINT((1,"trial_barr  = %e curr_barr  = %e\n", trial_barr, curr_barr));
     DBG_PRINT((1,"trial_theta = %e curr_theta = %e\n", trial_theta, curr_theta));
     return (Compare_le(trial_theta, (1.-gamma_theta_)*curr_theta, curr_theta)
@@ -581,8 +615,101 @@ namespace Ipopt
                       delta_soc_z_L,
                       delta_soc_z_U,
                       delta_soc_v_L,
-                      delta_soc_v_U);
+                      delta_soc_v_U,
+                      true);
 
+  }
+
+  void
+  FilterLineSearch::PerformMagicStep()
+  {
+    DBG_START_METH("FilterLineSearch::PerformMagicStep",
+                   0);
+
+    DBG_PRINT((1,"Incoming barr = %e and constrviol %e\n", IpCq().trial_barrier_obj(), IpCq().trial_constraint_violation()));
+    DBG_PRINT_VECTOR(2, "s in", *IpData().trial_s());
+    DBG_PRINT_VECTOR(2, "d minus s in", *IpCq().trial_d_minus_s());
+    DBG_PRINT_VECTOR(2, "slack_s_L in", *IpCq().trial_slack_s_L());
+    DBG_PRINT_VECTOR(2, "slack_s_U in", *IpCq().trial_slack_s_U());
+
+    SmartPtr<const Vector> d_L = IpNLP().d_L();
+    SmartPtr<const Matrix> Pd_L = IpNLP().Pd_L();
+    SmartPtr<Vector> delta_s_magic_L = d_L->MakeNew();
+    delta_s_magic_L->Set(0.);
+    SmartPtr<Vector> tmp = d_L->MakeNew();
+    Pd_L->TransMultVector(1., *IpCq().trial_d_minus_s(), 0., *tmp);
+    delta_s_magic_L->ElementWiseMax(*tmp);
+
+    SmartPtr<const Vector> d_U = IpNLP().d_U();
+    SmartPtr<const Matrix> Pd_U = IpNLP().Pd_U();
+    SmartPtr<Vector> delta_s_magic_U = d_U->MakeNew();
+    delta_s_magic_U->Set(0.);
+    tmp = d_U->MakeNew();
+    Pd_U->TransMultVector(1., *IpCq().trial_d_minus_s(), 0., *tmp);
+    delta_s_magic_U->ElementWiseMin(*tmp);
+
+    SmartPtr<Vector> delta_s_magic = IpData().trial_s()->MakeNew();
+    Pd_L->MultVector(1., *delta_s_magic_L, 0., *delta_s_magic);
+    Pd_U->MultVector(1., *delta_s_magic_U, 1., *delta_s_magic);
+    delta_s_magic_L = NULL; // free memory
+    delta_s_magic_U = NULL; // free memory
+
+    // Now find those entries with both lower and upper bounds, there
+    // the step is too large
+    // ToDo this should only be done if there are inequality
+    // constraints with two bounds
+    // also this can be done in a smaller space (d_L or d_U whichever
+    // is smaller)
+    tmp = delta_s_magic->MakeNew();
+    tmp->Copy(*IpData().trial_s());
+    Pd_L->MultVector(1., *d_L, -2., *tmp);
+    Pd_U->MultVector(1., *d_U, 1., *tmp);
+    SmartPtr<Vector> tmp2 = tmp->MakeNew();
+    tmp2->Copy(*tmp);
+    tmp2->ElementWiseAbs();
+    tmp->Axpy(-2., *delta_s_magic);
+    tmp->ElementWiseAbs();
+    // now, tmp2 = |d_L + d_u - 2*s| and tmp = |d_L + d_u - 2*(s+Delta s)|
+    // we want to throw out those for which tmp2 > tmp
+    tmp->Axpy(-1., *tmp2);
+    tmp->ElementWiseSgn();
+    tmp2->Set(0.);
+    tmp2->ElementWiseMax(*tmp);
+    tmp = d_L->MakeNew();
+    Pd_L->TransMultVector(1., *tmp2, 0., *tmp);
+    Pd_L->MultVector(1., *tmp, 0., *tmp2);
+    tmp = d_U->MakeNew();
+    Pd_U->TransMultVector(1., *tmp2, 0., *tmp);
+    Pd_U->MultVector(1., *tmp, 0., *tmp2);
+    DBG_PRINT_VECTOR(2, "tmp indicator", *tmp2)
+    // tmp2 now is one for those entries with both bounds, for which
+    // no step should be taken
+
+    tmp = delta_s_magic->MakeNew();
+    tmp->Copy(*delta_s_magic);
+    tmp->ElementWiseMultiply(*tmp2);
+    delta_s_magic->Axpy(-1., *tmp);
+
+    Number delta_s_magic_max = delta_s_magic->Amax();
+    Number mach_eps = std::numeric_limits<Number>::epsilon();
+    if (delta_s_magic_max>0.) {
+      if (delta_s_magic_max > 10*mach_eps*IpData().trial_s()->Amax()) {
+        IpData().Append_info_string("M");
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Magic step with max-norm %.6e taken.\n", delta_s_magic->Amax());
+        Jnlst().PrintVector(J_MOREVECTOR, J_LINE_SEARCH,
+                            "delta_s_magic", *delta_s_magic);
+      }
+
+      // now finally compute the new overall slacks
+      delta_s_magic->Axpy(1., *IpData().trial_s());
+      IpData().SetTrialSVariables(*delta_s_magic);
+    }
+
+    DBG_PRINT((1,"Outgoing barr = %e and constrviol %e\n", IpCq().trial_barrier_obj(), IpCq().trial_constraint_violation()));
+    DBG_PRINT_VECTOR(2, "s out", *IpData().trial_s());
+    DBG_PRINT_VECTOR(2, "d minus s out", *IpCq().trial_d_minus_s());
+    DBG_PRINT_VECTOR(2, "slack_s_L out", *IpCq().trial_slack_s_L());
+    DBG_PRINT_VECTOR(2, "slack_s_U out", *IpCq().trial_slack_s_U());
   }
 
   ///////////////////////////////////////////////////////////////////////////
