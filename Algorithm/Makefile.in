@@ -56,7 +56,7 @@ LIBRARIES = $(noinst_LIBRARIES)
 libipoptalg_a_AR = $(AR) $(ARFLAGS)
 libipoptalg_a_LIBADD =
 am_libipoptalg_a_OBJECTS = IpAlgBuilder.$(OBJEXT) \
-	IpDefaultIterateInitializer.$(OBJEXT) \
+	IpDefaultIterateInitializer.$(OBJEXT) IpFilter.$(OBJEXT) \
 	IpFilterLineSearch.$(OBJEXT) IpIpoptAlg.$(OBJEXT) \
 	IpIpoptCalculatedQuantities.$(OBJEXT) IpIpoptData.$(OBJEXT) \
 	IpLoqoMuOracle.$(OBJEXT) IpMonotoneMuUpdate.$(OBJEXT) \
@@ -71,6 +71,7 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/IpAlgBuilder.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpDefaultIterateInitializer.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpFilter.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpFilterLineSearch.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpIpoptAlg.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpIpoptCalculatedQuantities.Po \
@@ -203,6 +204,7 @@ libipoptalg_a_SOURCES = \
 	IpAlgStrategy.hpp \
 	IpConvCheck.hpp \
 	IpDefaultIterateInitializer.hpp IpDefaultIterateInitializer.cpp \
+	IpFilter.cpp IpFilter.hpp \
 	IpFilterLineSearch.cpp IpFilterLineSearch.hpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
@@ -234,6 +236,7 @@ ASTYLE_SOURCES = \
 	IpAlgStrategy.hppbak \
 	IpConvCheck.hppbak \
 	IpDefaultIterateInitializer.hppbak IpDefaultIterateInitializer.cppbak \
+	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLineSearch.cppbak IpFilterLineSearch.hppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
 	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \
@@ -309,6 +312,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAlgBuilder.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDefaultIterateInitializer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilterLineSearch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptAlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptCalculatedQuantities.Po@am__quote@
