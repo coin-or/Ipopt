@@ -80,9 +80,9 @@ namespace Ipopt
     }
 
     /** Number of block rows of this compound matrix. */
-    Index NComps_Rows() const;
+    inline Index NComps_Rows() const;
     /** Number of block colmuns of this compound matrix. */
-    Index NComps_Cols() const;
+    inline Index NComps_Cols() const;
 
   protected:
     /**@name Methods overloaded from Matrix */
@@ -131,9 +131,9 @@ namespace Ipopt
     /** Method to check whether or not the matrices are valid */
     bool MatricesValid() const;
 
-    const Matrix* ConstComp(Index irow, Index jcol) const;
+    inline const Matrix* ConstComp(Index irow, Index jcol) const;
 
-    Matrix* Comp(Index irow, Index jcol);
+    inline Matrix* Comp(Index irow, Index jcol);
   };
 
   /** This is the matrix space for CompoundMatrix.  Before a CompoundMatrix
