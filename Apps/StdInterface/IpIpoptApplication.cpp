@@ -194,8 +194,19 @@ namespace Ipopt
                             *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr_y_c(), *ip_data->curr_y_d(),
                             ip_cq->curr_f());
     }
+    catch(LOCALLY_INFEASIBILE& exc) {
+      exc.ReportException(*jnlst_);
+
+      retValue = Infeasible_Problem_Detected;
+    }
+    catch(TOO_FEW_DOF& exc) {
+      exc.ReportException(*jnlst_);
+
+      retValue = Not_Enough_Degrees_Of_Freedom;
+    }
     catch(IpoptException& exc) {
       exc.ReportException(*jnlst_);
+      
       retValue = Solve_Failed;
     }
     catch(std::bad_alloc& exc) {
