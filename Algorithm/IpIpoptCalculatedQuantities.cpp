@@ -283,7 +283,7 @@ namespace Ipopt
         num_adjusted_slack_s_U_ =
           CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_U());
         DBG_PRINT_VECTOR(2, "result", *result);
-	DBG_PRINT((1, "num_adjusted_slack_s_U = %d\n", num_adjusted_slack_s_U_));
+        DBG_PRINT((1, "num_adjusted_slack_s_U = %d\n", num_adjusted_slack_s_U_));
       }
       curr_slack_s_U_cache_.AddCachedResult1Dep(result, *s);
     }
@@ -372,8 +372,8 @@ namespace Ipopt
         DBG_ASSERT(num_adjusted_slack_s_U_==0);
         num_adjusted_slack_s_U_ =
           CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_U());
-	DBG_PRINT((1, "num_adjusted_slack_s_U = %d\n", num_adjusted_slack_s_U_));
-	DBG_PRINT_VECTOR(2, "trial_slack_s_U", *result);
+        DBG_PRINT((1, "num_adjusted_slack_s_U = %d\n", num_adjusted_slack_s_U_));
+        DBG_PRINT_VECTOR(2, "trial_slack_s_U", *result);
       }
       trial_slack_s_U_cache_.AddCachedResult1Dep(result, *s);
     }
@@ -410,9 +410,9 @@ namespace Ipopt
         DBG_PRINT((1,"Number of slack corrections = %d\n", retval));
         DBG_PRINT_VECTOR(2, "t(sgn)", *t);
 
-	// ToDo AW: I added the follwing line b/c I found a case where
-	// slack was negative and this correction produced 0
-	slack->ElementWiseMax(*zero_vec);
+        // ToDo AW: I added the follwing line b/c I found a case where
+        // slack was negative and this correction produced 0
+        slack->ElementWiseMax(*zero_vec);
 
         SmartPtr<Vector> t2 = t->MakeNew();
         t2->Copy(*multiplier);
@@ -431,9 +431,9 @@ namespace Ipopt
 
         SmartPtr<Vector> t_max = t2;
         t_max->Set(1.0);
-	SmartPtr<Vector> abs_bound = bound->MakeNew();
-	abs_bound->Copy(*bound);
-	abs_bound->ElementWiseAbs();
+        SmartPtr<Vector> abs_bound = bound->MakeNew();
+        abs_bound->Copy(*bound);
+        abs_bound->ElementWiseAbs();
         t_max->ElementWiseMax(*abs_bound);
         DBG_PRINT_VECTOR(2, "t_max1", *t_max);
         DBG_PRINT_VECTOR(2, "slack", *slack);
@@ -695,7 +695,7 @@ namespace Ipopt
       if (!curr_barrier_obj_cache_.GetCachedResult(result, tdeps, sdeps)) {
         result = trial_f();
         DBG_PRINT((1,"trial_F=%e\n",result));
-	DBG_PRINT_VECTOR(2, "trial_slack_s_U", *trial_slack_s_U());
+        DBG_PRINT_VECTOR(2, "trial_slack_s_U", *trial_slack_s_U());
         result += CalcBarrierTerm(ip_data_->curr_mu(),
                                   *trial_slack_x_L(),
                                   *trial_slack_x_U(),
