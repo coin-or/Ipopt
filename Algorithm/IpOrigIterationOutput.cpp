@@ -107,8 +107,14 @@ namespace Ipopt
     Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_c", *IpData().curr_y_c());
     Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_d", *IpData().curr_y_d());
 
+    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_x_L", *IpCq().curr_slack_x_L());
+    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_x_U", *IpCq().curr_slack_x_U());
+
     Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_L", *IpData().curr_z_L());
     Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_U", *IpData().curr_z_U());
+
+    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_s_L", *IpCq().curr_slack_s_L());
+    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_s_U", *IpCq().curr_slack_s_U());
 
     Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_L", *IpData().curr_v_L());
     Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_U", *IpData().curr_v_U());
