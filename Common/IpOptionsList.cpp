@@ -174,7 +174,7 @@ namespace Ipopt
   bool OptionsList::readnexttoken(FILE* fp, std::string& token)
   {
     token.clear();
-    char c = fgetc(fp);
+    int c = fgetc(fp);
 
     // First get rid of all comments and white spaces
     while (c!=EOF && (isspace(c) || c=='#') ) {
