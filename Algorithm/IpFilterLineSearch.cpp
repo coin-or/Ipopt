@@ -32,10 +32,16 @@ namespace Ipopt
       theta_min_(-1.0),
       theta_max_(-1.0),
       filter_(2)
-  {}
+  {
+    DBG_START_FUN("FilterLineSearch::FilterLineSearch",
+		  dbg_verbosity);
+  }
 
   FilterLineSearch::~FilterLineSearch()
-  {}
+  {
+    DBG_START_FUN("FilterLineSearch::~FilterLineSearch()",
+		  dbg_verbosity);
+  }
 
   bool FilterLineSearch::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)
@@ -187,6 +193,13 @@ namespace Ipopt
       skip_corr_if_neg_curv_ = true;
     }
 
+    if (options.GetIntegerValue("skip_corr_if_fixed_mode", ivalue, prefix)) {
+      skip_corr_if_fixed_mode_ = (ivalue != 0);
+    }
+    else {
+      skip_corr_if_fixed_mode_ = true;
+    }
+
     if (options.GetIntegerValue("ls_always_accept", ivalue, prefix)) {
       ls_always_accept_ = (ivalue != 0);
     }
@@ -203,7 +216,7 @@ namespace Ipopt
 
     if (options.GetNumericValue("corrector_compl_avrg_red_fact", value, prefix)) {
       ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"corrector_compl_avrg_red_fact_\": This value must be positive1.");
+                       "Option \"corrector_compl_avrg_red_fact_\": This value must be positive.");
       corrector_compl_avrg_red_fact_ = value;
     }
     else {
@@ -280,7 +293,8 @@ namespace Ipopt
       filter_.Print(Jnlst());
 
       if (corrector_type_!=0 &&
-          (!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) ) {
+          (!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) &&
+	  (!skip_corr_if_fixed_mode_ || IpData().FreeMuMode()) ) {
         // Before we do the actual backtracking line search for the
         // regular primal-dual search direction, let's see if a step
         // including a higher-order correctior is already acceptable
