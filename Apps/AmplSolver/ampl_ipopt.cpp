@@ -32,7 +32,7 @@ int main(int argv, char**argc)
   //... app->Options()->Add...
 
   SmartPtr<TNLP> ampl_tnlp = new AmplTNLP(app->Jnlst(), argc);
-  ApplicationReturnStatus retval = retval = app->OptimizeTNLP(ampl_tnlp);
+  ApplicationReturnStatus retval = app->OptimizeTNLP(ampl_tnlp);
 
   // finalize_solution method in AmplTNLP writes the solution file
 
