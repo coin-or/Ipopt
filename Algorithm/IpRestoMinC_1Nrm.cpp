@@ -12,11 +12,14 @@
 
 namespace Ipopt
 {
+  static const Index dbg_verbosity = 0;
 
   MinC_1NrmRestorationPhase::MinC_1NrmRestorationPhase
-  (IpoptAlgorithm& resto_alg)
+  (IpoptAlgorithm& resto_alg,
+   const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator)
       :
       resto_alg_(&resto_alg),
+      eq_mult_calculator_(eq_mult_calculator),
       resto_options_(NULL)
   {
     DBG_ASSERT(IsValid(resto_alg_));
@@ -32,12 +35,29 @@ namespace Ipopt
     // restoration phase
     resto_options_ = new OptionsList(options);
 
-    return true;
+    Number value;
+    if (options.GetNumericValue("laminitmax", value, prefix)) {
+      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"laminitmax\": Value must be non-negative.");
+      laminitmax_ = value;
+    }
+    else {
+      laminitmax_ = 1e3;
+    }
+
+    bool retvalue = true;
+    if (IsValid(eq_mult_calculator_)) {
+      retvalue = eq_mult_calculator_->Initialize(Jnlst(), IpNLP(), IpData(),
+                 IpCq(), options, prefix);
+    }
+    return retvalue;
   }
 
   bool
   MinC_1NrmRestorationPhase::PerformRestoration()
   {
+    DBG_START_METH("MinC_1NrmRestorationPhase::PerformRestoration",
+                   dbg_verbosity);
     Jnlst().Printf(J_DETAILED, J_MAIN, "Starting Restoration Phase\n");
 
     // Create the restoration phase NLP etc objects
@@ -107,6 +127,38 @@ namespace Ipopt
       SmartPtr<const Vector> x_only = cx->GetComp(0);
       SmartPtr<const Vector> s_only = resto_ip_data->curr_s();
       IpData().SetTrialPrimalVariablesFromPtr(x_only, s_only);
+
+      // Recompute the equality constraint multipliers as least square estimate
+      if (IsValid(eq_mult_calculator_) && laminitmax_>0.) {
+	// First move all the trial data into the current fields, since
+	// those values are needed to compute the initial values for
+	// the multipliers
+	SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
+	SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+	IpData().CopyTrialToCurrent();
+	y_c = IpData().curr_y_c()->MakeNew();
+	y_d = IpData().curr_y_d()->MakeNew();
+	bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
+	Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+		       "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
+		       y_c->Amax(), y_d->Amax());
+	Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
+	if (!retval || laminitnrm > laminitmax_) {
+	  y_c->Set(0.0);
+	  y_d->Set(0.0);
+	}
+	IpData().SetTrialEqMultipliers(*y_c, *y_d);
+      }
+      else {
+	SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
+	SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+	y_c->Set(0.0);
+	y_d->Set(0.0);
+	IpData().SetTrialEqMultipliers(*y_c, *y_d);
+      }
+
+      DBG_PRINT_VECTOR(2, "y_c", *IpData().curr_y_c());
+      DBG_PRINT_VECTOR(2, "y_d", *IpData().curr_y_d());
 
       IpData().Set_iter_count(resto_ip_data->iter_count()-1);
       // Skip the next line, because it would just replicate the first
