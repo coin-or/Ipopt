@@ -38,11 +38,30 @@ namespace Ipopt
       jac_c_evals_(0),
       d_evals_(0),
       jac_d_evals_(0),
-      h_evals_(0)
+      h_evals_(0),
+      initialized_(false)
   {}
 
   OrigIpoptNLP::~OrigIpoptNLP()
   {}
+
+  bool OrigIpoptNLP::Initialize(const Journalist& jnlst,
+				const OptionsList& options,
+				const std::string& prefix)
+  {
+    Number value;
+    if (options.GetNumericValue("bound_relax_factor", value, prefix)) {
+      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"bound_relax_factor\": This value must be non-negative.");
+      bound_relax_factor_ = value;
+    }
+    else {
+      bound_relax_factor_ = 0.;
+    }
+
+    initialized_ = true;
+    return true;
+  }
 
   bool OrigIpoptNLP::InitializeStructures(SmartPtr<Vector>& x,
                                           bool init_x,
@@ -60,6 +79,7 @@ namespace Ipopt
                                           bool init_v_U
                                          )
   {
+    DBG_ASSERT(initialized_);
 
     bool retValue = nlp_->GetSpaces(x_space_, c_space_, d_space_,
                                     x_l_space_, px_l_space_,
@@ -109,6 +129,11 @@ namespace Ipopt
       return false;
     }
 
+    relax_bounds(-bound_relax_factor_, *x_L_);
+    relax_bounds( bound_relax_factor_, *x_U_);
+    relax_bounds(-bound_relax_factor_, *d_L_);
+    relax_bounds( bound_relax_factor_, *d_U_);
+
     // Create the iterates structures
     x = x_space_->MakeNew();
     y_c = c_space_->MakeNew();
@@ -131,6 +156,20 @@ namespace Ipopt
     }
 
     return true;
+  }
+
+  void
+  OrigIpoptNLP::relax_bounds(Number bound_relax_factor, Vector& bounds)
+  {
+    if (bound_relax_factor!=0.) {
+      SmartPtr<Vector> tmp = bounds.MakeNew();
+      tmp->Copy(bounds);
+      tmp->ElementWiseAbs();
+      SmartPtr<Vector> ones = bounds.MakeNew();
+      ones->Set(1.);
+      tmp->ElementWiseMax(*ones);
+      bounds.Axpy(bound_relax_factor, *tmp);
+    }    
   }
 
   Number OrigIpoptNLP::f(const Vector& x)
