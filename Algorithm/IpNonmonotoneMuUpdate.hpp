@@ -66,6 +66,7 @@ namespace Ipopt
     Number mu_max_;
     Number mu_min_;
     Number tau_min_;
+    Number tau_max_;
     //@}
 
     /** @name Strategy objects */
@@ -93,6 +94,9 @@ namespace Ipopt
      *  fixed mu phase.  This method is called at the beginning of a
      *  new fixed mu phase. */
     Number NewFixedMu();
+    /** Compute value for the fraction-to-the-boundary parameter given
+     *  mu */
+    Number Compute_tau(Number mu);
 
     /** Method for computing the 1-norm of the primal dual system at
      *  the current point.  The individual components (dual
@@ -107,6 +111,9 @@ namespace Ipopt
     std::list<Number> refs_vals_;
     /** Factor requested to reduce the reference values */
     Number refs_red_fact_;
+    /** Flag indicating whether the barrier parameter should never be
+     *  fixed (no globalization) */
+    bool mu_never_fix_;
     //@}
 
     /** Flag indicating whether the problem has any inequality constraints */
