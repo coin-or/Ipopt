@@ -46,13 +46,14 @@ namespace Ipopt
     DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
 # endif
 
-    Journal* jrnl = jnlst_->AddJournal("ConsoleStdOut", "stdout", J_SUMMARY);
-    jrnl->SetPrintLevel(J_DBG, J_NONE);
+    Journal* stdout_jrnl =
+      jnlst_->AddJournal("ConsoleStdOut", "stdout", J_SUMMARY);
+    stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
 
 # ifdef IP_DEBUG
 
-    jrnl = jnlst_->AddJournal("Debug", "debug.out", J_DETAILED);
-    jrnl->SetPrintLevel(J_DBG, J_ALL);
+    Journal* dbg_jrnl = jnlst_->AddJournal("Debug", "debug.out", J_DETAILED);
+    dbg_jrnl->SetPrintLevel(J_DBG, J_ALL);
 # endif
 
 
@@ -67,16 +68,29 @@ namespace Ipopt
       }
     }
 
+    // Set printlevel for stdout
+    Index ivalue;
+    EJournalLevel print_level = J_SUMMARY;
+    if (options_->GetIntegerValue("print_level", ivalue, "")) {
+      ivalue = Max(0, Min(ivalue, ((Index)J_LAST_LEVEL)-1));
+      print_level = (EJournalLevel)ivalue;
+      stdout_jrnl->SetAllPrintLevels(print_level);
+      stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
+    }
+
     // Open an output file if required
     std::string output_filename;
     if (options_->GetValue("output_file", output_filename, "")) {
-      Index ivalue;
-      EJournalLevel print_level = J_SUMMARY;
-      if (options_->GetIntegerValue("print_level", ivalue, "")) {
-        print_level = (EJournalLevel)ivalue;
+      EJournalLevel file_print_level = J_SUMMARY;
+      if (options_->GetIntegerValue("file_print_level", ivalue, "")) {
+	ivalue = Max(0, Min(ivalue, ((Index)J_LAST_LEVEL)-1));
+        file_print_level = (EJournalLevel)ivalue;
       }
-      jrnl = jnlst_->AddJournal("OutputFile", output_filename.c_str(), print_level);
-      jrnl->SetPrintLevel(J_DBG, J_NONE);
+      else {
+	file_print_level = print_level;
+      }
+      Journal* file_jrnl = jnlst_->AddJournal("OutputFile", output_filename.c_str(), file_print_level);
+      file_jrnl->SetPrintLevel(J_DBG, J_NONE);
     }
 
     try {
