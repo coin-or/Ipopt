@@ -108,15 +108,15 @@ namespace Ipopt
     jnlst->Printf(J_SUMMARY, J_SOLUTION,
                   "\nNumber of Iterations    = %d\n", ip_data->iter_count());
     jnlst->Printf(J_SUMMARY, J_SOLUTION,
-                  "Optimal Objective Value = %.16e\n", ip_cq->curr_f());
+                  "Optimal Objective Value = %23.16e\n", ip_cq->curr_f());
     jnlst->Printf(J_SUMMARY, J_SOLUTION,
-                  "Primal Infeasibility    = %.16e\n",
+                  "Primal Infeasibility    = %23.16e\n",
                   ip_cq->curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX));
     jnlst->Printf(J_SUMMARY, J_SOLUTION,
-                  "Dual Infeasibility      = %.16e\n",
+                  "Dual Infeasibility      = %23.16e\n",
                   ip_cq->curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX));
     jnlst->Printf(J_SUMMARY, J_SOLUTION,
-                  "Complementarity         = %.16e\n",
+                  "Complementarity         = %23.16e\n",
                   ip_cq->curr_complementarity(0., IpoptCalculatedQuantities::NORM_MAX));
 
     jnlst->Printf(J_SUMMARY, J_SOLUTION,
