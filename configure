@@ -7283,7 +7283,7 @@ if test -z "$CXXLIBS"; then
 fi
 
 
-IPADDLIBS="$IPADDLIBS $CXXLIBS"
+IPADDLIBS="$IPADDLIBS"
 
 ##########
 # ASTYLE #

@@ -291,7 +291,7 @@ if test -z "$CXXLIBS"; then
 fi
 AC_ARG_VAR(CXXLIBS,[Libraries necessary for linking C++ code with Fortran compiler])
 
-IPADDLIBS="$IPADDLIBS $CXXLIBS"
+IPADDLIBS="$IPADDLIBS"
 
 ##########
 # ASTYLE #
