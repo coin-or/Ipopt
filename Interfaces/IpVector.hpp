@@ -342,8 +342,10 @@ namespace Ipopt
   inline
   void Vector::Scal(Number alpha)
   {
-    ScalImpl(alpha);
-    ObjectChanged();
+    if (alpha!=1.) {
+      ScalImpl(alpha);
+      ObjectChanged();
+    }
   }
 
   inline
