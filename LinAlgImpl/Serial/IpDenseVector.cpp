@@ -201,6 +201,14 @@ namespace Ipopt
     }
   }
 
+  void DenseVector::ElementWiseAbsImpl()
+  {
+    DBG_ASSERT(initialized_);
+    for (Index i=0; i<Dim(); i++) {
+      values_[i] = fabs(values_[i]);
+    }
+  }
+
   void DenseVector::ElementWiseSqrtImpl()
   {
     DBG_ASSERT(initialized_);
@@ -265,7 +273,7 @@ namespace Ipopt
     return sum;
   }
 
-  void DenseVector::SgnImpl()
+  void DenseVector::ElementWiseSgnImpl()
   {
     DBG_ASSERT(initialized_);
     for (Index i=0; i<Dim(); i++) {
@@ -326,7 +334,12 @@ namespace Ipopt
 
   Number* DenseVectorSpace::AllocateInternalStorage() const
   {
-    return new Number[Dim()];
+    if (Dim()>0) {
+      return new Number[Dim()];
+    }
+    else {
+      return NULL;
+    }
   }
 
   void DenseVectorSpace::FreeInternalStorage(Number* values) const

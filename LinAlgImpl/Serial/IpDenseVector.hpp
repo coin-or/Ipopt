@@ -109,8 +109,14 @@ namespace Ipopt
     /** reciprocates the elements of the vector */
     virtual void ElementWiseReciprocalImpl();
 
+    /** take abs of the elements of the vector */
+    virtual void ElementWiseAbsImpl();
+
     /** take square-root of the elements of the vector */
     virtual void ElementWiseSqrtImpl();
+
+    /** Changes each entry in the vector to its sgn value */
+    virtual void ElementWiseSgnImpl();
 
     /** Add scalar to every component of the vector.*/
     virtual void AddScalarImpl(Number scalar);
@@ -126,9 +132,6 @@ namespace Ipopt
 
     /** Computes the sum of the logs of the elements of vector */
     virtual Number SumLogsImpl() const;
-
-    /** Changes each entry in the vector to its sgn value */
-    virtual void SgnImpl();
 
     /** @name Output methods */
     //@{
