@@ -71,7 +71,7 @@ namespace Ipopt
      *  nlp_lower_bound_inf is -1e19 and nlp_upper_bound_inf is
      *  1e19. (see TNLPAdapter) */
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
-                                 Index m, Number* d_l, Number* d_u)=0;
+                                 Index m, Number* g_l, Number* g_u)=0;
 
     /** overload this method to return the starting point. The bools
      *  init_x and init_lambda are both inputs and outputs. As inputs,

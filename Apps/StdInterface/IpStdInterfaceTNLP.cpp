@@ -97,7 +97,7 @@ namespace Ipopt
   }
 
   bool StdInterfaceTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
-                                         Index m, Number* d_l, Number* d_u)
+                                         Index m, Number* g_l, Number* g_u)
   {
     DBG_ASSERT(n == n_var_);
     DBG_ASSERT(m == n_con_);
@@ -108,8 +108,8 @@ namespace Ipopt
     }
 
     for (Index i=0; i<m; i++) {
-      d_l[i] = g_L_[i];
-      d_u[i] = g_U_[i];
+      g_l[i] = g_L_[i];
+      g_u[i] = g_U_[i];
     }
 
     return true;
