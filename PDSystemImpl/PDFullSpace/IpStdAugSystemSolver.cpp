@@ -152,7 +152,7 @@ namespace Ipopt
       TripletHelper::FillValues(dbg_nz, *augmented_system_, dbg_values);
       Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "******* KKT SYSTEM *******\n");
       for (Index dbg_i=0; dbg_i<dbg_nz; dbg_i++) {
-        Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "(%d) KKT[%d][%d] = %g\n", dbg_i, dbg_iRows[dbg_i], dbg_jCols[dbg_i], dbg_values[dbg_i]);
+        Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "(%d) KKT[%d][%d] = %23.15e\n", dbg_i, dbg_iRows[dbg_i], dbg_jCols[dbg_i], dbg_values[dbg_i]);
       }
       delete [] dbg_iRows;
       dbg_iRows = NULL;

@@ -29,6 +29,9 @@ namespace Ipopt
   (Vector& y_c,
    Vector& y_d)
   {
+    DBG_START_METH("LeastSquareMultipliers::CalculateMultipliers",
+                   dbg_verbosity);
+
     SmartPtr<const SymMatrix> zeroW = IpCq().zero_hessian();
     SmartPtr<const Matrix> J_c = IpCq().curr_jac_c();
     SmartPtr<const Matrix> J_d = IpCq().curr_jac_d();
@@ -60,6 +63,11 @@ namespace Ipopt
     SmartPtr<Vector> sol_x = rhs_x->MakeNew();
     SmartPtr<Vector> sol_s = rhs_s->MakeNew();
 
+    DBG_PRINT_VECTOR(2, "rhs_x", *rhs_x);
+    DBG_PRINT_VECTOR(2, "rhs_s", *rhs_s);
+    DBG_PRINT_VECTOR(2, "rhs_c", *rhs_c);
+    DBG_PRINT_VECTOR(2, "rhs_d", *rhs_d);
+
     enum SymLinearSolver::ESolveStatus retval;
     Index numberOfEVals=rhs_c->Dim()+rhs_d->Dim();
     retval = augsyssolver_->Solve(GetRawPtr(zeroW), NULL, 1.0, NULL,
@@ -67,6 +75,11 @@ namespace Ipopt
                                   GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s,
                                   *rhs_c, *rhs_d, *sol_x, *sol_s,
                                   y_c, y_d, true, numberOfEVals);
+
+    DBG_PRINT_VECTOR(2, "sol_x", *sol_x);
+    DBG_PRINT_VECTOR(2, "sol_s", *sol_s);
+    DBG_PRINT_VECTOR(2, "sol_c", y_c);
+    DBG_PRINT_VECTOR(2, "sol_d", y_d);
 
     return (retval==SymLinearSolver::S_SUCCESS);
   }
