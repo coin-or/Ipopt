@@ -37,7 +37,7 @@ namespace Ipopt
       warm_start_bound_push_ = value;
     }
     else {
-      warm_start_bound_push_ = 1e-6;
+      warm_start_bound_push_ = 1e-3;
     }
 
     if (options.GetNumericValue("warm_start_bound_frac", value, prefix)) {
@@ -46,7 +46,7 @@ namespace Ipopt
       warm_start_bound_frac_ = value;
     }
     else {
-      warm_start_bound_frac_ = 1e-6;
+      warm_start_bound_frac_ = 1e-3;
     }
 
     if (options.GetNumericValue("warm_start_mult_bound_push", value, prefix)) {
@@ -55,7 +55,7 @@ namespace Ipopt
       warm_start_mult_bound_push_ = value;
     }
     else {
-      warm_start_mult_bound_push_ = 1e-6;
+      warm_start_mult_bound_push_ = 1e-3;
     }
 
     if (options.GetNumericValue("warm_start_mult_init_max", value, prefix)) {
@@ -69,7 +69,7 @@ namespace Ipopt
       warm_start_target_mu_ = value;
     }
     else {
-      warm_start_target_mu_ = 1e-3;
+      warm_start_target_mu_ = 0e-3;
     }
 
     return true;
