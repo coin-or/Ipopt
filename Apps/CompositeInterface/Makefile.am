@@ -41,7 +41,7 @@ CXXFLAGS += $(AMPL_CPPFLAGS)
 # Astyle stuff
 
 ASTYLE_SOURCES = \
-	CompositeNLP.hppbak CompositeNLP.cppbak
+	CompositeNLP.hppbak CompositeNLP.cppbak \
 	comp_ampl_ipopt.cppbak
 
 ASTYLE = @ASTYLE@
