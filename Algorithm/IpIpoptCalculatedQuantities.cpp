@@ -88,6 +88,7 @@ namespace Ipopt
       curr_sigma_s_cache_(1),
 
       curr_avrg_compl_cache_(1),
+      trial_avrg_compl_cache_(1),
       curr_gradBarrTDelta_cache_(1),
 
       dampind_x_L_(NULL),
@@ -1733,19 +1734,15 @@ namespace Ipopt
       return 1.0;
     }
 
-    SmartPtr<Vector> alpha_bar = x.MakeNew();
-    alpha_bar->Copy(x);
-    alpha_bar->Scal(-1.0*tau);
-    alpha_bar->ElementWiseDivide(delta);
-
-    DBG_PRINT_VECTOR(2, "alpha_bar", *alpha_bar);
-
-    SmartPtr<Vector> inv_alpha_bar = alpha_bar->MakeNew();
-    inv_alpha_bar->Set(1.0);
-    inv_alpha_bar->ElementWiseDivide(*alpha_bar);
+    SmartPtr<Vector> inv_alpha_bar = x.MakeNew();
+    inv_alpha_bar->Copy(delta);
+    inv_alpha_bar->Scal(-1.0/tau);
+    inv_alpha_bar->ElementWiseDivide(x);
+    DBG_PRINT_VECTOR(2, "x", x);
+    DBG_PRINT_VECTOR(2, "inv_alpha_bar", *inv_alpha_bar);
 
     Number alpha = inv_alpha_bar->Max();
-    if (alpha >= 0) {
+    if (alpha > 0) {
       alpha = Min(1.0/alpha, 1.0);
     }
     else {
@@ -1772,16 +1769,11 @@ namespace Ipopt
       SmartPtr<Vector> compressed_delta = slack_L.MakeNew();
       P_L.TransMultVector(1.0, delta, 0.0, *compressed_delta);
 
-      SmartPtr<Vector> alpha_bar = slack_L.MakeNew();
-      alpha_bar->Copy(slack_L);
-      alpha_bar->Scal(-1.0*tau);
-      alpha_bar->ElementWiseDivide(*compressed_delta);
+      SmartPtr<Vector> inv_alpha_bar = slack_L.MakeNew();
+      inv_alpha_bar->Copy(*compressed_delta);
+      inv_alpha_bar->Scal(-1.0/tau);
+      inv_alpha_bar->ElementWiseDivide(slack_L);
 
-      //	alpha_bar->Print(stdout, "alpha_bar_L", 0, "");
-
-      SmartPtr<Vector> inv_alpha_bar = alpha_bar->MakeNew();
-      inv_alpha_bar->Set(1.0);
-      inv_alpha_bar->ElementWiseDivide(*alpha_bar);
       alpha_L = inv_alpha_bar->Max();
       if (alpha_L > 0) {
         alpha_L = Min((1.0/alpha_L), 1.0);
@@ -1795,16 +1787,10 @@ namespace Ipopt
       SmartPtr<Vector> compressed_delta = slack_U.MakeNew();
       P_U.TransMultVector(1.0, delta, 0.0, *compressed_delta);
 
-      SmartPtr<Vector> alpha_bar = slack_U.MakeNew();
-      alpha_bar->Copy(slack_U);
-      alpha_bar->Scal(tau);
-      alpha_bar->ElementWiseDivide(*compressed_delta);
-
-      //	alpha_bar->Print(stdout, "alpha_bar_U", 0, "");
-
-      SmartPtr<Vector> inv_alpha_bar = alpha_bar->MakeNew();
-      inv_alpha_bar->Set(1.0);
-      inv_alpha_bar->ElementWiseDivide(*alpha_bar);
+      SmartPtr<Vector> inv_alpha_bar = slack_U.MakeNew();
+      inv_alpha_bar->Copy(*compressed_delta);
+      inv_alpha_bar->Scal(1.0/tau);
+      inv_alpha_bar->ElementWiseDivide(slack_U);
 
       alpha_U = inv_alpha_bar->Max();
       if (alpha_U > 0) {
@@ -2012,27 +1998,81 @@ namespace Ipopt
     tdeps.push_back(GetRawPtr(z_U));
 
     if (!curr_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
+      if (!trial_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
 
-      SmartPtr<const Vector> slack_x_L = curr_slack_x_L();
-      SmartPtr<const Vector> slack_x_U = curr_slack_x_U();
-      SmartPtr<const Vector> slack_s_L = curr_slack_s_L();
-      SmartPtr<const Vector> slack_s_U = curr_slack_s_U();
+	SmartPtr<const Vector> slack_x_L = curr_slack_x_L();
+	SmartPtr<const Vector> slack_x_U = curr_slack_x_U();
+	SmartPtr<const Vector> slack_s_L = curr_slack_s_L();
+	SmartPtr<const Vector> slack_s_U = curr_slack_s_U();
 
-      Index ncomps = z_L->Dim() + z_U->Dim() + v_L->Dim() + v_U->Dim();
+	Index ncomps = z_L->Dim() + z_U->Dim() + v_L->Dim() + v_U->Dim();
 
-      if (ncomps>0) {
-        result = z_L->Dot(*slack_x_L);
-        result += z_U->Dot(*slack_x_U);
-        result += v_L->Dot(*slack_s_L);
-        result += v_U->Dot(*slack_s_U);
+	if (ncomps>0) {
+	  result = z_L->Dot(*slack_x_L);
+	  result += z_U->Dot(*slack_x_U);
+	  result += v_L->Dot(*slack_s_L);
+	  result += v_U->Dot(*slack_s_U);
 
-        result /= (Number)ncomps;
-      }
-      else {
-        result = 0.;
+	  result /= (Number)ncomps;
+	}
+	else {
+	  result = 0.;
+	}
       }
 
       curr_avrg_compl_cache_.AddCachedResult(result, tdeps);
+    }
+
+    return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::trial_avrg_compl()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_avrg_compl()",
+                   dbg_verbosity);
+
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->trial_x();
+    SmartPtr<const Vector> s = ip_data_->trial_s();
+    SmartPtr<const Vector> z_L = ip_data_->trial_z_L();
+    SmartPtr<const Vector> z_U = ip_data_->trial_z_U();
+    SmartPtr<const Vector> v_L = ip_data_->trial_v_L();
+    SmartPtr<const Vector> v_U = ip_data_->trial_v_U();
+
+    std::vector<const TaggedObject*> tdeps;
+    tdeps.push_back(GetRawPtr(x));
+    tdeps.push_back(GetRawPtr(s));
+    tdeps.push_back(GetRawPtr(z_L));
+    tdeps.push_back(GetRawPtr(z_U));
+    tdeps.push_back(GetRawPtr(v_L));
+    tdeps.push_back(GetRawPtr(z_U));
+
+    if (!trial_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
+      if (!curr_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
+
+	SmartPtr<const Vector> slack_x_L = trial_slack_x_L();
+	SmartPtr<const Vector> slack_x_U = trial_slack_x_U();
+	SmartPtr<const Vector> slack_s_L = trial_slack_s_L();
+	SmartPtr<const Vector> slack_s_U = trial_slack_s_U();
+
+	Index ncomps = z_L->Dim() + z_U->Dim() + v_L->Dim() + v_U->Dim();
+
+	if (ncomps>0) {
+	  result = z_L->Dot(*slack_x_L);
+	  result += z_U->Dot(*slack_x_U);
+	  result += v_L->Dot(*slack_s_L);
+	  result += v_U->Dot(*slack_s_U);
+
+	  result /= (Number)ncomps;
+	}
+	else {
+	  result = 0.;
+	}
+      }
+
+      trial_avrg_compl_cache_.AddCachedResult(result, tdeps);
     }
 
     return result;
