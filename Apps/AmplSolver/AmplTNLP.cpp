@@ -12,12 +12,12 @@
 // - look closer at the interface - it should pass in non-zeros as well as m in the jacobian stuff (maybe hessian stuff)
 
 /* AMPL includes */
-extern "C"
-{
+//extern "C"
+//{
 #include "asl.h"
 #include "asl_pfgh.h"
 #include "getstub.h"
-}
+//}
 
 #include "AmplTNLP.hpp"
 #include "IpDenseVector.hpp"
