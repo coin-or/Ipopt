@@ -19,7 +19,7 @@ extern "C"
 {
   // here we assume that float corresponds to Fortran's single
   // precision
-  void F77_FUNC(mc19ad,MM19AD)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN,
+  void F77_FUNC(mc19ad,MC19AD)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN,
                                ipfint* ICN, float* R, float* C, float* W);
 }
 
@@ -80,7 +80,7 @@ namespace Ipopt
     float* R = new float[n];
     float* C = new float[n];
     float* W = new float[5*n];
-    F77_FUNC(mc19ad,MM19AD)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
+    F77_FUNC(mc19ad,MC19AD)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
     delete[] W;
 
     if (DBG_VERBOSITY()>=3) {
