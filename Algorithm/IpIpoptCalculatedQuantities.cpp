@@ -126,7 +126,7 @@ namespace Ipopt
       s_max_ = 100.;
     }
 
-    if (options.GetNumericValue("kappa_d_", value, prefix)) {
+    if (options.GetNumericValue("kappa_d", value, prefix)) {
       ASSERT_EXCEPTION(value >= 0.0, OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"kappa_d\": This value must be non-negative.");
       kappa_d_ = value;
@@ -1068,7 +1068,11 @@ namespace Ipopt
     zero_y_c->Set(0.);
     zero_y_d->Set(0.);
 
-    return ip_nlp_->h(*x, 0.0, *zero_y_c, *zero_y_d);
+    SmartPtr<const SymMatrix> h = ip_nlp_->h(*x, 0.0, *zero_y_c, *zero_y_d);
+
+    DBG_PRINT_MATRIX(2, "zero_hessian", *h);
+
+    return h;
   }
 
   ///////////////////////////////////////////////////////////////////////////
