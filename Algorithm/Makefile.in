@@ -55,7 +55,8 @@ LIBRARIES = $(noinst_LIBRARIES)
 libipoptalg_a_AR = $(AR) $(ARFLAGS)
 libipoptalg_a_LIBADD =
 am_libipoptalg_a_OBJECTS = IpAlgBuilder.$(OBJEXT) \
-	IpDefaultIterateInitializer.$(OBJEXT) IpFilter.$(OBJEXT) \
+	IpDefaultIterateInitializer.$(OBJEXT) \
+	IpWarmStartIterateInitializer.$(OBJEXT) IpFilter.$(OBJEXT) \
 	IpFilterLineSearch.$(OBJEXT) IpIpoptAlg.$(OBJEXT) \
 	IpIpoptCalculatedQuantities.$(OBJEXT) IpIpoptData.$(OBJEXT) \
 	IpLoqoMuOracle.$(OBJEXT) IpMonotoneMuUpdate.$(OBJEXT) \
@@ -90,7 +91,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/IpRestoIterateInitializer.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpRestoIterationOutput.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpRestoMinC_1Nrm.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/IpRestoRestoPhase.Po
+@AMDEP_TRUE@	./$(DEPDIR)/IpRestoRestoPhase.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpWarmStartIterateInitializer.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -235,6 +237,7 @@ libipoptalg_a_SOURCES = \
 	IpAlgStrategy.hpp \
 	IpConvCheck.hpp \
 	IpDefaultIterateInitializer.hpp IpDefaultIterateInitializer.cpp \
+	IpWarmStartIterateInitializer.hpp IpWarmStartIterateInitializer.cpp \
 	IpFilter.cpp IpFilter.hpp \
 	IpFilterLineSearch.cpp IpFilterLineSearch.hpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
@@ -269,6 +272,7 @@ ASTYLE_SOURCES = \
 	IpAlgStrategy.hppbak \
 	IpConvCheck.hppbak \
 	IpDefaultIterateInitializer.hppbak IpDefaultIterateInitializer.cppbak \
+	IpWarmStartIterateInitializer.hppbak IpWarmStartIterateInitializer.cppbak \
 	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLineSearch.cppbak IpFilterLineSearch.hppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
@@ -366,6 +370,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoIterationOutput.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoMinC_1Nrm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoRestoPhase.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpWarmStartIterateInitializer.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

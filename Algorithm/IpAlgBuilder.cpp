@@ -21,6 +21,7 @@
 #include "IpRestoMinC_1Nrm.hpp"
 #include "IpLeastSquareMults.hpp"
 #include "IpDefaultIterateInitializer.hpp"
+#include "IpWarmStartIterateInitializer.hpp"
 #include "IpOrigIterationOutput.hpp"
 #include "IpRestoIterationOutput.hpp"
 #include "IpRestoFilterConvCheck.hpp"
@@ -99,8 +100,21 @@ namespace Ipopt
     // Initialization object
     SmartPtr<EqMultiplierCalculator> EqMultCalculator =
       new LeastSquareMultipliers(*AugSolver);
-    SmartPtr<IterateInitializer> IterInitializer =
-      new DefaultIterateInitializer(EqMultCalculator);
+    SmartPtr<IterateInitializer> IterInitializer;
+    Index ivalue;
+    bool warm_start_init_point;
+    if (options.GetIntegerValue("warm_start_init_point", ivalue, prefix)) {
+      warm_start_init_point = (ivalue != 0);
+    }
+    else {
+      warm_start_init_point = false;
+    }
+    if (warm_start_init_point) {
+      IterInitializer = new WarmStartIterateInitializer();
+    }
+    else {
+      IterInitializer = new DefaultIterateInitializer(EqMultCalculator);
+    }
 
     // Solver for the restoration phase
     SmartPtr<AugSystemSolver> resto_AugSolver =
