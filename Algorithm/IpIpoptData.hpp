@@ -437,6 +437,14 @@ namespace Ipopt
     {
       return info_skip_output_;
     }
+    void Append_info_string(const std::string& add_str)
+    {
+      info_string_ += add_str;
+    }
+    const std::string& info_string() const
+    {
+      return info_string_;
+    }
     /** Set this to true, if the next time when output is written, the
      *  summary line should not be printed. */
     void Set_info_skip_output(bool info_skip_output)
@@ -453,6 +461,7 @@ namespace Ipopt
       info_alpha_primal_char_ = ' ';
       info_ls_count_ = -1;
       info_skip_output_ = false;
+      info_string_.clear();
     }
     //@}
 
@@ -585,6 +594,8 @@ namespace Ipopt
     /** true, if next summary output line should not be printed (eg
      *  after restoration phase. */
     bool info_skip_output_;
+    /** any string of characters for the end of the output line */
+    std::string info_string_;
     //@}
 
     /**@name Default Compiler Generated Methods
