@@ -158,6 +158,11 @@ namespace Ipopt
 
     Number mu = sigma*mu_curr;
 
+    // DELETEME
+    char ssigma[40];
+    sprintf(ssigma, "sigma=%e", sigma);
+    IpData().Append_info_string(ssigma);
+
     return mu;
   }
 
