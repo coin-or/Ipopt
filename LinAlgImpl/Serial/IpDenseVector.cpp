@@ -50,22 +50,6 @@ namespace Ipopt
     ObjectChanged();
   }
 
-  Number* DenseVector::Values()
-  {
-    // Here we assume that every time someone requests this direct raw
-    // pointer, the data is going to change and the Tag for this
-    // vector has to be updated.
-    ObjectChanged();
-    initialized_= true;
-    return values_;
-  }
-
-  const Number* DenseVector::Values() const
-  {
-    DBG_ASSERT(initialized_);
-    return values_;
-  }
-
   void DenseVector::CopyImpl(const Vector& x)
   {
     DBG_START_METH("DenseVector::CopyImpl(const Vector& x)", dbg_verbosity);
@@ -143,10 +127,11 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     assert(dense_x); // ToDo: Implement Others
     if (dense_x) {
+      Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
       // Is there a BLAS type operation for an efficient implementation? NO
       for (Index i=0; i<Dim(); i++) {
-        values_[i] = values_[i]/dense_x->values_[i];
+        values_[i] = values_[i]/values_x[i];
       }
     }
   }
@@ -157,10 +142,11 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     assert(dense_x); // ToDo: Implement Others
     if (dense_x) {
+      Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
       // Is there a BLAS type operation for an efficient implementation? NO
       for (Index i=0; i<Dim(); i++) {
-        values_[i] = values_[i]*dense_x->values_[i];
+        values_[i] = values_[i]*values_x[i];
       }
     }
   }
@@ -171,9 +157,10 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     assert(dense_x); // ToDo: Implement Others
     if (dense_x) {
+      Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
       for (Index i=0; i<Dim(); i++) {
-        values_[i] = Ipopt::Max(values_[i], dense_x->values_[i]);
+        values_[i] = Ipopt::Max(values_[i], values_x[i]);
       }
     }
   }
@@ -184,9 +171,10 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     assert(dense_x); // ToDo: Implement Others
     if (dense_x) {
+      Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
       for (Index i=0; i<Dim(); i++) {
-        values_[i] = Ipopt::Min(values_[i], dense_x->values_[i]);
+        values_[i] = Ipopt::Min(values_[i], values_x[i]);
       }
     }
   }
@@ -294,30 +282,32 @@ namespace Ipopt
     const DenseVector* dense_v1 = dynamic_cast<const DenseVector*>(&v1);
     DBG_ASSERT(dense_v1);
     DBG_ASSERT(dense_v1->initialized_);
+    Number* values_v1=dense_v1->values_;
     const DenseVector* dense_v2 = dynamic_cast<const DenseVector*>(&v2);
     DBG_ASSERT(dense_v2);
     DBG_ASSERT(dense_v2->initialized_);
+    Number* values_v2=dense_v2->values_;
     if (a==1.) {
       if (b==0.) {
 	for (Index i=0; i<Dim(); i++) {
-	  values_[i] = dense_v1->values_[i];
+	  values_[i] = values_v1[i];
 	}
       }
       else {
 	for (Index i=0; i<Dim(); i++) {
-	  values_[i] = dense_v1->values_[i] + b*dense_v2->values_[i];
+	  values_[i] = values_v1[i] + b*values_v2[i];
 	}
       }
     }
     else {
       if (b==0.) {
 	for (Index i=0; i<Dim(); i++) {
-	  values_[i] = a*dense_v1->values_[i];
+	  values_[i] = a*values_v1[i];
 	}
       }
       else {
 	for (Index i=0; i<Dim(); i++) {
-	  values_[i] = a*dense_v1->values_[i] + b*dense_v2->values_[i];
+	  values_[i] = a*values_v1[i] + b*values_v2[i];
 	}
       }
     }
