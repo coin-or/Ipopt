@@ -13,6 +13,12 @@
 #include "IpTypes.hpp"
 #include "IpDebug.hpp"
 
+#ifndef MY_C_FINITE
+# define FiniteNumber finite
+#else
+# define FiniteNumber MY_C_FINITE
+#endif
+
 namespace Ipopt
 {
 

@@ -13,10 +13,6 @@
 # include <cmath>
 #endif
 
-#ifndef MY_C_FINITE
-#define MY_C_FINITE finite
-#endif
-
 namespace Ipopt
 {
   OrigIpoptNLP::OrigIpoptNLP(const SmartPtr<const Journalist>& jnlst,
@@ -178,7 +174,7 @@ namespace Ipopt
     if (!f_cache_.GetCachedResult1Dep(ret, &x)) {
       f_evals_++;
       bool success = nlp_->Eval_f(x, ret);
-      ASSERT_EXCEPTION(success && MY_C_FINITE(ret), Eval_Error,
+      ASSERT_EXCEPTION(success && FiniteNumber(ret), Eval_Error,
                        "Error evaluating the objective function");
       f_cache_.AddCachedResult1Dep(ret, &x);
     }
@@ -194,7 +190,7 @@ namespace Ipopt
       retValue = x_space_->MakeNew();
 
       bool success = nlp_->Eval_grad_f(x, *retValue);
-      ASSERT_EXCEPTION(success && MY_C_FINITE(retValue->Nrm2()),
+      ASSERT_EXCEPTION(success && FiniteNumber(retValue->Nrm2()),
                        Eval_Error, "Error evaluating the gradient of the objective function");
 
       grad_f_cache_.AddCachedResult1Dep(retValue, &x);
@@ -212,7 +208,7 @@ namespace Ipopt
       c_evals_++;
       retValue = c_space_->MakeNew();
       bool success = nlp_->Eval_c(x, *retValue);
-      ASSERT_EXCEPTION(success && MY_C_FINITE(retValue->Nrm2()),
+      ASSERT_EXCEPTION(success && FiniteNumber(retValue->Nrm2()),
                        Eval_Error, "Error evaluating the equality constraints");
       c_cache_.AddCachedResult1Dep(retValue, &x);
     }
@@ -229,7 +225,7 @@ namespace Ipopt
       retValue = d_space_->MakeNew();
 
       bool success = nlp_->Eval_d(x, *retValue);
-      ASSERT_EXCEPTION(success && MY_C_FINITE(retValue->Nrm2()),
+      ASSERT_EXCEPTION(success && FiniteNumber(retValue->Nrm2()),
                        Eval_Error, "Error evaluating the inequality constraints");
       d_cache_.AddCachedResult1Dep(retValue, &x);
     }
