@@ -102,12 +102,17 @@ namespace Ipopt
     //@{
     /** Minimal number of iterative refinement performed per backsolve */
     Index num_min_iter_ref_;
+    /** Maximal value for the regularization. */
+    Number delta_regu_max_;
     //@}
 
     /** Internal function for a single backsolve (which will be used
-     *  for iterative refinement on the outside)
+     *  for iterative refinement on the outside).  This method returns
+     *  false, if for some reason the linear system could not be
+     *  solved (e.g. when the regularization parameter becomes too
+     *  large.)
      */
-    void SolveOnce(const SymMatrix& W,
+    bool SolveOnce(const SymMatrix& W,
                    const Matrix& J_c,
                    const Matrix& J_d,
                    const Matrix& Px_L,
