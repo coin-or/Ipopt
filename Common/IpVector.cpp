@@ -11,31 +11,6 @@
 namespace Ipopt
 {
 
-  Vector::Vector(const VectorSpace* owner_space)
-      :
-      owner_space_(owner_space),
-      TaggedObject(),
-      dot_cache_(10),
-      nrm2_cache_(1),
-      asum_cache_(1),
-      amax_cache_(1),
-      sum_cache_(1),
-      sumlogs_cache_(1)
-  {
-    DBG_ASSERT(IsValid(owner_space_));
-  }
-
-  Vector::~Vector()
-  {}
-
-  VectorSpace::VectorSpace(Index dim)
-      :
-      dim_(dim)
-  {}
-
-  VectorSpace::~VectorSpace()
-  {}
-
   /* Prototype implementation for specialized functions */
   void Vector::AddTwoVectorsImpl(Number a, const Vector& v1,
                                  Number b, const Vector& v2, Number c)
@@ -85,6 +60,29 @@ namespace Ipopt
         Axpy(b, v2);
       }
     }
+  }
+
+  Number Vector::FracToBoundImpl(const Vector& delta, Number tau) const
+  {
+    DBG_ASSERT(tau>=0.);
+    DBG_ASSERT(Dim() == delta.Dim());
+    if (Dim() == 0 && delta.Dim() == 0) {
+      return 1.0;
+    }
+
+    SmartPtr<Vector> inv_alpha_bar = MakeNew();
+    inv_alpha_bar->AddOneVector(-1.0/tau, delta, 0.);
+    inv_alpha_bar->ElementWiseDivide(*this);
+
+    Number alpha = inv_alpha_bar->Max();
+    if (alpha > 0) {
+      alpha = Ipopt::Min(1.0/alpha, 1.0);
+    }
+    else {
+      alpha = 1.0;
+    }
+
+    return alpha;
   }
 
 } // namespace Ipopt
