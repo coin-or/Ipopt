@@ -87,7 +87,10 @@ namespace Ipopt
       IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
 
     Number mu = IpData().curr_mu();
-    Number dnrm = Max(IpData().delta_x()->Amax(), IpData().delta_s()->Amax());
+    Number dnrm = 0.;
+    if (IsValid(IpData().delta_x())) {
+      dnrm = Max(IpData().delta_x()->Amax(), IpData().delta_s()->Amax());
+    }
 
     // Set  the trial  values  for  the original  Data  object to  the
     // current restoration phase values
@@ -168,22 +171,28 @@ namespace Ipopt
                      "||curr_v_U||_inf = %.16e\n", IpData().curr_v_U()->Amax());
     }
     if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                     "\n||delta_x||_inf   = %.16e\n", IpData().delta_x()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                     "||delta_s||_inf   = %.16e\n", IpData().delta_s()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                     "||delta_y_c||_inf = %.16e\n", IpData().delta_y_c()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                     "||delta_y_d||_inf = %.16e\n", IpData().delta_y_d()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                     "||delta_z_L||_inf = %.16e\n", IpData().delta_z_L()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                     "||delta_z_U||_inf = %.16e\n", IpData().delta_z_U()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                     "||delta_v_L||_inf = %.16e\n", IpData().delta_v_L()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                     "||delta_v_U||_inf = %.16e\n", IpData().delta_v_U()->Amax());
+      if (IsValid(IpData().delta_x())) {
+	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		       "\n||delta_x||_inf   = %.16e\n", IpData().delta_x()->Amax());
+	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		       "||delta_s||_inf   = %.16e\n", IpData().delta_s()->Amax());
+	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		       "||delta_y_c||_inf = %.16e\n", IpData().delta_y_c()->Amax());
+	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		       "||delta_y_d||_inf = %.16e\n", IpData().delta_y_d()->Amax());
+	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		       "||delta_z_L||_inf = %.16e\n", IpData().delta_z_L()->Amax());
+	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		       "||delta_z_U||_inf = %.16e\n", IpData().delta_z_U()->Amax());
+	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		       "||delta_v_L||_inf = %.16e\n", IpData().delta_v_L()->Amax());
+	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		       "||delta_v_U||_inf = %.16e\n", IpData().delta_v_U()->Amax());
+      }
+      else {
+	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		       "\nNo search direction has been computed yet.\n");
+      }
     }
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_x", *IpData().curr_x());
