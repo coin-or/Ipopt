@@ -120,8 +120,14 @@ namespace Ipopt
     /** Element-wise reciprocal */
     virtual void ElementWiseReciprocalImpl();
 
+    /** Element-wise absolute values */
+    virtual void ElementWiseAbsImpl();
+
     /** Element-wise square-root */
     virtual void ElementWiseSqrtImpl();
+
+    /** Replaces entries with sgn of the entry */
+    virtual void ElementWiseSgnImpl();
 
     /** Add scalar to every component of the vector.*/
     virtual void AddScalarImpl(Number scalar);
@@ -137,9 +143,6 @@ namespace Ipopt
 
     /** Computes the sum of the logs of the elements of vector */
     virtual Number SumLogsImpl() const;
-
-    /** Replaces entries with sgn of the entry */
-    virtual void SgnImpl();
 
     /** @name Output methods */
     //@{

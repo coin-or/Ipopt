@@ -222,6 +222,15 @@ namespace Ipopt
     }
   }
 
+  void CompoundVector::ElementWiseAbsImpl()
+  {
+    DBG_START_METH("CompoundVector::ElementWiseAbsImpl", dbg_verbosity);
+    DBG_ASSERT(vectors_valid_);
+    for(Index i=0; i<NComps(); i++) {
+      Comp(i)->ElementWiseAbs();
+    }
+  }
+
   void CompoundVector::ElementWiseSqrtImpl()
   {
     DBG_START_METH("CompoundVector::ElementWiseSqrtImpl", dbg_verbosity);
@@ -290,12 +299,12 @@ namespace Ipopt
     return sum;
   }
 
-  void CompoundVector::SgnImpl()
+  void CompoundVector::ElementWiseSgnImpl()
   {
-    DBG_START_METH("CompoundVector::SgnImpl", dbg_verbosity);
+    DBG_START_METH("CompoundVector::ElementWiseSgnImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
     for(Index i=0; i<NComps(); i++) {
-      Comp(i)->Sgn();
+      Comp(i)->ElementWiseSgn();
     }
   }
 
