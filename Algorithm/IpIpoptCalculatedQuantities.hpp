@@ -257,7 +257,8 @@ namespace Ipopt
     /** average of trial values of the complementarities */
     Number trial_avrg_compl();
 
-    /** inner_product of current barrier obj. fn. gradient with current search direction */
+    /** inner_product of current barrier obj. fn. gradient with
+     *  current search direction */
     Number curr_gradBarrTDelta();
 
     /** Compute the norm of a specific type of a set of vectors (uncached) */
