@@ -149,9 +149,11 @@ namespace Ipopt
     Number* dbg_values = new Number[dbg_nz];
     TripletHelper::FillRowCol(dbg_nz, *augmented_system_, dbg_iRows, dbg_jCols);
     TripletHelper::FillValues(dbg_nz, *augmented_system_, dbg_values);
-    Jnlst().Printf(J_MATRIX, J_LINEAR_ALGEBRA, "******* KKT SYSTEM *******\n");
-    for (Index dbg_i=0; dbg_i<dbg_nz; dbg_i++) {
-      Jnlst().Printf(J_MATRIX, J_LINEAR_ALGEBRA, "(%d) KKT[%d][%d] = %g\n", dbg_i, dbg_iRows[dbg_i], dbg_jCols[dbg_i], dbg_values[dbg_i]);
+    if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
+      Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "******* KKT SYSTEM *******\n");
+      for (Index dbg_i=0; dbg_i<dbg_nz; dbg_i++) {
+	Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "(%d) KKT[%d][%d] = %g\n", dbg_i, dbg_iRows[dbg_i], dbg_jCols[dbg_i], dbg_values[dbg_i]);
+      }
     }
     delete [] dbg_iRows;
     dbg_iRows = NULL;
