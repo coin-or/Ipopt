@@ -258,6 +258,16 @@ namespace Ipopt
     print_levels_[(Index)category] = (Index) level;
   }
 
+  void Journal::SetAllPrintLevels(
+    EJournalLevel level)
+  {
+    for (Index category=(Index)J_DBG; 
+	 category<(Index)J_LAST_CATEGORY;
+	 category++) {
+      print_levels_[category] = (Index) level;
+    }
+  }
+
   void Journal::Print(const char* str)
   {
     DBG_START_METH("Journal::Print", 0);

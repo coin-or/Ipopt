@@ -241,6 +241,11 @@ namespace Ipopt
       EJournalCategory category, EJournalLevel level
     );
 
+    /** Set the print level for all category. */
+    void SetAllPrintLevels(
+      EJournalLevel level
+    );
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
