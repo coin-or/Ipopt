@@ -207,143 +207,224 @@ namespace Ipopt
       ;
     }
 
-    /** @name ("Main") Search direction.  They are used to store the
-     *  search directions computed from solving the primal-dual
-     *  system, and can be used in the line search.  They are
-     *  overwritten in every iteration, so do not hold on to the
-     *  pointers (make copies instead)*/
+    /** @name ("Main") Primal-dual search direction.  Those fields are
+     *  used to store the search directions computed from solving the
+     *  primal-dual system, and can be used in the line search.  They
+     *  are overwritten in every iteration, so do not hold on to the
+     *  pointers (make copies instead) */
     //@{
     SmartPtr<const Vector> delta_x()
-    {
-      return ConstPtr(delta_x_);
-    }
-
-    SmartPtr<const Vector> delta_s()
-    {
-      return ConstPtr(delta_s_);
-    }
-
-    SmartPtr<const Vector> delta_y_c()
-    {
-      return ConstPtr(delta_y_c_);
-    }
-
-    SmartPtr<const Vector> delta_y_d()
-    {
-      return ConstPtr(delta_y_d_);
-    }
-
-    SmartPtr<const Vector> delta_z_L()
-    {
-      return ConstPtr(delta_z_L_);
-    }
-
-    SmartPtr<const Vector> delta_z_U()
-    {
-      return ConstPtr(delta_z_U_);
-    }
-
-    SmartPtr<const Vector> delta_v_L()
-    {
-      return ConstPtr(delta_v_L_);
-    }
-
-    SmartPtr<const Vector> delta_v_U()
-    {
-      return ConstPtr(delta_v_U_);
-    }
-
-    SmartPtr<Vector> NonConst_delta_x()
     {
       return delta_x_;
     }
 
-    SmartPtr<Vector> NonConst_delta_s()
+    SmartPtr<const Vector> delta_s()
     {
       return delta_s_;
     }
 
-    SmartPtr<Vector> NonConst_delta_y_c()
+    SmartPtr<const Vector> delta_y_c()
     {
       return delta_y_c_;
     }
 
-    SmartPtr<Vector> NonConst_delta_y_d()
+    SmartPtr<const Vector> delta_y_d()
     {
       return delta_y_d_;
     }
 
-    SmartPtr<Vector> NonConst_delta_z_L()
+    SmartPtr<const Vector> delta_z_L()
     {
       return delta_z_L_;
     }
 
-    SmartPtr<Vector> NonConst_delta_z_U()
+    SmartPtr<const Vector> delta_z_U()
     {
       return delta_z_U_;
     }
 
-    SmartPtr<Vector> NonConst_delta_v_L()
+    SmartPtr<const Vector> delta_v_L()
     {
       return delta_v_L_;
     }
 
-    SmartPtr<Vector> NonConst_delta_v_U()
+    SmartPtr<const Vector> delta_v_U()
     {
       return delta_v_U_;
     }
 
-    void SetFromPtr_delta_x(SmartPtr<Vector>& delta_x)
+    void SetFromPtr_delta_x(const SmartPtr<const Vector>& delta_x)
     {
       delta_x_ = delta_x;
     }
 
-    void SetFromPtr_delta_s(SmartPtr<Vector>& delta_s)
+    void SetFromPtr_delta_s(const SmartPtr<const Vector>& delta_s)
     {
       delta_s_ = delta_s;
     }
 
-    void SetFromPtr_delta_y_c(SmartPtr<Vector>& delta_y_c)
+    void SetFromPtr_delta_y_c(const SmartPtr<const Vector>& delta_y_c)
     {
       delta_y_c_ = delta_y_c;
     }
 
-    void SetFromPtr_delta_y_d(SmartPtr<Vector>& delta_y_d)
+    void SetFromPtr_delta_y_d(const SmartPtr<const Vector>& delta_y_d)
     {
       delta_y_d_ = delta_y_d;
     }
 
-    void SetFromPtr_delta_z_L(SmartPtr<Vector>& delta_z_L)
+    void SetFromPtr_delta_z_L(const SmartPtr<const Vector>& delta_z_L)
     {
       delta_z_L_ = delta_z_L;
     }
 
-    void SetFromPtr_delta_z_U(SmartPtr<Vector>& delta_z_U)
+    void SetFromPtr_delta_z_U(const SmartPtr<const Vector>& delta_z_U)
     {
       delta_z_U_ = delta_z_U;
     }
 
-    void SetFromPtr_delta_v_L(SmartPtr<Vector>& delta_v_L)
+    void SetFromPtr_delta_v_L(const SmartPtr<const Vector>& delta_v_L)
     {
       delta_v_L_ = delta_v_L;
     }
 
-    void SetFromPtr_delta_v_U(SmartPtr<Vector>& delta_v_U)
+    void SetFromPtr_delta_v_U(const SmartPtr<const Vector>& delta_v_U)
     {
       delta_v_U_ = delta_v_U;
     }
 
-    /** ToDo This is currently a hack and should be handled differently */
+    /** Returns true, if the primal-dual step have been already
+     *  computed for the current iteration.  This flag is reset after
+     *  every call of AcceptTrialPoint().  If the search direction is
+     *  computed during the computation of the barrier parameter, the
+     *  method computing the barrier parameter should call
+     *  SetHaveDeltas(true) to tell the IpoptAlgorithm object that it
+     *  doesn't need to recompute the primal-dual step. */
     bool HaveDeltas() const
     {
       return have_deltas_;
     }
 
+    /** Method for setting the HaveDeltas flag.  This method should be
+     *  called if some method computes the primal-dual step (and
+     *  stores it in the delta_ fields of IpoptData) at an early part
+     *  of the iteration.  If that flag is set to true, the
+     *  IpoptAlgorithm object will not recompute the step. */
     void SetHaveDeltas(bool have_deltas)
     {
       have_deltas_ = have_deltas;
     }
     //@}
+
+    /** @name Affine-scaling step.  Those fields can be used to store
+     *  the affine scaling step.  For example, if the method for
+     *  computing the current barrier parameter computes the affine
+     *  scaling steps, then the corrector step in the line search does
+     *  not have to recompute those solutions of the linear system. */
+    //@{
+    SmartPtr<const Vector> delta_aff_x()
+    {
+      return delta_aff_x_;
+    }
+
+    SmartPtr<const Vector> delta_aff_s()
+    {
+      return delta_aff_s_;
+    }
+
+    SmartPtr<const Vector> delta_aff_y_c()
+    {
+      return delta_aff_y_c_;
+    }
+
+    SmartPtr<const Vector> delta_aff_y_d()
+    {
+      return delta_aff_y_d_;
+    }
+
+    SmartPtr<const Vector> delta_aff_z_L()
+    {
+      return delta_aff_z_L_;
+    }
+
+    SmartPtr<const Vector> delta_aff_z_U()
+    {
+      return delta_aff_z_U_;
+    }
+
+    SmartPtr<const Vector> delta_aff_v_L()
+    {
+      return delta_aff_v_L_;
+    }
+
+    SmartPtr<const Vector> delta_aff_v_U()
+    {
+      return delta_aff_v_U_;
+    }
+
+    void SetFromPtr_delta_aff_x(const SmartPtr<const Vector>& delta_aff_x)
+    {
+      delta_aff_x_ = delta_aff_x;
+    }
+
+    void SetFromPtr_delta_aff_s(const SmartPtr<const Vector>& delta_aff_s)
+    {
+      delta_aff_s_ = delta_aff_s;
+    }
+
+    void SetFromPtr_delta_aff_y_c(const SmartPtr<const Vector>& delta_aff_y_c)
+    {
+      delta_aff_y_c_ = delta_aff_y_c;
+    }
+
+    void SetFromPtr_delta_aff_y_d(const SmartPtr<const Vector>& delta_aff_y_d)
+    {
+      delta_aff_y_d_ = delta_aff_y_d;
+    }
+
+    void SetFromPtr_delta_aff_z_L(const SmartPtr<const Vector>& delta_aff_z_L)
+    {
+      delta_aff_z_L_ = delta_aff_z_L;
+    }
+
+    void SetFromPtr_delta_aff_z_U(const SmartPtr<const Vector>& delta_aff_z_U)
+    {
+      delta_aff_z_U_ = delta_aff_z_U;
+    }
+
+    void SetFromPtr_delta_aff_v_L(const SmartPtr<const Vector>& delta_aff_v_L)
+    {
+      delta_aff_v_L_ = delta_aff_v_L;
+    }
+
+    void SetFromPtr_delta_aff_v_U(const SmartPtr<const Vector>& delta_aff_v_U)
+    {
+      delta_aff_v_U_ = delta_aff_v_U;
+    }
+
+    /** Returns true, if the affine-scaling step have been already
+     *  computed for the current iteration.  This flag is reset after
+     *  every call of AcceptTrialPoint().  If the search direction is
+     *  computed during the computation of the barrier parameter, the
+     *  method computing the barrier parameter should call
+     *  SetHaveDeltas(true) to tell the line search does not have to
+     *  recompute them in case it wants to do a corrector step. */
+    bool HaveAffineDeltas() const
+    {
+      return have_affine_deltas_;
+    }
+
+    /** Method for setting the HaveDeltas flag.  This method should be
+     *  called if some method computes the primal-dual step (and
+     *  stores it in the delta_ fields of IpoptData) at an early part
+     *  of the iteration.  If that flag is set to true, the
+     *  IpoptAlgorithm object will not recompute the step. */
+    void SetHaveAffineDeltas(bool have_affine_deltas)
+    {
+      have_affine_deltas_ = have_affine_deltas;
+    }
+    //@}
+
 
     /** @name Public Methods for updating iterates */
     //@{
@@ -609,16 +690,42 @@ namespace Ipopt
     /** Hessian (approximation) - might be changed elsewhere! */
     SmartPtr<const SymMatrix> W_;
 
-    /** @name Delta Variables (steps) */
+    /** @name Primal-dual Step */
     //@{
-    SmartPtr<Vector> delta_x_;
-    SmartPtr<Vector> delta_s_;
-    SmartPtr<Vector> delta_y_c_;
-    SmartPtr<Vector> delta_y_d_;
-    SmartPtr<Vector> delta_z_L_;
-    SmartPtr<Vector> delta_z_U_;
-    SmartPtr<Vector> delta_v_L_;
-    SmartPtr<Vector> delta_v_U_;
+    SmartPtr<const Vector> delta_x_;
+    SmartPtr<const Vector> delta_s_;
+    SmartPtr<const Vector> delta_y_c_;
+    SmartPtr<const Vector> delta_y_d_;
+    SmartPtr<const Vector> delta_z_L_;
+    SmartPtr<const Vector> delta_z_U_;
+    SmartPtr<const Vector> delta_v_L_;
+    SmartPtr<const Vector> delta_v_U_;
+    /** The following flag is set to true, if some other part of the
+     *  algorithm (like the method for computing the barrier
+     *  parameter) has already computed the primal-dual search
+     *  direction.  This flag is reset when the AcceptTrialPoint
+     *  method is called. */
+    bool have_deltas_;
+    //@}
+
+    /** @name Affine-scaling step.  This used to transfer the
+     *  information about the affine-scaling step from the computation
+     *  of the barrier parameter to the corrector (in the line
+     *  search). */
+    //@{
+    SmartPtr<const Vector> delta_aff_x_;
+    SmartPtr<const Vector> delta_aff_s_;
+    SmartPtr<const Vector> delta_aff_y_c_;
+    SmartPtr<const Vector> delta_aff_y_d_;
+    SmartPtr<const Vector> delta_aff_z_L_;
+    SmartPtr<const Vector> delta_aff_z_U_;
+    SmartPtr<const Vector> delta_aff_v_L_;
+    SmartPtr<const Vector> delta_aff_v_U_;
+    /** The following flag is set to true, if some other part of the
+     *  algorithm (like the method for computing the barrier
+     *  parameter) has already computed the affine-scaling step.  This
+     *  flag is reset when the AcceptTrialPoint method is called. */
+    bool have_affine_deltas_;
     //@}
 
     /** iteration count */
@@ -639,12 +746,6 @@ namespace Ipopt
     /** flag for debugging whether we have already curr_ values
      *  available (from which new Vectors can be generated */
     bool have_prototypes_;
-
-    /** The following flag is set to true, if some other part of the
-     *  algorithm (like the optprobing heuristic) has already computed
-     *  the search direction.  This flag is reset when the
-     *  AcceptTrialPoint method is called. */
-    bool have_deltas_;
 
     /** @name Global algorithm parameters.  Those are options that can
      *  be modified by the user and appear at different places in the

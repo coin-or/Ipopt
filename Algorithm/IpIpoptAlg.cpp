@@ -217,6 +217,26 @@ namespace Ipopt
 
     DBG_PRINT_VECTOR(2, "rhs_grad_lag_x", *rhs_grad_lag_x);
 
+    // To save memory, delete the old search directions
+    IpData().SetFromPtr_delta_x(NULL);
+    IpData().SetFromPtr_delta_s(NULL);
+    IpData().SetFromPtr_delta_y_c(NULL);
+    IpData().SetFromPtr_delta_y_d(NULL);
+    IpData().SetFromPtr_delta_z_L(NULL);
+    IpData().SetFromPtr_delta_z_U(NULL);
+    IpData().SetFromPtr_delta_v_L(NULL);
+    IpData().SetFromPtr_delta_v_U(NULL);
+
+    // Get space for the search direction
+    SmartPtr<Vector> delta_x = IpData().curr_x()->MakeNew();
+    SmartPtr<Vector> delta_s = IpData().curr_s()->MakeNew();
+    SmartPtr<Vector> delta_y_c = IpData().curr_y_c()->MakeNew();
+    SmartPtr<Vector> delta_y_d = IpData().curr_y_d()->MakeNew();
+    SmartPtr<Vector> delta_z_L = IpData().curr_z_L()->MakeNew();
+    SmartPtr<Vector> delta_z_U = IpData().curr_z_U()->MakeNew();
+    SmartPtr<Vector> delta_v_L = IpData().curr_v_L()->MakeNew();
+    SmartPtr<Vector> delta_v_U = IpData().curr_v_U()->MakeNew();
+
     pd_solver_->Solve(-1.0, 0.0,
                       *rhs_grad_lag_x,
                       *rhs_grad_lag_s,
@@ -226,15 +246,25 @@ namespace Ipopt
                       *rhs_rel_compl_x_U,
                       *rhs_rel_compl_s_L,
                       *rhs_rel_compl_s_U,
-                      *IpData().NonConst_delta_x(),
-                      *IpData().NonConst_delta_s(),
-                      *IpData().NonConst_delta_y_c(),
-                      *IpData().NonConst_delta_y_d(),
-                      *IpData().NonConst_delta_z_L(),
-                      *IpData().NonConst_delta_z_U(),
-                      *IpData().NonConst_delta_v_L(),
-                      *IpData().NonConst_delta_v_U()
+                      *delta_x,
+                      *delta_s,
+                      *delta_y_c,
+                      *delta_y_d,
+                      *delta_z_L,
+                      *delta_z_U,
+                      *delta_v_L,
+                      *delta_v_U
                      );
+
+    // Store the search directions in the IpData object
+    IpData().SetFromPtr_delta_x(ConstPtr(delta_x));
+    IpData().SetFromPtr_delta_s(ConstPtr(delta_s));
+    IpData().SetFromPtr_delta_y_c(ConstPtr(delta_y_c));
+    IpData().SetFromPtr_delta_y_d(ConstPtr(delta_y_d));
+    IpData().SetFromPtr_delta_z_L(ConstPtr(delta_z_L));
+    IpData().SetFromPtr_delta_z_U(ConstPtr(delta_z_U));
+    IpData().SetFromPtr_delta_v_L(ConstPtr(delta_v_L));
+    IpData().SetFromPtr_delta_v_U(ConstPtr(delta_v_U));   
 
     Jnlst().Printf(J_MOREVECTOR, J_MAIN,
                    "*** Step Calculated for Iteration: %d\n",
@@ -332,6 +362,7 @@ namespace Ipopt
         Jnlst().PrintVector(J_VECTOR, J_MAIN, "new_d_L", *IpNLP().d_L());
         Jnlst().PrintVector(J_VECTOR, J_MAIN, "new_d_U", *IpNLP().d_U());
       }
+
     }
 
     // Make sure that bound multipliers are not too far from \mu * S^{-1}
