@@ -67,9 +67,9 @@ namespace Ipopt
     /**@name Algorithmic Parameters */
     //@{
     /** Parameters for bumping x0 */
-    Number kappa_1_;
+    Number bound_push_;
     /** Parameters for bumping x0 */
-    Number kappa_2_;
+    Number bound_frac_;
     /** If max-norm of the initial equality constraint multiplier
      *  estimate is larger than this, the initial y_* variables are
      *  set to zero. */
