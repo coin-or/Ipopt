@@ -18,15 +18,7 @@ namespace Ipopt
       :
       PDSystemSolver(),
       augSysSolver_(&augSysSolver),
-      dummy_cache_(1),
-      delta_x_curr_(0.),
-      delta_s_curr_(0.),
-      delta_c_curr_(0.),
-      delta_d_curr_(0.),
-      delta_x_last_(0.),
-      delta_s_last_(0.),
-      delta_c_last_(0.),
-      delta_d_last_(0.)
+      dummy_cache_(1)
   {
     DBG_START_METH("PDFullSpaceSolver::PDFullSpaceSolver(SmartPtr<AugSystemSolver> augSysSolver)",dbg_verbosity);
   }
@@ -53,14 +45,61 @@ namespace Ipopt
       num_min_iter_ref_ = 1;
     }
 
+    if (options.GetIntegerValue("num_max_iter_ref", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue >= num_min_iter_ref_, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"num_max_iter_ref\": This value must be larger than or equal to num_min_iter_ref (default 1)");
+      num_max_iter_ref_ = ivalue;
+    }
+    else {
+      num_max_iter_ref_ = 10;
+    }
+
     if (options.GetNumericValue("delta_regu_max", value, prefix)) {
       ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"theta_min_fact\": This value must be larger than 0 and less than theta_max_fact.");
+                       "Option \"theta_min_fact\": This value must be larger than 0.");
       delta_regu_max_ = value;
     }
     else {
       delta_regu_max_ = 1e40;
     }
+
+    if (options.GetNumericValue("residual_ratio_max", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"residual_ratio_max\": This value must be larger than 0.");
+      residual_ratio_max_ = value;
+    }
+    else {
+      residual_ratio_max_ = 1e-10;
+    }
+
+    if (options.GetNumericValue("residual_ratio_singular", value, prefix)) {
+      ASSERT_EXCEPTION(value > residual_ratio_max_, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"residual_ratio_singular\": This value must be larger than residual_ratio_max.");
+      residual_ratio_singular_ = value;
+    }
+    else {
+      residual_ratio_singular_ = 1e-5;
+    }
+
+    if (options.GetNumericValue("residual_improvement_factor", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"residual_improvement_factor\": This value must be larger than 0.");
+      residual_improvement_factor_ = value;
+    }
+    else {
+      residual_improvement_factor_ = 0.999999999;
+    }
+
+    // Reset internal flags and data
+    augsys_improved_ = false;
+    delta_x_curr_=0.;
+    delta_s_curr_=0.;
+    delta_c_curr_=0.;
+    delta_d_curr_=0.;
+    delta_x_last_=0.;
+    delta_s_last_=0.;
+    delta_c_last_=0.;
+    delta_d_last_=0.;
 
     return augSysSolver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                      options, prefix);
@@ -126,7 +165,7 @@ namespace Ipopt
       copy_res_vU->Copy(res_vU);
     }
 
-    // Recieve data about matrix
+    // Receive data about matrix
     SmartPtr<const Vector> x = IpData().curr_x();
     SmartPtr<const Vector> s = IpData().curr_s();
     SmartPtr<const SymMatrix> W = IpData().W();
@@ -146,18 +185,45 @@ namespace Ipopt
     SmartPtr<const Vector> slack_s_U = IpCq().curr_slack_s_U();
     SmartPtr<const Vector> sigma_x = IpCq().curr_sigma_x();
     SmartPtr<const Vector> sigma_s = IpCq().curr_sigma_s();
-
     DBG_PRINT_VECTOR(2, "Sigma_x", *sigma_x);
     DBG_PRINT_VECTOR(2, "Sigma_s", *sigma_s);
-    SolveOnce(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
-              *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
-              *sigma_x, *sigma_s, 1., 0., rhs_x, rhs_s, rhs_c, rhs_d,
-              rhs_zL, rhs_zU, rhs_vL, rhs_vU, res_x, res_s, res_c, res_d,
-              res_zL, res_zU, res_vL, res_vU);
 
-    // If necessary or desired, perform iterative refinement
-    Index num_iter_ref = 0;
-    while (!allow_inexact && num_iter_ref < num_min_iter_ref_) {
+    bool done = false;
+    // The following flag is set to true, if we asked the linear
+    // solver successfully, to improve the quality of the solution in
+    // the next solve.
+    bool resolve_unmodified = false;
+    // the following flag is set to true, if iterative refinement
+    // failed, and we want to do try if a modified system is able to
+    // remedy that problem
+    bool pretend_singular = false;
+
+    while (!done) {
+
+      bool solve_retval =
+        SolveOnce(resolve_unmodified, pretend_singular,
+                  *W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
+                  *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
+                  *sigma_x, *sigma_s, 1., 0., rhs_x, rhs_s, rhs_c, rhs_d,
+                  rhs_zL, rhs_zU, rhs_vL, rhs_vU, res_x, res_s, res_c, res_d,
+                  res_zL, res_zU, res_vL, res_vU);
+
+      if (!solve_retval) {
+        // If system seems not to be solvable, we set the search
+        // direction to zero, and hope that the line search will take
+        // care of this (e.g. call the restoration phase).  ToDo: We
+        // might want to use a more explicit cue later.
+        res_x.Set(0.);
+        res_s.Set(0.);
+        res_c.Set(0.);
+        res_d.Set(0.);
+        res_zL.Set(0.);
+        res_zU.Set(0.);
+        res_vL.Set(0.);
+        res_vU.Set(0.);
+        return;
+      }
+
       // Get space for the residual
       SmartPtr<Vector> resid_x = res_x.MakeNew();
       SmartPtr<Vector> resid_s = res_s.MakeNew();
@@ -178,32 +244,116 @@ namespace Ipopt
                        *resid_c, *resid_d,
                        *resid_zL, *resid_zU, *resid_vL, *resid_vU);
 
-      // To the next back solve
-      bool solve_retval =
-        SolveOnce(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
-                  *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
-                  *sigma_x, *sigma_s, -1., 1., *resid_x, *resid_s, *resid_c, *resid_d,
-                  *resid_zL, *resid_zU, *resid_vL, *resid_vU, res_x, res_s, res_c, res_d,
-                  res_zL, res_zU, res_vL, res_vU);
-      // If system seems not to be solvable, we set the search
-      // direction to zero, and hope that the line search will take
-      // care of this (e.g. call the restoration phase).  ToDo: We
-      // might want to use a more explicit cue later.
-      if (!solve_retval) {
-        res_x.Set(0.);
-        res_s.Set(0.);
-        res_c.Set(0.);
-        res_d.Set(0.);
-        res_zL.Set(0.);
-        res_zU.Set(0.);
-        res_vL.Set(0.);
-        res_vU.Set(0.);
-        return;
+      Number residual_ratio =
+        ComputeResidualRatio(rhs_x, rhs_s, rhs_c, rhs_d,
+                             rhs_zL, rhs_zU, rhs_vL, rhs_vU,
+                             res_x, res_s, res_c, res_d,
+                             res_zL, res_zU, res_vL, res_vU,
+                             *resid_x, *resid_s, *resid_c, *resid_d,
+                             *resid_zL, *resid_zU, *resid_vL, *resid_vU);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "residual_ratio = %e\n", residual_ratio);
+      Number residual_ratio_old = residual_ratio;
+
+      // If necessary or desired, perform iterative refinement
+      Index num_iter_ref = 0;
+      bool quit_refinement = false;
+      while (!allow_inexact && !quit_refinement &&
+             (num_iter_ref < num_min_iter_ref_ ||
+              residual_ratio > residual_ratio_max_) ) {
+
+        // To the next back solve
+        solve_retval =
+          SolveOnce(resolve_unmodified, pretend_singular,
+                    *W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
+                    *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
+                    *sigma_x, *sigma_s, -1., 1., *resid_x, *resid_s, *resid_c, *resid_d,
+                    *resid_zL, *resid_zU, *resid_vL, *resid_vU, res_x, res_s, res_c, res_d,
+                    res_zL, res_zU, res_vL, res_vU);
+        DBG_ASSERT(solve_retval);
+
+        ComputeResiduals(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U,
+                         *z_L, *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U,
+                         *slack_s_L, *slack_s_U, *sigma_x, *sigma_s,
+                         alpha, beta, rhs_x, rhs_s, rhs_c, rhs_d,
+                         rhs_zL, rhs_zU, rhs_vL, rhs_vU, res_x, res_s,
+                         res_c, res_d,
+                         res_zL, res_zU, res_vL, res_vU, *resid_x, *resid_s,
+                         *resid_c, *resid_d,
+                         *resid_zL, *resid_zU, *resid_vL, *resid_vU);
+
+        residual_ratio =
+          ComputeResidualRatio(rhs_x, rhs_s, rhs_c, rhs_d,
+                               rhs_zL, rhs_zU, rhs_vL, rhs_vU,
+                               res_x, res_s, res_c, res_d,
+                               res_zL, res_zU, res_vL, res_vU,
+                               *resid_x, *resid_s, *resid_c, *resid_d,
+                               *resid_zL, *resid_zU, *resid_vL, *resid_vU);
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "residual_ratio = %e\n", residual_ratio);
+
+        num_iter_ref++;
+        // Check if we have to give up on iterative refinement
+        if (num_iter_ref>num_min_iter_ref_ &&
+            (num_iter_ref>num_max_iter_ref_ ||
+             residual_ratio>residual_improvement_factor_*residual_ratio_old)) {
+
+          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                         "Iterative refinement failed with residual_ratio = %e\n", residual_ratio);
+          quit_refinement = true;
+
+          // Pretend singularity only once - if it didn't help, we
+          // have to live with what we got so far
+          resolve_unmodified = false;
+          if (!pretend_singular) {
+            // First try if we can ask the augmented system solver to
+            // improve the quality of the solution (only if that hasn't
+            // been done before for this linear system)
+            if (!augsys_improved_) {
+              Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                             "Asking augmented system solver to improve quality of its solutions.\n");
+              augsys_improved_ = augSysSolver_->IncreaseQuality();
+              if (augsys_improved_) {
+                IpData().Append_info_string("q");
+                resolve_unmodified = true;
+              }
+              else {
+                // solver said it cannot improve quality, so let
+                // possibly conclude that the current modification is
+                // singular
+                pretend_singular = true;
+              }
+            }
+            else {
+              // we had already asked the solver before to improve the
+              // quality of the solution, so let's now pretend that the
+              // modification is possibly singular
+              pretend_singular = true;
+            }
+            if (pretend_singular) {
+              // let's only conclude that the current linear system
+              // including modifications is singular, if the residual is
+              // quite bad
+              if (residual_ratio < residual_ratio_singular_) {
+                pretend_singular = false;
+                IpData().Append_info_string("S");
+              }
+              else {
+                IpData().Append_info_string("s");
+              }
+            }
+          }
+          else {
+            pretend_singular = false;
+          }
+        }
+
+        residual_ratio_old = residual_ratio;
       }
 
-      num_iter_ref++;
-    }
+      done = !(resolve_unmodified) && !(pretend_singular);
 
+    } // while (!done) {
     // Finally let's assemble the res result vectors
     if (alpha != 0.) {
       res_x.Scal(alpha);
@@ -232,7 +382,9 @@ namespace Ipopt
 
   }
 
-  bool PDFullSpaceSolver::SolveOnce(const SymMatrix& W,
+  bool PDFullSpaceSolver::SolveOnce(bool resolve_unmodified,
+                                    bool pretend_singular,
+                                    const SymMatrix& W,
                                     const Matrix& J_c,
                                     const Matrix& J_d,
                                     const Matrix& Px_L,
@@ -316,10 +468,14 @@ namespace Ipopt
     bool uptodate = dummy_cache_.GetCachedResult(dummy, deps);
     if (!uptodate) {
       dummy_cache_.AddCachedResult(dummy, deps);
+      augsys_improved_ = false;
     }
+    // improve_current_solution can only be true, if that system has
+    // been solved before
+    DBG_ASSERT((!resolve_unmodified && !pretend_singular) || uptodate);
 
     enum SymLinearSolver::ESolveStatus retval;
-    if (uptodate) {
+    if (uptodate && !pretend_singular) {
       // No need to go throught the pain of finding the appropriate
       // values for the deltas, because the matrix hasn't changed since
       // the last call.  So, just call the Solve Method
@@ -333,24 +489,38 @@ namespace Ipopt
     }
     else {
       Index numberOfEVals=rhs_c.Dim()+rhs_d.Dim();
-      // First try, if no modification is necessary to obtain correct inertia
-      delta_x_curr_=0.;
-      delta_s_curr_=0.;
-      delta_c_curr_=0.;
-      delta_d_curr_=0.;
+      // counter for the number of trial evaluations
+      // (ToDo is not at the corrent place)
+      Index count = 0;
+      // Flag indicating if instead of the first
+      // solve we want to pretend that the system is
+      // singluar
+      if (!pretend_singular) {
+        // First try, if no modification is necessary to obtain correct inertia
+        delta_x_curr_=0.;
+        delta_s_curr_=0.;
+        delta_c_curr_=0.;
+        delta_d_curr_=0.;
+      }
 
       retval = SymLinearSolver::S_SINGULAR;
-      bool fail=false;
-      Index count=0;
+      bool fail = false;
+
       while (retval!= SymLinearSolver::S_SUCCESS && !fail) {
 
-        count++;
-        retval = augSysSolver_->Solve(&W, &sigma_x, delta_x_curr_,
-                                      &sigma_s, delta_s_curr_, &J_c, NULL,
-                                      delta_c_curr_, &J_d, NULL, delta_d_curr_,
-                                      *augRhs_x, *augRhs_s, rhs_c, rhs_d,
-                                      *sol_x, *sol_s, *sol_c,
-                                      *sol_d, true, numberOfEVals);
+        if (pretend_singular) {
+          retval = SymLinearSolver::S_SINGULAR;
+          pretend_singular = false;
+        }
+        else {
+          count++;
+          retval = augSysSolver_->Solve(&W, &sigma_x, delta_x_curr_,
+                                        &sigma_s, delta_s_curr_, &J_c, NULL,
+                                        delta_c_curr_, &J_d, NULL, delta_d_curr_,
+                                        *augRhs_x, *augRhs_s, rhs_c, rhs_d,
+                                        *sol_x, *sol_s, *sol_c,
+                                        *sol_d, true, numberOfEVals);
+        }
         assert(retval!=SymLinearSolver::S_FATAL_ERROR); //TODO make return code
         if (retval==SymLinearSolver::S_SINGULAR && delta_c_curr_==0.) {
           // If the matrix is singular and delta_c is not yet nonzero,
@@ -576,6 +746,76 @@ namespace Ipopt
                      "max-norm resid_vL %e\n", resid_vL.Amax());
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "max-norm resid_vU %e\n", resid_vU.Amax());
+    }
+  }
+
+  Number PDFullSpaceSolver::ComputeResidualRatio(
+    const Vector& rhs_x,
+    const Vector& rhs_s,
+    const Vector& rhs_c,
+    const Vector& rhs_d,
+    const Vector& rhs_zL,
+    const Vector& rhs_zU,
+    const Vector& rhs_vL,
+    const Vector& rhs_vU,
+    const Vector& res_x,
+    const Vector& res_s,
+    const Vector& res_c,
+    const Vector& res_d,
+    const Vector& res_zL,
+    const Vector& res_zU,
+    const Vector& res_vL,
+    const Vector& res_vU,
+    const Vector& resid_x,
+    const Vector& resid_s,
+    const Vector& resid_c,
+    const Vector& resid_d,
+    const Vector& resid_zL,
+    const Vector& resid_zU,
+    const Vector& resid_vL,
+    const Vector& resid_vU)
+  {
+    DBG_START_METH("PDFullSpaceSolver::ComputeResidualRatio", dbg_verbosity);
+
+    Number nrm_rhs = rhs_x.Amax();
+    nrm_rhs = Max(nrm_rhs, rhs_s.Amax());
+    nrm_rhs = Max(nrm_rhs, rhs_c.Amax());
+    nrm_rhs = Max(nrm_rhs, rhs_d.Amax());
+    nrm_rhs = Max(nrm_rhs, rhs_zL.Amax());
+    nrm_rhs = Max(nrm_rhs, rhs_zU.Amax());
+    nrm_rhs = Max(nrm_rhs, rhs_vL.Amax());
+    nrm_rhs = Max(nrm_rhs, rhs_vU.Amax());
+
+    Number nrm_res = res_x.Amax();
+    nrm_res = Max(nrm_res, res_s.Amax());
+    nrm_res = Max(nrm_res, res_c.Amax());
+    nrm_res = Max(nrm_res, res_d.Amax());
+    nrm_res = Max(nrm_res, res_zL.Amax());
+    nrm_res = Max(nrm_res, res_zU.Amax());
+    nrm_res = Max(nrm_res, res_vL.Amax());
+    nrm_res = Max(nrm_res, res_vU.Amax());
+
+    Number nrm_resid = resid_x.Amax();
+    nrm_resid = Max(nrm_resid, resid_s.Amax());
+    nrm_resid = Max(nrm_resid, resid_c.Amax());
+    nrm_resid = Max(nrm_resid, resid_d.Amax());
+    nrm_resid = Max(nrm_resid, resid_zL.Amax());
+    nrm_resid = Max(nrm_resid, resid_zU.Amax());
+    nrm_resid = Max(nrm_resid, resid_vL.Amax());
+    nrm_resid = Max(nrm_resid, resid_vU.Amax());
+
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "nrm_rhs = %8.2e nrm_sol = %8.2e nrm_resid = %8.2e\n",
+                   nrm_rhs, nrm_res, nrm_resid);
+
+    if (nrm_rhs+nrm_res == 0.) {
+      return nrm_resid;  // this should be zero
+    }
+    else {
+      // ToDo: determine how to include norm of matrix, and what
+      // safeguard to use against incredibly large solution vectors
+      Number max_cond = 1e6;
+      return nrm_resid/(Min(nrm_res, max_cond*nrm_rhs)+nrm_rhs);
     }
   }
 
