@@ -48,7 +48,7 @@ namespace Ipopt
       new PDFullSpaceSolver(*AugSolver);
 
     // Create the object for initializing the iterates
-    // Initialization object (TODO)
+    // Initialization object
     SmartPtr<EqMultiplierCalculator> EqMultCalculator =
       new LeastSquareMultipliers(*AugSolver);
     SmartPtr<IterateInitializer> IterInitializer =
@@ -111,8 +111,8 @@ namespace Ipopt
     SmartPtr<EqMultiplierCalculator> resto_EqMultCalculator =
       new LeastSquareMultipliers(*resto_AugSolver);
     SmartPtr<IterateInitializer> resto_IterInitializer =
-      new DefaultIterateInitializer(resto_EqMultCalculator); //TODO
-    //      new RestoIterateInitializer(resto_EqMultCalculator);
+    //      new DefaultIterateInitializer(resto_EqMultCalculator); //TODO
+      new RestoIterateInitializer(resto_EqMultCalculator);
 
     // Create the object for the iteration output during restoration
     SmartPtr<OrigIterationOutput> resto_OrigIterOutput = NULL;
@@ -131,7 +131,7 @@ namespace Ipopt
 
     // Set the restoration phase
     SmartPtr<RestorationPhase> resto_phase =
-      new MinC_1NrmRestorationPhase(*resto_alg);
+      new MinC_1NrmRestorationPhase(*resto_alg, EqMultCalculator);
 
     // Create the line search to be used by the main algorithm
     SmartPtr<FilterLineSearch> lineSearch =

@@ -12,6 +12,7 @@
 #include "IpUtils.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpIpoptAlg.hpp"
+#include "IpEqMultCalculator.hpp"
 
 namespace Ipopt
 {
@@ -25,8 +26,13 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor, taking strategy objects.  The resto_alg strategy
-     *  object is the restoration phase Ipopt algorithm.  The std::vector of Resto*/
-    MinC_1NrmRestorationPhase(IpoptAlgorithm& resto_alg);
+     *  object is the restoration phase Ipopt algorithm.  The
+     *  eq_mult_calculator is used to reinitialize the equality
+     *  constraint multipliers after the restoration phase algorithm
+     *  has finished - unless it is NULL, in which case the
+     *  multipliers are set to 0. */
+    MinC_1NrmRestorationPhase(IpoptAlgorithm& resto_alg,
+			      const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator);
 
     /** Default destructor */
     virtual ~MinC_1NrmRestorationPhase();
@@ -57,8 +63,21 @@ namespace Ipopt
     void operator=(const MinC_1NrmRestorationPhase&);
     //@}
 
+    /** @name Strategy objects */
+    //@{
     SmartPtr<IpoptAlgorithm> resto_alg_;
+    SmartPtr<EqMultiplierCalculator> eq_mult_calculator_;
+    //@}
+
+    /** Copy of original options, which is required to initialize the
+     *  Ipopt algorithm strategy object before restoration phase is
+     *  started. */
     SmartPtr<OptionsList> resto_options_;
+
+    /** @name Algorithmic parameters */
+    //@{
+    Number laminitmax_;
+    //@}
   };
 
 } // namespace Ipopt
