@@ -11,6 +11,12 @@
 // - pass in a tag so we can know when x has changed
 // - look closer at the interface - it should pass in non-zeros as well as m in the jacobian stuff (maybe hessian stuff)
 
+#include "AmplTNLP.hpp"
+#include "IpDenseVector.hpp"
+#include "IpGenTMatrix.hpp"
+#include "IpSymTMatrix.hpp"
+#include "IpBlas.hpp"
+
 /* AMPL includes */
 //extern "C"
 //{
@@ -18,12 +24,6 @@
 #include "asl_pfgh.h"
 #include "getstub.h"
 //}
-
-#include "AmplTNLP.hpp"
-#include "IpDenseVector.hpp"
-#include "IpGenTMatrix.hpp"
-#include "IpSymTMatrix.hpp"
-#include "IpBlas.hpp"
 
 namespace Ipopt
 {
