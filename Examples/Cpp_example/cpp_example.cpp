@@ -14,6 +14,6 @@ using namespace Ipopt;
 int main(int argv, char* argc[])
 {
    SmartPtr<TNLP> mynlp = new MyNLP();
-   IpoptApplication* app = new IpoptApplication();
+   SmartPtr<IpoptApplication> app = new IpoptApplication();
    return (int) app->OptimizeTNLP(mynlp);
 }
