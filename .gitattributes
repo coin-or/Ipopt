@@ -1,0 +1,4 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+# This should usually take care of everything, but to be sure, we setup
+# extra rules below.
+* text=auto
