@@ -283,7 +283,7 @@ namespace Ipopt
       IpBlasDcopy(m, g, 1, g_sol_, 1);
     }
     if (lambda_sol_) {
-      IpBlasDcopy(n, lambda, 1, lambda_sol_, 1);
+      IpBlasDcopy(m, lambda, 1, lambda_sol_, 1);
     }
     if (obj_sol_) {
       *obj_sol_ = obj_value;
