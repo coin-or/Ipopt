@@ -79,13 +79,6 @@ namespace Ipopt
       jrnl->SetPrintLevel(J_DBG, J_NONE);
     }
 
-    if( jnlst_->ProduceOutput(J_DETAILED, J_MAIN) ) {
-      // Print out the options (including the number of times they were used
-      std::string liststr;
-      options_->PrintList(liststr);
-      jnlst_->Printf(J_DETAILED, J_MAIN, "\nList of options:\n\n%s", liststr.c_str());
-    }
-
     try {
       SmartPtr<IpoptNLP> ip_nlp =
         new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp));
@@ -103,6 +96,13 @@ namespace Ipopt
 
       // Set up the algorithm
       alg->Initialize(*jnlst_, *ip_nlp, *ip_data, *ip_cq, *options_, "");
+
+      if( jnlst_->ProduceOutput(J_DETAILED, J_MAIN) ) {
+        // Print out the options (including the number of times they were used
+        std::string liststr;
+        options_->PrintList(liststr);
+        jnlst_->Printf(J_DETAILED, J_MAIN, "\nList of options:\n\n%s", liststr.c_str());
+      }
 
       // Run the algorithm
       IpoptAlgorithm::SolverReturn status = alg->Optimize();
