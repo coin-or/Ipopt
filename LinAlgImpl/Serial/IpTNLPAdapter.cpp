@@ -74,8 +74,8 @@ namespace Ipopt
     }
 
     if (options.GetNumericValue("nlp_upper_bound_inf", value, prefix)) {
-      ASSERT_EXCEPTION(value > nlp_lower_bound_inf_, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"theta_max_fact\": This value must be larger than nlp_lower_bound_inf_.");
+      //      ASSERT_EXCEPTION(value > nlp_lower_bound_inf_, OptionsList::OPTION_OUT_OF_RANGE,
+      //                       "Option \"theta_max_fact\": This value must be larger than nlp_lower_bound_inf_.");
       nlp_upper_bound_inf_ = value;
     }
     else {
@@ -279,7 +279,7 @@ namespace Ipopt
     // Get the non zero structure
     Index* g_iRow = new Index[nz_full_jac_g_];
     Index* g_jCol = new Index[nz_full_jac_g_];
-    tnlp_->eval_jac_g(n_full_x_, NULL, false, nz_full_jac_g_,
+    tnlp_->eval_jac_g(n_full_x_, NULL, false, n_full_g_, nz_full_jac_g_,
                       g_iRow, g_jCol, NULL);
 
     const Index* c_col_pos = P_x_full_x_->CompressedPosIndices();
@@ -833,6 +833,7 @@ namespace Ipopt
       return true;
     }
 
+    x_tag_for_g_ = x_tag_for_iterates_;
     return tnlp_->eval_g(n_full_x_, full_x_, new_x, n_full_g_, full_g_);
   }
 
@@ -843,8 +844,8 @@ namespace Ipopt
       return true;
     }
 
-    return tnlp_->eval_jac_g(n_full_x_, full_x_, new_x, nz_full_jac_g_,
-                             NULL, NULL, jac_g_);
+    x_tag_for_jac_g_ = x_tag_for_iterates_;
+    return tnlp_->eval_jac_g(n_full_x_, full_x_, new_x, n_full_g_,                             nz_full_jac_g_, NULL, NULL, jac_g_);
   }
 
 } // namespace Ipopt
