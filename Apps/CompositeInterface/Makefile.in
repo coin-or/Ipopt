@@ -213,7 +213,8 @@ composite_ampl_ipopt_LDADD = $(IPLIBS) \
 
 # Astyle stuff
 ASTYLE_SOURCES = \
-	CompositeNLP.hppbak CompositeNLP.cppbak
+	CompositeNLP.hppbak CompositeNLP.cppbak \
+	comp_ampl_ipopt.cppbak
 
 CLEANFILES = $(ASTYLE_SOURCES)
 SUFFIXES = .cppbak .hppbak
@@ -477,7 +478,6 @@ uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 	tags uninstall uninstall-am uninstall-binPROGRAMS \
 	uninstall-info-am
 
-	comp_ampl_ipopt.cppbak
 
 astyle: $(ASTYLE_SOURCES)
 
