@@ -400,7 +400,7 @@ cuter:	ipoma.o ipo sdipo
 	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
 	  echo CUTEr environment variables not set - cannot install ipoma.f; \
 	else \
-	  echo "-L$(libdir) -lipopt $(IPADDLIBS)" >$$MYCUTER/double/lib/ipo.liblist ;\
+	  echo "-L$(libdir) -lipopt $(IPADDLIBS) $(CXXLIBS)" >$$MYCUTER/double/lib/ipo.liblist ;\
 	  cp ipoma.o $(MYCUTER)/double/bin/ipoma.o; \
 	  cp ipo $(MYCUTER)/bin/ipo ;\
 	  cp sdipo $(MYCUTER)/bin/sdipo ;\

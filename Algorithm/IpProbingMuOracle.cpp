@@ -17,7 +17,7 @@
 namespace Ipopt
 {
 
-  static const Index dbg_verbosity = 0;
+  DBG_SET_VERBOSITY(0);
 
   ProbingMuOracle::ProbingMuOracle(const SmartPtr<PDSystemSolver>& pd_solver)
       :

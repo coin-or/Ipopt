@@ -15,7 +15,7 @@
 
 namespace Ipopt
 {
-  static const Index dbg_verbosity = 0;
+  DBG_SET_VERBOSITY(0);
 
   AugRestoSystemSolver::AugRestoSystemSolver(AugSystemSolver& orig_aug_solver,
       bool skip_orig_aug_solver_init)

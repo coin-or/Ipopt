@@ -20,8 +20,6 @@
 namespace Ipopt
 {
 
-  //  static const Index dbg_verbosity = 0;
-
   DenseVector::DenseVector(const DenseVectorSpace* owner_space)
       :
       Vector(owner_space),

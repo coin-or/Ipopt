@@ -370,7 +370,7 @@ namespace Ipopt
      *  (z_L, z_U, v_L, v_U) from provided step with step length
      *  alpha.
      */
-    void SetTrialBoundMutlipliersFromStep(Number alpha,
+    void SetTrialBoundMultipliersFromStep(Number alpha,
                                           const Vector& delta_z_L,
                                           const Vector& delta_z_U,
                                           const Vector& delta_v_L,

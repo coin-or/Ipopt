@@ -11,7 +11,7 @@
 
 namespace Ipopt
 {
-  static const Index dbg_verbosity = 0;
+  DBG_SET_VERBOSITY(0);
 
   RestoIterateInitializer::RestoIterateInitializer
   (const SmartPtr<EqMultiplierCalculator>& resto_eq_mult_calculator)

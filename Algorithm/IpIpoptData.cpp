@@ -240,7 +240,7 @@ namespace Ipopt
     trial_y_d_ = ConstPtr(newvec);
   }
 
-  void IpoptData::SetTrialBoundMutlipliersFromStep(Number alpha,
+  void IpoptData::SetTrialBoundMultipliersFromStep(Number alpha,
       const Vector& delta_z_L,
       const Vector& delta_z_U,
       const Vector& delta_v_L,

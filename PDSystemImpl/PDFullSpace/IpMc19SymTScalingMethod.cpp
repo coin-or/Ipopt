@@ -26,7 +26,7 @@ extern "C"
 namespace Ipopt
 {
 
-  static const Index dbg_verbosity = 0;
+  DBG_SET_VERBOSITY(0);
 
   bool Mc19SymTScalingMethod::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
