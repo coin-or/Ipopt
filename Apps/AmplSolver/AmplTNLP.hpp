@@ -75,8 +75,8 @@ namespace Ipopt
      *  evaluates the jacobian values (if values is not NULL) for the
      *  nlp. Overloaded from TNLP */
     virtual bool eval_jac_g(Index n, const Number* x, bool new_x,
-                            Index nele_jac, Index* iRow, Index *jCol,
-                            Number* values);
+                            Index m, Index nele_jac, Index* iRow,
+                            Index *jCol, Number* values);
 
     /** specifies the structure of the hessian of the lagrangian (if
      *  values is NULL) and evaluates the values (if values is not

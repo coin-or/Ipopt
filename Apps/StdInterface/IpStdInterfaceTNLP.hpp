@@ -90,7 +90,7 @@ namespace Ipopt
     /** specifies the jacobian structure (if values is NULL) and
      *  evaluates the jacobian values (if values is not NULL) for the
      *  nlp. Overloaded from TNLP */
-    virtual bool eval_jac_g(Index n, const Number* x, bool new_x,
+    virtual bool eval_jac_g(Index n, const Number* x, bool new_x, Index m,
                             Index nele_jac, Index* iRow, Index *jCol,
                             Number* values);
 

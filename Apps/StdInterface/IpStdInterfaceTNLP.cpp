@@ -203,8 +203,8 @@ namespace Ipopt
   }
 
   bool StdInterfaceTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
-                                    Index nele_jac, Index* iRow, Index *jCol,
-                                    Number* values)
+                                    Index m, Index nele_jac, Index* iRow,
+				    Index *jCol, Number* values)
   {
     DBG_ASSERT(n==n_var_);
     DBG_ASSERT(nele_jac==nele_jac_);
@@ -213,7 +213,7 @@ namespace Ipopt
 
     if ( (iRow && jCol && !values) || (!iRow && !jCol && values) ) {
       apply_new_x(new_x, n, x);
-      retval = (*eval_jac_g_)(n, non_const_x_, (Bool)new_x, nele_jac,
+      retval = (*eval_jac_g_)(n, non_const_x_, (Bool)new_x, m, nele_jac,
                               iRow, jCol, values, user_data_);
     }
     else {
