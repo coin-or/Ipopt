@@ -19,13 +19,15 @@ prefix = @prefix@
 
 # Libraries necessary to link with IPOPT
 #LIBS = -L$(IPOPTLIBDIR) -lipopt @IPADDLIBS@
-LIBS = @ipoptlib@ @IPADDLIBS@
+LIBS = @ipoptlib@ @IPADDLIBS@ @FLIBS@
 
 # Necessary Include dirs
-INCL =  -I @prefix@/Interfaces \
-	-I @prefix@/Apps/StdInterface \
-        -I @prefix@/Common \
-        -I @prefix@/inc \
+IPOPTSRCROOTDIR = $(SRCDIR)/../..
+IPOPTINSTALLROOTDIR = @prefix@
+INCL =  -I $(IPOPTSRCROOTDIR)/Interfaces \
+	-I $(IPOPTSRCROOTDIR)/Apps/StdInterface \
+        -I $(IPOPTSRCROOTDIR)/Common \
+        -I $(IPOPTINSTALLROOTDIR)/inc \
 
 # CHANGEME: This should be the name of your executable
 EXE = cpp_example@EXEEXT@
