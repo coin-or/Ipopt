@@ -406,7 +406,9 @@ namespace Ipopt
       IpData().Set_tau(tau);
 
       linesearch_->Reset();
-      linesearch_->SetRigorousLineSearch(false);
+      // Uncomment the next line if the filter should not switch to
+      // the restoration phase in the free mode
+      // linesearch_->SetRigorousLineSearch(false);
     }
     else {
       IpData().Append_info_string("F");
