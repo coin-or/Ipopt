@@ -34,7 +34,7 @@ namespace Ipopt
     }
 
     if (options.GetNumericValue("bound_frac", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0 && value < 0.5, OptionsList::OPTION_OUT_OF_RANGE,
+      ASSERT_EXCEPTION(value > 0 && value <= 0.5, OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"bound_frac\": Value must be between 0 and 0.5.");
       bound_frac_ = value;
     }
@@ -52,7 +52,7 @@ namespace Ipopt
     }
 
     if (options.GetNumericValue("warm_start_bound_frac", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0 && value < 0.5, OptionsList::OPTION_OUT_OF_RANGE,
+      ASSERT_EXCEPTION(value > 0 && value <= 0.5, OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"warm_start_bound_frac\": Value must be between 0 and 0.5.");
       warm_start_bound_frac_ = value;
     }
