@@ -12,6 +12,7 @@
 #include "IpMuUpdate.hpp"
 #include "IpLineSearch.hpp"
 #include "IpMuOracle.hpp"
+#include "IpFilter.hpp"
 
 namespace Ipopt
 {
@@ -68,6 +69,8 @@ namespace Ipopt
     Number mu_min_;
     Number tau_min_;
     Number tau_max_;
+    Number mu_safeguard_exp_;
+    Number mu_safeguard_factor_; //ToDo don't need that?
     //@}
 
     /** @name Strategy objects */
@@ -84,6 +87,13 @@ namespace Ipopt
      */
     SmartPtr<MuOracle> fix_mu_oracle_;
     //@}
+
+    /** Dual infeasibility at initial point.  A negative value means
+     *  that this quantity has not yet been initialized. */
+    Number init_dual_inf_;
+    /** Primal infeasibility at initial point.  A negative value means
+     *  that this quantity has not yet been initialized. */
+    Number init_primal_inf_;
 
     /** @name Methods and data defining the outer globalization
      *  strategy (might be a strategy object later). */
@@ -110,6 +120,11 @@ namespace Ipopt
      *  scaled to each other. */
     Number curr_norm_pd_system();
 
+    /** Method for computing a lower safeguard bound for the barrier
+     *  parameter.  For now, this is related to primal and dual
+     *  infeasibility. */
+    Number lower_mu_safeguard();
+
     /** Maximal number of reference values (algorithmic parameter) */
     Index num_refs_max_;
     /** Values of the currently stored reference values (norm of pd
@@ -120,6 +135,15 @@ namespace Ipopt
     /** Flag indicating whether the barrier parameter should never be
      *  fixed (no globalization) */
     bool mu_never_fix_;
+
+    /** Flag indicating which globalization strategy should be used. */
+    Index adaptive_globalization_;
+    /** Alternatively, we might also want to use a filter */
+    Filter filter_;
+    /** ToDo the following should be combined with MonotoneMuUpdate */
+    Number kappa_epsilon_;
+    Number kappa_mu_;
+    Number theta_mu_;
     //@}
 
     /** Flag indicating whether the problem has any inequality constraints */
