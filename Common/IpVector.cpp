@@ -38,37 +38,53 @@ namespace Ipopt
 
   /* Prototype implementation for specialized functions */
   void Vector::AddTwoVectorsImpl(Number a, const Vector& v1,
-				 Number b, const Vector& v2)
+				 Number b, const Vector& v2, Number c)
   {
-    if (a==0.) {
-      Copy(v2);
-      if (b!=1.) {
-	Scal(b);
+    if (c==0.) {
+      if (a==1.) {
+	Copy(v1);
+	if (b!=0.) {
+	  Axpy(b, v2);
+	}
+      }
+      else if (a==0.) {
+	if (b==0.) {
+	  Set(0.);
+	}
+	else {
+	  Copy(v2);
+	  if (b!=1.) {
+	    Scal(b);
+	  }
+	}
+      }
+      else {
+	if (b==1.) {
+	  Copy(v2);
+	  Axpy(a, v1);
+	}
+	else if (b==0.) {
+	  Copy(v1);
+	  Scal(a);
+	}
+	else {
+	  Copy(v1);
+	  Scal(a);
+	  Axpy(b, v2);
+	}
       }
     }
-    else {
-      Copy(v1);
-      if (a!=1.) {
-	Scal(a);
+    else { /* c==0. */
+      if (c!=1.) {
+	Scal(c);
+      }
+      if (a!=0.) {
+	Axpy(a, v1);
       }
       if (b!=0.) {
 	Axpy(b, v2);
       }
     }
   }
-
-  /*
-  Vector* VectorSpace::MakeNewEVector_Vector(Number factor)
-  {
-    return MakeNewEVector(factor);
-  }
-
-  EVector* VectorSpace::MakeNewEVector(Number factor)
-  {
-    EVector* retVector = new EVector(this);
-    retVector->Set(factor);
-    return retVector;
-  }
-  */
 
 } // namespace Ipopt

@@ -215,8 +215,11 @@ namespace Ipopt
     DBG_ASSERT(have_prototypes_);
 
     SmartPtr<Vector> newvec = curr_x_->MakeNew();
+    newvec->AddTwoVectors(1., *curr_x_, alpha, delta_x, 0.);
+    /* DELE
     newvec->Copy(*curr_x_);
     newvec->Axpy(alpha, delta_x);
+    */
     trial_x_ = ConstPtr(newvec);
 
     newvec = curr_s_->MakeNew();

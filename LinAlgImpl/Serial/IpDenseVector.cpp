@@ -277,37 +277,382 @@ namespace Ipopt
 
   // Specialized Functions
   void DenseVector::AddTwoVectorsImpl(Number a, const Vector& v1,
-				      Number b, const Vector& v2)
+				      Number b, const Vector& v2, Number c)
   {
-    const DenseVector* dense_v1 = dynamic_cast<const DenseVector*>(&v1);
-    DBG_ASSERT(dense_v1);
-    DBG_ASSERT(dense_v1->initialized_);
-    Number* values_v1=dense_v1->values_;
-    const DenseVector* dense_v2 = dynamic_cast<const DenseVector*>(&v2);
-    DBG_ASSERT(dense_v2);
-    DBG_ASSERT(dense_v2->initialized_);
-    Number* values_v2=dense_v2->values_;
-    if (a==1.) {
-      if (b==0.) {
-	for (Index i=0; i<Dim(); i++) {
-	  values_[i] = values_v1[i];
+    Number* values_v1=NULL;
+    if (a!=0.) {
+      const DenseVector* dense_v1 = dynamic_cast<const DenseVector*>(&v1);
+      DBG_ASSERT(dense_v1);
+      DBG_ASSERT(dense_v1->initialized_);
+      DBG_ASSERT(Dim() == dense_v1->Dim());
+      values_v1=dense_v1->values_;
+    }
+    Number* values_v2=NULL;
+    if (b!=0.) {
+      const DenseVector* dense_v2 = dynamic_cast<const DenseVector*>(&v2);
+      DBG_ASSERT(dense_v2);
+      DBG_ASSERT(dense_v2->initialized_);
+      DBG_ASSERT(Dim() == dense_v2->Dim());
+      values_v2=dense_v2->values_;
+    }
+    DBG_ASSERT(c==0. || initialized_);
+    // I guess I'm going over board here, but it might be best to
+    // capture all cases for a, b, and c separately...
+    if (c==0 ) {
+      if (a==1.) {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i] + values_v2[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i] - values_v2[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i] + b*values_v2[i];
+	  }
+	}
+      }
+      else if (a==-1.) {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i] + values_v2[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i] - values_v2[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i] + b*values_v2[i];
+	  }
+	}
+      }
+      else if (a==0.) {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = 0.;
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v2[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v2[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = b*values_v2[i];
+	  }
 	}
       }
       else {
-	for (Index i=0; i<Dim(); i++) {
-	  values_[i] = values_v1[i] + b*values_v2[i];
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i] + values_v2[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i] - values_v2[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i] + b*values_v2[i];
+	  }
+	}
+      }
+    }
+    else if (c==1.) {
+      if (a==1.) {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += values_v1[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += values_v1[i] + values_v2[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += values_v1[i] - values_v2[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += values_v1[i] + b*values_v2[i];
+	  }
+	}
+      }
+      else if (a==-1.) {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] -= values_v1[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += -values_v1[i] + values_v2[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += -values_v1[i] - values_v2[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += -values_v1[i] + b*values_v2[i];
+	  }
+	}
+      }
+      else if (a==0.) {
+	if (b==0.) {
+	  /* Nothing */
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += values_v2[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] -= values_v2[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += b*values_v2[i];
+	  }
+	}
+      }
+      else {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += a*values_v1[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += a*values_v1[i] + values_v2[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += a*values_v1[i] - values_v2[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] += a*values_v1[i] + b*values_v2[i];
+	  }
+	}
+      }
+    }
+    else if (c==-1.) {
+      if (a==1.) {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i] - values_[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i] + values_v2[i] - values_[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i] - values_v2[i] - values_[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i] + b*values_v2[i] - values_[i];
+	  }
+	}
+      }
+      else if (a==-1.) {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i] - values_[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i] + values_v2[i] - values_[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i] - values_v2[i] - values_[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i] + b*values_v2[i] - values_[i];
+	  }
+	}
+      }
+      else if (a==0.) {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] *= -1.;
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v2[i] - values_[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v2[i] - values_[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = b*values_v2[i] - values_[i];
+	  }
+	}
+      }
+      else {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i] - values_[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i] + values_v2[i] - values_[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i] - values_v2[i] - values_[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i] + b*values_v2[i] - values_[i];
+	  }
 	}
       }
     }
     else {
-      if (b==0.) {
-	for (Index i=0; i<Dim(); i++) {
-	  values_[i] = a*values_v1[i];
+      if (a==1.) {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i] + c*values_[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i] + values_v2[i] + c*values_[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i] - values_v2[i] + c*values_[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v1[i] + b*values_v2[i] + c*values_[i];
+	  }
+	}
+      }
+      else if (a==-1.) {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i] + c*values_[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i] + values_v2[i] + c*values_[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i] - values_v2[i] + c*values_[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v1[i] + b*values_v2[i] + c*values_[i];
+	  }
+	}
+      }
+      else if (a==0.) {
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] *= c;
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = values_v2[i] + c*values_[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = -values_v2[i] + c*values_[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = b*values_v2[i] + c*values_[i];
+	  }
 	}
       }
       else {
-	for (Index i=0; i<Dim(); i++) {
-	  values_[i] = a*values_v1[i] + b*values_v2[i];
+	if (b==0.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i] + c*values_[i];
+	  }
+	}
+	else if (b==1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i] + values_v2[i] + c*values_[i];
+	  }
+	}
+	else if (b==-1.) {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i] - values_v2[i] + c*values_[i];
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    values_[i] = a*values_v1[i] + b*values_v2[i] + c*values_[i];
+	  }
 	}
       }
     }
