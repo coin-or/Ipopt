@@ -68,11 +68,55 @@ namespace Ipopt
     Number tau_min_;
     //@}
 
+    /** @name Strategy objects */
+    //@{
     /** Pointer to the class that is to be used for computing a
      *  suggested value of the barrier parameter
      */
     SmartPtr<MuOracle> mu_oracle_;
+    /** Line search object of the Ipopt algorithm.  */
     SmartPtr<LineSearch> linesearch_;
+    //@}
+
+    /** @name Methods and data defining the outer globalization
+     *  strategy (might be a strategy object later). */
+    //@{
+    void InitializeFixedMuGlobalization();
+    /** Check whether the point in the "current" fields offers
+     *  sufficient reduction in order to remain in or switch to the
+     *  free mu mode. */
+    bool CheckSufficientProgress();
+    /** Include the current point in internal memory to as accepted
+     *  point */
+    void RememberCurrentPointAsAccepted();
+    /** Compute the value of the fixed mu that should be used in a new
+     *  fixed mu phase.  This method is called at the beginning of a
+     *  new fixed mu phase. */
+    Number NewFixedMu();
+
+    /** Method for computing the 1-norm of the primal dual system at
+     *  the current point.  The individual components (dual
+     *  infeasibility, primal infeasibility, complementarity) are
+     *  scaled to each other. */
+    Number curr_norm_pd_system();
+
+    /** Maximal number of reference values (algorithmic parameter) */
+    Index num_refs_max_;
+    /** Values of the currently stored reference values (norm of pd
+     *  equations) */
+    std::list<Number> refs_vals_;
+    /** Factor requested to reduce the reference values */
+    Number refs_red_fact_;
+    //@}
+
+    /** Flag indicating whether the problem has any inequality constraints */
+    bool no_bounds_;
+    /** Flag indicating whether no_bounds_ has been initialized */
+    bool check_if_no_bounds_;
+
+    /** Flag indicating whether we are in the mode where the barrier
+     *  parameter is fixed */
+    bool fixed_mu_mode_;
   };
 
 } // namespace Ipopt
