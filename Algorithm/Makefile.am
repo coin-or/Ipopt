@@ -39,7 +39,8 @@ libipoptalg_a_SOURCES = \
 	IpRestoIterateInitializer.hpp IpRestoIterateInitializer.cpp \
 	IpRestoIterationOutput.hpp IpRestoIterationOutput.cpp \
 	IpRestoMinC_1Nrm.cpp IpRestoMinC_1Nrm.hpp \
-	IpRestoPhase.hpp
+	IpRestoPhase.hpp \
+	IpRestoRestoPhase.hpp IpRestoRestoPhase.cpp
 
 CXXFLAGS += -I$(srcdir)/../Common
 CXXFLAGS += -I$(srcdir)/../Interfaces
@@ -77,7 +78,8 @@ ASTYLE_SOURCES = \
 	IpRestoIterateInitializer.hppbak IpRestoIterateInitializer.cppbak \
 	IpRestoIterationOutput.hppbak IpRestoIterationOutput.cppbak \
 	IpRestoMinC_1Nrm.cppbak IpRestoMinC_1Nrm.hppbak \
-	IpRestoPhase.hppbak
+	IpRestoPhase.hppbak \
+	IpRestoRestoPhase.hppbak IpRestoRestoPhase.cppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
