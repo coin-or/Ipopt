@@ -65,8 +65,6 @@ namespace Ipopt
 
     // Check for the algorithm options
     if (options.GetNumericValue("nlp_lower_bound_inf", value, prefix)) {
-      //      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-      //		       "Option \"nlp_lower_bound_inf\": This value must be larger than 0.");
       nlp_lower_bound_inf_ = value;
     }
     else {
@@ -74,8 +72,6 @@ namespace Ipopt
     }
 
     if (options.GetNumericValue("nlp_upper_bound_inf", value, prefix)) {
-      //      ASSERT_EXCEPTION(value > nlp_lower_bound_inf_, OptionsList::OPTION_OUT_OF_RANGE,
-      //                       "Option \"theta_max_fact\": This value must be larger than nlp_lower_bound_inf_.");
       nlp_upper_bound_inf_ = value;
     }
     else {
