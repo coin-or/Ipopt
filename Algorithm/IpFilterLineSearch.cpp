@@ -809,52 +809,14 @@ namespace Ipopt
       case 1 : {
         // 1: Standard MPC corrector
 
-        // 	// I think it doesn't make sense to try the MPC corrector step
-        // 	// in the fixed mu mode, since we are not heading to mu=0
-        // 	if (!IpData().FreeMuMode()) {
-        // 	  return false;
-        // 	}
+	DBG_ASSERT(IpData().HaveAffineDeltas());
 
-        // ToDo: For now, recompute the affine scaling step.  Later we
-        // have to find a way so that it doesn't have to be recomputed
-        // of it has been obtained as a probing step
-        SmartPtr<Vector> delta_aff_x = actual_delta_x->MakeNew();
-        SmartPtr<Vector> delta_aff_s = actual_delta_s->MakeNew();
-        SmartPtr<Vector> delta_aff_y_c = actual_delta_y_c->MakeNew();
-        SmartPtr<Vector> delta_aff_y_d = actual_delta_y_d->MakeNew();
-        SmartPtr<Vector> delta_aff_z_L = actual_delta_z_L->MakeNew();
-        SmartPtr<Vector> delta_aff_z_U = actual_delta_z_U->MakeNew();
-        SmartPtr<Vector> delta_aff_v_L = actual_delta_v_L->MakeNew();
-        SmartPtr<Vector> delta_aff_v_U = actual_delta_v_U->MakeNew();
-
-        // Now solve the primal-dual system to get the step
-        pd_solver_->Solve(-1.0, 0.0,
-                          *IpCq().curr_grad_lag_x(),
-                          *IpCq().curr_grad_lag_s(),
-                          *IpCq().curr_c(),
-                          *IpCq().curr_d_minus_s(),
-                          *IpCq().curr_compl_x_L(),
-                          *IpCq().curr_compl_x_U(),
-                          *IpCq().curr_compl_s_L(),
-                          *IpCq().curr_compl_s_U(),
-                          *delta_aff_x,
-                          *delta_aff_s,
-                          *delta_aff_y_c,
-                          *delta_aff_y_d,
-                          *delta_aff_z_L,
-                          *delta_aff_z_U,
-                          *delta_aff_v_L,
-                          *delta_aff_v_U,
-                          true);
-
-        DBG_PRINT_VECTOR(2, "delta_aff_x", *delta_aff_x);
-        DBG_PRINT_VECTOR(2, "delta_aff_s", *delta_aff_s);
-        DBG_PRINT_VECTOR(2, "delta_aff_y_c", *delta_aff_y_c);
-        DBG_PRINT_VECTOR(2, "delta_aff_y_d", *delta_aff_y_d);
-        DBG_PRINT_VECTOR(2, "delta_aff_z_L", *delta_aff_z_L);
-        DBG_PRINT_VECTOR(2, "delta_aff_z_U", *delta_aff_z_U);
-        DBG_PRINT_VECTOR(2, "delta_aff_v_L", *delta_aff_v_L);
-        DBG_PRINT_VECTOR(2, "delta_aff_v_U", *delta_aff_v_U);
+        SmartPtr<const Vector> delta_aff_x = IpData().delta_aff_x();
+        SmartPtr<const Vector> delta_aff_s = IpData().delta_aff_s();
+        SmartPtr<const Vector> delta_aff_z_L = IpData().delta_aff_z_L();
+        SmartPtr<const Vector> delta_aff_z_U = IpData().delta_aff_z_U();
+        SmartPtr<const Vector> delta_aff_v_L = IpData().delta_aff_v_L();
+        SmartPtr<const Vector> delta_aff_v_U = IpData().delta_aff_v_U();
 
         delta_corr_x->Copy(*actual_delta_x);
         delta_corr_s->Copy(*actual_delta_s);
