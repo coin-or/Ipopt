@@ -20,6 +20,8 @@
 namespace Ipopt
 {
 
+  DECLARE_STD_EXCEPTION(FATAL_ERROR_IN_LINEAR_SOLVER);
+
   /** Solver for the augmented system for triple type matrices.
    *
    *  The current implemetation assumes that all matrices are of the
