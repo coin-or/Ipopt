@@ -72,6 +72,12 @@ namespace Ipopt
     Number mu_safeguard_exp_;
     Number mu_safeguard_factor_; //ToDo don't need that?
     Number fixed_mu_avrg_factor_;
+    /** ToDo the following should be combined with MonotoneMuUpdate */
+    Number kappa_epsilon_;
+    Number kappa_mu_;
+    Number theta_mu_;
+    Index nonmonotone_kkt_norm_;
+    Index nonmonotone_kkt_centrality_;
     //@}
 
     /** @name Strategy objects */
@@ -147,10 +153,6 @@ namespace Ipopt
     Index adaptive_globalization_;
     /** Alternatively, we might also want to use a filter */
     Filter filter_;
-    /** ToDo the following should be combined with MonotoneMuUpdate */
-    Number kappa_epsilon_;
-    Number kappa_mu_;
-    Number theta_mu_;
     /** Flag indicating whether the most recent accepted step should
      *  be restored, when switching to the fixed mode. */
     bool restore_accepted_iterate_;
