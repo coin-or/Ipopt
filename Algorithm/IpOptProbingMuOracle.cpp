@@ -46,12 +46,12 @@ namespace Ipopt
     }
 
     if (options.GetIntegerValue("quality_function_norm", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=1 || ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
+      ASSERT_EXCEPTION(ivalue>=1 && ivalue<=4, OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"quality_function_norm\": This value must be between 1 and 3.");
       quality_function_norm_ = ivalue;
     }
     else {
-      quality_function_norm_ = 1;
+      quality_function_norm_ = 2;
     }
 
     if (options.GetIntegerValue("quality_function_normalized", ivalue, prefix)) {
@@ -538,10 +538,13 @@ namespace Ipopt
 
     // The scaling values have not yet been determined, compute them now
     if (dual_inf_scal_ < 0.) {
+      // DELETEME
+      assert(false && "Scaling in quality function not supported.");
       DBG_ASSERT(primal_inf_scal_ < 0.);
       DBG_ASSERT(compl_inf_scal_ < 0.);
 
-      if (quality_function_norm_==1) {
+      switch (quality_function_norm_) {
+      case 1:
         dual_inf_scal_ = Max(1., IpCq().curr_grad_lag_x()->Asum() +
                              IpCq().curr_grad_lag_s()->Asum());
 
@@ -559,8 +562,8 @@ namespace Ipopt
         }
         DBG_ASSERT(n_comp>0);
         compl_inf_scal_ /= n_comp;
-      }
-      else if (quality_function_norm_==2) {
+	break;
+      case 2:
         dual_inf_scal_ = Max(1., pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
                              pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
 
@@ -578,8 +581,8 @@ namespace Ipopt
 	}
 	DBG_ASSERT(n_comp>0);
 	compl_inf_scal_ /= n_comp;
-      }
-      else {
+	break;
+      case 3:
         dual_inf_scal_ = Max(1., IpCq().curr_grad_lag_x()->Amax(),
                              IpCq().curr_grad_lag_s()->Amax());
 
@@ -752,7 +755,8 @@ namespace Ipopt
       }
     }
 
-    if (quality_function_norm_==1) {
+    switch (quality_function_norm_) {
+    case 1:
       if (quality_function_dual_inf_==2) {
 	dual_inf = dual_inf_x->Asum() + dual_inf_s->Asum();
       }
@@ -773,8 +777,8 @@ namespace Ipopt
       }
       DBG_ASSERT(n_comp>0);
       compl_inf /= n_comp;
-    }
-    else if (quality_function_norm_==2) {
+      break;
+    case 2:
       if (quality_function_dual_inf_==2) {
 	dual_inf = pow(dual_inf_x->Nrm2(), 2) + pow(dual_inf_s->Nrm2(), 2);
       }
@@ -796,8 +800,8 @@ namespace Ipopt
       }
       DBG_ASSERT(n_comp>0);
       compl_inf /= n_comp;
-    }
-    else {
+      break;
+    case 3:
       if (quality_function_dual_inf_==2) {
 	dual_inf = Max(dual_inf_x->Amax(), dual_inf_s->Amax());
       }
@@ -812,6 +816,32 @@ namespace Ipopt
       compl_inf =
         Max(slack_x_L->Amax(), slack_x_U->Amax(),
 	    slack_s_L->Amax(), slack_s_U->Amax());
+      break;
+    case 4:
+      if (quality_function_dual_inf_==2) {
+	dual_inf = sqrt(pow(dual_inf_x->Nrm2(), 2) + pow(dual_inf_s->Nrm2(), 2));
+      }
+      else {
+	dual_inf =
+	 (1.-alpha_dual)*sqrt(pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
+			      pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
+      }
+      primal_inf =
+        (1.-alpha_primal, 2)*sqrt(pow(IpCq().curr_c()->Nrm2(), 2) +
+				  pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
+      compl_inf =
+        sqrt(pow(slack_x_L->Nrm2(), 2) + pow(slack_x_U->Nrm2(), 2) +
+	     pow(slack_s_L->Nrm2(), 2) + pow(slack_s_U->Nrm2(), 2));
+
+      dual_inf /= sqrt(n_dual);
+      if (n_pri>0) {
+        primal_inf /= sqrt(n_pri);
+      }
+      DBG_ASSERT(n_comp>0);
+      compl_inf /= sqrt(n_comp);
+      break;
+    default:
+      DBG_ASSERT("Unknown value for quality_function_norm_");
     }
 
     // Scale the quantities
