@@ -74,6 +74,8 @@ namespace Ipopt
      *  estimate is larger than this, the initial y_* variables are
      *  set to zero. */
     Number laminitmax_;
+    /** Initial value for all bound mulitpliers. */
+    Number boundmultinitval_;
     //@}
 
     /** object to be used for the initialization of the equality

@@ -51,6 +51,15 @@ namespace Ipopt
       laminitmax_ = 1e3;
     }
 
+    if (options.GetNumericValue("boundmultinitval", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"boundmultinitval\": Value must be positive.");
+      boundmultinitval_ = value;
+    }
+    else {
+      boundmultinitval_ = 1.;
+    }
+
     bool retvalue = true;
     if (IsValid(eq_mult_calculator_)) {
       retvalue = eq_mult_calculator_->Initialize(Jnlst(), IpNLP(), IpData(),
@@ -367,10 +376,10 @@ namespace Ipopt
     SmartPtr<Vector> z_U = IpData().curr_z_U()->MakeNew();
     SmartPtr<Vector> v_L = IpData().curr_v_L()->MakeNew();
     SmartPtr<Vector> v_U = IpData().curr_v_U()->MakeNew();
-    z_L->Set(1.0);  //TODO make this a parameter
-    z_U->Set(1.0);
-    v_L->Set(1.0);
-    v_U->Set(1.0);
+    z_L->Set(boundmultinitval_);  //TODO make this a parameter
+    z_U->Set(boundmultinitval_);
+    v_L->Set(boundmultinitval_);
+    v_U->Set(boundmultinitval_);
     IpData().SetTrialBoundMultipliers(*z_L, *z_U, *v_L, *v_U);
 
     /////////////////////////////////////////////////////////////////////
