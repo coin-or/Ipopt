@@ -275,12 +275,12 @@ namespace Ipopt
       const Vector& yc,
       const Vector& yd)
   {
-    std::vector<const TaggedObject*> deps;
-    std::vector<Number> scalar_deps;
-    deps.push_back(&x);
-    deps.push_back(&yc);
-    deps.push_back(&yd);
-    scalar_deps.push_back(obj_factor);
+    std::vector<const TaggedObject*> deps(3);
+    deps[0] = &x;
+    deps[1] = &yc;
+    deps[2] = &yd;
+    std::vector<Number> scalar_deps(1);
+    scalar_deps[0] = obj_factor;
 
     SmartPtr<SymMatrix> retValue;
     if (!h_cache_.GetCachedResult(retValue, deps, scalar_deps)) {
