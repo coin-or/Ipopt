@@ -136,18 +136,18 @@ namespace Ipopt
     //@{
     bool Acceptable(Number val1, Number val2) const
     {
-      std::vector<Number> vals;
-      vals.push_back(val1);
-      vals.push_back(val2);
+      std::vector<Number> vals(2);
+      vals[0] = val1;
+      vals[1] = val2;
 
       return Acceptable(vals);
     }
 
     void AddEntry(Number val1, Number val2, Index iteration)
     {
-      std::vector<Number> vals;
-      vals.push_back(val1);
-      vals.push_back(val2);
+      std::vector<Number> vals(2);
+      vals[0] = val1;
+      vals[1] = val2;
 
       AddEntry(vals, iteration);
     }
