@@ -12,6 +12,8 @@
 #include "IpReferenced.hpp"
 #include "IpDebug.hpp"
 
+//#define IP_DEBUG_SMARTPTR
+
 namespace Ipopt
 {
 
@@ -346,7 +348,10 @@ namespace Ipopt
       :
       ptr_(NULL)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("SmartPtr<T>::SmartPtr()", dbg_smartptr_verbosity);
+#endif
+
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
 
@@ -358,7 +363,10 @@ namespace Ipopt
       :
       ptr_(NULL)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<T>& copy)", dbg_smartptr_verbosity);
+#endif
+
     (void) SetFromSmartPtr_(copy);
   }
 
@@ -391,14 +399,20 @@ namespace Ipopt
       :
       ptr_(NULL)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("SmartPtr<T>::SmartPtr(T* ptr)", dbg_smartptr_verbosity);
+#endif
+
     (void) SetFromRawPtr_(ptr);
   }
 
   template <class T>
   SmartPtr<T>::~SmartPtr()
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("SmartPtr<T>::~SmartPtr(T* ptr)", dbg_smartptr_verbosity);
+#endif
+
     ReleasePointer_();
   }
 
@@ -406,7 +420,9 @@ namespace Ipopt
   template <class T>
   T* SmartPtr<T>::operator->() const
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("T* SmartPtr<T>::operator->()", dbg_smartptr_verbosity);
+#endif
 
     // cannot deref a null pointer
     DBG_ASSERT(ptr_);
@@ -418,7 +434,9 @@ namespace Ipopt
   template <class T>
   T& SmartPtr<T>::operator*() const
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("T& SmartPtr<T>::operator*()", dbg_smartptr_verbosity);
+#endif
 
     // cannot dereference a null pointer
     DBG_ASSERT(ptr_);
@@ -430,7 +448,10 @@ namespace Ipopt
   template <class T>
   SmartPtr<T>& SmartPtr<T>::operator=(T* rhs)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("SmartPtr<T>& SmartPtr<T>::operator=(T* rhs)", dbg_smartptr_verbosity);
+#endif
+
     return SetFromRawPtr_(rhs);
   }
 
@@ -438,9 +459,11 @@ namespace Ipopt
   template <class T>
   SmartPtr<T>& SmartPtr<T>::operator=(const SmartPtr<T>& rhs)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH(
       "SmartPtr<T>& SmartPtr<T>::operator=(const SmartPtr<T>& rhs)",
       dbg_smartptr_verbosity);
+#endif
 
     return SetFromSmartPtr_(rhs);
   }
@@ -449,8 +472,10 @@ namespace Ipopt
   template <class T>
   SmartPtr<T>& SmartPtr<T>::SetFromRawPtr_(T* rhs)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH(
       "SmartPtr<T>& SmartPtr<T>::SetFromRawPtr_(T* rhs)", dbg_smartptr_verbosity);
+#endif
 
     // Release any old pointer
     ReleasePointer_();
@@ -475,9 +500,11 @@ namespace Ipopt
   template <class T>
   SmartPtr<T>& SmartPtr<T>::SetFromSmartPtr_(const SmartPtr<T>& rhs)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH(
       "SmartPtr<T>& SmartPtr<T>::SetFromSmartPtr_(const SmartPtr<T>& rhs)",
       dbg_smartptr_verbosity);
+#endif
 
     T* ptr = GetRawPtr(rhs);
     if (ptr != NULL) {
@@ -491,9 +518,11 @@ namespace Ipopt
   template <class T>
   void SmartPtr<T>::ReleasePointer_()
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH(
       "void SmartPtr<T>::ReleasePointer()",
       dbg_smartptr_verbosity);
+#endif
 
     if (ptr_ != NULL) {
       const ReferencedObject* r_ptr =
@@ -511,9 +540,11 @@ namespace Ipopt
   template <class U>
   U* GetRawPtr(const SmartPtr<U>& smart_ptr)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "T* GetRawPtr(const SmartPtr<T>& smart_ptr)",
       0);
+#endif
 
     return smart_ptr.ptr_;
   }
@@ -545,9 +576,11 @@ namespace Ipopt
   template <class U1, class U2>
   bool ComparePointers(const U1* lhs, const U2* rhs)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool ComparePtrs(const U1* lhs, const U2* rhs)",
       dbg_smartptr_verbosity);
+#endif
 
     if (lhs == rhs) {
       return true;
@@ -570,9 +603,11 @@ namespace Ipopt
   template <class U1, class U2>
   bool operator==(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator==(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs)",
       dbg_smartptr_verbosity);
+#endif
 
     U1* raw_lhs = GetRawPtr(lhs);
     U2* raw_rhs = GetRawPtr(rhs);
@@ -582,9 +617,11 @@ namespace Ipopt
   template <class U1, class U2>
   bool operator==(const SmartPtr<U1>& lhs, U2* raw_rhs)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator==(SmartPtr<U1>& lhs, U2* rhs)",
       dbg_smartptr_verbosity);
+#endif
 
     U1* raw_lhs = GetRawPtr(lhs);
     return ComparePointers(raw_lhs, raw_rhs);
@@ -593,9 +630,11 @@ namespace Ipopt
   template <class U1, class U2>
   bool operator==(U1* raw_lhs, const SmartPtr<U2>& rhs)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator==(U1* raw_lhs, SmartPtr<U2>& rhs)",
       dbg_smartptr_verbosity);
+#endif
 
     const U2* raw_rhs = GetRawPtr(rhs);
     return ComparePointers(raw_lhs, raw_rhs);
@@ -604,9 +643,11 @@ namespace Ipopt
   template <class U1, class U2>
   bool operator!=(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator!=(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs)",
       dbg_smartptr_verbosity);
+#endif
 
     bool retValue = operator==(lhs, rhs);
     return !retValue;
@@ -615,9 +656,11 @@ namespace Ipopt
   template <class U1, class U2>
   bool operator!=(const SmartPtr<U1>& lhs, U2* raw_rhs)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator!=(SmartPtr<U1>& lhs, U2* rhs)",
       dbg_smartptr_verbosity);
+#endif
 
     bool retValue = operator==(lhs, raw_rhs);
     return !retValue;
@@ -626,9 +669,11 @@ namespace Ipopt
   template <class U1, class U2>
   bool operator!=(U1* raw_lhs, const SmartPtr<U2>& rhs)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator!=(U1* raw_lhs, SmartPtr<U2>& rhs)",
       dbg_smartptr_verbosity);
+#endif
 
     bool retValue = operator==(raw_lhs, rhs);
     return !retValue;
