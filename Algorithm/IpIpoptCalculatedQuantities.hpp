@@ -441,6 +441,30 @@ namespace Ipopt
     SmartPtr<Vector> dampind_s_U_;
     //@}
 
+    /** @name Temporary vectors for intermediate calcuations.  We keep
+     *  these around to avoid unnecessarily many new allocations of
+     *  Vectors. */
+    //@{
+    SmartPtr<Vector> tmp_x_;
+    SmartPtr<Vector> tmp_s_;
+    SmartPtr<Vector> tmp_c_;
+    SmartPtr<Vector> tmp_d_;
+    SmartPtr<Vector> tmp_x_L_;
+    SmartPtr<Vector> tmp_x_U_;
+    SmartPtr<Vector> tmp_s_L_;
+    SmartPtr<Vector> tmp_s_U_;
+
+    /** Accessor methods for the temporary vectors */
+    Vector& Tmp_x();
+    Vector& Tmp_s();
+    Vector& Tmp_c();
+    Vector& Tmp_d();
+    Vector& Tmp_x_L();
+    Vector& Tmp_x_U();
+    Vector& Tmp_s_L();
+    Vector& Tmp_s_U();
+    //@}
+
     /** flag indicating if Initialize method has been called (for
      *  debugging) */
     bool initialize_called_;
@@ -472,15 +496,12 @@ namespace Ipopt
     SmartPtr<const Vector> CalcCompl(const Vector& slack,
                                      const Vector& mult);
 
-    /** Compute fraction to the boundary parameter for lower bounds 0 */
-    Number CalcFracToZeroBound(const Vector& x,
-                               const Vector& delta,
-                               Number tau);
-
     /** Compute fraction to the boundary parameter for lower and upper bounds */
     Number CalcFracToBound(const Vector& slack_L,
+			   Vector& tmp_L,
                            const Matrix& P_L,
                            const Vector& slack_U,
+			   Vector& tmp_U,
                            const Matrix& P_U,
                            const Vector& delta,
                            Number tau);
