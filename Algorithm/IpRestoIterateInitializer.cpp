@@ -85,16 +85,17 @@ namespace Ipopt
     Number rho = resto_ip_nlp->Rho();
     SmartPtr<Vector> nc = Cnew_x->GetCompNonConst(1);
     SmartPtr<Vector> pc = Cnew_x->GetCompNonConst(2);
-    solve_quadratic(resto_mu, rho, *orig_ip_cq->curr_c(), *nc, *pc);
+    SmartPtr<Vector> a = nc->MakeNew();
+    SmartPtr<Vector> b = nc->MakeNew();
+    a->Set(resto_mu/(2.*rho));
+    a->Axpy(-0.5, *orig_ip_cq->curr_c());
+    b->Copy(*orig_ip_cq->curr_c());
+    b->Scal(resto_mu/(2.*rho));
+    solve_quadratic(*a, *b, *nc);
+    pc->Copy(*orig_ip_cq->curr_c());
+    pc->Axpy(1., *nc);
     DBG_PRINT_VECTOR(2, "nc", *nc);
     DBG_PRINT_VECTOR(2, "pc", *pc);
-
-    // DELETEME
-    SmartPtr<Vector> bla = nc->MakeNew();
-    bla->Copy(*orig_ip_cq->curr_c());
-    bla->Axpy(-1., *pc);
-    bla->Axpy(1., *nc);
-    DBG_PRINT_VECTOR(2, "bla", *bla);
 
     // The initial values for the inequality n and p variables are
     // trickier, since only some constraints have both n and p
@@ -130,28 +131,52 @@ namespace Ipopt
     // c) d - d_U  for entries with only an upper bound
     SmartPtr<Vector> cvec = ind_both->MakeNew();
     cvec->Copy(*orig_ip_cq->curr_d());
+    DBG_PRINT_VECTOR(2,"orig d",*cvec);
 
     // a)
     SmartPtr<Vector> tmpfull = ind_both->MakeNew();
     tmpfull->Copy(*orig_ip_data->curr_s());
+    DBG_PRINT_VECTOR(1,"curr_s",*tmpfull);
     tmpfull->ElementWiseMultiply(*ind_both);
+    DBG_PRINT_VECTOR(2,"s both",*tmpfull);
     cvec->Axpy(-1., *tmpfull);
     // b)
     Pd_L->MultVector(1., *d_L, 0., *tmpfull);
     tmpfull->ElementWiseMultiply(*ind_only_L);
+    DBG_PRINT_VECTOR(2,"d_L only lower",*tmpfull);
     cvec->Axpy(-1., *tmpfull);
     // c)
     Pd_U->MultVector(1., *d_U, 0., *tmpfull);
     tmpfull->ElementWiseMultiply(*ind_only_U);
+    DBG_PRINT_VECTOR(2,"d_U only upper",*tmpfull);
     cvec->Axpy(-1., *tmpfull);
 
-    // now solve the quadratic equation and get the pd, nd
+    // now set up coefficients for the quadratic equation and solve it
+    b = cvec->MakeNew();
+    b->Set(1.);
+    b->Axpy(1., *ind_both);
+    b->ElementWiseReciprocal();
+    b->Scal(resto_mu/rho);
+    DBG_PRINT_VECTOR(1, "b2", *b);
+    // now, b is resto_mu/rho for all entries with only one bound, and
+    // resto_mu/(2rho) for all entries with two bounds
+    a = cvec->MakeNew();
+    a->Copy(*cvec);
+    a->Scal(-0.5);
+    a->Axpy(1., *b);
+    b->ElementWiseMultiply(*cvec);
+    solve_quadratic(*a, *b, *tmpfull);
     SmartPtr<Vector> tmpfull2 = tmpfull->MakeNew();
+    tmpfull2->Copy(*cvec);
+    tmpfull2->Axpy(1., *tmpfull);
     SmartPtr<Vector> nd = Cnew_x->GetCompNonConst(3);
     SmartPtr<Vector> pd = Cnew_x->GetCompNonConst(4);
-    solve_quadratic(resto_mu, rho, *cvec, *tmpfull, *tmpfull2);
     Pd_L->TransMultVector(1., *tmpfull, 0., *nd);
     Pd_U->TransMultVector(1., *tmpfull2, 0., *pd);
+    DBG_PRINT_VECTOR(2,"nfull",*tmpfull);
+    DBG_PRINT_VECTOR(2,"pfull",*tmpfull2);
+    DBG_PRINT_VECTOR(2,"new nd",*nd);
+    DBG_PRINT_VECTOR(2,"new pd",*pd);
 
     // the new values for the slacks is takes as
     // a) keep for those entries that have two bounds
@@ -163,16 +188,21 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "curr_s", *new_s);
     new_s->ElementWiseMultiply(*ind_both);
     // b)
-    Pd_L->MultVector(1., *d_L, 1., *tmpfull);
-    tmpfull->ElementWiseMultiply(*ind_only_L);
-    new_s->Axpy(1., *tmpfull);
-    // c)
-    Pd_U->MultVector(1., *d_U, -1., *tmpfull2);
-    tmpfull2->ElementWiseMultiply(*ind_only_U);
+    Pd_L->MultVector(1., *d_L, 1., *tmpfull2);
+    tmpfull2->ElementWiseMultiply(*ind_only_L);
     new_s->Axpy(1., *tmpfull2);
+    // c)
+    Pd_U->MultVector(1., *d_U, -1., *tmpfull);
+    tmpfull->ElementWiseMultiply(*ind_only_U);
+    new_s->Axpy(1., *tmpfull);
+    DBG_PRINT_VECTOR(1,"new_s",*new_s);
+    DBG_PRINT_VECTOR(2,"new_x",*new_x);
 
     // Now set the primal trial variables
     IpData().SetTrialPrimalVariables(*new_x, *new_s);
+
+    DBG_PRINT_VECTOR(2, "resto_c", *IpCq().trial_c());
+    DBG_PRINT_VECTOR(2, "resto_d_minus_s", *IpCq().trial_d_minus_s());
 
     /////////////////////////////////////////////////////////////////////
     //                   Initialize bound multipliers                  //
@@ -268,31 +298,17 @@ namespace Ipopt
   }
 
   void
-  RestoIterateInitializer::solve_quadratic(Number rho, Number mu,
-      const Vector& c,
-      Vector& n,
-      Vector& p)
+  RestoIterateInitializer::solve_quadratic(const Vector& a,
+					   const Vector& b,
+					   Vector& v)
   {
-    DBG_ASSERT(mu>.0 && rho>.0);
+    v.Copy(a);
+    v.ElementWiseMultiply(a);
 
-    // a will be set to c - mu/rho e
-    SmartPtr<Vector> a = c.MakeNew();
-    a->Copy(c);
-    a->AddScalar(-mu/rho);
+    v.Axpy(1., b);
+    v.ElementWiseSqrt();
 
-    // First compute the elementwise square of a and store result in b
-    n.Copy(*a);
-    n.ElementWiseMultiply(*a);
-    // Now add the missing +(mu*c)/2*rho term and take the square root
-    n.Axpy(mu/(2.*rho), c);
-    n.ElementWiseSqrt();
-
-    // The final result is obtained by substracting a
-    n.Axpy(-1., *a);
-
-    // p is simply c - n
-    p.Copy(c);
-    p.Axpy(1., n);
+    v.Axpy(1., a);
   }
 
 } // namespace Ipopt
