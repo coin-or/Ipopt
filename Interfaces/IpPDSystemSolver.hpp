@@ -90,10 +90,14 @@ namespace Ipopt
     virtual bool InitializeImpl(const OptionsList& options,
                                 const std::string& prefix) = 0;
 
-    /** Solve the primal dual system, given one right hand side.
-     *  For the time being, we don't pass a state object, but all
-     *  items individually, including the calculated quantity
-     *  \f$\Sigma = P_L^TS_L^{-1}Z_L + P_U^TS_U^{-1}Z_U\f$.
+    /** Solve the primal dual system, given one right hand side.  For
+     *  the time being, we don't pass a state object, but all items
+     *  individually, including the calculated quantity \f$\Sigma =
+     *  P_L^TS_L^{-1}Z_L + P_U^TS_U^{-1}Z_U\f$.  If the flag
+     *  allow_inexact is set to true, it is not necessary to solve the
+     *  system to best accuracy; for example, we don't want iterative
+     *  refinement during the computation of the second order
+     *  correction.
      */
     virtual void Solve(Number alpha,
                        Number beta,
@@ -112,7 +116,8 @@ namespace Ipopt
                        Vector& res_zL,
                        Vector& res_zU,
                        Vector& res_vL,
-                       Vector& res_vU) =0;
+                       Vector& res_vU,
+		       bool allow_inexact=false) =0;
 
   private:
     /**@name Default Compiler Generated Methods
