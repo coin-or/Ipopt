@@ -304,6 +304,7 @@ namespace Ipopt
                          "Starting checks for alpha (primal) = %8.2e\n",
                          alpha_primal);
 
+	  bool evaluation_error = false;
           try {
             // Compute the primal trial point
             IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
@@ -323,32 +324,35 @@ namespace Ipopt
             Jnlst().Printf(J_WARNING, J_MAIN,
                            "Warning: Cutting back alpha due to evaluation error\n");
             accept = false;
+	    evaluation_error = true;
           }
 
           if (accept) {
             break;
           }
 
-          Number theta_curr = IpCq().curr_constraint_violation();
-          Number theta_trial = IpCq().trial_constraint_violation();
-          if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
-              theta_curr<=theta_trial && max_soc_>0) {
-            // Try second order correction
-            accept = TrySecondOrderCorrection(alpha_primal_test,
-                                              alpha_primal,
-                                              actual_delta_x,
-                                              actual_delta_s,
-                                              actual_delta_y_c,
-                                              actual_delta_y_d,
-                                              actual_delta_z_L,
-                                              actual_delta_z_U,
-                                              actual_delta_v_L,
-                                              actual_delta_v_U);
-          }
-          if (accept) {
-            soc_taken = true;
-            break;
-          }
+	  if (!evaluation_error) {
+	    Number theta_curr = IpCq().curr_constraint_violation();
+	    Number theta_trial = IpCq().trial_constraint_violation();
+	    if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
+		theta_curr<=theta_trial && max_soc_>0) {
+	      // Try second order correction
+	      accept = TrySecondOrderCorrection(alpha_primal_test,
+						alpha_primal,
+						actual_delta_x,
+						actual_delta_s,
+						actual_delta_y_c,
+						actual_delta_y_d,
+						actual_delta_z_L,
+						actual_delta_z_U,
+						actual_delta_v_L,
+						actual_delta_v_U);
+	    }
+	    if (accept) {
+	      soc_taken = true;
+	      break;
+	    }
+	  }
 
           // Point is not yet acceptable, try a shorter one
           alpha_primal *= alpha_red_factor_;
