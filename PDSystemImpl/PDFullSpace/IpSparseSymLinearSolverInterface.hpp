@@ -43,8 +43,9 @@ namespace Ipopt
    *  are Triplet_Format, as well as CSR_Format_0_Offset and
    *  CSR_Format_1_Offset.  The difference between the last two is
    *  that for CSR_Format_0_Offset the couning of the element position
-   *  in the ja array starts are 0 (C-style numbering), whereas for
-   *  the other one it starts at 1 (Fortran-style numbering).
+   *  in the ia and ja arrays starts are 0 (C-style numbering),
+   *  whereas for the other one it starts at 1 (Fortran-style
+   *  numbering).
    *
    *  3. After this, the InitializeStructure method is call (once).
    *  Here, the structure of the matrix is provided.  If the linear
@@ -85,8 +86,7 @@ namespace Ipopt
    *
    *  Note, if the matrix is given in triplet format, entries might be
    *  listed multiple times, in which case the corresponsing elements
-   *  have to be added.
-   */
+   *  have to be added.  */
   class SparseSymLinearSolverInterface: public AlgorithmStrategyObject
   {
   public:
