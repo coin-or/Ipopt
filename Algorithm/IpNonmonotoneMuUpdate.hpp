@@ -25,7 +25,8 @@ namespace Ipopt
     //@{
     /** Constructor */
     NonmonotoneMuUpdate(const SmartPtr<LineSearch>& linesearch,
-                        const SmartPtr<MuOracle>& mu_oracle);
+                        const SmartPtr<MuOracle>& free_mu_oracle,
+                        const SmartPtr<MuOracle>& fix_mu_oracle=NULL);
     /** Default destructor */
     virtual ~NonmonotoneMuUpdate();
     //@}
@@ -71,12 +72,17 @@ namespace Ipopt
 
     /** @name Strategy objects */
     //@{
-    /** Pointer to the class that is to be used for computing a
-     *  suggested value of the barrier parameter
+    /** Pointer to strategy object that is to be used for computing a
+     *  suggested value of the barrier parameter in the free mu mode.
      */
-    SmartPtr<MuOracle> mu_oracle_;
+    SmartPtr<MuOracle> free_mu_oracle_;
     /** Line search object of the Ipopt algorithm.  */
     SmartPtr<LineSearch> linesearch_;
+    /** Pointer to strategy object that is to be used for computing a
+     *  suggested value for the fixed mu mode.  If NULL, the current
+     *  average complementarity is used.
+     */
+    SmartPtr<MuOracle> fix_mu_oracle_;
     //@}
 
     /** @name Methods and data defining the outer globalization
@@ -120,10 +126,6 @@ namespace Ipopt
     bool no_bounds_;
     /** Flag indicating whether no_bounds_ has been initialized */
     bool check_if_no_bounds_;
-
-    /** Flag indicating whether we are in the mode where the barrier
-     *  parameter is fixed */
-    bool fixed_mu_mode_;
   };
 
 } // namespace Ipopt

@@ -22,14 +22,17 @@ namespace Ipopt
 
   NonmonotoneMuUpdate::NonmonotoneMuUpdate
   (const SmartPtr<LineSearch>& line_search,
-   const SmartPtr<MuOracle>& mu_oracle)
+   const SmartPtr<MuOracle>& free_mu_oracle,
+   const SmartPtr<MuOracle>& fix_mu_oracle)
       :
       MuUpdate(),
       linesearch_(line_search),
-      mu_oracle_(mu_oracle)
+      free_mu_oracle_(free_mu_oracle),
+      fix_mu_oracle_(fix_mu_oracle)
   {
     DBG_ASSERT(IsValid(linesearch_));
-    DBG_ASSERT(IsValid(mu_oracle_));
+    DBG_ASSERT(IsValid(free_mu_oracle_));
+    // fix_mu_oracle may be NULL
   }
 
   NonmonotoneMuUpdate::~NonmonotoneMuUpdate()
@@ -68,7 +71,7 @@ namespace Ipopt
     }
 
     if (options.GetNumericValue("tau_max", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0 && value < 1.0, OptionsList::OPTION_OUT_OF_RANGE,
+      ASSERT_EXCEPTION(value > 0.0 && value <= 1.0, OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"tau_max\": This value must be between 0 and 1.");
       tau_max_ = value;
     }
@@ -102,13 +105,24 @@ namespace Ipopt
       mu_never_fix_ = false;
     }
 
-    bool retvalue = mu_oracle_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                           options, prefix);
+    bool retvalue = free_mu_oracle_->Initialize(Jnlst(), IpNLP(), IpData(),
+                    IpCq(), options, prefix);
+    if (!retvalue) {
+      return retvalue;
+    }
+
+    if (IsValid(fix_mu_oracle_)) {
+      retvalue = fix_mu_oracle_->Initialize(Jnlst(), IpNLP(), IpData(),
+                                            IpCq(), options, prefix);
+      if (!retvalue) {
+        return retvalue;
+      }
+    }
 
     refs_vals_.clear();
     check_if_no_bounds_ = false;
     no_bounds_ = false;
-    fixed_mu_mode_ = false;
+    IpData().SetFreeMuMode(true);
 
     // TODO do we need to initialize the linesearch object?
 
@@ -134,14 +148,14 @@ namespace Ipopt
     if (no_bounds_)
       return;
 
-    if (fixed_mu_mode_) {
+    if (!IpData().FreeMuMode()) {
       // if we are in the fixed mu mode, we need to check if the
       // current iterate is good enough to continue with the free mode
       bool sufficient_progress = CheckSufficientProgress();
       if (sufficient_progress) {
         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                        "Switching back to free mu mode.\n");
-        fixed_mu_mode_ = false;
+        IpData().SetFreeMuMode(true);
         RememberCurrentPointAsAccepted();
       }
       else {
@@ -157,7 +171,7 @@ namespace Ipopt
         RememberCurrentPointAsAccepted();
       }
       else {
-        fixed_mu_mode_ = true;
+        IpData().SetFreeMuMode(false);
 
         // Set the new values for mu and tau and tell the linesearch
         // to reset its memory
@@ -172,9 +186,9 @@ namespace Ipopt
       }
     }
 
-    if (!fixed_mu_mode_) {
+    if (IpData().FreeMuMode()) {
       // Compute the new barrier parameter via the oracle
-      Number mu = mu_oracle_->CalculateMu();
+      Number mu = free_mu_oracle_->CalculateMu();
 
       Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                      "Barrier parameter mu computed by oracle is %e\n",
@@ -271,8 +285,18 @@ namespace Ipopt
       iter++;
     }
 
-    Number avrg_compl = IpCq().curr_avrg_compl();
-    return Min(avrg_compl, 0.1 * min_ref);
+    Number new_mu;
+
+    if (IsValid(fix_mu_oracle_)) {
+      new_mu = fix_mu_oracle_->CalculateMu();
+    }
+    else {
+      new_mu = IpCq().curr_avrg_compl();
+    }
+    new_mu = Min(new_mu, 0.1 * min_ref);
+    new_mu = Max(new_mu, mu_min_);
+    new_mu = Min(new_mu, mu_max_);
+    return new_mu;
   }
 
   Number
