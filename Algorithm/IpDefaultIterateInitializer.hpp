@@ -64,9 +64,11 @@ namespace Ipopt
     void operator=(const DefaultIterateInitializer&);
     //@}
 
-    /**@name Parameters for bumping x0 */
+    /**@name Algorithmic Parameters */
     //@{
+    /** Parameters for bumping x0 */
     Number kappa_1_;
+    /** Parameters for bumping x0 */
     Number kappa_2_;
     /** If max-norm of the initial equality constraint multiplier
      *  estimate is larger than this, the initial y_* variables are
