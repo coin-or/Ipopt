@@ -187,7 +187,7 @@ namespace Ipopt
 
     if (IpData().HaveDeltas()) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "No need to compute search direction - it has already been computed.\n");
+                     "No need to compute search direction - it has already been computed.\n");
       return;
     }
 

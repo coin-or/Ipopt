@@ -118,11 +118,12 @@ namespace Ipopt
     /** @name NLP solution routines. (Overload in derived classes.) */
     //@{
     virtual void FinalizeSolution(ApplicationReturnStatus status,
-				  const Vector& x, const Vector& z_L, const Vector& z_U,
-				  const Vector& c, const Vector& d,
-				  const Vector& y_c, const Vector& y_d,
-				  Number obj_value)
-    {};
+                                  const Vector& x, const Vector& z_L, const Vector& z_U,
+                                  const Vector& c, const Vector& d,
+                                  const Vector& y_c, const Vector& y_d,
+                                  Number obj_value)
+    {}
+    ;
     //@}
 
 

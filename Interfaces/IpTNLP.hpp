@@ -123,9 +123,9 @@ namespace Ipopt
     //@{
     /** This method is called when the algorithm is complete so the TNLP can store/write the solution */
     virtual void finalize_solution(ApplicationReturnStatus status,
-				   Index n, const Number* x, const Number* z_L, const Number* z_U, 
-				   Index m, const Number* g, const Number* lambda,
-				   Number obj_value)=0;
+                                   Index n, const Number* x, const Number* z_L, const Number* z_U,
+                                   Index m, const Number* g, const Number* lambda,
+                                   Number obj_value)=0;
     //@}
 
   private:
