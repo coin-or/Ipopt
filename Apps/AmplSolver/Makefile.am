@@ -28,9 +28,8 @@ IPLIBS = \
 	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
 	../../Algorithm/libipoptalg.a \
 	../../Common/libcommon.a \
-	../../OTHERS/ASL/amplsolver.a \
 	../../LinAlgImpl/Serial/liblaserial.a \
-	-ldl
+	$(ASLLIB)
 
 ipopt_LDADD = $(IPLIBS)
 

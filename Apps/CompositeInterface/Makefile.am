@@ -22,9 +22,7 @@ IPLIBS = ../../Algorithm/libipoptalg.a \
 	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
 	../../Common/libcommon.a \
 	../../Apps/AmplSolver/libamplinterface.a \
-	../../OTHERS/ASL/amplsolver.a \
-	-ldl
-#	../../OTHERS/HSL/libiphsl.a
+	$(ASLLIB)
 
 composite_ampl_ipopt_LDADD = $(IPLIBS) \
 	libcompositenlp.a

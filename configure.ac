@@ -8,6 +8,7 @@
 
 ## SGI: ./configure CC=cc F77=f77 CXX=CC CXXFLAGS="-g -LANG:std -DOLD_C_HEADERS" AR="CC -ar" ARFLAGS="-o "
 ## AIX: ./configure CC=xlc F77=xlf CXX=xlC --with-lapack=$HOME/lib/liblapack.a CFLAGS=-g FFLAGS=-g CXXFLAGS="-g -qrtti=dyna" CXXLIBS="-lC -lc"
+## HP1: configure --with-blas=/opt/fortran/lib/libblas.a --with-hsl=$HOME/COIN/OBJhp1/OTHERS/HSL/libiphsl.a --with-lapack=$HOME/COIN/OBJhp1/OTHERS/lapack/libiplapack.a F77=/opt/fortran/bin/f77 CC=/opt/ansic/bin/cc CXX=/opt/aCC/bin/aCC FFLAGS='-g' CFLAGS='-g' CXXFLAGS='-AA -DMY_C_FINITE=isfinite -g'
 
 AC_PREREQ(2.59)
 
@@ -244,6 +245,22 @@ AC_LANG_POP(Fortran 77)
 # For the remaining tests we need to include FLIBS into LIBS, so that
 # the C compiler can link programs
 LIBS="$LIBS $FLIBS"
+
+#######
+# ASL #
+#######
+
+AC_SUBST(ASLLIB)
+AC_ARG_WITH([asl],
+            AC_HELP_STRING([--with-asl],
+                           [specify AMPL solver library]),
+            [use_asl=$withval], [use_asl=])
+# Check if user supplied option makes sense
+if test ! -z "$use_asl"; then
+  ASLLIB="$use_asl"
+else
+  ASLLIB="\$(top_builddir)/OTHERS/ASL/amplsolver.a -ldl"
+fi
 
 
 ######################################

@@ -64,13 +64,13 @@ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_composite_ampl_ipopt_OBJECTS = comp_ampl_ipopt.$(OBJEXT)
 composite_ampl_ipopt_OBJECTS = $(am_composite_ampl_ipopt_OBJECTS)
-am__DEPENDENCIES_1 = ../../Algorithm/libipoptalg.a \
+am__DEPENDENCIES_1 =
+am__DEPENDENCIES_2 = ../../Algorithm/libipoptalg.a \
 	../../LinAlgImpl/Serial/liblaserial.a \
 	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
 	../../Common/libcommon.a \
-	../../Apps/AmplSolver/libamplinterface.a \
-	../../OTHERS/ASL/amplsolver.a
-composite_ampl_ipopt_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+	../../Apps/AmplSolver/libamplinterface.a $(am__DEPENDENCIES_1)
+composite_ampl_ipopt_DEPENDENCIES = $(am__DEPENDENCIES_2) \
 	libcompositenlp.a
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -98,6 +98,7 @@ AMDEP_TRUE = @AMDEP_TRUE@
 AMPL_CPPFLAGS = @AMPL_CPPFLAGS@
 AMTAR = @AMTAR@
 AR = @AR@
+ASLLIB = @ASLLIB@
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 AUTOCONF = @AUTOCONF@
@@ -204,10 +205,8 @@ IPLIBS = ../../Algorithm/libipoptalg.a \
 	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
 	../../Common/libcommon.a \
 	../../Apps/AmplSolver/libamplinterface.a \
-	../../OTHERS/ASL/amplsolver.a \
-	-ldl
+	$(ASLLIB)
 
-#	../../OTHERS/HSL/libiphsl.a
 composite_ampl_ipopt_LDADD = $(IPLIBS) \
 	libcompositenlp.a
 

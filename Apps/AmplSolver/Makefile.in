@@ -64,7 +64,8 @@ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_ipopt_OBJECTS = ampl_ipopt.$(OBJEXT)
 ipopt_OBJECTS = $(am_ipopt_OBJECTS)
-am__DEPENDENCIES_1 = ../../Apps/StdInterface/libstdinterface.a \
+am__DEPENDENCIES_1 =
+am__DEPENDENCIES_2 = ../../Apps/StdInterface/libstdinterface.a \
 	../../Algorithm/libipoptalg.a \
 	../../LinAlgImpl/Serial/liblaserial.a \
 	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
@@ -72,9 +73,8 @@ am__DEPENDENCIES_1 = ../../Apps/StdInterface/libstdinterface.a \
 	libamplinterface.a \
 	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
 	../../Algorithm/libipoptalg.a ../../Common/libcommon.a \
-	../../OTHERS/ASL/amplsolver.a \
-	../../LinAlgImpl/Serial/liblaserial.a
-ipopt_DEPENDENCIES = $(am__DEPENDENCIES_1)
+	../../LinAlgImpl/Serial/liblaserial.a $(am__DEPENDENCIES_1)
+ipopt_DEPENDENCIES = $(am__DEPENDENCIES_2)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -100,6 +100,7 @@ AMDEP_TRUE = @AMDEP_TRUE@
 AMPL_CPPFLAGS = @AMPL_CPPFLAGS@
 AMTAR = @AMTAR@
 AR = @AR@
+ASLLIB = @ASLLIB@
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 AUTOCONF = @AUTOCONF@
@@ -212,9 +213,8 @@ IPLIBS = \
 	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
 	../../Algorithm/libipoptalg.a \
 	../../Common/libcommon.a \
-	../../OTHERS/ASL/amplsolver.a \
 	../../LinAlgImpl/Serial/liblaserial.a \
-	-ldl
+	$(ASLLIB)
 
 ipopt_LDADD = $(IPLIBS)
 
