@@ -21,7 +21,7 @@
 namespace Ipopt
 {
 
-  static const Index dbg_verbosity = 0;
+  DBG_SET_VERBOSITY(0);
 
   FilterLineSearch::FilterLineSearch(const SmartPtr<RestorationPhase>& resto_phase,
                                      const SmartPtr<PDSystemSolver>& pd_solver)
@@ -218,6 +218,9 @@ namespace Ipopt
 
     // ToDo decide if also the PDSystemSolver should be initialized here...
 
+    rigorous_=true;
+    skipped_line_search_=false;
+
     return retvalue;
   }
 
@@ -228,6 +231,9 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "--> Starting filter line search in iteration %d <--\n",
                    IpData().iter_count());
+
+    // First assume that line search will find an acceptable trial point
+    skipped_line_search_ = false;
 
     // Get the search directions (this will store the actual search
     // direction, possibly including higher order corrections)
@@ -382,7 +388,13 @@ namespace Ipopt
     // If line search has been aborted because the step size becomes too small,
     // go to the restoration phase
     if (!accept) {
-      if (IsValid(resto_phase_)) {
+      // If we are not asked to do a rigorous line search, do no call
+      // the restoration phase.
+      if (!rigorous_) {
+	Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Skipping call of restoration phase...\n");
+	skipped_line_search_=true;
+      }
+      else if (IsValid(resto_phase_)) {
         if (IpCq().curr_constraint_violation()==0.) {
           THROW_EXCEPTION(IpoptException, "Restoration phase called, but constraint violation is zero.");
         }
@@ -416,7 +428,7 @@ namespace Ipopt
                                       *actual_delta_z_L, *actual_delta_z_U,
                                       *actual_delta_v_L, *actual_delta_v_U);
 
-      IpData().SetTrialBoundMutlipliersFromStep(alpha_dual_max,
+      IpData().SetTrialBoundMultipliersFromStep(alpha_dual_max,
           *actual_delta_z_L, *actual_delta_z_U,
           *actual_delta_v_L, *actual_delta_v_U);
 
@@ -579,7 +591,7 @@ namespace Ipopt
       if (fabs(curr_barr)>10.) {
         basval = log10(fabs(curr_barr));
       }
-      if (log10(trial_barr-curr_barr)>obj_max_inc_*basval) {
+      if (log10(trial_barr-curr_barr)>obj_max_inc_+basval) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Rejecting trial point because barrier objective function increasing too rapidly (from %27.15e to %27.15e)\n",curr_barr,trial_barr);
         return false;
       }
@@ -1003,7 +1015,7 @@ namespace Ipopt
                                     *delta_corr_z_L, *delta_corr_z_U,
                                     *delta_corr_v_L, *delta_corr_v_U);
 
-    IpData().SetTrialBoundMutlipliersFromStep(alpha_dual_max,
+    IpData().SetTrialBoundMultipliersFromStep(alpha_dual_max,
         *delta_corr_z_L, *delta_corr_z_U,
         *delta_corr_v_L, *delta_corr_v_U);
 
