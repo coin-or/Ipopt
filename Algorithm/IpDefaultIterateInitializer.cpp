@@ -24,22 +24,22 @@ namespace Ipopt
   {
     Number value = 0.0;
     // Check for the algorithm options
-    if (options.GetNumericValue("kappa_1", value, prefix)) {
+    if (options.GetNumericValue("bound_push", value, prefix)) {
       ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"kappa_1\": This value must be larger than 0.");
-      kappa_1_ = value;
+                       "Option \"bound_push\": This value must be larger than 0.");
+      bound_push_ = value;
     }
     else {
-      kappa_1_ = 0.01;
+      bound_push_ = 0.01;
     }
 
-    if (options.GetNumericValue("kappa_2", value, prefix)) {
+    if (options.GetNumericValue("bound_frac", value, prefix)) {
       ASSERT_EXCEPTION(value > 0 && value < 0.5, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"kappa_2\": Value must be between 0 and 0.5.");
-      kappa_2_ = value;
+                       "Option \"bound_frac\": Value must be between 0 and 0.5.");
+      bound_frac_ = value;
     }
     else {
-      kappa_2_ = 0.01;
+      bound_frac_ = 0.01;
     }
 
     if (options.GetNumericValue("laminitmax", value, prefix)) {
@@ -121,9 +121,9 @@ namespace Ipopt
     */
     Px_U->MultVector(1.0, *tmp_u, 0.0, *tmp);
     Px_L->TransMultVector(1.0, *tmp, 0.0, *q_l);
-    q_l->AddOneVector(-1.0, *tiny_l, kappa_2_);
+    q_l->AddOneVector(-1.0, *tiny_l, bound_frac_);
     /* DELE
-    q_l->Scal(kappa_2_);
+    q_l->Scal(bound_frac_);
     q_l->Axpy(-1.0, *tiny_l);
     */
 
@@ -132,9 +132,9 @@ namespace Ipopt
     p_l->ElementWiseSgn();
     p_l->ElementWiseMultiply(*x_L);
     p_l->ElementWiseMax(*tmp_l);
-    p_l->AddOneVector(-1.0, *tiny_l, kappa_1_);
+    p_l->AddOneVector(-1.0, *tiny_l, bound_push_);
     /* DELE
-    p_l->Scal(kappa_1_);
+    p_l->Scal(bound_push_);
     p_l->Axpy(-1.0, *tiny_l);
     */
 
@@ -156,9 +156,9 @@ namespace Ipopt
     tmp_l->Axpy(-1.0, *x_L);
     Px_L->MultVector(1.0, *tmp_l, 0.0, *tmp);
     Px_U->TransMultVector(1.0, *tmp, 0.0, *q_u);
-    q_u->AddOneVector(-1.0, *tiny_u, kappa_2_);
+    q_u->AddOneVector(-1.0, *tiny_u, bound_frac_);
     /* DELE
-    q_u->Scal(kappa_2_);
+    q_u->Scal(bound_frac_);
     q_u->Axpy(-1.0, *tiny_u);
     */
     DBG_PRINT_VECTOR(2,"q_u",*q_u);
@@ -168,9 +168,9 @@ namespace Ipopt
     p_u->ElementWiseSgn();
     p_u->ElementWiseMultiply(*x_U);
     p_u->ElementWiseMax(*tmp_u);
-    p_u->AddOneVector(-1.0, *tiny_u, kappa_1_);
+    p_u->AddOneVector(-1.0, *tiny_u, bound_push_);
     /* DELE
-    p_u->Scal(kappa_1_);
+    p_u->Scal(bound_push_);
     p_u->Axpy(-1.0, *tiny_u);
     */
     DBG_PRINT_VECTOR(2,"p_u",*p_u);
@@ -262,9 +262,9 @@ namespace Ipopt
     */
     Pd_U->MultVector(1.0, *tmp_u, 0.0, *tmp);
     Pd_L->TransMultVector(1.0, *tmp, 0.0, *q_l);
-    q_l->AddOneVector(-1.0, *tiny_l, kappa_2_);
+    q_l->AddOneVector(-1.0, *tiny_l, bound_frac_);
     /* DELE
-    q_l->Scal(kappa_2_);
+    q_l->Scal(bound_frac_);
     q_l->Axpy(-1.0, *tiny_l);
     */
 
@@ -273,9 +273,9 @@ namespace Ipopt
     p_l->ElementWiseSgn();
     p_l->ElementWiseMultiply(*d_L);
     p_l->ElementWiseMax(*tmp_l);
-    p_l->AddOneVector(-1.0, *tiny_l, kappa_1_);
+    p_l->AddOneVector(-1.0, *tiny_l, bound_push_);
     /* DELE
-    p_l->Scal(kappa_1_);
+    p_l->Scal(bound_push_);
     p_l->Axpy(-1.0, *tiny_l);
     */
 
@@ -298,9 +298,9 @@ namespace Ipopt
     tmp_l->Axpy(-1.0, *d_L);
     Pd_L->MultVector(1.0, *tmp_l, 0.0, *tmp);
     Pd_U->TransMultVector(1.0, *tmp, 0.0, *q_u);
-    q_u->AddOneVector(-1.0, *tiny_u, kappa_2_);
+    q_u->AddOneVector(-1.0, *tiny_u, bound_frac_);
     /* DELE
-    q_u->Scal(kappa_2_);
+    q_u->Scal(bound_frac_);
     q_u->Axpy(-1.0, *tiny_u);
     */
 
@@ -309,9 +309,9 @@ namespace Ipopt
     p_u->ElementWiseSgn();
     p_u->ElementWiseMultiply(*d_U);
     p_u->ElementWiseMax(*tmp_u);
-    p_u->AddOneVector(-1.0, *tiny_u, kappa_1_);
+    p_u->AddOneVector(-1.0, *tiny_u, bound_push_);
     /* DELE
-    p_u->Scal(kappa_1_);
+    p_u->Scal(bound_push_);
     p_u->Axpy(-1.0, *tiny_u);
     */
 
