@@ -34,7 +34,8 @@ namespace Ipopt
   CompositeNLP::~CompositeNLP()
   {}
 
-  bool CompositeNLP::ProcessOptions(const OptionsList& options)
+  bool CompositeNLP::ProcessOptions(const OptionsList& options,
+				    const std::string& prefix)
   {
     return true;
   }
