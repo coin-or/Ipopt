@@ -150,9 +150,9 @@ namespace Ipopt
                       *step_aff_v_L,
                       *step_aff_v_U,
                       false           // want accurate solution here
-				      // because we can use it to
-				      // compute the overall search
-				      // direction
+                      // because we can use it to
+                      // compute the overall search
+                      // direction
                      );
 
     DBG_PRINT_VECTOR(2, "step_aff_x", *step_aff_x);
@@ -220,9 +220,9 @@ namespace Ipopt
                       *step_cen_v_L,
                       *step_cen_v_U,
                       false           // want accurate solution here
-				      // because we can use it to
-				      // compute the overall search
-				      // direction
+                      // because we can use it to
+                      // compute the overall search
+                      // direction
                      );
 
     DBG_PRINT_VECTOR(2, "step_cen_x", *step_cen_x);
@@ -253,138 +253,138 @@ namespace Ipopt
     IpNLP().Px_U()->TransMultVector(-1., *step_cen_x, 0., *step_cen_x_U);
     IpNLP().Pd_L()->TransMultVector(1., *step_cen_s, 0., *step_cen_s_L);
     IpNLP().Pd_U()->TransMultVector(-1., *step_cen_s, 0., *step_cen_s_U);
-    
+
     Number sigma;
     if (max_bisection_steps_>0) {
-    // Now we do an search for the best centering parameter, that
-    // gives us the lower value of a quality function, using golden
-    // bisection
+      // Now we do an search for the best centering parameter, that
+      // gives us the lower value of a quality function, using golden
+      // bisection
 
-    Number tol = 1e-3;
-    Number sigma_up = Min(1., sigma_max_);
-    Number sigma_lo = 1e-9/avrg_compl;
-    sigma = PerformGoldenBisection(sigma_up, sigma_lo, tol,
-                                          *step_aff_x_L,
-                                          *step_aff_x_U,
-                                          *step_aff_s_L,
-                                          *step_aff_s_U,
-                                          *step_aff_z_L,
-                                          *step_aff_z_U,
-                                          *step_aff_v_L,
-                                          *step_aff_v_U,
-                                          *step_cen_x_L,
-                                          *step_cen_x_U,
-                                          *step_cen_s_L,
-                                          *step_cen_s_U,
-                                          *step_cen_z_L,
-                                          *step_cen_z_U,
-                                          *step_cen_v_L,
-                                          *step_cen_v_U);
-
-    if (sigma_max_ > 1. && sigma >= 1.-2*tol) {
-      // It seems that the optimal value might be larger than one.
-      sigma_up = sigma_max_;
-      sigma_lo = sigma;
+      Number tol = 1e-3;
+      Number sigma_up = Min(1., sigma_max_);
+      Number sigma_lo = 1e-9/avrg_compl;
       sigma = PerformGoldenBisection(sigma_up, sigma_lo, tol,
-				     *step_aff_x_L,
-				     *step_aff_x_U,
-				     *step_aff_s_L,
-				     *step_aff_s_U,
-				     *step_aff_z_L,
-				     *step_aff_z_U,
-				     *step_aff_v_L,
-				     *step_aff_v_U,
-				     *step_cen_x_L,
-				     *step_cen_x_U,
-				     *step_cen_s_L,
-				     *step_cen_s_U,
-				     *step_cen_z_L,
-				     *step_cen_z_U,
-				     *step_cen_v_L,
-				     *step_cen_v_U);
-    }
+                                     *step_aff_x_L,
+                                     *step_aff_x_U,
+                                     *step_aff_s_L,
+                                     *step_aff_s_U,
+                                     *step_aff_z_L,
+                                     *step_aff_z_U,
+                                     *step_aff_v_L,
+                                     *step_aff_v_U,
+                                     *step_cen_x_L,
+                                     *step_cen_x_U,
+                                     *step_cen_s_L,
+                                     *step_cen_s_U,
+                                     *step_cen_z_L,
+                                     *step_cen_z_U,
+                                     *step_cen_v_L,
+                                     *step_cen_v_U);
+
+      if (sigma_max_ > 1. && sigma >= 1.-2*tol) {
+        // It seems that the optimal value might be larger than one.
+        sigma_up = sigma_max_;
+        sigma_lo = sigma;
+        sigma = PerformGoldenBisection(sigma_up, sigma_lo, tol,
+                                       *step_aff_x_L,
+                                       *step_aff_x_U,
+                                       *step_aff_s_L,
+                                       *step_aff_s_U,
+                                       *step_aff_z_L,
+                                       *step_aff_z_U,
+                                       *step_aff_v_L,
+                                       *step_aff_v_U,
+                                       *step_cen_x_L,
+                                       *step_cen_x_U,
+                                       *step_cen_s_L,
+                                       *step_cen_s_U,
+                                       *step_cen_z_L,
+                                       *step_cen_z_U,
+                                       *step_cen_v_L,
+                                       *step_cen_v_U);
+      }
 
 #ifdef tracequalityfunction
-    //DELETEME
-    Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
-                   "\n");
-    Number base = 1.2;
-    for (Index l=30;l>=(Index)trunc(-(log(avrg_compl)-log(1e-9))/log(base));l--) {
-      Number sig = pow(base, l);
-      CalculateQualityFunction(sig,
-			       *step_aff_x_L,
-			       *step_aff_x_U,
-			       *step_aff_s_L,
-			       *step_aff_s_U,
-			       *step_aff_z_L,
-			       *step_aff_z_U,
-			       *step_aff_v_L,
-			       *step_aff_v_U,
-			       *step_cen_x_L,
-			       *step_cen_x_U,
-			       *step_cen_s_L,
-			       *step_cen_s_U,
-			       *step_cen_z_L,
-			       *step_cen_z_U,
-			       *step_cen_v_L,
-			       *step_cen_v_U);
-    }
+      //DELETEME
+      Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
+                     "\n");
+      Number base = 1.2;
+      for (Index l=30;l>=(Index)trunc(-(log(avrg_compl)-log(1e-9))/log(base));l--) {
+        Number sig = pow(base, l);
+        CalculateQualityFunction(sig,
+                                 *step_aff_x_L,
+                                 *step_aff_x_U,
+                                 *step_aff_s_L,
+                                 *step_aff_s_U,
+                                 *step_aff_z_L,
+                                 *step_aff_z_U,
+                                 *step_aff_v_L,
+                                 *step_aff_v_U,
+                                 *step_cen_x_L,
+                                 *step_cen_x_U,
+                                 *step_cen_s_L,
+                                 *step_cen_s_U,
+                                 *step_cen_z_L,
+                                 *step_cen_z_U,
+                                 *step_cen_v_L,
+                                 *step_cen_v_U);
+      }
 #endif
 
     }
     else {
-    Index l;
-    Index l_best;
-    Number q_best;
+      Index l;
+      Index l_best;
+      Number q_best;
 
-    Number base = 1.2;
-    l = 20;
-    l_best = l;
-    sigma = pow(base, l);
-    q_best = CalculateQualityFunction(sigma,
-				      *step_aff_x_L,
-				      *step_aff_x_U,
-				      *step_aff_s_L,
-				      *step_aff_s_U,
-				      *step_aff_z_L,
-				      *step_aff_z_U,
-				      *step_aff_v_L,
-				      *step_aff_v_U,
-				      *step_cen_x_L,
-				      *step_cen_x_U,
-				      *step_cen_s_L,
-				      *step_cen_s_U,
-				      *step_cen_z_L,
-				      *step_cen_z_U,
-				      *step_cen_v_L,
-				      *step_cen_v_U);
-    Index l_min = (Index)trunc(-(log(avrg_compl)-log(1e-9))/log(base))-1;
-    for (; l>=l_min; l--) {
+      Number base = 1.2;
+      l = 20;
+      l_best = l;
       sigma = pow(base, l);
-      Number q = CalculateQualityFunction(sigma,
-					  *step_aff_x_L,
-					  *step_aff_x_U,
-					  *step_aff_s_L,
-					  *step_aff_s_U,
-					  *step_aff_z_L,
-					  *step_aff_z_U,
-					  *step_aff_v_L,
-					  *step_aff_v_U,
-					  *step_cen_x_L,
-					  *step_cen_x_U,
-					  *step_cen_s_L,
-					  *step_cen_s_U,
-					  *step_cen_z_L,
-					  *step_cen_z_U,
-					  *step_cen_v_L,
-					  *step_cen_v_U);
-      if (q<=q_best) {
-        q_best = q;
-        l_best = l;
+      q_best = CalculateQualityFunction(sigma,
+                                        *step_aff_x_L,
+                                        *step_aff_x_U,
+                                        *step_aff_s_L,
+                                        *step_aff_s_U,
+                                        *step_aff_z_L,
+                                        *step_aff_z_U,
+                                        *step_aff_v_L,
+                                        *step_aff_v_U,
+                                        *step_cen_x_L,
+                                        *step_cen_x_U,
+                                        *step_cen_s_L,
+                                        *step_cen_s_U,
+                                        *step_cen_z_L,
+                                        *step_cen_z_U,
+                                        *step_cen_v_L,
+                                        *step_cen_v_U);
+      Index l_min = (Index)trunc(-(log(avrg_compl)-log(1e-9))/log(base))-1;
+      for (; l>=l_min; l--) {
+        sigma = pow(base, l);
+        Number q = CalculateQualityFunction(sigma,
+                                            *step_aff_x_L,
+                                            *step_aff_x_U,
+                                            *step_aff_s_L,
+                                            *step_aff_s_U,
+                                            *step_aff_z_L,
+                                            *step_aff_z_U,
+                                            *step_aff_v_L,
+                                            *step_aff_v_U,
+                                            *step_cen_x_L,
+                                            *step_cen_x_U,
+                                            *step_cen_s_L,
+                                            *step_cen_s_U,
+                                            *step_cen_z_L,
+                                            *step_cen_z_U,
+                                            *step_cen_v_L,
+                                            *step_cen_v_U);
+        if (q<=q_best) {
+          q_best = q;
+          l_best = l;
+        }
       }
-    }
 
-    sigma = pow(base, l_best);
+      sigma = pow(base, l_best);
     }
 
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
@@ -717,39 +717,39 @@ namespace Ipopt
     Number sigma_mid2 = sigma_lo + (1.-gfac)*(sigma_up-sigma_lo);
 
     Number qmid1 = CalculateQualityFunction(sigma_mid1,
-					    step_aff_x_L,
-					    step_aff_x_U,
-					    step_aff_s_L,
-					    step_aff_s_U,
-					    step_aff_z_L,
-					    step_aff_z_U,
-					    step_aff_v_L,
-					    step_aff_v_U,
-					    step_cen_x_L,
-					    step_cen_x_U,
-					    step_cen_s_L,
-					    step_cen_s_U,
-					    step_cen_z_L,
-					    step_cen_z_U,
-					    step_cen_v_L,
-					    step_cen_v_U);
+                                            step_aff_x_L,
+                                            step_aff_x_U,
+                                            step_aff_s_L,
+                                            step_aff_s_U,
+                                            step_aff_z_L,
+                                            step_aff_z_U,
+                                            step_aff_v_L,
+                                            step_aff_v_U,
+                                            step_cen_x_L,
+                                            step_cen_x_U,
+                                            step_cen_s_L,
+                                            step_cen_s_U,
+                                            step_cen_z_L,
+                                            step_cen_z_U,
+                                            step_cen_v_L,
+                                            step_cen_v_U);
     Number qmid2 = CalculateQualityFunction(sigma_mid2,
-					    step_aff_x_L,
-					    step_aff_x_U,
-					    step_aff_s_L,
-					    step_aff_s_U,
-					    step_aff_z_L,
-					    step_aff_z_U,
-					    step_aff_v_L,
-					    step_aff_v_U,
-					    step_cen_x_L,
-					    step_cen_x_U,
-					    step_cen_s_L,
-					    step_cen_s_U,
-					    step_cen_z_L,
-					    step_cen_z_U,
-					    step_cen_v_L,
-					    step_cen_v_U);
+                                            step_aff_x_L,
+                                            step_aff_x_U,
+                                            step_aff_s_L,
+                                            step_aff_s_U,
+                                            step_aff_z_L,
+                                            step_aff_z_U,
+                                            step_aff_v_L,
+                                            step_aff_v_U,
+                                            step_cen_x_L,
+                                            step_cen_x_U,
+                                            step_cen_s_L,
+                                            step_cen_s_U,
+                                            step_cen_z_L,
+                                            step_cen_z_U,
+                                            step_cen_v_L,
+                                            step_cen_v_U);
 
     Index nbisections = 0;
     while ((sigma_up-sigma_lo)>=tol*sigma_up && nbisections<max_bisection_steps_) {
@@ -761,22 +761,22 @@ namespace Ipopt
         qmid1 = qmid2;
         sigma_mid2 = sigma_lo + (1.-gfac)*(sigma_up-sigma_lo);
         qmid2 = CalculateQualityFunction(sigma_mid2,
-					 step_aff_x_L,
-					 step_aff_x_U,
-					 step_aff_s_L,
-					 step_aff_s_U,
-					 step_aff_z_L,
-					 step_aff_z_U,
-					 step_aff_v_L,
-					 step_aff_v_U,
-					 step_cen_x_L,
-					 step_cen_x_U,
-					 step_cen_s_L,
-					 step_cen_s_U,
-					 step_cen_z_L,
-					 step_cen_z_U,
-					 step_cen_v_L,
-					 step_cen_v_U);
+                                         step_aff_x_L,
+                                         step_aff_x_U,
+                                         step_aff_s_L,
+                                         step_aff_s_U,
+                                         step_aff_z_L,
+                                         step_aff_z_U,
+                                         step_aff_v_L,
+                                         step_aff_v_U,
+                                         step_cen_x_L,
+                                         step_cen_x_U,
+                                         step_cen_s_L,
+                                         step_cen_s_U,
+                                         step_cen_z_L,
+                                         step_cen_z_U,
+                                         step_cen_v_L,
+                                         step_cen_v_U);
       }
       else {
         sigma_up = sigma_mid2;
@@ -784,22 +784,22 @@ namespace Ipopt
         qmid2 = qmid1;
         sigma_mid1 = sigma_lo + gfac*(sigma_up-sigma_lo);
         qmid1 = CalculateQualityFunction(sigma_mid1,
-					 step_aff_x_L,
-					 step_aff_x_U,
-					 step_aff_s_L,
-					 step_aff_s_U,
-					 step_aff_z_L,
-					 step_aff_z_U,
-					 step_aff_v_L,
-					 step_aff_v_U,
-					 step_cen_x_L,
-					 step_cen_x_U,
-					 step_cen_s_L,
-					 step_cen_s_U,
-					 step_cen_z_L,
-					 step_cen_z_U,
-					 step_cen_v_L,
-					 step_cen_v_U);
+                                         step_aff_x_L,
+                                         step_aff_x_U,
+                                         step_aff_s_L,
+                                         step_aff_s_U,
+                                         step_aff_z_L,
+                                         step_aff_z_U,
+                                         step_aff_v_L,
+                                         step_aff_v_U,
+                                         step_cen_x_L,
+                                         step_cen_x_U,
+                                         step_cen_s_L,
+                                         step_cen_s_U,
+                                         step_cen_z_L,
+                                         step_cen_z_U,
+                                         step_cen_v_L,
+                                         step_cen_v_U);
       }
     }
 
@@ -814,22 +814,22 @@ namespace Ipopt
     }
     if (sigma_up == sigma_up_in) {
       Number qtmp = CalculateQualityFunction(sigma_up,
-					     step_aff_x_L,
-					     step_aff_x_U,
-					     step_aff_s_L,
-					     step_aff_s_U,
-					     step_aff_z_L,
-					     step_aff_z_U,
-					     step_aff_v_L,
-					     step_aff_v_U,
-					     step_cen_x_L,
-					     step_cen_x_U,
-					     step_cen_s_L,
-					     step_cen_s_U,
-					     step_cen_z_L,
-					     step_cen_z_U,
-					     step_cen_v_L,
-					     step_cen_v_U);
+                                             step_aff_x_L,
+                                             step_aff_x_U,
+                                             step_aff_s_L,
+                                             step_aff_s_U,
+                                             step_aff_z_L,
+                                             step_aff_z_U,
+                                             step_aff_v_L,
+                                             step_aff_v_U,
+                                             step_cen_x_L,
+                                             step_cen_x_U,
+                                             step_cen_s_L,
+                                             step_cen_s_U,
+                                             step_cen_z_L,
+                                             step_cen_z_U,
+                                             step_cen_v_L,
+                                             step_cen_v_U);
       if (qtmp < q) {
         sigma = sigma_up;
         q = qtmp;
@@ -837,22 +837,22 @@ namespace Ipopt
     }
     else if (sigma_lo == sigma_lo_in) {
       Number qtmp = CalculateQualityFunction(sigma_lo,
-					     step_aff_x_L,
-					     step_aff_x_U,
-					     step_aff_s_L,
-					     step_aff_s_U,
-					     step_aff_z_L,
-					     step_aff_z_U,
-					     step_aff_v_L,
-					     step_aff_v_U,
-					     step_cen_x_L,
-					     step_cen_x_U,
-					     step_cen_s_L,
-					     step_cen_s_U,
-					     step_cen_z_L,
-					     step_cen_z_U,
-					     step_cen_v_L,
-					     step_cen_v_U);
+                                             step_aff_x_L,
+                                             step_aff_x_U,
+                                             step_aff_s_L,
+                                             step_aff_s_U,
+                                             step_aff_z_L,
+                                             step_aff_z_U,
+                                             step_aff_v_L,
+                                             step_aff_v_U,
+                                             step_cen_x_L,
+                                             step_cen_x_U,
+                                             step_cen_s_L,
+                                             step_cen_s_U,
+                                             step_cen_z_L,
+                                             step_cen_z_U,
+                                             step_cen_v_L,
+                                             step_cen_v_U);
       if (qtmp < q) {
         sigma = sigma_lo;
         q = qtmp;

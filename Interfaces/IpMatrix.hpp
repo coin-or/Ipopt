@@ -201,7 +201,7 @@ namespace Ipopt
   {
     return owner_space_->NCols();
   }
-  
+
   inline
   SmartPtr<const MatrixSpace> Matrix::OwnerSpace() const
   {

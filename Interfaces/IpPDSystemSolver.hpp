@@ -117,7 +117,7 @@ namespace Ipopt
                        Vector& res_zU,
                        Vector& res_vL,
                        Vector& res_vU,
-		       bool allow_inexact=false) =0;
+                       bool allow_inexact=false) =0;
 
   private:
     /**@name Default Compiler Generated Methods

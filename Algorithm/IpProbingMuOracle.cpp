@@ -101,8 +101,8 @@ namespace Ipopt
                       *step_z_U,
                       *step_v_L,
                       *step_v_U
-		      //		      ,
-		      //                      true           // don't need high accuracy
+                      //		      ,
+                      //                      true           // don't need high accuracy
                      );
 
     DBG_PRINT_VECTOR(2, "step_x", *step_x);

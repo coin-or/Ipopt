@@ -240,10 +240,10 @@ namespace Ipopt
      *  steps in the slacks directly (e.g. when the primal step sizes
      *  are only temporary), the this method is more efficient. */
     Number slack_frac_to_the_bound(Number tau,
-				   const Vector& delta_x_L,
-				   const Vector& delta_x_U,
-				   const Vector& delta_s_L,
-				   const Vector& delta_s_U);
+                                   const Vector& delta_x_L,
+                                   const Vector& delta_x_U,
+                                   const Vector& delta_s_L,
+                                   const Vector& delta_s_U);
     //@}
 
     /** @name Sigma matrices */
