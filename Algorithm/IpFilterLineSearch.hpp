@@ -201,6 +201,9 @@ namespace Ipopt
      *  increased more than this compared to the current point, the
      *  trial point is rejected. */
     Number obj_max_inc_;
+    /** Flag indicating whether the dual step size is to be used for
+     *  the equality constraint multipliers. */
+    bool dual_alpha_for_y_;
 
     /** Flag indicating whether magic steps should be used. */
     bool magic_steps_;

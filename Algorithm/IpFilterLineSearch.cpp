@@ -194,6 +194,13 @@ namespace Ipopt
       ls_always_accept_ = false;
     }
 
+    if (options.GetIntegerValue("dual_alpha_for_y", ivalue, prefix)) {
+      dual_alpha_for_y_ = (ivalue != 0);
+    }
+    else {
+      dual_alpha_for_y_ = false;
+    }
+
     if (options.GetNumericValue("corrector_compl_avrg_red_fact", value, prefix)) {
       ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"corrector_compl_avrg_red_fact_\": This value must be positive1.");
@@ -308,6 +315,7 @@ namespace Ipopt
             }
 
             // If it is acceptable, stop the search
+	    alpha_primal_test = alpha_primal;
             accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
           }
           catch(IpoptNLP::Eval_Error& e) {
@@ -399,9 +407,6 @@ namespace Ipopt
     else {
       // we didn't do the restoration phase and are now updating the
       // trial point
-      IpData().SetTrialEqMultipilersFromStep(alpha_primal,
-                                             *actual_delta_y_c,
-                                             *actual_delta_y_d);
       Number alpha_dual_max =
         IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
                                       *actual_delta_z_L, *actual_delta_z_U,
@@ -410,6 +415,17 @@ namespace Ipopt
       IpData().SetTrialBoundMutlipliersFromStep(alpha_dual_max,
           *actual_delta_z_L, *actual_delta_z_U,
           *actual_delta_v_L, *actual_delta_v_U);
+
+      Number alpha_y;
+      if (dual_alpha_for_y_) {
+	alpha_y = alpha_dual_max;
+      }
+      else {
+	alpha_y = alpha_primal;
+      }
+      IpData().SetTrialEqMultipilersFromStep(alpha_y,
+					     *actual_delta_y_c,
+                                             *actual_delta_y_d);
 
       // Set some information for iteration summary output
       IpData().Set_info_alpha_primal(alpha_primal);
