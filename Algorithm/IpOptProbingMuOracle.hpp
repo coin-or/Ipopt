@@ -67,43 +67,43 @@ namespace Ipopt
      */
     // ToDo Replace pointers by references
     Number CalculateQualityFunction(Number sigma,
-                                    const Vector& step_aff_x,
-                                    const Vector& step_aff_s,
-                                    const Vector& step_aff_y_c,
-                                    const Vector& step_aff_y_d,
-                                    const Vector& step_aff_z_L,
-                                    const Vector& step_aff_z_U,
-                                    const Vector& step_aff_v_L,
-                                    const Vector& step_aff_v_U,
-                                    const Vector& step_cen_x,
-                                    const Vector& step_cen_s,
-                                    const Vector& step_cen_y_c,
-                                    const Vector& step_cen_y_d,
-                                    const Vector& step_cen_z_L,
-                                    const Vector& step_cen_z_U,
-                                    const Vector& step_cen_v_L,
-                                    const Vector& step_cen_v_U);
+				    const Vector& step_aff_x_L,
+				    const Vector& step_aff_x_U,
+				    const Vector& step_aff_s_L,
+				    const Vector& step_aff_s_U,
+				    const Vector& step_aff_z_L,
+				    const Vector& step_aff_z_U,
+				    const Vector& step_aff_v_L,
+				    const Vector& step_aff_v_U,
+				    const Vector& step_cen_x_L,
+				    const Vector& step_cen_x_U,
+				    const Vector& step_cen_s_L,
+				    const Vector& step_cen_s_U,
+				    const Vector& step_cen_z_L,
+				    const Vector& step_cen_z_U,
+				    const Vector& step_cen_v_L,
+				    const Vector& step_cen_v_U);
 
     /** Auxilliary function performing the golden bisection */
     Number PerformGoldenBisection(Number sigma_up,
                                   Number sigma_lo,
                                   Number tol,
-                                  const Vector& step_aff_x,
-                                  const Vector& step_aff_s,
-                                  const Vector& step_aff_y_c,
-                                  const Vector& step_aff_y_d,
-                                  const Vector& step_aff_z_L,
-                                  const Vector& step_aff_z_U,
-                                  const Vector& step_aff_v_L,
-                                  const Vector& step_aff_v_U,
-                                  const Vector& step_cen_x,
-                                  const Vector& step_cen_s,
-                                  const Vector& step_cen_y_c,
-                                  const Vector& step_cen_y_d,
-                                  const Vector& step_cen_z_L,
-                                  const Vector& step_cen_z_U,
-                                  const Vector& step_cen_v_L,
-                                  const Vector& step_cen_v_U);
+				  const Vector& step_aff_x_L,
+				  const Vector& step_aff_x_U,
+				  const Vector& step_aff_s_L,
+				  const Vector& step_aff_s_U,
+				  const Vector& step_aff_z_L,
+				  const Vector& step_aff_z_U,
+				  const Vector& step_aff_v_L,
+				  const Vector& step_aff_v_U,
+				  const Vector& step_cen_x_L,
+				  const Vector& step_cen_x_U,
+				  const Vector& step_cen_s_L,
+				  const Vector& step_cen_s_U,
+				  const Vector& step_cen_z_L,
+				  const Vector& step_cen_z_U,
+				  const Vector& step_cen_v_L,
+				  const Vector& step_cen_v_U);
 
     /** @name Algorithmic parameters */
     //@{
@@ -117,6 +117,9 @@ namespace Ipopt
     /** Flag indicating how centrality should be involved in the
      *  quality function */
     Index quality_function_centrality_;
+    /** Maximal number of bi-section steps in the golden bisection
+     *  search for sigma. */
+    Index max_bisection_steps_;
     //@}
 
     /** @name scaling values */
