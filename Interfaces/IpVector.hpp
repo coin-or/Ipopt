@@ -54,7 +54,8 @@ namespace Ipopt
     Vector(const VectorSpace* owner_space);
 
     /** Destructor */
-    virtual ~Vector();
+    virtual ~Vector()
+    {}
     //@}
 
     /** Create new Vector of the same type with uninitialized data */
@@ -147,9 +148,13 @@ namespace Ipopt
     void AddOneVector(Number a, const Vector& v1, Number c);
 
     /** Add two vectors, y = a * v1 + b * v2 + c * y.  Here, this
-	vector is y */
+     *  vector is y */
     void AddTwoVectors(Number a, const Vector& v1,
 		       Number b, const Vector& v2, Number c);
+    /** Fraction to the boundary parameter.  Computes \f$\alpha =
+     *  \max\{\bar\alpha\in(0,1] : x + \bar\alpha \Delta \geq (1-\tau)x\}\f$
+     */
+    Number FracToBound(const Vector& delta, Number tau) const;
     //@}
 
     /** @name Accessor methods */
@@ -244,6 +249,9 @@ namespace Ipopt
     virtual void AddTwoVectorsImpl(Number a, const Vector& v1,
 				   Number b, const Vector& v2, Number c);
 
+    /** Fraction to boundary parameter. */
+    virtual Number FracToBoundImpl(const Vector& delta, Number tau) const;
+
     /** Print the entire vector */
     virtual void PrintImpl(FILE* fp, std::string name = "Vector",
                            Index indent=0, std::string prefix = "") const =0;
@@ -308,7 +316,8 @@ namespace Ipopt
     VectorSpace(Index dim);
 
     /** Destructor */
-    virtual ~VectorSpace();
+    virtual ~VectorSpace()
+    {}
     //@}
 
     /** Pure virtual method for creating a new Vector of the
@@ -346,6 +355,21 @@ namespace Ipopt
   };
 
   /* inline methods */
+  inline
+  Vector::Vector(const VectorSpace* owner_space)
+      :
+      owner_space_(owner_space),
+      TaggedObject(),
+      dot_cache_(10),
+      nrm2_cache_(1),
+      asum_cache_(1),
+      amax_cache_(1),
+      sum_cache_(1),
+      sumlogs_cache_(1)
+  {
+    DBG_ASSERT(IsValid(owner_space_));
+  }
+
   inline
   Vector* Vector::MakeNew() const
   {
@@ -538,6 +562,12 @@ namespace Ipopt
   }
 
   inline
+  Number Vector::FracToBound(const Vector& delta, Number tau) const
+  {
+    return FracToBoundImpl(delta, tau);
+  }
+
+  inline
   Index Vector::Dim() const
   {
     return owner_space_->Dim();
@@ -554,6 +584,12 @@ namespace Ipopt
   {
     return owner_space_;
   }
+
+  inline
+  VectorSpace::VectorSpace(Index dim)
+      :
+      dim_(dim)
+  {}
 
 } // namespace Ipopt
 
