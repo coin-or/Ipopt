@@ -169,11 +169,14 @@ int main(int argv, char** argc)
   Journal* jrnl = jnlst->AddJournal("ConsoleStdOut", "stdout", J_SUMMARY);
   jrnl->SetPrintLevel(J_DBG, J_NONE);
 
-  //jrnl = jnlst->AddJournal("Debug", "debug.out", J_DETAILED);
-  //jrnl->SetPrintLevel(J_DBG, J_ALL);
+# ifdef IP_DEBUG
+  jrnl = jnlst->AddJournal("Debug", "debug.out", J_DETAILED);
+  jrnl->SetPrintLevel(J_DBG, J_ALL);
+# endif
 
+  //jrnl = jnlst->AddJournal("All", "all.out", J_MOREVECTOR);
   //jrnl = jnlst->AddJournal("All", "all.out", J_VECTOR);
-  //jrnl = jnlst->AddJournal("All", "all.out", J_DETAILED);
+  //jrnl = jnlst->AddJournal("All", "all.out", J_MOREDETAILED);
 
   //jrnl = jnlst->AddJournal("LineSearch", "linesearch.out", J_NONE);
   //jrnl->SetPrintLevel(J_LINE_SEARCH, J_ALL);
