@@ -238,6 +238,20 @@ namespace Ipopt
       nonmonotone_kkt_centrality_ = 0;
     }
 
+    if (options.GetIntegerValue("nonmonotone_kkt_balancing_term", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"nonmonotone_kkt_balancing_term\": This value must be between 0 and 3.");
+      nonmonotone_kkt_balancing_term_ = ivalue;
+    }
+    else if (options.GetIntegerValue("quality_function_balancing_term", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"quality_function_balancing_term\": This value must be between 0 and 3.");
+      nonmonotone_kkt_balancing_term_ = ivalue;
+    }
+    else {
+      nonmonotone_kkt_balancing_term_ = 0;
+    }
+
     init_dual_inf_ = -1.;
     init_primal_inf_ = -1.;
 
@@ -670,8 +684,23 @@ namespace Ipopt
 	DBG_ASSERT("Unknown value for nonmonotone_kkt_centrality_");
       }
     }
-    
-    Number kkt_error = primal_inf + dual_inf + complty + centrality;
+
+    Number balancing_term=0.;
+    switch (nonmonotone_kkt_balancing_term_) {
+    case 0:
+      //Nothing
+      break;
+    case 1:
+      balancing_term = pow(Max(0., Max(dual_inf,primal_inf)-complty),3);
+      break;
+    default:
+      DBG_ASSERT("Unknown value for quality_function_balancing term_");
+    }
+
+    DBG_ASSERT(centrality>=0.);
+    DBG_ASSERT(balancing_term>=0);
+    Number kkt_error = primal_inf + dual_inf + complty +
+      centrality + balancing_term;
 
     Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
                    "KKT error in barrier update check:\n"

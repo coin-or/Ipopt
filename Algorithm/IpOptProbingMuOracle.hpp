@@ -136,6 +136,10 @@ namespace Ipopt
     /** Flag indicating what term is to be used for the dual
      *  infeasibility in the quality function. */
     Index quality_function_dual_inf_;
+    /** Flag indicating whether we use a balancing term in the quality
+     *  function.
+     */
+    Index quality_function_balancing_term_;
     /** Relative tolerance for golden bi-section algorithm. */
     Number bisection_tol_;
     /** Maximal number of bi-section steps in the golden bisection
