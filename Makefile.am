@@ -55,6 +55,8 @@ install-exec-local:
 uninstall-local:
 	rm -f $(DESTDIR)$(libdir)/$(libipopt)
 
+cuter: install
+	cd Apps/CUTErInterface; $(MAKE) cuter
 
 # Astyle stuff
 

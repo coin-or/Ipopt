@@ -7196,7 +7196,7 @@ esac
 
 
 
-                                                                                                                        ac_config_files="$ac_config_files Makefile Common/Makefile Algorithm/Makefile LinAlgImpl/Makefile LinAlgImpl/Serial/Makefile PDSystemImpl/Makefile PDSystemImpl/PDFullSpace/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/StdInterface/Makefile Apps/CompositeInterface/Makefile Examples/Fortran_example/Makefile"
+                                                                                                                                  ac_config_files="$ac_config_files Makefile Common/Makefile Algorithm/Makefile LinAlgImpl/Makefile LinAlgImpl/Serial/Makefile PDSystemImpl/Makefile PDSystemImpl/PDFullSpace/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/StdInterface/Makefile Apps/CompositeInterface/Makefile Apps/CUTErInterface/Makefile Examples/Fortran_example/Makefile"
 
 
           ac_config_headers="$ac_config_headers inc/config.h"
@@ -7776,6 +7776,7 @@ do
   "Apps/AmplSolver/Makefile" ) CONFIG_FILES="$CONFIG_FILES Apps/AmplSolver/Makefile" ;;
   "Apps/StdInterface/Makefile" ) CONFIG_FILES="$CONFIG_FILES Apps/StdInterface/Makefile" ;;
   "Apps/CompositeInterface/Makefile" ) CONFIG_FILES="$CONFIG_FILES Apps/CompositeInterface/Makefile" ;;
+  "Apps/CUTErInterface/Makefile" ) CONFIG_FILES="$CONFIG_FILES Apps/CUTErInterface/Makefile" ;;
   "Examples/Fortran_example/Makefile" ) CONFIG_FILES="$CONFIG_FILES Examples/Fortran_example/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "inc/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS inc/config.h" ;;
