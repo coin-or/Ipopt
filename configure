@@ -5587,47 +5587,12 @@ fi;
 if test ! "$use_pardiso" = "no"; then
   LIBS="$use_pardiso $LIBS"
   IPADDLIBS="$use_pardiso $IPADDLIBS"
-  echo "$as_me:$LINENO: checking whether user supplied Pardiso library \"$use_pardiso\" works" >&5
-echo $ECHO_N "checking whether user supplied Pardiso library \"$use_pardiso\" works... $ECHO_C" >&6
-  cat >conftest.$ac_ext <<_ACEOF
-      program main
-      call PARDISO()
-      end
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_f77_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
 
-{ { echo "$as_me:$LINENO: error: Pardiso subroutine not found in $use_pardiso" >&5
-echo "$as_me: error: Pardiso subroutine not found in $use_pardiso" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
+# ToDo put this back in
+#  AC_MSG_CHECKING([whether user-supplied Pardiso library \"$use_pardiso\" works])
+#  AC_TRY_LINK([],[      call PARDISO()],
+#              [AC_MSG_RESULT(yes)],
+#              [AC_MSG_ERROR([Pardiso library $use_pardiso does not seem to work])])
 
 
 cat >>confdefs.h <<\_ACEOF

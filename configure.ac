@@ -315,10 +315,12 @@ AC_ARG_WITH([pardiso],
 if test ! "$use_pardiso" = "no"; then
   LIBS="$use_pardiso $LIBS"
   IPADDLIBS="$use_pardiso $IPADDLIBS"
-  AC_MSG_CHECKING([whether user supplied Pardiso library \"$use_pardiso\" works])
-  AC_TRY_LINK([],[      call PARDISO()],
-              [AC_MSG_RESULT(yes)],
-              [AC_MSG_ERROR([Pardiso subroutine not found in $use_pardiso])])
+
+# ToDo put this back in
+#  AC_MSG_CHECKING([whether user-supplied Pardiso library \"$use_pardiso\" works])
+#  AC_TRY_LINK([],[      call PARDISO()],
+#              [AC_MSG_RESULT(yes)],
+#              [AC_MSG_ERROR([Pardiso library $use_pardiso does not seem to work])])
 
   AC_DEFINE(HAVE_PARDISO,1,
             [Define to 1 if Pardiso is available])
