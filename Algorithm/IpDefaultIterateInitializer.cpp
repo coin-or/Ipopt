@@ -334,11 +334,9 @@ namespace Ipopt
       // First move all the trial data into the current fields, since
       // those values are needed to compute the initial values for
       // the multipliers
+      IpData().CopyTrialToCurrent();
       SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
       SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
-      IpData().CopyTrialToCurrent();
-      y_c = IpData().curr_y_c()->MakeNew();
-      y_d = IpData().curr_y_d()->MakeNew();
       bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
       if (!retval) {
         y_c->Set(0.0);
