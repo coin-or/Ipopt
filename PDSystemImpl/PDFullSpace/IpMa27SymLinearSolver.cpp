@@ -57,6 +57,7 @@ namespace Ipopt
       ikeep_(NULL),
       la_(0),
       a_(NULL),
+      scaling_factors_(NULL),
 
       la_increase_(false),
       liw_increase_(false)
