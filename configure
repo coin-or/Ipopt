@@ -10,7 +10,7 @@
 # gives unlimited permission to copy, distribute and modify it.
 #
 #
-# Copyright 2003 International Business Machines and others.
+# Copyright 2004 International Business Machines and others.
 # All Rights Reserved.
 # This file is part of the open source package IPOPT which is distributed
 # under the Common Public License.
@@ -884,7 +884,7 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-debug          compile with debug options
+  --enable-debug          compile with debug options and runtime tests
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
   --enable-maintainer-mode  enable make rules and dependencies not useful
@@ -1018,7 +1018,7 @@ This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
 
-Copyright 2003 International Business Machines and others.
+Copyright 2004 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.
@@ -1456,16 +1456,35 @@ fi;
 # C Compiler Options #
 ######################
 
-if test -z "$CXXFLAGS"; then
-  CXXFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Werror -pipe"
-fi
+if test "$debugcompile" = "true"; then
 
-if test -z "$CFLAGS"; then
-  CFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Werror -pipe"
-fi
+cat >>confdefs.h <<\_ACEOF
+#define IP_DEBUG 1
+_ACEOF
 
-if test -z "$FFLAGS"; then
-  FFLAGS="-g"
+  if test -z "$CXXFLAGS"; then
+    CXXFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Werror -pipe"
+  fi
+
+  if test -z "$CFLAGS"; then
+    CFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Werror -pipe"
+  fi
+
+  if test -z "$FFLAGS"; then
+    FFLAGS="-g"
+  fi
+else
+  if test -z "$CXXFLAGS"; then
+    CXXFLAGS="-O3 -pipe"
+  fi
+
+  if test -z "$CFLAGS"; then
+    CFLAGS="-O3 -pipe"
+  fi
+
+  if test -z "$FFLAGS"; then
+    FFLAGS="-O3"
+  fi
 fi
 
 SAVE_CFLAGS="$CFLAGS"
@@ -3658,7 +3677,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3661:" \
+echo "$as_me:3680:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -3855,7 +3874,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:3858: \"$ac_link\") >&5
+(eval echo $as_me:3877: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -3933,7 +3952,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:3936: \"$ac_link\") >&5
+(eval echo $as_me:3955: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
