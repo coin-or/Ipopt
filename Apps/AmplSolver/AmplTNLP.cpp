@@ -443,7 +443,7 @@ namespace Ipopt
       message = "Optimal Solution Found";
     }
     else if (status == Maximum_Iterations_Exceeded) {
-      message = "Maximum Iterations Exceeded";
+      message = "Maximum Number of Iterations Exceeded";
     }
     else if (status == Solve_Failed) {
       message = "Solve Failed";
@@ -455,11 +455,11 @@ namespace Ipopt
       message = "Ipopt Internal Error";
     }
     else {
-      message = "Unkown Error";
+      message = "Unknown Error";
     }
 
     // Write the .sol file
-    message = " \nEXIT: " + message;
+    message = " \nNewIpopt: " + message;
     write_solution_file(message.c_str());
   }
 
