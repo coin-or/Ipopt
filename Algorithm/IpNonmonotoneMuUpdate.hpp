@@ -71,6 +71,7 @@ namespace Ipopt
     Number tau_max_;
     Number mu_safeguard_exp_;
     Number mu_safeguard_factor_; //ToDo don't need that?
+    Number fixed_mu_avrg_factor_;
     //@}
 
     /** @name Strategy objects */
