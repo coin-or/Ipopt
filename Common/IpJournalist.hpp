@@ -159,6 +159,12 @@ namespace Ipopt
     bool ProduceOutput(EJournalLevel level,
                        EJournalCategory category) const;
 
+
+    /** Method that flushes the current buffer for all Journalists.
+     Calling this method after one optimization run helps to avoid
+     cluttering output with that produced by other parts of the
+     program (e.g. written in Fortran) */
+    void FlushBuffer() const;
     //@}
 
     /**@name Reader Methods.
@@ -303,6 +309,9 @@ namespace Ipopt
 
     /** Print matrix to the designated output location */
     void PrintMatrix(const std::string name, const Matrix& matrix, Index indent, std::string prefix);
+
+    /** Flush output buffer */
+    void FlushBuffer();
     //@}
 
     friend class Journalist;

@@ -163,6 +163,13 @@ namespace Ipopt
     return retValue;
   }
 
+  void Journalist::FlushBuffer() const
+  {
+    for (Index i=0; i<(Index)journals_.size(); i++) {
+      journals_[i]->FlushBuffer();
+    }
+  }
+
   Journal* Journalist::GetJournal(
     const std::string& journal_name
   )
@@ -301,6 +308,13 @@ namespace Ipopt
     if (file_) {
       matrix.Print(file_, name, indent, prefix);
       DBG_EXEC(0, fflush(file_));
+    }
+  }
+
+  void Journal::FlushBuffer()
+  {
+    if (file_) {
+      fflush(file_);
     }
   }
 } // namespace Ipopt
