@@ -152,6 +152,15 @@ namespace Ipopt
       }
     }
 
+    if (options.GetNumericValue("fixed_mu_avrg_factor", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0.0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"fixed_mu_avrg_factor\": This value must be larger than 0.");
+      fixed_mu_avrg_factor_ = value;
+    }
+    else {
+      fixed_mu_avrg_factor_ = 0.8;
+    }
+
     // ToDo combine the following with MonotoneMuUpdate
     if (options.GetNumericValue("kappa_epsilon", value, prefix)) {
       ASSERT_EXCEPTION(value > 0.0, OptionsList::OPTION_OUT_OF_RANGE,
@@ -463,6 +472,11 @@ namespace Ipopt
   NonmonotoneMuUpdate::NewFixedMu()
   {
     Number max_ref;
+    // ToDo: Decide whether we should impose an upper bound on 
+    // mu based on the smallest reference value.  For now, don't
+    // impose one.
+    max_ref = 1e20;
+    /*
     switch (adaptive_globalization_) {
       case 1 :
       max_ref = max_ref_val();
@@ -474,6 +488,7 @@ namespace Ipopt
       default:
       DBG_ASSERT("Unknown corrector_type value.");
     }
+    */
 
     Number new_mu;
 
@@ -481,7 +496,7 @@ namespace Ipopt
       new_mu = fix_mu_oracle_->CalculateMu();
     }
     else {
-      new_mu = IpCq().curr_avrg_compl();
+      new_mu = fixed_mu_avrg_factor_*IpCq().curr_avrg_compl();
     }
     new_mu = Max(new_mu, lower_mu_safeguard());
     new_mu = Min(new_mu, 0.1 * max_ref);
