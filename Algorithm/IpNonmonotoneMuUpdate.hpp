@@ -78,6 +78,12 @@ namespace Ipopt
     Number theta_mu_;
     Index nonmonotone_kkt_norm_;
     Index nonmonotone_kkt_centrality_;
+    /** Flag indicating which globalization strategy should be used. */
+    Index adaptive_globalization_;
+    /** Maximal margin in filter (for adaptive_globalization = 3) */
+    Number filter_max_margin_;
+    /** Factor for filter margin */
+    Number filter_margin_fact_;
     //@}
 
     /** @name Strategy objects */
@@ -149,8 +155,6 @@ namespace Ipopt
      *  fixed (no globalization) */
     bool mu_never_fix_;
 
-    /** Flag indicating which globalization strategy should be used. */
-    Index adaptive_globalization_;
     /** Alternatively, we might also want to use a filter */
     Filter filter_;
     /** Flag indicating whether the most recent accepted step should
