@@ -31,8 +31,6 @@ IPLIBS = \
 	../../OTHERS/ASL/amplsolver.a \
 	../../LinAlgImpl/Serial/liblaserial.a \
 	-ldl
-	../../Apps/StdInterface/libstdinterface.a \
-#	../../OTHERS/HSL/libiphsl.a
 
 ipopt_LDADD = $(IPLIBS)
 

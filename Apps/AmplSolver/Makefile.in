@@ -216,7 +216,6 @@ IPLIBS = \
 	../../LinAlgImpl/Serial/liblaserial.a \
 	-ldl
 
-#	../../OTHERS/HSL/libiphsl.a
 ipopt_LDADD = $(IPLIBS)
 
 # Astyle stuff
@@ -486,7 +485,6 @@ uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 	tags uninstall uninstall-am uninstall-binPROGRAMS \
 	uninstall-info-am
 
-	../../Apps/StdInterface/libstdinterface.a \
 
 astyle: $(ASTYLE_SOURCES)
 
