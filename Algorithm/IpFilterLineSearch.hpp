@@ -46,7 +46,7 @@ namespace Ipopt
      */
     virtual void FindAcceptableTrialPoint();
 
-    /** Resest the line search.
+    /** Reset the line search.
      *  This function should be called if all previous information
      *  should be discarded when the line search is performed the
      *  next time.  For example, this method should be called if
@@ -54,9 +54,34 @@ namespace Ipopt
      */
     virtual void Reset();
 
+    /** Set flag indicating whether a very rigorous line search should
+     *  be performed.  If this flag is set to true, the line search
+     *  algorithm might decide to abort the line search and not to
+     *  accept a new iterate.  If the line search decided not to
+     *  accept a new iterate, the return value of
+     *  CheckSkippedLineSearch() is true at the next call.  For
+     *  example, in the non-monotone barrier parameter update
+     *  procedure, the filter algorithm should not switch to the
+     *  restoration phase in the free mode; instead, the algorithm
+     *  should swtich to the fixed mode.
+     */
+    virtual void SetRigorousLineSearch(bool rigorous)
+    {
+      rigorous_ = rigorous;
+    }
+
+    /** Check if the line search procedure didn't accept a new iterate
+     *  during the last call of FindAcceptableTrialPoint().
+     *  
+     */
+    virtual bool CheckSkippedLineSearch()
+    {
+      return skipped_line_search_;
+    }
+
     /**@name Trial Point Accepting Methods. Used internally to check certain
      * acceptability criteria and used externally (by the restoration phase
-     * convergence check object, for instance
+     * convergence check object, for instance)
      */
     //@{
     /** Checks if a trial point is acceptable to the current iterate */
@@ -222,6 +247,16 @@ namespace Ipopt
 
     /** Filter with entries */
     Filter filter_;
+
+    /** Flag indicating whether the line search is to be performed
+     * robust (usually this is true, unless SetRigorousLineSearch is
+     * called with false).
+     */ 
+    bool rigorous_;
+
+    /** Flag indicating whether no acceptable trial point was found
+     *  during last line search. */
+    bool skipped_line_search_;
 
     SmartPtr<RestorationPhase> resto_phase_;
     SmartPtr<PDSystemSolver> pd_solver_;
