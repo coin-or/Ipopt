@@ -86,6 +86,7 @@ namespace Ipopt
 
       primal_frac_to_the_bound_cache_(5),
       dual_frac_to_the_bound_cache_(5),
+      slack_frac_to_the_bound_cache_(5),
 
       curr_sigma_x_cache_(1),
       curr_sigma_s_cache_(1),
@@ -2071,6 +2072,46 @@ namespace Ipopt
                                   *ip_data_->delta_z_U(),
                                   *ip_data_->delta_v_L(),
                                   *ip_data_->delta_v_U());
+  }
+
+  Number
+  IpoptCalculatedQuantities::slack_frac_to_the_bound(Number tau,
+      const Vector& delta_x_L,
+      const Vector& delta_x_U,
+      const Vector& delta_s_L,
+      const Vector& delta_s_U)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::slack_frac_to_the_bound",
+                   dbg_verbosity);
+    Number result;
+
+    SmartPtr<const Vector> x_L = curr_slack_x_L();
+    SmartPtr<const Vector> x_U = curr_slack_x_U();
+    SmartPtr<const Vector> s_L = curr_slack_s_L();
+    SmartPtr<const Vector> s_U = curr_slack_s_U();
+    std::vector<const TaggedObject*> tdeps;
+    tdeps.push_back(GetRawPtr(x_L));
+    tdeps.push_back(GetRawPtr(x_U));
+    tdeps.push_back(GetRawPtr(s_L));
+    tdeps.push_back(GetRawPtr(s_U));
+    tdeps.push_back(&delta_x_L);
+    tdeps.push_back(&delta_x_U);
+    tdeps.push_back(&delta_s_L);
+    tdeps.push_back(&delta_s_U);
+
+    std::vector<Number> sdeps;
+    sdeps.push_back(tau);
+
+    if (!slack_frac_to_the_bound_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      result = CalcFracToZeroBound(*x_L, delta_x_L, tau);
+      result = Min(result, CalcFracToZeroBound(*x_U, delta_x_U, tau));
+      result = Min(result, CalcFracToZeroBound(*s_L, delta_s_L, tau));
+      result = Min(result, CalcFracToZeroBound(*s_U, delta_s_U, tau));
+
+      slack_frac_to_the_bound_cache_.AddCachedResult(result, tdeps, sdeps);
+    }
+
+    return result;
   }
 
   ///////////////////////////////////////////////////////////////////////////

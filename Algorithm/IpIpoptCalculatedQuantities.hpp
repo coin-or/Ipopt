@@ -233,6 +233,17 @@ namespace Ipopt
     /** Fraction to the boundary from (current) dual variables z and v
      *  for internal (current) step */
     Number curr_dual_frac_to_the_bound(Number tau);
+    /** Fraction to the boundary from (current) slacks for a given
+     *  step in the slacks.  Usually, one will use the
+     *  primal_frac_to_the_bound method to compute the primal fraction
+     *  to the boundary step size, but if it is cheaper to provide the
+     *  steps in the slacks directly (e.g. when the primal step sizes
+     *  are only temporary), the this method is more efficient. */
+    Number slack_frac_to_the_bound(Number tau,
+				   const Vector& delta_x_L,
+				   const Vector& delta_x_U,
+				   const Vector& delta_s_L,
+				   const Vector& delta_s_U);
     //@}
 
     /** @name Sigma matrices */
@@ -387,6 +398,7 @@ namespace Ipopt
     //@{
     CachedResults<Number> primal_frac_to_the_bound_cache_;
     CachedResults<Number> dual_frac_to_the_bound_cache_;
+    CachedResults<Number> slack_frac_to_the_bound_cache_;
     //@}
 
     /** @name Caches for sigma matrices */
