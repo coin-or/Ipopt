@@ -205,9 +205,9 @@ C                Computation of Jacobian of equality constraints
 C
 C =============================================================================
 C
-      subroutine EV_JAC_G(TASK, N, X, NEW_X, NZ, ACON, AVAR, A,
+      subroutine EV_JAC_G(TASK, N, X, NEW_X, M, NZ, ACON, AVAR, A,
      1     IDAT, DAT, IERR)
-      integer TASK, N, NEW_X, NZ
+      integer TASK, N, NEW_X, M, NZ
       double precision X(N), A(NZ)
       integer ACON(NZ), AVAR(NZ), I
       double precision DAT(*)
