@@ -105,25 +105,34 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "tmp", *tmp);
     Px_L->MultVector(1.0, *x_L, 0.0, *tmp);
     Px_U->TransMultVector(1.0, *tmp, 0.0, *tmp_u);
+    tmp_u->AddOneVector(1., *x_U, -1.);
+    /* DELE
     tmp_u->Axpy(-1.0, *x_U);
     tmp_u->Scal(-1.0);
+    */
     Px_U->MultVector(1.0, *tmp_u, 0.0, *tmp);
     Px_L->TransMultVector(1.0, *tmp, 0.0, *q_l);
+    q_l->AddOneVector(-1.0, *tiny_l, kappa_2_);
+    /* DELE
     q_l->Scal(kappa_2_);
     q_l->Axpy(-1.0, *tiny_l);
+    */
 
     tmp_l->Set(1.0);
     p_l->Copy(*x_L);
     p_l->ElementWiseSgn();
     p_l->ElementWiseMultiply(*x_L);
     p_l->ElementWiseMax(*tmp_l);
+    p_l->AddOneVector(-1.0, *tiny_l, kappa_1_);
+    /* DELE
     p_l->Scal(kappa_1_);
     p_l->Axpy(-1.0, *tiny_l);
+    */
 
     q_l->ElementWiseReciprocal();
     p_l->ElementWiseReciprocal();
 
-    p_l ->ElementWiseMax(*q_l);
+    p_l->ElementWiseMax(*q_l);
     p_l->ElementWiseReciprocal();
     p_l->Axpy(1.0, *tiny_l);
 
@@ -138,8 +147,11 @@ namespace Ipopt
     tmp_l->Axpy(-1.0, *x_L);
     Px_L->MultVector(1.0, *tmp_l, 0.0, *tmp);
     Px_U->TransMultVector(1.0, *tmp, 0.0, *q_u);
+    q_u->AddOneVector(-1.0, *tiny_u, kappa_2_);
+    /* DELE
     q_u->Scal(kappa_2_);
     q_u->Axpy(-1.0, *tiny_u);
+    */
     DBG_PRINT_VECTOR(2,"q_u",*q_u);
 
     tmp_u->Set(1.0);
@@ -147,10 +159,12 @@ namespace Ipopt
     p_u->ElementWiseSgn();
     p_u->ElementWiseMultiply(*x_U);
     p_u->ElementWiseMax(*tmp_u);
+    p_u->AddOneVector(-1.0, *tiny_u, kappa_1_);
+    /* DELE
     p_u->Scal(kappa_1_);
     p_u->Axpy(-1.0, *tiny_u);
+    */
     DBG_PRINT_VECTOR(2,"p_u",*p_u);
-
 
 
     q_u->ElementWiseReciprocal();
@@ -171,8 +185,11 @@ namespace Ipopt
     zero_u->Set(0.0);
 
     Px_L->TransMultVector(-1.0, *x, 0.0, *tmp_l);
+    tmp_l->AddTwoVectors(1.0, *x_L, 1.0, *p_l, 1.);
+    /* DELE
     tmp_l->Axpy(1.0, *x_L);
     tmp_l->Axpy(1.0, *p_l);
+    */
     tmp_l->ElementWiseMax(*zero_l);
     Number nrm_l = tmp_l->Amax();
     if (nrm_l>0.) {
@@ -183,8 +200,11 @@ namespace Ipopt
     }
 
     Px_U->TransMultVector(1.0, *x, 0.0, *tmp_u);
+    tmp_u->AddTwoVectors(-1.0, *x_U, 1.0, *p_u, 1.);
+    /* DELE
     tmp_u->Axpy(-1.0, *x_U);
     tmp_u->Axpy(1.0, *p_u);
+    */
     tmp_u->ElementWiseMax(*zero_u);
     Number nrm_u = tmp_u->Amax();
     if (nrm_u>0.) {
@@ -226,20 +246,29 @@ namespace Ipopt
 
     Pd_L->MultVector(1.0, *d_L, 0.0, *tmp);
     Pd_U->TransMultVector(1.0, *tmp, 0.0, *tmp_u);
+    tmp_u->AddOneVector(1., *d_U, -1.);
+    /* DELE
     tmp_u->Axpy(-1.0, *d_U);
     tmp_u->Scal(-1.0);
+    */
     Pd_U->MultVector(1.0, *tmp_u, 0.0, *tmp);
     Pd_L->TransMultVector(1.0, *tmp, 0.0, *q_l);
+    q_l->AddOneVector(-1.0, *tiny_l, kappa_2_);
+    /* DELE
     q_l->Scal(kappa_2_);
     q_l->Axpy(-1.0, *tiny_l);
+    */
 
     tmp_l->Set(1.0);
     p_l->Copy(*d_L);
     p_l->ElementWiseSgn();
     p_l->ElementWiseMultiply(*d_L);
     p_l->ElementWiseMax(*tmp_l);
+    p_l->AddOneVector(-1.0, *tiny_l, kappa_1_);
+    /* DELE
     p_l->Scal(kappa_1_);
     p_l->Axpy(-1.0, *tiny_l);
+    */
 
     q_l->ElementWiseReciprocal();
     p_l->ElementWiseReciprocal();
@@ -260,16 +289,22 @@ namespace Ipopt
     tmp_l->Axpy(-1.0, *d_L);
     Pd_L->MultVector(1.0, *tmp_l, 0.0, *tmp);
     Pd_U->TransMultVector(1.0, *tmp, 0.0, *q_u);
+    q_u->AddOneVector(-1.0, *tiny_u, kappa_2_);
+    /* DELE
     q_u->Scal(kappa_2_);
     q_u->Axpy(-1.0, *tiny_u);
+    */
 
     tmp_u->Set(1.0);
     p_u->Copy(*d_U);
     p_u->ElementWiseSgn();
     p_u->ElementWiseMultiply(*d_U);
     p_u->ElementWiseMax(*tmp_u);
+    p_u->AddOneVector(-1.0, *tiny_u, kappa_1_);
+    /* DELE
     p_u->Scal(kappa_1_);
     p_u->Axpy(-1.0, *tiny_u);
+    */
 
     q_u->ElementWiseReciprocal();
     p_u->ElementWiseReciprocal();
@@ -285,8 +320,11 @@ namespace Ipopt
     zero_u->Set(0.0);
 
     Pd_L->TransMultVector(-1.0, *s, 0.0, *tmp_l);
+    tmp_l->AddTwoVectors(1.0, *d_L, 1.0, *p_l, 1.);
+    /* DELE
     tmp_l->Axpy(1.0, *d_L);
     tmp_l->Axpy(1.0, *p_l);
+    */
     tmp_l->ElementWiseMax(*zero_l);
     nrm_l = tmp_l->Amax();
     SmartPtr<Vector> delta_s = s->MakeNew();
@@ -298,8 +336,11 @@ namespace Ipopt
     }
 
     Pd_U->TransMultVector(1.0, *s, 0.0, *tmp_u);
+    tmp_u->AddTwoVectors(-1.0, *d_U, 1.0, *p_u, 1.);
+    /* DELE
     tmp_u->Axpy(-1.0, *d_U);
     tmp_u->Axpy(1.0, *p_u);
+    */
     tmp_u->ElementWiseMax(*zero_u);
     nrm_u = tmp_u->Amax();
     Pd_U->MultVector(-1.0, *tmp_u, 1.0, *delta_s);

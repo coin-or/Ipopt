@@ -684,10 +684,14 @@ namespace Ipopt
                      count_soc+1);
 
       // Compute SOC constraint violation
+      c_soc->AddOneVector(1.0, *IpCq().trial_c(), alpha_primal_soc);
+      dms_soc->AddOneVector(1.0, *IpCq().trial_d_minus_s(), alpha_primal_soc);
+      /* DELE
       c_soc->Scal(alpha_primal_soc);
       dms_soc->Scal(alpha_primal_soc);
       c_soc->Axpy(1.0, *IpCq().trial_c());
       dms_soc->Axpy(1.0, *IpCq().trial_d_minus_s());
+      */
 
       // Compute the SOC search direction
       SmartPtr<Vector> delta_soc_x = actual_delta_x->MakeNew();
@@ -946,8 +950,11 @@ namespace Ipopt
         IpNLP().Px_L()->TransMultVector(-1., *actual_delta_x,
                                         -1., *rhs_compl_x_L);
         tmp = actual_delta_z_L->MakeNew();
+	tmp->AddTwoVectors(1., *IpData().curr_z_L(), 1., *actual_delta_z_L, 0.);
+	/* DELE
         tmp->Copy(*IpData().curr_z_L());
         tmp->Axpy(1., *actual_delta_z_L);
+	*/
         rhs_compl_x_L->ElementWiseMultiply(*tmp);
         rhs_compl_x_L->AddScalar(mu);
 
@@ -955,8 +962,11 @@ namespace Ipopt
         IpNLP().Px_U()->TransMultVector(1., *actual_delta_x,
                                         -1., *rhs_compl_x_U);
         tmp = actual_delta_z_U->MakeNew();
+	tmp->AddTwoVectors(1., *IpData().curr_z_U(), 1., *actual_delta_z_U, 0.);
+	/* DELE
         tmp->Copy(*IpData().curr_z_U());
         tmp->Axpy(1., *actual_delta_z_U);
+	*/
         rhs_compl_x_U->ElementWiseMultiply(*tmp);
         rhs_compl_x_U->AddScalar(mu);
 
@@ -964,8 +974,11 @@ namespace Ipopt
         IpNLP().Pd_L()->TransMultVector(-1., *actual_delta_s,
                                         -1., *rhs_compl_s_L);
         tmp = actual_delta_v_L->MakeNew();
+	tmp->AddTwoVectors(1., *IpData().curr_v_L(), 1., *actual_delta_v_L, 0.);
+	/* DELE
         tmp->Copy(*IpData().curr_v_L());
         tmp->Axpy(1., *actual_delta_v_L);
+	*/
         rhs_compl_s_L->ElementWiseMultiply(*tmp);
         rhs_compl_s_L->AddScalar(mu);
 
@@ -973,8 +986,11 @@ namespace Ipopt
         IpNLP().Pd_U()->TransMultVector(1., *actual_delta_s,
                                         -1., *rhs_compl_s_U);
         tmp = actual_delta_v_U->MakeNew();
+	tmp->AddTwoVectors(1., *IpData().curr_v_U(), 1., *actual_delta_v_U, 0.);
+	/*
         tmp->Copy(*IpData().curr_v_U());
         tmp->Axpy(1., *actual_delta_v_U);
+	*/
         rhs_compl_s_U->ElementWiseMultiply(*tmp);
         rhs_compl_s_U->AddScalar(mu);
 

@@ -142,9 +142,14 @@ namespace Ipopt
      *  those should be specially implemented.
      */
     //@{
-    /** Add two vectors (a * v1 + b * v2).  Result is stored in this
-	vector. */
-    void AddTwoVectors(Number a, const Vector& v1, Number b, const Vector& v2);
+    /** Add one vector, y = a * v1 + c * y.  This is automatically
+     *  reduced to call AddTwoVectors.  */
+    void AddOneVector(Number a, const Vector& v1, Number c);
+
+    /** Add two vectors, y = a * v1 + b * v2 + c * y.  Here, this
+	vector is y */
+    void AddTwoVectors(Number a, const Vector& v1,
+		       Number b, const Vector& v2, Number c);
     //@}
 
     /** @name Accessor methods */
@@ -237,7 +242,7 @@ namespace Ipopt
     /** Add two vectors (a * v1 + b * v2).  Result is stored in this
 	vector. */
     virtual void AddTwoVectorsImpl(Number a, const Vector& v1,
-				   Number b, const Vector& v2);
+				   Number b, const Vector& v2, Number c);
 
     /** Print the entire vector */
     virtual void PrintImpl(FILE* fp, std::string name = "Vector",
@@ -519,10 +524,17 @@ namespace Ipopt
   }
 
   inline
-  void Vector::AddTwoVectors(Number a, const Vector& v1,
-			     Number b, const Vector& v2)
+  void Vector::AddOneVector(Number a, const Vector& v1, Number c)
   {
-    AddTwoVectorsImpl(a, v1, b, v2);
+    AddTwoVectorsImpl(a, v1, 0., v1, c);
+    ObjectChanged();
+  }
+
+  inline
+  void Vector::AddTwoVectors(Number a, const Vector& v1,
+			     Number b, const Vector& v2, Number c)
+  {
+    AddTwoVectorsImpl(a, v1, b, v2, c);
     ObjectChanged();
   }
 
