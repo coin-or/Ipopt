@@ -53,7 +53,7 @@ namespace Ipopt
     }
 
     // Create the complete Algorithm object
-    SmartPtr<IpoptAlgorithm> alg = AlgorithmBuilder(*jnlst, *options, "");
+    SmartPtr<IpoptAlgorithm> alg = AlgorithmBuilder::BuildBasicAlgorithm(*jnlst, *options, "");
 
     try {
       // Initialize the algorithm and parse the options
