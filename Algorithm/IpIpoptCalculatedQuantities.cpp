@@ -484,14 +484,14 @@ namespace Ipopt
     // ToDo: For now we make the value dependent on curr_mu during the
     // restoration phase (because Eta in the restoration phase
     // objective depends on it).  Need more elegant solution later.
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    std::vector<Number> sdeps;
+    std::vector<const TaggedObject*> tdeps(1);
+    tdeps[0] = GetRawPtr(x);
+    std::vector<Number> sdeps(1);
     if (in_restoration_phase()) {
-      sdeps.push_back(ip_data_->curr_mu());
+      sdeps[0] = ip_data_->curr_mu();
     }
     else {
-      sdeps.push_back(-1.);
+      sdeps[0] = -1.;
     }
 
     if (!curr_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
@@ -518,14 +518,14 @@ namespace Ipopt
     // ToDo: For now we make the value dependent on curr_mu during the
     // restoration phase (because Eta in the restoration phase
     // objective depends on it).  Need more elegant solution later.
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    std::vector<Number> sdeps;
+    std::vector<const TaggedObject*> tdeps(1);
+    tdeps[0] = GetRawPtr(x);
+    std::vector<Number> sdeps(1);
     if (in_restoration_phase()) {
-      sdeps.push_back(ip_data_->curr_mu());
+      sdeps[0] = ip_data_->curr_mu();
     }
     else {
-      sdeps.push_back(-1.);
+      sdeps[0] = -1.;
     }
 
     if (!trial_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
@@ -550,14 +550,14 @@ namespace Ipopt
     // ToDo: For now we make the value dependent on curr_mu during the
     // restoration phase (because Eta in the restoration phase
     // objective depends on it).  Need more elegant solution later.
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    std::vector<Number> sdeps;
+    std::vector<const TaggedObject*> tdeps(1);
+    tdeps[0] = GetRawPtr(x);
+    std::vector<Number> sdeps(1);
     if (in_restoration_phase()) {
-      sdeps.push_back(ip_data_->curr_mu());
+      sdeps[0] = ip_data_->curr_mu();
     }
     else {
-      sdeps.push_back(-1.);
+      sdeps[0] = -1.;
     }
 
     if (!curr_grad_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
@@ -603,23 +603,18 @@ namespace Ipopt
       SmartPtr<const Vector> dampind_s_U;
       ComputeDampingIndicators(dampind_x_L, dampind_x_U, dampind_s_L, dampind_s_U);
 
-      SmartPtr<Vector> tmp;
-      tmp = slack_x_L.MakeNew();
-      tmp->Copy(slack_x_L);
-      tmp->ElementWiseMultiply(*dampind_x_L);
-      retval += kappa_d_ * mu * tmp->Asum();
-      tmp = slack_x_U.MakeNew();
-      tmp->Copy(slack_x_U);
-      tmp->ElementWiseMultiply(*dampind_x_U);
-      retval += kappa_d_ * mu * tmp->Asum();
-      tmp = slack_s_L.MakeNew();
-      tmp->Copy(slack_s_L);
-      tmp->ElementWiseMultiply(*dampind_s_L);
-      retval += kappa_d_ * mu * tmp->Asum();
-      tmp = slack_s_U.MakeNew();
-      tmp->Copy(slack_s_U);
-      tmp->ElementWiseMultiply(*dampind_s_U);
-      retval += kappa_d_ * mu * tmp->Asum();
+      Tmp_x_L().Copy(slack_x_L);
+      Tmp_x_L().ElementWiseMultiply(*dampind_x_L);
+      retval += kappa_d_ * mu * Tmp_x_L().Asum();
+      Tmp_x_U().Copy(slack_x_U);
+      Tmp_x_U().ElementWiseMultiply(*dampind_x_U);
+      retval += kappa_d_ * mu * Tmp_x_U().Asum();
+      Tmp_s_L().Copy(slack_s_L);
+      Tmp_s_L().ElementWiseMultiply(*dampind_s_L);
+      retval += kappa_d_ * mu * Tmp_s_L().Asum();
+      Tmp_s_U().Copy(slack_s_U);
+      Tmp_s_U().ElementWiseMultiply(*dampind_s_U);
+      retval += kappa_d_ * mu * Tmp_s_U().Asum();
     }
 
     DBG_PRINT((1, "BarrierTerm with damping = %25.16e\n", retval));
@@ -639,14 +634,14 @@ namespace Ipopt
     SmartPtr<const Vector> s = ip_data_->curr_s();
     DBG_PRINT_VECTOR(2,"curr_x",*x);
     DBG_PRINT_VECTOR(2,"curr_s",*s);
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(s));
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
 
     Number mu = ip_data_->curr_mu();
     DBG_PRINT((1,"curr_mu=%e\n",mu));
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
 
     if (!curr_barrier_obj_cache_.GetCachedResult(result, tdeps, sdeps)) {
       if (!trial_barrier_obj_cache_.GetCachedResult(result, tdeps, sdeps)) {
@@ -675,14 +670,14 @@ namespace Ipopt
     SmartPtr<const Vector> s = ip_data_->trial_s();
     DBG_PRINT_VECTOR(2,"trial_x",*x);
     DBG_PRINT_VECTOR(2,"trial_s",*s);
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(s));
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
 
     Number mu = ip_data_->curr_mu();
     DBG_PRINT((1,"trial_mu=%e\n",mu));
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
 
     if (!trial_barrier_obj_cache_.GetCachedResult(result, tdeps, sdeps)) {
       if (!curr_barrier_obj_cache_.GetCachedResult(result, tdeps, sdeps)) {
@@ -709,27 +704,23 @@ namespace Ipopt
     SmartPtr<const Vector> result;
 
     SmartPtr<const Vector> x = ip_data_->curr_x();
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
+    std::vector<const TaggedObject*> tdeps(1);
+    tdeps[0] = GetRawPtr(x);
     Number mu = ip_data_->curr_mu();
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
 
     if (!curr_grad_barrier_obj_x_cache_.GetCachedResult(result, tdeps, sdeps)) {
       SmartPtr<Vector> tmp1 = x->MakeNew();
       tmp1->Copy(*curr_grad_f());
 
-      SmartPtr<const Vector> slack = curr_slack_x_L();
-      SmartPtr<Vector> tmp2 = slack->MakeNew();
-      tmp2->Set(1.);
-      tmp2->ElementWiseDivide(*slack);
-      ip_nlp_->Px_L()->MultVector(-mu, *tmp2, 1., *tmp1);
+      Tmp_x_L().Copy(*curr_slack_x_L());
+      Tmp_x_L().ElementWiseReciprocal();
+      ip_nlp_->Px_L()->MultVector(-mu, Tmp_x_L(), 1., *tmp1);
 
-      slack = curr_slack_x_U();
-      tmp2 = slack->MakeNew();
-      tmp2->Set(1.);
-      tmp2->ElementWiseDivide(*slack);
-      ip_nlp_->Px_U()->MultVector(mu, *tmp2, 1., *tmp1);
+      Tmp_x_U().Copy(*curr_slack_x_U());
+      Tmp_x_U().ElementWiseReciprocal();
+      ip_nlp_->Px_U()->MultVector(mu, Tmp_x_U(), 1., *tmp1);
 
       DBG_PRINT_VECTOR(2, "Barrier_Grad_x without damping", *tmp1);
 
@@ -766,26 +757,22 @@ namespace Ipopt
     SmartPtr<const Vector> result;
 
     SmartPtr<const Vector> s = ip_data_->curr_s();
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(s));
+    std::vector<const TaggedObject*> tdeps(1);
+    tdeps[0] = GetRawPtr(s);
     Number mu = ip_data_->curr_mu();
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
 
     if (!curr_grad_barrier_obj_s_cache_.GetCachedResult(result, tdeps, sdeps)) {
       SmartPtr<Vector> tmp1 = s->MakeNew();
 
-      SmartPtr<const Vector> slack = curr_slack_s_L();
-      SmartPtr<Vector> tmp2 = slack->MakeNew();
-      tmp2->Set(1.);
-      tmp2->ElementWiseDivide(*slack);
-      ip_nlp_->Pd_L()->MultVector(-mu, *tmp2, 0., *tmp1);
+      Tmp_s_L().Copy(*curr_slack_s_L());
+      Tmp_s_L().ElementWiseReciprocal();
+      ip_nlp_->Pd_L()->MultVector(-mu, Tmp_s_L(), 0., *tmp1);
 
-      slack = curr_slack_s_U();
-      tmp2 = slack->MakeNew();
-      tmp2->Set(1.);
-      tmp2->ElementWiseDivide(*slack);
-      ip_nlp_->Pd_U()->MultVector(mu, *tmp2, 1., *tmp1);
+      Tmp_s_U().Copy(*curr_slack_s_U());
+      Tmp_s_U().ElementWiseReciprocal();
+      ip_nlp_->Pd_U()->MultVector(mu, Tmp_s_U(), 1., *tmp1);
 
       DBG_PRINT_VECTOR(2, "Barrier_Grad_s without damping", *tmp1);
 
@@ -827,36 +814,28 @@ namespace Ipopt
     // SmartPtrs is still zero.
     if (IsNull(dampind_x_L_)) {
       // First for x
-      SmartPtr<Vector> diff = ip_data_->curr_x()->MakeNew();
-
-      SmartPtr<Vector> vones = ip_nlp_->x_L()->MakeNew();
-      vones->Set(1.0);
-      ip_nlp_->Px_L()->MultVector(1.0, *vones, 0.0, *diff);
-      vones = ip_nlp_->x_U()->MakeNew();
-      vones->Set(1.0);
-      ip_nlp_->Px_U()->MultVector(-1.0, *vones, 1.0, *diff);
+      Tmp_x_L().Set(1.0);
+      ip_nlp_->Px_L()->MultVector(1.0, Tmp_x_L(), 0.0, Tmp_x());
+      Tmp_x_U().Set(1.0);
+      ip_nlp_->Px_U()->MultVector(-1.0, Tmp_x_U(), 1.0, Tmp_x());
 
       dampind_x_L_ = ip_nlp_->x_L()->MakeNew();
-      ip_nlp_->Px_L()->TransMultVector(1.0, *diff, 0.0, *dampind_x_L_);
+      ip_nlp_->Px_L()->TransMultVector(1.0, Tmp_x(), 0.0, *dampind_x_L_);
 
       dampind_x_U_ = ip_nlp_->x_U()->MakeNew();
-      ip_nlp_->Px_U()->TransMultVector(-1.0, *diff, 0.0, *dampind_x_U_);
+      ip_nlp_->Px_U()->TransMultVector(-1.0, Tmp_x(), 0.0, *dampind_x_U_);
 
-      // New for s
-      diff = ip_data_->curr_s()->MakeNew();
-
-      vones = ip_nlp_->d_L()->MakeNew();
-      vones->Set(1.0);
-      ip_nlp_->Pd_L()->MultVector(1.0, *vones, 0.0, *diff);
-      vones = ip_nlp_->d_U()->MakeNew();
-      vones->Set(1.0);
-      ip_nlp_->Pd_U()->MultVector(-1.0, *vones, 1.0, *diff);
+      // Now for s
+      Tmp_s_L().Set(1.0);
+      ip_nlp_->Pd_L()->MultVector(1.0, Tmp_s_L(), 0.0, Tmp_s());
+      Tmp_s_U().Set(1.0);
+      ip_nlp_->Pd_U()->MultVector(-1.0, Tmp_s_U(), 1.0, Tmp_s());
 
       dampind_s_L_ = ip_nlp_->d_L()->MakeNew();
-      ip_nlp_->Pd_L()->TransMultVector(1.0, *diff, 0.0, *dampind_s_L_);
+      ip_nlp_->Pd_L()->TransMultVector(1.0, Tmp_s(), 0.0, *dampind_s_L_);
 
       dampind_s_U_ = ip_nlp_->d_U()->MakeNew();
-      ip_nlp_->Pd_U()->TransMultVector(-1.0, *diff, 0.0, *dampind_s_U_);
+      ip_nlp_->Pd_U()->TransMultVector(-1.0, Tmp_s(), 0.0, *dampind_s_U_);
 
       DBG_PRINT_VECTOR(2, "dampind_x_L_", *dampind_x_L_);
       DBG_PRINT_VECTOR(2, "dampind_x_U_", *dampind_x_U_);
@@ -956,10 +935,6 @@ namespace Ipopt
       if (!trial_d_minus_s_cache_.GetCachedResult2Dep(result, *x, *s)) {
         SmartPtr<Vector> tmp = s->MakeNew();
         tmp->AddTwoVectors(1., *curr_d(), -1., *s, 0.);
-        /* DELE
-               tmp->Copy(*curr_d());
-               tmp->Axpy(-1., *s);
-        */
         result = ConstPtr(tmp);
       }
       curr_d_minus_s_cache_.AddCachedResult2Dep(result, *x, *s);
@@ -982,10 +957,6 @@ namespace Ipopt
       if (!curr_d_minus_s_cache_.GetCachedResult2Dep(result, *x, *s)) {
         SmartPtr<Vector> tmp = s->MakeNew();
         tmp->AddTwoVectors(1., *trial_d(), -1., *s, 0.);
-        /* DELE
-               tmp->Copy(*trial_d());
-               tmp->Axpy(-1., *s);
-        */
         result = ConstPtr(tmp);
       }
       trial_d_minus_s_cache_.AddCachedResult2Dep(result, *x, *s);
@@ -1146,16 +1117,16 @@ namespace Ipopt
     // ToDo: For now we make the value dependent on curr_mu during the
     // restoration phase (because Eta in the restoration phase
     // objective depends on it).  Need more elegant solution later.
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(y_c));
-    tdeps.push_back(GetRawPtr(y_d));
-    std::vector<Number> sdeps;
+    std::vector<const TaggedObject*> tdeps(3);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(y_c);
+    tdeps[2] = GetRawPtr(y_d);
+    std::vector<Number> sdeps(1);
     if (in_restoration_phase()) {
-      sdeps.push_back(ip_data_->curr_mu());
+      sdeps[0] = ip_data_->curr_mu();
     }
     else {
-      sdeps.push_back(-1.);
+      sdeps[0] = -1.;
     }
 
     if (!curr_exact_hessian_cache_.GetCachedResult(result, tdeps, sdeps)) {
@@ -1177,12 +1148,10 @@ namespace Ipopt
                    dbg_verbosity);
 
     SmartPtr<const Vector> x = ip_data_->curr_x();
-    SmartPtr<Vector> zero_y_c = ip_data_->curr_y_c()->MakeNew();
-    SmartPtr<Vector> zero_y_d = ip_data_->curr_y_d()->MakeNew();
-    zero_y_c->Set(0.);
-    zero_y_d->Set(0.);
+    Tmp_c().Set(0.);
+    Tmp_d().Set(0.);
 
-    SmartPtr<const SymMatrix> h = ip_nlp_->h(*x, 0.0, *zero_y_c, *zero_y_d);
+    SmartPtr<const SymMatrix> h = ip_nlp_->h(*x, 0.0, Tmp_c(), Tmp_d());
 
     DBG_PRINT_MATRIX(2, "zero_hessian", *h);
 
@@ -1206,12 +1175,12 @@ namespace Ipopt
     SmartPtr<const Vector> z_L = ip_data_->curr_z_L();
     SmartPtr<const Vector> z_U = ip_data_->curr_z_U();
 
-    std::vector<const TaggedObject*> deps;
-    deps.push_back(GetRawPtr(x));
-    deps.push_back(GetRawPtr(y_c));
-    deps.push_back(GetRawPtr(y_d));
-    deps.push_back(GetRawPtr(z_L));
-    deps.push_back(GetRawPtr(z_U));
+    std::vector<const TaggedObject*> deps(5);
+    deps[0] = GetRawPtr(x);
+    deps[1] = GetRawPtr(y_c);
+    deps[2] = GetRawPtr(y_d);
+    deps[3] = GetRawPtr(z_L);
+    deps[4] = GetRawPtr(z_U);
 
     if (!curr_grad_lag_x_cache_.GetCachedResult(result, deps)) {
       SmartPtr<Vector> tmp = x->MakeNew();
@@ -1219,10 +1188,6 @@ namespace Ipopt
       tmp->Copy(*curr_grad_f());
       tmp->AddTwoVectors(1., *curr_jac_cT_times_curr_y_c(),
                          1., *curr_jac_dT_times_curr_y_d(), 1.);
-      /* DELE
-      tmp->Axpy(1., *curr_jac_cT_times_curr_y_c());
-      tmp->Axpy(1., *curr_jac_dT_times_curr_y_d());
-      */
       DBG_PRINT_VECTOR(2,"jac_cT*y_c",*curr_jac_cT_times_curr_y_c());
       DBG_PRINT_VECTOR(2,"jac_dT*y_d",*curr_jac_dT_times_curr_y_d());
       ip_nlp_->Px_L()->MultVector(-1., *ip_data_->curr_z_L(), 1., *tmp);
@@ -1245,10 +1210,10 @@ namespace Ipopt
     SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
     SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
 
-    std::vector<const TaggedObject*> deps;
-    deps.push_back(GetRawPtr(y_d));
-    deps.push_back(GetRawPtr(v_L));
-    deps.push_back(GetRawPtr(v_U));
+    std::vector<const TaggedObject*> deps(3);
+    deps[0] = GetRawPtr(y_d);
+    deps[1] = GetRawPtr(v_L);
+    deps[2] = GetRawPtr(v_U);
 
     if (!curr_grad_lag_s_cache_.GetCachedResult(result, deps)) {
       SmartPtr<Vector> tmp = y_d->MakeNew();
@@ -1283,14 +1248,14 @@ namespace Ipopt
     SmartPtr<const Vector> z_U = ip_data_->curr_z_U();
     Number mu = ip_data_->curr_mu();
 
-    std::vector<const TaggedObject*> deps;
-    deps.push_back(GetRawPtr(x));
-    deps.push_back(GetRawPtr(y_c));
-    deps.push_back(GetRawPtr(y_d));
-    deps.push_back(GetRawPtr(z_L));
-    deps.push_back(GetRawPtr(z_U));
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
+    std::vector<const TaggedObject*> deps(5);
+    deps[0] = GetRawPtr(x);
+    deps[1] = GetRawPtr(y_c);
+    deps[2] = GetRawPtr(y_d);
+    deps[3] = GetRawPtr(z_L);
+    deps[4] = GetRawPtr(z_U);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
 
     if (!curr_grad_lag_with_damping_x_cache_.GetCachedResult(result, deps, sdeps)) {
       SmartPtr<Vector> tmp = x->MakeNew();
@@ -1331,12 +1296,12 @@ namespace Ipopt
     SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
     Number mu = ip_data_->curr_mu();
 
-    std::vector<const TaggedObject*> deps;
-    deps.push_back(GetRawPtr(y_d));
-    deps.push_back(GetRawPtr(v_L));
-    deps.push_back(GetRawPtr(v_U));
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
+    std::vector<const TaggedObject*> deps(3);
+    deps[0] = GetRawPtr(y_d);
+    deps[1] = GetRawPtr(v_L);
+    deps[2] = GetRawPtr(v_U);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
 
     if (!curr_grad_lag_with_damping_s_cache_.GetCachedResult(result, deps, sdeps)) {
       SmartPtr<Vector> tmp = y_d->MakeNew();
@@ -1452,13 +1417,13 @@ namespace Ipopt
 
     SmartPtr<const Vector> slack = curr_slack_x_L();
     SmartPtr<const Vector> mult = ip_data_->curr_z_L();
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(slack));
-    tdeps.push_back(GetRawPtr(mult));
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = GetRawPtr(slack);
+    tdeps[1] = GetRawPtr(mult);
 
     Number mu = ip_data_->curr_mu();
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
 
     if (!curr_relaxed_compl_x_L_cache_.GetCachedResult(result, tdeps, sdeps)) {
       SmartPtr<Vector> tmp = slack->MakeNew();
@@ -1479,13 +1444,13 @@ namespace Ipopt
 
     SmartPtr<const Vector> slack = curr_slack_x_U();
     SmartPtr<const Vector> mult = ip_data_->curr_z_U();
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(slack));
-    tdeps.push_back(GetRawPtr(mult));
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = GetRawPtr(slack);
+    tdeps[1] = GetRawPtr(mult);
 
     Number mu = ip_data_->curr_mu();
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
 
     if (!curr_relaxed_compl_x_U_cache_.GetCachedResult(result, tdeps, sdeps)) {
       SmartPtr<Vector> tmp = slack->MakeNew();
@@ -1506,13 +1471,13 @@ namespace Ipopt
 
     SmartPtr<const Vector> slack = curr_slack_s_L();
     SmartPtr<const Vector> mult = ip_data_->curr_v_L();
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(slack));
-    tdeps.push_back(GetRawPtr(mult));
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = GetRawPtr(slack);
+    tdeps[1] = GetRawPtr(mult);
 
     Number mu = ip_data_->curr_mu();
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
 
     if (!curr_relaxed_compl_s_L_cache_.GetCachedResult(result, tdeps, sdeps)) {
       SmartPtr<Vector> tmp = slack->MakeNew();
@@ -1533,13 +1498,13 @@ namespace Ipopt
 
     SmartPtr<const Vector> slack = curr_slack_s_U();
     SmartPtr<const Vector> mult = ip_data_->curr_v_U();
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(slack));
-    tdeps.push_back(GetRawPtr(mult));
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = GetRawPtr(slack);
+    tdeps[1] = GetRawPtr(mult);
 
     Number mu = ip_data_->curr_mu();
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
 
     if (!curr_relaxed_compl_s_U_cache_.GetCachedResult(result, tdeps, sdeps)) {
       SmartPtr<Vector> tmp = slack->MakeNew();
@@ -1556,9 +1521,9 @@ namespace Ipopt
   (IpoptCalculatedQuantities::ENormType NormType,
    const Vector& vec1, const Vector& vec2)
   {
-    std::vector<SmartPtr<const Vector> > vecs;
-    vecs.push_back(&vec1);
-    vecs.push_back(&vec2);
+    std::vector<SmartPtr<const Vector> > vecs(2);
+    vecs[0] = &vec1;
+    vecs[1] = &vec2;
 
     return CalcNormOfType(NormType, vecs);
   }
@@ -1610,11 +1575,11 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "s to eval", *s);
     DBG_PRINT((1,"NormType = %d\n", NormType))
 
-    std::vector<const TaggedObject*> deps;
-    deps.push_back(GetRawPtr(x));
-    deps.push_back(GetRawPtr(s));
-    std::vector<Number> sdeps;
-    sdeps.push_back((Number)NormType);
+    std::vector<const TaggedObject*> deps(2);
+    deps[0] = GetRawPtr(x);
+    deps[1] = GetRawPtr(s);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = (Number)NormType;
 
     if (!curr_primal_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
       if (!trial_primal_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
@@ -1650,11 +1615,11 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "s to eval", *s);
     DBG_PRINT((1,"NormType = %d\n", NormType))
 
-    std::vector<const TaggedObject*> deps;
-    deps.push_back(GetRawPtr(x));
-    deps.push_back(GetRawPtr(s));
-    std::vector<Number> sdeps;
-    sdeps.push_back((Number)NormType);
+    std::vector<const TaggedObject*> deps(2);
+    deps[0] = GetRawPtr(x);
+    deps[1] = GetRawPtr(s);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = (Number)NormType;
 
     if (!trial_primal_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
       if (!curr_primal_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
@@ -1691,17 +1656,17 @@ namespace Ipopt
     SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
     SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
 
-    std::vector<const TaggedObject*> deps;
-    deps.push_back(GetRawPtr(x));
-    deps.push_back(GetRawPtr(s));
-    deps.push_back(GetRawPtr(y_c));
-    deps.push_back(GetRawPtr(y_c));
-    deps.push_back(GetRawPtr(z_L));
-    deps.push_back(GetRawPtr(z_U));
-    deps.push_back(GetRawPtr(v_L));
-    deps.push_back(GetRawPtr(v_U));
-    std::vector<Number> sdeps;
-    sdeps.push_back((Number)NormType);
+    std::vector<const TaggedObject*> deps(8);
+    deps[0] = GetRawPtr(x);
+    deps[1] = GetRawPtr(s);
+    deps[2] = GetRawPtr(y_c);
+    deps[3] = GetRawPtr(y_c);
+    deps[4] = GetRawPtr(z_L);
+    deps[5] = GetRawPtr(z_U);
+    deps[6] = GetRawPtr(v_L);
+    deps[7] = GetRawPtr(v_U);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = (Number)NormType;
 
     if (!curr_dual_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
       SmartPtr<const Vector> grad_lag_x = curr_grad_lag_x();
@@ -1732,48 +1697,48 @@ namespace Ipopt
     SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
     SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
 
-    std::vector<const TaggedObject*> deps;
-    deps.push_back(GetRawPtr(x));
-    deps.push_back(GetRawPtr(s));
-    deps.push_back(GetRawPtr(z_L));
-    deps.push_back(GetRawPtr(z_U));
-    deps.push_back(GetRawPtr(v_L));
-    deps.push_back(GetRawPtr(v_U));
-    std::vector<Number> sdeps;
-    sdeps.push_back((Number)NormType);
-    sdeps.push_back(mu);
+    std::vector<const TaggedObject*> deps(6);
+    deps[0] = GetRawPtr(x);
+    deps[1] = GetRawPtr(s);
+    deps[2] = GetRawPtr(z_L);
+    deps[3] = GetRawPtr(z_U);
+    deps[4] = GetRawPtr(v_L);
+    deps[5] = GetRawPtr(v_U);
+    std::vector<Number> sdeps(2);
+    sdeps[0] = (Number)NormType;
+    sdeps[1] = mu;
 
     if (!curr_complementarity_cache_.GetCachedResult(result, deps, sdeps)) {
 
-      std::vector<SmartPtr<const Vector> > vecs;
+      std::vector<SmartPtr<const Vector> > vecs(4);
       SmartPtr<const Vector> compl_x_L = curr_compl_x_L();
       SmartPtr<const Vector> compl_x_U = curr_compl_x_U();
       SmartPtr<const Vector> compl_s_L = curr_compl_s_L();
       SmartPtr<const Vector> compl_s_U = curr_compl_s_U();
 
       if (mu==.0) {
-        vecs.push_back(GetRawPtr(compl_x_L));
-        vecs.push_back(GetRawPtr(compl_x_U));
-        vecs.push_back(GetRawPtr(compl_s_L));
-        vecs.push_back(GetRawPtr(compl_s_U));
+        vecs[0] = GetRawPtr(compl_x_L);
+        vecs[1] = GetRawPtr(compl_x_U);
+        vecs[2] = GetRawPtr(compl_s_L);
+        vecs[3] = GetRawPtr(compl_s_U);
       }
       else {
         SmartPtr<Vector> tmp = compl_x_L->MakeNew();
         tmp->Copy(*compl_x_L);
         tmp->AddScalar(-mu);
-        vecs.push_back(GetRawPtr(tmp));
+        vecs[0] = GetRawPtr(tmp);
         tmp = compl_x_U->MakeNew();
         tmp->Copy(*compl_x_U);
         tmp->AddScalar(-mu);
-        vecs.push_back(GetRawPtr(tmp));
+        vecs[1] = GetRawPtr(tmp);
         tmp = compl_s_L->MakeNew();
         tmp->Copy(*compl_s_L);
         tmp->AddScalar(-mu);
-        vecs.push_back(GetRawPtr(tmp));
+        vecs[2] = GetRawPtr(tmp);
         tmp = compl_s_U->MakeNew();
         tmp->Copy(*compl_s_U);
         tmp->AddScalar(-mu);
-        vecs.push_back(GetRawPtr(tmp));
+        vecs[3] = GetRawPtr(tmp);
       }
 
       result = CalcNormOfType(NormType, vecs);
@@ -1878,13 +1843,13 @@ namespace Ipopt
     SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
     SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
 
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(s));
-    tdeps.push_back(GetRawPtr(z_L));
-    tdeps.push_back(GetRawPtr(z_U));
-    tdeps.push_back(GetRawPtr(v_L));
-    tdeps.push_back(GetRawPtr(z_U));
+    std::vector<const TaggedObject*> tdeps(6);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
+    tdeps[2] = GetRawPtr(z_L);
+    tdeps[3] = GetRawPtr(z_U);
+    tdeps[4] = GetRawPtr(v_L);
+    tdeps[5] = GetRawPtr(z_U);
 
     if (!curr_centrality_measure_cache_.GetCachedResult(result, tdeps)) {
       SmartPtr<const Vector> compl_x_L = curr_compl_x_L();
@@ -1917,15 +1882,15 @@ namespace Ipopt
     SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
     SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
 
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(s));
-    tdeps.push_back(GetRawPtr(y_c));
-    tdeps.push_back(GetRawPtr(y_c));
-    tdeps.push_back(GetRawPtr(z_L));
-    tdeps.push_back(GetRawPtr(z_U));
-    tdeps.push_back(GetRawPtr(v_L));
-    tdeps.push_back(GetRawPtr(v_U));
+    std::vector<const TaggedObject*> tdeps(8);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
+    tdeps[2] = GetRawPtr(y_c);
+    tdeps[3] = GetRawPtr(y_c);
+    tdeps[4] = GetRawPtr(z_L);
+    tdeps[5] = GetRawPtr(z_U);
+    tdeps[6] = GetRawPtr(v_L);
+    tdeps[7] = GetRawPtr(v_U);
 
     if (!curr_nlp_error_cache_.GetCachedResult(result, tdeps)) {
       Number s_d = 0;
@@ -1974,17 +1939,17 @@ namespace Ipopt
     SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
     Number mu = ip_data_->curr_mu();
 
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(s));
-    tdeps.push_back(GetRawPtr(y_c));
-    tdeps.push_back(GetRawPtr(y_c));
-    tdeps.push_back(GetRawPtr(z_L));
-    tdeps.push_back(GetRawPtr(z_U));
-    tdeps.push_back(GetRawPtr(v_L));
-    tdeps.push_back(GetRawPtr(v_U));
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
+    std::vector<const TaggedObject*> tdeps(8);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
+    tdeps[2] = GetRawPtr(y_c);
+    tdeps[3] = GetRawPtr(y_c);
+    tdeps[4] = GetRawPtr(z_L);
+    tdeps[5] = GetRawPtr(z_U);
+    tdeps[6] = GetRawPtr(v_L);
+    tdeps[7] = GetRawPtr(v_U);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
 
     if (!curr_barrier_error_cache_.GetCachedResult(result, tdeps, sdeps)) {
       Number s_d = 0;
@@ -2138,39 +2103,11 @@ namespace Ipopt
   ///////////////////////////////////////////////////////////////////////////
 
   Number
-  IpoptCalculatedQuantities::CalcFracToZeroBound(const Vector& x,
-      const Vector& delta,
-      Number tau)
-  {
-    DBG_START_METH("IpoptCalculatedQuantities::CalcFracToZeroBound",
-                   dbg_verbosity);
-    DBG_ASSERT(x.Dim() == delta.Dim());
-    if (x.Dim() == 0 && delta.Dim() == 0) {
-      return 1.0;
-    }
-
-    SmartPtr<Vector> inv_alpha_bar = x.MakeNew();
-    inv_alpha_bar->Copy(delta);
-    inv_alpha_bar->Scal(-1.0/tau);
-    inv_alpha_bar->ElementWiseDivide(x);
-    DBG_PRINT_VECTOR(2, "x", x);
-    DBG_PRINT_VECTOR(2, "inv_alpha_bar", *inv_alpha_bar);
-
-    Number alpha = inv_alpha_bar->Max();
-    if (alpha > 0) {
-      alpha = Min(1.0/alpha, 1.0);
-    }
-    else {
-      alpha = 1.0;
-    }
-
-    return alpha;
-  }
-
-  Number
   IpoptCalculatedQuantities::CalcFracToBound(const Vector& slack_L,
+      Vector& tmp_L,
       const Matrix& P_L,
       const Vector& slack_U,
+      Vector& tmp_U,
       const Matrix& P_U,
       const Vector& delta,
       Number tau)
@@ -2181,39 +2118,13 @@ namespace Ipopt
     Number alpha_L = 1.0;
     Number alpha_U = 1.0;
     if (slack_L.Dim() > 0) {
-      SmartPtr<Vector> compressed_delta = slack_L.MakeNew();
-      P_L.TransMultVector(1.0, delta, 0.0, *compressed_delta);
-
-      SmartPtr<Vector> inv_alpha_bar = slack_L.MakeNew();
-      inv_alpha_bar->Copy(*compressed_delta);
-      inv_alpha_bar->Scal(-1.0/tau);
-      inv_alpha_bar->ElementWiseDivide(slack_L);
-
-      alpha_L = inv_alpha_bar->Max();
-      if (alpha_L > 0) {
-        alpha_L = Min((1.0/alpha_L), 1.0);
-      }
-      else {
-        alpha_L = 1.0;
-      }
+      P_L.TransMultVector(1.0, delta, 0.0, tmp_L);
+      alpha_L = slack_L.FracToBound(tmp_L, tau);
     }
 
     if (slack_U.Dim() > 0) {
-      SmartPtr<Vector> compressed_delta = slack_U.MakeNew();
-      P_U.TransMultVector(1.0, delta, 0.0, *compressed_delta);
-
-      SmartPtr<Vector> inv_alpha_bar = slack_U.MakeNew();
-      inv_alpha_bar->Copy(*compressed_delta);
-      inv_alpha_bar->Scal(1.0/tau);
-      inv_alpha_bar->ElementWiseDivide(slack_U);
-
-      alpha_U = inv_alpha_bar->Max();
-      if (alpha_U > 0) {
-        alpha_U = Min((1.0/alpha_U), 1.0);
-      }
-      else {
-        alpha_U = 1.0;
-      }
+      P_U.TransMultVector(-1.0, delta, 0.0, tmp_U);
+      alpha_U = slack_U.FracToBound(tmp_U, tau);
     }
 
     DBG_PRINT((1,"alpha_L = %lf, alpha_U = %lf\n", alpha_L, alpha_U));
@@ -2233,21 +2144,21 @@ namespace Ipopt
     Number result;
     SmartPtr<const Vector> x = ip_data_->curr_x();
     SmartPtr<const Vector> s = ip_data_->curr_s();
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(s));
-    tdeps.push_back(&delta_x);
-    tdeps.push_back(&delta_s);
+    std::vector<const TaggedObject*> tdeps(4);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
+    tdeps[2] = &delta_x;
+    tdeps[3] = &delta_s;
 
-    std::vector<Number> sdeps;
-    sdeps.push_back(tau);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = tau;
 
     if (!primal_frac_to_the_bound_cache_.GetCachedResult(result, tdeps, sdeps)) {
-      result = Min(CalcFracToBound(*curr_slack_x_L(), *ip_nlp_->Px_L(),
-                                   *curr_slack_x_U(), *ip_nlp_->Px_U(),
+      result = Min(CalcFracToBound(*curr_slack_x_L(), Tmp_x_L(), *ip_nlp_->Px_L(),
+                                   *curr_slack_x_U(), Tmp_x_U(), *ip_nlp_->Px_U(),
                                    delta_x, tau),
-                   CalcFracToBound(*curr_slack_s_L(), *ip_nlp_->Pd_L(),
-                                   *curr_slack_s_U(), *ip_nlp_->Pd_U(),
+                   CalcFracToBound(*curr_slack_s_L(), Tmp_s_L(), *ip_nlp_->Pd_L(),
+                                   *curr_slack_s_U(), Tmp_s_U(), *ip_nlp_->Pd_U(),
                                    delta_s, tau));
 
       primal_frac_to_the_bound_cache_.AddCachedResult(result, tdeps, sdeps);
@@ -2280,24 +2191,24 @@ namespace Ipopt
     SmartPtr<const Vector> z_U = ip_data_->curr_z_U();
     SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
     SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(z_L));
-    tdeps.push_back(GetRawPtr(z_U));
-    tdeps.push_back(GetRawPtr(v_L));
-    tdeps.push_back(GetRawPtr(v_U));
-    tdeps.push_back(&delta_z_L);
-    tdeps.push_back(&delta_z_U);
-    tdeps.push_back(&delta_v_L);
-    tdeps.push_back(&delta_v_U);
+    std::vector<const TaggedObject*> tdeps(8);
+    tdeps[0] = GetRawPtr(z_L);
+    tdeps[1] = GetRawPtr(z_U);
+    tdeps[2] = GetRawPtr(v_L);
+    tdeps[3] = GetRawPtr(v_U);
+    tdeps[4] = &delta_z_L;
+    tdeps[5] = &delta_z_U;
+    tdeps[6] = &delta_v_L;
+    tdeps[7] = &delta_v_U;
 
-    std::vector<Number> sdeps;
-    sdeps.push_back(tau);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = tau;
 
     if (!dual_frac_to_the_bound_cache_.GetCachedResult(result, tdeps, sdeps)) {
-      result = CalcFracToZeroBound(*z_L, delta_z_L, tau);
-      result = Min(result, CalcFracToZeroBound(*z_U, delta_z_U, tau));
-      result = Min(result, CalcFracToZeroBound(*v_L, delta_v_L, tau));
-      result = Min(result, CalcFracToZeroBound(*v_U, delta_v_U, tau));
+      result = z_L->FracToBound(delta_z_L, tau);
+      result = Min(result, z_U->FracToBound(delta_z_U, tau));
+      result = Min(result, v_L->FracToBound(delta_v_L, tau));
+      result = Min(result, v_U->FracToBound(delta_v_U, tau));
 
       dual_frac_to_the_bound_cache_.AddCachedResult(result, tdeps, sdeps);
     }
@@ -2331,24 +2242,24 @@ namespace Ipopt
     SmartPtr<const Vector> x_U = curr_slack_x_U();
     SmartPtr<const Vector> s_L = curr_slack_s_L();
     SmartPtr<const Vector> s_U = curr_slack_s_U();
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x_L));
-    tdeps.push_back(GetRawPtr(x_U));
-    tdeps.push_back(GetRawPtr(s_L));
-    tdeps.push_back(GetRawPtr(s_U));
-    tdeps.push_back(&delta_x_L);
-    tdeps.push_back(&delta_x_U);
-    tdeps.push_back(&delta_s_L);
-    tdeps.push_back(&delta_s_U);
+    std::vector<const TaggedObject*> tdeps(8);
+    tdeps[0] = GetRawPtr(x_L);
+    tdeps[1] = GetRawPtr(x_U);
+    tdeps[2] = GetRawPtr(s_L);
+    tdeps[3] = GetRawPtr(s_U);
+    tdeps[4] = &delta_x_L;
+    tdeps[5] = &delta_x_U;
+    tdeps[6] = &delta_s_L;
+    tdeps[7] = &delta_s_U;
 
-    std::vector<Number> sdeps;
-    sdeps.push_back(tau);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = tau;
 
     if (!slack_frac_to_the_bound_cache_.GetCachedResult(result, tdeps, sdeps)) {
-      result = CalcFracToZeroBound(*x_L, delta_x_L, tau);
-      result = Min(result, CalcFracToZeroBound(*x_U, delta_x_U, tau));
-      result = Min(result, CalcFracToZeroBound(*s_L, delta_s_L, tau));
-      result = Min(result, CalcFracToZeroBound(*s_U, delta_s_U, tau));
+      result = x_L->FracToBound(delta_x_L, tau);
+      result = Min(result, x_U->FracToBound(delta_x_U, tau));
+      result = Min(result, s_L->FracToBound(delta_s_L, tau));
+      result = Min(result, s_U->FracToBound(delta_s_U, tau));
 
       slack_frac_to_the_bound_cache_.AddCachedResult(result, tdeps, sdeps);
     }
@@ -2373,20 +2284,16 @@ namespace Ipopt
     if (!curr_sigma_x_cache_.GetCachedResult3Dep(result, *x, *z_L, *z_U)) {
       SmartPtr<Vector> sigma = x->MakeNew();
 
-      SmartPtr<const Vector> slack = curr_slack_x_L();
-      SmartPtr<Vector> tmp = slack->MakeNew();
-      tmp->Copy(*z_L);
-      DBG_PRINT_VECTOR(2,"z_L", *z_L);
-      DBG_PRINT_VECTOR(2,"slack_x_L", *slack);
-      tmp->ElementWiseDivide(*slack);
-      DBG_PRINT_VECTOR(2,"z_L/slack_x_L", *tmp);
-      ip_nlp_->Px_L()->MultVector(1.0, *tmp, 0.0, *sigma);
+      Tmp_x_L().Copy(*z_L);
+      DBG_PRINT_VECTOR(2,"z_L", Tmp_x_L());
+      DBG_PRINT_VECTOR(2,"slack_x_L", *curr_slack_x_L());
+      Tmp_x_L().ElementWiseDivide(*curr_slack_x_L());
+      DBG_PRINT_VECTOR(2,"z_L/slack_x_L", Tmp_x_L());
+      ip_nlp_->Px_L()->MultVector(1.0, Tmp_x_L(), 0.0, *sigma);
 
-      slack =  curr_slack_x_U();
-      tmp = slack->MakeNew();
-      tmp->Copy(*z_U);
-      tmp->ElementWiseDivide(*slack);
-      ip_nlp_->Px_U()->MultVector(1.0, *tmp, 1.0, *sigma);
+      Tmp_x_U().Copy(*z_U);
+      Tmp_x_U().ElementWiseDivide(*curr_slack_x_U());
+      ip_nlp_->Px_U()->MultVector(1.0, Tmp_x_U(), 1.0, *sigma);
 
       DBG_PRINT_VECTOR(2,"sigma_x", *sigma);
 
@@ -2410,17 +2317,13 @@ namespace Ipopt
     if (!curr_sigma_s_cache_.GetCachedResult3Dep(result, *s, *v_L, *v_U)) {
       SmartPtr<Vector> sigma = s->MakeNew();
 
-      SmartPtr<const Vector> slack = curr_slack_s_L();
-      SmartPtr<Vector> tmp = slack->MakeNew();
-      tmp->Copy(*v_L);
-      tmp->ElementWiseDivide(*slack);
-      ip_nlp_->Pd_L()->MultVector(1.0, *tmp, 0.0, *sigma);
+      Tmp_s_L().Copy(*v_L);
+      Tmp_s_L().ElementWiseDivide(*curr_slack_s_L());
+      ip_nlp_->Pd_L()->MultVector(1.0, Tmp_s_L(), 0.0, *sigma);
 
-      slack =  curr_slack_s_U();
-      tmp = slack->MakeNew();
-      tmp->Copy(*v_U);
-      tmp->ElementWiseDivide(*slack);
-      ip_nlp_->Pd_U()->MultVector(1.0, *tmp, 1.0, *sigma);
+      Tmp_s_U().Copy(*v_U);
+      Tmp_s_U().ElementWiseDivide(*curr_slack_s_U());
+      ip_nlp_->Pd_U()->MultVector(1.0, Tmp_s_U(), 1.0, *sigma);
 
       result = ConstPtr(sigma);
       curr_sigma_s_cache_.AddCachedResult3Dep(result, *s, *v_L, *v_U);
@@ -2444,13 +2347,13 @@ namespace Ipopt
     SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
     SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
 
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(s));
-    tdeps.push_back(GetRawPtr(z_L));
-    tdeps.push_back(GetRawPtr(z_U));
-    tdeps.push_back(GetRawPtr(v_L));
-    tdeps.push_back(GetRawPtr(z_U));
+    std::vector<const TaggedObject*> tdeps(6);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
+    tdeps[2] = GetRawPtr(z_L);
+    tdeps[3] = GetRawPtr(z_U);
+    tdeps[4] = GetRawPtr(v_L);
+    tdeps[5] = GetRawPtr(z_U);
 
     if (!curr_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
       if (!trial_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
@@ -2496,13 +2399,13 @@ namespace Ipopt
     SmartPtr<const Vector> v_L = ip_data_->trial_v_L();
     SmartPtr<const Vector> v_U = ip_data_->trial_v_U();
 
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(s));
-    tdeps.push_back(GetRawPtr(z_L));
-    tdeps.push_back(GetRawPtr(z_U));
-    tdeps.push_back(GetRawPtr(v_L));
-    tdeps.push_back(GetRawPtr(z_U));
+    std::vector<const TaggedObject*> tdeps(6);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
+    tdeps[2] = GetRawPtr(z_L);
+    tdeps[3] = GetRawPtr(z_U);
+    tdeps[4] = GetRawPtr(v_L);
+    tdeps[5] = GetRawPtr(z_U);
 
     if (!trial_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
       if (!curr_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
@@ -2570,11 +2473,11 @@ namespace Ipopt
     SmartPtr<const Vector> s = ip_data_->curr_s();
     SmartPtr<const Vector> delta_x = ip_data_->delta_x();
     SmartPtr<const Vector> delta_s = ip_data_->delta_s();
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(s));
-    tdeps.push_back(GetRawPtr(delta_x));
-    tdeps.push_back(GetRawPtr(delta_s));
+    std::vector<const TaggedObject*> tdeps(4);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
+    tdeps[2] = GetRawPtr(delta_x);
+    tdeps[3] = GetRawPtr(delta_s);
 
     if (!curr_gradBarrTDelta_cache_.GetCachedResult(result, tdeps)) {
       result = curr_grad_barrier_obj_x()->Dot(*delta_x) +
@@ -2591,5 +2494,70 @@ namespace Ipopt
     const RestoIpoptNLP* resto_nlp = dynamic_cast<const RestoIpoptNLP*>(GetRawPtr(ip_nlp_));
     return (resto_nlp!=NULL);
   }
+
+  Vector& IpoptCalculatedQuantities::Tmp_x()
+  {
+    if (!IsValid(tmp_x_)) {
+      tmp_x_ = ip_data_->curr_x()->MakeNew();
+    }
+    return *tmp_x_;
+  }
+
+  Vector& IpoptCalculatedQuantities::Tmp_s()
+  {
+    if (!IsValid(tmp_s_)) {
+      tmp_s_ = ip_data_->curr_s()->MakeNew();
+    }
+    return *tmp_s_;
+  }
+
+  Vector& IpoptCalculatedQuantities::Tmp_c()
+  {
+    if (!IsValid(tmp_c_)) {
+      tmp_c_ = ip_data_->curr_y_c()->MakeNew();
+    }
+    return *tmp_c_;
+  }
+
+  Vector& IpoptCalculatedQuantities::Tmp_d()
+  {
+    if (!IsValid(tmp_d_)) {
+      tmp_d_ = ip_data_->curr_y_d()->MakeNew();
+    }
+    return *tmp_d_;
+  }
+
+  Vector& IpoptCalculatedQuantities::Tmp_x_L()
+  {
+    if (!IsValid(tmp_x_L_)) {
+      tmp_x_L_ = ip_nlp_->x_L()->MakeNew();
+    }
+    return *tmp_x_L_;
+  }
+
+  Vector& IpoptCalculatedQuantities::Tmp_x_U()
+  {
+    if (!IsValid(tmp_x_U_)) {
+      tmp_x_U_ = ip_nlp_->x_U()->MakeNew();
+    }
+    return *tmp_x_U_;
+  }
+
+  Vector& IpoptCalculatedQuantities::Tmp_s_L()
+  {
+    if (!IsValid(tmp_s_L_)) {
+      tmp_s_L_ = ip_nlp_->d_L()->MakeNew();
+    }
+    return *tmp_s_L_;
+  }
+
+  Vector& IpoptCalculatedQuantities::Tmp_s_U()
+  {
+    if (!IsValid(tmp_s_U_)) {
+      tmp_s_U_ = ip_nlp_->d_U()->MakeNew();
+    }
+    return *tmp_s_U_;
+  }
+
 
 } // namespace Ipopt
