@@ -264,6 +264,9 @@
 				Name="StdInterface"
 				Filter="">
 				<File
+					RelativePath="..\..\..\Apps\StdInterface\IpIpoptApplication.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\Apps\StdInterface\IpStdCInterface.cpp">
 				</File>
 				<File

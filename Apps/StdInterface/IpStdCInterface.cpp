@@ -155,7 +155,8 @@ Int IpoptSolve(Index n,
     = new IpoptCalculatedQuantities(ip_nlp, ip_data);
 
     // Create the Algorithm object
-    SmartPtr<IpoptAlgorithm> alg = AlgorithmBuilder(*jnlst, *options, "");
+    SmartPtr<IpoptAlgorithm> alg 
+       = AlgorithmBuilder::BuildBasicAlgorithm(*jnlst, *options, "");
 
     // Set up the algorithm
     alg->Initialize(*jnlst, *ip_nlp, *ip_data, *ip_cq, *options, "");

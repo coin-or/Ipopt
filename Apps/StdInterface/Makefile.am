@@ -12,7 +12,8 @@ noinst_LIBRARIES = libstdinterface.a
 
 libstdinterface_a_SOURCES = \
 	IpStdInterfaceTNLP.hpp IpStdInterfaceTNLP.cpp \
-	IpStdCInterface.cpp IpStdFInterface.c
+	IpStdCInterface.cpp IpStdFInterface.c \
+	IpIpoptApplication.cpp IpIpoptApplication.hpp
 
 CXXFLAGS += -I$(srcdir)/../../Common
 CXXFLAGS += -I$(srcdir)/../../Interfaces
@@ -26,7 +27,8 @@ CFLAGS += -I$(srcdir)/../../Interfaces
 
 ASTYLE_SOURCES = \
 	IpStdInterfaceTNLP.hppbak IpStdInterfaceTNLP.cppbak \
-	IpStdCInterface.cppbak
+	IpStdCInterface.cppbak \
+	IpIpoptApplication.cppbak IpIpoptApplication.hppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
