@@ -12,6 +12,8 @@
 namespace Ipopt
 {
 
+  DBG_SET_VERBOSITY(0);
+
   IpoptData::IpoptData()
       :
       iter_count_(0),
