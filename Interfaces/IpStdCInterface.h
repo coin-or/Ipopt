@@ -42,7 +42,8 @@ extern "C" {
 
   /** Type defining the callback function for evaluating the Jacobian of
    *  the constrant functions */
-  typedef Bool (*Eval_Jac_G_CB)(Index n, Number *x, Bool new_x, Index nele_jac,
+  typedef Bool (*Eval_Jac_G_CB)(Index n, Number *x, Bool new_x,
+				Index m, Index nele_jac,
 				Index *iRow, Index *jCol, Number *values,
 				UserDataPtr user_data);
 
