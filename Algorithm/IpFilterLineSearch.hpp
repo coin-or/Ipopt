@@ -243,6 +243,9 @@ namespace Ipopt
     /** Flag indicating whether the corrector should be skipped in an
      *  iteration in which negative curvature is detected */
     bool skip_corr_if_neg_curv_;
+    /** Flag indicating whether the corrector should be skipped in the
+     *  fixed mu mode. */
+    bool skip_corr_if_fixed_mode_;
     //@}
 
     /** Filter with entries */
