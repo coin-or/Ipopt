@@ -59,7 +59,7 @@ namespace Ipopt
     void SetCompNonConst(Index icomp, Vector& vec);
 
     /** Number of components of this compound vector */
-    Index NComps() const;
+    inline Index NComps() const;
 
     /** Return a particular component (const version) */
     SmartPtr<const Vector> GetComp(Index i) const
@@ -182,9 +182,9 @@ namespace Ipopt
 
     bool VectorsValid();
 
-    const Vector* ConstComp(Index i) const;
+    inline const Vector* ConstComp(Index i) const;
 
-    Vector* Comp(Index i);
+    inline Vector* Comp(Index i);
   };
 
   /** This vectors space is the vector space for CompoundVector.
