@@ -75,13 +75,16 @@ namespace Ipopt
                                   GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s,
                                   *rhs_c, *rhs_d, *sol_x, *sol_s,
                                   y_c, y_d, true, numberOfEVals);
+    if (retval!=SYMSOLVER_SUCCESS) {
+      return false;
+    }
 
     DBG_PRINT_VECTOR(2, "sol_x", *sol_x);
     DBG_PRINT_VECTOR(2, "sol_s", *sol_s);
     DBG_PRINT_VECTOR(2, "sol_c", y_c);
     DBG_PRINT_VECTOR(2, "sol_d", y_d);
 
-    return (retval==SYMSOLVER_SUCCESS);
+    return true;
   }
 
 } // namespace Ipopt
