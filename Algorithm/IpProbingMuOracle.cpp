@@ -44,11 +44,6 @@ namespace Ipopt
       sigma_max_ = 1.;
     }
 
-    // The following line is only here so that
-    // IpoptCalculatedQuantities::CalculateSafeSlack and the first
-    // output line have something to work with
-    IpData().Set_mu(1.);
-
     return true;
   }
 

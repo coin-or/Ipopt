@@ -126,11 +126,6 @@ namespace Ipopt
       dual_alpha_for_y_ = false;
     }
 
-    // The following line is only here so that
-    // IpoptCalculatedQuantities::CalculateSafeSlack and the first
-    // output line have something to work with
-    IpData().Set_mu(1.);
-
     return true;
   }
 
@@ -477,23 +472,45 @@ namespace Ipopt
                    "Sigma = %e\n", sigma);
     Number mu = sigma*avrg_compl;
 
+    // Store the affine search direction (in case it is needed in the
+    // line search for a corrector step)
+    IpData().SetFromPtr_delta_aff_x(ConstPtr(step_aff_x));
+    IpData().SetFromPtr_delta_aff_s(ConstPtr(step_aff_s));
+    IpData().SetFromPtr_delta_aff_y_c(ConstPtr(step_aff_y_c));
+    IpData().SetFromPtr_delta_aff_y_d(ConstPtr(step_aff_y_d));
+    IpData().SetFromPtr_delta_aff_z_L(ConstPtr(step_aff_z_L));
+    IpData().SetFromPtr_delta_aff_z_U(ConstPtr(step_aff_z_U));
+    IpData().SetFromPtr_delta_aff_v_L(ConstPtr(step_aff_v_L));
+    IpData().SetFromPtr_delta_aff_v_U(ConstPtr(step_aff_v_U));
+    IpData().SetHaveAffineDeltas(true);
+
     // Now construct the overall search direction here
-    step_aff_x->Axpy(sigma, *step_cen_x);
-    step_aff_s->Axpy(sigma, *step_cen_s);
-    step_aff_y_c->Axpy(sigma, *step_cen_y_c);
-    step_aff_y_d->Axpy(sigma, *step_cen_y_d);
-    step_aff_z_L->Axpy(sigma, *step_cen_z_L);
-    step_aff_z_U->Axpy(sigma, *step_cen_z_U);
-    step_aff_v_L->Axpy(sigma, *step_cen_v_L);
-    step_aff_v_U->Axpy(sigma, *step_cen_v_U);
-    IpData().SetFromPtr_delta_x(step_aff_x);
-    IpData().SetFromPtr_delta_s(step_aff_s);
-    IpData().SetFromPtr_delta_y_c(step_aff_y_c);
-    IpData().SetFromPtr_delta_y_d(step_aff_y_d);
-    IpData().SetFromPtr_delta_z_L(step_aff_z_L);
-    IpData().SetFromPtr_delta_z_U(step_aff_z_U);
-    IpData().SetFromPtr_delta_v_L(step_aff_v_L);
-    IpData().SetFromPtr_delta_v_U(step_aff_v_U);
+    SmartPtr<Vector> step_x = step_aff_x->MakeNew();
+    SmartPtr<Vector> step_s = step_aff_s->MakeNew();
+    SmartPtr<Vector> step_y_c = step_aff_y_c->MakeNew();
+    SmartPtr<Vector> step_y_d = step_aff_y_d->MakeNew();
+    SmartPtr<Vector> step_z_L = step_aff_z_L->MakeNew();
+    SmartPtr<Vector> step_z_U = step_aff_z_U->MakeNew();
+    SmartPtr<Vector> step_v_L = step_aff_v_L->MakeNew();
+    SmartPtr<Vector> step_v_U = step_aff_v_U->MakeNew();
+
+    step_x->AddTwoVectors(sigma, *step_cen_x, 1., *step_aff_x, 0.);
+    step_s->AddTwoVectors(sigma, *step_cen_s, 1., *step_aff_s, 0.);
+    step_y_c->AddTwoVectors(sigma, *step_cen_y_c, 1., *step_aff_y_c, 0.);
+    step_y_d->AddTwoVectors(sigma, *step_cen_y_d, 1., *step_aff_y_d, 0.);
+    step_z_L->AddTwoVectors(sigma, *step_cen_z_L, 1., *step_aff_z_L, 0.);
+    step_z_U->AddTwoVectors(sigma, *step_cen_z_U, 1., *step_aff_z_U, 0.);
+    step_v_L->AddTwoVectors(sigma, *step_cen_v_L, 1., *step_aff_v_L, 0.);
+    step_v_U->AddTwoVectors(sigma, *step_cen_v_U, 1., *step_aff_v_U, 0.);
+
+    IpData().SetFromPtr_delta_x(ConstPtr(step_x));
+    IpData().SetFromPtr_delta_s(ConstPtr(step_s));
+    IpData().SetFromPtr_delta_y_c(ConstPtr(step_y_c));
+    IpData().SetFromPtr_delta_y_d(ConstPtr(step_y_d));
+    IpData().SetFromPtr_delta_z_L(ConstPtr(step_z_L));
+    IpData().SetFromPtr_delta_z_U(ConstPtr(step_z_U));
+    IpData().SetFromPtr_delta_v_L(ConstPtr(step_v_L));
+    IpData().SetFromPtr_delta_v_U(ConstPtr(step_v_U));
     IpData().SetHaveDeltas(true);
 
     // DELETEME
@@ -646,7 +663,8 @@ namespace Ipopt
 
     // Compute the fraction-to-the-boundary step sizes
     // ToDo make sure we use the correct tau
-    Number tau = 0.99;
+    //Number tau = 0.99;
+    Number tau = IpData().curr_tau();
     Number alpha_primal = IpCq().slack_frac_to_the_bound(tau,
                           *step_x_L,
                           *step_x_U,
@@ -884,7 +902,7 @@ namespace Ipopt
       compl_inf /= sqrt((Number)n_comp);
       break;
     default:
-      DBG_ASSERT("Unknown value for quality_function_norm_");
+      DBG_ASSERT(false && "Unknown value for quality_function_norm_");
     }
 
     // Scale the quantities

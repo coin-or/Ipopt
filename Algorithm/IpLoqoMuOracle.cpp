@@ -32,11 +32,6 @@ namespace Ipopt
   bool LoqoMuOracle::InitializeImpl(const OptionsList& options,
                                     const std::string& prefix)
   {
-    // The following line is only here so that
-    // IpoptCalculatedQuantities::CalculateSafeSlack and the first
-    // output line have something to work with
-    IpData().Set_mu(1.);
-
     return true;
   }
 
