@@ -670,11 +670,12 @@ namespace Ipopt
     DBG_ASSERT(dense_delta);
 
     Number alpha = 1.;
-    Number* values_x = values_;;
+    Number* values_x = values_;
+    ;
     Number* values_delta = dense_delta->values_;
     for (Index i=0; i<Dim(); i++) {
       if (values_delta[i]<0.) {
-	alpha = Ipopt::Min(alpha, -tau/values_delta[i] * values_x[i]);
+        alpha = Ipopt::Min(alpha, -tau/values_delta[i] * values_x[i]);
       }
     }
     DBG_ASSERT(alpha>=0.);
