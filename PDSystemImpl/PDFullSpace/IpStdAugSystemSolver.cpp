@@ -142,26 +142,26 @@ namespace Ipopt
     augmented_rhs->SetComp(3, rhs_d);
 
     Jnlst().PrintMatrix(J_MATRIX, J_LINEAR_ALGEBRA, "KKT", *augmented_system_);
-    // ToDo: remove below here - for debug only
-    Index dbg_nz = TripletHelper::GetNumberEntries(*augmented_system_);
-    Index* dbg_iRows = new Index[dbg_nz];
-    Index* dbg_jCols = new Index[dbg_nz];
-    Number* dbg_values = new Number[dbg_nz];
-    TripletHelper::FillRowCol(dbg_nz, *augmented_system_, dbg_iRows, dbg_jCols);
-    TripletHelper::FillValues(dbg_nz, *augmented_system_, dbg_values);
     if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
+      // ToDo: remove below here - for debug only
+      Index dbg_nz = TripletHelper::GetNumberEntries(*augmented_system_);
+      Index* dbg_iRows = new Index[dbg_nz];
+      Index* dbg_jCols = new Index[dbg_nz];
+      Number* dbg_values = new Number[dbg_nz];
+      TripletHelper::FillRowCol(dbg_nz, *augmented_system_, dbg_iRows, dbg_jCols);
+      TripletHelper::FillValues(dbg_nz, *augmented_system_, dbg_values);
       Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "******* KKT SYSTEM *******\n");
       for (Index dbg_i=0; dbg_i<dbg_nz; dbg_i++) {
         Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "(%d) KKT[%d][%d] = %g\n", dbg_i, dbg_iRows[dbg_i], dbg_jCols[dbg_i], dbg_values[dbg_i]);
       }
+      delete [] dbg_iRows;
+      dbg_iRows = NULL;
+      delete [] dbg_jCols;
+      dbg_jCols = NULL;
+      delete [] dbg_values;
+      dbg_values = NULL;
+      // ToDo: remove above here
     }
-    delete [] dbg_iRows;
-    dbg_iRows = NULL;
-    delete [] dbg_jCols;
-    dbg_jCols = NULL;
-    delete [] dbg_values;
-    dbg_values = NULL;
-    // ToDo: remove above here
     Jnlst().PrintVector(J_MOREVECTOR, J_LINEAR_ALGEBRA, "RHS", *augmented_rhs);
 
     // Call the linear solver
@@ -477,6 +477,11 @@ namespace Ipopt
   bool StdAugSystemSolver::ProvidesInertia() const
   {
     return linsolver_->ProvidesInertia();
+  }
+
+  bool StdAugSystemSolver::IncreaseQuality()
+  {
+    return linsolver_->IncreaseQuality();
   }
 
 } // namespace Ipopt

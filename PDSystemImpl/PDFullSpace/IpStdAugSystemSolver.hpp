@@ -20,17 +20,6 @@
 namespace Ipopt
 {
 
-  /* CARL: This doesn't work on Windows */
-  /* forward declarations */
-  /*
-  class CompoundSymMatrix;
-  class CompoundSymMatrixSpace;
-  class CompoundVectorSpace;
-  class SumSymMatrixSpace;
-  class DiagMatrixSpace;
-  class IdentityMatrixSpace;
-  */
-
   /** Solver for the augmented system for triple type matrices.
    *
    *  The current implemetation assumes that all matrices are of the
@@ -90,6 +79,14 @@ namespace Ipopt
      * Returns true, if linear solver provides inertia.
      */
     virtual bool ProvidesInertia() const;
+
+    /** Request to increase quality of solution for next solve.  Ask
+     *  underlying linear solver to increase quality of solution for
+     *  the next solve (e.g. increase pivot tolerance).  Returns
+     *  false, if this is not possible (e.g. maximal pivot tolerance
+     *  already used.)
+     */
+    virtual bool IncreaseQuality();
 
   private:
     /**@name Default Compiler Generated Methods

@@ -373,6 +373,11 @@ namespace Ipopt
     return linsolver_->ProvidesInertia();
   }
 
+  bool AugTSystemSolver::IncreaseQuality()
+  {
+    return linsolver_->IncreaseQuality();
+  }
+
   bool AugTSystemSolver::ChangeInPart(const TaggedObject* Obj,
                                       const TaggedObject::Tag tag)
   {
