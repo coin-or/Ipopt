@@ -636,9 +636,9 @@ install-exec-local:
 	cd $(tmpdir); \
 	for lib in $(IPALLLIBS); \
 	do \
-	  $(AR) x $$basdir/$$lib; \
+	  ar x $$basdir/$$lib; \
 	done; \
-	$(AR) cur $(libipopt) *.$(OBJEXT)
+	ar cur $(libipopt) *.$(OBJEXT)
 	$(INSTALL_DATA) $(tmpdir)/$(libipopt) $(DESTDIR)$(libdir)
 	rm -rf $(tmpdir)
 	$(RANLIB) $(DESTDIR)$(libdir)/$(libipopt)
