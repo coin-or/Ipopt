@@ -336,6 +336,12 @@ namespace Ipopt
     that you are not modifying the incoming vectors afterwards! */
     void SetTrialPrimalVariablesFromPtr(const SmartPtr<const Vector>& xptr,
                                         const SmartPtr<const Vector>& sptr);
+    /** Set the pointers for the trial bound multipliers.  Make sure
+    that you are not modifying the incoming vectors afterwards! */
+    void SetTrialBoundMultipliersFromPtr(const SmartPtr<const Vector>& z_Lptr,
+                                         const SmartPtr<const Vector>& z_Uptr,
+                                         const SmartPtr<const Vector>& v_Lptr,
+                                         const SmartPtr<const Vector>& v_Uptr);
     //@}
 
     /** @name General algorithmic data */
