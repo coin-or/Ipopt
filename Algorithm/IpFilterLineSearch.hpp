@@ -10,6 +10,7 @@
 #define __IPFILTERLINESEARCH_HPP__
 
 #include "IpUtils.hpp"
+#include "IpFilter.hpp"
 #include "IpLineSearch.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpPDSystemSolver.hpp"
@@ -22,130 +23,6 @@ namespace Ipopt
    */
   class FilterLineSearch : public LineSearch
   {
-    /** Class for one filter entry. */
-    class FilterEntry
-    {
-    public:
-      /**@name Constructors/Destructors */
-      //@{
-      /** Constructor with the two components and the current iteration count */
-      FilterEntry(Number phi, Number theta, Index iter);
-
-      /** Default Destructor */
-      ~FilterEntry();
-      //@}
-
-      /** Check acceptability of pair (phi,theta) with respect
-       *  to this filter entry.  Returns true, if pair is acceptable.
-       */
-      bool Acceptable(Number phi, Number theta) const
-      {
-        return Compare_le(phi, phi_, phi_) ||
-               Compare_le(theta, theta_, theta_);
-      }
-
-      /** Check if this entry is dominated by pair (phi,theta).
-       * Returns true, if this entry is dominated.
-       */
-      bool Dominated(Number phi, Number theta) const
-      {
-        return (phi<=phi_ && theta<=theta_);
-      }
-
-      /** @name Accessor functions */
-      //@{
-      Number phi() const
-      {
-        return phi_;
-      }
-      Number theta() const
-      {
-        return theta_;
-      }
-      Index iter() const
-      {
-        return iter_;
-      }
-      //@}
-
-    private:
-      /**@name Default Compiler Generated Methods
-       * (Hidden to avoid implicit creation/calling).
-       * These methods are not implemented and 
-       * we do not want the compiler to implement
-       * them for us, so we declare them private
-       * and do not define them. This ensures that
-       * they will not be implicitly created/called. */
-      //@{
-      /** Default Constructor */
-      FilterEntry();
-      /** Copy Constructor */
-      FilterEntry(const FilterEntry&);
-
-      /** Overloaded Equals Operator */
-      void operator=(const FilterEntry&);
-      //@}
-
-      /** entry value for objective function */
-      const Number phi_;
-      /** entry value for constraint violation */
-      const Number theta_;
-      /** iteration number in which this entry was added to filter */
-      const Index iter_;
-    };
-
-    /** Class for the filter.  This class contains all filter entries.
-     *  The entries are stored as the corner point, including the
-     *  margin. */
-    class Filter
-    {
-    public:
-      /**@name Constructors/Destructors */
-      //@{
-      /** Default Constructor */
-      Filter()
-      {}
-      /** Default Destructor */
-      ~Filter()
-      {
-        Clear();
-      }
-      //@}
-
-      /** Check acceptability of pair (phi,theta) with respect
-       *  to the filter.  Returns true, if pair is acceptable
-       */
-      bool Acceptable(Number phi, Number theta) const;
-
-      /** Add filter entry for pair (phi,theta).  This will also
-       *  delete all dominated entries in the current filter. */
-      void AddEntry(Number phi, Number theta, Index iteration);
-
-      /** Delete all filter entries */
-      void Clear();
-
-      /** Print current filter entries */
-      void Print(const Journalist& jnlst);
-
-    private:
-      /**@name Default Compiler Generated Methods
-       * (Hidden to avoid implicit creation/calling).
-       * These methods are not implemented and 
-       * we do not want the compiler to implement
-       * them for us, so we declare them private
-       * and do not define them. This ensures that
-       * they will not be implicitly created/called. */
-      //@{
-      /** Copy Constructor */
-      Filter(const Filter&);
-
-      /** Overloaded Equals Operator */
-      void operator=(const Filter&);
-      //@}
-
-      mutable std::list<FilterEntry*> filter_list_;
-    };
-
   public:
     /**@name Constructors/Destructors */
     //@{
@@ -207,9 +84,6 @@ namespace Ipopt
 
     /** @name Filter information */
     //@{
-    /** Number of entries in the filter */
-    Index filter_size_;
-
     /** Upper bound on infeasibility */
     Number theta_max_;
     Number theta_max_fact_;
