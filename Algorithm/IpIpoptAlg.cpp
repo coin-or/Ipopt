@@ -11,7 +11,7 @@
 
 namespace Ipopt
 {
-  static const Index dbg_verbosity = 0;
+  DBG_SET_VERBOSITY(0);
 
   IpoptAlgorithm::IpoptAlgorithm(const SmartPtr<PDSystemSolver>& pd_solver,
                                  const SmartPtr<LineSearch>& line_search,
@@ -91,6 +91,16 @@ namespace Ipopt
                                         options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the iter_output strategy failed to initialize.");
+
+    Number value;
+    if (options.GetNumericValue("kappa_sigma", value, prefix)) {
+      ASSERT_EXCEPTION(value >= 1., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"kappa_sigma\": This value must be at least 1.");
+      kappa_sigma_ = value;
+    }
+    else {
+      kappa_sigma_ = 1e10;
+    }
 
     if (prefix=="resto.") {
       skip_print_problem_stats_ = true;
@@ -260,6 +270,14 @@ namespace Ipopt
 
   void IpoptAlgorithm::AcceptTrialPoint()
   {
+    // If the line search didn't determine a new acceptable trial
+    // point, do not accept a new iterate
+    if (line_search_->CheckSkippedLineSearch()) {
+      Jnlst().Printf(J_SUMMARY, J_MAIN,
+		     "Line search didn't find acceptable trial point.\n");
+      return;
+    }
+
     // Adjust the bounds if necessary
     Index adjusted_slacks = IpCq().AdjustedTrialSlacks();
     if (adjusted_slacks>0) {
@@ -310,6 +328,48 @@ namespace Ipopt
         Jnlst().PrintVector(J_VECTOR, J_MAIN, "new_d_U", *IpNLP().d_U());
       }
     }
+
+    // Make sure that bound multipliers are not too far from \mu * S^{-2}
+    // (see kappa_sigma in paper)
+    // For now, we only implement the upper bound
+    Number max_correction;
+    SmartPtr<const Vector> new_z_L;
+    max_correction = correct_bound_multiplier(*IpData().trial_z_L(),
+					      *IpCq().trial_slack_x_L(),
+					      new_z_L);
+    if (max_correction>0.) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "Some value in z_L becomes too large - maximal correction = %8.2e\n",
+		     max_correction);
+    }
+    SmartPtr<const Vector> new_z_U;
+    max_correction = correct_bound_multiplier(*IpData().trial_z_U(),
+					      *IpCq().trial_slack_x_U(),
+					      new_z_U);
+    if (max_correction>0.) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "Some value in z_U becomes too large - maximal correction = %8.2e\n",
+		     max_correction);
+    }
+    SmartPtr<const Vector> new_v_L;
+    max_correction = correct_bound_multiplier(*IpData().trial_v_L(),
+					      *IpCq().trial_slack_s_L(),
+					      new_v_L);
+    if (max_correction>0.) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "Some value in v_L becomes too large - maximal correction = %8.2e\n",
+		     max_correction);
+    }
+    SmartPtr<const Vector> new_v_U;
+    max_correction = correct_bound_multiplier(*IpData().trial_v_U(),
+					      *IpCq().trial_slack_s_U(),
+					      new_v_U);
+    if (max_correction>0.) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "Some value in v_U becomes too large - maximal correction = %8.2e\n",
+		     max_correction);
+    }
+    IpData().SetTrialBoundMultipliersFromPtr(new_z_L, new_z_U, new_v_L, new_v_U);
 
     // Accept the step
     IpData().AcceptTrialPoint();
@@ -417,6 +477,40 @@ namespace Ipopt
     // lower bounds
     n_only_lower = (Index)tmpx->Asum();
 
+  }
+
+  Number IpoptAlgorithm::correct_bound_multiplier(const Vector& trial_z,
+						  const Vector& trial_slack,
+						  SmartPtr<const Vector>& new_trial_z)
+  {
+    DBG_START_METH("IpoptAlgorithm::CorrectBoundMultiplier",
+                   dbg_verbosity);
+
+    if (trial_z.Dim()==0) {
+      new_trial_z = &trial_z;
+      return 0.;
+    }
+
+    SmartPtr<Vector> step_z = trial_z.MakeNew();
+    step_z->Copy(trial_slack);
+    step_z->ElementWiseReciprocal();
+    step_z->Scal(kappa_sigma_*IpData().curr_mu());
+    step_z->Axpy(-1., trial_z);
+
+    Number max_correction = Max(0., -step_z->Min());
+    if (max_correction>0.) {
+      SmartPtr<Vector> tmp = trial_z.MakeNew();
+      tmp->Set(0.);
+      step_z->ElementWiseMin(*tmp);
+      tmp->Copy(trial_z);
+      tmp->Axpy(1., *step_z);
+      new_trial_z = GetRawPtr(tmp);
+    }
+    else {
+      new_trial_z = &trial_z;
+    }
+
+    return max_correction;
   }
 
 } // namespace Ipopt
