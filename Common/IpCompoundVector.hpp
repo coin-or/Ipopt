@@ -144,6 +144,14 @@ namespace Ipopt
     /** Computes the sum of the logs of the elements of vector */
     virtual Number SumLogsImpl() const;
 
+    /** @name Implemented specialized functions */
+    //@{
+    /** Add two vectors (a * v1 + b * v2).  Result is stored in this
+	vector. */
+    void AddTwoVectorsImpl(Number a, const Vector& v1,
+			   Number b, const Vector& v2);
+    //@}
+
     /** @name Output methods */
     //@{
     /* Print the entire vector with padding */

@@ -186,6 +186,199 @@ namespace Ipopt
     }
   }
 
+  // Specialized method (overloaded from IpMatrix)
+  void CompoundMatrix::AddMSinvZImpl(Number alpha, const Vector& S,
+				     const Vector& Z, Vector& X) const
+  {
+    // The vectors are assumed to be compound Vectors as well (unless they
+    // are assumed to consist of only one component
+    const CompoundVector* comp_S = dynamic_cast<const CompoundVector*>(&S);
+    const CompoundVector* comp_Z = dynamic_cast<const CompoundVector*>(&Z);
+    CompoundVector* comp_X = dynamic_cast<CompoundVector*>(&X);
+
+    //  A few sanity checks for sizes
+    if (comp_S) {
+      DBG_ASSERT(NComps_Cols()==comp_S->NComps());
+    }
+    else {
+      DBG_ASSERT(NComps_Cols() == 1);
+    }
+    if (comp_Z) {
+      DBG_ASSERT(NComps_Cols()==comp_Z->NComps());
+    }
+    else {
+      DBG_ASSERT(NComps_Cols() == 1);
+    }
+    if (comp_X) {
+      DBG_ASSERT(NComps_Rows()==comp_X->NComps());
+    }
+    else {
+      DBG_ASSERT(NComps_Rows() == 1);
+    }
+
+    for( Index irow = 0; irow < NComps_Cols(); irow++ ) {
+      SmartPtr<Vector> X_i;
+      if (comp_X) {
+        X_i = comp_X->GetCompNonConst(irow);
+      }
+      else {
+        X_i = &X;
+      }
+      DBG_ASSERT(IsValid(X_i));
+
+      for( Index jcol = 0; jcol < NComps_Rows(); jcol++ ) {
+        SmartPtr<const Vector> S_j;
+        if (comp_S) {
+          S_j = comp_S->GetComp(jcol);
+        }
+        else {
+          S_j = &S;
+        }
+        DBG_ASSERT(IsValid(S_j));
+        SmartPtr<const Vector> Z_j;
+        if (comp_Z) {
+          Z_j = comp_Z->GetComp(jcol);
+        }
+        else {
+          Z_j = &Z;
+        }
+        DBG_ASSERT(IsValid(Z_j));
+
+        if (ConstComp(jcol, irow)) {
+          ConstComp(jcol, irow)->AddMSinvZ(alpha, *S_j, *Z_j, *X_i);
+        }
+      }
+    }
+  }
+
+  // Specialized method (overloaded from IpMatrix)
+  void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
+					  const Vector& R, const Vector& Z,
+					  const Vector& D, Vector& X) const
+  {
+    // First check if the matrix is indeed such that we can use the
+    // special methods from the component spaces (this only works if
+    // we have exactly one submatrix per column)
+
+    // ToDo: Do this test only once?
+    bool fast_SinvBlrmZMTdBr = true;
+    for (Index jcol=0; jcol < NComps_Cols(); jcol++ ) {
+      Index nblocks = 0;
+      for (Index irow=0; irow < NComps_Rows(); irow++ ) {
+	if (ConstComp(irow, jcol)) {
+	  nblocks++;
+	}
+      }
+      if (nblocks!=1) {
+	fast_SinvBlrmZMTdBr = false;
+	break;
+      }
+    }
+
+    if (!fast_SinvBlrmZMTdBr) {
+      // Use the standard replacement implementation
+      Matrix::SinvBlrmZMTdBrImpl(alpha, S, R, Z, D, X);
+      DBG_ASSERT(false && "Found a matrix where we can't use the fast SinvBlrmZMTdBr implementation in CompoundMatrix");
+      return;
+    }
+
+    // The vectors are assumed to be compound Vectors as well (unless they
+    // are assumed to consist of only one component
+    const CompoundVector* comp_S = dynamic_cast<const CompoundVector*>(&S);
+    const CompoundVector* comp_R = dynamic_cast<const CompoundVector*>(&R);
+    const CompoundVector* comp_Z = dynamic_cast<const CompoundVector*>(&Z);
+    const CompoundVector* comp_D = dynamic_cast<const CompoundVector*>(&D);
+    CompoundVector* comp_X = dynamic_cast<CompoundVector*>(&X);
+
+    //  A few sanity checks for sizes
+    if (comp_S) {
+      DBG_ASSERT(NComps_Cols()==comp_S->NComps());
+    }
+    else {
+      DBG_ASSERT(NComps_Cols() == 1);
+    }
+    if (comp_Z) {
+      DBG_ASSERT(NComps_Cols()==comp_Z->NComps());
+    }
+    else {
+      DBG_ASSERT(NComps_Cols() == 1);
+    }
+    if (comp_R) {
+      DBG_ASSERT(NComps_Cols()==comp_R->NComps());
+    }
+    else {
+      DBG_ASSERT(NComps_Cols() == 1);
+    }
+    if (comp_D) {
+      DBG_ASSERT(NComps_Rows()==comp_D->NComps());
+    }
+    else {
+      DBG_ASSERT(NComps_Rows() == 1);
+    }
+    if (comp_X) {
+      DBG_ASSERT(NComps_Cols()==comp_X->NComps());
+    }
+    else {
+      DBG_ASSERT(NComps_Cols() == 1);
+    }
+
+    for (Index irow=0; irow<NComps_Cols(); irow++ ) {
+      // Find the entry in the matrix for that row
+      Index jcol_found=NComps_Rows();
+      for (Index jcol=0; jcol<NComps_Rows(); jcol++ ) {
+	if (ConstComp(irow, jcol)) {
+	  jcol_found = jcol;
+	  break;
+	}
+      }
+      DBG_ASSERT(jcol_found<NComps_Rows());
+
+      SmartPtr<const Vector> S_i;
+      if (comp_S) {
+	S_i = comp_S->GetComp(irow);
+      }
+      else {
+	S_i = &S;
+      }
+      DBG_ASSERT(IsValid(S_i));
+      SmartPtr<const Vector> Z_i;
+      if (comp_Z) {
+	Z_i = comp_Z->GetComp(irow);
+      }
+      else {
+	Z_i = &Z;
+      }
+      DBG_ASSERT(IsValid(Z_i));
+      SmartPtr<const Vector> R_i;
+      if (comp_R) {
+	R_i = comp_R->GetComp(irow);
+      }
+      else {
+	R_i = &R;
+      }
+      DBG_ASSERT(IsValid(R_i));
+      SmartPtr<const Vector> D_i;
+      if (comp_D) {
+	D_i = comp_D->GetComp(jcol_found);
+      }
+      else {
+	D_i = &D;
+      }
+      DBG_ASSERT(IsValid(D_i));
+      SmartPtr<Vector> X_i;
+      if (comp_X) {
+	X_i = comp_X->GetCompNonConst(irow);
+      }
+      else {
+	X_i = &X;
+      }
+      DBG_ASSERT(IsValid(X_i));
+
+      ConstComp(jcol_found,irow)->SinvBlrmZMTdBr(alpha, *S_i, *R_i, *Z_i,
+						 *D_i, *X_i);
+    }
+  }
+
   void CompoundMatrix::PrintImpl(FILE* fp, std::string name, Index indent, std::string prefix) const
   {
     fprintf(fp, "\n");
