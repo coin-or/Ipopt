@@ -128,6 +128,12 @@ namespace Ipopt
     /** Product of Jacobian (evaluated at current point) of D
      *  transpose with current y_d */
     SmartPtr<const Vector> curr_jac_dT_times_curr_y_d();
+    /** Product of Jacobian (evaluated at current point) of C
+     *  with general vector */
+    SmartPtr<const Vector> curr_jac_c_times_vec(const Vector& vec);
+    /** Product of Jacobian (evaluated at current point) of D
+     *  with general vector */
+    SmartPtr<const Vector> curr_jac_d_times_vec(const Vector& vec);
     /** Constraint Violation (at current iterate). This value should
      *  be used in the line search, and not curr_primal_infeasibility().
      *  What type of norm is used depends on constr_viol_normtype */
@@ -337,6 +343,8 @@ namespace Ipopt
     CachedResults< SmartPtr<const Matrix> > curr_jac_d_cache_;
     CachedResults< SmartPtr<const Vector> > curr_jac_cT_times_vec_cache_;
     CachedResults< SmartPtr<const Vector> > curr_jac_dT_times_vec_cache_;
+    CachedResults< SmartPtr<const Vector> > curr_jac_c_times_vec_cache_;
+    CachedResults< SmartPtr<const Vector> > curr_jac_d_times_vec_cache_;
     CachedResults<Number> curr_constraint_violation_cache_;
     CachedResults<Number> trial_constraint_violation_cache_;
     //@}

@@ -58,6 +58,8 @@ namespace Ipopt
       curr_jac_d_cache_(1),
       curr_jac_cT_times_vec_cache_(2),
       curr_jac_dT_times_vec_cache_(2),
+      curr_jac_c_times_vec_cache_(1),
+      curr_jac_d_times_vec_cache_(1),
       curr_exact_hessian_cache_(1),
       curr_constraint_violation_cache_(2),
       trial_constraint_violation_cache_(5),
@@ -922,6 +924,58 @@ namespace Ipopt
   }
 
   SmartPtr<const Vector>
+  IpoptCalculatedQuantities::curr_jac_c_times_vec(const Vector& vec)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::curr_jac_c_times_vec",
+                   dbg_verbosity);
+    SmartPtr<const Vector> result;
+    SmartPtr<const Vector> x = ip_data_->curr_x();
+
+    if (!curr_jac_c_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
+      SmartPtr<Vector> tmp = ip_data_->curr_y_c()->MakeNew();
+      curr_jac_c()->MultVector(1.0, vec, 0., *tmp);
+      result = ConstPtr(tmp);
+      curr_jac_c_times_vec_cache_.AddCachedResult2Dep(result, *x, vec);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::curr_jac_d_times_vec(const Vector& vec)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::curr_jac_d_times_vec()",
+                   dbg_verbosity);
+    SmartPtr<const Vector> result;
+    SmartPtr<const Vector> x = ip_data_->curr_x();
+
+    if (!curr_jac_d_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
+      SmartPtr<Vector> tmp = ip_data_->curr_s()->MakeNew();
+      curr_jac_d()->MultVector(1.0, vec, 0., *tmp);
+      result = ConstPtr(tmp);
+      curr_jac_d_times_vec_cache_.AddCachedResult2Dep(result, *x, vec);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::curr_jac_cT_times_curr_y_c()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::curr_jac_cT_times_curr_y_c()",
+                   dbg_verbosity);
+    return curr_jac_cT_times_vec(*ip_data_->curr_y_c());
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::curr_jac_dT_times_curr_y_d()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::curr_jac_dT_times_curr_y_d()",
+                   dbg_verbosity);
+    return curr_jac_dT_times_vec(*ip_data_->curr_y_d());
+  }
+
+  SmartPtr<const Vector>
   IpoptCalculatedQuantities::curr_jac_cT_times_vec(const Vector& vec)
   {
     DBG_START_METH("IpoptCalculatedQuantities::curr_jac_cT_times_vec",
@@ -955,22 +1009,6 @@ namespace Ipopt
     }
 
     return result;
-  }
-
-  SmartPtr<const Vector>
-  IpoptCalculatedQuantities::curr_jac_cT_times_curr_y_c()
-  {
-    DBG_START_METH("IpoptCalculatedQuantities::curr_jac_cT_times_curr_y_c()",
-                   dbg_verbosity);
-    return curr_jac_cT_times_vec(*ip_data_->curr_y_c());
-  }
-
-  SmartPtr<const Vector>
-  IpoptCalculatedQuantities::curr_jac_dT_times_curr_y_d()
-  {
-    DBG_START_METH("IpoptCalculatedQuantities::curr_jac_dT_times_curr_y_d()",
-                   dbg_verbosity);
-    return curr_jac_dT_times_vec(*ip_data_->curr_y_d());
   }
 
   Number
