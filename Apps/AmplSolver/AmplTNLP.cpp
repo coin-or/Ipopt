@@ -28,9 +28,9 @@ extern "C"
 namespace Ipopt
 {
 
-  AmplTNLP::AmplTNLP(const SmartPtr<Journalist>& jnlst, char**& argv, 
-		     SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
-		     bool allow_discrete /* = false */)
+  AmplTNLP::AmplTNLP(const SmartPtr<Journalist>& jnlst, char**& argv,
+                     SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
+                     bool allow_discrete /* = false */)
       :
       TNLP(),
       jnlst_(ConstPtr(jnlst)),
@@ -78,10 +78,10 @@ namespace Ipopt
     //    DBG_ASSERT(nbv == 0); // Cannot handle binary variables
     //    DBG_ASSERT(niv == 0); // Cannot handle integer variables
     ASSERT_EXCEPTION(allow_discrete || (nbv == 0 && niv == 0),
-		     IpoptException, 
-		     "Discrete variables not allowed when the allow_discrete flag is false, "
-		     "Either remove the integer variables, or change the flag in the constructor of AmplTNLP"
-		     );
+                     IpoptException,
+                     "Discrete variables not allowed when the allow_discrete flag is false, "
+                     "Either remove the integer variables, or change the flag in the constructor of AmplTNLP"
+                    );
     // n_con can be >= 0
     DBG_ASSERT(n_obj == 1); // Currently can handle only 1 objective
     DBG_ASSERT(nlo == 0 || nlo == 1); // Can handle nonlinear obj.
@@ -292,6 +292,11 @@ namespace Ipopt
 
     fint nerror = 0;
     objgrd(0, non_const_x_, grad_f, &nerror);
+    if (obj_sign_==-1) {
+      for (Index i=0; i<n; i++) {
+        grad_f[i] *= -1.;
+      }
+    }
     if (nerror == 0) {
       return true;
     }
@@ -551,7 +556,7 @@ namespace Ipopt
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl);
-    
+
     n_binaries = nbv;
     n_integers = niv;
   }
