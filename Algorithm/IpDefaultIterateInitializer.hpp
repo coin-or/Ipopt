@@ -70,12 +70,20 @@ namespace Ipopt
     Number bound_push_;
     /** Parameters for bumping x0 */
     Number bound_frac_;
+    /** Parameters for bumping initial bound multipliers */
+    Number mult_bound_push_;
     /** If max-norm of the initial equality constraint multiplier
      *  estimate is larger than this, the initial y_* variables are
      *  set to zero. */
-    Number laminitmax_;
+    Number lam_init_max_;
     /** Initial value for all bound mulitpliers. */
-    Number boundmultinitval_;
+    Number bound_mult_init_val_;
+    /** Option for indicating whether warms start is used.  Warm start
+     *  means here that the initial values of all variables are given
+     *  by the NLP.  The values obtained from the NLP are still
+     *  subject to the bound_push_, bound_frac_, mult_bound_push_
+     *  options. */
+    bool warm_start_init_point_;
     //@}
 
     /** object to be used for the initialization of the equality
