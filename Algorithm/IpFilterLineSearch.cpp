@@ -464,11 +464,13 @@ namespace Ipopt
                    dbg_verbosity);
 
     if (ls_always_accept_) {
-      //       // We call the evaluation of a trial point once here, because
-      //       // otherwise the SafeSlack mechanism in
-      //       // IpoptCalculatedQuantities complains (it currently only ever
-      //       // corrects trial point slacks)
-      //       Number trial_barr = IpCq().trial_barrier_obj();
+
+      // We call the evaluation at the trial point here, so that an
+      // exception will the thrown if there are problem during the
+      // evaluation of the functions (in that case, we want to further
+      // reduce the step size
+      Number trial_barr = IpCq().trial_barrier_obj();
+      Number trial_theta = IpCq().trial_constraint_violation();
       return true;
     }
 
