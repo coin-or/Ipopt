@@ -4,7 +4,8 @@
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Andreas Waechter     IBM    2005-03-17
+
 
 #ifndef __IPPARDISOSOLVERINTERFACE_HPP__
 #define __IPPARDISOSOLVERINTERFACE_HPP__

@@ -1,10 +1,10 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2005, International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Andreas Waechter     IBM    2005-03-17
 
 #include "IpPardisoSolverInterface.hpp"
 
@@ -168,7 +168,7 @@ namespace Ipopt
 
     // Do the symbolic facotrization
     ESymSolverStatus retval = SymbolicFactorization(ia, ja);
-    if (retval != SYMSOLVER_SUCCESS ) {
+    if (retval != SYMSOLVER_SUCCESS) {
       return retval;
     }
 
