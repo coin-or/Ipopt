@@ -189,6 +189,34 @@ namespace Ipopt
       theta_mu_ = 1.5;
     }
 
+    if (options.GetIntegerValue("nonmonotone_kkt_norm", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue>=1 && ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"nonmonotone_kkt_norm\": This value must be between 1 and 3.");
+      nonmonotone_kkt_norm_ = ivalue;
+    }
+    else if (options.GetIntegerValue("quality_function_norm", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue>=1 && ivalue<=4, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"quality_function_norm\": This value must be between 1 and 3.");
+      nonmonotone_kkt_norm_ = ivalue;
+    }
+    else {
+      nonmonotone_kkt_norm_ = 1;
+    }
+
+    if (options.GetIntegerValue("nonmonotone_kkt_centrality", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"nonmonotone_kkt_centrality\": This value must be between 0 and 3.");
+      nonmonotone_kkt_centrality_ = ivalue;
+    }
+    else if (options.GetIntegerValue("quality_function_centrality", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"quality_function_centrality\": This value must be between 0 and 3.");
+      nonmonotone_kkt_centrality_ = ivalue;
+    }
+    else {
+      nonmonotone_kkt_centrality_ = 0;
+    }
+
     init_dual_inf_ = -1.;
     init_primal_inf_ = -1.;
 
@@ -511,39 +539,108 @@ namespace Ipopt
   Number
   NonmonotoneMuUpdate::curr_norm_pd_system()
   {
-    Number dual_inf =
-      IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_1);
-    Number primal_inf =
-      IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_1);
-    Number complty =
-      IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_1);
-
-    // scale those values (to get the average)
     Index n_dual = IpData().curr_x()->Dim() + IpData().curr_s()->Dim();
-    dual_inf /= (Number)n_dual;
     Index n_pri = IpData().curr_y_c()->Dim() + IpData().curr_y_d()->Dim();
-    DBG_ASSERT(n_pri>0 || primal_inf==0.);
-    if (n_pri>0) {
-      primal_inf /= (Number)n_pri;
-    }
     Index n_comp = IpData().curr_z_L()->Dim() + IpData().curr_z_U()->Dim() +
                    IpData().curr_v_L()->Dim() + IpData().curr_v_U()->Dim();
-    DBG_ASSERT(n_comp>0 || complty==0.);
-    if (n_comp>0) {
-      complty /= (Number)n_comp;
+
+    Number dual_inf;
+    Number primal_inf;
+    Number complty;
+    switch (nonmonotone_kkt_norm_) {
+    case 1:
+      dual_inf =
+	IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_1);
+      primal_inf =
+	IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_1);
+      complty =
+	IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_1);
+      dual_inf /= (Number)n_dual;
+      DBG_ASSERT(n_pri>0 || primal_inf==0.);
+      if (n_pri>0) {
+	primal_inf /= (Number)n_pri;
+      }
+      DBG_ASSERT(n_comp>0 || complty==0.);
+      if (n_comp>0) {
+	complty /= (Number)n_comp;
+      }
+      break;
+    case 2:
+      dual_inf =
+	IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_2);
+      dual_inf *= dual_inf;
+      primal_inf =
+	IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_2);
+      primal_inf *= primal_inf;
+      complty =
+	IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_2);
+      complty *= complty;
+      dual_inf /= (Number)n_dual;
+      DBG_ASSERT(n_pri>0 || primal_inf==0.);
+      if (n_pri>0) {
+	primal_inf /= (Number)n_pri;
+      }
+      DBG_ASSERT(n_comp>0 || complty==0.);
+      if (n_comp>0) {
+	complty /= (Number)n_comp;
+      }
+      break;
+    case 3:
+      dual_inf =
+	IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
+      primal_inf =
+	IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
+      complty =
+	IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_MAX);
+      break;
+    case 4:
+      dual_inf =
+	IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_2);
+      primal_inf =
+	IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_2);
+      complty =
+	IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_2);
+      dual_inf /= sqrt(n_dual);
+      DBG_ASSERT(n_pri>0 || primal_inf==0.);
+      if (n_pri>0) {
+	primal_inf /= sqrt(n_pri);
+      }
+      DBG_ASSERT(n_comp>0 || complty==0.);
+      if (n_comp>0) {
+	complty /= sqrt(n_comp);
+      }
+      break;
     }
 
-    Number norm_pd_system = primal_inf + dual_inf + complty;
+    Number centrality = 0.;
+    if (nonmonotone_kkt_centrality_!=0) {
+      Number xi = IpCq().curr_centrality_measure();
+      switch (nonmonotone_kkt_centrality_) {
+      case 1:
+	centrality = -complty*log(xi);
+	break;
+      case 2:
+	centrality = complty/xi;
+      case 3:
+	centrality = complty/pow(xi,3);
+	break;
+      default:
+	DBG_ASSERT("Unknown value for nonmonotone_kkt_centrality_");
+      }
+    }
+    
+    Number kkt_error = primal_inf + dual_inf + complty + centrality;
 
     Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
-                   "In barrier update check:\n"
-                   "  average primal infeasibility: %15.6e\n"
-                   "    average dual infeasibility: %15.6e\n"
-                   "       average complementarity: %15.6e\n"
-                   "   scaled norm of pd equations: %15.6e\n",
-                   primal_inf, dual_inf, complty, norm_pd_system);
+                   "KKT error in barrier update check:\n"
+                   "  primal infeasibility: %15.6e\n"
+                   "    dual infeasibility: %15.6e\n"
+                   "       complementarity: %15.6e\n"
+                   "            centrality: %15.6e\n"
+                   "             kkt error: %15.6e\n",
+                   primal_inf, dual_inf, complty, centrality, kkt_error);
 
-    return norm_pd_system;
+    return kkt_error;
   }
 
   Number
