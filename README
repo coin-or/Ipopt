@@ -1,0 +1,57 @@
+These directories contain the beta version of a C++ reimplementation
+of the interior point NLP solver Ipopt.
+
+At this point, the user documentation is limited to this short README
+file, but more detailed information will be included in later
+releases.  If you would like to try this beta version, please contact
+one of the two main developers:
+
+  Andreas Waechter    andreasw@watson.ibm.com
+  Carl Laird          claird@andrew.cmu.edu
+
+At this point, the `configure' has been written for RedHat Linux 9
+using the GNU compilers, but we have also gotten it to work on other
+UNIX-like systems and compilers - type `./configure --help' to see how
+options can be changed.
+
+Most probably, something will not work when you try the steps below. :)
+So, please contact us if you would like to give this version a try!
+
+--------------------------------------------------------------------------
+
+Currently, this version requires some BLAS routines (`--with-blas'
+option of configure).  It also requires the Harwell subroutine MA27 -
+it has to be in a library "libhsl.a" somewhere in the default library
+search path, or in your $HOME/lib.  Finally, for the AMPL solver
+executable, you will need to put the AMPL solver library source code
+into
+
+COIN/Ipopt-devel/OTHERS/ASL/solvers
+
+(you need to create this directory) and in addition copy the files
+
+amplsolver.a
+arith.h
+stdio1.h
+
+(created on your system) in COIN/Ipopt-devel/OTHERS/ASL .
+
+If all this is in place, you should be able to create the Makefile
+with
+
+./configure  [possibly here with some options]
+
+and compile it with 
+
+make install
+
+After this, you will have the AMPL executable `ipopt' in the `bin'
+subdirectory, and you will find the library `libipopt.a' in the `lib'
+subdirectory.
+
+There is also an example file how you can link the new version with a
+Fortran program, see
+
+COIN/Ipopt-devel/Examples/Fortran_example
+
+It can be compiled with `make' .

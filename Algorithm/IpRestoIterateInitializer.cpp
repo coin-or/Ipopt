@@ -1,0 +1,298 @@
+// Copyright (C) 2004, International Business Machines and others.
+// All Rights Reserved.
+// This code is published under the Common Public License.
+//
+// $Id$
+//
+// Authors:  Andreas Waechter              IBM    2004-10-12
+
+#include "IpRestoIterateInitializer.hpp"
+#include "IpRestoIpoptNLP.hpp"
+
+namespace Ipopt
+{
+  static const Index dbg_verbosity = 0;
+
+  RestoIterateInitializer::RestoIterateInitializer
+  (const SmartPtr<EqMultiplierCalculator>& resto_eq_mult_calculator)
+      :
+      IterateInitializer(),
+      resto_eq_mult_calculator_(resto_eq_mult_calculator)
+  {}
+
+  bool RestoIterateInitializer::InitializeImpl(const OptionsList& options,
+      const std::string& prefix)
+  {
+    Number value = 0.0;
+    if (options.GetNumericValue("laminitmax", value, prefix)) {
+      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"laminitmax\": Value must be non-negative.");
+      laminitmax_ = value;
+    }
+    else {
+      laminitmax_ = 1e3;
+    }
+
+    bool retvalue = true;
+    if (IsValid(resto_eq_mult_calculator_)) {
+      retvalue = resto_eq_mult_calculator_->Initialize(Jnlst(),
+                 IpNLP(), IpData(),
+                 IpCq(), options, prefix);
+    }
+    return retvalue;
+  }
+
+  bool RestoIterateInitializer::SetInitialIterates()
+  {
+    DBG_START_METH("RestoIterateInitializer::SetInitialIterates",
+                   dbg_verbosity);
+
+    // Get a grip on the restoration phase NLP and obtain the pointers
+    // to the original NLP data
+    SmartPtr<RestoIpoptNLP> resto_ip_nlp =
+      dynamic_cast<RestoIpoptNLP*> (&IpNLP());
+    SmartPtr<IpoptNLP> orig_ip_nlp =
+      dynamic_cast<IpoptNLP*> (&resto_ip_nlp->OrigIpNLP());
+    SmartPtr<IpoptData> orig_ip_data =
+      dynamic_cast<IpoptData*> (&resto_ip_nlp->OrigIpData());
+    SmartPtr<IpoptCalculatedQuantities> orig_ip_cq =
+      dynamic_cast<IpoptCalculatedQuantities*> (&resto_ip_nlp->OrigIpCq());
+
+    // Set the value of the barrier parameter
+    Number resto_mu;
+    resto_mu = Max(orig_ip_data->curr_mu(),
+                   orig_ip_cq->curr_c()->Amax(),
+                   orig_ip_cq->curr_d_minus_s()->Amax());
+    IpData().Set_mu(resto_mu);
+
+    /////////////////////////////////////////////////////////////////////
+    //                   Initialize primal varialbes                   //
+    /////////////////////////////////////////////////////////////////////
+
+    // initialize the data structures in the restoration phase NLP
+    IpData().InitializeDataStructures(IpNLP(), false, false, false,
+                                      false, false, false, false);
+
+    SmartPtr<Vector> new_x = IpData().curr_x()->MakeNew();
+    SmartPtr<CompoundVector> Cnew_x =
+      dynamic_cast<CompoundVector*> (GetRawPtr(new_x));
+
+    // Set the trial x variables from the original NLP
+    Cnew_x->GetCompNonConst(0)->Copy(*orig_ip_data->curr_x());
+
+    // Compute the initial values for the n and p variables for the
+    // equality constraints
+    Number rho = resto_ip_nlp->Rho();
+    SmartPtr<Vector> nc = Cnew_x->GetCompNonConst(1);
+    SmartPtr<Vector> pc = Cnew_x->GetCompNonConst(2);
+    solve_quadratic(resto_mu, rho, *orig_ip_cq->curr_c(), *nc, *pc);
+    DBG_PRINT_VECTOR(2, "nc", *nc);
+    DBG_PRINT_VECTOR(2, "pc", *pc);
+
+    // DELETEME
+    SmartPtr<Vector> bla = nc->MakeNew();
+    bla->Copy(*orig_ip_cq->curr_c());
+    bla->Axpy(-1., *pc);
+    bla->Axpy(1., *nc);
+    DBG_PRINT_VECTOR(2, "bla", *bla);
+
+    // The initial values for the inequality n and p variables are
+    // trickier, since only some constraints have both n and p
+    // variables.  If they don't have both, the slack takes the role
+    // of the missing one.
+    SmartPtr<const Vector> d_L = orig_ip_nlp->d_L();
+    SmartPtr<const Matrix> Pd_L = orig_ip_nlp->Pd_L();
+    SmartPtr<const Vector> d_U = orig_ip_nlp->d_U();
+    SmartPtr<const Matrix> Pd_U = orig_ip_nlp->Pd_U();
+    // compute indicator vectors, that are 1. for those entries in d
+    // that have only lower, only upper, or both bounds, respectively
+    SmartPtr<Vector> ind_only_L = orig_ip_data->curr_y_d()->MakeNew();
+    SmartPtr<Vector> ind_only_U = orig_ip_data->curr_y_d()->MakeNew();
+    SmartPtr<Vector> ind_both = orig_ip_data->curr_y_d()->MakeNew();
+    SmartPtr<Vector> tmp = d_U->MakeNew();
+    tmp->Set(1.);
+    Pd_U->MultVector(1., *tmp, 0., *ind_only_U);
+    tmp = d_L->MakeNew();
+    tmp->Set(1.);
+    Pd_L->MultVector(1., *tmp, 0., *ind_only_L);
+    Pd_L->TransMultVector(1., *ind_only_U, 0., *tmp);
+    Pd_L->MultVector(1., *tmp, 0., *ind_both);
+    ind_only_L->Axpy(-1., *ind_both);
+    ind_only_U->Axpy(-1., *ind_both);
+    tmp = NULL; // free memory
+    DBG_PRINT_VECTOR(2, "ind_only_L", *ind_only_L);
+    DBG_PRINT_VECTOR(2, "ind_only_U", *ind_only_U);
+    DBG_PRINT_VECTOR(2, "ind_both", *ind_both);
+
+    // We now compute cvec to be
+    // a) d - s    for entries with both bounds
+    // b) d - d_L  for entries with only a lower bound
+    // c) d - d_U  for entries with only an upper bound
+    SmartPtr<Vector> cvec = ind_both->MakeNew();
+    cvec->Copy(*orig_ip_cq->curr_d());
+
+    // a)
+    SmartPtr<Vector> tmpfull = ind_both->MakeNew();
+    tmpfull->Copy(*orig_ip_data->curr_s());
+    tmpfull->ElementWiseMultiply(*ind_both);
+    cvec->Axpy(-1., *tmpfull);
+    // b)
+    Pd_L->MultVector(1., *d_L, 0., *tmpfull);
+    tmpfull->ElementWiseMultiply(*ind_only_L);
+    cvec->Axpy(-1., *tmpfull);
+    // c)
+    Pd_U->MultVector(1., *d_U, 0., *tmpfull);
+    tmpfull->ElementWiseMultiply(*ind_only_U);
+    cvec->Axpy(-1., *tmpfull);
+
+    // now solve the quadratic equation and get the pd, nd
+    SmartPtr<Vector> tmpfull2 = tmpfull->MakeNew();
+    SmartPtr<Vector> nd = Cnew_x->GetCompNonConst(3);
+    SmartPtr<Vector> pd = Cnew_x->GetCompNonConst(4);
+    solve_quadratic(resto_mu, rho, *cvec, *tmpfull, *tmpfull2);
+    Pd_L->TransMultVector(1., *tmpfull, 0., *nd);
+    Pd_U->TransMultVector(1., *tmpfull2, 0., *pd);
+
+    // the new values for the slacks is takes as
+    // a) keep for those entries that have two bounds
+    // b) set to pfull + d_L for those with only lower bounds
+    // c) set to d_u - nfull for those with only upper bounds
+    SmartPtr<Vector> new_s = IpData().curr_s()->MakeNew();
+    // a)
+    new_s->Copy(*orig_ip_data->curr_s());
+    DBG_PRINT_VECTOR(2, "curr_s", *new_s);
+    new_s->ElementWiseMultiply(*ind_both);
+    // b)
+    Pd_L->MultVector(1., *d_L, 1., *tmpfull);
+    tmpfull->ElementWiseMultiply(*ind_only_L);
+    new_s->Axpy(1., *tmpfull);
+    // c)
+    Pd_U->MultVector(1., *d_U, -1., *tmpfull2);
+    tmpfull2->ElementWiseMultiply(*ind_only_U);
+    new_s->Axpy(1., *tmpfull2);
+
+    // Now set the primal trial variables
+    IpData().SetTrialPrimalVariables(*new_x, *new_s);
+
+    /////////////////////////////////////////////////////////////////////
+    //                   Initialize bound multipliers                  //
+    /////////////////////////////////////////////////////////////////////
+
+    SmartPtr<Vector> new_z_L = IpData().curr_z_L()->MakeNew();
+    SmartPtr<CompoundVector> Cnew_z_L =
+      dynamic_cast<CompoundVector*> (GetRawPtr(new_z_L));
+    DBG_ASSERT(IsValid(Cnew_z_L));
+    SmartPtr<Vector> new_z_U = IpData().curr_z_U()->MakeNew();
+    SmartPtr<Vector> new_v_L = IpData().curr_v_L()->MakeNew();
+    SmartPtr<Vector> new_v_U = IpData().curr_v_U()->MakeNew();
+
+    // multipliers for the original bounds are
+    SmartPtr<const Vector> orig_z_L = orig_ip_data->curr_z_L();
+    SmartPtr<const Vector> orig_z_U = orig_ip_data->curr_z_U();
+    SmartPtr<const Vector> orig_v_L = orig_ip_data->curr_v_L();
+    SmartPtr<const Vector> orig_v_U = orig_ip_data->curr_v_U();
+
+    // Set the new multipliers to the min of the penalty parameter Rho
+    // and their current value
+    SmartPtr<Vector> Cnew_z_L0 = Cnew_z_L->GetCompNonConst(0);
+    Cnew_z_L0->Set(rho);
+    Cnew_z_L0->ElementWiseMin(*orig_z_L);
+    new_z_U->Set(rho);
+    new_z_U->ElementWiseMin(*orig_z_U);
+    new_v_L->Set(rho);
+    new_v_L->ElementWiseMin(*orig_v_L);
+    new_v_U->Set(rho);
+    new_v_U->ElementWiseMin(*orig_v_U);
+
+    // Set the multipliers for the p and n bounds to the "primal" multipliers
+    SmartPtr<Vector> Cnew_z_L1 = Cnew_z_L->GetCompNonConst(1);
+    Cnew_z_L1->Set(resto_mu);
+    Cnew_z_L1->ElementWiseDivide(*nc);
+    SmartPtr<Vector> Cnew_z_L2 = Cnew_z_L->GetCompNonConst(2);
+    Cnew_z_L2->Set(resto_mu);
+    Cnew_z_L2->ElementWiseDivide(*pc);
+    SmartPtr<Vector> Cnew_z_L3 = Cnew_z_L->GetCompNonConst(3);
+    Cnew_z_L3->Set(resto_mu);
+    Cnew_z_L3->ElementWiseDivide(*nd);
+    SmartPtr<Vector> Cnew_z_L4 = Cnew_z_L->GetCompNonConst(4);
+    Cnew_z_L4->Set(resto_mu);
+    Cnew_z_L4->ElementWiseDivide(*pd);
+
+    // Set those initial values to be the trial values in Data
+    IpData().SetTrialBoundMultipliers(*new_z_L, *new_z_U, *new_v_L, *new_v_U);
+
+    /////////////////////////////////////////////////////////////////////
+    //           Initialize equality constraint multipliers            //
+    /////////////////////////////////////////////////////////////////////
+
+    if (IsValid(resto_eq_mult_calculator_) && laminitmax_>0.) {
+      // First move all the trial data into the current fields, since
+      // those values are needed to compute the initial values for
+      // the multipliers
+      SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
+      SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+      IpData().CopyTrialToCurrent();
+      y_c = IpData().curr_y_c()->MakeNew();
+      y_d = IpData().curr_y_d()->MakeNew();
+      bool retval = resto_eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
+      Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                     "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
+                     y_c->Amax(), y_d->Amax());
+      Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
+      if (!retval || laminitnrm > laminitmax_) {
+        y_c->Set(0.0);
+        y_d->Set(0.0);
+      }
+      IpData().SetTrialEqMultipliers(*y_c, *y_d);
+    }
+    else {
+      SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
+      SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+      y_c->Set(0.0);
+      y_d->Set(0.0);
+      IpData().SetTrialEqMultipliers(*y_c, *y_d);
+    }
+
+    DBG_PRINT_VECTOR(2, "y_c", *IpData().curr_y_c());
+    DBG_PRINT_VECTOR(2, "y_d", *IpData().curr_y_d());
+
+    DBG_PRINT_VECTOR(2, "z_L", *IpData().curr_z_L());
+    DBG_PRINT_VECTOR(2, "z_U", *IpData().curr_z_U());
+    DBG_PRINT_VECTOR(2, "v_L", *IpData().curr_v_L());
+    DBG_PRINT_VECTOR(2, "v_U", *IpData().curr_v_U());
+
+    // upgrade the trial to the current point
+    IpData().AcceptTrialPoint();
+
+    return true;
+  }
+
+  void
+  RestoIterateInitializer::solve_quadratic(Number rho, Number mu,
+      const Vector& c,
+      Vector& n,
+      Vector& p)
+  {
+    DBG_ASSERT(mu>.0 && rho>.0);
+
+    // a will be set to c - mu/rho e
+    SmartPtr<Vector> a = c.MakeNew();
+    a->Copy(c);
+    a->AddScalar(-mu/rho);
+
+    // First compute the elementwise square of a and store result in b
+    n.Copy(*a);
+    n.ElementWiseMultiply(*a);
+    // Now add the missing +(mu*c)/2*rho term and take the square root
+    n.Axpy(mu/(2.*rho), c);
+    n.ElementWiseSqrt();
+
+    // The final result is obtained by substracting a
+    n.Axpy(-1., *a);
+
+    // p is simply c - n
+    p.Copy(c);
+    p.Axpy(1., n);
+  }
+
+} // namespace Ipopt
