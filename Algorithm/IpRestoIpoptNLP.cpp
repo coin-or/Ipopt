@@ -87,13 +87,17 @@ namespace Ipopt
 
     DBG_PRINT((1, "Creating the x_space_\n"));
     // vector x
-    Index total_dim = orig_x_space->Dim() + 2*orig_c_space->Dim() + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+    Index total_dim = orig_x_space->Dim() + 2*orig_c_space->Dim()
+                      //orig  + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+                      + 2*orig_d_space->Dim();
     x_space_ = new CompoundVectorSpace(5, total_dim);
     x_space_->SetCompSpace(0, *orig_x_space);
     x_space_->SetCompSpace(1, *orig_c_space); // n_c
-    x_space_->SetCompSpace(2, *orig_c_space);  // p_c
-    x_space_->SetCompSpace(3, *orig_d_l_space); // n_d
-    x_space_->SetCompSpace(4, *orig_d_u_space); // p_d
+    x_space_->SetCompSpace(2, *orig_c_space); // p_c
+    x_space_->SetCompSpace(3, *orig_d_space); // n_d
+    x_space_->SetCompSpace(4, *orig_d_space); // p_d
+    //orig    x_space_->SetCompSpace(3, *orig_d_l_space); // n_d
+    //orig    x_space_->SetCompSpace(4, *orig_d_u_space); // p_d
 
     DBG_PRINT((1, "Setting the c_space_\n"));
     // vector c
@@ -105,13 +109,17 @@ namespace Ipopt
 
     DBG_PRINT((1, "Creating the x_l_space_\n"));
     // vector x_L
-    total_dim = orig_x_l_space->Dim() + 2*orig_c_space->Dim() + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+    total_dim = orig_x_l_space->Dim() + 2*orig_c_space->Dim()
+                //orig      + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+                + 2*orig_d_space->Dim();
     x_l_space_ = new CompoundVectorSpace(5, total_dim);
     x_l_space_->SetCompSpace(0, *orig_x_l_space);
     x_l_space_->SetCompSpace(1, *orig_c_space); // n_c >=0
     x_l_space_->SetCompSpace(2, *orig_c_space); // p_c >=0
-    x_l_space_->SetCompSpace(3, *orig_d_l_space); // n_d >=0
-    x_l_space_->SetCompSpace(4, *orig_d_u_space); // p_d >=0
+    x_l_space_->SetCompSpace(3, *orig_d_space); // n_d >=0
+    x_l_space_->SetCompSpace(4, *orig_d_space); // p_d >=0
+    //orig    x_l_space_->SetCompSpace(3, *orig_d_l_space); // n_d >=0
+    //orig    x_l_space_->SetCompSpace(4, *orig_d_u_space); // p_d >=0
 
     DBG_PRINT((1, "Setting the x_u_space_\n"));
     // vector x_U
@@ -119,19 +127,27 @@ namespace Ipopt
 
     DBG_PRINT((1, "Creating the px_l_space_\n"));
     // matrix px_l
-    Index total_rows = orig_x_space->Dim() + 2*orig_c_space->Dim() + orig_d_l_space->Dim() + orig_d_u_space->Dim();
-    Index total_cols = orig_x_l_space->Dim() + 2*orig_c_space->Dim() + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+    Index total_rows = orig_x_space->Dim() + 2*orig_c_space->Dim()
+                       //orig      + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+                       + 2*orig_d_space->Dim();
+    Index total_cols = orig_x_l_space->Dim() + 2*orig_c_space->Dim()
+                       //orig      + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+                       + 2*orig_d_space->Dim();
     px_l_space_ = new CompoundMatrixSpace(5, 5, total_rows, total_cols);
     px_l_space_->SetBlockRows(0, orig_x_space->Dim());
     px_l_space_->SetBlockRows(1, orig_c_space->Dim());
     px_l_space_->SetBlockRows(2, orig_c_space->Dim());
-    px_l_space_->SetBlockRows(3, orig_d_l_space->Dim());
-    px_l_space_->SetBlockRows(4, orig_d_u_space->Dim());
+    px_l_space_->SetBlockRows(3, orig_d_space->Dim());
+    px_l_space_->SetBlockRows(4, orig_d_space->Dim());
+    //orig    px_l_space_->SetBlockRows(3, orig_d_l_space->Dim());
+    //orig    px_l_space_->SetBlockRows(4, orig_d_u_space->Dim());
     px_l_space_->SetBlockCols(0, orig_x_l_space->Dim());
     px_l_space_->SetBlockCols(1, orig_c_space->Dim());
     px_l_space_->SetBlockCols(2, orig_c_space->Dim());
-    px_l_space_->SetBlockCols(3, orig_d_l_space->Dim());
-    px_l_space_->SetBlockCols(4, orig_d_u_space->Dim());
+    px_l_space_->SetBlockCols(3, orig_d_space->Dim());
+    px_l_space_->SetBlockCols(4, orig_d_space->Dim());
+    //orig    px_l_space_->SetBlockCols(3, orig_d_l_space->Dim());
+    //orig    px_l_space_->SetBlockCols(4, orig_d_u_space->Dim());
 
     px_l_space_->SetCompSpace(0, 0, *orig_px_l_space);
     // now setup the identity matrix
@@ -147,25 +163,33 @@ namespace Ipopt
     = new IdentityMatrixSpace(orig_c_space->Dim());
     px_l_space_->SetCompSpace(1, 1, *identity_mat_space_nc, true);
     px_l_space_->SetCompSpace(2, 2, *identity_mat_space_nc, true);
-    SmartPtr<const MatrixSpace> identity_mat_space_nd_l
-    = new IdentityMatrixSpace(orig_d_l_space->Dim());
-    px_l_space_->SetCompSpace(3, 3, *identity_mat_space_nd_l, true);
-    SmartPtr<const MatrixSpace> identity_mat_space_nd_u
-    = new IdentityMatrixSpace(orig_d_u_space->Dim());
-    px_l_space_->SetCompSpace(4, 4, *identity_mat_space_nd_u, true);
+    //orig    SmartPtr<const MatrixSpace> identity_mat_space_nd_l
+    //orig    = new IdentityMatrixSpace(orig_d_l_space->Dim());
+    SmartPtr<const MatrixSpace> identity_mat_space_nd
+    = new IdentityMatrixSpace(orig_d_space->Dim());
+    //orig    px_l_space_->SetCompSpace(3, 3, *identity_mat_space_nd_l, true);
+    px_l_space_->SetCompSpace(3, 3, *identity_mat_space_nd, true);
+    //orig    SmartPtr<const MatrixSpace> identity_mat_space_nd_u
+    //orig      = new IdentityMatrixSpace(orig_d_u_space->Dim());
+    //orig    px_l_space_->SetCompSpace(4, 4, *identity_mat_space_nd_u, true);
+    px_l_space_->SetCompSpace(4, 4, *identity_mat_space_nd, true);
 
     DBG_PRINT((1, "Creating the px_u_space_\n"));
     // matrix px_u    px_u_space_->SetBlockRows(0, orig_x_space->Dim());
 
-    total_rows = orig_x_space->Dim() + 2*orig_c_space->Dim() + + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+    total_rows = orig_x_space->Dim() + 2*orig_c_space->Dim()
+                 //orig      + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+                 + 2*orig_d_space->Dim();
     total_cols = orig_x_u_space->Dim();
     DBG_PRINT((1, "total_rows = %d, total_cols = %d\n",total_rows, total_cols));
     px_u_space_ = new CompoundMatrixSpace(5, 1, total_rows, total_cols);
     px_u_space_->SetBlockRows(0, orig_x_space->Dim());
     px_u_space_->SetBlockRows(1, orig_c_space->Dim());
     px_u_space_->SetBlockRows(2, orig_c_space->Dim());
-    px_u_space_->SetBlockRows(3, orig_d_l_space->Dim());
-    px_u_space_->SetBlockRows(4, orig_d_u_space->Dim());
+    px_u_space_->SetBlockRows(3, orig_d_space->Dim());
+    px_u_space_->SetBlockRows(4, orig_d_space->Dim());
+    //orig    px_u_space_->SetBlockRows(3, orig_d_l_space->Dim());
+    //orig    px_u_space_->SetBlockRows(4, orig_d_u_space->Dim());
     px_u_space_->SetBlockCols(0, orig_x_u_space->Dim());
 
     px_u_space_->SetCompSpace(0, 0, *orig_px_u_space);
@@ -186,14 +210,18 @@ namespace Ipopt
     DBG_PRINT((1, "Creating the jac_c_space_\n"));
     // matrix jac_c
     total_rows = orig_c_space->Dim();
-    total_cols = orig_x_space->Dim() + 2*orig_c_space->Dim() + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+    total_cols = orig_x_space->Dim() + 2*orig_c_space->Dim()
+                 + 2*orig_d_space->Dim();
+    //orig      + orig_d_l_space->Dim() + orig_d_u_space->Dim();
     jac_c_space_ = new CompoundMatrixSpace(1, 5, total_rows, total_cols);
     jac_c_space_->SetBlockRows(0, orig_c_space->Dim());
     jac_c_space_->SetBlockCols(0, orig_x_space->Dim());
     jac_c_space_->SetBlockCols(1, orig_c_space->Dim());
     jac_c_space_->SetBlockCols(2, orig_c_space->Dim());
-    jac_c_space_->SetBlockCols(3, orig_d_l_space->Dim());
-    jac_c_space_->SetBlockCols(4, orig_d_u_space->Dim());
+    jac_c_space_->SetBlockCols(3, orig_d_space->Dim());
+    jac_c_space_->SetBlockCols(4, orig_d_space->Dim());
+    //orig    jac_c_space_->SetBlockCols(3, orig_d_l_space->Dim());
+    //orig    jac_c_space_->SetBlockCols(4, orig_d_u_space->Dim());
 
     jac_c_space_->SetCompSpace(0, 0, *orig_jac_c_space);
     jac_c_space_->SetCompSpace(0, 1, *identity_mat_space_nc, true);
@@ -203,31 +231,41 @@ namespace Ipopt
     DBG_PRINT((1, "Creating the jac_d_space_\n"));
     // matrix jac_d
     total_rows = orig_d_space->Dim();
-    total_cols = orig_x_space->Dim() + 2*orig_c_space->Dim() + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+    total_cols = orig_x_space->Dim() + 2*orig_c_space->Dim()
+                 + 2*orig_d_space->Dim();
+    //orig      + orig_d_l_space->Dim() + orig_d_u_space->Dim();
     jac_d_space_ = new CompoundMatrixSpace(1, 5, total_rows, total_cols);
     jac_d_space_->SetBlockRows(0, orig_d_space->Dim());
     jac_d_space_->SetBlockCols(0, orig_x_space->Dim());
     jac_d_space_->SetBlockCols(1, orig_c_space->Dim());
     jac_d_space_->SetBlockCols(2, orig_c_space->Dim());
-    jac_d_space_->SetBlockCols(3, orig_d_l_space->Dim());
-    jac_d_space_->SetBlockCols(4, orig_d_u_space->Dim());
+    jac_d_space_->SetBlockCols(3, orig_d_space->Dim());
+    jac_d_space_->SetBlockCols(4, orig_d_space->Dim());
+    //orig    jac_d_space_->SetBlockCols(3, orig_d_l_space->Dim());
+    //orig    jac_d_space_->SetBlockCols(4, orig_d_u_space->Dim());
 
     jac_d_space_->SetCompSpace(0, 0, *orig_jac_d_space);
     // Blocks (0,1) and (0,2) are zero'ed out
-    jac_d_space_->SetCompSpace(0, 3, *orig_pd_l_space, true);
-    SmartPtr<SumMatrixSpace> sum_pd_u
-    = new SumMatrixSpace(orig_d_space->Dim(), orig_d_u_space->Dim(), 1);
-    jac_d_space_->SetCompSpace(0, 4, *sum_pd_u, true);
+    jac_d_space_->SetCompSpace(0, 3, *identity_mat_space_nd, true);
+    jac_d_space_->SetCompSpace(0, 4, *identity_mat_space_nd, true);
+    //orig    jac_d_space_->SetCompSpace(0, 3, *orig_pd_l_space, true);
+    //orig    SmartPtr<SumMatrixSpace> sum_pd_u
+    //orig    = new SumMatrixSpace(orig_d_space->Dim(), orig_d_u_space->Dim(), 1);
+    //orig    jac_d_space_->SetCompSpace(0, 4, *sum_pd_u, true);
 
     DBG_PRINT((1, "Creating the h_space_\n"));
     // matrix h
-    total_dim = orig_x_space->Dim() + 2*orig_c_space->Dim() + orig_d_l_space->Dim() + orig_d_u_space->Dim();
+    total_dim = orig_x_space->Dim() + 2*orig_c_space->Dim()
+                + 2*orig_d_space->Dim();
+    //orig      + orig_d_l_space->Dim() + orig_d_u_space->Dim();
     h_space_ = new CompoundSymMatrixSpace(5, total_dim);
     h_space_->SetBlockDim(0, orig_x_space->Dim());
     h_space_->SetBlockDim(1, orig_c_space->Dim());
     h_space_->SetBlockDim(2, orig_c_space->Dim());
-    h_space_->SetBlockDim(3, orig_d_l_space->Dim());
-    h_space_->SetBlockDim(4, orig_d_u_space->Dim());
+    h_space_->SetBlockDim(3, orig_d_space->Dim());
+    h_space_->SetBlockDim(4, orig_d_space->Dim());
+    //orig    h_space_->SetBlockDim(3, orig_d_l_space->Dim());
+    //orig    h_space_->SetBlockDim(4, orig_d_u_space->Dim());
 
     SmartPtr<const MatrixSpace> sumsym_mat_space =
       new SumSymMatrixSpace(orig_x_space->Dim(), 2);
@@ -323,10 +361,17 @@ namespace Ipopt
     x_ref_ = orig_x_space->MakeNew();
     x_ref_->Copy(*orig_ip_data_->curr_x());
 
-    // ToDo: Calculate DR properly
-    SmartPtr<DiagMatrixSpace> DR_x_space = new DiagMatrixSpace(orig_x_space->Dim());
+    SmartPtr<DiagMatrixSpace> DR_x_space
+    = new DiagMatrixSpace(orig_x_space->Dim());
     dr_x_ = orig_x_space->MakeNew();
     dr_x_->Set(1.0);
+    SmartPtr<Vector> tmp = dr_x_->MakeNew();
+    tmp->Copy(*x_ref_);
+    dr_x_->ElementWiseMax(*tmp);
+    tmp->Scal(-1.);
+    dr_x_->ElementWiseMax(*tmp);
+    dr_x_->ElementWiseReciprocal();
+    DBG_PRINT_VECTOR(2, "dr_x_", *dr_x_);
     DR_x_ = DR_x_space->MakeNewDiagMatrix();
     DR_x_->SetDiag(*dr_x_);
 
@@ -401,11 +446,16 @@ namespace Ipopt
     SmartPtr<const Vector> orig_d = orig_ip_nlp_->d(*x_only);
     SmartPtr<Vector> retPtr = d_space_->MakeNew();
     retPtr->Copy(*orig_d);
+    retPtr->Axpy(1., *nd_only);
+    retPtr->Axpy(-1., *pd_only);
+#ifdef orig
+
     SmartPtr<Vector> tmp = orig_d->MakeNew();
     orig_ip_nlp_->Pd_L()->MultVector(1.0, *nd_only, 0.0, *tmp);
     retPtr->Axpy(1.0, *tmp);
     orig_ip_nlp_->Pd_U()->MultVector(1.0, *pd_only, 0.0, *tmp);
     retPtr->Axpy(-1.0, *tmp);
+#endif
 
     return GetRawPtr(retPtr);
   }
@@ -468,6 +518,14 @@ namespace Ipopt
 
     // (0,1) and (0,2) blocks are zero (NULL)
 
+    // set the factor for the identity matrix for the pd variables
+    // (likr in jac_c)
+    SmartPtr<Matrix> jac_d_pd_mat = retPtr->GetCompNonConst(0,4);
+    IdentityMatrix* jac_d_pd = dynamic_cast<IdentityMatrix*>(GetRawPtr(jac_d_pd_mat));
+    DBG_ASSERT(jac_d_pd);
+    jac_d_pd->SetFactor(-1.0);
+
+#ifdef orig
     // Jacobian of resto d w.r.t. n_d is Pd_L
     retPtr->SetComp(0, 3, *orig_ip_nlp_->Pd_L());
 
@@ -477,6 +535,7 @@ namespace Ipopt
     SumMatrix* jac_d_pd_sum = dynamic_cast<SumMatrix*>(GetRawPtr(jac_d_pd_mat));
     DBG_ASSERT(jac_d_pd_sum);
     jac_d_pd_sum->SetTerm(0, -1.0, *orig_ip_nlp_->Pd_U());
+#endif
 
     return GetRawPtr(retPtr);
   }
