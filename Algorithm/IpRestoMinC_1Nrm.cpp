@@ -117,6 +117,11 @@ namespace Ipopt
 
       retval = 0;
     }
+    else if (resto_status == IpoptAlgorithm::MAXITER_EXCEEDED) {
+      //ToDo
+      THROW_EXCEPTION(IpoptException, "Maximal number of iterations exceeded in restoration phase.");
+      retval = 1;
+    }
     else {
       Jnlst().Printf(J_ERROR, J_MAIN, "Sorry, things failed ?!?!\n");
       retval = 1;
