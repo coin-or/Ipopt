@@ -220,7 +220,7 @@ namespace Ipopt
     Int max_cache_size_;
 
     /** list of currently cached results. */
-    mutable std::list<DependentResult<T>*> cached_results_;
+    mutable std::list<DependentResult<T>*>* cached_results_;
 
     /** internal method for removing stale DependentResults from the
      *  list.  It is called at the beginning of every
@@ -449,7 +449,8 @@ namespace Ipopt
   template <class T>
   CachedResults<T>::CachedResults(Int max_cache_size)
       :
-      max_cache_size_(max_cache_size)
+    max_cache_size_(max_cache_size),
+    cached_results_(NULL)
   {
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::CachedResults", dbg_verbosity);
@@ -462,8 +463,11 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::!CachedResults()", dbg_verbosity);
 #endif
-    for (typename std::list< DependentResult<T>* >::iterator iter = cached_results_.begin(); iter != cached_results_.end(); iter++) {
-      delete *iter;
+    if (cached_results_) {
+      for (typename std::list< DependentResult<T>* >::iterator iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
+	delete *iter;
+      }
+      delete cached_results_;
     }
     /*
     while (!cached_results_.empty()) {
@@ -487,15 +491,18 @@ namespace Ipopt
 
     // insert the new one here
     DependentResult<T>* newResult = new DependentResult<T>(result, dependents, scalar_dependents);
-    cached_results_.push_front(newResult);
+    if (!cached_results_) {
+      cached_results_ = new std::list<DependentResult<T>*>;
+    }
+    cached_results_->push_front(newResult);
 
     // keep the list small enough
     if (max_cache_size_ >= 0) { // if negative, allow infinite cache
       // non-negative - limit size of list to max_cache_size
-      DBG_ASSERT((Int)cached_results_.size()<=max_cache_size_+1);
-      if ((Int)cached_results_.size() > max_cache_size_) {
-	delete cached_results_.back();
-	cached_results_.pop_back();
+      DBG_ASSERT((Int)cached_results_->size()<=max_cache_size_+1);
+      if ((Int)cached_results_->size() > max_cache_size_) {
+	delete cached_results_->back();
+	cached_results_->pop_back();
       }
     }
 
@@ -520,11 +527,13 @@ namespace Ipopt
     DBG_START_METH("CachedResults<T>::GetCachedResult", dbg_verbosity);
 #endif
 
+    if (!cached_results_) return false;
+
     CleanupInvalidatedResults();
 
     bool retValue = false;
     typename std::list< DependentResult<T>* >::const_iterator iter;
-    for (iter = cached_results_.begin(); iter != cached_results_.end(); iter++) {
+    for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
       if ((*iter)->DependentsIdentical(dependents, scalar_dependents)) {
         retResult = (*iter)->GetResult();
         retValue = true;
@@ -638,14 +647,16 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::CleanupInvalidatedResults", dbg_verbosity);
 #endif
+    if (!cached_results_) return;
+
     typename std::list< DependentResult<T>* >::iterator iter;
-    for (iter = cached_results_.begin(); iter != cached_results_.end(); iter++) {
+    for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
       if ( (*iter)->IsStale() ) {
         typename std::list< DependentResult<T>* >::iterator
         iter_to_remove = iter;
         iter--;
         DependentResult<T>* result_to_delete = (*iter_to_remove);
-        cached_results_.erase(iter_to_remove);
+        cached_results_->erase(iter_to_remove);
         delete result_to_delete;
       }
     }
@@ -656,10 +667,17 @@ namespace Ipopt
   {
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::DebugPrintCachedResults", dbg_verbosity);
-    typename std::list< DependentResult<T>* >::const_iterator iter;
-    DBG_PRINT((2,"Current set of cached results:\n"));
-    for (iter = cached_results_.begin(); iter != cached_results_.end(); iter++) {
-      DBG_PRINT((2,"  DependentResult:0x%x\n", (*iter)));
+    if (DBG_VERBOSITY()>=2 ) {
+      if (!chached_results_) {
+	DBG_PRINT((2,"  DependentResult:0x%x\n", (*iter)));
+      }
+      else {
+	typename std::list< DependentResult<T>* >::const_iterator iter;
+	DBG_PRINT((2,"Current set of cached results:\n"));
+	for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
+	  DBG_PRINT((2,"  DependentResult:0x%x\n", (*iter)));
+	}
+      }
     }
 #endif
   }
