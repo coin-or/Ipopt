@@ -110,6 +110,28 @@ namespace Ipopt
     curr_v_L_ = ConstPtr(new_v_L);
     curr_v_U_ = ConstPtr(new_v_U);
 
+    // Set the pointers for storing steps to NULL
+    delta_x_ = NULL;
+    delta_s_ = NULL;
+    delta_y_c_ = NULL;
+    delta_y_d_ = NULL;
+    delta_z_L_ = NULL;
+    delta_z_U_ = NULL;
+    delta_v_L_ = NULL;
+    delta_v_U_ = NULL;
+    
+    // Set the pointers for storing steps to NULL
+    delta_aff_x_ = NULL;
+    delta_aff_s_ = NULL;
+    delta_aff_y_c_ = NULL;
+    delta_aff_y_d_ = NULL;
+    delta_aff_z_L_ = NULL;
+    delta_aff_z_U_ = NULL;
+    delta_aff_v_L_ = NULL;
+    delta_aff_v_U_ = NULL;
+    
+
+    /*
     // create structures for the deltas (uninitialized)
     delta_x_ = curr_x_->MakeNew();
     delta_s_ = curr_s_->MakeNew();
@@ -130,6 +152,7 @@ namespace Ipopt
     delta_z_U_->Set(0.0);
     delta_v_L_->Set(0.0);
     delta_v_U_->Set(0.0);
+    */
 
     have_prototypes_ = true;
     have_deltas_ = false;
@@ -366,8 +389,18 @@ namespace Ipopt
     trial_v_L_ = NULL;
     trial_v_U_ = NULL;
 
-    // ToDo that should be handled better
+    // Free the memory for the affine-scaling step
+    delta_aff_x_ = NULL;
+    delta_aff_s_ = NULL;
+    delta_aff_y_c_ = NULL;
+    delta_aff_y_d_ = NULL;
+    delta_aff_z_L_ = NULL;
+    delta_aff_z_U_ = NULL;
+    delta_aff_v_L_ = NULL;
+    delta_aff_v_U_ = NULL;
+
     have_deltas_ = false;
+    have_affine_deltas_ = false;
   }
 
 } // namespace Ipopt
