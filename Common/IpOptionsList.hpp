@@ -123,6 +123,12 @@ namespace Ipopt
     /** Default destructor */
     virtual ~OptionsList()
     {}
+
+    /** Overloaded Equals Operator */
+    void operator=(const OptionsList& source)
+    {
+      options_ = source.options_;
+    }
     //@}
 
     /** @name Exceptions that can be used to indicate errors with
@@ -170,8 +176,6 @@ namespace Ipopt
     /** Default Constructor */
     //    OptionsList();
 
-    /** Overloaded Equals Operator */
-    void operator=(const OptionsList&);
     //@}
 
     /** map for storing the options */
