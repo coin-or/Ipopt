@@ -68,7 +68,6 @@ namespace Ipopt
     Number mu_max_;
     Number mu_min_;
     Number tau_min_;
-    Number tau_max_;
     Number mu_safeguard_exp_;
     Number mu_safeguard_factor_; //ToDo don't need that?
     Number fixed_mu_avrg_factor_;
@@ -125,8 +124,8 @@ namespace Ipopt
      *  new fixed mu phase. */
     Number NewFixedMu();
     /** Compute value for the fraction-to-the-boundary parameter given
-     *  mu */
-    Number Compute_tau(Number mu);
+     *  mu in the monotone phase */
+    Number Compute_tau_monotone(Number mu);
 
     /** Method for computing the 1-norm of the primal dual system at
      *  the current point.  The individual components (dual
