@@ -114,8 +114,12 @@ namespace Ipopt
       expanded_pos_(NULL),
       compressed_pos_(NULL)
   {
-    expanded_pos_  = new Index[NCols()];
-    compressed_pos_ = new Index[NRows()];
+    if(NCols()>0) {
+      expanded_pos_  = new Index[NCols()];
+    }
+    if(NRows()>0) {
+      compressed_pos_ = new Index[NRows()];
+    }
     for (Index j=0; j<NRows(); j++) {
       compressed_pos_[j] = -1;
     }
