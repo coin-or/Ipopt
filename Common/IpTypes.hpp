@@ -24,6 +24,7 @@ namespace Ipopt
     Maximum_Iterations_Exceeded,
     Solve_Failed,
     NonIpopt_Exception_Thrown,
+    Insufficient_Memory,
     Internal_Error
   };
 
