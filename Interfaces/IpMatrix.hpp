@@ -67,11 +67,11 @@ namespace Ipopt
      *  those should be specially implemented.
      */
     //@{
-    /** X = beta*X + alpha*(Matrix S^{-1} Z).  Should be implemented
+    /** X = X + alpha*(Matrix S^{-1} Z).  Should be implemented
      *  efficiently for the ExansionMatrix
      */
     void AddMSinvZ(Number alpha, const Vector& S, const Vector& Z,
-		   Number beta, Vector& X) const;
+		   Vector& X) const;
 
     /** X = S^{-1} (r + alpha*Z*M^Td).   Should be implemented
      *  efficiently for the ExansionMatrix
@@ -113,12 +113,12 @@ namespace Ipopt
      */
     virtual void TransMultVectorImpl(Number alpha, const Vector& x, Number beta, Vector& y) const =0;
 
-    /** X = beta*X + alpha*(Matrix S^{-1} Z).  Prototype for this
+    /** X = X + alpha*(Matrix S^{-1} Z).  Prototype for this
      *  specialize method is provided, but for efficient
      *  implementation it should be overloaded for the expansion matrix.
      */
     virtual void AddMSinvZImpl(Number alpha, const Vector& S, const Vector& Z,
-			       Number beta, Vector& X) const;
+			       Vector& X) const;
 
     /** X = S^{-1} (r + alpha*Z*M^Td).   Should be implemented
      *  efficiently for the ExansionMatrix.
