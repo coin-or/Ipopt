@@ -17,12 +17,12 @@ namespace Ipopt
       :
       reference_count_(0)
   {
-    DBG_START_METH("ReferencedObject::ReferencedObject()", dbg_verbosity);
+    //    DBG_START_METH("ReferencedObject::ReferencedObject()", dbg_verbosity);
   }
 
   ReferencedObject::~ReferencedObject()
   {
-    DBG_START_METH("ReferencedObject::~ReferencedObject()", dbg_verbosity);
+    //    DBG_START_METH("ReferencedObject::~ReferencedObject()", dbg_verbosity);
     DBG_ASSERT(reference_count_ == 0);
   }
 
