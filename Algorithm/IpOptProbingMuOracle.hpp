@@ -4,7 +4,7 @@
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-11-12
+// Authors:  Andreas Waechter             IBM    2004-11-12
 
 #ifndef __IPOPTPROBINGMUORACLE_HPP__
 #define __IPOPTPROBINGMUORACLE_HPP__
@@ -67,27 +67,56 @@ namespace Ipopt
      */
     // ToDo Replace pointers by references
     Number CalculateQualityFunction(Number sigma,
-				    const Vector& step_aff_x,
-				    const Vector& step_aff_s,
-				    const Vector& step_aff_y_c,
-				    const Vector& step_aff_y_d,
-				    const Vector& step_aff_z_L,
-				    const Vector& step_aff_z_U,
-				    const Vector& step_aff_v_L,
-				    const Vector& step_aff_v_U,
-				    const Vector& step_cen_x,
-				    const Vector& step_cen_s,
-				    const Vector& step_cen_y_c,
-				    const Vector& step_cen_y_d,
-				    const Vector& step_cen_z_L,
-				    const Vector& step_cen_z_U,
-				    const Vector& step_cen_v_L,
-				    const Vector& step_cen_v_U);
+                                    const Vector& step_aff_x,
+                                    const Vector& step_aff_s,
+                                    const Vector& step_aff_y_c,
+                                    const Vector& step_aff_y_d,
+                                    const Vector& step_aff_z_L,
+                                    const Vector& step_aff_z_U,
+                                    const Vector& step_aff_v_L,
+                                    const Vector& step_aff_v_U,
+                                    const Vector& step_cen_x,
+                                    const Vector& step_cen_s,
+                                    const Vector& step_cen_y_c,
+                                    const Vector& step_cen_y_d,
+                                    const Vector& step_cen_z_L,
+                                    const Vector& step_cen_z_U,
+                                    const Vector& step_cen_v_L,
+                                    const Vector& step_cen_v_U);
+
+    /** Auxilliary function performing the golden bisection */
+    Number PerformGoldenBisection(Number sigma_up,
+                                  Number sigma_lo,
+                                  Number tol,
+                                  const Vector& step_aff_x,
+                                  const Vector& step_aff_s,
+                                  const Vector& step_aff_y_c,
+                                  const Vector& step_aff_y_d,
+                                  const Vector& step_aff_z_L,
+                                  const Vector& step_aff_z_U,
+                                  const Vector& step_aff_v_L,
+                                  const Vector& step_aff_v_U,
+                                  const Vector& step_cen_x,
+                                  const Vector& step_cen_s,
+                                  const Vector& step_cen_y_c,
+                                  const Vector& step_cen_y_d,
+                                  const Vector& step_cen_z_L,
+                                  const Vector& step_cen_z_U,
+                                  const Vector& step_cen_v_L,
+                                  const Vector& step_cen_v_U);
 
     /** @name Algorithmic parameters */
     //@{
-    /** safeguarding upper bound on centering parameter sigma */
+    /** Upper bound on centering parameter sigma */
     Number sigma_max_;
+    /** Norm to be used for the quality function. 1: 1-norm, 2: 2-norm */
+    Index quality_function_norm_;
+    /** Flag indicating whether the components of the quality function
+     *  should be normalized. */
+    bool quality_function_normalized_;
+    /** Flag indicating how centrality should be involved in the
+     *  quality function */
+    Index quality_function_centrality_;
     //@}
 
     /** @name scaling values */
