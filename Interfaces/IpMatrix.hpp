@@ -77,10 +77,7 @@ namespace Ipopt
     virtual void Print(FILE* fp, std::string name, Index indent, std::string prefix) const;
 
     /** Return the owner MatrixSpace*/
-    SmartPtr<const MatrixSpace> OwnerSpace() const
-    {
-      return owner_space_;
-    }
+    SmartPtr<const MatrixSpace> OwnerSpace() const;
 
   protected:
     /** @name implementation methods (derived classes MUST
@@ -203,6 +200,12 @@ namespace Ipopt
   Index  Matrix::NCols() const
   {
     return owner_space_->NCols();
+  }
+  
+  inline
+  SmartPtr<const MatrixSpace> Matrix::OwnerSpace() const
+  {
+    return owner_space_;
   }
 
 } // namespace Ipopt

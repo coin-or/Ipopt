@@ -143,10 +143,7 @@ namespace Ipopt
     Index Dim() const;
 
     /** Return the owner VectorSpace*/
-    SmartPtr<const VectorSpace> OwnerSpace() const
-    {
-      return owner_space_;
-    }
+    SmartPtr<const VectorSpace> OwnerSpace() const;
     //@}
 
     /** @name Output methods
@@ -516,6 +513,11 @@ namespace Ipopt
     PrintImpl(fp, name, indent, prefix);
   }
 
+  inline
+  SmartPtr<const VectorSpace> Vector::OwnerSpace() const
+  {
+    return owner_space_;
+  }
 
 } // namespace Ipopt
 

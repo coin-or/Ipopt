@@ -192,7 +192,7 @@ namespace Ipopt
     return true;
   }
 
-  bool AmplTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u, Index m, Number* d_l, Number* d_u)
+  bool AmplTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u, Index m, Number* g_l, Number* g_u)
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
@@ -206,8 +206,8 @@ namespace Ipopt
     }
 
     for (Index i=0; i<m; i++) {
-      d_l[i] = LUrhs[2*i];
-      d_u[i] = LUrhs[2*i+1];
+      g_l[i] = LUrhs[2*i];
+      g_u[i] = LUrhs[2*i+1];
     }
 
     return true;
