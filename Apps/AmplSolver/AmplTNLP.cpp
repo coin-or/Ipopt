@@ -552,13 +552,26 @@ namespace Ipopt
     delete [] cmessage;
   }
 
-  void AmplTNLP::get_discrete_info(Index& n_binaries, Index& n_integers) const
+  void AmplTNLP::get_discrete_info(Index& nlvb_,
+				   Index& nlvbi_,
+				   Index& nlvc_,
+				   Index& nlvci_,
+				   Index& nlvo_,
+				   Index& nlvoi_,
+				   Index& nbv_,
+				   Index& niv_) const
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl);
 
-    n_binaries = nbv;
-    n_integers = niv;
+    nlvb_ = nlvb;
+    nlvbi_ = nlvbi;
+    nlvc_ = nlvc;
+    nlvci_ = nlvci;
+    nlvo_ = nlvo;
+    nlvoi_ = nlvoi;
+    nbv_ = nbv;
+    niv_ = niv;
   }
 
   AmplSuffixHandler::AmplSuffixHandler()

@@ -110,8 +110,17 @@ namespace Ipopt
 
     /** ampl orders the variables like (continuous, binary, integer).
      *  This method gives the number of binary and integer variables.
+     *  For details, see Tables 3 and 4 in "Hooking Your Solver to
+     *  AMPL"
      */
-    void get_discrete_info(Index& n_binaries, Index& n_integers) const;
+    void get_discrete_info(Index& nlvb_,
+			   Index& nlvbi_,
+			   Index& nlvc_,
+			   Index& nlvci_,
+			   Index& nlvo_,
+			   Index& nlvoi_,
+			   Index& nbv_,
+			   Index& niv_) const;
     //@}
 
   private:
