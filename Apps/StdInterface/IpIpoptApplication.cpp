@@ -16,6 +16,8 @@
 
 namespace Ipopt
 {
+  DBG_SET_VERBOSITY(0);
+
   IpoptApplication::IpoptApplication()
       :
       read_params_dat_(true),
@@ -24,10 +26,16 @@ namespace Ipopt
       report_statistics_(true),
       jnlst_(new Journalist()),
       options_(new OptionsList())
-  {}
+  {
+    DBG_START_METH("IpoptApplication::IpoptApplication()",
+                   dbg_verbosity);
+  }
 
   IpoptApplication::~IpoptApplication()
-  {}
+  {
+    DBG_START_METH("IpoptApplication::~IpoptApplication()",
+                   dbg_verbosity);
+  }
 
   ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp)
   {
@@ -75,7 +83,7 @@ namespace Ipopt
 
 # ifdef IP_DEBUG
 
-    Journal* dbg_jrnl = jnlst_->AddJournal("Debug", "debug.out", J_DETAILED);
+    Journal* dbg_jrnl = jnlst_->AddJournal("Debug", "debug.out", J_SUMMARY);
     dbg_jrnl->SetPrintLevel(J_DBG, J_ALL);
 # endif
 
@@ -100,6 +108,16 @@ namespace Ipopt
       stdout_jrnl->SetAllPrintLevels(print_level);
       stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
     }
+
+#ifdef IP_DEBUG
+    // Set printlevel for debug
+    if (options_->GetIntegerValue("debug_print_level", ivalue, "")) {
+      ivalue = Max(0, Min(ivalue, ((Index)J_LAST_LEVEL)-1));
+      EJournalLevel debug_print_level = (EJournalLevel)ivalue;
+      dbg_jrnl->SetAllPrintLevels(debug_print_level);
+      dbg_jrnl->SetPrintLevel(J_DBG, J_ALL);
+    }
+#endif
 
     // Open an output file if required
     std::string output_filename;

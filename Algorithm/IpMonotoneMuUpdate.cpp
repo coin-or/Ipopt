@@ -26,11 +26,16 @@ namespace Ipopt
       linesearch_(linesearch),
       initialized_(false)
   {
+    DBG_START_METH("MonotoneMuUpdate::MonotoneMuUpdate",
+                   dbg_verbosity);    
     DBG_ASSERT(IsValid(linesearch_));
   }
 
   MonotoneMuUpdate::~MonotoneMuUpdate()
-  {}
+  {
+    DBG_START_METH("MonotoneMuUpdate::~MonotoneMuUpdate",
+                   dbg_verbosity);    
+  }
 
   bool MonotoneMuUpdate::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)

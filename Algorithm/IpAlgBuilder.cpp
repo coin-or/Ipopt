@@ -30,12 +30,15 @@
 
 namespace Ipopt
 {
+  DBG_SET_VERBOSITY(0);
 
   SmartPtr<IpoptAlgorithm>
   AlgorithmBuilder::BuildBasicAlgorithm(const Journalist& jnlst,
                                         const OptionsList& options,
                                         const std::string& prefix)
   {
+    DBG_START_FUN("AlgorithmBuilder::BuildBasicAlgorithm",
+		  dbg_verbosity);
     // Create the convergence check
     SmartPtr<ConvergenceCheck> convCheck =
       new OptimalityErrorConvergenceCheck();
@@ -167,6 +170,11 @@ namespace Ipopt
     // Create the line search to be used by the main algorithm
     SmartPtr<FilterLineSearch> lineSearch =
       new FilterLineSearch(GetRawPtr(resto_phase), GetRawPtr(PDSolver));
+
+    // The following cross reference is not good: We have to store a
+    // pointer to the lineSearch object in resto_convCheck as a
+    // non-SmartPtr to make sure that things are properly deleted when
+    // the IpoptAlgorithm return by the Builder is destructed.
     resto_convCheck->SetOrigFilterLineSearch(*lineSearch);
 
     // Create the mu update that will be used by the main algorithm
