@@ -396,12 +396,12 @@ namespace Ipopt
 
         accept = resto_phase_->PerformRestoration();
         if (!accept) {
-          DBG_ASSERT(false && "Failed restoration phase!!!");
+          THROW_EXCEPTION(IpoptException, "Failed restoration phase!!!");
         }
       }
       else {
         //ToDo
-        DBG_ASSERT(false && "No Restoration Phase given to this Filter Line Search Object!");
+        THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Filter Line Search Object!");
       }
     }
     else {
