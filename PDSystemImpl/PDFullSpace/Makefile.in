@@ -58,6 +58,7 @@ libpdfullspace_a_LIBADD =
 am_libpdfullspace_a_OBJECTS = IpAugRestoSystemSolver.$(OBJEXT) \
 	IpStdAugSystemSolver.$(OBJEXT) IpAugTSystemSolver.$(OBJEXT) \
 	IpLeastSquareMults.$(OBJEXT) IpMa27SymLinearSolver.$(OBJEXT) \
+	IpMc19SymTScalingMethod.$(OBJEXT) \
 	IpPDFullSpaceSolver.$(OBJEXT) IpTripletHelper.$(OBJEXT)
 libpdfullspace_a_OBJECTS = $(am_libpdfullspace_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
@@ -67,6 +68,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/IpAugTSystemSolver.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpLeastSquareMults.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpMa27SymLinearSolver.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpMc19SymTScalingMethod.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpPDFullSpaceSolver.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpStdAugSystemSolver.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpTripletHelper.Po
@@ -192,6 +194,7 @@ libpdfullspace_a_SOURCES = \
 	IpAugTSystemSolver.cpp IpAugTSystemSolver.hpp \
 	IpLeastSquareMults.hpp IpLeastSquareMults.cpp \
 	IpMa27SymLinearSolver.hpp IpMa27SymLinearSolver.cpp \
+	IpMc19SymTScalingMethod.hpp IpMc19SymTScalingMethod.cpp \
 	IpPDFullSpaceSolver.cpp	IpPDFullSpaceSolver.hpp \
 	IpTripletHelper.hpp IpTripletHelper.cpp \
 	IpSymLinearSolver.hpp 
@@ -205,6 +208,7 @@ ASTYLE_SOURCES = \
 	IpAugTSystemSolver.cppbak IpAugTSystemSolver.hppbak \
 	IpLeastSquareMults.hppbak IpLeastSquareMults.cppbak \
 	IpMa27SymLinearSolver.hppbak IpMa27SymLinearSolver.cppbak \
+	IpMc19SymTScalingMethod.hppbak IpMc19SymTScalingMethod.cppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpTripletHelper.hppbak IpTripletHelper.cppbak \
 	IpSymLinearSolver.hppbak
@@ -262,6 +266,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAugTSystemSolver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLeastSquareMults.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa27SymLinearSolver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19SymTScalingMethod.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDFullSpaceSolver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdAugSystemSolver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTripletHelper.Po@am__quote@
