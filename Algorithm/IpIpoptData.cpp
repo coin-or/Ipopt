@@ -21,6 +21,7 @@ namespace Ipopt
       tau_initialized_(false),
       initialize_called_(false),
       have_prototypes_(false),
+      free_mu_mode_(false),
 
       info_alpha_primal_(0.),
       info_alpha_primal_char_(' '),

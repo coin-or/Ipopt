@@ -378,6 +378,15 @@ namespace Ipopt
     {
       return tau_initialized_;
     }
+
+    void SetFreeMuMode(bool free_mu_mode)
+    {
+      free_mu_mode_ = free_mu_mode;
+    }
+    bool FreeMuMode() const
+    {
+      return free_mu_mode_;
+    }
     //@}
 
     /**@name Algorithm Parameters (these will later be
@@ -596,6 +605,8 @@ namespace Ipopt
     bool info_skip_output_;
     /** any string of characters for the end of the output line */
     std::string info_string_;
+    /** flag indicating whether the algorithm is in the free mu mode */
+    bool free_mu_mode_;
     //@}
 
     /**@name Default Compiler Generated Methods
