@@ -79,7 +79,9 @@ namespace Ipopt
                    "orig_curr_theta = %g, orig_trial_theta = %g, orig_trial_barr = %g\n",
                    orig_curr_theta, orig_trial_theta, orig_trial_barr);
 
-    if (orig_trial_theta > kappa_resto_*orig_curr_theta) {
+    // ToDo: In the following we might want to be more careful with the lower bound
+    Number orig_theta_max = Max(kappa_resto_*orig_curr_theta, orig_ip_data ->epsilon_tol());
+    if (orig_trial_theta > orig_theta_max) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "Point does not provide sufficient reduction w.r.t the original theta.\n");
       status = CONTINUE;
