@@ -46,8 +46,8 @@ namespace Ipopt
     }
 
     if (options.GetIntegerValue("quality_function_norm", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue==1 || ivalue==2, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"quality_function_norm\": This value must be 1 or 2.");
+      ASSERT_EXCEPTION(ivalue>=1 || ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"quality_function_norm\": This value must be between 1 and 3.");
       quality_function_norm_ = ivalue;
     }
     else {
@@ -86,6 +86,15 @@ namespace Ipopt
     }
     else {
       max_bisection_steps_ = 4;
+    }
+
+    if (options.GetNumericValue("bisection_tol", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0 && value <1., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"bisection_tol\": This value must be between 0 and 1.");
+      bisection_tol_ = value;
+    }
+    else {
+      bisection_tol_ = 1e-3;
     }
 
     if (quality_function_normalized_) {
@@ -288,10 +297,9 @@ namespace Ipopt
       // gives us the lower value of a quality function, using golden
       // bisection
 
-      Number tol = 1e-3;
       Number sigma_up = Min(1., sigma_max_);
       Number sigma_lo = 1e-9/avrg_compl;
-      sigma = PerformGoldenBisection(sigma_up, sigma_lo, tol,
+      sigma = PerformGoldenBisection(sigma_up, sigma_lo, bisection_tol_,
                                      *step_aff_x_L,
                                      *step_aff_x_U,
                                      *step_aff_s_L,
@@ -317,11 +325,11 @@ namespace Ipopt
 				     jac_cT_times_step_cen_y_c,
 				     jac_dT_times_step_cen_y_d);
 
-      if (sigma_max_ > 1. && sigma >= 1.-2*tol) {
+      if (sigma_max_ > 1. && sigma >= 1.-2*bisection_tol_) {
         // It seems that the optimal value might be larger than one.
         sigma_up = sigma_max_;
         sigma_lo = sigma;
-        sigma = PerformGoldenBisection(sigma_up, sigma_lo, tol,
+        sigma = PerformGoldenBisection(sigma_up, sigma_lo, bisection_tol_,
                                        *step_aff_x_L,
                                        *step_aff_x_U,
                                        *step_aff_s_L,
@@ -529,7 +537,7 @@ namespace Ipopt
                    IpData().curr_v_L()->Dim() + IpData().curr_v_U()->Dim();
 
     // The scaling values have not yet been determined, compute them now
-    if (dual_inf_scal_<0.) {
+    if (dual_inf_scal_ < 0.) {
       DBG_ASSERT(primal_inf_scal_ < 0.);
       DBG_ASSERT(compl_inf_scal_ < 0.);
 
@@ -552,7 +560,7 @@ namespace Ipopt
         DBG_ASSERT(n_comp>0);
         compl_inf_scal_ /= n_comp;
       }
-      else {
+      else if (quality_function_norm_==2) {
         dual_inf_scal_ = Max(1., pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
                              pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
 
@@ -564,12 +572,24 @@ namespace Ipopt
                               pow(IpCq().curr_compl_s_L()->Nrm2(), 2) +
                               pow(IpCq().curr_compl_s_U()->Nrm2(), 2));
 
-        dual_inf_scal_ /= sqrt(n_dual);
-        if (n_pri>0) {
-          primal_inf_scal_ /= sqrt(n_pri);
-        }
-        DBG_ASSERT(n_comp>0);
-        compl_inf_scal_ /= sqrt(n_comp);
+	dual_inf_scal_ /= n_dual;
+	if (n_pri>0) {
+	  primal_inf_scal_ /= n_pri;
+	}
+	DBG_ASSERT(n_comp>0);
+	compl_inf_scal_ /= n_comp;
+      }
+      else {
+        dual_inf_scal_ = Max(1., IpCq().curr_grad_lag_x()->Amax(),
+                             IpCq().curr_grad_lag_s()->Amax());
+
+        primal_inf_scal_ = Max(1., IpCq().curr_c()->Amax(),
+                               IpCq().curr_d_minus_s()->Amax());
+
+        compl_inf_scal_ = Max(1., Max(IpCq().curr_compl_x_L()->Amax(),
+				      IpCq().curr_compl_x_U()->Amax(),
+				      IpCq().curr_compl_s_L()->Amax(),
+				      IpCq().curr_compl_s_U()->Amax()));
       }
     }
 
@@ -754,7 +774,7 @@ namespace Ipopt
       DBG_ASSERT(n_comp>0);
       compl_inf /= n_comp;
     }
-    else {
+    else if (quality_function_norm_==2) {
       if (quality_function_dual_inf_==2) {
 	dual_inf = pow(dual_inf_x->Nrm2(), 2) + pow(dual_inf_s->Nrm2(), 2);
       }
@@ -776,6 +796,22 @@ namespace Ipopt
       }
       DBG_ASSERT(n_comp>0);
       compl_inf /= n_comp;
+    }
+    else {
+      if (quality_function_dual_inf_==2) {
+	dual_inf = Max(dual_inf_x->Amax(), dual_inf_s->Amax());
+      }
+      else {
+	dual_inf =
+	  (1.-alpha_dual)*Max(IpCq().curr_grad_lag_x()->Amax(),
+			      IpCq().curr_grad_lag_s()->Amax());
+      }
+      primal_inf =
+        (1.-alpha_primal, 2)*Max(IpCq().curr_c()->Amax(),
+                                 IpCq().curr_d_minus_s()->Amax());
+      compl_inf =
+        Max(slack_x_L->Amax(), slack_x_U->Amax(),
+	    slack_s_L->Amax(), slack_s_U->Amax());
     }
 
     // Scale the quantities
