@@ -67,6 +67,15 @@ namespace Ipopt
       tau_min_ = 0.99;
     }
 
+    if (options.GetNumericValue("tau_max", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0.0 && value < 1.0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"tau_max\": This value must be between 0 and 1.");
+      tau_max_ = value;
+    }
+    else {
+      tau_max_ = tau_min_;
+    }
+
     if (options.GetNumericValue("nonmonotone_mu_refs_redfact", value, prefix)) {
       ASSERT_EXCEPTION(value > 0.0 && value < 1.0, OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"nonmonotone_mu_refs_redfact\": This value must be between 0 and 1.");
@@ -84,6 +93,13 @@ namespace Ipopt
     }
     else {
       num_refs_max_ = 4;
+    }
+
+    if (options.GetIntegerValue("mu_never_fix", ivalue, prefix)) {
+      mu_never_fix_ = (ivalue != 0);
+    }
+    else {
+      mu_never_fix_ = false;
     }
 
     bool retvalue = mu_oracle_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
@@ -146,7 +162,7 @@ namespace Ipopt
         // Set the new values for mu and tau and tell the linesearch
         // to reset its memory
         Number mu = NewFixedMu();
-        Number tau = tau_min_;
+        Number tau = Compute_tau(mu);
 
         IpData().Set_mu(mu);
         IpData().Set_tau(tau);
@@ -174,7 +190,7 @@ namespace Ipopt
       // Update the fraction-to-the-boundary rule parameter
       // TODO The first rule makes tau too small early on.
       //    Number tau = Max(tau_min_, 1.-mu);
-      Number tau = tau_min_;
+      Number tau = Compute_tau(mu);
       Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                      "Fraction-to-the-boundary parameter tau is %e\n",
                      tau);
@@ -193,6 +209,8 @@ namespace Ipopt
   bool
   NonmonotoneMuUpdate::CheckSufficientProgress()
   {
+    if (mu_never_fix_) return true;
+
     bool retval = true;
 
     Index num_refs = refs_vals_.size();
@@ -231,6 +249,13 @@ namespace Ipopt
                        "pd system reference[%2d] = %.6e\n", num_refs, *iter);
       }
     }
+  }
+
+  Number
+  NonmonotoneMuUpdate::Compute_tau(Number mu)
+  {
+    return Max(tau_min_, Min(1.-mu, tau_max_));
+    //return tau_min_;
   }
 
   Number
