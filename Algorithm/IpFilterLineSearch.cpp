@@ -223,6 +223,13 @@ namespace Ipopt
       corrector_compl_avrg_red_fact_ = 1.;
     }
 
+    if (options.GetIntegerValue("expect_infeasible_problem", ivalue, prefix)) {
+      expect_infeasible_problem_ = (ivalue!=0);
+    }
+    else {
+      expect_infeasible_problem_ = false;
+    }
+
     bool retvalue = true;
     if (IsValid(resto_phase_)) {
       retvalue = resto_phase_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
@@ -233,6 +240,8 @@ namespace Ipopt
 
     rigorous_=true;
     skipped_line_search_=false;
+
+    count_successive_shortened_steps_ = 0;
 
     return retvalue;
   }
@@ -351,6 +360,14 @@ namespace Ipopt
             break;
           }
 
+          // Decide if we want to go to the restoration phase in a
+          // short cut to check if the problem is infeasible
+          if (expect_infeasible_problem_) {
+            if (count_successive_shortened_steps_>=5) {
+              break;
+            }
+          }
+
           if (!evaluation_error) {
             Number theta_curr = IpCq().curr_constraint_violation();
             Number theta_trial = IpCq().trial_constraint_violation();
@@ -410,7 +427,7 @@ namespace Ipopt
       }
       else if (IsValid(resto_phase_)) {
         if (IpCq().curr_constraint_violation()==0.) {
-          THROW_EXCEPTION(IpoptException, "Restoration phase called, but constraint violation is zero.");
+          THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase called, but norm of constraint violation is zero.");
         }
 
         // Augment the filter with the current point
@@ -426,7 +443,11 @@ namespace Ipopt
 
         accept = resto_phase_->PerformRestoration();
         if (!accept) {
-          THROW_EXCEPTION(IpoptException, "Failed restoration phase!!!");
+          THROW_EXCEPTION(RESTORATION_FAILED, "Failed restoration phase!!!");
+        }
+        count_successive_shortened_steps_ = 0;
+        if (expect_infeasible_problem_) {
+          expect_infeasible_problem_ = false;
         }
       }
       else {
@@ -460,6 +481,13 @@ namespace Ipopt
       // Set some information for iteration summary output
       IpData().Set_info_alpha_primal(alpha_primal);
       IpData().Set_info_alpha_dual(alpha_dual_max);
+
+      if (n_steps==0) {
+        count_successive_shortened_steps_ = 0;
+      }
+      else {
+        count_successive_shortened_steps_++;
+      }
     }
   }
 

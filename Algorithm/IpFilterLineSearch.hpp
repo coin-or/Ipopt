@@ -247,6 +247,11 @@ namespace Ipopt
     /** Flag indicating whether the corrector should be skipped in the
      *  fixed mu mode. */
     bool skip_corr_if_fixed_mode_;
+    /** Indicates whether problem can be expected to be infeasible.
+     *  This will trigger requesting a tighter reduction in
+     *  infeasibility the first time the restoration phase is
+     *  called. */
+    bool expect_infeasible_problem_;
     //@}
 
     /** Filter with entries */
@@ -261,6 +266,10 @@ namespace Ipopt
     /** Flag indicating whether no acceptable trial point was found
      *  during last line search. */
     bool skipped_line_search_;
+
+    /** Counter for the number of successive iterations in which the
+     *  full step was not accepted. */
+    Index count_successive_shortened_steps_;
 
     SmartPtr<RestorationPhase> resto_phase_;
     SmartPtr<PDSystemSolver> pd_solver_;
