@@ -40,12 +40,20 @@ namespace Ipopt
   void Vector::AddTwoVectorsImpl(Number a, const Vector& v1,
 				 Number b, const Vector& v2)
   {
-    Copy(v1);
-    if (a!=1.) {
-      Scal(a);
+    if (a==0.) {
+      Copy(v2);
+      if (b!=1.) {
+	Scal(b);
+      }
     }
-    if (b!=0.) {
-      Axpy(b, v2);
+    else {
+      Copy(v1);
+      if (a!=1.) {
+	Scal(a);
+      }
+      if (b!=0.) {
+	Axpy(b, v2);
+      }
     }
   }
 

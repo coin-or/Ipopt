@@ -35,9 +35,9 @@ namespace Ipopt
   }
 
   void Matrix::AddMSinvZ(Number alpha, const Vector& S, const Vector& Z,
-			 Number beta, Vector& X) const
+			 Vector& X) const
   {
-    AddMSinvZImpl(alpha, S, Z, beta, X);
+    AddMSinvZImpl(alpha, S, Z, X);
   }
 
   void Matrix::SinvBlrmZMTdBr(Number alpha, const Vector& S,
@@ -49,12 +49,12 @@ namespace Ipopt
 
   // Prototype for specialize methods (can and should be overloaded)
   void Matrix::AddMSinvZImpl(Number alpha, const Vector& S, const Vector& Z,
-			     Number beta, Vector& X) const
+			     Vector& X) const
   {
     SmartPtr<Vector> tmp = S.MakeNew();
     tmp->Copy(Z);
     tmp->ElementWiseDivide(S);
-    MultVector(alpha, *tmp, beta, X);
+    MultVector(alpha, *tmp, 1., X);
   }
   
   void Matrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,

@@ -87,8 +87,7 @@ namespace Ipopt
 
   // Specialized method (overloaded from IpMatrix)
   void ExpansionMatrix::AddMSinvZImpl(Number alpha, const Vector& S,
-				      const Vector& Z,
-				      Number beta, Vector& X) const
+				      const Vector& Z, Vector& X) const
   {
     DBG_ASSERT(NCols()==S.Dim());
     DBG_ASSERT(NCols()==Z.Dim());
@@ -106,27 +105,19 @@ namespace Ipopt
     const Number* vals_Z = dense_Z->Values();
     Number* vals_X = dense_X->Values();
 
-    if (beta==1.) {
-      if (alpha==1.) {
-	for(Index i=0; i<NCols(); i++) {
-	  vals_X[exp_pos[i]] += vals_Z[i]/vals_S[i];
-	}
+    if (alpha==1.) {
+      for(Index i=0; i<NCols(); i++) {
+	vals_X[exp_pos[i]] += vals_Z[i]/vals_S[i];
       }
-      else if (alpha==-1.) {
-	for(Index i=0; i<NCols(); i++) {
-	  vals_X[exp_pos[i]] -= vals_Z[i]/vals_S[i];
-	}
-      }
-      else {
-	for(Index i=0; i<NCols(); i++) {
-	  vals_X[exp_pos[i]] += alpha*vals_Z[i]/vals_S[i];
-	}
+    }
+    else if (alpha==-1.) {
+      for(Index i=0; i<NCols(); i++) {
+	vals_X[exp_pos[i]] -= vals_Z[i]/vals_S[i];
       }
     }
     else {
       for(Index i=0; i<NCols(); i++) {
-	vals_X[exp_pos[i]] =
-	  alpha*vals_Z[i]/vals_S[i] + beta*vals_X[exp_pos[i]];
+	vals_X[exp_pos[i]] += alpha*vals_Z[i]/vals_S[i];
       }
     }
   }
