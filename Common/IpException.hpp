@@ -85,8 +85,8 @@ namespace Ipopt
     /** Method to report the exception to a journalist */
     void ReportException(const Journalist& jnlst) const
     {
-      jnlst.Printf(J_ERROR, J_DBG,
-                   "Exception of type: %s in file \"%s\" at line %d: \n   %s\n",
+      jnlst.Printf(J_ERROR, J_MAIN,
+                   "Exception of type: %s in file \"%s\" at line %d:\n Exception message: %s\n",
                    type_.c_str(), file_name_.c_str(),  line_number_, msg_.c_str());
     }
 
