@@ -304,10 +304,10 @@ namespace Ipopt
     CachedResults< SmartPtr<Vector> > trial_slack_x_U_cache_;
     CachedResults< SmartPtr<Vector> > trial_slack_s_L_cache_;
     CachedResults< SmartPtr<Vector> > trial_slack_s_U_cache_;
-    Index adjusted_slack_x_L_;
-    Index adjusted_slack_x_U_;
-    Index adjusted_slack_s_L_;
-    Index adjusted_slack_s_U_;
+    Index num_adjusted_slack_x_L_;
+    Index num_adjusted_slack_x_U_;
+    Index num_adjusted_slack_s_L_;
+    Index num_adjusted_slack_s_U_;
     //@}
 
     /** @name Cached for objective function stuff */

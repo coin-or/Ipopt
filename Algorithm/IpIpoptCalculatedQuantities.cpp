@@ -34,10 +34,10 @@ namespace Ipopt
       trial_slack_x_U_cache_(1),
       trial_slack_s_L_cache_(1),
       trial_slack_s_U_cache_(1),
-      adjusted_slack_x_L_(0),
-      adjusted_slack_x_U_(0),
-      adjusted_slack_s_L_(0),
-      adjusted_slack_s_U_(0),
+      num_adjusted_slack_x_L_(0),
+      num_adjusted_slack_x_U_(0),
+      num_adjusted_slack_s_L_(0),
+      num_adjusted_slack_s_U_(0),
 
       curr_f_cache_(2),
       trial_f_cache_(5),
@@ -207,8 +207,9 @@ namespace Ipopt
         SmartPtr<const Matrix> P = ip_nlp_->Px_L();
         DBG_PRINT_VECTOR(2,"x_L", *x_bound);
         result = CalcSlack_L(*P, *x, *x_bound);
-        DBG_ASSERT(CalculateSafeSlack(result, x_bound, x, ip_data_->curr_z_L()) == false &&
-                   "We should never need to bump the slacks for the current point (only the trial)");
+        DBG_ASSERT(num_adjusted_slack_x_L_==0);
+        num_adjusted_slack_x_L_ =
+          CalculateSafeSlack(result, x_bound, x, ip_data_->curr_z_L());
       }
       curr_slack_x_L_cache_.AddCachedResult1Dep(result, *x);
     }
@@ -227,8 +228,9 @@ namespace Ipopt
       if (!trial_slack_x_U_cache_.GetCachedResult1Dep(result, *x)) {
         SmartPtr<const Matrix> P = ip_nlp_->Px_U();
         result = CalcSlack_U(*P, *x, *x_bound);
-        DBG_ASSERT(CalculateSafeSlack(result, x_bound, x, ip_data_->curr_z_U()) == false &&
-                   "We should never need to bump the slacks for the current point (only the trial)");
+        DBG_ASSERT(num_adjusted_slack_x_U_==0);
+        num_adjusted_slack_x_U_ =
+          CalculateSafeSlack(result, x_bound, x, ip_data_->curr_z_U());
       }
       curr_slack_x_U_cache_.AddCachedResult1Dep(result, *x);
     }
@@ -247,8 +249,9 @@ namespace Ipopt
       if (!trial_slack_s_L_cache_.GetCachedResult1Dep(result, *s)) {
         SmartPtr<const Matrix> P = ip_nlp_->Pd_L();
         result = CalcSlack_L(*P, *s, *s_bound);
-        DBG_ASSERT(CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_L()) == false &&
-                   "We should never need to bump the slacks for the current point (only the trial)");
+        DBG_ASSERT(num_adjusted_slack_s_L_==0);
+        num_adjusted_slack_s_L_ =
+          CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_L());
       }
       curr_slack_s_L_cache_.AddCachedResult1Dep(result, *s);
     }
@@ -269,8 +272,9 @@ namespace Ipopt
         DBG_PRINT_VECTOR(2, "s", *s);
         DBG_PRINT_VECTOR(2, "s_U", *s_bound);
         result = CalcSlack_U(*P, *s, *s_bound);
-        DBG_ASSERT(CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_U()) == false &&
-                   "We should never need to bump the slacks for the current point (only the trial)");
+        DBG_ASSERT(num_adjusted_slack_s_U_==0);
+        num_adjusted_slack_s_U_ =
+          CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_U());
         DBG_PRINT_VECTOR(2, "result", *result);
       }
       curr_slack_s_U_cache_.AddCachedResult1Dep(result, *s);
@@ -283,7 +287,7 @@ namespace Ipopt
     DBG_START_METH("IpoptCalculatedQuantities::trial_slack_x_L()",
                    dbg_verbosity);
 
-    adjusted_slack_x_L_ = 0;
+    num_adjusted_slack_x_L_ = 0;
     SmartPtr<Vector> result;
     SmartPtr<const Vector> x = ip_data_->trial_x();
     SmartPtr<const Vector> x_bound = ip_nlp_->x_L();
@@ -291,7 +295,9 @@ namespace Ipopt
       if (!curr_slack_x_L_cache_.GetCachedResult1Dep(result, *x)) {
         SmartPtr<const Matrix> P = ip_nlp_->Px_L();
         result = CalcSlack_L(*P, *x, *x_bound);
-        adjusted_slack_x_L_ = CalculateSafeSlack(result, x_bound, x, ip_data_->curr_z_L());
+        DBG_ASSERT(num_adjusted_slack_x_L_==0);
+        num_adjusted_slack_x_L_ =
+          CalculateSafeSlack(result, x_bound, x, ip_data_->curr_z_L());
       }
       trial_slack_x_L_cache_.AddCachedResult1Dep(result, *x);
     }
@@ -303,7 +309,7 @@ namespace Ipopt
     DBG_START_METH("IpoptCalculatedQuantities::trial_slack_x_U()",
                    dbg_verbosity);
 
-    adjusted_slack_x_U_ = 0;
+    num_adjusted_slack_x_U_ = 0;
     SmartPtr<Vector> result;
     SmartPtr<const Vector> x = ip_data_->trial_x();
     SmartPtr<const Vector> x_bound = ip_nlp_->x_U();
@@ -311,7 +317,9 @@ namespace Ipopt
       if (!curr_slack_x_U_cache_.GetCachedResult1Dep(result, *x)) {
         SmartPtr<const Matrix> P = ip_nlp_->Px_U();
         result = CalcSlack_U(*P, *x, *x_bound);
-        adjusted_slack_x_U_ = CalculateSafeSlack(result, x_bound, x, ip_data_->curr_z_U());
+        DBG_ASSERT(num_adjusted_slack_x_U_==0);
+        num_adjusted_slack_x_U_ =
+          CalculateSafeSlack(result, x_bound, x, ip_data_->curr_z_U());
       }
       trial_slack_x_U_cache_.AddCachedResult1Dep(result, *x);
     }
@@ -323,7 +331,7 @@ namespace Ipopt
     DBG_START_METH("IpoptCalculatedQuantities::trial_slack_s_L()",
                    dbg_verbosity);
 
-    adjusted_slack_s_L_ = 0;
+    num_adjusted_slack_s_L_ = 0;
     SmartPtr<Vector> result;
     SmartPtr<const Vector> s = ip_data_->trial_s();
     SmartPtr<const Vector> s_bound = ip_nlp_->d_L();
@@ -331,7 +339,9 @@ namespace Ipopt
       if (!curr_slack_s_L_cache_.GetCachedResult1Dep(result, *s)) {
         SmartPtr<const Matrix> P = ip_nlp_->Pd_L();
         result = CalcSlack_L(*P, *s, *s_bound);
-        adjusted_slack_s_L_ = CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_L());
+        DBG_ASSERT(num_adjusted_slack_s_L_==0);
+        num_adjusted_slack_s_L_ =
+          CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_L());
       }
       trial_slack_s_L_cache_.AddCachedResult1Dep(result, *s);
     }
@@ -343,7 +353,7 @@ namespace Ipopt
     DBG_START_METH("IpoptCalculatedQuantities::trial_slack_s_U()",
                    dbg_verbosity);
 
-    adjusted_slack_s_U_ = 0;
+    num_adjusted_slack_s_U_ = 0;
     SmartPtr<Vector> result;
     SmartPtr<const Vector> s = ip_data_->trial_s();
     SmartPtr<const Vector> s_bound = ip_nlp_->d_U();
@@ -351,7 +361,9 @@ namespace Ipopt
       if (!curr_slack_s_U_cache_.GetCachedResult1Dep(result, *s)) {
         SmartPtr<const Matrix> P = ip_nlp_->Pd_U();
         result = CalcSlack_U(*P, *s, *s_bound);
-        adjusted_slack_s_U_ = CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_U());
+        DBG_ASSERT(num_adjusted_slack_s_U_==0);
+        num_adjusted_slack_s_U_ =
+          CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_U());
       }
       trial_slack_s_U_cache_.AddCachedResult1Dep(result, *s);
     }
@@ -424,19 +436,19 @@ namespace Ipopt
   Index
   IpoptCalculatedQuantities::AdjustedTrialSlacks()
   {
-    return (adjusted_slack_x_L_ +
-            adjusted_slack_x_U_ +
-            adjusted_slack_s_L_ +
-            adjusted_slack_s_U_);
+    return (num_adjusted_slack_x_L_ +
+            num_adjusted_slack_x_U_ +
+            num_adjusted_slack_s_L_ +
+            num_adjusted_slack_s_U_);
   }
 
   void
   IpoptCalculatedQuantities::ResetAdjustedTrialSlacks()
   {
-    adjusted_slack_x_L_
-    = adjusted_slack_x_U_
-      = adjusted_slack_s_L_
-        = adjusted_slack_s_U_ = 0;
+    num_adjusted_slack_x_L_
+    = num_adjusted_slack_x_U_
+      = num_adjusted_slack_s_L_
+        = num_adjusted_slack_s_U_ = 0;
   }
 
   ///////////////////////////////////////////////////////////////////////////
