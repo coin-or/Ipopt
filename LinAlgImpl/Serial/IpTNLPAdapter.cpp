@@ -11,6 +11,8 @@
 namespace Ipopt
 {
 
+  DBG_SET_VERBOSITY(0);
+
   TNLPAdapter::TNLPAdapter(const SmartPtr<TNLP> tnlp)
       :
       tnlp_(tnlp),
@@ -221,16 +223,13 @@ namespace Ipopt
         n_c++;
       }
       else {
-        //	printf("pre_d_U[%d] = %lf\n",i,upper_bound);
         // inequality constraint
-        //printf("%lf != %lf\n", lower_bound, upper_bound);
         d_map[n_d] = i;
         if (lower_bound > nlp_lower_bound_inf_) {
           d_l_map[n_d_l] = n_d;
           n_d_l++;
         }
         if (upper_bound < nlp_upper_bound_inf_) {
-          //	  printf("Setting the upper bound\n");
           d_u_map[n_d_u] = n_d;
           n_d_u++;
         }
@@ -450,7 +449,6 @@ namespace Ipopt
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
       Number upper_bound = g_u[full_idx];
       values[i] = upper_bound;
-      //      printf("d_U[%d] = %lf\n", ampl_idx, upper_bound);
     }
 
     delete [] x_l;
@@ -545,7 +543,7 @@ namespace Ipopt
       DBG_ASSERT(dz_u);
       values = dz_u->Values();
       const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
-      const Index* z_u_pos = P_x_x_L_->ExpandedPosIndices();
+      const Index* z_u_pos = P_x_x_U_->ExpandedPosIndices();
       for (Index i=0; i<z_U.Dim(); i++) {
         Index idx = z_u_pos[i]; // convert from x_u to x (ipopt)
         idx = x_pos[idx]; // convert from x (ipopt) to x_full
@@ -740,6 +738,8 @@ namespace Ipopt
                                      const Vector& y_c, const Vector& y_d,
                                      Number obj_value)
   {
+    DBG_START_METH("TNLPAdapter::FinalizeSolution", dbg_verbosity);
+
     update_local_x(x);
     update_local_lambda(y_c, y_d);
 
@@ -755,8 +755,8 @@ namespace Ipopt
     Number* full_z_L = new Number[n_full_x_];
     Number* full_z_U = new Number[n_full_x_];
     for (int i=0; i<n_full_x_; i++) {
-      full_z_L[i] = 0.; // ToDo nlp_lower_bound_inf_;
-      full_z_U[i] = 0.; // ToDo nlp_upper_bound_inf_;
+      full_z_L[i] = nlp_lower_bound_inf_;
+      full_z_U[i] = nlp_upper_bound_inf_;
     }
     ResortBnds(z_L, full_z_L, z_U, full_z_U);
 
