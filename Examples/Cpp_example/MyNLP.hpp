@@ -65,7 +65,7 @@ public:
    *   2) The values of the jacobian (if "values" is not NULL)
    */
   virtual bool eval_jac_g(Index n, const Number* x, bool new_x,
-			  Index nele_jac, Index* iRow, Index *jCol,
+			  Index m, Index nele_jac, Index* iRow, Index *jCol,
 			  Number* values);
 
   /** Method to return:

@@ -283,7 +283,8 @@ AC_CONFIG_FILES([Makefile Common/Makefile Algorithm/Makefile
 		 Apps/StdInterface/Makefile
 		 Apps/CompositeInterface/Makefile
 		 Apps/CUTErInterface/Makefile
-		 Examples/Fortran_example/Makefile])
+		 Examples/Fortran_example/Makefile
+		 Examples/Cpp_example/Makefile])
 
 AC_CONFIG_HEADER([inc/config.h])
 
