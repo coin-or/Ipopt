@@ -27,6 +27,7 @@
 #include "IpRestoIterationOutput.hpp"
 #include "IpRestoFilterConvCheck.hpp"
 #include "IpRestoIterateInitializer.hpp"
+#include "IpRestoRestoPhase.hpp"
 
 namespace Ipopt
 {
@@ -68,8 +69,10 @@ namespace Ipopt
       new PDFullSpaceSolver(*resto_AugSolver);
 
     // Line search method for the restoration phase
+    SmartPtr<RestoRestorationPhase> resto_resto =
+      new RestoRestorationPhase();
     SmartPtr<FilterLineSearch> resto_LineSearch =
-      new FilterLineSearch(NULL, GetRawPtr(resto_PDSolver));
+      new FilterLineSearch(GetRawPtr(resto_resto), GetRawPtr(resto_PDSolver));
 
     // Create the mu update that will be used by the restoration phase
     // algorithm
