@@ -221,7 +221,7 @@ namespace Ipopt
 
   SmartPtr<const Vector> OrigIpoptNLP::d(const Vector& x)
   {
-    DBG_START_METH("OrigIpoptNLP::d", 2);
+    DBG_START_METH("OrigIpoptNLP::d", dbg_verbosity);
     SmartPtr<Vector> retValue;
     if (!d_cache_.GetCachedResult1Dep(retValue, &x)) {
       d_evals_++;
