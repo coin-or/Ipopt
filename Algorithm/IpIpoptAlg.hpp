@@ -148,6 +148,11 @@ namespace Ipopt
     bool skip_print_problem_stats_;
     //@}
 
+    /** @name Algorithmic parameters */
+    //@{
+    Number kappa_sigma_;
+    //@}
+
     /** @name auxilliary functions */
     //@{
     void calc_number_of_bounds(
@@ -160,6 +165,17 @@ namespace Ipopt
       Index& n_only_lower,
       Index& n_both,
       Index& n_only_upper);
+
+    /** Method for ensuring that the trial multipliers are not too far
+     *  from the primal estime.  If a correction is made, new_trial_z
+     *  is a pointer to the corrected multiplier, and the return value
+     *  of this method give the magnitutde of the largest correction
+     *  that we done.  If no correction was made, new_trial_z is just
+     *  a pointer to trial_z, and the return value is zero.
+     */
+    Number correct_bound_multiplier(const Vector& trial_z,
+				    const Vector& trial_slack,
+				    SmartPtr<const Vector>& new_trial_z);
     //@}
   };
 
