@@ -33,6 +33,17 @@ namespace Ipopt
   bool ProbingMuOracle::InitializeImpl(const OptionsList& options,
                                        const std::string& prefix)
   {
+    // Check for the algorithm options
+    Number value;
+    if (options.GetNumericValue("sigma_max", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"sigma_max\": This value must be positive.");
+      sigma_max_ = value;
+    }
+    else {
+      sigma_max_ = 1.;
+    }
+
     // The following line is only here so that
     // IpoptCalculatedQuantities::CalculateSafeSlack and the first
     // output line have something to work with
@@ -93,6 +104,15 @@ namespace Ipopt
                       true           // don't need high accuracy
                      );
 
+    DBG_PRINT_VECTOR(2, "step_x", *step_x);
+    DBG_PRINT_VECTOR(2, "step_s", *step_s);
+    DBG_PRINT_VECTOR(2, "step_y_c", *step_y_c);
+    DBG_PRINT_VECTOR(2, "step_y_d", *step_y_d);
+    DBG_PRINT_VECTOR(2, "step_z_L", *step_z_L);
+    DBG_PRINT_VECTOR(2, "step_z_U", *step_z_U);
+    DBG_PRINT_VECTOR(2, "step_v_L", *step_v_L);
+    DBG_PRINT_VECTOR(2, "step_v_U", *step_v_U);
+
     /////////////////////////////////////////////////////////////
     // Use Mehrotra's formula to compute the barrier parameter //
     /////////////////////////////////////////////////////////////
@@ -133,6 +153,9 @@ namespace Ipopt
 
     // Apply Mehrotra's rule
     Number sigma = pow((mu_aff/mu_curr),3);
+    // Make sure, sigma is not too large
+    sigma = Min(sigma, sigma_max_);
+
     Number mu = sigma*mu_curr;
 
     return mu;

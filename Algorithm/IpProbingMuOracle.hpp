@@ -74,6 +74,11 @@ namespace Ipopt
                              const Vector& step_v_L,
                              const Vector& step_v_U);
 
+    /** @name Algorithmic parameters */
+    //@{
+    /** safeguarding upper bound on centering parameter sigma */
+    Number sigma_max_;
+    //@}
   };
 
 } // namespace Ipopt
