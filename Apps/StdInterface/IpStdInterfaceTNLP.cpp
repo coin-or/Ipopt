@@ -69,9 +69,9 @@ namespace Ipopt
                      "No lower bounds for variables provided.");
     ASSERT_EXCEPTION(x_U_, INVALID_STDINTERFACE_NLP,
                      "No upper bounds for variables provided.");
-    ASSERT_EXCEPTION(g_L_, INVALID_STDINTERFACE_NLP,
+    ASSERT_EXCEPTION(g_L_ || n_con_==0, INVALID_STDINTERFACE_NLP,
                      "No lower bounds for constraints provided.");
-    ASSERT_EXCEPTION(g_U_, INVALID_STDINTERFACE_NLP,
+    ASSERT_EXCEPTION(g_U_ || n_con_==0, INVALID_STDINTERFACE_NLP,
                      "No upper bounds for constraints provided.");
     ASSERT_EXCEPTION(nele_jac_>=0, INVALID_STDINTERFACE_NLP,
                      "Number of non-zero elements in constraint Jacobian must be non-negative.");
