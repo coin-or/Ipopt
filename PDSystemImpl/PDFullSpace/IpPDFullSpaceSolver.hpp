@@ -55,7 +55,8 @@ namespace Ipopt
                        Vector& res_zL,
                        Vector& res_zU,
                        Vector& res_vL,
-                       Vector& res_vU);
+                       Vector& res_vU,
+		       bool allow_inexact=false);
 
   private:
     /**@name Default Compiler Generated Methods

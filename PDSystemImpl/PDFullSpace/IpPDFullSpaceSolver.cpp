@@ -73,9 +73,19 @@ namespace Ipopt
                                 Vector& res_zL,
                                 Vector& res_zU,
                                 Vector& res_vL,
-                                Vector& res_vU)
+                                Vector& res_vU,
+				bool allow_inexact)
   {
     DBG_START_METH("PDFullSpaceSolver::Solve",dbg_verbosity);
+
+    DBG_PRINT_VECTOR(2, "rhs_x", rhs_x);
+    DBG_PRINT_VECTOR(2, "rhs_s", rhs_s);
+    DBG_PRINT_VECTOR(2, "rhs_c", rhs_c);
+    DBG_PRINT_VECTOR(2, "rhs_d", rhs_d);
+    DBG_PRINT_VECTOR(2, "rhs_zL", rhs_zL);
+    DBG_PRINT_VECTOR(2, "rhs_zU", rhs_zU);
+    DBG_PRINT_VECTOR(2, "rhs_vL", rhs_vL);
+    DBG_PRINT_VECTOR(2, "rhs_vU", rhs_vU);
 
     // if beta is nonzero, keep a copy of the incoming values in res_ */
     SmartPtr<Vector> copy_res_x;
@@ -137,7 +147,7 @@ namespace Ipopt
 
     // If necessary or desired, perform iterative refinement
     Index num_iter_ref = 0;
-    while (num_iter_ref < num_min_iter_ref_) {
+    while (!allow_inexact && num_iter_ref < num_min_iter_ref_) {
       // Get space for the residual
       SmartPtr<Vector> resid_x = res_x.MakeNew();
       SmartPtr<Vector> resid_s = res_s.MakeNew();
