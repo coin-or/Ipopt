@@ -19,7 +19,7 @@ prefix = @prefix@
 
 # Libraries necessary to link with IPOPT
 #LIBS = -L$(IPOPTLIBDIR) -lipopt @IPADDLIBS@
-LIBS = @ipoptlib@ @IPADDLIBS@
+LIBS = @ipoptlib@ @IPADDLIBS@ @CXXLIBS@
 
 # CHANGEME: This should be the name of your executable
 EXE = example@EXEEXT@
