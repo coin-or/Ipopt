@@ -74,8 +74,9 @@ namespace Ipopt
                                       Matrix& Pd_U,
                                       Vector& d_U)=0;
 
-    /** Method for obtaining the starting point
-     *  for all the iterates. */
+    /** Method for obtaining the starting point for all the
+     *  iterates. ToDo it might not make sense to ask for initial
+     *  values for v_L and v_U? */
     virtual bool GetStartingPoint(
       Vector& x,
       bool need_x,
