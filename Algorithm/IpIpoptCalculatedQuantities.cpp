@@ -521,6 +521,12 @@ namespace Ipopt
     DBG_START_METH("IpoptCalculatedQuantities::CalcBarrierTerm",
                    dbg_verbosity);
     DBG_ASSERT(initialize_called_);
+
+    DBG_PRINT_VECTOR(2, "slack_x_L", slack_x_L);
+    DBG_PRINT_VECTOR(2, "slack_x_U", slack_x_U);
+    DBG_PRINT_VECTOR(2, "slack_s_L", slack_s_L);
+    DBG_PRINT_VECTOR(2, "slack_s_U", slack_s_U);
+	
     Number retval=0.;
     retval += slack_x_L.SumLogs();
     retval += slack_x_U.SumLogs();
@@ -555,6 +561,7 @@ namespace Ipopt
       retval += kappa_d_ * mu * tmp->Asum();
     }
 
+    DBG_ASSERT(FiniteNumber(retval));
     return retval;
   }
 
@@ -586,6 +593,7 @@ namespace Ipopt
       }
       curr_barrier_obj_cache_.AddCachedResult(result, tdeps, sdeps);
     }
+    DBG_ASSERT(FiniteNumber(result));
     return result;
   }
 
@@ -617,6 +625,7 @@ namespace Ipopt
       }
       trial_barrier_obj_cache_.AddCachedResult(result, tdeps, sdeps);
     }
+    DBG_ASSERT(FiniteNumber(result));
     return result;
   }
 

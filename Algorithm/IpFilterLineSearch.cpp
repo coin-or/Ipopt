@@ -511,6 +511,7 @@ namespace Ipopt
     }
 
     Number trial_barr = IpCq().trial_barrier_obj();
+    DBG_ASSERT(FiniteNumber(trial_barr));
 
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "Checking acceptability for trial step size alpha_primal_test=%13.6e:\n", alpha_primal_test);
