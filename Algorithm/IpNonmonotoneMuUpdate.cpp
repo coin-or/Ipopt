@@ -131,6 +131,13 @@ namespace Ipopt
       adaptive_globalization_ = 1;
     }
 
+    if (options.GetIntegerValue("restore_accepted_iterate", ivalue, prefix)) {
+      restore_accepted_iterate_ = (ivalue != 0);
+    }
+    else {
+      restore_accepted_iterate_ = false;
+    }
+
     bool retvalue = free_mu_oracle_->Initialize(Jnlst(), IpNLP(), IpData(),
                     IpCq(), options, prefix);
     if (!retvalue) {
@@ -180,6 +187,15 @@ namespace Ipopt
     check_if_no_bounds_ = false;
     no_bounds_ = false;
     IpData().SetFreeMuMode(true);
+
+    accepted_x_ = NULL;
+    accepted_s_ = NULL;
+    accepted_y_c_ = NULL;
+    accepted_y_d_ = NULL;
+    accepted_z_L_ = NULL;
+    accepted_z_U_ = NULL;
+    accepted_v_L_ = NULL;
+    accepted_v_U_ = NULL;
 
     // TODO do we need to initialize the linesearch object?
 
@@ -250,6 +266,17 @@ namespace Ipopt
       }
       else {
         IpData().SetFreeMuMode(false);
+
+	if (restore_accepted_iterate_) {
+	  // Restore most recent accepted iterate to start fixed mode from
+	  Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+			 "Restoring most recent accepted point.\n");
+	  IpData().SetTrialPrimalVariablesFromPtr(accepted_x_, accepted_s_);
+	  IpData().SetTrialConstraintMultipliersFromPtr(accepted_y_c_, accepted_y_d_);
+	  IpData().SetTrialBoundMultipliersFromPtr(accepted_z_L_, accepted_z_U_,
+						   accepted_v_L_, accepted_v_U_);
+	  IpData().AcceptTrialPoint();
+	}
 
         // Set the new values for mu and tau and tell the linesearch
         // to reset its memory
@@ -378,6 +405,18 @@ namespace Ipopt
       break;
       default:
       DBG_ASSERT("Unknown corrector_type value.");
+    }
+
+    if (restore_accepted_iterate_) {
+      // Keep pointers to this iterate so that it could be restored
+      accepted_x_ = IpData().curr_x();
+      accepted_s_ = IpData().curr_s();
+      accepted_y_c_ = IpData().curr_y_c();
+      accepted_y_d_ = IpData().curr_y_d();
+      accepted_z_L_ = IpData().curr_z_L();
+      accepted_z_U_ = IpData().curr_z_U();
+      accepted_v_L_ = IpData().curr_v_L();
+      accepted_v_U_ = IpData().curr_v_U();
     }
   }
 
