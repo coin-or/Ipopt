@@ -60,6 +60,8 @@ namespace Ipopt
                    dbg_verbosity);
     Jnlst().Printf(J_DETAILED, J_MAIN, "Starting Restoration Phase\n");
 
+    DBG_ASSERT(IpCq().curr_constraint_violation()>0.);
+
     // Create the restoration phase NLP etc objects
     SmartPtr<IpoptData> resto_ip_data = new IpoptData();
     SmartPtr<IpoptNLP> resto_ip_nlp
@@ -139,14 +141,20 @@ namespace Ipopt
         y_c = IpData().curr_y_c()->MakeNew();
         y_d = IpData().curr_y_d()->MakeNew();
         bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
-        Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
-                       "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
-                       y_c->Amax(), y_d->Amax());
-        Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
-        if (!retval || laminitnrm > laminitmax_) {
+	if (!retval) {
           y_c->Set(0.0);
           y_d->Set(0.0);
-        }
+	}
+	else {
+	  Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+			 "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
+			 y_c->Amax(), y_d->Amax());
+	  Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
+	  if (!retval || laminitnrm > laminitmax_) {
+	    y_c->Set(0.0);
+	    y_d->Set(0.0);
+	  }
+	}
         IpData().SetTrialEqMultipliers(*y_c, *y_d);
       }
       else {
