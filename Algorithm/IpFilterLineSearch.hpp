@@ -335,6 +335,12 @@ namespace Ipopt
     /** Flag indicating whether the line search should always accept
      *  the full (fraction-to-the-boundary) step. */
     bool ls_always_accept_;
+    /** parameter in heurstic that determines whether corrector step
+    should be tried. */
+    Number corrector_compl_avrg_red_fact_;
+    /** Flag indicating whether the corrector should be skipped in an
+     *  iteration in which negative curvature is detected */
+    bool skip_corr_if_neg_curv_;
     //@}
 
     /** Filter with entries */

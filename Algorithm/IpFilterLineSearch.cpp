@@ -158,13 +158,13 @@ namespace Ipopt
       kappa_soc_ = 0.99;
     }
 
-    if (options.GetNumericValue("obj_max_inc_", value, prefix)) {
+    if (options.GetNumericValue("obj_max_inc", value, prefix)) {
       ASSERT_EXCEPTION(value > 1., OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"obj_max_inc_\": This value must be larger than 1.");
       obj_max_inc_ = value;
     }
     else {
-      obj_max_inc_ = 5;
+      obj_max_inc_ = 5.;
     }
 
     if (options.GetIntegerValue("magic_steps", ivalue, prefix)) {
@@ -181,11 +181,27 @@ namespace Ipopt
       corrector_type_ = 0;
     }
 
+    if (options.GetIntegerValue("skip_corr_if_neg_curv", ivalue, prefix)) {
+      skip_corr_if_neg_curv_ = (ivalue != 0);
+    }
+    else {
+      skip_corr_if_neg_curv_ = true;
+    }
+
     if (options.GetIntegerValue("ls_always_accept", ivalue, prefix)) {
       ls_always_accept_ = (ivalue != 0);
     }
     else {
       ls_always_accept_ = false;
+    }
+
+    if (options.GetNumericValue("corrector_compl_avrg_red_fact", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"corrector_compl_avrg_red_fact_\": This value must be positive1.");
+      corrector_compl_avrg_red_fact_ = value;
+    }
+    else {
+      corrector_compl_avrg_red_fact_ = 1.;
     }
 
     bool retvalue = true;
@@ -238,8 +254,8 @@ namespace Ipopt
     bool soc_taken = false;
     Index n_steps = 0;
 
-    //if (corrector_type_!=0) {
-    if (corrector_type_!=0 && IpData().info_regu_x()==0.) {
+    if (corrector_type_!=0 &&
+        (!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) ) {
       // Before we do the actual backtracking line search for the
       // regular primal-dual search direction, let's see if a step
       // including a higher-order correctior is already acceptable
@@ -266,7 +282,7 @@ namespace Ipopt
              n_steps == 0) { // always allow the "full" step if it is
         // acceptable (even if alpha_primal<=alpha_min)
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                       "Starting checks for alpha (primal) = %lf\n",
+                       "Starting checks for alpha (primal) = %8.2e\n",
                        alpha_primal);
 
         try {
@@ -419,8 +435,14 @@ namespace Ipopt
     DBG_START_METH("FilterLineSearch::CheckAcceptabilityOfTrialPoint",
                    dbg_verbosity);
 
-    if (ls_always_accept_)
+    if (ls_always_accept_) {
+      //       // We call the evaluation of a trial point once here, because
+      //       // otherwise the SafeSlack mechanism in
+      //       // IpoptCalculatedQuantities complains (it currently only ever
+      //       // corrects trial point slacks)
+      //       Number trial_barr = IpCq().trial_barrier_obj();
       return true;
+    }
 
     bool accept;
 
@@ -545,6 +567,7 @@ namespace Ipopt
   {
     DBG_START_FUN("FilterLineSearch::Compare_le",
                   dbg_verbosity);
+    DBG_PRINT((1,"lhs = %27.16e rhs = %27.16e  BasVal = %27.16e\n",lhs,rhs,BasVal));
     // ToDo: Comparison based on machine precision
     return (lhs - rhs <= 1e-15*fabs(BasVal));
   }
@@ -706,18 +729,24 @@ namespace Ipopt
     bool accept = false;
 
     // Compute the corrector step based on corrector_type parameter
-    SmartPtr<Vector> delta_corr_x;
-    SmartPtr<Vector> delta_corr_s;
-    SmartPtr<Vector> delta_corr_y_c;
-    SmartPtr<Vector> delta_corr_y_d;
-    SmartPtr<Vector> delta_corr_z_L;
-    SmartPtr<Vector> delta_corr_z_U;
-    SmartPtr<Vector> delta_corr_v_L;
-    SmartPtr<Vector> delta_corr_v_U;
+    SmartPtr<Vector> delta_corr_x = actual_delta_x->MakeNew();
+    SmartPtr<Vector> delta_corr_s = actual_delta_s->MakeNew();
+    SmartPtr<Vector> delta_corr_y_c = actual_delta_y_c->MakeNew();
+    SmartPtr<Vector> delta_corr_y_d = actual_delta_y_d->MakeNew();
+    SmartPtr<Vector> delta_corr_z_L = actual_delta_z_L->MakeNew();
+    SmartPtr<Vector> delta_corr_z_U = actual_delta_z_U->MakeNew();
+    SmartPtr<Vector> delta_corr_v_L = actual_delta_v_L->MakeNew();
+    SmartPtr<Vector> delta_corr_v_U = actual_delta_v_U->MakeNew();
 
     switch (corrector_type_) {
       case 1 : {
-        // Standard MPC corrector
+        // 1: Standard MPC corrector
+
+        // 	// I think it doesn't make sense to try the MPC corrector step
+        // 	// in the fixed mu mode, since we are not heading to mu=0
+        // 	if (!IpData().FreeMuMode()) {
+        // 	  return false;
+        // 	}
 
         // ToDo: For now, recompute the affine scaling step.  Later we
         // have to find a way so that it doesn't have to be recomputed
@@ -760,14 +789,69 @@ namespace Ipopt
         DBG_PRINT_VECTOR(2, "delta_aff_v_L", *delta_aff_v_L);
         DBG_PRINT_VECTOR(2, "delta_aff_v_U", *delta_aff_v_U);
 
-        delta_corr_x = actual_delta_x->MakeNew();
-        delta_corr_s = actual_delta_s->MakeNew();
-        delta_corr_y_c = actual_delta_y_c->MakeNew();
-        delta_corr_y_d = actual_delta_y_d->MakeNew();
-        delta_corr_z_L = actual_delta_z_L->MakeNew();
-        delta_corr_z_U = actual_delta_z_U->MakeNew();
-        delta_corr_v_L = actual_delta_v_L->MakeNew();
-        delta_corr_v_U = actual_delta_v_U->MakeNew();
+        delta_corr_x->Copy(*actual_delta_x);
+        delta_corr_s->Copy(*actual_delta_s);
+        delta_corr_y_c->Copy(*actual_delta_y_c);
+        delta_corr_y_d->Copy(*actual_delta_y_d);
+        delta_corr_z_L->Copy(*actual_delta_z_L);
+        delta_corr_z_U->Copy(*actual_delta_z_U);
+        delta_corr_v_L->Copy(*actual_delta_v_L);
+        delta_corr_v_U->Copy(*actual_delta_v_U);
+
+        SmartPtr<Vector> rhs_x = actual_delta_x->MakeNew();
+        SmartPtr<Vector> rhs_s = actual_delta_s->MakeNew();
+        SmartPtr<Vector> rhs_c = actual_delta_y_c->MakeNew();
+        SmartPtr<Vector> rhs_d = actual_delta_y_d->MakeNew();
+        SmartPtr<Vector> rhs_compl_x_L = actual_delta_z_L->MakeNew();
+        SmartPtr<Vector> rhs_compl_x_U = actual_delta_z_U->MakeNew();
+        SmartPtr<Vector> rhs_compl_s_L = actual_delta_v_L->MakeNew();
+        SmartPtr<Vector> rhs_compl_s_U = actual_delta_v_U->MakeNew();
+
+        rhs_x->Set(0.);
+        rhs_s->Set(0.);
+        rhs_c->Set(0.);
+        rhs_d->Set(0.);
+        IpNLP().Px_L()->TransMultVector(-1., *delta_aff_x, 0., *rhs_compl_x_L);
+        rhs_compl_x_L->ElementWiseMultiply(*delta_aff_z_L);
+        IpNLP().Px_U()->TransMultVector(1., *delta_aff_x, 0., *rhs_compl_x_U);
+        rhs_compl_x_U->ElementWiseMultiply(*delta_aff_z_U);
+        IpNLP().Pd_L()->TransMultVector(-1., *delta_aff_s, 0., *rhs_compl_s_L);
+        rhs_compl_s_L->ElementWiseMultiply(*delta_aff_v_L);
+        IpNLP().Pd_U()->TransMultVector(1., *delta_aff_s, 0., *rhs_compl_s_U);
+        rhs_compl_s_U->ElementWiseMultiply(*delta_aff_v_U);
+
+        pd_solver_->Solve(1.0, 1.0,
+                          *rhs_x,
+                          *rhs_s,
+                          *rhs_c,
+                          *rhs_d,
+                          *rhs_compl_x_L,
+                          *rhs_compl_x_U,
+                          *rhs_compl_s_L,
+                          *rhs_compl_s_U,
+                          *delta_corr_x,
+                          *delta_corr_s,
+                          *delta_corr_y_c,
+                          *delta_corr_y_d,
+                          *delta_corr_z_L,
+                          *delta_corr_z_U,
+                          *delta_corr_v_L,
+                          *delta_corr_v_U,
+                          true);
+
+        DBG_PRINT_VECTOR(2, "delta_corr_x", *delta_corr_x);
+        DBG_PRINT_VECTOR(2, "delta_corr_s", *delta_corr_s);
+        DBG_PRINT_VECTOR(2, "delta_corr_y_c", *delta_corr_y_c);
+        DBG_PRINT_VECTOR(2, "delta_corr_y_d", *delta_corr_y_d);
+        DBG_PRINT_VECTOR(2, "delta_corr_z_L", *delta_corr_z_L);
+        DBG_PRINT_VECTOR(2, "delta_corr_z_U", *delta_corr_z_U);
+        DBG_PRINT_VECTOR(2, "delta_corr_v_L", *delta_corr_v_L);
+        DBG_PRINT_VECTOR(2, "delta_corr_v_U", *delta_corr_v_U);
+      }
+      break;
+      case 2 : {
+        // 2: Second order correction for primal-dual step to
+        // primal-dual mu
 
         delta_corr_x->Copy(*actual_delta_x);
         delta_corr_s->Copy(*actual_delta_s);
@@ -792,14 +876,49 @@ namespace Ipopt
         rhs_c->Set(0.);
         rhs_d->Set(0.);
 
-        IpNLP().Px_L()->TransMultVector(-1., *delta_aff_x, 0., *rhs_compl_x_L);
-        rhs_compl_x_L->ElementWiseMultiply(*delta_aff_z_L);
-        IpNLP().Px_U()->TransMultVector(1., *delta_aff_x, 0., *rhs_compl_x_U);
-        rhs_compl_x_U->ElementWiseMultiply(*delta_aff_z_U);
-        IpNLP().Pd_L()->TransMultVector(-1., *delta_aff_s, 0., *rhs_compl_s_L);
-        rhs_compl_s_L->ElementWiseMultiply(*delta_aff_v_L);
-        IpNLP().Pd_U()->TransMultVector(1., *delta_aff_s, 0., *rhs_compl_s_U);
-        rhs_compl_s_U->ElementWiseMultiply(*delta_aff_v_U);
+        Number mu = IpData().curr_mu();
+        SmartPtr<Vector> tmp;
+
+        rhs_compl_x_L->Copy(*IpCq().curr_slack_x_L());
+        IpNLP().Px_L()->TransMultVector(-1., *actual_delta_x,
+                                        -1., *rhs_compl_x_L);
+        tmp = actual_delta_z_L->MakeNew();
+        tmp->Copy(*IpData().curr_z_L());
+        tmp->Axpy(1., *actual_delta_z_L);
+        rhs_compl_x_L->ElementWiseMultiply(*tmp);
+        rhs_compl_x_L->AddScalar(mu);
+
+        rhs_compl_x_U->Copy(*IpCq().curr_slack_x_U());
+        IpNLP().Px_U()->TransMultVector(1., *actual_delta_x,
+                                        -1., *rhs_compl_x_U);
+        tmp = actual_delta_z_U->MakeNew();
+        tmp->Copy(*IpData().curr_z_U());
+        tmp->Axpy(1., *actual_delta_z_U);
+        rhs_compl_x_U->ElementWiseMultiply(*tmp);
+        rhs_compl_x_U->AddScalar(mu);
+
+        rhs_compl_s_L->Copy(*IpCq().curr_slack_s_L());
+        IpNLP().Pd_L()->TransMultVector(-1., *actual_delta_s,
+                                        -1., *rhs_compl_s_L);
+        tmp = actual_delta_v_L->MakeNew();
+        tmp->Copy(*IpData().curr_v_L());
+        tmp->Axpy(1., *actual_delta_v_L);
+        rhs_compl_s_L->ElementWiseMultiply(*tmp);
+        rhs_compl_s_L->AddScalar(mu);
+
+        rhs_compl_s_U->Copy(*IpCq().curr_slack_s_U());
+        IpNLP().Pd_U()->TransMultVector(1., *actual_delta_s,
+                                        -1., *rhs_compl_s_U);
+        tmp = actual_delta_v_U->MakeNew();
+        tmp->Copy(*IpData().curr_v_U());
+        tmp->Axpy(1., *actual_delta_v_U);
+        rhs_compl_s_U->ElementWiseMultiply(*tmp);
+        rhs_compl_s_U->AddScalar(mu);
+
+        DBG_PRINT_VECTOR(2, "rhs_compl_x_L", *rhs_compl_x_L);
+        DBG_PRINT_VECTOR(2, "rhs_compl_x_U", *rhs_compl_x_U);
+        DBG_PRINT_VECTOR(2, "rhs_compl_s_L", *rhs_compl_s_L);
+        DBG_PRINT_VECTOR(2, "rhs_compl_s_U", *rhs_compl_s_U);
 
         pd_solver_->Solve(1.0, 1.0,
                           *rhs_x,
@@ -859,9 +978,10 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "avrg_compl(curr) = %e, avrg_compl(trial) = %e\n",
                    curr_avrg_compl, trial_avrg_compl);
-    if (trial_avrg_compl>=2.*curr_avrg_compl) {
+    if (corrector_type_==1 &&
+        trial_avrg_compl>=corrector_compl_avrg_red_fact_*curr_avrg_compl) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                     "Rejecting corrector step, because trial compl is too large.\n" );
+                     "Rejecting corrector step, because trial complementarity is too large.\n" );
       return false;
     }
 
