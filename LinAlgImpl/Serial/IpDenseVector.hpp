@@ -45,14 +45,14 @@ namespace Ipopt
      *  WITH CARE!). This does not produce a copy, and lifetime is not
      *  guaranteed!
      */
-    Number* Values();
+    inline Number* Values();
 
     /** Obtain pointer to the internal Number array with vector
      *  elements without the intention to change the vector data (USE
      *  WITH CARE!). This does not produce a copy, and lifetime is not
      *  guaranteed!
      */
-    const Number* Values() const;
+    inline const Number* Values() const;
     //@}
 
     /** @name Modifying subranges of the vector. */
@@ -226,6 +226,25 @@ namespace Ipopt
     void FreeInternalStorage(Number* values) const;
     //@}
   };
+
+  // inline functions
+  inline Number* DenseVector::Values()
+  {
+    // Here we assume that every time someone requests this direct raw
+    // pointer, the data is going to change and the Tag for this
+    // vector has to be updated.
+    ObjectChanged();
+    initialized_= true;
+    return values_;
+  }
+
+  inline const Number* DenseVector::Values() const
+  {
+    DBG_ASSERT(initialized_);
+    return values_;
+  }
+
+
 
 } // namespace Ipopt
 #endif
