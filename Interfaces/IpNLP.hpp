@@ -41,7 +41,8 @@ namespace Ipopt
     //@{
     /** Overload if you want the chance to process options or parameters that
      *  may be specific to the NLP */
-    virtual bool ProcessOptions(const OptionsList& options)
+    virtual bool ProcessOptions(const OptionsList& options,
+                                const std::string& prefix)
     {
       return true;
     }

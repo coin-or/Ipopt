@@ -41,7 +41,8 @@ namespace Ipopt
 
     /** @name CompositeNLP Initialization. */
     //@{
-    virtual bool ProcessOptions(const OptionsList& options);
+    virtual bool ProcessOptions(const OptionsList& options,
+                                const std::string& prefix);
 
     /** Method for creating the derived vector / matrix types
      *  (Do not delete these, the ). */
