@@ -32,7 +32,7 @@ namespace Ipopt
      *  has finished - unless it is NULL, in which case the
      *  multipliers are set to 0. */
     MinC_1NrmRestorationPhase(IpoptAlgorithm& resto_alg,
-			      const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator);
+                              const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator);
 
     /** Default destructor */
     virtual ~MinC_1NrmRestorationPhase();

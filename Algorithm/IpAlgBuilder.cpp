@@ -111,7 +111,7 @@ namespace Ipopt
     SmartPtr<EqMultiplierCalculator> resto_EqMultCalculator =
       new LeastSquareMultipliers(*resto_AugSolver);
     SmartPtr<IterateInitializer> resto_IterInitializer =
-    //      new DefaultIterateInitializer(resto_EqMultCalculator); //TODO
+      //      new DefaultIterateInitializer(resto_EqMultCalculator); //TODO
       new RestoIterateInitializer(resto_EqMultCalculator);
 
     // Create the object for the iteration output during restoration
