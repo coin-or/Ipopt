@@ -502,6 +502,14 @@ namespace Ipopt
                                   SmartPtr<const Vector>& dampind_s_L,
                                   SmartPtr<const Vector>& dampind_s_U);
 
+    /** Check if we are in the restoration phase. Returns true, if the
+     *  ip_nlp is of the type RestoIpoptNLP. ToDo: We probably want to
+     *  handle this more elegant and don't have an explicit dependency
+     *  here.  Now I added this because otherwise the caching doesn't
+     *  work properly since the restoration phase objective function
+     *  depends on the current barrier parameter. */
+    bool in_restoration_phase();
+
     //@}
   };
 

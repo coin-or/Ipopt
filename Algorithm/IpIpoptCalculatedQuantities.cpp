@@ -15,6 +15,9 @@
 
 #include <limits>
 
+// ToDo remove the following dependency
+#include "IpRestoIpoptNLP.hpp"
+
 namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
@@ -39,8 +42,8 @@ namespace Ipopt
       num_adjusted_slack_s_L_(0),
       num_adjusted_slack_s_U_(0),
 
-      curr_f_cache_(2),
-      trial_f_cache_(5),
+      curr_f_cache_(0),
+      trial_f_cache_(0),
       curr_grad_f_cache_(2),
 
       curr_barrier_obj_cache_(2),
@@ -440,10 +443,14 @@ namespace Ipopt
   Index
   IpoptCalculatedQuantities::AdjustedTrialSlacks()
   {
-    return (num_adjusted_slack_x_L_ +
-            num_adjusted_slack_x_U_ +
-            num_adjusted_slack_s_L_ +
-            num_adjusted_slack_s_U_);
+    DBG_START_METH("IpoptCalculatedQuantities::AdjustedTrialSlacks()",
+		   dbg_verbosity);
+    Index result =  (num_adjusted_slack_x_L_ +
+		     num_adjusted_slack_x_U_ +
+		     num_adjusted_slack_s_L_ +
+		     num_adjusted_slack_s_U_);
+    DBG_PRINT((1,"result = %d\n", result));
+    return result;
   }
 
   void
@@ -466,13 +473,30 @@ namespace Ipopt
                    dbg_verbosity);
     Number result;
     SmartPtr<const Vector> x = ip_data_->curr_x();
+    DBG_PRINT_VECTOR(2,"curr_x",*x);
+    DBG_PRINT((1, "curr_x tag = %d\n", x->GetTag()));
 
-    if (!curr_f_cache_.GetCachedResult1Dep(result, *x)) {
-      if (!trial_f_cache_.GetCachedResult1Dep(result, *x)) {
+    // ToDo: For now we make the value dependent on curr_mu during the
+    // restoration phase (because Eta in the restoration phase
+    // objective depends on it).  Need more elegant solution later.
+    std::vector<const TaggedObject*> tdeps;
+    tdeps.push_back(GetRawPtr(x));
+    std::vector<Number> sdeps;
+    if (in_restoration_phase()) {
+      sdeps.push_back(ip_data_->curr_mu());
+    }
+    else {
+      sdeps.push_back(-1.);
+    }
+
+    if (!curr_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      if (!trial_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
+	DBG_PRINT((2,"evaluate curr f\n"));
         result = ip_nlp_->f(*x);
       }
-      curr_f_cache_.AddCachedResult1Dep(result, *x);
+      curr_f_cache_.AddCachedResult(result, tdeps, sdeps);
     }
+    DBG_PRINT((1,"result (curr_f) = %e\n", result));
     return result;
   }
 
@@ -483,13 +507,30 @@ namespace Ipopt
                    dbg_verbosity);
     Number result;
     SmartPtr<const Vector> x = ip_data_->trial_x();
+    DBG_PRINT_VECTOR(2,"trial_x",*x);
+    DBG_PRINT((1, "trial_x tag = %d\n", x->GetTag()));
 
-    if (!trial_f_cache_.GetCachedResult1Dep(result, *x)) {
-      if (!curr_f_cache_.GetCachedResult1Dep(result, *x)) {
+    // ToDo: For now we make the value dependent on curr_mu during the
+    // restoration phase (because Eta in the restoration phase
+    // objective depends on it).  Need more elegant solution later.
+    std::vector<const TaggedObject*> tdeps;
+    tdeps.push_back(GetRawPtr(x));
+    std::vector<Number> sdeps;
+    if (in_restoration_phase()) {
+      sdeps.push_back(ip_data_->curr_mu());
+    }
+    else {
+      sdeps.push_back(-1.);
+    }
+
+    if (!trial_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      if (!curr_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
+	DBG_PRINT((2,"evaluate trial f\n"));
         result = ip_nlp_->f(*x);
       }
-      trial_f_cache_.AddCachedResult1Dep(result, *x);
+      trial_f_cache_.AddCachedResult(result, tdeps, sdeps);
     }
+    DBG_PRINT((1,"result (trial_f) = %e\n", result));
     return result;
   }
 
@@ -501,9 +542,22 @@ namespace Ipopt
     SmartPtr<const Vector> result;
     SmartPtr<const Vector> x = ip_data_->curr_x();
 
-    if (!curr_grad_f_cache_.GetCachedResult1Dep(result, *x)) {
+    // ToDo: For now we make the value dependent on curr_mu during the
+    // restoration phase (because Eta in the restoration phase
+    // objective depends on it).  Need more elegant solution later.
+    std::vector<const TaggedObject*> tdeps;
+    tdeps.push_back(GetRawPtr(x));
+    std::vector<Number> sdeps;
+    if (in_restoration_phase()) {
+      sdeps.push_back(ip_data_->curr_mu());
+    }
+    else {
+      sdeps.push_back(-1.);
+    }
+
+    if (!curr_grad_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
       result = ip_nlp_->grad_f(*x);
-      curr_grad_f_cache_.AddCachedResult1Dep(result, *x);
+      curr_grad_f_cache_.AddCachedResult(result, tdeps, sdeps);
     }
     return result;
   }
@@ -574,17 +628,21 @@ namespace Ipopt
 
     SmartPtr<const Vector> x = ip_data_->curr_x();
     SmartPtr<const Vector> s = ip_data_->curr_s();
+    DBG_PRINT_VECTOR(2,"curr_x",*x);
+    DBG_PRINT_VECTOR(2,"curr_s",*s);
     std::vector<const TaggedObject*> tdeps;
     tdeps.push_back(GetRawPtr(x));
     tdeps.push_back(GetRawPtr(s));
 
     Number mu = ip_data_->curr_mu();
+    DBG_PRINT((1,"curr_mu=%e\n",mu));
     std::vector<Number> sdeps;
     sdeps.push_back(mu);
 
     if (!curr_barrier_obj_cache_.GetCachedResult(result, tdeps, sdeps)) {
       if (!trial_barrier_obj_cache_.GetCachedResult(result, tdeps, sdeps)) {
         result = curr_f();
+	DBG_PRINT((1,"curr_F=%e\n",result));
         result += CalcBarrierTerm(mu,
                                   *curr_slack_x_L(),
                                   *curr_slack_x_U(),
@@ -606,17 +664,21 @@ namespace Ipopt
 
     SmartPtr<const Vector> x = ip_data_->trial_x();
     SmartPtr<const Vector> s = ip_data_->trial_s();
+    DBG_PRINT_VECTOR(2,"trial_x",*x);
+    DBG_PRINT_VECTOR(2,"trial_s",*s);
     std::vector<const TaggedObject*> tdeps;
     tdeps.push_back(GetRawPtr(x));
     tdeps.push_back(GetRawPtr(s));
 
     Number mu = ip_data_->curr_mu();
+    DBG_PRINT((1,"trial_mu=%e\n",mu));
     std::vector<Number> sdeps;
     sdeps.push_back(mu);
 
     if (!trial_barrier_obj_cache_.GetCachedResult(result, tdeps, sdeps)) {
       if (!curr_barrier_obj_cache_.GetCachedResult(result, tdeps, sdeps)) {
         result = trial_f();
+	DBG_PRINT((1,"trial_F=%e\n",result));
         result += CalcBarrierTerm(ip_data_->curr_mu(),
                                   *trial_slack_x_L(),
                                   *trial_slack_x_U(),
@@ -1053,9 +1115,24 @@ namespace Ipopt
     SmartPtr<const Vector> y_c = ip_data_->curr_y_c();
     SmartPtr<const Vector> y_d = ip_data_->curr_y_d();
 
-    if (!curr_exact_hessian_cache_.GetCachedResult3Dep(result, *x, *y_c, *y_d)) {
+    // ToDo: For now we make the value dependent on curr_mu during the
+    // restoration phase (because Eta in the restoration phase
+    // objective depends on it).  Need more elegant solution later.
+    std::vector<const TaggedObject*> tdeps;
+    tdeps.push_back(GetRawPtr(x));
+    tdeps.push_back(GetRawPtr(y_c));
+    tdeps.push_back(GetRawPtr(y_d));
+    std::vector<Number> sdeps;
+    if (in_restoration_phase()) {
+      sdeps.push_back(ip_data_->curr_mu());
+    }
+    else {
+      sdeps.push_back(-1.);
+    }
+
+    if (!curr_exact_hessian_cache_.GetCachedResult(result, tdeps, sdeps)) {
       result = ip_nlp_->h(*x, 1.0, *y_c, *y_d);
-      curr_exact_hessian_cache_.AddCachedResult3Dep(result, *x, *y_c, *y_d);
+      curr_exact_hessian_cache_.AddCachedResult(result, tdeps, sdeps);
     }
 
     return result;
@@ -2376,6 +2453,13 @@ namespace Ipopt
       curr_gradBarrTDelta_cache_.AddCachedResult(result, tdeps);
     }
     return result;
+  }
+
+  // ToDo we probably want to get rid of this:
+  bool IpoptCalculatedQuantities::in_restoration_phase()
+  {
+    const RestoIpoptNLP* resto_nlp = dynamic_cast<const RestoIpoptNLP*>(GetRawPtr(ip_nlp_));
+    return (resto_nlp!=NULL);
   }
 
 } // namespace Ipopt
