@@ -308,6 +308,23 @@ namespace Ipopt
     }
   }
 
+  // Specialized Functions
+  void CompoundVector::AddTwoVectorsImpl(Number a, const Vector& v1,
+					 Number b, const Vector& v2)
+  {
+    DBG_ASSERT(vectors_valid_);
+    const CompoundVector* comp_v1 = dynamic_cast<const CompoundVector*>(&v1);
+    DBG_ASSERT(comp_v1);
+    DBG_ASSERT(NComps() == comp_v1->NComps());
+    const CompoundVector* comp_v2 = dynamic_cast<const CompoundVector*>(&v2);
+    DBG_ASSERT(comp_v2);
+    DBG_ASSERT(NComps() == comp_v2->NComps());
+
+    for(Index i=0; i<NComps(); i++) {
+      Comp(i)->AddTwoVectors(a, *comp_v1->GetComp(i), b, *comp_v2->GetComp(i));
+    }
+  }
+
   void CompoundVector::PrintImpl(FILE* fp, std::string name, Index indent, std::string prefix) const
   {
     DBG_START_METH("CompoundVector::PrintImpl", dbg_verbosity);
