@@ -69,6 +69,8 @@ namespace Ipopt
 
       curr_grad_lag_x_cache_(1),
       curr_grad_lag_s_cache_(1),
+      curr_grad_lag_with_damping_x_cache_(0),
+      curr_grad_lag_with_damping_s_cache_(0),
       curr_compl_x_L_cache_(1),
       curr_compl_x_U_cache_(1),
       curr_compl_s_L_cache_(1),
@@ -425,8 +427,11 @@ namespace Ipopt
         SmartPtr<Vector> t_max = t2;
         t_max->Set(1.0);
         t_max->ElementWiseMax(*bound);
+	t_max->AddOneVector(1.0, *slack, s_move_);
+	/* DELE
         t_max->Scal(s_move_);
         t_max->Axpy(1.0, *slack);
+	*/
         DBG_PRINT_VECTOR(2, "t_max", *t_max);
 
         t->ElementWiseMin(*t_max);
@@ -588,6 +593,8 @@ namespace Ipopt
     retval += slack_s_U.SumLogs();
     retval *= -mu;
 
+    DBG_PRINT((1, "BarrierTerm without damping = %25.16e\n", retval));
+
     // Include the linear damping term if kappa_d is nonzero.
     if (kappa_d_>0) {
       SmartPtr<const Vector> dampind_x_L;
@@ -614,6 +621,8 @@ namespace Ipopt
       tmp->ElementWiseMultiply(*dampind_s_U);
       retval += kappa_d_ * mu * tmp->Asum();
     }
+
+    DBG_PRINT((1, "BarrierTerm with damping = %25.16e\n", retval));
 
     DBG_ASSERT(FiniteNumber(retval));
     return retval;
@@ -722,6 +731,8 @@ namespace Ipopt
       tmp2->ElementWiseDivide(*slack);
       ip_nlp_->Px_U()->MultVector(mu, *tmp2, 1., *tmp1);
 
+      DBG_PRINT_VECTOR(2, "Barrier_Grad_x without damping", *tmp1);
+
       // Take care of linear damping terms
       if (kappa_d_>0.) {
         SmartPtr<const Vector> dampind_x_L;
@@ -730,9 +741,13 @@ namespace Ipopt
         SmartPtr<const Vector> dampind_s_U;
         ComputeDampingIndicators(dampind_x_L, dampind_x_U, dampind_s_L, dampind_s_U);
 
+	DBG_PRINT((1, "kappa_d*mu = %e\n", kappa_d_*mu));
+	DBG_PRINT_VECTOR(2, "dampind_x_L", *dampind_x_L);
         ip_nlp_->Px_L()->MultVector(kappa_d_*mu, *dampind_x_L, 1., *tmp1);
         ip_nlp_->Px_U()->MultVector(-kappa_d_*mu, *dampind_x_U, 1., *tmp1);
       }
+
+      DBG_PRINT_VECTOR(2, "Barrier_Grad_x with damping", *tmp1);
 
       result = ConstPtr(tmp1);
 
@@ -772,6 +787,8 @@ namespace Ipopt
       tmp2->ElementWiseDivide(*slack);
       ip_nlp_->Pd_U()->MultVector(mu, *tmp2, 1., *tmp1);
 
+      DBG_PRINT_VECTOR(2, "Barrier_Grad_s without damping", *tmp1);
+
       // Take care of linear damping terms
       if (kappa_d_>0.) {
         SmartPtr<const Vector> dampind_x_L;
@@ -780,9 +797,14 @@ namespace Ipopt
         SmartPtr<const Vector> dampind_s_U;
         ComputeDampingIndicators(dampind_x_L, dampind_x_U, dampind_s_L, dampind_s_U);
 
+	DBG_PRINT((1, "kappa_d*mu = %e\n", kappa_d_*mu));
+	DBG_PRINT_VECTOR(2, "dampind_s_L", *dampind_s_L);
+	DBG_PRINT_VECTOR(2, "dampind_s_U", *dampind_s_U);
         ip_nlp_->Pd_L()->MultVector(kappa_d_*mu, *dampind_s_L, 1., *tmp1);
         ip_nlp_->Pd_U()->MultVector(-kappa_d_*mu, *dampind_s_U, 1., *tmp1);
       }
+
+      DBG_PRINT_VECTOR(2, "Barrier_Grad_s with damping", *tmp1);
 
       result = ConstPtr(tmp1);
 
@@ -933,8 +955,11 @@ namespace Ipopt
     if (!curr_d_minus_s_cache_.GetCachedResult2Dep(result, *x, *s)) {
       if (!trial_d_minus_s_cache_.GetCachedResult2Dep(result, *x, *s)) {
         SmartPtr<Vector> tmp = s->MakeNew();
+	tmp->AddTwoVectors(1., *curr_d(), -1., *s, 0.);
+	/* DELE
         tmp->Copy(*curr_d());
         tmp->Axpy(-1., *s);
+	*/
         result = ConstPtr(tmp);
       }
       curr_d_minus_s_cache_.AddCachedResult2Dep(result, *x, *s);
@@ -956,8 +981,11 @@ namespace Ipopt
     if (!trial_d_minus_s_cache_.GetCachedResult2Dep(result, *x, *s)) {
       if (!curr_d_minus_s_cache_.GetCachedResult2Dep(result, *x, *s)) {
         SmartPtr<Vector> tmp = s->MakeNew();
+	tmp->AddTwoVectors(1., *trial_d(), -1., *s, 0.);
+	/* DELE
         tmp->Copy(*trial_d());
         tmp->Axpy(-1., *s);
+	*/
         result = ConstPtr(tmp);
       }
       trial_d_minus_s_cache_.AddCachedResult2Dep(result, *x, *s);
@@ -1189,8 +1217,12 @@ namespace Ipopt
       SmartPtr<Vector> tmp = x->MakeNew();
       DBG_PRINT_VECTOR(2,"curr_grad_f",*curr_grad_f());
       tmp->Copy(*curr_grad_f());
+      tmp->AddTwoVectors(1., *curr_jac_cT_times_curr_y_c(),
+			 1., *curr_jac_dT_times_curr_y_d(), 1.);
+      /* DELE
       tmp->Axpy(1., *curr_jac_cT_times_curr_y_c());
       tmp->Axpy(1., *curr_jac_dT_times_curr_y_d());
+      */
       DBG_PRINT_VECTOR(2,"jac_cT*y_c",*curr_jac_cT_times_curr_y_c());
       DBG_PRINT_VECTOR(2,"jac_dT*y_d",*curr_jac_dT_times_curr_y_d());
       ip_nlp_->Px_L()->MultVector(-1., *ip_data_->curr_z_L(), 1., *tmp);
@@ -1229,6 +1261,102 @@ namespace Ipopt
 
     return result;
   }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::curr_grad_lag_with_damping_x()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::curr_grad_lag_with_damping_x()",
+                   dbg_verbosity);
+
+    /* If no damping is used, just return the gradient of the regular
+       Lagrangian function */
+    if (kappa_d_==0.) {
+      return curr_grad_lag_x();
+    }
+
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const Vector> x = ip_data_->curr_x();
+    SmartPtr<const Vector> y_c = ip_data_->curr_y_c();
+    SmartPtr<const Vector> y_d = ip_data_->curr_y_d();
+    SmartPtr<const Vector> z_L = ip_data_->curr_z_L();
+    SmartPtr<const Vector> z_U = ip_data_->curr_z_U();
+    Number mu = ip_data_->curr_mu();
+
+    std::vector<const TaggedObject*> deps;
+    deps.push_back(GetRawPtr(x));
+    deps.push_back(GetRawPtr(y_c));
+    deps.push_back(GetRawPtr(y_d));
+    deps.push_back(GetRawPtr(z_L));
+    deps.push_back(GetRawPtr(z_U));
+    std::vector<Number> sdeps;
+    sdeps.push_back(mu);
+
+    if (!curr_grad_lag_with_damping_x_cache_.GetCachedResult(result, deps, sdeps)) {
+      SmartPtr<Vector> tmp = x->MakeNew();
+      tmp->Copy(*curr_grad_lag_x());
+
+      SmartPtr<const Vector> dampind_x_L;
+      SmartPtr<const Vector> dampind_x_U;
+      SmartPtr<const Vector> dampind_s_L;
+      SmartPtr<const Vector> dampind_s_U;
+      ComputeDampingIndicators(dampind_x_L, dampind_x_U, dampind_s_L, dampind_s_U);
+
+      ip_nlp_->Px_L()->MultVector(kappa_d_*mu, *dampind_x_L, 1., *tmp);
+      ip_nlp_->Px_U()->MultVector(-kappa_d_*mu, *dampind_x_U, 1., *tmp);
+
+      result = ConstPtr(tmp);
+      curr_grad_lag_with_damping_x_cache_.AddCachedResult(result, deps, sdeps);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::curr_grad_lag_with_damping_s()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::curr_grad_lag_with_damping_s()",
+                   dbg_verbosity);
+
+    /* If no damping is used, just return the gradient of the regular
+       Lagrangian function */
+    if (kappa_d_==0.) {
+      return curr_grad_lag_s();
+    }
+
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const Vector> y_d = ip_data_->curr_y_d();
+    SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
+    SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
+    Number mu = ip_data_->curr_mu();
+
+    std::vector<const TaggedObject*> deps;
+    deps.push_back(GetRawPtr(y_d));
+    deps.push_back(GetRawPtr(v_L));
+    deps.push_back(GetRawPtr(v_U));
+    std::vector<Number> sdeps;
+    sdeps.push_back(mu);
+
+    if (!curr_grad_lag_with_damping_s_cache_.GetCachedResult(result, deps, sdeps)) {
+      SmartPtr<Vector> tmp = y_d->MakeNew();
+      tmp->Copy(*curr_grad_lag_s());
+
+      SmartPtr<const Vector> dampind_x_L;
+      SmartPtr<const Vector> dampind_x_U;
+      SmartPtr<const Vector> dampind_s_L;
+      SmartPtr<const Vector> dampind_s_U;
+      ComputeDampingIndicators(dampind_x_L, dampind_x_U, dampind_s_L, dampind_s_U);
+
+      ip_nlp_->Pd_L()->MultVector(kappa_d_*mu, *dampind_s_L, 1., *tmp);
+      ip_nlp_->Pd_U()->MultVector(-kappa_d_*mu, *dampind_s_U, 1., *tmp);
+      
+      result = ConstPtr(tmp);
+      curr_grad_lag_with_damping_s_cache_.AddCachedResult(result, deps, sdeps);
+    }
+
+    return result;
+  }  
 
   SmartPtr<const Vector>
   IpoptCalculatedQuantities::CalcCompl(const Vector& slack,
