@@ -81,6 +81,8 @@ namespace Ipopt
     resto_ip_data->Set_info_alpha_dual(IpData().info_alpha_dual());
     resto_ip_data->Set_info_ls_count(IpData().info_ls_count());
 
+    // Call the optimization algorithm to solve the restoration phase
+    // problem
     IpoptAlgorithm::SolverReturn resto_status	= resto_alg_->Optimize();
 
     int retval=-1;
@@ -121,8 +123,8 @@ namespace Ipopt
     }
 
     if (retval == 0) {
-      // Copy the results back...!!!
-      // for now, I only copy x and s
+      // Copy the results into the trial fields;. They will be
+      // accepted later in the full algorith
       SmartPtr<const CompoundVector> cx =
         dynamic_cast<const CompoundVector*>(GetRawPtr(resto_ip_data->curr_x()));
       DBG_ASSERT(IsValid(cx));
@@ -167,6 +169,13 @@ namespace Ipopt
 
       DBG_PRINT_VECTOR(2, "y_c", *IpData().curr_y_c());
       DBG_PRINT_VECTOR(2, "y_d", *IpData().curr_y_d());
+
+      // ToDo: For the bound multipliers, for now we just keep the
+      // current ones
+      IpData().SetTrialBoundMultipliersFromPtr(IpData().curr_z_L(),
+          IpData().curr_z_U(),
+          IpData().curr_v_L(),
+          IpData().curr_v_U());
 
       IpData().Set_iter_count(resto_ip_data->iter_count()-1);
       // Skip the next line, because it would just replicate the first
