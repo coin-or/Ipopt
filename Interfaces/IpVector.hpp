@@ -110,8 +110,16 @@ namespace Ipopt
     /** Reciprocates the entries in the vector */
     void ElementWiseReciprocal();
 
+    /** Absolute values of the entries in the vector */
+    void ElementWiseAbs();
+
     /** Element-wise square root of the entries in the vector */
     void ElementWiseSqrt();
+
+    /** Replaces the vector values with their sgn values
+    ( -1 if x_i < 0, 0 if x_i == 0, and 1 if x_i > 0)
+    */
+    void ElementWiseSgn();
 
     /** Add scalar to every vector component */
     void AddScalar(Number scalar);
@@ -127,11 +135,6 @@ namespace Ipopt
 
     /** Returns the sum of the logs of each vector entry */
     Number SumLogs() const;
-
-    /** Replaces the vector values with their sgn values
-    ( -1 if x_i < 0, 0 if x_i == 0, and 1 if x_i > 0)
-    */
-    void Sgn();
     //@}
 
     /** @name Accessor methods
@@ -200,8 +203,14 @@ namespace Ipopt
     /** Reciprocates the elements of the vector */
     virtual void ElementWiseReciprocalImpl()=0;
 
+    /** Take elementwise absolute values of the elements of the vector */
+    virtual void ElementWiseAbsImpl()=0;
+
     /** Take elementwise square-root of the elements of the vector */
     virtual void ElementWiseSqrtImpl()=0;
+
+    /** Replaces entries with sgn of the entry */
+    virtual void ElementWiseSgnImpl()=0;
 
     /** Add scalar to every component of vector */
     virtual void AddScalarImpl(Number scalar)=0;
@@ -217,9 +226,6 @@ namespace Ipopt
 
     /** Sum of logs of entries in the vector */
     virtual Number SumLogsImpl() const=0;
-
-    /** Replaces entries with sgn of the entry */
-    virtual void SgnImpl()=0;
 
     /** Print the entire vector */
     virtual void PrintImpl(FILE* fp, std::string name = "Vector",
@@ -417,9 +423,9 @@ namespace Ipopt
   }
 
   inline
-  void Vector::Sgn()
+  void Vector::ElementWiseSgn()
   {
-    SgnImpl();
+    ElementWiseSgnImpl();
     ObjectChanged();
   }
 
@@ -462,6 +468,13 @@ namespace Ipopt
   void Vector::ElementWiseMin(const Vector& x)
   {
     ElementWiseMinImpl(x);
+    ObjectChanged();
+  }
+
+  inline
+  void Vector::ElementWiseAbs()
+  {
+    ElementWiseAbsImpl();
     ObjectChanged();
   }
 
