@@ -42,8 +42,8 @@ namespace Ipopt
       num_adjusted_slack_s_L_(0),
       num_adjusted_slack_s_U_(0),
 
-      curr_f_cache_(0),
-      trial_f_cache_(0),
+      curr_f_cache_(2),
+      trial_f_cache_(5),
       curr_grad_f_cache_(2),
 
       curr_barrier_obj_cache_(2),
