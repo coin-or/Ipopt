@@ -117,7 +117,7 @@ namespace Ipopt
 
     tmp_l->Set(1.0);
     p_l->Copy(*x_L);
-    p_l->Sgn();
+    p_l->ElementWiseSgn();
     p_l->ElementWiseMultiply(*x_L);
     p_l->ElementWiseMax(*tmp_l);
     p_l->Scal(kappa_1_);
@@ -147,7 +147,7 @@ namespace Ipopt
 
     tmp_u->Set(1.0);
     p_u->Copy(*x_U);
-    p_u->Sgn();
+    p_u->ElementWiseSgn();
     p_u->ElementWiseMultiply(*x_U);
     p_u->ElementWiseMax(*tmp_u);
     p_u->Scal(kappa_1_);
@@ -233,7 +233,7 @@ namespace Ipopt
 
     tmp_l->Set(1.0);
     p_l->Copy(*d_L);
-    p_l->Sgn();
+    p_l->ElementWiseSgn();
     p_l->ElementWiseMultiply(*d_L);
     p_l->ElementWiseMax(*tmp_l);
     p_l->Scal(kappa_1_);
@@ -263,7 +263,7 @@ namespace Ipopt
 
     tmp_u->Set(1.0);
     p_u->Copy(*d_U);
-    p_u->Sgn();
+    p_u->ElementWiseSgn();
     p_u->ElementWiseMultiply(*d_U);
     p_u->ElementWiseMax(*tmp_u);
     p_u->Scal(kappa_1_);
@@ -302,11 +302,11 @@ namespace Ipopt
     new_s->Axpy(1.0, *s);
 
     if (nrm_l > 0 || nrm_u > 0) {
-      IpData().SetTrialSVariables(*new_s);
       Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
                      "Moved initial values of s sufficiently inside the bounds.\n");
       Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION,
-                          "original s", *IpData().curr_s());
+                          "original s", *IpData().trial_s());
+      IpData().SetTrialSVariables(*new_s);
       Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION,
                           "new s", *IpData().trial_s());
     }
@@ -340,13 +340,19 @@ namespace Ipopt
       y_c = IpData().curr_y_c()->MakeNew();
       y_d = IpData().curr_y_d()->MakeNew();
       bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
-      Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
-                     "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
-                     y_c->Amax(), y_d->Amax());
-      Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
-      if (!retval || laminitnrm > laminitmax_) {
+      if (!retval) {
         y_c->Set(0.0);
         y_d->Set(0.0);
+      }
+      else {
+        Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                       "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
+                       y_c->Amax(), y_d->Amax());
+        Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
+        if (laminitnrm > laminitmax_) {
+          y_c->Set(0.0);
+          y_d->Set(0.0);
+        }
       }
       IpData().SetTrialEqMultipliers(*y_c, *y_d);
     }
