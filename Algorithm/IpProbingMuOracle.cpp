@@ -100,8 +100,9 @@ namespace Ipopt
                       *step_z_L,
                       *step_z_U,
                       *step_v_L,
-                      *step_v_U,
-                      true           // don't need high accuracy
+                      *step_v_U
+		      //		      ,
+		      //                      true           // don't need high accuracy
                      );
 
     DBG_PRINT_VECTOR(2, "step_x", *step_x);
@@ -160,9 +161,9 @@ namespace Ipopt
 
     // DELETEME
     char ssigma[40];
-    sprintf(ssigma, "sigma=%e", sigma);
+    sprintf(ssigma, " sigma=%8.2e", sigma);
     IpData().Append_info_string(ssigma);
-    sprintf(ssigma, "xi=%e", IpCq().curr_centrality_measure());
+    sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
     IpData().Append_info_string(ssigma);
 
     return mu;
