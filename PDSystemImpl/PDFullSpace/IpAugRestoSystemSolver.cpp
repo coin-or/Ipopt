@@ -314,13 +314,13 @@ namespace Ipopt
     DBG_START_METH("AugRestoSystemSolver::Neg_Omega_d_plus_D_d",dbg_verbosity);
     SmartPtr<Vector> retVec;
     if (IsValid(sigma_tilde_n_d_inv) || IsValid(sigma_tilde_p_d_inv) || D_d) {
-      std::vector<const TaggedObject*> deps;
+      std::vector<const TaggedObject*> deps(5);
       std::vector<Number> scalar_deps;
-      deps.push_back(&Pd_L);
-      deps.push_back(GetRawPtr(sigma_tilde_n_d_inv));
-      deps.push_back(&neg_Pd_U);
-      deps.push_back(GetRawPtr(sigma_tilde_p_d_inv));
-      deps.push_back(D_d);
+      deps[0] = &Pd_L;
+      deps[1] = GetRawPtr(sigma_tilde_n_d_inv);
+      deps[2] = &neg_Pd_U;
+      deps[3] = GetRawPtr(sigma_tilde_p_d_inv);
+      deps[4] = D_d;
       if (!neg_omega_d_plus_D_d_cache_.
           GetCachedResult(retVec, deps, scalar_deps)) {
         DBG_PRINT((2,"Not found in cache\n"));
@@ -350,10 +350,10 @@ namespace Ipopt
     DBG_START_METH("AugRestoSystemSolver::Sigma_tilde_n_c_inv",dbg_verbosity);
     SmartPtr<Vector> retVec;
     if (IsValid(sigma_n_c) || delta_x != 0.0) {
-      std::vector<const TaggedObject*> deps;
-      std::vector<Number> scalar_deps;
-      deps.push_back(GetRawPtr(sigma_n_c));
-      scalar_deps.push_back(delta_x);
+      std::vector<const TaggedObject*> deps(1);
+      std::vector<Number> scalar_deps(1);
+      deps[0] = GetRawPtr(sigma_n_c);
+      scalar_deps[0] = delta_x;
       if (!sigma_tilde_n_c_inv_cache_.GetCachedResult(retVec, deps, scalar_deps)) {
         DBG_PRINT((2,"Not found in cache\n"));
         retVec = any_vec_in_c.MakeNew();
@@ -381,10 +381,10 @@ namespace Ipopt
     DBG_START_METH("AugRestoSystemSolver::Sigma_tilde_p_c_inv",dbg_verbosity);
     SmartPtr<Vector> retVec;
     if (IsValid(sigma_p_c) || delta_x != 0.0) {
-      std::vector<const TaggedObject*> deps;
-      std::vector<Number> scalar_deps;
-      deps.push_back(GetRawPtr(sigma_p_c));
-      scalar_deps.push_back(delta_x);
+      std::vector<const TaggedObject*> deps(1);
+      std::vector<Number> scalar_deps(1);
+      deps[0] = GetRawPtr(sigma_p_c);
+      scalar_deps[0] = delta_x;
       if (!sigma_tilde_p_c_inv_cache_.GetCachedResult(retVec, deps, scalar_deps)) {
         DBG_PRINT((2,"Not found in cache\n"));
         retVec = any_vec_in_c.MakeNew();
@@ -412,10 +412,10 @@ namespace Ipopt
     DBG_START_METH("AugRestoSystemSolver::Sigma_tilde_n_d_inv",dbg_verbosity);
     SmartPtr<Vector> retVec;
     if (IsValid(sigma_n_d) || delta_x != 0) {
-      std::vector<const TaggedObject*> deps;
-      std::vector<Number> scalar_deps;
-      deps.push_back(GetRawPtr(sigma_n_d));
-      scalar_deps.push_back(delta_x);
+      std::vector<const TaggedObject*> deps(1);
+      std::vector<Number> scalar_deps(1);
+      deps[0] = GetRawPtr(sigma_n_d);
+      scalar_deps[0] = delta_x;
       if (!sigma_tilde_n_d_inv_cache_.GetCachedResult(retVec, deps, scalar_deps)) {
         DBG_PRINT((2,"Not found in cache\n"));
         retVec = any_vec_in_n_d.MakeNew();
@@ -443,10 +443,10 @@ namespace Ipopt
     DBG_START_METH("AugRestoSystemSolver::Sigma_tilde_p_d_inv",dbg_verbosity);
     SmartPtr<Vector> retVec;
     if (IsValid(sigma_p_d) || delta_x != 0) {
-      std::vector<const TaggedObject*> deps;
-      std::vector<Number> scalar_deps;
-      deps.push_back(GetRawPtr(sigma_p_d));
-      scalar_deps.push_back(delta_x);
+      std::vector<const TaggedObject*> deps(1);
+      std::vector<Number> scalar_deps(1);
+      deps[0] = GetRawPtr(sigma_p_d);
+      scalar_deps[0] = delta_x;
       if (!sigma_tilde_p_d_inv_cache_.GetCachedResult(retVec, deps, scalar_deps)) {
         DBG_PRINT((2,"Not found in cache\n"));
         retVec = any_vec_in_p_d.MakeNew();
@@ -475,16 +475,16 @@ namespace Ipopt
     DBG_START_METH("AugRestoSystemSolver::D_x_plus_wr_d",dbg_verbosity);
     SmartPtr<Vector> retVec;
 
-    std::vector<const TaggedObject*> deps;
-    deps.push_back(&wr_d);
+    std::vector<const TaggedObject*> deps(2);
+    deps[0] = &wr_d;
     if (IsValid(CD_x0)) {
-      deps.push_back(GetRawPtr(CD_x0));
+      deps[1] = GetRawPtr(CD_x0);
     }
     else {
-      deps.push_back(&wr_d);
+      deps[1] = &wr_d;
     }
-    std::vector<Number> scalar_deps;
-    scalar_deps.push_back(factor);
+    std::vector<Number> scalar_deps(1);
+    scalar_deps[0] = factor;
 
     if (!d_x_plus_wr_d_cache_.GetCachedResult(retVec, deps, scalar_deps)) {
       retVec = wr_d.MakeNew();
@@ -519,13 +519,13 @@ namespace Ipopt
       const SmartPtr<const Vector>& sigma_tilde_p_c_inv, const Vector& rhs_p_c)
   {
     SmartPtr<Vector> retVec;
-    std::vector<const TaggedObject*> deps;
+    std::vector<const TaggedObject*> deps(5);
     std::vector<Number> scalar_deps;
-    deps.push_back(&rhs_c);
-    deps.push_back(GetRawPtr(sigma_tilde_n_c_inv));
-    deps.push_back(&rhs_n_c);
-    deps.push_back(GetRawPtr(sigma_tilde_p_c_inv));
-    deps.push_back(&rhs_p_c);
+    deps[0] = &rhs_c;
+    deps[1] = GetRawPtr(sigma_tilde_n_c_inv);
+    deps[2] = &rhs_n_c;
+    deps[3] = GetRawPtr(sigma_tilde_p_c_inv);
+    deps[4] = &rhs_p_c;
     if (!rhs_cR_cache_.GetCachedResult(retVec, deps, scalar_deps)) {
       retVec = rhs_c.MakeNew();
       retVec->Copy(rhs_c);
@@ -552,15 +552,15 @@ namespace Ipopt
       const SmartPtr<const Vector>& sigma_tilde_p_d_inv, const Vector& rhs_p_d, const Matrix& neg_pd_U)
   {
     SmartPtr<Vector> retVec;
-    std::vector<const TaggedObject*> deps;
+    std::vector<const TaggedObject*> deps(7);
     std::vector<Number> scalar_deps;
-    deps.push_back(&rhs_d);
-    deps.push_back(GetRawPtr(sigma_tilde_n_d_inv));
-    deps.push_back(&rhs_n_d);
-    deps.push_back(&pd_L);
-    deps.push_back(GetRawPtr(sigma_tilde_p_d_inv));
-    deps.push_back(&rhs_p_d);
-    deps.push_back(&neg_pd_U);
+    deps[0] = &rhs_d;
+    deps[1] = GetRawPtr(sigma_tilde_n_d_inv);
+    deps[2] = &rhs_n_d;
+    deps[3] = &pd_L;
+    deps[4] = GetRawPtr(sigma_tilde_p_d_inv);
+    deps[5] = &rhs_p_d;
+    deps[6] = &neg_pd_U;
     if (!rhs_dR_cache_.GetCachedResult(retVec, deps, scalar_deps)) {
       retVec = rhs_d.MakeNew();
       retVec->Copy(rhs_d);

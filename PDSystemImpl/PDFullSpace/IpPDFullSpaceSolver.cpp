@@ -488,20 +488,20 @@ namespace Ipopt
     SmartPtr<Vector> sol_d = res_d.MakeNew();
 
     // Now check whether any data has changed
-    std::vector<const TaggedObject*> deps;
-    deps.push_back(&W);
-    deps.push_back(&J_c);
-    deps.push_back(&J_d);
-    deps.push_back(&z_L);
-    deps.push_back(&z_U);
-    deps.push_back(&v_L);
-    deps.push_back(&v_U);
-    deps.push_back(&slack_x_L);
-    deps.push_back(&slack_x_U);
-    deps.push_back(&slack_s_L);
-    deps.push_back(&slack_s_U);
-    deps.push_back(&sigma_x);
-    deps.push_back(&sigma_s);
+    std::vector<const TaggedObject*> deps(13);
+    deps[0] = &W;
+    deps[1] = &J_c;
+    deps[2] = &J_d;
+    deps[3] = &z_L;
+    deps[4] = &z_U;
+    deps[5] = &v_L;
+    deps[6] = &v_U;
+    deps[7] = &slack_x_L;
+    deps[8] = &slack_x_U;
+    deps[9] = &slack_s_L;
+    deps[10] = &slack_s_U;
+    deps[11] = &sigma_x;
+    deps[12] = &sigma_s;
     void* dummy;
     bool uptodate = dummy_cache_.GetCachedResult(dummy, deps);
     if (!uptodate) {
@@ -523,6 +523,9 @@ namespace Ipopt
                                     *augRhs_x, *augRhs_s, rhs_c, rhs_d,
                                     *sol_x, *sol_s, *sol_c,
                                     *sol_d, false, 0);
+      if (retval!=SYMSOLVER_SUCCESS) {
+	return false;
+      }
       assert(retval==SYMSOLVER_SUCCESS); //TODO make return code
     }
     else {

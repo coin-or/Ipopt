@@ -91,10 +91,10 @@ namespace Ipopt
                            bool check_NegEVals,
                            Index numberOfNegEVals)
     {
-      std::vector<const Vector*> rhsV;
-      rhsV.push_back(&rhs);
-      std::vector<Vector*> solV;
-      solV.push_back(&sol);
+      std::vector<const Vector*> rhsV(1);
+      rhsV[0] = &rhs;
+      std::vector<Vector*> solV(1);
+      solV[0] = &sol;
       return MultiSolve(A, rhsV, solV, check_NegEVals,
                         numberOfNegEVals);
     }
