@@ -895,6 +895,7 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-blas             specify BLAS library (or BUILD for compilation)
   --with-lapack           specify LAPACK library (or BUILD for compilation)
+  --with-hsl              specify Harwell library
 
 Some influential environment variables:
   AR          Command for handling archives (default is `ar')
@@ -3677,7 +3678,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3680:" \
+echo "$as_me:3681:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -3874,7 +3875,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:3877: \"$ac_link\") >&5
+(eval echo $as_me:3878: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -3952,7 +3953,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:3955: \"$ac_link\") >&5
+(eval echo $as_me:3956: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5243,9 +5244,64 @@ fi
 # HSL #
 #######
 
-LIBS="-L${HOME}/lib -lhsl $LIBS"
-IPADDLIBS="-L${HOME}/lib -lhsl $IPADDLIBS"
 
+# Check whether --with-hsl or --without-hsl was given.
+if test "${with_hsl+set}" = set; then
+  withval="$with_hsl"
+  use_hsl=$withval
+else
+  use_hsl=
+fi;
+# Check if user supplied option makes sense
+if test ! -z "$use_hsl"; then
+  echo "$as_me:$LINENO: checking whether user supplied HSLLIB=\"$use_hsl\" works" >&5
+echo $ECHO_N "checking whether user supplied HSLLIB=\"$use_hsl\" works... $ECHO_C" >&6
+  LIBS="$use_hsl $LIBS"
+  IPADDLIBS="$use_hsl $IPADDLIBS"
+  cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call ma27ad
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; { { echo "$as_me:$LINENO: error: user supplied HSL library \"$use_hsl\" does not work" >&5
+echo "$as_me: error: user supplied HSL library \"$use_hsl\" does not work" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+else
+  LIBS="-L${HOME}/lib -lhsl $LIBS"
+  IPADDLIBS="-L${HOME}/lib -lhsl $IPADDLIBS"
+fi
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'

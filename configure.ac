@@ -7,7 +7,7 @@
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 ## SGI: ./configure CC=cc F77=f77 CXX=CC CXXFLAGS="-g -LANG:std -DOLD_C_HEADERS" AR="CC -ar" ARFLAGS="-o "
-## AIX: ./configure CC=xlc F77=xlf CXX=xlC --with-lapack=$HOME/lib/liblapack.a CXXFLAGS="-g -qrtti=dyna" CXXLIBS="-lC -lc"
+## AIX: ./configure CC=xlc F77=xlf CXX=xlC --with-lapack=$HOME/lib/liblapack.a CFLAGS=-g FFLAGS=-g CXXFLAGS="-g -qrtti=dyna" CXXLIBS="-lC -lc"
 
 AC_PREREQ(2.59)
 
@@ -222,9 +222,21 @@ fi
 # HSL #
 #######
 
-LIBS="-L${HOME}/lib -lhsl $LIBS"
-IPADDLIBS="-L${HOME}/lib -lhsl $IPADDLIBS"
-
+AC_ARG_WITH([hsl],
+            AC_HELP_STRING([--with-hsl],
+                           [specify Harwell library]),
+            [use_hsl=$withval], [use_hsl=])
+# Check if user supplied option makes sense
+if test ! -z "$use_hsl"; then
+  AC_MSG_CHECKING([whether user supplied HSLLIB=\"$use_hsl\" works])
+  LIBS="$use_hsl $LIBS"
+  IPADDLIBS="$use_hsl $IPADDLIBS"
+  AC_TRY_LINK([],[      call ma27ad],[AC_MSG_RESULT([yes])],
+              [AC_MSG_RESULT([no]); AC_MSG_ERROR([user supplied HSL library \"$use_hsl\" does not work])])
+else
+  LIBS="-L${HOME}/lib -lhsl $LIBS"
+  IPADDLIBS="-L${HOME}/lib -lhsl $IPADDLIBS"
+fi
 
 AC_LANG_POP(Fortran 77)
 
