@@ -54,6 +54,16 @@ namespace Ipopt
       boundmultinitmax_ = 1e3;
     }
 
+    Int ivalue;
+    if (options.GetIntegerValue("expect_infeasible_problem", ivalue, prefix)) {
+      expect_infeasible_problem_ = (ivalue!=0);
+    }
+    else {
+      expect_infeasible_problem_ = false;
+    }
+
+    count_restorations_ = 0;
+
     bool retvalue = true;
     if (IsValid(eq_mult_calculator_)) {
       retvalue = eq_mult_calculator_->Initialize(Jnlst(), IpNLP(), IpData(),
@@ -67,7 +77,12 @@ namespace Ipopt
   {
     DBG_START_METH("MinC_1NrmRestorationPhase::PerformRestoration",
                    dbg_verbosity);
-    Jnlst().Printf(J_DETAILED, J_MAIN, "Starting Restoration Phase\n");
+
+    // Increase counter for restoration phase calls
+    count_restorations_++;
+    Jnlst().Printf(J_DETAILED, J_MAIN,
+		   "Starting Restoration Phase for the %d. time\n",
+		   count_restorations_);
 
     DBG_ASSERT(IpCq().curr_constraint_violation()>0.);
 
@@ -78,9 +93,20 @@ namespace Ipopt
     SmartPtr<IpoptCalculatedQuantities> resto_ip_cq
     = new IpoptCalculatedQuantities(resto_ip_nlp, resto_ip_data);
 
+    // Decide if we want to use the original option or want to make
+    // some changes
+    SmartPtr<OptionsList> actual_resto_options = resto_options_;
+    if (expect_infeasible_problem_ && count_restorations_==1) {
+      actual_resto_options = new OptionsList(*resto_options_);
+      // Ask for significant reduction of infeasibility, in the hope
+      // that we do not return from the restoration phase is the
+      // problem is infeasible
+      actual_resto_options->SetNumericValue("resto.kappa_resto", 1e-3);
+    }
+
     // Initialize the restoration phase algorithm
     resto_alg_->Initialize(Jnlst(), *resto_ip_nlp, *resto_ip_data,
-                           *resto_ip_cq, *resto_options_, "resto.");
+                           *resto_ip_cq, *actual_resto_options, "resto.");
 
     // Set iteration counter and info field for the restoration phase
     resto_ip_data->Set_iter_count(IpData().iter_count()+1);
