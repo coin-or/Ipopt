@@ -153,6 +153,11 @@ namespace Ipopt
         n_x_fixed++;
         full_x_[i] = lower_bound;
       }
+      else if (lower_bound > upper_bound) {
+	char string[128];
+	sprintf(string, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+	THROW_EXCEPTION(INVALID_TNLP, string);
+      }
       else {
         x_not_fixed_map[n_x_not_fixed] = i;
         if (lower_bound > nlp_lower_bound_inf_) {
