@@ -192,22 +192,26 @@ namespace Ipopt
     // The following flag is set to true, if we asked the linear
     // solver successfully, to improve the quality of the solution in
     // the next solve.
-    bool resolve_unmodified = false;
+    bool resolve_better_quality = false;
     // the following flag is set to true, if iterative refinement
     // failed, and we want to do try if a modified system is able to
     // remedy that problem
     bool pretend_singular = false;
+    bool pretend_singular_last_time = false;
 
+    // Beginning of loop for solving the system (including all
+    // modifications for the linear system to ensure good solution
+    // quality)
     while (!done) {
 
       bool solve_retval =
-        SolveOnce(resolve_unmodified, pretend_singular,
+        SolveOnce(resolve_better_quality, pretend_singular,
                   *W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
                   *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
                   *sigma_x, *sigma_s, 1., 0., rhs_x, rhs_s, rhs_c, rhs_d,
                   rhs_zL, rhs_zU, rhs_vL, rhs_vU, res_x, res_s, res_c, res_d,
                   res_zL, res_zU, res_vL, res_vU);
-      resolve_unmodified = false;
+      resolve_better_quality = false;
       pretend_singular = false;
 
       if (!solve_retval) {
@@ -257,7 +261,7 @@ namespace Ipopt
                      "residual_ratio = %e\n", residual_ratio);
       Number residual_ratio_old = residual_ratio;
 
-      // If necessary or desired, perform iterative refinement
+      // Beginning of loop for iterative refinement
       Index num_iter_ref = 0;
       bool quit_refinement = false;
       while (!allow_inexact && !quit_refinement &&
@@ -266,7 +270,7 @@ namespace Ipopt
 
         // To the next back solve
         solve_retval =
-          SolveOnce(resolve_unmodified, pretend_singular,
+          SolveOnce(resolve_better_quality, false,
                     *W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
                     *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
                     *sigma_x, *sigma_s, -1., 1., *resid_x, *resid_s, *resid_c, *resid_d,
@@ -306,8 +310,9 @@ namespace Ipopt
 
           // Pretend singularity only once - if it didn't help, we
           // have to live with what we got so far
-          resolve_unmodified = false;
-          if (!pretend_singular) {
+          resolve_better_quality = false;
+	  DBG_PRINT((1, "pretend_singular = %d\n", pretend_singular));
+          if (!pretend_singular_last_time) {
             // First try if we can ask the augmented system solver to
             // improve the quality of the solution (only if that hasn't
             // been done before for this linear system)
@@ -317,7 +322,7 @@ namespace Ipopt
               augsys_improved_ = augSysSolver_->IncreaseQuality();
               if (augsys_improved_) {
                 IpData().Append_info_string("q");
-                resolve_unmodified = true;
+		resolve_better_quality = true;
               }
               else {
                 // solver said it cannot improve quality, so let
@@ -332,6 +337,7 @@ namespace Ipopt
               // modification is possibly singular
               pretend_singular = true;
             }
+	    pretend_singular_last_time = pretend_singular;
             if (pretend_singular) {
               // let's only conclude that the current linear system
               // including modifications is singular, if the residual is
@@ -351,15 +357,16 @@ namespace Ipopt
           }
           else {
             pretend_singular = false;
+	    DBG_PRINT((1,"Resetting pretend_singular to false.\n"));
           }
         }
 
         residual_ratio_old = residual_ratio;
-      }
+      } // End of loop for iterative refinement
 
-      done = !(resolve_unmodified) && !(pretend_singular);
+      done = !(resolve_better_quality) && !(pretend_singular);
 
-    } // while (!done) {
+    } // End of loop for solving the linear system (incl. modifications)
 
     // Now that the system has been solved, remember the current
     // perturbation for the next time
