@@ -184,6 +184,10 @@ namespace Ipopt
       exc.ReportException(*jnlst_);
       retValue = Solve_Failed;
     }
+    catch(std::bad_alloc& exc) {
+      retValue = Insufficient_Memory;
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
+    }
     catch(...) {
       IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
       exc.ReportException(*jnlst_);
