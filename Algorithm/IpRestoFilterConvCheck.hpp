@@ -72,6 +72,8 @@ namespace Ipopt
 
     /** @name Algorithmic parameters */
     //@{
+    /** Fraction of required reduction in infeasibility before problem
+     *  is considered to be solved. */
     Number kappa_resto_;
     //@}
 
