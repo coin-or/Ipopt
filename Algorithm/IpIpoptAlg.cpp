@@ -206,8 +206,8 @@ namespace Ipopt
       return;
     }
 
-    SmartPtr<const Vector> rhs_grad_lag_x  = IpCq().curr_grad_lag_x();
-    SmartPtr<const Vector> rhs_grad_lag_s  = IpCq().curr_grad_lag_s();
+    SmartPtr<const Vector> rhs_grad_lag_x  = IpCq().curr_grad_lag_with_damping_x();
+    SmartPtr<const Vector> rhs_grad_lag_s  = IpCq().curr_grad_lag_with_damping_s();
     SmartPtr<const Vector> rhs_c = IpCq().curr_c();
     SmartPtr<const Vector> rhs_d_minus_s = IpCq().curr_d_minus_s();
     SmartPtr<const Vector> rhs_rel_compl_x_L = IpCq().curr_relaxed_compl_x_L();
@@ -523,9 +523,12 @@ namespace Ipopt
     one_over_s->ElementWiseReciprocal();
 
     SmartPtr<Vector> step_z = trial_z.MakeNew();
+    step_z->AddTwoVectors(kappa_sigma_*mu, *one_over_s, -1., trial_z, 0.);
+    /* DELE
     step_z->Copy(*one_over_s);
     step_z->Scal(kappa_sigma_*mu);
     step_z->Axpy(-1., trial_z);
+    */
 
     DBG_PRINT_VECTOR(2, "step_z", *step_z);
 
@@ -534,25 +537,34 @@ namespace Ipopt
       SmartPtr<Vector> tmp = trial_z.MakeNew();
       tmp->Set(0.);
       step_z->ElementWiseMin(*tmp);
+      tmp->AddTwoVectors(1., trial_z, 1., *step_z, 0.);
+      /* DELE
       tmp->Copy(trial_z);
       tmp->Axpy(1., *step_z);
+      */
       new_trial_z = GetRawPtr(tmp);
     }
     else {
       new_trial_z = &trial_z;
     }
 
+    step_z->AddTwoVectors(1./kappa_sigma_*mu, *one_over_s, -1., *new_trial_z, 0.);
+    /* DELE
     step_z->Copy(*one_over_s);
     step_z->Scal(1./kappa_sigma_*mu);
     step_z->Axpy(-1., *new_trial_z);
+    */
 
     Number max_correction_low = Max(0., step_z->Max());
     if (max_correction_low>0.) {
       SmartPtr<Vector> tmp = trial_z.MakeNew();
       tmp->Set(0.);
       step_z->ElementWiseMax(*tmp);
+      tmp->AddTwoVectors(1., *new_trial_z, 1., *step_z, 0.);
+      /* DELE
       tmp->Copy(*new_trial_z);
       tmp->Axpy(1., *step_z);
+      */
       new_trial_z = GetRawPtr(tmp);
     }
 
