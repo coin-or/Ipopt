@@ -207,6 +207,8 @@ namespace Ipopt
                   *sigma_x, *sigma_s, 1., 0., rhs_x, rhs_s, rhs_c, rhs_d,
                   rhs_zL, rhs_zU, rhs_vL, rhs_vU, res_x, res_s, res_c, res_d,
                   res_zL, res_zU, res_vL, res_vU);
+      resolve_unmodified = false;
+      pretend_singular = false;
 
       if (!solve_retval) {
         // If system seems not to be solvable, we set the search
@@ -337,9 +339,13 @@ namespace Ipopt
               if (residual_ratio < residual_ratio_singular_) {
                 pretend_singular = false;
                 IpData().Append_info_string("S");
+                Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                               "Just accept current solution.\n");
               }
               else {
                 IpData().Append_info_string("s");
+                Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                               "Pretend that the current system (including modifications) is singular.\n");
               }
             }
           }
@@ -354,6 +360,23 @@ namespace Ipopt
       done = !(resolve_unmodified) && !(pretend_singular);
 
     } // while (!done) {
+
+    // Now that the system has been solved, remember the current
+    // perturbation for the next time
+    if (delta_x_curr_!=0.) {
+      delta_x_last_ = delta_x_curr_;
+    }
+    if (delta_s_curr_!=0.) {
+      delta_s_last_ = delta_s_curr_;
+    }
+    if (delta_c_curr_!=0.) {
+      delta_c_last_ = delta_c_curr_;
+      IpData().Append_info_string("L");
+    }
+    if (delta_s_curr_!=0.) {
+      delta_d_last_ = delta_d_curr_;
+    }
+
     // Finally let's assemble the res result vectors
     if (alpha != 0.) {
       res_x.Scal(alpha);
@@ -495,7 +518,7 @@ namespace Ipopt
       // Flag indicating if instead of the first
       // solve we want to pretend that the system is
       // singluar
-      if (!pretend_singular) {
+      if (true || !pretend_singular) {
         // First try, if no modification is necessary to obtain correct inertia
         delta_x_curr_=0.;
         delta_s_curr_=0.;
@@ -514,6 +537,10 @@ namespace Ipopt
         }
         else {
           count++;
+          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                         "Solving system with delta_x=%e delta_s=%e\n                    delta_c=%e delta_d=%e\n",
+                         delta_x_curr_, delta_s_curr_,
+                         delta_c_curr_, delta_d_curr_);
           retval = augSysSolver_->Solve(&W, &sigma_x, delta_x_curr_,
                                         &sigma_s, delta_s_curr_, &J_c, NULL,
                                         delta_c_curr_, &J_d, NULL, delta_d_curr_,
@@ -552,18 +579,6 @@ namespace Ipopt
           delta_s_curr_ = delta_x_curr_;
         }
       } // while (retval!=S_SUCCESS && !fail) {
-      if (delta_x_curr_!=0.) {
-        delta_x_last_ = delta_x_curr_;
-      }
-      if (delta_s_curr_!=0.) {
-        delta_s_last_ = delta_s_curr_;
-      }
-      if (delta_c_curr_!=0.) {
-        delta_c_last_ = delta_c_curr_;
-      }
-      if (delta_s_curr_!=0.) {
-        delta_d_last_ = delta_d_curr_;
-      }
 
       // Some output
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
