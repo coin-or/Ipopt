@@ -43,6 +43,9 @@ namespace Ipopt
 						   const Index* airn,
 						   const Index* ajcn)
   {
+    DBG_START_METH("TSymLinearSolver::InitializeStructure",
+		   dbg_verbosity);
+
     DBG_ASSERT(dim>0);
     DBG_ASSERT(nonzeros>0);
 
@@ -63,6 +66,12 @@ namespace Ipopt
       list_iterator++;
     }
     DBG_ASSERT(list_iterator == entry_list.end());
+
+    if (DBG_VERBOSITY()>=2) {
+      for (Index i=0; i<nonzeros; i++) {
+	DBG_PRINT((2, "airn[%5d] = %5d acjn[%5d] = %5d\n", i, airn[i], i, ajcn[i]));
+      }
+    }
 
     // sort the list
     entry_list.sort();
@@ -134,6 +143,9 @@ namespace Ipopt
       for (Index i=0; i<nonzeros_compressed_; i++) {
 	ja_[i] = ja_tmp[i];
       }
+      for (Index i=0; i<=dim_; i++) {
+	ia_[i] = ia_[i] + 1;
+      }
     }
     delete[] ja_tmp;
 
@@ -156,6 +168,18 @@ namespace Ipopt
 
     initialized_ = true;
 
+    if (DBG_VERBOSITY()>=2) {
+      for (Index i=0; i<=dim_; i++) {
+	DBG_PRINT((2, "ia[%5d] = %5d\n", i, ia_[i]));
+      }
+      for (Index i=0; i<nonzeros_compressed_; i++) {
+	DBG_PRINT((2, "ja[%5d] = %5d ipos_first[%5d] = %5d\n", i, ja_[i], i, ipos_first_[i]));
+      }
+      for (Index i=0; i<nonzeros_triplet_-nonzeros_compressed_; i++) {
+	DBG_PRINT((2, "ipos_double_triplet[%5d] = %5d ipos_double_compressed[%5d] = %5d\n", i, ipos_double_triplet_[i], i, ipos_double_compressed_[i]));
+      }
+    }
+
     return nonzeros_compressed_;
   }
 
@@ -164,6 +188,9 @@ namespace Ipopt
 					    Index nonzeros_compressed,
 					    Number* a_compressed)
   {
+    DBG_START_METH("TSymLinearSolver::ConvertValues",
+		   dbg_verbosity);
+
     DBG_ASSERT(initialized_);
 
     DBG_ASSERT(nonzeros_triplet_==nonzeros_triplet);
@@ -175,6 +202,15 @@ namespace Ipopt
     for (Index i=0; i<nonzeros_triplet_-nonzeros_compressed_; i++) {
       a_compressed[ipos_double_compressed_[i]] +=
 	a_triplet[ipos_double_triplet_[i]];
+    }
+
+    if (DBG_VERBOSITY()>=2) {
+      for (Index i=0; i<nonzeros_triplet; i++) {
+	DBG_PRINT((2, "atriplet[%5d] = %24.16e\n", i, a_triplet[i]));
+      }
+      for (Index i=0; i<nonzeros_compressed; i++) {
+	DBG_PRINT((2, "acompre[%5d] = %24.16e\n", i, a_compressed[i]));
+      }
     }
   }
 
