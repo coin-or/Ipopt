@@ -124,8 +124,7 @@ namespace Ipopt
       CalcNewMuAndTau(new_mu, new_tau);
       Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                      "new_mu=%e and new_tau=%e\n", new_mu, new_tau);
-      // TODO check if that is necessary:
-      DBG_ASSERT(mu != new_mu);
+      bool mu_changed = (mu != new_mu);
 
       // Set the new values for mu and tau
       IpData().Set_mu(new_mu);
@@ -145,7 +144,7 @@ namespace Ipopt
       }
 
       // Reset the line search
-      if (done) {
+      if (done && mu_changed) {
         linesearch_->Reset();
       }
     }
