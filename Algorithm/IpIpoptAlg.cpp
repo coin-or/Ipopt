@@ -163,15 +163,22 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n\n");
     mu_update_->UpdateBarrierParameter();
 
-    Jnlst().Printf(J_DETAILED, J_MAIN, "Barrier Parameter: %lf\n", IpData().curr_mu());
+    Jnlst().Printf(J_DETAILED, J_MAIN, "Barrier Parameter: %e\n", IpData().curr_mu());
 
   }
 
   void IpoptAlgorithm::ComputeSearchDirection()
   {
-    Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n");
-    Jnlst().Printf(J_DETAILED, J_MAIN, "*** Solving the Primal Dual System for Iteration %d:", IpData().iter_count());
-    Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n\n");
+    DBG_START_METH("IpoptAlgorithm::ComputeSearchDirection", dbg_verbosity);
+
+    Jnlst().Printf(J_DETAILED, J_MAIN,
+                   "\n**************************************************\n");
+    Jnlst().Printf(J_DETAILED, J_MAIN,
+                   "*** Solving the Primal Dual System for Iteration %d:",
+                   IpData().iter_count());
+    Jnlst().Printf(J_DETAILED, J_MAIN,
+                   "\n**************************************************\n\n");
+
 
     SmartPtr<const Vector> rhs_grad_lag_x  = IpCq().curr_grad_lag_x();
     SmartPtr<const Vector> rhs_grad_lag_s  = IpCq().curr_grad_lag_s();
@@ -181,6 +188,9 @@ namespace Ipopt
     SmartPtr<const Vector> rhs_rel_compl_x_U = IpCq().curr_relaxed_compl_x_U();
     SmartPtr<const Vector> rhs_rel_compl_s_L = IpCq().curr_relaxed_compl_s_L();
     SmartPtr<const Vector> rhs_rel_compl_s_U = IpCq().curr_relaxed_compl_s_U();
+
+    DBG_PRINT_VECTOR(2, "rhs_grad_lag_x", *rhs_grad_lag_x);
+
     pd_solver_->Solve(-1.0, 0.0,
                       *rhs_grad_lag_x,
                       *rhs_grad_lag_s,
@@ -200,15 +210,17 @@ namespace Ipopt
                       *IpData().NonConst_delta_v_U()
                      );
 
-    Jnlst().Printf(J_VECTOR, J_MAIN, "*** Step Calculated for Iteration: %d\n", IpData().iter_count());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "delta_x", *IpData().delta_x());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "delta_s", *IpData().delta_s());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "delta_y_c", *IpData().delta_y_c());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "delta_y_d", *IpData().delta_y_d());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "delta_z_L", *IpData().delta_z_L());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "delta_z_U", *IpData().delta_z_U());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "delta_v_L", *IpData().delta_v_L());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "delta_v_U", *IpData().delta_v_U());
+    Jnlst().Printf(J_MOREVECTOR, J_MAIN,
+                   "*** Step Calculated for Iteration: %d\n",
+                   IpData().iter_count());
+    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_x", *IpData().delta_x());
+    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_s", *IpData().delta_s());
+    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_y_c", *IpData().delta_y_c());
+    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_y_d", *IpData().delta_y_d());
+    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_z_L", *IpData().delta_z_L());
+    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_z_U", *IpData().delta_z_U());
+    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_v_L", *IpData().delta_v_L());
+    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_v_U", *IpData().delta_v_U());
   }
 
   void IpoptAlgorithm::ComputeAcceptableTrialPoint()
@@ -331,7 +343,7 @@ namespace Ipopt
     Jnlst().Printf(J_SUMMARY, J_STATISTICS,
                    "Total number of inequality constraints...............: %8d\n",ns_tot);
     Jnlst().Printf(J_SUMMARY, J_STATISTICS,
-                   "        inequality constriants with only lower bounds: %8d\n",
+                   "        inequality constraints with only lower bounds: %8d\n",
                    ns_only_lower);
     Jnlst().Printf(J_SUMMARY, J_STATISTICS,
                    "   inequality constraints with lower and upper bounds: %8d\n",ns_both);
