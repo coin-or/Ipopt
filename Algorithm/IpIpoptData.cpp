@@ -267,13 +267,28 @@ namespace Ipopt
     trial_v_U_ = ConstPtr(newvec);
   }
 
-  void IpoptData::SetTrialPrimalVariablesFromPtr(const SmartPtr<const Vector>& xptr,
-      const SmartPtr<const Vector>& sptr)
+  void IpoptData::SetTrialPrimalVariablesFromPtr(
+    const SmartPtr<const Vector>& xptr,
+    const SmartPtr<const Vector>& sptr)
   {
     DBG_ASSERT(have_prototypes_);
 
     trial_x_ = xptr;
     trial_s_ = sptr;
+  }
+
+  void IpoptData::SetTrialBoundMultipliersFromPtr(
+    const SmartPtr<const Vector>& z_Lptr,
+    const SmartPtr<const Vector>& z_Uptr,
+    const SmartPtr<const Vector>& v_Lptr,
+    const SmartPtr<const Vector>& v_Uptr)
+  {
+    DBG_ASSERT(have_prototypes_);
+
+    trial_z_L_ = z_Lptr;
+    trial_z_U_ = z_Uptr;
+    trial_v_L_ = v_Lptr;
+    trial_v_U_ = v_Uptr;
   }
 
   void IpoptData::CopyTrialToCurrent()
