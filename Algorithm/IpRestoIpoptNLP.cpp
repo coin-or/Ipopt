@@ -19,6 +19,8 @@
 
 namespace Ipopt
 {
+  DBG_SET_VERBOSITY(0);
+
   RestoIpoptNLP::RestoIpoptNLP(IpoptNLP& orig_ip_nlp,
                                IpoptData& orig_ip_data,
                                IpoptCalculatedQuantities& orig_ip_cq,
@@ -389,19 +391,25 @@ namespace Ipopt
 
   Number RestoIpoptNLP::f(const Vector& x)
   {
+    DBG_START_METH("RestoIpoptNLP::f",
+                   dbg_verbosity);
     Number ret = 0.0;
     // rho*(pcTe + ncTe + pdT*e + ndT*e) + eta/2*||Dr*(x-xr)||_2^2
     const CompoundVector* c_vec = dynamic_cast<const CompoundVector*>(&x);
     DBG_ASSERT(c_vec);
     SmartPtr<const Vector> x_only = c_vec->GetComp(0);
     ret = x.Sum() - x_only->Sum();
+    DBG_PRINT((1,"xdiff sum = %e\n",ret));
     ret = rho_ * ret;
+    DBG_PRINT((1,"rho_ = %e\n",rho_));
 
     SmartPtr<Vector> x_diff = x_only->MakeNew();
     x_diff->Copy(*x_only);
     x_diff->Axpy(-1.0, *x_ref_);
+    DBG_PRINT_VECTOR(2,"x_ref",*x_ref_);
     x_diff->ElementWiseMultiply(*dr_x_);
     Number ret2 = x_diff->Nrm2();
+    DBG_PRINT((1,"Eta = %e\n",Eta()));
     ret2 = Eta()/2.0*ret2*ret2;
 
     ret += ret2;
