@@ -12,7 +12,7 @@ libdummy_a_SOURCES = ipoma.f
 
 ipoma.f: CUTErInterface.f
 	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
-	  echo CUTEr environment variables not set - cannot install ipoma.f; \
+	  touch ipoma.f; \
 	else \
 	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed > ipoma.f; \
 	fi
