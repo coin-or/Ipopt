@@ -780,12 +780,21 @@ namespace Ipopt
       IpNLP().Pd_U()->MultVector(-alpha_primal+alpha_dual,
 				 *step_v_U, 1., *dual_inf_s);
       if (dual_alpha_for_y_) {
+	dual_inf_x->AddTwoVectors(alpha_dual-alpha_primal, *jac_cT_times_step_aff_y_c,
+				  sigma*(alpha_dual-alpha_primal), *jac_cT_times_step_cen_y_c, 1.);
+	dual_inf_x->AddTwoVectors(alpha_dual-alpha_primal, *jac_dT_times_step_aff_y_d,
+				  sigma*(alpha_dual-alpha_primal), *jac_dT_times_step_cen_y_d, 1.);
+	dual_inf_s->AddTwoVectors(alpha_primal-alpha_dual, step_aff_y_d,
+				  sigma*(alpha_primal-alpha_dual), step_cen_y_d, 1.);
+
+	/* DELE
 	dual_inf_x->Axpy(alpha_dual-alpha_primal, *jac_cT_times_step_aff_y_c);  
 	dual_inf_x->Axpy(sigma*(alpha_dual-alpha_primal), *jac_cT_times_step_cen_y_c);
 	dual_inf_x->Axpy(alpha_dual-alpha_primal, *jac_dT_times_step_aff_y_d);  
 	dual_inf_x->Axpy(sigma*(alpha_dual-alpha_primal), *jac_dT_times_step_cen_y_d);
 	dual_inf_s->Axpy(alpha_primal-alpha_dual, step_aff_y_d);
 	dual_inf_s->Axpy(sigma*(alpha_primal-alpha_dual), step_cen_y_d);
+	*/
       }
     }
 

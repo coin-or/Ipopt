@@ -223,8 +223,11 @@ namespace Ipopt
     trial_x_ = ConstPtr(newvec);
 
     newvec = curr_s_->MakeNew();
+    newvec->AddTwoVectors(1., *curr_s_, alpha, delta_s, 0.);
+    /* DELE
     newvec->Copy(*curr_s_);
     newvec->Axpy(alpha, delta_s);
+    */
     trial_s_ = ConstPtr(newvec);
   }
 
@@ -235,13 +238,19 @@ namespace Ipopt
     DBG_ASSERT(have_prototypes_);
 
     SmartPtr<Vector> newvec = curr_y_c_->MakeNew();
+    newvec->AddTwoVectors(1., *curr_y_c_, alpha, delta_y_c, 0.);
+    /* DELE
     newvec->Copy(*curr_y_c_);
     newvec->Axpy(alpha, delta_y_c);
+    */
     trial_y_c_ = ConstPtr(newvec);
 
     newvec = curr_y_d_->MakeNew();
+    newvec->AddTwoVectors(1., *curr_y_d_, alpha, delta_y_d, 0.);
+    /* DELE
     newvec->Copy(*curr_y_d_);
     newvec->Axpy(alpha, delta_y_d);
+    */
     trial_y_d_ = ConstPtr(newvec);
   }
 
@@ -254,23 +263,35 @@ namespace Ipopt
     DBG_ASSERT(have_prototypes_);
 
     SmartPtr<Vector> newvec = curr_z_L_->MakeNew();
+    newvec->AddTwoVectors(1., *curr_z_L_, alpha, delta_z_L, 0.);
+    /* DELE
     newvec->Copy(*curr_z_L_);
     newvec->Axpy(alpha, delta_z_L);
+    */
     trial_z_L_ = ConstPtr(newvec);
 
     newvec = curr_z_U_->MakeNew();
+    newvec->AddTwoVectors(1., *curr_z_U_, alpha, delta_z_U, 0.);
+    /* DELE
     newvec->Copy(*curr_z_U_);
     newvec->Axpy(alpha, delta_z_U);
+    */
     trial_z_U_ = ConstPtr(newvec);
 
     newvec = curr_v_L_->MakeNew();
+    newvec->AddTwoVectors(1., *curr_v_L_, alpha, delta_v_L, 0.);
+    /* DELE
     newvec->Copy(*curr_v_L_);
     newvec->Axpy(alpha, delta_v_L);
+    */
     trial_v_L_ = ConstPtr(newvec);
 
     newvec = curr_v_U_->MakeNew();
+    newvec->AddTwoVectors(1., *curr_v_U_, alpha, delta_v_U, 0.);
+    /* DELE
     newvec->Copy(*curr_v_U_);
     newvec->Axpy(alpha, delta_v_U);
+    */
     trial_v_U_ = ConstPtr(newvec);
   }
 
