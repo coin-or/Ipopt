@@ -81,13 +81,10 @@ namespace Ipopt
     // Now we compute the initial values that the algorithm is going to
     // actually use.  We first store them in the trial fields in ip_data.
 
-    // Set the primal variables (may be modified later)
-    IpData().SetTrialPrimalVariables(*IpData().curr_x(), *IpCq().curr_d());
-
     // Calculate any required shift in x0 and s0
     const double dbl_min = std::numeric_limits<double>::min();
     const double tiny_double = 100.0*dbl_min;
-    SmartPtr<const Vector> x = IpData().trial_x();
+    SmartPtr<const Vector> x = IpData().curr_x();
     SmartPtr<const Vector> x_L = IpNLP().x_L();
     SmartPtr<const Vector> x_U = IpNLP().x_U();
     SmartPtr<const Matrix> Px_L = IpNLP().Px_L();
@@ -178,30 +175,35 @@ namespace Ipopt
     tmp_l->Axpy(1.0, *p_l);
     tmp_l->ElementWiseMax(*zero_l);
     Number nrm_l = tmp_l->Amax();
-    Px_L->MultVector(1.0, *tmp_l, 0.0, *delta_x);
-    //    x1->Axpy(1.0, *x);
+    if (nrm_l>0.) {
+      Px_L->MultVector(1.0, *tmp_l, 0.0, *delta_x);
+    }
+    else {
+      delta_x->Set(0.);
+    }
 
     Px_U->TransMultVector(1.0, *x, 0.0, *tmp_u);
     tmp_u->Axpy(-1.0, *x_U);
     tmp_u->Axpy(1.0, *p_u);
     tmp_u->ElementWiseMax(*zero_u);
     Number nrm_u = tmp_u->Amax();
-    Px_U->MultVector(1.0, *tmp_u, 0.0, *tmp);
-    delta_x->Axpy(-1.0, *tmp);
+    if (nrm_u>0.) {
+      Px_U->MultVector(-1.0, *tmp_u, 1.0, *delta_x);
+    }
+    //delta_x->Axpy(-1.0, *tmp);
 
     SmartPtr<Vector> new_x = delta_x;
     new_x->Axpy(1.0, *x);
 
+    IpData().SetTrialXVariables(*new_x);
     if (nrm_l > 0 || nrm_u > 0) {
-      IpData().SetTrialXVariables(*new_x);
       Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of x sufficiently inside the bounds.\n");
       Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "original x", *IpData().curr_x());
       Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "new x", *IpData().trial_x());
     }
 
-
     // Calculate the shift in s...
-    SmartPtr<const Vector> s = IpData().trial_s();
+    SmartPtr<const Vector> s = IpCq().trial_d();
     DBG_PRINT_VECTOR(2, "s", *s);
 
     SmartPtr<const Vector> d_L = IpNLP().d_L();
@@ -288,25 +290,29 @@ namespace Ipopt
     tmp_l->ElementWiseMax(*zero_l);
     nrm_l = tmp_l->Amax();
     SmartPtr<Vector> delta_s = s->MakeNew();
-    Pd_L->MultVector(1.0, *tmp_l, 0.0, *delta_s);
+    if (nrm_l>0.) {
+      Pd_L->MultVector(1.0, *tmp_l, 0.0, *delta_s);
+    }
+    else {
+      delta_s->Set(0.);
+    }
 
     Pd_U->TransMultVector(1.0, *s, 0.0, *tmp_u);
     tmp_u->Axpy(-1.0, *d_U);
     tmp_u->Axpy(1.0, *p_u);
     tmp_u->ElementWiseMax(*zero_u);
     nrm_u = tmp_u->Amax();
-    Pd_U->MultVector(1.0, *tmp_u, 0.0, *tmp);
-    delta_s->Axpy(-1.0, *tmp);
+    Pd_U->MultVector(-1.0, *tmp_u, 1.0, *delta_s);
 
     SmartPtr<Vector> new_s = delta_s;
     new_s->Axpy(1.0, *s);
 
+    IpData().SetTrialSVariables(*new_s);
     if (nrm_l > 0 || nrm_u > 0) {
       Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
                      "Moved initial values of s sufficiently inside the bounds.\n");
       Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION,
-                          "original s", *IpData().trial_s());
-      IpData().SetTrialSVariables(*new_s);
+                          "original s", *s);
       Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION,
                           "new s", *IpData().trial_s());
     }
