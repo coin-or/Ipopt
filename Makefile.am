@@ -47,7 +47,7 @@ install-exec-local:
 	do \
 	  ar x $$basdir/$$lib; \
 	done; \
-	ar cur $(libipopt) *.$(OBJEXT)
+	$(AR) $(ARFLAGS) $(libipopt) *.$(OBJEXT)
 	$(INSTALL_DATA) $(tmpdir)/$(libipopt) $(DESTDIR)$(libdir)
 	rm -rf $(tmpdir)
 	$(RANLIB) $(DESTDIR)$(libdir)/$(libipopt)
