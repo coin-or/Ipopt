@@ -20,6 +20,8 @@
 namespace Ipopt
 {
 
+  DBG_SET_VERBOSITY(0);
+
   DenseVector::DenseVector(const DenseVectorSpace* owner_space)
       :
       Vector(owner_space),
@@ -657,6 +659,26 @@ namespace Ipopt
       }
     }
     initialized_=true;
+  }
+
+  Number
+  DenseVector::FracToBoundImpl(const Vector& delta, Number tau) const
+  {
+    DBG_ASSERT(Dim()==delta.Dim());
+    DBG_ASSERT(tau>=0.);
+    const DenseVector* dense_delta = dynamic_cast<const DenseVector*>(&delta);
+    DBG_ASSERT(dense_delta);
+
+    Number alpha = 1.;
+    Number* values_x = values_;;
+    Number* values_delta = dense_delta->values_;
+    for (Index i=0; i<Dim(); i++) {
+      if (values_delta[i]<0.) {
+	alpha = Ipopt::Min(alpha, -tau/values_delta[i] * values_x[i]);
+      }
+    }
+    DBG_ASSERT(alpha>=0.);
+    return alpha;
   }
 
   void DenseVector::CopyToPos(Index Pos, const Vector& x)
