@@ -298,13 +298,14 @@ namespace Ipopt
 
   void IpoptAlgorithm::InitializeIterates()
   {
-    DBG_START_METH("IpoptAlgorithm::InitializeIterates", 0);
+    DBG_START_METH("IpoptAlgorithm::InitializeIterates", dbg_verbosity);
 
     iterate_initializer_->SetInitialIterates();
   }
 
   void IpoptAlgorithm::AcceptTrialPoint()
   {
+    DBG_START_METH("IpoptAlgorithm::AcceptTrialPoint", dbg_verbosity);
     // If the line search didn't determine a new acceptable trial
     // point, do not accept a new iterate
     if (line_search_->CheckSkippedLineSearch()) {
@@ -315,6 +316,7 @@ namespace Ipopt
 
     // Adjust the bounds if necessary
     Index adjusted_slacks = IpCq().AdjustedTrialSlacks();
+    DBG_PRINT((1, "adjusted_slacks = %d\n", adjusted_slacks));
     if (adjusted_slacks>0) {
       IpCq().ResetAdjustedTrialSlacks();
       if (adjusted_slacks==1) {
