@@ -137,6 +137,16 @@ namespace Ipopt
     Number SumLogs() const;
     //@}
 
+    /** @name Methods for specialized operations.  A prototype
+     *  implementation is provided, but for efficient implementation
+     *  those should be specially implemented.
+     */
+    //@{
+    /** Add two vectors (a * v1 + b * v2).  Result is stored in this
+	vector. */
+    void AddTwoVectors(Number a, const Vector& v1, Number b, const Vector& v2);
+    //@}
+
     /** @name Accessor methods */
     //@{
     /** Dimension of the Vector */
@@ -223,6 +233,11 @@ namespace Ipopt
 
     /** Sum of logs of entries in the vector */
     virtual Number SumLogsImpl() const=0;
+
+    /** Add two vectors (a * v1 + b * v2).  Result is stored in this
+	vector. */
+    virtual void AddTwoVectorsImpl(Number a, const Vector& v1,
+				   Number b, const Vector& v2);
 
     /** Print the entire vector */
     virtual void PrintImpl(FILE* fp, std::string name = "Vector",
@@ -501,6 +516,14 @@ namespace Ipopt
   Number Vector::Min() const
   {
     return MinImpl();
+  }
+
+  inline
+  void Vector::AddTwoVectors(Number a, const Vector& v1,
+			     Number b, const Vector& v2)
+  {
+    AddTwoVectorsImpl(a, v1, b, v2);
+    ObjectChanged();
   }
 
   inline

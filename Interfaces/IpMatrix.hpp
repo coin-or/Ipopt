@@ -62,6 +62,25 @@ namespace Ipopt
                          Vector& y) const;
     //@}
 
+    /** @name Methods for specialized operations.  A prototype
+     *  implementation is provided, but for efficient implementation
+     *  those should be specially implemented.
+     */
+    //@{
+    /** X = beta*X + alpha*(Matrix S^{-1} Z).  Should be implemented
+     *  efficiently for the ExansionMatrix
+     */
+    void AddMSinvZ(Number alpha, const Vector& S, const Vector& Z,
+		   Number beta, Vector& X) const;
+
+    /** X = S^{-1} (r + alpha*Z*M^Td).   Should be implemented
+     *  efficiently for the ExansionMatrix
+     */
+    void SinvBlrmZMTdBr(Number alpha, const Vector& S,
+			const Vector& R, const Vector& Z,
+			const Vector& D, Vector& X) const;
+    //@}
+
     //* @name Information about the size of the matrix */
     //@{
     /** Number of rows */
@@ -93,6 +112,20 @@ namespace Ipopt
      * Computes y = alpha * Matrix^T * x  +  beta * y
      */
     virtual void TransMultVectorImpl(Number alpha, const Vector& x, Number beta, Vector& y) const =0;
+
+    /** X = beta*X + alpha*(Matrix S^{-1} Z).  Prototype for this
+     *  specialize method is provided, but for efficient
+     *  implementation it should be overloaded for the expansion matrix.
+     */
+    virtual void AddMSinvZImpl(Number alpha, const Vector& S, const Vector& Z,
+			       Number beta, Vector& X) const;
+
+    /** X = S^{-1} (r + alpha*Z*M^Td).   Should be implemented
+     *  efficiently for the ExansionMatrix.
+     */
+    virtual void SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
+				    const Vector& R, const Vector& Z,
+				    const Vector& D, Vector& X) const;
 
     /** Print detailed information about the matrix. */
     virtual void PrintImpl(FILE* fp, std::string name, Index indent, std::string prefix) const =0;

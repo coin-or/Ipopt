@@ -34,6 +34,39 @@ namespace Ipopt
     TransMultVectorImpl(alpha, x, beta, y);
   }
 
+  void Matrix::AddMSinvZ(Number alpha, const Vector& S, const Vector& Z,
+			 Number beta, Vector& X) const
+  {
+    AddMSinvZImpl(alpha, S, Z, beta, X);
+  }
+
+  void Matrix::SinvBlrmZMTdBr(Number alpha, const Vector& S,
+			      const Vector& R, const Vector& Z,
+			      const Vector& D, Vector& X) const
+  {
+    SinvBlrmZMTdBrImpl(alpha, S, R, Z, D, X);
+  }
+
+  // Prototype for specialize methods (can and should be overloaded)
+  void Matrix::AddMSinvZImpl(Number alpha, const Vector& S, const Vector& Z,
+			     Number beta, Vector& X) const
+  {
+    SmartPtr<Vector> tmp = S.MakeNew();
+    tmp->Copy(Z);
+    tmp->ElementWiseDivide(S);
+    MultVector(alpha, *tmp, beta, X);
+  }
+  
+  void Matrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
+				  const Vector& R, const Vector& Z,
+				  const Vector& D, Vector& X) const
+  {
+    TransMultVector(alpha, D, 0., X);
+    X.ElementWiseMultiply(Z);
+    X.Axpy(1., R);
+    X.ElementWiseDivide(S);
+  }
+
   void Matrix::Print(FILE* fp, std::string name, Index indent, std::string prefix) const
   {
     PrintImpl(fp, name, indent, prefix);

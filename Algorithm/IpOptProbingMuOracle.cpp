@@ -615,6 +615,16 @@ namespace Ipopt
     SmartPtr<Vector> step_v_L = step_aff_v_L.MakeNew();
     SmartPtr<Vector> step_v_U = step_aff_v_U.MakeNew();
 
+    step_x_L->AddTwoVectors(1., step_aff_x_L, sigma, step_cen_x_L);
+    step_x_U->AddTwoVectors(1., step_aff_x_U, sigma, step_cen_x_U);
+    step_s_L->AddTwoVectors(1., step_aff_s_L, sigma, step_cen_s_L);
+    step_s_U->AddTwoVectors(1., step_aff_s_U, sigma, step_cen_s_U);
+    step_z_L->AddTwoVectors(1., step_aff_z_L, sigma, step_cen_z_L);
+    step_z_U->AddTwoVectors(1., step_aff_z_U, sigma, step_cen_z_U);
+    step_v_L->AddTwoVectors(1., step_aff_v_L, sigma, step_cen_v_L);
+    step_v_U->AddTwoVectors(1., step_aff_v_U, sigma, step_cen_v_U);
+
+    /*
     step_x_L->Copy(step_aff_x_L);
     step_x_U->Copy(step_aff_x_U);
     step_s_L->Copy(step_aff_s_L);
@@ -632,6 +642,7 @@ namespace Ipopt
     step_z_U->Axpy(sigma, step_cen_z_U);
     step_v_L->Axpy(sigma, step_cen_v_L);
     step_v_U->Axpy(sigma, step_cen_v_U);
+    */
 
     // Compute the fraction-to-the-boundary step sizes
     // ToDo make sure we use the correct tau
@@ -675,6 +686,12 @@ namespace Ipopt
 
     while (!found_beta) {
 
+      slack_x_L->AddTwoVectors(1., *IpCq().curr_slack_x_L(), alpha_primal, *step_x_L);
+      slack_x_U->AddTwoVectors(1., *IpCq().curr_slack_x_U(), alpha_primal, *step_x_U);
+      slack_s_L->AddTwoVectors(1., *IpCq().curr_slack_s_L(), alpha_primal, *step_s_L);
+      slack_s_U->AddTwoVectors(1., *IpCq().curr_slack_s_U(), alpha_primal, *step_s_U);
+
+      /*
       slack_x_L->Copy(*IpCq().curr_slack_x_L());
       slack_x_U->Copy(*IpCq().curr_slack_x_U());
       slack_s_L->Copy(*IpCq().curr_slack_s_L());
@@ -683,7 +700,14 @@ namespace Ipopt
       slack_x_U->Axpy(alpha_primal, *step_x_U);
       slack_s_L->Axpy(alpha_primal, *step_s_L);
       slack_s_U->Axpy(alpha_primal, *step_s_U);
+      */
 
+      z_L->AddTwoVectors(1., *IpData().curr_z_L(), alpha_dual, *step_z_L);
+      z_U->AddTwoVectors(1., *IpData().curr_z_U(), alpha_dual, *step_z_U);
+      v_L->AddTwoVectors(1., *IpData().curr_v_L(), alpha_dual, *step_v_L);
+      v_U->AddTwoVectors(1., *IpData().curr_v_U(), alpha_dual, *step_v_U);
+
+      /*
       z_L->Copy(*IpData().curr_z_L());
       z_U->Copy(*IpData().curr_z_U());
       v_L->Copy(*IpData().curr_v_L());
@@ -692,6 +716,7 @@ namespace Ipopt
       z_U->Axpy(alpha_dual, *step_z_U);
       v_L->Axpy(alpha_dual, *step_v_L);
       v_U->Axpy(alpha_dual, *step_v_U);
+      */
 
       slack_x_L->ElementWiseMultiply(*z_L);
       slack_x_U->ElementWiseMultiply(*z_U);

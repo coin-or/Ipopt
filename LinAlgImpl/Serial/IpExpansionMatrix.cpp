@@ -85,6 +85,97 @@ namespace Ipopt
     }
   }
 
+  // Specialized method (overloaded from IpMatrix)
+  void ExpansionMatrix::AddMSinvZImpl(Number alpha, const Vector& S,
+				      const Vector& Z,
+				      Number beta, Vector& X) const
+  {
+    DBG_ASSERT(NCols()==S.Dim());
+    DBG_ASSERT(NCols()==Z.Dim());
+    DBG_ASSERT(NRows()==X.Dim());
+
+    const DenseVector* dense_S = dynamic_cast<const DenseVector*>(&S);
+    DBG_ASSERT(dense_S);
+    const DenseVector* dense_Z = dynamic_cast<const DenseVector*>(&Z);
+    DBG_ASSERT(dense_Z);
+    DenseVector* dense_X = dynamic_cast<DenseVector*>(&X);
+    DBG_ASSERT(dense_X);
+
+    const Index* exp_pos = ExpandedPosIndices();
+    const Number* vals_S = dense_S->Values();
+    const Number* vals_Z = dense_Z->Values();
+    Number* vals_X = dense_X->Values();
+
+    if (beta==1.) {
+      if (alpha==1.) {
+	for(Index i=0; i<NCols(); i++) {
+	  vals_X[exp_pos[i]] += vals_Z[i]/vals_S[i];
+	}
+      }
+      else if (alpha==-1.) {
+	for(Index i=0; i<NCols(); i++) {
+	  vals_X[exp_pos[i]] -= vals_Z[i]/vals_S[i];
+	}
+      }
+      else {
+	for(Index i=0; i<NCols(); i++) {
+	  vals_X[exp_pos[i]] += alpha*vals_Z[i]/vals_S[i];
+	}
+      }
+    }
+    else {
+      for(Index i=0; i<NCols(); i++) {
+	vals_X[exp_pos[i]] =
+	  alpha*vals_Z[i]/vals_S[i] + beta*vals_X[exp_pos[i]];
+      }
+    }
+  }
+
+  void ExpansionMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
+					   const Vector& R, const Vector& Z,
+					   const Vector& D, Vector& X) const
+  {
+    DBG_ASSERT(NCols()==S.Dim());
+    DBG_ASSERT(NCols()==R.Dim());
+    DBG_ASSERT(NCols()==Z.Dim());
+    DBG_ASSERT(NRows()==D.Dim());
+    DBG_ASSERT(NCols()==X.Dim());
+
+    const DenseVector* dense_S = dynamic_cast<const DenseVector*>(&S);
+    DBG_ASSERT(dense_S);
+    const DenseVector* dense_R = dynamic_cast<const DenseVector*>(&R);
+    DBG_ASSERT(dense_R);
+    const DenseVector* dense_Z = dynamic_cast<const DenseVector*>(&Z);
+    DBG_ASSERT(dense_Z);
+    const DenseVector* dense_D = dynamic_cast<const DenseVector*>(&D);
+    DBG_ASSERT(dense_D);
+    DenseVector* dense_X = dynamic_cast<DenseVector*>(&X);
+    DBG_ASSERT(dense_X);
+
+    const Index* exp_pos = ExpandedPosIndices();
+    const Number* vals_S = dense_S->Values();
+    const Number* vals_R = dense_R->Values();
+    const Number* vals_Z = dense_Z->Values();
+    const Number* vals_D = dense_D->Values();
+    Number* vals_X = dense_X->Values();
+
+    if (alpha==1.) {
+      for (Index i=0; i<NCols(); i++) {
+	vals_X[i] = (vals_R[i] + vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+      }
+    }
+    else if (alpha==-1.) {
+      for (Index i=0; i<NCols(); i++) {
+	vals_X[i] = (vals_R[i] - vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+      }
+    }
+    else {
+      for (Index i=0; i<NCols(); i++) {
+	vals_X[i] = (vals_R[i] + alpha*vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+      }
+    }
+  }
+
   void ExpansionMatrix::PrintImpl(FILE* fp, std::string name, Index indent, std::string prefix) const
   {
     fprintf(fp, "\n");

@@ -67,6 +67,15 @@ namespace Ipopt
     virtual void TransMultVectorImpl(Number alpha, const Vector& x,
                                      Number beta, Vector& y) const;
 
+    /** X = beta*X + alpha*(Matrix S^{-1} Z).  Specialize implementation.
+     */
+    virtual void AddMSinvZImpl(Number alpha, const Vector& S, const Vector& Z,
+			       Number beta, Vector& X) const;
+
+    virtual void SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
+				    const Vector& R, const Vector& Z,
+				    const Vector& D, Vector& X) const;
+
     virtual void PrintImpl(FILE* fp, std::string name, Index indent, std::string prefix) const;
     //@}
 

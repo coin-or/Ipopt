@@ -36,6 +36,19 @@ namespace Ipopt
   VectorSpace::~VectorSpace()
   {}
 
+  /* Prototype implementation for specialized functions */
+  void Vector::AddTwoVectorsImpl(Number a, const Vector& v1,
+				 Number b, const Vector& v2)
+  {
+    Copy(v1);
+    if (a!=1.) {
+      Scal(a);
+    }
+    if (b!=0.) {
+      Axpy(b, v2);
+    }
+  }
+
   /*
   Vector* VectorSpace::MakeNewEVector_Vector(Number factor)
   {
