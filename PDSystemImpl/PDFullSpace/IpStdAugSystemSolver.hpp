@@ -44,7 +44,7 @@ namespace Ipopt
     /** Set up the augmented system and solve it for a given right hand
      *  side - implementation for GenTMatrices and SymTMatrices.
      */
-    virtual SymLinearSolver::ESolveStatus Solve(
+    virtual ESymSolverStatus Solve(
       const SymMatrix* W,
       const Vector* D_x,
       double delta_x,

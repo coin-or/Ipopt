@@ -55,28 +55,27 @@ namespace Ipopt
     return retval;
   }
 
-  SymLinearSolver::ESolveStatus
-  AugRestoSystemSolver::Solve(const SymMatrix* W,
-                              const Vector* D_x,
-                              double delta_x,
-                              const Vector* D_s,
-                              double delta_s,
-                              const Matrix* J_c,
-                              const Vector* D_c,
-                              double delta_c,
-                              const Matrix* J_d,
-                              const Vector* D_d,
-                              double delta_d,
-                              const Vector& rhs_x,
-                              const Vector& rhs_s,
-                              const Vector& rhs_c,
-                              const Vector& rhs_d,
-                              Vector& sol_x,
-                              Vector& sol_s,
-                              Vector& sol_c,
-                              Vector& sol_d,
-                              bool check_NegEVals,
-                              Index numberOfNegEVals)
+  ESymSolverStatus AugRestoSystemSolver::Solve(const SymMatrix* W,
+					       const Vector* D_x,
+					       double delta_x,
+					       const Vector* D_s,
+					       double delta_s,
+					       const Matrix* J_c,
+					       const Vector* D_c,
+					       double delta_c,
+					       const Matrix* J_d,
+					       const Vector* D_d,
+					       double delta_d,
+					       const Vector& rhs_x,
+					       const Vector& rhs_s,
+					       const Vector& rhs_c,
+					       const Vector& rhs_d,
+					       Vector& sol_x,
+					       Vector& sol_s,
+					       Vector& sol_c,
+					       Vector& sol_d,
+					       bool check_NegEVals,
+					       Index numberOfNegEVals)
   {
     DBG_START_METH("AugRestoSystemSolver::Solve",dbg_verbosity);
     DBG_ASSERT(J_c && J_d); // should pass these by ref
@@ -182,20 +181,19 @@ namespace Ipopt
     Vector& sol_cR = sol_c;
     Vector& sol_dR = sol_d;
 
-    SymLinearSolver::ESolveStatus
-    status = orig_aug_solver_->Solve(GetRawPtr(h_orig),
-                                     GetRawPtr(D_xR), delta_xR,
-                                     GetRawPtr(D_sR), delta_sR,
-                                     GetRawPtr(J_cR), GetRawPtr(D_cR),
-                                     delta_cR,
-                                     GetRawPtr(J_dR), GetRawPtr(D_dR),
-                                     delta_dR,
-                                     *rhs_xR, *rhs_sR, *rhs_cR, *rhs_dR,
-                                     *sol_xR, sol_sR, sol_cR, sol_dR,
-                                     check_NegEVals,
-                                     numberOfNegEVals);
+    ESymSolverStatus status = orig_aug_solver_->Solve(GetRawPtr(h_orig),
+						  GetRawPtr(D_xR), delta_xR,
+						  GetRawPtr(D_sR), delta_sR,
+						  GetRawPtr(J_cR), GetRawPtr(D_cR),
+						  delta_cR,
+						  GetRawPtr(J_dR), GetRawPtr(D_dR),
+						  delta_dR,
+						  *rhs_xR, *rhs_sR, *rhs_cR, *rhs_dR,
+						  *sol_xR, sol_sR, sol_cR, sol_dR,
+						  check_NegEVals,
+						  numberOfNegEVals);
 
-    if (status == SymLinearSolver::S_SUCCESS) {
+    if (status == SYMSOLVER_SUCCESS) {
       // Now back out the solutions for the n and p variables
       SmartPtr<Vector> sol_n_c = Csol_x->GetCompNonConst(1);
       sol_n_c->Set(0.0);

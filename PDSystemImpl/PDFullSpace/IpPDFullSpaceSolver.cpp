@@ -512,7 +512,7 @@ namespace Ipopt
     // been solved before
     DBG_ASSERT((!resolve_unmodified && !pretend_singular) || uptodate);
 
-    enum SymLinearSolver::ESolveStatus retval;
+    ESymSolverStatus retval;
     if (uptodate && !pretend_singular) {
       // No need to go throught the pain of finding the appropriate
       // values for the deltas, because the matrix hasn't changed since
@@ -523,7 +523,7 @@ namespace Ipopt
                                     *augRhs_x, *augRhs_s, rhs_c, rhs_d,
                                     *sol_x, *sol_s, *sol_c,
                                     *sol_d, false, 0);
-      assert(retval==SymLinearSolver::S_SUCCESS); //TODO make return code
+      assert(retval==SYMSOLVER_SUCCESS); //TODO make return code
     }
     else {
       Index numberOfEVals=rhs_c.Dim()+rhs_d.Dim();
@@ -541,13 +541,13 @@ namespace Ipopt
         delta_d_curr_=0.;
       }
 
-      retval = SymLinearSolver::S_SINGULAR;
+      retval = SYMSOLVER_SINGULAR;
       bool fail = false;
 
-      while (retval!= SymLinearSolver::S_SUCCESS && !fail) {
+      while (retval!= SYMSOLVER_SUCCESS && !fail) {
 
         if (pretend_singular) {
-          retval = SymLinearSolver::S_SINGULAR;
+          retval = SYMSOLVER_SINGULAR;
           pretend_singular = false;
         }
         else {
@@ -563,14 +563,14 @@ namespace Ipopt
                                         *sol_x, *sol_s, *sol_c,
                                         *sol_d, true, numberOfEVals);
         }
-        assert(retval!=SymLinearSolver::S_FATAL_ERROR); //TODO make return code
-        if (retval==SymLinearSolver::S_SINGULAR && delta_c_curr_==0.) {
+        assert(retval!=SYMSOLVER_FATAL_ERROR); //TODO make return code
+        if (retval==SYMSOLVER_SINGULAR && delta_c_curr_==0.) {
           // If the matrix is singular and delta_c is not yet nonzero,
           // increase both delta_c and delta_d
           delta_c_curr_ = 1e-8; // TODO: Make parameter
           delta_d_curr_ = 1e-8; // TODO Make parameter
         }
-        else if (retval==SymLinearSolver::S_WRONG_INERTIA || retval==SymLinearSolver::S_SINGULAR) {
+        else if (retval==SYMSOLVER_WRONG_INERTIA || retval==SYMSOLVER_SINGULAR) {
           if (delta_x_curr_ == 0) {
             if (delta_x_last_ == 0.) {
               delta_x_curr_ = 1e-4;  //TODO Parameter
@@ -593,7 +593,7 @@ namespace Ipopt
           }
           delta_s_curr_ = delta_x_curr_;
         }
-      } // while (retval!=S_SUCCESS && !fail) {
+      } // while (retval!=SYMSOLVER_SUCCESS && !fail) {
 
       // Some output
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,

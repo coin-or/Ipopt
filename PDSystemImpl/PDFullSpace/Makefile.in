@@ -42,6 +42,9 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+@HAVE_PARDISO_TRUE@am__append_1 = \
+@HAVE_PARDISO_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+
 subdir = PDSystemImpl/PDFullSpace
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -54,23 +57,39 @@ CONFIG_CLEAN_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
 libpdfullspace_a_AR = $(AR) $(ARFLAGS)
 libpdfullspace_a_LIBADD =
+am__libpdfullspace_a_SOURCES_DIST = IpAugRestoSystemSolver.cpp \
+	IpAugRestoSystemSolver.hpp IpAugSystemSolver.hpp \
+	IpStdAugSystemSolver.hpp IpStdAugSystemSolver.cpp \
+	IpLeastSquareMults.hpp IpLeastSquareMults.cpp \
+	IpMc19TSymScalingMethod.hpp IpMc19TSymScalingMethod.cpp \
+	IpPDFullSpaceSolver.cpp IpPDFullSpaceSolver.hpp \
+	IpTripletHelper.hpp IpTripletHelper.cpp IpSymLinearSolver.hpp \
+	IpTSymScalingMethod.hpp IpTSymLinearSolver.hpp \
+	IpTSymLinearSolver.cpp IpSparseSymLinearSolverInterface.hpp \
+	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
+	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
+	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+@HAVE_PARDISO_TRUE@am__objects_1 = IpPardisoSolverInterface.$(OBJEXT)
 am_libpdfullspace_a_OBJECTS = IpAugRestoSystemSolver.$(OBJEXT) \
-	IpStdAugSystemSolver.$(OBJEXT) IpAugTSystemSolver.$(OBJEXT) \
-	IpLeastSquareMults.$(OBJEXT) IpMa27SymLinearSolver.$(OBJEXT) \
-	IpMc19SymTScalingMethod.$(OBJEXT) \
-	IpPDFullSpaceSolver.$(OBJEXT) IpTripletHelper.$(OBJEXT)
+	IpStdAugSystemSolver.$(OBJEXT) IpLeastSquareMults.$(OBJEXT) \
+	IpMc19TSymScalingMethod.$(OBJEXT) \
+	IpPDFullSpaceSolver.$(OBJEXT) IpTripletHelper.$(OBJEXT) \
+	IpTSymLinearSolver.$(OBJEXT) IpMa27TSolverInterface.$(OBJEXT) \
+	IpTripletToCSRConverter.$(OBJEXT) $(am__objects_1)
 libpdfullspace_a_OBJECTS = $(am_libpdfullspace_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/IpAugRestoSystemSolver.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/IpAugTSystemSolver.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpLeastSquareMults.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/IpMa27SymLinearSolver.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/IpMc19SymTScalingMethod.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpMa27TSolverInterface.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpMc19TSymScalingMethod.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpPDFullSpaceSolver.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpPardisoSolverInterface.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpStdAugSystemSolver.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/IpTripletHelper.Po
+@AMDEP_TRUE@	./$(DEPDIR)/IpTSymLinearSolver.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpTripletHelper.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpTripletToCSRConverter.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -81,7 +100,7 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libpdfullspace_a_SOURCES)
-DIST_SOURCES = $(libpdfullspace_a_SOURCES)
+DIST_SOURCES = $(am__libpdfullspace_a_SOURCES_DIST)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -145,6 +164,8 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
+HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
+HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -216,27 +237,36 @@ libpdfullspace_a_SOURCES = \
 	IpAugRestoSystemSolver.cpp IpAugRestoSystemSolver.hpp \
 	IpAugSystemSolver.hpp \
 	IpStdAugSystemSolver.hpp IpStdAugSystemSolver.cpp \
-	IpAugTSystemSolver.cpp IpAugTSystemSolver.hpp \
 	IpLeastSquareMults.hpp IpLeastSquareMults.cpp \
-	IpMa27SymLinearSolver.hpp IpMa27SymLinearSolver.cpp \
-	IpMc19SymTScalingMethod.hpp IpMc19SymTScalingMethod.cpp \
+	IpMc19TSymScalingMethod.hpp IpMc19TSymScalingMethod.cpp \
 	IpPDFullSpaceSolver.cpp	IpPDFullSpaceSolver.hpp \
 	IpTripletHelper.hpp IpTripletHelper.cpp \
-	IpSymLinearSolver.hpp 
-
+	IpSymLinearSolver.hpp \
+	IpTSymScalingMethod.hpp \
+	IpTSymLinearSolver.hpp \
+	IpTSymLinearSolver.cpp \
+	IpSparseSymLinearSolverInterface.hpp \
+	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
+	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp\
+$(am__append_1)
 
 # Astyle stuff
 ASTYLE_SOURCES = \
 	IpAugRestoSystemSolver.cppbak IpAugRestoSystemSolver.hppbak \
 	IpAugSystemSolver.hppbak \
 	IpStdAugSystemSolver.hppbak IpStdAugSystemSolver.cppbak \
-	IpAugTSystemSolver.cppbak IpAugTSystemSolver.hppbak \
 	IpLeastSquareMults.hppbak IpLeastSquareMults.cppbak \
-	IpMa27SymLinearSolver.hppbak IpMa27SymLinearSolver.cppbak \
-	IpMc19SymTScalingMethod.hppbak IpMc19SymTScalingMethod.cppbak \
+	IpMc19TSymScalingMethod.hppbak IpMc19TSymScalingMethod.cppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpTripletHelper.hppbak IpTripletHelper.cppbak \
-	IpSymLinearSolver.hppbak
+	IpSymLinearSolver.hppbak \
+	IpTSymScalingMethod.hppbak \
+	IpTSymLinearSolver.hppbak \
+	IpTSymLinearSolver.cppbak \
+	IpSparseSymLinearSolverInterface.hppbak \
+	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
+	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
+	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak
 
 CLEANFILES = $(ASTYLE_SOURCES)
 SUFFIXES = .cppbak .hppbak
@@ -288,13 +318,15 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAugRestoSystemSolver.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAugTSystemSolver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLeastSquareMults.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa27SymLinearSolver.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19SymTScalingMethod.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa27TSolverInterface.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19TSymScalingMethod.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDFullSpaceSolver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPardisoSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdAugSystemSolver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTSymLinearSolver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTripletHelper.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTripletToCSRConverter.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

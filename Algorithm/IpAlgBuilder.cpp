@@ -8,8 +8,6 @@
 
 #include "IpAlgBuilder.hpp"
 
-#include "IpMa27SymLinearSolver.hpp"
-#include "IpAugTSystemSolver.hpp"
 #include "IpStdAugSystemSolver.hpp"
 #include "IpAugRestoSystemSolver.hpp"
 #include "IpPDFullSpaceSolver.hpp"
@@ -28,6 +26,10 @@
 #include "IpRestoFilterConvCheck.hpp"
 #include "IpRestoIterateInitializer.hpp"
 #include "IpRestoRestoPhase.hpp"
+#include "IpTSymLinearSolver.hpp"
+#include "IpMa27TSolverInterface.hpp"
+#include "IpMc19TSymScalingMethod.hpp"
+#include "IpPardisoSolverInterface.hpp"
 
 namespace Ipopt
 {
@@ -45,7 +47,7 @@ namespace Ipopt
       new OptimalityErrorConvergenceCheck();
 
     // Create the solvers that will be used by the main algorithm
-    SmartPtr<Mc19SymTScalingMethod> ScalingMethod;
+    SmartPtr<TSymScalingMethod> ScalingMethod;
     std::string scaling_method;
     if (options.GetValue("scaling_method", scaling_method, prefix)) {
       ASSERT_EXCEPTION(scaling_method=="mc19" || scaling_method=="none",
@@ -56,13 +58,38 @@ namespace Ipopt
       scaling_method = "mc19";
     }
     if (scaling_method=="mc19") {
-      ScalingMethod = new Mc19SymTScalingMethod();
+      ScalingMethod = new Mc19TSymScalingMethod();
     }
-    SmartPtr<SymLinearSolver> Ma27Solver =
-      new Ma27SymLinearSolver(ScalingMethod);
+
+    SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
+    std::string linear_solver;
+    if (options.GetValue("linear_solver", linear_solver, prefix)) {
+      ASSERT_EXCEPTION(linear_solver=="ma27" || linear_solver=="pardiso",
+                       OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"linear_solver\" has invalid value.");
+    }
+    else {
+      linear_solver = "ma27";
+    }
+    if (linear_solver=="ma27") {
+      SolverInterface = new Ma27TSolverInterface();
+    }
+    else if (linear_solver=="pardiso") {
+#ifdef HAVE_PARDISO
+      SolverInterface = new PardisoSolverInterface();
+#else
+      ASSERT_EXCEPTION(false,
+                       OptionsList::OPTION_OUT_OF_RANGE,
+                       "Selected solver Pardiso not available.");
+#endif
+    }
+
+    SmartPtr<SymLinearSolver> ScaledSolver =
+      new TSymLinearSolver(SolverInterface, ScalingMethod);
+
     SmartPtr<AugSystemSolver> AugSolver =
       //        = new AugTSystemSolver(*Ma27Solver);
-      new StdAugSystemSolver(*Ma27Solver);
+      new StdAugSystemSolver(*ScaledSolver);
     SmartPtr<PDSystemSolver> PDSolver =
       new PDFullSpaceSolver(*AugSolver);
 

@@ -14,13 +14,22 @@ libpdfullspace_a_SOURCES = \
 	IpAugRestoSystemSolver.cpp IpAugRestoSystemSolver.hpp \
 	IpAugSystemSolver.hpp \
 	IpStdAugSystemSolver.hpp IpStdAugSystemSolver.cpp \
-	IpAugTSystemSolver.cpp IpAugTSystemSolver.hpp \
 	IpLeastSquareMults.hpp IpLeastSquareMults.cpp \
-	IpMa27SymLinearSolver.hpp IpMa27SymLinearSolver.cpp \
-	IpMc19SymTScalingMethod.hpp IpMc19SymTScalingMethod.cpp \
+	IpMc19TSymScalingMethod.hpp IpMc19TSymScalingMethod.cpp \
 	IpPDFullSpaceSolver.cpp	IpPDFullSpaceSolver.hpp \
 	IpTripletHelper.hpp IpTripletHelper.cpp \
-	IpSymLinearSolver.hpp 
+	IpSymLinearSolver.hpp \
+	IpTSymScalingMethod.hpp \
+	IpTSymLinearSolver.hpp \
+	IpTSymLinearSolver.cpp \
+	IpSparseSymLinearSolverInterface.hpp \
+	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
+	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp
+
+if HAVE_PARDISO
+  libpdfullspace_a_SOURCES += \
+	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+endif
 
 
 CXXFLAGS += -I$(srcdir)/../../Common \
@@ -34,13 +43,18 @@ ASTYLE_SOURCES = \
 	IpAugRestoSystemSolver.cppbak IpAugRestoSystemSolver.hppbak \
 	IpAugSystemSolver.hppbak \
 	IpStdAugSystemSolver.hppbak IpStdAugSystemSolver.cppbak \
-	IpAugTSystemSolver.cppbak IpAugTSystemSolver.hppbak \
 	IpLeastSquareMults.hppbak IpLeastSquareMults.cppbak \
-	IpMa27SymLinearSolver.hppbak IpMa27SymLinearSolver.cppbak \
-	IpMc19SymTScalingMethod.hppbak IpMc19SymTScalingMethod.cppbak \
+	IpMc19TSymScalingMethod.hppbak IpMc19TSymScalingMethod.cppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpTripletHelper.hppbak IpTripletHelper.cppbak \
-	IpSymLinearSolver.hppbak
+	IpSymLinearSolver.hppbak \
+	IpTSymScalingMethod.hppbak \
+	IpTSymLinearSolver.hppbak \
+	IpTSymLinearSolver.cppbak \
+	IpSparseSymLinearSolverInterface.hppbak \
+	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
+	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
+	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@

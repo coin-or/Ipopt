@@ -59,7 +59,7 @@ namespace Ipopt
      *
      *  The return value is the return value of the linear solver object.
      */
-    virtual SymLinearSolver::ESolveStatus Solve(
+    virtual ESymSolverStatus Solve(
       const SymMatrix* W,
       const Vector* D_x,
       double delta_x,

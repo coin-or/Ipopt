@@ -319,7 +319,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os AR ARFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT F77 FFLAGS ac_ct_F77 FLIBS IPADDLIBS ASLMAKEFLAGS ASLMAKEFILECMDS CPP EGREP CXXLIBS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDLAPACK_TRUE BUILDLAPACK_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDLAPACKDIR_TRUE BUILDLAPACKDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE ASLLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os AR ARFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT F77 FFLAGS ac_ct_F77 FLIBS IPADDLIBS ASLMAKEFLAGS ASLMAKEFILECMDS CPP EGREP CXXLIBS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDLAPACK_TRUE BUILDLAPACK_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDLAPACKDIR_TRUE BUILDLAPACKDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE ASLLIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -904,6 +904,7 @@ Optional Packages:
   --with-blas             specify BLAS library (or BUILD for compilation)
   --with-lapack           specify LAPACK library (or BUILD for compilation)
   --with-hsl              specify Harwell library (or BUILD for compilation)
+  --with-pardiso          specify Pardiso library
   --with-asldir           specify absolute path to AMPL solver directory (or
                           BUILD for compilation, or "no" for disabling AMPL)
 
@@ -3696,7 +3697,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3699:" \
+echo "$as_me:3700:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -3893,7 +3894,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:3896: \"$ac_link\") >&5
+(eval echo $as_me:3897: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -3971,7 +3972,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:3974: \"$ac_link\") >&5
+(eval echo $as_me:3975: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5570,6 +5571,71 @@ fi
               ac_config_links="$ac_config_links OTHERS/HSL/fd05ad.f:OTHERS/HSL/$use_FD05"
 
   fi
+fi
+
+###########
+# PARDISO #
+###########
+
+
+# Check whether --with-pardiso or --without-pardiso was given.
+if test "${with_pardiso+set}" = set; then
+  withval="$with_pardiso"
+  use_pardiso=$withval
+else
+  use_pardiso=no
+fi;
+
+if test ! "$use_pardiso" = "no"; then
+  LIBS="$use_pardiso $LIBS"
+  IPADDLIBS="$use_pardiso $IPADDLIBS"
+  echo "$as_me:$LINENO: checking whether user supplied Pardiso library \"$use_pardiso\" works" >&5
+echo $ECHO_N "checking whether user supplied Pardiso library \"$use_pardiso\" works... $ECHO_C" >&6
+  cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call PARDISO()
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+{ { echo "$as_me:$LINENO: error: Pardiso subroutine not found in $use_pardiso" >&5
+echo "$as_me: error: Pardiso subroutine not found in $use_pardiso" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PARDISO 1
+_ACEOF
+
 fi
 
 ac_ext=c
@@ -7943,6 +8009,17 @@ fi
 
 
 
+if test ! "$use_pardiso" = no; then
+  HAVE_PARDISO_TRUE=
+  HAVE_PARDISO_FALSE='#'
+else
+  HAVE_PARDISO_TRUE='#'
+  HAVE_PARDISO_FALSE=
+fi
+
+
+
+
 if test "$use_asldir" = BUILD; then
   BUILDASLDIR_TRUE=
   BUILDASLDIR_FALSE='#'
@@ -8156,6 +8233,13 @@ if test -z "${BUILDHSLDIR_TRUE}" && test -z "${BUILDHSLDIR_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"BUILDHSLDIR\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"BUILDHSLDIR\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${HAVE_PARDISO_TRUE}" && test -z "${HAVE_PARDISO_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"HAVE_PARDISO\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"HAVE_PARDISO\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -8815,6 +8899,8 @@ s,@BUILDLAPACKDIR_TRUE@,$BUILDLAPACKDIR_TRUE,;t t
 s,@BUILDLAPACKDIR_FALSE@,$BUILDLAPACKDIR_FALSE,;t t
 s,@BUILDHSLDIR_TRUE@,$BUILDHSLDIR_TRUE,;t t
 s,@BUILDHSLDIR_FALSE@,$BUILDHSLDIR_FALSE,;t t
+s,@HAVE_PARDISO_TRUE@,$HAVE_PARDISO_TRUE,;t t
+s,@HAVE_PARDISO_FALSE@,$HAVE_PARDISO_FALSE,;t t
 s,@BUILDASLDIR_TRUE@,$BUILDASLDIR_TRUE,;t t
 s,@BUILDASLDIR_FALSE@,$BUILDASLDIR_FALSE,;t t
 s,@BUILDAMPLINTERFACE_TRUE@,$BUILDAMPLINTERFACE_TRUE,;t t

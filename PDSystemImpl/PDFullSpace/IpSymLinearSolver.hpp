@@ -17,6 +17,22 @@
 namespace Ipopt
 {
 
+  /** Enum to report outcome of a linear solve */
+  enum ESymSolverStatus {
+    /** Successful solve */
+    SYMSOLVER_SUCCESS,
+    /** Matrix seems to be singular; solve was aborted */
+    SYMSOLVER_SINGULAR,
+    /** The number of negative eigenvalues is not correct */
+    SYMSOLVER_WRONG_INERTIA,
+    /** Call the solver interface again after the matrix values have
+     *  been restored */
+    SYMSOLVER_CALL_AGAIN,
+    /** Unrecoverable error in linear solver occured.  The
+     *  optimization will be aborted. */
+    SYMSOLVER_FATAL_ERROR
+  };
+
   /** Base class for all derived symmetric linear
    *  solvers.  In the full space version of Ipopt a large linear
    *  system has to be solved for the augmented system.  This case is
@@ -34,18 +50,6 @@ namespace Ipopt
   class SymLinearSolver: public AlgorithmStrategyObject
   {
   public:
-    /** Enum to report outcome of a linear solve */
-    enum ESolveStatus {
-      /** Successful solve */
-      S_SUCCESS,
-      /** Matrix seems to be singular; solve was aborted */
-      S_SINGULAR,
-      /** The number of negative eigenvalues is not correct */
-      S_WRONG_INERTIA,
-      /** Unrecoverable error in linear solver occured during solve */
-      S_FATAL_ERROR
-    };
-
     /** @name Constructor/Destructor */
     //@{
     SymLinearSolver()
@@ -62,29 +66,30 @@ namespace Ipopt
     /** @name Methods for requesting solution of the linear system. */
     //@{
     /** Solve operation for multiple right hand sides.  Solves the
-     * linear system A * Sol = Rhs with multiple right hand sides.  If
-     * necessary, A is factorized.  Correct solutions are only
-     * guaranteed if the return values is S_SUCCESS.
-     * The solver will return S_SINGULAR if the linear system is singular,
-     * and it will return S_WRONG_INERTIA if check_NegEVals is true and
-     * the number of negative eigenvalues in the matrix matches
-     * numberOfNegEVals.
+     *  linear system A * Sol = Rhs with multiple right hand sides.  If
+     *  necessary, A is factorized.  Correct solutions are only
+     *  guaranteed if the return values is SYMSOLVER_SUCCESS.  The
+     *  solver will return SYMSOLVER_SINGULAR if the linear system is
+     *  singular, and it will return SYMSOLVER_WRONG_INERTIA if
+     *  check_NegEVals is true and the number of negative eigenvalues
+     *  in the matrix does not match numberOfNegEVals.
      *
-     * check_NegEVals cannot be chosen true, if ProvidesInertia() returns
-     * false.
+     *  check_NegEVals cannot be chosen true, if ProvidesInertia()
+     *  returns false.
      */
-    virtual ESolveStatus MultiSolve(const SymMatrix &A,
-                                    std::vector<const Vector*>& rhsV,
-                                    std::vector<Vector*>& solV,
-                                    bool check_NegEVals,
-                                    Index numberOfNegEVals)=0;
+    virtual ESymSolverStatus MultiSolve(const SymMatrix &A,
+					std::vector<const Vector*>& rhsV,
+					std::vector<Vector*>& solV,
+					bool check_NegEVals,
+					Index numberOfNegEVals)=0;
 
-    /** Solve operation for single right hand side. Solves the linear
-     * system A * Sol = Rhs.  See MultiSolve for more details. */
-    ESolveStatus Solve(const SymMatrix &A,
-                       const Vector& rhs, Vector& sol,
-                       bool check_NegEVals,
-                       Index numberOfNegEVals)
+    /** Solve operation for a single right hand side. Solves the
+     *  linear system A * Sol = Rhs.  See MultiSolve for more
+     *  details. */
+    ESymSolverStatus Solve(const SymMatrix &A,
+			   const Vector& rhs, Vector& sol,
+			   bool check_NegEVals,
+			   Index numberOfNegEVals)
     {
       std::vector<const Vector*> rhsV;
       rhsV.push_back(&rhs);
@@ -95,10 +100,10 @@ namespace Ipopt
     }
 
     /** Number of negative eigenvalues detected during last
-     * factorization.  Returns the number of negative eigenvalues of
-     * the most recent factorized matrix.  This must not be called if
-     * the linear solver does not compute this quantities (see
-     * ProvidesInertia).
+     *  factorization.  Returns the number of negative eigenvalues of
+     *  the most recent factorized matrix.  This must not be called if
+     *  the linear solver does not compute this quantities (see
+     *  ProvidesInertia).
      */
     virtual Index NumberOfNegEVals() const =0;
     //@}

@@ -68,7 +68,7 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "rhs_c", *rhs_c);
     DBG_PRINT_VECTOR(2, "rhs_d", *rhs_d);
 
-    enum SymLinearSolver::ESolveStatus retval;
+    enum ESymSolverStatus retval;
     Index numberOfEVals=rhs_c->Dim()+rhs_d->Dim();
     retval = augsyssolver_->Solve(GetRawPtr(zeroW), NULL, 1.0, NULL,
                                   1.0, GetRawPtr(J_c), NULL, 0.,
@@ -81,7 +81,7 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "sol_c", y_c);
     DBG_PRINT_VECTOR(2, "sol_d", y_d);
 
-    return (retval==SymLinearSolver::S_SUCCESS);
+    return (retval==SYMSOLVER_SUCCESS);
   }
 
 } // namespace Ipopt

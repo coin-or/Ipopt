@@ -74,28 +74,27 @@ namespace Ipopt
   }
 
 
-  SymLinearSolver::ESolveStatus
-  StdAugSystemSolver::Solve(const SymMatrix* W,
-                            const Vector* D_x,
-                            double delta_x,
-                            const Vector* D_s,
-                            double delta_s,
-                            const Matrix* J_c,
-                            const Vector* D_c,
-                            double delta_c,
-                            const Matrix* J_d,
-                            const Vector* D_d,
-                            double delta_d,
-                            const Vector& rhs_x,
-                            const Vector& rhs_s,
-                            const Vector& rhs_c,
-                            const Vector& rhs_d,
-                            Vector& sol_x,
-                            Vector& sol_s,
-                            Vector& sol_c,
-                            Vector& sol_d,
-                            bool check_NegEVals,
-                            Index numberOfNegEVals)
+  ESymSolverStatus StdAugSystemSolver::Solve(const SymMatrix* W,
+					     const Vector* D_x,
+					     double delta_x,
+					     const Vector* D_s,
+					     double delta_s,
+					     const Matrix* J_c,
+					     const Vector* D_c,
+					     double delta_c,
+					     const Matrix* J_d,
+					     const Vector* D_d,
+					     double delta_d,
+					     const Vector& rhs_x,
+					     const Vector& rhs_s,
+					     const Vector& rhs_c,
+					     const Vector& rhs_d,
+					     Vector& sol_x,
+					     Vector& sol_s,
+					     Vector& sol_c,
+					     Vector& sol_d,
+					     bool check_NegEVals,
+					     Index numberOfNegEVals)
   {
     DBG_START_METH("StdAugSystemSolver::Solve",dbg_verbosity);
     DBG_ASSERT(J_c && J_d && "Currently, you MUST specify J_c and J_d in the augmented system");
@@ -170,7 +169,7 @@ namespace Ipopt
     augmented_sol->SetCompNonConst(1, sol_s);
     augmented_sol->SetCompNonConst(2, sol_c);
     augmented_sol->SetCompNonConst(3, sol_d);
-    SymLinearSolver::ESolveStatus retval;
+    ESymSolverStatus retval;
     retval = linsolver_->Solve(*augmented_system_, *augmented_rhs, *augmented_sol,
                                check_NegEVals, numberOfNegEVals);
     Jnlst().PrintVector(J_MOREVECTOR, J_LINEAR_ALGEBRA, "SOL", *augmented_sol);

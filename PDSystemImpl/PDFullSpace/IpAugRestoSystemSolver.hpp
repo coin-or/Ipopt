@@ -47,7 +47,7 @@ namespace Ipopt
     /** Translate the augmented system (in the full space of the restoration variables)
      *  into the smaller space of the original variables
      */
-    virtual SymLinearSolver::ESolveStatus Solve(
+    virtual ESymSolverStatus Solve(
       const SymMatrix* W,
       const Vector* D_x,
       double delta_x,
