@@ -88,7 +88,7 @@ namespace Ipopt
 
     // check acceptability to the filter
     Jnlst().Printf(J_DETAILED, J_MAIN,
-                   "orig_curr_theta = %g, orig_trial_theta = %g, orig_trial_barr = %g\n",
+                   "orig_curr_theta = %8.2e, orig_trial_theta = %8.2e, orig_trial_barr = %8.2e\n",
                    orig_curr_theta, orig_trial_theta, orig_trial_barr);
 
     // ToDo: In the following we might want to be more careful with the lower bound
@@ -103,7 +103,7 @@ namespace Ipopt
                      "Point is not acceptable to the original filter.\n");
       status = CONTINUE;
     }
-    else if (!orig_filter_line_search_->IsAcceptableToCurrentIterate(orig_trial_barr, orig_trial_theta) ) {
+    else if (!orig_filter_line_search_->IsAcceptableToCurrentIterate(orig_trial_barr, orig_trial_theta, true) ) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "Point is not acceptable to the original current point.\n");
       status = CONTINUE;

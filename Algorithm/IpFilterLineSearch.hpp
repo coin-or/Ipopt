@@ -85,7 +85,8 @@ namespace Ipopt
      */
     //@{
     /** Checks if a trial point is acceptable to the current iterate */
-    bool IsAcceptableToCurrentIterate(Number trial_barr, Number trial_theta) const;
+    bool IsAcceptableToCurrentIterate(Number trial_barr, Number trial_theta,
+				      bool called_from_restoration=false) const;
 
     /** Checks if a trial point is acceptable to the current filter */
     bool IsAcceptableToCurrentFilter(Number trial_barr, Number trial_theta) const;
