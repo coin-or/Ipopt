@@ -90,6 +90,8 @@ namespace Ipopt
       exc.ReportException(*jnlst);
       message = exc.Message();
       retval = 1;
+      jnlst->Printf(J_SUMMARY, J_SOLUTION,
+		    "Exception message: %s\n",message.c_str());
     }
 
     // Write the .sol file
