@@ -53,6 +53,7 @@ namespace Ipopt
 
     have_prototypes_ = false;
     tau_initialized_ = false;
+    have_deltas_ = false;
 
     initialize_called_ = true;
     return true;
@@ -129,6 +130,7 @@ namespace Ipopt
     delta_v_U_->Set(0.0);
 
     have_prototypes_ = true;
+    have_deltas_ = false;
 
     return true;
   }
@@ -327,6 +329,9 @@ namespace Ipopt
     trial_z_U_ = NULL;
     trial_v_L_ = NULL;
     trial_v_U_ = NULL;
+
+    // ToDo that should be handled better
+    have_deltas_ = false;
   }
 
 } // namespace Ipopt
