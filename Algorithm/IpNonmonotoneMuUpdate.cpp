@@ -18,7 +18,7 @@
 namespace Ipopt
 {
 
-  static const Index dbg_verbosity = 0;
+  DBG_SET_VERBOSITY(0);
 
   NonmonotoneMuUpdate::NonmonotoneMuUpdate
   (const SmartPtr<LineSearch>& line_search,
@@ -125,10 +125,31 @@ namespace Ipopt
     }
 
     if (options.GetIntegerValue("adaptive_globalization", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue>=1 && ivalue<=3,
+		       OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"adaptive_globalization\": This value must be between 1 and 3.");
       adaptive_globalization_ = ivalue;
     }
     else {
       adaptive_globalization_ = 1;
+    }
+
+    if (options.GetNumericValue("filter_max_margin", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"filter_max_margin\": This value must be positive.");
+      filter_max_margin_ = value;
+    }
+    else {
+      filter_max_margin_ = 1.;
+    }
+
+    if (options.GetNumericValue("filter_margin_fact", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0 && value < 1, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"filter_margin_fact\": This value must be between 0 and 1.");
+      filter_margin_fact_ = value;
+    }
+    else {
+      filter_margin_fact_ = 1e-5;
     }
 
     if (options.GetIntegerValue("restore_accepted_iterate", ivalue, prefix)) {
@@ -267,6 +288,7 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                        "Switching back to free mu mode.\n");
         IpData().SetFreeMuMode(true);
+	// Skipping Restoration phase?
         RememberCurrentPointAsAccepted();
       }
       else {
@@ -295,7 +317,11 @@ namespace Ipopt
       }
     }
     else {
+      // Here we are in the free mu mode.
       bool sufficient_progress = CheckSufficientProgress();
+      if (linesearch_->CheckSkippedLineSearch()) {
+	sufficient_progress = false;
+      }
       if (sufficient_progress) {
         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                        "Staying in free mu mode.\n");
@@ -325,6 +351,7 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                        "Switching to fixed mu mode with mu = %e and tau = %e.\n", mu, tau);
         linesearch_->Reset();
+	// Skipping Restoration phase?
       }
     }
 
@@ -365,9 +392,11 @@ namespace Ipopt
       IpData().Set_tau(tau);
 
       linesearch_->Reset();
+      linesearch_->SetRigorousLineSearch(false);
     }
     else {
       IpData().Append_info_string("F");
+      linesearch_->SetRigorousLineSearch(true);
     }
   }
 
@@ -400,8 +429,15 @@ namespace Ipopt
                                     IpCq().curr_constraint_violation());
       }
       break;
+      case 3 : {
+	Number curr_error = curr_norm_pd_system();
+	Number margin = filter_margin_fact_*Min(filter_max_margin_, curr_error);
+        retval = filter_.Acceptable(IpCq().curr_f() + margin,
+                                    IpCq().curr_constraint_violation() + margin);
+      }
+      break;
       default:
-      DBG_ASSERT("Unknown corrector_type value.");
+      DBG_ASSERT("Unknown adaptive_globalization value.");
     }
 
     return retval;
@@ -433,11 +469,17 @@ namespace Ipopt
       break;
       case 2 : {
         Number theta = IpCq().curr_constraint_violation();
-        Number param = 1e-5;
-        // ToDo need margin
-        filter_.AddEntry(IpCq().curr_f() - param*theta,
-                         IpCq().curr_constraint_violation() - param*theta,
+        filter_.AddEntry(IpCq().curr_f() - filter_margin_fact_*theta,
+                         IpCq().curr_constraint_violation() - filter_margin_fact_*theta,
                          IpData().iter_count());
+	filter_.Print(Jnlst());
+      }
+      break;
+      case 3 : {
+        filter_.AddEntry(IpCq().curr_f(),
+                         IpCq().curr_constraint_violation(),
+                         IpData().iter_count());
+	filter_.Print(Jnlst());
       }
       break;
       default:
