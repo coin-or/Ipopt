@@ -324,6 +324,10 @@ namespace Ipopt
     // go to the restoration phase
     if (!accept) {
       if (IsValid(resto_phase_)) {
+	if (IpCq().curr_constraint_violation()==0.) {
+	  THROW_EXCEPTION(IpoptException, "Restoration phase called, but constraint violation is zero.");
+	}
+
         // Set the info fields for the first output line in the
         // restoration phase which reflects why the restoration phase
         // was called
