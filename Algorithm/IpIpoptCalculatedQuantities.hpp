@@ -188,6 +188,14 @@ namespace Ipopt
      *  in a given norm (at current iterate) */
     Number curr_complementarity(Number mu, ENormType NormType);
 
+    /** Centrality measure (in spirit of the -infinity-neighborhood. */
+    Number CalcCentralityMeasure(const Vector& compl_x_L,
+                                 const Vector& compl_x_U,
+                                 const Vector& compl_s_L,
+                                 const Vector& compl_s_U);
+    /** Centrality measure at current point */
+    Number curr_centrality_measure();
+
     /** Scaled total optimality error for the original NLP at the
      *  current iterate. */
     Number curr_nlp_error();
@@ -244,7 +252,7 @@ namespace Ipopt
     /** Compute the norm of a specific type of a set of vectors (uncached) */
     Number
     CalcNormOfType(IpoptCalculatedQuantities::ENormType NormType,
-                   std::vector<const Vector*> vecs);
+                   std::vector<SmartPtr<const Vector> > vecs);
 
     /** Compute the norm of a specific type of two vectors (uncached) */
     Number
@@ -368,6 +376,7 @@ namespace Ipopt
     CachedResults<Number> trial_primal_infeasibility_cache_;
     CachedResults<Number> curr_dual_infeasibility_cache_;
     CachedResults<Number> curr_complementarity_cache_;
+    CachedResults<Number> curr_centrality_measure_cache_;
     CachedResults<Number> curr_nlp_error_cache_;
     CachedResults<Number> curr_barrier_error_cache_;
     CachedResults<Number> curr_primal_dual_error_cache_;
