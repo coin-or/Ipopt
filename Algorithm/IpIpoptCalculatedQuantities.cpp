@@ -1706,6 +1706,8 @@ namespace Ipopt
     if (!curr_dual_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
       SmartPtr<const Vector> grad_lag_x = curr_grad_lag_x();
       SmartPtr<const Vector> grad_lag_s = curr_grad_lag_s();
+      DBG_PRINT_VECTOR(2,"grad_lag_x", *grad_lag_x);
+      DBG_PRINT_VECTOR(2,"grad_lag_s", *grad_lag_s);
 
       result = CalcNormOfType(NormType, *grad_lag_x, *grad_lag_s);
 
