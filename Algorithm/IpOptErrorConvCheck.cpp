@@ -10,6 +10,8 @@
 
 namespace Ipopt
 {
+  DBG_SET_VERBOSITY(0);
+
   OptimalityErrorConvergenceCheck::OptimalityErrorConvergenceCheck()
   {}
 
@@ -37,6 +39,7 @@ namespace Ipopt
 
   ConvergenceCheck::ConvergenceStatus OptimalityErrorConvergenceCheck::CheckConvergence()
   {
+    DBG_START_METH("OptimalityErrorConvergenceCheck::CheckConvergence", dbg_verbosity);
     // maybe we should throw exceptions here instead?
 
     if (IpData().iter_count() >= max_iterations_) {
@@ -44,6 +47,7 @@ namespace Ipopt
     }
 
     Number overall_error = IpCq().curr_nlp_error();
+    DBG_PRINT((1,"overall_error = %8.2e\n",overall_error));
     if (overall_error <= IpData().epsilon_tol()) {
       return ConvergenceCheck::CONVERGED;
     }

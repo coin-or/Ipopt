@@ -1706,10 +1706,16 @@ namespace Ipopt
       DBG_PRINT((1, "s_d = %lf, s_c = %lf\n", s_d, s_c));
 
       // Primal infeasibility
+      DBG_PRINT((1, "curr_dual_infeasibility(NORM_MAX) = %8.2e\n",
+		 curr_dual_infeasibility(NORM_MAX)));
       result = curr_dual_infeasibility(NORM_MAX)/s_d;
       // Dual infeasibility
+      DBG_PRINT((1, "curr_primal_infeasibility(NORM_MAX) = %8.2e\n",
+		 curr_primal_infeasibility(NORM_MAX)));
       result = Max(result, curr_primal_infeasibility(NORM_MAX));
       // Complementarity
+      DBG_PRINT((1, "curr_complementarity(0., NORM_MAX) = %8.2e\n",
+		 curr_complementarity(0., NORM_MAX)));
       result = Max(result, curr_complementarity(0., NORM_MAX)/s_c);
 
       curr_nlp_error_cache_.AddCachedResult(result, tdeps);
