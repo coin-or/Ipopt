@@ -27,6 +27,7 @@
 
 namespace Ipopt
 {
+  DBG_SET_VERBOSITY(0);
 
   AmplTNLP::AmplTNLP(const SmartPtr<Journalist>& jnlst, char**& argv,
                      SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
@@ -77,6 +78,8 @@ namespace Ipopt
     DBG_ASSERT(n_var > 0); // need some continuous variables
     //    DBG_ASSERT(nbv == 0); // Cannot handle binary variables
     //    DBG_ASSERT(niv == 0); // Cannot handle integer variables
+    // DELETEME
+    // allow_discrete = true;
     ASSERT_EXCEPTION(allow_discrete || (nbv == 0 && niv == 0),
                      IpoptException,
                      "Discrete variables not allowed when the allow_discrete flag is false, "
@@ -305,6 +308,7 @@ namespace Ipopt
 
   bool AmplTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
   {
+    DBG_START_METH("AmplTNLP::eval_g", dbg_verbosity);
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
     DBG_ASSERT(n == n_var);

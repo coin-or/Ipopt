@@ -27,6 +27,8 @@ namespace Ipopt
       iterate_initializer_(iterate_initializer),
       iter_output_(iter_output)
   {
+    DBG_START_METH("IpoptAlgorithm::IpoptAlgorithm",
+                   dbg_verbosity);
     DBG_ASSERT(IsValid(pd_solver_));
     DBG_ASSERT(IsValid(line_search_));
     DBG_ASSERT(IsValid(mu_update_));
@@ -36,11 +38,16 @@ namespace Ipopt
   }
 
   IpoptAlgorithm::~IpoptAlgorithm()
-  {}
+  {
+    DBG_START_METH("IpoptAlgorithm::~IpoptAlgorithm()",
+                   dbg_verbosity);
+  }
 
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,
                                       const std::string& prefix)
   {
+    DBG_START_METH("IpoptAlgorithm::InitializeImpl",
+                   dbg_verbosity);
 
     // Read the IpoptAlgorithm options
     // Initialize the Data object
