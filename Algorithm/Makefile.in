@@ -62,8 +62,9 @@ am_libipoptalg_a_OBJECTS = IpAlgBuilder.$(OBJEXT) \
 	IpLoqoMuOracle.$(OBJEXT) IpMonotoneMuUpdate.$(OBJEXT) \
 	IpNonmonotoneMuUpdate.$(OBJEXT) IpOptErrorConvCheck.$(OBJEXT) \
 	IpOrigIpoptNLP.$(OBJEXT) IpOrigIterationOutput.$(OBJEXT) \
-	IpProbingMuOracle.$(OBJEXT) IpRestoFilterConvCheck.$(OBJEXT) \
-	IpRestoIpoptNLP.$(OBJEXT) IpRestoIterateInitializer.$(OBJEXT) \
+	IpProbingMuOracle.$(OBJEXT) IpOptProbingMuOracle.$(OBJEXT) \
+	IpRestoFilterConvCheck.$(OBJEXT) IpRestoIpoptNLP.$(OBJEXT) \
+	IpRestoIterateInitializer.$(OBJEXT) \
 	IpRestoIterationOutput.$(OBJEXT) IpRestoMinC_1Nrm.$(OBJEXT)
 libipoptalg_a_OBJECTS = $(am_libipoptalg_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
@@ -80,6 +81,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/IpMonotoneMuUpdate.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpNonmonotoneMuUpdate.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpOptErrorConvCheck.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpOptProbingMuOracle.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpOrigIpoptNLP.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpOrigIterationOutput.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpProbingMuOracle.Po \
@@ -222,6 +224,7 @@ libipoptalg_a_SOURCES = \
 	IpIterationOutput.hpp \
 	IpOrigIterationOutput.hpp IpOrigIterationOutput.cpp \
 	IpProbingMuOracle.hpp IpProbingMuOracle.cpp \
+	IpOptProbingMuOracle.hpp IpOptProbingMuOracle.cpp \
 	IpRestoFilterConvCheck.cpp IpRestoFilterConvCheck.hpp \
 	IpRestoIpoptNLP.hpp IpRestoIpoptNLP.cpp \
 	IpRestoIterateInitializer.hpp IpRestoIterateInitializer.cpp \
@@ -254,6 +257,7 @@ ASTYLE_SOURCES = \
 	IpIterationOutput.hppbak \
 	IpOrigIterationOutput.hppbak IpOrigIterationOutput.cppbak \
 	IpProbingMuOracle.hppbak IpProbingMuOracle.cppbak \
+	IpOptProbingMuOracle.hppbak IpOptProbingMuOracle.cppbak \
 	IpRestoFilterConvCheck.cppbak IpRestoFilterConvCheck.hppbak \
 	IpRestoIpoptNLP.hppbak IpRestoIpoptNLP.cppbak \
 	IpRestoIterateInitializer.hppbak IpRestoIterateInitializer.cppbak \
@@ -321,6 +325,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMonotoneMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNonmonotoneMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptErrorConvCheck.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptProbingMuOracle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOrigIpoptNLP.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOrigIterationOutput.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpProbingMuOracle.Po@am__quote@

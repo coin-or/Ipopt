@@ -33,6 +33,7 @@ libipoptalg_a_SOURCES = \
 	IpIterationOutput.hpp \
 	IpOrigIterationOutput.hpp IpOrigIterationOutput.cpp \
 	IpProbingMuOracle.hpp IpProbingMuOracle.cpp \
+	IpOptProbingMuOracle.hpp IpOptProbingMuOracle.cpp \
 	IpRestoFilterConvCheck.cpp IpRestoFilterConvCheck.hpp \
 	IpRestoIpoptNLP.hpp IpRestoIpoptNLP.cpp \
 	IpRestoIterateInitializer.hpp IpRestoIterateInitializer.cpp \
@@ -70,6 +71,7 @@ ASTYLE_SOURCES = \
 	IpIterationOutput.hppbak \
 	IpOrigIterationOutput.hppbak IpOrigIterationOutput.cppbak \
 	IpProbingMuOracle.hppbak IpProbingMuOracle.cppbak \
+	IpOptProbingMuOracle.hppbak IpOptProbingMuOracle.cppbak \
 	IpRestoFilterConvCheck.cppbak IpRestoFilterConvCheck.hppbak \
 	IpRestoIpoptNLP.hppbak IpRestoIpoptNLP.cppbak \
 	IpRestoIterateInitializer.hppbak IpRestoIterateInitializer.cppbak \
