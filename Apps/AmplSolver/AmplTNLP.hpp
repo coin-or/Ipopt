@@ -34,7 +34,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
-    AmplTNLP(const SmartPtr<Journalist>& jnlst, char**& argv, SmartPtr<AmplSuffixHandler> suffix_handler = NULL);
+    AmplTNLP(const SmartPtr<Journalist>& jnlst, char**& argv, SmartPtr<AmplSuffixHandler> suffix_handler = NULL, bool allow_discrete = false);
 
     /** Default destructor */
     virtual ~AmplTNLP();
@@ -97,6 +97,7 @@ namespace Ipopt
 
     /**@name Ampl specific methods */
     //@{
+    /** Return the ampl solver object (ASL*) */
     ASL_pfgh* AmplSolverObject()
     {
       return asl_;
@@ -106,6 +107,11 @@ namespace Ipopt
      *  write_sol.  TODO Maybe this should be at a different place, or
      *  collect the numbers itself? */
     void write_solution_file(const std::string& message) const;
+
+    /** ampl orders the variables like (continuous, binary, integer).
+     *  This method gives the number of binary and integer variables.
+     */
+    void get_discrete_info(Index& n_binaries, Index& n_integers) const;
     //@}
 
   private:

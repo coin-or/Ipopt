@@ -10,13 +10,6 @@
 #include "AmplTNLP.hpp"
 #include "IpIpoptApplication.hpp"
 
-#ifdef OLD_C_HEADERS
-# include <math.h>
-#else
-# include <cmath>
-#endif
-
-
 int main(int argv, char**argc)
 {
   using namespace Ipopt;
