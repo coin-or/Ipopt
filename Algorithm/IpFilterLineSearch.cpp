@@ -593,7 +593,9 @@ namespace Ipopt
     return alpha_min_frac_*alpha_min;
   }
 
-  bool FilterLineSearch::IsAcceptableToCurrentIterate(Number trial_barr, Number trial_theta) const
+  bool FilterLineSearch::IsAcceptableToCurrentIterate(Number trial_barr,
+						      Number trial_theta,
+						      bool called_from_restoration /*=false*/) const
   {
     DBG_START_METH("FilterLineSearch::IsAcceptableToCurrentIterate",
                    dbg_verbosity);
@@ -601,7 +603,7 @@ namespace Ipopt
 
     // Check if the barrier objective function is increasing to
     // rapidly (according to option obj_max_inc)
-    if (trial_barr > curr_barr) {
+    if (!called_from_restoration && trial_barr > curr_barr) {
       Number basval = 1.;
       if (fabs(curr_barr)>10.) {
         basval = log10(fabs(curr_barr));
