@@ -79,6 +79,11 @@ namespace Ipopt
     /** Flag indicating whether the method has been called at least once so
      *  far */
     bool initialized_;
+
+    /** If true, no modification of the barrier parameter will be done
+     *  at the first call of Update (fix for the restoration phase -
+     *  we should clean that up!) */
+    bool first_iter_resto_;
   };
 
 } // namespace Ipopt
