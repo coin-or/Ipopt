@@ -13,10 +13,22 @@
 namespace Ipopt
 {
 
+  DBG_SET_VERBOSITY(0);
+
   RestoFilterConvergenceCheck::RestoFilterConvergenceCheck()
       :
       orig_filter_line_search_(NULL)
-  {}
+  {
+    DBG_START_FUN("RestoFilterConvergenceCheck::RestoFilterConvergenceCheck()",
+		  dbg_verbosity);
+
+  }
+
+  RestoFilterConvergenceCheck::~RestoFilterConvergenceCheck()
+  {
+    DBG_START_FUN("RestoFilterConvergenceCheck::RestoFilterConvergenceCheck()",
+		  dbg_verbosity);
+  }
 
   void
   RestoFilterConvergenceCheck::SetOrigFilterLineSearch
@@ -28,7 +40,7 @@ namespace Ipopt
   bool RestoFilterConvergenceCheck::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    DBG_ASSERT(IsValid(orig_filter_line_search_) && "Need to call RestoFilterConvergenceCheck::SetOrigFilterLineSearch before Initialize");
+    DBG_ASSERT(orig_filter_line_search_ && "Need to call RestoFilterConvergenceCheck::SetOrigFilterLineSearch before Initialize");
     Number value = 0.0;
 
     // Check for the algorithm options

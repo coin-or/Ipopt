@@ -39,8 +39,7 @@ namespace Ipopt
     RestoFilterConvergenceCheck();
 
     /** Default destructor */
-    virtual ~RestoFilterConvergenceCheck()
-    {}
+    virtual ~RestoFilterConvergenceCheck();
     //@}
 
     /** Set the object for the original filter line search. Here,
@@ -77,8 +76,11 @@ namespace Ipopt
     //@}
 
     /** Strategy object for the filter line search method for the
-     *  original NLP */
-    SmartPtr<const FilterLineSearch> orig_filter_line_search_;
+     *  original NLP.  CAREFUL: We must not hold on to this object
+     *  with a SmartPtr, because have otherwise circular references
+     *  that prevent the destructor of the line search object to be
+     *  called! */
+    const FilterLineSearch* orig_filter_line_search_;
   };
 
 } // namespace Ipopt
