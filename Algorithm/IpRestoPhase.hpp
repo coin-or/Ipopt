@@ -38,8 +38,7 @@ namespace Ipopt
                                 const std::string& prefix) = 0;
 
     /** Method called to perform restoration for the filter line
-     *  search method.  Derived classes should not overload this
-     *  method, but should overload the Impl version. */
+     *  search method. */
     virtual bool PerformRestoration() = 0;
 
   private:
