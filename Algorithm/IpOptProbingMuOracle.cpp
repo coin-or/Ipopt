@@ -255,6 +255,11 @@ namespace Ipopt
                    "Sigma = %e\n", sigma);
     Number mu = sigma*avrg_compl;
 
+    // DELETEME
+    char ssigma[40];
+    sprintf(ssigma, "sigma=%e", sigma);
+    IpData().Append_info_string(ssigma);
+
     return mu;
   }
 

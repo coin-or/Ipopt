@@ -120,6 +120,11 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "  Barrier parameter proposed by LOQO rule is %lf\n", mu);
 
+    // DELETEME
+    char ssigma[40];
+    sprintf(ssigma, "sigma=%e", 0.1*pow(Min(factor*(1.-xi)/xi,2),3.));
+    IpData().Append_info_string(ssigma);
+
     return mu;
   }
 
