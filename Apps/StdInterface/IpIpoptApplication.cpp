@@ -263,6 +263,8 @@ namespace Ipopt
       retValue = NonIpopt_Exception_Thrown;
     }
 
+    jnlst_->FlushBuffer();
+
     return retValue;
 
   }
