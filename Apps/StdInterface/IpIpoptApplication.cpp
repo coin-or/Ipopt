@@ -37,7 +37,30 @@ namespace Ipopt
     return OptimizeNLP(nlp_adapter);
   }
 
+  ApplicationReturnStatus 
+  IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp, 
+				 SmartPtr<IpoptData>& ip_data,
+				 SmartPtr<IpoptCalculatedQuantities>& ip_cq)
+  {
+    SmartPtr<NLP> nlp_adapter =
+      new TNLPAdapter(GetRawPtr(nlp));
+    
+    return OptimizeNLP(nlp_adapter, ip_data, ip_cq);
+  }
+
   ApplicationReturnStatus IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp)
+  {
+    SmartPtr<IpoptData> ip_data = NULL;
+    SmartPtr<IpoptCalculatedQuantities> ip_cq = NULL;
+
+    return OptimizeNLP(nlp, ip_data, ip_cq);
+
+  }
+
+  ApplicationReturnStatus 
+  IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp,
+				SmartPtr<IpoptData>& ip_data,
+				SmartPtr<IpoptCalculatedQuantities>& ip_cq)
   {
     ApplicationReturnStatus retValue = Solve_Succeeded;
 
@@ -98,11 +121,14 @@ namespace Ipopt
         new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp));
 
       // Create the IpoptData
-      SmartPtr<IpoptData> ip_data = new IpoptData();
+      if (IsNull(ip_data)) {
+	ip_data = new IpoptData();
+      }
 
       // Create the IpoptCalculators
-      SmartPtr<IpoptCalculatedQuantities> ip_cq
-      = new IpoptCalculatedQuantities(ip_nlp, ip_data);
+      if (IsNull(ip_cq)) {
+	ip_cq = new IpoptCalculatedQuantities(ip_nlp, ip_data);
+      }
 
       // Create the Algorithm object
       SmartPtr<IpoptAlgorithm> alg
