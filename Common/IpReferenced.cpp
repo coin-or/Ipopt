@@ -11,7 +11,7 @@
 namespace Ipopt
 {
 
-  static Index dbg_verbosity=0;
+  DBG_SET_VERBOSITY(0);
 
   ReferencedObject::ReferencedObject()
       :

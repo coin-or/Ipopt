@@ -39,14 +39,32 @@ namespace Ipopt
      */
     virtual void FindAcceptableTrialPoint() = 0;
 
-    /** Resest the line search.
+    /** Reset the line search.
      *  This function should be called if all previous information
      *  should be discarded when the line search is performed the
-     *  next time.  For example, this method should be calledm if
+     *  next time.  For example, this method should be called after
      *  the barrier parameter is changed.
      */
     virtual void Reset() = 0;
 
+    /** Set flag indicating whether a very rigorous line search should
+     *  be performed.  If this flag is set to true, the line search
+     *  algorithm might decide to abort the line search and not to
+     *  accept a new iterate.  If the line search decided not to
+     *  accept a new iterate, the return value of
+     *  CheckSkippedLineSearch() is true at the next call.  For
+     *  example, in the non-monotone barrier parameter update
+     *  procedure, the filter algorithm should not switch to the
+     *  restoration phase in the free mode; instead, the algorithm
+     *  should swtich to the fixed mode.
+     */
+    virtual void SetRigorousLineSearch(bool rigorous) = 0;
+
+    /** Check if the line search procedure didn't accept a new iterate
+     *  during the last call of FindAcceptableTrialPoint().
+     *  
+     */
+    virtual bool CheckSkippedLineSearch() = 0;
 
   private:
     /**@name Default Compiler Generated Methods

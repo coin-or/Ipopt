@@ -21,9 +21,12 @@
 # define DBG_ASSERT(test) assert(test)
 # define DBG_ASSERT_EXCEPTION(__condition, __except_type, __msg) \
    ASSERT_EXCEPTION( (__condition), __except_type, __msg);
+# define DBG_SET_VERBOSITY(__level) \
+   static const Index dbg_verbosity = __level;
 #else
 # define DBG_ASSERT(test)
 # define DBG_ASSERT_EXCEPTION(__condition, __except_type, __msg)
+# define DBG_SET_VERBOSITY(__level)
 #endif
 
 #ifndef IP_DEBUG

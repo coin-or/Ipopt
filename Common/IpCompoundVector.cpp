@@ -19,7 +19,7 @@
 namespace Ipopt
 {
 
-  static const Index dbg_verbosity = 0;
+  DBG_SET_VERBOSITY(0);
 
   CompoundVector::CompoundVector(const CompoundVectorSpace* owner_space, bool create_new)
       :

@@ -17,7 +17,7 @@
 
 namespace Ipopt
 {
-  static const Index dbg_verbosity = 0;
+  DBG_SET_VERBOSITY(0);
 
   RestoIterationOutput::RestoIterationOutput(const SmartPtr<OrigIterationOutput>& resto_orig_iteration_output)
       :

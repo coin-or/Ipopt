@@ -38,7 +38,7 @@ extern "C"
 namespace Ipopt
 {
 
-  static const Index dbg_verbosity = 0;
+  DBG_SET_VERBOSITY(0);
 
   Ma27SymLinearSolver::Ma27SymLinearSolver(SmartPtr<Mc19SymTScalingMethod> scaling_method)
       :
