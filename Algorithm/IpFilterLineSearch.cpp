@@ -987,7 +987,7 @@ namespace Ipopt
                                         -1., *rhs_compl_s_U);
         tmp = actual_delta_v_U->MakeNew();
 	tmp->AddTwoVectors(1., *IpData().curr_v_U(), 1., *actual_delta_v_U, 0.);
-	/*
+	/* DELE
         tmp->Copy(*IpData().curr_v_U());
         tmp->Axpy(1., *actual_delta_v_U);
 	*/
