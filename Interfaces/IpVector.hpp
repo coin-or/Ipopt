@@ -151,7 +151,7 @@ namespace Ipopt
     /** Add two vectors, y = a * v1 + b * v2 + c * y.  Here, this
      *  vector is y */
     void AddTwoVectors(Number a, const Vector& v1,
-		       Number b, const Vector& v2, Number c);
+                       Number b, const Vector& v2, Number c);
     /** Fraction to the boundary parameter.  Computes \f$\alpha =
      *  \max\{\bar\alpha\in(0,1] : x + \bar\alpha \Delta \geq (1-\tau)x\}\f$
      */
@@ -246,9 +246,9 @@ namespace Ipopt
     virtual Number SumLogsImpl() const=0;
 
     /** Add two vectors (a * v1 + b * v2).  Result is stored in this
-	vector. */
+    vector. */
     virtual void AddTwoVectorsImpl(Number a, const Vector& v1,
-				   Number b, const Vector& v2, Number c);
+                                   Number b, const Vector& v2, Number c);
 
     /** Fraction to boundary parameter. */
     virtual Number FracToBoundImpl(const Vector& delta, Number tau) const;
@@ -575,7 +575,7 @@ namespace Ipopt
 
   inline
   void Vector::AddTwoVectors(Number a, const Vector& v1,
-			     Number b, const Vector& v2, Number c)
+                             Number b, const Vector& v2, Number c)
   {
     AddTwoVectorsImpl(a, v1, b, v2, c);
     ObjectChanged();

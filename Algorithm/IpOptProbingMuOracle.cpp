@@ -43,7 +43,7 @@ namespace Ipopt
       tmp_v_U_(NULL),
 
       tmp_dual_inf_x_(NULL),
-      tmp_dual_inf_s_(NULL)      
+      tmp_dual_inf_s_(NULL)
   {
     DBG_ASSERT(IsValid(pd_solver_));
   }
@@ -741,22 +741,22 @@ namespace Ipopt
     while (!found_beta) {
 
       tmp_slack_x_L_->AddTwoVectors(1., *IpCq().curr_slack_x_L(),
-			       alpha_primal, *tmp_step_x_L_, 0.);
+                                    alpha_primal, *tmp_step_x_L_, 0.);
       tmp_slack_x_U_->AddTwoVectors(1., *IpCq().curr_slack_x_U(),
-			       alpha_primal, *tmp_step_x_U_, 0.);
+                                    alpha_primal, *tmp_step_x_U_, 0.);
       tmp_slack_s_L_->AddTwoVectors(1., *IpCq().curr_slack_s_L(),
-			       alpha_primal, *tmp_step_s_L_, 0.);
+                                    alpha_primal, *tmp_step_s_L_, 0.);
       tmp_slack_s_U_->AddTwoVectors(1., *IpCq().curr_slack_s_U(),
-			       alpha_primal, *tmp_step_s_U_, 0.);
+                                    alpha_primal, *tmp_step_s_U_, 0.);
 
       tmp_z_L_->AddTwoVectors(1., *IpData().curr_z_L(),
-			 alpha_dual, *tmp_step_z_L_, 0.);
+                              alpha_dual, *tmp_step_z_L_, 0.);
       tmp_z_U_->AddTwoVectors(1., *IpData().curr_z_U(),
-			 alpha_dual, *tmp_step_z_U_, 0.);
+                              alpha_dual, *tmp_step_z_U_, 0.);
       tmp_v_L_->AddTwoVectors(1., *IpData().curr_v_L(),
-			 alpha_dual, *tmp_step_v_L_, 0.);
+                              alpha_dual, *tmp_step_v_L_, 0.);
       tmp_v_U_->AddTwoVectors(1., *IpData().curr_v_U(),
-			 alpha_dual, *tmp_step_v_U_, 0.);
+                              alpha_dual, *tmp_step_v_U_, 0.);
 
       tmp_slack_x_L_->ElementWiseMultiply(*tmp_z_L_);
       tmp_slack_x_U_->ElementWiseMultiply(*tmp_z_U_);
@@ -803,9 +803,9 @@ namespace Ipopt
 
     if (quality_function_dual_inf_==2) {
       tmp_dual_inf_x_->AddOneVector(1.-alpha_primal,
-				    *IpCq().curr_grad_lag_x(), 0.);
+                                    *IpCq().curr_grad_lag_x(), 0.);
       tmp_dual_inf_s_->AddOneVector(1.-alpha_primal,
-				    *IpCq().curr_grad_lag_s(), 0.);
+                                    *IpCq().curr_grad_lag_s(), 0.);
       IpNLP().Px_L()->MultVector(alpha_primal-alpha_dual,
                                  *tmp_step_z_L_, 1., *tmp_dual_inf_x_);
       IpNLP().Px_U()->MultVector(-alpha_primal+alpha_dual,
@@ -816,17 +816,17 @@ namespace Ipopt
                                  *tmp_step_v_U_, 1., *tmp_dual_inf_s_);
       if (dual_alpha_for_y_) {
         tmp_dual_inf_x_->AddTwoVectors(alpha_dual-alpha_primal,
-				       *jac_cT_times_step_aff_y_c,
-				       sigma*(alpha_dual-alpha_primal),
-				       *jac_cT_times_step_cen_y_c, 1.);
+                                       *jac_cT_times_step_aff_y_c,
+                                       sigma*(alpha_dual-alpha_primal),
+                                       *jac_cT_times_step_cen_y_c, 1.);
         tmp_dual_inf_x_->AddTwoVectors(alpha_dual-alpha_primal,
-				       *jac_dT_times_step_aff_y_d,
-				       sigma*(alpha_dual-alpha_primal),
-				       *jac_dT_times_step_cen_y_d, 1.);
+                                       *jac_dT_times_step_aff_y_d,
+                                       sigma*(alpha_dual-alpha_primal),
+                                       *jac_dT_times_step_cen_y_d, 1.);
         tmp_dual_inf_s_->AddTwoVectors(alpha_primal-alpha_dual,
-				       step_aff_y_d,
-				       sigma*(alpha_primal-alpha_dual),
-				       step_cen_y_d, 1.);
+                                       step_aff_y_d,
+                                       sigma*(alpha_primal-alpha_dual),
+                                       step_cen_y_d, 1.);
       }
     }
 

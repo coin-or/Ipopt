@@ -498,10 +498,10 @@ namespace Ipopt
 
     /** Compute fraction to the boundary parameter for lower and upper bounds */
     Number CalcFracToBound(const Vector& slack_L,
-			   Vector& tmp_L,
+                           Vector& tmp_L,
                            const Matrix& P_L,
                            const Vector& slack_U,
-			   Vector& tmp_U,
+                           Vector& tmp_U,
                            const Matrix& P_U,
                            const Vector& delta,
                            Number tau);

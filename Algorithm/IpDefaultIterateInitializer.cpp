@@ -121,12 +121,12 @@ namespace Ipopt
       // and z_U) and the multipliers for c and d initialized.
       // We have to compute those for v_L and v_U from y_d
       IpData().InitializeDataStructures(IpNLP(), true, true, true,
-					true, true, false, false);
+                                        true, true, false, false);
     }
     else {
       // Ask to have only the primal variables to be initialized
       IpData().InitializeDataStructures(IpNLP(), true, false, false,
-					false, false, false, false);
+                                        false, false, false, false);
     }
 
     DBG_PRINT_VECTOR(2, "curr_x", *IpData().curr_x());
@@ -376,13 +376,13 @@ namespace Ipopt
       tmp->Set(warm_start_mult_bound_push_);
       z_L->ElementWiseMax(*tmp);
       if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
-	SmartPtr<Vector> delta_z_L = z_L->MakeNew();
-	delta_z_L->AddTwoVectors(1., *z_L, -1., *IpData().curr_z_L(), 0.);
-	if (delta_z_L->Amax()>0.) {
-	  Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of z_L sufficiently inside the bounds.\n");
-	  Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "original z_L", *IpData().curr_z_L());
-	  Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "new z_L", *z_L);
-	}
+        SmartPtr<Vector> delta_z_L = z_L->MakeNew();
+        delta_z_L->AddTwoVectors(1., *z_L, -1., *IpData().curr_z_L(), 0.);
+        if (delta_z_L->Amax()>0.) {
+          Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of z_L sufficiently inside the bounds.\n");
+          Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "original z_L", *IpData().curr_z_L());
+          Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "new z_L", *z_L);
+        }
       }
 
       z_U->Copy(*IpData().curr_z_U());
@@ -390,13 +390,13 @@ namespace Ipopt
       tmp->Set(warm_start_mult_bound_push_);
       z_U->ElementWiseMax(*tmp);
       if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
-	SmartPtr<Vector> delta_z_U = z_U->MakeNew();
-	delta_z_U->AddTwoVectors(1., *z_U, -1., *IpData().curr_z_U(), 0.);
-	if (delta_z_U->Amax()>0.) {
-	  Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of z_U sufficiently inside the bounds.\n");
-	  Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "original z_U", *IpData().curr_z_U());
-	  Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "new z_U", *z_U);
-	}
+        SmartPtr<Vector> delta_z_U = z_U->MakeNew();
+        delta_z_U->AddTwoVectors(1., *z_U, -1., *IpData().curr_z_U(), 0.);
+        if (delta_z_U->Amax()>0.) {
+          Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of z_U sufficiently inside the bounds.\n");
+          Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "original z_U", *IpData().curr_z_U());
+          Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "new z_U", *z_U);
+        }
       }
 
       // Compute the v_L and v_U multipliers from y_d and make sure they
@@ -427,39 +427,39 @@ namespace Ipopt
     if (warm_start_init_point_) {
       // Don't change anything for those multipliers
       IpData().SetTrialConstraintMultipliersFromPtr(IpData().curr_y_c(),
-						    IpData().curr_y_d());
+          IpData().curr_y_d());
     }
     else {
       if (IsValid(eq_mult_calculator_) && lam_init_max_>0.) {
-	// First move all the trial data into the current fields, since
-	// those values are needed to compute the initial values for
-	// the multipliers
-	IpData().CopyTrialToCurrent();
-	SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
-	SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
-	bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
-	if (!retval) {
-	  y_c->Set(0.0);
-	  y_d->Set(0.0);
-	}
-	else {
-	  Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
-			 "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
-			 y_c->Amax(), y_d->Amax());
-	  Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
-	  if (laminitnrm > lam_init_max_) {
-	    y_c->Set(0.0);
-	    y_d->Set(0.0);
-	  }
-	}
-	IpData().SetTrialEqMultipliers(*y_c, *y_d);
+        // First move all the trial data into the current fields, since
+        // those values are needed to compute the initial values for
+        // the multipliers
+        IpData().CopyTrialToCurrent();
+        SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
+        SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+        bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
+        if (!retval) {
+          y_c->Set(0.0);
+          y_d->Set(0.0);
+        }
+        else {
+          Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                         "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
+                         y_c->Amax(), y_d->Amax());
+          Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
+          if (laminitnrm > lam_init_max_) {
+            y_c->Set(0.0);
+            y_d->Set(0.0);
+          }
+        }
+        IpData().SetTrialEqMultipliers(*y_c, *y_d);
       }
       else {
-	SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
-	SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
-	y_c->Set(0.0);
-	y_d->Set(0.0);
-	IpData().SetTrialEqMultipliers(*y_c, *y_d);
+        SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
+        SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+        y_c->Set(0.0);
+        y_d->Set(0.0);
+        IpData().SetTrialEqMultipliers(*y_c, *y_d);
       }
     }
 

@@ -71,14 +71,14 @@ namespace Ipopt
      *  efficiently for the ExansionMatrix
      */
     void AddMSinvZ(Number alpha, const Vector& S, const Vector& Z,
-		   Vector& X) const;
+                   Vector& X) const;
 
     /** X = S^{-1} (r + alpha*Z*M^Td).   Should be implemented
      *  efficiently for the ExansionMatrix
      */
     void SinvBlrmZMTdBr(Number alpha, const Vector& S,
-			const Vector& R, const Vector& Z,
-			const Vector& D, Vector& X) const;
+                        const Vector& R, const Vector& Z,
+                        const Vector& D, Vector& X) const;
     //@}
 
     //* @name Information about the size of the matrix */
@@ -118,14 +118,14 @@ namespace Ipopt
      *  implementation it should be overloaded for the expansion matrix.
      */
     virtual void AddMSinvZImpl(Number alpha, const Vector& S, const Vector& Z,
-			       Vector& X) const;
+                               Vector& X) const;
 
     /** X = S^{-1} (r + alpha*Z*M^Td).   Should be implemented
      *  efficiently for the ExansionMatrix.
      */
     virtual void SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
-				    const Vector& R, const Vector& Z,
-				    const Vector& D, Vector& X) const;
+                                    const Vector& R, const Vector& Z,
+                                    const Vector& D, Vector& X) const;
 
     /** Print detailed information about the matrix. */
     virtual void PrintImpl(FILE* fp, std::string name, Index indent, std::string prefix) const =0;

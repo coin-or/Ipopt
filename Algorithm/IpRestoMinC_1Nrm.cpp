@@ -81,8 +81,8 @@ namespace Ipopt
     // Increase counter for restoration phase calls
     count_restorations_++;
     Jnlst().Printf(J_DETAILED, J_MAIN,
-		   "Starting Restoration Phase for the %d. time\n",
-		   count_restorations_);
+                   "Starting Restoration Phase for the %d. time\n",
+                   count_restorations_);
 
     DBG_ASSERT(IpCq().curr_constraint_violation()>0.);
 
