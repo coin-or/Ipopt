@@ -287,12 +287,13 @@ namespace Ipopt
   }
 
   bool AmplTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
-                            Index nele_jac, Index* iRow, Index *jCol,
-                            Number* values)
+                            Index m, Index nele_jac, Index* iRow,
+                            Index *jCol, Number* values)
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
     DBG_ASSERT(n == n_var);
+    DBG_ASSERT(m == n_con);
 
     if (iRow && jCol && !values) {
       // setup the structure
