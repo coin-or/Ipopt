@@ -17,8 +17,17 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if MA27 is available */
+#undef HAVE_MA27
+
+/* Define to 1 if MC19 is available */
+#undef HAVE_MC19
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
+
+/* Define to 1 if Pardiso is available */
+#undef HAVE_PARDISO
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
@@ -46,6 +55,9 @@
 
 /* If defined, debug sanity checks are performed during runtime */
 #undef IP_DEBUG
+
+/* Define to 1 if MA27 is given in the old, non-threadsafe version */
+#undef OLD_MA27
 
 /* Name of package */
 #undef PACKAGE

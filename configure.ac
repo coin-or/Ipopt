@@ -304,6 +304,27 @@ if test "$use_MA48" = BUILD || test "$use_MA57" = BUILD; then
   fi
 fi
 
+###########
+# PARDISO #
+###########
+
+AC_ARG_WITH([pardiso],
+            AC_HELP_STRING([--with-pardiso],
+                           [specify Pardiso library]),
+            [use_pardiso=$withval], [use_pardiso=no])
+
+if test ! "$use_pardiso" = "no"; then
+  LIBS="$use_pardiso $LIBS"
+  IPADDLIBS="$use_pardiso $IPADDLIBS"
+  AC_MSG_CHECKING([whether user supplied Pardiso library \"$use_pardiso\" works])
+  AC_TRY_LINK([],[      call PARDISO()],
+              [AC_MSG_RESULT(yes)],
+              [AC_MSG_ERROR([Pardiso subroutine not found in $use_pardiso])])
+
+  AC_DEFINE(HAVE_PARDISO,1,
+            [Define to 1 if Pardiso is available])
+fi
+
 AC_LANG_POP(Fortran 77)
 
 # For the remaining tests we need to include FLIBS into LIBS, so that
@@ -486,6 +507,8 @@ AM_CONDITIONAL([BUILDMC19],[test "$use_MC19" = BUILD])
 AM_CONDITIONAL([BUILDBLASDIR],[test "$use_blas" = BUILD])
 AM_CONDITIONAL([BUILDLAPACKDIR],[test "$use_lapack" = BUILD])
 AM_CONDITIONAL([BUILDHSLDIR],[test "$use_hsl" = BUILD])
+
+AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 
 AM_CONDITIONAL([BUILDASLDIR],[test "$use_asldir" = BUILD])
 AM_CONDITIONAL([BUILDAMPLINTERFACE],[test ! "$use_asldir" = "no"])
