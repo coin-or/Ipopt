@@ -17,6 +17,7 @@ libpdfullspace_a_SOURCES = \
 	IpAugTSystemSolver.cpp IpAugTSystemSolver.hpp \
 	IpLeastSquareMults.hpp IpLeastSquareMults.cpp \
 	IpMa27SymLinearSolver.hpp IpMa27SymLinearSolver.cpp \
+	IpMc19SymTScalingMethod.hpp IpMc19SymTScalingMethod.cpp \
 	IpPDFullSpaceSolver.cpp	IpPDFullSpaceSolver.hpp \
 	IpTripletHelper.hpp IpTripletHelper.cpp \
 	IpSymLinearSolver.hpp 
@@ -36,6 +37,7 @@ ASTYLE_SOURCES = \
 	IpAugTSystemSolver.cppbak IpAugTSystemSolver.hppbak \
 	IpLeastSquareMults.hppbak IpLeastSquareMults.cppbak \
 	IpMa27SymLinearSolver.hppbak IpMa27SymLinearSolver.cppbak \
+	IpMc19SymTScalingMethod.hppbak IpMc19SymTScalingMethod.cppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpTripletHelper.hppbak IpTripletHelper.cppbak \
 	IpSymLinearSolver.hppbak

@@ -11,6 +11,7 @@
 
 #include "IpSymLinearSolver.hpp"
 #include "IpSymMatrix.hpp"
+#include "IpMc19SymTScalingMethod.hpp"
 #include <vector>
 
 namespace Ipopt
@@ -25,7 +26,7 @@ namespace Ipopt
     /** @name Constructor/Destructor */
     //@{
     /** Constructor */
-    Ma27SymLinearSolver();
+    Ma27SymLinearSolver(SmartPtr<Mc19SymTScalingMethod> scaling_method);
 
     /** Destructor */
     virtual ~Ma27SymLinearSolver();
@@ -107,6 +108,9 @@ namespace Ipopt
      * and do not define them. This ensures that
      * they will not be implicitly created/called. */
     //@{
+    /** Default Constructor */
+    Ma27SymLinearSolver();
+
     /** Copy Constructor */
     Ma27SymLinearSolver(const Ma27SymLinearSolver&);
 
@@ -141,6 +145,12 @@ namespace Ipopt
      *  Is set to true, if data from a factorization is available */
     bool factorized_;
     //@}
+
+    /** Strategy Object for a method that computes scaling factors for
+     *  the matrices.  If NULL, no scaling is performed. */
+    SmartPtr<Mc19SymTScalingMethod> scaling_method_;
+    /** Array storing the scaling factors */
+    double* scaling_factors_;
 
     /** @name Solver specific data/options */
     //@{

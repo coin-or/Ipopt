@@ -40,9 +40,10 @@ namespace Ipopt
 
   static const Index dbg_verbosity = 0;
 
-  Ma27SymLinearSolver::Ma27SymLinearSolver()
+  Ma27SymLinearSolver::Ma27SymLinearSolver(SmartPtr<Mc19SymTScalingMethod> scaling_method)
       :
       SymLinearSolver(),
+      scaling_method_(scaling_method),
       atag_(0),
       dim_(0),
       nonzeros_(0),
@@ -72,6 +73,7 @@ namespace Ipopt
     delete [] iw_;
     delete [] ikeep_;
     delete [] a_;
+    delete [] scaling_factors_;
   }
 
   bool Ma27SymLinearSolver::InitializeImpl(const OptionsList& options,
@@ -144,7 +146,13 @@ namespace Ipopt
     la_increase_=false;
     liw_increase_=false;
 
-    return true;
+    bool retval = true;
+    if (IsValid(scaling_method_)) {
+      retval = scaling_method_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
+                                           options, prefix);
+    }
+
+    return retval;
   }
 
   Ma27SymLinearSolver::ESolveStatus
@@ -220,6 +228,11 @@ namespace Ipopt
       for (Index i=0; i<nonzeros_; i++) {
         DBG_PRINT((2, "KKT(%d,%d) = value\n", airn_[i], ajcn_[i]));
       }
+    }
+
+    delete [] scaling_factors_;
+    if (IsValid(scaling_method_)) {
+      scaling_factors_ = new double[dim_];
     }
 
     initialized_ = true;
@@ -326,17 +339,31 @@ namespace Ipopt
       DBG_PRINT_MATRIX(2, "A", A);
       TripletHelper::FillValues(nonzeros_, A, a_);
 
+      // Compute scaling factors if we have a method to do that, and
+      // scale the matrix before it is passed to the solver
+      if (IsValid(scaling_method_)) {
+        DBG_ASSERT(scaling_factors_);
+        bool retval =
+          scaling_method_->ComputeSymTScalingFactors(dim_, nonzeros_,
+              airn_, ajcn_, a_,
+              scaling_factors_);
+        DBG_ASSERT(retval);
+        for (Index i=0; i<nonzeros_; i++) {
+          a_[i] *= scaling_factors_[airn_[i]-1] * scaling_factors_[ajcn_[i]-1];
+        }
+      }
+
       ipfint N=dim_;
       ipfint NZ=nonzeros_;
       ipfint* IW1 = new ipfint[2*dim_];
       ipfint INFO[20];
 
-#     ifdef IP_DEBUG
-
-      for (Index i=0; i<NZ; i++) {
-        DBG_PRINT((2, "KKT(%d,%d) = %g\n", airn_[i], ajcn_[i], a_[i]));
+      if (DBG_VERBOSITY()>=2) {
+        for (Index i=0; i<NZ; i++) {
+          DBG_PRINT((2, "KKT(%d,%d) = %g\n", airn_[i], ajcn_[i], a_[i]));
+        }
       }
-#     endif
+
       F77_FUNC(ma27bd,MA27BD)(&N, &NZ, airn_, ajcn_, a_,
                               &la_, iw_, &liw_, ikeep_, &nsteps_,
                               &maxfrt_, IW1, icntl_, cntl_, INFO);
@@ -430,12 +457,38 @@ namespace Ipopt
       double* sol_vals = new double[dim_];
       TripletHelper::FillValuesFromVector(dim_, *rhsV[i], sol_vals);
 
+      if (DBG_VERBOSITY()>=2) {
+        for (Index i=0; i<dim_; i++) {
+          DBG_PRINT((2, "rhs[%5d] = %23.15e\n", i, sol_vals[i]));
+        }
+      }
+
+      // We we have scaling factors, scale the right hand side
+      if (IsValid(scaling_method_)) {
+        for (Index i=0; i<dim_; i++) {
+          sol_vals[i] *= scaling_factors_[i];
+        }
+      }
+
       ipfint N=dim_;
       double* W = new double[maxfrt_];
       ipfint* IW1 = new ipfint[nsteps_];
       F77_FUNC(ma27cd,MA27CD)(&N, a_, &la_, iw_, &liw_, W, &maxfrt_,
                               sol_vals, IW1, &nsteps_,
                               icntl_, cntl_);
+
+      // We we have scaling factors, scale the solution
+      if (IsValid(scaling_method_)) {
+        for (Index i=0; i<dim_; i++) {
+          sol_vals[i] *= scaling_factors_[i];
+        }
+      }
+
+      if (DBG_VERBOSITY()>=2) {
+        for (Index i=0; i<dim_; i++) {
+          DBG_PRINT((2, "sol[%5d] = %23.15e\n", i, sol_vals[i]));
+        }
+      }
 
       // Put the solution values back into the vector
       TripletHelper::PutValuesInVector(dim_, sol_vals, *solV[i]);

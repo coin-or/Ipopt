@@ -41,8 +41,10 @@ namespace Ipopt
       new OptimalityErrorConvergenceCheck();
 
     // Create the solvers that will be used by the main algorithm
+    SmartPtr<Mc19SymTScalingMethod> ScalingMethod =
+      new Mc19SymTScalingMethod();
     SmartPtr<SymLinearSolver> Ma27Solver =
-      new Ma27SymLinearSolver();
+      new Ma27SymLinearSolver(ScalingMethod);
     SmartPtr<AugSystemSolver> AugSolver =
       //        = new AugTSystemSolver(*Ma27Solver);
       new StdAugSystemSolver(*Ma27Solver);
