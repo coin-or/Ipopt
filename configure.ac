@@ -407,7 +407,7 @@ if test "$use_asldir" = BUILD; then
       fi
     fi
   fi
-  ASLMAKEFILECMDS="sed 's/ar ruv/$AR ruv/' makefile.u"
+  ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR \$\$(ARFLAGS)/' makefile.u | sed 's/ar ruv/$AR ruv/' "
   if test "$EXEEXT" = ".exe"; then
     ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's/a.out/a.exe/'"
   fi
