@@ -78,9 +78,9 @@ namespace Ipopt
 
     /** @name Auxilliary functions */
     //@{
-    /** Method for solving the quadratic equation (33) in IPOPT paper */
-    void solve_quadratic(Number rho, Number mu, const Vector& c,
-                         Vector& n, Vector& p);
+    /** Method for solving the quadratic vector equation v^2 + 2a*v -
+	b = 0 */
+    void solve_quadratic(const Vector& a, const Vector& b, Vector& v);
     //@}
   };
 
