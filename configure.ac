@@ -14,7 +14,7 @@ AC_PREREQ(2.59)
 AC_INIT([ipopt],[3.0beta],[coin-ipopt@www-124.ibm.com])
 
 AC_COPYRIGHT([
-Copyright 2003 International Business Machines and others.
+Copyright 2004 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
@@ -33,7 +33,7 @@ AC_ARG_VAR(AR,[Command for handling archives (default is `ar')])
 
 # Check if user wants to produce debugging code
 AC_ARG_ENABLE([debug],
-  AC_HELP_STRING([--enable-debug], [compile with debug options]),
+  AC_HELP_STRING([--enable-debug], [compile with debug options and runtime tests]),
   [case "${enableval}" in
     yes) debugcompile=true ;;
     no)  debugcompile=false ;;
@@ -44,16 +44,31 @@ AC_ARG_ENABLE([debug],
 # C Compiler Options #
 ######################
 
-if test -z "$CXXFLAGS"; then
-  CXXFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Werror -pipe"
-fi
+if test "$debugcompile" = "true"; then
+  AC_DEFINE([IP_DEBUG],[1],[If defined, debug sanity checks are performed during runtime])
+  if test -z "$CXXFLAGS"; then
+    CXXFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Werror -pipe"
+  fi
 
-if test -z "$CFLAGS"; then
-  CFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Werror -pipe"
-fi
+  if test -z "$CFLAGS"; then
+    CFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Werror -pipe"
+  fi
 
-if test -z "$FFLAGS"; then
-  FFLAGS="-g"
+  if test -z "$FFLAGS"; then
+    FFLAGS="-g"
+  fi
+else
+  if test -z "$CXXFLAGS"; then
+    CXXFLAGS="-O3 -pipe"
+  fi
+
+  if test -z "$CFLAGS"; then
+    CFLAGS="-O3 -pipe"
+  fi
+
+  if test -z "$FFLAGS"; then
+    FFLAGS="-O3"
+  fi
 fi
 
 SAVE_CFLAGS="$CFLAGS"

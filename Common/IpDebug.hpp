@@ -9,6 +9,7 @@
 #ifndef __IPDEBUG_HPP__
 #define __IPDEBUG_HPP__
 
+#include "config.h"
 #include "IpTypes.hpp"
 #ifdef OLD_C_HEADERS
 # include <assert.h>
@@ -16,8 +17,6 @@
 # include <cassert>
 #endif
 
-// For now define DEBUG here
-#define IP_DEBUG
 #ifdef IP_DEBUG
 # define DBG_ASSERT(test) assert(test)
 # define DBG_ASSERT_EXCEPTION(__condition, __except_type, __msg) \

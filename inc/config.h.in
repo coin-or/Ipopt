@@ -44,6 +44,9 @@
 /* Define to the C type corresponding to Fortran INTEGER */
 #undef INTEGER_TYPE
 
+/* If defined, debug sanity checks are performed during runtime */
+#undef IP_DEBUG
+
 /* Name of package */
 #undef PACKAGE
 
