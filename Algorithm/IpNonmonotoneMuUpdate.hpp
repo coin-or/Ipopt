@@ -78,6 +78,7 @@ namespace Ipopt
     Number theta_mu_;
     Index nonmonotone_kkt_norm_;
     Index nonmonotone_kkt_centrality_;
+    Index nonmonotone_kkt_balancing_term_;
     /** Flag indicating which globalization strategy should be used. */
     Index adaptive_globalization_;
     /** Maximal margin in filter (for adaptive_globalization = 3) */

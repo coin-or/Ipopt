@@ -79,6 +79,15 @@ namespace Ipopt
       quality_function_dual_inf_ = 1;
     }
 
+    if (options.GetIntegerValue("quality_function_balancing_term", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=1, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"quality_function_balancing_term\": This value must be 0 or 1.");
+      quality_function_balancing_term_ = ivalue;
+    }
+    else {
+      quality_function_balancing_term_ = 0;
+    }
+
     if (options.GetIntegerValue("max_bisection_steps", ivalue, prefix)) {
       //      ASSERT_EXCEPTION(ivalue>0, OptionsList::OPTION_OUT_OF_RANGE,
       //                       "Option \"max_bisection_steps\": This value must be positive.");
@@ -866,6 +875,17 @@ namespace Ipopt
       default:
       DBG_ASSERT("Unknown value for quality_function_centrality_");
     }
+
+    switch (quality_function_balancing_term_) {
+    case 0:
+      //Nothing
+      break;
+    case 1:
+      quality_function += pow(Max(0., Max(dual_inf,primal_inf)-compl_inf),3);
+      break;
+    default:
+      DBG_ASSERT("Unknown value for quality_function_balancing term_");
+   }
 
     Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
                    "sigma = %8.2e d_inf = %18.12e p_inf = %18.12e cmpl = %18.12e q = %18.12e a_pri = %8.2e a_dual = %8.2e xi = %8.2e\n", sigma, dual_inf, primal_inf, compl_inf, quality_function, alpha_primal, alpha_dual, xi);
