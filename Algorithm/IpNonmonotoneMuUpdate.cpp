@@ -389,23 +389,47 @@ namespace Ipopt
   }
 
   Number
+  NonmonotoneMuUpdate::min_ref_val()
+  {
+    DBG_ASSERT(adaptive_globalization_==1);
+    Number min_ref;
+    DBG_ASSERT(refs_vals_.size()>0);
+    std::list<Number>::iterator iter = refs_vals_.begin();
+    min_ref = *iter;
+    iter++;
+    while (iter != refs_vals_.end()) {
+      min_ref = Min(min_ref, *iter);
+      iter++;
+    }
+    return min_ref;
+  }
+
+  Number
+  NonmonotoneMuUpdate::max_ref_val()
+  {
+    DBG_ASSERT(adaptive_globalization_==1);
+    Number max_ref;
+    DBG_ASSERT(refs_vals_.size()>0);
+    std::list<Number>::iterator iter = refs_vals_.begin();
+    max_ref = *iter;
+    iter++;
+    while (iter != refs_vals_.end()) {
+      max_ref = Max(max_ref, *iter);
+      iter++;
+    }
+    return max_ref;
+  }
+
+  Number
   NonmonotoneMuUpdate::NewFixedMu()
   {
-    Number min_ref;
+    Number max_ref;
     switch (adaptive_globalization_) {
-      case 1 : {
-        DBG_ASSERT(refs_vals_.size()>0);
-        std::list<Number>::iterator iter = refs_vals_.begin();
-        min_ref = *iter;
-        iter++;
-        while (iter != refs_vals_.end()) {
-          min_ref = Min(min_ref, *iter);
-          iter++;
-        }
-      }
+      case 1 :
+	max_ref = max_ref_val();
       break;
       case 2 : {
-        min_ref = 1e20;
+        max_ref = 1e20;
       }
       break;
       default:
@@ -420,8 +444,8 @@ namespace Ipopt
     else {
       new_mu = IpCq().curr_avrg_compl();
     }
-    new_mu = Min(new_mu, 0.1 * min_ref);
     new_mu = Max(new_mu, lower_mu_safeguard());
+    new_mu = Min(new_mu, 0.1 * max_ref);
 
     new_mu = Max(new_mu, mu_min_);
     new_mu = Min(new_mu, mu_max_);
@@ -493,6 +517,10 @@ namespace Ipopt
     Number lower_mu_safeguard =
       Max(mu_safeguard_factor_ * (dual_inf/init_dual_inf_),
           mu_safeguard_factor_ * (primal_inf/init_primal_inf_));
+
+    if (adaptive_globalization_==1) {
+      lower_mu_safeguard = Min(lower_mu_safeguard, min_ref_val());
+    }
 
     return lower_mu_safeguard;
   }

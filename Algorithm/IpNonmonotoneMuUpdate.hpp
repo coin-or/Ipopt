@@ -125,6 +125,12 @@ namespace Ipopt
      *  infeasibility. */
     Number lower_mu_safeguard();
 
+    /** Computer the currently largest reference value. */
+    Number max_ref_val();
+
+    /** Computer the currently smallest reference value. */
+    Number min_ref_val();
+
     /** Maximal number of reference values (algorithmic parameter) */
     Index num_refs_max_;
     /** Values of the currently stored reference values (norm of pd
