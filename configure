@@ -5448,11 +5448,9 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-
-cat >>confdefs.h <<\_ACEOF
-#define OLD_MA27
-_ACEOF
-
+		    { { echo "$as_me:$LINENO: error: Please obtain the threadsafe (newer) version of MA27" >&5
+echo "$as_me: error: Please obtain the threadsafe (newer) version of MA27" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext

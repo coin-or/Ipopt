@@ -278,8 +278,7 @@ else
     AC_TRY_LINK([],[      call MA27UD()],
                    [AC_MSG_RESULT(yes)],
                    [AC_MSG_RESULT(no)
-                    AC_DEFINE(OLD_MA27,[],
-                        [Define to 1 if MA27 is given in the old, non-threadsafe version])])
+		    AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
   fi
   MY_CHECK_HSL([mc19ad],[MC19])
 fi
