@@ -150,6 +150,8 @@ namespace Ipopt
     vector. */
     void AddTwoVectorsImpl(Number a, const Vector& v1,
                            Number b, const Vector& v2, Number c);
+    /** Fraction to the boundary parameter. */
+    Number FracToBoundImpl(const Vector& delta, Number tau) const;
     //@}
 
     /** @name Output methods */

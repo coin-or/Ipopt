@@ -325,6 +325,23 @@ namespace Ipopt
     }
   }
 
+  Number
+  CompoundVector::FracToBoundImpl(const Vector& delta, Number tau) const
+  {
+    DBG_ASSERT(vectors_valid_);
+    const CompoundVector* comp_delta =
+      dynamic_cast<const CompoundVector*>(&delta);
+    DBG_ASSERT(comp_delta);
+    DBG_ASSERT(NComps() == comp_delta->NComps());
+
+    Number alpha = 1.;
+    for(Index i=0; i<NComps(); i++) {
+      alpha = Ipopt::Min(alpha,
+			 ConstComp(i)->FracToBound(*comp_delta->GetComp(i), tau));
+    }
+    return alpha;
+  }
+
   void CompoundVector::PrintImpl(FILE* fp, std::string name, Index indent, std::string prefix) const
   {
     DBG_START_METH("CompoundVector::PrintImpl", dbg_verbosity);
