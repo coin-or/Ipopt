@@ -87,7 +87,7 @@ namespace Ipopt
       IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
 
     Number mu = IpData().curr_mu();
-    Number dnrm = IpData().delta_x()->Amax() + IpData().delta_s()->Amax();
+    Number dnrm = Max(IpData().delta_x()->Amax(), IpData().delta_s()->Amax());
 
     // Set  the trial  values  for  the original  Data  object to  the
     // current restoration phase values
@@ -100,7 +100,7 @@ namespace Ipopt
     orig_ip_data->SetTrialPrimalVariablesFromPtr(x_only, IpData().curr_s());
 
     // Compute primal infeasibility
-    Number inf_pr = orig_ip_cq->trial_constraint_violation();
+    Number inf_pr = orig_ip_cq->trial_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
     Number f = orig_ip_cq->trial_f();
 
     // Retrieve some information set in the different parts of the algorithm
@@ -121,12 +121,13 @@ namespace Ipopt
       regu_x_ptr = regu_x_buf;
     }
     Index ls_count = IpData().info_ls_count();
+    const std::string info_string = IpData().info_string();
 
     Jnlst().Printf(J_SUMMARY, J_MAIN,
-                   "%5d%c %14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d\n",
+                   "%5d%c %14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d %s\n",
                    iter, info_iter, f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr,
                    alpha_dual, alpha_primal, alpha_primal_char,
-                   ls_count);
+                   ls_count, info_string.c_str());
 
 
     //////////////////////////////////////////////////////////////////////
@@ -173,6 +174,15 @@ namespace Ipopt
     Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_d", *IpCq().curr_d());
     Jnlst().PrintVector(J_VECTOR, J_MAIN,
                         "curr_d - curr_s", *IpCq().curr_d_minus_s());
+
+    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_x", *IpData().delta_x());
+    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_s", *IpData().delta_s());
+    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_y_c", *IpData().delta_y_c());
+    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_y_d", *IpData().delta_y_d());
+    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_z_L", *IpData().delta_z_L());
+    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_z_U", *IpData().delta_z_U());
+    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_v_L", *IpData().delta_v_L());
+    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_v_U", *IpData().delta_v_U());
 
     Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_c", *IpCq().curr_jac_c());
     Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_d", *IpCq().curr_jac_d());
