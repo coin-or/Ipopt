@@ -78,6 +78,7 @@ namespace Ipopt
       trial_primal_infeasibility_cache_(3),
       curr_dual_infeasibility_cache_(3),
       curr_complementarity_cache_(6),
+      curr_centrality_measure_cache_(1),
       curr_nlp_error_cache_(1),
       curr_barrier_error_cache_(1),
       curr_primal_dual_error_cache_(1),
@@ -1336,7 +1337,7 @@ namespace Ipopt
   (IpoptCalculatedQuantities::ENormType NormType,
    const Vector& vec1, const Vector& vec2)
   {
-    std::vector<const Vector*> vecs;
+    std::vector<SmartPtr<const Vector> > vecs;
     vecs.push_back(&vec1);
     vecs.push_back(&vec2);
 
@@ -1346,7 +1347,7 @@ namespace Ipopt
   Number
   IpoptCalculatedQuantities::CalcNormOfType
   (IpoptCalculatedQuantities::ENormType NormType,
-   std::vector<const Vector*> vecs)
+   std::vector<SmartPtr<const Vector> > vecs)
   {
     Number result=0.;
 
@@ -1499,7 +1500,7 @@ namespace Ipopt
   IpoptCalculatedQuantities::curr_complementarity
   (Number mu, IpoptCalculatedQuantities::ENormType NormType)
   {
-    DBG_START_METH("IpoptCalculatedQuantities::curr_dual_infeasibility()",
+    DBG_START_METH("IpoptCalculatedQuantities::curr_complementarity()",
                    dbg_verbosity);
     Number result;
 
@@ -1522,22 +1523,143 @@ namespace Ipopt
     sdeps.push_back(mu);
 
     if (!curr_complementarity_cache_.GetCachedResult(result, deps, sdeps)) {
+
+      std::vector<SmartPtr<const Vector> > vecs;
       SmartPtr<const Vector> compl_x_L = curr_compl_x_L();
       SmartPtr<const Vector> compl_x_U = curr_compl_x_U();
       SmartPtr<const Vector> compl_s_L = curr_compl_s_L();
       SmartPtr<const Vector> compl_s_U = curr_compl_s_U();
 
-      std::vector<const Vector*> vecs;
-      vecs.push_back(GetRawPtr(compl_x_L));
-      vecs.push_back(GetRawPtr(compl_x_U));
-      vecs.push_back(GetRawPtr(compl_s_L));
-      vecs.push_back(GetRawPtr(compl_s_U));
+      if (mu==.0) {
+        vecs.push_back(GetRawPtr(compl_x_L));
+        vecs.push_back(GetRawPtr(compl_x_U));
+        vecs.push_back(GetRawPtr(compl_s_L));
+        vecs.push_back(GetRawPtr(compl_s_U));
+      }
+      else {
+        SmartPtr<Vector> tmp = compl_x_L->MakeNew();
+        tmp->Copy(*compl_x_L);
+        tmp->AddScalar(-mu);
+        vecs.push_back(GetRawPtr(tmp));
+        tmp = compl_x_U->MakeNew();
+        tmp->Copy(*compl_x_U);
+        tmp->AddScalar(-mu);
+        vecs.push_back(GetRawPtr(tmp));
+        tmp = compl_s_L->MakeNew();
+        tmp->Copy(*compl_s_L);
+        tmp->AddScalar(-mu);
+        vecs.push_back(GetRawPtr(tmp));
+        tmp = compl_s_U->MakeNew();
+        tmp->Copy(*compl_s_U);
+        tmp->AddScalar(-mu);
+        vecs.push_back(GetRawPtr(tmp));
+      }
 
       result = CalcNormOfType(NormType, vecs);
 
       curr_complementarity_cache_.AddCachedResult(result, deps, sdeps);
     }
 
+    return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::CalcCentralityMeasure(const Vector& compl_x_L,
+      const Vector& compl_x_U,
+      const Vector& compl_s_L,
+      const Vector& compl_s_U)
+  {
+    Number MinCompl = std::numeric_limits<Number>::max();
+    bool have_bounds = false;
+
+    Index n_compl_x_L = compl_x_L.Dim();
+    Index n_compl_x_U = compl_x_U.Dim();
+    Index n_compl_s_L = compl_s_L.Dim();
+    Index n_compl_s_U = compl_s_U.Dim();
+
+    // Compute the Minimum of all complementarities
+    if( n_compl_x_L>0 ) {
+      if( have_bounds ) {
+        MinCompl = Min(MinCompl, compl_x_L.Min());
+      }
+      else {
+        MinCompl = compl_x_L.Min();
+      }
+      have_bounds = true;
+    }
+    if( n_compl_x_U>0 ) {
+      if( have_bounds ) {
+        MinCompl = Min(MinCompl, compl_x_U.Min());
+      }
+      else {
+        MinCompl = compl_x_U.Min();
+      }
+      have_bounds = true;
+    }
+    if( n_compl_s_L>0 ) {
+      if( have_bounds ) {
+        MinCompl = Min(MinCompl, compl_s_L.Min());
+      }
+      else {
+        MinCompl = compl_s_L.Min();
+      }
+      have_bounds = true;
+    }
+    if( n_compl_s_U>0 ) {
+      if( have_bounds ) {
+        MinCompl = Min(MinCompl, compl_s_U.Min());
+      }
+      else {
+        MinCompl = compl_s_U.Min();
+      }
+      have_bounds = true;
+    }
+
+    // If there are no bounds, just return 0.;
+    if (!have_bounds) {
+      return 0.;
+    }
+
+    DBG_ASSERT(MinCompl>0. && "There is a zero complementarity entry");
+
+    Number avrg_compl = (compl_x_L.Asum() + compl_x_U.Asum() +
+                         compl_s_L.Asum() + compl_s_U.Asum());
+    avrg_compl /= (n_compl_x_L + n_compl_x_U + n_compl_s_L + n_compl_s_U);
+
+    return MinCompl/avrg_compl;
+  }
+
+  Number
+  IpoptCalculatedQuantities::curr_centrality_measure()
+  {
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->curr_x();
+    SmartPtr<const Vector> s = ip_data_->curr_s();
+    SmartPtr<const Vector> z_L = ip_data_->curr_z_L();
+    SmartPtr<const Vector> z_U = ip_data_->curr_z_U();
+    SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
+    SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
+
+    std::vector<const TaggedObject*> tdeps;
+    tdeps.push_back(GetRawPtr(x));
+    tdeps.push_back(GetRawPtr(s));
+    tdeps.push_back(GetRawPtr(z_L));
+    tdeps.push_back(GetRawPtr(z_U));
+    tdeps.push_back(GetRawPtr(v_L));
+    tdeps.push_back(GetRawPtr(z_U));
+
+    if (!curr_centrality_measure_cache_.GetCachedResult(result, tdeps)) {
+      SmartPtr<const Vector> compl_x_L = curr_compl_x_L();
+      SmartPtr<const Vector> compl_x_U = curr_compl_x_U();
+      SmartPtr<const Vector> compl_s_L = curr_compl_s_L();
+      SmartPtr<const Vector> compl_s_U = curr_compl_s_U();
+
+      result = CalcCentralityMeasure(*compl_x_L, *compl_x_U,
+                                     *compl_s_L, *compl_s_U);
+
+      curr_centrality_measure_cache_.AddCachedResult(result, tdeps);
+    }
     return result;
   }
 
