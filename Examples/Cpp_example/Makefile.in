@@ -27,7 +27,7 @@ IPOPTINSTALLROOTDIR = @prefix@
 INCL =  -I $(IPOPTSRCROOTDIR)/Interfaces \
 	-I $(IPOPTSRCROOTDIR)/Apps/StdInterface \
         -I $(IPOPTSRCROOTDIR)/Common \
-        -I $(IPOPTINSTALLROOTDIR)/inc \
+        -I $(IPOPTINSTALLROOTDIR)/inc
 
 # CHANGEME: This should be the name of your executable
 EXE = cpp_example@EXEEXT@
