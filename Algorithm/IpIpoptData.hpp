@@ -292,6 +292,57 @@ namespace Ipopt
     {
       return delta_v_U_;
     }
+
+    void SetFromPtr_delta_x(SmartPtr<Vector>& delta_x)
+    {
+      delta_x_ = delta_x;
+    }
+
+    void SetFromPtr_delta_s(SmartPtr<Vector>& delta_s)
+    {
+      delta_s_ = delta_s;
+    }
+
+    void SetFromPtr_delta_y_c(SmartPtr<Vector>& delta_y_c)
+    {
+      delta_y_c_ = delta_y_c;
+    }
+
+    void SetFromPtr_delta_y_d(SmartPtr<Vector>& delta_y_d)
+    {
+      delta_y_d_ = delta_y_d;
+    }
+
+    void SetFromPtr_delta_z_L(SmartPtr<Vector>& delta_z_L)
+    {
+      delta_z_L_ = delta_z_L;
+    }
+
+    void SetFromPtr_delta_z_U(SmartPtr<Vector>& delta_z_U)
+    {
+      delta_z_U_ = delta_z_U;
+    }
+
+    void SetFromPtr_delta_v_L(SmartPtr<Vector>& delta_v_L)
+    {
+      delta_v_L_ = delta_v_L;
+    }
+
+    void SetFromPtr_delta_v_U(SmartPtr<Vector>& delta_v_U)
+    {
+      delta_v_U_ = delta_v_U;
+    }
+
+    /** ToDo This is currently a hack and should be handled differently */
+    bool HaveDeltas() const
+    {
+      return have_deltas_;
+    }
+
+    void SetHaveDeltas(bool have_deltas)
+    {
+      have_deltas_ = have_deltas;
+    }
     //@}
 
     /** @name Public Methods for updating iterates */
@@ -584,6 +635,12 @@ namespace Ipopt
     /** flag for debugging whether we have already curr_ values
      *  available (from which new Vectors can be generated */
     bool have_prototypes_;
+
+    /** The following flag is set to true, if some other part of the
+     *  algorithm (like the optprobing heuristic) has already computed
+     *  the search direction.  This flag is reset when the
+     *  AcceptTrialPoint method is called. */
+    bool have_deltas_;
 
     /** @name Global algorithm parameters.  Those are options that can
      *  be modified by the user and appear at different places in the
