@@ -40,16 +40,26 @@ namespace Ipopt
   bool PDFullSpaceSolver::InitializeImpl(const OptionsList& options,
                                          const std::string& prefix)
   {
-    Index value = 0;
+    Index ivalue;
+    Number value;
 
     // Check for the algorithm options
-    if (options.GetIntegerValue("num_min_iter_ref", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
+    if (options.GetIntegerValue("num_min_iter_ref", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue >= 0, OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"num_min_iter_ref\": This value must be larger than or equal to 0");
-      num_min_iter_ref_ = value;
+      num_min_iter_ref_ = ivalue;
     }
     else {
       num_min_iter_ref_ = 1;
+    }
+
+    if (options.GetNumericValue("delta_regu_max", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"theta_min_fact\": This value must be larger than 0 and less than theta_max_fact.");
+      delta_regu_max_ = value;
+    }
+    else {
+      delta_regu_max_ = 1e40;
     }
 
     return augSysSolver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
@@ -169,11 +179,27 @@ namespace Ipopt
                        *resid_zL, *resid_zU, *resid_vL, *resid_vU);
 
       // To the next back solve
-      SolveOnce(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
-                *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
-                *sigma_x, *sigma_s, -1., 1., *resid_x, *resid_s, *resid_c, *resid_d,
-                *resid_zL, *resid_zU, *resid_vL, *resid_vU, res_x, res_s, res_c, res_d,
-                res_zL, res_zU, res_vL, res_vU);
+      bool solve_retval =
+        SolveOnce(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
+                  *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
+                  *sigma_x, *sigma_s, -1., 1., *resid_x, *resid_s, *resid_c, *resid_d,
+                  *resid_zL, *resid_zU, *resid_vL, *resid_vU, res_x, res_s, res_c, res_d,
+                  res_zL, res_zU, res_vL, res_vU);
+      // If system seems not to be solvable, we set the search
+      // direction to zero, and hope that the line search will take
+      // care of this (e.g. call the restoration phase).  ToDo: We
+      // might want to use a more explicit cue later.
+      if (!solve_retval) {
+        res_x.Set(0.);
+        res_s.Set(0.);
+        res_c.Set(0.);
+        res_d.Set(0.);
+        res_zL.Set(0.);
+        res_zU.Set(0.);
+        res_vL.Set(0.);
+        res_vU.Set(0.);
+        return;
+      }
 
       num_iter_ref++;
     }
@@ -206,7 +232,7 @@ namespace Ipopt
 
   }
 
-  void PDFullSpaceSolver::SolveOnce(const SymMatrix& W,
+  bool PDFullSpaceSolver::SolveOnce(const SymMatrix& W,
                                     const Matrix& J_c,
                                     const Matrix& J_d,
                                     const Matrix& Px_L,
@@ -349,8 +375,10 @@ namespace Ipopt
               delta_x_curr_ = 8.*delta_x_curr_;  //TODO Parameter
             }
           }
-          ASSERT_EXCEPTION(delta_x_curr_<1e40, IpoptException,
-                           "Regularization parameter is getting too large.");
+          if (delta_x_curr_ > delta_regu_max_) {
+            // Give up trying to solve the linear system
+            return false;
+          }
           delta_s_curr_ = delta_x_curr_;
         }
       } // while (retval!=S_SUCCESS && !fail) {
@@ -396,6 +424,8 @@ namespace Ipopt
     AxpBy(alpha, *sol_zU, beta, res_zU);
     AxpBy(alpha, *sol_vL, beta, res_vL);
     AxpBy(alpha, *sol_vU, beta, res_vU);
+
+    return true;
   }
 
   void PDFullSpaceSolver::ComputeResiduals(
