@@ -185,6 +185,11 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "\n**************************************************\n\n");
 
+    if (IpData().HaveDeltas()) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "No need to compute search direction - it has already been computed.\n");
+      return;
+    }
 
     SmartPtr<const Vector> rhs_grad_lag_x  = IpCq().curr_grad_lag_x();
     SmartPtr<const Vector> rhs_grad_lag_s  = IpCq().curr_grad_lag_s();
