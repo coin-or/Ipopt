@@ -46,8 +46,8 @@ namespace Ipopt
   {}
 
   bool OrigIpoptNLP::Initialize(const Journalist& jnlst,
-				const OptionsList& options,
-				const std::string& prefix)
+                                const OptionsList& options,
+                                const std::string& prefix)
   {
     Number value;
     if (options.GetNumericValue("bound_relax_factor", value, prefix)) {
@@ -169,7 +169,7 @@ namespace Ipopt
       ones->Set(1.);
       tmp->ElementWiseMax(*ones);
       bounds.Axpy(bound_relax_factor, *tmp);
-    }    
+    }
   }
 
   Number OrigIpoptNLP::f(const Vector& x)

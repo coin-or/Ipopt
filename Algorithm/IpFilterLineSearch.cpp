@@ -315,7 +315,7 @@ namespace Ipopt
             }
 
             // If it is acceptable, stop the search
-	    alpha_primal_test = alpha_primal;
+            alpha_primal_test = alpha_primal;
             accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
           }
           catch(IpoptNLP::Eval_Error& e) {
@@ -418,13 +418,13 @@ namespace Ipopt
 
       Number alpha_y;
       if (dual_alpha_for_y_) {
-	alpha_y = alpha_dual_max;
+        alpha_y = alpha_dual_max;
       }
       else {
-	alpha_y = alpha_primal;
+        alpha_y = alpha_primal;
       }
       IpData().SetTrialEqMultipilersFromStep(alpha_y,
-					     *actual_delta_y_c,
+                                             *actual_delta_y_c,
                                              *actual_delta_y_d);
 
       // Set some information for iteration summary output

@@ -57,7 +57,7 @@ namespace Ipopt
 
     // Initialize the CQ object
     retvalue = IpNLP().Initialize(Jnlst(),
-				  options, prefix);
+                                  options, prefix);
     ASSERT_EXCEPTION(retvalue, AlgorithmStrategyObject::FAILED_INITIALIZATION,
                      "the IpIpoptNLP object failed to initialize.");
 

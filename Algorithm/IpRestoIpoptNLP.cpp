@@ -38,8 +38,8 @@ namespace Ipopt
   {}
 
   bool RestoIpoptNLP::Initialize(const Journalist& jnlst,
-				 const OptionsList& options,
-				 const std::string& prefix)
+                                 const OptionsList& options,
+                                 const std::string& prefix)
   {
     initialized_ = true;
     return true;
