@@ -149,21 +149,60 @@ namespace Ipopt
                    "Dual infeasibility for restoration phase problem   = %.16e\n",
                    IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX));
 
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_x", *IpData().curr_x());
-    Jnlst().Printf(J_DETAILED, J_MAIN,
-                   "||curr_x||_inf = %.16e\n", IpData().curr_x()->Amax());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_s", *IpData().curr_s());
-    Jnlst().Printf(J_DETAILED, J_MAIN,
-                   "||curr_s||_inf = %.16e\n", IpData().curr_s()->Amax());
+    if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "||curr_x||_inf   = %.16e\n", IpData().curr_x()->Amax());
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "||curr_s||_inf   = %.16e\n", IpData().curr_s()->Amax());
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "||curr_y_d||_inf = %.16e\n", IpData().curr_y_c()->Amax());
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "||curr_y_c||_inf = %.16e\n", IpData().curr_y_d()->Amax());
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "||curr_z_L||_inf = %.16e\n", IpData().curr_z_L()->Amax());
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "||curr_z_U||_inf = %.16e\n", IpData().curr_z_U()->Amax());
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "||curr_v_L||_inf = %.16e\n", IpData().curr_v_L()->Amax());
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+		     "||curr_v_U||_inf = %.16e\n", IpData().curr_v_U()->Amax());    }
+    if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		     "\n||delta_x||_inf   = %.16e\n", IpData().delta_x()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		     "||delta_s||_inf   = %.16e\n", IpData().delta_s()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		     "||delta_y_c||_inf = %.16e\n", IpData().delta_y_c()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		     "||delta_y_d||_inf = %.16e\n", IpData().delta_y_d()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		     "||delta_z_L||_inf = %.16e\n", IpData().delta_z_L()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		     "||delta_z_U||_inf = %.16e\n", IpData().delta_z_U()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		     "||delta_v_L||_inf = %.16e\n", IpData().delta_v_L()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+		     "||delta_v_U||_inf = %.16e\n", IpData().delta_v_U()->Amax());
+    }
+    if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_x", *IpData().curr_x());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_s", *IpData().curr_s());
 
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_c", *IpData().curr_y_c());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_d", *IpData().curr_y_d());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_c", *IpData().curr_y_c());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_d", *IpData().curr_y_d());
 
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_L", *IpData().curr_z_L());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_U", *IpData().curr_z_U());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_x_L", *IpCq().curr_slack_x_L());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_x_U", *IpCq().curr_slack_x_U());
 
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_L", *IpData().curr_v_L());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_U", *IpData().curr_v_U());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_L", *IpData().curr_z_L());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_U", *IpData().curr_z_U());
+
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_s_L", *IpCq().curr_slack_s_L());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_s_U", *IpCq().curr_slack_s_U());
+
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_L", *IpData().curr_v_L());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_U", *IpData().curr_v_U());
+    }
 
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "\n\n***Current NLP Values for Iteration (Restoration phase problem) %d:\n",
