@@ -391,6 +391,9 @@ namespace Ipopt
     // Check whether the number of negative eigenvalues matches the requested
     // count
     if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "In Ma27TSolverInterface::Factorization: negevals_ = %d, but numberOfNegEVals = %d\n",
+                     negevals_, numberOfNegEVals);
       return SYMSOLVER_WRONG_INERTIA;
     }
 
