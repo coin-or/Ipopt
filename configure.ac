@@ -45,9 +45,9 @@ AC_ARG_ENABLE([debug],
     *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
   esac],[debugcompile=false])
 
-######################
-# C Compiler Options #
-######################
+####################
+# Compiler Options #
+####################
 
 if test "$debugcompile" = "true"; then
   AC_DEFINE([IP_DEBUG],[1],[If defined, debug sanity checks are performed during runtime])
@@ -130,6 +130,8 @@ AC_SUBST(IPADDLIBS)
 #  BLAS  #
 ##########
 
+ipblaslibdir="\$(top_builddir)/OTHERS/blas"
+
 AC_ARG_WITH([blas],
             AC_HELP_STRING([--with-blas],
                            [specify BLAS library (or BUILD for compilation)]),
@@ -174,6 +176,11 @@ fi
 ##########
 # LAPACK #
 ##########
+
+iplapacklibdir="\$(top_builddir)/OTHERS/lapack"
+lapackdir=OTHERS/lapack/LAPACK/SRC
+lapacksrcdir=$srcdir/$lapackdir
+lapackobjdir=OTHERS/lapack
 
 AC_ARG_WITH([lapack],
             AC_HELP_STRING([--with-lapack],
@@ -223,49 +230,180 @@ else
   fi
 fi
 
-#######
-# HSL #
-#######
+#######################
+# HARWELL SUBROUTINES #
+#######################
+
+hslsrcdir="$srcdir/OTHERS/HSL"
+hsllibdir="\$(top_builddir)/OTHERS/HSL"
+
+AC_DEFUN([MY_CHECK_HSL],
+         [AC_MSG_CHECKING([for $1 in $use_hsl])
+          use_$2=
+          AC_TRY_LINK([],[      call $1()],
+                         [AC_DEFINE(HAVE_$2,1,[Define to 1 if $2 is available]) AC_MSG_RESULT([yes]); use_$2=yes],
+                         [AC_MSG_RESULT([no])])])
+AC_DEFUN([MY_CHECK_HSLFILE],
+         [AC_CHECK_FILE([$hslsrcdir/$1.f],
+                        [AC_DEFINE(HAVE_$2,1,[Define to 1 if $2 is available]) use_$2=BUILD],
+                        [use_$2=])])
+
+AC_MSG_NOTICE([Checking for Harwell subroutine library])
 
 AC_ARG_WITH([hsl],
             AC_HELP_STRING([--with-hsl],
-                           [specify Harwell library]),
-            [use_hsl=$withval], [use_hsl=])
-# Check if user supplied option makes sense
-if test ! -z "$use_hsl"; then
-  AC_MSG_CHECKING([whether user supplied HSLLIB=\"$use_hsl\" works])
+                           [specify Harwell library (or BUILD for compilation)]),
+            [use_hsl=$withval], [use_hsl=BUILD])
+
+if test "$use_hsl" = BUILD; then
+# Check which files are available
+  MY_CHECK_HSLFILE(ma27ad,MA27)
+  if test "$use_MA27" = BUILD; then
+    AC_MSG_CHECKING([whether MA27 is threadsafe])
+    if grep MA27UD $hslsrcdir/ma27ad.f >&5 ; then
+      AC_MSG_RESULT(yes)
+    else
+      AC_MSG_RESULT(no)
+      AC_DEFINE(OLD_MA27,[],
+                [Define to 1 if MA27 is given in the old, non-threadsafe version])
+    fi
+  fi
+  MY_CHECK_HSLFILE(mc19ad,MC19)
+else
   LIBS="$use_hsl $LIBS"
   IPADDLIBS="$use_hsl $IPADDLIBS"
-  AC_TRY_LINK([],[      call ma27ad],[AC_MSG_RESULT([yes])],
-              [AC_MSG_RESULT([no]); AC_MSG_ERROR([user supplied HSL library \"$use_hsl\" does not work])])
-else
-  LIBS="-L${HOME}/lib -lhsl $LIBS"
-  IPADDLIBS="-L${HOME}/lib -lhsl $IPADDLIBS"
+  MY_CHECK_HSL([ma27ad],[MA27])
+  if test "$use_MA27" = "yes"; then
+    AC_MSG_CHECKING([whether MA27 is threadsafe])
+    AC_TRY_LINK([],[      call MA27UD()],
+                   [AC_MSG_RESULT(yes)],
+                   [AC_MSG_RESULT(no)
+                    AC_DEFINE(OLD_MA27,[],
+                        [Define to 1 if MA27 is given in the old, non-threadsafe version])])
+  fi
+  MY_CHECK_HSL([mc19ad],[MC19])
+fi
+
+# Try to make sure the correct FD05 routine is there (if needed)
+if test "$use_MA48" = BUILD || test "$use_MA57" = BUILD; then
+  AC_CHECK_FILE([$hslsrcdir/fd05ad.f],[use_FD05="fd05ad.f"],[use_FD05=])
+  if test -z "$use_FD05"; then
+    case $build in
+      rs6000-* | powerpc*)
+                use_FD05="fd05adj.f";;
+      vax-*)    use_FD05="fd05adv.f";;
+      hp*)      use_FD05="fd05adh.f";;
+      *-osf*)   use_FD05="fd05ada.f";;
+      *ymp*)    use_FD05="fd05adc.f";;
+      *)        use_FD05="fd05ads.f";;
+    esac
+    AC_MSG_WARN([The file `fd05ad.f' is not provided.  My guess for this system is that you should use `$use_FD05', but you better verify this!!!])
+    AC_CHECK_FILE([$hslsrcdir/$use_FD05],
+                  [],[AC_MSG_ERROR([File $use_FD05 not found])])
+    AC_CONFIG_LINKS([OTHERS/HSL/fd05ad.f:OTHERS/HSL/$use_FD05])
+  fi
 fi
 
 AC_LANG_POP(Fortran 77)
-
 
 # For the remaining tests we need to include FLIBS into LIBS, so that
 # the C compiler can link programs
 LIBS="$LIBS $FLIBS"
 
-#######
-# ASL #
-#######
+#######################
+# AMPL SOLVER LIBRARY #
+#######################
 
-AC_SUBST(ASLLIB)
-AC_ARG_WITH([asl],
-            AC_HELP_STRING([--with-asl],
-                           [specify AMPL solver library]),
-            [use_asl=$withval], [use_asl=])
-# Check if user supplied option makes sense
-if test ! -z "$use_asl"; then
-  ASLLIB="$use_asl"
-else
-  ASLLIB="\$(top_builddir)/OTHERS/ASL/amplsolver.a -ldl"
+AC_LANG_PUSH(C)
+
+asldir=OTHERS/ASL/solvers
+aslsrcdir=$srcdir/$asldir
+
+AC_ARG_WITH([asldir],
+            AC_HELP_STRING([--with-asldir],
+                           [specify absolute path to AMPL solver directory (or BUILD for compilation, or "no" for disabling AMPL)]),
+            [use_asldir=$withval], [use_asldir=])
+
+if test "$use_asldir" = BUILD; then
+  AC_CHECK_FILE([$aslsrcdir/asl.h],[],
+                [AC_MSG_ERROR([option \"BUILD\" specified for asldir, but sources are missing])])
+elif test -z "$use_asldir"; then
+ # try to find sources - if not given don't compile
+  AC_CHECK_FILE([$aslsrcdir/asl.h],[use_asldir=BUILD],[use_asldir=no])
+elif test ! "$use_asldir" = "no"; then
+  AC_CHECK_FILE([$use_asldir/amplsolver.a],[],[AC_MSG_ERROR([ASL directory \"$use_asldir\" specified, but library missing])])
+  AC_CHECK_FILE([$use_asldir/asl.h],[],[AC_MSG_ERROR([ASL directory \"$use_asldir\" specified, but header files are missing])])
+  use_asldir=`cd $use_asldir; pwd`
+  case $build in
+    *-cygwin*) use_asldir=`cygpath -w $use_asldir` ;;
+  esac
 fi
 
+if test "$use_asldir" = BUILD; then
+  if test -z "$ASLMAKEFLAGS" ; then
+    asladdcflags=
+    case $build in
+      *-linux*) asladdcflags="-DNON_STDIO"
+                case $CC in
+                  pgcc | */pgcc)
+                     asladdcflags="$asladdcflags -DNO_fpu_control";;
+                esac
+                  ;;
+      *-cygwin*) asladdcflags="-DNON_STDIO"
+                if test "$use_mingw" = yes; then
+                  asladdcflags="$asladdcflags -DNo_Control87 -DNO_RUSAGE"
+                fi
+                ;;
+    esac
+#    ASLMAKEFLAGS="CFLAGS=\"\$(CFLAGS) $asladdcflags\""
+# Do the following for now to make sure we are not interupting compilation
+# of ASL because of warning message:
+    bla=
+    for i in $CFLAGS; do
+      if test ! "$i" = "-Werror"; then
+        bla="$bla $i"
+      fi
+    done
+    ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
+
+    if test $USE_MAINTAINER_MODE = 'yes'; then
+      AC_MSG_WARN([Assuming that maintainer mode is only used for GNU make])
+      ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
+    else
+      AC_MSG_CHECKING([whether $am_make understands the `-j 1' flag])
+      AC_LANG_CONFTEST([[bla:]])
+      if ($am_make -f conftest.c -j 1 bla >&5) 2>&5 ; then
+        AC_MSG_RESULT([yes])
+        ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
+      else
+        AC_MSG_RESULT([no])
+        AC_MSG_CHECKING([whether $am_make understands the `-J 1' flag])
+        if ($am_make -f conftest.c -J 1 bla >&5) 2>&5 ; then
+          AC_MSG_RESULT([yes])
+          ASLMAKEFLAGS="-J 1 $ASLMAKEFLAGS"
+        else
+          AC_MSG_RESULT([no])
+        fi
+      fi
+    fi
+  fi
+  ASLMAKEFILECMDS="sed 's/ar ruv/$AR ruv/' makefile.u"
+  if test "$EXEEXT" = ".exe"; then
+    ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's/a.out/a.exe/'"
+  fi
+  case $build in
+    *-cygwin*) ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's%s/System_details/\`uname -sr\`/%s|System_details|\`uname -sr\`|%'" ;;
+  esac
+  ASLMAKEFILECMDS="$ASLMAKEFILECMDS > makefile"
+fi
+AC_ARG_VAR(ASLMAKEFLAGS,[Compilation flags necessary for compiling the AMPL solver library])
+AC_SUBST(ASLMAKEFILECMDS)
+
+if test ! "$use_asldir" = no; then
+  AC_CHECK_LIB(dl,[dlopen],[LIBS="$LIBS -ldl"],[])
+fi
+
+AC_LANG_POP(C)
 
 ######################################
 # Equivalent int Fortran and C types #
@@ -312,6 +450,61 @@ AC_SUBST(ipoptlib)
 AC_SUBST(AMPL_CPPFLAGS)
 AMPL_CPPFLAGS="-I\$(top_builddir)/OTHERS/ASL -I\$(top_srcdir)/OTHERS/ASL/solvers"
 
+#########################
+# Makefile conditionals #
+#########################
+
+# The following variable collects the names of libraries that should be
+# included into libipopt.a
+AC_SUBST(IPALLLIBS)
+IPALLLIBS="Algorithm/libipoptalg.a Apps/StdInterface/libstdinterface.a Common/libcommon.a LinAlgImpl/Serial/liblaserial.a PDSystemImpl/PDFullSpace/libpdfullspace.a"
+
+AM_CONDITIONAL([BUILDBLAS],[test "$use_blas" = "BUILD"])
+if test "$use_blas" = BUILD; then
+  LIBS="$ipblaslibdir/libipblas.a $LIBS"
+  IPALLLIBS="OTHERS/blas/libipblas.a $IPALLLIBS"
+fi
+
+AM_CONDITIONAL([BUILDLAPACK],[test "$use_lapack" = "BUILD"])
+if test "$use_lapack" = BUILD; then
+  LIBS="$iplapacklibdir/libiplapack.a $LIBS"
+  IPALLLIBS="OTHERS/lapack/libiplapack.a $IPALLLIBS"
+  for file in dgesv.f dgetf2.f dgetrf.f dgetrs.f dlabad.f dlacon.f dlacpy.f dlae2.f dlaebz.f dlaev2.f dlagtf.f dlagts.f dlamch.f dlansp.f dlanst.f dlapy2.f dlaqsp.f dlarf.f dlarfg.f dlarnv.f dlartg.f dlaruv.f dlascl.f dlaset.f dlasr.f dlasrt.f dlassq.f dlaswp.f dlatps.f dopgtr.f dopmtr.f dorg2l.f dorg2r.f dppcon.f dppequ.f dpprfs.f dppsv.f dppsvx.f dpptrf.f dpptrs.f drscl.f dspev.f dspevx.f dsptrd.f dstebz.f dstein.f dsteqr.f dsterf.f ieeeck.f ilaenv.f; do
+    AC_CONFIG_LINKS($lapackobjdir/$file:$lapackdir/$file)
+  done
+fi
+
+AM_CONDITIONAL([BUILDHSL],[test "$use_hsl" = "BUILD"])
+if test "$use_hsl" = BUILD ; then
+#  LDFLAGS="-L$hsllibdir $LDFLAGS"
+  LIBS="$hsllibdir/libiphsl.a $LIBS"
+  IPALLLIBS="OTHERS/HSL/libiphsl.a $IPALLLIBS"
+fi
+AM_CONDITIONAL([BUILDMA27],[test "$use_MA27" = BUILD])
+AM_CONDITIONAL([BUILDMC19],[test "$use_MC19" = BUILD])
+
+AM_CONDITIONAL([BUILDBLASDIR],[test "$use_blas" = BUILD])
+AM_CONDITIONAL([BUILDLAPACKDIR],[test "$use_lapack" = BUILD])
+AM_CONDITIONAL([BUILDHSLDIR],[test "$use_hsl" = BUILD])
+
+AM_CONDITIONAL([BUILDASLDIR],[test "$use_asldir" = BUILD])
+AM_CONDITIONAL([BUILDAMPLINTERFACE],[test ! "$use_asldir" = "no"])
+AC_SUBST(ASLLIB)
+AC_SUBST(AMPL_CPPFLAGS)
+if test "$use_asldir" = BUILD; then
+  ASLLIB="\$(top_builddir)/OTHERS/ASL/amplsolver.a"
+  AMPL_CPPFLAGS="-I\$(top_builddir)/OTHERS/ASL -I\$(top_srcdir)/OTHERS/ASL/solvers"
+  AC_CONFIG_LINKS(OTHERS/ASL/ASLsolvers:OTHERS/ASL/solvers)
+elif test ! "$use_asldir" = no; then
+  case $build in
+    *-cygwin*) AMPL_CPPFLAGS="-I\"$use_asldir\""
+               ASLLIB="\"$use_asldir\amplsolver.a\"" ;;
+    *)         AMPL_CPPFLAGS="-I$use_asldir"
+               ASLLIB="$use_asldir/amplsolver.a";;
+  esac
+fi
+
+
 AC_CONFIG_FILES([Makefile Common/Makefile Algorithm/Makefile
                  LinAlgImpl/Makefile LinAlgImpl/Serial/Makefile 
                  PDSystemImpl/Makefile PDSystemImpl/PDFullSpace/Makefile
@@ -320,7 +513,10 @@ AC_CONFIG_FILES([Makefile Common/Makefile Algorithm/Makefile
 		 Apps/CompositeInterface/Makefile
 		 Apps/CUTErInterface/Makefile
 		 Examples/Fortran_example/Makefile
-		 Examples/Cpp_example/Makefile])
+		 Examples/Cpp_example/Makefile
+		 OTHERS/Makefile OTHERS/blas/Makefile
+		 OTHERS/lapack/Makefile OTHERS/HSL/Makefile
+		 OTHERS/ASL/Makefile])
 
 AC_CONFIG_HEADER([inc/config.h])
 

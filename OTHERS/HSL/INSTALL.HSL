@@ -1,0 +1,114 @@
+Installation of certain Harwell subroutines for IPOPT.
+
+*********************************************************************
+Note: It is YOUR RESPONSIBILITY to ensure that you are entitled to
+      download and use this third party package.
+*********************************************************************
+
+THIS FILE HAS NOT YET BEEN UPDATED FOR THE C++ VERSION OF IPOPT.
+FOR NOW, ALL YOU HAVE TO DOWNLOAD ARE THE ROUTINES:
+
+  MA27
+  MC19
+
+
+
+Information on the Harwell Subroutine Library (HSL) is available at
+
+http://www.cse.clrc.ac.uk/nag/hsl/
+
+Some of the required HSL routines are available in the HSL Archive.
+The subroutines in the HSL Archive are free for non-commercial
+purposes (make sure you read the license).
+
+Unless you want to use Ipopt with very special features, all you need
+is either MA57 and MC30 (if you have access for the standard HSL
+library) or MA27 and MC19 (if you have only access to the HSL
+Archive). So, if you not sure if you need more than those subroutines,
+chances are that you really don't need them.  (For some details on
+what the individual routines are needed for, you can consult the
+COIN/Ipopt/doc/INSTALL file.)
+
+Instructions on how to download files from the HSL Archive:
+-----------------------------------------------------------
+
+If you need to download subroutines from the HSL Archive website, this
+is how it goes:
+
+In order to download the HSL Archive subroutines (like ma27 and mc19),
+you need to register at the HSL Archive website
+
+http://hsl.rl.ac.uk/archive/hslarchive.html
+
+After that you can log in and go to the page that lists all the HSL
+Archive packages for download.  If you then click on the name of the
+desired routine (like MA27), you get to a download page, where one of
+the button reads "Download Package (comments removed)".
+
+Click on that button (leave the precision choice at default "Double
+Precision").  This brings up a webpage which contains the code for the
+subroutine as text.  All you have to do now is to save this page (all
+of it, even if there are more than one subroutines in it) into the a
+file called "ma27ad.f".  (If "Save page to..." doesn't work, you can
+copy the content of this page into an editor and save it there.)
+
+Similarly, if you want to get the MC19 routine, do the same steps as above
+and safe the context in a file called "mc19ad.f" .
+
+For neither MA27 or MC19 it is necessary to download any dependencies.
+(This is different for MA28, but only specialized usage of Ipopt requires
+this package.)
+
+Note:  If you are trying to locate certain routines in the HSL Archive,
+       such as MA28, you will not find its dependencies listed in the
+       HSL Archive Content list individually (e.g. for MA28, the
+       routine MC13 is not in the list).  However, you can obtain
+       those missing routine by downloading the "Dependencies" of the
+       particular package.  If you want to use the Makefile provided
+       in this directory, you will then have to copy the source for
+       those individual subroutines into their own files
+       (e.g. mc13ad.f, see below).
+       Again, if you only want to use MA27 and MC19 (which is enough
+       for most cases), no additional dependencies are required.
+
+Instructions on where to put the source code:
+---------------------------------------------
+
+Copy the source files for the required HSL routines into this
+directory before running the `configure' script.  The configuration
+script will detect which source files you have and prepare the
+Makefile accordingly.
+
+Here is the list of required files for each "component":
+
+MA27:  ma27ad.f
+
+MA47:  ma47ad.f
+
+MA57:  fd05ad.f ma57ad.f mc34ad.f mc47ad.f mc59ad.f mc71ad.f
+
+MA28:  ma28ad.f	ma30ad.f mc13dd.f mc20ad.f mc21ad.f mc22ad.f
+       mc23ad.f mc24ad.f
+
+MA48:  fd05ad.f ma48ad.f ma50ad.f ma51ad.f mc13dd.f mc21ad.f mc41ad.f
+
+MC30:  mc30ad.f
+
+MC19:  mc19ad.f
+
+MC29:  mc29ad.f
+
+MC35:  mc20ad.f mc35ad.f
+
+MC39:  mc39ad.f
+
+
+Note: Make sure, you have the correct version of fd05ad.f for your
+      operating system (if required).  FD05 is used to determine
+      machine dependent quantities.  In some cases, you might have the
+      source code for different versions of this routine available
+      (e.g. fd05ads.f for standard IEEE).  If the configure script
+      cannot find OTHERS/HSL/fd05ad.f, it tries to guess what version
+      (such as fd05ads.f) is the correct one, and look for that source
+      file instead.
+      (Not required if you only use MA27 and MC19).

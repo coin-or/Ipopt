@@ -18,7 +18,7 @@
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
-SOURCES = $(libdummy_a_SOURCES)
+SOURCES = $(nodist_libiplapack_a_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -40,7 +40,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-subdir = Apps/CUTErInterface
+subdir = OTHERS/lapack
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -50,17 +50,34 @@ mkinstalldirs = $(mkdir_p)
 CONFIG_HEADER = $(top_builddir)/inc/config.h
 CONFIG_CLEAN_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
-libdummy_a_AR = $(AR) $(ARFLAGS)
-libdummy_a_LIBADD =
-am_libdummy_a_OBJECTS = ipoma.$(OBJEXT)
-libdummy_a_OBJECTS = $(am_libdummy_a_OBJECTS)
+libiplapack_a_AR = $(AR) $(ARFLAGS)
+libiplapack_a_LIBADD =
+am__objects_1 = dgesv.$(OBJEXT) dgetf2.$(OBJEXT) dgetrf.$(OBJEXT) \
+	dgetrs.$(OBJEXT) dlabad.$(OBJEXT) dlacon.$(OBJEXT) \
+	dlacpy.$(OBJEXT) dlae2.$(OBJEXT) dlaebz.$(OBJEXT) \
+	dlaev2.$(OBJEXT) dlagtf.$(OBJEXT) dlagts.$(OBJEXT) \
+	dlamch.$(OBJEXT) dlansp.$(OBJEXT) dlanst.$(OBJEXT) \
+	dlapy2.$(OBJEXT) dlaqsp.$(OBJEXT) dlarf.$(OBJEXT) \
+	dlarfg.$(OBJEXT) dlarnv.$(OBJEXT) dlartg.$(OBJEXT) \
+	dlaruv.$(OBJEXT) dlascl.$(OBJEXT) dlaset.$(OBJEXT) \
+	dlasr.$(OBJEXT) dlasrt.$(OBJEXT) dlassq.$(OBJEXT) \
+	dlaswp.$(OBJEXT) dlatps.$(OBJEXT) dopgtr.$(OBJEXT) \
+	dopmtr.$(OBJEXT) dorg2l.$(OBJEXT) dorg2r.$(OBJEXT) \
+	dppcon.$(OBJEXT) dppequ.$(OBJEXT) dpprfs.$(OBJEXT) \
+	dppsv.$(OBJEXT) dppsvx.$(OBJEXT) dpptrf.$(OBJEXT) \
+	dpptrs.$(OBJEXT) drscl.$(OBJEXT) dspev.$(OBJEXT) \
+	dspevx.$(OBJEXT) dsptrd.$(OBJEXT) dstebz.$(OBJEXT) \
+	dstein.$(OBJEXT) dsteqr.$(OBJEXT) dsterf.$(OBJEXT) \
+	ieeeck.$(OBJEXT) ilaenv.$(OBJEXT)
+nodist_libiplapack_a_OBJECTS = $(am__objects_1)
+libiplapack_a_OBJECTS = $(nodist_libiplapack_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
 F77LD = $(F77)
 F77LINK = $(F77LD) $(AM_FFLAGS) $(FFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o \
 	$@
-SOURCES = $(libdummy_a_SOURCES)
-DIST_SOURCES = $(libdummy_a_SOURCES)
+SOURCES = $(nodist_libiplapack_a_SOURCES)
+DIST_SOURCES =
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -186,9 +203,59 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-noinst_LIBRARIES = libdummy.a
-libdummy_a_SOURCES = ipoma.f
-CLEANFILES = ipoma.f ipo sdipo
+noinst_LIBRARIES = libiplapack.a
+lapacksrc = dgesv.f \
+	dgetf2.f \
+	dgetrf.f \
+	dgetrs.f \
+	dlabad.f \
+	dlacon.f \
+	dlacpy.f \
+	dlae2.f \
+	dlaebz.f \
+	dlaev2.f \
+	dlagtf.f \
+	dlagts.f \
+	dlamch.f \
+	dlansp.f \
+	dlanst.f \
+	dlapy2.f \
+	dlaqsp.f \
+	dlarf.f \
+	dlarfg.f \
+	dlarnv.f \
+	dlartg.f \
+	dlaruv.f \
+	dlascl.f \
+	dlaset.f \
+	dlasr.f \
+	dlasrt.f \
+	dlassq.f \
+	dlaswp.f \
+	dlatps.f \
+	dopgtr.f \
+	dopmtr.f \
+	dorg2l.f \
+	dorg2r.f \
+	dppcon.f \
+	dppequ.f \
+	dpprfs.f \
+	dppsv.f \
+	dppsvx.f \
+	dpptrf.f \
+	dpptrs.f \
+	drscl.f \
+	dspev.f \
+	dspevx.f \
+	dsptrd.f \
+	dstebz.f \
+	dstein.f \
+	dsteqr.f \
+	dsterf.f \
+	ieeeck.f \
+	ilaenv.f
+
+nodist_libiplapack_a_SOURCES = $(lapacksrc)
 all: all-am
 
 .SUFFIXES:
@@ -202,9 +269,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  Apps/CUTErInterface/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  OTHERS/lapack/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  Apps/CUTErInterface/Makefile
+	  $(AUTOMAKE) --foreign  OTHERS/lapack/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -225,10 +292,10 @@ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 
 clean-noinstLIBRARIES:
 	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
-libdummy.a: $(libdummy_a_OBJECTS) $(libdummy_a_DEPENDENCIES) 
-	-rm -f libdummy.a
-	$(libdummy_a_AR) libdummy.a $(libdummy_a_OBJECTS) $(libdummy_a_LIBADD)
-	$(RANLIB) libdummy.a
+libiplapack.a: $(libiplapack_a_OBJECTS) $(libiplapack_a_DEPENDENCIES) 
+	-rm -f libiplapack.a
+	$(libiplapack_a_AR) libiplapack.a $(libiplapack_a_OBJECTS) $(libiplapack_a_LIBADD)
+	$(RANLIB) libiplapack.a
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -337,7 +404,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f $(CONFIG_CLEAN_FILES)
@@ -352,7 +418,7 @@ clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 distclean: distclean-am
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
-	distclean-tags
+	distclean-local distclean-tags
 
 dvi: dvi-am
 
@@ -394,40 +460,18 @@ uninstall-am: uninstall-info-am
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-noinstLIBRARIES ctags distclean distclean-compile \
-	distclean-generic distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-exec install-exec-am install-info \
-	install-info-am install-man install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
+	distclean-generic distclean-local distclean-tags distdir dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-data install-data-am install-exec install-exec-am \
+	install-info install-info-am install-man install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
 	uninstall-am uninstall-info-am
 
 
-ipoma.f: CUTErInterface.f
-	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
-	  touch ipoma.f; \
-	else \
-	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed > ipoma.f; \
-	fi
-
-ipo: ipo.pro
-	sed -f $$MYCUTER/double/config/script.sed $< > $@
-	chmod a+x $@
-
-sdipo: sdipo.pro
-	sed -f $$MYCUTER/double/config/script.sed $< > $@
-	chmod a+x $@
-
-cuter:	ipoma.o ipo sdipo
-	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
-	  echo CUTEr environment variables not set - cannot install ipoma.f; \
-	else \
-	  echo "-L$(libdir) -lipopt $(IPADDLIBS) $(CXXLIBS)" >$$MYCUTER/double/lib/ipo.liblist ;\
-	  cp ipoma.o $(MYCUTER)/double/bin/ipoma.o; \
-	  cp ipo $(MYCUTER)/bin/ipo ;\
-	  cp sdipo $(MYCUTER)/bin/sdipo ;\
-	fi
+distclean-local:
+	rm -f $(lapacksrc)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -18,7 +18,7 @@
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
-SOURCES = $(libdummy_a_SOURCES)
+SOURCES = $(nodist_libipblas_a_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -40,7 +40,45 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-subdir = Apps/CUTErInterface
+@BUILDBLAS_TRUE@am__append_1 = dasum.f \
+@BUILDBLAS_TRUE@	daxpy.f \
+@BUILDBLAS_TRUE@	dcopy.f \
+@BUILDBLAS_TRUE@	ddot.f \
+@BUILDBLAS_TRUE@	dgbmv.f \
+@BUILDBLAS_TRUE@	dgemm.f \
+@BUILDBLAS_TRUE@	dgemv.f \
+@BUILDBLAS_TRUE@	dger.f \
+@BUILDBLAS_TRUE@	dnrm2.f \
+@BUILDBLAS_TRUE@	drot.f \
+@BUILDBLAS_TRUE@	drotg.f \
+@BUILDBLAS_TRUE@	drotm.f \
+@BUILDBLAS_TRUE@	drotmg.f \
+@BUILDBLAS_TRUE@	dsbmv.f \
+@BUILDBLAS_TRUE@	dscal.f \
+@BUILDBLAS_TRUE@	dsdot.f \
+@BUILDBLAS_TRUE@	dspmv.f \
+@BUILDBLAS_TRUE@	dspr.f \
+@BUILDBLAS_TRUE@	dspr2.f \
+@BUILDBLAS_TRUE@	dswap.f \
+@BUILDBLAS_TRUE@	dsymm.f \
+@BUILDBLAS_TRUE@	dsymv.f \
+@BUILDBLAS_TRUE@	dsyr.f \
+@BUILDBLAS_TRUE@	dsyr2.f \
+@BUILDBLAS_TRUE@	dsyr2k.f \
+@BUILDBLAS_TRUE@	dsyrk.f \
+@BUILDBLAS_TRUE@	dtbmv.f \
+@BUILDBLAS_TRUE@	dtbsv.f \
+@BUILDBLAS_TRUE@	dtpmv.f \
+@BUILDBLAS_TRUE@	dtpsv.f \
+@BUILDBLAS_TRUE@	dtrmm.f \
+@BUILDBLAS_TRUE@	dtrmv.f \
+@BUILDBLAS_TRUE@	dtrsm.f \
+@BUILDBLAS_TRUE@	dtrsv.f \
+@BUILDBLAS_TRUE@	idamax.f \
+@BUILDBLAS_TRUE@	lsame.f \
+@BUILDBLAS_TRUE@	xerbla.f
+
+subdir = OTHERS/blas
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -50,17 +88,33 @@ mkinstalldirs = $(mkdir_p)
 CONFIG_HEADER = $(top_builddir)/inc/config.h
 CONFIG_CLEAN_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
-libdummy_a_AR = $(AR) $(ARFLAGS)
-libdummy_a_LIBADD =
-am_libdummy_a_OBJECTS = ipoma.$(OBJEXT)
-libdummy_a_OBJECTS = $(am_libdummy_a_OBJECTS)
+libipblas_a_AR = $(AR) $(ARFLAGS)
+libipblas_a_LIBADD =
+@BUILDBLAS_TRUE@am__objects_1 = dasum.$(OBJEXT) daxpy.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dcopy.$(OBJEXT) ddot.$(OBJEXT) dgbmv.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dgemm.$(OBJEXT) dgemv.$(OBJEXT) dger.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dnrm2.$(OBJEXT) drot.$(OBJEXT) drotg.$(OBJEXT) \
+@BUILDBLAS_TRUE@	drotm.$(OBJEXT) drotmg.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dsbmv.$(OBJEXT) dscal.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dsdot.$(OBJEXT) dspmv.$(OBJEXT) dspr.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dspr2.$(OBJEXT) dswap.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dsymm.$(OBJEXT) dsymv.$(OBJEXT) dsyr.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dsyr2.$(OBJEXT) dsyr2k.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dsyrk.$(OBJEXT) dtbmv.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dtbsv.$(OBJEXT) dtpmv.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dtpsv.$(OBJEXT) dtrmm.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dtrmv.$(OBJEXT) dtrsm.$(OBJEXT) \
+@BUILDBLAS_TRUE@	dtrsv.$(OBJEXT) idamax.$(OBJEXT) \
+@BUILDBLAS_TRUE@	lsame.$(OBJEXT) xerbla.$(OBJEXT)
+nodist_libipblas_a_OBJECTS = $(am__objects_1)
+libipblas_a_OBJECTS = $(nodist_libipblas_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
 F77LD = $(F77)
 F77LINK = $(F77LD) $(AM_FFLAGS) $(FFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o \
 	$@
-SOURCES = $(libdummy_a_SOURCES)
-DIST_SOURCES = $(libdummy_a_SOURCES)
+SOURCES = $(nodist_libipblas_a_SOURCES)
+DIST_SOURCES =
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -186,9 +240,9 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-noinst_LIBRARIES = libdummy.a
-libdummy_a_SOURCES = ipoma.f
-CLEANFILES = ipoma.f ipo sdipo
+iplibdir = $(top_builddir)/lib
+noinst_LIBRARIES = libipblas.a
+nodist_libipblas_a_SOURCES = $(am__append_1)
 all: all-am
 
 .SUFFIXES:
@@ -202,9 +256,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  Apps/CUTErInterface/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  OTHERS/blas/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  Apps/CUTErInterface/Makefile
+	  $(AUTOMAKE) --foreign  OTHERS/blas/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -225,10 +279,10 @@ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 
 clean-noinstLIBRARIES:
 	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
-libdummy.a: $(libdummy_a_OBJECTS) $(libdummy_a_DEPENDENCIES) 
-	-rm -f libdummy.a
-	$(libdummy_a_AR) libdummy.a $(libdummy_a_OBJECTS) $(libdummy_a_LIBADD)
-	$(RANLIB) libdummy.a
+libipblas.a: $(libipblas_a_OBJECTS) $(libipblas_a_DEPENDENCIES) 
+	-rm -f libipblas.a
+	$(libipblas_a_AR) libipblas.a $(libipblas_a_OBJECTS) $(libipblas_a_LIBADD)
+	$(RANLIB) libipblas.a
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -337,7 +391,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f $(CONFIG_CLEAN_FILES)
@@ -403,31 +456,6 @@ uninstall-am: uninstall-info-am
 	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
 	uninstall-am uninstall-info-am
 
-
-ipoma.f: CUTErInterface.f
-	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
-	  touch ipoma.f; \
-	else \
-	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed > ipoma.f; \
-	fi
-
-ipo: ipo.pro
-	sed -f $$MYCUTER/double/config/script.sed $< > $@
-	chmod a+x $@
-
-sdipo: sdipo.pro
-	sed -f $$MYCUTER/double/config/script.sed $< > $@
-	chmod a+x $@
-
-cuter:	ipoma.o ipo sdipo
-	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
-	  echo CUTEr environment variables not set - cannot install ipoma.f; \
-	else \
-	  echo "-L$(libdir) -lipopt $(IPADDLIBS) $(CXXLIBS)" >$$MYCUTER/double/lib/ipo.liblist ;\
-	  cp ipoma.o $(MYCUTER)/double/bin/ipoma.o; \
-	  cp ipo $(MYCUTER)/bin/ipo ;\
-	  cp sdipo $(MYCUTER)/bin/sdipo ;\
-	fi
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

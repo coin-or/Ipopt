@@ -14,11 +14,11 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2003, International Business Machines and others.
+# Copyright (C) 2003, International Business Machines and others
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
-SOURCES = $(libdummy_a_SOURCES)
+SOURCES = $(nodist_libiphsl_a_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -40,7 +40,9 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-subdir = Apps/CUTErInterface
+@BUILDMA27_TRUE@am__append_1 = ma27ad.f
+@BUILDMC19_TRUE@am__append_2 = mc19ad.f
+subdir = OTHERS/HSL
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -48,19 +50,21 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(mkdir_p)
 CONFIG_HEADER = $(top_builddir)/inc/config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = fd05ad.f
 LIBRARIES = $(noinst_LIBRARIES)
-libdummy_a_AR = $(AR) $(ARFLAGS)
-libdummy_a_LIBADD =
-am_libdummy_a_OBJECTS = ipoma.$(OBJEXT)
-libdummy_a_OBJECTS = $(am_libdummy_a_OBJECTS)
+libiphsl_a_AR = $(AR) $(ARFLAGS)
+libiphsl_a_LIBADD =
+@BUILDMA27_TRUE@am__objects_1 = ma27ad.$(OBJEXT)
+@BUILDMC19_TRUE@am__objects_2 = mc19ad.$(OBJEXT)
+nodist_libiphsl_a_OBJECTS = $(am__objects_1) $(am__objects_2)
+libiphsl_a_OBJECTS = $(nodist_libiphsl_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
 F77LD = $(F77)
 F77LINK = $(F77LD) $(AM_FFLAGS) $(FFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o \
 	$@
-SOURCES = $(libdummy_a_SOURCES)
-DIST_SOURCES = $(libdummy_a_SOURCES)
+SOURCES = $(nodist_libiphsl_a_SOURCES)
+DIST_SOURCES =
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -185,10 +189,10 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
+iplibdir = $(top_builddir)/lib
 AUTOMAKE_OPTIONS = foreign
-noinst_LIBRARIES = libdummy.a
-libdummy_a_SOURCES = ipoma.f
-CLEANFILES = ipoma.f ipo sdipo
+noinst_LIBRARIES = libiphsl.a
+nodist_libiphsl_a_SOURCES = $(am__append_1) $(am__append_2)
 all: all-am
 
 .SUFFIXES:
@@ -202,9 +206,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  Apps/CUTErInterface/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  OTHERS/HSL/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  Apps/CUTErInterface/Makefile
+	  $(AUTOMAKE) --foreign  OTHERS/HSL/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -225,10 +229,10 @@ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 
 clean-noinstLIBRARIES:
 	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
-libdummy.a: $(libdummy_a_OBJECTS) $(libdummy_a_DEPENDENCIES) 
-	-rm -f libdummy.a
-	$(libdummy_a_AR) libdummy.a $(libdummy_a_OBJECTS) $(libdummy_a_LIBADD)
-	$(RANLIB) libdummy.a
+libiphsl.a: $(libiphsl_a_OBJECTS) $(libiphsl_a_DEPENDENCIES) 
+	-rm -f libiphsl.a
+	$(libiphsl_a_AR) libiphsl.a $(libiphsl_a_OBJECTS) $(libiphsl_a_LIBADD)
+	$(RANLIB) libiphsl.a
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -337,7 +341,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f $(CONFIG_CLEAN_FILES)
@@ -403,31 +406,6 @@ uninstall-am: uninstall-info-am
 	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
 	uninstall-am uninstall-info-am
 
-
-ipoma.f: CUTErInterface.f
-	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
-	  touch ipoma.f; \
-	else \
-	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed > ipoma.f; \
-	fi
-
-ipo: ipo.pro
-	sed -f $$MYCUTER/double/config/script.sed $< > $@
-	chmod a+x $@
-
-sdipo: sdipo.pro
-	sed -f $$MYCUTER/double/config/script.sed $< > $@
-	chmod a+x $@
-
-cuter:	ipoma.o ipo sdipo
-	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
-	  echo CUTEr environment variables not set - cannot install ipoma.f; \
-	else \
-	  echo "-L$(libdir) -lipopt $(IPADDLIBS) $(CXXLIBS)" >$$MYCUTER/double/lib/ipo.liblist ;\
-	  cp ipoma.o $(MYCUTER)/double/bin/ipoma.o; \
-	  cp ipo $(MYCUTER)/bin/ipo ;\
-	  cp sdipo $(MYCUTER)/bin/sdipo ;\
-	fi
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

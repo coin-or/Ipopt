@@ -8,7 +8,9 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = Common LinAlgImpl Algorithm PDSystemImpl Apps
+SUBDIRS = OTHERS Common LinAlgImpl Algorithm PDSystemImpl Apps
+
+IPALLLIBS = @IPALLLIBS@
 
 EXTRA_DIST = Interfaces/IpEqMultCalculator.hpp \
 	Interfaces/IpMatrix.hpp \
@@ -29,12 +31,6 @@ doc:
 tmpdir = tmpdir
 
 libipopt = libipopt.a
-
-IPALLLIBS = Algorithm/libipoptalg.a \
-	Apps/StdInterface/libstdinterface.a \
-	Common/libcommon.a \
-	LinAlgImpl/Serial/liblaserial.a \
-	PDSystemImpl/PDFullSpace/libpdfullspace.a
 
 install-exec-local:
 	set -x; \
