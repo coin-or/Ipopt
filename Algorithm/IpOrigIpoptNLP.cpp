@@ -172,7 +172,9 @@ namespace Ipopt
 
   Number OrigIpoptNLP::f(const Vector& x)
   {
+    DBG_START_METH("OrigIpoptNLP::f", dbg_verbosity);
     Number ret = 0.0;
+    DBG_PRINT((1, "x.Tag = %d\n", x.GetTag()));
     if (!f_cache_.GetCachedResult1Dep(ret, &x)) {
       f_evals_++;
       bool success = nlp_->Eval_f(x, ret);
