@@ -77,6 +77,21 @@ namespace Ipopt
     /** @name Algorithmic parameters */
     //@{
     Number laminitmax_;
+    /** Maximal allowed value of a bound multiplier after restoration
+     *  phase.
+     */
+    Number boundmultinitmax_;
+    //@}
+
+    /** @name Auxilliary methods */
+    //@{
+    /** Method for computing "primal-dual" step in bound multipliers,
+     *  given step in slacks.
+     */
+    void ComputeBoundMultiplierStep(Vector& delta_z,
+				    const Vector& curr_z,
+				    const Vector& curr_slack,
+				    const Vector& trial_slack);
     //@}
   };
 

@@ -12,7 +12,7 @@
 
 namespace Ipopt
 {
-  static const Index dbg_verbosity = 0;
+  DBG_SET_VERBOSITY(0);
 
   MinC_1NrmRestorationPhase::MinC_1NrmRestorationPhase
   (IpoptAlgorithm& resto_alg,
@@ -43,6 +43,15 @@ namespace Ipopt
     }
     else {
       laminitmax_ = 1e3;
+    }
+
+    if (options.GetNumericValue("boundmultinitmax", value, prefix)) {
+      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"boundmultinitmax\": Value must be non-negative.");
+      boundmultinitmax_ = value;
+    }
+    else {
+      boundmultinitmax_ = 1e3;
     }
 
     bool retvalue = true;
@@ -88,30 +97,30 @@ namespace Ipopt
     int retval=-1;
 
     if (resto_status == IpoptAlgorithm::SUCCESS) {
-      if (Jnlst().ProduceOutput(J_DETAILED, J_SOLUTION)) {
-        Jnlst().Printf(J_DETAILED, J_SOLUTION,
+      if (Jnlst().ProduceOutput(J_DETAILED, J_LINE_SEARCH)) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "\nRESTORATION PHASE RESULTS\n");
-        Jnlst().Printf(J_DETAILED, J_SOLUTION,
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "\n\nOptimal solution found! \n");
-        Jnlst().Printf(J_DETAILED, J_SOLUTION,
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "Optimal Objective Value = %.16E\n", resto_ip_cq->curr_f());
-        Jnlst().Printf(J_DETAILED, J_SOLUTION,
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "Number of Iterations = %d\n", resto_ip_data->iter_count());
       }
-      if (Jnlst().ProduceOutput(J_VECTOR, J_SOLUTION)) {
-        Jnlst().PrintVector(J_VECTOR, J_SOLUTION,
+      if (Jnlst().ProduceOutput(J_VECTOR, J_LINE_SEARCH)) {
+        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
                             "x", *resto_ip_data->curr_x());
-        Jnlst().PrintVector(J_VECTOR, J_SOLUTION,
+        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
                             "y_c", *resto_ip_data->curr_y_c());
-        Jnlst().PrintVector(J_VECTOR, J_SOLUTION,
+        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
                             "y_d", *resto_ip_data->curr_y_d());
-        Jnlst().PrintVector(J_VECTOR, J_SOLUTION,
+        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
                             "z_L", *resto_ip_data->curr_z_L());
-        Jnlst().PrintVector(J_VECTOR, J_SOLUTION,
+        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
                             "z_U", *resto_ip_data->curr_z_U());
-        Jnlst().PrintVector(J_VECTOR, J_SOLUTION,
+        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
                             "v_L", *resto_ip_data->curr_v_L());
-        Jnlst().PrintVector(J_VECTOR, J_SOLUTION,
+        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
                             "v_U", *resto_ip_data->curr_v_U());
       }
 
@@ -137,23 +146,92 @@ namespace Ipopt
       SmartPtr<const Vector> s_only = resto_ip_data->curr_s();
       IpData().SetTrialPrimalVariablesFromPtr(x_only, s_only);
 
+      // Update the bound multiplers, pretending that the entire
+      // progress in x and s in the restoration phase has been one
+      // [rimal-dual Newton step (and therefore the result of solving
+      // an augmented system)
+      SmartPtr<Vector> delta_z_L = IpData().curr_z_L()->MakeNew();
+      SmartPtr<Vector> delta_z_U = IpData().curr_z_U()->MakeNew();
+      SmartPtr<Vector> delta_v_L = IpData().curr_v_L()->MakeNew();
+      SmartPtr<Vector> delta_v_U = IpData().curr_v_U()->MakeNew();
+      ComputeBoundMultiplierStep(*delta_z_L, *IpData().curr_z_L(),
+				 *IpCq().curr_slack_x_L(),
+				 *IpCq().trial_slack_x_L());
+      ComputeBoundMultiplierStep(*delta_z_U, *IpData().curr_z_U(),
+				 *IpCq().curr_slack_x_U(),
+				 *IpCq().trial_slack_x_U());
+      ComputeBoundMultiplierStep(*delta_v_L, *IpData().curr_v_L(),
+				 *IpCq().curr_slack_s_L(),
+				 *IpCq().trial_slack_s_L());
+      ComputeBoundMultiplierStep(*delta_v_U, *IpData().curr_v_U(),
+				 *IpCq().curr_slack_s_U(),
+				 *IpCq().trial_slack_s_U());
+
+      DBG_PRINT_VECTOR(1, "delta_z_L", *delta_z_L);
+      DBG_PRINT_VECTOR(1, "delta_z_U", *delta_z_U);
+      DBG_PRINT_VECTOR(1, "delta_v_L", *delta_v_L);
+      DBG_PRINT_VECTOR(1, "delta_v_U", *delta_v_U);
+
+      Number alpha_dual = IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
+							*delta_z_L,
+							*delta_z_U,
+							*delta_v_L,
+							*delta_v_U);
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+		     "Step size for bound multipliers: %8.2e\n", alpha_dual);
+     
+      IpData().SetTrialBoundMultipliersFromStep(alpha_dual,
+						*delta_z_L,
+						*delta_z_U,
+						*delta_v_L,
+						*delta_v_U);
+      
+#ifdef olddd
+      // DELETEME
+      // ToDo: For the bound multipliers, for now we just keep the
+      // current ones
+      IpData().SetTrialBoundMultipliersFromPtr(IpData().curr_z_L(),
+          IpData().curr_z_U(),
+          IpData().curr_v_L(),
+          IpData().curr_v_U());
+#endif
+
+      // ToDo: Check what to do here:
+      Number boundmultmax = Max(IpData().trial_z_L()->Amax(),
+				IpData().trial_z_U()->Amax(),
+				IpData().trial_v_L()->Amax(),
+				IpData().trial_v_U()->Amax());
+      if (boundmultmax > boundmultinitmax_) {
+	Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+		       "Bound multipliers after restoration phase too large (max=%8.2e). Set all to 1.\n",
+		       boundmultmax);
+	SmartPtr<Vector> new_z_L = IpData().curr_z_L()->MakeNew();
+	SmartPtr<Vector> new_z_U = IpData().curr_z_U()->MakeNew();
+	SmartPtr<Vector> new_v_L = IpData().curr_v_L()->MakeNew();
+	SmartPtr<Vector> new_v_U = IpData().curr_v_U()->MakeNew();
+	new_z_L->Set(1.0);
+	new_z_U->Set(1.0);
+	new_v_L->Set(1.0);
+	new_v_U->Set(1.0);      
+	IpData().SetTrialBoundMultipliersFromPtr(GetRawPtr(new_z_L), GetRawPtr(new_z_U),
+						 GetRawPtr(new_v_L), GetRawPtr(new_v_U));
+	
+      }
       // Recompute the equality constraint multipliers as least square estimate
       if (IsValid(eq_mult_calculator_) && laminitmax_>0.) {
         // First move all the trial data into the current fields, since
         // those values are needed to compute the initial values for
         // the multipliers
+        IpData().CopyTrialToCurrent();
         SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
         SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
-        IpData().CopyTrialToCurrent();
-        y_c = IpData().curr_y_c()->MakeNew();
-        y_d = IpData().curr_y_d()->MakeNew();
         bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
         if (!retval) {
           y_c->Set(0.0);
           y_d->Set(0.0);
         }
         else {
-          Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                          "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
                          y_c->Amax(), y_d->Amax());
           Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
@@ -175,13 +253,6 @@ namespace Ipopt
       DBG_PRINT_VECTOR(2, "y_c", *IpData().curr_y_c());
       DBG_PRINT_VECTOR(2, "y_d", *IpData().curr_y_d());
 
-      // ToDo: For the bound multipliers, for now we just keep the
-      // current ones
-      IpData().SetTrialBoundMultipliersFromPtr(IpData().curr_z_L(),
-          IpData().curr_z_U(),
-          IpData().curr_v_L(),
-          IpData().curr_v_U());
-
       IpData().Set_iter_count(resto_ip_data->iter_count()-1);
       // Skip the next line, because it would just replicate the first
       // on during the restoration phase.
@@ -189,6 +260,21 @@ namespace Ipopt
     }
 
     return (retval == 0);
+  }
+
+  void MinC_1NrmRestorationPhase::ComputeBoundMultiplierStep(Vector& delta_z,
+							     const Vector& curr_z,
+							     const Vector& curr_slack,
+							     const Vector& trial_slack)
+  {
+    Number mu = IpData().curr_mu();
+
+    delta_z.Copy(curr_slack);
+    delta_z.Axpy(-1., trial_slack);
+    delta_z.ElementWiseMultiply(curr_z);
+    delta_z.AddScalar(mu);
+    delta_z.ElementWiseDivide(curr_slack);
+    delta_z.Axpy(-1., curr_z);
   }
 
 } // namespace Ipopt
