@@ -319,7 +319,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os AR ARFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT F77 FFLAGS ac_ct_F77 FLIBS IPADDLIBS ASLLIB CPP EGREP CXXLIBS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os AR ARFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT F77 FFLAGS ac_ct_F77 FLIBS IPADDLIBS ASLMAKEFLAGS ASLMAKEFILECMDS CPP EGREP CXXLIBS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDLAPACK_TRUE BUILDLAPACK_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDLAPACKDIR_TRUE BUILDLAPACKDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE ASLLIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -800,6 +800,10 @@ ac_env_FFLAGS_set=${FFLAGS+set}
 ac_env_FFLAGS_value=$FFLAGS
 ac_cv_env_FFLAGS_set=${FFLAGS+set}
 ac_cv_env_FFLAGS_value=$FFLAGS
+ac_env_ASLMAKEFLAGS_set=${ASLMAKEFLAGS+set}
+ac_env_ASLMAKEFLAGS_value=$ASLMAKEFLAGS
+ac_cv_env_ASLMAKEFLAGS_set=${ASLMAKEFLAGS+set}
+ac_cv_env_ASLMAKEFLAGS_value=$ASLMAKEFLAGS
 ac_env_CPP_set=${CPP+set}
 ac_env_CPP_value=$CPP
 ac_cv_env_CPP_set=${CPP+set}
@@ -899,8 +903,9 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-blas             specify BLAS library (or BUILD for compilation)
   --with-lapack           specify LAPACK library (or BUILD for compilation)
-  --with-hsl              specify Harwell library
-  --with-asl              specify AMPL solver library
+  --with-hsl              specify Harwell library (or BUILD for compilation)
+  --with-asldir           specify absolute path to AMPL solver directory (or
+                          BUILD for compilation, or "no" for disabling AMPL)
 
 Some influential environment variables:
   AR          Command for handling archives (default is `ar')
@@ -915,6 +920,9 @@ Some influential environment variables:
   CXXFLAGS    C++ compiler flags
   F77         Fortran 77 compiler command
   FFLAGS      Fortran 77 compiler flags
+  ASLMAKEFLAGS
+              Compilation flags necessary for compiling the AMPL solver
+              library
   CPP         C preprocessor
   CXXLIBS     Libraries necessary for linking C++ code with Fortran compiler
 
@@ -1463,9 +1471,9 @@ else
   debugcompile=false
 fi;
 
-######################
-# C Compiler Options #
-######################
+####################
+# Compiler Options #
+####################
 
 if test "$debugcompile" = "true"; then
 
@@ -3688,7 +3696,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3691:" \
+echo "$as_me:3699:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -3885,7 +3893,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:3888: \"$ac_link\") >&5
+(eval echo $as_me:3896: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -3963,7 +3971,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:3966: \"$ac_link\") >&5
+(eval echo $as_me:3974: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4669,6 +4677,8 @@ IPADDLIBS=
 #  BLAS  #
 ##########
 
+ipblaslibdir="\$(top_builddir)/OTHERS/blas"
+
 
 # Check whether --with-blas or --without-blas was given.
 if test "${with_blas+set}" = set; then
@@ -4939,6 +4949,11 @@ fi
 ##########
 # LAPACK #
 ##########
+
+iplapacklibdir="\$(top_builddir)/OTHERS/lapack"
+lapackdir=OTHERS/lapack/LAPACK/SRC
+lapacksrcdir=$srcdir/$lapackdir
+lapackobjdir=OTHERS/lapack
 
 
 # Check whether --with-lapack or --without-lapack was given.
@@ -5250,9 +5265,18 @@ fi
   fi
 fi
 
-#######
-# HSL #
-#######
+#######################
+# HARWELL SUBROUTINES #
+#######################
+
+hslsrcdir="$srcdir/OTHERS/HSL"
+hsllibdir="\$(top_builddir)/OTHERS/HSL"
+
+
+
+
+{ echo "$as_me:$LINENO: Checking for Harwell subroutine library" >&5
+echo "$as_me: Checking for Harwell subroutine library" >&6;}
 
 
 # Check whether --with-hsl or --without-hsl was given.
@@ -5260,17 +5284,137 @@ if test "${with_hsl+set}" = set; then
   withval="$with_hsl"
   use_hsl=$withval
 else
-  use_hsl=
+  use_hsl=BUILD
 fi;
-# Check if user supplied option makes sense
-if test ! -z "$use_hsl"; then
-  echo "$as_me:$LINENO: checking whether user supplied HSLLIB=\"$use_hsl\" works" >&5
-echo $ECHO_N "checking whether user supplied HSLLIB=\"$use_hsl\" works... $ECHO_C" >&6
+
+if test "$use_hsl" = BUILD; then
+# Check which files are available
+  as_ac_File=`echo "ac_cv_file_$hslsrcdir/ma27ad.f" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $hslsrcdir/ma27ad.f" >&5
+echo $ECHO_N "checking for $hslsrcdir/ma27ad.f... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$hslsrcdir/ma27ad.f"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MA27 1
+_ACEOF
+ use_MA27=BUILD
+else
+  use_MA27=
+fi
+
+  if test "$use_MA27" = BUILD; then
+    echo "$as_me:$LINENO: checking whether MA27 is threadsafe" >&5
+echo $ECHO_N "checking whether MA27 is threadsafe... $ECHO_C" >&6
+    if grep MA27UD $hslsrcdir/ma27ad.f >&5 ; then
+      echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+      echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+
+cat >>confdefs.h <<\_ACEOF
+#define OLD_MA27
+_ACEOF
+
+    fi
+  fi
+  as_ac_File=`echo "ac_cv_file_$hslsrcdir/mc19ad.f" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $hslsrcdir/mc19ad.f" >&5
+echo $ECHO_N "checking for $hslsrcdir/mc19ad.f... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$hslsrcdir/mc19ad.f"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MC19 1
+_ACEOF
+ use_MC19=BUILD
+else
+  use_MC19=
+fi
+
+else
   LIBS="$use_hsl $LIBS"
   IPADDLIBS="$use_hsl $IPADDLIBS"
-  cat >conftest.$ac_ext <<_ACEOF
+  echo "$as_me:$LINENO: checking for ma27ad in $use_hsl" >&5
+echo $ECHO_N "checking for ma27ad in $use_hsl... $ECHO_C" >&6
+          use_MA27=
+          cat >conftest.$ac_ext <<_ACEOF
       program main
-      call ma27ad
+      call ma27ad()
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MA27 1
+_ACEOF
+ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; use_MA27=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+  if test "$use_MA27" = "yes"; then
+    echo "$as_me:$LINENO: checking whether MA27 is threadsafe" >&5
+echo $ECHO_N "checking whether MA27 is threadsafe... $ECHO_C" >&6
+    cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call MA27UD()
       end
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
@@ -5302,15 +5446,130 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; { { echo "$as_me:$LINENO: error: user supplied HSL library \"$use_hsl\" does not work" >&5
-echo "$as_me: error: user supplied HSL library \"$use_hsl\" does not work" >&2;}
-   { (exit 1); exit 1; }; }
+echo "${ECHO_T}no" >&6
+
+cat >>confdefs.h <<\_ACEOF
+#define OLD_MA27
+_ACEOF
+
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
+  fi
+  echo "$as_me:$LINENO: checking for mc19ad in $use_hsl" >&5
+echo $ECHO_N "checking for mc19ad in $use_hsl... $ECHO_C" >&6
+          use_MC19=
+          cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call mc19ad()
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MC19 1
+_ACEOF
+ echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; use_MC19=yes
 else
-  LIBS="-L${HOME}/lib -lhsl $LIBS"
-  IPADDLIBS="-L${HOME}/lib -lhsl $IPADDLIBS"
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+
+# Try to make sure the correct FD05 routine is there (if needed)
+if test "$use_MA48" = BUILD || test "$use_MA57" = BUILD; then
+  as_ac_File=`echo "ac_cv_file_$hslsrcdir/fd05ad.f" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $hslsrcdir/fd05ad.f" >&5
+echo $ECHO_N "checking for $hslsrcdir/fd05ad.f... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$hslsrcdir/fd05ad.f"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  use_FD05="fd05ad.f"
+else
+  use_FD05=
+fi
+
+  if test -z "$use_FD05"; then
+    case $build in
+      rs6000-* | powerpc*)
+                use_FD05="fd05adj.f";;
+      vax-*)    use_FD05="fd05adv.f";;
+      hp*)      use_FD05="fd05adh.f";;
+      *-osf*)   use_FD05="fd05ada.f";;
+      *ymp*)    use_FD05="fd05adc.f";;
+      *)        use_FD05="fd05ads.f";;
+    esac
+    { echo "$as_me:$LINENO: WARNING: The file \`fd05ad.f' is not provided.  My guess for this system is that you should use \`$use_FD05', but you better verify this!!!" >&5
+echo "$as_me: WARNING: The file \`fd05ad.f' is not provided.  My guess for this system is that you should use \`$use_FD05', but you better verify this!!!" >&2;}
+    as_ac_File=`echo "ac_cv_file_$hslsrcdir/$use_FD05" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $hslsrcdir/$use_FD05" >&5
+echo $ECHO_N "checking for $hslsrcdir/$use_FD05... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$hslsrcdir/$use_FD05"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: File $use_FD05 not found" >&5
+echo "$as_me: error: File $use_FD05 not found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+              ac_config_links="$ac_config_links OTHERS/HSL/fd05ad.f:OTHERS/HSL/$use_FD05"
+
+  fi
 fi
 
 ac_ext=c
@@ -5320,30 +5579,298 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-
 # For the remaining tests we need to include FLIBS into LIBS, so that
 # the C compiler can link programs
 LIBS="$LIBS $FLIBS"
 
-#######
-# ASL #
-#######
+#######################
+# AMPL SOLVER LIBRARY #
+#######################
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
+asldir=OTHERS/ASL/solvers
+aslsrcdir=$srcdir/$asldir
 
-# Check whether --with-asl or --without-asl was given.
-if test "${with_asl+set}" = set; then
-  withval="$with_asl"
-  use_asl=$withval
+
+# Check whether --with-asldir or --without-asldir was given.
+if test "${with_asldir+set}" = set; then
+  withval="$with_asldir"
+  use_asldir=$withval
 else
-  use_asl=
+  use_asldir=
 fi;
-# Check if user supplied option makes sense
-if test ! -z "$use_asl"; then
-  ASLLIB="$use_asl"
+
+if test "$use_asldir" = BUILD; then
+  as_ac_File=`echo "ac_cv_file_$aslsrcdir/asl.h" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $aslsrcdir/asl.h" >&5
+echo $ECHO_N "checking for $aslsrcdir/asl.h... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  ASLLIB="\$(top_builddir)/OTHERS/ASL/amplsolver.a -ldl"
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$aslsrcdir/asl.h"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
 fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for asldir, but sources are missing" >&5
+echo "$as_me: error: option \"BUILD\" specified for asldir, but sources are missing" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+elif test -z "$use_asldir"; then
+ # try to find sources - if not given don't compile
+  as_ac_File=`echo "ac_cv_file_$aslsrcdir/asl.h" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $aslsrcdir/asl.h" >&5
+echo $ECHO_N "checking for $aslsrcdir/asl.h... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$aslsrcdir/asl.h"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  use_asldir=BUILD
+else
+  use_asldir=no
+fi
+
+elif test ! "$use_asldir" = "no"; then
+  as_ac_File=`echo "ac_cv_file_$use_asldir/amplsolver.a" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $use_asldir/amplsolver.a" >&5
+echo $ECHO_N "checking for $use_asldir/amplsolver.a... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$use_asldir/amplsolver.a"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: ASL directory \"$use_asldir\" specified, but library missing" >&5
+echo "$as_me: error: ASL directory \"$use_asldir\" specified, but library missing" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+  as_ac_File=`echo "ac_cv_file_$use_asldir/asl.h" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $use_asldir/asl.h" >&5
+echo $ECHO_N "checking for $use_asldir/asl.h... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$use_asldir/asl.h"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: ASL directory \"$use_asldir\" specified, but header files are missing" >&5
+echo "$as_me: error: ASL directory \"$use_asldir\" specified, but header files are missing" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+  use_asldir=`cd $use_asldir; pwd`
+  case $build in
+    *-cygwin*) use_asldir=`cygpath -w $use_asldir` ;;
+  esac
+fi
+
+if test "$use_asldir" = BUILD; then
+  if test -z "$ASLMAKEFLAGS" ; then
+    asladdcflags=
+    case $build in
+      *-linux*) asladdcflags="-DNON_STDIO"
+                case $CC in
+                  pgcc | */pgcc)
+                     asladdcflags="$asladdcflags -DNO_fpu_control";;
+                esac
+                  ;;
+      *-cygwin*) asladdcflags="-DNON_STDIO"
+                if test "$use_mingw" = yes; then
+                  asladdcflags="$asladdcflags -DNo_Control87 -DNO_RUSAGE"
+                fi
+                ;;
+    esac
+#    ASLMAKEFLAGS="CFLAGS=\"\$(CFLAGS) $asladdcflags\""
+# Do the following for now to make sure we are not interupting compilation
+# of ASL because of warning message:
+    bla=
+    for i in $CFLAGS; do
+      if test ! "$i" = "-Werror"; then
+        bla="$bla $i"
+      fi
+    done
+    ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
+
+    if test $USE_MAINTAINER_MODE = 'yes'; then
+      { echo "$as_me:$LINENO: WARNING: Assuming that maintainer mode is only used for GNU make" >&5
+echo "$as_me: WARNING: Assuming that maintainer mode is only used for GNU make" >&2;}
+      ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
+    else
+      echo "$as_me:$LINENO: checking whether $am_make understands the \`-j 1' flag" >&5
+echo $ECHO_N "checking whether $am_make understands the \`-j 1' flag... $ECHO_C" >&6
+      cat >conftest.$ac_ext <<_ACEOF
+bla:
+_ACEOF
+      if ($am_make -f conftest.c -j 1 bla >&5) 2>&5 ; then
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+        ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
+      else
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+        echo "$as_me:$LINENO: checking whether $am_make understands the \`-J 1' flag" >&5
+echo $ECHO_N "checking whether $am_make understands the \`-J 1' flag... $ECHO_C" >&6
+        if ($am_make -f conftest.c -J 1 bla >&5) 2>&5 ; then
+          echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          ASLMAKEFLAGS="-J 1 $ASLMAKEFLAGS"
+        else
+          echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+        fi
+      fi
+    fi
+  fi
+  ASLMAKEFILECMDS="sed 's/ar ruv/$AR ruv/' makefile.u"
+  if test "$EXEEXT" = ".exe"; then
+    ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's/a.out/a.exe/'"
+  fi
+  case $build in
+    *-cygwin*) ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's%s/System_details/\`uname -sr\`/%s|System_details|\`uname -sr\`|%'" ;;
+  esac
+  ASLMAKEFILECMDS="$ASLMAKEFILECMDS > makefile"
+fi
+
+
+
+if test ! "$use_asldir" = no; then
+  echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
+echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6
+if test "${ac_cv_lib_dl_dlopen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldl  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char dlopen ();
+#ifdef F77_DUMMY_MAIN
+
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+
+#endif
+int
+main ()
+{
+dlopen ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_dl_dlopen=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_dl_dlopen=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
+echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6
+if test $ac_cv_lib_dl_dlopen = yes; then
+  LIBS="$LIBS -ldl"
+fi
+
+fi
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 ######################################
@@ -7304,7 +7831,154 @@ esac
 
 AMPL_CPPFLAGS="-I\$(top_builddir)/OTHERS/ASL -I\$(top_srcdir)/OTHERS/ASL/solvers"
 
-                                                                                                                                            ac_config_files="$ac_config_files Makefile Common/Makefile Algorithm/Makefile LinAlgImpl/Makefile LinAlgImpl/Serial/Makefile PDSystemImpl/Makefile PDSystemImpl/PDFullSpace/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/StdInterface/Makefile Apps/CompositeInterface/Makefile Apps/CUTErInterface/Makefile Examples/Fortran_example/Makefile Examples/Cpp_example/Makefile"
+#########################
+# Makefile conditionals #
+#########################
+
+# The following variable collects the names of libraries that should be
+# included into libipopt.a
+
+IPALLLIBS="Algorithm/libipoptalg.a Apps/StdInterface/libstdinterface.a Common/libcommon.a LinAlgImpl/Serial/liblaserial.a PDSystemImpl/PDFullSpace/libpdfullspace.a"
+
+
+
+if test "$use_blas" = "BUILD"; then
+  BUILDBLAS_TRUE=
+  BUILDBLAS_FALSE='#'
+else
+  BUILDBLAS_TRUE='#'
+  BUILDBLAS_FALSE=
+fi
+
+if test "$use_blas" = BUILD; then
+  LIBS="$ipblaslibdir/libipblas.a $LIBS"
+  IPALLLIBS="OTHERS/blas/libipblas.a $IPALLLIBS"
+fi
+
+
+
+if test "$use_lapack" = "BUILD"; then
+  BUILDLAPACK_TRUE=
+  BUILDLAPACK_FALSE='#'
+else
+  BUILDLAPACK_TRUE='#'
+  BUILDLAPACK_FALSE=
+fi
+
+if test "$use_lapack" = BUILD; then
+  LIBS="$iplapacklibdir/libiplapack.a $LIBS"
+  IPALLLIBS="OTHERS/lapack/libiplapack.a $IPALLLIBS"
+  for file in dgesv.f dgetf2.f dgetrf.f dgetrs.f dlabad.f dlacon.f dlacpy.f dlae2.f dlaebz.f dlaev2.f dlagtf.f dlagts.f dlamch.f dlansp.f dlanst.f dlapy2.f dlaqsp.f dlarf.f dlarfg.f dlarnv.f dlartg.f dlaruv.f dlascl.f dlaset.f dlasr.f dlasrt.f dlassq.f dlaswp.f dlatps.f dopgtr.f dopmtr.f dorg2l.f dorg2r.f dppcon.f dppequ.f dpprfs.f dppsv.f dppsvx.f dpptrf.f dpptrs.f drscl.f dspev.f dspevx.f dsptrd.f dstebz.f dstein.f dsteqr.f dsterf.f ieeeck.f ilaenv.f; do
+              ac_config_links="$ac_config_links $lapackobjdir/$file:$lapackdir/$file"
+
+  done
+fi
+
+
+
+if test "$use_hsl" = "BUILD"; then
+  BUILDHSL_TRUE=
+  BUILDHSL_FALSE='#'
+else
+  BUILDHSL_TRUE='#'
+  BUILDHSL_FALSE=
+fi
+
+if test "$use_hsl" = BUILD ; then
+#  LDFLAGS="-L$hsllibdir $LDFLAGS"
+  LIBS="$hsllibdir/libiphsl.a $LIBS"
+  IPALLLIBS="OTHERS/HSL/libiphsl.a $IPALLLIBS"
+fi
+
+
+if test "$use_MA27" = BUILD; then
+  BUILDMA27_TRUE=
+  BUILDMA27_FALSE='#'
+else
+  BUILDMA27_TRUE='#'
+  BUILDMA27_FALSE=
+fi
+
+
+
+if test "$use_MC19" = BUILD; then
+  BUILDMC19_TRUE=
+  BUILDMC19_FALSE='#'
+else
+  BUILDMC19_TRUE='#'
+  BUILDMC19_FALSE=
+fi
+
+
+
+
+if test "$use_blas" = BUILD; then
+  BUILDBLASDIR_TRUE=
+  BUILDBLASDIR_FALSE='#'
+else
+  BUILDBLASDIR_TRUE='#'
+  BUILDBLASDIR_FALSE=
+fi
+
+
+
+if test "$use_lapack" = BUILD; then
+  BUILDLAPACKDIR_TRUE=
+  BUILDLAPACKDIR_FALSE='#'
+else
+  BUILDLAPACKDIR_TRUE='#'
+  BUILDLAPACKDIR_FALSE=
+fi
+
+
+
+if test "$use_hsl" = BUILD; then
+  BUILDHSLDIR_TRUE=
+  BUILDHSLDIR_FALSE='#'
+else
+  BUILDHSLDIR_TRUE='#'
+  BUILDHSLDIR_FALSE=
+fi
+
+
+
+
+if test "$use_asldir" = BUILD; then
+  BUILDASLDIR_TRUE=
+  BUILDASLDIR_FALSE='#'
+else
+  BUILDASLDIR_TRUE='#'
+  BUILDASLDIR_FALSE=
+fi
+
+
+
+if test ! "$use_asldir" = "no"; then
+  BUILDAMPLINTERFACE_TRUE=
+  BUILDAMPLINTERFACE_FALSE='#'
+else
+  BUILDAMPLINTERFACE_TRUE='#'
+  BUILDAMPLINTERFACE_FALSE=
+fi
+
+
+
+if test "$use_asldir" = BUILD; then
+  ASLLIB="\$(top_builddir)/OTHERS/ASL/amplsolver.a"
+  AMPL_CPPFLAGS="-I\$(top_builddir)/OTHERS/ASL -I\$(top_srcdir)/OTHERS/ASL/solvers"
+            ac_config_links="$ac_config_links OTHERS/ASL/ASLsolvers:OTHERS/ASL/solvers"
+
+elif test ! "$use_asldir" = no; then
+  case $build in
+    *-cygwin*) AMPL_CPPFLAGS="-I\"$use_asldir\""
+               ASLLIB="\"$use_asldir\amplsolver.a\"" ;;
+    *)         AMPL_CPPFLAGS="-I$use_asldir"
+               ASLLIB="$use_asldir/amplsolver.a";;
+  esac
+fi
+
+
+                                                                                                                                                                                              ac_config_files="$ac_config_files Makefile Common/Makefile Algorithm/Makefile LinAlgImpl/Makefile LinAlgImpl/Serial/Makefile PDSystemImpl/Makefile PDSystemImpl/PDFullSpace/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/StdInterface/Makefile Apps/CompositeInterface/Makefile Apps/CUTErInterface/Makefile Examples/Fortran_example/Makefile Examples/Cpp_example/Makefile OTHERS/Makefile OTHERS/blas/Makefile OTHERS/lapack/Makefile OTHERS/HSL/Makefile OTHERS/ASL/Makefile"
 
 
           ac_config_headers="$ac_config_headers inc/config.h"
@@ -7426,6 +8100,76 @@ if test -z "${MAINTAINER_MODE_TRUE}" && test -z "${MAINTAINER_MODE_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"MAINTAINER_MODE\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"MAINTAINER_MODE\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${BUILDBLAS_TRUE}" && test -z "${BUILDBLAS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDBLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDBLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${BUILDLAPACK_TRUE}" && test -z "${BUILDLAPACK_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDLAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDLAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${BUILDHSL_TRUE}" && test -z "${BUILDHSL_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDHSL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDHSL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${BUILDMA27_TRUE}" && test -z "${BUILDMA27_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDMA27\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDMA27\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${BUILDMC19_TRUE}" && test -z "${BUILDMC19_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDMC19\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDMC19\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${BUILDBLASDIR_TRUE}" && test -z "${BUILDBLASDIR_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDBLASDIR\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDBLASDIR\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${BUILDLAPACKDIR_TRUE}" && test -z "${BUILDLAPACKDIR_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDLAPACKDIR\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDLAPACKDIR\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${BUILDHSLDIR_TRUE}" && test -z "${BUILDHSLDIR_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDHSLDIR\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDHSLDIR\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${BUILDASLDIR_TRUE}" && test -z "${BUILDASLDIR_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDASLDIR\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDASLDIR\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${BUILDAMPLINTERFACE_TRUE}" && test -z "${BUILDAMPLINTERFACE_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDAMPLINTERFACE\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDAMPLINTERFACE\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -7755,6 +8499,9 @@ $config_files
 Configuration headers:
 $config_headers
 
+Configuration links:
+$config_links
+
 Configuration commands:
 $config_commands
 
@@ -7887,6 +8634,14 @@ do
   "Apps/CUTErInterface/Makefile" ) CONFIG_FILES="$CONFIG_FILES Apps/CUTErInterface/Makefile" ;;
   "Examples/Fortran_example/Makefile" ) CONFIG_FILES="$CONFIG_FILES Examples/Fortran_example/Makefile" ;;
   "Examples/Cpp_example/Makefile" ) CONFIG_FILES="$CONFIG_FILES Examples/Cpp_example/Makefile" ;;
+  "OTHERS/Makefile" ) CONFIG_FILES="$CONFIG_FILES OTHERS/Makefile" ;;
+  "OTHERS/blas/Makefile" ) CONFIG_FILES="$CONFIG_FILES OTHERS/blas/Makefile" ;;
+  "OTHERS/lapack/Makefile" ) CONFIG_FILES="$CONFIG_FILES OTHERS/lapack/Makefile" ;;
+  "OTHERS/HSL/Makefile" ) CONFIG_FILES="$CONFIG_FILES OTHERS/HSL/Makefile" ;;
+  "OTHERS/ASL/Makefile" ) CONFIG_FILES="$CONFIG_FILES OTHERS/ASL/Makefile" ;;
+  "OTHERS/HSL/fd05ad.f" ) CONFIG_LINKS="$CONFIG_LINKS OTHERS/HSL/fd05ad.f:OTHERS/HSL/$use_FD05" ;;
+  "$lapackobjdir/$file" ) CONFIG_LINKS="$CONFIG_LINKS $lapackobjdir/$file:$lapackdir/$file" ;;
+  "OTHERS/ASL/ASLsolvers" ) CONFIG_LINKS="$CONFIG_LINKS OTHERS/ASL/ASLsolvers:OTHERS/ASL/solvers" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "inc/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS inc/config.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
@@ -7902,6 +8657,7 @@ done
 if $ac_need_defaults; then
   test "${CONFIG_FILES+set}" = set || CONFIG_FILES=$config_files
   test "${CONFIG_HEADERS+set}" = set || CONFIG_HEADERS=$config_headers
+  test "${CONFIG_LINKS+set}" = set || CONFIG_LINKS=$config_links
   test "${CONFIG_COMMANDS+set}" = set || CONFIG_COMMANDS=$config_commands
 fi
 
@@ -8033,7 +8789,8 @@ s,@FFLAGS@,$FFLAGS,;t t
 s,@ac_ct_F77@,$ac_ct_F77,;t t
 s,@FLIBS@,$FLIBS,;t t
 s,@IPADDLIBS@,$IPADDLIBS,;t t
-s,@ASLLIB@,$ASLLIB,;t t
+s,@ASLMAKEFLAGS@,$ASLMAKEFLAGS,;t t
+s,@ASLMAKEFILECMDS@,$ASLMAKEFILECMDS,;t t
 s,@CPP@,$CPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@CXXLIBS@,$CXXLIBS,;t t
@@ -8041,6 +8798,28 @@ s,@ASTYLE@,$ASTYLE,;t t
 s,@ASTYLEFLAGS@,$ASTYLEFLAGS,;t t
 s,@ipoptlib@,$ipoptlib,;t t
 s,@AMPL_CPPFLAGS@,$AMPL_CPPFLAGS,;t t
+s,@IPALLLIBS@,$IPALLLIBS,;t t
+s,@BUILDBLAS_TRUE@,$BUILDBLAS_TRUE,;t t
+s,@BUILDBLAS_FALSE@,$BUILDBLAS_FALSE,;t t
+s,@BUILDLAPACK_TRUE@,$BUILDLAPACK_TRUE,;t t
+s,@BUILDLAPACK_FALSE@,$BUILDLAPACK_FALSE,;t t
+s,@BUILDHSL_TRUE@,$BUILDHSL_TRUE,;t t
+s,@BUILDHSL_FALSE@,$BUILDHSL_FALSE,;t t
+s,@BUILDMA27_TRUE@,$BUILDMA27_TRUE,;t t
+s,@BUILDMA27_FALSE@,$BUILDMA27_FALSE,;t t
+s,@BUILDMC19_TRUE@,$BUILDMC19_TRUE,;t t
+s,@BUILDMC19_FALSE@,$BUILDMC19_FALSE,;t t
+s,@BUILDBLASDIR_TRUE@,$BUILDBLASDIR_TRUE,;t t
+s,@BUILDBLASDIR_FALSE@,$BUILDBLASDIR_FALSE,;t t
+s,@BUILDLAPACKDIR_TRUE@,$BUILDLAPACKDIR_TRUE,;t t
+s,@BUILDLAPACKDIR_FALSE@,$BUILDLAPACKDIR_FALSE,;t t
+s,@BUILDHSLDIR_TRUE@,$BUILDHSLDIR_TRUE,;t t
+s,@BUILDHSLDIR_FALSE@,$BUILDHSLDIR_FALSE,;t t
+s,@BUILDASLDIR_TRUE@,$BUILDASLDIR_TRUE,;t t
+s,@BUILDASLDIR_FALSE@,$BUILDASLDIR_FALSE,;t t
+s,@BUILDAMPLINTERFACE_TRUE@,$BUILDAMPLINTERFACE_TRUE,;t t
+s,@BUILDAMPLINTERFACE_FALSE@,$BUILDAMPLINTERFACE_FALSE,;t t
+s,@ASLLIB@,$ASLLIB,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
@@ -8524,6 +9303,144 @@ echo X$ac_file |
   	  /^X\(\/\/\)$/{ s//\1/; q; }
   	  /^X\(\/\).*/{ s//\1/; q; }
   	  s/.*/./; q'`/stamp-h$_am_stamp_count
+done
+_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF
+
+#
+# CONFIG_LINKS section.
+#
+
+for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
+  ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
+  ac_source=`echo "$ac_file" | sed 's,[^:]*:,,'`
+
+  { echo "$as_me:$LINENO: linking $srcdir/$ac_source to $ac_dest" >&5
+echo "$as_me: linking $srcdir/$ac_source to $ac_dest" >&6;}
+
+  if test ! -r $srcdir/$ac_source; then
+    { { echo "$as_me:$LINENO: error: $srcdir/$ac_source: file not found" >&5
+echo "$as_me: error: $srcdir/$ac_source: file not found" >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+  rm -f $ac_dest
+
+  # Make relative symlinks.
+  ac_dest_dir=`(dirname "$ac_dest") 2>/dev/null ||
+$as_expr X"$ac_dest" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"$ac_dest" : 'X\(//\)[^/]' \| \
+	 X"$ac_dest" : 'X\(//\)$' \| \
+	 X"$ac_dest" : 'X\(/\)' \| \
+	 .     : '\(.\)' 2>/dev/null ||
+echo X"$ac_dest" |
+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
+  { if $as_mkdir_p; then
+    mkdir -p "$ac_dest_dir"
+  else
+    as_dir="$ac_dest_dir"
+    as_dirs=
+    while test ! -d "$as_dir"; do
+      as_dirs="$as_dir $as_dirs"
+      as_dir=`(dirname "$as_dir") 2>/dev/null ||
+$as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"$as_dir" : 'X\(//\)[^/]' \| \
+	 X"$as_dir" : 'X\(//\)$' \| \
+	 X"$as_dir" : 'X\(/\)' \| \
+	 .     : '\(.\)' 2>/dev/null ||
+echo X"$as_dir" |
+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
+    done
+    test ! -n "$as_dirs" || mkdir $as_dirs
+  fi || { { echo "$as_me:$LINENO: error: cannot create directory \"$ac_dest_dir\"" >&5
+echo "$as_me: error: cannot create directory \"$ac_dest_dir\"" >&2;}
+   { (exit 1); exit 1; }; }; }
+
+  ac_builddir=.
+
+if test "$ac_dest_dir" != .; then
+  ac_dir_suffix=/`echo "$ac_dest_dir" | sed 's,^\.[\\/],,'`
+  # A "../" for each directory in $ac_dir_suffix.
+  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
+else
+  ac_dir_suffix= ac_top_builddir=
+fi
+
+case $srcdir in
+  .)  # No --srcdir option.  We are building in place.
+    ac_srcdir=.
+    if test -z "$ac_top_builddir"; then
+       ac_top_srcdir=.
+    else
+       ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
+    fi ;;
+  [\\/]* | ?:[\\/]* )  # Absolute path.
+    ac_srcdir=$srcdir$ac_dir_suffix;
+    ac_top_srcdir=$srcdir ;;
+  *) # Relative path.
+    ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_builddir$srcdir ;;
+esac
+
+# Do not use `cd foo && pwd` to compute absolute paths, because
+# the directories may not exist.
+case `pwd` in
+.) ac_abs_builddir="$ac_dest_dir";;
+*)
+  case "$ac_dest_dir" in
+  .) ac_abs_builddir=`pwd`;;
+  [\\/]* | ?:[\\/]* ) ac_abs_builddir="$ac_dest_dir";;
+  *) ac_abs_builddir=`pwd`/"$ac_dest_dir";;
+  esac;;
+esac
+case $ac_abs_builddir in
+.) ac_abs_top_builddir=${ac_top_builddir}.;;
+*)
+  case ${ac_top_builddir}. in
+  .) ac_abs_top_builddir=$ac_abs_builddir;;
+  [\\/]* | ?:[\\/]* ) ac_abs_top_builddir=${ac_top_builddir}.;;
+  *) ac_abs_top_builddir=$ac_abs_builddir/${ac_top_builddir}.;;
+  esac;;
+esac
+case $ac_abs_builddir in
+.) ac_abs_srcdir=$ac_srcdir;;
+*)
+  case $ac_srcdir in
+  .) ac_abs_srcdir=$ac_abs_builddir;;
+  [\\/]* | ?:[\\/]* ) ac_abs_srcdir=$ac_srcdir;;
+  *) ac_abs_srcdir=$ac_abs_builddir/$ac_srcdir;;
+  esac;;
+esac
+case $ac_abs_builddir in
+.) ac_abs_top_srcdir=$ac_top_srcdir;;
+*)
+  case $ac_top_srcdir in
+  .) ac_abs_top_srcdir=$ac_abs_builddir;;
+  [\\/]* | ?:[\\/]* ) ac_abs_top_srcdir=$ac_top_srcdir;;
+  *) ac_abs_top_srcdir=$ac_abs_builddir/$ac_top_srcdir;;
+  esac;;
+esac
+
+
+  case $srcdir in
+  [\\/$]* | ?:[\\/]* ) ac_rel_source=$srcdir/$ac_source ;;
+      *) ac_rel_source=$ac_top_builddir$srcdir/$ac_source ;;
+  esac
+
+  # Try a symlink, then a hard link, then a copy.
+  ln -s $ac_rel_source $ac_dest 2>/dev/null ||
+    ln $srcdir/$ac_source $ac_dest 2>/dev/null ||
+    cp -p $srcdir/$ac_source $ac_dest ||
+    { { echo "$as_me:$LINENO: error: cannot link or copy $srcdir/$ac_source to $ac_dest" >&5
+echo "$as_me: error: cannot link or copy $srcdir/$ac_source to $ac_dest" >&2;}
+   { (exit 1); exit 1; }; }
 done
 _ACEOF
 cat >>$CONFIG_STATUS <<\_ACEOF

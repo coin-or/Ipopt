@@ -1,0 +1,21 @@
+Installation of BLAS subroutines within IPOPT.
+
+**********************************************************************
+Note: It is YOUR RESPONSIBILITY to ensure that you are entitled to
+      download and use this third party package.
+**********************************************************************
+
+If you are working under Unix/Linux-like system and you have `wget'
+installed, you can downloaded the required source code for BLAS
+by executing the included script `get.blas' in this directory.
+
+Otherwise, follow those instructions:
+
+You may download
+
+http://www.netlib.org/blas/blas.tgz
+
+and unpack it in this directory:
+
+gunzip blas.tgz
+tar xf blas.tar
