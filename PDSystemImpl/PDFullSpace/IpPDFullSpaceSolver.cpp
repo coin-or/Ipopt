@@ -349,7 +349,8 @@ namespace Ipopt
               delta_x_curr_ = 8.*delta_x_curr_;  //TODO Parameter
             }
           }
-          assert(delta_x_curr_<1e40);  //TODO make return code
+	  ASSERT_EXCEPTION(delta_x_curr_<1e40, IpoptException,
+			   "Regularization parameter is getting too large.");
           delta_s_curr_ = delta_x_curr_;
         }
       } // while (retval!=S_SUCCESS && !fail) {
