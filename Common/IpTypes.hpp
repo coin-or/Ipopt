@@ -22,6 +22,8 @@ namespace Ipopt
   {
     Solve_Succeeded,
     Maximum_Iterations_Exceeded,
+    Infeasible_Problem_Detected,
+    Not_Enough_Degrees_Of_Freedom,
     Solve_Failed,
     NonIpopt_Exception_Thrown,
     Insufficient_Memory,
