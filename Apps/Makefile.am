@@ -8,4 +8,8 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = StdInterface AmplSolver CompositeInterface CUTErInterface
+SUBDIRS = StdInterface CUTErInterface
+
+if BUILDASLDIR
+  SUBDIRS += AmplSolver CompositeInterface
+endif
