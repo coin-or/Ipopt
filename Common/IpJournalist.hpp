@@ -40,6 +40,7 @@ namespace Ipopt
     J_VECTOR,
     J_MOREVECTOR,
     J_MATRIX,
+    J_MOREMATRIX,
     J_ALL,
     J_LAST_LEVEL
   };
