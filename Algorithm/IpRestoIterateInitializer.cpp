@@ -51,12 +51,16 @@ namespace Ipopt
     // to the original NLP data
     SmartPtr<RestoIpoptNLP> resto_ip_nlp =
       dynamic_cast<RestoIpoptNLP*> (&IpNLP());
+    DBG_ASSERT(IsValid(resto_ip_nlp));
     SmartPtr<IpoptNLP> orig_ip_nlp =
       dynamic_cast<IpoptNLP*> (&resto_ip_nlp->OrigIpNLP());
+    DBG_ASSERT(IsValid(orig_ip_nlp));
     SmartPtr<IpoptData> orig_ip_data =
       dynamic_cast<IpoptData*> (&resto_ip_nlp->OrigIpData());
+    DBG_ASSERT(IsValid(orig_ip_data));
     SmartPtr<IpoptCalculatedQuantities> orig_ip_cq =
       dynamic_cast<IpoptCalculatedQuantities*> (&resto_ip_nlp->OrigIpCq());
+    DBG_ASSERT(IsValid(orig_ip_cq));
 
     // Set the value of the barrier parameter
     Number resto_mu;
