@@ -41,8 +41,8 @@ namespace Ipopt
     /** Initialization method.  Set the internal options and
      *  initialize internal data structures. */
     virtual bool Initialize(const Journalist& jnlst,
-			    const OptionsList& options,
-			    const std::string& prefix) = 0;
+                            const OptionsList& options,
+                            const std::string& prefix) = 0;
 
     /**@name Possible Exceptions */
     //@{

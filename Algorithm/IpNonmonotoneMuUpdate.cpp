@@ -220,25 +220,25 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                        "Remaining in fixed mu mode.\n");
 
-	// ToDo decide whether we want this for all options
-	Number sub_problem_error = IpCq().curr_barrier_error();
-	Number mu = IpData().curr_mu();
-	if (sub_problem_error <= kappa_epsilon_ * mu) {
-	  //	DBG_ASSERT(adaptive_globalization_==2);
-	  // If the current barrier problem has been solved sufficiently
-	  // well, decrease mu
-	  // ToDo combine this code with MonotoneMuUpdate
-	  Number eps_tol = IpData().epsilon_tol();
+        // ToDo decide whether we want this for all options
+        Number sub_problem_error = IpCq().curr_barrier_error();
+        Number mu = IpData().curr_mu();
+        if (sub_problem_error <= kappa_epsilon_ * mu) {
+          //	DBG_ASSERT(adaptive_globalization_==2);
+          // If the current barrier problem has been solved sufficiently
+          // well, decrease mu
+          // ToDo combine this code with MonotoneMuUpdate
+          Number eps_tol = IpData().epsilon_tol();
 
-	  Number new_mu = Min( kappa_mu_*mu, pow(mu, theta_mu_) );
-	  new_mu = Max(new_mu, eps_tol/10);
-	  Number new_tau = Compute_tau(mu);
-	  IpData().Set_mu(new_mu);
-	  IpData().Set_tau(new_tau);
-	  Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-			 "Reducing mu to %e in fixed mu mode. Tau becomes %e\n", new_mu, new_tau);
-	  linesearch_->Reset();
-	}
+          Number new_mu = Min( kappa_mu_*mu, pow(mu, theta_mu_) );
+          new_mu = Max(new_mu, eps_tol/10);
+          Number new_tau = Compute_tau(mu);
+          IpData().Set_mu(new_mu);
+          IpData().Set_tau(new_tau);
+          Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                         "Reducing mu to %e in fixed mu mode. Tau becomes %e\n", new_mu, new_tau);
+          linesearch_->Reset();
+        }
       }
     }
     else {
@@ -426,7 +426,7 @@ namespace Ipopt
     Number max_ref;
     switch (adaptive_globalization_) {
       case 1 :
-	max_ref = max_ref_val();
+      max_ref = max_ref_val();
       break;
       case 2 : {
         max_ref = 1e20;
