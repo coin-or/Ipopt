@@ -18,6 +18,14 @@
 namespace Ipopt
 {
 
+  /** @name Exceptions */
+  //@{
+  /** Exception RESTORATION_FAILED for all trouble with the
+   *  restoration phase.
+   */
+  DECLARE_STD_EXCEPTION(RESTORATION_FAILED);
+  //@}
+
   /** Base class for different restoration phases.  The restoration
    *  phase is part of the FilterLineSearch. */
   class RestorationPhase : public AlgorithmStrategyObject
