@@ -377,7 +377,7 @@ namespace Ipopt
         SmartPtr<Vector> t = slack->MakeNew();
         t->Copy(*slack);
         t->AddScalar(-s_min);
-        t->Sgn();
+        t->ElementWiseSgn();
 
         SmartPtr<Vector> zero_vec = t->MakeNew();
         zero_vec->Set(0.0);
@@ -1049,7 +1049,7 @@ namespace Ipopt
       tmp->Axpy(1., *curr_jac_cT_times_curr_y_c());
       tmp->Axpy(1., *curr_jac_dT_times_curr_y_d());
       DBG_PRINT_VECTOR(2,"jac_cT*y_c",*curr_jac_cT_times_curr_y_c());
-      DBG_PRINT_VECTOR(2,"jac_dT*y_c",*curr_jac_dT_times_curr_y_d());
+      DBG_PRINT_VECTOR(2,"jac_dT*y_d",*curr_jac_dT_times_curr_y_d());
       ip_nlp_->Px_L()->MultVector(-1., *ip_data_->curr_z_L(), 1., *tmp);
       ip_nlp_->Px_U()->MultVector(1., *ip_data_->curr_z_U(), 1., *tmp);
       result = ConstPtr(tmp);
@@ -1335,6 +1335,10 @@ namespace Ipopt
     SmartPtr<const Vector> x = ip_data_->curr_x();
     SmartPtr<const Vector> s = ip_data_->curr_s();
 
+    DBG_PRINT_VECTOR(2, "x to eval", *x);
+    DBG_PRINT_VECTOR(2, "s to eval", *s);
+    DBG_PRINT((1,"NormType = %d\n", NormType))
+
     std::vector<const TaggedObject*> deps;
     deps.push_back(GetRawPtr(x));
     deps.push_back(GetRawPtr(s));
@@ -1343,8 +1347,12 @@ namespace Ipopt
 
     if (!curr_primal_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
       if (!trial_primal_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
+        DBG_PRINT((1,"Recomputing recomputing infeasibility.\n"));
         SmartPtr<const Vector> c = curr_c();
         SmartPtr<const Vector> d_minus_s = curr_d_minus_s();
+
+        DBG_PRINT_VECTOR(2,"c", *c);
+        DBG_PRINT_VECTOR(2,"d_minus_s", *d_minus_s);
 
         result = CalcNormOfType(NormType, *c, *d_minus_s);
 
@@ -1352,6 +1360,7 @@ namespace Ipopt
       curr_primal_infeasibility_cache_.AddCachedResult(result, deps, sdeps);
     }
 
+    DBG_PRINT((1,"result = %e\n",result));
     return result;
   }
 
@@ -1366,6 +1375,10 @@ namespace Ipopt
     SmartPtr<const Vector> x = ip_data_->trial_x();
     SmartPtr<const Vector> s = ip_data_->trial_s();
 
+    DBG_PRINT_VECTOR(2, "x to eval", *x);
+    DBG_PRINT_VECTOR(2, "s to eval", *s);
+    DBG_PRINT((1,"NormType = %d\n", NormType))
+
     std::vector<const TaggedObject*> deps;
     deps.push_back(GetRawPtr(x));
     deps.push_back(GetRawPtr(s));
@@ -1374,15 +1387,19 @@ namespace Ipopt
 
     if (!trial_primal_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
       if (!curr_primal_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
+        DBG_PRINT((1,"Recomputing recomputing infeasibility.\n"));
         SmartPtr<const Vector> c = trial_c();
         SmartPtr<const Vector> d_minus_s = trial_d_minus_s();
 
-        result = CalcNormOfType(NormType, *c, *d_minus_s);
+        DBG_PRINT_VECTOR(2,"c", *c);
+        DBG_PRINT_VECTOR(2,"d_minus_s", *d_minus_s);
 
+        result = CalcNormOfType(NormType, *c, *d_minus_s);
       }
       trial_primal_infeasibility_cache_.AddCachedResult(result, deps, sdeps);
     }
 
+    DBG_PRINT((1,"result = %e\n",result));
     return result;
   }
 
