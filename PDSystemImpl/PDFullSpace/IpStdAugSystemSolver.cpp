@@ -172,7 +172,12 @@ namespace Ipopt
     ESymSolverStatus retval;
     retval = linsolver_->Solve(*augmented_system_, *augmented_rhs, *augmented_sol,
                                check_NegEVals, numberOfNegEVals);
-    Jnlst().PrintVector(J_MOREVECTOR, J_LINEAR_ALGEBRA, "SOL", *augmented_sol);
+    if (retval==SYMSOLVER_SUCCESS) {
+      Jnlst().PrintVector(J_MOREVECTOR, J_LINEAR_ALGEBRA, "SOL", *augmented_sol);
+    }
+    if (retval==SYMSOLVER_FATAL_ERROR) {
+      THROW_EXCEPTION(FATAL_ERROR_IN_LINEAR_SOLVER,"A fatal error occured in the linear solver.");
+    }
 
     return retval;
   }
