@@ -11,5 +11,6 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = StdInterface CUTErInterface
 
 if BUILDASLDIR
-  SUBDIRS += AmplSolver CompositeInterface
+  SUBDIRS += AmplSolver
+#  SUBDIRS += CompositeInterface
 endif
