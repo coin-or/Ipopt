@@ -27,6 +27,11 @@ namespace Ipopt
     return ((a) > (b) ? (a) : (b));
   }
 
+  inline ipfint Min(ipfint a, ipfint b)
+  {
+    return ((a) < (b) ? (a) : (b));
+  }
+
   inline Number Max(Number a, Number b)
   {
     return ((a) > (b) ? (a) : (b));
