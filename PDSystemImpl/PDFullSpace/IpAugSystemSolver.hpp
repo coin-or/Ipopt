@@ -95,6 +95,14 @@ namespace Ipopt
      */
     virtual bool ProvidesInertia() const =0;
 
+    /** Request to increase quality of solution for next solve.  Ask
+     *  underlying linear solver to increase quality of solution for
+     *  the next solve (e.g. increase pivot tolerance).  Returns
+     *  false, if this is not possible (e.g. maximal pivot tolerance
+     *  already used.)
+     */
+    virtual bool IncreaseQuality() =0;
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
