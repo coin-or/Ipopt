@@ -623,7 +623,27 @@ namespace Ipopt
   void RestoIpoptNLP::AdjustVariableBounds(const Vector& new_x_L, const Vector& new_x_U,
       const Vector& new_d_L, const Vector& new_d_U)
   {
-    THROW_EXCEPTION(IpoptException, "This feature (AdjustVariableBounds), not implemented in the RestoIpoptNLP yet!");
+
+    const CompoundVector* comp_new_x_L =
+      dynamic_cast<const CompoundVector*>(&new_x_L);
+    DBG_ASSERT(comp_new_x_L);
+
+    SmartPtr<const Vector> new_orig_x_L = comp_new_x_L->GetComp(0);
+
+    // adapt bounds for the original NLP
+    orig_ip_nlp_->AdjustVariableBounds(*new_orig_x_L, new_x_U, new_d_L, new_d_U);
+
+    // adapt bounds for the p and n variables
+    SmartPtr<const Vector> new_nc_L = comp_new_x_L->GetComp(1);
+    SmartPtr<const Vector> new_pc_L = comp_new_x_L->GetComp(2);
+    SmartPtr<const Vector> new_nd_L = comp_new_x_L->GetComp(3);
+    SmartPtr<const Vector> new_pd_L = comp_new_x_L->GetComp(4);
+
+    x_L_->GetCompNonConst(1)->Copy(*new_nc_L);
+    x_L_->GetCompNonConst(2)->Copy(*new_pc_L);
+    x_L_->GetCompNonConst(3)->Copy(*new_nd_L);
+    x_L_->GetCompNonConst(4)->Copy(*new_pd_L);
+
   }
 
 } // namespace Ipopt
