@@ -1574,6 +1574,9 @@ namespace Ipopt
       const Vector& compl_s_L,
       const Vector& compl_s_U)
   {
+    DBG_START_METH("IpoptCalculatedQuantities::CalcCentralityMeasure()",
+                   dbg_verbosity);
+
     Number MinCompl = std::numeric_limits<Number>::max();
     bool have_bounds = false;
 
@@ -1625,13 +1628,26 @@ namespace Ipopt
       return 0.;
     }
 
+    DBG_PRINT_VECTOR(2, "compl_x_L", compl_x_L);
+    DBG_PRINT_VECTOR(2, "compl_x_U", compl_x_U);
+    DBG_PRINT_VECTOR(2, "compl_s_L", compl_s_L);
+    DBG_PRINT_VECTOR(2, "compl_s_U", compl_s_U);
+
     DBG_ASSERT(MinCompl>0. && "There is a zero complementarity entry");
 
     Number avrg_compl = (compl_x_L.Asum() + compl_x_U.Asum() +
                          compl_s_L.Asum() + compl_s_U.Asum());
+    DBG_PRINT((1,"sum_compl = %25.16e\n", avrg_compl));
     avrg_compl /= (n_compl_x_L + n_compl_x_U + n_compl_s_L + n_compl_s_U);
+    DBG_PRINT((1,"avrg_compl = %25.16e\n", avrg_compl));
+    DBG_PRINT((1,"MinCompl = %25.16e\n", MinCompl));
 
-    return MinCompl/avrg_compl;
+    Number xi = MinCompl/avrg_compl;
+    // The folloking line added for the case that avrg_compl is
+    // slighly smaller than MinCompl, due to numerical roundoff
+    xi = Min(1., xi);
+
+    return xi;
   }
 
   Number
