@@ -40,6 +40,11 @@ namespace Ipopt
     DECLARE_STD_EXCEPTION(TOO_FEW_DOF);
     //@}
 
+    /** Initialize - overloaded from IpoptNLP */
+    virtual bool Initialize(const Journalist& jnlst,
+			    const OptionsList& options,
+			    const std::string& prefix);
+
     /** Initialize (create) structures for
      *  the iteration data */
     virtual bool InitializeStructures(SmartPtr<Vector>& x,
@@ -299,6 +304,24 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const OrigIpoptNLP&);
     //@}
+
+    /** @name auxilliary functions */
+    //@{
+    /** relax the bounds by a relative move of relax_bound_factor.
+     *  Here, relax_bound_factor should be negative (or zero) for
+     *  lower bounds, and positive (or zero) for upper bounds.
+     */
+    void relax_bounds(Number bound_relax_factor, Vector& bounds);
+    //@}
+
+    /** @name Algorithmic parameters */
+    //@{
+    /** relaxation factor for the bounds */
+    Number bound_relax_factor_;
+    //@}
+
+    /** Flag indicating if initialization method has been called */
+    bool initialized_;
 
     /** @name Counters for the function evaluations */
     //@{
