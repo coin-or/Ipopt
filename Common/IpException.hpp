@@ -117,8 +117,6 @@ namespace Ipopt
     std::string type_;
   };
 
-} // namespace Ipopt
-
 #define THROW_EXCEPTION(__except_type, __msg) \
   throw __except_type( (__msg), (__FILE__), (__LINE__) );
 
@@ -143,5 +141,11 @@ namespace Ipopt
        void operator=(const __except_type&); \
     }
 
+// Here we define all exceptions that should be caught outside the
+// algorithm's solve
+DECLARE_STD_EXCEPTION(LOCALLY_INFEASIBILE);
+DECLARE_STD_EXCEPTION(TOO_FEW_DOF);
+
+} // namespace Ipopt
 
 #endif
