@@ -159,6 +159,12 @@ namespace Ipopt
     SmartPtr<const Vector> curr_grad_lag_x();
     /** s-part of gradient of Lagrangian function (at current point) */
     SmartPtr<const Vector> curr_grad_lag_s();
+    /** x-part of gradient of Lagrangian function (at current point)
+	including linear damping term */
+    SmartPtr<const Vector> curr_grad_lag_with_damping_x();
+    /** s-part of gradient of Lagrangian function (at current point)
+	including linear damping term */
+    SmartPtr<const Vector> curr_grad_lag_with_damping_s();
     /** Complementarity for x_L (for current iterate) */
     SmartPtr<const Vector> curr_compl_x_L();
     /** Complementarity for x_U (for current iterate) */
@@ -376,6 +382,8 @@ namespace Ipopt
     //@{
     CachedResults< SmartPtr<const Vector> > curr_grad_lag_x_cache_;
     CachedResults< SmartPtr<const Vector> > curr_grad_lag_s_cache_;
+    CachedResults< SmartPtr<const Vector> > curr_grad_lag_with_damping_x_cache_;
+    CachedResults< SmartPtr<const Vector> > curr_grad_lag_with_damping_s_cache_;
     CachedResults< SmartPtr<const Vector> > curr_compl_x_L_cache_;
     CachedResults< SmartPtr<const Vector> > curr_compl_x_U_cache_;
     CachedResults< SmartPtr<const Vector> > curr_compl_s_L_cache_;
