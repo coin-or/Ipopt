@@ -15,6 +15,7 @@ libipoptalg_a_SOURCES = \
 	IpAlgStrategy.hpp \
 	IpConvCheck.hpp \
 	IpDefaultIterateInitializer.hpp IpDefaultIterateInitializer.cpp \
+	IpFilter.cpp IpFilter.hpp \
 	IpFilterLineSearch.cpp IpFilterLineSearch.hpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
@@ -51,6 +52,7 @@ ASTYLE_SOURCES = \
 	IpAlgStrategy.hppbak \
 	IpConvCheck.hppbak \
 	IpDefaultIterateInitializer.hppbak IpDefaultIterateInitializer.cppbak \
+	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLineSearch.cppbak IpFilterLineSearch.hppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
 	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \
