@@ -150,6 +150,10 @@ namespace Ipopt
 
     /** @name Algorithmic parameters */
     //@{
+    /** safeguard factor for bound multipliers.  If value >= 1, then
+     *  the dual variables will never deviate from the primal estimate
+     *  by more than the factors kappa_sigma and 1./kappa_sigma.
+     */
     Number kappa_sigma_;
     //@}
 
