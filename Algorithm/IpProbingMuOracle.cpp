@@ -162,6 +162,8 @@ namespace Ipopt
     char ssigma[40];
     sprintf(ssigma, "sigma=%e", sigma);
     IpData().Append_info_string(ssigma);
+    sprintf(ssigma, "xi=%e", IpCq().curr_centrality_measure());
+    IpData().Append_info_string(ssigma);
 
     return mu;
   }
