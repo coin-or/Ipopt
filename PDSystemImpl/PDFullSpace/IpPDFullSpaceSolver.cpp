@@ -686,38 +686,56 @@ namespace Ipopt
 
     // x
     W.MultVector(1., res_x, 0., resid_x);
-    if (delta_x_curr_!=0.) {
-      resid_x.Axpy(delta_x_curr_, res_x);
-    }
+    //    if (delta_x_curr_!=0.) {
+    //      resid_x.Axpy(delta_x_curr_, res_x);
+    //    }
     J_c.TransMultVector(1., res_c, 1., resid_x);
     J_d.TransMultVector(1., res_d, 1., resid_x);
     Px_L.MultVector(-1., res_zL, 1., resid_x);
     Px_U.MultVector(1., res_zU, 1., resid_x);
-    resid_x.Axpy(-1., rhs_x);
+    resid_x.AddTwoVectors(delta_x_curr_, res_x, -1., rhs_x, 1.);
+    //    resid_x.Axpy(-1., rhs_x);
 
     // s
     Pd_U.MultVector(1., res_vU, 0., resid_s);
     Pd_L.MultVector(-1., res_vL, 1., resid_s);
+    resid_s.AddTwoVectors(-1., res_d, -1., rhs_s, 1.);
+    if (delta_s_curr_!=0.) {
+      resid_s.Axpy(delta_s_curr_, res_s);
+    }
+    
+    /* DELE
     resid_s.Axpy(-1., res_d);
     if (delta_s_curr_!=0.) {
       resid_s.Axpy(delta_s_curr_, res_s);
     }
     resid_s.Axpy(-1., rhs_s);
+    */
 
     // c
     J_c.MultVector(1., res_x, 0., resid_c);
+    resid_c.AddTwoVectors(-delta_c_curr_, res_c, -1., rhs_c, 1.);
+    /* DELE
     if (delta_c_curr_) {
       resid_c.Axpy(-delta_c_curr_, res_c);
     }
     resid_c.Axpy(-1., rhs_c);
+    */
 
     // d
     J_d.MultVector(1., res_x, 0., resid_d);
+    resid_d.AddTwoVectors(-1., res_s, -1., rhs_d, 1.);
+    if (delta_d_curr_) {
+      resid_d.Axpy(-delta_d_curr_, res_d);
+    }
+
+    /* DELE
     resid_d.Axpy(-1., res_s);
     if (delta_d_curr_) {
       resid_d.Axpy(-delta_d_curr_, res_d);
     }
     resid_d.Axpy(-1., rhs_d);
+    */
 
     // zL
     resid_zL.Copy(res_zL);
@@ -725,8 +743,11 @@ namespace Ipopt
     tmp = z_L.MakeNew();
     Px_L.TransMultVector(1., res_x, 0., *tmp);
     tmp->ElementWiseMultiply(z_L);
+    resid_zL.AddTwoVectors(1., *tmp, -1., rhs_zL, 1.);
+    /* DELE
     resid_zL.Axpy(1., *tmp);
     resid_zL.Axpy(-1., rhs_zL);
+    */
 
     // zU
     resid_zU.Copy(res_zU);
@@ -734,8 +755,11 @@ namespace Ipopt
     tmp = z_U.MakeNew();
     Px_U.TransMultVector(1., res_x, 0., *tmp);
     tmp->ElementWiseMultiply(z_U);
+    resid_zU.AddTwoVectors(-1., *tmp, -1., rhs_zU, 1.);
+    /* DELE
     resid_zU.Axpy(-1., *tmp);
     resid_zU.Axpy(-1., rhs_zU);
+    */
 
     // vL
     resid_vL.Copy(res_vL);
@@ -743,8 +767,11 @@ namespace Ipopt
     tmp = v_L.MakeNew();
     Pd_L.TransMultVector(1., res_s, 0., *tmp);
     tmp->ElementWiseMultiply(v_L);
+    resid_vL.AddTwoVectors(1., *tmp, -1., rhs_vL, 1.);
+    /* DELE
     resid_vL.Axpy(1., *tmp);
     resid_vL.Axpy(-1., rhs_vL);
+    */
 
     // vU
     resid_vU.Copy(res_vU);
@@ -752,8 +779,11 @@ namespace Ipopt
     tmp = v_U.MakeNew();
     Pd_U.TransMultVector(1., res_s, 0., *tmp);
     tmp->ElementWiseMultiply(v_U);
+    resid_vU.AddTwoVectors(-1., *tmp, -1., rhs_vU, 1.);
+    /* DELE
     resid_vU.Axpy(-1., *tmp);
     resid_vU.Axpy(-1., rhs_vU);
+    */
 
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_LINEAR_ALGEBRA)) {
       Jnlst().PrintVector(J_MOREVECTOR, J_LINEAR_ALGEBRA,"resid_x ", resid_x);

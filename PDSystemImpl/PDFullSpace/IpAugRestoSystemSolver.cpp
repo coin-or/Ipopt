@@ -200,8 +200,11 @@ namespace Ipopt
       SmartPtr<Vector> sol_n_c = Csol_x->GetCompNonConst(1);
       sol_n_c->Set(0.0);
       if (IsValid(sigma_tilde_n_c_inv)) {
+	sol_n_c->AddTwoVectors(1., *Crhs_x->GetComp(1), -1.0, sol_cR, 0.);
+	/* DELE
         sol_n_c->Copy(*Crhs_x->GetComp(1));
         sol_n_c->Axpy(-1.0, sol_cR);
+	*/
         sol_n_c->ElementWiseMultiply(*sigma_tilde_n_c_inv);
       }
 
@@ -211,8 +214,11 @@ namespace Ipopt
         DBG_PRINT_VECTOR(2, "rhs_pc", *Crhs_x->GetComp(2));
         DBG_PRINT_VECTOR(2, "delta_y_c", sol_cR);
         DBG_PRINT_VECTOR(2, "Sig~_{p_c}^{-1}", *sigma_tilde_p_c_inv);
+	sol_p_c->AddTwoVectors(1., *Crhs_x->GetComp(2), 1.0, sol_cR, 0.);
+	/* DELE
         sol_p_c->Copy(*Crhs_x->GetComp(2));
         sol_p_c->Axpy(1.0, sol_cR);
+	*/
         sol_p_c->ElementWiseMultiply(*sigma_tilde_p_c_inv);
       }
 
@@ -251,6 +257,30 @@ namespace Ipopt
           GetCachedResult3Dep(retVec, GetRawPtr(sigma_tilde_n_c_inv), GetRawPtr(sigma_tilde_p_c_inv), D_c)) {
         DBG_PRINT((2,"Not found in cache\n"));
         retVec = any_vec_in_c.MakeNew();
+
+	Number fact1, fact2;
+	SmartPtr<const Vector> v1;
+	SmartPtr<const Vector> v2;
+
+	if (IsValid(sigma_tilde_n_c_inv)) {
+	  v1 = sigma_tilde_n_c_inv;
+	  fact1 = -1.;
+	}
+	else {
+	  v1 = &any_vec_in_c;
+	  fact1 = 0.;
+        }
+	if (IsValid(sigma_tilde_p_c_inv)) {
+	  v2 = sigma_tilde_p_c_inv;
+	  fact2 = -1.;
+	}
+	else {
+	  v2 = &any_vec_in_c;
+	  fact2 = 0.;
+        }
+	retVec->AddTwoVectors(fact1, *v1, fact2, *v2, 0.);
+
+	/* DELE
         retVec->Set(0.0);
 
         if (IsValid(sigma_tilde_n_c_inv)) {
@@ -261,6 +291,7 @@ namespace Ipopt
         }
 
         retVec->Scal(-1.0);
+	*/
 
         if (D_c) {
           retVec->Axpy(1.0, *D_c);
@@ -298,12 +329,11 @@ namespace Ipopt
         retVec = any_vec_in_d.MakeNew();
         retVec->Set(0.0);
         if (IsValid(sigma_tilde_n_d_inv)) {
-          Pd_L.MultVector(1.0, *sigma_tilde_n_d_inv, 1.0, *retVec);
+          Pd_L.MultVector(-1.0, *sigma_tilde_n_d_inv, 1.0, *retVec);
         }
         if (IsValid(sigma_tilde_p_d_inv)) {
-          neg_Pd_U.MultVector(-1.0, *sigma_tilde_p_d_inv, 1.0, *retVec);
+          neg_Pd_U.MultVector(1.0, *sigma_tilde_p_d_inv, 1.0, *retVec);
         }
-        retVec->Scal(-1.0);
         if (D_d) {
           retVec->Copy(*D_d);
         }
@@ -460,11 +490,26 @@ namespace Ipopt
 
     if (!d_x_plus_wr_d_cache_.GetCachedResult(retVec, deps, scalar_deps)) {
       retVec = wr_d.MakeNew();
+
+      Number fact;
+      SmartPtr<const Vector> v;
+      if (IsValid(CD_x0)) {
+	fact = 1.;
+	v = CD_x0;
+      }
+      else {
+	fact = 0.;
+	v = &wr_d;
+      }
+      retVec->AddTwoVectors(factor, wr_d, fact, *v, 0.);
+
+      /* DELE
       retVec->Copy(wr_d);
       retVec->Scal(factor);
       if (IsValid(CD_x0)) {
         retVec->Axpy(1., *CD_x0);
       }
+      */
       d_x_plus_wr_d_cache_.AddCachedResult(retVec, deps, scalar_deps);
     }
     DBG_PRINT_VECTOR(2, "retVec", *retVec);
