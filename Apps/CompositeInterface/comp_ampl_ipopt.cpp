@@ -35,8 +35,10 @@ namespace Ipopt
 			 std::vector<SmartPtr<Matrix> >& Jq_linking_eqns,
 			 SmartPtr<VectorSpace>& q_space);
 
-  int RunIpoptAlgorithm(const SmartPtr<const Journalist> jnlst, int argv, char**argc)
+  int RunIpoptAlgorithm(const SmartPtr<Journalist> nonconst_jnlst, int argv, char**argc)
   {
+    SmartPtr<const Journalist> jnlst = ConstPtr(nonconst_jnlst);
+
     jnlst->Printf(J_ERROR, J_MAIN, "\n\n\n*************************************************************\n");
     jnlst->Printf(J_ERROR, J_MAIN, "*** Running Ipopt with AMPL Model ***************************\n");
     jnlst->Printf(J_ERROR, J_MAIN, "*************************************************************\n\n\n");
@@ -65,7 +67,7 @@ namespace Ipopt
       suffix_handler->AddAvailableSuffix("common_idx", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Index_Type);
       suffix_handlers.push_back(GetRawPtr(suffix_handler));
 
-      SmartPtr<AmplTNLP> ampl_nlp_i = new AmplTNLP(jnlst, argc_i, suffix_handler);
+      SmartPtr<AmplTNLP> ampl_nlp_i = new AmplTNLP(nonconst_jnlst, argc_i, suffix_handler);
       ampl_nlps.push_back(GetRawPtr(ampl_nlp_i));
 
       SmartPtr<NLP> nlp_i = new TNLPAdapter(GetRawPtr(ampl_nlp_i));
@@ -265,7 +267,7 @@ int main(int argv, char** argc)
     // Setup the Journalist
     //***
 
-    retValue = Ipopt::RunIpoptAlgorithm(ConstPtr(jnlst), argv, argc);
+    retValue = Ipopt::RunIpoptAlgorithm(jnlst, argv, argc);
   }
   catch(IpoptException& exc) {
     exc.ReportException(*jnlst);

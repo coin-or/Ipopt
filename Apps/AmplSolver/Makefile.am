@@ -17,7 +17,9 @@ libamplinterface_a_SOURCES = \
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
-IPLIBS = ../../Algorithm/libipoptalg.a \
+IPLIBS = \
+	../../Apps/StdInterface/libstdinterface.a \
+	../../Algorithm/libipoptalg.a \
 	../../LinAlgImpl/Serial/liblaserial.a \
 	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
 	../../Algorithm/libipoptalg.a \
@@ -29,6 +31,7 @@ IPLIBS = ../../Algorithm/libipoptalg.a \
 	../../OTHERS/ASL/amplsolver.a \
 	../../LinAlgImpl/Serial/liblaserial.a \
 	-ldl
+	../../Apps/StdInterface/libstdinterface.a \
 #	../../OTHERS/HSL/libiphsl.a
 
 ipopt_LDADD = $(IPLIBS)
@@ -38,6 +41,7 @@ CXXFLAGS += -I$(srcdir)/../../Interfaces
 CXXFLAGS += -I$(srcdir)/../../LinAlgImpl/Serial
 CXXFLAGS += -I$(srcdir)/../../Algorithm
 CXXFLAGS += -I$(srcdir)/../../PDSystemImpl/PDFullSpace
+CXXFLAGS += -I$(srcdir)/../../Apps/StdInterface
 CXXFLAGS += -I$(srcdir)/../../Apps/AmplSolver \
 	    -I$(srcdir)/../../OTHERS/ASL/ \
 	    -I$(srcdir)/../../OTHERS/ASL/solvers

@@ -64,7 +64,8 @@ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_ipopt_OBJECTS = ampl_ipopt.$(OBJEXT)
 ipopt_OBJECTS = $(am_ipopt_OBJECTS)
-am__DEPENDENCIES_1 = ../../Algorithm/libipoptalg.a \
+am__DEPENDENCIES_1 = ../../Apps/StdInterface/libstdinterface.a \
+	../../Algorithm/libipoptalg.a \
 	../../LinAlgImpl/Serial/liblaserial.a \
 	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
 	../../Algorithm/libipoptalg.a ../../Common/libcommon.a \
@@ -111,7 +112,7 @@ CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../../Common -I$(srcdir)/../../Interfaces -I$(srcdir)/../../LinAlgImpl/Serial -I$(srcdir)/../../Algorithm -I$(srcdir)/../../PDSystemImpl/PDFullSpace -I$(srcdir)/../../Apps/AmplSolver \
+CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../../Common -I$(srcdir)/../../Interfaces -I$(srcdir)/../../LinAlgImpl/Serial -I$(srcdir)/../../Algorithm -I$(srcdir)/../../PDSystemImpl/PDFullSpace -I$(srcdir)/../../Apps/StdInterface -I$(srcdir)/../../Apps/AmplSolver \
 	    -I$(srcdir)/../../OTHERS/ASL/ \
 	    -I$(srcdir)/../../OTHERS/ASL/solvers
 
@@ -199,7 +200,9 @@ libamplinterface_a_SOURCES = \
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
-IPLIBS = ../../Algorithm/libipoptalg.a \
+IPLIBS = \
+	../../Apps/StdInterface/libstdinterface.a \
+	../../Algorithm/libipoptalg.a \
 	../../LinAlgImpl/Serial/liblaserial.a \
 	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
 	../../Algorithm/libipoptalg.a \
@@ -482,6 +485,7 @@ uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 	tags uninstall uninstall-am uninstall-binPROGRAMS \
 	uninstall-info-am
 
+	../../Apps/StdInterface/libstdinterface.a \
 
 astyle: $(ASTYLE_SOURCES)
 

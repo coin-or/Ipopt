@@ -113,6 +113,15 @@ namespace Ipopt
                         SymMatrix& h);
     //@}
 
+    /** @name Solution Reporting Methods */
+    //@{
+    virtual void FinalizeSolution(ApplicationReturnStatus status,
+                                  const Vector& x, const Vector& z_L, const Vector& z_U,
+                                  const Vector& c, const Vector& d,
+                                  const Vector& y_c, const Vector& y_d,
+                                  Number obj_value);
+    //@}
+
     /** @name Methods for translating data for IpoptNLP into the TNLP
      *  data.  These methods can be used to obtain the current (or
      *  final) data for the TNLP formulation from the IpoptNLP

@@ -115,6 +115,16 @@ namespace Ipopt
                         SymMatrix& h) = 0;
     //@}
 
+    /** @name NLP solution routines. (Overload in derived classes.) */
+    //@{
+    virtual void FinalizeSolution(ApplicationReturnStatus status,
+				  const Vector& x, const Vector& z_L, const Vector& z_U,
+				  const Vector& c, const Vector& d,
+				  const Vector& y_c, const Vector& y_d,
+				  Number obj_value)
+    {};
+    //@}
+
 
   private:
     /**@name Default Compiler Generated Methods

@@ -16,150 +16,170 @@
 
 namespace Ipopt
 {
-   IpoptApplication::IpoptApplication()
+  IpoptApplication::IpoptApplication()
       :
-   output_file_(""),
-   output_file_print_level_(J_NONE),
-   read_params_dat_(true),
-   report_solve_status_(true),
-   report_solution_(true),
-   force_report_solution_to_console_(false),
-   report_statistics_(true)
-   {
-   }
+      read_params_dat_(true),
+      report_solution_(true),
+      force_report_solution_to_console_(false),
+      report_statistics_(true),
+      jnlst_(new Journalist()),
+      options_(new OptionsList())
+  {}
 
-   IpoptApplication::~IpoptApplication()
-   {
-   }
+  IpoptApplication::~IpoptApplication()
+  {}
 
-   ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp,
-      const SmartPtr<OptionsList> additional_options)
-   {
+  ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp)
+  {
     SmartPtr<NLP> nlp_adapter =
       new TNLPAdapter(GetRawPtr(nlp));
 
-    return OptimizeNLP(nlp_adapter, additional_options);
-   }
-
-   ApplicationReturnStatus IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp,
-      const SmartPtr<OptionsList> additional_options)
-   {
-      ApplicationReturnStatus retValue = Solve_Succeeded;
-  SmartPtr<Journalist> jnlst = new Journalist();
-
-# ifdef IP_DEBUG
-  DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst));
-# endif
-
-  Journal* jrnl = jnlst->AddJournal("ConsoleStdOut", "stdout", J_SUMMARY);
-  jrnl->SetPrintLevel(J_DBG, J_NONE);
-
-  if (output_file_ != "" && output_file_print_level_ != J_NONE) {
-     jnlst->AddJournal("IPOPT_OUT", output_file_, output_file_print_level_);
+    return OptimizeNLP(nlp_adapter);
   }
 
+  ApplicationReturnStatus IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp)
+  {
+    ApplicationReturnStatus retValue = Solve_Succeeded;
+
 # ifdef IP_DEBUG
-  jrnl = jnlst->AddJournal("Debug", "debug.out", J_DETAILED);
-  jrnl->SetPrintLevel(J_DBG, J_ALL);
+
+    DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
+# endif
+
+    Journal* jrnl = jnlst_->AddJournal("ConsoleStdOut", "stdout", J_SUMMARY);
+    jrnl->SetPrintLevel(J_DBG, J_NONE);
+
+# ifdef IP_DEBUG
+
+    jrnl = jnlst_->AddJournal("Debug", "debug.out", J_DETAILED);
+    jrnl->SetPrintLevel(J_DBG, J_ALL);
 # endif
 
 
-  // Get the options
-  SmartPtr<OptionsList> options;
-  if (IsValid(additional_options)){
-     options = new OptionsList(*additional_options);
-  }
-  else {
-     options = new OptionsList();
-  }
-
-  if (read_params_dat_) {
-    FILE* fp_options = fopen("PARAMS.DAT", "r");
-    if (fp_options) {
-      // PARAMS.DAT exists, read the content
-      options->ReadFromFile(*jnlst, fp_options);
-      fclose(fp_options);
-      fp_options=NULL;
+    // Get the options
+    if (read_params_dat_) {
+      FILE* fp_options = fopen("PARAMS.DAT", "r");
+      if (fp_options) {
+        // PARAMS.DAT exists, read the content
+        options_->ReadFromFile(*jnlst_, fp_options);
+        fclose(fp_options);
+        fp_options=NULL;
+      }
     }
-  }
 
-  try {
-    SmartPtr<IpoptNLP> ip_nlp =
-      new OrigIpoptNLP(ConstPtr(jnlst), GetRawPtr(nlp));
+    if( jnlst_->ProduceOutput(J_DETAILED, J_MAIN) ) {
+      // Print out the options (including the number of times they were used
+      std::string liststr;
+      options_->PrintList(liststr);
+      jnlst_->Printf(J_DETAILED, J_MAIN, "\nList of options:\n\n%s", liststr.c_str());
+    }
 
-    // Create the IpoptData
-    SmartPtr<IpoptData> ip_data = new IpoptData();
+    try {
+      SmartPtr<IpoptNLP> ip_nlp =
+        new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp));
 
-    // Create the IpoptCalculators
-    SmartPtr<IpoptCalculatedQuantities> ip_cq
-    = new IpoptCalculatedQuantities(ip_nlp, ip_data);
+      // Create the IpoptData
+      SmartPtr<IpoptData> ip_data = new IpoptData();
 
-    // Create the Algorithm object
-    SmartPtr<IpoptAlgorithm> alg 
-       = AlgorithmBuilder::BuildBasicAlgorithm(*jnlst, *options, "");
+      // Create the IpoptCalculators
+      SmartPtr<IpoptCalculatedQuantities> ip_cq
+      = new IpoptCalculatedQuantities(ip_nlp, ip_data);
 
-    // Set up the algorithm
-    alg->Initialize(*jnlst, *ip_nlp, *ip_data, *ip_cq, *options, "");
+      // Create the Algorithm object
+      SmartPtr<IpoptAlgorithm> alg
+      = AlgorithmBuilder::BuildBasicAlgorithm(*jnlst_, *options_, "");
 
-    // Run the algorithm
-    IpoptAlgorithm::SolverReturn status = alg->Optimize();
+      // Set up the algorithm
+      alg->Initialize(*jnlst_, *ip_nlp, *ip_data, *ip_cq, *options_, "");
 
-   if (status == IpoptAlgorithm::SUCCESS) {
-      if (report_solve_status_) {
-      jnlst->Printf(J_SUMMARY, J_MAIN, "\n\nIpopt Optimize Successful...\n");
+      // Run the algorithm
+      IpoptAlgorithm::SolverReturn status = alg->Optimize();
+
+      if (status == IpoptAlgorithm::SUCCESS) {
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\n\nOptimal Solution Found!\n");
       }
-   }
-   else if (status == IpoptAlgorithm::MAXITER_EXCEEDED) {
-      retValue = Maximum_Iterations_Exceeded;
-      if (report_solve_status_) {
-         jnlst->Printf(J_SUMMARY, J_MAIN, "\n\nERROR: Maximum Number of Iterations Exceeded.\n");
+      else if (status == IpoptAlgorithm::MAXITER_EXCEEDED) {
+        retValue = Maximum_Iterations_Exceeded;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\n\nERROR: Maximum Number of Iterations Exceeded.\n");
       }
-   }
-   else if (status == IpoptAlgorithm::FAILED) {
-      retValue = Solve_Failed;
-      if (report_solve_status_) {
-      jnlst->Printf(J_SUMMARY, J_MAIN, "\n\nERROR: Algorithm Failed - Check detailed output.\n");
+      else if (status == IpoptAlgorithm::FAILED) {
+        retValue = Solve_Failed;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\n\nERROR: Algorithm Failed - Check detailed output.\n");
       }
-   }
-   else {
-      retValue = Internal_Error;
-      if (report_solve_status_) {
-         jnlst->Printf(J_SUMMARY, J_MAIN, "\n\nINTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
+      else {
+        retValue = Internal_Error;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\n\nINTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
       }
-   }
 
-    EJournalLevel vector_report_level = J_VECTOR;
-    if (status == IpoptAlgorithm::SUCCESS && (report_solution_ || force_report_solution_to_console_)) {
-       if (force_report_solution_to_console_) {
+      EJournalLevel vector_report_level = J_VECTOR;
+      if (report_solution_ || force_report_solution_to_console_) {
+        if (force_report_solution_to_console_) {
           vector_report_level = J_SUMMARY;
-       }
-      jnlst->Printf(J_SUMMARY, J_SOLUTION, "\n\nOptimal solution found! \n");
-      jnlst->Printf(J_SUMMARY, J_SOLUTION, "Optimal Objective Value = %.16E\n", ip_cq->curr_f());
-      jnlst->PrintVector(vector_report_level, J_SOLUTION, "x", *ip_data->curr_x());
-      jnlst->PrintVector(vector_report_level, J_SOLUTION, "y_c", *ip_data->curr_y_c());
-      jnlst->PrintVector(vector_report_level, J_SOLUTION, "y_d", *ip_data->curr_y_d());
-      jnlst->PrintVector(vector_report_level, J_SOLUTION, "z_L", *ip_data->curr_z_L());
-      jnlst->PrintVector(vector_report_level, J_SOLUTION, "z_U", *ip_data->curr_z_U());
-      jnlst->PrintVector(vector_report_level, J_SOLUTION, "v_L", *ip_data->curr_v_L());
-      jnlst->PrintVector(vector_report_level, J_SOLUTION, "v_U", *ip_data->curr_v_U());
+        }
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "\nNumber of Iterations    = %d\n",
+                       ip_data->iter_count());
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Objective Value = %.16E\n",
+                       ip_cq->curr_f());
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Primal Infeasibility    = %23.16e\n",
+                       ip_cq->curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX));
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Dual Infeasibility      = %23.16e\n",
+                       ip_cq->curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX));
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Complementarity         = %23.16e\n",
+                       ip_cq->curr_complementarity(0., IpoptCalculatedQuantities::NORM_MAX));
+
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "x", *ip_data->curr_x());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "y_c", *ip_data->curr_y_c());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "y_d", *ip_data->curr_y_d());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "z_L", *ip_data->curr_z_L());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "z_U", *ip_data->curr_z_U());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "v_L", *ip_data->curr_v_L());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "v_U", *ip_data->curr_v_U());
+      }
+
+      if (report_statistics_) {
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "\nNumber of objective function evaluations             = %d\n",
+                       ip_nlp->f_evals());
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Number of equality constraint evaluations            = %d\n",
+                       ip_nlp->c_evals());
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Number of inequality constraint evaluations          = %d\n",
+                       ip_nlp->d_evals());
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Number of equality constraint Jacobian evaluations   = %d\n",
+                       ip_nlp->jac_c_evals());
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Number of inequality constraint Jacobian evaluations = %d\n",
+                       ip_nlp->jac_d_evals());
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Number of Lagrangian Hessian evaluations             = %d\n",
+                       ip_nlp->h_evals());
+      }
+
+      nlp->FinalizeSolution(retValue,
+                            *ip_data->curr_x(), *ip_data->curr_z_L(), *ip_data->curr_z_U(),
+                            *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr_y_c(), *ip_data->curr_y_d(),
+                            ip_cq->curr_f());
+    }
+    catch(IpoptException& exc) {
+      exc.ReportException(*jnlst_);
+      retValue = Solve_Failed;
+    }
+    catch(...) {
+      IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
+      exc.ReportException(*jnlst_);
+      retValue = NonIpopt_Exception_Thrown;
     }
 
-    if (report_statistics_) {
-      jnlst->Printf(J_SUMMARY, J_SOLUTION, "Number of Iterations = %d\n", ip_data->iter_count());
-    }
-  }
-  catch(IpoptException& exc) {
-    exc.ReportException(*jnlst);
-    retValue = Solve_Failed;
-  }
-  catch(...) {
-    IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
-    exc.ReportException(*jnlst);
-    retValue = NonIpopt_Exception_Thrown;
-  }
-  return retValue;
+    return retValue;
 
-   }
+  }
 } // namespace Ipopt
 
 

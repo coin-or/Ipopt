@@ -7,6 +7,7 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-09-02
 
 #include "IpStdInterfaceTNLP.hpp"
+#include "IpBlas.hpp"
 
 namespace Ipopt
 {
@@ -26,6 +27,12 @@ namespace Ipopt
                                      Eval_Grad_F_CB eval_grad_f,
                                      Eval_Jac_G_CB eval_jac_g,
                                      Eval_H_CB eval_h,
+                                     Number* x_sol,
+                                     Number* z_L_sol,
+                                     Number* z_U_sol,
+                                     Number* g_sol,
+                                     Number* lam_sol,
+                                     Number* obj_sol,
                                      UserDataPtr user_data)
       :
       TNLP(),
@@ -47,6 +54,12 @@ namespace Ipopt
       eval_grad_f_(eval_grad_f),
       eval_jac_g_(eval_jac_g),
       eval_h_(eval_h),
+      x_sol_(x_sol),
+      z_L_sol_(z_L_sol),
+      z_U_sol_(z_U_sol),
+      g_sol_(g_sol),
+      lambda_sol_(lam_sol),
+      obj_sol_(obj_sol),
       user_data_(user_data),
       non_const_x_(NULL)
   {
@@ -204,7 +217,7 @@ namespace Ipopt
 
   bool StdInterfaceTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
                                     Index m, Index nele_jac, Index* iRow,
-				    Index *jCol, Number* values)
+                                    Index *jCol, Number* values)
   {
     DBG_ASSERT(n==n_var_);
     DBG_ASSERT(nele_jac==nele_jac_);
@@ -252,6 +265,32 @@ namespace Ipopt
       DBG_ASSERT(false && "Invalid combination of iRow, jCol, and values pointers");
     }
     return (retval!=0);
+  }
+
+  void StdInterfaceTNLP::finalize_solution(ApplicationReturnStatus status,
+      Index n, const Number* x, const Number* z_L, const Number* z_U,
+      Index m, const Number* g, const Number* lambda,
+      Number obj_value)
+  {
+    if (x_sol_) {
+      IpBlasDcopy(n, x, 1, x_sol_, 1);
+    }
+    if (z_L_sol_) {
+      IpBlasDcopy(n, z_L, 1, z_L_sol_, 1);
+    }
+    if (z_U_sol_) {
+      IpBlasDcopy(n, z_U, 1, z_U_sol_, 1);
+    }
+    if (g_sol_) {
+      IpBlasDcopy(m, g, 1, g_sol_, 1);
+    }
+    if (lambda_sol_) {
+      IpBlasDcopy(n, lambda, 1, lambda_sol_, 1);
+    }
+    if (obj_sol_) {
+      *obj_sol_ = obj_value;
+    }
+    // don't need to store the status, we get the status from the OptimizeTNLP method
   }
 
   void StdInterfaceTNLP::apply_new_x(bool new_x, Index n, const Number* x)

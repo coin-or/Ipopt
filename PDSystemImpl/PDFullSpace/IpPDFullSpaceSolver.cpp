@@ -74,7 +74,7 @@ namespace Ipopt
                                 Vector& res_zU,
                                 Vector& res_vL,
                                 Vector& res_vU,
-				bool allow_inexact)
+                                bool allow_inexact)
   {
     DBG_START_METH("PDFullSpaceSolver::Solve",dbg_verbosity);
 
@@ -349,8 +349,8 @@ namespace Ipopt
               delta_x_curr_ = 8.*delta_x_curr_;  //TODO Parameter
             }
           }
-	  ASSERT_EXCEPTION(delta_x_curr_<1e40, IpoptException,
-			   "Regularization parameter is getting too large.");
+          ASSERT_EXCEPTION(delta_x_curr_<1e40, IpoptException,
+                           "Regularization parameter is getting too large.");
           delta_s_curr_ = delta_x_curr_;
         }
       } // while (retval!=S_SUCCESS && !fail) {

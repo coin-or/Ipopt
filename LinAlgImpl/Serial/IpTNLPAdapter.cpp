@@ -733,6 +733,45 @@ namespace Ipopt
     return retval;
   }
 
+  void TNLPAdapter::FinalizeSolution(ApplicationReturnStatus status,
+                                     const Vector& x, const Vector& z_L, const Vector& z_U,
+                                     const Vector& c, const Vector& d,
+                                     const Vector& y_c, const Vector& y_d,
+                                     Number obj_value)
+  {
+    update_local_x(x);
+    update_local_lambda(y_c, y_d);
+
+    ResortX(x, full_x_);
+    ResortG(y_c, y_d, full_lambda_);
+
+    const DenseVector* dc = dynamic_cast<const DenseVector*>(&c);
+    const DenseVector* dd = dynamic_cast<const DenseVector*>(&d);
+    DBG_ASSERT(dc && dd);
+    Number* full_g = new Number[n_full_g_];
+    ResortG(c, d, full_g);
+
+    Number* full_z_L = new Number[n_full_x_];
+    Number* full_z_U = new Number[n_full_x_];
+    for (int i=0; i<n_full_x_; i++) {
+      full_z_L[i] = nlp_lower_bound_inf_;
+      full_z_U[i] = nlp_upper_bound_inf_;
+    }
+    ResortBnds(z_L, full_z_L, z_U, full_z_U);
+
+    tnlp_->finalize_solution(status,
+                             n_full_x_, full_x_, full_z_L, full_z_U,
+                             n_full_g_, full_g, full_lambda_,
+                             obj_value);
+
+    delete [] full_z_L;
+    full_z_L = NULL;
+    delete [] full_z_U;
+    full_z_U = NULL;
+    delete [] full_g;
+    full_g = NULL;
+  }
+
   void TNLPAdapter::ResortX(const Vector& x, Number* x_orig)
   {
     const DenseVector* dx = dynamic_cast<const DenseVector*>(&x);
@@ -780,9 +819,12 @@ namespace Ipopt
       DBG_ASSERT(dx_L);
       const Number* x_L_values = dx_L->Values();
 
-      const Index* bnds_pos = P_x_x_L_->ExpandedPosIndices();
+      const Index* bnds_pos_not_fixed = P_x_x_L_->ExpandedPosIndices();
+      const Index* bnds_pos_full = P_x_full_x_->ExpandedPosIndices();
       for (Index i=0; i<x_L.Dim(); i++) {
-        x_L_orig[bnds_pos[i]] = x_L_values[i];
+        int idx = bnds_pos_not_fixed[i];
+        idx = bnds_pos_full[idx];
+        x_L_orig[idx] = x_L_values[i];
       }
     }
 
@@ -791,9 +833,12 @@ namespace Ipopt
       DBG_ASSERT(dx_U);
       const Number* x_U_values = dx_U->Values();
 
-      const Index* bnds_pos = P_x_x_U_->ExpandedPosIndices();
+      const Index* bnds_pos_not_fixed = P_x_x_U_->ExpandedPosIndices();
+      const Index* bnds_pos_full = P_x_full_x_->ExpandedPosIndices();
       for (Index i=0; i<x_U.Dim(); i++) {
-        x_U_orig[bnds_pos[i]] = x_U_values[i];
+        int idx = bnds_pos_not_fixed[i];
+        idx = bnds_pos_full[idx];
+        x_U_orig[idx] = x_U_values[i];
       }
     }
   }

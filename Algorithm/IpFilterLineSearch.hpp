@@ -264,15 +264,15 @@ namespace Ipopt
      *  The return value is true, if an SOC step has been accepted.
      */
     bool TrySecondOrderCorrection(Number alpha_primal_test,
-				  Number& alpha_primal,
-				  SmartPtr<const Vector>& actual_delta_x,
-				  SmartPtr<const Vector>& actual_delta_s,
-				  SmartPtr<const Vector>& actual_delta_y_c,
-				  SmartPtr<const Vector>& actual_delta_y_d,
-				  SmartPtr<const Vector>& actual_delta_z_L,
-				  SmartPtr<const Vector>& actual_delta_z_U,
-				  SmartPtr<const Vector>& actual_delta_v_L,
-				  SmartPtr<const Vector>& actual_delta_v_U);
+                                  Number& alpha_primal,
+                                  SmartPtr<const Vector>& actual_delta_x,
+                                  SmartPtr<const Vector>& actual_delta_s,
+                                  SmartPtr<const Vector>& actual_delta_y_c,
+                                  SmartPtr<const Vector>& actual_delta_y_d,
+                                  SmartPtr<const Vector>& actual_delta_z_L,
+                                  SmartPtr<const Vector>& actual_delta_z_U,
+                                  SmartPtr<const Vector>& actual_delta_v_L,
+                                  SmartPtr<const Vector>& actual_delta_v_U);
 
     /** Try higher order corrector (for fast local convergence).  In
      *  contrast to a second order correction step, which tries to
@@ -281,15 +281,15 @@ namespace Ipopt
      *  primal-dual step is acceptable.
      */
     bool TryCorrector(Number alpha_primal_test,
-		      Number& alpha_primal,
-		      SmartPtr<const Vector>& actual_delta_x,
-		      SmartPtr<const Vector>& actual_delta_s,
-		      SmartPtr<const Vector>& actual_delta_y_c,
-		      SmartPtr<const Vector>& actual_delta_y_d,
-		      SmartPtr<const Vector>& actual_delta_z_L,
-		      SmartPtr<const Vector>& actual_delta_z_U,
-		      SmartPtr<const Vector>& actual_delta_v_L,
-		      SmartPtr<const Vector>& actual_delta_v_U);
+                      Number& alpha_primal,
+                      SmartPtr<const Vector>& actual_delta_x,
+                      SmartPtr<const Vector>& actual_delta_s,
+                      SmartPtr<const Vector>& actual_delta_y_c,
+                      SmartPtr<const Vector>& actual_delta_y_d,
+                      SmartPtr<const Vector>& actual_delta_z_L,
+                      SmartPtr<const Vector>& actual_delta_z_U,
+                      SmartPtr<const Vector>& actual_delta_v_L,
+                      SmartPtr<const Vector>& actual_delta_v_U);
 
     /** Perform magic steps.  Take the current values of the slacks in
      *  trial and replace them by better ones that lead to smaller

@@ -156,7 +156,7 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = AmplSolver StdInterface CompositeInterface CUTErInterface
+SUBDIRS = StdInterface AmplSolver CompositeInterface CUTErInterface
 all: all-recursive
 
 .SUFFIXES:

@@ -78,6 +78,16 @@ public:
 		      Index* jCol, Number* values);
   
   //@}
+
+  /** @name Solution Methods */
+  //@{
+  /** This method is called when the algorithm is complete so the TNLP can store/write the solution */
+  virtual void finalize_solution(ApplicationReturnStatus status,
+				 Index n, const Number* x, const Number* z_L, const Number* z_U, 
+				 Index m, const Number* g, const Number* lambda,
+				 Number obj_value);
+  //@}
+
 private:
   /**@name Methods to block default compiler methods.
    * The compiler automatically generates the following three methods.

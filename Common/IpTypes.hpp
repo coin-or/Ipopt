@@ -18,6 +18,15 @@ namespace Ipopt
   typedef int Index;
   typedef int Int;
 
+  enum ApplicationReturnStatus
+  {
+    Solve_Succeeded,
+    Maximum_Iterations_Exceeded,
+    Solve_Failed,
+    NonIpopt_Exception_Thrown,
+    Internal_Error
+  };
+
 } // namespace Ipopt
 
 // external to the Ipopt namespace

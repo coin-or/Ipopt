@@ -138,8 +138,8 @@ Int IpoptSolve(Index n,
     SmartPtr<StdInterfaceTNLP> stdinterface_nlp =
       new StdInterfaceTNLP(ConstPtr(jnlst), n, x_L, x_U, m, g_L, g_U, nele_jac,
                            nele_hess, x, mult_g, mult_x_L, mult_x_U,
-                           eval_f, eval_g, eval_grad_f, eval_jac_g,
-                           eval_h, user_data);
+                           eval_f, eval_g, eval_grad_f, eval_jac_g, eval_h,
+                           x_, mult_x_L_, mult_x_U_, g, mult_g_, obj_val, user_data);
 
     SmartPtr<TNLPAdapter> tnlpadapter =
       new TNLPAdapter(GetRawPtr(stdinterface_nlp));
@@ -155,8 +155,8 @@ Int IpoptSolve(Index n,
     = new IpoptCalculatedQuantities(ip_nlp, ip_data);
 
     // Create the Algorithm object
-    SmartPtr<IpoptAlgorithm> alg 
-       = AlgorithmBuilder::BuildBasicAlgorithm(*jnlst, *options, "");
+    SmartPtr<IpoptAlgorithm> alg
+    = AlgorithmBuilder::BuildBasicAlgorithm(*jnlst, *options, "");
 
     // Set up the algorithm
     alg->Initialize(*jnlst, *ip_nlp, *ip_data, *ip_cq, *options, "");
@@ -183,21 +183,21 @@ Int IpoptSolve(Index n,
       retValue = 1;
     }
 
-    // Copy values into user-provided output arrays
-    tnlpadapter->ResortX(*ip_data->curr_x(), x_);
-    if (g) {
-      tnlpadapter->ResortG(*ip_cq->curr_c(), *ip_cq->curr_d(), g);
+    ApplicationReturnStatus app_status = Solve_Succeeded;
+    if (status == IpoptAlgorithm::MAXITER_EXCEEDED) {
+      app_status = Maximum_Iterations_Exceeded;
     }
-    if (obj_val) {
-      *obj_val = ip_cq->curr_f();
+    else if (status == IpoptAlgorithm::FAILED) {
+      app_status = Solve_Failed;
     }
-    if (mult_g_) {
-      tnlpadapter->ResortG(*ip_data->curr_y_c(), *ip_data->curr_y_d(), mult_g_);
+    else {
+      app_status = Internal_Error;
     }
-    if (mult_x_L_ || mult_x_U_) {
-      tnlpadapter->ResortBnds(*ip_data->curr_z_L(), mult_x_L_,
-                              *ip_data->curr_z_U(), mult_x_U_);
-    }
+
+    tnlpadapter->FinalizeSolution(app_status,
+                                  *ip_data->curr_x(), *ip_data->curr_z_L(), *ip_data->curr_z_U(),
+                                  *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr_y_c(), *ip_data->curr_y_d(),
+                                  ip_cq->curr_f());
   }
   catch(IpoptException& exc) {
     exc.ReportException(*jnlst);

@@ -209,7 +209,8 @@ namespace Ipopt
   bool
   NonmonotoneMuUpdate::CheckSufficientProgress()
   {
-    if (mu_never_fix_) return true;
+    if (mu_never_fix_)
+      return true;
 
     bool retval = true;
 

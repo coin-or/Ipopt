@@ -30,10 +30,10 @@
 namespace Ipopt
 {
 
-	SmartPtr<IpoptAlgorithm> 
-      AlgorithmBuilder::BuildBasicAlgorithm(const Journalist& jnlst,
-            const OptionsList& options,   
-            const std::string& prefix)
+  SmartPtr<IpoptAlgorithm>
+  AlgorithmBuilder::BuildBasicAlgorithm(const Journalist& jnlst,
+                                        const OptionsList& options,
+                                        const std::string& prefix)
   {
     // Create the convergence check
     SmartPtr<ConvergenceCheck> convCheck =
