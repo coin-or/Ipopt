@@ -88,6 +88,14 @@ namespace Ipopt
 
     initialized_ = false;
 
+    //TODO we need to clean up the mu-update for the restoration phase
+    if (prefix=="resto.") {
+      first_iter_resto_ = true;
+    }
+    else {
+      first_iter_resto_ = false;
+    }
+
     return true;
   }
 
@@ -99,14 +107,14 @@ namespace Ipopt
     Number sub_problem_error = IpCq().curr_barrier_error();
 
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                   "Optimality Error for Barrier Sub-problem = %lf\n",
+                   "Optimality Error for Barrier Sub-problem = %e\n",
                    sub_problem_error);
     Number kappa_eps_mu = kappa_epsilon_ * mu;
 
     bool done = false;
-    while (sub_problem_error <= kappa_eps_mu && !done) {
+    while (sub_problem_error <= kappa_eps_mu && !done && !first_iter_resto_) {
       Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                     "  sub_problem_error < kappa_eps * mu (%lf)\n", kappa_eps_mu);
+                     "  sub_problem_error < kappa_eps * mu (%e)\n", kappa_eps_mu);
 
       // Compute the new values for mu and tau
       Number new_mu;
@@ -142,6 +150,7 @@ namespace Ipopt
       }
     }
 
+    first_iter_resto_ = false;
     initialized_ = true;
   }
 
