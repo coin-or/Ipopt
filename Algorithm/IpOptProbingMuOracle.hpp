@@ -71,6 +71,8 @@ namespace Ipopt
                                     const Vector& step_aff_x_U,
                                     const Vector& step_aff_s_L,
                                     const Vector& step_aff_s_U,
+				    const Vector& step_aff_y_c,
+				    const Vector& step_aff_y_d,
                                     const Vector& step_aff_z_L,
                                     const Vector& step_aff_z_U,
                                     const Vector& step_aff_v_L,
@@ -79,10 +81,16 @@ namespace Ipopt
                                     const Vector& step_cen_x_U,
                                     const Vector& step_cen_s_L,
                                     const Vector& step_cen_s_U,
+				    const Vector& step_cen_y_c,
+				    const Vector& step_cen_y_d,
                                     const Vector& step_cen_z_L,
                                     const Vector& step_cen_z_U,
                                     const Vector& step_cen_v_L,
-                                    const Vector& step_cen_v_U);
+                                    const Vector& step_cen_v_U,
+				    SmartPtr<const Vector> jac_cT_times_step_aff_y_c,
+				    SmartPtr<const Vector> jac_dT_times_step_aff_y_d,
+				    SmartPtr<const Vector> jac_cT_times_step_cen_y_c,
+				    SmartPtr<const Vector> jac_dT_times_step_cen_y_d);
 
     /** Auxilliary function performing the golden bisection */
     Number PerformGoldenBisection(Number sigma_up,
@@ -92,6 +100,8 @@ namespace Ipopt
                                   const Vector& step_aff_x_U,
                                   const Vector& step_aff_s_L,
                                   const Vector& step_aff_s_U,
+				  const Vector& step_aff_y_c,
+				  const Vector& step_aff_y_d,
                                   const Vector& step_aff_z_L,
                                   const Vector& step_aff_z_U,
                                   const Vector& step_aff_v_L,
@@ -100,10 +110,16 @@ namespace Ipopt
                                   const Vector& step_cen_x_U,
                                   const Vector& step_cen_s_L,
                                   const Vector& step_cen_s_U,
+				  const Vector& step_cen_y_c,
+				  const Vector& step_cen_y_d,
                                   const Vector& step_cen_z_L,
                                   const Vector& step_cen_z_U,
                                   const Vector& step_cen_v_L,
-                                  const Vector& step_cen_v_U);
+                                  const Vector& step_cen_v_U,
+				  SmartPtr<const Vector> jac_cT_times_step_aff_y_c,
+				  SmartPtr<const Vector> jac_dT_times_step_aff_y_d,
+				  SmartPtr<const Vector> jac_cT_times_step_cen_y_c,
+				  SmartPtr<const Vector> jac_dT_times_step_cen_y_d);
 
     /** @name Algorithmic parameters */
     //@{
@@ -117,9 +133,16 @@ namespace Ipopt
     /** Flag indicating how centrality should be involved in the
      *  quality function */
     Index quality_function_centrality_;
+    /** Flag indicating what term is to be used for the dual
+     *  infeasibility in the quality function. */
+    Index quality_function_dual_inf_;
     /** Maximal number of bi-section steps in the golden bisection
      *  search for sigma. */
     Index max_bisection_steps_;
+    /** Flag indicating whether the dual step size is to be used for
+     *  the equality constraint multipliers. Note, this must be the
+     *  same as in any line search option. */
+    bool dual_alpha_for_y_;
     //@}
 
     /** @name scaling values */
