@@ -70,8 +70,12 @@ namespace Ipopt
     Number bound_push_;
     /** Parameters for bumping x0 */
     Number bound_frac_;
+    /** Parameters for bumping x0 in warm start mode */
+    Number warm_start_bound_push_;
+    /** Parameters for bumping x0 in warm start mode */
+    Number warm_start_bound_frac_;
     /** Parameters for bumping initial bound multipliers */
-    Number mult_bound_push_;
+    Number warm_start_mult_bound_push_;
     /** If max-norm of the initial equality constraint multiplier
      *  estimate is larger than this, the initial y_* variables are
      *  set to zero. */

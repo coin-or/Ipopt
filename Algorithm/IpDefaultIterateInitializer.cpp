@@ -42,13 +42,31 @@ namespace Ipopt
       bound_frac_ = 0.01;
     }
 
-    if (options.GetNumericValue("mult_bound_push", value, prefix)) {
+    if (options.GetNumericValue("warm_start_bound_push", value, prefix)) {
       ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"mult_bound_push\": This value must be larger than 0.");
-      mult_bound_push_ = value;
+                       "Option \"warm_start_bound_push\": This value must be larger than 0.");
+      warm_start_bound_push_ = value;
     }
     else {
-      mult_bound_push_ = 0.01;
+      warm_start_bound_push_ = 1e-4;
+    }
+
+    if (options.GetNumericValue("warm_start_bound_frac", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0 && value < 0.5, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"warm_start_bound_frac\": Value must be between 0 and 0.5.");
+      warm_start_bound_frac_ = value;
+    }
+    else {
+      warm_start_bound_frac_ = 1e-4;
+    }
+
+    if (options.GetNumericValue("warm_start_mult_bound_push", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"warm_start_mult_bound_push\": This value must be larger than 0.");
+      warm_start_mult_bound_push_ = value;
+    }
+    else {
+      warm_start_mult_bound_push_ = 1e-4;
     }
 
     if (options.GetNumericValue("lam_init_max", value, prefix)) {
@@ -116,6 +134,13 @@ namespace Ipopt
     // Now we compute the initial values that the algorithm is going to
     // actually use.  We first store them in the trial fields in ip_data.
 
+    Number bound_push_used = bound_push_;
+    Number bound_frac_used = bound_frac_;
+    if (warm_start_init_point_) {
+      bound_push_used = warm_start_bound_push_;
+      bound_frac_used = warm_start_bound_frac_;
+    }
+
     // Calculate any required shift in x0 and s0
     const double dbl_min = std::numeric_limits<double>::min();
     const double tiny_double = 100.0*dbl_min;
@@ -143,14 +168,14 @@ namespace Ipopt
     tmp_u->AddOneVector(1., *x_U, -1.);
     Px_U->MultVector(1.0, *tmp_u, 0.0, *tmp);
     Px_L->TransMultVector(1.0, *tmp, 0.0, *q_l);
-    q_l->AddOneVector(-1.0, *tiny_l, bound_frac_);
+    q_l->AddOneVector(-1.0, *tiny_l, bound_frac_used);
 
     tmp_l->Set(1.0);
     p_l->Copy(*x_L);
     p_l->ElementWiseSgn();
     p_l->ElementWiseMultiply(*x_L);
     p_l->ElementWiseMax(*tmp_l);
-    p_l->AddOneVector(-1.0, *tiny_l, bound_push_);
+    p_l->AddOneVector(-1.0, *tiny_l, bound_push_used);
 
     q_l->ElementWiseReciprocal();
     p_l->ElementWiseReciprocal();
@@ -170,7 +195,7 @@ namespace Ipopt
     tmp_l->Axpy(-1.0, *x_L);
     Px_L->MultVector(1.0, *tmp_l, 0.0, *tmp);
     Px_U->TransMultVector(1.0, *tmp, 0.0, *q_u);
-    q_u->AddOneVector(-1.0, *tiny_u, bound_frac_);
+    q_u->AddOneVector(-1.0, *tiny_u, bound_frac_used);
     DBG_PRINT_VECTOR(2,"q_u",*q_u);
 
     tmp_u->Set(1.0);
@@ -178,7 +203,7 @@ namespace Ipopt
     p_u->ElementWiseSgn();
     p_u->ElementWiseMultiply(*x_U);
     p_u->ElementWiseMax(*tmp_u);
-    p_u->AddOneVector(-1.0, *tiny_u, bound_push_);
+    p_u->AddOneVector(-1.0, *tiny_u, bound_push_used);
     DBG_PRINT_VECTOR(2,"p_u",*p_u);
 
     q_u->ElementWiseReciprocal();
@@ -255,14 +280,14 @@ namespace Ipopt
     tmp_u->AddOneVector(1., *d_U, -1.);
     Pd_U->MultVector(1.0, *tmp_u, 0.0, *tmp);
     Pd_L->TransMultVector(1.0, *tmp, 0.0, *q_l);
-    q_l->AddOneVector(-1.0, *tiny_l, bound_frac_);
+    q_l->AddOneVector(-1.0, *tiny_l, bound_frac_used);
 
     tmp_l->Set(1.0);
     p_l->Copy(*d_L);
     p_l->ElementWiseSgn();
     p_l->ElementWiseMultiply(*d_L);
     p_l->ElementWiseMax(*tmp_l);
-    p_l->AddOneVector(-1.0, *tiny_l, bound_push_);
+    p_l->AddOneVector(-1.0, *tiny_l, bound_push_used);
 
     q_l->ElementWiseReciprocal();
     p_l->ElementWiseReciprocal();
@@ -283,14 +308,14 @@ namespace Ipopt
     tmp_l->Axpy(-1.0, *d_L);
     Pd_L->MultVector(1.0, *tmp_l, 0.0, *tmp);
     Pd_U->TransMultVector(1.0, *tmp, 0.0, *q_u);
-    q_u->AddOneVector(-1.0, *tiny_u, bound_frac_);
+    q_u->AddOneVector(-1.0, *tiny_u, bound_frac_used);
 
     tmp_u->Set(1.0);
     p_u->Copy(*d_U);
     p_u->ElementWiseSgn();
     p_u->ElementWiseMultiply(*d_U);
     p_u->ElementWiseMax(*tmp_u);
-    p_u->AddOneVector(-1.0, *tiny_u, bound_push_);
+    p_u->AddOneVector(-1.0, *tiny_u, bound_push_used);
 
     q_u->ElementWiseReciprocal();
     p_u->ElementWiseReciprocal();
@@ -348,7 +373,7 @@ namespace Ipopt
       // Push given z_L and z_U multipliers away from 0
       z_L->Copy(*IpData().curr_z_L());
       tmp = z_L->MakeNew();
-      tmp->Set(mult_bound_push_);
+      tmp->Set(warm_start_mult_bound_push_);
       z_L->ElementWiseMax(*tmp);
       if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
 	SmartPtr<Vector> delta_z_L = z_L->MakeNew();
@@ -362,7 +387,7 @@ namespace Ipopt
 
       z_U->Copy(*IpData().curr_z_U());
       tmp = z_U->MakeNew();
-      tmp->Set(mult_bound_push_);
+      tmp->Set(warm_start_mult_bound_push_);
       z_U->ElementWiseMax(*tmp);
       if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
 	SmartPtr<Vector> delta_z_U = z_U->MakeNew();
@@ -375,15 +400,15 @@ namespace Ipopt
       }
 
       // Compute the v_L and v_U multipliers from y_d and make sure they
-      // are at least mult_bound_push_ away from 0
+      // are at least warm_start_mult_bound_push_ away from 0
       Pd_L->TransMultVector(-1., *IpData().curr_y_d(), 0., *v_L);
       tmp = v_L->MakeNew();
-      tmp->Set(mult_bound_push_);
+      tmp->Set(warm_start_mult_bound_push_);
       v_L->ElementWiseMax(*tmp);
 
       Pd_U->TransMultVector(1., *IpData().curr_y_d(), 0., *v_U);
       tmp = v_U->MakeNew();
-      tmp->Set(mult_bound_push_);
+      tmp->Set(warm_start_mult_bound_push_);
       v_U->ElementWiseMax(*tmp);
     }
     else {
