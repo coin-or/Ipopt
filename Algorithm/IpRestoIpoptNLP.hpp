@@ -42,6 +42,11 @@ namespace Ipopt
     ~RestoIpoptNLP();
     //@}
 
+    /** Initialize - overloaded from IpoptNLP */
+    virtual bool Initialize(const Journalist& jnlst,
+			    const OptionsList& options,
+			    const std::string& prefix);
+
     /** Initialize (create) structures for
      *  the iteration data */
     virtual bool InitializeStructures(SmartPtr<Vector>& x,
@@ -328,6 +333,9 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const RestoIpoptNLP&);
     //@}
+
+    /** Flag indicating if initialization method has been called */
+    bool initialized_;
 
     /** @name Counters for the function evaluations */
     //@{

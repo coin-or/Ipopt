@@ -55,6 +55,12 @@ namespace Ipopt
     ASSERT_EXCEPTION(retvalue, AlgorithmStrategyObject::FAILED_INITIALIZATION,
                      "the IpIpoptCalculatedQuantities object failed to initialize.");
 
+    // Initialize the CQ object
+    retvalue = IpNLP().Initialize(Jnlst(),
+				  options, prefix);
+    ASSERT_EXCEPTION(retvalue, AlgorithmStrategyObject::FAILED_INITIALIZATION,
+                     "the IpIpoptNLP object failed to initialize.");
+
     // Initialize all the strategies
     retvalue = iterate_initializer_->Initialize(Jnlst(), IpNLP(), IpData(),
                IpCq(), options, prefix);
