@@ -150,12 +150,30 @@ namespace Ipopt
     Number kappa_epsilon_;
     Number kappa_mu_;
     Number theta_mu_;
+    /** Flag indicating whether the most recent accepted step should
+     *  be restored, when switching to the fixed mode. */
+    bool restore_accepted_iterate_;
     //@}
 
     /** Flag indicating whether the problem has any inequality constraints */
     bool no_bounds_;
     /** Flag indicating whether no_bounds_ has been initialized */
     bool check_if_no_bounds_;
+
+    /** @name Most recent accepted point in free mode, from which
+     *  fixed mode should be started.
+     */
+    //@{
+    SmartPtr<const Vector> accepted_x_;
+    SmartPtr<const Vector> accepted_s_;
+    SmartPtr<const Vector> accepted_y_c_;
+    SmartPtr<const Vector> accepted_y_d_;
+    SmartPtr<const Vector> accepted_z_L_;
+    SmartPtr<const Vector> accepted_z_U_;
+    SmartPtr<const Vector> accepted_v_L_;
+    SmartPtr<const Vector> accepted_v_U_;
+    //@}
+
   };
 
 } // namespace Ipopt
