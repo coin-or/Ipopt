@@ -22,7 +22,28 @@ namespace Ipopt
   OptProbingMuOracle::OptProbingMuOracle(const SmartPtr<PDSystemSolver>& pd_solver)
       :
       MuOracle(),
-      pd_solver_(pd_solver)
+      pd_solver_(pd_solver),
+
+      tmp_step_x_L_(NULL),
+      tmp_step_x_U_(NULL),
+      tmp_step_s_L_(NULL),
+      tmp_step_s_U_(NULL),
+      tmp_step_z_L_(NULL),
+      tmp_step_z_U_(NULL),
+      tmp_step_v_L_(NULL),
+      tmp_step_v_U_(NULL),
+
+      tmp_slack_x_L_(NULL),
+      tmp_slack_x_U_(NULL),
+      tmp_slack_s_L_(NULL),
+      tmp_slack_s_U_(NULL),
+      tmp_z_L_(NULL),
+      tmp_z_U_(NULL),
+      tmp_v_L_(NULL),
+      tmp_v_U_(NULL),
+
+      tmp_dual_inf_x_(NULL),
+      tmp_dual_inf_s_(NULL)      
   {
     DBG_ASSERT(IsValid(pd_solver_));
   }
@@ -133,6 +154,33 @@ namespace Ipopt
   {
     DBG_START_METH("OptProbingMuOracle::CalculateMu",
                    dbg_verbosity);
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Reserve memory for temporary vectors used in CalculateQualityFunction //
+    ///////////////////////////////////////////////////////////////////////////
+
+    tmp_step_x_L_ = IpNLP().x_L()->MakeNew();
+    tmp_step_x_U_ = IpNLP().x_U()->MakeNew();
+    tmp_step_s_L_ = IpNLP().d_L()->MakeNew();
+    tmp_step_s_U_ = IpNLP().d_U()->MakeNew();
+    tmp_step_z_L_ = IpNLP().x_L()->MakeNew();
+    tmp_step_z_U_ = IpNLP().x_U()->MakeNew();
+    tmp_step_v_L_ = IpNLP().d_L()->MakeNew();
+    tmp_step_v_U_ = IpNLP().d_U()->MakeNew();
+
+    tmp_slack_x_L_ = IpNLP().x_L()->MakeNew();
+    tmp_slack_x_U_ = IpNLP().x_U()->MakeNew();
+    tmp_slack_s_L_ = IpNLP().d_L()->MakeNew();
+    tmp_slack_s_U_ = IpNLP().d_U()->MakeNew();
+    tmp_z_L_ = IpNLP().x_L()->MakeNew();
+    tmp_z_U_ = IpNLP().x_U()->MakeNew();
+    tmp_v_L_ = IpNLP().d_L()->MakeNew();
+    tmp_v_U_ = IpNLP().d_U()->MakeNew();
+
+    if (quality_function_dual_inf_==2) {
+      tmp_dual_inf_x_ = IpCq().curr_grad_lag_x()->MakeNew();
+      tmp_dual_inf_s_ = IpCq().curr_grad_lag_s()->MakeNew();
+    }
 
     /////////////////////////////////////
     // Compute the affine scaling step //
@@ -513,6 +561,33 @@ namespace Ipopt
     IpData().SetFromPtr_delta_v_U(ConstPtr(step_v_U));
     IpData().SetHaveDeltas(true);
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Release memory for temporary vectors used in CalculateQualityFunction //
+    ///////////////////////////////////////////////////////////////////////////
+
+    tmp_step_x_L_ = NULL;
+    tmp_step_x_U_ = NULL;
+    tmp_step_s_L_ = NULL;
+    tmp_step_s_U_ = NULL;
+    tmp_step_z_L_ = NULL;
+    tmp_step_z_U_ = NULL;
+    tmp_step_v_L_ = NULL;
+    tmp_step_v_U_ = NULL;
+
+    tmp_slack_x_L_ = NULL;
+    tmp_slack_x_U_ = NULL;
+    tmp_slack_s_L_ = NULL;
+    tmp_slack_s_U_ = NULL;
+    tmp_z_L_ = NULL;
+    tmp_z_U_ = NULL;
+    tmp_v_L_ = NULL;
+    tmp_v_U_ = NULL;
+
+    if (quality_function_dual_inf_==2) {
+      tmp_dual_inf_x_ = NULL;
+      tmp_dual_inf_s_ = NULL;
+    }
+
     // DELETEME
     char ssigma[40];
     sprintf(ssigma, " sigma=%8.2e", sigma);
@@ -622,60 +697,30 @@ namespace Ipopt
       }
     }
 
-    // First compute the corresponding search direction
-    SmartPtr<Vector> step_x_L = step_aff_x_L.MakeNew();
-    SmartPtr<Vector> step_x_U = step_aff_x_U.MakeNew();
-    SmartPtr<Vector> step_s_L = step_aff_s_L.MakeNew();
-    SmartPtr<Vector> step_s_U = step_aff_s_U.MakeNew();
-    SmartPtr<Vector> step_z_L = step_aff_z_L.MakeNew();
-    SmartPtr<Vector> step_z_U = step_aff_z_U.MakeNew();
-    SmartPtr<Vector> step_v_L = step_aff_v_L.MakeNew();
-    SmartPtr<Vector> step_v_U = step_aff_v_U.MakeNew();
-
-    step_x_L->AddTwoVectors(1., step_aff_x_L, sigma, step_cen_x_L, 0.);
-    step_x_U->AddTwoVectors(1., step_aff_x_U, sigma, step_cen_x_U, 0.);
-    step_s_L->AddTwoVectors(1., step_aff_s_L, sigma, step_cen_s_L, 0.);
-    step_s_U->AddTwoVectors(1., step_aff_s_U, sigma, step_cen_s_U, 0.);
-    step_z_L->AddTwoVectors(1., step_aff_z_L, sigma, step_cen_z_L, 0.);
-    step_z_U->AddTwoVectors(1., step_aff_z_U, sigma, step_cen_z_U, 0.);
-    step_v_L->AddTwoVectors(1., step_aff_v_L, sigma, step_cen_v_L, 0.);
-    step_v_U->AddTwoVectors(1., step_aff_v_U, sigma, step_cen_v_U, 0.);
-
-    /*
-    step_x_L->Copy(step_aff_x_L);
-    step_x_U->Copy(step_aff_x_U);
-    step_s_L->Copy(step_aff_s_L);
-    step_s_U->Copy(step_aff_s_U);
-    step_z_L->Copy(step_aff_z_L);
-    step_z_U->Copy(step_aff_z_U);
-    step_v_L->Copy(step_aff_v_L);
-    step_v_U->Copy(step_aff_v_U);
-
-    step_x_L->Axpy(sigma, step_cen_x_L);
-    step_x_U->Axpy(sigma, step_cen_x_U);
-    step_s_L->Axpy(sigma, step_cen_s_L);
-    step_s_U->Axpy(sigma, step_cen_s_U);
-    step_z_L->Axpy(sigma, step_cen_z_L);
-    step_z_U->Axpy(sigma, step_cen_z_U);
-    step_v_L->Axpy(sigma, step_cen_v_L);
-    step_v_U->Axpy(sigma, step_cen_v_U);
-    */
+    tmp_step_x_L_->AddTwoVectors(1., step_aff_x_L, sigma, step_cen_x_L, 0.);
+    tmp_step_x_U_->AddTwoVectors(1., step_aff_x_U, sigma, step_cen_x_U, 0.);
+    tmp_step_s_L_->AddTwoVectors(1., step_aff_s_L, sigma, step_cen_s_L, 0.);
+    tmp_step_s_U_->AddTwoVectors(1., step_aff_s_U, sigma, step_cen_s_U, 0.);
+    tmp_step_z_L_->AddTwoVectors(1., step_aff_z_L, sigma, step_cen_z_L, 0.);
+    tmp_step_z_U_->AddTwoVectors(1., step_aff_z_U, sigma, step_cen_z_U, 0.);
+    tmp_step_v_L_->AddTwoVectors(1., step_aff_v_L, sigma, step_cen_v_L, 0.);
+    tmp_step_v_U_->AddTwoVectors(1., step_aff_v_U, sigma, step_cen_v_U, 0.);
 
     // Compute the fraction-to-the-boundary step sizes
     // ToDo make sure we use the correct tau
     //Number tau = 0.99;
     Number tau = IpData().curr_tau();
     Number alpha_primal = IpCq().slack_frac_to_the_bound(tau,
-                          *step_x_L,
-                          *step_x_U,
-                          *step_s_L,
-                          *step_s_U);
+                          *tmp_step_x_L_,
+                          *tmp_step_x_U_,
+                          *tmp_step_s_L_,
+                          *tmp_step_s_U_);
 
     Number alpha_dual = IpCq().dual_frac_to_the_bound(tau,
-                        *step_z_L,
-                        *step_z_U,
-                        *step_v_L,
-                        *step_v_U);
+                        *tmp_step_z_L_,
+                        *tmp_step_z_U_,
+                        *tmp_step_v_L_,
+                        *tmp_step_v_U_);
 
     if (false) {
       if (alpha_dual < alpha_primal) {
@@ -693,61 +738,38 @@ namespace Ipopt
     bool found_beta = false;
     Number xi; // centrality measure
 
-    SmartPtr<Vector> slack_x_L = step_aff_z_L.MakeNew();
-    SmartPtr<Vector> slack_x_U = step_aff_z_U.MakeNew();
-    SmartPtr<Vector> slack_s_L = step_aff_v_L.MakeNew();
-    SmartPtr<Vector> slack_s_U = step_aff_v_U.MakeNew();
-    SmartPtr<Vector> z_L = step_aff_z_L.MakeNew();
-    SmartPtr<Vector> z_U = step_aff_z_U.MakeNew();
-    SmartPtr<Vector> v_L = step_aff_v_L.MakeNew();
-    SmartPtr<Vector> v_U = step_aff_v_U.MakeNew();
-
     while (!found_beta) {
 
-      slack_x_L->AddTwoVectors(1., *IpCq().curr_slack_x_L(), alpha_primal, *step_x_L, 0.);
-      slack_x_U->AddTwoVectors(1., *IpCq().curr_slack_x_U(), alpha_primal, *step_x_U, 0.);
-      slack_s_L->AddTwoVectors(1., *IpCq().curr_slack_s_L(), alpha_primal, *step_s_L, 0.);
-      slack_s_U->AddTwoVectors(1., *IpCq().curr_slack_s_U(), alpha_primal, *step_s_U, 0.);
+      tmp_slack_x_L_->AddTwoVectors(1., *IpCq().curr_slack_x_L(),
+			       alpha_primal, *tmp_step_x_L_, 0.);
+      tmp_slack_x_U_->AddTwoVectors(1., *IpCq().curr_slack_x_U(),
+			       alpha_primal, *tmp_step_x_U_, 0.);
+      tmp_slack_s_L_->AddTwoVectors(1., *IpCq().curr_slack_s_L(),
+			       alpha_primal, *tmp_step_s_L_, 0.);
+      tmp_slack_s_U_->AddTwoVectors(1., *IpCq().curr_slack_s_U(),
+			       alpha_primal, *tmp_step_s_U_, 0.);
 
-      /*
-      slack_x_L->Copy(*IpCq().curr_slack_x_L());
-      slack_x_U->Copy(*IpCq().curr_slack_x_U());
-      slack_s_L->Copy(*IpCq().curr_slack_s_L());
-      slack_s_U->Copy(*IpCq().curr_slack_s_U());
-      slack_x_L->Axpy(alpha_primal, *step_x_L);
-      slack_x_U->Axpy(alpha_primal, *step_x_U);
-      slack_s_L->Axpy(alpha_primal, *step_s_L);
-      slack_s_U->Axpy(alpha_primal, *step_s_U);
-      */
+      tmp_z_L_->AddTwoVectors(1., *IpData().curr_z_L(),
+			 alpha_dual, *tmp_step_z_L_, 0.);
+      tmp_z_U_->AddTwoVectors(1., *IpData().curr_z_U(),
+			 alpha_dual, *tmp_step_z_U_, 0.);
+      tmp_v_L_->AddTwoVectors(1., *IpData().curr_v_L(),
+			 alpha_dual, *tmp_step_v_L_, 0.);
+      tmp_v_U_->AddTwoVectors(1., *IpData().curr_v_U(),
+			 alpha_dual, *tmp_step_v_U_, 0.);
 
-      z_L->AddTwoVectors(1., *IpData().curr_z_L(), alpha_dual, *step_z_L, 0.);
-      z_U->AddTwoVectors(1., *IpData().curr_z_U(), alpha_dual, *step_z_U, 0.);
-      v_L->AddTwoVectors(1., *IpData().curr_v_L(), alpha_dual, *step_v_L, 0.);
-      v_U->AddTwoVectors(1., *IpData().curr_v_U(), alpha_dual, *step_v_U, 0.);
+      tmp_slack_x_L_->ElementWiseMultiply(*tmp_z_L_);
+      tmp_slack_x_U_->ElementWiseMultiply(*tmp_z_U_);
+      tmp_slack_s_L_->ElementWiseMultiply(*tmp_v_L_);
+      tmp_slack_s_U_->ElementWiseMultiply(*tmp_v_U_);
 
-      /*
-      z_L->Copy(*IpData().curr_z_L());
-      z_U->Copy(*IpData().curr_z_U());
-      v_L->Copy(*IpData().curr_v_L());
-      v_U->Copy(*IpData().curr_v_U());
-      z_L->Axpy(alpha_dual, *step_z_L);
-      z_U->Axpy(alpha_dual, *step_z_U);
-      v_L->Axpy(alpha_dual, *step_v_L);
-      v_U->Axpy(alpha_dual, *step_v_U);
-      */
+      DBG_PRINT_VECTOR(2, "compl_x_L", *tmp_slack_x_L_);
+      DBG_PRINT_VECTOR(2, "compl_x_U", *tmp_slack_x_U_);
+      DBG_PRINT_VECTOR(2, "compl_s_L", *tmp_slack_s_L_);
+      DBG_PRINT_VECTOR(2, "compl_s_U", *tmp_slack_s_U_);
 
-      slack_x_L->ElementWiseMultiply(*z_L);
-      slack_x_U->ElementWiseMultiply(*z_U);
-      slack_s_L->ElementWiseMultiply(*v_L);
-      slack_s_U->ElementWiseMultiply(*v_U);
-
-      DBG_PRINT_VECTOR(2, "compl_x_L", *slack_x_L);
-      DBG_PRINT_VECTOR(2, "compl_x_U", *slack_x_U);
-      DBG_PRINT_VECTOR(2, "compl_s_L", *slack_s_L);
-      DBG_PRINT_VECTOR(2, "compl_s_U", *slack_s_U);
-
-      xi = IpCq().CalcCentralityMeasure(*slack_x_L, *slack_x_U,
-                                        *slack_s_L, *slack_s_U);
+      xi = IpCq().CalcCentralityMeasure(*tmp_slack_x_L_, *tmp_slack_x_U_,
+                                        *tmp_slack_s_L_, *tmp_slack_s_U_);
 
       // in order to make this work, we need to somehow tell the line
       // search what beta is
@@ -779,47 +801,39 @@ namespace Ipopt
     Number primal_inf;
     Number compl_inf;
 
-    SmartPtr<Vector> dual_inf_x;
-    SmartPtr<Vector> dual_inf_s;
-
     if (quality_function_dual_inf_==2) {
-      dual_inf_x = IpCq().curr_grad_lag_x()->MakeNew();
-      dual_inf_s = IpCq().curr_grad_lag_s()->MakeNew();
-      dual_inf_x->Copy(*IpCq().curr_grad_lag_x());
-      dual_inf_s->Copy(*IpCq().curr_grad_lag_s());
-      dual_inf_x->Scal(1.-alpha_primal);
-      dual_inf_s->Scal(1.-alpha_primal);
+      tmp_dual_inf_x_->AddOneVector(1.-alpha_primal,
+				    *IpCq().curr_grad_lag_x(), 0.);
+      tmp_dual_inf_s_->AddOneVector(1.-alpha_primal,
+				    *IpCq().curr_grad_lag_s(), 0.);
       IpNLP().Px_L()->MultVector(alpha_primal-alpha_dual,
-                                 *step_z_L, 1., *dual_inf_x);
+                                 *tmp_step_z_L_, 1., *tmp_dual_inf_x_);
       IpNLP().Px_U()->MultVector(-alpha_primal+alpha_dual,
-                                 *step_z_U, 1., *dual_inf_x);
+                                 *tmp_step_z_U_, 1., *tmp_dual_inf_x_);
       IpNLP().Pd_L()->MultVector(alpha_primal-alpha_dual,
-                                 *step_v_L, 1., *dual_inf_s);
+                                 *tmp_step_v_L_, 1., *tmp_dual_inf_s_);
       IpNLP().Pd_U()->MultVector(-alpha_primal+alpha_dual,
-                                 *step_v_U, 1., *dual_inf_s);
+                                 *tmp_step_v_U_, 1., *tmp_dual_inf_s_);
       if (dual_alpha_for_y_) {
-        dual_inf_x->AddTwoVectors(alpha_dual-alpha_primal, *jac_cT_times_step_aff_y_c,
-                                  sigma*(alpha_dual-alpha_primal), *jac_cT_times_step_cen_y_c, 1.);
-        dual_inf_x->AddTwoVectors(alpha_dual-alpha_primal, *jac_dT_times_step_aff_y_d,
-                                  sigma*(alpha_dual-alpha_primal), *jac_dT_times_step_cen_y_d, 1.);
-        dual_inf_s->AddTwoVectors(alpha_primal-alpha_dual, step_aff_y_d,
-                                  sigma*(alpha_primal-alpha_dual), step_cen_y_d, 1.);
-
-        /* DELE
-        dual_inf_x->Axpy(alpha_dual-alpha_primal, *jac_cT_times_step_aff_y_c);  
-        dual_inf_x->Axpy(sigma*(alpha_dual-alpha_primal), *jac_cT_times_step_cen_y_c);
-        dual_inf_x->Axpy(alpha_dual-alpha_primal, *jac_dT_times_step_aff_y_d);  
-        dual_inf_x->Axpy(sigma*(alpha_dual-alpha_primal), *jac_dT_times_step_cen_y_d);
-        dual_inf_s->Axpy(alpha_primal-alpha_dual, step_aff_y_d);
-        dual_inf_s->Axpy(sigma*(alpha_primal-alpha_dual), step_cen_y_d);
-        */
+        tmp_dual_inf_x_->AddTwoVectors(alpha_dual-alpha_primal,
+				       *jac_cT_times_step_aff_y_c,
+				       sigma*(alpha_dual-alpha_primal),
+				       *jac_cT_times_step_cen_y_c, 1.);
+        tmp_dual_inf_x_->AddTwoVectors(alpha_dual-alpha_primal,
+				       *jac_dT_times_step_aff_y_d,
+				       sigma*(alpha_dual-alpha_primal),
+				       *jac_dT_times_step_cen_y_d, 1.);
+        tmp_dual_inf_s_->AddTwoVectors(alpha_primal-alpha_dual,
+				       step_aff_y_d,
+				       sigma*(alpha_primal-alpha_dual),
+				       step_cen_y_d, 1.);
       }
     }
 
     switch (quality_function_norm_) {
       case 1:
       if (quality_function_dual_inf_==2) {
-        dual_inf = dual_inf_x->Asum() + dual_inf_s->Asum();
+        dual_inf = tmp_dual_inf_x_->Asum() + tmp_dual_inf_s_->Asum();
       }
       else {
         dual_inf = (1.-alpha_dual)*(IpCq().curr_grad_lag_x()->Asum() +
@@ -829,8 +843,8 @@ namespace Ipopt
       primal_inf = (1.-alpha_primal)*(IpCq().curr_c()->Asum() +
                                       IpCq().curr_d_minus_s()->Asum());
 
-      compl_inf = slack_x_L->Asum() + slack_x_U->Asum() +
-                  slack_s_L->Asum() + slack_s_U->Asum();
+      compl_inf = tmp_slack_x_L_->Asum() + tmp_slack_x_U_->Asum() +
+                  tmp_slack_s_L_->Asum() + tmp_slack_s_U_->Asum();
 
       dual_inf /= n_dual;
       if (n_pri>0) {
@@ -841,7 +855,7 @@ namespace Ipopt
       break;
       case 2:
       if (quality_function_dual_inf_==2) {
-        dual_inf = pow(dual_inf_x->Nrm2(), 2) + pow(dual_inf_s->Nrm2(), 2);
+        dual_inf = pow(tmp_dual_inf_x_->Nrm2(), 2) + pow(tmp_dual_inf_s_->Nrm2(), 2);
       }
       else {
         dual_inf =
@@ -852,8 +866,8 @@ namespace Ipopt
         pow(1.-alpha_primal, 2)*(pow(IpCq().curr_c()->Nrm2(), 2) +
                                  pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
       compl_inf =
-        pow(slack_x_L->Nrm2(), 2) + pow(slack_x_U->Nrm2(), 2) +
-        pow(slack_s_L->Nrm2(), 2) + pow(slack_s_U->Nrm2(), 2);
+        pow(tmp_slack_x_L_->Nrm2(), 2) + pow(tmp_slack_x_U_->Nrm2(), 2) +
+        pow(tmp_slack_s_L_->Nrm2(), 2) + pow(tmp_slack_s_U_->Nrm2(), 2);
 
       dual_inf /= n_dual;
       if (n_pri>0) {
@@ -864,7 +878,7 @@ namespace Ipopt
       break;
       case 3:
       if (quality_function_dual_inf_==2) {
-        dual_inf = Max(dual_inf_x->Amax(), dual_inf_s->Amax());
+        dual_inf = Max(tmp_dual_inf_x_->Amax(), tmp_dual_inf_s_->Amax());
       }
       else {
         dual_inf =
@@ -875,12 +889,12 @@ namespace Ipopt
         (1.-alpha_primal, 2)*Max(IpCq().curr_c()->Amax(),
                                  IpCq().curr_d_minus_s()->Amax());
       compl_inf =
-        Max(slack_x_L->Amax(), slack_x_U->Amax(),
-            slack_s_L->Amax(), slack_s_U->Amax());
+        Max(tmp_slack_x_L_->Amax(), tmp_slack_x_U_->Amax(),
+            tmp_slack_s_L_->Amax(), tmp_slack_s_U_->Amax());
       break;
       case 4:
       if (quality_function_dual_inf_==2) {
-        dual_inf = sqrt(pow(dual_inf_x->Nrm2(), 2) + pow(dual_inf_s->Nrm2(), 2));
+        dual_inf = sqrt(pow(tmp_dual_inf_x_->Nrm2(), 2) + pow(tmp_dual_inf_s_->Nrm2(), 2));
       }
       else {
         dual_inf =
@@ -891,8 +905,8 @@ namespace Ipopt
         (1.-alpha_primal, 2)*sqrt(pow(IpCq().curr_c()->Nrm2(), 2) +
                                   pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
       compl_inf =
-        sqrt(pow(slack_x_L->Nrm2(), 2) + pow(slack_x_U->Nrm2(), 2) +
-             pow(slack_s_L->Nrm2(), 2) + pow(slack_s_U->Nrm2(), 2));
+        sqrt(pow(tmp_slack_x_L_->Nrm2(), 2) + pow(tmp_slack_x_U_->Nrm2(), 2) +
+             pow(tmp_slack_s_L_->Nrm2(), 2) + pow(tmp_slack_s_U_->Nrm2(), 2));
 
       dual_inf /= sqrt((Number)n_dual);
       if (n_pri>0) {

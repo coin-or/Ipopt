@@ -151,6 +151,31 @@ namespace Ipopt
     bool dual_alpha_for_y_;
     //@}
 
+    /** @name Temporary work space vectors.  We use those to avoid
+     *  repeated reallocation in CalculateQualityFunction. */
+    //@{
+    SmartPtr<Vector> tmp_step_x_L_;
+    SmartPtr<Vector> tmp_step_x_U_;
+    SmartPtr<Vector> tmp_step_s_L_;
+    SmartPtr<Vector> tmp_step_s_U_;
+    SmartPtr<Vector> tmp_step_z_L_;
+    SmartPtr<Vector> tmp_step_z_U_;
+    SmartPtr<Vector> tmp_step_v_L_;
+    SmartPtr<Vector> tmp_step_v_U_;
+
+    SmartPtr<Vector> tmp_slack_x_L_;
+    SmartPtr<Vector> tmp_slack_x_U_;
+    SmartPtr<Vector> tmp_slack_s_L_;
+    SmartPtr<Vector> tmp_slack_s_U_;
+    SmartPtr<Vector> tmp_z_L_;
+    SmartPtr<Vector> tmp_z_U_;
+    SmartPtr<Vector> tmp_v_L_;
+    SmartPtr<Vector> tmp_v_U_;
+
+    SmartPtr<Vector> tmp_dual_inf_x_;
+    SmartPtr<Vector> tmp_dual_inf_s_;
+    //@}
+
     /** @name scaling values */
     //@{
     Number dual_inf_scal_;
