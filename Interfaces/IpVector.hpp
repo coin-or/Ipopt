@@ -20,6 +20,7 @@
 # include <cstdio>
 #endif
 #include <string>
+#include <vector>
 
 namespace Ipopt
 {
@@ -289,10 +290,16 @@ namespace Ipopt
     mutable CachedResults<Number> asum_cache_;
     /** Cache for Amax */
     mutable CachedResults<Number> amax_cache_;
+    /** Cache for Max */
+    mutable CachedResults<Number> max_cache_;
+    /** Cache for Min */
+    mutable CachedResults<Number> min_cache_;
     /** Cache for Sum */
     mutable CachedResults<Number> sum_cache_;
     /** Cache for SumLogs */
     mutable CachedResults<Number> sumlogs_cache_;
+    /** Cache for FracToBound */
+    mutable CachedResults<Number> frac_to_bound_cache_;
     //@}
 
   };
@@ -365,7 +372,10 @@ namespace Ipopt
       asum_cache_(1),
       amax_cache_(1),
       sum_cache_(1),
-      sumlogs_cache_(1)
+      max_cache_(1),
+      min_cache_(1),
+      sumlogs_cache_(1),
+      frac_to_bound_cache_(4)
   {
     DBG_ASSERT(IsValid(owner_space_));
   }
@@ -402,7 +412,7 @@ namespace Ipopt
   inline
   Number Vector::Dot(const Vector &x) const
   {
-    Number retValue = 0.0;
+    Number retValue;
     if (!dot_cache_.GetCachedResult2Dep(retValue, this, &x)) {
       retValue = DotImpl(x);
       dot_cache_.AddCachedResult2Dep(retValue, this, &x);
@@ -413,7 +423,7 @@ namespace Ipopt
   inline
   Number Vector::Nrm2() const
   {
-    Number retValue = 0.0;
+    Number retValue;
     if (!nrm2_cache_.GetCachedResult1Dep(retValue, this)) {
       retValue = Nrm2Impl();
       nrm2_cache_.AddCachedResult1Dep(retValue, this);
@@ -435,7 +445,7 @@ namespace Ipopt
   inline
   Number Vector::Amax() const
   {
-    Number retValue = 0.0;
+    Number retValue;
     if (!amax_cache_.GetCachedResult1Dep(retValue, this)) {
       retValue = AmaxImpl();
       amax_cache_.AddCachedResult1Dep(retValue, this);
@@ -446,7 +456,7 @@ namespace Ipopt
   inline
   Number Vector::Sum() const
   {
-    Number retValue = 0.0;
+    Number retValue;
     if (!sum_cache_.GetCachedResult1Dep(retValue, this)) {
       retValue = SumImpl();
       sum_cache_.AddCachedResult1Dep(retValue, this);
@@ -457,7 +467,7 @@ namespace Ipopt
   inline
   Number Vector::SumLogs() const
   {
-    Number retValue = 0.0;
+    Number retValue;
     if (!sumlogs_cache_.GetCachedResult1Dep(retValue, this)) {
       retValue = SumLogsImpl();
       sumlogs_cache_.AddCachedResult1Dep(retValue, this);
@@ -538,13 +548,23 @@ namespace Ipopt
   inline
   Number Vector::Max() const
   {
-    return MaxImpl();
+    Number retValue;
+    if (!max_cache_.GetCachedResult1Dep(retValue, this)) {
+      retValue = MaxImpl();
+      max_cache_.AddCachedResult1Dep(retValue, this);
+    }
+    return retValue;
   }
 
   inline
   Number Vector::Min() const
   {
-    return MinImpl();
+    Number retValue;
+    if (!min_cache_.GetCachedResult1Dep(retValue, this)) {
+      retValue = MinImpl();
+      min_cache_.AddCachedResult1Dep(retValue, this);
+    }
+    return retValue;
   }
 
   inline
@@ -564,7 +584,16 @@ namespace Ipopt
   inline
   Number Vector::FracToBound(const Vector& delta, Number tau) const
   {
-    return FracToBoundImpl(delta, tau);
+    Number retValue;
+    std::vector<const TaggedObject*> tdeps(1);
+    tdeps[0] = &delta;
+    std::vector<Number> sdeps(1);
+    sdeps[0] = tau;
+    if (!frac_to_bound_cache_.GetCachedResult(retValue, tdeps, sdeps)) {
+      retValue = FracToBoundImpl(delta, tau);
+      frac_to_bound_cache_.AddCachedResult(retValue, tdeps, sdeps);
+    }
+    return retValue;
   }
 
   inline
