@@ -279,6 +279,16 @@ namespace Ipopt
     trial_s_ = sptr;
   }
 
+  void IpoptData::SetTrialConstraintMultipliersFromPtr(
+    const SmartPtr<const Vector>& y_cptr,
+    const SmartPtr<const Vector>& y_dptr)
+  {
+    DBG_ASSERT(have_prototypes_);
+
+    trial_y_c_ = y_cptr;
+    trial_y_d_ = y_dptr;
+  }
+
   void IpoptData::SetTrialBoundMultipliersFromPtr(
     const SmartPtr<const Vector>& z_Lptr,
     const SmartPtr<const Vector>& z_Uptr,
