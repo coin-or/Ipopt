@@ -11,8 +11,7 @@
 
 namespace Ipopt
 {
-  StdInterfaceTNLP::StdInterfaceTNLP(const SmartPtr<const Journalist>& jnlst,
-                                     Index n_var,
+  StdInterfaceTNLP::StdInterfaceTNLP(Index n_var,
                                      const Number* x_L, const Number* x_U,
                                      Index n_con,
                                      const Number* g_L, const Number* g_U,
@@ -36,7 +35,6 @@ namespace Ipopt
                                      UserDataPtr user_data)
       :
       TNLP(),
-      jnlst_(jnlst),
       n_var_(n_var),
       n_con_(n_con),
       x_L_(x_L),

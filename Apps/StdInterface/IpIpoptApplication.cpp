@@ -107,22 +107,6 @@ namespace Ipopt
       // Run the algorithm
       IpoptAlgorithm::SolverReturn status = alg->Optimize();
 
-      if (status == IpoptAlgorithm::SUCCESS) {
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "\n\nOptimal Solution Found!\n");
-      }
-      else if (status == IpoptAlgorithm::MAXITER_EXCEEDED) {
-        retValue = Maximum_Iterations_Exceeded;
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "\n\nERROR: Maximum Number of Iterations Exceeded.\n");
-      }
-      else if (status == IpoptAlgorithm::FAILED) {
-        retValue = Solve_Failed;
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "\n\nERROR: Algorithm Failed - Check detailed output.\n");
-      }
-      else {
-        retValue = Internal_Error;
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "\n\nINTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
-      }
-
       EJournalLevel vector_report_level = J_VECTOR;
       if (report_solution_ || force_report_solution_to_console_) {
         if (force_report_solution_to_console_) {
@@ -172,6 +156,23 @@ namespace Ipopt
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                        "Number of Lagrangian Hessian evaluations             = %d\n",
                        ip_nlp->h_evals());
+      }
+
+      // Write EXIT message
+      if (status == IpoptAlgorithm::SUCCESS) {
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Optimal Solution Found.\n");
+      }
+      else if (status == IpoptAlgorithm::MAXITER_EXCEEDED) {
+        retValue = Maximum_Iterations_Exceeded;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Maximum Number of Iterations Exceeded.\n");
+      }
+      else if (status == IpoptAlgorithm::FAILED) {
+        retValue = Solve_Failed;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Algorithm Failed - Check detailed output.\n");
+      }
+      else {
+        retValue = Internal_Error;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
       }
 
       nlp->FinalizeSolution(retValue,

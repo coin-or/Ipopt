@@ -7,10 +7,10 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpUtils.hpp"
-#include "IpAlgBuilder.hpp"
-#include "IpOrigIpoptNLP.hpp"
+#include "IpStdCInterface.h"
 #include "IpStdInterfaceTNLP.hpp"
-#include "IpTNLPAdapter.hpp"
+#include "IpOptionsList.hpp"
+#include "IpIpoptApplication.hpp"
 
 #ifdef OLD_C_HEADERS
 # include <math.h>
@@ -98,121 +98,27 @@ Int IpoptSolve(Index n,
   const ::Number* mult_x_L = mult_x_L_;
   const ::Number* mult_x_U = mult_x_U_;
 
-  // Get the journalist
-  ::Int retValue = 0;
-  SmartPtr<Journalist> jnlst = new Journalist();
-
-# ifdef IP_DEBUG
-
-  DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst));
-# endif
-
-  Journal* jrnl = jnlst->AddJournal("ConsoleStdOut", "stdout", J_SUMMARY);
-  jrnl->SetPrintLevel(J_DBG, J_NONE);
-
-# ifdef IP_DEBUG
-
-  jrnl = jnlst->AddJournal("Debug", "debug.out", J_DETAILED);
-  jrnl->SetPrintLevel(J_DBG, J_ALL);
-# endif
-
-  //  jrnl = jnlst->AddJournal("All", "all.out", J_ALL);
+  // Create an IpoptApplication
+  SmartPtr<IpoptApplication> app =
+    new IpoptApplication();
 
   // Get the options
   OptionsList* options = (OptionsList*) options_;
-  bool created_options=false;
-  if (!options) {
-    created_options=true;
-    options = new OptionsList();
-    FILE* fp_options = fopen("PARAMS.DAT", "r");
-    if (fp_options) {
-      // PARAMS.DAT exists, read the content
-      options->ReadFromFile(*jnlst, fp_options);
-      fclose(fp_options);
-      fp_options=NULL;
-    }
+  if (options) {
+    // Copy the options given by the C interface user to those in the
+    // Ipopt Application
+    *app->Options() = *options;
   }
 
-  try {
-    // Create the original nlp and the IpoptNLP
-    SmartPtr<StdInterfaceTNLP> stdinterface_nlp =
-      new StdInterfaceTNLP(ConstPtr(jnlst), n, x_L, x_U, m, g_L, g_U, nele_jac,
-                           nele_hess, x, mult_g, mult_x_L, mult_x_U,
-                           eval_f, eval_g, eval_grad_f, eval_jac_g, eval_h,
-                           x_, mult_x_L_, mult_x_U_, g, mult_g_, obj_val, user_data);
+  // Create the original nlp
+  SmartPtr<TNLP> tnlp =
+    new StdInterfaceTNLP(n, x_L, x_U, m, g_L, g_U, nele_jac,
+			 nele_hess, x, mult_g, mult_x_L, mult_x_U,
+			 eval_f, eval_g, eval_grad_f, eval_jac_g, eval_h,
+			 x_, mult_x_L_, mult_x_U_, g, mult_g_, obj_val, user_data);
 
-    SmartPtr<TNLPAdapter> tnlpadapter =
-      new TNLPAdapter(GetRawPtr(stdinterface_nlp));
-    SmartPtr<IpoptNLP> ip_nlp =
-      new OrigIpoptNLP(ConstPtr(jnlst), GetRawPtr(tnlpadapter));
-    //      new OrigIpoptNLP(ConstPtr(jnlst), GetRawPtr(tnlpadapter));
+  ApplicationReturnStatus status = app->OptimizeTNLP(tnlp);
 
-    // Create the IpoptData
-    SmartPtr<IpoptData> ip_data = new IpoptData();
-
-    // Create the IpoptCalculators
-    SmartPtr<IpoptCalculatedQuantities> ip_cq
-    = new IpoptCalculatedQuantities(ip_nlp, ip_data);
-
-    // Create the Algorithm object
-    SmartPtr<IpoptAlgorithm> alg
-    = AlgorithmBuilder::BuildBasicAlgorithm(*jnlst, *options, "");
-
-    // Set up the algorithm
-    alg->Initialize(*jnlst, *ip_nlp, *ip_data, *ip_cq, *options, "");
-
-    // Run the algorithm
-    IpoptAlgorithm::SolverReturn status = alg->Optimize();
-
-    if (status == IpoptAlgorithm::SUCCESS) {
-      jnlst->Printf(J_SUMMARY, J_SOLUTION, "\n\nOptimal solution found! \n");
-      jnlst->Printf(J_SUMMARY, J_SOLUTION, "Optimal Objective Value = %.16E\n", ip_cq->curr_f());
-      jnlst->Printf(J_SUMMARY, J_SOLUTION, "Number of Iterations = %d\n", ip_data->iter_count());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "x", *ip_data->curr_x());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "y_c", *ip_data->curr_y_c());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "y_d", *ip_data->curr_y_d());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "z_L", *ip_data->curr_z_L());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "z_U", *ip_data->curr_z_U());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "v_L", *ip_data->curr_v_L());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "v_U", *ip_data->curr_v_U());
-
-      retValue = 0;
-    }
-    else {
-      jnlst->Printf(J_ERROR, J_MAIN, "Sorry, things failed ?!?!\n");
-      retValue = 1;
-    }
-
-    ApplicationReturnStatus app_status = Solve_Succeeded;
-    if (status == IpoptAlgorithm::MAXITER_EXCEEDED) {
-      app_status = Maximum_Iterations_Exceeded;
-    }
-    else if (status == IpoptAlgorithm::FAILED) {
-      app_status = Solve_Failed;
-    }
-    else {
-      app_status = Internal_Error;
-    }
-
-    tnlpadapter->FinalizeSolution(app_status,
-                                  *ip_data->curr_x(), *ip_data->curr_z_L(), *ip_data->curr_z_U(),
-                                  *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr_y_c(), *ip_data->curr_y_d(),
-                                  ip_cq->curr_f());
-  }
-  catch(IpoptException& exc) {
-    exc.ReportException(*jnlst);
-    retValue = 1;
-  }
-  catch(...) {
-    IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
-    exc.ReportException(*jnlst);
-    retValue = 2;
-  }
-
-  if (created_options) {
-    delete options;
-  }
-
-  return retValue;
+  return (::Int) status;
 }
 
