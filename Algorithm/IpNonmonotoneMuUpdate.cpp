@@ -322,7 +322,7 @@ namespace Ipopt
           IpData().Set_mu(new_mu);
           IpData().Set_tau(new_tau);
           Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                         "Reducing mu to %e in fixed mu mode. Tau becomes %e\n", new_mu, new_tau);
+                         "Reducing mu to %24.16e in fixed mu mode. Tau becomes %24.16e\n", new_mu, new_tau);
           linesearch_->Reset();
         }
       }
@@ -360,7 +360,7 @@ namespace Ipopt
         IpData().Set_mu(mu);
         IpData().Set_tau(tau);
         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                       "Switching to fixed mu mode with mu = %e and tau = %e.\n", mu, tau);
+                       "Switching to fixed mu mode with mu = %24.16e and tau = %24.16e.\n", mu, tau);
         linesearch_->Reset();
         // Skipping Restoration phase?
       }
