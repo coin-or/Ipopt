@@ -37,6 +37,14 @@ namespace Ipopt
   RestoIpoptNLP::~RestoIpoptNLP()
   {}
 
+  bool RestoIpoptNLP::Initialize(const Journalist& jnlst,
+				 const OptionsList& options,
+				 const std::string& prefix)
+  {
+    initialized_ = true;
+    return true;
+  }
+
   bool RestoIpoptNLP::InitializeStructures(SmartPtr<Vector>& x,
       bool init_x,
       SmartPtr<Vector>& y_c,
@@ -54,6 +62,7 @@ namespace Ipopt
                                           )
   {
     DBG_START_METH("RestoIpoptNLP::InitializeStructures", 0);
+    DBG_ASSERT(initialized_);
     ///////////////////////////////////////////////////////////
     // Get the vector/matrix spaces for the original problem //
     ///////////////////////////////////////////////////////////
