@@ -67,6 +67,18 @@ namespace Ipopt
       }
     }
 
+    // Open an output file if required
+    std::string output_filename;
+    if (options_->GetValue("output_file", output_filename, "")) {
+      Index ivalue;
+      EJournalLevel print_level = J_SUMMARY;
+      if (options_->GetIntegerValue("print_level", ivalue, "")) {
+        print_level = (EJournalLevel)ivalue;
+      }
+      jrnl = jnlst_->AddJournal("OutputFile", output_filename.c_str(), print_level);
+      jrnl->SetPrintLevel(J_DBG, J_NONE);
+    }
+
     if( jnlst_->ProduceOutput(J_DETAILED, J_MAIN) ) {
       // Print out the options (including the number of times they were used
       std::string liststr;
@@ -120,7 +132,7 @@ namespace Ipopt
                        "\nNumber of Iterations    = %d\n",
                        ip_data->iter_count());
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "Objective Value = %.16E\n",
+                       "Objective Value         = %23.16e\n",
                        ip_cq->curr_f());
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                        "Primal Infeasibility    = %23.16e\n",
