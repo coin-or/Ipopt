@@ -64,6 +64,8 @@ namespace Ipopt
                    orig_ip_cq->curr_c()->Amax(),
                    orig_ip_cq->curr_d_minus_s()->Amax());
     IpData().Set_mu(resto_mu);
+    Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                   "Initial barrier parameter resto_mu = %e\n", resto_mu);
 
     /////////////////////////////////////////////////////////////////////
     //                   Initialize primal varialbes                   //
@@ -85,18 +87,40 @@ namespace Ipopt
     Number rho = resto_ip_nlp->Rho();
     SmartPtr<Vector> nc = Cnew_x->GetCompNonConst(1);
     SmartPtr<Vector> pc = Cnew_x->GetCompNonConst(2);
+    SmartPtr<const Vector> cvec = orig_ip_cq->curr_c();
     SmartPtr<Vector> a = nc->MakeNew();
     SmartPtr<Vector> b = nc->MakeNew();
     a->Set(resto_mu/(2.*rho));
-    a->Axpy(-0.5, *orig_ip_cq->curr_c());
-    b->Copy(*orig_ip_cq->curr_c());
+    a->Axpy(-0.5, *cvec);
+    b->Copy(*cvec);
     b->Scal(resto_mu/(2.*rho));
     solve_quadratic(*a, *b, *nc);
-    pc->Copy(*orig_ip_cq->curr_c());
+    pc->Copy(*cvec);
     pc->Axpy(1., *nc);
     DBG_PRINT_VECTOR(2, "nc", *nc);
     DBG_PRINT_VECTOR(2, "pc", *pc);
 
+    // initial values for the n and p variables for the inequality
+    // constraints
+    SmartPtr<Vector> nd = Cnew_x->GetCompNonConst(3);
+    SmartPtr<Vector> pd = Cnew_x->GetCompNonConst(4);
+    cvec = orig_ip_cq->curr_d_minus_s();
+    a = nd->MakeNew();
+    b = nd->MakeNew();
+    a->Set(resto_mu/(2.*rho));
+    a->Axpy(-0.5, *cvec);
+    b->Copy(*cvec);
+    b->Scal(resto_mu/(2.*rho));
+    solve_quadratic(*a, *b, *nd);
+    pd->Copy(*cvec);
+    pd->Axpy(1., *nd);
+    DBG_PRINT_VECTOR(2, "nd", *nd);
+    DBG_PRINT_VECTOR(2, "pd", *pd);
+
+    // Leave the slacks unchanged
+    SmartPtr<const Vector> new_s = orig_ip_data->curr_s();
+
+#ifdef orig
     // The initial values for the inequality n and p variables are
     // trickier, since only some constraints have both n and p
     // variables.  If they don't have both, the slack takes the role
@@ -195,10 +219,11 @@ namespace Ipopt
     Pd_U->MultVector(1., *d_U, -1., *tmpfull);
     tmpfull->ElementWiseMultiply(*ind_only_U);
     new_s->Axpy(1., *tmpfull);
-    DBG_PRINT_VECTOR(1,"new_s",*new_s);
-    DBG_PRINT_VECTOR(2,"new_x",*new_x);
+#endif
 
     // Now set the primal trial variables
+    DBG_PRINT_VECTOR(2,"new_s",*new_s);
+    DBG_PRINT_VECTOR(2,"new_x",*new_x);
     IpData().SetTrialPrimalVariables(*new_x, *new_s);
 
     DBG_PRINT_VECTOR(2, "resto_c", *IpCq().trial_c());
@@ -283,6 +308,9 @@ namespace Ipopt
       IpData().SetTrialEqMultipliers(*y_c, *y_d);
     }
 
+    // upgrade the trial to the current point
+    IpData().AcceptTrialPoint();
+
     DBG_PRINT_VECTOR(2, "y_c", *IpData().curr_y_c());
     DBG_PRINT_VECTOR(2, "y_d", *IpData().curr_y_d());
 
@@ -291,16 +319,13 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "v_L", *IpData().curr_v_L());
     DBG_PRINT_VECTOR(2, "v_U", *IpData().curr_v_U());
 
-    // upgrade the trial to the current point
-    IpData().AcceptTrialPoint();
-
     return true;
   }
 
   void
   RestoIterateInitializer::solve_quadratic(const Vector& a,
-					   const Vector& b,
-					   Vector& v)
+      const Vector& b,
+      Vector& v)
   {
     v.Copy(a);
     v.ElementWiseMultiply(a);
