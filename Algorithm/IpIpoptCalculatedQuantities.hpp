@@ -229,6 +229,8 @@ namespace Ipopt
 
     /** average of current values of the complementarities */
     Number curr_avrg_compl();
+    /** average of trial values of the complementarities */
+    Number trial_avrg_compl();
 
     /** inner_product of current barrier obj. fn. gradient with current search direction */
     Number curr_gradBarrTDelta();
@@ -378,6 +380,8 @@ namespace Ipopt
 
     /** Cache for average of current complementarity */
     CachedResults<Number> curr_avrg_compl_cache_;
+    /** Cache for average of trial complementarity */
+    CachedResults<Number> trial_avrg_compl_cache_;
 
     /** Cache for grad barrier obj. fn inner product with step */
     CachedResults<Number> curr_gradBarrTDelta_cache_;
