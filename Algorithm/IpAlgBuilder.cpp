@@ -45,8 +45,19 @@ namespace Ipopt
       new OptimalityErrorConvergenceCheck();
 
     // Create the solvers that will be used by the main algorithm
-    SmartPtr<Mc19SymTScalingMethod> ScalingMethod =
-      new Mc19SymTScalingMethod();
+    SmartPtr<Mc19SymTScalingMethod> ScalingMethod;
+    std::string scaling_method;
+    if (options.GetValue("scaling_method", scaling_method, prefix)) {
+      ASSERT_EXCEPTION(scaling_method=="mc19" || scaling_method=="none",
+                       OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"scaling_method\" has invalid value.");
+    }
+    else {
+      scaling_method = "mc19";
+    }
+    if (scaling_method=="mc19") {
+      ScalingMethod = new Mc19SymTScalingMethod();
+    }
     SmartPtr<SymLinearSolver> Ma27Solver =
       new Ma27SymLinearSolver(ScalingMethod);
     SmartPtr<AugSystemSolver> AugSolver =
