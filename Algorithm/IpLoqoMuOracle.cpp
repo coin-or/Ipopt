@@ -55,13 +55,17 @@ namespace Ipopt
 
     //Number factor = 1.-tau_min_;   //This is the original values
     Number factor = 0.05;   //This is the value I used otherwise
-    Number mu = 0.1*pow(Min(factor*(1.-xi)/xi,2),3.)*avrg_compl;
+    Number sigma = 0.1*pow(Min(factor*(1.-xi)/xi,2),3.);
+
+    Number mu = sigma*avrg_compl;
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "  Barrier parameter proposed by LOQO rule is %lf\n", mu);
 
     // DELETEME
     char ssigma[40];
-    sprintf(ssigma, "sigma=%e", 0.1*pow(Min(factor*(1.-xi)/xi,2),3.));
+    sprintf(ssigma, " sigma=%8.2e", sigma);
+    IpData().Append_info_string(ssigma);
+    sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
     IpData().Append_info_string(ssigma);
 
     return mu;
