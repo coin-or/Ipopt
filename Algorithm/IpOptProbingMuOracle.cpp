@@ -70,6 +70,15 @@ namespace Ipopt
       quality_function_centrality_ = 1;
     }
 
+    if (options.GetIntegerValue("quality_function_dual_inf", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue>=1 && ivalue<=2, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"quality_function_dual_inf\": This value must be 1 or 2.");
+      quality_function_dual_inf_ = ivalue;
+    }
+    else {
+      quality_function_dual_inf_ = 1;
+    }
+
     if (options.GetIntegerValue("max_bisection_steps", ivalue, prefix)) {
       //      ASSERT_EXCEPTION(ivalue>0, OptionsList::OPTION_OUT_OF_RANGE,
       //                       "Option \"max_bisection_steps\": This value must be positive.");
@@ -90,6 +99,13 @@ namespace Ipopt
       dual_inf_scal_ = 1.;
       primal_inf_scal_ = 1.;
       compl_inf_scal_ = 1.;
+    }
+
+    if (options.GetIntegerValue("dual_alpha_for_y", ivalue, prefix)) {
+      dual_alpha_for_y_ = (ivalue != 0);
+    }
+    else {
+      dual_alpha_for_y_ = false;
     }
 
     // The following line is only here so that
@@ -254,6 +270,18 @@ namespace Ipopt
     IpNLP().Pd_L()->TransMultVector(1., *step_cen_s, 0., *step_cen_s_L);
     IpNLP().Pd_U()->TransMultVector(-1., *step_cen_s, 0., *step_cen_s_U);
 
+    // If necessary, compute some products with the constraint Jacobian
+    SmartPtr<const Vector> jac_cT_times_step_aff_y_c;
+    SmartPtr<const Vector> jac_dT_times_step_aff_y_d;
+    SmartPtr<const Vector> jac_cT_times_step_cen_y_c;
+    SmartPtr<const Vector> jac_dT_times_step_cen_y_d;
+    if (quality_function_dual_inf_==2 && dual_alpha_for_y_) {
+      jac_cT_times_step_aff_y_c = IpCq().curr_jac_cT_times_vec(*step_aff_y_c);
+      jac_dT_times_step_aff_y_d = IpCq().curr_jac_dT_times_vec(*step_aff_y_d);
+      jac_cT_times_step_cen_y_c = IpCq().curr_jac_cT_times_vec(*step_cen_y_c);
+      jac_dT_times_step_cen_y_d = IpCq().curr_jac_dT_times_vec(*step_cen_y_d);
+    }
+
     Number sigma;
     if (max_bisection_steps_>0) {
       // Now we do an search for the best centering parameter, that
@@ -268,7 +296,9 @@ namespace Ipopt
                                      *step_aff_x_U,
                                      *step_aff_s_L,
                                      *step_aff_s_U,
-                                     *step_aff_z_L,
+                                     *step_aff_y_c,
+                                     *step_aff_y_d,
+				     *step_aff_z_L,
                                      *step_aff_z_U,
                                      *step_aff_v_L,
                                      *step_aff_v_U,
@@ -276,10 +306,16 @@ namespace Ipopt
                                      *step_cen_x_U,
                                      *step_cen_s_L,
                                      *step_cen_s_U,
+                                     *step_cen_y_c,
+                                     *step_cen_y_d,
                                      *step_cen_z_L,
                                      *step_cen_z_U,
                                      *step_cen_v_L,
-                                     *step_cen_v_U);
+                                     *step_cen_v_U,
+				     jac_cT_times_step_aff_y_c,
+				     jac_dT_times_step_aff_y_d,
+				     jac_cT_times_step_cen_y_c,
+				     jac_dT_times_step_cen_y_d);
 
       if (sigma_max_ > 1. && sigma >= 1.-2*tol) {
         // It seems that the optimal value might be larger than one.
@@ -290,6 +326,8 @@ namespace Ipopt
                                        *step_aff_x_U,
                                        *step_aff_s_L,
                                        *step_aff_s_U,
+				       *step_aff_y_c,
+				       *step_aff_y_d,
                                        *step_aff_z_L,
                                        *step_aff_z_U,
                                        *step_aff_v_L,
@@ -298,12 +336,19 @@ namespace Ipopt
                                        *step_cen_x_U,
                                        *step_cen_s_L,
                                        *step_cen_s_U,
+				       *step_cen_y_c,
+				       *step_cen_y_d,
                                        *step_cen_z_L,
                                        *step_cen_z_U,
                                        *step_cen_v_L,
-                                       *step_cen_v_U);
+                                       *step_cen_v_U,
+				       jac_cT_times_step_aff_y_c,
+				       jac_dT_times_step_aff_y_d,
+				       jac_cT_times_step_cen_y_c,
+				       jac_dT_times_step_cen_y_d);
       }
 
+      //#define tracequalityfunction
 #ifdef tracequalityfunction
       //DELETEME
       Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
@@ -316,6 +361,8 @@ namespace Ipopt
                                  *step_aff_x_U,
                                  *step_aff_s_L,
                                  *step_aff_s_U,
+				 *step_aff_y_c,
+				 *step_aff_y_d,
                                  *step_aff_z_L,
                                  *step_aff_z_U,
                                  *step_aff_v_L,
@@ -324,10 +371,16 @@ namespace Ipopt
                                  *step_cen_x_U,
                                  *step_cen_s_L,
                                  *step_cen_s_U,
+				 *step_cen_y_c,
+				 *step_cen_y_d,
                                  *step_cen_z_L,
                                  *step_cen_z_U,
                                  *step_cen_v_L,
-                                 *step_cen_v_U);
+                                 *step_cen_v_U,
+				 jac_cT_times_step_aff_y_c,
+				 jac_dT_times_step_aff_y_d,
+				 jac_cT_times_step_cen_y_c,
+				 jac_dT_times_step_cen_y_d);
       }
 #endif
 
@@ -346,6 +399,8 @@ namespace Ipopt
                                         *step_aff_x_U,
                                         *step_aff_s_L,
                                         *step_aff_s_U,
+					*step_aff_y_c,
+					*step_aff_y_d,
                                         *step_aff_z_L,
                                         *step_aff_z_U,
                                         *step_aff_v_L,
@@ -354,10 +409,16 @@ namespace Ipopt
                                         *step_cen_x_U,
                                         *step_cen_s_L,
                                         *step_cen_s_U,
+					*step_cen_y_c,
+					*step_cen_y_d,
                                         *step_cen_z_L,
                                         *step_cen_z_U,
                                         *step_cen_v_L,
-                                        *step_cen_v_U);
+                                        *step_cen_v_U,
+					jac_cT_times_step_aff_y_c,
+					jac_dT_times_step_aff_y_d,
+					jac_cT_times_step_cen_y_c,
+					jac_dT_times_step_cen_y_d);
       Index l_min = (Index)trunc(-(log(avrg_compl)-log(1e-9))/log(base))-1;
       for (; l>=l_min; l--) {
         sigma = pow(base, l);
@@ -366,7 +427,9 @@ namespace Ipopt
                                             *step_aff_x_U,
                                             *step_aff_s_L,
                                             *step_aff_s_U,
-                                            *step_aff_z_L,
+					    *step_aff_y_c,
+					    *step_aff_y_d,
+					    *step_aff_z_L,
                                             *step_aff_z_U,
                                             *step_aff_v_L,
                                             *step_aff_v_U,
@@ -374,10 +437,16 @@ namespace Ipopt
                                             *step_cen_x_U,
                                             *step_cen_s_L,
                                             *step_cen_s_U,
+					    *step_cen_y_c,
+					    *step_cen_y_d,
                                             *step_cen_z_L,
                                             *step_cen_z_U,
                                             *step_cen_v_L,
-                                            *step_cen_v_U);
+                                            *step_cen_v_U,
+					    jac_cT_times_step_aff_y_c,
+					    jac_dT_times_step_aff_y_d,
+					    jac_cT_times_step_cen_y_c,
+					    jac_dT_times_step_cen_y_d);
         if (q<=q_best) {
           q_best = q;
           l_best = l;
@@ -416,6 +485,9 @@ namespace Ipopt
     IpData().Append_info_string(ssigma);
     sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
     IpData().Append_info_string(ssigma);
+    if (sigma>1.) {
+      IpData().Append_info_string("LARGESIGMA");
+    }
 
     return mu;
   }
@@ -426,6 +498,8 @@ namespace Ipopt
    const Vector& step_aff_x_U,
    const Vector& step_aff_s_L,
    const Vector& step_aff_s_U,
+   const Vector& step_aff_y_c,
+   const Vector& step_aff_y_d,
    const Vector& step_aff_z_L,
    const Vector& step_aff_z_U,
    const Vector& step_aff_v_L,
@@ -434,10 +508,16 @@ namespace Ipopt
    const Vector& step_cen_x_U,
    const Vector& step_cen_s_L,
    const Vector& step_cen_s_U,
+   const Vector& step_cen_y_c,
+   const Vector& step_cen_y_d,
    const Vector& step_cen_z_L,
    const Vector& step_cen_z_U,
    const Vector& step_cen_v_L,
-   const Vector& step_cen_v_U
+   const Vector& step_cen_v_U,
+   SmartPtr<const Vector> jac_cT_times_step_aff_y_c,
+   SmartPtr<const Vector> jac_dT_times_step_aff_y_d,
+   SmartPtr<const Vector> jac_cT_times_step_cen_y_c,
+   SmartPtr<const Vector> jac_dT_times_step_cen_y_d
   )
   {
     DBG_START_METH("OptProbingMuOracle::CalculateQualityFunction",
@@ -586,6 +666,11 @@ namespace Ipopt
       slack_s_L->ElementWiseMultiply(*v_L);
       slack_s_U->ElementWiseMultiply(*v_U);
 
+      DBG_PRINT_VECTOR(2, "compl_x_L", *slack_x_L);
+      DBG_PRINT_VECTOR(2, "compl_x_U", *slack_x_U);
+      DBG_PRINT_VECTOR(2, "compl_s_L", *slack_s_L);
+      DBG_PRINT_VECTOR(2, "compl_s_U", *slack_s_U);
+
       xi = IpCq().CalcCentralityMeasure(*slack_x_L, *slack_x_U,
                                         *slack_s_L, *slack_s_U);
 
@@ -619,9 +704,42 @@ namespace Ipopt
     Number primal_inf;
     Number compl_inf;
 
+    SmartPtr<Vector> dual_inf_x;
+    SmartPtr<Vector> dual_inf_s;
+
+    if (quality_function_dual_inf_==2) {
+      dual_inf_x = IpCq().curr_grad_lag_x()->MakeNew();
+      dual_inf_s = IpCq().curr_grad_lag_s()->MakeNew();
+      dual_inf_x->Copy(*IpCq().curr_grad_lag_x());
+      dual_inf_s->Copy(*IpCq().curr_grad_lag_s());
+      dual_inf_x->Scal(1.-alpha_primal);
+      dual_inf_s->Scal(1.-alpha_primal);
+      IpNLP().Px_L()->MultVector(alpha_primal-alpha_dual,
+				 *step_z_L, 1., *dual_inf_x);
+      IpNLP().Px_U()->MultVector(-alpha_primal+alpha_dual,
+				 *step_z_U, 1., *dual_inf_x);
+      IpNLP().Pd_L()->MultVector(alpha_primal-alpha_dual,
+				 *step_v_L, 1., *dual_inf_s);
+      IpNLP().Pd_U()->MultVector(-alpha_primal+alpha_dual,
+				 *step_v_U, 1., *dual_inf_s);
+      if (dual_alpha_for_y_) {
+	dual_inf_x->Axpy(alpha_dual-alpha_primal, *jac_cT_times_step_aff_y_c);  
+	dual_inf_x->Axpy(sigma*(alpha_dual-alpha_primal), *jac_cT_times_step_cen_y_c);
+	dual_inf_x->Axpy(alpha_dual-alpha_primal, *jac_dT_times_step_aff_y_d);  
+	dual_inf_x->Axpy(sigma*(alpha_dual-alpha_primal), *jac_dT_times_step_cen_y_d);
+	dual_inf_s->Axpy(alpha_primal-alpha_dual, step_aff_y_d);
+	dual_inf_s->Axpy(sigma*(alpha_primal-alpha_dual), step_cen_y_d);
+      }
+    }
+
     if (quality_function_norm_==1) {
-      dual_inf = (1.-alpha_dual)*(IpCq().curr_grad_lag_x()->Asum() +
-                                  IpCq().curr_grad_lag_s()->Asum());
+      if (quality_function_dual_inf_==2) {
+	dual_inf = dual_inf_x->Asum() + dual_inf_s->Asum();
+      }
+      else {
+	dual_inf = (1.-alpha_dual)*(IpCq().curr_grad_lag_x()->Asum() +
+				    IpCq().curr_grad_lag_s()->Asum());
+      }
 
       primal_inf = (1.-alpha_primal)*(IpCq().curr_c()->Asum() +
                                       IpCq().curr_d_minus_s()->Asum());
@@ -637,9 +755,14 @@ namespace Ipopt
       compl_inf /= n_comp;
     }
     else {
-      dual_inf =
-        pow(1.-alpha_dual, 2)*(pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
-                               pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
+      if (quality_function_dual_inf_==2) {
+	dual_inf = pow(dual_inf_x->Nrm2(), 2) + pow(dual_inf_s->Nrm2(), 2);
+      }
+      else {
+	dual_inf =
+	  pow(1.-alpha_dual, 2)*(pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
+				 pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
+      }
       primal_inf =
         pow(1.-alpha_primal, 2)*(pow(IpCq().curr_c()->Nrm2(), 2) +
                                  pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
@@ -695,6 +818,8 @@ namespace Ipopt
    const Vector& step_aff_x_U,
    const Vector& step_aff_s_L,
    const Vector& step_aff_s_U,
+   const Vector& step_aff_y_c,
+   const Vector& step_aff_y_d,
    const Vector& step_aff_z_L,
    const Vector& step_aff_z_U,
    const Vector& step_aff_v_L,
@@ -703,10 +828,16 @@ namespace Ipopt
    const Vector& step_cen_x_U,
    const Vector& step_cen_s_L,
    const Vector& step_cen_s_U,
+   const Vector& step_cen_y_c,
+   const Vector& step_cen_y_d,
    const Vector& step_cen_z_L,
    const Vector& step_cen_z_U,
    const Vector& step_cen_v_L,
-   const Vector& step_cen_v_U
+   const Vector& step_cen_v_U,
+   SmartPtr<const Vector> jac_cT_times_step_aff_y_c,
+   SmartPtr<const Vector> jac_dT_times_step_aff_y_d,
+   SmartPtr<const Vector> jac_cT_times_step_cen_y_c,
+   SmartPtr<const Vector> jac_dT_times_step_cen_y_d
   )
   {
     Number sigma;
@@ -721,6 +852,8 @@ namespace Ipopt
                                             step_aff_x_U,
                                             step_aff_s_L,
                                             step_aff_s_U,
+                                            step_aff_y_c,
+                                            step_aff_y_d,
                                             step_aff_z_L,
                                             step_aff_z_U,
                                             step_aff_v_L,
@@ -729,15 +862,23 @@ namespace Ipopt
                                             step_cen_x_U,
                                             step_cen_s_L,
                                             step_cen_s_U,
+                                            step_cen_y_c,
+                                            step_cen_y_d,
                                             step_cen_z_L,
                                             step_cen_z_U,
                                             step_cen_v_L,
-                                            step_cen_v_U);
+                                            step_cen_v_U,
+					    jac_cT_times_step_aff_y_c,
+					    jac_dT_times_step_aff_y_d,
+					    jac_cT_times_step_cen_y_c,
+					    jac_dT_times_step_cen_y_d);
     Number qmid2 = CalculateQualityFunction(sigma_mid2,
                                             step_aff_x_L,
                                             step_aff_x_U,
                                             step_aff_s_L,
                                             step_aff_s_U,
+                                            step_aff_y_c,
+                                            step_aff_y_d,
                                             step_aff_z_L,
                                             step_aff_z_U,
                                             step_aff_v_L,
@@ -746,10 +887,16 @@ namespace Ipopt
                                             step_cen_x_U,
                                             step_cen_s_L,
                                             step_cen_s_U,
+                                            step_cen_y_c,
+                                            step_cen_y_d,
                                             step_cen_z_L,
                                             step_cen_z_U,
                                             step_cen_v_L,
-                                            step_cen_v_U);
+                                            step_cen_v_U,
+					    jac_cT_times_step_aff_y_c,
+					    jac_dT_times_step_aff_y_d,
+					    jac_cT_times_step_cen_y_c,
+					    jac_dT_times_step_cen_y_d);
 
     Index nbisections = 0;
     while ((sigma_up-sigma_lo)>=tol*sigma_up && nbisections<max_bisection_steps_) {
@@ -765,6 +912,8 @@ namespace Ipopt
                                          step_aff_x_U,
                                          step_aff_s_L,
                                          step_aff_s_U,
+					 step_aff_y_c,
+					 step_aff_y_d,
                                          step_aff_z_L,
                                          step_aff_z_U,
                                          step_aff_v_L,
@@ -773,10 +922,16 @@ namespace Ipopt
                                          step_cen_x_U,
                                          step_cen_s_L,
                                          step_cen_s_U,
+					 step_cen_y_c,
+					 step_cen_y_d,
                                          step_cen_z_L,
                                          step_cen_z_U,
                                          step_cen_v_L,
-                                         step_cen_v_U);
+                                         step_cen_v_U,
+					 jac_cT_times_step_aff_y_c,
+					 jac_dT_times_step_aff_y_d,
+					 jac_cT_times_step_cen_y_c,
+					 jac_dT_times_step_cen_y_d);
       }
       else {
         sigma_up = sigma_mid2;
@@ -788,6 +943,8 @@ namespace Ipopt
                                          step_aff_x_U,
                                          step_aff_s_L,
                                          step_aff_s_U,
+					 step_aff_y_c,
+					 step_aff_y_d,
                                          step_aff_z_L,
                                          step_aff_z_U,
                                          step_aff_v_L,
@@ -796,10 +953,16 @@ namespace Ipopt
                                          step_cen_x_U,
                                          step_cen_s_L,
                                          step_cen_s_U,
+					 step_cen_y_c,
+					 step_cen_y_d,
                                          step_cen_z_L,
                                          step_cen_z_U,
                                          step_cen_v_L,
-                                         step_cen_v_U);
+                                         step_cen_v_U,
+					 jac_cT_times_step_aff_y_c,
+					 jac_dT_times_step_aff_y_d,
+					 jac_cT_times_step_cen_y_c,
+					 jac_dT_times_step_cen_y_d);
       }
     }
 
@@ -818,6 +981,8 @@ namespace Ipopt
                                              step_aff_x_U,
                                              step_aff_s_L,
                                              step_aff_s_U,
+					     step_aff_y_c,
+					     step_aff_y_d,
                                              step_aff_z_L,
                                              step_aff_z_U,
                                              step_aff_v_L,
@@ -826,10 +991,16 @@ namespace Ipopt
                                              step_cen_x_U,
                                              step_cen_s_L,
                                              step_cen_s_U,
+					     step_cen_y_c,
+					     step_cen_y_d,
                                              step_cen_z_L,
                                              step_cen_z_U,
                                              step_cen_v_L,
-                                             step_cen_v_U);
+                                             step_cen_v_U,
+					     jac_cT_times_step_aff_y_c,
+					     jac_dT_times_step_aff_y_d,
+					     jac_cT_times_step_cen_y_c,
+					     jac_dT_times_step_cen_y_d);
       if (qtmp < q) {
         sigma = sigma_up;
         q = qtmp;
@@ -841,6 +1012,8 @@ namespace Ipopt
                                              step_aff_x_U,
                                              step_aff_s_L,
                                              step_aff_s_U,
+					     step_aff_y_c,
+					     step_aff_y_d,
                                              step_aff_z_L,
                                              step_aff_z_U,
                                              step_aff_v_L,
@@ -849,10 +1022,16 @@ namespace Ipopt
                                              step_cen_x_U,
                                              step_cen_s_L,
                                              step_cen_s_U,
+					     step_cen_y_c,
+					     step_cen_y_d,
                                              step_cen_z_L,
                                              step_cen_z_U,
                                              step_cen_v_L,
-                                             step_cen_v_U);
+                                             step_cen_v_U,
+					     jac_cT_times_step_aff_y_c,
+					     jac_dT_times_step_aff_y_d,
+					     jac_cT_times_step_cen_y_c,
+					     jac_dT_times_step_cen_y_d);
       if (qtmp < q) {
         sigma = sigma_lo;
         q = qtmp;
