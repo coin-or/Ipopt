@@ -103,9 +103,9 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "||curr_s||_inf   = %.16e\n", IpData().curr_s()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "||curr_y_d||_inf = %.16e\n", IpData().curr_y_c()->Amax());
+                     "||curr_y_c||_inf = %.16e\n", IpData().curr_y_c()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "||curr_y_c||_inf = %.16e\n", IpData().curr_y_d()->Amax());
+                     "||curr_y_d||_inf = %.16e\n", IpData().curr_y_d()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "||curr_z_L||_inf = %.16e\n", IpData().curr_z_L()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
