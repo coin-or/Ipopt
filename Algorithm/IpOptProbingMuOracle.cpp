@@ -833,12 +833,12 @@ namespace Ipopt
         sqrt(pow(slack_x_L->Nrm2(), 2) + pow(slack_x_U->Nrm2(), 2) +
 	     pow(slack_s_L->Nrm2(), 2) + pow(slack_s_U->Nrm2(), 2));
 
-      dual_inf /= sqrt(n_dual);
+      dual_inf /= sqrt((Number)n_dual);
       if (n_pri>0) {
-        primal_inf /= sqrt(n_pri);
+        primal_inf /= sqrt((Number)n_pri);
       }
       DBG_ASSERT(n_comp>0);
-      compl_inf /= sqrt(n_comp);
+      compl_inf /= sqrt((Number)n_comp);
       break;
     default:
       DBG_ASSERT("Unknown value for quality_function_norm_");

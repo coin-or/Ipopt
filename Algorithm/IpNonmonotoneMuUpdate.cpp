@@ -600,14 +600,14 @@ namespace Ipopt
 	IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_2);
       complty =
 	IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_2);
-      dual_inf /= sqrt(n_dual);
+      dual_inf /= sqrt((Number)n_dual);
       DBG_ASSERT(n_pri>0 || primal_inf==0.);
       if (n_pri>0) {
-	primal_inf /= sqrt(n_pri);
+	primal_inf /= sqrt((Number)n_pri);
       }
       DBG_ASSERT(n_comp>0 || complty==0.);
       if (n_comp>0) {
-	complty /= sqrt(n_comp);
+	complty /= sqrt((Number)n_comp);
       }
       break;
     }
