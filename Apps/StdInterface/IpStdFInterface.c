@@ -30,7 +30,7 @@ typedef void (*FEval_Grad_F_CB)(fint *N, fdouble* X, fint* NEW_X,
 				fdouble* GRAD, fint* IDAT, fdouble* DDAT,
 				fint* IERR);
 typedef void (*FEval_Jac_G_CB)(fint* TASK, fint* N, fdouble* X, fint* NEW_X,
-			       fint* NNZJAC, fint* IROW, fint* JCOL,
+			       fint* M, fint* NNZJAC, fint* IROW, fint* JCOL,
 			       fdouble* VALUES, fint* IDAT, fdouble* DDAT,
 			       fint* IERR);
 typedef void (*FEval_Hess_CB)(fint* TASK, fint* N, fdouble* X, fint* NEW_X,
@@ -99,12 +99,13 @@ static Bool eval_g(Index n, Number* x, Bool new_x,
   return (Bool) (IERR==OKRetVal);
 }
 
-static Bool eval_jac_g(Index n, Number *x, Bool new_x, Index nele_jac,
+static Bool eval_jac_g(Index n, Number *x, Bool new_x, Index m, Index nele_jac,
 		       Index *iRow, Index *jCol, Number *values,
 		       UserDataPtr user_data)
 {
   fint N = n;
   fint NEW_X = new_x;
+  fint M = m;
   fint NNZJAC = nele_jac;
   fint TASK;
   FUserData* fuser_data = (FUserData*)user_data;
@@ -124,7 +125,7 @@ static Bool eval_jac_g(Index n, Number *x, Bool new_x, Index nele_jac,
     return (Bool) 0;
   }
 
-  fuser_data->EVAL_JAC_G(&TASK, &N, x, &NEW_X, &NNZJAC, iRow, jCol,
+  fuser_data->EVAL_JAC_G(&TASK, &N, x, &NEW_X, &M, &NNZJAC, iRow, jCol,
 			 values, IDAT, DDAT, &IERR);
 
   return (Bool) (IERR==OKRetVal);
@@ -154,7 +155,7 @@ static Bool eval_h(Index n, Number *x, Bool new_x, Number obj_factor,
     /* Only request the values */
     TASK = 1;
   } else {
-    printf("Error in IpStdFInterface eval_jac_g!\n");
+    printf("Error in IpStdFInterface eval_hess!\n");
     return (Bool) 0;
   }
 
@@ -225,7 +226,9 @@ fptr F77_FUNC(ipnewopts,IPNEWOPTS)()
 
 void F77_FUNC(ipdelopts,IPDELOPTS)(fptr* OPTIONS)
 {
-  Ipopt_DeleteOptions((OptionsPtr)*OPTIONS);
+  if ((OptionsPtr)*OPTIONS!=NULL) {
+    Ipopt_DeleteOptions((OptionsPtr)*OPTIONS);
+  }
 }
 
 static char* f2cstr(char* FSTR, int slen) {
