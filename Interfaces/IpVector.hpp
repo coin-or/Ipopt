@@ -137,7 +137,7 @@ namespace Ipopt
     Number SumLogs() const;
     //@}
 
-    /** @name Accessor methods
+    /** @name Accessor methods */
     //@{
     /** Dimension of the Vector */
     Index Dim() const;
