@@ -173,10 +173,14 @@ namespace Ipopt
     retval = linsolver_->Solve(*augmented_system_, *augmented_rhs, *augmented_sol,
                                check_NegEVals, numberOfNegEVals);
     if (retval==SYMSOLVER_SUCCESS) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Factorization successful.\n");
       Jnlst().PrintVector(J_MOREVECTOR, J_LINEAR_ALGEBRA, "SOL", *augmented_sol);
     }
-    if (retval==SYMSOLVER_FATAL_ERROR) {
+    else if (retval==SYMSOLVER_FATAL_ERROR) {
       THROW_EXCEPTION(FATAL_ERROR_IN_LINEAR_SOLVER,"A fatal error occured in the linear solver.");
+    }
+    else {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Factorization failed with retval = %d\n", retval);
     }
 
     return retval;
