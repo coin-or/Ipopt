@@ -122,17 +122,17 @@ namespace Ipopt
 
       status = OptimalityErrorConvergenceCheck::CheckConvergence();
       if (status == CONVERGED) {
-	Number orig_trial_primal_inf =
-	  orig_ip_cq->trial_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
-	// ToDo make the factor in following line an option
-	if (orig_trial_primal_inf <= 1e4*orig_ip_data->epsilon_tol()) {
-	  THROW_EXCEPTION(RESTORATION_FAILED,
-			  "Restoration phase converged to a point with small primal infeasibility");
-	}
-	else {
-	  THROW_EXCEPTION(LOCALLY_INFEASIBILE,
-			  "Restoration phase converged to a point of local infeasibility");
-	}
+        Number orig_trial_primal_inf =
+          orig_ip_cq->trial_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
+        // ToDo make the factor in following line an option
+        if (orig_trial_primal_inf <= 1e4*orig_ip_data->epsilon_tol()) {
+          THROW_EXCEPTION(RESTORATION_FAILED,
+                          "Restoration phase converged to a point with small primal infeasibility");
+        }
+        else {
+          THROW_EXCEPTION(LOCALLY_INFEASIBILE,
+                          "Restoration phase converged to a point of local infeasibility");
+        }
       }
     }
     return status;
