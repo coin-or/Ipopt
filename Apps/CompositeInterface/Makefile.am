@@ -38,6 +38,7 @@ CXXFLAGS += -I$(srcdir)/../../PDSystemImpl/PDFullSpace
 CXXFLAGS += -I$(srcdir)/../../Apps/AmplSolver \
 	    -I$(srcdir)/../../OTHERS/ASL/ \
 	    -I$(srcdir)/../../OTHERS/ASL/solvers
+CXXFLAGS += $(AMPL_CPPFLAGS)
 
 # Astyle stuff
 

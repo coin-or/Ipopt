@@ -15,6 +15,8 @@
 
 namespace Ipopt
 {
+  static const Index dbg_verbosity = 0;
+
   OrigIpoptNLP::OrigIpoptNLP(const SmartPtr<const Journalist>& jnlst,
                              const SmartPtr<NLP>& nlp)
       :
@@ -219,12 +221,15 @@ namespace Ipopt
 
   SmartPtr<const Vector> OrigIpoptNLP::d(const Vector& x)
   {
+    DBG_START_METH("OrigIpoptNLP::d", 2);
     SmartPtr<Vector> retValue;
     if (!d_cache_.GetCachedResult1Dep(retValue, &x)) {
       d_evals_++;
       retValue = d_space_->MakeNew();
 
+      DBG_PRINT_VECTOR(2, "x", x);
       bool success = nlp_->Eval_d(x, *retValue);
+      DBG_PRINT_VECTOR(2, "retValue", *retValue);
       ASSERT_EXCEPTION(success && FiniteNumber(retValue->Nrm2()),
                        Eval_Error, "Error evaluating the inequality constraints");
       d_cache_.AddCachedResult1Dep(retValue, &x);
