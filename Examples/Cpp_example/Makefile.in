@@ -9,8 +9,8 @@ SRCDIR = @srcdir@
 VPATH = @srcdir@
 
 # Compiler options
-CC = @CC@
-FFLAGS = @CFLAGS@
+CXX = @CXX@
+CXXFLAGS = @CXXFLAGS@
 
 # Directory with libipopt.a
 IPOPTLIBDIR = @libdir@
@@ -47,14 +47,14 @@ all: $(EXE)
 $(EXE): $(OBJS)
 	bla=;\
 	for file in $(OBJS); do bla="$$bla `$(CYGPATH_W) $$file`"; done; \
-	$(CC) $(CFLAGS) -o $@ $$bla $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $$bla $(LIBS)
 
 clean:
 	rm -rf $(EXE) $(OBJS)
 
 .cpp.o:
-	$(CC) $(CFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
 
 
 .cpp.obj:
-	$(CC) $(CFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`
