@@ -28,23 +28,7 @@ namespace Ipopt
     public:
       /** @name Constructor/Destructor */
       //@{
-      /** Constructor.  i_row is the row position, j_col is the column
-       *  position, and i_pos_triplet is the position of the value in
-       *  the triplet matrix.  We assume that only the upper
-       *  triangular part is given.  If i_row>j_col, the reverted
-       *  entries are stored. */
-      /*
-      TripletEntry(Index i_row, Index j_col, Index i_pos_triplet)
-	i_row_(i_row),
-	j_col_(j_col),
-	i_pos_triplet_(i_pos_triplet)
-      {
-	if (i_row>j_col) {
-	  i_row_ = j_col;
-	  j_col_ = i_row;
-	}
-      }
-      */
+      /** Constructor. */
       TripletEntry(){}
 
       /** Destructor */
