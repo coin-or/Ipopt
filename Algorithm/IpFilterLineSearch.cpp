@@ -34,13 +34,13 @@ namespace Ipopt
       filter_(2)
   {
     DBG_START_FUN("FilterLineSearch::FilterLineSearch",
-		  dbg_verbosity);
+                  dbg_verbosity);
   }
 
   FilterLineSearch::~FilterLineSearch()
   {
     DBG_START_FUN("FilterLineSearch::~FilterLineSearch()",
-		  dbg_verbosity);
+                  dbg_verbosity);
   }
 
   bool FilterLineSearch::InitializeImpl(const OptionsList& options,
@@ -294,7 +294,7 @@ namespace Ipopt
 
       if (corrector_type_!=0 &&
           (!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) &&
-	  (!skip_corr_if_fixed_mode_ || IpData().FreeMuMode()) ) {
+          (!skip_corr_if_fixed_mode_ || IpData().FreeMuMode()) ) {
         // Before we do the actual backtracking line search for the
         // regular primal-dual search direction, let's see if a step
         // including a higher-order correctior is already acceptable
@@ -324,7 +324,7 @@ namespace Ipopt
                          "Starting checks for alpha (primal) = %8.2e\n",
                          alpha_primal);
 
-	  bool evaluation_error = false;
+          bool evaluation_error = false;
           try {
             // Compute the primal trial point
             IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
@@ -344,35 +344,35 @@ namespace Ipopt
             Jnlst().Printf(J_WARNING, J_MAIN,
                            "Warning: Cutting back alpha due to evaluation error\n");
             accept = false;
-	    evaluation_error = true;
+            evaluation_error = true;
           }
 
           if (accept) {
             break;
           }
 
-	  if (!evaluation_error) {
-	    Number theta_curr = IpCq().curr_constraint_violation();
-	    Number theta_trial = IpCq().trial_constraint_violation();
-	    if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
-		theta_curr<=theta_trial && max_soc_>0) {
-	      // Try second order correction
-	      accept = TrySecondOrderCorrection(alpha_primal_test,
-						alpha_primal,
-						actual_delta_x,
-						actual_delta_s,
-						actual_delta_y_c,
-						actual_delta_y_d,
-						actual_delta_z_L,
-						actual_delta_z_U,
-						actual_delta_v_L,
-						actual_delta_v_U);
-	    }
-	    if (accept) {
-	      soc_taken = true;
-	      break;
-	    }
-	  }
+          if (!evaluation_error) {
+            Number theta_curr = IpCq().curr_constraint_violation();
+            Number theta_trial = IpCq().trial_constraint_violation();
+            if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
+                theta_curr<=theta_trial && max_soc_>0) {
+              // Try second order correction
+              accept = TrySecondOrderCorrection(alpha_primal_test,
+                                                alpha_primal,
+                                                actual_delta_x,
+                                                actual_delta_s,
+                                                actual_delta_y_c,
+                                                actual_delta_y_d,
+                                                actual_delta_z_L,
+                                                actual_delta_z_U,
+                                                actual_delta_v_L,
+                                                actual_delta_v_U);
+            }
+            if (accept) {
+              soc_taken = true;
+              break;
+            }
+          }
 
           // Point is not yet acceptable, try a shorter one
           alpha_primal *= alpha_red_factor_;
@@ -405,8 +405,8 @@ namespace Ipopt
       // If we are not asked to do a rigorous line search, do no call
       // the restoration phase.
       if (!rigorous_) {
-	Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Skipping call of restoration phase...\n");
-	skipped_line_search_=true;
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Skipping call of restoration phase...\n");
+        skipped_line_search_=true;
       }
       else if (IsValid(resto_phase_)) {
         if (IpCq().curr_constraint_violation()==0.) {
@@ -594,8 +594,8 @@ namespace Ipopt
   }
 
   bool FilterLineSearch::IsAcceptableToCurrentIterate(Number trial_barr,
-						      Number trial_theta,
-						      bool called_from_restoration /*=false*/) const
+      Number trial_theta,
+      bool called_from_restoration /*=false*/) const
   {
     DBG_START_METH("FilterLineSearch::IsAcceptableToCurrentIterate",
                    dbg_verbosity);
@@ -809,7 +809,7 @@ namespace Ipopt
       case 1 : {
         // 1: Standard MPC corrector
 
-	DBG_ASSERT(IpData().HaveAffineDeltas());
+        DBG_ASSERT(IpData().HaveAffineDeltas());
 
         SmartPtr<const Vector> delta_aff_x = IpData().delta_aff_x();
         SmartPtr<const Vector> delta_aff_s = IpData().delta_aff_s();
@@ -912,11 +912,11 @@ namespace Ipopt
         IpNLP().Px_L()->TransMultVector(-1., *actual_delta_x,
                                         -1., *rhs_compl_x_L);
         tmp = actual_delta_z_L->MakeNew();
-	tmp->AddTwoVectors(1., *IpData().curr_z_L(), 1., *actual_delta_z_L, 0.);
-	/* DELE
-        tmp->Copy(*IpData().curr_z_L());
-        tmp->Axpy(1., *actual_delta_z_L);
-	*/
+        tmp->AddTwoVectors(1., *IpData().curr_z_L(), 1., *actual_delta_z_L, 0.);
+        /* DELE
+               tmp->Copy(*IpData().curr_z_L());
+               tmp->Axpy(1., *actual_delta_z_L);
+        */
         rhs_compl_x_L->ElementWiseMultiply(*tmp);
         rhs_compl_x_L->AddScalar(mu);
 
@@ -924,11 +924,11 @@ namespace Ipopt
         IpNLP().Px_U()->TransMultVector(1., *actual_delta_x,
                                         -1., *rhs_compl_x_U);
         tmp = actual_delta_z_U->MakeNew();
-	tmp->AddTwoVectors(1., *IpData().curr_z_U(), 1., *actual_delta_z_U, 0.);
-	/* DELE
-        tmp->Copy(*IpData().curr_z_U());
-        tmp->Axpy(1., *actual_delta_z_U);
-	*/
+        tmp->AddTwoVectors(1., *IpData().curr_z_U(), 1., *actual_delta_z_U, 0.);
+        /* DELE
+               tmp->Copy(*IpData().curr_z_U());
+               tmp->Axpy(1., *actual_delta_z_U);
+        */
         rhs_compl_x_U->ElementWiseMultiply(*tmp);
         rhs_compl_x_U->AddScalar(mu);
 
@@ -936,11 +936,11 @@ namespace Ipopt
         IpNLP().Pd_L()->TransMultVector(-1., *actual_delta_s,
                                         -1., *rhs_compl_s_L);
         tmp = actual_delta_v_L->MakeNew();
-	tmp->AddTwoVectors(1., *IpData().curr_v_L(), 1., *actual_delta_v_L, 0.);
-	/* DELE
-        tmp->Copy(*IpData().curr_v_L());
-        tmp->Axpy(1., *actual_delta_v_L);
-	*/
+        tmp->AddTwoVectors(1., *IpData().curr_v_L(), 1., *actual_delta_v_L, 0.);
+        /* DELE
+               tmp->Copy(*IpData().curr_v_L());
+               tmp->Axpy(1., *actual_delta_v_L);
+        */
         rhs_compl_s_L->ElementWiseMultiply(*tmp);
         rhs_compl_s_L->AddScalar(mu);
 
@@ -948,11 +948,11 @@ namespace Ipopt
         IpNLP().Pd_U()->TransMultVector(1., *actual_delta_s,
                                         -1., *rhs_compl_s_U);
         tmp = actual_delta_v_U->MakeNew();
-	tmp->AddTwoVectors(1., *IpData().curr_v_U(), 1., *actual_delta_v_U, 0.);
-	/* DELE
-        tmp->Copy(*IpData().curr_v_U());
-        tmp->Axpy(1., *actual_delta_v_U);
-	*/
+        tmp->AddTwoVectors(1., *IpData().curr_v_U(), 1., *actual_delta_v_U, 0.);
+        /* DELE
+               tmp->Copy(*IpData().curr_v_U());
+               tmp->Axpy(1., *actual_delta_v_U);
+        */
         rhs_compl_s_U->ElementWiseMultiply(*tmp);
         rhs_compl_s_U->AddScalar(mu);
 

@@ -20,14 +20,14 @@ namespace Ipopt
       orig_filter_line_search_(NULL)
   {
     DBG_START_FUN("RestoFilterConvergenceCheck::RestoFilterConvergenceCheck()",
-		  dbg_verbosity);
+                  dbg_verbosity);
 
   }
 
   RestoFilterConvergenceCheck::~RestoFilterConvergenceCheck()
   {
     DBG_START_FUN("RestoFilterConvergenceCheck::RestoFilterConvergenceCheck()",
-		  dbg_verbosity);
+                  dbg_verbosity);
   }
 
   void

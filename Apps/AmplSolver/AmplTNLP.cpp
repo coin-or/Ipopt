@@ -557,13 +557,13 @@ namespace Ipopt
   }
 
   void AmplTNLP::get_discrete_info(Index& nlvb_,
-				   Index& nlvbi_,
-				   Index& nlvc_,
-				   Index& nlvci_,
-				   Index& nlvo_,
-				   Index& nlvoi_,
-				   Index& nbv_,
-				   Index& niv_) const
+                                   Index& nlvbi_,
+                                   Index& nlvc_,
+                                   Index& nlvci_,
+                                   Index& nlvo_,
+                                   Index& nlvoi_,
+                                   Index& nbv_,
+                                   Index& niv_) const
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl);

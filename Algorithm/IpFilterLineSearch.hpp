@@ -86,7 +86,7 @@ namespace Ipopt
     //@{
     /** Checks if a trial point is acceptable to the current iterate */
     bool IsAcceptableToCurrentIterate(Number trial_barr, Number trial_theta,
-				      bool called_from_restoration=false) const;
+                                      bool called_from_restoration=false) const;
 
     /** Checks if a trial point is acceptable to the current filter */
     bool IsAcceptableToCurrentFilter(Number trial_barr, Number trial_theta) const;
@@ -255,7 +255,7 @@ namespace Ipopt
     /** Flag indicating whether the line search is to be performed
      * robust (usually this is true, unless SetRigorousLineSearch is
      * called with false).
-     */ 
+     */
     bool rigorous_;
 
     /** Flag indicating whether no acceptable trial point was found

@@ -28,12 +28,12 @@ extern "C"
 
 namespace Ipopt
 {
-  void CreateLinkingEqns(std::vector<SmartPtr<AmplTNLP> >& nlps, 
-			 std::vector<SmartPtr<AmplSuffixHandler> >& suffix_handlers,
-			 std::vector<SmartPtr<VectorSpace> >& linking_eqn_spaces, 
-			 std::vector<SmartPtr<Matrix> >& Jx_linking_eqns, 
-			 std::vector<SmartPtr<Matrix> >& Jq_linking_eqns,
-			 SmartPtr<VectorSpace>& q_space);
+  void CreateLinkingEqns(std::vector<SmartPtr<AmplTNLP> >& nlps,
+                         std::vector<SmartPtr<AmplSuffixHandler> >& suffix_handlers,
+                         std::vector<SmartPtr<VectorSpace> >& linking_eqn_spaces,
+                         std::vector<SmartPtr<Matrix> >& Jx_linking_eqns,
+                         std::vector<SmartPtr<Matrix> >& Jq_linking_eqns,
+                         SmartPtr<VectorSpace>& q_space);
 
   int RunIpoptAlgorithm(const SmartPtr<Journalist> nonconst_jnlst, int argv, char**argc)
   {
@@ -43,7 +43,7 @@ namespace Ipopt
     jnlst->Printf(J_ERROR, J_MAIN, "*** Running Ipopt with AMPL Model ***************************\n");
     jnlst->Printf(J_ERROR, J_MAIN, "*************************************************************\n\n\n");
 
-    // For test purposes, every ampl model must have 5 variables and the 
+    // For test purposes, every ampl model must have 5 variables and the
     // last variable in all of them is the linked variable
     Index nx = 5;
     std::vector<SmartPtr<AmplTNLP> > ampl_nlps;
@@ -73,7 +73,7 @@ namespace Ipopt
       SmartPtr<NLP> nlp_i = new TNLPAdapter(GetRawPtr(ampl_nlp_i));
       nlps.push_back(nlp_i);
     }
-    
+
     SmartPtr<VectorSpace> q_space;
     std::vector<SmartPtr<VectorSpace> > linking_eqn_spaces;
     std::vector<SmartPtr<Matrix> > Jx_linking_eqns;
@@ -81,9 +81,9 @@ namespace Ipopt
     CreateLinkingEqns(ampl_nlps, suffix_handlers, linking_eqn_spaces, Jx_linking_eqns, Jq_linking_eqns, q_space);
 
     // Create the composite nlp and the IpoptNLP
-    SmartPtr<NLP> nlp = new CompositeNLP(nlps, q_space, 
-					 linking_eqn_spaces, 
-					 Jx_linking_eqns, Jq_linking_eqns);
+    SmartPtr<NLP> nlp = new CompositeNLP(nlps, q_space,
+                                         linking_eqn_spaces,
+                                         Jx_linking_eqns, Jq_linking_eqns);
 
     SmartPtr<IpoptNLP> ip_nlp = new OrigIpoptNLP(jnlst, nlp);
 
@@ -142,12 +142,12 @@ namespace Ipopt
 
   DECLARE_STD_EXCEPTION(AMPL_SUFFIX_ERROR);
 
-  void CreateLinkingEqns(std::vector<SmartPtr<AmplTNLP> >& nlps, 
-			 std::vector<SmartPtr<AmplSuffixHandler> >& suffix_handlers,
-			 std::vector<SmartPtr<VectorSpace> >& linking_eqn_spaces, 
-			 std::vector<SmartPtr<Matrix> >& Jx_linking_eqns, 
-			 std::vector<SmartPtr<Matrix> >& Jq_linking_eqns,
-			 SmartPtr<VectorSpace>& q_space)
+  void CreateLinkingEqns(std::vector<SmartPtr<AmplTNLP> >& nlps,
+                         std::vector<SmartPtr<AmplSuffixHandler> >& suffix_handlers,
+                         std::vector<SmartPtr<VectorSpace> >& linking_eqn_spaces,
+                         std::vector<SmartPtr<Matrix> >& Jx_linking_eqns,
+                         std::vector<SmartPtr<Matrix> >& Jq_linking_eqns,
+                         SmartPtr<VectorSpace>& q_space)
   {
     Index n_nlps = nlps.size();
     DBG_ASSERT(n_nlps == suffix_handlers.size());
@@ -160,7 +160,7 @@ namespace Ipopt
       SmartPtr<AmplTNLP> ampl_nlp_i = nlps[nlp_idx];
       ASL_pfgh* asl = ampl_nlp_i->AmplSolverObject();
       for (Index i=0; i<n_var; i++) {
-	q_dim = Max(q_dim, dp[i]);
+        q_dim = Max(q_dim, dp[i]);
       }
     }
 
@@ -171,58 +171,58 @@ namespace Ipopt
     for (Index nlp_idx = 0; nlp_idx<n_nlps; nlp_idx++) {
       const Index* dp = suffix_handlers[nlp_idx]->GetIntegerSuffixValues("common_idx", AmplSuffixHandler::Variable_Source);
       SmartPtr<AmplTNLP> ampl_nlp_i = nlps[nlp_idx];
-      
+
       // count the number of linking equations
       ASL_pfgh* asl = ampl_nlp_i->AmplSolverObject();
       Index n_link_eqns = 0;
       for (Index i=0; i<n_var; i++) {
-	if (dp[i] != 0) {
-	  n_link_eqns++;
-	}
+        if (dp[i] != 0) {
+          n_link_eqns++;
+        }
       }
-    
+
       // Build the Jx_linking_eqns[i]
       Index* iRows = new Index[n_link_eqns];
       Index* jCols = new Index[n_link_eqns];
       Index curr_eqn_idx = 0;
       for (Index i=0; i<n_var; i++) {
-	if (dp[i]) {
-	  iRows[curr_eqn_idx] = curr_eqn_idx + 1;
-	  jCols[curr_eqn_idx] = i+1;
-	  curr_eqn_idx++;
-	}
+        if (dp[i]) {
+          iRows[curr_eqn_idx] = curr_eqn_idx + 1;
+          jCols[curr_eqn_idx] = i+1;
+          curr_eqn_idx++;
+        }
       }
-    
+
       SmartPtr<GenTMatrixSpace> space = new GenTMatrixSpace(n_link_eqns, n_var, n_link_eqns, iRows, jCols);
       SmartPtr<GenTMatrix> Jx_i = space->MakeNewGenTMatrix();
       Number* values = Jx_i->Values();
       for (Index i=0; i<n_link_eqns; i++) {
-	values[i] = 1.0;
+        values[i] = 1.0;
       }
-    
+
       // Build the Jq_linking_eqns
       curr_eqn_idx = 0;
       for (Index i=0; i<n_var; i++) {
-	if (dp[i]) {
-	  iRows[curr_eqn_idx] = curr_eqn_idx+1;
-	  jCols[curr_eqn_idx] = dp[i];
-	  q_test[dp[i]-1] = true;
-	  curr_eqn_idx++;
-	  ASSERT_EXCEPTION(dp[i] > 0, AMPL_SUFFIX_ERROR, "common_idx must be larger than zero (one based index)");
-	}
+        if (dp[i]) {
+          iRows[curr_eqn_idx] = curr_eqn_idx+1;
+          jCols[curr_eqn_idx] = dp[i];
+          q_test[dp[i]-1] = true;
+          curr_eqn_idx++;
+          ASSERT_EXCEPTION(dp[i] > 0, AMPL_SUFFIX_ERROR, "common_idx must be larger than zero (one based index)");
+        }
       }
-    
+
 
       space = new GenTMatrixSpace(n_link_eqns, q_dim, n_link_eqns, iRows, jCols);
       SmartPtr<GenTMatrix> Jq_i = space->MakeNewGenTMatrix();
       values = Jq_i->Values();
       for (Index i=0; i<n_link_eqns; i++) {
-	values[i] = -1.0;
+        values[i] = -1.0;
       }
-      
+
 
       linking_eqn_spaces.push_back(new DenseVectorSpace(n_link_eqns));
-      
+
       Jx_linking_eqns.push_back(GetRawPtr(Jx_i));
       Jq_linking_eqns.push_back(GetRawPtr(Jq_i));
 

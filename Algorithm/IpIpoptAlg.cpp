@@ -264,7 +264,7 @@ namespace Ipopt
     IpData().SetFromPtr_delta_z_L(ConstPtr(delta_z_L));
     IpData().SetFromPtr_delta_z_U(ConstPtr(delta_z_U));
     IpData().SetFromPtr_delta_v_L(ConstPtr(delta_v_L));
-    IpData().SetFromPtr_delta_v_U(ConstPtr(delta_v_U));   
+    IpData().SetFromPtr_delta_v_U(ConstPtr(delta_v_U));
 
     Jnlst().Printf(J_MOREVECTOR, J_MAIN,
                    "*** Step Calculated for Iteration: %d\n",
@@ -309,7 +309,7 @@ namespace Ipopt
     // point, do not accept a new iterate
     if (line_search_->CheckSkippedLineSearch()) {
       Jnlst().Printf(J_SUMMARY, J_MAIN,
-		     "Line search didn't find acceptable trial point.\n");
+                     "Line search didn't find acceptable trial point.\n");
       return;
     }
 
@@ -371,42 +371,42 @@ namespace Ipopt
     Number max_correction;
     SmartPtr<const Vector> new_z_L;
     max_correction = correct_bound_multiplier(*IpData().trial_z_L(),
-					      *IpCq().trial_slack_x_L(),
-					      new_z_L);
+                     *IpCq().trial_slack_x_L(),
+                     new_z_L);
     if (max_correction>0.) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "Some value in z_L becomes too large - maximal correction = %8.2e\n",
-		     max_correction);
+                     "Some value in z_L becomes too large - maximal correction = %8.2e\n",
+                     max_correction);
       corrected = true;
     }
     SmartPtr<const Vector> new_z_U;
     max_correction = correct_bound_multiplier(*IpData().trial_z_U(),
-					      *IpCq().trial_slack_x_U(),
-					      new_z_U);
+                     *IpCq().trial_slack_x_U(),
+                     new_z_U);
     if (max_correction>0.) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "Some value in z_U becomes too large - maximal correction = %8.2e\n",
-		     max_correction);
+                     "Some value in z_U becomes too large - maximal correction = %8.2e\n",
+                     max_correction);
       corrected = true;
     }
     SmartPtr<const Vector> new_v_L;
     max_correction = correct_bound_multiplier(*IpData().trial_v_L(),
-					      *IpCq().trial_slack_s_L(),
-					      new_v_L);
+                     *IpCq().trial_slack_s_L(),
+                     new_v_L);
     if (max_correction>0.) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "Some value in v_L becomes too large - maximal correction = %8.2e\n",
-		     max_correction);
+                     "Some value in v_L becomes too large - maximal correction = %8.2e\n",
+                     max_correction);
       corrected = true;
     }
     SmartPtr<const Vector> new_v_U;
     max_correction = correct_bound_multiplier(*IpData().trial_v_U(),
-					      *IpCq().trial_slack_s_U(),
-					      new_v_U);
+                     *IpCq().trial_slack_s_U(),
+                     new_v_U);
     if (max_correction>0.) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "Some value in v_U becomes too large - maximal correction = %8.2e\n",
-		     max_correction);
+                     "Some value in v_U becomes too large - maximal correction = %8.2e\n",
+                     max_correction);
       corrected = true;
     }
     IpData().SetTrialBoundMultipliersFromPtr(new_z_L, new_z_U, new_v_L, new_v_U);
@@ -524,8 +524,8 @@ namespace Ipopt
   }
 
   Number IpoptAlgorithm::correct_bound_multiplier(const Vector& trial_z,
-						  const Vector& trial_slack,
-						  SmartPtr<const Vector>& new_trial_z)
+      const Vector& trial_slack,
+      SmartPtr<const Vector>& new_trial_z)
   {
     DBG_START_METH("IpoptAlgorithm::CorrectBoundMultiplier",
                    dbg_verbosity);

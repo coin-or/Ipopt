@@ -268,9 +268,9 @@ namespace Ipopt
   void Journal::SetAllPrintLevels(
     EJournalLevel level)
   {
-    for (Index category=(Index)J_DBG; 
-	 category<(Index)J_LAST_CATEGORY;
-	 category++) {
+    for (Index category=(Index)J_DBG;
+         category<(Index)J_LAST_CATEGORY;
+         category++) {
       print_levels_[category] = (Index) level;
     }
   }

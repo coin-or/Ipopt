@@ -45,14 +45,14 @@ namespace Ipopt
     return OptimizeNLP(nlp_adapter);
   }
 
-  ApplicationReturnStatus 
-  IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp, 
-				 SmartPtr<IpoptData>& ip_data,
-				 SmartPtr<IpoptCalculatedQuantities>& ip_cq)
+  ApplicationReturnStatus
+  IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp,
+                                 SmartPtr<IpoptData>& ip_data,
+                                 SmartPtr<IpoptCalculatedQuantities>& ip_cq)
   {
     SmartPtr<NLP> nlp_adapter =
       new TNLPAdapter(GetRawPtr(nlp));
-    
+
     return OptimizeNLP(nlp_adapter, ip_data, ip_cq);
   }
 
@@ -65,10 +65,10 @@ namespace Ipopt
 
   }
 
-  ApplicationReturnStatus 
+  ApplicationReturnStatus
   IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp,
-				SmartPtr<IpoptData>& ip_data,
-				SmartPtr<IpoptCalculatedQuantities>& ip_cq)
+                                SmartPtr<IpoptData>& ip_data,
+                                SmartPtr<IpoptCalculatedQuantities>& ip_cq)
   {
     ApplicationReturnStatus retValue = Solve_Succeeded;
 
@@ -124,11 +124,11 @@ namespace Ipopt
     if (options_->GetValue("output_file", output_filename, "")) {
       EJournalLevel file_print_level = J_SUMMARY;
       if (options_->GetIntegerValue("file_print_level", ivalue, "")) {
-	ivalue = Max(0, Min(ivalue, ((Index)J_LAST_LEVEL)-1));
+        ivalue = Max(0, Min(ivalue, ((Index)J_LAST_LEVEL)-1));
         file_print_level = (EJournalLevel)ivalue;
       }
       else {
-	file_print_level = print_level;
+        file_print_level = print_level;
       }
       Journal* file_jrnl = jnlst_->AddJournal("OutputFile", output_filename.c_str(), file_print_level);
       file_jrnl->SetPrintLevel(J_DBG, J_NONE);
@@ -140,12 +140,12 @@ namespace Ipopt
 
       // Create the IpoptData
       if (IsNull(ip_data)) {
-	ip_data = new IpoptData();
+        ip_data = new IpoptData();
       }
 
       // Create the IpoptCalculators
       if (IsNull(ip_cq)) {
-	ip_cq = new IpoptCalculatedQuantities(ip_nlp, ip_data);
+        ip_cq = new IpoptCalculatedQuantities(ip_nlp, ip_data);
       }
 
       // Create the Algorithm object
@@ -250,7 +250,7 @@ namespace Ipopt
     }
     catch(IpoptException& exc) {
       exc.ReportException(*jnlst_);
-      
+
       retValue = Solve_Failed;
     }
     catch(std::bad_alloc& exc) {

@@ -147,9 +147,9 @@ namespace Ipopt
     /** @name Implemented specialized functions */
     //@{
     /** Add two vectors (a * v1 + b * v2).  Result is stored in this
-	vector. */
+    vector. */
     void AddTwoVectorsImpl(Number a, const Vector& v1,
-			   Number b, const Vector& v2, Number c);
+                           Number b, const Vector& v2, Number c);
     //@}
 
     /** @name Output methods */

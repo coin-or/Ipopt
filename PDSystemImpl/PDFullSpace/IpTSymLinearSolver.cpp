@@ -21,8 +21,8 @@ namespace Ipopt
   DBG_SET_VERBOSITY(0);
 
   TSymLinearSolver::TSymLinearSolver
-        (SmartPtr<SparseSymLinearSolverInterface> solver_interface,
-	 SmartPtr<TSymScalingMethod> scaling_method)
+  (SmartPtr<SparseSymLinearSolverInterface> solver_interface,
+   SmartPtr<TSymScalingMethod> scaling_method)
       :
       SymLinearSolver(),
       solver_interface_(solver_interface),
@@ -52,7 +52,7 @@ namespace Ipopt
   }
 
   bool TSymLinearSolver::InitializeImpl(const OptionsList& options,
-      const std::string& prefix)
+                                        const std::string& prefix)
   {
     // Reset all private data
     atag_=0;
@@ -62,22 +62,22 @@ namespace Ipopt
     initialized_=false;
 
     if (!solver_interface_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-				       options, prefix)) {
+                                       options, prefix)) {
       return false;
     }
 
     matrix_format_ = solver_interface_->MatrixFormat();
     switch (matrix_format_) {
-    case SparseSymLinearSolverInterface::CSR_Format_0_Offset:
+      case SparseSymLinearSolverInterface::CSR_Format_0_Offset:
       triplet_to_csr_converter_ = new TripletToCSRConverter(0);
       break;
-    case SparseSymLinearSolverInterface::CSR_Format_1_Offset:
+      case SparseSymLinearSolverInterface::CSR_Format_1_Offset:
       triplet_to_csr_converter_ = new TripletToCSRConverter(1);
       break;
-    case SparseSymLinearSolverInterface::Triplet_Format:
+      case SparseSymLinearSolverInterface::Triplet_Format:
       triplet_to_csr_converter_ = NULL;
       break;
-    default:
+      default:
       DBG_ASSERT(false && "Invalid MatrixFormat returned from solver interface.");
       return false;
     }
@@ -92,10 +92,10 @@ namespace Ipopt
 
   ESymSolverStatus
   TSymLinearSolver::MultiSolve(const SymMatrix& sym_A,
-			       std::vector<const Vector*>& rhsV,
-			       std::vector<Vector*>& solV,
-			       bool check_NegEVals,
-			       Index numberOfNegEVals)
+                               std::vector<const Vector*>& rhsV,
+                               std::vector<Vector*>& solV,
+                               bool check_NegEVals,
+                               Index numberOfNegEVals)
   {
     DBG_START_METH("TSymLinearSolver::MultiSolve",dbg_verbosity);
     DBG_ASSERT(!check_NegEVals || ProvidesInertia());
@@ -106,7 +106,7 @@ namespace Ipopt
     if (!initialized_) {
       ESymSolverStatus retval = InitializeStructure(sym_A);
       if (retval != SYMSOLVER_SUCCESS) {
-	return retval;
+        return retval;
       }
     }
 
@@ -130,7 +130,7 @@ namespace Ipopt
     double* rhs_vals = new double[dim_*nrhs];
     for (Index irhs=0; irhs<nrhs; irhs++) {
       TripletHelper::FillValuesFromVector(dim_, *rhsV[irhs],
-					  &rhs_vals[irhs*(dim_)]);
+                                          &rhs_vals[irhs*(dim_)]);
       if (IsValid(scaling_method_)) {
         for (Index i=0; i<dim_; i++) {
           rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
@@ -149,23 +149,23 @@ namespace Ipopt
       const Index* ia;
       const Index* ja;
       if (matrix_format_==SparseSymLinearSolverInterface::Triplet_Format) {
-	ia = airn_;
-	ja = ajcn_;
+        ia = airn_;
+        ja = ajcn_;
       }
       else {
-	ia = triplet_to_csr_converter_->IA();
-	ja = triplet_to_csr_converter_->JA();
+        ia = triplet_to_csr_converter_->IA();
+        ja = triplet_to_csr_converter_->JA();
       }
 
       retval = solver_interface_->MultiSolve(new_matrix, ia, ja,
-					     nrhs, rhs_vals, check_NegEVals,
-					     numberOfNegEVals);
+                                             nrhs, rhs_vals, check_NegEVals,
+                                             numberOfNegEVals);
       if (retval==SYMSOLVER_CALL_AGAIN) {
-	DBG_PRINT((1, "Solver interface asks to be called again.\n"));
-	GiveMatrixToSolver(false, sym_A);
+        DBG_PRINT((1, "Solver interface asks to be called again.\n"));
+        GiveMatrixToSolver(false, sym_A);
       }
       else {
-	done = true;
+        done = true;
       }
     }
 
@@ -173,13 +173,13 @@ namespace Ipopt
     // and transfer the result into the Vectors
     if (retval==SYMSOLVER_SUCCESS) {
       for (Index irhs=0; irhs<nrhs; irhs++) {
-	if (IsValid(scaling_method_)) {
-	  for (Index i=0; i<dim_; i++) {
-	    rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
-	  }
-	}
-	TripletHelper::PutValuesInVector(dim_, &rhs_vals[irhs*(dim_)],
-					 *solV[irhs]);
+        if (IsValid(scaling_method_)) {
+          for (Index i=0; i<dim_; i++) {
+            rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
+          }
+        }
+        TripletHelper::PutValuesInVector(dim_, &rhs_vals[irhs*(dim_)],
+                                         *solV[irhs]);
       }
     }
 
@@ -194,7 +194,7 @@ namespace Ipopt
   TSymLinearSolver::InitializeStructure(const SymMatrix& sym_A)
   {
     DBG_START_METH("TSymLinearSolver::InitializeStructure",
-		   dbg_verbosity);
+                   dbg_verbosity);
     DBG_ASSERT(!initialized_);
 
     dim_ = sym_A.Dim();
@@ -218,9 +218,9 @@ namespace Ipopt
       nonzeros = nonzeros_triplet_;
     }
     else {
-      nonzeros_compressed_ = 
-	triplet_to_csr_converter_->InitializeConverter(dim_, nonzeros_triplet_,
-						       airn_, ajcn_);
+      nonzeros_compressed_ =
+        triplet_to_csr_converter_->InitializeConverter(dim_, nonzeros_triplet_,
+            airn_, ajcn_);
       ia = triplet_to_csr_converter_->IA();
       ja = triplet_to_csr_converter_->JA();
       nonzeros = nonzeros_compressed_;
@@ -263,7 +263,7 @@ namespace Ipopt
   }
 
   void TSymLinearSolver::GiveMatrixToSolver(bool new_matrix,
-					    const SymMatrix& sym_A)
+      const SymMatrix& sym_A)
   {
     DBG_START_METH("TSymLinearSolver::GiveMatrixToSolver",dbg_verbosity);
     DBG_PRINT((1,"new_matrix = %d\n",new_matrix));
@@ -282,45 +282,45 @@ namespace Ipopt
     TripletHelper::FillValues(nonzeros_triplet_, sym_A, atriplet);
     if (DBG_VERBOSITY()>=3) {
       for (Index i=0; i<nonzeros_triplet_; i++) {
-	DBG_PRINT((3, "KKTunscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
+        DBG_PRINT((3, "KKTunscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
       }
     }
 
     if (IsValid(scaling_method_)) {
       DBG_ASSERT(scaling_factors_);
       if (new_matrix) {
-	// only compute scaling factors if the matrix has not been
-	// changed since the last call to this method
-	bool retval =
-	  scaling_method_->ComputeSymTScalingFactors(dim_, nonzeros_triplet_,
-						     airn_, ajcn_,
-						     atriplet, scaling_factors_);
-	DBG_ASSERT(retval);
-	if (Jnlst().ProduceOutput(J_MOREVECTOR, J_LINEAR_ALGEBRA)) {
-	  for (Index i=0; i<dim_; i++) {
-	    Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA,
-			   "scaling factor[%6d] = %22.17e\n",
-			   i, scaling_factors_[i]);
-	  }
-	}
+        // only compute scaling factors if the matrix has not been
+        // changed since the last call to this method
+        bool retval =
+          scaling_method_->ComputeSymTScalingFactors(dim_, nonzeros_triplet_,
+              airn_, ajcn_,
+              atriplet, scaling_factors_);
+        DBG_ASSERT(retval);
+        if (Jnlst().ProduceOutput(J_MOREVECTOR, J_LINEAR_ALGEBRA)) {
+          for (Index i=0; i<dim_; i++) {
+            Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA,
+                           "scaling factor[%6d] = %22.17e\n",
+                           i, scaling_factors_[i]);
+          }
+        }
       }
       for (Index i=0; i<nonzeros_triplet_; i++) {
-	atriplet[i] *=
-	  scaling_factors_[airn_[i]-1] * scaling_factors_[ajcn_[i]-1];
+        atriplet[i] *=
+          scaling_factors_[airn_[i]-1] * scaling_factors_[ajcn_[i]-1];
       }
       if (DBG_VERBOSITY()>=3) {
-	for (Index i=0; i<nonzeros_triplet_; i++) {
-	  DBG_PRINT((3, "KKTscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
-	}
+        for (Index i=0; i<nonzeros_triplet_; i++) {
+          DBG_PRINT((3, "KKTscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
+        }
       }
-    }      
+    }
 
     if (matrix_format_!=SparseSymLinearSolverInterface::Triplet_Format) {
       triplet_to_csr_converter_->ConvertValues(nonzeros_triplet_, atriplet,
-					       nonzeros_compressed_, pa);
+          nonzeros_compressed_, pa);
       delete[] atriplet;
     }
-    
+
   }
 
 } // namespace Ipopt

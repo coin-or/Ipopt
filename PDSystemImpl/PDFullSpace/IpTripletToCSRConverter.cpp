@@ -15,17 +15,17 @@ namespace Ipopt
   DBG_SET_VERBOSITY(0);
 
   TripletToCSRConverter::TripletToCSRConverter(Index offset)
-    :
-    offset_(offset),
-    ia_(NULL),
-    ja_(NULL),
-    ipos_first_(NULL),
-    ipos_double_triplet_(NULL),
-    ipos_double_compressed_(NULL),
-    dim_(0),
-    nonzeros_triplet_(0),
-    nonzeros_compressed_(0),
-    initialized_(false)
+      :
+      offset_(offset),
+      ia_(NULL),
+      ja_(NULL),
+      ipos_first_(NULL),
+      ipos_double_triplet_(NULL),
+      ipos_double_compressed_(NULL),
+      dim_(0),
+      nonzeros_triplet_(0),
+      nonzeros_compressed_(0),
+      initialized_(false)
   {
     DBG_ASSERT(offset==0|| offset==1);
   }
@@ -40,11 +40,11 @@ namespace Ipopt
   }
 
   Index TripletToCSRConverter::InitializeConverter(Index dim, Index nonzeros,
-						   const Index* airn,
-						   const Index* ajcn)
+      const Index* airn,
+      const Index* ajcn)
   {
     DBG_START_METH("TSymLinearSolver::InitializeStructure",
-		   dbg_verbosity);
+                   dbg_verbosity);
 
     DBG_ASSERT(dim>0);
     DBG_ASSERT(nonzeros>0);
@@ -69,7 +69,7 @@ namespace Ipopt
 
     if (DBG_VERBOSITY()>=2) {
       for (Index i=0; i<nonzeros; i++) {
-	DBG_PRINT((2, "airn[%5d] = %5d acjn[%5d] = %5d\n", i, airn[i], i, ajcn[i]));
+        DBG_PRINT((2, "airn[%5d] = %5d acjn[%5d] = %5d\n", i, airn[i], i, ajcn[i]));
       }
     }
 
@@ -101,26 +101,26 @@ namespace Ipopt
       Index irow = list_iterator->IRow();
       Index jcol = list_iterator->JCol();
       if (cur_row == irow && ja_tmp[nonzeros_compressed_] == jcol) {
-	// This element appears repeatedly, add to the double list
-	ipos_double_triplet_tmp[idouble] = list_iterator->PosTriplet();
-	ipos_double_compressed_tmp[idouble] = nonzeros_compressed_;
-	idouble++;
+        // This element appears repeatedly, add to the double list
+        ipos_double_triplet_tmp[idouble] = list_iterator->PosTriplet();
+        ipos_double_compressed_tmp[idouble] = nonzeros_compressed_;
+        idouble++;
       }
       else {
-	// This is a new element
-	nonzeros_compressed_++;
-	ja_tmp[nonzeros_compressed_] = jcol;
-	ipos_first_tmp[nonzeros_compressed_] = list_iterator->PosTriplet();
-	if (cur_row != irow) {
-	  // this is in a new row
+        // This is a new element
+        nonzeros_compressed_++;
+        ja_tmp[nonzeros_compressed_] = jcol;
+        ipos_first_tmp[nonzeros_compressed_] = list_iterator->PosTriplet();
+        if (cur_row != irow) {
+          // this is in a new row
 
-	  // make sure that the diagonal element is given and that no
-	  // row is omitted
-	  DBG_ASSERT(irow==jcol);
-	  DBG_ASSERT(cur_row+1==irow);
-	  ia_[cur_row] = nonzeros_compressed_;
-	  cur_row++;
-	}
+          // make sure that the diagonal element is given and that no
+          // row is omitted
+          DBG_ASSERT(irow==jcol);
+          DBG_ASSERT(cur_row+1==irow);
+          ia_[cur_row] = nonzeros_compressed_;
+          cur_row++;
+        }
       }
 
       list_iterator++;
@@ -136,15 +136,15 @@ namespace Ipopt
     ja_ = new Index[nonzeros_compressed_];
     if (offset_==0) {
       for (Index i=0; i<nonzeros_compressed_; i++) {
-	ja_[i] = ja_tmp[i] - 1;
+        ja_[i] = ja_tmp[i] - 1;
       }
     }
     else {
       for (Index i=0; i<nonzeros_compressed_; i++) {
-	ja_[i] = ja_tmp[i];
+        ja_[i] = ja_tmp[i];
       }
       for (Index i=0; i<=dim_; i++) {
-	ia_[i] = ia_[i] + 1;
+        ia_[i] = ia_[i] + 1;
       }
     }
     delete[] ja_tmp;
@@ -170,13 +170,13 @@ namespace Ipopt
 
     if (DBG_VERBOSITY()>=2) {
       for (Index i=0; i<=dim_; i++) {
-	DBG_PRINT((2, "ia[%5d] = %5d\n", i, ia_[i]));
+        DBG_PRINT((2, "ia[%5d] = %5d\n", i, ia_[i]));
       }
       for (Index i=0; i<nonzeros_compressed_; i++) {
-	DBG_PRINT((2, "ja[%5d] = %5d ipos_first[%5d] = %5d\n", i, ja_[i], i, ipos_first_[i]));
+        DBG_PRINT((2, "ja[%5d] = %5d ipos_first[%5d] = %5d\n", i, ja_[i], i, ipos_first_[i]));
       }
       for (Index i=0; i<nonzeros_triplet_-nonzeros_compressed_; i++) {
-	DBG_PRINT((2, "ipos_double_triplet[%5d] = %5d ipos_double_compressed[%5d] = %5d\n", i, ipos_double_triplet_[i], i, ipos_double_compressed_[i]));
+        DBG_PRINT((2, "ipos_double_triplet[%5d] = %5d ipos_double_compressed[%5d] = %5d\n", i, ipos_double_triplet_[i], i, ipos_double_compressed_[i]));
       }
     }
 
@@ -184,12 +184,12 @@ namespace Ipopt
   }
 
   void TripletToCSRConverter::ConvertValues(Index nonzeros_triplet,
-					    const Number* a_triplet,
-					    Index nonzeros_compressed,
-					    Number* a_compressed)
+      const Number* a_triplet,
+      Index nonzeros_compressed,
+      Number* a_compressed)
   {
     DBG_START_METH("TSymLinearSolver::ConvertValues",
-		   dbg_verbosity);
+                   dbg_verbosity);
 
     DBG_ASSERT(initialized_);
 
@@ -201,15 +201,15 @@ namespace Ipopt
     }
     for (Index i=0; i<nonzeros_triplet_-nonzeros_compressed_; i++) {
       a_compressed[ipos_double_compressed_[i]] +=
-	a_triplet[ipos_double_triplet_[i]];
+        a_triplet[ipos_double_triplet_[i]];
     }
 
     if (DBG_VERBOSITY()>=2) {
       for (Index i=0; i<nonzeros_triplet; i++) {
-	DBG_PRINT((2, "atriplet[%5d] = %24.16e\n", i, a_triplet[i]));
+        DBG_PRINT((2, "atriplet[%5d] = %24.16e\n", i, a_triplet[i]));
       }
       for (Index i=0; i<nonzeros_compressed; i++) {
-	DBG_PRINT((2, "acompre[%5d] = %24.16e\n", i, a_compressed[i]));
+        DBG_PRINT((2, "acompre[%5d] = %24.16e\n", i, a_compressed[i]));
       }
     }
   }

@@ -96,13 +96,13 @@ namespace Ipopt
     /** X = beta*X + alpha*(Matrix S^{-1} Z).  Specialized implementation.
      */
     virtual void AddMSinvZImpl(Number alpha, const Vector& S, const Vector& Z,
-			       Vector& X) const;
+                               Vector& X) const;
 
     /** X = S^{-1} (r + alpha*Z*M^Td).  Specialized implementation.
      */
     virtual void SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
-				    const Vector& R, const Vector& Z,
-				    const Vector& D, Vector& X) const;
+                                    const Vector& R, const Vector& Z,
+                                    const Vector& D, Vector& X) const;
 
     virtual void PrintImpl(FILE* fp, std::string name, Index indent, std::string prefix) const;
     //@}

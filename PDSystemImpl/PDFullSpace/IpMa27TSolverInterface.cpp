@@ -140,12 +140,12 @@ namespace Ipopt
   }
 
   ESymSolverStatus Ma27TSolverInterface::MultiSolve(bool new_matrix,
-						    const Index* airn,
-						    const Index* ajcn,
-						    Index nrhs,
-						    double* rhs_vals,
-						    bool check_NegEVals,
-						    Index numberOfNegEVals)
+      const Index* airn,
+      const Index* ajcn,
+      Index nrhs,
+      double* rhs_vals,
+      bool check_NegEVals,
+      Index numberOfNegEVals)
   {
     DBG_START_METH("Ma27TSolverInterface::MultiSolve",dbg_verbosity);
     DBG_ASSERT(!check_NegEVals || ProvidesInertia());
@@ -159,9 +159,9 @@ namespace Ipopt
       // new, we have to request the values for the matrix again to do
       // the factorization again.
       if (!new_matrix) {
-	DBG_PRINT((1,"Ask called to call again.\n"));
-	refactorize_ = true;
-	return SYMSOLVER_CALL_AGAIN;
+        DBG_PRINT((1,"Ask called to call again.\n"));
+        refactorize_ = true;
+        return SYMSOLVER_CALL_AGAIN;
       }
     }
 
@@ -201,8 +201,8 @@ namespace Ipopt
   /** Initialize the local copy of the positions of the nonzero
       elements */
   ESymSolverStatus Ma27TSolverInterface::InitializeStructure(Index dim, Index nonzeros,
-							     const Index* airn,
-							     const Index* ajcn)
+      const Index* airn,
+      const Index* ajcn)
   {
     DBG_START_METH("Ma27TSolverInterface::InitializeStructure",dbg_verbosity);
     dim_ = dim;
@@ -220,7 +220,7 @@ namespace Ipopt
   }
 
   ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(const Index* airn,
-							       const Index* ajcn)
+      const Index* ajcn)
   {
     DBG_START_METH("Ma27TSolverInterface::SymbolicFactorization",dbg_verbosity);
 
@@ -280,9 +280,9 @@ namespace Ipopt
 
   ESymSolverStatus
   Ma27TSolverInterface::Factorization(const Index* airn,
-				      const Index* ajcn,
-				      bool check_NegEVals,
-				      Index numberOfNegEVals)
+                                      const Index* ajcn,
+                                      bool check_NegEVals,
+                                      Index numberOfNegEVals)
   {
     DBG_START_METH("Ma27TSolverInterface::Factorization",dbg_verbosity);
     // Check if la should be increased
@@ -292,7 +292,7 @@ namespace Ipopt
       la_ = (ipfint)(meminc_factor_ * (double)(la_));
       a_ = new double[la_];
       for (Index i=0; i<nonzeros_; i++) {
-	a_[i] = a_old[i];
+        a_[i] = a_old[i];
       }
       delete [] a_old;
       la_increase_ = false;
@@ -325,8 +325,8 @@ namespace Ipopt
     cntl_[0] = pivtol_;  // Set pivot tolerance
 
     F77_FUNC(ma27bd,MA27BD)(&N, &NZ, airn, ajcn, a_,
-			    &la_, iw_, &liw_, ikeep_, &nsteps_,
-			    &maxfrt_, IW1, icntl_, cntl_, INFO);
+                            &la_, iw_, &liw_, ikeep_, &nsteps_,
+                            &maxfrt_, IW1, icntl_, cntl_, INFO);
     delete [] IW1;
 
     // Receive information about the factorization
@@ -337,7 +337,7 @@ namespace Ipopt
     negevals_ = INFO[14];   // Number of negative eigenvalues
 
     DBG_PRINT((1,"Return from MA27 iflag = %d and ierror = %d\n",
-	       iflag, ierror));
+               iflag, ierror));
 
     // Check if factorization failed due to insufficient memory space
     // iflag==-3 if LIW too small (recommended value in ierror)
@@ -349,18 +349,18 @@ namespace Ipopt
       ipfint liw_old = liw_;
       ipfint la_old = la_;
       if(iflag==-3) {
-	liw_ = (ipfint)(meminc_factor_ * (double)(ierror));
-	la_ = (ipfint)(meminc_factor_ * (double)(la_));
+        liw_ = (ipfint)(meminc_factor_ * (double)(ierror));
+        la_ = (ipfint)(meminc_factor_ * (double)(la_));
       }
       else {
-	liw_ = (ipfint)(meminc_factor_ * (double)(liw_));
-	la_ = (ipfint)(meminc_factor_ * (double)(ierror));
+        liw_ = (ipfint)(meminc_factor_ * (double)(liw_));
+        la_ = (ipfint)(meminc_factor_ * (double)(ierror));
       }
       iw_ = new ipfint[liw_];
       a_ = new double[la_];
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-		     "MA27BD returned iflag=%d.\n Increase liw from %d to %d and la from %d to %d and factorize again.\n",
-		     iflag, liw_old, liw_, la_old, la_);
+                     "MA27BD returned iflag=%d.\n Increase liw from %d to %d and la from %d to %d and factorize again.\n",
+                     iflag, liw_old, liw_, la_old, la_);
       return SYMSOLVER_CALL_AGAIN;
     }
 
@@ -398,7 +398,7 @@ namespace Ipopt
   }
 
   ESymSolverStatus Ma27TSolverInterface::Backsolve(Index nrhs,
-						   double *rhs_vals)
+      double *rhs_vals)
   {
     DBG_START_METH("Ma27TSolverInterface::Backsolve",dbg_verbosity);
 
@@ -445,14 +445,14 @@ namespace Ipopt
       return false;
     }
     pivtol_changed_ = true;
-    
+
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		   "Indreasing pivot tolerance from %7.2e ",
-		   pivtol_);
+                   "Indreasing pivot tolerance from %7.2e ",
+                   pivtol_);
     pivtol_ = Min(pivtolmax_, pow(pivtol_,0.75));
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		   "to %7.2e.\n",
-		   pivtol_);
+                   "to %7.2e.\n",
+                   pivtol_);
     return true;
   }
 

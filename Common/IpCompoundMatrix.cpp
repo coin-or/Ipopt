@@ -188,7 +188,7 @@ namespace Ipopt
 
   // Specialized method (overloaded from IpMatrix)
   void CompoundMatrix::AddMSinvZImpl(Number alpha, const Vector& S,
-				     const Vector& Z, Vector& X) const
+                                     const Vector& Z, Vector& X) const
   {
     // The vectors are assumed to be compound Vectors as well (unless they
     // are assumed to consist of only one component
@@ -253,8 +253,8 @@ namespace Ipopt
 
   // Specialized method (overloaded from IpMatrix)
   void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
-					  const Vector& R, const Vector& Z,
-					  const Vector& D, Vector& X) const
+                                          const Vector& R, const Vector& Z,
+                                          const Vector& D, Vector& X) const
   {
     // First check if the matrix is indeed such that we can use the
     // special methods from the component spaces (this only works if
@@ -265,13 +265,13 @@ namespace Ipopt
     for (Index jcol=0; jcol < NComps_Cols(); jcol++ ) {
       Index nblocks = 0;
       for (Index irow=0; irow < NComps_Rows(); irow++ ) {
-	if (ConstComp(irow, jcol)) {
-	  nblocks++;
-	}
+        if (ConstComp(irow, jcol)) {
+          nblocks++;
+        }
       }
       if (nblocks!=1) {
-	fast_SinvBlrmZMTdBr = false;
-	break;
+        fast_SinvBlrmZMTdBr = false;
+        break;
       }
     }
 
@@ -326,56 +326,56 @@ namespace Ipopt
       // Find the entry in the matrix for that row
       Index jcol_found=NComps_Rows();
       for (Index jcol=0; jcol<NComps_Rows(); jcol++ ) {
-	if (ConstComp(irow, jcol)) {
-	  jcol_found = jcol;
-	  break;
-	}
+        if (ConstComp(irow, jcol)) {
+          jcol_found = jcol;
+          break;
+        }
       }
       DBG_ASSERT(jcol_found<NComps_Rows());
 
       SmartPtr<const Vector> S_i;
       if (comp_S) {
-	S_i = comp_S->GetComp(irow);
+        S_i = comp_S->GetComp(irow);
       }
       else {
-	S_i = &S;
+        S_i = &S;
       }
       DBG_ASSERT(IsValid(S_i));
       SmartPtr<const Vector> Z_i;
       if (comp_Z) {
-	Z_i = comp_Z->GetComp(irow);
+        Z_i = comp_Z->GetComp(irow);
       }
       else {
-	Z_i = &Z;
+        Z_i = &Z;
       }
       DBG_ASSERT(IsValid(Z_i));
       SmartPtr<const Vector> R_i;
       if (comp_R) {
-	R_i = comp_R->GetComp(irow);
+        R_i = comp_R->GetComp(irow);
       }
       else {
-	R_i = &R;
+        R_i = &R;
       }
       DBG_ASSERT(IsValid(R_i));
       SmartPtr<const Vector> D_i;
       if (comp_D) {
-	D_i = comp_D->GetComp(jcol_found);
+        D_i = comp_D->GetComp(jcol_found);
       }
       else {
-	D_i = &D;
+        D_i = &D;
       }
       DBG_ASSERT(IsValid(D_i));
       SmartPtr<Vector> X_i;
       if (comp_X) {
-	X_i = comp_X->GetCompNonConst(irow);
+        X_i = comp_X->GetCompNonConst(irow);
       }
       else {
-	X_i = &X;
+        X_i = &X;
       }
       DBG_ASSERT(IsValid(X_i));
 
       ConstComp(jcol_found,irow)->SinvBlrmZMTdBr(alpha, *S_i, *R_i, *Z_i,
-						 *D_i, *X_i);
+          *D_i, *X_i);
     }
   }
 

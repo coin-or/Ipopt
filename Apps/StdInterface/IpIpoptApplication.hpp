@@ -35,13 +35,13 @@ namespace Ipopt
     //@{
     /** Solve a problem that inherits from TNLP */
     ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& nlp);
-  
+
     /** Solve a problem that inherits from TNLP
      *   use this method when you want access to ip_data nad ip_cq after the solve
      */
-    ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& nlp, 
-					 SmartPtr<IpoptData>& ip_data, 
-					 SmartPtr<IpoptCalculatedQuantities>& ip_cq);
+    ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& nlp,
+                                         SmartPtr<IpoptData>& ip_data,
+                                         SmartPtr<IpoptCalculatedQuantities>& ip_cq);
 
     /** Solve a problem that inherits from NLP */
     ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp);
@@ -49,9 +49,9 @@ namespace Ipopt
     /** Solve a problem that inherits from NLP
      *   use this method when you want access to ip_data nad ip_cq after the solve
      */
-    ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp, 
-					SmartPtr<IpoptData>& ip_data, 
-					SmartPtr<IpoptCalculatedQuantities>& ip_cq);
+    ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp,
+                                        SmartPtr<IpoptData>& ip_data,
+                                        SmartPtr<IpoptCalculatedQuantities>& ip_cq);
     //@}
 
     /**@name Accessor methods */

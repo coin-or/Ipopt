@@ -178,8 +178,8 @@ namespace Ipopt
      *  a pointer to trial_z, and the return value is zero.
      */
     Number correct_bound_multiplier(const Vector& trial_z,
-				    const Vector& trial_slack,
-				    SmartPtr<const Vector>& new_trial_z);
+                                    const Vector& trial_slack,
+                                    SmartPtr<const Vector>& new_trial_z);
     //@}
   };
 
