@@ -278,13 +278,12 @@ namespace Ipopt
     if (!curr_slack_s_U_cache_.GetCachedResult1Dep(result, *s)) {
       if (!trial_slack_s_U_cache_.GetCachedResult1Dep(result, *s)) {
         SmartPtr<const Matrix> P = ip_nlp_->Pd_U();
-        DBG_PRINT_VECTOR(2, "s", *s);
-        DBG_PRINT_VECTOR(2, "s_U", *s_bound);
         result = CalcSlack_U(*P, *s, *s_bound);
         DBG_ASSERT(num_adjusted_slack_s_U_==0);
         num_adjusted_slack_s_U_ =
           CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_U());
         DBG_PRINT_VECTOR(2, "result", *result);
+	DBG_PRINT((1, "num_adjusted_slack_s_U = %d\n", num_adjusted_slack_s_U_));
       }
       curr_slack_s_U_cache_.AddCachedResult1Dep(result, *s);
     }
@@ -373,6 +372,8 @@ namespace Ipopt
         DBG_ASSERT(num_adjusted_slack_s_U_==0);
         num_adjusted_slack_s_U_ =
           CalculateSafeSlack(result, s_bound, s, ip_data_->curr_v_U());
+	DBG_PRINT((1, "num_adjusted_slack_s_U = %d\n", num_adjusted_slack_s_U_));
+	DBG_PRINT_VECTOR(2, "trial_slack_s_U", *result);
       }
       trial_slack_s_U_cache_.AddCachedResult1Dep(result, *s);
     }
@@ -409,6 +410,10 @@ namespace Ipopt
         DBG_PRINT((1,"Number of slack corrections = %d\n", retval));
         DBG_PRINT_VECTOR(2, "t(sgn)", *t);
 
+	// ToDo AW: I added the follwing line b/c I found a case where
+	// slack was negative and this correction produced 0
+	slack->ElementWiseMax(*zero_vec);
+
         SmartPtr<Vector> t2 = t->MakeNew();
         t2->Copy(*multiplier);
         t2->ElementWiseReciprocal();
@@ -426,13 +431,14 @@ namespace Ipopt
 
         SmartPtr<Vector> t_max = t2;
         t_max->Set(1.0);
-        t_max->ElementWiseMax(*bound);
+	SmartPtr<Vector> abs_bound = bound->MakeNew();
+	abs_bound->Copy(*bound);
+	abs_bound->ElementWiseAbs();
+        t_max->ElementWiseMax(*abs_bound);
+        DBG_PRINT_VECTOR(2, "t_max1", *t_max);
+        DBG_PRINT_VECTOR(2, "slack", *slack);
         t_max->AddOneVector(1.0, *slack, s_move_);
-        /* DELE
-               t_max->Scal(s_move_);
-               t_max->Axpy(1.0, *slack);
-        */
-        DBG_PRINT_VECTOR(2, "t_max", *t_max);
+        DBG_PRINT_VECTOR(2, "t_max2", *t_max);
 
         t->ElementWiseMin(*t_max);
         DBG_PRINT_VECTOR(2, "new_slack", *t);
@@ -461,6 +467,8 @@ namespace Ipopt
   void
   IpoptCalculatedQuantities::ResetAdjustedTrialSlacks()
   {
+    DBG_START_METH("IpoptCalculatedQuantities::ResetAdjustedTrialSlacks()",
+                   dbg_verbosity);
     num_adjusted_slack_x_L_
     = num_adjusted_slack_x_U_
       = num_adjusted_slack_s_L_
@@ -588,9 +596,13 @@ namespace Ipopt
 
     Number retval=0.;
     retval += slack_x_L.SumLogs();
+    DBG_PRINT((1, "BarrierTerm after x_L = %25.16e\n", retval));
     retval += slack_x_U.SumLogs();
+    DBG_PRINT((1, "BarrierTerm after x_U = %25.16e\n", retval));
     retval += slack_s_L.SumLogs();
+    DBG_PRINT((1, "BarrierTerm after s_L = %25.16e\n", retval));
     retval += slack_s_U.SumLogs();
+    DBG_PRINT((1, "BarrierTerm after s_U = %25.16e\n", retval));
     retval *= -mu;
 
     DBG_PRINT((1, "BarrierTerm without damping = %25.16e\n", retval));
@@ -683,6 +695,7 @@ namespace Ipopt
       if (!curr_barrier_obj_cache_.GetCachedResult(result, tdeps, sdeps)) {
         result = trial_f();
         DBG_PRINT((1,"trial_F=%e\n",result));
+	DBG_PRINT_VECTOR(2, "trial_slack_s_U", *trial_slack_s_U());
         result += CalcBarrierTerm(ip_data_->curr_mu(),
                                   *trial_slack_x_L(),
                                   *trial_slack_x_U(),
@@ -1973,130 +1986,6 @@ namespace Ipopt
 
     return result;
   }
-
-  /*
-  Number
-  IpoptCalculatedQuantities::curr_primal_dual_error()
-  {
-    DBG_START_METH("IpoptCalculatedQuantities::curr_primal_dual_error()",
-                   dbg_verbosity);
-    DBG_ASSERT(initialize_called_);
-    Number result;
-
-    SmartPtr<const Vector> x = ip_data_->curr_x();
-    SmartPtr<const Vector> s = ip_data_->curr_s();
-    SmartPtr<const Vector> y_c = ip_data_->curr_y_c();
-    SmartPtr<const Vector> y_d = ip_data_->curr_y_d();
-    SmartPtr<const Vector> z_L = ip_data_->curr_z_L();
-    SmartPtr<const Vector> z_U = ip_data_->curr_z_U();
-    SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
-    SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
-
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(s));
-    tdeps.push_back(GetRawPtr(y_c));
-    tdeps.push_back(GetRawPtr(y_c));
-    tdeps.push_back(GetRawPtr(z_L));
-    tdeps.push_back(GetRawPtr(z_U));
-    tdeps.push_back(GetRawPtr(v_L));
-    tdeps.push_back(GetRawPtr(v_U));
-
-    if (!curr_primal_dual_error_cache_.GetCachedResult(result, tdeps)) {
-      Number s_d = 0;
-      Number s_c = 0;
-      ComputeOptimalityErrorScaling(*ip_data_->curr_y_c(), *ip_data_->curr_y_d(),
-                                    *ip_data_->curr_z_L(), *ip_data_->curr_z_U(),
-                                    *ip_data_->curr_v_L(), *ip_data_->curr_v_U(),
-                                    s_max_,
-                                    s_d, s_c);
-      DBG_PRINT((1, "s_d = %lf, s_c = %lf\n", s_d, s_c));
-      DBG_PRINT_VECTOR(2,"curr_grad_lag_x", *curr_grad_lag_x());
-      result = curr_grad_lag_x()->Amax()/s_d;
-      DBG_PRINT((1, "result = %lf\n", result));
-      DBG_PRINT_VECTOR(2,"curr_grad_lag_s", *curr_grad_lag_s());
-      result = Max(result, curr_grad_lag_s()->Amax()/s_d);
-      DBG_PRINT((1, "result = %lf\n", result));
-
-      DBG_PRINT_VECTOR(2,"curr_c", *curr_c());
-      result = Max(result, curr_c()->Amax());
-      DBG_PRINT((1, "result = %lf\n", result));
-      DBG_PRINT_VECTOR(2,"curr_d_minus_s", *curr_d_minus_s());
-      result = Max(result, curr_d_minus_s()->Amax());
-      DBG_PRINT((1, "result = %lf\n", result));
-
-      DBG_PRINT_VECTOR(2,"curr_compl_x_l", *curr_compl_x_L());
-      result = Max(result, curr_compl_x_L()->Amax()/s_c);
-      DBG_PRINT((1, "result = %lf\n", result));
-      DBG_PRINT_VECTOR(2,"curr_compl_x_U", *curr_compl_x_U());
-      result = Max(result, curr_compl_x_U()->Amax()/s_c);
-      DBG_PRINT((1, "result = %lf\n", result));
-      DBG_PRINT_VECTOR(2,"curr_compl_s_l", *curr_compl_s_L());
-      result = Max(result, curr_compl_s_L()->Amax()/s_c);
-      DBG_PRINT((1, "result = %lf\n", result));
-      DBG_PRINT_VECTOR(2,"curr_compl_s_U", *curr_compl_s_U());
-      result = Max(result, curr_compl_s_U()->Amax()/s_c);
-      DBG_PRINT((1, "result = %lf\n", result));
-      curr_primal_dual_error_cache_.AddCachedResult(result, tdeps);
-    }
-
-    return result;
-  }
-
-  Number
-  IpoptCalculatedQuantities::curr_relaxed_primal_dual_error()
-  {
-    DBG_START_METH("IpoptCalculatedQuantities::curr_relaxed_primal_dual_error()",
-                   dbg_verbosity);
-    DBG_ASSERT(initialize_called_);
-    Number result;
-
-    SmartPtr<const Vector> x = ip_data_->curr_x();
-    SmartPtr<const Vector> s = ip_data_->curr_s();
-    SmartPtr<const Vector> y_c = ip_data_->curr_y_c();
-    SmartPtr<const Vector> y_d = ip_data_->curr_y_d();
-    SmartPtr<const Vector> z_L = ip_data_->curr_z_L();
-    SmartPtr<const Vector> z_U = ip_data_->curr_z_U();
-    SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
-    SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
-
-    std::vector<const TaggedObject*> tdeps;
-    tdeps.push_back(GetRawPtr(x));
-    tdeps.push_back(GetRawPtr(s));
-    tdeps.push_back(GetRawPtr(y_c));
-    tdeps.push_back(GetRawPtr(y_c));
-    tdeps.push_back(GetRawPtr(z_L));
-    tdeps.push_back(GetRawPtr(z_U));
-    tdeps.push_back(GetRawPtr(v_L));
-    tdeps.push_back(GetRawPtr(v_U));
-
-    Number mu = ip_data_->curr_mu();
-    std::vector<Number> sdeps;
-    sdeps.push_back(mu);
-
-    if (!curr_relaxed_primal_dual_error_cache_.GetCachedResult(result, tdeps, sdeps)) {
-      Number s_d = 0;
-      Number s_c = 0;
-      ComputeOptimalityErrorScaling(*ip_data_->curr_y_c(), *ip_data_->curr_y_d(),
-                                    *ip_data_->curr_z_L(), *ip_data_->curr_z_U(),
-                                    *ip_data_->curr_v_L(), *ip_data_->curr_v_U(),
-                                    s_max_,
-                                    s_d, s_c);
-
-      result = curr_grad_lag_x()->Amax()/s_d;
-      result = Max(result, curr_grad_lag_s()->Amax()/s_d);
-      result = Max(result, curr_c()->Amax());
-      result = Max(result, curr_d_minus_s()->Amax());
-      result = Max(result, curr_relaxed_compl_x_L()->Amax()/s_c);
-      result = Max(result, curr_relaxed_compl_x_U()->Amax()/s_c);
-      result = Max(result, curr_relaxed_compl_s_L()->Amax()/s_c);
-      result = Max(result, curr_relaxed_compl_s_U()->Amax()/s_c);
-      curr_relaxed_primal_dual_error_cache_.AddCachedResult(result, tdeps, sdeps);
-    }
-
-    return result;
-  }
-  */
 
   ///////////////////////////////////////////////////////////////////////////
   //                Fraction-to-the-boundary step sizes                    //
