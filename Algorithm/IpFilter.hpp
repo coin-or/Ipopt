@@ -10,6 +10,7 @@
 #define __IPFILTER_HPP__
 
 #include "IpUtils.hpp"
+#include "IpJournalist.hpp"
 #include <list>
 #include <vector>
 
