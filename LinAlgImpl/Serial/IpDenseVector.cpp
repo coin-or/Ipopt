@@ -671,7 +671,6 @@ namespace Ipopt
 
     Number alpha = 1.;
     Number* values_x = values_;
-    ;
     Number* values_delta = dense_delta->values_;
     for (Index i=0; i<Dim(); i++) {
       if (values_delta[i]<0.) {
