@@ -42,33 +42,6 @@ namespace Ipopt
       bound_frac_ = 0.01;
     }
 
-    if (options.GetNumericValue("warm_start_bound_push", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"warm_start_bound_push\": This value must be larger than 0.");
-      warm_start_bound_push_ = value;
-    }
-    else {
-      warm_start_bound_push_ = 1e-4;
-    }
-
-    if (options.GetNumericValue("warm_start_bound_frac", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0 && value <= 0.5, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"warm_start_bound_frac\": Value must be between 0 and 0.5.");
-      warm_start_bound_frac_ = value;
-    }
-    else {
-      warm_start_bound_frac_ = 1e-4;
-    }
-
-    if (options.GetNumericValue("warm_start_mult_bound_push", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"warm_start_mult_bound_push\": This value must be larger than 0.");
-      warm_start_mult_bound_push_ = value;
-    }
-    else {
-      warm_start_mult_bound_push_ = 1e-4;
-    }
-
     if (options.GetNumericValue("lam_init_max", value, prefix)) {
       ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"lam_init_max\": Value must be non-negative.");
@@ -85,13 +58,6 @@ namespace Ipopt
     }
     else {
       bound_mult_init_val_ = 1.;
-    }
-
-    if (options.GetNumericValue("warm_start_init_point", value, prefix)) {
-      warm_start_init_point_ = (value != 0);
-    }
-    else {
-      warm_start_init_point_ = false;
     }
 
     bool retvalue = true;
@@ -116,30 +82,13 @@ namespace Ipopt
     //                   Initialize primal variables                   //
     /////////////////////////////////////////////////////////////////////
 
-    if (warm_start_init_point_) {
-      // Ask to have primal variables x, the bound multipliers (z_L
-      // and z_U) and the multipliers for c and d initialized.
-      // We have to compute those for v_L and v_U from y_d
-      IpData().InitializeDataStructures(IpNLP(), true, true, true,
-                                        true, true, false, false);
-    }
-    else {
-      // Ask to have only the primal variables to be initialized
-      IpData().InitializeDataStructures(IpNLP(), true, false, false,
-                                        false, false, false, false);
-    }
+    IpData().InitializeDataStructures(IpNLP(), true, false, false,
+                                      false, false, false, false);
 
     DBG_PRINT_VECTOR(2, "curr_x", *IpData().curr_x());
 
     // Now we compute the initial values that the algorithm is going to
     // actually use.  We first store them in the trial fields in ip_data.
-
-    Number bound_push_used = bound_push_;
-    Number bound_frac_used = bound_frac_;
-    if (warm_start_init_point_) {
-      bound_push_used = warm_start_bound_push_;
-      bound_frac_used = warm_start_bound_frac_;
-    }
 
     // Calculate any required shift in x0 and s0
     const double dbl_min = std::numeric_limits<double>::min();
@@ -168,14 +117,14 @@ namespace Ipopt
     tmp_u->AddOneVector(1., *x_U, -1.);
     Px_U->MultVector(1.0, *tmp_u, 0.0, *tmp);
     Px_L->TransMultVector(1.0, *tmp, 0.0, *q_l);
-    q_l->AddOneVector(-1.0, *tiny_l, bound_frac_used);
+    q_l->AddOneVector(-1.0, *tiny_l, bound_frac_);
 
     tmp_l->Set(1.0);
     p_l->Copy(*x_L);
     p_l->ElementWiseSgn();
     p_l->ElementWiseMultiply(*x_L);
     p_l->ElementWiseMax(*tmp_l);
-    p_l->AddOneVector(-1.0, *tiny_l, bound_push_used);
+    p_l->AddOneVector(-1.0, *tiny_l, bound_push_);
 
     q_l->ElementWiseReciprocal();
     p_l->ElementWiseReciprocal();
@@ -195,7 +144,7 @@ namespace Ipopt
     tmp_l->Axpy(-1.0, *x_L);
     Px_L->MultVector(1.0, *tmp_l, 0.0, *tmp);
     Px_U->TransMultVector(1.0, *tmp, 0.0, *q_u);
-    q_u->AddOneVector(-1.0, *tiny_u, bound_frac_used);
+    q_u->AddOneVector(-1.0, *tiny_u, bound_frac_);
     DBG_PRINT_VECTOR(2,"q_u",*q_u);
 
     tmp_u->Set(1.0);
@@ -203,7 +152,7 @@ namespace Ipopt
     p_u->ElementWiseSgn();
     p_u->ElementWiseMultiply(*x_U);
     p_u->ElementWiseMax(*tmp_u);
-    p_u->AddOneVector(-1.0, *tiny_u, bound_push_used);
+    p_u->AddOneVector(-1.0, *tiny_u, bound_push_);
     DBG_PRINT_VECTOR(2,"p_u",*p_u);
 
     q_u->ElementWiseReciprocal();
@@ -280,14 +229,14 @@ namespace Ipopt
     tmp_u->AddOneVector(1., *d_U, -1.);
     Pd_U->MultVector(1.0, *tmp_u, 0.0, *tmp);
     Pd_L->TransMultVector(1.0, *tmp, 0.0, *q_l);
-    q_l->AddOneVector(-1.0, *tiny_l, bound_frac_used);
+    q_l->AddOneVector(-1.0, *tiny_l, bound_frac_);
 
     tmp_l->Set(1.0);
     p_l->Copy(*d_L);
     p_l->ElementWiseSgn();
     p_l->ElementWiseMultiply(*d_L);
     p_l->ElementWiseMax(*tmp_l);
-    p_l->AddOneVector(-1.0, *tiny_l, bound_push_used);
+    p_l->AddOneVector(-1.0, *tiny_l, bound_push_);
 
     q_l->ElementWiseReciprocal();
     p_l->ElementWiseReciprocal();
@@ -308,14 +257,14 @@ namespace Ipopt
     tmp_l->Axpy(-1.0, *d_L);
     Pd_L->MultVector(1.0, *tmp_l, 0.0, *tmp);
     Pd_U->TransMultVector(1.0, *tmp, 0.0, *q_u);
-    q_u->AddOneVector(-1.0, *tiny_u, bound_frac_used);
+    q_u->AddOneVector(-1.0, *tiny_u, bound_frac_);
 
     tmp_u->Set(1.0);
     p_u->Copy(*d_U);
     p_u->ElementWiseSgn();
     p_u->ElementWiseMultiply(*d_U);
     p_u->ElementWiseMax(*tmp_u);
-    p_u->AddOneVector(-1.0, *tiny_u, bound_push_used);
+    p_u->AddOneVector(-1.0, *tiny_u, bound_push_);
 
     q_u->ElementWiseReciprocal();
     p_u->ElementWiseReciprocal();
@@ -365,102 +314,51 @@ namespace Ipopt
     //                   Initialize bound multipliers                  //
     /////////////////////////////////////////////////////////////////////
 
+    // Initialize the bound multipliers to bound_mult_init_val.
     SmartPtr<Vector> z_L = IpData().curr_z_L()->MakeNew();
     SmartPtr<Vector> z_U = IpData().curr_z_U()->MakeNew();
     SmartPtr<Vector> v_L = IpData().curr_v_L()->MakeNew();
     SmartPtr<Vector> v_U = IpData().curr_v_U()->MakeNew();
-    if (warm_start_init_point_) {
-      // Push given z_L and z_U multipliers away from 0
-      z_L->Copy(*IpData().curr_z_L());
-      tmp = z_L->MakeNew();
-      tmp->Set(warm_start_mult_bound_push_);
-      z_L->ElementWiseMax(*tmp);
-      if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
-        SmartPtr<Vector> delta_z_L = z_L->MakeNew();
-        delta_z_L->AddTwoVectors(1., *z_L, -1., *IpData().curr_z_L(), 0.);
-        if (delta_z_L->Amax()>0.) {
-          Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of z_L sufficiently inside the bounds.\n");
-          Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "original z_L", *IpData().curr_z_L());
-          Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "new z_L", *z_L);
-        }
-      }
-
-      z_U->Copy(*IpData().curr_z_U());
-      tmp = z_U->MakeNew();
-      tmp->Set(warm_start_mult_bound_push_);
-      z_U->ElementWiseMax(*tmp);
-      if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
-        SmartPtr<Vector> delta_z_U = z_U->MakeNew();
-        delta_z_U->AddTwoVectors(1., *z_U, -1., *IpData().curr_z_U(), 0.);
-        if (delta_z_U->Amax()>0.) {
-          Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of z_U sufficiently inside the bounds.\n");
-          Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "original z_U", *IpData().curr_z_U());
-          Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "new z_U", *z_U);
-        }
-      }
-
-      // Compute the v_L and v_U multipliers from y_d and make sure they
-      // are at least warm_start_mult_bound_push_ away from 0
-      Pd_L->TransMultVector(-1., *IpData().curr_y_d(), 0., *v_L);
-      tmp = v_L->MakeNew();
-      tmp->Set(warm_start_mult_bound_push_);
-      v_L->ElementWiseMax(*tmp);
-
-      Pd_U->TransMultVector(1., *IpData().curr_y_d(), 0., *v_U);
-      tmp = v_U->MakeNew();
-      tmp->Set(warm_start_mult_bound_push_);
-      v_U->ElementWiseMax(*tmp);
-    }
-    else {
-      // Initialize the bound multipliers to bound_mult_init_val_.
-      z_L->Set(bound_mult_init_val_);  //TODO make this a parameter
-      z_U->Set(bound_mult_init_val_);
-      v_L->Set(bound_mult_init_val_);
-      v_U->Set(bound_mult_init_val_);
-    }
+    z_L->Set(bound_mult_init_val_);
+    z_U->Set(bound_mult_init_val_);
+    v_L->Set(bound_mult_init_val_);
+    v_U->Set(bound_mult_init_val_);
     IpData().SetTrialBoundMultipliers(*z_L, *z_U, *v_L, *v_U);
 
     /////////////////////////////////////////////////////////////////////
     //           Initialize equality constraint multipliers            //
     /////////////////////////////////////////////////////////////////////
 
-    if (warm_start_init_point_) {
-      // Don't change anything for those multipliers
-      IpData().SetTrialConstraintMultipliersFromPtr(IpData().curr_y_c(),
-          IpData().curr_y_d());
-    }
-    else {
-      if (IsValid(eq_mult_calculator_) && lam_init_max_>0.) {
-        // First move all the trial data into the current fields, since
-        // those values are needed to compute the initial values for
-        // the multipliers
-        IpData().CopyTrialToCurrent();
-        SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
-        SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
-        bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
-        if (!retval) {
+    if (IsValid(eq_mult_calculator_) && lam_init_max_>0.) {
+      // First move all the trial data into the current fields, since
+      // those values are needed to compute the initial values for
+      // the multipliers
+      IpData().CopyTrialToCurrent();
+      SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
+      SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+      bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
+      if (!retval) {
+        y_c->Set(0.0);
+        y_d->Set(0.0);
+      }
+      else {
+        Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                       "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
+                       y_c->Amax(), y_d->Amax());
+        Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
+        if (laminitnrm > lam_init_max_) {
           y_c->Set(0.0);
           y_d->Set(0.0);
         }
-        else {
-          Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
-                         "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
-                         y_c->Amax(), y_d->Amax());
-          Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
-          if (laminitnrm > lam_init_max_) {
-            y_c->Set(0.0);
-            y_d->Set(0.0);
-          }
-        }
-        IpData().SetTrialEqMultipliers(*y_c, *y_d);
       }
-      else {
-        SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
-        SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
-        y_c->Set(0.0);
-        y_d->Set(0.0);
-        IpData().SetTrialEqMultipliers(*y_c, *y_d);
-      }
+      IpData().SetTrialEqMultipliers(*y_c, *y_d);
+    }
+    else {
+      SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
+      SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+      y_c->Set(0.0);
+      y_d->Set(0.0);
+      IpData().SetTrialEqMultipliers(*y_c, *y_d);
     }
 
     DBG_PRINT_VECTOR(2, "y_c", *IpData().curr_y_c());
