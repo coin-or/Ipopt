@@ -24,14 +24,16 @@ namespace Ipopt
   template <class T>
   class DependentResult;
 
-  /** Cache Priority Enum */
-  enum CachePriority
-  {
-    CP_Lowest,
-    CP_Standard,
-    CP_Trial,
-    CP_Iterate
-  };
+  //  AW: I'm taking this out, since this is by far the most used
+  //  class.  We should keep it as simple as possible.
+//   /** Cache Priority Enum */
+//   enum CachePriority
+//   {
+//     CP_Lowest,
+//     CP_Standard,
+//     CP_Trial,
+//     CP_Iterate
+//   };
 
   /** Templated class for Chached Results.  This class stores up to a
    *  given number of "results", entities that are stored here
@@ -62,10 +64,10 @@ namespace Ipopt
   class CachedResults
   {
   public:
-#   ifdef IP_DEBUG
+#ifdef IP_DEBUG_CACHE
     /** (Only if compiled in DEBUG mode): debug verbosity level */
     static const Index dbg_verbosity;
-#   endif
+#endif
 
     /** @name Constructors and Destructors. */
     //@{
@@ -86,8 +88,7 @@ namespace Ipopt
      */
     void AddCachedResult(const T& result,
                          const std::vector<const TaggedObject*>& dependents,
-                         const std::vector<Number>& scalar_dependents,
-                         CachePriority priority=CP_Standard);
+                         const std::vector<Number>& scalar_dependents);
 
     /** Generic method for retrieving a cached results, given the
      *  dependencies as a std::vector of TaggesObjects and a
@@ -101,8 +102,7 @@ namespace Ipopt
      *  TaggedObjects.
      */
     void AddCachedResult(const T& result,
-                         const std::vector<const TaggedObject*>& dependents,
-                         CachePriority priority=CP_Standard);
+                         const std::vector<const TaggedObject*>& dependents);
 
     /** Method for retrieving a cached result, providing only a
      * std::vector of TaggedObjects.
@@ -119,8 +119,7 @@ namespace Ipopt
      *  dependency as a TaggedObject explicitly.
      */
     void AddCachedResult1Dep(const T& result,
-                             const TaggedObject* dependent1,
-                             CachePriority priority=CP_Standard);
+                             const TaggedObject* dependent1);
 
     /** Method for retrieving a cached result, proving one dependency
      *  as a TaggedObject explicitly.
@@ -132,8 +131,7 @@ namespace Ipopt
      */
     void AddCachedResult2Dep(const T& result,
                              const TaggedObject* dependent1,
-                             const TaggedObject* dependent2,
-                             CachePriority priority=CP_Standard);
+                             const TaggedObject* dependent2);
 
     /** Method for retrieving a cached result, proving two
      *  dependencies as a TaggedObject explicitly.
@@ -148,8 +146,7 @@ namespace Ipopt
     void AddCachedResult3Dep(const T& result,
                              const TaggedObject* dependent1,
                              const TaggedObject* dependent2,
-                             const TaggedObject* dependent3,
-                             CachePriority priority=CP_Standard);
+                             const TaggedObject* dependent3);
 
     /** Method for retrieving a cached result, proving three
      *  dependencies as a TaggedObject explicitly.
@@ -181,25 +178,22 @@ namespace Ipopt
       return GetCachedResult3Dep(retResult, &dependent1, &dependent2, &dependent3);
     }
     void AddCachedResult1Dep(const T& result,
-                             const TaggedObject& dependent1,
-                             CachePriority priority=CP_Standard)
+                             const TaggedObject& dependent1)
     {
-      AddCachedResult1Dep(result, &dependent1, priority);
+      AddCachedResult1Dep(result, &dependent1);
     }
     void AddCachedResult2Dep(const T& result,
                              const TaggedObject& dependent1,
-                             const TaggedObject& dependent2,
-                             CachePriority priority=CP_Standard)
+                             const TaggedObject& dependent2)
     {
-      AddCachedResult2Dep(result, &dependent1, &dependent2, priority);
+      AddCachedResult2Dep(result, &dependent1, &dependent2);
     }
     void AddCachedResult3Dep(const T& result,
                              const TaggedObject& dependent1,
                              const TaggedObject& dependent2,
-                             const TaggedObject& dependent3,
-                             CachePriority priority=CP_Standard)
+                             const TaggedObject& dependent3)
     {
-      AddCachedResult3Dep(result, &dependent1, &dependent2, &dependent3, priority);
+      AddCachedResult3Dep(result, &dependent1, &dependent2, &dependent3);
     }
     //@}
 
@@ -248,16 +242,16 @@ namespace Ipopt
   {
   public:
 
-#   ifdef IP_DEBUG
+#ifdef IP_DEBUG_CACHE
 
     static const Index dbg_verbosity;
-#   endif
+#endif
 
     /** @name Constructor, Destructors */
     //@{
     /** Constructor, given all information about the result. */
     DependentResult(const T& result, const std::vector<const TaggedObject*>& dependents,
-                    const std::vector<Number>& scalar_dependents, CachePriority priority);
+                    const std::vector<Number>& scalar_dependents);
 
     /** Destructor. */
     ~DependentResult();
@@ -270,9 +264,6 @@ namespace Ipopt
 
     /** Returns the cached result. */
     const T& GetResult() const;
-
-    /** Returns priority of the cached result. */
-    CachePriority GetPriority() const;
     //@}
 
     /** This method returns true if the dependencies provided to this
@@ -280,7 +271,7 @@ namespace Ipopt
      *  DependentResult.
      */
     bool DependentsIdentical(const std::vector<const TaggedObject*>& dependents,
-                             const std::vector<Number> scalar_dependents) const;
+                             const std::vector<Number>& scalar_dependents) const;
 
     /** Print information about this DependentResults. */
     void DebugPrint() const;
@@ -321,35 +312,34 @@ namespace Ipopt
     bool stale_;
     /** The value of the dependent results */
     const T result_;
-    /** Priority of the dependent result */
-    const CachePriority priority_;
     /** Dependencies in form of TaggedObjects */
     std::vector<TaggedObject::Tag> dependent_tags_;
     /** Dependencies in form a Numbers */
     std::vector<Number> scalar_dependents_;
   };
 
-# ifdef IP_DEBUG
-
+#ifdef IP_DEBUG_CACHE
   template <class T>
   const Index CachedResults<T>::dbg_verbosity = 0;
 
   template <class T>
   const Index DependentResult<T>::dbg_verbosity = 0;
-# endif
+#endif
 
   template <class T>
   DependentResult<T>::DependentResult(
     const T& result,
     const std::vector<const TaggedObject*>& dependents,
-    const std::vector<Number>& scalar_dependents,
-    CachePriority priority)
+    const std::vector<Number>& scalar_dependents)
       :
       stale_(false),
       result_(result),
-      priority_(priority)
+      dependent_tags_(dependents.size()),
+      scalar_dependents_(scalar_dependents)
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::DependentResult()", dbg_verbosity);
+#endif
 
     for (Index i=0; i<(Index)dependents.size(); i++) {
       if (dependents[i]) {
@@ -361,22 +351,20 @@ namespace Ipopt
         // TaggedResult dependents[i] is changed (i.e. its HasChanged
         // method is called).
         RequestAttach(NT_Changed, dependents[i]);
-        dependent_tags_.push_back(dependents[i]->GetTag());
+        dependent_tags_[i] = dependents[i]->GetTag();
       }
       else {
-        dependent_tags_.push_back(0);
+        dependent_tags_[i] = 0;
       }
-    }
-
-    for (Index i=0; i<(Index)scalar_dependents.size(); i++) {
-      scalar_dependents_.push_back(scalar_dependents[i]);
     }
   }
 
   template <class T>
   DependentResult<T>::~DependentResult()
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::~DependentResult()", dbg_verbosity);
+#endif
     //DBG_ASSERT(stale_ == true);
     // Nothing to be done here, destructor
     // of T should sufficiently remove
@@ -393,7 +381,9 @@ namespace Ipopt
   template <class T>
   void DependentResult<T>::RecieveNotification(NotifyType notify_type, const Subject* subject)
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::RecieveNotification", dbg_verbosity);
+#endif
     if (notify_type == NT_Changed || notify_type==NT_BeingDestroyed) {
       stale_ = true;
       // technically, I could unregister the notifications here, but they
@@ -403,13 +393,15 @@ namespace Ipopt
 
   template <class T>
   bool DependentResult<T>::DependentsIdentical(const std::vector<const TaggedObject*>& dependents,
-      const std::vector<Number> scalar_dependents) const
+      const std::vector<Number>& scalar_dependents) const
   {
-    DBG_ASSERT(stale_ == false);
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::DependentsIdentical", dbg_verbosity);
-    bool retVal = true;
-
+#endif
+    DBG_ASSERT(stale_ == false);
     DBG_ASSERT(dependents.size() == dependent_tags_.size());
+
+    bool retVal = true;
 
     if (dependents.size() != dependent_tags_.size()
         || scalar_dependents.size() != scalar_dependents_.size()) {
@@ -439,24 +431,19 @@ namespace Ipopt
   template <class T>
   const T& DependentResult<T>::GetResult() const
   {
-    DBG_ASSERT(stale_ == false);
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::GetResult()", dbg_verbosity);
-    return result_;
-  }
-
-  template <class T>
-  CachePriority DependentResult<T>::GetPriority() const
-  {
+#endif
     DBG_ASSERT(stale_ == false);
-    //DBG_START_METH("DependentResult<T>::GetPriority()", dbg_verbosity);
-    return priority_;
+    return result_;
   }
 
   template <class T>
   void DependentResult<T>::DebugPrint() const
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::DebugPrint", dbg_verbosity);
-    DBG_PRINT((2,"this = 0x:%x, priority = %d\n", this, (int)GetPriority()));
+#endif
   }
 
   template <class T>
@@ -464,71 +451,74 @@ namespace Ipopt
       :
       max_cache_size_(max_cache_size)
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::CachedResults", dbg_verbosity);
+#endif
   }
 
   template <class T>
   CachedResults<T>::~CachedResults()
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::!CachedResults()", dbg_verbosity);
+#endif
+    for (typename std::list< DependentResult<T>* >::iterator iter = cached_results_.begin(); iter != cached_results_.end(); iter++) {
+      delete *iter;
+    }
+    /*
     while (!cached_results_.empty()) {
       DependentResult<T>* result = cached_results_.back();
       cached_results_.pop_back();
       delete result;
     }
+    */
   }
 
   template <class T>
   void CachedResults<T>::AddCachedResult(const T& result,
                                          const std::vector<const TaggedObject*>& dependents,
-                                         const std::vector<Number>& scalar_dependents,
-                                         CachePriority priority)
+                                         const std::vector<Number>& scalar_dependents)
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::AddCachedResult", dbg_verbosity);
+#endif
 
     CleanupInvalidatedResults();
 
-    // put the cached result at the appropriate spot in the list
-    typename std::list< DependentResult<T>* >::iterator iter;
-    for (iter = cached_results_.begin(); iter != cached_results_.end(); iter++) {
-      if ((int)(*iter)->GetPriority() <= (int)priority) {
-        break;
-      }
-    }
-
     // insert the new one here
-    DependentResult<T>* newResult = new DependentResult<T>(result, dependents, scalar_dependents, priority);
-    cached_results_.insert(iter, newResult);
+    DependentResult<T>* newResult = new DependentResult<T>(result, dependents, scalar_dependents);
+    cached_results_.push_front(newResult);
 
     // keep the list small enough
     if (max_cache_size_ >= 0) { // if negative, allow infinite cache
       // non-negative - limit size of list to max_cache_size
-      while ((Int)cached_results_.size() > max_cache_size_) {
-        DependentResult<T>* result_to_remove = cached_results_.back();
-
-        cached_results_.pop_back();
-
-        delete result_to_remove;
+      DBG_ASSERT((Int)cached_results_.size()<=max_cache_size_+1);
+      if ((Int)cached_results_.size() > max_cache_size_) {
+	delete cached_results_.back();
+	cached_results_.pop_back();
       }
     }
 
+#ifdef IP_DEBUG_CACHE
     DBG_EXEC(2, DebugPrintCachedResults());
+#endif
   }
 
   template <class T>
   void CachedResults<T>::AddCachedResult(const T& result,
-                                         const std::vector<const TaggedObject*>& dependents,
-                                         CachePriority priority)
+                                         const std::vector<const TaggedObject*>& dependents)
   {
     std::vector<Number> scalar_dependents;
-    AddCachedResult(result, dependents, scalar_dependents, priority);
+    AddCachedResult(result, dependents, scalar_dependents);
   }
 
   template <class T>
   bool CachedResults<T>::GetCachedResult(T& retResult, const std::vector<const TaggedObject*>& dependents,
                                          const std::vector<Number>& scalar_dependents) const
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::GetCachedResult", dbg_verbosity);
+#endif
 
     CleanupInvalidatedResults();
 
@@ -542,7 +532,9 @@ namespace Ipopt
       }
     }
 
+#ifdef IP_DEBUG_CACHE
     DBG_EXEC(2, DebugPrintCachedResults());
+#endif
     return retValue;
   }
 
@@ -556,47 +548,53 @@ namespace Ipopt
 
   template <class T>
   void CachedResults<T>::AddCachedResult1Dep(const T& result,
-      const TaggedObject* dependent1,
-      CachePriority priority)
+      const TaggedObject* dependent1)
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::AddCachedResult1Dep", dbg_verbosity);
-    std::vector<const TaggedObject*> dependents;
-    dependents.push_back(dependent1);
+#endif
+    std::vector<const TaggedObject*> dependents(1);
+    dependents[0] = dependent1;
 
-    AddCachedResult(result, dependents, priority);
+    AddCachedResult(result, dependents);
   }
 
   template <class T>
   bool CachedResults<T>::GetCachedResult1Dep(T& retResult, const TaggedObject* dependent1)
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::GetCachedResult1Dep", dbg_verbosity);
-    std::vector<const TaggedObject*> dependents;
-    dependents.push_back(dependent1);
+#endif
+    std::vector<const TaggedObject*> dependents(1);
+    dependents[0] = dependent1;
 
     return GetCachedResult(retResult, dependents);
   }
 
   template <class T>
   void CachedResults<T>::AddCachedResult2Dep(const T& result, const TaggedObject* dependent1,
-      const TaggedObject* dependent2,
-      CachePriority priority)
+      const TaggedObject* dependent2)
 
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::AddCachedResult2dDep", dbg_verbosity);
-    std::vector<const TaggedObject*> dependents;
-    dependents.push_back(dependent1);
-    dependents.push_back(dependent2);
+#endif
+    std::vector<const TaggedObject*> dependents(2);
+    dependents[0] = dependent1;
+    dependents[1] = dependent2;
 
-    AddCachedResult(result, dependents, priority);
+    AddCachedResult(result, dependents);
   }
 
   template <class T>
   bool CachedResults<T>::GetCachedResult2Dep(T& retResult, const TaggedObject* dependent1, const TaggedObject* dependent2)
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::GetCachedResult2Dep", dbg_verbosity);
-    std::vector<const TaggedObject*> dependents;
-    dependents.push_back(dependent1);
-    dependents.push_back(dependent2);
+#endif
+    std::vector<const TaggedObject*> dependents(2);
+    dependents[0] = dependent1;
+    dependents[1] = dependent2;
 
     return GetCachedResult(retResult, dependents);
   }
@@ -604,17 +602,18 @@ namespace Ipopt
   template <class T>
   void CachedResults<T>::AddCachedResult3Dep(const T& result, const TaggedObject* dependent1,
       const TaggedObject* dependent2,
-      const TaggedObject* dependent3,
-      CachePriority priority)
+      const TaggedObject* dependent3)
 
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::AddCachedResult2dDep", dbg_verbosity);
-    std::vector<const TaggedObject*> dependents;
-    dependents.push_back(dependent1);
-    dependents.push_back(dependent2);
-    dependents.push_back(dependent3);
+#endif
+    std::vector<const TaggedObject*> dependents(3);
+    dependents[0] = dependent1;
+    dependents[1] = dependent2;
+    dependents[2] = dependent3;
 
-    AddCachedResult(result, dependents, priority);
+    AddCachedResult(result, dependents);
   }
 
   template <class T>
@@ -622,11 +621,13 @@ namespace Ipopt
       const TaggedObject* dependent2,
       const TaggedObject* dependent3)
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::GetCachedResult2Dep", dbg_verbosity);
-    std::vector<const TaggedObject*> dependents;
-    dependents.push_back(dependent1);
-    dependents.push_back(dependent2);
-    dependents.push_back(dependent3);
+#endif
+    std::vector<const TaggedObject*> dependents(3);
+    dependents[0] = dependent1;
+    dependents[1] = dependent2;
+    dependents[2] = dependent3;
 
     return GetCachedResult(retResult, dependents);
   }
@@ -634,7 +635,9 @@ namespace Ipopt
   template <class T>
   void CachedResults<T>::CleanupInvalidatedResults() const
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::CleanupInvalidatedResults", dbg_verbosity);
+#endif
     typename std::list< DependentResult<T>* >::iterator iter;
     for (iter = cached_results_.begin(); iter != cached_results_.end(); iter++) {
       if ( (*iter)->IsStale() ) {
@@ -651,12 +654,14 @@ namespace Ipopt
   template <class T>
   void CachedResults<T>::DebugPrintCachedResults() const
   {
+#ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::DebugPrintCachedResults", dbg_verbosity);
     typename std::list< DependentResult<T>* >::const_iterator iter;
     DBG_PRINT((2,"Current set of cached results:\n"));
     for (iter = cached_results_.begin(); iter != cached_results_.end(); iter++) {
-      DBG_PRINT((2,"  DependentResult:0x%x, priority=%d\n", (*iter), (int)(*iter)->GetPriority()));
+      DBG_PRINT((2,"  DependentResult:0x%x\n", (*iter)));
     }
+#endif
   }
 
 } // namespace Ipopt
