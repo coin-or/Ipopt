@@ -78,6 +78,7 @@ namespace Ipopt
       resto_smuupdate = "monotone";
     }
     std::string resto_smuoracle;
+    std::string resto_sfixmuoracle;
     if (resto_smuupdate=="nonmonotone" ) {
       if (options.GetValue("muoracle", resto_smuoracle, "resto."+prefix)) {
         ASSERT_EXCEPTION(resto_smuoracle=="loqo" || resto_smuoracle=="probing",
@@ -86,6 +87,15 @@ namespace Ipopt
       }
       else {
         resto_smuoracle = "probing";
+      }
+
+      if (options.GetValue("fixmuoracle", resto_sfixmuoracle, "resto."+prefix)) {
+        ASSERT_EXCEPTION(resto_sfixmuoracle=="loqo" || resto_sfixmuoracle=="probing" || resto_sfixmuoracle=="average_compl",
+                         OptionsList::OPTION_OUT_OF_RANGE,
+                         "Option \"resto_fixmuoracle\" has invalid value.");
+      }
+      else {
+        resto_sfixmuoracle = "average_compl";
       }
     }
 
@@ -100,8 +110,19 @@ namespace Ipopt
       else if (resto_smuoracle=="probing") {
         resto_MuOracle = new ProbingMuOracle(resto_PDSolver);
       }
+      SmartPtr<MuOracle> resto_FixMuOracle;
+      if (resto_sfixmuoracle=="loqo") {
+        resto_FixMuOracle = new LoqoMuOracle();
+      }
+      else if (resto_sfixmuoracle=="probing") {
+        resto_FixMuOracle = new ProbingMuOracle(resto_PDSolver);
+      }
+      else {
+        resto_FixMuOracle = NULL;
+      }
       resto_MuUpdate =
-        new NonmonotoneMuUpdate(GetRawPtr(resto_LineSearch), resto_MuOracle);
+        new NonmonotoneMuUpdate(GetRawPtr(resto_LineSearch),
+                                resto_MuOracle, resto_FixMuOracle);
     }
 
     // Convergence check in the restoration phase
@@ -151,6 +172,7 @@ namespace Ipopt
       smuupdate = "monotone";
     }
     std::string smuoracle;
+    std::string sfixmuoracle;
     if (smuupdate=="nonmonotone" ) {
       if (options.GetValue("muoracle", smuoracle, prefix)) {
         ASSERT_EXCEPTION(smuoracle=="loqo" || smuoracle=="probing",
@@ -160,20 +182,40 @@ namespace Ipopt
       else {
         smuoracle = "probing";
       }
+
+      if (options.GetValue("fixmuoracle", sfixmuoracle, prefix)) {
+        ASSERT_EXCEPTION(sfixmuoracle=="loqo" || sfixmuoracle=="probing" || sfixmuoracle=="average_compl",
+                         OptionsList::OPTION_OUT_OF_RANGE,
+                         "Option \"fixmuoracle\" has invalid value.");
+      }
+      else {
+        sfixmuoracle = "average_compl";
+      }
     }
 
     if (smuupdate=="monotone" ) {
       MuUpdate = new MonotoneMuUpdate(GetRawPtr(lineSearch));
     }
     else if (smuupdate=="nonmonotone") {
-      SmartPtr<MuOracle> MuOracle;
+      SmartPtr<MuOracle> muOracle;
       if (smuoracle=="loqo") {
-        MuOracle = new LoqoMuOracle();
+        muOracle = new LoqoMuOracle();
       }
       else if (smuoracle=="probing") {
-        MuOracle = new ProbingMuOracle(PDSolver);
+        muOracle = new ProbingMuOracle(PDSolver);
       }
-      MuUpdate = new NonmonotoneMuUpdate(GetRawPtr(lineSearch), MuOracle);
+      SmartPtr<MuOracle> FixMuOracle;
+      if (sfixmuoracle=="loqo") {
+        FixMuOracle = new LoqoMuOracle();
+      }
+      else if (sfixmuoracle=="probing") {
+        FixMuOracle = new ProbingMuOracle(PDSolver);
+      }
+      else {
+        FixMuOracle = NULL;
+      }
+      MuUpdate = new NonmonotoneMuUpdate(GetRawPtr(lineSearch),
+                                         muOracle, FixMuOracle);
     }
 
     // Create the object for the iteration output
