@@ -267,6 +267,12 @@ namespace Ipopt
                                            Vector& delta_soc_v_L,
                                            Vector& delta_soc_v_U);
 
+    /** Perform magic steps.  Take the current values of the slacks in
+     *  trial and replace them by better ones that lead to smaller
+     *  values of the barrier function and less constraint
+     *  violation. */
+    void PerformMagicStep();
+
     /** @name Parameters for the filter algorithm.  Names as in the paper */
     //@{
     /** \f$ \eta_{\varphi} \f$ */
@@ -292,6 +298,14 @@ namespace Ipopt
      *  multiple second order correction steps \f$ \kappa_{soc}\f$.
      */
     Number kappa_soc_;
+    /** Maximal increase in objective function in orders of magnitute
+     *  (log10).  If the log10(barrier objective function) is
+     *  increased more than this compared to the current point, the
+     *  trial point is rejected. */
+    Number obj_max_inc_;
+
+    /** Flag indication whether magic steps should be used. */
+    bool magic_steps_;
     //@}
 
     /** Filter with entries */
