@@ -71,15 +71,6 @@ namespace Ipopt
       tau_min_ = 0.99;
     }
 
-    if (options.GetNumericValue("tau_max", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0 && value <= 1.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"tau_max\": This value must be between 0 and 1.");
-      tau_max_ = value;
-    }
-    else {
-      tau_max_ = tau_min_;
-    }
-
     if (options.GetNumericValue("mu_safeguard_exp", value, prefix)) {
       ASSERT_EXCEPTION(value >= 0.0, OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"mu_safeguard_exp\": This value must be non-negative.");
@@ -269,6 +260,12 @@ namespace Ipopt
     accepted_v_L_ = NULL;
     accepted_v_U_ = NULL;
 
+    // The following lines are only here so that
+    // IpoptCalculatedQuantities::CalculateSafeSlack and the first
+    // output line have something to work with
+    IpData().Set_mu(1.);
+    IpData().Set_tau(0.);
+
     // TODO do we need to initialize the linesearch object?
 
     return retvalue;
@@ -321,7 +318,7 @@ namespace Ipopt
 
           Number new_mu = Min( kappa_mu_*mu, pow(mu, theta_mu_) );
           new_mu = Max(new_mu, eps_tol/10);
-          Number new_tau = Compute_tau(mu);
+          Number new_tau = Compute_tau_monotone(mu);
           IpData().Set_mu(new_mu);
           IpData().Set_tau(new_tau);
           Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
@@ -358,7 +355,7 @@ namespace Ipopt
         // Set the new values for mu and tau and tell the linesearch
         // to reset its memory
         Number mu = NewFixedMu();
-        Number tau = Compute_tau(mu);
+        Number tau = Compute_tau_monotone(mu);
 
         IpData().Set_mu(mu);
         IpData().Set_tau(tau);
@@ -370,6 +367,13 @@ namespace Ipopt
     }
 
     if (IpData().FreeMuMode()) {
+      
+      // Choose the fraction-to-the-boundary parameter for the current
+      // iteration
+      // ToDo
+      Number tau = Max(tau_min_, 1.-IpCq().curr_nlp_error());
+      IpData().Set_tau(tau);
+
       // Compute the new barrier parameter via the oracle
       Number mu = free_mu_oracle_->CalculateMu();
 
@@ -393,17 +397,8 @@ namespace Ipopt
                      "Barrier parameter mu after safeguards is %e\n",
                      mu);
 
-      // Update the fraction-to-the-boundary rule parameter
-      // TODO The first rule makes tau too small early on.
-      //    Number tau = Max(tau_min_, 1.-mu);
-      Number tau = Compute_tau(mu);
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                     "Fraction-to-the-boundary parameter tau is %e\n",
-                     tau);
-
       // Set the new values
       IpData().Set_mu(mu);
-      IpData().Set_tau(tau);
 
       linesearch_->Reset();
       // Uncomment the next line if the filter should not switch to
@@ -516,10 +511,9 @@ namespace Ipopt
   }
 
   Number
-  NonmonotoneMuUpdate::Compute_tau(Number mu)
+  NonmonotoneMuUpdate::Compute_tau_monotone(Number mu)
   {
-    return Max(tau_min_, Min(1.-mu, tau_max_));
-    //return tau_min_;
+    return Max(tau_min_, 1.-mu);
   }
 
   Number
