@@ -104,12 +104,15 @@ namespace Ipopt
     F77_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, IPARM_);    
 
     // Set some parameters for Pardiso
+    IPARM_[0] = 1;  // Don't use the default values
     IPARM_[2] = 1;  // Only one CPU for now
     IPARM_[5] = 1;  // Overwrite right-hand side
 
     // ToDo: decide if we need iterative refinement in Pardiso.  For
-    // now, switch it off
+    // now, switch it off ?
     IPARM_[7] = 0;
+
+    // IPARM_[20] = 2;
 
     return true;
   }
@@ -176,7 +179,7 @@ namespace Ipopt
 
   ESymSolverStatus
   PardisoSolverInterface::SymbolicFactorization(const Index* ia,
-						 const Index* ja)
+						const Index* ja)
   {
     DBG_START_METH("PardisoSolverInterface::SymbolicFactorization",
 		   dbg_verbosity);
@@ -239,10 +242,12 @@ namespace Ipopt
       return SYMSOLVER_FATAL_ERROR;
     }
 
+    /* ToDo ask Olaf what this means
     if (IPARM_[13] != 0) {
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                      "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
     }
+    */
 
     negevals_ = IPARM_[22];
 
