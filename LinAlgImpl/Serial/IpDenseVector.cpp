@@ -287,6 +287,43 @@ namespace Ipopt
     }
   }
 
+  // Specialized Functions
+  void DenseVector::AddTwoVectorsImpl(Number a, const Vector& v1,
+				      Number b, const Vector& v2)
+  {
+    const DenseVector* dense_v1 = dynamic_cast<const DenseVector*>(&v1);
+    DBG_ASSERT(dense_v1);
+    DBG_ASSERT(dense_v1->initialized_);
+    const DenseVector* dense_v2 = dynamic_cast<const DenseVector*>(&v2);
+    DBG_ASSERT(dense_v2);
+    DBG_ASSERT(dense_v2->initialized_);
+    if (a==1.) {
+      if (b==0.) {
+	for (Index i=0; i<Dim(); i++) {
+	  values_[i] = dense_v1->values_[i];
+	}
+      }
+      else {
+	for (Index i=0; i<Dim(); i++) {
+	  values_[i] = dense_v1->values_[i] + b*dense_v2->values_[i];
+	}
+      }
+    }
+    else {
+      if (b==0.) {
+	for (Index i=0; i<Dim(); i++) {
+	  values_[i] = a*dense_v1->values_[i];
+	}
+      }
+      else {
+	for (Index i=0; i<Dim(); i++) {
+	  values_[i] = a*dense_v1->values_[i] + b*dense_v2->values_[i];
+	}
+      }
+    }
+    initialized_=true;
+  }
+
   void DenseVector::CopyToPos(Index Pos, const Vector& x)
   {
     Index dim_x = x.Dim();

@@ -465,13 +465,21 @@ namespace Ipopt
     // Compute the right hand side for the augmented system formulation
     SmartPtr<Vector> augRhs_x = rhs_x.MakeNew();
     augRhs_x->Copy(rhs_x);
+    Px_L.AddMSinvZ(1.0, slack_x_L, rhs_zL, 1.0, *augRhs_x);
+    Px_U.AddMSinvZ(-1.0, slack_x_U, rhs_zU, 1.0, *augRhs_x);
+    /*
     AddPSinvZ(1.0, Px_L, slack_x_L, rhs_zL, 1.0, *augRhs_x);
     AddPSinvZ(-1.0, Px_U, slack_x_U, rhs_zU, 1.0, *augRhs_x);
+    */
 
     SmartPtr<Vector> augRhs_s = rhs_s.MakeNew();
     augRhs_s->Copy(rhs_s);
+    Pd_L.AddMSinvZ(1.0, slack_s_L, rhs_vL, 1.0, *augRhs_s);
+    Pd_U.AddMSinvZ(-1.0, slack_s_U, rhs_vU, 1.0, *augRhs_s);
+    /*
     AddPSinvZ(1.0, Pd_L, slack_s_L, rhs_vL, 1.0, *augRhs_s);
     AddPSinvZ(-1.0, Pd_U, slack_s_U, rhs_vU, 1.0, *augRhs_s);
+    */
 
     // Get space into which we can put the solution of the augmented system
     SmartPtr<Vector> sol_x = res_x.MakeNew();
@@ -602,10 +610,17 @@ namespace Ipopt
     SmartPtr<Vector> sol_vL = res_vL.MakeNew();
     SmartPtr<Vector> sol_vU = res_vU.MakeNew();
 
+    Px_L.SinvBlrmZMTdBr(-1., slack_x_L, rhs_zL, z_L, *sol_x, *sol_zL);
+    Px_U.SinvBlrmZMTdBr(1., slack_x_U, rhs_zU, z_U, *sol_x, *sol_zU);
+    Pd_L.SinvBlrmZMTdBr(-1., slack_s_L, rhs_vL, v_L, *sol_s, *sol_vL);
+    Pd_U.SinvBlrmZMTdBr(1., slack_s_U, rhs_vU, v_U, *sol_s, *sol_vU);
+
+    /*
     SinvBlrmZPTdBr(-1., slack_x_L, rhs_zL, z_L, Px_L, *sol_x, *sol_zL);
     SinvBlrmZPTdBr(1., slack_x_U, rhs_zU, z_U, Px_U, *sol_x, *sol_zU);
     SinvBlrmZPTdBr(-1., slack_s_L, rhs_vL, v_L, Pd_L, *sol_s, *sol_vL);
     SinvBlrmZPTdBr(1., slack_s_U, rhs_vU, v_U, Pd_U, *sol_s, *sol_vU);
+    */
 
     // Finally let's assemble the res result vectors
     AxpBy(alpha, *sol_x, beta, res_x);
@@ -866,12 +881,25 @@ namespace Ipopt
                                 Number beta, Vector& Y)
   {
     if (beta==0.) {
+      // ToDo we probably want a "CopyScal" method on vectors
+      Y.Copy(X);
+      if (alpha!=1.) {
+	Y.Scal(alpha);
+      }
+    }
+    else {
+      /* ToDo make sure that we can call this with Y as argument!!! */
+      Y.AddTwoVectors(alpha, X, beta, Y);
+    }
+    /*
+    if (beta==0.) {
       Y.Set(0.);
     }
     else {
       Y.Scal(beta);
     }
     Y.Axpy(alpha, X);
+    */
   }
 
 } // namespace Ipopt
