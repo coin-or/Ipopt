@@ -97,6 +97,7 @@ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
+AMPL_CPPFLAGS = @AMPL_CPPFLAGS@
 AMTAR = @AMTAR@
 AR = @AR@
 ASTYLE = @ASTYLE@
@@ -114,8 +115,8 @@ CXX = @CXX@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../../Common -I$(srcdir)/../../Interfaces -I$(srcdir)/../../LinAlgImpl/Serial -I$(srcdir)/../../Algorithm -I$(srcdir)/../../PDSystemImpl/PDFullSpace -I$(srcdir)/../../Apps/StdInterface -I$(srcdir)/../../Apps/AmplSolver \
 	    -I$(srcdir)/../../OTHERS/ASL/ \
-	    -I$(srcdir)/../../OTHERS/ASL/solvers
-
+	    -I$(srcdir)/../../OTHERS/ASL/solvers\
+$(AMPL_CPPFLAGS)
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@

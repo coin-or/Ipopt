@@ -226,8 +226,8 @@ LIBS="-L${HOME}/lib -lhsl $LIBS"
 IPADDLIBS="-L${HOME}/lib -lhsl $IPADDLIBS"
 
 
-
 AC_LANG_POP(Fortran 77)
+
 
 # For the remaining tests we need to include FLIBS into LIBS, so that
 # the C compiler can link programs
@@ -275,6 +275,9 @@ case $build in
 esac
 AC_SUBST(ipoptlib)
 
+# For ASL
+AC_SUBST(AMPL_CPPFLAGS)
+AMPL_CPPFLAGS="-I\$(top_builddir)/OTHERS/ASL -I\$(top_srcdir)/OTHERS/ASL/solvers"
 
 AC_CONFIG_FILES([Makefile Common/Makefile Algorithm/Makefile
                  LinAlgImpl/Makefile LinAlgImpl/Serial/Makefile 
