@@ -36,8 +36,7 @@ namespace Ipopt
      *  for evaluation callback functions, and starting points. Note
      *  that the constrctor does not make a copy of any of the Number
      *  arrays, i.e. it is up to the called to keep them around. */
-    StdInterfaceTNLP(const SmartPtr<const Journalist>& jnlst,
-                     Index n_var,
+    StdInterfaceTNLP(Index n_var,
                      const Number* x_L, const Number* x_U,
                      Index n_con,
                      const Number* g_L, const Number* g_U,
