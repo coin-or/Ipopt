@@ -19,6 +19,7 @@
 #include "IpNonmonotoneMuUpdate.hpp"
 #include "IpLoqoMuOracle.hpp"
 #include "IpProbingMuOracle.hpp"
+#include "IpOptProbingMuOracle.hpp"
 #include "IpRestoMinC_1Nrm.hpp"
 #include "IpLeastSquareMults.hpp"
 #include "IpDefaultIterateInitializer.hpp"
@@ -81,7 +82,7 @@ namespace Ipopt
     std::string resto_sfixmuoracle;
     if (resto_smuupdate=="nonmonotone" ) {
       if (options.GetValue("muoracle", resto_smuoracle, "resto."+prefix)) {
-        ASSERT_EXCEPTION(resto_smuoracle=="loqo" || resto_smuoracle=="probing",
+        ASSERT_EXCEPTION(resto_smuoracle=="loqo" || resto_smuoracle=="probing" || resto_smuoracle=="optprobing",
                          OptionsList::OPTION_OUT_OF_RANGE,
                          "Option \"resto_muoracle\" has invalid value.");
       }
@@ -90,7 +91,7 @@ namespace Ipopt
       }
 
       if (options.GetValue("fixmuoracle", resto_sfixmuoracle, "resto."+prefix)) {
-        ASSERT_EXCEPTION(resto_sfixmuoracle=="loqo" || resto_sfixmuoracle=="probing" || resto_sfixmuoracle=="average_compl",
+        ASSERT_EXCEPTION(resto_sfixmuoracle=="loqo" || resto_sfixmuoracle=="probing" || resto_sfixmuoracle=="optprobing" || resto_sfixmuoracle=="average_compl",
                          OptionsList::OPTION_OUT_OF_RANGE,
                          "Option \"resto_fixmuoracle\" has invalid value.");
       }
@@ -110,12 +111,18 @@ namespace Ipopt
       else if (resto_smuoracle=="probing") {
         resto_MuOracle = new ProbingMuOracle(resto_PDSolver);
       }
+      else if (resto_smuoracle=="optprobing") {
+        resto_MuOracle = new OptProbingMuOracle(resto_PDSolver);
+      }
       SmartPtr<MuOracle> resto_FixMuOracle;
       if (resto_sfixmuoracle=="loqo") {
         resto_FixMuOracle = new LoqoMuOracle();
       }
       else if (resto_sfixmuoracle=="probing") {
         resto_FixMuOracle = new ProbingMuOracle(resto_PDSolver);
+      }
+      else if (resto_sfixmuoracle=="optprobing") {
+        resto_FixMuOracle = new OptProbingMuOracle(resto_PDSolver);
       }
       else {
         resto_FixMuOracle = NULL;
@@ -175,7 +182,7 @@ namespace Ipopt
     std::string sfixmuoracle;
     if (smuupdate=="nonmonotone" ) {
       if (options.GetValue("muoracle", smuoracle, prefix)) {
-        ASSERT_EXCEPTION(smuoracle=="loqo" || smuoracle=="probing",
+        ASSERT_EXCEPTION(smuoracle=="loqo" || smuoracle=="probing" || smuoracle=="optprobing",
                          OptionsList::OPTION_OUT_OF_RANGE,
                          "Option \"muoracle\" has invalid value.");
       }
@@ -184,7 +191,7 @@ namespace Ipopt
       }
 
       if (options.GetValue("fixmuoracle", sfixmuoracle, prefix)) {
-        ASSERT_EXCEPTION(sfixmuoracle=="loqo" || sfixmuoracle=="probing" || sfixmuoracle=="average_compl",
+        ASSERT_EXCEPTION(sfixmuoracle=="loqo" || sfixmuoracle=="probing" || sfixmuoracle=="optprobing" || sfixmuoracle=="average_compl",
                          OptionsList::OPTION_OUT_OF_RANGE,
                          "Option \"fixmuoracle\" has invalid value.");
       }
@@ -204,12 +211,18 @@ namespace Ipopt
       else if (smuoracle=="probing") {
         muOracle = new ProbingMuOracle(PDSolver);
       }
+      else if (smuoracle=="optprobing") {
+        muOracle = new OptProbingMuOracle(PDSolver);
+      }
       SmartPtr<MuOracle> FixMuOracle;
       if (sfixmuoracle=="loqo") {
         FixMuOracle = new LoqoMuOracle();
       }
       else if (sfixmuoracle=="probing") {
         FixMuOracle = new ProbingMuOracle(PDSolver);
+      }
+      else if (sfixmuoracle=="optprobing") {
+        FixMuOracle = new OptProbingMuOracle(PDSolver);
       }
       else {
         FixMuOracle = NULL;
