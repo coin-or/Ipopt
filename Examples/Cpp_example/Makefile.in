@@ -23,6 +23,7 @@ LIBS = @ipoptlib@ @IPADDLIBS@
 
 # Necessary Include dirs
 INCL =  -I @prefix@/Interfaces \
+	-I @prefix@/Apps/StdInterface \
         -I @prefix@/Common \
         -I @prefix@/inc \
 
