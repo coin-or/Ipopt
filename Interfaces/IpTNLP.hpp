@@ -67,7 +67,9 @@ namespace Ipopt
     /** overload this method to return the information about the bound
      *  on the variables and constraints. The value that indicates
      *  that a bound does not exist is specified in the parameters
-     *  nlp_lower_bound_inf and nlp_upper_bound_inf */
+     *  nlp_lower_bound_inf and nlp_upper_bound_inf.  By default,
+     *  nlp_lower_bound_inf is -1e19 and nlp_upper_bound_inf is
+     *  1e19. (see TNLPAdapter) */
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
                                  Index m, Number* d_l, Number* d_u)=0;
 
@@ -101,8 +103,8 @@ namespace Ipopt
      *  and jCol will be non-NULL, and values will be NULL) For
      *  subsequent calls, iRow and jCol will be NULL. */
     virtual bool eval_jac_g(Index n, const Number* x, bool new_x,
-                            Index nele_jac, Index* iRow, Index *jCol,
-                            Number* values)=0;
+                            Index m, Index nele_jac, Index* iRow,
+                            Index *jCol, Number* values)=0;
 
     /** overload this method to return the hessian of the
      *  lagrangian. The vectors iRow and jCol only need to be set once
