@@ -141,10 +141,10 @@ namespace Ipopt
        void operator=(const __except_type&); \
     }
 
-// Here we define all exceptions that should be caught outside the
-// algorithm's solve
-DECLARE_STD_EXCEPTION(LOCALLY_INFEASIBILE);
-DECLARE_STD_EXCEPTION(TOO_FEW_DOF);
+  // Here we define all exceptions that should be caught outside the
+  // algorithm's solve
+  DECLARE_STD_EXCEPTION(LOCALLY_INFEASIBILE);
+  DECLARE_STD_EXCEPTION(TOO_FEW_DOF);
 
 } // namespace Ipopt
 

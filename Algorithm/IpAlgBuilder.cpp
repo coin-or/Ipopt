@@ -41,7 +41,7 @@ namespace Ipopt
                                         const std::string& prefix)
   {
     DBG_START_FUN("AlgorithmBuilder::BuildBasicAlgorithm",
-		  dbg_verbosity);
+                  dbg_verbosity);
     // Create the convergence check
     SmartPtr<ConvergenceCheck> convCheck =
       new OptimalityErrorConvergenceCheck();
@@ -78,10 +78,12 @@ namespace Ipopt
 #ifdef HAVE_PARDISO
       SolverInterface = new PardisoSolverInterface();
 #else
+
       ASSERT_EXCEPTION(false,
                        OptionsList::OPTION_OUT_OF_RANGE,
                        "Selected solver Pardiso not available.");
 #endif
+
     }
 
     SmartPtr<SymLinearSolver> ScaledSolver =

@@ -89,9 +89,9 @@ namespace Ipopt
      *  given step in slacks.
      */
     void ComputeBoundMultiplierStep(Vector& delta_z,
-				    const Vector& curr_z,
-				    const Vector& curr_slack,
-				    const Vector& trial_slack);
+                                    const Vector& curr_z,
+                                    const Vector& curr_slack,
+                                    const Vector& trial_slack);
     //@}
   };
 

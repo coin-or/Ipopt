@@ -160,10 +160,10 @@ namespace Ipopt
     /** s-part of gradient of Lagrangian function (at current point) */
     SmartPtr<const Vector> curr_grad_lag_s();
     /** x-part of gradient of Lagrangian function (at current point)
-	including linear damping term */
+    including linear damping term */
     SmartPtr<const Vector> curr_grad_lag_with_damping_x();
     /** s-part of gradient of Lagrangian function (at current point)
-	including linear damping term */
+    including linear damping term */
     SmartPtr<const Vector> curr_grad_lag_with_damping_s();
     /** Complementarity for x_L (for current iterate) */
     SmartPtr<const Vector> curr_compl_x_L();

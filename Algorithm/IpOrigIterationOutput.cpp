@@ -109,7 +109,7 @@ namespace Ipopt
                    "Current barrier parameter mu = %21.16e\n", IpData().curr_mu());
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "Current fraction-to-the-boundary parameter tau = %21.16e\n\n",
-		   IpData().curr_tau());
+                   IpData().curr_tau());
 
     if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
@@ -131,26 +131,26 @@ namespace Ipopt
     }
     if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
       if (IsValid(IpData().delta_x())) {
-	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-		       "\n||delta_x||_inf   = %.16e\n", IpData().delta_x()->Amax());
-	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-		       "||delta_s||_inf   = %.16e\n", IpData().delta_s()->Amax());
-	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-		       "||delta_y_c||_inf = %.16e\n", IpData().delta_y_c()->Amax());
-	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-		       "||delta_y_d||_inf = %.16e\n", IpData().delta_y_d()->Amax());
-	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-		       "||delta_z_L||_inf = %.16e\n", IpData().delta_z_L()->Amax());
-	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-		       "||delta_z_U||_inf = %.16e\n", IpData().delta_z_U()->Amax());
-	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-		       "||delta_v_L||_inf = %.16e\n", IpData().delta_v_L()->Amax());
-	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-		       "||delta_v_U||_inf = %.16e\n", IpData().delta_v_U()->Amax());
+        Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                       "\n||delta_x||_inf   = %.16e\n", IpData().delta_x()->Amax());
+        Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                       "||delta_s||_inf   = %.16e\n", IpData().delta_s()->Amax());
+        Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                       "||delta_y_c||_inf = %.16e\n", IpData().delta_y_c()->Amax());
+        Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                       "||delta_y_d||_inf = %.16e\n", IpData().delta_y_d()->Amax());
+        Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                       "||delta_z_L||_inf = %.16e\n", IpData().delta_z_L()->Amax());
+        Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                       "||delta_z_U||_inf = %.16e\n", IpData().delta_z_U()->Amax());
+        Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                       "||delta_v_L||_inf = %.16e\n", IpData().delta_v_L()->Amax());
+        Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                       "||delta_v_U||_inf = %.16e\n", IpData().delta_v_U()->Amax());
       }
       else {
-	Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-		       "\nNo search direction has been computed yet.\n");
+        Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                       "\nNo search direction has been computed yet.\n");
       }
     }
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {

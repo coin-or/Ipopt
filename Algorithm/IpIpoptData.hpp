@@ -471,7 +471,7 @@ namespace Ipopt
     /** Set the pointers for the trial constraint multipliers.  Make sure
     that you are not modifying the incoming vectors afterwards! */
     void SetTrialConstraintMultipliersFromPtr(const SmartPtr<const Vector>& y_cptr,
-					      const SmartPtr<const Vector>& y_dptr);
+        const SmartPtr<const Vector>& y_dptr);
     /** Set the pointers for the trial bound multipliers.  Make sure
     that you are not modifying the incoming vectors afterwards! */
     void SetTrialBoundMultipliersFromPtr(const SmartPtr<const Vector>& z_Lptr,

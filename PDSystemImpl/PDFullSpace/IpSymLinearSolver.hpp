@@ -78,18 +78,18 @@ namespace Ipopt
      *  returns false.
      */
     virtual ESymSolverStatus MultiSolve(const SymMatrix &A,
-					std::vector<const Vector*>& rhsV,
-					std::vector<Vector*>& solV,
-					bool check_NegEVals,
-					Index numberOfNegEVals)=0;
+                                        std::vector<const Vector*>& rhsV,
+                                        std::vector<Vector*>& solV,
+                                        bool check_NegEVals,
+                                        Index numberOfNegEVals)=0;
 
     /** Solve operation for a single right hand side. Solves the
      *  linear system A * Sol = Rhs.  See MultiSolve for more
      *  details. */
     ESymSolverStatus Solve(const SymMatrix &A,
-			   const Vector& rhs, Vector& sol,
-			   bool check_NegEVals,
-			   Index numberOfNegEVals)
+                           const Vector& rhs, Vector& sol,
+                           bool check_NegEVals,
+                           Index numberOfNegEVals)
     {
       std::vector<const Vector*> rhsV;
       rhsV.push_back(&rhs);

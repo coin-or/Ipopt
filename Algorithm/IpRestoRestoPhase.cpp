@@ -31,7 +31,7 @@ namespace Ipopt
     DBG_START_METH("RestoRestorationPhase::PerformRestoration",
                    dbg_verbosity);
     Jnlst().Printf(J_DETAILED, J_MAIN,
-		   "Performing second level restoration phase for current constriant violation %8.2e\n", IpCq().curr_constraint_violation());
+                   "Performing second level restoration phase for current constriant violation %8.2e\n", IpCq().curr_constraint_violation());
 
     DBG_ASSERT(IpCq().curr_constraint_violation()>0.);
 
@@ -98,13 +98,13 @@ namespace Ipopt
     // Now set the trial point to the solution of the restoration phase
     // s and all multipliers remain unchanged
     IpData().SetTrialPrimalVariablesFromPtr(GetRawPtr(new_x),
-					    IpData().curr_s());
+                                            IpData().curr_s());
     IpData().SetTrialBoundMultipliersFromPtr(IpData().curr_z_L(),
-					     IpData().curr_z_U(),
-					     IpData().curr_v_L(),
-					     IpData().curr_v_U());
+        IpData().curr_z_U(),
+        IpData().curr_v_L(),
+        IpData().curr_v_U());
     IpData().SetTrialConstraintMultipliersFromPtr(IpData().curr_y_c(),
-						  IpData().curr_y_d());
+        IpData().curr_y_d());
 
     IpData().Append_info_string("R");
 

@@ -39,7 +39,7 @@ namespace Ipopt
      *  scaling_method not NULL, it must be a pointer to a class for
      *  computing scaling factors for the matrix. */
     TSymLinearSolver(SmartPtr<SparseSymLinearSolverInterface> solver_interface,
-		     SmartPtr<TSymScalingMethod> scaling_method);
+                     SmartPtr<TSymScalingMethod> scaling_method);
 
     /** Destructor */
     virtual ~TSymLinearSolver();
@@ -55,10 +55,10 @@ namespace Ipopt
      * see the description in the base class SymLinearSolver.
      */
     virtual ESymSolverStatus MultiSolve(const SymMatrix &A,
-					std::vector<const Vector*>& rhsV,
-					std::vector<Vector*>& solV,
-					bool check_NegEVals,
-					Index numberOfNegEVals);
+                                        std::vector<const Vector*>& rhsV,
+                                        std::vector<Vector*>& solV,
+                                        bool check_NegEVals,
+                                        Index numberOfNegEVals);
 
     /** Number of negative eigenvalues detected during last
      * factorization.  Returns the number of negative eigenvalues of
@@ -145,7 +145,7 @@ namespace Ipopt
     /** Pointer to object for conversion from triplet to compressed
      *  format.  This is only required if the linear solver works with
      *  the compressed representation. */
-    SmartPtr<TripletToCSRConverter> triplet_to_csr_converter_;    
+    SmartPtr<TripletToCSRConverter> triplet_to_csr_converter_;
     /** Flag indicating what matrix data format the solver requires. */
     SparseSymLinearSolverInterface::EMatrixFormat matrix_format_;
     //@}

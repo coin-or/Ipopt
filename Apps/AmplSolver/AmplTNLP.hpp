@@ -114,13 +114,13 @@ namespace Ipopt
      *  AMPL"
      */
     void get_discrete_info(Index& nlvb_,
-			   Index& nlvbi_,
-			   Index& nlvc_,
-			   Index& nlvci_,
-			   Index& nlvo_,
-			   Index& nlvoi_,
-			   Index& nbv_,
-			   Index& niv_) const;
+                           Index& nlvbi_,
+                           Index& nlvc_,
+                           Index& nlvci_,
+                           Index& nlvo_,
+                           Index& nlvoi_,
+                           Index& nbv_,
+                           Index& niv_) const;
     //@}
 
   private:

@@ -311,7 +311,7 @@ namespace Ipopt
           // Pretend singularity only once - if it didn't help, we
           // have to live with what we got so far
           resolve_better_quality = false;
-	  DBG_PRINT((1, "pretend_singular = %d\n", pretend_singular));
+          DBG_PRINT((1, "pretend_singular = %d\n", pretend_singular));
           if (!pretend_singular_last_time) {
             // First try if we can ask the augmented system solver to
             // improve the quality of the solution (only if that hasn't
@@ -322,7 +322,7 @@ namespace Ipopt
               augsys_improved_ = augSysSolver_->IncreaseQuality();
               if (augsys_improved_) {
                 IpData().Append_info_string("q");
-		resolve_better_quality = true;
+                resolve_better_quality = true;
               }
               else {
                 // solver said it cannot improve quality, so let
@@ -337,7 +337,7 @@ namespace Ipopt
               // modification is possibly singular
               pretend_singular = true;
             }
-	    pretend_singular_last_time = pretend_singular;
+            pretend_singular_last_time = pretend_singular;
             if (pretend_singular) {
               // let's only conclude that the current linear system
               // including modifications is singular, if the residual is
@@ -357,7 +357,7 @@ namespace Ipopt
           }
           else {
             pretend_singular = false;
-	    DBG_PRINT((1,"Resetting pretend_singular to false.\n"));
+            DBG_PRINT((1,"Resetting pretend_singular to false.\n"));
           }
         }
 
@@ -703,7 +703,7 @@ namespace Ipopt
     if (delta_s_curr_!=0.) {
       resid_s.Axpy(delta_s_curr_, res_s);
     }
-    
+
     /* DELE
     resid_s.Axpy(-1., res_d);
     if (delta_s_curr_!=0.) {

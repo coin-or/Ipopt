@@ -310,7 +310,7 @@ namespace Ipopt
 
   // Specialized Functions
   void CompoundVector::AddTwoVectorsImpl(Number a, const Vector& v1,
-					 Number b, const Vector& v2, Number c)
+                                         Number b, const Vector& v2, Number c)
   {
     DBG_ASSERT(vectors_valid_);
     const CompoundVector* comp_v1 = dynamic_cast<const CompoundVector*>(&v1);

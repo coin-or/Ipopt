@@ -54,45 +54,45 @@ namespace Ipopt
       if (airn[i]==ajcn[i]) {
         AIRN2[nnz2] = airn[i];
         AJCN2[nnz2] = ajcn[i];
-	/*
-	// ToDo decide if there should be a cut-off for small values in A
-	// probably based on maximal element in A
-	// DELETEME
-	if (fabs(a[i])<1e-10) {
-	  A2[nnz2] = 0.;
-	}
-	else {
-	  A2[nnz2] = a[i];
+        /*
+        // ToDo decide if there should be a cut-off for small values in A
+        // probably based on maximal element in A
+        // DELETEME
+        if (fabs(a[i])<1e-10) {
+          A2[nnz2] = 0.;
         }
-	*/
+        else {
+          A2[nnz2] = a[i];
+               }
+        */
         A2[nnz2] = a[i];
         nnz2++;
       }
       else {
         AIRN2[nnz2] = airn[i];
         AJCN2[nnz2] = ajcn[i];
-	/*
-	// DELETEME
-	if (fabs(a[i])<1e-10) {
-	  A2[nnz2] = 0.;
-	}
-	else {
-	  A2[nnz2] = a[i];
-	}
-	*/
+        /*
+        // DELETEME
+        if (fabs(a[i])<1e-10) {
+          A2[nnz2] = 0.;
+        }
+        else {
+          A2[nnz2] = a[i];
+        }
+        */
         A2[nnz2] = a[i];
         nnz2++;
         AIRN2[nnz2] = ajcn[i];
         AJCN2[nnz2] = airn[i];
-	/*
-	// DELETEME
-	if (fabs(a[i])<1e-10) {
-	  A2[nnz2] = 0.;
-	}
-	else {
-	  A2[nnz2] = a[i];
-	}
-	*/
+        /*
+        // DELETEME
+        if (fabs(a[i])<1e-10) {
+          A2[nnz2] = 0.;
+        }
+        else {
+          A2[nnz2] = a[i];
+        }
+        */
         A2[nnz2] = a[i];
         nnz2++;
       }

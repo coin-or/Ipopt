@@ -119,7 +119,7 @@ namespace Ipopt
     delta_z_U_ = NULL;
     delta_v_L_ = NULL;
     delta_v_U_ = NULL;
-    
+
     // Set the pointers for storing steps to NULL
     delta_aff_x_ = NULL;
     delta_aff_s_ = NULL;
@@ -129,7 +129,7 @@ namespace Ipopt
     delta_aff_z_U_ = NULL;
     delta_aff_v_L_ = NULL;
     delta_aff_v_U_ = NULL;
-    
+
 
     /*
     // create structures for the deltas (uninitialized)

@@ -42,8 +42,8 @@ namespace Ipopt
      *  positions of the nonzero elements.
      */
     virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
-						 const Index *airn,
-						 const Index *ajcn);
+        const Index *airn,
+        const Index *ajcn);
 
     /** Method returing an internal array into which the nonzero
      *  elements (in the same order as airn and ajcn) are to be stored
@@ -56,12 +56,12 @@ namespace Ipopt
      *  from SparseSymLinearSolverInterface.
      */
     virtual ESymSolverStatus MultiSolve(bool new_matrix,
-					const Index* airn,
-					const Index* ajcn,
-					Index nrhs,
-					double* rhs_vals,
-					bool check_NegEVals,
-					Index numberOfNegEVals);
+                                        const Index* airn,
+                                        const Index* ajcn,
+                                        Index nrhs,
+                                        double* rhs_vals,
+                                        bool check_NegEVals,
+                                        Index numberOfNegEVals);
 
     /** Number of negative eigenvalues detected during last
      *  factorization.  Returns the number of negative eigenvalues of
@@ -199,21 +199,21 @@ namespace Ipopt
      *  symbolic manipulations, and reserve all the remaining data memory
      */
     ESymSolverStatus SymbolicFactorization(const Index* airn,
-					   const Index* ajcn);
+                                           const Index* ajcn);
 
     /** Call MA27BD to factorize the Matrix.
      *  It is assumed that the first nonzeros_ element of a_ contain the values
      *  of the matrix to be factorized.
      */
     ESymSolverStatus Factorization(const Index* airn,
-				   const Index* ajcn,
-				   bool check_NegEVals,
-				   Index numberOfNegEVals);
+                                   const Index* ajcn,
+                                   bool check_NegEVals,
+                                   Index numberOfNegEVals);
 
     /** Call MA27CD to do the backsolve.
      */
     ESymSolverStatus Backsolve(Index nrhs,
-			       double *rhs_vals);
+                               double *rhs_vals);
     //@}
   };
 

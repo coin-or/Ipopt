@@ -32,16 +32,16 @@ namespace Ipopt
 
     /** overloaded from AlgorithmStrategyObject */
     virtual bool InitializeImpl(const OptionsList& options,
-				const std::string& prefix) = 0;
+                                const std::string& prefix) = 0;
 
     /** Method for computing the symmetric scaling factors, given the
      *  symmtric matrix in triplet (MA27) format. */
     virtual bool ComputeSymTScalingFactors(Index n,
-					   Index nnz,
-					   const Index* airn,
-					   const Index* ajcn,
-					   const double* a,
-					   double* scaling_factors) = 0;
+                                           Index nnz,
+                                           const Index* airn,
+                                           const Index* ajcn,
+                                           const double* a,
+                                           double* scaling_factors) = 0;
   private:
     /**@name Default Compiler Generated Methods (Hidden to avoid
      * implicit creation/calling).  These methods are not implemented

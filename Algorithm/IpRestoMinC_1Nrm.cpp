@@ -155,17 +155,17 @@ namespace Ipopt
       SmartPtr<Vector> delta_v_L = IpData().curr_v_L()->MakeNew();
       SmartPtr<Vector> delta_v_U = IpData().curr_v_U()->MakeNew();
       ComputeBoundMultiplierStep(*delta_z_L, *IpData().curr_z_L(),
-				 *IpCq().curr_slack_x_L(),
-				 *IpCq().trial_slack_x_L());
+                                 *IpCq().curr_slack_x_L(),
+                                 *IpCq().trial_slack_x_L());
       ComputeBoundMultiplierStep(*delta_z_U, *IpData().curr_z_U(),
-				 *IpCq().curr_slack_x_U(),
-				 *IpCq().trial_slack_x_U());
+                                 *IpCq().curr_slack_x_U(),
+                                 *IpCq().trial_slack_x_U());
       ComputeBoundMultiplierStep(*delta_v_L, *IpData().curr_v_L(),
-				 *IpCq().curr_slack_s_L(),
-				 *IpCq().trial_slack_s_L());
+                                 *IpCq().curr_slack_s_L(),
+                                 *IpCq().trial_slack_s_L());
       ComputeBoundMultiplierStep(*delta_v_U, *IpData().curr_v_U(),
-				 *IpCq().curr_slack_s_U(),
-				 *IpCq().trial_slack_s_U());
+                                 *IpCq().curr_slack_s_U(),
+                                 *IpCq().trial_slack_s_U());
 
       DBG_PRINT_VECTOR(1, "delta_z_L", *delta_z_L);
       DBG_PRINT_VECTOR(1, "delta_z_U", *delta_z_U);
@@ -173,19 +173,19 @@ namespace Ipopt
       DBG_PRINT_VECTOR(1, "delta_v_U", *delta_v_U);
 
       Number alpha_dual = IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
-							*delta_z_L,
-							*delta_z_U,
-							*delta_v_L,
-							*delta_v_U);
+                          *delta_z_L,
+                          *delta_z_U,
+                          *delta_v_L,
+                          *delta_v_U);
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		     "Step size for bound multipliers: %8.2e\n", alpha_dual);
-     
+                     "Step size for bound multipliers: %8.2e\n", alpha_dual);
+
       IpData().SetTrialBoundMultipliersFromStep(alpha_dual,
-						*delta_z_L,
-						*delta_z_U,
-						*delta_v_L,
-						*delta_v_U);
-      
+          *delta_z_L,
+          *delta_z_U,
+          *delta_v_L,
+          *delta_v_U);
+
 #ifdef olddd
       // DELETEME
       // ToDo: For the bound multipliers, for now we just keep the
@@ -198,24 +198,24 @@ namespace Ipopt
 
       // ToDo: Check what to do here:
       Number boundmultmax = Max(IpData().trial_z_L()->Amax(),
-				IpData().trial_z_U()->Amax(),
-				IpData().trial_v_L()->Amax(),
-				IpData().trial_v_U()->Amax());
+                                IpData().trial_z_U()->Amax(),
+                                IpData().trial_v_L()->Amax(),
+                                IpData().trial_v_U()->Amax());
       if (boundmultmax > boundmultinitmax_) {
-	Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		       "Bound multipliers after restoration phase too large (max=%8.2e). Set all to 1.\n",
-		       boundmultmax);
-	SmartPtr<Vector> new_z_L = IpData().curr_z_L()->MakeNew();
-	SmartPtr<Vector> new_z_U = IpData().curr_z_U()->MakeNew();
-	SmartPtr<Vector> new_v_L = IpData().curr_v_L()->MakeNew();
-	SmartPtr<Vector> new_v_U = IpData().curr_v_U()->MakeNew();
-	new_z_L->Set(1.0);
-	new_z_U->Set(1.0);
-	new_v_L->Set(1.0);
-	new_v_U->Set(1.0);      
-	IpData().SetTrialBoundMultipliersFromPtr(GetRawPtr(new_z_L), GetRawPtr(new_z_U),
-						 GetRawPtr(new_v_L), GetRawPtr(new_v_U));
-	
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "Bound multipliers after restoration phase too large (max=%8.2e). Set all to 1.\n",
+                       boundmultmax);
+        SmartPtr<Vector> new_z_L = IpData().curr_z_L()->MakeNew();
+        SmartPtr<Vector> new_z_U = IpData().curr_z_U()->MakeNew();
+        SmartPtr<Vector> new_v_L = IpData().curr_v_L()->MakeNew();
+        SmartPtr<Vector> new_v_U = IpData().curr_v_U()->MakeNew();
+        new_z_L->Set(1.0);
+        new_z_U->Set(1.0);
+        new_v_L->Set(1.0);
+        new_v_U->Set(1.0);
+        IpData().SetTrialBoundMultipliersFromPtr(GetRawPtr(new_z_L), GetRawPtr(new_z_U),
+            GetRawPtr(new_v_L), GetRawPtr(new_v_U));
+
       }
       // Recompute the equality constraint multipliers as least square estimate
       if (IsValid(eq_mult_calculator_) && laminitmax_>0.) {
@@ -263,9 +263,9 @@ namespace Ipopt
   }
 
   void MinC_1NrmRestorationPhase::ComputeBoundMultiplierStep(Vector& delta_z,
-							     const Vector& curr_z,
-							     const Vector& curr_slack,
-							     const Vector& trial_slack)
+      const Vector& curr_z,
+      const Vector& curr_slack,
+      const Vector& trial_slack)
   {
     Number mu = IpData().curr_mu();
 

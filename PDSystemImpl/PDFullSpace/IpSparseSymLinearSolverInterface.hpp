@@ -123,8 +123,8 @@ namespace Ipopt
      *  determined by MatrixFormat.
      */
     virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
-						 const Index* ia,
-						 const Index* ja) = 0;
+        const Index* ia,
+        const Index* ja) = 0;
 
     /** Method returing an internal array into which the nonzero
      *  elements (in the same order as ja) will be stored by the
@@ -132,7 +132,7 @@ namespace Ipopt
      *  new_matrix=true (or after a return of MultiSolve with
      *  SYMSOLV_CALL_AGAIN). The returned array must have space for at
      *  least nonzero elements. */
-    virtual double* GetValuesArrayPtr() = 0; 
+    virtual double* GetValuesArrayPtr() = 0;
 
     /** Solve operation for multiple right hand sides.  Solves the
      *  linear system A * x = b with multiple right hand sides, where
@@ -167,12 +167,12 @@ namespace Ipopt
      *  returns false.
      */
     virtual ESymSolverStatus MultiSolve(bool new_matrix,
-					const Index* ia,
-					const Index* ja,
-					Index nrhs,
-					double* rhs_vals,
-					bool check_NegEVals,
-					Index numberOfNegEVals)=0;
+                                        const Index* ia,
+                                        const Index* ja,
+                                        Index nrhs,
+                                        double* rhs_vals,
+                                        bool check_NegEVals,
+                                        Index numberOfNegEVals)=0;
 
     /** Number of negative eigenvalues detected during last
      *  factorization.  Returns the number of negative eigenvalues of

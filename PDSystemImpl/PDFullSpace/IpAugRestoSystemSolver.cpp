@@ -56,26 +56,26 @@ namespace Ipopt
   }
 
   ESymSolverStatus AugRestoSystemSolver::Solve(const SymMatrix* W,
-					       const Vector* D_x,
-					       double delta_x,
-					       const Vector* D_s,
-					       double delta_s,
-					       const Matrix* J_c,
-					       const Vector* D_c,
-					       double delta_c,
-					       const Matrix* J_d,
-					       const Vector* D_d,
-					       double delta_d,
-					       const Vector& rhs_x,
-					       const Vector& rhs_s,
-					       const Vector& rhs_c,
-					       const Vector& rhs_d,
-					       Vector& sol_x,
-					       Vector& sol_s,
-					       Vector& sol_c,
-					       Vector& sol_d,
-					       bool check_NegEVals,
-					       Index numberOfNegEVals)
+      const Vector* D_x,
+      double delta_x,
+      const Vector* D_s,
+      double delta_s,
+      const Matrix* J_c,
+      const Vector* D_c,
+      double delta_c,
+      const Matrix* J_d,
+      const Vector* D_d,
+      double delta_d,
+      const Vector& rhs_x,
+      const Vector& rhs_s,
+      const Vector& rhs_c,
+      const Vector& rhs_d,
+      Vector& sol_x,
+      Vector& sol_s,
+      Vector& sol_c,
+      Vector& sol_d,
+      bool check_NegEVals,
+      Index numberOfNegEVals)
   {
     DBG_START_METH("AugRestoSystemSolver::Solve",dbg_verbosity);
     DBG_ASSERT(J_c && J_d); // should pass these by ref
@@ -182,27 +182,27 @@ namespace Ipopt
     Vector& sol_dR = sol_d;
 
     ESymSolverStatus status = orig_aug_solver_->Solve(GetRawPtr(h_orig),
-						  GetRawPtr(D_xR), delta_xR,
-						  GetRawPtr(D_sR), delta_sR,
-						  GetRawPtr(J_cR), GetRawPtr(D_cR),
-						  delta_cR,
-						  GetRawPtr(J_dR), GetRawPtr(D_dR),
-						  delta_dR,
-						  *rhs_xR, *rhs_sR, *rhs_cR, *rhs_dR,
-						  *sol_xR, sol_sR, sol_cR, sol_dR,
-						  check_NegEVals,
-						  numberOfNegEVals);
+                              GetRawPtr(D_xR), delta_xR,
+                              GetRawPtr(D_sR), delta_sR,
+                              GetRawPtr(J_cR), GetRawPtr(D_cR),
+                              delta_cR,
+                              GetRawPtr(J_dR), GetRawPtr(D_dR),
+                              delta_dR,
+                              *rhs_xR, *rhs_sR, *rhs_cR, *rhs_dR,
+                              *sol_xR, sol_sR, sol_cR, sol_dR,
+                              check_NegEVals,
+                              numberOfNegEVals);
 
     if (status == SYMSOLVER_SUCCESS) {
       // Now back out the solutions for the n and p variables
       SmartPtr<Vector> sol_n_c = Csol_x->GetCompNonConst(1);
       sol_n_c->Set(0.0);
       if (IsValid(sigma_tilde_n_c_inv)) {
-	sol_n_c->AddTwoVectors(1., *Crhs_x->GetComp(1), -1.0, sol_cR, 0.);
-	/* DELE
-        sol_n_c->Copy(*Crhs_x->GetComp(1));
-        sol_n_c->Axpy(-1.0, sol_cR);
-	*/
+        sol_n_c->AddTwoVectors(1., *Crhs_x->GetComp(1), -1.0, sol_cR, 0.);
+        /* DELE
+               sol_n_c->Copy(*Crhs_x->GetComp(1));
+               sol_n_c->Axpy(-1.0, sol_cR);
+        */
         sol_n_c->ElementWiseMultiply(*sigma_tilde_n_c_inv);
       }
 
@@ -212,11 +212,11 @@ namespace Ipopt
         DBG_PRINT_VECTOR(2, "rhs_pc", *Crhs_x->GetComp(2));
         DBG_PRINT_VECTOR(2, "delta_y_c", sol_cR);
         DBG_PRINT_VECTOR(2, "Sig~_{p_c}^{-1}", *sigma_tilde_p_c_inv);
-	sol_p_c->AddTwoVectors(1., *Crhs_x->GetComp(2), 1.0, sol_cR, 0.);
-	/* DELE
-        sol_p_c->Copy(*Crhs_x->GetComp(2));
-        sol_p_c->Axpy(1.0, sol_cR);
-	*/
+        sol_p_c->AddTwoVectors(1., *Crhs_x->GetComp(2), 1.0, sol_cR, 0.);
+        /* DELE
+               sol_p_c->Copy(*Crhs_x->GetComp(2));
+               sol_p_c->Axpy(1.0, sol_cR);
+        */
         sol_p_c->ElementWiseMultiply(*sigma_tilde_p_c_inv);
       }
 
@@ -256,40 +256,40 @@ namespace Ipopt
         DBG_PRINT((2,"Not found in cache\n"));
         retVec = any_vec_in_c.MakeNew();
 
-	Number fact1, fact2;
-	SmartPtr<const Vector> v1;
-	SmartPtr<const Vector> v2;
-
-	if (IsValid(sigma_tilde_n_c_inv)) {
-	  v1 = sigma_tilde_n_c_inv;
-	  fact1 = -1.;
-	}
-	else {
-	  v1 = &any_vec_in_c;
-	  fact1 = 0.;
-        }
-	if (IsValid(sigma_tilde_p_c_inv)) {
-	  v2 = sigma_tilde_p_c_inv;
-	  fact2 = -1.;
-	}
-	else {
-	  v2 = &any_vec_in_c;
-	  fact2 = 0.;
-        }
-	retVec->AddTwoVectors(fact1, *v1, fact2, *v2, 0.);
-
-	/* DELE
-        retVec->Set(0.0);
+        Number fact1, fact2;
+        SmartPtr<const Vector> v1;
+        SmartPtr<const Vector> v2;
 
         if (IsValid(sigma_tilde_n_c_inv)) {
-          retVec->Axpy(1.0, *sigma_tilde_n_c_inv);
+          v1 = sigma_tilde_n_c_inv;
+          fact1 = -1.;
+        }
+        else {
+          v1 = &any_vec_in_c;
+          fact1 = 0.;
         }
         if (IsValid(sigma_tilde_p_c_inv)) {
-          retVec->Axpy(1.0, *sigma_tilde_p_c_inv);
+          v2 = sigma_tilde_p_c_inv;
+          fact2 = -1.;
         }
+        else {
+          v2 = &any_vec_in_c;
+          fact2 = 0.;
+        }
+        retVec->AddTwoVectors(fact1, *v1, fact2, *v2, 0.);
 
-        retVec->Scal(-1.0);
-	*/
+        /* DELE
+               retVec->Set(0.0);
+
+               if (IsValid(sigma_tilde_n_c_inv)) {
+                 retVec->Axpy(1.0, *sigma_tilde_n_c_inv);
+               }
+               if (IsValid(sigma_tilde_p_c_inv)) {
+                 retVec->Axpy(1.0, *sigma_tilde_p_c_inv);
+               }
+
+               retVec->Scal(-1.0);
+        */
 
         if (D_c) {
           retVec->Axpy(1.0, *D_c);
@@ -492,12 +492,12 @@ namespace Ipopt
       Number fact;
       SmartPtr<const Vector> v;
       if (IsValid(CD_x0)) {
-	fact = 1.;
-	v = CD_x0;
+        fact = 1.;
+        v = CD_x0;
       }
       else {
-	fact = 0.;
-	v = &wr_d;
+        fact = 0.;
+        v = &wr_d;
       }
       retVec->AddTwoVectors(factor, wr_d, fact, *v, 0.);
 

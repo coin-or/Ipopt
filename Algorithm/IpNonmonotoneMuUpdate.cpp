@@ -117,7 +117,7 @@ namespace Ipopt
 
     if (options.GetIntegerValue("adaptive_globalization", ivalue, prefix)) {
       ASSERT_EXCEPTION(ivalue>=1 && ivalue<=3,
-		       OptionsList::OPTION_OUT_OF_RANGE,
+                       OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"adaptive_globalization\": This value must be between 1 and 3.");
       adaptive_globalization_ = ivalue;
     }
@@ -299,7 +299,7 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                        "Switching back to free mu mode.\n");
         IpData().SetFreeMuMode(true);
-	// Skipping Restoration phase?
+        // Skipping Restoration phase?
         RememberCurrentPointAsAccepted();
       }
       else {
@@ -331,7 +331,7 @@ namespace Ipopt
       // Here we are in the free mu mode.
       bool sufficient_progress = CheckSufficientProgress();
       if (linesearch_->CheckSkippedLineSearch()) {
-	sufficient_progress = false;
+        sufficient_progress = false;
       }
       if (sufficient_progress) {
         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
@@ -341,16 +341,16 @@ namespace Ipopt
       else {
         IpData().SetFreeMuMode(false);
 
-	if (restore_accepted_iterate_) {
-	  // Restore most recent accepted iterate to start fixed mode from
-	  Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-			 "Restoring most recent accepted point.\n");
-	  IpData().SetTrialPrimalVariablesFromPtr(accepted_x_, accepted_s_);
-	  IpData().SetTrialConstraintMultipliersFromPtr(accepted_y_c_, accepted_y_d_);
-	  IpData().SetTrialBoundMultipliersFromPtr(accepted_z_L_, accepted_z_U_,
-						   accepted_v_L_, accepted_v_U_);
-	  IpData().AcceptTrialPoint();
-	}
+        if (restore_accepted_iterate_) {
+          // Restore most recent accepted iterate to start fixed mode from
+          Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                         "Restoring most recent accepted point.\n");
+          IpData().SetTrialPrimalVariablesFromPtr(accepted_x_, accepted_s_);
+          IpData().SetTrialConstraintMultipliersFromPtr(accepted_y_c_, accepted_y_d_);
+          IpData().SetTrialBoundMultipliersFromPtr(accepted_z_L_, accepted_z_U_,
+              accepted_v_L_, accepted_v_U_);
+          IpData().AcceptTrialPoint();
+        }
 
         // Set the new values for mu and tau and tell the linesearch
         // to reset its memory
@@ -362,12 +362,12 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                        "Switching to fixed mu mode with mu = %e and tau = %e.\n", mu, tau);
         linesearch_->Reset();
-	// Skipping Restoration phase?
+        // Skipping Restoration phase?
       }
     }
 
     if (IpData().FreeMuMode()) {
-      
+
       // Choose the fraction-to-the-boundary parameter for the current
       // iteration
       // ToDo
@@ -441,8 +441,8 @@ namespace Ipopt
       }
       break;
       case 3 : {
-	Number curr_error = curr_norm_pd_system();
-	Number margin = filter_margin_fact_*Min(filter_max_margin_, curr_error);
+        Number curr_error = curr_norm_pd_system();
+        Number margin = filter_margin_fact_*Min(filter_max_margin_, curr_error);
         retval = filter_.Acceptable(IpCq().curr_f() + margin,
                                     IpCq().curr_constraint_violation() + margin);
       }
@@ -483,14 +483,14 @@ namespace Ipopt
         filter_.AddEntry(IpCq().curr_f() - filter_margin_fact_*theta,
                          IpCq().curr_constraint_violation() - filter_margin_fact_*theta,
                          IpData().iter_count());
-	filter_.Print(Jnlst());
+        filter_.Print(Jnlst());
       }
       break;
       case 3 : {
         filter_.AddEntry(IpCq().curr_f(),
                          IpCq().curr_constraint_violation(),
                          IpData().iter_count());
-	filter_.Print(Jnlst());
+        filter_.Print(Jnlst());
       }
       break;
       default:
@@ -552,7 +552,7 @@ namespace Ipopt
   NonmonotoneMuUpdate::NewFixedMu()
   {
     Number max_ref;
-    // ToDo: Decide whether we should impose an upper bound on 
+    // ToDo: Decide whether we should impose an upper bound on
     // mu based on the smallest reference value.  For now, don't
     // impose one.
     max_ref = 1e20;
@@ -600,66 +600,66 @@ namespace Ipopt
     Number primal_inf;
     Number complty;
     switch (nonmonotone_kkt_norm_) {
-    case 1:
+      case 1:
       dual_inf =
-	IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_1);
+        IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_1);
       primal_inf =
-	IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_1);
+        IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_1);
       complty =
-	IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_1);
+        IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_1);
       dual_inf /= (Number)n_dual;
       DBG_ASSERT(n_pri>0 || primal_inf==0.);
       if (n_pri>0) {
-	primal_inf /= (Number)n_pri;
+        primal_inf /= (Number)n_pri;
       }
       DBG_ASSERT(n_comp>0 || complty==0.);
       if (n_comp>0) {
-	complty /= (Number)n_comp;
+        complty /= (Number)n_comp;
       }
       break;
-    case 2:
+      case 2:
       dual_inf =
-	IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_2);
       dual_inf *= dual_inf;
       primal_inf =
-	IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_2);
       primal_inf *= primal_inf;
       complty =
-	IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_2);
       complty *= complty;
       dual_inf /= (Number)n_dual;
       DBG_ASSERT(n_pri>0 || primal_inf==0.);
       if (n_pri>0) {
-	primal_inf /= (Number)n_pri;
+        primal_inf /= (Number)n_pri;
       }
       DBG_ASSERT(n_comp>0 || complty==0.);
       if (n_comp>0) {
-	complty /= (Number)n_comp;
+        complty /= (Number)n_comp;
       }
       break;
-    case 3:
+      case 3:
       dual_inf =
-	IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
+        IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
       primal_inf =
-	IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
+        IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
       complty =
-	IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_MAX);
+        IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_MAX);
       break;
-    case 4:
+      case 4:
       dual_inf =
-	IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_2);
       primal_inf =
-	IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_2);
       complty =
-	IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_2);
       dual_inf /= sqrt((Number)n_dual);
       DBG_ASSERT(n_pri>0 || primal_inf==0.);
       if (n_pri>0) {
-	primal_inf /= sqrt((Number)n_pri);
+        primal_inf /= sqrt((Number)n_pri);
       }
       DBG_ASSERT(n_comp>0 || complty==0.);
       if (n_comp>0) {
-	complty /= sqrt((Number)n_comp);
+        complty /= sqrt((Number)n_comp);
       }
       break;
     }
@@ -668,35 +668,35 @@ namespace Ipopt
     if (nonmonotone_kkt_centrality_!=0) {
       Number xi = IpCq().curr_centrality_measure();
       switch (nonmonotone_kkt_centrality_) {
-      case 1:
-	centrality = -complty*log(xi);
-	break;
-      case 2:
-	centrality = complty/xi;
-      case 3:
-	centrality = complty/pow(xi,3);
-	break;
-      default:
-	DBG_ASSERT("Unknown value for nonmonotone_kkt_centrality_");
+        case 1:
+        centrality = -complty*log(xi);
+        break;
+        case 2:
+        centrality = complty/xi;
+        case 3:
+        centrality = complty/pow(xi,3);
+        break;
+        default:
+        DBG_ASSERT("Unknown value for nonmonotone_kkt_centrality_");
       }
     }
 
     Number balancing_term=0.;
     switch (nonmonotone_kkt_balancing_term_) {
-    case 0:
+      case 0:
       //Nothing
       break;
-    case 1:
+      case 1:
       balancing_term = pow(Max(0., Max(dual_inf,primal_inf)-complty),3);
       break;
-    default:
+      default:
       DBG_ASSERT("Unknown value for quality_function_balancing term_");
     }
 
     DBG_ASSERT(centrality>=0.);
     DBG_ASSERT(balancing_term>=0);
     Number kkt_error = primal_inf + dual_inf + complty +
-      centrality + balancing_term;
+                       centrality + balancing_term;
 
     Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
                    "KKT error in barrier update check:\n"
