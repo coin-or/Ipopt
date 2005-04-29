@@ -172,6 +172,10 @@ namespace Ipopt
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_L", *IpData().curr_v_L());
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_U", *IpData().curr_v_U());
     }
+    if (Jnlst().ProduceOutput(J_MOREVECTOR, J_MAIN)) {
+      Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_x", *IpCq().curr_grad_lag_x());
+      Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_s", *IpCq().curr_grad_lag_s());
+    }
 
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "\n\n***Current NLP Values for Iteration %d:\n",
