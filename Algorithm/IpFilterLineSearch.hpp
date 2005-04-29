@@ -152,6 +152,37 @@ namespace Ipopt
     //     allow for different relaxation parameters values
     static bool Compare_le(Number lhs, Number rhs, Number BasVal);
 
+    /** Method for setting the dual variables in the trial fields in
+     *  IpData, given the search direction.  The step size for the
+     *  bound multipliers is the fraction-to-the-boundary step size,
+     *  and the step size for the equality constraint multipliers
+     *  depends on the choice of dual_alpha_for_y. */
+    void PerformDualStep(Number alpha_primal,
+                         Number alpha_dual,
+                         const Vector& delta_y_c,
+                         const Vector& delta_y_d,
+                         const Vector& delta_z_L,
+                         const Vector& delta_z_U,
+                         const Vector& delta_v_L,
+                         const Vector& delta_v_U);
+
+    /** Try a step for the soft restoration phase and check if it is
+     *  acceptable.  The step size is identical for all variables.  A
+     *  point is accepted if it is acceptable for the original filter
+     *  (in which case satisfies_original_filter = true on return), or
+     *  if the primal-dual system error was decrease by at least the
+     *  factor resto_pderror_reduction_factor_.  The return value is
+     *  true, if the trial point was acceptable. */
+    bool TrySoftRestoStep(SmartPtr<const Vector>& actual_delta_x,
+                          SmartPtr<const Vector>& actual_delta_s,
+                          SmartPtr<const Vector>& actual_delta_y_c,
+                          SmartPtr<const Vector>& actual_delta_y_d,
+                          SmartPtr<const Vector>& actual_delta_z_L,
+                          SmartPtr<const Vector>& actual_delta_z_U,
+                          SmartPtr<const Vector>& actual_delta_v_L,
+                          SmartPtr<const Vector>& actual_delta_v_U,
+                          bool &satisfies_original_filter);
+
     /** Try a second order correction for the constraints.  If the
      *  first trial step (with incoming alpha_primal) has been reject,
      *  this tries up to max_soc_ second order corrections for the
@@ -252,6 +283,10 @@ namespace Ipopt
      *  infeasibility the first time the restoration phase is
      *  called. */
     bool expect_infeasible_problem_;
+    /** Reduction factor for the restoration phase that accepts steps
+     *  reducing the optimality error ("soft restoration phase"). If
+     *  0., then this restoration phase is not enabled. */
+    Number resto_pderror_reduction_factor_;
     //@}
 
     /** Filter with entries */
@@ -266,6 +301,12 @@ namespace Ipopt
     /** Flag indicating whether no acceptable trial point was found
      *  during last line search. */
     bool skipped_line_search_;
+
+    /** Flag indicating whether we are currently in the "soft"
+     *  restoration phase mode, in which steps are accepted if they
+     *  reduce the optimality error (see
+     *  resto_pderror_reduction_factor) */
+    bool in_soft_resto_phase_;
 
     /** Counter for the number of successive iterations in which the
      *  full step was not accepted. */

@@ -111,7 +111,7 @@ namespace Ipopt
       gamma_phi_ = value;
     }
     else {
-      gamma_phi_ = 1e-5;
+      gamma_phi_ = 1e-8;
     }
 
     if (options.GetNumericValue("gamma_theta", value, prefix)) {
@@ -216,7 +216,7 @@ namespace Ipopt
 
     if (options.GetNumericValue("corrector_compl_avrg_red_fact", value, prefix)) {
       ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"corrector_compl_avrg_red_fact_\": This value must be positive.");
+                       "Option \"corrector_compl_avrg_red_fact\": This value must be positive.");
       corrector_compl_avrg_red_fact_ = value;
     }
     else {
@@ -234,6 +234,15 @@ namespace Ipopt
     if (IsValid(resto_phase_)) {
       retvalue = resto_phase_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                           options, prefix);
+    }
+
+    if (options.GetNumericValue("resto_pderror_reduction_factor", value, prefix)) {
+      ASSERT_EXCEPTION(value >= 0., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"resto_pderror_reduction_factor\": This value must be positive.");
+      resto_pderror_reduction_factor_ = value;
+    }
+    else {
+      resto_pderror_reduction_factor_ = 1.0 - 1e-4;
     }
 
     // ToDo decide if also the PDSystemSolver should be initialized here...
@@ -286,133 +295,160 @@ namespace Ipopt
     Number alpha_primal = 0.;
 
     if (!goto_resto) {
-      // Compute smallest step size allowed
-      Number alpha_min = CalculateAlphaMin();
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                     "minimal step size ALPHA_MIN = %E\n", alpha_min);
 
-      // Start line search from primal fraction-to-the-boundary value
-      Number alpha_primal_max =
-        IpCq().curr_primal_frac_to_the_bound(IpData().curr_tau());
-      alpha_primal = alpha_primal_max;
-
-      // Step size used in ftype and armijo tests
-      Number alpha_primal_test = alpha_primal;
-
-      filter_.Print(Jnlst());
-
-      if (corrector_type_!=0 &&
-          (!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) &&
-          (!skip_corr_if_fixed_mode_ || IpData().FreeMuMode()) ) {
-        // Before we do the actual backtracking line search for the
-        // regular primal-dual search direction, let's see if a step
-        // including a higher-order correctior is already acceptable
-        accept = TryCorrector(alpha_primal_test,
-                              alpha_primal,
-                              actual_delta_x,
-                              actual_delta_s,
-                              actual_delta_y_c,
-                              actual_delta_y_d,
-                              actual_delta_z_L,
-                              actual_delta_z_U,
-                              actual_delta_v_L,
-                              actual_delta_v_U);
-      }
-      if (accept) {
-        corr_taken = true;
-      }
-
-      if (!accept) {
-        // Loop over decreaseing step sizes until acceptable point is
-        // found or until step size becomes too small
-
-        while (alpha_primal>alpha_min ||
-               n_steps == 0) { // always allow the "full" step if it is
-          // acceptable (even if alpha_primal<=alpha_min)
-          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                         "Starting checks for alpha (primal) = %8.2e\n",
-                         alpha_primal);
-
-          bool evaluation_error = false;
-          try {
-            // Compute the primal trial point
-            IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
-                *actual_delta_x,
-                *actual_delta_s);
-
-            if (magic_steps_) {
-              PerformMagicStep();
-            }
-
-            // If it is acceptable, stop the search
-            alpha_primal_test = alpha_primal;
-            accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
+      if (in_soft_resto_phase_) {
+        bool satisfies_original_filter;
+        accept = TrySoftRestoStep(actual_delta_x,
+                                  actual_delta_s,
+                                  actual_delta_y_c,
+                                  actual_delta_y_d,
+                                  actual_delta_z_L,
+                                  actual_delta_z_U,
+                                  actual_delta_v_L,
+                                  actual_delta_v_U,
+                                  satisfies_original_filter);
+        if (accept) {
+          IpData().Set_info_alpha_primal_char('s');
+          if (satisfies_original_filter) {
+            in_soft_resto_phase_ = false;
+            IpData().Set_info_alpha_primal_char('S');
           }
-          catch(IpoptNLP::Eval_Error& e) {
-            e.ReportException(Jnlst());
-            Jnlst().Printf(J_WARNING, J_MAIN,
-                           "Warning: Cutting back alpha due to evaluation error\n");
-            accept = false;
-            evaluation_error = true;
-          }
-
-          if (accept) {
-            break;
-          }
-
-          // Decide if we want to go to the restoration phase in a
-          // short cut to check if the problem is infeasible
-          if (expect_infeasible_problem_) {
-            if (count_successive_shortened_steps_>=5) {
-              break;
-            }
-          }
-
-          if (!evaluation_error) {
-            Number theta_curr = IpCq().curr_constraint_violation();
-            Number theta_trial = IpCq().trial_constraint_violation();
-            if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
-                theta_curr<=theta_trial && max_soc_>0) {
-              // Try second order correction
-              accept = TrySecondOrderCorrection(alpha_primal_test,
-                                                alpha_primal,
-                                                actual_delta_x,
-                                                actual_delta_s,
-                                                actual_delta_y_c,
-                                                actual_delta_y_d,
-                                                actual_delta_z_L,
-                                                actual_delta_z_U,
-                                                actual_delta_v_L,
-                                                actual_delta_v_U);
-            }
-            if (accept) {
-              soc_taken = true;
-              break;
-            }
-          }
-
-          // Point is not yet acceptable, try a shorter one
-          alpha_primal *= alpha_red_factor_;
-          n_steps++;
         }
       }
-
-      char info_alpha_primal_char;
-      // Augment the filter if required
-      if (!IsFtype(alpha_primal_test) || !ArmijoHolds(alpha_primal_test)) {
-        AugmentFilter();
-        info_alpha_primal_char = 'h';
-      }
       else {
-        info_alpha_primal_char = 'f';
-      }
-      if (soc_taken) {
-        info_alpha_primal_char = toupper(info_alpha_primal_char);
-      }
-      IpData().Set_info_alpha_primal_char(info_alpha_primal_char);
-      IpData().Set_info_ls_count(n_steps+1);
-      if (corr_taken) {
-        IpData().Append_info_string("C");
+        // Compute primal fraction-to-the-boundary value
+        Number alpha_primal_max =
+          IpCq().curr_primal_frac_to_the_bound(IpData().curr_tau());
+
+        // Compute smallest step size allowed
+        Number alpha_min = CalculateAlphaMin();
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "minimal step size ALPHA_MIN = %E\n", alpha_min);
+
+        // Start line search from maximal step size
+        alpha_primal = alpha_primal_max;
+
+        // Step size used in ftype and armijo tests
+        Number alpha_primal_test = alpha_primal;
+
+        filter_.Print(Jnlst());
+
+        if (corrector_type_!=0 &&
+            (!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) &&
+            (!skip_corr_if_fixed_mode_ || IpData().FreeMuMode()) ) {
+          // Before we do the actual backtracking line search for the
+          // regular primal-dual search direction, let's see if a step
+          // including a higher-order correctior is already acceptable
+          accept = TryCorrector(alpha_primal_test,
+                                alpha_primal,
+                                actual_delta_x,
+                                actual_delta_s,
+                                actual_delta_y_c,
+                                actual_delta_y_d,
+                                actual_delta_z_L,
+                                actual_delta_z_U,
+                                actual_delta_v_L,
+                                actual_delta_v_U);
+        }
+        if (accept) {
+          corr_taken = true;
+        }
+
+        if (!accept) {
+          // Loop over decreaseing step sizes until acceptable point is
+          // found or until step size becomes too small
+
+          while (alpha_primal>alpha_min ||
+                 n_steps == 0) { // always allow the "full" step if it is
+            // acceptable (even if alpha_primal<=alpha_min)
+            Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                           "Starting checks for alpha (primal) = %8.2e\n",
+                           alpha_primal);
+
+            bool evaluation_error = false;
+            try {
+              // Compute the primal trial point
+              IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
+                  *actual_delta_x,
+                  *actual_delta_s);
+
+              if (magic_steps_) {
+                PerformMagicStep();
+              }
+
+              // If it is acceptable, stop the search
+              alpha_primal_test = alpha_primal;
+              accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
+            }
+            catch(IpoptNLP::Eval_Error& e) {
+              e.ReportException(Jnlst());
+              Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                             "Warning: Cutting back alpha due to evaluation error\n");
+              accept = false;
+              evaluation_error = true;
+            }
+
+            if (accept) {
+              break;
+            }
+
+            // Decide if we want to go to the restoration phase in a
+            // short cut to check if the problem is infeasible
+            if (expect_infeasible_problem_) {
+              if (count_successive_shortened_steps_>=5) {
+                break;
+              }
+            }
+
+            // try second order correction step if the function could
+            // be evaluated
+            if (!evaluation_error) {
+              Number theta_curr = IpCq().curr_constraint_violation();
+              Number theta_trial = IpCq().trial_constraint_violation();
+              if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
+                  theta_curr<=theta_trial && max_soc_>0) {
+                // Try second order correction
+                accept = TrySecondOrderCorrection(alpha_primal_test,
+                                                  alpha_primal,
+                                                  actual_delta_x,
+                                                  actual_delta_s,
+                                                  actual_delta_y_c,
+                                                  actual_delta_y_d,
+                                                  actual_delta_z_L,
+                                                  actual_delta_z_U,
+                                                  actual_delta_v_L,
+                                                  actual_delta_v_U);
+              }
+              if (accept) {
+                soc_taken = true;
+                break;
+              }
+            }
+
+            // Point is not yet acceptable, try a shorter one
+            alpha_primal *= alpha_red_factor_;
+            n_steps++;
+          }
+        }
+
+        char info_alpha_primal_char;
+        // Augment the filter if required
+        if (!IsFtype(alpha_primal_test) ||
+            !ArmijoHolds(alpha_primal_test)) {
+          AugmentFilter();
+          info_alpha_primal_char = 'h';
+        }
+        else {
+          info_alpha_primal_char = 'f';
+        }
+        if (soc_taken) {
+          info_alpha_primal_char = toupper(info_alpha_primal_char);
+        }
+        IpData().Set_info_alpha_primal_char(info_alpha_primal_char);
+        IpData().Set_info_ls_count(n_steps+1);
+        if (corr_taken) {
+          IpData().Append_info_string("C");
+        }
       }
     }
 
@@ -425,62 +461,87 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Skipping call of restoration phase...\n");
         skipped_line_search_=true;
       }
-      else if (IsValid(resto_phase_)) {
-        if (IpCq().curr_constraint_violation()==0.) {
-          THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase called, but norm of constraint violation is zero.");
-        }
-
-        // Augment the filter with the current point
-        AugmentFilter();
-
-        // Set the info fields for the first output line in the
-        // restoration phase which reflects why the restoration phase
-        // was called
-        IpData().Set_info_alpha_primal(alpha_primal);
-        IpData().Set_info_alpha_dual(0.);
-        IpData().Set_info_alpha_primal_char('R');
-        IpData().Set_info_ls_count(n_steps+1);
-
-        accept = resto_phase_->PerformRestoration();
-        if (!accept) {
-          THROW_EXCEPTION(RESTORATION_FAILED, "Failed restoration phase!!!");
-        }
-        count_successive_shortened_steps_ = 0;
-        if (expect_infeasible_problem_) {
-          expect_infeasible_problem_ = false;
-        }
-      }
       else {
-        //ToDo
-        THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Filter Line Search Object!");
+        // Check if we should start the soft restoration phase
+        if (!in_soft_resto_phase_ && resto_pderror_reduction_factor_>0.) {
+          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                         "--> Starting soft restoration phase <--\n");
+          // Augment the filter with the current point
+          AugmentFilter();
+
+          // Try the current search direction for the soft restoration phase
+          bool satisfies_original_filter;
+          accept = TrySoftRestoStep(actual_delta_x,
+                                    actual_delta_s,
+                                    actual_delta_y_c,
+                                    actual_delta_y_d,
+                                    actual_delta_z_L,
+                                    actual_delta_z_U,
+                                    actual_delta_v_L,
+                                    actual_delta_v_U,
+                                    satisfies_original_filter);
+          // If it has been accepted: If the original filter is also
+          // satisfied, we can just take that step and continue with
+          // the regular algorithm, otherwise we stay in the soft
+          // restoration phase
+          if (accept) {
+            if (satisfies_original_filter) {
+              IpData().Set_info_alpha_primal_char('S');
+            }
+            else {
+              in_soft_resto_phase_ = true;
+              IpData().Set_info_alpha_primal_char('s');
+            }
+          }
+        }
+
+        if (!accept) {
+          if (!in_soft_resto_phase_) {
+            // Augment the filter with the current point if we are
+            // already in the soft restoration phase, this has been
+            // done earlier
+            AugmentFilter();
+          }
+          if (!IsValid(resto_phase_)) {
+            //ToDo
+            THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Filter Line Search Object!");
+          }
+          if (IpCq().curr_constraint_violation()==0.) {
+            THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase called, but norm of constraint violation is zero.");
+          }
+
+          // Set the info fields for the first output line in the
+          // restoration phase which reflects why the restoration phase
+          // was called
+          IpData().Set_info_alpha_primal(alpha_primal);
+          IpData().Set_info_alpha_dual(0.);
+          IpData().Set_info_alpha_primal_char('R');
+          IpData().Set_info_ls_count(n_steps+1);
+
+          accept = resto_phase_->PerformRestoration();
+          if (!accept) {
+            THROW_EXCEPTION(RESTORATION_FAILED, "Failed restoration phase!!!");
+          }
+          count_successive_shortened_steps_ = 0;
+          if (expect_infeasible_problem_) {
+            expect_infeasible_problem_ = false;
+          }
+          in_soft_resto_phase_ = false;
+        }
       }
     }
-    else {
+    else if (!in_soft_resto_phase_) {
       // we didn't do the restoration phase and are now updating the
-      // trial point
+      // dual variables of the trial point
       Number alpha_dual_max =
         IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
                                       *actual_delta_z_L, *actual_delta_z_U,
                                       *actual_delta_v_L, *actual_delta_v_U);
 
-      IpData().SetTrialBoundMultipliersFromStep(alpha_dual_max,
-          *actual_delta_z_L, *actual_delta_z_U,
-          *actual_delta_v_L, *actual_delta_v_U);
-
-      Number alpha_y;
-      if (dual_alpha_for_y_) {
-        alpha_y = alpha_dual_max;
-      }
-      else {
-        alpha_y = alpha_primal;
-      }
-      IpData().SetTrialEqMultipilersFromStep(alpha_y,
-                                             *actual_delta_y_c,
-                                             *actual_delta_y_d);
-
-      // Set some information for iteration summary output
-      IpData().Set_info_alpha_primal(alpha_primal);
-      IpData().Set_info_alpha_dual(alpha_dual_max);
+      PerformDualStep(alpha_primal, alpha_dual_max,
+                      *actual_delta_y_c, *actual_delta_y_d,
+                      *actual_delta_z_L, *actual_delta_z_U,
+                      *actual_delta_v_L, *actual_delta_v_U);
 
       if (n_steps==0) {
         count_successive_shortened_steps_ = 0;
@@ -663,10 +724,145 @@ namespace Ipopt
     return (lhs - rhs <= 1e-15*fabs(BasVal));
   }
 
+  bool FilterLineSearch::TrySoftRestoStep(SmartPtr<const Vector>& actual_delta_x,
+                                          SmartPtr<const Vector>& actual_delta_s,
+                                          SmartPtr<const Vector>& actual_delta_y_c,
+                                          SmartPtr<const Vector>& actual_delta_y_d,
+                                          SmartPtr<const Vector>& actual_delta_z_L,
+                                          SmartPtr<const Vector>& actual_delta_z_U,
+                                          SmartPtr<const Vector>& actual_delta_v_L,
+                                          SmartPtr<const Vector>& actual_delta_v_U,
+                                          bool &satisfies_original_filter)
+  {
+    DBG_START_FUN("FilterLineSearch::TrySoftRestoStep", dbg_verbosity);
+
+    satisfies_original_filter = false;
+
+    // ToDo: Need to decide if we want to try a corrector step first
+
+    // Compute the maximal step sizes (we use identical step sizes for
+    // primal and dual variables
+    Number alpha_primal_max =
+      IpCq().primal_frac_to_the_bound(IpData().curr_tau(),
+                                      *actual_delta_x,
+                                      *actual_delta_s);
+    Number alpha_dual_max =
+      IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
+                                    *actual_delta_z_L,
+                                    *actual_delta_z_U,
+                                    *actual_delta_v_L,
+                                    *actual_delta_v_U);
+    Number alpha_max =  Min(alpha_primal_max, alpha_dual_max);
+
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                   "Trying soft restoration phase step with step length %13.6e\n",
+                   alpha_max);
+
+    // Set the trial point
+    IpData().SetTrialPrimalVariablesFromStep(alpha_max,
+        *actual_delta_x,
+        *actual_delta_s);
+    PerformDualStep(alpha_max, alpha_max,
+                    *actual_delta_y_c,
+                    *actual_delta_y_d,
+                    *actual_delta_z_L,
+                    *actual_delta_z_U,
+                    *actual_delta_v_L,
+                    *actual_delta_v_U);
+
+    // Check if that point is acceptable with respect to the current
+    // original filter
+
+    Number trial_barr;
+    Number trial_theta;
+    try {
+      trial_barr = IpCq().trial_barrier_obj();
+      trial_theta = IpCq().trial_constraint_violation();
+    }
+    catch(IpoptNLP::Eval_Error& e) {
+      e.ReportException(Jnlst());
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                     "Warning: Evaluation error during soft restoration phase step.\n");
+      return false;
+    }
+    if (theta_max_<=0 || trial_theta<=theta_max_) {
+      if (IsAcceptableToCurrentIterate(trial_barr, trial_theta)) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "  Trial step acceptable with respect to original filter.\n");
+        satisfies_original_filter = true;
+        return true;
+      }
+    }
+
+    // Evaluate the optimality error at the new point
+    Number mu = .0;
+    if (!IpData().FreeMuMode()) {
+      mu = IpData().curr_mu();
+    }
+    Number trial_pderror;
+    Number curr_pderror;
+    try {
+      trial_pderror = IpCq().trial_primal_dual_system_error(mu);
+      curr_pderror = IpCq().curr_primal_dual_system_error(mu);
+    }
+    catch(IpoptNLP::Eval_Error& e) {
+      e.ReportException(Jnlst());
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                     "Warning: Evaluation error during soft restoration phase step.\n");
+      return false;
+    }
+
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                   "  Primal-dual error at current point:  %23.16e\n", curr_pderror);
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                   "  Primal-dual error at trial point  :  %23.16e\n", trial_pderror);
+    // Check if there is sufficient reduction in the optimality error
+    if (trial_pderror <= resto_pderror_reduction_factor_*curr_pderror) {
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "  Trial step accepted.\n");
+      return true;
+    }
+
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                   "  Trial step rejected.\n");
+    return false;
+  }
+
   void FilterLineSearch::Reset()
   {
     DBG_START_FUN("FilterLineSearch::Reset", dbg_verbosity);
     filter_.Clear();
+  }
+
+  void FilterLineSearch::PerformDualStep(Number alpha_primal,
+                                         Number alpha_dual,
+                                         const Vector& delta_y_c,
+                                         const Vector& delta_y_d,
+                                         const Vector& delta_z_L,
+                                         const Vector& delta_z_U,
+                                         const Vector& delta_v_L,
+                                         const Vector& delta_v_U)
+  {
+    DBG_START_FUN("FilterLineSearch::PerformDualStep", dbg_verbosity);
+
+    IpData().SetTrialBoundMultipliersFromStep(alpha_dual,
+        delta_z_L, delta_z_U,
+        delta_v_L, delta_v_U);
+
+    Number alpha_y;
+    if (dual_alpha_for_y_) {
+      alpha_y = alpha_dual;
+    }
+    else {
+      alpha_y = alpha_primal;
+    }
+    IpData().SetTrialEqMultipilersFromStep(alpha_y,
+                                           delta_y_c,
+                                           delta_y_d);
+
+    // Set some information for iteration summary output
+    IpData().Set_info_alpha_primal(alpha_primal);
+    IpData().Set_info_alpha_dual(alpha_dual);
   }
 
   bool
@@ -690,22 +886,16 @@ namespace Ipopt
 
     Number theta_soc_old = 0.;
     Number theta_curr = IpCq().curr_constraint_violation();
-    Number theta_trial = 0.;
+    Number theta_trial = IpCq().trial_constraint_violation();
     Number alpha_primal_soc = alpha_primal;
 
     SmartPtr<Vector> c_soc = IpCq().curr_c()->MakeNew();
     SmartPtr<Vector> dms_soc = IpCq().curr_d_minus_s()->MakeNew();
     c_soc->Copy(*IpCq().curr_c());
     dms_soc->Copy(*IpCq().curr_d_minus_s());
-    while (count_soc<max_soc_ &&
-           theta_trial<=kappa_soc_*theta_soc_old &&
-           !accept) {
-      if (count_soc==0) {
-        theta_soc_old = theta_curr;
-      }
-      else {
-        theta_soc_old = theta_trial;
-      }
+    while (count_soc<max_soc_ && !accept &&
+           (count_soc==0 || theta_trial<=kappa_soc_*theta_soc_old) ) {
+      theta_soc_old = theta_trial;
 
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                      "Trying second order correction number %d\n",
@@ -714,12 +904,6 @@ namespace Ipopt
       // Compute SOC constraint violation
       c_soc->AddOneVector(1.0, *IpCq().trial_c(), alpha_primal_soc);
       dms_soc->AddOneVector(1.0, *IpCq().trial_d_minus_s(), alpha_primal_soc);
-      /* DELE
-      c_soc->Scal(alpha_primal_soc);
-      dms_soc->Scal(alpha_primal_soc);
-      c_soc->Axpy(1.0, *IpCq().trial_c());
-      dms_soc->Axpy(1.0, *IpCq().trial_d_minus_s());
-      */
 
       // Compute the SOC search direction
       SmartPtr<Vector> delta_soc_x = actual_delta_x->MakeNew();
@@ -820,6 +1004,13 @@ namespace Ipopt
   {
     DBG_START_METH("FilterLineSearch::TryCorrector",
                    dbg_verbosity);
+
+    Index n_bounds = IpData().curr_z_L()->Dim() + IpData().curr_z_U()->Dim()
+                     + IpData().curr_v_L()->Dim() + IpData().curr_v_U()->Dim();
+    if (n_bounds==0) {
+      // Nothing to be done
+      return false;
+    }
 
     bool accept = false;
 
@@ -941,10 +1132,6 @@ namespace Ipopt
                                         -1., *rhs_compl_x_L);
         tmp = actual_delta_z_L->MakeNew();
         tmp->AddTwoVectors(1., *IpData().curr_z_L(), 1., *actual_delta_z_L, 0.);
-        /* DELE
-               tmp->Copy(*IpData().curr_z_L());
-               tmp->Axpy(1., *actual_delta_z_L);
-        */
         rhs_compl_x_L->ElementWiseMultiply(*tmp);
         rhs_compl_x_L->AddScalar(mu);
 
@@ -953,10 +1140,6 @@ namespace Ipopt
                                         -1., *rhs_compl_x_U);
         tmp = actual_delta_z_U->MakeNew();
         tmp->AddTwoVectors(1., *IpData().curr_z_U(), 1., *actual_delta_z_U, 0.);
-        /* DELE
-               tmp->Copy(*IpData().curr_z_U());
-               tmp->Axpy(1., *actual_delta_z_U);
-        */
         rhs_compl_x_U->ElementWiseMultiply(*tmp);
         rhs_compl_x_U->AddScalar(mu);
 
@@ -965,10 +1148,6 @@ namespace Ipopt
                                         -1., *rhs_compl_s_L);
         tmp = actual_delta_v_L->MakeNew();
         tmp->AddTwoVectors(1., *IpData().curr_v_L(), 1., *actual_delta_v_L, 0.);
-        /* DELE
-               tmp->Copy(*IpData().curr_v_L());
-               tmp->Axpy(1., *actual_delta_v_L);
-        */
         rhs_compl_s_L->ElementWiseMultiply(*tmp);
         rhs_compl_s_L->AddScalar(mu);
 
@@ -977,10 +1156,6 @@ namespace Ipopt
                                         -1., *rhs_compl_s_U);
         tmp = actual_delta_v_U->MakeNew();
         tmp->AddTwoVectors(1., *IpData().curr_v_U(), 1., *actual_delta_v_U, 0.);
-        /* DELE
-               tmp->Copy(*IpData().curr_v_U());
-               tmp->Axpy(1., *actual_delta_v_U);
-        */
         rhs_compl_s_U->ElementWiseMultiply(*tmp);
         rhs_compl_s_U->AddScalar(mu);
 
