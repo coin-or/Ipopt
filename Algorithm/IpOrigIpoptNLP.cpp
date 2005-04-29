@@ -54,7 +54,7 @@ namespace Ipopt
       bound_relax_factor_ = value;
     }
     else {
-      bound_relax_factor_ = 0.;
+      bound_relax_factor_ = 1e-8;
     }
 
     initialized_ = true;
@@ -159,6 +159,7 @@ namespace Ipopt
   void
   OrigIpoptNLP::relax_bounds(Number bound_relax_factor, Vector& bounds)
   {
+    DBG_START_METH("OrigIpoptNLP::relax_bounds", dbg_verbosity);
     if (bound_relax_factor!=0.) {
       SmartPtr<Vector> tmp = bounds.MakeNew();
       tmp->Copy(bounds);
@@ -166,7 +167,11 @@ namespace Ipopt
       SmartPtr<Vector> ones = bounds.MakeNew();
       ones->Set(1.);
       tmp->ElementWiseMax(*ones);
+      DBG_PRINT((1, "bound_relax_factor = %e", bound_relax_factor));
+      DBG_PRINT_VECTOR(2, "tmp", *tmp);
+      DBG_PRINT_VECTOR(2, "bounds before", bounds);
       bounds.Axpy(bound_relax_factor, *tmp);
+      DBG_PRINT_VECTOR(2, "bounds after", bounds);
     }
   }
 
