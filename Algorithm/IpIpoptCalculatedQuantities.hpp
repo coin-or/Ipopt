@@ -77,6 +77,8 @@ namespace Ipopt
     Number trial_f();
     /** Gradient of objective function (at current point) */
     SmartPtr<const Vector> curr_grad_f();
+    /** Gradient of objective function (at trial point) */
+    SmartPtr<const Vector> trial_grad_f();
     //@}
 
     /** @name Barrier Objective Function */
@@ -114,20 +116,36 @@ namespace Ipopt
     SmartPtr<const Vector> trial_d_minus_s();
     /** Jacobian of c (at current point) */
     SmartPtr<const Matrix> curr_jac_c();
+    /** Jacobian of c (at trial point) */
+    SmartPtr<const Matrix> trial_jac_c();
     /** Jacobian of d (at current point) */
     SmartPtr<const Matrix> curr_jac_d();
+    /** Jacobian of d (at trial point) */
+    SmartPtr<const Matrix> trial_jac_d();
     /** Product of Jacobian (evaluated at current point) of C
      *  transpose with general vector */
     SmartPtr<const Vector> curr_jac_cT_times_vec(const Vector& vec);
+    /** Product of Jacobian (evaluated at trial point) of C
+     *  transpose with general vector */
+    SmartPtr<const Vector> trial_jac_cT_times_vec(const Vector& vec);
     /** Product of Jacobian (evaluated at current point) of D
      *  transpose with general vector */
     SmartPtr<const Vector> curr_jac_dT_times_vec(const Vector& vec);
+    /** Product of Jacobian (evaluated at trial point) of D
+     *  transpose with general vector */
+    SmartPtr<const Vector> trial_jac_dT_times_vec(const Vector& vec);
     /** Product of Jacobian (evaluated at current point) of C
      *  transpose with current y_c */
     SmartPtr<const Vector> curr_jac_cT_times_curr_y_c();
+    /** Product of Jacobian (evaluated at trial point) of C
+     *  transpose with trial y_c */
+    SmartPtr<const Vector> trial_jac_cT_times_trial_y_c();
     /** Product of Jacobian (evaluated at current point) of D
      *  transpose with current y_d */
     SmartPtr<const Vector> curr_jac_dT_times_curr_y_d();
+    /** Product of Jacobian (evaluated at trial point) of D
+     *  transpose with trial y_d */
+    SmartPtr<const Vector> trial_jac_dT_times_trial_y_d();
     /** Product of Jacobian (evaluated at current point) of C
      *  with general vector */
     SmartPtr<const Vector> curr_jac_c_times_vec(const Vector& vec);
@@ -157,8 +175,12 @@ namespace Ipopt
     //@{
     /** x-part of gradient of Lagrangian function (at current point) */
     SmartPtr<const Vector> curr_grad_lag_x();
+    /** x-part of gradient of Lagrangian function (at trial point) */
+    SmartPtr<const Vector> trial_grad_lag_x();
     /** s-part of gradient of Lagrangian function (at current point) */
     SmartPtr<const Vector> curr_grad_lag_s();
+    /** s-part of gradient of Lagrangian function (at trial point) */
+    SmartPtr<const Vector> trial_grad_lag_s();
     /** x-part of gradient of Lagrangian function (at current point)
     including linear damping term */
     SmartPtr<const Vector> curr_grad_lag_with_damping_x();
@@ -173,6 +195,14 @@ namespace Ipopt
     SmartPtr<const Vector> curr_compl_s_L();
     /** Complementarity for s_U (for current iterate) */
     SmartPtr<const Vector> curr_compl_s_U();
+    /** Complementarity for x_L (for trial iterate) */
+    SmartPtr<const Vector> trial_compl_x_L();
+    /** Complementarity for x_U (for trial iterate) */
+    SmartPtr<const Vector> trial_compl_x_U();
+    /** Complementarity for s_L (for trial iterate) */
+    SmartPtr<const Vector> trial_compl_s_L();
+    /** Complementarity for s_U (for trial iterate) */
+    SmartPtr<const Vector> trial_compl_s_U();
     /** Relaxed complementarity for x_L (for current iterate and current mu) */
     SmartPtr<const Vector> curr_relaxed_compl_x_L();
     /** Relaxed complementarity for x_U (for current iterate and current mu) */
@@ -189,10 +219,15 @@ namespace Ipopt
 
     /** Dual infeasibility in a given norm (at current iterate) */
     Number curr_dual_infeasibility(ENormType NormType);
+    /** Dual infeasibility in a given norm (at trial iterate) */
+    Number trial_dual_infeasibility(ENormType NormType);
 
     /** Complementarity (for all complementarity conditions together)
      *  in a given norm (at current iterate) */
     Number curr_complementarity(Number mu, ENormType NormType);
+    /** Complementarity (for all complementarity conditions together)
+     *  in a given norm (at trial iterate) */
+    Number trial_complementarity(Number mu, ENormType NormType);
 
     /** Centrality measure (in spirit of the -infinity-neighborhood. */
     Number CalcCentralityMeasure(const Vector& compl_x_L,
@@ -210,13 +245,20 @@ namespace Ipopt
      *  current iterate. */
     Number curr_barrier_error();
 
-    /** Primal-dual optimality error for the original NLP (at current iterate)
+    /** Norm of the primal-dual system for a given mu (at current
+     *  iterate).  The norm is defined as the sum of the 1-norms of
+     *  dual infeasibiliy, primal infeasibility, and complementarity,
+     *  all divided by the number of elements of the vectors of which
+     *  the norm is taken.
      */
-    Number curr_primal_dual_error();
-    /** Relaxed primal-dual optimality error for the original NLP
-     *  (at current iterate and for current mu)
+    Number curr_primal_dual_system_error(Number mu);
+    /** Norm of the primal-dual system for a given mu (at trial
+     *  iterate).  The norm is defined as the sum of the 1-norms of
+     *  dual infeasibiliy, primal infeasibility, and complementarity,
+     *  all divided by the number of elements of the vectors of which
+     *  the norm is taken.
      */
-    Number curr_relaxed_primal_dual_error();
+    Number trial_primal_dual_system_error(Number mu);
     //@}
 
     /** @name Computing fraction-to-the-boundary step sizes */
@@ -347,6 +389,7 @@ namespace Ipopt
     CachedResults<Number> curr_f_cache_;
     CachedResults<Number> trial_f_cache_;
     CachedResults< SmartPtr<const Vector> > curr_grad_f_cache_;
+    CachedResults< SmartPtr<const Vector> > trial_grad_f_cache_;
     //@}
 
     /** @name Caches for barrier function stuff */
@@ -366,9 +409,13 @@ namespace Ipopt
     CachedResults< SmartPtr<const Vector> > curr_d_minus_s_cache_;
     CachedResults< SmartPtr<const Vector> > trial_d_minus_s_cache_;
     CachedResults< SmartPtr<const Matrix> > curr_jac_c_cache_;
+    CachedResults< SmartPtr<const Matrix> > trial_jac_c_cache_;
     CachedResults< SmartPtr<const Matrix> > curr_jac_d_cache_;
+    CachedResults< SmartPtr<const Matrix> > trial_jac_d_cache_;
     CachedResults< SmartPtr<const Vector> > curr_jac_cT_times_vec_cache_;
+    CachedResults< SmartPtr<const Vector> > trial_jac_cT_times_vec_cache_;
     CachedResults< SmartPtr<const Vector> > curr_jac_dT_times_vec_cache_;
+    CachedResults< SmartPtr<const Vector> > trial_jac_dT_times_vec_cache_;
     CachedResults< SmartPtr<const Vector> > curr_jac_c_times_vec_cache_;
     CachedResults< SmartPtr<const Vector> > curr_jac_d_times_vec_cache_;
     CachedResults<Number> curr_constraint_violation_cache_;
@@ -381,13 +428,19 @@ namespace Ipopt
     /** @name Components of primal-dual error */
     //@{
     CachedResults< SmartPtr<const Vector> > curr_grad_lag_x_cache_;
+    CachedResults< SmartPtr<const Vector> > trial_grad_lag_x_cache_;
     CachedResults< SmartPtr<const Vector> > curr_grad_lag_s_cache_;
+    CachedResults< SmartPtr<const Vector> > trial_grad_lag_s_cache_;
     CachedResults< SmartPtr<const Vector> > curr_grad_lag_with_damping_x_cache_;
     CachedResults< SmartPtr<const Vector> > curr_grad_lag_with_damping_s_cache_;
     CachedResults< SmartPtr<const Vector> > curr_compl_x_L_cache_;
     CachedResults< SmartPtr<const Vector> > curr_compl_x_U_cache_;
     CachedResults< SmartPtr<const Vector> > curr_compl_s_L_cache_;
     CachedResults< SmartPtr<const Vector> > curr_compl_s_U_cache_;
+    CachedResults< SmartPtr<const Vector> > trial_compl_x_L_cache_;
+    CachedResults< SmartPtr<const Vector> > trial_compl_x_U_cache_;
+    CachedResults< SmartPtr<const Vector> > trial_compl_s_L_cache_;
+    CachedResults< SmartPtr<const Vector> > trial_compl_s_U_cache_;
     CachedResults< SmartPtr<const Vector> > curr_relaxed_compl_x_L_cache_;
     CachedResults< SmartPtr<const Vector> > curr_relaxed_compl_x_U_cache_;
     CachedResults< SmartPtr<const Vector> > curr_relaxed_compl_s_L_cache_;
@@ -395,12 +448,14 @@ namespace Ipopt
     CachedResults<Number> curr_primal_infeasibility_cache_;
     CachedResults<Number> trial_primal_infeasibility_cache_;
     CachedResults<Number> curr_dual_infeasibility_cache_;
+    CachedResults<Number> trial_dual_infeasibility_cache_;
     CachedResults<Number> curr_complementarity_cache_;
+    CachedResults<Number> trial_complementarity_cache_;
     CachedResults<Number> curr_centrality_measure_cache_;
     CachedResults<Number> curr_nlp_error_cache_;
     CachedResults<Number> curr_barrier_error_cache_;
-    CachedResults<Number> curr_primal_dual_error_cache_;
-    CachedResults<Number> curr_relaxed_primal_dual_error_cache_;
+    CachedResults<Number> curr_primal_dual_system_error_cache_;
+    CachedResults<Number> trial_primal_dual_system_error_cache_;
     //@}
 
     /** @name Caches for fraction to the boundary step sizes */

@@ -45,6 +45,7 @@ namespace Ipopt
       curr_f_cache_(2),
       trial_f_cache_(5),
       curr_grad_f_cache_(2),
+      trial_grad_f_cache_(1),
 
       curr_barrier_obj_cache_(2),
       trial_barrier_obj_cache_(5),
@@ -58,9 +59,13 @@ namespace Ipopt
       curr_d_minus_s_cache_(1),
       trial_d_minus_s_cache_(1),
       curr_jac_c_cache_(1),
+      trial_jac_c_cache_(1),
       curr_jac_d_cache_(1),
+      trial_jac_d_cache_(1),
       curr_jac_cT_times_vec_cache_(2),
       curr_jac_dT_times_vec_cache_(2),
+      trial_jac_cT_times_vec_cache_(1),
+      trial_jac_dT_times_vec_cache_(1),
       curr_jac_c_times_vec_cache_(1),
       curr_jac_d_times_vec_cache_(1),
       curr_exact_hessian_cache_(1),
@@ -68,13 +73,19 @@ namespace Ipopt
       trial_constraint_violation_cache_(5),
 
       curr_grad_lag_x_cache_(1),
+      trial_grad_lag_x_cache_(1),
       curr_grad_lag_s_cache_(1),
+      trial_grad_lag_s_cache_(1),
       curr_grad_lag_with_damping_x_cache_(0),
       curr_grad_lag_with_damping_s_cache_(0),
       curr_compl_x_L_cache_(1),
       curr_compl_x_U_cache_(1),
       curr_compl_s_L_cache_(1),
       curr_compl_s_U_cache_(1),
+      trial_compl_x_L_cache_(1),
+      trial_compl_x_U_cache_(1),
+      trial_compl_s_L_cache_(1),
+      trial_compl_s_U_cache_(1),
       curr_relaxed_compl_x_L_cache_(1),
       curr_relaxed_compl_x_U_cache_(1),
       curr_relaxed_compl_s_L_cache_(1),
@@ -82,12 +93,14 @@ namespace Ipopt
       curr_primal_infeasibility_cache_(3),
       trial_primal_infeasibility_cache_(3),
       curr_dual_infeasibility_cache_(3),
+      trial_dual_infeasibility_cache_(3),
       curr_complementarity_cache_(6),
+      trial_complementarity_cache_(6),
       curr_centrality_measure_cache_(1),
       curr_nlp_error_cache_(1),
       curr_barrier_error_cache_(1),
-      curr_primal_dual_error_cache_(1),
-      curr_relaxed_primal_dual_error_cache_(5),
+      curr_primal_dual_system_error_cache_(1),
+      trial_primal_dual_system_error_cache_(3),
 
       primal_frac_to_the_bound_cache_(5),
       dual_frac_to_the_bound_cache_(5),
@@ -569,8 +582,40 @@ namespace Ipopt
     }
 
     if (!curr_grad_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
-      result = ip_nlp_->grad_f(*x);
+      if (!trial_grad_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
+        result = ip_nlp_->grad_f(*x);
+      }
       curr_grad_f_cache_.AddCachedResult(result, tdeps, sdeps);
+    }
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::trial_grad_f()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_grad_f()",
+                   dbg_verbosity);
+    SmartPtr<const Vector> result;
+    SmartPtr<const Vector> x = ip_data_->trial_x();
+
+    // ToDo: For now we make the value dependent on curr_mu during the
+    // restoration phase (because Eta in the restoration phase
+    // objective depends on it).  Need more elegant solution later.
+    std::vector<const TaggedObject*> tdeps(1);
+    tdeps[0] = GetRawPtr(x);
+    std::vector<Number> sdeps(1);
+    if (in_restoration_phase()) {
+      sdeps[0] = ip_data_->curr_mu();
+    }
+    else {
+      sdeps[0] = -1.;
+    }
+
+    if (!trial_grad_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      if (!curr_grad_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
+        result = ip_nlp_->grad_f(*x);
+      }
+      trial_grad_f_cache_.AddCachedResult(result, tdeps, sdeps);
     }
     return result;
   }
@@ -987,8 +1032,27 @@ namespace Ipopt
     SmartPtr<const Vector> x = ip_data_->curr_x();
 
     if (!curr_jac_c_cache_.GetCachedResult1Dep(result, *x)) {
-      result = ip_nlp_->jac_c(*x);
+      if (!trial_jac_c_cache_.GetCachedResult1Dep(result, *x)) {
+        result = ip_nlp_->jac_c(*x);
+      }
       curr_jac_c_cache_.AddCachedResult1Dep(result, *x);
+    }
+    return result;
+  }
+
+  SmartPtr<const Matrix>
+  IpoptCalculatedQuantities::trial_jac_c()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_jac_c()",
+                   dbg_verbosity);
+    SmartPtr<const Matrix> result;
+    SmartPtr<const Vector> x = ip_data_->trial_x();
+
+    if (!trial_jac_c_cache_.GetCachedResult1Dep(result, *x)) {
+      if (!curr_jac_c_cache_.GetCachedResult1Dep(result, *x)) {
+        result = ip_nlp_->jac_c(*x);
+      }
+      trial_jac_c_cache_.AddCachedResult1Dep(result, *x);
     }
     return result;
   }
@@ -1002,8 +1066,27 @@ namespace Ipopt
     SmartPtr<const Vector> x = ip_data_->curr_x();
 
     if (!curr_jac_d_cache_.GetCachedResult1Dep(result, *x)) {
-      result = ip_nlp_->jac_d(*x);
+      if (!trial_jac_d_cache_.GetCachedResult1Dep(result, *x)) {
+        result = ip_nlp_->jac_d(*x);
+      }
       curr_jac_d_cache_.AddCachedResult1Dep(result, *x);
+    }
+    return result;
+  }
+
+  SmartPtr<const Matrix>
+  IpoptCalculatedQuantities::trial_jac_d()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_jac_d()",
+                   dbg_verbosity);
+    SmartPtr<const Matrix> result;
+    SmartPtr<const Vector> x = ip_data_->trial_x();
+
+    if (!trial_jac_d_cache_.GetCachedResult1Dep(result, *x)) {
+      if (!curr_jac_d_cache_.GetCachedResult1Dep(result, *x)) {
+        result = ip_nlp_->jac_d(*x);
+      }
+      trial_jac_d_cache_.AddCachedResult1Dep(result, *x);
     }
     return result;
   }
@@ -1053,11 +1136,27 @@ namespace Ipopt
   }
 
   SmartPtr<const Vector>
+  IpoptCalculatedQuantities::trial_jac_cT_times_trial_y_c()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_jac_cT_times_trial_y_c()",
+                   dbg_verbosity);
+    return trial_jac_cT_times_vec(*ip_data_->trial_y_c());
+  }
+
+  SmartPtr<const Vector>
   IpoptCalculatedQuantities::curr_jac_dT_times_curr_y_d()
   {
     DBG_START_METH("IpoptCalculatedQuantities::curr_jac_dT_times_curr_y_d()",
                    dbg_verbosity);
     return curr_jac_dT_times_vec(*ip_data_->curr_y_d());
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::trial_jac_dT_times_trial_y_d()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_jac_dT_times_trial_y_d()",
+                   dbg_verbosity);
+    return trial_jac_dT_times_vec(*ip_data_->trial_y_d());
   }
 
   SmartPtr<const Vector>
@@ -1069,10 +1168,32 @@ namespace Ipopt
     SmartPtr<const Vector> x = ip_data_->curr_x();
 
     if (!curr_jac_cT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
-      SmartPtr<Vector> tmp = ip_data_->curr_x()->MakeNew();
-      curr_jac_c()->TransMultVector(1.0, vec, 0., *tmp);
-      result = ConstPtr(tmp);
+      if (!trial_jac_cT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
+        SmartPtr<Vector> tmp = x->MakeNew();
+        curr_jac_c()->TransMultVector(1.0, vec, 0., *tmp);
+        result = ConstPtr(tmp);
+      }
       curr_jac_cT_times_vec_cache_.AddCachedResult2Dep(result, *x, vec);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::trial_jac_cT_times_vec(const Vector& vec)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_jac_cT_times_vec",
+                   dbg_verbosity);
+    SmartPtr<const Vector> result;
+    SmartPtr<const Vector> x = ip_data_->trial_x();
+
+    if (!trial_jac_cT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
+      if (!curr_jac_cT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
+        SmartPtr<Vector> tmp = x->MakeNew();
+        trial_jac_c()->TransMultVector(1.0, vec, 0., *tmp);
+        result = ConstPtr(tmp);
+      }
+      trial_jac_cT_times_vec_cache_.AddCachedResult2Dep(result, *x, vec);
     }
 
     return result;
@@ -1087,10 +1208,32 @@ namespace Ipopt
     SmartPtr<const Vector> x = ip_data_->curr_x();
 
     if (!curr_jac_dT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
-      SmartPtr<Vector> tmp = ip_data_->curr_x()->MakeNew();
-      curr_jac_d()->TransMultVector(1.0, vec, 0., *tmp);
-      result = ConstPtr(tmp);
+      if (!trial_jac_dT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
+        SmartPtr<Vector> tmp = x->MakeNew();
+        curr_jac_d()->TransMultVector(1.0, vec, 0., *tmp);
+        result = ConstPtr(tmp);
+      }
       curr_jac_dT_times_vec_cache_.AddCachedResult2Dep(result, *x, vec);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::trial_jac_dT_times_vec(const Vector& vec)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_jac_dT_times_vec()",
+                   dbg_verbosity);
+    SmartPtr<const Vector> result;
+    SmartPtr<const Vector> x = ip_data_->trial_x();
+
+    if (!trial_jac_dT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
+      if (!curr_jac_dT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
+        SmartPtr<Vector> tmp = x->MakeNew();
+        trial_jac_d()->TransMultVector(1.0, vec, 0., *tmp);
+        result = ConstPtr(tmp);
+      }
+      trial_jac_dT_times_vec_cache_.AddCachedResult2Dep(result, *x, vec);
     }
 
     return result;
@@ -1196,17 +1339,56 @@ namespace Ipopt
     deps[4] = GetRawPtr(z_U);
 
     if (!curr_grad_lag_x_cache_.GetCachedResult(result, deps)) {
-      SmartPtr<Vector> tmp = x->MakeNew();
-      DBG_PRINT_VECTOR(2,"curr_grad_f",*curr_grad_f());
-      tmp->Copy(*curr_grad_f());
-      tmp->AddTwoVectors(1., *curr_jac_cT_times_curr_y_c(),
-                         1., *curr_jac_dT_times_curr_y_d(), 1.);
-      DBG_PRINT_VECTOR(2,"jac_cT*y_c",*curr_jac_cT_times_curr_y_c());
-      DBG_PRINT_VECTOR(2,"jac_dT*y_d",*curr_jac_dT_times_curr_y_d());
-      ip_nlp_->Px_L()->MultVector(-1., *ip_data_->curr_z_L(), 1., *tmp);
-      ip_nlp_->Px_U()->MultVector(1., *ip_data_->curr_z_U(), 1., *tmp);
-      result = ConstPtr(tmp);
+      if (!trial_grad_lag_x_cache_.GetCachedResult(result, deps)) {
+        SmartPtr<Vector> tmp = x->MakeNew();
+        DBG_PRINT_VECTOR(2,"curr_grad_f",*curr_grad_f());
+        tmp->Copy(*curr_grad_f());
+        tmp->AddTwoVectors(1., *curr_jac_cT_times_curr_y_c(),
+                           1., *curr_jac_dT_times_curr_y_d(), 1.);
+        DBG_PRINT_VECTOR(2,"jac_cT*y_c",*curr_jac_cT_times_curr_y_c());
+        DBG_PRINT_VECTOR(2,"jac_dT*y_d",*curr_jac_dT_times_curr_y_d());
+        ip_nlp_->Px_L()->MultVector(-1., *z_L, 1., *tmp);
+        ip_nlp_->Px_U()->MultVector(1., *z_U, 1., *tmp);
+        result = ConstPtr(tmp);
+      }
       curr_grad_lag_x_cache_.AddCachedResult(result, deps);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::trial_grad_lag_x()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_grad_lag_x()",
+                   dbg_verbosity);
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const Vector> x = ip_data_->trial_x();
+    SmartPtr<const Vector> y_c = ip_data_->trial_y_c();
+    SmartPtr<const Vector> y_d = ip_data_->trial_y_d();
+    SmartPtr<const Vector> z_L = ip_data_->trial_z_L();
+    SmartPtr<const Vector> z_U = ip_data_->trial_z_U();
+
+    std::vector<const TaggedObject*> deps(5);
+    deps[0] = GetRawPtr(x);
+    deps[1] = GetRawPtr(y_c);
+    deps[2] = GetRawPtr(y_d);
+    deps[3] = GetRawPtr(z_L);
+    deps[4] = GetRawPtr(z_U);
+
+    if (!trial_grad_lag_x_cache_.GetCachedResult(result, deps)) {
+      if (!curr_grad_lag_x_cache_.GetCachedResult(result, deps)) {
+        SmartPtr<Vector> tmp = x->MakeNew();
+        DBG_PRINT_VECTOR(2,"trial_grad_f",*trial_grad_f());
+        tmp->Copy(*trial_grad_f());
+        tmp->AddTwoVectors(1., *trial_jac_cT_times_trial_y_c(),
+                           1., *trial_jac_dT_times_trial_y_d(), 1.);
+        ip_nlp_->Px_L()->MultVector(-1., *z_L, 1., *tmp);
+        ip_nlp_->Px_U()->MultVector(1., *z_U, 1., *tmp);
+        result = ConstPtr(tmp);
+      }
+      trial_grad_lag_x_cache_.AddCachedResult(result, deps);
     }
 
     return result;
@@ -1229,12 +1411,44 @@ namespace Ipopt
     deps[2] = GetRawPtr(v_U);
 
     if (!curr_grad_lag_s_cache_.GetCachedResult(result, deps)) {
-      SmartPtr<Vector> tmp = y_d->MakeNew();
-      ip_nlp_->Pd_U()->MultVector(1., *ip_data_->curr_v_U(), 0., *tmp);
-      ip_nlp_->Pd_L()->MultVector(-1., *ip_data_->curr_v_L(), 1., *tmp);
-      tmp->Axpy(-1., *y_d);
-      result = ConstPtr(tmp);
+      if (!trial_grad_lag_s_cache_.GetCachedResult(result, deps)) {
+        SmartPtr<Vector> tmp = y_d->MakeNew();
+        ip_nlp_->Pd_U()->MultVector(1., *v_U, 0., *tmp);
+        ip_nlp_->Pd_L()->MultVector(-1., *v_L, 1., *tmp);
+        tmp->Axpy(-1., *y_d);
+        result = ConstPtr(tmp);
+      }
       curr_grad_lag_s_cache_.AddCachedResult(result, deps);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::trial_grad_lag_s()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_grad_lag_s()",
+                   dbg_verbosity);
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const Vector> y_d = ip_data_->trial_y_d();
+    SmartPtr<const Vector> v_L = ip_data_->trial_v_L();
+    SmartPtr<const Vector> v_U = ip_data_->trial_v_U();
+
+    std::vector<const TaggedObject*> deps(3);
+    deps[0] = GetRawPtr(y_d);
+    deps[1] = GetRawPtr(v_L);
+    deps[2] = GetRawPtr(v_U);
+
+    if (!trial_grad_lag_s_cache_.GetCachedResult(result, deps)) {
+      if (!curr_grad_lag_s_cache_.GetCachedResult(result, deps)) {
+        SmartPtr<Vector> tmp = y_d->MakeNew();
+        ip_nlp_->Pd_U()->MultVector(1., *v_U, 0., *tmp);
+        ip_nlp_->Pd_L()->MultVector(-1., *v_L, 1., *tmp);
+        tmp->Axpy(-1., *y_d);
+        result = ConstPtr(tmp);
+      }
+      trial_grad_lag_s_cache_.AddCachedResult(result, deps);
     }
 
     return result;
@@ -1360,9 +1574,32 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "slack_x_L", *slack);
     DBG_PRINT_VECTOR(2, "z_L", *mult);
 
-    if (!curr_compl_x_L_cache_.GetCachedResult2Dep(result,
-        *slack, *mult)) {
-      result = CalcCompl(*slack, *mult);
+    if (!curr_compl_x_L_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+      if (!trial_compl_x_L_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+        result = CalcCompl(*slack, *mult);
+      }
+      curr_compl_x_L_cache_.AddCachedResult2Dep(result, *slack, *mult);
+    }
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::trial_compl_x_L()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_compl_x_L()",
+                   dbg_verbosity);
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const Vector> slack = trial_slack_x_L();
+    SmartPtr<const Vector> mult = ip_data_->trial_z_L();
+    DBG_PRINT_VECTOR(2, "slack_x_L", *slack);
+    DBG_PRINT_VECTOR(2, "z_L", *mult);
+
+    if (!trial_compl_x_L_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+      if (!curr_compl_x_L_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+        result = CalcCompl(*slack, *mult);
+      }
+      trial_compl_x_L_cache_.AddCachedResult2Dep(result, *slack, *mult);
     }
     return result;
   }
@@ -1377,9 +1614,30 @@ namespace Ipopt
     SmartPtr<const Vector> slack = curr_slack_x_U();
     SmartPtr<const Vector> mult = ip_data_->curr_z_U();
 
-    if (!curr_compl_x_U_cache_.GetCachedResult2Dep(result,
-        *slack, *mult)) {
-      result = CalcCompl(*slack, *mult);
+    if (!curr_compl_x_U_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+      if (!trial_compl_x_U_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+        result = CalcCompl(*slack, *mult);
+      }
+      curr_compl_x_U_cache_.AddCachedResult2Dep(result, *slack, *mult);
+    }
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::trial_compl_x_U()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_compl_x_U()",
+                   dbg_verbosity);
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const Vector> slack = trial_slack_x_U();
+    SmartPtr<const Vector> mult = ip_data_->trial_z_U();
+
+    if (!trial_compl_x_U_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+      if (!curr_compl_x_U_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+        result = CalcCompl(*slack, *mult);
+      }
+      trial_compl_x_U_cache_.AddCachedResult2Dep(result, *slack, *mult);
     }
     return result;
   }
@@ -1394,9 +1652,30 @@ namespace Ipopt
     SmartPtr<const Vector> slack = curr_slack_s_L();
     SmartPtr<const Vector> mult = ip_data_->curr_v_L();
 
-    if (!curr_compl_s_L_cache_.GetCachedResult2Dep(result,
-        *slack, *mult)) {
-      result = CalcCompl(*slack, *mult);
+    if (!curr_compl_s_L_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+      if (!trial_compl_s_L_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+        result = CalcCompl(*slack, *mult);
+      }
+      curr_compl_s_L_cache_.GetCachedResult2Dep(result, *slack, *mult);
+    }
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::trial_compl_s_L()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_compl_s_L()",
+                   dbg_verbosity);
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const Vector> slack = trial_slack_s_L();
+    SmartPtr<const Vector> mult = ip_data_->trial_v_L();
+
+    if (!trial_compl_s_L_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+      if (!curr_compl_s_L_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+        result = CalcCompl(*slack, *mult);
+      }
+      trial_compl_s_L_cache_.GetCachedResult2Dep(result, *slack, *mult);
     }
     return result;
   }
@@ -1411,12 +1690,30 @@ namespace Ipopt
     SmartPtr<const Vector> slack = curr_slack_s_U();
     SmartPtr<const Vector> mult = ip_data_->curr_v_U();
 
-    if (!curr_compl_s_U_cache_.GetCachedResult2Dep(result,
-        *slack, *mult)) {
-      DBG_PRINT_VECTOR(2,"slack_s_U", *slack);
-      DBG_PRINT_VECTOR(2,"v_U", *mult);
-      result = CalcCompl(*slack, *mult);
-      DBG_PRINT_VECTOR(2,"result", *result);
+    if (!curr_compl_s_U_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+      if (!trial_compl_s_U_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+        result = CalcCompl(*slack, *mult);
+      }
+      curr_compl_s_U_cache_.GetCachedResult2Dep(result, *slack, *mult);
+    }
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::trial_compl_s_U()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_compl_s_U()",
+                   dbg_verbosity);
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const Vector> slack = trial_slack_s_U();
+    SmartPtr<const Vector> mult = ip_data_->trial_v_U();
+
+    if (!trial_compl_s_U_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+      if (!curr_compl_s_U_cache_.GetCachedResult2Dep(result, *slack, *mult)) {
+        result = CalcCompl(*slack, *mult);
+      }
+      trial_compl_s_U_cache_.GetCachedResult2Dep(result, *slack, *mult);
     }
     return result;
   }
@@ -1682,14 +1979,60 @@ namespace Ipopt
     sdeps[0] = (Number)NormType;
 
     if (!curr_dual_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
-      SmartPtr<const Vector> grad_lag_x = curr_grad_lag_x();
-      SmartPtr<const Vector> grad_lag_s = curr_grad_lag_s();
-      DBG_PRINT_VECTOR(2,"grad_lag_x", *grad_lag_x);
-      DBG_PRINT_VECTOR(2,"grad_lag_s", *grad_lag_s);
+      if (!trial_dual_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
+        SmartPtr<const Vector> grad_lag_x = curr_grad_lag_x();
+        SmartPtr<const Vector> grad_lag_s = curr_grad_lag_s();
+        DBG_PRINT_VECTOR(2,"grad_lag_x", *grad_lag_x);
+        DBG_PRINT_VECTOR(2,"grad_lag_s", *grad_lag_s);
 
-      result = CalcNormOfType(NormType, *grad_lag_x, *grad_lag_s);
-
+        result = CalcNormOfType(NormType, *grad_lag_x, *grad_lag_s);
+      }
       curr_dual_infeasibility_cache_.AddCachedResult(result, deps, sdeps);
+    }
+
+    return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::trial_dual_infeasibility
+  (IpoptCalculatedQuantities::ENormType NormType)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_dual_infeasibility()",
+                   dbg_verbosity);
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->trial_x();
+    SmartPtr<const Vector> s = ip_data_->trial_s();
+    SmartPtr<const Vector> y_c = ip_data_->trial_y_c();
+    SmartPtr<const Vector> y_d = ip_data_->trial_y_d();
+    SmartPtr<const Vector> z_L = ip_data_->trial_z_L();
+    SmartPtr<const Vector> z_U = ip_data_->trial_z_U();
+    SmartPtr<const Vector> v_L = ip_data_->trial_v_L();
+    SmartPtr<const Vector> v_U = ip_data_->trial_v_U();
+
+    std::vector<const TaggedObject*> deps(8);
+    deps[0] = GetRawPtr(x);
+    deps[1] = GetRawPtr(s);
+    deps[2] = GetRawPtr(y_c);
+    deps[3] = GetRawPtr(y_c);
+    deps[4] = GetRawPtr(z_L);
+    deps[5] = GetRawPtr(z_U);
+    deps[6] = GetRawPtr(v_L);
+    deps[7] = GetRawPtr(v_U);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = (Number)NormType;
+
+    if (!trial_dual_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
+      if (!curr_dual_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
+        SmartPtr<const Vector> grad_lag_x = curr_grad_lag_x();
+        SmartPtr<const Vector> grad_lag_s = curr_grad_lag_s();
+        DBG_PRINT_VECTOR(2,"grad_lag_x", *grad_lag_x);
+        DBG_PRINT_VECTOR(2,"grad_lag_s", *grad_lag_s);
+
+        result = CalcNormOfType(NormType, *grad_lag_x, *grad_lag_s);
+
+      }
+      trial_dual_infeasibility_cache_.AddCachedResult(result, deps, sdeps);
     }
 
     return result;
@@ -1722,41 +2065,112 @@ namespace Ipopt
     sdeps[1] = mu;
 
     if (!curr_complementarity_cache_.GetCachedResult(result, deps, sdeps)) {
+      if (!trial_complementarity_cache_.GetCachedResult(result, deps, sdeps)) {
 
-      std::vector<SmartPtr<const Vector> > vecs(4);
-      SmartPtr<const Vector> compl_x_L = curr_compl_x_L();
-      SmartPtr<const Vector> compl_x_U = curr_compl_x_U();
-      SmartPtr<const Vector> compl_s_L = curr_compl_s_L();
-      SmartPtr<const Vector> compl_s_U = curr_compl_s_U();
+        std::vector<SmartPtr<const Vector> > vecs(4);
+        SmartPtr<const Vector> compl_x_L = curr_compl_x_L();
+        SmartPtr<const Vector> compl_x_U = curr_compl_x_U();
+        SmartPtr<const Vector> compl_s_L = curr_compl_s_L();
+        SmartPtr<const Vector> compl_s_U = curr_compl_s_U();
 
-      if (mu==.0) {
-        vecs[0] = GetRawPtr(compl_x_L);
-        vecs[1] = GetRawPtr(compl_x_U);
-        vecs[2] = GetRawPtr(compl_s_L);
-        vecs[3] = GetRawPtr(compl_s_U);
+        if (mu==.0) {
+          vecs[0] = GetRawPtr(compl_x_L);
+          vecs[1] = GetRawPtr(compl_x_U);
+          vecs[2] = GetRawPtr(compl_s_L);
+          vecs[3] = GetRawPtr(compl_s_U);
+        }
+        else {
+          SmartPtr<Vector> tmp = compl_x_L->MakeNew();
+          tmp->Copy(*compl_x_L);
+          tmp->AddScalar(-mu);
+          vecs[0] = GetRawPtr(tmp);
+          tmp = compl_x_U->MakeNew();
+          tmp->Copy(*compl_x_U);
+          tmp->AddScalar(-mu);
+          vecs[1] = GetRawPtr(tmp);
+          tmp = compl_s_L->MakeNew();
+          tmp->Copy(*compl_s_L);
+          tmp->AddScalar(-mu);
+          vecs[2] = GetRawPtr(tmp);
+          tmp = compl_s_U->MakeNew();
+          tmp->Copy(*compl_s_U);
+          tmp->AddScalar(-mu);
+          vecs[3] = GetRawPtr(tmp);
+        }
+
+        result = CalcNormOfType(NormType, vecs);
       }
-      else {
-        SmartPtr<Vector> tmp = compl_x_L->MakeNew();
-        tmp->Copy(*compl_x_L);
-        tmp->AddScalar(-mu);
-        vecs[0] = GetRawPtr(tmp);
-        tmp = compl_x_U->MakeNew();
-        tmp->Copy(*compl_x_U);
-        tmp->AddScalar(-mu);
-        vecs[1] = GetRawPtr(tmp);
-        tmp = compl_s_L->MakeNew();
-        tmp->Copy(*compl_s_L);
-        tmp->AddScalar(-mu);
-        vecs[2] = GetRawPtr(tmp);
-        tmp = compl_s_U->MakeNew();
-        tmp->Copy(*compl_s_U);
-        tmp->AddScalar(-mu);
-        vecs[3] = GetRawPtr(tmp);
-      }
-
-      result = CalcNormOfType(NormType, vecs);
 
       curr_complementarity_cache_.AddCachedResult(result, deps, sdeps);
+    }
+
+    return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::trial_complementarity
+  (Number mu, IpoptCalculatedQuantities::ENormType NormType)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_complementarity()",
+                   dbg_verbosity);
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->trial_x();
+    SmartPtr<const Vector> s = ip_data_->trial_s();
+    SmartPtr<const Vector> z_L = ip_data_->trial_z_L();
+    SmartPtr<const Vector> z_U = ip_data_->trial_z_U();
+    SmartPtr<const Vector> v_L = ip_data_->trial_v_L();
+    SmartPtr<const Vector> v_U = ip_data_->trial_v_U();
+
+    std::vector<const TaggedObject*> deps(6);
+    deps[0] = GetRawPtr(x);
+    deps[1] = GetRawPtr(s);
+    deps[2] = GetRawPtr(z_L);
+    deps[3] = GetRawPtr(z_U);
+    deps[4] = GetRawPtr(v_L);
+    deps[5] = GetRawPtr(v_U);
+    std::vector<Number> sdeps(2);
+    sdeps[0] = (Number)NormType;
+    sdeps[1] = mu;
+
+    if (!trial_complementarity_cache_.GetCachedResult(result, deps, sdeps)) {
+      if (!curr_complementarity_cache_.GetCachedResult(result, deps, sdeps)) {
+
+        std::vector<SmartPtr<const Vector> > vecs(4);
+        SmartPtr<const Vector> compl_x_L = trial_compl_x_L();
+        SmartPtr<const Vector> compl_x_U = trial_compl_x_U();
+        SmartPtr<const Vector> compl_s_L = trial_compl_s_L();
+        SmartPtr<const Vector> compl_s_U = trial_compl_s_U();
+
+        if (mu==.0) {
+          vecs[0] = GetRawPtr(compl_x_L);
+          vecs[1] = GetRawPtr(compl_x_U);
+          vecs[2] = GetRawPtr(compl_s_L);
+          vecs[3] = GetRawPtr(compl_s_U);
+        }
+        else {
+          SmartPtr<Vector> tmp = compl_x_L->MakeNew();
+          tmp->Copy(*compl_x_L);
+          tmp->AddScalar(-mu);
+          vecs[0] = GetRawPtr(tmp);
+          tmp = compl_x_U->MakeNew();
+          tmp->Copy(*compl_x_U);
+          tmp->AddScalar(-mu);
+          vecs[1] = GetRawPtr(tmp);
+          tmp = compl_s_L->MakeNew();
+          tmp->Copy(*compl_s_L);
+          tmp->AddScalar(-mu);
+          vecs[2] = GetRawPtr(tmp);
+          tmp = compl_s_U->MakeNew();
+          tmp->Copy(*compl_s_U);
+          tmp->AddScalar(-mu);
+          vecs[3] = GetRawPtr(tmp);
+        }
+
+        result = CalcNormOfType(NormType, vecs);
+      }
+
+      trial_complementarity_cache_.AddCachedResult(result, deps, sdeps);
     }
 
     return result;
@@ -1982,6 +2396,116 @@ namespace Ipopt
       result = Max(result, curr_complementarity(mu, NORM_MAX)/s_c);
 
       curr_barrier_error_cache_.AddCachedResult(result, tdeps);
+    }
+
+    return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::curr_primal_dual_system_error(Number mu)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::curr_primal_dual_system_error()",
+                   dbg_verbosity);
+    DBG_ASSERT(initialize_called_);
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->curr_x();
+    SmartPtr<const Vector> s = ip_data_->curr_s();
+    SmartPtr<const Vector> y_c = ip_data_->curr_y_c();
+    SmartPtr<const Vector> y_d = ip_data_->curr_y_d();
+    SmartPtr<const Vector> z_L = ip_data_->curr_z_L();
+    SmartPtr<const Vector> z_U = ip_data_->curr_z_U();
+    SmartPtr<const Vector> v_L = ip_data_->curr_v_L();
+    SmartPtr<const Vector> v_U = ip_data_->curr_v_U();
+
+    std::vector<const TaggedObject*> tdeps(8);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
+    tdeps[2] = GetRawPtr(y_c);
+    tdeps[3] = GetRawPtr(y_c);
+    tdeps[4] = GetRawPtr(z_L);
+    tdeps[5] = GetRawPtr(z_U);
+    tdeps[6] = GetRawPtr(v_L);
+    tdeps[7] = GetRawPtr(v_U);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
+
+    if (!curr_primal_dual_system_error_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      if (!trial_primal_dual_system_error_cache_.GetCachedResult(result, tdeps, sdeps)) {
+        // For now we use the 1 norm, and scale each component by the number of entries...
+        Index n_dual = x->Dim() + s->Dim();
+        Number dual_inf = curr_dual_infeasibility(NORM_1)/((Number)n_dual);
+
+        Index n_primal = y_c->Dim() + y_d->Dim();
+        Number primal_inf = 0.;
+        if (n_primal>0) {
+          primal_inf = curr_primal_infeasibility(NORM_1)/((Number)n_primal);
+        }
+
+        Index n_cmpl = z_L->Dim() + z_U->Dim() + v_L->Dim() + v_U->Dim();
+        Number cmpl = 0.;
+        if (n_cmpl>0) {
+          cmpl = curr_complementarity(mu, NORM_1)/((Number)n_cmpl);
+        }
+
+        result = dual_inf + primal_inf + cmpl;
+      }
+      curr_primal_dual_system_error_cache_.AddCachedResult(result, tdeps, sdeps);
+    }
+
+    return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::trial_primal_dual_system_error(Number mu)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::trial_primal_dual_system_error()",
+                   dbg_verbosity);
+    DBG_ASSERT(initialize_called_);
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->trial_x();
+    SmartPtr<const Vector> s = ip_data_->trial_s();
+    SmartPtr<const Vector> y_c = ip_data_->trial_y_c();
+    SmartPtr<const Vector> y_d = ip_data_->trial_y_d();
+    SmartPtr<const Vector> z_L = ip_data_->trial_z_L();
+    SmartPtr<const Vector> z_U = ip_data_->trial_z_U();
+    SmartPtr<const Vector> v_L = ip_data_->trial_v_L();
+    SmartPtr<const Vector> v_U = ip_data_->trial_v_U();
+
+    std::vector<const TaggedObject*> tdeps(8);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
+    tdeps[2] = GetRawPtr(y_c);
+    tdeps[3] = GetRawPtr(y_c);
+    tdeps[4] = GetRawPtr(z_L);
+    tdeps[5] = GetRawPtr(z_U);
+    tdeps[6] = GetRawPtr(v_L);
+    tdeps[7] = GetRawPtr(v_U);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
+
+    if (!trial_primal_dual_system_error_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      if (!curr_primal_dual_system_error_cache_.GetCachedResult(result, tdeps, sdeps)) {
+        // For now we use the 1 norm, and scale each component by the number of entries...
+        Index n_dual = x->Dim() + s->Dim();
+        Number dual_inf = trial_dual_infeasibility(NORM_1)/((Number)n_dual);
+
+        Index n_primal = y_c->Dim() + y_d->Dim();
+        Number primal_inf = 0.;
+        if (n_primal>0) {
+          primal_inf = trial_primal_infeasibility(NORM_1)/((Number)n_primal);
+        }
+
+        Index n_cmpl = z_L->Dim() + z_U->Dim() + v_L->Dim() + v_U->Dim();
+        Number cmpl = 0.;
+        if (n_cmpl>0) {
+          cmpl = trial_complementarity(mu, NORM_1)/((Number)n_cmpl);
+        }
+
+        result = dual_inf + primal_inf + cmpl;
+      }
+      trial_primal_dual_system_error_cache_.AddCachedResult(result, tdeps, sdeps);
     }
 
     return result;
