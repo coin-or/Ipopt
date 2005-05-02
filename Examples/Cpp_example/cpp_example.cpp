@@ -19,7 +19,7 @@ int main(int argv, char* argc[])
    SmartPtr<TNLP> mynlp = new MyNLP();
   
    // Create an instance of the IpoptApplication
-   IpoptApplication* app = new IpoptApplication();
+   SmartPtr<IpoptApplication> app = new IpoptApplication();
 
    // To illustrate the use of ip_data and ip_cq, we will use the 
    //  version of OptimzeTNLP that returns pointers to these objects
