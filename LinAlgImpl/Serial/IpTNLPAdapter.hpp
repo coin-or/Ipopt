@@ -157,10 +157,17 @@ namespace Ipopt
      *  harwell triplet matrices) */
     SmartPtr<TNLP> tnlp_;
 
-    /**@name Limits on bounds */
+    /**@name Algorithmic parameters */
     //@{
+    /** Value for a lower bound that denotes -infinity */
     Number nlp_lower_bound_inf_;
+    /** Value for a upper bound that denotes infinity */
     Number nlp_upper_bound_inf_;
+    /** Maximal slack for one-sidedly bounded variables.  If a
+     *  variable has only one bound, say a lower bound xL, then an
+     *  upper bound xL + max_onesided_bound_slack_.  If this value is
+     *  zero, no upper bound is added. */
+    Number max_onesided_bound_slack_;
     //@}
 
     /**@name Problem Size Data */
