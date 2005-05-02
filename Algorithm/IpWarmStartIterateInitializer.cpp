@@ -224,8 +224,6 @@ namespace Ipopt
       // message because at some point a slack became too small
       IpCq().ResetAdjustedTrialSlacks();
     }
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME curr_s",
-                        *IpData().curr_s());
 
     {
       SmartPtr<const Vector> new_x;
