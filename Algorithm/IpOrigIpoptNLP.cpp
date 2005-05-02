@@ -57,6 +57,10 @@ namespace Ipopt
       bound_relax_factor_ = 1e-8;
     }
 
+    if (!nlp_->ProcessOptions(options, prefix)) {
+      return false;
+    }
+
     initialized_ = true;
     return true;
   }
