@@ -16,8 +16,6 @@ namespace Ipopt
   TNLPAdapter::TNLPAdapter(const SmartPtr<TNLP> tnlp)
       :
       tnlp_(tnlp),
-      nlp_lower_bound_inf_(-1e19),
-      nlp_upper_bound_inf_(1e19),
       n_full_x_(-1),
       n_full_g_(-1),
       nz_jac_c_(-1),
@@ -63,6 +61,8 @@ namespace Ipopt
   bool TNLPAdapter::ProcessOptions(const OptionsList& options,
                                    const std::string& prefix)
   {
+    DBG_START_METH("TNLPAdapter::ProcessOptions", dbg_verbosity);
+
     Number value = 0.0;
 
     // Check for the algorithm options
@@ -78,6 +78,15 @@ namespace Ipopt
     }
     else {
       nlp_upper_bound_inf_ = 1e19;
+    }
+
+    if (options.GetNumericValue("max_onesided_bound_slack", value, prefix)) {
+      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"max_onesided_bound_slack\": This value must be non-negative.");
+      max_onesided_bound_slack_ = value;
+    }
+    else {
+      max_onesided_bound_slack_ = 0.;
     }
 
     // allow TNLP to process some options
@@ -101,6 +110,7 @@ namespace Ipopt
                               SmartPtr<MatrixSpace>& Jac_d_space,
                               SmartPtr<SymMatrixSpace>& Hess_lagrangian_space)
   {
+    DBG_START_METH("TNLPAdapter::GetSpaces", dbg_verbosity);
     // Get the full dimensions of the problem
     tnlp_->get_nlp_info(n_full_x_, n_full_g_, nz_full_jac_g_, nz_full_h_);
 
@@ -161,11 +171,23 @@ namespace Ipopt
         if (lower_bound > nlp_lower_bound_inf_) {
           x_l_map[n_x_l] = n_x_not_fixed;
           n_x_l++;
+	  if (max_onesided_bound_slack_>0. &&
+	      upper_bound >= nlp_upper_bound_inf_) {
+	    // Add very large upper bound if only a lower bound is given
+	    x_u_map[n_x_u] = n_x_not_fixed;
+	    n_x_u++;
+	  }
         }
 
         if (upper_bound < nlp_upper_bound_inf_) {
           x_u_map[n_x_u] = n_x_not_fixed;
           n_x_u++;
+	  if (max_onesided_bound_slack_>0. &&
+	      lower_bound <= nlp_lower_bound_inf_) {
+	    // Add very small lower bound if only a lower bound is given
+	    x_l_map[n_x_l] = n_x_not_fixed;
+	    n_x_l++;
+	  }
         }
         n_x_not_fixed++;
       }
@@ -222,16 +244,33 @@ namespace Ipopt
         c_map[n_c] = i;
         n_c++;
       }
+      else if (lower_bound > upper_bound) {
+        char string[128];
+        sprintf(string, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+        THROW_EXCEPTION(INVALID_TNLP, string);
+      }
       else {
         // inequality constraint
         d_map[n_d] = i;
         if (lower_bound > nlp_lower_bound_inf_) {
           d_l_map[n_d_l] = n_d;
           n_d_l++;
+	  if (max_onesided_bound_slack_>0. &&
+	      upper_bound >= nlp_upper_bound_inf_) {
+	    // Add very large upper bound if only a lower bound is given
+	    d_u_map[n_d_u] = n_d;
+	    n_d_u++;
+	  }
         }
         if (upper_bound < nlp_upper_bound_inf_) {
           d_u_map[n_d_u] = n_d;
           n_d_u++;
+	  if (max_onesided_bound_slack_>0. &&
+	      lower_bound <= nlp_lower_bound_inf_) {
+	    // Add very small lower bound if only a lower bound is given
+	    d_l_map[n_d_l] = n_d;
+	    n_d_l++;
+	  }
         }
         n_d++;
       }
@@ -402,7 +441,14 @@ namespace Ipopt
       Index ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
       Index full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
       Number lower_bound = x_l[full_idx];
-      values[i] = lower_bound;
+      if (lower_bound <= nlp_lower_bound_inf_) {
+	DBG_ASSERT(max_onesided_bound_slack_>0.);
+	DBG_ASSERT(x_u[full_idx] < nlp_upper_bound_inf_);
+	values[i] = x_u[full_idx] - max_onesided_bound_slack_;
+      }
+      else {
+	values[i] = lower_bound;
+      }
     }
 
     DenseVector* dx_U = dynamic_cast<DenseVector*>(&x_U);
@@ -414,7 +460,14 @@ namespace Ipopt
       Index ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
       Index full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
       Number upper_bound = x_u[full_idx];
-      values[i] = upper_bound;
+      if (upper_bound >= nlp_upper_bound_inf_) {
+	DBG_ASSERT(max_onesided_bound_slack_>0.);
+	DBG_ASSERT(x_l[full_idx] > nlp_upper_bound_inf_);
+	values[i] = x_l[full_idx] + max_onesided_bound_slack_;
+      }
+      else {
+	values[i] = upper_bound;
+      }
     }
 
     // get the bounds values (rhs values to subtract) for c
@@ -436,7 +489,14 @@ namespace Ipopt
       Index d_exp_idx = em_Pd_L->ExpandedPosIndices()[i];
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
       Number lower_bound = g_l[full_idx];
-      values[i] = lower_bound;
+      if (lower_bound <= nlp_lower_bound_inf_) {
+	DBG_ASSERT(max_onesided_bound_slack_>0.);
+	DBG_ASSERT(g_u[full_idx] < nlp_upper_bound_inf_);
+	values[i] = g_u[full_idx] - max_onesided_bound_slack_;
+      }
+      else {
+	values[i] = lower_bound;
+      }
     }
 
     DenseVector* dd_U = dynamic_cast<DenseVector*>(&d_U);
@@ -448,7 +508,14 @@ namespace Ipopt
       Index d_exp_idx = em_Pd_U->ExpandedPosIndices()[i];
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
       Number upper_bound = g_u[full_idx];
-      values[i] = upper_bound;
+      if (upper_bound >= nlp_upper_bound_inf_) {
+	DBG_ASSERT(max_onesided_bound_slack_>0.);
+	DBG_ASSERT(g_l[full_idx] > nlp_upper_bound_inf_);
+	values[i] = g_l[full_idx] + max_onesided_bound_slack_;
+      }
+      else {
+	values[i] = upper_bound;
+      }
     }
 
     delete [] x_l;
