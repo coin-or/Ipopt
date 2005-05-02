@@ -117,7 +117,9 @@ namespace Ipopt
     Number kappa_eps_mu = kappa_epsilon_ * mu;
 
     bool done = false;
-    while (sub_problem_error <= kappa_eps_mu && !done && !first_iter_resto_) {
+    bool tiny_step_flag = IpData().tiny_step_flag();
+    while ((sub_problem_error <= kappa_eps_mu || tiny_step_flag)
+           && !done && !first_iter_resto_) {
       Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                      "  sub_problem_error < kappa_eps * mu (%e)\n", kappa_eps_mu);
 
@@ -130,6 +132,10 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                      "new_mu=%e and new_tau=%e\n", new_mu, new_tau);
       bool mu_changed = (mu != new_mu);
+      if (!mu_changed && tiny_step_flag) {
+        THROW_EXCEPTION(TINY_STEP_DETECTED,
+                        "Problem solved to best possible numerical accuracy");
+      }
 
       // Set the new values for mu and tau
       IpData().Set_mu(new_mu);
@@ -152,6 +158,8 @@ namespace Ipopt
       if (done && mu_changed) {
         linesearch_->Reset();
       }
+
+      tiny_step_flag = false;
     }
 
     first_iter_resto_ = false;

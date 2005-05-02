@@ -529,6 +529,17 @@ namespace Ipopt
     {
       return free_mu_mode_;
     }
+
+    /** Setting the flag that indicates if a tiny step (below machine
+     *  precision) has been detected */
+    void Set_tiny_step_flag(bool flag)
+    {
+      tiny_step_flag_ = flag;
+    }
+    bool tiny_step_flag()
+    {
+      return tiny_step_flag_;
+    }
     //@}
 
     /**@name Algorithm Parameters (these will later be
@@ -773,8 +784,14 @@ namespace Ipopt
     bool info_skip_output_;
     /** any string of characters for the end of the output line */
     std::string info_string_;
+    //@}
+
+    /** @name Status data **/
+    //@{
     /** flag indicating whether the algorithm is in the free mu mode */
     bool free_mu_mode_;
+    /** flag indicating if a tiny step has been detected */
+    bool tiny_step_flag_;
     //@}
 
     /**@name Default Compiler Generated Methods

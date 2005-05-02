@@ -228,6 +228,11 @@ namespace Ipopt
      *  violation. */
     void PerformMagicStep();
 
+    /** Detect if the search direction is too small.  This should be
+     *  true if the search direction is so small that if makes
+     *  numerically no difference. */
+    bool DetectTinyStep();
+
     /** @name Parameters for the filter algorithm.  Names as in the paper */
     //@{
     /** \f$ \eta_{\varphi} \f$ */
@@ -287,6 +292,9 @@ namespace Ipopt
      *  reducing the optimality error ("soft restoration phase"). If
      *  0., then this restoration phase is not enabled. */
     Number resto_pderror_reduction_factor_;
+
+    /** Tolerance for detecting tiny steps. */
+    Number tiny_step_tol_;
     //@}
 
     /** Filter with entries */
@@ -311,6 +319,10 @@ namespace Ipopt
     /** Counter for the number of successive iterations in which the
      *  full step was not accepted. */
     Index count_successive_shortened_steps_;
+
+    /** Flag indicating if a tiny step was detected in previous
+     *  iteration */
+    bool tiny_step_last_iteration_;
 
     SmartPtr<RestorationPhase> resto_phase_;
     SmartPtr<PDSystemSolver> pd_solver_;
