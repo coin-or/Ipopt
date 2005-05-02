@@ -25,6 +25,7 @@ namespace Ipopt
     Infeasible_Problem_Detected,
     Not_Enough_Degrees_Of_Freedom,
     Solve_Failed,
+    Solved_To_Best_Possible_Precision,
     NonIpopt_Exception_Thrown,
     Insufficient_Memory,
     Internal_Error

@@ -291,11 +291,12 @@ namespace Ipopt
     if (no_bounds_)
       return;
 
+    bool tiny_step_flag = IpData().tiny_step_flag();
     if (!IpData().FreeMuMode()) {
       // if we are in the fixed mu mode, we need to check if the
       // current iterate is good enough to continue with the free mode
       bool sufficient_progress = CheckSufficientProgress();
-      if (sufficient_progress) {
+      if (sufficient_progress && !tiny_step_flag) {
         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                        "Switching back to free mu mode.\n");
         IpData().SetFreeMuMode(true);
@@ -309,7 +310,8 @@ namespace Ipopt
         // ToDo decide whether we want this for all options
         Number sub_problem_error = IpCq().curr_barrier_error();
         Number mu = IpData().curr_mu();
-        if (sub_problem_error <= kappa_epsilon_ * mu) {
+        if (sub_problem_error <= kappa_epsilon_ * mu ||
+            tiny_step_flag) {
           //	DBG_ASSERT(adaptive_globalization_==2);
           // If the current barrier problem has been solved sufficiently
           // well, decrease mu
@@ -318,6 +320,10 @@ namespace Ipopt
 
           Number new_mu = Min( kappa_mu_*mu, pow(mu, theta_mu_) );
           new_mu = Max(new_mu, eps_tol/10);
+          if (tiny_step_flag && new_mu == mu) {
+            THROW_EXCEPTION(TINY_STEP_DETECTED,
+                            "Problem solved to best possible numerical accuracy");
+          }
           Number new_tau = Compute_tau_monotone(mu);
           IpData().Set_mu(new_mu);
           IpData().Set_tau(new_tau);
@@ -330,7 +336,7 @@ namespace Ipopt
     else {
       // Here we are in the free mu mode.
       bool sufficient_progress = CheckSufficientProgress();
-      if (linesearch_->CheckSkippedLineSearch()) {
+      if (linesearch_->CheckSkippedLineSearch() || tiny_step_flag ) {
         sufficient_progress = false;
       }
       if (sufficient_progress) {
@@ -356,6 +362,11 @@ namespace Ipopt
         // to reset its memory
         Number mu = NewFixedMu();
         Number tau = Compute_tau_monotone(mu);
+
+        if (tiny_step_flag && mu==IpData().curr_mu()) {
+          THROW_EXCEPTION(TINY_STEP_DETECTED,
+                          "Problem solved to best possible numerical accuracy");
+        }
 
         IpData().Set_mu(mu);
         IpData().Set_tau(tau);

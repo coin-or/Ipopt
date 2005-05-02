@@ -452,6 +452,9 @@ namespace Ipopt
     else if (status == Solve_Failed) {
       message = "Solve Failed";
     }
+    else if (status == Solved_To_Best_Possible_Precision) {
+      message = "Solved To Best Possible Precision";
+    }
     else if (status == NonIpopt_Exception_Thrown) {
       message = "Non-Ipopt Exception Thrown";
     }

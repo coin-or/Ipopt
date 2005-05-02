@@ -224,6 +224,10 @@ namespace Ipopt
         retValue = Maximum_Iterations_Exceeded;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Maximum Number of Iterations Exceeded.\n");
       }
+      else if (status == IpoptAlgorithm::TINY_STEP) {
+        retValue = Solved_To_Best_Possible_Precision;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Solved To Best Possible Precision.\n");
+      }
       else if (status == IpoptAlgorithm::FAILED) {
         retValue = Solve_Failed;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Algorithm Failed - Check detailed output.\n");
@@ -269,6 +273,3 @@ namespace Ipopt
 
   }
 } // namespace Ipopt
-
-
-

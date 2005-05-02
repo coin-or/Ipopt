@@ -245,10 +245,21 @@ namespace Ipopt
       resto_pderror_reduction_factor_ = 1.0 - 1e-4;
     }
 
+    if (options.GetNumericValue("tiny_step_tol", value, prefix)) {
+      ASSERT_EXCEPTION(value >= 0., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"tiny_step_tol\": This value must be positive.");
+      tiny_step_tol_ = value;
+    }
+    else {
+      tiny_step_tol_ = 1e1 * std::numeric_limits<double>::epsilon();
+    }
+
     // ToDo decide if also the PDSystemSolver should be initialized here...
 
-    rigorous_=true;
-    skipped_line_search_=false;
+    rigorous_ = true;
+    skipped_line_search_ = false;
+    tiny_step_last_iteration_ = false;
+    in_soft_resto_phase_ = false;
 
     count_successive_shortened_steps_ = 0;
 
@@ -294,10 +305,40 @@ namespace Ipopt
     Index n_steps = 0;
     Number alpha_primal = 0.;
 
-    if (!goto_resto) {
+    // Check if search direction becomes too small
+    // ToDo: move this into place independent of this particular line search?
+    bool tiny_step = DetectTinyStep();
+    if (tiny_step) {
+      alpha_primal =
+        IpCq().curr_primal_frac_to_the_bound(IpData().curr_tau());
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Tiny step detected. Use step size alpha = %e unchecked\n",
+                     alpha_primal);
+      IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
+          *IpData().delta_x(),
+          *IpData().delta_s());
+      IpData().Set_info_ls_count(0);
+
+      if (tiny_step_last_iteration_) {
+        IpData().Set_info_alpha_primal_char('T');
+        IpData().Set_tiny_step_flag(true);
+      }
+      else {
+        IpData().Set_info_alpha_primal_char('t');
+      }
+
+      tiny_step_last_iteration_ = true;
+      accept = true;
+    }
+    else {
+      tiny_step_last_iteration_ = false;
+    }
+
+    if (!goto_resto && !tiny_step) {
 
       if (in_soft_resto_phase_) {
-        bool satisfies_original_filter;
+        bool satisfies_original_filter = false;
+        // ToDo use tiny_step in TrySoftRestoStep?
         accept = TrySoftRestoStep(actual_delta_x,
                                   actual_delta_s,
                                   actual_delta_y_c,
@@ -333,7 +374,7 @@ namespace Ipopt
 
         filter_.Print(Jnlst());
 
-        if (corrector_type_!=0 &&
+        if (corrector_type_!=0 && !tiny_step &&
             (!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) &&
             (!skip_corr_if_fixed_mode_ || IpData().FreeMuMode()) ) {
           // Before we do the actual backtracking line search for the
@@ -1373,6 +1414,55 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "d minus s out", *IpCq().trial_d_minus_s());
     DBG_PRINT_VECTOR(2, "slack_s_L out", *IpCq().trial_slack_s_L());
     DBG_PRINT_VECTOR(2, "slack_s_U out", *IpCq().trial_slack_s_U());
+  }
+
+  bool
+  FilterLineSearch::DetectTinyStep()
+  {
+    DBG_START_METH("FilterLineSearch::DetectTinyStep",
+                   dbg_verbosity);
+
+    Number max_step_x;
+    Number max_step_s;
+
+    if (tiny_step_tol_==0.)
+      return false;
+
+    SmartPtr<Vector> tmp = IpData().curr_x()->MakeNew();
+    tmp->Copy(*IpData().curr_x());
+    tmp->ElementWiseAbs();
+    tmp->AddScalar(1.);
+
+    SmartPtr<Vector> tmp2 = IpData().curr_x()->MakeNew();
+    tmp2->Copy(*IpData().delta_x());
+    tmp2->ElementWiseDivide(*tmp);
+    max_step_x = tmp2->Amax();
+    Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                   "Relative step size for delta_x = %e\n",
+                   max_step_x);
+    if (max_step_x > tiny_step_tol_)
+      return false;
+
+    tmp = IpData().curr_s()->MakeNew();
+    tmp->Copy(*IpData().curr_s());
+    tmp->ElementWiseAbs();
+    tmp->AddScalar(1.);
+
+    tmp2 = IpData().curr_s()->MakeNew();
+    tmp2->Copy(*IpData().delta_s());
+    tmp2->ElementWiseDivide(*tmp);
+    max_step_s = tmp2->Amax();
+    Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                   "Relative step size for delta_s = %e\n",
+                   max_step_s);
+    if (max_step_s > tiny_step_tol_)
+      return false;
+
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                   "Tiny step of relative size %e detected.\n",
+                   Max(max_step_x, max_step_s));
+
+    return true;
   }
 
 } // namespace Ipopt

@@ -47,7 +47,8 @@ namespace Ipopt
     enum SolverReturn {
       SUCCESS,
       MAXITER_EXCEEDED,
-      FAILED
+      FAILED,
+      TINY_STEP
     };
     //@}
 

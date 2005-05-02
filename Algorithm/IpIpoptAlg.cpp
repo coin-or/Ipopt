@@ -131,40 +131,47 @@ namespace Ipopt
     ConvergenceCheck::ConvergenceStatus conv_status
     = conv_check_->CheckConvergence();
 
-    // main loop
-    while (conv_status == ConvergenceCheck::CONTINUE) {
-      // Set the Hessian Matrix
-      ActualizeHessian();
+    try {
+      // main loop
+      while (conv_status == ConvergenceCheck::CONTINUE) {
+        // Set the Hessian Matrix
+        ActualizeHessian();
 
-      // do all the output for this iteration
+        // do all the output for this iteration
+        OutputIteration();
+        IpData().ResetInfo();
+
+        // update the barrier parameter if necessary
+        UpdateBarrierParameter();
+
+        // solve the primal-dual system to get the full step
+        ComputeSearchDirection();
+
+        // Compute the new iterate
+        ComputeAcceptableTrialPoint();
+        //ApplyFractionToBoundary();
+
+        // Accept the new iterate
+        AcceptTrialPoint();
+
+        IpData().Set_iter_count(IpData().iter_count()+1);
+
+        conv_status  = conv_check_->CheckConvergence();
+      }
+
       OutputIteration();
-      IpData().ResetInfo();
 
-      // update the barrier parameter if necessary
-      UpdateBarrierParameter();
-
-      // solve the primal-dual system to get the full step
-      ComputeSearchDirection();
-
-      // Compute the new iterate
-      ComputeAcceptableTrialPoint();
-      //ApplyFractionToBoundary();
-
-      // Accept the new iterate
-      AcceptTrialPoint();
-
-      IpData().Set_iter_count(IpData().iter_count()+1);
-
-      conv_status  = conv_check_->CheckConvergence();
+      if (conv_status == ConvergenceCheck::CONVERGED) {
+        return SUCCESS;
+      }
+      else if (conv_status == ConvergenceCheck::MAXITER_EXCEEDED) {
+        return MAXITER_EXCEEDED;
+      }
     }
+    catch(TINY_STEP_DETECTED& exc) {
+      exc.ReportException(Jnlst());
 
-    OutputIteration();
-
-    if (conv_status == ConvergenceCheck::CONVERGED) {
-      return SUCCESS;
-    }
-    else if (conv_status == ConvergenceCheck::MAXITER_EXCEEDED) {
-      return MAXITER_EXCEEDED;
+      return TINY_STEP;
     }
 
     return FAILED;
