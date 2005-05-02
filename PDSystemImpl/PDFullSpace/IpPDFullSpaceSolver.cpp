@@ -524,7 +524,7 @@ namespace Ipopt
                                     *sol_x, *sol_s, *sol_c,
                                     *sol_d, false, 0);
       if (retval!=SYMSOLVER_SUCCESS) {
-	return false;
+        return false;
       }
       assert(retval==SYMSOLVER_SUCCESS); //TODO make return code
     }
