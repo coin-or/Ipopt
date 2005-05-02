@@ -175,6 +175,24 @@ namespace Ipopt
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_MAIN)) {
       Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_x", *IpCq().curr_grad_lag_x());
       Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_s", *IpCq().curr_grad_lag_s());
+      if (IsValid(IpData().delta_x())) {
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_x", *IpData().delta_x());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_s", *IpData().delta_s());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_y_c", *IpData().delta_y_c());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_y_d", *IpData().delta_y_d());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_z_L", *IpData().delta_z_L());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_z_U", *IpData().delta_z_U());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_v_L", *IpData().delta_v_L());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_v_U", *IpData().delta_v_U());
+      }
     }
 
     Jnlst().Printf(J_DETAILED, J_MAIN,
