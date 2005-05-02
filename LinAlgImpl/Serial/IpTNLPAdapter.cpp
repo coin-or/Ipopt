@@ -79,6 +79,9 @@ namespace Ipopt
     else {
       nlp_upper_bound_inf_ = 1e19;
     }
+    ASSERT_EXCEPTION(nlp_lower_bound_inf_ < nlp_upper_bound_inf_,
+		     OptionsList::OPTION_OUT_OF_RANGE,
+		     "Option \"nlp_lower_bound_inf\" must be smaller than \"nlp_upper_bound_inf\".");
 
     if (options.GetNumericValue("max_onesided_bound_slack", value, prefix)) {
       ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
@@ -462,7 +465,7 @@ namespace Ipopt
       Number upper_bound = x_u[full_idx];
       if (upper_bound >= nlp_upper_bound_inf_) {
 	DBG_ASSERT(max_onesided_bound_slack_>0.);
-	DBG_ASSERT(x_l[full_idx] > nlp_upper_bound_inf_);
+	DBG_ASSERT(x_l[full_idx] > nlp_lower_bound_inf_);
 	values[i] = x_l[full_idx] + max_onesided_bound_slack_;
       }
       else {
@@ -510,7 +513,7 @@ namespace Ipopt
       Number upper_bound = g_u[full_idx];
       if (upper_bound >= nlp_upper_bound_inf_) {
 	DBG_ASSERT(max_onesided_bound_slack_>0.);
-	DBG_ASSERT(g_l[full_idx] > nlp_upper_bound_inf_);
+	DBG_ASSERT(g_l[full_idx] > nlp_lower_bound_inf_);
 	values[i] = g_l[full_idx] + max_onesided_bound_slack_;
       }
       else {
