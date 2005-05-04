@@ -208,10 +208,12 @@ namespace Ipopt
     }
 
     if (options.GetIntegerValue("dual_alpha_for_y", ivalue, prefix)) {
-      dual_alpha_for_y_ = (ivalue != 0);
+      dual_alpha_for_y_ = ivalue;
+      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=2, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"dual_alpha_for_y\": This value must be 0, 1, or 2.");
     }
     else {
-      dual_alpha_for_y_ = false;
+      dual_alpha_for_y_ = 0;
     }
 
     if (options.GetNumericValue("corrector_compl_avrg_red_fact", value, prefix)) {
@@ -228,6 +230,15 @@ namespace Ipopt
     }
     else {
       expect_infeasible_problem_ = false;
+    }
+
+    if (options.GetNumericValue("expect_infeasible_problem_ctol", value, prefix)) {
+      ASSERT_EXCEPTION(value >= 0., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"expect_infeasible_problem_ctol\": This value must be non-negative.");
+      expect_infeasible_problem_ctol_ = value;
+    }
+    else {
+      expect_infeasible_problem_ctol_ = 1.e-3;
     }
 
     bool retvalue = true;
@@ -254,12 +265,31 @@ namespace Ipopt
       tiny_step_tol_ = 1e1 * std::numeric_limits<double>::epsilon();
     }
 
+    if (options.GetIntegerValue("watch_dog_trial_iter_max", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue > 0., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"watch_dog_trial_iter_max\": This value must be positive.");
+      watch_dog_trial_iter_max_ = ivalue;
+    }
+    else {
+      watch_dog_trial_iter_max_ = 3;
+    }
+
+    if (options.GetIntegerValue("watch_dog_shortened_iter_trigger", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue >= 0., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"watch_dog_shortened_iter_trigger\": This value must be positive.");
+      watch_dog_shortened_iter_trigger_ = ivalue;
+    }
+    else {
+      watch_dog_shortened_iter_trigger_ = 10;
+    }
+
     // ToDo decide if also the PDSystemSolver should be initialized here...
 
     rigorous_ = true;
     skipped_line_search_ = false;
     tiny_step_last_iteration_ = false;
-    in_soft_resto_phase_ = false;
+
+    Reset();
 
     count_successive_shortened_steps_ = 0;
 
@@ -276,6 +306,18 @@ namespace Ipopt
 
     // First assume that line search will find an acceptable trial point
     skipped_line_search_ = false;
+
+    // Set the values for the reference point
+    if (!in_watch_dog_) {
+      reference_theta_ = IpCq().curr_constraint_violation();
+      reference_barr_ = IpCq().curr_barrier_obj();
+      reference_gradBarrTDelta_ = IpCq().curr_gradBarrTDelta();
+    }
+    else {
+      reference_theta_ = watch_dog_theta_;
+      reference_barr_ = watch_dog_barr_;
+      reference_gradBarrTDelta_ = watch_dog_gradBarrTDelta_;
+    }
 
     // Get the search directions (this will store the actual search
     // direction, possibly including higher order corrections)
@@ -307,7 +349,29 @@ namespace Ipopt
 
     // Check if search direction becomes too small
     // ToDo: move this into place independent of this particular line search?
-    bool tiny_step = DetectTinyStep();
+    bool tiny_step = (!goto_resto && DetectTinyStep());
+
+    if (in_watch_dog_ && (goto_resto || tiny_step)) {
+      // If the step could not be computed or is too small and the
+      // watchdog is active, stop the watch dog and resume everything
+      // from reference point
+      StopWatchDog(actual_delta_x, actual_delta_s,
+		   actual_delta_y_c, actual_delta_y_d,
+		   actual_delta_z_L, actual_delta_z_U,
+		   actual_delta_v_L, actual_delta_v_U);
+      goto_resto = false;
+      tiny_step = false;
+    }
+
+    // Check if we want to wake up the watchdog
+    if (watch_dog_shortened_iter_trigger_ > 0 &&
+	!in_watch_dog_ && !goto_resto && !tiny_step &&
+	!in_soft_resto_phase_ && !expect_infeasible_problem_ &&
+	watch_dog_shortened_iter_ >= watch_dog_shortened_iter_trigger_)
+      {
+	StartWatchDog();
+      }
+
     if (tiny_step) {
       alpha_primal =
         IpCq().curr_primal_frac_to_the_bound(IpData().curr_tau());
@@ -357,141 +421,51 @@ namespace Ipopt
         }
       }
       else {
-        // Compute primal fraction-to-the-boundary value
-        Number alpha_primal_max =
-          IpCq().curr_primal_frac_to_the_bound(IpData().curr_tau());
-
-        // Compute smallest step size allowed
-        Number alpha_min = CalculateAlphaMin();
-        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                       "minimal step size ALPHA_MIN = %E\n", alpha_min);
-
-        // Start line search from maximal step size
-        alpha_primal = alpha_primal_max;
-
-        // Step size used in ftype and armijo tests
-        Number alpha_primal_test = alpha_primal;
-
-        filter_.Print(Jnlst());
-
-        if (corrector_type_!=0 && !tiny_step &&
-            (!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) &&
-            (!skip_corr_if_fixed_mode_ || IpData().FreeMuMode()) ) {
-          // Before we do the actual backtracking line search for the
-          // regular primal-dual search direction, let's see if a step
-          // including a higher-order correctior is already acceptable
-          accept = TryCorrector(alpha_primal_test,
-                                alpha_primal,
-                                actual_delta_x,
-                                actual_delta_s,
-                                actual_delta_y_c,
-                                actual_delta_y_d,
-                                actual_delta_z_L,
-                                actual_delta_z_U,
-                                actual_delta_v_L,
-                                actual_delta_v_U);
-        }
-        if (accept) {
-          corr_taken = true;
-        }
-
-        if (!accept) {
-          // Loop over decreaseing step sizes until acceptable point is
-          // found or until step size becomes too small
-
-          while (alpha_primal>alpha_min ||
-                 n_steps == 0) { // always allow the "full" step if it is
-            // acceptable (even if alpha_primal<=alpha_min)
-            Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                           "Starting checks for alpha (primal) = %8.2e\n",
-                           alpha_primal);
-
-            bool evaluation_error = false;
-            try {
-              // Compute the primal trial point
-              IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
-                  *actual_delta_x,
-                  *actual_delta_s);
-
-              if (magic_steps_) {
-                PerformMagicStep();
-              }
-
-              // If it is acceptable, stop the search
-              alpha_primal_test = alpha_primal;
-              accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
-            }
-            catch(IpoptNLP::Eval_Error& e) {
-              e.ReportException(Jnlst());
-              Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
-                             "Warning: Cutting back alpha due to evaluation error\n");
-              accept = false;
-              evaluation_error = true;
-            }
-
-            if (accept) {
-              break;
-            }
-
-            // Decide if we want to go to the restoration phase in a
-            // short cut to check if the problem is infeasible
-            if (expect_infeasible_problem_) {
-              if (count_successive_shortened_steps_>=5) {
-                break;
-              }
-            }
-
-            // try second order correction step if the function could
-            // be evaluated
-            if (!evaluation_error) {
-              Number theta_curr = IpCq().curr_constraint_violation();
-              Number theta_trial = IpCq().trial_constraint_violation();
-              if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
-                  theta_curr<=theta_trial && max_soc_>0) {
-                // Try second order correction
-                accept = TrySecondOrderCorrection(alpha_primal_test,
-                                                  alpha_primal,
-                                                  actual_delta_x,
-                                                  actual_delta_s,
-                                                  actual_delta_y_c,
-                                                  actual_delta_y_d,
-                                                  actual_delta_z_L,
-                                                  actual_delta_z_U,
-                                                  actual_delta_v_L,
-                                                  actual_delta_v_U);
-              }
-              if (accept) {
-                soc_taken = true;
-                break;
-              }
-            }
-
-            // Point is not yet acceptable, try a shorter one
-            alpha_primal *= alpha_red_factor_;
-            n_steps++;
-          }
-        }
-
-        char info_alpha_primal_char;
-        // Augment the filter if required
-        if (!IsFtype(alpha_primal_test) ||
-            !ArmijoHolds(alpha_primal_test)) {
-          AugmentFilter();
-          info_alpha_primal_char = 'h';
-        }
-        else {
-          info_alpha_primal_char = 'f';
-        }
-        if (soc_taken) {
-          info_alpha_primal_char = toupper(info_alpha_primal_char);
-        }
-        IpData().Set_info_alpha_primal_char(info_alpha_primal_char);
-        IpData().Set_info_ls_count(n_steps+1);
-        if (corr_taken) {
-          IpData().Append_info_string("C");
-        }
-      }
-    }
+	bool done = false;
+	bool skip_first_trial_point = false;
+	while (!done) {
+	  accept = DoBacktrackingLineSearch(skip_first_trial_point,
+					    alpha_primal,
+					    corr_taken,
+					    soc_taken,
+					    n_steps,
+					    actual_delta_x,
+					    actual_delta_s,
+					    actual_delta_y_c,
+					    actual_delta_y_d,
+					    actual_delta_z_L,
+					    actual_delta_z_U,
+					    actual_delta_v_L,
+					    actual_delta_v_U);
+	  if (in_watch_dog_) {
+	    if (accept) {
+	      in_watch_dog_ = false;
+	      IpData().Append_info_string("W");
+	      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+			     "Watch dog procedure successful!\n");
+	      done = true;
+	    }
+	    else {
+	      watch_dog_trial_iter_++;
+	      if (watch_dog_trial_iter_ > watch_dog_trial_iter_max_) {
+		StopWatchDog(actual_delta_x, actual_delta_s,
+			     actual_delta_y_c, actual_delta_y_d,
+			     actual_delta_z_L, actual_delta_z_U,
+			     actual_delta_v_L, actual_delta_v_U);
+		skip_first_trial_point = true;
+	      }
+	      else {
+		done = true;
+		accept = true;
+	      }
+	    }
+	  }
+	  else {
+	    done = true;
+	  }
+	}
+      } /* else: if (in_soft_resto_phase_) { */
+    } /* if (!goto_resto && !tiny_step) { */
 
     // If line search has been aborted because the step size becomes too small,
     // go to the restoration phase
@@ -504,7 +478,8 @@ namespace Ipopt
       }
       else {
         // Check if we should start the soft restoration phase
-        if (!in_soft_resto_phase_ && resto_pderror_reduction_factor_>0.) {
+        if (!in_soft_resto_phase_ && resto_pderror_reduction_factor_>0.
+	    && !goto_resto ) {
           Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                          "--> Starting soft restoration phase <--\n");
           // Augment the filter with the current point
@@ -568,6 +543,7 @@ namespace Ipopt
             expect_infeasible_problem_ = false;
           }
           in_soft_resto_phase_ = false;
+	  watch_dog_shortened_iter_ = 0;
         }
       }
     }
@@ -586,33 +562,217 @@ namespace Ipopt
 
       if (n_steps==0) {
         count_successive_shortened_steps_ = 0;
+	watch_dog_shortened_iter_ = 0;
       }
       else {
         count_successive_shortened_steps_++;
+	watch_dog_shortened_iter_++;
+      }
+
+      if (expect_infeasible_problem_ &&
+	  IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
+	Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+		       "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n");
+	expect_infeasible_problem_ = false;
       }
     }
+  }
+
+  bool FilterLineSearch::DoBacktrackingLineSearch(bool skip_first_trial_point,
+						  Number& alpha_primal,
+						  bool& corr_taken,
+						  bool& soc_taken,
+						  Index& n_steps,
+						  SmartPtr<const Vector>& actual_delta_x,
+						  SmartPtr<const Vector>& actual_delta_s,
+						  SmartPtr<const Vector>& actual_delta_y_c,
+						  SmartPtr<const Vector>& actual_delta_y_d,
+						  SmartPtr<const Vector>& actual_delta_z_L,
+						  SmartPtr<const Vector>& actual_delta_z_U,
+						  SmartPtr<const Vector>& actual_delta_v_L,
+						  SmartPtr<const Vector>& actual_delta_v_U)
+  {
+    bool accept = false;
+
+    DBG_START_METH("FilterLineSearch::DoBacktrackingLineSearch",
+                   dbg_verbosity);
+
+    // Compute primal fraction-to-the-boundary value
+    Number alpha_primal_max =
+      IpCq().primal_frac_to_the_bound(IpData().curr_tau(),
+				      *actual_delta_x,
+				      *actual_delta_s);
+
+    // Compute smallest step size allowed
+    Number alpha_min = alpha_primal_max;
+    if (!in_watch_dog_) {
+      alpha_min = CalculateAlphaMin();
+    }
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+		   "minimal step size ALPHA_MIN = %E\n", alpha_min);
+
+    // Start line search from maximal step size
+    alpha_primal = alpha_primal_max;
+
+    // Step size used in ftype and armijo tests
+    Number alpha_primal_test = alpha_primal;
+    if (in_watch_dog_) {
+      alpha_primal_test = watch_dog_alpha_primal_test_;
+    }
+
+    if (skip_first_trial_point) {
+      alpha_primal *= alpha_red_factor_;
+    }
+
+    filter_.Print(Jnlst());
+
+    if (corrector_type_!=0 && !skip_first_trial_point &&
+	(!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) &&
+	(!skip_corr_if_fixed_mode_ || IpData().FreeMuMode()) ) {
+      // Before we do the actual backtracking line search for the
+      // regular primal-dual search direction, let's see if a step
+      // including a higher-order correctior is already acceptable
+      accept = TryCorrector(alpha_primal_test,
+			    alpha_primal,
+			    actual_delta_x,
+			    actual_delta_s,
+			    actual_delta_y_c,
+			    actual_delta_y_d,
+			    actual_delta_z_L,
+			    actual_delta_z_U,
+			    actual_delta_v_L,
+			    actual_delta_v_U);
+    }
+    if (accept) {
+      corr_taken = true;
+    }
+
+    if (!accept) {
+      // Loop over decreaseing step sizes until acceptable point is
+      // found or until step size becomes too small
+
+      while (alpha_primal>alpha_min ||
+	     n_steps == 0) { // always allow the "full" step if it is
+	// acceptable (even if alpha_primal<=alpha_min)
+	Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+		       "Starting checks for alpha (primal) = %8.2e\n",
+		       alpha_primal);
+
+	bool evaluation_error = false;
+	try {
+	  // Compute the primal trial point
+	  IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
+						   *actual_delta_x,
+						   *actual_delta_s);
+
+	  if (magic_steps_) {
+	    PerformMagicStep();
+	  }
+
+	  // If it is acceptable, stop the search
+	  alpha_primal_test = alpha_primal;
+	  accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
+	}
+	catch(IpoptNLP::Eval_Error& e) {
+	  e.ReportException(Jnlst());
+	  Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+			 "Warning: Cutting back alpha due to evaluation error\n");
+	  accept = false;
+	  evaluation_error = true;
+	}
+
+	if (accept) {
+	  break;
+	}
+
+	if (in_watch_dog_) {
+	  break;
+	}
+
+	// Decide if we want to go to the restoration phase in a
+	// short cut to check if the problem is infeasible
+	if (expect_infeasible_problem_) {
+	  if (count_successive_shortened_steps_>=5) {
+	    break;
+	  }
+	}
+
+	// try second order correction step if the function could
+	// be evaluated
+	// DoTo: check if we want to do SOC when watchdog is active
+	if (!evaluation_error) {
+	  Number theta_curr = IpCq().curr_constraint_violation();
+	  Number theta_trial = IpCq().trial_constraint_violation();
+	  if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
+	      theta_curr<=theta_trial && max_soc_>0) {
+	    // Try second order correction
+	    accept = TrySecondOrderCorrection(alpha_primal_test,
+					      alpha_primal,
+					      actual_delta_x,
+					      actual_delta_s,
+					      actual_delta_y_c,
+					      actual_delta_y_d,
+					      actual_delta_z_L,
+					      actual_delta_z_U,
+					      actual_delta_v_L,
+					      actual_delta_v_U);
+	  }
+	  if (accept) {
+	    soc_taken = true;
+	    break;
+	  }
+	}
+
+	// Point is not yet acceptable, try a shorter one
+	alpha_primal *= alpha_red_factor_;
+	n_steps++;
+      }
+    } /* if (!accept) */
+
+    char info_alpha_primal_char;
+    if (!accept && in_watch_dog_) {
+      info_alpha_primal_char = 'w';
+    }
+    else {
+      // Augment the filter if required
+      if (!IsFtype(alpha_primal_test) ||
+	  !ArmijoHolds(alpha_primal_test)) {
+	AugmentFilter();
+	info_alpha_primal_char = 'h';
+      }
+      else {
+	info_alpha_primal_char = 'f';
+      }
+    }
+    if (soc_taken) {
+      info_alpha_primal_char = toupper(info_alpha_primal_char);
+    }
+    IpData().Set_info_alpha_primal_char(info_alpha_primal_char);
+    IpData().Set_info_ls_count(n_steps+1);
+    if (corr_taken) {
+      IpData().Append_info_string("C");
+    }
+
+    return accept;
   }
 
   bool FilterLineSearch::IsFtype(Number alpha_primal_test)
   {
     DBG_START_METH("FilterLineSearch::IsFtype",
                    dbg_verbosity);
-    Number curr_theta = IpCq().curr_constraint_violation();
 
-    return (IpCq().curr_gradBarrTDelta() < 0.0 &&
-            alpha_primal_test*pow(-IpCq().curr_gradBarrTDelta(),s_phi_) >
-            delta_*pow(curr_theta,s_theta_));
+    return (reference_gradBarrTDelta_ < 0.0 &&
+            alpha_primal_test*pow(-reference_gradBarrTDelta_,s_phi_) >
+            delta_*pow(reference_theta_,s_theta_));
   }
 
   void FilterLineSearch::AugmentFilter()
   {
     DBG_START_METH("FilterLineSearch::AugmentFilter",
                    dbg_verbosity);
-    Number curr_barr = IpCq().curr_barrier_obj();
-    Number curr_theta = IpCq().curr_constraint_violation();
 
-    Number phi_add = curr_barr - gamma_phi_*curr_theta;
-    Number theta_add = (1.-gamma_theta_)*curr_theta;
+    Number phi_add = reference_barr_ - gamma_phi_*reference_theta_;
+    Number theta_add = (1.-gamma_theta_)*reference_theta_;
 
     filter_.AddEntry(phi_add, theta_add, IpData().iter_count());
   }
@@ -638,16 +798,14 @@ namespace Ipopt
 
     // First compute the barrier function and constraint violation at the
     // current iterate and the trial point
-    Number curr_barr = IpCq().curr_barrier_obj();
-    Number curr_theta = IpCq().curr_constraint_violation();
 
     Number trial_theta = IpCq().trial_constraint_violation();
     // Check if constraint violation is becoming too large
     if (theta_max_ < 0.0) {
-      theta_max_ = theta_max_fact_*Max(1.0, curr_theta);
+      theta_max_ = theta_max_fact_*Max(1.0, reference_theta_);
     }
     if (theta_min_ < 0.0) {
-      theta_min_ = theta_min_fact_*Max(1.0, curr_theta);
+      theta_min_ = theta_min_fact_*Max(1.0, reference_theta_);
     }
 
     if (theta_max_>0 && trial_theta>theta_max_) {
@@ -660,12 +818,12 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "Checking acceptability for trial step size alpha_primal_test=%13.6e:\n", alpha_primal_test);
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                   "  New values of barrier function     = %23.16e  (current %23.16e):\n", trial_barr, curr_barr);
+                   "  New values of barrier function     = %23.16e  (reference %23.16e):\n", trial_barr, reference_barr_);
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                   "  New values of constraint violation = %23.16e  (current %23.16e):\n", trial_theta, curr_theta);
+                   "  New values of constraint violation = %23.16e  (reference %23.16e):\n", trial_theta, reference_theta_);
 
     // Check if point is acceptable w.r.t current iterate
-    if (IsFtype(alpha_primal_test) && curr_theta <= theta_min_) {
+    if (IsFtype(alpha_primal_test) && reference_theta_ <= theta_min_) {
       // Armijo condition for the barrier function has to be satisfied
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Checking Armijo Condition...\n");
       accept = ArmijoHolds(alpha_primal_test);
@@ -699,9 +857,9 @@ namespace Ipopt
 
   bool FilterLineSearch::ArmijoHolds(Number alpha_primal_test)
   {
-    return Compare_le(IpCq().trial_barrier_obj()-IpCq().curr_barrier_obj(),
-                      eta_phi_*alpha_primal_test*IpCq().curr_gradBarrTDelta(),
-                      IpCq().curr_barrier_obj());
+    return Compare_le(IpCq().trial_barrier_obj()-reference_barr_,
+                      eta_phi_*alpha_primal_test*reference_gradBarrTDelta_,
+                      reference_barr_);
   }
 
   Number FilterLineSearch::CalculateAlphaMin()
@@ -729,26 +887,24 @@ namespace Ipopt
   {
     DBG_START_METH("FilterLineSearch::IsAcceptableToCurrentIterate",
                    dbg_verbosity);
-    Number curr_barr = IpCq().curr_barrier_obj();
 
     // Check if the barrier objective function is increasing to
     // rapidly (according to option obj_max_inc)
-    if (!called_from_restoration && trial_barr > curr_barr) {
+    if (!called_from_restoration && trial_barr > reference_barr_) {
       Number basval = 1.;
-      if (fabs(curr_barr)>10.) {
-        basval = log10(fabs(curr_barr));
+      if (fabs(reference_barr_)>10.) {
+        basval = log10(fabs(reference_barr_));
       }
-      if (log10(trial_barr-curr_barr)>obj_max_inc_+basval) {
-        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Rejecting trial point because barrier objective function increasing too rapidly (from %27.15e to %27.15e)\n",curr_barr,trial_barr);
+      if (log10(trial_barr-reference_barr_)>obj_max_inc_+basval) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Rejecting trial point because barrier objective function increasing too rapidly (from %27.15e to %27.15e)\n",reference_barr_,trial_barr);
         return false;
       }
     }
 
-    Number curr_theta = IpCq().curr_constraint_violation();
-    DBG_PRINT((1,"trial_barr  = %e curr_barr  = %e\n", trial_barr, curr_barr));
-    DBG_PRINT((1,"trial_theta = %e curr_theta = %e\n", trial_theta, curr_theta));
-    return (Compare_le(trial_theta, (1.-gamma_theta_)*curr_theta, curr_theta)
-            || Compare_le(trial_barr-curr_barr, -gamma_phi_*curr_theta, curr_barr));
+    DBG_PRINT((1,"trial_barr  = %e reference_barr  = %e\n", trial_barr, reference_barr_));
+    DBG_PRINT((1,"trial_theta = %e reference_theta = %e\n", trial_theta, reference_theta_));
+    return (Compare_le(trial_theta, (1.-gamma_theta_)*reference_theta_, reference_theta_)
+            || Compare_le(trial_barr-reference_barr_, -gamma_phi_*reference_theta_, reference_barr_));
   }
 
   bool FilterLineSearch::IsAcceptableToCurrentFilter(Number trial_barr, Number trial_theta) const
@@ -869,9 +1025,125 @@ namespace Ipopt
     return false;
   }
 
+  void FilterLineSearch::StartWatchDog()
+  {
+    DBG_START_FUN("FilterLineSearch::StartWatchDog", dbg_verbosity);
+
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+		   "Starting Watch Dog\n");
+
+    in_watch_dog_ = true;
+    watch_dog_x_ = IpData().curr_x();
+    watch_dog_s_ = IpData().curr_s();
+    watch_dog_y_c_ = IpData().curr_y_c();
+    watch_dog_y_d_ = IpData().curr_y_d();
+    watch_dog_z_L_ = IpData().curr_z_L();
+    watch_dog_z_U_ = IpData().curr_z_U();
+    watch_dog_v_L_ = IpData().curr_v_L();
+    watch_dog_v_U_ = IpData().curr_v_U();
+    watch_dog_delta_x_ = IpData().delta_x();
+    watch_dog_delta_s_ = IpData().delta_s();
+    watch_dog_delta_y_c_ = IpData().delta_y_c();
+    watch_dog_delta_y_d_ = IpData().delta_y_d();
+    watch_dog_delta_z_L_ = IpData().delta_z_L();
+    watch_dog_delta_z_U_ = IpData().delta_z_U();
+    watch_dog_delta_v_L_ = IpData().delta_v_L();
+    watch_dog_delta_v_U_ = IpData().delta_v_U();
+    watch_dog_trial_iter_ = 0;
+    watch_dog_alpha_primal_test_ = 
+      IpCq().curr_primal_frac_to_the_bound(IpData().curr_tau());
+    watch_dog_theta_ = IpCq().curr_constraint_violation();
+    watch_dog_barr_ = IpCq().curr_barrier_obj();
+    watch_dog_gradBarrTDelta_ = IpCq().curr_gradBarrTDelta();
+  }
+
+  void FilterLineSearch::StopWatchDog(SmartPtr<const Vector>& actual_delta_x,
+				      SmartPtr<const Vector>& actual_delta_s,
+				      SmartPtr<const Vector>& actual_delta_y_c,
+				      SmartPtr<const Vector>& actual_delta_y_d,
+				      SmartPtr<const Vector>& actual_delta_z_L,
+				      SmartPtr<const Vector>& actual_delta_z_U,
+				      SmartPtr<const Vector>& actual_delta_v_L,
+				      SmartPtr<const Vector>& actual_delta_v_U)
+  {
+    DBG_START_FUN("FilterLineSearch::StopWatchDog", dbg_verbosity);
+
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+		   "Stopping Watch Dog\n");
+
+    IpData().Append_info_string("w");
+
+    in_watch_dog_ = false;
+    // Reset all fields in IpData to reference point
+    IpData().SetTrialPrimalVariablesFromPtr(watch_dog_x_, watch_dog_s_);
+    IpData().SetTrialConstraintMultipliersFromPtr(watch_dog_y_c_,
+						  watch_dog_y_d_);
+    IpData().SetTrialBoundMultipliersFromPtr(watch_dog_z_L_,
+					     watch_dog_z_U_,
+					     watch_dog_v_L_,
+					     watch_dog_v_U_);
+    IpData().AcceptTrialPoint();
+
+    actual_delta_x = watch_dog_delta_x_;
+    actual_delta_s = watch_dog_delta_s_;
+    actual_delta_y_c = watch_dog_delta_y_c_;
+    actual_delta_y_d = watch_dog_delta_y_d_;
+    actual_delta_z_L = watch_dog_delta_z_L_;
+    actual_delta_z_U = watch_dog_delta_z_U_;
+    actual_delta_v_L = watch_dog_delta_v_L_;
+    actual_delta_v_U = watch_dog_delta_v_U_;
+
+    IpData().SetHaveAffineDeltas(false);
+
+    watch_dog_x_ = NULL;
+    watch_dog_s_ = NULL;
+    watch_dog_y_c_ = NULL;
+    watch_dog_y_d_ = NULL;
+    watch_dog_z_L_ = NULL;
+    watch_dog_z_U_ = NULL;
+    watch_dog_v_L_ = NULL;
+    watch_dog_v_U_ = NULL;
+    watch_dog_delta_x_ = NULL;
+    watch_dog_delta_s_ = NULL;
+    watch_dog_delta_y_c_ = NULL;
+    watch_dog_delta_y_d_ = NULL;
+    watch_dog_delta_z_L_ = NULL;
+    watch_dog_delta_z_U_ = NULL;
+    watch_dog_delta_v_L_ = NULL;
+    watch_dog_delta_v_U_ = NULL;
+
+    watch_dog_shortened_iter_ = 0;
+
+    reference_theta_ = watch_dog_theta_;
+    reference_barr_ = watch_dog_barr_;
+    reference_gradBarrTDelta_ = watch_dog_gradBarrTDelta_;
+  }
+
   void FilterLineSearch::Reset()
   {
     DBG_START_FUN("FilterLineSearch::Reset", dbg_verbosity);
+    in_soft_resto_phase_ = false;
+
+    // Inactivate the watchdog and release all stored data
+    in_watch_dog_ = false;
+    watch_dog_x_ = NULL;
+    watch_dog_s_ = NULL;
+    watch_dog_y_c_ = NULL;
+    watch_dog_y_d_ = NULL;
+    watch_dog_z_L_ = NULL;
+    watch_dog_z_U_ = NULL;
+    watch_dog_v_L_ = NULL;
+    watch_dog_v_U_ = NULL;
+    watch_dog_delta_x_ = NULL;
+    watch_dog_delta_s_ = NULL;
+    watch_dog_delta_y_c_ = NULL;
+    watch_dog_delta_y_d_ = NULL;
+    watch_dog_delta_z_L_ = NULL;
+    watch_dog_delta_z_U_ = NULL;
+    watch_dog_delta_v_L_ = NULL;
+    watch_dog_delta_v_U_ = NULL;
+    watch_dog_shortened_iter_ = 0;
+
     filter_.Clear();
   }
 
@@ -891,8 +1163,11 @@ namespace Ipopt
         delta_v_L, delta_v_U);
 
     Number alpha_y;
-    if (dual_alpha_for_y_) {
+    if (dual_alpha_for_y_==1) {
       alpha_y = alpha_dual;
+    }
+    else if (dual_alpha_for_y_==2) {
+      alpha_y = Min(alpha_dual, alpha_primal);
     }
     else {
       alpha_y = alpha_primal;

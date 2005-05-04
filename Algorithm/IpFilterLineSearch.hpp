@@ -132,13 +132,47 @@ namespace Ipopt
      */
     bool ArmijoHolds(Number alpha_primal_test);
 
-    /** Method to calculate alpha_min (minimum alpha before going to restoration
+    /** Method to calculate alpha_min (minimum alpha before going to
+     *  restoration
      */
     Number CalculateAlphaMin();
 
     /** Augment the filter used on the current values of the barrier
      *  objective function and the contraint violation */
     void AugmentFilter();
+
+    /** Method performing the backtracking line search.  The return
+     *  value indicates if the step acceptance criteria are met.  If
+     *  the watchdog is active, only one trial step is performed (and
+     *  the trial values are set accordingly). */
+    bool DoBacktrackingLineSearch(bool skip_first_trial_point,
+				  Number& alpha_primal,
+				  bool& corr_taken,
+				  bool& soc_taken,
+				  Index& n_steps,
+				  SmartPtr<const Vector>& actual_delta_x,
+				  SmartPtr<const Vector>& actual_delta_s,
+				  SmartPtr<const Vector>& actual_delta_y_c,
+				  SmartPtr<const Vector>& actual_delta_y_d,
+				  SmartPtr<const Vector>& actual_delta_z_L,
+				  SmartPtr<const Vector>& actual_delta_z_U,
+				  SmartPtr<const Vector>& actual_delta_v_L,
+				  SmartPtr<const Vector>& actual_delta_v_U);
+
+    /** Method for starting the watch dog.  Set all appropriate fields
+     *  accordingly */
+    void StartWatchDog();
+
+    /** Method for stopping the watch dog.  Set all appropriate fields
+     *  accordingly. */
+    void StopWatchDog(SmartPtr<const Vector>& actual_delta_x,
+		      SmartPtr<const Vector>& actual_delta_s,
+		      SmartPtr<const Vector>& actual_delta_y_c,
+		      SmartPtr<const Vector>& actual_delta_y_d,
+		      SmartPtr<const Vector>& actual_delta_z_L,
+		      SmartPtr<const Vector>& actual_delta_z_U,
+		      SmartPtr<const Vector>& actual_delta_v_L,
+		      SmartPtr<const Vector>& actual_delta_v_U);
 
     /** Method for checking if current trial point is acceptable.
      *  It is assumed that the delta information in ip_data is the
@@ -264,8 +298,10 @@ namespace Ipopt
      *  trial point is rejected. */
     Number obj_max_inc_;
     /** Flag indicating whether the dual step size is to be used for
-     *  the equality constraint multipliers. */
-    bool dual_alpha_for_y_;
+     *  the equality constraint multipliers. If 0, the primal step
+     *  size is used, if 1 the dual step size, and if 2, the minimum
+     *  of both. */
+    Index dual_alpha_for_y_;
 
     /** Flag indicating whether magic steps should be used. */
     bool magic_steps_;
@@ -288,6 +324,11 @@ namespace Ipopt
      *  infeasibility the first time the restoration phase is
      *  called. */
     bool expect_infeasible_problem_;
+    /** Tolerance on constraint violation for
+     *  expect_infeasible_problem heuristic.  If the constraint
+     *  violation becomes that than this value, the heuristic is
+     *  disabled for the rest of the optimization run. */
+    Number expect_infeasible_problem_ctol_;
     /** Reduction factor for the restoration phase that accepts steps
      *  reducing the optimality error ("soft restoration phase"). If
      *  0., then this restoration phase is not enabled. */
@@ -295,6 +336,70 @@ namespace Ipopt
 
     /** Tolerance for detecting tiny steps. */
     Number tiny_step_tol_;
+
+    /** Number of watch dog trial steps. */
+    Index watch_dog_trial_iter_max_;
+    /** Number of shortened iterations that trigger the watchdog. */
+    Index watch_dog_shortened_iter_trigger_;
+    //@}
+
+    /** @name Information related to watchdog procedure */
+    //@{
+    /** Constraint violation at the point with respect to which
+     *  progress is to be made */
+    Number reference_theta_;
+    /** Barrier objective function at the point with respect to which
+     *  progress is to be made */
+    Number reference_barr_;
+    /** Barrier gradient transpose search direction at the point with
+     *  respect to which progress is to be made */
+    Number reference_gradBarrTDelta_;
+    /** Flag indicating if the watchdog is active */
+    bool in_watch_dog_;
+    /** Counter for shortened iterations. */
+    Index watch_dog_shortened_iter_;
+    /** Counter for watch dog iterations */
+    Index watch_dog_trial_iter_;
+    /** Step size for Armijo test in watch dog */
+    Number watch_dog_alpha_primal_test_;
+    /** Constraint violation at reference point */
+    Number watch_dog_theta_;
+    /** Barrier objective function at reference point */
+    Number watch_dog_barr_;
+    /** Barrier gradient transpose search direction at reference point */
+    Number watch_dog_gradBarrTDelta_;
+    /** Refernence point iterate x */
+    SmartPtr<const Vector> watch_dog_x_;
+    /** Refernence point iterate s */
+    SmartPtr<const Vector> watch_dog_s_;
+    /** Refernence point iterate y_c */
+    SmartPtr<const Vector> watch_dog_y_c_;
+    /** Refernence point iterate y_d */
+    SmartPtr<const Vector> watch_dog_y_d_;
+    /** Refernence point iterate z_L */
+    SmartPtr<const Vector> watch_dog_z_L_;
+    /** Refernence point iterate z_U */
+    SmartPtr<const Vector> watch_dog_z_U_;
+    /** Refernence point iterate v_L */
+    SmartPtr<const Vector> watch_dog_v_L_;
+    /** Refernence point iterate v_U */
+    SmartPtr<const Vector> watch_dog_v_U_;
+    /** Search direction x at reference point */
+    SmartPtr<const Vector> watch_dog_delta_x_;
+    /** Search direction s at reference point */
+    SmartPtr<const Vector> watch_dog_delta_s_;
+    /** Search direction y_c at reference point */
+    SmartPtr<const Vector> watch_dog_delta_y_c_;
+    /** Search direction y_d at reference point */
+    SmartPtr<const Vector> watch_dog_delta_y_d_;
+    /** Search direction z_L at reference point */
+    SmartPtr<const Vector> watch_dog_delta_z_L_;
+    /** Search direction z_U at reference point */
+    SmartPtr<const Vector> watch_dog_delta_z_U_;
+    /** Search direction v_L at reference point */
+    SmartPtr<const Vector> watch_dog_delta_v_L_;
+    /** Search direction v_U at reference point */
+    SmartPtr<const Vector> watch_dog_delta_v_U_;
     //@}
 
     /** Filter with entries */
