@@ -356,21 +356,20 @@ namespace Ipopt
       // watchdog is active, stop the watch dog and resume everything
       // from reference point
       StopWatchDog(actual_delta_x, actual_delta_s,
-		   actual_delta_y_c, actual_delta_y_d,
-		   actual_delta_z_L, actual_delta_z_U,
-		   actual_delta_v_L, actual_delta_v_U);
+                   actual_delta_y_c, actual_delta_y_d,
+                   actual_delta_z_L, actual_delta_z_U,
+                   actual_delta_v_L, actual_delta_v_U);
       goto_resto = false;
       tiny_step = false;
     }
 
     // Check if we want to wake up the watchdog
     if (watch_dog_shortened_iter_trigger_ > 0 &&
-	!in_watch_dog_ && !goto_resto && !tiny_step &&
-	!in_soft_resto_phase_ && !expect_infeasible_problem_ &&
-	watch_dog_shortened_iter_ >= watch_dog_shortened_iter_trigger_)
-      {
-	StartWatchDog();
-      }
+        !in_watch_dog_ && !goto_resto && !tiny_step &&
+        !in_soft_resto_phase_ && !expect_infeasible_problem_ &&
+        watch_dog_shortened_iter_ >= watch_dog_shortened_iter_trigger_) {
+      StartWatchDog();
+    }
 
     if (tiny_step) {
       alpha_primal =
@@ -421,49 +420,49 @@ namespace Ipopt
         }
       }
       else {
-	bool done = false;
-	bool skip_first_trial_point = false;
-	while (!done) {
-	  accept = DoBacktrackingLineSearch(skip_first_trial_point,
-					    alpha_primal,
-					    corr_taken,
-					    soc_taken,
-					    n_steps,
-					    actual_delta_x,
-					    actual_delta_s,
-					    actual_delta_y_c,
-					    actual_delta_y_d,
-					    actual_delta_z_L,
-					    actual_delta_z_U,
-					    actual_delta_v_L,
-					    actual_delta_v_U);
-	  if (in_watch_dog_) {
-	    if (accept) {
-	      in_watch_dog_ = false;
-	      IpData().Append_info_string("W");
-	      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-			     "Watch dog procedure successful!\n");
-	      done = true;
-	    }
-	    else {
-	      watch_dog_trial_iter_++;
-	      if (watch_dog_trial_iter_ > watch_dog_trial_iter_max_) {
-		StopWatchDog(actual_delta_x, actual_delta_s,
-			     actual_delta_y_c, actual_delta_y_d,
-			     actual_delta_z_L, actual_delta_z_U,
-			     actual_delta_v_L, actual_delta_v_U);
-		skip_first_trial_point = true;
-	      }
-	      else {
-		done = true;
-		accept = true;
-	      }
-	    }
-	  }
-	  else {
-	    done = true;
-	  }
-	}
+        bool done = false;
+        bool skip_first_trial_point = false;
+        while (!done) {
+          accept = DoBacktrackingLineSearch(skip_first_trial_point,
+                                            alpha_primal,
+                                            corr_taken,
+                                            soc_taken,
+                                            n_steps,
+                                            actual_delta_x,
+                                            actual_delta_s,
+                                            actual_delta_y_c,
+                                            actual_delta_y_d,
+                                            actual_delta_z_L,
+                                            actual_delta_z_U,
+                                            actual_delta_v_L,
+                                            actual_delta_v_U);
+          if (in_watch_dog_) {
+            if (accept) {
+              in_watch_dog_ = false;
+              IpData().Append_info_string("W");
+              Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                             "Watch dog procedure successful!\n");
+              done = true;
+            }
+            else {
+              watch_dog_trial_iter_++;
+              if (watch_dog_trial_iter_ > watch_dog_trial_iter_max_) {
+                StopWatchDog(actual_delta_x, actual_delta_s,
+                             actual_delta_y_c, actual_delta_y_d,
+                             actual_delta_z_L, actual_delta_z_U,
+                             actual_delta_v_L, actual_delta_v_U);
+                skip_first_trial_point = true;
+              }
+              else {
+                done = true;
+                accept = true;
+              }
+            }
+          }
+          else {
+            done = true;
+          }
+        }
       } /* else: if (in_soft_resto_phase_) { */
     } /* if (!goto_resto && !tiny_step) { */
 
@@ -479,7 +478,7 @@ namespace Ipopt
       else {
         // Check if we should start the soft restoration phase
         if (!in_soft_resto_phase_ && resto_pderror_reduction_factor_>0.
-	    && !goto_resto ) {
+            && !goto_resto ) {
           Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                          "--> Starting soft restoration phase <--\n");
           // Augment the filter with the current point
@@ -543,7 +542,7 @@ namespace Ipopt
             expect_infeasible_problem_ = false;
           }
           in_soft_resto_phase_ = false;
-	  watch_dog_shortened_iter_ = 0;
+          watch_dog_shortened_iter_ = 0;
         }
       }
     }
@@ -562,35 +561,35 @@ namespace Ipopt
 
       if (n_steps==0) {
         count_successive_shortened_steps_ = 0;
-	watch_dog_shortened_iter_ = 0;
+        watch_dog_shortened_iter_ = 0;
       }
       else {
         count_successive_shortened_steps_++;
-	watch_dog_shortened_iter_++;
+        watch_dog_shortened_iter_++;
       }
 
       if (expect_infeasible_problem_ &&
-	  IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
-	Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		       "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n");
-	expect_infeasible_problem_ = false;
+          IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n");
+        expect_infeasible_problem_ = false;
       }
     }
   }
 
   bool FilterLineSearch::DoBacktrackingLineSearch(bool skip_first_trial_point,
-						  Number& alpha_primal,
-						  bool& corr_taken,
-						  bool& soc_taken,
-						  Index& n_steps,
-						  SmartPtr<const Vector>& actual_delta_x,
-						  SmartPtr<const Vector>& actual_delta_s,
-						  SmartPtr<const Vector>& actual_delta_y_c,
-						  SmartPtr<const Vector>& actual_delta_y_d,
-						  SmartPtr<const Vector>& actual_delta_z_L,
-						  SmartPtr<const Vector>& actual_delta_z_U,
-						  SmartPtr<const Vector>& actual_delta_v_L,
-						  SmartPtr<const Vector>& actual_delta_v_U)
+      Number& alpha_primal,
+      bool& corr_taken,
+      bool& soc_taken,
+      Index& n_steps,
+      SmartPtr<const Vector>& actual_delta_x,
+      SmartPtr<const Vector>& actual_delta_s,
+      SmartPtr<const Vector>& actual_delta_y_c,
+      SmartPtr<const Vector>& actual_delta_y_d,
+      SmartPtr<const Vector>& actual_delta_z_L,
+      SmartPtr<const Vector>& actual_delta_z_U,
+      SmartPtr<const Vector>& actual_delta_v_L,
+      SmartPtr<const Vector>& actual_delta_v_U)
   {
     bool accept = false;
 
@@ -600,8 +599,8 @@ namespace Ipopt
     // Compute primal fraction-to-the-boundary value
     Number alpha_primal_max =
       IpCq().primal_frac_to_the_bound(IpData().curr_tau(),
-				      *actual_delta_x,
-				      *actual_delta_s);
+                                      *actual_delta_x,
+                                      *actual_delta_s);
 
     // Compute smallest step size allowed
     Number alpha_min = alpha_primal_max;
@@ -609,7 +608,7 @@ namespace Ipopt
       alpha_min = CalculateAlphaMin();
     }
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		   "minimal step size ALPHA_MIN = %E\n", alpha_min);
+                   "minimal step size ALPHA_MIN = %E\n", alpha_min);
 
     // Start line search from maximal step size
     alpha_primal = alpha_primal_max;
@@ -627,21 +626,21 @@ namespace Ipopt
     filter_.Print(Jnlst());
 
     if (corrector_type_!=0 && !skip_first_trial_point &&
-	(!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) &&
-	(!skip_corr_if_fixed_mode_ || IpData().FreeMuMode()) ) {
+        (!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) &&
+        (!skip_corr_if_fixed_mode_ || IpData().FreeMuMode()) ) {
       // Before we do the actual backtracking line search for the
       // regular primal-dual search direction, let's see if a step
       // including a higher-order correctior is already acceptable
       accept = TryCorrector(alpha_primal_test,
-			    alpha_primal,
-			    actual_delta_x,
-			    actual_delta_s,
-			    actual_delta_y_c,
-			    actual_delta_y_d,
-			    actual_delta_z_L,
-			    actual_delta_z_U,
-			    actual_delta_v_L,
-			    actual_delta_v_U);
+                            alpha_primal,
+                            actual_delta_x,
+                            actual_delta_s,
+                            actual_delta_y_c,
+                            actual_delta_y_d,
+                            actual_delta_z_L,
+                            actual_delta_z_U,
+                            actual_delta_v_L,
+                            actual_delta_v_U);
     }
     if (accept) {
       corr_taken = true;
@@ -652,80 +651,80 @@ namespace Ipopt
       // found or until step size becomes too small
 
       while (alpha_primal>alpha_min ||
-	     n_steps == 0) { // always allow the "full" step if it is
-	// acceptable (even if alpha_primal<=alpha_min)
-	Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		       "Starting checks for alpha (primal) = %8.2e\n",
-		       alpha_primal);
+             n_steps == 0) { // always allow the "full" step if it is
+        // acceptable (even if alpha_primal<=alpha_min)
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "Starting checks for alpha (primal) = %8.2e\n",
+                       alpha_primal);
 
-	bool evaluation_error = false;
-	try {
-	  // Compute the primal trial point
-	  IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
-						   *actual_delta_x,
-						   *actual_delta_s);
+        bool evaluation_error = false;
+        try {
+          // Compute the primal trial point
+          IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
+              *actual_delta_x,
+              *actual_delta_s);
 
-	  if (magic_steps_) {
-	    PerformMagicStep();
-	  }
+          if (magic_steps_) {
+            PerformMagicStep();
+          }
 
-	  // If it is acceptable, stop the search
-	  alpha_primal_test = alpha_primal;
-	  accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
-	}
-	catch(IpoptNLP::Eval_Error& e) {
-	  e.ReportException(Jnlst());
-	  Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
-			 "Warning: Cutting back alpha due to evaluation error\n");
-	  accept = false;
-	  evaluation_error = true;
-	}
+          // If it is acceptable, stop the search
+          alpha_primal_test = alpha_primal;
+          accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
+        }
+        catch(IpoptNLP::Eval_Error& e) {
+          e.ReportException(Jnlst());
+          Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                         "Warning: Cutting back alpha due to evaluation error\n");
+          accept = false;
+          evaluation_error = true;
+        }
 
-	if (accept) {
-	  break;
-	}
+        if (accept) {
+          break;
+        }
 
-	if (in_watch_dog_) {
-	  break;
-	}
+        if (in_watch_dog_) {
+          break;
+        }
 
-	// Decide if we want to go to the restoration phase in a
-	// short cut to check if the problem is infeasible
-	if (expect_infeasible_problem_) {
-	  if (count_successive_shortened_steps_>=5) {
-	    break;
-	  }
-	}
+        // Decide if we want to go to the restoration phase in a
+        // short cut to check if the problem is infeasible
+        if (expect_infeasible_problem_) {
+          if (count_successive_shortened_steps_>=5) {
+            break;
+          }
+        }
 
-	// try second order correction step if the function could
-	// be evaluated
-	// DoTo: check if we want to do SOC when watchdog is active
-	if (!evaluation_error) {
-	  Number theta_curr = IpCq().curr_constraint_violation();
-	  Number theta_trial = IpCq().trial_constraint_violation();
-	  if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
-	      theta_curr<=theta_trial && max_soc_>0) {
-	    // Try second order correction
-	    accept = TrySecondOrderCorrection(alpha_primal_test,
-					      alpha_primal,
-					      actual_delta_x,
-					      actual_delta_s,
-					      actual_delta_y_c,
-					      actual_delta_y_d,
-					      actual_delta_z_L,
-					      actual_delta_z_U,
-					      actual_delta_v_L,
-					      actual_delta_v_U);
-	  }
-	  if (accept) {
-	    soc_taken = true;
-	    break;
-	  }
-	}
+        // try second order correction step if the function could
+        // be evaluated
+        // DoTo: check if we want to do SOC when watchdog is active
+        if (!evaluation_error) {
+          Number theta_curr = IpCq().curr_constraint_violation();
+          Number theta_trial = IpCq().trial_constraint_violation();
+          if (alpha_primal==alpha_primal_max &&       // i.e. first trial point
+              theta_curr<=theta_trial && max_soc_>0) {
+            // Try second order correction
+            accept = TrySecondOrderCorrection(alpha_primal_test,
+                                              alpha_primal,
+                                              actual_delta_x,
+                                              actual_delta_s,
+                                              actual_delta_y_c,
+                                              actual_delta_y_d,
+                                              actual_delta_z_L,
+                                              actual_delta_z_U,
+                                              actual_delta_v_L,
+                                              actual_delta_v_U);
+          }
+          if (accept) {
+            soc_taken = true;
+            break;
+          }
+        }
 
-	// Point is not yet acceptable, try a shorter one
-	alpha_primal *= alpha_red_factor_;
-	n_steps++;
+        // Point is not yet acceptable, try a shorter one
+        alpha_primal *= alpha_red_factor_;
+        n_steps++;
       }
     } /* if (!accept) */
 
@@ -736,12 +735,12 @@ namespace Ipopt
     else {
       // Augment the filter if required
       if (!IsFtype(alpha_primal_test) ||
-	  !ArmijoHolds(alpha_primal_test)) {
-	AugmentFilter();
-	info_alpha_primal_char = 'h';
+          !ArmijoHolds(alpha_primal_test)) {
+        AugmentFilter();
+        info_alpha_primal_char = 'h';
       }
       else {
-	info_alpha_primal_char = 'f';
+        info_alpha_primal_char = 'f';
       }
     }
     if (soc_taken) {
@@ -1030,7 +1029,7 @@ namespace Ipopt
     DBG_START_FUN("FilterLineSearch::StartWatchDog", dbg_verbosity);
 
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		   "Starting Watch Dog\n");
+                   "Starting Watch Dog\n");
 
     in_watch_dog_ = true;
     watch_dog_x_ = IpData().curr_x();
@@ -1050,7 +1049,7 @@ namespace Ipopt
     watch_dog_delta_v_L_ = IpData().delta_v_L();
     watch_dog_delta_v_U_ = IpData().delta_v_U();
     watch_dog_trial_iter_ = 0;
-    watch_dog_alpha_primal_test_ = 
+    watch_dog_alpha_primal_test_ =
       IpCq().curr_primal_frac_to_the_bound(IpData().curr_tau());
     watch_dog_theta_ = IpCq().curr_constraint_violation();
     watch_dog_barr_ = IpCq().curr_barrier_obj();
@@ -1058,18 +1057,18 @@ namespace Ipopt
   }
 
   void FilterLineSearch::StopWatchDog(SmartPtr<const Vector>& actual_delta_x,
-				      SmartPtr<const Vector>& actual_delta_s,
-				      SmartPtr<const Vector>& actual_delta_y_c,
-				      SmartPtr<const Vector>& actual_delta_y_d,
-				      SmartPtr<const Vector>& actual_delta_z_L,
-				      SmartPtr<const Vector>& actual_delta_z_U,
-				      SmartPtr<const Vector>& actual_delta_v_L,
-				      SmartPtr<const Vector>& actual_delta_v_U)
+                                      SmartPtr<const Vector>& actual_delta_s,
+                                      SmartPtr<const Vector>& actual_delta_y_c,
+                                      SmartPtr<const Vector>& actual_delta_y_d,
+                                      SmartPtr<const Vector>& actual_delta_z_L,
+                                      SmartPtr<const Vector>& actual_delta_z_U,
+                                      SmartPtr<const Vector>& actual_delta_v_L,
+                                      SmartPtr<const Vector>& actual_delta_v_U)
   {
     DBG_START_FUN("FilterLineSearch::StopWatchDog", dbg_verbosity);
 
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		   "Stopping Watch Dog\n");
+                   "Stopping Watch Dog\n");
 
     IpData().Append_info_string("w");
 
@@ -1077,11 +1076,11 @@ namespace Ipopt
     // Reset all fields in IpData to reference point
     IpData().SetTrialPrimalVariablesFromPtr(watch_dog_x_, watch_dog_s_);
     IpData().SetTrialConstraintMultipliersFromPtr(watch_dog_y_c_,
-						  watch_dog_y_d_);
+        watch_dog_y_d_);
     IpData().SetTrialBoundMultipliersFromPtr(watch_dog_z_L_,
-					     watch_dog_z_U_,
-					     watch_dog_v_L_,
-					     watch_dog_v_U_);
+        watch_dog_z_U_,
+        watch_dog_v_L_,
+        watch_dog_v_U_);
     IpData().AcceptTrialPoint();
 
     actual_delta_x = watch_dog_delta_x_;
