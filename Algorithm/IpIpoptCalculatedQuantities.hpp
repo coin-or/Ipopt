@@ -16,18 +16,19 @@
 namespace Ipopt
 {
 
+  /** Norm types */
+  enum ENormType {
+    NORM_1,
+    NORM_2,
+    NORM_MAX
+  };
+
   /** Class for all IPOPT specific calculated quantities.
    *  
    */
   class IpoptCalculatedQuantities : public ReferencedObject
   {
   public:
-    /** Norm types */
-    enum ENormType {
-      NORM_1,
-      NORM_2,
-      NORM_MAX
-    };
 
     /**@name Constructors/Destructors */
     //@{
@@ -311,12 +312,12 @@ namespace Ipopt
 
     /** Compute the norm of a specific type of a set of vectors (uncached) */
     Number
-    CalcNormOfType(IpoptCalculatedQuantities::ENormType NormType,
+    CalcNormOfType(ENormType NormType,
                    std::vector<SmartPtr<const Vector> > vecs);
 
     /** Compute the norm of a specific type of two vectors (uncached) */
     Number
-    CalcNormOfType(IpoptCalculatedQuantities::ENormType NormType,
+    CalcNormOfType(ENormType NormType,
                    const Vector& vec1, const Vector& vec2);
 
     /** Norm type used for calculating constraint violation */

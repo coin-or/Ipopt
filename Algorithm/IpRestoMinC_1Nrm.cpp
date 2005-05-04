@@ -152,6 +152,20 @@ namespace Ipopt
 
       retval = 0;
     }
+    else if (resto_status == IpoptAlgorithm::STOP_AT_TINY_STEP ||
+             resto_status == IpoptAlgorithm::STOP_AT_ACCEPTABLE_POINT) {
+      Number orig_primal_inf =
+        IpCq().curr_primal_infeasibility(NORM_MAX);
+      // ToDo make the factor in following line an option
+      if (orig_primal_inf <= 1e2*IpData().tol()) {
+        THROW_EXCEPTION(RESTORATION_FAILED,
+                        "Restoration phase converged to a point with small primal infeasibility");
+      }
+      else {
+        THROW_EXCEPTION(LOCALLY_INFEASIBILE,
+                        "Restoration phase converged to a point of local infeasibility");
+      }
+    }
     else if (resto_status == IpoptAlgorithm::MAXITER_EXCEEDED) {
       //ToDo
       THROW_EXCEPTION(IpoptException, "Maximal number of iterations exceeded in restoration phase.");

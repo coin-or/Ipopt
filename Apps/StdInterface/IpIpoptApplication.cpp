@@ -178,13 +178,13 @@ namespace Ipopt
                        ip_cq->curr_f());
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                        "Primal Infeasibility    = %23.16e\n",
-                       ip_cq->curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX));
+                       ip_cq->curr_primal_infeasibility(NORM_MAX));
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                        "Dual Infeasibility      = %23.16e\n",
-                       ip_cq->curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX));
+                       ip_cq->curr_dual_infeasibility(NORM_MAX));
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                        "Complementarity         = %23.16e\n",
-                       ip_cq->curr_complementarity(0., IpoptCalculatedQuantities::NORM_MAX));
+                       ip_cq->curr_complementarity(0., NORM_MAX));
 
         jnlst_->PrintVector(vector_report_level, J_SOLUTION, "x", *ip_data->curr_x());
         jnlst_->PrintVector(vector_report_level, J_SOLUTION, "y_c", *ip_data->curr_y_c());
@@ -224,9 +224,13 @@ namespace Ipopt
         retValue = Maximum_Iterations_Exceeded;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Maximum Number of Iterations Exceeded.\n");
       }
-      else if (status == IpoptAlgorithm::TINY_STEP) {
+      else if (status == IpoptAlgorithm::STOP_AT_TINY_STEP) {
         retValue = Solved_To_Best_Possible_Precision;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Solved To Best Possible Precision.\n");
+      }
+      else if (status == IpoptAlgorithm::STOP_AT_ACCEPTABLE_POINT) {
+        retValue = Solved_To_Acceptable_Level;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Solved To Acceptable Level.\n");
       }
       else if (status == IpoptAlgorithm::FAILED) {
         retValue = Solve_Failed;

@@ -92,7 +92,9 @@ namespace Ipopt
                    orig_curr_theta, orig_trial_theta, orig_trial_barr);
 
     // ToDo: In the following we might want to be more careful with the lower bound
-    Number orig_theta_max = Max(kappa_resto_*orig_curr_theta, 1.e1*orig_ip_data->epsilon_tol());
+    Number orig_theta_max = Max(kappa_resto_*orig_curr_theta,
+                                1.e1*Min(orig_ip_data->tol(),
+                                         orig_ip_data->primal_inf_tol()));
     if (orig_trial_theta > orig_theta_max) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "Point does not provide sufficient reduction w.r.t the original theta.\n");
@@ -123,9 +125,9 @@ namespace Ipopt
       status = OptimalityErrorConvergenceCheck::CheckConvergence();
       if (status == CONVERGED) {
         Number orig_trial_primal_inf =
-          orig_ip_cq->trial_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
+          orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
         // ToDo make the factor in following line an option
-        if (orig_trial_primal_inf <= 1e4*orig_ip_data->epsilon_tol()) {
+        if (orig_trial_primal_inf <= 1e2*orig_ip_data->tol()) {
           THROW_EXCEPTION(RESTORATION_FAILED,
                           "Restoration phase converged to a point with small primal infeasibility");
         }

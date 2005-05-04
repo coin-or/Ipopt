@@ -542,14 +542,29 @@ namespace Ipopt
     }
     //@}
 
-    /**@name Algorithm Parameters (these will later be
+    /**@name Algorithm Parameters ("these will later be
      *  moved to a specific IpoptParameters class, once
-     *  I get time to write one) */
+     *  I get time to write one" - he said) */
     //@{
-    Number epsilon_tol() const
+    Number tol() const
     {
       DBG_ASSERT(initialize_called_);
-      return epsilon_tol_;
+      return tol_;
+    }
+    Number dual_inf_tol() const
+    {
+      DBG_ASSERT(initialize_called_);
+      return dual_inf_tol_;
+    }
+    Number primal_inf_tol() const
+    {
+      DBG_ASSERT(initialize_called_);
+      return primal_inf_tol_;
+    }
+    Number compl_inf_tol() const
+    {
+      DBG_ASSERT(initialize_called_);
+      return compl_inf_tol_;
     }
     //@}
 
@@ -764,7 +779,13 @@ namespace Ipopt
      *  Initialize method.  */
     //@{
     /** Overall convergence tolerance */
-    Number epsilon_tol_;
+    Number tol_;
+    /** Tolerance on unscaled dual infeasibility */
+    Number dual_inf_tol_;
+    /** Tolerance on unscaled primal infeasibility */
+    Number primal_inf_tol_;
+    /** Tolerance on unscaled complementarity */
+    Number compl_inf_tol_;
     //@}
 
     /** @name Gathered information for iteration output */

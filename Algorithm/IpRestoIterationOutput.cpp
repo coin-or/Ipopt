@@ -84,7 +84,7 @@ namespace Ipopt
     // For now, just print the total NLP error for the restoration
     // phase problem in the dual infeasibility column
     Number inf_du =
-      IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
+      IpCq().curr_dual_infeasibility(NORM_MAX);
 
     Number mu = IpData().curr_mu();
     Number dnrm = 0.;
@@ -103,7 +103,7 @@ namespace Ipopt
     orig_ip_data->SetTrialPrimalVariablesFromPtr(x_only, IpData().curr_s());
 
     // Compute primal infeasibility
-    Number inf_pr = orig_ip_cq->trial_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
+    Number inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
     Number f = orig_ip_cq->trial_f();
 
     // Retrieve some information set in the different parts of the algorithm
@@ -147,10 +147,10 @@ namespace Ipopt
 
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "Primal infeasibility for restoration phase problem = %.16e\n",
-                   IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX));
+                   IpCq().curr_primal_infeasibility(NORM_MAX));
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "Dual infeasibility for restoration phase problem   = %.16e\n",
-                   IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX));
+                   IpCq().curr_dual_infeasibility(NORM_MAX));
 
     if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
@@ -213,6 +213,28 @@ namespace Ipopt
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_L", *IpData().curr_v_L());
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_U", *IpData().curr_v_U());
     }
+    if (Jnlst().ProduceOutput(J_MOREVECTOR, J_MAIN)) {
+      Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_x", *IpCq().curr_grad_lag_x());
+      Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_s", *IpCq().curr_grad_lag_s());
+      if (IsValid(IpData().delta_x())) {
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_x", *IpData().delta_x());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_s", *IpData().delta_s());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_y_c", *IpData().delta_y_c());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_y_d", *IpData().delta_y_d());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_z_L", *IpData().delta_z_L());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_z_U", *IpData().delta_z_U());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_v_L", *IpData().delta_v_L());
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_v_U", *IpData().delta_v_U());
+      }
+    }
 
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "\n\n***Current NLP Values for Iteration (Restoration phase problem) %d:\n",
@@ -223,15 +245,6 @@ namespace Ipopt
     Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_d", *IpCq().curr_d());
     Jnlst().PrintVector(J_VECTOR, J_MAIN,
                         "curr_d - curr_s", *IpCq().curr_d_minus_s());
-
-    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_x", *IpData().delta_x());
-    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_s", *IpData().delta_s());
-    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_y_c", *IpData().delta_y_c());
-    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_y_d", *IpData().delta_y_d());
-    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_z_L", *IpData().delta_z_L());
-    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_z_U", *IpData().delta_z_U());
-    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_v_L", *IpData().delta_v_L());
-    //     Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_v_U", *IpData().delta_v_U());
 
     Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_c", *IpCq().curr_jac_c());
     Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_d", *IpCq().curr_jac_d());

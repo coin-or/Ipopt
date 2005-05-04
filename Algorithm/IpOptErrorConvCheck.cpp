@@ -22,13 +22,14 @@ namespace Ipopt
   OptimalityErrorConvergenceCheck::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    Index value = 0;
+    Index ivalue;
+    Number value;
 
     // Check for the algorithm options
-    if (options.GetIntegerValue("maxiter", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
+    if (options.GetIntegerValue("maxiter", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue >= 0, OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"maxiter\": This value must be >= 0.");
-      max_iterations_ = value;
+      max_iterations_ = ivalue;
     }
     else {
       max_iterations_ = 1000;
@@ -47,8 +48,14 @@ namespace Ipopt
     }
 
     Number overall_error = IpCq().curr_nlp_error();
+    Number dual_inf = IpCq().curr_dual_infeasibility(NORM_MAX);
+    Number primal_inf = IpCq().curr_primal_infeasibility(NORM_MAX);
+    Number compl_inf = IpCq().curr_complementarity(0., NORM_MAX);
     DBG_PRINT((1,"overall_error = %8.2e\n",overall_error));
-    if (overall_error <= IpData().epsilon_tol()) {
+    if (overall_error <= IpData().tol() &&
+        dual_inf <= IpData().dual_inf_tol() &&
+        primal_inf <= IpData().primal_inf_tol() &&
+        compl_inf <= IpData().compl_inf_tol()) {
       return ConvergenceCheck::CONVERGED;
     }
 

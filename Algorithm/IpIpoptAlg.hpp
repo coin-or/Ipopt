@@ -48,7 +48,8 @@ namespace Ipopt
       SUCCESS,
       MAXITER_EXCEEDED,
       FAILED,
-      TINY_STEP
+      STOP_AT_TINY_STEP,
+      STOP_AT_ACCEPTABLE_POINT
     };
     //@}
 

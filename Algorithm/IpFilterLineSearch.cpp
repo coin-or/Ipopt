@@ -283,6 +283,24 @@ namespace Ipopt
       watch_dog_shortened_iter_trigger_ = 10;
     }
 
+    if (options.GetNumericValue("acceptable_tol", value, prefix)) {
+      ASSERT_EXCEPTION(value >= 0., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"acceptable_tol\": This value must be non-negative.");
+      acceptable_tol_ = value;
+    }
+    else {
+      acceptable_tol_ = 1e-5;
+    }
+
+    if (options.GetIntegerValue("acceptable_iter_max", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue >= 0., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"acceptable_iter_max\": This value must be positive.");
+      acceptable_iter_max_ = ivalue;
+    }
+    else {
+      acceptable_iter_max_ = 15;
+    }
+
     // ToDo decide if also the PDSystemSolver should be initialized here...
 
     rigorous_ = true;
@@ -292,6 +310,7 @@ namespace Ipopt
     Reset();
 
     count_successive_shortened_steps_ = 0;
+    count_acceptable_iter_ = 0;
 
     return retvalue;
   }
@@ -517,6 +536,11 @@ namespace Ipopt
             // done earlier
             AugmentFilter();
           }
+          if (IpCq().curr_nlp_error()<=acceptable_tol_) {
+            THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
+                            "Restoration phase called at acceptable point.");
+          }
+
           if (!IsValid(resto_phase_)) {
             //ToDo
             THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Filter Line Search Object!");
@@ -538,6 +562,7 @@ namespace Ipopt
             THROW_EXCEPTION(RESTORATION_FAILED, "Failed restoration phase!!!");
           }
           count_successive_shortened_steps_ = 0;
+          count_acceptable_iter_ = 0;
           if (expect_infeasible_problem_) {
             expect_infeasible_problem_ = false;
           }
@@ -561,11 +586,25 @@ namespace Ipopt
 
       if (n_steps==0) {
         count_successive_shortened_steps_ = 0;
+        if (acceptable_iter_max_>0) {
+          if (IpCq().curr_nlp_error()<=acceptable_tol_) {
+            count_acceptable_iter_++;
+            if (count_acceptable_iter_>=acceptable_iter_max_) {
+              IpData().AcceptTrialPoint();
+              THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
+                              "Algorithm seems stuck at acceptable level.");
+            }
+          }
+          else {
+            count_acceptable_iter_=0;
+          }
+        }
         watch_dog_shortened_iter_ = 0;
       }
       else {
         count_successive_shortened_steps_++;
         watch_dog_shortened_iter_++;
+        count_acceptable_iter_ = 0;
       }
 
       if (expect_infeasible_problem_ &&

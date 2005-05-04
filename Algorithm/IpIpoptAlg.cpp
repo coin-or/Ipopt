@@ -171,7 +171,12 @@ namespace Ipopt
     catch(TINY_STEP_DETECTED& exc) {
       exc.ReportException(Jnlst());
 
-      return TINY_STEP;
+      return STOP_AT_TINY_STEP;
+    }
+    catch(ACCEPTABLE_POINT_REACHED& exc) {
+      exc.ReportException(Jnlst());
+
+      return STOP_AT_ACCEPTABLE_POINT;
     }
 
     return FAILED;

@@ -51,8 +51,8 @@ namespace Ipopt
     else {
       Jnlst().Printf(J_DETAILED, J_MAIN, header.c_str());
     }
-    Number inf_pr = IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
-    Number inf_du = IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
+    Number inf_pr = IpCq().curr_primal_infeasibility(NORM_MAX);
+    Number inf_du = IpCq().curr_dual_infeasibility(NORM_MAX);
     Number mu = IpData().curr_mu();
     Number dnrm;
     if (IsValid(IpData().delta_x())) {

@@ -341,6 +341,14 @@ namespace Ipopt
     Index watch_dog_trial_iter_max_;
     /** Number of shortened iterations that trigger the watchdog. */
     Index watch_dog_shortened_iter_trigger_;
+
+    /** Acceptable tolerance for the problem to terminate earlier if
+     *  algorithm seems stuck or cycling */
+    Number acceptable_tol_;
+    /** Maximum number of iterations with acceptable level of accuracy
+     *  and full steps, after which the algorithm terminates.  If 0,
+     *  this heuristic is disabled. */
+    Index acceptable_iter_max_;
     //@}
 
     /** @name Information related to watchdog procedure */
@@ -424,6 +432,11 @@ namespace Ipopt
     /** Counter for the number of successive iterations in which the
      *  full step was not accepted. */
     Index count_successive_shortened_steps_;
+
+    /** Counter for the number of successive iterations in which the
+     *  nlp error was below the acceptable tolerance and a full step
+     *  was accepted. */
+    Index count_acceptable_iter_;
 
     /** Flag indicating if a tiny step was detected in previous
      *  iteration */

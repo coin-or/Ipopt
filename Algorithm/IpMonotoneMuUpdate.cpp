@@ -171,10 +171,11 @@ namespace Ipopt
   {
     // update the barrier parameter
     Number mu = IpData().curr_mu();
-    Number eps_tol = IpData().epsilon_tol();
+    Number tol = IpData().tol();
+    Number compl_inf_tol = IpData().compl_inf_tol();
 
     new_mu = Min( kappa_mu_*mu, pow(mu, theta_mu_) );
-    new_mu = Max(new_mu, eps_tol/10);
+    new_mu = Max(new_mu, Min(tol, compl_inf_tol)/10.);
 
     // update the fraction to the boundary parameter
     new_tau = Max(tau_min_, 1.-new_mu);
