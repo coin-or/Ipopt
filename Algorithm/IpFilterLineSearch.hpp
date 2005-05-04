@@ -146,18 +146,18 @@ namespace Ipopt
      *  the watchdog is active, only one trial step is performed (and
      *  the trial values are set accordingly). */
     bool DoBacktrackingLineSearch(bool skip_first_trial_point,
-				  Number& alpha_primal,
-				  bool& corr_taken,
-				  bool& soc_taken,
-				  Index& n_steps,
-				  SmartPtr<const Vector>& actual_delta_x,
-				  SmartPtr<const Vector>& actual_delta_s,
-				  SmartPtr<const Vector>& actual_delta_y_c,
-				  SmartPtr<const Vector>& actual_delta_y_d,
-				  SmartPtr<const Vector>& actual_delta_z_L,
-				  SmartPtr<const Vector>& actual_delta_z_U,
-				  SmartPtr<const Vector>& actual_delta_v_L,
-				  SmartPtr<const Vector>& actual_delta_v_U);
+                                  Number& alpha_primal,
+                                  bool& corr_taken,
+                                  bool& soc_taken,
+                                  Index& n_steps,
+                                  SmartPtr<const Vector>& actual_delta_x,
+                                  SmartPtr<const Vector>& actual_delta_s,
+                                  SmartPtr<const Vector>& actual_delta_y_c,
+                                  SmartPtr<const Vector>& actual_delta_y_d,
+                                  SmartPtr<const Vector>& actual_delta_z_L,
+                                  SmartPtr<const Vector>& actual_delta_z_U,
+                                  SmartPtr<const Vector>& actual_delta_v_L,
+                                  SmartPtr<const Vector>& actual_delta_v_U);
 
     /** Method for starting the watch dog.  Set all appropriate fields
      *  accordingly */
@@ -166,13 +166,13 @@ namespace Ipopt
     /** Method for stopping the watch dog.  Set all appropriate fields
      *  accordingly. */
     void StopWatchDog(SmartPtr<const Vector>& actual_delta_x,
-		      SmartPtr<const Vector>& actual_delta_s,
-		      SmartPtr<const Vector>& actual_delta_y_c,
-		      SmartPtr<const Vector>& actual_delta_y_d,
-		      SmartPtr<const Vector>& actual_delta_z_L,
-		      SmartPtr<const Vector>& actual_delta_z_U,
-		      SmartPtr<const Vector>& actual_delta_v_L,
-		      SmartPtr<const Vector>& actual_delta_v_U);
+                      SmartPtr<const Vector>& actual_delta_s,
+                      SmartPtr<const Vector>& actual_delta_y_c,
+                      SmartPtr<const Vector>& actual_delta_y_d,
+                      SmartPtr<const Vector>& actual_delta_z_L,
+                      SmartPtr<const Vector>& actual_delta_z_U,
+                      SmartPtr<const Vector>& actual_delta_v_L,
+                      SmartPtr<const Vector>& actual_delta_v_U);
 
     /** Method for checking if current trial point is acceptable.
      *  It is assumed that the delta information in ip_data is the
