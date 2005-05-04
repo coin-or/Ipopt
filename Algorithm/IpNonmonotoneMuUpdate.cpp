@@ -59,7 +59,7 @@ namespace Ipopt
       mu_min_ = value;
     }
     else {
-      mu_min_ = 0.1*IpData().epsilon_tol();
+      mu_min_ = 0.1*Min(IpData().tol(), IpData().compl_inf_tol());
     }
 
     if (options.GetNumericValue("tau_min", value, prefix)) {
@@ -316,10 +316,11 @@ namespace Ipopt
           // If the current barrier problem has been solved sufficiently
           // well, decrease mu
           // ToDo combine this code with MonotoneMuUpdate
-          Number eps_tol = IpData().epsilon_tol();
+          Number tol = IpData().tol();
+          Number compl_inf_tol = IpData().compl_inf_tol();
 
           Number new_mu = Min( kappa_mu_*mu, pow(mu, theta_mu_) );
-          new_mu = Max(new_mu, eps_tol/10);
+          new_mu = Max(new_mu, Min(compl_inf_tol, tol)/10.);
           if (tiny_step_flag && new_mu == mu) {
             THROW_EXCEPTION(TINY_STEP_DETECTED,
                             "Problem solved to best possible numerical accuracy");
@@ -613,11 +614,11 @@ namespace Ipopt
     switch (nonmonotone_kkt_norm_) {
       case 1:
       dual_inf =
-        IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_1);
+        IpCq().curr_dual_infeasibility(NORM_1);
       primal_inf =
-        IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_1);
+        IpCq().curr_primal_infeasibility(NORM_1);
       complty =
-        IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_1);
+        IpCq().curr_complementarity(0., NORM_1);
       dual_inf /= (Number)n_dual;
       DBG_ASSERT(n_pri>0 || primal_inf==0.);
       if (n_pri>0) {
@@ -630,13 +631,13 @@ namespace Ipopt
       break;
       case 2:
       dual_inf =
-        IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_dual_infeasibility(NORM_2);
       dual_inf *= dual_inf;
       primal_inf =
-        IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_primal_infeasibility(NORM_2);
       primal_inf *= primal_inf;
       complty =
-        IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_complementarity(0., NORM_2);
       complty *= complty;
       dual_inf /= (Number)n_dual;
       DBG_ASSERT(n_pri>0 || primal_inf==0.);
@@ -650,19 +651,19 @@ namespace Ipopt
       break;
       case 3:
       dual_inf =
-        IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
+        IpCq().curr_dual_infeasibility(NORM_MAX);
       primal_inf =
-        IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_MAX);
+        IpCq().curr_primal_infeasibility(NORM_MAX);
       complty =
-        IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_MAX);
+        IpCq().curr_complementarity(0., NORM_MAX);
       break;
       case 4:
       dual_inf =
-        IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_dual_infeasibility(NORM_2);
       primal_inf =
-        IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_primal_infeasibility(NORM_2);
       complty =
-        IpCq().curr_complementarity(0., IpoptCalculatedQuantities::NORM_2);
+        IpCq().curr_complementarity(0., NORM_2);
       dual_inf /= sqrt((Number)n_dual);
       DBG_ASSERT(n_pri>0 || primal_inf==0.);
       if (n_pri>0) {
@@ -725,9 +726,9 @@ namespace Ipopt
   NonmonotoneMuUpdate::lower_mu_safeguard()
   {
     Number dual_inf =
-      IpCq().curr_dual_infeasibility(IpoptCalculatedQuantities::NORM_1);
+      IpCq().curr_dual_infeasibility(NORM_1);
     Number primal_inf =
-      IpCq().curr_primal_infeasibility(IpoptCalculatedQuantities::NORM_1);
+      IpCq().curr_primal_infeasibility(NORM_1);
     Index n_dual = IpData().curr_x()->Dim() + IpData().curr_s()->Dim();
     dual_inf /= (Number)n_dual;
     Index n_pri = IpData().curr_y_c()->Dim() + IpData().curr_y_d()->Dim();

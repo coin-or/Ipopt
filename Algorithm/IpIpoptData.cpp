@@ -43,13 +43,40 @@ namespace Ipopt
   {
     Number value;
 
-    if (options.GetNumericValue("epsilon_tol", value, prefix)) {
+    if (options.GetNumericValue("tol", value, prefix)) {
       ASSERT_EXCEPTION(value > 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"epsilon_tol\": This value must be larger than 0.");
-      epsilon_tol_ = value;
+                       "Option \"tol\": This value must be larger than 0.");
+      tol_ = value;
     }
     else {
-      epsilon_tol_ = 1e-8;
+      tol_ = 1e-8;
+    }
+
+    if (options.GetNumericValue("dual_inf_tol", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"dual_inf_tol\": This value must be larger than 0.");
+      dual_inf_tol_ = value;
+    }
+    else {
+      dual_inf_tol_ = 1e-2;
+    }
+
+    if (options.GetNumericValue("primal_inf_tol", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"primal_inf_tol\": This value must be larger than 0.");
+      primal_inf_tol_ = value;
+    }
+    else {
+      primal_inf_tol_ = 1e-2;
+    }
+
+    if (options.GetNumericValue("compl_inf_tol", value, prefix)) {
+      ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"compl_inf_tol\": This value must be larger than 0.");
+      compl_inf_tol_ = value;
+    }
+    else {
+      compl_inf_tol_ = 1e-2;
     }
 
     iter_count_=0;

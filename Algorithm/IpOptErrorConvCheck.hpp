@@ -53,6 +53,7 @@ namespace Ipopt
 
     /** @name Algorithmic parameters */
     //@{
+    /** Maximal number of iterations */
     Index max_iterations_;
     //@}
   };

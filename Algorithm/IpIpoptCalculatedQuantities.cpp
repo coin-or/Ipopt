@@ -1828,7 +1828,7 @@ namespace Ipopt
 
   Number
   IpoptCalculatedQuantities::CalcNormOfType
-  (IpoptCalculatedQuantities::ENormType NormType,
+  (ENormType NormType,
    const Vector& vec1, const Vector& vec2)
   {
     std::vector<SmartPtr<const Vector> > vecs(2);
@@ -1840,7 +1840,7 @@ namespace Ipopt
 
   Number
   IpoptCalculatedQuantities::CalcNormOfType
-  (IpoptCalculatedQuantities::ENormType NormType,
+  (ENormType NormType,
    std::vector<SmartPtr<const Vector> > vecs)
   {
     Number result=0.;
@@ -1872,7 +1872,7 @@ namespace Ipopt
 
   Number
   IpoptCalculatedQuantities::curr_primal_infeasibility
-  (IpoptCalculatedQuantities::ENormType NormType)
+  (ENormType NormType)
   {
     DBG_START_METH("IpoptCalculatedQuantities::curr_primal_infeasibility()",
                    dbg_verbosity);
@@ -1912,7 +1912,7 @@ namespace Ipopt
 
   Number
   IpoptCalculatedQuantities::trial_primal_infeasibility
-  (IpoptCalculatedQuantities::ENormType NormType)
+  (ENormType NormType)
   {
     DBG_START_METH("IpoptCalculatedQuantities::trial_primal_infeasibility()",
                    dbg_verbosity);
@@ -1951,7 +1951,7 @@ namespace Ipopt
 
   Number
   IpoptCalculatedQuantities::curr_dual_infeasibility
-  (IpoptCalculatedQuantities::ENormType NormType)
+  (ENormType NormType)
   {
     DBG_START_METH("IpoptCalculatedQuantities::curr_dual_infeasibility()",
                    dbg_verbosity);
@@ -1995,7 +1995,7 @@ namespace Ipopt
 
   Number
   IpoptCalculatedQuantities::trial_dual_infeasibility
-  (IpoptCalculatedQuantities::ENormType NormType)
+  (ENormType NormType)
   {
     DBG_START_METH("IpoptCalculatedQuantities::trial_dual_infeasibility()",
                    dbg_verbosity);
@@ -2040,7 +2040,7 @@ namespace Ipopt
 
   Number
   IpoptCalculatedQuantities::curr_complementarity
-  (Number mu, IpoptCalculatedQuantities::ENormType NormType)
+  (Number mu, ENormType NormType)
   {
     DBG_START_METH("IpoptCalculatedQuantities::curr_complementarity()",
                    dbg_verbosity);
@@ -2109,7 +2109,7 @@ namespace Ipopt
 
   Number
   IpoptCalculatedQuantities::trial_complementarity
-  (Number mu, IpoptCalculatedQuantities::ENormType NormType)
+  (Number mu, ENormType NormType)
   {
     DBG_START_METH("IpoptCalculatedQuantities::trial_complementarity()",
                    dbg_verbosity);
