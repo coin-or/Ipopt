@@ -154,6 +154,18 @@ namespace Ipopt
 
     Number mu = sigma*mu_curr;
 
+    // Store the affine search direction (in case it is needed in the
+    // line search for a corrector step)
+    IpData().SetFromPtr_delta_aff_x(ConstPtr(step_x));
+    IpData().SetFromPtr_delta_aff_s(ConstPtr(step_s));
+    IpData().SetFromPtr_delta_aff_y_c(ConstPtr(step_y_c));
+    IpData().SetFromPtr_delta_aff_y_d(ConstPtr(step_y_d));
+    IpData().SetFromPtr_delta_aff_z_L(ConstPtr(step_z_L));
+    IpData().SetFromPtr_delta_aff_z_U(ConstPtr(step_z_U));
+    IpData().SetFromPtr_delta_aff_v_L(ConstPtr(step_v_L));
+    IpData().SetFromPtr_delta_aff_v_U(ConstPtr(step_v_U));
+    IpData().SetHaveAffineDeltas(true);
+
     // DELETEME
     char ssigma[40];
     sprintf(ssigma, " sigma=%8.2e", sigma);
