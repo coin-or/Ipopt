@@ -77,6 +77,11 @@ namespace Ipopt
     Number kappa_resto_;
     //@}
 
+    /** Flag indicating that this is the first call.  We don't want to
+     *  leave the restoration phase without taking at least one step,
+     *  so this flag is used to ensure this. */
+    bool first_resto_iter_;
+
     /** Strategy object for the filter line search method for the
      *  original NLP.  CAREFUL: We must not hold on to this object
      *  with a SmartPtr, because have otherwise circular references

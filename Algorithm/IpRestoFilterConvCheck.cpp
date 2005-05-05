@@ -54,6 +54,8 @@ namespace Ipopt
       kappa_resto_ = 0.9;
     }
 
+    first_resto_iter_ = true;
+
     return OptimalityErrorConvergenceCheck::InitializeImpl(options, prefix);
   }
 
@@ -110,6 +112,11 @@ namespace Ipopt
                      "Point is not acceptable to the original current point.\n");
       status = CONTINUE;
     }
+    else if (first_resto_iter_) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "This is the first iteration - continue to take at least one step.\n");
+      status = CONTINUE;
+    }
     else {
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "Restoration found a point that provides sufficient reduction in"
@@ -137,6 +144,9 @@ namespace Ipopt
         }
       }
     }
+
+    first_resto_iter_ = false;
+
     return status;
   }
 
