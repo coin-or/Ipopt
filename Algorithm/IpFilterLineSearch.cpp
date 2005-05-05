@@ -312,6 +312,15 @@ namespace Ipopt
     count_successive_shortened_steps_ = 0;
     count_acceptable_iter_ = 0;
 
+    acceptable_x_ = NULL;
+    acceptable_s_ = NULL;
+    acceptable_y_c_ = NULL;
+    acceptable_y_d_ = NULL;
+    acceptable_z_L_ = NULL;
+    acceptable_z_U_ = NULL;
+    acceptable_v_L_ = NULL;
+    acceptable_v_U_ = NULL;
+
     return retvalue;
   }
 
@@ -322,6 +331,15 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "--> Starting filter line search in iteration %d <--\n",
                    IpData().iter_count());
+
+    // Store current iterate if the optimality error is on acceptable
+    // level to restored if things fail later
+    if (IpCq().curr_nlp_error()<=acceptable_tol_) {
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Storing current iterate as backup acceptable point.\n");
+      IpData().Append_info_string("A");
+      StoreAcceptablePoint();
+    }
 
     // First assume that line search will find an acceptable trial point
     skipped_line_search_ = false;
@@ -545,8 +563,17 @@ namespace Ipopt
             //ToDo
             THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Filter Line Search Object!");
           }
-          if (IpCq().curr_constraint_violation()==0.) {
-            THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase called, but norm of constraint violation is zero.");
+          if (IpCq().curr_constraint_violation()<=
+              1e-2*Min(IpData().tol(),IpData().primal_inf_tol())) {
+            bool found_acceptable = RestoreAcceptablePoint();
+            if (found_acceptable) {
+              THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
+                              "Restoration phase called at almost feasible point, but acceptable point could be restore.\n");
+            }
+            else {
+              THROW_EXCEPTION(RESTORATION_FAILED,
+                              "Restoration phase called, but point is almost feasible.");
+            }
           }
 
           // Set the info fields for the first output line in the
@@ -559,7 +586,15 @@ namespace Ipopt
 
           accept = resto_phase_->PerformRestoration();
           if (!accept) {
-            THROW_EXCEPTION(RESTORATION_FAILED, "Failed restoration phase!!!");
+            bool found_acceptable = RestoreAcceptablePoint();
+            if (found_acceptable) {
+              THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
+                              "Restoration phase failed, but acceptable point could be restore.\n");
+            }
+            else {
+              THROW_EXCEPTION(RESTORATION_FAILED,
+                              "Failed restoration phase!!!");
+            }
           }
           count_successive_shortened_steps_ = 0;
           count_acceptable_iter_ = 0;
@@ -1777,5 +1812,42 @@ namespace Ipopt
 
     return true;
   }
+
+  void FilterLineSearch::StoreAcceptablePoint()
+  {
+    DBG_START_METH("FilterLineSearch::StoreAcceptablePoint",
+                   dbg_verbosity);
+
+    acceptable_x_ = IpData().curr_x();
+    acceptable_s_ = IpData().curr_s();
+    acceptable_y_c_ = IpData().curr_y_c();
+    acceptable_y_d_ = IpData().curr_y_d();
+    acceptable_z_L_ = IpData().curr_z_L();
+    acceptable_z_U_ = IpData().curr_z_U();
+    acceptable_v_L_ = IpData().curr_v_L();
+    acceptable_v_U_ = IpData().curr_v_U();
+  }
+
+  bool FilterLineSearch::RestoreAcceptablePoint()
+  {
+    DBG_START_METH("FilterLineSearch::RestoreAcceptablePoint",
+                   dbg_verbosity);
+
+    if (!IsValid(acceptable_x_)) {
+      return false;
+    }
+
+    IpData().SetTrialPrimalVariablesFromPtr(acceptable_x_, acceptable_s_);
+    IpData().SetTrialConstraintMultipliersFromPtr(acceptable_y_c_,
+        acceptable_y_d_);
+    IpData().SetTrialBoundMultipliersFromPtr(acceptable_z_L_,
+        acceptable_z_U_,
+        acceptable_v_L_,
+        acceptable_v_U_);
+    IpData().AcceptTrialPoint();
+
+    return true;
+  }
+
 
 } // namespace Ipopt

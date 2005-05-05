@@ -267,6 +267,13 @@ namespace Ipopt
      *  numerically no difference. */
     bool DetectTinyStep();
 
+    /** Store current iterate as acceptable point */
+    void StoreAcceptablePoint();
+
+    /** Restore acceptable point into the current fields of IpData if
+     *  found. Returns true if such as point is available. */
+    bool RestoreAcceptablePoint();
+
     /** @name Parameters for the filter algorithm.  Names as in the paper */
     //@{
     /** \f$ \eta_{\varphi} \f$ */
@@ -408,6 +415,19 @@ namespace Ipopt
     SmartPtr<const Vector> watch_dog_delta_v_L_;
     /** Search direction v_U at reference point */
     SmartPtr<const Vector> watch_dog_delta_v_U_;
+    //@}
+
+    /** @name Storage for last iterate that satisfies the acceptable
+     *  level of optimality error. */
+    //@{
+    SmartPtr<const Vector> acceptable_x_;
+    SmartPtr<const Vector> acceptable_s_;
+    SmartPtr<const Vector> acceptable_y_c_;
+    SmartPtr<const Vector> acceptable_y_d_;
+    SmartPtr<const Vector> acceptable_z_L_;
+    SmartPtr<const Vector> acceptable_z_U_;
+    SmartPtr<const Vector> acceptable_v_L_;
+    SmartPtr<const Vector> acceptable_v_U_;
     //@}
 
     /** Filter with entries */
