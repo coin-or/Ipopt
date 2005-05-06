@@ -1305,9 +1305,9 @@ namespace Ipopt
       SmartPtr<Vector> delta_soc_v_U = actual_delta_v_U->MakeNew();
 
       SmartPtr<const Vector> rhs_grad_lag_x
-      = IpCq().curr_grad_lag_x();
+      = IpCq().curr_grad_lag_with_damping_x();
       SmartPtr<const Vector> rhs_grad_lag_s
-      = IpCq().curr_grad_lag_s();
+      = IpCq().curr_grad_lag_with_damping_s();
       SmartPtr<const Vector> rhs_rel_compl_x_L
       = IpCq().curr_relaxed_compl_x_L();
       SmartPtr<const Vector> rhs_rel_compl_x_U
