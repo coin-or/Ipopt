@@ -8,7 +8,7 @@
 
 #include "IpWarmStartIterateInitializer.hpp"
 
-// DELETEME
+// ToDo make independent of DenseVector
 #include "IpDenseVector.hpp"
 #ifdef OLD_C_HEADERS
 # include <math.h>
