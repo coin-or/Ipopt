@@ -645,7 +645,7 @@ namespace Ipopt
       if (expect_infeasible_problem_ &&
           IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                       "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n");
+                       "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n", IpCq().curr_constraint_violation());
         expect_infeasible_problem_ = false;
       }
     }
