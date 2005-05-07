@@ -189,8 +189,8 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "Solving the Primal Dual System for the affine step\n");
     // First get the right hand side
-    SmartPtr<const Vector> rhs_aff_x = IpCq().curr_grad_lag_with_damping_x();
-    SmartPtr<const Vector> rhs_aff_s = IpCq().curr_grad_lag_with_damping_s();
+    SmartPtr<const Vector> rhs_aff_x = IpCq().curr_grad_lag_x();
+    SmartPtr<const Vector> rhs_aff_s = IpCq().curr_grad_lag_s();
     SmartPtr<const Vector> rhs_aff_c = IpCq().curr_c();
     SmartPtr<const Vector> rhs_aff_d = IpCq().curr_d_minus_s();
     SmartPtr<const Vector> rhs_aff_x_L = IpCq().curr_compl_x_L();
