@@ -259,8 +259,13 @@ namespace Ipopt
     SmartPtr<Vector> rhs_cen_s_L = rhs_aff_s_L->MakeNew();
     SmartPtr<Vector> rhs_cen_s_U = rhs_aff_s_U->MakeNew();
 
-    rhs_cen_x->Set(0.);
-    rhs_cen_s->Set(0.);
+    // ToDo The following is only necessary if kappa_d > 0.  Otherwise
+    // we can set it to zero.
+    rhs_cen_x->Copy(*IpCq().grad_kappa_times_damping_x());
+    rhs_cen_x->Scal(-avrg_compl);
+    rhs_cen_s->Copy(*IpCq().grad_kappa_times_damping_s());
+    rhs_cen_s->Scal(-avrg_compl);
+
     rhs_cen_c->Set(0.);
     rhs_cen_d->Set(0.);
     rhs_cen_x_L->Set(avrg_compl);
@@ -731,71 +736,38 @@ namespace Ipopt
       }
     }
 
-    // Additional reduction factor for the step size to ensure that
-    // they are in the -infinity neighborhood
-    // THIS DOESN'T WORK (YET?)
-    Number beta = 1.;
-    bool found_beta = false;
     Number xi; // centrality measure
 
-    while (!found_beta) {
+    tmp_slack_x_L_->AddTwoVectors(1., *IpCq().curr_slack_x_L(),
+				  alpha_primal, *tmp_step_x_L_, 0.);
+    tmp_slack_x_U_->AddTwoVectors(1., *IpCq().curr_slack_x_U(),
+				  alpha_primal, *tmp_step_x_U_, 0.);
+    tmp_slack_s_L_->AddTwoVectors(1., *IpCq().curr_slack_s_L(),
+				  alpha_primal, *tmp_step_s_L_, 0.);
+    tmp_slack_s_U_->AddTwoVectors(1., *IpCq().curr_slack_s_U(),
+				  alpha_primal, *tmp_step_s_U_, 0.);
 
-      tmp_slack_x_L_->AddTwoVectors(1., *IpCq().curr_slack_x_L(),
-                                    alpha_primal, *tmp_step_x_L_, 0.);
-      tmp_slack_x_U_->AddTwoVectors(1., *IpCq().curr_slack_x_U(),
-                                    alpha_primal, *tmp_step_x_U_, 0.);
-      tmp_slack_s_L_->AddTwoVectors(1., *IpCq().curr_slack_s_L(),
-                                    alpha_primal, *tmp_step_s_L_, 0.);
-      tmp_slack_s_U_->AddTwoVectors(1., *IpCq().curr_slack_s_U(),
-                                    alpha_primal, *tmp_step_s_U_, 0.);
+    tmp_z_L_->AddTwoVectors(1., *IpData().curr_z_L(),
+			    alpha_dual, *tmp_step_z_L_, 0.);
+    tmp_z_U_->AddTwoVectors(1., *IpData().curr_z_U(),
+			    alpha_dual, *tmp_step_z_U_, 0.);
+    tmp_v_L_->AddTwoVectors(1., *IpData().curr_v_L(),
+			    alpha_dual, *tmp_step_v_L_, 0.);
+    tmp_v_U_->AddTwoVectors(1., *IpData().curr_v_U(),
+			    alpha_dual, *tmp_step_v_U_, 0.);
 
-      tmp_z_L_->AddTwoVectors(1., *IpData().curr_z_L(),
-                              alpha_dual, *tmp_step_z_L_, 0.);
-      tmp_z_U_->AddTwoVectors(1., *IpData().curr_z_U(),
-                              alpha_dual, *tmp_step_z_U_, 0.);
-      tmp_v_L_->AddTwoVectors(1., *IpData().curr_v_L(),
-                              alpha_dual, *tmp_step_v_L_, 0.);
-      tmp_v_U_->AddTwoVectors(1., *IpData().curr_v_U(),
-                              alpha_dual, *tmp_step_v_U_, 0.);
+    tmp_slack_x_L_->ElementWiseMultiply(*tmp_z_L_);
+    tmp_slack_x_U_->ElementWiseMultiply(*tmp_z_U_);
+    tmp_slack_s_L_->ElementWiseMultiply(*tmp_v_L_);
+    tmp_slack_s_U_->ElementWiseMultiply(*tmp_v_U_);
 
-      tmp_slack_x_L_->ElementWiseMultiply(*tmp_z_L_);
-      tmp_slack_x_U_->ElementWiseMultiply(*tmp_z_U_);
-      tmp_slack_s_L_->ElementWiseMultiply(*tmp_v_L_);
-      tmp_slack_s_U_->ElementWiseMultiply(*tmp_v_U_);
+    DBG_PRINT_VECTOR(2, "compl_x_L", *tmp_slack_x_L_);
+    DBG_PRINT_VECTOR(2, "compl_x_U", *tmp_slack_x_U_);
+    DBG_PRINT_VECTOR(2, "compl_s_L", *tmp_slack_s_L_);
+    DBG_PRINT_VECTOR(2, "compl_s_U", *tmp_slack_s_U_);
 
-      DBG_PRINT_VECTOR(2, "compl_x_L", *tmp_slack_x_L_);
-      DBG_PRINT_VECTOR(2, "compl_x_U", *tmp_slack_x_U_);
-      DBG_PRINT_VECTOR(2, "compl_s_L", *tmp_slack_s_L_);
-      DBG_PRINT_VECTOR(2, "compl_s_U", *tmp_slack_s_U_);
-
-      xi = IpCq().CalcCentralityMeasure(*tmp_slack_x_L_, *tmp_slack_x_U_,
-                                        *tmp_slack_s_L_, *tmp_slack_s_U_);
-
-      // in order to make this work, we need to somehow tell the line
-      // search what beta is
-      Number xi_min_ = 0.;
-      if (xi_min_>0.) {
-        DBG_ASSERT(IpCq().curr_centrality_measure()>xi_min_);
-        Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
-                       "beta = %8.2e alpha_p = %8.2e alpha_d = %8.2e xi = %8.2e\n", beta, alpha_primal, alpha_dual, xi);
-        if (xi>=xi_min_) {
-          found_beta = true;
-        }
-        else {
-          Number redfact = 0.99;
-          beta *= redfact;
-          alpha_primal *= redfact;
-          alpha_dual *= redfact;
-        }
-      }
-      else {
-        found_beta = true;
-      }
-
-    }
-
-    if (beta<1.)
-      IpData().Append_info_string("b");
+    xi = IpCq().CalcCentralityMeasure(*tmp_slack_x_L_, *tmp_slack_x_U_,
+				      *tmp_slack_s_L_, *tmp_slack_s_U_);
 
     Number dual_inf;
     Number primal_inf;
