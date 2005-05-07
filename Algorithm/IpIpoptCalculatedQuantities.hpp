@@ -99,6 +99,13 @@ namespace Ipopt
     /** Gradient of barrier objective function with respect to s
      * (at current point with current mu) */
     SmartPtr<const Vector> curr_grad_barrier_obj_s();
+
+    /** Gradient of the damping term with respect to x (times
+     *  kappa_d) */
+    SmartPtr<const Vector> grad_kappa_times_damping_x();
+    /** Gradient of the damping term with respect to s (times
+     *  kappa_d) */
+    SmartPtr<const Vector> grad_kappa_times_damping_s();
     //@}
 
     /** @name Constraints */
@@ -399,6 +406,8 @@ namespace Ipopt
     CachedResults<Number> trial_barrier_obj_cache_;
     CachedResults< SmartPtr<const Vector> > curr_grad_barrier_obj_x_cache_;
     CachedResults< SmartPtr<const Vector> > curr_grad_barrier_obj_s_cache_;
+    CachedResults< SmartPtr<const Vector> > grad_kappa_times_damping_x_cache_;
+    CachedResults< SmartPtr<const Vector> > grad_kappa_times_damping_s_cache_;
     //@}
 
     /** @name Caches for constraint stuff */
