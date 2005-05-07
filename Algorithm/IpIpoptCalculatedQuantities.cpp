@@ -51,6 +51,8 @@ namespace Ipopt
       trial_barrier_obj_cache_(5),
       curr_grad_barrier_obj_x_cache_(1),
       curr_grad_barrier_obj_s_cache_(1),
+      grad_kappa_times_damping_x_cache_(1),
+      grad_kappa_times_damping_s_cache_(1),
 
       curr_c_cache_(1),
       trial_c_cache_(2),
@@ -807,6 +809,41 @@ namespace Ipopt
   }
 
   SmartPtr<const Vector>
+  IpoptCalculatedQuantities::grad_kappa_times_damping_x()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::grad_kappa_times_damping_x()",
+                   dbg_verbosity);
+    DBG_ASSERT(initialize_called_);
+    SmartPtr<const Vector> result;
+    SmartPtr<const Vector> x = ip_data_->curr_x();
+
+    std::vector<const TaggedObject*> tdeps(0);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = kappa_d_;
+    if (!grad_kappa_times_damping_x_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      SmartPtr<Vector> tmp1 = x->MakeNew();
+      if (kappa_d_>0.) {
+        SmartPtr<const Vector> dampind_x_L;
+        SmartPtr<const Vector> dampind_x_U;
+        SmartPtr<const Vector> dampind_s_L;
+        SmartPtr<const Vector> dampind_s_U;
+        ComputeDampingIndicators(dampind_x_L, dampind_x_U, dampind_s_L, dampind_s_U);
+
+        ip_nlp_->Px_L()->MultVector(kappa_d_, *dampind_x_L, 0., *tmp1);
+        ip_nlp_->Px_U()->MultVector(-kappa_d_, *dampind_x_U, 1., *tmp1);
+      }
+      else {
+	tmp1->Set(0.);
+      }
+      result = ConstPtr(tmp1);
+
+      grad_kappa_times_damping_x_cache_.AddCachedResult(result, tdeps, sdeps);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
   IpoptCalculatedQuantities::curr_grad_barrier_obj_s()
   {
     DBG_START_METH("IpoptCalculatedQuantities::curr_grad_barrier_obj_s()",
@@ -854,6 +891,41 @@ namespace Ipopt
       result = ConstPtr(tmp1);
 
       curr_grad_barrier_obj_s_cache_.AddCachedResult(result, tdeps, sdeps);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::grad_kappa_times_damping_s()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::grad_kappa_times_damping_s()",
+                   dbg_verbosity);
+    DBG_ASSERT(initialize_called_);
+    SmartPtr<const Vector> result;
+    SmartPtr<const Vector> s = ip_data_->curr_s();
+
+    std::vector<const TaggedObject*> tdeps(0);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = kappa_d_;
+    if (!grad_kappa_times_damping_s_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      SmartPtr<Vector> tmp1 = s->MakeNew();
+      if (kappa_d_>0.) {
+        SmartPtr<const Vector> dampind_x_L;
+        SmartPtr<const Vector> dampind_x_U;
+        SmartPtr<const Vector> dampind_s_L;
+        SmartPtr<const Vector> dampind_s_U;
+        ComputeDampingIndicators(dampind_x_L, dampind_x_U, dampind_s_L, dampind_s_U);
+
+        ip_nlp_->Pd_L()->MultVector(kappa_d_, *dampind_s_L, 0., *tmp1);
+        ip_nlp_->Pd_U()->MultVector(-kappa_d_, *dampind_s_U, 1., *tmp1);
+      }
+      else {
+	tmp1->Set(0.);
+      }
+      result = ConstPtr(tmp1);
+
+      grad_kappa_times_damping_s_cache_.AddCachedResult(result, tdeps, sdeps);
     }
 
     return result;
