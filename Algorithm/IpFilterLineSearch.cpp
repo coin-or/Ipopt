@@ -475,6 +475,7 @@ namespace Ipopt
                                             actual_delta_z_U,
                                             actual_delta_v_L,
                                             actual_delta_v_U);
+          DBG_PRINT((1, "evaluation_error = %d\n", evaluation_error));
           if (in_watch_dog_) {
             if (accept) {
               in_watch_dog_ = false;
@@ -659,7 +660,7 @@ namespace Ipopt
       bool& corr_taken,
       bool& soc_taken,
       Index& n_steps,
-      bool evaluation_error,
+      bool& evaluation_error,
       SmartPtr<const Vector>& actual_delta_x,
       SmartPtr<const Vector>& actual_delta_s,
       SmartPtr<const Vector>& actual_delta_y_c,
