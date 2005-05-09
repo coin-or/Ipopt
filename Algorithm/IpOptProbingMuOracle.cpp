@@ -739,22 +739,22 @@ namespace Ipopt
     Number xi; // centrality measure
 
     tmp_slack_x_L_->AddTwoVectors(1., *IpCq().curr_slack_x_L(),
-				  alpha_primal, *tmp_step_x_L_, 0.);
+                                  alpha_primal, *tmp_step_x_L_, 0.);
     tmp_slack_x_U_->AddTwoVectors(1., *IpCq().curr_slack_x_U(),
-				  alpha_primal, *tmp_step_x_U_, 0.);
+                                  alpha_primal, *tmp_step_x_U_, 0.);
     tmp_slack_s_L_->AddTwoVectors(1., *IpCq().curr_slack_s_L(),
-				  alpha_primal, *tmp_step_s_L_, 0.);
+                                  alpha_primal, *tmp_step_s_L_, 0.);
     tmp_slack_s_U_->AddTwoVectors(1., *IpCq().curr_slack_s_U(),
-				  alpha_primal, *tmp_step_s_U_, 0.);
+                                  alpha_primal, *tmp_step_s_U_, 0.);
 
     tmp_z_L_->AddTwoVectors(1., *IpData().curr_z_L(),
-			    alpha_dual, *tmp_step_z_L_, 0.);
+                            alpha_dual, *tmp_step_z_L_, 0.);
     tmp_z_U_->AddTwoVectors(1., *IpData().curr_z_U(),
-			    alpha_dual, *tmp_step_z_U_, 0.);
+                            alpha_dual, *tmp_step_z_U_, 0.);
     tmp_v_L_->AddTwoVectors(1., *IpData().curr_v_L(),
-			    alpha_dual, *tmp_step_v_L_, 0.);
+                            alpha_dual, *tmp_step_v_L_, 0.);
     tmp_v_U_->AddTwoVectors(1., *IpData().curr_v_U(),
-			    alpha_dual, *tmp_step_v_U_, 0.);
+                            alpha_dual, *tmp_step_v_U_, 0.);
 
     tmp_slack_x_L_->ElementWiseMultiply(*tmp_z_L_);
     tmp_slack_x_U_->ElementWiseMultiply(*tmp_z_U_);
@@ -767,7 +767,7 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "compl_s_U", *tmp_slack_s_U_);
 
     xi = IpCq().CalcCentralityMeasure(*tmp_slack_x_L_, *tmp_slack_x_U_,
-				      *tmp_slack_s_L_, *tmp_slack_s_U_);
+                                      *tmp_slack_s_L_, *tmp_slack_s_U_);
 
     Number dual_inf;
     Number primal_inf;
