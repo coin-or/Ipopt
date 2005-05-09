@@ -833,7 +833,7 @@ namespace Ipopt
         ip_nlp_->Px_U()->MultVector(-kappa_d_, *dampind_x_U, 1., *tmp1);
       }
       else {
-	tmp1->Set(0.);
+        tmp1->Set(0.);
       }
       result = ConstPtr(tmp1);
 
@@ -921,7 +921,7 @@ namespace Ipopt
         ip_nlp_->Pd_U()->MultVector(-kappa_d_, *dampind_s_U, 1., *tmp1);
       }
       else {
-	tmp1->Set(0.);
+        tmp1->Set(0.);
       }
       result = ConstPtr(tmp1);
 
