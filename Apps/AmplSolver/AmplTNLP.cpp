@@ -48,7 +48,8 @@ namespace Ipopt
       objval_called_with_current_x_(false),
       conval_called_with_current_x_(false)
   {
-
+    DBG_START_METH("AmplTNLP::AmplTNLP",
+                   dbg_verbosity);
     // The ASL include files #define certain
     // variables that they expect you to work with.
     // These variables then appear as though they are
@@ -79,7 +80,13 @@ namespace Ipopt
     //    DBG_ASSERT(nbv == 0); // Cannot handle binary variables
     //    DBG_ASSERT(niv == 0); // Cannot handle integer variables
     // DELETEME
-    // allow_discrete = true;
+    if (!allow_discrete && (nbv>0 || niv>0) ) {
+      // The journalist has not yet been initialized at this point
+      // jnlst_->Printf(J_WARNING, J_MAIN, "Warning: Treating %d binary and %d integer variables as continous.\n", nbv, niv);
+      printf("==> Warning: Treating %d binary and %d integer variables as continous.\n\n", nbv, niv);
+      allow_discrete = true;
+    }
+    allow_discrete = true;
     ASSERT_EXCEPTION(allow_discrete || (nbv == 0 && niv == 0),
                      IpoptException,
                      "Discrete variables not allowed when the allow_discrete flag is false, "
@@ -281,6 +288,8 @@ namespace Ipopt
 
   bool AmplTNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
   {
+    DBG_START_METH("AmplTNLP::eval_f",
+                   dbg_verbosity);
     apply_new_x(new_x, n, x);
 
     return internal_objval(obj_value);
@@ -288,6 +297,8 @@ namespace Ipopt
 
   bool AmplTNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
   {
+    DBG_START_METH("AmplTNLP::eval_grad_f",
+                   dbg_verbosity);
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
 
@@ -303,6 +314,7 @@ namespace Ipopt
     if (nerror == 0) {
       return true;
     }
+    DBG_PRINT((1, "nerror = %d\n", nerror));
     return false;
   }
 
@@ -324,6 +336,8 @@ namespace Ipopt
                             Index m, Index nele_jac, Index* iRow,
                             Index *jCol, Number* values)
   {
+    DBG_START_METH("AmplTNLP::eval_jac_g",
+                   dbg_verbosity);
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
     DBG_ASSERT(n == n_var);
@@ -353,6 +367,7 @@ namespace Ipopt
       if (nerror == 0) {
         return true;
       }
+      DBG_PRINT((1, "nerror = %d\n", nerror));
     }
     else {
       DBG_ASSERT(false && "Invalid combination of iRow, jCol, and values pointers");
@@ -366,6 +381,8 @@ namespace Ipopt
                         bool new_lambda, Index nele_hess, Index* iRow,
                         Index* jCol, Number* values)
   {
+    DBG_START_METH("AmplTNLP::eval_h",
+                   dbg_verbosity);
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
     DBG_ASSERT(n == n_var);
@@ -389,6 +406,7 @@ namespace Ipopt
       if (!objval_called_with_current_x_) {
         Number dummy;
         internal_objval(dummy);
+        internal_conval(m);
       }
       if (!conval_called_with_current_x_) {
         internal_conval(m);
@@ -475,6 +493,8 @@ namespace Ipopt
 
   bool AmplTNLP::internal_objval(Number& obj_val)
   {
+    DBG_START_METH("AmplTNLP::internal_objval",
+                   dbg_verbosity);
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
     objval_called_with_current_x_ = false; // in case the call below fails
@@ -488,12 +508,14 @@ namespace Ipopt
     }
 
     //DBG_ASSERT(false && "Error evaluating AMPL objective.\n");
+    DBG_PRINT((1, "nerror = %d\n", nerror));
     return false;
   }
 
   bool AmplTNLP::internal_conval(Index m, Number* g)
   {
-    DBG_START_METH("AmplTNLP::internal_conval", 0);
+    DBG_START_METH("AmplTNLP::internal_conval",
+                   dbg_verbosity);
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
     DBG_ASSERT(m == n_con);
@@ -517,16 +539,20 @@ namespace Ipopt
       conval_called_with_current_x_ = true;
       return true;
     }
+    DBG_PRINT((1, "nerror = %d\n", nerror));
     return false;
   }
 
 
   void AmplTNLP::apply_new_x(bool new_x, Index n, const Number* x)
   {
+    DBG_START_METH("AmplTNLP::apply_new_x",
+                   dbg_verbosity);
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
 
     if (new_x) {
+      DBG_PRINT((1, "Set new x.\n"));
       // update the flags so these methods are called
       // before evaluating the hessian
       conval_called_with_current_x_ = false;
