@@ -150,6 +150,7 @@ namespace Ipopt
                                   bool& corr_taken,
                                   bool& soc_taken,
                                   Index& n_steps,
+                                  bool evaluation_error,
                                   SmartPtr<const Vector>& actual_delta_x,
                                   SmartPtr<const Vector>& actual_delta_s,
                                   SmartPtr<const Vector>& actual_delta_y_c,

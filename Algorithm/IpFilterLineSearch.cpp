@@ -459,12 +459,14 @@ namespace Ipopt
       else {
         bool done = false;
         bool skip_first_trial_point = false;
+        bool evaluation_error;
         while (!done) {
           accept = DoBacktrackingLineSearch(skip_first_trial_point,
                                             alpha_primal,
                                             corr_taken,
                                             soc_taken,
                                             n_steps,
+                                            evaluation_error,
                                             actual_delta_x,
                                             actual_delta_s,
                                             actual_delta_y_c,
@@ -483,7 +485,8 @@ namespace Ipopt
             }
             else {
               watch_dog_trial_iter_++;
-              if (watch_dog_trial_iter_ > watch_dog_trial_iter_max_) {
+              if (evaluation_error ||
+                  watch_dog_trial_iter_ > watch_dog_trial_iter_max_) {
                 StopWatchDog(actual_delta_x, actual_delta_s,
                              actual_delta_y_c, actual_delta_y_d,
                              actual_delta_z_L, actual_delta_z_U,
@@ -656,6 +659,7 @@ namespace Ipopt
       bool& corr_taken,
       bool& soc_taken,
       Index& n_steps,
+      bool evaluation_error,
       SmartPtr<const Vector>& actual_delta_x,
       SmartPtr<const Vector>& actual_delta_s,
       SmartPtr<const Vector>& actual_delta_y_c,
@@ -665,6 +669,7 @@ namespace Ipopt
       SmartPtr<const Vector>& actual_delta_v_L,
       SmartPtr<const Vector>& actual_delta_v_U)
   {
+    evaluation_error = false;
     bool accept = false;
 
     DBG_START_METH("FilterLineSearch::DoBacktrackingLineSearch",
@@ -731,7 +736,6 @@ namespace Ipopt
                        "Starting checks for alpha (primal) = %8.2e\n",
                        alpha_primal);
 
-        bool evaluation_error = false;
         try {
           // Compute the primal trial point
           IpData().SetTrialPrimalVariablesFromStep(alpha_primal,
