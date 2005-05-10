@@ -127,7 +127,7 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "  The affine maximal step sizes are\n"
                    "   alpha_primal_aff = %23.16e\n"
-                   "   alpha_primal_aff = %23.16e\n",
+                   "   alpha_dual_aff = %23.16e\n",
                    alpha_primal_aff,
                    alpha_dual_aff);
 
