@@ -725,6 +725,8 @@ namespace Ipopt
   Number
   NonmonotoneMuUpdate::lower_mu_safeguard()
   {
+    if (mu_safeguard_factor_ == 0.) return 0.;
+
     Number dual_inf =
       IpCq().curr_dual_infeasibility(NORM_1);
     Number primal_inf =
