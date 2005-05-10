@@ -610,7 +610,7 @@ namespace Ipopt
         }
       }
     }
-    else if (!in_soft_resto_phase_) {
+    else if (!in_soft_resto_phase_ || tiny_step) {
       // we didn't do the restoration phase and are now updating the
       // dual variables of the trial point
       Number alpha_dual_max =
