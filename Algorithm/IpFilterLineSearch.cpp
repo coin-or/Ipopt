@@ -207,13 +207,13 @@ namespace Ipopt
       ls_always_accept_ = false;
     }
 
-    if (options.GetIntegerValue("dual_alpha_for_y", ivalue, prefix)) {
-      dual_alpha_for_y_ = ivalue;
-      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=2, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"dual_alpha_for_y\": This value must be 0, 1, or 2.");
+    if (options.GetIntegerValue("alpha_for_y", ivalue, prefix)) {
+      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=6, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"alpha_for_y\": This value must be 0, 1, or 2.");
+      alpha_for_y_ = ivalue;
     }
     else {
-      dual_alpha_for_y_ = 0;
+      alpha_for_y_ = 0;
     }
 
     if (options.GetNumericValue("corrector_compl_avrg_red_fact", value, prefix)) {
@@ -1241,11 +1241,47 @@ namespace Ipopt
         delta_v_L, delta_v_U);
 
     Number alpha_y;
-    if (dual_alpha_for_y_==1) {
+    if (alpha_for_y_==1) {
       alpha_y = alpha_dual;
     }
-    else if (dual_alpha_for_y_==2) {
+    else if (alpha_for_y_==2) {
       alpha_y = Min(alpha_dual, alpha_primal);
+    }
+    else if (alpha_for_y_==3) {
+      alpha_y = Max(alpha_dual, alpha_primal);
+    }
+    else if (alpha_for_y_==4) {
+      alpha_y = 1.;
+    }
+    else if (alpha_for_y_==5 || alpha_for_y_==6) {
+      // Here we compute the step size for y so that the dual
+      // infeasibility is minimized along delta_y
+
+      // compute the dual infeasibility at new point with old y
+      IpData().SetTrialConstraintMultipliersFromPtr(IpData().curr_y_c(),
+          IpData().curr_y_d());
+      SmartPtr<const Vector> dual_inf_x = IpCq().trial_grad_lag_x();
+      SmartPtr<const Vector> dual_inf_s = IpCq().trial_grad_lag_s();
+
+      SmartPtr<Vector> new_jac_times_delta_y =
+        IpData().curr_x()->MakeNew();
+      new_jac_times_delta_y->AddTwoVectors(1., *IpCq().trial_jac_cT_times_vec(delta_y_c),
+                                           1., *IpCq().trial_jac_dT_times_vec(delta_y_d),
+                                           0.);
+
+      Number a = pow(new_jac_times_delta_y->Nrm2(), 2.) +
+                 pow(delta_y_d.Nrm2(), 2.);
+      Number b = dual_inf_x->Dot(*new_jac_times_delta_y) -
+                 dual_inf_s->Dot(delta_y_d);
+
+      Number alpha = - b/a;
+
+      if (alpha_for_y_==5) {
+        alpha_y = Min(Max(alpha_primal, alpha_dual), Max(alpha, Min(alpha_primal, alpha_dual)));
+      }
+      else {
+        alpha_y = Min(1., Max(0., alpha));
+      }
     }
     else {
       alpha_y = alpha_primal;

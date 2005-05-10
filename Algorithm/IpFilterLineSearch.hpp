@@ -191,7 +191,7 @@ namespace Ipopt
      *  IpData, given the search direction.  The step size for the
      *  bound multipliers is the fraction-to-the-boundary step size,
      *  and the step size for the equality constraint multipliers
-     *  depends on the choice of dual_alpha_for_y. */
+     *  depends on the choice of alpha_for_y. */
     void PerformDualStep(Number alpha_primal,
                          Number alpha_dual,
                          const Vector& delta_y_c,
@@ -309,7 +309,7 @@ namespace Ipopt
      *  the equality constraint multipliers. If 0, the primal step
      *  size is used, if 1 the dual step size, and if 2, the minimum
      *  of both. */
-    Index dual_alpha_for_y_;
+    Index alpha_for_y_;
 
     /** Flag indicating whether magic steps should be used. */
     bool magic_steps_;
