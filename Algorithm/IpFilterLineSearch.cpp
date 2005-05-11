@@ -289,7 +289,7 @@ namespace Ipopt
       acceptable_tol_ = value;
     }
     else {
-      acceptable_tol_ = 1e-5;
+      acceptable_tol_ = 1e-6;
     }
 
     if (options.GetIntegerValue("acceptable_iter_max", ivalue, prefix)) {
