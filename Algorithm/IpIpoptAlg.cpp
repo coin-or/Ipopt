@@ -101,6 +101,8 @@ namespace Ipopt
 
     Number value;
     if (options.GetNumericValue("kappa_sigma", value, prefix)) {
+      ASSERT_EXCEPTION(value >= 1.0, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"kappa_sigma\": This value must be at least 1.");
       kappa_sigma_ = value;
     }
     else {
@@ -569,11 +571,6 @@ namespace Ipopt
 
     SmartPtr<Vector> step_z = trial_z.MakeNew();
     step_z->AddTwoVectors(kappa_sigma_*mu, *one_over_s, -1., trial_z, 0.);
-    /* DELE
-    step_z->Copy(*one_over_s);
-    step_z->Scal(kappa_sigma_*mu);
-    step_z->Axpy(-1., trial_z);
-    */
 
     DBG_PRINT_VECTOR(2, "step_z", *step_z);
 
@@ -583,10 +580,6 @@ namespace Ipopt
       tmp->Set(0.);
       step_z->ElementWiseMin(*tmp);
       tmp->AddTwoVectors(1., trial_z, 1., *step_z, 0.);
-      /* DELE
-      tmp->Copy(trial_z);
-      tmp->Axpy(1., *step_z);
-      */
       new_trial_z = GetRawPtr(tmp);
     }
     else {
@@ -594,11 +587,6 @@ namespace Ipopt
     }
 
     step_z->AddTwoVectors(1./kappa_sigma_*mu, *one_over_s, -1., *new_trial_z, 0.);
-    /* DELE
-    step_z->Copy(*one_over_s);
-    step_z->Scal(1./kappa_sigma_*mu);
-    step_z->Axpy(-1., *new_trial_z);
-    */
 
     Number max_correction_low = Max(0., step_z->Max());
     if (max_correction_low>0.) {
@@ -606,10 +594,6 @@ namespace Ipopt
       tmp->Set(0.);
       step_z->ElementWiseMax(*tmp);
       tmp->AddTwoVectors(1., *new_trial_z, 1., *step_z, 0.);
-      /* DELE
-      tmp->Copy(*new_trial_z);
-      tmp->Axpy(1., *step_z);
-      */
       new_trial_z = GetRawPtr(tmp);
     }
 
