@@ -249,6 +249,11 @@ namespace Ipopt
     catch(LOCALLY_INFEASIBILE& exc) {
       exc.ReportException(*jnlst_);
 
+      nlp->FinalizeSolution(retValue,
+                            *ip_data->curr_x(), *ip_data->curr_z_L(), *ip_data->curr_z_U(),
+                            *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr_y_c(), *ip_data->curr_y_d(),
+                            ip_cq->curr_f());
+
       retValue = Infeasible_Problem_Detected;
     }
     catch(TOO_FEW_DOF& exc) {
