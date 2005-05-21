@@ -44,6 +44,11 @@ namespace Ipopt
     DBG_START_METH("Mc19TSymScalingMethod::ComputeSymTScalingFactors",
                    dbg_verbosity);
 
+    if (DBG_VERBOSITY()>=2) {
+      for (Index i=0; i<nnz; i++) {
+        DBG_PRINT((2, "%5d A[%5d,%5d] = %23.15e\n", i, airn[i], ajcn[i], a[i]));
+      }
+    }
     // First copy the symmetric matrix into an unsymmetric (MA28)
     // format matrix
     ipfint* AIRN2 = new ipfint[2*nnz];
@@ -115,7 +120,7 @@ namespace Ipopt
     if (DBG_VERBOSITY()>=3) {
       for (Index i=0; i<n; i++) {
         DBG_PRINT((3, "R[%5d] = %23.15e  C[%5d] = %23.15e\n",
-                   i, R[i], C[i]));
+                   i, R[i], i, C[i]));
       }
     }
 
