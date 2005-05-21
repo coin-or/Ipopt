@@ -56,7 +56,8 @@ namespace Ipopt
                        "Option \"scaling_method\" has invalid value.");
     }
     else {
-      scaling_method = "mc19";
+      // ToDo: Somehow, MC19 doesn't work correctly in the new version...
+      scaling_method = "none";
     }
     if (scaling_method=="mc19") {
       ScalingMethod = new Mc19TSymScalingMethod();
