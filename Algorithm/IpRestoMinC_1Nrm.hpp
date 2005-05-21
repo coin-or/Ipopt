@@ -76,11 +76,11 @@ namespace Ipopt
 
     /** @name Algorithmic parameters */
     //@{
-    Number laminitmax_;
+    Number lam_init_max_;
     /** Maximal allowed value of a bound multiplier after restoration
      *  phase.
      */
-    Number boundmultinitmax_;
+    Number bound_mult_init_max_;
     /** Indicates whether problem can be expected to be infeasible.
      *  This will request the to set kappa_resto to a small value for
      *  the first time the restoration phase is called.  (ToDo) */
