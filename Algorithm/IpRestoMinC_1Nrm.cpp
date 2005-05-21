@@ -36,22 +36,22 @@ namespace Ipopt
     resto_options_ = new OptionsList(options);
 
     Number value;
-    if (options.GetNumericValue("laminitmax", value, prefix)) {
+    if (options.GetNumericValue("lam_init_max", value, prefix)) {
       ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"laminitmax\": Value must be non-negative.");
-      laminitmax_ = value;
+                       "Option \"lam_init_max\": Value must be non-negative.");
+      lam_init_max_ = value;
     }
     else {
-      laminitmax_ = 1e3;
+      lam_init_max_ = 1e3;
     }
 
-    if (options.GetNumericValue("boundmultinitmax", value, prefix)) {
+    if (options.GetNumericValue("bound_mult_init_max", value, prefix)) {
       ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"boundmultinitmax\": Value must be non-negative.");
-      boundmultinitmax_ = value;
+                       "Option \"bound_mult_init_max\": Value must be non-negative.");
+      bound_mult_init_max_ = value;
     }
     else {
-      boundmultinitmax_ = 1e3;
+      bound_mult_init_max_ = 1e3;
     }
 
     Int ivalue;
@@ -237,14 +237,14 @@ namespace Ipopt
 #endif
 
       // ToDo: Check what to do here:
-      Number boundmultmax = Max(IpData().trial_z_L()->Amax(),
-                                IpData().trial_z_U()->Amax(),
-                                IpData().trial_v_L()->Amax(),
-                                IpData().trial_v_U()->Amax());
-      if (boundmultmax > boundmultinitmax_) {
+      Number bound_mult_max = Max(IpData().trial_z_L()->Amax(),
+				  IpData().trial_z_U()->Amax(),
+				  IpData().trial_v_L()->Amax(),
+				  IpData().trial_v_U()->Amax());
+      if (bound_mult_max > bound_mult_init_max_) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "Bound multipliers after restoration phase too large (max=%8.2e). Set all to 1.\n",
-                       boundmultmax);
+                       bound_mult_max);
         SmartPtr<Vector> new_z_L = IpData().curr_z_L()->MakeNew();
         SmartPtr<Vector> new_z_U = IpData().curr_z_U()->MakeNew();
         SmartPtr<Vector> new_v_L = IpData().curr_v_L()->MakeNew();
@@ -258,7 +258,7 @@ namespace Ipopt
 
       }
       // Recompute the equality constraint multipliers as least square estimate
-      if (IsValid(eq_mult_calculator_) && laminitmax_>0.) {
+      if (IsValid(eq_mult_calculator_) && lam_init_max_>0.) {
         // First move all the trial data into the current fields, since
         // those values are needed to compute the initial values for
         // the multipliers
@@ -274,8 +274,8 @@ namespace Ipopt
           Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                          "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
                          y_c->Amax(), y_d->Amax());
-          Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
-          if (!retval || laminitnrm > laminitmax_) {
+          Number lam_init_nrm = Max(y_c->Amax(), y_d->Amax());
+          if (!retval || lam_init_nrm > lam_init_max_) {
             y_c->Set(0.0);
             y_d->Set(0.0);
           }
