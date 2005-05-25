@@ -283,7 +283,7 @@ namespace Ipopt
 			      &ERROR);
     if (ERROR!=0 ) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
+                     "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
       return SYMSOLVER_FATAL_ERROR;
     }
     return SYMSOLVER_SUCCESS;
