@@ -46,8 +46,8 @@ namespace Ipopt
 
     // Get the current point and create a new vector for the result
     SmartPtr<const CompoundVector> Ccurr_x =
-      dynamic_cast<const CompoundVector*> (GetRawPtr(IpData().curr_x()));
-    SmartPtr<Vector> new_x = IpData().curr_x()->MakeNew();
+      dynamic_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->x()));
+    SmartPtr<Vector> new_x = IpData().curr()->x()->MakeNew();
     SmartPtr<CompoundVector> Cnew_x =
       dynamic_cast<CompoundVector*> (GetRawPtr(new_x));
 
@@ -82,7 +82,7 @@ namespace Ipopt
     SmartPtr<Vector> pd = Cnew_x->GetCompNonConst(4);
     SmartPtr<Vector> dvec = pd->MakeNew();
     dvec->Copy(*orig_ip_nlp->d(*Ccurr_x->GetComp(0)));
-    dvec->Axpy(-1., *IpData().curr_s());
+    dvec->Axpy(-1., *IpData().curr()->s());
     a = nd->MakeNew();
     b = nd->MakeNew();
     a->Set(mu/(2.*rho));
@@ -97,14 +97,9 @@ namespace Ipopt
 
     // Now set the trial point to the solution of the restoration phase
     // s and all multipliers remain unchanged
-    IpData().SetTrialPrimalVariablesFromPtr(GetRawPtr(new_x),
-                                            IpData().curr_s());
-    IpData().SetTrialBoundMultipliersFromPtr(IpData().curr_z_L(),
-        IpData().curr_z_U(),
-        IpData().curr_v_L(),
-        IpData().curr_v_U());
-    IpData().SetTrialConstraintMultipliersFromPtr(IpData().curr_y_c(),
-        IpData().curr_y_d());
+    SmartPtr<IteratesVector> new_trial = IpData().curr()->MakeNewContainer();
+    new_trial->Set_x(*new_x);
+    IpData().set_trial(new_trial);
 
     IpData().Append_info_string("R");
 

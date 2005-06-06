@@ -40,10 +40,10 @@ namespace Ipopt
     SmartPtr<const Matrix> Px_U = IpNLP().Px_U();
     SmartPtr<const Matrix> Pd_L = IpNLP().Pd_L();
     SmartPtr<const Matrix> Pd_U = IpNLP().Pd_U();
-    SmartPtr<const Vector> z_L = IpData().curr_z_L();
-    SmartPtr<const Vector> z_U = IpData().curr_z_U();
-    SmartPtr<const Vector> v_L = IpData().curr_v_L();
-    SmartPtr<const Vector> v_U = IpData().curr_v_U();
+    SmartPtr<const Vector> z_L = IpData().curr()->z_L();
+    SmartPtr<const Vector> z_U = IpData().curr()->z_U();
+    SmartPtr<const Vector> v_L = IpData().curr()->v_L();
+    SmartPtr<const Vector> v_U = IpData().curr()->v_U();
 
     // Compute the right hand side
     SmartPtr<Vector> rhs_x = grad_f->MakeNew();
@@ -51,7 +51,7 @@ namespace Ipopt
     Px_L->MultVector(1., *z_L, -1., *rhs_x);
     Px_U->MultVector(-1., *z_U, 1., *rhs_x);
 
-    SmartPtr<Vector> rhs_s = IpData().curr_s()->MakeNew();
+    SmartPtr<Vector> rhs_s = IpData().curr()->s()->MakeNew();
     Pd_L->MultVector(1., *v_L, 0., *rhs_s);
     Pd_U->MultVector(-1., *v_U, 1., *rhs_s);
 

@@ -81,9 +81,7 @@ namespace Ipopt
                    dbg_verbosity);
 
     // Get the starting values provided by the NLP and store them
-    //.in the ip_data current fields.  The following line only requests
-    // intial values for the primal variables x, but later we might
-    // make this more flexible based on user options.
+    // in the ip_data current fields. 
 
     /////////////////////////////////////////////////////////////////////
     //                   Initialize primal variables                   //
@@ -94,15 +92,15 @@ namespace Ipopt
                                       true, true, false, false);
 
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided x",
-                        *IpData().curr_x());
+                        *IpData().curr()->x());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided y_c",
-                        *IpData().curr_y_c());
+                        *IpData().curr()->y_c());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided y_d",
-                        *IpData().curr_y_d());
+                        *IpData().curr()->y_d());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided z_L",
-                        *IpData().curr_z_L());
+                        *IpData().curr()->z_L());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided z_U",
-                        *IpData().curr_z_U());
+                        *IpData().curr()->z_U());
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_INITIALIZATION)) {
       Jnlst().PrintVector(J_MOREVECTOR, J_INITIALIZATION, "d at user-provided x",
                           *IpCq().curr_d());
@@ -110,97 +108,80 @@ namespace Ipopt
 
     SmartPtr<Vector> tmp;
 
-    {
-      // If requested, make sure that the multipliers are not too large
-      SmartPtr<const Vector> new_y_c;
-      SmartPtr<const Vector> new_y_d;
-      SmartPtr<const Vector> new_z_L;
-      SmartPtr<const Vector> new_z_U;
-      if (warm_start_mult_init_max_>0.) {
-        SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
-        y_c->Copy(*IpData().curr_y_c());
-        tmp = y_c->MakeNew();
-        tmp->Set(warm_start_mult_init_max_);
-        y_c->ElementWiseMin(*tmp);
-        tmp->Set(-warm_start_mult_init_max_);
-        y_c->ElementWiseMax(*tmp);
-        new_y_c = ConstPtr(y_c);
+    // If requested, make sure that the multipliers are not too large
+    SmartPtr<IteratesVector> init_vec = IpData().curr()->MakeNewIteratesVectorCopy();
+    if (warm_start_mult_init_max_>0.) {
+      SmartPtr<Vector> y_c = init_vec->y_c_NonConst();
+      tmp = y_c->MakeNew();
+      tmp->Set(warm_start_mult_init_max_);
+      y_c->ElementWiseMin(*tmp);
+      tmp->Set(-warm_start_mult_init_max_);
+      y_c->ElementWiseMax(*tmp);
 
-        SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
-        y_d->Copy(*IpData().curr_y_d());
-        tmp = y_d->MakeNew();
-        tmp->Set(warm_start_mult_init_max_);
-        y_d->ElementWiseMin(*tmp);
-        tmp->Set(-warm_start_mult_init_max_);
-        y_d->ElementWiseMax(*tmp);
-        new_y_d = ConstPtr(y_d);
+      SmartPtr<Vector> y_d = init_vec->y_d_NonConst();
+      tmp = y_d->MakeNew();
+      tmp->Set(warm_start_mult_init_max_);
+      y_d->ElementWiseMin(*tmp);
+      tmp->Set(-warm_start_mult_init_max_);
+      y_d->ElementWiseMax(*tmp);
 
-        SmartPtr<Vector> z_L = IpData().curr_z_L()->MakeNew();
-        z_L->Copy(*IpData().curr_z_L());
-        tmp = z_L->MakeNew();
-        tmp->Set(warm_start_mult_init_max_);
-        z_L->ElementWiseMin(*tmp);
-        new_z_L = ConstPtr(z_L);
+      SmartPtr<Vector> z_L = init_vec->z_L_NonConst();
+      tmp = z_L->MakeNew();
+      tmp->Set(warm_start_mult_init_max_);
+      z_L->ElementWiseMin(*tmp);
 
-        SmartPtr<Vector> z_U = IpData().curr_z_U()->MakeNew();
-        z_U->Copy(*IpData().curr_z_U());
-        tmp = z_U->MakeNew();
-        tmp->Set(warm_start_mult_init_max_);
-        z_U->ElementWiseMin(*tmp);
-        new_z_U = ConstPtr(z_U);
-      }
-      else {
-        new_y_c = IpData().curr_y_c();
-        new_y_d = IpData().curr_y_d();
-        new_z_L = IpData().curr_z_L();
-        new_z_U = IpData().curr_z_U();
-      }
-
-      // Get the initial values for v_L and v_U out of y_d
-      SmartPtr<Vector> new_v_L = IpNLP().d_L()->MakeNew();
-      IpNLP().Pd_L()->TransMultVector(-1., *new_y_d, 0., *new_v_L);
-      tmp = new_v_L->MakeNew();
-      tmp->Set(warm_start_mult_bound_push_);
-      new_v_L->ElementWiseMax(*tmp);
-
-      SmartPtr<Vector> new_v_U = IpNLP().d_U()->MakeNew();
-      IpNLP().Pd_U()->TransMultVector(1., *new_y_d, 0., *new_v_U);
-      tmp = new_v_U->MakeNew();
-      tmp->Set(warm_start_mult_bound_push_);
-      new_v_U->ElementWiseMax(*tmp);
-
-      // Make those currected values current (and initialize s)
-      IpData().SetTrialPrimalVariablesFromPtr(IpData().curr_x(),
-                                              IpCq().curr_d());
-      IpData().SetTrialConstraintMultipliersFromPtr(new_y_c, new_y_d);
-      IpData().SetTrialBoundMultipliersFromPtr(new_z_L, new_z_U,
-          ConstPtr(new_v_L),
-          ConstPtr(new_v_U));
-      IpData().AcceptTrialPoint();
+      SmartPtr<Vector> z_U = init_vec->z_U_NonConst();
+      tmp = z_U->MakeNew();
+      tmp->Set(warm_start_mult_init_max_);
+      z_U->ElementWiseMin(*tmp);
     }
+
+    // Get the initial values for v_L and v_U out of y_d
+    SmartPtr<Vector> v_L = init_vec->v_L_NonConst();
+    IpNLP().Pd_L()->TransMultVector(-1., *init_vec->y_d(), 0., *v_L);
+    tmp = v_L->MakeNew();
+    tmp->Set(warm_start_mult_bound_push_);
+    v_L->ElementWiseMax(*tmp);
+
+    SmartPtr<Vector> v_U = init_vec->v_U_NonConst();
+    IpNLP().Pd_U()->TransMultVector(1., *init_vec->y_d(), 0., *v_U);
+    tmp = v_U->MakeNew();
+    tmp->Set(warm_start_mult_bound_push_);
+    v_U->ElementWiseMax(*tmp);
+
+    // Make the corrected values current (and initialize s)
+    IpData().set_trial(init_vec);
+    IpData().AcceptTrialPoint();
 
     // Now apply the target mu heuristic if required
     if (warm_start_target_mu_>0.) {
-      SmartPtr<Vector> new_x;
-      SmartPtr<Vector> new_z_L;
-      process_target_mu(1., *IpData().curr_x(), *IpCq().curr_slack_x_L(),
-                        *IpData().curr_z_L(), *IpNLP().Px_L(),
-                        new_x, new_z_L);
-      SmartPtr<Vector> new_s;
-      SmartPtr<Vector> new_v_L;
-      process_target_mu(1., *IpData().curr_s(), *IpCq().curr_slack_s_L(),
-                        *IpData().curr_v_L(), *IpNLP().Pd_L(),
-                        new_s, new_v_L);
-      IpData().SetTrialPrimalVariablesFromPtr(ConstPtr(new_x),
-                                              ConstPtr(new_s));
+      SmartPtr<const Vector> new_x;
+      SmartPtr<const Vector> new_z_L;
 
-      SmartPtr<Vector> new_z_U;
-      process_target_mu(-1., *IpData().trial_x(), *IpCq().trial_slack_x_U(),
-                        *IpData().curr_z_U(), *IpNLP().Px_U(),
+      SmartPtr<const IteratesVector> curr = IpData().curr();
+      process_target_mu(1., *curr->x(), *IpCq().curr_slack_x_L(),
+                        *curr->z_L(), *IpNLP().Px_L(),
+                        new_x, new_z_L);
+      SmartPtr<const Vector> new_s;
+      SmartPtr<const Vector> new_v_L;
+      process_target_mu(1., *curr->s(), *IpCq().curr_slack_s_L(),
+                        *curr->v_L(), *IpNLP().Pd_L(),
+                        new_s, new_v_L);
+
+      // Set the trial pointers to new_x and new_s. The process_target_mu
+      // methods below create new vectors in new_x and new_s and do not alter
+      // the existing ones.
+      init_vec->Set_x(*new_x);
+      init_vec->Set_s(*new_s);
+      IpData().set_trial(init_vec);
+
+      SmartPtr<const Vector> new_z_U;
+      process_target_mu(-1., *IpData().trial()->x(), *IpCq().trial_slack_x_U(),
+                        *IpData().curr()->z_U(), *IpNLP().Px_U(),
                         new_x, new_z_U);
-      SmartPtr<Vector> new_v_U;
-      process_target_mu(-1., *IpData().trial_s(), *IpCq().trial_slack_s_U(),
-                        *IpData().curr_v_U(), *IpNLP().Pd_U(),
+      SmartPtr<const Vector> new_v_U;
+      process_target_mu(-1., *IpData().trial()->s(), *IpCq().trial_slack_s_U(),
+                        *IpData().curr()->v_U(), *IpNLP().Pd_U(),
                         new_s, new_v_U);
       Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME new_s",
                           *new_s);
@@ -209,15 +190,18 @@ namespace Ipopt
       Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME new_v_U",
                           *new_v_U);
 
-
-      IpData().SetTrialPrimalVariablesFromPtr(ConstPtr(new_x),
-                                              ConstPtr(new_s));
-      IpData().SetTrialConstraintMultipliersFromPtr(IpData().curr_y_c(),
-          IpData().curr_y_d());
-      IpData().SetTrialBoundMultipliersFromPtr(ConstPtr(new_z_L),
-          ConstPtr(new_z_U),
-          ConstPtr(new_v_L),
-          ConstPtr(new_v_U));
+      // Now submit the full modified point
+      init_vec->Set_x(*new_x);
+      init_vec->Set_s(*new_s);
+      // y_c and y_d currently contain a copy of curr()->y_c... 
+      // we set them back to the actual pointer to reuse the tags
+      init_vec->Set_y_c(*IpData().curr()->y_c());
+      init_vec->Set_y_d(*IpData().curr()->y_d());
+      init_vec->Set_z_L(*new_z_L);
+      init_vec->Set_z_U(*new_z_U);
+      init_vec->Set_v_L(*new_v_L);
+      init_vec->Set_v_U(*new_v_U);
+      IpData().set_trial(init_vec);
       IpData().AcceptTrialPoint();
 
       // We need to call this to make sure that we don't get an error
@@ -225,87 +209,83 @@ namespace Ipopt
       IpCq().ResetAdjustedTrialSlacks();
     }
 
-    {
-      SmartPtr<const Vector> new_x;
-      SmartPtr<const Vector> new_s;
-      // Push the primal x variables
-      push_variables(warm_start_bound_push_,
-                     warm_start_bound_frac_,
-                     "x",
-                     *IpData().curr_x(),
-                     new_x,
-                     *IpNLP().x_L(),
-                     *IpNLP().x_U(),
-                     *IpNLP().Px_L(),
-                     *IpNLP().Px_U());
+    SmartPtr<const Vector> new_x;
+    SmartPtr<const Vector> new_s;
+    // Push the primal x variables
+    push_variables(warm_start_bound_push_,
+		   warm_start_bound_frac_,
+		   "x",
+		   *IpData().curr()->x(),
+		   new_x,
+		   *IpNLP().x_L(),
+		   *IpNLP().x_U(),
+		   *IpNLP().Px_L(),
+		   *IpNLP().Px_U());
 
-      IpData().SetTrialPrimalVariablesFromPtr(new_x, new_s);
+    // ToDo: Don't see why this line is required
+    //    IpData().SetTrialPrimalVariablesFromPtr(new_x, new_s);
 
-      // Push the primal s variables
-      push_variables(warm_start_bound_push_,
-                     warm_start_bound_frac_,
-                     "s",
-                     *IpData().curr_s(),
-                     new_s,
-                     *IpNLP().d_L(),
-                     *IpNLP().d_U(),
-                     *IpNLP().Pd_L(),
-                     *IpNLP().Pd_U());
-      Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME new_s cor",
-                          *new_s);
+    // Push the primal s variables
+    push_variables(warm_start_bound_push_,
+		   warm_start_bound_frac_,
+		   "s",
+		   *IpData().curr()->s(),
+		   new_s,
+		   *IpNLP().d_L(),
+		   *IpNLP().d_U(),
+		   *IpNLP().Pd_L(),
+		   *IpNLP().Pd_U());
+    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME new_s cor",
+			*new_s);
 
-      // Push the multipliers
-      SmartPtr<Vector> new_z_L = IpData().curr_z_L()->MakeNew();
-      new_z_L->Copy(*IpData().curr_z_L());
-      tmp = IpData().curr_z_L()->MakeNew();
-      tmp->Set(warm_start_mult_bound_push_);
-      new_z_L->ElementWiseMax(*tmp);
+    // Push the multipliers
+    SmartPtr<Vector> new_z_L = IpData().curr()->z_L()->MakeNewCopy();
+    tmp = IpData().curr()->z_L()->MakeNew();
+    tmp->Set(warm_start_mult_bound_push_);
+    new_z_L->ElementWiseMax(*tmp);
 
-      SmartPtr<Vector> new_z_U = IpData().curr_z_U()->MakeNew();
-      new_z_U->Copy(*IpData().curr_z_U());
-      tmp = IpData().curr_z_U()->MakeNew();
-      tmp->Set(warm_start_mult_bound_push_);
-      new_z_U->ElementWiseMax(*tmp);
+    SmartPtr<Vector> new_z_U = IpData().curr()->z_U()->MakeNewCopy();
+    tmp = IpData().curr()->z_U()->MakeNew();
+    tmp->Set(warm_start_mult_bound_push_);
+    new_z_U->ElementWiseMax(*tmp);
 
-      SmartPtr<Vector> new_v_L = IpData().curr_v_L()->MakeNew();
-      new_v_L->Copy(*IpData().curr_v_L());
-      tmp = IpData().curr_v_L()->MakeNew();
-      tmp->Set(warm_start_mult_bound_push_);
-      new_v_L->ElementWiseMax(*tmp);
+    SmartPtr<Vector> new_v_L = IpData().curr()->v_L()->MakeNewCopy();
+    tmp = IpData().curr()->v_L()->MakeNew();
+    tmp->Set(warm_start_mult_bound_push_);
+    new_v_L->ElementWiseMax(*tmp);
 
-      SmartPtr<Vector> new_v_U = IpData().curr_v_U()->MakeNew();
-      new_v_U->Copy(*IpData().curr_v_U());
-      tmp = IpData().curr_v_U()->MakeNew();
-      tmp->Set(warm_start_mult_bound_push_);
-      new_v_U->ElementWiseMax(*tmp);
+    SmartPtr<Vector> new_v_U = IpData().curr()->v_U()->MakeNewCopy();
+    tmp = IpData().curr()->v_U()->MakeNew();
+    tmp->Set(warm_start_mult_bound_push_);
+    new_v_U->ElementWiseMax(*tmp);
 
-      // Make sure the new variables are current
-      IpData().SetTrialPrimalVariablesFromPtr(new_x, new_s);
-      IpData().SetTrialConstraintMultipliersFromPtr(IpData().curr_y_c(),
-          IpData().curr_y_d());
-      IpData().SetTrialBoundMultipliersFromPtr(ConstPtr(new_z_L),
-          ConstPtr(new_z_U),
-          ConstPtr(new_v_L),
-          ConstPtr(new_v_U));
-      IpData().AcceptTrialPoint();
-    }
+    // Make sure the new variables are current
+    init_vec = IpData().curr()->MakeNewContainer();
+    init_vec->Set_x(*new_x);
+    init_vec->Set_s(*new_s);
+    init_vec->Set_z_L(*new_z_L);
+    init_vec->Set_z_U(*new_z_U);
+    init_vec->Set_v_L(*new_v_L);
+    init_vec->Set_v_U(*new_v_U);
+    IpData().set_trial(init_vec);
+    IpData().AcceptTrialPoint();
 
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial x",
-                        *IpData().curr_x());
+                        *IpData().curr()->x());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial s",
-                        *IpData().curr_s());
+                        *IpData().curr()->s());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial y_c",
-                        *IpData().curr_y_c());
+                        *IpData().curr()->y_c());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial y_d",
-                        *IpData().curr_y_d());
+                        *IpData().curr()->y_d());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial z_L",
-                        *IpData().curr_z_L());
+                        *IpData().curr()->z_L());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial z_U",
-                        *IpData().curr_z_U());
+                        *IpData().curr()->z_U());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial v_L",
-                        *IpData().curr_v_L());
+                        *IpData().curr()->v_L());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial v_U",
-                        *IpData().curr_v_U());
+                        *IpData().curr()->v_U());
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_INITIALIZATION)) {
       Jnlst().PrintVector(J_MOREVECTOR, J_INITIALIZATION, "initial slack_x_L",
                           *IpCq().curr_slack_x_L());
@@ -325,20 +305,21 @@ namespace Ipopt
       const Vector& curr_slacks,
       const Vector& curr_mults,
       const Matrix& P,
-      SmartPtr<Vector>& new_vars,
-      SmartPtr<Vector>& new_mults)
+      SmartPtr<const Vector>& ret_vars,
+      SmartPtr<const Vector>& ret_mults)
   {
-    SmartPtr<Vector> new_slacks = curr_slacks.MakeNew();
-    new_slacks->Copy(curr_slacks);
-    new_mults = curr_mults.MakeNew();
-    new_mults->Copy(curr_mults);
+    SmartPtr<Vector> new_slacks = curr_slacks.MakeNewCopy();
+    SmartPtr<Vector> new_mults = curr_mults.MakeNewCopy();
     adapt_to_target_mu(*new_slacks, *new_mults, warm_start_target_mu_);
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME new_slacks",
                         *new_slacks);
     new_slacks->Axpy(-1, curr_slacks); // this is now correction step
-    new_vars = curr_vars.MakeNew();
+    SmartPtr<Vector> new_vars = curr_vars.MakeNew();
     new_vars->Copy(curr_vars);
     P.MultVector(factor, *new_slacks, 1., *new_vars);
+
+    ret_vars = ConstPtr(new_vars);
+    ret_mults = ConstPtr(new_mults);
   }
 
   void WarmStartIterateInitializer::push_variables(Number bound_bush,

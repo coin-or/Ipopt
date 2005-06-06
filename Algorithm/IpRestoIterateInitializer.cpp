@@ -79,12 +79,12 @@ namespace Ipopt
     IpData().InitializeDataStructures(IpNLP(), false, false, false,
                                       false, false, false, false);
 
-    SmartPtr<Vector> new_x = IpData().curr_x()->MakeNew();
+    SmartPtr<Vector> new_x = IpData().curr()->x()->MakeNew();
     SmartPtr<CompoundVector> Cnew_x =
       dynamic_cast<CompoundVector*> (GetRawPtr(new_x));
 
     // Set the trial x variables from the original NLP
-    Cnew_x->GetCompNonConst(0)->Copy(*orig_ip_data->curr_x());
+    Cnew_x->GetCompNonConst(0)->Copy(*orig_ip_data->curr()->x());
 
     // Compute the initial values for the n and p variables for the
     // equality constraints
@@ -122,7 +122,7 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "pd", *pd);
 
     // Leave the slacks unchanged
-    SmartPtr<const Vector> new_s = orig_ip_data->curr_s();
+    SmartPtr<const Vector> new_s = orig_ip_data->curr()->s();
 
 #ifdef orig
     // The initial values for the inequality n and p variables are
@@ -135,9 +135,9 @@ namespace Ipopt
     SmartPtr<const Matrix> Pd_U = orig_ip_nlp->Pd_U();
     // compute indicator vectors, that are 1. for those entries in d
     // that have only lower, only upper, or both bounds, respectively
-    SmartPtr<Vector> ind_only_L = orig_ip_data->curr_y_d()->MakeNew();
-    SmartPtr<Vector> ind_only_U = orig_ip_data->curr_y_d()->MakeNew();
-    SmartPtr<Vector> ind_both = orig_ip_data->curr_y_d()->MakeNew();
+    SmartPtr<Vector> ind_only_L = orig_ip_data->curr()->y_d()->MakeNew();
+    SmartPtr<Vector> ind_only_U = orig_ip_data->curr()->y_d()->MakeNew();
+    SmartPtr<Vector> ind_both = orig_ip_data->curr()->y_d()->MakeNew();
     SmartPtr<Vector> tmp = d_U->MakeNew();
     tmp->Set(1.);
     Pd_U->MultVector(1., *tmp, 0., *ind_only_U);
@@ -163,7 +163,7 @@ namespace Ipopt
 
     // a)
     SmartPtr<Vector> tmpfull = ind_both->MakeNew();
-    tmpfull->Copy(*orig_ip_data->curr_s());
+    tmpfull->Copy(*orig_ip_data->curr()->s());
     DBG_PRINT_VECTOR(1,"curr_s",*tmpfull);
     tmpfull->ElementWiseMultiply(*ind_both);
     DBG_PRINT_VECTOR(2,"s both",*tmpfull);
@@ -210,9 +210,9 @@ namespace Ipopt
     // a) keep for those entries that have two bounds
     // b) set to pfull + d_L for those with only lower bounds
     // c) set to d_u - nfull for those with only upper bounds
-    SmartPtr<Vector> new_s = IpData().curr_s()->MakeNew();
+    SmartPtr<Vector> new_s = IpData().curr()->s()->MakeNew();
     // a)
-    new_s->Copy(*orig_ip_data->curr_s());
+    new_s->Copy(*orig_ip_data->curr()->s());
     DBG_PRINT_VECTOR(2, "curr_s", *new_s);
     new_s->ElementWiseMultiply(*ind_both);
     // b)
@@ -228,7 +228,9 @@ namespace Ipopt
     // Now set the primal trial variables
     DBG_PRINT_VECTOR(2,"new_s",*new_s);
     DBG_PRINT_VECTOR(2,"new_x",*new_x);
-    IpData().SetTrialPrimalVariables(*new_x, *new_s);
+    SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
+    trial->Set_primal(*new_x, *new_s);
+    IpData().set_trial(trial);
 
     DBG_PRINT_VECTOR(2, "resto_c", *IpCq().trial_c());
     DBG_PRINT_VECTOR(2, "resto_d_minus_s", *IpCq().trial_d_minus_s());
@@ -237,19 +239,19 @@ namespace Ipopt
     //                   Initialize bound multipliers                  //
     /////////////////////////////////////////////////////////////////////
 
-    SmartPtr<Vector> new_z_L = IpData().curr_z_L()->MakeNew();
+    SmartPtr<Vector> new_z_L = IpData().curr()->z_L()->MakeNew();
     SmartPtr<CompoundVector> Cnew_z_L =
       dynamic_cast<CompoundVector*> (GetRawPtr(new_z_L));
     DBG_ASSERT(IsValid(Cnew_z_L));
-    SmartPtr<Vector> new_z_U = IpData().curr_z_U()->MakeNew();
-    SmartPtr<Vector> new_v_L = IpData().curr_v_L()->MakeNew();
-    SmartPtr<Vector> new_v_U = IpData().curr_v_U()->MakeNew();
+    SmartPtr<Vector> new_z_U = IpData().curr()->z_U()->MakeNew();
+    SmartPtr<Vector> new_v_L = IpData().curr()->v_L()->MakeNew();
+    SmartPtr<Vector> new_v_U = IpData().curr()->v_U()->MakeNew();
 
     // multipliers for the original bounds are
-    SmartPtr<const Vector> orig_z_L = orig_ip_data->curr_z_L();
-    SmartPtr<const Vector> orig_z_U = orig_ip_data->curr_z_U();
-    SmartPtr<const Vector> orig_v_L = orig_ip_data->curr_v_L();
-    SmartPtr<const Vector> orig_v_U = orig_ip_data->curr_v_U();
+    SmartPtr<const Vector> orig_z_L = orig_ip_data->curr()->z_L();
+    SmartPtr<const Vector> orig_z_U = orig_ip_data->curr()->z_U();
+    SmartPtr<const Vector> orig_v_L = orig_ip_data->curr()->v_L();
+    SmartPtr<const Vector> orig_v_U = orig_ip_data->curr()->v_U();
 
     // Set the new multipliers to the min of the penalty parameter Rho
     // and their current value
@@ -278,7 +280,8 @@ namespace Ipopt
     Cnew_z_L4->ElementWiseDivide(*pd);
 
     // Set those initial values to be the trial values in Data
-    IpData().SetTrialBoundMultipliers(*new_z_L, *new_z_U, *new_v_L, *new_v_U);
+    trial->Set_bound_mult(*new_z_L, *new_z_U, *new_v_L, *new_v_U);
+    IpData().set_trial(trial);
 
     /////////////////////////////////////////////////////////////////////
     //           Initialize equality constraint multipliers            //
@@ -289,8 +292,8 @@ namespace Ipopt
       // those values are needed to compute the initial values for
       // the multipliers
       IpData().CopyTrialToCurrent();
-      SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
-      SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+      SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
+      SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
       bool retval = resto_eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
       if (!retval) {
         y_c->Set(0.0);
@@ -306,26 +309,28 @@ namespace Ipopt
           y_d->Set(0.0);
         }
       }
-      IpData().SetTrialEqMultipliers(*y_c, *y_d);
+    trial->Set_eq_mult(*y_c, *y_d);
     }
     else {
-      SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
-      SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+      SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
+      SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
       y_c->Set(0.0);
       y_d->Set(0.0);
-      IpData().SetTrialEqMultipliers(*y_c, *y_d);
+      trial->Set_eq_mult(*y_c, *y_d);
     }
+    // update the new multipliers
+    IpData().set_trial(trial);
 
     // upgrade the trial to the current point
     IpData().AcceptTrialPoint();
 
-    DBG_PRINT_VECTOR(2, "y_c", *IpData().curr_y_c());
-    DBG_PRINT_VECTOR(2, "y_d", *IpData().curr_y_d());
+    DBG_PRINT_VECTOR(2, "y_c", *IpData().curr()->y_c());
+    DBG_PRINT_VECTOR(2, "y_d", *IpData().curr()->y_d());
 
-    DBG_PRINT_VECTOR(2, "z_L", *IpData().curr_z_L());
-    DBG_PRINT_VECTOR(2, "z_U", *IpData().curr_z_U());
-    DBG_PRINT_VECTOR(2, "v_L", *IpData().curr_v_L());
-    DBG_PRINT_VECTOR(2, "v_U", *IpData().curr_v_U());
+    DBG_PRINT_VECTOR(2, "z_L", *IpData().curr()->z_L());
+    DBG_PRINT_VECTOR(2, "z_U", *IpData().curr()->z_U());
+    DBG_PRINT_VECTOR(2, "v_L", *IpData().curr()->v_L());
+    DBG_PRINT_VECTOR(2, "v_U", *IpData().curr()->v_U());
 
     return true;
   }

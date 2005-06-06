@@ -189,57 +189,44 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "Solving the Primal Dual System for the affine step\n");
     // First get the right hand side
-    SmartPtr<const Vector> rhs_aff_x = IpCq().curr_grad_lag_x();
-    SmartPtr<const Vector> rhs_aff_s = IpCq().curr_grad_lag_s();
-    SmartPtr<const Vector> rhs_aff_c = IpCq().curr_c();
-    SmartPtr<const Vector> rhs_aff_d = IpCq().curr_d_minus_s();
-    SmartPtr<const Vector> rhs_aff_x_L = IpCq().curr_compl_x_L();
-    SmartPtr<const Vector> rhs_aff_x_U = IpCq().curr_compl_x_U();
-    SmartPtr<const Vector> rhs_aff_s_L = IpCq().curr_compl_s_L();
-    SmartPtr<const Vector> rhs_aff_s_U = IpCq().curr_compl_s_U();
+    SmartPtr<IteratesVector> rhs_aff = IpData().curr()->MakeNewIteratesVector(false);
+    rhs_aff->Set_x(*IpCq().curr_grad_lag_x());
+    rhs_aff->Set_s(*IpCq().curr_grad_lag_s());
+    rhs_aff->Set_y_c(*IpCq().curr_c());
+    rhs_aff->Set_y_d(*IpCq().curr_d_minus_s());
+    rhs_aff->Set_z_L(*IpCq().curr_compl_x_L());
+    rhs_aff->Set_z_U(*IpCq().curr_compl_x_U());
+    rhs_aff->Set_v_L(*IpCq().curr_compl_s_L());
+    rhs_aff->Set_v_U(*IpCq().curr_compl_s_U());
 
     // Get space for the affine scaling step
-    SmartPtr<Vector> step_aff_x = rhs_aff_x->MakeNew();
-    SmartPtr<Vector> step_aff_s = rhs_aff_s->MakeNew();
-    SmartPtr<Vector> step_aff_y_c = rhs_aff_c->MakeNew();
-    SmartPtr<Vector> step_aff_y_d = rhs_aff_d->MakeNew();
-    SmartPtr<Vector> step_aff_z_L = rhs_aff_x_L->MakeNew();
-    SmartPtr<Vector> step_aff_z_U = rhs_aff_x_U->MakeNew();
-    SmartPtr<Vector> step_aff_v_L = rhs_aff_s_L->MakeNew();
-    SmartPtr<Vector> step_aff_v_U = rhs_aff_s_U->MakeNew();
+    SmartPtr<IteratesVector> step_aff = IpData().curr()->MakeNewIteratesVector(true);
 
     // Now solve the primal-dual system to get the step
     pd_solver_->Solve(-1.0, 0.0,
-                      *rhs_aff_x,
-                      *rhs_aff_s,
-                      *rhs_aff_c,
-                      *rhs_aff_d,
-                      *rhs_aff_x_L,
-                      *rhs_aff_x_U,
-                      *rhs_aff_s_L,
-                      *rhs_aff_s_U,
-                      *step_aff_x,
-                      *step_aff_s,
-                      *step_aff_y_c,
-                      *step_aff_y_d,
-                      *step_aff_z_L,
-                      *step_aff_z_U,
-                      *step_aff_v_L,
-                      *step_aff_v_U,
+                      *rhs_aff->x(),
+                      *rhs_aff->s(),
+                      *rhs_aff->y_c(),
+                      *rhs_aff->y_d(),
+                      *rhs_aff->z_L(),
+                      *rhs_aff->z_U(),
+                      *rhs_aff->v_L(),
+                      *rhs_aff->v_U(),
+                      *step_aff->x_NonConst(),
+                      *step_aff->s_NonConst(),
+                      *step_aff->y_c_NonConst(),
+                      *step_aff->y_d_NonConst(),
+                      *step_aff->z_L_NonConst(),
+                      *step_aff->z_U_NonConst(),
+                      *step_aff->v_L_NonConst(),
+                      *step_aff->v_U_NonConst(),
                       false           // want accurate solution here
                       // because we can use it to
                       // compute the overall search
                       // direction
                      );
 
-    DBG_PRINT_VECTOR(2, "step_aff_x", *step_aff_x);
-    DBG_PRINT_VECTOR(2, "step_aff_s", *step_aff_s);
-    DBG_PRINT_VECTOR(2, "step_aff_y_c", *step_aff_y_c);
-    DBG_PRINT_VECTOR(2, "step_aff_y_d", *step_aff_y_d);
-    DBG_PRINT_VECTOR(2, "step_aff_z_L", *step_aff_z_L);
-    DBG_PRINT_VECTOR(2, "step_aff_z_U", *step_aff_z_U);
-    DBG_PRINT_VECTOR(2, "step_aff_v_L", *step_aff_v_L);
-    DBG_PRINT_VECTOR(2, "step_aff_v_U", *step_aff_v_U);
+    DBG_PRINT_VECTOR(2, "step_aff", *step_aff);
 
     /////////////////////////////////////
     // Compute the pure centering step //
@@ -250,91 +237,67 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "Solving the Primal Dual System for the centering step\n");
     // First get the right hand side
-    SmartPtr<Vector> rhs_cen_x = rhs_aff_x->MakeNew();
-    SmartPtr<Vector> rhs_cen_s = rhs_aff_s->MakeNew();
-    SmartPtr<Vector> rhs_cen_c = rhs_aff_c->MakeNew();
-    SmartPtr<Vector> rhs_cen_d = rhs_aff_d->MakeNew();
-    SmartPtr<Vector> rhs_cen_x_L = rhs_aff_x_L->MakeNew();
-    SmartPtr<Vector> rhs_cen_x_U = rhs_aff_x_U->MakeNew();
-    SmartPtr<Vector> rhs_cen_s_L = rhs_aff_s_L->MakeNew();
-    SmartPtr<Vector> rhs_cen_s_U = rhs_aff_s_U->MakeNew();
+    SmartPtr<IteratesVector> rhs_cen = IpData().curr()->MakeNewIteratesVector(true);
+    rhs_cen->x_NonConst()->Copy(*IpCq().grad_kappa_times_damping_x());
+    rhs_cen->x_NonConst()->Scal(-avrg_compl);
+    rhs_cen->s_NonConst()->Copy(*IpCq().grad_kappa_times_damping_s());
+    rhs_cen->s_NonConst()->Scal(-avrg_compl);
 
-    // ToDo The following is only necessary if kappa_d > 0.  Otherwise
-    // we can set it to zero.
-    rhs_cen_x->Copy(*IpCq().grad_kappa_times_damping_x());
-    rhs_cen_x->Scal(-avrg_compl);
-    rhs_cen_s->Copy(*IpCq().grad_kappa_times_damping_s());
-    rhs_cen_s->Scal(-avrg_compl);
-
-    rhs_cen_c->Set(0.);
-    rhs_cen_d->Set(0.);
-    rhs_cen_x_L->Set(avrg_compl);
-    rhs_cen_x_U->Set(avrg_compl);
-    rhs_cen_s_L->Set(avrg_compl);
-    rhs_cen_s_U->Set(avrg_compl);
+    rhs_cen->y_c_NonConst()->Set(0.);
+    rhs_cen->y_d_NonConst()->Set(0.);
+    rhs_cen->z_L_NonConst()->Set(avrg_compl);
+    rhs_cen->z_U_NonConst()->Set(avrg_compl);
+    rhs_cen->v_L_NonConst()->Set(avrg_compl);
+    rhs_cen->v_U_NonConst()->Set(avrg_compl);
 
     // Get space for the affine scaling step
-    SmartPtr<Vector> step_cen_x = rhs_aff_x->MakeNew();
-    SmartPtr<Vector> step_cen_s = rhs_aff_s->MakeNew();
-    SmartPtr<Vector> step_cen_y_c = rhs_aff_c->MakeNew();
-    SmartPtr<Vector> step_cen_y_d = rhs_aff_d->MakeNew();
-    SmartPtr<Vector> step_cen_z_L = rhs_aff_x_L->MakeNew();
-    SmartPtr<Vector> step_cen_z_U = rhs_aff_x_U->MakeNew();
-    SmartPtr<Vector> step_cen_v_L = rhs_aff_s_L->MakeNew();
-    SmartPtr<Vector> step_cen_v_U = rhs_aff_s_U->MakeNew();
+    SmartPtr<IteratesVector> step_cen = IpData().curr()->MakeNewIteratesVector(true);
 
     // Now solve the primal-dual system to get the step
     pd_solver_->Solve(1.0, 0.0,
-                      *rhs_cen_x,
-                      *rhs_cen_s,
-                      *rhs_cen_c,
-                      *rhs_cen_d,
-                      *rhs_cen_x_L,
-                      *rhs_cen_x_U,
-                      *rhs_cen_s_L,
-                      *rhs_cen_s_U,
-                      *step_cen_x,
-                      *step_cen_s,
-                      *step_cen_y_c,
-                      *step_cen_y_d,
-                      *step_cen_z_L,
-                      *step_cen_z_U,
-                      *step_cen_v_L,
-                      *step_cen_v_U,
+                      *rhs_cen->x(),
+                      *rhs_cen->s(),
+                      *rhs_cen->y_c(),
+                      *rhs_cen->y_d(),
+                      *rhs_cen->z_L(),
+                      *rhs_cen->z_U(),
+                      *rhs_cen->v_L(),
+                      *rhs_cen->v_U(),
+                      *step_cen->x_NonConst(),
+                      *step_cen->s_NonConst(),
+                      *step_cen->y_c_NonConst(),
+                      *step_cen->y_d_NonConst(),
+                      *step_cen->z_L_NonConst(),
+                      *step_cen->z_U_NonConst(),
+                      *step_cen->v_L_NonConst(),
+                      *step_cen->v_U_NonConst(),
                       false           // want accurate solution here
                       // because we can use it to
                       // compute the overall search
                       // direction
                      );
 
-    DBG_PRINT_VECTOR(2, "step_cen_x", *step_cen_x);
-    DBG_PRINT_VECTOR(2, "step_cen_s", *step_cen_s);
-    DBG_PRINT_VECTOR(2, "step_cen_y_c", *step_cen_y_c);
-    DBG_PRINT_VECTOR(2, "step_cen_y_d", *step_cen_y_d);
-    DBG_PRINT_VECTOR(2, "step_cen_z_L", *step_cen_z_L);
-    DBG_PRINT_VECTOR(2, "step_cen_z_U", *step_cen_z_U);
-    DBG_PRINT_VECTOR(2, "step_cen_v_L", *step_cen_v_L);
-    DBG_PRINT_VECTOR(2, "step_cen_v_U", *step_cen_v_U);
+    DBG_PRINT_VECTOR(2, "step_cen", *step_cen);
 
     // We now compute the step for the slack variables.  This safes
     // time, because we then don't have to do this any more for each
     // evaluation of the quality function
-    SmartPtr<Vector> step_aff_x_L = step_aff_z_L->MakeNew();
-    SmartPtr<Vector> step_aff_x_U = step_aff_z_U->MakeNew();
-    SmartPtr<Vector> step_aff_s_L = step_aff_v_L->MakeNew();
-    SmartPtr<Vector> step_aff_s_U = step_aff_v_U->MakeNew();
-    IpNLP().Px_L()->TransMultVector(1., *step_aff_x, 0., *step_aff_x_L);
-    IpNLP().Px_U()->TransMultVector(-1., *step_aff_x, 0., *step_aff_x_U);
-    IpNLP().Pd_L()->TransMultVector(1., *step_aff_s, 0., *step_aff_s_L);
-    IpNLP().Pd_U()->TransMultVector(-1., *step_aff_s, 0., *step_aff_s_U);
-    SmartPtr<Vector> step_cen_x_L = step_cen_z_L->MakeNew();
-    SmartPtr<Vector> step_cen_x_U = step_cen_z_U->MakeNew();
-    SmartPtr<Vector> step_cen_s_L = step_cen_v_L->MakeNew();
-    SmartPtr<Vector> step_cen_s_U = step_cen_v_U->MakeNew();
-    IpNLP().Px_L()->TransMultVector(1., *step_cen_x, 0., *step_cen_x_L);
-    IpNLP().Px_U()->TransMultVector(-1., *step_cen_x, 0., *step_cen_x_U);
-    IpNLP().Pd_L()->TransMultVector(1., *step_cen_s, 0., *step_cen_s_L);
-    IpNLP().Pd_U()->TransMultVector(-1., *step_cen_s, 0., *step_cen_s_U);
+    SmartPtr<Vector> step_aff_x_L = step_aff->z_L()->MakeNew();
+    SmartPtr<Vector> step_aff_x_U = step_aff->z_U()->MakeNew();
+    SmartPtr<Vector> step_aff_s_L = step_aff->v_L()->MakeNew();
+    SmartPtr<Vector> step_aff_s_U = step_aff->v_U()->MakeNew();
+    IpNLP().Px_L()->TransMultVector(1., *step_aff->x(), 0., *step_aff_x_L);
+    IpNLP().Px_U()->TransMultVector(-1., *step_aff->x(), 0., *step_aff_x_U);
+    IpNLP().Pd_L()->TransMultVector(1., *step_aff->s(), 0., *step_aff_s_L);
+    IpNLP().Pd_U()->TransMultVector(-1., *step_aff->s(), 0., *step_aff_s_U);
+    SmartPtr<Vector> step_cen_x_L = step_cen->z_L()->MakeNew();
+    SmartPtr<Vector> step_cen_x_U = step_cen->z_U()->MakeNew();
+    SmartPtr<Vector> step_cen_s_L = step_cen->v_L()->MakeNew();
+    SmartPtr<Vector> step_cen_s_U = step_cen->v_U()->MakeNew();
+    IpNLP().Px_L()->TransMultVector(1., *step_cen->x(), 0., *step_cen_x_L);
+    IpNLP().Px_U()->TransMultVector(-1., *step_cen->x(), 0., *step_cen_x_U);
+    IpNLP().Pd_L()->TransMultVector(1., *step_cen->s(), 0., *step_cen_s_L);
+    IpNLP().Pd_U()->TransMultVector(-1., *step_cen->s(), 0., *step_cen_s_U);
 
     // If necessary, compute some products with the constraint Jacobian
     SmartPtr<const Vector> jac_cT_times_step_aff_y_c;
@@ -342,10 +305,10 @@ namespace Ipopt
     SmartPtr<const Vector> jac_cT_times_step_cen_y_c;
     SmartPtr<const Vector> jac_dT_times_step_cen_y_d;
     if (quality_function_dual_inf_==2 && dual_alpha_for_y_) {
-      jac_cT_times_step_aff_y_c = IpCq().curr_jac_cT_times_vec(*step_aff_y_c);
-      jac_dT_times_step_aff_y_d = IpCq().curr_jac_dT_times_vec(*step_aff_y_d);
-      jac_cT_times_step_cen_y_c = IpCq().curr_jac_cT_times_vec(*step_cen_y_c);
-      jac_dT_times_step_cen_y_d = IpCq().curr_jac_dT_times_vec(*step_cen_y_d);
+      jac_cT_times_step_aff_y_c = IpCq().curr_jac_cT_times_vec(*step_aff->y_c());
+      jac_dT_times_step_aff_y_d = IpCq().curr_jac_dT_times_vec(*step_aff->y_d());
+      jac_cT_times_step_cen_y_c = IpCq().curr_jac_cT_times_vec(*step_cen->y_c());
+      jac_dT_times_step_cen_y_d = IpCq().curr_jac_dT_times_vec(*step_cen->y_d());
     }
 
     Number sigma;
@@ -361,22 +324,22 @@ namespace Ipopt
                                      *step_aff_x_U,
                                      *step_aff_s_L,
                                      *step_aff_s_U,
-                                     *step_aff_y_c,
-                                     *step_aff_y_d,
-                                     *step_aff_z_L,
-                                     *step_aff_z_U,
-                                     *step_aff_v_L,
-                                     *step_aff_v_U,
+                                     *step_aff->y_c(),
+                                     *step_aff->y_d(),
+                                     *step_aff->z_L(),
+                                     *step_aff->z_U(),
+                                     *step_aff->v_L(),
+                                     *step_aff->v_U(),
                                      *step_cen_x_L,
                                      *step_cen_x_U,
                                      *step_cen_s_L,
                                      *step_cen_s_U,
-                                     *step_cen_y_c,
-                                     *step_cen_y_d,
-                                     *step_cen_z_L,
-                                     *step_cen_z_U,
-                                     *step_cen_v_L,
-                                     *step_cen_v_U,
+                                     *step_cen->y_c(),
+                                     *step_cen->y_d(),
+                                     *step_cen->z_L(),
+                                     *step_cen->z_U(),
+                                     *step_cen->v_L(),
+                                     *step_cen->v_U(),
                                      jac_cT_times_step_aff_y_c,
                                      jac_dT_times_step_aff_y_d,
                                      jac_cT_times_step_cen_y_c,
@@ -391,22 +354,22 @@ namespace Ipopt
                                        *step_aff_x_U,
                                        *step_aff_s_L,
                                        *step_aff_s_U,
-                                       *step_aff_y_c,
-                                       *step_aff_y_d,
-                                       *step_aff_z_L,
-                                       *step_aff_z_U,
-                                       *step_aff_v_L,
-                                       *step_aff_v_U,
+                                       *step_aff->y_c(),
+                                       *step_aff->y_d(),
+                                       *step_aff->z_L(),
+                                       *step_aff->z_U(),
+                                       *step_aff->v_L(),
+                                       *step_aff->v_U(),
                                        *step_cen_x_L,
                                        *step_cen_x_U,
                                        *step_cen_s_L,
                                        *step_cen_s_U,
-                                       *step_cen_y_c,
-                                       *step_cen_y_d,
-                                       *step_cen_z_L,
-                                       *step_cen_z_U,
-                                       *step_cen_v_L,
-                                       *step_cen_v_U,
+                                       *step_cen->y_c(),
+                                       *step_cen->y_d(),
+                                       *step_cen->z_L(),
+                                       *step_cen->z_U(),
+                                       *step_cen->v_L(),
+                                       *step_cen->v_U(),
                                        jac_cT_times_step_aff_y_c,
                                        jac_dT_times_step_aff_y_d,
                                        jac_cT_times_step_cen_y_c,
@@ -426,22 +389,22 @@ namespace Ipopt
                                  *step_aff_x_U,
                                  *step_aff_s_L,
                                  *step_aff_s_U,
-                                 *step_aff_y_c,
-                                 *step_aff_y_d,
-                                 *step_aff_z_L,
-                                 *step_aff_z_U,
-                                 *step_aff_v_L,
-                                 *step_aff_v_U,
+                                 *step_aff->y_c(),
+                                 *step_aff->y_d(),
+                                 *step_aff->z_L(),
+                                 *step_aff->z_U(),
+                                 *step_aff->v_L(),
+                                 *step_aff->v_U(),
                                  *step_cen_x_L,
                                  *step_cen_x_U,
                                  *step_cen_s_L,
                                  *step_cen_s_U,
-                                 *step_cen_y_c,
-                                 *step_cen_y_d,
-                                 *step_cen_z_L,
-                                 *step_cen_z_U,
-                                 *step_cen_v_L,
-                                 *step_cen_v_U,
+                                 *step_cen->y_c(),
+                                 *step_cen->y_d(),
+                                 *step_cen->z_L(),
+                                 *step_cen->z_U(),
+                                 *step_cen->v_L(),
+                                 *step_cen->v_U(),
                                  jac_cT_times_step_aff_y_c,
                                  jac_dT_times_step_aff_y_d,
                                  jac_cT_times_step_cen_y_c,
@@ -460,58 +423,58 @@ namespace Ipopt
       l_best = l;
       sigma = pow(base, l);
       q_best = CalculateQualityFunction(sigma,
-                                        *step_aff_x_L,
-                                        *step_aff_x_U,
-                                        *step_aff_s_L,
-                                        *step_aff_s_U,
-                                        *step_aff_y_c,
-                                        *step_aff_y_d,
-                                        *step_aff_z_L,
-                                        *step_aff_z_U,
-                                        *step_aff_v_L,
-                                        *step_aff_v_U,
-                                        *step_cen_x_L,
-                                        *step_cen_x_U,
-                                        *step_cen_s_L,
-                                        *step_cen_s_U,
-                                        *step_cen_y_c,
-                                        *step_cen_y_d,
-                                        *step_cen_z_L,
-                                        *step_cen_z_U,
-                                        *step_cen_v_L,
-                                        *step_cen_v_U,
-                                        jac_cT_times_step_aff_y_c,
-                                        jac_dT_times_step_aff_y_d,
-                                        jac_cT_times_step_cen_y_c,
-                                        jac_dT_times_step_cen_y_d);
+                                 *step_aff_x_L,
+                                 *step_aff_x_U,
+                                 *step_aff_s_L,
+                                 *step_aff_s_U,
+                                 *step_aff->y_c(),
+                                 *step_aff->y_d(),
+                                 *step_aff->z_L(),
+                                 *step_aff->z_U(),
+                                 *step_aff->v_L(),
+                                 *step_aff->v_U(),
+                                 *step_cen_x_L,
+                                 *step_cen_x_U,
+                                 *step_cen_s_L,
+                                 *step_cen_s_U,
+                                 *step_cen->y_c(),
+                                 *step_cen->y_d(),
+                                 *step_cen->z_L(),
+                                 *step_cen->z_U(),
+                                 *step_cen->v_L(),
+                                 *step_cen->v_U(),
+                                 jac_cT_times_step_aff_y_c,
+                                 jac_dT_times_step_aff_y_d,
+                                 jac_cT_times_step_cen_y_c,
+                                 jac_dT_times_step_cen_y_d);
       Index l_min = (Index)trunc(-(log(avrg_compl)-log(1e-9))/log(base))-1;
       for (; l>=l_min; l--) {
         sigma = pow(base, l);
         Number q = CalculateQualityFunction(sigma,
-                                            *step_aff_x_L,
-                                            *step_aff_x_U,
-                                            *step_aff_s_L,
-                                            *step_aff_s_U,
-                                            *step_aff_y_c,
-                                            *step_aff_y_d,
-                                            *step_aff_z_L,
-                                            *step_aff_z_U,
-                                            *step_aff_v_L,
-                                            *step_aff_v_U,
-                                            *step_cen_x_L,
-                                            *step_cen_x_U,
-                                            *step_cen_s_L,
-                                            *step_cen_s_U,
-                                            *step_cen_y_c,
-                                            *step_cen_y_d,
-                                            *step_cen_z_L,
-                                            *step_cen_z_U,
-                                            *step_cen_v_L,
-                                            *step_cen_v_U,
-                                            jac_cT_times_step_aff_y_c,
-                                            jac_dT_times_step_aff_y_d,
-                                            jac_cT_times_step_cen_y_c,
-                                            jac_dT_times_step_cen_y_d);
+					    *step_aff_x_L,
+					    *step_aff_x_U,
+					    *step_aff_s_L,
+					    *step_aff_s_U,
+					    *step_aff->y_c(),
+					    *step_aff->y_d(),
+					    *step_aff->z_L(),
+					    *step_aff->z_U(),
+					    *step_aff->v_L(),
+					    *step_aff->v_U(),
+					    *step_cen_x_L,
+					    *step_cen_x_U,
+					    *step_cen_s_L,
+					    *step_cen_s_U,
+					    *step_cen->y_c(),
+					    *step_cen->y_d(),
+					    *step_cen->z_L(),
+					    *step_cen->z_U(),
+					    *step_cen->v_L(),
+					    *step_cen->v_U(),
+					    jac_cT_times_step_aff_y_c,
+					    jac_dT_times_step_aff_y_d,
+					    jac_cT_times_step_cen_y_c,
+					    jac_dT_times_step_cen_y_d);
         if (q<=q_best) {
           q_best = q;
           l_best = l;
@@ -527,43 +490,14 @@ namespace Ipopt
 
     // Store the affine search direction (in case it is needed in the
     // line search for a corrector step)
-    IpData().SetFromPtr_delta_aff_x(ConstPtr(step_aff_x));
-    IpData().SetFromPtr_delta_aff_s(ConstPtr(step_aff_s));
-    IpData().SetFromPtr_delta_aff_y_c(ConstPtr(step_aff_y_c));
-    IpData().SetFromPtr_delta_aff_y_d(ConstPtr(step_aff_y_d));
-    IpData().SetFromPtr_delta_aff_z_L(ConstPtr(step_aff_z_L));
-    IpData().SetFromPtr_delta_aff_z_U(ConstPtr(step_aff_z_U));
-    IpData().SetFromPtr_delta_aff_v_L(ConstPtr(step_aff_v_L));
-    IpData().SetFromPtr_delta_aff_v_U(ConstPtr(step_aff_v_U));
+    IpData().set_delta_aff(step_aff);
     IpData().SetHaveAffineDeltas(true);
 
     // Now construct the overall search direction here
-    SmartPtr<Vector> step_x = step_aff_x->MakeNew();
-    SmartPtr<Vector> step_s = step_aff_s->MakeNew();
-    SmartPtr<Vector> step_y_c = step_aff_y_c->MakeNew();
-    SmartPtr<Vector> step_y_d = step_aff_y_d->MakeNew();
-    SmartPtr<Vector> step_z_L = step_aff_z_L->MakeNew();
-    SmartPtr<Vector> step_z_U = step_aff_z_U->MakeNew();
-    SmartPtr<Vector> step_v_L = step_aff_v_L->MakeNew();
-    SmartPtr<Vector> step_v_U = step_aff_v_U->MakeNew();
+    SmartPtr<IteratesVector> step = IpData().curr()->MakeNewIteratesVector(true);
+    step->AddTwoVectors(sigma, *step_cen, 1.0, *step_aff, 0.0);
 
-    step_x->AddTwoVectors(sigma, *step_cen_x, 1., *step_aff_x, 0.);
-    step_s->AddTwoVectors(sigma, *step_cen_s, 1., *step_aff_s, 0.);
-    step_y_c->AddTwoVectors(sigma, *step_cen_y_c, 1., *step_aff_y_c, 0.);
-    step_y_d->AddTwoVectors(sigma, *step_cen_y_d, 1., *step_aff_y_d, 0.);
-    step_z_L->AddTwoVectors(sigma, *step_cen_z_L, 1., *step_aff_z_L, 0.);
-    step_z_U->AddTwoVectors(sigma, *step_cen_z_U, 1., *step_aff_z_U, 0.);
-    step_v_L->AddTwoVectors(sigma, *step_cen_v_L, 1., *step_aff_v_L, 0.);
-    step_v_U->AddTwoVectors(sigma, *step_cen_v_U, 1., *step_aff_v_U, 0.);
-
-    IpData().SetFromPtr_delta_x(ConstPtr(step_x));
-    IpData().SetFromPtr_delta_s(ConstPtr(step_s));
-    IpData().SetFromPtr_delta_y_c(ConstPtr(step_y_c));
-    IpData().SetFromPtr_delta_y_d(ConstPtr(step_y_d));
-    IpData().SetFromPtr_delta_z_L(ConstPtr(step_z_L));
-    IpData().SetFromPtr_delta_z_U(ConstPtr(step_z_U));
-    IpData().SetFromPtr_delta_v_L(ConstPtr(step_v_L));
-    IpData().SetFromPtr_delta_v_U(ConstPtr(step_v_U));
+    IpData().set_delta(step);
     IpData().SetHaveDeltas(true);
 
     ///////////////////////////////////////////////////////////////////////////
@@ -637,10 +571,10 @@ namespace Ipopt
     DBG_START_METH("OptProbingMuOracle::CalculateQualityFunction",
                    dbg_verbosity);
 
-    Index n_dual = IpData().curr_x()->Dim() + IpData().curr_s()->Dim();
-    Index n_pri = IpData().curr_y_c()->Dim() + IpData().curr_y_d()->Dim();
-    Index n_comp = IpData().curr_z_L()->Dim() + IpData().curr_z_U()->Dim() +
-                   IpData().curr_v_L()->Dim() + IpData().curr_v_U()->Dim();
+    Index n_dual = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
+    Index n_pri = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
+    Index n_comp = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() +
+                   IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim();
 
     // The scaling values have not yet been determined, compute them now
     if (dual_inf_scal_ < 0.) {
@@ -747,13 +681,13 @@ namespace Ipopt
     tmp_slack_s_U_->AddTwoVectors(1., *IpCq().curr_slack_s_U(),
                                   alpha_primal, *tmp_step_s_U_, 0.);
 
-    tmp_z_L_->AddTwoVectors(1., *IpData().curr_z_L(),
+    tmp_z_L_->AddTwoVectors(1., *IpData().curr()->z_L(),
                             alpha_dual, *tmp_step_z_L_, 0.);
-    tmp_z_U_->AddTwoVectors(1., *IpData().curr_z_U(),
+    tmp_z_U_->AddTwoVectors(1., *IpData().curr()->z_U(),
                             alpha_dual, *tmp_step_z_U_, 0.);
-    tmp_v_L_->AddTwoVectors(1., *IpData().curr_v_L(),
+    tmp_v_L_->AddTwoVectors(1., *IpData().curr()->v_L(),
                             alpha_dual, *tmp_step_v_L_, 0.);
-    tmp_v_U_->AddTwoVectors(1., *IpData().curr_v_U(),
+    tmp_v_U_->AddTwoVectors(1., *IpData().curr()->v_U(),
                             alpha_dual, *tmp_step_v_U_, 0.);
 
     tmp_slack_x_L_->ElementWiseMultiply(*tmp_z_L_);

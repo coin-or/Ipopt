@@ -135,19 +135,19 @@ namespace Ipopt
       }
       if (Jnlst().ProduceOutput(J_VECTOR, J_LINE_SEARCH)) {
         Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "x", *resto_ip_data->curr_x());
+                            "x", *resto_ip_data->curr()->x());
         Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "y_c", *resto_ip_data->curr_y_c());
+                            "y_c", *resto_ip_data->curr()->y_c());
         Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "y_d", *resto_ip_data->curr_y_d());
+                            "y_d", *resto_ip_data->curr()->y_d());
         Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "z_L", *resto_ip_data->curr_z_L());
+                            "z_L", *resto_ip_data->curr()->z_L());
         Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "z_U", *resto_ip_data->curr_z_U());
+                            "z_U", *resto_ip_data->curr()->z_U());
         Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "v_L", *resto_ip_data->curr_v_L());
+                            "v_L", *resto_ip_data->curr()->v_L());
         Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "v_U", *resto_ip_data->curr_v_U());
+                            "v_U", *resto_ip_data->curr()->v_U());
       }
 
       retval = 0;
@@ -178,53 +178,47 @@ namespace Ipopt
 
     if (retval == 0) {
       // Copy the results into the trial fields;. They will be
-      // accepted later in the full algorith
+      // accepted later in the full algorithm
       SmartPtr<const CompoundVector> cx =
-        dynamic_cast<const CompoundVector*>(GetRawPtr(resto_ip_data->curr_x()));
+        dynamic_cast<const CompoundVector*>(GetRawPtr(resto_ip_data->curr()->x()));
       DBG_ASSERT(IsValid(cx));
-      SmartPtr<const Vector> x_only = cx->GetComp(0);
-      SmartPtr<const Vector> s_only = resto_ip_data->curr_s();
-      IpData().SetTrialPrimalVariablesFromPtr(x_only, s_only);
+      SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
+      trial->Set_primal(*cx->GetComp(0), *resto_ip_data->curr()->s());
+      IpData().set_trial(trial);
 
       // Update the bound multiplers, pretending that the entire
       // progress in x and s in the restoration phase has been one
       // [rimal-dual Newton step (and therefore the result of solving
       // an augmented system)
-      SmartPtr<Vector> delta_z_L = IpData().curr_z_L()->MakeNew();
-      SmartPtr<Vector> delta_z_U = IpData().curr_z_U()->MakeNew();
-      SmartPtr<Vector> delta_v_L = IpData().curr_v_L()->MakeNew();
-      SmartPtr<Vector> delta_v_U = IpData().curr_v_U()->MakeNew();
-      ComputeBoundMultiplierStep(*delta_z_L, *IpData().curr_z_L(),
+      SmartPtr<IteratesVector> delta = IpData().curr()->MakeNewIteratesVector(true);
+      delta->Set(0.0);
+      ComputeBoundMultiplierStep(*delta->z_L_NonConst(), *IpData().curr()->z_L(),
                                  *IpCq().curr_slack_x_L(),
                                  *IpCq().trial_slack_x_L());
-      ComputeBoundMultiplierStep(*delta_z_U, *IpData().curr_z_U(),
+      ComputeBoundMultiplierStep(*delta->z_U_NonConst(), *IpData().curr()->z_U(),
                                  *IpCq().curr_slack_x_U(),
                                  *IpCq().trial_slack_x_U());
-      ComputeBoundMultiplierStep(*delta_v_L, *IpData().curr_v_L(),
+      ComputeBoundMultiplierStep(*delta->v_L_NonConst(), *IpData().curr()->v_L(),
                                  *IpCq().curr_slack_s_L(),
                                  *IpCq().trial_slack_s_L());
-      ComputeBoundMultiplierStep(*delta_v_U, *IpData().curr_v_U(),
+      ComputeBoundMultiplierStep(*delta->v_U_NonConst(), *IpData().curr()->v_U(),
                                  *IpCq().curr_slack_s_U(),
                                  *IpCq().trial_slack_s_U());
 
-      DBG_PRINT_VECTOR(1, "delta_z_L", *delta_z_L);
-      DBG_PRINT_VECTOR(1, "delta_z_U", *delta_z_U);
-      DBG_PRINT_VECTOR(1, "delta_v_L", *delta_v_L);
-      DBG_PRINT_VECTOR(1, "delta_v_U", *delta_v_U);
+      DBG_PRINT_VECTOR(1, "delta_z_L", *delta->z_L());
+      DBG_PRINT_VECTOR(1, "delta_z_U", *delta->z_U());
+      DBG_PRINT_VECTOR(1, "delta_v_L", *delta->v_L());
+      DBG_PRINT_VECTOR(1, "delta_v_U", *delta->v_U());
 
       Number alpha_dual = IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
-                          *delta_z_L,
-                          *delta_z_U,
-                          *delta_v_L,
-                          *delta_v_U);
+							*delta->z_L_NonConst(),
+							*delta->z_U_NonConst(),
+							*delta->v_L_NonConst(),
+							*delta->v_U_NonConst());
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                      "Step size for bound multipliers: %8.2e\n", alpha_dual);
 
-      IpData().SetTrialBoundMultipliersFromStep(alpha_dual,
-          *delta_z_L,
-          *delta_z_U,
-          *delta_v_L,
-          *delta_v_U);
+      IpData().SetTrialBoundMultipliersFromStep(alpha_dual, *delta->z_L(), *delta->z_U(), *delta->v_L(), *delta->v_U() );
 
 #ifdef olddd
       // DELETEME
@@ -237,24 +231,24 @@ namespace Ipopt
 #endif
 
       // ToDo: Check what to do here:
-      Number bound_mult_max = Max(IpData().trial_z_L()->Amax(),
-				  IpData().trial_z_U()->Amax(),
-				  IpData().trial_v_L()->Amax(),
-				  IpData().trial_v_U()->Amax());
+      Number bound_mult_max = Max(IpData().trial()->z_L()->Amax(),
+				  IpData().trial()->z_U()->Amax(),
+				  IpData().trial()->v_L()->Amax(),
+				  IpData().trial()->v_U()->Amax());
+      trial = IpData().trial()->MakeNewContainer();
       if (bound_mult_max > bound_mult_init_max_) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "Bound multipliers after restoration phase too large (max=%8.2e). Set all to 1.\n",
                        bound_mult_max);
-        SmartPtr<Vector> new_z_L = IpData().curr_z_L()->MakeNew();
-        SmartPtr<Vector> new_z_U = IpData().curr_z_U()->MakeNew();
-        SmartPtr<Vector> new_v_L = IpData().curr_v_L()->MakeNew();
-        SmartPtr<Vector> new_v_U = IpData().curr_v_U()->MakeNew();
-        new_z_L->Set(1.0);
-        new_z_U->Set(1.0);
-        new_v_L->Set(1.0);
-        new_v_U->Set(1.0);
-        IpData().SetTrialBoundMultipliersFromPtr(GetRawPtr(new_z_L), GetRawPtr(new_z_U),
-            GetRawPtr(new_v_L), GetRawPtr(new_v_U));
+	trial->create_new_z_L();
+	trial->create_new_z_U();
+	trial->create_new_v_L();
+	trial->create_new_v_U();
+	trial->z_L_NonConst()->Set(1.0);
+	trial->z_U_NonConst()->Set(1.0);
+	trial->v_L_NonConst()->Set(1.0);
+	trial->v_U_NonConst()->Set(1.0);
+	IpData().set_trial(trial);
 
       }
       // Recompute the equality constraint multipliers as least square estimate
@@ -263,8 +257,8 @@ namespace Ipopt
         // those values are needed to compute the initial values for
         // the multipliers
         IpData().CopyTrialToCurrent();
-        SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
-        SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+        SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
+        SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
         bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
         if (!retval) {
           y_c->Set(0.0);
@@ -280,18 +274,19 @@ namespace Ipopt
             y_d->Set(0.0);
           }
         }
-        IpData().SetTrialEqMultipliers(*y_c, *y_d);
+	trial->Set_eq_mult(*y_c, *y_d);
       }
       else {
-        SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
-        SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+        SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
+        SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
         y_c->Set(0.0);
         y_d->Set(0.0);
-        IpData().SetTrialEqMultipliers(*y_c, *y_d);
+	trial->Set_eq_mult(*y_c, *y_d);
       }
+      IpData().set_trial(trial);
 
-      DBG_PRINT_VECTOR(2, "y_c", *IpData().curr_y_c());
-      DBG_PRINT_VECTOR(2, "y_d", *IpData().curr_y_d());
+      DBG_PRINT_VECTOR(2, "y_c", *IpData().curr()->y_c());
+      DBG_PRINT_VECTOR(2, "y_d", *IpData().curr()->y_d());
 
       IpData().Set_iter_count(resto_ip_data->iter_count()-1);
       // Skip the next line, because it would just replicate the first

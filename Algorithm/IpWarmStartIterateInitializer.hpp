@@ -16,19 +16,14 @@
 namespace Ipopt
 {
 
-  /** Class implementing the default initialization procedure (based
-   *  on user options) for the iterates.  It is used at the very
-   *  beginning of the optimization for determine the starting point
-   *  for all variables.
+  /** Class implementing an initialization procedure for warm starts.
    */
   class WarmStartIterateInitializer: public IterateInitializer
   {
   public:
     /**@name Constructors/Destructors */
     //@{
-    /** Constructor.  If eq_mult_calculator is not NULL, it will be
-     *  used to compute the initial values for equality constraint
-     *  multipliers. */
+    /** Constructor. */
     WarmStartIterateInitializer();
 
     /** Default destructor */
@@ -95,8 +90,8 @@ namespace Ipopt
                            const Vector& curr_slacks,
                            const Vector& curr_mults,
                            const Matrix& P,
-                           SmartPtr<Vector>& new_vars,
-                           SmartPtr<Vector>& new_mults);
+                           SmartPtr<const Vector>& ret_vars,
+                           SmartPtr<const Vector>& ret_mults);
 
     void adapt_to_target_mu(Vector& new_s,
                             Vector& new_z,

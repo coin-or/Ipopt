@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International BusinDess Machines and others.
+// Copyright (C) 2004, International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -378,7 +378,7 @@ namespace Ipopt
     for (Index i=0; i<NComps(); i++) {
       // Better not have an entry in both (sanity check)
       DBG_ASSERT(IsNull(comps_[i]) || IsNull(const_comps_[i]));
-      if (ConstComp(i) == NULL) {
+      if (IsNull(comps_[i])  && IsNull(const_comps_[i])) {
         retVal = false;
         break;
       }

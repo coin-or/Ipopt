@@ -88,19 +88,21 @@ namespace Ipopt
 
     Number mu = IpData().curr_mu();
     Number dnrm = 0.;
-    if (IsValid(IpData().delta_x())) {
-      dnrm = Max(IpData().delta_x()->Amax(), IpData().delta_s()->Amax());
+    if (IsValid(IpData().delta()->x())) {
+      dnrm = Max(IpData().delta()->x()->Amax(), IpData().delta()->s()->Amax());
     }
 
     // Set  the trial  values  for  the original  Data  object to  the
     // current restoration phase values
-    SmartPtr<const Vector> x = IpData().curr_x();
+    SmartPtr<const Vector> x = IpData().curr()->x();
     const CompoundVector* cx =
       dynamic_cast<const CompoundVector*>(GetRawPtr(x));
     DBG_ASSERT(cx);
 
-    SmartPtr<const Vector> x_only = cx->GetComp(0);
-    orig_ip_data->SetTrialPrimalVariablesFromPtr(x_only, IpData().curr_s());
+    SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
+    trial->Set_x(*cx->GetComp(0));
+    trial->Set_s(*IpData().curr()->s());
+    orig_ip_data->set_trial(trial);
 
     // Compute primal infeasibility
     Number inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
@@ -154,40 +156,40 @@ namespace Ipopt
 
     if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "||curr_x||_inf   = %.16e\n", IpData().curr_x()->Amax());
+                     "||curr_x||_inf   = %.16e\n", IpData().curr()->x()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "||curr_s||_inf   = %.16e\n", IpData().curr_s()->Amax());
+                     "||curr_s||_inf   = %.16e\n", IpData().curr()->s()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "||curr_y_c||_inf = %.16e\n", IpData().curr_y_c()->Amax());
+                     "||curr_y_c||_inf = %.16e\n", IpData().curr()->y_c()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "||curr_y_d||_inf = %.16e\n", IpData().curr_y_d()->Amax());
+                     "||curr_y_d||_inf = %.16e\n", IpData().curr()->y_d()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "||curr_z_L||_inf = %.16e\n", IpData().curr_z_L()->Amax());
+                     "||curr_z_L||_inf = %.16e\n", IpData().curr()->z_L()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "||curr_z_U||_inf = %.16e\n", IpData().curr_z_U()->Amax());
+                     "||curr_z_U||_inf = %.16e\n", IpData().curr()->z_U()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "||curr_v_L||_inf = %.16e\n", IpData().curr_v_L()->Amax());
+                     "||curr_v_L||_inf = %.16e\n", IpData().curr()->v_L()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "||curr_v_U||_inf = %.16e\n", IpData().curr_v_U()->Amax());
+                     "||curr_v_U||_inf = %.16e\n", IpData().curr()->v_U()->Amax());
     }
     if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
-      if (IsValid(IpData().delta_x())) {
+      if (IsValid(IpData().delta()->x())) {
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                       "\n||delta_x||_inf   = %.16e\n", IpData().delta_x()->Amax());
+                       "\n||delta_x||_inf   = %.16e\n", IpData().delta()->x()->Amax());
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                       "||delta_s||_inf   = %.16e\n", IpData().delta_s()->Amax());
+                       "||delta_s||_inf   = %.16e\n", IpData().delta()->s()->Amax());
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                       "||delta_y_c||_inf = %.16e\n", IpData().delta_y_c()->Amax());
+                       "||delta_y_c||_inf = %.16e\n", IpData().delta()->y_c()->Amax());
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                       "||delta_y_d||_inf = %.16e\n", IpData().delta_y_d()->Amax());
+                       "||delta_y_d||_inf = %.16e\n", IpData().delta()->y_d()->Amax());
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                       "||delta_z_L||_inf = %.16e\n", IpData().delta_z_L()->Amax());
+                       "||delta_z_L||_inf = %.16e\n", IpData().delta()->z_L()->Amax());
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                       "||delta_z_U||_inf = %.16e\n", IpData().delta_z_U()->Amax());
+                       "||delta_z_U||_inf = %.16e\n", IpData().delta()->z_U()->Amax());
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                       "||delta_v_L||_inf = %.16e\n", IpData().delta_v_L()->Amax());
+                       "||delta_v_L||_inf = %.16e\n", IpData().delta()->v_L()->Amax());
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                       "||delta_v_U||_inf = %.16e\n", IpData().delta_v_U()->Amax());
+                       "||delta_v_U||_inf = %.16e\n", IpData().delta()->v_U()->Amax());
       }
       else {
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
@@ -195,44 +197,44 @@ namespace Ipopt
       }
     }
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_x", *IpData().curr_x());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_s", *IpData().curr_s());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_x", *IpData().curr()->x());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_s", *IpData().curr()->s());
 
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_c", *IpData().curr_y_c());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_d", *IpData().curr_y_d());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_c", *IpData().curr()->y_c());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_d", *IpData().curr()->y_d());
 
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_x_L", *IpCq().curr_slack_x_L());
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_x_U", *IpCq().curr_slack_x_U());
 
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_L", *IpData().curr_z_L());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_U", *IpData().curr_z_U());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_L", *IpData().curr()->z_L());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_U", *IpData().curr()->z_U());
 
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_s_L", *IpCq().curr_slack_s_L());
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_s_U", *IpCq().curr_slack_s_U());
 
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_L", *IpData().curr_v_L());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_U", *IpData().curr_v_U());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_L", *IpData().curr()->v_L());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_U", *IpData().curr()->v_U());
     }
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_MAIN)) {
       Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_x", *IpCq().curr_grad_lag_x());
       Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_s", *IpCq().curr_grad_lag_s());
-      if (IsValid(IpData().delta_x())) {
+      if (IsValid(IpData().delta()->x())) {
         Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_x", *IpData().delta_x());
+                            "delta_x", *IpData().delta()->x());
         Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_s", *IpData().delta_s());
+                            "delta_s", *IpData().delta()->s());
         Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_y_c", *IpData().delta_y_c());
+                            "delta_y_c", *IpData().delta()->y_c());
         Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_y_d", *IpData().delta_y_d());
+                            "delta_y_d", *IpData().delta()->y_d());
         Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_z_L", *IpData().delta_z_L());
+                            "delta_z_L", *IpData().delta()->z_L());
         Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_z_U", *IpData().delta_z_U());
+                            "delta_z_U", *IpData().delta()->z_U());
         Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_v_L", *IpData().delta_v_L());
+                            "delta_v_L", *IpData().delta()->v_L());
         Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_v_U", *IpData().delta_v_U());
+                            "delta_v_U", *IpData().delta()->v_U());
       }
     }
 

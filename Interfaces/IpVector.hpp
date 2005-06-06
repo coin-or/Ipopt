@@ -62,6 +62,9 @@ namespace Ipopt
     /** Create new Vector of the same type with uninitialized data */
     Vector* MakeNew() const;
 
+    /** Create new Vector of the same type and copy the data over */
+    Vector* MakeNewCopy() const;
+
     /**@name Standard BLAS-1 Operations
      *  (derived classes do NOT overload these 
      *  methods, instead, overload the 
@@ -384,6 +387,14 @@ namespace Ipopt
   Vector* Vector::MakeNew() const
   {
     return owner_space_->MakeNew();
+  }
+
+  inline
+  Vector* Vector::MakeNewCopy() const
+  {
+    Vector* copy = MakeNew();
+    copy->Copy(*this);
+    return copy;
   }
 
   inline
