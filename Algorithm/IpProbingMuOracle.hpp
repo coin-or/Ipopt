@@ -67,12 +67,7 @@ namespace Ipopt
      */
     Number CalculateAffineMu(Number alpha_primal,
                              Number alpha_dual,
-                             const Vector& step_x,
-                             const Vector& step_s,
-                             const Vector& step_z_L,
-                             const Vector& step_z_U,
-                             const Vector& step_v_L,
-                             const Vector& step_v_U);
+			     const IteratesVector& step);
 
     /** @name Algorithmic parameters */
     //@{

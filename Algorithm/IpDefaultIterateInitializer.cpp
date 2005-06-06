@@ -20,8 +20,7 @@ namespace Ipopt
   {}
 
   bool DefaultIterateInitializer::InitializeImpl(const OptionsList& options,
-      const std::string& prefix)
-  {
+      const std::string& prefix)  {
     Number value = 0.0;
     // Check for the algorithm options
     if (options.GetNumericValue("bound_push", value, prefix)) {
@@ -74,7 +73,7 @@ namespace Ipopt
                    dbg_verbosity);
 
     // Get the starting values provided by the NLP and store them
-    //.in the ip_data current fields.  The following line only requests
+    // in the ip_data current fields.  The following line only requests
     // intial values for the primal variables x, but later we might
     // make this more flexible based on user options.
 
@@ -85,15 +84,20 @@ namespace Ipopt
     IpData().InitializeDataStructures(IpNLP(), true, false, false,
                                       false, false, false, false);
 
-    DBG_PRINT_VECTOR(2, "curr_x", *IpData().curr_x());
+    // get a container of the current point. We will modify parts of this
+    // IteratesVector to set the trial point.
+    SmartPtr<IteratesVector> iterates = IpData().curr()->MakeNewContainer();
+
+    DBG_PRINT_VECTOR(2, "curr_x", *iterates->x());
 
     // Now we compute the initial values that the algorithm is going to
     // actually use.  We first store them in the trial fields in ip_data.
 
+    // Push the x iterates sufficiently inside the bounds
     // Calculate any required shift in x0 and s0
     const double dbl_min = std::numeric_limits<double>::min();
     const double tiny_double = 100.0*dbl_min;
-    SmartPtr<const Vector> x = IpData().curr_x();
+    SmartPtr<const Vector> x = iterates->x();
     SmartPtr<const Vector> x_L = IpNLP().x_L();
     SmartPtr<const Vector> x_U = IpNLP().x_U();
     SmartPtr<const Matrix> Px_L = IpNLP().Px_L();
@@ -195,11 +199,13 @@ namespace Ipopt
     SmartPtr<Vector> new_x = delta_x;
     new_x->Axpy(1.0, *x);
 
-    IpData().SetTrialXVariables(*new_x);
+    iterates->Set_x_NonConst(*new_x);
+    IpData().set_trial(iterates);
+
     if (nrm_l > 0 || nrm_u > 0) {
       Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of x sufficiently inside the bounds.\n");
-      Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "original x", *IpData().curr_x());
-      Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "new x", *IpData().trial_x());
+      Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "original x", *IpData().curr()->x());
+      Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "new x", *IpData().trial()->x());
     }
 
     // Calculate the shift in s...
@@ -300,14 +306,14 @@ namespace Ipopt
     SmartPtr<Vector> new_s = delta_s;
     new_s->Axpy(1.0, *s);
 
-    IpData().SetTrialSVariables(*new_s);
+    iterates->Set_s_NonConst(*new_s);
     if (nrm_l > 0 || nrm_u > 0) {
       Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
                      "Moved initial values of s sufficiently inside the bounds.\n");
       Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION,
                           "original s", *s);
       Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION,
-                          "new s", *IpData().trial_s());
+                          "new s", *iterates->s());
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -315,27 +321,30 @@ namespace Ipopt
     /////////////////////////////////////////////////////////////////////
 
     // Initialize the bound multipliers to bound_mult_init_val.
-    SmartPtr<Vector> z_L = IpData().curr_z_L()->MakeNew();
-    SmartPtr<Vector> z_U = IpData().curr_z_U()->MakeNew();
-    SmartPtr<Vector> v_L = IpData().curr_v_L()->MakeNew();
-    SmartPtr<Vector> v_U = IpData().curr_v_U()->MakeNew();
-    z_L->Set(bound_mult_init_val_);
-    z_U->Set(bound_mult_init_val_);
-    v_L->Set(bound_mult_init_val_);
-    v_U->Set(bound_mult_init_val_);
-    IpData().SetTrialBoundMultipliers(*z_L, *z_U, *v_L, *v_U);
+    iterates->create_new_z_L();
+    iterates->create_new_z_U();
+    iterates->create_new_v_L();
+    iterates->create_new_v_U();
+    iterates->z_L_NonConst()->Set(bound_mult_init_val_);
+    iterates->z_U_NonConst()->Set(bound_mult_init_val_);
+    iterates->v_L_NonConst()->Set(bound_mult_init_val_);
+    iterates->v_U_NonConst()->Set(bound_mult_init_val_);
+
+    IpData().set_trial(iterates);
 
     /////////////////////////////////////////////////////////////////////
     //           Initialize equality constraint multipliers            //
     /////////////////////////////////////////////////////////////////////
 
+    iterates->create_new_y_c();
+    iterates->create_new_y_d();
     if (IsValid(eq_mult_calculator_) && lam_init_max_>0.) {
       // First move all the trial data into the current fields, since
       // those values are needed to compute the initial values for
       // the multipliers
       IpData().CopyTrialToCurrent();
-      SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
-      SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
+      SmartPtr<Vector> y_c = iterates->y_c_NonConst();
+      SmartPtr<Vector> y_d = iterates->y_d_NonConst();
       bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
       if (!retval) {
         y_c->Set(0.0);
@@ -351,23 +360,21 @@ namespace Ipopt
           y_d->Set(0.0);
         }
       }
-      IpData().SetTrialEqMultipliers(*y_c, *y_d);
     }
     else {
-      SmartPtr<Vector> y_c = IpData().curr_y_c()->MakeNew();
-      SmartPtr<Vector> y_d = IpData().curr_y_d()->MakeNew();
-      y_c->Set(0.0);
-      y_d->Set(0.0);
-      IpData().SetTrialEqMultipliers(*y_c, *y_d);
+      iterates->y_c_NonConst()->Set(0.0);
+      iterates->y_d_NonConst()->Set(0.0);
     }
+    IpData().set_trial(iterates);
 
-    DBG_PRINT_VECTOR(2, "y_c", *IpData().curr_y_c());
-    DBG_PRINT_VECTOR(2, "y_d", *IpData().curr_y_d());
+    //Qu: why do you print curr here? they have not been updated yet?
+    DBG_PRINT_VECTOR(2, "y_c", *IpData().curr()->y_c());
+    DBG_PRINT_VECTOR(2, "y_d", *IpData().curr()->y_d());
 
-    DBG_PRINT_VECTOR(2, "z_L", *IpData().curr_z_L());
-    DBG_PRINT_VECTOR(2, "z_U", *IpData().curr_z_U());
-    DBG_PRINT_VECTOR(2, "v_L", *IpData().curr_v_L());
-    DBG_PRINT_VECTOR(2, "v_U", *IpData().curr_v_U());
+    DBG_PRINT_VECTOR(2, "z_L", *IpData().curr()->z_L());
+    DBG_PRINT_VECTOR(2, "z_U", *IpData().curr()->z_U());
+    DBG_PRINT_VECTOR(2, "v_L", *IpData().curr()->v_L());
+    DBG_PRINT_VECTOR(2, "v_U", *IpData().curr()->v_U());
 
     // upgrade the trial to the current point
     IpData().AcceptTrialPoint();

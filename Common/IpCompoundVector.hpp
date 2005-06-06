@@ -61,6 +61,27 @@ namespace Ipopt
     /** Number of components of this compound vector */
     inline Index NComps() const;
 
+    /** Check if a particular component is const or not */
+    bool IsCompConst(Index i) const
+    {
+      DBG_ASSERT(i > 0 && i < NComps());
+      DBG_ASSERT(IsValid(comps_[i]) || IsValid(const_comps_[i]));
+      if (IsValid(const_comps_[i])) {
+	return true;
+      }
+      return false;
+    }
+
+    /** Check if a particular component is null or not */
+    bool IsCompNull(Index i) const
+    {
+      DBG_ASSERT(i >= 0 && i < NComps());
+      if (IsValid(comps_[i]) || IsValid(const_comps_[i])) {
+	return false;
+      }
+      return true;
+    }
+
     /** Return a particular component (const version) */
     SmartPtr<const Vector> GetComp(Index i) const
     {
@@ -218,7 +239,7 @@ namespace Ipopt
     //@}
 
     /** Method for setting the individual component VectorSpaces */
-    void SetCompSpace(Index icomp                  /** Number of the component to be set */ ,
+    virtual void SetCompSpace(Index icomp                  /** Number of the component to be set */ ,
                       const VectorSpace& vec_space /** VectorSpace for component icomp */
                      );
 
@@ -232,7 +253,7 @@ namespace Ipopt
     }
 
     /** Method for creating a new vector of this specific type. */
-    CompoundVector* MakeNewCompoundVector(bool create_new = true) const
+    virtual CompoundVector* MakeNewCompoundVector(bool create_new = true) const
     {
       return new CompoundVector(this, create_new);
     }

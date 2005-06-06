@@ -70,6 +70,8 @@ namespace Ipopt
     Number bound_push_;
     /** Parameters for bumping x0 */
     Number bound_frac_;
+    
+    // Qu: Why wouldn't this go in the EqMultiplierCalculator? 
     /** If max-norm of the initial equality constraint multiplier
      *  estimate is larger than this, the initial y_* variables are
      *  set to zero. */

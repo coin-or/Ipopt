@@ -87,7 +87,6 @@ namespace Ipopt
     dbg_jrnl->SetPrintLevel(J_DBG, J_ALL);
 # endif
 
-
     // Get the options
     if (read_params_dat_) {
       FILE* fp_options = fopen("PARAMS.DAT", "r");
@@ -186,13 +185,13 @@ namespace Ipopt
                        "Complementarity         = %23.16e\n",
                        ip_cq->curr_complementarity(0., NORM_MAX));
 
-        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "x", *ip_data->curr_x());
-        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "y_c", *ip_data->curr_y_c());
-        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "y_d", *ip_data->curr_y_d());
-        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "z_L", *ip_data->curr_z_L());
-        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "z_U", *ip_data->curr_z_U());
-        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "v_L", *ip_data->curr_v_L());
-        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "v_U", *ip_data->curr_v_U());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "x", *ip_data->curr()->x());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "y_c", *ip_data->curr()->y_c());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "y_d", *ip_data->curr()->y_d());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "z_L", *ip_data->curr()->z_L());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "z_U", *ip_data->curr()->z_U());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "v_L", *ip_data->curr()->v_L());
+        jnlst_->PrintVector(vector_report_level, J_SOLUTION, "v_U", *ip_data->curr()->v_U());
       }
 
       if (report_statistics_) {
@@ -242,16 +241,16 @@ namespace Ipopt
       }
 
       nlp->FinalizeSolution(retValue,
-                            *ip_data->curr_x(), *ip_data->curr_z_L(), *ip_data->curr_z_U(),
-                            *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr_y_c(), *ip_data->curr_y_d(),
+                            *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
+                            *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
                             ip_cq->curr_f());
     }
     catch(LOCALLY_INFEASIBILE& exc) {
       exc.ReportException(*jnlst_);
 
       nlp->FinalizeSolution(retValue,
-                            *ip_data->curr_x(), *ip_data->curr_z_L(), *ip_data->curr_z_U(),
-                            *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr_y_c(), *ip_data->curr_y_d(),
+                            *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
+                            *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
                             ip_cq->curr_f());
 
       retValue = Infeasible_Problem_Detected;

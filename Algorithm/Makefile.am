@@ -23,6 +23,7 @@ libipoptalg_a_SOURCES = \
 	IpIpoptData.cpp IpIpoptData.hpp \
 	IpIpoptNLP.hpp \
 	IpIterateInitializer.hpp \
+	IpIteratesVector.hpp IpIteratesVector.cpp \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.hpp IpLoqoMuOracle.cpp \
 	IpMonotoneMuUpdate.hpp IpMonotoneMuUpdate.cpp \
@@ -63,6 +64,7 @@ ASTYLE_SOURCES = \
 	IpIpoptData.cppbak IpIpoptData.hppbak \
 	IpIpoptNLP.hppbak \
 	IpIterateInitializer.hppbak \
+	IpIteratesVector.hppbak IpIteratesVector.cppbak \
 	IpLineSearch.hppbak \
 	IpLoqoMuOracle.hppbak IpLoqoMuOracle.cppbak \
 	IpMonotoneMuUpdate.hppbak IpMonotoneMuUpdate.cppbak \

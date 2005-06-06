@@ -75,13 +75,15 @@ namespace Ipopt
       &resto_ipopt_nlp->OrigIpCq();
 
     // set the trial point for the original problem
-    SmartPtr<const Vector> x = IpData().curr_x();
+    SmartPtr<const Vector> x = IpData().curr()->x();
     const CompoundVector* cx =
       dynamic_cast<const CompoundVector*>(GetRawPtr(x));
     DBG_ASSERT(cx);
 
-    SmartPtr<const Vector> x_only = cx->GetComp(0);
-    orig_ip_data->SetTrialPrimalVariablesFromPtr(x_only, IpData().curr_s());
+    SmartPtr<IteratesVector> trial = IpData().curr()->MakeNewContainer();
+    trial->Set_x(*cx->GetComp(0));
+    trial->Set_s(*IpData().curr()->s());
+    orig_ip_data->set_trial(trial);
 
     // Calculate the f and theta for the original problem
     Number orig_trial_theta = orig_ip_cq->trial_constraint_violation();

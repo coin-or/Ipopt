@@ -251,14 +251,7 @@ namespace Ipopt
     no_bounds_ = false;
     IpData().SetFreeMuMode(true);
 
-    accepted_x_ = NULL;
-    accepted_s_ = NULL;
-    accepted_y_c_ = NULL;
-    accepted_y_d_ = NULL;
-    accepted_z_L_ = NULL;
-    accepted_z_U_ = NULL;
-    accepted_v_L_ = NULL;
-    accepted_v_U_ = NULL;
+    accepted_point_ = NULL;
 
     // The following lines are only here so that
     // IpoptCalculatedQuantities::CalculateSafeSlack and the first
@@ -276,8 +269,8 @@ namespace Ipopt
     // of there are not bounds, we always return the minimum MU value
     // ToDo put information on whether problem has bounds into IpCq
     if (!check_if_no_bounds_) {
-      Index n_bounds = IpData().curr_z_L()->Dim() + IpData().curr_z_U()->Dim()
-                       + IpData().curr_v_L()->Dim() + IpData().curr_v_U()->Dim();
+      Index n_bounds = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim()
+                       + IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim();
 
       if (n_bounds==0) {
         no_bounds_ = true;
@@ -352,10 +345,7 @@ namespace Ipopt
           // Restore most recent accepted iterate to start fixed mode from
           Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                          "Restoring most recent accepted point.\n");
-          IpData().SetTrialPrimalVariablesFromPtr(accepted_x_, accepted_s_);
-          IpData().SetTrialConstraintMultipliersFromPtr(accepted_y_c_, accepted_y_d_);
-          IpData().SetTrialBoundMultipliersFromPtr(accepted_z_L_, accepted_z_U_,
-              accepted_v_L_, accepted_v_U_);
+	  IpData().set_trial(accepted_point_);
           IpData().AcceptTrialPoint();
         }
 
@@ -511,14 +501,7 @@ namespace Ipopt
 
     if (restore_accepted_iterate_) {
       // Keep pointers to this iterate so that it could be restored
-      accepted_x_ = IpData().curr_x();
-      accepted_s_ = IpData().curr_s();
-      accepted_y_c_ = IpData().curr_y_c();
-      accepted_y_d_ = IpData().curr_y_d();
-      accepted_z_L_ = IpData().curr_z_L();
-      accepted_z_U_ = IpData().curr_z_U();
-      accepted_v_L_ = IpData().curr_v_L();
-      accepted_v_U_ = IpData().curr_v_U();
+      accepted_point_ = IpData().curr();
     }
   }
 
@@ -603,10 +586,10 @@ namespace Ipopt
   Number
   NonmonotoneMuUpdate::curr_norm_pd_system()
   {
-    Index n_dual = IpData().curr_x()->Dim() + IpData().curr_s()->Dim();
-    Index n_pri = IpData().curr_y_c()->Dim() + IpData().curr_y_d()->Dim();
-    Index n_comp = IpData().curr_z_L()->Dim() + IpData().curr_z_U()->Dim() +
-                   IpData().curr_v_L()->Dim() + IpData().curr_v_U()->Dim();
+    Index n_dual = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
+    Index n_pri = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
+    Index n_comp = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() +
+                   IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim();
 
     Number dual_inf;
     Number primal_inf;
@@ -732,9 +715,9 @@ namespace Ipopt
       IpCq().curr_dual_infeasibility(NORM_1);
     Number primal_inf =
       IpCq().curr_primal_infeasibility(NORM_1);
-    Index n_dual = IpData().curr_x()->Dim() + IpData().curr_s()->Dim();
+    Index n_dual = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
     dual_inf /= (Number)n_dual;
-    Index n_pri = IpData().curr_y_c()->Dim() + IpData().curr_y_d()->Dim();
+    Index n_pri = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
     DBG_ASSERT(n_pri>0 || primal_inf==0.);
     if (n_pri>0) {
       primal_inf /= (Number)n_pri;

@@ -166,8 +166,8 @@ namespace Ipopt
     }
 
     // Receive data about matrix
-    SmartPtr<const Vector> x = IpData().curr_x();
-    SmartPtr<const Vector> s = IpData().curr_s();
+    SmartPtr<const Vector> x = IpData().curr()->x();
+    SmartPtr<const Vector> s = IpData().curr()->s();
     SmartPtr<const SymMatrix> W = IpData().W();
     SmartPtr<const Matrix> J_c = IpCq().curr_jac_c();
     SmartPtr<const Matrix> J_d = IpCq().curr_jac_d();
@@ -175,10 +175,10 @@ namespace Ipopt
     SmartPtr<const Matrix> Px_U = IpNLP().Px_U();
     SmartPtr<const Matrix> Pd_L = IpNLP().Pd_L();
     SmartPtr<const Matrix> Pd_U = IpNLP().Pd_U();
-    SmartPtr<const Vector> z_L = IpData().curr_z_L();
-    SmartPtr<const Vector> z_U = IpData().curr_z_U();
-    SmartPtr<const Vector> v_L = IpData().curr_v_L();
-    SmartPtr<const Vector> v_U = IpData().curr_v_U();
+    SmartPtr<const Vector> z_L = IpData().curr()->z_L();
+    SmartPtr<const Vector> z_U = IpData().curr()->z_U();
+    SmartPtr<const Vector> v_L = IpData().curr()->v_L();
+    SmartPtr<const Vector> v_U = IpData().curr()->v_U();
     SmartPtr<const Vector> slack_x_L = IpCq().curr_slack_x_L();
     SmartPtr<const Vector> slack_x_U = IpCq().curr_slack_x_U();
     SmartPtr<const Vector> slack_s_L = IpCq().curr_slack_s_L();

@@ -220,77 +220,58 @@ namespace Ipopt
       return;
     }
 
-    SmartPtr<const Vector> rhs_grad_lag_x  = IpCq().curr_grad_lag_with_damping_x();
-    SmartPtr<const Vector> rhs_grad_lag_s  = IpCq().curr_grad_lag_with_damping_s();
-    SmartPtr<const Vector> rhs_c = IpCq().curr_c();
-    SmartPtr<const Vector> rhs_d_minus_s = IpCq().curr_d_minus_s();
-    SmartPtr<const Vector> rhs_rel_compl_x_L = IpCq().curr_relaxed_compl_x_L();
-    SmartPtr<const Vector> rhs_rel_compl_x_U = IpCq().curr_relaxed_compl_x_U();
-    SmartPtr<const Vector> rhs_rel_compl_s_L = IpCq().curr_relaxed_compl_s_L();
-    SmartPtr<const Vector> rhs_rel_compl_s_U = IpCq().curr_relaxed_compl_s_U();
+    SmartPtr<IteratesVector> rhs = IpData().curr()->MakeNewContainer();
+    rhs->Set_x(*IpCq().curr_grad_lag_with_damping_x());
+    rhs->Set_s(*IpCq().curr_grad_lag_with_damping_s());
+    rhs->Set_y_c(*IpCq().curr_c());
+    rhs->Set_y_d(*IpCq().curr_d_minus_s());
+    rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
+    rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
+    rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
+    rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
 
-    DBG_PRINT_VECTOR(2, "rhs_grad_lag_x", *rhs_grad_lag_x);
+    DBG_PRINT_VECTOR(2, "rhs", *rhs);
 
+    //ToDo: allow us to delete entries in IpData to save memory?
     // To save memory, delete the old search directions
-    IpData().SetFromPtr_delta_x(NULL);
-    IpData().SetFromPtr_delta_s(NULL);
-    IpData().SetFromPtr_delta_y_c(NULL);
-    IpData().SetFromPtr_delta_y_d(NULL);
-    IpData().SetFromPtr_delta_z_L(NULL);
-    IpData().SetFromPtr_delta_z_U(NULL);
-    IpData().SetFromPtr_delta_v_L(NULL);
-    IpData().SetFromPtr_delta_v_U(NULL);
+//     IpData().SetFromPtr_delta_x(NULL);
+//     IpData().SetFromPtr_delta_s(NULL);
+//     IpData().SetFromPtr_delta_y_c(NULL);
+//     IpData().SetFromPtr_delta_y_d(NULL);
+//     IpData().SetFromPtr_delta_z_L(NULL);
+//     IpData().SetFromPtr_delta_z_U(NULL);
+//     IpData().SetFromPtr_delta_v_L(NULL);
+//     IpData().SetFromPtr_delta_v_U(NULL);
 
     // Get space for the search direction
-    SmartPtr<Vector> delta_x = IpData().curr_x()->MakeNew();
-    SmartPtr<Vector> delta_s = IpData().curr_s()->MakeNew();
-    SmartPtr<Vector> delta_y_c = IpData().curr_y_c()->MakeNew();
-    SmartPtr<Vector> delta_y_d = IpData().curr_y_d()->MakeNew();
-    SmartPtr<Vector> delta_z_L = IpData().curr_z_L()->MakeNew();
-    SmartPtr<Vector> delta_z_U = IpData().curr_z_U()->MakeNew();
-    SmartPtr<Vector> delta_v_L = IpData().curr_v_L()->MakeNew();
-    SmartPtr<Vector> delta_v_U = IpData().curr_v_U()->MakeNew();
+    SmartPtr<IteratesVector> delta = IpData().curr()->MakeNewIteratesVector(true);
 
     pd_solver_->Solve(-1.0, 0.0,
-                      *rhs_grad_lag_x,
-                      *rhs_grad_lag_s,
-                      *rhs_c,
-                      *rhs_d_minus_s,
-                      *rhs_rel_compl_x_L,
-                      *rhs_rel_compl_x_U,
-                      *rhs_rel_compl_s_L,
-                      *rhs_rel_compl_s_U,
-                      *delta_x,
-                      *delta_s,
-                      *delta_y_c,
-                      *delta_y_d,
-                      *delta_z_L,
-                      *delta_z_U,
-                      *delta_v_L,
-                      *delta_v_U
+                      *rhs->x(),
+                      *rhs->s(),
+                      *rhs->y_c(),
+                      *rhs->y_d(),
+                      *rhs->z_L(),
+                      *rhs->z_U(),
+                      *rhs->v_L(),
+                      *rhs->v_U(),
+                      *delta->x_NonConst(),
+                      *delta->s_NonConst(),
+                      *delta->y_c_NonConst(),
+                      *delta->y_d_NonConst(),
+                      *delta->z_L_NonConst(),
+                      *delta->z_U_NonConst(),
+                      *delta->v_L_NonConst(),
+                      *delta->v_U_NonConst()
                      );
 
     // Store the search directions in the IpData object
-    IpData().SetFromPtr_delta_x(ConstPtr(delta_x));
-    IpData().SetFromPtr_delta_s(ConstPtr(delta_s));
-    IpData().SetFromPtr_delta_y_c(ConstPtr(delta_y_c));
-    IpData().SetFromPtr_delta_y_d(ConstPtr(delta_y_d));
-    IpData().SetFromPtr_delta_z_L(ConstPtr(delta_z_L));
-    IpData().SetFromPtr_delta_z_U(ConstPtr(delta_z_U));
-    IpData().SetFromPtr_delta_v_L(ConstPtr(delta_v_L));
-    IpData().SetFromPtr_delta_v_U(ConstPtr(delta_v_U));
+    IpData().set_delta(delta);
 
     Jnlst().Printf(J_MOREVECTOR, J_MAIN,
                    "*** Step Calculated for Iteration: %d\n",
                    IpData().iter_count());
-    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_x", *IpData().delta_x());
-    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_s", *IpData().delta_s());
-    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_y_c", *IpData().delta_y_c());
-    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_y_d", *IpData().delta_y_d());
-    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_z_L", *IpData().delta_z_L());
-    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_z_U", *IpData().delta_z_U());
-    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_v_L", *IpData().delta_v_L());
-    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta_v_U", *IpData().delta_v_U());
+    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta", *IpData().delta());
   }
 
   void IpoptAlgorithm::ComputeAcceptableTrialPoint()
@@ -351,22 +332,22 @@ namespace Ipopt
       }
 
       SmartPtr<Vector> new_x_l = IpNLP().x_L()->MakeNew();
-      IpNLP().Px_L()->TransMultVector(1.0, *IpData().trial_x(),
+      IpNLP().Px_L()->TransMultVector(1.0, *IpData().trial()->x(),
                                       0.0, *new_x_l);
       new_x_l->Axpy(-1.0, *IpCq().trial_slack_x_L());
 
       SmartPtr<Vector> new_x_u = IpNLP().x_U()->MakeNew();
-      IpNLP().Px_U()->TransMultVector(1.0, *IpData().trial_x(),
+      IpNLP().Px_U()->TransMultVector(1.0, *IpData().trial()->x(),
                                       0.0, *new_x_u);
       new_x_u->Axpy(1.0, *IpCq().trial_slack_x_U());
 
       SmartPtr<Vector> new_d_l = IpNLP().d_L()->MakeNew();
-      IpNLP().Pd_L()->TransMultVector(1.0, *IpData().trial_s(),
+      IpNLP().Pd_L()->TransMultVector(1.0, *IpData().trial()->s(),
                                       0.0, *new_d_l);
       new_d_l->Axpy(-1.0, *IpCq().trial_slack_s_L());
 
       SmartPtr<Vector> new_d_u = IpNLP().d_U()->MakeNew();
-      IpNLP().Pd_U()->TransMultVector(1.0, *IpData().trial_s(),
+      IpNLP().Pd_U()->TransMultVector(1.0, *IpData().trial()->s(),
                                       0.0, *new_d_u);
       new_d_u->Axpy(1.0, *IpCq().trial_slack_s_U());
 
@@ -386,7 +367,7 @@ namespace Ipopt
     bool corrected = false;
     Number max_correction;
     SmartPtr<const Vector> new_z_L;
-    max_correction = correct_bound_multiplier(*IpData().trial_z_L(),
+    max_correction = correct_bound_multiplier(*IpData().trial()->z_L(),
                      *IpCq().trial_slack_x_L(),
                      new_z_L);
     if (max_correction>0.) {
@@ -396,7 +377,7 @@ namespace Ipopt
       corrected = true;
     }
     SmartPtr<const Vector> new_z_U;
-    max_correction = correct_bound_multiplier(*IpData().trial_z_U(),
+    max_correction = correct_bound_multiplier(*IpData().trial()->z_U(),
                      *IpCq().trial_slack_x_U(),
                      new_z_U);
     if (max_correction>0.) {
@@ -406,7 +387,7 @@ namespace Ipopt
       corrected = true;
     }
     SmartPtr<const Vector> new_v_L;
-    max_correction = correct_bound_multiplier(*IpData().trial_v_L(),
+    max_correction = correct_bound_multiplier(*IpData().trial()->v_L(),
                      *IpCq().trial_slack_s_L(),
                      new_v_L);
     if (max_correction>0.) {
@@ -416,7 +397,7 @@ namespace Ipopt
       corrected = true;
     }
     SmartPtr<const Vector> new_v_U;
-    max_correction = correct_bound_multiplier(*IpData().trial_v_U(),
+    max_correction = correct_bound_multiplier(*IpData().trial()->v_U(),
                      *IpCq().trial_slack_s_U(),
                      new_v_U);
     if (max_correction>0.) {
@@ -425,7 +406,9 @@ namespace Ipopt
                      max_correction);
       corrected = true;
     }
-    IpData().SetTrialBoundMultipliersFromPtr(new_z_L, new_z_U, new_v_L, new_v_U);
+    SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
+    trial->Set_bound_mult(*new_z_L, *new_z_U, *new_v_L, *new_v_U);
+    IpData().set_trial(trial);
 
     if (corrected) {
       IpData().Append_info_string("z");
@@ -442,19 +425,19 @@ namespace Ipopt
       return;
     }
 
-    SmartPtr<const Vector> x = IpData().curr_x();
+    SmartPtr<const Vector> x = IpData().curr()->x();
     SmartPtr<const Vector> x_L = IpNLP().x_L();
     SmartPtr<const Vector> x_U = IpNLP().x_U();
     SmartPtr<const Matrix> Px_L = IpNLP().Px_L();
     SmartPtr<const Matrix> Px_U = IpNLP().Px_U();
 
     Index nx_tot, nx_only_lower, nx_both, nx_only_upper;
-    calc_number_of_bounds(*IpData().curr_x(), *IpNLP().x_L(), *IpNLP().x_U(),
+    calc_number_of_bounds(*IpData().curr()->x(), *IpNLP().x_L(), *IpNLP().x_U(),
                           *IpNLP().Px_L(), *IpNLP().Px_U(),
                           nx_tot, nx_only_lower, nx_both, nx_only_upper);
 
     Index ns_tot, ns_only_lower, ns_both, ns_only_upper;
-    calc_number_of_bounds(*IpData().curr_s(), *IpNLP().d_L(), *IpNLP().d_U(),
+    calc_number_of_bounds(*IpData().curr()->s(), *IpNLP().d_L(), *IpNLP().d_U(),
                           *IpNLP().Pd_L(), *IpNLP().Pd_U(),
                           ns_tot, ns_only_lower, ns_both, ns_only_upper);
 
@@ -470,7 +453,7 @@ namespace Ipopt
                    nx_only_upper);
     Jnlst().Printf(J_SUMMARY, J_STATISTICS,
                    "Total number of equality constraints.................: %8d\n",
-                   IpData().curr_y_c()->Dim());
+                   IpData().curr()->y_c()->Dim());
     Jnlst().Printf(J_SUMMARY, J_STATISTICS,
                    "Total number of inequality constraints...............: %8d\n",ns_tot);
     Jnlst().Printf(J_SUMMARY, J_STATISTICS,

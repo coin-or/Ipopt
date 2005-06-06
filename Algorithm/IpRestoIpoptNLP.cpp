@@ -328,7 +328,7 @@ namespace Ipopt
     // Vector x
     SmartPtr<CompoundVector> comp_x = x_space_->MakeNewCompoundVector();
     if (init_x) {
-      comp_x->GetCompNonConst(0)->Copy(*orig_ip_data_->curr_x());
+      comp_x->GetCompNonConst(0)->Copy(*orig_ip_data_->curr()->x());
       comp_x->GetCompNonConst(1)->Set(1.0);
       comp_x->GetCompNonConst(2)->Set(1.0);
       comp_x->GetCompNonConst(3)->Set(1.0);
@@ -370,7 +370,7 @@ namespace Ipopt
     // the point to reference to which we based the regularization
     // term
     x_ref_ = orig_x_space->MakeNew();
-    x_ref_->Copy(*orig_ip_data_->curr_x());
+    x_ref_->Copy(*orig_ip_data_->curr()->x());
 
     SmartPtr<DiagMatrixSpace> DR_x_space
     = new DiagMatrixSpace(orig_x_space->Dim());

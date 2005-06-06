@@ -59,10 +59,11 @@ am_libipoptalg_a_OBJECTS = IpAlgBuilder.$(OBJEXT) \
 	IpWarmStartIterateInitializer.$(OBJEXT) IpFilter.$(OBJEXT) \
 	IpFilterLineSearch.$(OBJEXT) IpIpoptAlg.$(OBJEXT) \
 	IpIpoptCalculatedQuantities.$(OBJEXT) IpIpoptData.$(OBJEXT) \
-	IpLoqoMuOracle.$(OBJEXT) IpMonotoneMuUpdate.$(OBJEXT) \
-	IpNonmonotoneMuUpdate.$(OBJEXT) IpOptErrorConvCheck.$(OBJEXT) \
-	IpOrigIpoptNLP.$(OBJEXT) IpOrigIterationOutput.$(OBJEXT) \
-	IpProbingMuOracle.$(OBJEXT) IpOptProbingMuOracle.$(OBJEXT) \
+	IpIteratesVector.$(OBJEXT) IpLoqoMuOracle.$(OBJEXT) \
+	IpMonotoneMuUpdate.$(OBJEXT) IpNonmonotoneMuUpdate.$(OBJEXT) \
+	IpOptErrorConvCheck.$(OBJEXT) IpOrigIpoptNLP.$(OBJEXT) \
+	IpOrigIterationOutput.$(OBJEXT) IpProbingMuOracle.$(OBJEXT) \
+	IpOptProbingMuOracle.$(OBJEXT) \
 	IpRestoFilterConvCheck.$(OBJEXT) IpRestoIpoptNLP.$(OBJEXT) \
 	IpRestoIterateInitializer.$(OBJEXT) \
 	IpRestoIterationOutput.$(OBJEXT) IpRestoMinC_1Nrm.$(OBJEXT) \
@@ -78,6 +79,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/IpIpoptAlg.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpIpoptCalculatedQuantities.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpIpoptData.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpIteratesVector.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpLoqoMuOracle.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpMonotoneMuUpdate.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpNonmonotoneMuUpdate.Po \
@@ -245,6 +247,7 @@ libipoptalg_a_SOURCES = \
 	IpIpoptData.cpp IpIpoptData.hpp \
 	IpIpoptNLP.hpp \
 	IpIterateInitializer.hpp \
+	IpIteratesVector.hpp IpIteratesVector.cpp \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.hpp IpLoqoMuOracle.cpp \
 	IpMonotoneMuUpdate.hpp IpMonotoneMuUpdate.cpp \
@@ -280,6 +283,7 @@ ASTYLE_SOURCES = \
 	IpIpoptData.cppbak IpIpoptData.hppbak \
 	IpIpoptNLP.hppbak \
 	IpIterateInitializer.hppbak \
+	IpIteratesVector.hppbak IpIteratesVector.cppbak \
 	IpLineSearch.hppbak \
 	IpLoqoMuOracle.hppbak IpLoqoMuOracle.cppbak \
 	IpMonotoneMuUpdate.hppbak IpMonotoneMuUpdate.cppbak \
@@ -356,6 +360,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptAlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptCalculatedQuantities.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptData.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIteratesVector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLoqoMuOracle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMonotoneMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNonmonotoneMuUpdate.Po@am__quote@

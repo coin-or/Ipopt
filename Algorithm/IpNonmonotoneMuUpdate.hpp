@@ -171,14 +171,7 @@ namespace Ipopt
      *  fixed mode should be started.
      */
     //@{
-    SmartPtr<const Vector> accepted_x_;
-    SmartPtr<const Vector> accepted_s_;
-    SmartPtr<const Vector> accepted_y_c_;
-    SmartPtr<const Vector> accepted_y_d_;
-    SmartPtr<const Vector> accepted_z_L_;
-    SmartPtr<const Vector> accepted_z_U_;
-    SmartPtr<const Vector> accepted_v_L_;
-    SmartPtr<const Vector> accepted_v_U_;
+    SmartPtr<const IteratesVector> accepted_point_;
     //@}
 
   };

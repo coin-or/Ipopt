@@ -151,14 +151,7 @@ namespace Ipopt
                                   bool& soc_taken,
                                   Index& n_steps,
                                   bool& evaluation_error,
-                                  SmartPtr<const Vector>& actual_delta_x,
-                                  SmartPtr<const Vector>& actual_delta_s,
-                                  SmartPtr<const Vector>& actual_delta_y_c,
-                                  SmartPtr<const Vector>& actual_delta_y_d,
-                                  SmartPtr<const Vector>& actual_delta_z_L,
-                                  SmartPtr<const Vector>& actual_delta_z_U,
-                                  SmartPtr<const Vector>& actual_delta_v_L,
-                                  SmartPtr<const Vector>& actual_delta_v_U);
+				  SmartPtr<IteratesVector>& actual_delta);
 
     /** Method for starting the watch dog.  Set all appropriate fields
      *  accordingly */
@@ -166,14 +159,7 @@ namespace Ipopt
 
     /** Method for stopping the watch dog.  Set all appropriate fields
      *  accordingly. */
-    void StopWatchDog(SmartPtr<const Vector>& actual_delta_x,
-                      SmartPtr<const Vector>& actual_delta_s,
-                      SmartPtr<const Vector>& actual_delta_y_c,
-                      SmartPtr<const Vector>& actual_delta_y_d,
-                      SmartPtr<const Vector>& actual_delta_z_L,
-                      SmartPtr<const Vector>& actual_delta_z_U,
-                      SmartPtr<const Vector>& actual_delta_v_L,
-                      SmartPtr<const Vector>& actual_delta_v_U);
+    void StopWatchDog(SmartPtr<IteratesVector>& actual_delta);
 
     /** Method for checking if current trial point is acceptable.
      *  It is assumed that the delta information in ip_data is the
@@ -189,17 +175,12 @@ namespace Ipopt
 
     /** Method for setting the dual variables in the trial fields in
      *  IpData, given the search direction.  The step size for the
-     *  bound multipliers is the fraction-to-the-boundary step size,
-     *  and the step size for the equality constraint multipliers
-     *  depends on the choice of alpha_for_y. */
+     *  bound multipliers is alpha_dual (the fraction-to-the-boundary
+     *  step size), and the step size for the equality constraint 
+     *  multipliers depends on the choice of alpha_for_y. */
     void PerformDualStep(Number alpha_primal,
-                         Number alpha_dual,
-                         const Vector& delta_y_c,
-                         const Vector& delta_y_d,
-                         const Vector& delta_z_L,
-                         const Vector& delta_z_U,
-                         const Vector& delta_v_L,
-                         const Vector& delta_v_U);
+			 Number alpha_dual,
+			 SmartPtr<IteratesVector>& delta);
 
     /** Try a step for the soft restoration phase and check if it is
      *  acceptable.  The step size is identical for all variables.  A
@@ -208,14 +189,7 @@ namespace Ipopt
      *  if the primal-dual system error was decrease by at least the
      *  factor resto_pderror_reduction_factor_.  The return value is
      *  true, if the trial point was acceptable. */
-    bool TrySoftRestoStep(SmartPtr<const Vector>& actual_delta_x,
-                          SmartPtr<const Vector>& actual_delta_s,
-                          SmartPtr<const Vector>& actual_delta_y_c,
-                          SmartPtr<const Vector>& actual_delta_y_d,
-                          SmartPtr<const Vector>& actual_delta_z_L,
-                          SmartPtr<const Vector>& actual_delta_z_U,
-                          SmartPtr<const Vector>& actual_delta_v_L,
-                          SmartPtr<const Vector>& actual_delta_v_U,
+    bool TrySoftRestoStep(SmartPtr<IteratesVector>& actual_delta,
                           bool &satisfies_original_filter);
 
     /** Try a second order correction for the constraints.  If the
@@ -231,14 +205,7 @@ namespace Ipopt
      */
     bool TrySecondOrderCorrection(Number alpha_primal_test,
                                   Number& alpha_primal,
-                                  SmartPtr<const Vector>& actual_delta_x,
-                                  SmartPtr<const Vector>& actual_delta_s,
-                                  SmartPtr<const Vector>& actual_delta_y_c,
-                                  SmartPtr<const Vector>& actual_delta_y_d,
-                                  SmartPtr<const Vector>& actual_delta_z_L,
-                                  SmartPtr<const Vector>& actual_delta_z_U,
-                                  SmartPtr<const Vector>& actual_delta_v_L,
-                                  SmartPtr<const Vector>& actual_delta_v_U);
+				  SmartPtr<IteratesVector>& actual_delta);
 
     /** Try higher order corrector (for fast local convergence).  In
      *  contrast to a second order correction step, which tries to
@@ -248,14 +215,7 @@ namespace Ipopt
      */
     bool TryCorrector(Number alpha_primal_test,
                       Number& alpha_primal,
-                      SmartPtr<const Vector>& actual_delta_x,
-                      SmartPtr<const Vector>& actual_delta_s,
-                      SmartPtr<const Vector>& actual_delta_y_c,
-                      SmartPtr<const Vector>& actual_delta_y_d,
-                      SmartPtr<const Vector>& actual_delta_z_L,
-                      SmartPtr<const Vector>& actual_delta_z_U,
-                      SmartPtr<const Vector>& actual_delta_v_L,
-                      SmartPtr<const Vector>& actual_delta_v_U);
+		      SmartPtr<IteratesVector>& actual_delta);
 
     /** Perform magic steps.  Take the current values of the slacks in
      *  trial and replace them by better ones that lead to smaller
@@ -384,51 +344,16 @@ namespace Ipopt
     Number watch_dog_barr_;
     /** Barrier gradient transpose search direction at reference point */
     Number watch_dog_gradBarrTDelta_;
-    /** Refernence point iterate x */
-    SmartPtr<const Vector> watch_dog_x_;
-    /** Refernence point iterate s */
-    SmartPtr<const Vector> watch_dog_s_;
-    /** Refernence point iterate y_c */
-    SmartPtr<const Vector> watch_dog_y_c_;
-    /** Refernence point iterate y_d */
-    SmartPtr<const Vector> watch_dog_y_d_;
-    /** Refernence point iterate z_L */
-    SmartPtr<const Vector> watch_dog_z_L_;
-    /** Refernence point iterate z_U */
-    SmartPtr<const Vector> watch_dog_z_U_;
-    /** Refernence point iterate v_L */
-    SmartPtr<const Vector> watch_dog_v_L_;
-    /** Refernence point iterate v_U */
-    SmartPtr<const Vector> watch_dog_v_U_;
-    /** Search direction x at reference point */
-    SmartPtr<const Vector> watch_dog_delta_x_;
-    /** Search direction s at reference point */
-    SmartPtr<const Vector> watch_dog_delta_s_;
-    /** Search direction y_c at reference point */
-    SmartPtr<const Vector> watch_dog_delta_y_c_;
-    /** Search direction y_d at reference point */
-    SmartPtr<const Vector> watch_dog_delta_y_d_;
-    /** Search direction z_L at reference point */
-    SmartPtr<const Vector> watch_dog_delta_z_L_;
-    /** Search direction z_U at reference point */
-    SmartPtr<const Vector> watch_dog_delta_z_U_;
-    /** Search direction v_L at reference point */
-    SmartPtr<const Vector> watch_dog_delta_v_L_;
-    /** Search direction v_U at reference point */
-    SmartPtr<const Vector> watch_dog_delta_v_U_;
+    /** Watchdog reference iterate */
+    SmartPtr<const IteratesVector> watch_dog_iterate_;
+    /** Watchdog search direction at reference point */
+    SmartPtr<const IteratesVector> watch_dog_delta_;
     //@}
 
     /** @name Storage for last iterate that satisfies the acceptable
      *  level of optimality error. */
     //@{
-    SmartPtr<const Vector> acceptable_x_;
-    SmartPtr<const Vector> acceptable_s_;
-    SmartPtr<const Vector> acceptable_y_c_;
-    SmartPtr<const Vector> acceptable_y_d_;
-    SmartPtr<const Vector> acceptable_z_L_;
-    SmartPtr<const Vector> acceptable_z_U_;
-    SmartPtr<const Vector> acceptable_v_L_;
-    SmartPtr<const Vector> acceptable_v_U_;
+    SmartPtr<const IteratesVector> acceptable_iterate_;
     //@}
 
     /** Filter with entries */
