@@ -50,22 +50,8 @@ namespace Ipopt
      */
     virtual void Solve(Number alpha,
                        Number beta,
-                       const Vector& rhs_x,
-                       const Vector& rhs_s,
-                       const Vector& rhs_c,
-                       const Vector& rhs_d,
-                       const Vector& rhs_zL,
-                       const Vector& rhs_zU,
-                       const Vector& rhs_vL,
-                       const Vector& rhs_vU,
-                       Vector& res_x,
-                       Vector& res_s,
-                       Vector& res_c,
-                       Vector& res_d,
-                       Vector& res_zL,
-                       Vector& res_zU,
-                       Vector& res_vL,
-                       Vector& res_vU,
+		       const IteratesVector& rhs,
+		       IteratesVector& res,
                        bool allow_inexact=false);
 
   private:
@@ -158,22 +144,8 @@ namespace Ipopt
                    const Vector& sigma_s,
                    Number alpha,
                    Number beta,
-                   const Vector& rhs_x,
-                   const Vector& rhs_s,
-                   const Vector& rhs_c,
-                   const Vector& rhs_d,
-                   const Vector& rhs_zL,
-                   const Vector& rhs_zU,
-                   const Vector& rhs_vL,
-                   const Vector& rhs_vU,
-                   Vector& res_x,
-                   Vector& res_s,
-                   Vector& res_c,
-                   Vector& res_d,
-                   Vector& res_zL,
-                   Vector& res_zU,
-                   Vector& res_vL,
-                   Vector& res_vU);
+		   const IteratesVector& rhs,
+		   IteratesVector& res);
 
     /** Internal function for computing the residual (resid) given the
      * right hand side (rhs) and the solution of the system (res).
@@ -197,58 +169,16 @@ namespace Ipopt
                           const Vector& sigma_s,
                           Number alpha,
                           Number beta,
-                          const Vector& rhs_x,
-                          const Vector& rhs_s,
-                          const Vector& rhs_c,
-                          const Vector& rhs_d,
-                          const Vector& rhs_zL,
-                          const Vector& rhs_zU,
-                          const Vector& rhs_vL,
-                          const Vector& rhs_vU,
-                          const Vector& res_x,
-                          const Vector& res_s,
-                          const Vector& res_c,
-                          const Vector& res_d,
-                          const Vector& res_zL,
-                          const Vector& res_zU,
-                          const Vector& res_vL,
-                          const Vector& res_vU,
-                          Vector& resid_x,
-                          Vector& resid_s,
-                          Vector& resid_c,
-                          Vector& resid_d,
-                          Vector& resid_zL,
-                          Vector& resid_zU,
-                          Vector& resid_vL,
-                          Vector& resid_vU);
+			  const IteratesVector& rhs,
+			  const IteratesVector& res,
+			  IteratesVector& resid);
 
     /** Internal function for computing the ratio of the residual
      *  compared to the right hand side and solution.  The smaller
      *  this value, the better the solution. */
-    Number ComputeResidualRatio(const Vector& rhs_x,
-                                const Vector& rhs_s,
-                                const Vector& rhs_c,
-                                const Vector& rhs_d,
-                                const Vector& rhs_zL,
-                                const Vector& rhs_zU,
-                                const Vector& rhs_vL,
-                                const Vector& rhs_vU,
-                                const Vector& res_x,
-                                const Vector& res_s,
-                                const Vector& res_c,
-                                const Vector& res_d,
-                                const Vector& res_zL,
-                                const Vector& res_zU,
-                                const Vector& res_vL,
-                                const Vector& res_vU,
-                                const Vector& resid_x,
-                                const Vector& resid_s,
-                                const Vector& resid_c,
-                                const Vector& resid_d,
-                                const Vector& resid_zL,
-                                const Vector& resid_zU,
-                                const Vector& resid_vL,
-                                const Vector& resid_vU);
+    Number ComputeResidualRatio(const IteratesVector& rhs,
+				const IteratesVector& res,
+				const IteratesVector& resid);
 
     /** @name Auxilliary functions */
     //@{
@@ -261,7 +191,7 @@ namespace Ipopt
     /** Compute \f$ x = S^{-1}(r + \alpha Z P^T d)\f$ */
     void SinvBlrmZPTdBr(Number alpha, const Vector& S,
                         const Vector& R, const Vector& Z,
-                        const Matrix& P, const Vector& D, Vector& X);
+                        const Matrix& P, const Vector&g, Vector& X);
     /** Compute \f$ y = \alpha* x + \beta * y \f$ */
     void AxpBy(Number alpha, const Vector& X, Number beta, Vector& Y);
     //@}

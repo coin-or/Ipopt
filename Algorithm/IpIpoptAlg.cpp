@@ -246,24 +246,7 @@ namespace Ipopt
     // Get space for the search direction
     SmartPtr<IteratesVector> delta = IpData().curr()->MakeNewIteratesVector(true);
 
-    pd_solver_->Solve(-1.0, 0.0,
-                      *rhs->x(),
-                      *rhs->s(),
-                      *rhs->y_c(),
-                      *rhs->y_d(),
-                      *rhs->z_L(),
-                      *rhs->z_U(),
-                      *rhs->v_L(),
-                      *rhs->v_U(),
-                      *delta->x_NonConst(),
-                      *delta->s_NonConst(),
-                      *delta->y_c_NonConst(),
-                      *delta->y_d_NonConst(),
-                      *delta->z_L_NonConst(),
-                      *delta->z_U_NonConst(),
-                      *delta->v_L_NonConst(),
-                      *delta->v_U_NonConst()
-                     );
+    pd_solver_->Solve(-1.0, 0.0, *rhs, *delta);
 
     // Store the search directions in the IpData object
     IpData().set_delta(delta);
