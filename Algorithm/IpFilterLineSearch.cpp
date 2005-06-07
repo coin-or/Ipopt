@@ -1189,24 +1189,7 @@ namespace Ipopt
       rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
       rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
       rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
-      pd_solver_->Solve(-1.0, 0.0,
-                        *rhs->x(),
-                        *rhs->s(),
-                        *rhs->y_c(),
-                        *rhs->y_d(),
-                        *rhs->z_L(),
-                        *rhs->z_U(),
-                        *rhs->v_L(),
-                        *rhs->v_U(),
-                        *delta_soc->x_NonConst(),
-                        *delta_soc->s_NonConst(),
-                        *delta_soc->y_c_NonConst(),
-                        *delta_soc->y_d_NonConst(),
-                        *delta_soc->z_L_NonConst(),
-                        *delta_soc->z_U_NonConst(),
-                        *delta_soc->v_L_NonConst(),
-                        *delta_soc->v_U_NonConst(),
-                        true);
+      pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_soc, true);
 
       // Compute step size
       alpha_primal_soc =
@@ -1288,24 +1271,7 @@ namespace Ipopt
 	  SmartPtr<IteratesVector> step_aff = delta_corr->MakeNewIteratesVector(true);
 
           // Now solve the primal-dual system to get the step
-          pd_solver_->Solve(-1.0, 0.0,
-                            *rhs_aff->x(),
-                            *rhs_aff->s(),
-                            *rhs_aff->y_c(),
-                            *rhs_aff->y_d(),
-                            *rhs_aff->z_L(),
-                            *rhs_aff->z_U(),
-                            *rhs_aff->v_L(),
-                            *rhs_aff->v_U(),
-                            *step_aff->x_NonConst(),
-                            *step_aff->s_NonConst(),
-                            *step_aff->y_c_NonConst(),
-                            *step_aff->y_d_NonConst(),
-                            *step_aff->z_L_NonConst(),
-                            *step_aff->z_U_NonConst(),
-                            *step_aff->v_L_NonConst(),
-                            *step_aff->v_U_NonConst(),
-                            false);
+          pd_solver_->Solve(-1.0, 0.0, *rhs_aff, *step_aff, false);
 
 	  DBG_PRINT_VECTOR(2, "step_aff", *step_aff);
 
@@ -1335,24 +1301,7 @@ namespace Ipopt
         IpNLP().Pd_U()->TransMultVector(1., *delta_aff->s(), 0., *rhs->v_U_NonConst());
         rhs->v_U_NonConst()->ElementWiseMultiply(*delta_aff->v_U());
 
-        pd_solver_->Solve(1.0, 1.0,
-                          *rhs->x(),
-                          *rhs->s(),
-                          *rhs->y_c(),
-                          *rhs->y_d(),
-                          *rhs->z_L(),
-                          *rhs->z_U(),
-                          *rhs->v_L(),
-                          *rhs->v_U(),
-                          *delta_corr->x_NonConst(),
-                          *delta_corr->s_NonConst(),
-                          *delta_corr->y_c_NonConst(),
-                          *delta_corr->y_d_NonConst(),
-                          *delta_corr->z_L_NonConst(),
-                          *delta_corr->z_U_NonConst(),
-                          *delta_corr->v_L_NonConst(),
-                          *delta_corr->v_U_NonConst(),
-                          true);
+        pd_solver_->Solve(1.0, 1.0, *rhs, *delta_corr, true);
 
 	DBG_PRINT_VECTOR(2, "delta_corr", *delta_corr);
       }
@@ -1408,24 +1357,7 @@ namespace Ipopt
 
 	DBG_PRINT_VECTOR(2, "rhs", *rhs);
 
-        pd_solver_->Solve(1.0, 1.0,
-                          *rhs->x(),
-                          *rhs->s(),
-                          *rhs->y_c(),
-                          *rhs->y_d(),
-                          *rhs->z_L(),
-                          *rhs->z_U(),
-                          *rhs->v_L(),
-                          *rhs->v_U(),
-                          *delta_corr->x_NonConst(),
-                          *delta_corr->s_NonConst(),
-                          *delta_corr->y_c_NonConst(),
-                          *delta_corr->y_d_NonConst(),
-                          *delta_corr->z_L_NonConst(),
-                          *delta_corr->z_U_NonConst(),
-                          *delta_corr->v_L_NonConst(),
-                          *delta_corr->v_U_NonConst(),
-                          true);
+        pd_solver_->Solve(1.0, 1.0, *rhs, *delta_corr, true);
 
 	DBG_PRINT_VECTOR(2, "delta_corr", *delta_corr);
       }

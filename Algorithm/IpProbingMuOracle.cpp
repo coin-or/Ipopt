@@ -75,23 +75,8 @@ namespace Ipopt
 
     // Now solve the primal-dual system to get the step
     pd_solver_->Solve(-1.0, 0.0,
-                      *rhs->x(),
-                      *rhs->s(),
-                      *rhs->y_c(),
-                      *rhs->y_d(),
-                      *rhs->z_L(),
-                      *rhs->z_U(),
-                      *rhs->v_L(),
-                      *rhs->v_U(),
-                      *step->x_NonConst(),
-                      *step->s_NonConst(),
-                      *step->y_c_NonConst(),
-                      *step->y_d_NonConst(),
-                      *step->z_L_NonConst(),
-                      *step->z_U_NonConst(),
-                      *step->v_L_NonConst(),
-                      *step->v_U_NonConst()
-                      //		      ,
+		      *rhs,
+		      *step
                       //                      true           // don't need high accuracy
                      );
 

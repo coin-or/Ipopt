@@ -12,6 +12,7 @@
 #include "IpUtils.hpp"
 #include "IpSymMatrix.hpp"
 #include "IpAlgStrategy.hpp"
+#include "IpIteratesVector.hpp"
 
 namespace Ipopt
 {
@@ -101,22 +102,8 @@ namespace Ipopt
      */
     virtual void Solve(Number alpha,
                        Number beta,
-                       const Vector& rhs_x,
-                       const Vector& rhs_s,
-                       const Vector& rhs_c,
-                       const Vector& rhs_d,
-                       const Vector& rhs_zL,
-                       const Vector& rhs_zU,
-                       const Vector& rhs_vL,
-                       const Vector& rhs_vU,
-                       Vector& res_x,
-                       Vector& res_s,
-                       Vector& res_c,
-                       Vector& res_d,
-                       Vector& res_zL,
-                       Vector& res_zU,
-                       Vector& res_vL,
-                       Vector& res_vU,
+		       const IteratesVector& rhs,
+		       IteratesVector& res,
                        bool allow_inexact=false) =0;
 
   private:

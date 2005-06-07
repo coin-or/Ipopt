@@ -204,22 +204,8 @@ namespace Ipopt
 
     // Now solve the primal-dual system to get the step
     pd_solver_->Solve(-1.0, 0.0,
-                      *rhs_aff->x(),
-                      *rhs_aff->s(),
-                      *rhs_aff->y_c(),
-                      *rhs_aff->y_d(),
-                      *rhs_aff->z_L(),
-                      *rhs_aff->z_U(),
-                      *rhs_aff->v_L(),
-                      *rhs_aff->v_U(),
-                      *step_aff->x_NonConst(),
-                      *step_aff->s_NonConst(),
-                      *step_aff->y_c_NonConst(),
-                      *step_aff->y_d_NonConst(),
-                      *step_aff->z_L_NonConst(),
-                      *step_aff->z_U_NonConst(),
-                      *step_aff->v_L_NonConst(),
-                      *step_aff->v_U_NonConst(),
+		      *rhs_aff,
+		      *step_aff,
                       false           // want accurate solution here
                       // because we can use it to
                       // compute the overall search
@@ -255,22 +241,8 @@ namespace Ipopt
 
     // Now solve the primal-dual system to get the step
     pd_solver_->Solve(1.0, 0.0,
-                      *rhs_cen->x(),
-                      *rhs_cen->s(),
-                      *rhs_cen->y_c(),
-                      *rhs_cen->y_d(),
-                      *rhs_cen->z_L(),
-                      *rhs_cen->z_U(),
-                      *rhs_cen->v_L(),
-                      *rhs_cen->v_U(),
-                      *step_cen->x_NonConst(),
-                      *step_cen->s_NonConst(),
-                      *step_cen->y_c_NonConst(),
-                      *step_cen->y_d_NonConst(),
-                      *step_cen->z_L_NonConst(),
-                      *step_cen->z_U_NonConst(),
-                      *step_cen->v_L_NonConst(),
-                      *step_cen->v_U_NonConst(),
+		      *rhs_cen,
+		      *step_cen,
                       false           // want accurate solution here
                       // because we can use it to
                       // compute the overall search
