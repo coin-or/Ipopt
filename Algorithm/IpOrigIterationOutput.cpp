@@ -55,7 +55,7 @@ namespace Ipopt
     Number inf_du = IpCq().curr_dual_infeasibility(NORM_MAX);
     Number mu = IpData().curr_mu();
     Number dnrm;
-    if (IsValid(IpData().delta()->x())) {
+    if (IsValid(IpData().delta()) && IsValid(IpData().delta()->x()) && IsValid(IpData().delta()->s())) {
       dnrm = Max(IpData().delta()->x()->Amax(), IpData().delta()->s()->Amax());
     }
     else {

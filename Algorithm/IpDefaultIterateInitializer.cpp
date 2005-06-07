@@ -306,6 +306,7 @@ namespace Ipopt
     SmartPtr<Vector> new_s = delta_s;
     new_s->Axpy(1.0, *s);
 
+    iterates = IpData().trial()->MakeNewContainer();
     iterates->Set_s_NonConst(*new_s);
     if (nrm_l > 0 || nrm_u > 0) {
       Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
@@ -336,6 +337,7 @@ namespace Ipopt
     //           Initialize equality constraint multipliers            //
     /////////////////////////////////////////////////////////////////////
 
+    iterates = IpData().trial()->MakeNewContainer();
     iterates->create_new_y_c();
     iterates->create_new_y_d();
     if (IsValid(eq_mult_calculator_) && lam_init_max_>0.) {

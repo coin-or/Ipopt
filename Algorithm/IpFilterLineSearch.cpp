@@ -1047,7 +1047,8 @@ namespace Ipopt
     in_watch_dog_ = false;
 
     // Reset all fields in IpData to reference point
-    IpData().set_trial(watch_dog_iterate_);
+    SmartPtr<IteratesVector> old_trial = watch_dog_iterate_->MakeNewContainer();
+    IpData().set_trial(old_trial);
     IpData().AcceptTrialPoint();
     actual_delta = watch_dog_delta_->MakeNewContainer();
     IpData().SetHaveAffineDeltas(false);
@@ -1654,7 +1655,8 @@ namespace Ipopt
       return false;
     }
 
-    IpData().set_trial(acceptable_iterate_);
+    SmartPtr<IteratesVector> prev_iterate = acceptable_iterate_->MakeNewContainer();
+    IpData().set_trial(prev_iterate);
     IpData().AcceptTrialPoint();
 
     return true;

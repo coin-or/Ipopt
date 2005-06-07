@@ -84,17 +84,7 @@ namespace Ipopt
      *  efficiency (no copy and to keep cache tags the same) so
      *  after you call set you cannot modify the data again
      */
-    void set_trial(const SmartPtr<const IteratesVector>& trial);
-    void set_trial(SmartPtr<IteratesVector>& trial)
-    { 
-      const SmartPtr<const IteratesVector> vec = ConstPtr(trial);
-      set_trial(vec);
-
-      // This is to remind the outside caller that they should not
-      // be modifying the data!
-      // trial = NULL;
-      // We will put the debug check in IpoptData.
-   }
+    void set_trial(SmartPtr<IteratesVector>& trial);
 
     /** Set the values of the primal trial variables (x and s) from
      *  provided Step with step length alpha.
@@ -142,138 +132,7 @@ namespace Ipopt
      *  same) so after you call set, you cannot modify the data
      */
     void set_delta_aff(SmartPtr<IteratesVector>& delta_aff);
-
-//     /** Main iteration variables
-//      * (current iteration) */
-//     SmartPtr<const Vector> curr_x()
-//     {
-//       DBG_ASSERT(IsValid(curr_x_));
-//       return curr_x_;
-//     }
-
-//     /** Main iteration variables
-//      *  (trial calculations) */
-//     SmartPtr<const Vector> trial_x()
-//     {
-//       DBG_ASSERT(IsValid(trial_x_));
-//       return trial_x_;
-//     }
-
-//     /** Slacks from inequality constraints
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_s()
-//     {
-//       DBG_ASSERT(IsValid(curr_s_));
-//       return curr_s_;
-//     }
-
-//     /** Slacks from inequality constraints
-//      *  (trial calculations) */
-//     SmartPtr<const Vector> trial_s()
-//     {
-//       DBG_ASSERT(IsValid(trial_s_));
-//       return trial_s_;
-//     }
-
-//     /** Multipliers for equality constraints
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_y_c()
-//     {
-//       DBG_ASSERT(IsValid(curr_y_c_));
-//       return curr_y_c_;
-//     }
-
-//     /** Multipliers for equality constraints
-//      *  (trial iteration) */
-//     SmartPtr<const Vector> trial_y_c()
-//     {
-//       DBG_ASSERT(IsValid(trial_y_c_));
-//       return trial_y_c_;
-//     }
-
-//     /** Multipliers for the inequality constraints
-//      *  - Note, inequalities made equality 
-//      *  by introduction of slacks)
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_y_d()
-//     {
-//       DBG_ASSERT(IsValid(curr_y_d_));
-//       return curr_y_d_;
-//     }
-
-//     /** Multipliers for the inequality constraints
-//      *  - Note, inequalities made equality 
-//      *  by introduction of slacks)
-//      *  (trial calculations) */
-//     SmartPtr<const Vector> trial_y_d()
-//     {
-//       DBG_ASSERT(IsValid(trial_y_d_));
-//       return trial_y_d_;
-//     }
-
-//     /** Multipliers for the lower bound on x
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_z_L()
-//     {
-//       DBG_ASSERT(IsValid(curr_z_L_));
-//       return curr_z_L_;
-//     }
-
-//     /** Multipliers for the lower bound on x
-//      *  (trial calculations) */
-//     SmartPtr<const Vector> trial_z_L()
-//     {
-//       DBG_ASSERT(IsValid(trial_z_L_));
-//       return trial_z_L_;
-//     }
-
-//     /** Multipliers for the upper bound on x
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_z_U()
-//     {
-//       DBG_ASSERT(IsValid(curr_z_U_));
-//       return curr_z_U_;
-//     }
-
-//     /** Multipliers for the upper bound on x
-//      * (trial calculations) */
-//     SmartPtr<const Vector> trial_z_U()
-//     {
-//       DBG_ASSERT(IsValid(trial_z_L_));
-//       return trial_z_U_;
-//     }
-
-//     /** Multipliers for the lower bound on s
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_v_L()
-//     {
-//       DBG_ASSERT(IsValid(curr_v_L_));
-//       return curr_v_L_;
-//     }
-
-//     /** Multipliers for the lower bound on s
-//      *  (trial calculations) */
-//     SmartPtr<const Vector> trial_v_L()
-//     {
-//       DBG_ASSERT(IsValid(trial_v_L_));
-//       return trial_v_L_;
-//     }
-
-//     /** Multipliers for the upper bound on s
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_v_U()
-//     {
-//       DBG_ASSERT(IsValid(curr_v_U_));
-//       return curr_v_U_;
-//     }
-
-//     /** Multipliers for the upper bound on s
-//      * (trial calculations) */
-//     SmartPtr<const Vector> trial_v_U()
-//     {
-//       DBG_ASSERT(IsValid(trial_v_U_));
-//       return trial_v_U_;
-//     }
+    
 
     /** Hessian or Hessian approximation (do not hold on to it, it might be changed) */
     SmartPtr<const SymMatrix> W()
@@ -295,85 +154,6 @@ namespace Ipopt
      *  are overwritten in every iteration, so do not hold on to the
      *  pointers (make copies instead) */
     //@{
-//     SmartPtr<const Vector> delta_x()
-//     {
-//       return delta_x_;
-//     }
-
-//     SmartPtr<const Vector> delta_s()
-//     {
-//       return delta_s_;
-//     }
-
-//     SmartPtr<const Vector> delta_y_c()
-//     {
-//       return delta_y_c_;
-//     }
-
-//     SmartPtr<const Vector> delta_y_d()
-//     {
-//       return delta_y_d_;
-//     }
-
-//     SmartPtr<const Vector> delta_z_L()
-//     {
-//       return delta_z_L_;
-//     }
-
-//     SmartPtr<const Vector> delta_z_U()
-//     {
-//       return delta_z_U_;
-//     }
-
-//     SmartPtr<const Vector> delta_v_L()
-//     {
-//       return delta_v_L_;
-//     }
-
-//     SmartPtr<const Vector> delta_v_U()
-//     {
-//       return delta_v_U_;
-//     }
-
-//     void SetFromPtr_delta_x(const SmartPtr<const Vector>& delta_x)
-//     {
-//       delta_x_ = delta_x;
-//     }
-
-//     void SetFromPtr_delta_s(const SmartPtr<const Vector>& delta_s)
-//     {
-//       delta_s_ = delta_s;
-//     }
-
-//     void SetFromPtr_delta_y_c(const SmartPtr<const Vector>& delta_y_c)
-//     {
-//       delta_y_c_ = delta_y_c;
-//     }
-
-//     void SetFromPtr_delta_y_d(const SmartPtr<const Vector>& delta_y_d)
-//     {
-//       delta_y_d_ = delta_y_d;
-//     }
-
-//     void SetFromPtr_delta_z_L(const SmartPtr<const Vector>& delta_z_L)
-//     {
-//       delta_z_L_ = delta_z_L;
-//     }
-
-//     void SetFromPtr_delta_z_U(const SmartPtr<const Vector>& delta_z_U)
-//     {
-//       delta_z_U_ = delta_z_U;
-//     }
-
-//     void SetFromPtr_delta_v_L(const SmartPtr<const Vector>& delta_v_L)
-//     {
-//       delta_v_L_ = delta_v_L;
-//     }
-
-//     void SetFromPtr_delta_v_U(const SmartPtr<const Vector>& delta_v_U)
-//     {
-//       delta_v_U_ = delta_v_U;
-//     }
 
     /** Returns true, if the primal-dual step have been already
      *  computed for the current iteration.  This flag is reset after
@@ -404,85 +184,6 @@ namespace Ipopt
      *  scaling steps, then the corrector step in the line search does
      *  not have to recompute those solutions of the linear system. */
     //@{
-//     SmartPtr<const Vector> delta_aff_x()
-//     {
-//       return delta_aff_x_;
-//     }
-
-//     SmartPtr<const Vector> delta_aff_s()
-//     {
-//       return delta_aff_s_;
-//     }
-
-//     SmartPtr<const Vector> delta_aff_y_c()
-//     {
-//       return delta_aff_y_c_;
-//     }
-
-//     SmartPtr<const Vector> delta_aff_y_d()
-//     {
-//       return delta_aff_y_d_;
-//     }
-
-//     SmartPtr<const Vector> delta_aff_z_L()
-//     {
-//       return delta_aff_z_L_;
-//     }
-
-//     SmartPtr<const Vector> delta_aff_z_U()
-//     {
-//       return delta_aff_z_U_;
-//     }
-
-//     SmartPtr<const Vector> delta_aff_v_L()
-//     {
-//       return delta_aff_v_L_;
-//     }
-
-//     SmartPtr<const Vector> delta_aff_v_U()
-//     {
-//       return delta_aff_v_U_;
-//     }
-
-//     void SetFromPtr_delta_aff_x(const SmartPtr<const Vector>& delta_aff_x)
-//     {
-//       delta_aff_x_ = delta_aff_x;
-//     }
-
-//     void SetFromPtr_delta_aff_s(const SmartPtr<const Vector>& delta_aff_s)
-//     {
-//       delta_aff_s_ = delta_aff_s;
-//     }
-
-//     void SetFromPtr_delta_aff_y_c(const SmartPtr<const Vector>& delta_aff_y_c)
-//     {
-//       delta_aff_y_c_ = delta_aff_y_c;
-//     }
-
-//     void SetFromPtr_delta_aff_y_d(const SmartPtr<const Vector>& delta_aff_y_d)
-//     {
-//       delta_aff_y_d_ = delta_aff_y_d;
-//     }
-
-//     void SetFromPtr_delta_aff_z_L(const SmartPtr<const Vector>& delta_aff_z_L)
-//     {
-//       delta_aff_z_L_ = delta_aff_z_L;
-//     }
-
-//     void SetFromPtr_delta_aff_z_U(const SmartPtr<const Vector>& delta_aff_z_U)
-//     {
-//       delta_aff_z_U_ = delta_aff_z_U;
-//     }
-
-//     void SetFromPtr_delta_aff_v_L(const SmartPtr<const Vector>& delta_aff_v_L)
-//     {
-//       delta_aff_v_L_ = delta_aff_v_L;
-//     }
-
-//     void SetFromPtr_delta_aff_v_U(const SmartPtr<const Vector>& delta_aff_v_U)
-//     {
-//       delta_aff_v_U_ = delta_aff_v_U;
-//     }
 
     /** Returns true, if the affine-scaling step have been already
      *  computed for the current iteration.  This flag is reset after
@@ -510,56 +211,12 @@ namespace Ipopt
 
     /** @name Public Methods for updating iterates */
     //@{
-//     void SetTrialPrimalVariables(const Vector& x, const Vector& s);
-//     void SetTrialXVariables(const Vector& x);
-//     void SetTrialSVariables(const Vector& s);
-//     void SetTrialEqMultipliers(const Vector& y_c, const Vector& y_d);
-//     void SetTrialBoundMultipliers(const Vector& z_L, const Vector& z_U,
-//                                   const Vector& v_L, const Vector& v_U);
-//     /** Set the values of the primal trial variables (x and s) from
-//      *  provided Step with step length alpha.
-//      */
-//     void SetTrialPrimalVariablesFromStep(Number alpha,
-//                                          const Vector& delta_x,
-//                                          const Vector& delta_s);
-//     /** Set the values of the trial values for the equality constraint
-//      *  multipliers (y_c and y_d) from provided step with step length
-//      *  alpha.
-//      */
-//     void SetTrialEqMultipilersFromStep(Number alpha,
-//                                        const Vector& delta_y_c,
-//                                        const Vector& delta_y_d);
-//     /** Set the value of the trial values for the bound multipliers
-//      *  (z_L, z_U, v_L, v_U) from provided step with step length
-//      *  alpha.
-//      */
-//     void SetTrialBoundMultipliersFromStep(Number alpha,
-//                                           const Vector& delta_z_L,
-//                                           const Vector& delta_z_U,
-//                                           const Vector& delta_v_L,
-//                                           const Vector& delta_v_U);
-
     /** Copy the trial values to the current values */
     void CopyTrialToCurrent();
 
     /** Set the current iterate values from the
      *  trial values. */
     void AcceptTrialPoint();
-
-//     /** Set the pointers for the primal trial variables.  Make sure
-//     that you are not modifying the incoming vectors afterwards! */
-//     void SetTrialPrimalVariablesFromPtr(const SmartPtr<const Vector>& xptr,
-//                                         const SmartPtr<const Vector>& sptr);
-//     /** Set the pointers for the trial constraint multipliers.  Make sure
-//     that you are not modifying the incoming vectors afterwards! */
-//     void SetTrialConstraintMultipliersFromPtr(const SmartPtr<const Vector>& y_cptr,
-//         const SmartPtr<const Vector>& y_dptr);
-//     /** Set the pointers for the trial bound multipliers.  Make sure
-//     that you are not modifying the incoming vectors afterwards! */
-//     void SetTrialBoundMultipliersFromPtr(const SmartPtr<const Vector>& z_Lptr,
-//                                          const SmartPtr<const Vector>& z_Uptr,
-//                                          const SmartPtr<const Vector>& v_Lptr,
-//                                          const SmartPtr<const Vector>& v_Uptr);
     //@}
 
     /** @name General algorithmic data */
@@ -735,93 +392,20 @@ namespace Ipopt
      *  (trial calculations) */
     SmartPtr<const IteratesVector> trial_;
 
-//     /** Main iteration variables
-//      * (current iteration) */
-//     SmartPtr<const Vector> curr_x_;
-
-//     /** Main iteration variables
-//      *  (trial calculations) */
-//     SmartPtr<const Vector> trial_x_;
-
-//     /** Slacks from inequality constraints
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_s_;
-
-//     /** Slacks from inequality constraints
-//      *  (trial calculations) */
-//     SmartPtr<const Vector> trial_s_;
-
-//     /** Multipliers for equality constraints
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_y_c_;
-
-//     /** Multipliers for equality constraints
-//      *  (trial iteration) */
-//     SmartPtr<const Vector> trial_y_c_;
-
-//     /** Multipliers for the inequality constraints
-//      *  - Note, inequalities made equality 
-//      *  by introduction of slacks)
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_y_d_;
-
-//     /** Multipliers for the inequality constraints
-//      *  - Note, inequalities made equality 
-//      *  by introduction of slacks)
-//      *  (trial calculations) */
-//     SmartPtr<const Vector> trial_y_d_;
-
-//     /** Multipliers for the lower bound on x
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_z_L_;
-
-//     /** Multipliers for the lower bound on x
-//      *  (trial calculations) */
-//     SmartPtr<const Vector> trial_z_L_;
-
-//     /** Multipliers for the upper bound on x
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_z_U_;
-
-//     /** Multipliers for the upper bound on x
-//      * (trial calculations) */
-//     SmartPtr<const Vector> trial_z_U_;
-
-//     /** Multipliers for the lower bound on s
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_v_L_;
-
-//     /** Multipliers for the lower bound on s
-//      *  (trial calculations) */
-//     SmartPtr<const Vector> trial_v_L_;
-
-//     /** Multipliers for the upper bound on s
-//      *  (current iteration) */
-//     SmartPtr<const Vector> curr_v_U_;
-
-//     /** Multipliers for the upper bound on s
-//      * (trial calculations) */
-//     SmartPtr<const Vector> trial_v_U_;
-
     /** Hessian (approximation) - might be changed elsewhere! */
     SmartPtr<const SymMatrix> W_;
 
     /** @name Primal-dual Step */
     //@{
-    SmartPtr<const Vector> delta_x_;
-    SmartPtr<const Vector> delta_s_;
-    SmartPtr<const Vector> delta_y_c_;
-    SmartPtr<const Vector> delta_y_d_;
-    SmartPtr<const Vector> delta_z_L_;
-    SmartPtr<const Vector> delta_z_U_;
-    SmartPtr<const Vector> delta_v_L_;
-    SmartPtr<const Vector> delta_v_U_;
+    SmartPtr<const IteratesVector> delta_;
     /** The following flag is set to true, if some other part of the
      *  algorithm (like the method for computing the barrier
      *  parameter) has already computed the primal-dual search
      *  direction.  This flag is reset when the AcceptTrialPoint
-     *  method is called. */
-    bool have_deltas_;
+     *  method is called.
+     * ToDo: we could cue off of a null delta_;
+     */
+     bool have_deltas_;
     //@}
 
     /** @name Affine-scaling step.  This used to transfer the
@@ -829,18 +413,13 @@ namespace Ipopt
      *  of the barrier parameter to the corrector (in the line
      *  search). */
     //@{
-    SmartPtr<const Vector> delta_aff_x_;
-    SmartPtr<const Vector> delta_aff_s_;
-    SmartPtr<const Vector> delta_aff_y_c_;
-    SmartPtr<const Vector> delta_aff_y_d_;
-    SmartPtr<const Vector> delta_aff_z_L_;
-    SmartPtr<const Vector> delta_aff_z_U_;
-    SmartPtr<const Vector> delta_aff_v_L_;
-    SmartPtr<const Vector> delta_aff_v_U_;
+    SmartPtr<const IteratesVector> delta_aff_;
     /** The following flag is set to true, if some other part of the
      *  algorithm (like the method for computing the barrier
      *  parameter) has already computed the affine-scaling step.  This
-     *  flag is reset when the AcceptTrialPoint method is called. */
+     *  flag is reset when the AcceptTrialPoint method is called.
+     * ToDo: we could cue off of a null delta_aff_;
+     */
     bool have_affine_deltas_;
     //@}
 
@@ -928,11 +507,126 @@ namespace Ipopt
      *  behind the IpoptData's back
      */
     //@{
+    TaggedObject::Tag debug_curr_tag_;
     TaggedObject::Tag debug_trial_tag_;
+    TaggedObject::Tag debug_delta_tag_;
+    TaggedObject::Tag debug_delta_aff_tag_;
+    TaggedObject::Tag debug_curr_tag_sum_;
+    TaggedObject::Tag debug_trial_tag_sum_;
+    TaggedObject::Tag debug_delta_tag_sum_;
+    TaggedObject::Tag debug_delta_aff_tag_sum_;
     //@}
 #endif
 
   };
+
+  inline
+  SmartPtr<const IteratesVector> IpoptData::curr() const
+  {
+#ifdef IP_DEBUG
+    DBG_ASSERT(IsNull(curr_) || (curr_->GetTag() == debug_curr_tag_ && curr_->GetTagSum() == debug_curr_tag_sum_) );
+#endif
+    return curr_;
+  }
+
+  inline
+  SmartPtr<const IteratesVector> IpoptData::trial() const
+  {
+#ifdef IP_DEBUG
+    DBG_ASSERT(IsNull(trial_) || (trial_->GetTag() == debug_trial_tag_ && trial_->GetTagSum() == debug_trial_tag_sum_) );
+#endif
+    return trial_;
+  }
+
+  inline
+  SmartPtr<const IteratesVector> IpoptData::delta() const
+  {
+#   ifdef IP_DEBUG
+    DBG_ASSERT(IsNull(delta_) || (delta_->GetTag() == debug_delta_tag_ && delta_->GetTagSum() == debug_delta_tag_sum_) );
+#   endif
+
+    return delta_;
+  }
+  
+  inline
+  SmartPtr<const IteratesVector> IpoptData::delta_aff() const
+  {
+#   ifdef IP_DEBUG
+    DBG_ASSERT(IsNull(delta_aff_) || (delta_aff_->GetTag() == debug_delta_aff_tag_ && delta_aff_->GetTagSum() == debug_delta_aff_tag_sum_) );
+#   endif
+    return delta_aff_;
+  }
+
+  inline
+  void IpoptData::CopyTrialToCurrent()
+  {
+    curr_ = trial_;
+#ifdef IP_DEBUG
+    if (IsValid(curr_)) {
+      debug_curr_tag_ = curr_->GetTag();
+      debug_curr_tag_sum_ = curr_->GetTagSum();
+    }
+    else {
+      debug_curr_tag_ = 0;
+      debug_curr_tag_sum_ = 0;
+    }
+#endif    
+  }
+
+  inline
+  void IpoptData::set_trial(SmartPtr<IteratesVector>& trial)
+  {
+    trial_ = ConstPtr(trial);
+
+#ifdef IP_DEBUG
+    if (IsValid(trial)) {
+      debug_trial_tag_ = trial->GetTag();
+      debug_trial_tag_sum_ = trial->GetTagSum();
+    }
+    else {
+      debug_trial_tag_ = 0;
+      debug_trial_tag_sum_ = 0;
+    }
+#endif
+
+    trial = NULL;
+  }
+    
+  inline
+  void IpoptData::set_delta(SmartPtr<IteratesVector>& delta)
+  {
+    delta_ = ConstPtr(delta);
+#ifdef IP_DEBUG
+    if (IsValid(delta)) {
+      debug_delta_tag_ = delta->GetTag();
+      debug_delta_tag_sum_ = delta->GetTagSum();
+    }
+    else {
+      debug_delta_tag_ = 0;
+      debug_delta_tag_sum_ = 0;
+    }
+#endif
+
+    delta = NULL;
+  }
+
+  inline
+  void IpoptData::set_delta_aff(SmartPtr<IteratesVector>& delta_aff)
+  {
+    delta_aff_ = ConstPtr(delta_aff);
+#ifdef IP_DEBUG
+    if (IsValid(delta_aff)) {
+      debug_delta_aff_tag_ = delta_aff->GetTag();
+      debug_delta_aff_tag_sum_ = delta_aff->GetTagSum();
+    }
+    else {
+      debug_delta_aff_tag_ = 0;
+      debug_delta_aff_tag_sum_ = delta_aff->GetTagSum();
+    }
+#endif
+
+    delta_aff = NULL;
+  }
 
 } // namespace Ipopt
 
