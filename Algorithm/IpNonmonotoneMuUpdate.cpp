@@ -345,7 +345,8 @@ namespace Ipopt
           // Restore most recent accepted iterate to start fixed mode from
           Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                          "Restoring most recent accepted point.\n");
-	  IpData().set_trial(accepted_point_);
+	  SmartPtr<IteratesVector> prev_iter = accepted_point_->MakeNewContainer();
+	  IpData().set_trial(prev_iter);
           IpData().AcceptTrialPoint();
         }
 

@@ -275,6 +275,25 @@ namespace Ipopt
     void Set_bound_mult_NonConst(Vector& z_L, Vector& z_U, Vector& v_L, Vector& v_U)
     { SetCompNonConst(4, z_L); SetCompNonConst(5, z_U); SetCompNonConst(6, v_L); SetCompNonConst(7, v_U); }
 
+    /** Get a sum of the tags of the contained items. There is no guarantee that
+     *  this is unique, but there is a high chance it is unique and it can
+     *  be used for debug checks relatively reliably.
+     */
+    TaggedObject::Tag GetTagSum() const
+    {
+      TaggedObject::Tag tag = 0;
+
+      if (IsValid(x())) { tag += x()->GetTag(); }
+      if (IsValid(s())) { tag += s()->GetTag(); }
+      if (IsValid(y_c())) { tag += y_c()->GetTag(); }
+      if (IsValid(y_d())) { tag += y_d()->GetTag(); }
+      if (IsValid(z_L())) { tag += z_L()->GetTag(); }
+      if (IsValid(z_U())) { tag += z_U()->GetTag(); }
+      if (IsValid(v_L())) { tag += v_L()->GetTag(); }
+      if (IsValid(v_U())) { tag += v_U()->GetTag(); }
+
+      return tag;
+    }
     //@}
 
   private:
