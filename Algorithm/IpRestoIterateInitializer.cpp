@@ -228,7 +228,7 @@ namespace Ipopt
     // Now set the primal trial variables
     DBG_PRINT_VECTOR(2,"new_s",*new_s);
     DBG_PRINT_VECTOR(2,"new_x",*new_x);
-    SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
+    SmartPtr<IteratesVector> trial = IpData().curr()->MakeNewContainer();
     trial->Set_primal(*new_x, *new_s);
     IpData().set_trial(trial);
 
@@ -280,6 +280,7 @@ namespace Ipopt
     Cnew_z_L4->ElementWiseDivide(*pd);
 
     // Set those initial values to be the trial values in Data
+    trial = IpData().trial()->MakeNewContainer();
     trial->Set_bound_mult(*new_z_L, *new_z_U, *new_v_L, *new_v_U);
     IpData().set_trial(trial);
 
@@ -292,6 +293,7 @@ namespace Ipopt
       // those values are needed to compute the initial values for
       // the multipliers
       IpData().CopyTrialToCurrent();
+      trial = IpData().trial()->MakeNewContainer();
       SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
       SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
       bool retval = resto_eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);

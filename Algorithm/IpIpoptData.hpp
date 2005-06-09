@@ -579,6 +579,8 @@ namespace Ipopt
     trial_ = ConstPtr(trial);
 
 #ifdef IP_DEBUG
+    // verify the correct space
+    DBG_ASSERT(trial_->OwnerSpace() == (VectorSpace*)GetRawPtr(iterates_space_));
     if (IsValid(trial)) {
       debug_trial_tag_ = trial->GetTag();
       debug_trial_tag_sum_ = trial->GetTagSum();

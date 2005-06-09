@@ -80,7 +80,7 @@ namespace Ipopt
       dynamic_cast<const CompoundVector*>(GetRawPtr(x));
     DBG_ASSERT(cx);
 
-    SmartPtr<IteratesVector> trial = IpData().curr()->MakeNewContainer();
+    SmartPtr<IteratesVector> trial = orig_ip_data->curr()->MakeNewContainer();
     trial->Set_x(*cx->GetComp(0));
     trial->Set_s(*IpData().curr()->s());
     orig_ip_data->set_trial(trial);
