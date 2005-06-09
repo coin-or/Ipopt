@@ -467,7 +467,7 @@ namespace Ipopt
 
     // Now construct the overall search direction here
     SmartPtr<IteratesVector> step = IpData().curr()->MakeNewIteratesVector(true);
-    step->AddTwoVectors(sigma, *step_cen, 1.0, *step_aff, 0.0);
+    step->AddTwoVectors(sigma, *step_cen, 1.0, *IpData().delta_aff(), 0.0);
 
     IpData().set_delta(step);
     IpData().SetHaveDeltas(true);
