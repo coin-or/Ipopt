@@ -88,7 +88,7 @@ namespace Ipopt
 
     Number mu = IpData().curr_mu();
     Number dnrm = 0.;
-    if (IsValid(IpData().delta()->x())) {
+    if (IsValid(IpData().delta()) && IsValid(IpData().delta()->x()) && IsValid(IpData().delta()->s())) {
       dnrm = Max(IpData().delta()->x()->Amax(), IpData().delta()->s()->Amax());
     }
 
@@ -99,7 +99,7 @@ namespace Ipopt
       dynamic_cast<const CompoundVector*>(GetRawPtr(x));
     DBG_ASSERT(cx);
 
-    SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
+    SmartPtr<IteratesVector> trial = orig_ip_data->trial()->MakeNewContainer();
     trial->Set_x(*cx->GetComp(0));
     trial->Set_s(*IpData().curr()->s());
     orig_ip_data->set_trial(trial);

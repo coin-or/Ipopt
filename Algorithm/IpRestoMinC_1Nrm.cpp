@@ -257,6 +257,7 @@ namespace Ipopt
         // those values are needed to compute the initial values for
         // the multipliers
         IpData().CopyTrialToCurrent();
+	trial = IpData().trial()->MakeNewContainer();
         SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
         SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
         bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
