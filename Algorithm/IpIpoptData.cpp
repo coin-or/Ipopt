@@ -14,6 +14,8 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(IpoptData);
+
   IpoptData::IpoptData()
       :
       iter_count_(0),
@@ -37,47 +39,24 @@ namespace Ipopt
   IpoptData::~IpoptData()
   {}
 
+  void IpoptData::RegisterOptions(SmartPtr<RegisteredOptions> reg_options)
+  {
+    reg_options->AddLowerBoundedNumberOption("tol", "tolerance (ToDo: better description)", 0.0, true,  1e-8);
+    reg_options->AddLowerBoundedNumberOption("dual_inf_tol", "tolerance on the dual infeasibility (ToDo: better description)", 0.0, true, 1e-2);
+    reg_options->AddLowerBoundedNumberOption("primal_inf_tol", "tolerance on the primal infeasibility (ToDo: better description)", 0.0, true, 1e-2);
+    reg_options->AddLowerBoundedNumberOption("compl_inf_tol", "tolerance on the complementarity (ToDo: better description)", 0.0, true, 1e-2);
+  }
+
   bool IpoptData::Initialize(const Journalist& jnlst,
                              const OptionsList& options,
                              const std::string& prefix)
   {
     Number value;
 
-    if (options.GetNumericValue("tol", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"tol\": This value must be larger than 0.");
-      tol_ = value;
-    }
-    else {
-      tol_ = 1e-8;
-    }
-
-    if (options.GetNumericValue("dual_inf_tol", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"dual_inf_tol\": This value must be larger than 0.");
-      dual_inf_tol_ = value;
-    }
-    else {
-      dual_inf_tol_ = 1e-2;
-    }
-
-    if (options.GetNumericValue("primal_inf_tol", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"primal_inf_tol\": This value must be larger than 0.");
-      primal_inf_tol_ = value;
-    }
-    else {
-      primal_inf_tol_ = 1e-2;
-    }
-
-    if (options.GetNumericValue("compl_inf_tol", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"compl_inf_tol\": This value must be larger than 0.");
-      compl_inf_tol_ = value;
-    }
-    else {
-      compl_inf_tol_ = 1e-2;
-    }
+    options.GetNumericValue("tol", tol_, prefix);
+    options.GetNumericValue("dual_inf_tol", dual_inf_tol_, prefix);
+    options.GetNumericValue("primal_inf_tol", primal_inf_tol_, prefix);
+    options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
 
     iter_count_=0;
 

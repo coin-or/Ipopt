@@ -23,6 +23,8 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(FilterLineSearch);
+
   FilterLineSearch::FilterLineSearch(const SmartPtr<RestorationPhase>& resto_phase,
                                      const SmartPtr<PDSystemSolver>& pd_solver)
       :
@@ -43,203 +45,111 @@ namespace Ipopt
                   dbg_verbosity);
   }
 
+  void FilterLineSearch::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedNumberOption("theta_max_fact", "???", 
+					  0.0, true, 1e4);
+    roptions->AddLowerBoundedNumberOption("theta_min_fact", "???", 
+					  0.0, true, 1e-4);
+    roptions->AddBoundedNumberOption("eta_phi", "???", 
+				     0.0, true, 0.5, true, 1e-4);
+    roptions->AddLowerBoundedNumberOption("delta", "???",
+					  0.0, true, 1.0);
+    roptions->AddLowerBoundedNumberOption("s_phi", "???",
+					  1.0, true, 2.3);
+    roptions->AddLowerBoundedNumberOption("s_theta", "???",
+					  1.0, true, 1.1);
+    roptions->AddBoundedNumberOption("gamma_phi", "???",
+				     0.0, true, 1.0, true, 1e-8);
+    roptions->AddBoundedNumberOption("gamma_theta", "???",
+				     0.0, true, 1.0, true, 1e-5);
+    roptions->AddBoundedNumberOption("alpha_min_frac", "???",
+				     0.0, true, 1.0, true, 0.05);
+    roptions->AddLowerBoundedNumberOption("alpha_red_factor", "fractional reduction of alpha (step size) in the line search",
+					  0.0, true, 0.5);
+    roptions->AddLowerBoundedIntegerOption("max_soc", "???",
+					  0, 4);
+    roptions->AddLowerBoundedNumberOption("kappa_soc", "???",
+					  0.0, true, 0.99);
+    roptions->AddLowerBoundedNumberOption("obj_max_inc", "???",
+					  1.0, true, 5.0);
+    roptions->AddStringOption2("magic_steps", "should we take special steps with the slack variables from the general inequalities", "no",
+			       "no", "don't take magic steps",
+			       "yes", "take magic steps");
+    roptions->AddStringOption3("corrector_type", "???", "none",
+			       "none", "no corrector",
+			       "affine", "corrector step towards mu=0",
+			       "primal-dual", "corrector step towards current mu");
+
+    roptions->AddStringOption2("skip_corr_if_neg_curv", "skip the corrector step if we are currently encountering negative curvature", "yes",
+			       "no", "don't skip",
+			       "yes", "skip");
+
+    roptions->AddStringOption2("skip_corr_if_fixed_mode", "skip the corrector step if we are currently in fixed mu mode", "yes",
+			       "no", "don't skip",
+			       "yes", "skip");
+    roptions->AddStringOption2("ls_always_accept", "always accept the full step", "no",
+			       "no", "don't arbitrarily accept the full step",
+			       "yes", "always accept the full step");
+
+    roptions->AddStringOption7("alpha_for_y", "method for performing the step for the equality multipliers", "primal",
+			       "primal", "set the y's using the primal step size",
+			       "bound-mult", "set the y's using the step for the bound multipliers",
+			       "min", "set the y's using the min of primal and bound-mult",
+			       "max", "set the y's using the max of primal and bound-mult",
+			       "full", "take a full step in the y's",
+			       "safe_min_dual_infeas", "???",
+			       "min_dual_infeas", "???");
+
+    roptions->AddLowerBoundedNumberOption("corrector_compl_avrg_red_fact", "???",
+					  0.0, true, 1.0);
+    roptions->AddLowerBoundedNumberOption("expect_infeasible_problem_ctol", "???",
+					  0.0, false, 1e-3);
+    roptions->AddLowerBoundedNumberOption("resto_pderror_reduction_factor", "???",
+					  0.0, false, (1.0 - 1e-4));
+    roptions->AddLowerBoundedNumberOption("tiny_step_tol", "???",
+					  0.0, false, 10.0*std::numeric_limits<double>::epsilon());
+    roptions->AddLowerBoundedIntegerOption("watch_dog_trial_iter_max", "number of trial iterations before watchdog returns to stored point",
+					   1, 3);
+    roptions->AddLowerBoundedIntegerOption("watch_dog_shortened_iter_trigger", "???",
+					   0, 10);
+    roptions->AddLowerBoundedNumberOption("acceptable_tol", "???",
+					  0.0, false, 1e-6);
+    roptions->AddLowerBoundedIntegerOption("acceptable_iter_max", "???",
+					   0, 15);
+  }
+
   bool FilterLineSearch::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)
   {
-    Number value = 0.0;
-    Int ivalue = 0;
-
-    // Check for the algorithm options
-    if (options.GetNumericValue("theta_max_fact", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"theta_max_fact\": This value must be larger than 0.");
-      theta_max_fact_ = value;
-    }
-    else {
-      theta_max_fact_ = 1e4;
-    }
-
-    if (options.GetNumericValue("theta_min_fact", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0 && value < theta_max_fact_, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"theta_min_fact\": This value must be larger than 0 and less than theta_max_fact.");
-      theta_min_fact_ = value;
-    }
-    else {
-      theta_min_fact_ = 1e-4;
-    }
-
-    if (options.GetNumericValue("eta_phi", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0 && value < 0.5, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"eta_phi\": This value must be between 0 and 0.5.");
-      eta_phi_ = value;
-    }
-    else {
-      eta_phi_ = 1e-4;
-    }
-
-    if (options.GetNumericValue("delta", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"delta\": This value must be larger than 0.");
-      delta_ = value;
-    }
-    else {
-      delta_ = 1.0;
-    }
-
-    if (options.GetNumericValue("s_phi", value, prefix)) {
-      ASSERT_EXCEPTION(value > 1.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"s_phi\": This value must be larger than 1.");
-      s_phi_ = value;
-    }
-    else {
-      s_phi_ = 2.3;
-    }
-
-    if (options.GetNumericValue("s_theta", value, prefix)) {
-      ASSERT_EXCEPTION(value > 1.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"s_theta\": This value must be larger than 1.0.");
-      s_theta_ = value;
-    }
-    else {
-      s_theta_ = 1.1;
-    }
-
-
-    if (options.GetNumericValue("gamma_phi", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0 && value < 1.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"gamma_phi\": This value must be between 0 and 1.");
-      gamma_phi_ = value;
-    }
-    else {
-      gamma_phi_ = 1e-8;
-    }
-
-    if (options.GetNumericValue("gamma_theta", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0 && value < 1.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"gamma_theta\": This value must be between 0 and 1.");
-      gamma_theta_ = value;
-    }
-    else {
-      gamma_theta_ = 1e-5;
-    }
-
-    if (options.GetNumericValue("alpha_min_frac", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"alpha_min_frac\": This value must be > 0 and <= 1.");
-      alpha_min_frac_ = value;
-    }
-    else {
-      alpha_min_frac_ = 0.05;
-    }
-
-    if (options.GetNumericValue("alpha_red_factor", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"alpha_red_factor\": This value must be larger than 0.");
-      alpha_red_factor_ = value;
-    }
-    else {
-      alpha_red_factor_ = 0.5;
-    }
-
-    if (options.GetIntegerValue("max_soc", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue >= 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"max_soc\": This value must be non-negative.");
-      max_soc_ = ivalue;
-    }
-    else {
-      max_soc_ = 4;
-    }
+    options.GetNumericValue("theta_max_fact", theta_max_fact_, prefix);
+    options.GetNumericValue("theta_min_fact", theta_min_fact_, prefix);
+    ASSERT_EXCEPTION(theta_min_fact_ < theta_max_fact_, OptionsList::OPTION_OUT_OF_RANGE,
+		     "Option \"theta_min_fact\": This value must be larger than 0 and less than theta_max_fact.");
+    options.GetNumericValue("eta_phi", eta_phi_, prefix);
+    options.GetNumericValue("delta", delta_, prefix);
+    options.GetNumericValue("s_phi", s_phi_, prefix);
+    options.GetNumericValue("s_theta", s_theta_, prefix);
+    options.GetNumericValue("gamma_phi", gamma_phi_, prefix);
+    options.GetNumericValue("gamma_theta", gamma_theta_, prefix);
+    options.GetNumericValue("alpha_min_frac", alpha_min_frac_, prefix);
+    options.GetNumericValue("alpha_red_factor", alpha_red_factor_, prefix);
+    options.GetIntegerValue("max_soc", max_soc_, prefix);
     if (max_soc_>0) {
       ASSERT_EXCEPTION(IsValid(pd_solver_), OptionsList::OPTION_OUT_OF_RANGE,
                        "Option \"max_soc\": This option is non-negative, but no linear solver for computing the SOC given to FilterLineSearch object.");
     }
-
-    if (options.GetNumericValue("kappa_soc", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"kappa_soc\": This value must be larger than 0.");
-      kappa_soc_ = value;
-    }
-    else {
-      kappa_soc_ = 0.99;
-    }
-
-    if (options.GetNumericValue("obj_max_inc", value, prefix)) {
-      ASSERT_EXCEPTION(value > 1., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"obj_max_inc_\": This value must be larger than 1.");
-      obj_max_inc_ = value;
-    }
-    else {
-      obj_max_inc_ = 5.;
-    }
-
-    if (options.GetIntegerValue("magic_steps", ivalue, prefix)) {
-      magic_steps_ = (ivalue != 0);
-    }
-    else {
-      magic_steps_ = false;
-    }
-
-    if (options.GetIntegerValue("corrector_type", ivalue, prefix)) {
-      corrector_type_ = ivalue;
-    }
-    else {
-      corrector_type_ = 0;
-    }
-
-    if (options.GetIntegerValue("skip_corr_if_neg_curv", ivalue, prefix)) {
-      skip_corr_if_neg_curv_ = (ivalue != 0);
-    }
-    else {
-      skip_corr_if_neg_curv_ = true;
-    }
-
-    if (options.GetIntegerValue("skip_corr_if_fixed_mode", ivalue, prefix)) {
-      skip_corr_if_fixed_mode_ = (ivalue != 0);
-    }
-    else {
-      skip_corr_if_fixed_mode_ = true;
-    }
-
-    if (options.GetIntegerValue("ls_always_accept", ivalue, prefix)) {
-      ls_always_accept_ = (ivalue != 0);
-    }
-    else {
-      ls_always_accept_ = false;
-    }
-
-    if (options.GetIntegerValue("alpha_for_y", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=6, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"alpha_for_y\": This value must be 0, 1, or 2.");
-      alpha_for_y_ = ivalue;
-    }
-    else {
-      alpha_for_y_ = 0;
-    }
-
-    if (options.GetNumericValue("corrector_compl_avrg_red_fact", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"corrector_compl_avrg_red_fact\": This value must be positive.");
-      corrector_compl_avrg_red_fact_ = value;
-    }
-    else {
-      corrector_compl_avrg_red_fact_ = 1.;
-    }
-
-    if (options.GetIntegerValue("expect_infeasible_problem", ivalue, prefix)) {
-      expect_infeasible_problem_ = (ivalue!=0);
-    }
-    else {
-      expect_infeasible_problem_ = false;
-    }
-
-    if (options.GetNumericValue("expect_infeasible_problem_ctol", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"expect_infeasible_problem_ctol\": This value must be non-negative.");
-      expect_infeasible_problem_ctol_ = value;
-    }
-    else {
-      expect_infeasible_problem_ctol_ = 1.e-3;
-    }
+    options.GetNumericValue("kappa_soc", kappa_soc_, prefix);
+    options.GetNumericValue("obj_max_inc", obj_max_inc_, prefix);
+    options.GetBoolValue("magic_steps", magic_steps_, prefix);
+    options.GetEnumValue("corrector_type", (Index)corrector_type_, prefix);
+    options.GetBoolValue("skip_corr_if_neg_curv", skip_corr_if_neg_curv_, prefix);
+    options.GetBoolValue("skip_corr_if_fixed_mode", skip_corr_if_fixed_mode_, prefix);
+    options.GetBoolValue("ls_always_accept", ls_always_accept_, prefix);
+    options.GetEnumValue("alpha_for_y", (Index)alpha_for_y_, prefix);
+    options.GetNumericValue("corrector_compl_avrg_red_fact", corrector_compl_avrg_red_fact_, prefix);
+    options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
+    options.GetNumericValue("expect_infeasible_problem_ctol", expect_infeasible_problem_ctol_, prefix);
 
     bool retvalue = true;
     if (IsValid(resto_phase_)) {
@@ -247,59 +157,12 @@ namespace Ipopt
                                           options, prefix);
     }
 
-    if (options.GetNumericValue("resto_pderror_reduction_factor", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"resto_pderror_reduction_factor\": This value must be positive.");
-      resto_pderror_reduction_factor_ = value;
-    }
-    else {
-      resto_pderror_reduction_factor_ = 1.0 - 1e-4;
-    }
-
-    if (options.GetNumericValue("tiny_step_tol", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"tiny_step_tol\": This value must be positive.");
-      tiny_step_tol_ = value;
-    }
-    else {
-      tiny_step_tol_ = 1e1 * std::numeric_limits<double>::epsilon();
-    }
-
-    if (options.GetIntegerValue("watch_dog_trial_iter_max", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue > 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"watch_dog_trial_iter_max\": This value must be positive.");
-      watch_dog_trial_iter_max_ = ivalue;
-    }
-    else {
-      watch_dog_trial_iter_max_ = 3;
-    }
-
-    if (options.GetIntegerValue("watch_dog_shortened_iter_trigger", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue >= 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"watch_dog_shortened_iter_trigger\": This value must be positive.");
-      watch_dog_shortened_iter_trigger_ = ivalue;
-    }
-    else {
-      watch_dog_shortened_iter_trigger_ = 10;
-    }
-
-    if (options.GetNumericValue("acceptable_tol", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"acceptable_tol\": This value must be non-negative.");
-      acceptable_tol_ = value;
-    }
-    else {
-      acceptable_tol_ = 1e-6;
-    }
-
-    if (options.GetIntegerValue("acceptable_iter_max", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue >= 0., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"acceptable_iter_max\": This value must be positive.");
-      acceptable_iter_max_ = ivalue;
-    }
-    else {
-      acceptable_iter_max_ = 15;
-    }
+    options.GetNumericValue("resto_pderror_reduction_factor", resto_pderror_reduction_factor_, prefix);
+    options.GetNumericValue("tiny_step_tol", tiny_step_tol_, prefix);
+    options.GetIntegerValue("watch_dog_trial_iter_max", watch_dog_trial_iter_max_, prefix);
+    options.GetIntegerValue("watch_dog_shortened_iter_trigger", watch_dog_shortened_iter_trigger_, prefix);
+    options.GetNumericValue("acceptable_tol", acceptable_tol_, prefix);
+    options.GetIntegerValue("acceptable_iter_max", acceptable_iter_max_, prefix);
 
     // ToDo decide if also the PDSystemSolver should be initialized here...
 

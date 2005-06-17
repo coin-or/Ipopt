@@ -12,9 +12,11 @@
 #include "IpUtils.hpp"
 #include "IpIterateInitializer.hpp"
 #include "IpEqMultCalculator.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
+  DeclareIpoptType(RestoIterateInitializer);
 
   /** Class implementing the default initialization procedure (based
    *  on user options) for the iterates.  It is used at the very
@@ -44,6 +46,11 @@ namespace Ipopt
     /** Compute the initial iterates and set the into the curr field
      *  of the ip_data object. */
     virtual bool SetInitialIterates();
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods

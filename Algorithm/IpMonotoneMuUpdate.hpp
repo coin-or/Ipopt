@@ -11,12 +11,15 @@
 
 #include "IpMuUpdate.hpp"
 #include "IpLineSearch.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
 
-  /** Filter line search.  This class implements the filter line
-   *  search procedure. 
+  DeclareIpoptType(MonotoneMuUpdate);
+
+  /** Monotone Mu Update. This class implements the standard monotone mu update 
+   *  approach.
    */
   class MonotoneMuUpdate : public MuUpdate
   {
@@ -40,6 +43,11 @@ namespace Ipopt
      *  LineSearch object linesearch is called.
      *  TODO: MORE DETAILS HERE */
     virtual void UpdateBarrierParameter();
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods

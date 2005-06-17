@@ -15,6 +15,8 @@
 namespace Ipopt
 {
 
+  DeclareIpoptType(AlgorithmBuilder);
+
   /** Builder to create a complete IpoptAlg object.  This object
    *  contains all subelements (such as line search objects etc).  How
    *  the resulting IpoptAlg object is build can be influenced by the
@@ -32,6 +34,12 @@ namespace Ipopt
     static SmartPtr<IpoptAlgorithm> BuildBasicAlgorithm(const Journalist& jnlst,
         const OptionsList& options,
         const std::string& prefix);
+    //@}
+
+    /** Methods for IpoptTypeInfo */
+    //@{
+    /** register the options used by the algorithm builder */
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
   };
 } // namespace Ipopt

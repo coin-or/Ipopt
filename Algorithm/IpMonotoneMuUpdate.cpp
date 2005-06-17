@@ -20,6 +20,8 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(MonotoneMuUpdate);
+
   MonotoneMuUpdate::MonotoneMuUpdate(const SmartPtr<LineSearch>& linesearch)
       :
       MuUpdate(),
@@ -37,55 +39,28 @@ namespace Ipopt
                    dbg_verbosity);
   }
 
+  void MonotoneMuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedNumberOption("mu0", "initial value for the barrier parameter, mu",
+					  0.0, true, 0.1);
+//     roptions->AddLowerBoundedNumberOption("kappa_epsilon", "???",
+// 					  0.0, true, 10.0);
+//     roptions->AddBoundedNumberOption("kappa_mu", "???",
+// 				     0.0, true, 1.0, true, 0.2);
+//     roptions->AddBoundedNumberOption("theta_mu", "???",
+// 				     1.0, true, 2.0, true, 1.5);
+//     roptions->AddBoundedNumberOption("tau_min", "???",
+//  				     0.0, true, 1.0, true, 0.99);
+  }
+
   bool MonotoneMuUpdate::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)
   {
-    Number value= 0.0;
-
-    if (options.GetNumericValue("mu0", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"mu0\": This value must be larger than 0.");
-      mu0_ = value;
-    }
-    else {
-      mu0_ = 0.1;
-    }
-
-    if (options.GetNumericValue("kappa_epsilon", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"kappa_epsilon\": This value must be larger than 0.");
-      kappa_epsilon_ = value;
-    }
-    else {
-      kappa_epsilon_ = 10.0;
-    }
-
-    if (options.GetNumericValue("kappa_mu", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0 && value < 1.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"kappa_mu\": This value must be between 0 and 1.");
-      kappa_mu_ = value;
-    }
-    else {
-      kappa_mu_ = 0.2;
-    }
-
-    if (options.GetNumericValue("theta_mu", value, prefix)) {
-      ASSERT_EXCEPTION(value > 1.0 && value < 2.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"theta_mu\": This value must be between 1 and 2.");
-      theta_mu_ = value;
-    }
-    else {
-      theta_mu_ = 1.5;
-    }
-
-    if (options.GetNumericValue("tau_min", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0 && value < 1.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"tau_min\": This value must be between 0 and 1.");
-      tau_min_ = value;
-    }
-    else {
-      tau_min_ = 0.99;
-    }
+    options.GetNumericValue("mu0", mu0_, prefix);
+    options.GetNumericValue("kappa_epsilon", kappa_epsilon_, prefix);
+    options.GetNumericValue("kappa_mu", kappa_mu_, prefix);
+    options.GetNumericValue("theta_mu", theta_mu_, prefix);
+    options.GetNumericValue("tau_min", tau_min_, prefix);
 
     IpData().Set_mu(mu0_);
     Number tau = Max(tau_min_, 1.0 - mu0_);

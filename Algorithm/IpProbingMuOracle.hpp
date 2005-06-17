@@ -15,6 +15,8 @@
 namespace Ipopt
 {
 
+  DeclareIpoptType(ProbingMuOracle);
+
   /** Implementation of the probing strategy for computing the
    *  barrier parameter.
    */
@@ -37,6 +39,11 @@ namespace Ipopt
      *  could be used in the current iteration (using the LOQO formula).
      */
     virtual Number CalculateMu();
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods

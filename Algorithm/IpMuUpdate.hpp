@@ -11,9 +11,12 @@
 
 #include "IpUtils.hpp"
 #include "IpAlgStrategy.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
+
+  DeclareIpoptType(MuUpdate);
 
   /** Abstract Base Class for classes that implement methods for computing
    *  the barrier and fraction-to-the-boundary rule parameter for the
@@ -25,8 +28,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Default Constructor */
-    MuUpdate()
-    {}
+    MuUpdate();
 
     /** Default destructor */
     virtual ~MuUpdate()
@@ -43,6 +45,11 @@ namespace Ipopt
      *  barrier parameter is changed. This method is also responsible
      *  for setting the fraction-to-the-boundary parameter tau */
     virtual void UpdateBarrierParameter() = 0;
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods

@@ -14,9 +14,12 @@
 #include "IpLineSearch.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpPDSystemSolver.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
+  
+  DeclareIpoptType(FilterLineSearch);
 
   /** Filter line search.  This class implements the filter line
    *  search procedure. 
@@ -92,6 +95,11 @@ namespace Ipopt
     bool IsAcceptableToCurrentFilter(Number trial_barr, Number trial_theta) const;
     //@}
 
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -117,7 +125,6 @@ namespace Ipopt
     /** Infeasibility switching bound */
     Number theta_min_;
     Number theta_min_fact_;
-
     //@}
 
     /** Method for checking if the current step size satisfies the
@@ -265,16 +272,32 @@ namespace Ipopt
      *  increased more than this compared to the current point, the
      *  trial point is rejected. */
     Number obj_max_inc_;
+
+    /** enumeration for the different alpha_for_y_ settings */
+    enum AlphaForYEnum {
+      PRIMAL_ALPHA_FOR_Y=0,
+      DUAL_ALPHA_FOR_Y,
+      MIN_ALPHA_FOR_Y,
+      MAX_ALPHA_FOR_Y,
+      SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y,
+      MIN_DUAL_INFEAS_ALPHA_FOR_Y
+    };
     /** Flag indicating whether the dual step size is to be used for
      *  the equality constraint multipliers. If 0, the primal step
      *  size is used, if 1 the dual step size, and if 2, the minimum
      *  of both. */
-    Index alpha_for_y_;
+    AlphaForYEnum alpha_for_y_;
 
     /** Flag indicating whether magic steps should be used. */
     bool magic_steps_;
+    /** enumeration for the corrector type */
+    enum CorrectorTypeEnum {
+      NO_CORRECTOR=0,
+      AFFINE_CORRECTOR,
+      PRIMAL_DUAL_CORRECTOR
+    };
     /** Type of corrector steps that should be tried. */
-    Index corrector_type_;
+    CorrectorTypeEnum corrector_type_;
     /** Flag indicating whether the line search should always accept
      *  the full (fraction-to-the-boundary) step. */
     bool ls_always_accept_;

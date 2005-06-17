@@ -15,6 +15,8 @@
 namespace Ipopt
 {
 
+  DeclareIpoptType(OptimalityErrorConvergenceCheck);
+
   /** Brief Class Description.
    *  Detailed Class Description.
    */
@@ -36,6 +38,11 @@ namespace Ipopt
 
     /** Overloaded convergence check */
     virtual ConvergenceStatus CheckConvergence();
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods (Hidden to avoid

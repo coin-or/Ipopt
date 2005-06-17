@@ -22,6 +22,8 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(IpoptCalculatedQuantities);
+
   IpoptCalculatedQuantities::IpoptCalculatedQuantities
   (const SmartPtr<IpoptNLP>& ip_nlp,
    const SmartPtr<IpoptData>& ip_data)
@@ -130,58 +132,27 @@ namespace Ipopt
   IpoptCalculatedQuantities::~IpoptCalculatedQuantities()
   {}
 
+  void IpoptCalculatedQuantities::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedNumberOption("s_max", "???", 0.0, true, 100.0);
+    roptions->AddLowerBoundedNumberOption("kappa_d", "???", 0.0, false, 1e-5); 
+    roptions->AddLowerBoundedNumberOption("s_move", "???", 0.0, false,  pow(std::numeric_limits<double>::epsilon(), 0.75) ); 
+    roptions->AddStringOption3("constraint_violation_norm_type", "norm to be used for the constraint violation", "1-norm",
+			       "1-norm", "use the 1-norm (abs sum)",
+			       "2-norm", "use the 2-norm sqrt(sum of squares)",
+			       "max-norm", "use the infinity norm (max)");
+  }
+
   bool IpoptCalculatedQuantities::Initialize(const Journalist& jnlst,
       const OptionsList& options,
       const std::string& prefix)
   {
-    Number value;
     std::string svalue;
 
-    if (options.GetNumericValue("s_max", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"s_max\": This value must be larger than 0.");
-      s_max_ = value;
-    }
-    else {
-      s_max_ = 100.;
-    }
-
-    if (options.GetNumericValue("kappa_d", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"kappa_d\": This value must be non-negative.");
-      kappa_d_ = value;
-    }
-    else {
-      kappa_d_ = 1e-5;
-    }
-
-    if (options.GetNumericValue("s_move_", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"s_move\": This value must be non-negative.");
-      s_move_ = value;
-    }
-    else {
-      s_move_ = pow(std::numeric_limits<double>::epsilon(), 0.75);
-    }
-
-    if (options.GetValue("constraint_violation_normtype", svalue, prefix)) {
-      if (svalue=="norm_1" || svalue=="1-norm" || svalue=="1norm") {
-        constr_viol_normtype_ = NORM_1;
-      }
-      else if (svalue=="norm_2" || svalue=="2-norm" || svalue=="2norm") {
-        constr_viol_normtype_ = NORM_2;
-      }
-      else if (svalue=="norm_max" || svalue=="max-norm" || svalue=="maxnorm") {
-        constr_viol_normtype_ = NORM_MAX;
-      }
-      else {
-        ASSERT_EXCEPTION(false, OptionsList::OPTION_OUT_OF_RANGE,
-                         "Option \"constraint_violation_normtype\": Unknown keyword \""+svalue+"\".");
-      }
-    }
-    else {
-      constr_viol_normtype_ = NORM_1;
-    }
+    options.GetNumericValue("s_max", s_max_, prefix);
+    options.GetNumericValue("kappa_d", kappa_d_, prefix);
+    options.GetNumericValue("s_move", s_move_, prefix);
+    options.GetEnumValue("constraint_violation_norm_type", (Index)constr_viol_normtype_, prefix);
 
     initialize_called_ = true;
     return true;

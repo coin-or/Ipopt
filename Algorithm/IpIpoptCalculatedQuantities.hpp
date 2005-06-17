@@ -18,10 +18,12 @@ namespace Ipopt
 
   /** Norm types */
   enum ENormType {
-    NORM_1,
+    NORM_1=0,
     NORM_2,
     NORM_MAX
   };
+
+  DeclareIpoptType(IpoptCalculatedQuantities);
 
   /** Class for all IPOPT specific calculated quantities.
    *  
@@ -332,6 +334,12 @@ namespace Ipopt
     {
       return constr_viol_normtype_;
     }
+
+    /** Methods for IpoptType */
+    //@{
+    /** Called by IpoptType to register the options */
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods

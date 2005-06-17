@@ -20,58 +20,36 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(WarmStartIterateInitializer);
+
   WarmStartIterateInitializer::WarmStartIterateInitializer()
       :
       IterateInitializer()
   {}
 
+  void WarmStartIterateInitializer::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedNumberOption("warm_start_bound_push", "same as bound_push for the regular initializer",
+ 					  0.0, true, 1e-3);
+    roptions->AddBoundedNumberOption("warm_start_bound_frac", "same as bound_frac for the regular initializer",
+ 				     0.0, true, 0.5, false, 1e-3);
+    roptions->AddLowerBoundedNumberOption("warm_start_mult_bound_push", "same as mult_bound_push for the regular initializer",
+ 					  0.0, true, 1e-3);
+    roptions->AddNumberOption("warm_start_mult_init_max", "(No Range?) max initial value for the equality multipliers",
+ 			      1e6);
+     roptions->AddNumberOption("warm_start_target_mu", "(No range?) - default value in code was 0e-3 ???",
+			       0e-3);
+  }
+
   bool WarmStartIterateInitializer::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    Number value = 0.0;
-    // Check for the algorithm options
-
-    if (options.GetNumericValue("warm_start_bound_push", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"warm_start_bound_push\": This value must be larger than 0.");
-      warm_start_bound_push_ = value;
-    }
-    else {
-      warm_start_bound_push_ = 1e-3;
-    }
-
-    if (options.GetNumericValue("warm_start_bound_frac", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0 && value <= 0.5, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"warm_start_bound_frac\": Value must be between 0 and 0.5.");
-      warm_start_bound_frac_ = value;
-    }
-    else {
-      warm_start_bound_frac_ = 1e-3;
-    }
-
-    if (options.GetNumericValue("warm_start_mult_bound_push", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"warm_start_mult_bound_push\": This value must be larger than 0.");
-      warm_start_mult_bound_push_ = value;
-    }
-    else {
-      warm_start_mult_bound_push_ = 1e-3;
-    }
-
-    if (options.GetNumericValue("warm_start_mult_init_max", value, prefix)) {
-      warm_start_mult_init_max_ = value;
-    }
-    else {
-      warm_start_mult_init_max_ = 1e6;
-    }
-
-    if (options.GetNumericValue("warm_start_target_mu", value, prefix)) {
-      warm_start_target_mu_ = value;
-    }
-    else {
-      warm_start_target_mu_ = 0e-3;
-    }
-
+    options.GetNumericValue("warm_start_bound_push", warm_start_bound_push_, prefix);
+    options.GetNumericValue("warm_start_bound_frac", warm_start_bound_frac_, prefix);
+    options.GetNumericValue("warm_start_mult_bound_push", warm_start_mult_bound_push_, prefix);
+    options.GetNumericValue("warm_start_mult_init_max", warm_start_mult_init_max_, prefix);
+    options.GetNumericValue("warm_start_target_mu", warm_start_target_mu_, prefix);
+    
     return true;
   }
 

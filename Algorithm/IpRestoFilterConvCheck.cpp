@@ -15,6 +15,8 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(RestoFilterConvergenceCheck);
+
   RestoFilterConvergenceCheck::RestoFilterConvergenceCheck()
       :
       orig_filter_line_search_(NULL)
@@ -37,22 +39,17 @@ namespace Ipopt
     orig_filter_line_search_ = &orig_filter_line_search;
   }
 
+  void RestoFilterConvergenceCheck::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddBoundedNumberOption("kappa_resto", "???", 
+				     0.0, true, 1.0, true, 0.9);
+  }
+
   bool RestoFilterConvergenceCheck::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
     DBG_ASSERT(orig_filter_line_search_ && "Need to call RestoFilterConvergenceCheck::SetOrigFilterLineSearch before Initialize");
-    Number value = 0.0;
-
-    // Check for the algorithm options
-    if (options.GetNumericValue("kappa_resto", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0 && value < 1.0,
-                       OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"kappa_resto\": This value must be larger than 0 and less than 1.");
-      kappa_resto_ = value;
-    }
-    else {
-      kappa_resto_ = 0.9;
-    }
+    options.GetNumericValue("kappa_resto", kappa_resto_, prefix);
 
     first_resto_iter_ = true;
 

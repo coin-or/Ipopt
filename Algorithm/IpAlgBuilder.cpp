@@ -36,6 +36,36 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(AlgorithmBuilder);
+
+  void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddStringOption2("scaling_method", "sets the scaling method for the problem", "none",
+			       "none", "no scaling will be performed",
+			       "mc19", "use the Harwell routine mc19 to find suitable scaling factors");
+    roptions->AddStringOption2("linear_solver", "set which linear solver should be used for the augmented system", "ma27",
+			       "ma27", "use the Harwell routine ma27",
+			       "pardiso", "use Pardiso (ref)");
+    roptions->AddStringOption2("warm_start_init_point", "use a warm start initialization or not", "no",
+			       "no", "do not use the warm start initialization",
+			       "yes", "use the warm start initialization");
+
+    roptions->AddStringOption2("muupdate", "which update option should be used for the barrier parameter, mu", "monotone",
+			       "monotone", "use a monotone mu update strategy",
+			       "nonmonotone", "use a nonmonotone update strategy");
+
+    roptions->AddStringOption3("muoracle", "when using  nonmonotone mu update strategy, this selects how the update is performed", "probing",
+			       "probing", "???",
+			       "loqo", "???",
+			       "optprobing", "???");
+
+    roptions->AddStringOption4("fixmuoracle", "???", "avgerage_compl",
+			       "probing", "???",
+			       "loqo", "???",
+			       "optprobing", "???",
+			       "avgerage_compl", "???");
+  }
+
   SmartPtr<IpoptAlgorithm>
   AlgorithmBuilder::BuildBasicAlgorithm(const Journalist& jnlst,
                                         const OptionsList& options,
@@ -50,29 +80,14 @@ namespace Ipopt
     // Create the solvers that will be used by the main algorithm
     SmartPtr<TSymScalingMethod> ScalingMethod;
     std::string scaling_method;
-    if (options.GetValue("scaling_method", scaling_method, prefix)) {
-      ASSERT_EXCEPTION(scaling_method=="mc19" || scaling_method=="none",
-                       OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"scaling_method\" has invalid value.");
-    }
-    else {
-      // ToDo: Somehow, MC19 doesn't work correctly in the new version...
-      scaling_method = "none";
-    }
+    options.GetValue("scaling_method", scaling_method, prefix);
     if (scaling_method=="mc19") {
       ScalingMethod = new Mc19TSymScalingMethod();
     }
 
     SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
     std::string linear_solver;
-    if (options.GetValue("linear_solver", linear_solver, prefix)) {
-      ASSERT_EXCEPTION(linear_solver=="ma27" || linear_solver=="pardiso",
-                       OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"linear_solver\" has invalid value.");
-    }
-    else {
-      linear_solver = "ma27";
-    }
+    options.GetValue("linear_solver", linear_solver, prefix);
     if (linear_solver=="ma27") {
       SolverInterface = new Ma27TSolverInterface();
     }
@@ -80,9 +95,7 @@ namespace Ipopt
 #ifdef HAVE_PARDISO
       SolverInterface = new PardisoSolverInterface();
 #else
-
-      ASSERT_EXCEPTION(false,
-                       OptionsList::OPTION_OUT_OF_RANGE,
+      THROW_EXCEPTION(OptionsList::OPTION_OUT_OF_RANGE,
                        "Selected solver Pardiso not available.");
 #endif
 
@@ -102,14 +115,11 @@ namespace Ipopt
     SmartPtr<EqMultiplierCalculator> EqMultCalculator =
       new LeastSquareMultipliers(*AugSolver);
     SmartPtr<IterateInitializer> IterInitializer;
-    Index ivalue;
     bool warm_start_init_point;
-    if (options.GetIntegerValue("warm_start_init_point", ivalue, prefix)) {
-      warm_start_init_point = (ivalue != 0);
-    }
-    else {
-      warm_start_init_point = false;
-    }
+    std::string warm_start_option;
+    options.GetValue("warm_start_init_point", warm_start_option, prefix);
+    warm_start_init_point = (warm_start_option == "yes");
+
     if (warm_start_init_point) {
       IterInitializer = new WarmStartIterateInitializer();
     }
@@ -133,34 +143,13 @@ namespace Ipopt
     // algorithm
     SmartPtr<MuUpdate> resto_MuUpdate;
     std::string resto_smuupdate;
-    if (options.GetValue("muupdate", resto_smuupdate, "resto."+prefix)) {
-      ASSERT_EXCEPTION(resto_smuupdate=="monotone" || resto_smuupdate=="nonmonotone",
-                       OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"resto_muupdate\" has invalid value.");
-    }
-    else {
-      resto_smuupdate = "monotone";
-    }
+    options.GetValue("muupdate", resto_smuupdate, "resto."+prefix);
+
     std::string resto_smuoracle;
     std::string resto_sfixmuoracle;
     if (resto_smuupdate=="nonmonotone" ) {
-      if (options.GetValue("muoracle", resto_smuoracle, "resto."+prefix)) {
-        ASSERT_EXCEPTION(resto_smuoracle=="loqo" || resto_smuoracle=="probing" || resto_smuoracle=="optprobing",
-                         OptionsList::OPTION_OUT_OF_RANGE,
-                         "Option \"resto_muoracle\" has invalid value.");
-      }
-      else {
-        resto_smuoracle = "probing";
-      }
-
-      if (options.GetValue("fixmuoracle", resto_sfixmuoracle, "resto."+prefix)) {
-        ASSERT_EXCEPTION(resto_sfixmuoracle=="loqo" || resto_sfixmuoracle=="probing" || resto_sfixmuoracle=="optprobing" || resto_sfixmuoracle=="average_compl",
-                         OptionsList::OPTION_OUT_OF_RANGE,
-                         "Option \"resto_fixmuoracle\" has invalid value.");
-      }
-      else {
-        resto_sfixmuoracle = "average_compl";
-      }
+      options.GetValue("muoracle", resto_smuoracle, "resto."+prefix);
+      options.GetValue("fixmuoracle", resto_sfixmuoracle, "resto."+prefix);
     }
 
     if (resto_smuupdate=="monotone" ) {
@@ -238,34 +227,12 @@ namespace Ipopt
     // Create the mu update that will be used by the main algorithm
     SmartPtr<MuUpdate> MuUpdate;
     std::string smuupdate;
-    if (options.GetValue("muupdate", smuupdate, prefix)) {
-      ASSERT_EXCEPTION(smuupdate=="monotone" || smuupdate=="nonmonotone",
-                       OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"muupdate\" has invalid value.");
-    }
-    else {
-      smuupdate = "monotone";
-    }
+    options.GetValue("muupdate", smuupdate, prefix);
     std::string smuoracle;
     std::string sfixmuoracle;
     if (smuupdate=="nonmonotone" ) {
-      if (options.GetValue("muoracle", smuoracle, prefix)) {
-        ASSERT_EXCEPTION(smuoracle=="loqo" || smuoracle=="probing" || smuoracle=="optprobing",
-                         OptionsList::OPTION_OUT_OF_RANGE,
-                         "Option \"muoracle\" has invalid value.");
-      }
-      else {
-        smuoracle = "probing";
-      }
-
-      if (options.GetValue("fixmuoracle", sfixmuoracle, prefix)) {
-        ASSERT_EXCEPTION(sfixmuoracle=="loqo" || sfixmuoracle=="probing" || sfixmuoracle=="optprobing" || sfixmuoracle=="average_compl",
-                         OptionsList::OPTION_OUT_OF_RANGE,
-                         "Option \"fixmuoracle\" has invalid value.");
-      }
-      else {
-        sfixmuoracle = "average_compl";
-      }
+      options.GetValue("muoracle", smuoracle, prefix);
+      options.GetValue("fixmuoracle", sfixmuoracle, prefix);
     }
 
     if (smuupdate=="monotone" ) {
