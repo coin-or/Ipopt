@@ -13,6 +13,8 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(RestoIterateInitializer);
+
   RestoIterateInitializer::RestoIterateInitializer
   (const SmartPtr<EqMultiplierCalculator>& resto_eq_mult_calculator)
       :
@@ -20,18 +22,16 @@ namespace Ipopt
       resto_eq_mult_calculator_(resto_eq_mult_calculator)
   {}
 
+  void RestoIterateInitializer::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedNumberOption("laminitmax", "maximum value for the initial lambda's", 
+					  0.0, false, 1e3);
+  }
+
   bool RestoIterateInitializer::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    Number value = 0.0;
-    if (options.GetNumericValue("laminitmax", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"laminitmax\": Value must be non-negative.");
-      laminitmax_ = value;
-    }
-    else {
-      laminitmax_ = 1e3;
-    }
+    options.GetNumericValue("laminitmax", laminitmax_, prefix);
 
     bool retvalue = true;
     if (IsValid(resto_eq_mult_calculator_)) {

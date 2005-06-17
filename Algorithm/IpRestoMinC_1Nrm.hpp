@@ -17,6 +17,8 @@
 namespace Ipopt
 {
 
+  DeclareIpoptType(MinC_1NrmRestorationPhase);
+
   /** Restoration Phase that minimizes the 1-norm of the constraint
    *  violation - using the interior point method (Ipopt).
    */
@@ -41,6 +43,11 @@ namespace Ipopt
     /** Overloaded from AlgorithmStrategy case class */
     virtual bool InitializeImpl(const OptionsList& options,
                                 const std::string& prefix);
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
   protected:
     /** Overloaded method from RestorationPhase. */

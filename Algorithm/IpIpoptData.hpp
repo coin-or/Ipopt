@@ -16,9 +16,13 @@
 #include "IpReferenced.hpp"
 #include "IpOptionsList.hpp"
 #include "IpIteratesVector.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
+
+  DeclareIpoptType(IpoptData);
+
   /* Forward declaration */
   class IpoptNLP;
 
@@ -379,6 +383,11 @@ namespace Ipopt
       info_skip_output_ = false;
       info_string_.clear();
     }
+    //@}
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> reg_options);
     //@}
 
   private:

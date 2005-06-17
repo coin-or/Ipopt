@@ -20,6 +20,8 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(NonmonotoneMuUpdate);
+
   NonmonotoneMuUpdate::NonmonotoneMuUpdate
   (const SmartPtr<LineSearch>& line_search,
    const SmartPtr<MuOracle>& free_mu_oracle,
@@ -39,116 +41,78 @@ namespace Ipopt
   NonmonotoneMuUpdate::~NonmonotoneMuUpdate()
   {}
 
+  void NonmonotoneMuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedNumberOption("mu_max", "maximum value for mu",
+					  0.0, true, 1e10);
+    roptions->AddLowerBoundedNumberOption("mu_min", "minimum value for mu - AW We need to do something with this one... You override the default in the code - but I assume that you do not want to do this if the user specified something ",
+					  0.0, true, 1e-9);
+    roptions->AddLowerBoundedNumberOption("mu_safeguard_exp", "???",
+					  0.0, false, 0.0);
+    roptions->AddLowerBoundedNumberOption("mu_safeguard_factor", "???",
+					  0.0, false, 0.0);
+    roptions->AddBoundedNumberOption("nonmonotone_mu_refs_redfact", "???",
+				     0.0, true, 1.0, true, 0.9999);
+    roptions->AddLowerBoundedIntegerOption("nonmonotone_mu_max_refs", "???",
+					   0, 4);
+    roptions->AddStringOption2("mu_never_fix", "??? - this seems like a double negative", "no",
+			       "no", "allow mu to be fixed",
+			       "yes", "never fix mu");
+    roptions->AddStringOption3("adaptive_globalization", "???", "type1",
+			       "type1", "need a better name and desc",
+			       "type2", "need a better name and desc",
+			       "type3", "need a better name and desc");
+    roptions->AddLowerBoundedNumberOption("filter_max_margin", "???",
+					  0.0, true, 1.0);
+    roptions->AddBoundedNumberOption("filter_margin_fact", "???",
+				     0.0, true, 1.0, true, 1e-5);
+    roptions->AddStringOption2("restore_accepted_iterate", "???", "no",
+			       "no", "don't restore accepted iterate",
+			       "yes", "restore accepted iterate");
+    roptions->AddLowerBoundedNumberOption("fixed_mu_avrg_factor", "???",
+					  0.0, true, 0.8);
+
+    roptions->AddStringOption4("nonmonotone_kkt_norm_type", "norm to be used for the constraint violation", "1-norm",
+			       "1-norm", "use the 1-norm (abs sum)",
+			       "2-norm", "use the 2-norm sqrt(sum of squares)",
+			       "max-norm", "use the infinity norm (max)",
+			       "other", "ToDo: sensible name and desc");
+
+    roptions->AddStringOption4("nonmonotone_function_centrality", "???", "none",
+			       "none", "???",
+			       "log", "compute the centrality as the complementarity * the log of the centrality measure",
+			       "reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure",
+			       "cubed-reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure cubed");
+
+    roptions->AddStringOption2("nonmonotone_kkt_balancing_term", "???", "none",
+			       "none", "no balancing term",
+			       "standard", "standard cubic balancing term");
+
+  }
+
   bool NonmonotoneMuUpdate::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    Number value;
-
-    if (options.GetNumericValue("mu_max", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"mu_max\": This value must be larger than 0.");
-      mu_max_ = value;
-    }
-    else {
-      mu_max_ = 1e10;
-    }
-
-    if (options.GetNumericValue("mu_min", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0 && value < mu_max_, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"mu_min\": This value must be larger than 0 and less than mu_max.");
-      mu_min_ = value;
-    }
-    else {
-      mu_min_ = 0.1*Min(IpData().tol(), IpData().compl_inf_tol());
-    }
-
-    if (options.GetNumericValue("tau_min", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0 && value < 1.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"tau_min\": This value must be between 0 and 1.");
-      tau_min_ = value;
-    }
-    else {
-      tau_min_ = 0.99;
-    }
-
-    if (options.GetNumericValue("mu_safeguard_exp", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"mu_safeguard_exp\": This value must be non-negative.");
-      mu_safeguard_exp_ = value;
-    }
-    else {
-      mu_safeguard_exp_ = 0.;
-    }
-
-    if (options.GetNumericValue("mu_safeguard_factor", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"mu_safeguard_factor\": This value must be non-negative.");
-      mu_safeguard_factor_ = value;
-    }
-    else {
-      mu_safeguard_factor_ = 0.;
-    }
-
-    if (options.GetNumericValue("nonmonotone_mu_refs_redfact", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0 && value < 1.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"nonmonotone_mu_refs_redfact\": This value must be between 0 and 1.");
-      refs_red_fact_ = value;
-    }
-    else {
-      refs_red_fact_ = 0.9999;
-    }
-
-    Index ivalue;
-    if (options.GetIntegerValue("nonmonotone_mu_max_refs", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue >= 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"nonmonotone_mu_max_refs\": This value must be non-negative.");
-      num_refs_max_ = ivalue;
-    }
-    else {
-      num_refs_max_ = 4;
-    }
-
-    if (options.GetIntegerValue("mu_never_fix", ivalue, prefix)) {
-      mu_never_fix_ = (ivalue != 0);
-    }
-    else {
-      mu_never_fix_ = false;
-    }
-
-    if (options.GetIntegerValue("adaptive_globalization", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=1 && ivalue<=3,
-                       OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"adaptive_globalization\": This value must be between 1 and 3.");
-      adaptive_globalization_ = ivalue;
-    }
-    else {
-      adaptive_globalization_ = 1;
-    }
-
-    if (options.GetNumericValue("filter_max_margin", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"filter_max_margin\": This value must be positive.");
-      filter_max_margin_ = value;
-    }
-    else {
-      filter_max_margin_ = 1.;
-    }
-
-    if (options.GetNumericValue("filter_margin_fact", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0 && value < 1, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"filter_margin_fact\": This value must be between 0 and 1.");
-      filter_margin_fact_ = value;
-    }
-    else {
-      filter_margin_fact_ = 1e-5;
-    }
-
-    if (options.GetIntegerValue("restore_accepted_iterate", ivalue, prefix)) {
-      restore_accepted_iterate_ = (ivalue != 0);
-    }
-    else {
-      restore_accepted_iterate_ = false;
-    }
+    options.GetNumericValue("mu_max", mu_max_, prefix);
+    options.GetNumericValue("mu_min", mu_min_, prefix);
+//     if (options.GetNumericValue("mu_min", value, prefix)) {
+//       ASSERT_EXCEPTION(value > 0.0 && value < mu_max_, OptionsList::OPTION_OUT_OF_RANGE,
+//                        "Option \"mu_min\": This value must be larger than 0 and less than mu_max.");
+//       mu_min_ = value;
+//     }
+//     else {
+//       mu_min_ = 0.1*Min(IpData().tol(), IpData().compl_inf_tol());
+//     }
+    options.GetNumericValue("tau_min", tau_min_, prefix);
+    options.GetNumericValue("mu_safeguard_exp", mu_safeguard_exp_, prefix);
+    options.GetNumericValue("mu_safeguard_factor", mu_safeguard_factor_, prefix);
+    options.GetNumericValue("nonmonotone_mu_refs_redfact", refs_red_fact_, prefix);
+    options.GetIntegerValue("nonmonotone_mu_max_refs", num_refs_max_, prefix);
+    options.GetBoolValue("mu_never_fix", mu_never_fix_, prefix);
+    options.GetEnumValue("adaptive_globalization", (Index)adaptive_globalization_, prefix);
+    options.GetNumericValue("filter_max_margin", filter_max_margin_, prefix);
+    options.GetNumericValue("filter_margin_fact", filter_margin_fact_, prefix);
+    options.GetBoolValue("restore_accepted_iterate", restore_accepted_iterate_, prefix);
 
     bool retvalue = free_mu_oracle_->Initialize(Jnlst(), IpNLP(), IpData(),
                     IpCq(), options, prefix);
@@ -164,84 +128,14 @@ namespace Ipopt
       }
     }
 
-    if (options.GetNumericValue("fixed_mu_avrg_factor", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"fixed_mu_avrg_factor\": This value must be larger than 0.");
-      fixed_mu_avrg_factor_ = value;
-    }
-    else {
-      fixed_mu_avrg_factor_ = 0.8;
-    }
+    options.GetNumericValue("fixed_mu_avrg_factor", fixed_mu_avrg_factor_, prefix);
+    options.GetNumericValue("kappa_epsilon", kappa_epsilon_, prefix);
+    options.GetNumericValue("kappa_mu", kappa_mu_, prefix);
+    options.GetNumericValue("theta_mu", theta_mu_, prefix);
 
-    // ToDo combine the following with MonotoneMuUpdate
-    if (options.GetNumericValue("kappa_epsilon", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"kappa_epsilon\": This value must be larger than 0.");
-      kappa_epsilon_ = value;
-    }
-    else {
-      kappa_epsilon_ = 10.0;
-    }
-
-    if (options.GetNumericValue("kappa_mu", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0.0 && value < 1.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"kappa_mu\": This value must be between 0 and 1.");
-      kappa_mu_ = value;
-    }
-    else {
-      kappa_mu_ = 0.2;
-    }
-
-    if (options.GetNumericValue("theta_mu", value, prefix)) {
-      ASSERT_EXCEPTION(value > 1.0 && value < 2.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"theta_mu\": This value must be between 1 and 2.");
-      theta_mu_ = value;
-    }
-    else {
-      theta_mu_ = 1.5;
-    }
-
-    if (options.GetIntegerValue("nonmonotone_kkt_norm", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=1 && ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"nonmonotone_kkt_norm\": This value must be between 1 and 3.");
-      nonmonotone_kkt_norm_ = ivalue;
-    }
-    else if (options.GetIntegerValue("quality_function_norm", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=1 && ivalue<=4, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"quality_function_norm\": This value must be between 1 and 3.");
-      nonmonotone_kkt_norm_ = ivalue;
-    }
-    else {
-      nonmonotone_kkt_norm_ = 1;
-    }
-
-    if (options.GetIntegerValue("nonmonotone_kkt_centrality", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"nonmonotone_kkt_centrality\": This value must be between 0 and 3.");
-      nonmonotone_kkt_centrality_ = ivalue;
-    }
-    else if (options.GetIntegerValue("quality_function_centrality", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"quality_function_centrality\": This value must be between 0 and 3.");
-      nonmonotone_kkt_centrality_ = ivalue;
-    }
-    else {
-      nonmonotone_kkt_centrality_ = 0;
-    }
-
-    if (options.GetIntegerValue("nonmonotone_kkt_balancing_term", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"nonmonotone_kkt_balancing_term\": This value must be between 0 and 3.");
-      nonmonotone_kkt_balancing_term_ = ivalue;
-    }
-    else if (options.GetIntegerValue("quality_function_balancing_term", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"quality_function_balancing_term\": This value must be between 0 and 3.");
-      nonmonotone_kkt_balancing_term_ = ivalue;
-    }
-    else {
-      nonmonotone_kkt_balancing_term_ = 0;
-    }
+    options.GetEnumValue("nonmonotone_kkt_norm", (Index)nonmonotone_kkt_norm_, prefix);
+    options.GetEnumValue("nonmonotone_kkt_centrality", (Index)nonmonotone_kkt_centrality_, prefix);
+    options.GetEnumValue("nonmonotone_kkt_balancing_term", (Index)nonmonotone_kkt_balancing_term_, prefix);
 
     init_dual_inf_ = -1.;
     init_primal_inf_ = -1.;
@@ -423,7 +317,7 @@ namespace Ipopt
     bool retval = true;
 
     switch (adaptive_globalization_) {
-      case 1 : {
+      case AG_1 : {
         Index num_refs = refs_vals_.size();
         if (num_refs >= num_refs_max_) {
           retval = false;
@@ -438,12 +332,12 @@ namespace Ipopt
         }
       }
       break;
-      case 2 : {
+      case AG_2 : {
         retval = filter_.Acceptable(IpCq().curr_f(),
                                     IpCq().curr_constraint_violation());
       }
       break;
-      case 3 : {
+      case AG_3 : {
         Number curr_error = curr_norm_pd_system();
         Number margin = filter_margin_fact_*Min(filter_max_margin_, curr_error);
         retval = filter_.Acceptable(IpCq().curr_f() + margin,
@@ -461,7 +355,7 @@ namespace Ipopt
   NonmonotoneMuUpdate::RememberCurrentPointAsAccepted()
   {
     switch (adaptive_globalization_) {
-      case 1 : {
+      case AG_1 : {
         Number curr_error = curr_norm_pd_system();
         Index num_refs = refs_vals_.size();
         if (num_refs >= num_refs_max_) {
@@ -481,7 +375,7 @@ namespace Ipopt
         }
       }
       break;
-      case 2 : {
+      case AG_2 : {
         Number theta = IpCq().curr_constraint_violation();
         filter_.AddEntry(IpCq().curr_f() - filter_margin_fact_*theta,
                          IpCq().curr_constraint_violation() - filter_margin_fact_*theta,
@@ -489,7 +383,7 @@ namespace Ipopt
         filter_.Print(Jnlst());
       }
       break;
-      case 3 : {
+      case AG_3 : {
         filter_.AddEntry(IpCq().curr_f(),
                          IpCq().curr_constraint_violation(),
                          IpData().iter_count());
@@ -515,7 +409,7 @@ namespace Ipopt
   Number
   NonmonotoneMuUpdate::min_ref_val()
   {
-    DBG_ASSERT(adaptive_globalization_==1);
+    DBG_ASSERT(adaptive_globalization_==AG_1);
     Number min_ref;
     DBG_ASSERT(refs_vals_.size()>0);
     std::list<Number>::iterator iter = refs_vals_.begin();
@@ -531,7 +425,7 @@ namespace Ipopt
   Number
   NonmonotoneMuUpdate::max_ref_val()
   {
-    DBG_ASSERT(adaptive_globalization_==1);
+    DBG_ASSERT(adaptive_globalization_==AG_1);
     Number max_ref;
     DBG_ASSERT(refs_vals_.size()>0);
     std::list<Number>::iterator iter = refs_vals_.begin();
@@ -596,7 +490,7 @@ namespace Ipopt
     Number primal_inf;
     Number complty;
     switch (nonmonotone_kkt_norm_) {
-      case 1:
+      case NKN_NORM_1:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_1);
       primal_inf =
@@ -613,7 +507,7 @@ namespace Ipopt
         complty /= (Number)n_comp;
       }
       break;
-      case 2:
+      case NKN_NORM_2:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_2);
       dual_inf *= dual_inf;
@@ -633,7 +527,7 @@ namespace Ipopt
         complty /= (Number)n_comp;
       }
       break;
-      case 3:
+      case NKN_NORM_MAX:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_MAX);
       primal_inf =
@@ -641,7 +535,7 @@ namespace Ipopt
       complty =
         IpCq().curr_complementarity(0., NORM_MAX);
       break;
-      case 4:
+      case NKN_NORM_OTHER:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_2);
       primal_inf =
@@ -686,7 +580,7 @@ namespace Ipopt
       balancing_term = pow(Max(0., Max(dual_inf,primal_inf)-complty),3);
       break;
       default:
-      DBG_ASSERT("Unknown value for quality_function_balancing term_");
+      DBG_ASSERT("Unknown value for nonmonotone_function_balancing term_");
     }
 
     DBG_ASSERT(centrality>=0.);
@@ -735,7 +629,7 @@ namespace Ipopt
       Max(mu_safeguard_factor_ * (dual_inf/init_dual_inf_),
           mu_safeguard_factor_ * (primal_inf/init_primal_inf_));
 
-    if (adaptive_globalization_==1) {
+    if (adaptive_globalization_==AG_1) {
       lower_mu_safeguard = Min(lower_mu_safeguard, min_ref_val());
     }
 

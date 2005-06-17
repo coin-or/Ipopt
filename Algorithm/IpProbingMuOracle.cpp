@@ -19,6 +19,8 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(ProbingMuOracle);
+
   ProbingMuOracle::ProbingMuOracle(const SmartPtr<PDSystemSolver>& pd_solver)
       :
       MuOracle(),
@@ -30,19 +32,15 @@ namespace Ipopt
   ProbingMuOracle::~ProbingMuOracle()
   {}
 
+  void ProbingMuOracle::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    // None to register...
+  }
+
   bool ProbingMuOracle::InitializeImpl(const OptionsList& options,
                                        const std::string& prefix)
   {
-    // Check for the algorithm options
-    Number value;
-    if (options.GetNumericValue("sigma_max", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"sigma_max\": This value must be positive.");
-      sigma_max_ = value;
-    }
-    else {
-      sigma_max_ = 1.;
-    }
+    options.GetNumericValue("sigma_max", sigma_max_, prefix);
 
     return true;
   }

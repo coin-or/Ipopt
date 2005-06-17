@@ -11,9 +11,12 @@
 
 #include "IpIpoptNLP.hpp"
 #include "IpException.hpp"
+#include"IpIpoptType.hpp"
 
 namespace Ipopt
 {
+
+  DeclareIpoptType(OrigIpoptNLP);
 
   /** This class maps the traditional NLP into
    *  something that is more useful by Ipopt.
@@ -189,6 +192,12 @@ namespace Ipopt
     {
       return h_evals_;
     }
+    //@}
+
+    /** Methods for IpoptType */
+    //@{
+    /** Called by IpoptType to register the options */
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
   private:

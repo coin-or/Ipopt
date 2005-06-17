@@ -17,6 +17,8 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(OrigIpoptNLP);
+
   OrigIpoptNLP::OrigIpoptNLP(const SmartPtr<const Journalist>& jnlst,
                              const SmartPtr<NLP>& nlp)
       :
@@ -43,19 +45,17 @@ namespace Ipopt
   OrigIpoptNLP::~OrigIpoptNLP()
   {}
 
+  void OrigIpoptNLP::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedNumberOption("bound_relax_factor","factor for initial relaxation of the bounds",
+					  0, false, 1e-8);
+  }
+
   bool OrigIpoptNLP::Initialize(const Journalist& jnlst,
                                 const OptionsList& options,
                                 const std::string& prefix)
   {
-    Number value;
-    if (options.GetNumericValue("bound_relax_factor", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"bound_relax_factor\": This value must be non-negative.");
-      bound_relax_factor_ = value;
-    }
-    else {
-      bound_relax_factor_ = 1e-8;
-    }
+    options.GetNumericValue("bound_relax_factor", bound_relax_factor_, prefix);
 
     if (!nlp_->ProcessOptions(options, prefix)) {
       return false;

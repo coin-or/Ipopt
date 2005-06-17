@@ -11,9 +11,13 @@
 
 #include "IpMuOracle.hpp"
 #include "IpPDSystemSolver.hpp"
+#include "IpIpoptType.hpp"
+#include "IpIpoptCalculatedQuantities.hpp"
 
 namespace Ipopt
 {
+
+  DeclareIpoptType(OptProbingMuOracle);
 
   /** Implementation of the probing strategy for computing the
    *  barrier parameter.
@@ -37,6 +41,11 @@ namespace Ipopt
      *  could be used in the current iteration (using the LOQO formula).
      */
     virtual Number CalculateMu();
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods
@@ -126,20 +135,26 @@ namespace Ipopt
     /** Upper bound on centering parameter sigma */
     Number sigma_max_;
     /** Norm to be used for the quality function. 1: 1-norm, 2: 2-norm */
-    Index quality_function_norm_;
+    ENormType quality_function_norm_;
     /** Flag indicating whether the components of the quality function
      *  should be normalized. */
     bool quality_function_normalized_;
     /** Flag indicating how centrality should be involved in the
      *  quality function */
-    Index quality_function_centrality_;
+    QualityFunctionCentralityEnum quality_function_centrality_;
+    /** enum for the dual infeasibility term in the quality function */
+    enum QualityFunctionDualInfeasibilityTypeEnum
+      {
+	TYPE1=0,
+	TYPE2
+      };
     /** Flag indicating what term is to be used for the dual
      *  infeasibility in the quality function. */
-    Index quality_function_dual_inf_;
+    QualityFunctionDualInfeasibilityTypeEnum quality_function_dual_inf_;
     /** Flag indicating whether we use a balancing term in the quality
      *  function.
      */
-    Index quality_function_balancing_term_;
+    QualityFunctionBalancingTermEnum quality_function_balancing_term_;
     /** Relative tolerance for golden bi-section algorithm. */
     Number bisection_tol_;
     /** Maximal number of bi-section steps in the golden bisection

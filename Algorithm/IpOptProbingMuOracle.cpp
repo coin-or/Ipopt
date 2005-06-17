@@ -19,6 +19,8 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(OptProbingMuOracle);
+
   OptProbingMuOracle::OptProbingMuOracle(const SmartPtr<PDSystemSolver>& pd_solver)
       :
       MuOracle(),
@@ -51,81 +53,52 @@ namespace Ipopt
   OptProbingMuOracle::~OptProbingMuOracle()
   {}
 
+  void OptProbingMuOracle::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedNumberOption("sigma_max", "???", 
+					  0.0, true, 1e2);
+    roptions->AddStringOption3("quality_function_norm_type", "norm to be used for the quality function", "2-norm",
+			       "1-norm", "use the 1-norm (abs sum)",
+			       "2-norm", "use the 2-norm sqrt(sum of squares)",
+			       "max-norm", "use the infinity norm (max)");
+    roptions->AddStringOption2("quality_function_normalized", "set whether or not the quality function should be normalized", "no",
+			       "no", "do not normalize the quality function",
+			       "yes", "normalize the quality function");
+    roptions->AddStringOption4("quality_function_centrality", "???", "log",
+			       "none", "???",
+			       "log", "compute the centrality as the complementarity * the log of the centrality measure",
+			       "reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure",
+			       "cubed-reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure cubed");
+    roptions->AddStringOption2("quality_function_dual_inf", "???", "type-1",
+			       "type-1", "???",
+			       "type-2", "???");
+    roptions->AddStringOption2("quality_function_balancing_term", "???", "none",
+			       "none", "no balancing term",
+			       "standard", "standard cubic balancing term");
+    roptions->AddIntegerOption("max_bisection_steps", "??? No Range ???", 4);
+			       
+	
+    roptions->AddBoundedNumberOption("bisection_tol", "tolerance for the bisection step length search",
+				     0.0, true, 1.0, true, 1e-3);
+    roptions->AddStringOption2("dual_alpha_for_y", "???", "no",
+			       "no", "???",
+			       "yes", "???");
+			       
+  }
+
+
   bool OptProbingMuOracle::InitializeImpl(const OptionsList& options,
                                           const std::string& prefix)
   {
-    // Check for the algorithm options
-    Number value;
-    Index ivalue;
-    if (options.GetNumericValue("sigma_max", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"sigma_max\": This value must be positive.");
-      sigma_max_ = value;
-    }
-    else {
-      sigma_max_ = 1e2;
-    }
+    options.GetNumericValue("sigma_max", sigma_max_, prefix);
 
-    if (options.GetIntegerValue("quality_function_norm", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=1 && ivalue<=4, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"quality_function_norm\": This value must be between 1 and 3.");
-      quality_function_norm_ = ivalue;
-    }
-    else {
-      quality_function_norm_ = 2;
-    }
-
-    if (options.GetIntegerValue("quality_function_normalized", ivalue, prefix)) {
-      quality_function_normalized_ = !(ivalue==0);
-    }
-    else {
-      quality_function_normalized_ = false;
-    }
-
-    if (options.GetIntegerValue("quality_function_centrality", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=3, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"quality_function_centrality\": This value must be 0, 1, 2 or 3.");
-      quality_function_centrality_ = ivalue;
-    }
-    else {
-      quality_function_centrality_ = 1;
-    }
-
-    if (options.GetIntegerValue("quality_function_dual_inf", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=1 && ivalue<=2, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"quality_function_dual_inf\": This value must be 1 or 2.");
-      quality_function_dual_inf_ = ivalue;
-    }
-    else {
-      quality_function_dual_inf_ = 1;
-    }
-
-    if (options.GetIntegerValue("quality_function_balancing_term", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue>=0 && ivalue<=1, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"quality_function_balancing_term\": This value must be 0 or 1.");
-      quality_function_balancing_term_ = ivalue;
-    }
-    else {
-      quality_function_balancing_term_ = 0;
-    }
-
-    if (options.GetIntegerValue("max_bisection_steps", ivalue, prefix)) {
-      //      ASSERT_EXCEPTION(ivalue>0, OptionsList::OPTION_OUT_OF_RANGE,
-      //                       "Option \"max_bisection_steps\": This value must be positive.");
-      max_bisection_steps_ = ivalue;
-    }
-    else {
-      max_bisection_steps_ = 4;
-    }
-
-    if (options.GetNumericValue("bisection_tol", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0 && value <1., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"bisection_tol\": This value must be between 0 and 1.");
-      bisection_tol_ = value;
-    }
-    else {
-      bisection_tol_ = 1e-3;
-    }
+    options.GetEnumValue("quality_function_norm_type", (Index)quality_function_norm_, prefix);
+    options.GetBoolValue("quality_function_normalized", quality_function_normalized_, prefix);
+    options.GetEnumValue("quality_function_centrality", (Index)quality_function_centrality_, prefix);
+    options.GetEnumValue("quality_function_dual_inf", (Index)quality_function_dual_inf_, prefix);
+    options.GetEnumValue("quality_function_balancing_term", (Index)quality_function_balancing_term_, prefix);
+    options.GetIntegerValue("max_bisection_steps", max_bisection_steps_, prefix);
+    options.GetNumericValue("bisection_tol", bisection_tol_, prefix);
 
     if (quality_function_normalized_) {
       // Set the scaling values to a negative value to indicate that
@@ -140,12 +113,7 @@ namespace Ipopt
       compl_inf_scal_ = 1.;
     }
 
-    if (options.GetIntegerValue("dual_alpha_for_y", ivalue, prefix)) {
-      dual_alpha_for_y_ = (ivalue != 0);
-    }
-    else {
-      dual_alpha_for_y_ = false;
-    }
+    options.GetBoolValue("dual_alpha_for_y", dual_alpha_for_y_, prefix);
 
     return true;
   }
@@ -177,7 +145,7 @@ namespace Ipopt
     tmp_v_L_ = IpNLP().d_L()->MakeNew();
     tmp_v_U_ = IpNLP().d_U()->MakeNew();
 
-    if (quality_function_dual_inf_==2) {
+    if (quality_function_dual_inf_==TYPE2) {
       tmp_dual_inf_x_ = IpCq().curr_grad_lag_x()->MakeNew();
       tmp_dual_inf_s_ = IpCq().curr_grad_lag_s()->MakeNew();
     }
@@ -276,7 +244,7 @@ namespace Ipopt
     SmartPtr<const Vector> jac_dT_times_step_aff_y_d;
     SmartPtr<const Vector> jac_cT_times_step_cen_y_c;
     SmartPtr<const Vector> jac_dT_times_step_cen_y_d;
-    if (quality_function_dual_inf_==2 && dual_alpha_for_y_) {
+    if (quality_function_dual_inf_==TYPE2 && dual_alpha_for_y_) {
       jac_cT_times_step_aff_y_c = IpCq().curr_jac_cT_times_vec(*step_aff->y_c());
       jac_dT_times_step_aff_y_d = IpCq().curr_jac_dT_times_vec(*step_aff->y_d());
       jac_cT_times_step_cen_y_c = IpCq().curr_jac_cT_times_vec(*step_cen->y_c());
@@ -494,7 +462,7 @@ namespace Ipopt
     tmp_v_L_ = NULL;
     tmp_v_U_ = NULL;
 
-    if (quality_function_dual_inf_==2) {
+    if (quality_function_dual_inf_==TYPE2) {
       tmp_dual_inf_x_ = NULL;
       tmp_dual_inf_s_ = NULL;
     }
@@ -556,7 +524,7 @@ namespace Ipopt
       DBG_ASSERT(compl_inf_scal_ < 0.);
 
       switch (quality_function_norm_) {
-        case 1:
+        case NORM_1:
         dual_inf_scal_ = Max(1., IpCq().curr_grad_lag_x()->Asum() +
                              IpCq().curr_grad_lag_s()->Asum());
 
@@ -575,7 +543,7 @@ namespace Ipopt
         DBG_ASSERT(n_comp>0);
         compl_inf_scal_ /= n_comp;
         break;
-        case 2:
+        case NORM_2:
         dual_inf_scal_ = Max(1., pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
                              pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
 
@@ -594,7 +562,7 @@ namespace Ipopt
         DBG_ASSERT(n_comp>0);
         compl_inf_scal_ /= n_comp;
         break;
-        case 3:
+        case NORM_MAX:
         dual_inf_scal_ = Max(1., IpCq().curr_grad_lag_x()->Amax(),
                              IpCq().curr_grad_lag_s()->Amax());
 
@@ -679,7 +647,7 @@ namespace Ipopt
     Number primal_inf;
     Number compl_inf;
 
-    if (quality_function_dual_inf_==2) {
+    if (quality_function_dual_inf_==TYPE2) {
       tmp_dual_inf_x_->AddOneVector(1.-alpha_primal,
                                     *IpCq().curr_grad_lag_x(), 0.);
       tmp_dual_inf_s_->AddOneVector(1.-alpha_primal,
@@ -709,8 +677,8 @@ namespace Ipopt
     }
 
     switch (quality_function_norm_) {
-      case 1:
-      if (quality_function_dual_inf_==2) {
+      case NORM_1:
+      if (quality_function_dual_inf_==TYPE2) {
         dual_inf = tmp_dual_inf_x_->Asum() + tmp_dual_inf_s_->Asum();
       }
       else {
@@ -731,8 +699,8 @@ namespace Ipopt
       DBG_ASSERT(n_comp>0);
       compl_inf /= n_comp;
       break;
-      case 2:
-      if (quality_function_dual_inf_==2) {
+      case NORM_2:
+      if (quality_function_dual_inf_==TYPE2) {
         dual_inf = pow(tmp_dual_inf_x_->Nrm2(), 2) + pow(tmp_dual_inf_s_->Nrm2(), 2);
       }
       else {
@@ -754,8 +722,8 @@ namespace Ipopt
       DBG_ASSERT(n_comp>0);
       compl_inf /= n_comp;
       break;
-      case 3:
-      if (quality_function_dual_inf_==2) {
+      case NORM_MAX:
+      if (quality_function_dual_inf_==TYPE2) {
         dual_inf = Max(tmp_dual_inf_x_->Amax(), tmp_dual_inf_s_->Amax());
       }
       else {
@@ -771,7 +739,7 @@ namespace Ipopt
             tmp_slack_s_L_->Amax(), tmp_slack_s_U_->Amax());
       break;
       case 4:
-      if (quality_function_dual_inf_==2) {
+      if (quality_function_dual_inf_==TYPE2) {
         dual_inf = sqrt(pow(tmp_dual_inf_x_->Nrm2(), 2) + pow(tmp_dual_inf_s_->Nrm2(), 2));
       }
       else {
@@ -805,15 +773,15 @@ namespace Ipopt
     Number quality_function = dual_inf + primal_inf + compl_inf;
 
     switch (quality_function_centrality_) {
-      case 0:
+      case CEN_NONE:
       //Nothing
       break;
-      case 1:
+      case CEN_LOG:
       quality_function -= compl_inf*log(xi);
       break;
-      case 2:
+      case CEN_RECIPROCAL:
       quality_function += compl_inf/xi;
-      case 3:
+      case CEN_CUBED_RECIPROCAL:
       quality_function += compl_inf/pow(xi,3);
       break;
       default:
@@ -821,10 +789,10 @@ namespace Ipopt
     }
 
     switch (quality_function_balancing_term_) {
-      case 0:
+      case BT_NONE:
       //Nothing
       break;
-      case 1:
+      case BT_CUBIC:
       quality_function += pow(Max(0., Max(dual_inf,primal_inf)-compl_inf),3);
       break;
       default:

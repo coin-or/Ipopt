@@ -19,11 +19,12 @@
 #include "IpOptionsList.hpp"
 #include "IpIterateInitializer.hpp"
 #include "IpIterationOutput.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
 
-  /** forward declarations */
+  DeclareIpoptType(IpoptAlgorithm);
 
   /** The main ipopt algorithm class.
    *  Main Ipopt algorithm class, contains the main optimize method,
@@ -77,6 +78,11 @@ namespace Ipopt
 
     /** Main solve method. */
     SolverReturn Optimize();
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods

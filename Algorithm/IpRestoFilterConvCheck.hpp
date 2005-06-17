@@ -12,9 +12,12 @@
 #include "IpUtils.hpp"
 #include "IpOptErrorConvCheck.hpp"
 #include "IpFilterLineSearch.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
+
+  DeclareIpoptType(RestoFilterConvergenceCheck);
 
   /** Convergence check for the restoration phase as called by the
    *  filter.  This inherits from the OptimalityErrorConvergenceCheck
@@ -56,6 +59,10 @@ namespace Ipopt
     /** overloaded from ConvergenceCheck */
     virtual ConvergenceStatus CheckConvergence();
 
+    /** Methods used by IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
   private:
     /**@name Default Compiler Generated Methods (Hidden to avoid
      * implicit creation/calling).  These methods are not implemented

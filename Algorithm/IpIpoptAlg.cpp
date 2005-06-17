@@ -13,6 +13,8 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(IpoptAlgorithm);
+
   IpoptAlgorithm::IpoptAlgorithm(const SmartPtr<PDSystemSolver>& pd_solver,
                                  const SmartPtr<LineSearch>& line_search,
                                  const SmartPtr<MuUpdate>& mu_update,
@@ -41,6 +43,17 @@ namespace Ipopt
   {
     DBG_START_METH("IpoptAlgorithm::~IpoptAlgorithm()",
                    dbg_verbosity);
+  }
+
+  void IpoptAlgorithm::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedNumberOption("lam_init_max", "maximum initial value for the equality multipliers", 
+					     0, false, 1e3);    
+    roptions->AddStringOption2("expect_infeasible_problem", "this may speed up the infeasibility determination if you expect the problem to be infeasible", "no",
+			       "no", "don't expect the problem to be infeasible",
+			       "yes", "expect the problem to be infeasible");
+    roptions->AddLowerBoundedNumberOption("kappa_sigma", "???",
+					  1.0, false, 1e10);
   }
 
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,
@@ -99,15 +112,7 @@ namespace Ipopt
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the iter_output strategy failed to initialize.");
 
-    Number value;
-    if (options.GetNumericValue("kappa_sigma", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 1.0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"kappa_sigma\": This value must be at least 1.");
-      kappa_sigma_ = value;
-    }
-    else {
-      kappa_sigma_ = 1e10;
-    }
+    options.GetNumericValue("kappa_sigma", kappa_sigma_, prefix);
 
     if (prefix=="resto.") {
       skip_print_problem_stats_ = true;

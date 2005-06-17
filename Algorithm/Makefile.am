@@ -21,14 +21,14 @@ libipoptalg_a_SOURCES = \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
 	IpIpoptData.cpp IpIpoptData.hpp \
-	IpIpoptNLP.hpp \
+	IpIpoptNLP.hpp  \
 	IpIterateInitializer.hpp \
 	IpIteratesVector.hpp IpIteratesVector.cpp \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.hpp IpLoqoMuOracle.cpp \
 	IpMonotoneMuUpdate.hpp IpMonotoneMuUpdate.cpp \
 	IpMuOracle.hpp \
-	IpMuUpdate.hpp \
+	IpMuUpdate.hpp IpMuUpdate.cpp \
 	IpNonmonotoneMuUpdate.hpp IpNonmonotoneMuUpdate.cpp \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \
 	IpOrigIpoptNLP.cpp IpOrigIpoptNLP.hpp \

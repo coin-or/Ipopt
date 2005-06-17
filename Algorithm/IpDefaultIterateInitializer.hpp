@@ -16,6 +16,8 @@
 namespace Ipopt
 {
 
+  DeclareIpoptType(DefaultIterateInitializer);
+
   /** Class implementing the default initialization procedure (based
    *  on user options) for the iterates.  It is used at the very
    *  beginning of the optimization for determine the starting point
@@ -44,6 +46,11 @@ namespace Ipopt
     /** Compute the initial iterates and set the into the curr field
      *  of the ip_data object. */
     virtual bool SetInitialIterates();
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> reg_options);
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods

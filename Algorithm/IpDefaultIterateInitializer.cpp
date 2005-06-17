@@ -12,52 +12,32 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(DefaultIterateInitializer);
+
   DefaultIterateInitializer::DefaultIterateInitializer
   (const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator)
       :
       IterateInitializer(),
       eq_mult_calculator_(eq_mult_calculator)
   {}
+  
+  void DefaultIterateInitializer::RegisterOptions(SmartPtr<RegisteredOptions> reg_options)
+  {
+    reg_options->AddLowerBoundedNumberOption("bound_push", "factor used when pushing initial point back in to the interior", 
+					     0.0, true, 0.01);
+    reg_options->AddBoundedNumberOption("bound_frac", "boundary fraction for pushing initial iterates in bounds prior to solve",
+					0, true, 0.5, false, 0.01);
+    reg_options->AddLowerBoundedNumberOption("bound_mult_init_val", "initial value for the bound multipliers", 
+					     0, true, 1.0);
+  }
 
   bool DefaultIterateInitializer::InitializeImpl(const OptionsList& options,
       const std::string& prefix)  {
-    Number value = 0.0;
     // Check for the algorithm options
-    if (options.GetNumericValue("bound_push", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"bound_push\": This value must be larger than 0.");
-      bound_push_ = value;
-    }
-    else {
-      bound_push_ = 0.01;
-    }
-
-    if (options.GetNumericValue("bound_frac", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0 && value <= 0.5, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"bound_frac\": Value must be between 0 and 0.5.");
-      bound_frac_ = value;
-    }
-    else {
-      bound_frac_ = 0.01;
-    }
-
-    if (options.GetNumericValue("lam_init_max", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"lam_init_max\": Value must be non-negative.");
-      lam_init_max_ = value;
-    }
-    else {
-      lam_init_max_ = 1e3;
-    }
-
-    if (options.GetNumericValue("bound_mult_init_val", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"bound_mult_init_val\": Value must be positive.");
-      bound_mult_init_val_ = value;
-    }
-    else {
-      bound_mult_init_val_ = 1.;
-    }
+    options.GetNumericValue("bound_push", bound_push_, prefix);
+    options.GetNumericValue("bound_frac", bound_frac_, prefix);
+    options.GetNumericValue("lam_init_max", lam_init_max_, prefix);
+    options.GetNumericValue("bound_mult_init_val", bound_mult_init_val_, prefix);
 
     bool retvalue = true;
     if (IsValid(eq_mult_calculator_)) {

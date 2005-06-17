@@ -13,9 +13,12 @@
 #include "IpLineSearch.hpp"
 #include "IpMuOracle.hpp"
 #include "IpFilter.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
+
+  DeclareIpoptType(NonmonotoneMuUpdate);
 
   /** Non-monotone mu update.
    */
@@ -42,6 +45,11 @@ namespace Ipopt
      *  LineSearch object linesearch is called.
      *  TODO: MORE DETAILS HERE */
     virtual void UpdateBarrierParameter();
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods
@@ -75,11 +83,27 @@ namespace Ipopt
     Number kappa_epsilon_;
     Number kappa_mu_;
     Number theta_mu_;
-    Index nonmonotone_kkt_norm_;
-    Index nonmonotone_kkt_centrality_;
-    Index nonmonotone_kkt_balancing_term_;
+    /** Special norm type enum for nonmonotone_kkt_norm_ */
+    enum NonmonotoneKKTNormTypeEnum
+      {
+	NKN_NORM_1=0,
+	NKN_NORM_2,
+	NKN_NORM_MAX,
+	NKN_NORM_OTHER //ToDo: Rename these sensibly
+      };
+    NonmonotoneKKTNormTypeEnum nonmonotone_kkt_norm_;
+    MuOracle::QualityFunctionCentralityEnum nonmonotone_kkt_centrality_;
+    MuOracle::QualityFunctionBalancingTermEnum nonmonotone_kkt_balancing_term_;
+    /** enumeration for adaptive globalization ToDo: Andreas, can you give these
+     * sensible names */
+    enum AdaptiveGlobalizationEnum
+      {
+	AG_1=0,
+	AG_2,
+	AG_3
+      };
     /** Flag indicating which globalization strategy should be used. */
-    Index adaptive_globalization_;
+    AdaptiveGlobalizationEnum adaptive_globalization_;
     /** Maximal margin in filter (for adaptive_globalization = 3) */
     Number filter_max_margin_;
     /** Factor for filter margin */

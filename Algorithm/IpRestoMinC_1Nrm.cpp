@@ -14,6 +14,8 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(MinC_1NrmRestorationPhase);
+
   MinC_1NrmRestorationPhase::MinC_1NrmRestorationPhase
   (IpoptAlgorithm& resto_alg,
    const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator)
@@ -28,6 +30,12 @@ namespace Ipopt
   MinC_1NrmRestorationPhase::~MinC_1NrmRestorationPhase()
   {}
 
+  void MinC_1NrmRestorationPhase::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedNumberOption("bound_mult_init_max", "???",
+					  0.0, false, 1e3);
+  }
+
   bool MinC_1NrmRestorationPhase::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
@@ -35,32 +43,9 @@ namespace Ipopt
     // restoration phase
     resto_options_ = new OptionsList(options);
 
-    Number value;
-    if (options.GetNumericValue("lam_init_max", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"lam_init_max\": Value must be non-negative.");
-      lam_init_max_ = value;
-    }
-    else {
-      lam_init_max_ = 1e3;
-    }
-
-    if (options.GetNumericValue("bound_mult_init_max", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"bound_mult_init_max\": Value must be non-negative.");
-      bound_mult_init_max_ = value;
-    }
-    else {
-      bound_mult_init_max_ = 1e3;
-    }
-
-    Int ivalue;
-    if (options.GetIntegerValue("expect_infeasible_problem", ivalue, prefix)) {
-      expect_infeasible_problem_ = (ivalue!=0);
-    }
-    else {
-      expect_infeasible_problem_ = false;
-    }
+    options.GetNumericValue("lam_init_max", lam_init_max_, prefix);
+    options.GetNumericValue("bound_mult_init_max", bound_mult_init_max_, prefix);
+    options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
 
     count_restorations_ = 0;
 
