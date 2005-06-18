@@ -173,7 +173,7 @@ namespace Ipopt
                      "||curr_v_U||_inf = %.16e\n", IpData().curr()->v_U()->Amax());
     }
     if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
-      if (IsValid(IpData().delta()->x())) {
+      if (IsValid(IpData().delta())) {
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                        "\n||delta_x||_inf   = %.16e\n", IpData().delta()->x()->Amax());
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
@@ -218,7 +218,7 @@ namespace Ipopt
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_MAIN)) {
       Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_x", *IpCq().curr_grad_lag_x());
       Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_s", *IpCq().curr_grad_lag_s());
-      if (IsValid(IpData().delta()->x())) {
+      if (IsValid(IpData().delta())) {
         Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
                             "delta_x", *IpData().delta()->x());
         Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
