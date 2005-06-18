@@ -13,6 +13,8 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(TNLPAdapter);
+
   TNLPAdapter::TNLPAdapter(const SmartPtr<TNLP> tnlp)
       :
       tnlp_(tnlp),
@@ -58,39 +60,28 @@ namespace Ipopt
     h_idx_map_ = NULL;
   }
 
+  void TNLPAdapter::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddNumberOption("nlp_lower_bound_inf", "any bound <= this value will be considered -inf (i.e. not lower bounded)",
+			      -1e19);
+    roptions->AddNumberOption("nlp_upper_bound_inf", "any bound >= this value will be considered +inf (i.e. not upper bounded)",
+			      1e19);
+    roptions->AddLowerBoundedNumberOption("max_onesided_bound_slack", "???",
+					  0.0, false, 0.0);
+  }
+
   bool TNLPAdapter::ProcessOptions(const OptionsList& options,
                                    const std::string& prefix)
   {
     DBG_START_METH("TNLPAdapter::ProcessOptions", dbg_verbosity);
+    options.GetNumericValue("nlp_lower_bound_inf", nlp_lower_bound_inf_, prefix);
+    options.GetNumericValue("nlp_upper_bound_inf", nlp_upper_bound_inf_, prefix);
 
-    Number value = 0.0;
-
-    // Check for the algorithm options
-    if (options.GetNumericValue("nlp_lower_bound_inf", value, prefix)) {
-      nlp_lower_bound_inf_ = value;
-    }
-    else {
-      nlp_lower_bound_inf_ = -1e19;
-    }
-
-    if (options.GetNumericValue("nlp_upper_bound_inf", value, prefix)) {
-      nlp_upper_bound_inf_ = value;
-    }
-    else {
-      nlp_upper_bound_inf_ = 1e19;
-    }
     ASSERT_EXCEPTION(nlp_lower_bound_inf_ < nlp_upper_bound_inf_,
 		     OptionsList::OPTION_OUT_OF_RANGE,
 		     "Option \"nlp_lower_bound_inf\" must be smaller than \"nlp_upper_bound_inf\".");
 
-    if (options.GetNumericValue("max_onesided_bound_slack", value, prefix)) {
-      ASSERT_EXCEPTION(value >= 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"max_onesided_bound_slack\": This value must be non-negative.");
-      max_onesided_bound_slack_ = value;
-    }
-    else {
-      max_onesided_bound_slack_ = 0.;
-    }
+    options.GetNumericValue("max_onesided_bound_slack", max_onesided_bound_slack_, prefix);
 
     // allow TNLP to process some options
     //tnlp_->ProcessOptions(....);

@@ -19,10 +19,12 @@ libcommon_a_SOURCES = \
 	IpDiagMatrix.cpp IpDiagMatrix.hpp \
 	IpException.hpp \
 	IpIdentityMatrix.cpp IpIdentityMatrix.hpp \
+	IpIpoptType.hpp IpIpoptType.cpp \
 	IpJournalist.cpp IpJournalist.hpp \
 	IpMatrix.cpp \
 	IpObserver.cpp IpObserver.hpp \
 	IpOptionsList.cpp IpOptionsList.hpp \
+	IpRegOptions.cpp IpRegOptions.hpp \
 	IpReferenced.cpp IpReferenced.hpp \
 	IpSmartPtr.hpp \
 	IpSumMatrix.cpp IpSumMatrix.hpp \
@@ -47,10 +49,12 @@ ASTYLE_SOURCES = \
 	IpDiagMatrix.cppbak IpDiagMatrix.hppbak \
 	IpException.hppbak \
 	IpIdentityMatrix.cppbak IpIdentityMatrix.hppbak \
+	IpIpoptType.hppbak IpIpoptType.cppbak \
 	IpJournalist.cppbak IpJournalist.hppbak \
 	IpMatrix.cppbak \
 	IpObserver.cppbak IpObserver.hppbak \
 	IpOptionsList.hppbak \
+	IpRegOptions.cppbak IpRegOptions.hppbak \
 	IpReferenced.cppbak IpReferenced.hppbak \
 	IpSmartPtr.hppbak \
 	IpSumMatrix.cppbak IpSumMatrix.hppbak \

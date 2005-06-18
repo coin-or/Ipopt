@@ -14,6 +14,8 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(PDFullSpaceSolver);
+
   PDFullSpaceSolver::PDFullSpaceSolver(AugSystemSolver& augSysSolver)
       :
       PDSystemSolver(),
@@ -28,67 +30,38 @@ namespace Ipopt
     DBG_START_METH("PDFullSpaceSolver::~PDFullSpaceSolver()",dbg_verbosity);
   }
 
+  void PDFullSpaceSolver::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedIntegerOption("num_min_iter_ref", "???", 
+					   0, 1);
+    roptions->AddLowerBoundedIntegerOption("num_max_iter_ref", "???",
+					   0, 10);
+    roptions->AddLowerBoundedNumberOption("delta_regu_max", "maximum regularization for the linear system (delta_w)",
+					  0, true, 1e40);
+    roptions->AddLowerBoundedNumberOption("residual_ratio_max", "maximum allowed residual ratio (tolerance for iterative refinement)",
+					  0.0, true, 1e-10);
+    roptions->AddLowerBoundedNumberOption("residual_ratio_singular", "only assume the system is singular if the residual_ratio is worse than this.",
+					  0.0, true, 1e-5);
+    roptions->AddLowerBoundedNumberOption("residual_improvement_factor", "???",
+					  0.0, true, 0.999999999);
+  }
+
 
   bool PDFullSpaceSolver::InitializeImpl(const OptionsList& options,
                                          const std::string& prefix)
   {
-    Index ivalue;
-    Number value;
-
     // Check for the algorithm options
-    if (options.GetIntegerValue("num_min_iter_ref", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue >= 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"num_min_iter_ref\": This value must be larger than or equal to 0");
-      num_min_iter_ref_ = ivalue;
-    }
-    else {
-      num_min_iter_ref_ = 1;
-    }
+    options.GetIntegerValue("num_min_iter_ref", num_min_iter_ref_, prefix);
+    options.GetIntegerValue("num_max_iter_ref", num_max_iter_ref_, prefix);
+    ASSERT_EXCEPTION(num_max_iter_ref_ >= num_min_iter_ref_, OptionsList::OPTION_OUT_OF_RANGE,
+		     "Option \"num_max_iter_ref\": This value must be larger than or equal to num_min_iter_ref (default 1)");
 
-    if (options.GetIntegerValue("num_max_iter_ref", ivalue, prefix)) {
-      ASSERT_EXCEPTION(ivalue >= num_min_iter_ref_, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"num_max_iter_ref\": This value must be larger than or equal to num_min_iter_ref (default 1)");
-      num_max_iter_ref_ = ivalue;
-    }
-    else {
-      num_max_iter_ref_ = 10;
-    }
-
-    if (options.GetNumericValue("delta_regu_max", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"theta_min_fact\": This value must be larger than 0.");
-      delta_regu_max_ = value;
-    }
-    else {
-      delta_regu_max_ = 1e40;
-    }
-
-    if (options.GetNumericValue("residual_ratio_max", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"residual_ratio_max\": This value must be larger than 0.");
-      residual_ratio_max_ = value;
-    }
-    else {
-      residual_ratio_max_ = 1e-10;
-    }
-
-    if (options.GetNumericValue("residual_ratio_singular", value, prefix)) {
-      ASSERT_EXCEPTION(value > residual_ratio_max_, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"residual_ratio_singular\": This value must be larger than residual_ratio_max.");
-      residual_ratio_singular_ = value;
-    }
-    else {
-      residual_ratio_singular_ = 1e-5;
-    }
-
-    if (options.GetNumericValue("residual_improvement_factor", value, prefix)) {
-      ASSERT_EXCEPTION(value > 0, OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"residual_improvement_factor\": This value must be larger than 0.");
-      residual_improvement_factor_ = value;
-    }
-    else {
-      residual_improvement_factor_ = 0.999999999;
-    }
+    options.GetNumericValue("delta_regu_max", delta_regu_max_, prefix);
+    options.GetNumericValue("residual_ratio_max", residual_ratio_max_, prefix);
+    options.GetNumericValue("residual_ratio_singular", residual_ratio_singular_, prefix);
+    ASSERT_EXCEPTION(residual_ratio_singular_ > residual_ratio_max_, OptionsList::OPTION_OUT_OF_RANGE,
+		     "Option \"residual_ratio_singular\": This value must be larger than residual_ratio_max.");
+    options.GetNumericValue("residual_improvement_factor", residual_improvement_factor_, prefix);
 
     // Reset internal flags and data
     augsys_improved_ = false;

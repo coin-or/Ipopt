@@ -12,6 +12,7 @@
 #include "IpUtils.hpp"
 #include "IpReferenced.hpp"
 #include "IpException.hpp"
+#include "IpRegOptions.hpp"
 #include <map>
 
 #ifdef OLD_C_HEADERS
@@ -111,6 +112,10 @@ namespace Ipopt
   public:
     /**@name Constructors/Destructors */
     //@{
+    OptionsList(SmartPtr<RegisteredOptions> reg_options, SmartPtr<Journalist> jnlst)
+      : reg_options_(reg_options), jnlst_(jnlst)
+    {}
+
     OptionsList()
     {}
 
@@ -134,11 +139,20 @@ namespace Ipopt
     /** @name Exceptions that can be used to indicate errors with
     options */
     //@{
+    DECLARE_STD_EXCEPTION(OPTION_NOT_REGISTERED);
+    DECLARE_STD_EXCEPTION(OPTION_VALUE_IS_INCORRECT_TYPE);
     DECLARE_STD_EXCEPTION(OPTION_OUT_OF_RANGE);
     DECLARE_STD_EXCEPTION(OPTION_VALUE_IS_NONINTEGER);
     DECLARE_STD_EXCEPTION(OPTION_VALUE_IS_NONNUMERIC);
     //@}
 
+    /** @name Get / Set Methods */
+    //@{
+    void SetRegisteredOptions(const SmartPtr<RegisteredOptions> reg_options)
+    { reg_options_ = reg_options; }
+    void SetJournalist(const SmartPtr<Journalist> jnlst)
+    { jnlst_ = jnlst; }
+    //@}
     /** @name Methods for setting options */
     //@{
     void SetValue(const std::string& tag, const std::string& value);
@@ -151,6 +165,10 @@ namespace Ipopt
     //@{
     bool GetValue(const std::string& tag, std::string& value,
                   const std::string& prefix) const;
+    bool GetEnumValue(const std::string& tag, Index& value,
+		      const std::string& prefix) const;
+    bool GetBoolValue(const std::string& tag, bool& value,
+		      const std::string& prefix) const;
     bool GetNumericValue(const std::string& tag, Number& value,
                          const std::string& prefix) const;
     bool GetIntegerValue(const std::string& tag, Index& value,
@@ -180,6 +198,12 @@ namespace Ipopt
 
     /** map for storing the options */
     std::map< std::string, OptionValue > options_;
+
+    /** list of all the registered options to validate against */
+    SmartPtr<RegisteredOptions> reg_options_;
+
+    /** Journalist for writing error messages, etc. */
+    SmartPtr<Journalist> jnlst_;
 
     /** auxilliary method for converting sting to all lower-case
      *  letters */

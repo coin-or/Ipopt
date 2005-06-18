@@ -57,12 +57,13 @@ libcommon_a_LIBADD =
 am_libcommon_a_OBJECTS = IpCompoundMatrix.$(OBJEXT) \
 	IpCompoundSymMatrix.$(OBJEXT) IpCompoundVector.$(OBJEXT) \
 	IpDebug.$(OBJEXT) IpDiagMatrix.$(OBJEXT) \
-	IpIdentityMatrix.$(OBJEXT) IpJournalist.$(OBJEXT) \
-	IpMatrix.$(OBJEXT) IpObserver.$(OBJEXT) \
-	IpOptionsList.$(OBJEXT) IpReferenced.$(OBJEXT) \
-	IpSumMatrix.$(OBJEXT) IpSumSymMatrix.$(OBJEXT) \
-	IpSymMatrix.$(OBJEXT) IpTaggedObject.$(OBJEXT) \
-	IpVector.$(OBJEXT) IpZeroMatrix.$(OBJEXT)
+	IpIdentityMatrix.$(OBJEXT) IpIpoptType.$(OBJEXT) \
+	IpJournalist.$(OBJEXT) IpMatrix.$(OBJEXT) IpObserver.$(OBJEXT) \
+	IpOptionsList.$(OBJEXT) IpRegOptions.$(OBJEXT) \
+	IpReferenced.$(OBJEXT) IpSumMatrix.$(OBJEXT) \
+	IpSumSymMatrix.$(OBJEXT) IpSymMatrix.$(OBJEXT) \
+	IpTaggedObject.$(OBJEXT) IpVector.$(OBJEXT) \
+	IpZeroMatrix.$(OBJEXT)
 libcommon_a_OBJECTS = $(am_libcommon_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -72,10 +73,12 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/IpCompoundVector.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpDebug.Po ./$(DEPDIR)/IpDiagMatrix.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpIdentityMatrix.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpIpoptType.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpJournalist.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpMatrix.Po ./$(DEPDIR)/IpObserver.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpOptionsList.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpReferenced.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/IpRegOptions.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpSumMatrix.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpSumSymMatrix.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/IpSymMatrix.Po \
@@ -230,10 +233,12 @@ libcommon_a_SOURCES = \
 	IpDiagMatrix.cpp IpDiagMatrix.hpp \
 	IpException.hpp \
 	IpIdentityMatrix.cpp IpIdentityMatrix.hpp \
+	IpIpoptType.hpp IpIpoptType.cpp \
 	IpJournalist.cpp IpJournalist.hpp \
 	IpMatrix.cpp \
 	IpObserver.cpp IpObserver.hpp \
 	IpOptionsList.cpp IpOptionsList.hpp \
+	IpRegOptions.cpp IpRegOptions.hpp \
 	IpReferenced.cpp IpReferenced.hpp \
 	IpSmartPtr.hpp \
 	IpSumMatrix.cpp IpSumMatrix.hpp \
@@ -256,10 +261,12 @@ ASTYLE_SOURCES = \
 	IpDiagMatrix.cppbak IpDiagMatrix.hppbak \
 	IpException.hppbak \
 	IpIdentityMatrix.cppbak IpIdentityMatrix.hppbak \
+	IpIpoptType.hppbak IpIpoptType.cppbak \
 	IpJournalist.cppbak IpJournalist.hppbak \
 	IpMatrix.cppbak \
 	IpObserver.cppbak IpObserver.hppbak \
 	IpOptionsList.hppbak \
+	IpRegOptions.cppbak IpRegOptions.hppbak \
 	IpReferenced.cppbak IpReferenced.hppbak \
 	IpSmartPtr.hppbak \
 	IpSumMatrix.cppbak IpSumMatrix.hppbak \
@@ -326,11 +333,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDebug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDiagMatrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIdentityMatrix.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptType.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpJournalist.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMatrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpObserver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptionsList.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpReferenced.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRegOptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSumMatrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSumSymMatrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSymMatrix.Po@am__quote@

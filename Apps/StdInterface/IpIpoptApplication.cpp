@@ -13,10 +13,13 @@
 #include "IpIpoptData.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
 #include "IpAlgBuilder.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
+
+  DefineIpoptType(IpoptApplication);
 
   IpoptApplication::IpoptApplication()
       :
@@ -35,6 +38,17 @@ namespace Ipopt
   {
     DBG_START_METH("IpoptApplication::~IpoptApplication()",
                    dbg_verbosity);
+  }
+
+  void IpoptApplication::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddBoundedIntegerOption("print_level", "Sets the print level for the console output", 0, J_LAST_LEVEL-1, J_SUMMARY);
+#if IP_DEBUG
+    roptions->AddBoundedIntegerOption("debug_print_level", "sets the print level for the debug file", 0, J_LAST_LEVEL-1, J_SUMMARY);
+#endif
+    roptions->AddStringOption1("output_file", "file name of an output file (leave unset for no file output)", "", 
+			       "*", "Any acceptable standard file name");
+    roptions->AddBoundedIntegerOption("file_print_level", "sets the print level for the output file", 0, J_LAST_LEVEL-1, J_SUMMARY);
   }
 
   ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp)
@@ -71,69 +85,73 @@ namespace Ipopt
                                 SmartPtr<IpoptCalculatedQuantities>& ip_cq)
   {
     ApplicationReturnStatus retValue = Solve_Succeeded;
+    try {
 
 # ifdef IP_DEBUG
 
-    DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
+      DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
 # endif
 
-    Journal* stdout_jrnl =
-      jnlst_->AddJournal("ConsoleStdOut", "stdout", J_SUMMARY);
-    stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
+      Journal* stdout_jrnl =
+	jnlst_->AddJournal("ConsoleStdOut", "stdout", J_SUMMARY);
+      stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
 
 # ifdef IP_DEBUG
 
-    Journal* dbg_jrnl = jnlst_->AddJournal("Debug", "debug.out", J_SUMMARY);
-    dbg_jrnl->SetPrintLevel(J_DBG, J_ALL);
+      Journal* dbg_jrnl = jnlst_->AddJournal("Debug", "debug.out", J_SUMMARY);
+      dbg_jrnl->SetPrintLevel(J_DBG, J_ALL);
 # endif
 
-    // Get the options
-    if (read_params_dat_) {
-      FILE* fp_options = fopen("PARAMS.DAT", "r");
-      if (fp_options) {
-        // PARAMS.DAT exists, read the content
-        options_->ReadFromFile(*jnlst_, fp_options);
-        fclose(fp_options);
-        fp_options=NULL;
+      // Register the valid options
+      SmartPtr<RegisteredOptions> reg_options = new RegisteredOptions();
+      IpoptTypeInfo::RegisterAllOptions(reg_options);
+      
+      //::RegisterOptionsImpl(reg_options);
+
+      // output a description of all the options
+      reg_options->OutputOptionDocumentation(*jnlst_);
+
+      options_->SetJournalist(jnlst_);
+      options_->SetRegisteredOptions(reg_options);
+
+      // Get the options
+      if (read_params_dat_) {
+	FILE* fp_options = fopen("PARAMS.DAT", "r");
+	if (fp_options) {
+	  // PARAMS.DAT exists, read the content
+	  options_->ReadFromFile(*jnlst_, fp_options);
+	  fclose(fp_options);
+	  fp_options=NULL;
+	}
       }
-    }
 
-    // Set printlevel for stdout
-    Index ivalue;
-    EJournalLevel print_level = J_SUMMARY;
-    if (options_->GetIntegerValue("print_level", ivalue, "")) {
-      ivalue = Max(0, Min(ivalue, ((Index)J_LAST_LEVEL)-1));
+      // Set printlevel for stdout
+      Index ivalue;
+      EJournalLevel print_level;
+      options_->GetIntegerValue("print_level", ivalue, "");
       print_level = (EJournalLevel)ivalue;
       stdout_jrnl->SetAllPrintLevels(print_level);
       stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
-    }
 
 #ifdef IP_DEBUG
-    // Set printlevel for debug
-    if (options_->GetIntegerValue("debug_print_level", ivalue, "")) {
-      ivalue = Max(0, Min(ivalue, ((Index)J_LAST_LEVEL)-1));
+      // Set printlevel for debug
+      options_->GetIntegerValue("debug_print_level", ivalue, "");
       EJournalLevel debug_print_level = (EJournalLevel)ivalue;
       dbg_jrnl->SetAllPrintLevels(debug_print_level);
       dbg_jrnl->SetPrintLevel(J_DBG, J_ALL);
-    }
 #endif
 
-    // Open an output file if required
-    std::string output_filename;
-    if (options_->GetValue("output_file", output_filename, "")) {
-      EJournalLevel file_print_level = J_SUMMARY;
-      if (options_->GetIntegerValue("file_print_level", ivalue, "")) {
-        ivalue = Max(0, Min(ivalue, ((Index)J_LAST_LEVEL)-1));
-        file_print_level = (EJournalLevel)ivalue;
+      // Open an output file if required
+      std::string output_filename;
+      options_->GetValue("output_file", output_filename, "");
+      if (output_filename != "") {
+	EJournalLevel file_print_level;
+	options_->GetIntegerValue("file_print_level", ivalue, "");
+	file_print_level = (EJournalLevel)ivalue;
+	Journal* file_jrnl = jnlst_->AddJournal("OutputFile", output_filename.c_str(), file_print_level);
+	file_jrnl->SetPrintLevel(J_DBG, J_NONE);
       }
-      else {
-        file_print_level = print_level;
-      }
-      Journal* file_jrnl = jnlst_->AddJournal("OutputFile", output_filename.c_str(), file_print_level);
-      file_jrnl->SetPrintLevel(J_DBG, J_NONE);
-    }
 
-    try {
       SmartPtr<IpoptNLP> ip_nlp =
         new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp));
 

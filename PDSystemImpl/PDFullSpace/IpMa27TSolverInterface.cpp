@@ -38,6 +38,8 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(Ma27TSolverInterface);
+
   Ma27TSolverInterface::Ma27TSolverInterface()
       :
       dim_(0),
@@ -67,56 +69,31 @@ namespace Ipopt
     delete [] a_;
   }
 
+  void Ma27TSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddBoundedNumberOption("pivtol", "pivot tolerance for the linear solver. smaller number - pivot for sparsity, larger number - pivot for stability",
+				     0.0, true, 1.0, true, 1e-8);
+    roptions->AddBoundedNumberOption("pivtolmax", "maximum pivot tolerance. IPOPT may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system",
+				     0.0, true, 1.0, true, 1e-4);
+    roptions->AddLowerBoundedNumberOption("liw_init_factor", "integer workspace memory = liw_init_factor * memory required by unfactored system",
+					   1.0, false, 5.0);
+    roptions->AddLowerBoundedNumberOption("la_init_factor", "real workspace memory = la_init_factor * memory required by unfactored system", 
+					   1.0, false, 5.0);
+    roptions->AddLowerBoundedNumberOption("meminc_factor", "if workspace is not large enough, IPOPT will increase the size by this factor", 
+					   1.0, false, 10.0);
+  }
+
   bool Ma27TSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    Number value = 0.0;
-
-    if (options.GetNumericValue("pivtol", value, prefix)) {
-      ASSERT_EXCEPTION(value>0. && value<1., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"pivtol\": This value must be between 0 and 1.");
-      pivtol_ = value;
-    }
-    else {
-      pivtol_ = 1e-8;
-    }
-
-    if (options.GetNumericValue("pivtolmax", value, prefix)) {
-      ASSERT_EXCEPTION(value>=pivtol_ && value<1.,
-                       OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"pivtolmax\": This value must be between pivtol and 1.");
-      pivtolmax_ = value;
-    }
-    else {
-      pivtolmax_ = 1e-4;
-    }
-
-    if (options.GetNumericValue("liw_init_factor", value, prefix)) {
-      ASSERT_EXCEPTION(value>=1., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"liw_init_factor\": This value must be at least 1.");
-      liw_init_factor_ = value;
-    }
-    else {
-      liw_init_factor_ = 5.;
-    }
-
-    if (options.GetNumericValue("la_init_factor", value, prefix)) {
-      ASSERT_EXCEPTION(value>=1., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"la_init_factor\": This value must be at least 1.");
-      la_init_factor_ = value;
-    }
-    else {
-      la_init_factor_ = 5.;
-    }
-
-    if (options.GetNumericValue("meminc_factor", value, prefix)) {
-      ASSERT_EXCEPTION(value>1., OptionsList::OPTION_OUT_OF_RANGE,
-                       "Option \"meminc_factor\": This value must be larger than 1.");
-      meminc_factor_ = value;
-    }
-    else {
-      meminc_factor_ = 10.;
-    }
+    options.GetNumericValue("pivtol", pivtol_, prefix);
+    options.GetNumericValue("pivtolmax", pivtolmax_, prefix);
+    ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OptionsList::OPTION_OUT_OF_RANGE,
+		     "Option \"pivtolmax\": This value must be between pivtol and 1.");
+    
+    options.GetNumericValue("liw_init_factor", liw_init_factor_, prefix);
+    options.GetNumericValue("la_init_factor", la_init_factor_, prefix);
+    options.GetNumericValue("meminc_factor", meminc_factor_, prefix);
 
     /* Set the default options for MA27 */
     F77_FUNC(ma27id,MA27ID)(icntl_, cntl_);
