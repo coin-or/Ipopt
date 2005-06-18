@@ -15,6 +15,8 @@
 namespace Ipopt
 {
 
+  DeclareIpoptType(PDFullSpaceSolver);
+
   /** This is the implemetation of the Primal-Dual System, using the
    *  full space approach with a direct linear solver.
    *
@@ -53,6 +55,11 @@ namespace Ipopt
 		       const IteratesVector& rhs,
 		       IteratesVector& res,
                        bool allow_inexact=false);
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods

@@ -10,9 +10,12 @@
 #define __IPMA27TSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
+
+  DeclareIpoptType(Ma27TSolverInterface);
 
   /** Interface to the symmetric linear solver MA27, derived from
    *  SparseSymLinearSolverInterface.
@@ -95,6 +98,11 @@ namespace Ipopt
     {
       return Triplet_Format;
     }
+    //@}
+
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
   private:

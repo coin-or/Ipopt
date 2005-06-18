@@ -354,6 +354,7 @@ namespace Ipopt
 
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
+    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;
 
   }
 
@@ -366,6 +367,10 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<T>& copy)", dbg_smartptr_verbosity);
 #endif
+
+    const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
+    = ptr_;
+    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;
 
     (void) SetFromSmartPtr_(copy);
   }
@@ -402,6 +407,10 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("SmartPtr<T>::SmartPtr(T* ptr)", dbg_smartptr_verbosity);
 #endif
+
+    const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
+    = ptr_;
+    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;
 
     (void) SetFromRawPtr_(ptr);
   }

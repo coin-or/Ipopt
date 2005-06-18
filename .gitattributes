@@ -2,3 +2,7 @@
 Algorithm/IpIteratesVector.cpp -text
 Algorithm/IpIteratesVector.hpp -text
 Algorithm/IpMuUpdate.cpp -text
+Common/IpIpoptType.cpp -text
+Common/IpIpoptType.hpp -text
+Common/IpRegOptions.cpp -text
+Common/IpRegOptions.hpp -text

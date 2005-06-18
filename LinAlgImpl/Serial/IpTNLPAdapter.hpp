@@ -15,9 +15,11 @@
 #include "IpExpansionMatrix.hpp"
 #include "IpGenTMatrix.hpp"
 #include "IpSymTMatrix.hpp"
-
+#include "IpIpoptType.hpp"
 namespace Ipopt
 {
+
+  DeclareIpoptType(TNLPAdapter);
 
   /** This class Adapts the TNLP interface so it looks like an NLP interface.
    *  This is an Adapter class (Design Patterns) that converts  a TNLP to an
@@ -134,6 +136,12 @@ namespace Ipopt
                     const Vector& x_U, Number* x_U_orig);
     //@}
 
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -238,8 +246,6 @@ namespace Ipopt
     Index* jac_idx_map_;
     Index* h_idx_map_;
     //@}
-
-
   };
 
 } // namespace Ipopt

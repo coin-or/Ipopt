@@ -12,11 +12,14 @@
 #include "IpReferenced.hpp"
 #include "IpSmartPtr.hpp"
 #include "IpJournalist.hpp"
+#include "IpIpoptType.hpp"
 #include "IpTNLP.hpp"
 #include "IpNLP.hpp"
 
 namespace Ipopt
 {
+
+  DeclareIpoptType(IpoptApplication);
 
   /* forward declarations */
   class IpoptData;
@@ -73,6 +76,11 @@ namespace Ipopt
     //@{
     //@}
 
+    /** @name Methods for IpoptTypeInfo */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -111,6 +119,7 @@ namespace Ipopt
     /** OptionsList used for the application */
     SmartPtr<OptionsList> options_;
   };
+
 } // namespace Ipopt
 
 #endif
