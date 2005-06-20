@@ -64,7 +64,8 @@ am_libipoptalg_a_OBJECTS = IpAlgBuilder.$(OBJEXT) \
 	IpMonotoneMuUpdate.$(OBJEXT) IpMuUpdate.$(OBJEXT) \
 	IpNonmonotoneMuUpdate.$(OBJEXT) IpOptErrorConvCheck.$(OBJEXT) \
 	IpOrigIpoptNLP.$(OBJEXT) IpOrigIterationOutput.$(OBJEXT) \
-	IpProbingMuOracle.$(OBJEXT) IpOptProbingMuOracle.$(OBJEXT) \
+	IpProbingMuOracle.$(OBJEXT) \
+	IpQualityFunctionMuOracle.$(OBJEXT) \
 	IpRestoFilterConvCheck.$(OBJEXT) IpRestoIpoptNLP.$(OBJEXT) \
 	IpRestoIterateInitializer.$(OBJEXT) \
 	IpRestoIterationOutput.$(OBJEXT) IpRestoMinC_1Nrm.$(OBJEXT) \
@@ -243,7 +244,7 @@ libipoptalg_a_SOURCES = \
 	IpIterationOutput.hpp \
 	IpOrigIterationOutput.hpp IpOrigIterationOutput.cpp \
 	IpProbingMuOracle.hpp IpProbingMuOracle.cpp \
-	IpOptProbingMuOracle.hpp IpOptProbingMuOracle.cpp \
+	IpQualityFunctionMuOracle.hpp IpQualityFunctionMuOracle.cpp \
 	IpRestoFilterConvCheck.cpp IpRestoFilterConvCheck.hpp \
 	IpRestoIpoptNLP.hpp IpRestoIpoptNLP.cpp \
 	IpRestoIterateInitializer.hpp IpRestoIterateInitializer.cpp \
@@ -279,7 +280,7 @@ ASTYLE_FILES = \
 	IpIterationOutput.hppbak \
 	IpOrigIterationOutput.hppbak IpOrigIterationOutput.cppbak \
 	IpProbingMuOracle.hppbak IpProbingMuOracle.cppbak \
-	IpOptProbingMuOracle.hppbak IpOptProbingMuOracle.cppbak \
+	IpQualityFunctionMuOracle.hppbak IpQualityFunctionMuOracle.cppbak \
 	IpRestoFilterConvCheck.cppbak IpRestoFilterConvCheck.hppbak \
 	IpRestoIpoptNLP.hppbak IpRestoIpoptNLP.cppbak \
 	IpRestoIterateInitializer.hppbak IpRestoIterateInitializer.cppbak \
@@ -350,10 +351,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNonmonotoneMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptErrorConvCheck.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptProbingMuOracle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOrigIpoptNLP.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOrigIterationOutput.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpProbingMuOracle.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpQualityFunctionMuOracle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoFilterConvCheck.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoIpoptNLP.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoIterateInitializer.Po@am__quote@

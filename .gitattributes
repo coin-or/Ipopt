@@ -2,6 +2,8 @@
 Algorithm/IpIteratesVector.cpp -text
 Algorithm/IpIteratesVector.hpp -text
 Algorithm/IpMuUpdate.cpp -text
+Algorithm/IpQualityFunctionMuOracle.cpp -text
+Algorithm/IpQualityFunctionMuOracle.hpp -text
 Common/IpIpoptType.cpp -text
 Common/IpIpoptType.hpp -text
 Common/IpRegOptions.cpp -text
