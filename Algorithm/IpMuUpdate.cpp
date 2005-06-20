@@ -14,7 +14,6 @@ namespace Ipopt {
 
   MuUpdate::MuUpdate()
   {
-    std::cout << "Bogus output" << std::endl;
   }
 
   void MuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
