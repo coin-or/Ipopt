@@ -23,7 +23,7 @@ CXXFLAGS += -I$(srcdir)/../../Common \
 
 # Astyle stuff
 
-ASTYLE_SOURCES = IpBlas.cppbak IpBlas.hppbak \
+ASTYLE_FILES = IpBlas.cppbak IpBlas.hppbak \
 	IpDenseVector.cppbak IpDenseVector.hppbak \
 	IpExpansionMatrix.hppbak IpExpansionMatrix.cppbak \
 	IpGenTMatrix.hppbak IpGenTMatrix.cppbak \
@@ -33,11 +33,11 @@ ASTYLE_SOURCES = IpBlas.cppbak IpBlas.hppbak \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_SOURCES)
+CLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 
-astyle: $(ASTYLE_SOURCES)
+astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@

@@ -40,18 +40,18 @@ CXXFLAGS += $(AMPL_CPPFLAGS)
 
 # Astyle stuff
 
-ASTYLE_SOURCES = \
+ASTYLE_FILES = \
 	CompositeNLP.hppbak CompositeNLP.cppbak \
 	comp_ampl_ipopt.cppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_SOURCES)
+CLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 
-astyle: $(ASTYLE_SOURCES)
+astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@

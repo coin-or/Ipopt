@@ -31,6 +31,11 @@ if HAVE_PARDISO
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 endif
 
+if HAVE_TAUCS
+  libpdfullspace_a_SOURCES += \
+	IpTAUCSSolverInterface.hpp IpTAUCSSolverInterface.cpp
+endif
+
 
 CXXFLAGS += -I$(srcdir)/../../Common \
 	-I$(srcdir)/../../Interfaces \
@@ -39,7 +44,7 @@ CXXFLAGS += -I$(srcdir)/../../Common \
 
 # Astyle stuff
 
-ASTYLE_SOURCES = \
+ASTYLE_FILES = \
 	IpAugRestoSystemSolver.cppbak IpAugRestoSystemSolver.hppbak \
 	IpAugSystemSolver.hppbak \
 	IpStdAugSystemSolver.hppbak IpStdAugSystemSolver.cppbak \
@@ -54,16 +59,17 @@ ASTYLE_SOURCES = \
 	IpSparseSymLinearSolverInterface.hppbak \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
-	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak
+	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
+	IpTAUCSSolverInterface.hppbak IpTAUCSSolverInterface.cppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_SOURCES)
+CLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 
-astyle: $(ASTYLE_SOURCES)
+astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@

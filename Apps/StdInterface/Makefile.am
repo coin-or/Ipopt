@@ -25,7 +25,7 @@ CFLAGS += -I$(srcdir)/../../Interfaces
 
 # Astyle stuff
 
-ASTYLE_SOURCES = \
+ASTYLE_FILES = \
 	IpStdInterfaceTNLP.hppbak IpStdInterfaceTNLP.cppbak \
 	IpStdCInterface.cppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak
@@ -33,11 +33,11 @@ ASTYLE_SOURCES = \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_SOURCES)
+CLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 
-astyle: $(ASTYLE_SOURCES)
+astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@
