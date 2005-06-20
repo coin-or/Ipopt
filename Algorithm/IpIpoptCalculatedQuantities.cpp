@@ -148,11 +148,13 @@ namespace Ipopt
       const std::string& prefix)
   {
     std::string svalue;
+    Index enum_int;
 
     options.GetNumericValue("s_max", s_max_, prefix);
     options.GetNumericValue("kappa_d", kappa_d_, prefix);
     options.GetNumericValue("s_move", s_move_, prefix);
-    options.GetEnumValue("constraint_violation_norm_type", (Index)constr_viol_normtype_, prefix);
+    options.GetEnumValue("constraint_violation_norm_type", enum_int, prefix);
+    constr_viol_normtype_ = ENormType(enum_int);
 
     initialize_called_ = true;
     return true;

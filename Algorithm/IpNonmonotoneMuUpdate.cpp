@@ -109,7 +109,9 @@ namespace Ipopt
     options.GetNumericValue("nonmonotone_mu_refs_redfact", refs_red_fact_, prefix);
     options.GetIntegerValue("nonmonotone_mu_max_refs", num_refs_max_, prefix);
     options.GetBoolValue("mu_never_fix", mu_never_fix_, prefix);
-    options.GetEnumValue("adaptive_globalization", (Index)adaptive_globalization_, prefix);
+    Index enum_int;
+    options.GetEnumValue("adaptive_globalization", enum_int, prefix);
+    adaptive_globalization_ = AdaptiveGlobalizationEnum(enum_int);
     options.GetNumericValue("filter_max_margin", filter_max_margin_, prefix);
     options.GetNumericValue("filter_margin_fact", filter_margin_fact_, prefix);
     options.GetBoolValue("restore_accepted_iterate", restore_accepted_iterate_, prefix);
@@ -133,9 +135,12 @@ namespace Ipopt
     options.GetNumericValue("kappa_mu", kappa_mu_, prefix);
     options.GetNumericValue("theta_mu", theta_mu_, prefix);
 
-    options.GetEnumValue("nonmonotone_kkt_norm", (Index)nonmonotone_kkt_norm_, prefix);
-    options.GetEnumValue("nonmonotone_kkt_centrality", (Index)nonmonotone_kkt_centrality_, prefix);
-    options.GetEnumValue("nonmonotone_kkt_balancing_term", (Index)nonmonotone_kkt_balancing_term_, prefix);
+    options.GetEnumValue("nonmonotone_kkt_norm", enum_int, prefix);
+    nonmonotone_kkt_norm_ = NonmonotoneKKTNormTypeEnum(enum_int);
+    options.GetEnumValue("nonmonotone_kkt_centrality", enum_int, prefix);
+    nonmonotone_kkt_centrality_ = MuOracle::QualityFunctionCentralityEnum(enum_int);
+    options.GetEnumValue("nonmonotone_kkt_balancing_term", enum_int, prefix);
+    nonmonotone_kkt_balancing_term_ = MuOracle::QualityFunctionBalancingTermEnum(enum_int);
 
     init_dual_inf_ = -1.;
     init_primal_inf_ = -1.;
