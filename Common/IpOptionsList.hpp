@@ -113,7 +113,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     OptionsList(SmartPtr<RegisteredOptions> reg_options, SmartPtr<Journalist> jnlst)
-      : reg_options_(reg_options), jnlst_(jnlst)
+        : reg_options_(reg_options), jnlst_(jnlst)
     {}
 
     OptionsList()
@@ -149,9 +149,13 @@ namespace Ipopt
     /** @name Get / Set Methods */
     //@{
     void SetRegisteredOptions(const SmartPtr<RegisteredOptions> reg_options)
-    { reg_options_ = reg_options; }
+    {
+      reg_options_ = reg_options;
+    }
     void SetJournalist(const SmartPtr<Journalist> jnlst)
-    { jnlst_ = jnlst; }
+    {
+      jnlst_ = jnlst;
+    }
     //@}
     /** @name Methods for setting options */
     //@{
@@ -166,9 +170,9 @@ namespace Ipopt
     bool GetValue(const std::string& tag, std::string& value,
                   const std::string& prefix) const;
     bool GetEnumValue(const std::string& tag, Index& value,
-		      const std::string& prefix) const;
+                      const std::string& prefix) const;
     bool GetBoolValue(const std::string& tag, bool& value,
-		      const std::string& prefix) const;
+                      const std::string& prefix) const;
     bool GetNumericValue(const std::string& tag, Number& value,
                          const std::string& prefix) const;
     bool GetIntegerValue(const std::string& tag, Index& value,

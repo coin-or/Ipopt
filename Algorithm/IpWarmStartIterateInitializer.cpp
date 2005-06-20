@@ -30,15 +30,15 @@ namespace Ipopt
   void WarmStartIterateInitializer::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddLowerBoundedNumberOption("warm_start_bound_push", "same as bound_push for the regular initializer",
- 					  0.0, true, 1e-3);
+                                          0.0, true, 1e-3);
     roptions->AddBoundedNumberOption("warm_start_bound_frac", "same as bound_frac for the regular initializer",
- 				     0.0, true, 0.5, false, 1e-3);
+                                     0.0, true, 0.5, false, 1e-3);
     roptions->AddLowerBoundedNumberOption("warm_start_mult_bound_push", "same as mult_bound_push for the regular initializer",
- 					  0.0, true, 1e-3);
+                                          0.0, true, 1e-3);
     roptions->AddNumberOption("warm_start_mult_init_max", "(No Range?) max initial value for the equality multipliers",
- 			      1e6);
-     roptions->AddNumberOption("warm_start_target_mu", "(No range?) - default value in code was 0e-3 ???",
-			       0e-3);
+                              1e6);
+    roptions->AddNumberOption("warm_start_target_mu", "(No range?) - default value in code was 0e-3 ???",
+                              0e-3);
   }
 
   bool WarmStartIterateInitializer::InitializeImpl(const OptionsList& options,
@@ -49,7 +49,7 @@ namespace Ipopt
     options.GetNumericValue("warm_start_mult_bound_push", warm_start_mult_bound_push_, prefix);
     options.GetNumericValue("warm_start_mult_init_max", warm_start_mult_init_max_, prefix);
     options.GetNumericValue("warm_start_target_mu", warm_start_target_mu_, prefix);
-    
+
     return true;
   }
 
@@ -59,7 +59,7 @@ namespace Ipopt
                    dbg_verbosity);
 
     // Get the starting values provided by the NLP and store them
-    // in the ip_data current fields. 
+    // in the ip_data current fields.
 
     /////////////////////////////////////////////////////////////////////
     //                   Initialize primal variables                   //
@@ -171,7 +171,7 @@ namespace Ipopt
       // Now submit the full modified point
       init_vec->Set_x(*new_x);
       init_vec->Set_s(*new_s);
-      // y_c and y_d currently contain a copy of curr()->y_c... 
+      // y_c and y_d currently contain a copy of curr()->y_c...
       // we set them back to the actual pointer to reuse the tags
       init_vec->Set_y_c(*IpData().curr()->y_c());
       init_vec->Set_y_d(*IpData().curr()->y_d());
@@ -191,30 +191,30 @@ namespace Ipopt
     SmartPtr<const Vector> new_s;
     // Push the primal x variables
     push_variables(warm_start_bound_push_,
-		   warm_start_bound_frac_,
-		   "x",
-		   *IpData().curr()->x(),
-		   new_x,
-		   *IpNLP().x_L(),
-		   *IpNLP().x_U(),
-		   *IpNLP().Px_L(),
-		   *IpNLP().Px_U());
+                   warm_start_bound_frac_,
+                   "x",
+                   *IpData().curr()->x(),
+                   new_x,
+                   *IpNLP().x_L(),
+                   *IpNLP().x_U(),
+                   *IpNLP().Px_L(),
+                   *IpNLP().Px_U());
 
     // ToDo: Don't see why this line is required
     //    IpData().SetTrialPrimalVariablesFromPtr(new_x, new_s);
 
     // Push the primal s variables
     push_variables(warm_start_bound_push_,
-		   warm_start_bound_frac_,
-		   "s",
-		   *IpData().curr()->s(),
-		   new_s,
-		   *IpNLP().d_L(),
-		   *IpNLP().d_U(),
-		   *IpNLP().Pd_L(),
-		   *IpNLP().Pd_U());
+                   warm_start_bound_frac_,
+                   "s",
+                   *IpData().curr()->s(),
+                   new_s,
+                   *IpNLP().d_L(),
+                   *IpNLP().d_U(),
+                   *IpNLP().Pd_L(),
+                   *IpNLP().Pd_U());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME new_s cor",
-			*new_s);
+                        *new_s);
 
     // Push the multipliers
     SmartPtr<Vector> new_z_L = IpData().curr()->z_L()->MakeNewCopy();

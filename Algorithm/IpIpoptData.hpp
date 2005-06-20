@@ -70,11 +70,11 @@ namespace Ipopt
     SmartPtr<const IteratesVector> curr() const;
 
     /** Get the current point in a copied container that is non-const.
-	The entries in the container cannot be modified, but 
-	the container can be modified to point to new entries.
+    The entries in the container cannot be modified, but 
+    the container can be modified to point to new entries.
     */
     //    SmartPtr<IteratesVector> curr_container() const;
-    
+
     /** Get Trial point */
     SmartPtr<const IteratesVector> trial() const;
 
@@ -136,7 +136,7 @@ namespace Ipopt
      *  same) so after you call set, you cannot modify the data
      */
     void set_delta_aff(SmartPtr<IteratesVector>& delta_aff);
-    
+
 
     /** Hessian or Hessian approximation (do not hold on to it, it might be changed) */
     SmartPtr<const SymMatrix> W()
@@ -414,7 +414,7 @@ namespace Ipopt
      *  method is called.
      * ToDo: we could cue off of a null delta_;
      */
-     bool have_deltas_;
+    bool have_deltas_;
     //@}
 
     /** @name Affine-scaling step.  This used to transfer the
@@ -535,6 +535,7 @@ namespace Ipopt
 #ifdef IP_DEBUG
     DBG_ASSERT(IsNull(curr_) || (curr_->GetTag() == debug_curr_tag_ && curr_->GetTagSum() == debug_curr_tag_sum_) );
 #endif
+
     return curr_;
   }
 
@@ -544,6 +545,7 @@ namespace Ipopt
 #ifdef IP_DEBUG
     DBG_ASSERT(IsNull(trial_) || (trial_->GetTag() == debug_trial_tag_ && trial_->GetTagSum() == debug_trial_tag_sum_) );
 #endif
+
     return trial_;
   }
 
@@ -556,13 +558,14 @@ namespace Ipopt
 
     return delta_;
   }
-  
+
   inline
   SmartPtr<const IteratesVector> IpoptData::delta_aff() const
   {
 #   ifdef IP_DEBUG
     DBG_ASSERT(IsNull(delta_aff_) || (delta_aff_->GetTag() == debug_delta_aff_tag_ && delta_aff_->GetTagSum() == debug_delta_aff_tag_sum_) );
 #   endif
+
     return delta_aff_;
   }
 
@@ -571,6 +574,7 @@ namespace Ipopt
   {
     curr_ = trial_;
 #ifdef IP_DEBUG
+
     if (IsValid(curr_)) {
       debug_curr_tag_ = curr_->GetTag();
       debug_curr_tag_sum_ = curr_->GetTagSum();
@@ -579,7 +583,8 @@ namespace Ipopt
       debug_curr_tag_ = 0;
       debug_curr_tag_sum_ = 0;
     }
-#endif    
+#endif
+
   }
 
   inline
@@ -602,12 +607,13 @@ namespace Ipopt
 
     trial = NULL;
   }
-    
+
   inline
   void IpoptData::set_delta(SmartPtr<IteratesVector>& delta)
   {
     delta_ = ConstPtr(delta);
 #ifdef IP_DEBUG
+
     if (IsValid(delta)) {
       debug_delta_tag_ = delta->GetTag();
       debug_delta_tag_sum_ = delta->GetTagSum();
@@ -626,6 +632,7 @@ namespace Ipopt
   {
     delta_aff_ = ConstPtr(delta_aff);
 #ifdef IP_DEBUG
+
     if (IsValid(delta_aff)) {
       debug_delta_aff_tag_ = delta_aff->GetTag();
       debug_delta_aff_tag_sum_ = delta_aff->GetTagSum();

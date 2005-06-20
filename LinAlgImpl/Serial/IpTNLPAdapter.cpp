@@ -63,11 +63,11 @@ namespace Ipopt
   void TNLPAdapter::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddNumberOption("nlp_lower_bound_inf", "any bound <= this value will be considered -inf (i.e. not lower bounded)",
-			      -1e19);
+                              -1e19);
     roptions->AddNumberOption("nlp_upper_bound_inf", "any bound >= this value will be considered +inf (i.e. not upper bounded)",
-			      1e19);
+                              1e19);
     roptions->AddLowerBoundedNumberOption("max_onesided_bound_slack", "???",
-					  0.0, false, 0.0);
+                                          0.0, false, 0.0);
   }
 
   bool TNLPAdapter::ProcessOptions(const OptionsList& options,
@@ -78,8 +78,8 @@ namespace Ipopt
     options.GetNumericValue("nlp_upper_bound_inf", nlp_upper_bound_inf_, prefix);
 
     ASSERT_EXCEPTION(nlp_lower_bound_inf_ < nlp_upper_bound_inf_,
-		     OptionsList::OPTION_OUT_OF_RANGE,
-		     "Option \"nlp_lower_bound_inf\" must be smaller than \"nlp_upper_bound_inf\".");
+                     OptionsList::OPTION_OUT_OF_RANGE,
+                     "Option \"nlp_lower_bound_inf\" must be smaller than \"nlp_upper_bound_inf\".");
 
     options.GetNumericValue("max_onesided_bound_slack", max_onesided_bound_slack_, prefix);
 
@@ -165,23 +165,23 @@ namespace Ipopt
         if (lower_bound > nlp_lower_bound_inf_) {
           x_l_map[n_x_l] = n_x_not_fixed;
           n_x_l++;
-	  if (max_onesided_bound_slack_>0. &&
-	      upper_bound >= nlp_upper_bound_inf_) {
-	    // Add very large upper bound if only a lower bound is given
-	    x_u_map[n_x_u] = n_x_not_fixed;
-	    n_x_u++;
-	  }
+          if (max_onesided_bound_slack_>0. &&
+              upper_bound >= nlp_upper_bound_inf_) {
+            // Add very large upper bound if only a lower bound is given
+            x_u_map[n_x_u] = n_x_not_fixed;
+            n_x_u++;
+          }
         }
 
         if (upper_bound < nlp_upper_bound_inf_) {
           x_u_map[n_x_u] = n_x_not_fixed;
           n_x_u++;
-	  if (max_onesided_bound_slack_>0. &&
-	      lower_bound <= nlp_lower_bound_inf_) {
-	    // Add very small lower bound if only a lower bound is given
-	    x_l_map[n_x_l] = n_x_not_fixed;
-	    n_x_l++;
-	  }
+          if (max_onesided_bound_slack_>0. &&
+              lower_bound <= nlp_lower_bound_inf_) {
+            // Add very small lower bound if only a lower bound is given
+            x_l_map[n_x_l] = n_x_not_fixed;
+            n_x_l++;
+          }
         }
         n_x_not_fixed++;
       }
@@ -249,22 +249,22 @@ namespace Ipopt
         if (lower_bound > nlp_lower_bound_inf_) {
           d_l_map[n_d_l] = n_d;
           n_d_l++;
-	  if (max_onesided_bound_slack_>0. &&
-	      upper_bound >= nlp_upper_bound_inf_) {
-	    // Add very large upper bound if only a lower bound is given
-	    d_u_map[n_d_u] = n_d;
-	    n_d_u++;
-	  }
+          if (max_onesided_bound_slack_>0. &&
+              upper_bound >= nlp_upper_bound_inf_) {
+            // Add very large upper bound if only a lower bound is given
+            d_u_map[n_d_u] = n_d;
+            n_d_u++;
+          }
         }
         if (upper_bound < nlp_upper_bound_inf_) {
           d_u_map[n_d_u] = n_d;
           n_d_u++;
-	  if (max_onesided_bound_slack_>0. &&
-	      lower_bound <= nlp_lower_bound_inf_) {
-	    // Add very small lower bound if only a lower bound is given
-	    d_l_map[n_d_l] = n_d;
-	    n_d_l++;
-	  }
+          if (max_onesided_bound_slack_>0. &&
+              lower_bound <= nlp_lower_bound_inf_) {
+            // Add very small lower bound if only a lower bound is given
+            d_l_map[n_d_l] = n_d;
+            n_d_l++;
+          }
         }
         n_d++;
       }
@@ -436,12 +436,12 @@ namespace Ipopt
       Index full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
       Number lower_bound = x_l[full_idx];
       if (lower_bound <= nlp_lower_bound_inf_) {
-	DBG_ASSERT(max_onesided_bound_slack_>0.);
-	DBG_ASSERT(x_u[full_idx] < nlp_upper_bound_inf_);
-	values[i] = x_u[full_idx] - max_onesided_bound_slack_;
+        DBG_ASSERT(max_onesided_bound_slack_>0.);
+        DBG_ASSERT(x_u[full_idx] < nlp_upper_bound_inf_);
+        values[i] = x_u[full_idx] - max_onesided_bound_slack_;
       }
       else {
-	values[i] = lower_bound;
+        values[i] = lower_bound;
       }
     }
 
@@ -455,12 +455,12 @@ namespace Ipopt
       Index full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
       Number upper_bound = x_u[full_idx];
       if (upper_bound >= nlp_upper_bound_inf_) {
-	DBG_ASSERT(max_onesided_bound_slack_>0.);
-	DBG_ASSERT(x_l[full_idx] > nlp_lower_bound_inf_);
-	values[i] = x_l[full_idx] + max_onesided_bound_slack_;
+        DBG_ASSERT(max_onesided_bound_slack_>0.);
+        DBG_ASSERT(x_l[full_idx] > nlp_lower_bound_inf_);
+        values[i] = x_l[full_idx] + max_onesided_bound_slack_;
       }
       else {
-	values[i] = upper_bound;
+        values[i] = upper_bound;
       }
     }
 
@@ -484,12 +484,12 @@ namespace Ipopt
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
       Number lower_bound = g_l[full_idx];
       if (lower_bound <= nlp_lower_bound_inf_) {
-	DBG_ASSERT(max_onesided_bound_slack_>0.);
-	DBG_ASSERT(g_u[full_idx] < nlp_upper_bound_inf_);
-	values[i] = g_u[full_idx] - max_onesided_bound_slack_;
+        DBG_ASSERT(max_onesided_bound_slack_>0.);
+        DBG_ASSERT(g_u[full_idx] < nlp_upper_bound_inf_);
+        values[i] = g_u[full_idx] - max_onesided_bound_slack_;
       }
       else {
-	values[i] = lower_bound;
+        values[i] = lower_bound;
       }
     }
 
@@ -503,12 +503,12 @@ namespace Ipopt
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
       Number upper_bound = g_u[full_idx];
       if (upper_bound >= nlp_upper_bound_inf_) {
-	DBG_ASSERT(max_onesided_bound_slack_>0.);
-	DBG_ASSERT(g_l[full_idx] > nlp_lower_bound_inf_);
-	values[i] = g_l[full_idx] + max_onesided_bound_slack_;
+        DBG_ASSERT(max_onesided_bound_slack_>0.);
+        DBG_ASSERT(g_l[full_idx] > nlp_lower_bound_inf_);
+        values[i] = g_l[full_idx] + max_onesided_bound_slack_;
       }
       else {
-	values[i] = upper_bound;
+        values[i] = upper_bound;
       }
     }
 

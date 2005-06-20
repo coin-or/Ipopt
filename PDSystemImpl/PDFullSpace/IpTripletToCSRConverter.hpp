@@ -29,7 +29,8 @@ namespace Ipopt
       /** @name Constructor/Destructor */
       //@{
       /** Constructor. */
-      TripletEntry(){}
+      TripletEntry()
+      {}
 
       /** Destructor */
       ~TripletEntry()
@@ -46,15 +47,15 @@ namespace Ipopt
       /** Set the values of an entry */
       void Set(Index i_row, Index j_col, Index i_pos_triplet)
       {
-	if (i_row>j_col) {
-	  i_row_ = j_col;
-	  j_col_ = i_row;
-	}
-	else {
-	  i_row_ = i_row;
-	  j_col_ = j_col;
-	}
-	i_pos_triplet_ = i_pos_triplet;
+        if (i_row>j_col) {
+          i_row_ = j_col;
+          j_col_ = i_row;
+        }
+        else {
+          i_row_ = i_row;
+          j_col_ = j_col;
+        }
+        i_pos_triplet_ = i_pos_triplet;
       }
 
       /** @name Accessor methods. */
@@ -62,25 +63,25 @@ namespace Ipopt
       /** Row position. */
       Index IRow() const
       {
-	return i_row_;
+        return i_row_;
       }
       /** Column position. */
       Index JCol() const
       {
-	return j_col_;
+        return j_col_;
       }
       /** Index in original triplet matrix. */
       Index PosTriplet() const
       {
-	return i_pos_triplet_;
+        return i_pos_triplet_;
       }
       //@}
 
       /** Comparison operator.  This is required for the sort function. */
       bool operator< (const TripletEntry& Tentry)
       {
-	return ((i_row_ < Tentry.i_row_) ||
-		(i_row_==Tentry.i_row_ && j_col_<Tentry.j_col_));
+        return ((i_row_ < Tentry.i_row_) ||
+                (i_row_==Tentry.i_row_ && j_col_<Tentry.j_col_));
       }
 
     private:
@@ -136,8 +137,8 @@ namespace Ipopt
      *  called before the GetIA, GetJA, GetValues methods are called.
      */
     Index InitializeConverter(Index dim, Index nonzeros,
-			      const Index* airn,
-			      const Index* ajcn);
+                              const Index* airn,
+                              const Index* ajcn);
 
     /** Return the IA array for the condensed format. */
     const Index* IA() const
@@ -159,7 +160,7 @@ namespace Ipopt
      *  the length of the array a_condensed and must be identical to
      *  the return value of InitializeConverter. */
     void ConvertValues(Index nonzeros_triplet, const Number* a_triplet,
-		       Index nonzeros_compressed, Number* a_compressed);
+                       Index nonzeros_compressed, Number* a_compressed);
 
   private:
     /**@name Default Compiler Generated Methods

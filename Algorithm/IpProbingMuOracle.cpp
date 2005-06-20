@@ -58,7 +58,7 @@ namespace Ipopt
                    "Solving the Primal Dual System for the affine step\n");
     // First get the right hand side
     SmartPtr<IteratesVector> rhs = IpData().curr()->MakeNewContainer();
-    
+
     rhs->Set_x(*IpCq().curr_grad_lag_x());
     rhs->Set_s(*IpCq().curr_grad_lag_s());
     rhs->Set_y_c(*IpCq().curr_c());
@@ -73,8 +73,8 @@ namespace Ipopt
 
     // Now solve the primal-dual system to get the step
     pd_solver_->Solve(-1.0, 0.0,
-		      *rhs,
-		      *step
+                      *rhs,
+                      *step
                       //                      true           // don't need high accuracy
                      );
 
@@ -86,14 +86,14 @@ namespace Ipopt
 
     // First compute the fraction-to-the-boundary step sizes
     Number alpha_primal_aff = IpCq().primal_frac_to_the_bound(1.0,
-							      *step->x(),
-							      *step->s());
+                              *step->x(),
+                              *step->s());
 
     Number alpha_dual_aff = IpCq().dual_frac_to_the_bound(1.0,
-							  *step->z_L(),
-							  *step->z_U(),
-							  *step->v_L(),
-							  *step->v_U());
+                            *step->z_L(),
+                            *step->z_U(),
+                            *step->v_L(),
+                            *step->v_U());
 
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "  The affine maximal step sizes are\n"

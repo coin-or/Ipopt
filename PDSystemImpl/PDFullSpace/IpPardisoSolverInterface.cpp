@@ -18,15 +18,15 @@
 extern "C"
 {
   void F77_FUNC(pardisoinit,PARDISOINIT)(void* PT, const ipfint* MTYPE,
-					 ipfint* IPARM);
+                                         ipfint* IPARM);
   void F77_FUNC(pardiso,PARDISO)(void** PT, const ipfint* MAXFCT,
-				 const ipfint* MNUM, const ipfint* MTYPE,
-				 const ipfint* PHASE, const ipfint* N,
-				 const double* A, const ipfint* IA,
-				 const ipfint* JA, const ipfint* PERM,
-				 const ipfint* NRHS, ipfint* IPARM,
-				 const ipfint* MSGLVL, double* B, double* X,
-				 ipfint* ERROR);
+                                 const ipfint* MNUM, const ipfint* MTYPE,
+                                 const ipfint* PHASE, const ipfint* N,
+                                 const double* A, const ipfint* IA,
+                                 const ipfint* JA, const ipfint* PERM,
+                                 const ipfint* NRHS, ipfint* IPARM,
+                                 const ipfint* MSGLVL, double* B, double* X,
+                                 ipfint* ERROR);
 }
 
 namespace Ipopt
@@ -66,8 +66,8 @@ namespace Ipopt
       ipfint NRHS = 0;
       ipfint ERROR;
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
-				NULL, NULL, NULL, NULL, &NRHS, IPARM_,
-				&MSGLVL_, NULL, NULL, &ERROR);
+                                NULL, NULL, NULL, NULL, &NRHS, IPARM_,
+                                &MSGLVL_, NULL, NULL, &ERROR);
       DBG_ASSERT(ERROR==0);
     }
 
@@ -88,8 +88,8 @@ namespace Ipopt
       ipfint NRHS = 0;
       ipfint ERROR;
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
-				NULL, NULL, NULL, NULL, &NRHS, IPARM_,
-				&MSGLVL_, NULL, NULL, &ERROR);
+                                NULL, NULL, NULL, NULL, &NRHS, IPARM_,
+                                &MSGLVL_, NULL, NULL, &ERROR);
       DBG_ASSERT(ERROR==0);
     }
 
@@ -101,7 +101,7 @@ namespace Ipopt
 
     // Call Pardiso's initialization routine
     IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
-    F77_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, IPARM_);    
+    F77_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, IPARM_);
 
     // Set some parameters for Pardiso
     IPARM_[0] = 1;  // Don't use the default values
@@ -118,12 +118,12 @@ namespace Ipopt
   }
 
   ESymSolverStatus PardisoSolverInterface::MultiSolve(bool new_matrix,
-						      const Index* ia,
-						      const Index* ja,
-						      Index nrhs,
-						      double* rhs_vals,
-						      bool check_NegEVals,
-						      Index numberOfNegEVals)
+      const Index* ia,
+      const Index* ja,
+      Index nrhs,
+      double* rhs_vals,
+      bool check_NegEVals,
+      Index numberOfNegEVals)
   {
     DBG_START_METH("PardisoSolverInterface::MultiSolve",dbg_verbosity);
     DBG_ASSERT(!check_NegEVals || ProvidesInertia());
@@ -154,9 +154,9 @@ namespace Ipopt
   /** Initialize the local copy of the positions of the nonzero
       elements */
   ESymSolverStatus PardisoSolverInterface::InitializeStructure
-      (Index dim, Index nonzeros,
-       const Index* ia,
-       const Index* ja)
+  (Index dim, Index nonzeros,
+   const Index* ia,
+   const Index* ja)
   {
     DBG_START_METH("PardisoSolverInterface::InitializeStructure",dbg_verbosity);
     dim_ = dim;
@@ -179,10 +179,10 @@ namespace Ipopt
 
   ESymSolverStatus
   PardisoSolverInterface::SymbolicFactorization(const Index* ia,
-						const Index* ja)
+      const Index* ja)
   {
     DBG_START_METH("PardisoSolverInterface::SymbolicFactorization",
-		   dbg_verbosity);
+                   dbg_verbosity);
 
     // Call Pardiso to do the analysis phase
     ipfint PHASE = 11;
@@ -190,19 +190,19 @@ namespace Ipopt
     ipfint PERM;   // This should not be accessed by Pardiso
     ipfint NRHS = 0;
     double B;  // This should not be accessed by Pardiso in analysis
-	       // phase
+    // phase
     double X;  // This should not be accessed by Pardiso in analysis
-	       // phase
+    // phase
     ipfint ERROR;
 
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-			      &PHASE, &N, a_, ia, ja, &PERM,
-			      &NRHS, IPARM_, &MSGLVL_, &B, &X,
-			      &ERROR);
+                              &PHASE, &N, a_, ia, ja, &PERM,
+                              &NRHS, IPARM_, &MSGLVL_, &B, &X,
+                              &ERROR);
     if (ERROR!=0) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pardiso during analysis phase.  ERROR = %d.\n",
-		     ERROR);
+                     ERROR);
       return SYMSOLVER_FATAL_ERROR;
     }
 
@@ -211,9 +211,9 @@ namespace Ipopt
 
   ESymSolverStatus
   PardisoSolverInterface::Factorization(const Index* ia,
-					 const Index* ja,
-					 bool check_NegEVals,
-					 Index numberOfNegEVals)
+                                        const Index* ja,
+                                        bool check_NegEVals,
+                                        Index numberOfNegEVals)
   {
     DBG_START_METH("PardisoSolverInterface::Factorization",dbg_verbosity);
 
@@ -223,15 +223,15 @@ namespace Ipopt
     ipfint PERM;   // This should not be accessed by Pardiso
     ipfint NRHS = 0;
     double B;  // This should not be accessed by Pardiso in factorization
-	       // phase
+    // phase
     double X;  // This should not be accessed by Pardiso in factorization
-	       // phase
+    // phase
     ipfint ERROR;
 
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-			      &PHASE, &N, a_, ia, ja, &PERM,
-			      &NRHS, IPARM_, &MSGLVL_, &B, &X,
-			      &ERROR);
+                              &PHASE, &N, a_, ia, ja, &PERM,
+                              &NRHS, IPARM_, &MSGLVL_, &B, &X,
+                              &ERROR);
     if (ERROR==-4) {
       // I think this means that the matrix is singular
       return SYMSOLVER_SINGULAR;
@@ -263,9 +263,9 @@ namespace Ipopt
   }
 
   ESymSolverStatus PardisoSolverInterface::Solve(const Index* ia,
-						 const Index* ja,
-						 Index nrhs,
-						 double *rhs_vals)
+      const Index* ja,
+      Index nrhs,
+      double *rhs_vals)
   {
     DBG_START_METH("PardisoSolverInterface::Solve",dbg_verbosity);
 
@@ -278,9 +278,9 @@ namespace Ipopt
     ipfint ERROR;
 
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-			      &PHASE, &N, a_, ia, ja, &PERM,
-			      &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-			      &ERROR);
+                              &PHASE, &N, a_, ia, ja, &PERM,
+                              &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+                              &ERROR);
     if (ERROR!=0 ) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);

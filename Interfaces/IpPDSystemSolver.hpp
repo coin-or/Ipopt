@@ -102,8 +102,8 @@ namespace Ipopt
      */
     virtual void Solve(Number alpha,
                        Number beta,
-		       const IteratesVector& rhs,
-		       IteratesVector& res,
+                       const IteratesVector& rhs,
+                       IteratesVector& res,
                        bool allow_inexact=false) =0;
 
   private:

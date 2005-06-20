@@ -33,7 +33,7 @@ namespace Ipopt
   void MinC_1NrmRestorationPhase::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddLowerBoundedNumberOption("bound_mult_init_max", "???",
-					  0.0, false, 1e3);
+                                          0.0, false, 1e3);
   }
 
   bool MinC_1NrmRestorationPhase::InitializeImpl(const OptionsList& options,
@@ -196,10 +196,10 @@ namespace Ipopt
       DBG_PRINT_VECTOR(1, "delta_v_U", *delta->v_U());
 
       Number alpha_dual = IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
-							*delta->z_L_NonConst(),
-							*delta->z_U_NonConst(),
-							*delta->v_L_NonConst(),
-							*delta->v_U_NonConst());
+                          *delta->z_L_NonConst(),
+                          *delta->z_U_NonConst(),
+                          *delta->v_L_NonConst(),
+                          *delta->v_U_NonConst());
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                      "Step size for bound multipliers: %8.2e\n", alpha_dual);
 
@@ -217,23 +217,23 @@ namespace Ipopt
 
       // ToDo: Check what to do here:
       Number bound_mult_max = Max(IpData().trial()->z_L()->Amax(),
-				  IpData().trial()->z_U()->Amax(),
-				  IpData().trial()->v_L()->Amax(),
-				  IpData().trial()->v_U()->Amax());
+                                  IpData().trial()->z_U()->Amax(),
+                                  IpData().trial()->v_L()->Amax(),
+                                  IpData().trial()->v_U()->Amax());
       trial = IpData().trial()->MakeNewContainer();
       if (bound_mult_max > bound_mult_init_max_) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "Bound multipliers after restoration phase too large (max=%8.2e). Set all to 1.\n",
                        bound_mult_max);
-	trial->create_new_z_L();
-	trial->create_new_z_U();
-	trial->create_new_v_L();
-	trial->create_new_v_U();
-	trial->z_L_NonConst()->Set(1.0);
-	trial->z_U_NonConst()->Set(1.0);
-	trial->v_L_NonConst()->Set(1.0);
-	trial->v_U_NonConst()->Set(1.0);
-	IpData().set_trial(trial);
+        trial->create_new_z_L();
+        trial->create_new_z_U();
+        trial->create_new_v_L();
+        trial->create_new_v_U();
+        trial->z_L_NonConst()->Set(1.0);
+        trial->z_U_NonConst()->Set(1.0);
+        trial->v_L_NonConst()->Set(1.0);
+        trial->v_U_NonConst()->Set(1.0);
+        IpData().set_trial(trial);
 
       }
       // Recompute the equality constraint multipliers as least square estimate
@@ -242,7 +242,7 @@ namespace Ipopt
         // those values are needed to compute the initial values for
         // the multipliers
         IpData().CopyTrialToCurrent();
-	trial = IpData().trial()->MakeNewContainer();
+        trial = IpData().trial()->MakeNewContainer();
         SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
         SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
         bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
@@ -260,14 +260,14 @@ namespace Ipopt
             y_d->Set(0.0);
           }
         }
-	trial->Set_eq_mult(*y_c, *y_d);
+        trial->Set_eq_mult(*y_c, *y_d);
       }
       else {
         SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
         SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
         y_c->Set(0.0);
         y_d->Set(0.0);
-	trial->Set_eq_mult(*y_c, *y_d);
+        trial->Set_eq_mult(*y_c, *y_d);
       }
       IpData().set_trial(trial);
 

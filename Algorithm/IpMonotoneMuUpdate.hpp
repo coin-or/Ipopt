@@ -18,7 +18,7 @@ namespace Ipopt
 
   DeclareIpoptType(MonotoneMuUpdate);
 
-  /** Monotone Mu Update. This class implements the standard monotone mu update 
+  /** Monotone Mu Update. This class implements the standard monotone mu update
    *  approach.
    */
   class MonotoneMuUpdate : public MuUpdate

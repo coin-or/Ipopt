@@ -69,11 +69,11 @@ ASTYLE_FILES = \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_FILE)
+CLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 
-astyle: $(ASTYLE_FILE)
+astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@

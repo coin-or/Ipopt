@@ -24,8 +24,8 @@ namespace Ipopt
 
   void RestoIterateInitializer::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("laminitmax", "maximum value for the initial lambda's", 
-					  0.0, false, 1e3);
+    roptions->AddLowerBoundedNumberOption("laminitmax", "maximum value for the initial lambda's",
+                                          0.0, false, 1e3);
   }
 
   bool RestoIterateInitializer::InitializeImpl(const OptionsList& options,
@@ -311,7 +311,7 @@ namespace Ipopt
           y_d->Set(0.0);
         }
       }
-    trial->Set_eq_mult(*y_c, *y_d);
+      trial->Set_eq_mult(*y_c, *y_d);
     }
     else {
       SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();

@@ -145,10 +145,10 @@ namespace Ipopt
     NonmonotoneMuUpdate::CentralityEnum quality_function_centrality_;
     /** enum for the dual infeasibility term in the quality function */
     enum QualityFunctionDualInfeasibilityTypeEnum
-      {
-	TYPE1=0,
-	TYPE2
-      };
+    {
+      TYPE1=0,
+      TYPE2
+    };
     /** Flag indicating what term is to be used for the dual
      *  infeasibility in the quality function. */
     QualityFunctionDualInfeasibilityTypeEnum quality_function_dual_inf_;

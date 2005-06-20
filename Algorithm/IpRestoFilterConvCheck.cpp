@@ -41,8 +41,8 @@ namespace Ipopt
 
   void RestoFilterConvergenceCheck::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddBoundedNumberOption("kappa_resto", "???", 
-				     0.0, true, 1.0, true, 0.9);
+    roptions->AddBoundedNumberOption("kappa_resto", "???",
+                                     0.0, true, 1.0, true, 0.9);
   }
 
   bool RestoFilterConvergenceCheck::InitializeImpl(const OptionsList& options,

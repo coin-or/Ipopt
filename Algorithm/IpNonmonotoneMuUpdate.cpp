@@ -44,49 +44,49 @@ namespace Ipopt
   void NonmonotoneMuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddLowerBoundedNumberOption("mu_max", "maximum value for mu",
-					  0.0, true, 1e10);
+                                          0.0, true, 1e10);
     roptions->AddLowerBoundedNumberOption("mu_min", "minimum value for mu - AW We need to do something with this one... You override the default in the code - but I assume that you do not want to do this if the user specified something ",
-					  0.0, true, 1e-9);
+                                          0.0, true, 1e-9);
     roptions->AddLowerBoundedNumberOption("mu_safeguard_exp", "???",
-					  0.0, false, 0.0);
+                                          0.0, false, 0.0);
     roptions->AddLowerBoundedNumberOption("mu_safeguard_factor", "???",
-					  0.0, false, 0.0);
+                                          0.0, false, 0.0);
     roptions->AddBoundedNumberOption("nonmonotone_mu_refs_redfact", "???",
-				     0.0, true, 1.0, true, 0.9999);
+                                     0.0, true, 1.0, true, 0.9999);
     roptions->AddLowerBoundedIntegerOption("nonmonotone_mu_max_refs", "???",
-					   0, 4);
+                                           0, 4);
     roptions->AddStringOption2("mu_never_fix", "??? - this seems like a double negative", "no",
-			       "no", "allow mu to be fixed",
-			       "yes", "never fix mu");
+                               "no", "allow mu to be fixed",
+                               "yes", "never fix mu");
     roptions->AddStringOption3("adaptive_globalization", "globalization strategy for non-monotone mode", "type1",
-			       "kkt-error", "monitor kkt error",
-			       "filter", "2-dim filter in objective and constraint violation",
-			       "type3", "need a better name and desc");
+                               "kkt-error", "monitor kkt error",
+                               "filter", "2-dim filter in objective and constraint violation",
+                               "type3", "need a better name and desc");
     roptions->AddLowerBoundedNumberOption("filter_max_margin", "???",
-					  0.0, true, 1.0);
+                                          0.0, true, 1.0);
     roptions->AddBoundedNumberOption("filter_margin_fact", "???",
-				     0.0, true, 1.0, true, 1e-5);
+                                     0.0, true, 1.0, true, 1e-5);
     roptions->AddStringOption2("restore_accepted_iterate", "???", "no",
-			       "no", "don't restore accepted iterate",
-			       "yes", "restore accepted iterate");
+                               "no", "don't restore accepted iterate",
+                               "yes", "restore accepted iterate");
     roptions->AddLowerBoundedNumberOption("fixed_mu_avrg_factor", "???",
-					  0.0, true, 0.8);
+                                          0.0, true, 0.8);
 
     roptions->AddStringOption4("nonmonotone_kkt_norm_type", "norm to be used for the constraint violation", "1-norm",
-			       "1-norm", "use the 1-norm (abs sum)",
-			       "2-norm", "use the 2-norm sqrt(sum of squares)",
-			       "max-norm", "use the infinity norm (max)",
-			       "other", "ToDo: sensible name and desc");
+                               "1-norm", "use the 1-norm (abs sum)",
+                               "2-norm", "use the 2-norm sqrt(sum of squares)",
+                               "max-norm", "use the infinity norm (max)",
+                               "other", "ToDo: sensible name and desc");
 
     roptions->AddStringOption4("nonmonotone_kkt_centrality", "???", "none",
-			       "none", "???",
-			       "log", "compute the centrality as the complementarity * the log of the centrality measure",
-			       "reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure",
-			       "cubed-reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure cubed");
+                               "none", "???",
+                               "log", "compute the centrality as the complementarity * the log of the centrality measure",
+                               "reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure",
+                               "cubed-reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure cubed");
 
     roptions->AddStringOption2("nonmonotone_kkt_balancing_term", "???", "none",
-			       "none", "no balancing term",
-			       "standard", "standard cubic balancing term");
+                               "none", "no balancing term",
+                               "standard", "standard cubic balancing term");
 
   }
 
@@ -95,14 +95,14 @@ namespace Ipopt
   {
     options.GetNumericValue("mu_max", mu_max_, prefix);
     options.GetNumericValue("mu_min", mu_min_, prefix);
-//     if (options.GetNumericValue("mu_min", value, prefix)) {
-//       ASSERT_EXCEPTION(value > 0.0 && value < mu_max_, OptionsList::OPTION_OUT_OF_RANGE,
-//                        "Option \"mu_min\": This value must be larger than 0 and less than mu_max.");
-//       mu_min_ = value;
-//     }
-//     else {
-//       mu_min_ = 0.1*Min(IpData().tol(), IpData().compl_inf_tol());
-//     }
+    //     if (options.GetNumericValue("mu_min", value, prefix)) {
+    //       ASSERT_EXCEPTION(value > 0.0 && value < mu_max_, OptionsList::OPTION_OUT_OF_RANGE,
+    //                        "Option \"mu_min\": This value must be larger than 0 and less than mu_max.");
+    //       mu_min_ = value;
+    //     }
+    //     else {
+    //       mu_min_ = 0.1*Min(IpData().tol(), IpData().compl_inf_tol());
+    //     }
     options.GetNumericValue("tau_min", tau_min_, prefix);
     options.GetNumericValue("mu_safeguard_exp", mu_safeguard_exp_, prefix);
     options.GetNumericValue("mu_safeguard_factor", mu_safeguard_factor_, prefix);
@@ -244,8 +244,8 @@ namespace Ipopt
           // Restore most recent accepted iterate to start fixed mode from
           Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                          "Restoring most recent accepted point.\n");
-	  SmartPtr<IteratesVector> prev_iter = accepted_point_->MakeNewContainer();
-	  IpData().set_trial(prev_iter);
+          SmartPtr<IteratesVector> prev_iter = accepted_point_->MakeNewContainer();
+          IpData().set_trial(prev_iter);
           IpData().AcceptTrialPoint();
         }
 

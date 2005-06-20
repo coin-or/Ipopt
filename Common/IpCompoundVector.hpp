@@ -67,7 +67,7 @@ namespace Ipopt
       DBG_ASSERT(i > 0 && i < NComps());
       DBG_ASSERT(IsValid(comps_[i]) || IsValid(const_comps_[i]));
       if (IsValid(const_comps_[i])) {
-	return true;
+        return true;
       }
       return false;
     }
@@ -77,7 +77,7 @@ namespace Ipopt
     {
       DBG_ASSERT(i >= 0 && i < NComps());
       if (IsValid(comps_[i]) || IsValid(const_comps_[i])) {
-	return false;
+        return false;
       }
       return true;
     }
@@ -240,8 +240,8 @@ namespace Ipopt
 
     /** Method for setting the individual component VectorSpaces */
     virtual void SetCompSpace(Index icomp                  /** Number of the component to be set */ ,
-                      const VectorSpace& vec_space /** VectorSpace for component icomp */
-                     );
+                              const VectorSpace& vec_space /** VectorSpace for component icomp */
+                             );
 
     /** Method for obtaining an individual component VectorSpace */
     SmartPtr<const VectorSpace> GetCompSpace(Index icomp) const;

@@ -72,15 +72,15 @@ namespace Ipopt
   void Ma27TSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddBoundedNumberOption("pivtol", "pivot tolerance for the linear solver. smaller number - pivot for sparsity, larger number - pivot for stability",
-				     0.0, true, 1.0, true, 1e-8);
+                                     0.0, true, 1.0, true, 1e-8);
     roptions->AddBoundedNumberOption("pivtolmax", "maximum pivot tolerance. IPOPT may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system",
-				     0.0, true, 1.0, true, 1e-4);
+                                     0.0, true, 1.0, true, 1e-4);
     roptions->AddLowerBoundedNumberOption("liw_init_factor", "integer workspace memory = liw_init_factor * memory required by unfactored system",
-					   1.0, false, 5.0);
-    roptions->AddLowerBoundedNumberOption("la_init_factor", "real workspace memory = la_init_factor * memory required by unfactored system", 
-					   1.0, false, 5.0);
-    roptions->AddLowerBoundedNumberOption("meminc_factor", "if workspace is not large enough, IPOPT will increase the size by this factor", 
-					   1.0, false, 10.0);
+                                          1.0, false, 5.0);
+    roptions->AddLowerBoundedNumberOption("la_init_factor", "real workspace memory = la_init_factor * memory required by unfactored system",
+                                          1.0, false, 5.0);
+    roptions->AddLowerBoundedNumberOption("meminc_factor", "if workspace is not large enough, IPOPT will increase the size by this factor",
+                                          1.0, false, 10.0);
   }
 
   bool Ma27TSolverInterface::InitializeImpl(const OptionsList& options,
@@ -89,8 +89,8 @@ namespace Ipopt
     options.GetNumericValue("pivtol", pivtol_, prefix);
     options.GetNumericValue("pivtolmax", pivtolmax_, prefix);
     ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OptionsList::OPTION_OUT_OF_RANGE,
-		     "Option \"pivtolmax\": This value must be between pivtol and 1.");
-    
+                     "Option \"pivtolmax\": This value must be between pivtol and 1.");
+
     options.GetNumericValue("liw_init_factor", liw_init_factor_, prefix);
     options.GetNumericValue("la_init_factor", la_init_factor_, prefix);
     options.GetNumericValue("meminc_factor", meminc_factor_, prefix);

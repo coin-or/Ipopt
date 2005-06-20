@@ -14,74 +14,79 @@
 #include <iostream>
 #include "IpRegOptions.hpp"
 
-namespace Ipopt {
+namespace Ipopt
+{
 
   class IpoptTypeInfo;
   std::list<IpoptTypeInfo*>& IpoptTypeInfosList();
-  
-/** This class is for implementing "class objects" or types in IPOPT.
- *  It is primarily used so we have runtime access to each class.
- */
-class IpoptTypeInfo
-{
- public:
-  /** Constructors / Destructors */
-  //@{
-  /** Standard Constructor - takes in the type_name of the derived class */
-  IpoptTypeInfo(const char* type_name)
-    : type_name_(type_name)  
+
+  /** This class is for implementing "class objects" or types in IPOPT.
+   *  It is primarily used so we have runtime access to each class.
+   */
+  class IpoptTypeInfo
   {
-    IpoptTypeInfosList().push_back(this);
+  public:
+    /** Constructors / Destructors */
+    //@{
+    /** Standard Constructor - takes in the type_name of the derived class */
+    IpoptTypeInfo(const char* type_name)
+        : type_name_(type_name)
+    {
+      IpoptTypeInfosList().push_back(this);
+    }
+
+    /** Standard destructor */
+    virtual ~IpoptTypeInfo()
+    {}
+    //@}
+
+    /** Standard Access Methods */
+    //@{
+    std::string TypeName()
+    {
+      return type_name_;
+    }
+    //@}
+
+    /** Static methods to interact with ALL class type infos */
+    //@{
+    /** Register all the options */
+    static void RegisterAllOptions(SmartPtr<RegisteredOptions> reg_options);
+    //@}
+
+  protected:
+    /** Methods to be overridded by derived classes */
+    //@{
+    /** Override this method in derived TypeInfo classs to register options */
+    virtual void RegisterOptionsImpl(SmartPtr<RegisteredOptions> reg_options)=0;
+    //@}
+
+  private:
+    /** store the type name */
+    std::string type_name_;
+
+    /** keep a static list of all IpoptTypeInfo's */
+    //  static std::list<IpoptTypeInfo*> ipopt_type_infos_;
+
+  };
+
+  inline
+  void IpoptTypeInfo::RegisterAllOptions(SmartPtr<RegisteredOptions> reg_options)
+  {
+    std::list<IpoptTypeInfo*>::iterator i;
+    for (i=IpoptTypeInfosList().begin(); i != IpoptTypeInfosList().end(); i++) {
+      (*i)->RegisterOptionsImpl(reg_options);
+    }
   }
 
-  /** Standard destructor */
-  virtual ~IpoptTypeInfo() {}
-  //@}
 
-  /** Standard Access Methods */
-  //@{
-  std::string TypeName() { return type_name_; }
-  //@}
-
-  /** Static methods to interact with ALL class type infos */
-  //@{
-  /** Register all the options */
-  static void RegisterAllOptions(SmartPtr<RegisteredOptions> reg_options);
-  //@}
-
- protected:
-  /** Methods to be overridded by derived classes */
-  //@{
-  /** Override this method in derived TypeInfo classs to register options */
-  virtual void RegisterOptionsImpl(SmartPtr<RegisteredOptions> reg_options)=0;
-  //@}
-
- private:
-  /** store the type name */
-  std::string type_name_;
-
-  /** keep a static list of all IpoptTypeInfo's */
-  //  static std::list<IpoptTypeInfo*> ipopt_type_infos_;
- 
-};
-
-inline 
- void IpoptTypeInfo::RegisterAllOptions(SmartPtr<RegisteredOptions> reg_options)
- {
-   std::list<IpoptTypeInfo*>::iterator i;
-   for (i=IpoptTypeInfosList().begin(); i != IpoptTypeInfosList().end(); i++) {
-     (*i)->RegisterOptionsImpl(reg_options);
-   }
- }
+  //extern std::list<IpoptTypeInfo*> IpoptTypeInfo::ipopt_type_infos_;
 
 
-//extern std::list<IpoptTypeInfo*> IpoptTypeInfo::ipopt_type_infos_;
-
-
-////////////////////////////////////////////////////////////
-// Below is what needs to be added for each IpoptType
-// but I think this can be macro'ed
-///////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////
+  // Below is what needs to be added for each IpoptType
+  // but I think this can be macro'ed
+  ///////////////////////////////////////////////////////////
 
 #define DeclareIpoptType(__class_name__)                                \
 class __class_name__ ## IpoptTypeInfo : public IpoptTypeInfo            \
@@ -93,7 +98,7 @@ class __class_name__ ## IpoptTypeInfo : public IpoptTypeInfo            \
    __class_name__ ## IpoptTypeInfo* KeepCompilerFromOptimizing();	\
   protected:                                                             \
    virtual void RegisterOptionsImpl(SmartPtr<RegisteredOptions> reg_options); \
- };                                                                      
+ };
 
 #define DefineIpoptType(__class_name__) \
   void __class_name__ ## IpoptTypeInfo::RegisterOptionsImpl(SmartPtr<RegisteredOptions> reg_options) \
@@ -109,19 +114,19 @@ __class_name__ ## IpoptTypeInfo* \
 __class_name__ ## IpoptTypeInfo::KeepCompilerFromOptimizing() \
    { return &_ ## __class_name__ ## IpoptTypeInfo_; }
 
-// class ClassAIpoptTypeInfo : public IpoptTypeInfo
-// {
-//  public:
-//   ClassAIpoptTypeInfo()
-//     : IpoptTypeInfo("ClassA") {}
+  // class ClassAIpoptTypeInfo : public IpoptTypeInfo
+  // {
+  //  public:
+  //   ClassAIpoptTypeInfo()
+  //     : IpoptTypeInfo("ClassA") {}
 
-//  protected:
-//   virtual void RegisterOptionsImpl()
-//   { 
-//     //  ClassA::RegisterOptions(); 
-//   }
-// };
-// ClassAIpoptTypeInfo _ClassAIpoptTypeInfo_;
+  //  protected:
+  //   virtual void RegisterOptionsImpl()
+  //   {
+  //     //  ClassA::RegisterOptions();
+  //   }
+  // };
+  // ClassAIpoptTypeInfo _ClassAIpoptTypeInfo_;
 
 } // end namespace Ipopt
 

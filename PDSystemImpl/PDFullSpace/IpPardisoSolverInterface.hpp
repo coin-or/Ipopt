@@ -40,8 +40,8 @@ namespace Ipopt
     //@{
     /** Method for initializing internal stuctures. */
     virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
-						 const Index *ia,
-						 const Index *ja);
+        const Index *ia,
+        const Index *ja);
 
     /** Method returing an internal array into which the nonzero
      *  elements are to be stored. */
@@ -49,12 +49,12 @@ namespace Ipopt
 
     /** Solve operation for multiple right hand sides. */
     virtual ESymSolverStatus MultiSolve(bool new_matrix,
-					const Index* ia,
-					const Index* ja,
-					Index nrhs,
-					double* rhs_vals,
-					bool check_NegEVals,
-					Index numberOfNegEVals);
+                                        const Index* ia,
+                                        const Index* ja,
+                                        Index nrhs,
+                                        double* rhs_vals,
+                                        bool check_NegEVals,
+                                        Index numberOfNegEVals);
 
     /** Number of negative eigenvalues detected during last
      *  factorization.
@@ -147,21 +147,21 @@ namespace Ipopt
     /** Call Pardiso to do the analysis phase.
      */
     ESymSolverStatus SymbolicFactorization(const Index* ia,
-					   const Index* ja);
+                                           const Index* ja);
 
     /** Call Pardiso to factorize the Matrix.
      */
     ESymSolverStatus Factorization(const Index* ia,
-				   const Index* ja,
-				   bool check_NegEVals,
-				   Index numberOfNegEVals);
+                                   const Index* ja,
+                                   bool check_NegEVals,
+                                   Index numberOfNegEVals);
 
     /** Call Pardiso to do the Solve.
      */
     ESymSolverStatus Solve(const Index* ia,
-			   const Index* ja,
-			   Index nrhs,
-			   double *rhs_vals);
+                           const Index* ja,
+                           Index nrhs,
+                           double *rhs_vals);
     //@}
   };
 

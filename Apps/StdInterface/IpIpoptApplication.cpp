@@ -44,14 +44,17 @@ namespace Ipopt
   {
     roptions->AddBoundedIntegerOption("print_level", "Sets the print level for the console output", 0, J_LAST_LEVEL-1, J_SUMMARY);
 #if IP_DEBUG
+
     roptions->AddBoundedIntegerOption("debug_print_level", "sets the print level for the debug file", 0, J_LAST_LEVEL-1, J_SUMMARY);
 #endif
-    roptions->AddStringOption1("output_file", "file name of an output file (leave unset for no file output)", "", 
-			       "*", "Any acceptable standard file name");
+
+    roptions->AddStringOption1("output_file", "file name of an output file (leave unset for no file output)", "",
+                               "*", "Any acceptable standard file name");
     roptions->AddBoundedIntegerOption("file_print_level", "sets the print level for the output file", 0, J_LAST_LEVEL-1, J_SUMMARY);
     roptions->AddStringOption2("print_options_documentation", "list all algorithmic options", "no",
-			       "no", "don't print list",
-			       "yes", "print list");  }
+                               "no", "don't print list",
+                               "yes", "print list");
+  }
 
   ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp)
   {
@@ -95,7 +98,7 @@ namespace Ipopt
 # endif
 
       Journal* stdout_jrnl =
-	jnlst_->AddJournal("ConsoleStdOut", "stdout", J_SUMMARY);
+        jnlst_->AddJournal("ConsoleStdOut", "stdout", J_SUMMARY);
       stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
 
 # ifdef IP_DEBUG
@@ -107,7 +110,7 @@ namespace Ipopt
       // Register the valid options
       SmartPtr<RegisteredOptions> reg_options = new RegisteredOptions();
       IpoptTypeInfo::RegisterAllOptions(reg_options);
-      
+
       //::RegisterOptionsImpl(reg_options);
 
       options_->SetJournalist(jnlst_);
@@ -115,13 +118,13 @@ namespace Ipopt
 
       // Get the options
       if (read_params_dat_) {
-	FILE* fp_options = fopen("PARAMS.DAT", "r");
-	if (fp_options) {
-	  // PARAMS.DAT exists, read the content
-	  options_->ReadFromFile(*jnlst_, fp_options);
-	  fclose(fp_options);
-	  fp_options=NULL;
-	}
+        FILE* fp_options = fopen("PARAMS.DAT", "r");
+        if (fp_options) {
+          // PARAMS.DAT exists, read the content
+          options_->ReadFromFile(*jnlst_, fp_options);
+          fclose(fp_options);
+          fp_options=NULL;
+        }
       }
 
       // Set printlevel for stdout
@@ -144,20 +147,20 @@ namespace Ipopt
       std::string output_filename;
       options_->GetValue("output_file", output_filename, "");
       if (output_filename != "") {
-	EJournalLevel file_print_level;
-	options_->GetIntegerValue("file_print_level", ivalue, "");
-	file_print_level = (EJournalLevel)ivalue;
-	Journal* file_jrnl = jnlst_->AddJournal("OutputFile", output_filename.c_str(), file_print_level);
-	file_jrnl->SetPrintLevel(J_DBG, J_NONE);
+        EJournalLevel file_print_level;
+        options_->GetIntegerValue("file_print_level", ivalue, "");
+        file_print_level = (EJournalLevel)ivalue;
+        Journal* file_jrnl = jnlst_->AddJournal("OutputFile", output_filename.c_str(), file_print_level);
+        file_jrnl->SetPrintLevel(J_DBG, J_NONE);
       }
 
 
       // output a description of all the options
       bool print_options_documentation;
       options_->GetBoolValue("print_options_documentation",
-			     print_options_documentation, "");
+                             print_options_documentation, "");
       if (print_options_documentation) {
-	reg_options->OutputOptionDocumentation(*jnlst_);
+        reg_options->OutputOptionDocumentation(*jnlst_);
       }
 
       SmartPtr<IpoptNLP> ip_nlp =
