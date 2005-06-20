@@ -9,6 +9,13 @@
 #include "IpRegOptions.hpp"
 #include <set>
 
+#ifdef OLD_C_HEADERS
+# include <ctype.h>
+#else
+# include <cctype>
+#endif
+
+
 namespace Ipopt
 {
 
@@ -221,6 +228,8 @@ namespace Ipopt
     while(i1!=s1.end()) {
       if (toupper(*i1)!=toupper(*i2))
         return false;
+      i1++;
+      i2++;
     }
     return true;
   }
