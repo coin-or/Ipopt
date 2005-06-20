@@ -58,9 +58,9 @@ namespace Ipopt
     roptions->AddStringOption2("mu_never_fix", "??? - this seems like a double negative", "no",
 			       "no", "allow mu to be fixed",
 			       "yes", "never fix mu");
-    roptions->AddStringOption3("adaptive_globalization", "???", "type1",
-			       "type1", "need a better name and desc",
-			       "type2", "need a better name and desc",
+    roptions->AddStringOption3("adaptive_globalization", "globalization strategy for non-monotone mode", "type1",
+			       "kkt-error", "monitor kkt error",
+			       "filter", "2-dim filter in objective and constraint violation",
 			       "type3", "need a better name and desc");
     roptions->AddLowerBoundedNumberOption("filter_max_margin", "???",
 					  0.0, true, 1.0);
@@ -78,7 +78,7 @@ namespace Ipopt
 			       "max-norm", "use the infinity norm (max)",
 			       "other", "ToDo: sensible name and desc");
 
-    roptions->AddStringOption4("nonmonotone_function_centrality", "???", "none",
+    roptions->AddStringOption4("nonmonotone_kkt_centrality", "???", "none",
 			       "none", "???",
 			       "log", "compute the centrality as the complementarity * the log of the centrality measure",
 			       "reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure",
@@ -135,12 +135,12 @@ namespace Ipopt
     options.GetNumericValue("kappa_mu", kappa_mu_, prefix);
     options.GetNumericValue("theta_mu", theta_mu_, prefix);
 
-    options.GetEnumValue("nonmonotone_kkt_norm", enum_int, prefix);
-    nonmonotone_kkt_norm_ = NonmonotoneKKTNormTypeEnum(enum_int);
+    options.GetEnumValue("nonmonotone_kkt_norm_type", enum_int, prefix);
+    nonmonotone_kkt_norm_ = NormEnum(enum_int);
     options.GetEnumValue("nonmonotone_kkt_centrality", enum_int, prefix);
-    nonmonotone_kkt_centrality_ = MuOracle::QualityFunctionCentralityEnum(enum_int);
+    nonmonotone_kkt_centrality_ = CentralityEnum(enum_int);
     options.GetEnumValue("nonmonotone_kkt_balancing_term", enum_int, prefix);
-    nonmonotone_kkt_balancing_term_ = MuOracle::QualityFunctionBalancingTermEnum(enum_int);
+    nonmonotone_kkt_balancing_term_ = BalancingTermEnum(enum_int);
 
     init_dual_inf_ = -1.;
     init_primal_inf_ = -1.;
@@ -495,7 +495,7 @@ namespace Ipopt
     Number primal_inf;
     Number complty;
     switch (nonmonotone_kkt_norm_) {
-      case NKN_NORM_1:
+      case NM_NORM_1:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_1);
       primal_inf =
@@ -512,7 +512,7 @@ namespace Ipopt
         complty /= (Number)n_comp;
       }
       break;
-      case NKN_NORM_2:
+      case NM_NORM_2_SQUARED:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_2);
       dual_inf *= dual_inf;
@@ -532,7 +532,7 @@ namespace Ipopt
         complty /= (Number)n_comp;
       }
       break;
-      case NKN_NORM_MAX:
+      case NM_NORM_MAX:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_MAX);
       primal_inf =
@@ -540,7 +540,7 @@ namespace Ipopt
       complty =
         IpCq().curr_complementarity(0., NORM_MAX);
       break;
-      case NKN_NORM_OTHER:
+      case NM_NORM_2:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_2);
       primal_inf =

@@ -31,6 +31,9 @@
 #include "IpMa27TSolverInterface.hpp"
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpPardisoSolverInterface.hpp"
+#ifdef HAVE_TAUCS
+#include "IpTAUCSSolverInterface.hpp"
+#endif
 
 namespace Ipopt
 {
@@ -43,9 +46,10 @@ namespace Ipopt
     roptions->AddStringOption2("scaling_method", "sets the scaling method for the problem", "none",
 			       "none", "no scaling will be performed",
 			       "mc19", "use the Harwell routine mc19 to find suitable scaling factors");
-    roptions->AddStringOption2("linear_solver", "set which linear solver should be used for the augmented system", "ma27",
+    roptions->AddStringOption3("linear_solver", "set which linear solver should be used for the augmented system", "ma27",
 			       "ma27", "use the Harwell routine ma27",
-			       "pardiso", "use Pardiso (ref)");
+			       "pardiso", "use Pardiso (ref)",
+			       "taucs", "use TAUCS (ref)");
     roptions->AddStringOption2("warm_start_init_point", "use a warm start initialization or not", "no",
 			       "no", "do not use the warm start initialization",
 			       "yes", "use the warm start initialization");
@@ -98,7 +102,16 @@ namespace Ipopt
       THROW_EXCEPTION(OptionsList::OPTION_OUT_OF_RANGE,
                        "Selected solver Pardiso not available.");
 #endif
+    }
+    else if (linear_solver=="taucs") {
+#ifdef HAVE_TAUCS
+      SolverInterface = new TAUCSSolverInterface();
+#else
 
+      ASSERT_EXCEPTION(false,
+                       OptionsList::OPTION_OUT_OF_RANGE,
+                       "Selected solver TAUCS not available.");
+#endif
     }
 
     SmartPtr<SymLinearSolver> ScaledSolver =

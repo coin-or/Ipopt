@@ -13,6 +13,7 @@
 #include "IpPDSystemSolver.hpp"
 #include "IpIpoptType.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
+#include "IpNonmonotoneMuUpdate.hpp"
 
 namespace Ipopt
 {
@@ -134,14 +135,14 @@ namespace Ipopt
     //@{
     /** Upper bound on centering parameter sigma */
     Number sigma_max_;
-    /** Norm to be used for the quality function. 1: 1-norm, 2: 2-norm */
-    ENormType quality_function_norm_;
+    /** Norm to be used for the quality function. */
+    NonmonotoneMuUpdate::NormEnum quality_function_norm_;
     /** Flag indicating whether the components of the quality function
      *  should be normalized. */
     bool quality_function_normalized_;
     /** Flag indicating how centrality should be involved in the
      *  quality function */
-    QualityFunctionCentralityEnum quality_function_centrality_;
+    NonmonotoneMuUpdate::CentralityEnum quality_function_centrality_;
     /** enum for the dual infeasibility term in the quality function */
     enum QualityFunctionDualInfeasibilityTypeEnum
       {
@@ -154,7 +155,7 @@ namespace Ipopt
     /** Flag indicating whether we use a balancing term in the quality
      *  function.
      */
-    QualityFunctionBalancingTermEnum quality_function_balancing_term_;
+    NonmonotoneMuUpdate::BalancingTermEnum quality_function_balancing_term_;
     /** Relative tolerance for golden bi-section algorithm. */
     Number bisection_tol_;
     /** Maximal number of bi-section steps in the golden bisection

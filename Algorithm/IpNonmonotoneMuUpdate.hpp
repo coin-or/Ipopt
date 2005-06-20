@@ -51,6 +51,33 @@ namespace Ipopt
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
+    /** @name Public enums.  Some of those are also used for the
+     *  quality function */
+    //@{
+    /** enum for norm type */
+    enum NormEnum
+      {
+	NM_NORM_1=0,
+	NM_NORM_2_SQUARED,
+	NM_NORM_MAX,
+	NM_NORM_2
+      };
+    /** enum for centrality type */
+    enum CentralityEnum
+      {
+	CEN_NONE=0,
+	CEN_LOG,
+	CEN_RECIPROCAL,
+	CEN_CUBED_RECIPROCAL
+      };
+    /** enum for the quality function balancing term type */
+    enum BalancingTermEnum
+      {
+	BT_NONE=0,
+	BT_CUBIC
+      };
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -83,17 +110,9 @@ namespace Ipopt
     Number kappa_epsilon_;
     Number kappa_mu_;
     Number theta_mu_;
-    /** Special norm type enum for nonmonotone_kkt_norm_ */
-    enum NonmonotoneKKTNormTypeEnum
-      {
-	NKN_NORM_1=0,
-	NKN_NORM_2,
-	NKN_NORM_MAX,
-	NKN_NORM_OTHER //ToDo: Rename these sensibly
-      };
-    NonmonotoneKKTNormTypeEnum nonmonotone_kkt_norm_;
-    MuOracle::QualityFunctionCentralityEnum nonmonotone_kkt_centrality_;
-    MuOracle::QualityFunctionBalancingTermEnum nonmonotone_kkt_balancing_term_;
+    NormEnum nonmonotone_kkt_norm_;
+    CentralityEnum nonmonotone_kkt_centrality_;
+    BalancingTermEnum nonmonotone_kkt_balancing_term_;
     /** enumeration for adaptive globalization ToDo: Andreas, can you give these
      * sensible names */
     enum AdaptiveGlobalizationEnum

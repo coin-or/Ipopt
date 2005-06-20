@@ -57,14 +57,15 @@ namespace Ipopt
   {
     roptions->AddLowerBoundedNumberOption("sigma_max", "???", 
 					  0.0, true, 1e2);
-    roptions->AddStringOption3("quality_function_norm_type", "norm to be used for the quality function", "2-norm",
+    roptions->AddStringOption4("quality_function_norm_type", "norm to be used for the quality function", "2-norm",
 			       "1-norm", "use the 1-norm (abs sum)",
-			       "2-norm", "use the 2-norm sqrt(sum of squares)",
-			       "max-norm", "use the infinity norm (max)");
+			       "2-norm-squared", "use the 2-norm squared (sum of squares)",
+			       "max-norm", "use the infinity norm (max)",
+			       "2-norm", "use 2-norm");
     roptions->AddStringOption2("quality_function_normalized", "set whether or not the quality function should be normalized", "no",
 			       "no", "do not normalize the quality function",
 			       "yes", "normalize the quality function");
-    roptions->AddStringOption4("quality_function_centrality", "???", "log",
+    roptions->AddStringOption4("quality_function_centrality", "???", "none",
 			       "none", "???",
 			       "log", "compute the centrality as the complementarity * the log of the centrality measure",
 			       "reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure",
@@ -95,14 +96,14 @@ namespace Ipopt
     options.GetNumericValue("sigma_max", sigma_max_, prefix);
 
     options.GetEnumValue("quality_function_norm_type", enum_int, prefix);
-    quality_function_norm_ = ENormType(enum_int);
+    quality_function_norm_ = NonmonotoneMuUpdate::NormEnum(enum_int);
     options.GetBoolValue("quality_function_normalized", quality_function_normalized_, prefix);
     options.GetEnumValue("quality_function_centrality", enum_int, prefix);
-    quality_function_centrality_ = QualityFunctionCentralityEnum(enum_int);
+    quality_function_centrality_ = NonmonotoneMuUpdate::CentralityEnum(enum_int);
     options.GetEnumValue("quality_function_dual_inf", enum_int, prefix);
     quality_function_dual_inf_ = QualityFunctionDualInfeasibilityTypeEnum(enum_int);
     options.GetEnumValue("quality_function_balancing_term", enum_int, prefix);
-    quality_function_balancing_term_ = QualityFunctionBalancingTermEnum(enum_int);
+    quality_function_balancing_term_ = NonmonotoneMuUpdate::BalancingTermEnum(enum_int);
     options.GetIntegerValue("max_bisection_steps", max_bisection_steps_, prefix);
     options.GetNumericValue("bisection_tol", bisection_tol_, prefix);
 
@@ -530,7 +531,7 @@ namespace Ipopt
       DBG_ASSERT(compl_inf_scal_ < 0.);
 
       switch (quality_function_norm_) {
-        case NORM_1:
+        case NonmonotoneMuUpdate::NM_NORM_1:
         dual_inf_scal_ = Max(1., IpCq().curr_grad_lag_x()->Asum() +
                              IpCq().curr_grad_lag_s()->Asum());
 
@@ -549,7 +550,7 @@ namespace Ipopt
         DBG_ASSERT(n_comp>0);
         compl_inf_scal_ /= n_comp;
         break;
-        case NORM_2:
+        case NonmonotoneMuUpdate::NM_NORM_2_SQUARED:
         dual_inf_scal_ = Max(1., pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
                              pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
 
@@ -568,7 +569,7 @@ namespace Ipopt
         DBG_ASSERT(n_comp>0);
         compl_inf_scal_ /= n_comp;
         break;
-        case NORM_MAX:
+        case NonmonotoneMuUpdate::NM_NORM_MAX:
         dual_inf_scal_ = Max(1., IpCq().curr_grad_lag_x()->Amax(),
                              IpCq().curr_grad_lag_s()->Amax());
 
@@ -683,7 +684,7 @@ namespace Ipopt
     }
 
     switch (quality_function_norm_) {
-      case NORM_1:
+      case NonmonotoneMuUpdate::NM_NORM_1:
       if (quality_function_dual_inf_==TYPE2) {
         dual_inf = tmp_dual_inf_x_->Asum() + tmp_dual_inf_s_->Asum();
       }
@@ -705,7 +706,7 @@ namespace Ipopt
       DBG_ASSERT(n_comp>0);
       compl_inf /= n_comp;
       break;
-      case NORM_2:
+      case NonmonotoneMuUpdate::NM_NORM_2_SQUARED:
       if (quality_function_dual_inf_==TYPE2) {
         dual_inf = pow(tmp_dual_inf_x_->Nrm2(), 2) + pow(tmp_dual_inf_s_->Nrm2(), 2);
       }
@@ -728,7 +729,7 @@ namespace Ipopt
       DBG_ASSERT(n_comp>0);
       compl_inf /= n_comp;
       break;
-      case NORM_MAX:
+      case NonmonotoneMuUpdate::NM_NORM_MAX:
       if (quality_function_dual_inf_==TYPE2) {
         dual_inf = Max(tmp_dual_inf_x_->Amax(), tmp_dual_inf_s_->Amax());
       }
@@ -744,7 +745,7 @@ namespace Ipopt
         Max(tmp_slack_x_L_->Amax(), tmp_slack_x_U_->Amax(),
             tmp_slack_s_L_->Amax(), tmp_slack_s_U_->Amax());
       break;
-      case 4:
+      case NonmonotoneMuUpdate::NM_NORM_2:
       if (quality_function_dual_inf_==TYPE2) {
         dual_inf = sqrt(pow(tmp_dual_inf_x_->Nrm2(), 2) + pow(tmp_dual_inf_s_->Nrm2(), 2));
       }
@@ -779,15 +780,15 @@ namespace Ipopt
     Number quality_function = dual_inf + primal_inf + compl_inf;
 
     switch (quality_function_centrality_) {
-      case CEN_NONE:
+      case NonmonotoneMuUpdate::CEN_NONE:
       //Nothing
       break;
-      case CEN_LOG:
+      case NonmonotoneMuUpdate::CEN_LOG:
       quality_function -= compl_inf*log(xi);
       break;
-      case CEN_RECIPROCAL:
+      case NonmonotoneMuUpdate::CEN_RECIPROCAL:
       quality_function += compl_inf/xi;
-      case CEN_CUBED_RECIPROCAL:
+      case NonmonotoneMuUpdate::CEN_CUBED_RECIPROCAL:
       quality_function += compl_inf/pow(xi,3);
       break;
       default:
@@ -795,10 +796,10 @@ namespace Ipopt
     }
 
     switch (quality_function_balancing_term_) {
-      case BT_NONE:
+      case NonmonotoneMuUpdate::BT_NONE:
       //Nothing
       break;
-      case BT_CUBIC:
+      case NonmonotoneMuUpdate::BT_CUBIC:
       quality_function += pow(Max(0., Max(dual_inf,primal_inf)-compl_inf),3);
       break;
       default:

@@ -43,21 +43,6 @@ namespace Ipopt
      */
     virtual Number CalculateMu() = 0;
 
-    /** enum for quality function centrality type */
-    enum QualityFunctionCentralityEnum
-      {
-	CEN_NONE=0,
-	CEN_LOG,
-	CEN_RECIPROCAL,
-	CEN_CUBED_RECIPROCAL
-      };
-    /** enum for the quality function balancing term type */
-    enum QualityFunctionBalancingTermEnum
-      {
-	BT_NONE=0,
-	BT_CUBIC
-      };
-
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
