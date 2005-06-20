@@ -142,11 +142,14 @@ namespace Ipopt
     options.GetNumericValue("kappa_soc", kappa_soc_, prefix);
     options.GetNumericValue("obj_max_inc", obj_max_inc_, prefix);
     options.GetBoolValue("magic_steps", magic_steps_, prefix);
-    options.GetEnumValue("corrector_type", (Index)corrector_type_, prefix);
+    Index enum_int;
+    options.GetEnumValue("corrector_type", enum_int, prefix);
+    corrector_type_ = CorrectorTypeEnum(enum_int);
     options.GetBoolValue("skip_corr_if_neg_curv", skip_corr_if_neg_curv_, prefix);
     options.GetBoolValue("skip_corr_if_fixed_mode", skip_corr_if_fixed_mode_, prefix);
     options.GetBoolValue("ls_always_accept", ls_always_accept_, prefix);
-    options.GetEnumValue("alpha_for_y", (Index)alpha_for_y_, prefix);
+    options.GetEnumValue("alpha_for_y", enum_int, prefix);
+    alpha_for_y_ = AlphaForYEnum(enum_int);
     options.GetNumericValue("corrector_compl_avrg_red_fact", corrector_compl_avrg_red_fact_, prefix);
     options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
     options.GetNumericValue("expect_infeasible_problem_ctol", expect_infeasible_problem_ctol_, prefix);

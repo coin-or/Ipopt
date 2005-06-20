@@ -90,13 +90,19 @@ namespace Ipopt
   bool OptProbingMuOracle::InitializeImpl(const OptionsList& options,
                                           const std::string& prefix)
   {
+    Index enum_int;
+
     options.GetNumericValue("sigma_max", sigma_max_, prefix);
 
-    options.GetEnumValue("quality_function_norm_type", (Index)quality_function_norm_, prefix);
+    options.GetEnumValue("quality_function_norm_type", enum_int, prefix);
+    quality_function_norm_ = ENormType(enum_int);
     options.GetBoolValue("quality_function_normalized", quality_function_normalized_, prefix);
-    options.GetEnumValue("quality_function_centrality", (Index)quality_function_centrality_, prefix);
-    options.GetEnumValue("quality_function_dual_inf", (Index)quality_function_dual_inf_, prefix);
-    options.GetEnumValue("quality_function_balancing_term", (Index)quality_function_balancing_term_, prefix);
+    options.GetEnumValue("quality_function_centrality", enum_int, prefix);
+    quality_function_centrality_ = QualityFunctionCentralityEnum(enum_int);
+    options.GetEnumValue("quality_function_dual_inf", enum_int, prefix);
+    quality_function_dual_inf_ = QualityFunctionDualInfeasibilityTypeEnum(enum_int);
+    options.GetEnumValue("quality_function_balancing_term", enum_int, prefix);
+    quality_function_balancing_term_ = QualityFunctionBalancingTermEnum(enum_int);
     options.GetIntegerValue("max_bisection_steps", max_bisection_steps_, prefix);
     options.GetNumericValue("bisection_tol", bisection_tol_, prefix);
 
