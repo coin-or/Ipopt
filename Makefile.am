@@ -56,7 +56,7 @@ cuter: install
 
 # Astyle stuff
 
-ASTYLE_SOURCES = Interfaces/IpEqMultCalculator.hppbak \
+ASTYLE_FILES = Interfaces/IpEqMultCalculator.hppbak \
 	Interfaces/IpMatrix.hppbak \
 	Interfaces/IpNLP.hppbak \
 	Interfaces/IpPDSystemSolver.hppbak \
@@ -67,11 +67,11 @@ ASTYLE_SOURCES = Interfaces/IpEqMultCalculator.hppbak \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_SOURCES)
+CLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 
-astyle: $(ASTYLE_SOURCES)
+astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@

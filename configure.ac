@@ -326,6 +326,23 @@ if test ! "$use_pardiso" = "no"; then
             [Define to 1 if Pardiso is available])
 fi
 
+#########
+# TAUCS #
+#########
+
+AC_ARG_WITH([taucs],
+            AC_HELP_STRING([--with-taucs],
+                           [specify TAUCS library and dependencies]),
+            [use_taucs=$withval], [use_taucs=no])
+
+if test ! "$use_taucs" = "no"; then
+  LIBS="$use_taucs $LIBS"
+  IPADDLIBS="$use_taucs $IPADDLIBS"
+
+  AC_DEFINE(HAVE_TAUCS,1,
+            [Define to 1 if TAUCS is available])
+fi
+
 AC_LANG_POP(Fortran 77)
 
 # For the remaining tests we need to include FLIBS into LIBS, so that
@@ -510,6 +527,7 @@ AM_CONDITIONAL([BUILDLAPACKDIR],[test "$use_lapack" = BUILD])
 AM_CONDITIONAL([BUILDHSLDIR],[test "$use_hsl" = BUILD])
 
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
+AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])
 
 AM_CONDITIONAL([BUILDASLDIR],[test "$use_asldir" = BUILD])
 AM_CONDITIONAL([BUILDAMPLINTERFACE],[test ! "$use_asldir" = "no"])
@@ -518,7 +536,7 @@ AC_SUBST(AMPL_CPPFLAGS)
 if test "$use_asldir" = BUILD; then
   ASLLIB="\$(top_builddir)/OTHERS/ASL/amplsolver.a"
   AMPL_CPPFLAGS="-I\$(top_builddir)/OTHERS/ASL -I\$(top_srcdir)/OTHERS/ASL/solvers"
-  AC_CONFIG_LINKS(OTHERS/ASL/ASLsolvers:OTHERS/ASL/solvers)
+  AC_CONFIG_LINKS(OTHERS/ASL/ASLsolvers:$aslsrcdir)
 elif test ! "$use_asldir" = no; then
   case $build in
     *-cygwin*) AMPL_CPPFLAGS="-I\"$use_asldir\""

@@ -40,7 +40,7 @@ CXXFLAGS += -I$(srcdir)/../Interfaces
 
 # Astyle stuff
 
-ASTYLE_SOURCES = \
+ASTYLE_FILES = \
 	IpCachedResults.hppbak \
 	IpCompoundMatrix.cppbak IpCompoundMatrix.hppbak \
 	IpCompoundSymMatrix.cppbak IpCompoundSymMatrix.hppbak \
@@ -69,11 +69,11 @@ ASTYLE_SOURCES = \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_SOURCES)
+CLEANFILES = $(ASTYLE_FILE)
 
 SUFFIXES = .cppbak .hppbak
 
-astyle: $(ASTYLE_SOURCES)
+astyle: $(ASTYLE_FILE)
 
 .hpp.hppbak:
 	mv $< $@

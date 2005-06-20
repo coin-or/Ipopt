@@ -51,7 +51,7 @@ CXXFLAGS += -I$(srcdir)/../LinAlgImpl/Serial
 
 # Astyle stuff
 
-ASTYLE_SOURCES = \
+ASTYLE_FILES = \
 	IpAlgBuilder.hppbak IpAlgBuilder.cppbak \
 	IpAlgStrategy.hppbak \
 	IpConvCheck.hppbak \
@@ -88,11 +88,11 @@ ASTYLE_SOURCES = \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_SOURCES)
+CLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 
-astyle: $(ASTYLE_SOURCES)
+astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@
