@@ -110,6 +110,9 @@
 					RelativePath="..\..\..\Algorithm\IpDefaultIterateInitializer.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\Algorithm\IpFilter.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\Algorithm\IpFilterLineSearch.cpp">
 				</File>
 				<File
@@ -122,10 +125,16 @@
 					RelativePath="..\..\..\Algorithm\IpIpoptData.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\Algorithm\IpIteratesVector.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\Algorithm\IpLoqoMuOracle.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\Algorithm\IpMonotoneMuUpdate.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\Algorithm\IpMuUpdate.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\Algorithm\IpNonmonotoneMuUpdate.cpp">
@@ -143,6 +152,9 @@
 					RelativePath="..\..\..\Algorithm\IpProbingMuOracle.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\Algorithm\IpQualityFunctionMuOracle.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\Algorithm\IpRestoFilterConvCheck.cpp">
 				</File>
 				<File
@@ -156,6 +168,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\Algorithm\IpRestoMinC_1Nrm.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\Algorithm\IpRestoRestoPhase.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\Algorithm\IpWarmStartIterateInitializer.cpp">
 				</File>
 			</Filter>
 			<Filter
@@ -202,6 +220,9 @@
 					RelativePath="..\..\..\Common\IpIdentityMatrix.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\Common\IpIpoptType.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\Common\IpJournalist.cpp">
 				</File>
 				<File
@@ -215,6 +236,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\Common\IpReferenced.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\Common\IpRegOptions.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\Common\IpSumMatrix.cpp">
@@ -242,13 +266,16 @@
 					RelativePath="..\..\..\PDSystemImpl\PDFullSpace\IpAugRestoSystemSolver.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\PDSystemImpl\PDFullSpace\IpAugTSystemSolver.cpp">
-				</File>
-				<File
 					RelativePath="..\..\..\PDSystemImpl\PDFullSpace\IpLeastSquareMults.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\PDSystemImpl\PDFullSpace\IpMa27SymLinearSolver.cpp">
+					RelativePath="..\..\..\PDSystemImpl\PDFullSpace\IpMa27TSolverInterface.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\PDSystemImpl\PDFullSpace\IpMc19TSymScalingMethod.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\PDSystemImpl\PDFullSpace\IpPardisoSolverInterface.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\PDSystemImpl\PDFullSpace\IpPDFullSpaceSolver.cpp">
@@ -258,6 +285,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\PDSystemImpl\PDFullSpace\IpTripletHelper.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\PDSystemImpl\PDFullSpace\IpTripletToCSRConverter.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\PDSystemImpl\PDFullSpace\IpTSymLinearSolver.cpp">
 				</File>
 			</Filter>
 			<Filter

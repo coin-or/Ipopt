@@ -333,7 +333,7 @@ namespace Ipopt
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     DBG_ASSERT(settings.size() == descriptions.size());
-    for (int i=0; i<settings.size(); i++) {
+    for (int i=0; i<(int)settings.size(); i++) {
       option->AddValidStringSetting(settings[i], descriptions[i]);
     }
     ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
