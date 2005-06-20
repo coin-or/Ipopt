@@ -31,7 +31,6 @@ class IpoptTypeInfo
   IpoptTypeInfo(const char* type_name)
     : type_name_(type_name)  
   {
-    std::cout << "Registering: " << type_name_ << std::endl;
     IpoptTypeInfosList().push_back(this);
   }
 
