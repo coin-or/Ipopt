@@ -266,7 +266,7 @@ ASTYLE_FILES = \
 	IpVector.cppbak \
 	IpZeroMatrix.cppbak IpZeroMatrix.hppbak
 
-CLEANFILES = $(ASTYLE_FILE)
+CLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
 all: all-am
 
@@ -515,7 +515,7 @@ uninstall-am: uninstall-info-am
 	uninstall-am uninstall-info-am
 
 
-astyle: $(ASTYLE_FILE)
+astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@

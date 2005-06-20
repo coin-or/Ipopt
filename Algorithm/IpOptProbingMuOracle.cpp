@@ -55,36 +55,36 @@ namespace Ipopt
 
   void OptProbingMuOracle::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("sigma_max", "???", 
-					  0.0, true, 1e2);
+    roptions->AddLowerBoundedNumberOption("sigma_max", "???",
+                                          0.0, true, 1e2);
     roptions->AddStringOption4("quality_function_norm_type", "norm to be used for the quality function", "2-norm",
-			       "1-norm", "use the 1-norm (abs sum)",
-			       "2-norm-squared", "use the 2-norm squared (sum of squares)",
-			       "max-norm", "use the infinity norm (max)",
-			       "2-norm", "use 2-norm");
+                               "1-norm", "use the 1-norm (abs sum)",
+                               "2-norm-squared", "use the 2-norm squared (sum of squares)",
+                               "max-norm", "use the infinity norm (max)",
+                               "2-norm", "use 2-norm");
     roptions->AddStringOption2("quality_function_normalized", "set whether or not the quality function should be normalized", "no",
-			       "no", "do not normalize the quality function",
-			       "yes", "normalize the quality function");
+                               "no", "do not normalize the quality function",
+                               "yes", "normalize the quality function");
     roptions->AddStringOption4("quality_function_centrality", "???", "none",
-			       "none", "???",
-			       "log", "compute the centrality as the complementarity * the log of the centrality measure",
-			       "reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure",
-			       "cubed-reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure cubed");
+                               "none", "???",
+                               "log", "compute the centrality as the complementarity * the log of the centrality measure",
+                               "reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure",
+                               "cubed-reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure cubed");
     roptions->AddStringOption2("quality_function_dual_inf", "???", "type-1",
-			       "type-1", "???",
-			       "type-2", "???");
+                               "type-1", "???",
+                               "type-2", "???");
     roptions->AddStringOption2("quality_function_balancing_term", "???", "none",
-			       "none", "no balancing term",
-			       "standard", "standard cubic balancing term");
+                               "none", "no balancing term",
+                               "standard", "standard cubic balancing term");
     roptions->AddIntegerOption("max_bisection_steps", "??? No Range ???", 4);
-			       
-	
+
+
     roptions->AddBoundedNumberOption("bisection_tol", "tolerance for the bisection step length search",
-				     0.0, true, 1.0, true, 1e-3);
+                                     0.0, true, 1.0, true, 1e-3);
     roptions->AddStringOption2("dual_alpha_for_y", "???", "no",
-			       "no", "???",
-			       "yes", "???");
-			       
+                               "no", "???",
+                               "yes", "???");
+
   }
 
 
@@ -179,8 +179,8 @@ namespace Ipopt
 
     // Now solve the primal-dual system to get the step
     pd_solver_->Solve(-1.0, 0.0,
-		      *rhs_aff,
-		      *step_aff,
+                      *rhs_aff,
+                      *step_aff,
                       false           // want accurate solution here
                       // because we can use it to
                       // compute the overall search
@@ -216,8 +216,8 @@ namespace Ipopt
 
     // Now solve the primal-dual system to get the step
     pd_solver_->Solve(1.0, 0.0,
-		      *rhs_cen,
-		      *step_cen,
+                      *rhs_cen,
+                      *step_cen,
                       false           // want accurate solution here
                       // because we can use it to
                       // compute the overall search
@@ -370,58 +370,58 @@ namespace Ipopt
       l_best = l;
       sigma = pow(base, l);
       q_best = CalculateQualityFunction(sigma,
-                                 *step_aff_x_L,
-                                 *step_aff_x_U,
-                                 *step_aff_s_L,
-                                 *step_aff_s_U,
-                                 *step_aff->y_c(),
-                                 *step_aff->y_d(),
-                                 *step_aff->z_L(),
-                                 *step_aff->z_U(),
-                                 *step_aff->v_L(),
-                                 *step_aff->v_U(),
-                                 *step_cen_x_L,
-                                 *step_cen_x_U,
-                                 *step_cen_s_L,
-                                 *step_cen_s_U,
-                                 *step_cen->y_c(),
-                                 *step_cen->y_d(),
-                                 *step_cen->z_L(),
-                                 *step_cen->z_U(),
-                                 *step_cen->v_L(),
-                                 *step_cen->v_U(),
-                                 jac_cT_times_step_aff_y_c,
-                                 jac_dT_times_step_aff_y_d,
-                                 jac_cT_times_step_cen_y_c,
-                                 jac_dT_times_step_cen_y_d);
+                                        *step_aff_x_L,
+                                        *step_aff_x_U,
+                                        *step_aff_s_L,
+                                        *step_aff_s_U,
+                                        *step_aff->y_c(),
+                                        *step_aff->y_d(),
+                                        *step_aff->z_L(),
+                                        *step_aff->z_U(),
+                                        *step_aff->v_L(),
+                                        *step_aff->v_U(),
+                                        *step_cen_x_L,
+                                        *step_cen_x_U,
+                                        *step_cen_s_L,
+                                        *step_cen_s_U,
+                                        *step_cen->y_c(),
+                                        *step_cen->y_d(),
+                                        *step_cen->z_L(),
+                                        *step_cen->z_U(),
+                                        *step_cen->v_L(),
+                                        *step_cen->v_U(),
+                                        jac_cT_times_step_aff_y_c,
+                                        jac_dT_times_step_aff_y_d,
+                                        jac_cT_times_step_cen_y_c,
+                                        jac_dT_times_step_cen_y_d);
       Index l_min = (Index)trunc(-(log(avrg_compl)-log(1e-9))/log(base))-1;
       for (; l>=l_min; l--) {
         sigma = pow(base, l);
         Number q = CalculateQualityFunction(sigma,
-					    *step_aff_x_L,
-					    *step_aff_x_U,
-					    *step_aff_s_L,
-					    *step_aff_s_U,
-					    *step_aff->y_c(),
-					    *step_aff->y_d(),
-					    *step_aff->z_L(),
-					    *step_aff->z_U(),
-					    *step_aff->v_L(),
-					    *step_aff->v_U(),
-					    *step_cen_x_L,
-					    *step_cen_x_U,
-					    *step_cen_s_L,
-					    *step_cen_s_U,
-					    *step_cen->y_c(),
-					    *step_cen->y_d(),
-					    *step_cen->z_L(),
-					    *step_cen->z_U(),
-					    *step_cen->v_L(),
-					    *step_cen->v_U(),
-					    jac_cT_times_step_aff_y_c,
-					    jac_dT_times_step_aff_y_d,
-					    jac_cT_times_step_cen_y_c,
-					    jac_dT_times_step_cen_y_d);
+                                            *step_aff_x_L,
+                                            *step_aff_x_U,
+                                            *step_aff_s_L,
+                                            *step_aff_s_U,
+                                            *step_aff->y_c(),
+                                            *step_aff->y_d(),
+                                            *step_aff->z_L(),
+                                            *step_aff->z_U(),
+                                            *step_aff->v_L(),
+                                            *step_aff->v_U(),
+                                            *step_cen_x_L,
+                                            *step_cen_x_U,
+                                            *step_cen_s_L,
+                                            *step_cen_s_U,
+                                            *step_cen->y_c(),
+                                            *step_cen->y_d(),
+                                            *step_cen->z_L(),
+                                            *step_cen->z_U(),
+                                            *step_cen->v_L(),
+                                            *step_cen->v_U(),
+                                            jac_cT_times_step_aff_y_c,
+                                            jac_dT_times_step_aff_y_d,
+                                            jac_cT_times_step_cen_y_c,
+                                            jac_dT_times_step_cen_y_d);
         if (q<=q_best) {
           q_best = q;
           l_best = l;

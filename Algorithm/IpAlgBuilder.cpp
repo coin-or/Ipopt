@@ -44,30 +44,30 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddStringOption2("scaling_method", "sets the scaling method for the problem", "none",
-			       "none", "no scaling will be performed",
-			       "mc19", "use the Harwell routine mc19 to find suitable scaling factors");
+                               "none", "no scaling will be performed",
+                               "mc19", "use the Harwell routine mc19 to find suitable scaling factors");
     roptions->AddStringOption3("linear_solver", "set which linear solver should be used for the augmented system", "ma27",
-			       "ma27", "use the Harwell routine ma27",
-			       "pardiso", "use Pardiso (ref)",
-			       "taucs", "use TAUCS (ref)");
+                               "ma27", "use the Harwell routine ma27",
+                               "pardiso", "use Pardiso (ref)",
+                               "taucs", "use TAUCS (ref)");
     roptions->AddStringOption2("warm_start_init_point", "use a warm start initialization or not", "no",
-			       "no", "do not use the warm start initialization",
-			       "yes", "use the warm start initialization");
+                               "no", "do not use the warm start initialization",
+                               "yes", "use the warm start initialization");
 
     roptions->AddStringOption2("muupdate", "which update option should be used for the barrier parameter, mu", "monotone",
-			       "monotone", "use a monotone mu update strategy",
-			       "nonmonotone", "use a nonmonotone update strategy");
+                               "monotone", "use a monotone mu update strategy",
+                               "nonmonotone", "use a nonmonotone update strategy");
 
     roptions->AddStringOption3("muoracle", "when using  nonmonotone mu update strategy, this selects how the update is performed", "probing",
-			       "probing", "???",
-			       "loqo", "???",
-			       "optprobing", "???");
+                               "probing", "???",
+                               "loqo", "???",
+                               "optprobing", "???");
 
     roptions->AddStringOption4("fixmuoracle", "???", "avgerage_compl",
-			       "probing", "???",
-			       "loqo", "???",
-			       "optprobing", "???",
-			       "avgerage_compl", "???");
+                               "probing", "???",
+                               "loqo", "???",
+                               "optprobing", "???",
+                               "avgerage_compl", "???");
   }
 
   SmartPtr<IpoptAlgorithm>
@@ -99,9 +99,11 @@ namespace Ipopt
 #ifdef HAVE_PARDISO
       SolverInterface = new PardisoSolverInterface();
 #else
+
       THROW_EXCEPTION(OptionsList::OPTION_OUT_OF_RANGE,
-                       "Selected solver Pardiso not available.");
+                      "Selected solver Pardiso not available.");
 #endif
+
     }
     else if (linear_solver=="taucs") {
 #ifdef HAVE_TAUCS
@@ -112,6 +114,7 @@ namespace Ipopt
                        OptionsList::OPTION_OUT_OF_RANGE,
                        "Selected solver TAUCS not available.");
 #endif
+
     }
 
     SmartPtr<SymLinearSolver> ScaledSolver =

@@ -33,6 +33,7 @@ namespace Ipopt
   {
   public:
 #ifdef IP_DEBUG_OBSERVER
+
     static const Index dbg_verbosity;
 #endif
 
@@ -117,6 +118,7 @@ namespace Ipopt
   {
   public:
 #ifdef IP_DEBUG_OBSERVER
+
     static const Index dbg_verbosity;
 #endif
 
@@ -124,7 +126,8 @@ namespace Ipopt
     //@{
     /** Default Constructor */
     Subject()
-    {};
+    {}
+    ;
 
     /** Default destructor */
     virtual ~Subject();
@@ -183,7 +186,7 @@ namespace Ipopt
     DBG_START_METH("Observer::~Observer", dbg_verbosity);
     if (DBG_VERBOSITY()>=1) {
       for (Index i=0; i<(Index)subjects_.size(); i++) {
-	DBG_PRINT((1,"subjects_[%d] = 0x%x\n", i, subjects_[i]));
+        DBG_PRINT((1,"subjects_[%d] = 0x%x\n", i, subjects_[i]));
       }
     }
 #endif
@@ -192,6 +195,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_OBSERVER
       DBG_PRINT((1,"About to detach subjects_[%d] = 0x%x\n", i, subjects_[i]));
 #endif
+
       RequestDetach(NT_All, subjects_[i]);
     }
   }
@@ -202,6 +206,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_OBSERVER
     DBG_START_METH("Observer::RequestAttach", dbg_verbosity);
 #endif
+
     DBG_ASSERT(subject);
     if (subject) {
       // Add the subject to the list if it does not already exist
@@ -224,16 +229,20 @@ namespace Ipopt
     DBG_PRINT((1, "Requesting detach of subject: 0x%x\n", subject));
     DBG_ASSERT(subject);
 #endif
+
     if (subject) {
       std::vector<const Subject*>::iterator attached_subject;
       attached_subject = std::find(subjects_.begin(), subjects_.end(), subject);
 #ifdef IP_DEBUG_OBSERVER
+
       DBG_ASSERT(attached_subject != subjects_.end());
 #endif
+
       if (attached_subject != subjects_.end()) {
 #ifdef IP_DEBUG_OBSERVER
         DBG_PRINT((1, "Removing subject: 0x%x from the list\n", subject));
 #endif
+
         subjects_.erase(attached_subject);
       }
 
@@ -249,6 +258,7 @@ namespace Ipopt
     DBG_START_METH("Observer::ProcessNotification", dbg_verbosity);
     DBG_ASSERT(subject);
 #endif
+
     if (subject) {
       std::vector<const Subject*>::iterator attached_subject;
       attached_subject = std::find(subjects_.begin(), subjects_.end(), subject);
@@ -256,8 +266,10 @@ namespace Ipopt
       // We must be processing a notification for a
       // subject that was previously attached.
 #ifdef IP_DEBUG_OBSERVER
+
       DBG_ASSERT(attached_subject != subjects_.end());
 #endif
+
       this->RecieveNotification(notify_type, subject);
 
       if (notify_type == NT_BeingDestroyed) {
@@ -273,6 +285,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_OBSERVER
     DBG_START_METH("Subject::~Subject", dbg_verbosity);
 #endif
+
     std::vector<Observer*>::iterator iter;
     for (iter = observers_.begin(); iter != observers_.end(); iter++) {
       (*iter)->ProcessNotification(Observer::NT_BeingDestroyed, this);
@@ -289,6 +302,7 @@ namespace Ipopt
     // in (i.e. a hub, not a router)
     DBG_ASSERT(observer);
 #endif
+
     if (observer) {
       std::vector<Observer*>::iterator attached_observer;
       attached_observer = std::find(observers_.begin(), observers_.end(), observer);
@@ -305,12 +319,15 @@ namespace Ipopt
     DBG_START_METH("Subject::DetachObserver", dbg_verbosity);
     DBG_ASSERT(observer);
 #endif
+
     if (observer) {
       std::vector<Observer*>::iterator attached_observer;
       attached_observer = std::find(observers_.begin(), observers_.end(), observer);
 #ifdef IP_DEBUG_OBSERVER
+
       DBG_ASSERT(attached_observer != observers_.end());
 #endif
+
       if (attached_observer != observers_.end()) {
         observers_.erase(attached_observer);
       }
@@ -323,6 +340,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_OBSERVER
     DBG_START_METH("Subject::Notify", dbg_verbosity);
 #endif
+
     std::vector<Observer*>::iterator iter;
     for (iter = observers_.begin(); iter != observers_.end(); iter++) {
       (*iter)->ProcessNotification(notify_type, this);

@@ -47,76 +47,76 @@ namespace Ipopt
 
   void FilterLineSearch::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("theta_max_fact", "???", 
-					  0.0, true, 1e4);
-    roptions->AddLowerBoundedNumberOption("theta_min_fact", "???", 
-					  0.0, true, 1e-4);
-    roptions->AddBoundedNumberOption("eta_phi", "???", 
-				     0.0, true, 0.5, true, 1e-4);
+    roptions->AddLowerBoundedNumberOption("theta_max_fact", "???",
+                                          0.0, true, 1e4);
+    roptions->AddLowerBoundedNumberOption("theta_min_fact", "???",
+                                          0.0, true, 1e-4);
+    roptions->AddBoundedNumberOption("eta_phi", "???",
+                                     0.0, true, 0.5, true, 1e-4);
     roptions->AddLowerBoundedNumberOption("delta", "???",
-					  0.0, true, 1.0);
+                                          0.0, true, 1.0);
     roptions->AddLowerBoundedNumberOption("s_phi", "???",
-					  1.0, true, 2.3);
+                                          1.0, true, 2.3);
     roptions->AddLowerBoundedNumberOption("s_theta", "???",
-					  1.0, true, 1.1);
+                                          1.0, true, 1.1);
     roptions->AddBoundedNumberOption("gamma_phi", "???",
-				     0.0, true, 1.0, true, 1e-8);
+                                     0.0, true, 1.0, true, 1e-8);
     roptions->AddBoundedNumberOption("gamma_theta", "???",
-				     0.0, true, 1.0, true, 1e-5);
+                                     0.0, true, 1.0, true, 1e-5);
     roptions->AddBoundedNumberOption("alpha_min_frac", "???",
-				     0.0, true, 1.0, true, 0.05);
+                                     0.0, true, 1.0, true, 0.05);
     roptions->AddLowerBoundedNumberOption("alpha_red_factor", "fractional reduction of alpha (step size) in the line search",
-					  0.0, true, 0.5);
+                                          0.0, true, 0.5);
     roptions->AddLowerBoundedIntegerOption("max_soc", "???",
-					  0, 4);
+                                           0, 4);
     roptions->AddLowerBoundedNumberOption("kappa_soc", "???",
-					  0.0, true, 0.99);
+                                          0.0, true, 0.99);
     roptions->AddLowerBoundedNumberOption("obj_max_inc", "???",
-					  1.0, true, 5.0);
+                                          1.0, true, 5.0);
     roptions->AddStringOption2("magic_steps", "should we take special steps with the slack variables from the general inequalities", "no",
-			       "no", "don't take magic steps",
-			       "yes", "take magic steps");
+                               "no", "don't take magic steps",
+                               "yes", "take magic steps");
     roptions->AddStringOption3("corrector_type", "???", "none",
-			       "none", "no corrector",
-			       "affine", "corrector step towards mu=0",
-			       "primal-dual", "corrector step towards current mu");
+                               "none", "no corrector",
+                               "affine", "corrector step towards mu=0",
+                               "primal-dual", "corrector step towards current mu");
 
     roptions->AddStringOption2("skip_corr_if_neg_curv", "skip the corrector step if we are currently encountering negative curvature", "yes",
-			       "no", "don't skip",
-			       "yes", "skip");
+                               "no", "don't skip",
+                               "yes", "skip");
 
     roptions->AddStringOption2("skip_corr_if_fixed_mode", "skip the corrector step if we are currently in fixed mu mode", "yes",
-			       "no", "don't skip",
-			       "yes", "skip");
+                               "no", "don't skip",
+                               "yes", "skip");
     roptions->AddStringOption2("ls_always_accept", "always accept the full step", "no",
-			       "no", "don't arbitrarily accept the full step",
-			       "yes", "always accept the full step");
+                               "no", "don't arbitrarily accept the full step",
+                               "yes", "always accept the full step");
 
     roptions->AddStringOption7("alpha_for_y", "method for performing the step for the equality multipliers", "primal",
-			       "primal", "set the y's using the primal step size",
-			       "bound-mult", "set the y's using the step for the bound multipliers",
-			       "min", "set the y's using the min of primal and bound-mult",
-			       "max", "set the y's using the max of primal and bound-mult",
-			       "full", "take a full step in the y's",
-			       "safe_min_dual_infeas", "???",
-			       "min_dual_infeas", "???");
+                               "primal", "set the y's using the primal step size",
+                               "bound-mult", "set the y's using the step for the bound multipliers",
+                               "min", "set the y's using the min of primal and bound-mult",
+                               "max", "set the y's using the max of primal and bound-mult",
+                               "full", "take a full step in the y's",
+                               "safe_min_dual_infeas", "???",
+                               "min_dual_infeas", "???");
 
     roptions->AddLowerBoundedNumberOption("corrector_compl_avrg_red_fact", "???",
-					  0.0, true, 1.0);
+                                          0.0, true, 1.0);
     roptions->AddLowerBoundedNumberOption("expect_infeasible_problem_ctol", "???",
-					  0.0, false, 1e-3);
+                                          0.0, false, 1e-3);
     roptions->AddLowerBoundedNumberOption("resto_pderror_reduction_factor", "???",
-					  0.0, false, (1.0 - 1e-4));
+                                          0.0, false, (1.0 - 1e-4));
     roptions->AddLowerBoundedNumberOption("tiny_step_tol", "???",
-					  0.0, false, 10.0*std::numeric_limits<double>::epsilon());
+                                          0.0, false, 10.0*std::numeric_limits<double>::epsilon());
     roptions->AddLowerBoundedIntegerOption("watch_dog_trial_iter_max", "number of trial iterations before watchdog returns to stored point",
-					   1, 3);
+                                           1, 3);
     roptions->AddLowerBoundedIntegerOption("watch_dog_shortened_iter_trigger", "???",
-					   0, 10);
+                                           0, 10);
     roptions->AddLowerBoundedNumberOption("acceptable_tol", "???",
-					  0.0, false, 1e-6);
+                                          0.0, false, 1e-6);
     roptions->AddLowerBoundedIntegerOption("acceptable_iter_max", "???",
-					   0, 15);
+                                           0, 15);
   }
 
   bool FilterLineSearch::InitializeImpl(const OptionsList& options,
@@ -125,7 +125,7 @@ namespace Ipopt
     options.GetNumericValue("theta_max_fact", theta_max_fact_, prefix);
     options.GetNumericValue("theta_min_fact", theta_min_fact_, prefix);
     ASSERT_EXCEPTION(theta_min_fact_ < theta_max_fact_, OptionsList::OPTION_OUT_OF_RANGE,
-		     "Option \"theta_min_fact\": This value must be larger than 0 and less than theta_max_fact.");
+                     "Option \"theta_min_fact\": This value must be larger than 0 and less than theta_max_fact.");
     options.GetNumericValue("eta_phi", eta_phi_, prefix);
     options.GetNumericValue("delta", delta_, prefix);
     options.GetNumericValue("s_phi", s_phi_, prefix);
@@ -304,7 +304,7 @@ namespace Ipopt
                                             soc_taken,
                                             n_steps,
                                             evaluation_error,
-					    actual_delta);
+                                            actual_delta);
           DBG_PRINT((1, "evaluation_error = %d\n", evaluation_error));
           if (in_watch_dog_) {
             if (accept) {
@@ -478,7 +478,7 @@ namespace Ipopt
       bool& soc_taken,
       Index& n_steps,
       bool& evaluation_error,
-      SmartPtr<IteratesVector>& actual_delta)  
+      SmartPtr<IteratesVector>& actual_delta)
   {
     evaluation_error = false;
     bool accept = false;
@@ -523,7 +523,7 @@ namespace Ipopt
       // including a higher-order correctior is already acceptable
       accept = TryCorrector(alpha_primal_test,
                             alpha_primal,
-			    actual_delta);
+                            actual_delta);
     }
     if (accept) {
       corr_taken = true;
@@ -542,7 +542,7 @@ namespace Ipopt
 
         try {
           // Compute the primal trial point
-	  IpData().SetTrialPrimalVariablesFromStep(alpha_primal, *actual_delta->x(), *actual_delta->s());
+          IpData().SetTrialPrimalVariablesFromStep(alpha_primal, *actual_delta->x(), *actual_delta->s());
 
           if (magic_steps_) {
             PerformMagicStep();
@@ -587,7 +587,7 @@ namespace Ipopt
             // Try second order correction
             accept = TrySecondOrderCorrection(alpha_primal_test,
                                               alpha_primal,
-					      actual_delta);
+                                              actual_delta);
           }
           if (accept) {
             soc_taken = true;
@@ -823,7 +823,7 @@ namespace Ipopt
     // Set the trial point
     IpData().SetTrialPrimalVariablesFromStep(alpha_max, *actual_delta->x(), *actual_delta->s());
     PerformDualStep(alpha_max, alpha_max,
-		    actual_delta);
+                    actual_delta);
 
     // Check if that point is acceptable with respect to the current
     // original filter
@@ -946,10 +946,10 @@ namespace Ipopt
 
   void FilterLineSearch::PerformDualStep(Number alpha_primal,
                                          Number alpha_dual,
-					 SmartPtr<IteratesVector>& delta)
+                                         SmartPtr<IteratesVector>& delta)
   {
     DBG_START_FUN("FilterLineSearch::PerformDualStep", dbg_verbosity);
-    
+
     // set the bound multipliers from the step
     IpData().SetTrialBoundMultipliersFromStep(alpha_dual, *delta->z_L(), *delta->z_U(), *delta->v_L(), *delta->v_U());
 
@@ -1002,7 +1002,7 @@ namespace Ipopt
       alpha_y = alpha_primal;
     }
 
-    // Set the eq multipliers from the step now that alpha_y 
+    // Set the eq multipliers from the step now that alpha_y
     // has been calculated.
     IpData().SetTrialEqMultipliersFromStep(alpha_y, *delta->y_c(), *delta->y_d());
 
@@ -1066,7 +1066,7 @@ namespace Ipopt
       // Check if trial point is acceptable
       try {
         // Compute the primal trial point
-	IpData().SetTrialPrimalVariablesFromStep(alpha_primal_soc, *delta_soc->x(), *delta_soc->s());
+        IpData().SetTrialPrimalVariablesFromStep(alpha_primal_soc, *delta_soc->x(), *delta_soc->s());
 
         // in acceptance tests, use original step size!
         accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
@@ -1081,7 +1081,7 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Second order correction step accepted with %d corrections.\n", count_soc+1);
         // Accept all SOC quantities
         alpha_primal = alpha_primal_soc;
-	actual_delta = delta_soc;
+        actual_delta = delta_soc;
       }
       else {
         count_soc++;
@@ -1121,38 +1121,38 @@ namespace Ipopt
           Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                          "Solving the Primal Dual System for the affine step\n");
           // First get the right hand side
-	  SmartPtr<IteratesVector> rhs_aff = delta_corr->MakeNewContainer();
-	  
+          SmartPtr<IteratesVector> rhs_aff = delta_corr->MakeNewContainer();
+
           rhs_aff->Set_x(*IpCq().curr_grad_lag_x());
           rhs_aff->Set_s(*IpCq().curr_grad_lag_s());
           rhs_aff->Set_y_c(*IpCq().curr_c());
           rhs_aff->Set_y_d(*IpCq().curr_d_minus_s());
           rhs_aff->Set_z_L(*IpCq().curr_compl_x_L());
-	  rhs_aff->Set_z_U(*IpCq().curr_compl_x_U());
-	  rhs_aff->Set_v_L(*IpCq().curr_compl_s_L());
-	  rhs_aff->Set_v_U(*IpCq().curr_compl_s_U());
+          rhs_aff->Set_z_U(*IpCq().curr_compl_x_U());
+          rhs_aff->Set_v_L(*IpCq().curr_compl_s_L());
+          rhs_aff->Set_v_U(*IpCq().curr_compl_s_U());
 
-	  // create a new iterates vector (with allocated space)
-	  // for the affine scaling step
-	  SmartPtr<IteratesVector> step_aff = delta_corr->MakeNewIteratesVector(true);
+          // create a new iterates vector (with allocated space)
+          // for the affine scaling step
+          SmartPtr<IteratesVector> step_aff = delta_corr->MakeNewIteratesVector(true);
 
           // Now solve the primal-dual system to get the step
           pd_solver_->Solve(-1.0, 0.0, *rhs_aff, *step_aff, false);
 
-	  DBG_PRINT_VECTOR(2, "step_aff", *step_aff);
+          DBG_PRINT_VECTOR(2, "step_aff", *step_aff);
 
-	  IpData().set_delta_aff(step_aff);
+          IpData().set_delta_aff(step_aff);
           IpData().SetHaveAffineDeltas(true);
         }
 
         DBG_ASSERT(IpData().HaveAffineDeltas());
 
-	const SmartPtr<const IteratesVector> delta_aff = IpData().delta_aff();
+        const SmartPtr<const IteratesVector> delta_aff = IpData().delta_aff();
 
-	delta_corr->Copy(*actual_delta);
-	
-	// create a rhs vector and allocate entries
-	SmartPtr<IteratesVector> rhs = actual_delta->MakeNewIteratesVector(true);
+        delta_corr->Copy(*actual_delta);
+
+        // create a rhs vector and allocate entries
+        SmartPtr<IteratesVector> rhs = actual_delta->MakeNewIteratesVector(true);
 
         rhs->x_NonConst()->Set(0.);
         rhs->s_NonConst()->Set(0.);
@@ -1169,17 +1169,17 @@ namespace Ipopt
 
         pd_solver_->Solve(1.0, 1.0, *rhs, *delta_corr, true);
 
-	DBG_PRINT_VECTOR(2, "delta_corr", *delta_corr);
+        DBG_PRINT_VECTOR(2, "delta_corr", *delta_corr);
       }
       break;
       case 2 : {
         // 2: Second order correction for primal-dual step to
         // primal-dual mu
 
-	delta_corr->Copy(*actual_delta);
-	
-	// allocate space for the rhs
-	SmartPtr<IteratesVector> rhs = actual_delta->MakeNewIteratesVector(true);
+        delta_corr->Copy(*actual_delta);
+
+        // allocate space for the rhs
+        SmartPtr<IteratesVector> rhs = actual_delta->MakeNewIteratesVector(true);
 
         rhs->x_NonConst()->Set(0.);
         rhs->s_NonConst()->Set(0.);
@@ -1221,11 +1221,11 @@ namespace Ipopt
         rhs->v_U_NonConst()->ElementWiseMultiply(*tmp);
         rhs->v_U_NonConst()->AddScalar(mu);
 
-	DBG_PRINT_VECTOR(2, "rhs", *rhs);
+        DBG_PRINT_VECTOR(2, "rhs", *rhs);
 
         pd_solver_->Solve(1.0, 1.0, *rhs, *delta_corr, true);
 
-	DBG_PRINT_VECTOR(2, "delta_corr", *delta_corr);
+        DBG_PRINT_VECTOR(2, "delta_corr", *delta_corr);
       }
       break;
       default:
@@ -1283,8 +1283,8 @@ namespace Ipopt
         Jnlst().Printf(J_MOREVECTOR, J_MAIN,
                        "*** Accepted corrector for Iteration: %d\n",
                        IpData().iter_count());
-	Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-			    "delta_corr", *delta_corr);
+        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
+                            "delta_corr", *delta_corr);
       }
     }
 

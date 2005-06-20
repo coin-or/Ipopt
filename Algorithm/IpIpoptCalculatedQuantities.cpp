@@ -135,12 +135,12 @@ namespace Ipopt
   void IpoptCalculatedQuantities::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddLowerBoundedNumberOption("s_max", "???", 0.0, true, 100.0);
-    roptions->AddLowerBoundedNumberOption("kappa_d", "???", 0.0, false, 1e-5); 
-    roptions->AddLowerBoundedNumberOption("s_move", "???", 0.0, false,  pow(std::numeric_limits<double>::epsilon(), 0.75) ); 
+    roptions->AddLowerBoundedNumberOption("kappa_d", "???", 0.0, false, 1e-5);
+    roptions->AddLowerBoundedNumberOption("s_move", "???", 0.0, false,  pow(std::numeric_limits<double>::epsilon(), 0.75) );
     roptions->AddStringOption3("constraint_violation_norm_type", "norm to be used for the constraint violation", "1-norm",
-			       "1-norm", "use the 1-norm (abs sum)",
-			       "2-norm", "use the 2-norm sqrt(sum of squares)",
-			       "max-norm", "use the infinity norm (max)");
+                               "1-norm", "use the 1-norm (abs sum)",
+                               "2-norm", "use the 2-norm sqrt(sum of squares)",
+                               "max-norm", "use the infinity norm (max)");
   }
 
   bool IpoptCalculatedQuantities::Initialize(const Journalist& jnlst,

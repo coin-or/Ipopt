@@ -42,15 +42,15 @@ namespace Ipopt
   void MonotoneMuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddLowerBoundedNumberOption("mu0", "initial value for the barrier parameter, mu",
-					  0.0, true, 0.1);
-//     roptions->AddLowerBoundedNumberOption("kappa_epsilon", "???",
-// 					  0.0, true, 10.0);
-//     roptions->AddBoundedNumberOption("kappa_mu", "???",
-// 				     0.0, true, 1.0, true, 0.2);
-//     roptions->AddBoundedNumberOption("theta_mu", "???",
-// 				     1.0, true, 2.0, true, 1.5);
-//     roptions->AddBoundedNumberOption("tau_min", "???",
-//  				     0.0, true, 1.0, true, 0.99);
+                                          0.0, true, 0.1);
+    //     roptions->AddLowerBoundedNumberOption("kappa_epsilon", "???",
+    // 					  0.0, true, 10.0);
+    //     roptions->AddBoundedNumberOption("kappa_mu", "???",
+    // 				     0.0, true, 1.0, true, 0.2);
+    //     roptions->AddBoundedNumberOption("theta_mu", "???",
+    // 				     1.0, true, 2.0, true, 1.5);
+    //     roptions->AddBoundedNumberOption("tau_min", "???",
+    //  				     0.0, true, 1.0, true, 0.99);
   }
 
   bool MonotoneMuUpdate::InitializeImpl(const OptionsList& options,

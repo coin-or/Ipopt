@@ -1,6 +1,7 @@
 #include "IpIpoptType.hpp"
 
-namespace Ipopt {
+namespace Ipopt
+{
 
   std::list<IpoptTypeInfo*>& IpoptTypeInfosList()
   {

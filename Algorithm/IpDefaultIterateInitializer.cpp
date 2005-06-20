@@ -20,19 +20,20 @@ namespace Ipopt
       IterateInitializer(),
       eq_mult_calculator_(eq_mult_calculator)
   {}
-  
+
   void DefaultIterateInitializer::RegisterOptions(SmartPtr<RegisteredOptions> reg_options)
   {
-    reg_options->AddLowerBoundedNumberOption("bound_push", "factor used when pushing initial point back in to the interior", 
-					     0.0, true, 0.01);
+    reg_options->AddLowerBoundedNumberOption("bound_push", "factor used when pushing initial point back in to the interior",
+        0.0, true, 0.01);
     reg_options->AddBoundedNumberOption("bound_frac", "boundary fraction for pushing initial iterates in bounds prior to solve",
-					0, true, 0.5, false, 0.01);
-    reg_options->AddLowerBoundedNumberOption("bound_mult_init_val", "initial value for the bound multipliers", 
-					     0, true, 1.0);
+                                        0, true, 0.5, false, 0.01);
+    reg_options->AddLowerBoundedNumberOption("bound_mult_init_val", "initial value for the bound multipliers",
+        0, true, 1.0);
   }
 
   bool DefaultIterateInitializer::InitializeImpl(const OptionsList& options,
-      const std::string& prefix)  {
+      const std::string& prefix)
+  {
     // Check for the algorithm options
     options.GetNumericValue("bound_push", bound_push_, prefix);
     options.GetNumericValue("bound_frac", bound_frac_, prefix);

@@ -47,13 +47,13 @@ namespace Ipopt
 
   void IpoptAlgorithm::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("lam_init_max", "maximum initial value for the equality multipliers", 
-					     0, false, 1e3);    
+    roptions->AddLowerBoundedNumberOption("lam_init_max", "maximum initial value for the equality multipliers",
+                                          0, false, 1e3);
     roptions->AddStringOption2("expect_infeasible_problem", "this may speed up the infeasibility determination if you expect the problem to be infeasible", "no",
-			       "no", "don't expect the problem to be infeasible",
-			       "yes", "expect the problem to be infeasible");
+                               "no", "don't expect the problem to be infeasible",
+                               "yes", "expect the problem to be infeasible");
     roptions->AddLowerBoundedNumberOption("kappa_sigma", "???",
-					  1.0, false, 1e10);
+                                          1.0, false, 1e10);
   }
 
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,
@@ -239,14 +239,14 @@ namespace Ipopt
 
     //ToDo: allow us to delete entries in IpData to save memory?
     // To save memory, delete the old search directions
-//     IpData().SetFromPtr_delta_x(NULL);
-//     IpData().SetFromPtr_delta_s(NULL);
-//     IpData().SetFromPtr_delta_y_c(NULL);
-//     IpData().SetFromPtr_delta_y_d(NULL);
-//     IpData().SetFromPtr_delta_z_L(NULL);
-//     IpData().SetFromPtr_delta_z_U(NULL);
-//     IpData().SetFromPtr_delta_v_L(NULL);
-//     IpData().SetFromPtr_delta_v_U(NULL);
+    //     IpData().SetFromPtr_delta_x(NULL);
+    //     IpData().SetFromPtr_delta_s(NULL);
+    //     IpData().SetFromPtr_delta_y_c(NULL);
+    //     IpData().SetFromPtr_delta_y_d(NULL);
+    //     IpData().SetFromPtr_delta_z_L(NULL);
+    //     IpData().SetFromPtr_delta_z_U(NULL);
+    //     IpData().SetFromPtr_delta_v_L(NULL);
+    //     IpData().SetFromPtr_delta_v_U(NULL);
 
     // Get space for the search direction
     SmartPtr<IteratesVector> delta = IpData().curr()->MakeNewIteratesVector(true);

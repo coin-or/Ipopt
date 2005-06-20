@@ -32,18 +32,18 @@ namespace Ipopt
 
   void PDFullSpaceSolver::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedIntegerOption("num_min_iter_ref", "???", 
-					   0, 1);
+    roptions->AddLowerBoundedIntegerOption("num_min_iter_ref", "???",
+                                           0, 1);
     roptions->AddLowerBoundedIntegerOption("num_max_iter_ref", "???",
-					   0, 10);
+                                           0, 10);
     roptions->AddLowerBoundedNumberOption("delta_regu_max", "maximum regularization for the linear system (delta_w)",
-					  0, true, 1e40);
+                                          0, true, 1e40);
     roptions->AddLowerBoundedNumberOption("residual_ratio_max", "maximum allowed residual ratio (tolerance for iterative refinement)",
-					  0.0, true, 1e-10);
+                                          0.0, true, 1e-10);
     roptions->AddLowerBoundedNumberOption("residual_ratio_singular", "only assume the system is singular if the residual_ratio is worse than this.",
-					  0.0, true, 1e-5);
+                                          0.0, true, 1e-5);
     roptions->AddLowerBoundedNumberOption("residual_improvement_factor", "???",
-					  0.0, true, 0.999999999);
+                                          0.0, true, 0.999999999);
   }
 
 
@@ -54,13 +54,13 @@ namespace Ipopt
     options.GetIntegerValue("num_min_iter_ref", num_min_iter_ref_, prefix);
     options.GetIntegerValue("num_max_iter_ref", num_max_iter_ref_, prefix);
     ASSERT_EXCEPTION(num_max_iter_ref_ >= num_min_iter_ref_, OptionsList::OPTION_OUT_OF_RANGE,
-		     "Option \"num_max_iter_ref\": This value must be larger than or equal to num_min_iter_ref (default 1)");
+                     "Option \"num_max_iter_ref\": This value must be larger than or equal to num_min_iter_ref (default 1)");
 
     options.GetNumericValue("delta_regu_max", delta_regu_max_, prefix);
     options.GetNumericValue("residual_ratio_max", residual_ratio_max_, prefix);
     options.GetNumericValue("residual_ratio_singular", residual_ratio_singular_, prefix);
     ASSERT_EXCEPTION(residual_ratio_singular_ > residual_ratio_max_, OptionsList::OPTION_OUT_OF_RANGE,
-		     "Option \"residual_ratio_singular\": This value must be larger than residual_ratio_max.");
+                     "Option \"residual_ratio_singular\": This value must be larger than residual_ratio_max.");
     options.GetNumericValue("residual_improvement_factor", residual_improvement_factor_, prefix);
 
     // Reset internal flags and data
@@ -80,8 +80,8 @@ namespace Ipopt
 
   void PDFullSpaceSolver::Solve(Number alpha,
                                 Number beta,
-				const IteratesVector& rhs,
-				IteratesVector& res,
+                                const IteratesVector& rhs,
+                                IteratesVector& res,
                                 bool allow_inexact)
   {
     DBG_START_METH("PDFullSpaceSolver::Solve",dbg_verbosity);
@@ -153,7 +153,7 @@ namespace Ipopt
         // direction to zero, and hope that the line search will take
         // care of this (e.g. call the restoration phase).  ToDo: We
         // might want to use a more explicit cue later.
-	res.Set(0.0);
+        res.Set(0.0);
         return;
       }
 
@@ -317,8 +317,8 @@ namespace Ipopt
                                     const Vector& sigma_s,
                                     Number alpha,
                                     Number beta,
-				    const IteratesVector& rhs,
-				    IteratesVector& res)
+                                    const IteratesVector& rhs,
+                                    IteratesVector& res)
   {
     // TO DO LIST:
     //
@@ -386,9 +386,9 @@ namespace Ipopt
                                     &sigma_s, delta_s_curr_, &J_c, NULL,
                                     delta_c_curr_, &J_d, NULL, delta_d_curr_,
                                     *augRhs_x, *augRhs_s, *rhs.y_c(), *rhs.y_d(),
-                                    *sol->x_NonConst(), *sol->s_NonConst(), 
-				    *sol->y_c_NonConst(), *sol->y_d_NonConst(), 
-				    false, 0);
+                                    *sol->x_NonConst(), *sol->s_NonConst(),
+                                    *sol->y_c_NonConst(), *sol->y_d_NonConst(),
+                                    false, 0);
       if (retval!=SYMSOLVER_SUCCESS) {
         return false;
       }
@@ -429,8 +429,8 @@ namespace Ipopt
                                         &sigma_s, delta_s_curr_, &J_c, NULL,
                                         delta_c_curr_, &J_d, NULL, delta_d_curr_,
                                         *augRhs_x, *augRhs_s, *rhs.y_c(), *rhs.y_d(),
-					*sol->x_NonConst(), *sol->s_NonConst(), 
-					*sol->y_c_NonConst(), *sol->y_d_NonConst(), 
+                                        *sol->x_NonConst(), *sol->s_NonConst(),
+                                        *sol->y_c_NonConst(), *sol->y_d_NonConst(),
                                         true, numberOfEVals);
         }
         assert(retval!=SYMSOLVER_FATAL_ERROR); //TODO make return code
@@ -615,8 +615,8 @@ namespace Ipopt
   }
 
   Number PDFullSpaceSolver::ComputeResidualRatio(const IteratesVector& rhs,
-						 const IteratesVector& res,
-						 const IteratesVector& resid)
+      const IteratesVector& res,
+      const IteratesVector& resid)
   {
     DBG_START_METH("PDFullSpaceSolver::ComputeResidualRatio", dbg_verbosity);
 

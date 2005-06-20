@@ -18,7 +18,7 @@
 
 namespace Ipopt
 {
-  
+
   DeclareIpoptType(FilterLineSearch);
 
   /** Filter line search.  This class implements the filter line
@@ -158,7 +158,7 @@ namespace Ipopt
                                   bool& soc_taken,
                                   Index& n_steps,
                                   bool& evaluation_error,
-				  SmartPtr<IteratesVector>& actual_delta);
+                                  SmartPtr<IteratesVector>& actual_delta);
 
     /** Method for starting the watch dog.  Set all appropriate fields
      *  accordingly */
@@ -186,8 +186,8 @@ namespace Ipopt
      *  step size), and the step size for the equality constraint 
      *  multipliers depends on the choice of alpha_for_y. */
     void PerformDualStep(Number alpha_primal,
-			 Number alpha_dual,
-			 SmartPtr<IteratesVector>& delta);
+                         Number alpha_dual,
+                         SmartPtr<IteratesVector>& delta);
 
     /** Try a step for the soft restoration phase and check if it is
      *  acceptable.  The step size is identical for all variables.  A
@@ -212,7 +212,7 @@ namespace Ipopt
      */
     bool TrySecondOrderCorrection(Number alpha_primal_test,
                                   Number& alpha_primal,
-				  SmartPtr<IteratesVector>& actual_delta);
+                                  SmartPtr<IteratesVector>& actual_delta);
 
     /** Try higher order corrector (for fast local convergence).  In
      *  contrast to a second order correction step, which tries to
@@ -222,7 +222,7 @@ namespace Ipopt
      */
     bool TryCorrector(Number alpha_primal_test,
                       Number& alpha_primal,
-		      SmartPtr<IteratesVector>& actual_delta);
+                      SmartPtr<IteratesVector>& actual_delta);
 
     /** Perform magic steps.  Take the current values of the slacks in
      *  trial and replace them by better ones that lead to smaller

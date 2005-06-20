@@ -48,7 +48,7 @@ namespace Ipopt
   void OrigIpoptNLP::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddLowerBoundedNumberOption("bound_relax_factor","factor for initial relaxation of the bounds",
-					  0, false, 1e-8);
+                                          0, false, 1e-8);
   }
 
   bool OrigIpoptNLP::Initialize(const Journalist& jnlst,

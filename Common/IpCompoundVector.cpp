@@ -337,7 +337,7 @@ namespace Ipopt
     Number alpha = 1.;
     for(Index i=0; i<NComps(); i++) {
       alpha = Ipopt::Min(alpha,
-			 ConstComp(i)->FracToBound(*comp_delta->GetComp(i), tau));
+                         ConstComp(i)->FracToBound(*comp_delta->GetComp(i), tau));
     }
     return alpha;
   }

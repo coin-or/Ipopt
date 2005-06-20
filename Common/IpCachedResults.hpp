@@ -26,14 +26,14 @@ namespace Ipopt
 
   //  AW: I'm taking this out, since this is by far the most used
   //  class.  We should keep it as simple as possible.
-//   /** Cache Priority Enum */
-//   enum CachePriority
-//   {
-//     CP_Lowest,
-//     CP_Standard,
-//     CP_Trial,
-//     CP_Iterate
-//   };
+  //   /** Cache Priority Enum */
+  //   enum CachePriority
+  //   {
+  //     CP_Lowest,
+  //     CP_Standard,
+  //     CP_Trial,
+  //     CP_Iterate
+  //   };
 
   /** Templated class for Chached Results.  This class stores up to a
    *  given number of "results", entities that are stored here
@@ -319,6 +319,7 @@ namespace Ipopt
   };
 
 #ifdef IP_DEBUG_CACHE
+
   template <class T>
   const Index CachedResults<T>::dbg_verbosity = 0;
 
@@ -384,6 +385,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::RecieveNotification", dbg_verbosity);
 #endif
+
     if (notify_type == NT_Changed || notify_type==NT_BeingDestroyed) {
       stale_ = true;
       // technically, I could unregister the notifications here, but they
@@ -398,6 +400,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::DependentsIdentical", dbg_verbosity);
 #endif
+
     DBG_ASSERT(stale_ == false);
     DBG_ASSERT(dependents.size() == dependent_tags_.size());
 
@@ -434,6 +437,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::GetResult()", dbg_verbosity);
 #endif
+
     DBG_ASSERT(stale_ == false);
     return result_;
   }
@@ -444,17 +448,19 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::DebugPrint", dbg_verbosity);
 #endif
+
   }
 
   template <class T>
   CachedResults<T>::CachedResults(Int max_cache_size)
       :
-    max_cache_size_(max_cache_size),
-    cached_results_(NULL)
+      max_cache_size_(max_cache_size),
+      cached_results_(NULL)
   {
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::CachedResults", dbg_verbosity);
 #endif
+
   }
 
   template <class T>
@@ -463,9 +469,13 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::!CachedResults()", dbg_verbosity);
 #endif
+
     if (cached_results_) {
-      for (typename std::list< DependentResult<T>* >::iterator iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
-	delete *iter;
+      for (typename std::list< DependentResult<T>* >::iterator iter = cached_results_->
+           begin();
+           iter != cached_results_->end();
+           iter++) {
+        delete *iter;
       }
       delete cached_results_;
     }
@@ -501,14 +511,15 @@ namespace Ipopt
       // non-negative - limit size of list to max_cache_size
       DBG_ASSERT((Int)cached_results_->size()<=max_cache_size_+1);
       if ((Int)cached_results_->size() > max_cache_size_) {
-	delete cached_results_->back();
-	cached_results_->pop_back();
+        delete cached_results_->back();
+        cached_results_->pop_back();
       }
     }
 
 #ifdef IP_DEBUG_CACHE
     DBG_EXEC(2, DebugPrintCachedResults());
 #endif
+
   }
 
   template <class T>
@@ -527,7 +538,8 @@ namespace Ipopt
     DBG_START_METH("CachedResults<T>::GetCachedResult", dbg_verbosity);
 #endif
 
-    if (!cached_results_) return false;
+    if (!cached_results_)
+      return false;
 
     CleanupInvalidatedResults();
 
@@ -544,6 +556,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_EXEC(2, DebugPrintCachedResults());
 #endif
+
     return retValue;
   }
 
@@ -562,6 +575,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::AddCachedResult1Dep", dbg_verbosity);
 #endif
+
     std::vector<const TaggedObject*> dependents(1);
     dependents[0] = dependent1;
 
@@ -574,6 +588,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::GetCachedResult1Dep", dbg_verbosity);
 #endif
+
     std::vector<const TaggedObject*> dependents(1);
     dependents[0] = dependent1;
 
@@ -588,6 +603,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::AddCachedResult2dDep", dbg_verbosity);
 #endif
+
     std::vector<const TaggedObject*> dependents(2);
     dependents[0] = dependent1;
     dependents[1] = dependent2;
@@ -601,6 +617,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::GetCachedResult2Dep", dbg_verbosity);
 #endif
+
     std::vector<const TaggedObject*> dependents(2);
     dependents[0] = dependent1;
     dependents[1] = dependent2;
@@ -617,6 +634,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::AddCachedResult2dDep", dbg_verbosity);
 #endif
+
     std::vector<const TaggedObject*> dependents(3);
     dependents[0] = dependent1;
     dependents[1] = dependent2;
@@ -633,6 +651,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::GetCachedResult2Dep", dbg_verbosity);
 #endif
+
     std::vector<const TaggedObject*> dependents(3);
     dependents[0] = dependent1;
     dependents[1] = dependent2;
@@ -647,7 +666,9 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::CleanupInvalidatedResults", dbg_verbosity);
 #endif
-    if (!cached_results_) return;
+
+    if (!cached_results_)
+      return;
 
     typename std::list< DependentResult<T>* >::iterator iter;
     for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
@@ -669,17 +690,18 @@ namespace Ipopt
     DBG_START_METH("CachedResults<T>::DebugPrintCachedResults", dbg_verbosity);
     if (DBG_VERBOSITY()>=2 ) {
       if (!chached_results_) {
-	DBG_PRINT((2,"  DependentResult:0x%x\n", (*iter)));
+        DBG_PRINT((2,"  DependentResult:0x%x\n", (*iter)));
       }
       else {
-	typename std::list< DependentResult<T>* >::const_iterator iter;
-	DBG_PRINT((2,"Current set of cached results:\n"));
-	for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
-	  DBG_PRINT((2,"  DependentResult:0x%x\n", (*iter)));
-	}
+        typename std::list< DependentResult<T>* >::const_iterator iter;
+        DBG_PRINT((2,"Current set of cached results:\n"));
+        for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
+          DBG_PRINT((2,"  DependentResult:0x%x\n", (*iter)));
+        }
       }
     }
 #endif
+
   }
 
 } // namespace Ipopt

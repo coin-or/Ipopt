@@ -52,8 +52,8 @@ namespace Ipopt
      */
     virtual void Solve(Number alpha,
                        Number beta,
-		       const IteratesVector& rhs,
-		       IteratesVector& res,
+                       const IteratesVector& rhs,
+                       IteratesVector& res,
                        bool allow_inexact=false);
 
     /** Methods for IpoptType */
@@ -151,8 +151,8 @@ namespace Ipopt
                    const Vector& sigma_s,
                    Number alpha,
                    Number beta,
-		   const IteratesVector& rhs,
-		   IteratesVector& res);
+                   const IteratesVector& rhs,
+                   IteratesVector& res);
 
     /** Internal function for computing the residual (resid) given the
      * right hand side (rhs) and the solution of the system (res).
@@ -176,16 +176,16 @@ namespace Ipopt
                           const Vector& sigma_s,
                           Number alpha,
                           Number beta,
-			  const IteratesVector& rhs,
-			  const IteratesVector& res,
-			  IteratesVector& resid);
+                          const IteratesVector& rhs,
+                          const IteratesVector& res,
+                          IteratesVector& resid);
 
     /** Internal function for computing the ratio of the residual
      *  compared to the right hand side and solution.  The smaller
      *  this value, the better the solution. */
     Number ComputeResidualRatio(const IteratesVector& rhs,
-				const IteratesVector& res,
-				const IteratesVector& resid);
+                                const IteratesVector& res,
+                                const IteratesVector& resid);
 
     /** @name Auxilliary functions */
     //@{

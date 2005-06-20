@@ -22,8 +22,8 @@ namespace Ipopt
 
   void OptimalityErrorConvergenceCheck::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedIntegerOption("maxiter", "Maximum number of iterations to allow", 
-					   0, 1000);
+    roptions->AddLowerBoundedIntegerOption("maxiter", "Maximum number of iterations to allow",
+                                           0, 1000);
   }
 
   bool

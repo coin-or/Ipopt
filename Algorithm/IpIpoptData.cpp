@@ -109,20 +109,21 @@ namespace Ipopt
     //new_s_->Set(0.0);
 
     iterates_space_ = new IteratesVectorSpace(*(new_x->OwnerSpace()), *(new_s->OwnerSpace()),
-					      *(new_y_c->OwnerSpace()), *(new_y_d->OwnerSpace()),
-					      *(new_z_L->OwnerSpace()), *(new_z_U->OwnerSpace()),
-					      *(new_v_L->OwnerSpace()), *(new_v_U->OwnerSpace())
-					      );
+                      *(new_y_c->OwnerSpace()), *(new_y_d->OwnerSpace()),
+                      *(new_z_L->OwnerSpace()), *(new_z_U->OwnerSpace()),
+                      *(new_v_L->OwnerSpace()), *(new_v_U->OwnerSpace())
+                                             );
 
     curr_ = iterates_space_->MakeNewIteratesVector(*new_x,
-						   *new_s,
-						   *new_y_c,
-						   *new_y_d,
-						   *new_z_L,
-						   *new_z_U,
-						   *new_v_L,
-						   *new_v_U);
+            *new_s,
+            *new_y_c,
+            *new_y_d,
+            *new_z_L,
+            *new_z_U,
+            *new_v_L,
+            *new_v_U);
 #ifdef IP_DEBUG
+
     debug_curr_tag_ = curr_->GetTag();
     debug_curr_tag_sum_ = curr_->GetTagSum();
     debug_trial_tag_ = 0;
@@ -146,7 +147,7 @@ namespace Ipopt
 
     return true;
   }
-  
+
   void IpoptData::SetTrialPrimalVariablesFromStep(Number alpha,
       const Vector& delta_x,
       const Vector& delta_s)

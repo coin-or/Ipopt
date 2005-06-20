@@ -56,26 +56,26 @@ namespace Ipopt
     //@{
     /** enum for norm type */
     enum NormEnum
-      {
-	NM_NORM_1=0,
-	NM_NORM_2_SQUARED,
-	NM_NORM_MAX,
-	NM_NORM_2
-      };
+    {
+      NM_NORM_1=0,
+      NM_NORM_2_SQUARED,
+      NM_NORM_MAX,
+      NM_NORM_2
+    };
     /** enum for centrality type */
     enum CentralityEnum
-      {
-	CEN_NONE=0,
-	CEN_LOG,
-	CEN_RECIPROCAL,
-	CEN_CUBED_RECIPROCAL
-      };
+    {
+      CEN_NONE=0,
+      CEN_LOG,
+      CEN_RECIPROCAL,
+      CEN_CUBED_RECIPROCAL
+    };
     /** enum for the quality function balancing term type */
     enum BalancingTermEnum
-      {
-	BT_NONE=0,
-	BT_CUBIC
-      };
+    {
+      BT_NONE=0,
+      BT_CUBIC
+    };
     //@}
 
   private:
@@ -116,11 +116,11 @@ namespace Ipopt
     /** enumeration for adaptive globalization ToDo: Andreas, can you give these
      * sensible names */
     enum AdaptiveGlobalizationEnum
-      {
-	AG_1=0,
-	AG_2,
-	AG_3
-      };
+    {
+      AG_1=0,
+      AG_2,
+      AG_3
+    };
     /** Flag indicating which globalization strategy should be used. */
     AdaptiveGlobalizationEnum adaptive_globalization_;
     /** Maximal margin in filter (for adaptive_globalization = 3) */
