@@ -2,11 +2,11 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id$
+// $Id: IpOptProbingMuOracle.cpp 321 2005-06-20 21:53:55Z andreasw $
 //
 // Authors:  Andreas Waechter            IBM    2004-11-12
 
-#include "IpOptProbingMuOracle.hpp"
+#include "IpQualityFunctionMuOracle.hpp"
 
 #ifdef OLD_C_HEADERS
 # include <math.h>
@@ -19,9 +19,9 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(OptProbingMuOracle);
+  DefineIpoptType(QualityFunctionMuOracle);
 
-  OptProbingMuOracle::OptProbingMuOracle(const SmartPtr<PDSystemSolver>& pd_solver)
+  QualityFunctionMuOracle::QualityFunctionMuOracle(const SmartPtr<PDSystemSolver>& pd_solver)
       :
       MuOracle(),
       pd_solver_(pd_solver),
@@ -50,10 +50,10 @@ namespace Ipopt
     DBG_ASSERT(IsValid(pd_solver_));
   }
 
-  OptProbingMuOracle::~OptProbingMuOracle()
+  QualityFunctionMuOracle::~QualityFunctionMuOracle()
   {}
 
-  void OptProbingMuOracle::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  void QualityFunctionMuOracle::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddLowerBoundedNumberOption("sigma_max", "???",
                                           0.0, true, 1e2);
@@ -88,7 +88,7 @@ namespace Ipopt
   }
 
 
-  bool OptProbingMuOracle::InitializeImpl(const OptionsList& options,
+  bool QualityFunctionMuOracle::InitializeImpl(const OptionsList& options,
                                           const std::string& prefix)
   {
     Index enum_int;
@@ -125,9 +125,9 @@ namespace Ipopt
     return true;
   }
 
-  Number OptProbingMuOracle::CalculateMu()
+  Number QualityFunctionMuOracle::CalculateMu()
   {
-    DBG_START_METH("OptProbingMuOracle::CalculateMu",
+    DBG_START_METH("QualityFunctionMuOracle::CalculateMu",
                    dbg_verbosity);
 
     ///////////////////////////////////////////////////////////////////////////
@@ -487,7 +487,7 @@ namespace Ipopt
     return mu;
   }
 
-  Number OptProbingMuOracle::CalculateQualityFunction
+  Number QualityFunctionMuOracle::CalculateQualityFunction
   (Number sigma,
    const Vector& step_aff_x_L,
    const Vector& step_aff_x_U,
@@ -515,7 +515,7 @@ namespace Ipopt
    SmartPtr<const Vector> jac_dT_times_step_cen_y_d
   )
   {
-    DBG_START_METH("OptProbingMuOracle::CalculateQualityFunction",
+    DBG_START_METH("QualityFunctionMuOracle::CalculateQualityFunction",
                    dbg_verbosity);
 
     Index n_dual = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
@@ -815,7 +815,7 @@ namespace Ipopt
   }
 
   Number
-  OptProbingMuOracle::PerformGoldenBisection
+  QualityFunctionMuOracle::PerformGoldenBisection
   (Number sigma_up,
    Number sigma_lo,
    Number tol,

@@ -17,7 +17,7 @@
 #include "IpNonmonotoneMuUpdate.hpp"
 #include "IpLoqoMuOracle.hpp"
 #include "IpProbingMuOracle.hpp"
-#include "IpOptProbingMuOracle.hpp"
+#include "IpQualityFunctionMuOracle.hpp"
 #include "IpRestoMinC_1Nrm.hpp"
 #include "IpLeastSquareMults.hpp"
 #include "IpDefaultIterateInitializer.hpp"
@@ -61,12 +61,12 @@ namespace Ipopt
     roptions->AddStringOption3("muoracle", "when using  nonmonotone mu update strategy, this selects how the update is performed", "probing",
                                "probing", "???",
                                "loqo", "???",
-                               "optprobing", "???");
+                               "quality_function", "???");
 
     roptions->AddStringOption4("fixmuoracle", "???", "avgerage_compl",
                                "probing", "???",
                                "loqo", "???",
-                               "optprobing", "???",
+                               "quality_function", "???",
                                "avgerage_compl", "???");
   }
 
@@ -179,8 +179,8 @@ namespace Ipopt
       else if (resto_smuoracle=="probing") {
         resto_MuOracle = new ProbingMuOracle(resto_PDSolver);
       }
-      else if (resto_smuoracle=="optprobing") {
-        resto_MuOracle = new OptProbingMuOracle(resto_PDSolver);
+      else if (resto_smuoracle=="quality_function") {
+        resto_MuOracle = new QualityFunctionMuOracle(resto_PDSolver);
       }
       SmartPtr<MuOracle> resto_FixMuOracle;
       if (resto_sfixmuoracle=="loqo") {
@@ -189,8 +189,8 @@ namespace Ipopt
       else if (resto_sfixmuoracle=="probing") {
         resto_FixMuOracle = new ProbingMuOracle(resto_PDSolver);
       }
-      else if (resto_sfixmuoracle=="optprobing") {
-        resto_FixMuOracle = new OptProbingMuOracle(resto_PDSolver);
+      else if (resto_sfixmuoracle=="quality_function") {
+        resto_FixMuOracle = new QualityFunctionMuOracle(resto_PDSolver);
       }
       else {
         resto_FixMuOracle = NULL;
@@ -262,8 +262,8 @@ namespace Ipopt
       else if (smuoracle=="probing") {
         muOracle = new ProbingMuOracle(PDSolver);
       }
-      else if (smuoracle=="optprobing") {
-        muOracle = new OptProbingMuOracle(PDSolver);
+      else if (smuoracle=="quality_function") {
+        muOracle = new QualityFunctionMuOracle(PDSolver);
       }
       SmartPtr<MuOracle> FixMuOracle;
       if (sfixmuoracle=="loqo") {
@@ -272,8 +272,8 @@ namespace Ipopt
       else if (sfixmuoracle=="probing") {
         FixMuOracle = new ProbingMuOracle(PDSolver);
       }
-      else if (sfixmuoracle=="optprobing") {
-        FixMuOracle = new OptProbingMuOracle(PDSolver);
+      else if (sfixmuoracle=="quality_function") {
+        FixMuOracle = new QualityFunctionMuOracle(PDSolver);
       }
       else {
         FixMuOracle = NULL;

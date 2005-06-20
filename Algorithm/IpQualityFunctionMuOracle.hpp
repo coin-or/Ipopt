@@ -2,12 +2,12 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id$
+// $Id: IpOptProbingMuOracle.hpp 321 2005-06-20 21:53:55Z andreasw $
 //
 // Authors:  Andreas Waechter             IBM    2004-11-12
 
-#ifndef __IPOPTPROBINGMUORACLE_HPP__
-#define __IPOPTPROBINGMUORACLE_HPP__
+#ifndef __IPQUALITYFUNCTIONMUORACLE_HPP__
+#define __IPQUALITYFUNCTIONMUORACLE_HPP__
 
 #include "IpMuOracle.hpp"
 #include "IpPDSystemSolver.hpp"
@@ -18,20 +18,20 @@
 namespace Ipopt
 {
 
-  DeclareIpoptType(OptProbingMuOracle);
+  DeclareIpoptType(QualityFunctionMuOracle);
 
   /** Implementation of the probing strategy for computing the
    *  barrier parameter.
    */
-  class OptProbingMuOracle : public MuOracle
+  class QualityFunctionMuOracle : public MuOracle
   {
   public:
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
-    OptProbingMuOracle(const SmartPtr<PDSystemSolver>& pd_solver);
+    QualityFunctionMuOracle(const SmartPtr<PDSystemSolver>& pd_solver);
     /** Default destructor */
-    virtual ~OptProbingMuOracle();
+    virtual ~QualityFunctionMuOracle();
     //@}
 
     /** overloaded from AlgorithmStrategyObject */
@@ -59,12 +59,12 @@ namespace Ipopt
     //@{
 
     /** Default Constructor */
-    OptProbingMuOracle();
+    QualityFunctionMuOracle();
     /** Copy Constructor */
-    OptProbingMuOracle(const OptProbingMuOracle&);
+    QualityFunctionMuOracle(const QualityFunctionMuOracle&);
 
     /** Overloaded Equals Operator */
-    void operator=(const OptProbingMuOracle&);
+    void operator=(const QualityFunctionMuOracle&);
     //@}
 
     /** Pointer to the object that should be used to solve the
