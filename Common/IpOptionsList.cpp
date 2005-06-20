@@ -240,7 +240,7 @@ namespace Ipopt
   }
 
   bool OptionsList::GetBoolValue(const std::string& tag, bool& value,
-				    const std::string& prefix) const
+				 const std::string& prefix) const
   {
     std::string str;
     bool ret = GetValue(tag, str, prefix);
