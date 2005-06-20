@@ -49,7 +49,9 @@ namespace Ipopt
     roptions->AddStringOption1("output_file", "file name of an output file (leave unset for no file output)", "", 
 			       "*", "Any acceptable standard file name");
     roptions->AddBoundedIntegerOption("file_print_level", "sets the print level for the output file", 0, J_LAST_LEVEL-1, J_SUMMARY);
-  }
+    roptions->AddStringOption2("print_options_documentation", "list all algorithmic options", "no",
+			       "no", "don't print list",
+			       "yes", "print list");  }
 
   ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp)
   {
@@ -108,9 +110,6 @@ namespace Ipopt
       
       //::RegisterOptionsImpl(reg_options);
 
-      // output a description of all the options
-      reg_options->OutputOptionDocumentation(*jnlst_);
-
       options_->SetJournalist(jnlst_);
       options_->SetRegisteredOptions(reg_options);
 
@@ -150,6 +149,15 @@ namespace Ipopt
 	file_print_level = (EJournalLevel)ivalue;
 	Journal* file_jrnl = jnlst_->AddJournal("OutputFile", output_filename.c_str(), file_print_level);
 	file_jrnl->SetPrintLevel(J_DBG, J_NONE);
+      }
+
+
+      // output a description of all the options
+      bool print_options_documentation;
+      options_->GetBoolValue("print_options_documentation",
+			     print_options_documentation, "");
+      if (print_options_documentation) {
+	reg_options->OutputOptionDocumentation(*jnlst_);
       }
 
       SmartPtr<IpoptNLP> ip_nlp =
