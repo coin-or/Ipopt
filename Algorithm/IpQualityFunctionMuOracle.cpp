@@ -394,7 +394,7 @@ namespace Ipopt
                                         jac_dT_times_step_aff_y_d,
                                         jac_cT_times_step_cen_y_c,
                                         jac_dT_times_step_cen_y_d);
-      Index l_min = (Index)trunc(-(log(avrg_compl)-log(1e-9))/log(base))-1;
+      Index l_min = (Index)(-(log(avrg_compl)-log(1e-9))/log(base))-1;
       for (; l>=l_min; l--) {
         sigma = pow(base, l);
         Number q = CalculateQualityFunction(sigma,

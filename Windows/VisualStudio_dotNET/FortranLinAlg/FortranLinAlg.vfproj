@@ -1,38 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<VisualStudioProject ProjectType="typeStaticLibrary" ProjectCreator="Intel Fortran" Keyword="Static Library" Version="8.00" ProjectIdGuid="{E139BC7F-6A35-40A3-A09E-5D0001C536F8}">
+<VisualStudioProject ProjectType="typeStaticLibrary" ProjectCreator="Intel Fortran" Keyword="Static Library" Version="8.10" ProjectIdGuid="{E139BC7F-6A35-40A3-A09E-5D0001C536F8}">
 	<Platforms>
 		<Platform Name="Win32"/></Platforms>
 	<Configurations>
 		<Configuration Name="Debug|Win32" DeleteExtensionsOnClean="*.obj;*.mod;*.pdb;*.asm;*.map;*.dyn;*.dpi;*.tmp;*.log;*.lib;$(TargetPath)" ConfigurationType="typeStaticLibrary">
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TypeLibraryName="$(IntDir)/$(InputName).tlb"/>
 				<Tool Name="VFPreBuildEventTool"/>
-				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" ModulePath="$(INTDIR)/" ObjectFile="$(INTDIR)/" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtSingleThreadedDebug" CompileOnly="true"/>
 				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" ModulePath="$(INTDIR)/" ObjectFile="$(INTDIR)/" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtSingleThreadedDebug" CompileOnly="true"/>
 				<Tool Name="VFCustomBuildTool"/>
-				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/>
+				<Tool Name="VFLibrarianTool" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/>
 				<Tool Name="VFPreLinkEventTool"/>
-				<Tool Name="VFLibrarianTool" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/></Configuration>
+				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/></Configuration>
 		<Configuration Name="Release|Win32" DeleteExtensionsOnClean="*.obj;*.mod;*.pdb;*.asm;*.map;*.dyn;*.dpi;*.tmp;*.log;*.lib;$(TargetPath)" ConfigurationType="typeStaticLibrary" MustRebuild="true">
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TypeLibraryName="$(IntDir)/$(InputName).tlb"/>
 				<Tool Name="VFPreBuildEventTool"/>
-				<Tool Name="VFFortranCompilerTool" SwitchesHaveChanged="true" SuppressStartupBanner="true" ModulePath="$(INTDIR)/" ObjectFile="$(INTDIR)/" DisableDefaultLibSearch="true" CompileOnly="true"/>
 				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFFortranCompilerTool" SwitchesHaveChanged="true" SuppressStartupBanner="true" ModulePath="$(INTDIR)/" ObjectFile="$(INTDIR)/" DisableDefaultLibSearch="true" CompileOnly="true"/>
 				<Tool Name="VFCustomBuildTool"/>
-				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/>
+				<Tool Name="VFLibrarianTool" SwitchesHaveChanged="true" MustRebuild="true" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/>
 				<Tool Name="VFPreLinkEventTool"/>
-				<Tool Name="VFLibrarianTool" SwitchesHaveChanged="true" MustRebuild="true" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/></Configuration></Configurations>
+				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<Filter Name="blas">
 		<File RelativePath="..\..\..\OTHERS\blas\dasum.f"/>
 		<File RelativePath="..\..\..\OTHERS\blas\daxpy.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dcabs1.f"/>
 		<File RelativePath="..\..\..\OTHERS\blas\dcopy.f"/>
 		<File RelativePath="..\..\..\OTHERS\blas\ddot.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dgbmv.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dgemm.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dgemv.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dger.f"/>
 		<File RelativePath="..\..\..\OTHERS\blas\dnrm2.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\drot.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\drotg.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\drotm.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\drotmg.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dsbmv.f"/>
 		<File RelativePath="..\..\..\OTHERS\blas\dscal.f"/>
-		<File RelativePath="..\..\..\OTHERS\blas\idamax.f"/></Filter>
+		<File RelativePath="..\..\..\OTHERS\blas\dsdot.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dspmv.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dspr.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dspr2.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dswap.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dsymm.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dsymv.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dsyr.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dsyr2.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dsyr2k.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dsyrk.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dtbmv.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dtbsv.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dtpmv.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dtpsv.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dtrmm.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dtrmv.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dtrsm.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\dtrsv.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\idamax.f"/>
+		<File RelativePath="..\..\..\OTHERS\blas\xerbla.f"/></Filter>
 		<Filter Name="HSL">
-		<File RelativePath="..\..\..\OTHERS\HSL\ma27ad.f"/></Filter></Filter>
+		<File RelativePath="..\..\..\OTHERS\HSL\ma27ad.f"/>
+		<File RelativePath="..\..\..\OTHERS\HSL\mc19ad.f"/></Filter></Filter>
 		<Filter Name="Header Files" Filter="fi;fd"/>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/></Files>
 	<Globals/></VisualStudioProject>

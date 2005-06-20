@@ -17,6 +17,12 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if MA27 is available */
+#define HAVE_MA27 1
+
+/* Define to 1 if MC19 is available */
+#define HAVE_MC19 1
+
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 

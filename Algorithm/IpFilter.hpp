@@ -35,7 +35,7 @@ namespace Ipopt
      */
     bool Acceptable(std::vector<Number> vals) const
     {
-      Index ncoor = vals_.size();
+      Index ncoor = (Index)vals_.size();
       DBG_ASSERT(vals.size() == ncoor);
 
       // ToDo decide where we can get Compare_le from
@@ -55,7 +55,7 @@ namespace Ipopt
      */
     bool Dominated(std::vector<Number> vals) const
     {
-      Index ncoor = vals_.size();
+      Index ncoor = (Index)vals_.size();
       DBG_ASSERT(vals.size() == ncoor);
 
       bool retval = true;

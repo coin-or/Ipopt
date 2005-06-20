@@ -323,7 +323,7 @@ namespace Ipopt
 
     switch (adaptive_globalization_) {
       case AG_1 : {
-        Index num_refs = refs_vals_.size();
+        Index num_refs = (Index)refs_vals_.size();
         if (num_refs >= num_refs_max_) {
           retval = false;
           Number curr_error = curr_norm_pd_system();
@@ -362,7 +362,7 @@ namespace Ipopt
     switch (adaptive_globalization_) {
       case AG_1 : {
         Number curr_error = curr_norm_pd_system();
-        Index num_refs = refs_vals_.size();
+        Index num_refs = (Index)refs_vals_.size();
         if (num_refs >= num_refs_max_) {
           refs_vals_.pop_front();
         }

@@ -51,8 +51,6 @@ namespace Ipopt
                              const OptionsList& options,
                              const std::string& prefix)
   {
-    Number value;
-
     options.GetNumericValue("tol", tol_, prefix);
     options.GetNumericValue("dual_inf_tol", dual_inf_tol_, prefix);
     options.GetNumericValue("primal_inf_tol", primal_inf_tol_, prefix);
