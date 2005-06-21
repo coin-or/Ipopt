@@ -122,7 +122,10 @@ namespace Ipopt
     /** Copy Constructor */
     OptionsList(const OptionsList& copy)
     {
+      // copy all the option strings and values
       options_ = copy.options_;
+      // copy the registered options pointer
+      reg_options_ = copy.reg_options_;
     }
 
     /** Default destructor */
