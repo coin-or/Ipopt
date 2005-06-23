@@ -8,6 +8,7 @@
 
 #include "IpRegOptions.hpp"
 #include <set>
+#include <iostream>
 
 #ifdef OLD_C_HEADERS
 # include <ctype.h>
@@ -469,8 +470,14 @@ namespace Ipopt
 
   SmartPtr<const RegisteredOption> RegisteredOptions::GetOption(const std::string& name)
   {
+    std::string tag_only = name;
+    std::string::size_type pos = name.rfind(".", name.length());
+    if (pos != std::string::npos) {
+      tag_only = name.substr(pos+1, name.length()-pos);
+      std::cout << tag_only << std::endl;
+    }
     SmartPtr<const RegisteredOption> option;
-    std::map< std::string, SmartPtr<RegisteredOption> >::iterator reg_option = registered_options_.find(name);
+    std::map< std::string, SmartPtr<RegisteredOption> >::iterator reg_option = registered_options_.find(tag_only);
     if (reg_option == registered_options_.end()) {
       option = NULL;
     }
