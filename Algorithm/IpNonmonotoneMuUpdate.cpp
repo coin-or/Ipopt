@@ -72,11 +72,11 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption("fixed_mu_avrg_factor", "???",
                                           0.0, true, 0.8);
 
-    roptions->AddStringOption4("nonmonotone_kkt_norm_type", "norm to be used for the constraint violation", "1-norm",
+    roptions->AddStringOption4("nonmonotone_kkt_norm_type", "norm to be used for the KKT error", "2-norm-squared",
                                "1-norm", "use the 1-norm (abs sum)",
-                               "2-norm", "use the 2-norm sqrt(sum of squares)",
+                               "2-norm-squared", "use the 2-norm squared (sum of squares)",
                                "max-norm", "use the infinity norm (max)",
-                               "other", "ToDo: sensible name and desc");
+                               "2-norm", "use 2-norm");
 
     roptions->AddStringOption4("nonmonotone_kkt_centrality", "???", "none",
                                "none", "???",
