@@ -127,6 +127,9 @@ namespace Ipopt
     tmp->Set(warm_start_mult_bound_push_);
     v_U->ElementWiseMax(*tmp);
 
+    // Initialize slack variables
+    init_vec->Set_s(*IpCq().curr_d());
+
     // Make the corrected values current (and initialize s)
     IpData().set_trial(init_vec);
     IpData().AcceptTrialPoint();
@@ -379,6 +382,7 @@ namespace Ipopt
     p_u->ElementWiseReciprocal();
     p_u->Axpy(1.0, *tiny_u);
     DBG_PRINT_VECTOR(2,"actual_p_u",*p_u);
+    DBG_PRINT_VECTOR(2,"orig_x",orig_x);
 
     // Calculate the new x
     SmartPtr<Vector> delta_x = orig_x.MakeNew();
