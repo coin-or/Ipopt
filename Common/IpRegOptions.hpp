@@ -42,7 +42,9 @@ namespace Ipopt
     //@{
     RegisteredOption()
         :
-        type_(OT_Unknown)
+      type_(OT_Unknown),
+      has_lower_(false),
+      has_upper_(false)
     {}
 
     RegisteredOption(const std::string& name, const std::string& description,
@@ -51,7 +53,9 @@ namespace Ipopt
         name_(name),
         description_(description),
         registering_class_(registering_class),
-        type_(OT_Unknown)
+        type_(OT_Unknown),
+	has_lower_(false),
+	has_upper_(false)
     {}
 
     RegisteredOption(const RegisteredOption& copy)
