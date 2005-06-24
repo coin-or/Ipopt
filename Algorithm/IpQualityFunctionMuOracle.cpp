@@ -57,7 +57,7 @@ namespace Ipopt
   {
     roptions->AddLowerBoundedNumberOption("sigma_max", "???",
                                           0.0, true, 1e2);
-    roptions->AddStringOption4("quality_function_norm_type", "norm to be used for the quality function", "2-norm",
+    roptions->AddStringOption4("quality_function_norm_type", "norm to be used for the quality function", "2-norm-squared",
                                "1-norm", "use the 1-norm (abs sum)",
                                "2-norm-squared", "use the 2-norm squared (sum of squares)",
                                "max-norm", "use the infinity norm (max)",
@@ -89,7 +89,7 @@ namespace Ipopt
 
 
   bool QualityFunctionMuOracle::InitializeImpl(const OptionsList& options,
-                                          const std::string& prefix)
+      const std::string& prefix)
   {
     Index enum_int;
 
