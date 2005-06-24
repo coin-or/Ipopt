@@ -76,7 +76,7 @@ namespace Ipopt
     roptions->AddStringOption2("quality_function_balancing_term", "???", "none",
                                "none", "no balancing term",
                                "standard", "standard cubic balancing term");
-    roptions->AddIntegerOption("max_bisection_steps", "??? No Range ???", 4);
+    roptions->AddLowerBoundedIntegerOption("max_bisection_steps", "No Range given before...", 0, 4);
 
 
     roptions->AddBoundedNumberOption("bisection_tol", "tolerance for the bisection step length search",
