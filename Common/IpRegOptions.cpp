@@ -32,128 +32,154 @@ namespace Ipopt
       type_str = "String";
     }
 
-    jnlst.Printf(J_ERROR, J_MAIN, "\n### %s (%s) ###\nClass: %s\nDescription: %s\n",
-                 name_.c_str(), type_str.c_str(), registering_class_.c_str(), description_.c_str());
+    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                 "\n### %s (%s) ###\nClass: %s\nDescription: %s\n",
+                 name_.c_str(), type_str.c_str(),
+                 registering_class_.c_str(), short_description_.c_str());
 
     if (type_ ==OT_Number) {
       if (has_lower_) {
-        jnlst.Printf(J_ERROR, J_MAIN, "%g", lower_);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%g", lower_);
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, "-inf");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "-inf");
       }
 
       if (lower_strict_) {
-        jnlst.Printf(J_ERROR, J_MAIN, " < ");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < ");
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, " <= ");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= ");
       }
 
-      jnlst.Printf(J_ERROR, J_MAIN, "(%g)", default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(%g)", default_number_);
 
       if (has_upper_ && upper_strict_) {
-        jnlst.Printf(J_ERROR, J_MAIN, " < ");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < ");
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, " <= ");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= ");
       }
 
       if (has_upper_) {
-        jnlst.Printf(J_ERROR, J_MAIN, "%g\n", upper_);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%g\n", upper_);
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, "+inf\n");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "+inf\n");
       }
     }
     else if (type_ ==OT_Integer) {
       if (has_lower_) {
-        jnlst.Printf(J_ERROR, J_MAIN, "%d", (Index)lower_);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d", (Index)lower_);
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, "-inf");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "-inf");
       }
 
-      jnlst.Printf(J_ERROR, J_MAIN, " <= (%d) <= ", (Index)default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= (%d) <= ", (Index)default_number_);
 
       if (has_upper_) {
-        jnlst.Printf(J_ERROR, J_MAIN, "%d\n", (Index)upper_);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d\n", (Index)upper_);
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, "+inf\n");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "+inf\n");
       }
     }
     else if (type_ ==OT_String) {
       std::vector<string_entry>::const_iterator i;
-      jnlst.Printf(J_ERROR, J_MAIN, "Valid Settings:\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "Valid Settings:\n");
       for (i = valid_strings_.begin(); i != valid_strings_.end(); i++) {
-        jnlst.Printf(J_ERROR, J_MAIN, "\t%s (%s)\n", (*i).value_.c_str(), (*i).description_.c_str());
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\t%s (%s)\n",
+                     (*i).value_.c_str(), (*i).description_.c_str());
       }
-      jnlst.Printf(J_ERROR, J_MAIN, "Default: \"%s\"\n", default_string_.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "Default: \"%s\"\n",
+                   default_string_.c_str());
     }
   }
 
   void RegisteredOption::OutputShortDescription(const Journalist& jnlst) const
   {
-    jnlst.Printf(J_ERROR, J_MAIN, "\n# %s\n", description_.c_str());
-    jnlst.Printf(J_ERROR, J_MAIN, "%s: ",  name_.c_str());
+    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%-30s",  name_.c_str());
 
 
-    if (type_ ==OT_Number) {
+    if (type_ == OT_Number) {
       if (has_lower_) {
-        jnlst.Printf(J_ERROR, J_MAIN, "%g", lower_);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10g", lower_);
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, "-inf");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10s", "-inf");
       }
 
-      if (lower_strict_) {
-        jnlst.Printf(J_ERROR, J_MAIN, " < ");
+      if (has_lower_ && !lower_strict_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= ");
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, " <= ");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
       }
 
-      jnlst.Printf(J_ERROR, J_MAIN, "(%g)", default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(%11g)", default_number_);
 
-      if (has_upper_ && upper_strict_) {
-        jnlst.Printf(J_ERROR, J_MAIN, " < ");
+      if (has_upper_ && !upper_strict_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= ");
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, " <= ");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
       }
 
       if (has_upper_) {
-        jnlst.Printf(J_ERROR, J_MAIN, "%g\n", upper_);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%-10g\n", upper_);
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, "+inf\n");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%-10s\n", "+inf");
       }
     }
-    else if (type_ ==OT_Integer) {
+    else if (type_ == OT_Integer) {
       if (has_lower_) {
-        jnlst.Printf(J_ERROR, J_MAIN, "%d", (Index)lower_);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10d <= ", (Index)lower_);
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, "-inf");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10s <  ", "-inf");
       }
 
-      jnlst.Printf(J_ERROR, J_MAIN, " <= (%d) <= ", (Index)default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(%11d)",
+                   (Index)default_number_);
 
       if (has_upper_) {
-        jnlst.Printf(J_ERROR, J_MAIN, "%d\n", (Index)upper_);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "% <= -10d\n", (Index)upper_);
       }
       else {
-        jnlst.Printf(J_ERROR, J_MAIN, "+inf\n");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "% <  -10s\n", "+inf");
       }
     }
-    else if (type_ ==OT_String) {
-      std::vector<string_entry>::const_iterator i;
-      jnlst.Printf(J_ERROR, J_MAIN, "(\"%s\")\n", default_string_.c_str());
-      for (i = valid_strings_.begin(); i != valid_strings_.end(); i++) {
-        jnlst.Printf(J_ERROR, J_MAIN, "\t- %s (%s)\n", (*i).value_.c_str(), (*i).description_.c_str());
+    else if (type_ == OT_String) {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(\"%s\")\n",
+                   default_string_.c_str());
+    }
+    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   ");
+    jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 3, 76,
+                               short_description_.c_str());
+    if (long_description_ != "") {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n    ");
+      jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 4, 75,
+                                 long_description_.c_str());
+    }
+    if (type_ == OT_String) {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n   Possible values:\n");
+      for (std::vector<string_entry>::const_iterator
+           i = valid_strings_.begin();
+           i != valid_strings_.end(); i++) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "    - %-20s [",
+                     (*i).value_.c_str());
+
+        jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 28, 51,
+                                   (*i).description_.c_str());
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "]\n");
       }
     }
+    else {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+    }
+    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
   }
 
   bool RegisteredOption::IsValidStringSetting(const std::string& value) const
@@ -234,21 +260,33 @@ namespace Ipopt
     return true;
   }
 
-  void RegisteredOptions::AddNumberOption(const std::string& name, const std::string& description,
-                                          Number default_value)
+  void
+  RegisteredOptions::AddNumberOption(const std::string& name,
+                                     const std::string& short_description,
+                                     Number default_value,
+                                     const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
-    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
+    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(),
+                     OPTION_ALREADY_REGISTERED,
                      std::string("The option: ") + option->Name() + " has already been registered by someone else");
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddLowerBoundedNumberOption(const std::string& name, const std::string& description,
-      Number lower, bool strict, Number default_value)
+  void
+  RegisteredOptions::AddLowerBoundedNumberOption(const std::string& name,
+      const std::string& short_description,
+      Number lower, bool strict,
+      Number default_value,
+      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetLowerNumber(lower, strict);
@@ -256,10 +294,17 @@ namespace Ipopt
                      std::string("The option: ") + option->Name() + " has already been registered by someone else");
     registered_options_[name] = option;
   }
-  void RegisteredOptions::AddUpperBoundedNumberOption(const std::string& name, const std::string& description,
-      Number upper, bool strict, Number default_value)
+
+  void
+  RegisteredOptions::AddUpperBoundedNumberOption(const std::string& name,
+      const std::string& short_description,
+      Number upper, bool strict,
+      Number default_value,
+      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetUpperNumber(upper, strict);
@@ -268,11 +313,17 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddBoundedNumberOption(const std::string& name, const std::string& description,
+  void
+  RegisteredOptions::AddBoundedNumberOption(const std::string& name,
+      const std::string& short_description,
       Number lower, bool lower_strict,
-      Number upper, bool upper_strict, Number default_value)
+      Number upper, bool upper_strict,
+      Number default_value,
+      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetLowerNumber(lower, lower_strict);
@@ -282,9 +333,15 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddIntegerOption(const std::string& name, const std::string& description,  Index default_value)
+  void
+  RegisteredOptions::AddIntegerOption(const std::string& name,
+                                      const std::string& short_description,
+                                      Index default_value,
+                                      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
@@ -292,9 +349,15 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddLowerBoundedIntegerOption(const std::string& name, const std::string& description,  Index lower, Index default_value)
+  void
+  RegisteredOptions::AddLowerBoundedIntegerOption(const std::string& name,
+      const std::string& short_description,
+      Index lower, Index default_value,
+      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetLowerInteger(lower);
@@ -303,9 +366,15 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddUpperBoundedIntegerOption(const std::string& name, const std::string& description,  Index upper, Index default_value)
+  void
+  RegisteredOptions::AddUpperBoundedIntegerOption(const std::string& name,
+      const std::string& short_description,
+      Index upper, Index default_value,
+      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetUpperInteger(upper);
@@ -314,9 +383,16 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddBoundedIntegerOption(const std::string& name, const std::string& description,  Index lower, Index upper, Index default_value)
+  void
+  RegisteredOptions::AddBoundedIntegerOption(const std::string& name,
+      const std::string& short_description,
+      Index lower, Index upper,
+      Index default_value,
+      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetLowerInteger(lower);
@@ -326,10 +402,17 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddStringOption(const std::string& name, const std::string& description,  const std::string& default_value,
-                                          const std::vector<std::string>& settings, const std::vector<std::string>& descriptions)
+  void
+  RegisteredOptions::AddStringOption(const std::string& name,
+                                     const std::string& short_description,
+                                     const std::string& default_value,
+                                     const std::vector<std::string>& settings,
+                                     const std::vector<std::string>& descriptions,
+                                     const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     DBG_ASSERT(settings.size() == descriptions.size());
@@ -341,10 +424,17 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddStringOption1(const std::string& name, const std::string& description,  const std::string& default_value,
-      const std::string& setting1, const std::string& description1)
+  void
+  RegisteredOptions::AddStringOption1(const std::string& name,
+                                      const std::string& short_description,
+                                      const std::string& default_value,
+                                      const std::string& setting1,
+                                      const std::string& description1,
+                                      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -353,11 +443,19 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddStringOption2(const std::string& name, const std::string& description,  const std::string& default_value,
-      const std::string& setting1, const std::string& description1,
-      const std::string& setting2, const std::string& description2)
+  void
+  RegisteredOptions::AddStringOption2(const std::string& name,
+                                      const std::string& short_description,
+                                      const std::string& default_value,
+                                      const std::string& setting1,
+                                      const std::string& description1,
+                                      const std::string& setting2,
+                                      const std::string& description2,
+                                      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -367,12 +465,21 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddStringOption3(const std::string& name, const std::string& description,  const std::string& default_value,
-      const std::string& setting1, const std::string& description1,
-      const std::string& setting2, const std::string& description2,
-      const std::string& setting3, const std::string& description3)
+  void
+  RegisteredOptions::AddStringOption3(const std::string& name,
+                                      const std::string& short_description,
+                                      const std::string& default_value,
+                                      const std::string& setting1,
+                                      const std::string& description1,
+                                      const std::string& setting2,
+                                      const std::string& description2,
+                                      const std::string& setting3,
+                                      const std::string& description3,
+                                      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -383,13 +490,23 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddStringOption4(const std::string& name, const std::string& description,  const std::string& default_value,
-      const std::string& setting1, const std::string& description1,
-      const std::string& setting2, const std::string& description2,
-      const std::string& setting3, const std::string& description3,
-      const std::string& setting4, const std::string& description4)
+  void
+  RegisteredOptions::AddStringOption4(const std::string& name,
+                                      const std::string& short_description,
+                                      const std::string& default_value,
+                                      const std::string& setting1,
+                                      const std::string& description1,
+                                      const std::string& setting2,
+                                      const std::string& description2,
+                                      const std::string& setting3,
+                                      const std::string& description3,
+                                      const std::string& setting4,
+                                      const std::string& description4,
+                                      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -401,14 +518,25 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddStringOption5(const std::string& name, const std::string& description,  const std::string& default_value,
-      const std::string& setting1, const std::string& description1,
-      const std::string& setting2, const std::string& description2,
-      const std::string& setting3, const std::string& description3,
-      const std::string& setting4, const std::string& description4,
-      const std::string& setting5, const std::string& description5)
+  void
+  RegisteredOptions::AddStringOption5(const std::string& name,
+                                      const std::string& short_description,
+                                      const std::string& default_value,
+                                      const std::string& setting1,
+                                      const std::string& description1,
+                                      const std::string& setting2,
+                                      const std::string& description2,
+                                      const std::string& setting3,
+                                      const std::string& description3,
+                                      const std::string& setting4,
+                                      const std::string& description4,
+                                      const std::string& setting5,
+                                      const std::string& description5,
+                                      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -421,15 +549,27 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddStringOption6(const std::string& name, const std::string& description,  const std::string& default_value,
-      const std::string& setting1, const std::string& description1,
-      const std::string& setting2, const std::string& description2,
-      const std::string& setting3, const std::string& description3,
-      const std::string& setting4, const std::string& description4,
-      const std::string& setting5, const std::string& description5,
-      const std::string& setting6, const std::string& description6)
+  void
+  RegisteredOptions::AddStringOption6(const std::string& name,
+                                      const std::string& short_description,
+                                      const std::string& default_value,
+                                      const std::string& setting1,
+                                      const std::string& description1,
+                                      const std::string& setting2,
+                                      const std::string& description2,
+                                      const std::string& setting3,
+                                      const std::string& description3,
+                                      const std::string& setting4,
+                                      const std::string& description4,
+                                      const std::string& setting5,
+                                      const std::string& description5,
+                                      const std::string& setting6,
+                                      const std::string& description6,
+                                      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -443,16 +583,29 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
-  void RegisteredOptions::AddStringOption7(const std::string& name, const std::string& description,  const std::string& default_value,
-      const std::string& setting1, const std::string& description1,
-      const std::string& setting2, const std::string& description2,
-      const std::string& setting3, const std::string& description3,
-      const std::string& setting4, const std::string& description4,
-      const std::string& setting5, const std::string& description5,
-      const std::string& setting7, const std::string& description7,
-      const std::string& setting6, const std::string& description6)
+  void
+  RegisteredOptions::AddStringOption7(const std::string& name,
+                                      const std::string& short_description,
+                                      const std::string& default_value,
+                                      const std::string& setting1,
+                                      const std::string& description1,
+                                      const std::string& setting2,
+                                      const std::string& description2,
+                                      const std::string& setting3,
+                                      const std::string& description3,
+                                      const std::string& setting4,
+                                      const std::string& description4,
+                                      const std::string& setting5,
+                                      const std::string& description5,
+                                      const std::string& setting6,
+                                      const std::string& description6,
+                                      const std::string& setting7,
+                                      const std::string& description7,
+                                      const std::string& long_description)
   {
-    SmartPtr<RegisteredOption> option = new RegisteredOption(name, description, current_registering_class_);
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_class_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -499,7 +652,7 @@ namespace Ipopt
     std::set
       <std::string>::iterator i;
     for (i = classes.begin(); i != classes.end(); i++) {
-      jnlst.Printf(J_ERROR, J_MAIN, "\n\n### %s ###\n", (*i).c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n\n### %s ###\n", (*i).c_str());
       for (option = registered_options_.begin(); option != registered_options_.end(); option++) {
         if (option->second->RegisteringClass() == (*i)) {
           option->second->OutputShortDescription(jnlst);

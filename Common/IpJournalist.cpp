@@ -40,6 +40,68 @@ namespace Ipopt
     va_end(ap);
   }
 
+  void Journalist::PrintStringOverLines(EJournalLevel level,
+                                        EJournalCategory category,
+                                        Index indent_spaces, Index max_length,
+                                        const std::string& line) const
+  {
+    DBG_ASSERT(indent_spaces + max_length + 1 < 1024);
+    char buffer[1024];
+    std::string::size_type last_line_pos = 0;
+    std::string::size_type last_word_pos = 0;
+    bool first_line = true;
+    Index buffer_pos = 0;
+
+    while (last_line_pos < line.length()) {
+      std::string::size_type line_pos = last_line_pos;
+      Index curr_length = 0;
+      while (curr_length < max_length && line_pos < line.length()) {
+        buffer[buffer_pos] = line[line_pos];
+        if (line[line_pos] == ' ') {
+          last_word_pos = line_pos+1;
+        }
+        curr_length++;
+        buffer_pos++;
+        line_pos++;
+      }
+      if (line_pos == line.length()) {
+        // This is the last line to be printed.
+        buffer[buffer_pos] = '\0';
+        Printf(level, category, "%s", buffer);
+        break;
+      }
+      if (last_word_pos == last_line_pos) {
+        if (line[line_pos]==' ') {
+          buffer[buffer_pos] = '\0';
+          last_word_pos = line_pos+1;
+          last_line_pos = line_pos+1;
+        }
+        else {
+          // The current word is too long to fit into one line
+          // split word over two lines
+          buffer[buffer_pos-1] = '-';
+          buffer[buffer_pos] = '\0';
+          last_word_pos = line_pos-1;
+          last_line_pos = last_word_pos;
+        }
+      }
+      else {
+        // insert '\0' character after last complete word
+        buffer[buffer_pos-(line_pos-last_word_pos)-1] = '\0';
+        last_line_pos = last_word_pos;
+      }
+
+      Printf(level, category, "%s\n", buffer);
+      if (first_line) {
+        for(Index i=0; i<indent_spaces; i++) {
+          buffer[i] = ' ';
+        }
+        first_line = false;
+      }
+      buffer_pos = indent_spaces;
+    }
+  }
+
   void Journalist::PrintfIndented( EJournalLevel level,
                                    EJournalCategory category, Index indent_level,
                                    const char* pformat, ... ) const

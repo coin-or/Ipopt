@@ -57,6 +57,7 @@ namespace Ipopt
     J_LINEAR_ALGEBRA,
     J_LINE_SEARCH,
     J_SOLUTION,
+    J_DOCUMENTATION,
     J_LAST_CATEGORY
   };
   //@}
@@ -108,6 +109,17 @@ namespace Ipopt
     /** Method to print a formatted string */
     void Printf(EJournalLevel level, EJournalCategory category,
                 const char* format, ...) const;
+
+    /** Method to print a long string including indentation.  The
+     *  string is printed starting at the current position.  If the
+     *  position (counting started at the current position) exceeds
+     *  max_length, a new line is inserted, and indent_spaces many
+     *  spaces are printed before the string is continued.  This is
+     *  for example used during the printing of the option
+     *  documentation. */
+    void PrintStringOverLines(EJournalLevel level, EJournalCategory category,
+                              Index indent_spaces, Index max_length,
+                              const std::string& line) const;
 
     /** Method to print a formatted string with indentation */
     void PrintfIndented(EJournalLevel level,

@@ -42,26 +42,30 @@ namespace Ipopt
     //@{
     RegisteredOption()
         :
-      type_(OT_Unknown),
-      has_lower_(false),
-      has_upper_(false)
+        type_(OT_Unknown),
+        has_lower_(false),
+        has_upper_(false)
     {}
 
-    RegisteredOption(const std::string& name, const std::string& description,
+    RegisteredOption(const std::string& name,
+                     const std::string& short_description,
+                     const std::string& long_description,
                      const std::string& registering_class)
         :
         name_(name),
-        description_(description),
+        short_description_(short_description),
+        long_description_(long_description),
         registering_class_(registering_class),
         type_(OT_Unknown),
-	has_lower_(false),
-	has_upper_(false)
+        has_lower_(false),
+        has_upper_(false)
     {}
 
     RegisteredOption(const RegisteredOption& copy)
         :
         name_(copy.name_),
-        description_(copy.description_),
+        short_description_(copy.short_description_),
+        long_description_(copy.long_description_),
         registering_class_(copy.registering_class_),
         type_(copy.type_),
         has_lower_(copy.has_lower_),
@@ -89,15 +93,25 @@ namespace Ipopt
     {
       name_ = name;
     }
-    /** Get the description */
-    const std::string& Description() const
+    /** Get the short description */
+    const std::string& ShortDescription() const
     {
-      return description_;
+      return short_description_;
     }
-    /** Set the description */
-    void SetDescription(const std::string& description)
+    /** Get the long description */
+    const std::string& LongDescription() const
     {
-      description_ = description;
+      return long_description_;
+    }
+    /** Set the short description */
+    void SetShortDescription(const std::string& short_description)
+    {
+      short_description_ = short_description;
+    }
+    /** Set the long description */
+    void SetLongDescription(const std::string& long_description)
+    {
+      long_description_ = long_description;
     }
     /** Get the registering class */
     const std::string& RegisteringClass() const
@@ -319,7 +333,8 @@ namespace Ipopt
 
   private:
     std::string name_;
-    std::string description_;
+    std::string short_description_;
+    std::string long_description_;
     std::string registering_class_;
     RegisteredOptionType type_;
 
@@ -381,73 +396,85 @@ namespace Ipopt
     }
     /** Add a Number option (with no restrictions) */
     void AddNumberOption(const std::string& name,
-                         const std::string& description,
-                         Number default_value);
+                         const std::string& short_description,
+                         Number default_value,
+                         const std::string& long_description="");
     /** Add a Number option (with a lower bound) */
     void AddLowerBoundedNumberOption(const std::string& name,
-                                     const std::string& description,
+                                     const std::string& short_description,
                                      Number lower, bool strict,
-                                     Number default_value);
+                                     Number default_value,
+                                     const std::string& long_description="");
     /** Add a Number option (with a upper bound) */
     void AddUpperBoundedNumberOption(const std::string& name,
-                                     const std::string& description,
+                                     const std::string& short_description,
                                      Number upper, bool strict,
-                                     Number default_value);
+                                     Number default_value,
+                                     const std::string& long_description="");
     /** Add a Number option (with a both bounds) */
     void AddBoundedNumberOption(const std::string& name,
-                                const std::string& description,
+                                const std::string& short_description,
                                 Number lower, bool lower_strict,
                                 Number upper, bool upper_strict,
-                                Number default_value);
+                                Number default_value,
+                                const std::string& long_description="");
     /** Add a Integer option (with no restrictions) */
     void AddIntegerOption(const std::string& name,
-                          const std::string& description,
-                          Index default_value);
+                          const std::string& short_description,
+                          Index default_value,
+                          const std::string& long_description="");
     /** Add a Integer option (with a lower bound) */
     void AddLowerBoundedIntegerOption(const std::string& name,
-                                      const std::string& description,
-                                      Index lower, Index default_value);
+                                      const std::string& short_description,
+                                      Index lower, Index default_value,
+                                      const std::string& long_description="");
     /** Add a Integer option (with a upper bound) */
     void AddUpperBoundedIntegerOption(const std::string& name,
-                                      const std::string& description,
-                                      Index upper, Index default_value);
+                                      const std::string& short_description,
+                                      Index upper, Index default_value,
+                                      const std::string& long_description="");
     /** Add a Integer option (with a both bounds) */
     void AddBoundedIntegerOption(const std::string& name,
-                                 const std::string& description,
+                                 const std::string& short_description,
                                  Index lower, Index upper,
-                                 Index default_value);
+                                 Index default_value,
+                                 const std::string& long_description="");
 
     /** Add a String option (with no restrictions) */
     void AddStringOption(const std::string& name,
-                         const std::string& description,
+                         const std::string& short_description,
                          const std::string& default_value,
                          const std::vector<std::string>& settings,
-                         const std::vector<std::string>& descriptions);
+                         const std::vector<std::string>& descriptions,
+                         const std::string& long_description="");
     /** Methods that make adding string options with only a few
      *  entries easier */
     void AddStringOption1(const std::string& name,
-                          const std::string& description,
+                          const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
-                          const std::string& description1);
+                          const std::string& description1,
+                          const std::string& long_description="");
     void AddStringOption2(const std::string& name,
-                          const std::string& description,
+                          const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
                           const std::string& description1,
                           const std::string& setting2,
-                          const std::string& description2);
+                          const std::string& description2,
+                          const std::string& long_description="");
     void AddStringOption3(const std::string& name,
-                          const std::string& description,
+                          const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
                           const std::string& description1,
                           const std::string& setting2,
                           const std::string& description2,
                           const std::string& setting3,
-                          const std::string& description3);
+                          const std::string& description3,
+                          const std::string& long_description="");
     void AddStringOption4(const std::string& name,
-                          const std::string& description,
+                          const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
                           const std::string& description1,
@@ -456,9 +483,10 @@ namespace Ipopt
                           const std::string& setting3,
                           const std::string& description3,
                           const std::string& setting4,
-                          const std::string& description4);
+                          const std::string& description4,
+                          const std::string& long_description="");
     void AddStringOption5(const std::string& name,
-                          const std::string& description,
+                          const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
                           const std::string& description1,
@@ -469,9 +497,10 @@ namespace Ipopt
                           const std::string& setting4,
                           const std::string& description4,
                           const std::string& setting5,
-                          const std::string& description5);
+                          const std::string& description5,
+                          const std::string& long_description="");
     void AddStringOption6(const std::string& name,
-                          const std::string& description,
+                          const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
                           const std::string& description1,
@@ -484,9 +513,10 @@ namespace Ipopt
                           const std::string& setting5,
                           const std::string& description5,
                           const std::string& setting6,
-                          const std::string& description6);
+                          const std::string& description6,
+                          const std::string& long_description="");
     void AddStringOption7(const std::string& name,
-                          const std::string& description,
+                          const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
                           const std::string& description1,
@@ -501,7 +531,8 @@ namespace Ipopt
                           const std::string& setting6,
                           const std::string& description6,
                           const std::string& setting7,
-                          const std::string& description7);
+                          const std::string& description7,
+                          const std::string& long_description="");
 
     /** Get a registered option - this will return NULL if the option
      *  does not exist */
