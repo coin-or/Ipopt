@@ -130,7 +130,7 @@ namespace Ipopt
     // if that is the case
     Number sum=0.;
     for (Index i=0; i<n; i++) {
-      scaling_factors[i] = exp((R[i]+C[i])/2.);
+      scaling_factors[i] = exp((double)((R[i]+C[i])/2.));
       sum += scaling_factors[i];
     }
     if (!FiniteNumber(sum)) {
