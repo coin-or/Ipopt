@@ -336,18 +336,10 @@ namespace Ipopt
     SmartPtr<Vector> augRhs_x = rhs.x()->MakeNewCopy();
     Px_L.AddMSinvZ(1.0, slack_x_L, *rhs.z_L(), *augRhs_x);
     Px_U.AddMSinvZ(-1.0, slack_x_U, *rhs.z_U(), *augRhs_x);
-    /*
-    AddPSinvZ(1.0, Px_L, slack_x_L, rhs_zL, 1.0, *augRhs_x);
-    AddPSinvZ(-1.0, Px_U, slack_x_U, rhs_zU, 1.0, *augRhs_x);
-    */
 
     SmartPtr<Vector> augRhs_s = rhs.s()->MakeNewCopy();
     Pd_L.AddMSinvZ(1.0, slack_s_L, *rhs.v_L(), *augRhs_s);
     Pd_U.AddMSinvZ(-1.0, slack_s_U, *rhs.v_U(), *augRhs_s);
-    /*
-    AddPSinvZ(1.0, Pd_L, slack_s_L, rhs_vL, 1.0, *augRhs_s);
-    AddPSinvZ(-1.0, Pd_U, slack_s_U, rhs_vU, 1.0, *augRhs_s);
-    */
 
     // Get space into which we can put the solution of the augmented system
     SmartPtr<IteratesVector> sol = res.MakeNewIteratesVector(true);
@@ -479,13 +471,6 @@ namespace Ipopt
     Px_U.SinvBlrmZMTdBr(1., slack_x_U, *rhs.z_U(), z_U, *sol->x_NonConst(), *sol->z_U_NonConst());
     Pd_L.SinvBlrmZMTdBr(-1., slack_s_L, *rhs.v_L(), v_L, *sol->s_NonConst(), *sol->v_L_NonConst());
     Pd_U.SinvBlrmZMTdBr(1., slack_s_U, *rhs.v_U(), v_U, *sol->s_NonConst(), *sol->v_U_NonConst());
-
-    /*
-    SinvBlrmZPTdBr(-1., slack_x_L, rhs_zL, z_L, Px_L, *sol_x, *sol_zL);
-    SinvBlrmZPTdBr(1., slack_x_U, rhs_zU, z_U, Px_U, *sol_x, *sol_zU);
-    SinvBlrmZPTdBr(-1., slack_s_L, rhs_vL, v_L, Pd_L, *sol_s, *sol_vL);
-    SinvBlrmZPTdBr(1., slack_s_U, rhs_vU, v_U, Pd_U, *sol_s, *sol_vU);
-    */
 
     // Finally let's assemble the res result vectors
     AxpBy(alpha, *sol, beta, res);
