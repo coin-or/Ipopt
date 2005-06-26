@@ -10,6 +10,7 @@
 #include "IpIdentityMatrix.hpp"
 #include "IpSumSymMatrix.hpp"
 #include "IpSumMatrix.hpp"
+#include "IpNLPScaling.hpp"
 
 #ifdef OLD_C_HEADERS
 #include <math.h>
@@ -26,7 +27,7 @@ namespace Ipopt
                                IpoptCalculatedQuantities& orig_ip_cq,
                                IpoptData& curr_ip_data)
       :
-      IpoptNLP(),
+      IpoptNLP(new NoNLPScalingObject()),
       orig_ip_nlp_(&orig_ip_nlp),
       orig_ip_data_(&orig_ip_data),
       orig_ip_cq_(&orig_ip_cq),

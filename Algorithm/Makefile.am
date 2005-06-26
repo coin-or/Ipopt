@@ -24,15 +24,16 @@ libipoptalg_a_SOURCES = \
 	IpIpoptNLP.hpp  \
 	IpIterateInitializer.hpp \
 	IpIteratesVector.hpp IpIteratesVector.cpp \
+	IpIterationOutput.hpp \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.hpp IpLoqoMuOracle.cpp \
 	IpMonotoneMuUpdate.hpp IpMonotoneMuUpdate.cpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp IpMuUpdate.cpp \
 	IpNonmonotoneMuUpdate.hpp IpNonmonotoneMuUpdate.cpp \
+	IpNLPScaling.hpp IpNLPScaling.cpp \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \
 	IpOrigIpoptNLP.cpp IpOrigIpoptNLP.hpp \
-	IpIterationOutput.hpp \
 	IpOrigIterationOutput.hpp IpOrigIterationOutput.cpp \
 	IpProbingMuOracle.hpp IpProbingMuOracle.cpp \
 	IpQualityFunctionMuOracle.hpp IpQualityFunctionMuOracle.cpp \
@@ -42,7 +43,8 @@ libipoptalg_a_SOURCES = \
 	IpRestoIterationOutput.hpp IpRestoIterationOutput.cpp \
 	IpRestoMinC_1Nrm.cpp IpRestoMinC_1Nrm.hpp \
 	IpRestoPhase.hpp \
-	IpRestoRestoPhase.hpp IpRestoRestoPhase.cpp
+	IpRestoRestoPhase.hpp IpRestoRestoPhase.cpp \
+	IpUserScaling.cpp IpUserScaling.hpp
 
 CXXFLAGS += -I$(srcdir)/../Common
 CXXFLAGS += -I$(srcdir)/../Interfaces
@@ -65,15 +67,16 @@ ASTYLE_FILES = \
 	IpIpoptNLP.hppbak \
 	IpIterateInitializer.hppbak \
 	IpIteratesVector.hppbak IpIteratesVector.cppbak \
+	IpIterationOutput.hppbak \
 	IpLineSearch.hppbak \
 	IpLoqoMuOracle.hppbak IpLoqoMuOracle.cppbak \
 	IpMonotoneMuUpdate.hppbak IpMonotoneMuUpdate.cppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
 	IpNonmonotoneMuUpdate.hppbak IpNonmonotoneMuUpdate.cppbak \
+	IpNLPScaling.hpp IpNLPScaling.cppbak \
 	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
 	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \
-	IpIterationOutput.hppbak \
 	IpOrigIterationOutput.hppbak IpOrigIterationOutput.cppbak \
 	IpProbingMuOracle.hppbak IpProbingMuOracle.cppbak \
 	IpQualityFunctionMuOracle.hppbak IpQualityFunctionMuOracle.cppbak \
@@ -83,7 +86,8 @@ ASTYLE_FILES = \
 	IpRestoIterationOutput.hppbak IpRestoIterationOutput.cppbak \
 	IpRestoMinC_1Nrm.cppbak IpRestoMinC_1Nrm.hppbak \
 	IpRestoPhase.hppbak \
-	IpRestoRestoPhase.hppbak IpRestoRestoPhase.cppbak
+	IpRestoRestoPhase.hppbak IpRestoRestoPhase.cppbak \
+	IpUserScaling.cppbak IpUserScaling.hppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@

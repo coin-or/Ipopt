@@ -46,7 +46,8 @@ namespace Ipopt
       obj_sol_(0.0),
       lambda_sol_(NULL),
       objval_called_with_current_x_(false),
-      conval_called_with_current_x_(false)
+      conval_called_with_current_x_(false),
+      suffix_handler_(suffix_handler)
   {
     DBG_START_METH("AmplTNLP::AmplTNLP",
                    dbg_verbosity);
@@ -610,6 +611,43 @@ namespace Ipopt
     niv_ = niv;
   }
 
+  void AmplTNLP::get_scaling_parameters(Number& obj_scaling,
+					Index n, double* x_scaling,
+					Index m, double* g_scaling)
+  {
+    DBG_ASSERT(IsValid(suffix_handler_));
+    const double* obj = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Objective_Source);
+    obj_scaling = (obj) ? obj[0] : 1.0;
+
+    const double* x = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Variable_Source);
+    for (int i=0; i < n; i++) {
+      if (x) {
+	x_scaling[i] = x[i];
+	ASSERT_EXCEPTION(x[i] > 0, NONPOSITIVE_SCALING_FACTOR,
+			 "Scaling factors specified through ampl suffixes must all be positive. \nNOTE: Ampl may use zero as a defaut value.\n If you specify"
+			 " a scaling value (using the scaling_factor suffix) for one constraint,\n you must specify a scaling for all constraints (likewise for variables)"
+			 );
+      }
+      else {
+	x_scaling[i] = 1.0;
+      }
+    }
+
+    const double* g = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Constraint_Source);
+    for (int i=0; i < m; i++) {
+      if (g) {
+	g_scaling[i] = g[i];
+	ASSERT_EXCEPTION(g[i] > 0, NONPOSITIVE_SCALING_FACTOR,
+			 "Scaling factors specified through ampl suffixes must all be positive. \nNOTE: Ampl may use zero as a defaut value.\n If you specify"
+			 " a scaling value (using the scaling_factor suffix) for one constraint,\n you must specify a scaling for all constraints (likewise for variables)"
+			 );
+      }
+      else {
+	g_scaling[i] = 1.0;
+      }
+    }
+  }
+
   AmplSuffixHandler::AmplSuffixHandler()
       :
       asl_(NULL),
@@ -649,8 +687,18 @@ namespace Ipopt
       else if (suffix_sources_[i]  == Constraint_Source) {
         suftab_[i].kind = ASL_Sufkind_con;
       }
+      else if (suffix_sources_[i] == Objective_Source) {
+        suftab_[i].kind = ASL_Sufkind_obj;
+      }
+      else if (suffix_sources_[i] == Problem_Source) {
+        suftab_[i].kind = ASL_Sufkind_prob;
+      }
       else {
         DBG_ASSERT(false && "Unknown suffix source in PrepareAmplForSuffixes");
+      }
+
+      if (suffix_types_[i] == Number_Type) {
+	suftab_[i].kind = suftab_[i].kind | ASL_Sufkind_real;
       }
 
       suftab_[i].nextra = 0;
@@ -664,7 +712,22 @@ namespace Ipopt
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl);
 
-    int kind = (source == Variable_Source) ? ASL_Sufkind_var : ASL_Sufkind_con;
+    int kind;
+    if (source == Variable_Source) {
+      kind = ASL_Sufkind_var;
+    }
+    else if (source == Constraint_Source) {
+      kind = ASL_Sufkind_con;
+    }
+    else if (source == Objective_Source) {
+      kind = ASL_Sufkind_obj;
+    }
+    else if (source == Problem_Source) {
+      kind = ASL_Sufkind_prob;
+    }
+    else {
+      DBG_ASSERT(false && "Unknown suffix source in GetIntegerSuffixValues");
+    }
     SufDesc* dp = suf_get(suffix_string.c_str(), kind);
     return dp->u.i;
   }
@@ -674,7 +737,22 @@ namespace Ipopt
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl);
 
-    int kind = (source == Variable_Source) ? ASL_Sufkind_var : ASL_Sufkind_con;
+    int kind;
+    if (source == Variable_Source) {
+      kind = ASL_Sufkind_var;
+    }
+    else if (source == Constraint_Source) {
+      kind = ASL_Sufkind_con;
+    }
+    else if (source == Objective_Source) {
+      kind = ASL_Sufkind_obj;
+    }
+    else if (source == Problem_Source) {
+      kind = ASL_Sufkind_prob;
+    }
+    else {
+      DBG_ASSERT(false && "Unknown suffix source in GetNumberSuffixValues");
+    }
     SufDesc* dp = suf_get(suffix_string.c_str(), kind);
     return dp->u.r;
   }

@@ -20,9 +20,10 @@ namespace Ipopt
   DefineIpoptType(OrigIpoptNLP);
 
   OrigIpoptNLP::OrigIpoptNLP(const SmartPtr<const Journalist>& jnlst,
-                             const SmartPtr<NLP>& nlp)
+                             const SmartPtr<NLP>& nlp,
+			     const SmartPtr<NLPScalingObject>& nlp_scaling)
       :
-      IpoptNLP(),
+      IpoptNLP(nlp_scaling),
       jnlst_(jnlst),
       nlp_(nlp),
       f_cache_(1),
@@ -95,6 +96,11 @@ namespace Ipopt
       return false;
     }
 
+    NLP_scaling()->DetermineScaling(ConstPtr(x_space_), 
+				    ConstPtr(c_space_), ConstPtr(d_space_),
+				    ConstPtr(jac_c_space_), ConstPtr(jac_d_space_), 
+				    ConstPtr(h_space_));
+
     ASSERT_EXCEPTION(x_space_->Dim() >= c_space_->Dim(), TOO_FEW_DOF,
                      "Too few degrees of freedom!");
 
@@ -136,6 +142,12 @@ namespace Ipopt
     relax_bounds(-bound_relax_factor_, *d_L_);
     relax_bounds( bound_relax_factor_, *d_U_);
 
+    // now create and store the scaled bounds
+    x_L_ = NLP_scaling()->apply_vector_scaling_x_L_NonConst(Px_L_, ConstPtr(x_L_), x_space_);
+    x_U_ = NLP_scaling()->apply_vector_scaling_x_U_NonConst(Px_U_, ConstPtr(x_U_), x_space_);
+    d_L_ = NLP_scaling()->apply_vector_scaling_d_L_NonConst(Pd_L_, ConstPtr(d_L_), d_space_);
+    d_U_ = NLP_scaling()->apply_vector_scaling_d_U_NonConst(Pd_U_, ConstPtr(d_U_), d_space_);
+
     // Create the iterates structures
     x = x_space_->MakeNew();
     y_c = c_space_->MakeNew();
@@ -152,6 +164,14 @@ namespace Ipopt
                                       *z_U, init_z_U,
                                       *v_L, init_v_L,
                                       *v_U, init_v_U);
+
+    if (init_x) { x = NLP_scaling()->apply_vector_scaling_x_NonConst(ConstPtr(x)); }
+    if (init_y_c) { y_c = NLP_scaling()->apply_vector_scaling_c_NonConst(ConstPtr(y_c)); }
+    if (init_y_d) { y_d = NLP_scaling()->apply_vector_scaling_d_NonConst(ConstPtr(y_d)); }
+    if (init_z_L) { z_L = NLP_scaling()->apply_vector_scaling_x_L_NonConst(Px_L_, ConstPtr(z_L), x_space_); }
+    if (init_z_U) { z_U = NLP_scaling()->apply_vector_scaling_x_U_NonConst(Px_U_, ConstPtr(z_U), x_space_); }
+    if (init_v_L) { v_L = NLP_scaling()->apply_vector_scaling_d_L_NonConst(Pd_L_, ConstPtr(v_L), d_space_); }
+    if (init_v_U) { v_U = NLP_scaling()->apply_vector_scaling_d_U_NonConst(Pd_U_, ConstPtr(v_U), d_space_); }
 
     if (!retValue) {
       return false;
@@ -186,9 +206,11 @@ namespace Ipopt
     DBG_PRINT((1, "x.Tag = %d\n", x.GetTag()));
     if (!f_cache_.GetCachedResult1Dep(ret, &x)) {
       f_evals_++;
-      bool success = nlp_->Eval_f(x, ret);
+      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      bool success = nlp_->Eval_f(*unscaled_x, ret);
       ASSERT_EXCEPTION(success && FiniteNumber(ret), Eval_Error,
                        "Error evaluating the objective function");
+      ret = NLP_scaling()->apply_obj_scaling(ret);
       f_cache_.AddCachedResult1Dep(ret, &x);
     }
 
@@ -197,86 +219,100 @@ namespace Ipopt
 
   SmartPtr<const Vector> OrigIpoptNLP::grad_f(const Vector& x)
   {
-    SmartPtr<Vector> retValue;
+    SmartPtr<Vector> unscaled_grad_f;
+    SmartPtr<const Vector> retValue;
     if (!grad_f_cache_.GetCachedResult1Dep(retValue, &x)) {
       grad_f_evals_++;
-      retValue = x_space_->MakeNew();
+      unscaled_grad_f = x_space_->MakeNew();
 
-      bool success = nlp_->Eval_grad_f(x, *retValue);
-      ASSERT_EXCEPTION(success && FiniteNumber(retValue->Nrm2()),
+      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      bool success = nlp_->Eval_grad_f(*unscaled_x, *unscaled_grad_f);
+      ASSERT_EXCEPTION(success && FiniteNumber(unscaled_grad_f->Nrm2()),
                        Eval_Error, "Error evaluating the gradient of the objective function");
-
+      retValue = NLP_scaling()->apply_grad_obj_scaling(ConstPtr(unscaled_grad_f));
       grad_f_cache_.AddCachedResult1Dep(retValue, &x);
     }
 
-    return ConstPtr(retValue);
+    return retValue;
   }
 
 
   /** Equality constraint residual */
   SmartPtr<const Vector> OrigIpoptNLP::c(const Vector& x)
   {
-    SmartPtr<Vector> retValue;
+    SmartPtr<Vector> unscaled_c;
+    SmartPtr<const Vector> retValue;
     if (!c_cache_.GetCachedResult1Dep(retValue, &x)) {
       c_evals_++;
-      retValue = c_space_->MakeNew();
-      bool success = nlp_->Eval_c(x, *retValue);
-      ASSERT_EXCEPTION(success && FiniteNumber(retValue->Nrm2()),
+      unscaled_c = c_space_->MakeNew();
+      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      bool success = nlp_->Eval_c(*unscaled_x, *unscaled_c);
+      ASSERT_EXCEPTION(success && FiniteNumber(unscaled_c->Nrm2()),
                        Eval_Error, "Error evaluating the equality constraints");
+      retValue = NLP_scaling()->apply_vector_scaling_c(ConstPtr(unscaled_c));
       c_cache_.AddCachedResult1Dep(retValue, &x);
     }
 
-    return ConstPtr(retValue);
+    return retValue;
   }
 
 
   SmartPtr<const Vector> OrigIpoptNLP::d(const Vector& x)
   {
     DBG_START_METH("OrigIpoptNLP::d", dbg_verbosity);
-    SmartPtr<Vector> retValue;
+    SmartPtr<Vector> unscaled_d;
+    SmartPtr<const Vector> retValue;
     if (!d_cache_.GetCachedResult1Dep(retValue, &x)) {
       d_evals_++;
-      retValue = d_space_->MakeNew();
+      unscaled_d = d_space_->MakeNew();
 
-      DBG_PRINT_VECTOR(2, "x", x);
-      bool success = nlp_->Eval_d(x, *retValue);
-      DBG_PRINT_VECTOR(2, "retValue", *retValue);
-      ASSERT_EXCEPTION(success && FiniteNumber(retValue->Nrm2()),
+      DBG_PRINT_VECTOR(2, "scaled_x", x);
+      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      bool success = nlp_->Eval_d(*unscaled_x, *unscaled_d);
+      DBG_PRINT_VECTOR(2, "unscaled_d", *unscaled_d);
+      ASSERT_EXCEPTION(success && FiniteNumber(unscaled_d->Nrm2()),
                        Eval_Error, "Error evaluating the inequality constraints");
+      retValue = NLP_scaling()->apply_vector_scaling_d(ConstPtr(unscaled_d));
       d_cache_.AddCachedResult1Dep(retValue, &x);
     }
 
-    return ConstPtr(retValue);
+    return retValue;
   }
 
   SmartPtr<const Matrix> OrigIpoptNLP::jac_c(const Vector& x)
   {
-    SmartPtr<Matrix> retValue;
+    SmartPtr<Matrix> unscaled_jac_c;
+    SmartPtr<const Matrix> retValue;
     if (!jac_c_cache_.GetCachedResult1Dep(retValue, &x)) {
       jac_c_evals_++;
-      retValue = jac_c_space_->MakeNew();
+      unscaled_jac_c = jac_c_space_->MakeNew();
 
-      bool success = nlp_->Eval_jac_c(x, *retValue);
+      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      bool success = nlp_->Eval_jac_c(*unscaled_x, *unscaled_jac_c);
       ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the equality constraints");
+      retValue = NLP_scaling()->apply_jac_c_scaling(ConstPtr(unscaled_jac_c));
       jac_c_cache_.AddCachedResult1Dep(retValue, &x);
     }
 
-    return ConstPtr(retValue);
+    return retValue;
   }
 
   SmartPtr<const Matrix> OrigIpoptNLP::jac_d(const Vector& x)
   {
-    SmartPtr<Matrix> retValue;
+    SmartPtr<Matrix> unscaled_jac_d;
+    SmartPtr<const Matrix> retValue;
     if (!jac_d_cache_.GetCachedResult1Dep(retValue, &x)) {
       jac_d_evals_++;
-      retValue = jac_d_space_->MakeNew();
+      unscaled_jac_d = jac_d_space_->MakeNew();
 
-      bool success = nlp_->Eval_jac_d(x, *retValue);
+      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      bool success = nlp_->Eval_jac_d(*unscaled_x, *unscaled_jac_d);
       ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the inequality constraints");
+      retValue = NLP_scaling()->apply_jac_d_scaling(ConstPtr(unscaled_jac_d));
       jac_d_cache_.AddCachedResult1Dep(retValue, &x);
     }
 
-    return ConstPtr(retValue);
+    return retValue;
   }
 
   SmartPtr<const SymMatrix> OrigIpoptNLP::h(const Vector& x,
@@ -291,17 +327,22 @@ namespace Ipopt
     std::vector<Number> scalar_deps(1);
     scalar_deps[0] = obj_factor;
 
-    SmartPtr<SymMatrix> retValue;
+    SmartPtr<SymMatrix> unscaled_h;
+    SmartPtr<const SymMatrix> retValue;
     if (!h_cache_.GetCachedResult(retValue, deps, scalar_deps)) {
       h_evals_++;
-      retValue = h_space_->MakeNewSymMatrix();
+      unscaled_h = h_space_->MakeNewSymMatrix();
 
-      bool success = nlp_->Eval_h(x, obj_factor, yc, yd, *retValue);
+      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      SmartPtr<const Vector> unscaled_yc = NLP_scaling()->apply_vector_scaling_c(&yc);
+      SmartPtr<const Vector> unscaled_yd = NLP_scaling()->apply_vector_scaling_d(&yd);
+      bool success = nlp_->Eval_h(*unscaled_x, obj_factor, *unscaled_yc, *unscaled_yd, *unscaled_h);
       ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the hessian of the lagrangian");
+      retValue = NLP_scaling()->apply_hessian_scaling(ConstPtr(unscaled_h));
       h_cache_.AddCachedResult(retValue, deps, scalar_deps);
     }
 
-    return ConstPtr(retValue);
+    return retValue;
   }
 
   void OrigIpoptNLP::GetSpaces(SmartPtr<const VectorSpace>& x_space,

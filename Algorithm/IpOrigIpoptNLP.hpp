@@ -30,7 +30,8 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     OrigIpoptNLP(const SmartPtr<const Journalist>& jnlst,
-                 const SmartPtr<NLP>& nlp);
+                 const SmartPtr<NLP>& nlp,
+		 const SmartPtr<NLPScalingObject>& nlp_scaling);
 
     /** Default destructor */
     virtual ~OrigIpoptNLP();
@@ -243,26 +244,26 @@ namespace Ipopt
     CachedResults<Number> f_cache_;
 
     /** Gradient of the objective function */
-    CachedResults<SmartPtr<Vector> > grad_f_cache_;
+    CachedResults<SmartPtr<const Vector> > grad_f_cache_;
 
     /** Equality constraint residuals */
-    CachedResults<SmartPtr<Vector> > c_cache_;
+    CachedResults<SmartPtr<const Vector> > c_cache_;
 
     /** Jacobian Matrix for equality constraints
      *  (current iteration) */
-    CachedResults<SmartPtr<Matrix> > jac_c_cache_;
+    CachedResults<SmartPtr<const Matrix> > jac_c_cache_;
 
     /** Inequality constraint residual (reformulated
      *  as equalities with slacks */
-    CachedResults<SmartPtr<Vector> > d_cache_;
+    CachedResults<SmartPtr<const Vector> > d_cache_;
 
     /** Jacobian Matrix for inequality constraints
      *  (current iteration) */
-    CachedResults<SmartPtr<Matrix> > jac_d_cache_;
+    CachedResults<SmartPtr<const Matrix> > jac_d_cache_;
 
     /** Hessian of the lagrangian
      *  (current iteration) */
-    CachedResults<SmartPtr<SymMatrix> > h_cache_;
+    CachedResults<SmartPtr<const SymMatrix> > h_cache_;
 
     /** Lower bounds on x */
     SmartPtr<Vector> x_L_;

@@ -40,6 +40,9 @@ namespace Ipopt
     virtual ~AmplTNLP();
     //@}
 
+    /** Exceptions */
+    DECLARE_STD_EXCEPTION(NONPOSITIVE_SCALING_FACTOR);
+
     /**@name methods to gather information about the NLP. These
     * methods are overloaded from TNLP. See TNLP for their more
     * detailed documentation. */
@@ -85,6 +88,10 @@ namespace Ipopt
                         Number obj_factor, Index m, const Number* lambda,
                         bool new_lambda, Index nele_hess, Index* iRow,
                         Index* jCol, Number* values);
+
+    virtual void get_scaling_parameters(Number& obj_scaling,
+					Index n, Number* x_scaling,
+					Index m, Number* g_scaling);
     //@}
 
     /** @name Solution Methods */
@@ -166,6 +173,9 @@ namespace Ipopt
     //@}
 
 
+    /** Suffix Handler */
+    SmartPtr<AmplSuffixHandler> suffix_handler_;
+
     /** Make the objective call to ampl */
     bool internal_objval(Number& obj_val);
 
@@ -214,7 +224,9 @@ namespace Ipopt
     enum Suffix_Source
     {
       Variable_Source,
-      Constraint_Source
+      Constraint_Source,
+      Objective_Source,
+      Problem_Source 
     };
 
     void AddAvailableSuffix(std::string suffix_string, Suffix_Source source, Suffix_Type type)

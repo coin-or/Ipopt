@@ -14,6 +14,7 @@
 #include "IpIpoptCalculatedQuantities.hpp"
 #include "IpAlgBuilder.hpp"
 #include "IpIpoptType.hpp"
+#include "IpUserScaling.hpp"
 
 namespace Ipopt
 {
@@ -111,8 +112,6 @@ namespace Ipopt
       SmartPtr<RegisteredOptions> reg_options = new RegisteredOptions();
       IpoptTypeInfo::RegisterAllOptions(reg_options);
 
-      //::RegisterOptionsImpl(reg_options);
-
       options_->SetJournalist(jnlst_);
       options_->SetRegisteredOptions(reg_options);
 
@@ -163,8 +162,10 @@ namespace Ipopt
         reg_options->OutputOptionDocumentation(*jnlst_);
       }
 
+      //      SmartPtr<NLPScalingObject> nlp_scaling = new NoNLPScalingObject();
+      SmartPtr<NLPScalingObject> nlp_scaling = new UserScaling(ConstPtr(nlp));
       SmartPtr<IpoptNLP> ip_nlp =
-        new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp));
+        new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp), nlp_scaling);
 
       // Create the IpoptData
       if (IsNull(ip_data)) {

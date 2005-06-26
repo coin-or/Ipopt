@@ -26,10 +26,12 @@ libcommon_a_SOURCES = \
 	IpOptionsList.cpp IpOptionsList.hpp \
 	IpRegOptions.cpp IpRegOptions.hpp \
 	IpReferenced.cpp IpReferenced.hpp \
+	IpScaledMatrix.cpp IpScaledMatrix.hpp \
 	IpSmartPtr.hpp \
 	IpSumMatrix.cpp IpSumMatrix.hpp \
 	IpSumSymMatrix.cpp IpSumSymMatrix.hpp \
 	IpSymMatrix.cpp \
+	IpSymScaledMatrix.cpp IpSymScaledMatrix.hpp \
 	IpTaggedObject.cpp IpTaggedObject.hpp \
 	IpTypes.hpp \
 	IpUtils.hpp \
@@ -56,10 +58,12 @@ ASTYLE_FILES = \
 	IpOptionsList.hppbak \
 	IpRegOptions.cppbak IpRegOptions.hppbak \
 	IpReferenced.cppbak IpReferenced.hppbak \
+	IpScaledMatrix.cppbak IpScaledMatrix.hppbak \
 	IpSmartPtr.hppbak \
 	IpSumMatrix.cppbak IpSumMatrix.hppbak \
 	IpSumSymMatrix.cppbak IpSumSymMatrix.hppbak \
 	IpSymMatrix.cppbak \
+	IpSymScaledMatrix.cppbak IpSymScaledMatrix.hppbak \
 	IpTaggedObject.cppbak IpTaggedObject.hppbak \
 	IpTypes.hppbak \
 	IpUtils.hppbak \

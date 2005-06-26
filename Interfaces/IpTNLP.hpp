@@ -55,6 +55,7 @@ namespace Ipopt
     //@}
 
     DECLARE_STD_EXCEPTION(INVALID_TNLP);
+    DECLARE_STD_EXCEPTION(SCALING_NOT_IMPLEMENTED_FOR_TNLP);
 
     /**@name methods to gather information about the NLP */
     //@{
@@ -72,6 +73,18 @@ namespace Ipopt
      *  1e19. (see TNLPAdapter) */
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
                                  Index m, Number* g_l, Number* g_u)=0;
+
+    /** overload this method to return scaling parameters. This is only
+     *  called if the options are set to retrieve user scaling
+     */
+    virtual void get_scaling_parameters(Number& obj_scaling,
+					Index n, Number* x_scaling,
+					Index m, Number* g_scaling)
+    {
+      THROW_EXCEPTION(SCALING_NOT_IMPLEMENTED_FOR_TNLP,
+		      "Ipopt options have been set to request scaling from the TNLP"
+		      ", but the TNLP has not implemented get_scaling_parameters");
+    }
 
     /** overload this method to return the starting point. The bools
      *  init_x and init_lambda are both inputs and outputs. As inputs,
