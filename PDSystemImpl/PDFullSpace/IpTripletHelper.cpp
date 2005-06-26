@@ -13,6 +13,8 @@
 #include "IpDiagMatrix.hpp"
 #include "IpIdentityMatrix.hpp"
 #include "IpExpansionMatrix.hpp"
+#include "IpScaledMatrix.hpp"
+#include "IpSymScaledMatrix.hpp"
 #include "IpSumMatrix.hpp"
 #include "IpSumSymMatrix.hpp"
 #include "IpZeroMatrix.hpp"
@@ -38,6 +40,16 @@ namespace Ipopt
     const SymTMatrix* symt = dynamic_cast<const SymTMatrix*>(mptr);
     if (symt) {
       return symt->Nonzeros();
+    }
+
+    const ScaledMatrix* scaled = dynamic_cast<const ScaledMatrix*>(mptr);
+    if (scaled) {
+      return GetNumberEntries(*GetRawPtr(scaled->GetUnscaledMatrix()));
+    }
+
+    const SymScaledMatrix* symscaled = dynamic_cast<const SymScaledMatrix*>(mptr);
+    if (symscaled) {
+      return GetNumberEntries(*GetRawPtr(symscaled->GetUnscaledMatrix()));
     }
 
     const DiagMatrix* diag = dynamic_cast<const DiagMatrix*>(mptr);
@@ -80,6 +92,7 @@ namespace Ipopt
       return GetNumberEntries_(*cmpd_sym);
     }
 
+    int i = 4;
     THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::GetNumberEntries");
     return 0;
   }
@@ -96,6 +109,18 @@ namespace Ipopt
     const SymTMatrix* symt = dynamic_cast<const SymTMatrix*>(mptr);
     if (symt) {
       FillRowCol_(n_entries, *symt, row_offset, col_offset, iRow, jCol);
+      return;
+    }
+
+    const ScaledMatrix* scaled = dynamic_cast<const ScaledMatrix*>(mptr);
+    if (scaled) {
+      FillRowCol_(n_entries, *scaled, row_offset, col_offset, iRow, jCol);
+      return;
+    }
+
+    const SymScaledMatrix* symscaled = dynamic_cast<const SymScaledMatrix*>(mptr);
+    if (symscaled) {
+      FillRowCol_(n_entries, *symscaled, row_offset, col_offset, iRow, jCol);
       return;
     }
 
@@ -147,7 +172,7 @@ namespace Ipopt
       return;
     }
 
-    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::GetNumberEntries");
+    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::FillRowCol");
   }
 
   void TripletHelper::FillValues(Index n_entries, const Matrix& matrix, Number* values)
@@ -162,6 +187,18 @@ namespace Ipopt
     const SymTMatrix* symt = dynamic_cast<const SymTMatrix*>(mptr);
     if (symt) {
       FillValues_(n_entries, *symt, values);
+      return;
+    }
+
+    const ScaledMatrix* scaled = dynamic_cast<const ScaledMatrix*>(mptr);
+    if (scaled) {
+      FillValues_(n_entries, *scaled, values);
+      return;
+    }
+
+    const SymScaledMatrix* symscaled = dynamic_cast<const SymScaledMatrix*>(mptr);
+    if (symscaled) {
+      FillValues_(n_entries, *symscaled, values);
       return;
     }
 
@@ -213,7 +250,7 @@ namespace Ipopt
       return;
     }
 
-    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::GetNumberEntries");
+    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::FillValues");
     return;
   }
 
@@ -579,6 +616,85 @@ namespace Ipopt
     }
 
     THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"Unknown vector type passed to TripletHelper::FillValues");
+  }
+
+  void TripletHelper::FillRowCol_(Index n_entries, const ScaledMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  {
+    FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, row_offset, col_offset);
+  }
+    
+  void TripletHelper::FillValues_(Index n_entries, const ScaledMatrix& matrix, Number* values)
+  {
+    // ToDo:
+    // This method can be made much more efficient for ScaledMatrix with GenTMatrix
+    // contained
+
+    // Get the matrix values
+    FillValues(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), values);
+
+    // Scale the values
+    // To Do : This assumes 1-base values (like the TMatrices)
+    Index* iRow = new Index[n_entries];
+    Index* jCol = new Index[n_entries];
+    FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, 0, 0);
+
+    if (IsValid(matrix.RowScaling())) {
+      Index n_rows = matrix.NRows();
+      Number* row_scaling = new Number[n_rows];
+      FillValuesFromVector(n_rows, *matrix.RowScaling(), row_scaling);
+      for (Index i=0; i<n_entries; i++) {
+	values[i] *= row_scaling[iRow[i]-1];
+      }
+      delete [] row_scaling;
+    }
+
+    if (IsValid(matrix.ColumnScaling())) {
+      Index n_cols = matrix.NCols();
+      Number* col_scaling = new Number[n_cols];
+      FillValuesFromVector(n_cols, *matrix.ColumnScaling(), col_scaling);
+      for (Index i=0; i<n_entries; i++) {
+	values[i] *= col_scaling[jCol[i]-1];
+      }
+      delete [] col_scaling;
+    }
+
+    delete [] iRow;
+    delete [] jCol;
+  }
+
+  void TripletHelper::FillRowCol_(Index n_entries, const SymScaledMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  {
+    FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, row_offset, col_offset);
+  }
+    
+  void TripletHelper::FillValues_(Index n_entries, const SymScaledMatrix& matrix, Number* values)
+  {
+    // ToDo:
+    // This method can be made much more efficient for ScaledMatrix with SymTMatrix
+    // contained
+
+    // Get the matrix values
+    FillValues(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), values);
+
+    // Scale the values
+    // To Do : This assumes 1-base values (like the TMatrices)
+    Index* iRow = new Index[n_entries];
+    Index* jCol = new Index[n_entries];
+    FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, 0, 0);
+
+    if (IsValid(matrix.RowColScaling())) {
+      Index n_dim = matrix.NRows();
+      Number* scaling = new Number[n_dim];
+      FillValuesFromVector(n_dim, *matrix.RowColScaling(), scaling);
+      for (Index i=0; i<n_entries; i++) {
+	values[i] *= scaling[iRow[i]-1];
+	values[i] *= scaling[jCol[i]-1];
+      }
+      delete [] scaling;
+    }
+
+    delete [] iRow;
+    delete [] jCol;
   }
 
   void TripletHelper::PutValuesInVector(Index dim, const double* values, Vector& vector)

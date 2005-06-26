@@ -793,6 +793,43 @@ namespace Ipopt
     return retval;
   }
 
+  void TNLPAdapter::GetScalingParameters(Number& obj_scaling, Vector& x_scaling, 
+					 Vector& c_scaling, Vector& d_scaling) const
+  {
+    DBG_ASSERT((c_scaling.Dim()+d_scaling.Dim()) == n_full_g_);
+    Number* full_x_scaling = new Number[n_full_x_];
+    Number* full_g_scaling = new Number[n_full_g_];
+    tnlp_->get_scaling_parameters(obj_scaling, 
+				  n_full_x_, full_x_scaling,
+				  n_full_g_, full_g_scaling);
+
+    DenseVector* dx = dynamic_cast<DenseVector*>(&x_scaling);
+    DenseVector* dc = dynamic_cast<DenseVector*>(&c_scaling);
+    DenseVector* dd = dynamic_cast<DenseVector*>(&d_scaling);
+    DBG_ASSERT(dx && dc && dd);
+    Number* dx_values = dx->Values();
+    Number* dc_values = dc->Values();
+    Number* dd_values = dd->Values();
+
+    const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
+    for (Index i=0; i<dx->Dim(); i++) {
+      dx_values[i] = full_x_scaling[x_pos[i]];
+    }
+    const Index* c_pos = P_c_g_->ExpandedPosIndices();
+    for (Index i=0; i<dc->Dim(); i++) {
+      dc_values[i] = full_g_scaling[c_pos[i]];
+    }
+
+    const Index* d_pos = P_d_g_->ExpandedPosIndices();
+    for (Index i=0; i<dd->Dim(); i++) {
+      dd_values[i] = full_g_scaling[d_pos[i]];
+    }
+
+    delete [] full_x_scaling;
+    delete [] full_g_scaling;
+  }
+
+
   void TNLPAdapter::FinalizeSolution(ApplicationReturnStatus status,
                                      const Vector& x, const Vector& z_L, const Vector& z_U,
                                      const Vector& c, const Vector& d,

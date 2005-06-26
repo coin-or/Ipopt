@@ -2,9 +2,17 @@
 Algorithm/IpIteratesVector.cpp -text
 Algorithm/IpIteratesVector.hpp -text
 Algorithm/IpMuUpdate.cpp -text
+Algorithm/IpNLPScaling.cpp -text
+Algorithm/IpNLPScaling.hpp -text
 Algorithm/IpQualityFunctionMuOracle.cpp -text
 Algorithm/IpQualityFunctionMuOracle.hpp -text
+Algorithm/IpUserScaling.cpp -text
+Algorithm/IpUserScaling.hpp -text
 Common/IpIpoptType.cpp -text
 Common/IpIpoptType.hpp -text
 Common/IpRegOptions.cpp -text
 Common/IpRegOptions.hpp -text
+Common/IpScaledMatrix.cpp -text
+Common/IpScaledMatrix.hpp -text
+Common/IpSymScaledMatrix.cpp -text
+Common/IpSymScaledMatrix.hpp -text

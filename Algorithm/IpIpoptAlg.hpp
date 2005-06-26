@@ -11,6 +11,7 @@
 
 #include "IpUtils.hpp"
 #include "IpSmartPtr.hpp"
+#include "IpIpoptNLP.hpp"
 #include "IpAlgStrategy.hpp"
 #include "IpPDSystemSolver.hpp"
 #include "IpLineSearch.hpp"

@@ -14,6 +14,7 @@
 #include "IpJournalist.hpp"
 #include "IpReferenced.hpp"
 #include "IpException.hpp"
+#include "IpNLPScaling.hpp"
 
 namespace Ipopt
 {
@@ -30,7 +31,9 @@ namespace Ipopt
   public:
     /**@name Constructors/Destructors */
     //@{
-    IpoptNLP()
+    IpoptNLP(const SmartPtr<NLPScalingObject> nlp_scaling)
+      :
+      nlp_scaling_(nlp_scaling)
     {}
 
     /** Default destructor */
@@ -157,6 +160,10 @@ namespace Ipopt
     virtual Index h_evals() const = 0;
     //@}
 
+  protected:
+    /** Returns the scaling strategy object - may be NULL */
+    SmartPtr<NLPScalingObject> NLP_scaling() { DBG_ASSERT(IsValid(nlp_scaling_)); return nlp_scaling_; }
+
   private:
 
     /**@name Default Compiler Generated Methods
@@ -174,6 +181,8 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const IpoptNLP&);
     //@}
+
+    SmartPtr<NLPScalingObject> nlp_scaling_;
   };
 
 } // namespace Ipopt

@@ -36,6 +36,11 @@ namespace Ipopt
     {}
     //@}
 
+    /** Exceptions */
+    //@{
+    DECLARE_STD_EXCEPTION(USER_SCALING_NOT_IMPLEMENTED);
+    //@}
+
     /** @name NLP Initialization (overload in
      *  derived classes).*/
     //@{
@@ -125,7 +130,19 @@ namespace Ipopt
                                   const Vector& y_c, const Vector& y_d,
                                   Number obj_value)
     {}
-    ;
+    //@}
+
+    /** Routines to get the scaling parameters. These do not need to be overloaded
+     *  unless the options are set for User scaling
+     */
+    //@{
+    virtual void GetScalingParameters(Number& obj_scaling, Vector& x_scaling, 
+				      Vector& c_scaling, Vector& d_scaling) const
+    {
+      THROW_EXCEPTION(USER_SCALING_NOT_IMPLEMENTED,
+		      "You have set options for user provided scaling, but have"
+		      " not implemented GetScalingParameters in the NLP interface");
+    }
     //@}
 
 
