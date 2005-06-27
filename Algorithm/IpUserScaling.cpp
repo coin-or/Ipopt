@@ -16,7 +16,10 @@ namespace Ipopt
                                      const SmartPtr<const VectorSpace> d_space,
                                      const SmartPtr<const MatrixSpace> jac_c_space,
                                      const SmartPtr<const MatrixSpace> jac_d_space,
-                                     const SmartPtr<const SymMatrixSpace> h_space)
+                                     const SmartPtr<const SymMatrixSpace> h_space,
+                                     SmartPtr<const MatrixSpace>& new_jac_c_space,
+                                     SmartPtr<const MatrixSpace>& new_jac_d_space,
+                                     SmartPtr<const SymMatrixSpace>& new_h_space)
   {
     DBG_ASSERT(IsValid(nlp_));
 
@@ -29,6 +32,11 @@ namespace Ipopt
     scaled_jac_c_space_ = new ScaledMatrixSpace(ConstPtr(dc), false, jac_c_space, ConstPtr(dx_), true);
     scaled_jac_d_space_ = new ScaledMatrixSpace(ConstPtr(dd), false, jac_d_space, ConstPtr(dx_), true);
     scaled_h_space_ = new SymScaledMatrixSpace(ConstPtr(dx_), true, h_space);
+
+    // set the return values
+    new_jac_c_space = GetRawPtr(scaled_jac_c_space_);
+    new_jac_d_space = GetRawPtr(scaled_jac_d_space_);
+    new_h_space = GetRawPtr(scaled_h_space_);
   }
 
   Number UserScaling::apply_obj_scaling(const Number& f)

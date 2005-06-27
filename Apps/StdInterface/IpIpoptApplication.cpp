@@ -55,6 +55,16 @@ namespace Ipopt
     roptions->AddStringOption2("print_options_documentation", "list all algorithmic options", "no",
                                "no", "don't print list",
                                "yes", "print list");
+
+    roptions->AddStringOption2(
+      "scaling_method",
+      "select the technique used for scaling the NLP", "none",
+      "none", "no problem scaling will be performed",
+      "user-scaling", "scaling parameters will come from the user",
+      "Selects the technique used for scaling the problem before it is solved."
+      " For user-scaling, the parameters come from the NLP. If you are using AMPL,"
+      " they can be specified through suffixes (scaling_factor)");
+
   }
 
   ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp)
@@ -162,8 +172,16 @@ namespace Ipopt
         reg_options->OutputOptionDocumentation(*jnlst_);
       }
 
-      //      SmartPtr<NLPScalingObject> nlp_scaling = new NoNLPScalingObject();
-      SmartPtr<NLPScalingObject> nlp_scaling = new UserScaling(ConstPtr(nlp));
+      SmartPtr<NLPScalingObject> nlp_scaling;
+      std::string scaling_method;
+      options_->GetValue("scaling_method", scaling_method, "");
+      if (scaling_method == "user-scaling") {
+        nlp_scaling = new UserScaling(ConstPtr(nlp));
+      }
+      else {
+        nlp_scaling = new NoNLPScalingObject();
+      }
+
       SmartPtr<IpoptNLP> ip_nlp =
         new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp), nlp_scaling);
 

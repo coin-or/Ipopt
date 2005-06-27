@@ -226,7 +226,7 @@ namespace Ipopt
       }
       DBG_ASSERT(IsValid(X_i));
 
-      for( Index jcol = 0; jcol < NComps_Rows(); jcol++ ) {
+      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ ) {
         SmartPtr<const Vector> S_j;
         if (comp_S) {
           S_j = comp_S->GetComp(jcol);
