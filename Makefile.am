@@ -71,7 +71,16 @@ CLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 
-astyle: $(ASTYLE_FILES)
+astyle: astyle-local
+	cd Algorithm; $(MAKE) astyle
+	cd Apps/AmplSolver; $(MAKE) astyle
+	cd Apps/CompositeInterface; $(MAKE) astyle
+	cd Apps/StdInterface; $(MAKE) astyle
+	cd Common; $(MAKE) astyle
+	cd LinAlgImpl/Serial; $(MAKE) astyle
+	cd PDSystemImpl/PDFullSpace; $(MAKE) astyle
+
+astyle-local: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@
