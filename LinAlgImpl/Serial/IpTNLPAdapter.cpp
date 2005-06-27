@@ -793,15 +793,15 @@ namespace Ipopt
     return retval;
   }
 
-  void TNLPAdapter::GetScalingParameters(Number& obj_scaling, Vector& x_scaling, 
-					 Vector& c_scaling, Vector& d_scaling) const
+  void TNLPAdapter::GetScalingParameters(Number& obj_scaling, Vector& x_scaling,
+                                         Vector& c_scaling, Vector& d_scaling) const
   {
     DBG_ASSERT((c_scaling.Dim()+d_scaling.Dim()) == n_full_g_);
     Number* full_x_scaling = new Number[n_full_x_];
     Number* full_g_scaling = new Number[n_full_g_];
-    tnlp_->get_scaling_parameters(obj_scaling, 
-				  n_full_x_, full_x_scaling,
-				  n_full_g_, full_g_scaling);
+    tnlp_->get_scaling_parameters(obj_scaling,
+                                  n_full_x_, full_x_scaling,
+                                  n_full_g_, full_g_scaling);
 
     DenseVector* dx = dynamic_cast<DenseVector*>(&x_scaling);
     DenseVector* dc = dynamic_cast<DenseVector*>(&c_scaling);

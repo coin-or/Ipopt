@@ -92,7 +92,6 @@ namespace Ipopt
       return GetNumberEntries_(*cmpd_sym);
     }
 
-    int i = 4;
     THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::GetNumberEntries");
     return 0;
   }
@@ -622,7 +621,7 @@ namespace Ipopt
   {
     FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, row_offset, col_offset);
   }
-    
+
   void TripletHelper::FillValues_(Index n_entries, const ScaledMatrix& matrix, Number* values)
   {
     // ToDo:
@@ -643,7 +642,7 @@ namespace Ipopt
       Number* row_scaling = new Number[n_rows];
       FillValuesFromVector(n_rows, *matrix.RowScaling(), row_scaling);
       for (Index i=0; i<n_entries; i++) {
-	values[i] *= row_scaling[iRow[i]-1];
+        values[i] *= row_scaling[iRow[i]-1];
       }
       delete [] row_scaling;
     }
@@ -653,7 +652,7 @@ namespace Ipopt
       Number* col_scaling = new Number[n_cols];
       FillValuesFromVector(n_cols, *matrix.ColumnScaling(), col_scaling);
       for (Index i=0; i<n_entries; i++) {
-	values[i] *= col_scaling[jCol[i]-1];
+        values[i] *= col_scaling[jCol[i]-1];
       }
       delete [] col_scaling;
     }
@@ -666,7 +665,7 @@ namespace Ipopt
   {
     FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, row_offset, col_offset);
   }
-    
+
   void TripletHelper::FillValues_(Index n_entries, const SymScaledMatrix& matrix, Number* values)
   {
     // ToDo:
@@ -687,8 +686,8 @@ namespace Ipopt
       Number* scaling = new Number[n_dim];
       FillValuesFromVector(n_dim, *matrix.RowColScaling(), scaling);
       for (Index i=0; i<n_entries; i++) {
-	values[i] *= scaling[iRow[i]-1];
-	values[i] *= scaling[jCol[i]-1];
+        values[i] *= scaling[iRow[i]-1];
+        values[i] *= scaling[jCol[i]-1];
       }
       delete [] scaling;
     }

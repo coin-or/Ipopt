@@ -612,8 +612,8 @@ namespace Ipopt
   }
 
   void AmplTNLP::get_scaling_parameters(Number& obj_scaling,
-					Index n, double* x_scaling,
-					Index m, double* g_scaling)
+                                        Index n, double* x_scaling,
+                                        Index m, double* g_scaling)
   {
     DBG_ASSERT(IsValid(suffix_handler_));
     const double* obj = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Objective_Source);
@@ -622,28 +622,28 @@ namespace Ipopt
     const double* x = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Variable_Source);
     for (int i=0; i < n; i++) {
       if (x) {
-	x_scaling[i] = x[i];
-	ASSERT_EXCEPTION(x[i] > 0, NONPOSITIVE_SCALING_FACTOR,
-			 "Scaling factors specified through ampl suffixes must all be positive. \nNOTE: Ampl may use zero as a defaut value.\n If you specify"
-			 " a scaling value (using the scaling_factor suffix) for one constraint,\n you must specify a scaling for all constraints (likewise for variables)"
-			 );
+        x_scaling[i] = x[i];
+        ASSERT_EXCEPTION(x[i] > 0, NONPOSITIVE_SCALING_FACTOR,
+                         "Scaling factors specified through ampl suffixes must all be positive. \nNOTE: Ampl may use zero as a defaut value.\n If you specify"
+                         " a scaling value (using the scaling_factor suffix) for one constraint,\n you must specify a scaling for all constraints (likewise for variables)"
+                        );
       }
       else {
-	x_scaling[i] = 1.0;
+        x_scaling[i] = 1.0;
       }
     }
 
     const double* g = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Constraint_Source);
     for (int i=0; i < m; i++) {
       if (g) {
-	g_scaling[i] = g[i];
-	ASSERT_EXCEPTION(g[i] > 0, NONPOSITIVE_SCALING_FACTOR,
-			 "Scaling factors specified through ampl suffixes must all be positive. \nNOTE: Ampl may use zero as a defaut value.\n If you specify"
-			 " a scaling value (using the scaling_factor suffix) for one constraint,\n you must specify a scaling for all constraints (likewise for variables)"
-			 );
+        g_scaling[i] = g[i];
+        ASSERT_EXCEPTION(g[i] > 0, NONPOSITIVE_SCALING_FACTOR,
+                         "Scaling factors specified through ampl suffixes must all be positive. \nNOTE: Ampl may use zero as a defaut value.\n If you specify"
+                         " a scaling value (using the scaling_factor suffix) for one constraint,\n you must specify a scaling for all constraints (likewise for variables)"
+                        );
       }
       else {
-	g_scaling[i] = 1.0;
+        g_scaling[i] = 1.0;
       }
     }
   }
@@ -698,7 +698,7 @@ namespace Ipopt
       }
 
       if (suffix_types_[i] == Number_Type) {
-	suftab_[i].kind = suftab_[i].kind | ASL_Sufkind_real;
+        suftab_[i].kind = suftab_[i].kind | ASL_Sufkind_real;
       }
 
       suftab_[i].nextra = 0;

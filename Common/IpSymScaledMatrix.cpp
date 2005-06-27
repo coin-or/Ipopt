@@ -15,15 +15,14 @@ namespace Ipopt
       :
       SymMatrix(owner_space),
       owner_space_(owner_space)
-  {
-  }
+  {}
 
 
   SymScaledMatrix::~SymScaledMatrix()
   {}
 
   void SymScaledMatrix::MultVectorImpl(Number alpha, const Vector &x,
-                                      Number beta, Vector &y) const
+                                       Number beta, Vector &y) const
   {
     DBG_ASSERT(IsValid(matrix_));
 
@@ -66,7 +65,7 @@ namespace Ipopt
     }
     else {
       for (Index ind=0; ind<indent; ind++) {
-	fprintf(fp, " ");
+        fprintf(fp, " ");
       }
       fprintf(fp, "unscaled matrix is NULL\n");
     }

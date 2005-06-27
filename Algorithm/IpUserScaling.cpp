@@ -12,11 +12,11 @@ namespace Ipopt
 {
 
   void UserScaling::DetermineScaling(const SmartPtr<const VectorSpace> x_space,
-				     const SmartPtr<const VectorSpace> c_space,
-				     const SmartPtr<const VectorSpace> d_space,
-				     const SmartPtr<const MatrixSpace> jac_c_space,
-				     const SmartPtr<const MatrixSpace> jac_d_space,
-				     const SmartPtr<const SymMatrixSpace> h_space)
+                                     const SmartPtr<const VectorSpace> c_space,
+                                     const SmartPtr<const VectorSpace> d_space,
+                                     const SmartPtr<const MatrixSpace> jac_c_space,
+                                     const SmartPtr<const MatrixSpace> jac_d_space,
+                                     const SmartPtr<const SymMatrixSpace> h_space)
   {
     DBG_ASSERT(IsValid(nlp_));
 
@@ -71,7 +71,7 @@ namespace Ipopt
     scaled_c->ElementWiseMultiply(*scaled_jac_c_space_->RowScaling());
     return scaled_c;
   }
-  
+
   SmartPtr<const Vector> UserScaling::apply_vector_scaling_c(const SmartPtr<const Vector>& v)
   {
     return ConstPtr(apply_vector_scaling_c_NonConst(v));
@@ -83,7 +83,7 @@ namespace Ipopt
     scaled_c->ElementWiseDivide(*scaled_jac_c_space_->RowScaling());
     return scaled_c;
   }
-  
+
   SmartPtr<const Vector> UserScaling::unapply_vector_scaling_c(const SmartPtr<const Vector>& v)
   {
     return ConstPtr(unapply_vector_scaling_c_NonConst(v));
@@ -95,7 +95,7 @@ namespace Ipopt
     scaled_d->ElementWiseMultiply(*scaled_jac_d_space_->RowScaling());
     return scaled_d;
   }
-  
+
   SmartPtr<const Vector> UserScaling::apply_vector_scaling_d(const SmartPtr<const Vector>& v)
   {
     return ConstPtr(apply_vector_scaling_d_NonConst(v));
@@ -107,7 +107,7 @@ namespace Ipopt
     scaled_d->ElementWiseDivide(*scaled_jac_d_space_->RowScaling());
     return scaled_d;
   }
-  
+
   SmartPtr<const Vector> UserScaling::unapply_vector_scaling_d(const SmartPtr<const Vector>& v)
   {
     return ConstPtr(unapply_vector_scaling_d_NonConst(v));
@@ -127,7 +127,7 @@ namespace Ipopt
     ret->SetUnscaledMatrix(matrix);
     return GetRawPtr(ret);
   }
-  
+
   SmartPtr<const SymMatrix> UserScaling::apply_hessian_scaling(SmartPtr<const SymMatrix> matrix)
   {
     SmartPtr<SymScaledMatrix> ret = scaled_h_space_->MakeNewSymScaledMatrix(false);

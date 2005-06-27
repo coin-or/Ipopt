@@ -105,11 +105,11 @@ namespace Ipopt
     static void FillValues_(Index n_entries, const CompoundSymMatrix& matrix, Number* values);
 
     static void FillRowCol_(Index n_entries, const ScaledMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
-    
+
     static void FillValues_(Index n_entries, const ScaledMatrix& matrix, Number* values);
 
     static void FillRowCol_(Index n_entries, const SymScaledMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
-    
+
     static void FillValues_(Index n_entries, const SymScaledMatrix& matrix, Number* values);
 
   };

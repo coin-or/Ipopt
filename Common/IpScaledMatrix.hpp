@@ -30,7 +30,7 @@ namespace Ipopt
     /**@name Constructors / Destructors */
     //@{
 
-    /** Constructor, taking the owner_space. 
+    /** Constructor, taking the owner_space.
      */
     ScaledMatrix(const ScaledMatrixSpace* owner_space);
 
@@ -107,10 +107,10 @@ namespace Ipopt
      *  well as the totel number of rows and columns.
      */
     ScaledMatrixSpace(const SmartPtr<const Vector>& row_scaling,
-		      bool row_scaling_reciprocal,
-		      const SmartPtr<const MatrixSpace>& unscaled_matrix_space,
-		      const SmartPtr<const Vector>& column_scaling,
-		      bool column_scaling_reciprocal);
+                      bool row_scaling_reciprocal,
+                      const SmartPtr<const MatrixSpace>& unscaled_matrix_space,
+                      const SmartPtr<const Vector>& column_scaling,
+                      bool column_scaling_reciprocal);
 
     /** Destructor */
     ~ScaledMatrixSpace()
@@ -123,8 +123,8 @@ namespace Ipopt
     {
       ScaledMatrix* ret = new ScaledMatrix(this);
       if (allocate_unscaled_matrix) {
-	SmartPtr<Matrix> unscaled_matrix = unscaled_matrix_space_->MakeNew();
-	ret->SetUnscaledMatrixNonConst(unscaled_matrix);
+        SmartPtr<Matrix> unscaled_matrix = unscaled_matrix_space_->MakeNew();
+        ret->SetUnscaledMatrixNonConst(unscaled_matrix);
       }
       return ret;
     }
@@ -137,13 +137,22 @@ namespace Ipopt
     }
 
     /** return the vector for the row scaling */
-    SmartPtr<const Vector> RowScaling() const { return ConstPtr(row_scaling_); }
+    SmartPtr<const Vector> RowScaling() const
+    {
+      return ConstPtr(row_scaling_);
+    }
 
     /** return the matrix space for the unscaled matrix */
-    SmartPtr<const MatrixSpace> UnscaledMatrixSpace() const { return unscaled_matrix_space_; }
-    
+    SmartPtr<const MatrixSpace> UnscaledMatrixSpace() const
+    {
+      return unscaled_matrix_space_;
+    }
+
     /** return the vector for the column scaling */
-    SmartPtr<const Vector> ColumnScaling() const { return ConstPtr(column_scaling_); }
+    SmartPtr<const Vector> ColumnScaling() const
+    {
+      return ConstPtr(column_scaling_);
+    }
 
   private:
     /**@name Default Compiler Generated Methods
@@ -179,7 +188,7 @@ namespace Ipopt
     nonconst_matrix_ = NULL;
     ObjectChanged();
   }
-  
+
   inline
   void ScaledMatrix::SetUnscaledMatrixNonConst(const SmartPtr<Matrix>& unscaled_matrix)
   {
@@ -187,7 +196,7 @@ namespace Ipopt
     matrix_ = GetRawPtr(unscaled_matrix);
     ObjectChanged();
   }
-  
+
   inline
   SmartPtr<const Matrix> ScaledMatrix::GetUnscaledMatrix() const
   {
@@ -203,15 +212,15 @@ namespace Ipopt
   }
 
   inline
-  SmartPtr<const Vector> ScaledMatrix::RowScaling() const 
-  { 
-    return ConstPtr(owner_space_->RowScaling()); 
+  SmartPtr<const Vector> ScaledMatrix::RowScaling() const
+  {
+    return ConstPtr(owner_space_->RowScaling());
   }
 
   inline
-  SmartPtr<const Vector> ScaledMatrix::ColumnScaling() const 
-  { 
-    return ConstPtr(owner_space_->ColumnScaling()); 
+  SmartPtr<const Vector> ScaledMatrix::ColumnScaling() const
+  {
+    return ConstPtr(owner_space_->ColumnScaling());
   }
 
 } // namespace Ipopt
