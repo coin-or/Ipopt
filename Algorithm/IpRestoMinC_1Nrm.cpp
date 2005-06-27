@@ -43,7 +43,7 @@ namespace Ipopt
     // restoration phase
     resto_options_ = new OptionsList(options);
 
-    options.GetNumericValue("lam_init_max", lam_init_max_, prefix);
+    options.GetNumericValue("constr_mult_init_max", constr_mult_init_max_, prefix);
     options.GetNumericValue("bound_mult_init_max", bound_mult_init_max_, prefix);
     options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
 
@@ -237,7 +237,7 @@ namespace Ipopt
 
       }
       // Recompute the equality constraint multipliers as least square estimate
-      if (IsValid(eq_mult_calculator_) && lam_init_max_>0.) {
+      if (IsValid(eq_mult_calculator_) && constr_mult_init_max_>0.) {
         // First move all the trial data into the current fields, since
         // those values are needed to compute the initial values for
         // the multipliers
@@ -254,8 +254,8 @@ namespace Ipopt
           Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                          "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
                          y_c->Amax(), y_d->Amax());
-          Number lam_init_nrm = Max(y_c->Amax(), y_d->Amax());
-          if (!retval || lam_init_nrm > lam_init_max_) {
+          Number y_init_nrm = Max(y_c->Amax(), y_d->Amax());
+          if (!retval || y_init_nrm > constr_mult_init_max_) {
             y_c->Set(0.0);
             y_d->Set(0.0);
           }

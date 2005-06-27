@@ -83,7 +83,7 @@ namespace Ipopt
 
     /** @name Algorithmic parameters */
     //@{
-    Number lam_init_max_;
+    Number constr_mult_init_max_;
     /** Maximal allowed value of a bound multiplier after restoration
      *  phase.
      */

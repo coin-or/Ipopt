@@ -30,9 +30,11 @@
 #include "IpTSymLinearSolver.hpp"
 #include "IpMa27TSolverInterface.hpp"
 #include "IpMc19TSymScalingMethod.hpp"
-#include "IpPardisoSolverInterface.hpp"
+#ifdef HAVE_PARDISO
+# include "IpPardisoSolverInterface.hpp"
+#endif
 #ifdef HAVE_TAUCS
-#include "IpTAUCSSolverInterface.hpp"
+# include "IpTAUCSSolverInterface.hpp"
 #endif
 
 namespace Ipopt
@@ -43,31 +45,64 @@ namespace Ipopt
 
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddStringOption2("scaling_method", "sets the scaling method for the problem", "none",
-                               "none", "no scaling will be performed",
-                               "mc19", "use the Harwell routine mc19 to find suitable scaling factors");
-    roptions->AddStringOption3("linear_solver", "set which linear solver should be used for the augmented system", "ma27",
-                               "ma27", "use the Harwell routine ma27",
-                               "pardiso", "use Pardiso (ref)",
-                               "taucs", "use TAUCS (ref)");
-    roptions->AddStringOption2("warm_start_init_point", "use a warm start initialization or not", "no",
-                               "no", "do not use the warm start initialization",
-                               "yes", "use the warm start initialization");
-
-    roptions->AddStringOption2("muupdate", "which update option should be used for the barrier parameter, mu", "monotone",
-                               "monotone", "use a monotone mu update strategy",
-                               "nonmonotone", "use a nonmonotone update strategy");
-
-    roptions->AddStringOption3("muoracle", "when using  nonmonotone mu update strategy, this selects how the update is performed", "probing",
-                               "probing", "???",
-                               "loqo", "???",
-                               "quality_function", "???");
-
-    roptions->AddStringOption4("fixmuoracle", "???", "avgerage_compl",
-                               "probing", "???",
-                               "loqo", "???",
-                               "quality_function", "???",
-                               "avgerage_compl", "???");
+    roptions->AddStringOption3(
+      "linear_solver",
+      "Linear solver used for step computations.",
+      "ma27",
+      "ma27", "use the Harwell routine MA27",
+      "pardiso", "use the Pardiso package",
+      "taucs", "use TAUCS package",
+      "Determines which linear algebra package is to be used for the "
+      "solution of the linear system from which the search directions is "
+      "obtained.  Note that depending on your Ipopt installation, not all "
+      "options might be available.");
+    roptions->AddStringOption2(
+      "linear_system_scaling",
+      "Method for scaling the linear system.",
+      "none",
+      "none", "no scaling will be performed",
+      "mc19", "use the Harwell routine mc19",
+      "Determines which method should be use to compute symmetric scaling "
+      "factors for the augmented system.");
+    roptions->AddStringOption2(
+      "mu_strategy",
+      "Update strategy for barrier parameter.",
+      "monotone",
+      "monotone", "use a monotone (Fiacco-McCormick) strategy",
+      "nonmonotone", "use a nonmonotone update strategy",
+      "Determines whether a nonmonotone barrier "
+      "parameter strategy is to be used.");
+    roptions->AddStringOption3(
+      "mu_oracle",
+      "Oracle for a new barrier parameters in the nonmonotone strategy",
+      "probing",
+      "probing", "Mehrotra's probing heuristic",
+      "loqo", "LOQO's centrality rule",
+      "quality_function", "minimize a quality function",
+      "Determines how a new barrier parameter is computed in each "
+      "\"free-mode\" iteration of the nonmonotone barrier parameter "
+      "strategy. (Only considered if \"nonmonotone\" is selected for "
+      "option \"mu_strategy\".");
+    roptions->AddStringOption4(
+      "fixed_mu_oracle",
+      "Oracle for the barrier parameter when switching to fixed mode.",
+      "average_compl",
+      "probing", "Mehrotra's probing heuristic",
+      "loqo", "LOQO's centrality rule",
+      "quality_function", "minimize a quality function",
+      "average_compl", "base on current average complementarity",
+      "Determines how the first value of the barrier parameter should be "
+      "computed when switching to the \"monotone mode\" in the nonmonotone "
+      "strategy. (Only considered if \"nonmonotone\" is selected for option "
+      "\"mu_strategy\".");
+    roptions->AddStringOption2(
+      "warm_start_init_point",
+      "Warm-start for initial point", "no",
+      "no", "do not use the warm start initialization",
+      "yes", "use the warm start initialization",
+      "Indicates whether this optimization should use a warm start "
+      "initialization, where values of primal and dual variables are "
+      "given (e.g., from a previous optimization of a related problem.)");
   }
 
   SmartPtr<IpoptAlgorithm>
@@ -83,9 +118,10 @@ namespace Ipopt
 
     // Create the solvers that will be used by the main algorithm
     SmartPtr<TSymScalingMethod> ScalingMethod;
-    std::string scaling_method;
-    options.GetValue("scaling_method", scaling_method, prefix);
-    if (scaling_method=="mc19") {
+    std::string linear_system_scaling;
+    options.GetValue("linear_system_scaling",
+                     linear_system_scaling, prefix);
+    if (linear_system_scaling=="mc19") {
       ScalingMethod = new Mc19TSymScalingMethod();
     }
 
@@ -159,13 +195,13 @@ namespace Ipopt
     // algorithm
     SmartPtr<MuUpdate> resto_MuUpdate;
     std::string resto_smuupdate;
-    options.GetValue("muupdate", resto_smuupdate, "resto."+prefix);
+    options.GetValue("mu_strategy", resto_smuupdate, "resto."+prefix);
 
     std::string resto_smuoracle;
     std::string resto_sfixmuoracle;
     if (resto_smuupdate=="nonmonotone" ) {
-      options.GetValue("muoracle", resto_smuoracle, "resto."+prefix);
-      options.GetValue("fixmuoracle", resto_sfixmuoracle, "resto."+prefix);
+      options.GetValue("mu_oracle", resto_smuoracle, "resto."+prefix);
+      options.GetValue("fixed_mu_oracle", resto_sfixmuoracle, "resto."+prefix);
     }
 
     if (resto_smuupdate=="monotone" ) {
@@ -208,7 +244,6 @@ namespace Ipopt
     SmartPtr<EqMultiplierCalculator> resto_EqMultCalculator =
       new LeastSquareMultipliers(*resto_AugSolver);
     SmartPtr<IterateInitializer> resto_IterInitializer =
-      //      new DefaultIterateInitializer(resto_EqMultCalculator); //TODO
       new RestoIterateInitializer(resto_EqMultCalculator);
 
     // Create the object for the iteration output during restoration
@@ -243,12 +278,12 @@ namespace Ipopt
     // Create the mu update that will be used by the main algorithm
     SmartPtr<MuUpdate> MuUpdate;
     std::string smuupdate;
-    options.GetValue("muupdate", smuupdate, prefix);
+    options.GetValue("mu_strategy", smuupdate, prefix);
     std::string smuoracle;
     std::string sfixmuoracle;
     if (smuupdate=="nonmonotone" ) {
-      options.GetValue("muoracle", smuoracle, prefix);
-      options.GetValue("fixmuoracle", sfixmuoracle, prefix);
+      options.GetValue("mu_oracle", smuoracle, prefix);
+      options.GetValue("fixed_mu_oracle", sfixmuoracle, prefix);
     }
 
     if (smuupdate=="monotone" ) {

@@ -15,9 +15,10 @@
 # include <cctype>
 #endif
 
-
 namespace Ipopt
 {
+
+  Index RegisteredOption::next_counter_ = 1;
 
   void RegisteredOption::OutputDescription(const Journalist& jnlst) const
   {
@@ -145,10 +146,10 @@ namespace Ipopt
                    (Index)default_number_);
 
       if (has_upper_) {
-        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "% <= -10d\n", (Index)upper_);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= %-10d\n", (Index)upper_);
       }
       else {
-        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "% <  -10s\n", "+inf");
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  %-10s\n", "+inf");
       }
     }
     else if (type_ == OT_String) {
@@ -159,8 +160,8 @@ namespace Ipopt
     jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 3, 76,
                                short_description_.c_str());
     if (long_description_ != "") {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n    ");
-      jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 4, 75,
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n     ");
+      jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 5, 74,
                                  long_description_.c_str());
     }
     if (type_ == OT_String) {
@@ -168,10 +169,10 @@ namespace Ipopt
       for (std::vector<string_entry>::const_iterator
            i = valid_strings_.begin();
            i != valid_strings_.end(); i++) {
-        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "    - %-20s [",
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "    - %-23s [",
                      (*i).value_.c_str());
 
-        jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 28, 51,
+        jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 31, 48,
                                    (*i).description_.c_str());
         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "]\n");
       }
@@ -614,7 +615,7 @@ namespace Ipopt
     option->AddValidStringSetting(setting4, description4);
     option->AddValidStringSetting(setting5, description5);
     option->AddValidStringSetting(setting6, description6);
-    option->AddValidStringSetting(setting6, description7);
+    option->AddValidStringSetting(setting7, description7);
     ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                      std::string("The option: ") + option->Name() + " has already been registered by someone else");
     registered_options_[name] = option;
@@ -644,7 +645,7 @@ namespace Ipopt
     // create a set to print sorted output
     std::set
       <std::string> classes;
-    std::map< std::string, SmartPtr<RegisteredOption> >::iterator option;
+    std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
     for (option = registered_options_.begin(); option != registered_options_.end(); option++) {
       classes.insert(option->second->RegisteringClass());
     }
@@ -652,19 +653,22 @@ namespace Ipopt
     std::set
       <std::string>::iterator i;
     for (i = classes.begin(); i != classes.end(); i++) {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n\n### %s ###\n", (*i).c_str());
-      for (option = registered_options_.begin(); option != registered_options_.end(); option++) {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "\n### %s ###\n\n", (*i).c_str());
+      std::map<Index, SmartPtr<RegisteredOption> > class_options;
+      for (option = registered_options_.begin();
+           option != registered_options_.end(); option++) {
         if (option->second->RegisteringClass() == (*i)) {
-          option->second->OutputShortDescription(jnlst);
+
+          class_options[option->second->Counter()] = option->second;
         }
       }
+      std::map<Index, SmartPtr<RegisteredOption> >::const_iterator co;
+      for (co = class_options.begin(); co != class_options.end(); co++) {
+        co->second->OutputShortDescription(jnlst);
+      }
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
     }
-
-    //     // This output should be sorted by registered class at some point, not by name
-    //     std::map< std::string, SmartPtr<RegisteredOption> >::iterator option;
-    //     for (option = registered_options_.begin(); option != registered_options_.end(); option++) {
-    //       option->second->OutputDescription(jnlst);
-    //     }
   }
 
 } // namespace Ipopt

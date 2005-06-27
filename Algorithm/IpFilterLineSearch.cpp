@@ -47,76 +47,218 @@ namespace Ipopt
 
   void FilterLineSearch::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("theta_max_fact", "???",
-                                          0.0, true, 1e4);
-    roptions->AddLowerBoundedNumberOption("theta_min_fact", "???",
-                                          0.0, true, 1e-4);
-    roptions->AddBoundedNumberOption("eta_phi", "???",
-                                     0.0, true, 0.5, true, 1e-4);
-    roptions->AddLowerBoundedNumberOption("delta", "???",
-                                          0.0, true, 1.0);
-    roptions->AddLowerBoundedNumberOption("s_phi", "???",
-                                          1.0, true, 2.3);
-    roptions->AddLowerBoundedNumberOption("s_theta", "???",
-                                          1.0, true, 1.1);
-    roptions->AddBoundedNumberOption("gamma_phi", "???",
-                                     0.0, true, 1.0, true, 1e-8);
-    roptions->AddBoundedNumberOption("gamma_theta", "???",
-                                     0.0, true, 1.0, true, 1e-5);
-    roptions->AddBoundedNumberOption("alpha_min_frac", "???",
-                                     0.0, true, 1.0, true, 0.05);
-    roptions->AddLowerBoundedNumberOption("alpha_red_factor", "fractional reduction of alpha (step size) in the line search",
-                                          0.0, true, 0.5);
-    roptions->AddLowerBoundedIntegerOption("max_soc", "???",
-                                           0, 4);
-    roptions->AddLowerBoundedNumberOption("kappa_soc", "???",
-                                          0.0, true, 0.99);
-    roptions->AddLowerBoundedNumberOption("obj_max_inc", "???",
-                                          1.0, true, 5.0);
-    roptions->AddStringOption2("magic_steps", "should we take special steps with the slack variables from the general inequalities", "no",
-                               "no", "don't take magic steps",
-                               "yes", "take magic steps");
-    roptions->AddStringOption3("corrector_type", "???", "none",
-                               "none", "no corrector",
-                               "affine", "corrector step towards mu=0",
-                               "primal-dual", "corrector step towards current mu");
+    roptions->AddLowerBoundedNumberOption(
+      "theta_max_fact",
+      "Determines upper bound for constraint violation in the filter.",
+      0.0, true, 1e4,
+      "The algorithmic parameter theta_max is determined as theta_max_fact "
+      "times the maximum of 1 and the constraint violation at initial point.  "
+      "Any point with a constraint violation larger than theta_max is "
+      "unacceptable to the filter (see Eqn. (21) in implementation paper).");
+    roptions->AddLowerBoundedNumberOption(
+      "theta_min_fact",
+      "Determines constraint violation threshold in switching rule.",
+      0.0, true, 1e-4,
+      "The algorithmic parameter theta_min is determined as theta_max_fact "
+      "times the maximum of 1 and the constraint violation at initial point.  "
+      "The switching rules treats an iteration as h-type iteration whenever "
+      "the current constraint violation is larger than theta_min (see "
+      "paragraph before Eqn. (19) in implementation paper).");
+    roptions->AddBoundedNumberOption(
+      "eta_phi",
+      "Relaxation factor in the Armijo condition.",
+      0.0, true, 0.5, true, 1e-4,
+      "(See Eqn. (20) in implementation paper)");
+    roptions->AddLowerBoundedNumberOption(
+      "delta", "Multiplier for constraint violation in switching rule.",
+      0.0, true, 1.0,
+      "(See Eqn. (19) in implementation paper)");
+    roptions->AddLowerBoundedNumberOption(
+      "s_phi",
+      "Exponent for linear barrier function model in switching rule.",
+      1.0, true, 2.3,
+      "(See Eqn. (19) in implementation paper)");
+    roptions->AddLowerBoundedNumberOption(
+      "s_theta",
+      "Exponent for current constraint violation in switching rule.",
+      1.0, true, 1.1,
+      "(See Eqn. (19) in implementation paper)");
+    roptions->AddBoundedNumberOption(
+      "gamma_phi",
+      "Relaxation factor in filter margin for barrier function.",
+      0.0, true, 1.0, true, 1e-8,
+      "(See Eqn. (18a) in implementation paper)");
+    roptions->AddBoundedNumberOption(
+      "gamma_theta",
+      "Relaxation factor in filter margin for constraint violation.",
+      0.0, true, 1.0, true, 1e-5,
+      "(See Eqn. (18b) in implementation paper)");
+    roptions->AddBoundedNumberOption(
+      "alpha_min_frac",
+      "Safety factor for minimal step size (switch to restoration phase).",
+      0.0, true, 1.0, true, 0.05,
+      "(This is gamma_alpha in Eqn. (20) in implementation paper)");
+    roptions->AddBoundedNumberOption(
+      "alpha_red_factor",
+      "Fractional reduction of trial step size in the backtracking line search.",
+      0.0, true, 1.0, true, 0.5,
+      "Determines the fraction by how much the trial step size is reduced in "
+      "every step of the backtracking line search.");
+    roptions->AddLowerBoundedIntegerOption(
+      "max_soc",
+      "Maximal number of second order correction trial steps.",
+      0, 4,
+      "Determines the maximal number of second order correction trial steps "
+      "that should be performed.  Choosing 0 disables the second order "
+      "corrections. (This is p^{max} of Step A-5.9 of "
+      "Algorithm A in implementation paper.)");
+    roptions->AddLowerBoundedNumberOption(
+      "kappa_soc",
+      "Factor in sufficient reduction rule for second order correction.",
+      0.0, true, 0.99,
+      "Determines by how much a second order correction step must reduce the "
+      "constraint violation so that further correction steps are attempted.  "
+      "(See Step A-5.9 of Algorithm A in implementation paper.)");
+    roptions->AddLowerBoundedNumberOption(
+      "obj_max_inc",
+      "Determines upper bound on acceptable increase of barrier objective function.",
+      1.0, true, 5.0,
+      "A trial point leading to more orders of magnitude increase in the "
+      "barrier objective function are rejected.");
+    roptions->AddStringOption2(
+      "magic_steps",
+      "Enables magic steps.",
+      "no",
+      "no", "don't take magic steps",
+      "yes", "take magic steps",
+      "DOESN'T REALLY WORK YET!");
+    roptions->AddStringOption3(
+      "corrector_type",
+      "Type of corrector steps.",
+      "none",
+      "none", "no corrector",
+      "affine", "corrector step towards mu=0",
+      "primal-dual", "corrector step towards current mu",
+      "Determines what kind of corrector steps should be tried.");
 
-    roptions->AddStringOption2("skip_corr_if_neg_curv", "skip the corrector step if we are currently encountering negative curvature", "yes",
-                               "no", "don't skip",
-                               "yes", "skip");
+    roptions->AddStringOption2(
+      "skip_corr_if_neg_curv",
+      "Skip the corrector step in negative curvature iteration.",
+      "yes",
+      "no", "don't skip",
+      "yes", "skip",
+      "The corrector step is not tried if during the computation of "
+      "the search direction in the current iteration negative curvature has "
+      "been encountered.");
 
-    roptions->AddStringOption2("skip_corr_if_fixed_mode", "skip the corrector step if we are currently in fixed mu mode", "yes",
-                               "no", "don't skip",
-                               "yes", "skip");
-    roptions->AddStringOption2("ls_always_accept", "always accept the full step", "no",
-                               "no", "don't arbitrarily accept the full step",
-                               "yes", "always accept the full step");
+    roptions->AddStringOption2(
+      "skip_corr_in_monotone_mode",
+      "Skip the corrector step during monotone barrier parameter mode.",
+      "yes",
+      "no", "don't skip",
+      "yes", "skip",
+      "The corrector step is not tried if the algorithm is currently in the "
+      "monotone mode (see also option \"barrier_strategy\").");
 
-    roptions->AddStringOption7("alpha_for_y", "method for performing the step for the equality multipliers", "primal",
-                               "primal", "set the y's using the primal step size",
-                               "bound-mult", "set the y's using the step for the bound multipliers",
-                               "min", "set the y's using the min of primal and bound-mult",
-                               "max", "set the y's using the max of primal and bound-mult",
-                               "full", "take a full step in the y's",
-                               "safe_min_dual_infeas", "???",
-                               "min_dual_infeas", "???");
+    roptions->AddStringOption2(
+      "accept_every_trial_step",
+      "always accept the frist trial step",
+      "no",
+      "no", "don't arbitrarily accept the full step",
+      "yes", "always accept the full step",
+      "Setting this option to \"yes\" essentially disables the line search "
+      "and makes the algorithm take aggressive steps.");
 
-    roptions->AddLowerBoundedNumberOption("corrector_compl_avrg_red_fact", "???",
-                                          0.0, true, 1.0);
-    roptions->AddLowerBoundedNumberOption("expect_infeasible_problem_ctol", "???",
-                                          0.0, false, 1e-3);
-    roptions->AddLowerBoundedNumberOption("resto_pderror_reduction_factor", "???",
-                                          0.0, false, (1.0 - 1e-4));
-    roptions->AddLowerBoundedNumberOption("tiny_step_tol", "???",
-                                          0.0, false, 10.0*std::numeric_limits<double>::epsilon());
-    roptions->AddLowerBoundedIntegerOption("watch_dog_trial_iter_max", "number of trial iterations before watchdog returns to stored point",
-                                           1, 3);
-    roptions->AddLowerBoundedIntegerOption("watch_dog_shortened_iter_trigger", "???",
-                                           0, 10);
-    roptions->AddLowerBoundedNumberOption("acceptable_tol", "???",
-                                          0.0, false, 1e-6);
-    roptions->AddLowerBoundedIntegerOption("acceptable_iter_max", "???",
-                                           0, 15);
+    roptions->AddStringOption7(
+      "alpha_for_y",
+      "Step size for constraint multipliers.",
+      "primal",
+      "primal", "use primal step size",
+      "bound_mult", "use step size for the bound multipliers",
+      "min", "use the min of primal and bound multipliers",
+      "max", "use the max of primal and bound multipliers",
+      "full", "take a full step of size one",
+      "min_dual_infeas", "choose step size minimizing new dual infeasibility",
+      "safe_min_dual_infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
+      "Determines which step size (alpha_y) should be used to update the "
+      "constraint multipliers.");
+
+    roptions->AddLowerBoundedNumberOption(
+      "corrector_compl_avrg_red_fact",
+      "Complementarity tolerance factor for accepting corrector step",
+      0.0, true, 1.0,
+      "Determines the factor by which complementarity is allowed to increase "
+      "for a corrector step to be accepted.");
+
+    roptions->AddStringOption2(
+      "expect_infeasible_problem",
+      "Enable heuristics to quickly detect an infeasible problem.",
+      "no",
+      "no", "the problem probably be feasible",
+      "yes", "the problem has a good chance to be infeasible",
+      "This options is meant to activate heuristics that may speed up the "
+      "infeasibility determination if you expect the problem to be "
+      "infeasible.  In the filter line search procedure, the restoration "
+      "phase is called more qucikly than usually, and more reduction in "
+      "the constraint violation is enforced.");
+    roptions->AddLowerBoundedNumberOption(
+      "expect_infeasible_problem_ctol",
+      "Threshold for disabling \"expect_infeasible_problem\" option",
+      0.0, false, 1e-3,
+      "If the constraint violation becomes small than this threshold, "
+      "the \"expect_infeasible_problem\" heuristics in the filter line "
+      "search will are disabled.");
+    roptions->AddLowerBoundedNumberOption(
+      "soft_resto_pderror_reduction_factor",
+      "Required reduction in primal-dual error in soft restoration phase.",
+      0.0, false, (1.0 - 1e-4),
+      "For the soft restoration phase (which attempts to reduce the "
+      "primal-dual error with regular steps), this indicates by which "
+      "factor the primal-dual error has to be reduced in order to continue "
+      "with the soft restoration phase. If the regular primal-dual step, "
+      "damped onl to satisfty the fraction-to-the-boundary rule, is not "
+      "decreasing the error by this factor, then the regular restoration "
+      "phase is called.  Choosing \"0\" here disables the soft "
+      "restoration phase.");
+    roptions->AddLowerBoundedNumberOption(
+      "tiny_step_tol",
+      "Tolerance for detecting numerically insignificant steps.",
+      0.0, false, 10.0*std::numeric_limits<double>::epsilon(),
+      "If the search direction in the primal variables (x and s) is, in "
+      "relative terms for each component, less than this values, the "
+      "algorithm accepts the full step without line search.  The default "
+      "value is 10 times machine precision.");
+    roptions->AddLowerBoundedIntegerOption(
+      "watchdog_shortened_iter_trigger",
+      "Number of shortened iterations that trigger the watchdog.",
+      0, 10,
+      "If the number of iterations in which the backtracking line search "
+      "did not accept the first trial point exceedes this number, the "
+      "watchdog procedure is activated.  Choosing \"0\" here disables the "
+      "watchdog procedure.");
+    roptions->AddLowerBoundedIntegerOption(
+      "watchdog_trial_iter_max",
+      "Maximal number of watchdog iterations.",
+      1, 3,
+      "Determines the number of trial iterations before the watchdog "
+      "procedure is aborted and the algorithm returns to the stored point.");
+    roptions->AddLowerBoundedNumberOption(
+      "acceptable_tol",
+      "Threshold for NLP error to consider iterate as acceptable.",
+      0.0, false, 1e-6,
+      "Determines tolerance for which an iterate is considered as accepable "
+      "solution.  If the algorithm would trigger the restoration phase at "
+      "such a point, it instead terminates, returning this acceptable "
+      "point.  Further, if the algorithm encounters \"acceptable_iter_max\" "
+      "successive points satisfying this NLP tolerance, the algorithm "
+      "terminates.");
+    roptions->AddLowerBoundedIntegerOption(
+      "acceptable_iter_max",
+      "Number of acceptable iterates to trigger termination.",
+      0, 15,
+      "if the algorithm encounters so many successive acceptable iterates "
+      "(see \"acceptable_tol\"), it terminates, assuming that the problem "
+      "has been solved to best possible accuracy given round-off.");
   }
 
   bool FilterLineSearch::InitializeImpl(const OptionsList& options,
@@ -146,8 +288,8 @@ namespace Ipopt
     options.GetEnumValue("corrector_type", enum_int, prefix);
     corrector_type_ = CorrectorTypeEnum(enum_int);
     options.GetBoolValue("skip_corr_if_neg_curv", skip_corr_if_neg_curv_, prefix);
-    options.GetBoolValue("skip_corr_if_fixed_mode", skip_corr_if_fixed_mode_, prefix);
-    options.GetBoolValue("ls_always_accept", ls_always_accept_, prefix);
+    options.GetBoolValue("skip_corr_in_monotone_mode", skip_corr_in_monotone_mode_, prefix);
+    options.GetBoolValue("accept_every_trial_step", accept_every_trial_step_, prefix);
     options.GetEnumValue("alpha_for_y", enum_int, prefix);
     alpha_for_y_ = AlphaForYEnum(enum_int);
     options.GetNumericValue("corrector_compl_avrg_red_fact", corrector_compl_avrg_red_fact_, prefix);
@@ -160,10 +302,11 @@ namespace Ipopt
                                           options, prefix);
     }
 
-    options.GetNumericValue("resto_pderror_reduction_factor", resto_pderror_reduction_factor_, prefix);
+    options.GetNumericValue("soft_resto_pderror_reduction_factor",
+                            soft_resto_pderror_reduction_factor_, prefix);
     options.GetNumericValue("tiny_step_tol", tiny_step_tol_, prefix);
-    options.GetIntegerValue("watch_dog_trial_iter_max", watch_dog_trial_iter_max_, prefix);
-    options.GetIntegerValue("watch_dog_shortened_iter_trigger", watch_dog_shortened_iter_trigger_, prefix);
+    options.GetIntegerValue("watchdog_trial_iter_max", watchdog_trial_iter_max_, prefix);
+    options.GetIntegerValue("watchdog_shortened_iter_trigger", watchdog_shortened_iter_trigger_, prefix);
     options.GetNumericValue("acceptable_tol", acceptable_tol_, prefix);
     options.GetIntegerValue("acceptable_iter_max", acceptable_iter_max_, prefix);
 
@@ -204,15 +347,15 @@ namespace Ipopt
     skipped_line_search_ = false;
 
     // Set the values for the reference point
-    if (!in_watch_dog_) {
+    if (!in_watchdog_) {
       reference_theta_ = IpCq().curr_constraint_violation();
       reference_barr_ = IpCq().curr_barrier_obj();
       reference_gradBarrTDelta_ = IpCq().curr_gradBarrTDelta();
     }
     else {
-      reference_theta_ = watch_dog_theta_;
-      reference_barr_ = watch_dog_barr_;
-      reference_gradBarrTDelta_ = watch_dog_gradBarrTDelta_;
+      reference_theta_ = watchdog_theta_;
+      reference_barr_ = watchdog_barr_;
+      reference_gradBarrTDelta_ = watchdog_gradBarrTDelta_;
     }
 
     // Get the search directions (this will store the actual search
@@ -237,7 +380,7 @@ namespace Ipopt
     // ToDo: move this into place independent of this particular line search?
     bool tiny_step = (!goto_resto && DetectTinyStep());
 
-    if (in_watch_dog_ && (goto_resto || tiny_step)) {
+    if (in_watchdog_ && (goto_resto || tiny_step)) {
       // If the step could not be computed or is too small and the
       // watchdog is active, stop the watch dog and resume everything
       // from reference point
@@ -247,10 +390,10 @@ namespace Ipopt
     }
 
     // Check if we want to wake up the watchdog
-    if (watch_dog_shortened_iter_trigger_ > 0 &&
-        !in_watch_dog_ && !goto_resto && !tiny_step &&
+    if (watchdog_shortened_iter_trigger_ > 0 &&
+        !in_watchdog_ && !goto_resto && !tiny_step &&
         !in_soft_resto_phase_ && !expect_infeasible_problem_ &&
-        watch_dog_shortened_iter_ >= watch_dog_shortened_iter_trigger_) {
+        watchdog_shortened_iter_ >= watchdog_shortened_iter_trigger_) {
       StartWatchDog();
     }
 
@@ -306,18 +449,18 @@ namespace Ipopt
                                             evaluation_error,
                                             actual_delta);
           DBG_PRINT((1, "evaluation_error = %d\n", evaluation_error));
-          if (in_watch_dog_) {
+          if (in_watchdog_) {
             if (accept) {
-              in_watch_dog_ = false;
+              in_watchdog_ = false;
               IpData().Append_info_string("W");
               Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                              "Watch dog procedure successful!\n");
               done = true;
             }
             else {
-              watch_dog_trial_iter_++;
+              watchdog_trial_iter_++;
               if (evaluation_error ||
-                  watch_dog_trial_iter_ > watch_dog_trial_iter_max_) {
+                  watchdog_trial_iter_ > watchdog_trial_iter_max_) {
                 StopWatchDog(actual_delta);
                 skip_first_trial_point = true;
               }
@@ -345,7 +488,7 @@ namespace Ipopt
       }
       else {
         // Check if we should start the soft restoration phase
-        if (!in_soft_resto_phase_ && resto_pderror_reduction_factor_>0.
+        if (!in_soft_resto_phase_ && soft_resto_pderror_reduction_factor_>0.
             && !goto_resto ) {
           Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                          "--> Starting soft restoration phase <--\n");
@@ -426,7 +569,7 @@ namespace Ipopt
             expect_infeasible_problem_ = false;
           }
           in_soft_resto_phase_ = false;
-          watch_dog_shortened_iter_ = 0;
+          watchdog_shortened_iter_ = 0;
         }
       }
     }
@@ -455,11 +598,11 @@ namespace Ipopt
             count_acceptable_iter_=0;
           }
         }
-        watch_dog_shortened_iter_ = 0;
+        watchdog_shortened_iter_ = 0;
       }
       else {
         count_successive_shortened_steps_++;
-        watch_dog_shortened_iter_++;
+        watchdog_shortened_iter_++;
         count_acceptable_iter_ = 0;
       }
 
@@ -494,7 +637,7 @@ namespace Ipopt
 
     // Compute smallest step size allowed
     Number alpha_min = alpha_primal_max;
-    if (!in_watch_dog_) {
+    if (!in_watchdog_) {
       alpha_min = CalculateAlphaMin();
     }
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
@@ -505,8 +648,8 @@ namespace Ipopt
 
     // Step size used in ftype and armijo tests
     Number alpha_primal_test = alpha_primal;
-    if (in_watch_dog_) {
-      alpha_primal_test = watch_dog_alpha_primal_test_;
+    if (in_watchdog_) {
+      alpha_primal_test = watchdog_alpha_primal_test_;
     }
 
     if (skip_first_trial_point) {
@@ -515,9 +658,9 @@ namespace Ipopt
 
     filter_.Print(Jnlst());
 
-    if (corrector_type_!=0 && !skip_first_trial_point &&
+    if (corrector_type_!=NO_CORRECTOR && !skip_first_trial_point &&
         (!skip_corr_if_neg_curv_ || IpData().info_regu_x()==0.) &&
-        (!skip_corr_if_fixed_mode_ || IpData().FreeMuMode()) ) {
+        (!skip_corr_in_monotone_mode_ || IpData().FreeMuMode()) ) {
       // Before we do the actual backtracking line search for the
       // regular primal-dual search direction, let's see if a step
       // including a higher-order correctior is already acceptable
@@ -564,7 +707,7 @@ namespace Ipopt
           break;
         }
 
-        if (in_watch_dog_) {
+        if (in_watchdog_) {
           break;
         }
 
@@ -602,7 +745,7 @@ namespace Ipopt
     } /* if (!accept) */
 
     char info_alpha_primal_char;
-    if (!accept && in_watch_dog_) {
+    if (!accept && in_watchdog_) {
       info_alpha_primal_char = 'w';
     }
     else {
@@ -655,7 +798,7 @@ namespace Ipopt
     DBG_START_METH("FilterLineSearch::CheckAcceptabilityOfTrialPoint",
                    dbg_verbosity);
 
-    if (ls_always_accept_) {
+    if (accept_every_trial_step_) {
 
       // We call the evaluation at the trial point here, so that an
       // exception will the thrown if there are problem during the
@@ -872,7 +1015,7 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "  Primal-dual error at trial point  :  %23.16e\n", trial_pderror);
     // Check if there is sufficient reduction in the optimality error
-    if (trial_pderror <= resto_pderror_reduction_factor_*curr_pderror) {
+    if (trial_pderror <= soft_resto_pderror_reduction_factor_*curr_pderror) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                      "  Trial step accepted.\n");
       return true;
@@ -890,15 +1033,15 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "Starting Watch Dog\n");
 
-    in_watch_dog_ = true;
-    watch_dog_iterate_ = IpData().curr();
-    watch_dog_delta_ = IpData().delta();
-    watch_dog_trial_iter_ = 0;
-    watch_dog_alpha_primal_test_ =
+    in_watchdog_ = true;
+    watchdog_iterate_ = IpData().curr();
+    watchdog_delta_ = IpData().delta();
+    watchdog_trial_iter_ = 0;
+    watchdog_alpha_primal_test_ =
       IpCq().curr_primal_frac_to_the_bound(IpData().curr_tau());
-    watch_dog_theta_ = IpCq().curr_constraint_violation();
-    watch_dog_barr_ = IpCq().curr_barrier_obj();
-    watch_dog_gradBarrTDelta_ = IpCq().curr_gradBarrTDelta();
+    watchdog_theta_ = IpCq().curr_constraint_violation();
+    watchdog_barr_ = IpCq().curr_barrier_obj();
+    watchdog_gradBarrTDelta_ = IpCq().curr_gradBarrTDelta();
   }
 
   void FilterLineSearch::StopWatchDog(SmartPtr<IteratesVector>& actual_delta)
@@ -910,24 +1053,24 @@ namespace Ipopt
 
     IpData().Append_info_string("w");
 
-    in_watch_dog_ = false;
+    in_watchdog_ = false;
 
     // Reset all fields in IpData to reference point
-    SmartPtr<IteratesVector> old_trial = watch_dog_iterate_->MakeNewContainer();
+    SmartPtr<IteratesVector> old_trial = watchdog_iterate_->MakeNewContainer();
     IpData().set_trial(old_trial);
     IpData().AcceptTrialPoint();
-    actual_delta = watch_dog_delta_->MakeNewContainer();
+    actual_delta = watchdog_delta_->MakeNewContainer();
     IpData().SetHaveAffineDeltas(false);
 
     // reset the stored watchdog iterates
-    watch_dog_iterate_ = NULL;
-    watch_dog_delta_ = NULL;
+    watchdog_iterate_ = NULL;
+    watchdog_delta_ = NULL;
 
-    watch_dog_shortened_iter_ = 0;
+    watchdog_shortened_iter_ = 0;
 
-    reference_theta_ = watch_dog_theta_;
-    reference_barr_ = watch_dog_barr_;
-    reference_gradBarrTDelta_ = watch_dog_gradBarrTDelta_;
+    reference_theta_ = watchdog_theta_;
+    reference_barr_ = watchdog_barr_;
+    reference_gradBarrTDelta_ = watchdog_gradBarrTDelta_;
   }
 
   void FilterLineSearch::Reset()
@@ -936,10 +1079,10 @@ namespace Ipopt
     in_soft_resto_phase_ = false;
 
     // Inactivate the watchdog and release all stored data
-    in_watch_dog_ = false;
-    watch_dog_iterate_ = NULL;
-    watch_dog_delta_ = NULL;
-    watch_dog_shortened_iter_ = 0;
+    in_watchdog_ = false;
+    watchdog_iterate_ = NULL;
+    watchdog_delta_ = NULL;
+    watchdog_shortened_iter_ = 0;
 
     filter_.Clear();
   }
@@ -954,24 +1097,27 @@ namespace Ipopt
     IpData().SetTrialBoundMultipliersFromStep(alpha_dual, *delta->z_L(), *delta->z_U(), *delta->v_L(), *delta->v_U());
 
     Number alpha_y;
-    if (alpha_for_y_==1) {
+    switch (corrector_type_) {
+      case PRIMAL_ALPHA_FOR_Y:
+      alpha_y = alpha_primal;
+      break;
+      case DUAL_ALPHA_FOR_Y:
       alpha_y = alpha_dual;
-    }
-    else if (alpha_for_y_==2) {
+      break;
+      case MIN_ALPHA_FOR_Y:
       alpha_y = Min(alpha_dual, alpha_primal);
-    }
-    else if (alpha_for_y_==3) {
+      break;
+      case MAX_ALPHA_FOR_Y:
       alpha_y = Max(alpha_dual, alpha_primal);
-    }
-    else if (alpha_for_y_==4) {
-      alpha_y = 1.;
-    }
-    else if (alpha_for_y_==5 || alpha_for_y_==6) {
+      break;
+      case MIN_DUAL_INFEAS_ALPHA_FOR_Y:
+      case SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y:
       // Here we compute the step size for y so that the dual
       // infeasibility is minimized along delta_y
 
       // compute the dual infeasibility at new point with old y
-      SmartPtr<IteratesVector> temp_trial = IpData().trial()->MakeNewContainer();
+      SmartPtr<IteratesVector> temp_trial
+      = IpData().trial()->MakeNewContainer();
       temp_trial->Set_y_c(*IpData().curr()->y_c());
       temp_trial->Set_y_d(*IpData().curr()->y_d());
       IpData().set_trial(temp_trial);
@@ -991,15 +1137,13 @@ namespace Ipopt
 
       Number alpha = - b/a;
 
-      if (alpha_for_y_==5) {
+      if (alpha_for_y_==SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y) {
         alpha_y = Min(Max(alpha_primal, alpha_dual), Max(alpha, Min(alpha_primal, alpha_dual)));
       }
       else {
         alpha_y = Min(1., Max(0., alpha));
       }
-    }
-    else {
-      alpha_y = alpha_primal;
+      break;
     }
 
     // Set the eq multipliers from the step now that alpha_y
@@ -1114,7 +1258,7 @@ namespace Ipopt
     SmartPtr<IteratesVector> delta_corr = actual_delta->MakeNewIteratesVector(true);
 
     switch (corrector_type_) {
-      case 1 : {
+      case AFFINE_CORRECTOR : {
         // 1: Standard MPC corrector
 
         if (!IpData().HaveAffineDeltas()) {
@@ -1172,7 +1316,7 @@ namespace Ipopt
         DBG_PRINT_VECTOR(2, "delta_corr", *delta_corr);
       }
       break;
-      case 2 : {
+      case PRIMAL_DUAL_CORRECTOR : {
         // 2: Second order correction for primal-dual step to
         // primal-dual mu
 
@@ -1253,7 +1397,7 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "avrg_compl(curr) = %e, avrg_compl(trial) = %e\n",
                    curr_avrg_compl, trial_avrg_compl);
-    if (corrector_type_==1 &&
+    if (corrector_type_==AFFINE_CORRECTOR &&
         trial_avrg_compl>=corrector_compl_avrg_red_fact_*curr_avrg_compl) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                      "Rejecting corrector step, because trial complementarity is too large.\n" );
@@ -1267,7 +1411,8 @@ namespace Ipopt
     }
     catch(IpoptNLP::Eval_Error& e) {
       e.ReportException(Jnlst());
-      Jnlst().Printf(J_WARNING, J_MAIN, "Warning: Corrector step rejected due to evaluation error\n");
+      Jnlst().Printf(J_WARNING, J_MAIN,
+                     "Warning: Corrector step rejected due to evaluation error\n");
       accept = false;
     }
 

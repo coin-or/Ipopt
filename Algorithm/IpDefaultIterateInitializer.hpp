@@ -82,7 +82,7 @@ namespace Ipopt
     /** If max-norm of the initial equality constraint multiplier
      *  estimate is larger than this, the initial y_* variables are
      *  set to zero. */
-    Number lam_init_max_;
+    Number constr_mult_init_max_;
     /** Initial value for all bound mulitpliers. */
     Number bound_mult_init_val_;
     //@}
