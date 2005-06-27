@@ -11,7 +11,7 @@
 namespace Ipopt
 {
 
-  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_L_NonConst(SmartPtr<Matrix> Px_L, const SmartPtr<const Vector>& l, const SmartPtr<VectorSpace> x_space)
+  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_L_NonConst(SmartPtr<Matrix> Px_L, const SmartPtr<const Vector>& l, const SmartPtr<const VectorSpace> x_space)
   {
     SmartPtr<Vector> tmp_x = x_space->MakeNew();
 
@@ -28,7 +28,7 @@ namespace Ipopt
     return scaled_x_L;
   }
 
-  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_U_NonConst(SmartPtr<Matrix> Px_U, const SmartPtr<const Vector>& u, const SmartPtr<VectorSpace> x_space)
+  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_U_NonConst(SmartPtr<Matrix> Px_U, const SmartPtr<const Vector>& u, const SmartPtr<const VectorSpace> x_space)
   {
     SmartPtr<Vector> tmp_x = x_space->MakeNew();
 
@@ -45,7 +45,7 @@ namespace Ipopt
     return scaled_x_U;
   }
 
-  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_d_L_NonConst(SmartPtr<Matrix> Pd_L, const SmartPtr<const Vector>& l, const SmartPtr<VectorSpace> d_space)
+  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_d_L_NonConst(SmartPtr<Matrix> Pd_L, const SmartPtr<const Vector>& l, const SmartPtr<const VectorSpace> d_space)
   {
     SmartPtr<Vector> tmp_d = d_space->MakeNew();
 
@@ -62,7 +62,7 @@ namespace Ipopt
     return scaled_d_L;
   }
 
-  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_d_U_NonConst(SmartPtr<Matrix> Pd_U, const SmartPtr<const Vector>& u, const SmartPtr<VectorSpace> d_space)
+  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_d_U_NonConst(SmartPtr<Matrix> Pd_U, const SmartPtr<const Vector>& u, const SmartPtr<const VectorSpace> d_space)
   {
     SmartPtr<Vector> tmp_d = d_space->MakeNew();
 
@@ -107,4 +107,18 @@ namespace Ipopt
     return ConstPtr(unscaled_v);
   }
 
+  void NoNLPScalingObject::DetermineScaling(const SmartPtr<const VectorSpace> x_space,
+      const SmartPtr<const VectorSpace> c_space,
+      const SmartPtr<const VectorSpace> d_space,
+      const SmartPtr<const MatrixSpace> jac_c_space,
+      const SmartPtr<const MatrixSpace> jac_d_space,
+      const SmartPtr<const SymMatrixSpace> h_space,
+      SmartPtr<const MatrixSpace>& new_jac_c_space,
+      SmartPtr<const MatrixSpace>& new_jac_d_space,
+      SmartPtr<const SymMatrixSpace>& new_h_space)
+  {
+    new_jac_c_space = jac_c_space;
+    new_jac_d_space = jac_d_space;
+    new_h_space = h_space;
+  }
 } // namespace Ipopt

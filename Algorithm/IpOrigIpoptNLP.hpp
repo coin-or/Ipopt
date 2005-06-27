@@ -210,33 +210,24 @@ namespace Ipopt
 
     /** Necessary Vector/Matrix spaces */
     //@{
-    SmartPtr<VectorSpace> x_space_;
+    SmartPtr<const VectorSpace> x_space_;
+    SmartPtr<const VectorSpace> c_space_;
+    SmartPtr<const VectorSpace> d_space_;
+    SmartPtr<const VectorSpace> x_l_space_;
+    SmartPtr<const MatrixSpace> px_l_space_;
+    SmartPtr<const VectorSpace> x_u_space_;
+    SmartPtr<const MatrixSpace> px_u_space_;
+    SmartPtr<const VectorSpace> d_l_space_;
+    SmartPtr<const MatrixSpace> pd_l_space_;
+    SmartPtr<const VectorSpace> d_u_space_;
+    SmartPtr<const MatrixSpace> pd_u_space_;
+    SmartPtr<const MatrixSpace> jac_c_space_;
+    SmartPtr<const MatrixSpace> jac_d_space_;
+    SmartPtr<const SymMatrixSpace> h_space_;
 
-    SmartPtr<VectorSpace> c_space_;
-
-    SmartPtr<VectorSpace> d_space_;
-
-    SmartPtr<VectorSpace> x_l_space_;
-
-    SmartPtr<MatrixSpace> px_l_space_;
-
-    SmartPtr<VectorSpace> x_u_space_;
-
-    SmartPtr<MatrixSpace> px_u_space_;
-
-    SmartPtr<VectorSpace> d_l_space_;
-
-    SmartPtr<MatrixSpace> pd_l_space_;
-
-    SmartPtr<VectorSpace> d_u_space_;
-
-    SmartPtr<MatrixSpace> pd_u_space_;
-
-    SmartPtr<MatrixSpace> jac_c_space_;
-
-    SmartPtr<MatrixSpace> jac_d_space_;
-
-    SmartPtr<SymMatrixSpace> h_space_;
+    SmartPtr<const MatrixSpace> scaled_jac_c_space_;
+    SmartPtr<const MatrixSpace> scaled_jac_d_space_;
+    SmartPtr<const SymMatrixSpace> scaled_h_space_;
     //@}
     /**@name Storage for Model Quantities */
     //@{

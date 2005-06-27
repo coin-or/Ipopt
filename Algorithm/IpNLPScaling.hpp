@@ -84,13 +84,13 @@ namespace Ipopt
     /** Methods for scaling bounds - these wrap those above */
     //@{
     /** Returns an x-scaled vector in the x_L space */
-    SmartPtr<Vector> apply_vector_scaling_x_L_NonConst(SmartPtr<Matrix> Px_L, const SmartPtr<const Vector>& l, const SmartPtr<VectorSpace> x_space);
+    SmartPtr<Vector> apply_vector_scaling_x_L_NonConst(SmartPtr<Matrix> Px_L, const SmartPtr<const Vector>& l, const SmartPtr<const VectorSpace> x_space);
     /** Returns an x-scaled vector in the x_U space */
-    SmartPtr<Vector> apply_vector_scaling_x_U_NonConst(SmartPtr<Matrix> Px_U, const SmartPtr<const Vector>& u, const SmartPtr<VectorSpace> x_space);    
+    SmartPtr<Vector> apply_vector_scaling_x_U_NonConst(SmartPtr<Matrix> Px_U, const SmartPtr<const Vector>& u, const SmartPtr<const VectorSpace> x_space);    
     /** Returns an d-scaled vector in the d_L space */
-    SmartPtr<Vector> apply_vector_scaling_d_L_NonConst(SmartPtr<Matrix> Pd_L, const SmartPtr<const Vector>& l, const SmartPtr<VectorSpace> d_space);
+    SmartPtr<Vector> apply_vector_scaling_d_L_NonConst(SmartPtr<Matrix> Pd_L, const SmartPtr<const Vector>& l, const SmartPtr<const VectorSpace> d_space);
     /** Returns an d-scaled vector in the d_U space */
-    SmartPtr<Vector> apply_vector_scaling_d_U_NonConst(SmartPtr<Matrix> Pd_U, const SmartPtr<const Vector>& u, const SmartPtr<VectorSpace> d_space);    
+    SmartPtr<Vector> apply_vector_scaling_d_U_NonConst(SmartPtr<Matrix> Pd_U, const SmartPtr<const Vector>& u, const SmartPtr<const VectorSpace> d_space);    
     //@}
 
     /** Methods for scaling the gradient of the objective - wraps the
@@ -101,7 +101,8 @@ namespace Ipopt
     virtual SmartPtr<Vector> apply_grad_obj_scaling_NonConst(const SmartPtr<const Vector>& v);
     /** Returns a grad_f scaled version (d_f * D_x^{-1}) of the given vector */
     virtual SmartPtr<const Vector> apply_grad_obj_scaling(const SmartPtr<const Vector>& v);
-    /** Returns a grad_f unscaled version (d_f * D_x^{-1}) of the given vector */
+    /** Returns a grad_f unscaled version (d_f * D_x^{-1}) of the
+     *  given vector */
     virtual SmartPtr<Vector> unapply_grad_obj_scaling_NonConst(const SmartPtr<const Vector>& v);
     /** Returns a grad_f unscaled version (d_f * D_x^{-1}) of the given vector */
     virtual SmartPtr<const Vector> unapply_grad_obj_scaling(const SmartPtr<const Vector>& v);
@@ -115,8 +116,10 @@ namespace Ipopt
 				  const SmartPtr<const VectorSpace> d_space,
 				  const SmartPtr<const MatrixSpace> jac_c_space,
 				  const SmartPtr<const MatrixSpace> jac_d_space,
-				  const SmartPtr<const SymMatrixSpace> h_space)=0;
-
+				  const SmartPtr<const SymMatrixSpace> h_space,
+				  SmartPtr<const MatrixSpace>& new_jac_c_space,
+				  SmartPtr<const MatrixSpace>& new_jac_d_space,
+				  SmartPtr<const SymMatrixSpace>& new_h_space)=0;
   private:
 
     /**@name Default Compiler Generated Methods
@@ -157,29 +160,29 @@ namespace Ipopt
     /** Returns an obj-unscaled version of the given scalar */
     virtual Number unapply_obj_scaling(const Number& f) { return f; }
     /** Returns an x-scaled version of the given vector */
-    virtual SmartPtr<Vector> apply_vector_scaling_x_NonConst(const SmartPtr<const Vector>& v) { return v->MakeNewCopy(); }
+    virtual SmartPtr<Vector> apply_vector_scaling_x_NonConst(const SmartPtr<const Vector>& v) { DBG_ASSERT(true); return v->MakeNewCopy(); }
     /** Returns an x-scaled version of the given vector */
     virtual SmartPtr<const Vector> apply_vector_scaling_x(const SmartPtr<const Vector>& v) { return v; }
     /** Returns an x-unscaled version of the given vector */
-    virtual SmartPtr<Vector> unapply_vector_scaling_x_NonConst(const SmartPtr<const Vector>& v) { return v->MakeNewCopy(); }
+    virtual SmartPtr<Vector> unapply_vector_scaling_x_NonConst(const SmartPtr<const Vector>& v) { DBG_ASSERT(true); return v->MakeNewCopy(); }
     /** Returns an x-unscaled version of the given vector */
     virtual SmartPtr<const Vector> unapply_vector_scaling_x(const SmartPtr<const Vector>& v) { return v; }
     /** Returns an c-scaled version of the given vector */
     virtual SmartPtr<const Vector> apply_vector_scaling_c(const SmartPtr<const Vector>& v) { return v; }
+    /** Returns an c-scaled version of the given vector */
+    virtual SmartPtr<Vector> apply_vector_scaling_c_NonConst(const SmartPtr<const Vector>& v) { DBG_ASSERT(true); return v->MakeNewCopy(); }
     /** Returns an c-unscaled version of the given vector */
     virtual SmartPtr<const Vector> unapply_vector_scaling_c(const SmartPtr<const Vector>& v) { return v; }
-    /** Returns an c-scaled version of the given vector */
-    virtual SmartPtr<Vector> apply_vector_scaling_c_NonConst(const SmartPtr<const Vector>& v) { return v->MakeNewCopy(); }
     /** Returns an c-unscaled version of the given vector */
-    virtual SmartPtr<Vector> unapply_vector_scaling_c_NonConst(const SmartPtr<const Vector>& v) { return v->MakeNewCopy(); }
+    virtual SmartPtr<Vector> unapply_vector_scaling_c_NonConst(const SmartPtr<const Vector>& v) { DBG_ASSERT(true); return v->MakeNewCopy(); }
     /** Returns an d-scaled version of the given vector */
     virtual SmartPtr<const Vector> apply_vector_scaling_d(const SmartPtr<const Vector>& v) { return v; }
+    /** Returns an d-scaled version of the given vector */
+    virtual SmartPtr<Vector> apply_vector_scaling_d_NonConst(const SmartPtr<const Vector>& v) { DBG_ASSERT(true); return v->MakeNewCopy(); }
     /** Returns an d-unscaled version of the given vector */
     virtual SmartPtr<const Vector> unapply_vector_scaling_d(const SmartPtr<const Vector>& v)  { return v; }
-    /** Returns an d-scaled version of the given vector */
-    virtual SmartPtr<Vector> apply_vector_scaling_d_NonConst(const SmartPtr<const Vector>& v) { return v->MakeNewCopy(); }
     /** Returns an d-unscaled version of the given vector */
-    virtual SmartPtr<Vector> unapply_vector_scaling_d_NonConst(const SmartPtr<const Vector>& v)  { return v->MakeNewCopy(); }
+    virtual SmartPtr<Vector> unapply_vector_scaling_d_NonConst(const SmartPtr<const Vector>& v)  { DBG_ASSERT(true); return v->MakeNewCopy(); }
     /** Returns a scaled version of the jacobian for c.
      *  If the overloaded method does not create a new matrix, make sure to set the matrix
      *  ptr passed in to NULL.
@@ -205,19 +208,21 @@ namespace Ipopt
 				  const SmartPtr<const VectorSpace> d_space,
 				  const SmartPtr<const MatrixSpace> jac_c_space,
 				  const SmartPtr<const MatrixSpace> jac_d_space,
-				  const SmartPtr<const SymMatrixSpace> h_space)
-    {}
+				  const SmartPtr<const SymMatrixSpace> h_space,
+				  SmartPtr<const MatrixSpace>& new_jac_c_space,
+				  SmartPtr<const MatrixSpace>& new_jac_d_space,
+				  SmartPtr<const SymMatrixSpace>& new_h_space);
 
     /** Methods for scaling the gradient of the objective - made efficient for
      *  the NoScaling implementation.
      */
     //@{
     /** Returns a grad_f scaled version (d_f * D_x^{-1}) of the given vector */
-    virtual SmartPtr<Vector> apply_grad_obj_scaling_NonConst(const SmartPtr<const Vector>& v) { return v->MakeNewCopy(); }
+    virtual SmartPtr<Vector> apply_grad_obj_scaling_NonConst(const SmartPtr<const Vector>& v) { DBG_ASSERT(true); return v->MakeNewCopy(); }
     /** Returns a grad_f scaled version (d_f * D_x^{-1}) of the given vector */
     virtual SmartPtr<const Vector> apply_grad_obj_scaling(const SmartPtr<const Vector>& v) { return v; }
     /** Returns a grad_f unscaled version (d_f * D_x^{-1}) of the given vector */
-    virtual SmartPtr<Vector> unapply_grad_obj_scaling_NonConst(const SmartPtr<const Vector>& v) { return v->MakeNewCopy(); }
+    virtual SmartPtr<Vector> unapply_grad_obj_scaling_NonConst(const SmartPtr<const Vector>& v) { DBG_ASSERT(true); return v->MakeNewCopy(); }
     /** Returns a grad_f unscaled version (d_f * D_x^{-1}) of the given vector */
     virtual SmartPtr<const Vector> unapply_grad_obj_scaling(const SmartPtr<const Vector>& v) { return v; }
     //@}

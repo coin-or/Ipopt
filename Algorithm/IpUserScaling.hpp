@@ -88,7 +88,10 @@ namespace Ipopt
                                   const SmartPtr<const VectorSpace> d_space,
                                   const SmartPtr<const MatrixSpace> jac_c_space,
                                   const SmartPtr<const MatrixSpace> jac_d_space,
-                                  const SmartPtr<const SymMatrixSpace> h_space);
+                                  const SmartPtr<const SymMatrixSpace> h_space,
+                                  SmartPtr<const MatrixSpace>& new_jac_c_space,
+                                  SmartPtr<const MatrixSpace>& new_jac_d_space,
+                                  SmartPtr<const SymMatrixSpace>& new_h_space);
 
   private:
 

@@ -89,20 +89,20 @@ namespace Ipopt
     return true;
   }
 
-  bool TNLPAdapter::GetSpaces(SmartPtr<VectorSpace>& x_space,
-                              SmartPtr<VectorSpace>& c_space,
-                              SmartPtr<VectorSpace>& d_space,
-                              SmartPtr<VectorSpace>& x_l_space,
-                              SmartPtr<MatrixSpace>& px_l_space,
-                              SmartPtr<VectorSpace>& x_u_space,
-                              SmartPtr<MatrixSpace>& px_u_space,
-                              SmartPtr<VectorSpace>& d_l_space,
-                              SmartPtr<MatrixSpace>& pd_l_space,
-                              SmartPtr<VectorSpace>& d_u_space,
-                              SmartPtr<MatrixSpace>& pd_u_space,
-                              SmartPtr<MatrixSpace>& Jac_c_space,
-                              SmartPtr<MatrixSpace>& Jac_d_space,
-                              SmartPtr<SymMatrixSpace>& Hess_lagrangian_space)
+  bool TNLPAdapter::GetSpaces(SmartPtr<const VectorSpace>& x_space,
+                              SmartPtr<const VectorSpace>& c_space,
+                              SmartPtr<const VectorSpace>& d_space,
+                              SmartPtr<const VectorSpace>& x_l_space,
+                              SmartPtr<const MatrixSpace>& px_l_space,
+                              SmartPtr<const VectorSpace>& x_u_space,
+                              SmartPtr<const MatrixSpace>& px_u_space,
+                              SmartPtr<const VectorSpace>& d_l_space,
+                              SmartPtr<const MatrixSpace>& pd_l_space,
+                              SmartPtr<const VectorSpace>& d_u_space,
+                              SmartPtr<const MatrixSpace>& pd_u_space,
+                              SmartPtr<const MatrixSpace>& Jac_c_space,
+                              SmartPtr<const MatrixSpace>& Jac_d_space,
+                              SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space)
   {
     DBG_START_METH("TNLPAdapter::GetSpaces", dbg_verbosity);
     // Get the full dimensions of the problem

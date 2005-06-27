@@ -96,10 +96,12 @@ namespace Ipopt
       return false;
     }
 
-    NLP_scaling()->DetermineScaling(ConstPtr(x_space_),
-                                    ConstPtr(c_space_), ConstPtr(d_space_),
-                                    ConstPtr(jac_c_space_), ConstPtr(jac_d_space_),
-                                    ConstPtr(h_space_));
+    NLP_scaling()->DetermineScaling(x_space_,
+                                    c_space_, d_space_,
+                                    jac_c_space_, jac_d_space_,
+                                    h_space_,
+                                    scaled_jac_c_space_, scaled_jac_d_space_,
+                                    scaled_h_space_);
 
     ASSERT_EXCEPTION(x_space_->Dim() >= c_space_->Dim(), TOO_FEW_DOF,
                      "Too few degrees of freedom!");
@@ -112,7 +114,9 @@ namespace Ipopt
                 && IsValid(d_u_space_) && IsValid(pd_u_space_)
                 && IsValid(d_l_space_) && IsValid(pd_l_space_)
                 && IsValid(jac_c_space_) && IsValid(jac_d_space_)
-                && IsValid(h_space_));
+                && IsValid(h_space_)
+                && IsValid(scaled_jac_c_space_) && IsValid(scaled_jac_d_space_)
+                && IsValid(scaled_h_space_));
 
     DBG_ASSERT(retValue && "Model cannot return null vector or matrix prototypes or spaces,"
                " please return zero length vectors instead");
@@ -347,7 +351,8 @@ namespace Ipopt
       SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
       SmartPtr<const Vector> unscaled_yc = NLP_scaling()->apply_vector_scaling_c(&yc);
       SmartPtr<const Vector> unscaled_yd = NLP_scaling()->apply_vector_scaling_d(&yd);
-      bool success = nlp_->Eval_h(*unscaled_x, obj_factor, *unscaled_yc, *unscaled_yd, *unscaled_h);
+      Number scaled_obj_factor = NLP_scaling()->apply_obj_scaling(obj_factor);
+      bool success = nlp_->Eval_h(*unscaled_x, scaled_obj_factor, *unscaled_yc, *unscaled_yd, *unscaled_h);
       ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the hessian of the lagrangian");
       retValue = NLP_scaling()->apply_hessian_scaling(ConstPtr(unscaled_h));
       h_cache_.AddCachedResult(retValue, deps, scalar_deps);
@@ -383,24 +388,26 @@ namespace Ipopt
                IsValid(pd_l_space_) &&
                IsValid(d_u_space_) &&
                IsValid(pd_u_space_) &&
-               IsValid(jac_c_space_) &&
-               IsValid(jac_d_space_) &&
-               IsValid(h_space_));
+               IsValid(scaled_jac_c_space_) &&
+               IsValid(scaled_jac_d_space_) &&
+               IsValid(scaled_h_space_));
 
-    x_space = ConstPtr(x_space_);
-    c_space = ConstPtr(c_space_);
-    d_space = ConstPtr(d_space_);
-    x_l_space = ConstPtr(x_l_space_);
-    px_l_space = ConstPtr(px_l_space_);
-    x_u_space = ConstPtr(x_u_space_);
-    px_u_space = ConstPtr(px_u_space_);
-    d_l_space = ConstPtr(d_l_space_);
-    pd_l_space = ConstPtr(pd_l_space_);
-    d_u_space = ConstPtr(d_u_space_);
-    pd_u_space = ConstPtr(pd_u_space_);
-    Jac_c_space = ConstPtr(jac_c_space_);
-    Jac_d_space = ConstPtr(jac_d_space_);
-    Hess_lagrangian_space = ConstPtr(h_space_);
+    DBG_ASSERT(IsValid(NLP_scaling()));
+
+    x_space = x_space_;
+    c_space = c_space_;
+    d_space = d_space_;
+    x_l_space = x_l_space_;
+    px_l_space = px_l_space_;
+    x_u_space = x_u_space_;
+    px_u_space = px_u_space_;
+    d_l_space = d_l_space_;
+    pd_l_space = pd_l_space_;
+    d_u_space = d_u_space_;
+    pd_u_space = pd_u_space_;
+    Jac_c_space = scaled_jac_c_space_;
+    Jac_d_space = scaled_jac_d_space_;
+    Hess_lagrangian_space = scaled_h_space_;
   }
 
   void OrigIpoptNLP::AdjustVariableBounds(const Vector& new_x_L, const Vector& new_x_U,
