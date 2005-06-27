@@ -47,11 +47,6 @@ namespace Ipopt
 
   void IpoptAlgorithm::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("lam_init_max", "maximum initial value for the equality multipliers",
-                                          0, false, 1e3);
-    roptions->AddStringOption2("expect_infeasible_problem", "this may speed up the infeasibility determination if you expect the problem to be infeasible", "no",
-                               "no", "don't expect the problem to be infeasible",
-                               "yes", "expect the problem to be infeasible");
     roptions->AddLowerBoundedNumberOption("kappa_sigma", "???",
                                           1.0, false, 1e10);
   }

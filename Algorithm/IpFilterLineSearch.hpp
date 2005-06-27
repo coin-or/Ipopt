@@ -194,7 +194,7 @@ namespace Ipopt
      *  point is accepted if it is acceptable for the original filter
      *  (in which case satisfies_original_filter = true on return), or
      *  if the primal-dual system error was decrease by at least the
-     *  factor resto_pderror_reduction_factor_.  The return value is
+     *  factor soft_resto_pderror_reduction_factor_.  The return value is
      *  true, if the trial point was acceptable. */
     bool TrySoftRestoStep(SmartPtr<IteratesVector>& actual_delta,
                           bool &satisfies_original_filter);
@@ -279,8 +279,8 @@ namespace Ipopt
       DUAL_ALPHA_FOR_Y,
       MIN_ALPHA_FOR_Y,
       MAX_ALPHA_FOR_Y,
-      SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y,
-      MIN_DUAL_INFEAS_ALPHA_FOR_Y
+      MIN_DUAL_INFEAS_ALPHA_FOR_Y,
+      SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y
     };
     /** Flag indicating whether the dual step size is to be used for
      *  the equality constraint multipliers. If 0, the primal step
@@ -300,16 +300,16 @@ namespace Ipopt
     CorrectorTypeEnum corrector_type_;
     /** Flag indicating whether the line search should always accept
      *  the full (fraction-to-the-boundary) step. */
-    bool ls_always_accept_;
+    bool accept_every_trial_step_;
     /** parameter in heurstic that determines whether corrector step
     should be tried. */
     Number corrector_compl_avrg_red_fact_;
     /** Flag indicating whether the corrector should be skipped in an
      *  iteration in which negative curvature is detected */
     bool skip_corr_if_neg_curv_;
-    /** Flag indicating whether the corrector should be skipped in the
-     *  fixed mu mode. */
-    bool skip_corr_if_fixed_mode_;
+    /** Flag indicating whether the corrector should be skipped during
+     *  the monotone mu mode. */
+    bool skip_corr_in_monotone_mode_;
     /** Indicates whether problem can be expected to be infeasible.
      *  This will trigger requesting a tighter reduction in
      *  infeasibility the first time the restoration phase is
@@ -323,15 +323,15 @@ namespace Ipopt
     /** Reduction factor for the restoration phase that accepts steps
      *  reducing the optimality error ("soft restoration phase"). If
      *  0., then this restoration phase is not enabled. */
-    Number resto_pderror_reduction_factor_;
+    Number soft_resto_pderror_reduction_factor_;
 
     /** Tolerance for detecting tiny steps. */
     Number tiny_step_tol_;
 
     /** Number of watch dog trial steps. */
-    Index watch_dog_trial_iter_max_;
+    Index watchdog_trial_iter_max_;
     /** Number of shortened iterations that trigger the watchdog. */
-    Index watch_dog_shortened_iter_trigger_;
+    Index watchdog_shortened_iter_trigger_;
 
     /** Acceptable tolerance for the problem to terminate earlier if
      *  algorithm seems stuck or cycling */
@@ -354,23 +354,23 @@ namespace Ipopt
      *  respect to which progress is to be made */
     Number reference_gradBarrTDelta_;
     /** Flag indicating if the watchdog is active */
-    bool in_watch_dog_;
+    bool in_watchdog_;
     /** Counter for shortened iterations. */
-    Index watch_dog_shortened_iter_;
+    Index watchdog_shortened_iter_;
     /** Counter for watch dog iterations */
-    Index watch_dog_trial_iter_;
+    Index watchdog_trial_iter_;
     /** Step size for Armijo test in watch dog */
-    Number watch_dog_alpha_primal_test_;
+    Number watchdog_alpha_primal_test_;
     /** Constraint violation at reference point */
-    Number watch_dog_theta_;
+    Number watchdog_theta_;
     /** Barrier objective function at reference point */
-    Number watch_dog_barr_;
+    Number watchdog_barr_;
     /** Barrier gradient transpose search direction at reference point */
-    Number watch_dog_gradBarrTDelta_;
+    Number watchdog_gradBarrTDelta_;
     /** Watchdog reference iterate */
-    SmartPtr<const IteratesVector> watch_dog_iterate_;
+    SmartPtr<const IteratesVector> watchdog_iterate_;
     /** Watchdog search direction at reference point */
-    SmartPtr<const IteratesVector> watch_dog_delta_;
+    SmartPtr<const IteratesVector> watchdog_delta_;
     //@}
 
     /** @name Storage for last iterate that satisfies the acceptable
@@ -395,7 +395,7 @@ namespace Ipopt
     /** Flag indicating whether we are currently in the "soft"
      *  restoration phase mode, in which steps are accepted if they
      *  reduce the optimality error (see
-     *  resto_pderror_reduction_factor) */
+     *  soft_resto_pderror_reduction_factor) */
     bool in_soft_resto_phase_;
 
     /** Counter for the number of successive iterations in which the

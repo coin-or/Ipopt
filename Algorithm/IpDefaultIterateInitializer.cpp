@@ -23,12 +23,38 @@ namespace Ipopt
 
   void DefaultIterateInitializer::RegisterOptions(SmartPtr<RegisteredOptions> reg_options)
   {
-    reg_options->AddLowerBoundedNumberOption("bound_push", "factor used when pushing initial point back in to the interior",
-        0.0, true, 0.01);
-    reg_options->AddBoundedNumberOption("bound_frac", "boundary fraction for pushing initial iterates in bounds prior to solve",
-                                        0, true, 0.5, false, 0.01);
-    reg_options->AddLowerBoundedNumberOption("bound_mult_init_val", "initial value for the bound multipliers",
-        0, true, 1.0);
+    reg_options->AddLowerBoundedNumberOption(
+      "bound_push",
+      "Desired minimal absolute distance of initial point to bound",
+      0.0, true, 0.01,
+      "Determines (together with \"bound_frac\") by how much the initial "
+      "point might have to be modified in order to be sufficiently inside "
+      "the bounds.");
+    reg_options->AddBoundedNumberOption(
+      "bound_frac",
+      "Desired minimal relative distance of initial point to bound",
+      0, true, 0.5, false, 0.01,
+      "Determines (together with \"bound_push\") by how much the initial "
+      "point might have to be modified in order to be sufficiently inside "
+      "the bounds.");
+    reg_options->AddLowerBoundedNumberOption(
+      "constr_mult_init_max",
+      "Maximal allowed least-square guess of constraint multipliers.",
+      0, false, 1e3,
+      "Determines how large the initial least-square guesses of the contraint "
+      "multipliers (in max-norm) are allowed to be. If the guess is larger "
+      "than this value, it is discarded and all constraint multipliers are "
+      "set to zero.  This options is also used in the classes "
+      "\"RestoIterateInitializer\" and \"MinC_1NrmRestorationPhase\".  "
+      "In the latter it determines when the "
+      "least-square estimate after returning from the restoration phase is "
+      "to be discareded.");
+    reg_options->AddLowerBoundedNumberOption(
+      "bound_mult_init_val",
+      "Initial value for the bound multipliers",
+      0, true, 1.0,
+      "All dual variables corresponding to bound constraints are "
+      "initialized to this value.");
   }
 
   bool DefaultIterateInitializer::InitializeImpl(const OptionsList& options,
@@ -37,7 +63,7 @@ namespace Ipopt
     // Check for the algorithm options
     options.GetNumericValue("bound_push", bound_push_, prefix);
     options.GetNumericValue("bound_frac", bound_frac_, prefix);
-    options.GetNumericValue("lam_init_max", lam_init_max_, prefix);
+    options.GetNumericValue("constr_mult_init_max", constr_mult_init_max_, prefix);
     options.GetNumericValue("bound_mult_init_val", bound_mult_init_val_, prefix);
 
     bool retvalue = true;
@@ -73,6 +99,8 @@ namespace Ipopt
 
     // Now we compute the initial values that the algorithm is going to
     // actually use.  We first store them in the trial fields in ip_data.
+
+    // ToDo combine the following code with warm_start_intializer
 
     // Push the x iterates sufficiently inside the bounds
     // Calculate any required shift in x0 and s0
@@ -321,7 +349,7 @@ namespace Ipopt
     iterates = IpData().trial()->MakeNewContainer();
     iterates->create_new_y_c();
     iterates->create_new_y_d();
-    if (IsValid(eq_mult_calculator_) && lam_init_max_>0.) {
+    if (IsValid(eq_mult_calculator_) && constr_mult_init_max_>0.) {
       // First move all the trial data into the current fields, since
       // those values are needed to compute the initial values for
       // the multipliers
@@ -337,8 +365,8 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
                        "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
                        y_c->Amax(), y_d->Amax());
-        Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
-        if (laminitnrm > lam_init_max_) {
+        Number yinitnrm = Max(y_c->Amax(), y_d->Amax());
+        if (yinitnrm > constr_mult_init_max_) {
           y_c->Set(0.0);
           y_d->Set(0.0);
         }

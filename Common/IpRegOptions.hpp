@@ -58,7 +58,8 @@ namespace Ipopt
         registering_class_(registering_class),
         type_(OT_Unknown),
         has_lower_(false),
-        has_upper_(false)
+        has_upper_(false),
+        counter_(next_counter_++)
     {}
 
     RegisteredOption(const RegisteredOption& copy)
@@ -72,7 +73,8 @@ namespace Ipopt
         lower_(copy.lower_),
         has_upper_(copy.has_upper_),
         upper_(copy.upper_),
-        valid_strings_(copy.valid_strings_)
+        valid_strings_(copy.valid_strings_),
+        counter_(copy.counter_)
     {}
 
     virtual ~RegisteredOption()
@@ -132,6 +134,11 @@ namespace Ipopt
     void SetType(const RegisteredOptionType& type)
     {
       type_ = type;
+    }
+    /** Counter */
+    Index Counter() const
+    {
+      return counter_;
     }
     //@}
 
@@ -364,6 +371,12 @@ namespace Ipopt
 
     std::vector<string_entry> valid_strings_;
     std::string default_string_;
+
+    /** Has the information as how many-th option this one was
+     *  registered. */
+    const Index counter_;
+
+    static Index next_counter_;
   };
 
   /** Class for storing registered options. Used for validation and
