@@ -32,8 +32,8 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     IpoptNLP(const SmartPtr<NLPScalingObject> nlp_scaling)
-      :
-      nlp_scaling_(nlp_scaling)
+        :
+        nlp_scaling_(nlp_scaling)
     {}
 
     /** Default destructor */
@@ -162,7 +162,11 @@ namespace Ipopt
 
   protected:
     /** Returns the scaling strategy object - may be NULL */
-    SmartPtr<NLPScalingObject> NLP_scaling() { DBG_ASSERT(IsValid(nlp_scaling_)); return nlp_scaling_; }
+    SmartPtr<NLPScalingObject> NLP_scaling()
+    {
+      DBG_ASSERT(IsValid(nlp_scaling_));
+      return nlp_scaling_;
+    }
 
   private:
 

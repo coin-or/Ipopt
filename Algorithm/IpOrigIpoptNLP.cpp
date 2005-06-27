@@ -21,7 +21,7 @@ namespace Ipopt
 
   OrigIpoptNLP::OrigIpoptNLP(const SmartPtr<const Journalist>& jnlst,
                              const SmartPtr<NLP>& nlp,
-			     const SmartPtr<NLPScalingObject>& nlp_scaling)
+                             const SmartPtr<NLPScalingObject>& nlp_scaling)
       :
       IpoptNLP(nlp_scaling),
       jnlst_(jnlst),
@@ -96,16 +96,13 @@ namespace Ipopt
       return false;
     }
 
-    NLP_scaling()->DetermineScaling(ConstPtr(x_space_), 
-				    ConstPtr(c_space_), ConstPtr(d_space_),
-				    ConstPtr(jac_c_space_), ConstPtr(jac_d_space_), 
-				    ConstPtr(h_space_));
+    NLP_scaling()->DetermineScaling(ConstPtr(x_space_),
+                                    ConstPtr(c_space_), ConstPtr(d_space_),
+                                    ConstPtr(jac_c_space_), ConstPtr(jac_d_space_),
+                                    ConstPtr(h_space_));
 
     ASSERT_EXCEPTION(x_space_->Dim() >= c_space_->Dim(), TOO_FEW_DOF,
                      "Too few degrees of freedom!");
-
-    //    ASSERT_EXCEPTION(x_space_->Dim() != c_space_->Dim(), IpoptException,
-    //                     "Currently cannot solve a square problem!");
 
     // cannot have any null pointers, want zero length vectors
     // instead of null - this will later need to be changed for _h;
@@ -165,13 +162,27 @@ namespace Ipopt
                                       *v_L, init_v_L,
                                       *v_U, init_v_U);
 
-    if (init_x) { x = NLP_scaling()->apply_vector_scaling_x_NonConst(ConstPtr(x)); }
-    if (init_y_c) { y_c = NLP_scaling()->apply_vector_scaling_c_NonConst(ConstPtr(y_c)); }
-    if (init_y_d) { y_d = NLP_scaling()->apply_vector_scaling_d_NonConst(ConstPtr(y_d)); }
-    if (init_z_L) { z_L = NLP_scaling()->apply_vector_scaling_x_L_NonConst(Px_L_, ConstPtr(z_L), x_space_); }
-    if (init_z_U) { z_U = NLP_scaling()->apply_vector_scaling_x_U_NonConst(Px_U_, ConstPtr(z_U), x_space_); }
-    if (init_v_L) { v_L = NLP_scaling()->apply_vector_scaling_d_L_NonConst(Pd_L_, ConstPtr(v_L), d_space_); }
-    if (init_v_U) { v_U = NLP_scaling()->apply_vector_scaling_d_U_NonConst(Pd_U_, ConstPtr(v_U), d_space_); }
+    if (init_x) {
+      x = NLP_scaling()->apply_vector_scaling_x_NonConst(ConstPtr(x));
+    }
+    if (init_y_c) {
+      y_c = NLP_scaling()->apply_vector_scaling_c_NonConst(ConstPtr(y_c));
+    }
+    if (init_y_d) {
+      y_d = NLP_scaling()->apply_vector_scaling_d_NonConst(ConstPtr(y_d));
+    }
+    if (init_z_L) {
+      z_L = NLP_scaling()->apply_vector_scaling_x_L_NonConst(Px_L_, ConstPtr(z_L), x_space_);
+    }
+    if (init_z_U) {
+      z_U = NLP_scaling()->apply_vector_scaling_x_U_NonConst(Px_U_, ConstPtr(z_U), x_space_);
+    }
+    if (init_v_L) {
+      v_L = NLP_scaling()->apply_vector_scaling_d_L_NonConst(Pd_L_, ConstPtr(v_L), d_space_);
+    }
+    if (init_v_U) {
+      v_U = NLP_scaling()->apply_vector_scaling_d_U_NonConst(Pd_U_, ConstPtr(v_U), d_space_);
+    }
 
     if (!retValue) {
       return false;

@@ -31,7 +31,7 @@ namespace Ipopt
     //@{
     OrigIpoptNLP(const SmartPtr<const Journalist>& jnlst,
                  const SmartPtr<NLP>& nlp,
-		 const SmartPtr<NLPScalingObject>& nlp_scaling);
+                 const SmartPtr<NLPScalingObject>& nlp_scaling);
 
     /** Default destructor */
     virtual ~OrigIpoptNLP();

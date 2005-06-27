@@ -30,7 +30,7 @@ namespace Ipopt
     /**@name Constructors / Destructors */
     //@{
 
-    /** Constructor, taking the owner_space. 
+    /** Constructor, taking the owner_space.
      */
     SymScaledMatrix(const SymScaledMatrixSpace* owner_space);
 
@@ -101,15 +101,15 @@ namespace Ipopt
      *  well as the totel number of rows and columns.
      */
     SymScaledMatrixSpace(const SmartPtr<const Vector>& row_col_scaling,
-		      bool row_col_scaling_reciprocal,
-		      const SmartPtr<const SymMatrixSpace>& unscaled_matrix_space)
-      :
-      SymMatrixSpace(unscaled_matrix_space->Dim()),
-      unscaled_matrix_space_(unscaled_matrix_space)
+                         bool row_col_scaling_reciprocal,
+                         const SmartPtr<const SymMatrixSpace>& unscaled_matrix_space)
+        :
+        SymMatrixSpace(unscaled_matrix_space->Dim()),
+        unscaled_matrix_space_(unscaled_matrix_space)
     {
       scaling_ = row_col_scaling->MakeNewCopy();
       if (row_col_scaling_reciprocal) {
-	scaling_->ElementWiseReciprocal();
+        scaling_->ElementWiseReciprocal();
       }
     }
 
@@ -124,8 +124,8 @@ namespace Ipopt
     {
       SymScaledMatrix* ret = new SymScaledMatrix(this);
       if (allocate_unscaled_matrix) {
-	SmartPtr<SymMatrix> unscaled_matrix = unscaled_matrix_space_->MakeNewSymMatrix();
-	ret->SetUnscaledMatrixNonConst(unscaled_matrix);
+        SmartPtr<SymMatrix> unscaled_matrix = unscaled_matrix_space_->MakeNewSymMatrix();
+        ret->SetUnscaledMatrixNonConst(unscaled_matrix);
       }
       return ret;
     }
@@ -143,10 +143,16 @@ namespace Ipopt
     }
 
     /** return the vector for the row and column scaling */
-    SmartPtr<const Vector> RowColScaling() const { return ConstPtr(scaling_); }
+    SmartPtr<const Vector> RowColScaling() const
+    {
+      return ConstPtr(scaling_);
+    }
 
     /** return the matrix space for the unscaled matrix */
-    SmartPtr<const SymMatrixSpace> UnscaledMatrixSpace() const { return unscaled_matrix_space_; }
+    SmartPtr<const SymMatrixSpace> UnscaledMatrixSpace() const
+    {
+      return unscaled_matrix_space_;
+    }
 
   private:
     /**@name Default Compiler Generated Methods
@@ -180,7 +186,7 @@ namespace Ipopt
     nonconst_matrix_ = NULL;
     ObjectChanged();
   }
-  
+
   inline
   void SymScaledMatrix::SetUnscaledMatrixNonConst(const SmartPtr<SymMatrix>& unscaled_matrix)
   {
@@ -188,7 +194,7 @@ namespace Ipopt
     matrix_ = GetRawPtr(unscaled_matrix);
     ObjectChanged();
   }
-  
+
   inline
   SmartPtr<const SymMatrix> SymScaledMatrix::GetUnscaledMatrix() const
   {
@@ -202,7 +208,7 @@ namespace Ipopt
     ObjectChanged();
     return nonconst_matrix_;
   }
-  
+
   inline SmartPtr<const Vector> SymScaledMatrix::RowColScaling() const
   {
     return ConstPtr(owner_space_->RowColScaling());

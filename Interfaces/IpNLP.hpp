@@ -136,12 +136,12 @@ namespace Ipopt
      *  unless the options are set for User scaling
      */
     //@{
-    virtual void GetScalingParameters(Number& obj_scaling, Vector& x_scaling, 
-				      Vector& c_scaling, Vector& d_scaling) const
+    virtual void GetScalingParameters(Number& obj_scaling, Vector& x_scaling,
+                                      Vector& c_scaling, Vector& d_scaling) const
     {
       THROW_EXCEPTION(USER_SCALING_NOT_IMPLEMENTED,
-		      "You have set options for user provided scaling, but have"
-		      " not implemented GetScalingParameters in the NLP interface");
+                      "You have set options for user provided scaling, but have"
+                      " not implemented GetScalingParameters in the NLP interface");
     }
     //@}
 

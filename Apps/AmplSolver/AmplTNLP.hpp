@@ -90,8 +90,8 @@ namespace Ipopt
                         Index* jCol, Number* values);
 
     virtual void get_scaling_parameters(Number& obj_scaling,
-					Index n, Number* x_scaling,
-					Index m, Number* g_scaling);
+                                        Index n, Number* x_scaling,
+                                        Index m, Number* g_scaling);
     //@}
 
     /** @name Solution Methods */
@@ -226,7 +226,7 @@ namespace Ipopt
       Variable_Source,
       Constraint_Source,
       Objective_Source,
-      Problem_Source 
+      Problem_Source
     };
 
     void AddAvailableSuffix(std::string suffix_string, Suffix_Source source, Suffix_Type type)

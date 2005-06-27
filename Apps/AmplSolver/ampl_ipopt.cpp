@@ -23,13 +23,13 @@ int main(int argv, char**argc)
   // TODO: Need method in AmplNLP that can fill options with the  AMPL user options
   //...  get options from AMPL
   //... app->Options()->Add...
-  
+
   // Add the suffix handler for scaling
   SmartPtr<AmplSuffixHandler> suffix_handler = new AmplSuffixHandler();
   suffix_handler->AddAvailableSuffix("scaling_factor", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
   suffix_handler->AddAvailableSuffix("scaling_factor", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
   suffix_handler->AddAvailableSuffix("scaling_factor", AmplSuffixHandler::Objective_Source, AmplSuffixHandler::Number_Type);
-                                                                                                                                         
+
   SmartPtr<TNLP> ampl_tnlp = new AmplTNLP(app->Jnlst(), argc, suffix_handler);
   ApplicationReturnStatus retval = app->OptimizeTNLP(ampl_tnlp);
 

@@ -25,7 +25,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     UserScaling(const SmartPtr<const NLP>& nlp)
-      : nlp_(nlp)
+        : nlp_(nlp)
     {}
 
     /** Default destructor */
@@ -68,7 +68,7 @@ namespace Ipopt
      *  ptr passed in to NULL.
      */
     virtual SmartPtr<const Matrix> apply_jac_c_scaling(SmartPtr<const Matrix> matrix);
-    /** Returns a scaled version of the jacobian for d 
+    /** Returns a scaled version of the jacobian for d
      *  If the overloaded method does not create a new matrix, make sure to set the matrix
      *  ptr passed in to NULL.
      */
@@ -84,11 +84,11 @@ namespace Ipopt
      *  compute and/or read scaling factors 
      */
     virtual void DetermineScaling(const SmartPtr<const VectorSpace> x_space,
-				  const SmartPtr<const VectorSpace> c_space,
-				  const SmartPtr<const VectorSpace> d_space,
-				  const SmartPtr<const MatrixSpace> jac_c_space,
-				  const SmartPtr<const MatrixSpace> jac_d_space,
-				  const SmartPtr<const SymMatrixSpace> h_space);
+                                  const SmartPtr<const VectorSpace> c_space,
+                                  const SmartPtr<const VectorSpace> d_space,
+                                  const SmartPtr<const MatrixSpace> jac_c_space,
+                                  const SmartPtr<const MatrixSpace> jac_d_space,
+                                  const SmartPtr<const SymMatrixSpace> h_space);
 
   private:
 
@@ -111,7 +111,7 @@ namespace Ipopt
     /** pointer to the NLP to get scaling parameters */
     SmartPtr<const NLP> nlp_;
 
-    /** Scaling parameters - we only need to keep copies of 
+    /** Scaling parameters - we only need to keep copies of
      *  the objective scaling and the x scaling - the others we can
      *  get from the scaled matrix spaces.
      */
@@ -119,7 +119,7 @@ namespace Ipopt
     /** objective scaling parameter */
     Number df_;
     /** x scaling */
-    SmartPtr<Vector> dx_;    
+    SmartPtr<Vector> dx_;
     //@}
 
     /** Scaled Matrix Spaces */

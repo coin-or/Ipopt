@@ -15,15 +15,14 @@ namespace Ipopt
       :
       Matrix(owner_space),
       owner_space_(owner_space)
-  {
-  }
+  {}
 
 
   ScaledMatrix::~ScaledMatrix()
   {}
 
   void ScaledMatrix::MultVectorImpl(Number alpha, const Vector &x,
-                                      Number beta, Vector &y) const
+                                    Number beta, Vector &y) const
   {
     DBG_ASSERT(IsValid(matrix_));
 
@@ -53,7 +52,7 @@ namespace Ipopt
   }
 
   void ScaledMatrix::TransMultVectorImpl(Number alpha, const Vector &x,
-					 Number beta, Vector &y) const
+                                         Number beta, Vector &y) const
   {
     DBG_ASSERT(IsValid(matrix_));
 
@@ -96,7 +95,7 @@ namespace Ipopt
     }
     else {
       for (Index ind=0; ind<indent; ind++) {
-	fprintf(fp, " ");
+        fprintf(fp, " ");
       }
       fprintf(fp, "unscaled matrix is NULL\n");
     }
@@ -104,13 +103,13 @@ namespace Ipopt
   }
 
   ScaledMatrixSpace::ScaledMatrixSpace(const SmartPtr<const Vector>& row_scaling,
-				       bool row_scaling_reciprocal,
-				       const SmartPtr<const MatrixSpace>& unscaled_matrix_space,
-				       const SmartPtr<const Vector>& column_scaling,
-				       bool column_scaling_reciprocal)
-    :
-    MatrixSpace(unscaled_matrix_space->NRows(), unscaled_matrix_space->NCols()),
-    unscaled_matrix_space_(unscaled_matrix_space)
+                                       bool row_scaling_reciprocal,
+                                       const SmartPtr<const MatrixSpace>& unscaled_matrix_space,
+                                       const SmartPtr<const Vector>& column_scaling,
+                                       bool column_scaling_reciprocal)
+      :
+      MatrixSpace(unscaled_matrix_space->NRows(), unscaled_matrix_space->NCols()),
+      unscaled_matrix_space_(unscaled_matrix_space)
   {
     row_scaling_ = row_scaling->MakeNewCopy();
     if (row_scaling_reciprocal) {

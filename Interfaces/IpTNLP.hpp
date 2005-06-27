@@ -78,12 +78,12 @@ namespace Ipopt
      *  called if the options are set to retrieve user scaling
      */
     virtual void get_scaling_parameters(Number& obj_scaling,
-					Index n, Number* x_scaling,
-					Index m, Number* g_scaling)
+                                        Index n, Number* x_scaling,
+                                        Index m, Number* g_scaling)
     {
       THROW_EXCEPTION(SCALING_NOT_IMPLEMENTED_FOR_TNLP,
-		      "Ipopt options have been set to request scaling from the TNLP"
-		      ", but the TNLP has not implemented get_scaling_parameters");
+                      "Ipopt options have been set to request scaling from the TNLP"
+                      ", but the TNLP has not implemented get_scaling_parameters");
     }
 
     /** overload this method to return the starting point. The bools
