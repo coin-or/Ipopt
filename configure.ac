@@ -536,7 +536,7 @@ AC_SUBST(AMPL_CPPFLAGS)
 if test "$use_asldir" = BUILD; then
   ASLLIB="\$(top_builddir)/OTHERS/ASL/amplsolver.a"
   AMPL_CPPFLAGS="-I\$(top_builddir)/OTHERS/ASL -I\$(top_srcdir)/OTHERS/ASL/solvers"
-  AC_CONFIG_LINKS(OTHERS/ASL/ASLsolvers:$aslsrcdir)
+  AC_CONFIG_LINKS(OTHERS/ASL/ASLsolvers:$asldir)
 elif test ! "$use_asldir" = no; then
   case $build in
     *-cygwin*) AMPL_CPPFLAGS="-I\"$use_asldir\""

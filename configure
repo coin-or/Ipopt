@@ -8063,7 +8063,7 @@ fi
 if test "$use_asldir" = BUILD; then
   ASLLIB="\$(top_builddir)/OTHERS/ASL/amplsolver.a"
   AMPL_CPPFLAGS="-I\$(top_builddir)/OTHERS/ASL -I\$(top_srcdir)/OTHERS/ASL/solvers"
-            ac_config_links="$ac_config_links OTHERS/ASL/ASLsolvers:$aslsrcdir"
+            ac_config_links="$ac_config_links OTHERS/ASL/ASLsolvers:$asldir"
 
 elif test ! "$use_asldir" = no; then
   case $build in
@@ -8752,7 +8752,7 @@ do
   "OTHERS/ASL/Makefile" ) CONFIG_FILES="$CONFIG_FILES OTHERS/ASL/Makefile" ;;
   "OTHERS/HSL/fd05ad.f" ) CONFIG_LINKS="$CONFIG_LINKS OTHERS/HSL/fd05ad.f:OTHERS/HSL/$use_FD05" ;;
   "$lapackobjdir/$file" ) CONFIG_LINKS="$CONFIG_LINKS $lapackobjdir/$file:$lapackdir/$file" ;;
-  "OTHERS/ASL/ASLsolvers" ) CONFIG_LINKS="$CONFIG_LINKS OTHERS/ASL/ASLsolvers:$aslsrcdir" ;;
+  "OTHERS/ASL/ASLsolvers" ) CONFIG_LINKS="$CONFIG_LINKS OTHERS/ASL/ASLsolvers:$asldir" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "inc/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS inc/config.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
