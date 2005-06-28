@@ -1001,20 +1001,4 @@ namespace Ipopt
       fprintf(fp, "Uninitialized!\n");
     }
   }
-
-  Number* DenseVectorSpace::AllocateInternalStorage() const
-  {
-    if (Dim()>0) {
-      return new Number[Dim()];
-    }
-    else {
-      return NULL;
-    }
-  }
-
-  void DenseVectorSpace::FreeInternalStorage(Number* values) const
-  {
-    delete [] values;
-  }
-
 } // namespace Ipopt

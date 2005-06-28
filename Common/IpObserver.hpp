@@ -207,18 +207,18 @@ namespace Ipopt
     DBG_START_METH("Observer::RequestAttach", dbg_verbosity);
 #endif
 
+#ifdef IP_DEBUG
+    // Add the subject to the list if it does not already exist
+    std::vector<const Subject*>::iterator attached_subject;
+    attached_subject = std::find(subjects_.begin(), subjects_.end(), subject);
+    DBG_ASSERT(attached_subject == subjects_.end());
+#endif
     DBG_ASSERT(subject);
-    if (subject) {
-      // Add the subject to the list if it does not already exist
-      std::vector<const Subject*>::iterator attached_subject;
-      attached_subject = std::find(subjects_.begin(), subjects_.end(), subject);
-      if (attached_subject == subjects_.end()) {
-        subjects_.push_back(subject);
-      }
 
-      // Attach the observer to the subject
-      subject->AttachObserver(notify_type, this);
-    }
+    // add the subject to the list
+    subjects_.push_back(subject);
+    // Attach the observer to the subject
+    subject->AttachObserver(notify_type, this);
   }
 
   inline
@@ -303,13 +303,15 @@ namespace Ipopt
     DBG_ASSERT(observer);
 #endif
 
-    if (observer) {
-      std::vector<Observer*>::iterator attached_observer;
-      attached_observer = std::find(observers_.begin(), observers_.end(), observer);
-      if (attached_observer == observers_.end()) {
-        observers_.push_back(observer);
-      }
-    }
+
+#ifdef IP_DEBUG
+    std::vector<Observer*>::iterator attached_observer;
+    attached_observer = std::find(observers_.begin(), observers_.end(), observer);
+    DBG_ASSERT(attached_observer == observers_.end());
+#endif
+
+    DBG_ASSERT(observer);
+    observers_.push_back(observer);
   }
 
   inline

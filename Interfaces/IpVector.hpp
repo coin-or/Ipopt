@@ -287,22 +287,44 @@ namespace Ipopt
     //@{
     /** Cache for dot products */
     mutable CachedResults<Number> dot_cache_;
-    /** Cache for 2-norm */
-    mutable CachedResults<Number> nrm2_cache_;
-    /** Cache for Asum */
-    mutable CachedResults<Number> asum_cache_;
-    /** Cache for Amax */
-    mutable CachedResults<Number> amax_cache_;
-    /** Cache for Max */
-    mutable CachedResults<Number> max_cache_;
-    /** Cache for Min */
-    mutable CachedResults<Number> min_cache_;
-    /** Cache for Sum */
-    mutable CachedResults<Number> sum_cache_;
-    /** Cache for SumLogs */
-    mutable CachedResults<Number> sumlogs_cache_;
-    /** Cache for FracToBound */
-    mutable CachedResults<Number> frac_to_bound_cache_;
+
+    mutable TaggedObject::Tag nrm2_cache_tag_;
+    mutable Number cached_nrm2_;
+
+    mutable TaggedObject::Tag asum_cache_tag_;
+    mutable Number cached_asum_;
+
+    mutable TaggedObject::Tag amax_cache_tag_;
+    mutable Number cached_amax_;
+
+    mutable TaggedObject::Tag max_cache_tag_;
+    mutable Number cached_max_;
+
+    mutable TaggedObject::Tag min_cache_tag_;
+    mutable Number cached_min_;
+
+    mutable TaggedObject::Tag sum_cache_tag_;
+    mutable Number cached_sum_;
+
+    mutable TaggedObject::Tag sumlogs_cache_tag_;
+    mutable Number cached_sumlogs_;
+
+//     /** Cache for 2-norm */
+//     mutable CachedResults<Number> nrm2_cache_;
+//     /** Cache for Asum */
+//     mutable CachedResults<Number> asum_cache_;
+//     /** Cache for Amax */
+//     mutable CachedResults<Number> amax_cache_;
+//     /** Cache for Max */
+//     mutable CachedResults<Number> max_cache_;
+//     /** Cache for Min */
+//     mutable CachedResults<Number> min_cache_;
+//     /** Cache for Sum */
+//     mutable CachedResults<Number> sum_cache_;
+//     /** Cache for SumLogs */
+//     mutable CachedResults<Number> sumlogs_cache_;
+     /** Cache for FracToBound */
+     mutable CachedResults<Number> frac_to_bound_cache_;
     //@}
 
   };
@@ -371,13 +393,13 @@ namespace Ipopt
       owner_space_(owner_space),
       TaggedObject(),
       dot_cache_(10),
-      nrm2_cache_(1),
-      asum_cache_(1),
-      amax_cache_(1),
-      sum_cache_(1),
-      max_cache_(1),
-      min_cache_(1),
-      sumlogs_cache_(1),
+      nrm2_cache_tag_(0),
+      asum_cache_tag_(0),
+      amax_cache_tag_(0),
+      sum_cache_tag_(0),
+      max_cache_tag_(0),
+      min_cache_tag_(0),
+      sumlogs_cache_tag_(0),
       frac_to_bound_cache_(4)
   {
     DBG_ASSERT(IsValid(owner_space_));
@@ -434,56 +456,51 @@ namespace Ipopt
   inline
   Number Vector::Nrm2() const
   {
-    Number retValue;
-    if (!nrm2_cache_.GetCachedResult1Dep(retValue, this)) {
-      retValue = Nrm2Impl();
-      nrm2_cache_.AddCachedResult1Dep(retValue, this);
+    if (nrm2_cache_tag_ != GetTag()) {
+      cached_nrm2_ = Nrm2Impl();
+      nrm2_cache_tag_ = GetTag();
     }
-    return retValue;
+    return cached_nrm2_;
   }
 
   inline
   Number Vector::Asum() const
   {
-    Number retValue = 0.0;
-    if (!asum_cache_.GetCachedResult1Dep(retValue, this)) {
-      retValue = AsumImpl();
-      asum_cache_.AddCachedResult1Dep(retValue, this);
+    if (asum_cache_tag_ != GetTag()) {
+      cached_asum_ = AsumImpl();
+      asum_cache_tag_ = GetTag();
     }
-    return retValue;
+    return cached_asum_;
   }
 
   inline
   Number Vector::Amax() const
   {
-    Number retValue;
-    if (!amax_cache_.GetCachedResult1Dep(retValue, this)) {
-      retValue = AmaxImpl();
-      amax_cache_.AddCachedResult1Dep(retValue, this);
+    if (amax_cache_tag_ != GetTag()) {
+      cached_amax_ = AmaxImpl();
+      amax_cache_tag_ = GetTag();
     }
-    return retValue;
+    return cached_amax_;
   }
 
   inline
   Number Vector::Sum() const
   {
-    Number retValue;
-    if (!sum_cache_.GetCachedResult1Dep(retValue, this)) {
-      retValue = SumImpl();
-      sum_cache_.AddCachedResult1Dep(retValue, this);
+    if (sum_cache_tag_ != GetTag()) {
+      cached_sum_ = SumImpl();
+      sum_cache_tag_ = GetTag();
     }
-    return retValue;
+    return cached_sum_;
   }
 
   inline
   Number Vector::SumLogs() const
   {
-    Number retValue;
-    if (!sumlogs_cache_.GetCachedResult1Dep(retValue, this)) {
-      retValue = SumLogsImpl();
-      sumlogs_cache_.AddCachedResult1Dep(retValue, this);
+    if (sumlogs_cache_tag_ != GetTag()) {
+      cached_sumlogs_ = SumLogsImpl();
+      sumlogs_cache_tag_ = GetTag();
     }
-    return retValue;
+    return cached_sumlogs_;
   }
 
   inline
@@ -559,23 +576,21 @@ namespace Ipopt
   inline
   Number Vector::Max() const
   {
-    Number retValue;
-    if (!max_cache_.GetCachedResult1Dep(retValue, this)) {
-      retValue = MaxImpl();
-      max_cache_.AddCachedResult1Dep(retValue, this);
+    if (max_cache_tag_ != GetTag()) {
+      cached_max_ = MaxImpl();
+      max_cache_tag_ = GetTag();
     }
-    return retValue;
+    return cached_max_;
   }
 
   inline
   Number Vector::Min() const
   {
-    Number retValue;
-    if (!min_cache_.GetCachedResult1Dep(retValue, this)) {
-      retValue = MinImpl();
-      min_cache_.AddCachedResult1Dep(retValue, this);
+    if (min_cache_tag_ != GetTag()) {
+      cached_min_ = MinImpl();
+      min_cache_tag_ = GetTag();
     }
-    return retValue;
+    return cached_min_;
   }
 
   inline
