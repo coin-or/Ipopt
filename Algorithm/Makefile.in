@@ -278,7 +278,7 @@ ASTYLE_FILES = \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
 	IpNonmonotoneMuUpdate.hppbak IpNonmonotoneMuUpdate.cppbak \
-	IpNLPScaling.hpp IpNLPScaling.cppbak \
+	IpNLPScaling.hppbak IpNLPScaling.cppbak \
 	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
 	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \
 	IpOrigIterationOutput.hppbak IpOrigIterationOutput.cppbak \
