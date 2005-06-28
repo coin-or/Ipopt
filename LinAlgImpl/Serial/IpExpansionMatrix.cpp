@@ -118,32 +118,42 @@ namespace Ipopt
     DenseVector* dense_X = dynamic_cast<DenseVector*>(&X);
     DBG_ASSERT(dense_X);
 
-    // if any of the vectors is of the homogeneous type, revert to the
-    // default implementation
-    if (dense_S->IsHomogeneous() ||
-        dense_Z->IsHomogeneous()) {
+    // if vector S is homogeneous type, call the default implementation
+    // ToDo: find out how often the default implementation is called and
+    // if we should implement specialized method for the homogenenous
+    // case
+    if (dense_S->IsHomogeneous()) {
+      DBG_ASSERT(false && "dense_S is homogeneous - implement specialized option?");
       Matrix::AddMSinvZImpl(alpha, S, Z, X);
       return;
     }
 
     const Index* exp_pos = ExpandedPosIndices();
     const Number* vals_S = dense_S->Values();
-    const Number* vals_Z = dense_Z->Values();
     Number* vals_X = dense_X->Values();
 
-    if (alpha==1.) {
+    if (dense_Z->IsHomogeneous()) {
+      Number val = alpha*dense_Z->Scalar();
       for(Index i=0; i<NCols(); i++) {
-        vals_X[exp_pos[i]] += vals_Z[i]/vals_S[i];
-      }
-    }
-    else if (alpha==-1.) {
-      for(Index i=0; i<NCols(); i++) {
-        vals_X[exp_pos[i]] -= vals_Z[i]/vals_S[i];
+        vals_X[exp_pos[i]] += val/vals_S[i];
       }
     }
     else {
-      for(Index i=0; i<NCols(); i++) {
-        vals_X[exp_pos[i]] += alpha*vals_Z[i]/vals_S[i];
+      const Number* vals_Z = dense_Z->Values();
+      if (alpha==1.) {
+        for(Index i=0; i<NCols(); i++) {
+          vals_X[exp_pos[i]] += vals_Z[i]/vals_S[i];
+        }
+      }
+      else if (alpha==-1.) {
+        for(Index i=0; i<NCols(); i++) {
+          vals_X[exp_pos[i]] -= vals_Z[i]/vals_S[i];
+        }
+      }
+      else {
+        for(Index i=0; i<NCols(); i++) {
+          vals_X[exp_pos[i]] += alpha*vals_Z[i]/vals_S[i];
+        }
       }
     }
   }
@@ -172,38 +182,85 @@ namespace Ipopt
     DenseVector* dense_X = dynamic_cast<DenseVector*>(&X);
     DBG_ASSERT(dense_X);
 
-    // if any of the vectors is of the homogeneous type, revert to the
+    // if the vectors S or D are of the homogeneous type, revert to the
     // default implementation
+    // ToDo: find out how often the default implementation is called and
+    // if we should implement specialized method for the homogenenous
+    // case
 
-    DBG_PRINT_VECTOR(2, "S", S);
     if (dense_S->IsHomogeneous() ||
-        dense_R->IsHomogeneous() ||
-        dense_Z->IsHomogeneous() ||
         dense_D->IsHomogeneous()) {
+      DBG_ASSERT(false && "dense_S or dense_D is homogeneous - implement specialized option?");
       Matrix::SinvBlrmZMTdBrImpl(alpha, S, R, Z, D, X);
       return;
     }
 
     const Index* exp_pos = ExpandedPosIndices();
     const Number* vals_S = dense_S->Values();
-    const Number* vals_R = dense_R->Values();
-    const Number* vals_Z = dense_Z->Values();
     const Number* vals_D = dense_D->Values();
     Number* vals_X = dense_X->Values();
 
-    if (alpha==1.) {
-      for (Index i=0; i<NCols(); i++) {
-        vals_X[i] = (vals_R[i] + vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+    if (dense_R->IsHomogeneous()) {
+      Number scalar_R = dense_R->Scalar();
+      if (dense_Z->IsHomogeneous()) {
+        Number val = alpha*dense_Z->Scalar();
+        if (val == 0.) {
+          for (Index i=0; i<NCols(); i++) {
+            // ToDo could treat val == 0 extra
+            vals_X[i] = (scalar_R)/vals_S[i];
+          }
+        }
+        else {
+          for (Index i=0; i<NCols(); i++) {
+            // ToDo could treat val == 0 extra
+            vals_X[i] = (scalar_R + val*vals_D[exp_pos[i]])/vals_S[i];
+          }
+        }
       }
-    }
-    else if (alpha==-1.) {
-      for (Index i=0; i<NCols(); i++) {
-        vals_X[i] = (vals_R[i] - vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+      else {
+        const Number* vals_Z = dense_Z->Values();
+        if (alpha==1.) {
+          for (Index i=0; i<NCols(); i++) {
+            vals_X[i] = (scalar_R + vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+          }
+        }
+        else if (alpha==-1.) {
+          for (Index i=0; i<NCols(); i++) {
+            vals_X[i] = (scalar_R - vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+          }
+        }
+        else {
+          for (Index i=0; i<NCols(); i++) {
+            vals_X[i] = (scalar_R + alpha*vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+          }
+        }
       }
     }
     else {
-      for (Index i=0; i<NCols(); i++) {
-        vals_X[i] = (vals_R[i] + alpha*vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+      const Number* vals_R = dense_R->Values();
+      if (dense_Z->IsHomogeneous()) {
+        Number val = alpha*dense_Z->Scalar();
+        for (Index i=0; i<NCols(); i++) {
+          vals_X[i] = (vals_R[i] + val*vals_D[exp_pos[i]])/vals_S[i];
+        }
+      }
+      else {
+        const Number* vals_Z = dense_Z->Values();
+        if (alpha==1.) {
+          for (Index i=0; i<NCols(); i++) {
+            vals_X[i] = (vals_R[i] + vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+          }
+        }
+        else if (alpha==-1.) {
+          for (Index i=0; i<NCols(); i++) {
+            vals_X[i] = (vals_R[i] - vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+          }
+        }
+        else {
+          for (Index i=0; i<NCols(); i++) {
+            vals_X[i] = (vals_R[i] + alpha*vals_Z[i]*vals_D[exp_pos[i]])/vals_S[i];
+          }
+        }
       }
     }
   }
