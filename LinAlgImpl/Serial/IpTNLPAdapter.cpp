@@ -875,16 +875,31 @@ namespace Ipopt
   {
     const DenseVector* dx = dynamic_cast<const DenseVector*>(&x);
     DBG_ASSERT(dx);
-    const Number* x_values = dx->Values();
 
     const Index* x_pos = P_x_full_x_->CompressedPosIndices();
-    for (Index i=0; i<n_full_x_; i++) {
-      Index idx = x_pos[i];
-      if (idx != -1) {
-        x_orig[i] = x_values[idx];
+
+    if (dx->IsHomogeneous()) {
+      Number scalar = dx->Scalar();
+      for (Index i=0; i<n_full_x_; i++) {
+        Index idx = x_pos[i];
+        if (idx != -1) {
+          x_orig[i] = scalar;
+        }
+        else {
+          x_orig[i] = full_x_[i];
+        }
       }
-      else {
-        x_orig[i] = full_x_[i];
+    }
+    else {
+      const Number* x_values = dx->Values();
+      for (Index i=0; i<n_full_x_; i++) {
+        Index idx = x_pos[i];
+        if (idx != -1) {
+          x_orig[i] = x_values[idx];
+        }
+        else {
+          x_orig[i] = full_x_[i];
+        }
       }
     }
   }
@@ -893,20 +908,36 @@ namespace Ipopt
   {
     const DenseVector* dc = dynamic_cast<const DenseVector*>(&c);
     DBG_ASSERT(dc);
-    const Number* c_values = dc->Values();
 
     const Index* c_pos = P_c_g_->ExpandedPosIndices();
-    for (Index i=0; i<c.Dim(); i++) {
-      g_orig[c_pos[i]] = c_values[i];
+    if (dc->IsHomogeneous()) {
+      Number scalar = dc->Scalar();
+      for (Index i=0; i<c.Dim(); i++) {
+        g_orig[c_pos[i]] = scalar;
+      }
+    }
+    else {
+      const Number* c_values = dc->Values();
+      for (Index i=0; i<c.Dim(); i++) {
+        g_orig[c_pos[i]] = c_values[i];
+      }
     }
 
     const DenseVector* dd = dynamic_cast<const DenseVector*>(&d);
     DBG_ASSERT(dd);
-    const Number* d_values = dd->Values();
 
     const Index* d_pos = P_d_g_->ExpandedPosIndices();
-    for (Index i=0; i<d.Dim(); i++) {
-      g_orig[d_pos[i]] = d_values[i];
+    if (dd->IsHomogeneous()) {
+      Number scalar = dd->Scalar();
+      for (Index i=0; i<d.Dim(); i++) {
+        g_orig[d_pos[i]] = scalar;
+      }
+    }
+    else {
+      const Number* d_values = dd->Values();
+      for (Index i=0; i<d.Dim(); i++) {
+        g_orig[d_pos[i]] = d_values[i];
+      }
     }
   }
 
@@ -916,28 +947,50 @@ namespace Ipopt
     if (x_L_orig) {
       const DenseVector* dx_L = dynamic_cast<const DenseVector*>(&x_L);
       DBG_ASSERT(dx_L);
-      const Number* x_L_values = dx_L->Values();
 
       const Index* bnds_pos_not_fixed = P_x_x_L_->ExpandedPosIndices();
       const Index* bnds_pos_full = P_x_full_x_->ExpandedPosIndices();
-      for (Index i=0; i<x_L.Dim(); i++) {
-        int idx = bnds_pos_not_fixed[i];
-        idx = bnds_pos_full[idx];
-        x_L_orig[idx] = x_L_values[i];
+
+      if (dx_L->IsHomogeneous()) {
+        Number scalar = dx_L->Scalar();
+        for (Index i=0; i<x_L.Dim(); i++) {
+          int idx = bnds_pos_not_fixed[i];
+          idx = bnds_pos_full[idx];
+          x_L_orig[idx] = scalar;
+        }
+      }
+      else {
+        const Number* x_L_values = dx_L->Values();
+        for (Index i=0; i<x_L.Dim(); i++) {
+          int idx = bnds_pos_not_fixed[i];
+          idx = bnds_pos_full[idx];
+          x_L_orig[idx] = x_L_values[i];
+        }
       }
     }
 
     if (x_U_orig) {
       const DenseVector* dx_U = dynamic_cast<const DenseVector*>(&x_U);
       DBG_ASSERT(dx_U);
-      const Number* x_U_values = dx_U->Values();
 
       const Index* bnds_pos_not_fixed = P_x_x_U_->ExpandedPosIndices();
       const Index* bnds_pos_full = P_x_full_x_->ExpandedPosIndices();
-      for (Index i=0; i<x_U.Dim(); i++) {
-        int idx = bnds_pos_not_fixed[i];
-        idx = bnds_pos_full[idx];
-        x_U_orig[idx] = x_U_values[i];
+
+      if (dx_U->IsHomogeneous()) {
+        Number scalar = dx_U->Scalar();
+        for (Index i=0; i<x_U.Dim(); i++) {
+          int idx = bnds_pos_not_fixed[i];
+          idx = bnds_pos_full[idx];
+          x_U_orig[idx] = scalar;
+        }
+      }
+      else {
+        const Number* x_U_values = dx_U->Values();
+        for (Index i=0; i<x_U.Dim(); i++) {
+          int idx = bnds_pos_not_fixed[i];
+          idx = bnds_pos_full[idx];
+          x_U_orig[idx] = x_U_values[i];
+        }
       }
     }
   }
