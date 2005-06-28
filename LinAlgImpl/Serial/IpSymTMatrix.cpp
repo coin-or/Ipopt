@@ -66,17 +66,33 @@ namespace Ipopt
       const Index*  irn=Irows();
       const Index*  jcn=Jcols();
       const Number* val=values_;
-      const Number* xvals=dense_x->Values();
       Number* yvals=dense_y->Values();
-      for(Index i=0; i<Nonzeros(); i++) {
-        yvals[*irn-1] += alpha* (*val) * xvals[*jcn-1];
-        if (*irn!=*jcn) {
-          // this is not a diagonal element
-          yvals[*jcn-1] += alpha* (*val) * xvals[*irn-1];
+
+      if (dense_x->IsHomogeneous()) {
+        Number as = alpha *  dense_x->Scalar();
+        for(Index i=0; i<Nonzeros(); i++) {
+          yvals[*irn-1] += as * (*val);
+          if (*irn!=*jcn) {
+            // this is not a diagonal element
+            yvals[*jcn-1] += as * (*val);
+          }
+          val++;
+          irn++;
+          jcn++;
         }
-        val++;
-        irn++;
-        jcn++;
+      }
+      else {
+        const Number* xvals=dense_x->Values();
+        for(Index i=0; i<Nonzeros(); i++) {
+          yvals[*irn-1] += alpha* (*val) * xvals[*jcn-1];
+          if (*irn!=*jcn) {
+            // this is not a diagonal element
+            yvals[*jcn-1] += alpha* (*val) * xvals[*irn-1];
+          }
+          val++;
+          irn++;
+          jcn++;
+        }
       }
     }
   }

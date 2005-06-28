@@ -30,36 +30,54 @@ namespace Ipopt
       initialized_(false)
   {
     DBG_START_METH("DenseVector::DenseVector(Index dim)", dbg_verbosity);
-    values_ = owner_space_->AllocateInternalStorage();
     if (Dim() == 0) {
-      initialized_ = true; // I guess ?!? what does this even mean ?!?
+      initialized_ = true;
+      homogeneous_ = false;
     }
   }
 
   DenseVector::~DenseVector()
   {
     DBG_START_METH("DenseVector::~DenseVector()", dbg_verbosity);
-    owner_space_->FreeInternalStorage(values_);
+    if (values_) {
+      owner_space_->FreeInternalStorage(values_);
+    }
   }
 
   void DenseVector::SetValues(const Number* x)
   {
     initialized_ = true;
-    IpBlasDcopy(Dim(), x, 1, values_, 1);
+    IpBlasDcopy(Dim(), x, 1, values_allocated(), 1);
+    homogeneous_ = false;
     // This is not an overloaded method from
     // Vector. Here, we must call ObjectChanged()
     // manually.
     ObjectChanged();
   }
 
+  void DenseVector::set_values_from_scalar()
+  {
+    DBG_ASSERT(homogeneous_);
+    initialized_ = true;
+    homogeneous_ = false;
+    Number* vals = values_allocated();
+    IpBlasDcopy(Dim(), &scalar_, 0, vals, 1);
+  }
+
   void DenseVector::CopyImpl(const Vector& x)
   {
     DBG_START_METH("DenseVector::CopyImpl(const Vector& x)", dbg_verbosity);
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dense_x); /* ToDo: Implement others */
+    DBG_ASSERT(dense_x);
     if (dense_x) {
       DBG_ASSERT(Dim() == dense_x->Dim());
-      IpBlasDcopy(Dim(), dense_x->values_, 1, values_, 1);
+      homogeneous_ = dense_x->homogeneous_;
+      if (homogeneous_) {
+        scalar_ = dense_x->scalar_;
+      }
+      else {
+        IpBlasDcopy(Dim(), dense_x->values_, 1, values_allocated(), 1);
+      }
     }
     initialized_=true;
   }
@@ -67,29 +85,68 @@ namespace Ipopt
   void DenseVector::ScalImpl(Number alpha)
   {
     DBG_ASSERT(initialized_);
-    IpBlasDscal(Dim(), alpha, values_, 1);
+    if (homogeneous_) {
+      scalar_ *= alpha;
+    }
+    else {
+      IpBlasDscal(Dim(), alpha, values_, 1);
+    }
   }
 
   void DenseVector::AxpyImpl(Number alpha, const Vector &x)
   {
     DBG_ASSERT(initialized_);
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    assert(dense_x); // ToDo: Implement Others
+    DBG_ASSERT(dense_x);
     if (dense_x) {
       DBG_ASSERT(Dim() == dense_x->Dim());
-      IpBlasDaxpy(Dim(), alpha, dense_x->values_, 1, values_, 1);
+      if (homogeneous_) {
+        if (dense_x->homogeneous_) {
+          scalar_ += alpha * dense_x->scalar_;
+        }
+        else {
+          homogeneous_ = false;
+          Number* vals = values_allocated();
+          for (Index i=0; i<Dim(); i++) {
+            vals[i] = scalar_ + alpha*dense_x->values_[i];
+          }
+        }
+      }
+      else {
+        if (dense_x->homogeneous_) {
+          IpBlasDaxpy(Dim(), alpha, &dense_x->scalar_, 0, values_, 1);
+        }
+        else {
+          IpBlasDaxpy(Dim(), alpha, dense_x->values_, 1, values_, 1);
+        }
+      }
     }
   }
 
   Number DenseVector::DotImpl(const Vector &x) const
   {
     DBG_ASSERT(initialized_);
-    Number retValue = 0.0;
+    Number retValue;
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    assert(dense_x); // ToDo: Implement Others
+    DBG_ASSERT(dense_x);
     if (dense_x) {
       DBG_ASSERT(Dim() == dense_x->Dim());
-      retValue = IpBlasDdot(Dim(), dense_x->values_, 1, values_, 1);
+      if (homogeneous_) {
+        if (dense_x->homogeneous_) {
+          retValue = Dim() * scalar_ * dense_x->scalar_;
+        }
+        else {
+          retValue = IpBlasDdot(Dim(), dense_x->values_, 1, &scalar_, 0);
+        }
+      }
+      else {
+        if (dense_x->homogeneous_) {
+          retValue = IpBlasDdot(Dim(), &dense_x->scalar_, 0, values_, 1);
+        }
+        else {
+          retValue = IpBlasDdot(Dim(), dense_x->values_, 1, values_, 1);
+        }
+      }
     }
     return retValue;
   }
@@ -97,13 +154,23 @@ namespace Ipopt
   Number DenseVector::Nrm2Impl() const
   {
     DBG_ASSERT(initialized_);
-    return IpBlasDnrm2(Dim(), values_, 1);
+    if (homogeneous_) {
+      return sqrt(Dim()) * fabs(scalar_);
+    }
+    else {
+      return IpBlasDnrm2(Dim(), values_, 1);
+    }
   }
 
   Number DenseVector::AsumImpl() const
   {
     DBG_ASSERT(initialized_);
-    return IpBlasDasum(Dim(), values_, 1);
+    if (homogeneous_) {
+      return Dim() * fabs(scalar_);
+    }
+    else {
+      return IpBlasDasum(Dim(), values_, 1);
+    }
   }
 
   Number DenseVector::AmaxImpl() const
@@ -113,27 +180,58 @@ namespace Ipopt
       return 0.;
     }
     else {
-      return fabs(values_[IpBlasIdamax(Dim(), values_, 1)-1]);
+      if (homogeneous_) {
+        return fabs(scalar_);
+      }
+      else {
+        return fabs(values_[IpBlasIdamax(Dim(), values_, 1)-1]);
+      }
     }
   }
 
   void DenseVector::SetImpl(Number value)
   {
     initialized_ = true;
-    IpBlasDcopy(Dim(), &value, 0, values_, 1);
+    homogeneous_ = true;
+    scalar_ = value;
+    // ToDo decide if we want this here:
+    if (values_) {
+      owner_space_->FreeInternalStorage(values_);
+      values_ = NULL;
+    }
   }
 
   void DenseVector::ElementWiseDivideImpl(const Vector& x)
   {
     DBG_ASSERT(initialized_);
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    assert(dense_x); // ToDo: Implement Others
+    DBG_ASSERT(dense_x);
     if (dense_x) {
-      Number* values_x = dense_x->values_;
+      const Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
-      // Is there a BLAS type operation for an efficient implementation? NO
-      for (Index i=0; i<Dim(); i++) {
-        values_[i] = values_[i]/values_x[i];
+      if (homogeneous_) {
+        if (dense_x->homogeneous_) {
+          scalar_ /= dense_x->scalar_;
+        }
+        else {
+          homogeneous_ = false;
+          Number* vals = values_allocated();
+          for (Index i=0; i<Dim(); i++) {
+            vals[i] = scalar_/values_x[i];
+          }
+        }
+      }
+      else {
+        if (dense_x->homogeneous_) {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] /= dense_x->scalar_;
+          }
+        }
+        else {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] /= values_x[i];
+          }
+        }
       }
     }
   }
@@ -142,13 +240,33 @@ namespace Ipopt
   {
     DBG_ASSERT(initialized_);
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    assert(dense_x); // ToDo: Implement Others
+    DBG_ASSERT(dense_x);
     if (dense_x) {
-      Number* values_x = dense_x->values_;
+      const Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
-      // Is there a BLAS type operation for an efficient implementation? NO
-      for (Index i=0; i<Dim(); i++) {
-        values_[i] = values_[i]*values_x[i];
+      if (homogeneous_) {
+        if (dense_x->homogeneous_) {
+          scalar_ *= dense_x->scalar_;
+        }
+        else {
+          homogeneous_ = false;
+          Number* vals = values_allocated();
+          for (Index i=0; i<Dim(); i++) {
+            vals[i] = scalar_*values_x[i];
+          }
+        }
+      }
+      else {
+        if (dense_x->homogeneous_) {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] *= dense_x->scalar_;
+          }
+        }
+        else {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] *= values_x[i];
+          }
+        }
       }
     }
   }
@@ -159,10 +277,31 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     assert(dense_x); // ToDo: Implement Others
     if (dense_x) {
-      Number* values_x = dense_x->values_;
+      const Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
-      for (Index i=0; i<Dim(); i++) {
-        values_[i] = Ipopt::Max(values_[i], values_x[i]);
+      if (homogeneous_) {
+        if (dense_x->homogeneous_) {
+          scalar_ = Ipopt::Max(scalar_, dense_x->scalar_);
+        }
+        else {
+          homogeneous_ = false;
+          Number* vals = values_allocated();
+          for (Index i=0; i<Dim(); i++) {
+            vals[i] = Ipopt::Max(scalar_, values_x[i]);
+          }
+        }
+      }
+      else {
+        if (dense_x->homogeneous_) {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] = Ipopt::Max(values_[i], dense_x->scalar_);
+          }
+        }
+        else {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] = Ipopt::Max(values_[i], values_x[i]);
+          }
+        }
       }
     }
   }
@@ -171,12 +310,33 @@ namespace Ipopt
   {
     DBG_ASSERT(initialized_);
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    assert(dense_x); // ToDo: Implement Others
+    DBG_ASSERT(dense_x);
     if (dense_x) {
-      Number* values_x = dense_x->values_;
+      const Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
-      for (Index i=0; i<Dim(); i++) {
-        values_[i] = Ipopt::Min(values_[i], values_x[i]);
+      if (homogeneous_) {
+        if (dense_x->homogeneous_) {
+          scalar_ = Ipopt::Min(scalar_, dense_x->scalar_);
+        }
+        else {
+          homogeneous_ = false;
+          Number* vals = values_allocated();
+          for (Index i=0; i<Dim(); i++) {
+            vals[i] = Ipopt::Min(scalar_, values_x[i]);
+          }
+        }
+      }
+      else {
+        if (dense_x->homogeneous_) {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] = Ipopt::Min(values_[i], dense_x->scalar_);
+          }
+        }
+        else {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] = Ipopt::Min(values_[i], values_x[i]);
+          }
+        }
       }
     }
   }
@@ -184,39 +344,62 @@ namespace Ipopt
   void DenseVector::ElementWiseReciprocalImpl()
   {
     DBG_ASSERT(initialized_);
-    for (Index i=0; i<Dim(); i++) {
-      values_[i] = 1.0/values_[i];
+    if (homogeneous_) {
+      scalar_ = 1.0/scalar_;
+    }
+    else {
+      for (Index i=0; i<Dim(); i++) {
+        values_[i] = 1.0/values_[i];
+      }
     }
   }
 
   void DenseVector::ElementWiseAbsImpl()
   {
     DBG_ASSERT(initialized_);
-    for (Index i=0; i<Dim(); i++) {
-      values_[i] = fabs(values_[i]);
+    if (homogeneous_) {
+      scalar_ = fabs(scalar_);
+    }
+    else {
+      for (Index i=0; i<Dim(); i++) {
+        values_[i] = fabs(values_[i]);
+      }
     }
   }
 
   void DenseVector::ElementWiseSqrtImpl()
   {
     DBG_ASSERT(initialized_);
-    for (Index i=0; i<Dim(); i++) {
-      values_[i] = sqrt(values_[i]);
+    if (homogeneous_) {
+      scalar_ = sqrt(scalar_);
+    }
+    else {
+      for (Index i=0; i<Dim(); i++) {
+        values_[i] = sqrt(values_[i]);
+      }
     }
   }
 
   void DenseVector::AddScalarImpl(Number scalar)
   {
     DBG_ASSERT(initialized_);
-    IpBlasDaxpy(Dim(), 1., &scalar, 0, values_, 1);
+    if (homogeneous_) {
+      scalar_ += scalar;
+    }
+    else {
+      IpBlasDaxpy(Dim(), 1., &scalar, 0, values_, 1);
+    }
   }
 
   Number DenseVector::MaxImpl() const
   {
     DBG_ASSERT(initialized_);
     DBG_ASSERT(Dim() > 0 && "There is no Max of a zero length vector (no reasonable default can be returned)");
-    Number max = 0.0;
-    if (Dim() > 0) {
+    Number max;
+    if (homogeneous_) {
+      max = scalar_;
+    }
+    else {
       max = values_[0];
       for (Index i=1; i<Dim(); i++) {
         max = Ipopt::Max(values_[i], max);
@@ -231,8 +414,11 @@ namespace Ipopt
     DBG_ASSERT(Dim() > 0 && "There is no Min of a zero length vector"
                "(no reasonable default can be returned) - "
                "Check for zero length vector before calling");
-    Number min = 0.0;
-    if (Dim() > 0) {
+    Number min;
+    if (homogeneous_) {
+      min = scalar_;
+    }
+    else {
       min = values_[0];
       for (Index i=1; i<Dim(); i++) {
         min = Ipopt::Min(values_[i], min);
@@ -244,9 +430,15 @@ namespace Ipopt
   Number DenseVector::SumImpl() const
   {
     DBG_ASSERT(initialized_);
-    Number sum = 0.0;
-    for (Index i=0; i<Dim(); i++) {
-      sum += values_[i];
+    Number sum;
+    if (homogeneous_) {
+      sum = Dim()*scalar_;
+    }
+    else {
+      sum = 0.;
+      for (Index i=0; i<Dim(); i++) {
+        sum += values_[i];
+      }
     }
     return sum;
   }
@@ -254,9 +446,15 @@ namespace Ipopt
   Number DenseVector::SumLogsImpl() const
   {
     DBG_ASSERT(initialized_);
-    Number sum = 0.0;
-    for (Index i=0; i<Dim(); i++) {
-      sum += log(values_[i]);
+    Number sum;
+    if (homogeneous_) {
+      sum = Dim() * log(scalar_);
+    }
+    else {
+      sum = 0.0;
+      for (Index i=0; i<Dim(); i++) {
+        sum += log(values_[i]);
+      }
     }
     return sum;
   }
@@ -264,15 +462,28 @@ namespace Ipopt
   void DenseVector::ElementWiseSgnImpl()
   {
     DBG_ASSERT(initialized_);
-    for (Index i=0; i<Dim(); i++) {
-      if (values_[i] > 0) {
-        values_[i] = 1;
+    if (homogeneous_) {
+      if (scalar_ > 0.) {
+        scalar_ = 1.;
       }
-      else if (values_[i] < 0) {
-        values_[i] = -1;
+      else if (scalar_ < 0.) {
+        scalar_ = -1.;
       }
       else {
-        values_[i] = 0;
+        scalar_ = 0.;
+      }
+    }
+    else {
+      for (Index i=0; i<Dim(); i++) {
+        if (values_[i] > 0.) {
+          values_[i] = 1.;
+        }
+        else if (values_[i] < 0.) {
+          values_[i] = -1.;
+        }
+        else {
+          values_[i] = 0;
+        }
       }
     }
   }
@@ -282,22 +493,38 @@ namespace Ipopt
                                       Number b, const Vector& v2, Number c)
   {
     Number* values_v1=NULL;
+    bool homogeneous_v1=false;
     if (a!=0.) {
       const DenseVector* dense_v1 = dynamic_cast<const DenseVector*>(&v1);
       DBG_ASSERT(dense_v1);
       DBG_ASSERT(dense_v1->initialized_);
       DBG_ASSERT(Dim() == dense_v1->Dim());
       values_v1=dense_v1->values_;
+      homogeneous_v1=dense_v1->homogeneous_;
     }
     Number* values_v2=NULL;
+    bool homogeneous_v2=false;
     if (b!=0.) {
       const DenseVector* dense_v2 = dynamic_cast<const DenseVector*>(&v2);
       DBG_ASSERT(dense_v2);
       DBG_ASSERT(dense_v2->initialized_);
       DBG_ASSERT(Dim() == dense_v2->Dim());
       values_v2=dense_v2->values_;
+      homogeneous_v2=dense_v2->homogeneous_;
     }
     DBG_ASSERT(c==0. || initialized_);
+    if (c==0.) {
+      // make sure we have memory allocated for this vector
+      values_allocated();
+      homogeneous_ = false;
+    }
+
+    // If any of the vectors is homogeneous, call the default implementation
+    if ( homogeneous_ || homogeneous_v1 || homogeneous_v2) {
+      Vector::AddTwoVectorsImpl(a, v1, b, v2, c);
+      return;
+    }
+
     // I guess I'm going over board here, but it might be best to
     // capture all cases for a, b, and c separately...
     if (c==0 ) {
@@ -672,11 +899,37 @@ namespace Ipopt
     Number alpha = 1.;
     Number* values_x = values_;
     Number* values_delta = dense_delta->values_;
-    for (Index i=0; i<Dim(); i++) {
-      if (values_delta[i]<0.) {
-        alpha = Ipopt::Min(alpha, -tau/values_delta[i] * values_x[i]);
+    if (homogeneous_) {
+      if (dense_delta->homogeneous_) {
+        if (dense_delta->scalar_<0.) {
+          alpha = Ipopt::Min(alpha, -tau/dense_delta->scalar_ * scalar_);
+        }
+      }
+      else {
+        for (Index i=0; i<Dim(); i++) {
+          if (values_delta[i]<0.) {
+            alpha = Ipopt::Min(alpha, -tau/values_delta[i] * scalar_);
+          }
+        }
       }
     }
+    else {
+      if (dense_delta->homogeneous_) {
+        if (dense_delta->scalar_<0.) {
+          for (Index i=0; i<Dim(); i++) {
+            alpha = Ipopt::Min(alpha, -tau/dense_delta->scalar_ * values_x[i]);
+          }
+        }
+      }
+      else {
+        for (Index i=0; i<Dim(); i++) {
+          if (values_delta[i]<0.) {
+            alpha = Ipopt::Min(alpha, -tau/values_delta[i] * values_x[i]);
+          }
+        }
+      }
+    }
+
     DBG_ASSERT(alpha>=0.);
     return alpha;
   }
@@ -687,8 +940,17 @@ namespace Ipopt
     DBG_ASSERT(dim_x+Pos<=Dim());
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     DBG_ASSERT(dense_x);
-    IpBlasDcopy(dim_x, dense_x->values_, 1, values_+Pos, 1);
-    initialized_=true;
+
+    Number* vals = values_allocated();
+    homogeneous_ = false;
+
+    if (dense_x->homogeneous_) {
+      IpBlasDcopy(dim_x, &scalar_, 1, vals+Pos, 1);
+    }
+    else {
+      IpBlasDcopy(dim_x, dense_x->values_, 1, vals+Pos, 1);
+    }
+    initialized_ = true;
     ObjectChanged();
   }
 
@@ -698,7 +960,14 @@ namespace Ipopt
     DBG_ASSERT(dim_x+Pos<=Dim());
     DenseVector* dense_x = dynamic_cast<DenseVector*>(&x);
     DBG_ASSERT(dense_x);
-    IpBlasDcopy(dim_x, values_+Pos, 1, dense_x->values_, 1);
+    DBG_ASSERT(dense_x->homogeneous_); // This might have to made more general
+
+    if (homogeneous_) {
+      IpBlasDcopy(dim_x, &scalar_, 1, dense_x->values_, 1);
+    }
+    else {
+      IpBlasDcopy(dim_x, values_+Pos, 1, dense_x->values_, 1);
+    }
     // We need to tell X that it has changed!
     dense_x->ObjectChanged();
     dense_x->initialized_=true;
@@ -712,11 +981,18 @@ namespace Ipopt
     fprintf(fp, "%sDenseVector \"%s\" with %d elements:\n",
             prefix.c_str(), name.c_str(), Dim());
     if (initialized_) {
-      for (Index i=0; i<Dim(); i++) {
-        for (Index ind=0; ind<indent; ind++) {
-          fprintf(fp, " ");
+      if (homogeneous_) {
+        fprintf(fp,
+                "  Homogeneous vector, all elements have value %23.16e\n",
+                scalar_);
+      }
+      else {
+        for (Index i=0; i<Dim(); i++) {
+          for (Index ind=0; ind<indent; ind++) {
+            fprintf(fp, " ");
+          }
+          fprintf(fp, "%s%s[%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i+1, values_[i]);
         }
-        fprintf(fp, "%s%s[%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i+1, values_[i]);
       }
     }
     else {
