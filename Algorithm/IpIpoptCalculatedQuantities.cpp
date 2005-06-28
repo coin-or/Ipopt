@@ -2057,7 +2057,7 @@ namespace Ipopt
     deps[0] = GetRawPtr(x);
     deps[1] = GetRawPtr(s);
     deps[2] = GetRawPtr(y_c);
-    deps[3] = GetRawPtr(y_c);
+    deps[3] = GetRawPtr(y_d);
     deps[4] = GetRawPtr(z_L);
     deps[5] = GetRawPtr(z_U);
     deps[6] = GetRawPtr(v_L);
@@ -2101,7 +2101,7 @@ namespace Ipopt
     deps[0] = GetRawPtr(x);
     deps[1] = GetRawPtr(s);
     deps[2] = GetRawPtr(y_c);
-    deps[3] = GetRawPtr(y_c);
+    deps[3] = GetRawPtr(y_d);
     deps[4] = GetRawPtr(z_L);
     deps[5] = GetRawPtr(z_U);
     deps[6] = GetRawPtr(v_L);
@@ -2363,7 +2363,7 @@ namespace Ipopt
     tdeps[2] = GetRawPtr(z_L);
     tdeps[3] = GetRawPtr(z_U);
     tdeps[4] = GetRawPtr(v_L);
-    tdeps[5] = GetRawPtr(z_U);
+    tdeps[5] = GetRawPtr(v_U);
 
     if (!curr_centrality_measure_cache_.GetCachedResult(result, tdeps)) {
       SmartPtr<const Vector> compl_x_L = curr_compl_x_L();
@@ -2400,7 +2400,7 @@ namespace Ipopt
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(s);
     tdeps[2] = GetRawPtr(y_c);
-    tdeps[3] = GetRawPtr(y_c);
+    tdeps[3] = GetRawPtr(y_d);
     tdeps[4] = GetRawPtr(z_L);
     tdeps[5] = GetRawPtr(z_U);
     tdeps[6] = GetRawPtr(v_L);
@@ -2457,7 +2457,7 @@ namespace Ipopt
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(s);
     tdeps[2] = GetRawPtr(y_c);
-    tdeps[3] = GetRawPtr(y_c);
+    tdeps[3] = GetRawPtr(y_d);
     tdeps[4] = GetRawPtr(z_L);
     tdeps[5] = GetRawPtr(z_U);
     tdeps[6] = GetRawPtr(v_L);
@@ -2509,7 +2509,7 @@ namespace Ipopt
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(s);
     tdeps[2] = GetRawPtr(y_c);
-    tdeps[3] = GetRawPtr(y_c);
+    tdeps[3] = GetRawPtr(y_d);
     tdeps[4] = GetRawPtr(z_L);
     tdeps[5] = GetRawPtr(z_U);
     tdeps[6] = GetRawPtr(v_L);
@@ -2564,7 +2564,7 @@ namespace Ipopt
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(s);
     tdeps[2] = GetRawPtr(y_c);
-    tdeps[3] = GetRawPtr(y_c);
+    tdeps[3] = GetRawPtr(y_d);
     tdeps[4] = GetRawPtr(z_L);
     tdeps[5] = GetRawPtr(z_U);
     tdeps[6] = GetRawPtr(v_L);
@@ -2853,7 +2853,7 @@ namespace Ipopt
     tdeps[2] = GetRawPtr(z_L);
     tdeps[3] = GetRawPtr(z_U);
     tdeps[4] = GetRawPtr(v_L);
-    tdeps[5] = GetRawPtr(z_U);
+    tdeps[5] = GetRawPtr(v_U);
 
     if (!curr_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
       if (!trial_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
@@ -2905,7 +2905,7 @@ namespace Ipopt
     tdeps[2] = GetRawPtr(z_L);
     tdeps[3] = GetRawPtr(z_U);
     tdeps[4] = GetRawPtr(v_L);
-    tdeps[5] = GetRawPtr(z_U);
+    tdeps[5] = GetRawPtr(v_U);
 
     if (!trial_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
       if (!curr_avrg_compl_cache_.GetCachedResult(result, tdeps)) {
