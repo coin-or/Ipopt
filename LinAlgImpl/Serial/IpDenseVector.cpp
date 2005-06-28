@@ -114,9 +114,9 @@ namespace Ipopt
       }
       else {
         if (dense_x->homogeneous_) {
-	  if (dense_x->scalar_!=0.) {
-	    IpBlasDaxpy(Dim(), alpha, &dense_x->scalar_, 0, values_, 1);
-	  }
+          if (dense_x->scalar_!=0.) {
+            IpBlasDaxpy(Dim(), alpha, &dense_x->scalar_, 0, values_, 1);
+          }
         }
         else {
           IpBlasDaxpy(Dim(), alpha, dense_x->values_, 1, values_, 1);
