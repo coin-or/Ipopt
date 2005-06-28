@@ -65,13 +65,23 @@ namespace Ipopt
       const Index*  irows=Irows();
       const Index*  jcols=Jcols();
       const Number* val=values_;
-      const Number* xvals=dense_x->Values();
       Number* yvals=dense_y->Values();
-      for(Index i=0; i<Nonzeros(); i++) {
-        yvals[*irows-1] += alpha* (*val) * xvals[*jcols-1];
-        val++;
-        irows++;
-        jcols++;
+      if (dense_x->IsHomogeneous()) {
+        Number as = alpha * dense_x->Scalar();
+        for(Index i=0; i<Nonzeros(); i++) {
+          yvals[*irows-1] += as * (*val);
+          val++;
+          irows++;
+        }
+      }
+      else {
+        const Number* xvals=dense_x->Values();
+        for(Index i=0; i<Nonzeros(); i++) {
+          yvals[*irows-1] += alpha* (*val) * xvals[*jcols-1];
+          val++;
+          irows++;
+          jcols++;
+        }
       }
     }
   }
@@ -102,13 +112,24 @@ namespace Ipopt
       const Index*  irows=Irows();
       const Index*  jcols=Jcols();
       const Number* val=values_;
-      const Number* xvals=dense_x->Values();
       Number* yvals=dense_y->Values();
-      for(Index i=0; i<Nonzeros(); i++) {
-        yvals[*jcols-1] += alpha* (*val) * xvals[*irows-1];
-        val++;
-        irows++;
-        jcols++;
+
+      if (dense_x->IsHomogeneous()) {
+        Number as = alpha * dense_x->Scalar();
+        for(Index i=0; i<Nonzeros(); i++) {
+          yvals[*jcols-1] += as * (*val);
+          val++;
+          jcols++;
+        }
+      }
+      else {
+        const Number* xvals=dense_x->Values();
+        for(Index i=0; i<Nonzeros(); i++) {
+          yvals[*jcols-1] += alpha* (*val) * xvals[*irows-1];
+          val++;
+          irows++;
+          jcols++;
+        }
       }
     }
   }
@@ -126,7 +147,8 @@ namespace Ipopt
         for (Index ind=0; ind<indent; ind++) {
           fprintf(fp, " ");
         }
-        fprintf(fp, "%s%s[%5d,%5d]=%23.16e  (%d)\n", prefix.c_str(), name.c_str(), Irows()[i],
+        fprintf(fp, "%s%s[%5d,%5d]=%23.16e  (%d)\n",
+                prefix.c_str(), name.c_str(), Irows()[i],
                 Jcols()[i], values_[i], i);
       }
     }

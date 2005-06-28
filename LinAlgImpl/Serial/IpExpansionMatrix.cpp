@@ -12,6 +12,8 @@
 namespace Ipopt
 {
 
+  DBG_SET_VERBOSITY(0);
+
   ExpansionMatrix::ExpansionMatrix(const ExpansionMatrixSpace* owner_space)
       :
       Matrix(owner_space),
@@ -45,10 +47,18 @@ namespace Ipopt
     const Index* exp_pos = ExpandedPosIndices();
 
     if (dense_x && dense_y) {
-      const Number* xvals=dense_x->Values();
       Number* yvals=dense_y->Values();
-      for(Index i=0; i<NCols(); i++) {
-        yvals[exp_pos[i]] += alpha * xvals[i];
+      if (dense_x->IsHomogeneous()) {
+        Number val = alpha * dense_x->Scalar();
+        for(Index i=0; i<NCols(); i++) {
+          yvals[exp_pos[i]] += val;
+        }
+      }
+      else {
+        const Number* xvals=dense_x->Values();
+        for(Index i=0; i<NCols(); i++) {
+          yvals[exp_pos[i]] += alpha * xvals[i];
+        }
       }
     }
   }
@@ -77,10 +87,18 @@ namespace Ipopt
     const Index* exp_pos = ExpandedPosIndices();
 
     if (dense_x && dense_y) {
-      const Number* xvals=dense_x->Values();
       Number* yvals=dense_y->Values();
-      for(Index i=0; i<NCols(); i++) {
-        yvals[i] += alpha * xvals[exp_pos[i]];
+      if (dense_x->IsHomogeneous()) {
+        Number val = alpha * dense_x->Scalar();
+        for(Index i=0; i<NCols(); i++) {
+          yvals[i] += val;
+        }
+      }
+      else {
+        const Number* xvals=dense_x->Values();
+        for(Index i=0; i<NCols(); i++) {
+          yvals[i] += alpha * xvals[exp_pos[i]];
+        }
       }
     }
   }
@@ -99,6 +117,14 @@ namespace Ipopt
     DBG_ASSERT(dense_Z);
     DenseVector* dense_X = dynamic_cast<DenseVector*>(&X);
     DBG_ASSERT(dense_X);
+
+    // if any of the vectors is of the homogeneous type, revert to the
+    // default implementation
+    if (dense_S->IsHomogeneous() ||
+        dense_Z->IsHomogeneous()) {
+      Matrix::AddMSinvZImpl(alpha, S, Z, X);
+      return;
+    }
 
     const Index* exp_pos = ExpandedPosIndices();
     const Number* vals_S = dense_S->Values();
@@ -126,6 +152,9 @@ namespace Ipopt
       const Vector& R, const Vector& Z,
       const Vector& D, Vector& X) const
   {
+    DBG_START_METH("ExpansionMatrix::SinvBlrmZMTdBrImpl",
+                   dbg_verbosity);
+
     DBG_ASSERT(NCols()==S.Dim());
     DBG_ASSERT(NCols()==R.Dim());
     DBG_ASSERT(NCols()==Z.Dim());
@@ -142,6 +171,18 @@ namespace Ipopt
     DBG_ASSERT(dense_D);
     DenseVector* dense_X = dynamic_cast<DenseVector*>(&X);
     DBG_ASSERT(dense_X);
+
+    // if any of the vectors is of the homogeneous type, revert to the
+    // default implementation
+
+    DBG_PRINT_VECTOR(2, "S", S);
+    if (dense_S->IsHomogeneous() ||
+        dense_R->IsHomogeneous() ||
+        dense_Z->IsHomogeneous() ||
+        dense_D->IsHomogeneous()) {
+      Matrix::SinvBlrmZMTdBrImpl(alpha, S, R, Z, D, X);
+      return;
+    }
 
     const Index* exp_pos = ExpandedPosIndices();
     const Number* vals_S = dense_S->Values();

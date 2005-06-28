@@ -594,8 +594,14 @@ namespace Ipopt
     DBG_ASSERT(dim == vector.Dim());
     const DenseVector* dv = dynamic_cast<const DenseVector*>(&vector);
     if (dv) {
-      const Number* dv_vals = dv->Values();
-      IpBlasDcopy(dim, dv_vals, 1, values, 1);
+      if (dv->IsHomogeneous()) {
+        Number scalar = dv->Scalar();
+        IpBlasDcopy(dim, &scalar, 0, values, 1);
+      }
+      else {
+        const Number* dv_vals = dv->Values();
+        IpBlasDcopy(dim, dv_vals, 1, values, 1);
+      }
       return;
     }
 

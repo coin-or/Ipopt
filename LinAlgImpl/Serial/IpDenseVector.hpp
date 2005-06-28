@@ -53,6 +53,20 @@ namespace Ipopt
      *  guaranteed!
      */
     inline const Number* Values() const;
+
+    /** Indicates if the vector is homogeneous (i.e., all entries have
+     *  the value Scalar() */
+    bool IsHomogeneous() const
+    {
+      return homogeneous_;
+    }
+
+    /** Scalar value of all entries in a homogeneous vector */
+    Number Scalar() const
+    {
+      DBG_ASSERT(homogeneous_);
+      return scalar_;
+    }
     //@}
 
     /** @name Modifying subranges of the vector. */
@@ -176,10 +190,27 @@ namespace Ipopt
     /** Dense Number array of vector values. */
     Number* values_;
 
+    /** Method of getting the internal values array, making sure that
+     *  memory has been allocated */
+    Number* values_allocated();
+
     /** Flag for Initialization.  This flag is false, if the data has
     not yet been initialized. */
     bool initialized_;
 
+    /** Flag indicating whether the vector is currently homogeneous
+     *  (that is, all elements have the same value). This flag is used
+     *  to determine whether the elements of the vector are stored in
+     *  values_ or in scalar_ */
+    bool homogeneous_;
+
+    /** Homogeneous value of all elements if the vector is currently
+     *  homogenous */
+    Number scalar_;
+
+    /** Auxilliary method for setting explicitly all elements in
+     *  values_ to the current scalar value. */
+    void set_values_from_scalar();
   };
 
   /** This vectors space is the vector space for DenseVector.
@@ -235,17 +266,31 @@ namespace Ipopt
     // Here we assume that every time someone requests this direct raw
     // pointer, the data is going to change and the Tag for this
     // vector has to be updated.
+
+    if (initialized_ && homogeneous_) {
+      // If currently the vector is a homogeneous vector, set all elements
+      // explicitly to this value
+      set_values_from_scalar();
+    }
     ObjectChanged();
     initialized_= true;
-    return values_;
+    homogeneous_ = false;
+    return values_allocated();
   }
 
   inline const Number* DenseVector::Values() const
   {
-    DBG_ASSERT(initialized_);
+    DBG_ASSERT(initialized_ && (Dim()==0 || values_));
     return values_;
   }
 
+  inline Number* DenseVector::values_allocated()
+  {
+    if (values_==NULL) {
+      values_ = owner_space_->AllocateInternalStorage();
+    }
+    return values_;
+  }
 
 
 } // namespace Ipopt
