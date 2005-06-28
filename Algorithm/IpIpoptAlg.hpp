@@ -188,6 +188,7 @@ namespace Ipopt
      */
     Number correct_bound_multiplier(const Vector& trial_z,
                                     const Vector& trial_slack,
+                                    const Vector& trial_compl,
                                     SmartPtr<const Vector>& new_trial_z);
     //@}
   };
