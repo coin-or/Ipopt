@@ -1,4 +1,5 @@
 * text=auto !eol
+/AUTHORS -text
 Algorithm/IpIteratesVector.cpp -text
 Algorithm/IpIteratesVector.hpp -text
 Algorithm/IpMuUpdate.cpp -text

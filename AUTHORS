@@ -1,0 +1,12 @@
+Main authors:
+
+- Andreas Waechter (IBM)
+- Carl Laird (IBM, CMU)
+
+
+Contributors:
+
+- Yifan Hu (Wolfram): Contributed TAUCS interface, implemented in the files
+
+  PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.hpp
+  PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.cpp
