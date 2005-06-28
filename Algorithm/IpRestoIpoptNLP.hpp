@@ -77,7 +77,7 @@ namespace Ipopt
     /** Objective value (incorrect version for restoration phase) */
     virtual Number f(const Vector& x)
     {
-      DBG_ASSERT("ERROR: In RestoIpoptNLP f() is called without mu!");
+      DBG_ASSERT(false && "ERROR: In RestoIpoptNLP f() is called without mu!");
       return 0.;
     }
 
@@ -87,7 +87,7 @@ namespace Ipopt
     /** Gradient of the objective (incorrect version for restoration phase) */
     virtual SmartPtr<const Vector> grad_f(const Vector& x)
     {
-      DBG_ASSERT("ERROR: In RestoIpoptNLP grad_f() is called without mu!");
+      DBG_ASSERT(false && "ERROR: In RestoIpoptNLP grad_f() is called without mu!");
       return NULL;
     }
 
@@ -115,7 +115,7 @@ namespace Ipopt
                                         const Vector& yd
                                        )
     {
-      DBG_ASSERT("ERROR: In RestoIpoptNLP h() is called without mu!");
+      DBG_ASSERT(false && "ERROR: In RestoIpoptNLP h() is called without mu!");
       return NULL;
     }
 

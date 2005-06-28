@@ -174,14 +174,14 @@ namespace Ipopt
      *  knows about the barrier parameter */
     virtual Number f(const Vector& x, Number mu)
     {
-      DBG_ASSERT("ERROR: This method is only a placeholder for f(mu) and should not be called");
+      DBG_ASSERT(false && "ERROR: This method is only a placeholder for f(mu) and should not be called");
       return 0.;
     }
     /** Replacement for the default objective gradient method which
      *  knows about the barrier parameter  */
     virtual SmartPtr<const Vector> grad_f(const Vector& x, Number mu)
     {
-      DBG_ASSERT("ERROR: This method is only a placeholder for grad_f(mu) and should not be called");
+      DBG_ASSERT(false && "ERROR: This method is only a placeholder for grad_f(mu) and should not be called");
       return NULL;
     }
     /** Replacement for the default Lagrangian Hessian method which
@@ -192,7 +192,7 @@ namespace Ipopt
                                         const Vector& yd,
                                         Number mu)
     {
-      DBG_ASSERT("ERROR: This method is only a for h(mu) and should not be called");
+      DBG_ASSERT(false && "ERROR: This method is only a for h(mu) and should not be called");
       return NULL;
     }
     //@}
