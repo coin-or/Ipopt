@@ -199,10 +199,6 @@ namespace Ipopt
       sol_n_c->Set(0.0);
       if (IsValid(sigma_tilde_n_c_inv)) {
         sol_n_c->AddTwoVectors(1., *Crhs_x->GetComp(1), -1.0, sol_cR, 0.);
-        /* DELE
-               sol_n_c->Copy(*Crhs_x->GetComp(1));
-               sol_n_c->Axpy(-1.0, sol_cR);
-        */
         sol_n_c->ElementWiseMultiply(*sigma_tilde_n_c_inv);
       }
 
@@ -213,10 +209,6 @@ namespace Ipopt
         DBG_PRINT_VECTOR(2, "delta_y_c", sol_cR);
         DBG_PRINT_VECTOR(2, "Sig~_{p_c}^{-1}", *sigma_tilde_p_c_inv);
         sol_p_c->AddTwoVectors(1., *Crhs_x->GetComp(2), 1.0, sol_cR, 0.);
-        /* DELE
-               sol_p_c->Copy(*Crhs_x->GetComp(2));
-               sol_p_c->Axpy(1.0, sol_cR);
-        */
         sol_p_c->ElementWiseMultiply(*sigma_tilde_p_c_inv);
       }
 
@@ -277,19 +269,6 @@ namespace Ipopt
           fact2 = 0.;
         }
         retVec->AddTwoVectors(fact1, *v1, fact2, *v2, 0.);
-
-        /* DELE
-               retVec->Set(0.0);
-
-               if (IsValid(sigma_tilde_n_c_inv)) {
-                 retVec->Axpy(1.0, *sigma_tilde_n_c_inv);
-               }
-               if (IsValid(sigma_tilde_p_c_inv)) {
-                 retVec->Axpy(1.0, *sigma_tilde_p_c_inv);
-               }
-
-               retVec->Scal(-1.0);
-        */
 
         if (D_c) {
           retVec->Axpy(1.0, *D_c);
@@ -481,7 +460,7 @@ namespace Ipopt
       deps[1] = GetRawPtr(CD_x0);
     }
     else {
-      deps[1] = &wr_d;
+      deps[1] = NULL;
     }
     std::vector<Number> scalar_deps(1);
     scalar_deps[0] = factor;
@@ -501,13 +480,6 @@ namespace Ipopt
       }
       retVec->AddTwoVectors(factor, wr_d, fact, *v, 0.);
 
-      /* DELE
-      retVec->Copy(wr_d);
-      retVec->Scal(factor);
-      if (IsValid(CD_x0)) {
-        retVec->Axpy(1., *CD_x0);
-      }
-      */
       d_x_plus_wr_d_cache_.AddCachedResult(retVec, deps, scalar_deps);
     }
     DBG_PRINT_VECTOR(2, "retVec", *retVec);
