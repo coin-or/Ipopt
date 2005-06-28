@@ -490,17 +490,19 @@ namespace Ipopt
     ReleasePointer_();
 
     if (rhs != NULL) {
-      const ReferencedObject* r_ptr =
-        dynamic_cast<const ReferencedObject*>(rhs);
+      rhs->AddRef(this);
+      ptr_ = rhs;
+//       const ReferencedObject* r_ptr =
+//         dynamic_cast<const ReferencedObject*>(rhs);
 
-      // All objects pointed to by a SmartPtr MUST
-      // inherit off of ReferencedObject
-      DBG_ASSERT(r_ptr && "This is not inherited from ReferencedObject");
+//       // All objects pointed to by a SmartPtr MUST
+//       // inherit off of ReferencedObject
+//       DBG_ASSERT(r_ptr && "This is not inherited from ReferencedObject");
 
-      if (r_ptr) {
-        r_ptr->AddRef(this);
-        ptr_ = rhs;
-      }
+//       if (r_ptr) {
+//         r_ptr->AddRef(this);
+//         ptr_ = rhs;
+//       }
     }
 
     return *this;
@@ -533,16 +535,23 @@ namespace Ipopt
       dbg_smartptr_verbosity);
 #endif
 
-    if (ptr_ != NULL) {
-      const ReferencedObject* r_ptr =
-        dynamic_cast<const ReferencedObject*>(ptr_);
-
-      r_ptr->ReleaseRef(this);
-      if (r_ptr->ReferenceCount() == 0) {
-        delete ptr_;
+    if (ptr_) {
+      ptr_->ReleaseRef(this);
+      if (ptr_->ReferenceCount() == 0) {
+	delete ptr_;
       }
       ptr_ = NULL;
     }
+//     if (ptr_ != NULL) {
+//       const ReferencedObject* r_ptr =
+//         dynamic_cast<const ReferencedObject*>(ptr_);
+
+//       r_ptr->ReleaseRef(this);
+//       if (r_ptr->ReferenceCount() == 0) {
+//         delete ptr_;
+//       }
+//       ptr_ = NULL;
+//     }
   }
 
 

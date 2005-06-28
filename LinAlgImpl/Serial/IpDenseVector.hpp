@@ -292,6 +292,22 @@ namespace Ipopt
     return values_;
   }
 
+  inline
+  Number* DenseVectorSpace::AllocateInternalStorage() const
+  {
+    if (Dim()>0) {
+      return new Number[Dim()];
+    }
+    else {
+      return NULL;
+    }
+  }
+
+  inline
+  void DenseVectorSpace::FreeInternalStorage(Number* values) const
+  {
+    delete [] values;
+  }
 
 } // namespace Ipopt
 #endif
