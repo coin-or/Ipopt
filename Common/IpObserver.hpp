@@ -213,6 +213,7 @@ namespace Ipopt
     attached_subject = std::find(subjects_.begin(), subjects_.end(), subject);
     DBG_ASSERT(attached_subject == subjects_.end());
 #endif
+
     DBG_ASSERT(subject);
 
     // add the subject to the list
@@ -305,6 +306,7 @@ namespace Ipopt
 
 
 #ifdef IP_DEBUG
+
     std::vector<Observer*>::iterator attached_observer;
     attached_observer = std::find(observers_.begin(), observers_.end(), observer);
     DBG_ASSERT(attached_observer == observers_.end());

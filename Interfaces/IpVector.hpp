@@ -309,22 +309,22 @@ namespace Ipopt
     mutable TaggedObject::Tag sumlogs_cache_tag_;
     mutable Number cached_sumlogs_;
 
-//     /** Cache for 2-norm */
-//     mutable CachedResults<Number> nrm2_cache_;
-//     /** Cache for Asum */
-//     mutable CachedResults<Number> asum_cache_;
-//     /** Cache for Amax */
-//     mutable CachedResults<Number> amax_cache_;
-//     /** Cache for Max */
-//     mutable CachedResults<Number> max_cache_;
-//     /** Cache for Min */
-//     mutable CachedResults<Number> min_cache_;
-//     /** Cache for Sum */
-//     mutable CachedResults<Number> sum_cache_;
-//     /** Cache for SumLogs */
-//     mutable CachedResults<Number> sumlogs_cache_;
-     /** Cache for FracToBound */
-     mutable CachedResults<Number> frac_to_bound_cache_;
+    //     /** Cache for 2-norm */
+    //     mutable CachedResults<Number> nrm2_cache_;
+    //     /** Cache for Asum */
+    //     mutable CachedResults<Number> asum_cache_;
+    //     /** Cache for Amax */
+    //     mutable CachedResults<Number> amax_cache_;
+    //     /** Cache for Max */
+    //     mutable CachedResults<Number> max_cache_;
+    //     /** Cache for Min */
+    //     mutable CachedResults<Number> min_cache_;
+    //     /** Cache for Sum */
+    //     mutable CachedResults<Number> sum_cache_;
+    //     /** Cache for SumLogs */
+    //     mutable CachedResults<Number> sumlogs_cache_;
+    /** Cache for FracToBound */
+    mutable CachedResults<Number> frac_to_bound_cache_;
     //@}
 
   };
