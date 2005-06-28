@@ -354,9 +354,11 @@ namespace Ipopt
     bool corrected = false;
     Number max_correction;
     SmartPtr<const Vector> new_z_L;
-    max_correction = correct_bound_multiplier(*IpData().trial()->z_L(),
-                     *IpCq().trial_slack_x_L(),
-                     new_z_L);
+    max_correction = correct_bound_multiplier(
+                       *IpData().trial()->z_L(),
+                       *IpCq().trial_slack_x_L(),
+                       *IpCq().trial_compl_x_L(),
+                       new_z_L);
     if (max_correction>0.) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "Some value in z_L becomes too large - maximal correction = %8.2e\n",
@@ -364,9 +366,11 @@ namespace Ipopt
       corrected = true;
     }
     SmartPtr<const Vector> new_z_U;
-    max_correction = correct_bound_multiplier(*IpData().trial()->z_U(),
-                     *IpCq().trial_slack_x_U(),
-                     new_z_U);
+    max_correction = correct_bound_multiplier(
+                       *IpData().trial()->z_U(),
+                       *IpCq().trial_slack_x_U(),
+                       *IpCq().trial_compl_x_U(),
+                       new_z_U);
     if (max_correction>0.) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "Some value in z_U becomes too large - maximal correction = %8.2e\n",
@@ -374,9 +378,11 @@ namespace Ipopt
       corrected = true;
     }
     SmartPtr<const Vector> new_v_L;
-    max_correction = correct_bound_multiplier(*IpData().trial()->v_L(),
-                     *IpCq().trial_slack_s_L(),
-                     new_v_L);
+    max_correction = correct_bound_multiplier(
+                       *IpData().trial()->v_L(),
+                       *IpCq().trial_slack_s_L(),
+                       *IpCq().trial_compl_s_L(),
+                       new_v_L);
     if (max_correction>0.) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "Some value in v_L becomes too large - maximal correction = %8.2e\n",
@@ -384,9 +390,11 @@ namespace Ipopt
       corrected = true;
     }
     SmartPtr<const Vector> new_v_U;
-    max_correction = correct_bound_multiplier(*IpData().trial()->v_U(),
-                     *IpCq().trial_slack_s_U(),
-                     new_v_U);
+    max_correction = correct_bound_multiplier(
+                       *IpData().trial()->v_U(),
+                       *IpCq().trial_slack_s_U(),
+                       *IpCq().trial_compl_s_U(),
+                       new_v_U);
     if (max_correction>0.) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "Some value in v_U becomes too large - maximal correction = %8.2e\n",
@@ -509,9 +517,11 @@ namespace Ipopt
 
   }
 
-  Number IpoptAlgorithm::correct_bound_multiplier(const Vector& trial_z,
-      const Vector& trial_slack,
-      SmartPtr<const Vector>& new_trial_z)
+  Number IpoptAlgorithm::correct_bound_multiplier(
+    const Vector& trial_z,
+    const Vector& trial_slack,
+    const Vector& trial_compl,
+    SmartPtr<const Vector>& new_trial_z)
   {
     DBG_START_METH("IpoptAlgorithm::CorrectBoundMultiplier",
                    dbg_verbosity);
@@ -534,6 +544,15 @@ namespace Ipopt
     }
     DBG_PRINT((1,"mu = %8.2e\n", mu));
     DBG_PRINT_VECTOR(2, "trial_z", trial_z);
+
+    // First check quickly if anything need to be corrected, using the
+    // trial complementarity directly.  Here, Amax is the same as Max
+    // (and we use Amax because that can be used later)
+    if (trial_compl.Amax() <= kappa_sigma_*mu &&
+        trial_compl.Min() >= 1./kappa_sigma_*mu) {
+      new_trial_z = &trial_z;
+      return 0.;
+    }
 
     SmartPtr<Vector> one_over_s = trial_z.MakeNew();
     one_over_s->Copy(trial_slack);
