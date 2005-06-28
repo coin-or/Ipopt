@@ -167,8 +167,9 @@ namespace Ipopt
     void SetIntegerValue(const std::string& tag, Index value);
     //@}
 
-    /** @name Method for retrieving values from the options list.  If
-     *  a tag is not found, the methods return false. */
+    /** @name Methods for retrieving values from the options list.  If
+     *  a tag is not found, the methods return false, and value is set
+     *  to the default value defined in the registered options. */
     //@{
     bool GetValue(const std::string& tag, std::string& value,
                   const std::string& prefix) const;

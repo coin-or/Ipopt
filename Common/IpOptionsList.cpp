@@ -187,7 +187,6 @@ namespace Ipopt
       }
       else {
 	value = option->DefaultString();
-	found = true;
       }
     }
 
@@ -232,7 +231,6 @@ namespace Ipopt
       }
       else {
 	value = option->DefaultStringAsEnum();
-	found = true;
       }
     }
 
@@ -304,7 +302,7 @@ namespace Ipopt
     }
     else if (IsValid(option)) {
       value = option->DefaultNumber();
-      return true;
+      return false;
     }
     return false;
   }
@@ -355,7 +353,7 @@ namespace Ipopt
     }
     else if (IsValid(option)) {
       value = option->DefaultInteger();
-      return true;
+      return false;
     }
 
     return false;
