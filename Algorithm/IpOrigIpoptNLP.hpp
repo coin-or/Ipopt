@@ -71,20 +71,17 @@ namespace Ipopt
     /** Equality constraint residual */
     virtual SmartPtr<const Vector> c(const Vector& x);
 
-    /** Jacobian Matrix for equality constraints
-     *  (current iteration) */
+    /** Jacobian Matrix for equality constraints */
     virtual SmartPtr<const Matrix> jac_c(const Vector& x);
 
     /** Inequality constraint residual (reformulated
      *  as equalities with slacks */
     virtual SmartPtr<const Vector> d(const Vector& x);
 
-    /** Jacobian Matrix for inequality constraints
-     *  (current iteration) */
+    /** Jacobian Matrix for inequality constraints*/
     virtual SmartPtr<const Matrix> jac_d(const Vector& x);
 
-    /** Hessian of the lagrangian
-     *  (current iteration) */
+    /** Hessian of the Lagrangian */
     virtual SmartPtr<const SymMatrix> h(const Vector& x,
                                         Number obj_factor,
                                         const Vector& yc,

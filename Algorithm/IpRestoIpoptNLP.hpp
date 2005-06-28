@@ -35,8 +35,7 @@ namespace Ipopt
     //@{
     RestoIpoptNLP(IpoptNLP& orig_ip_nlp,
                   IpoptData& orig_ip_data,
-                  IpoptCalculatedQuantities& orig_ip_cq,
-                  IpoptData& curr_ip_data);
+                  IpoptCalculatedQuantities& orig_ip_cq);
 
     /** Default destructor */
     ~RestoIpoptNLP();
@@ -67,34 +66,65 @@ namespace Ipopt
 
     /** Accessor methods for model data */
     //@{
+    /** Method for telling IpoptCalculatedQuantities that the
+     *  restoration phase objective function depends on the barrier
+     *  parameter */
+    virtual bool objective_depends_on_mu() const
+    {
+      return true;
+    }
+
+    /** Objective value (incorrect version for restoration phase) */
+    virtual Number f(const Vector& x)
+    {
+      DBG_ASSERT("ERROR: In RestoIpoptNLP f() is called without mu!");
+      return 0.;
+    }
+
     /** Objective value */
-    virtual Number f(const Vector& x);
+    virtual Number f(const Vector& x, Number mu);
+
+    /** Gradient of the objective (incorrect version for restoration phase) */
+    virtual SmartPtr<const Vector> grad_f(const Vector& x)
+    {
+      DBG_ASSERT("ERROR: In RestoIpoptNLP grad_f() is called without mu!");
+      return NULL;
+    }
 
     /** Gradient of the objective */
-    virtual SmartPtr<const Vector> grad_f(const Vector& x);
+    virtual SmartPtr<const Vector> grad_f(const Vector& x, Number mu);
 
     /** Equality constraint residual */
     virtual SmartPtr<const Vector> c(const Vector& x);
 
-    /** Jacobian Matrix for equality constraints
-     *  (current iteration) */
+    /** Jacobian Matrix for equality constraints */
     virtual SmartPtr<const Matrix> jac_c(const Vector& x);
 
     /** Inequality constraint residual (reformulated
      *  as equalities with slacks */
     virtual SmartPtr<const Vector> d(const Vector& x);
 
-    /** Jacobian Matrix for inequality constraints
-     *  (current iteration) */
+    /** Jacobian Matrix for inequality constraints */
     virtual SmartPtr<const Matrix> jac_d(const Vector& x);
 
-    /** Hessian of the lagrangian
-     *  (current iteration) */
+    /** Hessian of the Lagrangian (incorrect version for restoration
+     *  phase) */
     virtual SmartPtr<const SymMatrix> h(const Vector& x,
                                         Number obj_factor,
                                         const Vector& yc,
                                         const Vector& yd
-                                       );
+                                       )
+    {
+      DBG_ASSERT("ERROR: In RestoIpoptNLP h() is called without mu!");
+      return NULL;
+    }
+
+    /** Hessian of the Lagrangian */
+    virtual SmartPtr<const SymMatrix> h(const Vector& x,
+                                        Number obj_factor,
+                                        const Vector& yc,
+                                        const Vector& yd,
+                                        Number mu);
 
     /** Lower bounds on x */
     virtual SmartPtr<const Vector> x_L()
@@ -236,9 +266,6 @@ namespace Ipopt
     SmartPtr<IpoptCalculatedQuantities> orig_ip_cq_;
     //@}
 
-    /** Pointer to the current IpoptData (to get the value for mu) */
-    SmartPtr<IpoptData> ip_data_;
-
     /** Necessary Vector/Matrix spaces */
     //@{
     SmartPtr<CompoundVectorSpace> x_space_;
@@ -313,8 +340,8 @@ namespace Ipopt
     SmartPtr<Vector> x_ref_;
     //@}
 
-    /** Method to calculate eta, the factor for the restoration term */
-    Number Eta() const;
+    /** Method to calculate eta, the factor for the regularization term */
+    Number Eta(Number mu) const;
 
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).

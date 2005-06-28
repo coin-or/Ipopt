@@ -41,10 +41,38 @@ namespace Ipopt
 
   void IpoptData::RegisterOptions(SmartPtr<RegisteredOptions> reg_options)
   {
-    reg_options->AddLowerBoundedNumberOption("tol", "tolerance (ToDo: better description)", 0.0, true,  1e-8);
-    reg_options->AddLowerBoundedNumberOption("dual_inf_tol", "tolerance on the dual infeasibility (ToDo: better description)", 0.0, true, 1e-2);
-    reg_options->AddLowerBoundedNumberOption("primal_inf_tol", "tolerance on the primal infeasibility (ToDo: better description)", 0.0, true, 1e-2);
-    reg_options->AddLowerBoundedNumberOption("compl_inf_tol", "tolerance on the complementarity (ToDo: better description)", 0.0, true, 1e-2);
+    reg_options->AddLowerBoundedNumberOption(
+      "tol",
+      "Convergence tolerance (relative).",
+      0.0, true,  1e-8,
+      "Determines the convergence tolerance for the algorthim.  The "
+      "algorithm terminates successfully, if the (scaled) NLP error "
+      "becomes smaller than this value, and if the (absolute) criteria "
+      "according to \"dual_inf_tol\", \"primal_inf_tol\", and "
+      "\"cmpl_inf_tol\" are met.  (This is epsilon_tol in Eqn. (6) in "
+      "implementation paper).  [Some other algorithmic features also use "
+      "this quantity.]");
+    reg_options->AddLowerBoundedNumberOption(
+      "dual_inf_tol",
+      "Acceptance threshold for the unscaled dual infeasibility.",
+      0.0, true, 1e-2,
+      "Absolute tolerance on the dual infesaibility.  Successful termination "
+      "requires that the (unscaled) dual infeasibility is less than this "
+      "threshold.");
+    reg_options->AddLowerBoundedNumberOption(
+      "primal_inf_tol",
+      "Acceptance threshold for the unscaled primal infeasibility.",
+      0.0, true, 1e-2,
+      "Absolute tolerance on the dual infesaibility.  Successful termination "
+      "requires that the (unscaled) primal infeasibility is less than this "
+      "threshold.");
+    reg_options->AddLowerBoundedNumberOption(
+      "compl_inf_tol",
+      "Acceptance threshold for the complementarity conditions.",
+      0.0, true, 1e-2,
+      "Absolute tolerance on the complementarity.  Successful termination "
+      "requires that the (unscaled) complementarity is less than this "
+      "threshold.");
   }
 
   bool IpoptData::Initialize(const Journalist& jnlst,

@@ -15,9 +15,6 @@
 
 #include <limits>
 
-// ToDo remove the following dependency
-#include "IpRestoIpoptNLP.hpp"
-
 namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
@@ -134,13 +131,36 @@ namespace Ipopt
 
   void IpoptCalculatedQuantities::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("s_max", "???", 0.0, true, 100.0);
-    roptions->AddLowerBoundedNumberOption("kappa_d", "???", 0.0, false, 1e-5);
-    roptions->AddLowerBoundedNumberOption("s_move", "???", 0.0, false,  pow(std::numeric_limits<double>::epsilon(), 0.75) );
-    roptions->AddStringOption3("constraint_violation_norm_type", "norm to be used for the constraint violation", "1-norm",
-                               "1-norm", "use the 1-norm (abs sum)",
-                               "2-norm", "use the 2-norm sqrt(sum of squares)",
-                               "max-norm", "use the infinity norm (max)");
+    roptions->AddLowerBoundedNumberOption(
+      "s_max",
+      "Scaling threshold for the NLP error.",
+      0.0, true, 100.0,
+      "(see paragraph after Eqn. (6) in the implementation paper)");
+    roptions->AddLowerBoundedNumberOption(
+      "kappa_d",
+      "Weight for linear damping term (to handle one-sided bounds).",
+      0.0, false, 1e-5,
+      "(see Section 3.7 in implementation paper)");
+    roptions->AddLowerBoundedNumberOption(
+      "slack_move",
+      "Correction size for very small slacks.",
+      0.0, false,
+      pow(std::numeric_limits<double>::epsilon(), 0.75),
+      "Due to numercal issues or lack of interior, the slack variables might "
+      "become very small.  If a slack becomes very small compared to machine "
+      "precision, the corresponding bound is moved a little.  This parameter "
+      "determines how large the perturbation should be.  Its default value is "
+      "mach_eps^{3/4}.  (See also end of Section 3.5 in implementation paper "
+      "- but actual implementation might be somewhat different.)");
+    roptions->AddStringOption3(
+      "constraint_violation_norm_type",
+      "Norm to be used for the constraint violation",
+      "1-norm",
+      "1-norm", "use the 1-norm",
+      "2-norm", "use the 2-norm",
+      "max-norm", "use the infinity norm",
+      "Determines which norm should be used when the algorithm computes the "
+      "constraint violation, for example for the line search.");
   }
 
   bool IpoptCalculatedQuantities::Initialize(const Journalist& jnlst,
@@ -152,7 +172,7 @@ namespace Ipopt
 
     options.GetNumericValue("s_max", s_max_, prefix);
     options.GetNumericValue("kappa_d", kappa_d_, prefix);
-    options.GetNumericValue("s_move", s_move_, prefix);
+    options.GetNumericValue("slack_move", slack_move_, prefix);
     options.GetEnumValue("constraint_violation_norm_type", enum_int, prefix);
     constr_viol_normtype_ = ENormType(enum_int);
 
@@ -425,7 +445,7 @@ namespace Ipopt
         t_max->ElementWiseMax(*abs_bound);
         DBG_PRINT_VECTOR(2, "t_max1", *t_max);
         DBG_PRINT_VECTOR(2, "slack", *slack);
-        t_max->AddOneVector(1.0, *slack, s_move_);
+        t_max->AddOneVector(1.0, *slack, slack_move_);
         DBG_PRINT_VECTOR(2, "t_max2", *t_max);
 
         t->ElementWiseMin(*t_max);
@@ -477,13 +497,11 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2,"curr_x",*x);
     DBG_PRINT((1, "curr_x tag = %d\n", x->GetTag()));
 
-    // ToDo: For now we make the value dependent on curr_mu during the
-    // restoration phase (because Eta in the restoration phase
-    // objective depends on it).  Need more elegant solution later.
+    bool objective_depends_on_mu = ip_nlp_->objective_depends_on_mu();
     std::vector<const TaggedObject*> tdeps(1);
     tdeps[0] = GetRawPtr(x);
     std::vector<Number> sdeps(1);
-    if (in_restoration_phase()) {
+    if (objective_depends_on_mu) {
       sdeps[0] = ip_data_->curr_mu();
     }
     else {
@@ -493,7 +511,12 @@ namespace Ipopt
     if (!curr_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
       if (!trial_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
         DBG_PRINT((2,"evaluate curr f\n"));
-        result = ip_nlp_->f(*x);
+        if (objective_depends_on_mu) {
+          result = ip_nlp_->f(*x, ip_data_->curr_mu());
+        }
+        else {
+          result = ip_nlp_->f(*x);
+        }
       }
       curr_f_cache_.AddCachedResult(result, tdeps, sdeps);
     }
@@ -511,13 +534,11 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2,"trial_x",*x);
     DBG_PRINT((1, "trial_x tag = %d\n", x->GetTag()));
 
-    // ToDo: For now we make the value dependent on curr_mu during the
-    // restoration phase (because Eta in the restoration phase
-    // objective depends on it).  Need more elegant solution later.
+    bool objective_depends_on_mu = ip_nlp_->objective_depends_on_mu();
     std::vector<const TaggedObject*> tdeps(1);
     tdeps[0] = GetRawPtr(x);
     std::vector<Number> sdeps(1);
-    if (in_restoration_phase()) {
+    if (objective_depends_on_mu) {
       sdeps[0] = ip_data_->curr_mu();
     }
     else {
@@ -527,7 +548,12 @@ namespace Ipopt
     if (!trial_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
       if (!curr_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
         DBG_PRINT((2,"evaluate trial f\n"));
-        result = ip_nlp_->f(*x);
+        if (objective_depends_on_mu) {
+          result = ip_nlp_->f(*x, ip_data_->curr_mu());
+        }
+        else {
+          result = ip_nlp_->f(*x);
+        }
       }
       trial_f_cache_.AddCachedResult(result, tdeps, sdeps);
     }
@@ -543,13 +569,11 @@ namespace Ipopt
     SmartPtr<const Vector> result;
     SmartPtr<const Vector> x = ip_data_->curr()->x();
 
-    // ToDo: For now we make the value dependent on curr_mu during the
-    // restoration phase (because Eta in the restoration phase
-    // objective depends on it).  Need more elegant solution later.
+    bool objective_depends_on_mu = ip_nlp_->objective_depends_on_mu();
     std::vector<const TaggedObject*> tdeps(1);
     tdeps[0] = GetRawPtr(x);
     std::vector<Number> sdeps(1);
-    if (in_restoration_phase()) {
+    if (objective_depends_on_mu) {
       sdeps[0] = ip_data_->curr_mu();
     }
     else {
@@ -558,7 +582,12 @@ namespace Ipopt
 
     if (!curr_grad_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
       if (!trial_grad_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
-        result = ip_nlp_->grad_f(*x);
+        if (objective_depends_on_mu) {
+          result = ip_nlp_->grad_f(*x, ip_data_->curr_mu());
+        }
+        else {
+          result = ip_nlp_->grad_f(*x);
+        }
       }
       curr_grad_f_cache_.AddCachedResult(result, tdeps, sdeps);
     }
@@ -573,13 +602,11 @@ namespace Ipopt
     SmartPtr<const Vector> result;
     SmartPtr<const Vector> x = ip_data_->trial()->x();
 
-    // ToDo: For now we make the value dependent on curr_mu during the
-    // restoration phase (because Eta in the restoration phase
-    // objective depends on it).  Need more elegant solution later.
+    bool objective_depends_on_mu = ip_nlp_->objective_depends_on_mu();
     std::vector<const TaggedObject*> tdeps(1);
     tdeps[0] = GetRawPtr(x);
     std::vector<Number> sdeps(1);
-    if (in_restoration_phase()) {
+    if (objective_depends_on_mu) {
       sdeps[0] = ip_data_->curr_mu();
     }
     else {
@@ -588,7 +615,12 @@ namespace Ipopt
 
     if (!trial_grad_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
       if (!curr_grad_f_cache_.GetCachedResult(result, tdeps, sdeps)) {
-        result = ip_nlp_->grad_f(*x);
+        if (objective_depends_on_mu) {
+          result = ip_nlp_->grad_f(*x, ip_data_->curr_mu());
+        }
+        else {
+          result = ip_nlp_->grad_f(*x);
+        }
       }
       trial_grad_f_cache_.AddCachedResult(result, tdeps, sdeps);
     }
@@ -1315,15 +1347,13 @@ namespace Ipopt
     SmartPtr<const Vector> y_c = ip_data_->curr()->y_c();
     SmartPtr<const Vector> y_d = ip_data_->curr()->y_d();
 
-    // ToDo: For now we make the value dependent on curr_mu during the
-    // restoration phase (because Eta in the restoration phase
-    // objective depends on it).  Need more elegant solution later.
+    bool objective_depends_on_mu = ip_nlp_->objective_depends_on_mu();
     std::vector<const TaggedObject*> tdeps(3);
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(y_c);
     tdeps[2] = GetRawPtr(y_d);
     std::vector<Number> sdeps(1);
-    if (in_restoration_phase()) {
+    if (objective_depends_on_mu) {
       sdeps[0] = ip_data_->curr_mu();
     }
     else {
@@ -1331,7 +1361,12 @@ namespace Ipopt
     }
 
     if (!curr_exact_hessian_cache_.GetCachedResult(result, tdeps, sdeps)) {
-      result = ip_nlp_->h(*x, 1.0, *y_c, *y_d);
+      if (objective_depends_on_mu) {
+        result = ip_nlp_->h(*x, 1.0, *y_c, *y_d, ip_data_->curr_mu());
+      }
+      else {
+        result = ip_nlp_->h(*x, 1.0, *y_c, *y_d);
+      }
       curr_exact_hessian_cache_.AddCachedResult(result, tdeps, sdeps);
     }
 
@@ -1352,7 +1387,14 @@ namespace Ipopt
     Tmp_c().Set(0.);
     Tmp_d().Set(0.);
 
-    SmartPtr<const SymMatrix> h = ip_nlp_->h(*x, 0.0, Tmp_c(), Tmp_d());
+    SmartPtr<const SymMatrix> h ;
+    bool objective_depends_on_mu = ip_nlp_->objective_depends_on_mu();
+    if (objective_depends_on_mu) {
+      h = ip_nlp_->h(*x, 0.0, Tmp_c(), Tmp_d(), 0.);
+    }
+    else {
+      h = ip_nlp_->h(*x, 0.0, Tmp_c(), Tmp_d());
+    }
 
     DBG_PRINT_MATRIX(2, "zero_hessian", *h);
 
@@ -2944,13 +2986,6 @@ namespace Ipopt
       curr_gradBarrTDelta_cache_.AddCachedResult(result, tdeps);
     }
     return result;
-  }
-
-  // ToDo we probably want to get rid of this:
-  bool IpoptCalculatedQuantities::in_restoration_phase()
-  {
-    const RestoIpoptNLP* resto_nlp = dynamic_cast<const RestoIpoptNLP*>(GetRawPtr(ip_nlp_));
-    return (resto_nlp!=NULL);
   }
 
   Vector& IpoptCalculatedQuantities::Tmp_x()

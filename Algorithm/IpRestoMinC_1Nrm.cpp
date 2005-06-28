@@ -73,10 +73,10 @@ namespace Ipopt
 
     // Create the restoration phase NLP etc objects
     SmartPtr<IpoptData> resto_ip_data = new IpoptData();
-    SmartPtr<IpoptNLP> resto_ip_nlp
-    = new RestoIpoptNLP(IpNLP(), IpData(), IpCq(), *resto_ip_data);
-    SmartPtr<IpoptCalculatedQuantities> resto_ip_cq
-    = new IpoptCalculatedQuantities(resto_ip_nlp, resto_ip_data);
+    SmartPtr<IpoptNLP> resto_ip_nlp =
+      new RestoIpoptNLP(IpNLP(), IpData(), IpCq());
+    SmartPtr<IpoptCalculatedQuantities> resto_ip_cq =
+      new IpoptCalculatedQuantities(resto_ip_nlp, resto_ip_data);
 
     // Decide if we want to use the original option or want to make
     // some changes
