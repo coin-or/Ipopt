@@ -47,8 +47,11 @@ namespace Ipopt
 
   void IpoptAlgorithm::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("kappa_sigma", "???",
-                                          1.0, false, 1e10);
+    roptions->AddLowerBoundedNumberOption(
+      "kappa_sigma",
+      "Factor limiting deviation of dual variables from primal estimates.",
+      1.0, false, 1e10,
+      "(see Eqn. (16) in the implementation paper.)");
   }
 
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,

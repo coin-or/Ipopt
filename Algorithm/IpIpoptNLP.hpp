@@ -81,20 +81,17 @@ namespace Ipopt
     /** Equality constraint residual */
     virtual SmartPtr<const Vector> c(const Vector& x) = 0;
 
-    /** Jacobian Matrix for equality constraints
-     *  (current iteration) */
+    /** Jacobian Matrix for equality constraints */
     virtual SmartPtr<const Matrix> jac_c(const Vector& x) = 0;
 
     /** Inequality constraint residual (reformulated
      *  as equalities with slacks */
     virtual SmartPtr<const Vector> d(const Vector& x) = 0;
 
-    /** Jacobian Matrix for inequality constraints
-     *  (current iteration) */
+    /** Jacobian Matrix for inequality constraints */
     virtual SmartPtr<const Matrix> jac_d(const Vector& x) = 0;
 
-    /** Hessian of the lagrangian
-     *  (current iteration) */
+    /** Hessian of the Lagrangian */
     virtual SmartPtr<const SymMatrix> h(const Vector& x,
                                         Number obj_factor,
                                         const Vector& yc,
@@ -160,9 +157,49 @@ namespace Ipopt
     virtual Index h_evals() const = 0;
     //@}
 
+    /** @name Special method for dealing with the fact that the
+     *  restoration phase objective function depends on the barrier
+     *  parameter */
+    //@{
+    /** Method for telling the IpoptCalculatedQuantities class whether
+     *  the objective function depends on the barrier function.  This
+     *  is only used for the restoration phase NLP
+     *  formulation. Probably only RestoIpoptNLP should overwrite
+     *  this. */
+    virtual bool objective_depends_on_mu() const
+    {
+      return false;
+    }
+    /** Replacement for the default objective function method which
+     *  knows about the barrier parameter */
+    virtual Number f(const Vector& x, Number mu)
+    {
+      DBG_ASSERT("ERROR: This method is only a placeholder for f(mu) and should not be called");
+      return 0.;
+    }
+    /** Replacement for the default objective gradient method which
+     *  knows about the barrier parameter  */
+    virtual SmartPtr<const Vector> grad_f(const Vector& x, Number mu)
+    {
+      DBG_ASSERT("ERROR: This method is only a placeholder for grad_f(mu) and should not be called");
+      return NULL;
+    }
+    /** Replacement for the default Lagrangian Hessian method which
+     *  knows about the barrier parameter */
+    virtual SmartPtr<const SymMatrix> h(const Vector& x,
+                                        Number obj_factor,
+                                        const Vector& yc,
+                                        const Vector& yd,
+                                        Number mu)
+    {
+      DBG_ASSERT("ERROR: This method is only a for h(mu) and should not be called");
+      return NULL;
+    }
+    //@}
+
   protected:
     /** Returns the scaling strategy object - may be NULL */
-    SmartPtr<NLPScalingObject> NLP_scaling()
+    SmartPtr<NLPScalingObject> NLP_scaling() const
     {
       DBG_ASSERT(IsValid(nlp_scaling_));
       return nlp_scaling_;

@@ -379,7 +379,7 @@ namespace Ipopt
      *  barrier objective funciton. */
     Number kappa_d_;
     /** fractional movement allowed in bounds */
-    Number s_move_;
+    Number slack_move_;
     /** Norm type to be used when calculating the constraint violation */
     ENormType constr_viol_normtype_;
     //@}

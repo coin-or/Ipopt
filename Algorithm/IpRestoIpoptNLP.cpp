@@ -24,14 +24,12 @@ namespace Ipopt
 
   RestoIpoptNLP::RestoIpoptNLP(IpoptNLP& orig_ip_nlp,
                                IpoptData& orig_ip_data,
-                               IpoptCalculatedQuantities& orig_ip_cq,
-                               IpoptData& curr_ip_data)
+                               IpoptCalculatedQuantities& orig_ip_cq)
       :
       IpoptNLP(new NoNLPScalingObject()),
       orig_ip_nlp_(&orig_ip_nlp),
       orig_ip_data_(&orig_ip_data),
       orig_ip_cq_(&orig_ip_cq),
-      ip_data_(&curr_ip_data),
       eta_factor_(1.0),
       eta_mu_exponent_(0.5),
       rho_(1000.)
@@ -390,7 +388,7 @@ namespace Ipopt
     return true;
   }
 
-  Number RestoIpoptNLP::f(const Vector& x)
+  Number RestoIpoptNLP::f(const Vector& x, Number mu)
   {
     DBG_START_METH("RestoIpoptNLP::f",
                    dbg_verbosity);
@@ -410,14 +408,14 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2,"x_ref",*x_ref_);
     x_diff->ElementWiseMultiply(*dr_x_);
     Number ret2 = x_diff->Nrm2();
-    DBG_PRINT((1,"Eta = %e\n",Eta()));
-    ret2 = Eta()/2.0*ret2*ret2;
+    DBG_PRINT((1,"Eta = %e\n",Eta(mu)));
+    ret2 = Eta(mu)/2.0*ret2*ret2;
 
     ret += ret2;
     return ret;
   }
 
-  SmartPtr<const Vector> RestoIpoptNLP::grad_f(const Vector& x)
+  SmartPtr<const Vector> RestoIpoptNLP::grad_f(const Vector& x, Number mu)
   {
     SmartPtr<Vector> retPtr = x.MakeNew();
     // Scale the p's and n's by rho (Scale all, take out the x part later)
@@ -432,7 +430,7 @@ namespace Ipopt
     x_only->Copy(*x_only_in);
     x_only->Axpy(-1.0, *x_ref_);
     x_only->ElementWiseMultiply(*dr_x_);
-    x_only->Scal(Eta());
+    x_only->Scal(Eta(mu));
 
     return ConstPtr(retPtr);
   }
@@ -561,7 +559,8 @@ namespace Ipopt
   SmartPtr<const SymMatrix> RestoIpoptNLP::h(const Vector& x,
       Number obj_factor,
       const Vector& yc,
-      const Vector& yd)
+      const Vector& yd,
+      Number mu)
   {
     // Here, we use a SumSymMatrix for the (0,0) block of the
     // Hessian. We need to set this to the hessian of the restoration
@@ -588,7 +587,7 @@ namespace Ipopt
     SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0,0);
     SmartPtr<SumSymMatrix> h_sum = dynamic_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
     h_sum->SetTerm(0, 1.0, *h_con_orig);
-    h_sum->SetTerm(1, obj_factor*Eta(), *DR_x_);
+    h_sum->SetTerm(1, obj_factor*Eta(mu), *DR_x_);
 
     return GetRawPtr(retPtr);
   }
@@ -624,9 +623,9 @@ namespace Ipopt
     Hess_lagrangian_space = GetRawPtr(h_space_);
   }
 
-  Number RestoIpoptNLP::Eta() const
+  Number RestoIpoptNLP::Eta(Number mu) const
   {
-    return eta_factor_ * pow(ip_data_->curr_mu(), eta_mu_exponent_);
+    return eta_factor_ * pow(mu, eta_mu_exponent_);
   }
 
   void RestoIpoptNLP::AdjustVariableBounds(const Vector& new_x_L, const Vector& new_x_U,
