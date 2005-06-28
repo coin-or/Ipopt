@@ -43,28 +43,57 @@ namespace Ipopt
 
   void IpoptApplication::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddBoundedIntegerOption("print_level", "Sets the print level for the console output", 0, J_LAST_LEVEL-1, J_SUMMARY);
+    roptions->AddBoundedIntegerOption(
+      "print_level",
+      "Output verbosity level.",
+      0, J_LAST_LEVEL-1, J_SUMMARY,
+      "Sets the default verbosity level, in particular to screen.  The "
+      "larger this value the more detailed is the output.");
+
 #if IP_DEBUG
 
-    roptions->AddBoundedIntegerOption("debug_print_level", "sets the print level for the debug file", 0, J_LAST_LEVEL-1, J_SUMMARY);
+    roptions->AddBoundedIntegerOption(
+      "debug_print_level",
+      "Verbosity level for debug file.",
+      0, J_LAST_LEVEL-1, J_SUMMARY,
+      "This Ipopt library has been compiled in debug mode, and a file "
+      "\"debug.out\" is produced for every run.  This option determines "
+      "the verbosity level for this file.  By default it is the same as "
+      "\"print_level\".");
 #endif
 
-    roptions->AddStringOption1("output_file", "file name of an output file (leave unset for no file output)", "",
-                               "*", "Any acceptable standard file name");
-    roptions->AddBoundedIntegerOption("file_print_level", "sets the print level for the output file", 0, J_LAST_LEVEL-1, J_SUMMARY);
-    roptions->AddStringOption2("print_options_documentation", "list all algorithmic options", "no",
-                               "no", "don't print list",
-                               "yes", "print list");
+    roptions->AddStringOption1(
+      "output_file",
+      "File name of an output file (leave unset for no file output)",
+      "",
+      "*", "Any acceptable standard file name",
+      "An output file with this name will be written (leave unset for no "
+      "file output).  The verbosity level is either \"print_level\", or "
+      "\"file_print_level\" if that is given.");
+    roptions->AddBoundedIntegerOption(
+      "file_print_level",
+      "Verbosity level output file.",
+      0, J_LAST_LEVEL-1, J_SUMMARY,
+      "Determines the verbosity level for the file specified by "
+      "\"output_file\".  By defauly it is the same as \"print_level\".");
+    roptions->AddStringOption2(
+      "print_options_documentation",
+      "Switch to print list all algorithmic options",
+      "no",
+      "no", "don't print list",
+      "yes", "print list",
+      "If selected, the algorithm will print the list of all available "
+      "algorithmic options with some documentation before solving the "
+      "optimization problem.");
 
     roptions->AddStringOption2(
       "scaling_method",
-      "select the technique used for scaling the NLP", "none",
+      "Select the technique used for scaling the NLP", "none",
       "none", "no problem scaling will be performed",
       "user-scaling", "scaling parameters will come from the user",
       "Selects the technique used for scaling the problem before it is solved."
-      " For user-scaling, the parameters come from the NLP. If you are using AMPL,"
-      " they can be specified through suffixes (scaling_factor)");
-
+      " For user-scaling, the parameters come from the NLP. If you are using "
+      "AMPL, they can be specified through suffixes (scaling_factor)");
   }
 
   ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp)
@@ -144,10 +173,19 @@ namespace Ipopt
       stdout_jrnl->SetAllPrintLevels(print_level);
       stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
 
+      bool option_set;
+
 #ifdef IP_DEBUG
       // Set printlevel for debug
-      options_->GetIntegerValue("debug_print_level", ivalue, "");
-      EJournalLevel debug_print_level = (EJournalLevel)ivalue;
+      option_set = options_->GetIntegerValue("debug_print_level",
+                                             ivalue, "");
+      EJournalLevel debug_print_level;
+      if (option_set) {
+        debug_print_level = (EJournalLevel)ivalue;
+      }
+      else {
+        debug_print_level = print_level;
+      }
       dbg_jrnl->SetAllPrintLevels(debug_print_level);
       dbg_jrnl->SetPrintLevel(J_DBG, J_ALL);
 #endif
@@ -157,8 +195,13 @@ namespace Ipopt
       options_->GetValue("output_file", output_filename, "");
       if (output_filename != "") {
         EJournalLevel file_print_level;
-        options_->GetIntegerValue("file_print_level", ivalue, "");
-        file_print_level = (EJournalLevel)ivalue;
+        option_set = options_->GetIntegerValue("file_print_level", ivalue, "");
+        if (option_set) {
+          file_print_level = (EJournalLevel)ivalue;
+        }
+        else {
+          file_print_level = print_level;
+        }
         Journal* file_jrnl = jnlst_->AddJournal("OutputFile", output_filename.c_str(), file_print_level);
         file_jrnl->SetPrintLevel(J_DBG, J_NONE);
       }
