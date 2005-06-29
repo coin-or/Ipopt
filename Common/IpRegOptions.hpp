@@ -44,7 +44,8 @@ namespace Ipopt
         :
         type_(OT_Unknown),
         has_lower_(false),
-        has_upper_(false)
+        has_upper_(false),
+        counter_(0)
     {}
 
     RegisteredOption(const std::string& name,
