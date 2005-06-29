@@ -159,6 +159,9 @@ namespace Ipopt
      *  \max\{\bar\alpha\in(0,1] : x + \bar\alpha \Delta \geq (1-\tau)x\}\f$
      */
     Number FracToBound(const Vector& delta, Number tau) const;
+    /** Add the quotient of two vectors, y = a * z/s + c * y. */
+    void AddVectorQuotient(Number a, const Vector& z, const Vector& s,
+                           Number c);
     //@}
 
     /** @name Accessor methods */
@@ -255,6 +258,10 @@ namespace Ipopt
 
     /** Fraction to boundary parameter. */
     virtual Number FracToBoundImpl(const Vector& delta, Number tau) const;
+
+    /** Add the quotient of two vectors */
+    virtual void AddVectorQuotientImpl(Number a, const Vector& z,
+                                       const Vector& s, Number c);
 
     /** Print the entire vector */
     virtual void PrintImpl(FILE* fp, std::string name = "Vector",
@@ -620,6 +627,14 @@ namespace Ipopt
       frac_to_bound_cache_.AddCachedResult(retValue, tdeps, sdeps);
     }
     return retValue;
+  }
+
+  inline
+  void Vector::AddVectorQuotient(Number a, const Vector& z,
+                                 const Vector& s, Number c)
+  {
+    AddVectorQuotientImpl(a, z, s, c);
+    ObjectChanged();
   }
 
   inline

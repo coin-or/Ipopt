@@ -85,4 +85,22 @@ namespace Ipopt
     return alpha;
   }
 
+  void Vector::AddVectorQuotientImpl(Number a, const Vector& z,
+                                     const Vector& s, Number c)
+  {
+    DBG_ASSERT(Dim() == z.Dim());
+    DBG_ASSERT(Dim() == s.Dim());
+
+    if (c==0.) {
+      AddOneVector(a, z, 0.);
+      ElementWiseDivide(s);
+    }
+    else {
+      SmartPtr<Vector> tmp = MakeNew();
+      tmp->Copy(z);
+      tmp->ElementWiseDivide(s);
+      AddOneVector(a, *tmp, c);
+    }
+  }
+
 } // namespace Ipopt

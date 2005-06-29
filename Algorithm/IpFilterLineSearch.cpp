@@ -1544,6 +1544,8 @@ namespace Ipopt
     if (tiny_step_tol_==0.)
       return false;
 
+    // ToDo try to find more efficient implementation
+
     SmartPtr<Vector> tmp = IpData().curr()->x()->MakeNew();
     tmp->Copy(*IpData().curr()->x());
     tmp->ElementWiseAbs();
