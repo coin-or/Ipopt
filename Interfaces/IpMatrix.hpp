@@ -121,7 +121,7 @@ namespace Ipopt
                                Vector& X) const;
 
     /** X = S^{-1} (r + alpha*Z*M^Td).   Should be implemented
-     *  efficiently for the ExansionMatrix.
+     *  efficiently for the ExpansionMatrix.
      */
     virtual void SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
                                     const Vector& R, const Vector& Z,
