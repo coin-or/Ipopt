@@ -52,8 +52,7 @@ namespace Ipopt
                              Vector& X) const
   {
     SmartPtr<Vector> tmp = S.MakeNew();
-    tmp->Copy(Z);
-    tmp->ElementWiseDivide(S);
+    tmp->AddVectorQuotient(1., Z, S, 0.);
     MultVector(alpha, *tmp, 1., X);
   }
 

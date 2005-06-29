@@ -173,6 +173,9 @@ namespace Ipopt
                            Number b, const Vector& v2, Number c);
     /** Fraction to the boundary parameter. */
     Number FracToBoundImpl(const Vector& delta, Number tau) const;
+    /** Add the quotient of two vectors, y = a * z/s + c * y. */
+    void AddVectorQuotientImpl(Number a, const Vector& z, const Vector& s,
+                               Number c);
     //@}
 
     /** @name Output methods */

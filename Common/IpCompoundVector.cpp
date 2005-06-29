@@ -342,6 +342,25 @@ namespace Ipopt
     return alpha;
   }
 
+  void CompoundVector::AddVectorQuotientImpl(Number a, const Vector& z,
+      const Vector& s, Number c)
+  {
+    DBG_ASSERT(vectors_valid_);
+    const CompoundVector* comp_z =
+      dynamic_cast<const CompoundVector*>(&z);
+    DBG_ASSERT(comp_z);
+    DBG_ASSERT(NComps() == comp_z->NComps());
+    const CompoundVector* comp_s =
+      dynamic_cast<const CompoundVector*>(&s);
+    DBG_ASSERT(comp_s);
+    DBG_ASSERT(NComps() == comp_s->NComps());
+
+    for(Index i=0; i<NComps(); i++) {
+      Comp(i)->AddVectorQuotient(a, *comp_z->GetComp(i),
+                                 *comp_s->GetComp(i), c);
+    }
+  }
+
   void CompoundVector::PrintImpl(FILE* fp, std::string name, Index indent, std::string prefix) const
   {
     DBG_START_METH("CompoundVector::PrintImpl", dbg_verbosity);

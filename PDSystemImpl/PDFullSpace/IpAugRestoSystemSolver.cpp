@@ -337,13 +337,21 @@ namespace Ipopt
         DBG_PRINT((2,"Not found in cache\n"));
         retVec = any_vec_in_c.MakeNew();
         if (IsValid(sigma_n_c)) {
-          retVec->Copy(*sigma_n_c);
-          retVec->AddScalar(delta_x);
+          if (delta_x != 0.) {
+            retVec->Copy(*sigma_n_c);
+            retVec->AddScalar(delta_x);
+            retVec->ElementWiseReciprocal();
+          }
+          else {
+            // Given a "homogenous vector" implementation (such as in
+            // DenseVector) the following should be more efficient
+            retVec->Set(1.);
+            retVec->ElementWiseDivide(*sigma_n_c);
+          }
         }
         else {
-          retVec->Set(delta_x);
+          retVec->Set(1./delta_x);
         }
-        retVec->ElementWiseReciprocal();
 
         sigma_tilde_n_c_inv_cache_.AddCachedResult(retVec, deps, scalar_deps);
       }
@@ -368,13 +376,19 @@ namespace Ipopt
         DBG_PRINT((2,"Not found in cache\n"));
         retVec = any_vec_in_c.MakeNew();
         if (IsValid(sigma_p_c)) {
-          retVec->Copy(*sigma_p_c);
-          retVec->AddScalar(delta_x);
+          if (delta_x != 0.) {
+            retVec->Copy(*sigma_p_c);
+            retVec->AddScalar(delta_x);
+            retVec->ElementWiseReciprocal();
+          }
+          else {
+            retVec->Set(1.);
+            retVec->ElementWiseDivide(*sigma_p_c);
+          }
         }
         else {
-          retVec->Set(delta_x);
+          retVec->Set(1./delta_x);
         }
-        retVec->ElementWiseReciprocal();
 
         sigma_tilde_p_c_inv_cache_.AddCachedResult(retVec, deps, scalar_deps);
       }
@@ -399,13 +413,19 @@ namespace Ipopt
         DBG_PRINT((2,"Not found in cache\n"));
         retVec = any_vec_in_n_d.MakeNew();
         if (IsValid(sigma_n_d)) {
-          retVec->Copy(*sigma_n_d);
-          retVec->AddScalar(delta_x);
+          if (delta_x != 0.) {
+            retVec->Copy(*sigma_n_d);
+            retVec->AddScalar(delta_x);
+            retVec->ElementWiseReciprocal();
+          }
+          else {
+            retVec->Set(1.);
+            retVec->ElementWiseDivide(*sigma_n_d);
+          }
         }
         else {
-          retVec->Set(delta_x);
+          retVec->Set(1./delta_x);
         }
-        retVec->ElementWiseReciprocal();
 
         sigma_tilde_n_d_inv_cache_.AddCachedResult(retVec, deps, scalar_deps);
       }
@@ -431,13 +451,19 @@ namespace Ipopt
         retVec = any_vec_in_p_d.MakeNew();
 
         if (IsValid(sigma_p_d)) {
-          retVec->Copy(*sigma_p_d);
-          retVec->AddScalar(delta_x);
+          if (delta_x != 0.) {
+            retVec->Copy(*sigma_p_d);
+            retVec->AddScalar(delta_x);
+            retVec->ElementWiseReciprocal();
+          }
+          else {
+            retVec->Set(1.);
+            retVec->ElementWiseDivide(*sigma_p_d);
+          }
         }
         else {
-          retVec->Set(delta_x);
+          retVec->Set(1./delta_x);
         }
-        retVec->ElementWiseReciprocal();
 
         sigma_tilde_p_d_inv_cache_.AddCachedResult(retVec, deps, scalar_deps);
       }

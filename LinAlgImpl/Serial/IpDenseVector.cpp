@@ -496,6 +496,7 @@ namespace Ipopt
   {
     Number* values_v1=NULL;
     bool homogeneous_v1=false;
+    Number scalar_v1 = 0;
     if (a!=0.) {
       const DenseVector* dense_v1 = dynamic_cast<const DenseVector*>(&v1);
       DBG_ASSERT(dense_v1);
@@ -503,9 +504,12 @@ namespace Ipopt
       DBG_ASSERT(Dim() == dense_v1->Dim());
       values_v1=dense_v1->values_;
       homogeneous_v1=dense_v1->homogeneous_;
+      if (homogeneous_v1)
+        scalar_v1 = dense_v1->scalar_;
     }
     Number* values_v2=NULL;
     bool homogeneous_v2=false;
+    Number scalar_v2 = 0;
     if (b!=0.) {
       const DenseVector* dense_v2 = dynamic_cast<const DenseVector*>(&v2);
       DBG_ASSERT(dense_v2);
@@ -513,8 +517,19 @@ namespace Ipopt
       DBG_ASSERT(Dim() == dense_v2->Dim());
       values_v2=dense_v2->values_;
       homogeneous_v2=dense_v2->homogeneous_;
+      if (homogeneous_v2)
+        scalar_v2 = dense_v2->scalar_;
     }
     DBG_ASSERT(c==0. || initialized_);
+    if ((c==0. || homogeneous_) && homogeneous_v1 && homogeneous_v2 ) {
+      homogeneous_ = true;
+      Number val = 0;
+      if (c!=0.) {
+        val = c*scalar_;
+      }
+      scalar_ = val + a*scalar_v1 + b*scalar_v2;
+      return;
+    }
     if (c==0.) {
       // make sure we have memory allocated for this vector
       values_allocated();
@@ -523,6 +538,7 @@ namespace Ipopt
 
     // If any of the vectors is homogeneous, call the default implementation
     if ( homogeneous_ || homogeneous_v1 || homogeneous_v2) {
+      // ToDo:Should we implement specialized methods here too?
       Vector::AddTwoVectorsImpl(a, v1, b, v2, c);
       return;
     }
@@ -934,6 +950,112 @@ namespace Ipopt
 
     DBG_ASSERT(alpha>=0.);
     return alpha;
+  }
+
+  void DenseVector::AddVectorQuotientImpl(Number a, const Vector& z,
+                                          const Vector& s, Number c)
+  {
+    DBG_ASSERT(Dim()==z.Dim());
+    DBG_ASSERT(Dim()==s.Dim());
+    const DenseVector* dense_z = dynamic_cast<const DenseVector*>(&z);
+    DBG_ASSERT(dense_z);
+    DBG_ASSERT(dense_z->initialized_);
+    const DenseVector* dense_s = dynamic_cast<const DenseVector*>(&s);
+    DBG_ASSERT(dense_s);
+    DBG_ASSERT(dense_s->initialized_);
+
+    DBG_ASSERT(c==0. || initialized_);
+    bool homogeneous_z = dense_z->homogeneous_;
+    bool homogeneous_s = dense_s->homogeneous_;
+
+    if ((c==0. || homogeneous_) && homogeneous_z && homogeneous_s) {
+      if (c==0.) {
+        scalar_ = a * dense_z->scalar_ / dense_s->scalar_;
+      }
+      else {
+        scalar_ = c * scalar_ + a * dense_z->scalar_ / dense_s->scalar_;
+      }
+      homogeneous_ = true;
+      if (values_) {
+        owner_space_->FreeInternalStorage(values_);
+        values_ = NULL;
+      }
+    }
+
+    // Make sure we have memory to store a non-homogeneous vector
+    values_allocated();
+
+    Number* values_z = dense_z->values_;
+    Number* values_s = dense_s->values_;
+
+    if (c==0.) {
+      if (homogeneous_z) {
+        // then s is not homogeneous
+        for (Index i=0; i<Dim(); i++) {
+          values_[i] = dense_z->scalar_ / values_s[i];
+        }
+      }
+      else if (homogeneous_s) {
+        // then z is not homogeneous
+        for (Index i=0; i<Dim(); i++) {
+          values_[i] = values_z[i] / dense_s->scalar_;
+        }
+      }
+      else {
+        for (Index i=0; i<Dim(); i++) {
+          values_[i] = values_z[i] / values_s[i];
+        }
+      }
+    }
+    else if (homogeneous_) {
+      Number val = c*scalar_;
+      if (homogeneous_z) {
+        // then s is not homogeneous
+        for (Index i=0; i<Dim(); i++) {
+          values_[i] = val + dense_z->scalar_ / values_s[i];
+        }
+      }
+      else if (homogeneous_s) {
+        // then z is not homogeneous
+        for (Index i=0; i<Dim(); i++) {
+          values_[i] = val + values_z[i] / dense_s->scalar_;
+        }
+      }
+      else {
+        for (Index i=0; i<Dim(); i++) {
+          values_[i] = val + values_z[i] / values_s[i];
+        }
+      }
+    }
+    else {
+      // ToDo could distinguish c = 1
+      if (homogeneous_z) {
+        if (homogeneous_s) {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] = c*values_[i] + dense_z->scalar_/dense_s->scalar_;
+          }
+        }
+        else {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] = c*values_[i] + dense_z->scalar_/values_s[i];
+          }
+        }
+      }
+      else {
+        if (homogeneous_s) {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] = c*values_[i] + values_z[i]/dense_s->scalar_;
+          }
+        }
+        else {
+          for (Index i=0; i<Dim(); i++) {
+            values_[i] = c*values_[i] + values_z[i]/values_s[i];
+          }
+        }
+      }
+    }
+
+    homogeneous_ = false;
   }
 
   void DenseVector::CopyToPos(Index Pos, const Vector& x)

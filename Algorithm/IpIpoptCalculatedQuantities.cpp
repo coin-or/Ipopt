@@ -423,9 +423,8 @@ namespace Ipopt
         slack->ElementWiseMax(*zero_vec);
 
         SmartPtr<Vector> t2 = t->MakeNew();
-        t2->Copy(*multiplier);
-        t2->ElementWiseReciprocal();
-        t2->Scal(ip_data_->curr_mu());
+        t2->Set(ip_data_->curr_mu());
+        t2->ElementWiseDivide(*multiplier);
 
         SmartPtr<Vector> s_min_vec = t2->MakeNew();
         s_min_vec->Set(s_min);
@@ -779,13 +778,11 @@ namespace Ipopt
       SmartPtr<Vector> tmp1 = x->MakeNew();
       tmp1->Copy(*curr_grad_f());
 
-      Tmp_x_L().Copy(*curr_slack_x_L());
-      Tmp_x_L().ElementWiseReciprocal();
-      ip_nlp_->Px_L()->MultVector(-mu, Tmp_x_L(), 1., *tmp1);
+      Tmp_x_L().Set(1.);
+      ip_nlp_->Px_L()->AddMSinvZ(-mu, *curr_slack_x_L(), Tmp_x_L(), *tmp1);
 
-      Tmp_x_U().Copy(*curr_slack_x_U());
-      Tmp_x_U().ElementWiseReciprocal();
-      ip_nlp_->Px_U()->MultVector(mu, Tmp_x_U(), 1., *tmp1);
+      Tmp_x_U().Set(1.);
+      ip_nlp_->Px_U()->AddMSinvZ(mu, *curr_slack_x_U(), Tmp_x_U(), *tmp1);
 
       DBG_PRINT_VECTOR(2, "Barrier_Grad_x without damping", *tmp1);
 
@@ -866,13 +863,12 @@ namespace Ipopt
     if (!curr_grad_barrier_obj_s_cache_.GetCachedResult(result, tdeps, sdeps)) {
       SmartPtr<Vector> tmp1 = s->MakeNew();
 
-      Tmp_s_L().Copy(*curr_slack_s_L());
-      Tmp_s_L().ElementWiseReciprocal();
-      ip_nlp_->Pd_L()->MultVector(-mu, Tmp_s_L(), 0., *tmp1);
+      Tmp_s_L().Set(-mu);
+      Tmp_s_L().ElementWiseDivide(*curr_slack_s_L());
+      ip_nlp_->Pd_L()->MultVector(1., Tmp_s_L(), 0., *tmp1);
 
-      Tmp_s_U().Copy(*curr_slack_s_U());
-      Tmp_s_U().ElementWiseReciprocal();
-      ip_nlp_->Pd_U()->MultVector(mu, Tmp_s_U(), 1., *tmp1);
+      Tmp_s_U().Set(1.);
+      ip_nlp_->Pd_U()->AddMSinvZ(mu, *curr_slack_s_U(), Tmp_s_U(), *tmp1);
 
       DBG_PRINT_VECTOR(2, "Barrier_Grad_s without damping", *tmp1);
 
@@ -2784,16 +2780,9 @@ namespace Ipopt
     if (!curr_sigma_x_cache_.GetCachedResult3Dep(result, *x, *z_L, *z_U)) {
       SmartPtr<Vector> sigma = x->MakeNew();
 
-      Tmp_x_L().Copy(*z_L);
-      DBG_PRINT_VECTOR(2,"z_L", Tmp_x_L());
-      DBG_PRINT_VECTOR(2,"slack_x_L", *curr_slack_x_L());
-      Tmp_x_L().ElementWiseDivide(*curr_slack_x_L());
-      DBG_PRINT_VECTOR(2,"z_L/slack_x_L", Tmp_x_L());
-      ip_nlp_->Px_L()->MultVector(1.0, Tmp_x_L(), 0.0, *sigma);
-
-      Tmp_x_U().Copy(*z_U);
-      Tmp_x_U().ElementWiseDivide(*curr_slack_x_U());
-      ip_nlp_->Px_U()->MultVector(1.0, Tmp_x_U(), 1.0, *sigma);
+      sigma->Set(0.);
+      ip_nlp_->Px_L()->AddMSinvZ(1., *curr_slack_x_L(), *z_L, *sigma);
+      ip_nlp_->Px_U()->AddMSinvZ(1., *curr_slack_x_U(), *z_U, *sigma);
 
       DBG_PRINT_VECTOR(2,"sigma_x", *sigma);
 
@@ -2817,13 +2806,9 @@ namespace Ipopt
     if (!curr_sigma_s_cache_.GetCachedResult3Dep(result, *s, *v_L, *v_U)) {
       SmartPtr<Vector> sigma = s->MakeNew();
 
-      Tmp_s_L().Copy(*v_L);
-      Tmp_s_L().ElementWiseDivide(*curr_slack_s_L());
-      ip_nlp_->Pd_L()->MultVector(1.0, Tmp_s_L(), 0.0, *sigma);
-
-      Tmp_s_U().Copy(*v_U);
-      Tmp_s_U().ElementWiseDivide(*curr_slack_s_U());
-      ip_nlp_->Pd_U()->MultVector(1.0, Tmp_s_U(), 1.0, *sigma);
+      sigma->Set(0.);
+      ip_nlp_->Pd_L()->AddMSinvZ(1., *curr_slack_s_L(), *v_L, *sigma);
+      ip_nlp_->Pd_U()->AddMSinvZ(1., *curr_slack_s_U(), *v_U, *sigma);
 
       result = ConstPtr(sigma);
       curr_sigma_s_cache_.AddCachedResult3Dep(result, *s, *v_L, *v_U);
