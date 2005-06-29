@@ -132,7 +132,11 @@ namespace Ipopt
     }
 
     new_s = new_y_d->MakeNew(); // same dimension as d
-    //new_s_->Set(0.0);
+    /*
+    new_s ->Set(0.0); // we set it here so that in
+        // WarmStartIterateInitializer we can use
+        // MakeNewIteratesVector
+        */
 
     iterates_space_ = new IteratesVectorSpace(*(new_x->OwnerSpace()), *(new_s->OwnerSpace()),
                       *(new_y_c->OwnerSpace()), *(new_y_d->OwnerSpace()),
