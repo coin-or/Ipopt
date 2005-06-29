@@ -86,42 +86,43 @@ namespace Ipopt
 
     SmartPtr<Vector> tmp;
 
+    SmartPtr<IteratesVector> init_vec = IpData().curr()->MakeNewContainer();
+
     // If requested, make sure that the multipliers are not too large
-    SmartPtr<IteratesVector> init_vec = IpData().curr()->MakeNewIteratesVectorCopy();
     if (warm_start_mult_init_max_>0.) {
-      SmartPtr<Vector> y_c = init_vec->y_c_NonConst();
+      SmartPtr<Vector> y_c = init_vec->create_new_y_c_copy();
       tmp = y_c->MakeNew();
       tmp->Set(warm_start_mult_init_max_);
       y_c->ElementWiseMin(*tmp);
       tmp->Set(-warm_start_mult_init_max_);
       y_c->ElementWiseMax(*tmp);
 
-      SmartPtr<Vector> y_d = init_vec->y_d_NonConst();
+      SmartPtr<Vector> y_d = init_vec->create_new_y_d_copy();
       tmp = y_d->MakeNew();
       tmp->Set(warm_start_mult_init_max_);
       y_d->ElementWiseMin(*tmp);
       tmp->Set(-warm_start_mult_init_max_);
       y_d->ElementWiseMax(*tmp);
 
-      SmartPtr<Vector> z_L = init_vec->z_L_NonConst();
+      SmartPtr<Vector> z_L = init_vec->create_new_z_L_copy();
       tmp = z_L->MakeNew();
       tmp->Set(warm_start_mult_init_max_);
       z_L->ElementWiseMin(*tmp);
 
-      SmartPtr<Vector> z_U = init_vec->z_U_NonConst();
+      SmartPtr<Vector> z_U = init_vec->create_new_z_U_copy();
       tmp = z_U->MakeNew();
       tmp->Set(warm_start_mult_init_max_);
       z_U->ElementWiseMin(*tmp);
     }
 
     // Get the initial values for v_L and v_U out of y_d
-    SmartPtr<Vector> v_L = init_vec->v_L_NonConst();
+    SmartPtr<Vector> v_L = init_vec->create_new_v_L();
     IpNLP().Pd_L()->TransMultVector(-1., *init_vec->y_d(), 0., *v_L);
     tmp = v_L->MakeNew();
     tmp->Set(warm_start_mult_bound_push_);
     v_L->ElementWiseMax(*tmp);
 
-    SmartPtr<Vector> v_U = init_vec->v_U_NonConst();
+    SmartPtr<Vector> v_U = init_vec->create_new_v_U();
     IpNLP().Pd_U()->TransMultVector(1., *init_vec->y_d(), 0., *v_U);
     tmp = v_U->MakeNew();
     tmp->Set(warm_start_mult_bound_push_);
