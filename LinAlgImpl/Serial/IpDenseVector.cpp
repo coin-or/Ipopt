@@ -992,18 +992,18 @@ namespace Ipopt
       if (homogeneous_z) {
         // then s is not homogeneous
         for (Index i=0; i<Dim(); i++) {
-          values_[i] = dense_z->scalar_ / values_s[i];
+          values_[i] = a * dense_z->scalar_ / values_s[i];
         }
       }
       else if (homogeneous_s) {
         // then z is not homogeneous
         for (Index i=0; i<Dim(); i++) {
-          values_[i] = values_z[i] / dense_s->scalar_;
+          values_[i] = values_z[i] * a / dense_s->scalar_;
         }
       }
       else {
         for (Index i=0; i<Dim(); i++) {
-          values_[i] = values_z[i] / values_s[i];
+          values_[i] = a * values_z[i] / values_s[i];
         }
       }
     }
@@ -1012,18 +1012,18 @@ namespace Ipopt
       if (homogeneous_z) {
         // then s is not homogeneous
         for (Index i=0; i<Dim(); i++) {
-          values_[i] = val + dense_z->scalar_ / values_s[i];
+          values_[i] = val + a * dense_z->scalar_ / values_s[i];
         }
       }
       else if (homogeneous_s) {
         // then z is not homogeneous
         for (Index i=0; i<Dim(); i++) {
-          values_[i] = val + values_z[i] / dense_s->scalar_;
+          values_[i] = val + values_z[i] * a / dense_s->scalar_;
         }
       }
       else {
         for (Index i=0; i<Dim(); i++) {
-          values_[i] = val + values_z[i] / values_s[i];
+          values_[i] = val + a * values_z[i] / values_s[i];
         }
       }
     }
@@ -1032,24 +1032,24 @@ namespace Ipopt
       if (homogeneous_z) {
         if (homogeneous_s) {
           for (Index i=0; i<Dim(); i++) {
-            values_[i] = c*values_[i] + dense_z->scalar_/dense_s->scalar_;
+            values_[i] = c*values_[i] + a * dense_z->scalar_/dense_s->scalar_;
           }
         }
         else {
           for (Index i=0; i<Dim(); i++) {
-            values_[i] = c*values_[i] + dense_z->scalar_/values_s[i];
+            values_[i] = c*values_[i] + a * dense_z->scalar_/values_s[i];
           }
         }
       }
       else {
         if (homogeneous_s) {
           for (Index i=0; i<Dim(); i++) {
-            values_[i] = c*values_[i] + values_z[i]/dense_s->scalar_;
+            values_[i] = c*values_[i] + values_z[i] * a /dense_s->scalar_;
           }
         }
         else {
           for (Index i=0; i<Dim(); i++) {
-            values_[i] = c*values_[i] + values_z[i]/values_s[i];
+            values_[i] = c*values_[i] + a * values_z[i]/values_s[i];
           }
         }
       }
