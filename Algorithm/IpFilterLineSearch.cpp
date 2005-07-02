@@ -489,7 +489,7 @@ namespace Ipopt
       else {
         // Check if we should start the soft restoration phase
         if (!in_soft_resto_phase_ && soft_resto_pderror_reduction_factor_>0.
-            && !goto_resto ) {
+            && !goto_resto && !expect_infeasible_problem_) {
           Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                          "--> Starting soft restoration phase <--\n");
           // Augment the filter with the current point
