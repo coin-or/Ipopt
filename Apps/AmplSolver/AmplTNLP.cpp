@@ -29,7 +29,7 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  AmplTNLP::AmplTNLP(const SmartPtr<Journalist>& jnlst, char**& argv,
+  AmplTNLP::AmplTNLP(const SmartPtr<const Journalist>& jnlst, char**& argv,
                      SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
                      bool allow_discrete /* = false */)
       :

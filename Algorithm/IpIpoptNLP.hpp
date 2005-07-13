@@ -45,7 +45,14 @@ namespace Ipopt
      *  initialize internal data structures. */
     virtual bool Initialize(const Journalist& jnlst,
                             const OptionsList& options,
-                            const std::string& prefix) = 0;
+                            const std::string& prefix)
+    {
+      bool ret = true;
+      if (IsValid(nlp_scaling_)) {
+	ret = nlp_scaling_->Initialize(jnlst, options, prefix);
+      }
+      return ret;
+    }
 
     /**@name Possible Exceptions */
     //@{
@@ -75,11 +82,17 @@ namespace Ipopt
     /** Objective value */
     virtual Number f(const Vector& x) = 0;
 
+    /** Unscaled objective value */
+    virtual Number unscaled_f(const Vector& x) = 0;
+
     /** Gradient of the objective */
     virtual SmartPtr<const Vector> grad_f(const Vector& x) = 0;
 
     /** Equality constraint residual */
     virtual SmartPtr<const Vector> c(const Vector& x) = 0;
+
+    /** Unscaled Equality constraint residual */
+    virtual SmartPtr<const Vector> unscaled_c(const Vector& x) = 0;
 
     /** Jacobian Matrix for equality constraints */
     virtual SmartPtr<const Matrix> jac_c(const Vector& x) = 0;
@@ -87,6 +100,10 @@ namespace Ipopt
     /** Inequality constraint residual (reformulated
      *  as equalities with slacks */
     virtual SmartPtr<const Vector> d(const Vector& x) = 0;
+
+    /** Unscaled Inequality constraint residual (reformulated
+     *  as equalities with slacks */
+    virtual SmartPtr<const Vector> unscaled_d(const Vector& x) = 0;
 
     /** Jacobian Matrix for inequality constraints */
     virtual SmartPtr<const Matrix> jac_d(const Vector& x) = 0;
@@ -195,6 +212,15 @@ namespace Ipopt
       DBG_ASSERT(false && "ERROR: This method is only a for h(mu) and should not be called");
       return NULL;
     }
+    //@}
+
+    /** solution routines */
+    //@{
+    virtual void FinalizeSolution(ApplicationReturnStatus status,
+			  const Vector& x, const Vector& z_L, const Vector& z_U,
+			  const Vector& c, const Vector& d,
+			  const Vector& y_c, const Vector& y_d,
+			  Number obj_value)=0;
     //@}
 
   protected:

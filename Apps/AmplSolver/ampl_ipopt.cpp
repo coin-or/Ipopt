@@ -30,7 +30,7 @@ int main(int argv, char**argc)
   suffix_handler->AddAvailableSuffix("scaling_factor", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
   suffix_handler->AddAvailableSuffix("scaling_factor", AmplSuffixHandler::Objective_Source, AmplSuffixHandler::Number_Type);
 
-  SmartPtr<TNLP> ampl_tnlp = new AmplTNLP(app->Jnlst(), argc, suffix_handler);
+  SmartPtr<TNLP> ampl_tnlp = new AmplTNLP(ConstPtr(app->Jnlst()), argc, suffix_handler);
   ApplicationReturnStatus retval = app->OptimizeTNLP(ampl_tnlp);
 
   // finalize_solution method in AmplTNLP writes the solution file

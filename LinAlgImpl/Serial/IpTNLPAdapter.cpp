@@ -524,19 +524,19 @@ namespace Ipopt
     return true;
   }
 
-  bool TNLPAdapter::GetStartingPoint(Vector& x,
+  bool TNLPAdapter::GetStartingPoint(Vector* x,
                                      bool need_x,
-                                     Vector& y_c,
+                                     Vector* y_c,
                                      bool need_y_c,
-                                     Vector& y_d,
+                                     Vector* y_d,
                                      bool need_y_d,
-                                     Vector& z_L,
+                                     Vector* z_L,
                                      bool need_z_L,
-                                     Vector& z_U,
+                                     Vector* z_U,
                                      bool need_z_U,
-                                     Vector& v_L,
+                                     Vector* v_L,
                                      bool need_v_L,
-                                     Vector& v_U,
+                                     Vector* v_U,
                                      bool need_v_U
                                     )
   {
@@ -555,44 +555,44 @@ namespace Ipopt
       return false;
     }
 
-    DenseVector* dx = dynamic_cast<DenseVector*>(&x);
-    DBG_ASSERT(dx);
-    Number* values = dx->Values();
 
     if (need_x) {
+      DenseVector* dx = dynamic_cast<DenseVector*>(x);
+      DBG_ASSERT(dx);
+      Number* values = dx->Values();
       const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
-      for (Index i=0; i<x.Dim(); i++) {
+      for (Index i=0; i<x->Dim(); i++) {
         values[i] = full_x[x_pos[i]];
       }
     }
 
     if (need_y_c) {
-      DenseVector* dy_c = dynamic_cast<DenseVector*>(&y_c);
+      DenseVector* dy_c = dynamic_cast<DenseVector*>(y_c);
       DBG_ASSERT(dy_c);
-      values = dy_c->Values();
+      Number* values = dy_c->Values();
       const Index* y_c_pos = P_c_g_->ExpandedPosIndices();
-      for (Index i=0; i<y_c.Dim(); i++) {
+      for (Index i=0; i<y_c->Dim(); i++) {
         values[i] = full_lambda[y_c_pos[i]];
       }
     }
 
     if (need_y_d) {
-      DenseVector* dy_d = dynamic_cast<DenseVector*>(&y_d);
+      DenseVector* dy_d = dynamic_cast<DenseVector*>(y_d);
       DBG_ASSERT(dy_d);
-      values = dy_d->Values();
+      Number* values = dy_d->Values();
       const Index* y_d_pos = P_d_g_->ExpandedPosIndices();
-      for (Index i=0; i<y_d.Dim(); i++) {
+      for (Index i=0; i<y_d->Dim(); i++) {
         values[i] = full_lambda[y_d_pos[i]];
       }
     }
 
     if (need_z_L) {
-      DenseVector* dz_l = dynamic_cast<DenseVector*>(&z_L);
+      DenseVector* dz_l = dynamic_cast<DenseVector*>(z_L);
       DBG_ASSERT(dz_l);
-      values = dz_l->Values();
+      Number* values = dz_l->Values();
       const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
       const Index* z_l_pos = P_x_x_L_->ExpandedPosIndices();
-      for (Index i=0; i<z_L.Dim(); i++) {
+      for (Index i=0; i<z_L->Dim(); i++) {
         Index idx = z_l_pos[i]; // convert from x_L to x (ipopt)
         idx = x_pos[idx]; // convert from x (ipopt) to x_full
         values[i] = full_z_l[idx];
@@ -600,12 +600,12 @@ namespace Ipopt
     }
 
     if (need_z_U) {
-      DenseVector* dz_u = dynamic_cast<DenseVector*>(&z_U);
+      DenseVector* dz_u = dynamic_cast<DenseVector*>(z_U);
       DBG_ASSERT(dz_u);
-      values = dz_u->Values();
+      Number* values = dz_u->Values();
       const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
       const Index* z_u_pos = P_x_x_U_->ExpandedPosIndices();
-      for (Index i=0; i<z_U.Dim(); i++) {
+      for (Index i=0; i<z_U->Dim(); i++) {
         Index idx = z_u_pos[i]; // convert from x_u to x (ipopt)
         idx = x_pos[idx]; // convert from x (ipopt) to x_full
         values[i] = full_z_u[idx];

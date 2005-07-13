@@ -63,7 +63,7 @@ namespace Ipopt
       // computed yet.
       dnrm = 0.;
     }
-    Number f = IpCq().curr_f();
+    Number unscaled_f = IpCq().unscaled_curr_f();
 
     // Retrieve some information set in the different parts of the algorithm
     char info_iter=' ';
@@ -87,7 +87,7 @@ namespace Ipopt
     if (!IpData().info_skip_output()) {
       Jnlst().Printf(J_SUMMARY, J_MAIN,
                      "%5d%c %14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d %s\n",
-                     iter, info_iter, f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr,
+                     iter, info_iter, unscaled_f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr,
                      alpha_dual, alpha_primal, alpha_primal_char,
                      ls_count, info_string.c_str());
     }

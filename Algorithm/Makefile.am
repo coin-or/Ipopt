@@ -18,6 +18,7 @@ libipoptalg_a_SOURCES = \
 	IpWarmStartIterateInitializer.hpp IpWarmStartIterateInitializer.cpp \
 	IpFilter.cpp IpFilter.hpp \
 	IpFilterLineSearch.cpp IpFilterLineSearch.hpp \
+	IpGradientScaling.hpp IpGradientScaling.cpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
 	IpIpoptData.cpp IpIpoptData.hpp \
@@ -61,6 +62,7 @@ ASTYLE_FILES = \
 	IpWarmStartIterateInitializer.hppbak IpWarmStartIterateInitializer.cppbak \
 	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLineSearch.cppbak IpFilterLineSearch.hppbak \
+	IpGradientScaling.hppbak IpGradientScaling.cppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
 	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \
 	IpIpoptData.cppbak IpIpoptData.hppbak \

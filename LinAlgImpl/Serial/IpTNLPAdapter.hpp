@@ -77,19 +77,19 @@ namespace Ipopt
     /** Method for obtaining the starting point
      *  for all the iterates. */
     virtual bool GetStartingPoint(
-      Vector& x,
+      Vector* x,
       bool need_x,
-      Vector& y_c,
+      Vector* y_c,
       bool need_y_c,
-      Vector& y_d,
+      Vector* y_d,
       bool need_y_d,
-      Vector& z_L,
+      Vector* z_L,
       bool need_z_L,
-      Vector& z_U,
+      Vector* z_U,
       bool need_z_U,
-      Vector& v_L,
+      Vector* v_L,
       bool need_v_L,
-      Vector& v_U,
+      Vector* v_U,
       bool need_v_U
     );
     //@}

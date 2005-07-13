@@ -523,6 +523,13 @@ namespace Ipopt
     return result;
   }
 
+  Number 
+  IpoptCalculatedQuantities::unscaled_curr_f()
+  {
+    // this value is cached in IpOrigIpoptNLP (not in the resto...)
+    return ip_nlp_->unscaled_f(*ip_data_->curr()->x());
+  }
+
   Number
   IpoptCalculatedQuantities::trial_f()
   {
@@ -1002,6 +1009,13 @@ namespace Ipopt
   }
 
   SmartPtr<const Vector>
+  IpoptCalculatedQuantities::unscaled_curr_c()
+  {
+    // this value is cached in IpOrigIpoptNLP (not resto)
+    return ip_nlp_->unscaled_c(*ip_data_->curr()->x());
+  }
+
+  SmartPtr<const Vector>
   IpoptCalculatedQuantities::trial_c()
   {
     DBG_START_METH("IpoptCalculatedQuantities::trial_c()",
@@ -1033,6 +1047,13 @@ namespace Ipopt
       curr_d_cache_.AddCachedResult1Dep(result, *x);
     }
     return result;
+  }
+
+  SmartPtr<const Vector>
+  IpoptCalculatedQuantities::unscaled_curr_d()
+  {
+    // this value is cached in IpOrigIpoptNLP (not the resto)
+    return ip_nlp_->unscaled_d(*ip_data_->curr()->x());
   }
 
   SmartPtr<const Vector>

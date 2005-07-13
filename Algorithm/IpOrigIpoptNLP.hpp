@@ -65,11 +65,17 @@ namespace Ipopt
     /** Objective value */
     virtual Number f(const Vector& x);
 
+    /** Unscaled objective value */
+    virtual Number unscaled_f(const Vector& x);
+
     /** Gradient of the objective */
     virtual SmartPtr<const Vector> grad_f(const Vector& x);
 
     /** Equality constraint residual */
     virtual SmartPtr<const Vector> c(const Vector& x);
+
+    /** Unscaled Equality constraint residual */
+    virtual SmartPtr<const Vector> unscaled_c(const Vector& x);
 
     /** Jacobian Matrix for equality constraints */
     virtual SmartPtr<const Matrix> jac_c(const Vector& x);
@@ -77,6 +83,10 @@ namespace Ipopt
     /** Inequality constraint residual (reformulated
      *  as equalities with slacks */
     virtual SmartPtr<const Vector> d(const Vector& x);
+
+    /** Unscaled Inequality constraint residual (reformulated
+     *  as equalities with slacks */
+    virtual SmartPtr<const Vector> unscaled_d(const Vector& x);
 
     /** Jacobian Matrix for inequality constraints*/
     virtual SmartPtr<const Matrix> jac_d(const Vector& x);
@@ -192,6 +202,15 @@ namespace Ipopt
     }
     //@}
 
+    /** Solution Routines - overloaded from IpoptNLP*/
+    //@{
+    void FinalizeSolution(ApplicationReturnStatus status,
+			  const Vector& x, const Vector& z_L, const Vector& z_U,
+			  const Vector& c, const Vector& d,
+			  const Vector& y_c, const Vector& y_d,
+			  Number obj_value);
+    //@}
+    
     /** Methods for IpoptType */
     //@{
     /** Called by IpoptType to register the options */

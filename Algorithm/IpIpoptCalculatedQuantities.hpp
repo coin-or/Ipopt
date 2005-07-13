@@ -76,6 +76,8 @@ namespace Ipopt
     //@{
     /** Value of objective function (at current point) */
     Number curr_f();
+    /** Unscaled value of the objective function (at the current point) */
+    Number unscaled_curr_f();
     /** Value of objective function (at trial point) */
     Number trial_f();
     /** Gradient of objective function (at current point) */
@@ -114,10 +116,14 @@ namespace Ipopt
     //@{
     /** c(x) (at current point) */
     SmartPtr<const Vector> curr_c();
+    /** unscaled c(x) (at current point) */
+    SmartPtr<const Vector> unscaled_curr_c();
     /** c(x) (at trial point) */
     SmartPtr<const Vector> trial_c();
     /** d(x) (at current point) */
     SmartPtr<const Vector> curr_d();
+    /** unscaled d(x) (at current point) */
+    SmartPtr<const Vector> unscaled_curr_d();
     /** d(x) (at trial point) */
     SmartPtr<const Vector> trial_d();
     /** d(x) - s (at current point) */

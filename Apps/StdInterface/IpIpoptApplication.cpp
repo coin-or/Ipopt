@@ -15,6 +15,7 @@
 #include "IpAlgBuilder.hpp"
 #include "IpIpoptType.hpp"
 #include "IpUserScaling.hpp"
+#include "IpGradientScaling.hpp"
 
 namespace Ipopt
 {
@@ -86,11 +87,12 @@ namespace Ipopt
       "algorithmic options with some documentation before solving the "
       "optimization problem.");
 
-    roptions->AddStringOption2(
+    roptions->AddStringOption3(
       "scaling_method",
-      "Select the technique used for scaling the NLP", "none",
+      "Select the technique used for scaling the NLP", "gradient_based",
       "none", "no problem scaling will be performed",
-      "user-scaling", "scaling parameters will come from the user",
+      "user_scaling", "scaling parameters will come from the user",
+      "gradient_based", "scale the problem so the maximum gradient at the starting point is scaling_max_gradient",
       "Selects the technique used for scaling the problem before it is solved."
       " For user-scaling, the parameters come from the NLP. If you are using "
       "AMPL, they can be specified through suffixes (scaling_factor)");
@@ -130,6 +132,7 @@ namespace Ipopt
                                 SmartPtr<IpoptCalculatedQuantities>& ip_cq)
   {
     ApplicationReturnStatus retValue = Solve_Succeeded;
+    SmartPtr<IpoptNLP> ip_nlp;
     try {
 
 # ifdef IP_DEBUG
@@ -218,15 +221,17 @@ namespace Ipopt
       SmartPtr<NLPScalingObject> nlp_scaling;
       std::string scaling_method;
       options_->GetValue("scaling_method", scaling_method, "");
-      if (scaling_method == "user-scaling") {
+      if (scaling_method == "user_scaling") {
         nlp_scaling = new UserScaling(ConstPtr(nlp));
+      }
+      else if (scaling_method == "gradient_based") {
+	nlp_scaling = new GradientScaling(nlp);
       }
       else {
         nlp_scaling = new NoNLPScalingObject();
       }
 
-      SmartPtr<IpoptNLP> ip_nlp =
-        new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp), nlp_scaling);
+      ip_nlp =  new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp), nlp_scaling);
 
       // Create the IpoptData
       if (IsNull(ip_data)) {
@@ -240,7 +245,7 @@ namespace Ipopt
 
       // Create the Algorithm object
       SmartPtr<IpoptAlgorithm> alg
-      = AlgorithmBuilder::BuildBasicAlgorithm(*jnlst_, *options_, "");
+	= AlgorithmBuilder::BuildBasicAlgorithm(*jnlst_, *options_, "");
 
       // Set up the algorithm
       alg->Initialize(*jnlst_, *ip_nlp, *ip_data, *ip_cq, *options_, "");
@@ -265,7 +270,7 @@ namespace Ipopt
                        ip_data->iter_count());
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                        "Objective Value         = %23.16e\n",
-                       ip_cq->curr_f());
+                       ip_cq->unscaled_curr_f());
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                        "Primal Infeasibility    = %23.16e\n",
                        ip_cq->curr_primal_infeasibility(NORM_MAX));
@@ -331,29 +336,26 @@ namespace Ipopt
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
       }
 
-      nlp->FinalizeSolution(retValue,
-                            *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
-                            *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
-                            ip_cq->curr_f());
+      ip_nlp->FinalizeSolution(retValue,
+			       *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
+			       *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
+			       ip_cq->curr_f());
     }
     catch(LOCALLY_INFEASIBILE& exc) {
       exc.ReportException(*jnlst_);
-
-      nlp->FinalizeSolution(retValue,
-                            *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
-                            *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
-                            ip_cq->curr_f());
+      ip_nlp->FinalizeSolution(retValue,
+			       *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
+			       *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
+			       ip_cq->curr_f());
 
       retValue = Infeasible_Problem_Detected;
     }
     catch(TOO_FEW_DOF& exc) {
       exc.ReportException(*jnlst_);
-
       retValue = Not_Enough_Degrees_Of_Freedom;
     }
     catch(IpoptException& exc) {
       exc.ReportException(*jnlst_);
-
       retValue = Solve_Failed;
     }
     catch(std::bad_alloc& exc) {
