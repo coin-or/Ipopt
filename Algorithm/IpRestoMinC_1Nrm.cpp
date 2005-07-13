@@ -32,8 +32,18 @@ namespace Ipopt
 
   void MinC_1NrmRestorationPhase::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("bound_mult_init_max", "???",
-                                          0.0, false, 1e3);
+    roptions->AddLowerBoundedNumberOption(
+      "bound_mult_reset_threshold",
+      "Threshold for resetting bound multipliers after restoration phase.",
+      0.0, false,
+      1e3,
+      "After returning from the restoration phase, the bound multipliers are "
+      "updated with a Newton step for complementarity.  Here, the "
+      "change in the primal variables during the entire restoration "
+      "phase is taken to be the corresponding primal Newton step. "
+      "However, if after the update the largest bound multiplier "
+      "exceeds the threshold specified by this option, the multipliers "
+      "are all reset to 1.");
   }
 
   bool MinC_1NrmRestorationPhase::InitializeImpl(const OptionsList& options,
@@ -43,9 +53,20 @@ namespace Ipopt
     // restoration phase
     resto_options_ = new OptionsList(options);
 
-    options.GetNumericValue("constr_mult_init_max", constr_mult_init_max_, prefix);
-    options.GetNumericValue("bound_mult_init_max", bound_mult_init_max_, prefix);
-    options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
+    options.GetNumericValue("constr_mult_init_max",
+                            constr_mult_init_max_,
+                            prefix);
+    options.GetNumericValue("bound_mult_reset_threshold",
+                            bound_mult_reset_threshold_,
+                            prefix);
+    options.GetBoolValue("expect_infeasible_problem",
+                         expect_infeasible_problem_,
+                         prefix);
+
+    // ToDo take care of this somewhere else?  avoid that the
+    // restoration phase is trigged by user option in first iteration
+    // of the restoration phase
+    resto_options_->SetValue("resto.start_with_resto", "no");
 
     count_restorations_ = 0;
 
@@ -221,7 +242,7 @@ namespace Ipopt
                                   IpData().trial()->v_L()->Amax(),
                                   IpData().trial()->v_U()->Amax());
       trial = IpData().trial()->MakeNewContainer();
-      if (bound_mult_max > bound_mult_init_max_) {
+      if (bound_mult_max > bound_mult_reset_threshold_) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "Bound multipliers after restoration phase too large (max=%8.2e). Set all to 1.\n",
                        bound_mult_max);
