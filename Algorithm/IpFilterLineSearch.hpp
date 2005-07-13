@@ -340,6 +340,10 @@ namespace Ipopt
      *  and full steps, after which the algorithm terminates.  If 0,
      *  this heuristic is disabled. */
     Index acceptable_iter_max_;
+
+    /** Indicates whether the algorithm should start directly with the
+     *  restoratin phase */
+    bool start_with_resto_;
     //@}
 
     /** @name Information related to watchdog procedure */

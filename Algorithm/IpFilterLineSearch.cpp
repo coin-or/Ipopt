@@ -220,6 +220,15 @@ namespace Ipopt
       "decreasing the error by this factor, then the regular restoration "
       "phase is called.  Choosing \"0\" here disables the soft "
       "restoration phase.");
+    roptions->AddStringOption2(
+      "start_with_resto",
+      "Tells algorithm to switch to restoration phase in first iteration.",
+      "no",
+      "no", "don't force start in restoration phase",
+      "yes", "force start in restoration phase",
+      "Setting this option to yes forces the algorithm to switch to the "
+      "restoration phase in the first iteration.  If the initial point "
+      "is feasible, the algorithm will abort with a failure.");
     roptions->AddLowerBoundedNumberOption(
       "tiny_step_tol",
       "Tolerance for detecting numerically insignificant steps.",
@@ -295,6 +304,7 @@ namespace Ipopt
     options.GetNumericValue("corrector_compl_avrg_red_fact", corrector_compl_avrg_red_fact_, prefix);
     options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
     options.GetNumericValue("expect_infeasible_problem_ctol", expect_infeasible_problem_ctol_, prefix);
+    options.GetBoolValue("start_with_resto", start_with_resto_, prefix);
 
     bool retvalue = true;
     if (IsValid(resto_phase_)) {
@@ -368,6 +378,14 @@ namespace Ipopt
       // we should immediately go to the restoration phase.  ToDo: Cue
       // off of a something else than the norm of the search direction
       goto_resto = true;
+    }
+
+    if (start_with_resto_) {
+      // If the use requested to start with the restoration phase,
+      // skip the lin e search and do exactly that.  Reset the flag so
+      // that this happens only once.
+      goto_resto = true;
+      start_with_resto_= false;
     }
 
     bool accept = false;
@@ -489,7 +507,7 @@ namespace Ipopt
       else {
         // Check if we should start the soft restoration phase
         if (!in_soft_resto_phase_ && soft_resto_pderror_reduction_factor_>0.
-            && !goto_resto ) {
+            && !goto_resto && !expect_infeasible_problem_) {
           Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                          "--> Starting soft restoration phase <--\n");
           // Augment the filter with the current point
