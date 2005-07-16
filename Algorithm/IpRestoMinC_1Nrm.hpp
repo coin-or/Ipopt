@@ -92,6 +92,8 @@ namespace Ipopt
      *  This will request the to set kappa_resto to a small value for
      *  the first time the restoration phase is called.  (ToDo) */
     bool expect_infeasible_problem_;
+    /** temp since things don't compile */
+    Number bound_mult_reset_threshold_;
     //@}
 
     /** Counter for the number of time that PerformRestoration is

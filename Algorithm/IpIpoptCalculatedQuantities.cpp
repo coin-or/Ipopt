@@ -1935,11 +1935,17 @@ namespace Ipopt
   (ENormType NormType,
    const Vector& vec1, const Vector& vec2)
   {
-    std::vector<SmartPtr<const Vector> > vecs(2);
-    vecs[0] = &vec1;
-    vecs[1] = &vec2;
-
-    return CalcNormOfType(NormType, vecs);
+    switch (NormType) {
+      case NORM_1 :
+	return vec1.Asum() + vec2.Asum();
+      case NORM_2 :
+	return sqrt(vec1.Nrm2()*vec2.Nrm2());
+      case NORM_MAX :
+	return Max(vec1.Amax(), vec2.Amax());
+      default:
+	DBG_ASSERT("Unknown NormType.");
+	return 0.0;
+    }
   }
 
   Number

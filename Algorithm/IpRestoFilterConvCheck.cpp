@@ -50,6 +50,7 @@ namespace Ipopt
   {
     DBG_ASSERT(orig_filter_line_search_ && "Need to call RestoFilterConvergenceCheck::SetOrigFilterLineSearch before Initialize");
     options.GetNumericValue("kappa_resto", kappa_resto_, prefix);
+    options.GetIntegerValue("maxiter", maximum_iters_, prefix);
 
     first_resto_iter_ = true;
 
@@ -59,6 +60,10 @@ namespace Ipopt
   ConvergenceCheck::ConvergenceStatus
   RestoFilterConvergenceCheck::CheckConvergence()
   {
+    if (IpData().iter_count() >= maximum_iters_) {
+      return ConvergenceCheck::MAXITER_EXCEEDED;
+    }
+
     // First check if the point is now acceptable for the outer filter
     ConvergenceStatus status;
 
@@ -84,43 +89,50 @@ namespace Ipopt
 
     // Calculate the f and theta for the original problem
     Number orig_trial_theta = orig_ip_cq->trial_constraint_violation();
-    Number orig_trial_barr = orig_ip_cq->trial_barrier_obj();
     Number orig_curr_theta = orig_ip_cq->curr_constraint_violation();
 
     // check acceptability to the filter
     Jnlst().Printf(J_DETAILED, J_MAIN,
-                   "orig_curr_theta = %8.2e, orig_trial_theta = %8.2e, orig_trial_barr = %8.2e\n",
-                   orig_curr_theta, orig_trial_theta, orig_trial_barr);
+                   "orig_curr_theta = %8.2e, orig_trial_theta = %8.2e\n",
+                   orig_curr_theta, orig_trial_theta);
 
     // ToDo: In the following we might want to be more careful with the lower bound
     Number orig_theta_max = Max(kappa_resto_*orig_curr_theta,
                                 1.e1*Min(orig_ip_data->tol(),
                                          orig_ip_data->primal_inf_tol()));
-    if (orig_trial_theta > orig_theta_max) {
-      Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "Point does not provide sufficient reduction w.r.t the original theta.\n");
-      status = CONTINUE;
-    }
-    else if (!orig_filter_line_search_->IsAcceptableToCurrentFilter(orig_trial_barr, orig_trial_theta)) {
-      Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "Point is not acceptable to the original filter.\n");
-      status = CONTINUE;
-    }
-    else if (!orig_filter_line_search_->IsAcceptableToCurrentIterate(orig_trial_barr, orig_trial_theta, true) ) {
-      Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "Point is not acceptable to the original current point.\n");
-      status = CONTINUE;
-    }
-    else if (first_resto_iter_) {
+
+    if (first_resto_iter_) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "This is the first iteration - continue to take at least one step.\n");
       status = CONTINUE;
     }
-    else {
+    else if (orig_trial_theta > orig_theta_max) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "Restoration found a point that provides sufficient reduction in"
-                     " theta and is acceptable to the current filter.\n");
-      status = CONVERGED;
+                     "Point does not provide sufficient reduction w.r.t the original theta.\n");
+      status = CONTINUE;
+    }
+    else {
+      Number orig_trial_barr = orig_ip_cq->trial_barrier_obj();
+
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                   "orig_trial_barr = %8.2e\n", orig_trial_barr);
+      
+      if (!orig_filter_line_search_->IsAcceptableToCurrentFilter(orig_trial_barr, orig_trial_theta)) {
+	Jnlst().Printf(J_DETAILED, J_MAIN,
+		       "Point is not acceptable to the original filter.\n");
+	status = CONTINUE;
+      }
+      else if (!orig_filter_line_search_->IsAcceptableToCurrentIterate(orig_trial_barr, orig_trial_theta, true) ) {
+	Jnlst().Printf(J_DETAILED, J_MAIN,
+		       "Point is not acceptable to the original current point.\n");
+	status = CONTINUE;
+      }
+      else {
+	Jnlst().Printf(J_DETAILED, J_MAIN,
+		       "Restoration found a point that provides sufficient reduction in"
+		       " theta and is acceptable to the current filter.\n");
+	status = CONVERGED;
+      }
     }
 
     // If the point is not yet acceptable to the filter, check if the problem
