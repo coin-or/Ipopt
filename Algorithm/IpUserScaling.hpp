@@ -24,8 +24,8 @@ namespace Ipopt
     //@{
     UserScaling(const SmartPtr<const NLP>& nlp)
         :
-      StandardScalingBase(),
-      nlp_(nlp)
+        StandardScalingBase(),
+        nlp_(nlp)
     {}
 
     /** Default destructor */
@@ -35,14 +35,14 @@ namespace Ipopt
 
   protected:
     virtual void DetermineScalingParametersImpl(
-	const SmartPtr<const VectorSpace> x_space,
-	const SmartPtr<const VectorSpace> c_space,
-	const SmartPtr<const VectorSpace> d_space,
-	const SmartPtr<const MatrixSpace> jac_c_space,
-	const SmartPtr<const MatrixSpace> jac_d_space,
-	const SmartPtr<const SymMatrixSpace> h_space,
-	Number& df, Vector& dx, 
-	Vector& dc, Vector& dd);
+      const SmartPtr<const VectorSpace> x_space,
+      const SmartPtr<const VectorSpace> c_space,
+      const SmartPtr<const VectorSpace> d_space,
+      const SmartPtr<const MatrixSpace> jac_c_space,
+      const SmartPtr<const MatrixSpace> jac_d_space,
+      const SmartPtr<const SymMatrixSpace> h_space,
+      Number& df, Vector& dx,
+      Vector& dc, Vector& dd);
 
   private:
 

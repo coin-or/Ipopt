@@ -99,18 +99,18 @@ namespace Ipopt
 
     if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "\n**************************************************\n");
+                     "\n**************************************************\n");
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "*** Beginning Iteration %d from the following point:",
-		     IpData().iter_count());
+                     "*** Beginning Iteration %d from the following point:",
+                     IpData().iter_count());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "\n**************************************************\n\n");
+                     "\n**************************************************\n\n");
 
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "Current barrier parameter mu = %21.16e\n", IpData().curr_mu());
+                     "Current barrier parameter mu = %21.16e\n", IpData().curr_mu());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "Current fraction-to-the-boundary parameter tau = %21.16e\n\n",
-		     IpData().curr_tau());
+                     "Current fraction-to-the-boundary parameter tau = %21.16e\n\n",
+                     IpData().curr_tau());
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "||curr_x||_inf   = %.16e\n", IpData().curr()->x()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
@@ -196,8 +196,8 @@ namespace Ipopt
 
     if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "\n\n***Current NLP Values for Iteration %d:\n",
-		     IpData().iter_count());
+                     "\n\n***Current NLP Values for Iteration %d:\n",
+                     IpData().iter_count());
       Jnlst().Printf(J_DETAILED, J_MAIN, "Objective = %.16e\n", IpCq().curr_f());
     }
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
@@ -205,7 +205,7 @@ namespace Ipopt
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_c", *IpCq().curr_c());
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_d", *IpCq().curr_d());
       Jnlst().PrintVector(J_VECTOR, J_MAIN,
-			  "curr_d - curr_s", *IpCq().curr_d_minus_s());
+                          "curr_d - curr_s", *IpCq().curr_d_minus_s());
     }
 
     if (Jnlst().ProduceOutput(J_MATRIX, J_MAIN)) {

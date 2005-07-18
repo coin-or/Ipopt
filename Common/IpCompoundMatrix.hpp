@@ -220,7 +220,10 @@ namespace Ipopt
     }
 
     /** True if the blocks lie on the diagonal - can make some operations faster */
-    bool Diagonal() const { return diagonal_; }
+    bool Diagonal() const
+    {
+      return diagonal_;
+    }
     //@}
 
     /** Method for creating a new matrix of this specific type. */

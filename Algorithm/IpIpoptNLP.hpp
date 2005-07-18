@@ -49,7 +49,7 @@ namespace Ipopt
     {
       bool ret = true;
       if (IsValid(nlp_scaling_)) {
-	ret = nlp_scaling_->Initialize(jnlst, options, prefix);
+        ret = nlp_scaling_->Initialize(jnlst, options, prefix);
       }
       return ret;
     }
@@ -217,10 +217,10 @@ namespace Ipopt
     /** solution routines */
     //@{
     virtual void FinalizeSolution(ApplicationReturnStatus status,
-			  const Vector& x, const Vector& z_L, const Vector& z_U,
-			  const Vector& c, const Vector& d,
-			  const Vector& y_c, const Vector& y_d,
-			  Number obj_value)=0;
+                                  const Vector& x, const Vector& z_L, const Vector& z_U,
+                                  const Vector& c, const Vector& d,
+                                  const Vector& y_c, const Vector& y_d,
+                                  Number obj_value)=0;
     //@}
 
   protected:

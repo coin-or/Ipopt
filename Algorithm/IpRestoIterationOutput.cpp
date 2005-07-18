@@ -141,19 +141,19 @@ namespace Ipopt
 
     if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "\n**************************************************\n");
+                     "\n**************************************************\n");
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "*** Beginning Iteration %d from the following point:",
-		     IpData().iter_count());
+                     "*** Beginning Iteration %d from the following point:",
+                     IpData().iter_count());
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "\n**************************************************\n\n");
+                     "\n**************************************************\n\n");
 
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "Primal infeasibility for restoration phase problem = %.16e\n",
-		     IpCq().curr_primal_infeasibility(NORM_MAX));
+                     "Primal infeasibility for restoration phase problem = %.16e\n",
+                     IpCq().curr_primal_infeasibility(NORM_MAX));
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "Dual infeasibility for restoration phase problem   = %.16e\n",
-		     IpCq().curr_dual_infeasibility(NORM_MAX));
+                     "Dual infeasibility for restoration phase problem   = %.16e\n",
+                     IpCq().curr_dual_infeasibility(NORM_MAX));
 
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "||curr_x||_inf   = %.16e\n", IpData().curr()->x()->Amax());
@@ -240,8 +240,8 @@ namespace Ipopt
 
     if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-		     "\n\n***Current NLP Values for Iteration (Restoration phase problem) %d:\n",
-		     IpData().iter_count());
+                     "\n\n***Current NLP Values for Iteration (Restoration phase problem) %d:\n",
+                     IpData().iter_count());
       Jnlst().Printf(J_DETAILED, J_MAIN, "Objective = %.16e\n", IpCq().curr_f());
     }
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
@@ -249,7 +249,7 @@ namespace Ipopt
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_c", *IpCq().curr_c());
       Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_d", *IpCq().curr_d());
       Jnlst().PrintVector(J_VECTOR, J_MAIN,
-			  "curr_d - curr_s", *IpCq().curr_d_minus_s());
+                          "curr_d - curr_s", *IpCq().curr_d_minus_s());
     }
     if (Jnlst().ProduceOutput(J_MATRIX, J_MAIN)) {
       Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_c", *IpCq().curr_jac_c());

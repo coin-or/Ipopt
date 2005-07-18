@@ -115,23 +115,23 @@ namespace Ipopt
       Number orig_trial_barr = orig_ip_cq->trial_barrier_obj();
 
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                   "orig_trial_barr = %8.2e\n", orig_trial_barr);
-      
+                     "orig_trial_barr = %8.2e\n", orig_trial_barr);
+
       if (!orig_filter_line_search_->IsAcceptableToCurrentFilter(orig_trial_barr, orig_trial_theta)) {
-	Jnlst().Printf(J_DETAILED, J_MAIN,
-		       "Point is not acceptable to the original filter.\n");
-	status = CONTINUE;
+        Jnlst().Printf(J_DETAILED, J_MAIN,
+                       "Point is not acceptable to the original filter.\n");
+        status = CONTINUE;
       }
       else if (!orig_filter_line_search_->IsAcceptableToCurrentIterate(orig_trial_barr, orig_trial_theta, true) ) {
-	Jnlst().Printf(J_DETAILED, J_MAIN,
-		       "Point is not acceptable to the original current point.\n");
-	status = CONTINUE;
+        Jnlst().Printf(J_DETAILED, J_MAIN,
+                       "Point is not acceptable to the original current point.\n");
+        status = CONTINUE;
       }
       else {
-	Jnlst().Printf(J_DETAILED, J_MAIN,
-		       "Restoration found a point that provides sufficient reduction in"
-		       " theta and is acceptable to the current filter.\n");
-	status = CONVERGED;
+        Jnlst().Printf(J_DETAILED, J_MAIN,
+                       "Restoration found a point that provides sufficient reduction in"
+                       " theta and is acceptable to the current filter.\n");
+        status = CONVERGED;
       }
     }
 

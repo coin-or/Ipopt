@@ -123,22 +123,22 @@ namespace Ipopt
   }
 
   void StandardScalingBase::DetermineScaling(const SmartPtr<const VectorSpace> x_space,
-                                     const SmartPtr<const VectorSpace> c_space,
-                                     const SmartPtr<const VectorSpace> d_space,
-                                     const SmartPtr<const MatrixSpace> jac_c_space,
-                                     const SmartPtr<const MatrixSpace> jac_d_space,
-                                     const SmartPtr<const SymMatrixSpace> h_space,
-                                     SmartPtr<const MatrixSpace>& new_jac_c_space,
-                                     SmartPtr<const MatrixSpace>& new_jac_d_space,
-                                     SmartPtr<const SymMatrixSpace>& new_h_space)
+      const SmartPtr<const VectorSpace> c_space,
+      const SmartPtr<const VectorSpace> d_space,
+      const SmartPtr<const MatrixSpace> jac_c_space,
+      const SmartPtr<const MatrixSpace> jac_d_space,
+      const SmartPtr<const SymMatrixSpace> h_space,
+      SmartPtr<const MatrixSpace>& new_jac_c_space,
+      SmartPtr<const MatrixSpace>& new_jac_d_space,
+      SmartPtr<const SymMatrixSpace>& new_h_space)
   {
     dx_ = x_space->MakeNew();
     SmartPtr<Vector> dc = c_space->MakeNew();
     SmartPtr<Vector> dd = d_space->MakeNew();
     DetermineScalingParametersImpl(x_space, c_space, d_space,
-				   jac_c_space, jac_d_space,
-				   h_space,
-				   df_, *dx_, *dc, *dd);
+                                   jac_c_space, jac_d_space,
+                                   h_space,
+                                   df_, *dx_, *dc, *dd);
 
     // create the scaling matrix spaces
     scaled_jac_c_space_ = new ScaledMatrixSpace(ConstPtr(dc), false, jac_c_space, ConstPtr(dx_), true);

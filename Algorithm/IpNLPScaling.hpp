@@ -41,9 +41,11 @@ namespace Ipopt
 
     /** Method to initialize the options */
     virtual bool Initialize(const Journalist& jnlst,
-		    const OptionsList& options,
-		    const std::string& prefix) 
-    { return true; }
+                            const OptionsList& options,
+                            const std::string& prefix)
+    {
+      return true;
+    }
 
     /** Methods to map scaled and unscaled matrices */
     //@{
@@ -96,9 +98,9 @@ namespace Ipopt
     //@{
     /** Returns an x-scaled vector in the x_L space */
     SmartPtr<Vector> apply_vector_scaling_x_L_NonConst(
-        SmartPtr<Matrix> Px_L, 
-	const SmartPtr<const Vector>& l, 
-	const SmartPtr<const VectorSpace> x_space);
+      SmartPtr<Matrix> Px_L,
+      const SmartPtr<const Vector>& l,
+      const SmartPtr<const VectorSpace> x_space);
     /** Returns an x-scaled vector in the x_U space */
     SmartPtr<Vector> apply_vector_scaling_x_U_NonConst(SmartPtr<Matrix> Px_U, const SmartPtr<const Vector>& u, const SmartPtr<const VectorSpace> x_space);
     /** Returns an d-scaled vector in the d_L space */
@@ -416,14 +418,14 @@ namespace Ipopt
 
   protected:
     virtual void DetermineScalingParametersImpl(
-	const SmartPtr<const VectorSpace> x_space,
-	const SmartPtr<const VectorSpace> c_space,
-	const SmartPtr<const VectorSpace> d_space,
-	const SmartPtr<const MatrixSpace> jac_c_space,
-	const SmartPtr<const MatrixSpace> jac_d_space,
-	const SmartPtr<const SymMatrixSpace> h_space,
-	Number& df, Vector& dx, 
-	Vector& dc, Vector& dd)=0;
+      const SmartPtr<const VectorSpace> x_space,
+      const SmartPtr<const VectorSpace> c_space,
+      const SmartPtr<const VectorSpace> d_space,
+      const SmartPtr<const MatrixSpace> jac_c_space,
+      const SmartPtr<const MatrixSpace> jac_d_space,
+      const SmartPtr<const SymMatrixSpace> h_space,
+      Number& df, Vector& dx,
+      Vector& dc, Vector& dd)=0;
 
   private:
 

@@ -18,7 +18,7 @@ namespace Ipopt
 
   DeclareIpoptType(GradientScaling);
 
-  /** This class does problem scaling by setting the 
+  /** This class does problem scaling by setting the
    *  scaling parameters based on the maximum of the
    *  gradient at the user provided initial point.
    */
@@ -29,8 +29,8 @@ namespace Ipopt
     //@{
     GradientScaling(const SmartPtr<NLP>& nlp)
         :
-      StandardScalingBase(),
-      nlp_(nlp)
+        StandardScalingBase(),
+        nlp_(nlp)
     {}
 
     /** Default destructor */
@@ -40,8 +40,8 @@ namespace Ipopt
 
     /** Initialize the object from the options */
     bool Initialize(const Journalist& jnlst,
-		    const OptionsList& options,
-		    const std::string& prefix);
+                    const OptionsList& options,
+                    const std::string& prefix);
 
     /** Methods for IpoptType */
     //@{
@@ -51,14 +51,14 @@ namespace Ipopt
 
   protected:
     virtual void DetermineScalingParametersImpl(
-	const SmartPtr<const VectorSpace> x_space,
-	const SmartPtr<const VectorSpace> c_space,
-	const SmartPtr<const VectorSpace> d_space,
-	const SmartPtr<const MatrixSpace> jac_c_space,
-	const SmartPtr<const MatrixSpace> jac_d_space,
-	const SmartPtr<const SymMatrixSpace> h_space,
-	Number& df, Vector& dx, 
-	Vector& dc, Vector& dd);
+      const SmartPtr<const VectorSpace> x_space,
+      const SmartPtr<const VectorSpace> c_space,
+      const SmartPtr<const VectorSpace> d_space,
+      const SmartPtr<const MatrixSpace> jac_c_space,
+      const SmartPtr<const MatrixSpace> jac_d_space,
+      const SmartPtr<const SymMatrixSpace> h_space,
+      Number& df, Vector& dx,
+      Vector& dc, Vector& dd);
 
   private:
 

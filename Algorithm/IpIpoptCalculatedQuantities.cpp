@@ -523,7 +523,7 @@ namespace Ipopt
     return result;
   }
 
-  Number 
+  Number
   IpoptCalculatedQuantities::unscaled_curr_f()
   {
     // this value is cached in IpOrigIpoptNLP (not in the resto...)
@@ -1937,14 +1937,14 @@ namespace Ipopt
   {
     switch (NormType) {
       case NORM_1 :
-	return vec1.Asum() + vec2.Asum();
+      return vec1.Asum() + vec2.Asum();
       case NORM_2 :
-	return sqrt(vec1.Nrm2()*vec2.Nrm2());
+      return sqrt(vec1.Nrm2()*vec2.Nrm2());
       case NORM_MAX :
-	return Max(vec1.Amax(), vec2.Amax());
+      return Max(vec1.Amax(), vec2.Amax());
       default:
-	DBG_ASSERT("Unknown NormType.");
-	return 0.0;
+      DBG_ASSERT("Unknown NormType.");
+      return 0.0;
     }
   }
 

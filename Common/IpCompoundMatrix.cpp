@@ -107,15 +107,15 @@ namespace Ipopt
 
       for( Index jcol = 0; jcol < NComps_Cols(); jcol++ ) {
         if ( (owner_space_->Diagonal() && irow == jcol)
-	     || (!owner_space_->Diagonal() && ConstComp(irow,jcol)) ) {
-	  SmartPtr<const Vector> x_j;
-	  if (comp_x) {
-	    x_j = comp_x->GetComp(jcol);
-	  }
-	  else if (NComps_Cols() == 1) {
-	    x_j = &x;
-	  }
-	  DBG_ASSERT(IsValid(x_j));
+             || (!owner_space_->Diagonal() && ConstComp(irow,jcol)) ) {
+          SmartPtr<const Vector> x_j;
+          if (comp_x) {
+            x_j = comp_x->GetComp(jcol);
+          }
+          else if (NComps_Cols() == 1) {
+            x_j = &x;
+          }
+          DBG_ASSERT(IsValid(x_j));
 
           ConstComp(irow, jcol)->MultVector(alpha, *x_j,
                                             1., *y_i);
@@ -171,15 +171,15 @@ namespace Ipopt
 
       for( Index jcol = 0; jcol < NComps_Rows(); jcol++ ) {
         if ( (owner_space_->Diagonal() && irow == jcol)
-	     || (!owner_space_->Diagonal() && ConstComp(jcol, irow)) ) {
-	  SmartPtr<const Vector> x_j;
-	  if (comp_x) {
-	    x_j = comp_x->GetComp(jcol);
-	  }
-	  else {
-	    x_j = &x;
-	  }
-	  DBG_ASSERT(IsValid(x_j));
+             || (!owner_space_->Diagonal() && ConstComp(jcol, irow)) ) {
+          SmartPtr<const Vector> x_j;
+          if (comp_x) {
+            x_j = comp_x->GetComp(jcol);
+          }
+          else {
+            x_j = &x;
+          }
+          DBG_ASSERT(IsValid(x_j));
 
           ConstComp(jcol, irow)->TransMultVector(alpha, *x_j,
                                                  1., *y_i);
@@ -230,23 +230,23 @@ namespace Ipopt
 
       for( Index jcol = 0; jcol < NComps_Cols(); jcol++ ) {
         if ( (owner_space_->Diagonal() && irow == jcol)
-	     || (!owner_space_->Diagonal() && ConstComp(jcol, irow)) ) {
-	  SmartPtr<const Vector> S_j;
-	  if (comp_S) {
-	    S_j = comp_S->GetComp(jcol);
-	  }
-	  else {
-	    S_j = &S;
-	  }
-	  DBG_ASSERT(IsValid(S_j));
-	  SmartPtr<const Vector> Z_j;
-	  if (comp_Z) {
-	    Z_j = comp_Z->GetComp(jcol);
-	  }
-	  else {
-	    Z_j = &Z;
-	  }
-	  DBG_ASSERT(IsValid(Z_j));
+             || (!owner_space_->Diagonal() && ConstComp(jcol, irow)) ) {
+          SmartPtr<const Vector> S_j;
+          if (comp_S) {
+            S_j = comp_S->GetComp(jcol);
+          }
+          else {
+            S_j = &S;
+          }
+          DBG_ASSERT(IsValid(S_j));
+          SmartPtr<const Vector> Z_j;
+          if (comp_Z) {
+            Z_j = comp_Z->GetComp(jcol);
+          }
+          else {
+            Z_j = &Z;
+          }
+          DBG_ASSERT(IsValid(Z_j));
 
           ConstComp(jcol, irow)->AddMSinvZ(alpha, *S_j, *Z_j, *X_i);
         }
@@ -262,7 +262,7 @@ namespace Ipopt
     // First check if the matrix is indeed such that we can use the
     // special methods from the component spaces (this only works if
     // we have exactly one submatrix per column)
-    // CDL: in every case this was true, the matrix blocks were on the 
+    // CDL: in every case this was true, the matrix blocks were on the
     // diagonal so I made this more efficient.
 
     if (!owner_space_->Diagonal()) {
@@ -281,81 +281,81 @@ namespace Ipopt
 
       //  A few sanity checks for sizes
       if (comp_S) {
-	DBG_ASSERT(NComps_Cols()==comp_S->NComps());
+        DBG_ASSERT(NComps_Cols()==comp_S->NComps());
       }
       else {
-	DBG_ASSERT(NComps_Cols() == 1);
+        DBG_ASSERT(NComps_Cols() == 1);
       }
       if (comp_Z) {
-	DBG_ASSERT(NComps_Cols()==comp_Z->NComps());
+        DBG_ASSERT(NComps_Cols()==comp_Z->NComps());
       }
       else {
-	DBG_ASSERT(NComps_Cols() == 1);
+        DBG_ASSERT(NComps_Cols() == 1);
       }
       if (comp_R) {
-	DBG_ASSERT(NComps_Cols()==comp_R->NComps());
+        DBG_ASSERT(NComps_Cols()==comp_R->NComps());
       }
       else {
-	DBG_ASSERT(NComps_Cols() == 1);
+        DBG_ASSERT(NComps_Cols() == 1);
       }
       if (comp_D) {
-	DBG_ASSERT(NComps_Rows()==comp_D->NComps());
+        DBG_ASSERT(NComps_Rows()==comp_D->NComps());
       }
       else {
-	DBG_ASSERT(NComps_Rows() == 1);
+        DBG_ASSERT(NComps_Rows() == 1);
       }
       if (comp_X) {
-	DBG_ASSERT(NComps_Cols()==comp_X->NComps());
+        DBG_ASSERT(NComps_Cols()==comp_X->NComps());
       }
       else {
-	DBG_ASSERT(NComps_Cols() == 1);
+        DBG_ASSERT(NComps_Cols() == 1);
       }
 
       for (Index irow=0; irow<NComps_Cols(); irow++ ) {
-	Index jcol = irow; // diagonal, remember
-	SmartPtr<const Vector> S_i;
-	if (comp_S) {
-	  S_i = comp_S->GetComp(irow);
-	}
-	else {
-	  S_i = &S;
-	}
-	DBG_ASSERT(IsValid(S_i));
-	SmartPtr<const Vector> Z_i;
-	if (comp_Z) {
-	  Z_i = comp_Z->GetComp(irow);
-	}
-	else {
-	  Z_i = &Z;
-	}
-	DBG_ASSERT(IsValid(Z_i));
-	SmartPtr<const Vector> R_i;
-	if (comp_R) {
-	  R_i = comp_R->GetComp(irow);
-	}
-	else {
-	  R_i = &R;
-	}
-	DBG_ASSERT(IsValid(R_i));
-	SmartPtr<const Vector> D_i;
-	if (comp_D) {
-	  D_i = comp_D->GetComp(jcol);
-	}
-	else {
-	  D_i = &D;
-	}
-	DBG_ASSERT(IsValid(D_i));
-	SmartPtr<Vector> X_i;
-	if (comp_X) {
-	  X_i = comp_X->GetCompNonConst(irow);
-	}
-	else {
-	  X_i = &X;
-	}
-	DBG_ASSERT(IsValid(X_i));
+        Index jcol = irow; // diagonal, remember
+        SmartPtr<const Vector> S_i;
+        if (comp_S) {
+          S_i = comp_S->GetComp(irow);
+        }
+        else {
+          S_i = &S;
+        }
+        DBG_ASSERT(IsValid(S_i));
+        SmartPtr<const Vector> Z_i;
+        if (comp_Z) {
+          Z_i = comp_Z->GetComp(irow);
+        }
+        else {
+          Z_i = &Z;
+        }
+        DBG_ASSERT(IsValid(Z_i));
+        SmartPtr<const Vector> R_i;
+        if (comp_R) {
+          R_i = comp_R->GetComp(irow);
+        }
+        else {
+          R_i = &R;
+        }
+        DBG_ASSERT(IsValid(R_i));
+        SmartPtr<const Vector> D_i;
+        if (comp_D) {
+          D_i = comp_D->GetComp(jcol);
+        }
+        else {
+          D_i = &D;
+        }
+        DBG_ASSERT(IsValid(D_i));
+        SmartPtr<Vector> X_i;
+        if (comp_X) {
+          X_i = comp_X->GetCompNonConst(irow);
+        }
+        else {
+          X_i = &X;
+        }
+        DBG_ASSERT(IsValid(X_i));
 
-	ConstComp(jcol, irow)->SinvBlrmZMTdBr(alpha, *S_i, *R_i, *Z_i,
-					      *D_i, *X_i);
+        ConstComp(jcol, irow)->SinvBlrmZMTdBr(alpha, *S_i, *R_i, *Z_i,
+                                              *D_i, *X_i);
       }
     }
   }
@@ -479,11 +479,11 @@ namespace Ipopt
     diagonal_ = true;
     for (Index i=0; i < NComps_Rows(); i++) {
       for (Index j=0; j < NComps_Cols(); j++) {
-	if ( (i == j && IsNull(GetCompSpace(i,j)))
-	     || (i != j && IsValid(GetCompSpace(i,j)))) {
-	  diagonal_ = false;
-	  break;
-	}
+        if ( (i == j && IsNull(GetCompSpace(i,j)))
+             || (i != j && IsValid(GetCompSpace(i,j)))) {
+          diagonal_ = false;
+          break;
+        }
       }
     }
   }

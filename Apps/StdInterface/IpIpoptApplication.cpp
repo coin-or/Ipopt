@@ -225,7 +225,7 @@ namespace Ipopt
         nlp_scaling = new UserScaling(ConstPtr(nlp));
       }
       else if (scaling_method == "gradient_based") {
-	nlp_scaling = new GradientScaling(nlp);
+        nlp_scaling = new GradientScaling(nlp);
       }
       else {
         nlp_scaling = new NoNLPScalingObject();
@@ -245,7 +245,7 @@ namespace Ipopt
 
       // Create the Algorithm object
       SmartPtr<IpoptAlgorithm> alg
-	= AlgorithmBuilder::BuildBasicAlgorithm(*jnlst_, *options_, "");
+      = AlgorithmBuilder::BuildBasicAlgorithm(*jnlst_, *options_, "");
 
       // Set up the algorithm
       alg->Initialize(*jnlst_, *ip_nlp, *ip_data, *ip_cq, *options_, "");
@@ -337,16 +337,16 @@ namespace Ipopt
       }
 
       ip_nlp->FinalizeSolution(retValue,
-			       *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
-			       *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
-			       ip_cq->curr_f());
+                               *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
+                               *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
+                               ip_cq->curr_f());
     }
     catch(LOCALLY_INFEASIBILE& exc) {
       exc.ReportException(*jnlst_);
       ip_nlp->FinalizeSolution(retValue,
-			       *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
-			       *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
-			       ip_cq->curr_f());
+                               *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
+                               *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
+                               ip_cq->curr_f());
 
       retValue = Infeasible_Problem_Detected;
     }
