@@ -30,7 +30,7 @@ libipoptalg_a_SOURCES = \
 	IpLoqoMuOracle.hpp IpLoqoMuOracle.cpp \
 	IpMonotoneMuUpdate.hpp IpMonotoneMuUpdate.cpp \
 	IpMuOracle.hpp \
-	IpMuUpdate.hpp IpMuUpdate.cpp \
+	IpMuUpdate.hpp \
 	IpNonmonotoneMuUpdate.hpp IpNonmonotoneMuUpdate.cpp \
 	IpNLPScaling.hpp IpNLPScaling.cpp \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \

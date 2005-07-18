@@ -21,7 +21,7 @@ namespace Ipopt
    *  full space approach with a direct linear solver.
    *
    *  A note on the iterative refinement: We perform at least
-   *  num_min_iter_ref number of iterative refinement steps.  If after
+   *  min_refinement_steps number of iterative refinement steps.  If after
    *  one iterative refinement the quality of the solution (defined in
    *  ResidualRatio) does not improve or the maximal number of
    *  iterative refinement steps is exceeded before the tolerance
@@ -107,11 +107,11 @@ namespace Ipopt
     /** @name Parameters */
     //@{
     /** Minimal number of iterative refinement performed per backsolve */
-    Index num_min_iter_ref_;
+    Index min_refinement_steps_;
     /** Maximal number of iterative refinement performed per backsolve */
-    Index num_max_iter_ref_;
+    Index max_refinement_steps_;
     /** Maximal value for the regularization. */
-    Number delta_regu_max_;
+    Number max_inertia_correction_;
     /** Maximal allowed ratio of the norm of the residual over the
      *  norm of the right hand side and solution. */
     Number residual_ratio_max_;

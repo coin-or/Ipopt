@@ -22,15 +22,19 @@ namespace Ipopt
 
   void OptimalityErrorConvergenceCheck::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedIntegerOption("maxiter", "Maximum number of iterations to allow",
-                                           0, 1000);
+    roptions->AddLowerBoundedIntegerOption(
+      "max_iter",
+      "Maximum number of iterations.",
+      0, 3000,
+      "The algorithm terminates with an error message if the number of "
+      "iterations exceeded this number.");
   }
 
   bool
   OptimalityErrorConvergenceCheck::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    options.GetIntegerValue("maxiter", max_iterations_, prefix);
+    options.GetIntegerValue("max_iter", max_iterations_, prefix);
 
     return true;
   }

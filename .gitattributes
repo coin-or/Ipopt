@@ -4,7 +4,6 @@ Algorithm/IpGradientScaling.cpp -text
 Algorithm/IpGradientScaling.hpp -text
 Algorithm/IpIteratesVector.cpp -text
 Algorithm/IpIteratesVector.hpp -text
-Algorithm/IpMuUpdate.cpp -text
 Algorithm/IpNLPScaling.cpp -text
 Algorithm/IpNLPScaling.hpp -text
 Algorithm/IpQualityFunctionMuOracle.cpp -text

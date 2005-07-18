@@ -48,8 +48,15 @@ namespace Ipopt
 
   void OrigIpoptNLP::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("bound_relax_factor","factor for initial relaxation of the bounds",
-                                          0, false, 1e-8);
+    roptions->AddLowerBoundedNumberOption(
+      "bound_relax_factor",
+      "Factor for initial relaxation of the bounds.",
+      0, false,
+      1e-8,
+      "Before start of the optimization, the bounds given by the user are "
+      "relaxed.  This option determines the factor by how much.  If it "
+      "is set to zero, then this option is disabled.  (See Eqn.(35) in "
+      "implmentation paper.)");
   }
 
   bool OrigIpoptNLP::Initialize(const Journalist& jnlst,
@@ -61,7 +68,7 @@ namespace Ipopt
     if (!nlp_->ProcessOptions(options, prefix)) {
       return false;
     }
-    
+
     initialized_ = true;
     return IpoptNLP::Initialize(jnlst, options, prefix);
   }
@@ -303,7 +310,7 @@ namespace Ipopt
       // return the unscaled version
       retValue = NLP_scaling()->unapply_vector_scaling_c(scaled_c);
     }
-    else{
+    else {
       c_evals_++;
       unscaled_c = c_space_->MakeNew();
       SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
@@ -485,10 +492,10 @@ namespace Ipopt
   }
 
   void OrigIpoptNLP::FinalizeSolution(ApplicationReturnStatus status,
-				      const Vector& x, const Vector& z_L, const Vector& z_U,
-				      const Vector& c, const Vector& d,
-				      const Vector& y_c, const Vector& y_d,
-				      Number obj_value)
+                                      const Vector& x, const Vector& z_L, const Vector& z_U,
+                                      const Vector& c, const Vector& d,
+                                      const Vector& y_c, const Vector& y_d,
+                                      Number obj_value)
   {
     // need to submit the unscaled solution back to the nlp
     SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
@@ -500,11 +507,11 @@ namespace Ipopt
     SmartPtr<const Vector> unscaled_y_d = NLP_scaling()->apply_vector_scaling_d(&y_d);
     const Number unscaled_obj = NLP_scaling()->unapply_obj_scaling(obj_value);
 
-    nlp_->FinalizeSolution(status, *unscaled_x, 
-			   *unscaled_z_L, *unscaled_z_U,
-			   *unscaled_c, *unscaled_d,
-			   *unscaled_y_c, *unscaled_y_d,
-			   unscaled_obj);
+    nlp_->FinalizeSolution(status, *unscaled_x,
+                           *unscaled_z_L, *unscaled_z_U,
+                           *unscaled_c, *unscaled_d,
+                           *unscaled_y_c, *unscaled_y_d,
+                           unscaled_obj);
   }
 
   void OrigIpoptNLP::AdjustVariableBounds(const Vector& new_x_L, const Vector& new_x_U,

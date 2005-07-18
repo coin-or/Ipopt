@@ -103,27 +103,25 @@ namespace Ipopt
     Number mu_max_;
     Number mu_min_;
     Number tau_min_;
-    Number mu_safeguard_exp_;
-    Number mu_safeguard_factor_; //ToDo don't need that?
-    Number fixed_mu_avrg_factor_;
-    /** ToDo the following should be combined with MonotoneMuUpdate */
-    Number kappa_epsilon_;
-    Number kappa_mu_;
-    Number theta_mu_;
-    NormEnum nonmonotone_kkt_norm_;
-    CentralityEnum nonmonotone_kkt_centrality_;
-    BalancingTermEnum nonmonotone_kkt_balancing_term_;
-    /** enumeration for adaptive globalization ToDo: Andreas, can you give these
-     * sensible names */
-    enum AdaptiveGlobalizationEnum
+    Number adaptive_mu_safeguard_factor_; //ToDo don't need that?
+    Number adaptive_mu_monotone_init_factor_;
+    Number barrier_tol_factor_;
+    Number mu_linear_decrease_factor_;
+    Number mu_superlinear_decrease_power_;
+    NormEnum adaptive_mu_kkt_norm_;
+    CentralityEnum adaptive_mu_kkt_centrality_;
+    BalancingTermEnum adaptive_mu_kkt_balancing_term_;
+    /** enumeration for adaptive globalization */
+    enum AdaptiveMuGlobalizationEnum
     {
-      AG_1=0,
-      AG_2,
-      AG_3
+      KKT_ERROR=0,
+      FILTER_OBJ_CONSTR,
+      FILTER_KKT_ERROR,
+      NEVER_MONOTONE_MODE
     };
     /** Flag indicating which globalization strategy should be used. */
-    AdaptiveGlobalizationEnum adaptive_globalization_;
-    /** Maximal margin in filter (for adaptive_globalization = 3) */
+    AdaptiveMuGlobalizationEnum adaptive_mu_globalization_;
+    /** Maximal margin in filter */
     Number filter_max_margin_;
     /** Factor for filter margin */
     Number filter_margin_fact_;
@@ -194,9 +192,6 @@ namespace Ipopt
     std::list<Number> refs_vals_;
     /** Factor requested to reduce the reference values */
     Number refs_red_fact_;
-    /** Flag indicating whether the barrier parameter should never be
-     *  fixed (no globalization) */
-    bool mu_never_fix_;
 
     /** Alternatively, we might also want to use a filter */
     Filter filter_;
