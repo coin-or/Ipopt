@@ -1,5 +1,7 @@
 * text=auto !eol
 /AUTHORS -text
+Algorithm/IpAdaptiveMuUpdate.cpp -text
+Algorithm/IpAdaptiveMuUpdate.hpp -text
 Algorithm/IpGradientScaling.cpp -text
 Algorithm/IpGradientScaling.hpp -text
 Algorithm/IpIteratesVector.cpp -text

@@ -56,7 +56,7 @@ namespace Ipopt
       10.0,
       "The convergence tolerance for each barrier problem in the montone mode "
       "is the value of the barrier parameter times this value. This option is "
-      "also used in class \"NonmontoneMuUpdate\" during the monotone mode. "
+      "also used in class \"AdaptiveMuUpdate\" during the monotone mode. "
       "(This is kappa_epsilon in implementation paper).");
     roptions->AddBoundedNumberOption(
       "mu_linear_decrease_factor",
@@ -67,7 +67,7 @@ namespace Ipopt
       "is obtained by taking the minimum of mu*\"mu_linear_decrease_factor\" "
       "and mu^\"superlinear_decrease_power\".  (This is kappa_mu in "
       "implementation paper.) [This option is also used in "
-      "NonmonotoneMuUpdate]");
+      "AdaptiveMuUpdate]");
     roptions->AddBoundedNumberOption(
       "mu_superlinear_decrease_power",
       "Determines superlinear decrease rate of barrier parameter.",
@@ -77,14 +77,14 @@ namespace Ipopt
       "is obtained by taking the minimum of mu*\"mu_linear_decrease_factor\" "
       "and mu^\"superlinear_decrease_power\".  (This is theta_mu in "
       "implementation paper.) [This option is also used in "
-      "NonmonotoneMuUpdate]");
+      "AdaptiveMuUpdate]");
     roptions->AddBoundedNumberOption(
       "tau_min",
       "Lower bound on fraction-to-the-boundary parameter tau.",
       0.0, true, 1.0, true,
       0.99,
       "(This is tau_min in implementation paper.) [This option is also "
-      "used in NonmonotoneMuUpdate]");
+      "used in AdaptiveMuUpdate]");
   }
 
   bool MonotoneMuUpdate::InitializeImpl(const OptionsList& options,

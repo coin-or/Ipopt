@@ -2,11 +2,11 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id$
+// $Id: IpAdaptiveMuUpdate.cpp 375 2005-07-18 18:30:42Z andreasw $
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-#include "IpNonmonotoneMuUpdate.hpp"
+#include "IpAdaptiveMuUpdate.hpp"
 #include "IpJournalist.hpp"
 
 #ifdef OLD_C_HEADERS
@@ -20,9 +20,9 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(NonmonotoneMuUpdate);
+  DefineIpoptType(AdaptiveMuUpdate);
 
-  NonmonotoneMuUpdate::NonmonotoneMuUpdate
+  AdaptiveMuUpdate::AdaptiveMuUpdate
   (const SmartPtr<LineSearch>& line_search,
    const SmartPtr<MuOracle>& free_mu_oracle,
    const SmartPtr<MuOracle>& fix_mu_oracle)
@@ -38,10 +38,10 @@ namespace Ipopt
     // fix_mu_oracle may be NULL
   }
 
-  NonmonotoneMuUpdate::~NonmonotoneMuUpdate()
+  AdaptiveMuUpdate::~AdaptiveMuUpdate()
   {}
 
-  void NonmonotoneMuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  void AdaptiveMuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddLowerBoundedNumberOption(
       "mu_max",
@@ -83,12 +83,6 @@ namespace Ipopt
       "For the \"kkt-error\" based globalization strategy, this "
       "determins by how much the error has to be decrease to be deemed "
       "sufficient.");
-    roptions->AddLowerBoundedIntegerOption(
-      "nonmonotone_mu_max_refs",
-      "Maximal number of nonmonotone iterations for kkt-error globalization strategy.",
-      0, 4,
-      "For the \"kkt-error\" based globalization strategy, this determines "
-      "over how many iterations the kkt error had be decrease sufficiently.");
 
     roptions->AddBoundedNumberOption(
       "filter_margin_fact",
@@ -170,8 +164,8 @@ namespace Ipopt
 
   }
 
-  bool NonmonotoneMuUpdate::InitializeImpl(const OptionsList& options,
-      const std::string& prefix)
+  bool AdaptiveMuUpdate::InitializeImpl(const OptionsList& options,
+                                        const std::string& prefix)
   {
     options.GetNumericValue("mu_max", mu_max_, prefix);
     if (!options.GetNumericValue("mu_min", mu_min_, prefix)) {
@@ -180,7 +174,6 @@ namespace Ipopt
     options.GetNumericValue("tau_min", tau_min_, prefix);
     options.GetNumericValue("adaptive_mu_safeguard_factor", adaptive_mu_safeguard_factor_, prefix);
     options.GetNumericValue("adaptive_mu_kkterror_red_fact", refs_red_fact_, prefix);
-    options.GetIntegerValue("nonmonotone_mu_max_refs", num_refs_max_, prefix);
     Index enum_int;
     options.GetEnumValue("adaptive_mu_globalization", enum_int, prefix);
     adaptive_mu_globalization_ = AdaptiveMuGlobalizationEnum(enum_int);
@@ -235,7 +228,7 @@ namespace Ipopt
     return retvalue;
   }
 
-  void NonmonotoneMuUpdate::UpdateBarrierParameter()
+  void AdaptiveMuUpdate::UpdateBarrierParameter()
   {
     // of there are not bounds, we always return the minimum MU value
     // ToDo put information on whether problem has bounds into IpCq
@@ -387,7 +380,7 @@ namespace Ipopt
   }
 
   bool
-  NonmonotoneMuUpdate::CheckSufficientProgress()
+  AdaptiveMuUpdate::CheckSufficientProgress()
   {
     bool retval = true;
 
@@ -430,7 +423,7 @@ namespace Ipopt
   }
 
   void
-  NonmonotoneMuUpdate::RememberCurrentPointAsAccepted()
+  AdaptiveMuUpdate::RememberCurrentPointAsAccepted()
   {
     switch (adaptive_mu_globalization_) {
       case KKT_ERROR : {
@@ -481,13 +474,13 @@ namespace Ipopt
   }
 
   Number
-  NonmonotoneMuUpdate::Compute_tau_monotone(Number mu)
+  AdaptiveMuUpdate::Compute_tau_monotone(Number mu)
   {
     return Max(tau_min_, 1.-mu);
   }
 
   Number
-  NonmonotoneMuUpdate::min_ref_val()
+  AdaptiveMuUpdate::min_ref_val()
   {
     DBG_ASSERT(adaptive_mu_globalization_==KKT_ERROR);
     Number min_ref;
@@ -503,7 +496,7 @@ namespace Ipopt
   }
 
   Number
-  NonmonotoneMuUpdate::max_ref_val()
+  AdaptiveMuUpdate::max_ref_val()
   {
     DBG_ASSERT(adaptive_mu_globalization_==KKT_ERROR);
     Number max_ref;
@@ -519,7 +512,7 @@ namespace Ipopt
   }
 
   Number
-  NonmonotoneMuUpdate::NewFixedMu()
+  AdaptiveMuUpdate::NewFixedMu()
   {
     Number max_ref;
     // ToDo: Decide whether we should impose an upper bound on
@@ -559,7 +552,7 @@ namespace Ipopt
 
   //ToDo put the following into CalculatedQuantities?
   Number
-  NonmonotoneMuUpdate::curr_norm_pd_system()
+  AdaptiveMuUpdate::curr_norm_pd_system()
   {
     Index n_dual = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
     Index n_pri = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
@@ -660,7 +653,7 @@ namespace Ipopt
       balancing_term = pow(Max(0., Max(dual_inf,primal_inf)-complty),3);
       break;
       default:
-      DBG_ASSERT("Unknown value for nonmonotone_function_balancing term_");
+      DBG_ASSERT("Unknown value for adaptive_mu_kkt_balancing_term");
     }
 
     DBG_ASSERT(centrality>=0.);
@@ -681,7 +674,7 @@ namespace Ipopt
   }
 
   Number
-  NonmonotoneMuUpdate::lower_mu_safeguard()
+  AdaptiveMuUpdate::lower_mu_safeguard()
   {
     if (adaptive_mu_safeguard_factor_ == 0.)
       return 0.;

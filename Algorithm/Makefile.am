@@ -31,7 +31,7 @@ libipoptalg_a_SOURCES = \
 	IpMonotoneMuUpdate.hpp IpMonotoneMuUpdate.cpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp \
-	IpNonmonotoneMuUpdate.hpp IpNonmonotoneMuUpdate.cpp \
+	IpAdaptiveMuUpdate.hpp IpAdaptiveMuUpdate.cpp \
 	IpNLPScaling.hpp IpNLPScaling.cpp \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \
 	IpOrigIpoptNLP.cpp IpOrigIpoptNLP.hpp \
@@ -75,7 +75,7 @@ ASTYLE_FILES = \
 	IpMonotoneMuUpdate.hppbak IpMonotoneMuUpdate.cppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
-	IpNonmonotoneMuUpdate.hppbak IpNonmonotoneMuUpdate.cppbak \
+	IpAdaptiveMuUpdate.hppbak IpAdaptiveMuUpdate.cppbak \
 	IpNLPScaling.hppbak IpNLPScaling.cppbak \
 	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
 	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \

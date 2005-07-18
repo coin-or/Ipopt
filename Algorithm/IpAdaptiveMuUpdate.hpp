@@ -2,12 +2,12 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id$
+// $Id: IpNonmonotoneMuUpdate.hpp 375 2005-07-18 18:30:42Z andreasw $
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-#ifndef __IPNONMONOTONEMUUPDATE_HPP__
-#define __IPNONMONOTONEMUUPDATE_HPP__
+#ifndef __IPADAPTIVEMUUPDATE_HPP__
+#define __IPADAPTIVEMUUPDATE_HPP__
 
 #include "IpMuUpdate.hpp"
 #include "IpLineSearch.hpp"
@@ -18,21 +18,21 @@
 namespace Ipopt
 {
 
-  DeclareIpoptType(NonmonotoneMuUpdate);
+  DeclareIpoptType(AdaptiveMuUpdate);
 
   /** Non-monotone mu update.
    */
-  class NonmonotoneMuUpdate : public MuUpdate
+  class AdaptiveMuUpdate : public MuUpdate
   {
   public:
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
-    NonmonotoneMuUpdate(const SmartPtr<LineSearch>& linesearch,
-                        const SmartPtr<MuOracle>& free_mu_oracle,
-                        const SmartPtr<MuOracle>& fix_mu_oracle=NULL);
+    AdaptiveMuUpdate(const SmartPtr<LineSearch>& linesearch,
+                     const SmartPtr<MuOracle>& free_mu_oracle,
+                     const SmartPtr<MuOracle>& fix_mu_oracle=NULL);
     /** Default destructor */
-    virtual ~NonmonotoneMuUpdate();
+    virtual ~AdaptiveMuUpdate();
     //@}
 
     /** Initialize method - overloaded from AlgorithmStrategyObject */
@@ -89,13 +89,13 @@ namespace Ipopt
     //@{
 
     /** Default Constructor */
-    NonmonotoneMuUpdate();
+    AdaptiveMuUpdate();
 
     /** Copy Constructor */
-    NonmonotoneMuUpdate(const NonmonotoneMuUpdate&);
+    AdaptiveMuUpdate(const AdaptiveMuUpdate&);
 
     /** Overloaded Equals Operator */
-    void operator=(const NonmonotoneMuUpdate&);
+    void operator=(const AdaptiveMuUpdate&);
     //@}
 
     /** @name Algorithmic parameters */
