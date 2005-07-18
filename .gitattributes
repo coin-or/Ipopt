@@ -20,3 +20,5 @@ Common/IpScaledMatrix.cpp -text
 Common/IpScaledMatrix.hpp -text
 Common/IpSymScaledMatrix.cpp -text
 Common/IpSymScaledMatrix.hpp -text
+PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.cpp -text
+PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.hpp -text
