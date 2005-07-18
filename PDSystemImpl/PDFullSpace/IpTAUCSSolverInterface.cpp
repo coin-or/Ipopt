@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpPardisoSolverInterface.cpp 304 2005-05-25 19:17:41Z andreasw $
+// $Id$
 //
 // Author:  Yifan Hu              2005-04-06
 

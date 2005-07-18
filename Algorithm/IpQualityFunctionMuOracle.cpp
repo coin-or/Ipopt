@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpOptProbingMuOracle.cpp 321 2005-06-20 21:53:55Z andreasw $
+// $Id$
 //
 // Authors:  Andreas Waechter            IBM    2004-11-12
 
