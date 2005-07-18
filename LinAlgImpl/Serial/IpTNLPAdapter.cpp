@@ -524,19 +524,19 @@ namespace Ipopt
     return true;
   }
 
-  bool TNLPAdapter::GetStartingPoint(Vector* x,
+  bool TNLPAdapter::GetStartingPoint(SmartPtr<Vector> x,
                                      bool need_x,
-                                     Vector* y_c,
+                                     SmartPtr<Vector> y_c,
                                      bool need_y_c,
-                                     Vector* y_d,
+                                     SmartPtr<Vector> y_d,
                                      bool need_y_d,
-                                     Vector* z_L,
+                                     SmartPtr<Vector> z_L,
                                      bool need_z_L,
-                                     Vector* z_U,
+                                     SmartPtr<Vector> z_U,
                                      bool need_z_U,
-                                     Vector* v_L,
+                                     SmartPtr<Vector> v_L,
                                      bool need_v_L,
-                                     Vector* v_U,
+                                     SmartPtr<Vector> v_U,
                                      bool need_v_U
                                     )
   {
@@ -555,9 +555,8 @@ namespace Ipopt
       return false;
     }
 
-
     if (need_x) {
-      DenseVector* dx = dynamic_cast<DenseVector*>(x);
+      DenseVector* dx = dynamic_cast<DenseVector*>(GetRawPtr(x));
       DBG_ASSERT(dx);
       Number* values = dx->Values();
       const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
@@ -567,7 +566,7 @@ namespace Ipopt
     }
 
     if (need_y_c) {
-      DenseVector* dy_c = dynamic_cast<DenseVector*>(y_c);
+      DenseVector* dy_c = dynamic_cast<DenseVector*>(GetRawPtr(y_c));
       DBG_ASSERT(dy_c);
       Number* values = dy_c->Values();
       const Index* y_c_pos = P_c_g_->ExpandedPosIndices();
@@ -577,7 +576,7 @@ namespace Ipopt
     }
 
     if (need_y_d) {
-      DenseVector* dy_d = dynamic_cast<DenseVector*>(y_d);
+      DenseVector* dy_d = dynamic_cast<DenseVector*>(GetRawPtr(y_d));
       DBG_ASSERT(dy_d);
       Number* values = dy_d->Values();
       const Index* y_d_pos = P_d_g_->ExpandedPosIndices();
@@ -587,7 +586,7 @@ namespace Ipopt
     }
 
     if (need_z_L) {
-      DenseVector* dz_l = dynamic_cast<DenseVector*>(z_L);
+      DenseVector* dz_l = dynamic_cast<DenseVector*>(GetRawPtr(z_L));
       DBG_ASSERT(dz_l);
       Number* values = dz_l->Values();
       const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
@@ -600,7 +599,7 @@ namespace Ipopt
     }
 
     if (need_z_U) {
-      DenseVector* dz_u = dynamic_cast<DenseVector*>(z_U);
+      DenseVector* dz_u = dynamic_cast<DenseVector*>(GetRawPtr(z_U));
       DBG_ASSERT(dz_u);
       Number* values = dz_u->Values();
       const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
