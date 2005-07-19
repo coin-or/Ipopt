@@ -15,140 +15,16 @@
 
 extern "C"
 {
-  // we can not just wrap a extern C around
-  // #include "taucs.h"
-  // becuase we will get tons of messages and errors,
-  // because taucs.h includes a lot of C libraried.
-  typedef double    taucs_double;
-  typedef float     taucs_single;
-  //we do not use complex anyway, so do worry about
-  // whether TAUCS_C99_COMPLEX is defined or not
-#ifdef TAUCS_C99_COMPLEX
-#include <complex.h>
-
-  typedef _Complex double taucs_dcomplex;
-  typedef _Complex float  taucs_scomplex;
-#else /* C99 */
-
-  typedef struct {
-    double r,i;
-  }
-  taucs_dcomplex;
-  typedef struct {
-    float  r,i;
-  }
-  taucs_scomplex;
-#endif
-#define TAUCS_INT       1024
-#define TAUCS_DOUBLE    2048
-#define TAUCS_SINGLE    4096
-#define TAUCS_DCOMPLEX  8192
-#define TAUCS_SCOMPLEX 16384
-#define TAUCS_LOWER      1
-#define TAUCS_UPPER      2
-#define TAUCS_TRIANGULAR 4
-#define TAUCS_SYMMETRIC  8
-#define TAUCS_HERMITIAN  16
-#define TAUCS_PATTERN    32
-#define TAUCS_FACTORTYPE_NONE           0
-
-  typedef struct {
-    int   n;
-    int   flags;
-    int   type;
-    int*  rowperm;
-    int*  colperm;
-    void* L;
-  }
-  taucs_factorization;
-  typedef struct {
-    int     n;    /* columns                      */
-    int     m;    /* rows; don't use if symmetric   */
-    int     flags;
-    int*    colptr; /* pointers to where columns begin in rowind and values. */
-    /* 0-based. Length is (n+1). */
-    int*    rowind; /* row indices */
-
-    union {
-      void*           v;
-      taucs_double*   d;
-      taucs_single*   s;
-      taucs_dcomplex* z;
-      taucs_scomplex* c;
-    } values;
-
-  }
-  taucs_ccs_matrix;
-
+# include <taucs.h>
 
   void  taucs_free_stub(void *ptr);
   void  taucs_free   (void* ptr);
-#define taucs_free(x)      taucs_free_stub(x)
-  /*
-   extern void iFree(void *bp);
-  #define taucs_free(x)  iFree(x)
-  */
-
+# define taucs_free(x)      taucs_free_stub(x)
 
   void* taucs_malloc_stub(size_t size);
   void* taucs_malloc (size_t size);
-#define taucs_malloc(x)    taucs_malloc_stub(x);
-  /*
-   extern void *MallocAlign16( size_t size);
-  #define taucs_malloc(x)    MallocAlign16(x)
-  */
-
-  int taucs_printf(char *fmt, ...);
-  void taucs_ccs_free(taucs_ccs_matrix* matrix);
-  void taucs_ccs_order(taucs_ccs_matrix* matrix,
-                       int** perm, int** invperm,
-                       char* which);
-  void taucs_vec_permute(int n, int flags, void* v, void* pv, int p[]);
-  void    taucs_inertia_calc(void* vL, int* inertia);
-  void taucs_supernodal_factor_free                (void* L);
-  void taucs_supernodal_factor_free_numeric        (void* L);
-  int   taucs_ccs_factor_ldlt_numeric(taucs_ccs_matrix* A,void* L);
-  taucs_ccs_matrix* taucs_ccs_permute_symmetrically (taucs_ccs_matrix* A,
-      int* perm, int* invperm);
-  int taucs_supernodal_solve_ldlt_many(void *L,int n,void* X, int ld_X,void* B,
-                                       int ld_B);
-  void* taucs_ccs_factor_ldlt_ll_maxdepth(taucs_ccs_matrix* A,int max_depth);
-  void* taucs_ccs_factor_ldlt_symbolic_maxdepth(taucs_ccs_matrix* A,int max_depth);
-  void taucs_vec_ipermute(int n, int flags, void* v, void* pv, int p[]);
-  taucs_ccs_matrix* taucs_ccs_create(int m, int n, int nnz, int flags);
-
+# define taucs_malloc(x)    taucs_malloc_stub(x);
 }
-
-static int element_size(int flags)
-{
-  if (flags & TAUCS_SINGLE)
-    return sizeof(taucs_single);
-  if (flags & TAUCS_DOUBLE)
-    return sizeof(taucs_double);
-  if (flags & TAUCS_SCOMPLEX)
-    return sizeof(taucs_scomplex);
-  if (flags & TAUCS_DCOMPLEX)
-    return sizeof(taucs_dcomplex);
-  if (flags & TAUCS_INT)
-    return sizeof(int);
-  return -1;
-}
-
-/*********************************************************/
-/* Generic Factor routines                               */
-/* (Experimental, unstable interface)                    */
-/*********************************************************/
-
-#define TAUCS_FACTORTYPE_NONE           0
-#define TAUCS_FACTORTYPE_LLT_SUPERNODAL 1
-#define TAUCS_FACTORTYPE_LLT_CCS        2
-#define TAUCS_FACTORTYPE_LDLT_CCS       3
-#define TAUCS_FACTORTYPE_LLT_OOC        4
-#define TAUCS_FACTORTYPE_LU_OOC         5
-#define TAUCS_FACTORTYPE_IND            6
-#define TAUCS_FACTORTYPE_IND_OOC        7
-#define TAUCS_FACTORTYPE_LU             8
-
 
 namespace Ipopt
 {
@@ -159,6 +35,27 @@ namespace Ipopt
    */
   class TAUCSSolverInterface: public SparseSymLinearSolverInterface
   {
+    /** Enum to define different types of factorizations that TAUCS
+     *  can do. */
+    enum TAUCS_Matrix_type {
+      TAUCS_FACTORTYPE_NONE,
+      TAUCS_FACTORTYPE_LLT_SUPERNODAL,
+      TAUCS_FACTORTYPE_LLT_CCS,
+      TAUCS_FACTORTYPE_IND
+    };
+
+    /** Structure to store information about the factorization */
+    typedef struct
+    {
+      int n;
+      int flags;
+      TAUCS_Matrix_type type;
+      int* rowperm;
+      int* colperm;
+      void* L;
+    }
+    taucs_factorization;
+
   public:
     /** @name Constructor/Destructor */
     //@{
@@ -241,45 +138,74 @@ namespace Ipopt
     /** @name Information about the matrix */
     //@{
     /** Number of rows and columns of the matrix */
-    Index m, n;
+    Index n_;
 
     /** Number of nonzeros of the matrix in triplet representation. */
-    Index nz;
+    Index nz_;
 
     /** Array for storing the values of the matrix. */
-    double* a;
+    double* a_;
+
+    /** Flag indicatining whether to use multifrontal or IC indefinite
+     *  LL factorization */
+    bool multi_frontal_;
+
+    /** Structure storing information about the factorization. */
+    taucs_factorization *taucs_factor_;
+
+    /** Storing the matrix in TAUCS format */
+    taucs_ccs_matrix *A_;
+    //@}
 
     /** @name Information about most recent factorization/solve */
+    //@{
     /** Number of negative eigenvalues */
-    Index negevals;
+    Index negevals_;
 
-    /** @name Initialization flags */
     /** Flag indicating if internal data is initialized.
      *  For initialization, this object needs to have seen a matrix */
-    bool initialized;
+    bool initialized_;
+    //@}
 
-    /* whether to use multifrontal or IC indefinite LL factorization */
-    bool multi_frontal;
-
-    /* name Solver specific information */
-    taucs_factorization *taucs_factor;
-    taucs_ccs_matrix *A;
-
-    // Call TAUCS to do the analysis phase.
+    /** @name Auxilliary methods */
+    //@{
+    /** TAUCS to do the analysis phase. */
     ESymSolverStatus SymbolicFactorization(const Index* ia,
                                            const Index* ja);
 
-    // Call TAUCS to factorize the Matrix.
+    /** Call TAUCS to factorize the Matrix. */
     ESymSolverStatus Factorization(const Index* ia,
                                    const Index* ja,
                                    bool check_NegEVals,
                                    Index numberOfNegEVals);
 
-    // Call TAUCS to do the Solve.
+    /** Call TAUCS to do the Solve. */
     ESymSolverStatus Solve(const Index* ia,
                            const Index* ja,
                            Index nrhs,
                            double *rhs_vals);
+
+    /** return size of matrix entry type */
+    int element_size(int flags)
+    {
+      if (flags & TAUCS_SINGLE)
+        return sizeof(taucs_single);
+      if (flags & TAUCS_DOUBLE)
+        return sizeof(taucs_double);
+      if (flags & TAUCS_SCOMPLEX)
+        return sizeof(taucs_scomplex);
+      if (flags & TAUCS_DCOMPLEX)
+        return sizeof(taucs_dcomplex);
+      if (flags & TAUCS_INT)
+        return sizeof(int);
+      return -1;
+    }
+
+    /** Delete TAUCS' factorization structure */
+    void taucs_factor_delete_L(taucs_factorization *F);
+
+    /** Delete TAUCS' factorization and matrix */
+    void taucs_delete(taucs_factorization *F, taucs_ccs_matrix *A);
     //@}
   };
 

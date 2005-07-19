@@ -341,6 +341,9 @@ if test ! "$use_taucs" = "no"; then
 
   AC_DEFINE(HAVE_TAUCS,1,
             [Define to 1 if TAUCS is available])
+
+  AC_ARG_VAR(TAUCS_INCFLAGS,[Flags for including taucs header files])
+  CXXFLAGS="$CXXFLAGS $TAUCS_INCFLAGS"
 fi
 
 AC_LANG_POP(Fortran 77)
