@@ -615,7 +615,7 @@ namespace Ipopt
   {
     DBG_ASSERT(IsValid(suffix_handler_));
     const double* obj = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Objective_Source);
-    obj_scaling = (obj && obj[0] > 0) ? obj[0] : 1.0;
+    obj_scaling = (obj) ? obj[0] : 1.0;
 
     const double* x = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Variable_Source);
     for (int i=0; i < n; i++) {

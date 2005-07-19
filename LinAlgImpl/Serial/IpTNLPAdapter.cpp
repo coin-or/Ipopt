@@ -792,19 +792,28 @@ namespace Ipopt
     return retval;
   }
 
-  void TNLPAdapter::GetScalingParameters(Number& obj_scaling, Vector& x_scaling,
-                                         Vector& c_scaling, Vector& d_scaling) const
+  void TNLPAdapter::GetScalingParameters(
+    const SmartPtr<const VectorSpace> x_space,
+    const SmartPtr<const VectorSpace> c_space,
+    const SmartPtr<const VectorSpace> d_space,
+    Number& obj_scaling,
+    SmartPtr<Vector> x_scaling,
+    SmartPtr<Vector> c_scaling,
+    SmartPtr<Vector> d_scaling) const
   {
-    DBG_ASSERT((c_scaling.Dim()+d_scaling.Dim()) == n_full_g_);
+    x_scaling = x_space->MakeNew();
+    c_scaling = c_space->MakeNew();
+    d_scaling = d_space->MakeNew();
+    DBG_ASSERT((c_scaling->Dim()+d_scaling->Dim()) == n_full_g_);
     Number* full_x_scaling = new Number[n_full_x_];
     Number* full_g_scaling = new Number[n_full_g_];
     tnlp_->get_scaling_parameters(obj_scaling,
                                   n_full_x_, full_x_scaling,
                                   n_full_g_, full_g_scaling);
 
-    DenseVector* dx = dynamic_cast<DenseVector*>(&x_scaling);
-    DenseVector* dc = dynamic_cast<DenseVector*>(&c_scaling);
-    DenseVector* dd = dynamic_cast<DenseVector*>(&d_scaling);
+    DenseVector* dx = dynamic_cast<DenseVector*>(GetRawPtr(x_scaling));
+    DenseVector* dc = dynamic_cast<DenseVector*>(GetRawPtr(c_scaling));
+    DenseVector* dd = dynamic_cast<DenseVector*>(GetRawPtr(d_scaling));
     DBG_ASSERT(dx && dc && dd);
     Number* dx_values = dx->Values();
     Number* dc_values = dc->Values();

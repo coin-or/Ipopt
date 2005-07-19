@@ -16,19 +16,21 @@ namespace Ipopt
 
   void GradientScaling::RegisterOptions(SmartPtr<RegisteredOptions>& roptions)
   {
-    roptions->AddLowerBoundedNumberOption("scaling_max_gradient", "maximum gradient after scaling",
-                                          1, true, 1000.0,
-                                          "This is the gradient scaling cut-off. If the maximum"
-                                          " gradient is above this value, then gradient based scaling"
-                                          " will be performed. Scaling parameters will scale the maximum"
-                                          " gradient back to this value. Note: This option is only used"
-                                          " if scaling_method = gradient_based");
+    roptions->AddLowerBoundedNumberOption(
+      "scaling_max_gradient", "maximum gradient after scaling",
+      0, true, 100.0,
+      "This is the gradient scaling cut-off. If the maximum"
+      " gradient is above this value, then gradient based scaling"
+      " will be performed. Scaling parameters will scale the maximum"
+      " gradient back to this value. Note: This option is only used"
+      " if \"nlp_scaling_method\" is chosen as \"gradient_based\".");
   }
 
   bool GradientScaling::Initialize(const Journalist& jnlst,
                                    const OptionsList& options,
                                    const std::string& prefix)
   {
+    jnlst_ = &jnlst;
     options.GetNumericValue("scaling_max_gradient", scaling_max_gradient_, prefix);
     return StandardScalingBase::Initialize(jnlst, options, prefix);
   }
@@ -41,8 +43,10 @@ namespace Ipopt
     const SmartPtr<const MatrixSpace> jac_c_space,
     const SmartPtr<const MatrixSpace> jac_d_space,
     const SmartPtr<const SymMatrixSpace> h_space,
-    Number& df, Vector& dx,
-    Vector& dc, Vector& dd)
+    Number& df,
+    SmartPtr<Vector>& dx,
+    SmartPtr<Vector>& dc,
+    SmartPtr<Vector>& dd)
   {
     DBG_ASSERT(IsValid(nlp_));
 
@@ -65,11 +69,13 @@ namespace Ipopt
     if (max_grad_f > scaling_max_gradient_) {
       df = scaling_max_gradient_ / max_grad_f;
     }
+    Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                   "Scaling parameter for objective function = %e\n", df);
 
     //
-    // calculate x scaling
+    // No x scaling
     //
-    dx.Set(1.0);
+    dx = NULL;
 
     //
     // Calculate c scaling
@@ -89,23 +95,37 @@ namespace Ipopt
     }
 
     // put the max of each row into c_scaling...
+    bool need_c_scale = false;
     for (Index i=0; i<nnz; i++) {
-      if (values[i] > scaling_max_gradient_
-          && values[i] > c_scaling[irow[i]-1]) {
-        c_scaling[irow[i]-1] = values[i];
+      if (fabs(values[i]) > scaling_max_gradient_) {
+        c_scaling[irow[i]-1] = Max(c_scaling[irow[i]-1], fabs(values[i]));
+        need_c_scale = true;
       }
     }
 
-    // now compute the scaling factors for each row
-    for (Index r=0; r<jac_c->NRows(); r++) {
-      Number scaling = 1.0;
-      if (c_scaling[r] > scaling_max_gradient_) {
-        scaling = scaling_max_gradient_/c_scaling[r];
+    if (need_c_scale) {
+      // now compute the scaling factors for each row
+      for (Index r=0; r<jac_c->NRows(); r++) {
+        Number scaling = 1.0;
+        if (c_scaling[r] > scaling_max_gradient_) {
+          scaling = scaling_max_gradient_/c_scaling[r];
+        }
+        c_scaling[r] = scaling;
       }
-      c_scaling[r] = scaling;
+
+      dc = c_space->MakeNew();
+      TripletHelper::PutValuesInVector(jac_c->NRows(), c_scaling, *dc);
+      if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
+        Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                       "Equality constraints are scaled with smallest scaling parameter is %e\n", dc->Min());
+      }
+    }
+    else {
+      Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                     "Equality constraints are not scaled.\n");
+      dc = NULL;
     }
 
-    TripletHelper::PutValuesInVector(jac_c->NRows(), c_scaling, dc);
     delete [] irow;
     irow = NULL;
     delete [] jcol;
@@ -133,23 +153,37 @@ namespace Ipopt
     }
 
     // put the max of each row into c_scaling...
+    bool need_d_scale = false;
     for (Index i=0; i<nnz; i++) {
-      if (values[i] > scaling_max_gradient_
-          && values[i] > d_scaling[irow[i]-1]) {
-        d_scaling[irow[i]-1] = values[i];
+      if (fabs(values[i]) > scaling_max_gradient_) {
+        d_scaling[irow[i]-1] = Max(d_scaling[irow[i]-1], fabs(values[i]));
+        need_d_scale = true;
       }
     }
 
-    // now compute the scaling factors for each row
-    for (Index r=0; r<jac_d->NRows(); r++) {
-      Number scaling = 1.0;
-      if (d_scaling[r] > scaling_max_gradient_) {
-        scaling = scaling_max_gradient_/d_scaling[r];
+    if (need_d_scale) {
+      // now compute the scaling factors for each row
+      for (Index r=0; r<jac_d->NRows(); r++) {
+        Number scaling = 1.0;
+        if (d_scaling[r] > scaling_max_gradient_) {
+          scaling = scaling_max_gradient_/d_scaling[r];
+        }
+        d_scaling[r] = scaling;
       }
-      d_scaling[r] = scaling;
+
+      dd = d_space->MakeNew();
+      TripletHelper::PutValuesInVector(jac_d->NRows(), d_scaling, *dd);
+      if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
+        Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                       "Inequality constraints are scaled with smallest scaling parameter is %e\n", dd->Min());
+      }
+    }
+    else {
+      dd = NULL;
+      Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                     "Inequality constraints are not scaled.\n");
     }
 
-    TripletHelper::PutValuesInVector(jac_d->NRows(), d_scaling, dd);
     delete [] irow;
     irow = NULL;
     delete [] jcol;

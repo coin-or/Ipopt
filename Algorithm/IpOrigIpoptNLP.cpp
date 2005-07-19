@@ -103,8 +103,7 @@ namespace Ipopt
       return false;
     }
 
-    NLP_scaling()->DetermineScaling(ConstPtr(jnlst_),
-                                    x_space_,
+    NLP_scaling()->DetermineScaling(x_space_,
                                     c_space_, d_space_,
                                     jac_c_space_, jac_d_space_,
                                     h_space_,

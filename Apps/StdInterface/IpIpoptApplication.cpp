@@ -88,7 +88,7 @@ namespace Ipopt
       "optimization problem.");
 
     roptions->AddStringOption3(
-      "scaling_method",
+      "nlp_scaling_method",
       "Select the technique used for scaling the NLP", "gradient_based",
       "none", "no problem scaling will be performed",
       "user_scaling", "scaling parameters will come from the user",
@@ -219,12 +219,12 @@ namespace Ipopt
       }
 
       SmartPtr<NLPScalingObject> nlp_scaling;
-      std::string scaling_method;
-      options_->GetValue("scaling_method", scaling_method, "");
-      if (scaling_method == "user_scaling") {
+      std::string nlp_scaling_method;
+      options_->GetValue("nlp_scaling_method", nlp_scaling_method, "");
+      if (nlp_scaling_method == "user_scaling") {
         nlp_scaling = new UserScaling(ConstPtr(nlp));
       }
-      else if (scaling_method == "gradient_based") {
+      else if (nlp_scaling_method == "gradient_based") {
         nlp_scaling = new GradientScaling(nlp);
       }
       else {

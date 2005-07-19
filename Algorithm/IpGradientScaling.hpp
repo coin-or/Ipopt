@@ -57,8 +57,10 @@ namespace Ipopt
       const SmartPtr<const MatrixSpace> jac_c_space,
       const SmartPtr<const MatrixSpace> jac_d_space,
       const SmartPtr<const SymMatrixSpace> h_space,
-      Number& df, Vector& dx,
-      Vector& dc, Vector& dd);
+      Number& df,
+      SmartPtr<Vector>& dx,
+      SmartPtr<Vector>& dc,
+      SmartPtr<Vector>& dd);
 
   private:
 
@@ -80,6 +82,15 @@ namespace Ipopt
 
     /** pointer to the NLP to get scaling parameters */
     SmartPtr<NLP> nlp_;
+
+    /** pointer to the journalist */
+    SmartPtr<const Journalist> jnlst_;
+
+    /** Accessor function for journalits */
+    const Journalist& Jnlst() const
+    {
+      return *jnlst_;
+    }
 
     /** maximum allowed gradient before scaling is performed */
     Number scaling_max_gradient_;

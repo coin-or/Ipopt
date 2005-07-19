@@ -18,11 +18,13 @@ namespace Ipopt
     const SmartPtr<const MatrixSpace> jac_c_space,
     const SmartPtr<const MatrixSpace> jac_d_space,
     const SmartPtr<const SymMatrixSpace> h_space,
-    Number& df, Vector& dx,
-    Vector& dc, Vector& dd)
+    Number& df,
+    SmartPtr<Vector>& dx,
+    SmartPtr<Vector>& dc,
+    SmartPtr<Vector>& dd)
   {
     DBG_ASSERT(IsValid(nlp_));
-    nlp_->GetScalingParameters(df, dx, dc, dd);
+    nlp_->GetScalingParameters(x_space, c_space, d_space, df, dx, dc, dd);
   }
 
 } // namespace Ipopt

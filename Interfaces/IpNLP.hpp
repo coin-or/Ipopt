@@ -133,12 +133,18 @@ namespace Ipopt
     {}
     //@}
 
-    /** Routines to get the scaling parameters. These do not need to be overloaded
-     *  unless the options are set for User scaling
+    /** Routines to get the scaling parameters. These do not need to
+     *  be overloaded unless the options are set for User scaling
      */
     //@{
-    virtual void GetScalingParameters(Number& obj_scaling, Vector& x_scaling,
-                                      Vector& c_scaling, Vector& d_scaling) const
+    virtual void GetScalingParameters(
+      const SmartPtr<const VectorSpace> x_space,
+      const SmartPtr<const VectorSpace> c_space,
+      const SmartPtr<const VectorSpace> d_space,
+      Number& obj_scaling,
+      SmartPtr<Vector> x_scaling,
+      SmartPtr<Vector> c_scaling,
+      SmartPtr<Vector> d_scaling) const
     {
       THROW_EXCEPTION(USER_SCALING_NOT_IMPLEMENTED,
                       "You have set options for user provided scaling, but have"
