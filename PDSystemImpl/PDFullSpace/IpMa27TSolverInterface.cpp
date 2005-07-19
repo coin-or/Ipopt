@@ -143,6 +143,7 @@ namespace Ipopt
     }
 
     // check if a factorization has to be done
+    DBG_PRINT((1, "new_matrix = %d\n", new_matrix));
     if (new_matrix || refactorize_) {
       // perform the factorization
       ESymSolverStatus retval;
