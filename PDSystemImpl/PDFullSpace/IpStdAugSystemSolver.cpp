@@ -351,7 +351,7 @@ namespace Ipopt
     SmartPtr<DiagMatrix> diag_c = diag_space_c_->MakeNewDiagMatrix();
     if (D_c) {
       diag_c->SetDiag(*D_c);
-      d_c_tag_ = 0;//D_c->GetTag();
+      d_c_tag_ = D_c->GetTag();
     }
     else {
       SmartPtr<Vector> zero_c = proto_c.MakeNew();
