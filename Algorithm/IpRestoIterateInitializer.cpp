@@ -280,12 +280,12 @@ namespace Ipopt
     //           Initialize equality constraint multipliers            //
     /////////////////////////////////////////////////////////////////////
 
+    trial = IpData().trial()->MakeNewContainer();
     if (IsValid(resto_eq_mult_calculator_) && laminitmax_>0.) {
       // First move all the trial data into the current fields, since
       // those values are needed to compute the initial values for
       // the multipliers
       IpData().CopyTrialToCurrent();
-      trial = IpData().trial()->MakeNewContainer();
       SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
       SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
       bool retval = resto_eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
