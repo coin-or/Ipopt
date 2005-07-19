@@ -50,7 +50,7 @@ namespace Ipopt
   {
     DBG_ASSERT(orig_filter_line_search_ && "Need to call RestoFilterConvergenceCheck::SetOrigFilterLineSearch before Initialize");
     options.GetNumericValue("kappa_resto", kappa_resto_, prefix);
-    options.GetIntegerValue("maxiter", maximum_iters_, prefix);
+    options.GetIntegerValue("max_iter", maximum_iters_, prefix);
 
     first_resto_iter_ = true;
 

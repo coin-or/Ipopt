@@ -75,13 +75,22 @@ namespace Ipopt
       "convergence does not seem to appear.  This option determines the "
       "criterion to be used to decide when to switch to the monotone mode.");
 
+    roptions->AddLowerBoundedIntegerOption(
+      "adaptive_mu_kkterror_red_iters",
+      "Specifying maximal number of iterations in which sufficient progress in kkt-error globalization must be made.",
+      0, 4,
+      "For the \"kkt-error\" based globalization strategy, this "
+      "determines after maximal how many iterations sufficient progress must "
+      "be made.  If that number of iterations is exceeded, the "
+      "globalization strategy switches to the monotone mode.");
+
     roptions->AddBoundedNumberOption(
       "adaptive_mu_kkterror_red_fact",
       "Factor specifying sufficient decrease in kkt-error globalization strategy",
       0.0, true, 1.0, true,
       0.9999,
       "For the \"kkt-error\" based globalization strategy, this "
-      "determins by how much the error has to be decrease to be deemed "
+      "determines by how much the error has to be decrease to be deemed "
       "sufficient.");
 
     roptions->AddBoundedNumberOption(
@@ -174,6 +183,7 @@ namespace Ipopt
     options.GetNumericValue("tau_min", tau_min_, prefix);
     options.GetNumericValue("adaptive_mu_safeguard_factor", adaptive_mu_safeguard_factor_, prefix);
     options.GetNumericValue("adaptive_mu_kkterror_red_fact", refs_red_fact_, prefix);
+    options.GetIntegerValue("adaptive_mu_kkterror_red_iters", num_refs_max_, prefix);
     Index enum_int;
     options.GetEnumValue("adaptive_mu_globalization", enum_int, prefix);
     adaptive_mu_globalization_ = AdaptiveMuGlobalizationEnum(enum_int);

@@ -27,7 +27,7 @@ namespace Ipopt
       "Maximum number of iterations.",
       0, 3000,
       "The algorithm terminates with an error message if the number of "
-      "iterations exceeded this number.");
+      "iterations exceeded this number. [Also used in RestoFilterConvCheck]");
   }
 
   bool
