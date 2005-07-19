@@ -8,6 +8,7 @@
 
 #include "IpIpoptAlg.hpp"
 #include "IpJournalist.hpp"
+#include "IpRestoPhase.hpp"
 
 namespace Ipopt
 {
@@ -123,7 +124,7 @@ namespace Ipopt
     return true;
   }
 
-  IpoptAlgorithm::SolverReturn IpoptAlgorithm::Optimize()
+  SolverReturn IpoptAlgorithm::Optimize()
   {
     DBG_START_METH("IpoptAlgorithm::Optimize", dbg_verbosity);
 
@@ -176,16 +177,22 @@ namespace Ipopt
     }
     catch(TINY_STEP_DETECTED& exc) {
       exc.ReportException(Jnlst());
-
       return STOP_AT_TINY_STEP;
     }
     catch(ACCEPTABLE_POINT_REACHED& exc) {
       exc.ReportException(Jnlst());
-
       return STOP_AT_ACCEPTABLE_POINT;
     }
+    catch(LOCALLY_INFEASIBLE& exc) {
+      exc.ReportException(Jnlst());
+      return LOCAL_INFEASIBILITY;
+    }
+    catch(RESTORATION_FAILED& exc) {
+      exc.ReportException(Jnlst());
+      return RESTORATION_FAILURE;
+    }
 
-    return FAILED;
+    DBG_ASSERT(false && "Unknown return code in the algorithm");
   }
 
   void IpoptAlgorithm::ActualizeHessian()

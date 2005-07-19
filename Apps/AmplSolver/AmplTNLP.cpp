@@ -16,6 +16,7 @@
 #include "IpGenTMatrix.hpp"
 #include "IpSymTMatrix.hpp"
 #include "IpBlas.hpp"
+#include "IpInterfaceTypes.hpp"
 
 /* AMPL includes */
 //extern "C"
@@ -433,7 +434,7 @@ namespace Ipopt
     return false;
   }
 
-  void AmplTNLP::finalize_solution(ApplicationReturnStatus status,
+  void AmplTNLP::finalize_solution(SolverReturn status,
                                    Index n, const Number* x, const Number* z_L, const Number* z_U,
                                    Index m, const Number* g, const Number* lambda,
                                    Number obj_value)
@@ -462,26 +463,23 @@ namespace Ipopt
     obj_sol_ = obj_value;
 
     std::string message;
-    if (status == Solve_Succeeded) {
+    if (status == SUCCESS) {
       message = "Optimal Solution Found";
     }
-    else if (status == Maximum_Iterations_Exceeded) {
+    else if (status == MAXITER_EXCEEDED) {
       message = "Maximum Number of Iterations Exceeded";
     }
-    else if (status == Solve_Failed) {
-      message = "Solve Failed";
-    }
-    else if (status == Solved_To_Best_Possible_Precision) {
+    else if (status == STOP_AT_TINY_STEP) {
       message = "Solved To Best Possible Precision";
     }
-    else if (status == Solved_To_Acceptable_Level) {
+    else if (status == STOP_AT_ACCEPTABLE_POINT) {
       message = "Solved To Acceptable Level";
     }
-    else if (status == NonIpopt_Exception_Thrown) {
-      message = "Non-Ipopt Exception Thrown";
+    else if (status == LOCAL_INFEASIBILITY) {
+      message = "Converged to a locally infeasible point. Problem may be infeasible.";
     }
-    else if (status == Internal_Error) {
-      message = "Ipopt Internal Error";
+    else if (status == RESTORATION_FAILURE) {
+      message = "Restoration Phase Failed.";
     }
     else {
       message = "Unknown Error";

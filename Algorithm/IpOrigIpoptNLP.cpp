@@ -103,7 +103,8 @@ namespace Ipopt
       return false;
     }
 
-    NLP_scaling()->DetermineScaling(x_space_,
+    NLP_scaling()->DetermineScaling(ConstPtr(jnlst_),
+                                    x_space_,
                                     c_space_, d_space_,
                                     jac_c_space_, jac_d_space_,
                                     h_space_,
@@ -491,7 +492,7 @@ namespace Ipopt
     Hess_lagrangian_space = scaled_h_space_;
   }
 
-  void OrigIpoptNLP::FinalizeSolution(ApplicationReturnStatus status,
+  void OrigIpoptNLP::FinalizeSolution(SolverReturn status,
                                       const Vector& x, const Vector& z_L, const Vector& z_U,
                                       const Vector& c, const Vector& d,
                                       const Vector& y_c, const Vector& y_d,

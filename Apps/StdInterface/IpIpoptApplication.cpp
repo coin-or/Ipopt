@@ -131,7 +131,7 @@ namespace Ipopt
                                 SmartPtr<IpoptData>& ip_data,
                                 SmartPtr<IpoptCalculatedQuantities>& ip_cq)
   {
-    ApplicationReturnStatus retValue = Solve_Succeeded;
+    ApplicationReturnStatus retValue = Internal_Error;
     SmartPtr<IpoptNLP> ip_nlp;
     try {
 
@@ -258,7 +258,7 @@ namespace Ipopt
       }
 
       // Run the algorithm
-      IpoptAlgorithm::SolverReturn status = alg->Optimize();
+      SolverReturn status = alg->Optimize();
 
       EJournalLevel vector_report_level = J_VECTOR;
       if (report_solution_ || force_report_solution_to_console_) {
@@ -312,43 +312,38 @@ namespace Ipopt
       }
 
       // Write EXIT message
-      if (status == IpoptAlgorithm::SUCCESS) {
+      if (status == SUCCESS) {
+        retValue = Solve_Succeeded;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Optimal Solution Found.\n");
       }
-      else if (status == IpoptAlgorithm::MAXITER_EXCEEDED) {
+      else if (status == MAXITER_EXCEEDED) {
         retValue = Maximum_Iterations_Exceeded;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Maximum Number of Iterations Exceeded.\n");
       }
-      else if (status == IpoptAlgorithm::STOP_AT_TINY_STEP) {
+      else if (status == STOP_AT_TINY_STEP) {
         retValue = Solved_To_Best_Possible_Precision;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Solved To Best Possible Precision.\n");
       }
-      else if (status == IpoptAlgorithm::STOP_AT_ACCEPTABLE_POINT) {
+      else if (status == STOP_AT_ACCEPTABLE_POINT) {
         retValue = Solved_To_Acceptable_Level;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Solved To Acceptable Level.\n");
       }
-      else if (status == IpoptAlgorithm::FAILED) {
-        retValue = Solve_Failed;
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Algorithm Failed - Check detailed output.\n");
+      else if (status == RESTORATION_FAILURE) {
+        retValue = Restoration_Failed;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Restoration Failed!\n");
+      }
+      else if (status == LOCAL_INFEASIBILITY) {
+        retValue = Infeasible_Problem_Detected;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Converged to a point of local infeasibility. Problem may be infeasible.\n");
       }
       else {
         retValue = Internal_Error;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
       }
-
-      ip_nlp->FinalizeSolution(retValue,
+      ip_nlp->FinalizeSolution(status,
                                *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
                                *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
                                ip_cq->curr_f());
-    }
-    catch(LOCALLY_INFEASIBILE& exc) {
-      exc.ReportException(*jnlst_);
-      ip_nlp->FinalizeSolution(retValue,
-                               *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
-                               *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
-                               ip_cq->curr_f());
-
-      retValue = Infeasible_Problem_Detected;
     }
     catch(TOO_FEW_DOF& exc) {
       exc.ReportException(*jnlst_);
@@ -356,7 +351,7 @@ namespace Ipopt
     }
     catch(IpoptException& exc) {
       exc.ReportException(*jnlst_);
-      retValue = Solve_Failed;
+      retValue = Unrecoverable_Exception;
     }
     catch(std::bad_alloc& exc) {
       retValue = Insufficient_Memory;

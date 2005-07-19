@@ -12,6 +12,7 @@
 #include "IpUtils.hpp"
 #include "IpReferenced.hpp"
 #include "IpException.hpp"
+#include "IpAlgTypes.hpp"
 
 namespace Ipopt
 {
@@ -135,7 +136,7 @@ namespace Ipopt
     /** @name Solution Methods */
     //@{
     /** This method is called when the algorithm is complete so the TNLP can store/write the solution */
-    virtual void finalize_solution(ApplicationReturnStatus status,
+    virtual void finalize_solution(SolverReturn status,
                                    Index n, const Number* x, const Number* z_L, const Number* z_U,
                                    Index m, const Number* g, const Number* lambda,
                                    Number obj_value)=0;

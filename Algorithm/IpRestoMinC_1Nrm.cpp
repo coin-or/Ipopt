@@ -124,11 +124,11 @@ namespace Ipopt
 
     // Call the optimization algorithm to solve the restoration phase
     // problem
-    IpoptAlgorithm::SolverReturn resto_status	= resto_alg_->Optimize();
+    SolverReturn resto_status	= resto_alg_->Optimize();
 
     int retval=-1;
 
-    if (resto_status == IpoptAlgorithm::SUCCESS) {
+    if (resto_status == SUCCESS) {
       if (Jnlst().ProduceOutput(J_DETAILED, J_LINE_SEARCH)) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "\nRESTORATION PHASE RESULTS\n");
@@ -158,8 +158,8 @@ namespace Ipopt
 
       retval = 0;
     }
-    else if (resto_status == IpoptAlgorithm::STOP_AT_TINY_STEP ||
-             resto_status == IpoptAlgorithm::STOP_AT_ACCEPTABLE_POINT) {
+    else if (resto_status == STOP_AT_TINY_STEP ||
+             resto_status == STOP_AT_ACCEPTABLE_POINT) {
       Number orig_primal_inf =
         IpCq().curr_primal_infeasibility(NORM_MAX);
       // ToDo make the factor in following line an option
@@ -168,14 +168,21 @@ namespace Ipopt
                         "Restoration phase converged to a point with small primal infeasibility");
       }
       else {
-        THROW_EXCEPTION(LOCALLY_INFEASIBILE,
+        THROW_EXCEPTION(LOCALLY_INFEASIBLE,
                         "Restoration phase converged to a point of local infeasibility");
       }
     }
-    else if (resto_status == IpoptAlgorithm::MAXITER_EXCEEDED) {
-      //ToDo
+    else if (resto_status == MAXITER_EXCEEDED) {
       THROW_EXCEPTION(IpoptException, "Maximal number of iterations exceeded in restoration phase.");
       retval = 1;
+    }
+    else if (resto_status == LOCAL_INFEASIBILITY) {
+      DBG_ASSERT(false && "Restoration of the Restoration phase should never be locally infeasible!");
+      THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase itself converged to a point of local "
+                      "infeasibility - This is an internal error and should not happen");
+    }
+    else if (resto_status == RESTORATION_FAILURE) {
+      THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase in the restoration phase failed.");
     }
     else {
       Jnlst().Printf(J_ERROR, J_MAIN, "Sorry, things failed ?!?!\n");

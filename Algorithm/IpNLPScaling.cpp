@@ -107,7 +107,9 @@ namespace Ipopt
     return ConstPtr(unscaled_v);
   }
 
-  void NoNLPScalingObject::DetermineScaling(const SmartPtr<const VectorSpace> x_space,
+  void NoNLPScalingObject::DetermineScaling(
+      const SmartPtr<const Journalist> jnlst,
+      const SmartPtr<const VectorSpace> x_space,
       const SmartPtr<const VectorSpace> c_space,
       const SmartPtr<const VectorSpace> d_space,
       const SmartPtr<const MatrixSpace> jac_c_space,
@@ -122,7 +124,9 @@ namespace Ipopt
     new_h_space = h_space;
   }
 
-  void StandardScalingBase::DetermineScaling(const SmartPtr<const VectorSpace> x_space,
+  void StandardScalingBase::DetermineScaling(
+      const SmartPtr<const Journalist> jnlst,
+      const SmartPtr<const VectorSpace> x_space,
       const SmartPtr<const VectorSpace> c_space,
       const SmartPtr<const VectorSpace> d_space,
       const SmartPtr<const MatrixSpace> jac_c_space,
@@ -139,6 +143,11 @@ namespace Ipopt
                                    jac_c_space, jac_d_space,
                                    h_space,
                                    df_, *dx_, *dc, *dd);
+
+    jnlst->Printf(J_VECTOR, J_MAIN, "objective scaling factor = %g\n", df_);
+    jnlst->PrintVector(J_VECTOR, J_MAIN, "x scaling vector", *dx_);
+    jnlst->PrintVector(J_VECTOR, J_MAIN, "c scaling vector", *dc);
+    jnlst->PrintVector(J_VECTOR, J_MAIN, "d scaling vector", *dd);
 
     // create the scaling matrix spaces
     scaled_jac_c_space_ = new ScaledMatrixSpace(ConstPtr(dc), false, jac_c_space, ConstPtr(dx_), true);

@@ -204,7 +204,7 @@ namespace Ipopt
 
     /** Solution Routines - overloaded from IpoptNLP*/
     //@{
-    void FinalizeSolution(ApplicationReturnStatus status,
+    void FinalizeSolution(SolverReturn status,
                           const Vector& x, const Vector& z_L, const Vector& z_U,
                           const Vector& c, const Vector& d,
                           const Vector& y_c, const Vector& y_d,

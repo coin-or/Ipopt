@@ -15,6 +15,7 @@
 #include "IpMatrix.hpp"
 #include "IpSymMatrix.hpp"
 #include "IpOptionsList.hpp"
+#include "IpAlgTypes.hpp"
 
 namespace Ipopt
 {
@@ -124,7 +125,7 @@ namespace Ipopt
 
     /** @name NLP solution routines. (Overload in derived classes.) */
     //@{
-    virtual void FinalizeSolution(ApplicationReturnStatus status,
+    virtual void FinalizeSolution(SolverReturn status,
                                   const Vector& x, const Vector& z_L, const Vector& z_U,
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,

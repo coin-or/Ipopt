@@ -150,7 +150,7 @@ namespace Ipopt
                           "Restoration phase converged to a point with small primal infeasibility");
         }
         else {
-          THROW_EXCEPTION(LOCALLY_INFEASIBILE,
+          THROW_EXCEPTION(LOCALLY_INFEASIBLE,
                           "Restoration phase converged to a point of local infeasibility");
         }
       }

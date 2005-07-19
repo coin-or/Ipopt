@@ -15,6 +15,7 @@
 #include "IpIpoptType.hpp"
 #include "IpTNLP.hpp"
 #include "IpNLP.hpp"
+#include "IpInterfaceTypes.hpp"
 
 namespace Ipopt
 {

@@ -9,6 +9,7 @@
 #include "IpFilterLineSearch.hpp"
 #include "IpJournalist.hpp"
 #include "IpRestoPhase.hpp"
+#include "IpAlgTypes.hpp"
 
 #ifdef OLD_C_HEADERS
 # include <math.h>

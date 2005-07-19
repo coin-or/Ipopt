@@ -265,8 +265,10 @@ namespace Ipopt
       }
       else {
         if (dense_x->homogeneous_) {
-          for (Index i=0; i<Dim(); i++) {
-            values_[i] *= dense_x->scalar_;
+          if (dense_x->scalar_ != 1.0) {
+            for (Index i=0; i<Dim(); i++) {
+              values_[i] *= dense_x->scalar_;
+            }
           }
         }
         else {

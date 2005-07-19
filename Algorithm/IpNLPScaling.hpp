@@ -127,7 +127,8 @@ namespace Ipopt
     /** This method is called by the IpoptNLP's at a convenient time to
      *  compute and/or read scaling factors 
      */
-    virtual void DetermineScaling(const SmartPtr<const VectorSpace> x_space,
+    virtual void DetermineScaling(const SmartPtr<const Journalist> jnlst,
+                                  const SmartPtr<const VectorSpace> x_space,
                                   const SmartPtr<const VectorSpace> c_space,
                                   const SmartPtr<const VectorSpace> d_space,
                                   const SmartPtr<const MatrixSpace> jac_c_space,
@@ -282,7 +283,8 @@ namespace Ipopt
     /** Method to determine the scaling - overloaded from NLPScaling.
      *  Since no scaling is done, we do not need to determine anything
      */
-    virtual void DetermineScaling(const SmartPtr<const VectorSpace> x_space,
+    virtual void DetermineScaling(const SmartPtr<const Journalist> jnlst,
+                                  const SmartPtr<const VectorSpace> x_space,
                                   const SmartPtr<const VectorSpace> c_space,
                                   const SmartPtr<const VectorSpace> d_space,
                                   const SmartPtr<const MatrixSpace> jac_c_space,
@@ -406,7 +408,8 @@ namespace Ipopt
     /** This method is called by the IpoptNLP's at a convenient time to
      *  compute and/or read scaling factors 
      */
-    virtual void DetermineScaling(const SmartPtr<const VectorSpace> x_space,
+    virtual void DetermineScaling(const SmartPtr<const Journalist> jnlst,
+                                  const SmartPtr<const VectorSpace> x_space,
                                   const SmartPtr<const VectorSpace> c_space,
                                   const SmartPtr<const VectorSpace> d_space,
                                   const SmartPtr<const MatrixSpace> jac_c_space,
