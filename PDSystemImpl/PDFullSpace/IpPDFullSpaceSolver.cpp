@@ -336,6 +336,15 @@ namespace Ipopt
     // Set some information for iteration summary output
     IpData().Set_info_regu_x(delta_x_curr_);
 
+    DBG_PRINT_VECTOR(2, "res_x", *res.x());
+    DBG_PRINT_VECTOR(2, "res_s", *res.s());
+    DBG_PRINT_VECTOR(2, "res_c", *res.y_c());
+    DBG_PRINT_VECTOR(2, "res_d", *res.y_d());
+    DBG_PRINT_VECTOR(2, "res_zL", *res.z_L());
+    DBG_PRINT_VECTOR(2, "res_zU", *res.z_U());
+    DBG_PRINT_VECTOR(2, "res_vL", *res.v_L());
+    DBG_PRINT_VECTOR(2, "res_vU", *res.v_U());
+
   }
 
   bool PDFullSpaceSolver::SolveOnce(bool resolve_unmodified,
