@@ -336,7 +336,8 @@ namespace Ipopt
     }
     else {
       new_x = &orig_x;
-      jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Initial values of %s sufficiently inside the bounds.\n", name.c_str());    }
+      jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Initial values of %s sufficiently inside the bounds.\n", name.c_str());
+    }
   }
 
 } // namespace Ipopt
