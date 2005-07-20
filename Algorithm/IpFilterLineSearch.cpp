@@ -583,7 +583,9 @@ namespace Ipopt
 
       PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
 
-      if (n_steps==0) {
+      if (true || n_steps==0) { // The original heuristic only
+        // accepted this if a full step was
+        // taken
         count_successive_shortened_steps_ = 0;
         if (acceptable_iter_max_>0) {
           if (IpCq().curr_nlp_error()<=acceptable_tol_) {
