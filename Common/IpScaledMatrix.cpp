@@ -112,13 +112,38 @@ namespace Ipopt
     }
   }
 
-  ScaledMatrixSpace::ScaledMatrixSpace(const SmartPtr<const Vector>& row_scaling,
-                                       bool row_scaling_reciprocal,
-                                       const SmartPtr<const MatrixSpace>& unscaled_matrix_space,
-                                       const SmartPtr<const Vector>& column_scaling,
-                                       bool column_scaling_reciprocal)
+  void ScaledMatrix::AddMSinvZImpl(Number alpha, const Vector& S,
+                                   const Vector& Z, Vector& X) const
+  {
+    DBG_ASSERT(false && "Got the ScaledMatrix::AddMSinvZImpl.  Should implement specialized method!");
+
+    SmartPtr<Vector> tmp = S.MakeNew();
+    tmp->AddVectorQuotient(1., Z, S, 0.);
+    MultVector(alpha, *tmp, 1., X);
+  }
+
+  void ScaledMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
+                                        const Vector& R, const Vector& Z,
+                                        const Vector& D, Vector& X) const
+  {
+    DBG_ASSERT(false && "Got the ScaledMatrix::SinvBlrmZMTdBrImpl.  Should implement specialized method!");
+
+    TransMultVector(alpha, D, 0., X);
+    X.ElementWiseMultiply(Z);
+    X.Axpy(1., R);
+    X.ElementWiseDivide(S);
+  }
+
+
+  ScaledMatrixSpace::ScaledMatrixSpace(
+    const SmartPtr<const Vector>& row_scaling,
+    bool row_scaling_reciprocal,
+    const SmartPtr<const MatrixSpace>& unscaled_matrix_space,
+    const SmartPtr<const Vector>& column_scaling,
+    bool column_scaling_reciprocal)
       :
-      MatrixSpace(unscaled_matrix_space->NRows(), unscaled_matrix_space->NCols()),
+      MatrixSpace(unscaled_matrix_space->NRows(),
+                  unscaled_matrix_space->NCols()),
       unscaled_matrix_space_(unscaled_matrix_space)
   {
     if (IsValid(row_scaling)) {
