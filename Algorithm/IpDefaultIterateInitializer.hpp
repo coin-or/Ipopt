@@ -47,6 +47,20 @@ namespace Ipopt
      *  of the ip_data object. */
     virtual bool SetInitialIterates();
 
+    /** Auxilliary method for moving the initial point.  This is
+     *  declared static so that it can also be used from
+     *  WarmStartIterateInitializer. */
+    static void push_variables(const Journalist& jnlst,
+                               Number bound_push,
+                               Number bound_frac,
+                               std::string name,
+                               const Vector& orig_x,
+                               SmartPtr<const Vector>& new_x,
+                               const Vector& x_L,
+                               const Vector& x_U,
+                               const Matrix& Px_L,
+                               const Matrix& Px_U);
+
     /** Methods for IpoptType */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> reg_options);

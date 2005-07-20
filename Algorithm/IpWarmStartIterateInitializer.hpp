@@ -82,16 +82,6 @@ namespace Ipopt
 
     /** @name Auxilliary functions */
     //@{
-    void push_variables(Number bound_bush,
-                        Number bound_frac,
-                        std::string name,
-                        const Vector& orig_x,
-                        SmartPtr<const Vector>& new_x,
-                        const Vector& x_L,
-                        const Vector& x_U,
-                        const Matrix& Px_L,
-                        const Matrix& Px_U);
-
     void process_target_mu(Number factor,
                            const Vector& curr_vars,
                            const Vector& curr_slacks,
