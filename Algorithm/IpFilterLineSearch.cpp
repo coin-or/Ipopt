@@ -602,7 +602,9 @@ namespace Ipopt
 
       PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
 
-      if (n_steps==0) {
+      if (true || n_steps==0) { // The original heuristic only
+        // accepted this if a full step was
+        // taken
         count_successive_shortened_steps_ = 0;
         if (acceptable_iter_max_>0) {
           if (IpCq().curr_nlp_error()<=acceptable_tol_) {
@@ -1116,7 +1118,7 @@ namespace Ipopt
     IpData().SetTrialBoundMultipliersFromStep(alpha_dual, *delta->z_L(), *delta->z_U(), *delta->v_L(), *delta->v_U());
 
     Number alpha_y;
-    switch (corrector_type_) {
+    switch (alpha_for_y_) {
       case PRIMAL_ALPHA_FOR_Y:
       alpha_y = alpha_primal;
       break;
@@ -1167,6 +1169,9 @@ namespace Ipopt
 
     // Set the eq multipliers from the step now that alpha_y
     // has been calculated.
+    DBG_PRINT((1, "alpha_y = %e\n", alpha_y));
+    DBG_PRINT_VECTOR(2, "delta_y_c", *delta->y_c());
+    DBG_PRINT_VECTOR(2, "delta_y_d", *delta->y_d());
     IpData().SetTrialEqMultipliersFromStep(alpha_y, *delta->y_c(), *delta->y_d());
 
     // Set some information for iteration summary output
