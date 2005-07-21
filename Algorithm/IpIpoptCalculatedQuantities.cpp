@@ -780,6 +780,7 @@ namespace Ipopt
     Number mu = ip_data_->curr_mu();
     std::vector<Number> sdeps(1);
     sdeps[0] = mu;
+    DBG_PRINT((1,"curr_mu=%e\n",mu));
 
     if (!curr_grad_barrier_obj_x_cache_.GetCachedResult(result, tdeps, sdeps)) {
       SmartPtr<Vector> tmp1 = x->MakeNew();
@@ -866,6 +867,7 @@ namespace Ipopt
     Number mu = ip_data_->curr_mu();
     std::vector<Number> sdeps(1);
     sdeps[0] = mu;
+    DBG_PRINT((1,"curr_mu=%e\n",mu));
 
     if (!curr_grad_barrier_obj_s_cache_.GetCachedResult(result, tdeps, sdeps)) {
       SmartPtr<Vector> tmp1 = s->MakeNew();
@@ -2979,6 +2981,9 @@ namespace Ipopt
 
   Number IpoptCalculatedQuantities::curr_gradBarrTDelta()
   {
+    DBG_START_METH("IpoptCalculatedQuantities::curr_gradBarrTDelta()",
+                   dbg_verbosity);
+
     Number result;
 
     SmartPtr<const Vector> x = ip_data_->curr()->x();
@@ -2990,12 +2995,16 @@ namespace Ipopt
     tdeps[1] = GetRawPtr(s);
     tdeps[2] = GetRawPtr(delta_x);
     tdeps[3] = GetRawPtr(delta_s);
+    Number mu = ip_data_->curr_mu();
+    std::vector<Number> sdeps(1);
+    sdeps[0] = mu;
+    DBG_PRINT((1,"curr_mu=%e\n",mu));
 
-    if (!curr_gradBarrTDelta_cache_.GetCachedResult(result, tdeps)) {
+    if (!curr_gradBarrTDelta_cache_.GetCachedResult(result, tdeps, sdeps)) {
       result = curr_grad_barrier_obj_x()->Dot(*delta_x) +
                curr_grad_barrier_obj_s()->Dot(*delta_s);
 
-      curr_gradBarrTDelta_cache_.AddCachedResult(result, tdeps);
+      curr_gradBarrTDelta_cache_.AddCachedResult(result, tdeps, sdeps);
     }
     return result;
   }
