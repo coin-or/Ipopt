@@ -201,14 +201,15 @@ namespace Ipopt
       "infeasibility determination if you expect the problem to be "
       "infeasible.  In the filter line search procedure, the restoration "
       "phase is called more qucikly than usually, and more reduction in "
-      "the constraint violation is enforced.");
+      "the constraint violation is enforced. If the problem is square, this "
+      "is enabled automatically.");
     roptions->AddLowerBoundedNumberOption(
       "expect_infeasible_problem_ctol",
       "Threshold for disabling \"expect_infeasible_problem\" option",
       0.0, false, 1e-3,
       "If the constraint violation becomes small than this threshold, "
       "the \"expect_infeasible_problem\" heuristics in the filter line "
-      "search will are disabled.");
+      "search will are disabled. If the problem is square, this is set to 0.");
     roptions->AddLowerBoundedNumberOption(
       "soft_resto_pderror_reduction_factor",
       "Required reduction in primal-dual error in soft restoration phase.",
@@ -303,8 +304,9 @@ namespace Ipopt
     options.GetEnumValue("alpha_for_y", enum_int, prefix);
     alpha_for_y_ = AlphaForYEnum(enum_int);
     options.GetNumericValue("corrector_compl_avrg_red_fact", corrector_compl_avrg_red_fact_, prefix);
-    options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
     options.GetNumericValue("expect_infeasible_problem_ctol", expect_infeasible_problem_ctol_, prefix);
+    options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
+
     options.GetBoolValue("start_with_resto", start_with_resto_, prefix);
 
     bool retvalue = true;
@@ -344,6 +346,17 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "--> Starting filter line search in iteration %d <--\n",
                    IpData().iter_count());
+
+    // If the problem is square, we want to enable the
+    // expect_infeasible_problem option automatically so that the
+    // restoration phase is entered soon
+    bool square_problem =
+      (IpData().curr()->x()->Dim() == IpData().curr()->y_c()->Dim()) &&
+      (IpData().curr()->s()->Dim() == 0);
+    if (square_problem) {
+      expect_infeasible_problem_ = true;
+      expect_infeasible_problem_ctol_ = 0.;
+    }
 
     // Store current iterate if the optimality error is on acceptable
     // level to restored if things fail later
@@ -602,29 +615,29 @@ namespace Ipopt
 
       PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
 
-      if (true || n_steps==0) { // The original heuristic only
+      if (acceptable_iter_max_>0) {
+        if (IpCq().curr_nlp_error()<=acceptable_tol_) {
+          count_acceptable_iter_++;
+          if (count_acceptable_iter_>=acceptable_iter_max_) {
+            IpData().AcceptTrialPoint();
+            THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
+                            "Algorithm seems stuck at acceptable level.");
+          }
+        }
+        else {
+          count_acceptable_iter_=0;
+        }
+      }
+
+      if (n_steps==0) {
         // accepted this if a full step was
         // taken
         count_successive_shortened_steps_ = 0;
-        if (acceptable_iter_max_>0) {
-          if (IpCq().curr_nlp_error()<=acceptable_tol_) {
-            count_acceptable_iter_++;
-            if (count_acceptable_iter_>=acceptable_iter_max_) {
-              IpData().AcceptTrialPoint();
-              THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
-                              "Algorithm seems stuck at acceptable level.");
-            }
-          }
-          else {
-            count_acceptable_iter_=0;
-          }
-        }
         watchdog_shortened_iter_ = 0;
       }
       else {
         count_successive_shortened_steps_++;
         watchdog_shortened_iter_++;
-        count_acceptable_iter_ = 0;
       }
 
       if (expect_infeasible_problem_ &&
@@ -893,6 +906,10 @@ namespace Ipopt
 
   bool FilterLineSearch::ArmijoHolds(Number alpha_primal_test)
   {
+    /*
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                   "ArmijoHolds test with trial_barr = %25.16e reference_barr = %25.16e\n        alpha_primal_test = %25.16e reference_gradBarrTDelta = %25.16e\n", IpCq().trial_barrier_obj(), reference_barr_,alpha_primal_test,reference_gradBarrTDelta_);
+    */
     return Compare_le(IpCq().trial_barrier_obj()-reference_barr_,
                       eta_phi_*alpha_primal_test*reference_gradBarrTDelta_,
                       reference_barr_);

@@ -99,6 +99,11 @@ namespace Ipopt
     SmartPtr<IpoptCalculatedQuantities> resto_ip_cq =
       new IpoptCalculatedQuantities(resto_ip_nlp, resto_ip_data);
 
+    // Determine if this is a square problem
+    bool square_problem =
+      (IpData().curr()->x()->Dim() == IpData().curr()->y_c()->Dim()) &&
+      (IpData().curr()->s()->Dim() == 0);
+
     // Decide if we want to use the original option or want to make
     // some changes
     SmartPtr<OptionsList> actual_resto_options = resto_options_;
@@ -108,6 +113,12 @@ namespace Ipopt
       // that we do not return from the restoration phase is the
       // problem is infeasible
       actual_resto_options->SetNumericValue("resto.kappa_resto", 1e-3);
+    }
+    else if(square_problem) {
+      actual_resto_options = new OptionsList(*resto_options_);
+      // If this is a square problem, the want the restoration phase
+      // never to be left until the problem is converged
+      actual_resto_options->SetNumericValue("resto.kappa_resto", 0.);
     }
 
     // Initialize the restoration phase algorithm
