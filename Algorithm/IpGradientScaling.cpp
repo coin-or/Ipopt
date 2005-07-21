@@ -26,13 +26,11 @@ namespace Ipopt
       " if \"nlp_scaling_method\" is chosen as \"gradient_based\".");
   }
 
-  bool GradientScaling::Initialize(const Journalist& jnlst,
-                                   const OptionsList& options,
-                                   const std::string& prefix)
+  bool GradientScaling::InitializeImpl(const OptionsList& options,
+                                       const std::string& prefix)
   {
-    jnlst_ = &jnlst;
     options.GetNumericValue("scaling_max_gradient", scaling_max_gradient_, prefix);
-    return StandardScalingBase::Initialize(jnlst, options, prefix);
+    return StandardScalingBase::InitializeImpl(options, prefix);
   }
 
 

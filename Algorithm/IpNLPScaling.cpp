@@ -143,6 +143,30 @@ namespace Ipopt
     }
   }
 
+  DefineIpoptType(StandardScalingBase);
+
+  void
+  StandardScalingBase::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddNumberOption(
+      "obj_scaling_factor",
+      "Scaling factor for the objective function.",
+      1.,
+      "This option allows to set a scaling factor for the objective function "
+      "that is used to scale the problem that is seen internally by "
+      "Ipopt. If additional scaling parameters are computed "
+      "(e.g. user-scaling or gradient-based), this factor is multiplied "
+      "in addition. If this value is chosen to be negative, Ipopt will "
+      "maximize the objective function.");
+  }
+
+  bool StandardScalingBase::InitializeImpl(const OptionsList& options,
+      const std::string& prefix)
+  {
+    options.GetNumericValue("obj_scaling_factor", obj_scaling_factor_, prefix);
+    return true;
+  }
+
   void StandardScalingBase::DetermineScaling(
     const SmartPtr<const VectorSpace> x_space,
     const SmartPtr<const VectorSpace> c_space,
@@ -159,6 +183,8 @@ namespace Ipopt
     DetermineScalingParametersImpl(x_space, c_space, d_space,
                                    jac_c_space, jac_d_space,
                                    h_space, df_, dx_, dc, dd);
+
+    df_ *= obj_scaling_factor_;
 
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
       Jnlst().Printf(J_VECTOR, J_MAIN, "objective scaling factor = %g\n", df_);

@@ -38,11 +38,6 @@ namespace Ipopt
     {}
     //@}
 
-    /** Initialize the object from the options */
-    bool Initialize(const Journalist& jnlst,
-                    const OptionsList& options,
-                    const std::string& prefix);
-
     /** Methods for IpoptType */
     //@{
     /** Register the options for this class */
@@ -50,6 +45,10 @@ namespace Ipopt
     //@}
 
   protected:
+    /** Initialize the object from the options */
+    bool InitializeImpl(const OptionsList& options,
+                        const std::string& prefix);
+
     virtual void DetermineScalingParametersImpl(
       const SmartPtr<const VectorSpace> x_space,
       const SmartPtr<const VectorSpace> c_space,
@@ -82,15 +81,6 @@ namespace Ipopt
 
     /** pointer to the NLP to get scaling parameters */
     SmartPtr<NLP> nlp_;
-
-    /** pointer to the journalist */
-    SmartPtr<const Journalist> jnlst_;
-
-    /** Accessor function for journalits */
-    const Journalist& Jnlst() const
-    {
-      return *jnlst_;
-    }
 
     /** maximum allowed gradient before scaling is performed */
     Number scaling_max_gradient_;

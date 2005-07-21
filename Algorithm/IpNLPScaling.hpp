@@ -16,6 +16,7 @@
 #include "IpScaledMatrix.hpp"
 #include "IpSymScaledMatrix.hpp"
 #include "IpOptionsList.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
@@ -38,12 +39,12 @@ namespace Ipopt
     //@}
 
     /** Method to initialize the options */
-    virtual bool Initialize(const Journalist& jnlst,
-                            const OptionsList& options,
-                            const std::string& prefix)
+    bool Initialize(const Journalist& jnlst,
+                    const OptionsList& options,
+                    const std::string& prefix)
     {
       jnlst_ = &jnlst;
-      return true;
+      return InitializeImpl(options, prefix);
     }
 
     /** Methods to map scaled and unscaled matrices */
@@ -165,6 +166,12 @@ namespace Ipopt
                                   SmartPtr<const MatrixSpace>& new_jac_d_space,
                                   SmartPtr<const SymMatrixSpace>& new_h_space)=0;
   protected:
+    /** Implementation of the initialization method that has to be
+     *  overloaded by for each derived class. */
+    virtual bool InitializeImpl(const OptionsList& options,
+                                const std::string& prefix)=0;
+
+    /** Accessor method for the journalist */
     const Journalist& Jnlst() const
     {
       return *jnlst_;
@@ -190,6 +197,7 @@ namespace Ipopt
     SmartPtr<const Journalist> jnlst_;
   };
 
+  DeclareIpoptType(StandardScalingBase);
 
   /** This is a base class for many standard scaling
    *  techniques. The overloaded classes only need to
@@ -283,7 +291,16 @@ namespace Ipopt
                                   SmartPtr<const MatrixSpace>& new_jac_d_space,
                                   SmartPtr<const SymMatrixSpace>& new_h_space);
 
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
   protected:
+    /** Overloaded initialization method */
+    virtual bool InitializeImpl(const OptionsList& options,
+                                const std::string& prefix);
+
     /** This is the method that has to be overloaded by a particular
      *  scaling method that somehow computes the scaling vectors dx,
      *  dc, and dd.  The pointers to those vectors can be NULL, in
@@ -337,6 +354,12 @@ namespace Ipopt
     SmartPtr<ScaledMatrixSpace> scaled_jac_d_space_;
     /** Scaled hessian of lagrangian spacea */
     SmartPtr<SymScaledMatrixSpace> scaled_h_space_;
+    //@}
+
+    /** @name Algorithmic parameters */
+    //@{
+    /** Additional scaling value for the objective function */
+    Number obj_scaling_factor_;
     //@}
   };
 
