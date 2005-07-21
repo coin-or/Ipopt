@@ -1131,6 +1131,9 @@ namespace Ipopt
       case MAX_ALPHA_FOR_Y:
       alpha_y = Max(alpha_dual, alpha_primal);
       break;
+      case FULL_STEP_FOR_Y:
+      alpha_y = 1;
+      break;
       case MIN_DUAL_INFEAS_ALPHA_FOR_Y:
       case SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y:
       // Here we compute the step size for y so that the dual

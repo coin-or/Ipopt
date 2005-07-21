@@ -279,6 +279,7 @@ namespace Ipopt
       DUAL_ALPHA_FOR_Y,
       MIN_ALPHA_FOR_Y,
       MAX_ALPHA_FOR_Y,
+      FULL_STEP_FOR_Y,
       MIN_DUAL_INFEAS_ALPHA_FOR_Y,
       SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y
     };
