@@ -68,7 +68,7 @@ namespace Ipopt
     roptions->AddBoundedNumberOption(
       "eta_phi",
       "Relaxation factor in the Armijo condition.",
-      0.0, true, 0.5, true, 1e-4,
+      0.0, true, 0.5, true, 1e-8,
       "(See Eqn. (20) in implementation paper)");
     roptions->AddLowerBoundedNumberOption(
       "delta", "Multiplier for constraint violation in switching rule.",
