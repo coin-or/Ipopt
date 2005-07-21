@@ -50,7 +50,9 @@ namespace Ipopt
   {
     if (F) {
       //printf("MEM: freeing factor and colptr and rowptr\n");
-      taucs_factor_delete_L(F);
+      if(F->L) {
+        taucs_factor_delete_L(F);
+      }
       taucs_free(F->rowperm);
       taucs_free(F->colperm);
       taucs_free(F);
@@ -203,8 +205,7 @@ namespace Ipopt
     taucs_ccs_order(A_,&rowperm,&colperm, "metis");
     if (!rowperm) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "Error during ordering in TAUCS analysis phase.  ERROR = %d.\n",
-                     SYMSOLVER_FATAL_ERROR);
+                     "Error during ordering in TAUCS analysis phase - rowperm is NULL.\n");
       retcode = SYMSOLVER_FATAL_ERROR;
       goto release_and_return;
     }
@@ -216,8 +217,7 @@ namespace Ipopt
     PAPT = taucs_ccs_permute_symmetrically(A_,rowperm,colperm);
     if (!PAPT) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "Error during permutation in TAUCS analysis phase.  ERROR = %d.\n",
-                     SYMSOLVER_FATAL_ERROR);
+                     "Error during permutation in TAUCS analysis phase.  PAPT is NULL.\n");
       retcode = SYMSOLVER_FATAL_ERROR;
       goto release_and_return;
     }
@@ -227,8 +227,7 @@ namespace Ipopt
       taucs_factor_->L = taucs_ccs_factor_ldlt_symbolic_maxdepth(PAPT,(int) opt_maxdepth);
       if (!(taucs_factor_->L)) {
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                       "Error during permutation in TAUCS analysis phase.  ERROR = %d.\n",
-                       SYMSOLVER_FATAL_ERROR);
+                       "Error during permutation in TAUCS analysis phase.  taucs_factor_->L is NULL");
         retcode = SYMSOLVER_FATAL_ERROR;
         goto release_and_return;
       }
@@ -278,8 +277,7 @@ release_and_return:
 
     if (!(taucs_factor_->L) || rc) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "Error TAUCS factorizarion phase.  ERROR = %d.\n",
-                     SYMSOLVER_FATAL_ERROR);
+                     "Error TAUCS factorizarion phase.  rc != 0 or taucs_factor_->L is NULL\n");
       return SYMSOLVER_FATAL_ERROR;
     }
 
