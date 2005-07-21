@@ -87,9 +87,13 @@ namespace Ipopt
       const std::string& prefix)
   {
     options.GetNumericValue("pivtol", pivtol_, prefix);
-    options.GetNumericValue("pivtolmax", pivtolmax_, prefix);
-    ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OptionsList::OPTION_OUT_OF_RANGE,
-                     "Option \"pivtolmax\": This value must be between pivtol and 1.");
+    if(options.GetNumericValue("pivtolmax", pivtolmax_, prefix)) {
+      ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"pivtolmax\": This value must be between pivtol and 1.");
+    }
+    else {
+      pivtolmax_ = Max(pivtolmax_, pivtol_);
+    }
 
     options.GetNumericValue("liw_init_factor", liw_init_factor_, prefix);
     options.GetNumericValue("la_init_factor", la_init_factor_, prefix);
