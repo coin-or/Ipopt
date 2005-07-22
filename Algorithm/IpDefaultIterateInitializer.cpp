@@ -150,7 +150,9 @@ namespace Ipopt
     iterates = IpData().trial()->MakeNewContainer();
     iterates->create_new_y_c();
     iterates->create_new_y_d();
-    if (IsValid(eq_mult_calculator_) && constr_mult_init_max_>0.) {
+
+    if (IsValid(eq_mult_calculator_) && constr_mult_init_max_>0. &&
+        iterates->y_c_NonConst()->Dim()+iterates->y_d_NonConst()->Dim()>0) {
       // First move all the trial data into the current fields, since
       // those values are needed to compute the initial values for
       // the multipliers

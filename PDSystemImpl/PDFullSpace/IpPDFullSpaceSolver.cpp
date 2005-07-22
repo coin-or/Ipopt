@@ -477,7 +477,8 @@ namespace Ipopt
                                         true, numberOfEVals);
         }
         assert(retval!=SYMSOLVER_FATAL_ERROR); //TODO make return code
-        if (retval==SYMSOLVER_SINGULAR && delta_c_curr_==0.) {
+        if (retval==SYMSOLVER_SINGULAR && delta_c_curr_==0. &&
+            (rhs.y_c()->Dim()+rhs.y_d()->Dim() > 0) ) {
           // If the matrix is singular and delta_c is not yet nonzero,
           // increase both delta_c and delta_d
           delta_c_curr_ = 1e-8; // TODO: Make parameter
