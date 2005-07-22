@@ -3009,6 +3009,11 @@ namespace Ipopt
     return result;
   }
 
+  bool IpoptCalculatedQuantities::IsSquareProblem() const
+  {
+    return (ip_data_->curr()->x()->Dim() == ip_data_->curr()->y_c()->Dim());
+  }
+
   Vector& IpoptCalculatedQuantities::Tmp_x()
   {
     if (!IsValid(tmp_x_)) {

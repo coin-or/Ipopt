@@ -341,6 +341,9 @@ namespace Ipopt
       return constr_viol_normtype_;
     }
 
+    /** Method returning true if this is a square problem */
+    bool IsSquareProblem() const;
+
     /** Methods for IpoptType */
     //@{
     /** Called by IpoptType to register the options */

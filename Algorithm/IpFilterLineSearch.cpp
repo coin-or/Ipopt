@@ -350,10 +350,7 @@ namespace Ipopt
     // If the problem is square, we want to enable the
     // expect_infeasible_problem option automatically so that the
     // restoration phase is entered soon
-    bool square_problem =
-      (IpData().curr()->x()->Dim() == IpData().curr()->y_c()->Dim()) &&
-      (IpData().curr()->s()->Dim() == 0);
-    if (square_problem) {
+    if (IpCq().IsSquareProblem()) {
       expect_infeasible_problem_ = true;
       expect_infeasible_problem_ctol_ = 0.;
     }

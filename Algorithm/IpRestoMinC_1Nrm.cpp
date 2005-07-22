@@ -100,9 +100,7 @@ namespace Ipopt
       new IpoptCalculatedQuantities(resto_ip_nlp, resto_ip_data);
 
     // Determine if this is a square problem
-    bool square_problem =
-      (IpData().curr()->x()->Dim() == IpData().curr()->y_c()->Dim()) &&
-      (IpData().curr()->s()->Dim() == 0);
+    bool square_problem = IpCq().IsSquareProblem();
 
     // Decide if we want to use the original option or want to make
     // some changes
