@@ -146,8 +146,9 @@ namespace Ipopt
           orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
         // ToDo make the factor in following line an option
         if (orig_trial_primal_inf <= 1e2*orig_ip_data->tol()) {
-          THROW_EXCEPTION(RESTORATION_FAILED,
-                          "Restoration phase converged to a point with small primal infeasibility");
+          THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
+           "Restoration phase converged to a feasible point that was "
+	   "unacceptable to the filter for the original problem.");
         }
         else {
           THROW_EXCEPTION(LOCALLY_INFEASIBLE,

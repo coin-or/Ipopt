@@ -23,6 +23,7 @@ namespace Ipopt
   /** Exception RESTORATION_FAILED for all trouble with the
    *  restoration phase.
    */
+  DECLARE_STD_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT);
   DECLARE_STD_EXCEPTION(RESTORATION_FAILED);
   //@}
 

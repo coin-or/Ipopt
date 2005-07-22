@@ -175,7 +175,7 @@ namespace Ipopt
         IpCq().curr_primal_infeasibility(NORM_MAX);
       // ToDo make the factor in following line an option
       if (orig_primal_inf <= 1e2*IpData().tol()) {
-        THROW_EXCEPTION(RESTORATION_FAILED,
+        THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
                         "Restoration phase converged to a point with small primal infeasibility");
       }
       else {
@@ -188,9 +188,8 @@ namespace Ipopt
       retval = 1;
     }
     else if (resto_status == LOCAL_INFEASIBILITY) {
-      DBG_ASSERT(false && "Restoration of the Restoration phase should never be locally infeasible!");
-      THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase itself converged to a point of local "
-                      "infeasibility - This is an internal error and should not happen");
+      // converged to locally infeasible point - pass this on to the outer algorithm...
+      THROW_EXCEPTION(LOCALLY_INFEASIBLE, "Restoration phase converged to a point of local infeasibility");
     }
     else if (resto_status == RESTORATION_FAILURE) {
       THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase in the restoration phase failed.");
