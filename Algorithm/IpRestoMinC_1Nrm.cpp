@@ -9,6 +9,7 @@
 #include "IpRestoMinC_1Nrm.hpp"
 #include "IpCompoundVector.hpp"
 #include "IpRestoIpoptNLP.hpp"
+#include "IpDefaultIterateInitializer.hpp"
 
 namespace Ipopt
 {
@@ -44,6 +45,14 @@ namespace Ipopt
       "However, if after the update the largest bound multiplier "
       "exceeds the threshold specified by this option, the multipliers "
       "are all reset to 1.");
+    roptions->AddLowerBoundedNumberOption(
+      "constr_mult_reset_threshold",
+      "Threshold for resetting equality and inequality multipliers after restoration phase.",
+      0.0, false,
+      0e3,
+      "After returning from the restoration phase, the constraint multipliers "
+      "are recomputed by a least square estimate.  This option triggers when "
+      "those least-square esimates should be ignored.");
   }
 
   bool MinC_1NrmRestorationPhase::InitializeImpl(const OptionsList& options,
@@ -53,8 +62,8 @@ namespace Ipopt
     // restoration phase
     resto_options_ = new OptionsList(options);
 
-    options.GetNumericValue("constr_mult_init_max",
-                            constr_mult_init_max_,
+    options.GetNumericValue("constr_mult_reset_threshold",
+                            constr_mult_reset_threshold_,
                             prefix);
     options.GetNumericValue("bound_mult_reset_threshold",
                             bound_mult_reset_threshold_,
@@ -255,8 +264,8 @@ namespace Ipopt
                                   IpData().trial()->z_U()->Amax(),
                                   IpData().trial()->v_L()->Amax(),
                                   IpData().trial()->v_U()->Amax());
-      trial = IpData().trial()->MakeNewContainer();
       if (bound_mult_max > bound_mult_reset_threshold_) {
+        trial = IpData().trial()->MakeNewContainer();
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "Bound multipliers after restoration phase too large (max=%8.2e). Set all to 1.\n",
                        bound_mult_max);
@@ -271,41 +280,10 @@ namespace Ipopt
         IpData().set_trial(trial);
 
       }
-      // Recompute the equality constraint multipliers as least square estimate
-      trial = IpData().trial()->MakeNewContainer();
-      if (IsValid(eq_mult_calculator_) && constr_mult_init_max_>0. &&
-          IpData().curr()->y_c()->Dim()+IpData().curr()->y_d()->Dim()>0) {
-        // First move all the trial data into the current fields, since
-        // those values are needed to compute the initial values for
-        // the multipliers
-        IpData().CopyTrialToCurrent();
-        SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
-        SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
-        bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
-        if (!retval) {
-          y_c->Set(0.0);
-          y_d->Set(0.0);
-        }
-        else {
-          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                         "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
-                         y_c->Amax(), y_d->Amax());
-          Number y_init_nrm = Max(y_c->Amax(), y_d->Amax());
-          if (!retval || y_init_nrm > constr_mult_init_max_) {
-            y_c->Set(0.0);
-            y_d->Set(0.0);
-          }
-        }
-        trial->Set_eq_mult(*y_c, *y_d);
-      }
-      else {
-        SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
-        SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
-        y_c->Set(0.0);
-        y_d->Set(0.0);
-        trial->Set_eq_mult(*y_c, *y_d);
-      }
-      IpData().set_trial(trial);
+
+      DefaultIterateInitializer::least_square_mults(
+        Jnlst(), IpNLP(), IpData(), IpCq(),
+        eq_mult_calculator_, constr_mult_reset_threshold_);
 
       DBG_PRINT_VECTOR(2, "y_c", *IpData().curr()->y_c());
       DBG_PRINT_VECTOR(2, "y_d", *IpData().curr()->y_d());

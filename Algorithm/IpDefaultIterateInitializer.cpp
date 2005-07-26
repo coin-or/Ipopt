@@ -45,10 +45,9 @@ namespace Ipopt
       "multipliers (in max-norm) are allowed to be. If the guess is larger "
       "than this value, it is discarded and all constraint multipliers are "
       "set to zero.  This options is also used in the classes "
-      "\"RestoIterateInitializer\" and \"MinC_1NrmRestorationPhase\".  "
-      "In the latter it determines when the "
-      "least-square estimate after returning from the restoration phase is "
-      "to be discareded.");
+      "\"RestoIterateInitializer\".  By default, "
+      "\"resto.constr_mult_init_max\" (the one "
+      "used in RestoIterateInitializer) is set to zero.");
     reg_options->AddLowerBoundedNumberOption(
       "bound_mult_init_val",
       "Initial value for the bound multipliers",
@@ -147,48 +146,8 @@ namespace Ipopt
     //           Initialize equality constraint multipliers            //
     /////////////////////////////////////////////////////////////////////
 
-    iterates = IpData().trial()->MakeNewContainer();
-    iterates->create_new_y_c();
-    iterates->create_new_y_d();
-
-    if (IsValid(eq_mult_calculator_) && constr_mult_init_max_>0. &&
-        iterates->y_c_NonConst()->Dim()+iterates->y_d_NonConst()->Dim()>0) {
-      // First move all the trial data into the current fields, since
-      // those values are needed to compute the initial values for
-      // the multipliers
-      IpData().CopyTrialToCurrent();
-      SmartPtr<Vector> y_c = iterates->y_c_NonConst();
-      SmartPtr<Vector> y_d = iterates->y_d_NonConst();
-      bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
-      if (!retval) {
-        y_c->Set(0.0);
-        y_d->Set(0.0);
-      }
-      else {
-        Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
-                       "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
-                       y_c->Amax(), y_d->Amax());
-        Number yinitnrm = Max(y_c->Amax(), y_d->Amax());
-        if (yinitnrm > constr_mult_init_max_) {
-          y_c->Set(0.0);
-          y_d->Set(0.0);
-        }
-      }
-    }
-    else {
-      iterates->y_c_NonConst()->Set(0.0);
-      iterates->y_d_NonConst()->Set(0.0);
-    }
-    IpData().set_trial(iterates);
-
-    //Qu: why do you print curr here? they have not been updated yet?
-    DBG_PRINT_VECTOR(2, "y_c", *IpData().curr()->y_c());
-    DBG_PRINT_VECTOR(2, "y_d", *IpData().curr()->y_d());
-
-    DBG_PRINT_VECTOR(2, "z_L", *IpData().curr()->z_L());
-    DBG_PRINT_VECTOR(2, "z_U", *IpData().curr()->z_U());
-    DBG_PRINT_VECTOR(2, "v_L", *IpData().curr()->v_L());
-    DBG_PRINT_VECTOR(2, "v_U", *IpData().curr()->v_U());
+    least_square_mults(Jnlst(), IpNLP(), IpData(), IpCq(),
+                       eq_mult_calculator_, constr_mult_init_max_);
 
     // upgrade the trial to the current point
     IpData().AcceptTrialPoint();
@@ -340,6 +299,67 @@ namespace Ipopt
       new_x = &orig_x;
       jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Initial values of %s sufficiently inside the bounds.\n", name.c_str());
     }
+  }
+
+  void DefaultIterateInitializer::least_square_mults(
+    const Journalist& jnlst,
+    IpoptNLP& ip_nlp,
+    IpoptData& ip_data,
+    IpoptCalculatedQuantities& ip_cq,
+    const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
+    Number constr_mult_init_max)
+  {
+    DBG_START_FUN("DefaultIterateInitializer::least_square_mults",
+                  dbg_verbosity);
+
+    SmartPtr<IteratesVector> iterates = ip_data.trial()->MakeNewContainer();
+    iterates->create_new_y_c();
+    iterates->create_new_y_d();
+
+    if (IsValid(eq_mult_calculator) && constr_mult_init_max>0. &&
+        iterates->y_c_NonConst()->Dim()+iterates->y_d_NonConst()->Dim()>0) {
+      // First move all the trial data into the current fields, since
+      // those values are needed to compute the initial values for
+      // the multipliers
+      ip_data.CopyTrialToCurrent();
+      SmartPtr<Vector> y_c = iterates->y_c_NonConst();
+      SmartPtr<Vector> y_d = iterates->y_d_NonConst();
+      bool retval = eq_mult_calculator->CalculateMultipliers(*y_c, *y_d);
+      if (!retval) {
+        y_c->Set(0.0);
+        y_d->Set(0.0);
+      }
+      else {
+        /*
+        {
+          ip_data.set_trial(iterates);
+          printf("grad_x = %e grad_s = %e y_c = %e y_d = %e\n",
+        	 ip_cq.trial_grad_lag_x()->Amax(),
+        	 ip_cq.trial_grad_lag_s()->Amax(),
+        	 y_c->Amax(),
+        	 y_d->Amax());
+          iterates = ip_data.trial()->MakeNewContainer();
+        }
+        */
+        jnlst.Printf(J_DETAILED, J_INITIALIZATION,
+                     "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
+                     y_c->Amax(), y_d->Amax());
+        Number yinitnrm = Max(y_c->Amax(), y_d->Amax());
+        if (yinitnrm > constr_mult_init_max) {
+          y_c->Set(0.0);
+          y_d->Set(0.0);
+          ip_data.Append_info_string("y");
+        }
+      }
+    }
+    else {
+      iterates->y_c_NonConst()->Set(0.0);
+      iterates->y_d_NonConst()->Set(0.0);
+    }
+    ip_data.set_trial(iterates);
+
+    DBG_PRINT_VECTOR(2, "y_c", *ip_data.trial()->y_c());
+    DBG_PRINT_VECTOR(2, "y_d", *ip_data.trial()->y_d());
   }
 
 } // namespace Ipopt
