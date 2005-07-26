@@ -556,7 +556,6 @@ namespace Ipopt
           }
 
           if (!IsValid(resto_phase_)) {
-            //ToDo
             THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Filter Line Search Object!");
           }
           if (IpCq().curr_constraint_violation()<=
@@ -806,7 +805,7 @@ namespace Ipopt
   {
     DBG_START_METH("FilterLineSearch::IsFtype",
                    dbg_verbosity);
-
+    DBG_ASSERT(reference_theta_>0. || reference_gradBarrTDelta_ < 0.0);
     return (reference_gradBarrTDelta_ < 0.0 &&
             alpha_primal_test*pow(-reference_gradBarrTDelta_,s_phi_) >
             delta_*pow(reference_theta_,s_theta_));
