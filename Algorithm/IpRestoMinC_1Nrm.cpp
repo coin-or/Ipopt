@@ -207,6 +207,15 @@ namespace Ipopt
       trial->Set_primal(*cx->GetComp(0), *resto_ip_data->curr()->s());
       IpData().set_trial(trial);
 
+      // If this is a square problem, we are done because a
+      // sufficiently feasible point has been found
+      if (square_problem) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "Recursive restoration phase algorithm termined successfully for square problem.\n");
+        IpData().AcceptTrialPoint();
+        THROW_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED, "Restoration phase converged to sufficiently feasible point of original square problem.");
+      }
+
       // Update the bound multiplers, pretending that the entire
       // progress in x and s in the restoration phase has been one
       // [rimal-dual Newton step (and therefore the result of solving
@@ -240,16 +249,6 @@ namespace Ipopt
                      "Step size for bound multipliers: %8.2e\n", alpha_dual);
 
       IpData().SetTrialBoundMultipliersFromStep(alpha_dual, *delta->z_L(), *delta->z_U(), *delta->v_L(), *delta->v_U() );
-
-#ifdef olddd
-      // DELETEME
-      // ToDo: For the bound multipliers, for now we just keep the
-      // current ones
-      IpData().SetTrialBoundMultipliersFromPtr(IpData().curr_z_L(),
-          IpData().curr_z_U(),
-          IpData().curr_v_L(),
-          IpData().curr_v_U());
-#endif
 
       // ToDo: Check what to do here:
       Number bound_mult_max = Max(IpData().trial()->z_L()->Amax(),

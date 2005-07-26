@@ -111,6 +111,12 @@ namespace Ipopt
                      "Point does not provide sufficient reduction w.r.t the original theta.\n");
       status = CONTINUE;
     }
+    else if (orig_ip_cq->IsSquareProblem() &&
+             orig_trial_theta <= orig_ip_data->tol()) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Restoration phase found points satisfying feasibility tolerance in square problem.\n");
+      status = CONVERGED;
+    }
     else {
       Number orig_trial_barr = orig_ip_cq->trial_barrier_obj();
 
