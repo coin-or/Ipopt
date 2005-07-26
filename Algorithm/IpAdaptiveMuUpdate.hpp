@@ -14,6 +14,7 @@
 #include "IpMuOracle.hpp"
 #include "IpFilter.hpp"
 #include "IpIpoptType.hpp"
+#include "IpQualityFunctionMuOracle.hpp"
 
 namespace Ipopt
 {
@@ -51,33 +52,6 @@ namespace Ipopt
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
-    /** @name Public enums.  Some of those are also used for the
-     *  quality function */
-    //@{
-    /** enum for norm type */
-    enum NormEnum
-    {
-      NM_NORM_1=0,
-      NM_NORM_2_SQUARED,
-      NM_NORM_MAX,
-      NM_NORM_2
-    };
-    /** enum for centrality type */
-    enum CentralityEnum
-    {
-      CEN_NONE=0,
-      CEN_LOG,
-      CEN_RECIPROCAL,
-      CEN_CUBED_RECIPROCAL
-    };
-    /** enum for the quality function balancing term type */
-    enum BalancingTermEnum
-    {
-      BT_NONE=0,
-      BT_CUBIC
-    };
-    //@}
-
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -108,9 +82,9 @@ namespace Ipopt
     Number barrier_tol_factor_;
     Number mu_linear_decrease_factor_;
     Number mu_superlinear_decrease_power_;
-    NormEnum adaptive_mu_kkt_norm_;
-    CentralityEnum adaptive_mu_kkt_centrality_;
-    BalancingTermEnum adaptive_mu_kkt_balancing_term_;
+    QualityFunctionMuOracle::NormEnum adaptive_mu_kkt_norm_;
+    QualityFunctionMuOracle::CentralityEnum adaptive_mu_kkt_centrality_;
+    QualityFunctionMuOracle::BalancingTermEnum adaptive_mu_kkt_balancing_term_;
     /** enumeration for adaptive globalization */
     enum AdaptiveMuGlobalizationEnum
     {
@@ -168,11 +142,12 @@ namespace Ipopt
      *  mu in the monotone phase */
     Number Compute_tau_monotone(Number mu);
 
-    /** Method for computing the 1-norm of the primal dual system at
-     *  the current point.  The individual components (dual
-     *  infeasibility, primal infeasibility, complementarity) are
-     *  scaled to each other. */
-    Number curr_norm_pd_system();
+    /** Method for computing the norm of the primal dual system at the
+     *  current point.  For consistency, this is computed in the same
+     *  way as the quality function is computed.  This is the
+     *  quantities used in the nonmonontone KKT reduction
+     *  globalization. */
+    Number quality_function_pd_system();
 
     /** Method for computing a lower safeguard bound for the barrier
      *  parameter.  For now, this is related to primal and dual

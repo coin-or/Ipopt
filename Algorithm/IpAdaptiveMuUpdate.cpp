@@ -17,6 +17,7 @@
 
 namespace Ipopt
 {
+  // ToDo Make the different globalization strategies extra classes
 
   DBG_SET_VERBOSITY(0);
 
@@ -62,13 +63,13 @@ namespace Ipopt
       "ToDo: This option should probably be deleted!",
       0.0, false, 0.0);
 
-    roptions->AddStringOption4(
+    roptions->AddStringOption3(
       "adaptive_mu_globalization",
       "Globalization strategy for non-monotone mode",
       "kkt-error",
       "kkt-error", "nonmonotone decrease of kkt-error",
       "obj-constr-filter", "2-dim filter for objective and constraint violation",
-      "kkt-error-filter", "3-dim filter for kkt-error components",
+      /*"kkt-error-filter", "3-dim filter for kkt-error components", not yet implemented*/
       "never-monotone-mode", "disables globalization",
       "To achieve global convergence of the adaptive version, the algorithm "
       "has to swtich to the monotone mode (Fiacco-McCormick approach) when "
@@ -150,7 +151,7 @@ namespace Ipopt
       "log", "complementarity * the log of the centrality measure",
       "reciprocal", "complementarity * the reciprocal of the centrality measure",
       "cubed-reciprocal", "complementarity * the reciprocal of the centrality measure cubed",
-      "Thie determines whether a term penalizing deviation from centrality "
+      "This determines whether a term penalizing deviation from centrality "
       "with respect to complementarity is added to the KKT "
       "error measure used in the globalization atrategies.  The "
       "complementarity measure here is the xi in the Loqo update rule. "
@@ -210,12 +211,12 @@ namespace Ipopt
     options.GetNumericValue("mu_linear_decrease_factor", mu_linear_decrease_factor_, prefix);
     options.GetNumericValue("mu_superlinear_decrease_power", mu_superlinear_decrease_power_, prefix);
 
-    options.GetEnumValue("adaptive_mu_kkt_norm_type", enum_int, prefix);
-    adaptive_mu_kkt_norm_ = NormEnum(enum_int);
-    options.GetEnumValue("adaptive_mu_kkt_centrality", enum_int, prefix);
-    adaptive_mu_kkt_centrality_ = CentralityEnum(enum_int);
-    options.GetEnumValue("adaptive_mu_kkt_balancing_term", enum_int, prefix);
-    adaptive_mu_kkt_balancing_term_ = BalancingTermEnum(enum_int);
+    options.GetEnumValue("quality_function_norm_type", enum_int, prefix);
+    adaptive_mu_kkt_norm_ = QualityFunctionMuOracle::NormEnum(enum_int);
+    options.GetEnumValue("quality_function_centrality", enum_int, prefix);
+    adaptive_mu_kkt_centrality_ = QualityFunctionMuOracle::CentralityEnum(enum_int);
+    options.GetEnumValue("quality_function_balancing_term", enum_int, prefix);
+    adaptive_mu_kkt_balancing_term_ = QualityFunctionMuOracle::BalancingTermEnum(enum_int);
 
     init_dual_inf_ = -1.;
     init_primal_inf_ = -1.;
@@ -233,15 +234,12 @@ namespace Ipopt
     IpData().Set_mu(1.);
     IpData().Set_tau(0.);
 
-    // TODO do we need to initialize the linesearch object?
-
     return retvalue;
   }
 
   void AdaptiveMuUpdate::UpdateBarrierParameter()
   {
-    // of there are not bounds, we always return the minimum MU value
-    // ToDo put information on whether problem has bounds into IpCq
+    // if there are not bounds, we always return the minimum MU value
     if (!check_if_no_bounds_) {
       Index n_bounds = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim()
                        + IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim();
@@ -279,7 +277,6 @@ namespace Ipopt
         Number mu = IpData().curr_mu();
         if (sub_problem_error <= barrier_tol_factor_ * mu ||
             tiny_step_flag) {
-          //	DBG_ASSERT(adaptive_globalization_==2);
           // If the current barrier problem has been solved sufficiently
           // well, decrease mu
           // ToDo combine this code with MonotoneMuUpdate
@@ -399,7 +396,7 @@ namespace Ipopt
         Index num_refs = (Index)refs_vals_.size();
         if (num_refs >= num_refs_max_) {
           retval = false;
-          Number curr_error = curr_norm_pd_system();
+          Number curr_error = quality_function_pd_system();
           std::list<Number>::iterator iter;
           for (iter = refs_vals_.begin(); iter != refs_vals_.end();
                iter++) {
@@ -411,15 +408,18 @@ namespace Ipopt
       }
       break;
       case FILTER_OBJ_CONSTR : {
-        retval = filter_.Acceptable(IpCq().curr_f(),
-                                    IpCq().curr_constraint_violation());
-      }
-      break;
-      case FILTER_KKT_ERROR : {
-        Number curr_error = curr_norm_pd_system();
+        /*
+               retval = filter_.Acceptable(IpCq().curr_f(),
+                                           IpCq().curr_constraint_violation());
+        */
+        Number curr_error = IpCq().curr_nlp_error();
         Number margin = filter_margin_fact_*Min(filter_max_margin_, curr_error);
         retval = filter_.Acceptable(IpCq().curr_f() + margin,
                                     IpCq().curr_constraint_violation() + margin);
+      }
+      break;
+      case FILTER_KKT_ERROR : {
+        DBG_ASSERT("Unknown adaptive_mu_globalization value.");
       }
       break;
       case NEVER_MONOTONE_MODE :
@@ -437,7 +437,7 @@ namespace Ipopt
   {
     switch (adaptive_mu_globalization_) {
       case KKT_ERROR : {
-        Number curr_error = curr_norm_pd_system();
+        Number curr_error = quality_function_pd_system();
         Index num_refs = (Index)refs_vals_.size();
         if (num_refs >= num_refs_max_) {
           refs_vals_.pop_front();
@@ -457,20 +457,21 @@ namespace Ipopt
       }
       break;
       case FILTER_OBJ_CONSTR : {
-        // ToDo shouldn't this be the KKT error for theta???
-        // ToDo Also use filter_max_margin here?
-        Number theta = IpCq().curr_constraint_violation();
-        filter_.AddEntry(IpCq().curr_f() - filter_margin_fact_*theta,
-                         IpCq().curr_constraint_violation() - filter_margin_fact_*theta,
+        /*
+               Number theta = IpCq().curr_constraint_violation();
+               filter_.AddEntry(IpCq().curr_f() - filter_margin_fact_*theta,
+                                IpCq().curr_constraint_violation() - filter_margin_fact_*theta,
+                                IpData().iter_count());
+               filter_.Print(Jnlst());
+        */
+        filter_.AddEntry(IpCq().curr_f(),
+                         IpCq().curr_constraint_violation(),
                          IpData().iter_count());
         filter_.Print(Jnlst());
       }
       break;
       case FILTER_KKT_ERROR : {
-        filter_.AddEntry(IpCq().curr_f(),
-                         IpCq().curr_constraint_violation(),
-                         IpData().iter_count());
-        filter_.Print(Jnlst());
+        DBG_ASSERT("Unknown corrector_type value.");
       }
       break;
       default:
@@ -560,9 +561,8 @@ namespace Ipopt
     return new_mu;
   }
 
-  //ToDo put the following into CalculatedQuantities?
   Number
-  AdaptiveMuUpdate::curr_norm_pd_system()
+  AdaptiveMuUpdate::quality_function_pd_system()
   {
     Index n_dual = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
     Index n_pri = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
@@ -573,7 +573,7 @@ namespace Ipopt
     Number primal_inf;
     Number complty;
     switch (adaptive_mu_kkt_norm_) {
-      case NM_NORM_1:
+      case QualityFunctionMuOracle::NM_NORM_1:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_1);
       primal_inf =
@@ -590,7 +590,7 @@ namespace Ipopt
         complty /= (Number)n_comp;
       }
       break;
-      case NM_NORM_2_SQUARED:
+      case QualityFunctionMuOracle::NM_NORM_2_SQUARED:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_2);
       dual_inf *= dual_inf;
@@ -610,7 +610,7 @@ namespace Ipopt
         complty /= (Number)n_comp;
       }
       break;
-      case NM_NORM_MAX:
+      case QualityFunctionMuOracle::NM_NORM_MAX:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_MAX);
       primal_inf =
@@ -618,7 +618,7 @@ namespace Ipopt
       complty =
         IpCq().curr_complementarity(0., NORM_MAX);
       break;
-      case NM_NORM_2:
+      case QualityFunctionMuOracle::NM_NORM_2:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_2);
       primal_inf =
