@@ -66,19 +66,19 @@ namespace Ipopt
     // Initialize the Data object
     bool retvalue = IpData().Initialize(Jnlst(),
                                         options, prefix);
-    ASSERT_EXCEPTION(retvalue, AlgorithmStrategyObject::FAILED_INITIALIZATION,
+    ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptData object failed to initialize.");
 
     // Initialize the CQ object
     retvalue = IpCq().Initialize(Jnlst(),
                                  options, prefix);
-    ASSERT_EXCEPTION(retvalue, AlgorithmStrategyObject::FAILED_INITIALIZATION,
+    ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptCalculatedQuantities object failed to initialize.");
 
     // Initialize the CQ object
     retvalue = IpNLP().Initialize(Jnlst(),
                                   options, prefix);
-    ASSERT_EXCEPTION(retvalue, AlgorithmStrategyObject::FAILED_INITIALIZATION,
+    ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptNLP object failed to initialize.");
 
     // Initialize all the strategies
@@ -190,6 +190,10 @@ namespace Ipopt
     catch(RESTORATION_FAILED& exc) {
       exc.ReportException(Jnlst());
       return RESTORATION_FAILURE;
+    }
+    catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
+      exc.ReportException(Jnlst());
+      return SUCCESS;
     }
 
     DBG_ASSERT(false && "Unknown return code in the algorithm");

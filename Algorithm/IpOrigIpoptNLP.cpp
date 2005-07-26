@@ -173,6 +173,10 @@ namespace Ipopt
                                       GetRawPtr(v_L), init_v_L,
                                       GetRawPtr(v_U), init_v_U);
 
+    if (!retValue) {
+      return false;
+    }
+
     if (init_x) {
       x = NLP_scaling()->apply_vector_scaling_x_NonConst(ConstPtr(x));
     }
@@ -193,10 +197,6 @@ namespace Ipopt
     }
     if (init_v_U) {
       v_U = NLP_scaling()->apply_vector_scaling_d_U_NonConst(Pd_U_, ConstPtr(v_U), d_space_);
-    }
-
-    if (!retValue) {
-      return false;
     }
 
     return true;

@@ -308,16 +308,16 @@ namespace Ipopt
 
     fint nerror = 0;
     objgrd(0, non_const_x_, grad_f, &nerror);
+    if (nerror != 0) {
+      DBG_PRINT((1, "nerror = %d\n", nerror));
+      return false;
+    }
     if (obj_sign_==-1) {
       for (Index i=0; i<n; i++) {
         grad_f[i] *= -1.;
       }
     }
-    if (nerror == 0) {
-      return true;
-    }
-    DBG_PRINT((1, "nerror = %d\n", nerror));
-    return false;
+    return true;
   }
 
   bool AmplTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
