@@ -53,9 +53,7 @@ namespace Ipopt
                                   bool want_y_c,
                                   bool want_y_d,
                                   bool want_z_L,
-                                  bool want_z_U,
-                                  bool want_v_L,
-                                  bool want_v_U);
+                                  bool want_z_U);
 
     /** This method must be called to initialize the global
      *  algorithmic parameters.  The parameters are taken from the

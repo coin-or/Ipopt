@@ -11,7 +11,7 @@
 
 #include "IpIpoptNLP.hpp"
 #include "IpException.hpp"
-#include"IpIpoptType.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
@@ -55,9 +55,7 @@ namespace Ipopt
                                       SmartPtr<Vector>& z_U,
                                       bool init_z_U,
                                       SmartPtr<Vector>& v_L,
-                                      bool init_v_L,
-                                      SmartPtr<Vector>& v_U,
-                                      bool init_v_U
+                                      SmartPtr<Vector>& v_U
                                      );
 
     /** Accessor methods for model data */
@@ -65,17 +63,11 @@ namespace Ipopt
     /** Objective value */
     virtual Number f(const Vector& x);
 
-    /** Unscaled objective value */
-    virtual Number unscaled_f(const Vector& x);
-
     /** Gradient of the objective */
     virtual SmartPtr<const Vector> grad_f(const Vector& x);
 
     /** Equality constraint residual */
     virtual SmartPtr<const Vector> c(const Vector& x);
-
-    /** Unscaled Equality constraint residual */
-    virtual SmartPtr<const Vector> unscaled_c(const Vector& x);
 
     /** Jacobian Matrix for equality constraints */
     virtual SmartPtr<const Matrix> jac_c(const Vector& x);
@@ -83,10 +75,6 @@ namespace Ipopt
     /** Inequality constraint residual (reformulated
      *  as equalities with slacks */
     virtual SmartPtr<const Vector> d(const Vector& x);
-
-    /** Unscaled Inequality constraint residual (reformulated
-     *  as equalities with slacks */
-    virtual SmartPtr<const Vector> unscaled_d(const Vector& x);
 
     /** Jacobian Matrix for inequality constraints*/
     virtual SmartPtr<const Matrix> jac_d(const Vector& x);
@@ -101,49 +89,49 @@ namespace Ipopt
     /** Lower bounds on x */
     virtual SmartPtr<const Vector> x_L()
     {
-      return ConstPtr(x_L_);
+      return x_L_;
     }
 
     /** Permutation matrix (x_L_ -> x) */
     virtual SmartPtr<const Matrix> Px_L()
     {
-      return ConstPtr(Px_L_);
+      return Px_L_;
     }
 
     /** Upper bounds on x */
     virtual SmartPtr<const Vector> x_U()
     {
-      return ConstPtr(x_U_);
+      return x_U_;
     }
 
     /** Permutation matrix (x_U_ -> x */
     virtual SmartPtr<const Matrix> Px_U()
     {
-      return ConstPtr(Px_U_);
+      return Px_U_;
     }
 
     /** Lower bounds on d */
     virtual SmartPtr<const Vector> d_L()
     {
-      return ConstPtr(d_L_);
+      return d_L_;
     }
 
     /** Permutation matrix (d_L_ -> d) */
     virtual SmartPtr<const Matrix> Pd_L()
     {
-      return ConstPtr(Pd_L_);
+      return Pd_L_;
     }
 
     /** Upper bounds on d */
     virtual SmartPtr<const Vector> d_U()
     {
-      return ConstPtr(d_U_);
+      return d_U_;
     }
 
     /** Permutation matrix (d_U_ -> d */
     virtual SmartPtr<const Matrix> Pd_U()
     {
-      return ConstPtr(Pd_U_);
+      return Pd_U_;
     }
     //@}
 
@@ -273,28 +261,28 @@ namespace Ipopt
     CachedResults<SmartPtr<const SymMatrix> > h_cache_;
 
     /** Lower bounds on x */
-    SmartPtr<Vector> x_L_;
+    SmartPtr<const Vector> x_L_;
 
     /** Permutation matrix (x_L_ -> x) */
-    SmartPtr<Matrix> Px_L_;
+    SmartPtr<const Matrix> Px_L_;
 
     /** Upper bounds on x */
-    SmartPtr<Vector> x_U_;
+    SmartPtr<const Vector> x_U_;
 
     /** Permutation matrix (x_U_ -> x */
-    SmartPtr<Matrix> Px_U_;
+    SmartPtr<const Matrix> Px_U_;
 
     /** Lower bounds on d */
-    SmartPtr<Vector> d_L_;
+    SmartPtr<const Vector> d_L_;
 
     /** Permutation matrix (d_L_ -> d) */
-    SmartPtr<Matrix> Pd_L_;
+    SmartPtr<const Matrix> Pd_L_;
 
     /** Upper bounds on d */
-    SmartPtr<Vector> d_U_;
+    SmartPtr<const Vector> d_U_;
 
     /** Permutation matrix (d_U_ -> d */
-    SmartPtr<Matrix> Pd_U_;
+    SmartPtr<const Matrix> Pd_U_;
     //@}
 
     /**@name Default Compiler Generated Methods

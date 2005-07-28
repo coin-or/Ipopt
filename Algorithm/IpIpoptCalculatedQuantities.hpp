@@ -80,6 +80,8 @@ namespace Ipopt
     Number unscaled_curr_f();
     /** Value of objective function (at trial point) */
     Number trial_f();
+    /** Unscaled value of the objective function (at the trial point) */
+    Number unscaled_trial_f();
     /** Gradient of objective function (at current point) */
     SmartPtr<const Vector> curr_grad_f();
     /** Gradient of objective function (at trial point) */
@@ -176,6 +178,14 @@ namespace Ipopt
      *  be used in the line search, and not curr_primal_infeasibility().
      *  What type of norm is used depends on constr_viol_normtype */
     Number trial_constraint_violation();
+    /** Real constraint violation in a given norm (at current
+     *  iterate).  This considers the inequality constraints without
+     *  slacks. */
+    Number curr_nlp_constraint_violation(ENormType NormType);
+    /** Unscaled real constraint violation in a given norm (at current
+     *  iterate).  This considers the inequality constraints without
+     *  slacks. */
+    Number unscaled_curr_nlp_constraint_violation(ENormType NormType);
     //@}
 
     /** @name Hessian matrices */
@@ -237,6 +247,8 @@ namespace Ipopt
     Number curr_dual_infeasibility(ENormType NormType);
     /** Dual infeasibility in a given norm (at trial iterate) */
     Number trial_dual_infeasibility(ENormType NormType);
+    /** Unscaled dual infeasibility in a given norm (at current iterate) */
+    Number unscaled_curr_dual_infeasibility(ENormType NormType);
 
     /** Complementarity (for all complementarity conditions together)
      *  in a given norm (at current iterate) */
@@ -244,6 +256,9 @@ namespace Ipopt
     /** Complementarity (for all complementarity conditions together)
      *  in a given norm (at trial iterate) */
     Number trial_complementarity(Number mu, ENormType NormType);
+    /** Complementarity (for all complementarity conditions together)
+     *  in a given norm (at current iterate) without NLP scaling. */
+    Number unscaled_curr_complementarity(Number mu, ENormType NormType);
 
     /** Centrality measure (in spirit of the -infinity-neighborhood. */
     Number CalcCentralityMeasure(const Vector& compl_x_L,
@@ -253,12 +268,19 @@ namespace Ipopt
     /** Centrality measure at current point */
     Number curr_centrality_measure();
 
-    /** Scaled total optimality error for the original NLP at the
-     *  current iterate. */
+    /** Total optimality error for the original NLP at the current
+     *  iterate, using scaling factors based on multipliers.  Note
+     *  that here the constraint violation is measured without slacks
+     *  (nlp_constraint_violation) */
     Number curr_nlp_error();
+    /** Total optimality error for the original NLP at the current
+     *  iterate, but using no scaling based on multipliers, and no
+     *  scaling for the NLP.  Note that here the constraint violation
+     *  is measured without slacks (nlp_constraint_violation) */
+    Number unscaled_curr_nlp_error();
 
-    /** Scaled total optimality error for the barrier problem at the
-     *  current iterate. */
+    /** Total optimality error for the barrier problem at the
+     *  current iterate, using scaling factors based on multipliers. */
     Number curr_barrier_error();
 
     /** Norm of the primal-dual system for a given mu (at current
@@ -447,6 +469,8 @@ namespace Ipopt
     CachedResults< SmartPtr<const Vector> > curr_jac_d_times_vec_cache_;
     CachedResults<Number> curr_constraint_violation_cache_;
     CachedResults<Number> trial_constraint_violation_cache_;
+    CachedResults<Number> curr_nlp_constraint_violation_cache_;
+    CachedResults<Number> unscaled_curr_nlp_constraint_violation_cache_;
     //@}
 
     /** Cache for the exact Hessian */
@@ -476,10 +500,12 @@ namespace Ipopt
     CachedResults<Number> trial_primal_infeasibility_cache_;
     CachedResults<Number> curr_dual_infeasibility_cache_;
     CachedResults<Number> trial_dual_infeasibility_cache_;
+    CachedResults<Number> unscaled_curr_dual_infeasibility_cache_;
     CachedResults<Number> curr_complementarity_cache_;
     CachedResults<Number> trial_complementarity_cache_;
     CachedResults<Number> curr_centrality_measure_cache_;
     CachedResults<Number> curr_nlp_error_cache_;
+    CachedResults<Number> unscaled_curr_nlp_error_cache_;
     CachedResults<Number> curr_barrier_error_cache_;
     CachedResults<Number> curr_primal_dual_system_error_cache_;
     CachedResults<Number> trial_primal_dual_system_error_cache_;

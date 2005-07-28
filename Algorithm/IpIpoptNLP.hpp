@@ -72,9 +72,7 @@ namespace Ipopt
                                       SmartPtr<Vector>& z_U,
                                       bool init_z_U,
                                       SmartPtr<Vector>& v_L,
-                                      bool init_v_L,
-                                      SmartPtr<Vector>& v_U,
-                                      bool init_v_U
+                                      SmartPtr<Vector>& v_U
                                      ) = 0;
 
     /** Accessor methods for model data */
@@ -82,17 +80,11 @@ namespace Ipopt
     /** Objective value */
     virtual Number f(const Vector& x) = 0;
 
-    /** Unscaled objective value */
-    virtual Number unscaled_f(const Vector& x) = 0;
-
     /** Gradient of the objective */
     virtual SmartPtr<const Vector> grad_f(const Vector& x) = 0;
 
     /** Equality constraint residual */
     virtual SmartPtr<const Vector> c(const Vector& x) = 0;
-
-    /** Unscaled Equality constraint residual */
-    virtual SmartPtr<const Vector> unscaled_c(const Vector& x) = 0;
 
     /** Jacobian Matrix for equality constraints */
     virtual SmartPtr<const Matrix> jac_c(const Vector& x) = 0;
@@ -100,10 +92,6 @@ namespace Ipopt
     /** Inequality constraint residual (reformulated
      *  as equalities with slacks */
     virtual SmartPtr<const Vector> d(const Vector& x) = 0;
-
-    /** Unscaled Inequality constraint residual (reformulated
-     *  as equalities with slacks */
-    virtual SmartPtr<const Vector> unscaled_d(const Vector& x) = 0;
 
     /** Jacobian Matrix for inequality constraints */
     virtual SmartPtr<const Matrix> jac_d(const Vector& x) = 0;
@@ -223,8 +211,7 @@ namespace Ipopt
                                   Number obj_value)=0;
     //@}
 
-  protected:
-    /** Returns the scaling strategy object - may be NULL */
+    /** Returns the scaling strategy object */
     SmartPtr<NLPScalingObject> NLP_scaling() const
     {
       DBG_ASSERT(IsValid(nlp_scaling_));

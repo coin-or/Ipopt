@@ -533,11 +533,7 @@ namespace Ipopt
                                      SmartPtr<Vector> z_L,
                                      bool need_z_L,
                                      SmartPtr<Vector> z_U,
-                                     bool need_z_U,
-                                     SmartPtr<Vector> v_L,
-                                     bool need_v_L,
-                                     SmartPtr<Vector> v_U,
-                                     bool need_v_U
+                                     bool need_z_U
                                     )
   {
     Number* full_x = new Number[n_full_x_];
@@ -610,9 +606,6 @@ namespace Ipopt
         values[i] = full_z_u[idx];
       }
     }
-
-    DBG_ASSERT(!need_v_L && !need_v_U
-               && "Need to think about initialization of these.");
 
     delete [] full_x;
     full_x = NULL;
@@ -797,9 +790,9 @@ namespace Ipopt
     const SmartPtr<const VectorSpace> c_space,
     const SmartPtr<const VectorSpace> d_space,
     Number& obj_scaling,
-    SmartPtr<Vector> x_scaling,
-    SmartPtr<Vector> c_scaling,
-    SmartPtr<Vector> d_scaling) const
+    SmartPtr<Vector>& x_scaling,
+    SmartPtr<Vector>& c_scaling,
+    SmartPtr<Vector>& d_scaling) const
   {
     x_scaling = x_space->MakeNew();
     c_scaling = c_space->MakeNew();

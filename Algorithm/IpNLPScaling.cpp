@@ -13,84 +13,118 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_L_NonConst(
-    SmartPtr<Matrix> Px_L,
-    const SmartPtr<const Vector>& l,
-    const SmartPtr<const VectorSpace> x_space)
+  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_LU_NonConst(
+    const Matrix& Px_LU,
+    const SmartPtr<const Vector>& lu,
+    const VectorSpace& x_space)
   {
-    SmartPtr<Vector> tmp_x = x_space->MakeNew();
+    SmartPtr<Vector> scaled_x_LU = lu->MakeNew();
+    if (have_x_scaling()) {
+      SmartPtr<Vector> tmp_x = x_space.MakeNew();
 
-    // move to full x space
-    Px_L->MultVector(1.0, *l, 0.0, *tmp_x);
+      // move to full x space
+      Px_LU.MultVector(1.0, *lu, 0.0, *tmp_x);
 
-    // scale in full x space
-    tmp_x = apply_vector_scaling_x_NonConst(ConstPtr(tmp_x));
+      // scale in full x space
+      tmp_x = apply_vector_scaling_x_NonConst(ConstPtr(tmp_x));
 
-    // move back to x_L space
-    SmartPtr<Vector> scaled_x_L = l->MakeNew();
-    Px_L->TransMultVector(1.0, *tmp_x, 0.0, *scaled_x_L);
+      // move back to x_L space
+      Px_LU.TransMultVector(1.0, *tmp_x, 0.0, *scaled_x_LU);
+    }
+    else {
+      scaled_x_LU->Copy(*lu);
+    }
 
-    return scaled_x_L;
+    return scaled_x_LU;
   }
 
-  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_U_NonConst(
-    SmartPtr<Matrix> Px_U,
-    const SmartPtr<const Vector>& u,
-    const SmartPtr<const VectorSpace> x_space)
+  SmartPtr<const Vector> NLPScalingObject::apply_vector_scaling_x_LU(
+    const Matrix& Px_LU,
+    const SmartPtr<const Vector>& lu,
+    const VectorSpace& x_space)
   {
-    SmartPtr<Vector> tmp_x = x_space->MakeNew();
-
-    // move to full x space
-    Px_U->MultVector(1.0, *u, 0.0, *tmp_x);
-
-    // scale in full x space
-    tmp_x = apply_vector_scaling_x_NonConst(ConstPtr(tmp_x));
-
-    // move back to x_L space
-    SmartPtr<Vector> scaled_x_U = u->MakeNew();
-    Px_U->TransMultVector(1.0, *tmp_x, 0.0, *scaled_x_U);
-
-    return scaled_x_U;
+    if (have_x_scaling()) {
+      return ConstPtr(apply_vector_scaling_x_LU_NonConst(Px_LU, lu, x_space));
+    }
+    else {
+      return lu;
+    }
   }
 
-  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_d_L_NonConst(
-    SmartPtr<Matrix> Pd_L,
-    const SmartPtr<const Vector>& l,
-    const SmartPtr<const VectorSpace> d_space)
+  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_d_LU_NonConst(
+    const Matrix& Pd_LU,
+    const SmartPtr<const Vector>& lu,
+    const VectorSpace& d_space)
   {
-    SmartPtr<Vector> tmp_d = d_space->MakeNew();
+    SmartPtr<Vector> scaled_d_LU = lu->MakeNew();
+    if (have_d_scaling()) {
+      SmartPtr<Vector> tmp_d = d_space.MakeNew();
 
-    // move to full d space
-    Pd_L->MultVector(1.0, *l, 0.0, *tmp_d);
+      // move to full d space
+      Pd_LU.MultVector(1.0, *lu, 0.0, *tmp_d);
 
-    // scale in full d space
-    tmp_d = apply_vector_scaling_d_NonConst(ConstPtr(tmp_d));
+      // scale in full x space
+      tmp_d = apply_vector_scaling_d_NonConst(ConstPtr(tmp_d));
 
-    // move back to d_L space
-    SmartPtr<Vector> scaled_d_L = l->MakeNew();
-    Pd_L->TransMultVector(1.0, *tmp_d, 0.0, *scaled_d_L);
+      // move back to x_L space
+      Pd_LU.TransMultVector(1.0, *tmp_d, 0.0, *scaled_d_LU);
+    }
+    else {
+      scaled_d_LU->Copy(*lu);
+    }
 
-    return scaled_d_L;
+    return scaled_d_LU;
   }
 
-  SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_d_U_NonConst(
-    SmartPtr<Matrix> Pd_U,
-    const SmartPtr<const Vector>& u,
-    const SmartPtr<const VectorSpace> d_space)
+  SmartPtr<const Vector> NLPScalingObject::apply_vector_scaling_d_LU(
+    const Matrix& Pd_LU,
+    const SmartPtr<const Vector>& lu,
+    const VectorSpace& d_space)
   {
-    SmartPtr<Vector> tmp_d = d_space->MakeNew();
+    if (have_d_scaling()) {
+      return ConstPtr(apply_vector_scaling_d_LU_NonConst(Pd_LU, lu, d_space));
+    }
+    else {
+      return lu;
+    }
+  }
 
-    // move to full d space
-    Pd_U->MultVector(1.0, *u, 0.0, *tmp_d);
+  SmartPtr<Vector> NLPScalingObject::unapply_vector_scaling_d_LU_NonConst(
+    const Matrix& Pd_LU,
+    const SmartPtr<const Vector>& lu,
+    const VectorSpace& d_space)
+  {
+    SmartPtr<Vector> unscaled_d_LU = lu->MakeNew();
+    if (have_d_scaling()) {
+      SmartPtr<Vector> tmp_d = d_space.MakeNew();
 
-    // scale in full d space
-    tmp_d = apply_vector_scaling_d_NonConst(ConstPtr(tmp_d));
+      // move to full d space
+      Pd_LU.MultVector(1.0, *lu, 0.0, *tmp_d);
 
-    // move back to d_L space
-    SmartPtr<Vector> scaled_d_U = u->MakeNew();
-    Pd_U->TransMultVector(1.0, *tmp_d, 0.0, *scaled_d_U);
+      // scale in full x space
+      tmp_d = unapply_vector_scaling_d_NonConst(ConstPtr(tmp_d));
 
-    return scaled_d_U;
+      // move back to x_L space
+      Pd_LU.TransMultVector(1.0, *tmp_d, 0.0, *unscaled_d_LU);
+    }
+    else {
+      unscaled_d_LU->Copy(*lu);
+    }
+
+    return unscaled_d_LU;
+  }
+
+  SmartPtr<const Vector> NLPScalingObject::unapply_vector_scaling_d_LU(
+    const Matrix& Pd_LU,
+    const SmartPtr<const Vector>& lu,
+    const VectorSpace& d_space)
+  {
+    if (have_d_scaling()) {
+      return ConstPtr(unapply_vector_scaling_d_LU_NonConst(Pd_LU, lu, d_space));
+    }
+    else {
+      return lu;
+    }
   }
 
   SmartPtr<Vector> NLPScalingObject::apply_grad_obj_scaling_NonConst(
@@ -122,7 +156,7 @@ namespace Ipopt
     const SmartPtr<const Vector>& v)
   {
     SmartPtr<Vector> unscaled_v = apply_vector_scaling_x_NonConst(v);
-    Number df = unapply_obj_scaling(1.0);
+    Number df = unapply_obj_scaling(1.);
     if (df != 1.) {
       unscaled_v->Scal(df);
     }
@@ -132,7 +166,7 @@ namespace Ipopt
   SmartPtr<const Vector> NLPScalingObject::unapply_grad_obj_scaling(
     const SmartPtr<const Vector>& v)
   {
-    Number df = unapply_obj_scaling(1.0);
+    Number df = unapply_obj_scaling(1.);
     if (df != 1.) {
       SmartPtr<Vector> unscaled_v = unapply_grad_obj_scaling_NonConst(v);
       return ConstPtr(unscaled_v);
@@ -415,6 +449,7 @@ namespace Ipopt
     }
   }
 
+  // ToDo: matrix not passed by reference, so setting to NULL doesn't make difference
   SmartPtr<const Matrix> StandardScalingBase::apply_jac_c_scaling(
     SmartPtr<const Matrix> matrix)
   {
@@ -458,6 +493,23 @@ namespace Ipopt
       matrix = NULL;
       return ret;
     }
+  }
+
+  bool StandardScalingBase::have_x_scaling()
+  {
+    return IsValid(dx_);
+  }
+
+  bool StandardScalingBase::have_c_scaling()
+  {
+    return (IsValid(scaled_jac_c_space_) &&
+            IsValid(scaled_jac_c_space_->RowScaling()));
+  }
+
+  bool StandardScalingBase::have_d_scaling()
+  {
+    return (IsValid(scaled_jac_d_space_) &&
+            IsValid(scaled_jac_d_space_->RowScaling()));
   }
 
   void NoNLPScalingObject::DetermineScalingParametersImpl(

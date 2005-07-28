@@ -93,11 +93,7 @@ namespace Ipopt
       SmartPtr<Vector> z_L,
       bool need_z_L,
       SmartPtr<Vector> z_U,
-      bool need_z_U,
-      SmartPtr<Vector> v_L,
-      bool need_v_L,
-      SmartPtr<Vector> v_U,
-      bool need_v_U
+      bool need_z_U
     )=0;
     //@}
 
@@ -142,9 +138,9 @@ namespace Ipopt
       const SmartPtr<const VectorSpace> c_space,
       const SmartPtr<const VectorSpace> d_space,
       Number& obj_scaling,
-      SmartPtr<Vector> x_scaling,
-      SmartPtr<Vector> c_scaling,
-      SmartPtr<Vector> d_scaling) const
+      SmartPtr<Vector>& x_scaling,
+      SmartPtr<Vector>& c_scaling,
+      SmartPtr<Vector>& d_scaling) const
     {
       THROW_EXCEPTION(USER_SCALING_NOT_IMPLEMENTED,
                       "You have set options for user provided scaling, but have"

@@ -17,7 +17,7 @@ namespace Ipopt
   void GradientScaling::RegisterOptions(SmartPtr<RegisteredOptions>& roptions)
   {
     roptions->AddLowerBoundedNumberOption(
-      "scaling_max_gradient", "maximum gradient after scaling",
+      "nlp_scaling_max_gradient", "maximum gradient after scaling",
       0, true, 100.0,
       "This is the gradient scaling cut-off. If the maximum"
       " gradient is above this value, then gradient based scaling"
@@ -29,7 +29,7 @@ namespace Ipopt
   bool GradientScaling::InitializeImpl(const OptionsList& options,
                                        const std::string& prefix)
   {
-    options.GetNumericValue("scaling_max_gradient", scaling_max_gradient_, prefix);
+    options.GetNumericValue("nlp_scaling_max_gradient", scaling_max_gradient_, prefix);
     return StandardScalingBase::InitializeImpl(options, prefix);
   }
 
@@ -50,8 +50,6 @@ namespace Ipopt
 
     SmartPtr<Vector> x = x_space->MakeNew();
     if (!nlp_->GetStartingPoint(GetRawPtr(x), true,
-                                NULL, false,
-                                NULL, false,
                                 NULL, false,
                                 NULL, false,
                                 NULL, false,

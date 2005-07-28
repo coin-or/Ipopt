@@ -345,7 +345,7 @@ namespace Ipopt
 
       // Choose the fraction-to-the-boundary parameter for the current
       // iteration
-      // ToDo
+      // ToDo: Is curr_nlp_error really what we should use here?
       Number tau = Max(tau_min_, 1.-IpCq().curr_nlp_error());
       IpData().Set_tau(tau);
 
@@ -412,6 +412,7 @@ namespace Ipopt
                retval = filter_.Acceptable(IpCq().curr_f(),
                                            IpCq().curr_constraint_violation());
         */
+        // ToDo: Is curr_nlp_error really what we should use here?
         Number curr_error = IpCq().curr_nlp_error();
         Number margin = filter_margin_fact_*Min(filter_max_margin_, curr_error);
         retval = filter_.Acceptable(IpCq().curr_f() + margin,

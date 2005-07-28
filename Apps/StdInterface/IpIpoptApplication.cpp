@@ -266,20 +266,22 @@ namespace Ipopt
           vector_report_level = J_SUMMARY;
         }
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "\nNumber of Iterations    = %d\n",
+                       "\nNumber of Iterations....: %d\n",
                        ip_data->iter_count());
+
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "Objective Value         = %23.16e\n",
-                       ip_cq->unscaled_curr_f());
+                       "\n                                   (scaled)                 (unscaled)\n");
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "Primal Infeasibility    = %23.16e\n",
-                       ip_cq->curr_primal_infeasibility(NORM_MAX));
+                       "Objective...............: %24.16e  %24.16e\n", ip_cq->curr_f(), ip_cq->unscaled_curr_f());
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "Dual Infeasibility      = %23.16e\n",
-                       ip_cq->curr_dual_infeasibility(NORM_MAX));
+                       "Dual infeasibility......: %24.16e  %24.16e\n", ip_cq->curr_dual_infeasibility(NORM_MAX), ip_cq->unscaled_curr_dual_infeasibility(NORM_MAX));
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "Complementarity         = %23.16e\n",
-                       ip_cq->curr_complementarity(0., NORM_MAX));
+                       "Constraint violation....: %24.16e  %24.16e\n", ip_cq->curr_nlp_constraint_violation(NORM_MAX), ip_cq->unscaled_curr_nlp_constraint_violation(NORM_MAX));
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Complementarity.........: %24.16e  %24.16e\n", ip_cq->curr_complementarity(0., NORM_MAX), ip_cq->unscaled_curr_complementarity(0., NORM_MAX));
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Overall NLP error.......: %24.16e  %24.16e\n\n", ip_cq->curr_nlp_error(), ip_cq->unscaled_curr_nlp_error());
+
 
         jnlst_->PrintVector(vector_report_level, J_SOLUTION, "x", *ip_data->curr()->x());
         jnlst_->PrintVector(vector_report_level, J_SOLUTION, "y_c", *ip_data->curr()->y_c());

@@ -74,7 +74,7 @@ namespace Ipopt
 
     // initialize the data structures in the restoration phase NLP
     IpData().InitializeDataStructures(IpNLP(), false, false, false,
-                                      false, false, false, false);
+                                      false, false);
 
     SmartPtr<Vector> new_x = IpData().curr()->x()->MakeNew();
     SmartPtr<CompoundVector> Cnew_x =

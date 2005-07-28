@@ -111,26 +111,36 @@ namespace Ipopt
 
     /** Methods for scaling bounds - these wrap those above */
     //@{
-    /** Returns an x-scaled vector in the x_L space */
-    SmartPtr<Vector> apply_vector_scaling_x_L_NonConst(
-      SmartPtr<Matrix> Px_L,
-      const SmartPtr<const Vector>& l,
-      const SmartPtr<const VectorSpace> x_space);
-    /** Returns an x-scaled vector in the x_U space */
-    SmartPtr<Vector> apply_vector_scaling_x_U_NonConst(
-      SmartPtr<Matrix> Px_U,
-      const SmartPtr<const Vector>& u,
-      const SmartPtr<const VectorSpace> x_space);
-    /** Returns an d-scaled vector in the d_L space */
-    SmartPtr<Vector> apply_vector_scaling_d_L_NonConst(
-      SmartPtr<Matrix> Pd_L,
-      const SmartPtr<const Vector>& l,
-      const SmartPtr<const VectorSpace> d_space);
-    /** Returns an d-scaled vector in the d_U space */
-    SmartPtr<Vector> apply_vector_scaling_d_U_NonConst(
-      SmartPtr<Matrix> Pd_U,
-      const SmartPtr<const Vector>& u,
-      const SmartPtr<const VectorSpace> d_space);
+    /** Returns an x-scaled vector in the x_L or x_U space */
+    SmartPtr<Vector> apply_vector_scaling_x_LU_NonConst(
+      const Matrix& Px_LU,
+      const SmartPtr<const Vector>& lu,
+      const VectorSpace& x_space);
+    /** Returns an x-scaled vector in the x_L or x_U space */
+    SmartPtr<const Vector> apply_vector_scaling_x_LU(
+      const Matrix& Px_LU,
+      const SmartPtr<const Vector>& lu,
+      const VectorSpace& x_space);
+    /** Returns an d-scaled vector in the d_L or d_U space */
+    SmartPtr<Vector> apply_vector_scaling_d_LU_NonConst(
+      const Matrix& Pd_LU,
+      const SmartPtr<const Vector>& lu,
+      const VectorSpace& d_space);
+    /** Returns an d-scaled vector in the d_L or d_U space */
+    SmartPtr<const Vector> apply_vector_scaling_d_LU(
+      const Matrix& Pd_LU,
+      const SmartPtr<const Vector>& lu,
+      const VectorSpace& d_space);
+    /** Returns an d-unscaled vector in the d_L or d_U space */
+    SmartPtr<Vector> unapply_vector_scaling_d_LU_NonConst(
+      const Matrix& Pd_LU,
+      const SmartPtr<const Vector>& lu,
+      const VectorSpace& d_space);
+    /** Returns an d-unscaled vector in the d_L or d_U space */
+    SmartPtr<const Vector> unapply_vector_scaling_d_LU(
+      const Matrix& Pd_LU,
+      const SmartPtr<const Vector>& lu,
+      const VectorSpace& d_space);
     //@}
 
     /** Methods for scaling the gradient of the objective - wraps the
@@ -151,6 +161,17 @@ namespace Ipopt
      *  given vector */
     virtual SmartPtr<const Vector>
     unapply_grad_obj_scaling(const SmartPtr<const Vector>& v);
+    //@}
+
+    /** @name Methods for determining whether scaling for entities is
+     *  done */
+    //@{
+    /** Returns true if the primal x variables are scaled. */
+    virtual bool have_x_scaling()=0;
+    /** Returns true if the equality constraints are scaled. */
+    virtual bool have_c_scaling()=0;
+    /** Returns true if the inequality constraints are scaled. */
+    virtual bool have_d_scaling()=0;
     //@}
 
     /** This method is called by the IpoptNLP's at a convenient time to
@@ -276,6 +297,14 @@ namespace Ipopt
      */
     virtual SmartPtr<const SymMatrix>
     apply_hessian_scaling(SmartPtr<const SymMatrix> matrix);
+    //@}
+
+    /** @name Methods for determining whether scaling for entities is
+     *  done */
+    //@{
+    virtual bool have_x_scaling();
+    virtual bool have_c_scaling();
+    virtual bool have_d_scaling();
     //@}
 
     /** This method is called by the IpoptNLP's at a convenient time to

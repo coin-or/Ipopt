@@ -72,6 +72,8 @@ namespace Ipopt
       curr_exact_hessian_cache_(1),
       curr_constraint_violation_cache_(2),
       trial_constraint_violation_cache_(5),
+      curr_nlp_constraint_violation_cache_(3),
+      unscaled_curr_nlp_constraint_violation_cache_(3),
 
       curr_grad_lag_x_cache_(1),
       trial_grad_lag_x_cache_(1),
@@ -95,10 +97,12 @@ namespace Ipopt
       trial_primal_infeasibility_cache_(3),
       curr_dual_infeasibility_cache_(3),
       trial_dual_infeasibility_cache_(3),
+      unscaled_curr_dual_infeasibility_cache_(3),
       curr_complementarity_cache_(6),
       trial_complementarity_cache_(6),
       curr_centrality_measure_cache_(1),
       curr_nlp_error_cache_(1),
+      unscaled_curr_nlp_error_cache_(1),
       curr_barrier_error_cache_(1),
       curr_primal_dual_system_error_cache_(1),
       trial_primal_dual_system_error_cache_(3),
@@ -526,8 +530,7 @@ namespace Ipopt
   Number
   IpoptCalculatedQuantities::unscaled_curr_f()
   {
-    // this value is cached in IpOrigIpoptNLP (not in the resto...)
-    return ip_nlp_->unscaled_f(*ip_data_->curr()->x());
+    return ip_nlp_->NLP_scaling()->unapply_obj_scaling(curr_f());
   }
 
   Number
@@ -565,6 +568,12 @@ namespace Ipopt
     }
     DBG_PRINT((1,"result (trial_f) = %e\n", result));
     return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::unscaled_trial_f()
+  {
+    return ip_nlp_->NLP_scaling()->unapply_obj_scaling(trial_f());
   }
 
   SmartPtr<const Vector>
@@ -1013,8 +1022,7 @@ namespace Ipopt
   SmartPtr<const Vector>
   IpoptCalculatedQuantities::unscaled_curr_c()
   {
-    // this value is cached in IpOrigIpoptNLP (not resto)
-    return ip_nlp_->unscaled_c(*ip_data_->curr()->x());
+    return ip_nlp_->NLP_scaling()->unapply_vector_scaling_c(curr_c());
   }
 
   SmartPtr<const Vector>
@@ -1054,8 +1062,7 @@ namespace Ipopt
   SmartPtr<const Vector>
   IpoptCalculatedQuantities::unscaled_curr_d()
   {
-    // this value is cached in IpOrigIpoptNLP (not the resto)
-    return ip_nlp_->unscaled_d(*ip_data_->curr()->x());
+    return ip_nlp_->NLP_scaling()->unapply_vector_scaling_d(curr_d());
   }
 
   SmartPtr<const Vector>
@@ -1349,6 +1356,95 @@ namespace Ipopt
     DBG_START_METH("IpoptCalculatedQuantities::trial_constraint_violation()",
                    dbg_verbosity);
     return trial_primal_infeasibility(constr_viol_normtype_);
+  }
+
+  Number
+  IpoptCalculatedQuantities::curr_nlp_constraint_violation
+  (ENormType NormType)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::curr_nlp_constraint_violation()",
+                   dbg_verbosity);
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->curr()->x();
+
+    std::vector<const TaggedObject*> deps(1);
+    deps[0] = GetRawPtr(x);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = (Number)NormType;
+
+    if (!curr_nlp_constraint_violation_cache_.GetCachedResult(result, deps, sdeps)) {
+      SmartPtr<const Vector> c = curr_c();
+      SmartPtr<const Vector> d = curr_d();
+
+      SmartPtr<Vector> d_viol_L = ip_nlp_->d_L()->MakeNewCopy();
+      ip_nlp_->Pd_L()->TransMultVector(-1., *d, 1., *d_viol_L);
+      SmartPtr<Vector> tmp = d_viol_L->MakeNew();
+      tmp->Set(0.);
+      d_viol_L->ElementWiseMax(*tmp);
+      DBG_PRINT_VECTOR(2, "d_viol_L", *d_viol_L);
+
+      SmartPtr<Vector> d_viol_U = ip_nlp_->d_U()->MakeNewCopy();
+      ip_nlp_->Pd_U()->TransMultVector(-1., *d, 1., *d_viol_U);
+      tmp = d_viol_U->MakeNew();
+      tmp->Set(0.);
+      d_viol_U->ElementWiseMin(*tmp);
+      DBG_PRINT_VECTOR(2, "d_viol_U", *d_viol_U);
+
+      std::vector<SmartPtr<const Vector> > vecs(3);
+      vecs[0] = c;
+      vecs[1] = GetRawPtr(d_viol_L);
+      vecs[2] = GetRawPtr(d_viol_U);
+      result = CalcNormOfType(NormType, vecs);
+      curr_nlp_constraint_violation_cache_.AddCachedResult(result, deps, sdeps);
+    }
+
+    return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::unscaled_curr_nlp_constraint_violation
+  (ENormType NormType)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::unscaled_curr_nlp_constraint_violation()",
+                   dbg_verbosity);
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->curr()->x();
+
+    std::vector<const TaggedObject*> deps(1);
+    deps[0] = GetRawPtr(x);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = (Number)NormType;
+
+    if (!unscaled_curr_nlp_constraint_violation_cache_.GetCachedResult(result, deps, sdeps)) {
+      SmartPtr<const Vector> c = unscaled_curr_c();
+
+      SmartPtr<const Vector> d = curr_d();
+
+      SmartPtr<Vector> d_viol_L = ip_nlp_->d_L()->MakeNewCopy();
+      ip_nlp_->Pd_L()->TransMultVector(-1., *d, 1., *d_viol_L);
+      SmartPtr<Vector> tmp = d_viol_L->MakeNew();
+      tmp->Set(0.);
+      d_viol_L->ElementWiseMax(*tmp);
+      DBG_PRINT_VECTOR(2, "d_viol_L", *d_viol_L);
+
+      SmartPtr<Vector> d_viol_U = ip_nlp_->d_U()->MakeNewCopy();
+      ip_nlp_->Pd_U()->TransMultVector(-1., *d, 1., *d_viol_U);
+      tmp = d_viol_U->MakeNew();
+      tmp->Set(0.);
+      d_viol_U->ElementWiseMin(*tmp);
+      DBG_PRINT_VECTOR(2, "d_viol_U", *d_viol_U);
+
+      std::vector<SmartPtr<const Vector> > vecs(3);
+      vecs[0] = c;
+      vecs[1] = GetRawPtr(d_viol_L);
+      vecs[2] = GetRawPtr(d_viol_U);
+      result = CalcNormOfType(NormType, vecs);
+      unscaled_curr_nlp_constraint_violation_cache_.AddCachedResult(result, deps, sdeps);
+    }
+
+    return result;
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -2151,6 +2247,58 @@ namespace Ipopt
   }
 
   Number
+  IpoptCalculatedQuantities::unscaled_curr_dual_infeasibility
+  (ENormType NormType)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::unscaled_curr_dual_infeasibility()",
+                   dbg_verbosity);
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->curr()->x();
+    SmartPtr<const Vector> s = ip_data_->curr()->s();
+    SmartPtr<const Vector> y_c = ip_data_->curr()->y_c();
+    SmartPtr<const Vector> y_d = ip_data_->curr()->y_d();
+    SmartPtr<const Vector> z_L = ip_data_->curr()->z_L();
+    SmartPtr<const Vector> z_U = ip_data_->curr()->z_U();
+    SmartPtr<const Vector> v_L = ip_data_->curr()->v_L();
+    SmartPtr<const Vector> v_U = ip_data_->curr()->v_U();
+
+    std::vector<const TaggedObject*> deps(8);
+    deps[0] = GetRawPtr(x);
+    deps[1] = GetRawPtr(s);
+    deps[2] = GetRawPtr(y_c);
+    deps[3] = GetRawPtr(y_d);
+    deps[4] = GetRawPtr(z_L);
+    deps[5] = GetRawPtr(z_U);
+    deps[6] = GetRawPtr(v_L);
+    deps[7] = GetRawPtr(v_U);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = (Number)NormType;
+
+    if (!unscaled_curr_dual_infeasibility_cache_.GetCachedResult(result, deps, sdeps)) {
+      SmartPtr<const Vector> grad_lag_x =
+        ip_nlp_->NLP_scaling()->unapply_grad_obj_scaling(curr_grad_lag_x());
+
+      Number obj_unscal = ip_nlp_->NLP_scaling()->unapply_obj_scaling(1.);
+      SmartPtr<const Vector> grad_lag_s;
+      if (obj_unscal != 1.) {
+        SmartPtr<Vector> tmp =
+          ip_nlp_->NLP_scaling()->apply_vector_scaling_d_NonConst(ConstPtr(curr_grad_lag_s()));
+        tmp->Scal(obj_unscal);
+        grad_lag_s = ConstPtr(tmp);
+      }
+      else {
+        grad_lag_s = ip_nlp_->NLP_scaling()->apply_vector_scaling_d(curr_grad_lag_s());
+      }
+
+      result = CalcNormOfType(NormType, *grad_lag_x, *grad_lag_s);
+      unscaled_curr_dual_infeasibility_cache_.AddCachedResult(result, deps, sdeps);
+    }
+
+    return result;
+  }
+
+  Number
   IpoptCalculatedQuantities::curr_complementarity
   (Number mu, ENormType NormType)
   {
@@ -2286,6 +2434,13 @@ namespace Ipopt
     }
 
     return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::unscaled_curr_complementarity
+  (Number mu, ENormType NormType)
+  {
+    return ip_nlp_->NLP_scaling()->unapply_obj_scaling(curr_complementarity(mu, NormType));
   }
 
   Number
@@ -2441,20 +2596,67 @@ namespace Ipopt
                                     s_d, s_c);
       DBG_PRINT((1, "s_d = %lf, s_c = %lf\n", s_d, s_c));
 
-      // Primal infeasibility
+      // Dual infeasibility
       DBG_PRINT((1, "curr_dual_infeasibility(NORM_MAX) = %8.2e\n",
                  curr_dual_infeasibility(NORM_MAX)));
       result = curr_dual_infeasibility(NORM_MAX)/s_d;
-      // Dual infeasibility
+      /*
+      // Primal infeasibility
       DBG_PRINT((1, "curr_primal_infeasibility(NORM_MAX) = %8.2e\n",
                  curr_primal_infeasibility(NORM_MAX)));
       result = Max(result, curr_primal_infeasibility(NORM_MAX));
+      */
+      result = Max(result, curr_nlp_constraint_violation(NORM_MAX));
       // Complementarity
       DBG_PRINT((1, "curr_complementarity(0., NORM_MAX) = %8.2e\n",
                  curr_complementarity(0., NORM_MAX)));
       result = Max(result, curr_complementarity(0., NORM_MAX)/s_c);
 
       curr_nlp_error_cache_.AddCachedResult(result, tdeps);
+    }
+
+    return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::unscaled_curr_nlp_error()
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::unscaled_curr_nlp_error()",
+                   dbg_verbosity);
+    DBG_ASSERT(initialize_called_);
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->curr()->x();
+    SmartPtr<const Vector> s = ip_data_->curr()->s();
+    SmartPtr<const Vector> y_c = ip_data_->curr()->y_c();
+    SmartPtr<const Vector> y_d = ip_data_->curr()->y_d();
+    SmartPtr<const Vector> z_L = ip_data_->curr()->z_L();
+    SmartPtr<const Vector> z_U = ip_data_->curr()->z_U();
+    SmartPtr<const Vector> v_L = ip_data_->curr()->v_L();
+    SmartPtr<const Vector> v_U = ip_data_->curr()->v_U();
+
+    std::vector<const TaggedObject*> tdeps(8);
+    tdeps[0] = GetRawPtr(x);
+    tdeps[1] = GetRawPtr(s);
+    tdeps[2] = GetRawPtr(y_c);
+    tdeps[3] = GetRawPtr(y_d);
+    tdeps[4] = GetRawPtr(z_L);
+    tdeps[5] = GetRawPtr(z_U);
+    tdeps[6] = GetRawPtr(v_L);
+    tdeps[7] = GetRawPtr(v_U);
+
+    if (!unscaled_curr_nlp_error_cache_.GetCachedResult(result, tdeps)) {
+
+      // Dual infeasibility
+      result = unscaled_curr_dual_infeasibility(NORM_MAX);
+      // Constraint violation
+      result = Max(result, unscaled_curr_nlp_constraint_violation(NORM_MAX));
+      // Complementarity (ToDo use unscaled?)
+      DBG_PRINT((1, "curr_complementarity(0., NORM_MAX) = %8.2e\n",
+                 curr_complementarity(0., NORM_MAX)));
+      result = Max(result, unscaled_curr_complementarity(0., NORM_MAX));
+
+      unscaled_curr_nlp_error_cache_.AddCachedResult(result, tdeps);
     }
 
     return result;

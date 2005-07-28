@@ -99,9 +99,7 @@ namespace Ipopt
       bool want_y_c,
       bool want_y_d,
       bool want_z_L,
-      bool want_z_U,
-      bool want_v_L,
-      bool want_v_U)
+      bool want_z_U)
   {
     DBG_ASSERT(initialize_called_);
     /*
@@ -125,18 +123,12 @@ namespace Ipopt
                                   new_y_d, want_y_d,
                                   new_z_L, want_z_L,
                                   new_z_U, want_z_U,
-                                  new_v_L, want_v_L,
-                                  new_v_U, want_v_U);
+                                  new_v_L, new_v_U);
     if (!retValue) {
       return false;
     }
 
     new_s = new_y_d->MakeNew(); // same dimension as d
-    /*
-    new_s ->Set(0.0); // we set it here so that in
-        // WarmStartIterateInitializer we can use
-        // MakeNewIteratesVector
-        */
 
     iterates_space_ = new IteratesVectorSpace(*(new_x->OwnerSpace()), *(new_s->OwnerSpace()),
                       *(new_y_c->OwnerSpace()), *(new_y_d->OwnerSpace()),

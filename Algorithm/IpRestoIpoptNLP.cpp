@@ -57,9 +57,7 @@ namespace Ipopt
       SmartPtr<Vector>& z_U,
       bool init_z_U,
       SmartPtr<Vector>& v_L,
-      bool init_v_L,
-      SmartPtr<Vector>& v_U,
-      bool init_v_U
+      SmartPtr<Vector>& v_U
                                           )
   {
     DBG_START_METH("RestoIpoptNLP::InitializeStructures", 0);

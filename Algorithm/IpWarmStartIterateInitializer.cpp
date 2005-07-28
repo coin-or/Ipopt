@@ -67,8 +67,7 @@ namespace Ipopt
     /////////////////////////////////////////////////////////////////////
 
     // Get the intial values for x, y_c, y_d, z_L, z_U,
-    IpData().InitializeDataStructures(IpNLP(), true, true, true,
-                                      true, true, false, false);
+    IpData().InitializeDataStructures(IpNLP(), true, true, true, true, true);
 
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided x",
                         *IpData().curr()->x());
