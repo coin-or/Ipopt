@@ -52,27 +52,6 @@ namespace Ipopt
       "\"cmpl_inf_tol\" are met.  (This is epsilon_tol in Eqn. (6) in "
       "implementation paper).  [Some other algorithmic features also use "
       "this quantity.]");
-    reg_options->AddLowerBoundedNumberOption(
-      "dual_inf_tol",
-      "Acceptance threshold for the unscaled dual infeasibility.",
-      0.0, true, 1e-2,
-      "Absolute tolerance on the dual infesaibility.  Successful termination "
-      "requires that the (unscaled) dual infeasibility is less than this "
-      "threshold.");
-    reg_options->AddLowerBoundedNumberOption(
-      "primal_inf_tol",
-      "Acceptance threshold for the unscaled primal infeasibility.",
-      0.0, true, 1e-2,
-      "Absolute tolerance on the dual infesaibility.  Successful termination "
-      "requires that the (unscaled) primal infeasibility is less than this "
-      "threshold.");
-    reg_options->AddLowerBoundedNumberOption(
-      "compl_inf_tol",
-      "Acceptance threshold for the complementarity conditions.",
-      0.0, true, 1e-2,
-      "Absolute tolerance on the complementarity.  Successful termination "
-      "requires that the (unscaled) complementarity is less than this "
-      "threshold.");
   }
 
   bool IpoptData::Initialize(const Journalist& jnlst,
@@ -80,9 +59,6 @@ namespace Ipopt
                              const std::string& prefix)
   {
     options.GetNumericValue("tol", tol_, prefix);
-    options.GetNumericValue("dual_inf_tol", dual_inf_tol_, prefix);
-    options.GetNumericValue("primal_inf_tol", primal_inf_tol_, prefix);
-    options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
 
     iter_count_=0;
 

@@ -56,8 +56,8 @@ namespace Ipopt
       0.0, true, 1e-9,
       "This option allows to specify a lower bound on the adaptively chosen "
       "barrier parameter.  By default, it is set to "
-      "0.1*min(\"tol\",\"compl_inf_tol\"), which should be a very reasonable "
-      "value.");
+      "min(\"tol\",\"compl_inf_tol\")/(\"barrier_tol_factor\"+1), which "
+      "should be a very reasonable value.");
     roptions->AddLowerBoundedNumberOption(
       "adaptive_mu_safeguard_factor",
       "ToDo: This option should probably be deleted!",
@@ -142,45 +142,12 @@ namespace Ipopt
       "norm specified with this option is used.  [This options is also used "
       "in QualityFunctionMuOracle]");
 
-    // ToDo move the last two options here to QualityFunctionMuOracle?
-    roptions->AddStringOption4(
-      "adaptive_mu_kkt_centrality",
-      "Determines whether a penalty term for centrality is added to KKT error.",
-      "none",
-      "none", "no penalty term is added",
-      "log", "complementarity * the log of the centrality measure",
-      "reciprocal", "complementarity * the reciprocal of the centrality measure",
-      "cubed-reciprocal", "complementarity * the reciprocal of the centrality measure cubed",
-      "This determines whether a term penalizing deviation from centrality "
-      "with respect to complementarity is added to the KKT "
-      "error measure used in the globalization atrategies.  The "
-      "complementarity measure here is the xi in the Loqo update rule. "
-      "(This originated from including such a term in the quality "
-      "function for the QualityFunctionMuOracle and needs to be used "
-      "here for consistency.)");
-
-    roptions->AddStringOption2(
-      "adaptive_mu_kkt_balancing_term",
-      "Determines whether a balancing term for centrality is added to KKT error.",
-      "none",
-      "none", "no balancing term is added",
-      "cubic", "Max(0,Max(dual_ing,primal_inf)-compl)^3",
-      "This determines whether a term penalizing stuations there the "
-      "complementality is much smaller than dual and primal "
-      "infeasibilities is added to the KKT error measure used in the "
-      "globalization strategies. (This originated from including such "
-      "a term in the quality function for the QualityFunctionMuOracle "
-      "and needs to be used here for consistency.)");
-
   }
 
   bool AdaptiveMuUpdate::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)
   {
     options.GetNumericValue("mu_max", mu_max_, prefix);
-    if (!options.GetNumericValue("mu_min", mu_min_, prefix)) {
-      mu_min_ = 0.1*Min(IpData().tol(), IpData().compl_inf_tol());
-    }
     options.GetNumericValue("tau_min", tau_min_, prefix);
     options.GetNumericValue("adaptive_mu_safeguard_factor", adaptive_mu_safeguard_factor_, prefix);
     options.GetNumericValue("adaptive_mu_kkterror_red_fact", refs_red_fact_, prefix);
@@ -217,6 +184,12 @@ namespace Ipopt
     adaptive_mu_kkt_centrality_ = QualityFunctionMuOracle::CentralityEnum(enum_int);
     options.GetEnumValue("quality_function_balancing_term", enum_int, prefix);
     adaptive_mu_kkt_balancing_term_ = QualityFunctionMuOracle::BalancingTermEnum(enum_int);
+    options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
+    if (!options.GetNumericValue("mu_min", mu_min_, prefix)) {
+      // Defer computation of the default until the scaling of the NLP
+      // is known
+      mu_min_ = -1.;
+    }
 
     init_dual_inf_ = -1.;
     init_primal_inf_ = -1.;
@@ -239,6 +212,18 @@ namespace Ipopt
 
   void AdaptiveMuUpdate::UpdateBarrierParameter()
   {
+    DBG_START_METH("AdaptiveMuUpdate::UpdateBarrierParameter",
+                   dbg_verbosity);
+
+    // if min_mu_ has not been given, we now set the default (can't do
+    // that earlier, because during call of InitializeImpl, the
+    // scaling in the NLP is not yet determined
+    if (mu_min_ < 0.) {
+      mu_min_ = Min(IpData().tol(),
+                    IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_))/
+                (barrier_tol_factor_+1.);
+    }
+
     // if there are not bounds, we always return the minimum MU value
     if (!check_if_no_bounds_) {
       Index n_bounds = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim()
@@ -281,11 +266,14 @@ namespace Ipopt
           // well, decrease mu
           // ToDo combine this code with MonotoneMuUpdate
           Number tol = IpData().tol();
-          Number compl_inf_tol = IpData().compl_inf_tol();
+          Number compl_inf_tol =
+            IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_);
 
           Number new_mu = Min( mu_linear_decrease_factor_*mu,
                                pow(mu, mu_superlinear_decrease_power_) );
-          new_mu = Max(new_mu, Min(compl_inf_tol, tol)/10.);
+          DBG_PRINT((1,"new_mu = %e, compl_inf_tol = %e tol = %e\n", new_mu, compl_inf_tol, tol));
+          new_mu = Max(new_mu,
+                       Min(compl_inf_tol, tol)/(barrier_tol_factor_+1.));
           if (tiny_step_flag && new_mu == mu) {
             THROW_EXCEPTION(TINY_STEP_DETECTED,
                             "Problem solved to best possible numerical accuracy");
@@ -687,6 +675,8 @@ namespace Ipopt
   Number
   AdaptiveMuUpdate::lower_mu_safeguard()
   {
+    DBG_START_METH("AdaptiveMuUpdate::lower_mu_safeguard",
+                   dbg_verbosity);
     if (adaptive_mu_safeguard_factor_ == 0.)
       return 0.;
 
@@ -712,6 +702,7 @@ namespace Ipopt
     Number lower_mu_safeguard =
       Max(adaptive_mu_safeguard_factor_ * (dual_inf/init_dual_inf_),
           adaptive_mu_safeguard_factor_ * (primal_inf/init_primal_inf_));
+    DBG_PRINT((1,"dual_inf=%e init_dual_inf_=%e primal_inf=%e init_primal_inf_=%e\n", dual_inf, init_dual_inf_, primal_inf, init_primal_inf_));
 
     if (adaptive_mu_globalization_==KKT_ERROR) {
       lower_mu_safeguard = Min(lower_mu_safeguard, min_ref_val());

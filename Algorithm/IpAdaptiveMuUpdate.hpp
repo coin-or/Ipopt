@@ -99,6 +99,8 @@ namespace Ipopt
     Number filter_max_margin_;
     /** Factor for filter margin */
     Number filter_margin_fact_;
+    /** Unscaled tolerance for complementarity */
+    Number compl_inf_tol_;
     //@}
 
     /** @name Strategy objects */

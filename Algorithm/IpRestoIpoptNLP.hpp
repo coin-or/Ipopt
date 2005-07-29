@@ -22,6 +22,8 @@
 namespace Ipopt
 {
 
+  DeclareIpoptType(RestoIpoptNLP);
+
   /** This class maps the traditional NLP into
    *  something that is more useful by Ipopt.
    *  This class takes care of storing the
@@ -261,6 +263,12 @@ namespace Ipopt
     }
     //@}
 
+    /** Methods for IpoptType */
+    //@{
+    /** Called by IpoptType to register the options */
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
   private:
     /** @name Pointers for the original NLP information. */
     //@{
@@ -368,6 +376,11 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const RestoIpoptNLP&);
     //@}
+
+    /** Flag indicating if evalution of the objective should be
+     *  performed for every restoration phase objective function
+     *  evaluation. */
+    bool evaluate_orig_obj_at_resto_trial_;
 
     /** Flag indicating if initialization method has been called */
     bool initialized_;

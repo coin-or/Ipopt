@@ -184,11 +184,16 @@ namespace Ipopt
     SmartPtr<PDSystemSolver> resto_PDSolver =
       new PDFullSpaceSolver(*resto_AugSolver);
 
+    // Convergence check in the restoration phase
+    SmartPtr<RestoFilterConvergenceCheck> resto_convCheck =
+      new RestoFilterConvergenceCheck();
+
     // Line search method for the restoration phase
     SmartPtr<RestoRestorationPhase> resto_resto =
       new RestoRestorationPhase();
     SmartPtr<FilterLineSearch> resto_LineSearch =
-      new FilterLineSearch(GetRawPtr(resto_resto), GetRawPtr(resto_PDSolver));
+      new FilterLineSearch(GetRawPtr(resto_resto), GetRawPtr(resto_PDSolver),
+                           GetRawPtr(resto_convCheck));
 
     // Create the mu update that will be used by the restoration phase
     // algorithm
@@ -235,10 +240,6 @@ namespace Ipopt
                              resto_MuOracle, resto_FixMuOracle);
     }
 
-    // Convergence check in the restoration phase
-    SmartPtr<RestoFilterConvergenceCheck> resto_convCheck =
-      new RestoFilterConvergenceCheck();
-
     // Initialization of the iterates for the restoration phase
     SmartPtr<EqMultiplierCalculator> resto_EqMultCalculator =
       new LeastSquareMultipliers(*resto_AugSolver);
@@ -266,7 +267,8 @@ namespace Ipopt
 
     // Create the line search to be used by the main algorithm
     SmartPtr<FilterLineSearch> lineSearch =
-      new FilterLineSearch(GetRawPtr(resto_phase), GetRawPtr(PDSolver));
+      new FilterLineSearch(GetRawPtr(resto_phase), GetRawPtr(PDSolver),
+                           convCheck);
 
     // The following cross reference is not good: We have to store a
     // pointer to the lineSearch object in resto_convCheck as a

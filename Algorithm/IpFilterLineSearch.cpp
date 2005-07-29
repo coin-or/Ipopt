@@ -27,11 +27,13 @@ namespace Ipopt
   DefineIpoptType(FilterLineSearch);
 
   FilterLineSearch::FilterLineSearch(const SmartPtr<RestorationPhase>& resto_phase,
-                                     const SmartPtr<PDSystemSolver>& pd_solver)
+                                     const SmartPtr<PDSystemSolver>& pd_solver,
+                                     const SmartPtr<ConvergenceCheck>& conv_check)
       :
       LineSearch(),
       resto_phase_(resto_phase),
       pd_solver_(pd_solver),
+      conv_check_(conv_check),
       theta_min_(-1.0),
       theta_max_(-1.0),
       filter_(2)
@@ -253,23 +255,6 @@ namespace Ipopt
       1, 3,
       "Determines the number of trial iterations before the watchdog "
       "procedure is aborted and the algorithm returns to the stored point.");
-    roptions->AddLowerBoundedNumberOption(
-      "acceptable_tol",
-      "Threshold for NLP error to consider iterate as acceptable.",
-      0.0, false, 1e-6,
-      "Determines tolerance for which an iterate is considered as accepable "
-      "solution.  If the algorithm would trigger the restoration phase at "
-      "such a point, it instead terminates, returning this acceptable "
-      "point.  Further, if the algorithm encounters \"acceptable_iter_max\" "
-      "successive points satisfying this NLP tolerance, the algorithm "
-      "terminates.");
-    roptions->AddLowerBoundedIntegerOption(
-      "acceptable_iter_max",
-      "Number of acceptable iterates to trigger termination.",
-      0, 15,
-      "if the algorithm encounters so many successive acceptable iterates "
-      "(see \"acceptable_tol\"), it terminates, assuming that the problem "
-      "has been solved to best possible accuracy given round-off.");
   }
 
   bool FilterLineSearch::InitializeImpl(const OptionsList& options,
@@ -320,8 +305,6 @@ namespace Ipopt
     options.GetNumericValue("tiny_step_tol", tiny_step_tol_, prefix);
     options.GetIntegerValue("watchdog_trial_iter_max", watchdog_trial_iter_max_, prefix);
     options.GetIntegerValue("watchdog_shortened_iter_trigger", watchdog_shortened_iter_trigger_, prefix);
-    options.GetNumericValue("acceptable_tol", acceptable_tol_, prefix);
-    options.GetIntegerValue("acceptable_iter_max", acceptable_iter_max_, prefix);
 
     // ToDo decide if also the PDSystemSolver should be initialized here...
 
@@ -332,7 +315,6 @@ namespace Ipopt
     Reset();
 
     count_successive_shortened_steps_ = 0;
-    count_acceptable_iter_ = 0;
 
     acceptable_iterate_ = NULL;
 
@@ -357,10 +339,9 @@ namespace Ipopt
 
     // Store current iterate if the optimality error is on acceptable
     // level to restored if things fail later
-    if (IpCq().curr_nlp_error()<=acceptable_tol_) {
+    if (CurrentIsAcceptable()) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                      "Storing current iterate as backup acceptable point.\n");
-      IpData().Append_info_string("A");
       StoreAcceptablePoint();
     }
 
@@ -550,7 +531,7 @@ namespace Ipopt
             // done earlier
             AugmentFilter();
           }
-          if (IpCq().curr_nlp_error()<=acceptable_tol_) {
+          if (CurrentIsAcceptable()) {
             THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
                             "Restoration phase called at acceptable point.");
           }
@@ -558,14 +539,16 @@ namespace Ipopt
           if (!IsValid(resto_phase_)) {
             THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Filter Line Search Object!");
           }
+          // ToDo make the 1e-2 below a parameter?
           if (IpCq().curr_constraint_violation()<=
-              1e-2*Min(IpData().tol(),IpData().primal_inf_tol())) {
+              1e-2*IpData().tol()) {
             bool found_acceptable = RestoreAcceptablePoint();
             if (found_acceptable) {
               THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
-                              "Restoration phase called at almost feasible point, but acceptable point could be restore.\n");
+                              "Restoration phase called at almost feasible point, but acceptable point could be restored.\n");
             }
             else {
+              // ToDo does that happen too often?
               THROW_EXCEPTION(RESTORATION_FAILED,
                               "Restoration phase called, but point is almost feasible.");
             }
@@ -592,7 +575,6 @@ namespace Ipopt
             }
           }
           count_successive_shortened_steps_ = 0;
-          count_acceptable_iter_ = 0;
           if (expect_infeasible_problem_) {
             expect_infeasible_problem_ = false;
           }
@@ -610,20 +592,6 @@ namespace Ipopt
                                       *actual_delta->v_L(), *actual_delta->v_U());
 
       PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
-
-      if (acceptable_iter_max_>0) {
-        if (IpCq().curr_nlp_error()<=acceptable_tol_) {
-          count_acceptable_iter_++;
-          if (count_acceptable_iter_>=acceptable_iter_max_) {
-            IpData().AcceptTrialPoint();
-            THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
-                            "Algorithm seems stuck at acceptable level.");
-          }
-        }
-        else {
-          count_acceptable_iter_=0;
-        }
-      }
 
       if (n_steps==0) {
         // accepted this if a full step was
@@ -1259,6 +1227,8 @@ namespace Ipopt
         e.ReportException(Jnlst());
         Jnlst().Printf(J_WARNING, J_MAIN, "Warning: SOC step rejected due to evaluation error\n");
         accept = false;
+        // There is no point in continuing SOC procedure
+        break;
       }
 
       if (accept) {
@@ -1621,6 +1591,12 @@ namespace Ipopt
                    Max(max_step_x, max_step_s));
 
     return true;
+  }
+
+  bool FilterLineSearch::CurrentIsAcceptable()
+  {
+    return (IsValid(conv_check_) &&
+            conv_check_->CurrentIsAcceptable());
   }
 
   void FilterLineSearch::StoreAcceptablePoint()

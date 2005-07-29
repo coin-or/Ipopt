@@ -292,21 +292,6 @@ namespace Ipopt
       DBG_ASSERT(initialize_called_);
       return tol_;
     }
-    Number dual_inf_tol() const
-    {
-      DBG_ASSERT(initialize_called_);
-      return dual_inf_tol_;
-    }
-    Number primal_inf_tol() const
-    {
-      DBG_ASSERT(initialize_called_);
-      return primal_inf_tol_;
-    }
-    Number compl_inf_tol() const
-    {
-      DBG_ASSERT(initialize_called_);
-      return compl_inf_tol_;
-    }
     //@}
 
     /** @name Information gathered for iteration output */
@@ -456,12 +441,6 @@ namespace Ipopt
     //@{
     /** Overall convergence tolerance */
     Number tol_;
-    /** Tolerance on unscaled dual infeasibility */
-    Number dual_inf_tol_;
-    /** Tolerance on unscaled primal infeasibility */
-    Number primal_inf_tol_;
-    /** Tolerance on unscaled complementarity */
-    Number compl_inf_tol_;
     //@}
 
     /** @name Gathered information for iteration output */

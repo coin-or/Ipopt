@@ -171,6 +171,9 @@ namespace Ipopt
       if (conv_status == ConvergenceCheck::CONVERGED) {
         return SUCCESS;
       }
+      if (conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT) {
+        return STOP_AT_ACCEPTABLE_POINT;
+      }
       else if (conv_status == ConvergenceCheck::MAXITER_EXCEEDED) {
         return MAXITER_EXCEEDED;
       }

@@ -80,6 +80,7 @@ namespace Ipopt
     Number mu_superlinear_decrease_power_;
     /** Tau_min for fraction to boundary rule */
     Number tau_min_;
+    Number compl_inf_tol_;
     //@}
 
     SmartPtr<LineSearch> linesearch_;

@@ -95,6 +95,7 @@ namespace Ipopt
     options.GetNumericValue("mu_linear_decrease_factor", mu_linear_decrease_factor_, prefix);
     options.GetNumericValue("mu_superlinear_decrease_power", mu_superlinear_decrease_power_, prefix);
     options.GetNumericValue("tau_min", tau_min_, prefix);
+    options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
 
     IpData().Set_mu(mu_init_);
     Number tau = Max(tau_min_, 1.0 - mu_init_);
@@ -181,11 +182,15 @@ namespace Ipopt
     // update the barrier parameter
     Number mu = IpData().curr_mu();
     Number tol = IpData().tol();
-    Number compl_inf_tol = IpData().compl_inf_tol();
+
+    // Here we need the complementarity tolerance that is posed to the
+    // scaled problem
+    Number compl_inf_tol =
+      IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_);
 
     new_mu = Min( mu_linear_decrease_factor_*mu,
                   pow(mu, mu_superlinear_decrease_power_) );
-    new_mu = Max(new_mu, Min(tol, compl_inf_tol)/10.);
+    new_mu = Max(new_mu, Min(tol, compl_inf_tol)/(barrier_tol_factor_+1.));
 
     // update the fraction to the boundary parameter
     new_tau = Max(tau_min_, 1.-new_mu);

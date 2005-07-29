@@ -41,15 +41,21 @@ namespace Ipopt
 
   void RestoFilterConvergenceCheck::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddBoundedNumberOption("kappa_resto", "???",
-                                     0.0, false, 1.0, true, 0.9);
+    roptions->AddBoundedNumberOption(
+      "required_infeasibility_reduction",
+      "Required reduction of infeasibility before restoration phase is left.",
+      0.0, false, 1.0, true,
+      0.9,
+      "The restoration phase algorithm is performed, until a point is found "
+      "that is acceptable to the filter and the infeasibility has been "
+      "reduced by at least the fraction given by this option.");
   }
 
   bool RestoFilterConvergenceCheck::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
     DBG_ASSERT(orig_filter_line_search_ && "Need to call RestoFilterConvergenceCheck::SetOrigFilterLineSearch before Initialize");
-    options.GetNumericValue("kappa_resto", kappa_resto_, prefix);
+    options.GetNumericValue("required_infeasibility_reduction", kappa_resto_, prefix);
     options.GetIntegerValue("max_iter", maximum_iters_, prefix);
 
     first_resto_iter_ = true;
@@ -99,7 +105,7 @@ namespace Ipopt
     // ToDo: In the following we might want to be more careful with the lower bound
     Number orig_theta_max = Max(kappa_resto_*orig_curr_theta,
                                 1.e1*Min(orig_ip_data->tol(),
-                                         orig_ip_data->primal_inf_tol()));
+                                         constr_viol_tol_));
 
     if (first_resto_iter_) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
@@ -147,7 +153,7 @@ namespace Ipopt
     if (status==CONTINUE) {
 
       status = OptimalityErrorConvergenceCheck::CheckConvergence();
-      if (status == CONVERGED) {
+      if (status == CONVERGED || status == CONVERGED_TO_ACCEPTABLE_POINT) {
         Number orig_trial_primal_inf =
           orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
         // ToDo make the factor in following line an option
