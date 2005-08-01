@@ -15,26 +15,26 @@ using namespace Ipopt;
 
 int main(int argv, char* argc[])
 {
-   // Create an instance of your nlp...
-   SmartPtr<TNLP> mynlp = new MyNLP();
-  
-   // Create an instance of the IpoptApplication
-   SmartPtr<IpoptApplication> app = new IpoptApplication();
+  // Create an instance of your nlp...
+  SmartPtr<TNLP> mynlp = new MyNLP();
 
-   // To illustrate the use of ip_data and ip_cq, we will use the 
-   //  version of OptimzeTNLP that returns pointers to these objects
-   // Usually, the standard IpoptApplication output is sufficient
-   //  and you would only need to call OptimizeTNLP(mynlp);
-   SmartPtr<IpoptData> ip_data = NULL;
-   SmartPtr<IpoptCalculatedQuantities> ip_cq = NULL;
-   ApplicationReturnStatus status = app->OptimizeTNLP(mynlp, ip_data, ip_cq);
+  // Create an instance of the IpoptApplication
+  SmartPtr<IpoptApplication> app = new IpoptApplication();
 
-   if (status == Solve_Succeeded) {
-     // Retrieve some information from ip_data
-     printf("\n\n*** The problem solved in %d iterations!\n", ip_data->iter_count()); 
-     // Retrieve some information from ip_cq
-     printf("\n\n*** The current value of the objective function is %g.\n", ip_cq->curr_f());
-   }
+  // To illustrate the use of ip_data and ip_cq, we will use the
+  //  version of OptimzeTNLP that returns pointers to these objects
+  // Usually, the standard IpoptApplication output is sufficient
+  //  and you would only need to call OptimizeTNLP(mynlp);
+  SmartPtr<IpoptData> ip_data = NULL;
+  SmartPtr<IpoptCalculatedQuantities> ip_cq = NULL;
+  ApplicationReturnStatus status = app->OptimizeTNLP(mynlp, ip_data, ip_cq);
 
-   return (int) status;
+  if (status == Solve_Succeeded) {
+    // Retrieve some information from ip_data
+    printf("\n\n*** The problem solved in %d iterations!\n", ip_data->iter_count());
+    // Retrieve some information from ip_cq
+    printf("\n\n*** The current value of the objective function is %g.\n", ip_cq->curr_f());
+  }
+
+  return (int) status;
 }
