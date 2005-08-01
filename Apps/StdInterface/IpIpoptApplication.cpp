@@ -30,7 +30,7 @@ namespace Ipopt
   {
 # ifdef IP_DEBUG
     DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
-    Journal* debug_jrnl = jnlst_->AddJournal("Debug", "debug.out", J_SUMMARY);
+    SmartPtr<Journal> debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_SUMMARY);
     debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
 # endif
 
@@ -38,10 +38,10 @@ namespace Ipopt
                    dbg_verbosity);
 
 
-    Journal* stdout_jrnl = NULL;
+    SmartPtr<Journal> stdout_jrnl = NULL;
     if (create_console_out) {
       stdout_jrnl =
-        jnlst_->AddJournal("console", "stdout", J_SUMMARY);
+        jnlst_->AddFileJournal("console", "stdout", J_SUMMARY);
       stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
     }
 
@@ -103,7 +103,7 @@ namespace Ipopt
       else {
         file_print_level = print_level;
       }
-      Journal* file_jrnl = jnlst_->AddJournal("OutputFile", output_filename.c_str(), file_print_level);
+      SmartPtr<Journal> file_jrnl = jnlst_->AddFileJournal("OutputFile", output_filename.c_str(), file_print_level);
       file_jrnl->SetPrintLevel(J_DBG, J_NONE);
     }
 
