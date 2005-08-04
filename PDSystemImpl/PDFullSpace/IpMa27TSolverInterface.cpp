@@ -140,7 +140,7 @@ namespace Ipopt
       // new, we have to request the values for the matrix again to do
       // the factorization again.
       if (!new_matrix) {
-        DBG_PRINT((1,"Ask called to call again.\n"));
+        DBG_PRINT((1,"Ask caller to call again.\n"));
         refactorize_ = true;
         return SYMSOLVER_CALL_AGAIN;
       }

@@ -348,6 +348,8 @@ namespace Ipopt
         if (yinitnrm > constr_mult_init_max) {
           y_c->Set(0.0);
           y_d->Set(0.0);
+        }
+        else {
           ip_data.Append_info_string("y");
         }
       }

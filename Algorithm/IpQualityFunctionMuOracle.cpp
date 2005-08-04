@@ -481,8 +481,6 @@ namespace Ipopt
     tmp_step_v_U_->AddTwoVectors(1., step_aff_v_U, sigma, step_cen_v_U, 0.);
 
     // Compute the fraction-to-the-boundary step sizes
-    // ToDo make sure we use the correct tau
-    //Number tau = 0.99;
     Number tau = IpData().curr_tau();
     Number alpha_primal = IpCq().slack_frac_to_the_bound(tau,
                           *tmp_step_x_L_,
