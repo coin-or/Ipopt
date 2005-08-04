@@ -9,6 +9,12 @@
 #include "IpGradientScaling.hpp"
 #include "IpTripletHelper.hpp"
 
+#ifdef OLD_C_HEADERS
+# include <math.h>
+#else
+# include <cmath>
+#endif
+
 namespace Ipopt
 {
 
