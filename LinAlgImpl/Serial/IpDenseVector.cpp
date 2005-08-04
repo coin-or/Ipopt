@@ -70,6 +70,7 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     DBG_ASSERT(dense_x);
     if (dense_x) {
+      DBG_ASSERT(dense_x->initialized_);
       DBG_ASSERT(Dim() == dense_x->Dim());
       homogeneous_ = dense_x->homogeneous_;
       if (homogeneous_) {
@@ -99,6 +100,7 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     DBG_ASSERT(dense_x);
     if (dense_x) {
+      DBG_ASSERT(dense_x->initialized_);
       DBG_ASSERT(Dim() == dense_x->Dim());
       if (homogeneous_) {
         if (dense_x->homogeneous_) {
@@ -132,6 +134,7 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     DBG_ASSERT(dense_x);
     if (dense_x) {
+      DBG_ASSERT(dense_x->initialized_);
       DBG_ASSERT(Dim() == dense_x->Dim());
       if (homogeneous_) {
         if (dense_x->homogeneous_) {
@@ -209,6 +212,7 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     DBG_ASSERT(dense_x);
     if (dense_x) {
+      DBG_ASSERT(dense_x->initialized_);
       const Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
       if (homogeneous_) {
@@ -244,6 +248,7 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     DBG_ASSERT(dense_x);
     if (dense_x) {
+      DBG_ASSERT(dense_x->initialized_);
       const Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
       if (homogeneous_) {
@@ -260,8 +265,10 @@ namespace Ipopt
       }
       else {
         if (dense_x->homogeneous_) {
-          for (Index i=0; i<Dim(); i++) {
-            values_[i] *= dense_x->scalar_;
+          if (dense_x->scalar_ != 1.0) {
+            for (Index i=0; i<Dim(); i++) {
+              values_[i] *= dense_x->scalar_;
+            }
           }
         }
         else {
@@ -279,6 +286,7 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     assert(dense_x); // ToDo: Implement Others
     if (dense_x) {
+      DBG_ASSERT(dense_x->initialized_);
       const Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
       if (homogeneous_) {
@@ -314,6 +322,7 @@ namespace Ipopt
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     DBG_ASSERT(dense_x);
     if (dense_x) {
+      DBG_ASSERT(dense_x->initialized_);
       const Number* values_x = dense_x->values_;
       DBG_ASSERT(Dim() == dense_x->Dim());
       if (homogeneous_) {

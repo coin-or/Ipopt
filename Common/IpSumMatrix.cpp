@@ -14,9 +14,9 @@ namespace Ipopt
   SumMatrix::SumMatrix(const SumMatrixSpace* owner_space)
       :
       Matrix(owner_space),
-      owner_space_(owner_space),
       factors_(owner_space->NTerms(), 1.0),
-      matrices_(owner_space->NTerms())
+      matrices_(owner_space->NTerms()),
+      owner_space_(owner_space)
   {}
 
   SumMatrix::~SumMatrix()

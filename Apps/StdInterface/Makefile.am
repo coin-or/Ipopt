@@ -11,6 +11,7 @@ AUTOMAKE_OPTIONS = foreign
 noinst_LIBRARIES = libstdinterface.a
 
 libstdinterface_a_SOURCES = \
+	IpInterfaceTypes.hpp \
 	IpStdInterfaceTNLP.hpp IpStdInterfaceTNLP.cpp \
 	IpStdCInterface.cpp IpStdFInterface.c \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp
@@ -26,6 +27,7 @@ CFLAGS += -I$(srcdir)/../../Interfaces
 # Astyle stuff
 
 ASTYLE_FILES = \
+	IpInterfaceTypes.hppbak \
 	IpStdInterfaceTNLP.hppbak IpStdInterfaceTNLP.cppbak \
 	IpStdCInterface.cppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak

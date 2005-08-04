@@ -163,17 +163,10 @@ namespace Ipopt
     SmartPtr<CompoundSymMatrixSpace> augmented_system_space_;
     SmartPtr<SumSymMatrixSpace> sumsym_space_x_;
     SmartPtr<DiagMatrixSpace> diag_space_x_;
-    SmartPtr<IdentityMatrixSpace> ident_space_x_;
-    SmartPtr<SumSymMatrixSpace> sumsym_space_s_;
     SmartPtr<DiagMatrixSpace> diag_space_s_;
-    SmartPtr<IdentityMatrixSpace> ident_space_s_;
-    SmartPtr<SumSymMatrixSpace> sumsym_space_c_;
     SmartPtr<DiagMatrixSpace> diag_space_c_;
-    SmartPtr<IdentityMatrixSpace> ident_space_c_;
     SmartPtr<IdentityMatrixSpace> ident_space_ds_;
-    SmartPtr<SumSymMatrixSpace> sumsym_space_d_;
     SmartPtr<DiagMatrixSpace> diag_space_d_;
-    SmartPtr<IdentityMatrixSpace> ident_space_d_;
 
     SmartPtr<CompoundVectorSpace> augmented_vector_space_;
 

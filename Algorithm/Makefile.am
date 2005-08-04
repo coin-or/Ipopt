@@ -18,6 +18,7 @@ libipoptalg_a_SOURCES = \
 	IpWarmStartIterateInitializer.hpp IpWarmStartIterateInitializer.cpp \
 	IpFilter.cpp IpFilter.hpp \
 	IpFilterLineSearch.cpp IpFilterLineSearch.hpp \
+	IpGradientScaling.hpp IpGradientScaling.cpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
 	IpIpoptData.cpp IpIpoptData.hpp \
@@ -29,8 +30,8 @@ libipoptalg_a_SOURCES = \
 	IpLoqoMuOracle.hpp IpLoqoMuOracle.cpp \
 	IpMonotoneMuUpdate.hpp IpMonotoneMuUpdate.cpp \
 	IpMuOracle.hpp \
-	IpMuUpdate.hpp IpMuUpdate.cpp \
-	IpNonmonotoneMuUpdate.hpp IpNonmonotoneMuUpdate.cpp \
+	IpMuUpdate.hpp \
+	IpAdaptiveMuUpdate.hpp IpAdaptiveMuUpdate.cpp \
 	IpNLPScaling.hpp IpNLPScaling.cpp \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \
 	IpOrigIpoptNLP.cpp IpOrigIpoptNLP.hpp \
@@ -61,6 +62,7 @@ ASTYLE_FILES = \
 	IpWarmStartIterateInitializer.hppbak IpWarmStartIterateInitializer.cppbak \
 	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLineSearch.cppbak IpFilterLineSearch.hppbak \
+	IpGradientScaling.hppbak IpGradientScaling.cppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
 	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \
 	IpIpoptData.cppbak IpIpoptData.hppbak \
@@ -73,7 +75,7 @@ ASTYLE_FILES = \
 	IpMonotoneMuUpdate.hppbak IpMonotoneMuUpdate.cppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
-	IpNonmonotoneMuUpdate.hppbak IpNonmonotoneMuUpdate.cppbak \
+	IpAdaptiveMuUpdate.hppbak IpAdaptiveMuUpdate.cppbak \
 	IpNLPScaling.hppbak IpNLPScaling.cppbak \
 	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
 	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \

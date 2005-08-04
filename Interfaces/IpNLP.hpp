@@ -15,6 +15,7 @@
 #include "IpMatrix.hpp"
 #include "IpSymMatrix.hpp"
 #include "IpOptionsList.hpp"
+#include "IpAlgTypes.hpp"
 
 namespace Ipopt
 {
@@ -83,20 +84,16 @@ namespace Ipopt
      *  iterates. ToDo it might not make sense to ask for initial
      *  values for v_L and v_U? */
     virtual bool GetStartingPoint(
-      Vector& x,
+      SmartPtr<Vector> x,
       bool need_x,
-      Vector& y_c,
+      SmartPtr<Vector> y_c,
       bool need_y_c,
-      Vector& y_d,
+      SmartPtr<Vector> y_d,
       bool need_y_d,
-      Vector& z_L,
+      SmartPtr<Vector> z_L,
       bool need_z_L,
-      Vector& z_U,
-      bool need_z_U,
-      Vector& v_L,
-      bool need_v_L,
-      Vector& v_U,
-      bool need_v_U
+      SmartPtr<Vector> z_U,
+      bool need_z_U
     )=0;
     //@}
 
@@ -124,7 +121,7 @@ namespace Ipopt
 
     /** @name NLP solution routines. (Overload in derived classes.) */
     //@{
-    virtual void FinalizeSolution(ApplicationReturnStatus status,
+    virtual void FinalizeSolution(SolverReturn status,
                                   const Vector& x, const Vector& z_L, const Vector& z_U,
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,
@@ -132,12 +129,18 @@ namespace Ipopt
     {}
     //@}
 
-    /** Routines to get the scaling parameters. These do not need to be overloaded
-     *  unless the options are set for User scaling
+    /** Routines to get the scaling parameters. These do not need to
+     *  be overloaded unless the options are set for User scaling
      */
     //@{
-    virtual void GetScalingParameters(Number& obj_scaling, Vector& x_scaling,
-                                      Vector& c_scaling, Vector& d_scaling) const
+    virtual void GetScalingParameters(
+      const SmartPtr<const VectorSpace> x_space,
+      const SmartPtr<const VectorSpace> c_space,
+      const SmartPtr<const VectorSpace> d_space,
+      Number& obj_scaling,
+      SmartPtr<Vector>& x_scaling,
+      SmartPtr<Vector>& c_scaling,
+      SmartPtr<Vector>& d_scaling) const
     {
       THROW_EXCEPTION(USER_SCALING_NOT_IMPLEMENTED,
                       "You have set options for user provided scaling, but have"

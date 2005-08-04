@@ -87,9 +87,13 @@ namespace Ipopt
       const std::string& prefix)
   {
     options.GetNumericValue("pivtol", pivtol_, prefix);
-    options.GetNumericValue("pivtolmax", pivtolmax_, prefix);
-    ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OptionsList::OPTION_OUT_OF_RANGE,
-                     "Option \"pivtolmax\": This value must be between pivtol and 1.");
+    if(options.GetNumericValue("pivtolmax", pivtolmax_, prefix)) {
+      ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OptionsList::OPTION_OUT_OF_RANGE,
+                       "Option \"pivtolmax\": This value must be between pivtol and 1.");
+    }
+    else {
+      pivtolmax_ = Max(pivtolmax_, pivtol_);
+    }
 
     options.GetNumericValue("liw_init_factor", liw_init_factor_, prefix);
     options.GetNumericValue("la_init_factor", la_init_factor_, prefix);
@@ -136,13 +140,14 @@ namespace Ipopt
       // new, we have to request the values for the matrix again to do
       // the factorization again.
       if (!new_matrix) {
-        DBG_PRINT((1,"Ask called to call again.\n"));
+        DBG_PRINT((1,"Ask caller to call again.\n"));
         refactorize_ = true;
         return SYMSOLVER_CALL_AGAIN;
       }
     }
 
     // check if a factorization has to be done
+    DBG_PRINT((1, "new_matrix = %d\n", new_matrix));
     if (new_matrix || refactorize_) {
       // perform the factorization
       ESymSolverStatus retval;

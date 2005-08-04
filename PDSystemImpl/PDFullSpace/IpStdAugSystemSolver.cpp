@@ -30,17 +30,10 @@ namespace Ipopt
       augmented_system_space_(NULL),
       sumsym_space_x_(NULL),
       diag_space_x_(NULL),
-      ident_space_x_(NULL),
-      sumsym_space_s_(NULL),
       diag_space_s_(NULL),
-      ident_space_s_(NULL),
-      sumsym_space_c_(NULL),
       diag_space_c_(NULL),
-      ident_space_c_(NULL),
       ident_space_ds_(NULL),
-      sumsym_space_d_(NULL),
       diag_space_d_(NULL),
-      ident_space_d_(NULL),
       w_tag_(0),
       d_x_tag_(0),
       delta_x_(0.),
@@ -218,31 +211,24 @@ namespace Ipopt
     // (1,1) block
     // create the spaces and sum matrix for the upper left corner (W + D_x delta_x*I)
     // of the hessian part for the 1,1 block
-    sumsym_space_x_ = new SumSymMatrixSpace(n_x, 3);
+    sumsym_space_x_ = new SumSymMatrixSpace(n_x, 2);
     augmented_system_space_->SetCompSpace(0,0, *sumsym_space_x_);
 
     diag_space_x_ = new DiagMatrixSpace(n_x);
-    ident_space_x_ = new IdentityMatrixSpace(n_x);
 
     // (2,2) block
-    // create the spaces and sum matrix for the lower right corner (D_s + delta_s*I)
+    // create the spaces and diag matrix for the lower right corner (D_s + delta_s*I)
     // of the hessian part, the 2,2 block
-    sumsym_space_s_ = new SumSymMatrixSpace(n_s, 2);
-    augmented_system_space_->SetCompSpace(1,1, *sumsym_space_s_);
-
     diag_space_s_ = new DiagMatrixSpace(n_s);
-    ident_space_s_ = new IdentityMatrixSpace(n_s);
+    augmented_system_space_->SetCompSpace(1,1, *diag_space_s_);
 
     // (3,1) block
     augmented_system_space_->SetCompSpace(2,0, *J_c.OwnerSpace());
 
     // (3,3) block
-    // create the sum matrix space and matrix for the 3,3 block
-    sumsym_space_c_ = new SumSymMatrixSpace(n_c, 2);
-    augmented_system_space_->SetCompSpace(2,2, *sumsym_space_c_);
-
+    // create the matrix space and matrix for the 3,3 block
     diag_space_c_ = new DiagMatrixSpace(n_c);
-    ident_space_c_ = new IdentityMatrixSpace(n_c);
+    augmented_system_space_->SetCompSpace(2,2, *diag_space_c_);
 
     // (4,1) block
     augmented_system_space_->SetCompSpace(3,0, *J_d.OwnerSpace());
@@ -254,11 +240,8 @@ namespace Ipopt
 
     // (4,4) block
     // create the sum matrix space and matrix for the 4,4 block
-    sumsym_space_d_ = new SumSymMatrixSpace(n_d, 2);
-    augmented_system_space_->SetCompSpace(3,3, *sumsym_space_d_);
-
     diag_space_d_ = new DiagMatrixSpace(n_d);
-    ident_space_d_ = new IdentityMatrixSpace(n_d);
+    augmented_system_space_->SetCompSpace(3,3, *diag_space_d_);
 
     // Create the space for the vectors
     augmented_vector_space_ = new CompoundVectorSpace(4, n_x + n_s + n_c + n_d);
@@ -302,70 +285,76 @@ namespace Ipopt
 
     SmartPtr<DiagMatrix> diag_x = diag_space_x_->MakeNewDiagMatrix();
     if (D_x) {
-      diag_x->SetDiag(*D_x);
+      if (delta_x==0.) {
+        diag_x->SetDiag(*D_x);
+      }
+      else {
+        SmartPtr<Vector> tmp = D_x->MakeNewCopy();
+        tmp->AddScalar(delta_x);
+        diag_x->SetDiag(*tmp);
+      }
       d_x_tag_ = D_x->GetTag();
     }
     else {
-      SmartPtr<Vector> zero_x = proto_x.MakeNew();
-      zero_x->Set(0.0);
-      diag_x->SetDiag(*zero_x);
+      SmartPtr<Vector> tmp = proto_x.MakeNew();
+      tmp->Set(delta_x);
+      diag_x->SetDiag(*tmp);
       d_x_tag_ = 0;
     }
     sumsym_x->SetTerm(1, 1.0, *diag_x);
-
-    SmartPtr<IdentityMatrix> ident_x = ident_space_x_->MakeNewIdentityMatrix();
-    sumsym_x->SetTerm(2, delta_x, *ident_x);
     delta_x_ = delta_x;
 
     augmented_system_->SetComp(0,0, *sumsym_x);
 
     // (2,2) block
-    SmartPtr<SumSymMatrix> sumsym_s = sumsym_space_s_->MakeNewSumSymMatrix();
-
     SmartPtr<DiagMatrix> diag_s = diag_space_s_->MakeNewDiagMatrix();
     if (D_s) {
-      diag_s->SetDiag(*D_s);
+      if (delta_s==0.) {
+        diag_s->SetDiag(*D_s);
+      }
+      else {
+        SmartPtr<Vector> tmp = D_s->MakeNewCopy();
+        tmp->AddScalar(delta_s);
+        diag_s->SetDiag(*tmp);
+      }
       d_s_tag_ = D_s->GetTag();
     }
     else {
-      SmartPtr<Vector> zero_s = proto_s.MakeNew();
-      zero_s->Set(0.0);
-      diag_s->SetDiag(*zero_s);
+      SmartPtr<Vector> tmp = proto_s.MakeNew();
+      tmp->Set(delta_s);
+      diag_s->SetDiag(*tmp);
       d_s_tag_ = 0;
     }
-    sumsym_s->SetTerm(0, 1.0, *diag_s);
-
-    SmartPtr<IdentityMatrix> ident_s = ident_space_s_->MakeNewIdentityMatrix();
-    sumsym_s->SetTerm(1, delta_s, *ident_s);
     delta_s_ = delta_s;
 
-    augmented_system_->SetComp(1,1, *sumsym_s);
+    augmented_system_->SetComp(1, 1, *diag_s);
 
     // (3,1) block
     augmented_system_->SetComp(2,0, J_c);
     j_c_tag_ = J_c.GetTag();
 
     // (3,3) block
-    SmartPtr<SumSymMatrix> sumsym_c = sumsym_space_c_->MakeNewSumSymMatrix();
-
     SmartPtr<DiagMatrix> diag_c = diag_space_c_->MakeNewDiagMatrix();
     if (D_c) {
-      diag_c->SetDiag(*D_c);
-      d_c_tag_ = 0;//D_c->GetTag();
+      if (delta_c==0.) {
+        diag_c->SetDiag(*D_c);
+      }
+      else {
+        SmartPtr<Vector> tmp = D_c->MakeNewCopy();
+        tmp->AddScalar(-delta_c);
+        diag_c->SetDiag(*tmp);
+      }
+      d_c_tag_ = D_c->GetTag();
     }
     else {
-      SmartPtr<Vector> zero_c = proto_c.MakeNew();
-      zero_c->Set(0.0);
-      diag_c->SetDiag(*zero_c);
+      SmartPtr<Vector> tmp = proto_c.MakeNew();
+      tmp->Set(-delta_c);
+      diag_c->SetDiag(*tmp);
       d_c_tag_ = 0;
     }
-    sumsym_c->SetTerm(0, 1.0, *diag_c);
-
-    SmartPtr<IdentityMatrix> ident_c = ident_space_c_->MakeNewIdentityMatrix();
-    sumsym_c->SetTerm(1, -delta_c, *ident_c);
     delta_c_ = delta_c;
 
-    augmented_system_->SetComp(2,2, *sumsym_c);
+    augmented_system_->SetComp(2,2, *diag_c);
 
     // (4,1) block
     augmented_system_->SetComp(3,0, J_d);
@@ -377,26 +366,27 @@ namespace Ipopt
     augmented_system_->SetComp(3,1, *ident_ds);
 
     // (4,4) block
-    SmartPtr<SumSymMatrix> sumsym_d = sumsym_space_d_->MakeNewSumSymMatrix();
-
     SmartPtr<DiagMatrix> diag_d = diag_space_d_->MakeNewDiagMatrix();
     if (D_d) {
-      diag_d->SetDiag(*D_d);
+      if (delta_d==0.) {
+        diag_d->SetDiag(*D_d);
+      }
+      else {
+        SmartPtr<Vector> tmp = D_d->MakeNewCopy();
+        tmp->AddScalar(-delta_d);
+        diag_d->SetDiag(*tmp);
+      }
       d_d_tag_ = D_d->GetTag();
     }
     else {
-      SmartPtr<Vector> zero_d = proto_d.MakeNew();
-      zero_d->Set(0.0);
-      diag_d->SetDiag(*zero_d);
+      SmartPtr<Vector> tmp = proto_d.MakeNew();
+      tmp->Set(-delta_d);
+      diag_d->SetDiag(*tmp);
       d_d_tag_ = 0;
     }
-    sumsym_d->SetTerm(0, 1.0, *diag_d);
-
-    SmartPtr<IdentityMatrix> ident_d = ident_space_d_->MakeNewIdentityMatrix();
-    sumsym_d->SetTerm(1, -delta_d, *ident_d);
     delta_d_ = delta_d;
 
-    augmented_system_->SetComp(3,3, *sumsym_d);
+    augmented_system_->SetComp(3,3, *diag_d);
 
     augsys_tag_ = augmented_system_->GetTag();
   }

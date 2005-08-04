@@ -22,6 +22,8 @@
 namespace Ipopt
 {
 
+  DeclareIpoptType(RestoIpoptNLP);
+
   /** This class maps the traditional NLP into
    *  something that is more useful by Ipopt.
    *  This class takes care of storing the
@@ -59,10 +61,18 @@ namespace Ipopt
                                       SmartPtr<Vector>& z_U,
                                       bool init_z_U,
                                       SmartPtr<Vector>& v_L,
-                                      bool init_v_L,
-                                      SmartPtr<Vector>& v_U,
-                                      bool init_v_U
+                                      SmartPtr<Vector>& v_U
                                      );
+
+    /** Solution Routines - overloaded from IpoptNLP*/
+    //@{
+    void FinalizeSolution(SolverReturn status,
+                          const Vector& x, const Vector& z_L, const Vector& z_U,
+                          const Vector& c, const Vector& d,
+                          const Vector& y_c, const Vector& y_d,
+                          Number obj_value)
+    {}
+    //@}
 
     /** Accessor methods for model data */
     //@{
@@ -253,6 +263,12 @@ namespace Ipopt
     }
     //@}
 
+    /** Methods for IpoptType */
+    //@{
+    /** Called by IpoptType to register the options */
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
   private:
     /** @name Pointers for the original NLP information. */
     //@{
@@ -327,6 +343,7 @@ namespace Ipopt
     /** @name Values particular to the restoration phase problem statement */
     //@{
     /** Penalty parameter for the \$l_1\$ norm */
+    /* ToDo make this parameter? */
     Number rho_;
     /** scaling factor for eta calculation */
     Number eta_factor_;
@@ -360,6 +377,11 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const RestoIpoptNLP&);
     //@}
+
+    /** Flag indicating if evalution of the objective should be
+     *  performed for every restoration phase objective function
+     *  evaluation. */
+    bool evaluate_orig_obj_at_resto_trial_;
 
     /** Flag indicating if initialization method has been called */
     bool initialized_;

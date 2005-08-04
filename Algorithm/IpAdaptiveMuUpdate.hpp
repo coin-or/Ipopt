@@ -6,33 +6,34 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-#ifndef __IPNONMONOTONEMUUPDATE_HPP__
-#define __IPNONMONOTONEMUUPDATE_HPP__
+#ifndef __IPADAPTIVEMUUPDATE_HPP__
+#define __IPADAPTIVEMUUPDATE_HPP__
 
 #include "IpMuUpdate.hpp"
 #include "IpLineSearch.hpp"
 #include "IpMuOracle.hpp"
 #include "IpFilter.hpp"
 #include "IpIpoptType.hpp"
+#include "IpQualityFunctionMuOracle.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(NonmonotoneMuUpdate);
+  DeclareIpoptType(AdaptiveMuUpdate);
 
   /** Non-monotone mu update.
    */
-  class NonmonotoneMuUpdate : public MuUpdate
+  class AdaptiveMuUpdate : public MuUpdate
   {
   public:
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
-    NonmonotoneMuUpdate(const SmartPtr<LineSearch>& linesearch,
-                        const SmartPtr<MuOracle>& free_mu_oracle,
-                        const SmartPtr<MuOracle>& fix_mu_oracle=NULL);
+    AdaptiveMuUpdate(const SmartPtr<LineSearch>& linesearch,
+                     const SmartPtr<MuOracle>& free_mu_oracle,
+                     const SmartPtr<MuOracle>& fix_mu_oracle=NULL);
     /** Default destructor */
-    virtual ~NonmonotoneMuUpdate();
+    virtual ~AdaptiveMuUpdate();
     //@}
 
     /** Initialize method - overloaded from AlgorithmStrategyObject */
@@ -51,33 +52,6 @@ namespace Ipopt
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
-    /** @name Public enums.  Some of those are also used for the
-     *  quality function */
-    //@{
-    /** enum for norm type */
-    enum NormEnum
-    {
-      NM_NORM_1=0,
-      NM_NORM_2_SQUARED,
-      NM_NORM_MAX,
-      NM_NORM_2
-    };
-    /** enum for centrality type */
-    enum CentralityEnum
-    {
-      CEN_NONE=0,
-      CEN_LOG,
-      CEN_RECIPROCAL,
-      CEN_CUBED_RECIPROCAL
-    };
-    /** enum for the quality function balancing term type */
-    enum BalancingTermEnum
-    {
-      BT_NONE=0,
-      BT_CUBIC
-    };
-    //@}
-
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -89,13 +63,13 @@ namespace Ipopt
     //@{
 
     /** Default Constructor */
-    NonmonotoneMuUpdate();
+    AdaptiveMuUpdate();
 
     /** Copy Constructor */
-    NonmonotoneMuUpdate(const NonmonotoneMuUpdate&);
+    AdaptiveMuUpdate(const AdaptiveMuUpdate&);
 
     /** Overloaded Equals Operator */
-    void operator=(const NonmonotoneMuUpdate&);
+    void operator=(const AdaptiveMuUpdate&);
     //@}
 
     /** @name Algorithmic parameters */
@@ -103,40 +77,40 @@ namespace Ipopt
     Number mu_max_;
     Number mu_min_;
     Number tau_min_;
-    Number mu_safeguard_exp_;
-    Number mu_safeguard_factor_; //ToDo don't need that?
-    Number fixed_mu_avrg_factor_;
-    /** ToDo the following should be combined with MonotoneMuUpdate */
-    Number kappa_epsilon_;
-    Number kappa_mu_;
-    Number theta_mu_;
-    NormEnum nonmonotone_kkt_norm_;
-    CentralityEnum nonmonotone_kkt_centrality_;
-    BalancingTermEnum nonmonotone_kkt_balancing_term_;
-    /** enumeration for adaptive globalization ToDo: Andreas, can you give these
-     * sensible names */
-    enum AdaptiveGlobalizationEnum
+    Number adaptive_mu_safeguard_factor_; //ToDo don't need that?
+    Number adaptive_mu_monotone_init_factor_;
+    Number barrier_tol_factor_;
+    Number mu_linear_decrease_factor_;
+    Number mu_superlinear_decrease_power_;
+    QualityFunctionMuOracle::NormEnum adaptive_mu_kkt_norm_;
+    QualityFunctionMuOracle::CentralityEnum adaptive_mu_kkt_centrality_;
+    QualityFunctionMuOracle::BalancingTermEnum adaptive_mu_kkt_balancing_term_;
+    /** enumeration for adaptive globalization */
+    enum AdaptiveMuGlobalizationEnum
     {
-      AG_1=0,
-      AG_2,
-      AG_3
+      KKT_ERROR=0,
+      FILTER_OBJ_CONSTR,
+      FILTER_KKT_ERROR,
+      NEVER_MONOTONE_MODE
     };
     /** Flag indicating which globalization strategy should be used. */
-    AdaptiveGlobalizationEnum adaptive_globalization_;
-    /** Maximal margin in filter (for adaptive_globalization = 3) */
+    AdaptiveMuGlobalizationEnum adaptive_mu_globalization_;
+    /** Maximal margin in filter */
     Number filter_max_margin_;
     /** Factor for filter margin */
     Number filter_margin_fact_;
+    /** Unscaled tolerance for complementarity */
+    Number compl_inf_tol_;
     //@}
 
     /** @name Strategy objects */
     //@{
+    /** Line search object of the Ipopt algorithm.  */
+    SmartPtr<LineSearch> linesearch_;
     /** Pointer to strategy object that is to be used for computing a
      *  suggested value of the barrier parameter in the free mu mode.
      */
     SmartPtr<MuOracle> free_mu_oracle_;
-    /** Line search object of the Ipopt algorithm.  */
-    SmartPtr<LineSearch> linesearch_;
     /** Pointer to strategy object that is to be used for computing a
      *  suggested value for the fixed mu mode.  If NULL, the current
      *  average complementarity is used.
@@ -170,11 +144,12 @@ namespace Ipopt
      *  mu in the monotone phase */
     Number Compute_tau_monotone(Number mu);
 
-    /** Method for computing the 1-norm of the primal dual system at
-     *  the current point.  The individual components (dual
-     *  infeasibility, primal infeasibility, complementarity) are
-     *  scaled to each other. */
-    Number curr_norm_pd_system();
+    /** Method for computing the norm of the primal dual system at the
+     *  current point.  For consistency, this is computed in the same
+     *  way as the quality function is computed.  This is the
+     *  quantities used in the nonmonontone KKT reduction
+     *  globalization. */
+    Number quality_function_pd_system();
 
     /** Method for computing a lower safeguard bound for the barrier
      *  parameter.  For now, this is related to primal and dual
@@ -194,9 +169,6 @@ namespace Ipopt
     std::list<Number> refs_vals_;
     /** Factor requested to reduce the reference values */
     Number refs_red_fact_;
-    /** Flag indicating whether the barrier parameter should never be
-     *  fixed (no globalization) */
-    bool mu_never_fix_;
 
     /** Alternatively, we might also want to use a filter */
     Filter filter_;

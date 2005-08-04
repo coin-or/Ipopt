@@ -32,18 +32,60 @@ namespace Ipopt
 
   void PDFullSpaceSolver::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedIntegerOption("num_min_iter_ref", "???",
-                                           0, 1);
-    roptions->AddLowerBoundedIntegerOption("num_max_iter_ref", "???",
-                                           0, 10);
-    roptions->AddLowerBoundedNumberOption("delta_regu_max", "maximum regularization for the linear system (delta_w)",
-                                          0, true, 1e40);
-    roptions->AddLowerBoundedNumberOption("residual_ratio_max", "maximum allowed residual ratio (tolerance for iterative refinement)",
-                                          0.0, true, 1e-10);
-    roptions->AddLowerBoundedNumberOption("residual_ratio_singular", "only assume the system is singular if the residual_ratio is worse than this.",
-                                          0.0, true, 1e-5);
-    roptions->AddLowerBoundedNumberOption("residual_improvement_factor", "???",
-                                          0.0, true, 0.999999999);
+    roptions->AddLowerBoundedNumberOption(
+      "max_inertia_correction",
+      "Maximum value of regularization parameter for handling negative curvature.",
+      0, true,
+      1e40,
+      "In order to guarantee that the search directions are indeed proper "
+      "descent directions, Ipopt requires that the inertia of the "
+      "(augmented) linear system for the step computation has the "
+      "correct number of negative and positive eigenvalues.  The idea "
+      "is that this guides the algorithm away from maximizers and makes "
+      "Ipopt more likely converge to first order optimal points that "
+      "are minimizers. If the inertia is not correct, a multiple of the "
+      "identity matrix is added to the Hessian of the Lagrangian in the "
+      "augmented system. This parameter gives the maximum value of the "
+      "regularization parameter. If a regularization of that size is "
+      "not enough, the algorithm skips this iteration and goes to the "
+      "restoration phase.  (This is delta_w^max in implementation paper)");
+    roptions->AddLowerBoundedIntegerOption(
+      "min_refinement_steps",
+      "Minimum number of iterative refinement steps per solve.",
+      0, 1,
+      "Iterative refinement (on the unsymmetric full system) is performed for "
+      "each right hand side.  This option determines the minimal number "
+      "of iterative refinements, i.e., by setting it to 1 at least one "
+      "iterative refinement step per right hand side is enforce.");
+    roptions->AddLowerBoundedIntegerOption(
+      "max_refinement_steps",
+      "Maximal number of iterative refinement steps per solve.",
+      0, 10,
+      "Iterative refinement (on the unsymmetric full system) is performed for "
+      "each right hand side.  This option determines the maximal number "
+      "of iterative refinements.");
+    roptions->AddLowerBoundedNumberOption(
+      "residual_ratio_max",
+      "Iterative refinement tolerance",
+      0.0, true, 1e-10,
+      "Iterative refinement is performed until the residual test ratio is "
+      "less than this tolerance (or until \"max_refinement_steps\" refinement "
+      "steps are performed).");
+    roptions->AddLowerBoundedNumberOption(
+      "residual_ratio_singular",
+      "Threshold for declaring linear system singular after failed iterative refinement.",
+      0.0, true, 1e-5,
+      "If the residual test ratio is larger than this value after failed "
+      "iterative refinement, the algorithm pretends that the linear system is "
+      "singular.");
+    // ToDo Think about following option - are the correct norms used?
+    roptions->AddLowerBoundedNumberOption(
+      "residual_improvement_factor",
+      "Minimal required reduction of residual test ratio in iterative refinement.",
+      0.0, true, 0.999999999,
+      "If the improvement of the residual test ratio made by one iterative "
+      "refinement step is not better than this factor, iterative refinement "
+      "is aborted.");
   }
 
 
@@ -51,12 +93,12 @@ namespace Ipopt
                                          const std::string& prefix)
   {
     // Check for the algorithm options
-    options.GetIntegerValue("num_min_iter_ref", num_min_iter_ref_, prefix);
-    options.GetIntegerValue("num_max_iter_ref", num_max_iter_ref_, prefix);
-    ASSERT_EXCEPTION(num_max_iter_ref_ >= num_min_iter_ref_, OptionsList::OPTION_OUT_OF_RANGE,
-                     "Option \"num_max_iter_ref\": This value must be larger than or equal to num_min_iter_ref (default 1)");
+    options.GetIntegerValue("min_refinement_steps", min_refinement_steps_, prefix);
+    options.GetIntegerValue("max_refinement_steps", max_refinement_steps_, prefix);
+    ASSERT_EXCEPTION(max_refinement_steps_ >= min_refinement_steps_, OptionsList::OPTION_OUT_OF_RANGE,
+                     "Option \"max_refinement_steps\": This value must be larger than or equal to min_refinement_steps (default 1)");
 
-    options.GetNumericValue("delta_regu_max", delta_regu_max_, prefix);
+    options.GetNumericValue("max_inertia_correction", max_inertia_correction_, prefix);
     options.GetNumericValue("residual_ratio_max", residual_ratio_max_, prefix);
     options.GetNumericValue("residual_ratio_singular", residual_ratio_singular_, prefix);
     ASSERT_EXCEPTION(residual_ratio_singular_ > residual_ratio_max_, OptionsList::OPTION_OUT_OF_RANGE,
@@ -175,7 +217,7 @@ namespace Ipopt
       Index num_iter_ref = 0;
       bool quit_refinement = false;
       while (!allow_inexact && !quit_refinement &&
-             (num_iter_ref < num_min_iter_ref_ ||
+             (num_iter_ref < min_refinement_steps_ ||
               residual_ratio > residual_ratio_max_) ) {
 
         // To the next back solve
@@ -198,8 +240,8 @@ namespace Ipopt
 
         num_iter_ref++;
         // Check if we have to give up on iterative refinement
-        if (num_iter_ref>num_min_iter_ref_ &&
-            (num_iter_ref>num_max_iter_ref_ ||
+        if (num_iter_ref>min_refinement_steps_ &&
+            (num_iter_ref>max_refinement_steps_ ||
              residual_ratio>residual_improvement_factor_*residual_ratio_old)) {
 
           Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -293,6 +335,15 @@ namespace Ipopt
 
     // Set some information for iteration summary output
     IpData().Set_info_regu_x(delta_x_curr_);
+
+    DBG_PRINT_VECTOR(2, "res_x", *res.x());
+    DBG_PRINT_VECTOR(2, "res_s", *res.s());
+    DBG_PRINT_VECTOR(2, "res_c", *res.y_c());
+    DBG_PRINT_VECTOR(2, "res_d", *res.y_d());
+    DBG_PRINT_VECTOR(2, "res_zL", *res.z_L());
+    DBG_PRINT_VECTOR(2, "res_zU", *res.z_U());
+    DBG_PRINT_VECTOR(2, "res_vL", *res.v_L());
+    DBG_PRINT_VECTOR(2, "res_vU", *res.v_U());
 
   }
 
@@ -426,7 +477,8 @@ namespace Ipopt
                                         true, numberOfEVals);
         }
         assert(retval!=SYMSOLVER_FATAL_ERROR); //TODO make return code
-        if (retval==SYMSOLVER_SINGULAR && delta_c_curr_==0.) {
+        if (retval==SYMSOLVER_SINGULAR && delta_c_curr_==0. &&
+            (rhs.y_c()->Dim()+rhs.y_d()->Dim() > 0) ) {
           // If the matrix is singular and delta_c is not yet nonzero,
           // increase both delta_c and delta_d
           delta_c_curr_ = 1e-8; // TODO: Make parameter
@@ -449,7 +501,7 @@ namespace Ipopt
               delta_x_curr_ = 8.*delta_x_curr_;  //TODO Parameter
             }
           }
-          if (delta_x_curr_ > delta_regu_max_) {
+          if (delta_x_curr_ > max_inertia_correction_) {
             // Give up trying to solve the linear system
             return false;
           }

@@ -25,13 +25,14 @@ namespace Ipopt
       tau_initialized_(false),
       initialize_called_(false),
       have_prototypes_(false),
+
       free_mu_mode_(false),
       tiny_step_flag_(false),
 
+      info_regu_x_(0.),
       info_alpha_primal_(0.),
       info_alpha_primal_char_(' '),
       info_alpha_dual_(0.),
-      info_regu_x_(0.),
       info_ls_count_(0),
       info_skip_output_(false)
   {}
@@ -52,27 +53,6 @@ namespace Ipopt
       "\"cmpl_inf_tol\" are met.  (This is epsilon_tol in Eqn. (6) in "
       "implementation paper).  [Some other algorithmic features also use "
       "this quantity.]");
-    reg_options->AddLowerBoundedNumberOption(
-      "dual_inf_tol",
-      "Acceptance threshold for the unscaled dual infeasibility.",
-      0.0, true, 1e-2,
-      "Absolute tolerance on the dual infesaibility.  Successful termination "
-      "requires that the (unscaled) dual infeasibility is less than this "
-      "threshold.");
-    reg_options->AddLowerBoundedNumberOption(
-      "primal_inf_tol",
-      "Acceptance threshold for the unscaled primal infeasibility.",
-      0.0, true, 1e-2,
-      "Absolute tolerance on the dual infesaibility.  Successful termination "
-      "requires that the (unscaled) primal infeasibility is less than this "
-      "threshold.");
-    reg_options->AddLowerBoundedNumberOption(
-      "compl_inf_tol",
-      "Acceptance threshold for the complementarity conditions.",
-      0.0, true, 1e-2,
-      "Absolute tolerance on the complementarity.  Successful termination "
-      "requires that the (unscaled) complementarity is less than this "
-      "threshold.");
   }
 
   bool IpoptData::Initialize(const Journalist& jnlst,
@@ -80,9 +60,6 @@ namespace Ipopt
                              const std::string& prefix)
   {
     options.GetNumericValue("tol", tol_, prefix);
-    options.GetNumericValue("dual_inf_tol", dual_inf_tol_, prefix);
-    options.GetNumericValue("primal_inf_tol", primal_inf_tol_, prefix);
-    options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
 
     iter_count_=0;
 
@@ -99,9 +76,7 @@ namespace Ipopt
       bool want_y_c,
       bool want_y_d,
       bool want_z_L,
-      bool want_z_U,
-      bool want_v_L,
-      bool want_v_U)
+      bool want_z_U)
   {
     DBG_ASSERT(initialize_called_);
     /*
@@ -125,14 +100,12 @@ namespace Ipopt
                                   new_y_d, want_y_d,
                                   new_z_L, want_z_L,
                                   new_z_U, want_z_U,
-                                  new_v_L, want_v_L,
-                                  new_v_U, want_v_U);
+                                  new_v_L, new_v_U);
     if (!retValue) {
       return false;
     }
 
     new_s = new_y_d->MakeNew(); // same dimension as d
-    //new_s_->Set(0.0);
 
     iterates_space_ = new IteratesVectorSpace(*(new_x->OwnerSpace()), *(new_s->OwnerSpace()),
                       *(new_y_c->OwnerSpace()), *(new_y_d->OwnerSpace()),

@@ -16,6 +16,7 @@
 #include "IpGenTMatrix.hpp"
 #include "IpSymTMatrix.hpp"
 #include "IpBlas.hpp"
+#include "IpInterfaceTypes.hpp"
 
 /* AMPL includes */
 //extern "C"
@@ -29,7 +30,7 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  AmplTNLP::AmplTNLP(const SmartPtr<Journalist>& jnlst, char**& argv,
+  AmplTNLP::AmplTNLP(const SmartPtr<const Journalist>& jnlst, char**& argv,
                      SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
                      bool allow_discrete /* = false */)
       :
@@ -43,8 +44,8 @@ namespace Ipopt
       z_L_sol_(NULL),
       z_U_sol_(NULL),
       g_sol_(NULL),
-      obj_sol_(0.0),
       lambda_sol_(NULL),
+      obj_sol_(0.0),
       objval_called_with_current_x_(false),
       conval_called_with_current_x_(false),
       suffix_handler_(suffix_handler)
@@ -307,16 +308,16 @@ namespace Ipopt
 
     fint nerror = 0;
     objgrd(0, non_const_x_, grad_f, &nerror);
+    if (nerror != 0) {
+      DBG_PRINT((1, "nerror = %d\n", nerror));
+      return false;
+    }
     if (obj_sign_==-1) {
       for (Index i=0; i<n; i++) {
         grad_f[i] *= -1.;
       }
     }
-    if (nerror == 0) {
-      return true;
-    }
-    DBG_PRINT((1, "nerror = %d\n", nerror));
-    return false;
+    return true;
   }
 
   bool AmplTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
@@ -329,7 +330,6 @@ namespace Ipopt
 
     apply_new_x(new_x, n, x);
 
-    fint nerror = 0;
     return internal_conval(m, g);
   }
 
@@ -419,7 +419,6 @@ namespace Ipopt
         non_const_lambda[i] = lambda[i];
       }
 
-      fint nerror = 0;
       real ow=obj_sign_*obj_factor;
       sphes(values, -1, &ow, non_const_lambda);
 
@@ -433,7 +432,7 @@ namespace Ipopt
     return false;
   }
 
-  void AmplTNLP::finalize_solution(ApplicationReturnStatus status,
+  void AmplTNLP::finalize_solution(SolverReturn status,
                                    Index n, const Number* x, const Number* z_L, const Number* z_U,
                                    Index m, const Number* g, const Number* lambda,
                                    Number obj_value)
@@ -462,26 +461,23 @@ namespace Ipopt
     obj_sol_ = obj_value;
 
     std::string message;
-    if (status == Solve_Succeeded) {
+    if (status == SUCCESS) {
       message = "Optimal Solution Found";
     }
-    else if (status == Maximum_Iterations_Exceeded) {
+    else if (status == MAXITER_EXCEEDED) {
       message = "Maximum Number of Iterations Exceeded";
     }
-    else if (status == Solve_Failed) {
-      message = "Solve Failed";
-    }
-    else if (status == Solved_To_Best_Possible_Precision) {
+    else if (status == STOP_AT_TINY_STEP) {
       message = "Solved To Best Possible Precision";
     }
-    else if (status == Solved_To_Acceptable_Level) {
+    else if (status == STOP_AT_ACCEPTABLE_POINT) {
       message = "Solved To Acceptable Level";
     }
-    else if (status == NonIpopt_Exception_Thrown) {
-      message = "Non-Ipopt Exception Thrown";
+    else if (status == LOCAL_INFEASIBILITY) {
+      message = "Converged to a locally infeasible point. Problem may be infeasible.";
     }
-    else if (status == Internal_Error) {
-      message = "Ipopt Internal Error";
+    else if (status == RESTORATION_FAILURE) {
+      message = "Restoration Phase Failed.";
     }
     else {
       message = "Unknown Error";
@@ -617,7 +613,7 @@ namespace Ipopt
   {
     DBG_ASSERT(IsValid(suffix_handler_));
     const double* obj = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Objective_Source);
-    obj_scaling = (obj && obj[0] > 0) ? obj[0] : 1.0;
+    obj_scaling = (obj) ? obj[0] : 1.0;
 
     const double* x = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Variable_Source);
     for (int i=0; i < n; i++) {

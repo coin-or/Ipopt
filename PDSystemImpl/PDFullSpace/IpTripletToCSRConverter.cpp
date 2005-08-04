@@ -19,13 +19,13 @@ namespace Ipopt
       offset_(offset),
       ia_(NULL),
       ja_(NULL),
-      ipos_first_(NULL),
-      ipos_double_triplet_(NULL),
-      ipos_double_compressed_(NULL),
       dim_(0),
       nonzeros_triplet_(0),
       nonzeros_compressed_(0),
-      initialized_(false)
+      initialized_(false),
+      ipos_first_(NULL),
+      ipos_double_triplet_(NULL),
+      ipos_double_compressed_(NULL)
   {
     DBG_ASSERT(offset==0|| offset==1);
   }

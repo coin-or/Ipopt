@@ -106,7 +106,7 @@ namespace Ipopt
 
     // Compute primal infeasibility
     Number inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
-    Number f = orig_ip_cq->trial_f();
+    Number f = orig_ip_cq->unscaled_trial_f();
 
     // Retrieve some information set in the different parts of the algorithm
     char info_iter='r';
@@ -139,22 +139,22 @@ namespace Ipopt
     //           Now if desired more detail on the iterates             //
     //////////////////////////////////////////////////////////////////////
 
-    Jnlst().Printf(J_DETAILED, J_MAIN,
-                   "\n**************************************************\n");
-    Jnlst().Printf(J_DETAILED, J_MAIN,
-                   "*** Beginning Iteration %d from the following point:",
-                   IpData().iter_count());
-    Jnlst().Printf(J_DETAILED, J_MAIN,
-                   "\n**************************************************\n\n");
-
-    Jnlst().Printf(J_DETAILED, J_MAIN,
-                   "Primal infeasibility for restoration phase problem = %.16e\n",
-                   IpCq().curr_primal_infeasibility(NORM_MAX));
-    Jnlst().Printf(J_DETAILED, J_MAIN,
-                   "Dual infeasibility for restoration phase problem   = %.16e\n",
-                   IpCq().curr_dual_infeasibility(NORM_MAX));
-
     if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "\n**************************************************\n");
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "*** Beginning Iteration %d from the following point:",
+                     IpData().iter_count());
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "\n**************************************************\n\n");
+
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Primal infeasibility for restoration phase problem = %.16e\n",
+                     IpCq().curr_primal_infeasibility(NORM_MAX));
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Dual infeasibility for restoration phase problem   = %.16e\n",
+                     IpCq().curr_dual_infeasibility(NORM_MAX));
+
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "||curr_x||_inf   = %.16e\n", IpData().curr()->x()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN,
@@ -238,21 +238,31 @@ namespace Ipopt
       }
     }
 
-    Jnlst().Printf(J_DETAILED, J_MAIN,
-                   "\n\n***Current NLP Values for Iteration (Restoration phase problem) %d:\n",
-                   IpData().iter_count());
-    Jnlst().Printf(J_DETAILED, J_MAIN, "Objective = %.16e\n", IpCq().curr_f());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "grad_f", *IpCq().curr_grad_f());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_c", *IpCq().curr_c());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_d", *IpCq().curr_d());
-    Jnlst().PrintVector(J_VECTOR, J_MAIN,
-                        "curr_d - curr_s", *IpCq().curr_d_minus_s());
+    if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "\n\n***Current NLP Values for Iteration (Restoration phase problem) %d:\n",
+                     IpData().iter_count());
+      Jnlst().Printf(J_DETAILED, J_MAIN, "\n                                   (scaled)                 (unscaled)\n");
+      Jnlst().Printf(J_DETAILED, J_MAIN, "Objective...............: %24.16e  %24.16e\n", IpCq().curr_f(), IpCq().unscaled_curr_f());
+      Jnlst().Printf(J_DETAILED, J_MAIN, "Dual infeasibility......: %24.16e  %24.16e\n", IpCq().curr_dual_infeasibility(NORM_MAX), IpCq().unscaled_curr_dual_infeasibility(NORM_MAX));
+      Jnlst().Printf(J_DETAILED, J_MAIN, "Constraint violation....: %24.16e  %24.16e\n", IpCq().curr_nlp_constraint_violation(NORM_MAX), IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX));
+      Jnlst().Printf(J_DETAILED, J_MAIN, "Complementarity.........: %24.16e  %24.16e\n", IpCq().curr_complementarity(0., NORM_MAX), IpCq().unscaled_curr_complementarity(0., NORM_MAX));
+      Jnlst().Printf(J_DETAILED, J_MAIN, "Overall NLP error.......: %24.16e  %24.16e\n\n", IpCq().curr_nlp_error(), IpCq().unscaled_curr_nlp_error());
+    }
+    if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "grad_f", *IpCq().curr_grad_f());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_c", *IpCq().curr_c());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_d", *IpCq().curr_d());
+      Jnlst().PrintVector(J_VECTOR, J_MAIN,
+                          "curr_d - curr_s", *IpCq().curr_d_minus_s());
+    }
+    if (Jnlst().ProduceOutput(J_MATRIX, J_MAIN)) {
+      Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_c", *IpCq().curr_jac_c());
+      Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_d", *IpCq().curr_jac_d());
+      Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "h", *IpCq().curr_exact_hessian());
+    }
 
-    Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_c", *IpCq().curr_jac_c());
-    Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_d", *IpCq().curr_jac_d());
-    Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "h", *IpCq().curr_exact_hessian());
     Jnlst().Printf(J_DETAILED, J_MAIN, "\n\n");
-
   }
 
 } // namespace Ipopt

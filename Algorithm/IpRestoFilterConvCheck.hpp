@@ -82,6 +82,8 @@ namespace Ipopt
     /** Fraction of required reduction in infeasibility before problem
      *  is considered to be solved. */
     Number kappa_resto_;
+    /** Maximum number of iterations in restoration phase */
+    Index maximum_iters_;
     //@}
 
     /** Flag indicating that this is the first call.  We don't want to

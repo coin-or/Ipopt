@@ -30,13 +30,13 @@ namespace Ipopt
       full_g_(NULL),
       jac_g_(NULL),
       c_rhs_(NULL),
-      jac_idx_map_(NULL),
-      h_idx_map_(NULL),
       x_tag_for_iterates_(0),
       y_c_tag_for_iterates_(0),
       y_d_tag_for_iterates_(0),
       x_tag_for_g_(0),
-      x_tag_for_jac_g_(0)
+      x_tag_for_jac_g_(0),
+      jac_idx_map_(NULL),
+      h_idx_map_(NULL)
   {
     ASSERT_EXCEPTION(IsValid(tnlp_), INVALID_TNLP,
                      "The TNLP passed to TNLPAdapter is NULL. This MUST be a valid TNLP!");
@@ -524,20 +524,16 @@ namespace Ipopt
     return true;
   }
 
-  bool TNLPAdapter::GetStartingPoint(Vector& x,
+  bool TNLPAdapter::GetStartingPoint(SmartPtr<Vector> x,
                                      bool need_x,
-                                     Vector& y_c,
+                                     SmartPtr<Vector> y_c,
                                      bool need_y_c,
-                                     Vector& y_d,
+                                     SmartPtr<Vector> y_d,
                                      bool need_y_d,
-                                     Vector& z_L,
+                                     SmartPtr<Vector> z_L,
                                      bool need_z_L,
-                                     Vector& z_U,
-                                     bool need_z_U,
-                                     Vector& v_L,
-                                     bool need_v_L,
-                                     Vector& v_U,
-                                     bool need_v_U
+                                     SmartPtr<Vector> z_U,
+                                     bool need_z_U
                                     )
   {
     Number* full_x = new Number[n_full_x_];
@@ -555,44 +551,43 @@ namespace Ipopt
       return false;
     }
 
-    DenseVector* dx = dynamic_cast<DenseVector*>(&x);
-    DBG_ASSERT(dx);
-    Number* values = dx->Values();
-
     if (need_x) {
+      DenseVector* dx = dynamic_cast<DenseVector*>(GetRawPtr(x));
+      DBG_ASSERT(dx);
+      Number* values = dx->Values();
       const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
-      for (Index i=0; i<x.Dim(); i++) {
+      for (Index i=0; i<x->Dim(); i++) {
         values[i] = full_x[x_pos[i]];
       }
     }
 
     if (need_y_c) {
-      DenseVector* dy_c = dynamic_cast<DenseVector*>(&y_c);
+      DenseVector* dy_c = dynamic_cast<DenseVector*>(GetRawPtr(y_c));
       DBG_ASSERT(dy_c);
-      values = dy_c->Values();
+      Number* values = dy_c->Values();
       const Index* y_c_pos = P_c_g_->ExpandedPosIndices();
-      for (Index i=0; i<y_c.Dim(); i++) {
+      for (Index i=0; i<y_c->Dim(); i++) {
         values[i] = full_lambda[y_c_pos[i]];
       }
     }
 
     if (need_y_d) {
-      DenseVector* dy_d = dynamic_cast<DenseVector*>(&y_d);
+      DenseVector* dy_d = dynamic_cast<DenseVector*>(GetRawPtr(y_d));
       DBG_ASSERT(dy_d);
-      values = dy_d->Values();
+      Number* values = dy_d->Values();
       const Index* y_d_pos = P_d_g_->ExpandedPosIndices();
-      for (Index i=0; i<y_d.Dim(); i++) {
+      for (Index i=0; i<y_d->Dim(); i++) {
         values[i] = full_lambda[y_d_pos[i]];
       }
     }
 
     if (need_z_L) {
-      DenseVector* dz_l = dynamic_cast<DenseVector*>(&z_L);
+      DenseVector* dz_l = dynamic_cast<DenseVector*>(GetRawPtr(z_L));
       DBG_ASSERT(dz_l);
-      values = dz_l->Values();
+      Number* values = dz_l->Values();
       const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
       const Index* z_l_pos = P_x_x_L_->ExpandedPosIndices();
-      for (Index i=0; i<z_L.Dim(); i++) {
+      for (Index i=0; i<z_L->Dim(); i++) {
         Index idx = z_l_pos[i]; // convert from x_L to x (ipopt)
         idx = x_pos[idx]; // convert from x (ipopt) to x_full
         values[i] = full_z_l[idx];
@@ -600,20 +595,17 @@ namespace Ipopt
     }
 
     if (need_z_U) {
-      DenseVector* dz_u = dynamic_cast<DenseVector*>(&z_U);
+      DenseVector* dz_u = dynamic_cast<DenseVector*>(GetRawPtr(z_U));
       DBG_ASSERT(dz_u);
-      values = dz_u->Values();
+      Number* values = dz_u->Values();
       const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
       const Index* z_u_pos = P_x_x_U_->ExpandedPosIndices();
-      for (Index i=0; i<z_U.Dim(); i++) {
+      for (Index i=0; i<z_U->Dim(); i++) {
         Index idx = z_u_pos[i]; // convert from x_u to x (ipopt)
         idx = x_pos[idx]; // convert from x (ipopt) to x_full
         values[i] = full_z_u[idx];
       }
     }
-
-    DBG_ASSERT(!need_v_L && !need_v_U
-               && "Need to think about initialization of these.");
 
     delete [] full_x;
     full_x = NULL;
@@ -793,19 +785,28 @@ namespace Ipopt
     return retval;
   }
 
-  void TNLPAdapter::GetScalingParameters(Number& obj_scaling, Vector& x_scaling,
-                                         Vector& c_scaling, Vector& d_scaling) const
+  void TNLPAdapter::GetScalingParameters(
+    const SmartPtr<const VectorSpace> x_space,
+    const SmartPtr<const VectorSpace> c_space,
+    const SmartPtr<const VectorSpace> d_space,
+    Number& obj_scaling,
+    SmartPtr<Vector>& x_scaling,
+    SmartPtr<Vector>& c_scaling,
+    SmartPtr<Vector>& d_scaling) const
   {
-    DBG_ASSERT((c_scaling.Dim()+d_scaling.Dim()) == n_full_g_);
+    x_scaling = x_space->MakeNew();
+    c_scaling = c_space->MakeNew();
+    d_scaling = d_space->MakeNew();
+    DBG_ASSERT((c_scaling->Dim()+d_scaling->Dim()) == n_full_g_);
     Number* full_x_scaling = new Number[n_full_x_];
     Number* full_g_scaling = new Number[n_full_g_];
     tnlp_->get_scaling_parameters(obj_scaling,
                                   n_full_x_, full_x_scaling,
                                   n_full_g_, full_g_scaling);
 
-    DenseVector* dx = dynamic_cast<DenseVector*>(&x_scaling);
-    DenseVector* dc = dynamic_cast<DenseVector*>(&c_scaling);
-    DenseVector* dd = dynamic_cast<DenseVector*>(&d_scaling);
+    DenseVector* dx = dynamic_cast<DenseVector*>(GetRawPtr(x_scaling));
+    DenseVector* dc = dynamic_cast<DenseVector*>(GetRawPtr(c_scaling));
+    DenseVector* dd = dynamic_cast<DenseVector*>(GetRawPtr(d_scaling));
     DBG_ASSERT(dx && dc && dd);
     Number* dx_values = dx->Values();
     Number* dc_values = dc->Values();
@@ -830,7 +831,7 @@ namespace Ipopt
   }
 
 
-  void TNLPAdapter::FinalizeSolution(ApplicationReturnStatus status,
+  void TNLPAdapter::FinalizeSolution(SolverReturn status,
                                      const Vector& x, const Vector& z_L, const Vector& z_U,
                                      const Vector& c, const Vector& d,
                                      const Vector& y_c, const Vector& y_d,

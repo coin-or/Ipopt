@@ -41,29 +41,64 @@ namespace Ipopt
 
   void MonotoneMuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("mu0", "initial value for the barrier parameter, mu",
-                                          0.0, true, 0.1);
-    //     roptions->AddLowerBoundedNumberOption("kappa_epsilon", "???",
-    // 					  0.0, true, 10.0);
-    //     roptions->AddBoundedNumberOption("kappa_mu", "???",
-    // 				     0.0, true, 1.0, true, 0.2);
-    //     roptions->AddBoundedNumberOption("theta_mu", "???",
-    // 				     1.0, true, 2.0, true, 1.5);
-    //     roptions->AddBoundedNumberOption("tau_min", "???",
-    //  				     0.0, true, 1.0, true, 0.99);
+    roptions->AddLowerBoundedNumberOption(
+      "mu_init", "Initial value for the barrier parameter.",
+      0.0, true,
+      0.1,
+      "This option determines the initial value for the barrier parameter "
+      "(mu).  It is only relevant in the monotone, Fiacco-McCormick "
+      "version of the algorithm., i.e., if \"mu_strategy\" is chosen "
+      "as \"monotone\"");
+    roptions->AddLowerBoundedNumberOption(
+      "barrier_tol_factor",
+      "Factor for mu in barrier stop test.",
+      0.0, true,
+      10.0,
+      "The convergence tolerance for each barrier problem in the montone mode "
+      "is the value of the barrier parameter times this value. This option is "
+      "also used in class \"AdaptiveMuUpdate\" during the monotone mode. "
+      "(This is kappa_epsilon in implementation paper).");
+    roptions->AddBoundedNumberOption(
+      "mu_linear_decrease_factor",
+      "Determines linear decrease rate of barrier parameter.",
+      0.0, true, 1.0, true,
+      0.2,
+      "For the Fiacco-McCormick update procedure the new barrier parameter mu "
+      "is obtained by taking the minimum of mu*\"mu_linear_decrease_factor\" "
+      "and mu^\"superlinear_decrease_power\".  (This is kappa_mu in "
+      "implementation paper.) [This option is also used in "
+      "AdaptiveMuUpdate]");
+    roptions->AddBoundedNumberOption(
+      "mu_superlinear_decrease_power",
+      "Determines superlinear decrease rate of barrier parameter.",
+      1.0, true, 2.0, true,
+      1.5,
+      "For the Fiacco-McCormick update procedure the new barrier parameter mu "
+      "is obtained by taking the minimum of mu*\"mu_linear_decrease_factor\" "
+      "and mu^\"superlinear_decrease_power\".  (This is theta_mu in "
+      "implementation paper.) [This option is also used in "
+      "AdaptiveMuUpdate]");
+    roptions->AddBoundedNumberOption(
+      "tau_min",
+      "Lower bound on fraction-to-the-boundary parameter tau.",
+      0.0, true, 1.0, true,
+      0.99,
+      "(This is tau_min in implementation paper.) [This option is also "
+      "used in AdaptiveMuUpdate]");
   }
 
   bool MonotoneMuUpdate::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)
   {
-    options.GetNumericValue("mu0", mu0_, prefix);
-    options.GetNumericValue("kappa_epsilon", kappa_epsilon_, prefix);
-    options.GetNumericValue("kappa_mu", kappa_mu_, prefix);
-    options.GetNumericValue("theta_mu", theta_mu_, prefix);
+    options.GetNumericValue("mu_init", mu_init_, prefix);
+    options.GetNumericValue("barrier_tol_factor", barrier_tol_factor_, prefix);
+    options.GetNumericValue("mu_linear_decrease_factor", mu_linear_decrease_factor_, prefix);
+    options.GetNumericValue("mu_superlinear_decrease_power", mu_superlinear_decrease_power_, prefix);
     options.GetNumericValue("tau_min", tau_min_, prefix);
+    options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
 
-    IpData().Set_mu(mu0_);
-    Number tau = Max(tau_min_, 1.0 - mu0_);
+    IpData().Set_mu(mu_init_);
+    Number tau = Max(tau_min_, 1.0 - mu_init_);
     IpData().Set_tau(tau);
 
     initialized_ = false;
@@ -89,7 +124,7 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "Optimality Error for Barrier Sub-problem = %e\n",
                    sub_problem_error);
-    Number kappa_eps_mu = kappa_epsilon_ * mu;
+    Number kappa_eps_mu = barrier_tol_factor_ * mu;
 
     bool done = false;
     bool tiny_step_flag = IpData().tiny_step_flag();
@@ -125,7 +160,7 @@ namespace Ipopt
       }
       else {
         sub_problem_error = IpCq().curr_barrier_error();
-        kappa_eps_mu = kappa_epsilon_ * mu;
+        kappa_eps_mu = barrier_tol_factor_ * mu;
         done = (sub_problem_error > kappa_eps_mu);
       }
 
@@ -147,10 +182,15 @@ namespace Ipopt
     // update the barrier parameter
     Number mu = IpData().curr_mu();
     Number tol = IpData().tol();
-    Number compl_inf_tol = IpData().compl_inf_tol();
 
-    new_mu = Min( kappa_mu_*mu, pow(mu, theta_mu_) );
-    new_mu = Max(new_mu, Min(tol, compl_inf_tol)/10.);
+    // Here we need the complementarity tolerance that is posed to the
+    // scaled problem
+    Number compl_inf_tol =
+      IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_);
+
+    new_mu = Min( mu_linear_decrease_factor_*mu,
+                  pow(mu, mu_superlinear_decrease_power_) );
+    new_mu = Max(new_mu, Min(tol, compl_inf_tol)/(barrier_tol_factor_+1.));
 
     // update the fraction to the boundary parameter
     new_tau = Max(tau_min_, 1.-new_mu);

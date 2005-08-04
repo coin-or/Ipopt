@@ -39,7 +39,7 @@ namespace Ipopt
   bool Filter::Acceptable(std::vector<Number> vals) const
   {
     DBG_START_METH("FilterLineSearch::Filter::Acceptable", dbg_verbosity);
-    DBG_ASSERT(vals.size()==dim_);
+    DBG_ASSERT((Index)vals.size()==dim_);
     bool acceptable = true;
     std::list<FilterEntry*>::iterator iter;
     for (iter = filter_list_.begin(); iter != filter_list_.end();
@@ -55,7 +55,7 @@ namespace Ipopt
   void Filter::AddEntry(std::vector<Number> vals, Index iteration)
   {
     DBG_START_METH("FilterLineSearch::Filter::AddEntry", dbg_verbosity);
-    DBG_ASSERT(vals.size()==dim_);
+    DBG_ASSERT((Index)vals.size()==dim_);
     std::list<FilterEntry*>::iterator iter;
     for (iter = filter_list_.begin(); iter != filter_list_.end();
          iter++) {

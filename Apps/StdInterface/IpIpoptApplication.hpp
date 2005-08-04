@@ -15,6 +15,7 @@
 #include "IpIpoptType.hpp"
 #include "IpTNLP.hpp"
 #include "IpNLP.hpp"
+#include "IpInterfaceTypes.hpp"
 
 namespace Ipopt
 {
@@ -30,7 +31,7 @@ namespace Ipopt
   class IpoptApplication : public ReferencedObject
   {
   public:
-    IpoptApplication();
+    IpoptApplication(bool read_params_dat = true, bool create_console_out = true);
 
     virtual ~IpoptApplication();
 
@@ -102,15 +103,8 @@ namespace Ipopt
 
     /**@name Variables that customize the application behavior */
     //@{
-    /** Name of the file for detailed output */
     /** Decide whether or not the PARAMS.DAT file should be read */
     bool read_params_dat_;
-    /** Decide whether or not to report the solution to the journalist */
-    bool report_solution_;
-    /** Decide whether or not to force reporting of the solution to the console */
-    bool force_report_solution_to_console_;
-    /** Decide whether or not to report statistics */
-    bool report_statistics_;
     //@}
 
     /** Journalist for reporting output */

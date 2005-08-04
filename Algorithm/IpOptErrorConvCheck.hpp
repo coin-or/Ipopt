@@ -39,9 +39,39 @@ namespace Ipopt
     /** Overloaded convergence check */
     virtual ConvergenceStatus CheckConvergence();
 
+    /** Auxilliary function for testing whether current iterate
+     *  satisfies the acceptable level of optimality */
+    virtual bool CurrentIsAcceptable();
+
     /** Methods for IpoptType */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
+  protected:
+    /** @name Algorithmic parameters */
+    //@{
+    /** Maximal number of iterations */
+    Index max_iterations_;
+    /** Tolerance on unscaled dual infeasibility */
+    Number dual_inf_tol_;
+    /** Tolerance on unscaled constraint violation */
+    Number constr_viol_tol_;
+    /** Tolerance on unscaled complementarity */
+    Number compl_inf_tol_;
+    /** Number of iterations with acceptable level of accuracy, after
+     *  which the algorithm terminates.  If 0, this heuristic is
+     *  disabled. */
+    Index acceptable_iter_;
+    /** Acceptable tolerance for the problem to terminate earlier if
+     *  algorithm seems stuck or cycling */
+    Number acceptable_tol_;
+    /** Acceptable tolerance on unscaled dual infeasibility */
+    Number acceptable_dual_inf_tol_;
+    /** Acceptable tolerance on unscaled constraint violation */
+    Number acceptable_constr_viol_tol_;
+    /** Acceptable tolerance on unscaled complementarity */
+    Number acceptable_compl_inf_tol_;
     //@}
 
   private:
@@ -58,11 +88,9 @@ namespace Ipopt
     void operator=(const OptimalityErrorConvergenceCheck&);
     //@}
 
-    /** @name Algorithmic parameters */
-    //@{
-    /** Maximal number of iterations */
-    Index max_iterations_;
-    //@}
+    /** Counter for successive iterations in which acceptability
+     *  criteria are met. */
+    Index acceptable_counter_;
   };
 
 } // namespace Ipopt

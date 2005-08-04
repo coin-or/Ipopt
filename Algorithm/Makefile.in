@@ -58,11 +58,11 @@ libipoptalg_a_LIBADD =
 am_libipoptalg_a_OBJECTS = IpAlgBuilder.$(OBJEXT) \
 	IpDefaultIterateInitializer.$(OBJEXT) \
 	IpWarmStartIterateInitializer.$(OBJEXT) IpFilter.$(OBJEXT) \
-	IpFilterLineSearch.$(OBJEXT) IpIpoptAlg.$(OBJEXT) \
-	IpIpoptCalculatedQuantities.$(OBJEXT) IpIpoptData.$(OBJEXT) \
-	IpIteratesVector.$(OBJEXT) IpLoqoMuOracle.$(OBJEXT) \
-	IpMonotoneMuUpdate.$(OBJEXT) IpMuUpdate.$(OBJEXT) \
-	IpNonmonotoneMuUpdate.$(OBJEXT) IpNLPScaling.$(OBJEXT) \
+	IpFilterLineSearch.$(OBJEXT) IpGradientScaling.$(OBJEXT) \
+	IpIpoptAlg.$(OBJEXT) IpIpoptCalculatedQuantities.$(OBJEXT) \
+	IpIpoptData.$(OBJEXT) IpIteratesVector.$(OBJEXT) \
+	IpLoqoMuOracle.$(OBJEXT) IpMonotoneMuUpdate.$(OBJEXT) \
+	IpAdaptiveMuUpdate.$(OBJEXT) IpNLPScaling.$(OBJEXT) \
 	IpOptErrorConvCheck.$(OBJEXT) IpOrigIpoptNLP.$(OBJEXT) \
 	IpOrigIterationOutput.$(OBJEXT) IpProbingMuOracle.$(OBJEXT) \
 	IpQualityFunctionMuOracle.$(OBJEXT) \
@@ -177,6 +177,7 @@ RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
+TAUCS_INCFLAGS = @TAUCS_INCFLAGS@
 VERSION = @VERSION@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
@@ -227,6 +228,7 @@ libipoptalg_a_SOURCES = \
 	IpWarmStartIterateInitializer.hpp IpWarmStartIterateInitializer.cpp \
 	IpFilter.cpp IpFilter.hpp \
 	IpFilterLineSearch.cpp IpFilterLineSearch.hpp \
+	IpGradientScaling.hpp IpGradientScaling.cpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
 	IpIpoptData.cpp IpIpoptData.hpp \
@@ -238,8 +240,8 @@ libipoptalg_a_SOURCES = \
 	IpLoqoMuOracle.hpp IpLoqoMuOracle.cpp \
 	IpMonotoneMuUpdate.hpp IpMonotoneMuUpdate.cpp \
 	IpMuOracle.hpp \
-	IpMuUpdate.hpp IpMuUpdate.cpp \
-	IpNonmonotoneMuUpdate.hpp IpNonmonotoneMuUpdate.cpp \
+	IpMuUpdate.hpp \
+	IpAdaptiveMuUpdate.hpp IpAdaptiveMuUpdate.cpp \
 	IpNLPScaling.hpp IpNLPScaling.cpp \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \
 	IpOrigIpoptNLP.cpp IpOrigIpoptNLP.hpp \
@@ -265,6 +267,7 @@ ASTYLE_FILES = \
 	IpWarmStartIterateInitializer.hppbak IpWarmStartIterateInitializer.cppbak \
 	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLineSearch.cppbak IpFilterLineSearch.hppbak \
+	IpGradientScaling.hppbak IpGradientScaling.cppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
 	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \
 	IpIpoptData.cppbak IpIpoptData.hppbak \
@@ -277,7 +280,7 @@ ASTYLE_FILES = \
 	IpMonotoneMuUpdate.hppbak IpMonotoneMuUpdate.cppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
-	IpNonmonotoneMuUpdate.hppbak IpNonmonotoneMuUpdate.cppbak \
+	IpAdaptiveMuUpdate.hppbak IpAdaptiveMuUpdate.cppbak \
 	IpNLPScaling.hppbak IpNLPScaling.cppbak \
 	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
 	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \
@@ -342,19 +345,19 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAdaptiveMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAlgBuilder.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDefaultIterateInitializer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilterLineSearch.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpGradientScaling.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptAlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptCalculatedQuantities.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptData.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIteratesVector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLoqoMuOracle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMonotoneMuUpdate.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNLPScaling.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNonmonotoneMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptErrorConvCheck.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOrigIpoptNLP.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOrigIterationOutput.Po@am__quote@

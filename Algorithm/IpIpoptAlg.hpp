@@ -21,6 +21,7 @@
 #include "IpIterateInitializer.hpp"
 #include "IpIterationOutput.hpp"
 #include "IpIpoptType.hpp"
+#include "IpAlgTypes.hpp"
 
 namespace Ipopt
 {
@@ -42,18 +43,6 @@ namespace Ipopt
   class IpoptAlgorithm : public AlgorithmStrategyObject
   {
   public:
-    /**@name Enumerations */
-    //@{
-    /** enum for the return from the optimize algorithm
-     *  (obviously we need to add more) */
-    enum SolverReturn {
-      SUCCESS,
-      MAXITER_EXCEEDED,
-      FAILED,
-      STOP_AT_TINY_STEP,
-      STOP_AT_ACCEPTABLE_POINT
-    };
-    //@}
 
     /**@name Constructors/Destructors */
     //@{

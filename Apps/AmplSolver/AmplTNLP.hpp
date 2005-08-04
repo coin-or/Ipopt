@@ -34,7 +34,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
-    AmplTNLP(const SmartPtr<Journalist>& jnlst, char**& argv, SmartPtr<AmplSuffixHandler> suffix_handler = NULL, bool allow_discrete = false);
+    AmplTNLP(const SmartPtr<const Journalist>& jnlst, char**& argv, SmartPtr<AmplSuffixHandler> suffix_handler = NULL, bool allow_discrete = false);
 
     /** Default destructor */
     virtual ~AmplTNLP();
@@ -96,7 +96,7 @@ namespace Ipopt
 
     /** @name Solution Methods */
     //@{
-    virtual void finalize_solution(ApplicationReturnStatus status,
+    virtual void finalize_solution(SolverReturn status,
                                    Index n, const Number* x, const Number* z_L, const Number* z_U,
                                    Index m, const Number* g, const Number* lambda,
                                    Number obj_value);

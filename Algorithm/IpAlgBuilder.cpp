@@ -14,7 +14,7 @@
 #include "IpOptErrorConvCheck.hpp"
 #include "IpFilterLineSearch.hpp"
 #include "IpMonotoneMuUpdate.hpp"
-#include "IpNonmonotoneMuUpdate.hpp"
+#include "IpAdaptiveMuUpdate.hpp"
 #include "IpLoqoMuOracle.hpp"
 #include "IpProbingMuOracle.hpp"
 #include "IpQualityFunctionMuOracle.hpp"
@@ -68,20 +68,19 @@ namespace Ipopt
       "mu_strategy",
       "Update strategy for barrier parameter.",
       "monotone",
-      "monotone", "use a monotone (Fiacco-McCormick) strategy",
-      "nonmonotone", "use a nonmonotone update strategy",
-      "Determines whether a nonmonotone barrier "
-      "parameter strategy is to be used.");
+      "monotone", "use the monotone (Fiacco-McCormick) strategy",
+      "adaptive", "use the adaptive update strategy",
+      "Determines which barrier parameter strategy is to be used.");
     roptions->AddStringOption3(
       "mu_oracle",
-      "Oracle for a new barrier parameters in the nonmonotone strategy",
+      "Oracle for a new barrier parameters in the adaptive strategy",
       "probing",
       "probing", "Mehrotra's probing heuristic",
       "loqo", "LOQO's centrality rule",
       "quality_function", "minimize a quality function",
       "Determines how a new barrier parameter is computed in each "
-      "\"free-mode\" iteration of the nonmonotone barrier parameter "
-      "strategy. (Only considered if \"nonmonotone\" is selected for "
+      "\"free-mode\" iteration of the adaptive barrier parameter "
+      "strategy. (Only considered if \"adaptive\" is selected for "
       "option \"mu_strategy\".");
     roptions->AddStringOption4(
       "fixed_mu_oracle",
@@ -92,8 +91,8 @@ namespace Ipopt
       "quality_function", "minimize a quality function",
       "average_compl", "base on current average complementarity",
       "Determines how the first value of the barrier parameter should be "
-      "computed when switching to the \"monotone mode\" in the nonmonotone "
-      "strategy. (Only considered if \"nonmonotone\" is selected for option "
+      "computed when switching to the \"monotone mode\" in the adaptive "
+      "strategy. (Only considered if \"adaptive\" is selected for option "
       "\"mu_strategy\".");
     roptions->AddStringOption2(
       "warm_start_init_point",
@@ -185,11 +184,16 @@ namespace Ipopt
     SmartPtr<PDSystemSolver> resto_PDSolver =
       new PDFullSpaceSolver(*resto_AugSolver);
 
+    // Convergence check in the restoration phase
+    SmartPtr<RestoFilterConvergenceCheck> resto_convCheck =
+      new RestoFilterConvergenceCheck();
+
     // Line search method for the restoration phase
     SmartPtr<RestoRestorationPhase> resto_resto =
       new RestoRestorationPhase();
     SmartPtr<FilterLineSearch> resto_LineSearch =
-      new FilterLineSearch(GetRawPtr(resto_resto), GetRawPtr(resto_PDSolver));
+      new FilterLineSearch(GetRawPtr(resto_resto), GetRawPtr(resto_PDSolver),
+                           GetRawPtr(resto_convCheck));
 
     // Create the mu update that will be used by the restoration phase
     // algorithm
@@ -199,7 +203,7 @@ namespace Ipopt
 
     std::string resto_smuoracle;
     std::string resto_sfixmuoracle;
-    if (resto_smuupdate=="nonmonotone" ) {
+    if (resto_smuupdate=="adaptive" ) {
       options.GetValue("mu_oracle", resto_smuoracle, "resto."+prefix);
       options.GetValue("fixed_mu_oracle", resto_sfixmuoracle, "resto."+prefix);
     }
@@ -207,7 +211,7 @@ namespace Ipopt
     if (resto_smuupdate=="monotone" ) {
       resto_MuUpdate = new MonotoneMuUpdate(GetRawPtr(resto_LineSearch));
     }
-    else if (resto_smuupdate=="nonmonotone") {
+    else if (resto_smuupdate=="adaptive") {
       SmartPtr<MuOracle> resto_MuOracle;
       if (resto_smuoracle=="loqo") {
         resto_MuOracle = new LoqoMuOracle();
@@ -232,13 +236,9 @@ namespace Ipopt
         resto_FixMuOracle = NULL;
       }
       resto_MuUpdate =
-        new NonmonotoneMuUpdate(GetRawPtr(resto_LineSearch),
-                                resto_MuOracle, resto_FixMuOracle);
+        new AdaptiveMuUpdate(GetRawPtr(resto_LineSearch),
+                             resto_MuOracle, resto_FixMuOracle);
     }
-
-    // Convergence check in the restoration phase
-    SmartPtr<RestoFilterConvergenceCheck> resto_convCheck =
-      new RestoFilterConvergenceCheck();
 
     // Initialization of the iterates for the restoration phase
     SmartPtr<EqMultiplierCalculator> resto_EqMultCalculator =
@@ -267,7 +267,8 @@ namespace Ipopt
 
     // Create the line search to be used by the main algorithm
     SmartPtr<FilterLineSearch> lineSearch =
-      new FilterLineSearch(GetRawPtr(resto_phase), GetRawPtr(PDSolver));
+      new FilterLineSearch(GetRawPtr(resto_phase), GetRawPtr(PDSolver),
+                           convCheck);
 
     // The following cross reference is not good: We have to store a
     // pointer to the lineSearch object in resto_convCheck as a
@@ -281,7 +282,7 @@ namespace Ipopt
     options.GetValue("mu_strategy", smuupdate, prefix);
     std::string smuoracle;
     std::string sfixmuoracle;
-    if (smuupdate=="nonmonotone" ) {
+    if (smuupdate=="adaptive" ) {
       options.GetValue("mu_oracle", smuoracle, prefix);
       options.GetValue("fixed_mu_oracle", sfixmuoracle, prefix);
     }
@@ -289,7 +290,7 @@ namespace Ipopt
     if (smuupdate=="monotone" ) {
       MuUpdate = new MonotoneMuUpdate(GetRawPtr(lineSearch));
     }
-    else if (smuupdate=="nonmonotone") {
+    else if (smuupdate=="adaptive") {
       SmartPtr<MuOracle> muOracle;
       if (smuoracle=="loqo") {
         muOracle = new LoqoMuOracle();
@@ -313,8 +314,8 @@ namespace Ipopt
       else {
         FixMuOracle = NULL;
       }
-      MuUpdate = new NonmonotoneMuUpdate(GetRawPtr(lineSearch),
-                                         muOracle, FixMuOracle);
+      MuUpdate = new AdaptiveMuUpdate(GetRawPtr(lineSearch),
+                                      muOracle, FixMuOracle);
     }
 
     // Create the object for the iteration output
