@@ -52,11 +52,11 @@ AC_ARG_ENABLE([debug],
 if test "$debugcompile" = "true"; then
   AC_DEFINE([IP_DEBUG],[1],[If defined, debug sanity checks are performed during runtime])
   if test -z "$CXXFLAGS"; then
-    CXXFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Werror -pipe -Wconversion"
+    CXXFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -pipe -Wconversion"
   fi
 
   if test -z "$CFLAGS"; then
-    CFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Werror -pipe"
+    CFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Werror -pipe"
   fi
 
   if test -z "$FFLAGS"; then

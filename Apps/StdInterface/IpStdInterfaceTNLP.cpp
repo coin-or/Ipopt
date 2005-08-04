@@ -52,14 +52,14 @@ namespace Ipopt
       eval_grad_f_(eval_grad_f),
       eval_jac_g_(eval_jac_g),
       eval_h_(eval_h),
+      user_data_(user_data),
+      non_const_x_(NULL),
       x_sol_(x_sol),
       z_L_sol_(z_L_sol),
       z_U_sol_(z_U_sol),
       g_sol_(g_sol),
       lambda_sol_(lam_sol),
-      obj_sol_(obj_sol),
-      user_data_(user_data),
-      non_const_x_(NULL)
+      obj_sol_(obj_sol)
   {
     ASSERT_EXCEPTION(n_var_>0, INVALID_STDINTERFACE_NLP,
                      "The number of variables must be at least 1.");

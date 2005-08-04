@@ -31,12 +31,12 @@ namespace Ipopt
                                      const SmartPtr<ConvergenceCheck>& conv_check)
       :
       LineSearch(),
+      theta_max_(-1.0),
+      theta_min_(-1.0),
+      filter_(2),
       resto_phase_(resto_phase),
       pd_solver_(pd_solver),
-      conv_check_(conv_check),
-      theta_min_(-1.0),
-      theta_max_(-1.0),
-      filter_(2)
+      conv_check_(conv_check)
   {
     DBG_START_FUN("FilterLineSearch::FilterLineSearch",
                   dbg_verbosity);
@@ -802,8 +802,9 @@ namespace Ipopt
       // exception will the thrown if there are problem during the
       // evaluation of the functions (in that case, we want to further
       // reduce the step size
-      Number trial_barr = IpCq().trial_barrier_obj();
-      Number trial_theta = IpCq().trial_constraint_violation();
+      /* Number trial_barr = */ IpCq().trial_barrier_obj();
+      /* Number trial_theta = */
+      IpCq().trial_constraint_violation();
       return true;
     }
 
@@ -1176,7 +1177,6 @@ namespace Ipopt
     Index count_soc = 0;
 
     Number theta_soc_old = 0.;
-    Number theta_curr = IpCq().curr_constraint_violation();
     Number theta_trial = IpCq().trial_constraint_violation();
     Number alpha_primal_soc = alpha_primal;
 

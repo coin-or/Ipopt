@@ -32,9 +32,9 @@ namespace Ipopt
       orig_ip_nlp_(&orig_ip_nlp),
       orig_ip_data_(&orig_ip_data),
       orig_ip_cq_(&orig_ip_cq),
+      rho_(1000.),
       eta_factor_(1.0),
-      eta_mu_exponent_(0.5),
-      rho_(1000.)
+      eta_mu_exponent_(0.5)
   {}
 
   RestoIpoptNLP::~RestoIpoptNLP()
@@ -456,7 +456,7 @@ namespace Ipopt
     // the original objective function cannot be evaluated at the
     // trial point in the restoration phase
     if (evaluate_orig_obj_at_resto_trial_) {
-      Number orig_f = orig_ip_nlp_->f(*x_only);
+      /* Number orig_f = */ orig_ip_nlp_->f(*x_only);
     }
 
     return ret;

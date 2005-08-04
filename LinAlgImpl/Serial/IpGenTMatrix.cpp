@@ -166,8 +166,8 @@ namespace Ipopt
       :
       MatrixSpace(nRows, nCols),
       nonZeros_(nonZeros),
-      iRows_(NULL),
-      jCols_(NULL)
+      jCols_(NULL),
+      iRows_(NULL)
   {
     iRows_ = new Index[nonZeros];
     jCols_ = new Index[nonZeros];

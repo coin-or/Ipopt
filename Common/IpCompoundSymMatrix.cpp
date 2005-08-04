@@ -19,7 +19,6 @@ namespace Ipopt
       matrices_valid_(false)
   {
     for (Index irow=0; irow<NComps_Dim(); irow++) {
-      bool row_set = false;
       std::vector< SmartPtr<Matrix> > row(irow+1);
       std::vector< SmartPtr<const Matrix> > const_row(irow+1);
       comps_.push_back(row);
@@ -187,8 +186,8 @@ namespace Ipopt
       :
       SymMatrixSpace(total_dim),
       ncomp_spaces_(ncomp_spaces),
-      dimensions_set_(false),
-      block_dim_(ncomp_spaces, -1)
+      block_dim_(ncomp_spaces, -1),
+      dimensions_set_(false)
   {
     for (Index irow=0; irow<ncomp_spaces_; irow++) {
       std::vector<SmartPtr<const MatrixSpace> > row(irow+1);

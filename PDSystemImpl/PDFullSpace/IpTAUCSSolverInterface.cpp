@@ -21,12 +21,10 @@ namespace Ipopt
 
   TAUCSSolverInterface::TAUCSSolverInterface()
       :
-      n_(0),
-      nz_(0),
-      initialized_(false),
-      negevals_(-1),
       a_(NULL),
-      multi_frontal_(false)
+      multi_frontal_(false),
+      negevals_(-1),
+      initialized_(false)
   {
     DBG_START_METH("TAUCSSolverInterface::TAUCSSolverInterface()",dbg_verbosity);
   }
@@ -80,8 +78,6 @@ namespace Ipopt
   bool TAUCSSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    Number value = 0.0;
-
     // Tell TAUCS to release all memory if it had been used before
     if (initialized_) {
       taucs_delete(taucs_factor_, A_);
@@ -192,7 +188,8 @@ namespace Ipopt
     //printf("MEM: allocing taucs_factor\n");
     taucs_factor_ = (taucs_factorization*) taucs_malloc(sizeof(taucs_factorization));
     if (!taucs_factor_) {
-      taucs_printf("MEM: taucs_factor: memory allocation\n");
+      char msg[] = "MEM: taucs_factor: memory allocation\n";
+      taucs_printf(msg);
       retcode = SYMSOLVER_FATAL_ERROR;
       goto release_and_return;
     }
@@ -202,7 +199,10 @@ namespace Ipopt
 
     // Call TAUCS to do the analysis phase
     //printf("MEM: rowperm, colperm\n");
-    taucs_ccs_order(A_,&rowperm,&colperm, "metis");
+    {
+      char msg[] = "metis";
+      taucs_ccs_order(A_,&rowperm,&colperm, msg);
+    }
     if (!rowperm) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error during ordering in TAUCS analysis phase - rowperm is NULL.\n");

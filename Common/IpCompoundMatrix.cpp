@@ -414,9 +414,9 @@ namespace Ipopt
       MatrixSpace(total_nRows, total_nCols),
       ncomps_rows_(ncomps_rows),
       ncomps_cols_(ncomps_cols),
+      dimensions_set_(false),
       block_rows_(ncomps_rows, -1),
       block_cols_(ncomps_cols, -1),
-      dimensions_set_(false),
       diagonal_(false)
   {
     DBG_START_METH("CompoundMatrixSpace::CompoundMatrixSpace", 0);

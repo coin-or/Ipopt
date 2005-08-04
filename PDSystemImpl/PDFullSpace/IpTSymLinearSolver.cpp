@@ -25,18 +25,17 @@ namespace Ipopt
    SmartPtr<TSymScalingMethod> scaling_method)
       :
       SymLinearSolver(),
-      solver_interface_(solver_interface),
-      scaling_method_(scaling_method),
       atag_(0),
       dim_(0),
       nonzeros_triplet_(0),
       nonzeros_compressed_(0),
+      initialized_(false),
 
-      airn_(NULL),
-      ajcn_(NULL),
+      solver_interface_(solver_interface),
+      scaling_method_(scaling_method),
       scaling_factors_(NULL),
-
-      initialized_(false)
+      airn_(NULL),
+      ajcn_(NULL)
   {
     DBG_START_METH("TSymLinearSolver::TSymLinearSolver()",dbg_verbosity);
     DBG_ASSERT(IsValid(solver_interface));

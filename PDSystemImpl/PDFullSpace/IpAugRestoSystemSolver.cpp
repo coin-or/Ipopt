@@ -21,8 +21,6 @@ namespace Ipopt
       bool skip_orig_aug_solver_init)
       :
       AugSystemSolver(),
-      orig_aug_solver_(&orig_aug_solver),
-      skip_orig_aug_solver_init_(skip_orig_aug_solver_init),
       neg_omega_c_plus_D_c_cache_(1),
       neg_omega_d_plus_D_d_cache_(1),
       sigma_tilde_n_c_inv_cache_(1),
@@ -31,7 +29,9 @@ namespace Ipopt
       sigma_tilde_p_d_inv_cache_(1),
       d_x_plus_wr_d_cache_(1),
       rhs_cR_cache_(1),
-      rhs_dR_cache_(1)
+      rhs_dR_cache_(1),
+      orig_aug_solver_(&orig_aug_solver),
+      skip_orig_aug_solver_init_(skip_orig_aug_solver_init)
   {
     DBG_START_METH("AugRestoSystemSolver::AugRestoSystemSolver()",dbg_verbosity);
   }

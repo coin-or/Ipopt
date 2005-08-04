@@ -105,12 +105,12 @@ namespace Ipopt
 
     /** @name Strategy objects */
     //@{
+    /** Line search object of the Ipopt algorithm.  */
+    SmartPtr<LineSearch> linesearch_;
     /** Pointer to strategy object that is to be used for computing a
      *  suggested value of the barrier parameter in the free mu mode.
      */
     SmartPtr<MuOracle> free_mu_oracle_;
-    /** Line search object of the Ipopt algorithm.  */
-    SmartPtr<LineSearch> linesearch_;
     /** Pointer to strategy object that is to be used for computing a
      *  suggested value for the fixed mu mode.  If NULL, the current
      *  average complementarity is used.

@@ -443,6 +443,14 @@ namespace Ipopt
     Number tol_;
     //@}
 
+    /** @name Status data **/
+    //@{
+    /** flag indicating whether the algorithm is in the free mu mode */
+    bool free_mu_mode_;
+    /** flag indicating if a tiny step has been detected */
+    bool tiny_step_flag_;
+    //@}
+
     /** @name Gathered information for iteration output */
     //@{
     /** Size of regularization for the Hessian */
@@ -460,14 +468,6 @@ namespace Ipopt
     bool info_skip_output_;
     /** any string of characters for the end of the output line */
     std::string info_string_;
-    //@}
-
-    /** @name Status data **/
-    //@{
-    /** flag indicating whether the algorithm is in the free mu mode */
-    bool free_mu_mode_;
-    /** flag indicating if a tiny step has been detected */
-    bool tiny_step_flag_;
     //@}
 
     /** VectorSpace for all the iterates */

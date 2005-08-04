@@ -572,8 +572,8 @@ namespace Ipopt
         (1.-alpha_dual)*Max(IpCq().curr_grad_lag_x()->Amax(),
                             IpCq().curr_grad_lag_s()->Amax());
       primal_inf =
-        (1.-alpha_primal, 2)*Max(IpCq().curr_c()->Amax(),
-                                 IpCq().curr_d_minus_s()->Amax());
+        (1.-alpha_primal)*Max(IpCq().curr_c()->Amax(),
+                              IpCq().curr_d_minus_s()->Amax());
       compl_inf =
         Max(tmp_slack_x_L_->Amax(), tmp_slack_x_U_->Amax(),
             tmp_slack_s_L_->Amax(), tmp_slack_s_U_->Amax());
@@ -583,8 +583,8 @@ namespace Ipopt
         (1.-alpha_dual)*sqrt(pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
                              pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
       primal_inf =
-        (1.-alpha_primal, 2)*sqrt(pow(IpCq().curr_c()->Nrm2(), 2) +
-                                  pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
+        (1.-alpha_primal)*sqrt(pow(IpCq().curr_c()->Nrm2(), 2) +
+                               pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
       compl_inf =
         sqrt(pow(tmp_slack_x_L_->Nrm2(), 2) + pow(tmp_slack_x_U_->Nrm2(), 2) +
              pow(tmp_slack_s_L_->Nrm2(), 2) + pow(tmp_slack_s_U_->Nrm2(), 2));

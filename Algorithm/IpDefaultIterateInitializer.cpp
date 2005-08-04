@@ -103,8 +103,6 @@ namespace Ipopt
 
     // Push the x iterates sufficiently inside the bounds
     // Calculate any required shift in x0 and s0
-    const double dbl_min = std::numeric_limits<double>::min();
-    const double tiny_double = 100.0*dbl_min;
 
     SmartPtr<const Vector> new_x;
     push_variables(Jnlst(), bound_push_, bound_frac_,

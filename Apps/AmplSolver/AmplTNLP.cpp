@@ -44,8 +44,8 @@ namespace Ipopt
       z_L_sol_(NULL),
       z_U_sol_(NULL),
       g_sol_(NULL),
-      obj_sol_(0.0),
       lambda_sol_(NULL),
+      obj_sol_(0.0),
       objval_called_with_current_x_(false),
       conval_called_with_current_x_(false),
       suffix_handler_(suffix_handler)
@@ -330,7 +330,6 @@ namespace Ipopt
 
     apply_new_x(new_x, n, x);
 
-    fint nerror = 0;
     return internal_conval(m, g);
   }
 
@@ -420,7 +419,6 @@ namespace Ipopt
         non_const_lambda[i] = lambda[i];
       }
 
-      fint nerror = 0;
       real ow=obj_sign_*obj_factor;
       sphes(values, -1, &ow, non_const_lambda);
 

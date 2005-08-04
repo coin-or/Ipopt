@@ -206,11 +206,11 @@ namespace Ipopt
     //@}
 
   private:
-    /** Pointer to the NLP */
-    SmartPtr<NLP> nlp_;
-
     /** journalist */
     SmartPtr<const Journalist> jnlst_;
+
+    /** Pointer to the NLP */
+    SmartPtr<NLP> nlp_;
 
     /** Necessary Vector/Matrix spaces */
     //@{
@@ -318,9 +318,6 @@ namespace Ipopt
     Number bound_relax_factor_;
     //@}
 
-    /** Flag indicating if initialization method has been called */
-    bool initialized_;
-
     /** @name Counters for the function evaluations */
     //@{
     Index f_evals_;
@@ -330,6 +327,9 @@ namespace Ipopt
     Index d_evals_;
     Index jac_d_evals_;
     Index h_evals_;
+
+    /** Flag indicating if initialization method has been called */
+    bool initialized_;
     //@}
   };
 

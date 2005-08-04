@@ -52,14 +52,14 @@ namespace Ipopt
   class DebugJournalistWrapper
   {
   public:
-    DebugJournalistWrapper(char* func_name, Index verbose_level);
-    DebugJournalistWrapper(char* func_name, Index verbose_level,
+    DebugJournalistWrapper(std::string func_name, Index verbose_level);
+    DebugJournalistWrapper(std::string func_name, Index verbose_level,
                            const void* const method_owner);
     ~DebugJournalistWrapper();
 
     Index Verbosity();
 
-    void DebugPrintf(Index verbosity, char* pformat, ...);
+    void DebugPrintf(Index verbosity, const char* pformat, ...);
 
     void DebugPrintVector(const std::string& vec_name, const Vector& vec);
 
@@ -70,7 +70,7 @@ namespace Ipopt
   private:
 
     static Index indentation_level_;
-    char func_name_[256];
+    std::string func_name_;
     Index verbose_level_;
     const void* method_owner_;
 

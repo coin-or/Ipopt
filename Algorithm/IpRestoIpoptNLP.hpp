@@ -343,6 +343,7 @@ namespace Ipopt
     /** @name Values particular to the restoration phase problem statement */
     //@{
     /** Penalty parameter for the \$l_1\$ norm */
+    /* ToDo make this parameter? */
     Number rho_;
     /** scaling factor for eta calculation */
     Number eta_factor_;
