@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpOptProbingMuOracle.hpp 321 2005-06-20 21:53:55Z andreasw $
+// $Id$
 //
 // Authors:  Andreas Waechter             IBM    2004-11-12
 
@@ -13,7 +13,6 @@
 #include "IpPDSystemSolver.hpp"
 #include "IpIpoptType.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
-#include "IpNonmonotoneMuUpdate.hpp"
 
 namespace Ipopt
 {
@@ -46,6 +45,33 @@ namespace Ipopt
     /** Methods for IpoptType */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
+    /** @name Public enums.  Some of those are also used for the
+     *  quality function */
+    //@{
+    /** enum for norm type */
+    enum NormEnum
+    {
+      NM_NORM_1=0,
+      NM_NORM_2_SQUARED,
+      NM_NORM_MAX,
+      NM_NORM_2
+    };
+    /** enum for centrality type */
+    enum CentralityEnum
+    {
+      CEN_NONE=0,
+      CEN_LOG,
+      CEN_RECIPROCAL,
+      CEN_CUBED_RECIPROCAL
+    };
+    /** enum for the quality function balancing term type */
+    enum BalancingTermEnum
+    {
+      BT_NONE=0,
+      BT_CUBIC
+    };
     //@}
 
   private:
@@ -96,11 +122,7 @@ namespace Ipopt
                                     const Vector& step_cen_z_L,
                                     const Vector& step_cen_z_U,
                                     const Vector& step_cen_v_L,
-                                    const Vector& step_cen_v_U,
-                                    SmartPtr<const Vector> jac_cT_times_step_aff_y_c,
-                                    SmartPtr<const Vector> jac_dT_times_step_aff_y_d,
-                                    SmartPtr<const Vector> jac_cT_times_step_cen_y_c,
-                                    SmartPtr<const Vector> jac_dT_times_step_cen_y_d);
+                                    const Vector& step_cen_v_U);
 
     /** Auxilliary function performing the golden bisection */
     Number PerformGoldenBisection(Number sigma_up,
@@ -125,46 +147,54 @@ namespace Ipopt
                                   const Vector& step_cen_z_L,
                                   const Vector& step_cen_z_U,
                                   const Vector& step_cen_v_L,
-                                  const Vector& step_cen_v_U,
-                                  SmartPtr<const Vector> jac_cT_times_step_aff_y_c,
-                                  SmartPtr<const Vector> jac_dT_times_step_aff_y_d,
-                                  SmartPtr<const Vector> jac_cT_times_step_cen_y_c,
-                                  SmartPtr<const Vector> jac_dT_times_step_cen_y_d);
+                                  const Vector& step_cen_v_U);
+
+    /** Auxilliary function performing the golden bisection in the
+     *  logarithmic scale */
+    /* This doesn't seem to work well, so I took it out for now (AW)
+    Number PerformGoldenBisectionLog(Number sigma_up,
+                                     Number sigma_lo,
+                                     Number tol,
+                                     const Vector& step_aff_x_L,
+                                     const Vector& step_aff_x_U,
+                                     const Vector& step_aff_s_L,
+                                     const Vector& step_aff_s_U,
+                                     const Vector& step_aff_y_c,
+                                     const Vector& step_aff_y_d,
+                                     const Vector& step_aff_z_L,
+                                     const Vector& step_aff_z_U,
+                                     const Vector& step_aff_v_L,
+                                     const Vector& step_aff_v_U,
+                                     const Vector& step_cen_x_L,
+                                     const Vector& step_cen_x_U,
+                                     const Vector& step_cen_s_L,
+                                     const Vector& step_cen_s_U,
+                                     const Vector& step_cen_y_c,
+                                     const Vector& step_cen_y_d,
+                                     const Vector& step_cen_z_L,
+                                     const Vector& step_cen_z_U,
+                                     const Vector& step_cen_v_L,
+                                     const Vector& step_cen_v_U);
+    */
 
     /** @name Algorithmic parameters */
     //@{
     /** Upper bound on centering parameter sigma */
     Number sigma_max_;
     /** Norm to be used for the quality function. */
-    NonmonotoneMuUpdate::NormEnum quality_function_norm_;
-    /** Flag indicating whether the components of the quality function
-     *  should be normalized. */
-    bool quality_function_normalized_;
+    NormEnum quality_function_norm_;
     /** Flag indicating how centrality should be involved in the
      *  quality function */
-    NonmonotoneMuUpdate::CentralityEnum quality_function_centrality_;
-    /** enum for the dual infeasibility term in the quality function */
-    enum QualityFunctionDualInfeasibilityTypeEnum
-    {
-      TYPE1=0,
-      TYPE2
-    };
-    /** Flag indicating what term is to be used for the dual
-     *  infeasibility in the quality function. */
-    QualityFunctionDualInfeasibilityTypeEnum quality_function_dual_inf_;
+    CentralityEnum quality_function_centrality_;
     /** Flag indicating whether we use a balancing term in the quality
      *  function.
      */
-    NonmonotoneMuUpdate::BalancingTermEnum quality_function_balancing_term_;
+    BalancingTermEnum quality_function_balancing_term_;
     /** Relative tolerance for golden bi-section algorithm. */
     Number bisection_tol_;
     /** Maximal number of bi-section steps in the golden bisection
      *  search for sigma. */
     Index max_bisection_steps_;
-    /** Flag indicating whether the dual step size is to be used for
-     *  the equality constraint multipliers. Note, this must be the
-     *  same as in any line search option. */
-    bool dual_alpha_for_y_;
     //@}
 
     /** @name Temporary work space vectors.  We use those to avoid
@@ -187,16 +217,6 @@ namespace Ipopt
     SmartPtr<Vector> tmp_z_U_;
     SmartPtr<Vector> tmp_v_L_;
     SmartPtr<Vector> tmp_v_U_;
-
-    SmartPtr<Vector> tmp_dual_inf_x_;
-    SmartPtr<Vector> tmp_dual_inf_s_;
-    //@}
-
-    /** @name scaling values */
-    //@{
-    Number dual_inf_scal_;
-    Number primal_inf_scal_;
-    Number compl_inf_scal_;
     //@}
   };
 

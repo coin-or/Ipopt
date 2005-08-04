@@ -77,20 +77,16 @@ namespace Ipopt
     /** Method for obtaining the starting point
      *  for all the iterates. */
     virtual bool GetStartingPoint(
-      Vector& x,
+      SmartPtr<Vector> x,
       bool need_x,
-      Vector& y_c,
+      SmartPtr<Vector> y_c,
       bool need_y_c,
-      Vector& y_d,
+      SmartPtr<Vector> y_d,
       bool need_y_d,
-      Vector& z_L,
+      SmartPtr<Vector> z_L,
       bool need_z_L,
-      Vector& z_U,
-      bool need_z_U,
-      Vector& v_L,
-      bool need_v_L,
-      Vector& v_U,
-      bool need_v_U
+      SmartPtr<Vector> z_U,
+      bool need_z_U
     );
     //@}
 
@@ -114,13 +110,19 @@ namespace Ipopt
                         const Vector& yd,
                         SymMatrix& h);
 
-    virtual void GetScalingParameters(Number& obj_scaling, Vector& x_scaling,
-                                      Vector& c_scaling, Vector& d_scaling) const;
+    virtual void GetScalingParameters(
+      const SmartPtr<const VectorSpace> x_space,
+      const SmartPtr<const VectorSpace> c_space,
+      const SmartPtr<const VectorSpace> d_space,
+      Number& obj_scaling,
+      SmartPtr<Vector>& x_scaling,
+      SmartPtr<Vector>& c_scaling,
+      SmartPtr<Vector>& d_scaling) const;
     //@}
 
     /** @name Solution Reporting Methods */
     //@{
-    virtual void FinalizeSolution(ApplicationReturnStatus status,
+    virtual void FinalizeSolution(SolverReturn status,
                                   const Vector& x, const Vector& z_L, const Vector& z_U,
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,

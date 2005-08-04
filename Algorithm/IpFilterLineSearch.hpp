@@ -15,6 +15,7 @@
 #include "IpRestoPhase.hpp"
 #include "IpPDSystemSolver.hpp"
 #include "IpIpoptType.hpp"
+#include "IpConvCheck.hpp"
 
 namespace Ipopt
 {
@@ -31,9 +32,14 @@ namespace Ipopt
     //@{
     /** Constructor.  The PDSystemSolver object only needs to be
      *  provided (i.e. not NULL) if second order correction is to be
-     *  used. */
+     *  used.  The ConvergenceCheck object is used to determine
+     *  whether the current iterate is acceptable (for example, the
+     *  restoration phase is not started if the acceptability level
+     *  has been reached).  If conv_check is NULL, we assume that the
+     *  current iterate is not acceptable. */
     FilterLineSearch(const SmartPtr<RestorationPhase>& resto_phase,
-                     const SmartPtr<PDSystemSolver>& pd_solver
+                     const SmartPtr<PDSystemSolver>& pd_solver,
+                     const SmartPtr<ConvergenceCheck>& conv_check
                     );
 
     /** Default destructor */
@@ -242,6 +248,11 @@ namespace Ipopt
      *  found. Returns true if such as point is available. */
     bool RestoreAcceptablePoint();
 
+    /** Method for determining if the current iterate is acceptable.
+     *  This is a wrapper for same method from ConvergenceCheck, but
+     *  returns false, if no ConvergenceCheck object is provided. */
+    bool CurrentIsAcceptable();
+
     /** @name Parameters for the filter algorithm.  Names as in the paper */
     //@{
     /** \f$ \eta_{\varphi} \f$ */
@@ -279,6 +290,7 @@ namespace Ipopt
       DUAL_ALPHA_FOR_Y,
       MIN_ALPHA_FOR_Y,
       MAX_ALPHA_FOR_Y,
+      FULL_STEP_FOR_Y,
       MIN_DUAL_INFEAS_ALPHA_FOR_Y,
       SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y
     };
@@ -333,13 +345,9 @@ namespace Ipopt
     /** Number of shortened iterations that trigger the watchdog. */
     Index watchdog_shortened_iter_trigger_;
 
-    /** Acceptable tolerance for the problem to terminate earlier if
-     *  algorithm seems stuck or cycling */
-    Number acceptable_tol_;
-    /** Maximum number of iterations with acceptable level of accuracy
-     *  and full steps, after which the algorithm terminates.  If 0,
-     *  this heuristic is disabled. */
-    Index acceptable_iter_max_;
+    /** Indicates whether the algorithm should start directly with the
+     *  restoratin phase */
+    bool start_with_resto_;
     //@}
 
     /** @name Information related to watchdog procedure */
@@ -402,17 +410,16 @@ namespace Ipopt
      *  full step was not accepted. */
     Index count_successive_shortened_steps_;
 
-    /** Counter for the number of successive iterations in which the
-     *  nlp error was below the acceptable tolerance and a full step
-     *  was accepted. */
-    Index count_acceptable_iter_;
-
     /** Flag indicating if a tiny step was detected in previous
      *  iteration */
     bool tiny_step_last_iteration_;
 
+    /** @name Strategy objective that are used */
+    //@{
     SmartPtr<RestorationPhase> resto_phase_;
     SmartPtr<PDSystemSolver> pd_solver_;
+    SmartPtr<ConvergenceCheck> conv_check_;
+    //@}
   };
 
 } // namespace Ipopt

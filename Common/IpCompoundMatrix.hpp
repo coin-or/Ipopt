@@ -218,6 +218,12 @@ namespace Ipopt
     {
       return ncomps_cols_;
     }
+
+    /** True if the blocks lie on the diagonal - can make some operations faster */
+    bool Diagonal() const
+    {
+      return diagonal_;
+    }
     //@}
 
     /** Method for creating a new matrix of this specific type. */
@@ -270,6 +276,12 @@ namespace Ipopt
 
     /** Vector of the number of cols in each comp row */
     std::vector<Index> block_cols_;
+
+    /** true if the CompoundMatrixSpace only has Matrix spaces along the diagonal.
+     *  this means that the CompoundMatrix will only have matrices along the 
+     *  diagonal and it could make some operations more efficient
+     */
+    bool diagonal_;
 
     /** Auxilliary function for debugging to set if all block
      *  dimensions have been set. */

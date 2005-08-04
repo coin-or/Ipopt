@@ -36,6 +36,7 @@ namespace Ipopt
     enum ConvergenceStatus {
       CONTINUE,
       CONVERGED,
+      CONVERGED_TO_ACCEPTABLE_POINT,
       MAXITER_EXCEEDED,
       FAILED
     };
@@ -46,6 +47,13 @@ namespace Ipopt
 
     /** Pure virtual method for performing the convergence test */
     virtual ConvergenceStatus CheckConvergence()=0;
+
+    /** Method for testing if the current iterate is considered to
+     *  satisfy the "accptable level" of accuracy.  The idea is that
+     *  if the desired convergence tolerance cannot be achieved, the
+     *  algorithm might stop after a number of acceptable points have
+     *  been encountered. */
+    virtual bool CurrentIsAcceptable()=0;
 
   private:
     /**@name Default Compiler Generated Methods

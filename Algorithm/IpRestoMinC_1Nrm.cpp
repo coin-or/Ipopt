@@ -9,6 +9,7 @@
 #include "IpRestoMinC_1Nrm.hpp"
 #include "IpCompoundVector.hpp"
 #include "IpRestoIpoptNLP.hpp"
+#include "IpDefaultIterateInitializer.hpp"
 
 namespace Ipopt
 {
@@ -32,8 +33,26 @@ namespace Ipopt
 
   void MinC_1NrmRestorationPhase::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("bound_mult_init_max", "???",
-                                          0.0, false, 1e3);
+    roptions->AddLowerBoundedNumberOption(
+      "bound_mult_reset_threshold",
+      "Threshold for resetting bound multipliers after restoration phase.",
+      0.0, false,
+      1e3,
+      "After returning from the restoration phase, the bound multipliers are "
+      "updated with a Newton step for complementarity.  Here, the "
+      "change in the primal variables during the entire restoration "
+      "phase is taken to be the corresponding primal Newton step. "
+      "However, if after the update the largest bound multiplier "
+      "exceeds the threshold specified by this option, the multipliers "
+      "are all reset to 1.");
+    roptions->AddLowerBoundedNumberOption(
+      "constr_mult_reset_threshold",
+      "Threshold for resetting equality and inequality multipliers after restoration phase.",
+      0.0, false,
+      0e3,
+      "After returning from the restoration phase, the constraint multipliers "
+      "are recomputed by a least square estimate.  This option triggers when "
+      "those least-square esimates should be ignored.");
   }
 
   bool MinC_1NrmRestorationPhase::InitializeImpl(const OptionsList& options,
@@ -43,9 +62,20 @@ namespace Ipopt
     // restoration phase
     resto_options_ = new OptionsList(options);
 
-    options.GetNumericValue("constr_mult_init_max", constr_mult_init_max_, prefix);
-    options.GetNumericValue("bound_mult_init_max", bound_mult_init_max_, prefix);
-    options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
+    options.GetNumericValue("constr_mult_reset_threshold",
+                            constr_mult_reset_threshold_,
+                            prefix);
+    options.GetNumericValue("bound_mult_reset_threshold",
+                            bound_mult_reset_threshold_,
+                            prefix);
+    options.GetBoolValue("expect_infeasible_problem",
+                         expect_infeasible_problem_,
+                         prefix);
+
+    // ToDo take care of this somewhere else?  avoid that the
+    // restoration phase is trigged by user option in first iteration
+    // of the restoration phase
+    resto_options_->SetValue("resto.start_with_resto", "no");
 
     count_restorations_ = 0;
 
@@ -78,6 +108,9 @@ namespace Ipopt
     SmartPtr<IpoptCalculatedQuantities> resto_ip_cq =
       new IpoptCalculatedQuantities(resto_ip_nlp, resto_ip_data);
 
+    // Determine if this is a square problem
+    bool square_problem = IpCq().IsSquareProblem();
+
     // Decide if we want to use the original option or want to make
     // some changes
     SmartPtr<OptionsList> actual_resto_options = resto_options_;
@@ -86,7 +119,13 @@ namespace Ipopt
       // Ask for significant reduction of infeasibility, in the hope
       // that we do not return from the restoration phase is the
       // problem is infeasible
-      actual_resto_options->SetNumericValue("resto.kappa_resto", 1e-3);
+      actual_resto_options->SetNumericValue("resto.required_infeasibility_reduction", 1e-3);
+    }
+    else if(square_problem) {
+      actual_resto_options = new OptionsList(*resto_options_);
+      // If this is a square problem, the want the restoration phase
+      // never to be left until the problem is converged
+      actual_resto_options->SetNumericValue("resto.required_infeasibility_reduction", 0.);
     }
 
     // Initialize the restoration phase algorithm
@@ -103,11 +142,11 @@ namespace Ipopt
 
     // Call the optimization algorithm to solve the restoration phase
     // problem
-    IpoptAlgorithm::SolverReturn resto_status	= resto_alg_->Optimize();
+    SolverReturn resto_status	= resto_alg_->Optimize();
 
     int retval=-1;
 
-    if (resto_status == IpoptAlgorithm::SUCCESS) {
+    if (resto_status == SUCCESS) {
       if (Jnlst().ProduceOutput(J_DETAILED, J_LINE_SEARCH)) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "\nRESTORATION PHASE RESULTS\n");
@@ -137,24 +176,30 @@ namespace Ipopt
 
       retval = 0;
     }
-    else if (resto_status == IpoptAlgorithm::STOP_AT_TINY_STEP ||
-             resto_status == IpoptAlgorithm::STOP_AT_ACCEPTABLE_POINT) {
+    else if (resto_status == STOP_AT_TINY_STEP ||
+             resto_status == STOP_AT_ACCEPTABLE_POINT) {
       Number orig_primal_inf =
         IpCq().curr_primal_infeasibility(NORM_MAX);
       // ToDo make the factor in following line an option
       if (orig_primal_inf <= 1e2*IpData().tol()) {
-        THROW_EXCEPTION(RESTORATION_FAILED,
+        THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
                         "Restoration phase converged to a point with small primal infeasibility");
       }
       else {
-        THROW_EXCEPTION(LOCALLY_INFEASIBILE,
+        THROW_EXCEPTION(LOCALLY_INFEASIBLE,
                         "Restoration phase converged to a point of local infeasibility");
       }
     }
-    else if (resto_status == IpoptAlgorithm::MAXITER_EXCEEDED) {
-      //ToDo
+    else if (resto_status == MAXITER_EXCEEDED) {
       THROW_EXCEPTION(IpoptException, "Maximal number of iterations exceeded in restoration phase.");
       retval = 1;
+    }
+    else if (resto_status == LOCAL_INFEASIBILITY) {
+      // converged to locally infeasible point - pass this on to the outer algorithm...
+      THROW_EXCEPTION(LOCALLY_INFEASIBLE, "Restoration phase converged to a point of local infeasibility");
+    }
+    else if (resto_status == RESTORATION_FAILURE) {
+      THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase in the restoration phase failed.");
     }
     else {
       Jnlst().Printf(J_ERROR, J_MAIN, "Sorry, things failed ?!?!\n");
@@ -170,6 +215,15 @@ namespace Ipopt
       SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
       trial->Set_primal(*cx->GetComp(0), *resto_ip_data->curr()->s());
       IpData().set_trial(trial);
+
+      // If this is a square problem, we are done because a
+      // sufficiently feasible point has been found
+      if (square_problem) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "Recursive restoration phase algorithm termined successfully for square problem.\n");
+        IpData().AcceptTrialPoint();
+        THROW_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED, "Restoration phase converged to sufficiently feasible point of original square problem.");
+      }
 
       // Update the bound multiplers, pretending that the entire
       // progress in x and s in the restoration phase has been one
@@ -205,23 +259,13 @@ namespace Ipopt
 
       IpData().SetTrialBoundMultipliersFromStep(alpha_dual, *delta->z_L(), *delta->z_U(), *delta->v_L(), *delta->v_U() );
 
-#ifdef olddd
-      // DELETEME
-      // ToDo: For the bound multipliers, for now we just keep the
-      // current ones
-      IpData().SetTrialBoundMultipliersFromPtr(IpData().curr_z_L(),
-          IpData().curr_z_U(),
-          IpData().curr_v_L(),
-          IpData().curr_v_U());
-#endif
-
       // ToDo: Check what to do here:
       Number bound_mult_max = Max(IpData().trial()->z_L()->Amax(),
                                   IpData().trial()->z_U()->Amax(),
                                   IpData().trial()->v_L()->Amax(),
                                   IpData().trial()->v_U()->Amax());
-      trial = IpData().trial()->MakeNewContainer();
-      if (bound_mult_max > bound_mult_init_max_) {
+      if (bound_mult_max > bound_mult_reset_threshold_) {
+        trial = IpData().trial()->MakeNewContainer();
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "Bound multipliers after restoration phase too large (max=%8.2e). Set all to 1.\n",
                        bound_mult_max);
@@ -236,40 +280,10 @@ namespace Ipopt
         IpData().set_trial(trial);
 
       }
-      // Recompute the equality constraint multipliers as least square estimate
-      if (IsValid(eq_mult_calculator_) && constr_mult_init_max_>0.) {
-        // First move all the trial data into the current fields, since
-        // those values are needed to compute the initial values for
-        // the multipliers
-        IpData().CopyTrialToCurrent();
-        trial = IpData().trial()->MakeNewContainer();
-        SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
-        SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
-        bool retval = eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
-        if (!retval) {
-          y_c->Set(0.0);
-          y_d->Set(0.0);
-        }
-        else {
-          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                         "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
-                         y_c->Amax(), y_d->Amax());
-          Number y_init_nrm = Max(y_c->Amax(), y_d->Amax());
-          if (!retval || y_init_nrm > constr_mult_init_max_) {
-            y_c->Set(0.0);
-            y_d->Set(0.0);
-          }
-        }
-        trial->Set_eq_mult(*y_c, *y_d);
-      }
-      else {
-        SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
-        SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
-        y_c->Set(0.0);
-        y_d->Set(0.0);
-        trial->Set_eq_mult(*y_c, *y_d);
-      }
-      IpData().set_trial(trial);
+
+      DefaultIterateInitializer::least_square_mults(
+        Jnlst(), IpNLP(), IpData(), IpCq(),
+        eq_mult_calculator_, constr_mult_reset_threshold_);
 
       DBG_PRINT_VECTOR(2, "y_c", *IpData().curr()->y_c());
       DBG_PRINT_VECTOR(2, "y_d", *IpData().curr()->y_d());

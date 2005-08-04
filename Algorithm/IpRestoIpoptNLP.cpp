@@ -22,6 +22,8 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
+  DefineIpoptType(RestoIpoptNLP);
+
   RestoIpoptNLP::RestoIpoptNLP(IpoptNLP& orig_ip_nlp,
                                IpoptData& orig_ip_data,
                                IpoptCalculatedQuantities& orig_ip_cq)
@@ -30,20 +32,43 @@ namespace Ipopt
       orig_ip_nlp_(&orig_ip_nlp),
       orig_ip_data_(&orig_ip_data),
       orig_ip_cq_(&orig_ip_cq),
+      rho_(1000.),
       eta_factor_(1.0),
-      eta_mu_exponent_(0.5),
-      rho_(1000.)
+      eta_mu_exponent_(0.5)
   {}
 
   RestoIpoptNLP::~RestoIpoptNLP()
   {}
 
+  void RestoIpoptNLP::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddStringOption2(
+      "evaluate_orig_obj_at_resto_trial",
+      "Determines if the original objective function should be evalutated at restoration phase trial points.",
+      "yes",
+      "no", "skip evaluation",
+      "yes", "evaluate at every trial point",
+      "Setting this option to true makes the restoration phase algorithm "
+      "evaluate the objective function of the original problem at every trial "
+      "point encountered during the restoration phase, even if this value is "
+      "not required.  In this way, it is guaranteed that the original "
+      "objective function can be evaluated without error at all accepted "
+      "iterates; otherwise the algorithm might fail at a point where the "
+      "restoration phase accepts an iterate that is good for the restoration "
+      "phase problem, but not the original problem.  On the other hand, if "
+      "the evaluation of the original objective is expensive, this might be "
+      "costly.");
+  }
+
   bool RestoIpoptNLP::Initialize(const Journalist& jnlst,
                                  const OptionsList& options,
                                  const std::string& prefix)
   {
+    options.GetBoolValue("evaluate_orig_obj_at_resto_trial",
+                         evaluate_orig_obj_at_resto_trial_, prefix);
+
     initialized_ = true;
-    return true;
+    return IpoptNLP::Initialize(jnlst, options, prefix);
   }
 
   bool RestoIpoptNLP::InitializeStructures(SmartPtr<Vector>& x,
@@ -57,9 +82,7 @@ namespace Ipopt
       SmartPtr<Vector>& z_U,
       bool init_z_U,
       SmartPtr<Vector>& v_L,
-      bool init_v_L,
-      SmartPtr<Vector>& v_U,
-      bool init_v_U
+      SmartPtr<Vector>& v_U
                                           )
   {
     DBG_START_METH("RestoIpoptNLP::InitializeStructures", 0);
@@ -282,6 +305,21 @@ namespace Ipopt
     h_space_->SetCompSpace(0, 0, *sumsym_mat_space, true);
     // All remaining blocks are zero'ed out
 
+    SmartPtr<const MatrixSpace> scaled_jac_c_space;
+    SmartPtr<const MatrixSpace> scaled_jac_d_space;
+    SmartPtr<const SymMatrixSpace> scaled_h_space;
+    NLP_scaling()->DetermineScaling(GetRawPtr(x_space_),
+                                    c_space_, d_space_,
+                                    GetRawPtr(jac_c_space_),
+                                    GetRawPtr(jac_d_space_),
+                                    GetRawPtr(h_space_),
+                                    scaled_jac_c_space, scaled_jac_d_space,
+                                    scaled_h_space);
+    // For now we assume that no scaling is done inside the NLP_Scaling
+    DBG_ASSERT(scaled_jac_c_space == jac_c_space_);
+    DBG_ASSERT(scaled_jac_d_space == jac_d_space_);
+    DBG_ASSERT(scaled_h_space == h_space_);
+
     ///////////////////////////
     // Create the bound data //
     ///////////////////////////
@@ -412,6 +450,15 @@ namespace Ipopt
     ret2 = Eta(mu)/2.0*ret2*ret2;
 
     ret += ret2;
+
+    // We evaluate also the objective function for the original
+    // problem here.  This might be wasteful, but it will detect if
+    // the original objective function cannot be evaluated at the
+    // trial point in the restoration phase
+    if (evaluate_orig_obj_at_resto_trial_) {
+      /* Number orig_f = */ orig_ip_nlp_->f(*x_only);
+    }
+
     return ret;
   }
 

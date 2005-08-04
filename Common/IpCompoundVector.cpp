@@ -24,9 +24,9 @@ namespace Ipopt
   CompoundVector::CompoundVector(const CompoundVectorSpace* owner_space, bool create_new)
       :
       Vector(owner_space),
-      owner_space_(owner_space),
       comps_(owner_space->NCompSpaces()),
       const_comps_(owner_space->NCompSpaces()),
+      owner_space_(owner_space),
       vectors_valid_(false)
   {
     Index dim_check = 0;

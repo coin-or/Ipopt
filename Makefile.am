@@ -13,6 +13,7 @@ SUBDIRS = OTHERS Common LinAlgImpl Algorithm PDSystemImpl Apps
 IPALLLIBS = @IPALLLIBS@
 
 EXTRA_DIST = Interfaces/IpEqMultCalculator.hpp \
+	Interfaces/IpAlgTypes.hpp \
 	Interfaces/IpMatrix.hpp \
 	Interfaces/IpNLP.hpp \
 	Interfaces/IpPDSystemSolver.hpp \
@@ -57,6 +58,7 @@ cuter: install
 # Astyle stuff
 
 ASTYLE_FILES = Interfaces/IpEqMultCalculator.hppbak \
+	Interfaces/IpAlgTypes.hppbak \
 	Interfaces/IpMatrix.hppbak \
 	Interfaces/IpNLP.hppbak \
 	Interfaces/IpPDSystemSolver.hppbak \

@@ -8,6 +8,7 @@
 
 #include "IpRestoIterateInitializer.hpp"
 #include "IpRestoIpoptNLP.hpp"
+#include "IpDefaultIterateInitializer.hpp"
 
 namespace Ipopt
 {
@@ -23,7 +24,11 @@ namespace Ipopt
   bool RestoIterateInitializer::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    options.GetNumericValue("constr_mult_init_max", laminitmax_, prefix);
+    if (!options.GetNumericValue("constr_mult_init_max", constr_mult_init_max_, prefix)) {
+      // By default, we want to set this to zero. Seems to work better
+      // as initialization for the restoration phase
+      constr_mult_init_max_ = 0.;
+    }
 
     bool retvalue = true;
     if (IsValid(resto_eq_mult_calculator_)) {
@@ -69,7 +74,7 @@ namespace Ipopt
 
     // initialize the data structures in the restoration phase NLP
     IpData().InitializeDataStructures(IpNLP(), false, false, false,
-                                      false, false, false, false);
+                                      false, false);
 
     SmartPtr<Vector> new_x = IpData().curr()->x()->MakeNew();
     SmartPtr<CompoundVector> Cnew_x =
@@ -81,15 +86,19 @@ namespace Ipopt
     // Compute the initial values for the n and p variables for the
     // equality constraints
     Number rho = resto_ip_nlp->Rho();
+    DBG_PRINT((1,"rho = %e\n", rho));
     SmartPtr<Vector> nc = Cnew_x->GetCompNonConst(1);
     SmartPtr<Vector> pc = Cnew_x->GetCompNonConst(2);
     SmartPtr<const Vector> cvec = orig_ip_cq->curr_c();
+    DBG_PRINT_VECTOR(2, "cvec", *cvec);
     SmartPtr<Vector> a = nc->MakeNew();
     SmartPtr<Vector> b = nc->MakeNew();
     a->Set(resto_mu/(2.*rho));
     a->Axpy(-0.5, *cvec);
     b->Copy(*cvec);
     b->Scal(resto_mu/(2.*rho));
+    DBG_PRINT_VECTOR(2, "a", *a);
+    DBG_PRINT_VECTOR(2, "b", *b);
     solve_quadratic(*a, *b, *nc);
     pc->Copy(*cvec);
     pc->Axpy(1., *nc);
@@ -115,107 +124,6 @@ namespace Ipopt
 
     // Leave the slacks unchanged
     SmartPtr<const Vector> new_s = orig_ip_data->curr()->s();
-
-#ifdef orig
-    // The initial values for the inequality n and p variables are
-    // trickier, since only some constraints have both n and p
-    // variables.  If they don't have both, the slack takes the role
-    // of the missing one.
-    SmartPtr<const Vector> d_L = orig_ip_nlp->d_L();
-    SmartPtr<const Matrix> Pd_L = orig_ip_nlp->Pd_L();
-    SmartPtr<const Vector> d_U = orig_ip_nlp->d_U();
-    SmartPtr<const Matrix> Pd_U = orig_ip_nlp->Pd_U();
-    // compute indicator vectors, that are 1. for those entries in d
-    // that have only lower, only upper, or both bounds, respectively
-    SmartPtr<Vector> ind_only_L = orig_ip_data->curr()->y_d()->MakeNew();
-    SmartPtr<Vector> ind_only_U = orig_ip_data->curr()->y_d()->MakeNew();
-    SmartPtr<Vector> ind_both = orig_ip_data->curr()->y_d()->MakeNew();
-    SmartPtr<Vector> tmp = d_U->MakeNew();
-    tmp->Set(1.);
-    Pd_U->MultVector(1., *tmp, 0., *ind_only_U);
-    tmp = d_L->MakeNew();
-    tmp->Set(1.);
-    Pd_L->MultVector(1., *tmp, 0., *ind_only_L);
-    Pd_L->TransMultVector(1., *ind_only_U, 0., *tmp);
-    Pd_L->MultVector(1., *tmp, 0., *ind_both);
-    ind_only_L->Axpy(-1., *ind_both);
-    ind_only_U->Axpy(-1., *ind_both);
-    tmp = NULL; // free memory
-    DBG_PRINT_VECTOR(2, "ind_only_L", *ind_only_L);
-    DBG_PRINT_VECTOR(2, "ind_only_U", *ind_only_U);
-    DBG_PRINT_VECTOR(2, "ind_both", *ind_both);
-
-    // We now compute cvec to be
-    // a) d - s    for entries with both bounds
-    // b) d - d_L  for entries with only a lower bound
-    // c) d - d_U  for entries with only an upper bound
-    SmartPtr<Vector> cvec = ind_both->MakeNew();
-    cvec->Copy(*orig_ip_cq->curr_d());
-    DBG_PRINT_VECTOR(2,"orig d",*cvec);
-
-    // a)
-    SmartPtr<Vector> tmpfull = ind_both->MakeNew();
-    tmpfull->Copy(*orig_ip_data->curr()->s());
-    DBG_PRINT_VECTOR(1,"curr_s",*tmpfull);
-    tmpfull->ElementWiseMultiply(*ind_both);
-    DBG_PRINT_VECTOR(2,"s both",*tmpfull);
-    cvec->Axpy(-1., *tmpfull);
-    // b)
-    Pd_L->MultVector(1., *d_L, 0., *tmpfull);
-    tmpfull->ElementWiseMultiply(*ind_only_L);
-    DBG_PRINT_VECTOR(2,"d_L only lower",*tmpfull);
-    cvec->Axpy(-1., *tmpfull);
-    // c)
-    Pd_U->MultVector(1., *d_U, 0., *tmpfull);
-    tmpfull->ElementWiseMultiply(*ind_only_U);
-    DBG_PRINT_VECTOR(2,"d_U only upper",*tmpfull);
-    cvec->Axpy(-1., *tmpfull);
-
-    // now set up coefficients for the quadratic equation and solve it
-    b = cvec->MakeNew();
-    b->Set(1.);
-    b->Axpy(1., *ind_both);
-    b->ElementWiseReciprocal();
-    b->Scal(resto_mu/rho);
-    DBG_PRINT_VECTOR(1, "b2", *b);
-    // now, b is resto_mu/rho for all entries with only one bound, and
-    // resto_mu/(2rho) for all entries with two bounds
-    a = cvec->MakeNew();
-    a->Copy(*cvec);
-    a->Scal(-0.5);
-    a->Axpy(1., *b);
-    b->ElementWiseMultiply(*cvec);
-    solve_quadratic(*a, *b, *tmpfull);
-    SmartPtr<Vector> tmpfull2 = tmpfull->MakeNew();
-    tmpfull2->Copy(*cvec);
-    tmpfull2->Axpy(1., *tmpfull);
-    SmartPtr<Vector> nd = Cnew_x->GetCompNonConst(3);
-    SmartPtr<Vector> pd = Cnew_x->GetCompNonConst(4);
-    Pd_L->TransMultVector(1., *tmpfull, 0., *nd);
-    Pd_U->TransMultVector(1., *tmpfull2, 0., *pd);
-    DBG_PRINT_VECTOR(2,"nfull",*tmpfull);
-    DBG_PRINT_VECTOR(2,"pfull",*tmpfull2);
-    DBG_PRINT_VECTOR(2,"new nd",*nd);
-    DBG_PRINT_VECTOR(2,"new pd",*pd);
-
-    // the new values for the slacks is takes as
-    // a) keep for those entries that have two bounds
-    // b) set to pfull + d_L for those with only lower bounds
-    // c) set to d_u - nfull for those with only upper bounds
-    SmartPtr<Vector> new_s = IpData().curr()->s()->MakeNew();
-    // a)
-    new_s->Copy(*orig_ip_data->curr()->s());
-    DBG_PRINT_VECTOR(2, "curr_s", *new_s);
-    new_s->ElementWiseMultiply(*ind_both);
-    // b)
-    Pd_L->MultVector(1., *d_L, 1., *tmpfull2);
-    tmpfull2->ElementWiseMultiply(*ind_only_L);
-    new_s->Axpy(1., *tmpfull2);
-    // c)
-    Pd_U->MultVector(1., *d_U, -1., *tmpfull);
-    tmpfull->ElementWiseMultiply(*ind_only_U);
-    new_s->Axpy(1., *tmpfull);
-#endif
 
     // Now set the primal trial variables
     DBG_PRINT_VECTOR(2,"new_s",*new_s);
@@ -280,40 +188,9 @@ namespace Ipopt
     //           Initialize equality constraint multipliers            //
     /////////////////////////////////////////////////////////////////////
 
-    if (IsValid(resto_eq_mult_calculator_) && laminitmax_>0.) {
-      // First move all the trial data into the current fields, since
-      // those values are needed to compute the initial values for
-      // the multipliers
-      IpData().CopyTrialToCurrent();
-      trial = IpData().trial()->MakeNewContainer();
-      SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
-      SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
-      bool retval = resto_eq_mult_calculator_->CalculateMultipliers(*y_c, *y_d);
-      if (!retval) {
-        y_c->Set(0.0);
-        y_d->Set(0.0);
-      }
-      else {
-        Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
-                       "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
-                       y_c->Amax(), y_d->Amax());
-        Number laminitnrm = Max(y_c->Amax(), y_d->Amax());
-        if (laminitnrm > laminitmax_) {
-          y_c->Set(0.0);
-          y_d->Set(0.0);
-        }
-      }
-      trial->Set_eq_mult(*y_c, *y_d);
-    }
-    else {
-      SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
-      SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
-      y_c->Set(0.0);
-      y_d->Set(0.0);
-      trial->Set_eq_mult(*y_c, *y_d);
-    }
-    // update the new multipliers
-    IpData().set_trial(trial);
+    DefaultIterateInitializer::least_square_mults(
+      Jnlst(), IpNLP(), IpData(), IpCq(),
+      resto_eq_mult_calculator_, constr_mult_init_max_);
 
     // upgrade the trial to the current point
     IpData().AcceptTrialPoint();

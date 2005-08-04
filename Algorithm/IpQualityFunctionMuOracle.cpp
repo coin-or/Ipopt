@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpOptProbingMuOracle.cpp 321 2005-06-20 21:53:55Z andreasw $
+// $Id$
 //
 // Authors:  Andreas Waechter            IBM    2004-11-12
 
@@ -42,10 +42,7 @@ namespace Ipopt
       tmp_z_L_(NULL),
       tmp_z_U_(NULL),
       tmp_v_L_(NULL),
-      tmp_v_U_(NULL),
-
-      tmp_dual_inf_x_(NULL),
-      tmp_dual_inf_s_(NULL)
+      tmp_v_U_(NULL)
   {
     DBG_ASSERT(IsValid(pd_solver_));
   }
@@ -55,36 +52,47 @@ namespace Ipopt
 
   void QualityFunctionMuOracle::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("sigma_max", "???",
-                                          0.0, true, 1e2);
-    roptions->AddStringOption4("quality_function_norm_type", "norm to be used for the quality function", "2-norm-squared",
-                               "1-norm", "use the 1-norm (abs sum)",
-                               "2-norm-squared", "use the 2-norm squared (sum of squares)",
-                               "max-norm", "use the infinity norm (max)",
-                               "2-norm", "use 2-norm");
-    roptions->AddStringOption2("quality_function_normalized", "set whether or not the quality function should be normalized", "no",
-                               "no", "do not normalize the quality function",
-                               "yes", "normalize the quality function");
-    roptions->AddStringOption4("quality_function_centrality", "???", "none",
-                               "none", "???",
-                               "log", "compute the centrality as the complementarity * the log of the centrality measure",
-                               "reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure",
-                               "cubed-reciprocal", "compute the centrality as the complementarity * the reciprocal of the centrality measure cubed");
-    roptions->AddStringOption2("quality_function_dual_inf", "???", "type-1",
-                               "type-1", "???",
-                               "type-2", "???");
-    roptions->AddStringOption2("quality_function_balancing_term", "???", "none",
-                               "none", "no balancing term",
-                               "standard", "standard cubic balancing term");
-    roptions->AddLowerBoundedIntegerOption("max_bisection_steps", "No Range given before...", 0, 4);
-
-
-    roptions->AddBoundedNumberOption("bisection_tol", "tolerance for the bisection step length search",
-                                     0.0, true, 1.0, true, 1e-3);
-    roptions->AddStringOption2("dual_alpha_for_y", "???", "no",
-                               "no", "???",
-                               "yes", "???");
-
+    roptions->AddLowerBoundedNumberOption(
+      "sigma_max",
+      "Maximal value of centering parameter.",
+      0.0, true, 1e2);
+    roptions->AddStringOption4(
+      "quality_function_norm_type",
+      "Norm used for components of the quality function.",
+      "2-norm-squared",
+      "1-norm", "use the 1-norm (abs sum)",
+      "2-norm-squared", "use the 2-norm squared (sum of squares)",
+      "max-norm", "use the infinity norm (max)",
+      "2-norm", "use 2-norm");
+    roptions->AddStringOption4(
+      "quality_function_centrality",
+      "Determines whether a penalty term for centrality is included quality function.",
+      "none",
+      "none", "no penalty term is added",
+      "log", "complementarity * the log of the centrality measure",
+      "reciprocal", "complementarity * the reciprocal of the centrality measure",
+      "cubed-reciprocal", "complementarity * the reciprocal of the centrality measure cubed",
+      "This determines whether a term penalizing deviation from centrality "
+      "with respect to complementarity is added the quality function.  The "
+      "complementarity measure here is the xi in the Loqo update rule.");
+    roptions->AddStringOption2(
+      "quality_function_balancing_term",
+      "Determines whether a balancing term for centrality is included in quality function.",
+      "none",
+      "none", "no balancing term is added",
+      "cubic", "Max(0,Max(dual_ing,primal_inf)-compl)^3",
+      "This determines whether a term penalizing stuations there the "
+      "complementality is much smaller than dual and primal "
+      "infeasibilities is added to the quality function.");
+    roptions->AddLowerBoundedIntegerOption(
+      "max_bisection_steps",
+      "Maximal number of search steps during direct search procedure determining optimal centering parameter.",
+      0, 4);
+    roptions->AddBoundedNumberOption(
+      "bisection_tol",
+      "Tolerance for the bisection search procedure determining optimal centering parameter.",
+      0.0, true, 1.0, true,
+      1e-3);
   }
 
 
@@ -96,31 +104,13 @@ namespace Ipopt
     options.GetNumericValue("sigma_max", sigma_max_, prefix);
 
     options.GetEnumValue("quality_function_norm_type", enum_int, prefix);
-    quality_function_norm_ = NonmonotoneMuUpdate::NormEnum(enum_int);
-    options.GetBoolValue("quality_function_normalized", quality_function_normalized_, prefix);
+    quality_function_norm_ = NormEnum(enum_int);
     options.GetEnumValue("quality_function_centrality", enum_int, prefix);
-    quality_function_centrality_ = NonmonotoneMuUpdate::CentralityEnum(enum_int);
-    options.GetEnumValue("quality_function_dual_inf", enum_int, prefix);
-    quality_function_dual_inf_ = QualityFunctionDualInfeasibilityTypeEnum(enum_int);
+    quality_function_centrality_ = CentralityEnum(enum_int);
     options.GetEnumValue("quality_function_balancing_term", enum_int, prefix);
-    quality_function_balancing_term_ = NonmonotoneMuUpdate::BalancingTermEnum(enum_int);
+    quality_function_balancing_term_ = BalancingTermEnum(enum_int);
     options.GetIntegerValue("max_bisection_steps", max_bisection_steps_, prefix);
     options.GetNumericValue("bisection_tol", bisection_tol_, prefix);
-
-    if (quality_function_normalized_) {
-      // Set the scaling values to a negative value to indicate that
-      // they still have to be determined
-      dual_inf_scal_ = -1.;
-      primal_inf_scal_ = -1.;
-      compl_inf_scal_ = -1.;
-    }
-    else {
-      dual_inf_scal_ = 1.;
-      primal_inf_scal_ = 1.;
-      compl_inf_scal_ = 1.;
-    }
-
-    options.GetBoolValue("dual_alpha_for_y", dual_alpha_for_y_, prefix);
 
     return true;
   }
@@ -151,11 +141,6 @@ namespace Ipopt
     tmp_z_U_ = IpNLP().x_U()->MakeNew();
     tmp_v_L_ = IpNLP().d_L()->MakeNew();
     tmp_v_U_ = IpNLP().d_U()->MakeNew();
-
-    if (quality_function_dual_inf_==TYPE2) {
-      tmp_dual_inf_x_ = IpCq().curr_grad_lag_x()->MakeNew();
-      tmp_dual_inf_s_ = IpCq().curr_grad_lag_s()->MakeNew();
-    }
 
     /////////////////////////////////////
     // Compute the affine scaling step //
@@ -199,10 +184,12 @@ namespace Ipopt
                    "Solving the Primal Dual System for the centering step\n");
     // First get the right hand side
     SmartPtr<IteratesVector> rhs_cen = IpData().curr()->MakeNewIteratesVector(true);
-    rhs_cen->x_NonConst()->Copy(*IpCq().grad_kappa_times_damping_x());
-    rhs_cen->x_NonConst()->Scal(-avrg_compl);
-    rhs_cen->s_NonConst()->Copy(*IpCq().grad_kappa_times_damping_s());
-    rhs_cen->s_NonConst()->Scal(-avrg_compl);
+    rhs_cen->x_NonConst()->AddOneVector(-avrg_compl,
+                                        *IpCq().grad_kappa_times_damping_x(),
+                                        0.);
+    rhs_cen->s_NonConst()->AddOneVector(-avrg_compl,
+                                        *IpCq().grad_kappa_times_damping_s(),
+                                        0.);
 
     rhs_cen->y_c_NonConst()->Set(0.);
     rhs_cen->y_d_NonConst()->Set(0.);
@@ -211,7 +198,7 @@ namespace Ipopt
     rhs_cen->v_L_NonConst()->Set(avrg_compl);
     rhs_cen->v_U_NonConst()->Set(avrg_compl);
 
-    // Get space for the affine scaling step
+    // Get space for the centering step
     SmartPtr<IteratesVector> step_cen = IpData().curr()->MakeNewIteratesVector(true);
 
     // Now solve the primal-dual system to get the step
@@ -246,18 +233,6 @@ namespace Ipopt
     IpNLP().Pd_L()->TransMultVector(1., *step_cen->s(), 0., *step_cen_s_L);
     IpNLP().Pd_U()->TransMultVector(-1., *step_cen->s(), 0., *step_cen_s_U);
 
-    // If necessary, compute some products with the constraint Jacobian
-    SmartPtr<const Vector> jac_cT_times_step_aff_y_c;
-    SmartPtr<const Vector> jac_dT_times_step_aff_y_d;
-    SmartPtr<const Vector> jac_cT_times_step_cen_y_c;
-    SmartPtr<const Vector> jac_dT_times_step_cen_y_d;
-    if (quality_function_dual_inf_==TYPE2 && dual_alpha_for_y_) {
-      jac_cT_times_step_aff_y_c = IpCq().curr_jac_cT_times_vec(*step_aff->y_c());
-      jac_dT_times_step_aff_y_d = IpCq().curr_jac_dT_times_vec(*step_aff->y_d());
-      jac_cT_times_step_cen_y_c = IpCq().curr_jac_cT_times_vec(*step_cen->y_c());
-      jac_dT_times_step_cen_y_d = IpCq().curr_jac_dT_times_vec(*step_cen->y_d());
-    }
-
     Number sigma;
     if (max_bisection_steps_>0) {
       // Now we do an search for the best centering parameter, that
@@ -267,6 +242,7 @@ namespace Ipopt
       Number sigma_up = Min(1., sigma_max_);
       Number sigma_lo = 1e-9/avrg_compl;
       sigma = PerformGoldenBisection(sigma_up, sigma_lo, bisection_tol_,
+                                     //sigma = PerformGoldenBisectionLog(sigma_up, sigma_lo, bisection_tol_,
                                      *step_aff_x_L,
                                      *step_aff_x_U,
                                      *step_aff_s_L,
@@ -286,17 +262,14 @@ namespace Ipopt
                                      *step_cen->z_L(),
                                      *step_cen->z_U(),
                                      *step_cen->v_L(),
-                                     *step_cen->v_U(),
-                                     jac_cT_times_step_aff_y_c,
-                                     jac_dT_times_step_aff_y_d,
-                                     jac_cT_times_step_cen_y_c,
-                                     jac_dT_times_step_cen_y_d);
+                                     *step_cen->v_U());
 
       if (sigma_max_ > 1. && sigma >= 1.-2*bisection_tol_) {
         // It seems that the optimal value might be larger than one.
         sigma_up = sigma_max_;
         sigma_lo = sigma;
         sigma = PerformGoldenBisection(sigma_up, sigma_lo, bisection_tol_,
+                                       //sigma = PerformGoldenBisectionLog(sigma_up, sigma_lo, bisection_tol_,
                                        *step_aff_x_L,
                                        *step_aff_x_U,
                                        *step_aff_s_L,
@@ -316,11 +289,7 @@ namespace Ipopt
                                        *step_cen->z_L(),
                                        *step_cen->z_U(),
                                        *step_cen->v_L(),
-                                       *step_cen->v_U(),
-                                       jac_cT_times_step_aff_y_c,
-                                       jac_dT_times_step_aff_y_d,
-                                       jac_cT_times_step_cen_y_c,
-                                       jac_dT_times_step_cen_y_d);
+                                       *step_cen->v_U());
       }
 
       //#define tracequalityfunction
@@ -351,11 +320,7 @@ namespace Ipopt
                                  *step_cen->z_L(),
                                  *step_cen->z_U(),
                                  *step_cen->v_L(),
-                                 *step_cen->v_U(),
-                                 jac_cT_times_step_aff_y_c,
-                                 jac_dT_times_step_aff_y_d,
-                                 jac_cT_times_step_cen_y_c,
-                                 jac_dT_times_step_cen_y_d);
+                                 *step_cen->v_U());
       }
 #endif
 
@@ -389,11 +354,7 @@ namespace Ipopt
                                         *step_cen->z_L(),
                                         *step_cen->z_U(),
                                         *step_cen->v_L(),
-                                        *step_cen->v_U(),
-                                        jac_cT_times_step_aff_y_c,
-                                        jac_dT_times_step_aff_y_d,
-                                        jac_cT_times_step_cen_y_c,
-                                        jac_dT_times_step_cen_y_d);
+                                        *step_cen->v_U());
       Index l_min = (Index)(-(log(avrg_compl)-log(1e-9))/log(base))-1;
       for (; l>=l_min; l--) {
         sigma = pow(base, l);
@@ -417,11 +378,7 @@ namespace Ipopt
                                             *step_cen->z_L(),
                                             *step_cen->z_U(),
                                             *step_cen->v_L(),
-                                            *step_cen->v_U(),
-                                            jac_cT_times_step_aff_y_c,
-                                            jac_dT_times_step_aff_y_d,
-                                            jac_cT_times_step_cen_y_c,
-                                            jac_dT_times_step_cen_y_d);
+                                            *step_cen->v_U());
         if (q<=q_best) {
           q_best = q;
           l_best = l;
@@ -469,11 +426,6 @@ namespace Ipopt
     tmp_v_L_ = NULL;
     tmp_v_U_ = NULL;
 
-    if (quality_function_dual_inf_==TYPE2) {
-      tmp_dual_inf_x_ = NULL;
-      tmp_dual_inf_s_ = NULL;
-    }
-
     // DELETEME
     char ssigma[40];
     sprintf(ssigma, " sigma=%8.2e", sigma);
@@ -508,11 +460,7 @@ namespace Ipopt
    const Vector& step_cen_z_L,
    const Vector& step_cen_z_U,
    const Vector& step_cen_v_L,
-   const Vector& step_cen_v_U,
-   SmartPtr<const Vector> jac_cT_times_step_aff_y_c,
-   SmartPtr<const Vector> jac_dT_times_step_aff_y_d,
-   SmartPtr<const Vector> jac_cT_times_step_cen_y_c,
-   SmartPtr<const Vector> jac_dT_times_step_cen_y_d
+   const Vector& step_cen_v_U
   )
   {
     DBG_START_METH("QualityFunctionMuOracle::CalculateQualityFunction",
@@ -522,66 +470,6 @@ namespace Ipopt
     Index n_pri = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
     Index n_comp = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() +
                    IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim();
-
-    // The scaling values have not yet been determined, compute them now
-    if (dual_inf_scal_ < 0.) {
-      // DELETEME
-      assert(false && "Scaling in quality function not supported.");
-      DBG_ASSERT(primal_inf_scal_ < 0.);
-      DBG_ASSERT(compl_inf_scal_ < 0.);
-
-      switch (quality_function_norm_) {
-        case NonmonotoneMuUpdate::NM_NORM_1:
-        dual_inf_scal_ = Max(1., IpCq().curr_grad_lag_x()->Asum() +
-                             IpCq().curr_grad_lag_s()->Asum());
-
-        primal_inf_scal_ = Max(1., IpCq().curr_c()->Asum() +
-                               IpCq().curr_d_minus_s()->Asum());
-
-        compl_inf_scal_ = Max(1., IpCq().curr_compl_x_L()->Asum() +
-                              IpCq().curr_compl_x_U()->Asum() +
-                              IpCq().curr_compl_s_L()->Asum() +
-                              IpCq().curr_compl_s_U()->Asum());
-
-        dual_inf_scal_ /= n_dual;
-        if (n_pri>0) {
-          primal_inf_scal_ /= n_pri;
-        }
-        DBG_ASSERT(n_comp>0);
-        compl_inf_scal_ /= n_comp;
-        break;
-        case NonmonotoneMuUpdate::NM_NORM_2_SQUARED:
-        dual_inf_scal_ = Max(1., pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
-                             pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
-
-        primal_inf_scal_ = Max(1., pow(IpCq().curr_c()->Nrm2(), 2) +
-                               pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
-
-        compl_inf_scal_ = Max(1., pow(IpCq().curr_compl_x_L()->Nrm2(), 2) +
-                              pow(IpCq().curr_compl_x_U()->Nrm2(), 2) +
-                              pow(IpCq().curr_compl_s_L()->Nrm2(), 2) +
-                              pow(IpCq().curr_compl_s_U()->Nrm2(), 2));
-
-        dual_inf_scal_ /= n_dual;
-        if (n_pri>0) {
-          primal_inf_scal_ /= n_pri;
-        }
-        DBG_ASSERT(n_comp>0);
-        compl_inf_scal_ /= n_comp;
-        break;
-        case NonmonotoneMuUpdate::NM_NORM_MAX:
-        dual_inf_scal_ = Max(1., IpCq().curr_grad_lag_x()->Amax(),
-                             IpCq().curr_grad_lag_s()->Amax());
-
-        primal_inf_scal_ = Max(1., IpCq().curr_c()->Amax(),
-                               IpCq().curr_d_minus_s()->Amax());
-
-        compl_inf_scal_ = Max(1., Max(IpCq().curr_compl_x_L()->Amax(),
-                                      IpCq().curr_compl_x_U()->Amax(),
-                                      IpCq().curr_compl_s_L()->Amax(),
-                                      IpCq().curr_compl_s_U()->Amax()));
-      }
-    }
 
     tmp_step_x_L_->AddTwoVectors(1., step_aff_x_L, sigma, step_cen_x_L, 0.);
     tmp_step_x_U_->AddTwoVectors(1., step_aff_x_U, sigma, step_cen_x_U, 0.);
@@ -593,8 +481,6 @@ namespace Ipopt
     tmp_step_v_U_->AddTwoVectors(1., step_aff_v_U, sigma, step_cen_v_U, 0.);
 
     // Compute the fraction-to-the-boundary step sizes
-    // ToDo make sure we use the correct tau
-    //Number tau = 0.99;
     Number tau = IpData().curr_tau();
     Number alpha_primal = IpCq().slack_frac_to_the_bound(tau,
                           *tmp_step_x_L_,
@@ -607,15 +493,6 @@ namespace Ipopt
                         *tmp_step_z_U_,
                         *tmp_step_v_L_,
                         *tmp_step_v_U_);
-
-    if (false) {
-      if (alpha_dual < alpha_primal) {
-        alpha_primal = alpha_dual;
-      }
-      else {
-        alpha_dual = alpha_primal;
-      }
-    }
 
     Number xi; // centrality measure
 
@@ -654,44 +531,10 @@ namespace Ipopt
     Number primal_inf;
     Number compl_inf;
 
-    if (quality_function_dual_inf_==TYPE2) {
-      tmp_dual_inf_x_->AddOneVector(1.-alpha_primal,
-                                    *IpCq().curr_grad_lag_x(), 0.);
-      tmp_dual_inf_s_->AddOneVector(1.-alpha_primal,
-                                    *IpCq().curr_grad_lag_s(), 0.);
-      IpNLP().Px_L()->MultVector(alpha_primal-alpha_dual,
-                                 *tmp_step_z_L_, 1., *tmp_dual_inf_x_);
-      IpNLP().Px_U()->MultVector(-alpha_primal+alpha_dual,
-                                 *tmp_step_z_U_, 1., *tmp_dual_inf_x_);
-      IpNLP().Pd_L()->MultVector(alpha_primal-alpha_dual,
-                                 *tmp_step_v_L_, 1., *tmp_dual_inf_s_);
-      IpNLP().Pd_U()->MultVector(-alpha_primal+alpha_dual,
-                                 *tmp_step_v_U_, 1., *tmp_dual_inf_s_);
-      if (dual_alpha_for_y_) {
-        tmp_dual_inf_x_->AddTwoVectors(alpha_dual-alpha_primal,
-                                       *jac_cT_times_step_aff_y_c,
-                                       sigma*(alpha_dual-alpha_primal),
-                                       *jac_cT_times_step_cen_y_c, 1.);
-        tmp_dual_inf_x_->AddTwoVectors(alpha_dual-alpha_primal,
-                                       *jac_dT_times_step_aff_y_d,
-                                       sigma*(alpha_dual-alpha_primal),
-                                       *jac_dT_times_step_cen_y_d, 1.);
-        tmp_dual_inf_s_->AddTwoVectors(alpha_primal-alpha_dual,
-                                       step_aff_y_d,
-                                       sigma*(alpha_primal-alpha_dual),
-                                       step_cen_y_d, 1.);
-      }
-    }
-
     switch (quality_function_norm_) {
-      case NonmonotoneMuUpdate::NM_NORM_1:
-      if (quality_function_dual_inf_==TYPE2) {
-        dual_inf = tmp_dual_inf_x_->Asum() + tmp_dual_inf_s_->Asum();
-      }
-      else {
-        dual_inf = (1.-alpha_dual)*(IpCq().curr_grad_lag_x()->Asum() +
-                                    IpCq().curr_grad_lag_s()->Asum());
-      }
+      case NM_NORM_1:
+      dual_inf = (1.-alpha_dual)*(IpCq().curr_grad_lag_x()->Asum() +
+                                  IpCq().curr_grad_lag_s()->Asum());
 
       primal_inf = (1.-alpha_primal)*(IpCq().curr_c()->Asum() +
                                       IpCq().curr_d_minus_s()->Asum());
@@ -706,15 +549,10 @@ namespace Ipopt
       DBG_ASSERT(n_comp>0);
       compl_inf /= n_comp;
       break;
-      case NonmonotoneMuUpdate::NM_NORM_2_SQUARED:
-      if (quality_function_dual_inf_==TYPE2) {
-        dual_inf = pow(tmp_dual_inf_x_->Nrm2(), 2) + pow(tmp_dual_inf_s_->Nrm2(), 2);
-      }
-      else {
-        dual_inf =
-          pow(1.-alpha_dual, 2)*(pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
-                                 pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
-      }
+      case NM_NORM_2_SQUARED:
+      dual_inf =
+        pow(1.-alpha_dual, 2)*(pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
+                               pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
       primal_inf =
         pow(1.-alpha_primal, 2)*(pow(IpCq().curr_c()->Nrm2(), 2) +
                                  pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
@@ -729,34 +567,24 @@ namespace Ipopt
       DBG_ASSERT(n_comp>0);
       compl_inf /= n_comp;
       break;
-      case NonmonotoneMuUpdate::NM_NORM_MAX:
-      if (quality_function_dual_inf_==TYPE2) {
-        dual_inf = Max(tmp_dual_inf_x_->Amax(), tmp_dual_inf_s_->Amax());
-      }
-      else {
-        dual_inf =
-          (1.-alpha_dual)*Max(IpCq().curr_grad_lag_x()->Amax(),
-                              IpCq().curr_grad_lag_s()->Amax());
-      }
+      case NM_NORM_MAX:
+      dual_inf =
+        (1.-alpha_dual)*Max(IpCq().curr_grad_lag_x()->Amax(),
+                            IpCq().curr_grad_lag_s()->Amax());
       primal_inf =
-        (1.-alpha_primal, 2)*Max(IpCq().curr_c()->Amax(),
-                                 IpCq().curr_d_minus_s()->Amax());
+        (1.-alpha_primal)*Max(IpCq().curr_c()->Amax(),
+                              IpCq().curr_d_minus_s()->Amax());
       compl_inf =
         Max(tmp_slack_x_L_->Amax(), tmp_slack_x_U_->Amax(),
             tmp_slack_s_L_->Amax(), tmp_slack_s_U_->Amax());
       break;
-      case NonmonotoneMuUpdate::NM_NORM_2:
-      if (quality_function_dual_inf_==TYPE2) {
-        dual_inf = sqrt(pow(tmp_dual_inf_x_->Nrm2(), 2) + pow(tmp_dual_inf_s_->Nrm2(), 2));
-      }
-      else {
-        dual_inf =
-          (1.-alpha_dual)*sqrt(pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
-                               pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
-      }
+      case NM_NORM_2:
+      dual_inf =
+        (1.-alpha_dual)*sqrt(pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
+                             pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
       primal_inf =
-        (1.-alpha_primal, 2)*sqrt(pow(IpCq().curr_c()->Nrm2(), 2) +
-                                  pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
+        (1.-alpha_primal)*sqrt(pow(IpCq().curr_c()->Nrm2(), 2) +
+                               pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
       compl_inf =
         sqrt(pow(tmp_slack_x_L_->Nrm2(), 2) + pow(tmp_slack_x_U_->Nrm2(), 2) +
              pow(tmp_slack_s_L_->Nrm2(), 2) + pow(tmp_slack_s_U_->Nrm2(), 2));
@@ -772,23 +600,18 @@ namespace Ipopt
       DBG_ASSERT(false && "Unknown value for quality_function_norm_");
     }
 
-    // Scale the quantities
-    dual_inf /= dual_inf_scal_;
-    primal_inf /= primal_inf_scal_;
-    compl_inf /= compl_inf_scal_;
-
     Number quality_function = dual_inf + primal_inf + compl_inf;
 
     switch (quality_function_centrality_) {
-      case NonmonotoneMuUpdate::CEN_NONE:
+      case CEN_NONE:
       //Nothing
       break;
-      case NonmonotoneMuUpdate::CEN_LOG:
+      case CEN_LOG:
       quality_function -= compl_inf*log(xi);
       break;
-      case NonmonotoneMuUpdate::CEN_RECIPROCAL:
+      case CEN_RECIPROCAL:
       quality_function += compl_inf/xi;
-      case NonmonotoneMuUpdate::CEN_CUBED_RECIPROCAL:
+      case CEN_CUBED_RECIPROCAL:
       quality_function += compl_inf/pow(xi,3);
       break;
       default:
@@ -796,10 +619,10 @@ namespace Ipopt
     }
 
     switch (quality_function_balancing_term_) {
-      case NonmonotoneMuUpdate::BT_NONE:
+      case BT_NONE:
       //Nothing
       break;
-      case NonmonotoneMuUpdate::BT_CUBIC:
+      case BT_CUBIC:
       quality_function += pow(Max(0., Max(dual_inf,primal_inf)-compl_inf),3);
       break;
       default:
@@ -838,11 +661,7 @@ namespace Ipopt
    const Vector& step_cen_z_L,
    const Vector& step_cen_z_U,
    const Vector& step_cen_v_L,
-   const Vector& step_cen_v_U,
-   SmartPtr<const Vector> jac_cT_times_step_aff_y_c,
-   SmartPtr<const Vector> jac_dT_times_step_aff_y_d,
-   SmartPtr<const Vector> jac_cT_times_step_cen_y_c,
-   SmartPtr<const Vector> jac_dT_times_step_cen_y_d
+   const Vector& step_cen_v_U
   )
   {
     Number sigma;
@@ -872,11 +691,7 @@ namespace Ipopt
                                             step_cen_z_L,
                                             step_cen_z_U,
                                             step_cen_v_L,
-                                            step_cen_v_U,
-                                            jac_cT_times_step_aff_y_c,
-                                            jac_dT_times_step_aff_y_d,
-                                            jac_cT_times_step_cen_y_c,
-                                            jac_dT_times_step_cen_y_d);
+                                            step_cen_v_U);
     Number qmid2 = CalculateQualityFunction(sigma_mid2,
                                             step_aff_x_L,
                                             step_aff_x_U,
@@ -897,15 +712,10 @@ namespace Ipopt
                                             step_cen_z_L,
                                             step_cen_z_U,
                                             step_cen_v_L,
-                                            step_cen_v_U,
-                                            jac_cT_times_step_aff_y_c,
-                                            jac_dT_times_step_aff_y_d,
-                                            jac_cT_times_step_cen_y_c,
-                                            jac_dT_times_step_cen_y_d);
+                                            step_cen_v_U);
 
     Index nbisections = 0;
     while ((sigma_up-sigma_lo)>=tol*sigma_up && nbisections<max_bisection_steps_) {
-      //      printf("lo = %e mid1 = %e mid2 = %e up = %e\n",sigma_lo,sigma_mid1,sigma_mid2,sigma_up);
       nbisections++;
       if (qmid1 > qmid2) {
         sigma_lo = sigma_mid1;
@@ -932,11 +742,7 @@ namespace Ipopt
                                          step_cen_z_L,
                                          step_cen_z_U,
                                          step_cen_v_L,
-                                         step_cen_v_U,
-                                         jac_cT_times_step_aff_y_c,
-                                         jac_dT_times_step_aff_y_d,
-                                         jac_cT_times_step_cen_y_c,
-                                         jac_dT_times_step_cen_y_d);
+                                         step_cen_v_U);
       }
       else {
         sigma_up = sigma_mid2;
@@ -963,11 +769,7 @@ namespace Ipopt
                                          step_cen_z_L,
                                          step_cen_z_U,
                                          step_cen_v_L,
-                                         step_cen_v_U,
-                                         jac_cT_times_step_aff_y_c,
-                                         jac_dT_times_step_aff_y_d,
-                                         jac_cT_times_step_cen_y_c,
-                                         jac_dT_times_step_cen_y_d);
+                                         step_cen_v_U);
       }
     }
 
@@ -1001,11 +803,7 @@ namespace Ipopt
                                              step_cen_z_L,
                                              step_cen_z_U,
                                              step_cen_v_L,
-                                             step_cen_v_U,
-                                             jac_cT_times_step_aff_y_c,
-                                             jac_dT_times_step_aff_y_d,
-                                             jac_cT_times_step_cen_y_c,
-                                             jac_dT_times_step_cen_y_d);
+                                             step_cen_v_U);
       if (qtmp < q) {
         sigma = sigma_up;
         q = qtmp;
@@ -1032,11 +830,7 @@ namespace Ipopt
                                              step_cen_z_L,
                                              step_cen_z_U,
                                              step_cen_v_L,
-                                             step_cen_v_U,
-                                             jac_cT_times_step_aff_y_c,
-                                             jac_dT_times_step_aff_y_d,
-                                             jac_cT_times_step_cen_y_c,
-                                             jac_dT_times_step_cen_y_d);
+                                             step_cen_v_U);
       if (qtmp < q) {
         sigma = sigma_lo;
         q = qtmp;
@@ -1045,6 +839,216 @@ namespace Ipopt
 
     return sigma;
   }
+
+  /* AW: Tried search in the log space, but that was even worse than
+     search in unscaled space */
+  /*
+  Number
+  QualityFunctionMuOracle::PerformGoldenBisectionLog
+  (Number sigma_up,
+   Number sigma_lo,
+   Number tol,
+   const Vector& step_aff_x_L,
+   const Vector& step_aff_x_U,
+   const Vector& step_aff_s_L,
+   const Vector& step_aff_s_U,
+   const Vector& step_aff_y_c,
+   const Vector& step_aff_y_d,
+   const Vector& step_aff_z_L,
+   const Vector& step_aff_z_U,
+   const Vector& step_aff_v_L,
+   const Vector& step_aff_v_U,
+   const Vector& step_cen_x_L,
+   const Vector& step_cen_x_U,
+   const Vector& step_cen_s_L,
+   const Vector& step_cen_s_U,
+   const Vector& step_cen_y_c,
+   const Vector& step_cen_y_d,
+   const Vector& step_cen_z_L,
+   const Vector& step_cen_z_U,
+   const Vector& step_cen_v_L,
+   const Vector& step_cen_v_U
+  )
+  {
+    Number log_sigma;
+    Number log_sigma_up = log(sigma_up);
+    Number log_sigma_lo = log(sigma_lo);
+
+    Number log_sigma_up_in = log_sigma_up;
+    Number log_sigma_lo_in = log_sigma_lo;
+    Number gfac = (3.-sqrt(5.))/2.;
+    Number log_sigma_mid1 = log_sigma_lo + gfac*(log_sigma_up-log_sigma_lo);
+    Number log_sigma_mid2 = log_sigma_lo + (1.-gfac)*(log_sigma_up-log_sigma_lo);
+
+    Number qmid1 = CalculateQualityFunction(exp(log_sigma_mid1),
+                                            step_aff_x_L,
+                                            step_aff_x_U,
+                                            step_aff_s_L,
+                                            step_aff_s_U,
+                                            step_aff_y_c,
+                                            step_aff_y_d,
+                                            step_aff_z_L,
+                                            step_aff_z_U,
+                                            step_aff_v_L,
+                                            step_aff_v_U,
+                                            step_cen_x_L,
+                                            step_cen_x_U,
+                                            step_cen_s_L,
+                                            step_cen_s_U,
+                                            step_cen_y_c,
+                                            step_cen_y_d,
+                                            step_cen_z_L,
+                                            step_cen_z_U,
+                                            step_cen_v_L,
+                                            step_cen_v_U);
+    Number qmid2 = CalculateQualityFunction(exp(log_sigma_mid2),
+                                            step_aff_x_L,
+                                            step_aff_x_U,
+                                            step_aff_s_L,
+                                            step_aff_s_U,
+                                            step_aff_y_c,
+                                            step_aff_y_d,
+                                            step_aff_z_L,
+                                            step_aff_z_U,
+                                            step_aff_v_L,
+                                            step_aff_v_U,
+                                            step_cen_x_L,
+                                            step_cen_x_U,
+                                            step_cen_s_L,
+                                            step_cen_s_U,
+                                            step_cen_y_c,
+                                            step_cen_y_d,
+                                            step_cen_z_L,
+                                            step_cen_z_U,
+                                            step_cen_v_L,
+                                            step_cen_v_U);
+
+    Index nbisections = 0;
+    while ((log_sigma_up-log_sigma_lo)>=tol*log_sigma_up && nbisections<max_bisection_steps_) {
+      nbisections++;
+      if (qmid1 > qmid2) {
+        log_sigma_lo = log_sigma_mid1;
+        log_sigma_mid1 = log_sigma_mid2;
+        qmid1 = qmid2;
+        log_sigma_mid2 = log_sigma_lo + (1.-gfac)*(log_sigma_up-log_sigma_lo);
+        qmid2 = CalculateQualityFunction(exp(log_sigma_mid2),
+                                         step_aff_x_L,
+                                         step_aff_x_U,
+                                         step_aff_s_L,
+                                         step_aff_s_U,
+                                         step_aff_y_c,
+                                         step_aff_y_d,
+                                         step_aff_z_L,
+                                         step_aff_z_U,
+                                         step_aff_v_L,
+                                         step_aff_v_U,
+                                         step_cen_x_L,
+                                         step_cen_x_U,
+                                         step_cen_s_L,
+                                         step_cen_s_U,
+                                         step_cen_y_c,
+                                         step_cen_y_d,
+                                         step_cen_z_L,
+                                         step_cen_z_U,
+                                         step_cen_v_L,
+                                         step_cen_v_U);
+      }
+      else {
+        log_sigma_up = log_sigma_mid2;
+        log_sigma_mid2 = log_sigma_mid1;
+        qmid2 = qmid1;
+        log_sigma_mid1 = log_sigma_lo + gfac*(log_sigma_up-log_sigma_lo);
+        qmid1 = CalculateQualityFunction(exp(log_sigma_mid1),
+                                         step_aff_x_L,
+                                         step_aff_x_U,
+                                         step_aff_s_L,
+                                         step_aff_s_U,
+                                         step_aff_y_c,
+                                         step_aff_y_d,
+                                         step_aff_z_L,
+                                         step_aff_z_U,
+                                         step_aff_v_L,
+                                         step_aff_v_U,
+                                         step_cen_x_L,
+                                         step_cen_x_U,
+                                         step_cen_s_L,
+                                         step_cen_s_U,
+                                         step_cen_y_c,
+                                         step_cen_y_d,
+                                         step_cen_z_L,
+                                         step_cen_z_U,
+                                         step_cen_v_L,
+                                         step_cen_v_U);
+      }
+    }
+
+    Number q;
+    if (qmid1 < qmid2) {
+      log_sigma = log_sigma_mid1;
+      q = qmid1;
+    }
+    else {
+      log_sigma = log_sigma_mid2;
+      q = qmid2;
+    }
+    if (log_sigma_up == log_sigma_up_in) {
+      Number qtmp = CalculateQualityFunction(exp(log_sigma_up),
+                                             step_aff_x_L,
+                                             step_aff_x_U,
+                                             step_aff_s_L,
+                                             step_aff_s_U,
+                                             step_aff_y_c,
+                                             step_aff_y_d,
+                                             step_aff_z_L,
+                                             step_aff_z_U,
+                                             step_aff_v_L,
+                                             step_aff_v_U,
+                                             step_cen_x_L,
+                                             step_cen_x_U,
+                                             step_cen_s_L,
+                                             step_cen_s_U,
+                                             step_cen_y_c,
+                                             step_cen_y_d,
+                                             step_cen_z_L,
+                                             step_cen_z_U,
+                                             step_cen_v_L,
+                                             step_cen_v_U);
+      if (qtmp < q) {
+        log_sigma = log_sigma_up;
+        q = qtmp;
+      }
+    }
+    else if (log_sigma_lo == log_sigma_lo_in) {
+      Number qtmp = CalculateQualityFunction(exp(log_sigma_lo),
+                                             step_aff_x_L,
+                                             step_aff_x_U,
+                                             step_aff_s_L,
+                                             step_aff_s_U,
+                                             step_aff_y_c,
+                                             step_aff_y_d,
+                                             step_aff_z_L,
+                                             step_aff_z_U,
+                                             step_aff_v_L,
+                                             step_aff_v_U,
+                                             step_cen_x_L,
+                                             step_cen_x_U,
+                                             step_cen_s_L,
+                                             step_cen_s_U,
+                                             step_cen_y_c,
+                                             step_cen_y_d,
+                                             step_cen_z_L,
+                                             step_cen_z_U,
+                                             step_cen_v_L,
+                                             step_cen_v_U);
+      if (qtmp < q) {
+        log_sigma = log_sigma_lo;
+        q = qtmp;
+      }
+    }
+
+    return exp(log_sigma);
+  }
+  */
 
 
 } // namespace Ipopt

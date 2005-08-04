@@ -53,9 +53,7 @@ namespace Ipopt
                                   bool want_y_c,
                                   bool want_y_d,
                                   bool want_z_L,
-                                  bool want_z_U,
-                                  bool want_v_L,
-                                  bool want_v_U);
+                                  bool want_z_U);
 
     /** This method must be called to initialize the global
      *  algorithmic parameters.  The parameters are taken from the
@@ -294,21 +292,6 @@ namespace Ipopt
       DBG_ASSERT(initialize_called_);
       return tol_;
     }
-    Number dual_inf_tol() const
-    {
-      DBG_ASSERT(initialize_called_);
-      return dual_inf_tol_;
-    }
-    Number primal_inf_tol() const
-    {
-      DBG_ASSERT(initialize_called_);
-      return primal_inf_tol_;
-    }
-    Number compl_inf_tol() const
-    {
-      DBG_ASSERT(initialize_called_);
-      return compl_inf_tol_;
-    }
     //@}
 
     /** @name Information gathered for iteration output */
@@ -458,12 +441,14 @@ namespace Ipopt
     //@{
     /** Overall convergence tolerance */
     Number tol_;
-    /** Tolerance on unscaled dual infeasibility */
-    Number dual_inf_tol_;
-    /** Tolerance on unscaled primal infeasibility */
-    Number primal_inf_tol_;
-    /** Tolerance on unscaled complementarity */
-    Number compl_inf_tol_;
+    //@}
+
+    /** @name Status data **/
+    //@{
+    /** flag indicating whether the algorithm is in the free mu mode */
+    bool free_mu_mode_;
+    /** flag indicating if a tiny step has been detected */
+    bool tiny_step_flag_;
     //@}
 
     /** @name Gathered information for iteration output */
@@ -483,14 +468,6 @@ namespace Ipopt
     bool info_skip_output_;
     /** any string of characters for the end of the output line */
     std::string info_string_;
-    //@}
-
-    /** @name Status data **/
-    //@{
-    /** flag indicating whether the algorithm is in the free mu mode */
-    bool free_mu_mode_;
-    /** flag indicating if a tiny step has been detected */
-    bool tiny_step_flag_;
     //@}
 
     /** VectorSpace for all the iterates */

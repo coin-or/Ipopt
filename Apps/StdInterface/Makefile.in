@@ -167,6 +167,7 @@ RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
+TAUCS_INCFLAGS = @TAUCS_INCFLAGS@
 VERSION = @VERSION@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
@@ -210,6 +211,7 @@ target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 noinst_LIBRARIES = libstdinterface.a
 libstdinterface_a_SOURCES = \
+	IpInterfaceTypes.hpp \
 	IpStdInterfaceTNLP.hpp IpStdInterfaceTNLP.cpp \
 	IpStdCInterface.cpp IpStdFInterface.c \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp
@@ -217,6 +219,7 @@ libstdinterface_a_SOURCES = \
 
 # Astyle stuff
 ASTYLE_FILES = \
+	IpInterfaceTypes.hppbak \
 	IpStdInterfaceTNLP.hppbak IpStdInterfaceTNLP.cppbak \
 	IpStdCInterface.cppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak

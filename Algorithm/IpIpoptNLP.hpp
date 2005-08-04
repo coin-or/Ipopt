@@ -45,7 +45,14 @@ namespace Ipopt
      *  initialize internal data structures. */
     virtual bool Initialize(const Journalist& jnlst,
                             const OptionsList& options,
-                            const std::string& prefix) = 0;
+                            const std::string& prefix)
+    {
+      bool ret = true;
+      if (IsValid(nlp_scaling_)) {
+        ret = nlp_scaling_->Initialize(jnlst, options, prefix);
+      }
+      return ret;
+    }
 
     /**@name Possible Exceptions */
     //@{
@@ -65,9 +72,7 @@ namespace Ipopt
                                       SmartPtr<Vector>& z_U,
                                       bool init_z_U,
                                       SmartPtr<Vector>& v_L,
-                                      bool init_v_L,
-                                      SmartPtr<Vector>& v_U,
-                                      bool init_v_U
+                                      SmartPtr<Vector>& v_U
                                      ) = 0;
 
     /** Accessor methods for model data */
@@ -197,8 +202,16 @@ namespace Ipopt
     }
     //@}
 
-  protected:
-    /** Returns the scaling strategy object - may be NULL */
+    /** solution routines */
+    //@{
+    virtual void FinalizeSolution(SolverReturn status,
+                                  const Vector& x, const Vector& z_L, const Vector& z_U,
+                                  const Vector& c, const Vector& d,
+                                  const Vector& y_c, const Vector& y_d,
+                                  Number obj_value)=0;
+    //@}
+
+    /** Returns the scaling strategy object */
     SmartPtr<NLPScalingObject> NLP_scaling() const
     {
       DBG_ASSERT(IsValid(nlp_scaling_));

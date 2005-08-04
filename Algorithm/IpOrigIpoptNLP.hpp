@@ -11,7 +11,7 @@
 
 #include "IpIpoptNLP.hpp"
 #include "IpException.hpp"
-#include"IpIpoptType.hpp"
+#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
@@ -55,9 +55,7 @@ namespace Ipopt
                                       SmartPtr<Vector>& z_U,
                                       bool init_z_U,
                                       SmartPtr<Vector>& v_L,
-                                      bool init_v_L,
-                                      SmartPtr<Vector>& v_U,
-                                      bool init_v_U
+                                      SmartPtr<Vector>& v_U
                                      );
 
     /** Accessor methods for model data */
@@ -91,49 +89,49 @@ namespace Ipopt
     /** Lower bounds on x */
     virtual SmartPtr<const Vector> x_L()
     {
-      return ConstPtr(x_L_);
+      return x_L_;
     }
 
     /** Permutation matrix (x_L_ -> x) */
     virtual SmartPtr<const Matrix> Px_L()
     {
-      return ConstPtr(Px_L_);
+      return Px_L_;
     }
 
     /** Upper bounds on x */
     virtual SmartPtr<const Vector> x_U()
     {
-      return ConstPtr(x_U_);
+      return x_U_;
     }
 
     /** Permutation matrix (x_U_ -> x */
     virtual SmartPtr<const Matrix> Px_U()
     {
-      return ConstPtr(Px_U_);
+      return Px_U_;
     }
 
     /** Lower bounds on d */
     virtual SmartPtr<const Vector> d_L()
     {
-      return ConstPtr(d_L_);
+      return d_L_;
     }
 
     /** Permutation matrix (d_L_ -> d) */
     virtual SmartPtr<const Matrix> Pd_L()
     {
-      return ConstPtr(Pd_L_);
+      return Pd_L_;
     }
 
     /** Upper bounds on d */
     virtual SmartPtr<const Vector> d_U()
     {
-      return ConstPtr(d_U_);
+      return d_U_;
     }
 
     /** Permutation matrix (d_U_ -> d */
     virtual SmartPtr<const Matrix> Pd_U()
     {
-      return ConstPtr(Pd_U_);
+      return Pd_U_;
     }
     //@}
 
@@ -192,6 +190,15 @@ namespace Ipopt
     }
     //@}
 
+    /** Solution Routines - overloaded from IpoptNLP*/
+    //@{
+    void FinalizeSolution(SolverReturn status,
+                          const Vector& x, const Vector& z_L, const Vector& z_U,
+                          const Vector& c, const Vector& d,
+                          const Vector& y_c, const Vector& y_d,
+                          Number obj_value);
+    //@}
+
     /** Methods for IpoptType */
     //@{
     /** Called by IpoptType to register the options */
@@ -199,11 +206,11 @@ namespace Ipopt
     //@}
 
   private:
-    /** Pointer to the NLP */
-    SmartPtr<NLP> nlp_;
-
     /** journalist */
     SmartPtr<const Journalist> jnlst_;
+
+    /** Pointer to the NLP */
+    SmartPtr<NLP> nlp_;
 
     /** Necessary Vector/Matrix spaces */
     //@{
@@ -254,28 +261,28 @@ namespace Ipopt
     CachedResults<SmartPtr<const SymMatrix> > h_cache_;
 
     /** Lower bounds on x */
-    SmartPtr<Vector> x_L_;
+    SmartPtr<const Vector> x_L_;
 
     /** Permutation matrix (x_L_ -> x) */
-    SmartPtr<Matrix> Px_L_;
+    SmartPtr<const Matrix> Px_L_;
 
     /** Upper bounds on x */
-    SmartPtr<Vector> x_U_;
+    SmartPtr<const Vector> x_U_;
 
     /** Permutation matrix (x_U_ -> x */
-    SmartPtr<Matrix> Px_U_;
+    SmartPtr<const Matrix> Px_U_;
 
     /** Lower bounds on d */
-    SmartPtr<Vector> d_L_;
+    SmartPtr<const Vector> d_L_;
 
     /** Permutation matrix (d_L_ -> d) */
-    SmartPtr<Matrix> Pd_L_;
+    SmartPtr<const Matrix> Pd_L_;
 
     /** Upper bounds on d */
-    SmartPtr<Vector> d_U_;
+    SmartPtr<const Vector> d_U_;
 
     /** Permutation matrix (d_U_ -> d */
-    SmartPtr<Matrix> Pd_U_;
+    SmartPtr<const Matrix> Pd_U_;
     //@}
 
     /**@name Default Compiler Generated Methods
@@ -311,9 +318,6 @@ namespace Ipopt
     Number bound_relax_factor_;
     //@}
 
-    /** Flag indicating if initialization method has been called */
-    bool initialized_;
-
     /** @name Counters for the function evaluations */
     //@{
     Index f_evals_;
@@ -323,6 +327,9 @@ namespace Ipopt
     Index d_evals_;
     Index jac_d_evals_;
     Index h_evals_;
+
+    /** Flag indicating if initialization method has been called */
+    bool initialized_;
     //@}
   };
 

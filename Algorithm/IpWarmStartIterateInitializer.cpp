@@ -7,6 +7,7 @@
 // Authors:  Andreas Waechter              IBM    2004-09-23
 
 #include "IpWarmStartIterateInitializer.hpp"
+#include "IpDefaultIterateInitializer.hpp"
 
 // ToDo make independent of DenseVector
 #include "IpDenseVector.hpp"
@@ -66,8 +67,7 @@ namespace Ipopt
     /////////////////////////////////////////////////////////////////////
 
     // Get the intial values for x, y_c, y_d, z_L, z_U,
-    IpData().InitializeDataStructures(IpNLP(), true, true, true,
-                                      true, true, false, false);
+    IpData().InitializeDataStructures(IpNLP(), true, true, true, true, true);
 
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided x",
                         *IpData().curr()->x());
@@ -194,29 +194,31 @@ namespace Ipopt
     SmartPtr<const Vector> new_x;
     SmartPtr<const Vector> new_s;
     // Push the primal x variables
-    push_variables(warm_start_bound_push_,
-                   warm_start_bound_frac_,
-                   "x",
-                   *IpData().curr()->x(),
-                   new_x,
-                   *IpNLP().x_L(),
-                   *IpNLP().x_U(),
-                   *IpNLP().Px_L(),
-                   *IpNLP().Px_U());
+    DefaultIterateInitializer::push_variables(Jnlst(),
+        warm_start_bound_push_,
+        warm_start_bound_frac_,
+        "x",
+        *IpData().curr()->x(),
+        new_x,
+        *IpNLP().x_L(),
+        *IpNLP().x_U(),
+        *IpNLP().Px_L(),
+        *IpNLP().Px_U());
 
     // ToDo: Don't see why this line is required
     //    IpData().SetTrialPrimalVariablesFromPtr(new_x, new_s);
 
     // Push the primal s variables
-    push_variables(warm_start_bound_push_,
-                   warm_start_bound_frac_,
-                   "s",
-                   *IpData().curr()->s(),
-                   new_s,
-                   *IpNLP().d_L(),
-                   *IpNLP().d_U(),
-                   *IpNLP().Pd_L(),
-                   *IpNLP().Pd_U());
+    DefaultIterateInitializer::push_variables(Jnlst(),
+        warm_start_bound_push_,
+        warm_start_bound_frac_,
+        "s",
+        *IpData().curr()->s(),
+        new_s,
+        *IpNLP().d_L(),
+        *IpNLP().d_U(),
+        *IpNLP().Pd_L(),
+        *IpNLP().Pd_U());
     Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME new_s cor",
                         *new_s);
 
@@ -302,126 +304,6 @@ namespace Ipopt
 
     ret_vars = ConstPtr(new_vars);
     ret_mults = ConstPtr(new_mults);
-  }
-
-  void WarmStartIterateInitializer::push_variables(Number bound_bush,
-      Number bound_frac,
-      std::string name,
-      const Vector& orig_x,
-      SmartPtr<const Vector>& new_x,
-      const Vector& x_L,
-      const Vector& x_U,
-      const Matrix& Px_L,
-      const Matrix& Px_U)
-  {
-    DBG_START_METH("WarmStartIterateInitializer::push_variables",
-                   dbg_verbosity);
-    // Calculate any required shift in x0 and s0
-    const double dbl_min = std::numeric_limits<double>::min();
-    const double tiny_double = 100.0*dbl_min;
-
-    SmartPtr<Vector> tmp = orig_x.MakeNew();
-    SmartPtr<Vector> tmp_l = x_L.MakeNew();
-    SmartPtr<Vector> tmp_u = x_U.MakeNew();
-    SmartPtr<Vector> tiny_l = x_L.MakeNew();
-    tiny_l->Set(tiny_double);
-
-    // Calculate p_l
-    SmartPtr<Vector> q_l = x_L.MakeNew();
-    SmartPtr<Vector> p_l = x_L.MakeNew();
-
-    DBG_PRINT_MATRIX(2,"Px_L", Px_L);
-    DBG_PRINT_VECTOR(2, "x_L", x_L);
-    DBG_PRINT_VECTOR(2, "tmp", *tmp);
-    Px_L.MultVector(1.0, x_L, 0.0, *tmp);
-    Px_U.TransMultVector(1.0, *tmp, 0.0, *tmp_u);
-    tmp_u->AddOneVector(1., x_U, -1.);
-    Px_U.MultVector(1.0, *tmp_u, 0.0, *tmp);
-    Px_L.TransMultVector(1.0, *tmp, 0.0, *q_l);
-    q_l->AddOneVector(-1.0, *tiny_l, warm_start_bound_frac_);
-
-    tmp_l->Set(1.0);
-    p_l->Copy(x_L);
-    p_l->ElementWiseSgn();
-    p_l->ElementWiseMultiply(x_L);
-    p_l->ElementWiseMax(*tmp_l);
-    p_l->AddOneVector(-1.0, *tiny_l, warm_start_bound_push_);
-
-    q_l->ElementWiseReciprocal();
-    p_l->ElementWiseReciprocal();
-
-    p_l->ElementWiseMax(*q_l);
-    p_l->ElementWiseReciprocal();
-    p_l->Axpy(1.0, *tiny_l);
-
-    // Calculate p_u
-    SmartPtr<Vector> q_u = x_U.MakeNew();
-    SmartPtr<Vector> p_u = x_U.MakeNew();
-    SmartPtr<Vector> tiny_u = x_U.MakeNew();
-    tiny_u->Set(tiny_double);
-
-    Px_U.MultVector(1.0, x_U, 0.0, *tmp);
-    Px_L.TransMultVector(1.0, *tmp, 0.0, *tmp_l);
-    tmp_l->Axpy(-1.0, x_L);
-    Px_L.MultVector(1.0, *tmp_l, 0.0, *tmp);
-    Px_U.TransMultVector(1.0, *tmp, 0.0, *q_u);
-    q_u->AddOneVector(-1.0, *tiny_u, warm_start_bound_frac_);
-    DBG_PRINT_VECTOR(2,"q_u",*q_u);
-
-    tmp_u->Set(1.0);
-    p_u->Copy(x_U);
-    p_u->ElementWiseSgn();
-    p_u->ElementWiseMultiply(x_U);
-    p_u->ElementWiseMax(*tmp_u);
-    p_u->AddOneVector(-1.0, *tiny_u, warm_start_bound_push_);
-    DBG_PRINT_VECTOR(2,"p_u",*p_u);
-
-    q_u->ElementWiseReciprocal();
-    p_u->ElementWiseReciprocal();
-
-    p_u->ElementWiseMax(*q_u);
-    p_u->ElementWiseReciprocal();
-    p_u->Axpy(1.0, *tiny_u);
-    DBG_PRINT_VECTOR(2,"actual_p_u",*p_u);
-    DBG_PRINT_VECTOR(2,"orig_x",orig_x);
-
-    // Calculate the new x
-    SmartPtr<Vector> delta_x = orig_x.MakeNew();
-
-    SmartPtr<Vector> zero_l = x_L.MakeNew();
-    zero_l->Set(0.0);
-    SmartPtr<Vector> zero_u = x_U.MakeNew();
-    zero_u->Set(0.0);
-
-    Px_L.TransMultVector(-1.0, orig_x, 0.0, *tmp_l);
-    tmp_l->AddTwoVectors(1.0, x_L, 1.0, *p_l, 1.);
-    tmp_l->ElementWiseMax(*zero_l);
-    Number nrm_l = tmp_l->Amax();
-    if (nrm_l>0.) {
-      Px_L.MultVector(1.0, *tmp_l, 0.0, *delta_x);
-    }
-    else {
-      delta_x->Set(0.);
-    }
-
-    Px_U.TransMultVector(1.0, orig_x, 0.0, *tmp_u);
-    tmp_u->AddTwoVectors(-1.0, x_U, 1.0, *p_u, 1.);
-    tmp_u->ElementWiseMax(*zero_u);
-    Number nrm_u = tmp_u->Amax();
-    if (nrm_u>0.) {
-      Px_U.MultVector(-1.0, *tmp_u, 1.0, *delta_x);
-    }
-
-    if (nrm_l > 0 || nrm_u > 0) {
-      delta_x->Axpy(1.0, orig_x);
-      new_x = ConstPtr(delta_x);
-      Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of %s sufficiently inside the bounds.\n", name.c_str());
-      Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "original vars", orig_x);
-      Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "new vars", *new_x);
-    }
-    else {
-      new_x = &orig_x;
-    }
   }
 
   void WarmStartIterateInitializer::adapt_to_target_mu(Vector& new_s,

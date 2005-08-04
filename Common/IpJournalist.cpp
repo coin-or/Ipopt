@@ -19,12 +19,6 @@ namespace Ipopt
 
   Journalist::~Journalist()
   {
-    // delete the journals
-    for (Index i=0; i<(Index)journals_.size(); i++) {
-      Journal* journal = journals_[i];
-      delete journal;
-    }
-
     journals_.clear();
   }
 
@@ -159,7 +153,10 @@ namespace Ipopt
     for (Index i=0; i<(Index)journals_.size(); i++) {
       if (journals_[i]->IsAccepted(category, level)) {
         // print the message
-        journals_[i]->Printf(pformat, ap);
+        va_list apcopy;
+        va_copy(apcopy, ap);
+        journals_[i]->Printf(pformat, apcopy);
+        va_end(apcopy);
       }
     }
   }
@@ -181,7 +178,10 @@ namespace Ipopt
         }
 
         // print the message
-        journals_[i]->Printf(pformat, ap);
+        va_list apcopy;
+        va_copy(apcopy, ap);
+        journals_[i]->Printf(pformat, apcopy);
+        va_end(apcopy);
       }
     }
   }
@@ -197,32 +197,35 @@ namespace Ipopt
     return false;
   }
 
-  Journal* Journalist::AddJournal(
+  bool Journalist::AddJournal(const SmartPtr<Journal> jrnl)
+  {
+    DBG_ASSERT(IsValid(jrnl));
+    std::string name = jrnl->Name();
+
+    SmartPtr<Journal> temp = GetJournal(name);
+    DBG_ASSERT(IsNull(temp));
+    if (IsValid(temp)) {
+      return false;
+    }
+
+    journals_.push_back(jrnl);
+    return true;
+  }
+
+  SmartPtr<Journal> Journalist::AddFileJournal(
     const std::string& journal_name,
     const std::string& fname,
     EJournalLevel default_level
   )
   {
-    // check for an existing journal of the same name
-    Journal* retValue = GetJournal(journal_name);
-    if (!retValue) {
-      // journal does not already exist, add a new one
-      Journal* temp = new Journal(journal_name, default_level);
+    SmartPtr<FileJournal> temp = new FileJournal(journal_name, default_level);
 
-      // Open the file (Note:, a fname of "stdout" is handled by the
-      // Journal class to mean stdout, etc.
-      if (temp->Open(fname.c_str())) {
-        // journal was created, add it to the list
-        journals_.push_back(temp);
-        retValue = temp;
-      }
-      else {
-        // journal could not be created
-        delete temp;
-      }
+    // Open the file (Note:, a fname of "stdout" is handled by the
+    // Journal class to mean stdout, etc.
+    if (temp->Open(fname.c_str()) && AddJournal(GetRawPtr(temp))) {
+      return GetRawPtr(temp);
     }
-
-    return retValue;
+    return NULL;
   }
 
   void Journalist::FlushBuffer() const
@@ -232,15 +235,15 @@ namespace Ipopt
     }
   }
 
-  Journal* Journalist::GetJournal(
+  SmartPtr<Journal> Journalist::GetJournal(
     const std::string& journal_name
   )
   {
-    Journal* retValue = NULL;
+    SmartPtr<Journal> retValue = NULL;
 
     // try to find the journal
     for (Index i=0; i<(Index)journals_.size(); i++) {
-      Journal* tmp = journals_[i];
+      SmartPtr<Journal> tmp = journals_[i];
       if (tmp->Name() == journal_name) {
         retValue = tmp;
         break;
@@ -259,8 +262,7 @@ namespace Ipopt
     EJournalLevel default_level
   )
       :
-      name_(name),
-      file_(NULL)
+      name_(name)
   {
     for (Index i=0; i<J_LAST_CATEGORY; i++) {
       print_levels_[i] = default_level;
@@ -268,44 +270,11 @@ namespace Ipopt
   }
 
   Journal::~Journal()
-  {
-    if (file_ && file_ != stdout && file_ != stderr) {
-      // close the file
-      fclose(file_);
-    }
-    file_ = NULL;
-  }
+  {}
 
   std::string Journal::Name()
   {
     return name_;
-  }
-
-  bool Journal::Open(const char* fname)
-  {
-    if (file_ && file_ != stdout && file_ != stderr) {
-      // file already opened, close it
-      fclose(file_);
-    }
-    file_ = NULL;
-
-    if (strcmp("stdout", fname)==0) {
-      file_=stdout;
-      return true;
-    }
-    else if (strcmp("stderr", fname)==0) {
-      file_=stderr;
-      return true;
-    }
-    else {
-      // open the file on disk
-      file_ = fopen(fname, "w+");
-      if (file_) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   bool Journal::IsAccepted(
@@ -337,7 +306,59 @@ namespace Ipopt
     }
   }
 
-  void Journal::Print(const char* str)
+
+  ///////////////////////////////////////////////////////////////////////////
+  //                 Implementation of the FileJournal class                   //
+  ///////////////////////////////////////////////////////////////////////////
+
+  FileJournal::FileJournal(
+    const std::string& name,
+    EJournalLevel default_level
+  )
+      :
+      Journal(name, default_level),
+      file_(NULL)
+  {}
+
+  FileJournal::~FileJournal()
+  {
+    if (file_ && file_ != stdout && file_ != stderr) {
+      // close the file
+      fclose(file_);
+    }
+    file_ = NULL;
+  }
+
+
+  bool FileJournal::Open(const char* fname)
+  {
+    if (file_ && file_ != stdout && file_ != stderr) {
+      // file already opened, close it
+      fclose(file_);
+    }
+    file_ = NULL;
+
+    if (strcmp("stdout", fname)==0) {
+      file_=stdout;
+      return true;
+    }
+    else if (strcmp("stderr", fname)==0) {
+      file_=stderr;
+      return true;
+    }
+    else {
+      // open the file on disk
+      file_ = fopen(fname, "w+");
+      if (file_) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+
+  void FileJournal::PrintImpl(const char* str)
   {
     DBG_START_METH("Journal::Print", 0);
     if (file_) {
@@ -346,7 +367,7 @@ namespace Ipopt
     }
   }
 
-  void Journal::Printf(const char* pformat, va_list ap)
+  void FileJournal::PrintfImpl(const char* pformat, va_list ap)
   {
     DBG_START_METH("Journal::Printf", 0);
     if (file_) {
@@ -355,7 +376,7 @@ namespace Ipopt
     }
   }
 
-  void Journal::PrintVector(const std::string name, const Vector& vector, Index indent, std::string prefix)
+  void FileJournal::PrintVectorImpl(const std::string name, const Vector& vector, Index indent, std::string prefix)
   {
     DBG_START_METH("Journal::PrintVector", 0);
     if (file_) {
@@ -364,7 +385,7 @@ namespace Ipopt
     }
   }
 
-  void Journal::PrintMatrix(const std::string name, const Matrix& matrix, Index indent, std::string prefix)
+  void FileJournal::PrintMatrixImpl(const std::string name, const Matrix& matrix, Index indent, std::string prefix)
   {
     DBG_START_METH("Journal::PrintMatrix", 0);
     if (file_) {
@@ -373,7 +394,7 @@ namespace Ipopt
     }
   }
 
-  void Journal::FlushBuffer()
+  void FileJournal::FlushBufferImpl()
   {
     if (file_) {
       fflush(file_);

@@ -166,6 +166,7 @@ RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
+TAUCS_INCFLAGS = @TAUCS_INCFLAGS@
 VERSION = @VERSION@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
@@ -209,6 +210,7 @@ target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 SUBDIRS = OTHERS Common LinAlgImpl Algorithm PDSystemImpl Apps
 EXTRA_DIST = Interfaces/IpEqMultCalculator.hpp \
+	Interfaces/IpAlgTypes.hpp \
 	Interfaces/IpMatrix.hpp \
 	Interfaces/IpNLP.hpp \
 	Interfaces/IpPDSystemSolver.hpp \
@@ -224,6 +226,7 @@ libipopt = libipopt.a
 
 # Astyle stuff
 ASTYLE_FILES = Interfaces/IpEqMultCalculator.hppbak \
+	Interfaces/IpAlgTypes.hppbak \
 	Interfaces/IpMatrix.hppbak \
 	Interfaces/IpNLP.hppbak \
 	Interfaces/IpPDSystemSolver.hppbak \

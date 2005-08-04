@@ -12,12 +12,10 @@ using namespace Ipopt;
 
 /* Constructor. */
 MyNLP::MyNLP()
-{
-}
+{}
 
 MyNLP::~MyNLP()
-{
-}
+{}
 
 bool MyNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, Index& nnz_h_lag)
 {
@@ -39,9 +37,9 @@ bool MyNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, Index& nnz_h_lag)
 }
 
 bool MyNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
-			       Index m, Number* g_l, Number* g_u)
+                            Index m, Number* g_l, Number* g_u)
 {
-  // here, the n and m we gave IPOPT in get_nlp_info are passed back to us. 
+  // here, the n and m we gave IPOPT in get_nlp_info are passed back to us.
   // If desired, we could assert to make sure they are what we think they are.
   assert(n == 2);
   assert(m == 1);
@@ -52,12 +50,12 @@ bool MyNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
 
   // x2 has no upper or lower bound, so we set them to
   // a large negative and a large positive number.
-  // The value that is interpretted as -/+infinity can be 
+  // The value that is interpretted as -/+infinity can be
   // set in the options, but it defaults to -/+1e19
   x_l[1] = -1.0e19;
   x_u[1] = +1.0e19;
 
-  // we have one equality constraint, so we set the bounds on this constraint 
+  // we have one equality constraint, so we set the bounds on this constraint
   // to be equal (and zero).
   g_l[0] = g_u[0] = 0.0;
 
@@ -65,9 +63,9 @@ bool MyNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
 }
 
 bool MyNLP::get_starting_point(Index n, bool init_x, Number* x,
-			       bool init_z, Number* z_L, Number* z_U,
-			       Index m, bool init_lambda,
-			       Number* lambda)
+                               bool init_z, Number* z_L, Number* z_U,
+                               Index m, bool init_lambda,
+                               Number* lambda)
 {
   // Here, we assume we only have starting values for x, if you code
   // your own NLP, you can provide starting values for the others if
@@ -112,77 +110,77 @@ bool MyNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
   Number x2 = x[1];
 
   g[0] = -(x1*x1 + x2 - 1.0);
-  
+
   return true;
 }
 
 bool MyNLP::eval_jac_g(Index n, const Number* x, bool new_x,
-		       Index m, Index nele_jac, Index* iRow, Index *jCol,
-		       Number* values)
+                       Index m, Index nele_jac, Index* iRow, Index *jCol,
+                       Number* values)
 {
-  if (values == NULL)
-    {
-      // return the structure of the jacobian of the constraints
-      
-      // element at 1,1: grad_{x1} g_{1}(x)
-      iRow[0] = 1; jCol[0] = 1;
+  if (values == NULL) {
+    // return the structure of the jacobian of the constraints
 
-      // element at 1,2: grad_{x2} g_{1}(x) 
-      iRow[1] = 1; jCol[1] = 2;
-    }
-  else
-    {
-      // return the values of the jacobian of the constraints
-      Number x1 = x[0];
+    // element at 1,1: grad_{x1} g_{1}(x)
+    iRow[0] = 1;
+    jCol[0] = 1;
 
-      // element at 1,1: grad_{x1} g_{1}(x)
-      values[0] = -2.0 * x1;
+    // element at 1,2: grad_{x2} g_{1}(x)
+    iRow[1] = 1;
+    jCol[1] = 2;
+  }
+  else {
+    // return the values of the jacobian of the constraints
+    Number x1 = x[0];
 
-      // element at 1,2: grad_{x1} g_{1}(x)
-      values[1] = -1.0;
-    }
+    // element at 1,1: grad_{x1} g_{1}(x)
+    values[0] = -2.0 * x1;
+
+    // element at 1,2: grad_{x1} g_{1}(x)
+    values[1] = -1.0;
+  }
 
   return true;
 }
 
 bool MyNLP::eval_h(Index n, const Number* x, bool new_x,
-		   Number obj_factor, Index m, const Number* lambda,
-		   bool new_lambda, Index nele_hess, Index* iRow,
-		   Index* jCol, Number* values)
+                   Number obj_factor, Index m, const Number* lambda,
+                   bool new_lambda, Index nele_hess, Index* iRow,
+                   Index* jCol, Number* values)
 {
-  if (values == NULL)
-    {
-      // return the structure. This is a symmetric matrix, fill the lower left 
-      // triangle only.
-      
-      // element at 1,1: grad^2_{x1,x1} L(x,lambda)
-      iRow[0] = 1; jCol[0] = 1;
+  if (values == NULL) {
+    // return the structure. This is a symmetric matrix, fill the lower left
+    // triangle only.
 
-      // element at 2,2: grad^2_{x2,x2} L(x,lambda)
-      iRow[1] = 2; jCol[1] = 2;
-      
-      // Note: off-diagonal elements are zero for this problem
-    }
-  else 
-    {
-      // return the values
+    // element at 1,1: grad^2_{x1,x1} L(x,lambda)
+    iRow[0] = 1;
+    jCol[0] = 1;
 
-      // element at 1,1: grad^2_{x1,x1} L(x,lambda)
-      values[0] = -2.0 * lambda[0];
+    // element at 2,2: grad^2_{x2,x2} L(x,lambda)
+    iRow[1] = 2;
+    jCol[1] = 2;
 
-      // element at 2,2: grad^2_{x2,x2} L(x,lambda)
-      values[1] = -2.0;
+    // Note: off-diagonal elements are zero for this problem
+  }
+  else {
+    // return the values
 
-      // Note: off-diagonal elements are zero for this problem
-    }
+    // element at 1,1: grad^2_{x1,x1} L(x,lambda)
+    values[0] = -2.0 * lambda[0];
+
+    // element at 2,2: grad^2_{x2,x2} L(x,lambda)
+    values[1] = -2.0;
+
+    // Note: off-diagonal elements are zero for this problem
+  }
 
   return true;
 }
 
-void MyNLP::finalize_solution(ApplicationReturnStatus status,
-			      Index n, const Number* x, const Number* z_L, const Number* z_U, 
-			      Index m, const Number* g, const Number* lambda,
-			      Number obj_value)
+void MyNLP::finalize_solution(SolverReturn status,
+                              Index n, const Number* x, const Number* z_L, const Number* z_U,
+                              Index m, const Number* g, const Number* lambda,
+                              Number obj_value)
 {
   // here is where we would store the solution to variables, or write to a file, etc
   // so we could use the solution. Since the solution is displayed to the console,

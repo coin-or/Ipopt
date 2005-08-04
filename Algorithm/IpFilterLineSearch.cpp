@@ -9,6 +9,7 @@
 #include "IpFilterLineSearch.hpp"
 #include "IpJournalist.hpp"
 #include "IpRestoPhase.hpp"
+#include "IpAlgTypes.hpp"
 
 #ifdef OLD_C_HEADERS
 # include <math.h>
@@ -26,14 +27,16 @@ namespace Ipopt
   DefineIpoptType(FilterLineSearch);
 
   FilterLineSearch::FilterLineSearch(const SmartPtr<RestorationPhase>& resto_phase,
-                                     const SmartPtr<PDSystemSolver>& pd_solver)
+                                     const SmartPtr<PDSystemSolver>& pd_solver,
+                                     const SmartPtr<ConvergenceCheck>& conv_check)
       :
       LineSearch(),
+      theta_max_(-1.0),
+      theta_min_(-1.0),
+      filter_(2),
       resto_phase_(resto_phase),
       pd_solver_(pd_solver),
-      theta_min_(-1.0),
-      theta_max_(-1.0),
-      filter_(2)
+      conv_check_(conv_check)
   {
     DBG_START_FUN("FilterLineSearch::FilterLineSearch",
                   dbg_verbosity);
@@ -67,7 +70,7 @@ namespace Ipopt
     roptions->AddBoundedNumberOption(
       "eta_phi",
       "Relaxation factor in the Armijo condition.",
-      0.0, true, 0.5, true, 1e-4,
+      0.0, true, 0.5, true, 1e-8,
       "(See Eqn. (20) in implementation paper)");
     roptions->AddLowerBoundedNumberOption(
       "delta", "Multiplier for constraint violation in switching rule.",
@@ -200,14 +203,15 @@ namespace Ipopt
       "infeasibility determination if you expect the problem to be "
       "infeasible.  In the filter line search procedure, the restoration "
       "phase is called more qucikly than usually, and more reduction in "
-      "the constraint violation is enforced.");
+      "the constraint violation is enforced. If the problem is square, this "
+      "is enabled automatically.");
     roptions->AddLowerBoundedNumberOption(
       "expect_infeasible_problem_ctol",
       "Threshold for disabling \"expect_infeasible_problem\" option",
       0.0, false, 1e-3,
       "If the constraint violation becomes small than this threshold, "
       "the \"expect_infeasible_problem\" heuristics in the filter line "
-      "search will are disabled.");
+      "search will are disabled. If the problem is square, this is set to 0.");
     roptions->AddLowerBoundedNumberOption(
       "soft_resto_pderror_reduction_factor",
       "Required reduction in primal-dual error in soft restoration phase.",
@@ -220,6 +224,15 @@ namespace Ipopt
       "decreasing the error by this factor, then the regular restoration "
       "phase is called.  Choosing \"0\" here disables the soft "
       "restoration phase.");
+    roptions->AddStringOption2(
+      "start_with_resto",
+      "Tells algorithm to switch to restoration phase in first iteration.",
+      "no",
+      "no", "don't force start in restoration phase",
+      "yes", "force start in restoration phase",
+      "Setting this option to yes forces the algorithm to switch to the "
+      "restoration phase in the first iteration.  If the initial point "
+      "is feasible, the algorithm will abort with a failure.");
     roptions->AddLowerBoundedNumberOption(
       "tiny_step_tol",
       "Tolerance for detecting numerically insignificant steps.",
@@ -242,23 +255,6 @@ namespace Ipopt
       1, 3,
       "Determines the number of trial iterations before the watchdog "
       "procedure is aborted and the algorithm returns to the stored point.");
-    roptions->AddLowerBoundedNumberOption(
-      "acceptable_tol",
-      "Threshold for NLP error to consider iterate as acceptable.",
-      0.0, false, 1e-6,
-      "Determines tolerance for which an iterate is considered as accepable "
-      "solution.  If the algorithm would trigger the restoration phase at "
-      "such a point, it instead terminates, returning this acceptable "
-      "point.  Further, if the algorithm encounters \"acceptable_iter_max\" "
-      "successive points satisfying this NLP tolerance, the algorithm "
-      "terminates.");
-    roptions->AddLowerBoundedIntegerOption(
-      "acceptable_iter_max",
-      "Number of acceptable iterates to trigger termination.",
-      0, 15,
-      "if the algorithm encounters so many successive acceptable iterates "
-      "(see \"acceptable_tol\"), it terminates, assuming that the problem "
-      "has been solved to best possible accuracy given round-off.");
   }
 
   bool FilterLineSearch::InitializeImpl(const OptionsList& options,
@@ -293,8 +289,10 @@ namespace Ipopt
     options.GetEnumValue("alpha_for_y", enum_int, prefix);
     alpha_for_y_ = AlphaForYEnum(enum_int);
     options.GetNumericValue("corrector_compl_avrg_red_fact", corrector_compl_avrg_red_fact_, prefix);
-    options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
     options.GetNumericValue("expect_infeasible_problem_ctol", expect_infeasible_problem_ctol_, prefix);
+    options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
+
+    options.GetBoolValue("start_with_resto", start_with_resto_, prefix);
 
     bool retvalue = true;
     if (IsValid(resto_phase_)) {
@@ -307,8 +305,6 @@ namespace Ipopt
     options.GetNumericValue("tiny_step_tol", tiny_step_tol_, prefix);
     options.GetIntegerValue("watchdog_trial_iter_max", watchdog_trial_iter_max_, prefix);
     options.GetIntegerValue("watchdog_shortened_iter_trigger", watchdog_shortened_iter_trigger_, prefix);
-    options.GetNumericValue("acceptable_tol", acceptable_tol_, prefix);
-    options.GetIntegerValue("acceptable_iter_max", acceptable_iter_max_, prefix);
 
     // ToDo decide if also the PDSystemSolver should be initialized here...
 
@@ -319,7 +315,6 @@ namespace Ipopt
     Reset();
 
     count_successive_shortened_steps_ = 0;
-    count_acceptable_iter_ = 0;
 
     acceptable_iterate_ = NULL;
 
@@ -334,12 +329,19 @@ namespace Ipopt
                    "--> Starting filter line search in iteration %d <--\n",
                    IpData().iter_count());
 
+    // If the problem is square, we want to enable the
+    // expect_infeasible_problem option automatically so that the
+    // restoration phase is entered soon
+    if (IpCq().IsSquareProblem()) {
+      expect_infeasible_problem_ = true;
+      expect_infeasible_problem_ctol_ = 0.;
+    }
+
     // Store current iterate if the optimality error is on acceptable
     // level to restored if things fail later
-    if (IpCq().curr_nlp_error()<=acceptable_tol_) {
+    if (CurrentIsAcceptable()) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                      "Storing current iterate as backup acceptable point.\n");
-      IpData().Append_info_string("A");
       StoreAcceptablePoint();
     }
 
@@ -368,6 +370,14 @@ namespace Ipopt
       // we should immediately go to the restoration phase.  ToDo: Cue
       // off of a something else than the norm of the search direction
       goto_resto = true;
+    }
+
+    if (start_with_resto_) {
+      // If the use requested to start with the restoration phase,
+      // skip the lin e search and do exactly that.  Reset the flag so
+      // that this happens only once.
+      goto_resto = true;
+      start_with_resto_= false;
     }
 
     bool accept = false;
@@ -521,23 +531,24 @@ namespace Ipopt
             // done earlier
             AugmentFilter();
           }
-          if (IpCq().curr_nlp_error()<=acceptable_tol_) {
+          if (CurrentIsAcceptable()) {
             THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
                             "Restoration phase called at acceptable point.");
           }
 
           if (!IsValid(resto_phase_)) {
-            //ToDo
             THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Filter Line Search Object!");
           }
+          // ToDo make the 1e-2 below a parameter?
           if (IpCq().curr_constraint_violation()<=
-              1e-2*Min(IpData().tol(),IpData().primal_inf_tol())) {
+              1e-2*IpData().tol()) {
             bool found_acceptable = RestoreAcceptablePoint();
             if (found_acceptable) {
               THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
-                              "Restoration phase called at almost feasible point, but acceptable point could be restore.\n");
+                              "Restoration phase called at almost feasible point, but acceptable point could be restored.\n");
             }
             else {
+              // ToDo does that happen too often?
               THROW_EXCEPTION(RESTORATION_FAILED,
                               "Restoration phase called, but point is almost feasible.");
             }
@@ -564,7 +575,6 @@ namespace Ipopt
             }
           }
           count_successive_shortened_steps_ = 0;
-          count_acceptable_iter_ = 0;
           if (expect_infeasible_problem_) {
             expect_infeasible_problem_ = false;
           }
@@ -583,29 +593,15 @@ namespace Ipopt
 
       PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
 
-      if (true || n_steps==0) { // The original heuristic only
+      if (n_steps==0) {
         // accepted this if a full step was
         // taken
         count_successive_shortened_steps_ = 0;
-        if (acceptable_iter_max_>0) {
-          if (IpCq().curr_nlp_error()<=acceptable_tol_) {
-            count_acceptable_iter_++;
-            if (count_acceptable_iter_>=acceptable_iter_max_) {
-              IpData().AcceptTrialPoint();
-              THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
-                              "Algorithm seems stuck at acceptable level.");
-            }
-          }
-          else {
-            count_acceptable_iter_=0;
-          }
-        }
         watchdog_shortened_iter_ = 0;
       }
       else {
         count_successive_shortened_steps_++;
         watchdog_shortened_iter_++;
-        count_acceptable_iter_ = 0;
       }
 
       if (expect_infeasible_problem_ &&
@@ -777,7 +773,7 @@ namespace Ipopt
   {
     DBG_START_METH("FilterLineSearch::IsFtype",
                    dbg_verbosity);
-
+    DBG_ASSERT(reference_theta_>0. || reference_gradBarrTDelta_ < 0.0);
     return (reference_gradBarrTDelta_ < 0.0 &&
             alpha_primal_test*pow(-reference_gradBarrTDelta_,s_phi_) >
             delta_*pow(reference_theta_,s_theta_));
@@ -806,8 +802,9 @@ namespace Ipopt
       // exception will the thrown if there are problem during the
       // evaluation of the functions (in that case, we want to further
       // reduce the step size
-      Number trial_barr = IpCq().trial_barrier_obj();
-      Number trial_theta = IpCq().trial_constraint_violation();
+      /* Number trial_barr = */ IpCq().trial_barrier_obj();
+      /* Number trial_theta = */
+      IpCq().trial_constraint_violation();
       return true;
     }
 
@@ -874,6 +871,10 @@ namespace Ipopt
 
   bool FilterLineSearch::ArmijoHolds(Number alpha_primal_test)
   {
+    /*
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                   "ArmijoHolds test with trial_barr = %25.16e reference_barr = %25.16e\n        alpha_primal_test = %25.16e reference_gradBarrTDelta = %25.16e\n", IpCq().trial_barrier_obj(), reference_barr_,alpha_primal_test,reference_gradBarrTDelta_);
+    */
     return Compare_le(IpCq().trial_barrier_obj()-reference_barr_,
                       eta_phi_*alpha_primal_test*reference_gradBarrTDelta_,
                       reference_barr_);
@@ -1099,7 +1100,7 @@ namespace Ipopt
     IpData().SetTrialBoundMultipliersFromStep(alpha_dual, *delta->z_L(), *delta->z_U(), *delta->v_L(), *delta->v_U());
 
     Number alpha_y;
-    switch (corrector_type_) {
+    switch (alpha_for_y_) {
       case PRIMAL_ALPHA_FOR_Y:
       alpha_y = alpha_primal;
       break;
@@ -1111,6 +1112,9 @@ namespace Ipopt
       break;
       case MAX_ALPHA_FOR_Y:
       alpha_y = Max(alpha_dual, alpha_primal);
+      break;
+      case FULL_STEP_FOR_Y:
+      alpha_y = 1;
       break;
       case MIN_DUAL_INFEAS_ALPHA_FOR_Y:
       case SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y:
@@ -1150,6 +1154,9 @@ namespace Ipopt
 
     // Set the eq multipliers from the step now that alpha_y
     // has been calculated.
+    DBG_PRINT((1, "alpha_y = %e\n", alpha_y));
+    DBG_PRINT_VECTOR(2, "delta_y_c", *delta->y_c());
+    DBG_PRINT_VECTOR(2, "delta_y_d", *delta->y_d());
     IpData().SetTrialEqMultipliersFromStep(alpha_y, *delta->y_c(), *delta->y_d());
 
     // Set some information for iteration summary output
@@ -1170,7 +1177,6 @@ namespace Ipopt
     Index count_soc = 0;
 
     Number theta_soc_old = 0.;
-    Number theta_curr = IpCq().curr_constraint_violation();
     Number theta_trial = IpCq().trial_constraint_violation();
     Number alpha_primal_soc = alpha_primal;
 
@@ -1221,6 +1227,8 @@ namespace Ipopt
         e.ReportException(Jnlst());
         Jnlst().Printf(J_WARNING, J_MAIN, "Warning: SOC step rejected due to evaluation error\n");
         accept = false;
+        // There is no point in continuing SOC procedure
+        break;
       }
 
       if (accept) {
@@ -1583,6 +1591,12 @@ namespace Ipopt
                    Max(max_step_x, max_step_s));
 
     return true;
+  }
+
+  bool FilterLineSearch::CurrentIsAcceptable()
+  {
+    return (IsValid(conv_check_) &&
+            conv_check_->CurrentIsAcceptable());
   }
 
   void FilterLineSearch::StoreAcceptablePoint()

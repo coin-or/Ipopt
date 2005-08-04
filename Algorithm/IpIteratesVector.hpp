@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpCompoundVector.hpp,v 1.7 2005/03/21 16:08:47 andreasw Exp $
+// $Id$
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
@@ -16,12 +16,13 @@ namespace Ipopt
   /* forward declarations */
   class IteratesVectorSpace;
 
-  /** Specialized CompoundVector class specifically for the algorithm iterates.
-   *  This class inherits from CompoundVector and is a specialized class for
-   *  handling the iterates of the Ipopt Algorithm, that is, 
-   *  x, s, y_c, y_d, z_L, z_U, v_L, and v_U. It inherits from CompoundVector
-   *  so it can behave like a CV in most calculations, but it has fixed
-   *  dimensions and cannot be customized
+  /** Specialized CompoundVector class specifically for the algorithm
+   *  iterates.  This class inherits from CompoundVector and is a
+   *  specialized class for handling the iterates of the Ipopt
+   *  Algorithm, that is, x, s, y_c, y_d, z_L, z_U, v_L, and v_U. It
+   *  inherits from CompoundVector so it can behave like a CV in most
+   *  calculations, but it has fixed dimensions and cannot be
+   *  customized
    */
   class IteratesVector : public CompoundVector
   {
@@ -35,14 +36,14 @@ namespace Ipopt
 
     /** Make New methods */
     //@{
-    /** Use this method to create a new iterates vector. The MakeNew method
-     *  on the Vector class also works, but it does not give the create_new
-     *  option.
+    /** Use this method to create a new iterates vector. The MakeNew
+     *  method on the Vector class also works, but it does not give
+     *  the create_new option.
      */
     SmartPtr<IteratesVector> MakeNewIteratesVector(bool create_new = true) const;
 
-    /** Use this method to create a new iterates vector with a copy of all
-     *  the data.
+    /** Use this method to create a new iterates vector with a copy of
+     *  all the data.
      */
     SmartPtr<IteratesVector> MakeNewIteratesVectorCopy() const
     {
@@ -51,10 +52,11 @@ namespace Ipopt
       return ret;
     }
 
-    /** Use this method to create a new iterates vector container. This creates a
-     *  new NonConst container, but the elements inside the iterates vector may be
-     *  const. Therefore, the container can be modified to point to new entries, but
-     *  the existing entries may or may not be modifiable.
+    /** Use this method to create a new iterates vector
+     *  container. This creates a new NonConst container, but the
+     *  elements inside the iterates vector may be const. Therefore,
+     *  the container can be modified to point to new entries, but the
+     *  existing entries may or may not be modifiable.
      */
     SmartPtr<IteratesVector> MakeNewContainer() const;
     //@}
@@ -68,7 +70,8 @@ namespace Ipopt
     }
 
     /** Get the x iterate (non-const) - this can only be called if the
-     *  vector was created intenally, or the Set_x_NonConst method was used. */
+     *  vector was created intenally, or the Set_x_NonConst method was
+     *  used. */
     SmartPtr<Vector> x_NonConst()
     {
       return GetNonConstIterateFromComp(0);
@@ -77,7 +80,8 @@ namespace Ipopt
     /** Create a new vector in the x entry */
     SmartPtr<Vector> create_new_x();
 
-    /** Create a new vector in the x entry and copy the current values into it. */
+    /** Create a new vector in the x entry and copy the current values
+     *  into it. */
     SmartPtr<Vector> create_new_x_copy()
     {
       SmartPtr<const Vector> curr_x = GetComp(0);
@@ -86,13 +90,15 @@ namespace Ipopt
       return x_NonConst();
     }
 
-    /** Set the x iterate (const). Sets the pointer, does NOT copy data. */
+    /** Set the x iterate (const). Sets the pointer, does NOT copy
+     *  data. */
     void Set_x(const Vector& vec)
     {
       SetComp(0, vec);
     }
 
-    /** Set the x iterate (non-const). Sets the pointer, does NOT copy data. */
+    /** Set the x iterate (non-const). Sets the pointer, does NOT copy
+     *  data. */
     void Set_x_NonConst(Vector& vec)
     {
       SetCompNonConst(0, vec);
@@ -105,7 +111,8 @@ namespace Ipopt
     }
 
     /** Get the s iterate (non-const) - this can only be called if the
-     *  vector was created intenally, or the Set_s_NonConst method was used. */
+     *  vector was created intenally, or the Set_s_NonConst method was
+     *  used. */
     SmartPtr<Vector> s_NonConst()
     {
       return GetNonConstIterateFromComp(1);
@@ -114,7 +121,8 @@ namespace Ipopt
     /** Create a new vector in the s entry */
     SmartPtr<Vector> create_new_s();
 
-    /** Create a new vector in the s entry and copy the current values into it. */
+    /** Create a new vector in the s entry and copy the current values
+     *  into it. */
     SmartPtr<Vector> create_new_s_copy()
     {
       SmartPtr<const Vector> curr_s = GetComp(1);
@@ -123,13 +131,15 @@ namespace Ipopt
       return s_NonConst();
     }
 
-    /** Set the s iterate (const). Sets the pointer, does NOT copy data. */
+    /** Set the s iterate (const). Sets the pointer, does NOT copy
+     *  data. */
     void Set_s(const Vector& vec)
     {
       SetComp(1, vec);
     }
 
-    /** Set the s iterate (non-const). Sets the pointer, does NOT copy data. */
+    /** Set the s iterate (non-const). Sets the pointer, does NOT copy
+     *  data. */
     void Set_s_NonConst(Vector& vec)
     {
       SetCompNonConst(1, vec);
@@ -141,8 +151,9 @@ namespace Ipopt
       return GetIterateFromComp(2);
     }
 
-    /** Get the y_c iterate (non-const) - this can only be called if the
-     *  vector was created intenally, or the Set_y_c_NonConst method was used. */
+    /** Get the y_c iterate (non-const) - this can only be called if
+     *  the vector was created intenally, or the Set_y_c_NonConst
+     *  method was used. */
     SmartPtr<Vector> y_c_NonConst()
     {
       return GetNonConstIterateFromComp(2);
@@ -151,7 +162,8 @@ namespace Ipopt
     /** Create a new vector in the y_c entry */
     SmartPtr<Vector> create_new_y_c();
 
-    /** Create a new vector in the y_c entry and copy the current values into it. */
+    /** Create a new vector in the y_c entry and copy the current
+     *  values into it. */
     SmartPtr<Vector> create_new_y_c_copy()
     {
       SmartPtr<const Vector> curr_y_c = GetComp(2);
@@ -160,13 +172,15 @@ namespace Ipopt
       return y_c_NonConst();
     }
 
-    /** Set the y_c iterate (const). Sets the pointer, does NOT copy data. */
+    /** Set the y_c iterate (const). Sets the pointer, does NOT copy
+     *  data. */
     void Set_y_c(const Vector& vec)
     {
       SetComp(2, vec);
     }
 
-    /** Set the y_c iterate (non-const). Sets the pointer, does NOT copy data. */
+    /** Set the y_c iterate (non-const). Sets the pointer, does NOT
+     *  copy data. */
     void Set_y_c_NonConst(Vector& vec)
     {
       SetCompNonConst(2, vec);
@@ -178,8 +192,9 @@ namespace Ipopt
       return GetIterateFromComp(3);
     }
 
-    /** Get the y_d iterate (non-const) - this can only be called if the
-     *  vector was created intenally, or the Set_y_d_NonConst method was used. */
+    /** Get the y_d iterate (non-const) - this can only be called if
+     *  the vector was created intenally, or the Set_y_d_NonConst
+     *  method was used. */
     SmartPtr<Vector> y_d_NonConst()
     {
       return GetNonConstIterateFromComp(3);
@@ -188,7 +203,8 @@ namespace Ipopt
     /** Create a new vector in the y_d entry */
     SmartPtr<Vector> create_new_y_d();
 
-    /** Create a new vector in the y_d entry and copy the current values into it. */
+    /** Create a new vector in the y_d entry and copy the current
+     *  values into it. */
     SmartPtr<Vector> create_new_y_d_copy()
     {
       SmartPtr<const Vector> curr_y_d = GetComp(3);
@@ -197,13 +213,15 @@ namespace Ipopt
       return y_d_NonConst();
     }
 
-    /** Set the y_d iterate (const). Sets the pointer, does NOT copy data. */
+    /** Set the y_d iterate (const). Sets the pointer, does NOT copy
+     *  data. */
     void Set_y_d(const Vector& vec)
     {
       SetComp(3, vec);
     }
 
-    /** Set the y_d iterate (non-const). Sets the pointer, does NOT copy data. */
+    /** Set the y_d iterate (non-const). Sets the pointer, does NOT
+     *  copy data. */
     void Set_y_d_NonConst(Vector& vec)
     {
       SetCompNonConst(3, vec);
@@ -215,8 +233,9 @@ namespace Ipopt
       return GetIterateFromComp(4);
     }
 
-    /** Get the z_L iterate (non-const) - this can only be called if the
-     *  vector was created intenally, or the Set_z_L_NonConst method was used. */
+    /** Get the z_L iterate (non-const) - this can only be called if
+     *  the vector was created intenally, or the Set_z_L_NonConst
+     *  method was used. */
     SmartPtr<Vector> z_L_NonConst()
     {
       return GetNonConstIterateFromComp(4);
@@ -225,7 +244,8 @@ namespace Ipopt
     /** Create a new vector in the z_L entry */
     SmartPtr<Vector> create_new_z_L() ;
 
-    /** Create a new vector in the z_L entry and copy the current values into it. */
+    /** Create a new vector in the z_L entry and copy the current
+     *  values into it. */
     SmartPtr<Vector> create_new_z_L_copy()
     {
       SmartPtr<const Vector> curr_z_L = GetComp(4);
@@ -234,13 +254,15 @@ namespace Ipopt
       return z_L_NonConst();
     }
 
-    /** Set the z_L iterate (const). Sets the pointer, does NOT copy data. */
+    /** Set the z_L iterate (const). Sets the pointer, does NOT copy
+     *  data. */
     void Set_z_L(const Vector& vec)
     {
       SetComp(4, vec);
     }
 
-    /** Set the z_L iterate (non-const). Sets the pointer, does NOT copy data. */
+    /** Set the z_L iterate (non-const). Sets the pointer, does NOT
+     *  copy data. */
     void Set_z_L_NonConst(Vector& vec)
     {
       SetCompNonConst(4, vec);
@@ -252,8 +274,9 @@ namespace Ipopt
       return GetIterateFromComp(5);
     }
 
-    /** Get the z_U iterate (non-const) - this can only be called if the
-     *  vector was created intenally, or the Set_z_U_NonConst method was used. */
+    /** Get the z_U iterate (non-const) - this can only be called if
+     *  the vector was created intenally, or the Set_z_U_NonConst
+     *  method was used. */
     SmartPtr<Vector> z_U_NonConst()
     {
       return GetNonConstIterateFromComp(5);
@@ -262,7 +285,8 @@ namespace Ipopt
     /** Create a new vector in the z_U entry */
     SmartPtr<Vector> create_new_z_U();
 
-    /** Create a new vector in the z_U entry and copy the current values into it. */
+    /** Create a new vector in the z_U entry and copy the current
+     *  values into it. */
     SmartPtr<Vector> create_new_z_U_copy()
     {
       SmartPtr<const Vector> curr_z_U = GetComp(5);
@@ -271,13 +295,15 @@ namespace Ipopt
       return z_U_NonConst();
     }
 
-    /** Set the z_U iterate (const). Sets the pointer, does NOT copy data. */
+    /** Set the z_U iterate (const). Sets the pointer, does NOT copy
+     *  data. */
     void Set_z_U(const Vector& vec)
     {
       SetComp(5, vec);
     }
 
-    /** Set the z_U iterate (non-const). Sets the pointer, does NOT copy data. */
+    /** Set the z_U iterate (non-const). Sets the pointer, does NOT
+     *  copy data. */
     void Set_z_U_NonConst(Vector& vec)
     {
       SetCompNonConst(5, vec);
@@ -289,8 +315,9 @@ namespace Ipopt
       return GetIterateFromComp(6);
     }
 
-    /** Get the v_L iterate (non-const) - this can only be called if the
-     *  vector was created intenally, or the Set_v_L_NonConst method was used. */
+    /** Get the v_L iterate (non-const) - this can only be called if
+     *  the vector was created intenally, or the Set_v_L_NonConst
+     *  method was used. */
     SmartPtr<Vector> v_L_NonConst()
     {
       return GetNonConstIterateFromComp(6);
@@ -299,7 +326,8 @@ namespace Ipopt
     /** Create a new vector in the v_L entry */
     SmartPtr<Vector> create_new_v_L();
 
-    /** Create a new vector in the v_L entry and copy the current values into it. */
+    /** Create a new vector in the v_L entry and copy the current
+     *  values into it. */
     SmartPtr<Vector> create_new_v_L_copy()
     {
       SmartPtr<const Vector> curr_v_L = GetComp(6);
@@ -308,13 +336,15 @@ namespace Ipopt
       return v_L_NonConst();
     }
 
-    /** Set the v_L iterate (const). Sets the pointer, does NOT copy data. */
+    /** Set the v_L iterate (const). Sets the pointer, does NOT copy
+     *  data. */
     void Set_v_L(const Vector& vec)
     {
       SetComp(6, vec);
     }
 
-    /** Set the v_L iterate (non-const). Sets the pointer, does NOT copy data. */
+    /** Set the v_L iterate (non-const). Sets the pointer, does NOT
+     *  copy data. */
     void Set_v_L_NonConst(Vector& vec)
     {
       SetCompNonConst(6, vec);
@@ -326,8 +356,9 @@ namespace Ipopt
       return GetIterateFromComp(7);
     }
 
-    /** Get the v_U iterate (non-const) - this can only be called if the
-     *  vector was created intenally, or the Set_v_U_NonConst method was used. */
+    /** Get the v_U iterate (non-const) - this can only be called if
+     *  the vector was created intenally, or the Set_v_U_NonConst
+     *  method was used. */
     SmartPtr<Vector> v_U_NonConst()
     {
       return GetNonConstIterateFromComp(7);
@@ -336,7 +367,8 @@ namespace Ipopt
     /** Create a new vector in the v_U entry */
     SmartPtr<Vector> create_new_v_U();
 
-    /** Create a new vector in the v_U entry and copy the current values into it. */
+    /** Create a new vector in the v_U entry and copy the current
+     *  values into it. */
     SmartPtr<Vector> create_new_v_U_copy()
     {
       SmartPtr<const Vector> curr_v_U = GetComp(7);
@@ -345,19 +377,22 @@ namespace Ipopt
       return v_U_NonConst();
     }
 
-    /** Set the v_U iterate (const). Sets the pointer, does NOT copy data. */
+    /** Set the v_U iterate (const). Sets the pointer, does NOT copy
+     *  data. */
     void Set_v_U(const Vector& vec)
     {
       SetComp(7, vec);
     }
 
-    /** Set the v_U iterate (non-const). Sets the pointer, does NOT copy data. */
+    /** Set the v_U iterate (non-const). Sets the pointer, does NOT
+     *  copy data. */
     void Set_v_U_NonConst(Vector& vec)
     {
       SetCompNonConst(7, vec);
     }
 
-    /** Set the primal variables all in one shot. Sets the pointers, does NOT copy data */
+    /** Set the primal variables all in one shot. Sets the pointers,
+     *  does NOT copy data */
     void Set_primal(const Vector& x, const Vector& s)
     {
       SetComp(0, x);
@@ -369,7 +404,8 @@ namespace Ipopt
       SetCompNonConst(1, s);
     }
 
-    /** Set the eq multipliers all in one shot. Sets the pointers, does not copy data. */
+    /** Set the eq multipliers all in one shot. Sets the pointers,
+     *  does not copy data. */
     void Set_eq_mult(const Vector& y_c, const Vector& y_d)
     {
       SetComp(2, y_c);
@@ -381,7 +417,8 @@ namespace Ipopt
       SetCompNonConst(3, y_d);
     }
 
-    /** Set the bound multipliers all in one shot. Sets the pointers, does not copy data. */
+    /** Set the bound multipliers all in one shot. Sets the pointers,
+     *  does not copy data. */
     void Set_bound_mult(const Vector& z_L, const Vector& z_U, const Vector& v_L, const Vector& v_U)
     {
       SetComp(4, z_L);
@@ -397,9 +434,10 @@ namespace Ipopt
       SetCompNonConst(7, v_U);
     }
 
-    /** Get a sum of the tags of the contained items. There is no guarantee that
-     *  this is unique, but there is a high chance it is unique and it can
-     *  be used for debug checks relatively reliably.
+    /** Get a sum of the tags of the contained items. There is no
+     *  guarantee that this is unique, but there is a high chance it
+     *  is unique and it can be used for debug checks relatively
+     *  reliably.
      */
     TaggedObject::Tag GetTagSum() const
     {
@@ -435,12 +473,10 @@ namespace Ipopt
     //@}
 
   private:
-    /**@name Default Compiler Generated Methods
-     * (Hidden to avoid implicit creation/calling).
-     * These methods are not implemented and 
-     * we do not want the compiler to implement
-     * them for us, so we declare them private
-     * and do not define them. This ensures that
+    /**@name Default Compiler Generated Methods (Hidden to avoid
+     * implicit creation/calling).  These methods are not implemented
+     * and we do not want the compiler to implement them for us, so we
+     * declare them private and do not define them. This ensures that
      * they will not be implicitly created/called.
      */
     //@{
@@ -456,8 +492,9 @@ namespace Ipopt
 
     const IteratesVectorSpace* owner_space_;
 
-    /** private method to return the const element from the compound vector.
-     *  This method will return NULL if none is currently set.
+    /** private method to return the const element from the compound
+     *  vector.  This method will return NULL if none is currently
+     *  set.
      */
     SmartPtr<const Vector> GetIterateFromComp(Index i) const
     {
@@ -467,8 +504,9 @@ namespace Ipopt
       return GetComp(i);
     }
 
-    /** private method to return the non-const element from the compound vector.
-     *  This method will return NULL if none is currently set.
+    /** private method to return the non-const element from the
+     *  compound vector.  This method will return NULL if none is
+     *  currently set.
      */
     SmartPtr<Vector> GetNonConstIterateFromComp(Index i)
     {
@@ -480,8 +518,8 @@ namespace Ipopt
 
   };
 
-  /** Vector Space for the IteratesVector class.
-   *  This is a specialized vector space for the IteratesVector class.
+  /** Vector Space for the IteratesVector class.  This is a
+   *  specialized vector space for the IteratesVector class.
    */
   class IteratesVectorSpace : public CompoundVectorSpace
   {
@@ -502,8 +540,9 @@ namespace Ipopt
 
     /** Method for creating vectors . */
     //@{
-    /** Use this to create a new IteratesVector. You can pass-in create_new = false
-     *  if you only want a container and do not want vectors allocated.
+    /** Use this to create a new IteratesVector. You can pass-in
+     *  create_new = false if you only want a container and do not
+     *  want vectors allocated.
      */
     virtual IteratesVector* MakeNewIteratesVector(bool create_new = true) const
     {
@@ -531,18 +570,19 @@ namespace Ipopt
     }
 
 
-    /** This method overloads ComooundVectorSpace::MakeNewCompoundVector to make
-     *  sure that we get a vector of the correct type
+    /** This method overloads
+     *  ComooundVectorSpace::MakeNewCompoundVector to make sure that
+     *  we get a vector of the correct type
      */
     virtual CompoundVector* MakeNewCompoundVector(bool create_new = true) const
     {
       return MakeNewIteratesVector(create_new);
     }
 
-    /** This method creates a new vector (and allocates space in all the
-     *  contained vectors. This is really only used for code that does not 
-     *  know what type of vector it is dealing with - for example, this method
-     *  is called from Vector::MakeNew() 
+    /** This method creates a new vector (and allocates space in all
+     *  the contained vectors. This is really only used for code that
+     *  does not know what type of vector it is dealing with - for
+     *  example, this method is called from Vector::MakeNew()
      */
     virtual Vector* MakeNew() const
     {
@@ -550,8 +590,9 @@ namespace Ipopt
     }
     //@}
 
-    /** This method hides the CompoundVectorSpace::SetCompSpace method since
-     *  the components of the Iterates are fixed at construction.
+    /** This method hides the CompoundVectorSpace::SetCompSpace method
+     *  since the components of the Iterates are fixed at
+     *  construction.
      */
     virtual void SetCompSpace(Index icomp, const VectorSpace& vec_space)
     {
@@ -559,12 +600,10 @@ namespace Ipopt
     }
 
   private:
-    /**@name Default Compiler Generated Methods
-    * (Hidden to avoid implicit creation/calling).
-    * These methods are not implemented and 
-    * we do not want the compiler to implement
-    * them for us, so we declare them private
-    * and do not define them. This ensures that
+    /**@name Default Compiler Generated Methods (Hidden to avoid
+    * implicit creation/calling).  These methods are not implemented
+    * and we do not want the compiler to implement them for us, so we
+    * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called. */
     //@{
     /** Default constructor */

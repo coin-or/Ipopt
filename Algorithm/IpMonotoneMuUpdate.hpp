@@ -73,13 +73,14 @@ namespace Ipopt
 
     /** @name Algorithmic parameters */
     //@{
-    /** Initial value of the barrier parameter (TODO: NEED GOOD NAMES HERE)*/
-    Number mu0_;
-    Number kappa_epsilon_;
-    Number kappa_mu_;
-    Number theta_mu_;
+    /** Initial value of the barrier parameter */
+    Number mu_init_;
+    Number barrier_tol_factor_;
+    Number mu_linear_decrease_factor_;
+    Number mu_superlinear_decrease_power_;
     /** Tau_min for fraction to boundary rule */
     Number tau_min_;
+    Number compl_inf_tol_;
     //@}
 
     SmartPtr<LineSearch> linesearch_;

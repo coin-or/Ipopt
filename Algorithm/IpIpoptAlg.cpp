@@ -8,6 +8,7 @@
 
 #include "IpIpoptAlg.hpp"
 #include "IpJournalist.hpp"
+#include "IpRestoPhase.hpp"
 
 namespace Ipopt
 {
@@ -65,19 +66,19 @@ namespace Ipopt
     // Initialize the Data object
     bool retvalue = IpData().Initialize(Jnlst(),
                                         options, prefix);
-    ASSERT_EXCEPTION(retvalue, AlgorithmStrategyObject::FAILED_INITIALIZATION,
+    ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptData object failed to initialize.");
 
     // Initialize the CQ object
     retvalue = IpCq().Initialize(Jnlst(),
                                  options, prefix);
-    ASSERT_EXCEPTION(retvalue, AlgorithmStrategyObject::FAILED_INITIALIZATION,
+    ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptCalculatedQuantities object failed to initialize.");
 
     // Initialize the CQ object
     retvalue = IpNLP().Initialize(Jnlst(),
                                   options, prefix);
-    ASSERT_EXCEPTION(retvalue, AlgorithmStrategyObject::FAILED_INITIALIZATION,
+    ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptNLP object failed to initialize.");
 
     // Initialize all the strategies
@@ -123,7 +124,7 @@ namespace Ipopt
     return true;
   }
 
-  IpoptAlgorithm::SolverReturn IpoptAlgorithm::Optimize()
+  SolverReturn IpoptAlgorithm::Optimize()
   {
     DBG_START_METH("IpoptAlgorithm::Optimize", dbg_verbosity);
 
@@ -170,22 +171,35 @@ namespace Ipopt
       if (conv_status == ConvergenceCheck::CONVERGED) {
         return SUCCESS;
       }
+      if (conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT) {
+        return STOP_AT_ACCEPTABLE_POINT;
+      }
       else if (conv_status == ConvergenceCheck::MAXITER_EXCEEDED) {
         return MAXITER_EXCEEDED;
       }
     }
     catch(TINY_STEP_DETECTED& exc) {
       exc.ReportException(Jnlst());
-
       return STOP_AT_TINY_STEP;
     }
     catch(ACCEPTABLE_POINT_REACHED& exc) {
       exc.ReportException(Jnlst());
-
       return STOP_AT_ACCEPTABLE_POINT;
     }
+    catch(LOCALLY_INFEASIBLE& exc) {
+      exc.ReportException(Jnlst());
+      return LOCAL_INFEASIBILITY;
+    }
+    catch(RESTORATION_FAILED& exc) {
+      exc.ReportException(Jnlst());
+      return RESTORATION_FAILURE;
+    }
+    catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
+      exc.ReportException(Jnlst());
+      return SUCCESS;
+    }
 
-    return FAILED;
+    DBG_ASSERT(false && "Unknown return code in the algorithm");
   }
 
   void IpoptAlgorithm::ActualizeHessian()

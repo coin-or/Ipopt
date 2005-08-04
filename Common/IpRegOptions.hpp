@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpOptionsList.hpp,v 1.2 2005/01/12 02:58:15 andreasw Exp $
+// $Id$
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 

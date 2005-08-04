@@ -47,16 +47,6 @@ namespace Ipopt
     {}
     //@}
 
-    /** @name Exceptions */
-    //@{
-    /** Exception FAILED_INITIALIZATION for problem during
-     *  initialization of a strategy object.  This is thrown by a
-     *  strategy object, if a problem arises during initialization,
-     *  such as a value out of a feasible range.
-     */
-    DECLARE_STD_EXCEPTION(FAILED_INITIALIZATION);
-    //@}
-
     /** This method is called every time the algorithm starts again -
      *  it is used to reset any internal state.  The pointers to the
      *  Journalist, as well as to the IpoptNLP, IpoptData, and

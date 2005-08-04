@@ -18,12 +18,14 @@
 #include <vector>
 #include "IpTypes.hpp"
 #include "IpReferenced.hpp"
+#include "IpSmartPtr.hpp"
 
 namespace Ipopt
 {
 
   // forward declarations
   class Journal;
+  class FileJournal;
   class Matrix;
   class Vector;
 
@@ -75,15 +77,15 @@ namespace Ipopt
    * Authors:
    * Authors use the 
    * Journals: You can add as many Journals as you like to the
-   * Journalist with the AddJournal method. Each one represents 
-   * a different printing location (or file).  Then, you can 
-   * call the "print" methods of the Journalist to output
+   * Journalist with the AddJournal or the AddFileJournal methods. 
+   * Each one represents a different printing location (or file).  
+   * Then, you can call the "print" methods of the Journalist to output
    * information to each of the journals.
    * 
    * Acceptance Criteria: Each print message should be flagged 
    * appropriately with an EJournalCategory and EJournalLevel.
    * 
-   * The AddJournal
+   * The AddFileJournal
    * method returns a pointer to the newly created Journal object
    * (if successful) so you can set Acceptance criteria for that
    * particular location.
@@ -184,27 +186,29 @@ namespace Ipopt
      * journalist with each output file and the acceptance
      * criteria for that file.
      *
-     * Use these methods to setup the wanted journals (files).
+     * Use these methods to setup the journals (files or other output).
      * These are the internal objects that keep track of the print levels 
      * for each category. Then use the internal Journal objects to
      * set specific print levels for each category (or keep defaults).
      *  
-     * Note: the lifetime of these internal objects is controlled by
-     * the Journalist class. Do not try to delete and do not try to keep the
-     * pointer outside of the current scope. 
      */
     //@{
     /** Add a new journal.  The location_name is a string identifier,
      *  which can be used to obtain the pointer to the new Journal at
-     *  a later point using the GetJournal method.  fname is the name
+     *  a later point using the GetJournal method.
+     *  The default_level is
+     *  used to initialize the * printing level for all categories.
+     */
+    bool AddJournal(const SmartPtr<Journal> jrnl);
+
+    /** Add a new FileJournal. fname is the name
      *  of the * file to which this Journal corresponds.  Use
      *  fname="stdout" * for stdout, and use fname="stderr" for
      *  stderr.  This method * returns the Journal pointer so you can
-     *  set specific acceptance * criteria.  It returns NULL if there
-     *  was a problem creating a * new Journal.  The default_level is
-     *  used to initialize the * printing level for all categories.
+     *  set specific acceptance criteria.  It returns NULL if there
+     *  was a problem creating a new Journal.    
      */
-    Journal* AddJournal(
+    SmartPtr<Journal> AddFileJournal(
       const std::string& location_name,    /** identifier */
       const std::string& fname,
       EJournalLevel default_level = J_WARNING
@@ -213,7 +217,7 @@ namespace Ipopt
     /** Get an existing journal.  You can use this method to change
      *  the acceptance criteria at runtime.
      */
-    Journal* GetJournal(const std::string& location_name);
+    SmartPtr<Journal> GetJournal(const std::string& location_name);
     //@}
 
   private:
@@ -234,22 +238,23 @@ namespace Ipopt
 
     //** Private Data Members. */
     //@{
-    std::vector<Journal*> journals_;
+    std::vector< SmartPtr<Journal> > journals_;
     //@}
   };
 
-  /** Journal class (part of the Journalist implementation.).  This
-   * class stores the specific information for one journal, the file
-   * location (stdout, stderr, or disk), and the acceptance criteria.
+  /** Journal class (part of the Journalist implementation.). This
+   *  class is the base class for all Journals. It controls the 
+   *  acceptance criteria for print statements etc. Derived classes
+   *  like the FileJournal - output those messages to specific locations
    */
-  class Journal
+  class Journal : public ReferencedObject
   {
   public:
     /** Constructor. */
     Journal(const std::string& name, EJournalLevel default_level);
 
     /** Destructor. */
-    ~Journal();
+    virtual ~Journal();
 
     /** Get the name of the Journal */
     std::string Name();
@@ -263,6 +268,75 @@ namespace Ipopt
     void SetAllPrintLevels(
       EJournalLevel level
     );
+
+    /**@name Journal Output Methods. These methods are called by the
+     *  Journalist who first checks if the output print level and category
+     *  are acceptable.
+     *  Calling the Print methods explicitly (instead of through the 
+     *  Journalist will output the message regardless of print level
+     *  and category. You should use the Journalist to print & flush instead
+     */
+    //@{
+    /** Ask if a particular print level/category is accepted by the
+     * journal.
+     */
+    bool IsAccepted(
+      EJournalCategory category, EJournalLevel level
+    ) const;
+
+    /** Print to the designated output location */
+    void Print(const char* str)
+    {
+      PrintImpl(str);
+    }
+
+    /** Printf to the designated output location */
+    void Printf(const char* pformat, va_list ap)
+    {
+      PrintfImpl(pformat, ap);
+    }
+
+    /** Print vector to the designated output location */
+    void PrintVector(std::string name, const Vector& vector,
+                     Index indent, std::string prefix)
+    {
+      PrintVectorImpl(name, vector, indent, prefix);
+    }
+
+    /** Print matrix to the designated output location */
+    void PrintMatrix(const std::string name, const Matrix& matrix,
+                     Index indent, std::string prefix)
+    {
+      PrintMatrixImpl(name, matrix, indent, prefix);
+    }
+
+    /** Flush output buffer.*/
+    void FlushBuffer()
+    {
+      FlushBufferImpl();
+    }
+    //@}
+
+  protected:
+    /**@name Implementation version of Print methods. Derived classes
+     * should overload the Impl methods.
+     */
+    //@{
+    /** Print to the designated output location */
+    virtual void PrintImpl(const char* str)=0;
+
+    /** Printf to the designated output location */
+    virtual void PrintfImpl(const char* pformat, va_list ap)=0;
+
+    /** Print vector to the designated output location */
+    virtual void PrintVectorImpl(std::string name, const Vector& vector, Index indent, std::string prefix)=0;
+
+    /** Print matrix to the designated output location */
+    virtual void PrintMatrixImpl(const std::string name, const Matrix& matrix, Index indent, std::string prefix)=0;
+
+    /** Flush output buffer.*/
+    virtual void FlushBufferImpl()=0;
+    //@}
 
   private:
     /**@name Default Compiler Generated Methods
@@ -288,12 +362,22 @@ namespace Ipopt
 
     /** vector of integers indicating the level for each category */
     Index print_levels_[J_LAST_CATEGORY];
+  };
 
-    /** FILE pointer for the output destination */
-    FILE* file_;
 
-    /**@name Private methods for the Journalist (friend) to call*/
-    //@{
+  /** FileJournal class. This is a particular Journal implementation that
+   *  writes to a file for output. It can write to (stdout, stderr, or disk)
+   *  by using "stdout" and "stderr" as filenames.
+   */
+  class FileJournal : public Journal
+  {
+  public:
+    /** Constructor. */
+    FileJournal(const std::string& name, EJournalLevel default_level);
+
+    /** Destructor. */
+    virtual ~FileJournal();
+
     /** Open a new file for the output location.
      *  Special Names: stdout means stdout,
      *               : stderr means stderr.
@@ -303,30 +387,49 @@ namespace Ipopt
      */
     bool Open(const char* fname);
 
-    /** Ask if a particular print level/category is accepted by the
-     * journal.
+  protected:
+    /**@name Implementation version of Print methods - Overloaded from
+     * Journal base class.
      */
-    bool IsAccepted(
-      EJournalCategory category, EJournalLevel level
-    ) const;
-
+    //@{
     /** Print to the designated output location */
-    void Print(const char* str);
+    virtual void PrintImpl(const char* str);
 
     /** Printf to the designated output location */
-    void Printf(const char* pformat, va_list ap);
+    virtual void PrintfImpl(const char* pformat, va_list ap);
 
     /** Print vector to the designated output location */
-    void PrintVector(std::string name, const Vector& vector, Index indent, std::string prefix);
+    virtual void PrintVectorImpl(std::string name, const Vector& vector, Index indent, std::string prefix);
 
     /** Print matrix to the designated output location */
-    void PrintMatrix(const std::string name, const Matrix& matrix, Index indent, std::string prefix);
+    virtual void PrintMatrixImpl(const std::string name, const Matrix& matrix, Index indent, std::string prefix);
 
-    /** Flush output buffer */
-    void FlushBuffer();
+    /** Flush output buffer.*/
+    virtual void FlushBufferImpl();
     //@}
 
-    friend class Journalist;
+  private:
+    /**@name Default Compiler Generated Methods
+     * (Hidden to avoid implicit creation/calling).
+     * These methods are not implemented and 
+     * we do not want the compiler to implement
+     * them for us, so we declare them private
+     * and do not define them. This ensures that
+     * they will not be implicitly created/called. */
+    //@{
+    /** Default Constructor */
+    FileJournal();
+
+    /** Copy Constructor */
+    FileJournal(const FileJournal&);
+
+    /** Overloaded Equals Operator */
+    void operator=(const FileJournal&);
+    //@}
+
+    /** FILE pointer for the output destination */
+    FILE* file_;
+    //@}
   };
 }
 
