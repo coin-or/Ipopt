@@ -160,7 +160,7 @@ namespace Ipopt
   {
     DBG_ASSERT(initialized_);
     if (homogeneous_) {
-      return sqrt(Dim()) * fabs(scalar_);
+      return sqrt((double)Dim()) * fabs(scalar_);
     }
     else {
       return IpBlasDnrm2(Dim(), values_, 1);

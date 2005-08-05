@@ -153,10 +153,14 @@ namespace Ipopt
     for (Index i=0; i<(Index)journals_.size(); i++) {
       if (journals_[i]->IsAccepted(category, level)) {
         // print the message
+#ifndef NO_VA_COPY
         va_list apcopy;
         va_copy(apcopy, ap);
         journals_[i]->Printf(pformat, apcopy);
         va_end(apcopy);
+#else
+        journals_[i]->Printf(pformat, ap);
+#endif
       }
     }
   }
@@ -178,10 +182,14 @@ namespace Ipopt
         }
 
         // print the message
+#ifndef NO_VA_COPY
         va_list apcopy;
         va_copy(apcopy, ap);
         journals_[i]->Printf(pformat, apcopy);
         va_end(apcopy);
+#else
+        journals_[i]->Printf(pformat, ap);
+#endif
       }
     }
   }
