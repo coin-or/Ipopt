@@ -159,8 +159,10 @@ namespace Ipopt
         journals_[i]->Printf(pformat, apcopy);
         va_end(apcopy);
 #else
+
         journals_[i]->Printf(pformat, ap);
 #endif
+
       }
     }
   }
@@ -188,8 +190,10 @@ namespace Ipopt
         journals_[i]->Printf(pformat, apcopy);
         va_end(apcopy);
 #else
+
         journals_[i]->Printf(pformat, ap);
 #endif
+
       }
     }
   }

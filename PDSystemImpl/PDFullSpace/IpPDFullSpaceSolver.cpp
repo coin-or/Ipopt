@@ -456,35 +456,35 @@ namespace Ipopt
           perturbHandler_->PerturbForSingularity(delta_x, delta_s,
                                                  delta_c, delta_d);
         }
-	else if (retval==SYMSOLVER_WRONG_INERTIA &&
-		 augSysSolver_->NumberOfNegEVals() < numberOfEVals) {
-	  Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-			 "Number of negative eigenvalues too small!\n");
-	  // If the number of negative eigenvalues is too small, then
-	  // we first try to remedy this by asking for better quality
-	  // solution (e.g. increasing pivot tolerance), and if that
-	  // doesn't help, we assume that the system is singular
-	  bool assume_singular = true;
-	  if (!augsys_improved_) {
-	    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-			   "Asking augmented system solver to improve quality of its solutions.\n");
-	    augsys_improved_ = augSysSolver_->IncreaseQuality();
-	    if (augsys_improved_) {
-	      IpData().Append_info_string("q");
-	      resolve_with_better_quality = true;
-	      assume_singular = false;
-	    }
-	    else {
-	      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-			     "Quality could not be improved\n");
-	    }
-	  }
-	  if (assume_singular) {
-	    perturbHandler_->PerturbForSingularity(delta_x, delta_s,
-						   delta_c, delta_d);
-	    IpData().Append_info_string("M");
-	  }
-	}
+        else if (retval==SYMSOLVER_WRONG_INERTIA &&
+                 augSysSolver_->NumberOfNegEVals() < numberOfEVals) {
+          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                         "Number of negative eigenvalues too small!\n");
+          // If the number of negative eigenvalues is too small, then
+          // we first try to remedy this by asking for better quality
+          // solution (e.g. increasing pivot tolerance), and if that
+          // doesn't help, we assume that the system is singular
+          bool assume_singular = true;
+          if (!augsys_improved_) {
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "Asking augmented system solver to improve quality of its solutions.\n");
+            augsys_improved_ = augSysSolver_->IncreaseQuality();
+            if (augsys_improved_) {
+              IpData().Append_info_string("q");
+              resolve_with_better_quality = true;
+              assume_singular = false;
+            }
+            else {
+              Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                             "Quality could not be improved\n");
+            }
+          }
+          if (assume_singular) {
+            perturbHandler_->PerturbForSingularity(delta_x, delta_s,
+                                                   delta_c, delta_d);
+            IpData().Append_info_string("M");
+          }
+        }
         else if (retval==SYMSOLVER_WRONG_INERTIA ||
                  retval==SYMSOLVER_SINGULAR) {
           // Get new perturbation factors from the perturbation

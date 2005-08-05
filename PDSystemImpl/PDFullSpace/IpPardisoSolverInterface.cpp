@@ -258,7 +258,7 @@ namespace Ipopt
     if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Wrong inertia: required are %d, but we got %d.\n",
-		     numberOfNegEVals, negevals_);
+                     numberOfNegEVals, negevals_);
       return SYMSOLVER_WRONG_INERTIA;
     }
 
