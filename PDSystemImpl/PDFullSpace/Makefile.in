@@ -47,7 +47,7 @@ build_triplet = @build@
 @HAVE_PARDISO_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 
 @HAVE_TAUCS_TRUE@am__append_2 = \
-@HAVE_TAUCS_TRUE@	IpTAUCSSolverInterface.hpp IpTAUCSSolverInterface.cpp
+@HAVE_TAUCS_TRUE@	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp
 
 subdir = PDSystemImpl/PDFullSpace
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
@@ -72,8 +72,9 @@ am__libpdfullspace_a_SOURCES_DIST = IpAugRestoSystemSolver.cpp \
 	IpTSymLinearSolver.cpp IpSparseSymLinearSolverInterface.hpp \
 	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
 	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
+	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
-	IpTAUCSSolverInterface.hpp IpTAUCSSolverInterface.cpp
+	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp
 @HAVE_PARDISO_TRUE@am__objects_1 = IpPardisoSolverInterface.$(OBJEXT)
 @HAVE_TAUCS_TRUE@am__objects_2 = IpTAUCSSolverInterface.$(OBJEXT)
 am_libpdfullspace_a_OBJECTS = IpAugRestoSystemSolver.$(OBJEXT) \
@@ -81,7 +82,8 @@ am_libpdfullspace_a_OBJECTS = IpAugRestoSystemSolver.$(OBJEXT) \
 	IpMc19TSymScalingMethod.$(OBJEXT) \
 	IpPDFullSpaceSolver.$(OBJEXT) IpTripletHelper.$(OBJEXT) \
 	IpTSymLinearSolver.$(OBJEXT) IpMa27TSolverInterface.$(OBJEXT) \
-	IpTripletToCSRConverter.$(OBJEXT) $(am__objects_1) \
+	IpTripletToCSRConverter.$(OBJEXT) \
+	IpPDPerturbationHandler.$(OBJEXT) $(am__objects_1) \
 	$(am__objects_2)
 libpdfullspace_a_OBJECTS = $(am_libpdfullspace_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
@@ -245,6 +247,7 @@ libpdfullspace_a_SOURCES = IpAugRestoSystemSolver.cpp \
 	IpTSymLinearSolver.cpp IpSparseSymLinearSolverInterface.hpp \
 	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
 	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
+	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
 	$(am__append_1) $(am__append_2)
 
 # Astyle stuff
@@ -264,7 +267,8 @@ ASTYLE_FILES = \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
-	IpTAUCSSolverInterface.hppbak IpTAUCSSolverInterface.cppbak
+	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak \
+	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak
 
 CLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
@@ -320,6 +324,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa27TSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19TSymScalingMethod.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDFullSpaceSolver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDPerturbationHandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPardisoSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdAugSystemSolver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTAUCSSolverInterface.Po@am__quote@

@@ -87,7 +87,7 @@ namespace Ipopt
     roptions->AddLowerBoundedIntegerOption(
       "max_bisection_steps",
       "Maximal number of search steps during direct search procedure determining optimal centering parameter.",
-      0, 4);
+      0, 8);
     roptions->AddBoundedNumberOption(
       "bisection_tol",
       "Tolerance for the bisection search procedure determining optimal centering parameter.",

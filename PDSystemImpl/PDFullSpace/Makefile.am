@@ -24,7 +24,8 @@ libpdfullspace_a_SOURCES = \
 	IpTSymLinearSolver.cpp \
 	IpSparseSymLinearSolverInterface.hpp \
 	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
-	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp
+	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
+	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp
 
 if HAVE_PARDISO
   libpdfullspace_a_SOURCES += \
@@ -33,7 +34,7 @@ endif
 
 if HAVE_TAUCS
   libpdfullspace_a_SOURCES += \
-	IpTAUCSSolverInterface.hpp IpTAUCSSolverInterface.cpp
+	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp
 endif
 
 
@@ -60,7 +61,8 @@ ASTYLE_FILES = \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
-	IpTAUCSSolverInterface.hppbak IpTAUCSSolverInterface.cppbak
+	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak \
+	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@

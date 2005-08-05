@@ -16,13 +16,15 @@ namespace Ipopt
 
   DefineIpoptType(PDFullSpaceSolver);
 
-  PDFullSpaceSolver::PDFullSpaceSolver(AugSystemSolver& augSysSolver)
+  PDFullSpaceSolver::PDFullSpaceSolver(AugSystemSolver& augSysSolver,
+                                       PDPerturbationHandler& perturbHandler)
       :
       PDSystemSolver(),
       augSysSolver_(&augSysSolver),
+      perturbHandler_(&perturbHandler),
       dummy_cache_(1)
   {
-    DBG_START_METH("PDFullSpaceSolver::PDFullSpaceSolver(SmartPtr<AugSystemSolver> augSysSolver)",dbg_verbosity);
+    DBG_START_METH("PDFullSpaceSolver::PDFullSpaceSolver",dbg_verbosity);
   }
 
   PDFullSpaceSolver::~PDFullSpaceSolver()
@@ -32,23 +34,6 @@ namespace Ipopt
 
   void PDFullSpaceSolver::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption(
-      "max_inertia_correction",
-      "Maximum value of regularization parameter for handling negative curvature.",
-      0, true,
-      1e40,
-      "In order to guarantee that the search directions are indeed proper "
-      "descent directions, Ipopt requires that the inertia of the "
-      "(augmented) linear system for the step computation has the "
-      "correct number of negative and positive eigenvalues.  The idea "
-      "is that this guides the algorithm away from maximizers and makes "
-      "Ipopt more likely converge to first order optimal points that "
-      "are minimizers. If the inertia is not correct, a multiple of the "
-      "identity matrix is added to the Hessian of the Lagrangian in the "
-      "augmented system. This parameter gives the maximum value of the "
-      "regularization parameter. If a regularization of that size is "
-      "not enough, the algorithm skips this iteration and goes to the "
-      "restoration phase.  (This is delta_w^max in implementation paper)");
     roptions->AddLowerBoundedIntegerOption(
       "min_refinement_steps",
       "Minimum number of iterative refinement steps per solve.",
@@ -98,7 +83,6 @@ namespace Ipopt
     ASSERT_EXCEPTION(max_refinement_steps_ >= min_refinement_steps_, OptionsList::OPTION_OUT_OF_RANGE,
                      "Option \"max_refinement_steps\": This value must be larger than or equal to min_refinement_steps (default 1)");
 
-    options.GetNumericValue("max_inertia_correction", max_inertia_correction_, prefix);
     options.GetNumericValue("residual_ratio_max", residual_ratio_max_, prefix);
     options.GetNumericValue("residual_ratio_singular", residual_ratio_singular_, prefix);
     ASSERT_EXCEPTION(residual_ratio_singular_ > residual_ratio_max_, OptionsList::OPTION_OUT_OF_RANGE,
@@ -107,17 +91,14 @@ namespace Ipopt
 
     // Reset internal flags and data
     augsys_improved_ = false;
-    delta_x_curr_=0.;
-    delta_s_curr_=0.;
-    delta_c_curr_=0.;
-    delta_d_curr_=0.;
-    delta_x_last_=0.;
-    delta_s_last_=0.;
-    delta_c_last_=0.;
-    delta_d_last_=0.;
 
-    return augSysSolver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                     options, prefix);
+    if (!augSysSolver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
+                                   options, prefix)) {
+      return false;
+    }
+
+    return perturbHandler_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
+                                       options, prefix);
   }
 
   void PDFullSpaceSolver::Solve(Number alpha,
@@ -168,12 +149,12 @@ namespace Ipopt
 
     bool done = false;
     // The following flag is set to true, if we asked the linear
-    // solver successfully, to improve the quality of the solution in
-    // the next solve.
-    bool resolve_better_quality = false;
+    // solver to improve the quality of the solution in
+    // the next solve
+    bool resolve_with_better_quality = false;
     // the following flag is set to true, if iterative refinement
-    // failed, and we want to do try if a modified system is able to
-    // remedy that problem
+    // failed and we want to try if a modified system is able to
+    // remedy that problem by pretending the matrix is singular
     bool pretend_singular = false;
     bool pretend_singular_last_time = false;
 
@@ -183,11 +164,11 @@ namespace Ipopt
     while (!done) {
 
       bool solve_retval =
-        SolveOnce(resolve_better_quality, pretend_singular,
+        SolveOnce(resolve_with_better_quality, pretend_singular,
                   *W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
                   *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
                   *sigma_x, *sigma_s, 1., 0., rhs, res);
-      resolve_better_quality = false;
+      resolve_with_better_quality = false;
       pretend_singular = false;
 
       if (!solve_retval) {
@@ -222,7 +203,7 @@ namespace Ipopt
 
         // To the next back solve
         solve_retval =
-          SolveOnce(resolve_better_quality, false,
+          SolveOnce(resolve_with_better_quality, false,
                     *W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
                     *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
                     *sigma_x, *sigma_s, -1., 1., *resid, res);
@@ -250,7 +231,7 @@ namespace Ipopt
 
           // Pretend singularity only once - if it didn't help, we
           // have to live with what we got so far
-          resolve_better_quality = false;
+          resolve_with_better_quality = false;
           DBG_PRINT((1, "pretend_singular = %d\n", pretend_singular));
           if (!pretend_singular_last_time) {
             // First try if we can ask the augmented system solver to
@@ -262,7 +243,7 @@ namespace Ipopt
               augsys_improved_ = augSysSolver_->IncreaseQuality();
               if (augsys_improved_) {
                 IpData().Append_info_string("q");
-                resolve_better_quality = true;
+                resolve_with_better_quality = true;
               }
               else {
                 // solver said it cannot improve quality, so let
@@ -304,25 +285,9 @@ namespace Ipopt
         residual_ratio_old = residual_ratio;
       } // End of loop for iterative refinement
 
-      done = !(resolve_better_quality) && !(pretend_singular);
+      done = !(resolve_with_better_quality) && !(pretend_singular);
 
     } // End of loop for solving the linear system (incl. modifications)
-
-    // Now that the system has been solved, remember the current
-    // perturbation for the next time
-    if (delta_x_curr_!=0.) {
-      delta_x_last_ = delta_x_curr_;
-    }
-    if (delta_s_curr_!=0.) {
-      delta_s_last_ = delta_s_curr_;
-    }
-    if (delta_c_curr_!=0.) {
-      delta_c_last_ = delta_c_curr_;
-      IpData().Append_info_string("L");
-    }
-    if (delta_s_curr_!=0.) {
-      delta_d_last_ = delta_d_curr_;
-    }
 
     // Finally let's assemble the res result vectors
     if (alpha != 0.) {
@@ -332,9 +297,6 @@ namespace Ipopt
     if (beta != 0.) {
       res.Axpy(beta, *copy_res);
     }
-
-    // Set some information for iteration summary output
-    IpData().Set_info_regu_x(delta_x_curr_);
 
     DBG_PRINT_VECTOR(2, "res_x", *res.x());
     DBG_PRINT_VECTOR(2, "res_s", *res.s());
@@ -347,7 +309,7 @@ namespace Ipopt
 
   }
 
-  bool PDFullSpaceSolver::SolveOnce(bool resolve_unmodified,
+  bool PDFullSpaceSolver::SolveOnce(bool resolve_with_better_quality,
                                     bool pretend_singular,
                                     const SymMatrix& W,
                                     const Matrix& J_c,
@@ -418,16 +380,29 @@ namespace Ipopt
     }
     // improve_current_solution can only be true, if that system has
     // been solved before
-    DBG_ASSERT((!resolve_unmodified && !pretend_singular) || uptodate);
+    DBG_ASSERT((!resolve_with_better_quality && !pretend_singular) || uptodate);
 
     ESymSolverStatus retval;
     if (uptodate && !pretend_singular) {
+
+      // Get the perturbation values
+      Number delta_x;
+      Number delta_s;
+      Number delta_c;
+      Number delta_d;
+      perturbHandler_->CurrentPerturbation(delta_x, delta_s, delta_c, delta_d);
+
       // No need to go throught the pain of finding the appropriate
       // values for the deltas, because the matrix hasn't changed since
       // the last call.  So, just call the Solve Method
-      retval = augSysSolver_->Solve(&W, &sigma_x, delta_x_curr_,
-                                    &sigma_s, delta_s_curr_, &J_c, NULL,
-                                    delta_c_curr_, &J_d, NULL, delta_d_curr_,
+      //
+      // Note: resolve_with_better_quality is true, then the Solve
+      // method has already asked the augSysSolver to increase the
+      // quality at the end solve, and we are now getting the solution
+      // with that better quality
+      retval = augSysSolver_->Solve(&W, &sigma_x, delta_x,
+                                    &sigma_s, delta_s, &J_c, NULL,
+                                    delta_c, &J_d, NULL, delta_d,
                                     *augRhs_x, *augRhs_s, *rhs.y_c(), *rhs.y_d(),
                                     *sol->x_NonConst(), *sol->s_NonConst(),
                                     *sol->y_c_NonConst(), *sol->y_d_NonConst(),
@@ -435,23 +410,20 @@ namespace Ipopt
       if (retval!=SYMSOLVER_SUCCESS) {
         return false;
       }
-      assert(retval==SYMSOLVER_SUCCESS); //TODO make return code
     }
     else {
       Index numberOfEVals=rhs.y_c()->Dim()+rhs.y_d()->Dim();
       // counter for the number of trial evaluations
       // (ToDo is not at the corrent place)
       Index count = 0;
-      // Flag indicating if instead of the first
-      // solve we want to pretend that the system is
-      // singluar
-      if (true || !pretend_singular) {
-        // First try, if no modification is necessary to obtain correct inertia
-        delta_x_curr_=0.;
-        delta_s_curr_=0.;
-        delta_c_curr_=0.;
-        delta_d_curr_=0.;
-      }
+
+      // Get the very first perturbation values from the perturbation
+      // Handler
+      Number delta_x;
+      Number delta_s;
+      Number delta_c;
+      Number delta_d;
+      perturbHandler_->ConsiderNewSystem(delta_x, delta_s, delta_c, delta_d);
 
       retval = SYMSOLVER_SINGULAR;
       bool fail = false;
@@ -466,46 +438,31 @@ namespace Ipopt
           count++;
           Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                          "Solving system with delta_x=%e delta_s=%e\n                    delta_c=%e delta_d=%e\n",
-                         delta_x_curr_, delta_s_curr_,
-                         delta_c_curr_, delta_d_curr_);
-          retval = augSysSolver_->Solve(&W, &sigma_x, delta_x_curr_,
-                                        &sigma_s, delta_s_curr_, &J_c, NULL,
-                                        delta_c_curr_, &J_d, NULL, delta_d_curr_,
+                         delta_x, delta_s, delta_c, delta_d);
+          retval = augSysSolver_->Solve(&W, &sigma_x, delta_x,
+                                        &sigma_s, delta_s, &J_c, NULL,
+                                        delta_c, &J_d, NULL, delta_d,
                                         *augRhs_x, *augRhs_s, *rhs.y_c(), *rhs.y_d(),
                                         *sol->x_NonConst(), *sol->s_NonConst(),
                                         *sol->y_c_NonConst(), *sol->y_d_NonConst(),
                                         true, numberOfEVals);
         }
         assert(retval!=SYMSOLVER_FATAL_ERROR); //TODO make return code
-        if (retval==SYMSOLVER_SINGULAR && delta_c_curr_==0. &&
+        if (retval==SYMSOLVER_SINGULAR &&
             (rhs.y_c()->Dim()+rhs.y_d()->Dim() > 0) ) {
-          // If the matrix is singular and delta_c is not yet nonzero,
-          // increase both delta_c and delta_d
-          delta_c_curr_ = 1e-8; // TODO: Make parameter
-          delta_d_curr_ = 1e-8; // TODO Make parameter
+
+          // Get new perturbation factors from the perturbation
+          // handlers for the singular case
+          perturbHandler_->PerturbForSingularity(delta_x, delta_s,
+                                                 delta_c, delta_d);
         }
-        else if (retval==SYMSOLVER_WRONG_INERTIA || retval==SYMSOLVER_SINGULAR) {
-          if (delta_x_curr_ == 0) {
-            if (delta_x_last_ == 0.) {
-              delta_x_curr_ = 1e-4;  //TODO Parameter
-            }
-            else {
-              delta_x_curr_ = Max(1e-20,delta_x_last_/3.);  //TODO Parameter
-            }
-          }
-          else {
-            if (delta_x_last_ == 0. || 1e5*delta_x_last_<delta_x_curr_) {
-              delta_x_curr_ = 100.*delta_x_curr_;  //TODO Parameter
-            }
-            else {
-              delta_x_curr_ = 8.*delta_x_curr_;  //TODO Parameter
-            }
-          }
-          if (delta_x_curr_ > max_inertia_correction_) {
-            // Give up trying to solve the linear system
-            return false;
-          }
-          delta_s_curr_ = delta_x_curr_;
+        else if (retval==SYMSOLVER_WRONG_INERTIA ||
+                 retval==SYMSOLVER_SINGULAR) {
+
+          // Get new perturbation factors from the perturbation
+          // handlers for the case of wrong inertia
+          perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
+                                                  delta_c, delta_d);
         }
       } // while (retval!=SYMSOLVER_SUCCESS && !fail) {
 
@@ -515,7 +472,7 @@ namespace Ipopt
                      count);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n",
-                     delta_x_curr_,delta_s_curr_,delta_c_curr_,delta_d_curr_);
+                     delta_x, delta_s, delta_c, delta_d);
     }
 
     // Compute the remaining sol Vectors
@@ -525,7 +482,7 @@ namespace Ipopt
     Pd_U.SinvBlrmZMTdBr(1., slack_s_U, *rhs.v_U(), v_U, *sol->s_NonConst(), *sol->v_U_NonConst());
 
     // Finally let's assemble the res result vectors
-    AxpBy(alpha, *sol, beta, res);
+    res.AddOneVector(alpha, *sol, beta);
 
     return true;
   }
@@ -556,36 +513,40 @@ namespace Ipopt
   {
     DBG_START_METH("PDFullSpaceSolver::ComputeResiduals", dbg_verbosity);
 
+    // Get the current sizes of the perturbation factors
+    Number delta_x;
+    Number delta_s;
+    Number delta_c;
+    Number delta_d;
+    perturbHandler_->CurrentPerturbation(delta_x, delta_s, delta_c, delta_d);
+
     SmartPtr<Vector> tmp;
 
     // x
     W.MultVector(1., *res.x(), 0., *resid.x_NonConst());
-    //    if (delta_x_curr_!=0.) {
-    //      resid_x.Axpy(delta_x_curr_, res_x);
-    //    }
     J_c.TransMultVector(1., *res.y_c(), 1., *resid.x_NonConst());
     J_d.TransMultVector(1., *res.y_d(), 1., *resid.x_NonConst());
     Px_L.MultVector(-1., *res.z_L(), 1., *resid.x_NonConst());
     Px_U.MultVector(1., *res.z_U(), 1., *resid.x_NonConst());
-    resid.x_NonConst()->AddTwoVectors(delta_x_curr_, *res.x(), -1., *rhs.x(), 1.);
+    resid.x_NonConst()->AddTwoVectors(delta_x, *res.x(), -1., *rhs.x(), 1.);
 
     // s
     Pd_U.MultVector(1., *res.v_U(), 0., *resid.s_NonConst());
     Pd_L.MultVector(-1., *res.v_L(), 1., *resid.s_NonConst());
     resid.s_NonConst()->AddTwoVectors(-1., *res.y_d(), -1., *rhs.s(), 1.);
-    if (delta_s_curr_!=0.) {
-      resid.s_NonConst()->Axpy(delta_s_curr_, *res.s());
+    if (delta_s!=0.) {
+      resid.s_NonConst()->Axpy(delta_s, *res.s());
     }
 
     // c
     J_c.MultVector(1., *res.x(), 0., *resid.y_c_NonConst());
-    resid.y_c_NonConst()->AddTwoVectors(-delta_c_curr_, *res.y_c(), -1., *rhs.y_c(), 1.);
+    resid.y_c_NonConst()->AddTwoVectors(-delta_c, *res.y_c(), -1., *rhs.y_c(), 1.);
 
     // d
     J_d.MultVector(1., *res.x(), 0., *resid.y_d_NonConst());
     resid.y_d_NonConst()->AddTwoVectors(-1., *res.s(), -1., *rhs.y_d(), 1.);
-    if (delta_d_curr_) {
-      resid.y_d_NonConst()->Axpy(-delta_d_curr_, *res.y_d());
+    if (delta_d!=0.) {
+      resid.y_d_NonConst()->Axpy(-delta_d, *res.y_d());
     }
 
     // zL
@@ -672,20 +633,6 @@ namespace Ipopt
       // safeguard to use against incredibly large solution vectors
       Number max_cond = 1e6;
       return nrm_resid/(Min(nrm_res, max_cond*nrm_rhs)+nrm_rhs);
-    }
-  }
-
-  void PDFullSpaceSolver::AxpBy(Number alpha, const Vector& X,
-                                Number beta, Vector& Y)
-  {
-    if (beta==0.) {
-      Y.Set(0.);
-    }
-    else if (beta!=1.) {
-      Y.Scal(beta);
-    }
-    if (alpha!=0.) {
-      Y.Axpy(alpha, X);
     }
   }
 

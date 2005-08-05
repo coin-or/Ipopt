@@ -11,6 +11,7 @@
 #include "IpStdAugSystemSolver.hpp"
 #include "IpAugRestoSystemSolver.hpp"
 #include "IpPDFullSpaceSolver.hpp"
+#include "IpPDPerturbationHandler.hpp"
 #include "IpOptErrorConvCheck.hpp"
 #include "IpFilterLineSearch.hpp"
 #include "IpMonotoneMuUpdate.hpp"
@@ -158,8 +159,10 @@ namespace Ipopt
     SmartPtr<AugSystemSolver> AugSolver =
       //        = new AugTSystemSolver(*Ma27Solver);
       new StdAugSystemSolver(*ScaledSolver);
+    SmartPtr<PDPerturbationHandler> pertHandler =
+      new PDPerturbationHandler();
     SmartPtr<PDSystemSolver> PDSolver =
-      new PDFullSpaceSolver(*AugSolver);
+      new PDFullSpaceSolver(*AugSolver, *pertHandler);
 
     // Create the object for initializing the iterates
     // Initialization object
@@ -181,8 +184,10 @@ namespace Ipopt
     // Solver for the restoration phase
     SmartPtr<AugSystemSolver> resto_AugSolver =
       new AugRestoSystemSolver(*AugSolver);
+    SmartPtr<PDPerturbationHandler> resto_pertHandler =
+      new PDPerturbationHandler();
     SmartPtr<PDSystemSolver> resto_PDSolver =
-      new PDFullSpaceSolver(*resto_AugSolver);
+      new PDFullSpaceSolver(*resto_AugSolver, *resto_pertHandler);
 
     // Convergence check in the restoration phase
     SmartPtr<RestoFilterConvergenceCheck> resto_convCheck =

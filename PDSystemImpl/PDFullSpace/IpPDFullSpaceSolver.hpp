@@ -11,6 +11,7 @@
 
 #include "IpPDSystemSolver.hpp"
 #include "IpAugSystemSolver.hpp"
+#include "IpPDPerturbationHandler.hpp"
 
 namespace Ipopt
 {
@@ -38,7 +39,8 @@ namespace Ipopt
     /** Constructor that takes in the Augmented System solver that
      *  is to be used inside
      */
-    PDFullSpaceSolver(AugSystemSolver& augSysSolver);
+    PDFullSpaceSolver(AugSystemSolver& augSysSolver,
+                      PDPerturbationHandler& perturbHandler);
 
     /** Default destructor */
     virtual ~PDFullSpaceSolver();
@@ -76,29 +78,18 @@ namespace Ipopt
     PDFullSpaceSolver& operator=(const PDFullSpaceSolver&);
     //@}
 
+    /** @name Strategy objects to hold on to. */
+    //@{
     /** Pointer to the Solver for the augmented system */
     SmartPtr<AugSystemSolver> augSysSolver_;
+    /** Pointer to the Perturbation Handler. */
+    SmartPtr<PDPerturbationHandler> perturbHandler_;
+    //@}
 
     /**@name Data about the correction made to the system */
     //@{
     /** A dummy cache to figure out if the deltas are still up to date*/
     CachedResults<void*> dummy_cache_;
-    /** The current value for delta_x */
-    Number delta_x_curr_;
-    /** The current value for delta_s */
-    Number delta_s_curr_;
-    /** The current value for delta_c */
-    Number delta_c_curr_;
-    /** The current value for delta_d */
-    Number delta_d_curr_;
-    /** The last nonzero value for delta_x */
-    Number delta_x_last_;
-    /** The last nonzero value for delta_s */
-    Number delta_s_last_;
-    /** The last nonzero value for delta_c */
-    Number delta_c_last_;
-    /** The last nonzero value for delta_d */
-    Number delta_d_last_;
     /** Flag indicating if for the current matrix the solution quality
      *  of the augmented system solver has already been increased. */
     bool augsys_improved_;
@@ -110,8 +101,6 @@ namespace Ipopt
     Index min_refinement_steps_;
     /** Maximal number of iterative refinement performed per backsolve */
     Index max_refinement_steps_;
-    /** Maximal value for the regularization. */
-    Number max_inertia_correction_;
     /** Maximal allowed ratio of the norm of the residual over the
      *  norm of the right hand side and solution. */
     Number residual_ratio_max_;
@@ -189,18 +178,10 @@ namespace Ipopt
 
     /** @name Auxilliary functions */
     //@{
-    /** Compute
-     * \f$ x = \alpha P S^{-1} z + \beta x \f$.
-     */
-    void AddPSinvZ(Number alpha, const Matrix& P,
-                   const Vector& S, const Vector& Z,
-                   Number beta, Vector& X);
     /** Compute \f$ x = S^{-1}(r + \alpha Z P^T d)\f$ */
     void SinvBlrmZPTdBr(Number alpha, const Vector& S,
                         const Vector& R, const Vector& Z,
                         const Matrix& P, const Vector&g, Vector& X);
-    /** Compute \f$ y = \alpha* x + \beta * y \f$ */
-    void AxpBy(Number alpha, const Vector& X, Number beta, Vector& Y);
     //@}
   };
 
