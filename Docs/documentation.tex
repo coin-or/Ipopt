@@ -1,0 +1,510 @@
+%% Copyright (C) 2005, Carnegie Mellon University and others.
+%%
+%% The first version of this files was contributed to the Ipopt project
+%% on Aug 1, 2005, by Yoshiaki Kawajiri
+%%                    Department of Chemical Engineering
+%%                    Carnegie Mellon University
+%%                    Pittsburgh, PA 15213
+%%
+\documentclass[letter,12pt]{article}
+\setlength{\textwidth}{6.3in}       % Text width
+\setlength{\textheight}{8.5in}      % Text height
+\setlength{\oddsidemargin}{0.1in}     % Left margin for even-numbered pages
+\setlength{\evensidemargin}{0.1in}    % Left margin for odd-numbered pages
+\setlength{\topmargin}{-0.5in}         % Top margin
+\renewcommand{\baselinestretch}{1.1}
+%\usepackage{times} % Times Roman font ?
+
+
+\begin{document}
+\begin{center}
+\begin{Large}
+\textbf{Introduction to IPOPT}\\
+\vspace{0.5cm}
+\end{Large}
+\end{center}
+\begin{center}
+Yoshiaki Kawajiri\footnote{
+Department of Chemical Engineering, Carnegie Mellon University, Pittsburgh, PA, 15213\\
+Email: kawajiri@cmu.edu}\\
+\today
+\end{center}
+\section{Overview}
+This is a tutorial on how to download, install, and use IPOPT.
+IPOPT is a solver for nonlinear programming 
+available as an open
+ source software package from COIN-OR\cite{COINORWeb}.
+ IPOPT has been originally written in FORTRAN, 
+and recently implemented in C++. This document 
+describes its interfaces for C++ and AMPL.\par
+IPOPT can handle general nonlinear programming problems as follows:
+\begin{center}
+\begin{eqnarray}
+\min_{x \in R^n} f(x) \label{obj}\\
+subject~to:~~~ g_l \leq g(x) \leq g_u\\
+~~~~~~~~~~~x_l \leq x \leq x_u \label{bounds}
+\end{eqnarray}
+\end{center}
+where $f(x)$ and $g(x)$ can be linear or nonlinear, convex
+or non-convex. $g_l$ is the lower bound of the constraint $g(x)$
+, and $g_u$ is the upper bound. $g(x)$ can contain an equality constraint
+$g_i(x)=c$ as its component by setting $g_{l,i}=g_{u,i}=c$.
+IPOPT assumes that your optimization problem has been
+ transformed into the form of (\ref{obj})-(\ref{bounds}).\footnote{There
+ are more complex forms that IPOPT can handle, but in this document 
+we discuss only this basic form.}\par
+ The downloading, installation, and execution steps in the following
+ sections are confirmed to work on Linux as well as Cygwin/Windows
+environment. It is assumed that readers are
+familiar with basic UNIX commands and C++.\par
+General questions related to IPOPT should be addressed to IPOPT mailing
+list ({\tt http://list.coin-or.org/mailman/listinfo/coin-ipopt}). You might
+want to look at the archives before posting a question. The mathematical
+details of the algorithm can be found in the
+reports by the main author of IPOPT, Andreas W\"achter
+\cite{AndreasPaper} \cite{AndreasThesis}.
+ Questions related to this document specifically should be directed to 
+{\tt kawajiri@cmu.edu}.
+
+
+\section{Download IPOPT}
+IPOPT is available from the COIN CVS repository. Follow the steps below to
+download it into your machine:
+\begin{enumerate}
+\item{Set the environmental variables:\footnote{By creating this environmental variable, you can avoid repeatedly typing
+ the address of the repository. If you do not want to create this variable, add
+ the option
+ {\tt -d
+``:pserver:anonymous@www.coin-or.org:2401/home/coin/coincvs''} in
+every {\tt cvs} command in the following steps.}\\
+\textit{(csh, tcsh)}\\
+{\tt \$ setenv CVSROOT 
+``:pserver:anonymous@www.coin-or.org:2401/home/coin/coincvs''}\\
+\textit{(bash)}\\
+{\tt \$ export
+CVSROOT=``:pserver:anonymous@www.coin-or.org:2401/home/coin/coincvs''}}
+\item{Move to the directory you wish to download IPOPT in. Log on to the cvs session:\\
+{\tt \$ cvs login}}
+\item{You will be asked for a password. Type {\tt anonymous}}
+\item{Download the package:\\
+{\tt\$ cvs checkout COIN/Ipopt-devel}}
+\item{Log out of the cvs session:\\
+{\tt \$ cvs logout}}
+\item{Confirm that the directory {\tt COIN/Ipopt-devel} has been created in
+your directory.}
+\end{enumerate}
+
+\section{Download HSL libraries}
+In addition to the IPOPT source code, two additional subroutines
+have to be downloaded from the Harwell Subroutine Library (HSL):
+\begin{enumerate}
+\item{Go to {\tt http://hsl.rl.ac.uk/archive/hslarchive.html}}
+\item{Follow the instruction on the website, and submit the registration form.}
+\item{Go to \textit{HSL Archive Programs}, and find the package list.}
+\item{In your browser window, click on \textit{MA27}.}
+\item{Make sure that \textit{Double precision:} is checked. Click \textit{Download package (comments removed)}}
+\item{Save the file as {\tt ma27ad.f} in {\tt COIN/Ipopt-devel/OTHERS/HSL/}}
+\item{Go back to the package list using the back button of your browser.}
+\item{In your browser window, click on \textit{MC19}.}
+\item{Make sure \textit{Double precision:} is checked. Click \textit{Download package (comments removed)}}
+\item{Save the file as {\tt mc19ad.f} in {\tt
+COIN/Ipopt-devel/OTHERS/HSL/}}
+\end{enumerate}
+
+\section{Install IPOPT}
+\begin{enumerate}
+\item{Run the following scripts.\footnote{These scripts download additional
+     files from Netlib Repository (http://www.netlib.org)}\\
+{\tt
+\$ COIN/Ipopt/OTHERS/blas/get.blas\\
+\$ COIN/Ipopt/OTHERS/lapack/get.lapack\\
+\$ COIN/Ipopt/OTHERS/HSL/asl/get.asl}}
+\item{Go to the top directory of IPOPT:\\
+{\tt\$cd /home/\textit{...your directory...}/COIN/Ipopt-devel/}}
+\item{Run\\
+{\tt\$ ./configure}}
+\item{Run\\
+{\tt \$ make}\\
+{\tt \$ make install}}
+\item{Although not necessary in this example, you might want an access
+to information on the source code of IPOPT. If you have \textit{doxygen}
+installed in your machine, create html files by running\\
+{\tt \$ make doc}\\
+at the top directory ({\tt COIN/Ipopt-devel/}).
+Open your web browser and bookmark the index file {\tt
+     COIN/Ipopt-devel/doc/html/index.html}.}
+\end{enumerate}
+
+\section{Example Problem}
+An example has already been created in {\tt COIN/Examples/cpp\_example}.
+\subsection{Problem Definition}
+ We consider the following simple nonlinear optimization
+problem:
+\begin{eqnarray}
+\min_{x=(x_1,x_2)^T \in R^2} f(x) = -(x_2-2)^2\\
+subject~to: g(x)=-x_1^2 - x_2 + 1=0\\
+~~~~~~~~~~~-1 \leq x_1 \leq 1 \label{ExampleBound}\\
+~~~~~~~~~~~~~~x^0=(0.5,1.5)^T~~(Starting~point)
+\end{eqnarray}
+Since this problem has only one equality constraint, we have
+$g_l=g_u=0$. Referring to (\ref{obj})-(\ref{bounds}), we have
+$x_l=(-1,-\infty)^T$ and $x_u=(1,\infty)^T$\\
+Its Lagrangian is given by:
+\begin{eqnarray}
+L(x,\lambda,\mu)=-(x_2-2)^2+\lambda(-x_1^2 - x_2 + 1)+\mu_{1}(-x_1-1)+\mu_{2}(x_1-1)
+\end{eqnarray}
+We will need the derivatives of these functions:\\
+\textit{Gradient of objective function}\\
+\begin{equation}
+\nabla f(x)=\left(\begin{array}{c}0\\-2(x_2-2)\\\end{array}\right)\\
+\end{equation}
+\textit{Jacobian of constraint}\\
+\begin{equation}
+\nabla g(x)=\left(\begin{array}{c}-2x_1\\-1\\\end{array}\right)\\
+\end{equation}
+\textit{Hessian of Lagrangian}\\
+\begin{equation}
+\nabla^2_{xx} L(x,\lambda, \mu)=\left(\begin{array}{cc}-2\lambda & 0 \\0
+				      & -2\\\end{array}\right)
+\end{equation}
+
+\subsection{Problem Description}
+We create a class where our problem is specified. In the header 
+file {\tt MyNLP.hpp}, we
+ derive our class {\tt MyNLP} from {\tt TNLP}. 
+And in the file {\tt MyNLP.cpp}, we describe the problem by overloading the
+ member functions of the class {\tt MyNLP}. Each member function, as
+ shown below\footnote{Comments are
+ not necessarily the same as those in the source code of this example.}
+, returns
+ its corresponding value at each iteration. Use the types {\tt Index}
+ for indices, and {\tt Number} for values.\\
+%
+\begin{itemize}
+\item{{\tt get\_nlp\_info}}: 
+Specify the size of the problem.\\
+\begin{small}
+{\tt
+bool MyNLP::get\_nlp\_info(Index\& n, Index\& m, Index\& nnz\_jac\_g, Index\& nnz\_h\_lag)\\
+\{\\
+  n = 2; // number of variables\\
+  m = 1; // number of equality constraints\\
+  nnz\_jac\_g = 2; // number of nonzeros in the Jacobian of constraints $\nabla g(x)$\\
+  nnz\_h\_lag = 2; // number of nonzeros in the Hessian of Lagrangian $\nabla^2_{xx}L(x,\lambda,\mu)$\\
+\\
+  return true;\\
+\}}
+\end{small}
+%
+\item{{\tt get\_bounds\_info}}: 
+Specify the bounds $x_l$, $x_u$, $g_l$, and $g_u$ here. $10^{19}$ and $-10^{19}$ are interpreted as
+     $\infty$ and $-\infty$ respectively by default:\\
+\begin{small}
+{\tt
+bool MyNLP::get\_bounds\_info(Index n, Number* x\_l, Number* x\_u,
+			       Index m, Number* g\_l, Number* g\_u)\\
+\{\\
+  assert(n == 2); // assert the number of variables\\
+  assert(m == 1); // assert the number of constraints\\
+\\
+  x\_l[0] = -1.0; // $-1 \leq x_1$\\
+  x\_u[0] = 1.0;  // $x_1 \leq 1$\\
+  x\_l[1] = -1.0e19; // $-\infty \leq x_2$\\
+  x\_u[1] = +1.0e19; // $x_2 \leq +\infty$\\
+  g\_l[0] = g\_u[0] = 0.0; // $g_l=g_u=0$\\
+  return true;\\
+\}
+}
+\end{small}
+%
+\item{{\tt get\_starting\_point}}: 
+Specify the starting point $x^0$\\
+\begin{small}
+{\tt bool MyNLP::get\_starting\_point(Index n, bool init\_x, Number* x,
+			       bool init\_z, Number* z\_L, Number* z\_U,
+			       Index m, bool init\_lambda,
+			       Number* lambda)\\
+\{\\
+  assert(init\_x == true);  //assert x has a starting point\\
+  assert(init\_z == false); //assert z does not have a starting point\\
+  assert(init\_lambda == false); // assert lambda does not have a
+			       starting point\\
+// Starting point: $x^0=(0.5,1.5)^T$
+{\subitem}  x[0] = 0.5;
+{\subitem}  x[1] = 1.5;
+{\subitem}  return true;\\
+\}
+}
+\end{small}
+%
+\item{{\tt eval\_f}}: 
+Return the value of the objective function $f(x)$:\\
+\begin{small}
+bool MyNLP::eval\_f(Index n, const Number* x, bool new\_x, Number\&
+obj\_value)
+{\tt
+\{
+{\subitem}  // return the value of the objective function $f(x)=-(x_2-2)^2)$
+{\subitem}  Number x2 = x[1];
+{\subitem}  obj\_value = -(x2 - 2.0) * (x2 - 2.0);
+{\subitem}  return true;
+\}
+}
+\end{small}
+%
+\item{{\tt eval\_grad\_f}}: 
+Return the gradient of the objective function, $\nabla f(x)$\\
+\begin{small}
+{\tt 
+bool MyNLP::eval\_grad\_f(Index n, const Number* x, bool new\_x, Number\* grad\_f)\\
+\{
+{\subitem}  // Gradient of the objective function $\nabla f(x)$
+{\subitem}  grad\_f[0] = 0.0 // $\partial f(x)/ \partial x_1=0$; 
+{\subitem}  Number x2 = x[1];
+{\subitem}  grad\_f[1] = -2.0*(x2 - 2.0); //  $\partial f(x)/ \partial x_2=-2(x_2-2)$;
+{\subitem}  return true;\\
+\}
+}
+\end{small}
+
+
+\item{{\tt eval\_g}}: 
+Return the value of constraint function $g(x)$ here.\\
+\begin{small}
+{\tt
+bool MyNLP::eval\_g(Index n, const Number* x, bool new\_x, Index m, Number* g)
+\{
+{\subitem}  // Constraint $g(x)=0$
+{\subitem}  Number x1 = x[0];
+{\subitem}  Number x2 = x[1];
+{\subitem}  g[0] = -(x1*x1 + x2 - 1.0); // $g(x)=-(x_1^2+x_2-1)$
+{\subitem}  return true;\\
+\}
+}
+\end{small}
+
+\item{{\tt eval\_jac\_g}}: 
+Return the Jacobian of the constraint function $\nabla g(x)$. Notice
+     that we need to return either the structure or value of $\nabla
+     g(x)$ depending on {\tt values}:\\
+\begin{small}
+{\tt
+bool MyNLP::eval\_jac\_g(Index n, const Number* x, bool new\_x,
+		       Index m, Index nele\_jac, Index* iRow, Index *jCol,
+		       Number* values)
+\{
+{\subitem}  if (values == NULL)
+{\subitem}    \{
+{\subsubitem}      // return the ``structure'' of the Jacobian of the constraints
+{\subsubitem}      // element at 1,1 is nonzero
+{\subsubitem}      iRow[0] = 1; jCol[0] = 1;
+{\subsubitem}      // element at 1,2 is nonzero 
+{\subsubitem}      iRow[1] = 1; jCol[1] = 2;
+{\subitem}    \}
+{\subitem}  else
+{\subitem}    \{
+{\subsubitem}      // return the values of the Jacobian of the constraints
+{\subsubitem}      //   $\nabla g(x)=\left(2x_1,1\right)^T$
+{\subsubitem}      Number x1 = x[0];
+{\subsubitem}      // element at 1,1: 
+{\subsubitem}      values[0] = -2.0 * x1; // $\partial g(x)/\partial x_1=-2x_1$
+{\subsubitem}      // element at 1,2: 
+{\subsubitem}      values[1] = -1.0; // $\partial g(x)/\partial x_2=-1$
+{\subitem}    \}
+{\subitem}  return true;
+\}
+}
+\end{small}
+%
+\item{{\tt eval\_h}}: 
+Return the Hessian of the Lagrangian $\nabla^2_{xx}L(x,\lambda,\mu)$
+here. Again, we need to return either the structure of value depending
+     on {\tt values}. Since the Hessian is a symmetric matrix, 
+we only need to fill the lower left triangle only. Also we do not need
+     to specify non-diagonal elements since they are zero.\\
+\begin{small}
+{\tt
+bool MyNLP::eval\_h(Index n, const Number* x, bool new\_x,
+		   Number obj\_factor, Index m, const Number* lambda,
+		   bool new\_lambda, Index nele\_hess, Index* iRow,
+		   Index* jCol, Number* values)
+\{
+  if (values == NULL)
+{\subitem}    \{
+{\subsubitem}      // Return the ``structure'' of the Hessian of
+{\subsubitem}      // Lagrangian.
+{\subsubitem}      // element at 1,1 is nonzero
+{\subsubitem}      iRow[0] = 1; jCol[0] = 1;
+{\subsubitem}      // element at 2,2 is nonzero
+{\subsubitem}      iRow[1] = 2; jCol[1] = 2;
+{\subitem}    \}
+{\subitem}  else 
+{\subitem}    \{
+{\subsubitem}      // Return the values of the Hessian of Lagrangian
+{\subsubitem}      // element at 1,1: 
+{\subsubitem}      values[0] = -2.0 * lambda[0]; $\partial^2 L(x,\lambda,\mu)/ \partial x_1^2=-2\lambda$
+{\subsubitem}      // element at 2,2: 
+{\subsubitem}      values[1] = -2.0; $\partial^2 L(x,\lambda,\mu)/ \partial x_2^2=-2$
+{\subitem}    \}
+{\subitem}  return true;
+\}
+}
+\end{small}
+
+\end{itemize}
+
+\subsection{Execute IPOPT}
+We write
+the main routine that executes IPOPT. We create an object {\tt mynlp} 
+which belongs to {\tt MyNLP}.\par
+We also create two objects that stores optimization
+results: {\tt ip\_data} which belongs to {\tt
+IpoptData}, and {\tt ip\_cp} which belongs to {\tt IpoptCalculatedQuantities}.\par
+Finally, we create an object {\tt app} that belongs to {\tt IpoptApplication}. One of
+its member functions, {\tt OptimizeTNLP} executes optimization when it
+receives {\tt mynlp}, {\tt ip\_data}, and {\tt ip\_cp}. \par
+The execute function {\tt OptimizeTNLP} should be invoked using call-by-reference.
+Here, instead of a regular pointer, we use {\tt SmartPtr}, which automatically
+frees itself from the memory at the end of the program execution. 
+This saves us from tracking every pointer we declare, and makes debugging easier.\par
+ By default, IPOPT
+shows the optimization result as well as information
+of every iteration. Particular information can be extracted 
+from {\tt ip\_data} and {\tt ip\_cp}.
+Make sure to include the four header files as shown below:\\\\
+\begin{small}
+{\tt
+\#include "IpIpoptApplication.hpp"\\
+\#include "MyNLP.hpp"\\
+\#include "IpIpoptData.hpp"\\
+\#include "IpIpoptCalculatedQuantities.hpp"\\
+\\
+using namespace Ipopt;\\
+\\
+int main(int argv, char* argc [])\\
+\{
+{\subitem}   // Create an instance of our problem
+{\subitem}   SmartPtr<TNLP> mynlp = new MyNLP();
+{\subitem}     // Create an instance of the IpoptApplication
+{\subitem}   IpoptApplication* app = new IpoptApplication();
+{\subitem}
+{\subitem}   SmartPtr<IpoptData> ip\_data = NULL;
+{\subitem}   SmartPtr<IpoptCalculatedQuantities> ip\_cq = NULL;
+{\subitem}   ApplicationReturnStatus status = app->OptimizeTNLP(mynlp,
+ ip\_data, ip\_cq);
+{\subitem}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~// Execute IPOPT
+{\subitem}   if (status == Solve\_Succeeded) \{
+{\subsubitem}     // Retrieve some information from ip\_data
+{\subsubitem}     printf("*** The problem solved in \%d iterations!", ip\_data->iter\_count()); 
+{\subsubitem}     // Retrieve some information from ip\_cq
+{\subsubitem}     printf("*** The current value of the objective function is \%g.", ip\_cq->curr\_f());
+{\subsubitem}   \}
+
+{\subitem}   return (int) status;
+\}
+}\\\\
+\end{small}
+A Makefile already exists in {\tt COIN/Ipopt-devel/Examples/}.\footnote{The
+necessary libraries are {\tt libipopt.a}, {\tt
+liblapack.a}, and {\tt libblas.a}. The directories that contain these libraries
+ depend on your system. Check the Makefile.}
+To compile,
+\begin{enumerate}
+\item{Go to the directory {\tt COIN/Ipopt-devel/Examples/Cpp\_example}}
+\item{Run {\tt \$ make}.}
+\end{enumerate}
+%
+An executable {\tt cpp\_example} has been created in the same
+directory. Run {\tt ./cpp\_example} in this directory.\\
+Below is the output:\\
+
+\begin{small}
+{\tt
+Total number of variables............................:~~~~~2\\
+~~~~~~~~~~~~~~~~variables with only lower bounds:~~~~~~~~~~~~~0\\
+~~~~~~~~~~~~~~~~variables with lower and upper bounds:~~~~~~~~1\\
+~~~~~~~~~~~~~~~~~~~~~variables with only upper bounds:~~~~~~~~0\\
+Total number of equality constraints.................:~~~~~~~~1\\
+Total number of inequality constraints...............:~~~~~~~~0\\
+~~~~~~~~inequality constraints with only lower bounds:~~~~~~~~0\\
+~~~inequality constraints with lower and upper bounds:~~~~~~~~0\\
+~~~~~~~~inequality constraints with only upper bounds:~~~~~~~~0\\
+\\
+~iter~~~~objective~~~inf\_pr~~~inf\_du~~lg(mu)~||d||~~lg(rg)~alpha\_du~alpha\_pr~ls
+\footnote{{\tt iter}: Iteration number, {\tt objective}: Value of objective
+ function, {\tt inf\_pr}: Primal infeasibility, {\tt inf\_du}: Dual infeasibility,
+ {\tt lg(mu)}: Log of barrier parameter, {\tt ||d||}:2-norm of overall
+ step , {\tt lg(rg)}: Log of regularization,
+ {\tt alpha\_du}: Step size for dual variables,  {\tt alpha\_pr}: Step
+ size for primal variables ,{\tt ls}: Number of line search steps}\\
+~~~~0  -2.5000000e-01 7.50e-01 5.00e-01  -1.0 0.00e+00    -  0.00e+00 0.00e+00  0\\
+~~~~1  -1.8981454e+00 6.12e-01 1.55e+00  -1.0 1.72e+00   0.0 6.27e-01 5.10e-01f  1\\
+~~~~2  -3.6781502e+00 1.32e-03 1.60e-01  -1.0 5.40e-01    -  1.00e+00 1.00e+00f  1\\
+~~~~3  -3.9900217e+00 1.67e-03 1.22e-02  -1.7 7.98e-02    -  1.00e+00 9.99e-01f  1\\
+~~~~4  -3.9971718e+00 3.49e-09 4.22e-07  -2.5 1.79e-03    -  1.00e+00 1.00e+00h  1\\
+~~~~5  -3.9998505e+00 1.12e-07 8.98e-07  -3.8 6.70e-04    -  1.00e+00 1.00e+00f  1\\
+~~~~6  -3.9999982e+00 3.39e-10 2.72e-09  -5.7 3.69e-05    -  1.00e+00 1.00e+00h  1\\
+~~~~7  -4.0000000e+00 5.29e-14 4.23e-13  -8.6 4.60e-07    -  1.00e+00 1.00e+00h  1\\
+\\
+Number of Iterations~~~~=~7\\
+Objective Value~~~~~~~~~=~-3.9999999974945193e+00\\
+Primal Infeasibility~~~~=~~5.2906247091644154e-14\\
+Dual Infeasibility~~~~~~=~~4.2277292777725961e-13\\
+Complementarity~~~~~~~~~=~~2.5056920317575144e-09\\
+\\
+Number of objective function evaluations~~~~~~~~~~~~~= 8\\
+Number of equality constraint evaluations~~~~~~~~~~~~= 8\\
+Number of inequality constraint evaluations~~~~~~~~~~= 8\\
+Number of equality constraint Jacobian evaluations~~~= 8\\
+Number of inequality constraint Jacobian evaluations~= 8\\
+Number of Lagrangian Hessian evaluations~~~~~~~~~~~~~= 9\\
+\\
+EXIT: Optimal Solution Found.\\
+\\
+*** The problem solved in 7 iterations!\\
+\\
+*** The current value of the objective function is -4.
+}\\\\
+\end{small}
+As can be seen above, IPOPT finds the optimal solution in 7 iterations,
+and the optimal value is -4.00. All output lines except the last two are shown
+by default.
+
+\section{AMPL interface}
+An IPOPT solver executable for AMPL, {\tt ipopt}, has already been 
+created in\\{\tt
+Ipopt-devel/Apps/AmplSolver}. Copy {\tt ipopt} to a directory
+specified in {\tt PATH}, such as {\tt /usr/local/bin/}.\par
+You can call IPOPT from the AMPL modeling environment by writing:\\
+{\tt option solver ipopt;}\\
+before executing {\tt solve} command. You can also set options by
+writing:\\
+{\tt option ipopt\_options \textit{'option1=value1 option2=value2 ...'};}\\
+The information on the options are found in {\tt http://www.coin-or.org/Ipopt/IPOPT\_options.html}.
+
+
+\section*{Acknowledgement}
+This document has been created as the course project for \textit{47852 Open
+Source Software for Optimization}, taught by Prof. Fran\c cois Margot at 
+Tepper School of Business, Carnegie Mellon University. The author
+gratefully acknowledges the support of Carl Laird, one of the 
+main authors of the C++ version of IPOPT.
+
+\begin{thebibliography}{99}
+\bibitem{COINORWeb}
+http://www.coin-or.org
+\bibitem{AndreasPaper}
+W\"achter, A. and Biegler, L.T.:''On the Implementation of a Primal-Dual
+	Interior Point Filter Line Search Algorithm for Large-Scale
+	Nonlinear Programming'', Research Report, IBM T. J. Watson
+	Research Center, Yorktown, USA (2004)
+\bibitem{AndreasThesis}
+W\"achter, A.:''An Interior Point Algorithm for Large-Scale Nonlinear
+	Optimization with Applications in Process Engineering'',
+	Ph.D. Thesis, Carnegie Mellon University, Pittsburgh, USA (2002)
+\bibitem{MargotClassText}
+Margot, F.: Course material for \textit{47852 Open Source Software for
+	Optimization}, Carnegie Mellon University (2005)
+\end{thebibliography}
+
+\end{document}
