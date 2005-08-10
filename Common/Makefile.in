@@ -521,7 +521,7 @@ install-exec-local:
 	echo "#define __IPCONFIG__" >>bla
 	cat ../inc/config.h >> bla
 	echo "#endif" >>bla
-	sed -s 's/#include "config.h"//' <$(srcdir)/IpTypes.hpp >> bla
+	sed -e 's/#include "config.h"//' <$(srcdir)/IpTypes.hpp >> bla
 	$(install_sh_DATA) bla $(includeipoptdir)/IpTypes.hpp
 	rm bla
 
