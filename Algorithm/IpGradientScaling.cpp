@@ -18,7 +18,7 @@
 namespace Ipopt
 {
 
-  DefineIpoptType(GradientScaling);
+  DefineOptionsRegistrar(GradientScaling);
 
   void GradientScaling::RegisterOptions(SmartPtr<RegisteredOptions>& roptions)
   {

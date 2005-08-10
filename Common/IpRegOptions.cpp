@@ -671,4 +671,10 @@ namespace Ipopt
     }
   }
 
+  std::list<OptionsRegistrar*>& OptionsRegistrarsList()
+  {
+    static std::list<OptionsRegistrar*> options_infos;
+    return options_infos;
+  }
+
 } // namespace Ipopt

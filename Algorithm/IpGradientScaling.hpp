@@ -11,12 +11,11 @@
 
 #include "IpNLPScaling.hpp"
 #include "IpNLP.hpp"
-#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(GradientScaling);
+  DeclareOptionsRegistrar(GradientScaling);
 
   /** This class does problem scaling by setting the
    *  scaling parameters based on the maximum of the

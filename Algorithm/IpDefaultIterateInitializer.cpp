@@ -12,7 +12,7 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(DefaultIterateInitializer);
+  DefineOptionsRegistrar(DefaultIterateInitializer);
 
   DefaultIterateInitializer::DefaultIterateInitializer
   (const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator)
@@ -290,8 +290,8 @@ namespace Ipopt
       delta_x->Axpy(1.0, orig_x);
       new_x = ConstPtr(delta_x);
       jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of %s sufficiently inside the bounds.\n", name.c_str());
-      jnlst.PrintVector(J_VECTOR, J_INITIALIZATION, "original vars", orig_x);
-      jnlst.PrintVector(J_VECTOR, J_INITIALIZATION, "new vars", *new_x);
+      orig_x.Print(jnlst, J_VECTOR, J_INITIALIZATION, "original vars");
+      new_x->Print(jnlst, J_VECTOR, J_INITIALIZATION, "new vars");
     }
     else {
       new_x = &orig_x;

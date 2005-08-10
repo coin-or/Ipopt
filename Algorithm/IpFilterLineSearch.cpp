@@ -24,7 +24,7 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(FilterLineSearch);
+  DefineOptionsRegistrar(FilterLineSearch);
 
   FilterLineSearch::FilterLineSearch(const SmartPtr<RestorationPhase>& resto_phase,
                                      const SmartPtr<PDSystemSolver>& pd_solver,
@@ -1438,8 +1438,7 @@ namespace Ipopt
         Jnlst().Printf(J_MOREVECTOR, J_MAIN,
                        "*** Accepted corrector for Iteration: %d\n",
                        IpData().iter_count());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_corr", *delta_corr);
+        delta_corr->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "delta_corr");
       }
     }
 
@@ -1524,8 +1523,8 @@ namespace Ipopt
       if (delta_s_magic_max > 10*mach_eps*IpData().trial()->s()->Amax()) {
         IpData().Append_info_string("M");
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Magic step with max-norm %.6e taken.\n", delta_s_magic->Amax());
-        Jnlst().PrintVector(J_MOREVECTOR, J_LINE_SEARCH,
-                            "delta_s_magic", *delta_s_magic);
+        delta_s_magic->Print(Jnlst(), J_MOREVECTOR, J_LINE_SEARCH,
+                             "delta_s_magic");
       }
 
       // now finally compute the new overall slacks

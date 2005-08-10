@@ -12,7 +12,7 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(OptimalityErrorConvergenceCheck);
+  DefineOptionsRegistrar(OptimalityErrorConvergenceCheck);
 
   OptimalityErrorConvergenceCheck::OptimalityErrorConvergenceCheck()
   {}

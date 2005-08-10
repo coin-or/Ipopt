@@ -9,7 +9,6 @@
 #ifndef __IPIPOPTCALCULATEDQUANTITIES_HPP__
 #define __IPIPOPTCALCULATEDQUANTITIES_HPP__
 
-#include "IpUtils.hpp"
 #include "IpIpoptNLP.hpp"
 #include "IpIpoptData.hpp"
 
@@ -23,7 +22,7 @@ namespace Ipopt
     NORM_MAX
   };
 
-  DeclareIpoptType(IpoptCalculatedQuantities);
+  DeclareOptionsRegistrar(IpoptCalculatedQuantities);
 
   /** Class for all IPOPT specific calculated quantities.
    *  

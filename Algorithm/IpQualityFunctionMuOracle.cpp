@@ -19,7 +19,7 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(QualityFunctionMuOracle);
+  DefineOptionsRegistrar(QualityFunctionMuOracle);
 
   QualityFunctionMuOracle::QualityFunctionMuOracle(const SmartPtr<PDSystemSolver>& pd_solver)
       :

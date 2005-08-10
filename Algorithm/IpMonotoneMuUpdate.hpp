@@ -11,12 +11,11 @@
 
 #include "IpMuUpdate.hpp"
 #include "IpLineSearch.hpp"
-#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(MonotoneMuUpdate);
+  DeclareOptionsRegistrar(MonotoneMuUpdate);
 
   /** Monotone Mu Update. This class implements the standard monotone mu update
    *  approach.

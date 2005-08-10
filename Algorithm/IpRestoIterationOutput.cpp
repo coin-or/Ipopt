@@ -197,44 +197,27 @@ namespace Ipopt
       }
     }
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_x", *IpData().curr()->x());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_s", *IpData().curr()->s());
+      IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_x");
+      IpData().curr()->s()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_s");
 
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_c", *IpData().curr()->y_c());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_d", *IpData().curr()->y_d());
+      IpData().curr()->y_c()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_y_c");
+      IpData().curr()->y_d()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_y_d");
 
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_x_L", *IpCq().curr_slack_x_L());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_x_U", *IpCq().curr_slack_x_U());
+      IpCq().curr_slack_x_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_slack_x_L");
+      IpCq().curr_slack_x_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_slack_x_U");
+      IpData().curr()->z_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_z_L");
+      IpData().curr()->z_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_z_U");
 
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_L", *IpData().curr()->z_L());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_U", *IpData().curr()->z_U());
-
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_s_L", *IpCq().curr_slack_s_L());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_s_U", *IpCq().curr_slack_s_U());
-
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_L", *IpData().curr()->v_L());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_U", *IpData().curr()->v_U());
+      IpCq().curr_slack_s_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_slack_s_L");
+      IpCq().curr_slack_s_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_slack_s_U");
+      IpData().curr()->v_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_v_L");
+      IpData().curr()->v_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_v_U");
     }
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_MAIN)) {
-      Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_x", *IpCq().curr_grad_lag_x());
-      Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_s", *IpCq().curr_grad_lag_s());
+      IpCq().curr_grad_lag_x()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "curr_grad_lag_x");
+      IpCq().curr_grad_lag_s()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "curr_grad_lag_s");
       if (IsValid(IpData().delta())) {
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_x", *IpData().delta()->x());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_s", *IpData().delta()->s());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_y_c", *IpData().delta()->y_c());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_y_d", *IpData().delta()->y_d());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_z_L", *IpData().delta()->z_L());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_z_U", *IpData().delta()->z_U());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_v_L", *IpData().delta()->v_L());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_v_U", *IpData().delta()->v_U());
+        IpData().delta()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "delta");
       }
     }
 
@@ -250,16 +233,17 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_MAIN, "Overall NLP error.......: %24.16e  %24.16e\n\n", IpCq().curr_nlp_error(), IpCq().unscaled_curr_nlp_error());
     }
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "grad_f", *IpCq().curr_grad_f());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_c", *IpCq().curr_c());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_d", *IpCq().curr_d());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN,
-                          "curr_d - curr_s", *IpCq().curr_d_minus_s());
+      IpCq().curr_grad_f()->Print(Jnlst(), J_VECTOR, J_MAIN, "grad_f");
+      IpCq().curr_c()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_c");
+      IpCq().curr_d()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_d");
+      IpCq().curr_d_minus_s()->Print(Jnlst(), J_VECTOR, J_MAIN,
+                                     "curr_d - curr_s");
     }
+
     if (Jnlst().ProduceOutput(J_MATRIX, J_MAIN)) {
-      Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_c", *IpCq().curr_jac_c());
-      Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_d", *IpCq().curr_jac_d());
-      Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "h", *IpCq().curr_exact_hessian());
+      IpCq().curr_jac_c()->Print(Jnlst(), J_MATRIX, J_MAIN, "jac_c");
+      IpCq().curr_jac_d()->Print(Jnlst(), J_MATRIX, J_MAIN, "jac_d");
+      IpCq().curr_exact_hessian()->Print(Jnlst(), J_MATRIX, J_MAIN, "h");
     }
 
     Jnlst().Printf(J_DETAILED, J_MAIN, "\n\n");

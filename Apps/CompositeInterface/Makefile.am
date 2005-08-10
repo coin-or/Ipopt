@@ -12,36 +12,41 @@ noinst_LIBRARIES = libcompositenlp.a
 bin_PROGRAMS = composite_ampl_ipopt
 
 libcompositenlp_a_SOURCES = \
-	CompositeNLP.hpp CompositeNLP.cpp
+	CompositeNLP.cpp CompositeNLP.hpp
 
 composite_ampl_ipopt_SOURCES = \
 	comp_ampl_ipopt.cpp
 
-IPLIBS = ../../Algorithm/libipoptalg.a \
-	../../LinAlgImpl/Serial/liblaserial.a \
-	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
+IPLIBS = \
+	../../Interfaces/libinterfaces.a \
+	../../Algorithm/libipoptalg.a \
+	../../Algorithm/LinearSolvers/liblinsolvers.a \
+	../../LinAlg/TMatrices/libtmatrices.a \
+	../../LinAlg/liblinalg.a \
 	../../Common/libcommon.a \
-	../../Apps/AmplSolver/libamplinterface.a \
+	../AmplSolver/libamplinterface.a \
 	$(ASLLIB)
 
 composite_ampl_ipopt_LDADD = $(IPLIBS) \
 	libcompositenlp.a
 
 
-CXXFLAGS += -I$(srcdir)/../../Common
-CXXFLAGS += -I$(srcdir)/../../Interfaces
-CXXFLAGS += -I$(srcdir)/../../LinAlgImpl/Serial
-CXXFLAGS += -I$(srcdir)/../../Algorithm
-CXXFLAGS += -I$(srcdir)/../../PDSystemImpl/PDFullSpace
-CXXFLAGS += -I$(srcdir)/../../Apps/AmplSolver \
-	    -I$(srcdir)/../../OTHERS/ASL/ \
-	    -I$(srcdir)/../../OTHERS/ASL/solvers
+CXXFLAGS += -I$(srcdir)/../../Common \
+	-I$(srcdir)/../../LinAlg \
+	-I$(srcdir)/../../LinAlg/TMatrices \
+	-I$(srcdir)/../../Algorithm \
+	-I$(srcdir)/../../Interfaces \
+	-I$(srcdir)/../AmplSolver
+
+#CXXFLAGS += -I$(srcdir)/../../Apps/AmplSolver \
+#	    -I$(srcdir)/../../OTHERS/ASL/ \
+#	    -I$(srcdir)/../../OTHERS/ASL/solvers
 CXXFLAGS += $(AMPL_CPPFLAGS)
 
 # Astyle stuff
 
 ASTYLE_FILES = \
-	CompositeNLP.hppbak CompositeNLP.cppbak \
+	CompositeNLP.cppbak CompositeNLP.hppbak \
 	comp_ampl_ipopt.cppbak
 
 ASTYLE = @ASTYLE@

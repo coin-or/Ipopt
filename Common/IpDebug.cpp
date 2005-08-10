@@ -85,11 +85,6 @@ namespace Ipopt
   }
 
 
-  Index DebugJournalistWrapper::Verbosity()
-  {
-    return verbose_level_;
-  }
-
   void DebugJournalistWrapper::DebugPrintf(Index verbosity, const char* pformat, ...)
   {
 
@@ -105,18 +100,6 @@ namespace Ipopt
       va_end(ap);
     }
   }
-
-  void DebugJournalistWrapper::DebugPrintVector(const std::string& vec_name, const Vector& vec)
-  {
-    jrnl_->PrintVector(J_ERROR, J_DBG, vec_name, vec, indentation_level_*2, "# ");
-  }
-
-  void DebugJournalistWrapper::DebugPrintMatrix(const std::string& mat_name, const Matrix& mat)
-  {
-    jrnl_->PrintMatrix(J_ERROR, J_DBG, mat_name, mat, indentation_level_*2, "# ");
-  }
-
-
 
 } // namespace Ipopt
 

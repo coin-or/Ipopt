@@ -9,14 +9,11 @@
 #ifndef __IPNLPSCALING_HPP__
 #define __IPNLPSCALING_HPP__
 
-#include "IpSmartPtr.hpp"
-#include "IpVector.hpp"
-#include "IpMatrix.hpp"
 #include "IpSymMatrix.hpp"
 #include "IpScaledMatrix.hpp"
 #include "IpSymScaledMatrix.hpp"
 #include "IpOptionsList.hpp"
-#include "IpIpoptType.hpp"
+#include "IpRegOptions.hpp"
 
 namespace Ipopt
 {
@@ -218,7 +215,7 @@ namespace Ipopt
     SmartPtr<const Journalist> jnlst_;
   };
 
-  DeclareIpoptType(StandardScalingBase);
+  DeclareOptionsRegistrar(StandardScalingBase);
 
   /** This is a base class for many standard scaling
    *  techniques. The overloaded classes only need to

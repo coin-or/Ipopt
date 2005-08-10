@@ -13,13 +13,12 @@
 #include "IpLineSearch.hpp"
 #include "IpMuOracle.hpp"
 #include "IpFilter.hpp"
-#include "IpIpoptType.hpp"
 #include "IpQualityFunctionMuOracle.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(AdaptiveMuUpdate);
+  DeclareOptionsRegistrar(AdaptiveMuUpdate);
 
   /** Non-monotone mu update.
    */

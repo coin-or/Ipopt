@@ -11,13 +11,12 @@
 
 #include "IpMuOracle.hpp"
 #include "IpPDSystemSolver.hpp"
-#include "IpIpoptType.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(QualityFunctionMuOracle);
+  DeclareOptionsRegistrar(QualityFunctionMuOracle);
 
   /** Implementation of the probing strategy for computing the
    *  barrier parameter.

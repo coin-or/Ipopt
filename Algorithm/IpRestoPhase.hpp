@@ -9,7 +9,6 @@
 #ifndef __IPRESTOPHASE_HPP__
 #define __IPRESTOPHASE_HPP__
 
-#include "IpUtils.hpp"
 #include "IpAlgStrategy.hpp"
 #include "IpIpoptNLP.hpp"
 #include "IpIpoptData.hpp"

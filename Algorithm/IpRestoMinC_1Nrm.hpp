@@ -9,7 +9,6 @@
 #ifndef __IPRESTOC_1NRM_HPP__
 #define __IPRESTOC_1NRM_HPP__
 
-#include "IpUtils.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpIpoptAlg.hpp"
 #include "IpEqMultCalculator.hpp"
@@ -17,7 +16,7 @@
 namespace Ipopt
 {
 
-  DeclareIpoptType(MinC_1NrmRestorationPhase);
+  DeclareOptionsRegistrar(MinC_1NrmRestorationPhase);
 
   /** Restoration Phase that minimizes the 1-norm of the constraint
    *  violation - using the interior point method (Ipopt).

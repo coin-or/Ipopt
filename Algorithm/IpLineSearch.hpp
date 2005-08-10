@@ -9,7 +9,6 @@
 #ifndef __IPLINESEARCH_HPP__
 #define __IPLINESEARCH_HPP__
 
-#include "IpUtils.hpp"
 #include "IpAlgStrategy.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
 

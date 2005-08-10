@@ -9,18 +9,16 @@
 #ifndef __IPFILTERLINESEARCH_HPP__
 #define __IPFILTERLINESEARCH_HPP__
 
-#include "IpUtils.hpp"
 #include "IpFilter.hpp"
 #include "IpLineSearch.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpPDSystemSolver.hpp"
-#include "IpIpoptType.hpp"
 #include "IpConvCheck.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(FilterLineSearch);
+  DeclareOptionsRegistrar(FilterLineSearch);
 
   /** Filter line search.  This class implements the filter line
    *  search procedure. 

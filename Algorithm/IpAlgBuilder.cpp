@@ -42,7 +42,7 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(AlgorithmBuilder);
+  DefineOptionsRegistrar(AlgorithmBuilder);
 
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {

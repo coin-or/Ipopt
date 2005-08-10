@@ -22,7 +22,7 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(RestoIpoptNLP);
+  DefineOptionsRegistrar(RestoIpoptNLP);
 
   RestoIpoptNLP::RestoIpoptNLP(IpoptNLP& orig_ip_nlp,
                                IpoptData& orig_ip_data,

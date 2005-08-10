@@ -9,9 +9,16 @@
 #ifndef __IPREFERENCED_HPP__
 #define __IPREFERENCED_HPP__
 
-#include "IpUtils.hpp"
-#include "IpDebug.hpp"
+#include "IpTypes.hpp"
 #include <list>
+
+#ifdef IP_DEBUG
+# ifdef OLD_C_HEADERS
+#  include <assert.h>
+# else
+#  include <cassert>
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -165,9 +172,18 @@ namespace Ipopt
   class ReferencedObject
   {
   public:
-    ReferencedObject();
+    ReferencedObject()
+      :
+      reference_count_(0)
+    {
+    }
 
-    virtual ~ReferencedObject();
+    virtual ~ReferencedObject()
+    {
+#ifdef IP_DEBUG
+      assert(reference_count_ == 0);
+#endif
+    }
 
     Index ReferenceCount() const;
 

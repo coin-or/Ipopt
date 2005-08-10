@@ -9,7 +9,6 @@
 #ifndef __IPITERATIONOUTPUT_HPP__
 #define __IPITERATIONOUTPUT_HPP__
 
-#include "IpUtils.hpp"
 #include "IpAlgStrategy.hpp"
 #include "IpIpoptNLP.hpp"
 #include "IpIpoptData.hpp"

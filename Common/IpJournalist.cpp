@@ -7,8 +7,7 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpJournalist.hpp"
-#include "IpVector.hpp"
-#include "IpMatrix.hpp"
+#include "IpDebug.hpp"
 #include <stdio.h>
 
 namespace Ipopt
@@ -109,39 +108,39 @@ namespace Ipopt
     va_end(ap);
   }
 
-  void Journalist::PrintVector(EJournalLevel level,
-                               EJournalCategory category,
-                               const std::string& name,
-                               const Vector& vector,
-                               Index indent,
-                               const std::string prefix) const
-  {
-    // print the msg on every journal that accepts
-    // the category and output level
-    for (Index i=0; i<(Index)journals_.size(); i++) {
-      if (journals_[i]->IsAccepted(category, level)) {
-        // print the message
-        journals_[i]->PrintVector(name, vector, indent, prefix);
-      }
-    }
-  }
+  //   void Journalist::PrintVector(EJournalLevel level,
+  //                                EJournalCategory category,
+  //                                const std::string& name,
+  //                                const Vector& vector,
+  //                                Index indent,
+  //                                const std::string prefix) const
+  //   {
+  //     // print the msg on every journal that accepts
+  //     // the category and output level
+  //     for (Index i=0; i<(Index)journals_.size(); i++) {
+  //       if (journals_[i]->IsAccepted(category, level)) {
+  //         // print the message
+  //         journals_[i]->PrintVector(name, vector, indent, prefix);
+  //       }
+  //     }
+  //   }
 
-  void Journalist::PrintMatrix(EJournalLevel level,
-                               EJournalCategory category,
-                               const std::string& name,
-                               const Matrix& matrix,
-                               Index indent /*=0*/,
-                               std::string prefix /*=""*/) const
-  {
-    // print the msg on every journal that accepts
-    // the category and output level
-    for (Index i=0; i<(Index)journals_.size(); i++) {
-      if (journals_[i]->IsAccepted(category, level)) {
-        // print the message
-        journals_[i]->PrintMatrix(name, matrix, indent, prefix);
-      }
-    }
-  }
+  //   void Journalist::PrintMatrix(EJournalLevel level,
+  //                                EJournalCategory category,
+  //                                const std::string& name,
+  //                                const Matrix& matrix,
+  //                                Index indent /*=0*/,
+  //                                std::string prefix /*=""*/) const
+  //   {
+  //     // print the msg on every journal that accepts
+  //     // the category and output level
+  //     for (Index i=0; i<(Index)journals_.size(); i++) {
+  //       if (journals_[i]->IsAccepted(category, level)) {
+  //         // print the message
+  //         journals_[i]->PrintMatrix(name, matrix, indent, prefix);
+  //       }
+  //     }
+  //   }
 
   void Journalist::VPrintf(
     EJournalLevel level,
@@ -388,23 +387,23 @@ namespace Ipopt
     }
   }
 
-  void FileJournal::PrintVectorImpl(const std::string name, const Vector& vector, Index indent, std::string prefix)
-  {
-    DBG_START_METH("Journal::PrintVector", 0);
-    if (file_) {
-      vector.Print(file_, name, indent, prefix);
-      DBG_EXEC(0, fflush(file_));
-    }
-  }
+  //   void FileJournal::PrintVectorImpl(const std::string name, const Vector& vector, Index indent, std::string prefix)
+  //   {
+  //     DBG_START_METH("Journal::PrintVector", 0);
+  //     if (file_) {
+  //       vector.Print(file_, name, indent, prefix);
+  //       DBG_EXEC(0, fflush(file_));
+  //     }
+  //   }
 
-  void FileJournal::PrintMatrixImpl(const std::string name, const Matrix& matrix, Index indent, std::string prefix)
-  {
-    DBG_START_METH("Journal::PrintMatrix", 0);
-    if (file_) {
-      matrix.Print(file_, name, indent, prefix);
-      DBG_EXEC(0, fflush(file_));
-    }
-  }
+  //   void FileJournal::PrintMatrixImpl(const std::string name, const Matrix& matrix, Index indent, std::string prefix)
+  //   {
+  //     DBG_START_METH("Journal::PrintMatrix", 0);
+  //     if (file_) {
+  //       matrix.Print(file_, name, indent, prefix);
+  //       DBG_EXEC(0, fflush(file_));
+  //     }
+  //   }
 
   void FileJournal::FlushBufferImpl()
   {

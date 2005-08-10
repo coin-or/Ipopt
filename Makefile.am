@@ -8,21 +8,13 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = OTHERS Common LinAlgImpl Algorithm PDSystemImpl Apps
+SUBDIRS = Extern Common LinAlg Algorithm Interfaces Apps
 
 IPALLLIBS = @IPALLLIBS@
 
-EXTRA_DIST = Interfaces/IpEqMultCalculator.hpp \
-	Interfaces/IpAlgTypes.hpp \
-	Interfaces/IpMatrix.hpp \
-	Interfaces/IpNLP.hpp \
-	Interfaces/IpPDSystemSolver.hpp \
-	Interfaces/IpSymMatrix.hpp \
-	Interfaces/IpTNLP.hpp \
-	Interfaces/IpVector.hpp \
-	Interfaces/IpStdCInterface.h \
-	Examples/Fortran_example/example.f \
-	README
+EXTRA_DIST = Examples/Fortran_example/example.f \
+	README \
+	Docs/documentation.tex
 
 .PHONY: doc
 
@@ -55,41 +47,12 @@ uninstall-local:
 cuter: install
 	cd Apps/CUTErInterface; $(MAKE) cuter
 
-# Astyle stuff
-
-ASTYLE_FILES = Interfaces/IpEqMultCalculator.hppbak \
-	Interfaces/IpAlgTypes.hppbak \
-	Interfaces/IpMatrix.hppbak \
-	Interfaces/IpNLP.hppbak \
-	Interfaces/IpPDSystemSolver.hppbak \
-	Interfaces/IpSymMatrix.hppbak \
-	Interfaces/IpTNLP.hppbak \
-	Interfaces/IpVector.hppbak
-
-ASTYLE = @ASTYLE@
-ASTYLEFLAGS = @ASTYLEFLAGS@
-
-CLEANFILES = $(ASTYLE_FILES)
-
-SUFFIXES = .cppbak .hppbak
-
-astyle: astyle-local
+astyle:
 	cd Algorithm; $(MAKE) astyle
+	cd Algorithm/LinearSolvers; $(MAKE) astyle
 	cd Apps/AmplSolver; $(MAKE) astyle
 	cd Apps/CompositeInterface; $(MAKE) astyle
-	cd Apps/StdInterface; $(MAKE) astyle
 	cd Common; $(MAKE) astyle
-	cd LinAlgImpl/Serial; $(MAKE) astyle
-	cd PDSystemImpl/PDFullSpace; $(MAKE) astyle
+	cd LinAlg; $(MAKE) astyle
+	cd LinAlg/TMatrices; $(MAKE) astyle
 
-astyle-local: $(ASTYLE_FILES)
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
-	touch $@

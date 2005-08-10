@@ -9,7 +9,6 @@
 #ifndef __IPRESTORESTOPHASE_HPP__
 #define __IPRESTORESTOPHASE_HPP__
 
-#include "IpUtils.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpIpoptAlg.hpp"
 #include "IpEqMultCalculator.hpp"

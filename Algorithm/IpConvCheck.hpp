@@ -9,7 +9,6 @@
 #ifndef __IPCONVCHECK_HPP__
 #define __IPCONVCHECK_HPP__
 
-#include "IpUtils.hpp"
 #include "IpAlgStrategy.hpp"
 
 namespace Ipopt

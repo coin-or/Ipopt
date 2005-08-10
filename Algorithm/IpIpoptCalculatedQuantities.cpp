@@ -19,7 +19,7 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(IpoptCalculatedQuantities);
+  DefineOptionsRegistrar(IpoptCalculatedQuantities);
 
   IpoptCalculatedQuantities::IpoptCalculatedQuantities
   (const SmartPtr<IpoptNLP>& ip_nlp,

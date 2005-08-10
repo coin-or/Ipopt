@@ -35,17 +35,15 @@ namespace Ipopt
                          std::vector<SmartPtr<Matrix> >& Jq_linking_eqns,
                          SmartPtr<VectorSpace>& q_space);
 
-  int RunIpoptAlgorithm(const SmartPtr<Journalist> nonconst_jnlst, int argv, char**argc)
+  int RunIpoptAlgorithm(const SmartPtr<const Journalist>& jnlst,
+                        int argv, char**argc)
   {
-    SmartPtr<const Journalist> jnlst = ConstPtr(nonconst_jnlst);
-
     jnlst->Printf(J_ERROR, J_MAIN, "\n\n\n*************************************************************\n");
     jnlst->Printf(J_ERROR, J_MAIN, "*** Running Ipopt with AMPL Model ***************************\n");
     jnlst->Printf(J_ERROR, J_MAIN, "*************************************************************\n\n\n");
 
     // For test purposes, every ampl model must have 5 variables and the
     // last variable in all of them is the linked variable
-    Index nx = 5;
     std::vector<SmartPtr<AmplTNLP> > ampl_nlps;
     std::vector<SmartPtr<NLP> > nlps;
     std::vector<SmartPtr<AmplSuffixHandler> > suffix_handlers;
@@ -67,7 +65,7 @@ namespace Ipopt
       suffix_handler->AddAvailableSuffix("common_idx", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Index_Type);
       suffix_handlers.push_back(GetRawPtr(suffix_handler));
 
-      SmartPtr<AmplTNLP> ampl_nlp_i = new AmplTNLP(nonconst_jnlst, argc_i, suffix_handler);
+      SmartPtr<AmplTNLP> ampl_nlp_i = new AmplTNLP(jnlst, argc_i, suffix_handler);
       ampl_nlps.push_back(GetRawPtr(ampl_nlp_i));
 
       SmartPtr<NLP> nlp_i = new TNLPAdapter(GetRawPtr(ampl_nlp_i));
@@ -85,7 +83,8 @@ namespace Ipopt
                                          linking_eqn_spaces,
                                          Jx_linking_eqns, Jq_linking_eqns);
 
-    SmartPtr<IpoptNLP> ip_nlp = new OrigIpoptNLP(jnlst, nlp);
+    SmartPtr<NLPScalingObject> nlp_scaling = new NoNLPScalingObject();
+    SmartPtr<IpoptNLP> ip_nlp = new OrigIpoptNLP(jnlst, nlp, nlp_scaling);
 
     // Create the IpoptData
     SmartPtr<IpoptData> ip_data = new IpoptData();
@@ -112,21 +111,15 @@ namespace Ipopt
     alg->Initialize(*jnlst, *ip_nlp, *ip_data, *ip_cq, *options, "");
 
     // Run the algorithm
-    IpoptAlgorithm::SolverReturn status = alg->Optimize();
+    SolverReturn status = alg->Optimize();
 
     int retval=-1;
 
-    if (status == IpoptAlgorithm::SUCCESS) {
+    if (status == SUCCESS) {
       jnlst->Printf(J_SUMMARY, J_SOLUTION, "\n\nOptimal solution found! \n");
       jnlst->Printf(J_SUMMARY, J_SOLUTION, "Optimal Objective Value = %.16E\n", ip_cq->curr_f());
       jnlst->Printf(J_SUMMARY, J_SOLUTION, "Number of Iterations = %d\n", ip_data->iter_count());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "x", *ip_data->curr_x());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "y_c", *ip_data->curr_y_c());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "y_d", *ip_data->curr_y_d());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "z_L", *ip_data->curr_z_L());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "z_U", *ip_data->curr_z_U());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "v_L", *ip_data->curr_v_L());
-      jnlst->PrintVector(J_VECTOR, J_SOLUTION, "v_U", *ip_data->curr_v_U());
+      ip_data->curr()->Print(jnlst, J_VECTOR, J_SOLUTION, "sol");
 
       retval = 0;
     }
@@ -150,7 +143,7 @@ namespace Ipopt
                          SmartPtr<VectorSpace>& q_space)
   {
     Index n_nlps = nlps.size();
-    DBG_ASSERT(n_nlps == suffix_handlers.size());
+    DBG_ASSERT(n_nlps == (Index)suffix_handlers.size());
 
     // first, count the number of required q's
     Index q_dim = 0;
@@ -254,20 +247,21 @@ int main(int argv, char** argc)
   DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst));
 # endif
 
-  Journal* jrnl = jnlst->AddJournal("ConsoleStdOut", "stdout", J_SUMMARY);
+  SmartPtr<Journal> jrnl =
+    jnlst->AddFileJournal("ConsoleStdOut", "stdout", J_SUMMARY);
   jrnl->SetPrintLevel(J_DBG, J_NONE);
 
-  jrnl = jnlst->AddJournal("Debug", "debug.out", J_DETAILED);
+  jrnl = jnlst->AddFileJournal("Debug", "debug.out", J_DETAILED);
   jrnl->SetPrintLevel(J_DBG, J_ALL);
 
-  jrnl = jnlst->AddJournal("All", "all.out", J_ALL);
+  jrnl = jnlst->AddFileJournal("All", "all.out", J_ALL);
 
   try {
     //***
     // Setup the Journalist
     //***
 
-    retValue = Ipopt::RunIpoptAlgorithm(jnlst, argv, argc);
+    retValue = Ipopt::RunIpoptAlgorithm(ConstPtr(jnlst), argv, argc);
   }
   catch(IpoptException& exc) {
     exc.ReportException(*jnlst);

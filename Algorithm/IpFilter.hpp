@@ -9,8 +9,8 @@
 #ifndef __IPFILTER_HPP__
 #define __IPFILTER_HPP__
 
-#include "IpUtils.hpp"
 #include "IpJournalist.hpp"
+#include "IpDebug.hpp"
 #include <list>
 #include <vector>
 

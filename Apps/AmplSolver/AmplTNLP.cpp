@@ -16,7 +16,6 @@
 #include "IpGenTMatrix.hpp"
 #include "IpSymTMatrix.hpp"
 #include "IpBlas.hpp"
-#include "IpInterfaceTypes.hpp"
 
 /* AMPL includes */
 //extern "C"

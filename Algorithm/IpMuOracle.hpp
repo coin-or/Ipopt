@@ -9,7 +9,6 @@
 #ifndef __IPMUORACLE_HPP__
 #define __IPMUORACLE_HPP__
 
-#include "IpUtils.hpp"
 #include "IpAlgStrategy.hpp"
 
 namespace Ipopt

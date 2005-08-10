@@ -9,13 +9,12 @@
 #ifndef __IPOPTERRORCONVCHECK_HPP__
 #define __IPOPTERRORCONVCHECK_HPP__
 
-#include "IpUtils.hpp"
 #include "IpConvCheck.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(OptimalityErrorConvergenceCheck);
+  DeclareOptionsRegistrar(OptimalityErrorConvergenceCheck);
 
   /** Brief Class Description.
    *  Detailed Class Description.

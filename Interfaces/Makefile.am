@@ -1,0 +1,63 @@
+# Copyright (C) 2004, International Business Machines and others.
+# All Rights Reserved.
+# This file is distributed under the Common Public License.
+
+## $Id$
+
+# Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+
+AUTOMAKE_OPTIONS = foreign
+
+includeipoptdir = $(includedir)/ipopt
+includeipopt_HEADERS = \
+	IpIpoptApplication.hpp \
+	IpAlgTypes.hpp \
+	IpTNLP.hpp \
+	IpStdCInterface.h
+
+noinst_LIBRARIES = libinterfaces.a
+
+libinterfaces_a_SOURCES = \
+	IpAlgTypes.hpp \
+	IpIpoptApplication.cpp IpIpoptApplication.hpp \
+	IpNLP.hpp \
+	IpStdCInterface.cpp IpStdCInterface.h \
+	IpStdFInterface.c \
+	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \
+	IpTNLP.hpp \
+	IpTNLPAdapter.cpp IpTNLPAdapter.hpp
+
+CXXFLAGS += -I$(srcdir)/../Common \
+	-I$(srcdir)/../LinAlg \
+	-I$(srcdir)/../LinAlg/TMatrices \
+	-I$(srcdir)/../Algorithm
+
+# Astyle stuff
+
+ASTYLE_FILES = \
+	IpAlgTypes.hppbak \
+	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
+	IpNLP.hppbak \
+	IpStdCInterface.cppbak \
+	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
+	IpTNLP.hppbak \
+	IpTNLPAdapter.cppbak IpTNLPAdapter.hppbak
+
+ASTYLE = @ASTYLE@
+ASTYLEFLAGS = @ASTYLEFLAGS@
+
+CLEANFILES = $(ASTYLE_FILES)
+
+SUFFIXES = .cppbak .hppbak
+
+astyle: $(ASTYLE_FILES)
+
+.hpp.hppbak:
+	mv $< $@
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	touch $@
+
+.cpp.cppbak:
+	mv $< $@
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	touch $@

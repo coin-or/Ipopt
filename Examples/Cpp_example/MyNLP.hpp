@@ -10,7 +10,6 @@
 #define __MYNLP_HPP__
 
 #include "IpTNLP.hpp"
-#include "IpUtils.hpp"
 
 using namespace Ipopt;
 

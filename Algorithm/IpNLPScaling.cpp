@@ -177,7 +177,7 @@ namespace Ipopt
     }
   }
 
-  DefineIpoptType(StandardScalingBase);
+  DefineOptionsRegistrar(StandardScalingBase);
 
   void
   StandardScalingBase::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
@@ -223,19 +223,19 @@ namespace Ipopt
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
       Jnlst().Printf(J_VECTOR, J_MAIN, "objective scaling factor = %g\n", df_);
       if (IsValid(dx_)) {
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "x scaling vector", *dx_);
+        dx_->Print(Jnlst(), J_VECTOR, J_MAIN, "x scaling vector");
       }
       else {
         Jnlst().Printf(J_VECTOR, J_MAIN, "No x scaling provided\n");
       }
       if (IsValid(dc)) {
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "c scaling vector", *dc);
+        dc->Print(Jnlst(), J_VECTOR, J_MAIN, "c scaling vector");
       }
       else {
         Jnlst().Printf(J_VECTOR, J_MAIN, "No c scaling provided\n");
       }
       if (IsValid(dd)) {
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "d scaling vector", *dd);
+        dd->Print(Jnlst(), J_VECTOR, J_MAIN, "d scaling vector");
       }
       else {
         Jnlst().Printf(J_VECTOR, J_MAIN, "No d scaling provided\n");

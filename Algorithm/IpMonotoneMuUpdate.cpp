@@ -20,7 +20,7 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(MonotoneMuUpdate);
+  DefineOptionsRegistrar(MonotoneMuUpdate);
 
   MonotoneMuUpdate::MonotoneMuUpdate(const SmartPtr<LineSearch>& linesearch)
       :

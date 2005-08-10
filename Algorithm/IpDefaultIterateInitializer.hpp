@@ -9,14 +9,13 @@
 #ifndef __IPDEFAULTITERATEINITIALIZER_HPP__
 #define __IPDEFAULTITERATEINITIALIZER_HPP__
 
-#include "IpUtils.hpp"
 #include "IpIterateInitializer.hpp"
 #include "IpEqMultCalculator.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(DefaultIterateInitializer);
+  DeclareOptionsRegistrar(DefaultIterateInitializer);
 
   /** Class implementing the default initialization procedure (based
    *  on user options) for the iterates.  It is used at the very

@@ -10,9 +10,11 @@
 #define __IPSMARTPTR_HPP__
 
 #include "IpReferenced.hpp"
-#include "IpDebug.hpp"
 
 //#define IP_DEBUG_SMARTPTR
+#ifdef IP_DEBUG_SMARTPTR
+# include "IpDebug.hpp"
+#endif
 
 namespace Ipopt
 {
@@ -434,7 +436,9 @@ namespace Ipopt
 #endif
 
     // cannot deref a null pointer
-    DBG_ASSERT(ptr_);
+#ifdef IP_DEBUG
+    assert(ptr_);
+#endif
 
     return ptr_;
   }
@@ -448,7 +452,9 @@ namespace Ipopt
 #endif
 
     // cannot dereference a null pointer
-    DBG_ASSERT(ptr_);
+#ifdef IP_DEBUG
+    assert(ptr_);
+#endif
 
     return *ptr_;
   }
@@ -583,9 +589,11 @@ namespace Ipopt
   template <class U>
   bool IsNull(const SmartPtr<U>& smart_ptr)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool IsNull(const SmartPtr<T>& smart_ptr)",
       0);
+#endif
 
     return (smart_ptr.ptr_ == NULL);
   }

@@ -562,6 +562,109 @@ namespace Ipopt
     std::map<std::string, SmartPtr<RegisteredOption> > registered_options_;
   };
 
+  ///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
+
+  // Forward definition
+  class OptionsRegistrar;
+  std::list<OptionsRegistrar*>& OptionsRegistrarsList();
+
+  /** This class is for implementing the registration of options on a
+   *  class by class basis.  It is primarily used so we have runtime
+   *  access to each class.
+   */
+  class OptionsRegistrar
+  {
+  public:
+    /** @name Constructors / Destructors */
+    //@{
+    /** Standard Constructor - takes in the class_name of the derived class */
+    OptionsRegistrar(const char* class_name)
+        : class_name_(class_name)
+    {
+      OptionsRegistrarsList().push_back(this);
+    }
+
+    /** Standard destructor */
+    virtual ~OptionsRegistrar()
+    {}
+    //@}
+
+    /** Standard Access Methods */
+    //@{
+    std::string ClassName()
+    {
+      return class_name_;
+    }
+    //@}
+
+    /** Static methods to interact with ALL class type infos */
+    //@{
+    /** Register all the options */
+    static void RegisterAllOptions(SmartPtr<RegisteredOptions> reg_options);
+    //@}
+
+  protected:
+    /** Methods to be overridded by derived classes */
+    //@{
+    /** Override this method in derived TypeInfo classs to register options */
+    virtual void RegisterOptionsImpl(SmartPtr<RegisteredOptions> reg_options)=0;
+    //@}
+
+  private:
+    /** store the type name */
+    std::string class_name_;
+
+    /** keep a static list of all OptionsRegistrar's */
+    //  static std::list<OptionsRegistrar*> ipopt_type_infos_;
+
+  };
+
+  inline
+  void OptionsRegistrar::RegisterAllOptions(SmartPtr<RegisteredOptions> reg_options)
+  {
+    std::list<OptionsRegistrar*>::iterator i;
+    for (i=OptionsRegistrarsList().begin(); i != OptionsRegistrarsList().end(); i++) {
+      (*i)->RegisterOptionsImpl(reg_options);
+    }
+  }
+
+
+  //extern std::list<OptionsRegistrar*> OptionsRegistrar::ipopt_type_infos_;
+
+
+  ////////////////////////////////////////////////////////////
+  // Below is what needs to be added for each IpoptType
+  // but I think this can be macro'ed
+  ///////////////////////////////////////////////////////////
+
+#define DeclareOptionsRegistrar(__class_name__) \
+class __class_name__ ## OptionsRegistrar : public OptionsRegistrar \
+ { \
+  public: \
+   __class_name__ ## OptionsRegistrar() \
+     : OptionsRegistrar(# __class_name__) { } \
+    \
+   __class_name__ ## OptionsRegistrar* KeepCompilerFromOptimizing(); \
+  protected: \
+   virtual void RegisterOptionsImpl(SmartPtr<RegisteredOptions> reg_options); \
+ };
+
+#define DefineOptionsRegistrar(__class_name__) \
+  void __class_name__ ## OptionsRegistrar::RegisterOptionsImpl(SmartPtr<RegisteredOptions> reg_options) \
+   { \
+     reg_options->SetRegisteringClass(# __class_name__ ); \
+     __class_name__::RegisterOptions(reg_options); \
+     reg_options->SetRegisteringClass("Unknown Class");	\
+   } \
+ \
+__class_name__ ## OptionsRegistrar _ ## __class_name__ ## OptionsRegistrar_; \
+ \
+__class_name__ ## OptionsRegistrar* \
+__class_name__ ## OptionsRegistrar::KeepCompilerFromOptimizing() \
+   { return &_ ## __class_name__ ## OptionsRegistrar_; }
+
+
 } // namespace Ipopt
 
 #endif

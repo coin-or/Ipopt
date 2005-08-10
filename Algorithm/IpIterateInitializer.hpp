@@ -9,7 +9,6 @@
 #ifndef __IPITERATEINITIALIZER_HPP__
 #define __IPITERATEINITIALIZER_HPP__
 
-#include "IpUtils.hpp"
 #include "IpAlgStrategy.hpp"
 #include "IpIpoptNLP.hpp"
 #include "IpIpoptData.hpp"

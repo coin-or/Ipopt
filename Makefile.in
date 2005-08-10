@@ -107,10 +107,6 @@ BUILDHSLDIR_FALSE = @BUILDHSLDIR_FALSE@
 BUILDHSLDIR_TRUE = @BUILDHSLDIR_TRUE@
 BUILDHSL_FALSE = @BUILDHSL_FALSE@
 BUILDHSL_TRUE = @BUILDHSL_TRUE@
-BUILDLAPACKDIR_FALSE = @BUILDLAPACKDIR_FALSE@
-BUILDLAPACKDIR_TRUE = @BUILDLAPACKDIR_TRUE@
-BUILDLAPACK_FALSE = @BUILDLAPACK_FALSE@
-BUILDLAPACK_TRUE = @BUILDLAPACK_TRUE@
 BUILDMA27_FALSE = @BUILDMA27_FALSE@
 BUILDMA27_TRUE = @BUILDMA27_TRUE@
 BUILDMC19_FALSE = @BUILDMC19_FALSE@
@@ -208,38 +204,16 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = OTHERS Common LinAlgImpl Algorithm PDSystemImpl Apps
-EXTRA_DIST = Interfaces/IpEqMultCalculator.hpp \
-	Interfaces/IpAlgTypes.hpp \
-	Interfaces/IpMatrix.hpp \
-	Interfaces/IpNLP.hpp \
-	Interfaces/IpPDSystemSolver.hpp \
-	Interfaces/IpSymMatrix.hpp \
-	Interfaces/IpTNLP.hpp \
-	Interfaces/IpVector.hpp \
-	Interfaces/IpStdCInterface.h \
-	Examples/Fortran_example/example.f \
-	README
+SUBDIRS = Extern Common LinAlg Algorithm Interfaces Apps
+EXTRA_DIST = Examples/Fortran_example/example.f \
+	README \
+	Docs/documentation.tex
 
 tmpdir = tmpdir
 libipopt = libipopt.a
-
-# Astyle stuff
-ASTYLE_FILES = Interfaces/IpEqMultCalculator.hppbak \
-	Interfaces/IpAlgTypes.hppbak \
-	Interfaces/IpMatrix.hppbak \
-	Interfaces/IpNLP.hppbak \
-	Interfaces/IpPDSystemSolver.hppbak \
-	Interfaces/IpSymMatrix.hppbak \
-	Interfaces/IpTNLP.hppbak \
-	Interfaces/IpVector.hppbak
-
-CLEANFILES = $(ASTYLE_FILES)
-SUFFIXES = .cppbak .hppbak
 all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .cpp .hpp
 am--refresh:
 	@:
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
@@ -431,7 +405,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/Examples/Cpp_example $(distdir)/Examples/Fortran_example $(distdir)/Interfaces $(distdir)/inc
+	$(mkdir_p) $(distdir)/Docs $(distdir)/Examples/Cpp_example $(distdir)/Examples/Fortran_example $(distdir)/inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -592,7 +566,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -694,26 +667,14 @@ uninstall-local:
 cuter: install
 	cd Apps/CUTErInterface; $(MAKE) cuter
 
-astyle: astyle-local
+astyle:
 	cd Algorithm; $(MAKE) astyle
+	cd Algorithm/LinearSolvers; $(MAKE) astyle
 	cd Apps/AmplSolver; $(MAKE) astyle
 	cd Apps/CompositeInterface; $(MAKE) astyle
-	cd Apps/StdInterface; $(MAKE) astyle
 	cd Common; $(MAKE) astyle
-	cd LinAlgImpl/Serial; $(MAKE) astyle
-	cd PDSystemImpl/PDFullSpace; $(MAKE) astyle
-
-astyle-local: $(ASTYLE_FILES)
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
-	touch $@
+	cd LinAlg; $(MAKE) astyle
+	cd LinAlg/TMatrices; $(MAKE) astyle
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

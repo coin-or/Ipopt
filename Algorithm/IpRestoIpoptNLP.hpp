@@ -22,7 +22,7 @@
 namespace Ipopt
 {
 
-  DeclareIpoptType(RestoIpoptNLP);
+  DeclareOptionsRegistrar(RestoIpoptNLP);
 
   /** This class maps the traditional NLP into
    *  something that is more useful by Ipopt.

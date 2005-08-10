@@ -14,7 +14,7 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(IpoptAlgorithm);
+  DefineOptionsRegistrar(IpoptAlgorithm);
 
   IpoptAlgorithm::IpoptAlgorithm(const SmartPtr<PDSystemSolver>& pd_solver,
                                  const SmartPtr<LineSearch>& line_search,
@@ -272,7 +272,7 @@ namespace Ipopt
     Jnlst().Printf(J_MOREVECTOR, J_MAIN,
                    "*** Step Calculated for Iteration: %d\n",
                    IpData().iter_count());
-    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta", *IpData().delta());
+    IpData().delta()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "delta");
   }
 
   void IpoptAlgorithm::ComputeAcceptableTrialPoint()
@@ -326,10 +326,10 @@ namespace Ipopt
                        adjusted_slacks);
       }
       if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "old_x_L", *IpNLP().x_L());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "old_x_U", *IpNLP().x_U());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "old_d_L", *IpNLP().d_L());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "old_d_U", *IpNLP().d_U());
+        IpNLP().x_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "old_x_L");
+        IpNLP().x_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "old_x_U");
+        IpNLP().d_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "old_d_L");
+        IpNLP().d_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "old_d_U");
       }
 
       SmartPtr<Vector> new_x_l = IpNLP().x_L()->MakeNew();
@@ -355,10 +355,10 @@ namespace Ipopt
       IpNLP().AdjustVariableBounds(*new_x_l, *new_x_u, *new_d_l, *new_d_u);
 
       if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "new_x_L", *IpNLP().x_L());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "new_x_U", *IpNLP().x_U());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "new_d_L", *IpNLP().d_L());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "new_d_U", *IpNLP().d_U());
+        IpNLP().x_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "new_x_L");
+        IpNLP().x_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "new_x_U");
+        IpNLP().d_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "new_d_L");
+        IpNLP().d_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "new_d_U");
       }
 
     }

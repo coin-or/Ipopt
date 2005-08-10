@@ -9,15 +9,13 @@
 #ifndef __IPWARMSTARTITERATEINITIALIZER_HPP__
 #define __IPWARMSTARTITERATEINITIALIZER_HPP__
 
-#include "IpUtils.hpp"
 #include "IpIterateInitializer.hpp"
 #include "IpEqMultCalculator.hpp"
-#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(WarmStartIterateInitializer);
+  DeclareOptionsRegistrar(WarmStartIterateInitializer);
 
   /** Class implementing an initialization procedure for warm starts.
    */

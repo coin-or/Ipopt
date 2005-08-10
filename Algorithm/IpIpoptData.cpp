@@ -14,7 +14,7 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(IpoptData);
+  DefineOptionsRegistrar(IpoptData);
 
   IpoptData::IpoptData()
       :

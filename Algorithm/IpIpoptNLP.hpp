@@ -9,11 +9,8 @@
 #ifndef __IPIPOPTNLP_HPP__
 #define __IPIPOPTNLP_HPP__
 
-#include "IpUtils.hpp"
 #include "IpNLP.hpp"
 #include "IpJournalist.hpp"
-#include "IpReferenced.hpp"
-#include "IpException.hpp"
 #include "IpNLPScaling.hpp"
 
 namespace Ipopt

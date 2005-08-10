@@ -6,7 +6,6 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-#include "IpUtils.hpp"
 #include "AmplTNLP.hpp"
 #include "IpIpoptApplication.hpp"
 

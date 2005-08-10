@@ -11,12 +11,11 @@
 
 #include "IpIpoptNLP.hpp"
 #include "IpException.hpp"
-#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(OrigIpoptNLP);
+  DeclareOptionsRegistrar(OrigIpoptNLP);
 
   /** This class maps the traditional NLP into
    *  something that is more useful by Ipopt.

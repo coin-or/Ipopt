@@ -9,13 +9,12 @@
 #ifndef __IPALGBUILDER_HPP__
 #define __IPALGBUILDER_HPP__
 
-#include "IpUtils.hpp"
 #include "IpIpoptAlg.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(AlgorithmBuilder);
+  DeclareOptionsRegistrar(AlgorithmBuilder);
 
   /** Builder to create a complete IpoptAlg object.  This object
    *  contains all subelements (such as line search objects etc).  How

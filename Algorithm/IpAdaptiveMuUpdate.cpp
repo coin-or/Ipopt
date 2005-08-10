@@ -21,7 +21,7 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineIpoptType(AdaptiveMuUpdate);
+  DefineOptionsRegistrar(AdaptiveMuUpdate);
 
   AdaptiveMuUpdate::AdaptiveMuUpdate
   (const SmartPtr<LineSearch>& line_search,

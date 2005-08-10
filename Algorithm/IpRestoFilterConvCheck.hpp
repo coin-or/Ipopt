@@ -9,15 +9,13 @@
 #ifndef __IPRESTOFILTERCONVCHECK_HPP__
 #define __IPRESTOFILTERCONVCHECK_HPP__
 
-#include "IpUtils.hpp"
 #include "IpOptErrorConvCheck.hpp"
 #include "IpFilterLineSearch.hpp"
-#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
 
-  DeclareIpoptType(RestoFilterConvergenceCheck);
+  DeclareOptionsRegistrar(RestoFilterConvergenceCheck);
 
   /** Convergence check for the restoration phase as called by the
    *  filter.  This inherits from the OptimalityErrorConvergenceCheck

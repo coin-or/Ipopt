@@ -9,7 +9,6 @@
 #ifndef __IPMUUPDATE_HPP__
 #define __IPMUUPDATE_HPP__
 
-#include "IpUtils.hpp"
 #include "IpAlgStrategy.hpp"
 
 namespace Ipopt

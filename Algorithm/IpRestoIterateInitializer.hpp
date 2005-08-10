@@ -9,10 +9,8 @@
 #ifndef __IPRESTOITERATEINITIALIZER_HPP__
 #define __IPRESTOITERATEINITIALIZER_HPP__
 
-#include "IpUtils.hpp"
 #include "IpIterateInitializer.hpp"
 #include "IpEqMultCalculator.hpp"
-#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
