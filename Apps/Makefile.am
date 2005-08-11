@@ -12,5 +12,5 @@ SUBDIRS = CUTErInterface
 
 if BUILDASLDIR
   SUBDIRS += AmplSolver
-  SUBDIRS += CompositeInterface
+#  SUBDIRS += CompositeInterface
 endif

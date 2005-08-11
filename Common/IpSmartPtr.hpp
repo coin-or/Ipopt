@@ -437,6 +437,7 @@ namespace Ipopt
 
     // cannot deref a null pointer
 #ifdef IP_DEBUG
+
     assert(ptr_);
 #endif
 
@@ -453,6 +454,7 @@ namespace Ipopt
 
     // cannot dereference a null pointer
 #ifdef IP_DEBUG
+
     assert(ptr_);
 #endif
 

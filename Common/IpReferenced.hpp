@@ -173,16 +173,16 @@ namespace Ipopt
   {
   public:
     ReferencedObject()
-      :
-      reference_count_(0)
-    {
-    }
+        :
+        reference_count_(0)
+    {}
 
     virtual ~ReferencedObject()
     {
 #ifdef IP_DEBUG
       assert(reference_count_ == 0);
 #endif
+
     }
 
     Index ReferenceCount() const;
