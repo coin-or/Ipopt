@@ -12,6 +12,7 @@ includeipoptdir = $(includedir)/ipopt
 includeipopt_HEADERS = \
 	IpAlgTypes.hpp \
 	IpIpoptApplication.hpp \
+	IpNLP.hpp \
 	IpReturnCodes.h \
 	IpReturnCodes.inc \
 	IpStdCInterface.h \

@@ -1,4 +1,4 @@
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2005 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -34,7 +34,7 @@ install-exec-local:
 	cd $(tmpdir); \
 	for lib in $(IPALLLIBS); \
 	do \
-	  ar x $$basdir/$$lib; \
+	  $(AR_X) $$basdir/$$lib; \
 	done; \
 	$(AR) $(ARFLAGS) $(libipopt) *.$(OBJEXT)
 	$(INSTALL_DATA) $(tmpdir)/$(libipopt) $(DESTDIR)$(libdir)

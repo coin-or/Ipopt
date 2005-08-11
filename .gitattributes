@@ -1,6 +1,1 @@
 * text=auto !eol
-Docs/documentation.tex -text
-Interfaces/Makefile.am -text
-Interfaces/Makefile.in -text
-LinAlg/TMatrices/Makefile.am -text
-LinAlg/TMatrices/Makefile.in -text

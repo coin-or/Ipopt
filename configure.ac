@@ -1,4 +1,4 @@
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2005, International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -6,7 +6,7 @@
 
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-## SGI: ./configure CC=cc F77=f77 CXX=CC CXXFLAGS="-g -LANG:std -DOLD_C_HEADERS" AR="CC -ar" ARFLAGS="-o " FFLAGS=-g CFLAGS=-g CXXLIBS='-lCsup -lC -lCio'
+## SGI: ./configure CC=cc F77=f77 CXX=CC CXXFLAGS="-g -LANG:std -DOLD_C_HEADERS" AR="CC -ar" ARFLAGS="-o " AR_X="ar x" FFLAGS=-g CFLAGS=-g CXXLIBS='-lCsup -lC -lCio'
 ## AIX: ./configure CC=xlc F77=xlf CXX=xlC --with-lapack=$HOME/lib/liblapack.a CFLAGS=-g FFLAGS=-g CXXFLAGS="-g -qrtti=dyna" CXXLIBS="-lC -lc"
 ## HP1: configure --with-asl=$HOME/COIN/OBJhp1/OTHERS/ASL/amplsolver.a --with-blas=/opt/fortran/lib/libblas.a --with-hsl=$HOME/COIN/OBJhp1/OTHERS/HSL/libiphsl.a --with-lapack=$HOME/COIN/OBJhp1/OTHERS/lapack/libiplapack.a F77=/opt/fortran/bin/fort77 CC=/opt/ansic/bin/cc CXX=/opt/aCC/bin/aCC FFLAGS='-g' CFLAGS='-g' CXXFLAGS='-AA -DMY_C_FINITE=isfinite -g' CXXLIBS='-L/opt/aCC/lib -l++ -lstd_v2 -lCsup_v2 -lm -lcl -lc'
 
@@ -15,7 +15,7 @@ AC_PREREQ(2.59)
 AC_INIT([ipopt],[3.0beta],[coin-ipopt@www-124.ibm.com])
 
 AC_COPYRIGHT([
-Copyright 2004 International Business Machines and others.
+Copyright 2004, 2005 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
@@ -27,6 +27,7 @@ AC_CONFIG_SRCDIR(Common/IpDebug.hpp)
 # Get the system type
 AC_CANONICAL_BUILD
 
+# Set variables for the archiver
 if test -z "$AR"; then
   AR="ar"
 fi
@@ -34,7 +35,11 @@ AC_ARG_VAR(AR,[Command for handling archives (default is `ar')])
 if test -z "$ARFLAGS"; then
   ARFLAGS="cru"
 fi
-AC_ARG_VAR(ARFLAGS,[Flags for archive command (default is `crv')])
+AC_ARG_VAR(ARFLAGS,[Flags for adding file for archive command (default is `crv')])
+if test -z "$AR_X"; then
+  AR_X="ar x"
+fi
+AC_ARG_VAR(AR_X,[Command for extracing an archive (default is `ar x')])
 
 # Check if user wants to produce debugging code
 AC_ARG_ENABLE([debug],

@@ -10,7 +10,6 @@
 #include "IpStdInterfaceTNLP.hpp"
 #include "IpOptionsList.hpp"
 #include "IpIpoptApplication.hpp"
-#include "IpBlas.hpp"
 
 #ifdef OLD_C_HEADERS
 # include <math.h>

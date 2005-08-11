@@ -10,7 +10,7 @@
 # gives unlimited permission to copy, distribute and modify it.
 #
 #
-# Copyright 2004 International Business Machines and others.
+# Copyright 2004, 2005 International Business Machines and others.
 # All Rights Reserved.
 # This file is part of the open source package IPOPT which is distributed
 # under the Common Public License.
@@ -319,7 +319,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os AR ARFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT F77 FFLAGS ac_ct_F77 FLIBS IPADDLIBS TAUCS_INCFLAGS ASLMAKEFLAGS ASLMAKEFILECMDS CPP EGREP CXXLIBS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE ASLLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os AR ARFLAGS AR_X CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT F77 FFLAGS ac_ct_F77 FLIBS IPADDLIBS TAUCS_INCFLAGS ASLMAKEFLAGS ASLMAKEFILECMDS CPP EGREP CXXLIBS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE ASLLIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -768,6 +768,10 @@ ac_env_ARFLAGS_set=${ARFLAGS+set}
 ac_env_ARFLAGS_value=$ARFLAGS
 ac_cv_env_ARFLAGS_set=${ARFLAGS+set}
 ac_cv_env_ARFLAGS_value=$ARFLAGS
+ac_env_AR_X_set=${AR_X+set}
+ac_env_AR_X_value=$AR_X
+ac_cv_env_AR_X_set=${AR_X+set}
+ac_cv_env_AR_X_value=$AR_X
 ac_env_CC_set=${CC+set}
 ac_env_CC_value=$CC
 ac_cv_env_CC_set=${CC+set}
@@ -914,7 +918,8 @@ Optional Packages:
 
 Some influential environment variables:
   AR          Command for handling archives (default is `ar')
-  ARFLAGS     Flags for archive command (default is `crv')
+  ARFLAGS     Flags for adding file for archive command (default is `crv')
+  AR_X        Command for extracing an archive (default is `ar x')
   CC          C compiler command
   CFLAGS      C compiler flags
   LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
@@ -1040,7 +1045,7 @@ This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
 
-Copyright 2004 International Business Machines and others.
+Copyright 2004, 2005 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.
@@ -1454,12 +1459,17 @@ build_os=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 
 
 
+# Set variables for the archiver
 if test -z "$AR"; then
   AR="ar"
 fi
 
 if test -z "$ARFLAGS"; then
   ARFLAGS="cru"
+fi
+
+if test -z "$AR_X"; then
+  AR_X="ar x"
 fi
 
 
@@ -3725,7 +3735,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3728:" \
+echo "$as_me:3738:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -3922,7 +3932,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:3925: \"$ac_link\") >&5
+(eval echo $as_me:3935: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4000,7 +4010,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:4003: \"$ac_link\") >&5
+(eval echo $as_me:4013: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -8557,6 +8567,7 @@ s,@build_vendor@,$build_vendor,;t t
 s,@build_os@,$build_os,;t t
 s,@AR@,$AR,;t t
 s,@ARFLAGS@,$ARFLAGS,;t t
+s,@AR_X@,$AR_X,;t t
 s,@CC@,$CC,;t t
 s,@CFLAGS@,$CFLAGS,;t t
 s,@LDFLAGS@,$LDFLAGS,;t t
