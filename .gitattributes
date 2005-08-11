@@ -2,6 +2,8 @@
 Common/IpBlas.cpp -text
 Common/IpBlas.hpp -text
 Docs/documentation.tex -text
+Interfaces/IpReturnCodes.h -text
+Interfaces/IpReturnCodes.inc -text
 Interfaces/Makefile.am -text
 Interfaces/Makefile.in -text
 LinAlg/TMatrices/Makefile.am -text

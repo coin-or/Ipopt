@@ -262,7 +262,7 @@ namespace Ipopt
   {
     options.GetNumericValue("theta_max_fact", theta_max_fact_, prefix);
     options.GetNumericValue("theta_min_fact", theta_min_fact_, prefix);
-    ASSERT_EXCEPTION(theta_min_fact_ < theta_max_fact_, OptionsList::OPTION_OUT_OF_RANGE,
+    ASSERT_EXCEPTION(theta_min_fact_ < theta_max_fact_, OPTION_INVALID,
                      "Option \"theta_min_fact\": This value must be larger than 0 and less than theta_max_fact.");
     options.GetNumericValue("eta_phi", eta_phi_, prefix);
     options.GetNumericValue("delta", delta_, prefix);
@@ -274,7 +274,7 @@ namespace Ipopt
     options.GetNumericValue("alpha_red_factor", alpha_red_factor_, prefix);
     options.GetIntegerValue("max_soc", max_soc_, prefix);
     if (max_soc_>0) {
-      ASSERT_EXCEPTION(IsValid(pd_solver_), OptionsList::OPTION_OUT_OF_RANGE,
+      ASSERT_EXCEPTION(IsValid(pd_solver_), OPTION_INVALID,
                        "Option \"max_soc\": This option is non-negative, but no linear solver for computing the SOC given to FilterLineSearch object.");
     }
     options.GetNumericValue("kappa_soc", kappa_soc_, prefix);

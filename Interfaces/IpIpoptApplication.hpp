@@ -16,21 +16,8 @@
 
 namespace Ipopt
 {
-  /** Return codes for the Optimize call for an application */
-  enum ApplicationReturnStatus
-  {
-    Solve_Succeeded,
-    Maximum_Iterations_Exceeded,
-    Solved_To_Best_Possible_Precision,
-    Solved_To_Acceptable_Level,
-    Infeasible_Problem_Detected,
-    Restoration_Failed,
-    Not_Enough_Degrees_Of_Freedom,
-    Unrecoverable_Exception,
-    NonIpopt_Exception_Thrown,
-    Insufficient_Memory,
-    Internal_Error
-  };
+  /* Return codes for the Optimize call for an application */
+#include "IpReturnCodes.h"
 
   DeclareOptionsRegistrar(IpoptApplication);
 
@@ -70,6 +57,10 @@ namespace Ipopt
                                         SmartPtr<IpoptData>& ip_data,
                                         SmartPtr<IpoptCalculatedQuantities>& ip_cq);
     //@}
+
+    /** Method for opening an output file with given print_level.
+     *  Returns false if there was a problem. */
+    bool OpenOutputFile(std::string file_name, EJournalLevel print_level);
 
     /**@name Accessor methods */
     //@{

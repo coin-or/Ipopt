@@ -16,53 +16,63 @@
 namespace Ipopt
 {
 
-  void OptionsList::SetValue(const std::string& tag, const std::string& value)
+  bool OptionsList::SetValue(const std::string& tag, const std::string& value)
   {
     if (IsValid(reg_options_)) {
       SmartPtr<const RegisteredOption> option = reg_options_->GetOption(tag);
 
       if (IsNull(option)) {
-        std::string msg = "Tried to set Option: " + tag;
-        msg += ". It is not a valid option. Please check the list of available options.";
-        THROW_EXCEPTION(OPTION_NOT_REGISTERED, msg);
+        if (IsValid(jnlst_)) {
+          std::string msg = "Tried to set Option: " + tag;
+          msg += ". It is not a valid option. Please check the list of available options.\n";
+          jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
+        }
+        //THROW_EXCEPTION(OPTION_INVALID, msg);
+        return false;
       }
 
       if (option->Type() != OT_String) {
-        std::string msg = "Tried to set Option: " + tag;
-        msg += ". It is a valid option, but it is of type ";
-        if (option->Type() == OT_Number) {
-          msg += " Number";
-        }
-        else if (option->Type() == OT_Integer) {
-          msg += " Integer";
-        }
-        else {
-          msg += " Unknown";
-        }
-        msg += ", not of type String. Please check the documentation for options.";
         if (IsValid(jnlst_)) {
+          std::string msg = "Tried to set Option: " + tag;
+          msg += ". It is a valid option, but it is of type ";
+          if (option->Type() == OT_Number) {
+            msg += " Number";
+          }
+          else if (option->Type() == OT_Integer) {
+            msg += " Integer";
+          }
+          else {
+            msg += " Unknown";
+          }
+          msg += ", not of type String. Please check the documentation for options.\n";
+          jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
           option->OutputDescription(*jnlst_);
         }
-        THROW_EXCEPTION(OPTION_VALUE_IS_INCORRECT_TYPE, msg);
+        //THROW_EXCEPTION(OPTION_INVALID, msg);
+        return false;
       }
 
       if (!option->IsValidStringSetting(value)) {
-        std::string msg = "Setting: " + value;
-        msg += " is not a valid setting for Option: ";
-        msg += tag;
-        msg += ". Check the option documentation.";
         if (IsValid(jnlst_)) {
+          std::string msg = "Setting: " + value;
+          msg += " is not a valid setting for Option: ";
+          msg += tag;
+          msg += ". Check the option documentation.\n";
+          jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
           option->OutputDescription(*jnlst_);
         }
-        THROW_EXCEPTION(OPTION_OUT_OF_RANGE, msg);
+        //THROW_EXCEPTION(OPTION_INVALID, msg);
+        return false;
       }
     }
 
     OptionsList::OptionValue optval(lowercase(value));
     options_[lowercase(tag)] = optval;
+
+    return true;
   }
 
-  void OptionsList::SetNumericValue(const std::string& tag, Number value)
+  bool OptionsList::SetNumericValue(const std::string& tag, Number value)
   {
     char buffer[256];
     sprintf(buffer, "%g", value);
@@ -71,48 +81,58 @@ namespace Ipopt
       SmartPtr<const RegisteredOption> option = reg_options_->GetOption(tag);
 
       if (IsNull(option)) {
-        std::string msg = "Tried to set Option: " + tag;
-        msg += ". It is not a valid option. Please check the list of available options.";
-        THROW_EXCEPTION(OPTION_NOT_REGISTERED, msg);
+        if (IsValid(jnlst_)) {
+          std::string msg = "Tried to set Option: " + tag;
+          msg += ". It is not a valid option. Please check the list of available options.\n";
+          jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
+        }
+        //THROW_EXCEPTION(OPTION_INVALID, msg);
+        return false;
       }
 
       if (option->Type() != OT_Number) {
-        std::string msg = "Tried to set Option: " + tag;
-        msg += ". It is a valid option, but it is of type ";
-        if (option->Type() == OT_String) {
-          msg += " String";
-        }
-        else if (option->Type() == OT_Integer) {
-          msg += " Integer";
-        }
-        else {
-          msg += " Unknown";
-        }
-        msg += ", not of type Number. Please check the documentation for options.";
         if (IsValid(jnlst_)) {
+          std::string msg = "Tried to set Option: " + tag;
+          msg += ". It is a valid option, but it is of type ";
+          if (option->Type() == OT_String) {
+            msg += " String";
+          }
+          else if (option->Type() == OT_Integer) {
+            msg += " Integer";
+          }
+          else {
+            msg += " Unknown";
+          }
+          msg += ", not of type Number. Please check the documentation for options.\n";
+          jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
           option->OutputDescription(*jnlst_);
         }
-        THROW_EXCEPTION(OPTION_VALUE_IS_INCORRECT_TYPE, msg);
+        //THROW_EXCEPTION(OPTION_INVALID, msg);
+        return false;
       }
 
       if (!option->IsValidNumberSetting(value)) {
-        std::string msg = "Setting: ";
-        msg += buffer;
-        msg += " is not a valid setting for Option: ";
-        msg += tag;
-        msg += ". Check the option documentation.";
         if (IsValid(jnlst_)) {
+          std::string msg = "Setting: ";
+          msg += buffer;
+          msg += " is not a valid setting for Option: ";
+          msg += tag;
+          msg += ". Check the option documentation.\n";
+          jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
           option->OutputDescription(*jnlst_);
         }
-        THROW_EXCEPTION(OPTION_OUT_OF_RANGE, msg);
+        //THROW_EXCEPTION(OPTION_INVALID, msg);
+        return false;
       }
     }
 
     OptionsList::OptionValue optval(buffer);
     options_[lowercase(tag)] = optval;
+
+    return true;
   }
 
-  void OptionsList::SetIntegerValue(const std::string& tag, Index value)
+  bool OptionsList::SetIntegerValue(const std::string& tag, Index value)
   {
     char buffer[256];
     sprintf(buffer, "%d", value);
@@ -122,44 +142,54 @@ namespace Ipopt
 
       if (IsNull(option)) {
         std::string msg = "Tried to set Option: " + tag;
-        msg += ". It is not a valid option. Please check the list of available options.";
-        THROW_EXCEPTION(OPTION_NOT_REGISTERED, msg);
+        msg += ". It is not a valid option. Please check the list of available options.\n";
+        if (IsValid(jnlst_)) {
+          jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
+        }
+        //THROW_EXCEPTION(OPTION_INVALID, msg);
+        return false;
       }
 
       if (option->Type() != OT_Integer) {
-        std::string msg = "Tried to set Option: " + tag;
-        msg += ". It is a valid option, but it is of type ";
-        if (option->Type() == OT_String) {
-          msg += " String";
-        }
-        else if (option->Type() == OT_Number) {
-          msg += " Number";
-        }
-        else {
-          msg += " Unknown";
-        }
-        msg += ", not of type Integer. Please check the documentation for options.";
         if (IsValid(jnlst_)) {
+          std::string msg = "Tried to set Option: " + tag;
+          msg += ". It is a valid option, but it is of type ";
+          if (option->Type() == OT_String) {
+            msg += " String";
+          }
+          else if (option->Type() == OT_Number) {
+            msg += " Number";
+          }
+          else {
+            msg += " Unknown";
+          }
+          msg += ", not of type Integer. Please check the documentation for options.\n";
+          jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
           option->OutputDescription(*jnlst_);
         }
-        THROW_EXCEPTION(OPTION_VALUE_IS_INCORRECT_TYPE, msg);
+        //THROW_EXCEPTION(OPTION_INVALID, msg);
+        return false;
       }
 
       if (!option->IsValidIntegerSetting(value)) {
-        std::string msg = "Setting: ";
-        msg += buffer;
-        msg += " is not a valid setting for Option: ";
-        msg += tag;
-        msg += ". Check the option documentation.";
         if (IsValid(jnlst_)) {
+          std::string msg = "Setting: ";
+          msg += buffer;
+          msg += " is not a valid setting for Option: ";
+          msg += tag;
+          msg += ". Check the option documentation.\n";
+          jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
           option->OutputDescription(*jnlst_);
         }
-        THROW_EXCEPTION(OPTION_OUT_OF_RANGE, msg);
+        //THROW_EXCEPTION(OPTION_INVALID, msg);
+        return false;
       }
     }
 
     OptionsList::OptionValue optval(buffer);
     options_[lowercase(tag)] = optval;
+
+    return true;
   }
 
   bool OptionsList::GetValue(const std::string& tag, std::string& value,
@@ -174,7 +204,7 @@ namespace Ipopt
       if (IsNull(option)) {
         std::string msg = "IPOPT tried to get the value of Option: " + tag;
         msg += ". It is not a valid registered option.";
-        THROW_EXCEPTION(OPTION_NOT_REGISTERED, msg);
+        THROW_EXCEPTION(OPTION_INVALID, msg);
       }
 
       if (option->Type() != OT_String) {
@@ -193,7 +223,7 @@ namespace Ipopt
         if (IsValid(jnlst_)) {
           option->OutputDescription(*jnlst_);
         }
-        THROW_EXCEPTION(OPTION_VALUE_IS_INCORRECT_TYPE, msg);
+        THROW_EXCEPTION(OPTION_INVALID, msg);
       }
 
       if (found) {
@@ -220,7 +250,7 @@ namespace Ipopt
       if (IsNull(option)) {
         std::string msg = "IPOPT tried to get the value of Option: " + tag;
         msg += ". It is not a valid registered option.";
-        THROW_EXCEPTION(OPTION_NOT_REGISTERED, msg);
+        THROW_EXCEPTION(OPTION_INVALID, msg);
       }
 
       if (option->Type() != OT_String) {
@@ -239,7 +269,7 @@ namespace Ipopt
         if (IsValid(jnlst_)) {
           option->OutputDescription(*jnlst_);
         }
-        THROW_EXCEPTION(OPTION_VALUE_IS_INCORRECT_TYPE, msg);
+        THROW_EXCEPTION(OPTION_INVALID, msg);
       }
 
       if (found) {
@@ -265,7 +295,7 @@ namespace Ipopt
       value = true;
     }
     else {
-      THROW_EXCEPTION(OPTION_OUT_OF_RANGE, "Tried to get a boolean from an option and failed.");
+      THROW_EXCEPTION(OPTION_INVALID, "Tried to get a boolean from an option and failed.");
       ret = false;
     }
 
@@ -282,7 +312,7 @@ namespace Ipopt
       if (IsNull(option)) {
         std::string msg = "IPOPT tried to get the value of Option: " + tag;
         msg += ". It is not a valid registered option.";
-        THROW_EXCEPTION(OPTION_NOT_REGISTERED, msg);
+        THROW_EXCEPTION(OPTION_INVALID, msg);
       }
 
       if (option->Type() != OT_Number) {
@@ -301,7 +331,7 @@ namespace Ipopt
         if (IsValid(jnlst_)) {
           option->OutputDescription(*jnlst_);
         }
-        THROW_EXCEPTION(OPTION_VALUE_IS_INCORRECT_TYPE, msg);
+        THROW_EXCEPTION(OPTION_INVALID, msg);
       }
     }
 
@@ -313,7 +343,7 @@ namespace Ipopt
         std::string msg = "Option \"" + tag +
                           "\": Double value expected, but non-numeric value \"" +
                           strvalue+"\" found.\n";
-        THROW_EXCEPTION(OPTION_VALUE_IS_NONNUMERIC, msg);
+        THROW_EXCEPTION(OPTION_INVALID, msg);
       }
       value = retval;
       return true;
@@ -335,7 +365,7 @@ namespace Ipopt
       if (IsNull(option)) {
         std::string msg = "IPOPT tried to get the value of Option: " + tag;
         msg += ". It is not a valid registered option.";
-        THROW_EXCEPTION(OPTION_NOT_REGISTERED, msg);
+        THROW_EXCEPTION(OPTION_INVALID, msg);
       }
 
       if (option->Type() != OT_Integer) {
@@ -354,7 +384,7 @@ namespace Ipopt
         if (IsValid(jnlst_)) {
           option->OutputDescription(*jnlst_);
         }
-        THROW_EXCEPTION(OPTION_VALUE_IS_INCORRECT_TYPE, msg);
+        THROW_EXCEPTION(OPTION_INVALID, msg);
       }
     }
 
@@ -366,7 +396,7 @@ namespace Ipopt
         std::string msg = "Option \"" + tag +
                           "\": Integer value expected, but non-integer value \"" +
                           strvalue+"\" found.\n";
-        THROW_EXCEPTION(OPTION_VALUE_IS_NONINTEGER, msg);
+        THROW_EXCEPTION(OPTION_INVALID, msg);
       }
       value = retval;
       return true;
@@ -440,43 +470,47 @@ namespace Ipopt
           std::string msg = "Read Option: ";
           msg += tag;
           msg += ". It is not a valid option. Check the list of available options.";
-          THROW_EXCEPTION(OPTION_NOT_REGISTERED, msg);
+          THROW_EXCEPTION(OPTION_INVALID, msg);
         }
 
         if (option->Type() == OT_String) {
-          SetValue(tag, value);
+          ASSERT_EXCEPTION(SetValue(tag, value), OPTION_INVALID,
+                           "Error setting string value read from option file.");
         }
         else if (option->Type() == OT_Number) {
           char* p_end;
           Number retval = strtod(value.c_str(), &p_end);
           if (*p_end!='\0' && !isspace(*p_end)) {
             std::string msg = "Option \"" + tag +
-                              "\": Double value expected, but non-numeric value \"" +
+                              "\": Double value expected, but non-numeric option value \"" +
                               value + "\" found.\n";
-            THROW_EXCEPTION(OPTION_VALUE_IS_NONNUMERIC, msg);
+            THROW_EXCEPTION(OPTION_INVALID, msg);
           }
-          SetNumericValue(tag, retval);
+          ASSERT_EXCEPTION(SetNumericValue(tag, retval), OPTION_INVALID,
+                           "Error setting numeric value read from file.");
         }
         else if (option->Type() == OT_Integer) {
           char* p_end;
           Index retval = strtol(value.c_str(), &p_end, 10);
           if (*p_end!='\0' && !isspace(*p_end)) {
             std::string msg = "Option \"" + tag +
-                              "\": Integer value expected, but non-integer value \"" +
+                              "\": Integer value expected, but non-integer option value \"" +
                               value + "\" found.\n";
             if (IsValid(jnlst_)) {
               option->OutputDescription(*jnlst_);
             }
-            THROW_EXCEPTION(OPTION_VALUE_IS_NONINTEGER, msg);
+            THROW_EXCEPTION(OPTION_INVALID, msg);
           }
-          SetIntegerValue(tag, retval);
+          ASSERT_EXCEPTION(SetIntegerValue(tag, retval), OPTION_INVALID,
+                           "Error setting integer value read from option file.");
         }
         else {
           DBG_ASSERT(false && "Option Type: Unknown");
         }
       }
       else {
-        SetValue(tag, value);
+        ASSERT_EXCEPTION(SetValue(tag, value), OPTION_INVALID,
+                         "Error setting value read from option file.");
       }
     }
   }

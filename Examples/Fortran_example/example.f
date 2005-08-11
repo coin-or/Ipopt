@@ -1,4 +1,4 @@
-C Copyright (C) 2002, Carnegie Mellon University and others.
+C Copyright (C) 2002, 2004, 2005 Carnegie Mellon University and others.
 C All Rights Reserved.
 C This code is published under the Common Public License.
 C
@@ -33,6 +33,10 @@ C
 C
       implicit none
 C
+C     include the Ipopt return codes
+C
+      include 'IpReturnCodes.inc'
+C
 C     Size of the problem (number of variables and equality constraints)
 C
       integer     N,     M,     NELE_JAC,     NELE_HESS
@@ -59,12 +63,21 @@ C
       double precision DAT(2)
       integer IDAT(1)
 C
-C     Algorithmic Parameters
+C     Place for storing the Ipopt Problem Handle
 C
-      integer OPTIONS, IPNEWOPTS
+      integer IPROBLEM
+      integer IPCREATE
+C     for 64 platforms:
+C64   integer*8 IPROBLEM
+C64   integer*8 IPCREATE
 C
-      integer i, IERR
+      integer IERR
+      integer IPSOLVE, IPADDSTROPTION
+      integer IPADDNUMOPTION, IPADDINTOPTION
+      integer IPOPENOUTPUTFILE
+C
       double precision f
+      integer i
 C
 C     Set initial point and bounds:
 C
@@ -83,26 +96,52 @@ C     down in this file.
 C
       external EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS
 C
+C     First create a handle for the Ipopt problem (and read the options
+C     file)
+C
+      IPROBLEM = IPCREATE(N, X_L, X_U, M, G_L, G_U, NELE_JAC, NELE_HESS,
+     1     EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS)
+      if (IPROBLEM.eq.0) then
+         write(*,*) 'Error creating an Ipopt Problem handle.'
+         stop
+      endif
+C
+C     Open an output file
+C
+      IERR = IPOPENOUTPUTFILE(IPROBLEM, 'IPOPT.OUT', 5)
+      if (IERR.ne.0 ) then
+         write(*,*) 'Error opening the Ipopt output file.'
+         goto 9000
+      endif
+C
+C     Set a string option
+C
+      IERR = IPADDSTROPTION(IPROBLEM, 'mu_strategy', 'adaptive')
+      if (IERR.ne.0 ) goto 9990
+C
+C     Set an integer option
+C
+      IERR = IPADDINTOPTION(IPROBLEM, 'max_iter', 3000)
+      if (IERR.ne.0 ) goto 9990
+C
+C     Set a double precision option
+C
+      IERR = IPADDNUMOPTION(IPROBLEM, 'tol', 1.d-9)
+      if (IERR.ne.0 ) goto 9990
+C
 C     As a simple example, we pass the constants in the constraints to
 C     the EVAL_C routine via the "private" DAT array.
 C
       DAT(1) = 0.d0
       DAT(2) = 0.d0
 C
-C     Call optimization routine:
+C     Call optimization routine
 C
-      OPTIONS = 0
-      OPTIONS = IPNEWOPTS()
-c      call IPADDINTOPT(OPTIONS, 1, "max_iter")
-c      call IPADDOPT(OPTIONS, "1", "max_iter")
-      call IPOPT(N, X, X_L, X_U, M, G, G_L, G_U, NELE_JAC, NELE_HESS,
-     1     F, LAM, Z_L, Z_U, EV_F, EV_G, EV_GRAD_F, EV_JAC_G,
-     1     EV_HESS, OPTIONS, IDAT, DAT, IERR)
-      call IPDELOPTS(OPTIONS)
+      IERR = IPSOLVE(IPROBLEM, X, G, F, LAM, Z_L, Z_U, IDAT, DAT)
 C
 C     Output:
 C
-      if( IERR.eq.0 ) then
+      if( IERR.eq.IP_SOLVE_SUCCEEDED ) then
          write(*,*)
          write(*,*) 'The solution was found.'
          write(*,*)
@@ -139,6 +178,16 @@ C
          write(*,*)
       endif
 C
+ 9000 continue
+C
+C     Clean up
+C
+      call IPFREE(IPROBLEM)
+      stop
+C
+ 9990 continue
+      write(*,*) 'Error setting an option'
+      goto 9000
       end
 C
 C =============================================================================

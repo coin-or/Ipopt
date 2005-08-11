@@ -12,6 +12,9 @@ VPATH = @srcdir@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 
+# Directory with include file
+IPOPTINCDIR = @includedir@/ipopt
+
 # Directory with libipopt.a
 IPOPTLIBDIR = @libdir@
 exec_prefix = @exec_prefix@
@@ -20,6 +23,9 @@ prefix = @prefix@
 # Libraries necessary to link with IPOPT
 #LIBS = -L$(IPOPTLIBDIR) -lipopt @IPADDLIBS@
 LIBS = @ipoptlib@ @IPADDLIBS@ @CXXLIBS@
+
+# Necessary Include dirs
+INCL =  -I$(IPOPTINCDIR)
 
 # CHANGEME: This should be the name of your executable
 EXE = example@EXEEXT@
@@ -41,11 +47,11 @@ $(EXE): $(OBJS)
 	$(F77) $(FFLAGS) -o $@ $$bla $(LIBS)
 
 clean:
-	rm -rf $(EXE) $(OBJS)
+	rm -f $(EXE) $(OBJS) IPOPT.OUT
 
 .f.o:
-	$(F77) $(FFLAGS) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
+	$(F77) $(FFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
 
 
 .f.obj:
-	$(F77) $(FFLAGS) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`
+	$(F77) $(FFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`

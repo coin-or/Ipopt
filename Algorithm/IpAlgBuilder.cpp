@@ -136,7 +136,7 @@ namespace Ipopt
       SolverInterface = new PardisoSolverInterface();
 #else
 
-      THROW_EXCEPTION(OptionsList::OPTION_OUT_OF_RANGE,
+      THROW_EXCEPTION(OPTION_INVALID,
                       "Selected solver Pardiso not available.");
 #endif
 
@@ -146,9 +146,8 @@ namespace Ipopt
       SolverInterface = new TAUCSSolverInterface();
 #else
 
-      ASSERT_EXCEPTION(false,
-                       OptionsList::OPTION_OUT_OF_RANGE,
-                       "Selected solver TAUCS not available.");
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Selected solver TAUCS not available.");
 #endif
 
     }

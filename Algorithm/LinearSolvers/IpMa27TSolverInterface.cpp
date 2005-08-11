@@ -88,7 +88,7 @@ namespace Ipopt
   {
     options.GetNumericValue("pivtol", pivtol_, prefix);
     if(options.GetNumericValue("pivtolmax", pivtolmax_, prefix)) {
-      ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OptionsList::OPTION_OUT_OF_RANGE,
+      ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OPTION_INVALID,
                        "Option \"pivtolmax\": This value must be between pivtol and 1.");
     }
     else {

@@ -23,6 +23,9 @@
 
 namespace Ipopt
 {
+  /** Exception that can be used to indicate errors with options */
+  DECLARE_STD_EXCEPTION(OPTION_INVALID);
+
   /** This class stores a list of user set options.  Each options is
    *  identified by a case-insensitive keyword (tag).  Its value is
    *  stored internally as a string (always lower case), but for
@@ -139,16 +142,6 @@ namespace Ipopt
     }
     //@}
 
-    /** @name Exceptions that can be used to indicate errors with
-    options */
-    //@{
-    DECLARE_STD_EXCEPTION(OPTION_NOT_REGISTERED);
-    DECLARE_STD_EXCEPTION(OPTION_VALUE_IS_INCORRECT_TYPE);
-    DECLARE_STD_EXCEPTION(OPTION_OUT_OF_RANGE);
-    DECLARE_STD_EXCEPTION(OPTION_VALUE_IS_NONINTEGER);
-    DECLARE_STD_EXCEPTION(OPTION_VALUE_IS_NONNUMERIC);
-    //@}
-
     /** @name Get / Set Methods */
     //@{
     void SetRegisteredOptions(const SmartPtr<RegisteredOptions> reg_options)
@@ -162,9 +155,9 @@ namespace Ipopt
     //@}
     /** @name Methods for setting options */
     //@{
-    void SetValue(const std::string& tag, const std::string& value);
-    void SetNumericValue(const std::string& tag, Number value);
-    void SetIntegerValue(const std::string& tag, Index value);
+    bool SetValue(const std::string& tag, const std::string& value);
+    bool SetNumericValue(const std::string& tag, Number value);
+    bool SetIntegerValue(const std::string& tag, Index value);
     //@}
 
     /** @name Methods for retrieving values from the options list.  If

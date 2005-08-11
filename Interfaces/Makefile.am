@@ -10,10 +10,12 @@ AUTOMAKE_OPTIONS = foreign
 
 includeipoptdir = $(includedir)/ipopt
 includeipopt_HEADERS = \
-	IpIpoptApplication.hpp \
 	IpAlgTypes.hpp \
-	IpTNLP.hpp \
-	IpStdCInterface.h
+	IpIpoptApplication.hpp \
+	IpReturnCodes.h \
+	IpReturnCodes.inc \
+	IpStdCInterface.h \
+	IpTNLP.hpp
 
 noinst_LIBRARIES = libinterfaces.a
 
@@ -21,6 +23,7 @@ libinterfaces_a_SOURCES = \
 	IpAlgTypes.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
+	IpReturnCodes.h \
 	IpStdCInterface.cpp IpStdCInterface.h \
 	IpStdFInterface.c \
 	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \
@@ -31,6 +34,8 @@ CXXFLAGS += -I$(srcdir)/../Common \
 	-I$(srcdir)/../LinAlg \
 	-I$(srcdir)/../LinAlg/TMatrices \
 	-I$(srcdir)/../Algorithm
+
+CFLAGS += -I$(srcdir)/../Common
 
 # Astyle stuff
 

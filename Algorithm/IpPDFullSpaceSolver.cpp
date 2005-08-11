@@ -80,12 +80,12 @@ namespace Ipopt
     // Check for the algorithm options
     options.GetIntegerValue("min_refinement_steps", min_refinement_steps_, prefix);
     options.GetIntegerValue("max_refinement_steps", max_refinement_steps_, prefix);
-    ASSERT_EXCEPTION(max_refinement_steps_ >= min_refinement_steps_, OptionsList::OPTION_OUT_OF_RANGE,
+    ASSERT_EXCEPTION(max_refinement_steps_ >= min_refinement_steps_, OPTION_INVALID,
                      "Option \"max_refinement_steps\": This value must be larger than or equal to min_refinement_steps (default 1)");
 
     options.GetNumericValue("residual_ratio_max", residual_ratio_max_, prefix);
     options.GetNumericValue("residual_ratio_singular", residual_ratio_singular_, prefix);
-    ASSERT_EXCEPTION(residual_ratio_singular_ > residual_ratio_max_, OptionsList::OPTION_OUT_OF_RANGE,
+    ASSERT_EXCEPTION(residual_ratio_singular_ > residual_ratio_max_, OPTION_INVALID,
                      "Option \"residual_ratio_singular\": This value must be larger than residual_ratio_max.");
     options.GetNumericValue("residual_improvement_factor", residual_improvement_factor_, prefix);
 

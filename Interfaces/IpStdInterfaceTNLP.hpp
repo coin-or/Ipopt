@@ -18,6 +18,10 @@
 
 namespace Ipopt
 {
+  /** Declare excpetion that is thrown when invalid NLP data
+   *  is provided */
+  DECLARE_STD_EXCEPTION(INVALID_STDINTERFACE_NLP);
+
   /** Implementation of a TNLP for the Standard C interface.  The
    *  standard C interface is exposed to the user as a single C
    *  function that is given problem dimension, starting points, and
@@ -26,10 +30,6 @@ namespace Ipopt
   class StdInterfaceTNLP : public TNLP
   {
   public:
-    /**Declare excpetion that is thrown when invalid NLP data
-     *  is provided */
-    DECLARE_STD_EXCEPTION(INVALID_STDINTERFACE_NLP);
-
     /**@name Constructors/Destructors */
     //@{
     /** Constructor, given dimensions of problem, function pointers

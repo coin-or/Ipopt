@@ -78,7 +78,7 @@ namespace Ipopt
     options.GetNumericValue("nlp_upper_bound_inf", nlp_upper_bound_inf_, prefix);
 
     ASSERT_EXCEPTION(nlp_lower_bound_inf_ < nlp_upper_bound_inf_,
-                     OptionsList::OPTION_OUT_OF_RANGE,
+                     OPTION_INVALID,
                      "Option \"nlp_lower_bound_inf\" must be smaller than \"nlp_upper_bound_inf\".");
 
     options.GetNumericValue("max_onesided_bound_slack", max_onesided_bound_slack_, prefix);

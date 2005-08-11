@@ -121,7 +121,7 @@ BUILDMC19_FALSE = @BUILDMC19_FALSE@
 BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
-CFLAGS = @CFLAGS@
+CFLAGS = @CFLAGS@ -I$(srcdir)/../Common
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -215,16 +215,19 @@ target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 includeipoptdir = $(includedir)/ipopt
 includeipopt_HEADERS = \
-	IpIpoptApplication.hpp \
 	IpAlgTypes.hpp \
-	IpTNLP.hpp \
-	IpStdCInterface.h
+	IpIpoptApplication.hpp \
+	IpReturnCodes.h \
+	IpReturnCodes.inc \
+	IpStdCInterface.h \
+	IpTNLP.hpp
 
 noinst_LIBRARIES = libinterfaces.a
 libinterfaces_a_SOURCES = \
 	IpAlgTypes.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
+	IpReturnCodes.h \
 	IpStdCInterface.cpp IpStdCInterface.h \
 	IpStdFInterface.c \
 	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \

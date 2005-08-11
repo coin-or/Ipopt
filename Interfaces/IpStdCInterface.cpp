@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005, International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -6,11 +6,11 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-#include "IpUtils.hpp"
 #include "IpStdCInterface.h"
 #include "IpStdInterfaceTNLP.hpp"
 #include "IpOptionsList.hpp"
 #include "IpIpoptApplication.hpp"
+#include "IpBlas.hpp"
 
 #ifdef OLD_C_HEADERS
 # include <math.h>
@@ -18,107 +18,181 @@
 # include <cmath>
 #endif
 
-OptionsPtr Ipopt_NewOptions()
+struct IpoptProblemInfo {
+  Index n;
+  Number* x_L;
+  Number* x_U;
+  Index m;
+  Number* g_L;
+  Number* g_U;
+  Index nele_jac;
+  Index nele_hess;
+  Eval_F_CB eval_f;
+  Eval_G_CB eval_g;
+  Eval_Grad_F_CB eval_grad_f;
+  Eval_Jac_G_CB eval_jac_g;
+  Eval_H_CB eval_h;
+  Ipopt::SmartPtr<Ipopt::IpoptApplication> app;
+};
+
+IpoptProblem CreateIpoptProblem(
+    Index n,
+    Number* x_L,
+    Number* x_U,
+    Index m,
+    Number* g_L,
+    Number* g_U,
+    Index nele_jac,
+    Index nele_hess,
+    Eval_F_CB eval_f,
+    Eval_G_CB eval_g,
+    Eval_Grad_F_CB eval_grad_f,
+    Eval_Jac_G_CB eval_jac_g,
+    Eval_H_CB eval_h)
 {
-  Ipopt::OptionsList* options = new Ipopt::OptionsList();
-  return (OptionsPtr) options;
+  // make sure input is Ok
+  if (n<1 || m<0 || !x_L || !x_U || (m>0 && (!g_L || !g_U)) ||
+      (m==0 && nele_jac != 0) || (m>0 && nele_jac < 1) || nele_hess < 0 ||
+      !eval_f || !eval_grad_f || (m>0 && (!eval_g || !eval_jac_g))) {
+    return NULL;
+  }
+
+  IpoptProblem retval = new IpoptProblemInfo;
+
+  retval->n = n;
+  retval->x_L = new Number[n];
+  for (Index i=0; i<n; i++) {
+    retval->x_L[i] = x_L[i];
+  }
+  retval->x_U = new Number[n];
+  for (Index i=0; i<n; i++) {
+    retval->x_U[i] = x_U[i];
+  }
+
+  retval->m = m;
+  if (m>0) {
+    retval->g_L = new Number[m];
+    for (Index i=0; i<m; i++) {
+      retval->g_L[i] = g_L[i];
+    }
+    retval->g_U = new Number[m];
+    for (Index i=0; i<m; i++) {
+      retval->g_U[i] = g_U[i];
+    }
+  }
+  else {
+    retval->g_L = NULL;
+    retval->g_U = NULL;
+  }
+
+  retval->nele_jac = nele_jac;
+  retval->nele_hess = nele_hess;
+  retval->eval_f = eval_f;
+  retval->eval_g = eval_g;
+  retval->eval_grad_f = eval_grad_f;
+  retval->eval_jac_g = eval_jac_g;
+  retval->eval_h = eval_h;
+
+  retval->app = new Ipopt::IpoptApplication();
+
+  return retval;
 }
 
-void Ipopt_DeleteOptions(OptionsPtr options)
+void FreeIpoptProblem(IpoptProblem ipopt_problem)
 {
-  Ipopt::OptionsList* optlist = (Ipopt::OptionsList*)options;
-  delete optlist;
+  delete [] ipopt_problem->x_L;
+  delete [] ipopt_problem->x_U;
+  if (ipopt_problem->m>0) {
+    delete [] ipopt_problem->g_L;
+    delete [] ipopt_problem->g_U;
+  }
+
+  ipopt_problem->app = NULL;
+
+  delete ipopt_problem;
 }
 
-Bool Ipopt_AddOption(OptionsPtr options, char* keyword, char* val)
+
+Bool AddIpoptStrOption(IpoptProblem ipopt_problem, char* keyword, char* val)
 {
-  Ipopt::OptionsList* optlist = (Ipopt::OptionsList*)options;
   std::string tag(keyword);
   std::string value(val);
-
-  optlist->SetValue(tag, value);
-
-  return (Bool)true;
+  return (Bool) ipopt_problem->app->Options()->SetValue(tag, value);
 }
 
-Bool Ipopt_AddNumOption(OptionsPtr options, char* keyword, Number val)
+Bool AddIpoptNumOption(IpoptProblem ipopt_problem, char* keyword, Number val)
 {
-  Ipopt::OptionsList* optlist = (Ipopt::OptionsList*)options;
   std::string tag(keyword);
   Ipopt::Number value=val;
-
-  optlist->SetNumericValue(tag, value);
-
-  return (Bool)true;
+  return (Bool) ipopt_problem->app->Options()->SetNumericValue(tag, value);
 }
 
-Bool Ipopt_AddIntOption(OptionsPtr options, char* keyword, Int val)
+Bool AddIpoptIntOption(IpoptProblem ipopt_problem, char* keyword, Int val)
 {
-  Ipopt::OptionsList* optlist = (Ipopt::OptionsList*)options;
   std::string tag(keyword);
   Ipopt::Index value=val;
-
-  optlist->SetIntegerValue(tag, value);
-
-  return (Bool)true;
+  return (Bool) ipopt_problem->app->Options()->SetIntegerValue(tag, value);
 }
 
-Int IpoptSolve(Index n,
-               Number* x_,
-               Number* x_L_,
-               Number* x_U_,
-               Index m,
-               Number* g,
-               Number* g_L_,
-               Number* g_U_,
-               Index nele_jac,
-               Index nele_hess,
-               Number* obj_val,
-               Number* mult_g_,
-               Number* mult_x_L_,
-               Number* mult_x_U_,
-               Eval_F_CB eval_f,
-               Eval_G_CB eval_g,
-               Eval_Grad_F_CB eval_grad_f,
-               Eval_Jac_G_CB eval_jac_g,
-               Eval_H_CB eval_h,
-               OptionsPtr options_,
-               UserDataPtr user_data)
+Bool OpenIpoptOutputFile(IpoptProblem ipopt_problem, char* file_name,
+			 Int print_level)
+{
+  std::string name(file_name);
+  Ipopt::EJournalLevel level = Ipopt::EJournalLevel(print_level);
+  return (Bool) ipopt_problem->app->OpenOutputFile(name, level);
+}
+
+enum ApplicationReturnStatus IpoptSolve(
+    IpoptProblem ipopt_problem,
+    Number* x,
+    Number* g,
+    Number* obj_val,
+    Number* mult_g,
+    Number* mult_x_L,
+    Number* mult_x_U,
+    UserDataPtr user_data)
 {
   using namespace Ipopt;
 
-  // Since those arrays are assumed not to change during the optimization
-  // make sure we are not accidentially changing them.
-  const ::Number* x = x_;
-  const ::Number* x_L = x_L_;
-  const ::Number* x_U = x_U_;
-  const ::Number* g_L = g_L_;
-  const ::Number* g_U = g_U_;
-  const ::Number* mult_g = mult_g_;
-  const ::Number* mult_x_L = mult_x_L_;
-  const ::Number* mult_x_U = mult_x_U_;
-
-  // Create an IpoptApplication
-  SmartPtr<IpoptApplication> app =
-    new IpoptApplication();
-
-  // Get the options
-  OptionsList* options = (OptionsList*) options_;
-  if (options) {
-    // Copy the options given by the C interface user to those in the
-    // Ipopt Application
-    *app->Options() = *options;
+  // For now only copy the values of the x's.  When we allow warm
+  // starts we also need to copy the values of the multipliers
+  ::Number* start_x = new ::Number[ipopt_problem->n];
+  for (::Index i=0; i<ipopt_problem->n; i++) {
+    start_x[i] = x[i];
   }
 
   // Create the original nlp
-  SmartPtr<TNLP> tnlp =
-    new StdInterfaceTNLP(n, x_L, x_U, m, g_L, g_U, nele_jac,
-                         nele_hess, x, mult_g, mult_x_L, mult_x_U,
-                         eval_f, eval_g, eval_grad_f, eval_jac_g, eval_h,
-                         x_, mult_x_L_, mult_x_U_, g, mult_g_, obj_val, user_data);
+  SmartPtr<TNLP> tnlp;
 
-  ApplicationReturnStatus status = app->OptimizeTNLP(tnlp);
+  bool skip_optimize = false;
+  try {
+    tnlp = new StdInterfaceTNLP(ipopt_problem->n, ipopt_problem->x_L,
+				ipopt_problem->x_U, ipopt_problem->m,
+				ipopt_problem->g_L, ipopt_problem->g_U,
+				ipopt_problem->nele_jac,
+				ipopt_problem->nele_hess,
+				start_x, NULL, NULL, NULL,
+				ipopt_problem->eval_f, ipopt_problem->eval_g,
+				ipopt_problem->eval_grad_f,
+				ipopt_problem->eval_jac_g,
+				ipopt_problem->eval_h,
+				x, mult_x_L, mult_x_U, g, mult_g,
+				obj_val, user_data);
+  }
+  catch(INVALID_STDINTERFACE_NLP& exc) {
+    skip_optimize = true;
+  }
 
-  return (::Int) status;
+  ApplicationReturnStatus status;
+  if (!skip_optimize) {
+    status = ipopt_problem->app->OptimizeTNLP(tnlp);
+  }
+  else {
+    status = Invalid_Problem_Definition;
+  }
+
+  delete [] start_x;
+
+  return status;
 }
 

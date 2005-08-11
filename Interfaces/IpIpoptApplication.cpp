@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005, International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -101,10 +101,8 @@ namespace Ipopt
       else {
         file_print_level = print_level;
       }
-      SmartPtr<Journal> file_jrnl = jnlst_->AddFileJournal("OutputFile", output_filename.c_str(), file_print_level);
-      file_jrnl->SetPrintLevel(J_DBG, J_NONE);
+      OpenOutputFile(output_filename, file_print_level);
     }
-
 
     // output a description of all the options
     bool print_options_documentation;
@@ -147,6 +145,7 @@ namespace Ipopt
       "File name of an output file (leave unset for no file output)",
       "",
       "*", "Any acceptable standard file name",
+      "NOTE: This option only works when read from PARAMS.DAT options file! "
       "An output file with this name will be written (leave unset for no "
       "file output).  The verbosity level is either \"print_level\", or "
       "\"file_print_level\" if that is given.");
@@ -154,6 +153,7 @@ namespace Ipopt
       "file_print_level",
       "Verbosity level output file.",
       0, J_LAST_LEVEL-1, J_SUMMARY,
+      "NOTE: This option only works when read from PARAMS.DAT options file! "
       "Determines the verbosity level for the file specified by "
       "\"output_file\".  By defauly it is the same as \"print_level\".");
     roptions->AddStringOption2(
@@ -328,6 +328,7 @@ namespace Ipopt
       else {
         retValue = Internal_Error;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
+	return retValue;
       }
       ip_nlp->FinalizeSolution(status,
                                *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
@@ -337,6 +338,10 @@ namespace Ipopt
     catch(TOO_FEW_DOF& exc) {
       exc.ReportException(*jnlst_);
       retValue = Not_Enough_Degrees_Of_Freedom;
+    }
+    catch(OPTION_INVALID& exc) {
+      exc.ReportException(*jnlst_);
+      retValue = Invalid_Option;
     }
     catch(IpoptException& exc) {
       exc.ReportException(*jnlst_);
@@ -357,4 +362,16 @@ namespace Ipopt
     return retValue;
 
   }
+
+  bool IpoptApplication::OpenOutputFile(std::string file_name,
+					EJournalLevel print_level)
+  {
+    SmartPtr<Journal> file_jrnl = jnlst_->AddFileJournal("OutputFile:"+file_name,
+							 file_name.c_str(),
+							 print_level);
+    file_jrnl->SetPrintLevel(J_DBG, J_NONE);
+
+    return true;
+  }
+
 } // namespace Ipopt
