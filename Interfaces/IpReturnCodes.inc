@@ -2,7 +2,7 @@ C Copyright (C) 2005 Carnegie Mellon University and others.
 C All Rights Reserved.
 C This code is published under the Common Public License.
 C
-C    $Id: example.f 362 2005-06-29 15:01:41Z andreasw $
+C    $Id$
 C
 C Author:   Andreas Waechter    IBM      2005-08-11
 C
