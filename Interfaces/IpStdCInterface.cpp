@@ -182,16 +182,16 @@ enum ApplicationReturnStatus IpoptSolve(
     skip_optimize = true;
   }
 
-  ApplicationReturnStatus status;
+  Ipopt::ApplicationReturnStatus status;
   if (!skip_optimize) {
     status = ipopt_problem->app->OptimizeTNLP(tnlp);
   }
   else {
-    status = Invalid_Problem_Definition;
+    status = Ipopt::Invalid_Problem_Definition;
   }
 
   delete [] start_x;
 
-  return status;
+  return (::ApplicationReturnStatus) status;
 }
 

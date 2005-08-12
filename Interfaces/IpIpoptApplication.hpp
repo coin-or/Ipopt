@@ -17,7 +17,7 @@
 namespace Ipopt
 {
   /* Return codes for the Optimize call for an application */
-#include "IpReturnCodes.h"
+#include "IpReturnCodes_inc.h"
 
   DeclareOptionsRegistrar(IpoptApplication);
 
