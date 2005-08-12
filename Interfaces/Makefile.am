@@ -14,6 +14,7 @@ includeipopt_HEADERS = \
 	IpIpoptApplication.hpp \
 	IpNLP.hpp \
 	IpReturnCodes.h \
+	IpReturnCodes_inc.h \
 	IpReturnCodes.inc \
 	IpStdCInterface.h \
 	IpTNLP.hpp

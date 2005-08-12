@@ -15,12 +15,6 @@
 #include "IpSmartPtr.hpp"
 #include "IpJournalist.hpp"
 
-#ifdef OLD_C_HEADERS
-# include <stdio.h>
-#else
-# include <cstdio>
-#endif
-#include <string>
 #include <vector>
 
 namespace Ipopt

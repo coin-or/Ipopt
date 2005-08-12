@@ -11,13 +11,6 @@
 
 #include "IpVector.hpp"
 
-#ifdef OLD_C_HEADERS
-# include <stdio.h>
-#else
-# include <cstdio>
-#endif
-#include <string>
-
 namespace Ipopt
 {
 

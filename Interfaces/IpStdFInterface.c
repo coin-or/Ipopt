@@ -15,7 +15,7 @@
 #include <string.h>
 
 /* ToDo: The following needs to be adapted based on configuration */
-typedef int fint;
+typedef FORTRAN_INTEGER_TYPE fint;
 typedef double fdouble;
 typedef long fptr;
 

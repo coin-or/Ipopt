@@ -145,9 +145,9 @@ BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
-CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../Common -I$(srcdir)/../LinAlg \
 	-I$(srcdir)/../LinAlg/TMatrices -I$(srcdir)/../Interfaces \

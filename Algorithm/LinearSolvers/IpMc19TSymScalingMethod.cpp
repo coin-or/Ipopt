@@ -8,10 +8,14 @@
 
 #include "IpMc19TSymScalingMethod.hpp"
 
-#ifdef OLD_C_HEADERS
-# include <math.h>
-#else
+#ifdef HAVE_CMATH
 # include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 /** Prototypes for MA27's Fortran subroutines */
@@ -133,7 +137,7 @@ namespace Ipopt
       scaling_factors[i] = exp((double)((R[i]+C[i])/2.));
       sum += scaling_factors[i];
     }
-    if (!FiniteNumber(sum)) {
+    if (!IsFiniteNumber(sum)) {
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                      "Scaling factors are invalid - setting them all to 1.\n");
       for (Index i=0; i<n; i++) {

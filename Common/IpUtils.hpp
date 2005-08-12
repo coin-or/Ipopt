@@ -13,12 +13,6 @@
 #include "IpTypes.hpp"
 #include "IpDebug.hpp"
 
-#ifndef MY_C_FINITE
-# define FiniteNumber finite
-#else
-# define FiniteNumber MY_C_FINITE
-#endif
-
 namespace Ipopt
 {
 
@@ -69,6 +63,10 @@ namespace Ipopt
     min = Min(min, d);
     return min;
   }
+
+  /** Function returning true iff the argument is a valid double number
+   *  (not NaN or Inf). */
+  bool IsFiniteNumber(Number val);
 
 } //namespace Ipopt
 

@@ -7,10 +7,15 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpIpoptCalculatedQuantities.hpp"
-#ifdef OLD_C_HEADERS
-#include <math.h>
+
+#ifdef HAVE_CMATH
+# include <cmath>
 #else
-#include <cmath>
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 #include <limits>
@@ -699,7 +704,7 @@ namespace Ipopt
 
     DBG_PRINT((1, "BarrierTerm with damping = %25.16e\n", retval));
 
-    DBG_ASSERT(FiniteNumber(retval));
+    DBG_ASSERT(IsFiniteNumber(retval));
     return retval;
   }
 
@@ -735,7 +740,7 @@ namespace Ipopt
       }
       curr_barrier_obj_cache_.AddCachedResult(result, tdeps, sdeps);
     }
-    DBG_ASSERT(FiniteNumber(result));
+    DBG_ASSERT(IsFiniteNumber(result));
     return result;
   }
 
@@ -772,7 +777,7 @@ namespace Ipopt
       }
       trial_barrier_obj_cache_.AddCachedResult(result, tdeps, sdeps);
     }
-    DBG_ASSERT(FiniteNumber(result));
+    DBG_ASSERT(IsFiniteNumber(result));
     return result;
   }
 

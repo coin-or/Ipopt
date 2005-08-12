@@ -7,10 +7,15 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpOrigIpoptNLP.hpp"
-#ifdef OLD_C_HEADERS
-# include <math.h>
-#else
+
+#ifdef HAVE_CMATH
 # include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 namespace Ipopt
@@ -253,7 +258,7 @@ namespace Ipopt
       SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
       bool success = nlp_->Eval_f(*unscaled_x, ret);
       DBG_PRINT((1, "success = %d ret = %e\n", success, ret));
-      ASSERT_EXCEPTION(success && FiniteNumber(ret), Eval_Error,
+      ASSERT_EXCEPTION(success && IsFiniteNumber(ret), Eval_Error,
                        "Error evaluating the objective function");
       ret = NLP_scaling()->apply_obj_scaling(ret);
       f_cache_.AddCachedResult1Dep(ret, &x);
@@ -272,7 +277,7 @@ namespace Ipopt
 
       SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
       bool success = nlp_->Eval_grad_f(*unscaled_x, *unscaled_grad_f);
-      ASSERT_EXCEPTION(success && FiniteNumber(unscaled_grad_f->Nrm2()),
+      ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_grad_f->Nrm2()),
                        Eval_Error, "Error evaluating the gradient of the objective function");
       retValue = NLP_scaling()->apply_grad_obj_scaling(ConstPtr(unscaled_grad_f));
       grad_f_cache_.AddCachedResult1Dep(retValue, &x);
@@ -304,7 +309,7 @@ namespace Ipopt
       c_evals_++;
       SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
       bool success = nlp_->Eval_c(*unscaled_x, *unscaled_c);
-      ASSERT_EXCEPTION(success && FiniteNumber(unscaled_c->Nrm2()),
+      ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_c->Nrm2()),
                        Eval_Error, "Error evaluating the equality constraints");
       retValue = NLP_scaling()->apply_vector_scaling_c(ConstPtr(unscaled_c));
       c_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
@@ -339,7 +344,7 @@ namespace Ipopt
       SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
       bool success = nlp_->Eval_d(*unscaled_x, *unscaled_d);
       DBG_PRINT_VECTOR(2, "unscaled_d", *unscaled_d);
-      ASSERT_EXCEPTION(success && FiniteNumber(unscaled_d->Nrm2()),
+      ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_d->Nrm2()),
                        Eval_Error, "Error evaluating the inequality constraints");
       retValue = NLP_scaling()->apply_vector_scaling_d(ConstPtr(unscaled_d));
       d_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));

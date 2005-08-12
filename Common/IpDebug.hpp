@@ -10,10 +10,15 @@
 #define __IPDEBUG_HPP__
 
 #include "IpTypes.hpp"
-#ifdef OLD_C_HEADERS
-# include <assert.h>
-#else
+
+#ifdef HAVE_CASSERT
 # include <cassert>
+#else
+# ifdef HAVE_ASSERT_H
+#  include <assert.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 #ifdef IP_DEBUG

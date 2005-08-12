@@ -7,10 +7,25 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpOptionsList.hpp"
-#ifdef OLD_C_HEADERS
-# include <ctype.h>
-#else
+
+#ifdef HAVE_CCTYPE
 # include <cctype>
+#else
+# ifdef HAVE_CTYPE_H
+#  include <ctype.h>
+# else
+#  error "don't have header file for ctype"
+# endif
+#endif
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
 #endif
 
 namespace Ipopt

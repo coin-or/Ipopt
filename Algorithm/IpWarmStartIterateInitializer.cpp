@@ -11,10 +11,15 @@
 
 // ToDo make independent of DenseVector
 #include "IpDenseVector.hpp"
-#ifdef OLD_C_HEADERS
-# include <math.h>
-#else
+
+#ifdef HAVE_CMATH
 # include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 namespace Ipopt

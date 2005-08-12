@@ -15,12 +15,6 @@
 #include "IpRegOptions.hpp"
 #include <map>
 
-#ifdef OLD_C_HEADERS
-# include <stdio.h>
-#else
-# include <cstdio>
-#endif
-
 namespace Ipopt
 {
   /** Exception that can be used to indicate errors with options */

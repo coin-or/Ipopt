@@ -130,9 +130,9 @@ BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
-CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg -I$(srcdir)/../../LinAlg/TMatrices \
@@ -239,7 +239,9 @@ ASTYLE_FILES = \
 	IpSymLinearSolver.hppbak \
 	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
-	IpTSymScalingMethod.hppbak
+	IpTSymScalingMethod.hppbak \
+	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
+	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak
 
 CLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
@@ -476,8 +478,6 @@ uninstall-am: uninstall-info-am
 	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
 	uninstall-am uninstall-info-am
 
-	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak
-	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak
 
 astyle: $(ASTYLE_FILES)
 

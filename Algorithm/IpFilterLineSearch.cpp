@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,12 +11,24 @@
 #include "IpRestoPhase.hpp"
 #include "IpAlgTypes.hpp"
 
-#ifdef OLD_C_HEADERS
-# include <math.h>
-# include <ctype.h>
-#else
+#ifdef HAVE_CMATH
 # include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+
+#ifdef HAVE_CCTYPE
 # include <cctype>
+#else
+# ifdef HAVE_CTYPE_H
+#  include <ctype.h>
+# else
+#  error "don't have header file for ctype"
+# endif
 #endif
 
 namespace Ipopt
@@ -827,7 +839,7 @@ namespace Ipopt
     }
 
     Number trial_barr = IpCq().trial_barrier_obj();
-    DBG_ASSERT(FiniteNumber(trial_barr));
+    DBG_ASSERT(IsFiniteNumber(trial_barr));
 
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "Checking acceptability for trial step size alpha_primal_test=%13.6e:\n", alpha_primal_test);

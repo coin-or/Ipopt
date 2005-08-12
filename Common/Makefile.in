@@ -59,7 +59,8 @@ libcommon_a_AR = $(AR) $(ARFLAGS)
 libcommon_a_LIBADD =
 am_libcommon_a_OBJECTS = IpDebug.$(OBJEXT) IpJournalist.$(OBJEXT) \
 	IpObserver.$(OBJEXT) IpOptionsList.$(OBJEXT) \
-	IpRegOptions.$(OBJEXT) IpTaggedObject.$(OBJEXT)
+	IpRegOptions.$(OBJEXT) IpTaggedObject.$(OBJEXT) \
+	IpUtils.$(OBJEXT)
 libcommon_a_OBJECTS = $(am_libcommon_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -123,9 +124,9 @@ BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
-CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@
 CXXLIBS = @CXXLIBS@
@@ -240,7 +241,7 @@ libcommon_a_SOURCES = \
 	IpSmartPtr.hpp \
 	IpTaggedObject.cpp IpTaggedObject.hpp \
 	IpTypes.hpp \
-	IpUtils.hpp
+	IpUtils.cpp IpUtils.hpp
 
 
 # Astyle stuff
@@ -256,7 +257,7 @@ ASTYLE_FILES = \
 	IpSmartPtr.hppbak \
 	IpTaggedObject.cppbak IpTaggedObject.hppbak \
 	IpTypes.hppbak \
-	IpUtils.hppbak
+	IpUtils.cppbak IpUtils.hppbak
 
 CLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
@@ -313,6 +314,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptionsList.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRegOptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTaggedObject.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpUtils.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

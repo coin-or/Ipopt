@@ -9,16 +9,21 @@
 #ifndef __IPJOURNALIST_HPP__
 #define __IPJOURNALIST_HPP__
 
-#ifdef OLD_C_HEADERS
-# include <stdarg.h>
-#else
-# include <cstdarg>
-#endif
 #include <string>
 #include <vector>
 #include "IpTypes.hpp"
 #include "IpReferenced.hpp"
 #include "IpSmartPtr.hpp"
+
+#ifdef HAVE_CSTDARG
+# include <cstdarg>
+#else
+# ifdef HAVE_STDARG_H
+#  include <stdarg.h>
+# else
+#  error "don't have header file for stdarg"
+# endif
+#endif
 
 namespace Ipopt
 {

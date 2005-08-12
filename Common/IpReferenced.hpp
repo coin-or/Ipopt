@@ -10,15 +10,9 @@
 #define __IPREFERENCED_HPP__
 
 #include "IpTypes.hpp"
-#include <list>
+#include "IpDebug.hpp"
 
-#ifdef IP_DEBUG
-# ifdef OLD_C_HEADERS
-#  include <assert.h>
-# else
-#  include <cassert>
-# endif
-#endif
+#include <list>
 
 namespace Ipopt
 {
@@ -179,10 +173,7 @@ namespace Ipopt
 
     virtual ~ReferencedObject()
     {
-#ifdef IP_DEBUG
-      assert(reference_count_ == 0);
-#endif
-
+      DBG_ASSERT(reference_count_ == 0);
     }
 
     Index ReferenceCount() const;

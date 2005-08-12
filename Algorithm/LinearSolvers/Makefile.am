@@ -45,8 +45,8 @@ ASTYLE_FILES = \
 	IpSymLinearSolver.hppbak \
 	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
-	IpTSymScalingMethod.hppbak
-	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak
+	IpTSymScalingMethod.hppbak \
+	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
 	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak
 
 

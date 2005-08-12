@@ -57,11 +57,11 @@ AC_ARG_ENABLE([debug],
 if test "$debugcompile" = "true"; then
   AC_DEFINE([IP_DEBUG],[1],[If defined, debug sanity checks are performed during runtime])
   if test -z "$CXXFLAGS"; then
-    CXXFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -pipe -Wconversion"
+    CXXFLAGS="-g"
   fi
 
   if test -z "$CFLAGS"; then
-    CFLAGS="-g -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Werror -pipe"
+    CFLAGS="-g"
   fi
 
   if test -z "$FFLAGS"; then
@@ -100,6 +100,139 @@ AC_PROG_LN_S
 # Stuff for automake
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
+
+############################################################################
+############################################################################
+#                   Stuff that we need for C++ programs                    #
+############################################################################
+############################################################################
+
+AC_LANG_PUSH(C++)
+
+################
+# Header Files #
+################
+
+AC_CHECK_HEADERS([cmath])
+AC_CHECK_HEADERS([math.h])
+AC_CHECK_HEADERS([cctype])
+AC_CHECK_HEADERS([ctype.h])
+AC_CHECK_HEADERS([cassert])
+AC_CHECK_HEADERS([assert.h])
+AC_CHECK_HEADERS([cstdio])
+AC_CHECK_HEADERS([stdio.h])
+AC_CHECK_HEADERS([cstdarg])
+AC_CHECK_HEADERS([stdarg.h])
+AC_CHECK_HEADERS([cfloat])
+AC_CHECK_HEADERS([float.h])
+
+###################
+# Function finite #
+###################
+
+# First check for a few headers
+
+case $build in
+  *-cygwin*) ;;
+  *) AC_CHECK_HEADERS([ieeefp.h])
+     AC_CHECK_HEADERS([cieeefp]) ;;
+esac
+
+# now try to guess the correct name of the finite function
+
+MY_C_FINITE=
+AC_CHECK_DECL([finite],[MY_C_FINITE=finite],,[
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# endif
+#endif
+#ifdef HAVE_CFLOAT
+# include <cfloat>
+#else
+# ifdef HAVE_FLOAT_H
+#  include <float.h>
+# endif
+#endif
+#ifdef HAVE_CIEEEFP
+# include <cieeefp>
+#else
+# ifdef HAVE_IEEEFP_H
+#  include <ieeefp.h>
+# endif
+#endif])
+if test -z "$MY_C_FINITE"; then
+  AC_CHECK_DECL([_finite],[MY_C_FINITE=_finite],,[
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# endif
+#endif
+#ifdef HAVE_CFLOAT
+# include <cfloat>
+#else
+# ifdef HAVE_FLOAT_H
+#  include <float.h>
+# endif
+#endif
+#ifdef HAVE_CIEEEFP
+# include <cieeefp>
+#else
+# ifdef HAVE_IEEEFP_H
+#  include <ieeefp.h>
+# endif
+#endif])
+  if test -z "$MY_C_FINITE"; then
+    AC_CHECK_DECL([isfinite],[MY_C_FINITE=isfinite],,[
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# endif
+#endif
+#ifdef HAVE_CFLOAT
+# include <cfloat>
+#else
+# ifdef HAVE_FLOAT_H
+#  include <float.h>
+# endif
+#endif
+#ifdef HAVE_CIEEEFP
+# include <cieeefp>
+#else
+# ifdef HAVE_IEEEFP_H
+#  include <ieeefp.h>
+# endif
+#endif])
+  fi
+fi
+if test -z "$MY_C_FINITE"; then
+  AC_MSG_WARN(Cannot find C-function for checking NaN and Inf.  Check will be disabled)
+else
+  AC_DEFINE_UNQUOTED([MY_C_FINITE],[$MY_C_FINITE],
+                     [Define to be the name of C-function for NaNInf check])
+fi
+
+###########
+# va_copy #
+###########
+
+AC_CHECK_DECL([va_copy],[AC_DEFINE([HAVE_VA_COPY],[1],
+                                   [Define to 1 if va_copy is avaliable])],,[
+#ifdef HAVE_CSTDARG
+# include <cstdarg>
+#else
+# ifdef HAVE_STDARG_H
+#  include <stdarg.h>
+# endif
+#endif])
+
+AC_LANG_POP(C++)
 
 ###################################
 #   Fortran 77 compiler options   #
@@ -456,17 +589,18 @@ AC_LANG_POP(C)
 # Equivalent int Fortran and C types #
 ######################################
 
-AC_CHECK_SIZEOF([long])
-AC_CHECK_SIZEOF([int])
-AC_CHECK_SIZEOF([double])
-AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
-if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
-  AC_DEFINE([INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
-  AC_MSG_RESULT([int])
-else
-  AC_DEFINE([INTEGER_TYPE],[long])
-  AC_MSG_RESULT([long])
-fi
+AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
+#AC_CHECK_SIZEOF([long])
+#AC_CHECK_SIZEOF([int])
+#AC_CHECK_SIZEOF([double])
+#AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
+#if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
+#  AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
+#  AC_MSG_RESULT([int])
+#else
+#  AC_DEFINE([FORTRAN_INTEGER_TYPE],[long])
+#  AC_MSG_RESULT([long])
+#fi
 
 ######################
 # C++ link libraries #
@@ -477,6 +611,17 @@ fi
 AC_ARG_VAR(CXXLIBS,[Libraries necessary for linking C++ code with Fortran compiler])
 
 IPADDLIBS="$IPADDLIBS"
+
+##################################
+# Debug compiler warning options #
+##################################
+
+if test "$debugcompile" = "true"; then
+#ToDo this should only be added for GNU compilers
+  CXXFLAGS="$CXXFLAGS -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -pipe -Wconversion"
+
+  CFLAGS="$CFLAGS -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Werror -pipe"
+fi
 
 ##########
 # ASTYLE #

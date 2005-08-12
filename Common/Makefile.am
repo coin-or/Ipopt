@@ -36,7 +36,7 @@ libcommon_a_SOURCES = \
 	IpSmartPtr.hpp \
 	IpTaggedObject.cpp IpTaggedObject.hpp \
 	IpTypes.hpp \
-	IpUtils.hpp
+	IpUtils.cpp IpUtils.hpp
 
 # Astyle stuff
 
@@ -52,7 +52,7 @@ ASTYLE_FILES = \
 	IpSmartPtr.hppbak \
 	IpTaggedObject.cppbak IpTaggedObject.hppbak \
 	IpTypes.hppbak \
-	IpUtils.hppbak
+	IpUtils.cppbak IpUtils.hppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@

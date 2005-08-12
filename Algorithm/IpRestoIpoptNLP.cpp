@@ -12,10 +12,14 @@
 #include "IpSumMatrix.hpp"
 #include "IpNLPScaling.hpp"
 
-#ifdef OLD_C_HEADERS
-#include <math.h>
+#ifdef HAVE_CMATH
+# include <cmath>
 #else
-#include <cmath>
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 namespace Ipopt
