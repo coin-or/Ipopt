@@ -16,6 +16,7 @@ includeipopt_HEADERS = \
 	IpReturnCodes.h \
 	IpReturnCodes_inc.h \
 	IpReturnCodes.inc \
+	IpSolveStatistics.hpp \
 	IpStdCInterface.h \
 	IpTNLP.hpp
 
@@ -26,6 +27,7 @@ libinterfaces_a_SOURCES = \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
 	IpReturnCodes.h \
+	IpSolveStatistics.cpp IpSolveStatistics.hpp \
 	IpStdCInterface.cpp IpStdCInterface.h \
 	IpStdFInterface.c \
 	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \
@@ -45,6 +47,7 @@ ASTYLE_FILES = \
 	IpAlgTypes.hppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
+	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
 	IpTNLP.hppbak \

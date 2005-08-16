@@ -22,10 +22,12 @@ namespace Ipopt
 
   DefineOptionsRegistrar(IpoptApplication);
 
-  IpoptApplication::IpoptApplication(bool read_params_dat, bool create_console_out)
+  IpoptApplication::IpoptApplication(bool read_params_dat,
+                                     bool create_console_out)
       :
       jnlst_(new Journalist()),
-      options_(new OptionsList())
+      options_(new OptionsList()),
+      statistics_(NULL)
   {
 # ifdef IP_DEBUG
     DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
@@ -63,11 +65,10 @@ namespace Ipopt
     }
 
     Index ivalue;
-    EJournalLevel print_level;
+    options_->GetIntegerValue("print_level", ivalue, "");
+    EJournalLevel print_level = (EJournalLevel)ivalue;
     if (create_console_out) {
       // Set printlevel for stdout
-      options_->GetIntegerValue("print_level", ivalue, "");
-      print_level = (EJournalLevel)ivalue;
       stdout_jrnl->SetAllPrintLevels(print_level);
       stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
     }
@@ -186,31 +187,12 @@ namespace Ipopt
   }
 
   ApplicationReturnStatus
-  IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp,
-                                 SmartPtr<IpoptData>& ip_data,
-                                 SmartPtr<IpoptCalculatedQuantities>& ip_cq)
+  IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp)
   {
-    SmartPtr<NLP> nlp_adapter =
-      new TNLPAdapter(GetRawPtr(nlp));
-
-    return OptimizeNLP(nlp_adapter, ip_data, ip_cq);
-  }
-
-  ApplicationReturnStatus IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp)
-  {
-    SmartPtr<IpoptData> ip_data = NULL;
-    SmartPtr<IpoptCalculatedQuantities> ip_cq = NULL;
-
-    return OptimizeNLP(nlp, ip_data, ip_cq);
-
-  }
-
-  ApplicationReturnStatus
-  IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp,
-                                SmartPtr<IpoptData>& ip_data,
-                                SmartPtr<IpoptCalculatedQuantities>& ip_cq)
-  {
+    statistics_ = NULL; /* delete old statistics */
     ApplicationReturnStatus retValue = Internal_Error;
+    SmartPtr<IpoptData> ip_data;
+    SmartPtr<IpoptCalculatedQuantities> ip_cq;
     SmartPtr<IpoptNLP> ip_nlp;
     try {
 
@@ -285,6 +267,9 @@ namespace Ipopt
                      "\nNumber of objective function evaluations             = %d\n",
                      ip_nlp->f_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
+                     "Number of objective gradient evaluations             = %d\n",
+                     ip_nlp->grad_f_evals());
+      jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Number of equality constraint evaluations            = %d\n",
                      ip_nlp->c_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
@@ -328,12 +313,14 @@ namespace Ipopt
       else {
         retValue = Internal_Error;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
-	return retValue;
+        return retValue;
       }
       ip_nlp->FinalizeSolution(status,
                                *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
                                *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
                                ip_cq->curr_f());
+      // Create a SolveStatistics object
+      statistics_ = new SolveStatistics(ip_nlp, ip_data, ip_cq);
     }
     catch(TOO_FEW_DOF& exc) {
       exc.ReportException(*jnlst_);
@@ -364,11 +351,11 @@ namespace Ipopt
   }
 
   bool IpoptApplication::OpenOutputFile(std::string file_name,
-					EJournalLevel print_level)
+                                        EJournalLevel print_level)
   {
     SmartPtr<Journal> file_jrnl = jnlst_->AddFileJournal("OutputFile:"+file_name,
-							 file_name.c_str(),
-							 print_level);
+                                  file_name.c_str(),
+                                  print_level);
     file_jrnl->SetPrintLevel(J_DBG, J_NONE);
 
     return true;

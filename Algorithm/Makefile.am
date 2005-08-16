@@ -1,4 +1,4 @@
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2005 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -9,14 +9,6 @@
 AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = LinearSolvers
-
-includeipoptdir = $(includedir)/ipopt
-includeipopt_HEADERS = \
-	IpIpoptCalculatedQuantities.hpp \
-	IpIpoptData.hpp \
-	IpIpoptNLP.hpp \
-	IpIteratesVector.hpp \
-	IpNLPScaling.hpp
 
 noinst_LIBRARIES = libipoptalg.a
 

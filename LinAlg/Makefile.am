@@ -12,11 +12,8 @@ SUBDIRS = TMatrices
 
 includeipoptdir = $(includedir)/ipopt
 includeipopt_HEADERS = \
-	IpCompoundVector.hpp \
 	IpMatrix.hpp \
-	IpScaledMatrix.hpp \
 	IpSymMatrix.hpp \
-	IpSymScaledMatrix.hpp \
 	IpVector.hpp
 
 noinst_LIBRARIES = liblinalg.a

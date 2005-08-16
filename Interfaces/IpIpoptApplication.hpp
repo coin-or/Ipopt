@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -13,21 +13,19 @@
 #include "IpTNLP.hpp"
 #include "IpRegOptions.hpp"
 #include "IpOptionsList.hpp"
+#include "IpSolveStatistics.hpp"
 
 namespace Ipopt
 {
+  /* Forward declaration */
+  class NLP;
+
   /* Return codes for the Optimize call for an application */
 #include "IpReturnCodes_inc.h"
 
   DeclareOptionsRegistrar(IpoptApplication);
 
-  /* forward declarations */
-  class IpoptData;
-  class IpoptCalculatedQuantities;
-  class NLP;
-
-  /** This is the main application class for making calls
-  *     to Ipopt. */
+  /** This is the main application class for making calls to Ipopt. */
   class IpoptApplication : public ReferencedObject
   {
   public:
@@ -40,22 +38,8 @@ namespace Ipopt
     /** Solve a problem that inherits from TNLP */
     ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& nlp);
 
-    /** Solve a problem that inherits from TNLP
-     *   use this method when you want access to ip_data and ip_cq after the solve
-     */
-    ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& nlp,
-                                         SmartPtr<IpoptData>& ip_data,
-                                         SmartPtr<IpoptCalculatedQuantities>& ip_cq);
-
     /** Solve a problem that inherits from NLP */
     ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp);
-
-    /** Solve a problem that inherits from NLP
-     *   use this method when you want access to ip_data and ip_cq after the solve
-     */
-    ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp,
-                                        SmartPtr<IpoptData>& ip_data,
-                                        SmartPtr<IpoptCalculatedQuantities>& ip_cq);
     //@}
 
     /** Method for opening an output file with given print_level.
@@ -74,6 +58,13 @@ namespace Ipopt
     SmartPtr<OptionsList> Options()
     {
       return options_;
+    }
+
+    /** Get the object with the statistics about the most recent
+     *  optimization run. */
+    SmartPtr<SolveStatistics> Statistics()
+    {
+      return statistics_;
     }
     //@}
 
@@ -112,6 +103,10 @@ namespace Ipopt
 
     /** OptionsList used for the application */
     SmartPtr<OptionsList> options_;
+
+    /** Object for storing statistics about the most recent
+     *  optimization run. */
+    SmartPtr<SolveStatistics> statistics_;
   };
 
 } // namespace Ipopt

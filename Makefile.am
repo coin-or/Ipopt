@@ -55,4 +55,5 @@ astyle:
 	cd Common; $(MAKE) astyle
 	cd LinAlg; $(MAKE) astyle
 	cd LinAlg/TMatrices; $(MAKE) astyle
+	cd Interfaces; $(MAKE) astyle
 

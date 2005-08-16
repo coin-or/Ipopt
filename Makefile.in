@@ -676,6 +676,7 @@ astyle:
 	cd Common; $(MAKE) astyle
 	cd LinAlg; $(MAKE) astyle
 	cd LinAlg/TMatrices; $(MAKE) astyle
+	cd Interfaces; $(MAKE) astyle
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

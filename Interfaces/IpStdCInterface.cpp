@@ -21,7 +21,8 @@
 # endif
 #endif
 
-struct IpoptProblemInfo {
+struct IpoptProblemInfo
+{
   Index n;
   Number* x_L;
   Number* x_U;
@@ -39,19 +40,19 @@ struct IpoptProblemInfo {
 };
 
 IpoptProblem CreateIpoptProblem(
-    Index n,
-    Number* x_L,
-    Number* x_U,
-    Index m,
-    Number* g_L,
-    Number* g_U,
-    Index nele_jac,
-    Index nele_hess,
-    Eval_F_CB eval_f,
-    Eval_G_CB eval_g,
-    Eval_Grad_F_CB eval_grad_f,
-    Eval_Jac_G_CB eval_jac_g,
-    Eval_H_CB eval_h)
+  Index n,
+  Number* x_L,
+  Number* x_U,
+  Index m,
+  Number* g_L,
+  Number* g_U,
+  Index nele_jac,
+  Index nele_hess,
+  Eval_F_CB eval_f,
+  Eval_G_CB eval_g,
+  Eval_Grad_F_CB eval_grad_f,
+  Eval_Jac_G_CB eval_jac_g,
+  Eval_H_CB eval_h)
 {
   // make sure input is Ok
   if (n<1 || m<0 || !x_L || !x_U || (m>0 && (!g_L || !g_U)) ||
@@ -138,7 +139,7 @@ Bool AddIpoptIntOption(IpoptProblem ipopt_problem, char* keyword, Int val)
 }
 
 Bool OpenIpoptOutputFile(IpoptProblem ipopt_problem, char* file_name,
-			 Int print_level)
+                         Int print_level)
 {
   std::string name(file_name);
   Ipopt::EJournalLevel level = Ipopt::EJournalLevel(print_level);
@@ -146,14 +147,14 @@ Bool OpenIpoptOutputFile(IpoptProblem ipopt_problem, char* file_name,
 }
 
 enum ApplicationReturnStatus IpoptSolve(
-    IpoptProblem ipopt_problem,
-    Number* x,
-    Number* g,
-    Number* obj_val,
-    Number* mult_g,
-    Number* mult_x_L,
-    Number* mult_x_U,
-    UserDataPtr user_data)
+  IpoptProblem ipopt_problem,
+  Number* x,
+  Number* g,
+  Number* obj_val,
+  Number* mult_g,
+  Number* mult_x_L,
+  Number* mult_x_U,
+  UserDataPtr user_data)
 {
   using namespace Ipopt;
 
@@ -170,17 +171,17 @@ enum ApplicationReturnStatus IpoptSolve(
   bool skip_optimize = false;
   try {
     tnlp = new StdInterfaceTNLP(ipopt_problem->n, ipopt_problem->x_L,
-				ipopt_problem->x_U, ipopt_problem->m,
-				ipopt_problem->g_L, ipopt_problem->g_U,
-				ipopt_problem->nele_jac,
-				ipopt_problem->nele_hess,
-				start_x, NULL, NULL, NULL,
-				ipopt_problem->eval_f, ipopt_problem->eval_g,
-				ipopt_problem->eval_grad_f,
-				ipopt_problem->eval_jac_g,
-				ipopt_problem->eval_h,
-				x, mult_x_L, mult_x_U, g, mult_g,
-				obj_val, user_data);
+                                ipopt_problem->x_U, ipopt_problem->m,
+                                ipopt_problem->g_L, ipopt_problem->g_U,
+                                ipopt_problem->nele_jac,
+                                ipopt_problem->nele_hess,
+                                start_x, NULL, NULL, NULL,
+                                ipopt_problem->eval_f, ipopt_problem->eval_g,
+                                ipopt_problem->eval_grad_f,
+                                ipopt_problem->eval_jac_g,
+                                ipopt_problem->eval_h,
+                                x, mult_x_L, mult_x_U, g, mult_g,
+                                obj_val, user_data);
   }
   catch(INVALID_STDINTERFACE_NLP& exc) {
     skip_optimize = true;

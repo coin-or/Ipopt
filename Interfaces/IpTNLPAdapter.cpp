@@ -845,9 +845,6 @@ namespace Ipopt
     ResortX(x, full_x_);
     ResortG(y_c, y_d, full_lambda_);
 
-    const DenseVector* dc = dynamic_cast<const DenseVector*>(&c);
-    const DenseVector* dd = dynamic_cast<const DenseVector*>(&d);
-    DBG_ASSERT(dc && dd);
     Number* full_g = new Number[n_full_g_];
     ResortG(c, d, full_g);
 

@@ -58,8 +58,9 @@ LIBRARIES = $(noinst_LIBRARIES)
 libinterfaces_a_AR = $(AR) $(ARFLAGS)
 libinterfaces_a_LIBADD =
 am_libinterfaces_a_OBJECTS = IpIpoptApplication.$(OBJEXT) \
-	IpStdCInterface.$(OBJEXT) IpStdFInterface.$(OBJEXT) \
-	IpStdInterfaceTNLP.$(OBJEXT) IpTNLPAdapter.$(OBJEXT)
+	IpSolveStatistics.$(OBJEXT) IpStdCInterface.$(OBJEXT) \
+	IpStdFInterface.$(OBJEXT) IpStdInterfaceTNLP.$(OBJEXT) \
+	IpTNLPAdapter.$(OBJEXT)
 libinterfaces_a_OBJECTS = $(am_libinterfaces_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -222,6 +223,7 @@ includeipopt_HEADERS = \
 	IpReturnCodes.h \
 	IpReturnCodes_inc.h \
 	IpReturnCodes.inc \
+	IpSolveStatistics.hpp \
 	IpStdCInterface.h \
 	IpTNLP.hpp
 
@@ -231,6 +233,7 @@ libinterfaces_a_SOURCES = \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
 	IpReturnCodes.h \
+	IpSolveStatistics.cpp IpSolveStatistics.hpp \
 	IpStdCInterface.cpp IpStdCInterface.h \
 	IpStdFInterface.c \
 	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \
@@ -243,6 +246,7 @@ ASTYLE_FILES = \
 	IpAlgTypes.hppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
+	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
 	IpTNLP.hppbak \
@@ -298,6 +302,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptApplication.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSolveStatistics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdCInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdFInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdInterfaceTNLP.Po@am__quote@
