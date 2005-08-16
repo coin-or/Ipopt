@@ -42,7 +42,7 @@ namespace Ipopt
                      const Number* g_L, const Number* g_U,
                      Index nele_jac,
                      Index nele_hess,
-		     Index index_style,
+                     Index index_style,
                      const Number* start_x,
                      const Number* start_lam,
                      const Number* start_z_L,

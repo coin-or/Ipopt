@@ -215,8 +215,8 @@ namespace Ipopt
     lambda_sol_ = NULL;
   }
 
-  bool AmplTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, 
-			      Index& nnz_h_lag, IndexStyleEnum& index_style)
+  bool AmplTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
+                              Index& nnz_h_lag, IndexStyleEnum& index_style)
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);

@@ -178,7 +178,7 @@ enum ApplicationReturnStatus IpoptSolve(
                                 ipopt_problem->g_L, ipopt_problem->g_U,
                                 ipopt_problem->nele_jac,
                                 ipopt_problem->nele_hess,
-				ipopt_problem->index_style,
+                                ipopt_problem->index_style,
                                 start_x, NULL, NULL, NULL,
                                 ipopt_problem->eval_f, ipopt_problem->eval_g,
                                 ipopt_problem->eval_grad_f,
