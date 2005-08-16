@@ -1,4 +1,5 @@
 * text=auto !eol
+Docs/documentation.ps -text
 Examples/hs071_cpp/Makefile.in -text
 Examples/hs071_cpp/hs071_main.cpp -text
 Examples/hs071_cpp/hs071_nlp.cpp -text

@@ -187,7 +187,6 @@ bool HS071_NLP::eval_h(Index n, const Number* x, bool new_x,
       }
     }
     
-    printf("idx = %d\n", idx);
     assert(idx == nele_hess);
   }
   else {
@@ -239,6 +238,22 @@ void HS071_NLP::finalize_solution(SolverReturn status,
                               Number obj_value)
 {
   // here is where we would store the solution to variables, or write to a file, etc
-  // so we could use the solution. Since the solution is displayed to the console,
-  // we currently do nothing here.
+  // so we could use the solution. 
+
+  // For this example, we write the solution to the console
+  printf("\n\nSolution of the primal variables, x\n");
+  for (Index i=0; i<n; i++) {
+    printf("x[%d] = %g\n", i, x[i]); 
+  }
+
+  printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
+  for (Index i=0; i<n; i++) {
+    printf("z_L[%d] = %g\n", i, z_L[i]); 
+  }
+  for (Index i=0; i<n; i++) {
+    printf("z_U[%d] = %g\n", i, z_U[i]); 
+  }
+
+  printf("\n\nObjective value\n");
+  printf("f(x*) = %g\n", obj_value); 
 }
