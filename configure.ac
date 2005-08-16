@@ -311,7 +311,7 @@ if test -z "$CFLAGS"; then
              add_cflags="-Ae"
              dbg_cflags="-g";;
     *-sun-*)
-             opt_cflags="-O5"
+             opt_cflags="-xO5"
              dbg_cflags="-g";;
     *-sgi-*)
              opt_cflags="-O -OPT:Olimit=0"
