@@ -194,8 +194,7 @@ if test -z "$CXXLIBS"; then
         CXXLIBS="-lstdc++ -lm -lgcc_s -lgcc"
         ;;
     esac
-  fi
-  if test -z "$opt_cxxflags"; then
+  else
     case $build in
      *-linux-*)
       case "$CXX" in
