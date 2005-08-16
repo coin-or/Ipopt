@@ -1071,6 +1071,7 @@ AC_CONFIG_FILES([Makefile Common/Makefile
 		 Apps/CUTErInterface/Makefile
 		 Examples/Fortran_example/Makefile
 		 Examples/Cpp_example/Makefile
+		 Examples/hs071_cpp/Makefile
 		 Extern/Makefile Extern/blas/Makefile
 		 Extern/HSL/Makefile
 		 Extern/ASL/Makefile])
