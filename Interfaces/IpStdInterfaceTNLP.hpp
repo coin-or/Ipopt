@@ -42,6 +42,7 @@ namespace Ipopt
                      const Number* g_L, const Number* g_U,
                      Index nele_jac,
                      Index nele_hess,
+		     Index index_style,
                      const Number* start_x,
                      const Number* start_lam,
                      const Number* start_z_L,
@@ -68,7 +69,7 @@ namespace Ipopt
     //@{
     /** returns dimensions of the nlp. Overloaded from TNLP */
     virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-                              Index& nnz_h_lag);
+                              Index& nnz_h_lag, IndexStyleEnum& index_style);
 
     /** returns bounds of the nlp. Overloaded from TNLP */
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
@@ -137,6 +138,8 @@ namespace Ipopt
     const Index nele_jac_;
     /** Number of non-zero elements in the Hessian */
     const Index nele_hess_;
+    /** Starting value of the iRow and jCol parameters for matrices */
+    const Index index_style_;
     /** Pointer to Number array containing starting point for variables */
     const Number* start_x_;
     /** Poitner to Number array containing starting values for

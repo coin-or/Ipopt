@@ -49,7 +49,7 @@ namespace Ipopt
     //@{
     /** returns dimensions of the nlp. Overloaded from TNLP */
     virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-                              Index& nnz_h_lag);
+                              Index& nnz_h_lag, IndexStyleEnum& index_style);
 
     /** returns bounds of the nlp. Overloaded from TNLP */
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,

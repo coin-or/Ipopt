@@ -182,6 +182,7 @@ fptr F77_FUNC(ipcreate,IPCREATE)
  fdouble* G_U,
  fint* NELE_JAC,
  fint* NELE_HESS,
+ fint* IDX_STY,
  FEval_F_CB EVAL_F,
  FEval_G_CB EVAL_G,
  FEval_Grad_F_CB EVAL_GRAD_F,
@@ -192,6 +193,7 @@ fptr F77_FUNC(ipcreate,IPCREATE)
   Index m = *M;
   Index nele_jac = *NELE_JAC;
   Index nele_hess = *NELE_HESS;
+  Index index_style = *IDX_STY;
 
   FUserData* fuser_data;
 
@@ -199,8 +201,9 @@ fptr F77_FUNC(ipcreate,IPCREATE)
 
   /* First create a new IpoptProblem object; if that fails return 0 */
   fuser_data->Problem =
-    CreateIpoptProblem(n, X_L, X_U, m, G_L, G_U, nele_jac, nele_hess,
-                       eval_f, eval_g, eval_grad_f, eval_jac_g, eval_h);
+    CreateIpoptProblem(n, X_L, X_U, m, G_L, G_U, nele_jac, nele_hess, 
+		       index_style, eval_f, eval_g, eval_grad_f, 
+		       eval_jac_g, eval_h);
   if (fuser_data->Problem == NULL) {
     free(fuser_data);
     return (fptr)NULL;

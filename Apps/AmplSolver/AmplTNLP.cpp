@@ -215,7 +215,8 @@ namespace Ipopt
     lambda_sol_ = NULL;
   }
 
-  bool AmplTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, Index& nnz_h_lag)
+  bool AmplTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, 
+			      Index& nnz_h_lag, IndexStyleEnum& index_style)
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
@@ -224,6 +225,8 @@ namespace Ipopt
     m = n_con; // # of constraints
     nnz_jac_g = nzc; // # of non-zeros in the jacobian
     nnz_h_lag = nz_h_full_; // # of non-zeros in the hessian
+
+    index_style = TNLP::FORTRAN_STYLE;
 
     return true;
   }

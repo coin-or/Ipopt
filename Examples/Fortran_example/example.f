@@ -39,8 +39,9 @@ C
 C
 C     Size of the problem (number of variables and equality constraints)
 C
-      integer     N,     M,     NELE_JAC,     NELE_HESS
+      integer     N,     M,     NELE_JAC,     NELE_HESS,      IDX_STY
       parameter  (N = 4, M = 2, NELE_JAC = 8, NELE_HESS = 10)
+      parameter  (IDX_STY = 1 )
 C
 C     Space for multipliers and constraints
 C
@@ -100,7 +101,7 @@ C     First create a handle for the Ipopt problem (and read the options
 C     file)
 C
       IPROBLEM = IPCREATE(N, X_L, X_U, M, G_L, G_U, NELE_JAC, NELE_HESS,
-     1     EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS)
+     1     IDX_STY, EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS)
       if (IPROBLEM.eq.0) then
          write(*,*) 'Error creating an Ipopt Problem handle.'
          stop

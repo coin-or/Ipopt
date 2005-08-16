@@ -38,7 +38,7 @@ public:
   //@{
   /** Method to return some info about the nlp */
   virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-                            Index& nnz_h_lag);
+                            Index& nnz_h_lag, IndexStyleEnum& index_style);
 
   /** Method to return the bounds for my problem */
   virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,

@@ -31,6 +31,7 @@ struct IpoptProblemInfo
   Number* g_U;
   Index nele_jac;
   Index nele_hess;
+  Index index_style;
   Eval_F_CB eval_f;
   Eval_G_CB eval_g;
   Eval_Grad_F_CB eval_grad_f;
@@ -48,6 +49,7 @@ IpoptProblem CreateIpoptProblem(
   Number* g_U,
   Index nele_jac,
   Index nele_hess,
+  Index index_style,
   Eval_F_CB eval_f,
   Eval_G_CB eval_g,
   Eval_Grad_F_CB eval_grad_f,
@@ -91,6 +93,7 @@ IpoptProblem CreateIpoptProblem(
 
   retval->nele_jac = nele_jac;
   retval->nele_hess = nele_hess;
+  retval->index_style = index_style;
   retval->eval_f = eval_f;
   retval->eval_g = eval_g;
   retval->eval_grad_f = eval_grad_f;
@@ -175,6 +178,7 @@ enum ApplicationReturnStatus IpoptSolve(
                                 ipopt_problem->g_L, ipopt_problem->g_U,
                                 ipopt_problem->nele_jac,
                                 ipopt_problem->nele_hess,
+				ipopt_problem->index_style,
                                 start_x, NULL, NULL, NULL,
                                 ipopt_problem->eval_f, ipopt_problem->eval_g,
                                 ipopt_problem->eval_grad_f,

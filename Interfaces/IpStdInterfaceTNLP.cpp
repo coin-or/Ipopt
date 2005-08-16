@@ -17,6 +17,7 @@ namespace Ipopt
                                      const Number* g_L, const Number* g_U,
                                      Index nele_jac,
                                      Index nele_hess,
+				     Index index_style,
                                      const Number* start_x,
                                      const Number* start_lam,
                                      const Number* start_z_L,
@@ -43,6 +44,7 @@ namespace Ipopt
       g_U_(g_U),
       nele_jac_(nele_jac),
       nele_hess_(nele_hess),
+      index_style_(index_style),
       start_x_(start_x),
       start_lam_(start_lam),
       start_z_L_(start_z_L),
@@ -77,6 +79,8 @@ namespace Ipopt
                      "Number of non-zero elements in constraint Jacobian must be non-negative.");
     ASSERT_EXCEPTION(nele_hess_>=0, INVALID_STDINTERFACE_NLP,
                      "Number of non-zero elements in Hessian of Lagrangian must be non-negative.");
+    ASSERT_EXCEPTION(index_style_ == 0 || index_style_ == 1, INVALID_STDINTERFACE_NLP,
+                     "Valid index styles are 0 (C style) or 1 (Fortran style)");
     ASSERT_EXCEPTION(start_x_, INVALID_STDINTERFACE_NLP,
                      "No initial point for the variables provided.");
     ASSERT_EXCEPTION(eval_f_, INVALID_STDINTERFACE_NLP,
@@ -97,12 +101,14 @@ namespace Ipopt
   }
 
   bool StdInterfaceTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-                                      Index& nnz_h_lag)
+                                      Index& nnz_h_lag, IndexStyleEnum& index_style)
   {
     n = n_var_; // # of variables (variable types have been asserted in the constructor
     m = n_con_; // # of constraints
     nnz_jac_g = nele_jac_; // # of non-zeros in the jacobian
     nnz_h_lag = nele_hess_; // # of non-zeros in the hessian
+
+    index_style = (index_style_ == 0) ? C_STYLE : FORTRAN_STYLE;
 
     return true;
   }

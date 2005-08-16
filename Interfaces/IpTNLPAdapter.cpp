@@ -106,7 +106,9 @@ namespace Ipopt
   {
     DBG_START_METH("TNLPAdapter::GetSpaces", dbg_verbosity);
     // Get the full dimensions of the problem
-    tnlp_->get_nlp_info(n_full_x_, n_full_g_, nz_full_jac_g_, nz_full_h_);
+    TNLP::IndexStyleEnum index_style = TNLP::FORTRAN_STYLE;
+    tnlp_->get_nlp_info(n_full_x_, n_full_g_, nz_full_jac_g_, 
+			nz_full_h_, index_style);
 
     // create space to store vectors that are the full length of x
     full_x_ = new Number[n_full_x_];
@@ -315,6 +317,12 @@ namespace Ipopt
     tnlp_->eval_jac_g(n_full_x_, NULL, false, n_full_g_, nz_full_jac_g_,
                       g_iRow, g_jCol, NULL);
 
+    if (index_style != TNLP::FORTRAN_STYLE) {
+      for (Index i=0; i<nz_full_jac_g_; i++) {
+	g_iRow[i] += 1;
+	g_jCol[i] += 1;;
+      }
+    }
     const Index* c_col_pos = P_x_full_x_->CompressedPosIndices();
     const Index* c_row_pos = P_c_g_->CompressedPosIndices();
 
@@ -379,6 +387,13 @@ namespace Ipopt
     Index* h_jCol = new Index[nz_full_h_];
     tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_, NULL, false,
                   nz_full_h_, full_h_iRow, full_h_jCol, NULL);
+    
+    if (index_style != TNLP::FORTRAN_STYLE) {
+      for (Index i=0; i<nz_full_h_; i++) {
+	full_h_iRow[i] += 1;
+	full_h_jCol[i] += 1;
+      }
+    }
 
     h_idx_map_ = new Index[nz_full_h_];
     const Index* h_pos = P_x_full_x_->CompressedPosIndices();
