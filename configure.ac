@@ -133,19 +133,19 @@ if test -z "$CXXFLAGS"; then
     *-ibm-*)
       case "$CXX" in
       xlC* | */xlC* | mpxlC* | */mpxlC*)
-             opt_cxxflags="-O5 -qmaxmem=-1"
+             opt_cxxflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
              add_cxxflags="-bmaxdata:0x80000000 -qrtti=dyna"
              dbg_cxxflags="-g";;
       esac;;
     *-hp-*)
       case "$CXX" in
       aCC | */aCC )
-             opt_cxxflags="+O4"
+             opt_cxxflags="-O"
              add_cxxflags="-AA"
              dbg_cxxflags="-g";;
       esac;;
     *-sun-*)
-             opt_cxxflags="-O5"
+             opt_cxxflags="-O5 -xtarget=native"
              dbg_cxxflags="-g";;
     esac
   fi
@@ -302,16 +302,16 @@ if test -z "$CFLAGS"; then
     *-ibm-*)
       case "$CC" in
       xlc* | */xlc* | mpxlc* | */mpxlc*)
-             opt_cflags="-O5 -qmaxmem=-1"
+             opt_cflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
              add_cflags="-bmaxdata:0x80000000"
              dbg_cflags="-g";;
       esac;;
     *-hp-*)
-             opt_cflags="+O4"
+             opt_cflags="-O"
              add_cflags="-Ae"
              dbg_cflags="-g";;
     *-sun-*)
-             opt_cflags="-xO5"
+             opt_cflags="-xO5 -xtarget=native"
              dbg_cflags="-g";;
     *-sgi-*)
              opt_cflags="-O -OPT:Olimit=0"
@@ -426,16 +426,16 @@ if test -z "$FFLAGS"; then
     *-ibm-*)
       case $F77 in
       xlf* | */xlf* | mpxlf* | */mpxlf* )
-             opt_fflags="-O5 -qmaxmem=-1"
+             opt_fflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
              add_fflags="-bmaxdata:0x80000000"
              dbg_fflags="-g -C";;
       esac;;
     *-hp-*)
-             opt_fflags="+O2"
+             opt_fflags="+O3"
              add_fflags="+U77"
              dbg_fflags="-C -g";;
     *-sun-*)
-             opt_fflags="-O5"
+             opt_fflags="-O5 -xtarget=native"
              dbg_fflags="-g";;
     *-sgi-*)
              opt_fflags="-O5 -OPT:Olimit=0"
@@ -465,7 +465,7 @@ AC_MSG_CHECKING([whether FFLAGS=\"$FFLAGS\" works])
 AC_TRY_LINK([],[      integer i],[],[FFLAGS=])
 if test -z "$FFLAGS"; then
   AC_MSG_RESULT([no])
-  AC_MSG_WARN([This value for FFLAGS does not work.  I will now jst try '-O', but you might want to set FFLAGS manually.])
+  AC_MSG_WARN([This value for FFLAGS does not work.  I will now just try '-O', but you might want to set FFLAGS manually.])
   FFLAGS='-O'
   AC_TRY_LINK([],[      integer i],[],[FFLAGS=])
   if test -z "$FFLAGS"; then
@@ -487,6 +487,8 @@ case $build in
      esac;;
    *-hp-*)
        FLIBS="$FLIBS -lm";;
+   *-ibm-*)
+       FLIBS=`echo $FLIBS | sed 's/-lc)/-lc/g'` ;;
 esac
 
 AC_PROG_RANLIB
