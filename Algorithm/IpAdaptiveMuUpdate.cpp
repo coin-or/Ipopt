@@ -562,9 +562,9 @@ namespace Ipopt
     Index n_comp = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() +
                    IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim();
 
-    Number dual_inf;
-    Number primal_inf;
-    Number complty;
+    Number dual_inf=0.;
+    Number primal_inf=0.;
+    Number complty=0.;
     switch (adaptive_mu_kkt_norm_) {
       case QualityFunctionMuOracle::NM_NORM_1:
       dual_inf =

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -322,10 +322,12 @@ namespace Ipopt
   bool AmplTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
   {
     DBG_START_METH("AmplTNLP::eval_g", dbg_verbosity);
+#ifdef IP_DEBUG
+
     ASL_pfgh* asl = asl_;
-    DBG_ASSERT(asl_);
     DBG_ASSERT(n == n_var);
     DBG_ASSERT(m == n_con);
+#endif
 
     apply_new_x(new_x, n, x);
 
@@ -713,6 +715,7 @@ namespace Ipopt
       kind = ASL_Sufkind_prob;
     }
     else {
+      kind = 0;
       DBG_ASSERT(false && "Unknown suffix source in GetIntegerSuffixValues");
     }
     SufDesc* dp = suf_get(suffix_string.c_str(), kind);
@@ -738,6 +741,7 @@ namespace Ipopt
       kind = ASL_Sufkind_prob;
     }
     else {
+      kind = 0;
       DBG_ASSERT(false && "Unknown suffix source in GetNumberSuffixValues");
     }
     SufDesc* dp = suf_get(suffix_string.c_str(), kind);

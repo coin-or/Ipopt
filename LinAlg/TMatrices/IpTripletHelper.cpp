@@ -516,9 +516,6 @@ namespace Ipopt
   {
     Index total_n_entries = 0;
 
-    const CompoundMatrixSpace* owner_space = dynamic_cast<const CompoundMatrixSpace*>(GetRawPtr(matrix.OwnerSpace()));
-    DBG_ASSERT(owner_space);
-
     for (Index i=0; i<matrix.NComps_Rows(); i++) {
       for (Index j=0; j<matrix.NComps_Cols(); j++) {
         // Fill the indices for the individual term
@@ -568,9 +565,6 @@ namespace Ipopt
   void TripletHelper::FillValues_(Index n_entries, const CompoundSymMatrix& matrix, Number* values)
   {
     Index total_n_entries = 0;
-
-    const CompoundSymMatrixSpace* owner_space = dynamic_cast<const CompoundSymMatrixSpace*>(GetRawPtr(matrix.OwnerSpace()));
-    DBG_ASSERT(owner_space);
 
     for (Index i=0; i<matrix.NComps_Dim(); i++) {
       for (Index j=0; j<=i; j++) {

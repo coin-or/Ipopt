@@ -200,6 +200,8 @@ namespace Ipopt
     }
 
     DBG_ASSERT(false && "Unknown return code in the algorithm");
+
+    return INTERNAL_ERROR;
   }
 
   void IpoptAlgorithm::ActualizeHessian()

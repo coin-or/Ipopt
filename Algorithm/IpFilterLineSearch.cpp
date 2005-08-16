@@ -1111,7 +1111,7 @@ namespace Ipopt
     // set the bound multipliers from the step
     IpData().SetTrialBoundMultipliersFromStep(alpha_dual, *delta->z_L(), *delta->z_U(), *delta->v_L(), *delta->v_U());
 
-    Number alpha_y;
+    Number alpha_y=-1.;
     switch (alpha_for_y_) {
       case PRIMAL_ALPHA_FOR_Y:
       alpha_y = alpha_primal;

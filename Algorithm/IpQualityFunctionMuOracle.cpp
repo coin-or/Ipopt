@@ -531,9 +531,9 @@ namespace Ipopt
     xi = IpCq().CalcCentralityMeasure(*tmp_slack_x_L_, *tmp_slack_x_U_,
                                       *tmp_slack_s_L_, *tmp_slack_s_U_);
 
-    Number dual_inf;
-    Number primal_inf;
-    Number compl_inf;
+    Number dual_inf=-1.;
+    Number primal_inf=-1.;
+    Number compl_inf=-1.;
 
     switch (quality_function_norm_) {
       case NM_NORM_1:

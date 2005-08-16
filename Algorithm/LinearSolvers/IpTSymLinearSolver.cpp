@@ -299,6 +299,8 @@ namespace Ipopt
               airn_, ajcn_,
               atriplet, scaling_factors_);
         DBG_ASSERT(retval);
+        retval = false; // is added to make sure compiles doesn't
+        // complain if not in debug mode
         if (Jnlst().ProduceOutput(J_MOREVECTOR, J_LINEAR_ALGEBRA)) {
           for (Index i=0; i<dim_; i++) {
             Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA,

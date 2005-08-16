@@ -137,24 +137,22 @@ namespace Ipopt
     Number retValue;
     const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
     DBG_ASSERT(dense_x);
-    if (dense_x) {
-      DBG_ASSERT(dense_x->initialized_);
-      DBG_ASSERT(Dim() == dense_x->Dim());
-      if (homogeneous_) {
-        if (dense_x->homogeneous_) {
-          retValue = Dim() * scalar_ * dense_x->scalar_;
-        }
-        else {
-          retValue = IpBlasDdot(Dim(), dense_x->values_, 1, &scalar_, 0);
-        }
+    DBG_ASSERT(dense_x->initialized_);
+    DBG_ASSERT(Dim() == dense_x->Dim());
+    if (homogeneous_) {
+      if (dense_x->homogeneous_) {
+        retValue = Dim() * scalar_ * dense_x->scalar_;
       }
       else {
-        if (dense_x->homogeneous_) {
-          retValue = IpBlasDdot(Dim(), &dense_x->scalar_, 0, values_, 1);
-        }
-        else {
-          retValue = IpBlasDdot(Dim(), dense_x->values_, 1, values_, 1);
-        }
+        retValue = IpBlasDdot(Dim(), dense_x->values_, 1, &scalar_, 0);
+      }
+    }
+    else {
+      if (dense_x->homogeneous_) {
+        retValue = IpBlasDdot(Dim(), &dense_x->scalar_, 0, values_, 1);
+      }
+      else {
+        retValue = IpBlasDdot(Dim(), dense_x->values_, 1, values_, 1);
       }
     }
     return retValue;
