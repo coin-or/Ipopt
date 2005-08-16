@@ -13,21 +13,20 @@
 \setlength{\evensidemargin}{0.1in}    % Left margin for odd-numbered pages
 \setlength{\topmargin}{-0.5in}         % Top margin
 \renewcommand{\baselinestretch}{1.1}
-%\usepackage{times} % Times Roman font ?
+\usepackage{amsfonts}
+
+\newcommand{\RR}{{\mathbb{R}}}
+
 
 \begin{document}
-\title{
-\begin{large}
-\textbf{Introduction to Ipopt:}
-\end{large} \\
-\begin{small}
-A tutorial for downloading, installing, and using Ipopt. \\ Yoshiaki
-Kawajiri,\footnote{Department of Chemical Engineering, Carnegie Mellon
-University, Pittsburgh, PA, 15213, Email: kawajiri@cmu.edu} Carl
+\title{Introduction to Ipopt:\\
+A tutorial for downloading, installing, and using Ipopt.}
+
+\author{Yoshiaki
+Kawajiri\footnote{Department of Chemical Engineering, Carnegie Mellon
+University, Pittsburgh, PA, 15213, Email: kawajiri@cmu.edu}, Carl
 D. Laird\footnote{Department of Chemical Engineering, Carnegie Mellon
-University, Pittsburgh, PA, 15213, Email: kawajiri@cmu.edu}
-\end{small}
-}
+University, Pittsburgh, PA, 15213, Email: kawajiri@cmu.edu}}
 
 %\date{\today}
 \maketitle
@@ -35,23 +34,25 @@ University, Pittsburgh, PA, 15213, Email: kawajiri@cmu.edu}
 \section{Overview}
 Ipopt (\underline{I}nterior \underline{P}oint \underline{Opt}imizer) is an open
 source software package for large-scale nonlinear optimization. It can
-be used to solve general nonlinear programming problems of the form,
+be used to solve general nonlinear programming problems of the form
 \begin{eqnarray}
-\min_{x} &f(x) \label{obj} \\
-\mbox{s.t.} \; 	&g^L \leq g(x) \leq g^U \\
-		&x^L \leq x \leq x^U, \label{bounds}
+\min_{x} &&f(x) \label{obj} \\
+\mbox{s.t.} \;  &&g^L \leq g(x) \leq g^U \\
+                &&x^L \leq x \leq x^U, \label{bounds}
 \end{eqnarray}
-where $x \in \Re^n$ are the optimization variables (possibly with
-lower and upper bounds, $x^L$ and $x^U$), $f(x) \in \Re^1$ is the
-objective function, and $g(x) \in \Re^m$ are the general nonlinear
-constraints. The functions $f(x)$ and $g(x)$ can be linear or
-nonlinear and convex or non-convex. The constraints, $g(x)$ have lower
-and upper bounds, $g^L$ and $g^U$. Note that equality constraints of
-the form $g_i(x)=c$ can be specified by setting $g^L_{i}=g^U_{i}=c$.
+where $x \in \RR^n$ are the optimization variables (possibly with
+lower and upper bounds, $x^L\in(\RR\cup\{-\infty\})^n$ and
+$x^U\in(\RR\cup\{+\infty\})^n$), $f:\RR^n\longrightarrow\RR$ is the
+objective function, and $g:\RR^n\longrightarrow \RR^m$ are the general
+nonlinear constraints.  The functions $f(x)$ and $g(x)$ can be linear
+or nonlinear and convex or non-convex (but are assumed to be twice
+continuously differentiable). The constraints, $g(x)$, have lower and
+upper bounds, $g^L\in(\RR\cup\{-\infty\})^n$ and
+$g^U\in(\RR\cup\{+\infty\})^m$. Note that equality constraints of the
+form $g_i(x)=\bar g_i$ can be specified by setting $g^L_{i}=g^U_{i}=\bar g_i$.
 
 Ipopt implements an interior point line search filter method. The
-mathematical details of the algorithm can be found in the reports by
-the main author of Ipopt, Andreas W\"achter
+mathematical details of the algorithm can be found in the reports
 \cite{AndreasPaper} \cite{AndreasThesis}.
 
 The Ipopt package is available from COIN-OR\cite{COINORWeb} under the
@@ -68,7 +69,7 @@ should be addressed to Ipopt mailing list ({\tt
 http://list.coin-or.org/mailman/listinfo/coin-ipopt}). You might want
 to look at the archives before posting a question.
 
-\section{New Ipopt versus Old Ipopt}
+\section{History of Ipopt}
 The original Ipopt (Fortran version) was a product of the dissertation
 research of Andreas W\"achter \cite{AndreasThesis}, under Lorenz
 T. Biegler at the Chemical Engineering Department at Carnegie Mellon
@@ -101,29 +102,39 @@ control.
 To use subversion, follow the steps below:
 \begin{enumerate}
 \item{Create a directory to store the code}\\
-{\tt \$ mkdir ipopt}\\ 
+{\tt \$ mkdir Ipopt}\\ 
 Note the {\tt \$} indicates the command line
 prompt, do not type {\tt \$}, only the text following it.
 \item{Download the code to the new directory}\\
-{\tt \$ cd ipopt; svn co https://www.coin-or.org/svn/ipopt-devel/trunk}
+{\tt \$ cd Ipopt; svn co https://www.coin-or.org/svn/ipopt-devel/trunk}
 \end{enumerate}
 
 \subsection{Download External Code}
 Ipopt uses a few external packages that are not included in the
-distribution, namely ASL (the Ampl Solver Library), blas, lapack and
-some routines from the Harwell Subroutine Library. 
+distribution, namely ASL (the Ampl Solver Library), BLAS, and
+some routines from the Harwell Subroutine Library.
 
+Note that you only need to obtain the ASL if you intend to use Ipopt
+from AMPL.  It is not required if you want to specify yout
+optimization problem in a programming language (C++, C, or Fortran).
 
-\subsubsection{Download ASL, blas, and lapack}
-Retrieving ASL, blas, and lapack is straightforward using scripts
-included with the ipopt distribution. These scripts download the required 
-files from the Netlib Repository \\
-(http://www.netlib.org).\\
+\subsubsection{Download BLAS and ASL}
+If you have the download utility \texttt{wget} installed on your
+system, retrieving ASL, and BLAS is straightforward using scripts
+included with the ipopt distribution. These scripts download the
+required files from the Netlib Repository (http://www.netlib.org).\\
+
+\noindent
 {\tt \$ cd trunk/ipopt/Extern/blas; ./get.blas}\\
-{\tt \$ cd trunk/ipopt/Extern/lapack; ./get.lapack}\\
-{\tt \$ cd trunk/ipopt/Extern/ASL; ./get.asl}\\
+{\tt \$ cd ../ASL; ./get.asl}\\
 
-\subsubsection{Download HSL libraries}
+\noindent
+If you don't have \texttt{wget} installed on your system, please read
+the \texttt{INSTALL.*} files in the \texttt{trunk/ipopt/Extern/blas}
+and \texttt{trunk/ipopt/Extern/ASL} directories for alternative
+instructions.
+
+\subsubsection{Download HSL Subroutines}
 In addition to the IPOPT source code, two additional subroutines have
 to be downloaded from the Harwell Subroutine Library (HSL).  The
 required routines are freely available for non-commercial, academic
@@ -148,6 +159,7 @@ ipopt/trunk/Extern/HSL/}}\\
 Note: Some browsers append a file extension ({\tt .txt}) when you save
 the file, so you may have to rename it.
 \end{enumerate}
+
 
 \section{Compiling and Installing Ipopt} \label{sec.comp_and_inst}
 Ipopt can be easily compiled and installed with the usual {\tt configure},
@@ -178,23 +190,23 @@ that allow specific data structures and linear solver
 techniques. Nevertheless, the authors have included a standard
 representation that should meet the needs of most users.
 
-This tutorial will discuss four interfaces to Ipopt, the AMPL modeling
-language interface, and the C, C++, and Fortran code interfaces.  AMPL
-is a 3rd party modeling language tool that allows users to write their
-optimization problem in a syntax that resembles the way the problem
-would be written mathematically. Once the problem has been formulated
-in AMPL, the problem can be easily solved using the (already compiled)
-executable. Interfacing your problem by directly linking code requires
-more effort to write, but can be far more efficient for large
-problems.
+This tutorial will discuss four interfaces to Ipopt, namely the AMPL
+modeling language interface, and the C, C++, and Fortran code
+interfaces.  AMPL is a 3rd party modeling language tool that allows
+users to write their optimization problem in a syntax that resembles
+the way the problem would be written mathematically. Once the problem
+has been formulated in AMPL, the problem can be easily solved using
+the (already compiled) executable. Interfacing your problem by
+directly linking code requires more effort to write, but can be far
+more efficient for large problems.
 
 We will illustrate how to use each of the four interfaces using an
 example problem, number 71 from the Hock-Schittkowsky test suite,
 \begin{eqnarray}
 \min_{x \in \Re^4} &x_1 x_4 (x_1 + x_2 + x_3)  +  x_3 \label{ex_obj} \\
-\mbox{s.t.} \; 	&x_1 x_2 x_3 x_4 \ge 25 \label{ex_ineq} \\
-		&x_1^2 + x_2^2 + x_3^2 + x_4^2  =  40 \label{ex_equ} \\
-		&1 \leq x_1, x_2, x_3, x_4 \leq 5, \label{ex_bounds}
+\mbox{s.t.} \;  &x_1 x_2 x_3 x_4 \ge 25 \label{ex_ineq} \\
+                &x_1^2 + x_2^2 + x_3^2 + x_4^2  =  40 \label{ex_equ} \\
+                &1 \leq x_1, x_2, x_3, x_4 \leq 5, \label{ex_bounds}
 \end{eqnarray}
 with the starting point,
 \begin{equation}
@@ -208,10 +220,10 @@ x^\star {=} (1.00000000, 4.74299963, 3.82114998, 1.37940829). \nonumber
 \section{Tutorial Example: Using the AMPL interface}
 Interfacing through the AMPL interface is by far the easiest way to
 solve a problem with Ipopt. The user must simply formulate the problem
-in AMPL syntax, and solve the problem through the AMPL
-environment. There are drawbacks, however. AMPL is a 3rd party package
-and, as such, must be appropriately licensed (a free, limited student
-version is available from the AMPL website,
+in AMPL syntax, and solve the problem through the AMPL environment.
+There are drawbacks, however. AMPL is a 3rd party package and, as
+such, must be appropriately licensed (a free, student version for
+limited problem size is available from the AMPL website,
 www.ampl.com). Furthermore, the AMPL environment may be prohibitive
 for very large problems. Nevertheless, formulating the problem in AMPL
 is straightforward and even for large problems, it is often used as a
@@ -222,7 +234,7 @@ AMPL. If you are not already familiar with AMPL, please consult
 \cite{AMPL_REFERENCE}.
 
 The problem presented in equations (\ref{ex_obj}-\ref{ex_startpt}) can
-be solved with ipopt with the following AMPL mod file.
+be solved with Ipopt with the following AMPL mod file.
 \subsubsection{hs071\_ampl.mod}
 \begin{verbatim}
 # tell ampl to use the ipopt executable as a solver
@@ -238,18 +250,18 @@ var x4 >= 1, <= 5;
 
 # specify the objective function
 minimize obj:
-		x1 * x4 * (x1 + x2 + x3) + x3;
-	
+                x1 * x4 * (x1 + x2 + x3) + x3;
+        
 # specify the constraints
 s.t.
-	
-	inequality:
-		x1 * x2 * x3 * x4 >= 25;
-		
-	equality:
-		x1\^2 + x2\^2 + x3\^2 +x4\^2 = 40;
+        
+        inequality:
+                x1 * x2 * x3 * x4 >= 25;
+                
+        equality:
+                x1^2 + x2^2 + x3^2 +x4^2 = 40;
 
-# specify the starting point		
+# specify the starting point            
 let x1 := 1;
 let x2 := 5;
 let x3 := 5;
@@ -272,7 +284,7 @@ remaining lines specify the problem in AMPL format. The problem can
 now be solved by starting ampl and loading the mod file.
 \begin{verbatim}
 $ ampl
-> model hs071\_ampl.mod;
+> model hs071_ampl.mod;
 .
 .
 .
@@ -297,45 +309,45 @@ provide this additional information.
 \begin{figure}
 \caption{Information Required By Ipopt}
 \begin{enumerate}
-	\item Problem dimensions \label{it.prob_dim}
-		\begin{itemize}
-			\item number of variables
-			\item number of constraints
-		\end{itemize}
-	\item Problem bounds
-		\begin{itemize}
-			\item variable bounds
-			\item constraint bounds
-		\end{itemize}
-	\item Initial starting point
-		\begin{itemize}
-			\item Initial values for the primal $x$ variables
-			\item Initial values for the multipliers may 
-				be given, but are not required
-		\end{itemize}
-	\item Problem Structure \label{it.prob_struct}
-		\begin{itemize}
-		\item number of nonzeros in the jacobian of the constraints
-		\item number of nonzeros in the hessian of the lagrangian
-		\item Structure of the Jacobian of the constraints
-		\item Structure of the Hessian of the Lagrangian
-		\end{itemize}
-	\item Evaluation of Problem Functions \label{it.prob_eval} \\
-	Information evaluated using a given point 
-	($x_k, \lambda_k$ coming from Ipopt)
-		\begin{itemize}
-			\item Objective function, $f(x_k)$
-			\item Gradient of the objective $\nabla f(x_k)$
-			\item Constraint residuals, $g(x_k)$
-			\item Jacobian of the constraints, $\nabla g(x_k)$
-			\item Hessian of the Lagrangian, 
-			$\alpha_f \nabla^2_x f(x_k) + \nabla^2_x g(x_k)^T \lambda$ 
-		\end{itemize}
+        \item Problem dimensions \label{it.prob_dim}
+                \begin{itemize}
+                        \item number of variables
+                        \item number of constraints
+                \end{itemize}
+        \item Problem bounds
+                \begin{itemize}
+                        \item variable bounds
+                        \item constraint bounds
+                \end{itemize}
+        \item Initial starting point
+                \begin{itemize}
+                        \item Initial values for the primal $x$ variables
+                        \item Initial values for the multipliers (only
+                          required for a warm start option)
+                \end{itemize}
+        \item Problem Structure \label{it.prob_struct}
+                \begin{itemize}
+                \item number of nonzeros in the Jacobian of the constraints
+                \item number of nonzeros in the Hessian of the Lagrangian
+                \item Structure of the Jacobian of the constraints
+                \item Structure of the Hessian of the Lagrangian
+                \end{itemize}
+        \item Evaluation of Problem Functions \label{it.prob_eval} \\
+        Information evaluated using a given point 
+        ($x_k, \lambda_k, \sigma_f$ coming from Ipopt)
+                \begin{itemize}
+                        \item Objective function, $f(x_k)$
+                        \item Gradient of the objective $\nabla f(x_k)$
+                        \item Constraint residuals, $g(x_k)$
+                        \item Jacobian of the constraints, $\nabla g(x_k)$
+                        \item Hessian of the Lagrangian, 
+                        $\sigma_f \nabla^2 f(x_k) + \sum_{i=1}^m\lambda_i\nabla^2 g_i(x_k)$ 
+                \end{itemize}
 \end{enumerate}
 \label{fig.required_info}
 \end{figure}
 \vspace{0.1in}
-The information required by Ipopt is shown in figure
+The information required by Ipopt is shown in Figure
 \ref{fig.required_info}. The problem dimensions and bounds are
 straightforward and come solely from the problem definition. The
 initial starting point is used by the algorithm when it begins
@@ -362,7 +374,7 @@ begin coding the interface, however, we need to work out the details
 of these equations symbolically for example problem
 (\ref{ex_obj}-\ref{ex_bounds}).
 
-The gradient of the objective is given by,
+The gradient of the objective is given by
 \begin{equation}
 \left[
 \begin{array}{c}
@@ -373,21 +385,21 @@ x_1 (x_1 + x_2 + x_3)
 \end{array}
 \right],
 \end{equation}
-the jacobian of 
+the Jacobian of 
 the constraints is,
 \begin{equation}
 \left[
 \begin{array}{cccc}
-x_2 x_3 x_4 	& x_1 x_3 x_4	& x_1 x_2 x_4 	& x_1 x_2 x_3 	\\
-2 x_1		& 2 x_2		& 2 x_3		& 2 x_4
+x_2 x_3 x_4     & x_1 x_3 x_4   & x_1 x_2 x_4   & x_1 x_2 x_3   \\
+2 x_1           & 2 x_2         & 2 x_3         & 2 x_4
 \end{array}
 \right].
 \end{equation}
 
-We need to determine the hessian of the Lagrangian.  The Lagrangian is
+We need to determine the Hessian of the Lagrangian.  The Lagrangian is
 given by $f(x) + g(x)^T \lambda$ and the Hessian of the Lagrangian is
-technically, $ \nabla^2_x f(x_k) + \nabla^2_x g(x_k)^T \lambda$,
-however, so that Ipopt can ask for the hessian of the objective or the
+technically, $ \nabla^2 f(x_k) + sum_{i=1}^m\lambda_i\nabla^2 g_i(x_k)$,
+however, so that Ipopt can ask for the Hessian of the objective or the
 constraints independently if required, we introduce a factor
 ($\sigma_f$) in front of the objective term. The value for $\sigma_f$
 is generally $1$, although it may include scaling factors or even be
@@ -406,33 +418,35 @@ Lagrangian (with the $\sigma_f$ parameter) is,
 \scriptsize
 \sigma_f \left[
 \begin{array}{cccc}
-2 x_4 		& x_4		& x_4 		& 2 x_1 + x_2 + x_3 	\\
-x_4		& 0		& 0		& x_1			\\
-x_4		& 0		& 0		& x_1			\\
-2 x_1+x_2+x_3	& x_1		& x_1		& 0
+2 x_4           & x_4           & x_4           & 2 x_1 + x_2 + x_3     \\
+x_4             & 0             & 0             & x_1                   \\
+x_4             & 0             & 0             & x_1                   \\
+2 x_1+x_2+x_3   & x_1           & x_1           & 0
 \end{array}
 \right]
 +
+\lambda_1
 \left[
 \begin{array}{cccc}
-0		& x_3 x_4	& x_2 x_4	& x_2 x_3	\\
-x_3 x_4		& 0		& x_1 x_4	& x_1 x_3	\\
-x_2 x_4		& x_1 x_4	& 0		& x_1 x_2	\\
-x_2 x_3		& x_1 x_3	& x_1 x_2	& 0 
+0               & x_3 x_4       & x_2 x_4       & x_2 x_3       \\
+x_3 x_4         & 0             & x_1 x_4       & x_1 x_3       \\
+x_2 x_4         & x_1 x_4       & 0             & x_1 x_2       \\
+x_2 x_3         & x_1 x_3       & x_1 x_2       & 0 
 \end{array}
-\right] \lambda_1
+\right]
 +
+\lambda_2
 \left[
 \begin{array}{cccc}
-2	& 0	& 0	& 0	\\
-0	& 2	& 0	& 0	\\
-0	& 0	& 2	& 0	\\
-0	& 0	& 0	& 2
+2       & 0     & 0     & 0     \\
+0       & 2     & 0     & 0     \\
+0       & 0     & 2     & 0     \\
+0       & 0     & 0     & 2
 \end{array}
-\right] \lambda_2
+\right]
 \end{equation}
-where the first term comes from the hessian of the objective function, and the 
-second and third term from the hessian of (\ref{ex_ineq}) and (\ref{ex_equ})
+where the first term comes from the Hessian of the objective function, and the 
+second and third term from the Hessian of (\ref{ex_ineq}) and (\ref{ex_equ})
 respectively. Therefore, the dual variables $\lambda_1$ and $\lambda_2$ 
 are then the multipliers for constraints (\ref{ex_ineq}) and (\ref{ex_equ})
 respectively.
@@ -459,16 +473,16 @@ The remainder of this section of the tutorial will lead you through
 the coding required to solve example problem
 (\ref{ex_obj}-\ref{ex_bounds}) using, first C++, then C, and finally
 Fortran. Completed versions of these examples can be found in {\tt
-ipopt/trunk/Examples} under {\tt hs071\_cpp}, {\tt hs071\_c}, {\tt
+Ipopt/trunk/Examples} under {\tt hs071\_cpp}, {\tt hs071\_c}, {\tt
 hs071\_f}.
 
 As a user, you are responsible for coding two sections of the program
-that solves a problem using Ipopt, the executable ({\tt main}) and the
+that solves a problem using Ipopt: the executable ({\tt main}) and the
 problem representation.  Generally, you will write an executable that
 prepares the problem, and then passes control over to Ipopt through an
 {\tt Optimize} call. In this {\tt Optimize} call, you will give Ipopt
 everything that it requires to call back to your code whenever it
-needs functions evaluated (like the objective, the jacobian, etc.).
+needs functions evaluated (like the objective, the Jacobian, etc.).
 In each of the three sections that follow (C++, C, and Fortran), we
 will first discuss how to code the problem representation, and then
 how to code the executable.
@@ -499,13 +513,14 @@ create the files {\tt hs071\_nlp.hpp} and {\tt hs071\_nlp.cpp}. In
 {\tt hs071\_nlp.hpp}, include {\tt IpTNLP.hpp} (the base class), tell
 the compiler that we are using the Ipopt namespace, and create the
 declaration of the {\tt HS071\_NLP} class, inheriting off of {\tt
-TNLP}. Have a look at the {\tt TNLP} class in {\tt IpTNLP.hpp}; you
+  TNLP}. Have a look at the {\tt TNLP} class in {\tt IpTNLP.hpp}; you
 will see eight pure virtual methods that we must implement. Declare
-these methods in the header file.
-Implement each of the methods in {\tt HS071\_NLP.cpp} using the descriptions 
-given below. In {\tt hs071\_nlp.cpp}, first include the header file for yoru class 
-and tell the compiler that you are using the Ipopt namespace. A full version of
-these files can be found in the {\tt Examples/hs071\_cpp} directory.
+these methods in the header file.  Implement each of the methods in
+{\tt HS071\_NLP.cpp} using the descriptions given below. In {\tt
+  hs071\_nlp.cpp}, first include the header file for your class and
+tell the compiler that you are using the Ipopt namespace. A full
+version of these files can be found in the {\tt Examples/hs071\_cpp}
+directory.
 
 \paragraph{virtual bool get\_nlp\_info(Index\& n, Index\& m, Index\& nnz\_jac\_g, \\
 Index\& nnz\_h\_lag, IndexStyleEnum\& index\_style)} 
@@ -515,27 +530,28 @@ the size of the arrays that it needs to allocate).
 \begin{itemize}
 \item {\tt n}: (out), the number of variables in the problem (dimension of {\tt x}).
 \item {\tt m}: (out), the number of constraints in the problem (dimension of {\tt g}).
-\item {\tt nnz\_jac\_g}: (out), the number of nonzero entries in the jacobian.
-\item {\tt nnz\_h\_lag}: (out), the number of nonzero entries in the hessian.
+\item {\tt nnz\_jac\_g}: (out), the number of nonzero entries in the Jacobian.
+\item {\tt nnz\_h\_lag}: (out), the number of nonzero entries in the Hessian.
 \item {\tt index\_style}: (out), the style used for row/col entries in the sparse matrix
 format (C\_STYLE: 0-based, FORTRAN\_STYLE: 1-based).
 \end{itemize}
 Ipopt uses this information when allocating the arrays that
 it will later ask you to fill with values. Be careful in this method
-since incorrect values could cause memory bugs which may be very
+since incorrect values will cause memory bugs which may be very
 difficult to find.
 
-Our example problem has 4 variables (n), and two
-constraints (m). The jacobian for this small problem is actually dense
-and has 8 nonzeros (we will still represent this jacobian using the
-sparse matrix triplet format). The Hessian of the Lagrangian has 16
-nonzeros. Keep in mind that the number of nonzeros is the total number of elements
-that may \emph{ever} be nonzero, not just those that are nonzero at the starting 
-point. This information is set once for the entire problem.
+Our example problem has 4 variables (n), and two constraints (m). The
+Jacobian for this small problem is actually dense and has 8 nonzeros
+(we will still represent this Jacobian using the sparse matrix triplet
+format). The Hessian of the Lagrangian has 10 ``symmetric'' nonzeros.
+Keep in mind that the number of nonzeros is the total number of
+elements that may \emph{ever} be nonzero, not just those that are
+nonzero at the starting point. This information is set once for the
+entire problem.
 
 \begin{verbatim}
 bool HS071_NLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, 
-			     Index& nnz_h_lag, IndexStyleEnum& index_style)
+                             Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
   // The problem described in HS071_NLP.hpp has 4 variables, x[0] through x[3]
   n = 4;
@@ -543,10 +559,10 @@ bool HS071_NLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
   // one equality constraint and one inequality constraint
   m = 2;
 
-  // in this example the jacobian is dense and contains 8 nonzeros
+  // in this example the Jacobian is dense and contains 8 nonzeros
   nnz_jac_g = 8;
 
-  // the hessian is also dense and has 16 total nonzeros, but we
+  // the Hessian is also dense and has 16 total nonzeros, but we
   // only need the lower left corner (since it is symmetric)
   nnz_h_lag = 10;
 
@@ -569,21 +585,20 @@ Give Ipopt the value of the bounds on the variables and constraints.
 \item {\tt g\_l}: (out) the lower bounds for {\tt g}. 
 \item {\tt g\_u}: (out) the upper bounds for {\tt g}.
 \end{itemize}
-The values of {\tt n} and {\tt m} that you specified in {\tt get\_nlp\_info} 
-are passed to you for debug checking.
-Setting a lower bound to a value less than {\tt nlp\_lower\_bound\_inf\_} 
-(data member of {\tt TNLP}) will cause
+The values of {\tt n} and {\tt m} that you specified in {\tt
+  get\_nlp\_info} are passed to you for debug checking.  Setting a
+lower bound to a value less than or equal to the value of the option
+{\tt nlp\_lower\_bound\_inf} (data member of {\tt TNLP}) will cause
 Ipopt to assume no lower bound. Likewise, specifying the upper bound
-above {\tt nlp\_upper\_bound\_inf\_} will cause Ipopt to assume no
-upper bound. The variables, {\tt nlp\_lower\_bound\_inf\_} and {\tt
-nlp\_upper\_bound\_inf\_}, are set to $-1e^{19}$ and $1e^{19}$
-respectively, by default, but may be modified by changing the options
-{\tt nlp\_lower\_bound\_inf} and {\tt nlp\_upper\_bound\_inf} (see
-Section \ref{sec.options}).
+above or equal to the value of the option {\tt nlp\_upper\_bound\_inf}
+will cause Ipopt to assume no upper bound.  These options, {\tt
+  nlp\_lower\_bound\_inf} and {\tt nlp\_upper\_bound\_inf}, are set to
+$-10^{19}$ and $10^{19}$ respectively, by default, but may be modified
+by changing the options (see Section \ref{sec.options}).
 
 In our example, the first constraint has a lower bound of $25$ and no upper
 bound, so we set the lower bound of constraint {\tt [0]} to $25$ and
-the upper bound to some number greater than $1e^{19}$. The second
+the upper bound to some number greater than $10^{19}$. The second
 constraint is an equality constraint and we set both bounds to
 $40$. Ipopt recognizes this as an equality constraint and does not
 treat it as two inequalities.
@@ -625,7 +640,7 @@ bool HS071_NLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
 
 \paragraph{virtual bool get\_starting\_point(Index n, bool init\_x, Number* x, \\
               bool init\_z, Number* z\_L, Number* z\_U, Index m, 
-	bool init\_lambda, Number* lambda)} 
+        bool init\_lambda, Number* lambda)} 
 $\;$ \\
 Give Ipopt the starting point before it begins iterating.
 \begin{itemize}
@@ -633,12 +648,12 @@ Give Ipopt the starting point before it begins iterating.
 \item {\tt init\_x}: (in), if true, this method must provide an initial value for {\tt x}.
 \item {\tt x}: (out), the initial values for the primal variables, {\tt x}.
 \item {\tt init\_z}: (in), if true, this method must provide an initial value 
-	for the bound multipliers {\tt z\_L}, and {\tt z\_U}.
+        for the bound multipliers {\tt z\_L}, and {\tt z\_U}.
 \item {\tt z\_L}: (out), the initial values for the bound multipliers, {\tt z\_L}.
 \item {\tt z\_U}: (out), the initial values for the bound multipliers, {\tt z\_U}.
 \item {\tt m}: (in), the number of constraints in the problem (dimension of {\tt g}).
 \item {\tt init\_lambda}: (in), if true, this method must provide an initial value 
-	for the constraint multipliers, {\tt lambda}.
+        for the constraint multipliers, {\tt lambda}.
 \item {\tt lambda}: (out), the initial values for the constraint multipliers, {\tt lambda}.
 \end{itemize}
 
@@ -667,7 +682,7 @@ bool HS071_NLP::get_starting_point(Index n, bool init_x, Number* x,
 {
   // Here, we assume we only have starting values for x, if you code
   // your own NLP, you can provide starting values for the dual variables
-  // if you wish
+  // if you wish to use a warmstart option
   assert(init_x == true);
   assert(init_z == false);
   assert(init_lambda == false);
@@ -683,21 +698,21 @@ bool HS071_NLP::get_starting_point(Index n, bool init_x, Number* x,
 \end{verbatim}
 
 \paragraph{virtual bool eval\_f(Index n, const Number* x, 
-		bool new\_x, Number\& obj\_value)} 
+                bool new\_x, Number\& obj\_value)} 
 $\;$ \\
 Return the value of the objective function as calculated using {\tt x}.
 \begin{itemize}
 \item {\tt n}: (in), the number of variables in the problem (dimension of {\tt x}). 
 \item {\tt x}: (in), the current values for the primal variables, {\tt x}.
-\item {\tt new\_x}: (in), false if an evaluation method was previously called 
-	with the same values in {\tt x}, true otherwise.
+\item {\tt new\_x}: (in), false if any evaluation method was previously called 
+        with the same values in {\tt x}, true otherwise.
 \item {\tt obj\_value}: (out) the value of the objective function ($f(x)$).
 \end{itemize}
 
 The boolean variable {\tt new\_x} will be false if the last call to
 any of the evaluation methods used the same $x$ values. This can be
 helpful when users have efficient implementations that calculate
-multiple outputs at once. Ipopt internally cache's results from the
+multiple outputs at once. Ipopt internally caches results from the
 {\tt TNLP} and generally, this flag can be ignored.
 
 The index variable $n$ is passed in only to help your debugging. This
@@ -718,34 +733,34 @@ bool HS071_NLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
 \end{verbatim}
 
 \paragraph{virtual bool eval\_grad\_f(Index n, const Number* x, bool new\_x, 
-	Number* grad\_f)} 
+        Number* grad\_f)} 
 $\;$ \\
 Return the gradient of the objective to Ipopt, as calculated by the values in {\tt x}.
 \begin{itemize}
 \item {\tt n}: (in), the number of variables in the problem (dimension of {\tt x}). 
 \item {\tt x}: (in), the current values for the primal variables, {\tt x}.
-\item {\tt new\_x}: (in), false if an evaluation method was previously called 
-	with the same values in {\tt x}, true otherwise.
+\item {\tt new\_x}: (in), false if any evaluation method was previously called 
+        with the same values in {\tt x}, true otherwise.
 \item {\tt grad\_f}: (out) the array of values for the gradient of the 
-	objective function ($\nabla f(x)$).
+        objective function ($\nabla f(x)$).
 \end{itemize}
 
-The gradient array is in the same order as the $x$ variables (i.e. the
+The gradient array is in the same order as the $x$ variables (i.e.\ the
 gradient of the objective with respect to {\tt x[2]} should be put in
-{\tt grad\_f[2]}.
+{\tt grad\_f[2]}).
 
 The boolean variable {\tt new\_x} will be false if the last call to
 any of the evaluation methods used the same $x$ values. This can be
 helpful when users have efficient implementations that caclulate
-multiple outputs at once. Ipopt internally cache's results from the
+multiple outputs at once. Ipopt internally caches results from the
 {\tt TNLP} and generally, this flag can be ignored.
 
 The index variable $n$ is passed in only to help your debugging. This
 variable will have the same value you specified in {\tt
 get\_nlp\_info}.
 
-In our example, we ignore the {\tt new\_x} flag and calculate the values for the
-gradient of the objective.
+In our example, we ignore the {\tt new\_x} flag and calculate the
+values for the gradient of the objective.
 \begin{verbatim}
 bool HS071_NLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
 {
@@ -762,14 +777,14 @@ bool HS071_NLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f
 
 
 \paragraph{virtual bool eval\_g(Index n, const Number* x, 
-	bool new\_x, Index m, Number* g)}
+        bool new\_x, Index m, Number* g)}
 $\;$ \\
 Give Ipopt the value of the constraints as calculated by the values in {\tt x}.
 \begin{itemize}
 \item {\tt n}: (in), the number of variables in the problem (dimension of {\tt x}). 
 \item {\tt x}: (in), the current values for the primal variables, {\tt x}.
-\item {\tt new\_x}: (in), false if an evaluation method was previously called 
-	with the same values in {\tt x}, true otherwise.
+\item {\tt new\_x}: (in), false if any evaluation method was previously called 
+        with the same values in {\tt x}, true otherwise.
 \item {\tt m}: (in), the number of constraints in the problem (dimension of {\tt g}).
 \item {\tt g}: (out) the array of constraint residuals.
 \end{itemize}
@@ -780,44 +795,59 @@ do not add or subtract the bound values $g_l$ or $g_u$.
 The boolean variable {\tt new\_x} will be false if the last call to
 any of the evaluation methods used the same $x$ values. This can be
 helpful when users have efficient implementations that calculate
-multiple outputs at once. Ipopt internally cache's results from the
+multiple outputs at once. Ipopt internally caches results from the
 {\tt TNLP} and generally, this flag can be ignored.
 
 The index variables $n$, and $m$ are passed in only to help your
 debugging. These variables will have the same values you specified in
 {\tt get\_nlp\_info}.
 
+In our example, we ignore the {\tt new\_x} flag and calculate the
+values for the gradient of the objective.
+\begin{verbatim}
+bool HS071_NLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
+{
+  assert(n == 4);
+  assert(m == 2);
+
+  g[0] = x[0] * x[1] * x[2] * x[3];
+  g[1] = x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3];
+
+  return true;
+} 
+\end{verbatim}
+
 \paragraph{virtual bool eval\_jac\_g(Index n, const Number* x, bool new\_x, \\
                        Index m, Index nele\_jac, Index* iRow, 
-	Index *jCol, Number* values)}
+        Index *jCol, Number* values)}
 $\;$ \\
-Return either the structure of the jacobian of the constraints, or the values for the 
-jacobian of the constraints as calculated by the values in {\tt x}.
+Return either the structure of the Jacobian of the constraints, or the values for the 
+Jacobian of the constraints as calculated by the values in {\tt x}.
 \begin{itemize}
 \item {\tt n}: (in), the number of variables in the problem (dimension of {\tt x}). 
 \item {\tt x}: (in), the current values for the primal variables, {\tt x}.
-\item {\tt new\_x}: (in), false if an evaluation method was previously called 
-	with the same values in {\tt x}, true otherwise.
+\item {\tt new\_x}: (in), false if any evaluation method was previously called 
+        with the same values in {\tt x}, true otherwise.
 \item {\tt m}: (in), the number of constraints in the problem (dimension of {\tt g}).
 \item {\tt n\_elel\_jac}: (in), the number of nonzero elements in the 
-	jacobian (dimension of {\tt iRow}, {\tt jCol}, and {\tt values}).
-\item {\tt iRow}: (out), the row indices of entries in the jacobian of the constraints.
-\item {\tt jCol}: (out), the column indices of entries in the jacobian of the constraints.
-\item {\tt values}: (out), the values of the entries in the jacobian of the constraints.
+        Jacobian (dimension of {\tt iRow}, {\tt jCol}, and {\tt values}).
+\item {\tt iRow}: (out), the row indices of entries in the Jacobian of the constraints.
+\item {\tt jCol}: (out), the column indices of entries in the Jacobian of the constraints.
+\item {\tt values}: (out), the values of the entries in the Jacobian of the constraints.
 \end{itemize}
 
-The jacobian is the matrix of derivatives where
+The Jacobian is the matrix of derivatives where
 the derivative of constraint $i$ with respect to variable $j$ is
 placed in row $i$ and column $j$. See Appendix \ref{app.triplet} for a discussion of 
 the sparse matrix format used in this method.
 
 If the {\tt iRow} and {\tt jCol} arguments are not NULL, then Ipopt
-wants you to fill in the structure of the jacobian (the row and column
+wants you to fill in the structure of the Jacobian (the row and column
 indices only). At this time, the {\tt x} argument and the {\tt values}
 argument will be NULL.
 
 If the {\tt x} argument and the {\tt values} argument are not NULL,
-then Ipopt wants you to fill in the values of the jacobian as
+then Ipopt wants you to fill in the values of the Jacobian as
 calculated from the array {\tt x} (using the same order as you used
 when specifying the structure). At this time, the {\tt iRow} and {\tt
 jCol} arguments will be NULL;
@@ -825,14 +855,14 @@ jCol} arguments will be NULL;
 The boolean variable {\tt new\_x} will be false if the last call to
 any of the evaluation methods used the same $x$ values. This can be
 helpful when users have efficient implementations that caclulate
-multiple outputs at once. Ipopt internally cache's results from the
+multiple outputs at once. Ipopt internally caches results from the
 {\tt TNLP} and generally, this flag can be ignored.
 
 The index variables {\tt n}, {\tt m}, and {\tt nele\_jac} are passed
 in only to help your debugging. These arguments will have the same
 values you specified in {\tt get\_nlp\_info}.
 
-In our example, the jacobian is actually dense, but we still
+In our example, the Jacobian is actually dense, but we still
 specify it using the sparse format.
 
 \begin{verbatim}
@@ -841,9 +871,9 @@ bool HS071_NLP::eval_jac_g(Index n, const Number* x, bool new_x,
                        Number* values)
 {
   if (values == NULL) {
-    // return the structure of the jacobian
+    // return the structure of the Jacobian
 
-    // this particular jacobian is dense
+    // this particular Jacobian is dense
     iRow[0] = 0; jCol[0] = 0;
     iRow[1] = 0; jCol[1] = 1;
     iRow[2] = 0; jCol[2] = 2;
@@ -854,7 +884,7 @@ bool HS071_NLP::eval_jac_g(Index n, const Number* x, bool new_x,
     iRow[7] = 1; jCol[7] = 3;
   }
   else {
-    // return the values of the jacobian of the constraints
+    // return the values of the Jacobian of the constraints
     
     values[0] = x[1]*x[2]*x[3]; // 0,0
     values[1] = x[0]*x[2]*x[3]; // 0,1
@@ -873,7 +903,7 @@ bool HS071_NLP::eval_jac_g(Index n, const Number* x, bool new_x,
 
 \paragraph{virtual bool eval\_h(Index n, const Number* x, bool new\_x,\\
    Number obj\_factor, Index m, const Number* lambda, bool new\_lambda,\\
-	Index nele\_hess, Index* iRow, Index* jCol, Number* values)}
+        Index nele\_hess, Index* iRow, Index* jCol, Number* values)}
 $\;$ \\
 Return the structure of the Hessian of the Lagrangian or the values of the 
 Hessian of the Lagrangian as calculated by the values in {\tt obj\_factor},
@@ -881,30 +911,30 @@ Hessian of the Lagrangian as calculated by the values in {\tt obj\_factor},
 \begin{itemize}
 \item {\tt n}: (in), the number of variables in the problem (dimension of {\tt x}). 
 \item {\tt x}: (in), the current values for the primal variables, {\tt x}.
-\item {\tt new\_x}: (in), false if an evaluation method was previously called 
-	with the same values in {\tt x}, true otherwise.
-\item {\tt obj\_factor}: (in), factor in front of the objective term in the hessian.
+\item {\tt new\_x}: (in), false if any evaluation method was previously called 
+        with the same values in {\tt x}, true otherwise.
+\item {\tt obj\_factor}: (in), factor in front of the objective term in the Hessian.
 \item {\tt m}: (in), the number of constraints in the problem (dimension of {\tt g}).
 \item {\tt lambda}: (in), the current values of the equality multipliers to use
-	for each constraint in the evaluation of the hessian.
+        for each constraint in the evaluation of the Hessian.
 \item {\tt n\_elel\_jac}: (in), the number of nonzero elements in the 
-	jacobian (dimension of {\tt iRow}, {\tt jCol}, and {\tt values}).
-\item {\tt new\_lambda}: (in), false if an evaluation method was previously called 
-	with the same values in {\tt lambda}, true otherwise.
-\item {\tt nele\_hess}: (in), the number of nonzero elements in the hessian 
-	(dimension of {\tt iRow}, {\tt jCol}, and {\tt values}.
-\item {\tt iRow}: (out), the row indices of entries in the hessian.
-\item {\tt jCol}: (out), the column indices of entries in the hessian.
-\item {\tt values}: (out), the values of the entries in the hessian.
+        Jacobian (dimension of {\tt iRow}, {\tt jCol}, and {\tt values}).
+\item {\tt new\_lambda}: (in), false if any evaluation method was previously called 
+        with the same values in {\tt lambda}, true otherwise.
+\item {\tt nele\_hess}: (in), the number of nonzero elements in the Hessian 
+        (dimension of {\tt iRow}, {\tt jCol}, and {\tt values}.
+\item {\tt iRow}: (out), the row indices of entries in the Hessian.
+\item {\tt jCol}: (out), the column indices of entries in the Hessian.
+\item {\tt values}: (out), the values of the entries in the Hessian.
 \end{itemize}
 
 If the {\tt iRow} and {\tt jCol} arguments are not NULL, then Ipopt
-wants you to fill in the structure of the hessian (the row and column
+wants you to fill in the structure of the Hessian (the row and column
 indices only). In this case, the {\tt x}, {\tt lambda}, and {\tt
 values} arrays will be NULL.
 
 If the {\tt x}, {\tt lambda}, and {\tt values} arrays are not NULL,
-then Ipopt wants you to fill in the values of the hessian as
+then Ipopt wants you to fill in the values of the Hessian as
 calculated using {\tt x} and {\tt lambda} (using the same order as you
 used when specifying the structure). In this case, the {\tt iRow} and
 {\tt jCol} arguments will be NULL.
@@ -912,15 +942,15 @@ used when specifying the structure). In this case, the {\tt iRow} and
 The boolean variables {\tt new\_x} and {\tt new\_lambda} will both be
 false if the last call to any of the evaluation methods used the same
 values. This can be helpful when users have efficient implementations
-that caclulate multiple outputs at once. Ipopt internally cache's
+that caclulate multiple outputs at once. Ipopt internally caches
 results from the {\tt TNLP} and generally, this flag can be ignored.
 
 The index variables {\tt n}, {\tt m}, and {\tt nele\_hess} are passed
 in only to help your debugging. These arguments will have the same
 values you specified in {\tt get\_nlp\_info}.
 
-In our example, the hessian is dense, but we still specify it using the
-sparse matrix format. Because the hessian is symmetric, we only need to 
+In our example, the Hessian is dense, but we still specify it using the
+sparse matrix format. Because the Hessian is symmetric, we only need to 
 specify the lower left corner.
 \begin{verbatim}
 bool HS071_NLP::eval_h(Index n, const Number* x, bool new_x,
@@ -932,13 +962,13 @@ bool HS071_NLP::eval_h(Index n, const Number* x, bool new_x,
     // return the structure. This is a symmetric matrix, fill the lower left
     // triangle only.
 
-    // the hessian for this problem is actually dense
+    // the Hessian for this problem is actually dense
     Index idx=0;
     for (Index row = 0; row < 4; row++) {
       for (Index col = 0; col <= row; col++) {
-	iRow[idx] = row; 
-	jCol[idx] = col;
-	idx++;
+        iRow[idx] = row; 
+        jCol[idx] = col;
+        idx++;
       }
     }
     
@@ -952,16 +982,16 @@ bool HS071_NLP::eval_h(Index n, const Number* x, bool new_x,
     values[0] = obj_factor * (2*x[3]); // 0,0
 
     values[1] = obj_factor * (x[3]);   // 1,0
-    values[2] = 0;                   // 1,1
+    values[2] = 0;                     // 1,1
 
     values[3] = obj_factor * (x[3]);   // 2,0
-    values[4] = 0;                   // 2,1
-    values[5] = 0;                   // 2,2
+    values[4] = 0;                     // 2,1
+    values[5] = 0;                     // 2,2
 
     values[6] = obj_factor * (2*x[0] + x[1] + x[2]); // 3,0
-    values[7] = obj_factor * (x[0]);             // 3,1
-    values[8] = obj_factor * (x[0]);             // 3,2
-    values[9] = 0;                             // 3,3
+    values[7] = obj_factor * (x[0]);                 // 3,1
+    values[8] = obj_factor * (x[0]);                 // 3,2
+    values[9] = 0;                                   // 3,3
 
 
     // add the portion for the first constraint
@@ -997,24 +1027,24 @@ This is the only method that is not mentioned in Figure
 algorithm has finished (successfully or even with most errors).
 \begin{itemize}
 \item {\tt status}: (in), gives the status of the algorithm 
-	as specified in {\tt IpAlgTypes.hpp},
-	\begin{itemize}
-	\item {\tt SUCCESS}: Algorithm terminated successfully 
-	at a locally optimal point.
-	\item {\tt MAXITER\_EXCEEDED}: Maximum number of iterations 
-	exceeded (can be specified by an option).
-	\item {\tt STOP\_AT\_TINY\_STEP}: Algorithm proceeds with very little
-	progress. 
-	\item {\tt STOP\_AT\_ACCEPTABLE\_POINT}: Algorithm stopped at a point
-	that was converged, not to desired tolerances, 
-	but to acceptable tolerances.
-	\item {\tt LOCAL\_INFEASIBILITY}: Algorithm converged to a point 
-	of local infeasibility. Problem may be infeasible.
-	\item {\tt RESTORATION\_FAILURE}: Restoration phase was called, but 
-	failed to find a more feasible point.
-	\item {\tt INTERNAL\_ERROR}: An unknown internal error occurred. Please
-	contact the Ipopt Authors through the mailing list.
-	\end{itemize}
+        as specified in {\tt IpAlgTypes.hpp},
+        \begin{itemize}
+        \item {\tt SUCCESS}: Algorithm terminated successfully 
+        at a locally optimal point.
+        \item {\tt MAXITER\_EXCEEDED}: Maximum number of iterations 
+        exceeded (can be specified by an option).
+        \item {\tt STOP\_AT\_TINY\_STEP}: Algorithm proceeds with very little
+        progress. 
+        \item {\tt STOP\_AT\_ACCEPTABLE\_POINT}: Algorithm stopped at a point
+        that was converged, not to ``desired'' tolerances, 
+        but to ``acceptable'' tolerances (see the ??? options).
+        \item {\tt LOCAL\_INFEASIBILITY}: Algorithm converged to a point 
+        of local infeasibility. Problem may be infeasible.
+        \item {\tt RESTORATION\_FAILURE}: Restoration phase was called, but 
+        failed to find a more feasible point.
+        \item {\tt INTERNAL\_ERROR}: An unknown internal error occurred. Please
+        contact the Ipopt Authors through the mailing list.
+        \end{itemize}
 \item {\tt n}: (in), the number of variables in the problem (dimension of {\tt x}). 
 \item {\tt x}: (in), the current values for the primal variables, {\tt x}.
 \item {\tt z\_L}: (in), the current values for the lower bound multipliers.
@@ -1044,19 +1074,19 @@ void HS071_NLP::finalize_solution(SolverReturn status,
   // For this example, we write the solution to the console
   printf("\n\nSolution of the primal variables, x\n");
   for (Index i=0; i<n; i++) {
-    printf("x[%d] = %g\n", i, x[i]); 
+    printf("x[%d] = %e\n", i, x[i]); 
   }
 
   printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
   for (Index i=0; i<n; i++) {
-    printf("z_L[%d] = %g\n", i, z_L[i]); 
+    printf("z_L[%d] = %e\n", i, z_L[i]); 
   }
   for (Index i=0; i<n; i++) {
-    printf("z_U[%d] = %g\n", i, z_U[i]); 
+    printf("z_U[%d] = %e\n", i, z_U[i]); 
   }
 
   printf("\n\nObjective value\n");
-  printf("f(x*) = %g\n", obj_value); 
+  printf("f(x*) = %e\n", obj_value); 
 }
 \end{verbatim}
 
@@ -1075,38 +1105,37 @@ raw C++ pointers when creating and passing Ipopt objects. To find out
 more information about smart pointers and the SmartPtr implementation
 used in Ipopt, see Appendix \ref{app.smart_ptr}.
 
-Create the file {\tt MyExample.cpp} in the MyExample
-directory. Include {\tt HS071\_NLP.hpp} and {\tt IpSmartPtr.hpp}, tell the
-compiler to use the Ipopt namespace, and implement the {\tt main}
+Create the file {\tt MyExample.cpp} in the MyExample directory.
+Include {\tt HS071\_NLP.hpp} and {\tt IpIpoptApplication.hpp}, tell
+the compiler to use the Ipopt namespace, and implement the {\tt main}
 function.
 \begin{verbatim}
+#include "IpIpoptApplication.hpp"
 #include "HS071_NLP.hpp"
-#include "IpSmartPtr.hpp"
-#include <iostream>
 
 using namespace Ipopt;
 
 int main()
 {
-	// use a SmartPtr to point the new HS071_NLP
-	SmartPtr<TNLP> mynlp = new HS071_NLP();
-	
-	// use a SmartPtr to point to new IpoptApplication
-	SmartPtr<IpoptApplication> app = new IpoptApplication();
+        // use a SmartPtr to point the new HS071_NLP
+        SmartPtr<TNLP> mynlp = new HS071_NLP();
+        
+        // use a SmartPtr to point to new IpoptApplication
+        SmartPtr<IpoptApplication> app = new IpoptApplication();
 
-	// Ask Ipopt to solve the problem
-	SolverReturn status = app->OptimizeTNLP(mynlp);
-	if (status == SUCCESSFUL) {
-		std::cout << "SOLVED :)" << std::endl;
-		return 0;
-	}
-	else {
-		std::cout << "FAILED! :(" << std::endl;
-		return -1;
-	}
-	
-	// As the SmartPtr's go out of scope, the reference counts will be decremented
-	// and the mynlp and app objects will automatically be deleted.
+        // Ask Ipopt to solve the problem
+        SolverReturn status = app->OptimizeTNLP(mynlp);
+        if (status == SUCCESSFUL) {
+                std::cout << "SOLVED :)" << std::endl;
+                return 0;
+        }
+        else {
+                std::cout << "FAILED! :(" << std::endl;
+                return -1;
+        }
+        
+        // As the SmartPtr's go out of scope, the reference counts will be decremented
+        // and the mynlp and app objects will automatically be deleted.
 }
 \end{verbatim} 
 
@@ -1120,7 +1149,7 @@ its progress to the console, and return the {\tt SolverReturn} status.
 Our next task is to compile and test the code. If you are familiar
 with the compiler and linker used on your system, you can build the
 code, including the ipopt library (and other necessary libraries).  If
-you are using Linux, then a sample makefile exists already that was
+you are using Linux/UNIX, then a sample makefile exists already that was
 created by configure. Copy {\tt Examples/hs071\_cpp/Makefile} into
 your {\tt MyExample} directory. This makefile was created for the
 hs071\_cpp code, but it can be easily modified for your example
@@ -1223,16 +1252,16 @@ thank Yoshi for his efforts.
 http://www.coin-or.org
 \bibitem{AndreasPaper}
 W\"achter, A. and Biegler, L.T.:''On the Implementation of a Primal-Dual
-	Interior Point Filter Line Search Algorithm for Large-Scale
-	Nonlinear Programming'', Research Report, IBM T. J. Watson
-	Research Center, Yorktown, USA (2004)
+        Interior Point Filter Line Search Algorithm for Large-Scale
+        Nonlinear Programming'', Research Report, IBM T. J. Watson
+        Research Center, Yorktown, USA (2004)
 \bibitem{AndreasThesis}
 W\"achter, A.:''An Interior Point Algorithm for Large-Scale Nonlinear
-	Optimization with Applications in Process Engineering'',
-	Ph.D. Thesis, Carnegie Mellon University, Pittsburgh, USA (2002)
+        Optimization with Applications in Process Engineering'',
+        Ph.D. Thesis, Carnegie Mellon University, Pittsburgh, USA (2002)
 \bibitem{MargotClassText}
 Margot, F.: Course material for \textit{47852 Open Source Software for
-	Optimization}, Carnegie Mellon University (2005)
+        Optimization}, Carnegie Mellon University (2005)
 \end{thebibliography}
 
 
@@ -1244,47 +1273,68 @@ Consider the matrix,
 \[
 \left[
 \begin{array}{ccccccc}
-1.1	& 0		& 0		& 0		& 0		& 0		& 0.5 \\
-0	& 1.9	& 0		& 0		& 0		& 0		& 0.5 \\
-0	& 0		& 2.6	& 0		& 0		& 0		& 0.5 \\
-0	& 0		& 7.8	& 0.6	& 0		& 0		& 0    \\
-0	& 0		& 0		& 1.5	& 2.7	& 0		& 0 	\\
-1.6	& 0		& 0		& 0		& 0.4	& 0		& 0 	\\
-0	& 0		& 0		& 0		& 0		& 0.9	& 1.7 \\
+1.1     & 0             & 0             & 0             & 0             & 0             & 0.5 \\
+0       & 1.9   & 0             & 0             & 0             & 0             & 0.5 \\
+0       & 0             & 2.6   & 0             & 0             & 0             & 0.5 \\
+0       & 0             & 7.8   & 0.6   & 0             & 0             & 0    \\
+0       & 0             & 0             & 1.5   & 2.7   & 0             & 0     \\
+1.6     & 0             & 0             & 0             & 0.4   & 0             & 0     \\
+0       & 0             & 0             & 0             & 0             & 0.9   & 1.7 \\
 \end{array}
 \right].
 \]
 
-A standard dense matrix representation would need to store $7 \cdot 7{=} 49$ floating point numbers, where many entries would be zero. In triplet format, however, only the nonzero entries are stored. The triplet format records the row number, the column number, and the value of all nonzero entries in the matrix. For the matrix above, this means storing $14$ integers for the rows, $14$ integers for the columns, and $14$ floating point numbers for the values. While this does not seem like a huge space savings over the $49$ floating point numbers stored in the dense representation, for larger matrices, the space savings are very dramatic\footnote{For an $n \times n$ matrix, the dense representation grows with the the square of $n$, while the sparse representation grows linearly in the number of nonzeros.}
+A standard dense matrix representation would need to store $7 \cdot
+7{=} 49$ floating point numbers, where many entries would be zero. In
+triplet format, however, only the nonzero entries are stored. The
+triplet format records the row number, the column number, and the
+value of all nonzero entries in the matrix. For the matrix above, this
+means storing $14$ integers for the rows, $14$ integers for the
+columns, and $14$ floating point numbers for the values. While this
+does not seem like a huge space savings over the $49$ floating point
+numbers stored in the dense representation, for larger matrices, the
+space savings are very dramatic\footnote{For an $n \times n$ matrix,
+  the dense representation grows with the the square of $n$, while the
+  sparse representation grows linearly in the number of nonzeros.}
 
-In triplet format used in these Ipopt interfaces, the row and column numbers are 1-based, and the above matrix is represented by,
+In triplet format used in these Ipopt interfaces, the row and column
+numbers are 1-based {\bf have table for both 0- and 1-based}, and the
+above matrix is represented by
 \[
 \begin{array}{ccc}
-row	& 	col	& 	value \\
-1	& 	1	&	1.1	\\
-1	&	7	&	0.5	\\
-2	&	2	&	1.9	\\
-2	&	7	&	0.5	\\
-3	&	3	&	2.6	\\
-3	&	7	&	0.5	\\
-4	&	3	&	7.8	\\
-4	&	4	&	0.6	\\
-5	&	4	&	1.5	\\
-5	&	5	&	2.7	\\
-6	&	1	&	1.6	\\
-6	&	5	&	0.4	\\
-7	&	6	&	0.9	\\
-7	&	7	&	1.7
+row     &       col     &       value \\
+1       &       1       &       1.1     \\
+1       &       7       &       0.5     \\
+2       &       2       &       1.9     \\
+2       &       7       &       0.5     \\
+3       &       3       &       2.6     \\
+3       &       7       &       0.5     \\
+4       &       3       &       7.8     \\
+4       &       4       &       0.6     \\
+5       &       4       &       1.5     \\
+5       &       5       &       2.7     \\
+6       &       1       &       1.6     \\
+6       &       5       &       0.4     \\
+7       &       6       &       0.9     \\
+7       &       7       &       1.7
 \end{array}
 \]
 
+The individual elements of the matrix can be listed in any order, and
+if there are multiple items for the same nonzero position, the values
+provided for those positions are added.
+
+MISSING: Symmetric matrices
+
+
 \section{The Smart Pointer Implementation: SmartPtr}
+
 The SmartPtr class is described in {\tt IpSmartPtr.hpp}. It is a
 template class that takes care of deleting objects for us so we need
 not be concerned about memory leaks. Instead of pointing to an object
-with a raw C++ pointer (e.g. {\tt HS071\_NLP*}), we use a SmartPtr. Every time a
-SmartPtr is set to reference an object, it increments a counter in
-that object (see the ReferencedObject base class if you are
+with a raw C++ pointer (e.g. {\tt HS071\_NLP*}), we use a SmartPtr.
+Every time a SmartPtr is set to reference an object, it increments a
+counter in that object (see the ReferencedObject base class if you are
 interested). If a SmartPtr is done with the object, either by leaving
 scope or being set to point to another object, the counter is
 decremented. When the count of the object goes to zero, the object is
