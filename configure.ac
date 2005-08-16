@@ -134,14 +134,14 @@ if test -z "$CXXFLAGS"; then
       case "$CXX" in
       xlC* | */xlC* | mpxlC* | */mpxlC*)
              opt_cxxflags="-O5 -qmaxmem=-1"
-             add_cxxflags="-bmaxdata:0x80000000"
+             add_cxxflags="-bmaxdata:0x80000000 -qrtti=dyna"
              dbg_cxxflags="-g";;
       esac;;
     *-hp-*)
       case "$CXX" in
       aCC | */aCC )
              opt_cxxflags="+O4"
-             add_cxxflags="-AA -qrtti=dyna"
+             add_cxxflags="-AA"
              dbg_cxxflags="-g";;
       esac;;
     *-sun-*)
