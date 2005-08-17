@@ -9851,7 +9851,7 @@ elif test ! "$use_asldir" = no; then
 fi
 
 
-                                                                                                                                                                          ac_config_files="$ac_config_files Makefile Common/Makefile LinAlg/Makefile LinAlg/TMatrices/Makefile Interfaces/Makefile Algorithm/Makefile Algorithm/LinearSolvers/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/CUTErInterface/Makefile Examples/Fortran_example/Makefile Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile Extern/Makefile Extern/blas/Makefile Extern/HSL/Makefile Extern/ASL/Makefile"
+                                                                                                                                                                                    ac_config_files="$ac_config_files Makefile Common/Makefile LinAlg/Makefile LinAlg/TMatrices/Makefile Interfaces/Makefile Algorithm/Makefile Algorithm/LinearSolvers/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/CUTErInterface/Makefile Examples/Fortran_example/Makefile Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile Examples/hs071_c/Makefile Extern/Makefile Extern/blas/Makefile Extern/HSL/Makefile Extern/ASL/Makefile"
 
 
           ac_config_headers="$ac_config_headers inc/config.h"
@@ -10506,6 +10506,7 @@ do
   "Examples/Fortran_example/Makefile" ) CONFIG_FILES="$CONFIG_FILES Examples/Fortran_example/Makefile" ;;
   "Examples/Cpp_example/Makefile" ) CONFIG_FILES="$CONFIG_FILES Examples/Cpp_example/Makefile" ;;
   "Examples/hs071_cpp/Makefile" ) CONFIG_FILES="$CONFIG_FILES Examples/hs071_cpp/Makefile" ;;
+  "Examples/hs071_c/Makefile" ) CONFIG_FILES="$CONFIG_FILES Examples/hs071_c/Makefile" ;;
   "Extern/Makefile" ) CONFIG_FILES="$CONFIG_FILES Extern/Makefile" ;;
   "Extern/blas/Makefile" ) CONFIG_FILES="$CONFIG_FILES Extern/blas/Makefile" ;;
   "Extern/HSL/Makefile" ) CONFIG_FILES="$CONFIG_FILES Extern/HSL/Makefile" ;;

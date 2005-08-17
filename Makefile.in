@@ -44,6 +44,7 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in \
 	$(top_srcdir)/Examples/Cpp_example/Makefile.in \
 	$(top_srcdir)/Examples/Fortran_example/Makefile.in \
+	$(top_srcdir)/Examples/hs071_c/Makefile.in \
 	$(top_srcdir)/Examples/hs071_cpp/Makefile.in \
 	$(top_srcdir)/configure $(top_srcdir)/inc/config.h.in AUTHORS \
 	config.guess config.sub depcomp install-sh missing
@@ -57,7 +58,8 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config.h
 CONFIG_CLEAN_FILES = Examples/Fortran_example/Makefile \
-	Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile
+	Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile \
+	Examples/hs071_c/Makefile
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -279,6 +281,8 @@ Examples/Cpp_example/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examp
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 Examples/hs071_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/hs071_cpp/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+Examples/hs071_c/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/hs071_c/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 uninstall-info-am:
 
 # This directory's subdirectories are mostly independent; you can cd
@@ -416,7 +420,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/Docs $(distdir)/Examples/Cpp_example $(distdir)/Examples/Fortran_example $(distdir)/Examples/hs071_cpp $(distdir)/inc
+	$(mkdir_p) $(distdir)/Docs $(distdir)/Examples/Cpp_example $(distdir)/Examples/Fortran_example $(distdir)/Examples/hs071_c $(distdir)/Examples/hs071_cpp $(distdir)/inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
