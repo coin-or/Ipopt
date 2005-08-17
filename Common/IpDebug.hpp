@@ -30,7 +30,7 @@
 #else
 # define DBG_ASSERT(test)
 # define DBG_ASSERT_EXCEPTION(__condition, __except_type, __msg)
-# define DBG_SET_VERBOSITY(__level)
+# define DBG_SET_VERBOSITY(__level) /##/
 #endif
 
 #ifndef IP_DEBUG
