@@ -194,8 +194,9 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-iplibdir = $(top_builddir)/lib
 AUTOMAKE_OPTIONS = foreign
+EXTRA_DIST = INSTALL.HSL
+iplibdir = $(top_builddir)/lib
 noinst_LIBRARIES = libiphsl.a
 nodist_libiphsl_a_SOURCES = $(am__append_1) $(am__append_2)
 all: all-am

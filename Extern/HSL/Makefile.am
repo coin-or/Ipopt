@@ -4,9 +4,11 @@
 
 ## $Id$
 
-iplibdir = $(top_builddir)/lib
-
 AUTOMAKE_OPTIONS = foreign
+
+EXTRA_DIST = INSTALL.HSL
+
+iplibdir = $(top_builddir)/lib
 
 noinst_LIBRARIES = libiphsl.a
 

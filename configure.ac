@@ -9,6 +9,7 @@
 ## SGI: ./configure CC=cc F77=f77 CXX=CC CXXFLAGS="-g -LANG:std -DOLD_C_HEADERS" AR="CC -ar" ARFLAGS="-o " AR_X="ar x" FFLAGS=-g CFLAGS=-g CXXLIBS='-lCsup -lC -lCio'
 ## AIX: ./configure CC=xlc F77=xlf CXX=xlC --with-lapack=$HOME/lib/liblapack.a CFLAGS=-g FFLAGS=-g CXXFLAGS="-g -qrtti=dyna" CXXLIBS="-lC -lc"
 ## HP1: configure --with-asl=$HOME/COIN/OBJhp1/OTHERS/ASL/amplsolver.a --with-blas=/opt/fortran/lib/libblas.a --with-hsl=$HOME/COIN/OBJhp1/OTHERS/HSL/libiphsl.a --with-lapack=$HOME/COIN/OBJhp1/OTHERS/lapack/libiplapack.a F77=/opt/fortran/bin/fort77 CC=/opt/ansic/bin/cc CXX=/opt/aCC/bin/aCC FFLAGS='-g' CFLAGS='-g' CXXFLAGS='-AA -DMY_C_FINITE=isfinite -g' CXXLIBS='-L/opt/aCC/lib -l++ -lstd_v2 -lCsup_v2 -lm -lcl -lc'
+# gridsun1: need AR='CC -xar' ARFLAGS='-o'
 
 AC_PREREQ(2.59)
 
@@ -89,7 +90,7 @@ if test -z "$CXXFLAGS"; then
         esac
         add_cxxflags="-pipe"
         dbg_cxxflags="-g"
-        warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -Wconversion"
+        warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -Wconversion"
         case $build in
           *-cygwin*) AC_MSG_CHECKING([whether flag \" -mno-cygwin\" works])
                     CXXFLAGS="-mno-cygwin"
@@ -145,7 +146,7 @@ if test -z "$CXXFLAGS"; then
              dbg_cxxflags="-g";;
       esac;;
     *-sun-*)
-             opt_cxxflags="-fast"
+             opt_cxxflags="-O5 -xtarget=native"
              dbg_cxxflags="-g";;
     esac
   fi
@@ -311,7 +312,7 @@ if test -z "$CFLAGS"; then
              add_cflags="-Ae"
              dbg_cflags="-g";;
     *-sun-*)
-             opt_cflags="-fast"
+             opt_cflags="-xO5 -xtarget=native"
              dbg_cflags="-g";;
     *-sgi-*)
              opt_cflags="-O -OPT:Olimit=0"
@@ -435,7 +436,7 @@ if test -z "$FFLAGS"; then
              add_fflags="+U77"
              dbg_fflags="-C -g";;
     *-sun-*)
-             opt_fflags="-fast"
+             opt_fflags="-O5 -xtarget=native"
              dbg_fflags="-g";;
     *-sgi-*)
              opt_fflags="-O5 -OPT:Olimit=0"
@@ -944,7 +945,7 @@ if test "$use_asldir" = BUILD; then
       fi
     fi
   fi
-  ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR \$\$(ARFLAGS)/' makefile.u | sed 's/ar ruv/$AR ruv/' "
+  ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR $ARFLAGS/' makefile.u | sed 's/ar ruv/$AR $ARFLAGS/' "
   if test "$EXEEXT" = ".exe"; then
     ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's/a.out/a.exe/'"
   fi
@@ -1069,7 +1070,6 @@ AC_CONFIG_FILES([Makefile Common/Makefile
 		 Interfaces/Makefile Algorithm/Makefile
 		 Algorithm/LinearSolvers/Makefile
 		 Apps/Makefile Apps/AmplSolver/Makefile
-		 Apps/CompositeInterface/Makefile
 		 Apps/CUTErInterface/Makefile
 		 Examples/Fortran_example/Makefile
 		 Examples/Cpp_example/Makefile

@@ -2137,7 +2137,7 @@ rm -f conftest.err conftest.$ac_objext \
         esac
         add_cxxflags="-pipe"
         dbg_cxxflags="-g"
-        warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -Wconversion"
+        warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -Wconversion"
         case $build in
           *-cygwin*) echo "$as_me:$LINENO: checking whether flag \" -mno-cygwin\" works" >&5
 echo $ECHO_N "checking whether flag \" -mno-cygwin\" works... $ECHO_C" >&6
@@ -2285,7 +2285,7 @@ rm -f conftest.err conftest.$ac_objext \
              dbg_cxxflags="-g";;
       esac;;
     *-sun-*)
-             opt_cxxflags="-fast"
+             opt_cxxflags="-O5 -xtarget=native"
              dbg_cxxflags="-g";;
     esac
   fi
@@ -3248,7 +3248,7 @@ rm -f conftest.err conftest.$ac_objext \
              add_cflags="-Ae"
              dbg_cflags="-g";;
     *-sun-*)
-             opt_cflags="-fast"
+             opt_cflags="-xO5 -xtarget=native"
              dbg_cflags="-g";;
     *-sgi-*)
              opt_cflags="-O -OPT:Olimit=0"
@@ -3859,7 +3859,7 @@ rm -f conftest.err conftest.$ac_objext \
              add_fflags="+U77"
              dbg_fflags="-C -g";;
     *-sun-*)
-             opt_fflags="-fast"
+             opt_fflags="-O5 -xtarget=native"
              dbg_fflags="-g";;
     *-sgi-*)
              opt_fflags="-O5 -OPT:Olimit=0"
@@ -9556,7 +9556,7 @@ echo "${ECHO_T}no" >&6
       fi
     fi
   fi
-  ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR \$\$(ARFLAGS)/' makefile.u | sed 's/ar ruv/$AR ruv/' "
+  ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR $ARFLAGS/' makefile.u | sed 's/ar ruv/$AR $ARFLAGS/' "
   if test "$EXEEXT" = ".exe"; then
     ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's/a.out/a.exe/'"
   fi
@@ -9851,7 +9851,7 @@ elif test ! "$use_asldir" = no; then
 fi
 
 
-                                                                                                                                                                                    ac_config_files="$ac_config_files Makefile Common/Makefile LinAlg/Makefile LinAlg/TMatrices/Makefile Interfaces/Makefile Algorithm/Makefile Algorithm/LinearSolvers/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/CompositeInterface/Makefile Apps/CUTErInterface/Makefile Examples/Fortran_example/Makefile Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile Extern/Makefile Extern/blas/Makefile Extern/HSL/Makefile Extern/ASL/Makefile"
+                                                                                                                                                                          ac_config_files="$ac_config_files Makefile Common/Makefile LinAlg/Makefile LinAlg/TMatrices/Makefile Interfaces/Makefile Algorithm/Makefile Algorithm/LinearSolvers/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/CUTErInterface/Makefile Examples/Fortran_example/Makefile Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile Extern/Makefile Extern/blas/Makefile Extern/HSL/Makefile Extern/ASL/Makefile"
 
 
           ac_config_headers="$ac_config_headers inc/config.h"
@@ -10502,7 +10502,6 @@ do
   "Algorithm/LinearSolvers/Makefile" ) CONFIG_FILES="$CONFIG_FILES Algorithm/LinearSolvers/Makefile" ;;
   "Apps/Makefile" ) CONFIG_FILES="$CONFIG_FILES Apps/Makefile" ;;
   "Apps/AmplSolver/Makefile" ) CONFIG_FILES="$CONFIG_FILES Apps/AmplSolver/Makefile" ;;
-  "Apps/CompositeInterface/Makefile" ) CONFIG_FILES="$CONFIG_FILES Apps/CompositeInterface/Makefile" ;;
   "Apps/CUTErInterface/Makefile" ) CONFIG_FILES="$CONFIG_FILES Apps/CUTErInterface/Makefile" ;;
   "Examples/Fortran_example/Makefile" ) CONFIG_FILES="$CONFIG_FILES Examples/Fortran_example/Makefile" ;;
   "Examples/Cpp_example/Makefile" ) CONFIG_FILES="$CONFIG_FILES Examples/Cpp_example/Makefile" ;;

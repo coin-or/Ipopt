@@ -245,6 +245,7 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
+EXTRA_DIST = get.blas INSTALL.BLAS
 iplibdir = $(top_builddir)/lib
 noinst_LIBRARIES = libipblas.a
 nodist_libipblas_a_SOURCES = $(am__append_1)

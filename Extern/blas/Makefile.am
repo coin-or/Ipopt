@@ -1,10 +1,12 @@
-# Copyright (C) 2003, International Business Machines and others.
+# Copyright (C) 2003, 2004, 2005 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
 ## $Id$
 
 AUTOMAKE_OPTIONS = foreign
+
+EXTRA_DIST = get.blas INSTALL.BLAS
 
 iplibdir = $(top_builddir)/lib
 

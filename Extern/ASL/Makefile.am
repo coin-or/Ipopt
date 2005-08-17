@@ -6,6 +6,8 @@
 
 AUTOMAKE_OPTIONS = foreign
 
+EXTRA_DIST = get.ASL INSTALL.ASL
+
 compdir = compdir
 
 libampl   = amplsolver.a
