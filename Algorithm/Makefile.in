@@ -56,7 +56,8 @@ LIBRARIES = $(noinst_LIBRARIES)
 libipoptalg_a_AR = $(AR) $(ARFLAGS)
 libipoptalg_a_LIBADD =
 am_libipoptalg_a_OBJECTS = IpAdaptiveMuUpdate.$(OBJEXT) \
-	IpAlgBuilder.$(OBJEXT) IpAugRestoSystemSolver.$(OBJEXT) \
+	IpAlgBuilder.$(OBJEXT) IpAlgorithmRegOp.$(OBJEXT) \
+	IpAugRestoSystemSolver.$(OBJEXT) \
 	IpDefaultIterateInitializer.$(OBJEXT) IpFilter.$(OBJEXT) \
 	IpFilterLineSearch.$(OBJEXT) IpGradientScaling.$(OBJEXT) \
 	IpIpoptAlg.$(OBJEXT) IpIpoptCalculatedQuantities.$(OBJEXT) \
@@ -231,6 +232,7 @@ noinst_LIBRARIES = libipoptalg.a
 libipoptalg_a_SOURCES = \
 	IpAdaptiveMuUpdate.cpp IpAdaptiveMuUpdate.hpp \
 	IpAlgBuilder.cpp IpAlgBuilder.hpp \
+	IpAlgorithmRegOp.cpp IpAlgorithmRegOp.hpp \
 	IpAlgStrategy.hpp \
 	IpAugRestoSystemSolver.cpp IpAugRestoSystemSolver.hpp \
 	IpAugSystemSolver.hpp \
@@ -278,6 +280,7 @@ libipoptalg_a_SOURCES = \
 ASTYLE_FILES = \
 	IpAdaptiveMuUpdate.cppbak IpAdaptiveMuUpdate.hppbak \
 	IpAlgBuilder.cppbak IpAlgBuilder.hppbak \
+	IpAlgorithmRegOp.cppbak IpAlgorithmRegOp.hppbak \
 	IpAlgStrategy.hppbak \
 	IpAugRestoSystemSolver.cppbak IpAugRestoSystemSolver.hppbak \
 	IpAugSystemSolver.hppbak \
@@ -371,6 +374,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAdaptiveMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAlgBuilder.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAlgorithmRegOp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAugRestoSystemSolver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDefaultIterateInitializer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilter.Po@am__quote@

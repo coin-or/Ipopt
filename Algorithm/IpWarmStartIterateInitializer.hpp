@@ -15,8 +15,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(WarmStartIterateInitializer);
-
   /** Class implementing an initialization procedure for warm starts.
    */
   class WarmStartIterateInitializer: public IterateInitializer

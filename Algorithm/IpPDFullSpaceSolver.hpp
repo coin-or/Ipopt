@@ -16,8 +16,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(PDFullSpaceSolver);
-
   /** This is the implemetation of the Primal-Dual System, using the
    *  full space approach with a direct linear solver.
    *

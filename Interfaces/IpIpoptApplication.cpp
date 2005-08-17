@@ -16,11 +16,13 @@
 #include "IpUserScaling.hpp"
 #include "IpGradientScaling.hpp"
 
+#include "IpLinearSolversRegOp.hpp"
+#include "IpInterfacesRegOp.hpp"
+#include "IpAlgorithmRegOp.hpp"
+
 namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
-
-  DefineOptionsRegistrar(IpoptApplication);
 
   IpoptApplication::IpoptApplication(bool read_params_dat,
                                      bool create_console_out)
@@ -29,88 +31,108 @@ namespace Ipopt
       options_(new OptionsList()),
       statistics_(NULL)
   {
+    try {
 # ifdef IP_DEBUG
-    DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
-    SmartPtr<Journal> debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_SUMMARY);
-    debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
+      DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
+      SmartPtr<Journal> debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_SUMMARY);
+      debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
 # endif
 
-    DBG_START_METH("IpoptApplication::IpoptApplication()",
-                   dbg_verbosity);
+      DBG_START_METH("IpoptApplication::IpoptApplication()",
+                     dbg_verbosity);
 
 
-    SmartPtr<Journal> stdout_jrnl = NULL;
-    if (create_console_out) {
-      stdout_jrnl =
-        jnlst_->AddFileJournal("console", "stdout", J_SUMMARY);
-      stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
-    }
-
-    // Register the valid options
-    SmartPtr<RegisteredOptions> reg_options = new RegisteredOptions();
-    OptionsRegistrar::RegisterAllOptions(reg_options);
-
-    options_->SetJournalist(jnlst_);
-    options_->SetRegisteredOptions(reg_options);
-
-    // Get the options
-    if (read_params_dat) {
-      FILE* fp_options = fopen("PARAMS.DAT", "r");
-      if (fp_options) {
-        // PARAMS.DAT exists, read the content
-        options_->ReadFromFile(*jnlst_, fp_options);
-        fclose(fp_options);
-        fp_options=NULL;
+      SmartPtr<Journal> stdout_jrnl = NULL;
+      if (create_console_out) {
+        stdout_jrnl =
+          jnlst_->AddFileJournal("console", "stdout", J_SUMMARY);
+        stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
       }
-    }
 
-    Index ivalue;
-    options_->GetIntegerValue("print_level", ivalue, "");
-    EJournalLevel print_level = (EJournalLevel)ivalue;
-    if (create_console_out) {
-      // Set printlevel for stdout
-      stdout_jrnl->SetAllPrintLevels(print_level);
-      stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
-    }
+      // Register the valid options
+      SmartPtr<RegisteredOptions> reg_options = new RegisteredOptions();
+      RegisterAllOptions(reg_options);
 
-    bool option_set;
+      options_->SetJournalist(jnlst_);
+      options_->SetRegisteredOptions(reg_options);
+
+      // Get the options
+      if (read_params_dat) {
+        FILE* fp_options = fopen("PARAMS.DAT", "r");
+        if (fp_options) {
+          // PARAMS.DAT exists, read the content
+          options_->ReadFromFile(*jnlst_, fp_options);
+          fclose(fp_options);
+          fp_options=NULL;
+        }
+      }
+
+      Index ivalue;
+      options_->GetIntegerValue("print_level", ivalue, "");
+      EJournalLevel print_level = (EJournalLevel)ivalue;
+      if (create_console_out) {
+        // Set printlevel for stdout
+        stdout_jrnl->SetAllPrintLevels(print_level);
+        stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
+      }
+
+      bool option_set;
 
 #ifdef IP_DEBUG
-    // Set printlevel for debug
-    option_set = options_->GetIntegerValue("debug_print_level",
-                                           ivalue, "");
-    EJournalLevel debug_print_level;
-    if (option_set) {
-      debug_print_level = (EJournalLevel)ivalue;
-    }
-    else {
-      debug_print_level = print_level;
-    }
-    debug_jrnl->SetAllPrintLevels(debug_print_level);
-    debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
-#endif
-
-    // Open an output file if required
-    std::string output_filename;
-    options_->GetValue("output_file", output_filename, "");
-    if (output_filename != "") {
-      EJournalLevel file_print_level;
-      option_set = options_->GetIntegerValue("file_print_level", ivalue, "");
+      // Set printlevel for debug
+      option_set = options_->GetIntegerValue("debug_print_level",
+                                             ivalue, "");
+      EJournalLevel debug_print_level;
       if (option_set) {
-        file_print_level = (EJournalLevel)ivalue;
+        debug_print_level = (EJournalLevel)ivalue;
       }
       else {
-        file_print_level = print_level;
+        debug_print_level = print_level;
       }
-      OpenOutputFile(output_filename, file_print_level);
-    }
+      debug_jrnl->SetAllPrintLevels(debug_print_level);
+      debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
+#endif
 
-    // output a description of all the options
-    bool print_options_documentation;
-    options_->GetBoolValue("print_options_documentation",
-                           print_options_documentation, "");
-    if (print_options_documentation) {
-      reg_options->OutputOptionDocumentation(*jnlst_);
+      // Open an output file if required
+      std::string output_filename;
+      options_->GetValue("output_file", output_filename, "");
+      if (output_filename != "") {
+        EJournalLevel file_print_level;
+        option_set = options_->GetIntegerValue("file_print_level", ivalue, "");
+        if (option_set) {
+          file_print_level = (EJournalLevel)ivalue;
+        }
+        else {
+          file_print_level = print_level;
+        }
+        OpenOutputFile(output_filename, file_print_level);
+      }
+
+      // output a description of all the options
+      bool print_options_documentation;
+      options_->GetBoolValue("print_options_documentation",
+                             print_options_documentation, "");
+      if (print_options_documentation) {
+        reg_options->OutputOptionDocumentation(*jnlst_);
+      }
+
+    }
+    catch(OPTION_INVALID& exc) {
+      exc.ReportException(*jnlst_);
+      exit(-1);
+    }
+    catch(IpoptException& exc) {
+      exc.ReportException(*jnlst_);
+      exit(-1);
+    }
+    catch(std::bad_alloc& exc) {
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
+      exit(-1);
+    }
+    catch(...) {
+      IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
+      exc.ReportException(*jnlst_);
+      exit(-1);
     }
   }
 
@@ -359,6 +381,13 @@ namespace Ipopt
     file_jrnl->SetPrintLevel(J_DBG, J_NONE);
 
     return true;
+  }
+
+  void IpoptApplication::RegisterAllOptions(const SmartPtr<RegisteredOptions>& roptions)
+  {
+    RegisterOptions_Interfaces(roptions);
+    RegisterOptions_Algorithm(roptions);
+    RegisterOptions_LinearSolvers(roptions);
   }
 
 } // namespace Ipopt

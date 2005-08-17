@@ -670,11 +670,4 @@ namespace Ipopt
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
     }
   }
-
-  std::list<OptionsRegistrar*>& OptionsRegistrarsList()
-  {
-    static std::list<OptionsRegistrar*> options_infos;
-    return options_infos;
-  }
-
 } // namespace Ipopt

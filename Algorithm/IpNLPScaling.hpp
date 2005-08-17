@@ -215,8 +215,6 @@ namespace Ipopt
     SmartPtr<const Journalist> jnlst_;
   };
 
-  DeclareOptionsRegistrar(StandardScalingBase);
-
   /** This is a base class for many standard scaling
    *  techniques. The overloaded classes only need to
    *  provide the scaling parameters

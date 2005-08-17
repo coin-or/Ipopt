@@ -12,8 +12,6 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(PDPerturbationHandler);
-
   PDPerturbationHandler::PDPerturbationHandler()
       :
       delta_xs_first_inc_fact_(100.),

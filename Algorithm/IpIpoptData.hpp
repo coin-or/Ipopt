@@ -17,8 +17,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(IpoptData);
-
   /* Forward declaration */
   class IpoptNLP;
 

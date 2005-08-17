@@ -15,8 +15,6 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(RestoFilterConvergenceCheck);
-
   RestoFilterConvergenceCheck::RestoFilterConvergenceCheck()
       :
       orig_filter_line_search_(NULL)

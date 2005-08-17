@@ -15,6 +15,7 @@ noinst_LIBRARIES = libipoptalg.a
 libipoptalg_a_SOURCES = \
 	IpAdaptiveMuUpdate.cpp IpAdaptiveMuUpdate.hpp \
 	IpAlgBuilder.cpp IpAlgBuilder.hpp \
+	IpAlgorithmRegOp.cpp IpAlgorithmRegOp.hpp \
 	IpAlgStrategy.hpp \
 	IpAugRestoSystemSolver.cpp IpAugRestoSystemSolver.hpp \
 	IpAugSystemSolver.hpp \
@@ -68,6 +69,7 @@ CXXFLAGS += -I$(srcdir)/../Common \
 ASTYLE_FILES = \
 	IpAdaptiveMuUpdate.cppbak IpAdaptiveMuUpdate.hppbak \
 	IpAlgBuilder.cppbak IpAlgBuilder.hppbak \
+	IpAlgorithmRegOp.cppbak IpAlgorithmRegOp.hppbak \
 	IpAlgStrategy.hppbak \
 	IpAugRestoSystemSolver.cppbak IpAugRestoSystemSolver.hppbak \
 	IpAugSystemSolver.hppbak \

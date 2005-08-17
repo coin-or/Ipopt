@@ -22,8 +22,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(RestoIpoptNLP);
-
   /** This class maps the traditional NLP into
    *  something that is more useful by Ipopt.
    *  This class takes care of storing the

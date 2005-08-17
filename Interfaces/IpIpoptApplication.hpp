@@ -23,8 +23,6 @@ namespace Ipopt
   /* Return codes for the Optimize call for an application */
 #include "IpReturnCodes_inc.h"
 
-  DeclareOptionsRegistrar(IpoptApplication);
-
   /** This is the main application class for making calls to Ipopt. */
   class IpoptApplication : public ReferencedObject
   {
@@ -91,6 +89,9 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const IpoptApplication&);
     //@}
+
+    /** Method to register all the options */
+    void RegisterAllOptions(const SmartPtr<RegisteredOptions>& roptions);
 
     /**@name Variables that customize the application behavior */
     //@{

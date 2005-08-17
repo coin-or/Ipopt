@@ -25,8 +25,6 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(AdaptiveMuUpdate);
-
   AdaptiveMuUpdate::AdaptiveMuUpdate
   (const SmartPtr<LineSearch>& line_search,
    const SmartPtr<MuOracle>& free_mu_oracle,

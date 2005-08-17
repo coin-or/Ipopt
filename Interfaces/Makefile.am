@@ -24,6 +24,7 @@ noinst_LIBRARIES = libinterfaces.a
 
 libinterfaces_a_SOURCES = \
 	IpAlgTypes.hpp \
+	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
 	IpReturnCodes.h \
@@ -36,6 +37,7 @@ libinterfaces_a_SOURCES = \
 
 CXXFLAGS += -I$(srcdir)/../Common \
 	-I$(srcdir)/../LinAlg \
+	-I$(srcdir)/../Algorithm/LinearSolvers \
 	-I$(srcdir)/../LinAlg/TMatrices \
 	-I$(srcdir)/../Algorithm
 
@@ -45,6 +47,7 @@ CFLAGS += -I$(srcdir)/../Common
 
 ASTYLE_FILES = \
 	IpAlgTypes.hppbak \
+	IpInterfacesRegOp.cppbak IpInterfacesRegOp.hppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \

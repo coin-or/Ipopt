@@ -19,8 +19,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(TNLPAdapter);
-
   /** This class Adapts the TNLP interface so it looks like an NLP interface.
    *  This is an Adapter class (Design Patterns) that converts  a TNLP to an
    *  NLP. This allows users to write to the "more convenient" TNLP interface.

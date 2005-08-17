@@ -36,8 +36,6 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(FilterLineSearch);
-
   FilterLineSearch::FilterLineSearch(const SmartPtr<RestorationPhase>& resto_phase,
                                      const SmartPtr<PDSystemSolver>& pd_solver,
                                      const SmartPtr<ConvergenceCheck>& conv_check)

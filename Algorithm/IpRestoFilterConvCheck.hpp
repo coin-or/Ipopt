@@ -15,8 +15,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(RestoFilterConvergenceCheck);
-
   /** Convergence check for the restoration phase as called by the
    *  filter.  This inherits from the OptimalityErrorConvergenceCheck
    *  so that the method for the regular optimality error convergence

@@ -26,8 +26,6 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(RestoIpoptNLP);
-
   RestoIpoptNLP::RestoIpoptNLP(IpoptNLP& orig_ip_nlp,
                                IpoptData& orig_ip_data,
                                IpoptCalculatedQuantities& orig_ip_cq)

@@ -16,8 +16,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(QualityFunctionMuOracle);
-
   /** Implementation of the probing strategy for computing the
    *  barrier parameter.
    */

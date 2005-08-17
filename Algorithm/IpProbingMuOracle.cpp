@@ -23,8 +23,6 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(ProbingMuOracle);
-
   ProbingMuOracle::ProbingMuOracle(const SmartPtr<PDSystemSolver>& pd_solver)
       :
       MuOracle(),

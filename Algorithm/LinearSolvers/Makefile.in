@@ -61,7 +61,8 @@ CONFIG_CLEAN_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
 liblinsolvers_a_AR = $(AR) $(ARFLAGS)
 liblinsolvers_a_LIBADD =
-am__liblinsolvers_a_SOURCES_DIST = IpMa27TSolverInterface.cpp \
+am__liblinsolvers_a_SOURCES_DIST = IpLinearSolversRegOp.cpp \
+	IpLinearSolversRegOp.hpp IpMa27TSolverInterface.cpp \
 	IpMa27TSolverInterface.hpp IpMc19TSymScalingMethod.cpp \
 	IpMc19TSymScalingMethod.hpp \
 	IpSparseSymLinearSolverInterface.hpp IpSymLinearSolver.hpp \
@@ -72,7 +73,8 @@ am__liblinsolvers_a_SOURCES_DIST = IpMa27TSolverInterface.cpp \
 	IpTAUCSSolverInterface.hpp
 @HAVE_PARDISO_TRUE@am__objects_1 = IpPardisoSolverInterface.$(OBJEXT)
 @HAVE_TAUCS_TRUE@am__objects_2 = IpTAUCSSolverInterface.$(OBJEXT)
-am_liblinsolvers_a_OBJECTS = IpMa27TSolverInterface.$(OBJEXT) \
+am_liblinsolvers_a_OBJECTS = IpLinearSolversRegOp.$(OBJEXT) \
+	IpMa27TSolverInterface.$(OBJEXT) \
 	IpMc19TSymScalingMethod.$(OBJEXT) \
 	IpTripletToCSRConverter.$(OBJEXT) IpTSymLinearSolver.$(OBJEXT) \
 	$(am__objects_1) $(am__objects_2)
@@ -223,7 +225,8 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 noinst_LIBRARIES = liblinsolvers.a
-liblinsolvers_a_SOURCES = IpMa27TSolverInterface.cpp \
+liblinsolvers_a_SOURCES = IpLinearSolversRegOp.cpp \
+	IpLinearSolversRegOp.hpp IpMa27TSolverInterface.cpp \
 	IpMa27TSolverInterface.hpp IpMc19TSymScalingMethod.cpp \
 	IpMc19TSymScalingMethod.hpp \
 	IpSparseSymLinearSolverInterface.hpp IpSymLinearSolver.hpp \
@@ -233,6 +236,7 @@ liblinsolvers_a_SOURCES = IpMa27TSolverInterface.cpp \
 
 # Astyle stuff
 ASTYLE_FILES = \
+	IpLinearSolversRegOp.cppbak IpLinearSolversRegOp.hppbak \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
 	IpSparseSymLinearSolverInterface.hppbak \
@@ -292,6 +296,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLinearSolversRegOp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa27TSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19TSymScalingMethod.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPardisoSolverInterface.Po@am__quote@

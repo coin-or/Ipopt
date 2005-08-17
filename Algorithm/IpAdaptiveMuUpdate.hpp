@@ -18,8 +18,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(AdaptiveMuUpdate);
-
   /** Non-monotone mu update.
    */
   class AdaptiveMuUpdate : public MuUpdate

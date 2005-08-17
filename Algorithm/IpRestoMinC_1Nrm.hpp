@@ -16,8 +16,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(MinC_1NrmRestorationPhase);
-
   /** Restoration Phase that minimizes the 1-norm of the constraint
    *  violation - using the interior point method (Ipopt).
    */

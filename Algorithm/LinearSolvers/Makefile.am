@@ -11,6 +11,7 @@ AUTOMAKE_OPTIONS = foreign
 noinst_LIBRARIES = liblinsolvers.a
 
 liblinsolvers_a_SOURCES = \
+	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
 	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
 	IpSparseSymLinearSolverInterface.hpp \
@@ -39,6 +40,7 @@ CXXFLAGS += -I$(srcdir)/../../Common \
 # Astyle stuff
 
 ASTYLE_FILES = \
+	IpLinearSolversRegOp.cppbak IpLinearSolversRegOp.hppbak \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
 	IpSparseSymLinearSolverInterface.hppbak \

@@ -12,8 +12,6 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(OptimalityErrorConvergenceCheck);
-
   OptimalityErrorConvergenceCheck::OptimalityErrorConvergenceCheck()
   {}
 

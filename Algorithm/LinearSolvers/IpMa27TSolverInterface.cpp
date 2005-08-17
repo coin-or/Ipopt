@@ -42,8 +42,6 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(Ma27TSolverInterface);
-
   Ma27TSolverInterface::Ma27TSolverInterface()
       :
       dim_(0),

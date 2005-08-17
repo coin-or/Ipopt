@@ -18,8 +18,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(FilterLineSearch);
-
   /** Filter line search.  This class implements the filter line
    *  search procedure. 
    */

@@ -13,8 +13,6 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(TNLPAdapter);
-
   TNLPAdapter::TNLPAdapter(const SmartPtr<TNLP> tnlp)
       :
       tnlp_(tnlp),

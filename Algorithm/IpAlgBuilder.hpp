@@ -14,8 +14,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(AlgorithmBuilder);
-
   /** Builder to create a complete IpoptAlg object.  This object
    *  contains all subelements (such as line search objects etc).  How
    *  the resulting IpoptAlg object is build can be influenced by the

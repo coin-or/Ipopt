@@ -24,8 +24,6 @@ namespace Ipopt
 
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(MonotoneMuUpdate);
-
   MonotoneMuUpdate::MonotoneMuUpdate(const SmartPtr<LineSearch>& linesearch)
       :
       MuUpdate(),
@@ -43,7 +41,7 @@ namespace Ipopt
                    dbg_verbosity);
   }
 
-  void MonotoneMuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  void MonotoneMuUpdate::RegisterOptions(const SmartPtr<RegisteredOptions>& roptions)
   {
     roptions->AddLowerBoundedNumberOption(
       "mu_init", "Initial value for the barrier parameter.",

@@ -26,8 +26,6 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(WarmStartIterateInitializer);
-
   WarmStartIterateInitializer::WarmStartIterateInitializer()
       :
       IterateInitializer()

@@ -23,8 +23,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(IpoptAlgorithm);
-
   /** The main ipopt algorithm class.
    *  Main Ipopt algorithm class, contains the main optimize method,
    *  handles the execution of the optimization.

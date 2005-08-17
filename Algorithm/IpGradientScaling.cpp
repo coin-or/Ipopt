@@ -22,9 +22,7 @@
 namespace Ipopt
 {
 
-  DefineOptionsRegistrar(GradientScaling);
-
-  void GradientScaling::RegisterOptions(SmartPtr<RegisteredOptions>& roptions)
+  void GradientScaling::RegisterOptions(const SmartPtr<RegisteredOptions>& roptions)
   {
     roptions->AddLowerBoundedNumberOption(
       "nlp_scaling_max_gradient", "maximum gradient after scaling",

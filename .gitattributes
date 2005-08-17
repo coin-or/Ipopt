@@ -1,8 +1,14 @@
 * text=auto !eol
+Algorithm/IpAlgorithmRegOp.cpp -text
+Algorithm/IpAlgorithmRegOp.hpp -text
+Algorithm/LinearSolvers/IpLinearSolversRegOp.cpp -text
+Algorithm/LinearSolvers/IpLinearSolversRegOp.hpp -text
 Docs/documentation.ps -text
 Examples/hs071_cpp/Makefile.in -text
 Examples/hs071_cpp/hs071_main.cpp -text
 Examples/hs071_cpp/hs071_nlp.cpp -text
 Examples/hs071_cpp/hs071_nlp.hpp -text
+Interfaces/IpInterfacesRegOp.cpp -text
+Interfaces/IpInterfacesRegOp.hpp -text
 Interfaces/IpSolveStatistics.cpp -text
 Interfaces/IpSolveStatistics.hpp -text

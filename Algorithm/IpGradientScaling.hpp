@@ -14,9 +14,6 @@
 
 namespace Ipopt
 {
-
-  DeclareOptionsRegistrar(GradientScaling);
-
   /** This class does problem scaling by setting the
    *  scaling parameters based on the maximum of the
    *  gradient at the user provided initial point.
@@ -40,7 +37,7 @@ namespace Ipopt
     /** Methods for IpoptType */
     //@{
     /** Register the options for this class */
-    static void RegisterOptions(SmartPtr<RegisteredOptions>& roptions);
+    static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
     //@}
 
   protected:

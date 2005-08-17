@@ -15,8 +15,6 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(MinC_1NrmRestorationPhase);
-
   MinC_1NrmRestorationPhase::MinC_1NrmRestorationPhase
   (IpoptAlgorithm& resto_alg,
    const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator)

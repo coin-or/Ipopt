@@ -14,8 +14,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(OptimalityErrorConvergenceCheck);
-
   /** Brief Class Description.
    *  Detailed Class Description.
    */

@@ -57,10 +57,10 @@ CONFIG_CLEAN_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
 libinterfaces_a_AR = $(AR) $(ARFLAGS)
 libinterfaces_a_LIBADD =
-am_libinterfaces_a_OBJECTS = IpIpoptApplication.$(OBJEXT) \
-	IpSolveStatistics.$(OBJEXT) IpStdCInterface.$(OBJEXT) \
-	IpStdFInterface.$(OBJEXT) IpStdInterfaceTNLP.$(OBJEXT) \
-	IpTNLPAdapter.$(OBJEXT)
+am_libinterfaces_a_OBJECTS = IpInterfacesRegOp.$(OBJEXT) \
+	IpIpoptApplication.$(OBJEXT) IpSolveStatistics.$(OBJEXT) \
+	IpStdCInterface.$(OBJEXT) IpStdFInterface.$(OBJEXT) \
+	IpStdInterfaceTNLP.$(OBJEXT) IpTNLPAdapter.$(OBJEXT)
 libinterfaces_a_OBJECTS = $(am_libinterfaces_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -129,6 +129,7 @@ CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../Common -I$(srcdir)/../LinAlg \
+	-I$(srcdir)/../Algorithm/LinearSolvers \
 	-I$(srcdir)/../LinAlg/TMatrices -I$(srcdir)/../Algorithm
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
@@ -230,6 +231,7 @@ includeipopt_HEADERS = \
 noinst_LIBRARIES = libinterfaces.a
 libinterfaces_a_SOURCES = \
 	IpAlgTypes.hpp \
+	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
 	IpReturnCodes.h \
@@ -244,6 +246,7 @@ libinterfaces_a_SOURCES = \
 # Astyle stuff
 ASTYLE_FILES = \
 	IpAlgTypes.hppbak \
+	IpInterfacesRegOp.cppbak IpInterfacesRegOp.hppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
@@ -301,6 +304,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInterfacesRegOp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptApplication.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSolveStatistics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdCInterface.Po@am__quote@

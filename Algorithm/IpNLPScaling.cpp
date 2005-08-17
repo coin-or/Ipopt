@@ -177,8 +177,6 @@ namespace Ipopt
     }
   }
 
-  DefineOptionsRegistrar(StandardScalingBase);
-
   void
   StandardScalingBase::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {

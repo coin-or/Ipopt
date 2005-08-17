@@ -14,8 +14,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(PDPerturbationHandler);
-
   /** Class for handling the perturbation factors delta_x, delta_s,
    *  delta_c, and delta_d in the primal dual system.  This class is
    *  used by the PDFullSpaceSolver to handle the cases where the

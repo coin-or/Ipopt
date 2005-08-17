@@ -22,8 +22,6 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-  DefineOptionsRegistrar(OrigIpoptNLP);
-
   OrigIpoptNLP::OrigIpoptNLP(const SmartPtr<const Journalist>& jnlst,
                              const SmartPtr<NLP>& nlp,
                              const SmartPtr<NLPScalingObject>& nlp_scaling)

@@ -11,11 +11,10 @@
 
 #include "IpMuUpdate.hpp"
 #include "IpLineSearch.hpp"
+#include "IpRegOptions.hpp"
 
 namespace Ipopt
 {
-
-  DeclareOptionsRegistrar(MonotoneMuUpdate);
 
   /** Monotone Mu Update. This class implements the standard monotone mu update
    *  approach.
@@ -45,7 +44,7 @@ namespace Ipopt
 
     /** Methods for IpoptType */
     //@{
-    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
     //@}
 
   private:

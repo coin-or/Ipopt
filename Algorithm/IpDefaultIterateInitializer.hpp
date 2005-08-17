@@ -15,8 +15,6 @@
 namespace Ipopt
 {
 
-  DeclareOptionsRegistrar(DefaultIterateInitializer);
-
   /** Class implementing the default initialization procedure (based
    *  on user options) for the iterates.  It is used at the very
    *  beginning of the optimization for determine the starting point

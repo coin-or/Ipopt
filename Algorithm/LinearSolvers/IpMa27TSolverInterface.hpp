@@ -13,9 +13,6 @@
 
 namespace Ipopt
 {
-
-  DeclareOptionsRegistrar(Ma27TSolverInterface);
-
   /** Interface to the symmetric linear solver MA27, derived from
    *  SparseSymLinearSolverInterface.
    */

@@ -22,8 +22,6 @@ namespace Ipopt
     NORM_MAX
   };
 
-  DeclareOptionsRegistrar(IpoptCalculatedQuantities);
-
   /** Class for all IPOPT specific calculated quantities.
    *  
    */
