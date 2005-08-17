@@ -29,21 +29,6 @@ namespace Ipopt
 {
   DBG_SET_VERBOSITY(0);
 
-#define nullintopt -2682238
-#define nullrealopt -1.278463e202
-
-  static real opTOL = nullrealopt;
-  // Stuff for AMPL options
-  static keyword keywds[] =
-  {
-    KW("tol"         ,D_val,&opTOL,
-       "Overall error tolerance (termination criterion)")
-  } ;
-
-  static Option_Info Oinfo = {PACKAGE_NAME,PACKAGE_STRING,
-			      "ipopt_options",keywds,nkeywds};
-
-
   AmplTNLP::AmplTNLP(const SmartPtr<const Journalist>& jnlst, char**& argv,
                      SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
                      bool allow_discrete /* = false */)
@@ -653,13 +638,6 @@ namespace Ipopt
         g_scaling[i] = 1.0;
       }
     }
-  }
-
-
-
-  void AmplTNLP::GetOptions()
-  {
-    
   }
 
   AmplSuffixHandler::AmplSuffixHandler()
