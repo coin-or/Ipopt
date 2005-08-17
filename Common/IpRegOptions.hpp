@@ -648,7 +648,7 @@ class __class_name__ ## OptionsRegistrar : public OptionsRegistrar \
    __class_name__ ## OptionsRegistrar* KeepCompilerFromOptimizing(); \
   protected: \
    virtual void RegisterOptionsImpl(SmartPtr<RegisteredOptions> reg_options); \
- };
+ }
 
 #define DefineOptionsRegistrar(__class_name__) \
   void __class_name__ ## OptionsRegistrar::RegisterOptionsImpl(SmartPtr<RegisteredOptions> reg_options) \
