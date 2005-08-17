@@ -1,4 +1,4 @@
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2005 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -42,7 +42,7 @@ libcommon_a_SOURCES = \
 
 ASTYLE_FILES = \
 	IpCachedResults.hppbak \
-	IpDebug.cpp IpDebug.hppbak \
+	IpDebug.cppbak IpDebug.hppbak \
 	IpException.hppbak \
 	IpJournalist.cppbak IpJournalist.hppbak \
 	IpObserver.cppbak IpObserver.hppbak \
