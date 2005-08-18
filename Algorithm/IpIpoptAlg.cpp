@@ -46,6 +46,7 @@ namespace Ipopt
 
   void IpoptAlgorithm::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
+    roptions->SetRegisteringCategory("Line Search");
     roptions->AddLowerBoundedNumberOption(
       "kappa_sigma",
       "Factor limiting deviation of dual variables from primal estimates.",

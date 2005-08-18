@@ -1,10 +1,10 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2005, International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpMa27TSolverInterface.hpp 430 2005-08-10 00:19:54Z andreasw $
+// $Id: IpAlgorithmRegOp.cpp 430 2005-08-10 00:19:54Z andreasw $
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2005-08-16
+// Authors:  Carl Laird     IBM    2005-08-16
 
 #include "IpAlgorithmRegOp.hpp"
 #include "IpRegOptions.hpp"
@@ -36,26 +36,47 @@ namespace Ipopt
 
   void RegisterOptions_Algorithm(const SmartPtr<RegisteredOptions>& roptions)
   {
+    roptions->SetRegisteringCategory("Mu Update");
     AdaptiveMuUpdate::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Main Algorithm");
     AlgorithmBuilder::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Initialization");
     DefaultIterateInitializer::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Line Search");
     FilterLineSearch::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Scaling");
     GradientScaling::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Uncategorized");
     IpoptAlgorithm::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Uncategorized");
     IpoptCalculatedQuantities::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Uncategorized");
     IpoptData::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Mu Update");
     MonotoneMuUpdate::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Scaling");
     StandardScalingBase::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Convergence");
     OptimalityErrorConvergenceCheck::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("NLP");
     OrigIpoptNLP::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Step Calculation");
     PDFullSpaceSolver::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Step Calculation");
     PDPerturbationHandler::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Mu Update");
     ProbingMuOracle::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Mu Update");
     QualityFunctionMuOracle::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Convergence");
     RestoFilterConvergenceCheck::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Restoration");
     RestoIpoptNLP::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Uncategorized");
     MinC_1NrmRestorationPhase::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Restoration");
     WarmStartIterateInitializer::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Initialization");
   }
 
 } // namespace Ipopt

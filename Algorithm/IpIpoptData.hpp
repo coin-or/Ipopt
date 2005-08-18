@@ -364,7 +364,7 @@ namespace Ipopt
 
     /** Methods for IpoptType */
     //@{
-    static void RegisterOptions(SmartPtr<RegisteredOptions> reg_options);
+    static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
     //@}
 
   private:

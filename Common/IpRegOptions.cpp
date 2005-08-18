@@ -34,9 +34,9 @@ namespace Ipopt
     }
 
     jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                 "\n### %s (%s) ###\nClass: %s\nDescription: %s\n",
+                 "\n### %s (%s) ###\nCategory: %s\nDescription: %s\n",
                  name_.c_str(), type_str.c_str(),
-                 registering_class_.c_str(), short_description_.c_str());
+                 registering_category_.c_str(), short_description_.c_str());
 
     if (type_ ==OT_Number) {
       if (has_lower_) {
@@ -269,7 +269,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(),
@@ -287,7 +287,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetLowerNumber(lower, strict);
@@ -305,7 +305,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetUpperNumber(upper, strict);
@@ -324,7 +324,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetLowerNumber(lower, lower_strict);
@@ -342,7 +342,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
@@ -358,7 +358,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetLowerInteger(lower);
@@ -375,7 +375,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetUpperInteger(upper);
@@ -393,7 +393,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetLowerInteger(lower);
@@ -413,7 +413,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     DBG_ASSERT(settings.size() == descriptions.size());
@@ -435,7 +435,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -456,7 +456,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -480,7 +480,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -507,7 +507,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -537,7 +537,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -570,7 +570,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -606,7 +606,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -640,25 +640,27 @@ namespace Ipopt
     return option;
   }
 
-  void RegisteredOptions::OutputOptionDocumentation(const Journalist& jnlst)
+  void RegisteredOptions::OutputOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories)
   {
     // create a set to print sorted output
-    std::set
-      <std::string> classes;
-    std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
-    for (option = registered_options_.begin(); option != registered_options_.end(); option++) {
-      classes.insert(option->second->RegisteringClass());
-    }
+//     std::set
+//       <std::string> classes;
+//     std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
+//     for (option = registered_options_.begin(); option != registered_options_.end(); option++) {
+//       classes.insert(option->second->RegisteringCategory());
+//     }
 
-    std::set
+
+    std::list
       <std::string>::iterator i;
-    for (i = classes.begin(); i != classes.end(); i++) {
+    for (i = categories.begin(); i != categories.end(); i++) {
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                    "\n### %s ###\n\n", (*i).c_str());
       std::map<Index, SmartPtr<RegisteredOption> > class_options;
+      std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
       for (option = registered_options_.begin();
            option != registered_options_.end(); option++) {
-        if (option->second->RegisteringClass() == (*i)) {
+        if (option->second->RegisteringCategory() == (*i)) {
 
           class_options[option->second->Counter()] = option->second;
         }

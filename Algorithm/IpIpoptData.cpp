@@ -38,9 +38,10 @@ namespace Ipopt
   IpoptData::~IpoptData()
   {}
 
-  void IpoptData::RegisterOptions(SmartPtr<RegisteredOptions> reg_options)
+  void IpoptData::RegisterOptions(const SmartPtr<RegisteredOptions>& roptions)
   {
-    reg_options->AddLowerBoundedNumberOption(
+    roptions->SetRegisteringCategory("Convergence");
+    roptions->AddLowerBoundedNumberOption(
       "tol",
       "Convergence tolerance (relative).",
       0.0, true,  1e-8,

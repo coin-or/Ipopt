@@ -160,6 +160,7 @@ namespace Ipopt
       "determines how large the perturbation should be.  Its default value is "
       "mach_eps^{3/4}.  (See also end of Section 3.5 in implementation paper "
       "- but actual implementation might be somewhat different.)");
+    roptions->SetRegisteringCategory("Convergence");
     roptions->AddStringOption3(
       "constraint_violation_norm_type",
       "Norm to be used for the constraint violation",

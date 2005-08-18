@@ -31,6 +31,8 @@ University, Pittsburgh, PA, 15213, Email: kawajiri@cmu.edu}}
 %\date{\today}
 \maketitle
 
+\tableofcontents
+
 \section{Overview}
 Ipopt (\underline{I}nterior \underline{P}oint \underline{Opt}imizer) is an open
 source software package for large-scale nonlinear optimization. It can
@@ -499,7 +501,7 @@ SmartPtr class ({\tt IpSmartPtr.hpp}) which implements a reference counting
 pointer that takes care of memory management (object deletion) for
 you.
 
-\subsubsection{The C++ Interface: Coding the Problem Representation}
+\subsubsection{Coding the Problem Representation}\label{sec.cpp_problem}
 We provide the information required in Figure \ref{fig.required_info}
 by coding the {\tt HS071\_NLP} class, a specific implementation of the
 {\tt TNLP} base class. In the executable, we will create an instance
@@ -1093,7 +1095,7 @@ void HS071_NLP::finalize_solution(SolverReturn status,
 This is all that is required for our {\tt HS071\_NLP} class and 
 the coding of the problem representation.
  
-\subsubsection{The C++ Interface: Coding the Executable (main)}
+\subsubsection{Coding the Executable (main)}
 Now that we have a problem representation, the {\tt HS071\_NLP} class,
 we need to code the main function that will call Ipopt and ask Ipopt
 to find a solution.
@@ -1145,7 +1147,7 @@ IpoptApplication. The call to {\tt app->OptimizeTNLP(...)} will run
 Ipopt and try to solve the problem. By default, Ipopt will write to
 its progress to the console, and return the {\tt SolverReturn} status.
 
-\subsubsection{The C++ Interface: Compiling and Testing the Example}
+\subsubsection{Compiling and Testing the Example}
 Our next task is to compile and test the code. If you are familiar
 with the compiler and linker used on your system, you can build the
 code, including the ipopt library (and other necessary libraries).  If
@@ -1239,6 +1241,153 @@ Section \ref{sec.jnlst} to learn about adjusting the output produced
 from Ipopt through the use of the Journalist, and Section
 \ref{sec.options} for information about the use of options to
 customize the behavior of Ipopt.
+
+\subsection{The C Interface}
+Have a look at {\tt IpStdCInterface.h} to see the declarations for the
+C interface.  For the C++ interface, all problem information is
+provided through the NLP class. In the C interface, we instead create
+an IpoptProblem (C structure) and pass that structure to the
+IpoptSolve call.
+
+The IpoptProblem structure contains the problem dimensions, the variable
+and constraint bounds, and the function pointers for callbacks that 
+will be used to evaluate the NLP.
+We then make the call to IpoptSolve, giving Ipopt the IpoptProblem structure, 
+the starting point, and arrays to store the solution values, if desired.
+
+A completed version of this example can be found in {\tt
+Examples/hs071\_c}.  We first create the necessary callback functions
+for evaluating the NLP.  We require callbacks to evaluate the
+objective value, constraints, gradient of the objective, Jacobian of
+the constraints, and the Hessian of the Lagrangian.  These callbacks
+are implemented using function pointers (see {\tt IpStdCInterface.h}).
+Have a look at the documentation for {\tt eval\_f}, {\tt eval\_g}, {\tt
+eval\_grad\_f}, {\tt eval\_jac\_g}, and {\tt eval\_h} in Section
+\ref{sec.cpp_problem}. The C implementations will have different
+prototypes, but will be implemented almost identically to the C++
+code.
+
+Create a new directory {\tt MyCExample} and create a new file, {\tt
+hs071\_c.c}.  Here, include the interface header file {\tt
+IpStdCInterface.h}, along with {\tt malloc.h} and {\tt assert.h}. Add
+the prototypes and implementations for the five callback functions.
+See the completed example in {\tt Examples/hs071\_c/hs071\_c.c}.
+
+We now need to implement the {\tt main} function, create the {\tt
+IpoptProblem}, and call {\tt IpoptSolve}. The {\tt CreateIpoptProblem}
+function requires the problem dimensions, the variable and constraint
+bounds, and the function pointers to the callback routines. The {\tt
+IpoptSolve} function requires the {\tt IpoptProblem}, the starting
+point, and allocated arrays for the solution.  The {\tt main} function
+from the example is shown below.
+\begin{verbatim}
+int main()
+{
+  Index n=-1;                          /* number of variables */
+  Index m=-1;                          /* number of constraints */
+  Number* x_L = NULL;                  /* lower bounds on x */
+  Number* x_U = NULL;                  /* upper bounds on x */
+  Number* g_L = NULL;                  /* lower bounds on g */
+  Number* g_U = NULL;                  /* upper bounds on g */
+  IpoptProblem nlp = NULL;             /* IpoptProblem */
+  enum ApplicationReturnStatus status; /* Solve return code */
+  Number* x = NULL;                    /* starting point and solution vector */
+  Number obj;                          /* objective value */
+  Index i;                             /* generic counter */
+  
+  n=4;
+  x_L = (Number*)malloc(sizeof(Number)*n);
+  x_U = (Number*)malloc(sizeof(Number)*n);
+  for (i=0; i<n; i++) {
+    x_L[i] = 1.0;
+    x_U[i] = 5.0;
+  }
+
+  m=2;
+  g_L = (Number*)malloc(sizeof(Number)*m);
+  g_U = (Number*)malloc(sizeof(Number)*m);
+  g_L[0] = 25; g_U[0] = 2e19;
+  g_L[1] = 40; g_U[1] = 40;
+
+  nlp = CreateIpoptProblem(n, x_L, x_U, m, g_L, g_U, 8, 10, 0, 
+			   &eval_f, &eval_g, &eval_grad_f, 
+			   &eval_jac_g, &eval_h);
+  
+  
+  x = (Number*)malloc(sizeof(Number)*n);
+  x[0] = 1.0;
+  x[1] = 5.0;
+  x[2] = 5.0;
+  x[3] = 1.0;
+
+  AddIpoptNumOption(nlp, "tol", 1e-9);
+  AddIpoptStrOption(nlp, "mu_strategy", "adaptive");
+
+  status = IpoptSolve(nlp, x, NULL, &obj, NULL, NULL, NULL, NULL);
+ 
+  FreeIpoptProblem(nlp);
+  free(x_L);
+  free(x_U);
+  free(g_L);
+  free(g_U);
+  free(x);
+
+  return 0;
+}
+\end{verbatim}
+Here, we declare all the necessary variables and set the dimensions of
+the problem.  The problem has 4 variables, so we set {\tt n} and
+allocate space for the variable bounds (don't forget to call {\tt
+free} for each of your {\tt malloc} calls). We then set the values for
+the variable bounds.  
+
+The problem has 2 constraints, so we set {\tt m}
+and allocate space for the constraint bounds. The first constraint has
+a lower bound of $25$ and no upper bound.  Here we set the upper bound
+to 2e19. Ipopt interprets any number greater than nlp_upper_bound_inf
+as infinity. The default value of nlp_upper_bound_inf and
+nlp_lower_bound_inf is 1e19 and can be changed through ipopt options.
+The second constraint is an equality, so we set both the upper and the 
+lower bound to $40$.
+
+We next create an instance of the {\tt IpoptProblem} by calling {\tt
+CreateIpoptProblem}, giving it the problem dimensions and the variable
+and constraint bounds. The arguments {\tt nele\_jac} and {\tt
+nele\_hess} are the number of elements in Jacobian and the Hessian
+respectively. See appendix \ref{app.triplet} for a description of the
+sparse matrix format. The {\tt index_style} argument specifies whether
+we want to use C style indexing for the row and column indices of the
+matrices or Fortran style indexing. Here, we set it to {\tt 0} to
+indicate C style.  We also include the references to each of our
+callback functions. Ipopt can use these function pointers to ask for
+evaluation of the NLP when required.
+
+The next two lines illustrate how you can change the value of options
+through the interface.  Ipopt Options can also be changed by creating
+a PARAMS.DAT file. We next allocate space for the initial point and
+set the values as given in the problem definition.
+
+The call to {\tt IpoptSolve} can provide us with information about the solution,
+but most of this is optional. Here, we want values for the bound multipliers at
+the solution and we allocate space for these.
+
+We can now make the call to {\tt IpoptSolve} and find the solution of
+the problem. We pass in the {\tt IpoptProblem}, the starting point
+{\tt x} (Ipopt will use this variable to return the solution as
+well). The next 5 arguments are pointers so Ipopt can fill in values
+at the solution.  If these pointers are set to {\tt NULL}, Ipopt will
+ignore that entry.  For example, here, we do not want the constraint
+residuals at the solution or the equality multipliers, so we set those
+entries to {\tt NULL}. We do want the value of the objective, and the
+multipliers for the variable bounds. The last argument is a {\tt
+void*} for user data. Any pointer you give here will also be passed to
+you in the callback functions.
+
+The return code is an ApplicationReturnStatus enumeration, see {\tt
+Interfaces/ReturnCodes_inc.h}.
+
+After the problem has solved, we check the status and print the solution if 
+successful. Finally, we free the memory and return from {\tt main}.
 
 \section*{Acknowledgement}
 The initial version of this document was created by Yoshiaki Kawajir

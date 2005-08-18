@@ -113,7 +113,20 @@ namespace Ipopt
       options_->GetBoolValue("print_options_documentation",
                              print_options_documentation, "");
       if (print_options_documentation) {
-        reg_options->OutputOptionDocumentation(*jnlst_);
+	std::list<std::string> categories;
+	categories.push_back("Output");
+	categories.push_back("Main Algorithm");
+	categories.push_back("Convergence");
+	categories.push_back("Scaling");
+	categories.push_back("Mu Update");
+	categories.push_back("Line Search");
+	categories.push_back("Initialization");
+	categories.push_back("Linear Solver");
+	categories.push_back("Step Calculation");
+	categories.push_back("Restoration");
+	categories.push_back("NLP");
+	categories.push_back("Uncategorized");
+        reg_options->OutputOptionDocumentation(*jnlst_, categories);
       }
 
     }
@@ -144,6 +157,7 @@ namespace Ipopt
 
   void IpoptApplication::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
+    roptions->SetRegisteringCategory("Output");
     roptions->AddBoundedIntegerOption(
       "print_level",
       "Output verbosity level.",
@@ -189,6 +203,7 @@ namespace Ipopt
       "algorithmic options with some documentation before solving the "
       "optimization problem.");
 
+    roptions->SetRegisteringCategory("Scaling");
     roptions->AddStringOption3(
       "nlp_scaling_method",
       "Select the technique used for scaling the NLP", "gradient_based",

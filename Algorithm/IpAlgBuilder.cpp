@@ -93,6 +93,7 @@ namespace Ipopt
       "computed when switching to the \"monotone mode\" in the adaptive "
       "strategy. (Only considered if \"adaptive\" is selected for option "
       "\"mu_strategy\".");
+    roptions->SetRegisteringCategory("Initialization");
     roptions->AddStringOption2(
       "warm_start_init_point",
       "Warm-start for initial point", "no",
