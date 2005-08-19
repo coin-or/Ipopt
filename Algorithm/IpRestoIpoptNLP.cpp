@@ -22,6 +22,16 @@
 # endif
 #endif
 
+#ifdef HAVE_CASSERT
+# include <cassert>
+#else
+# ifdef HAVE_ASSERT_H
+#  include <assert.h>
+# else
+#  error "don't have header file for assert"
+# endif
+#endif
+
 namespace Ipopt
 {
 #ifdef IP_DEBUG
@@ -430,6 +440,12 @@ namespace Ipopt
     return true;
   }
 
+  Number RestoIpoptNLP::f(const Vector& x)
+  {
+    assert(false && "ERROR: In RestoIpoptNLP f() is called without mu!");
+    return 0.;
+  }
+
   Number RestoIpoptNLP::f(const Vector& x, Number mu)
   {
     DBG_START_METH("RestoIpoptNLP::f",
@@ -502,6 +518,11 @@ namespace Ipopt
     return GetRawPtr(retPtr);
   }
 
+  SmartPtr<const Vector> RestoIpoptNLP::grad_f(const Vector& x)
+  {
+    assert(false && "ERROR: In RestoIpoptNLP grad_f() is called without mu!");
+    return NULL;
+  }
 
   SmartPtr<const Vector> RestoIpoptNLP::d(const Vector& x)
   {
@@ -605,6 +626,16 @@ namespace Ipopt
 #endif
 
     return GetRawPtr(retPtr);
+  }
+
+  SmartPtr<const SymMatrix> RestoIpoptNLP::h(const Vector& x,
+      Number obj_factor,
+      const Vector& yc,
+      const Vector& yd
+                                            )
+  {
+    assert(false && "ERROR: In RestoIpoptNLP h() is called without mu!");
+    return NULL;
   }
 
   SmartPtr<const SymMatrix> RestoIpoptNLP::h(const Vector& x,

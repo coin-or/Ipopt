@@ -83,21 +83,13 @@ namespace Ipopt
     }
 
     /** Objective value (incorrect version for restoration phase) */
-    virtual Number f(const Vector& x)
-    {
-      DBG_ASSERT(false && "ERROR: In RestoIpoptNLP f() is called without mu!");
-      return 0.;
-    }
+    virtual Number f(const Vector& x);
 
     /** Objective value */
     virtual Number f(const Vector& x, Number mu);
 
     /** Gradient of the objective (incorrect version for restoration phase) */
-    virtual SmartPtr<const Vector> grad_f(const Vector& x)
-    {
-      DBG_ASSERT(false && "ERROR: In RestoIpoptNLP grad_f() is called without mu!");
-      return NULL;
-    }
+    virtual SmartPtr<const Vector> grad_f(const Vector& x);
 
     /** Gradient of the objective */
     virtual SmartPtr<const Vector> grad_f(const Vector& x, Number mu);
@@ -121,11 +113,7 @@ namespace Ipopt
                                         Number obj_factor,
                                         const Vector& yc,
                                         const Vector& yd
-                                       )
-    {
-      DBG_ASSERT(false && "ERROR: In RestoIpoptNLP h() is called without mu!");
-      return NULL;
-    }
+                                       );
 
     /** Hessian of the Lagrangian */
     virtual SmartPtr<const SymMatrix> h(const Vector& x,

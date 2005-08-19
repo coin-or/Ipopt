@@ -18,6 +18,16 @@
 # endif
 #endif
 
+#ifdef HAVE_CASSERT
+# include <cassert>
+#else
+# ifdef HAVE_ASSERT_H
+#  include <assert.h>
+# else
+#  error "don't have header file for assert"
+# endif
+#endif
+
 namespace Ipopt
 {
 #ifdef IP_DEBUG
@@ -267,6 +277,12 @@ namespace Ipopt
     return ret;
   }
 
+  Number OrigIpoptNLP::f(const Vector& x, Number mu)
+  {
+    assert(false && "ERROR: This method is only a placeholder for f(mu) and should not be called");
+    return 0.;
+  }
+
   SmartPtr<const Vector> OrigIpoptNLP::grad_f(const Vector& x)
   {
     SmartPtr<Vector> unscaled_grad_f;
@@ -284,6 +300,12 @@ namespace Ipopt
     }
 
     return retValue;
+  }
+
+  SmartPtr<const Vector> OrigIpoptNLP::grad_f(const Vector& x, Number mu)
+  {
+    assert(false && "ERROR: This method is only a placeholder for grad_f(mu) and should not be called");
+    return NULL;
   }
 
   /** Equality constraint residual */
@@ -443,6 +465,18 @@ namespace Ipopt
 
     return retValue;
   }
+
+  SmartPtr<const SymMatrix> OrigIpoptNLP::h(const Vector& x,
+      Number obj_factor,
+      const Vector& yc,
+      const Vector& yd,
+      Number mu)
+  {
+    assert(false &&
+           "ERROR: This method is only a for h(mu) and should not be called");
+    return NULL;
+  }
+
 
   void OrigIpoptNLP::GetSpaces(SmartPtr<const VectorSpace>& x_space,
                                SmartPtr<const VectorSpace>& c_space,
