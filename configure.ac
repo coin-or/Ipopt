@@ -1236,7 +1236,13 @@ AC_SUBST(AMPL_CPPFLAGS)
 AMPL_CPPFLAGS="-I\$(top_builddir)/Extern/ASL -I\$(top_srcdir)/Extern/ASL/solvers"
 
 # Add the compiler warning flags for GNU compilers
-# (we can't use them during tests
+# (we can't use them during tests)
+case $build in
+# Cygwin seems to be giving too many error messages
+  *-cygwin*) warn_cflags=""
+             warn_cxxflags=""
+             ;;
+esac
 CFLAGS="$CFLAGS $warn_cflags"
 CXXFLAGS="$CXXFLAGS $warn_cxxflags"
 
