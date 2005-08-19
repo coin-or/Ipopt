@@ -55,4 +55,3 @@ Fortran program, see
 COIN/Ipopt-devel/Examples/Fortran_example
 
 It can be compiled with `make' .
-
