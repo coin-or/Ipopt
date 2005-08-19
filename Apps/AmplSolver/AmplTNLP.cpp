@@ -600,8 +600,8 @@ namespace Ipopt
   }
 
   void AmplTNLP::get_scaling_parameters(Number& obj_scaling,
-                                        Index n, double* x_scaling,
-                                        Index m, double* g_scaling)
+                                        Index n, Number* x_scaling,
+                                        Index m, Number* g_scaling)
   {
     DBG_ASSERT(IsValid(suffix_handler_));
     const double* obj = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Objective_Source);

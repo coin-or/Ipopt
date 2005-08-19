@@ -13,7 +13,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.0beta],[coin-ipopt@www-124.ibm.com])
+AC_INIT([Ipopt],[3.0.-1],[coin-ipopt@www-124.ibm.com])
 
 AC_COPYRIGHT([
 Copyright 2004, 2005 International Business Machines and others.
@@ -21,7 +21,7 @@ All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
 
-AC_REVISION(beta)
+AC_REVISION(3.0.-1)
 
 AC_CONFIG_SRCDIR(Common/IpDebug.hpp)
 
@@ -1003,7 +1003,7 @@ if test "$use_hsl" = BUILD; then
   MY_CHECK_HSLFILE(ma27ad,MA27)
   if test "$use_MA27" = BUILD; then
     AC_MSG_CHECKING([whether MA27 is threadsafe])
-    if grep MA27UD $hslsrcdir/ma27ad.f >&5 ; then
+    if $EGREP MA27UD $hslsrcdir/ma27ad.f >&5 ; then
       AC_MSG_RESULT(yes)
     else
       AC_MSG_RESULT(no)
@@ -1145,12 +1145,15 @@ if test "$use_asldir" = BUILD; then
     ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
 
     AC_MSG_CHECKING([whether $am_make is the GNU make])
-    if $am_make -v | grep GNU >&5 ; then
+    rm -f conftest.mak
+    ($am_make -v -f conftest.mak > conftest.grp) 2>&5
+    if $EGREP GNU conftest.grp >&5 ; then
       AC_MSG_RESULT([yes])
       ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
     else
-      AC_MSG_RESULT([yes])
+      AC_MSG_RESULT([no])
     fi
+    rm -f conftest.mak conftest.grp
 
 #    if test $USE_MAINTAINER_MODE = 'yes'; then
 #      AC_MSG_WARN([Assuming that maintainer mode is only used for GNU make])

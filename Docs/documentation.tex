@@ -1344,9 +1344,9 @@ the variable bounds.
 The problem has 2 constraints, so we set {\tt m}
 and allocate space for the constraint bounds. The first constraint has
 a lower bound of $25$ and no upper bound.  Here we set the upper bound
-to 2e19. Ipopt interprets any number greater than nlp_upper_bound_inf
-as infinity. The default value of nlp_upper_bound_inf and
-nlp_lower_bound_inf is 1e19 and can be changed through ipopt options.
+to \texttt{2e19}. Ipopt interprets any number greater than \texttt{nlp\_upper\_bound\_inf}
+as infinity. The default value of \texttt{nlp\_upper\_bound\_inf} and
+\texttt{nlp\_lower\_bound\_inf} is \texttt{1e19} and can be changed through ipopt options.
 The second constraint is an equality, so we set both the upper and the 
 lower bound to $40$.
 
@@ -1355,7 +1355,7 @@ CreateIpoptProblem}, giving it the problem dimensions and the variable
 and constraint bounds. The arguments {\tt nele\_jac} and {\tt
 nele\_hess} are the number of elements in Jacobian and the Hessian
 respectively. See appendix \ref{app.triplet} for a description of the
-sparse matrix format. The {\tt index_style} argument specifies whether
+sparse matrix format. The {\tt index\_style} argument specifies whether
 we want to use C style indexing for the row and column indices of the
 matrices or Fortran style indexing. Here, we set it to {\tt 0} to
 indicate C style.  We also include the references to each of our
@@ -1384,7 +1384,7 @@ void*} for user data. Any pointer you give here will also be passed to
 you in the callback functions.
 
 The return code is an ApplicationReturnStatus enumeration, see {\tt
-Interfaces/ReturnCodes_inc.h}.
+Interfaces/ReturnCodes\_inc.h}.
 
 After the problem has solved, we check the status and print the solution if 
 successful. Finally, we free the memory and return from {\tt main}.

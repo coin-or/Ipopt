@@ -91,6 +91,8 @@ namespace Ipopt
                         bool new_lambda, Index nele_hess, Index* iRow,
                         Index* jCol, Number* values);
 
+    /** retrieve the scaling parameters for the variables, objective
+     *  function, and constraints. */
     virtual void get_scaling_parameters(Number& obj_scaling,
                                         Index n, Number* x_scaling,
                                         Index m, Number* g_scaling);

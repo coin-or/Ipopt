@@ -14,3 +14,4 @@ Interfaces/IpInterfacesRegOp.cpp -text
 Interfaces/IpInterfacesRegOp.hpp -text
 Interfaces/IpSolveStatistics.cpp -text
 Interfaces/IpSolveStatistics.hpp -text
+/LICENSE -text
