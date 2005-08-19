@@ -9642,10 +9642,10 @@ if test `eval echo '${'$as_ac_Lib'}'` = yes; then
 fi
 
              ;;
-    *-sun-*) SAVE_LDFLAGS="$LDFLAGS"
+    *-sun-*) SAVE_LIBS="$LIBS"
              echo "$as_me:$LINENO: checking whether -xlic_lib=sunperf has BLAS" >&5
 echo $ECHO_N "checking whether -xlic_lib=sunperf has BLAS... $ECHO_C" >&6
-             LDFLAGS="-xlic_lib=sunperf $LDFLAGS"
+             LIBS="-xlic_lib=sunperf $LIBS"
              ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -9711,13 +9711,16 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; use_blas=-xlic_lib=sunperf
+echo "${ECHO_T}yes" >&6
+			  IPADDLIBS="-xlic_lib=sunperf $IPADDLIBS"
+			  use_blas=-xlic_lib=sunperf
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
 echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; LDFLAGS="$SAVE_LDFLAGS"
+echo "${ECHO_T}no" >&6
+			  LIBS="$SAVE_LIBS"
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext

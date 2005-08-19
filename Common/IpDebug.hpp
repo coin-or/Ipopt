@@ -17,7 +17,7 @@
 # ifdef HAVE_ASSERT_H
 #  include <assert.h>
 # else
-#  error "don't have header file for math"
+#  error "don't have header file for assert"
 # endif
 #endif
 

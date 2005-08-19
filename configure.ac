@@ -884,13 +884,16 @@ else
                            LIBS="-lcomplib.sgimath $LIBS";
                            IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"])
              ;;
-    *-sun-*) SAVE_LDFLAGS="$LDFLAGS"
+    *-sun-*) SAVE_LIBS="$LIBS"
              AC_MSG_CHECKING([whether -xlic_lib=sunperf has BLAS])
-             LDFLAGS="-xlic_lib=sunperf $LDFLAGS"
+             LIBS="-xlic_lib=sunperf $LIBS"
              AC_F77_FUNC(daxpy,cfunc)
              AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc()],
-                         [AC_MSG_RESULT([yes]); use_blas=-xlic_lib=sunperf],
-                         [AC_MSG_RESULT([no]); LDFLAGS="$SAVE_LDFLAGS"])
+                         [AC_MSG_RESULT([yes])
+			  IPADDLIBS="-xlic_lib=sunperf $IPADDLIBS"
+			  use_blas=-xlic_lib=sunperf],
+                         [AC_MSG_RESULT([no])
+			  LIBS="$SAVE_LIBS"])
              ;;
   esac
   if test -z "$use_blas"; then
