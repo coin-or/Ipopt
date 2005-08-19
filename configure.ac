@@ -227,7 +227,7 @@ if test -z "$CXXLIBS"; then
         CXXLIBS=""
         ;;
       *)
-        CXXLIBS="-lstdc++ -lm -lgcc_s -lgcc"
+        CXXLIBS="-lstdc++ -lm -lgcc"
         ;;
     esac
   else
