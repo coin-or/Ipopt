@@ -13,7 +13,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([ipopt],[3.0beta],[coin-ipopt@www-124.ibm.com])
+AC_INIT([Ipopt],[3.0beta],[coin-ipopt@www-124.ibm.com])
 
 AC_COPYRIGHT([
 Copyright 2004, 2005 International Business Machines and others.
@@ -27,23 +27,6 @@ AC_CONFIG_SRCDIR(Common/IpDebug.hpp)
 
 # Get the system type
 AC_CANONICAL_BUILD
-
-##########################################
-# Set variables for the archiver         #
-# (for AIX in 64bit mode also on SGI...) #
-##########################################
-if test -z "$AR"; then
-  AR="ar"
-fi
-AC_ARG_VAR(AR,[Command for handling archives (default is `ar')])
-if test -z "$ARFLAGS"; then
-  ARFLAGS="cru"
-fi
-AC_ARG_VAR(ARFLAGS,[Flags for adding file for archive command (default is `crv')])
-if test -z "$AR_X"; then
-  AR_X="ar x"
-fi
-AC_ARG_VAR(AR_X,[Command for extracing an archive (default is `ar x')])
 
 # Check if user wants to produce debugging code
 AC_ARG_ENABLE([debug],
@@ -63,7 +46,7 @@ AC_ARG_ENABLE([debug],
 
 AC_LANG_PUSH(C++)
 SAVE_CXXFLAGS="$CXXFLAGS"
-AC_PROG_CXX([icpc cl xlC aCC CC g++])
+AC_PROG_CXX([cl xlC aCC CC g++ icpc])
 CXXFLAGS="$SAVE_CXXFLAGS"
 
 warn_cxxflags=
@@ -79,13 +62,65 @@ if test -z "$CXXFLAGS"; then
       *)
         opt_cxxflags="-O3 -funroll-loops"
         case $build in
-          i686-* )
-            CXXFLAGS="-march=i686 -mfpmath=sse -msse"
-            AC_MSG_CHECKING([whether flags \"$CXXFLAGS\" work])
-            AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-	                   [AC_MSG_RESULT([yes]); opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
-                           [AC_MSG_RESULT([no])])
-            CXXFLAGS=
+          x86_64-* | i686-* | i586-* )
+            # Check for enabling special instructions
+            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
+            have_sse=no
+            for i in $myflags; do
+              case $i in
+                sse3) CXXFLAGS="-mfpmath=sse -msse3"
+                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
+                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
+	                [AC_MSG_RESULT([yes])
+                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
+                        [AC_MSG_RESULT([no])])
+                     have_sse=yes;
+                     CXXFLAGS=
+                     ;;
+                sse2)
+                     CXXFLAGS="-mfpmath=sse -msse2"
+                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
+                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
+	                [AC_MSG_RESULT([yes])
+                         if test $have_sse = no; then
+                           opt_cxxflags="$opt_cxxflags $CXXFLAGS"
+			 else
+			   opt_cxxflags="$opt_cxxflags -msse2"
+                         fi],
+                        [AC_MSG_RESULT([no])])
+                     have_sse=yes;
+                     CXXFLAGS=
+                     ;;
+                sse)
+                     CXXFLAGS="-mfpmath=sse -msse"
+                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
+                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
+	                [AC_MSG_RESULT([yes])
+                         if test $have_sse = no; then
+                           opt_cxxflags="$opt_cxxflags $CXXFLAGS"
+			 else
+			   opt_cxxflags="$opt_cxxflags -msse"
+                         fi],
+                        [AC_MSG_RESULT([no])])
+                     have_sse=yes;
+                     CXXFLAGS=
+                     ;;
+                mmx) CXXFLAGS="-mmmx"
+                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
+                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
+	                [AC_MSG_RESULT([yes])
+                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
+                        [AC_MSG_RESULT([no])])
+                     CXXFLAGS= ;;
+                3dnow) CXXFLAGS="-m3dnow"
+                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
+                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
+	                [AC_MSG_RESULT([yes])
+                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
+                        [AC_MSG_RESULT([no])])
+                     CXXFLAGS= ;;
+              esac
+            done
           ;;
         esac
         add_cxxflags="-pipe"
@@ -221,12 +256,59 @@ else
 fi
 AC_LANG_POP(C++)
 
+###############################################
+# Set variables for the archiver              #
+# (for AIX in 64bit mode also on SGI, SUN...) #
+###############################################
+if test -z "$AR"; then
+  if test ! "$GXX" = "yes"; then
+    case $build in
+      *-sun-*)
+        AR="CC -xar"
+        ;;
+      *-sgi-*)
+        AR="CC -ar"
+        ;;
+    esac
+  fi
+  if test -z "$AR"; then
+    AR="ar"
+  fi
+fi
+AC_ARG_VAR(AR,[Command for handling archives (default is `ar')])
+AC_MSG_NOTICE([Using AR=\"$AR\".])
+
+if test -z "$ARFLAGS"; then
+  if test ! "$GXX" = "yes"; then
+    case $build in
+      *-sun-*)
+        ARFLAGS="-o"
+        ;;
+      *-sgi-*)
+        ARFLAGS="-o"
+        ;;
+    esac
+  fi
+  if test -z "$ARFLAGS"; then
+    ARFLAGS="crv"
+  fi
+fi
+AC_ARG_VAR(ARFLAGS,[Flags for adding file for archive command (default is `crv')])
+AC_MSG_NOTICE([Using ARFLAGS=\"$ARFLAGS\".])
+
+if test -z "$AR_X"; then
+  AR_X="ar x"
+fi
+AC_ARG_VAR(AR_X,[Command for extracing an archive (default is `ar x')])
+AC_MSG_NOTICE([Using AR_X=\"$AR_X\".])
+
 ######################
 # C Compiler Options #
 ######################
 
+AC_LANG_PUSH(C)
 SAVE_CFLAGS="$CFLAGS"
-AC_PROG_CC([icc cl pgcc xlc cc gcc cl])
+AC_PROG_CC([cl pgcc xlc cc gcc icc])
 CFLAGS="$SAVE_CFLAGS"
 
 warn_cflags=
@@ -242,15 +324,68 @@ if test -z "$CFLAGS"; then
       *)
         opt_cflags="-O3 -funroll-loops"
         case $build in
-          i686-* )
-            myCFLAGS="-march=i686 -mfpmath=sse -msse"
-            AC_MSG_CHECKING([whether  flags \"$myCFLAGS\" work])
-# This is a trick to make sure that the math library is included
-            CFLAGS="$myCFLAGS -lm"
-            AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-                           [AC_MSG_RESULT([yes]); opt_cflags="$opt_cflags $myCFLAGS"],
-                           [AC_MSG_RESULT([no])])
-            CFLAGS=
+          x86_64-* | i686-* | i586-* )
+            # Check for enabling special instructions
+            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
+            have_sse=no
+            SAVE_LIBS="$LIBS"
+            LIBS="$LIBS -lm"
+            for i in $myflags; do
+              case $i in
+                sse3) CFLAGS="-mfpmath=sse -msse3"
+                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
+                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
+	                [AC_MSG_RESULT([yes])
+                         opt_cflags="$opt_cflags $CFLAGS"],
+                        [AC_MSG_RESULT([no])])
+                     have_sse=yes;
+                     CFLAGS=
+                     ;;
+                sse2)
+                     CFLAGS="-mfpmath=sse -msse2"
+                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
+                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
+	                [AC_MSG_RESULT([yes])
+                         if test $have_sse = no; then
+                           opt_cflags="$opt_cflags $CFLAGS"
+			 else
+			   opt_cflags="$opt_cflags -msse2"
+                         fi],
+                        [AC_MSG_RESULT([no])])
+                     have_sse=yes;
+                     CFLAGS=
+                     ;;
+                sse)
+                     CFLAGS="-mfpmath=sse -msse"
+                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
+                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
+	                [AC_MSG_RESULT([yes])
+                         if test $have_sse = no; then
+                           opt_cflags="$opt_cflags $CFLAGS"
+			 else
+			   opt_cflags="$opt_cflags -msse"
+                         fi],
+                        [AC_MSG_RESULT([no])])
+                     have_sse=yes;
+                     CFLAGS=
+                     ;;
+                mmx) CFLAGS="-mmmx"
+                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
+                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
+	                [AC_MSG_RESULT([yes])
+                         opt_cflags="$opt_cflags $CFLAGS"],
+                        [AC_MSG_RESULT([no])])
+                     CFLAGS= ;;
+                3dnow) CFLAGS="-m3dnow"
+                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
+                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
+	                [AC_MSG_RESULT([yes])
+                         opt_cflags="$opt_cflags $CFLAGS"],
+                        [AC_MSG_RESULT([no])])
+                     CFLAGS= ;;
+              esac
+            done
+            LIBS="$SAVE_LIBS"
           ;;
         esac
         add_cflags="-pipe"
@@ -351,6 +486,7 @@ if test -z "$CFLAGS"; then
 else
   AC_MSG_RESULT([yes])
 fi
+AC_LANG_POP(C)
 
 ###################################
 #   Fortran 77 compiler options   #
@@ -358,7 +494,7 @@ fi
 
 AC_LANG_PUSH(Fortran 77)
 SAVE_FFLAGS="$FFLAGS"
-AC_PROG_F77(ifort ifc pgf77 xlf fort77 f77 g77 df)
+AC_PROG_F77(ifort pgf77 xlf fort77 f77 g77 df ifc)
 FFLAGS="$SAVE_FFLAGS"
 
 if test -z "$FFLAGS"; then
@@ -368,18 +504,86 @@ if test -z "$FFLAGS"; then
 
   if test "$G77" = "yes"; then
     opt_fflags="-O3 -funroll-loops"
-    case $build in
-      i686-* )
-        FFLAGS="-march=i686 -mfpmath=sse -msse"
-        AC_MSG_CHECKING([whether flags \"$FFLAGS\" work])
-        AC_TRY_LINK(,[
-      double precision x
+        case $build in
+          x86_64-* | i686-* | i586-* )
+            # Check for enabling special instructions
+            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
+            have_sse=no
+            for i in $myflags; do
+              case $i in
+                sse3) FFLAGS="-mfpmath=sse -msse3"
+                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
+                     AC_TRY_LINK(,[      double precision x
       x = sin(1.d0)],
-                       [AC_MSG_RESULT([yes]); opt_fflags="$opt_fflags $FFLAGS"],
-                       [AC_MSG_RESULT([no])])
-        FFLAGS=
-      ;;
-    esac
+	                [AC_MSG_RESULT([yes])
+                         opt_fflags="$opt_fflags $FFLAGS"],
+                        [AC_MSG_RESULT([no])])
+                     have_sse=yes;
+                     FFLAGS=
+                     ;;
+                sse2)
+                     FFLAGS="-mfpmath=sse -msse2"
+                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
+                     AC_TRY_LINK(,[      double precision x
+      x = sin(1.d0)],
+	                [AC_MSG_RESULT([yes])
+                         if test $have_sse = no; then
+                           opt_fflags="$opt_fflags $FFLAGS"
+			 else
+			   opt_fflags="$opt_fflags -msse2"
+                         fi],
+                        [AC_MSG_RESULT([no])])
+                     have_sse=yes;
+                     FFLAGS=
+                     ;;
+                sse)
+                     FFLAGS="-mfpmath=sse -msse"
+                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
+                     AC_TRY_LINK(,[      double precision x
+      x = sin(1.d0)],
+	                [AC_MSG_RESULT([yes])
+                         if test $have_sse = no; then
+                           opt_fflags="$opt_fflags $FFLAGS"
+			 else
+			   opt_fflags="$opt_fflags -msse"
+                         fi],
+                        [AC_MSG_RESULT([no])])
+                     have_sse=yes;
+                     FFLAGS=
+                     ;;
+                mmx) FFLAGS="-mmmx"
+                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
+                     AC_TRY_LINK(,[      double precision x
+      x = sin(1.d0)],
+	                [AC_MSG_RESULT([yes])
+                         opt_fflags="$opt_fflags $FFLAGS"],
+                        [AC_MSG_RESULT([no])])
+                     FFLAGS= ;;
+                3dnow) FFLAGS="-m3dnow"
+                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
+                     AC_TRY_LINK(,[      double precision x
+      x = sin(1.d0)],
+	                [AC_MSG_RESULT([yes])
+                         opt_fflags="$opt_fflags $FFLAGS"],
+                        [AC_MSG_RESULT([no])])
+                     FFLAGS= ;;
+              esac
+            done
+          ;;
+        esac
+
+#    case $build in
+#      i686-* )
+#        FFLAGS="-march=i686 -mfpmath=sse -msse"
+#        AC_MSG_CHECKING([whether flags \"$FFLAGS\" work])
+#        AC_TRY_LINK(,[
+#      double precision x
+#      x = sin(1.d0)],
+#                       [AC_MSG_RESULT([yes]); opt_fflags="$opt_fflags $FFLAGS"],
+#                       [AC_MSG_RESULT([no])])
+#        FFLAGS=
+#      ;;
+#    esac
     add_fflags="-pipe"
     dbg_fflags="-g"
     case $build in
@@ -492,6 +696,8 @@ case $build in
        FLIBS=`echo $FLIBS | sed 's/-lc)/-lc/g'` ;;
 esac
 
+AC_LANG_POP(Fortran 77)
+
 AC_PROG_RANLIB
 
 AC_PREFIX_DEFAULT([`pwd`])
@@ -514,18 +720,18 @@ AC_LANG_PUSH(C++)
 # Header Files #
 ################
 
-AC_CHECK_HEADERS([cmath])
-AC_CHECK_HEADERS([math.h])
-AC_CHECK_HEADERS([cctype])
-AC_CHECK_HEADERS([ctype.h])
-AC_CHECK_HEADERS([cassert])
-AC_CHECK_HEADERS([assert.h])
-AC_CHECK_HEADERS([cstdio])
-AC_CHECK_HEADERS([stdio.h])
-AC_CHECK_HEADERS([cstdarg])
-AC_CHECK_HEADERS([stdarg.h])
-AC_CHECK_HEADERS([cfloat])
-AC_CHECK_HEADERS([float.h])
+AC_DEFUN([MY_CHECK_CXX_HEADER],
+         [AC_CHECK_HEADERS([c$1])
+          if test ! "$ac_cv_header_c$1" = "yes"; then
+            AC_CHECK_HEADERS([$1.h])
+          fi])
+
+MY_CHECK_CXX_HEADER(math)
+MY_CHECK_CXX_HEADER(ctype)
+MY_CHECK_CXX_HEADER(assert)
+MY_CHECK_CXX_HEADER(stdio)
+MY_CHECK_CXX_HEADER(stdarg)
+MY_CHECK_CXX_HEADER(float)
 
 ###################
 # Function finite #
@@ -535,8 +741,7 @@ AC_CHECK_HEADERS([float.h])
 
 case $build in
   *-cygwin*) ;;
-  *) AC_CHECK_HEADERS([ieeefp.h])
-     AC_CHECK_HEADERS([cieeefp]) ;;
+  *) MY_CHECK_CXX_HEADER([ieeefp]) ;;
 esac
 
 # now try to guess the correct name of the finite function
@@ -633,8 +838,6 @@ AC_CHECK_DECL([va_copy],[AC_DEFINE([HAVE_VA_COPY],[1],
 # endif
 #endif])
 
-AC_LANG_POP(C++)
-
 ##########################################################################
 
 # Additional libraries and packages
@@ -679,9 +882,15 @@ else
                          [AC_MSG_RESULT([no]); LDFLAGS="$SAVE_LDFLAGS"]) ;;
   esac
   if test -z "$use_blas"; then
-    AC_CHECK_LIB(blas,dgemm,[use_blas=-lblas;
-                             LIBS="-lblas $LIBS";
-                             IPADDLIBS="-lblas $IPADDLIBS"],[])
+    # Probably the blas library requires the Fortran libraries, so add
+    # them for this test.  They are added at the end anyway
+    AC_F77_FUNC(daxpy,cdaxpy)
+    SAVE_LIBS="$LIBS"
+    LIBS="$LIBS $FLIBS"
+    AC_CHECK_LIB(blas,$cdaxpy,[use_blas=-lblas;
+                               LIBS="-lblas $SAVE_LIBS";
+                               IPADDLIBS="-lblas $IPADDLIBS"],
+                              [LIBS="$SAVE_LIBS"])
   fi
   if test -z "$use_blas"; then
     AC_CHECK_FILE([$srcdir/Extern/blas/dgemm.f],[use_blas=BUILD],
@@ -756,13 +965,16 @@ hsllibdir="\$(top_builddir)/Extern/HSL"
 AC_DEFUN([MY_CHECK_HSL],
          [AC_MSG_CHECKING([for $1 in $use_hsl])
           use_$2=
-          AC_TRY_LINK([],[      call $1()],
-                         [AC_DEFINE(HAVE_$2,1,[Define to 1 if $2 is available]) AC_MSG_RESULT([yes]); use_$2=yes],
-                         [AC_MSG_RESULT([no])])])
+          AC_F77_FUNC($1,cfunc)
+          AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc()],
+                      [AC_DEFINE(HAVE_$2,1,[Define to 1 if $2 is available])
+		       AC_MSG_RESULT([yes]); use_$2=yes],
+                      [AC_MSG_RESULT([no]); use_$2=no])])
+
 AC_DEFUN([MY_CHECK_HSLFILE],
          [AC_CHECK_FILE([$hslsrcdir/$1.f],
                         [AC_DEFINE(HAVE_$2,1,[Define to 1 if $2 is available]) use_$2=BUILD],
-                        [use_$2=])])
+                        [use_$2=no])])
 
 AC_MSG_NOTICE([Checking for Harwell subroutine library])
 
@@ -780,43 +992,25 @@ if test "$use_hsl" = BUILD; then
       AC_MSG_RESULT(yes)
     else
       AC_MSG_RESULT(no)
-      AC_DEFINE(OLD_MA27,[],
-                [Define to 1 if MA27 is given in the old, non-threadsafe version])
+      AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])
     fi
   fi
   MY_CHECK_HSLFILE(mc19ad,MC19)
 else
-  LIBS="$use_hsl $LIBS"
+  SAVE_LIBS="$LIBS"
+  LIBS="$use_hsl $LIBS $FLIBS"
   IPADDLIBS="$use_hsl $IPADDLIBS"
   MY_CHECK_HSL([ma27ad],[MA27])
   if test "$use_MA27" = "yes"; then
     AC_MSG_CHECKING([whether MA27 is threadsafe])
-    AC_TRY_LINK([],[      call MA27UD()],
-                   [AC_MSG_RESULT(yes)],
-                   [AC_MSG_RESULT(no)
-		    AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
+    AC_F77_FUNC(ma27ud, cfunc)
+    AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc],
+                [AC_MSG_RESULT(yes)],
+                [AC_MSG_RESULT(no)
+		 AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
   fi
   MY_CHECK_HSL([mc19ad],[MC19])
-fi
-
-# Try to make sure the correct FD05 routine is there (if needed)
-if test "$use_MA48" = BUILD || test "$use_MA57" = BUILD; then
-  AC_CHECK_FILE([$hslsrcdir/fd05ad.f],[use_FD05="fd05ad.f"],[use_FD05=])
-  if test -z "$use_FD05"; then
-    case $build in
-      rs6000-* | powerpc*)
-                use_FD05="fd05adj.f";;
-      vax-*)    use_FD05="fd05adv.f";;
-      hp*)      use_FD05="fd05adh.f";;
-      *-osf*)   use_FD05="fd05ada.f";;
-      *ymp*)    use_FD05="fd05adc.f";;
-      *)        use_FD05="fd05ads.f";;
-    esac
-    AC_MSG_WARN([The file `fd05ad.f' is not provided.  My guess for this system is that you should use `$use_FD05', but you better verify this!!!])
-    AC_CHECK_FILE([$hslsrcdir/$use_FD05],
-                  [],[AC_MSG_ERROR([File $use_FD05 not found])])
-    AC_CONFIG_LINKS([Extern/HSL/fd05ad.f:Extern/HSL/$use_FD05])
-  fi
+  LIBS="$use_hsl $SAVE_LIBS"
 fi
 
 ###########
@@ -825,7 +1019,7 @@ fi
 
 AC_ARG_WITH([pardiso],
             AC_HELP_STRING([--with-pardiso],
-                           [specify Pardiso library]),
+                           [specify Pardiso library (unsupported)]),
             [use_pardiso=$withval], [use_pardiso=no])
 
 if test ! "$use_pardiso" = "no"; then
@@ -839,7 +1033,7 @@ if test ! "$use_pardiso" = "no"; then
 #              [AC_MSG_ERROR([Pardiso library $use_pardiso does not seem to work])])
 
   AC_DEFINE(HAVE_PARDISO,1,
-            [Define to 1 if Pardiso is available])
+            [Define to 1 if Pardiso is available (unsupported)])
 fi
 
 #########
@@ -848,7 +1042,7 @@ fi
 
 AC_ARG_WITH([taucs],
             AC_HELP_STRING([--with-taucs],
-                           [specify TAUCS library and dependencies]),
+                           [specify TAUCS library and dependencies (unsupported)]),
             [use_taucs=$withval], [use_taucs=no])
 
 if test ! "$use_taucs" = "no"; then
@@ -856,13 +1050,26 @@ if test ! "$use_taucs" = "no"; then
   IPADDLIBS="$use_taucs $IPADDLIBS"
 
   AC_DEFINE(HAVE_TAUCS,1,
-            [Define to 1 if TAUCS is available])
+            [Define to 1 if TAUCS is available (unsupported)])
 
   AC_ARG_VAR(TAUCS_INCFLAGS,[Flags for including taucs header files])
   CXXFLAGS="$CXXFLAGS $TAUCS_INCFLAGS"
 fi
 
-AC_LANG_POP(Fortran 77)
+# Check if at least one linear solver was found
+
+AC_ARG_ENABLE([distconf],,
+  [case "${enableval}" in
+    yes) distconf=true ;;
+    no)  distconf=false ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-distconf) ;;
+  esac],[distconf=false])
+
+if test "$use_MA27" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no; then
+  if test "$distconf" = false; then
+    AC_MSG_ERROR("No linear solver (such as MA27) available")
+  fi
+fi
 
 # For the remaining tests we need to include FLIBS into LIBS, so that
 # the C compiler can link programs
@@ -871,8 +1078,6 @@ LIBS="$LIBS $FLIBS"
 #######################
 # AMPL SOLVER LIBRARY #
 #######################
-
-AC_LANG_PUSH(C)
 
 asldir=Extern/ASL/solvers
 aslsrcdir=$srcdir/$asldir
@@ -924,26 +1129,36 @@ if test "$use_asldir" = BUILD; then
     done
     ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
 
-    if test $USE_MAINTAINER_MODE = 'yes'; then
-      AC_MSG_WARN([Assuming that maintainer mode is only used for GNU make])
+    AC_MSG_CHECKING([whether $am_make is the GNU make])
+    if $am_make -v | grep GNU >&5 ; then
+      AC_MSG_RESULT([yes])
       ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
     else
-      AC_MSG_CHECKING([whether $am_make understands the `-j 1' flag])
-      AC_LANG_CONFTEST([[bladfaoekja:]])
-      if ($am_make -f conftest.c -j 1 bladfaoekja >&5) 2>&5 ; then
-        AC_MSG_RESULT([yes])
-        ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
-      else
-        AC_MSG_RESULT([no])
-        AC_MSG_CHECKING([whether $am_make understands the `-J 1' flag])
-        if ($am_make -f conftest.c -J 1 bladfaoekja >&5) 2>&5 ; then
-          AC_MSG_RESULT([yes])
-          ASLMAKEFLAGS="-J 1 $ASLMAKEFLAGS"
-        else
-          AC_MSG_RESULT([no])
-        fi
-      fi
+      AC_MSG_RESULT([yes])
     fi
+
+#    if test $USE_MAINTAINER_MODE = 'yes'; then
+#      AC_MSG_WARN([Assuming that maintainer mode is only used for GNU make])
+#      ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
+#    else
+#      AC_LANG_PUSH(Fortran 77)
+#      AC_MSG_CHECKING([whether $am_make understands the `-j 1' flag])
+#      AC_LANG_CONFTEST([[bladfaoekja:]])
+#      if ($am_make -f conftest.c -j 1 bladfaoekja >&5) 2>&5 ; then
+#        AC_MSG_RESULT([yes])
+#        ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
+#      else
+#        AC_MSG_RESULT([no])
+#        AC_MSG_CHECKING([whether $am_make understands the `-J 1' flag])
+#        if ($am_make -f conftest.c -J 1 bladfaoekja >&5) 2>&5 ; then
+#          AC_MSG_RESULT([yes])
+#          ASLMAKEFLAGS="-J 1 $ASLMAKEFLAGS"
+#        else
+#          AC_MSG_RESULT([no])
+#        fi
+#      fi
+#      AC_LANG_POP(Fortran 77)
+#    fi
   fi
   ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR $ARFLAGS/' makefile.u | sed 's/ar ruv/$AR $ARFLAGS/' "
   if test "$EXEEXT" = ".exe"; then
@@ -961,7 +1176,7 @@ if test ! "$use_asldir" = no; then
   AC_CHECK_LIB(dl,[dlopen],[LIBS="$LIBS -ldl"],[])
 fi
 
-AC_LANG_POP(C)
+AC_LANG_POP(C++)
 
 ######################################
 # Equivalent int Fortran and C types #
@@ -1044,6 +1259,8 @@ AM_CONDITIONAL([BUILDBLASDIR],[test "$use_blas" = BUILD])
 # AM_CONDITIONAL([BUILDLAPACKDIR],[test "$use_lapack" = BUILD])
 AM_CONDITIONAL([BUILDHSLDIR],[test "$use_hsl" = BUILD])
 
+AM_CONDITIONAL([HAVE_MA27],[test ! "$use_MA27" = no])
+AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])
 

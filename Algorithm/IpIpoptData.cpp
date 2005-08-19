@@ -12,7 +12,9 @@
 namespace Ipopt
 {
 
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   IpoptData::IpoptData()
       :
@@ -43,7 +45,7 @@ namespace Ipopt
     roptions->SetRegisteringCategory("Convergence");
     roptions->AddLowerBoundedNumberOption(
       "tol",
-      "Convergence tolerance (relative).",
+      "Desired convergence tolerance (relative).",
       0.0, true,  1e-8,
       "Determines the convergence tolerance for the algorthim.  The "
       "algorithm terminates successfully, if the (scaled) NLP error "

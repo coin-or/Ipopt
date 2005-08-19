@@ -23,7 +23,9 @@
 namespace Ipopt
 {
 
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   CompoundVector::CompoundVector(const CompoundVectorSpace* owner_space, bool create_new)
       :

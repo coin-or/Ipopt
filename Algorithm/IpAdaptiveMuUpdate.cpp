@@ -23,7 +23,9 @@ namespace Ipopt
 {
   // ToDo Make the different globalization strategies extra classes
 
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   AdaptiveMuUpdate::AdaptiveMuUpdate
   (const SmartPtr<LineSearch>& line_search,
@@ -68,10 +70,9 @@ namespace Ipopt
     roptions->AddStringOption3(
       "adaptive_mu_globalization",
       "Globalization strategy for non-monotone mode",
-      "kkt-error",
+      "obj-constr-filter",
       "kkt-error", "nonmonotone decrease of kkt-error",
       "obj-constr-filter", "2-dim filter for objective and constraint violation",
-      /*"kkt-error-filter", "3-dim filter for kkt-error components", not yet implemented*/
       "never-monotone-mode", "disables globalization",
       "To achieve global convergence of the adaptive version, the algorithm "
       "has to swtich to the monotone mode (Fiacco-McCormick approach) when "

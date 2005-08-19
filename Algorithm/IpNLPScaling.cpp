@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,7 +11,9 @@
 namespace Ipopt
 {
 
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_LU_NonConst(
     const Matrix& Px_LU,
@@ -296,7 +298,7 @@ namespace Ipopt
       DBG_PRINT((1, "Creating copy in apply_vector_scaling_x_NonConst!"));
     }
     return scaled_x;
-  };
+  }
 
   SmartPtr<const Vector> StandardScalingBase::apply_vector_scaling_x(
     const SmartPtr<const Vector>& v)

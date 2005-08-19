@@ -389,13 +389,14 @@ namespace Ipopt
     /** Constructors / Destructors */
     //@{
     /** Standard Constructor */
-    RegisteredOptions() : current_registering_category_("Uncategorized")
+    RegisteredOptions()
+        :
+        current_registering_category_("Uncategorized")
     {}
 
     /** Standard Destructor */
     ~RegisteredOptions()
     {}
-    ;
     //@}
 
     DECLARE_STD_EXCEPTION(OPTION_ALREADY_REGISTERED);

@@ -643,16 +643,16 @@ namespace Ipopt
   void RegisteredOptions::OutputOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories)
   {
     // create a set to print sorted output
-//     std::set
-//       <std::string> classes;
-//     std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
-//     for (option = registered_options_.begin(); option != registered_options_.end(); option++) {
-//       classes.insert(option->second->RegisteringCategory());
-//     }
+    //     std::set
+    //       <std::string> classes;
+    //     std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
+    //     for (option = registered_options_.begin(); option != registered_options_.end(); option++) {
+    //       classes.insert(option->second->RegisteringCategory());
+    //     }
 
 
     std::list
-      <std::string>::iterator i;
+    <std::string>::iterator i;
     for (i = categories.begin(); i != categories.end(); i++) {
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                    "\n### %s ###\n\n", (*i).c_str());

@@ -17,6 +17,7 @@ EXTRA_DIST = \
 	Examples/Cpp_example/MyNLP.cpp \
 	Examples/Cpp_example/MyNLP.hpp \
 	Examples/Fortran_example/example.f \
+	Examples/hs071_c/hs071_c.c \
 	Examples/hs071_cpp/hs071_main.cpp \
 	Examples/hs071_cpp/hs071_nlp.cpp \
 	Examples/hs071_cpp/hs071_nlp.hpp \
@@ -58,7 +59,6 @@ astyle:
 	cd Algorithm; $(MAKE) astyle
 	cd Algorithm/LinearSolvers; $(MAKE) astyle
 	cd Apps/AmplSolver; $(MAKE) astyle
-	cd Apps/CompositeInterface; $(MAKE) astyle
 	cd Common; $(MAKE) astyle
 	cd LinAlg; $(MAKE) astyle
 	cd LinAlg/TMatrices; $(MAKE) astyle

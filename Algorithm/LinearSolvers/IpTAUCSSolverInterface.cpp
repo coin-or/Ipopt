@@ -1,4 +1,4 @@
-// Copyright (C) 2005, Yifan Hu (Wolfram Research)
+// Copyright (C) 2005 Yifan Hu (Wolfram Research) and others
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -20,8 +20,9 @@
 
 namespace Ipopt
 {
-
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   TAUCSSolverInterface::TAUCSSolverInterface()
       :

@@ -21,8 +21,9 @@
 
 namespace Ipopt
 {
-
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   TSymLinearSolver::TSymLinearSolver
   (SmartPtr<SparseSymLinearSolverInterface> solver_interface,

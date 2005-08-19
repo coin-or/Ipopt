@@ -29,8 +29,13 @@
 #include "IpRestoIterateInitializer.hpp"
 #include "IpRestoRestoPhase.hpp"
 #include "IpTSymLinearSolver.hpp"
-#include "IpMa27TSolverInterface.hpp"
-#include "IpMc19TSymScalingMethod.hpp"
+
+#ifdef HAVE_MA27
+# include "IpMa27TSolverInterface.hpp"
+#endif
+#ifdef HAVE_MC19
+# include "IpMc19TSymScalingMethod.hpp"
+#endif
 #ifdef HAVE_PARDISO
 # include "IpPardisoSolverInterface.hpp"
 #endif
@@ -40,7 +45,9 @@
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
@@ -72,7 +79,7 @@ namespace Ipopt
       "Determines which barrier parameter strategy is to be used.");
     roptions->AddStringOption3(
       "mu_oracle",
-      "Oracle for a new barrier parameters in the adaptive strategy",
+      "Oracle for a new barrier parameter in the adaptive strategy",
       "probing",
       "probing", "Mehrotra's probing heuristic",
       "loqo", "LOQO's centrality rule",
@@ -121,14 +128,28 @@ namespace Ipopt
     options.GetValue("linear_system_scaling",
                      linear_system_scaling, prefix);
     if (linear_system_scaling=="mc19") {
+#ifdef HAVE_MC19
       ScalingMethod = new Mc19TSymScalingMethod();
+#else
+
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Selected linear system scaling method MC19 not available.");
+#endif
+
     }
 
     SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
     std::string linear_solver;
     options.GetValue("linear_solver", linear_solver, prefix);
     if (linear_solver=="ma27") {
+#ifdef HAVE_MA27
       SolverInterface = new Ma27TSolverInterface();
+#else
+
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Selected linear solver MA27 not available.");
+#endif
+
     }
     else if (linear_solver=="pardiso") {
 #ifdef HAVE_PARDISO
@@ -136,7 +157,7 @@ namespace Ipopt
 #else
 
       THROW_EXCEPTION(OPTION_INVALID,
-                      "Selected solver Pardiso not available.");
+                      "Selected linear solver Pardiso not available.");
 #endif
 
     }
@@ -146,7 +167,7 @@ namespace Ipopt
 #else
 
       THROW_EXCEPTION(OPTION_INVALID,
-                      "Selected solver TAUCS not available.");
+                      "Selected linear solver TAUCS not available.");
 #endif
 
     }

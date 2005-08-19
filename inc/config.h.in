@@ -65,7 +65,7 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
-/* Define to 1 if Pardiso is available */
+/* Define to 1 if Pardiso is available (unsupported) */
 #undef HAVE_PARDISO
 
 /* Define to 1 if you have the <stdarg.h> header file. */
@@ -92,7 +92,7 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
-/* Define to 1 if TAUCS is available */
+/* Define to 1 if TAUCS is available (unsupported) */
 #undef HAVE_TAUCS
 
 /* Define to 1 if you have the <unistd.h> header file. */
@@ -106,9 +106,6 @@
 
 /* Define to be the name of C-function for NaNInf check */
 #undef MY_C_FINITE
-
-/* Define to 1 if MA27 is given in the old, non-threadsafe version */
-#undef OLD_MA27
 
 /* Name of package */
 #undef PACKAGE

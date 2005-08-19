@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -29,8 +29,10 @@ extern "C"
 
 namespace Ipopt
 {
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
-  DBG_SET_VERBOSITY(0);
 
   bool Mc19TSymScalingMethod::InitializeImpl(const OptionsList& options,
       const std::string& prefix)

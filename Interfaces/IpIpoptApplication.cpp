@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -22,7 +22,9 @@
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   IpoptApplication::IpoptApplication(bool read_params_dat,
                                      bool create_console_out)
@@ -113,19 +115,19 @@ namespace Ipopt
       options_->GetBoolValue("print_options_documentation",
                              print_options_documentation, "");
       if (print_options_documentation) {
-	std::list<std::string> categories;
-	categories.push_back("Output");
-	categories.push_back("Main Algorithm");
-	categories.push_back("Convergence");
-	categories.push_back("Scaling");
-	categories.push_back("Mu Update");
-	categories.push_back("Line Search");
-	categories.push_back("Initialization");
-	categories.push_back("Linear Solver");
-	categories.push_back("Step Calculation");
-	categories.push_back("Restoration");
-	categories.push_back("NLP");
-	categories.push_back("Uncategorized");
+        std::list<std::string> categories;
+        categories.push_back("Output");
+        categories.push_back("Main Algorithm");
+        categories.push_back("Convergence");
+        categories.push_back("Scaling");
+        categories.push_back("Mu Update");
+        categories.push_back("Line Search");
+        categories.push_back("Initialization");
+        categories.push_back("Linear Solver");
+        categories.push_back("Step Calculation");
+        categories.push_back("Restoration");
+        categories.push_back("NLP");
+        categories.push_back("Uncategorized");
         reg_options->OutputOptionDocumentation(*jnlst_, categories);
       }
 
@@ -188,7 +190,7 @@ namespace Ipopt
       "\"file_print_level\" if that is given.");
     roptions->AddBoundedIntegerOption(
       "file_print_level",
-      "Verbosity level output file.",
+      "Verbosity level for output file.",
       0, J_LAST_LEVEL-1, J_SUMMARY,
       "NOTE: This option only works when read from PARAMS.DAT options file! "
       "Determines the verbosity level for the file specified by "

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International BusinDess Machines and others.
+// Copyright (C) 2004, 2005 International BusinDess Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,7 +12,9 @@
 namespace Ipopt
 {
 
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   PDFullSpaceSolver::PDFullSpaceSolver(AugSystemSolver& augSysSolver,
                                        PDPerturbationHandler& perturbHandler)
@@ -34,7 +36,7 @@ namespace Ipopt
   {
     roptions->AddLowerBoundedIntegerOption(
       "min_refinement_steps",
-      "Minimum number of iterative refinement steps per solve.",
+      "Minimum number of iterative refinement steps per linear system solve.",
       0, 1,
       "Iterative refinement (on the unsymmetric full system) is performed for "
       "each right hand side.  This option determines the minimal number "
@@ -42,7 +44,7 @@ namespace Ipopt
       "iterative refinement step per right hand side is enforce.");
     roptions->AddLowerBoundedIntegerOption(
       "max_refinement_steps",
-      "Maximal number of iterative refinement steps per solve.",
+      "Maximal number of iterative refinement steps per linear system solve.",
       0, 10,
       "Iterative refinement (on the unsymmetric full system) is performed for "
       "each right hand side.  This option determines the maximal number "

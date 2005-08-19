@@ -1,4 +1,4 @@
-// Copyright (C) 2005, International Business Machines and others.
+// Copyright (C) 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -8,7 +8,10 @@
 
 #include "IpLinearSolversRegOp.hpp"
 #include "IpRegOptions.hpp"
-#include "IpMa27TSolverInterface.hpp"
+
+#ifdef HAVE_MA27
+# include "IpMa27TSolverInterface.hpp"
+#endif
 
 namespace Ipopt
 {
@@ -16,7 +19,11 @@ namespace Ipopt
   void RegisterOptions_LinearSolvers(const SmartPtr<RegisteredOptions>& roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
+#ifdef HAVE_MA27
+
     Ma27TSolverInterface::RegisterOptions(roptions);
+#endif
+
     roptions->SetRegisteringCategory("Uncategorized");
   }
 

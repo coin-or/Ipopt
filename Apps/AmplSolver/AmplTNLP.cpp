@@ -6,11 +6,6 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-// TODO:
-// - clean up the boolean for initialization
-// - pass in a tag so we can know when x has changed
-// - look closer at the interface - it should pass in non-zeros as well as m in the jacobian stuff (maybe hessian stuff)
-
 #include "AmplTNLP.hpp"
 #include "IpDenseVector.hpp"
 #include "IpGenTMatrix.hpp"
@@ -18,23 +13,24 @@
 #include "IpBlas.hpp"
 
 /* AMPL includes */
-//extern "C"
-//{
 #include "asl.h"
 #include "asl_pfgh.h"
 #include "getstub.h"
-//}
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
-  AmplTNLP::AmplTNLP(const SmartPtr<const Journalist>& jnlst, char**& argv,
+  AmplTNLP::AmplTNLP(const SmartPtr<const Journalist>& jnlst,
+                     const SmartPtr<OptionsList> options,
+                     char**& argv,
                      SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
                      bool allow_discrete /* = false */)
       :
       TNLP(),
-      jnlst_(ConstPtr(jnlst)),
+      jnlst_(jnlst),
       asl_(NULL),
       obj_sign_(1),
       nz_h_full_(-1),
@@ -63,28 +59,20 @@ namespace Ipopt
     asl_ = asl; // keep the pointer for ourselves to use later...
 
     // Read the options and stub
-    // ToDo: Figure out the options stuff
-    char* stub = getstub(&argv, NULL); // need to deal with options here
+    char* stub = get_options(options, argv);
     if (!stub) {
-      printf("No .nl file given!\n");
-      exit(1);
+      jnlst_->Printf(J_ERROR, J_MAIN, "No .nl file given!\n");
+      exit(-1);
     }
 
-    jnlst_->Printf(J_SUMMARY, J_MAIN, "Ampl Model: %s\n", stub);
-
-    // Parse the first part of the nl file
-    //char* stub = argv[0];
     FILE* nl = jac0dim(stub, (fint)strlen(stub));
     DBG_ASSERT(nl);
+    jnlst_->Printf(J_SUMMARY, J_MAIN, "\n");
+
     // check the problem statistics (see Table 1 in AMPL doc)
     DBG_ASSERT(n_var > 0); // need some continuous variables
-    //    DBG_ASSERT(nbv == 0); // Cannot handle binary variables
-    //    DBG_ASSERT(niv == 0); // Cannot handle integer variables
-    // DELETEME
     if (!allow_discrete && (nbv>0 || niv>0) ) {
-      // The journalist has not yet been initialized at this point
-      // jnlst_->Printf(J_WARNING, J_MAIN, "Warning: Treating %d binary and %d integer variables as continous.\n", nbv, niv);
-      printf("==> Warning: Treating %d binary and %d integer variables as continous.\n\n", nbv, niv);
+      jnlst_->Printf(J_WARNING, J_MAIN, "==> Warning: Treating %d binary and %d integer variables as continous.\n\n", nbv, niv);
       allow_discrete = true;
     }
     allow_discrete = true;
@@ -126,39 +114,39 @@ namespace Ipopt
       case ASL_readerr_none : {}
       break;
       case ASL_readerr_nofile : {
-        printf("Cannot open .nl file\n");
-        exit(1);
+        jnlst_->Printf(J_ERROR, J_MAIN, "Cannot open .nl file\n");
+        exit(-1);
       }
       break;
       case ASL_readerr_nonlin : {
         DBG_ASSERT(false); // this better not be an error!
-        printf("model involves nonlinearities (ed0read)\n");
-        exit(1);
+        jnlst_->Printf(J_ERROR, J_MAIN, "model involves nonlinearities (ed0read)\n");
+        exit(-1);
       }
       break;
       case  ASL_readerr_argerr : {
-        printf("user-defined function with bad args\n");
-        exit(1);
+        jnlst_->Printf(J_ERROR, J_MAIN, "user-defined function with bad args\n");
+        exit(-1);
       }
       break;
       case ASL_readerr_unavail : {
-        printf("user-defined function not available\n");
-        exit(1);
+        jnlst_->Printf(J_ERROR, J_MAIN, "user-defined function not available\n");
+        exit(-1);
       }
       break;
       case ASL_readerr_corrupt : {
-        printf("corrupt .nl file\n");
-        exit(1);
+        jnlst_->Printf(J_ERROR, J_MAIN, "corrupt .nl file\n");
+        exit(-1);
       }
       break;
       case ASL_readerr_bug : {
-        printf("bug in .nl reader\n");
-        exit(1);
+        jnlst_->Printf(J_ERROR, J_MAIN, "bug in .nl reader\n");
+        exit(-1);
       }
       break;
       default: {
-        printf("Unknown error in stub file read\n");
-        exit(1);
+        jnlst_->Printf(J_ERROR, J_MAIN, "Unknown error in stub file read\n");
+        exit(-1);
       }
       break;
     }
@@ -488,7 +476,7 @@ namespace Ipopt
     }
 
     // Write the .sol file
-    message = " \nNewIpopt: " + message;
+    message = " \n" PACKAGE_STRING ": " + message;
     write_solution_file(message.c_str());
   }
 
@@ -640,6 +628,189 @@ namespace Ipopt
     }
   }
 
+  struct privat_info
+  {
+    SmartPtr<OptionsList> options;
+    SmartPtr<const Journalist> jnlst;
+  };
+
+  extern "C"
+  {
+    static char* get_num_opt(Option_Info *oi, keyword *kw, char *value) {
+      privat_info* pinfo = (privat_info*) kw->info;
+
+      real real_val;
+      kw->info = &real_val;
+      char* retval = D_val(oi, kw, value);
+      kw->info = (void*) pinfo;
+
+      if (!pinfo->options->SetNumericValue(kw->name, real_val)) {
+        pinfo->jnlst->Printf(J_ERROR, J_MAIN,
+                             "\nInvalid value for option %s.\n", kw->name);
+        exit(-1);
+      }
+
+      return retval;
+    }
+
+    static char* get_int_opt(Option_Info *oi, keyword *kw, char *value) {
+      privat_info* pinfo = (privat_info*) kw->info;
+
+      int int_val;
+      kw->info = &int_val;
+      char* retval = I_val(oi, kw, value);
+      kw->info = (void*) pinfo;
+
+      if (!pinfo->options->SetIntegerValue(kw->name, int_val)) {
+        pinfo->jnlst->Printf(J_ERROR, J_MAIN,
+                             "\nInvalid value for option %s.\n", kw->name);
+        exit(-1);
+      }
+
+      return retval;
+    }
+
+    static char* get_str_opt(Option_Info *oi, keyword *kw, char *value) {
+      privat_info* pinfo = (privat_info*) kw->info;
+
+      char* str_val;
+      kw->info = &str_val;
+      char* retval = C_val(oi, kw, value);
+      kw->info = (void*) pinfo;
+
+      if (!pinfo->options->SetValue(kw->name, str_val)) {
+        pinfo->jnlst->Printf(J_ERROR, J_MAIN,
+                             "\nInvalid value for option %s.\n", kw->name);
+        exit(-1);
+      }
+
+      return retval;
+    }
+  }
+
+  // Define some macros for convenience
+#define ADDNUMOPT(__NAME__, __DESC__) \
+    static char name_ ## __NAME__ [] = #__NAME__; \
+    static char desc_ ## __NAME__ [] = __DESC__; \
+    privat_info pinfo_ ## __NAME__ = {options, jnlst_}; \
+    keywds[count_options].name = name_ ## __NAME__; \
+    keywds[count_options].kf = get_num_opt; \
+    keywds[count_options].info = (void*) &pinfo_ ## __NAME__; \
+    keywds[count_options].desc = desc_ ## __NAME__; \
+    count_options++;
+
+#define ADDINTOPT(__NAME__, __DESC__) \
+    static char name_ ## __NAME__ [] = #__NAME__; \
+    static char desc_ ## __NAME__ [] = __DESC__; \
+    privat_info pinfo_ ## __NAME__ = {options, jnlst_}; \
+    keywds[count_options].name = name_ ## __NAME__; \
+    keywds[count_options].kf = get_int_opt; \
+    keywds[count_options].info = (void*) &pinfo_ ## __NAME__; \
+    keywds[count_options].desc = desc_ ## __NAME__; \
+    count_options++;
+
+#define ADDSTROPT(__NAME__, __DESC__) \
+    static char name_ ## __NAME__ [] = #__NAME__; \
+    static char desc_ ## __NAME__ [] = __DESC__; \
+    privat_info pinfo_ ## __NAME__ = {options, jnlst_}; \
+    keywds[count_options].name = name_ ## __NAME__; \
+    keywds[count_options].kf = get_str_opt; \
+    keywds[count_options].info = (void*) &pinfo_ ## __NAME__; \
+    keywds[count_options].desc = desc_ ## __NAME__; \
+    count_options++;
+
+  char*
+  AmplTNLP::get_options(const SmartPtr<OptionsList>& options,
+                        char**& argv)
+  {
+    ASL_pfgh* asl = asl_;
+
+    // Now we list all options with one-line descriptions, using the
+    // macros defined above.  The names must be ordered
+    // alphabetically!!!
+    static const int n_options = 31; // This must be the total number
+    // of options defined below
+    keyword keywds[n_options];
+    int count_options=0;
+    ADDNUMOPT(acceptable_compl_inf_tol,
+              "Acceptance threshold for the complementarity conditions");
+    ADDNUMOPT(acceptable_constr_viol_tol,
+              "Acceptance threshold for the constraint violation");
+    ADDNUMOPT(acceptable_dual_inf_tol,
+              "Acceptance threshold for the dual infeasibility");
+    ADDNUMOPT(acceptable_tol,
+              "Acceptable convergence tolerance (relative)");
+    ADDSTROPT(alpha_for_y,
+              "Step size for constraint multipliers");
+    ADDNUMOPT(bound_frac,
+              "Desired minimal relative distance of initial point to bound");
+    ADDNUMOPT(bound_mult_init_val,
+              "Initial value for the bound multipliers");
+    ADDNUMOPT(bound_push,
+              "Desired minimal absolute distance of initial point to bound");
+    ADDNUMOPT(bound_relax_factor,
+              "Factor for initial relaxation of the bounds");
+    ADDNUMOPT(compl_inf_tol,
+              "Acceptance threshold for the complementarity conditions");
+    ADDNUMOPT(constr_mult_init_max,
+              "Maximal allowed least-square guess of constraint multipliers");
+    ADDNUMOPT(constr_viol_tol,
+              "Desired threshold for the constraint violation");
+    ADDSTROPT(corrector_type,
+              "Type of corrector steps");
+    ADDNUMOPT(dual_inf_tol,
+              "Desired threshold for the dual infeasibility");
+    ADDSTROPT(expect_infeasible_problem,
+              "Enable heuristics to quickly detect an infeasible problem");
+    ADDINTOPT(file_print_level,
+              "Verbosity level for output file");
+    ADDINTOPT(max_iter,
+              "Maximum number of iterations");
+    ADDINTOPT(max_refinement_steps,
+              "Maximal number of iterative refinement steps per linear system solve");
+    ADDINTOPT(max_soc,
+              "Maximal number of second order correction trial steps");
+    ADDINTOPT(min_refinement_steps,
+              "Minimum number of iterative refinement steps per linear system solve");
+    ADDNUMOPT(mu_init,
+              "Initial value for the barrier parameter");
+    ADDSTROPT(mu_oracle,
+              "Oracle for a new barrier parameter in the adaptive strategy");
+    ADDSTROPT(mu_strategy,
+              "Update strategy for barrier parameter");
+    ADDNUMOPT(nlp_scaling_max_gradient,
+              "Maximum gradient after scaling");
+    ADDSTROPT(nlp_scaling_method,
+              "Select the technique used for scaling the NLP");
+    ADDNUMOPT(obj_scaling_factor,
+              "Scaling factor for the objective function");
+    ADDSTROPT(output_file,
+              "File name of an output file (leave unset for no file output)");
+    ADDNUMOPT(pivtol,
+              "Pivot tolerance for the linear solver");
+    ADDNUMOPT(pivtolmax,
+              "Maximal pivot tolerance for the linear solver");
+    ADDINTOPT(print_level,
+              "Verbosity level");
+    ADDNUMOPT(tol,
+              "Desired convergence tolerance (relative)");
+
+    DBG_ASSERT(count_options == n_options);
+
+    static char sname[] = "ipopt";
+    static char bsname[] = PACKAGE_STRING;
+    static char opname[] = "ipopt_options";
+    Option_Info Oinfo = {sname,
+                         bsname,
+                         opname,
+                         keywds,
+                         n_options};
+
+    char* stub = getstops(argv, &Oinfo);
+
+    return stub;
+  }
+
   AmplSuffixHandler::AmplSuffixHandler()
       :
       asl_(NULL),
@@ -699,7 +870,9 @@ namespace Ipopt
     suf_declare(suftab_, n);
   }
 
-  const Index* AmplSuffixHandler::GetIntegerSuffixValues(std::string suffix_string, Suffix_Source source) const
+  const Index*
+  AmplSuffixHandler::GetIntegerSuffixValues(std::string suffix_string,
+      Suffix_Source source) const
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl);
@@ -725,7 +898,9 @@ namespace Ipopt
     return dp->u.i;
   }
 
-  const Number* AmplSuffixHandler::GetNumberSuffixValues(std::string suffix_string, Suffix_Source source) const
+  const Number*
+  AmplSuffixHandler::GetNumberSuffixValues(std::string suffix_string,
+      Suffix_Source source) const
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl);

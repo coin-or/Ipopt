@@ -12,13 +12,21 @@ noinst_LIBRARIES = liblinsolvers.a
 
 liblinsolvers_a_SOURCES = \
 	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
-	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
-	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
 	IpSparseSymLinearSolverInterface.hpp \
 	IpSymLinearSolver.hpp \
 	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
 	IpTSymLinearSolver.cpp IpTSymLinearSolver.hpp \
 	IpTSymScalingMethod.hpp
+
+if HAVE_MA27
+  liblinsolvers_a_SOURCES += \
+	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp
+endif
+
+if HAVE_MC19
+  liblinsolvers_a_SOURCES += \
+	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp
+endif
 
 if HAVE_PARDISO
   liblinsolvers_a_SOURCES += \

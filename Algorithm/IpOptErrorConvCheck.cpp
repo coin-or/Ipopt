@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -10,7 +10,9 @@
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   OptimalityErrorConvergenceCheck::OptimalityErrorConvergenceCheck()
   {}
@@ -28,21 +30,21 @@ namespace Ipopt
       "iterations exceeded this number. [Also used in RestoFilterConvCheck]");
     roptions->AddLowerBoundedNumberOption(
       "dual_inf_tol",
-      "Acceptance threshold for the dual infeasibility.",
+      "Desired threshold for the dual infeasibility.",
       0.0, true, 1e-4,
       "Absolute tolerance on the dual infesaibility. Successful termination "
       "requires that the (unscaled) dual infeasibility is less than this "
       "threshold.");
     roptions->AddLowerBoundedNumberOption(
       "constr_viol_tol",
-      "Acceptance threshold for the constraint violation.",
+      "Desired threshold for the constraint violation.",
       0.0, true, 1e-4,
       "Absolute tolerance on the constraint violation. Successful termination "
       "requires that the (unscaled) constraint violation is less than this "
       "threshold.");
     roptions->AddLowerBoundedNumberOption(
       "compl_inf_tol",
-      "Acceptance threshold for the complementarity conditions.",
+      "Desired threshold for the complementarity conditions.",
       0.0, true, 1e-4,
       "Absolute tolerance on the complementarity. Successful termination "
       "requires that the (unscaled) complementarity is less than this "

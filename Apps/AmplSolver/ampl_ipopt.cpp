@@ -14,14 +14,6 @@ int main(int argv, char**argc)
   using namespace Ipopt;
 
   SmartPtr<IpoptApplication> app = new IpoptApplication();
-  app->Jnlst()->Printf(J_ERROR, J_MAIN, "\n\n\n*************************************************************\n");
-  app->Jnlst()->Printf(J_ERROR, J_MAIN, "*** Running Ipopt with AMPL Model ***************************\n");
-  app->Jnlst()->Printf(J_ERROR, J_MAIN, "*************************************************************\n\n\n");
-
-  // Get the options
-  // TODO: Need method in AmplNLP that can fill options with the  AMPL user options
-  //...  get options from AMPL
-  //... app->Options()->Add...
 
   // Add the suffix handler for scaling
   SmartPtr<AmplSuffixHandler> suffix_handler = new AmplSuffixHandler();
@@ -29,7 +21,9 @@ int main(int argv, char**argc)
   suffix_handler->AddAvailableSuffix("scaling_factor", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
   suffix_handler->AddAvailableSuffix("scaling_factor", AmplSuffixHandler::Objective_Source, AmplSuffixHandler::Number_Type);
 
-  SmartPtr<TNLP> ampl_tnlp = new AmplTNLP(ConstPtr(app->Jnlst()), argc, suffix_handler);
+  SmartPtr<TNLP> ampl_tnlp = new AmplTNLP(ConstPtr(app->Jnlst()),
+                                          app->Options(),
+                                          argc, suffix_handler);
 
   ApplicationReturnStatus retval;
   const int n_loops = 1; // make larger for profiling
