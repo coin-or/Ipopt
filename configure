@@ -9456,13 +9456,36 @@ fi
 echo $ECHO_N "checking whether user supplied BLASLIB=\"$use_blas\" works... $ECHO_C" >&6
     LIBS="$use_blas $LIBS"
     IPADDLIBS="$use_blas $IPADDLIBS"
+    # Probably the blas library requires the Fortran libraries, so add
+    # them for this test.  They are added at the end anyway
+    SAVE_LIBS="$LIBS"
+    LIBS="$LIBS $FLIBS"
+    ac_ext=f
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
+case $ac_cv_f77_mangling in
+  upper*) ac_val="DAXPY" ;;
+  lower*) ac_val="daxpy" ;;
+  *)      ac_val="unknown" ;;
+esac
+case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
+
+cfunc="$ac_val"
+
+ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
     cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
+extern "C" {void $cfunc();}
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -9474,7 +9497,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 int
 main ()
 {
-      call dgemm
+$cfunc()
   ;
   return 0;
 }
@@ -9508,19 +9531,41 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; { { echo "$as_me:$LINENO: error: user supplied BLAS library \"$use_blas\" does not work" >&5
+echo "${ECHO_T}no" >&6
+                 { { echo "$as_me:$LINENO: error: user supplied BLAS library \"$use_blas\" does not work" >&5
 echo "$as_me: error: user supplied BLAS library \"$use_blas\" does not work" >&2;}
    { (exit 1); exit 1; }; }
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
+    LIBS="$SAVE_LIBS"
   fi
 else
 # Try to autodetect the library for blas based on build system
   case $build in
-    *-sgi-*)   echo "$as_me:$LINENO: checking for dgemm in -lcomplib.sgimath" >&5
-echo $ECHO_N "checking for dgemm in -lcomplib.sgimath... $ECHO_C" >&6
-if test "${ac_cv_lib_complib_sgimath_dgemm+set}" = set; then
+    *-sgi-*) ac_ext=f
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
+case $ac_cv_f77_mangling in
+  upper*) ac_val="DAXPY" ;;
+  lower*) ac_val="daxpy" ;;
+  *)      ac_val="unknown" ;;
+esac
+case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
+
+cfunc="$ac_val"
+
+ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+             as_ac_Lib=`echo "ac_cv_lib_complib.sgimath_$cfunc" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $cfunc in -lcomplib.sgimath" >&5
+echo $ECHO_N "checking for $cfunc in -lcomplib.sgimath... $ECHO_C" >&6
+if eval "test \"\${$as_ac_Lib+set}\" = set"; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -9538,7 +9583,7 @@ extern "C"
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
-char dgemm ();
+char $cfunc ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -9550,7 +9595,7 @@ char dgemm ();
 int
 main ()
 {
-dgemm ();
+$cfunc ();
   ;
   return 0;
 }
@@ -9577,36 +9622,56 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_complib_sgimath_dgemm=yes
+  eval "$as_ac_Lib=yes"
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_lib_complib_sgimath_dgemm=no
+eval "$as_ac_Lib=no"
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_complib_sgimath_dgemm" >&5
-echo "${ECHO_T}$ac_cv_lib_complib_sgimath_dgemm" >&6
-if test $ac_cv_lib_complib_sgimath_dgemm = yes; then
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Lib'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_Lib'}'`" >&6
+if test `eval echo '${'$as_ac_Lib'}'` = yes; then
   use_blas=-lcomplib.sgimath;
                            LIBS="-lcomplib.sgimath $LIBS";
                            IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"
 fi
-;;
+
+             ;;
     *-sun-*) SAVE_LDFLAGS="$LDFLAGS"
              echo "$as_me:$LINENO: checking whether -xlic_lib=sunperf has BLAS" >&5
 echo $ECHO_N "checking whether -xlic_lib=sunperf has BLAS... $ECHO_C" >&6
              LDFLAGS="-xlic_lib=sunperf $LDFLAGS"
+             ac_ext=f
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
+case $ac_cv_f77_mangling in
+  upper*) ac_val="DAXPY" ;;
+  lower*) ac_val="daxpy" ;;
+  *)      ac_val="unknown" ;;
+esac
+case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
+
+cfunc="$ac_val"
+
+ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
              cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
+extern "C" {void $cfunc();}
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -9618,7 +9683,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 int
 main ()
 {
-      call dgemm
+$cfunc()
   ;
   return 0;
 }
@@ -9655,7 +9720,8 @@ echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; LDFLAGS="$SAVE_LDFLAGS"
 fi
 rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext ;;
+      conftest$ac_exeext conftest.$ac_ext
+             ;;
   esac
   if test -z "$use_blas"; then
     # Probably the blas library requires the Fortran libraries, so add

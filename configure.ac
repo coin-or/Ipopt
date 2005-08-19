@@ -864,22 +864,34 @@ if test ! -z "$use_blas"; then
     AC_MSG_CHECKING([whether user supplied BLASLIB=\"$use_blas\" works])
     LIBS="$use_blas $LIBS"
     IPADDLIBS="$use_blas $IPADDLIBS"
-    AC_TRY_LINK([],[      call dgemm],[AC_MSG_RESULT([yes])],
-                [AC_MSG_RESULT([no]); AC_MSG_ERROR([user supplied BLAS library \"$use_blas\" does not work])])
+    # Probably the blas library requires the Fortran libraries, so add
+    # them for this test.  They are added at the end anyway
+    SAVE_LIBS="$LIBS"
+    LIBS="$LIBS $FLIBS"
+    AC_F77_FUNC(daxpy,cfunc)
+    AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc()],
+                [AC_MSG_RESULT([yes])],
+                [AC_MSG_RESULT([no])
+                 AC_MSG_ERROR([user supplied BLAS library \"$use_blas\" does not work])])
+    LIBS="$SAVE_LIBS"
   fi
 else
 # Try to autodetect the library for blas based on build system
   case $build in
-    *-sgi-*)   AC_CHECK_LIB([complib.sgimath],[dgemm],
+    *-sgi-*) AC_F77_FUNC(daxpy,cfunc)
+             AC_CHECK_LIB([complib.sgimath],[$cfunc],
                           [use_blas=-lcomplib.sgimath;
                            LIBS="-lcomplib.sgimath $LIBS";
-                           IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"]);;
+                           IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"])
+             ;;
     *-sun-*) SAVE_LDFLAGS="$LDFLAGS"
              AC_MSG_CHECKING([whether -xlic_lib=sunperf has BLAS])
              LDFLAGS="-xlic_lib=sunperf $LDFLAGS"
-             AC_TRY_LINK([],[      call dgemm],
+             AC_F77_FUNC(daxpy,cfunc)
+             AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc()],
                          [AC_MSG_RESULT([yes]); use_blas=-xlic_lib=sunperf],
-                         [AC_MSG_RESULT([no]); LDFLAGS="$SAVE_LDFLAGS"]) ;;
+                         [AC_MSG_RESULT([no]); LDFLAGS="$SAVE_LDFLAGS"])
+             ;;
   esac
   if test -z "$use_blas"; then
     # Probably the blas library requires the Fortran libraries, so add
