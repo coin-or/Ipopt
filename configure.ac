@@ -147,7 +147,7 @@ if test -z "$CXXFLAGS"; then
       case "$CXX" in
       cl | */cl)
              opt_cxxflags="-Ot1"
-             add_cxxflags="-nologo"
+             add_cxxflags="-nologo -EHsc -GR"
              dbg_cxxflags="-Yd";;
       esac;;
      *-linux-*)
