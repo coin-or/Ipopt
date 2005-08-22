@@ -46,7 +46,11 @@ AC_ARG_ENABLE([debug],
 
 AC_LANG_PUSH(C++)
 SAVE_CXXFLAGS="$CXXFLAGS"
-AC_PROG_CXX([cl xlC aCC CC g++ icpc])
+case $build in
+  *-cygwin) comps="g++" ;;
+  *)        comps="xlC aCC CC g++ c++ icpc" ;;
+esac
+AC_PROG_CXX([$comps])
 CXXFLAGS="$SAVE_CXXFLAGS"
 
 warn_cxxflags=
@@ -60,6 +64,7 @@ if test -z "$CXXFLAGS"; then
     case "$CXX" in
       icpc | */icpc) ;;
       *)
+# ToDo decide aboiut unroll-loops
         opt_cxxflags="-O3 -funroll-loops"
         case $build in
           x86_64-* | i686-* | i586-* )
@@ -308,7 +313,11 @@ AC_MSG_NOTICE([Using AR_X=\"$AR_X\".])
 
 AC_LANG_PUSH(C)
 SAVE_CFLAGS="$CFLAGS"
-AC_PROG_CC([cl pgcc xlc cc gcc icc])
+case $build in
+  *-cygwin) comps="gcc" ;;
+  *)        comps="xlc cc gcc icc" ;;
+esac
+AC_PROG_CC([$comps])
 CFLAGS="$SAVE_CFLAGS"
 
 warn_cflags=
@@ -494,7 +503,11 @@ AC_LANG_POP(C)
 
 AC_LANG_PUSH(Fortran 77)
 SAVE_FFLAGS="$FFLAGS"
-AC_PROG_F77(ifort pgf77 xlf fort77 f77 g77 df ifc)
+case $build in
+  *-cygwin) comps="gfortran g77" ;;
+  *)        comps="xlf fort77 gfortran f77 g77 ifort ifc" ;;
+esac
+AC_PROG_F77($comps)
 FFLAGS="$SAVE_FFLAGS"
 
 if test -z "$FFLAGS"; then
