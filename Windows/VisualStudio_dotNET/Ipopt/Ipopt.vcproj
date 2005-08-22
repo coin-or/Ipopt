@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="NewIpopt"
+	Name="Ipopt"
 	ProjectGUID="{70C95D45-EB96-4C08-94D5-F1081D021629}"
 	Keyword="Win32Proj">
 	<Platforms>
@@ -34,7 +34,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/NewIpopt.lib"/>
+				OutputFile="$(OutDir)/Ipopt.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -62,8 +62,11 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..\..\..\Interfaces;..\..\..\Common;..\include;..\..\..\Algorithm;..\..\..\Algorithm\LinearSolvers;..\..\..\LinAlg;..\..\..\LinAlg\TMatrices"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="4"
+				DisableLanguageExtensions="TRUE"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -72,7 +75,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/NewIpopt.lib"/>
+				OutputFile="$(OutDir)/Ipopt.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -110,6 +113,9 @@
 					RelativePath="..\..\..\Algorithm\IpAlgBuilder.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\Algorithm\IpAlgorithmRegOp.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\Algorithm\IpAugRestoSystemSolver.cpp">
 				</File>
 				<File
@@ -138,6 +144,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\Algorithm\IpLeastSquareMults.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\Algorithm\LinearSolvers\IpLinearSolversRegOp.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\Algorithm\IpLoqoMuOracle.cpp">
@@ -274,21 +283,6 @@
 				Name="Common"
 				Filter="">
 				<File
-					RelativePath="..\..\..\Common\IpBlas.cpp">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\..\..\Common\IpDebug.cpp">
 				</File>
 				<File
@@ -306,12 +300,21 @@
 				<File
 					RelativePath="..\..\..\Common\IpTaggedObject.cpp">
 				</File>
+				<File
+					RelativePath="..\..\..\Common\IpUtils.cpp">
+				</File>
 			</Filter>
 			<Filter
 				Name="Interfaces"
 				Filter="">
 				<File
+					RelativePath="..\..\..\Interfaces\IpInterfacesRegOp.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\Interfaces\IpIpoptApplication.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\Interfaces\IpSolveStatistics.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\Interfaces\IpStdCInterface.cpp">
