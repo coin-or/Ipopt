@@ -1397,7 +1397,7 @@ Interfaces/ReturnCodes\_inc.h}.
 After the problem has solved, we check the status and print the solution if 
 successful. Finally, we free the memory and return from {\tt main}.
 
-\section{Ipopt Options}
+\section{Ipopt Options}\label{sec.options}
 Ipopt has many (maybe too many) options that can be adjusted for the
 algorithm.  Options are all identified by a string name and their
 values can be of one of three types, Number (real), Integer, or
@@ -1428,16 +1428,28 @@ max_iter 500
 is a valid {\tt PARAMS.DAT} file.
 
 Options can also be set in code. Have a look at the examples to see
-how this is done. Note, the PARAMS.DAT file is given preference when
-setting options. This way, you can easily override any options set in
-a particular executable by creating PARAMS.DAT.
+how this is done. 
+
+A subset of Ipopt options are available through AMPL. To set options
+through AMPL, use the internal AMPL command {\tt options}.  For
+example, \\ 
+{\tt options ipopt ``nlp\_scaling\_method=none mu\_init=1e-2
+max\_iter=500''} \\ 
+is a valid options command in AMPL. The most common
+options are referenced in Appendix \ref{app.options_ref}. These are also
+the options that are available through AMPL using the {\tt options}
+command. To specify other options when using AMPL, you can always
+create {\tt PARAMS.DAT}.  Note, the {\tt PARAMS.DAT} file is given
+preference when setting options. This way, you can easily override any
+options set in a particular executable or AMPL model by specifying new
+values in {\tt PARAMS.DAT}.
 
 For a short list of the valid options, see the Appendix
 \ref{app.options_ref}. You can print the documentation for all Ipopt
-options by adding the option, \\ 
-{\tt print\_options\_documentation yes} \\
-and running Ipopt (like the Ampl executable, for instance). This will
-output all of the options documentation to the console.
+options by adding the option, \\ {\tt print\_options\_documentation
+yes} \\ and running Ipopt (like the Ampl executable, for
+instance). This will output all of the options documentation to the
+console.
 
 \section*{Acknowledgement}
 The initial version of this document was created by Yoshiaki Kawajir
@@ -1556,38 +1568,47 @@ smart pointers, but just follow one simple rule; always use a SmartPtr
 when creating or passing an Ipopt object.
 
 \section{Options Reference} \label{app.options_ref}
+Options can be set using {\tt PARAMS.DAT}, through your own code, or through the 
+AMPL {\tt options} command. See Section \ref{sec.options} for an explanation of
+how to use these commands.
+Shown here is a short list of the most common options for Ipopt. To view
+the full list of options, run the ipopt executable with the option,
 \begin{verbatim}
-* print_options_documentation   ("no")
-   Switch to print list all algorithmic options
-     If selected, the algorithm will print the list of all available
-     algorithmic options with some documentation before solving the
-     optimization problem.
-   Possible values:
-    - no                      [don't print list]
-    - yes                     [print list]
+print_options_documentation yes
+\end{verbatim}
+
+The most common options are:
 
 
-### Convergence ###
 
-*tol                                    0 <  (      1e-08) <  +inf      
-   Desired convergence tolerance (relative).
-     Determines the convergence tolerance for the algorthim.  The algorithm
-     terminates successfully, if the (scaled) NLP error becomes smaller than
-     this value, and if the (absolute) criteria according to "dual_inf_tol",
-     "primal_inf_tol", and "cmpl_inf_tol" are met.  (This is epsilon_tol in
-     Eqn. (6) in implementation paper).  [Some other algorithmic features also
-     use this quantity.]
 
-* max_iter                               0 <= (       3000) <  +inf      
-   Maximum number of iterations.
-     The algorithm terminates with an error message if the number of
-     iterations exceeded this number. [Also used in RestoFilterConvCheck]
 
-* dual_inf_tol                           0 <  (     0.0001) <  +inf      
-   Desired threshold for the dual infeasibility.
-     Absolute tolerance on the dual infesaibility. Successful termination
-     requires that the (unscaled) dual infeasibility is less than this
-     threshold.
+\begin{verbatim}
+
+\paragraph{tol} $\;$ \\
+The desired relative convergence tolerance. The algorithm terminates
+successfully, if the (scaled) NLP error becomes smaller than this
+value, and if the (absolute) criteria according to "dual\_inf\_tol",
+"primal\_inf\_tol", and "cmpl\_inf\_tol" are met.  (This is
+epsilon\_tol in Eqn. (6) in implementation paper). Other
+algorithmic features rely on this quantity. The valid range is $0 <
+tol < +{\tt inf}$ and the default value is $1 \cdot 10^{-8}$.
+
+\paragraph{max\_iter} $\;$ \\
+The maximum number of iterations allowed.  The algorithm terminates with an error
+message if the number of iterations exceeds this number. Also used
+in the convergence check for the restoratin phase. 
+The valid range for this option is $0 \le
+{\tt max_iter} < +{\tt inf}$ and the default value is $3000$.
+
+
+\paragraph{dual\_inf\_tol} $\;$ \\
+Absolute tolerance on
+the dual infesaibility. Successful termination requires that the
+(unscaled) dual infeasibility is less than this threshold. The valid
+range is $0 < {\tt dual\_inf\_tol} < +{\tt inf}$ and the default value
+is $1\cdot 10^{-4}$.
+
 
 * constr_viol_tol                        0 <  (     0.0001) <  +inf      
    Desired threshold for the constraint violation.

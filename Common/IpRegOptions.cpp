@@ -98,6 +98,123 @@ namespace Ipopt
     }
   }
 
+  void RegisteredOption::OutputLatexDescription(const Journalist& jnlst) const
+  {
+    std::string latex_name;
+    MakeValidLatexString(name_, latex_name);
+    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, 
+		 "\\paragraph{%s} $\\;$ \\\\\n",  latex_name.c_str());
+
+    std::string latex_desc;
+    MakeValidLatexString(short_description_, latex_desc);
+    jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 0, 50,
+                               latex_desc.c_str());
+    if (long_description_ != "") {
+      latex_desc = "";
+      MakeValidLatexString(long_description_, latex_desc);      
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " ");
+      jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 0, 50,
+                                 latex_desc.c_str());
+    }
+
+    if (type_ == OT_Number) {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, 
+		     " The valid range for this real option is \n$");
+      if (has_lower_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%g", lower_);
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", "{\\tt -inf}");
+      }
+
+      if (has_lower_ && !lower_strict_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le ");
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
+      }
+
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "{\\tt %s }", latex_name.c_str());
+
+      if (has_upper_ && !upper_strict_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le ");
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
+      }
+
+      if (has_upper_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%g", upper_);
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", "{\\tt +inf}");
+      }
+
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, 
+		   "$\nand its default value is %g.\n\n", default_number_);
+      
+    }
+    else if (type_ == OT_Integer) {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, 
+		     " The valid range for this integer option is\n$");
+      if (has_lower_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d \\le ", (Index)lower_);
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s <  ", "{\\tt -inf}");
+      }
+
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "{\\tt %s }", latex_name.c_str());
+
+      if (has_upper_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le %d", (Index)upper_);
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  %s", "{\\tt +inf}");
+      }
+
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, 
+		   "$\nand its default value is %d.\n\n",
+                   (Index)default_number_);
+    }
+    else if (type_ == OT_String) {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\\\ \nPossible values:\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\begin{itemize}\n");
+      for (std::vector<string_entry>::const_iterator
+           i = valid_strings_.begin();
+           i != valid_strings_.end(); i++) {
+	std::string latex_value;
+	MakeValidLatexString((*i).value_, latex_value);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   \\item %s: ",
+                     latex_value.c_str());
+
+	std::string latex_desc;
+	MakeValidLatexString((*i).description_, latex_desc);
+        jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 0, 48,
+                                   latex_desc.c_str());
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+      }
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\end{itemize}\n");
+    }
+    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+  }
+
+  void RegisteredOption::MakeValidLatexString(std::string source, std::string& dest) const
+  {
+    std::string::iterator c;
+    for (c=source.begin(); c!=source.end(); c++) {
+      if (*c == '_') {
+	dest.append("\\_");
+      }
+      else if (*c == '^') {
+	dest.append("\\^");
+      }
+      else {
+	dest.push_back(*c);
+      }
+    }
+  }
+
   void RegisteredOption::OutputShortDescription(const Journalist& jnlst) const
   {
     jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%-30s",  name_.c_str());
@@ -672,4 +789,26 @@ namespace Ipopt
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
     }
   }
+
+  void RegisteredOptions::OutputLatexOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories)
+  {
+    std::list
+    <std::string>::iterator i;
+    for (i = categories.begin(); i != categories.end(); i++) {
+      std::map<Index, SmartPtr<RegisteredOption> > class_options;
+      std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
+      for (option = registered_options_.begin();
+           option != registered_options_.end(); option++) {
+        if (option->second->RegisteringCategory() == (*i)) {
+
+          class_options[option->second->Counter()] = option->second;
+        }
+      }
+      std::map<Index, SmartPtr<RegisteredOption> >::const_iterator co;
+      for (co = class_options.begin(); co != class_options.end(); co++) {
+        co->second->OutputLatexDescription(jnlst);
+      }
+    }
+  }
+
 } // namespace Ipopt

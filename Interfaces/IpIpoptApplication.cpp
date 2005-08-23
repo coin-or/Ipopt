@@ -130,7 +130,14 @@ namespace Ipopt
         categories.push_back("Warm Start");
         categories.push_back("MA27 Linear Solver");
         categories.push_back("Uncategorized");
-        reg_options->OutputOptionDocumentation(*jnlst_, categories);
+	bool latex;
+	options_->GetBoolValue("print_options_latex_mode", latex, "");
+	if (latex) {
+	  reg_options->OutputLatexOptionDocumentation(*jnlst_, categories);
+	}
+	else {
+	  reg_options->OutputOptionDocumentation(*jnlst_, categories);
+	}
       }
 
     }
@@ -218,6 +225,15 @@ namespace Ipopt
       "Selects the technique used for scaling the problem before it is solved."
       " For user-scaling, the parameters come from the NLP. If you are using "
       "AMPL, they can be specified through suffixes (scaling_factor)");
+
+    roptions->SetRegisteringCategory("Undocumented Options");
+    roptions->AddStringOption2(
+			       "print_options_latex_mode", 
+			       "Undocumented", "no",
+			       "no", "Undocumented",
+			       "yes", "Undocumented",
+			       "Undocumented"
+			       );
   }
 
   ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp)

@@ -337,6 +337,8 @@ namespace Ipopt
     void OutputDescription(const Journalist& jnlst) const;
     /** output a more concise version */
     void OutputShortDescription(const Journalist& jnlst) const;
+    /** output a latex version */
+    void OutputLatexDescription(const Journalist& jnlst) const;
 
   private:
     std::string name_;
@@ -352,6 +354,8 @@ namespace Ipopt
     bool upper_strict_;
     Number upper_;
     Number default_number_;
+
+    void MakeValidLatexString(std::string source, std::string& dest) const;
 
     /** Compare two strings and return true if they are equal (case
     insensitive comparison) */
@@ -555,6 +559,9 @@ namespace Ipopt
     /** Output documentation for the options - gives a description,
      *  etc. */
     void OutputOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories);
+
+    /** Output documentation in Latex format to include in a latex file */
+    void OutputLatexOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories);
     //@}
 
   private:

@@ -74,16 +74,28 @@ namespace Ipopt
 
   void Ma27TSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddBoundedNumberOption("pivtol", "pivot tolerance for the linear solver. smaller number - pivot for sparsity, larger number - pivot for stability",
-                                     0.0, true, 1.0, true, 1e-8);
-    roptions->AddBoundedNumberOption("pivtolmax", "maximum pivot tolerance. IPOPT may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system",
-                                     0.0, true, 1.0, true, 1e-4);
-    roptions->AddLowerBoundedNumberOption("liw_init_factor", "integer workspace memory = liw_init_factor * memory required by unfactored system",
-                                          1.0, false, 5.0);
-    roptions->AddLowerBoundedNumberOption("la_init_factor", "real workspace memory = la_init_factor * memory required by unfactored system",
-                                          1.0, false, 5.0);
-    roptions->AddLowerBoundedNumberOption("meminc_factor", "if workspace is not large enough, IPOPT will increase the size by this factor",
-                                          1.0, false, 10.0);
+    roptions->AddBoundedNumberOption("pivtol", "Pivot tolerance for the linear solver.",
+                                     0.0, true, 1.0, true, 1e-8,
+				     "A smaller number pivots for sparsity, "
+				     "a larger number pivots for stability.");
+    roptions->AddBoundedNumberOption("pivtolmax", "Maximum pivot tolerance.",
+                                     0.0, true, 1.0, true, 1e-4,
+				     "IPOPT may increase pivtol as high as pivtolmax "
+				     "to get a more accurate solution to the linear system");
+    roptions->AddLowerBoundedNumberOption("liw_init_factor", "Integer workspace memory.",
+                                          1.0, false, 5.0,
+					  "The initial integer workspace memory = liw_init_factor * memory "
+					  "required by unfactored system. IPOPT will increase the workspace size by "
+					  "meminc_factor if required.");
+    roptions->AddLowerBoundedNumberOption("la_init_factor", "Real workspace memory",
+                                          1.0, false, 5.0,
+					  "The initial real workspace memory = la_init_factor * memory "
+					  "required by unfactored system. IPOPT will increase the workspace size by "
+					  "meminc_factor if required.");
+    roptions->AddLowerBoundedNumberOption("meminc_factor", "Increment factor for workspace size.",
+                                          1.0, false, 10.0,
+					  "If the integer or real workspace is not large enough, "
+					  "IPOPT will increase its size by this factor");
   }
 
   bool Ma27TSolverInterface::InitializeImpl(const OptionsList& options,
