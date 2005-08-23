@@ -124,7 +124,7 @@ Bool AddIpoptStrOption(IpoptProblem ipopt_problem, char* keyword, char* val)
 {
   std::string tag(keyword);
   std::string value(val);
-  return (Bool) ipopt_problem->app->Options()->SetValue(tag, value);
+  return (Bool) ipopt_problem->app->Options()->SetStringValue(tag, value);
 }
 
 Bool AddIpoptNumOption(IpoptProblem ipopt_problem, char* keyword, Number val)

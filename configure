@@ -2065,6 +2065,7 @@ if test -z "$CXXFLAGS"; then
     case "$CXX" in
       icpc | */icpc) ;;
       *)
+# ToDo decide aboiut unroll-loops
         opt_cxxflags="-O3 -funroll-loops"
         case $build in
           x86_64-* | i686-* | i586-* )
@@ -2424,7 +2425,7 @@ rm -f conftest.err conftest.$ac_objext \
       case "$CXX" in
       cl | */cl)
              opt_cxxflags="-Ot1"
-             add_cxxflags="-nologo"
+             add_cxxflags="-nologo -EHsc -GR"
              dbg_cxxflags="-Yd";;
       esac;;
      *-linux-*)
@@ -4060,7 +4061,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4063:" \
+echo "$as_me:4064:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -4807,7 +4808,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:4810: \"$ac_link\") >&5
+(eval echo $as_me:4811: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4885,7 +4886,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:4888: \"$ac_link\") >&5
+(eval echo $as_me:4889: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS

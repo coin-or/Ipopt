@@ -43,11 +43,12 @@ namespace Ipopt
       {}
 
       /** Constructor given the value */
-      OptionValue(std::string value)
+      OptionValue(std::string value, bool allow_clobber)
           :
           value_(value),
           counter_(0),
-          initialized_(true)
+          initialized_(true),
+          allow_clobber_(allow_clobber)
       {}
 
       /** Copy Constructor */
@@ -55,7 +56,8 @@ namespace Ipopt
           :
           value_(copy.value_),
           counter_(copy.counter_),
-          initialized_(copy.initialized_)
+          initialized_(copy.initialized_),
+          allow_clobber_(copy.allow_clobber_)
       {}
 
       /** Equals operator */
@@ -64,6 +66,7 @@ namespace Ipopt
         value_=copy.value_;
         counter_=copy.counter_;
         initialized_=copy.initialized_;
+        allow_clobber_=copy.allow_clobber_;
       }
 
       /** Default Destructor */
@@ -95,6 +98,13 @@ namespace Ipopt
         return counter_;
       }
 
+      /** True if the option can be overwritten */
+      bool AllowClobber() const
+      {
+        DBG_ASSERT(initialized_);
+        return allow_clobber_;
+      }
+
     private:
       /** Value for this option */
       std::string value_;
@@ -104,6 +114,9 @@ namespace Ipopt
 
       /** for debugging */
       bool initialized_;
+
+      /** True if the option can be overwritten */
+      bool allow_clobber_;
     };
 
   public:
@@ -149,17 +162,20 @@ namespace Ipopt
     //@}
     /** @name Methods for setting options */
     //@{
-    bool SetValue(const std::string& tag, const std::string& value);
-    bool SetNumericValue(const std::string& tag, Number value);
-    bool SetIntegerValue(const std::string& tag, Index value);
+    bool SetStringValue(const std::string& tag, const std::string& value,
+                        bool allow_clobber = true);
+    bool SetNumericValue(const std::string& tag, Number value,
+                         bool allow_clobber = true);
+    bool SetIntegerValue(const std::string& tag, Index value,
+                         bool allow_clobber = true);
     //@}
 
     /** @name Methods for retrieving values from the options list.  If
      *  a tag is not found, the methods return false, and value is set
      *  to the default value defined in the registered options. */
     //@{
-    bool GetValue(const std::string& tag, std::string& value,
-                  const std::string& prefix) const;
+    bool GetStringValue(const std::string& tag, std::string& value,
+                        const std::string& prefix) const;
     bool GetEnumValue(const std::string& tag, Index& value,
                       const std::string& prefix) const;
     bool GetBoolValue(const std::string& tag, bool& value,
@@ -212,6 +228,12 @@ namespace Ipopt
      *  string value is copied into value. */
     bool find_tag(const std::string& tag, const std::string& prefix,
                   std::string& value) const;
+
+    /** tells whether or not we can clobber a particular option.
+     *  returns true if the option does not already exist, or if
+     *  the option exists but is set to allow_clobber
+     */
+    bool will_allow_clobber(const std::string& tag) const;
 
     /** read the next token from stream fp.  Returns false, if EOF was
      *  reached before a tokens was ecountered. */

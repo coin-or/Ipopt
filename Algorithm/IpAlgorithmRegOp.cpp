@@ -38,24 +38,24 @@ namespace Ipopt
   {
     roptions->SetRegisteringCategory("Mu Update");
     AdaptiveMuUpdate::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Main Algorithm");
-    AlgorithmBuilder::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Initialization");
     DefaultIterateInitializer::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Main Algorithm");
+    AlgorithmBuilder::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Line Search");
     FilterLineSearch::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Scaling");
+    roptions->SetRegisteringCategory("NLP Scaling");
+    StandardScalingBase::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("NLP Scaling");
     GradientScaling::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Uncategorized");
     IpoptAlgorithm::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Uncategorized");
-    IpoptCalculatedQuantities::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Uncategorized");
     IpoptData::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Uncategorized");
+    IpoptCalculatedQuantities::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Mu Update");
     MonotoneMuUpdate::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Scaling");
-    StandardScalingBase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Convergence");
     OptimalityErrorConvergenceCheck::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP");
@@ -68,15 +68,15 @@ namespace Ipopt
     ProbingMuOracle::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Mu Update");
     QualityFunctionMuOracle::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Convergence");
+    roptions->SetRegisteringCategory("Restoration");
     RestoFilterConvergenceCheck::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Restoration");
     RestoIpoptNLP::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Uncategorized");
-    MinC_1NrmRestorationPhase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Restoration");
+    MinC_1NrmRestorationPhase::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Warm Start");
     WarmStartIterateInitializer::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Initialization");
   }
 
 } // namespace Ipopt

@@ -678,7 +678,7 @@ namespace Ipopt
       char* retval = C_val(oi, kw, value);
       kw->info = (void*) pinfo;
 
-      if (!pinfo->options->SetValue(kw->name, str_val)) {
+      if (!pinfo->options->SetStringValue(kw->name, str_val)) {
         pinfo->jnlst->Printf(J_ERROR, J_MAIN,
                              "\nInvalid value for option %s.\n", kw->name);
         exit(-1);

@@ -51,6 +51,7 @@ namespace Ipopt
 
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
+    roptions->SetRegisteringCategory("Linear Solver");
     roptions->AddStringOption3(
       "linear_solver",
       "Linear solver used for step computations.",
@@ -70,6 +71,8 @@ namespace Ipopt
       "mc19", "use the Harwell routine mc19",
       "Determines which method should be use to compute symmetric scaling "
       "factors for the augmented system.");
+
+    roptions->SetRegisteringCategory("Mu Update");
     roptions->AddStringOption2(
       "mu_strategy",
       "Update strategy for barrier parameter.",
@@ -125,8 +128,8 @@ namespace Ipopt
     // Create the solvers that will be used by the main algorithm
     SmartPtr<TSymScalingMethod> ScalingMethod;
     std::string linear_system_scaling;
-    options.GetValue("linear_system_scaling",
-                     linear_system_scaling, prefix);
+    options.GetStringValue("linear_system_scaling",
+                           linear_system_scaling, prefix);
     if (linear_system_scaling=="mc19") {
 #ifdef HAVE_MC19
       ScalingMethod = new Mc19TSymScalingMethod();
@@ -140,7 +143,7 @@ namespace Ipopt
 
     SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
     std::string linear_solver;
-    options.GetValue("linear_solver", linear_solver, prefix);
+    options.GetStringValue("linear_solver", linear_solver, prefix);
     if (linear_solver=="ma27") {
 #ifdef HAVE_MA27
       SolverInterface = new Ma27TSolverInterface();
@@ -190,7 +193,7 @@ namespace Ipopt
     SmartPtr<IterateInitializer> IterInitializer;
     bool warm_start_init_point;
     std::string warm_start_option;
-    options.GetValue("warm_start_init_point", warm_start_option, prefix);
+    options.GetStringValue("warm_start_init_point", warm_start_option, prefix);
     warm_start_init_point = (warm_start_option == "yes");
 
     if (warm_start_init_point) {
@@ -223,13 +226,13 @@ namespace Ipopt
     // algorithm
     SmartPtr<MuUpdate> resto_MuUpdate;
     std::string resto_smuupdate;
-    options.GetValue("mu_strategy", resto_smuupdate, "resto."+prefix);
+    options.GetStringValue("mu_strategy", resto_smuupdate, "resto."+prefix);
 
     std::string resto_smuoracle;
     std::string resto_sfixmuoracle;
     if (resto_smuupdate=="adaptive" ) {
-      options.GetValue("mu_oracle", resto_smuoracle, "resto."+prefix);
-      options.GetValue("fixed_mu_oracle", resto_sfixmuoracle, "resto."+prefix);
+      options.GetStringValue("mu_oracle", resto_smuoracle, "resto."+prefix);
+      options.GetStringValue("fixed_mu_oracle", resto_sfixmuoracle, "resto."+prefix);
     }
 
     if (resto_smuupdate=="monotone" ) {
@@ -303,12 +306,12 @@ namespace Ipopt
     // Create the mu update that will be used by the main algorithm
     SmartPtr<MuUpdate> MuUpdate;
     std::string smuupdate;
-    options.GetValue("mu_strategy", smuupdate, prefix);
+    options.GetStringValue("mu_strategy", smuupdate, prefix);
     std::string smuoracle;
     std::string sfixmuoracle;
     if (smuupdate=="adaptive" ) {
-      options.GetValue("mu_oracle", smuoracle, prefix);
-      options.GetValue("fixed_mu_oracle", sfixmuoracle, prefix);
+      options.GetStringValue("mu_oracle", smuoracle, prefix);
+      options.GetStringValue("fixed_mu_oracle", sfixmuoracle, prefix);
     }
 
     if (smuupdate=="monotone" ) {

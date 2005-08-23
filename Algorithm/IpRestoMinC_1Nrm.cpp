@@ -75,7 +75,7 @@ namespace Ipopt
     // ToDo take care of this somewhere else?  avoid that the
     // restoration phase is trigged by user option in first iteration
     // of the restoration phase
-    resto_options_->SetValue("resto.start_with_resto", "no");
+    resto_options_->SetStringValue("resto.start_with_resto", "no");
 
     count_restorations_ = 0;
 

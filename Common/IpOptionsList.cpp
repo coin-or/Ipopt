@@ -31,7 +31,9 @@
 namespace Ipopt
 {
 
-  bool OptionsList::SetValue(const std::string& tag, const std::string& value)
+  bool OptionsList::SetStringValue(const std::string& tag,
+                                   const std::string& value,
+                                   bool allow_clobber /* = true */)
   {
     if (IsValid(reg_options_)) {
       SmartPtr<const RegisteredOption> option = reg_options_->GetOption(tag);
@@ -81,13 +83,24 @@ namespace Ipopt
       }
     }
 
-    OptionsList::OptionValue optval(lowercase(value));
-    options_[lowercase(tag)] = optval;
+    if (will_allow_clobber(tag)) {
+      OptionsList::OptionValue optval(lowercase(value), allow_clobber);
+      options_[lowercase(tag)] = optval;
+      return true;
+    }
 
-    return true;
+    std::string msg = "Option: \"" + tag;
+    msg += " ";
+    msg += value;
+    msg += "\" not taken because a value of \n\"" ;
+    msg += options_[lowercase(tag)].GetValue();
+    msg += "\" already exists and is set to disallow clobbering.\n\n";
+    jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
+    return false;
   }
 
-  bool OptionsList::SetNumericValue(const std::string& tag, Number value)
+  bool OptionsList::SetNumericValue(const std::string& tag, Number value,
+                                    bool allow_clobber /* = true */)
   {
     char buffer[256];
     sprintf(buffer, "%g", value);
@@ -141,13 +154,24 @@ namespace Ipopt
       }
     }
 
-    OptionsList::OptionValue optval(buffer);
-    options_[lowercase(tag)] = optval;
+    if (will_allow_clobber(tag)) {
+      OptionsList::OptionValue optval(buffer, allow_clobber);
+      options_[lowercase(tag)] = optval;
+      return true;
+    }
 
-    return true;
+    std::string msg = "Option: \"" + tag;
+    msg += " ";
+    msg += buffer;
+    msg += "\" not taken because a value of\n\"" ;
+    msg += options_[lowercase(tag)].GetValue();
+    msg += "\" already exists and is set to disallow clobbering.\n\n";
+    jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
+    return false;
   }
 
-  bool OptionsList::SetIntegerValue(const std::string& tag, Index value)
+  bool OptionsList::SetIntegerValue(const std::string& tag, Index value,
+                                    bool allow_clobber /* = true */)
   {
     char buffer[256];
     sprintf(buffer, "%d", value);
@@ -201,14 +225,24 @@ namespace Ipopt
       }
     }
 
-    OptionsList::OptionValue optval(buffer);
-    options_[lowercase(tag)] = optval;
+    if (will_allow_clobber(tag)) {
+      OptionsList::OptionValue optval(buffer, allow_clobber);
+      options_[lowercase(tag)] = optval;
+      return true;
+    }
 
-    return true;
+    std::string msg = "Option: \"" + tag;
+    msg += " ";
+    msg += buffer;
+    msg += "\" not taken because a value of \n\"" ;
+    msg += options_[lowercase(tag)].GetValue();
+    msg += "\" already exists and is set to disallow clobbering.\n\n";
+    jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
+    return false;
   }
 
-  bool OptionsList::GetValue(const std::string& tag, std::string& value,
-                             const std::string& prefix) const
+  bool OptionsList::GetStringValue(const std::string& tag, std::string& value,
+                                   const std::string& prefix) const
   {
     SmartPtr<const RegisteredOption> option = NULL;
 
@@ -302,7 +336,7 @@ namespace Ipopt
                                  const std::string& prefix) const
   {
     std::string str;
-    bool ret = GetValue(tag, str, prefix);
+    bool ret = GetStringValue(tag, str, prefix);
     if (str == "no" || str == "false" || str == "off") {
       value = false;
     }
@@ -489,7 +523,8 @@ namespace Ipopt
         }
 
         if (option->Type() == OT_String) {
-          ASSERT_EXCEPTION(SetValue(tag, value), OPTION_INVALID,
+          bool result = SetStringValue(tag, value, false);
+          ASSERT_EXCEPTION(result, OPTION_INVALID,
                            "Error setting string value read from option file.");
         }
         else if (option->Type() == OT_Number) {
@@ -501,7 +536,8 @@ namespace Ipopt
                               value + "\" found.\n";
             THROW_EXCEPTION(OPTION_INVALID, msg);
           }
-          ASSERT_EXCEPTION(SetNumericValue(tag, retval), OPTION_INVALID,
+          bool result = SetNumericValue(tag, retval, false);
+          ASSERT_EXCEPTION(result, OPTION_INVALID,
                            "Error setting numeric value read from file.");
         }
         else if (option->Type() == OT_Integer) {
@@ -516,7 +552,8 @@ namespace Ipopt
             }
             THROW_EXCEPTION(OPTION_INVALID, msg);
           }
-          ASSERT_EXCEPTION(SetIntegerValue(tag, retval), OPTION_INVALID,
+          bool result = SetIntegerValue(tag, retval, false);
+          ASSERT_EXCEPTION(result, OPTION_INVALID,
                            "Error setting integer value read from option file.");
         }
         else {
@@ -524,7 +561,8 @@ namespace Ipopt
         }
       }
       else {
-        ASSERT_EXCEPTION(SetValue(tag, value), OPTION_INVALID,
+        bool result = SetStringValue(tag, value, false);
+        ASSERT_EXCEPTION(result, OPTION_INVALID,
                          "Error setting value read from option file.");
       }
     }
@@ -556,6 +594,19 @@ namespace Ipopt
     }
 
     return found;
+  }
+
+  bool OptionsList::will_allow_clobber(const std::string& tag) const
+  {
+    bool allow_clobber=true;
+    std::map< std::string, OptionValue >::const_iterator p;
+
+    p = options_.find(lowercase(tag));
+    if (p != options_.end()) {
+      allow_clobber = p->second.AllowClobber();
+    }
+
+    return allow_clobber;
   }
 
   bool OptionsList::readnexttoken(FILE* fp, std::string& token)

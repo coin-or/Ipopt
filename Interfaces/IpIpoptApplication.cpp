@@ -97,7 +97,7 @@ namespace Ipopt
 
       // Open an output file if required
       std::string output_filename;
-      options_->GetValue("output_file", output_filename, "");
+      options_->GetStringValue("output_file", output_filename, "");
       if (output_filename != "") {
         EJournalLevel file_print_level;
         option_set = options_->GetIntegerValue("file_print_level", ivalue, "");
@@ -119,7 +119,7 @@ namespace Ipopt
         categories.push_back("Output");
         categories.push_back("Main Algorithm");
         categories.push_back("Convergence");
-        categories.push_back("Scaling");
+        categories.push_back("NLP Scaling");
         categories.push_back("Mu Update");
         categories.push_back("Line Search");
         categories.push_back("Initialization");
@@ -127,6 +127,8 @@ namespace Ipopt
         categories.push_back("Step Calculation");
         categories.push_back("Restoration");
         categories.push_back("NLP");
+        categories.push_back("Warm Start");
+        categories.push_back("MA27 Linear Solver");
         categories.push_back("Uncategorized");
         reg_options->OutputOptionDocumentation(*jnlst_, categories);
       }
@@ -167,18 +169,6 @@ namespace Ipopt
       "Sets the default verbosity level, in particular to screen.  The "
       "larger this value the more detailed is the output.");
 
-#if IP_DEBUG
-
-    roptions->AddBoundedIntegerOption(
-      "debug_print_level",
-      "Verbosity level for debug file.",
-      0, J_LAST_LEVEL-1, J_SUMMARY,
-      "This Ipopt library has been compiled in debug mode, and a file "
-      "\"debug.out\" is produced for every run.  This option determines "
-      "the verbosity level for this file.  By default it is the same as "
-      "\"print_level\".");
-#endif
-
     roptions->AddStringOption1(
       "output_file",
       "File name of an output file (leave unset for no file output)",
@@ -205,7 +195,20 @@ namespace Ipopt
       "algorithmic options with some documentation before solving the "
       "optimization problem.");
 
-    roptions->SetRegisteringCategory("Scaling");
+#if IP_DEBUG
+
+    roptions->AddBoundedIntegerOption(
+      "debug_print_level",
+      "Verbosity level for debug file.",
+      0, J_LAST_LEVEL-1, J_SUMMARY,
+      "This Ipopt library has been compiled in debug mode, and a file "
+      "\"debug.out\" is produced for every run.  This option determines "
+      "the verbosity level for this file.  By default it is the same as "
+      "\"print_level\".");
+
+#endif
+
+    roptions->SetRegisteringCategory("NLP Scaling");
     roptions->AddStringOption3(
       "nlp_scaling_method",
       "Select the technique used for scaling the NLP", "gradient_based",
@@ -237,7 +240,7 @@ namespace Ipopt
 
       SmartPtr<NLPScalingObject> nlp_scaling;
       std::string nlp_scaling_method;
-      options_->GetValue("nlp_scaling_method", nlp_scaling_method, "");
+      options_->GetStringValue("nlp_scaling_method", nlp_scaling_method, "");
       if (nlp_scaling_method == "user_scaling") {
         nlp_scaling = new UserScaling(ConstPtr(nlp));
       }

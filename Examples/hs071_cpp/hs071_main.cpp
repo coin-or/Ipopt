@@ -13,12 +13,19 @@ using namespace Ipopt;
 
 int main(int argv, char* argc[])
 {
-  // Create an instance of your nlp...
+  // Create a new instance of your nlp 
+  //  (use a SmartPtr, not raw)
   SmartPtr<TNLP> mynlp = new HS071_NLP();
 
-  // Create an instance of the IpoptApplication
+  // Create a new instance of IpoptApplication
+  //  (use a SmartPtr, not raw)
   SmartPtr<IpoptApplication> app = new IpoptApplication();
 
+  // Change some options
+  app->Options()->SetNumericValue("tol", 1e-9);
+  app->Options()->SetStringValue("mu_strategy", "adaptive");
+
+  // Ask Ipopt to solve the problem
   ApplicationReturnStatus status = app->OptimizeTNLP(mynlp);
 
   if (status == Solve_Succeeded) {
@@ -27,6 +34,10 @@ int main(int argv, char* argc[])
   else {
     printf("\n\n*** The problem FAILED!\n");
   }
+
+  // As the SmartPtrs go out of scope, the reference count
+  // will be decremented and the objects will automatically 
+  // be deleted.
 
   return (int) status;
 }

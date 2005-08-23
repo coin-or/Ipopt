@@ -1113,31 +1113,39 @@ the compiler to use the Ipopt namespace, and implement the {\tt main}
 function.
 \begin{verbatim}
 #include "IpIpoptApplication.hpp"
-#include "HS071_NLP.hpp"
+#include "hs071_nlp.hpp"
 
 using namespace Ipopt;
 
-int main()
+int main(int argv, char* argc[])
 {
-        // use a SmartPtr to point the new HS071_NLP
-        SmartPtr<TNLP> mynlp = new HS071_NLP();
-        
-        // use a SmartPtr to point to new IpoptApplication
-        SmartPtr<IpoptApplication> app = new IpoptApplication();
+  // Create a new instance of your nlp 
+  //  (use a SmartPtr, not raw)
+  SmartPtr<TNLP> mynlp = new HS071_NLP();
 
-        // Ask Ipopt to solve the problem
-        SolverReturn status = app->OptimizeTNLP(mynlp);
-        if (status == SUCCESSFUL) {
-                std::cout << "SOLVED :)" << std::endl;
-                return 0;
-        }
-        else {
-                std::cout << "FAILED! :(" << std::endl;
-                return -1;
-        }
-        
-        // As the SmartPtr's go out of scope, the reference counts will be decremented
-        // and the mynlp and app objects will automatically be deleted.
+  // Create a new instance of IpoptApplication
+  //  (use a SmartPtr, not raw)
+  SmartPtr<IpoptApplication> app = new IpoptApplication();
+
+  // Change some options
+  app->Options()->SetNumericValue("tol", 1e-9);
+  app->Options()->SetStringValue("mu_strategy", "adaptive");
+
+  // Ask Ipopt to solve the problem
+  ApplicationReturnStatus status = app->OptimizeTNLP(mynlp);
+
+  if (status == Solve_Succeeded) {
+    printf("\n\n*** The problem solved!\n");
+  }
+  else {
+    printf("\n\n*** The problem FAILED!\n");
+  }
+
+  // As the SmartPtrs go out of scope, the reference count
+  // will be decremented and the objects will automatically 
+  // be deleted.
+
+  return (int) status;
 }
 \end{verbatim} 
 
@@ -1389,6 +1397,48 @@ Interfaces/ReturnCodes\_inc.h}.
 After the problem has solved, we check the status and print the solution if 
 successful. Finally, we free the memory and return from {\tt main}.
 
+\section{Ipopt Options}
+Ipopt has many (maybe too many) options that can be adjusted for the
+algorithm.  Options are all identified by a string name and their
+values can be of one of three types, Number (real), Integer, or
+string. Number options are used for things like tolerances, integer
+options are used for things like maximum number of iterations, and
+string options are used for setting algorithm details, like the NLP
+scaling method. Options can be set through code, through the AMPL
+interface if you are using AMPL, or by creating a {\tt PARAMS.DAT}
+file in the directory you are executing Ipopt.
+
+The {\tt PARAMS.DAT} file is read line by line and each line should
+contain the option name, followed by whitespace, and then the
+value. Comments can be included with the {\tt \#} symbol. Don't forget
+to ensure you have a newline at the end of the file. For example,
+\begin{verbatim}
+# This is a comment
+
+# Turn off the NLP scaling
+nlp_scaling_method none
+
+# Change the initial barrier parameter
+mu_init 1e-2
+
+# Set the max number of iterations
+max_iter 500
+
+\end{verbatim}
+is a valid {\tt PARAMS.DAT} file.
+
+Options can also be set in code. Have a look at the examples to see
+how this is done. Note, the PARAMS.DAT file is given preference when
+setting options. This way, you can easily override any options set in
+a particular executable by creating PARAMS.DAT.
+
+For a short list of the valid options, see the Appendix
+\ref{app.options_ref}. You can print the documentation for all Ipopt
+options by adding the option, \\ 
+{\tt print\_options\_documentation yes} \\
+and running Ipopt (like the Ampl executable, for instance). This will
+output all of the options documentation to the console.
+
 \section*{Acknowledgement}
 The initial version of this document was created by Yoshiaki Kawajir
 as a course project for \textit{47852 Open Source Software for
@@ -1476,7 +1526,7 @@ provided for those positions are added.
 MISSING: Symmetric matrices
 
 
-\section{The Smart Pointer Implementation: SmartPtr}
+\section{The Smart Pointer Implementation: SmartPtr} \label{app.smart_ptr}
 
 The SmartPtr class is described in {\tt IpSmartPtr.hpp}. It is a
 template class that takes care of deleting objects for us so we need
@@ -1505,4 +1555,229 @@ This might sound difficult to anyone not familiar with the use of
 smart pointers, but just follow one simple rule; always use a SmartPtr
 when creating or passing an Ipopt object.
 
+\section{Options Reference} \label{app.options_ref}
+\begin{verbatim}
+* print_options_documentation   ("no")
+   Switch to print list all algorithmic options
+     If selected, the algorithm will print the list of all available
+     algorithmic options with some documentation before solving the
+     optimization problem.
+   Possible values:
+    - no                      [don't print list]
+    - yes                     [print list]
+
+
+### Convergence ###
+
+*tol                                    0 <  (      1e-08) <  +inf      
+   Desired convergence tolerance (relative).
+     Determines the convergence tolerance for the algorthim.  The algorithm
+     terminates successfully, if the (scaled) NLP error becomes smaller than
+     this value, and if the (absolute) criteria according to "dual_inf_tol",
+     "primal_inf_tol", and "cmpl_inf_tol" are met.  (This is epsilon_tol in
+     Eqn. (6) in implementation paper).  [Some other algorithmic features also
+     use this quantity.]
+
+* max_iter                               0 <= (       3000) <  +inf      
+   Maximum number of iterations.
+     The algorithm terminates with an error message if the number of
+     iterations exceeded this number. [Also used in RestoFilterConvCheck]
+
+* dual_inf_tol                           0 <  (     0.0001) <  +inf      
+   Desired threshold for the dual infeasibility.
+     Absolute tolerance on the dual infesaibility. Successful termination
+     requires that the (unscaled) dual infeasibility is less than this
+     threshold.
+
+* constr_viol_tol                        0 <  (     0.0001) <  +inf      
+   Desired threshold for the constraint violation.
+     Absolute tolerance on the constraint violation. Successful termination
+     requires that the (unscaled) constraint violation is less than this
+     threshold.
+
+* compl_inf_tol                          0 <  (     0.0001) <  +inf      
+   Desired threshold for the complementarity conditions.
+     Absolute tolerance on the complementarity. Successful termination
+     requires that the (unscaled) complementarity is less than this threshold.
+
+* acceptable_tol                         0 <  (      1e-06) <  +inf      
+   Acceptable convergence tolerance (relative).
+     Determines which (scaled) overall optimality error is considered to be
+     acceptable. If the algorithm encounters "acceptable_iter" iterations in a
+     row that are considered "acceptable", it will terminate before the
+     desired convergence tolerance ("tol", "dual_inf_tol", etc) is met.
+
+* acceptable_dual_inf_tol                0 <  (       0.01) <  +inf      
+   Acceptance threshold for the dual infeasibility.
+     Absolute tolerance on the dual infesaibility. Acceptable termination
+     requires that the (unscaled) dual infeasibility is less than this
+     threshold.
+
+* acceptable_constr_viol_tol             0 <  (       0.01) <  +inf      
+   Acceptance threshold for the constraint violation.
+     Absolute tolerance on the constraint violation. Acceptable termination
+     requires that the (unscaled) constraint violation is less than this
+     threshold.
+
+* acceptable_compl_inf_tol               0 <  (       0.01) <  +inf      
+   Acceptance threshold for the complementarity conditions.
+     Absolute tolerance on the complementarity. Acceptable termination
+     requires that the (unscaled) complementarity is less than this threshold.
+
+### NLP Scaling ###
+
+* nlp_scaling_method            ("gradient_based")
+   Select the technique used for scaling the NLP
+     Selects the technique used for scaling the problem before it is solved.
+     For user-scaling, the parameters come from the NLP. If you are using
+     AMPL, they can be specified through suffixes (scaling_factor)
+   Possible values:
+    - none                    [no problem scaling will be performed]
+    - user_scaling            [scaling parameters will come from the user]
+    - gradient_based          [scale the problem so the maximum gradient at
+                               the starting point is scaling_max_gradient]
+
+* obj_scaling_factor                  -inf <  (          1) <  +inf      
+   Scaling factor for the objective function.
+     This option allows to set a scaling factor for the objective function
+     that is used to scale the problem that is seen internally by Ipopt. If
+     additional scaling parameters are computed (e.g. user-scaling or
+     gradient-based), this factor is multiplied in addition. If this value is
+     chosen to be negative, Ipopt will maximize the objective function.
+
+* nlp_scaling_max_gradient               0 <  (        100) <  +inf      
+   maximum gradient after scaling
+     This is the gradient scaling cut-off. If the maximum gradient is above
+     this value, then gradient based scaling will be performed. Scaling
+     parameters will scale the maximum gradient back to this value. Note: This
+     option is only used if "nlp_scaling_method" is chosen as "gradient_based".
+
+### Mu Update ###
+
+* mu_strategy                   ("monotone")
+   Update strategy for barrier parameter.
+     Determines which barrier parameter strategy is to be used.
+   Possible values:
+    - monotone                [use the monotone (Fiacco-McCormick) strategy]
+    - adaptive                [use the adaptive update strategy]
+
+* mu_oracle                     ("probing")
+   Oracle for a new barrier parameter in the adaptive strategy
+     Determines how a new barrier parameter is computed in each "free-mode"
+     iteration of the adaptive barrier parameter strategy. (Only considered if
+     "adaptive" is selected for option "mu_strategy".
+   Possible values:
+    - probing                 [Mehrotra's probing heuristic]
+    - loqo                    [LOQO's centrality rule]
+    - quality_function        [minimize a quality function]
+
+* mu_init                                0 <  (        0.1) <  +inf      
+   Initial value for the barrier parameter.
+     This option determines the initial value for the barrier parameter (mu). 
+     It is only relevant in the monotone, Fiacco-McCormick version of the
+     algorithm., i.e., if "mu_strategy" is chosen as "monotone"
+
+### Line Search ###
+
+* max_soc                                0 <= (          4) <  +inf      
+   Maximal number of second order correction trial steps.
+     Determines the maximal number of second order correction trial steps that
+     should be performed.  Choosing 0 disables the second order corrections.
+     (This is p^{max} of Step A-5.9 of Algorithm A in implementation paper.)
+
+* corrector_type                ("none")
+   Type of corrector steps.
+     Determines what kind of corrector steps should be tried.
+   Possible values:
+    - none                    [no corrector]
+    - affine                  [corrector step towards mu=0]
+    - primal-dual             [corrector step towards current mu]
+
+* alpha_for_y                   ("primal")
+   Step size for constraint multipliers.
+     Determines which step size (alpha_y) should be used to update the
+     constraint multipliers.
+   Possible values:
+    - primal                  [use primal step size]
+    - bound_mult              [use step size for the bound multipliers]
+    - min                     [use the min of primal and bound multipliers]
+    - max                     [use the max of primal and bound multipliers]
+    - full                    [take a full step of size one]
+    - min_dual_infeas         [choose step size minimizing new dual
+                               infeasibility]
+    - safe_min_dual_infeas    [like "min_dual_infeas", but safeguarded by
+                               "min" and "max"]
+* expect_infeasible_problem     ("no")
+   Enable heuristics to quickly detect an infeasible problem.
+     This options is meant to activate heuristics that may speed up the
+     infeasibility determination if you expect the problem to be infeasible. 
+     In the filter line search procedure, the restoration phase is called more
+     qucikly than usually, and more reduction in the constraint violation is
+     enforced. If the problem is square, this is enabled automatically.
+   Possible values:
+    - no                      [the problem probably be feasible]
+    - yes                     [the problem has a good chance to be infeasible]
+
+### Initialization ###
+
+* bound_push                             0 <  (       0.01) <  +inf      
+   Desired minimal absolute distance of initial point to bound
+     Determines (together with "bound_frac") by how much the initial point
+     might have to be modified in order to be sufficiently inside the bounds.
+
+* bound_frac                             0 <  (       0.01) <= 0.5       
+   Desired minimal relative distance of initial point to bound
+     Determines (together with "bound_push") by how much the initial point
+     might have to be modified in order to be sufficiently inside the bounds.
+
+* constr_mult_init_max                   0 <= (       1000) <  +inf      
+   Maximal allowed least-square guess of constraint multipliers.
+     Determines how large the initial least-square guesses of the contraint
+     multipliers (in max-norm) are allowed to be. If the guess is larger than
+     this value, it is discarded and all constraint multipliers are set to
+     zero.  This options is also used in the classes
+     "RestoIterateInitializer".  By default, "resto.constr_mult_init_max" (the
+     one used in RestoIterateInitializer) is set to zero.
+
+* bound_mult_init_val                    0 <  (          1) <  +inf      
+   Initial value for the bound multipliers
+     All dual variables corresponding to bound constraints are initialized to
+     this value.
+
+### Step Calculation ###
+
+* min_refinement_steps                   0 <= (          1) <  +inf      
+   Minimum number of iterative refinement steps per linear system solve.
+     Iterative refinement (on the unsymmetric full system) is performed for
+     each right hand side.  This option determines the minimal number of
+     iterative refinements, i.e., by setting it to 1 at least one iterative
+     refinement step per right hand side is enforce.
+
+* max_refinement_steps                   0 <= (         10) <  +inf      
+   Maximal number of iterative refinement steps per linear system solve.
+     Iterative refinement (on the unsymmetric full system) is performed for
+     each right hand side.  This option determines the maximal number of
+     iterative refinements.
+
+
+### NLP ###
+
+* bound_relax_factor                     0 <= (      1e-08) <  +inf      
+   Factor for initial relaxation of the bounds.
+     Before start of the optimization, the bounds given by the user are
+     relaxed.  This option determines the factor by how much.  If it is set to
+     zero, then this option is disabled.  (See Eqn.(35) in implmentation
+     paper.)
+
+
+### MA27 Linear Solver ###
+
+* pivtol                                 0 <  (      1e-08) <  1         
+   pivot tolerance for the linear solver. smaller number - pivot for sparsity,
+   larger number - pivot for stability
+
+* pivtolmax                              0 <  (     0.0001) <  1         
+   maximum pivot tolerance. IPOPT may increase pivtol as high as pivtolmax to
+   get a more accurate solution to the linear system
+\end{verbatim}
 \end{document}
