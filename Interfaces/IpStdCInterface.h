@@ -107,7 +107,7 @@ extern "C"
                               the number specified by option
                               'nlp_lower_bound_inf' is interpreted to
                               be minus infinity. */
-    , Number* x_U         /** Upper bounds on variables. This rray of
+    , Number* x_U         /** Upper bounds on variables. This array of
                               size n is copied internally, so that the
                               caller can change the incoming data after
                               return without that IpoptProblem is
@@ -116,7 +116,7 @@ extern "C"
                               'nlp_upper_bound_inf' is interpreted to
                               be plus infinity. */
     , Index m             /** Number of constraints. */
-    , Number* g_L         /** Lower bounds on constraints. This rray of
+    , Number* g_L         /** Lower bounds on constraints. This array of
                               size m is copied internally, so that the
                               caller can change the incoming data after
                               return without that IpoptProblem is
@@ -124,7 +124,7 @@ extern "C"
                               the number specified by option
                               'nlp_lower_bound_inf' is interpreted to
                               be minus infinity. */
-    , Number* g_U         /** Upper bounds on constraints. This rray of
+    , Number* g_U         /** Upper bounds on constraints. This array of
                               size m is copied internally, so that the
                               caller can change the incoming data after
                               return without that IpoptProblem is

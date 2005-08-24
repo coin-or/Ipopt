@@ -1325,7 +1325,7 @@ AC_CONFIG_FILES([Makefile Common/Makefile
 		 Algorithm/LinearSolvers/Makefile
 		 Apps/Makefile Apps/AmplSolver/Makefile
 		 Apps/CUTErInterface/Makefile
-		 Examples/Fortran_example/Makefile
+		 Examples/hs071_f/Makefile
 		 Examples/Cpp_example/Makefile
 		 Examples/hs071_cpp/Makefile
 		 Examples/hs071_c/Makefile

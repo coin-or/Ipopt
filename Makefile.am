@@ -16,7 +16,7 @@ EXTRA_DIST = \
 	Examples/Cpp_example/cpp_example.cpp \
 	Examples/Cpp_example/MyNLP.cpp \
 	Examples/Cpp_example/MyNLP.hpp \
-	Examples/Fortran_example/example.f \
+	Examples/hs071_f/hs071_f.f \
 	Examples/hs071_c/hs071_c.c \
 	Examples/hs071_cpp/hs071_main.cpp \
 	Examples/hs071_cpp/hs071_nlp.cpp \
