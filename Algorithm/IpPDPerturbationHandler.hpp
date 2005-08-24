@@ -174,6 +174,11 @@ namespace Ipopt
 
     /** @name Auxilliary methods */
     //@{
+    /** Internal version of PerturbForWrongInertia with the
+     *  difference, that finalize_test is not called. */
+    bool get_deltas_for_wrong_inertia(Number& delta_x, Number& delta_s,
+                                      Number& delta_c, Number& delta_d);
+
     /** This method is call whenever a matrix had been factorization
      *  and is not singular.  In here, we can evaluate the outcome of
      *  the deneracy test heuristics. */

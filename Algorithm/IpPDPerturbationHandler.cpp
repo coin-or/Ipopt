@@ -172,8 +172,10 @@ namespace Ipopt
     delta_d = delta_d_curr_ = delta_c;
 
     if (hess_degenerate_ == DEGENERATE) {
-      PerturbForWrongInertia(delta_x, delta_s,
-                             delta_c, delta_d);
+      bool retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
+                    delta_c, delta_d);
+      ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
+                       "get_deltas_for_wrong_inertia returns false.");
     }
     else {
       delta_x = 0.;
@@ -198,6 +200,8 @@ namespace Ipopt
     DBG_START_METH("PDPerturbationHandler::PerturbForSingularity",
                    dbg_verbosity);
 
+    bool retval;
+
     // Check for structural degeneracy
     if (hess_degenerate_ == NOT_YET_DETERMINED ||
         jac_degenerate_ == NOT_YET_DETERMINED) {
@@ -211,9 +215,11 @@ namespace Ipopt
         }
         else {
           DBG_ASSERT(hess_degenerate_ == NOT_YET_DETERMINED);
-          PerturbForWrongInertia(delta_x, delta_s,
-                                 delta_c, delta_d);
-          DBG_ASSERT(delta_c = delta_cd_val_ && delta_d == delta_cd_val_);
+          retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
+						delta_c, delta_d);
+          ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
+                           "get_deltas_for_wrong_inertia returns false.");
+          DBG_ASSERT(delta_c == delta_cd_val_ && delta_d == delta_cd_val_);
           test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         }
         break;
@@ -221,21 +227,27 @@ namespace Ipopt
         DBG_ASSERT(delta_x_curr_ == 0. && delta_c_curr_ > 0.);
         DBG_ASSERT(jac_degenerate_ == NOT_YET_DETERMINED);
         delta_d_curr_ = delta_c_curr_ = 0.;
-        PerturbForWrongInertia(delta_x, delta_s,
-                               delta_c, delta_d);
+	retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
+					      delta_c, delta_d);
+        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
+                         "get_deltas_for_wrong_inertia returns false.");
         DBG_ASSERT(delta_c == 0. && delta_d == 0.);
         test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         break;
         case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
         DBG_ASSERT(delta_x_curr_ > 0. && delta_c_curr_ == 0.);
         delta_d_curr_ = delta_c_curr_ = delta_cd_val_;
-        PerturbForWrongInertia(delta_x, delta_s,
-                               delta_c, delta_d);
+        retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
+					      delta_c, delta_d);
+        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
+                         "get_deltas_for_wrong_inertia returns false.");
         test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
         break;
         case TEST_DELTA_C_GT_0_DELTA_X_GT_0:
-        PerturbForWrongInertia(delta_x, delta_s,
-                               delta_c, delta_d);
+        retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
+					      delta_c, delta_d);
+        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
+                         "get_deltas_for_wrong_inertia returns false.");
         break;
         case NO_TEST:
         DBG_ASSERT(false && "we should not get here.");
@@ -245,8 +257,10 @@ namespace Ipopt
       if (delta_c_curr_ > 0.) {
         // If we already used a perturbation for the constraints, we do
         // the same thing as if we were encountering negative curvature
-        PerturbForWrongInertia(delta_x, delta_s,
-                               delta_c, delta_d);
+        retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
+					      delta_c, delta_d);
+        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
+                         "get_deltas_for_wrong_inertia returns false.");
       }
       else {
         // Otherwise we now perturb the lower right corner
@@ -268,18 +282,10 @@ namespace Ipopt
   }
 
   bool
-  PDPerturbationHandler::PerturbForWrongInertia(
+  PDPerturbationHandler::get_deltas_for_wrong_inertia(
     Number& delta_x, Number& delta_s,
     Number& delta_c, Number& delta_d)
   {
-    DBG_START_METH("PDPerturbationHandler::PerturbForWrongInertia",
-                   dbg_verbosity);
-
-    // Check if we can conclude that components of the system are
-    // structurally degenerate (we only get here if the most recent
-    // perturbation for a test did not result in a singular system)
-    finalize_test();
-
     if (delta_x_curr_ == 0.) {
       if (delta_x_last_ == 0.) {
         delta_x_curr_ = delta_xs_init_;
@@ -312,6 +318,22 @@ namespace Ipopt
     IpData().Set_info_regu_x(delta_x);
 
     return true;
+  }
+
+  bool
+  PDPerturbationHandler::PerturbForWrongInertia(
+    Number& delta_x, Number& delta_s,
+    Number& delta_c, Number& delta_d)
+  {
+    DBG_START_METH("PDPerturbationHandler::PerturbForWrongInertia",
+                   dbg_verbosity);
+
+    // Check if we can conclude that components of the system are
+    // structurally degenerate (we only get here if the most recent
+    // perturbation for a test did not result in a singular system)
+    finalize_test();
+
+    return get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
   }
 
   void

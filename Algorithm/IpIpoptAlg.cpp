@@ -199,6 +199,10 @@ namespace Ipopt
       exc.ReportException(Jnlst());
       return SUCCESS;
     }
+    catch(INTERNAL_ABORT& exc) {
+      exc.ReportException(Jnlst());
+      return INTERNAL_ERROR;
+    }
 
     DBG_ASSERT(false && "Unknown return code in the algorithm");
 

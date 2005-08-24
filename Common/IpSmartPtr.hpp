@@ -224,7 +224,7 @@ namespace Ipopt
      * user to compare the value of a SmartPtr with a raw pointer. */
     template <class U1, class U2>
     friend
-    bool operator==(const SmartPtr& lhs, U2* raw_rhs);
+    bool operator==(const SmartPtr<U1>& lhs, U2* raw_rhs);
 
     /** Overloaded equality comparison operator, allows the
      * user to compare the value of a raw pointer with a SmartPtr. */

@@ -37,6 +37,7 @@ namespace Ipopt
   DECLARE_STD_EXCEPTION(TINY_STEP_DETECTED);
   DECLARE_STD_EXCEPTION(ACCEPTABLE_POINT_REACHED);
   DECLARE_STD_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED);
+  DECLARE_STD_EXCEPTION(INTERNAL_ABORT);
   /** Exception FAILED_INITIALIZATION for problem during
    *  initialization of a strategy object (or other problems).  This
    *  is thrown by a strategy object, if a problem arises during
