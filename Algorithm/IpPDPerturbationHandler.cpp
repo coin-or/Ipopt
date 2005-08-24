@@ -218,12 +218,12 @@ namespace Ipopt
         }
         break;
         case TEST_DELTA_C_GT_0_DELTA_X_EQ_0:
-        DBG_ASSERT(delta_x_curr_ > 0. && delta_c_curr_ == 0.);
+        DBG_ASSERT(delta_x_curr_ == 0. && delta_c_curr_ > 0.);
         DBG_ASSERT(jac_degenerate_ == NOT_YET_DETERMINED);
         delta_d_curr_ = delta_c_curr_ = 0.;
         PerturbForWrongInertia(delta_x, delta_s,
                                delta_c, delta_d);
-        DBG_ASSERT(delta_c = 0. && delta_d == 0.);
+        DBG_ASSERT(delta_c == 0. && delta_d == 0.);
         test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         break;
         case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
