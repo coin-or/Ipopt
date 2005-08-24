@@ -312,29 +312,27 @@ namespace Ipopt
   SmartPtr<const Vector> OrigIpoptNLP::c(const Vector& x)
   {
     SmartPtr<const Vector> retValue;
-    SmartPtr<const Vector> dep;
     if (c_space_->Dim()==0) {
       // We do this caching of an empty vector so that the returned
       // Vector has always the same tag (this might make a difference
       // in cases where only the constraints are supposed to change...
-      dep = NULL;
+      SmartPtr<const Vector> dep = NULL;
       if (!c_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
         retValue = c_space_->MakeNew();
         c_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
       }
     }
     else {
-      dep = &x;
-    }
-    if (!c_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
-      SmartPtr<Vector> unscaled_c = c_space_->MakeNew();
-      c_evals_++;
-      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
-      bool success = nlp_->Eval_c(*unscaled_x, *unscaled_c);
-      ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_c->Nrm2()),
-                       Eval_Error, "Error evaluating the equality constraints");
-      retValue = NLP_scaling()->apply_vector_scaling_c(ConstPtr(unscaled_c));
-      c_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
+      if (!c_cache_.GetCachedResult1Dep(retValue, x)) {
+        SmartPtr<Vector> unscaled_c = c_space_->MakeNew();
+        c_evals_++;
+        SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        bool success = nlp_->Eval_c(*unscaled_x, *unscaled_c);
+        ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_c->Nrm2()),
+                         Eval_Error, "Error evaluating the equality constraints");
+        retValue = NLP_scaling()->apply_vector_scaling_c(ConstPtr(unscaled_c));
+        c_cache_.AddCachedResult1Dep(retValue, x);
+      }
     }
 
     return retValue;
@@ -344,32 +342,30 @@ namespace Ipopt
   {
     DBG_START_METH("OrigIpoptNLP::d", dbg_verbosity);
     SmartPtr<const Vector> retValue;
-    SmartPtr<const Vector> dep;
     if (d_space_->Dim()==0) {
       // We do this caching of an empty vector so that the returned
       // Vector has always the same tag (this might make a difference
       // in cases where only the constraints are supposed to change...
-      dep = NULL;
+      SmartPtr<const Vector> dep = NULL;
       if (!d_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
         retValue = d_space_->MakeNew();
         d_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
       }
     }
     else {
-      dep = &x;
-    }
-    if (!d_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
-      d_evals_++;
-      SmartPtr<Vector> unscaled_d = d_space_->MakeNew();
+      if (!d_cache_.GetCachedResult1Dep(retValue, x)) {
+        d_evals_++;
+        SmartPtr<Vector> unscaled_d = d_space_->MakeNew();
 
-      DBG_PRINT_VECTOR(2, "scaled_x", x);
-      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
-      bool success = nlp_->Eval_d(*unscaled_x, *unscaled_d);
-      DBG_PRINT_VECTOR(2, "unscaled_d", *unscaled_d);
-      ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_d->Nrm2()),
-                       Eval_Error, "Error evaluating the inequality constraints");
-      retValue = NLP_scaling()->apply_vector_scaling_d(ConstPtr(unscaled_d));
-      d_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
+        DBG_PRINT_VECTOR(2, "scaled_x", x);
+        SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        bool success = nlp_->Eval_d(*unscaled_x, *unscaled_d);
+        DBG_PRINT_VECTOR(2, "unscaled_d", *unscaled_d);
+        ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_d->Nrm2()),
+                         Eval_Error, "Error evaluating the inequality constraints");
+        retValue = NLP_scaling()->apply_vector_scaling_d(ConstPtr(unscaled_d));
+        d_cache_.AddCachedResult1Dep(retValue, x);
+      }
     }
 
     return retValue;
@@ -378,28 +374,27 @@ namespace Ipopt
   SmartPtr<const Matrix> OrigIpoptNLP::jac_c(const Vector& x)
   {
     SmartPtr<const Matrix> retValue;
-    SmartPtr<const Vector> dep;
     if (c_space_->Dim()==0) {
       // We do this caching of an empty vector so that the returned
       // Matrix has always the same tag
-      dep = NULL;
+      SmartPtr<const Vector> dep = NULL;
       if (!jac_c_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
-        retValue = jac_c_space_->MakeNew();
+        SmartPtr<Matrix> unscaled_jac_c = jac_c_space_->MakeNew();
+        retValue = NLP_scaling()->apply_jac_c_scaling(ConstPtr(unscaled_jac_c));
         jac_c_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
       }
     }
     else {
-      dep = &x;
-    }
-    if (!jac_c_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
-      jac_c_evals_++;
-      SmartPtr<Matrix> unscaled_jac_c = jac_c_space_->MakeNew();
+      if (!jac_c_cache_.GetCachedResult1Dep(retValue, x)) {
+        jac_c_evals_++;
+        SmartPtr<Matrix> unscaled_jac_c = jac_c_space_->MakeNew();
 
-      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
-      bool success = nlp_->Eval_jac_c(*unscaled_x, *unscaled_jac_c);
-      ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the equality constraints");
-      retValue = NLP_scaling()->apply_jac_c_scaling(ConstPtr(unscaled_jac_c));
-      jac_c_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
+        SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        bool success = nlp_->Eval_jac_c(*unscaled_x, *unscaled_jac_c);
+        ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the equality constraints");
+        retValue = NLP_scaling()->apply_jac_c_scaling(ConstPtr(unscaled_jac_c));
+        jac_c_cache_.AddCachedResult1Dep(retValue, x);
+      }
     }
 
     return retValue;
@@ -408,28 +403,27 @@ namespace Ipopt
   SmartPtr<const Matrix> OrigIpoptNLP::jac_d(const Vector& x)
   {
     SmartPtr<const Matrix> retValue;
-    SmartPtr<const Vector> dep;
     if (d_space_->Dim()==0) {
       // We do this caching of an empty vector so that the returned
       // Matrix has always the same tag
-      dep = NULL;
+      SmartPtr<const Vector> dep = NULL;
       if (!jac_d_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
-        retValue = jac_d_space_->MakeNew();
+        SmartPtr<Matrix> unscaled_jac_d = jac_d_space_->MakeNew();
+        retValue = NLP_scaling()->apply_jac_d_scaling(ConstPtr(unscaled_jac_d));
         jac_d_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
       }
     }
     else {
-      dep = &x;
-    }
-    if (!jac_d_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
-      jac_d_evals_++;
-      SmartPtr<Matrix> unscaled_jac_d = jac_d_space_->MakeNew();
+      if (!jac_d_cache_.GetCachedResult1Dep(retValue, x)) {
+        jac_d_evals_++;
+        SmartPtr<Matrix> unscaled_jac_d = jac_d_space_->MakeNew();
 
-      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
-      bool success = nlp_->Eval_jac_d(*unscaled_x, *unscaled_jac_d);
-      ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the inequality constraints");
-      retValue = NLP_scaling()->apply_jac_d_scaling(ConstPtr(unscaled_jac_d));
-      jac_d_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
+        SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        bool success = nlp_->Eval_jac_d(*unscaled_x, *unscaled_jac_d);
+        ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the inequality constraints");
+        retValue = NLP_scaling()->apply_jac_d_scaling(ConstPtr(unscaled_jac_d));
+        jac_d_cache_.AddCachedResult1Dep(retValue, x);
+      }
     }
 
     return retValue;
