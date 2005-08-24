@@ -25,13 +25,14 @@ namespace Ipopt
   void GradientScaling::RegisterOptions(const SmartPtr<RegisteredOptions>& roptions)
   {
     roptions->AddLowerBoundedNumberOption(
-      "nlp_scaling_max_gradient", "maximum gradient after scaling",
+      "nlp_scaling_max_gradient", "Maximum gradient after scaling.",
       0, true, 100.0,
       "This is the gradient scaling cut-off. If the maximum"
       " gradient is above this value, then gradient based scaling"
-      " will be performed. Scaling parameters will scale the maximum"
-      " gradient back to this value. Note: This option is only used"
-      " if \"nlp_scaling_method\" is chosen as \"gradient_based\".");
+      " will be performed. Scaling parameters are calculated to"
+      " scale the maximum gradient back to this value. Note: This"
+      " option is only used if \"nlp_scaling_method\" is chosen as"
+      " \"gradient_based\".");
   }
 
   bool GradientScaling::InitializeImpl(const OptionsList& options,

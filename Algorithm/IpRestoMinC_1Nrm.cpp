@@ -35,7 +35,7 @@ namespace Ipopt
   {
     roptions->AddLowerBoundedNumberOption(
       "bound_mult_reset_threshold",
-      "Threshold for resetting bound multipliers after restoration phase.",
+      "Threshold for resetting bound multipliers after the restoration phase.",
       0.0, false,
       1e3,
       "After returning from the restoration phase, the bound multipliers are "

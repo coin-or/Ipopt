@@ -41,9 +41,9 @@ namespace Ipopt
                                      0.0, true, 0.5, false, 1e-3);
     roptions->AddLowerBoundedNumberOption("warm_start_mult_bound_push", "same as mult_bound_push for the regular initializer",
                                           0.0, true, 1e-3);
-    roptions->AddNumberOption("warm_start_mult_init_max", "(No Range?) max initial value for the equality multipliers",
+    roptions->AddNumberOption("warm_start_mult_init_max", "Maximum initial value for the equality multipliers",
                               1e6);
-    roptions->AddNumberOption("warm_start_target_mu", "(No range?) - default value in code was 0e-3 ???",
+    roptions->AddNumberOption("warm_start_target_mu", "(No range?) default value in code was 0e-3 ???",
                               0e-3);
   }
 

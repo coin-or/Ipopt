@@ -69,9 +69,9 @@ namespace Ipopt
       0, false,
       1e-8,
       "Before start of the optimization, the bounds given by the user are "
-      "relaxed.  This option determines the factor by how much.  If it "
-      "is set to zero, then this option is disabled.  (See Eqn.(35) in "
-      "implmentation paper.)");
+      "relaxed.  This option sets the factor for this relaxation.  If it "
+      "is set to zero, then then bounds relaxation is disabled. "
+      "(See Eqn.(35) in implmentation paper.)");
   }
 
   bool OrigIpoptNLP::Initialize(const Journalist& jnlst,

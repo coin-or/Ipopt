@@ -38,17 +38,17 @@ namespace Ipopt
       "min_refinement_steps",
       "Minimum number of iterative refinement steps per linear system solve.",
       0, 1,
-      "Iterative refinement (on the unsymmetric full system) is performed for "
-      "each right hand side.  This option determines the minimal number "
-      "of iterative refinements, i.e., by setting it to 1 at least one "
-      "iterative refinement step per right hand side is enforce.");
+      "Iterative refinement (on the full unsymmetric system) is performed for "
+      "each right hand side.  This option determines the minimum number "
+      "of iterative refinements (i.e. at least \"min_refinement_steps\" "
+      "iterative refinement steps are enforced per right hand side.)");
     roptions->AddLowerBoundedIntegerOption(
       "max_refinement_steps",
-      "Maximal number of iterative refinement steps per linear system solve.",
+      "Maximum number of iterative refinement steps per linear system solve.",
       0, 10,
-      "Iterative refinement (on the unsymmetric full system) is performed for "
-      "each right hand side.  This option determines the maximal number "
-      "of iterative refinements.");
+      "Iterative refinement (on the full unsymmetric system) is performed for "
+      "each right hand side.  This option determines the maximum number "
+      "of iterative refinement steps.");
     roptions->AddLowerBoundedNumberOption(
       "residual_ratio_max",
       "Iterative refinement tolerance",

@@ -48,9 +48,9 @@ namespace Ipopt
       "restoration phase. (This is delta_w^max in implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "min_hessian_perturbation",
-      "Smallest value by which Hessian block is perturbed.",
+      "Smallest perturbation of the Hessian block.",
       0., false, 1e-20,
-      "The size of the perturbation of the Hessian block is never chosen "
+      "The size of the perturbation of the Hessian block is never selected "
       "smaller than this value, unless no perturbation is necessary. (This "
       "is delta_w^min in implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
@@ -59,15 +59,17 @@ namespace Ipopt
       1., true, 100.,
       "The factor by which the perturbation is increased when a trial value "
       "was not sufficient - this value is used for the computation of the "
-      "very first perturbation. (This is bar_kappa_w^+ in implementation "
-      "paper.)");
+      "very first perturbation and allows a different value for for the first "
+      "perturbation than that used for the remaining perturbations. "
+      "(This is bar_kappa_w^+ in implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "perturb_inc_fact",
       "Increase factor for x-s perturbation.",
       1., true, 8.,
       "The factor by which the perturbation is increased when a trial value "
       "was not sufficient - this value is used for the computation of "
-      "later perturbations. (This is kappa_w^+ in implementation paper.)");
+      "all perturbations except for the first. "
+      "(This is kappa_w^+ in implementation paper.)");
     roptions->AddBoundedNumberOption(
       "perturb_dec_fact",
       "Decrease factor for x-s perturbation.",
@@ -77,9 +79,9 @@ namespace Ipopt
       "(This is kappa_w^- in implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "first_hessian_perturbation",
-      "First size of first x-s perturbation tried.",
+      "Size of first x-s perturbation tried.",
       0., true, 1e-4,
-      "The first value for an x-s perturbation factors tried. "
+      "The first value tried for the x-s perturbation. "
       "(This is delta_0 in implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "jacobian_regularization",

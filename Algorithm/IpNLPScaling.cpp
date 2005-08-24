@@ -186,12 +186,13 @@ namespace Ipopt
       "obj_scaling_factor",
       "Scaling factor for the objective function.",
       1.,
-      "This option allows to set a scaling factor for the objective function "
-      "that is used to scale the problem that is seen internally by "
-      "Ipopt. If additional scaling parameters are computed "
-      "(e.g. user-scaling or gradient-based), this factor is multiplied "
-      "in addition. If this value is chosen to be negative, Ipopt will "
-      "maximize the objective function.");
+      "This option sets a scaling factor for the objective function. "
+      "The scaling is seen internally by Ipopt but the unscaled objective is "
+      "reported in the console output. "
+      "If additional scaling parameters are computed "
+      "(e.g. user-scaling or gradient-based), both factors are multiplied. "
+      "If this value is chosen to be negative, Ipopt will "
+      "maximize the objective function instead of minimizing it.");
   }
 
   bool StandardScalingBase::InitializeImpl(const OptionsList& options,

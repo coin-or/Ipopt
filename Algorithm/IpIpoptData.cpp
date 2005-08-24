@@ -47,13 +47,13 @@ namespace Ipopt
       "tol",
       "Desired convergence tolerance (relative).",
       0.0, true,  1e-8,
-      "Determines the convergence tolerance for the algorthim.  The "
+      "Determines the convergence tolerance for the algorithm.  The "
       "algorithm terminates successfully, if the (scaled) NLP error "
       "becomes smaller than this value, and if the (absolute) criteria "
       "according to \"dual_inf_tol\", \"primal_inf_tol\", and "
       "\"cmpl_inf_tol\" are met.  (This is epsilon_tol in Eqn. (6) in "
-      "implementation paper).  [Some other algorithmic features also use "
-      "this quantity.]");
+      "implementation paper). Note, some other algorithmic features also use "
+      "this quantity.");
   }
 
   bool IpoptData::Initialize(const Journalist& jnlst,

@@ -25,28 +25,27 @@ namespace Ipopt
   {
     reg_options->AddLowerBoundedNumberOption(
       "bound_push",
-      "Desired minimal absolute distance of initial point to bound",
+      "Desired minimum absolute distance from the initial point to bound",
       0.0, true, 0.01,
-      "Determines (together with \"bound_frac\") by how much the initial "
-      "point might have to be modified in order to be sufficiently inside "
-      "the bounds.");
+      "Determines how much the initial point might have to "
+      "be modified in order to be sufficiently inside "
+      "the bounds (together with \"bound_frac\").");
     reg_options->AddBoundedNumberOption(
       "bound_frac",
-      "Desired minimal relative distance of initial point to bound",
+      "Desired minimum relative distance from the initial point to bound",
       0, true, 0.5, false, 0.01,
-      "Determines (together with \"bound_push\") by how much the initial "
-      "point might have to be modified in order to be sufficiently inside "
-      "the bounds.");
+      "Determines how much the initial point might have to "
+      "be modified in order to be sufficiently inside "
+      "the bounds (together with \"bound_push\").");
     reg_options->AddLowerBoundedNumberOption(
       "constr_mult_init_max",
-      "Maximal allowed least-square guess of constraint multipliers.",
+      "Maximum allowed least-square guess of constraint multipliers.",
       0, false, 1e3,
       "Determines how large the initial least-square guesses of the contraint "
-      "multipliers (in max-norm) are allowed to be. If the guess is larger "
+      "multipliers are allowed to be (in max-norm). If the guess is larger "
       "than this value, it is discarded and all constraint multipliers are "
-      "set to zero.  This options is also used in the classes "
-      "\"RestoIterateInitializer\".  By default, "
-      "\"resto.constr_mult_init_max\" (the one "
+      "set to zero.  This options is also used when initializing the "
+      "restoration phase. By default, \"resto.constr_mult_init_max\" (the one "
       "used in RestoIterateInitializer) is set to zero.");
     reg_options->AddLowerBoundedNumberOption(
       "bound_mult_init_val",

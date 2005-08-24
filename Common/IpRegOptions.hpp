@@ -356,6 +356,7 @@ namespace Ipopt
     Number default_number_;
 
     void MakeValidLatexString(std::string source, std::string& dest) const;
+    std::string MakeValidLatexNumber(Number value) const;
 
     /** Compare two strings and return true if they are equal (case
     insensitive comparison) */
@@ -412,6 +413,13 @@ namespace Ipopt
     {
       current_registering_category_ = registering_category;
     }
+    
+    /** retrieve the value of the current registering category */
+    std::string RegisteringCategory()
+    {
+      return current_registering_category_;
+    }
+
     /** Add a Number option (with no restrictions) */
     void AddNumberOption(const std::string& name,
                          const std::string& short_description,

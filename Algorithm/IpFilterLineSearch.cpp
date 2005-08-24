@@ -72,11 +72,11 @@ namespace Ipopt
       "unacceptable to the filter (see Eqn. (21) in implementation paper).");
     roptions->AddLowerBoundedNumberOption(
       "theta_min_fact",
-      "Determines constraint violation threshold in switching rule.",
+      "Determines constraint violation threshold in the switching rule.",
       0.0, true, 1e-4,
-      "The algorithmic parameter theta_min is determined as theta_max_fact "
+      "The algorithmic parameter theta_min is determined as theta_min_fact "
       "times the maximum of 1 and the constraint violation at initial point.  "
-      "The switching rules treats an iteration as h-type iteration whenever "
+      "The switching rules treats an iteration as an h-type iteration whenever "
       "the current constraint violation is larger than theta_min (see "
       "paragraph before Eqn. (19) in implementation paper).");
     roptions->AddBoundedNumberOption(
@@ -85,61 +85,64 @@ namespace Ipopt
       0.0, true, 0.5, true, 1e-8,
       "(See Eqn. (20) in implementation paper)");
     roptions->AddLowerBoundedNumberOption(
-      "delta", "Multiplier for constraint violation in switching rule.",
+      "delta", "Multiplier for constraint violation in the switching rule.",
       0.0, true, 1.0,
       "(See Eqn. (19) in implementation paper)");
     roptions->AddLowerBoundedNumberOption(
       "s_phi",
-      "Exponent for linear barrier function model in switching rule.",
+      "Exponent for linear barrier function model in the switching rule.",
       1.0, true, 2.3,
       "(See Eqn. (19) in implementation paper)");
     roptions->AddLowerBoundedNumberOption(
       "s_theta",
-      "Exponent for current constraint violation in switching rule.",
+      "Exponent for current constraint violation in the switching rule.",
       1.0, true, 1.1,
       "(See Eqn. (19) in implementation paper)");
     roptions->AddBoundedNumberOption(
       "gamma_phi",
-      "Relaxation factor in filter margin for barrier function.",
+      "Relaxation factor in the filter margin for the barrier function.",
       0.0, true, 1.0, true, 1e-8,
       "(See Eqn. (18a) in implementation paper)");
     roptions->AddBoundedNumberOption(
       "gamma_theta",
-      "Relaxation factor in filter margin for constraint violation.",
+      "Relaxation factor in the filter margin for the constraint violation.",
       0.0, true, 1.0, true, 1e-5,
       "(See Eqn. (18b) in implementation paper)");
     roptions->AddBoundedNumberOption(
       "alpha_min_frac",
-      "Safety factor for minimal step size (switch to restoration phase).",
+      "Safety factor for the minimal step size (before switching to restoration phase).",
       0.0, true, 1.0, true, 0.05,
       "(This is gamma_alpha in Eqn. (20) in implementation paper)");
     roptions->AddBoundedNumberOption(
       "alpha_red_factor",
-      "Fractional reduction of trial step size in the backtracking line search.",
+      "Fractional reduction of the trial step size in the backtracking line search.",
       0.0, true, 1.0, true, 0.5,
-      "Determines the fraction by how much the trial step size is reduced in "
-      "every step of the backtracking line search.");
+      "At every step of the backtracking line search, the trial step size is "
+      "reduced by this factor.");
     roptions->AddLowerBoundedIntegerOption(
       "max_soc",
-      "Maximal number of second order correction trial steps.",
+      "Maximum number of second order correction trial steps at each iteration.",
       0, 4,
-      "Determines the maximal number of second order correction trial steps "
-      "that should be performed.  Choosing 0 disables the second order "
+      "Choosing 0 disables the second order "
       "corrections. (This is p^{max} of Step A-5.9 of "
       "Algorithm A in implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "kappa_soc",
-      "Factor in sufficient reduction rule for second order correction.",
+      "Factor in the sufficient reduction rule for second order correction.",
       0.0, true, 0.99,
-      "Determines by how much a second order correction step must reduce the "
+      "This option determines how much a second order correction step must reduce the "
       "constraint violation so that further correction steps are attempted.  "
       "(See Step A-5.9 of Algorithm A in implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "obj_max_inc",
-      "Determines upper bound on acceptable increase of barrier objective function.",
+      "Determines the upper bound on the acceptable increase of barrier objective function.",
       1.0, true, 5.0,
-      "A trial point leading to more orders of magnitude increase in the "
-      "barrier objective function are rejected.");
+      "Trial points are rejected if they lead to anincrease in the "
+      "barrier objective function by more than obj_max_inc orders "
+      "of magnitude.");
+      
+    std::string prev_category = roptions->RegisteringCategory();
+    roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption2(
       "magic_steps",
       "Enables magic steps.",
@@ -147,14 +150,16 @@ namespace Ipopt
       "no", "don't take magic steps",
       "yes", "take magic steps",
       "DOESN'T REALLY WORK YET!");
+    roptions->SetRegisteringCategory(prev_category);
     roptions->AddStringOption3(
       "corrector_type",
-      "Type of corrector steps.",
+      "The type of corrector steps that should be taken.",
       "none",
       "none", "no corrector",
       "affine", "corrector step towards mu=0",
       "primal-dual", "corrector step towards current mu",
-      "Determines what kind of corrector steps should be tried.");
+      "If \"mu_strategy\" is \"adaptive\", this option determines "
+      "what kind of corrector steps should be tried.");
 
     roptions->AddStringOption2(
       "skip_corr_if_neg_curv",
@@ -162,9 +167,10 @@ namespace Ipopt
       "yes",
       "no", "don't skip",
       "yes", "skip",
-      "The corrector step is not tried if during the computation of "
-      "the search direction in the current iteration negative curvature has "
-      "been encountered.");
+      "The corrector step is not tried if negative curvature has been "
+      "encountered during the computation of the search direction in "
+      "the current iteration. This option is only used if \"mu_strategy\" is "
+      "\"adaptive\".");
 
     roptions->AddStringOption2(
       "skip_corr_in_monotone_mode",
@@ -173,11 +179,12 @@ namespace Ipopt
       "no", "don't skip",
       "yes", "skip",
       "The corrector step is not tried if the algorithm is currently in the "
-      "monotone mode (see also option \"barrier_strategy\").");
+      "monotone mode (see also option \"barrier_strategy\")."
+      "This option is only used if \"mu_strategy\" is \"adaptive\".");
 
     roptions->AddStringOption2(
       "accept_every_trial_step",
-      "always accept the frist trial step",
+      "Always accept the frist trial step.",
       "no",
       "no", "don't arbitrarily accept the full step",
       "yes", "always accept the full step",
@@ -186,7 +193,7 @@ namespace Ipopt
 
     roptions->AddStringOption7(
       "alpha_for_y",
-      "Step size for constraint multipliers.",
+      "Method to determine the step size for constraint multipliers.",
       "primal",
       "primal", "use primal step size",
       "bound_mult", "use step size for the bound multipliers",
@@ -195,14 +202,14 @@ namespace Ipopt
       "full", "take a full step of size one",
       "min_dual_infeas", "choose step size minimizing new dual infeasibility",
       "safe_min_dual_infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
-      "Determines which step size (alpha_y) should be used to update the "
+      "This option determines how the step size (alpha_y) will be calculated when updating the "
       "constraint multipliers.");
 
     roptions->AddLowerBoundedNumberOption(
       "corrector_compl_avrg_red_fact",
-      "Complementarity tolerance factor for accepting corrector step",
+      "Complementarity tolerance factor for accepting corrector step.",
       0.0, true, 1.0,
-      "Determines the factor by which complementarity is allowed to increase "
+      "This option determines the factor by which complementarity is allowed to increase "
       "for a corrector step to be accepted.");
 
     roptions->AddStringOption2(
@@ -219,22 +226,21 @@ namespace Ipopt
       "is enabled automatically.");
     roptions->AddLowerBoundedNumberOption(
       "expect_infeasible_problem_ctol",
-      "Threshold for disabling \"expect_infeasible_problem\" option",
+      "Threshold for disabling \"expect_infeasible_problem\" option.",
       0.0, false, 1e-3,
-      "If the constraint violation becomes small than this threshold, "
+      "If the constraint violation becomes smaller than this threshold, "
       "the \"expect_infeasible_problem\" heuristics in the filter line "
-      "search will are disabled. If the problem is square, this is set to 0.");
+      "search are disabled. If the problem is square, this is set to 0.");
     roptions->AddLowerBoundedNumberOption(
       "soft_resto_pderror_reduction_factor",
-      "Required reduction in primal-dual error in soft restoration phase.",
+      "Required reduction in primal-dual error in the soft restoration phase.",
       0.0, false, (1.0 - 1e-4),
-      "For the soft restoration phase (which attempts to reduce the "
-      "primal-dual error with regular steps), this indicates by which "
-      "factor the primal-dual error has to be reduced in order to continue "
-      "with the soft restoration phase. If the regular primal-dual step, "
-      "damped onl to satisfty the fraction-to-the-boundary rule, is not "
-      "decreasing the error by this factor, then the regular restoration "
-      "phase is called.  Choosing \"0\" here disables the soft "
+      "The soft restoration phase attempts to reduce the "
+      "primal-dual error with regular steps. If the damped "
+      "primal-dual step (damped only to satisfy the "
+      "fraction-to-the-boundary rule) is not decreasing the primal-dual error "
+      "by at least this factor, then the regular restoration phase is called. "
+      "Choosing \"0\" here disables the soft "
       "restoration phase.");
     roptions->AddStringOption2(
       "start_with_resto",
@@ -242,15 +248,15 @@ namespace Ipopt
       "no",
       "no", "don't force start in restoration phase",
       "yes", "force start in restoration phase",
-      "Setting this option to yes forces the algorithm to switch to the "
-      "restoration phase in the first iteration.  If the initial point "
+      "Setting this option to \"yes\" forces the algorithm to switch to the "
+      "feasibility restoration phase. If the initial point "
       "is feasible, the algorithm will abort with a failure.");
     roptions->AddLowerBoundedNumberOption(
       "tiny_step_tol",
       "Tolerance for detecting numerically insignificant steps.",
       0.0, false, 10.0*std::numeric_limits<double>::epsilon(),
       "If the search direction in the primal variables (x and s) is, in "
-      "relative terms for each component, less than this values, the "
+      "relative terms for each component, less than this value, the "
       "algorithm accepts the full step without line search.  The default "
       "value is 10 times machine precision.");
     roptions->AddLowerBoundedIntegerOption(
@@ -263,9 +269,10 @@ namespace Ipopt
       "watchdog procedure.");
     roptions->AddLowerBoundedIntegerOption(
       "watchdog_trial_iter_max",
-      "Maximal number of watchdog iterations.",
+      "Maximum number of watchdog iterations.",
       1, 3,
-      "Determines the number of trial iterations before the watchdog "
+      "This option determines the number of trial iterations "
+      "allowed before the watchdog "
       "procedure is aborted and the algorithm returns to the stored point.");
   }
 

@@ -27,7 +27,8 @@ namespace Ipopt
       "Maximum number of iterations.",
       0, 3000,
       "The algorithm terminates with an error message if the number of "
-      "iterations exceeded this number. [Also used in RestoFilterConvCheck]");
+      "iterations exceeded this number. This option is also used in the "
+      "restoration phase.");
     roptions->AddLowerBoundedNumberOption(
       "dual_inf_tol",
       "Desired threshold for the dual infeasibility.",
@@ -51,9 +52,9 @@ namespace Ipopt
       "threshold.");
     roptions->AddLowerBoundedIntegerOption(
       "acceptable_iter",
-      "Number of acceptable iterates to trigger termination.",
+      "Number of acceptable iterates before triggering termination.",
       0, 15,
-      "If the algorithm encounters so many successive acceptable iterates "
+      "If the algorithm encounters this many successive acceptable iterates "
       "(see \"acceptable_tol\"), it terminates, assuming that the problem "
       "has been solved to best possible accuracy given round-off.  If it is "
       "set to zero, this heuristic is disabled.");

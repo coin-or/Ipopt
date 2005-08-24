@@ -57,7 +57,7 @@ namespace Ipopt
   {
     roptions->AddLowerBoundedNumberOption(
       "sigma_max",
-      "Maximal value of centering parameter.",
+      "Maximum value of the centering parameter.",
       0.0, true, 1e2);
     roptions->AddStringOption4(
       "quality_function_norm_type",
@@ -69,31 +69,33 @@ namespace Ipopt
       "2-norm", "use 2-norm");
     roptions->AddStringOption4(
       "quality_function_centrality",
-      "Determines whether a penalty term for centrality is included quality function.",
+      "The penalty term for centrality that is included quality function.",
       "none",
       "none", "no penalty term is added",
       "log", "complementarity * the log of the centrality measure",
       "reciprocal", "complementarity * the reciprocal of the centrality measure",
       "cubed-reciprocal", "complementarity * the reciprocal of the centrality measure cubed",
-      "This determines whether a term penalizing deviation from centrality "
-      "with respect to complementarity is added the quality function.  The "
+      "This determines whether a term is added to the quality function to "
+      "penalizing deviation from centrality with respect to complementarity.  The "
       "complementarity measure here is the xi in the Loqo update rule.");
     roptions->AddStringOption2(
       "quality_function_balancing_term",
-      "Determines whether a balancing term for centrality is included in quality function.",
+      "The balancing term included in the quality function for centrality.",
       "none",
       "none", "no balancing term is added",
       "cubic", "Max(0,Max(dual_ing,primal_inf)-compl)^3",
-      "This determines whether a term penalizing stuations there the "
-      "complementality is much smaller than dual and primal "
-      "infeasibilities is added to the quality function.");
+      "This determines whether a term is added to the quality function that"
+      "penalizing situations where the complementality is much smaller "
+      "than dual and primal infeasibilities.");
     roptions->AddLowerBoundedIntegerOption(
       "max_bisection_steps",
-      "Maximal number of search steps during direct search procedure determining optimal centering parameter.",
+      "Maximum number of search steps during direct search procedure "
+      "determining the optimal centering parameter.",
       0, 8);
     roptions->AddBoundedNumberOption(
       "bisection_tol",
-      "Tolerance for the bisection search procedure determining optimal centering parameter.",
+      "Tolerance for the bisection search procedure determining "
+      "the optimal centering parameter.",
       0.0, true, 1.0, true,
       1e-3);
   }

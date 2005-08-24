@@ -161,10 +161,10 @@ namespace Ipopt
       "Correction size for very small slacks.",
       0.0, false,
       pow(std::numeric_limits<double>::epsilon(), 0.75),
-      "Due to numercal issues or lack of interior, the slack variables might "
+      "Due to numerical issues or the lack of an interior, the slack variables might "
       "become very small.  If a slack becomes very small compared to machine "
-      "precision, the corresponding bound is moved a little.  This parameter "
-      "determines how large the perturbation should be.  Its default value is "
+      "precision, the corresponding bound is moved slightly.  This parameter "
+      "determines how large the move should be.  Its default value is "
       "mach_eps^{3/4}.  (See also end of Section 3.5 in implementation paper "
       "- but actual implementation might be somewhat different.)");
     roptions->SetRegisteringCategory("Convergence");
@@ -176,7 +176,7 @@ namespace Ipopt
       "2-norm", "use the 2-norm",
       "max-norm", "use the infinity norm",
       "Determines which norm should be used when the algorithm computes the "
-      "constraint violation, for example for the line search.");
+      "constraint violation (for example, in the line search).");
   }
 
   bool IpoptCalculatedQuantities::Initialize(const Journalist& jnlst,

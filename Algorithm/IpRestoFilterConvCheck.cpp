@@ -42,7 +42,7 @@ namespace Ipopt
   {
     roptions->AddBoundedNumberOption(
       "required_infeasibility_reduction",
-      "Required reduction of infeasibility before restoration phase is left.",
+      "Required reduction of infeasibility before leaving restoration phase.",
       0.0, false, 1.0, true,
       0.9,
       "The restoration phase algorithm is performed, until a point is found "

@@ -51,10 +51,11 @@ namespace Ipopt
     roptions->SetRegisteringCategory("Line Search");
     roptions->AddLowerBoundedNumberOption(
       "kappa_sigma",
-      "Factor limiting deviation of dual variables from primal estimates.",
+      "Factor limiting the deviation of dual variables from primal estimates.",
       0, true, 1e10,
-      "(see Eqn. (16) in the implementation paper.) Setting to value less than "
-      "one disables correction.");
+      "If the dual variables deviate from their primal estimates, a correction "
+      "is performed. (See Eqn. (16) in the implementation paper.)"
+      "Setting the to value less than one disables the correction.");
   }
 
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,

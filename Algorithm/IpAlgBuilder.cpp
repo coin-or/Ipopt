@@ -51,7 +51,7 @@ namespace Ipopt
 
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->SetRegisteringCategory("Linear Solver");
+    roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption3(
       "linear_solver",
       "Linear solver used for step computations.",
@@ -60,17 +60,19 @@ namespace Ipopt
       "pardiso", "use the Pardiso package",
       "taucs", "use TAUCS package",
       "Determines which linear algebra package is to be used for the "
-      "solution of the linear system from which the search directions is "
-      "obtained.  Note that depending on your Ipopt installation, not all "
-      "options might be available.");
+      "solution of the augmented linear system (obtaining the search directions) "
+      "Note that depending on your Ipopt installation, not all "
+      "options may be available.");
+    roptions->SetRegisteringCategory("Linear Solver");
     roptions->AddStringOption2(
       "linear_system_scaling",
       "Method for scaling the linear system.",
       "none",
       "none", "no scaling will be performed",
       "mc19", "use the Harwell routine mc19",
-      "Determines which method should be use to compute symmetric scaling "
-      "factors for the augmented system.");
+      "Determines the method used to compute symmetric scaling "
+      "factors for the augmented system. This scaling will be done "
+      "in addition to any NLP problem scaling.");
 
     roptions->SetRegisteringCategory("Mu Update");
     roptions->AddStringOption2(
@@ -79,7 +81,7 @@ namespace Ipopt
       "monotone",
       "monotone", "use the monotone (Fiacco-McCormick) strategy",
       "adaptive", "use the adaptive update strategy",
-      "Determines which barrier parameter strategy is to be used.");
+      "Determines which barrier parameter update strategy is to be used.");
     roptions->AddStringOption3(
       "mu_oracle",
       "Oracle for a new barrier parameter in the adaptive strategy",
