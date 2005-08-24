@@ -21,6 +21,7 @@
 #include "IpNLPScaling.hpp"
 #include "IpOptErrorConvCheck.hpp"
 #include "IpOrigIpoptNLP.hpp"
+#include "IpOrigIterationOutput.hpp"
 #include "IpPDFullSpaceSolver.hpp"
 #include "IpPDPerturbationHandler.hpp"
 #include "IpProbingMuOracle.hpp"
@@ -60,6 +61,8 @@ namespace Ipopt
     OptimalityErrorConvergenceCheck::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP");
     OrigIpoptNLP::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Output");
+    OrigIterationOutput::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Step Calculation");
     PDFullSpaceSolver::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Step Calculation");

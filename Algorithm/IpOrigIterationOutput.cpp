@@ -30,9 +30,23 @@ namespace Ipopt
   OrigIterationOutput::~OrigIterationOutput()
   {}
 
+  void
+  OrigIterationOutput::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddStringOption2(
+      "print_info_string",
+      "Enables printing of additional info string at end of iteration output.",
+      "no",
+      "no", "don't print string",
+      "yes", "print string at end of each iteration output",
+      "This string contains some insider information about the current iteration.");
+  }
+
   bool OrigIterationOutput::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
+    options.GetBoolValue("print_info_string", print_info_string_, prefix);
+
     return true;
   }
 
@@ -44,7 +58,7 @@ namespace Ipopt
 
     Index iter = IpData().iter_count();
     std::string header =
-      " iter     objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n";
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n";
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "\n\n**************************************************\n");
     Jnlst().Printf(J_DETAILED, J_MAIN,
@@ -93,10 +107,17 @@ namespace Ipopt
 
     if (!IpData().info_skip_output()) {
       Jnlst().Printf(J_SUMMARY, J_MAIN,
-                     "%5d%c %14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d %s\n",
+                     "%4d%c %13.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d",
                      iter, info_iter, unscaled_f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr,
                      alpha_dual, alpha_primal, alpha_primal_char,
-                     ls_count, info_string.c_str());
+                     ls_count);
+      if (print_info_string_) {
+        Jnlst().Printf(J_SUMMARY, J_MAIN, " %s", info_string.c_str());
+      }
+      else {
+        Jnlst().Printf(J_DETAILED, J_MAIN, " %s", info_string.c_str());
+      }
+      Jnlst().Printf(J_SUMMARY, J_MAIN, "\n");
     }
 
 

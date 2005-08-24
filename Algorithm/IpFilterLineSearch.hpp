@@ -97,7 +97,7 @@ namespace Ipopt
     bool IsAcceptableToCurrentFilter(Number trial_barr, Number trial_theta) const;
     //@}
 
-    /** Methods for IpoptType */
+    /** Methods for OptionsList */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}

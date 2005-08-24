@@ -60,7 +60,12 @@ namespace Ipopt
     void operator=(const RestoIterationOutput&);
     //@}
 
+    /** Pointer to output strategy object during regular iterations. */
     SmartPtr<OrigIterationOutput> resto_orig_iteration_output_;
+
+    /** Flag indicating weather info string should be printed at end
+     *  of iteration summary line. */
+    bool print_info_string_;
   };
 
 } // namespace Ipopt
