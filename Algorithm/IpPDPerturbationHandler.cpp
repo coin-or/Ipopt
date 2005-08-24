@@ -216,7 +216,7 @@ namespace Ipopt
         else {
           DBG_ASSERT(hess_degenerate_ == NOT_YET_DETERMINED);
           retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-						delta_c, delta_d);
+                                                delta_c, delta_d);
           ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
                            "get_deltas_for_wrong_inertia returns false.");
           DBG_ASSERT(delta_c == delta_cd_val_ && delta_d == delta_cd_val_);
@@ -227,8 +227,8 @@ namespace Ipopt
         DBG_ASSERT(delta_x_curr_ == 0. && delta_c_curr_ > 0.);
         DBG_ASSERT(jac_degenerate_ == NOT_YET_DETERMINED);
         delta_d_curr_ = delta_c_curr_ = 0.;
-	retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-					      delta_c, delta_d);
+        retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
+                                              delta_c, delta_d);
         ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
                          "get_deltas_for_wrong_inertia returns false.");
         DBG_ASSERT(delta_c == 0. && delta_d == 0.);
@@ -238,14 +238,14 @@ namespace Ipopt
         DBG_ASSERT(delta_x_curr_ > 0. && delta_c_curr_ == 0.);
         delta_d_curr_ = delta_c_curr_ = delta_cd_val_;
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-					      delta_c, delta_d);
+                                              delta_c, delta_d);
         ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
                          "get_deltas_for_wrong_inertia returns false.");
         test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
         break;
         case TEST_DELTA_C_GT_0_DELTA_X_GT_0:
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-					      delta_c, delta_d);
+                                              delta_c, delta_d);
         ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
                          "get_deltas_for_wrong_inertia returns false.");
         break;
@@ -258,7 +258,7 @@ namespace Ipopt
         // If we already used a perturbation for the constraints, we do
         // the same thing as if we were encountering negative curvature
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-					      delta_c, delta_d);
+                                              delta_c, delta_d);
         ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
                          "get_deltas_for_wrong_inertia returns false.");
       }

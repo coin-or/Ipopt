@@ -72,10 +72,17 @@ namespace Ipopt
                          expect_infeasible_problem_,
                          prefix);
 
-    // ToDo take care of this somewhere else?  avoid that the
-    // restoration phase is trigged by user option in first iteration
-    // of the restoration phase
+    // Avoid that the restoration phase is trigged by user option in
+    // first iteration of the restoration phase
     resto_options_->SetStringValue("resto.start_with_resto", "no");
+
+    // We want the default for the theta_max_fact in the restoration
+    // phase higher than for the regular phase
+    Number theta_max_fact;
+    if (!options.GetNumericValue("resto.theta_max_fact",
+                                 theta_max_fact, "")) {
+      resto_options_->SetNumericValue("resto.theta_max_fact", 1e8);
+    }
 
     count_restorations_ = 0;
 

@@ -835,6 +835,10 @@ namespace Ipopt
     }
 
     if (theta_max_>0 && trial_theta>theta_max_) {
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "trial_theta = %e is larger than theta_max = %e\n",
+                     trial_theta, theta_max_);
+      IpData().Append_info_string("Tmax");
       return false;
     }
 
