@@ -74,7 +74,13 @@ int main()
 			   &eval_f, &eval_g, &eval_grad_f, 
 			   &eval_jac_g, &eval_h);
   
-  
+  /* We can free the memory now - the values for the bounds have been
+     copied internally in CreateIpoptProblem */
+  free(x_L);
+  free(x_U);
+  free(g_L);
+  free(g_U);
+
   /* set some options */
   AddIpoptNumOption(nlp, "tol", 1e-9);
   AddIpoptStrOption(nlp, "mu_strategy", "adaptive");
@@ -113,10 +119,6 @@ int main()
  
   /* free allocated memory */
   FreeIpoptProblem(nlp);
-  free(x_L);
-  free(x_U);
-  free(g_L);
-  free(g_U);
   free(x);
   free(mult_x_L);
   free(mult_x_U);
