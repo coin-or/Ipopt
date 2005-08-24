@@ -65,69 +65,69 @@ if test -z "$CXXFLAGS"; then
       icpc | */icpc) ;;
       *)
 # ToDo decide aboiut unroll-loops
-        opt_cxxflags="-O3 -funroll-loops"
-        case $build in
-          x86_64-* | i686-* | i586-* )
-            # Check for enabling special instructions
-            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
-            have_sse=no
-            for i in $myflags; do
-              case $i in
-                sse3) CXXFLAGS="-mfpmath=sse -msse3"
-                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-	                [AC_MSG_RESULT([yes])
-                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
-                        [AC_MSG_RESULT([no])])
-                     have_sse=yes;
-                     CXXFLAGS=
-                     ;;
-                sse2)
-                     CXXFLAGS="-mfpmath=sse -msse2"
-                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-	                [AC_MSG_RESULT([yes])
-                         if test $have_sse = no; then
-                           opt_cxxflags="$opt_cxxflags $CXXFLAGS"
-			 else
-			   opt_cxxflags="$opt_cxxflags -msse2"
-                         fi],
-                        [AC_MSG_RESULT([no])])
-                     have_sse=yes;
-                     CXXFLAGS=
-                     ;;
-                sse)
-                     CXXFLAGS="-mfpmath=sse -msse"
-                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-	                [AC_MSG_RESULT([yes])
-                         if test $have_sse = no; then
-                           opt_cxxflags="$opt_cxxflags $CXXFLAGS"
-			 else
-			   opt_cxxflags="$opt_cxxflags -msse"
-                         fi],
-                        [AC_MSG_RESULT([no])])
-                     have_sse=yes;
-                     CXXFLAGS=
-                     ;;
-                mmx) CXXFLAGS="-mmmx"
-                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-	                [AC_MSG_RESULT([yes])
-                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
-                        [AC_MSG_RESULT([no])])
-                     CXXFLAGS= ;;
-                3dnow) CXXFLAGS="-m3dnow"
-                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-	                [AC_MSG_RESULT([yes])
-                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
-                        [AC_MSG_RESULT([no])])
-                     CXXFLAGS= ;;
-              esac
-            done
-          ;;
-        esac
+        opt_cxxflags="-O3"
+#        case $build in
+#          x86_64-* | i686-* | i586-* )
+#            # Check for enabling special instructions
+#            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
+#            have_sse=no
+#            for i in $myflags; do
+#              case $i in
+#                sse3) CXXFLAGS="-mfpmath=sse -msse3"
+#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
+#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
+#	                [AC_MSG_RESULT([yes])
+#                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
+#                        [AC_MSG_RESULT([no])])
+#                     have_sse=yes;
+#                     CXXFLAGS=
+#                     ;;
+#                sse2)
+#                     CXXFLAGS="-mfpmath=sse -msse2"
+#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
+#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
+#	                [AC_MSG_RESULT([yes])
+#                         if test $have_sse = no; then
+#                           opt_cxxflags="$opt_cxxflags $CXXFLAGS"
+#			 else
+#			   opt_cxxflags="$opt_cxxflags -msse2"
+#                         fi],
+#                        [AC_MSG_RESULT([no])])
+#                     have_sse=yes;
+#                     CXXFLAGS=
+#                     ;;
+#                sse)
+#                     CXXFLAGS="-mfpmath=sse -msse"
+#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
+#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
+#	                [AC_MSG_RESULT([yes])
+#                         if test $have_sse = no; then
+#                           opt_cxxflags="$opt_cxxflags $CXXFLAGS"
+#			 else
+#			   opt_cxxflags="$opt_cxxflags -msse"
+#                         fi],
+#                        [AC_MSG_RESULT([no])])
+#                     have_sse=yes;
+#                     CXXFLAGS=
+#                     ;;
+#                mmx) CXXFLAGS="-mmmx"
+#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
+#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
+#	                [AC_MSG_RESULT([yes])
+#                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
+#                        [AC_MSG_RESULT([no])])
+#                     CXXFLAGS= ;;
+#                3dnow) CXXFLAGS="-m3dnow"
+#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
+#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
+#	                [AC_MSG_RESULT([yes])
+#                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
+#                        [AC_MSG_RESULT([no])])
+#                     CXXFLAGS= ;;
+#              esac
+#            done
+#          ;;
+#        esac
         add_cxxflags="-pipe"
         dbg_cxxflags="-g"
         warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -Wconversion"
@@ -331,72 +331,72 @@ if test -z "$CFLAGS"; then
     case "$CC" in
       icc | */icc) ;;
       *)
-        opt_cflags="-O3 -funroll-loops"
-        case $build in
-          x86_64-* | i686-* | i586-* )
-            # Check for enabling special instructions
-            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
-            have_sse=no
-            SAVE_LIBS="$LIBS"
-            LIBS="$LIBS -lm"
-            for i in $myflags; do
-              case $i in
-                sse3) CFLAGS="-mfpmath=sse -msse3"
-                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-	                [AC_MSG_RESULT([yes])
-                         opt_cflags="$opt_cflags $CFLAGS"],
-                        [AC_MSG_RESULT([no])])
-                     have_sse=yes;
-                     CFLAGS=
-                     ;;
-                sse2)
-                     CFLAGS="-mfpmath=sse -msse2"
-                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-	                [AC_MSG_RESULT([yes])
-                         if test $have_sse = no; then
-                           opt_cflags="$opt_cflags $CFLAGS"
-			 else
-			   opt_cflags="$opt_cflags -msse2"
-                         fi],
-                        [AC_MSG_RESULT([no])])
-                     have_sse=yes;
-                     CFLAGS=
-                     ;;
-                sse)
-                     CFLAGS="-mfpmath=sse -msse"
-                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-	                [AC_MSG_RESULT([yes])
-                         if test $have_sse = no; then
-                           opt_cflags="$opt_cflags $CFLAGS"
-			 else
-			   opt_cflags="$opt_cflags -msse"
-                         fi],
-                        [AC_MSG_RESULT([no])])
-                     have_sse=yes;
-                     CFLAGS=
-                     ;;
-                mmx) CFLAGS="-mmmx"
-                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-	                [AC_MSG_RESULT([yes])
-                         opt_cflags="$opt_cflags $CFLAGS"],
-                        [AC_MSG_RESULT([no])])
-                     CFLAGS= ;;
-                3dnow) CFLAGS="-m3dnow"
-                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-	                [AC_MSG_RESULT([yes])
-                         opt_cflags="$opt_cflags $CFLAGS"],
-                        [AC_MSG_RESULT([no])])
-                     CFLAGS= ;;
-              esac
-            done
-            LIBS="$SAVE_LIBS"
-          ;;
-        esac
+        opt_cflags="-O3"
+#        case $build in
+#          x86_64-* | i686-* | i586-* )
+#            # Check for enabling special instructions
+#            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
+#            have_sse=no
+#            SAVE_LIBS="$LIBS"
+#            LIBS="$LIBS -lm"
+#            for i in $myflags; do
+#              case $i in
+#                sse3) CFLAGS="-mfpmath=sse -msse3"
+#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
+#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
+#	                [AC_MSG_RESULT([yes])
+#                         opt_cflags="$opt_cflags $CFLAGS"],
+#                        [AC_MSG_RESULT([no])])
+#                     have_sse=yes;
+#                     CFLAGS=
+#                     ;;
+#                sse2)
+#                     CFLAGS="-mfpmath=sse -msse2"
+#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
+#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
+#	                [AC_MSG_RESULT([yes])
+#                         if test $have_sse = no; then
+#                           opt_cflags="$opt_cflags $CFLAGS"
+#			 else
+#			   opt_cflags="$opt_cflags -msse2"
+#                         fi],
+#                        [AC_MSG_RESULT([no])])
+#                     have_sse=yes;
+#                     CFLAGS=
+#                     ;;
+#                sse)
+#                     CFLAGS="-mfpmath=sse -msse"
+#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
+#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
+#	                [AC_MSG_RESULT([yes])
+#                         if test $have_sse = no; then
+#                           opt_cflags="$opt_cflags $CFLAGS"
+#			 else
+#			   opt_cflags="$opt_cflags -msse"
+#                         fi],
+#                        [AC_MSG_RESULT([no])])
+#                     have_sse=yes;
+#                     CFLAGS=
+#                     ;;
+#                mmx) CFLAGS="-mmmx"
+#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
+#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
+#	                [AC_MSG_RESULT([yes])
+#                         opt_cflags="$opt_cflags $CFLAGS"],
+#                        [AC_MSG_RESULT([no])])
+#                     CFLAGS= ;;
+#                3dnow) CFLAGS="-m3dnow"
+#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
+#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
+#	                [AC_MSG_RESULT([yes])
+#                         opt_cflags="$opt_cflags $CFLAGS"],
+#                        [AC_MSG_RESULT([no])])
+#                     CFLAGS= ;;
+#              esac
+#            done
+#            LIBS="$SAVE_LIBS"
+#          ;;
+#        esac
         add_cflags="-pipe"
         dbg_cflags="-g"
 	warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Werror "
@@ -516,74 +516,74 @@ if test -z "$FFLAGS"; then
   dbg_fflags=
 
   if test "$G77" = "yes"; then
-    opt_fflags="-O3 -funroll-loops"
-        case $build in
-          x86_64-* | i686-* | i586-* )
-            # Check for enabling special instructions
-            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
-            have_sse=no
-            for i in $myflags; do
-              case $i in
-                sse3) FFLAGS="-mfpmath=sse -msse3"
-                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-                     AC_TRY_LINK(,[      double precision x
-      x = sin(1.d0)],
-	                [AC_MSG_RESULT([yes])
-                         opt_fflags="$opt_fflags $FFLAGS"],
-                        [AC_MSG_RESULT([no])])
-                     have_sse=yes;
-                     FFLAGS=
-                     ;;
-                sse2)
-                     FFLAGS="-mfpmath=sse -msse2"
-                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-                     AC_TRY_LINK(,[      double precision x
-      x = sin(1.d0)],
-	                [AC_MSG_RESULT([yes])
-                         if test $have_sse = no; then
-                           opt_fflags="$opt_fflags $FFLAGS"
-			 else
-			   opt_fflags="$opt_fflags -msse2"
-                         fi],
-                        [AC_MSG_RESULT([no])])
-                     have_sse=yes;
-                     FFLAGS=
-                     ;;
-                sse)
-                     FFLAGS="-mfpmath=sse -msse"
-                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-                     AC_TRY_LINK(,[      double precision x
-      x = sin(1.d0)],
-	                [AC_MSG_RESULT([yes])
-                         if test $have_sse = no; then
-                           opt_fflags="$opt_fflags $FFLAGS"
-			 else
-			   opt_fflags="$opt_fflags -msse"
-                         fi],
-                        [AC_MSG_RESULT([no])])
-                     have_sse=yes;
-                     FFLAGS=
-                     ;;
-                mmx) FFLAGS="-mmmx"
-                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-                     AC_TRY_LINK(,[      double precision x
-      x = sin(1.d0)],
-	                [AC_MSG_RESULT([yes])
-                         opt_fflags="$opt_fflags $FFLAGS"],
-                        [AC_MSG_RESULT([no])])
-                     FFLAGS= ;;
-                3dnow) FFLAGS="-m3dnow"
-                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-                     AC_TRY_LINK(,[      double precision x
-      x = sin(1.d0)],
-	                [AC_MSG_RESULT([yes])
-                         opt_fflags="$opt_fflags $FFLAGS"],
-                        [AC_MSG_RESULT([no])])
-                     FFLAGS= ;;
-              esac
-            done
-          ;;
-        esac
+    opt_fflags="-O3"
+#        case $build in
+#          x86_64-* | i686-* | i586-* )
+#            # Check for enabling special instructions
+#            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
+#            have_sse=no
+#            for i in $myflags; do
+#              case $i in
+#                sse3) FFLAGS="-mfpmath=sse -msse3"
+#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
+#                     AC_TRY_LINK(,[      double precision x
+#      x = sin(1.d0)],
+#	                [AC_MSG_RESULT([yes])
+#                         opt_fflags="$opt_fflags $FFLAGS"],
+#                        [AC_MSG_RESULT([no])])
+#                     have_sse=yes;
+#                     FFLAGS=
+#                     ;;
+#                sse2)
+#                     FFLAGS="-mfpmath=sse -msse2"
+#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
+#                     AC_TRY_LINK(,[      double precision x
+#      x = sin(1.d0)],
+#	                [AC_MSG_RESULT([yes])
+#                         if test $have_sse = no; then
+#                           opt_fflags="$opt_fflags $FFLAGS"
+#			 else
+#			   opt_fflags="$opt_fflags -msse2"
+#                         fi],
+#                        [AC_MSG_RESULT([no])])
+#                     have_sse=yes;
+#                     FFLAGS=
+#                     ;;
+#                sse)
+#                     FFLAGS="-mfpmath=sse -msse"
+#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
+#                     AC_TRY_LINK(,[      double precision x
+#      x = sin(1.d0)],
+#	                [AC_MSG_RESULT([yes])
+#                         if test $have_sse = no; then
+#                           opt_fflags="$opt_fflags $FFLAGS"
+#			 else
+#			   opt_fflags="$opt_fflags -msse"
+#                         fi],
+#                        [AC_MSG_RESULT([no])])
+#                     have_sse=yes;
+#                     FFLAGS=
+#                     ;;
+#                mmx) FFLAGS="-mmmx"
+#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
+#                     AC_TRY_LINK(,[      double precision x
+#      x = sin(1.d0)],
+#	                [AC_MSG_RESULT([yes])
+#                         opt_fflags="$opt_fflags $FFLAGS"],
+#                        [AC_MSG_RESULT([no])])
+#                     FFLAGS= ;;
+#                3dnow) FFLAGS="-m3dnow"
+#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
+#                     AC_TRY_LINK(,[      double precision x
+#      x = sin(1.d0)],
+#	                [AC_MSG_RESULT([yes])
+#                         opt_fflags="$opt_fflags $FFLAGS"],
+#                        [AC_MSG_RESULT([no])])
+#                     FFLAGS= ;;
+#              esac
+#            done
+#          ;;
+#        esac
 
 #    case $build in
 #      i686-* )
