@@ -222,7 +222,7 @@ namespace Ipopt
                                                 delta_c, delta_d);
           ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
                            "get_deltas_for_wrong_inertia returns false.");
-          DBG_ASSERT(delta_c == delta_cd_val_ && delta_d == delta_cd_val_);
+          DBG_ASSERT(delta_c == 0. && delta_d == 0.);
           test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         }
         break;
