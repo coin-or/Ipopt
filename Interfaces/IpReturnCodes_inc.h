@@ -16,9 +16,9 @@
 enum ApplicationReturnStatus
   {
     Solve_Succeeded=0,
-    Solved_To_Best_Possible_Precision=1,
-    Solved_To_Acceptable_Level=2,
-    Infeasible_Problem_Detected=3,
+    Solved_To_Acceptable_Level=1,
+    Infeasible_Problem_Detected=2,
+    Search_Direction_Becomes_Too_Small=3,
 
     Maximum_Iterations_Exceeded=-1,
     Restoration_Failed=-2,

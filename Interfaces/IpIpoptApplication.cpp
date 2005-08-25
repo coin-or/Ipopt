@@ -386,8 +386,8 @@ namespace Ipopt
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Maximum Number of Iterations Exceeded.\n");
       }
       else if (status == STOP_AT_TINY_STEP) {
-        retValue = Solved_To_Best_Possible_Precision;
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Solved To Best Possible Precision.\n");
+        retValue = Search_Direction_Becomes_Too_Small;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Search Direction becomes Too Small.\n");
       }
       else if (status == STOP_AT_ACCEPTABLE_POINT) {
         retValue = Solved_To_Acceptable_Level;

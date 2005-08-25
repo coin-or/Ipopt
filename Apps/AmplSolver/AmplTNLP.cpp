@@ -457,13 +457,13 @@ namespace Ipopt
       message = "Optimal Solution Found";
     }
     else if (status == MAXITER_EXCEEDED) {
-      message = "Maximum Number of Iterations Exceeded";
+      message = "Maximum Number of Iterations Exceeded.";
     }
     else if (status == STOP_AT_TINY_STEP) {
-      message = "Solved To Best Possible Precision";
+      message = "Search Direction becomes Too Small.";
     }
     else if (status == STOP_AT_ACCEPTABLE_POINT) {
-      message = "Solved To Acceptable Level";
+      message = "Solved To Acceptable Level.";
     }
     else if (status == LOCAL_INFEASIBILITY) {
       message = "Converged to a locally infeasible point. Problem may be infeasible.";
