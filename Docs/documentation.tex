@@ -1506,11 +1506,9 @@ f(x*) = 17.014
 \end{footnotesize}
 
 This completes the basic C++ tutorial, but see Section
-\ref{sec.output} which explains the standard console output of \Ipopt,
-Section \ref{sec.jnlst} to learn about adjusting the output produced
-from \Ipopt\ through the use of the Journalist, and Section
-\ref{sec.options} for information about the use of options to
-customize the behavior of \Ipopt.
+\ref{sec.output} which explains the standard console output of \Ipopt
+and Section \ref{sec.options} for information about the use of options
+to customize the behavior of \Ipopt.
 
 \subsection{The C Interface}\label{sec.cinterface}
 The C interface for \Ipopt\ is declared in the header file {\tt
@@ -1885,7 +1883,8 @@ thank Yoshi for his efforts.
 \Ipopt\ was designed for optimizing large sparse nonlinear programs. 
 Because of problem sparsity, the required matrices (like the Jacobian or Hessian) are not stored as traditional dense matrices, but rather in a sparse matrix format. For the tutorials in this document, we use the triplet format. 
 Consider the matrix,
-\[
+\begin{equation}
+\label{eqn.ex_matrix}
 \left[
 \begin{array}{ccccccc}
 1.1     & 0             & 0             & 0             & 0             & 0             & 0.5 \\
@@ -1896,8 +1895,8 @@ Consider the matrix,
 1.6     & 0             & 0             & 0             & 0.4   & 0             & 0     \\
 0       & 0             & 0             & 0             & 0             & 0.9   & 1.7 \\
 \end{array}
-\right].
-\]
+\right]
+\end{equation}
 
 A standard dense matrix representation would need to store $7 \cdot
 7{=} 49$ floating point numbers, where many entries would be zero. In
@@ -1909,39 +1908,132 @@ columns, and $14$ floating point numbers for the values. While this
 does not seem like a huge space savings over the $49$ floating point
 numbers stored in the dense representation, for larger matrices, the
 space savings are very dramatic\footnote{For an $n \times n$ matrix,
-  the dense representation grows with the the square of $n$, while the
-  sparse representation grows linearly in the number of nonzeros.}
+the dense representation grows with the the square of $n$, while the
+sparse representation grows linearly in the number of nonzeros.}
 
-In triplet format used in these \Ipopt\ interfaces, the row and column
-numbers are 1-based {\bf have table for both 0- and 1-based}, and the
-above matrix is represented by
-\[
-\begin{array}{ccc}
-row     &       col     &       value \\
-1       &       1       &       1.1     \\
-1       &       7       &       0.5     \\
-2       &       2       &       1.9     \\
-2       &       7       &       0.5     \\
-3       &       3       &       2.6     \\
-3       &       7       &       0.5     \\
-4       &       3       &       7.8     \\
-4       &       4       &       0.6     \\
-5       &       4       &       1.5     \\
-5       &       5       &       2.7     \\
-6       &       1       &       1.6     \\
-6       &       5       &       0.4     \\
-7       &       6       &       0.9     \\
-7       &       7       &       1.7
-\end{array}
-\]
+The option {\tt index\_style} in {\tt get\_nlp\_info} tells Ipopt if
+you prefer to use C style indexing (0-based) for the row and column
+indices or Fortran style (1-based). Tables \ref{tab.fortran_triplet} and 
+\ref{tab.c_triplet} below show the triplet
+format for both indexing styles, using the example matrix (\ref{eqn.ex_matrix}).
 
+\begin{footnotesize}
+\begin{table}[!h]
+\begin{center}
+\caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
+with {\tt index\_style=FORTRAN\_STYLE}}
+\label{tab.fortran_triplet}
+\begin{tabular}{c c c}
+row     		&       col     	&       value 			    \\
+\hline
+{\tt iRow[0] = 1}       &       {\tt jCol[0] = 1}       & {\tt values[0] = 1.1}     \\
+{\tt iRow[1] = 1}       &       {\tt jCol[1] = 7}       & {\tt values[1] = 0.5}     \\
+{\tt iRow[2] = 2}       &       {\tt jCol[2] = 2}       & {\tt values[2] = 1.9}     \\
+{\tt iRow[3] = 2}       &       {\tt jCol[3] = 7}       & {\tt values[3] = 0.5}     \\
+{\tt iRow[4] = 3}       &       {\tt jCol[4] = 3}       & {\tt values[4] = 2.6}     \\
+{\tt iRow[5] = 3}       &       {\tt jCol[5] = 7}       & {\tt values[5] = 0.5}     \\
+{\tt iRow[6] = 4}       &       {\tt jCol[6] = 3}       & {\tt values[6] = 7.8}     \\
+{\tt iRow[7] = 4}       &       {\tt jCol[7] = 4}       & {\tt values[7] = 0.6}     \\
+{\tt iRow[8] = 5}       &       {\tt jCol[8] = 4}       & {\tt values[8] = 1.5}     \\
+{\tt iRow[9] = 5}       &       {\tt jCol[9] = 5}       & {\tt values[9] = 2.7}     \\
+{\tt iRow[10] = 6}      &       {\tt jCol[10] = 1}      & {\tt values[10] = 1.6}     \\
+{\tt iRow[11] = 6}      &       {\tt jCol[11] = 5}      & {\tt values[11] = 0.4}     \\
+{\tt iRow[12] = 7}      &       {\tt jCol[12] = 6}      & {\tt values[12] = 0.9}     \\
+{\tt iRow[13] = 7}      &       {\tt jCol[13] = 7}      & {\tt values[13] = 1.7}
+\end{tabular}
+\end{center}
+\end{table}
+\begin{table}[!h]
+\begin{center}
+\caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
+with {\tt index\_style=C\_STYLE}}
+\label{tab.c_triplet}
+\begin{tabular}{c c c}
+row     		&       col     	&       value 			    \\
+\hline
+{\tt iRow[0] = 0}       &       {\tt jCol[0] = 0}       & {\tt values[0] = 1.1}     \\
+{\tt iRow[1] = 0}       &       {\tt jCol[1] = 6}       & {\tt values[1] = 0.5}     \\
+{\tt iRow[2] = 1}       &       {\tt jCol[2] = 1}       & {\tt values[2] = 1.9}     \\
+{\tt iRow[3] = 1}       &       {\tt jCol[3] = 6}       & {\tt values[3] = 0.5}     \\
+{\tt iRow[4] = 2}       &       {\tt jCol[4] = 2}       & {\tt values[4] = 2.6}     \\
+{\tt iRow[5] = 2}       &       {\tt jCol[5] = 6}       & {\tt values[5] = 0.5}     \\
+{\tt iRow[6] = 3}       &       {\tt jCol[6] = 2}       & {\tt values[6] = 7.8}     \\
+{\tt iRow[7] = 3}       &       {\tt jCol[7] = 3}       & {\tt values[7] = 0.6}     \\
+{\tt iRow[8] = 4}       &       {\tt jCol[8] = 3}       & {\tt values[8] = 1.5}     \\
+{\tt iRow[9] = 4}       &       {\tt jCol[9] = 4}       & {\tt values[9] = 2.7}     \\
+{\tt iRow[10] = 5}      &       {\tt jCol[10] = 0}      & {\tt values[10] = 1.6}     \\
+{\tt iRow[11] = 5}      &       {\tt jCol[11] = 4}      & {\tt values[11] = 0.4}     \\
+{\tt iRow[12] = 6}      &       {\tt jCol[12] = 5}      & {\tt values[12] = 0.9}     \\
+{\tt iRow[13] = 6}      &       {\tt jCol[13] = 6}      & {\tt values[13] = 1.7}
+\end{tabular}
+\end{center}
+\end{table}
+\end{footnotesize}
 The individual elements of the matrix can be listed in any order, and
 if there are multiple items for the same nonzero position, the values
 provided for those positions are added.
 
-MISSING: Symmetric matrices
-
-
+The Hessian of the Lagrangian is a symmetric matrix. In the case of a
+symmetric matrix, you only need to specify the lower left corner. For
+example, given the matrix,
+\begin{equation}
+\label{eqn.ex_sym_matrix}
+\left[
+\begin{array}{ccccccc}
+1.0	& 0	& 3.0	& 0	& 2.0 	\\
+0	& 1.1	& 0	& 0	& 5.0	\\
+3.0	& 0	& 1.2	& 6.0	& 0	\\
+0	& 0	& 6.0	& 1.3	& 9.0	\\
+2.0	& 5.0	& 0	& 9.0	& 1.4
+\end{array}
+\right]
+\end{equation}
+the triplet format is shown in Tables \ref{tab.sym_fortran_triplet}
+and \ref{tab.sym_c_triplet}.
+\begin{footnotesize}
+\begin{table}[!h]
+\begin{center}
+\caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
+with {\tt index\_style=FORTRAN\_STYLE}}
+\label{tab.sym_fortran_triplet}
+\begin{tabular}{c c c}
+row     		&       col     	&       value 			    \\
+\hline
+{\tt iRow[0] = 1}       &       {\tt jCol[0] = 1}       & {\tt values[0] = 1.0}     \\
+{\tt iRow[1] = 2}       &       {\tt jCol[1] = 1}       & {\tt values[1] = 1.1}     \\
+{\tt iRow[2] = 3}       &       {\tt jCol[2] = 1}       & {\tt values[2] = 3.0}     \\
+{\tt iRow[3] = 3}       &       {\tt jCol[3] = 3}       & {\tt values[3] = 1.2}     \\
+{\tt iRow[4] = 4}       &       {\tt jCol[4] = 3}       & {\tt values[4] = 6.0}     \\
+{\tt iRow[5] = 4}       &       {\tt jCol[5] = 4}       & {\tt values[5] = 1.3}     \\
+{\tt iRow[6] = 5}       &       {\tt jCol[6] = 1}       & {\tt values[6] = 2.0}     \\
+{\tt iRow[7] = 5}       &       {\tt jCol[7] = 2}       & {\tt values[7] = 5.0}     \\
+{\tt iRow[8] = 5}       &       {\tt jCol[8] = 4}       & {\tt values[8] = 9.0}     \\
+{\tt iRow[9] = 5}       &       {\tt jCol[9] = 5}       & {\tt values[9] = 1.4}
+\end{tabular}
+\end{center}
+\end{table}
+\begin{table}[!h]
+\begin{center}
+\caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
+with {\tt index\_style=C\_STYLE}}
+\label{tab.sym_c_triplet}
+\begin{tabular}{c c c}
+row     		&       col     	&       value 			    \\
+\hline
+{\tt iRow[0] = 0}       &       {\tt jCol[0] = 0}       & {\tt values[0] = 1.0}     \\
+{\tt iRow[1] = 1}       &       {\tt jCol[1] = 0}       & {\tt values[1] = 1.1}     \\
+{\tt iRow[2] = 2}       &       {\tt jCol[2] = 0}       & {\tt values[2] = 3.0}     \\
+{\tt iRow[3] = 2}       &       {\tt jCol[3] = 2}       & {\tt values[3] = 1.2}     \\
+{\tt iRow[4] = 3}       &       {\tt jCol[4] = 2}       & {\tt values[4] = 6.0}     \\
+{\tt iRow[5] = 3}       &       {\tt jCol[5] = 3}       & {\tt values[5] = 1.3}     \\
+{\tt iRow[6] = 4}       &       {\tt jCol[6] = 0}       & {\tt values[6] = 2.0}     \\
+{\tt iRow[7] = 4}       &       {\tt jCol[7] = 1}       & {\tt values[7] = 5.0}     \\
+{\tt iRow[8] = 4}       &       {\tt jCol[8] = 3}       & {\tt values[8] = 9.0}     \\
+{\tt iRow[9] = 4}       &       {\tt jCol[9] = 4}       & {\tt values[9] = 1.4}
+\end{tabular}
+\end{center}
+\end{table}
+\end{footnotesize}
 \section{The Smart Pointer Implementation: SmartPtr} \label{app.smart_ptr}
 
 The SmartPtr class is described in {\tt IpSmartPtr.hpp}. It is a
