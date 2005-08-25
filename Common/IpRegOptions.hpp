@@ -413,7 +413,7 @@ namespace Ipopt
     {
       current_registering_category_ = registering_category;
     }
-    
+
     /** retrieve the value of the current registering category */
     std::string RegisteringCategory()
     {
