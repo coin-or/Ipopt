@@ -181,23 +181,23 @@ namespace Ipopt
       }
     }
     catch(TINY_STEP_DETECTED& exc) {
-      exc.ReportException(Jnlst());
+      exc.ReportException(Jnlst(), J_DETAILED);
       return STOP_AT_TINY_STEP;
     }
     catch(ACCEPTABLE_POINT_REACHED& exc) {
-      exc.ReportException(Jnlst());
+      exc.ReportException(Jnlst(), J_DETAILED);
       return STOP_AT_ACCEPTABLE_POINT;
     }
     catch(LOCALLY_INFEASIBLE& exc) {
-      exc.ReportException(Jnlst());
+      exc.ReportException(Jnlst(), J_DETAILED);
       return LOCAL_INFEASIBILITY;
     }
     catch(RESTORATION_FAILED& exc) {
-      exc.ReportException(Jnlst());
+      exc.ReportException(Jnlst(), J_DETAILED);
       return RESTORATION_FAILURE;
     }
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
-      exc.ReportException(Jnlst());
+      exc.ReportException(Jnlst(), J_DETAILED);
       return SUCCESS;
     }
     catch(INTERNAL_ABORT& exc) {

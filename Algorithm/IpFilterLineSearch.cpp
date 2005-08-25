@@ -715,9 +715,10 @@ namespace Ipopt
           accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
         }
         catch(IpoptNLP::Eval_Error& e) {
-          e.ReportException(Jnlst());
+          e.ReportException(Jnlst(), J_DETAILED);
           Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
                          "Warning: Cutting back alpha due to evaluation error\n");
+          IpData().Append_info_string("e");
           accept = false;
           evaluation_error = true;
         }
@@ -1006,9 +1007,10 @@ namespace Ipopt
       trial_theta = IpCq().trial_constraint_violation();
     }
     catch(IpoptNLP::Eval_Error& e) {
-      e.ReportException(Jnlst());
+      e.ReportException(Jnlst(), J_DETAILED);
       Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
                      "Warning: Evaluation error during soft restoration phase step.\n");
+      IpData().Append_info_string("e");
       return false;
     }
     if (theta_max_<=0 || trial_theta<=theta_max_) {
@@ -1032,9 +1034,10 @@ namespace Ipopt
       curr_pderror = IpCq().curr_primal_dual_system_error(mu);
     }
     catch(IpoptNLP::Eval_Error& e) {
-      e.ReportException(Jnlst());
+      e.ReportException(Jnlst(), J_DETAILED);
       Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
                      "Warning: Evaluation error during soft restoration phase step.\n");
+      IpData().Append_info_string("e");
       return false;
     }
 
@@ -1249,8 +1252,9 @@ namespace Ipopt
         accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
       }
       catch(IpoptNLP::Eval_Error& e) {
-        e.ReportException(Jnlst());
+        e.ReportException(Jnlst(), J_DETAILED);
         Jnlst().Printf(J_WARNING, J_MAIN, "Warning: SOC step rejected due to evaluation error\n");
+        IpData().Append_info_string("e");
         accept = false;
         // There is no point in continuing SOC procedure
         break;
@@ -1445,9 +1449,10 @@ namespace Ipopt
       accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
     }
     catch(IpoptNLP::Eval_Error& e) {
-      e.ReportException(Jnlst());
+      e.ReportException(Jnlst(), J_DETAILED);
       Jnlst().Printf(J_WARNING, J_MAIN,
                      "Warning: Corrector step rejected due to evaluation error\n");
+      IpData().Append_info_string("e");
       accept = false;
     }
 
