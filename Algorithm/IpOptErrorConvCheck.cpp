@@ -62,32 +62,36 @@ namespace Ipopt
       "acceptable_tol",
       "Acceptable convergence tolerance (relative).",
       0.0, true,  1e-6,
-      "Determines which (scaled) overall optimality error is considered to be "
-      "acceptable. If the algorithm encounters \"acceptable_iter\" iterations "
-      "in a row that are considered \"acceptable\", it will terminate before "
-      "the desired convergence tolerance (\"tol\", \"dual_inf_tol\", etc) is "
-      "met.");
+      "Determines which (scaled) overall optimality error is considered to be"
+      " \"acceptable.\" There are two levels of termination criteria.  If the "
+      "usual \"desired\" tolerances (see tol, dual_inf_tol etc) are satisfied "
+      "at an iteration, the algorithm immediately terminates with a success "
+      "message.  On the other hand, if the algorithm encounters "
+      "\"acceptable_iter\" many iterations in a row that are considered "
+      "\"acceptable\", it will terminate before the desired convergence "
+      "tolerance is met. This is useful in cases where the algorithm might "
+      "not be able to achieve the \"desired\" level of accuracy.");
     roptions->AddLowerBoundedNumberOption(
       "acceptable_dual_inf_tol",
       "Acceptance threshold for the dual infeasibility.",
       0.0, true, 1e-2,
       "Absolute tolerance on the dual infesaibility. Acceptable termination "
       "requires that the (unscaled) dual infeasibility is less than this "
-      "threshold.");
+      "threshold; see also acceptable_tol.");
     roptions->AddLowerBoundedNumberOption(
       "acceptable_constr_viol_tol",
       "Acceptance threshold for the constraint violation.",
       0.0, true, 1e-2,
       "Absolute tolerance on the constraint violation. Acceptable termination "
       "requires that the (unscaled) constraint violation is less than this "
-      "threshold.");
+      "threshold; see also acceptable_tol.");
     roptions->AddLowerBoundedNumberOption(
       "acceptable_compl_inf_tol",
       "Acceptance threshold for the complementarity conditions.",
       0.0, true, 1e-2,
       "Absolute tolerance on the complementarity. Acceptable termination "
       "requires that the (unscaled) complementarity is less than this "
-      "threshold.");
+      "threshold; see also acceptable_tol.");
   }
 
   bool

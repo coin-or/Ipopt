@@ -146,14 +146,14 @@ namespace Ipopt
       "s_max",
       "Scaling threshold for the NLP error.",
       0.0, true, 100.0,
-      "(see paragraph after Eqn. (6) in the implementation paper)");
+      "(See paragraph after Eqn. (6) in the implementation paper.)");
 
     roptions->SetRegisteringCategory("NLP");
     roptions->AddLowerBoundedNumberOption(
       "kappa_d",
       "Weight for linear damping term (to handle one-sided bounds).",
       0.0, false, 1e-5,
-      "(see Section 3.7 in implementation paper)");
+      "(see Section 3.7 in implementation paper.)");
 
     roptions->SetRegisteringCategory("Line Search");
     roptions->AddLowerBoundedNumberOption(
@@ -170,7 +170,7 @@ namespace Ipopt
     roptions->SetRegisteringCategory("Convergence");
     roptions->AddStringOption3(
       "constraint_violation_norm_type",
-      "Norm to be used for the constraint violation",
+      "Norm to be used for the constraint violation.",
       "1-norm",
       "1-norm", "use the 1-norm",
       "2-norm", "use the 2-norm",

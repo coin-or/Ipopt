@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -52,7 +52,8 @@ namespace Ipopt
       "becomes smaller than this value, and if the (absolute) criteria "
       "according to \"dual_inf_tol\", \"primal_inf_tol\", and "
       "\"cmpl_inf_tol\" are met.  (This is epsilon_tol in Eqn. (6) in "
-      "implementation paper). Note, some other algorithmic features also use "
+      "implementation paper).  See also \"acceptable_tol\" as a second "
+      "termination criterion.  Note, some other algorithmic features also use "
       "this quantity.");
   }
 

@@ -54,7 +54,7 @@ namespace Ipopt
       "Factor limiting the deviation of dual variables from primal estimates.",
       0, true, 1e10,
       "If the dual variables deviate from their primal estimates, a correction "
-      "is performed. (See Eqn. (16) in the implementation paper.)"
+      "is performed. (See Eqn. (16) in the implementation paper.) "
       "Setting the to value less than one disables the correction.");
   }
 

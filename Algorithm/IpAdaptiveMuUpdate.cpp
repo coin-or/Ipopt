@@ -56,7 +56,7 @@ namespace Ipopt
       "adaptive mu selection mode.");
     roptions->AddLowerBoundedNumberOption(
       "mu_min",
-      "Minimum value for barrier parameter ",
+      "Minimum value for barrier parameter.",
       0.0, true, 1e-9,
       "This option specifies the lower bound on the barrier parameter in the "
       "adaptive mu selection mode. By default, it is set to "
@@ -66,7 +66,7 @@ namespace Ipopt
     roptions->SetRegisteringCategory("Undocumented");
     roptions->AddLowerBoundedNumberOption(
       "adaptive_mu_safeguard_factor",
-      "ToDo: This option should probably be deleted!",
+      "",
       0.0, false, 0.0);
     roptions->SetRegisteringCategory(prev_cat);
 
@@ -101,7 +101,7 @@ namespace Ipopt
 
     roptions->AddBoundedNumberOption(
       "filter_margin_fact",
-      "Factor determining width of margin for *-filter adaptive globalization strategies.",
+      "Factor determining width of margin for obj-constr-filter adaptive globalization strategy.",
       0.0, true, 1.0, true,
       1e-5,
       "When using the adaptive globalization strategy, \"obj-constr-filter\", "
@@ -112,7 +112,7 @@ namespace Ipopt
       "the \"kkt-error-filter\" option see \"filter_max_margin\".");
     roptions->AddLowerBoundedNumberOption(
       "filter_max_margin",
-      "Maximum width of margin in *-filter adaptive globalization strategies.",
+      "Maximum width of margin in obj-constr--filter adaptive globalization strategy.",
       0.0, true,
       1.0,
       // ToDo Detailed description later
@@ -133,7 +133,8 @@ namespace Ipopt
       "Determines the initial value of the barrier parameter when switching to the monotone mode.",
       0.0, true, 0.8,
       "When the globalization strategy for the adaptive barrier algorithm "
-      "switches to the monotone mode, the barrier parameter is set to the "
+      "switches to the monotone mode and fixed_mu_oracle is chosen as "
+      "\"average_compl\", the barrier parameter is set to the "
       "current average complementarity times the value of "
       "\"adaptive_mu_monotone_init_factor\".");
 

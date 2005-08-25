@@ -25,18 +25,20 @@ namespace Ipopt
   {
     reg_options->AddLowerBoundedNumberOption(
       "bound_push",
-      "Desired minimum absolute distance from the initial point to bound",
+      "Desired minimum absolute distance from the initial point to bound.",
       0.0, true, 0.01,
       "Determines how much the initial point might have to "
       "be modified in order to be sufficiently inside "
-      "the bounds (together with \"bound_frac\").");
+      "the bounds (together with \"bound_frac\").  (This is kappa_1 in "
+      "Section 3.6 of implementation paper.)");
     reg_options->AddBoundedNumberOption(
       "bound_frac",
-      "Desired minimum relative distance from the initial point to bound",
+      "Desired minimum relative distance from the initial point to bound.",
       0, true, 0.5, false, 0.01,
       "Determines how much the initial point might have to "
       "be modified in order to be sufficiently inside "
-      "the bounds (together with \"bound_push\").");
+      "the bounds (together with \"bound_push\").  (This is kappa_2 in "
+      "Section 3.6 of implementation paper.)");
     reg_options->AddLowerBoundedNumberOption(
       "constr_mult_init_max",
       "Maximum allowed least-square guess of constraint multipliers.",
@@ -49,7 +51,7 @@ namespace Ipopt
       "used in RestoIterateInitializer) is set to zero.");
     reg_options->AddLowerBoundedNumberOption(
       "bound_mult_init_val",
-      "Initial value for the bound multipliers",
+      "Initial value for the bound multipliers.",
       0, true, 1.0,
       "All dual variables corresponding to bound constraints are "
       "initialized to this value.");

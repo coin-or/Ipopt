@@ -60,7 +60,8 @@ namespace Ipopt
       "pardiso", "use the Pardiso package",
       "taucs", "use TAUCS package",
       "Determines which linear algebra package is to be used for the "
-      "solution of the augmented linear system (obtaining the search directions) "
+      "solution of the augmented linear system (for obtaining the search "
+      "directions). "
       "Note that depending on your Ipopt installation, not all "
       "options may be available.");
     roptions->SetRegisteringCategory("Linear Solver");
@@ -84,7 +85,7 @@ namespace Ipopt
       "Determines which barrier parameter update strategy is to be used.");
     roptions->AddStringOption3(
       "mu_oracle",
-      "Oracle for a new barrier parameter in the adaptive strategy",
+      "Oracle for a new barrier parameter in the adaptive strategy.",
       "probing",
       "probing", "Mehrotra's probing heuristic",
       "loqo", "LOQO's centrality rule",
@@ -92,7 +93,7 @@ namespace Ipopt
       "Determines how a new barrier parameter is computed in each "
       "\"free-mode\" iteration of the adaptive barrier parameter "
       "strategy. (Only considered if \"adaptive\" is selected for "
-      "option \"mu_strategy\".");
+      "option \"mu_strategy\").");
     roptions->AddStringOption4(
       "fixed_mu_oracle",
       "Oracle for the barrier parameter when switching to fixed mode.",
@@ -104,7 +105,7 @@ namespace Ipopt
       "Determines how the first value of the barrier parameter should be "
       "computed when switching to the \"monotone mode\" in the adaptive "
       "strategy. (Only considered if \"adaptive\" is selected for option "
-      "\"mu_strategy\".");
+      "\"mu_strategy\".)");
     roptions->SetRegisteringCategory("Initialization");
     roptions->AddStringOption2(
       "warm_start_init_point",

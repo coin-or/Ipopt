@@ -62,9 +62,9 @@ namespace Ipopt
   void TNLPAdapter::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("NLP");
-    roptions->AddNumberOption("nlp_lower_bound_inf", "any bound <= this value will be considered -inf (i.e. not lower bounded)",
+    roptions->AddNumberOption("nlp_lower_bound_inf", "any bound less or equal this value will be considered -inf (i.e. not lower bounded).",
                               -1e19);
-    roptions->AddNumberOption("nlp_upper_bound_inf", "any bound >= this value will be considered +inf (i.e. not upper bounded)",
+    roptions->AddNumberOption("nlp_upper_bound_inf", "any bound greater or this value will be considered +inf (i.e. not upper bounded).",
                               1e19);
     roptions->AddLowerBoundedNumberOption("max_onesided_bound_slack", "???",
                                           0.0, false, 0.0);

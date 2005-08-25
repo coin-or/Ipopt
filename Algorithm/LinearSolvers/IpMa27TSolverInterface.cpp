@@ -74,28 +74,38 @@ namespace Ipopt
 
   void Ma27TSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddBoundedNumberOption("pivtol", "Pivot tolerance for the linear solver.",
-                                     0.0, true, 1.0, true, 1e-8,
-				     "A smaller number pivots for sparsity, "
-				     "a larger number pivots for stability.");
-    roptions->AddBoundedNumberOption("pivtolmax", "Maximum pivot tolerance.",
-                                     0.0, true, 1.0, true, 1e-4,
-				     "IPOPT may increase pivtol as high as pivtolmax "
-				     "to get a more accurate solution to the linear system");
-    roptions->AddLowerBoundedNumberOption("liw_init_factor", "Integer workspace memory.",
-                                          1.0, false, 5.0,
-					  "The initial integer workspace memory = liw_init_factor * memory "
-					  "required by unfactored system. IPOPT will increase the workspace size by "
-					  "meminc_factor if required.");
-    roptions->AddLowerBoundedNumberOption("la_init_factor", "Real workspace memory",
-                                          1.0, false, 5.0,
-					  "The initial real workspace memory = la_init_factor * memory "
-					  "required by unfactored system. IPOPT will increase the workspace size by "
-					  "meminc_factor if required.");
-    roptions->AddLowerBoundedNumberOption("meminc_factor", "Increment factor for workspace size.",
-                                          1.0, false, 10.0,
-					  "If the integer or real workspace is not large enough, "
-					  "IPOPT will increase its size by this factor");
+    roptions->AddBoundedNumberOption(
+      "pivtol",
+      "Pivot tolerance for the linear solver MA27.",
+      0.0, true, 1.0, true, 1e-8,
+      "A smaller number pivots for sparsity, "
+      "a larger number pivots for stability.");
+    roptions->AddBoundedNumberOption(
+      "pivtolmax",
+      "Maximum pivot tolerance.",
+      0.0, true, 1.0, true, 1e-4,
+      "Ipopt may increase pivtol as high as pivtolmax "
+      "to get a more accurate solution to the linear system.");
+    roptions->AddLowerBoundedNumberOption(
+      "liw_init_factor",
+      "Integer workspace memory for MA27.",
+      1.0, false, 5.0,
+      "The initial integer workspace memory = liw_init_factor * memory "
+      "required by unfactored system. Ipopt will increase the workspace "
+      "size by meminc_factor if required.");
+    roptions->AddLowerBoundedNumberOption(
+      "la_init_factor",
+      "Real workspace memory for MA27.",
+      1.0, false, 5.0,
+      "The initial real workspace memory = la_init_factor * memory "
+      "required by unfactored system. Ipopt will increase the workspace"
+      " size by meminc_factor if required.");
+    roptions->AddLowerBoundedNumberOption(
+      "meminc_factor",
+      "Increment factor for workspace size for MA27.",
+      1.0, false, 10.0,
+      "If the integer or real workspace is not large enough, "
+      "Ipopt will increase its size by this factor.");
   }
 
   bool Ma27TSolverInterface::InitializeImpl(const OptionsList& options,
@@ -258,7 +268,11 @@ namespace Ipopt
     if (iflag!=0) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "*** Error from MA27AD *** IFLAG = %d IERROR = %d\n", iflag, ierror);
-      return SYMSOLVER_FATAL_ERROR;
+       if (iflags==1) {
+	 Jnlst().Print(J_ERROR, J_LINEAR_ALGEBRA,
+		       "The index a matrix is out of range.\nPlease check your implementation of the Jabobian and Hessian matrices.");
+       }
+     return SYMSOLVER_FATAL_ERROR;
     }
 
     // ToDo: try and catch

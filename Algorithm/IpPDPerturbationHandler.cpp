@@ -45,7 +45,7 @@ namespace Ipopt
       "augmented system. This parameter gives the maximum value of the "
       "regularization parameter. If a regularization of that size is "
       "not enough, the algorithm skips this iteration and goes to the "
-      "restoration phase. (This is delta_w^max in implementation paper.)");
+      "restoration phase. (This is delta_w^max in the implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "min_hessian_perturbation",
       "Smallest perturbation of the Hessian block.",
@@ -61,7 +61,7 @@ namespace Ipopt
       "was not sufficient - this value is used for the computation of the "
       "very first perturbation and allows a different value for for the first "
       "perturbation than that used for the remaining perturbations. "
-      "(This is bar_kappa_w^+ in implementation paper.)");
+      "(This is bar_kappa_w^+ in the implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "perturb_inc_fact",
       "Increase factor for x-s perturbation.",
@@ -69,25 +69,26 @@ namespace Ipopt
       "The factor by which the perturbation is increased when a trial value "
       "was not sufficient - this value is used for the computation of "
       "all perturbations except for the first. "
-      "(This is kappa_w^+ in implementation paper.)");
+      "(This is kappa_w^+ in the implementation paper.)");
     roptions->AddBoundedNumberOption(
       "perturb_dec_fact",
       "Decrease factor for x-s perturbation.",
       0., true, 1., true, 1./3.,
       "The factor by which the perturbation is decreased when a trial value "
       "is deduced from the size of the most recent successful perturbation. "
-      "(This is kappa_w^- in implementation paper.)");
+      "(This is kappa_w^- in the implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "first_hessian_perturbation",
       "Size of first x-s perturbation tried.",
       0., true, 1e-4,
-      "The first value tried for the x-s perturbation. "
-      "(This is delta_0 in implementation paper.)");
+      "The first value tried for the x-s perturbation in the inertia "
+      "correction scheme."
+      "(This is delta_0 in the implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "jacobian_regularization",
       "Size of the regularization for rank-deficient constraint Jacobians.",
       0., false, 1e-9,
-      "(This is delta_c in implementation paper - assuming that kappa_c=0.)");
+      "(This is delta_c in the implementation paper - assuming that kappa_c=0.)");
   }
 
   bool PDPerturbationHandler::InitializeImpl(const OptionsList& options,

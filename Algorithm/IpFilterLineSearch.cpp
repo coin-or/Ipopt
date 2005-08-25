@@ -87,32 +87,32 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "delta", "Multiplier for constraint violation in the switching rule.",
       0.0, true, 1.0,
-      "(See Eqn. (19) in implementation paper)");
+      "(See Eqn. (19) in implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "s_phi",
       "Exponent for linear barrier function model in the switching rule.",
       1.0, true, 2.3,
-      "(See Eqn. (19) in implementation paper)");
+      "(See Eqn. (19) in implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
       "s_theta",
       "Exponent for current constraint violation in the switching rule.",
       1.0, true, 1.1,
-      "(See Eqn. (19) in implementation paper)");
+      "(See Eqn. (19) in implementation paper.)");
     roptions->AddBoundedNumberOption(
       "gamma_phi",
       "Relaxation factor in the filter margin for the barrier function.",
       0.0, true, 1.0, true, 1e-8,
-      "(See Eqn. (18a) in implementation paper)");
+      "(See Eqn. (18a) in implementation paper.)");
     roptions->AddBoundedNumberOption(
       "gamma_theta",
       "Relaxation factor in the filter margin for the constraint violation.",
       0.0, true, 1.0, true, 1e-5,
-      "(See Eqn. (18b) in implementation paper)");
+      "(See Eqn. (18b) in implementation paper.)");
     roptions->AddBoundedNumberOption(
       "alpha_min_frac",
       "Safety factor for the minimal step size (before switching to restoration phase).",
       0.0, true, 1.0, true, 0.05,
-      "(This is gamma_alpha in Eqn. (20) in implementation paper)");
+      "(This is gamma_alpha in Eqn. (20) in implementation paper.)");
     roptions->AddBoundedNumberOption(
       "alpha_red_factor",
       "Fractional reduction of the trial step size in the backtracking line search.",
@@ -137,10 +137,10 @@ namespace Ipopt
       "obj_max_inc",
       "Determines the upper bound on the acceptable increase of barrier objective function.",
       1.0, true, 5.0,
-      "Trial points are rejected if they lead to anincrease in the "
+      "Trial points are rejected if they lead to an increase in the "
       "barrier objective function by more than obj_max_inc orders "
       "of magnitude.");
-      
+
     std::string prev_category = roptions->RegisteringCategory();
     roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption2(
@@ -219,18 +219,19 @@ namespace Ipopt
       "no", "the problem probably be feasible",
       "yes", "the problem has a good chance to be infeasible",
       "This options is meant to activate heuristics that may speed up the "
-      "infeasibility determination if you expect the problem to be "
+      "infeasibility determination if you expect that there is a good chance for the problem to be "
       "infeasible.  In the filter line search procedure, the restoration "
       "phase is called more qucikly than usually, and more reduction in "
       "the constraint violation is enforced. If the problem is square, this "
-      "is enabled automatically.");
+      "option is enabled automatically.");
     roptions->AddLowerBoundedNumberOption(
       "expect_infeasible_problem_ctol",
       "Threshold for disabling \"expect_infeasible_problem\" option.",
       0.0, false, 1e-3,
       "If the constraint violation becomes smaller than this threshold, "
       "the \"expect_infeasible_problem\" heuristics in the filter line "
-      "search are disabled. If the problem is square, this is set to 0.");
+      "search are disabled. If the problem is square, this options is set to "
+      "0.");
     roptions->AddLowerBoundedNumberOption(
       "soft_resto_pderror_reduction_factor",
       "Required reduction in primal-dual error in the soft restoration phase.",
@@ -249,16 +250,17 @@ namespace Ipopt
       "no", "don't force start in restoration phase",
       "yes", "force start in restoration phase",
       "Setting this option to \"yes\" forces the algorithm to switch to the "
-      "feasibility restoration phase. If the initial point "
-      "is feasible, the algorithm will abort with a failure.");
+      "feasibility restoration phase in the first iteration. If the initial "
+      "point is feasible, the algorithm will abort with a failure.");
     roptions->AddLowerBoundedNumberOption(
       "tiny_step_tol",
       "Tolerance for detecting numerically insignificant steps.",
       0.0, false, 10.0*std::numeric_limits<double>::epsilon(),
       "If the search direction in the primal variables (x and s) is, in "
       "relative terms for each component, less than this value, the "
-      "algorithm accepts the full step without line search.  The default "
-      "value is 10 times machine precision.");
+      "algorithm accepts the full step without line search.  If this happens "
+      "repeatedly, the algorithm will terminate with a corresponding exit "
+      "message. The default value is 10 times machine precision.");
     roptions->AddLowerBoundedIntegerOption(
       "watchdog_shortened_iter_trigger",
       "Number of shortened iterations that trigger the watchdog.",

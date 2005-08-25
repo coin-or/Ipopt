@@ -115,62 +115,62 @@ namespace Ipopt
       options_->GetBoolValue("print_options_documentation",
                              print_options_documentation, "");
       if (print_options_documentation) {
-	bool latex;
-	options_->GetBoolValue("print_options_latex_mode", latex, "");
-	if (latex) {
-	  std::list<std::string> options_to_print;
-	  options_to_print.push_back("print_level");
-	  options_to_print.push_back("pivtol");
-	  options_to_print.push_back("pivtolmax");
-	  options_to_print.push_back("tol");
-	  options_to_print.push_back("compl_inf_tol");
-	  options_to_print.push_back("dual_inf_tol");
-	  options_to_print.push_back("constr_mult_init_max");
-	  options_to_print.push_back("constr_viol_tol");
-	  options_to_print.push_back("mu_strategy");
-	  options_to_print.push_back("mu_init");
-	  options_to_print.push_back("mu_oracle");
-	  options_to_print.push_back("corrector_type");
-	  options_to_print.push_back("obj_scaling_factor");
-	  options_to_print.push_back("nlp_scaling_method");
-	  options_to_print.push_back("nlp_scaling_max_gradient");
-	  options_to_print.push_back("bound_frac");
-	  options_to_print.push_back("bound_mult_init_val");
-	  options_to_print.push_back("bound_push");
-	  options_to_print.push_back("bound_relax_factor");
-	  options_to_print.push_back("acceptable_compl_inf_tol");
-	  options_to_print.push_back("acceptable_constr_viol_tol");
-	  options_to_print.push_back("acceptable_dual_inf_tol");
-	  options_to_print.push_back("acceptable_tol");
-	  options_to_print.push_back("alpha_for_y");
-	  options_to_print.push_back("expect_infeasible_problem");
-	  options_to_print.push_back("max_iter");
-	  options_to_print.push_back("max_refinement_steps");
-	  options_to_print.push_back("max_soc");
-	  options_to_print.push_back("min_refinement_steps");
-	  options_to_print.push_back("output_file");
-	  options_to_print.push_back("file_print_level");
+        bool latex;
+        options_->GetBoolValue("print_options_latex_mode", latex, "");
+        if (latex) {
+          std::list<std::string> options_to_print;
+          options_to_print.push_back("print_level");
+          options_to_print.push_back("pivtol");
+          options_to_print.push_back("pivtolmax");
+          options_to_print.push_back("tol");
+          options_to_print.push_back("compl_inf_tol");
+          options_to_print.push_back("dual_inf_tol");
+          options_to_print.push_back("constr_mult_init_max");
+          options_to_print.push_back("constr_viol_tol");
+          options_to_print.push_back("mu_strategy");
+          options_to_print.push_back("mu_init");
+          options_to_print.push_back("mu_oracle");
+          options_to_print.push_back("corrector_type");
+          options_to_print.push_back("obj_scaling_factor");
+          options_to_print.push_back("nlp_scaling_method");
+          options_to_print.push_back("nlp_scaling_max_gradient");
+          options_to_print.push_back("bound_frac");
+          options_to_print.push_back("bound_mult_init_val");
+          options_to_print.push_back("bound_push");
+          options_to_print.push_back("bound_relax_factor");
+          options_to_print.push_back("acceptable_compl_inf_tol");
+          options_to_print.push_back("acceptable_constr_viol_tol");
+          options_to_print.push_back("acceptable_dual_inf_tol");
+          options_to_print.push_back("acceptable_tol");
+          options_to_print.push_back("alpha_for_y");
+          options_to_print.push_back("expect_infeasible_problem");
+          options_to_print.push_back("max_iter");
+          options_to_print.push_back("max_refinement_steps");
+          options_to_print.push_back("max_soc");
+          options_to_print.push_back("min_refinement_steps");
+          options_to_print.push_back("output_file");
+          options_to_print.push_back("file_print_level");
 
-	  reg_options->OutputLatexOptionDocumentation(*jnlst_, options_to_print);
-	}
-	else {
-	  std::list<std::string> categories;
-	  categories.push_back("Output");
-	  categories.push_back("Main Algorithm");
-	  categories.push_back("Convergence");
-	  categories.push_back("NLP Scaling");
-	  categories.push_back("Mu Update");
-	  categories.push_back("Line Search");
-	  categories.push_back("Initialization");
-	  categories.push_back("Linear Solver");
-	  categories.push_back("Step Calculation");
-	  categories.push_back("Restoration");
-	  categories.push_back("NLP");
-	  categories.push_back("Warm Start");
-	  categories.push_back("MA27 Linear Solver");
-	  categories.push_back("Uncategorized");
-	  reg_options->OutputOptionDocumentation(*jnlst_, categories);
-	}
+          reg_options->OutputLatexOptionDocumentation(*jnlst_, options_to_print);
+        }
+        else {
+          std::list<std::string> categories;
+          categories.push_back("Output");
+          categories.push_back("Main Algorithm");
+          categories.push_back("Convergence");
+          categories.push_back("NLP Scaling");
+          categories.push_back("Mu Update");
+          categories.push_back("Line Search");
+          categories.push_back("Initialization");
+          categories.push_back("Linear Solver");
+          categories.push_back("Step Calculation");
+          categories.push_back("Restoration");
+          categories.push_back("NLP");
+          categories.push_back("Warm Start");
+          categories.push_back("MA27 Linear Solver");
+          categories.push_back("Uncategorized");
+          reg_options->OutputOptionDocumentation(*jnlst_, categories);
+        }
       }
 
     }
@@ -211,23 +211,23 @@ namespace Ipopt
 
     roptions->AddStringOption1(
       "output_file",
-      "File name of desired output file (leave unset for no file output)",
+      "File name of desired output file (leave unset for no file output).",
       "",
       "*", "Any acceptable standard file name",
-      "NOTE: This option only works when read from PARAMS.DAT options file! "
+      "NOTE: This option only works when read from the PARAMS.DAT options file! "
       "An output file with this name will be written (leave unset for no "
-      "file output).  The verbosity level is by default, \"print_level\", or "
+      "file output).  The verbosity level is by default set to \"print_level\", or "
       "but can be overridden with \"file_print_level\".");
     roptions->AddBoundedIntegerOption(
       "file_print_level",
       "Verbosity level for output file.",
       0, J_LAST_LEVEL-1, J_SUMMARY,
-      "NOTE: This option only works when read from PARAMS.DAT options file! "
+      "NOTE: This option only works when read from the PARAMS.DAT options file! "
       "Determines the verbosity level for the file specified by "
-      "\"output_file\".  By defauly it is the same as \"print_level\".");
+      "\"output_file\".  By default it is the same as \"print_level\".");
     roptions->AddStringOption2(
       "print_options_documentation",
-      "Switch to print all algorithmic options",
+      "Switch to print all algorithmic options.",
       "no",
       "no", "don't print list",
       "yes", "print list",
@@ -261,12 +261,12 @@ namespace Ipopt
 
     roptions->SetRegisteringCategory("Undocumented Options");
     roptions->AddStringOption2(
-			       "print_options_latex_mode", 
-			       "Undocumented", "no",
-			       "no", "Undocumented",
-			       "yes", "Undocumented",
-			       "Undocumented"
-			       );
+      "print_options_latex_mode",
+      "Undocumented", "no",
+      "no", "Undocumented",
+      "yes", "Undocumented",
+      "Undocumented"
+    );
   }
 
   ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp)
