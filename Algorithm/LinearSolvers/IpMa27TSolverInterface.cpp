@@ -268,11 +268,11 @@ namespace Ipopt
     if (iflag!=0) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "*** Error from MA27AD *** IFLAG = %d IERROR = %d\n", iflag, ierror);
-       if (iflags==1) {
-	 Jnlst().Print(J_ERROR, J_LINEAR_ALGEBRA,
-		       "The index a matrix is out of range.\nPlease check your implementation of the Jabobian and Hessian matrices.");
-       }
-     return SYMSOLVER_FATAL_ERROR;
+      if (iflags==1) {
+        Jnlst().Print(J_ERROR, J_LINEAR_ALGEBRA,
+                      "The index a matrix is out of range.\nPlease check your implementation of the Jabobian and Hessian matrices.");
+      }
+      return SYMSOLVER_FATAL_ERROR;
     }
 
     // ToDo: try and catch
