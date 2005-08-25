@@ -39,7 +39,8 @@ A tutorial for downloading, installing, and using \Ipopt.}
 
 \tableofcontents
 
-\section{Overview}
+\section{Introduction}
+\subsection{sdfg}
 \Ipopt\ (\underline{I}nterior \underline{P}oint \underline{Opt}imizer,
 pronounced ``I--P--Opt'') is an open source software package for
 large-scale nonlinear optimization. It can be used to solve general
@@ -1543,7 +1544,7 @@ n$, $\tt x$, $\tt new\_x$, $\tt obj\_value$ in the declaration of {\tt
   Eval\_F\_CB} see the discussion of ``{\tt eval\_f}''.  The callback
 functions should return {\tt TRUE}, unless there was a problem doing
 the requested function/derivative evaluation at the given point {\tt
-  x}.
+  x} (then it should return {\tt FALSE}.
 
 Note the additional argument of type {\tt UserDataPtr} in the callback
 functions.  This pointer argument is available for you to communicate
@@ -1803,7 +1804,8 @@ The only special things to consider are:
   The last argument of the {\tt EV\_*} subroutines, {\tt IERR}, is to
   be set to 0 by the users on return, unless there was a problem
   during the evaluation of the optimnization problem
-  function/derivative for the given point {\tt X}.
+  function/derivative for the given point {\tt X} (then it should
+  return a non-zero value).
 \end{itemize}
 
 
