@@ -1879,6 +1879,7 @@ thank Yoshi for his efforts.
 
 
 \appendix
+\newpage
 \section{Triplet Format for Sparse Matrices}\label{app.triplet}
 \Ipopt\ was designed for optimizing large sparse nonlinear programs. 
 Because of problem sparsity, the required matrices (like the Jacobian or Hessian) are not stored as traditional dense matrices, but rather in a sparse matrix format. For the tutorials in this document, we use the triplet format. 
@@ -1918,7 +1919,7 @@ indices or Fortran style (1-based). Tables \ref{tab.fortran_triplet} and
 format for both indexing styles, using the example matrix (\ref{eqn.ex_matrix}).
 
 \begin{footnotesize}
-\begin{table}[!h]
+\begin{table}[h]%[!h]
 \begin{center}
 \caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
 with {\tt index\_style=FORTRAN\_STYLE}}
@@ -1943,7 +1944,7 @@ row     		&       col     	&       value 			    \\
 \end{tabular}
 \end{center}
 \end{table}
-\begin{table}[!h]
+\begin{table}[h]%[!h]
 \begin{center}
 \caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
 with {\tt index\_style=C\_STYLE}}
@@ -1991,7 +1992,7 @@ example, given the matrix,
 the triplet format is shown in Tables \ref{tab.sym_fortran_triplet}
 and \ref{tab.sym_c_triplet}.
 \begin{footnotesize}
-\begin{table}[!h]
+\begin{table}[h]%[!h]
 \begin{center}
 \caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
 with {\tt index\_style=FORTRAN\_STYLE}}
@@ -2012,7 +2013,7 @@ row     		&       col     	&       value 			    \\
 \end{tabular}
 \end{center}
 \end{table}
-\begin{table}[!h]
+\begin{table}[h]%[!h]
 \begin{center}
 \caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
 with {\tt index\_style=C\_STYLE}}
@@ -2034,6 +2035,7 @@ row     		&       col     	&       value 			    \\
 \end{center}
 \end{table}
 \end{footnotesize}
+\newpage
 \section{The Smart Pointer Implementation: SmartPtr} \label{app.smart_ptr}
 
 The SmartPtr class is described in {\tt IpSmartPtr.hpp}. It is a
@@ -2063,6 +2065,7 @@ This might sound difficult to anyone not familiar with the use of
 smart pointers, but just follow one simple rule; always use a SmartPtr
 when creating or passing an \Ipopt\ object.
 
+\newpage
 \section{Options Reference} \label{app.options_ref}
 Options can be set using {\tt PARAMS.DAT}, through your own code, or through the 
 AMPL {\tt options} command. See Section \ref{sec.options} for an explanation of
@@ -2396,7 +2399,8 @@ By defauly it is the same as "print\_level". The valid range for this integer op
 $0 \le {\tt file\_print\_level } \le 10$
 and its default value is $3$.
 
-\subsection{Detailed Installation Information}\label{ExpertInstall}
+\newpage
+\section{Detailed Installation Information}\label{ExpertInstall}
 
 
 
