@@ -616,7 +616,7 @@ displayed.
 
 At this point, AMPL users may wish to skip the sections about
 interfacing with code, but should read Section \ref{sec.options}
-concerning \Ipopt\ options, and Section \ref{sec.ipopt_output} which
+concerning \Ipopt\ options, and Section \ref{sec.output} which
 explains the output displayed by \Ipopt.
 
 \subsection{Interfacing with \Ipopt\ through code}
@@ -740,7 +740,6 @@ Lagrangian
 %- \displaystyle \sum_{i \in 1..4} z^L_i + \sum_{i \in 1..4} z^U_i
 %\end{eqnarray}
 \begin{equation}
-\scriptsize
 \sigma_f \left[
 \begin{array}{cccc}
 2 x_4           & x_4           & x_4           & 2 x_1 + x_2 + x_3     \\
@@ -1975,8 +1974,43 @@ yes} \\ and running Ipopt (like the Ampl executable, for
 instance). This will output all of the options documentation to the
 console.
 
- \bibliographystyle{plain}
- \bibliography{/home/andreasw/tex/andreas}
+\section{Ipopt Output}\label{sec.output}
+This section describes the standard Ipopt console output with the
+default setting for {\tt print\_level}. The output is designed to
+provide a quick summary of each iteration as Ipopt solves the problem.
+
+Before Ipopt starts to solve the problem, it displays the problem
+statistics (number of variables, etc.). Note that if you have fixed
+variables (both upper and lower bounds are equal), Ipopt may remove
+these variables from the problem.
+
+Following the problem statistics, Ipopt will begin to solve the
+problem and you will see output resembling the following,
+\begin{verbatim}
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.6109693e+01 1.12e+01 5.28e-01   0.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  1.8029749e+01 9.90e-01 6.62e+01   0.1 2.05e+00    -  2.14e-01 1.00e+00f  1
+   2  1.8719906e+01 1.25e-02 9.04e+00  -2.2 5.94e-02   2.0 8.04e-01 1.00e+00h  1
+\end{verbatim}
+and the columns of output are defined as,
+\begin{itemize}
+\item[{\tt iter}] The current iteration count. This includes regular iterations and
+iterations while in restoration phase. If in restoration phase, the letter {\tt r'}
+will be appended to the iteration number. 
+\item[{\tt objective}] The unscaled objective value at the current point. In restoration, this value remains the unscaled objective value for the original problem.
+\item[{\tt inf\_pr}] The scaled primal infeasibility at the current point. In restoration, this value is the primal infeasibility of the original problem at the current point.
+\item[{\tt inf\_du}] The scaled dual infeasibility at the current point. In restoration, this is the value of the dual infeasibility for the restoration problem.
+\item[{\tt lg(mu)}] The value of the barrier parameter mu ($log_{10}$).
+\item[{\tt ||d||}] The infinity norm (max) of the primal step (in x and s). In restoration, this value includes the values of the additional variables, $p$ and $n$.
+\item[{\tt lg(rg)}] The value of the regularization term for the Hessian of the Lagrangian ($log_{10}$).
+\item[{\tt alpha\_du}] The stepsize for the dual variables.
+\item[{\tt alpha\_pr}] The stepsize for the primal variables.
+\item[{\tt ls}] The number of backtracking line search steps.
+\end{itemize}
+
+
+\bibliographystyle{plain}
+\bibliography{/home/andreasw/tex/andreas}
 
 %\bibitem{MargotClassText}
 %Margot, F.: Course material for \textit{47852 Open Source Software for
