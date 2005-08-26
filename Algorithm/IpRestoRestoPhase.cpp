@@ -1,17 +1,19 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-02-11
 
 #include "IpRestoRestoPhase.hpp"
 #include "IpRestoIpoptNLP.hpp"
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   RestoRestorationPhase::RestoRestorationPhase()
   {}

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,7 +9,6 @@
 #ifndef __IPALGSTRATEGY_HPP__
 #define __IPALGSTRATEGY_HPP__
 
-#include "IpUtils.hpp"
 #include "IpOptionsList.hpp"
 #include "IpJournalist.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"

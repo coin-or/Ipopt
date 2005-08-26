@@ -14,11 +14,50 @@
 /* Define if F77 and FC dummy `main' functions are identical. */
 #undef FC_DUMMY_MAIN_EQ_F77
 
+/* Define to the C type corresponding to Fortran INTEGER */
+#undef FORTRAN_INTEGER_TYPE
+
+/* Define to 1 if you have the <assert.h> header file. */
+#undef HAVE_ASSERT_H
+
+/* Define to 1 if you have the <cassert> header file. */
+#undef HAVE_CASSERT
+
+/* Define to 1 if you have the <cctype> header file. */
+#undef HAVE_CCTYPE
+
+/* Define to 1 if you have the <cfloat> header file. */
+#undef HAVE_CFLOAT
+
+/* Define to 1 if you have the <cieeefp> header file. */
+#undef HAVE_CIEEEFP
+
+/* Define to 1 if you have the <cmath> header file. */
+#undef HAVE_CMATH
+
+/* Define to 1 if you have the <cstdarg> header file. */
+#undef HAVE_CSTDARG
+
+/* Define to 1 if you have the <cstdio> header file. */
+#undef HAVE_CSTDIO
+
+/* Define to 1 if you have the <ctype.h> header file. */
+#undef HAVE_CTYPE_H
+
+/* Define to 1 if you have the <float.h> header file. */
+#undef HAVE_FLOAT_H
+
+/* Define to 1 if you have the <ieeefp.h> header file. */
+#undef HAVE_IEEEFP_H
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
 /* Define to 1 if MA27 is available */
 #undef HAVE_MA27
+
+/* Define to 1 if you have the <math.h> header file. */
+#undef HAVE_MATH_H
 
 /* Define to 1 if MC19 is available */
 #undef HAVE_MC19
@@ -26,11 +65,17 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
-/* Define to 1 if Pardiso is available */
+/* Define to 1 if Pardiso is available (unsupported) */
 #undef HAVE_PARDISO
+
+/* Define to 1 if you have the <stdarg.h> header file. */
+#undef HAVE_STDARG_H
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
@@ -47,20 +92,20 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
-/* Define to 1 if TAUCS is available */
+/* Define to 1 if TAUCS is available (unsupported) */
 #undef HAVE_TAUCS
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define to the C type corresponding to Fortran INTEGER */
-#undef INTEGER_TYPE
+/* Define to 1 if va_copy is avaliable */
+#undef HAVE_VA_COPY
 
 /* If defined, debug sanity checks are performed during runtime */
 #undef IP_DEBUG
 
-/* Define to 1 if MA27 is given in the old, non-threadsafe version */
-#undef OLD_MA27
+/* Define to be the name of C-function for NaNInf check */
+#undef MY_C_FINITE
 
 /* Name of package */
 #undef PACKAGE
@@ -79,15 +124,6 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
-
-/* The size of a `double', as computed by sizeof. */
-#undef SIZEOF_DOUBLE
-
-/* The size of a `int', as computed by sizeof. */
-#undef SIZEOF_INT
-
-/* The size of a `long', as computed by sizeof. */
-#undef SIZEOF_LONG
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

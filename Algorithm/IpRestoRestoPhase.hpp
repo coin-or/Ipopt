@@ -1,15 +1,14 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-02-11
 
 #ifndef __IPRESTORESTOPHASE_HPP__
 #define __IPRESTORESTOPHASE_HPP__
 
-#include "IpUtils.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpIpoptAlg.hpp"
 #include "IpEqMultCalculator.hpp"

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,16 +9,21 @@
 #ifndef __IPJOURNALIST_HPP__
 #define __IPJOURNALIST_HPP__
 
-#ifdef OLD_C_HEADERS
-# include <stdarg.h>
-#else
-# include <cstdarg>
-#endif
 #include <string>
 #include <vector>
 #include "IpTypes.hpp"
 #include "IpReferenced.hpp"
 #include "IpSmartPtr.hpp"
+
+#ifdef HAVE_CSTDARG
+# include <cstdarg>
+#else
+# ifdef HAVE_STDARG_H
+#  include <stdarg.h>
+# else
+#  error "don't have header file for stdarg"
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -26,8 +31,6 @@ namespace Ipopt
   // forward declarations
   class Journal;
   class FileJournal;
-  class Matrix;
-  class Vector;
 
   /**@name Journalist Enumerations. */
   //@{
@@ -128,26 +131,6 @@ namespace Ipopt
                         EJournalCategory category,
                         Index indent_level,
                         const char* format, ...) const;
-
-    /** Method for printing a vector.  This calls the Vector print
-     *  methods for each appropriate Journal.
-     */
-    void PrintVector(EJournalLevel level,
-                     EJournalCategory category,
-                     const std::string& name,
-                     const Vector& vector,
-                     Index indent=0,
-                     std::string prefix="") const;
-
-    /** Method for printing a matrix.  This calls the Matrix print
-     *  methods for each appropriate Journal.
-     */
-    void PrintMatrix(EJournalLevel level,
-                     EJournalCategory category,
-                     const std::string& name,
-                     const Matrix& matrix,
-                     Index indent=0,
-                     std::string prefix="") const;
 
     /** Method to print a formatted string
      * using the va_list argument. */
@@ -296,20 +279,6 @@ namespace Ipopt
       PrintfImpl(pformat, ap);
     }
 
-    /** Print vector to the designated output location */
-    void PrintVector(std::string name, const Vector& vector,
-                     Index indent, std::string prefix)
-    {
-      PrintVectorImpl(name, vector, indent, prefix);
-    }
-
-    /** Print matrix to the designated output location */
-    void PrintMatrix(const std::string name, const Matrix& matrix,
-                     Index indent, std::string prefix)
-    {
-      PrintMatrixImpl(name, matrix, indent, prefix);
-    }
-
     /** Flush output buffer.*/
     void FlushBuffer()
     {
@@ -327,12 +296,6 @@ namespace Ipopt
 
     /** Printf to the designated output location */
     virtual void PrintfImpl(const char* pformat, va_list ap)=0;
-
-    /** Print vector to the designated output location */
-    virtual void PrintVectorImpl(std::string name, const Vector& vector, Index indent, std::string prefix)=0;
-
-    /** Print matrix to the designated output location */
-    virtual void PrintMatrixImpl(const std::string name, const Matrix& matrix, Index indent, std::string prefix)=0;
 
     /** Flush output buffer.*/
     virtual void FlushBufferImpl()=0;
@@ -398,12 +361,6 @@ namespace Ipopt
     /** Printf to the designated output location */
     virtual void PrintfImpl(const char* pformat, va_list ap);
 
-    /** Print vector to the designated output location */
-    virtual void PrintVectorImpl(std::string name, const Vector& vector, Index indent, std::string prefix);
-
-    /** Print matrix to the designated output location */
-    virtual void PrintMatrixImpl(const std::string name, const Matrix& matrix, Index indent, std::string prefix);
-
     /** Flush output buffer.*/
     virtual void FlushBufferImpl();
     //@}
@@ -429,7 +386,6 @@ namespace Ipopt
 
     /** FILE pointer for the output destination */
     FILE* file_;
-    //@}
   };
 }
 

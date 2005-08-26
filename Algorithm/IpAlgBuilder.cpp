@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,6 +11,7 @@
 #include "IpStdAugSystemSolver.hpp"
 #include "IpAugRestoSystemSolver.hpp"
 #include "IpPDFullSpaceSolver.hpp"
+#include "IpPDPerturbationHandler.hpp"
 #include "IpOptErrorConvCheck.hpp"
 #include "IpFilterLineSearch.hpp"
 #include "IpMonotoneMuUpdate.hpp"
@@ -28,8 +29,13 @@
 #include "IpRestoIterateInitializer.hpp"
 #include "IpRestoRestoPhase.hpp"
 #include "IpTSymLinearSolver.hpp"
-#include "IpMa27TSolverInterface.hpp"
-#include "IpMc19TSymScalingMethod.hpp"
+
+#ifdef HAVE_MA27
+# include "IpMa27TSolverInterface.hpp"
+#endif
+#ifdef HAVE_MC19
+# include "IpMc19TSymScalingMethod.hpp"
+#endif
 #ifdef HAVE_PARDISO
 # include "IpPardisoSolverInterface.hpp"
 #endif
@@ -39,12 +45,13 @@
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
-
-  DefineIpoptType(AlgorithmBuilder);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
+    roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption3(
       "linear_solver",
       "Linear solver used for step computations.",
@@ -53,27 +60,32 @@ namespace Ipopt
       "pardiso", "use the Pardiso package",
       "taucs", "use TAUCS package",
       "Determines which linear algebra package is to be used for the "
-      "solution of the linear system from which the search directions is "
-      "obtained.  Note that depending on your Ipopt installation, not all "
-      "options might be available.");
+      "solution of the augmented linear system (for obtaining the search "
+      "directions). "
+      "Note that depending on your Ipopt installation, not all "
+      "options may be available.");
+    roptions->SetRegisteringCategory("Linear Solver");
     roptions->AddStringOption2(
       "linear_system_scaling",
       "Method for scaling the linear system.",
       "none",
       "none", "no scaling will be performed",
       "mc19", "use the Harwell routine mc19",
-      "Determines which method should be use to compute symmetric scaling "
-      "factors for the augmented system.");
+      "Determines the method used to compute symmetric scaling "
+      "factors for the augmented system. This scaling will be done "
+      "in addition to any NLP problem scaling.");
+
+    roptions->SetRegisteringCategory("Mu Update");
     roptions->AddStringOption2(
       "mu_strategy",
       "Update strategy for barrier parameter.",
       "monotone",
       "monotone", "use the monotone (Fiacco-McCormick) strategy",
       "adaptive", "use the adaptive update strategy",
-      "Determines which barrier parameter strategy is to be used.");
+      "Determines which barrier parameter update strategy is to be used.");
     roptions->AddStringOption3(
       "mu_oracle",
-      "Oracle for a new barrier parameters in the adaptive strategy",
+      "Oracle for a new barrier parameter in the adaptive strategy.",
       "probing",
       "probing", "Mehrotra's probing heuristic",
       "loqo", "LOQO's centrality rule",
@@ -81,7 +93,7 @@ namespace Ipopt
       "Determines how a new barrier parameter is computed in each "
       "\"free-mode\" iteration of the adaptive barrier parameter "
       "strategy. (Only considered if \"adaptive\" is selected for "
-      "option \"mu_strategy\".");
+      "option \"mu_strategy\").");
     roptions->AddStringOption4(
       "fixed_mu_oracle",
       "Oracle for the barrier parameter when switching to fixed mode.",
@@ -93,7 +105,8 @@ namespace Ipopt
       "Determines how the first value of the barrier parameter should be "
       "computed when switching to the \"monotone mode\" in the adaptive "
       "strategy. (Only considered if \"adaptive\" is selected for option "
-      "\"mu_strategy\".");
+      "\"mu_strategy\".)");
+    roptions->SetRegisteringCategory("Initialization");
     roptions->AddStringOption2(
       "warm_start_init_point",
       "Warm-start for initial point", "no",
@@ -118,25 +131,39 @@ namespace Ipopt
     // Create the solvers that will be used by the main algorithm
     SmartPtr<TSymScalingMethod> ScalingMethod;
     std::string linear_system_scaling;
-    options.GetValue("linear_system_scaling",
-                     linear_system_scaling, prefix);
+    options.GetStringValue("linear_system_scaling",
+                           linear_system_scaling, prefix);
     if (linear_system_scaling=="mc19") {
+#ifdef HAVE_MC19
       ScalingMethod = new Mc19TSymScalingMethod();
+#else
+
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Selected linear system scaling method MC19 not available.");
+#endif
+
     }
 
     SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
     std::string linear_solver;
-    options.GetValue("linear_solver", linear_solver, prefix);
+    options.GetStringValue("linear_solver", linear_solver, prefix);
     if (linear_solver=="ma27") {
+#ifdef HAVE_MA27
       SolverInterface = new Ma27TSolverInterface();
+#else
+
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Selected linear solver MA27 not available.");
+#endif
+
     }
     else if (linear_solver=="pardiso") {
 #ifdef HAVE_PARDISO
       SolverInterface = new PardisoSolverInterface();
 #else
 
-      THROW_EXCEPTION(OptionsList::OPTION_OUT_OF_RANGE,
-                      "Selected solver Pardiso not available.");
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Selected linear solver Pardiso not available.");
 #endif
 
     }
@@ -145,9 +172,8 @@ namespace Ipopt
       SolverInterface = new TAUCSSolverInterface();
 #else
 
-      ASSERT_EXCEPTION(false,
-                       OptionsList::OPTION_OUT_OF_RANGE,
-                       "Selected solver TAUCS not available.");
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Selected linear solver TAUCS not available.");
 #endif
 
     }
@@ -158,8 +184,10 @@ namespace Ipopt
     SmartPtr<AugSystemSolver> AugSolver =
       //        = new AugTSystemSolver(*Ma27Solver);
       new StdAugSystemSolver(*ScaledSolver);
+    SmartPtr<PDPerturbationHandler> pertHandler =
+      new PDPerturbationHandler();
     SmartPtr<PDSystemSolver> PDSolver =
-      new PDFullSpaceSolver(*AugSolver);
+      new PDFullSpaceSolver(*AugSolver, *pertHandler);
 
     // Create the object for initializing the iterates
     // Initialization object
@@ -168,7 +196,7 @@ namespace Ipopt
     SmartPtr<IterateInitializer> IterInitializer;
     bool warm_start_init_point;
     std::string warm_start_option;
-    options.GetValue("warm_start_init_point", warm_start_option, prefix);
+    options.GetStringValue("warm_start_init_point", warm_start_option, prefix);
     warm_start_init_point = (warm_start_option == "yes");
 
     if (warm_start_init_point) {
@@ -181,8 +209,10 @@ namespace Ipopt
     // Solver for the restoration phase
     SmartPtr<AugSystemSolver> resto_AugSolver =
       new AugRestoSystemSolver(*AugSolver);
+    SmartPtr<PDPerturbationHandler> resto_pertHandler =
+      new PDPerturbationHandler();
     SmartPtr<PDSystemSolver> resto_PDSolver =
-      new PDFullSpaceSolver(*resto_AugSolver);
+      new PDFullSpaceSolver(*resto_AugSolver, *resto_pertHandler);
 
     // Convergence check in the restoration phase
     SmartPtr<RestoFilterConvergenceCheck> resto_convCheck =
@@ -199,13 +229,13 @@ namespace Ipopt
     // algorithm
     SmartPtr<MuUpdate> resto_MuUpdate;
     std::string resto_smuupdate;
-    options.GetValue("mu_strategy", resto_smuupdate, "resto."+prefix);
+    options.GetStringValue("mu_strategy", resto_smuupdate, "resto."+prefix);
 
     std::string resto_smuoracle;
     std::string resto_sfixmuoracle;
     if (resto_smuupdate=="adaptive" ) {
-      options.GetValue("mu_oracle", resto_smuoracle, "resto."+prefix);
-      options.GetValue("fixed_mu_oracle", resto_sfixmuoracle, "resto."+prefix);
+      options.GetStringValue("mu_oracle", resto_smuoracle, "resto."+prefix);
+      options.GetStringValue("fixed_mu_oracle", resto_sfixmuoracle, "resto."+prefix);
     }
 
     if (resto_smuupdate=="monotone" ) {
@@ -279,12 +309,12 @@ namespace Ipopt
     // Create the mu update that will be used by the main algorithm
     SmartPtr<MuUpdate> MuUpdate;
     std::string smuupdate;
-    options.GetValue("mu_strategy", smuupdate, prefix);
+    options.GetStringValue("mu_strategy", smuupdate, prefix);
     std::string smuoracle;
     std::string sfixmuoracle;
     if (smuupdate=="adaptive" ) {
-      options.GetValue("mu_oracle", smuoracle, prefix);
-      options.GetValue("fixed_mu_oracle", sfixmuoracle, prefix);
+      options.GetStringValue("mu_oracle", smuoracle, prefix);
+      options.GetStringValue("fixed_mu_oracle", sfixmuoracle, prefix);
     }
 
     if (smuupdate=="monotone" ) {

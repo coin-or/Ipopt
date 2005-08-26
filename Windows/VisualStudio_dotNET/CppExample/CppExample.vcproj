@@ -20,11 +20,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\Interfaces;..\..\..\Common;..\include;..\..\..\Apps\StdInterface;..\..\..\Algorithm"
+				AdditionalIncludeDirectories="..\..\..\Interfaces;..\..\..\Common;..\include;..\..\..\Algorithm;..\..\..\LinAlg"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
+				DisableLanguageExtensions="TRUE"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -69,9 +71,12 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..\..\..\Interfaces;..\..\..\Common;..\include;..\..\..\Algorithm;..\..\..\LinAlg"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="4"
-				UsePrecompiledHeader="3"
+				DisableLanguageExtensions="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"/>
@@ -81,6 +86,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/CppExample.exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Intel\Fortran\compiler80\IA32\LIB&quot;"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"

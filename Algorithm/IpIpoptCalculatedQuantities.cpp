@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -7,19 +7,24 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpIpoptCalculatedQuantities.hpp"
-#ifdef OLD_C_HEADERS
-#include <math.h>
+
+#ifdef HAVE_CMATH
+# include <cmath>
 #else
-#include <cmath>
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 #include <limits>
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
-
-  DefineIpoptType(IpoptCalculatedQuantities);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   IpoptCalculatedQuantities::IpoptCalculatedQuantities
   (const SmartPtr<IpoptNLP>& ip_nlp,
@@ -136,36 +141,42 @@ namespace Ipopt
 
   void IpoptCalculatedQuantities::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
+    roptions->SetRegisteringCategory("Convergence");
     roptions->AddLowerBoundedNumberOption(
       "s_max",
       "Scaling threshold for the NLP error.",
       0.0, true, 100.0,
-      "(see paragraph after Eqn. (6) in the implementation paper)");
+      "(See paragraph after Eqn. (6) in the implementation paper.)");
+
+    roptions->SetRegisteringCategory("NLP");
     roptions->AddLowerBoundedNumberOption(
       "kappa_d",
       "Weight for linear damping term (to handle one-sided bounds).",
       0.0, false, 1e-5,
-      "(see Section 3.7 in implementation paper)");
+      "(see Section 3.7 in implementation paper.)");
+
+    roptions->SetRegisteringCategory("Line Search");
     roptions->AddLowerBoundedNumberOption(
       "slack_move",
       "Correction size for very small slacks.",
       0.0, false,
       pow(std::numeric_limits<double>::epsilon(), 0.75),
-      "Due to numercal issues or lack of interior, the slack variables might "
+      "Due to numerical issues or the lack of an interior, the slack variables might "
       "become very small.  If a slack becomes very small compared to machine "
-      "precision, the corresponding bound is moved a little.  This parameter "
-      "determines how large the perturbation should be.  Its default value is "
+      "precision, the corresponding bound is moved slightly.  This parameter "
+      "determines how large the move should be.  Its default value is "
       "mach_eps^{3/4}.  (See also end of Section 3.5 in implementation paper "
       "- but actual implementation might be somewhat different.)");
+    roptions->SetRegisteringCategory("Convergence");
     roptions->AddStringOption3(
       "constraint_violation_norm_type",
-      "Norm to be used for the constraint violation",
+      "Norm to be used for the constraint violation.",
       "1-norm",
       "1-norm", "use the 1-norm",
       "2-norm", "use the 2-norm",
       "max-norm", "use the infinity norm",
       "Determines which norm should be used when the algorithm computes the "
-      "constraint violation, for example for the line search.");
+      "constraint violation (for example, in the line search).");
   }
 
   bool IpoptCalculatedQuantities::Initialize(const Journalist& jnlst,
@@ -699,7 +710,7 @@ namespace Ipopt
 
     DBG_PRINT((1, "BarrierTerm with damping = %25.16e\n", retval));
 
-    DBG_ASSERT(FiniteNumber(retval));
+    DBG_ASSERT(IsFiniteNumber(retval));
     return retval;
   }
 
@@ -735,7 +746,7 @@ namespace Ipopt
       }
       curr_barrier_obj_cache_.AddCachedResult(result, tdeps, sdeps);
     }
-    DBG_ASSERT(FiniteNumber(result));
+    DBG_ASSERT(IsFiniteNumber(result));
     return result;
   }
 
@@ -772,7 +783,7 @@ namespace Ipopt
       }
       trial_barrier_obj_cache_.AddCachedResult(result, tdeps, sdeps);
     }
-    DBG_ASSERT(FiniteNumber(result));
+    DBG_ASSERT(IsFiniteNumber(result));
     return result;
   }
 

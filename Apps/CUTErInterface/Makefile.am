@@ -6,6 +6,11 @@
 
 AUTOMAKE_OPTIONS = foreign
 
+EXTRA_DIST = \
+	CUTErInterface.f \
+	ipo.pro \
+	sdipo.pro
+
 noinst_LIBRARIES = libdummy.a
 
 libdummy_a_SOURCES = ipoma.f

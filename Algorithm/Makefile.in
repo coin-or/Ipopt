@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2005 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -55,21 +55,25 @@ CONFIG_CLEAN_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
 libipoptalg_a_AR = $(AR) $(ARFLAGS)
 libipoptalg_a_LIBADD =
-am_libipoptalg_a_OBJECTS = IpAlgBuilder.$(OBJEXT) \
-	IpDefaultIterateInitializer.$(OBJEXT) \
-	IpWarmStartIterateInitializer.$(OBJEXT) IpFilter.$(OBJEXT) \
+am_libipoptalg_a_OBJECTS = IpAdaptiveMuUpdate.$(OBJEXT) \
+	IpAlgBuilder.$(OBJEXT) IpAlgorithmRegOp.$(OBJEXT) \
+	IpAugRestoSystemSolver.$(OBJEXT) \
+	IpDefaultIterateInitializer.$(OBJEXT) IpFilter.$(OBJEXT) \
 	IpFilterLineSearch.$(OBJEXT) IpGradientScaling.$(OBJEXT) \
 	IpIpoptAlg.$(OBJEXT) IpIpoptCalculatedQuantities.$(OBJEXT) \
 	IpIpoptData.$(OBJEXT) IpIteratesVector.$(OBJEXT) \
-	IpLoqoMuOracle.$(OBJEXT) IpMonotoneMuUpdate.$(OBJEXT) \
-	IpAdaptiveMuUpdate.$(OBJEXT) IpNLPScaling.$(OBJEXT) \
+	IpLeastSquareMults.$(OBJEXT) IpLoqoMuOracle.$(OBJEXT) \
+	IpMonotoneMuUpdate.$(OBJEXT) IpNLPScaling.$(OBJEXT) \
 	IpOptErrorConvCheck.$(OBJEXT) IpOrigIpoptNLP.$(OBJEXT) \
-	IpOrigIterationOutput.$(OBJEXT) IpProbingMuOracle.$(OBJEXT) \
+	IpOrigIterationOutput.$(OBJEXT) IpPDFullSpaceSolver.$(OBJEXT) \
+	IpPDPerturbationHandler.$(OBJEXT) IpProbingMuOracle.$(OBJEXT) \
 	IpQualityFunctionMuOracle.$(OBJEXT) \
 	IpRestoFilterConvCheck.$(OBJEXT) IpRestoIpoptNLP.$(OBJEXT) \
 	IpRestoIterateInitializer.$(OBJEXT) \
 	IpRestoIterationOutput.$(OBJEXT) IpRestoMinC_1Nrm.$(OBJEXT) \
-	IpRestoRestoPhase.$(OBJEXT) IpUserScaling.$(OBJEXT)
+	IpRestoRestoPhase.$(OBJEXT) IpStdAugSystemSolver.$(OBJEXT) \
+	IpUserScaling.$(OBJEXT) \
+	IpWarmStartIterateInitializer.$(OBJEXT)
 libipoptalg_a_OBJECTS = $(am_libipoptalg_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -85,8 +89,15 @@ CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libipoptalg_a_SOURCES)
 DIST_SOURCES = $(libipoptalg_a_SOURCES)
+RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
+	html-recursive info-recursive install-data-recursive \
+	install-exec-recursive install-info-recursive \
+	install-recursive installcheck-recursive installdirs-recursive \
+	pdf-recursive ps-recursive uninstall-info-recursive \
+	uninstall-recursive
 ETAGS = etags
 CTAGS = ctags
+DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -95,6 +106,7 @@ AMPL_CPPFLAGS = @AMPL_CPPFLAGS@
 AMTAR = @AMTAR@
 AR = @AR@
 ARFLAGS = @ARFLAGS@
+AR_X = @AR_X@
 ASLLIB = @ASLLIB@
 ASLMAKEFILECMDS = @ASLMAKEFILECMDS@
 ASLMAKEFLAGS = @ASLMAKEFLAGS@
@@ -116,10 +128,6 @@ BUILDHSLDIR_FALSE = @BUILDHSLDIR_FALSE@
 BUILDHSLDIR_TRUE = @BUILDHSLDIR_TRUE@
 BUILDHSL_FALSE = @BUILDHSL_FALSE@
 BUILDHSL_TRUE = @BUILDHSL_TRUE@
-BUILDLAPACKDIR_FALSE = @BUILDLAPACKDIR_FALSE@
-BUILDLAPACKDIR_TRUE = @BUILDLAPACKDIR_TRUE@
-BUILDLAPACK_FALSE = @BUILDLAPACK_FALSE@
-BUILDLAPACK_TRUE = @BUILDLAPACK_TRUE@
 BUILDMA27_FALSE = @BUILDMA27_FALSE@
 BUILDMA27_TRUE = @BUILDMA27_TRUE@
 BUILDMC19_FALSE = @BUILDMC19_FALSE@
@@ -127,13 +135,13 @@ BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
-CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../Common -I$(srcdir)/../Interfaces \
-	-I$(srcdir)/../PDSystemImpl/PDFullSpace \
-	-I$(srcdir)/../LinAlgImpl/Serial
+CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../Common -I$(srcdir)/../LinAlg \
+	-I$(srcdir)/../LinAlg/TMatrices -I$(srcdir)/../Interfaces \
+	-I$(srcdir)/LinearSolvers
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -146,6 +154,10 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
+HAVE_MA27_FALSE = @HAVE_MA27_FALSE@
+HAVE_MA27_TRUE = @HAVE_MA27_TRUE@
+HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
+HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
@@ -219,86 +231,105 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
+SUBDIRS = LinearSolvers
 noinst_LIBRARIES = libipoptalg.a
 libipoptalg_a_SOURCES = \
-	IpAlgBuilder.hpp IpAlgBuilder.cpp \
+	IpAdaptiveMuUpdate.cpp IpAdaptiveMuUpdate.hpp \
+	IpAlgBuilder.cpp IpAlgBuilder.hpp \
+	IpAlgorithmRegOp.cpp IpAlgorithmRegOp.hpp \
 	IpAlgStrategy.hpp \
+	IpAugRestoSystemSolver.cpp IpAugRestoSystemSolver.hpp \
+	IpAugSystemSolver.hpp \
 	IpConvCheck.hpp \
-	IpDefaultIterateInitializer.hpp IpDefaultIterateInitializer.cpp \
-	IpWarmStartIterateInitializer.hpp IpWarmStartIterateInitializer.cpp \
+	IpDefaultIterateInitializer.cpp IpDefaultIterateInitializer.hpp \
+	IpEqMultCalculator.hpp \
 	IpFilter.cpp IpFilter.hpp \
 	IpFilterLineSearch.cpp IpFilterLineSearch.hpp \
-	IpGradientScaling.hpp IpGradientScaling.cpp \
+	IpGradientScaling.cpp IpGradientScaling.hpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
 	IpIpoptData.cpp IpIpoptData.hpp \
-	IpIpoptNLP.hpp  \
+	IpIpoptNLP.hpp \
 	IpIterateInitializer.hpp \
-	IpIteratesVector.hpp IpIteratesVector.cpp \
+	IpIteratesVector.cpp IpIteratesVector.hpp \
 	IpIterationOutput.hpp \
+	IpLeastSquareMults.cpp IpLeastSquareMults.hpp \
 	IpLineSearch.hpp \
-	IpLoqoMuOracle.hpp IpLoqoMuOracle.cpp \
-	IpMonotoneMuUpdate.hpp IpMonotoneMuUpdate.cpp \
+	IpLoqoMuOracle.cpp IpLoqoMuOracle.hpp \
+	IpMonotoneMuUpdate.cpp IpMonotoneMuUpdate.hpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp \
-	IpAdaptiveMuUpdate.hpp IpAdaptiveMuUpdate.cpp \
-	IpNLPScaling.hpp IpNLPScaling.cpp \
+	IpNLPScaling.cpp IpNLPScaling.hpp \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \
 	IpOrigIpoptNLP.cpp IpOrigIpoptNLP.hpp \
-	IpOrigIterationOutput.hpp IpOrigIterationOutput.cpp \
-	IpProbingMuOracle.hpp IpProbingMuOracle.cpp \
-	IpQualityFunctionMuOracle.hpp IpQualityFunctionMuOracle.cpp \
+	IpOrigIterationOutput.cpp IpOrigIterationOutput.hpp \
+	IpPDFullSpaceSolver.cpp IpPDFullSpaceSolver.hpp \
+	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
+	IpPDSystemSolver.hpp \
+	IpProbingMuOracle.cpp IpProbingMuOracle.hpp \
+	IpQualityFunctionMuOracle.cpp IpQualityFunctionMuOracle.hpp \
 	IpRestoFilterConvCheck.cpp IpRestoFilterConvCheck.hpp \
-	IpRestoIpoptNLP.hpp IpRestoIpoptNLP.cpp \
-	IpRestoIterateInitializer.hpp IpRestoIterateInitializer.cpp \
-	IpRestoIterationOutput.hpp IpRestoIterationOutput.cpp \
+	IpRestoIpoptNLP.cpp IpRestoIpoptNLP.hpp \
+	IpRestoIterateInitializer.cpp IpRestoIterateInitializer.hpp \
+	IpRestoIterationOutput.cpp IpRestoIterationOutput.hpp \
 	IpRestoMinC_1Nrm.cpp IpRestoMinC_1Nrm.hpp \
 	IpRestoPhase.hpp \
-	IpRestoRestoPhase.hpp IpRestoRestoPhase.cpp \
-	IpUserScaling.cpp IpUserScaling.hpp
+	IpRestoRestoPhase.cpp IpRestoRestoPhase.hpp \
+	IpStdAugSystemSolver.cpp IpStdAugSystemSolver.hpp \
+	IpUserScaling.cpp IpUserScaling.hpp \
+	IpWarmStartIterateInitializer.cpp IpWarmStartIterateInitializer.hpp
 
 
 # Astyle stuff
 ASTYLE_FILES = \
-	IpAlgBuilder.hppbak IpAlgBuilder.cppbak \
+	IpAdaptiveMuUpdate.cppbak IpAdaptiveMuUpdate.hppbak \
+	IpAlgBuilder.cppbak IpAlgBuilder.hppbak \
+	IpAlgorithmRegOp.cppbak IpAlgorithmRegOp.hppbak \
 	IpAlgStrategy.hppbak \
+	IpAugRestoSystemSolver.cppbak IpAugRestoSystemSolver.hppbak \
+	IpAugSystemSolver.hppbak \
 	IpConvCheck.hppbak \
-	IpDefaultIterateInitializer.hppbak IpDefaultIterateInitializer.cppbak \
-	IpWarmStartIterateInitializer.hppbak IpWarmStartIterateInitializer.cppbak \
+	IpDefaultIterateInitializer.cppbak IpDefaultIterateInitializer.hppbak \
+	IpEqMultCalculator.hppbak \
 	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLineSearch.cppbak IpFilterLineSearch.hppbak \
-	IpGradientScaling.hppbak IpGradientScaling.cppbak \
+	IpGradientScaling.cppbak IpGradientScaling.hppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
 	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \
 	IpIpoptData.cppbak IpIpoptData.hppbak \
 	IpIpoptNLP.hppbak \
 	IpIterateInitializer.hppbak \
-	IpIteratesVector.hppbak IpIteratesVector.cppbak \
+	IpIteratesVector.cppbak IpIteratesVector.hppbak \
 	IpIterationOutput.hppbak \
+	IpLeastSquareMults.cppbak IpLeastSquareMults.hppbak \
 	IpLineSearch.hppbak \
-	IpLoqoMuOracle.hppbak IpLoqoMuOracle.cppbak \
-	IpMonotoneMuUpdate.hppbak IpMonotoneMuUpdate.cppbak \
+	IpLoqoMuOracle.cppbak IpLoqoMuOracle.hppbak \
+	IpMonotoneMuUpdate.cppbak IpMonotoneMuUpdate.hppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
-	IpAdaptiveMuUpdate.hppbak IpAdaptiveMuUpdate.cppbak \
-	IpNLPScaling.hppbak IpNLPScaling.cppbak \
+	IpNLPScaling.cppbak IpNLPScaling.hppbak \
 	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
 	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \
-	IpOrigIterationOutput.hppbak IpOrigIterationOutput.cppbak \
-	IpProbingMuOracle.hppbak IpProbingMuOracle.cppbak \
-	IpQualityFunctionMuOracle.hppbak IpQualityFunctionMuOracle.cppbak \
+	IpOrigIterationOutput.cppbak IpOrigIterationOutput.hppbak \
+	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
+	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
+	IpPDSystemSolver.hppbak \
+	IpProbingMuOracle.cppbak IpProbingMuOracle.hppbak \
+	IpQualityFunctionMuOracle.cppbak IpQualityFunctionMuOracle.hppbak \
 	IpRestoFilterConvCheck.cppbak IpRestoFilterConvCheck.hppbak \
-	IpRestoIpoptNLP.hppbak IpRestoIpoptNLP.cppbak \
-	IpRestoIterateInitializer.hppbak IpRestoIterateInitializer.cppbak \
-	IpRestoIterationOutput.hppbak IpRestoIterationOutput.cppbak \
+	IpRestoIpoptNLP.cppbak IpRestoIpoptNLP.hppbak \
+	IpRestoIterateInitializer.cppbak IpRestoIterateInitializer.hppbak \
+	IpRestoIterationOutput.cppbak IpRestoIterationOutput.hppbak \
 	IpRestoMinC_1Nrm.cppbak IpRestoMinC_1Nrm.hppbak \
 	IpRestoPhase.hppbak \
-	IpRestoRestoPhase.hppbak IpRestoRestoPhase.cppbak \
-	IpUserScaling.cppbak IpUserScaling.hppbak
+	IpRestoRestoPhase.cppbak IpRestoRestoPhase.hppbak \
+	IpStdAugSystemSolver.cppbak IpStdAugSystemSolver.hppbak \
+	IpUserScaling.cppbak IpUserScaling.hppbak \
+	IpWarmStartIterateInitializer.cppbak IpWarmStartIterateInitializer.hppbak
 
 CLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
-all: all-am
+all: all-recursive
 
 .SUFFIXES:
 .SUFFIXES: .cppbak .hppbak .cpp .hpp .o .obj
@@ -347,6 +378,8 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAdaptiveMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAlgBuilder.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAlgorithmRegOp.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAugRestoSystemSolver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDefaultIterateInitializer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilterLineSearch.Po@am__quote@
@@ -355,12 +388,15 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptCalculatedQuantities.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptData.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIteratesVector.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLeastSquareMults.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLoqoMuOracle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMonotoneMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNLPScaling.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptErrorConvCheck.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOrigIpoptNLP.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOrigIterationOutput.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDFullSpaceSolver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDPerturbationHandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpProbingMuOracle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpQualityFunctionMuOracle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoFilterConvCheck.Po@am__quote@
@@ -369,6 +405,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoIterationOutput.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoMinC_1Nrm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoRestoPhase.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdAugSystemSolver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpUserScaling.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpWarmStartIterateInitializer.Po@am__quote@
 
@@ -387,6 +424,77 @@ distclean-compile:
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 uninstall-info-am:
 
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
+$(RECURSIVE_TARGETS):
+	@failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
+	fi; test -z "$$fail"
+
+mostlyclean-recursive clean-recursive distclean-recursive \
+maintainer-clean-recursive:
+	@failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	case "$@" in \
+	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
+	  *) list='$(SUBDIRS)' ;; \
+	esac; \
+	rev=''; for subdir in $$list; do \
+	  if test "$$subdir" = "."; then :; else \
+	    rev="$$subdir $$rev"; \
+	  fi; \
+	done; \
+	rev="$$rev ."; \
+	target=`echo $@ | sed s/-recursive//`; \
+	for subdir in $$rev; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done && test -z "$$fail"
+tags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) tags); \
+	done
+ctags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) ctags); \
+	done
+
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
@@ -397,10 +505,23 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	mkid -fID $$unique
 tags: TAGS
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
+	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
+	  include_option=--etags-include; \
+	  empty_fix=.; \
+	else \
+	  include_option=--include; \
+	  empty_fix=; \
+	fi; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test ! -f $$subdir/TAGS || \
+	      tags="$$tags $$include_option=$$here/$$subdir/TAGS"; \
+	  fi; \
+	done; \
 	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
@@ -413,7 +534,7 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 	    $$tags $$unique; \
 	fi
 ctags: CTAGS
-CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+CTAGS: ctags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
@@ -462,19 +583,35 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
+	list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test -d "$(distdir)/$$subdir" \
+	    || $(mkdir_p) "$(distdir)/$$subdir" \
+	    || exit 1; \
+	    distdir=`$(am__cd) $(distdir) && pwd`; \
+	    top_distdir=`$(am__cd) $(top_distdir) && pwd`; \
+	    (cd $$subdir && \
+	      $(MAKE) $(AM_MAKEFLAGS) \
+	        top_distdir="$$top_distdir" \
+	        distdir="$$distdir/$$subdir" \
+	        distdir) \
+	      || exit 1; \
+	  fi; \
+	done
 check-am: all-am
-check: check-am
+check: check-recursive
 all-am: Makefile $(LIBRARIES)
-installdirs:
-install: install-am
-install-exec: install-exec-am
-install-data: install-data-am
-uninstall: uninstall-am
+installdirs: installdirs-recursive
+installdirs-am:
+install: install-recursive
+install-exec: install-exec-recursive
+install-data: install-data-recursive
+uninstall: uninstall-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-am
+installcheck: installcheck-recursive
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
 	  install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
@@ -491,23 +628,23 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-clean: clean-am
+clean: clean-recursive
 
 clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
-distclean: distclean-am
+distclean: distclean-recursive
 	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
 
-dvi: dvi-am
+dvi: dvi-recursive
 
 dvi-am:
 
-html: html-am
+html: html-recursive
 
-info: info-am
+info: info-recursive
 
 info-am:
 
@@ -515,41 +652,45 @@ install-data-am:
 
 install-exec-am:
 
-install-info: install-info-am
+install-info: install-info-recursive
 
 install-man:
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-am
+maintainer-clean: maintainer-clean-recursive
 	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-am
+mostlyclean: mostlyclean-recursive
 
 mostlyclean-am: mostlyclean-compile mostlyclean-generic
 
-pdf: pdf-am
+pdf: pdf-recursive
 
 pdf-am:
 
-ps: ps-am
+ps: ps-recursive
 
 ps-am:
 
 uninstall-am: uninstall-info-am
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-noinstLIBRARIES ctags distclean distclean-compile \
-	distclean-generic distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-exec install-exec-am install-info \
-	install-info-am install-man install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-info-am
+uninstall-info: uninstall-info-recursive
+
+.PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am check check-am \
+	clean clean-generic clean-noinstLIBRARIES clean-recursive \
+	ctags ctags-recursive distclean distclean-compile \
+	distclean-generic distclean-recursive distclean-tags distdir \
+	dvi dvi-am html html-am info info-am install install-am \
+	install-data install-data-am install-exec install-exec-am \
+	install-info install-info-am install-man install-strip \
+	installcheck installcheck-am installdirs installdirs-am \
+	maintainer-clean maintainer-clean-generic \
+	maintainer-clean-recursive mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-recursive pdf pdf-am ps ps-am \
+	tags tags-recursive uninstall uninstall-am uninstall-info-am
 
 
 astyle: $(ASTYLE_FILES)

@@ -1,18 +1,18 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Andreas Waechter              IBM    2004-09-23
+// Authors:  Carl Laird, Andreas Waechter              IBM    2004-09-23
 
 #include "IpDefaultIterateInitializer.hpp"
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
-
-  DefineIpoptType(DefaultIterateInitializer);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   DefaultIterateInitializer::DefaultIterateInitializer
   (const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator)
@@ -25,32 +25,33 @@ namespace Ipopt
   {
     reg_options->AddLowerBoundedNumberOption(
       "bound_push",
-      "Desired minimal absolute distance of initial point to bound",
+      "Desired minimum absolute distance from the initial point to bound.",
       0.0, true, 0.01,
-      "Determines (together with \"bound_frac\") by how much the initial "
-      "point might have to be modified in order to be sufficiently inside "
-      "the bounds.");
+      "Determines how much the initial point might have to "
+      "be modified in order to be sufficiently inside "
+      "the bounds (together with \"bound_frac\").  (This is kappa_1 in "
+      "Section 3.6 of implementation paper.)");
     reg_options->AddBoundedNumberOption(
       "bound_frac",
-      "Desired minimal relative distance of initial point to bound",
+      "Desired minimum relative distance from the initial point to bound.",
       0, true, 0.5, false, 0.01,
-      "Determines (together with \"bound_push\") by how much the initial "
-      "point might have to be modified in order to be sufficiently inside "
-      "the bounds.");
+      "Determines how much the initial point might have to "
+      "be modified in order to be sufficiently inside "
+      "the bounds (together with \"bound_push\").  (This is kappa_2 in "
+      "Section 3.6 of implementation paper.)");
     reg_options->AddLowerBoundedNumberOption(
       "constr_mult_init_max",
-      "Maximal allowed least-square guess of constraint multipliers.",
+      "Maximum allowed least-square guess of constraint multipliers.",
       0, false, 1e3,
       "Determines how large the initial least-square guesses of the contraint "
-      "multipliers (in max-norm) are allowed to be. If the guess is larger "
+      "multipliers are allowed to be (in max-norm). If the guess is larger "
       "than this value, it is discarded and all constraint multipliers are "
-      "set to zero.  This options is also used in the classes "
-      "\"RestoIterateInitializer\".  By default, "
-      "\"resto.constr_mult_init_max\" (the one "
+      "set to zero.  This options is also used when initializing the "
+      "restoration phase. By default, \"resto.constr_mult_init_max\" (the one "
       "used in RestoIterateInitializer) is set to zero.");
     reg_options->AddLowerBoundedNumberOption(
       "bound_mult_init_val",
-      "Initial value for the bound multipliers",
+      "Initial value for the bound multipliers.",
       0, true, 1.0,
       "All dual variables corresponding to bound constraints are "
       "initialized to this value.");
@@ -98,8 +99,6 @@ namespace Ipopt
 
     // Now we compute the initial values that the algorithm is going to
     // actually use.  We first store them in the trial fields in ip_data.
-
-    // ToDo combine the following code with warm_start_intializer
 
     // Push the x iterates sufficiently inside the bounds
     // Calculate any required shift in x0 and s0
@@ -290,8 +289,8 @@ namespace Ipopt
       delta_x->Axpy(1.0, orig_x);
       new_x = ConstPtr(delta_x);
       jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of %s sufficiently inside the bounds.\n", name.c_str());
-      jnlst.PrintVector(J_VECTOR, J_INITIALIZATION, "original vars", orig_x);
-      jnlst.PrintVector(J_VECTOR, J_INITIALIZATION, "new vars", *new_x);
+      orig_x.Print(jnlst, J_VECTOR, J_INITIALIZATION, "original vars");
+      new_x->Print(jnlst, J_VECTOR, J_INITIALIZATION, "new vars");
     }
     else {
       new_x = &orig_x;

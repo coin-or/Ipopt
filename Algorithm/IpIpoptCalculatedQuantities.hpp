@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,7 +9,6 @@
 #ifndef __IPIPOPTCALCULATEDQUANTITIES_HPP__
 #define __IPIPOPTCALCULATEDQUANTITIES_HPP__
 
-#include "IpUtils.hpp"
 #include "IpIpoptNLP.hpp"
 #include "IpIpoptData.hpp"
 
@@ -22,8 +21,6 @@ namespace Ipopt
     NORM_2,
     NORM_MAX
   };
-
-  DeclareIpoptType(IpoptCalculatedQuantities);
 
   /** Class for all IPOPT specific calculated quantities.
    *  

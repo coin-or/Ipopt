@@ -40,20 +40,20 @@ namespace Ipopt
     return true;
   }
 
-  bool CompositeNLP::GetSpaces(SmartPtr<VectorSpace>& x_space,
-                               SmartPtr<VectorSpace>& c_space,
-                               SmartPtr<VectorSpace>& d_space,
-                               SmartPtr<VectorSpace>& x_l_space,
-                               SmartPtr<MatrixSpace>& px_l_space,
-                               SmartPtr<VectorSpace>& x_u_space,
-                               SmartPtr<MatrixSpace>& px_u_space,
-                               SmartPtr<VectorSpace>& d_l_space,
-                               SmartPtr<MatrixSpace>& pd_l_space,
-                               SmartPtr<VectorSpace>& d_u_space,
-                               SmartPtr<MatrixSpace>& pd_u_space,
-                               SmartPtr<MatrixSpace>& Jac_c_space,
-                               SmartPtr<MatrixSpace>& Jac_d_space,
-                               SmartPtr<SymMatrixSpace>& Hess_lagrangian_space)
+  bool CompositeNLP::GetSpaces(SmartPtr<const VectorSpace>& x_space,
+                               SmartPtr<const VectorSpace>& c_space,
+                               SmartPtr<const VectorSpace>& d_space,
+                               SmartPtr<const VectorSpace>& x_l_space,
+                               SmartPtr<const MatrixSpace>& px_l_space,
+                               SmartPtr<const VectorSpace>& x_u_space,
+                               SmartPtr<const MatrixSpace>& px_u_space,
+                               SmartPtr<const VectorSpace>& d_l_space,
+                               SmartPtr<const MatrixSpace>& pd_l_space,
+                               SmartPtr<const VectorSpace>& d_u_space,
+                               SmartPtr<const MatrixSpace>& pd_u_space,
+                               SmartPtr<const MatrixSpace>& Jac_c_space,
+                               SmartPtr<const MatrixSpace>& Jac_d_space,
+                               SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space)
   {
     Index n_nlps = nlps_.size();
     DBG_ASSERT(n_nlps > 0);
@@ -83,20 +83,20 @@ namespace Ipopt
     Index h_rows = 0;
 
     // retrieve the necessary spaces from the individual NLPS
-    std::vector<SmartPtr<VectorSpace> > x_spaces;
-    std::vector<SmartPtr<VectorSpace> > c_spaces;
-    std::vector<SmartPtr<VectorSpace> > d_spaces;
-    std::vector<SmartPtr<VectorSpace> > x_l_spaces;
-    std::vector<SmartPtr<MatrixSpace> > px_l_spaces;
-    std::vector<SmartPtr<VectorSpace> > x_u_spaces;
-    std::vector<SmartPtr<MatrixSpace> > px_u_spaces;
-    std::vector<SmartPtr<VectorSpace> > d_l_spaces;
-    std::vector<SmartPtr<MatrixSpace> > pd_l_spaces;
-    std::vector<SmartPtr<VectorSpace> > d_u_spaces;
-    std::vector<SmartPtr<MatrixSpace> > pd_u_spaces;
-    std::vector<SmartPtr<MatrixSpace> > jac_c_spaces;
-    std::vector<SmartPtr<MatrixSpace> > jac_d_spaces;
-    std::vector<SmartPtr<SymMatrixSpace> > h_spaces;
+    std::vector<SmartPtr<const VectorSpace> > x_spaces;
+    std::vector<SmartPtr<const VectorSpace> > c_spaces;
+    std::vector<SmartPtr<const VectorSpace> > d_spaces;
+    std::vector<SmartPtr<const VectorSpace> > x_l_spaces;
+    std::vector<SmartPtr<const MatrixSpace> > px_l_spaces;
+    std::vector<SmartPtr<const VectorSpace> > x_u_spaces;
+    std::vector<SmartPtr<const MatrixSpace> > px_u_spaces;
+    std::vector<SmartPtr<const VectorSpace> > d_l_spaces;
+    std::vector<SmartPtr<const MatrixSpace> > pd_l_spaces;
+    std::vector<SmartPtr<const VectorSpace> > d_u_spaces;
+    std::vector<SmartPtr<const MatrixSpace> > pd_u_spaces;
+    std::vector<SmartPtr<const MatrixSpace> > jac_c_spaces;
+    std::vector<SmartPtr<const MatrixSpace> > jac_d_spaces;
+    std::vector<SmartPtr<const SymMatrixSpace> > h_spaces;
     for (Index i=0; i<n_nlps; i++) {
       DBG_ASSERT(IsValid(nlps_[i]));
       ASSERT_EXCEPTION(Jq_linking_eqns_[i]->NCols() == q_dim, INVALID_JACOBIAN_DIMENSION_FOR_LINKING_EQUATIONS,
@@ -106,20 +106,20 @@ namespace Ipopt
       ASSERT_EXCEPTION(Jx_linking_eqns_[i]->NRows() == Jq_linking_eqns_[i]->NRows() , INVALID_JACOBIAN_DIMENSION_FOR_LINKING_EQUATIONS,
                        "The # of rows in the Jx_linking_eqns[i] must be the same as the number of rows in the Jq_linking_eqns[i]");
 
-      SmartPtr<VectorSpace> x_space_i;
-      SmartPtr<VectorSpace> c_space_i;
-      SmartPtr<VectorSpace> d_space_i;
-      SmartPtr<VectorSpace> x_l_space_i;
-      SmartPtr<MatrixSpace> px_l_space_i;
-      SmartPtr<VectorSpace> x_u_space_i;
-      SmartPtr<MatrixSpace> px_u_space_i;
-      SmartPtr<VectorSpace> d_l_space_i;
-      SmartPtr<MatrixSpace> pd_l_space_i;
-      SmartPtr<VectorSpace> d_u_space_i;
-      SmartPtr<MatrixSpace> pd_u_space_i;
-      SmartPtr<MatrixSpace> jac_c_space_i;
-      SmartPtr<MatrixSpace> jac_d_space_i;
-      SmartPtr<SymMatrixSpace> h_space_i;
+      SmartPtr<const VectorSpace> x_space_i;
+      SmartPtr<const VectorSpace> c_space_i;
+      SmartPtr<const VectorSpace> d_space_i;
+      SmartPtr<const VectorSpace> x_l_space_i;
+      SmartPtr<const MatrixSpace> px_l_space_i;
+      SmartPtr<const VectorSpace> x_u_space_i;
+      SmartPtr<const MatrixSpace> px_u_space_i;
+      SmartPtr<const VectorSpace> d_l_space_i;
+      SmartPtr<const MatrixSpace> pd_l_space_i;
+      SmartPtr<const VectorSpace> d_u_space_i;
+      SmartPtr<const MatrixSpace> pd_u_space_i;
+      SmartPtr<const MatrixSpace> jac_c_space_i;
+      SmartPtr<const MatrixSpace> jac_d_space_i;
+      SmartPtr<const SymMatrixSpace> h_space_i;
 
       bool retvalue = nlps_[i]->GetSpaces(x_space_i,
                                           c_space_i,
@@ -348,21 +348,17 @@ namespace Ipopt
     return true;
   }
 
-  bool CompositeNLP::GetStartingPoint(Vector& x,
-                                      bool need_x,
-                                      Vector& y_c,
-                                      bool need_y_c,
-                                      Vector& y_d,
-                                      bool need_y_d,
-                                      Vector& z_L,
-                                      bool need_z_L,
-                                      Vector& z_U,
-                                      bool need_z_U,
-                                      Vector& v_L,
-                                      bool need_v_L,
-                                      Vector& v_U,
-                                      bool need_v_U
-                                     )
+  bool CompositeNLP::GetStartingPoint(
+    SmartPtr<Vector> x,
+    bool need_x,
+    SmartPtr<Vector> y_c,
+    bool need_y_c,
+    SmartPtr<Vector> y_d,
+    bool need_y_d,
+    SmartPtr<Vector> z_L,
+    bool need_z_L,
+    SmartPtr<Vector> z_U,
+    bool need_z_U)
   {
 
     CompoundVector* cx = dynamic_cast<CompoundVector*>(&x);
@@ -370,10 +366,8 @@ namespace Ipopt
     CompoundVector* cy_d = dynamic_cast<CompoundVector*>(&y_d);
     CompoundVector* cz_l = dynamic_cast<CompoundVector*>(&z_L);
     CompoundVector* cz_u = dynamic_cast<CompoundVector*>(&z_U);
-    CompoundVector* cv_l = dynamic_cast<CompoundVector*>(&v_L);
-    CompoundVector* cv_u = dynamic_cast<CompoundVector*>(&v_U);
 
-    DBG_ASSERT(cx && cy_c && cy_d && cz_l && cz_u && cv_l && cv_u);
+    DBG_ASSERT(cx && cy_c && cy_d && cz_l && cz_u);
 
     Index n_nlps = nlps_.size();
     for (Index i=0; i<n_nlps; i++) {
@@ -382,13 +376,10 @@ namespace Ipopt
       SmartPtr<Vector> y_di = cy_d->GetCompNonConst(i);
       SmartPtr<Vector> z_li = cz_l->GetCompNonConst(i);
       SmartPtr<Vector> z_ui = cz_u->GetCompNonConst(i);
-      SmartPtr<Vector> v_li = cv_l->GetCompNonConst(i);
-      SmartPtr<Vector> v_ui = cv_u->GetCompNonConst(i);
 
-      if (!nlps_[i]->GetStartingPoint(*xi, need_x,
-                                      *y_ci, need_y_c, *y_di, need_y_d,
-                                      *z_li, need_z_L, *z_ui, need_z_U,
-                                      *v_li, need_v_L, *v_ui, need_v_U) ) {
+      if (!nlps_[i]->GetStartingPoint(xi, need_x,
+                                      y_ci, need_y_c, y_di, need_y_d,
+                                      z_li, need_z_L, z_ui, need_z_U) ) {
         return false;
       }
     }

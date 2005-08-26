@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -83,9 +83,10 @@ namespace Ipopt
     //@}
 
     /** Method to report the exception to a journalist */
-    void ReportException(const Journalist& jnlst) const
+    void ReportException(const Journalist& jnlst,
+                         EJournalLevel level = J_ERROR) const
     {
-      jnlst.Printf(J_ERROR, J_MAIN,
+      jnlst.Printf(level, J_MAIN,
                    "Exception of type: %s in file \"%s\" at line %d:\n Exception message: %s\n",
                    type_.c_str(), file_name_.c_str(),  line_number_, msg_.c_str());
     }

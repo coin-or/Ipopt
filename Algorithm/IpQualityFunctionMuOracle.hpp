@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004,2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,13 +11,10 @@
 
 #include "IpMuOracle.hpp"
 #include "IpPDSystemSolver.hpp"
-#include "IpIpoptType.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
 
 namespace Ipopt
 {
-
-  DeclareIpoptType(QualityFunctionMuOracle);
 
   /** Implementation of the probing strategy for computing the
    *  barrier parameter.

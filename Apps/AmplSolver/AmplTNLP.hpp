@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,8 +12,7 @@
 #include "IpUtils.hpp"
 #include "IpTNLP.hpp"
 #include "IpJournalist.hpp"
-#include "IpException.hpp"
-#include "IpSmartPtr.hpp"
+#include "IpOptionsList.hpp"
 
 /* non Ipopt forward declaration */
 struct ASL_pfgh;
@@ -34,7 +33,10 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
-    AmplTNLP(const SmartPtr<const Journalist>& jnlst, char**& argv, SmartPtr<AmplSuffixHandler> suffix_handler = NULL, bool allow_discrete = false);
+    AmplTNLP(const SmartPtr<const Journalist>& jnlst,
+             const SmartPtr<OptionsList> options,
+             char**& argv, SmartPtr<AmplSuffixHandler>
+             suffix_handler = NULL, bool allow_discrete = false);
 
     /** Default destructor */
     virtual ~AmplTNLP();
@@ -49,7 +51,7 @@ namespace Ipopt
     //@{
     /** returns dimensions of the nlp. Overloaded from TNLP */
     virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-                              Index& nnz_h_lag);
+                              Index& nnz_h_lag, IndexStyleEnum& index_style);
 
     /** returns bounds of the nlp. Overloaded from TNLP */
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
@@ -89,6 +91,8 @@ namespace Ipopt
                         bool new_lambda, Index nele_hess, Index* iRow,
                         Index* jCol, Number* values);
 
+    /** retrieve the scaling parameters for the variables, objective
+     *  function, and constraints. */
     virtual void get_scaling_parameters(Number& obj_scaling,
                                         Index n, Number* x_scaling,
                                         Index m, Number* g_scaling);
@@ -131,6 +135,24 @@ namespace Ipopt
     //@}
 
   private:
+    /**@name Default Compiler Generated Methods
+     * (Hidden to avoid implicit creation/calling).
+     * These methods are not implemented and 
+     * we do not want the compiler to implement
+     * them for us, so we declare them private
+     * and do not define them. This ensures that
+     * they will not be implicitly created/called. */
+    //@{
+    /** Default Constructor */
+    AmplTNLP();
+
+    /** Copy Constructor */
+    AmplTNLP(const AmplTNLP&);
+
+    /** Overloaded Equals Operator */
+    void operator=(const AmplTNLP&);
+    //@}
+
     /** Journlist */
     SmartPtr<const Journalist> jnlst_;
 
@@ -183,28 +205,14 @@ namespace Ipopt
     bool internal_conval(Index m, Number* g=NULL);
 
     /** Internal function to update the internal and ampl state if the
-    x value changes */
+     *  x value changes */
     void apply_new_x(bool new_x, Index n, const Number* x);
 
-
-    /**@name Default Compiler Generated Methods
-     * (Hidden to avoid implicit creation/calling).
-     * These methods are not implemented and 
-     * we do not want the compiler to implement
-     * them for us, so we declare them private
-     * and do not define them. This ensures that
-     * they will not be implicitly created/called. */
-    //@{
-    /** Default Constructor */
-    AmplTNLP();
-
-    /** Copy Constructor */
-    AmplTNLP(const AmplTNLP&);
-
-    /** Overloaded Equals Operator */
-    void operator=(const AmplTNLP&);
-    //@}
-
+    /** Method for obtaining the name of the NL file and the options
+     *  set from AMPL.  Returns a pointer to a char* with the name of
+     *  the stub */
+    char* get_options(const SmartPtr<OptionsList>& options,
+                      char**& argv);
   };
 
 

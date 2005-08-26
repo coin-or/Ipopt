@@ -65,15 +65,12 @@ PROGRAMS = $(bin_PROGRAMS)
 am_ipopt_OBJECTS = ampl_ipopt.$(OBJEXT)
 ipopt_OBJECTS = $(am_ipopt_OBJECTS)
 am__DEPENDENCIES_1 =
-am__DEPENDENCIES_2 = ../../Apps/StdInterface/libstdinterface.a \
+am__DEPENDENCIES_2 = ../../Interfaces/libinterfaces.a \
 	../../Algorithm/libipoptalg.a \
-	../../LinAlgImpl/Serial/liblaserial.a \
-	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
-	../../Algorithm/libipoptalg.a ../../Common/libcommon.a \
-	libamplinterface.a \
-	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
-	../../Algorithm/libipoptalg.a ../../Common/libcommon.a \
-	../../LinAlgImpl/Serial/liblaserial.a $(am__DEPENDENCIES_1)
+	../../Algorithm/LinearSolvers/liblinsolvers.a \
+	../../LinAlg/TMatrices/libtmatrices.a ../../LinAlg/liblinalg.a \
+	../../Common/libcommon.a libamplinterface.a \
+	$(am__DEPENDENCIES_1)
 ipopt_DEPENDENCIES = $(am__DEPENDENCIES_2)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -99,6 +96,7 @@ AMPL_CPPFLAGS = @AMPL_CPPFLAGS@
 AMTAR = @AMTAR@
 AR = @AR@
 ARFLAGS = @ARFLAGS@
+AR_X = @AR_X@
 ASLLIB = @ASLLIB@
 ASLMAKEFILECMDS = @ASLMAKEFILECMDS@
 ASLMAKEFLAGS = @ASLMAKEFLAGS@
@@ -120,10 +118,6 @@ BUILDHSLDIR_FALSE = @BUILDHSLDIR_FALSE@
 BUILDHSLDIR_TRUE = @BUILDHSLDIR_TRUE@
 BUILDHSL_FALSE = @BUILDHSL_FALSE@
 BUILDHSL_TRUE = @BUILDHSL_TRUE@
-BUILDLAPACKDIR_FALSE = @BUILDLAPACKDIR_FALSE@
-BUILDLAPACKDIR_TRUE = @BUILDLAPACKDIR_TRUE@
-BUILDLAPACK_FALSE = @BUILDLAPACK_FALSE@
-BUILDLAPACK_TRUE = @BUILDLAPACK_TRUE@
 BUILDMA27_FALSE = @BUILDMA27_FALSE@
 BUILDMA27_TRUE = @BUILDMA27_TRUE@
 BUILDMC19_FALSE = @BUILDMC19_FALSE@
@@ -131,19 +125,14 @@ BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
-CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../../Common \
-	-I$(srcdir)/../../Interfaces \
-	-I$(srcdir)/../../LinAlgImpl/Serial \
-	-I$(srcdir)/../../Algorithm \
-	-I$(srcdir)/../../PDSystemImpl/PDFullSpace \
-	-I$(srcdir)/../../Apps/StdInterface \
-	-I$(srcdir)/../../Apps/AmplSolver \
-	-I$(srcdir)/../../OTHERS/ASL/ \
-	-I$(srcdir)/../../OTHERS/ASL/solvers $(AMPL_CPPFLAGS)
+	-I$(srcdir)/../../LinAlg -I$(srcdir)/../../LinAlg/TMatrices \
+	-I$(srcdir)/../../Algorithm -I$(srcdir)/../../Interfaces \
+	$(AMPL_CPPFLAGS)
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -156,6 +145,10 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
+HAVE_MA27_FALSE = @HAVE_MA27_FALSE@
+HAVE_MA27_TRUE = @HAVE_MA27_TRUE@
+HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
+HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
@@ -237,17 +230,13 @@ ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
 IPLIBS = \
-	../../Apps/StdInterface/libstdinterface.a \
+	../../Interfaces/libinterfaces.a \
 	../../Algorithm/libipoptalg.a \
-	../../LinAlgImpl/Serial/liblaserial.a \
-	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
-	../../Algorithm/libipoptalg.a \
+	../../Algorithm/LinearSolvers/liblinsolvers.a \
+	../../LinAlg/TMatrices/libtmatrices.a \
+	../../LinAlg/liblinalg.a \
 	../../Common/libcommon.a \
 	libamplinterface.a \
-	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
-	../../Algorithm/libipoptalg.a \
-	../../Common/libcommon.a \
-	../../LinAlgImpl/Serial/liblaserial.a \
 	$(ASLLIB)
 
 ipopt_LDADD = $(IPLIBS)

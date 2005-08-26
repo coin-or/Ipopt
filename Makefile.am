@@ -1,4 +1,4 @@
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2005 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -8,21 +8,21 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = OTHERS Common LinAlgImpl Algorithm PDSystemImpl Apps
+SUBDIRS = Extern Common LinAlg Algorithm Interfaces Apps
 
 IPALLLIBS = @IPALLLIBS@
 
-EXTRA_DIST = Interfaces/IpEqMultCalculator.hpp \
-	Interfaces/IpAlgTypes.hpp \
-	Interfaces/IpMatrix.hpp \
-	Interfaces/IpNLP.hpp \
-	Interfaces/IpPDSystemSolver.hpp \
-	Interfaces/IpSymMatrix.hpp \
-	Interfaces/IpTNLP.hpp \
-	Interfaces/IpVector.hpp \
-	Interfaces/IpStdCInterface.h \
-	Examples/Fortran_example/example.f \
-	README
+EXTRA_DIST = \
+	Examples/Cpp_example/cpp_example.cpp \
+	Examples/Cpp_example/MyNLP.cpp \
+	Examples/Cpp_example/MyNLP.hpp \
+	Examples/hs071_f/hs071_f.f \
+	Examples/hs071_c/hs071_c.c \
+	Examples/hs071_cpp/hs071_main.cpp \
+	Examples/hs071_cpp/hs071_nlp.cpp \
+	Examples/hs071_cpp/hs071_nlp.hpp \
+	README \
+	Docs/documentation.tex
 
 .PHONY: doc
 
@@ -42,7 +42,7 @@ install-exec-local:
 	cd $(tmpdir); \
 	for lib in $(IPALLLIBS); \
 	do \
-	  ar x $$basdir/$$lib; \
+	  $(AR_X) $$basdir/$$lib; \
 	done; \
 	$(AR) $(ARFLAGS) $(libipopt) *.$(OBJEXT)
 	$(INSTALL_DATA) $(tmpdir)/$(libipopt) $(DESTDIR)$(libdir)
@@ -55,41 +55,12 @@ uninstall-local:
 cuter: install
 	cd Apps/CUTErInterface; $(MAKE) cuter
 
-# Astyle stuff
-
-ASTYLE_FILES = Interfaces/IpEqMultCalculator.hppbak \
-	Interfaces/IpAlgTypes.hppbak \
-	Interfaces/IpMatrix.hppbak \
-	Interfaces/IpNLP.hppbak \
-	Interfaces/IpPDSystemSolver.hppbak \
-	Interfaces/IpSymMatrix.hppbak \
-	Interfaces/IpTNLP.hppbak \
-	Interfaces/IpVector.hppbak
-
-ASTYLE = @ASTYLE@
-ASTYLEFLAGS = @ASTYLEFLAGS@
-
-CLEANFILES = $(ASTYLE_FILES)
-
-SUFFIXES = .cppbak .hppbak
-
-astyle: astyle-local
+astyle:
 	cd Algorithm; $(MAKE) astyle
+	cd Algorithm/LinearSolvers; $(MAKE) astyle
 	cd Apps/AmplSolver; $(MAKE) astyle
-	cd Apps/CompositeInterface; $(MAKE) astyle
-	cd Apps/StdInterface; $(MAKE) astyle
 	cd Common; $(MAKE) astyle
-	cd LinAlgImpl/Serial; $(MAKE) astyle
-	cd PDSystemImpl/PDFullSpace; $(MAKE) astyle
+	cd LinAlg; $(MAKE) astyle
+	cd LinAlg/TMatrices; $(MAKE) astyle
+	cd Interfaces; $(MAKE) astyle
 
-astyle-local: $(ASTYLE_FILES)
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
-	touch $@

@@ -1,35 +1,39 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2004-07-13
 
 #include "IpGradientScaling.hpp"
 #include "IpTripletHelper.hpp"
 
-#ifdef OLD_C_HEADERS
-# include <math.h>
-#else
+#ifdef HAVE_CMATH
 # include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 namespace Ipopt
 {
 
-  DefineIpoptType(GradientScaling);
-
-  void GradientScaling::RegisterOptions(SmartPtr<RegisteredOptions>& roptions)
+  void GradientScaling::RegisterOptions(const SmartPtr<RegisteredOptions>& roptions)
   {
     roptions->AddLowerBoundedNumberOption(
-      "nlp_scaling_max_gradient", "maximum gradient after scaling",
+      "nlp_scaling_max_gradient", "Maximum gradient after NLP scaling.",
       0, true, 100.0,
       "This is the gradient scaling cut-off. If the maximum"
       " gradient is above this value, then gradient based scaling"
-      " will be performed. Scaling parameters will scale the maximum"
-      " gradient back to this value. Note: This option is only used"
-      " if \"nlp_scaling_method\" is chosen as \"gradient_based\".");
+      " will be performed. Scaling parameters are calculated to"
+      " scale the maximum gradient back to this value. (This is g_max in "
+      "Section 3.8 of the implementation paper.) Note: This"
+      " option is only used if \"nlp_scaling_method\" is chosen as"
+      " \"gradient_based\".");
   }
 
   bool GradientScaling::InitializeImpl(const OptionsList& options,

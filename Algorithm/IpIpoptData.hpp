@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,19 +9,13 @@
 #ifndef __IPIPOPTDATA_HPP__
 #define __IPIPOPTDATA_HPP__
 
-#include "IpUtils.hpp"
-#include "IpSmartPtr.hpp"
-#include "IpVector.hpp"
 #include "IpSymMatrix.hpp"
-#include "IpReferenced.hpp"
 #include "IpOptionsList.hpp"
 #include "IpIteratesVector.hpp"
-#include "IpIpoptType.hpp"
+#include "IpRegOptions.hpp"
 
 namespace Ipopt
 {
-
-  DeclareIpoptType(IpoptData);
 
   /* Forward declaration */
   class IpoptNLP;
@@ -370,7 +364,7 @@ namespace Ipopt
 
     /** Methods for IpoptType */
     //@{
-    static void RegisterOptions(SmartPtr<RegisteredOptions> reg_options);
+    static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
     //@}
 
   private:

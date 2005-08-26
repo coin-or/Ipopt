@@ -1,21 +1,28 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Andreas Waechter              IBM    2004-09-23
+// Authors:  Carl Laird, Andreas Waechter              IBM    2004-09-23
 
 #include "IpOrigIterationOutput.hpp"
-#ifdef OLD_C_HEADERS
-# include <math.h>
-#else
+
+#ifdef HAVE_CMATH
 # include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   OrigIterationOutput::OrigIterationOutput()
   {}
@@ -23,9 +30,26 @@ namespace Ipopt
   OrigIterationOutput::~OrigIterationOutput()
   {}
 
+  void
+  OrigIterationOutput::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    std::string prev_cat = roptions->RegisteringCategory();
+    roptions->SetRegisteringCategory("Undocumented");
+    roptions->AddStringOption2(
+      "print_info_string",
+      "Enables printing of additional info string at end of iteration output.",
+      "no",
+      "no", "don't print string",
+      "yes", "print string at end of each iteration output",
+      "This string contains some insider information about the current iteration.");
+    roptions->SetRegisteringCategory(prev_cat);
+  }
+
   bool OrigIterationOutput::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
+    options.GetBoolValue("print_info_string", print_info_string_, prefix);
+
     return true;
   }
 
@@ -37,7 +61,7 @@ namespace Ipopt
 
     Index iter = IpData().iter_count();
     std::string header =
-      " iter     objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n";
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n";
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "\n\n**************************************************\n");
     Jnlst().Printf(J_DETAILED, J_MAIN,
@@ -86,10 +110,17 @@ namespace Ipopt
 
     if (!IpData().info_skip_output()) {
       Jnlst().Printf(J_SUMMARY, J_MAIN,
-                     "%5d%c %14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d %s\n",
+                     "%4d%c %13.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d",
                      iter, info_iter, unscaled_f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr,
                      alpha_dual, alpha_primal, alpha_primal_char,
-                     ls_count, info_string.c_str());
+                     ls_count);
+      if (print_info_string_) {
+        Jnlst().Printf(J_SUMMARY, J_MAIN, " %s", info_string.c_str());
+      }
+      else {
+        Jnlst().Printf(J_DETAILED, J_MAIN, " %s", info_string.c_str());
+      }
+      Jnlst().Printf(J_SUMMARY, J_MAIN, "\n");
     }
 
 
@@ -153,44 +184,27 @@ namespace Ipopt
       }
     }
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_x", *IpData().curr()->x());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_s", *IpData().curr()->s());
+      IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_x");
+      IpData().curr()->s()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_s");
 
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_c", *IpData().curr()->y_c());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_y_d", *IpData().curr()->y_d());
+      IpData().curr()->y_c()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_y_c");
+      IpData().curr()->y_d()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_y_d");
 
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_x_L", *IpCq().curr_slack_x_L());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_x_U", *IpCq().curr_slack_x_U());
+      IpCq().curr_slack_x_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_slack_x_L");
+      IpCq().curr_slack_x_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_slack_x_U");
+      IpData().curr()->z_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_z_L");
+      IpData().curr()->z_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_z_U");
 
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_L", *IpData().curr()->z_L());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_z_U", *IpData().curr()->z_U());
-
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_s_L", *IpCq().curr_slack_s_L());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_slack_s_U", *IpCq().curr_slack_s_U());
-
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_L", *IpData().curr()->v_L());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_v_U", *IpData().curr()->v_U());
+      IpCq().curr_slack_s_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_slack_s_L");
+      IpCq().curr_slack_s_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_slack_s_U");
+      IpData().curr()->v_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_v_L");
+      IpData().curr()->v_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_v_U");
     }
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_MAIN)) {
-      Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_x", *IpCq().curr_grad_lag_x());
-      Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "curr_grad_lag_s", *IpCq().curr_grad_lag_s());
+      IpCq().curr_grad_lag_x()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "curr_grad_lag_x");
+      IpCq().curr_grad_lag_s()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "curr_grad_lag_s");
       if (IsValid(IpData().delta())) {
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_x", *IpData().delta()->x());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_s", *IpData().delta()->s());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_y_c", *IpData().delta()->y_c());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_y_d", *IpData().delta()->y_d());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_z_L", *IpData().delta()->z_L());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_z_U", *IpData().delta()->z_U());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_v_L", *IpData().delta()->v_L());
-        Jnlst().PrintVector(J_MOREVECTOR, J_MAIN,
-                            "delta_v_U", *IpData().delta()->v_U());
+        IpData().delta()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "delta");
       }
     }
 
@@ -206,17 +220,17 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_MAIN, "Overall NLP error.......: %24.16e  %24.16e\n\n", IpCq().curr_nlp_error(), IpCq().unscaled_curr_nlp_error());
     }
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "grad_f", *IpCq().curr_grad_f());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_c", *IpCq().curr_c());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN, "curr_d", *IpCq().curr_d());
-      Jnlst().PrintVector(J_VECTOR, J_MAIN,
-                          "curr_d - curr_s", *IpCq().curr_d_minus_s());
+      IpCq().curr_grad_f()->Print(Jnlst(), J_VECTOR, J_MAIN, "grad_f");
+      IpCq().curr_c()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_c");
+      IpCq().curr_d()->Print(Jnlst(), J_VECTOR, J_MAIN, "curr_d");
+      IpCq().curr_d_minus_s()->Print(Jnlst(), J_VECTOR, J_MAIN,
+                                     "curr_d - curr_s");
     }
 
     if (Jnlst().ProduceOutput(J_MATRIX, J_MAIN)) {
-      Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_c", *IpCq().curr_jac_c());
-      Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "jac_d", *IpCq().curr_jac_d());
-      Jnlst().PrintMatrix(J_MATRIX, J_MAIN, "h", *IpCq().curr_exact_hessian());
+      IpCq().curr_jac_c()->Print(Jnlst(), J_MATRIX, J_MAIN, "jac_c");
+      IpCq().curr_jac_d()->Print(Jnlst(), J_MATRIX, J_MAIN, "jac_d");
+      IpCq().curr_exact_hessian()->Print(Jnlst(), J_MATRIX, J_MAIN, "h");
     }
 
     Jnlst().Printf(J_DETAILED, J_MAIN, "\n\n");

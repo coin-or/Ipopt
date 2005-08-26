@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,12 +12,6 @@
 // Standard Ip Include Files
 #include "IpTypes.hpp"
 #include "IpDebug.hpp"
-
-#ifndef MY_C_FINITE
-# define FiniteNumber finite
-#else
-# define FiniteNumber MY_C_FINITE
-#endif
 
 namespace Ipopt
 {
@@ -69,6 +63,10 @@ namespace Ipopt
     min = Min(min, d);
     return min;
   }
+
+  /** Function returning true iff the argument is a valid double number
+   *  (not NaN or Inf). */
+  bool IsFiniteNumber(Number val);
 
 } //namespace Ipopt
 

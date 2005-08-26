@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,15 +9,11 @@
 #ifndef __IPRESTOFILTERCONVCHECK_HPP__
 #define __IPRESTOFILTERCONVCHECK_HPP__
 
-#include "IpUtils.hpp"
 #include "IpOptErrorConvCheck.hpp"
 #include "IpFilterLineSearch.hpp"
-#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
-
-  DeclareIpoptType(RestoFilterConvergenceCheck);
 
   /** Convergence check for the restoration phase as called by the
    *  filter.  This inherits from the OptimalityErrorConvergenceCheck

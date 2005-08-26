@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004,2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,18 +9,14 @@
 #ifndef __IPFILTERLINESEARCH_HPP__
 #define __IPFILTERLINESEARCH_HPP__
 
-#include "IpUtils.hpp"
 #include "IpFilter.hpp"
 #include "IpLineSearch.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpPDSystemSolver.hpp"
-#include "IpIpoptType.hpp"
 #include "IpConvCheck.hpp"
 
 namespace Ipopt
 {
-
-  DeclareIpoptType(FilterLineSearch);
 
   /** Filter line search.  This class implements the filter line
    *  search procedure. 
@@ -101,7 +97,7 @@ namespace Ipopt
     bool IsAcceptableToCurrentFilter(Number trial_barr, Number trial_theta) const;
     //@}
 
-    /** Methods for IpoptType */
+    /** Methods for OptionsList */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}

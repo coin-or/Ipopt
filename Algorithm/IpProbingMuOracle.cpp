@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -8,18 +8,21 @@
 
 #include "IpProbingMuOracle.hpp"
 
-#ifdef OLD_C_HEADERS
-# include <math.h>
-#else
+#ifdef HAVE_CMATH
 # include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 namespace Ipopt
 {
-
-  DBG_SET_VERBOSITY(0);
-
-  DefineIpoptType(ProbingMuOracle);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   ProbingMuOracle::ProbingMuOracle(const SmartPtr<PDSystemSolver>& pd_solver)
       :

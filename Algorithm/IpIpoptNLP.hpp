@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,11 +9,8 @@
 #ifndef __IPIPOPTNLP_HPP__
 #define __IPIPOPTNLP_HPP__
 
-#include "IpUtils.hpp"
 #include "IpNLP.hpp"
 #include "IpJournalist.hpp"
-#include "IpReferenced.hpp"
-#include "IpException.hpp"
 #include "IpNLPScaling.hpp"
 
 namespace Ipopt
@@ -175,31 +172,22 @@ namespace Ipopt
     {
       return false;
     }
+
     /** Replacement for the default objective function method which
      *  knows about the barrier parameter */
-    virtual Number f(const Vector& x, Number mu)
-    {
-      DBG_ASSERT(false && "ERROR: This method is only a placeholder for f(mu) and should not be called");
-      return 0.;
-    }
+    virtual Number f(const Vector& x, Number mu) = 0;
+
     /** Replacement for the default objective gradient method which
      *  knows about the barrier parameter  */
-    virtual SmartPtr<const Vector> grad_f(const Vector& x, Number mu)
-    {
-      DBG_ASSERT(false && "ERROR: This method is only a placeholder for grad_f(mu) and should not be called");
-      return NULL;
-    }
+    virtual SmartPtr<const Vector> grad_f(const Vector& x, Number mu) = 0;
+
     /** Replacement for the default Lagrangian Hessian method which
      *  knows about the barrier parameter */
     virtual SmartPtr<const SymMatrix> h(const Vector& x,
                                         Number obj_factor,
                                         const Vector& yc,
                                         const Vector& yd,
-                                        Number mu)
-    {
-      DBG_ASSERT(false && "ERROR: This method is only a for h(mu) and should not be called");
-      return NULL;
-    }
+                                        Number mu) = 0;
     //@}
 
     /** solution routines */

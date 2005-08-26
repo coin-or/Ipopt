@@ -1,25 +1,28 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Andreas Waechter            IBM    2004-11-12
+// Authors:  Carl Laird, Andreas Waechter            IBM    2004-11-12
 
 #include "IpQualityFunctionMuOracle.hpp"
 
-#ifdef OLD_C_HEADERS
-# include <math.h>
-#else
+#ifdef HAVE_CMATH
 # include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 namespace Ipopt
 {
-
-  DBG_SET_VERBOSITY(0);
-
-  DefineIpoptType(QualityFunctionMuOracle);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   QualityFunctionMuOracle::QualityFunctionMuOracle(const SmartPtr<PDSystemSolver>& pd_solver)
       :
@@ -54,7 +57,7 @@ namespace Ipopt
   {
     roptions->AddLowerBoundedNumberOption(
       "sigma_max",
-      "Maximal value of centering parameter.",
+      "Maximum value of the centering parameter.",
       0.0, true, 1e2);
     roptions->AddStringOption4(
       "quality_function_norm_type",
@@ -66,33 +69,39 @@ namespace Ipopt
       "2-norm", "use 2-norm");
     roptions->AddStringOption4(
       "quality_function_centrality",
-      "Determines whether a penalty term for centrality is included quality function.",
+      "The penalty term for centrality that is included in quality function.",
       "none",
       "none", "no penalty term is added",
       "log", "complementarity * the log of the centrality measure",
       "reciprocal", "complementarity * the reciprocal of the centrality measure",
       "cubed-reciprocal", "complementarity * the reciprocal of the centrality measure cubed",
-      "This determines whether a term penalizing deviation from centrality "
-      "with respect to complementarity is added the quality function.  The "
+      "This determines whether a term is added to the quality function to "
+      "penalize deviation from centrality with respect to complementarity.  The "
       "complementarity measure here is the xi in the Loqo update rule.");
     roptions->AddStringOption2(
       "quality_function_balancing_term",
-      "Determines whether a balancing term for centrality is included in quality function.",
+      "The balancing term included in the quality function for centrality.",
       "none",
       "none", "no balancing term is added",
-      "cubic", "Max(0,Max(dual_ing,primal_inf)-compl)^3",
-      "This determines whether a term penalizing stuations there the "
-      "complementality is much smaller than dual and primal "
-      "infeasibilities is added to the quality function.");
+      "cubic", "Max(0,Max(dual_inf,primal_inf)-compl)^3",
+      "This determines whether a term is added to the quality function that "
+      "penalizes situations where the complementarity is much smaller "
+      "than dual and primal infeasibilities.");
     roptions->AddLowerBoundedIntegerOption(
       "max_bisection_steps",
-      "Maximal number of search steps during direct search procedure determining optimal centering parameter.",
-      0, 4);
+      "Maximum number of search steps during direct search procedure "
+      "determining the optimal centering parameter.",
+      0, 8,
+      "The bisection search is performed for the quality function based mu "
+      "oractle.");
     roptions->AddBoundedNumberOption(
       "bisection_tol",
-      "Tolerance for the bisection search procedure determining optimal centering parameter.",
+      "Tolerance for the bisection search procedure determining "
+      "the optimal centering parameter.",
       0.0, true, 1.0, true,
-      1e-3);
+      1e-3,
+      "The bisection search is performed for the quality function based mu "
+      "oractle.");
   }
 
 
@@ -527,9 +536,9 @@ namespace Ipopt
     xi = IpCq().CalcCentralityMeasure(*tmp_slack_x_L_, *tmp_slack_x_U_,
                                       *tmp_slack_s_L_, *tmp_slack_s_U_);
 
-    Number dual_inf;
-    Number primal_inf;
-    Number compl_inf;
+    Number dual_inf=-1.;
+    Number primal_inf=-1.;
+    Number compl_inf=-1.;
 
     switch (quality_function_norm_) {
       case NM_NORM_1:

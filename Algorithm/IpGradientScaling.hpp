@@ -1,23 +1,19 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-07-13
 
 #ifndef __IPGRADIENTCALING_HPP__
 #define __IPGRADIENTSCALING_HPP__
 
 #include "IpNLPScaling.hpp"
 #include "IpNLP.hpp"
-#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
-
-  DeclareIpoptType(GradientScaling);
-
   /** This class does problem scaling by setting the
    *  scaling parameters based on the maximum of the
    *  gradient at the user provided initial point.
@@ -41,7 +37,7 @@ namespace Ipopt
     /** Methods for IpoptType */
     //@{
     /** Register the options for this class */
-    static void RegisterOptions(SmartPtr<RegisteredOptions>& roptions);
+    static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
     //@}
 
   protected:

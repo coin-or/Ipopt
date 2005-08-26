@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,8 +9,9 @@
 #ifndef __IPREFERENCED_HPP__
 #define __IPREFERENCED_HPP__
 
-#include "IpUtils.hpp"
+#include "IpTypes.hpp"
 #include "IpDebug.hpp"
+
 #include <list>
 
 namespace Ipopt
@@ -165,9 +166,15 @@ namespace Ipopt
   class ReferencedObject
   {
   public:
-    ReferencedObject();
+    ReferencedObject()
+        :
+        reference_count_(0)
+    {}
 
-    virtual ~ReferencedObject();
+    virtual ~ReferencedObject()
+    {
+      DBG_ASSERT(reference_count_ == 0);
+    }
 
     Index ReferenceCount() const;
 

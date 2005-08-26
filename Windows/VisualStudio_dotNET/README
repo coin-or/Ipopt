@@ -1,4 +1,4 @@
-These directories contain the Visual Studio version of NewIpopt.  They
+These directories contain the Visual Studio version of Ipopt.  They
 have been created with Microsoft Visual C++ .NET 2003 and Intel
 Fortran 8.0.
 
@@ -6,22 +6,23 @@ Before opening the files in your Visual Studio, first make sure that
 the following third party source files are present (after you got them
 from netlib and Harwell):
 
-NewIpopt/OTHERS/HSL/ma27ad.f
-NewIpopt/OTHERS/blas/dasum.f
-NewIpopt/OTHERS/blas/daxpy.f
-NewIpopt/OTHERS/blas/dcopy.f
-NewIpopt/OTHERS/blas/ddot.f
-NewIpopt/OTHERS/blas/dnrm2.f
-NewIpopt/OTHERS/blas/dscal.f
-NewIpopt/OTHERS/blas/idamax.
+trunk/Extern/HSL/ma27ad.f
+trunk/Extern/HSL/mc19ad.f
+trunk/Extern/blas/dasum.f
+trunk/Extern/blas/daxpy.f
+trunk/Extern/blas/dcopy.f
+trunk/Extern/blas/ddot.f
+trunk/Extern/blas/dnrm2.f
+trunk/Extern/blas/dscal.f
+trunk/Extern/blas/idamax.f
 
 Then open the solution file
 
-NewIpopt/VisualStudio/NewIpopt.sln
+trunk/Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln
 
-This solution compiles both the Fortran example problem
-and the C++ example problem. You should be able to base
-your development off of one of these examples.
+This solution compiles both a Fortran example problem and a C++
+example problem. You should be able to base your development on one of
+these examples.
 
 
 Here are some helpful notes if you are building a new C++ project.
@@ -31,8 +32,8 @@ Here are some helpful notes if you are building a new C++ project.
 	Project Properties | C/C++ | Precompiled-Headers | Create/Use Precompiled Headers = "Not Using Precompiled Headers"
 
 - You will need to add the include directories to your C++ project
-	you can copy these from the NewIpopt project:
-	Project Properties | C/C++ | General | Additional Include Directories = <copy from NewIpopt>
+	you can copy these from the Ipopt project:
+	Project Properties | C/C++ | General | Additional Include Directories = <copy from Ipopt>
 
 - You must ensure that the run-time libraries between FortranLinAlg and the C++ project are 
 	compatible. Look at the "Mixed Language" area of the Intel Fortran compiler html help for

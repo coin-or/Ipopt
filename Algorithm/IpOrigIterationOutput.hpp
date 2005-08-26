@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -37,6 +37,11 @@ namespace Ipopt
      *  details about the iterates if desired */
     virtual void WriteOutput();
 
+    /** Methods for OptionsList */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods (Hidden to avoid
      * implicit creation/calling).  These methods are not implemented
@@ -50,6 +55,10 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const OrigIterationOutput&);
     //@}
+
+    /** Flag indicating weather info string should be printed at end
+     *  of iteration summary line. */
+    bool print_info_string_;
   };
 
 } // namespace Ipopt
