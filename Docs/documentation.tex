@@ -12,9 +12,9 @@
 %%
 %% $Id$
 %%
-\documentclass[letter,10pt]{article}
+\documentclass[10pt]{article}
 \setlength{\textwidth}{6.3in}       % Text width
-\setlength{\textheight}{8.5in}      % Text height
+\setlength{\textheight}{9.4in}      % Text height
 \setlength{\oddsidemargin}{0.1in}     % Left margin for even-numbered pages
 \setlength{\evensidemargin}{0.1in}    % Left margin for odd-numbered pages
 \setlength{\topmargin}{-0.5in}         % Top margin
@@ -30,13 +30,7 @@
 \title{Introduction to \Ipopt:\\
 A tutorial for downloading, installing, and using \Ipopt.}
 
-%\author{Yoshiaki Kawajiri\footnote{Department of Chemical Engineering,
-%    Carnegie Mellon University, Pittsburgh, PA 15213, USA}, Carl D.
-%  Laird\footnote{Department of Chemical Engineering, Carnegie Mellon
-%    University, Pittsburgh, PA 15213, USA}, Andreas
-%  W\"achter\footnote{Department of Mathematical Sciences, IBM
-%    T.J.~Watson Research Center, Yorktown Heights, NY 10598, USA}}
-\author{Revision of this document: $Revision$}
+\author{Revision number of this document: $Revision$}
 
 %\date{\today}
 \maketitle
@@ -61,6 +55,14 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \end{abstract}
 
 \tableofcontents
+
+\vspace{\baselineskip}
+\begin{small}
+\noindent
+The following names used in this document are trademarks or registered
+trademarks: AMPL, Intel, Miscrosoft, Visual Studio C++, Visual Studio
+C++ .NET
+\end{small}
 
 \section{Introduction}
 \Ipopt\ (\underline{I}nterior \underline{P}oint \underline{Opt}imizer,
@@ -182,7 +184,8 @@ More and up-to-date information can be found at the \Ipopt\ homepage,
 \texttt{http://projects.coin-or.org/Ipopt}.
 \end{center}
 
-Here, you can find FAQs, some (hopefully useful) hints, etc.
+Here, you can find FAQs, some (hopefully useful) hints, a bug report
+system etc.
 
 \Ipopt\ is an open source project, and we encourage people to
 contribute code (such as interfaces to appropriate linear solvers,
@@ -241,8 +244,10 @@ control system, including easy updates and revision control.
 
 Of course, the \textit{subversion} client must be installed on your
 system if you want to obtain the code this way (the executable it
-called \texttt{svn}).  Information about \textit{subversion} and how
-to download it can be found at \texttt{http://subversion.tigris.org/}.\\
+called \texttt{svn}); it is already installed by default for many
+recent Linux distributions.  Information about \textit{subversion} and
+how to download it can be found at
+\texttt{http://subversion.tigris.org/}.\\
 
 To obtain the \Ipopt\ source code via subversion, follow the steps
 below:
@@ -284,11 +289,20 @@ which you are right now (output of \texttt{pwd}).
 
 \subsection{Download External Code}\label{ExternalCode}
 \Ipopt\ uses a few external packages that are not included in the
-distribution, namely ASL (the Ampl Solver Library), BLAS, and some
-sparse linear algebra routines from the Harwell Subroutine Library.
+\Ipopt\ source code distribution, namely ASL (the Ampl Solver
+Library), BLAS, and some sparse linear algebra routines from the
+Harwell Subroutine Library.
+
+Since those packages are released under different licenses than
+\Ipopt, we cannot distribute that code together with the \Ipopt\
+packages and have to ask you to go through the hassle of obtaining it
+yourself (even though we tried to make it as easy for you as we
+could).  Keep in mind that it is still your responsibility to ensure
+that your downloading and usage if the third party components conforms
+with their licenses.
 
 Note that you only need to obtain the ASL if you intend to use \Ipopt\
-from AMPL.  It is not required if you want to specify yout
+from AMPL.  It is not required if you want to specify your
 optimization problem in a programming language (C++, C, or Fortran).
 
 \subsubsection{Download BLAS and ASL}
@@ -310,7 +324,7 @@ and \texttt{\$IPOPTDIR/Extern/ASL} directories for alternative
 instructions.
 
 \subsubsection{Download HSL Subroutines}
-In addition to the IPOPT source code, two additional subroutines have
+In addition to the \Ipopt\ source code, two additional subroutines have
 to be downloaded from the Harwell Subroutine Library (HSL).  The
 required routines are freely available for non-commercial, academic
 use, but it is your responsibility to investigate the licensing of all
@@ -336,6 +350,10 @@ third party code.
   the file, so you may have to rename it.
 \end{enumerate}
 
+Note: Whereas currently obtaining MA27 is essential for using \Ipopt,
+MC19 could be omitted (with the consequence that you cannot use this
+method for scaling the linear systems arsing inside the \Ipopt\
+algorithm).
 
 \subsection{Compiling and Installing \Ipopt} \label{sec.comp_and_inst}
 
@@ -344,7 +362,7 @@ third party code.
 basic steps that should work on most systems.  For special
 compilations and some for troubleshooting see
 Appendix~\ref{ExpertInstall} and consult the \Ipopt\ webpage before
-sending a message to the mailing list.
+submitting a ticket or sending a message to the mailing list.
 \begin{enumerate}
 \item Go to the main directory of \Ipopt:\\
   {\tt \$ cd \$IPOPTDIR} 
@@ -462,7 +480,7 @@ to choose some connection settings differently):
   After that you obtain the third party code (like on Linux/UNIX),
   type
 
-  \texttt{./configure CXX=g++ CC=gcc F77=g77}
+  \texttt{./configure}
 
   and
 
@@ -2009,14 +2027,9 @@ will be appended to the iteration number.
 \end{itemize}
 
 
-\bibliographystyle{plain}
-\bibliography{/home/andreasw/tex/andreas}
-
-%\bibitem{MargotClassText}
-%Margot, F.: Course material for \textit{47852 Open Source Software for
-%        Optimization}, Carnegie Mellon University (2005)
-%\end{thebibliography}
-
+%\bibliographystyle{plain}
+%\bibliography{/home/andreasw/tex/andreas}
+\input{documentation.bbl}
 
 \appendix
 \newpage
@@ -2542,6 +2555,106 @@ and its default value is $3$.
 \newpage
 \section{Detailed Installation Information}\label{ExpertInstall}
 
+The configuration script and Makefiles in the \Ipopt\ distribution
+have been created using GNU's {\tt autoconf} and {\tt automake}.  They
+attempt to automatically adapt the compiler settings etc.\ to the
+system they are running on.  We tested a the provided scripts for a
+number of different machines, operating systems and compilers, but you
+might easily run into a situation where the default setting does not
+work, or where you need to change the settings to fit your particular
+environment.
 
+In general, you can see the list of options and variables that can be
+set for the {\tt configure} script by typing {\tt configure --help}.
+Below a few particular options are discussed:
+
+\begin{itemize}
+\item The {\tt configure} script tries to determine automatically, if
+  you have BLAS already installed on your system (trying a few default
+  libraries), and if it does not find them, it makes sure that you
+  put the source code in the required place.
+
+  However, you can specify a BLAS library (such as your local ATLAS
+  library) explicitly, using the {\tt --with-blas} flag for {\tt
+    configure}.  For example,
+
+  {\tt ./configure --with=blas="-L \$HOME/lib -latlas"}
+
+  To tell the configure script to compile and use the downloaded BLAS
+  source files even if a BLAS library is found on your system, specify
+  {\tt --with-blas=BUILD}.
+
+\item Similarly, if you have a precompiled library containing the
+  Harwell Subroutines, you can specify its location with the {\tt
+    --with-hsl} flag.
+
+\item If you want to specify that you want to use particular
+  compilers, you can do so by adding the variables definitions for
+  {\tt CXX}, {\tt CC}, and {\tt F77} to the {\tt ./configure} command
+  line, to specify the C++, C, and Fortran compiler, respectively.
+  For example,
+
+  {\tt ./configure CXX=g++ CC=gcc F77=g77}
+
+  In order to set the compiler flags, you should use the variables
+  {\tt CXXFLAGS}, {\tt CFLAGS}, {\tt FFLAGS}.  Note, that the \Ipopt\
+  code uses ``{\tt dynamic\_cast}''.  Therefore it is necessary that
+  the C++ code is compiled including RTTI (Run-Time Type Information).
+  Some compilers need to be given special flags to do that (e.g.,
+  ``{\tt -qrtti=dyna}'' for the AIX {\tt xlC} compiler).
+
+\item If you want to link the \Ipopt\ library with a main program
+  written in C or Fortran, the C and Fortran compiler doing the
+  linking of the executable needs to be told about the C++ runtime
+  libraries.  Unfortunately, the current version of {\tt autoconf}
+  does not provide the automatic detection of those libraries.  We
+  have hard-coded some default values for some systems and compilers,
+  but this might not work all the time.
+
+  If you have problems linking your Fortran or C code with the \Ipopt\
+  library {\tt libipopt.a} and the linker complains about missing
+  symbols from C++ (e.g., the standard template library), you should
+  specify the C++ libraries with the CXXLIBS variable.  To find out
+  what those libraries are, it is probably helpful to link a C++
+  program with verbose compiler output.
+
+  For example, for the Intel compilers on a Linux system, you
+  might need to specify something like
+
+  {\tt ./configure CC=icc F77=ifort CXX=icpc $\backslash$\\ \hspace*{14ex} CXXLIBS='-L/usr/lib/gcc-lib/i386-redhat-linux/3.2.3 -lstdc++'}
+
+\item Compilation in 64bit sometimes requires some espicial
+  consideration.  For example, for compilation of 64bit code on AIX,
+  we recommend the following configuration
+
+  {\tt ./configure AR='ar -X64' AR\_X='ar -X64 x' $\backslash$\\
+    \hspace*{14ex} CC='xlc -q64' F77='xlf -q64' CXX='xlC
+    -q64'$\backslash$\\ \hspace*{14ex} CFLAGS='-O3
+    -bmaxdata:0x3f0000000'
+    $\backslash$\\ \hspace*{14ex} FFLAGS='-O3 -bmaxdata:0x3f0000000' $\backslash$\\
+    \hspace*{14ex} CXXFLAGS='-qrtti=dyna -O3 -bmaxdata:0x3f0000000'}
+
+\item To build library/archive files (with the ending {\tt .a})
+  including C++ code in some environments, it is necessary to use the
+  C++ compiler instead of {\tt ar} to build the archive.  This is for
+  example the case for some older compilers on SGI and SUN.  For this,
+  the {\tt configure} variables {\tt AR}, {\tt ARFLAGS}, and {\tt
+    AR\_X} are provided.  Here, {\tt AR} specifies the command for the
+  archiver for creating an archive, and {\tt ARFLAGS} speficies
+  additional flags.  {\tt AR\_X} contains the command for extracing
+  all files from an archive.  For example, the default setting for SUN
+  compilers for our configure script is
+
+  {\tt AR='CC-xar' ARFLAGS='-o' AR\_X='ar x'}
+
+\item It is possible to compile the \Ipopt\ library in a debug
+  configuration, by specifying {\tt --enable-debug}.  Then the
+  compilers will use the debug flags (unless the compilation flag
+  variables are overwritten in the command line), and additional debug
+  checks are compiled into the code.  This usually leads to a
+  significant slowdown of the code, but might be helpful when
+  debugging something.
+
+\end{itemize}
 
 \end{document}
