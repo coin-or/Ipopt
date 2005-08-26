@@ -533,10 +533,10 @@ We will illustrate how to use each of the four interfaces using an
 example problem, number 71 from the Hock-Schittkowsky test suite \cite{HS},
 %\begin{subequations}\label{HS71}
   \begin{eqnarray}
-    \min_{x \in \Re^4} &x_1 x_4 (x_1 + x_2 + x_3)  +  x_3 \label{eq:ex_obj} \\
-    \mbox{s.t.} \;  &x_1 x_2 x_3 x_4 \ge 25 \label{eq:ex_ineq} \\
-    &x_1^2 + x_2^2 + x_3^2 + x_4^2  =  40 \label{eq:ex_equ} \\
-    &1 \leq x_1, x_2, x_3, x_4 \leq 5, \label{eq:ex_bounds}
+    \min_{x \in \Re^4} &&x_1 x_4 (x_1 + x_2 + x_3)  +  x_3 \label{eq:ex_obj} \\
+    \mbox{s.t.}  &&x_1 x_2 x_3 x_4 \ge 25 \label{eq:ex_ineq} \\
+    &&x_1^2 + x_2^2 + x_3^2 + x_4^2  =  40 \label{eq:ex_equ} \\
+    &&1 \leq x_1, x_2, x_3, x_4 \leq 5, \label{eq:ex_bounds}
   \end{eqnarray}
 %\end{subequations}
 with the starting point
@@ -2072,7 +2072,7 @@ indices or Fortran style (1-based). Tables \ref{tab.fortran_triplet} and
 format for both indexing styles, using the example matrix (\ref{eqn.ex_matrix}).
 
 \begin{footnotesize}
-\begin{table}[h]%[!h]
+\begin{table}[ht]%[!h]
 \begin{center}
 \caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
 with {\tt index\_style=FORTRAN\_STYLE}}
@@ -2097,7 +2097,7 @@ row     		&       col     	&       value 			    \\
 \end{tabular}
 \end{center}
 \end{table}
-\begin{table}[h]%[!h]
+\begin{table}[ht]%[!h]
 \begin{center}
 \caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
 with {\tt index\_style=C\_STYLE}}
@@ -2145,7 +2145,7 @@ example, given the matrix,
 the triplet format is shown in Tables \ref{tab.sym_fortran_triplet}
 and \ref{tab.sym_c_triplet}.
 \begin{footnotesize}
-\begin{table}[h]%[!h]
+\begin{table}[ht]%[!h]
 \begin{center}
 \caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
 with {\tt index\_style=FORTRAN\_STYLE}}
@@ -2166,7 +2166,7 @@ row     		&       col     	&       value 			    \\
 \end{tabular}
 \end{center}
 \end{table}
-\begin{table}[h]%[!h]
+\begin{table}[ht]%[!h]
 \begin{center}
 \caption{Triplet Format of Matrix (\ref{eqn.ex_matrix}) 
 with {\tt index\_style=C\_STYLE}}
