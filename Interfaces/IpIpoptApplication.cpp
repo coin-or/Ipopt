@@ -387,7 +387,7 @@ namespace Ipopt
       }
       else if (status == STOP_AT_TINY_STEP) {
         retValue = Search_Direction_Becomes_Too_Small;
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Search Direction becomes Too Small.\n");
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Search Direction is becoming Too Small.\n");
       }
       else if (status == STOP_AT_ACCEPTABLE_POINT) {
         retValue = Solved_To_Acceptable_Level;
@@ -414,7 +414,8 @@ namespace Ipopt
       statistics_ = new SolveStatistics(ip_nlp, ip_data, ip_cq);
     }
     catch(TOO_FEW_DOF& exc) {
-      exc.ReportException(*jnlst_);
+      //exc.ReportException(*jnlst_);
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has too few degrees of freedom.\n");
       retValue = Not_Enough_Degrees_Of_Freedom;
     }
     catch(OPTION_INVALID& exc) {
@@ -430,7 +431,7 @@ namespace Ipopt
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
     }
     catch(...) {
-      IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
+      IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
       exc.ReportException(*jnlst_);
       retValue = NonIpopt_Exception_Thrown;
     }

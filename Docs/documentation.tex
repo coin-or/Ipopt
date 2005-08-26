@@ -266,7 +266,7 @@ prompt, do not type {\tt \$}, only the text following it.
 In the following, ``\texttt{\$IPOPTDIR}'' will refer to the directory in
 which you are right now (output of \texttt{pwd}).
 
-\subsubsection{Getting the \Ipopt\ code as tarball}
+\subsubsection{Getting the \Ipopt\ code as a tarball}
 
 To use the tarball, follow the steps below:
 \begin{enumerate}
@@ -491,7 +491,7 @@ to choose some connection settings differently):
   \texttt{bin} (called ``\texttt{ipopt.exe}'').
 \end{enumerate}
 
-\subsubsection{Using the Visual Studio}\label{VisualStudioInstall}
+\subsubsection{Using Visual Studio}\label{VisualStudioInstall}
 
 The \Ipopt\ distribution includes project files that can be used to
 compile the \Ipopt\ library and a Fortran and C++ example within the
@@ -1938,7 +1938,7 @@ The only special things to consider are:
 \end{itemize}
 
 
-\section{Ipopt Options}\label{sec.options}
+\section{\Ipopt\ Options}\label{sec.options}
 Ipopt has many (maybe too many) options that can be adjusted for the
 algorithm.  Options are all identified by a string name and their
 values can be of one of three types, Number (real), Integer, or
@@ -1986,23 +1986,23 @@ options set in a particular executable or AMPL model by specifying new
 values in {\tt PARAMS.DAT}.
 
 For a short list of the valid options, see the Appendix
-\ref{app.options_ref}. You can print the documentation for all Ipopt
+\ref{app.options_ref}. You can print the documentation for all \Ipopt\
 options by adding the option, \\ {\tt print\_options\_documentation
-yes} \\ and running Ipopt (like the Ampl executable, for
+yes} \\ and running \Ipopt\ (like the Ampl executable, for
 instance). This will output all of the options documentation to the
 console.
 
-\section{Ipopt Output}\label{sec.output}
-This section describes the standard Ipopt console output with the
+\section{\Ipopt\ Output}\label{sec.output}
+This section describes the standard \Ipopt\ console output with the
 default setting for {\tt print\_level}. The output is designed to
-provide a quick summary of each iteration as Ipopt solves the problem.
+provide a quick summary of each iteration as \Ipopt\ solves the problem.
 
-Before Ipopt starts to solve the problem, it displays the problem
+Before \Ipopt\ starts to solve the problem, it displays the problem
 statistics (number of variables, etc.). Note that if you have fixed
-variables (both upper and lower bounds are equal), Ipopt may remove
+variables (both upper and lower bounds are equal), \Ipopt\ may remove
 these variables from the problem.
 
-Following the problem statistics, Ipopt will begin to solve the
+Following the problem statistics, \Ipopt\ will begin to solve the
 problem and you will see output resembling the following,
 \begin{verbatim}
 iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
@@ -2011,21 +2011,95 @@ iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
    2  1.8719906e+01 1.25e-02 9.04e+00  -2.2 5.94e-02   2.0 8.04e-01 1.00e+00h  1
 \end{verbatim}
 and the columns of output are defined as,
-\begin{itemize}
-\item[{\tt iter}] The current iteration count. This includes regular iterations and
+\begin{description}
+\item[{\tt iter}:] The current iteration count. This includes regular iterations and
 iterations while in restoration phase. If in restoration phase, the letter {\tt r'}
 will be appended to the iteration number. 
-\item[{\tt objective}] The unscaled objective value at the current point. In restoration, this value remains the unscaled objective value for the original problem.
-\item[{\tt inf\_pr}] The scaled primal infeasibility at the current point. In restoration, this value is the primal infeasibility of the original problem at the current point.
-\item[{\tt inf\_du}] The scaled dual infeasibility at the current point. In restoration, this is the value of the dual infeasibility for the restoration problem.
-\item[{\tt lg(mu)}] The value of the barrier parameter mu ($log_{10}$).
-\item[{\tt ||d||}] The infinity norm (max) of the primal step (in x and s). In restoration, this value includes the values of the additional variables, $p$ and $n$.
-\item[{\tt lg(rg)}] The value of the regularization term for the Hessian of the Lagrangian ($log_{10}$).
-\item[{\tt alpha\_du}] The stepsize for the dual variables.
-\item[{\tt alpha\_pr}] The stepsize for the primal variables.
-\item[{\tt ls}] The number of backtracking line search steps.
-\end{itemize}
+\item[{\tt objective}:] The unscaled objective value at the current point. In restoration, this value remains the unscaled objective value for the original problem.
+\item[{\tt inf\_pr}:] The scaled primal infeasibility at the current point. In restoration, this value is the primal infeasibility of the original problem at the current point.
+\item[{\tt inf\_du}:] The scaled dual infeasibility at the current point. In restoration, this is the value of the dual infeasibility for the restoration problem.
+\item[{\tt lg(mu)}:] The value of the barrier parameter mu ($log_{10}$).
+\item[{\tt ||d||}:] The infinity norm (max) of the primal step (in x and s). In restoration, this value includes the values of the additional variables, $p$ and $n$.
+\item[{\tt lg(rg)}:] The value of the regularization term for the Hessian of the Lagrangian ($log_{10}$).
+\item[{\tt alpha\_du}:] The stepsize for the dual variables.
+\item[{\tt alpha\_pr}:] The stepsize for the primal variables.
+\item[{\tt ls}:] The number of backtracking line search steps.
+\end{description}
 
+When the algorithm is complete, \Ipopt\ will output a message to the
+screen based on the return status of the call to {\tt Optimize}. The following
+is a list of the possible return codes, their corresponding output message
+to the console, and a brief description.
+\begin{description}
+\item[{\tt Solve\_Succeeded}:] $\;$ \\
+Console Message: {\tt EXIT: Optimal Solution Found.} \\
+This message indicates that \Ipopt\ found a (locally) optimal
+point within the desired tolerances.
+\item[{\tt Solved\_To\_Acceptable\_Level}:]  $\;$ \\
+Console Message: {\tt EXIT: Solved To Acceptable Level.} \\
+This indicates that was not converged to the desired tolerances, but was
+converged to an acceptable level as specified by {\tt acceptable-*}
+options. This may happen if the desired tolerances are too small for the
+current problem.
+\item[{\tt Infeasible\_Problem\_Detected}:]  $\;$ \\
+Console Message: {\tt EXIT: Converged to a point of 
+local infeasibility. Problem may be infeasible.} \\
+The restoration phase converged to a point that was not feasible for the 
+original problem. This indicates that the problem may be infeasible, or that
+the algorithm is stuck at a locally infeasible point. 
+\item[{\tt Search\_Direction\_Becomes\_Too\_Small}:]  $\;$ \\
+Console Message: {\tt EXIT: Search Direction is becoming Too Small.} \\
+This indicates that \Ipopt\ is calculating very small step sizes and 
+making very little progress. 
+This could happen if the problem has been solved to the best numerical 
+accuracy possible given the current scaling.
+\item[{\tt Maximum\_Iterations\_Exceeded}:]  $\;$ \\
+Console Message: {\tt EXIT: Maximum Number of Iterations Exceeded.} \\
+This indicates that \Ipopt\ has exceeded the maximum number of 
+iterations as specified by the option {\tt max\_iter}.
+\item[{\tt Restoration\_Failed}:]  $\;$ \\
+Console Message: {\tt EXIT: Restoration Failed!} \\
+This indicates that the restoration phase failed to find
+a feasible point that was acceptable to the filter line
+search for the original problem. This could happen if the
+problem is highly degenerate or if your NLP provides incorrect
+derivative information.
+\item[{\tt Invalid\_Option}:]  $\;$ \\
+Console Message: (details about the particular error 
+will be output to the console) \\
+This indicates that there was some problem specifying the options. See the
+specific message for details.
+\item[{\tt Not\_Enough\_Degrees\_Of\_Freedom}:]  $\;$ \\
+Console Message: {\tt EXIT: Problem has too few degrees of freedom.} \\
+This indicates that your problem, as specified, has too few degrees of
+freedom. This can happen if you have too many constraints, or if you 
+fix too many variables (\Ipopt\ removes fixed variables).
+\item[{\tt Invalid\_Problem\_Definition}:]  $\;$ \\
+Console Message: (no console message, this is a return code for the 
+C and Fortran interfaces only.) \\
+This indicates that there was an exception of some sort when building 
+the {\tt IpoptProblem} structure in the C or Fortran interface. Likely
+there is an error in your model or the {\tt main} routine.
+\item[{\tt Unrecoverable\_Exception}:]  $\;$ \\
+Console Message: (details about the particular error 
+will be output to the console) \\
+This indicates that \Ipopt\ has thrown an exception that does 
+not have an internal return code. See the specific message for details.
+\item[{\tt NonIpopt\_Exception\_Thrown}:]  $\;$ \\
+Console Message: {\tt Unknown Exception caught in Ipopt} \\
+An unknown exception was caught in Ipopt. This exception could
+have originated from your model or any linked in third party code.
+\item[{\tt Insufficient\_Memory}:]  $\;$ \\
+Console Message: {\tt EXIT: Not enough memory.} \\
+An error occurred while trying to allocate memory. The problem may
+be too large for your current memory and swap configuration.
+\item[{\tt Internal\_Error}:]  $\;$ \\
+Console Message: {\tt EXIT: INTERNAL ERROR: Unknown SolverReturn 
+value - Notify IPOPT Authors.} \\
+An unknown internal error has occurred. Please Notify the 
+authors of \Ipopt.
+
+\end{description}
 
 %\bibliographystyle{plain}
 %\bibliography{/home/andreasw/tex/andreas}
@@ -2065,7 +2139,7 @@ space savings are very dramatic\footnote{For an $n \times n$ matrix,
 the dense representation grows with the the square of $n$, while the
 sparse representation grows linearly in the number of nonzeros.}
 
-The option {\tt index\_style} in {\tt get\_nlp\_info} tells Ipopt if
+The option {\tt index\_style} in {\tt get\_nlp\_info} tells \Ipopt\ if
 you prefer to use C style indexing (0-based) for the row and column
 indices or Fortran style (1-based). Tables \ref{tab.fortran_triplet} and 
 \ref{tab.c_triplet} below show the triplet
@@ -2189,7 +2263,7 @@ row     		&       col     	&       value 			    \\
 \end{table}
 \end{footnotesize}
 \newpage
-\section{The Smart Pointer Implementation: SmartPtr} \label{app.smart_ptr}
+\section{The Smart Pointer Implementation: SmartPtr<T>} \label{app.smart_ptr}
 
 The SmartPtr class is described in {\tt IpSmartPtr.hpp}. It is a
 template class that takes care of deleting objects for us so we need
@@ -2231,326 +2305,7 @@ print_options_documentation yes
 
 The most common options are:
 
-
-\paragraph{print\_level:} Output verbosity level. $\;$ \\
- Sets the default verbosity level for console
-output. The larger this value the more detailed
-is the output. The valid range for this integer option is
-$0 \le {\tt print\_level } \le 10$
-and its default value is $3$.
-
-
-\paragraph{pivtol:} Pivot tolerance for the linear solver. $\;$ \\
- A smaller number pivots for sparsity, a larger
-number pivots for stability. The valid range for this real option is 
-$0 <  {\tt pivtol } <  1$
-and its default value is $1 \cdot 10^{-08}$.
-
-
-\paragraph{pivtolmax:} Maximum pivot tolerance. $\;$ \\
- IPOPT may increase pivtol as high as pivtolmax to
-get a more accurate solution to the linear system The valid range for this real option is 
-$0 <  {\tt pivtolmax } <  1$
-and its default value is $0.0001$.
-
-
-\paragraph{tol:} Desired convergence tolerance (relative). $\;$ \\
- Determines the convergence tolerance for the
-algorithm.  The algorithm terminates
-successfully, if the (scaled) NLP error becomes
-smaller than this value, and if the (absolute)
-criteria according to "dual\_inf\_tol",
-"primal\_inf\_tol", and "cmpl\_inf\_tol" are met.
- (This is epsilon\_tol in Eqn. (6) in
-implementation paper). Note, some other
-algorithmic features also use this quantity. The valid range for this real option is 
-$0 <  {\tt tol } <  {\tt +inf}$
-and its default value is $1 \cdot 10^{-08}$.
-
-
-\paragraph{compl\_inf\_tol:} Desired threshold for the complementarity conditions. $\;$ \\
- Absolute tolerance on the complementarity.
-Successful termination requires that the
-(unscaled) complementarity is less than this
-threshold. The valid range for this real option is 
-$0 <  {\tt compl\_inf\_tol } <  {\tt +inf}$
-and its default value is $0.0001$.
-
-
-\paragraph{dual\_inf\_tol:} Desired threshold for the dual infeasibility. $\;$ \\
- Absolute tolerance on the dual infesaibility.
-Successful termination requires that the
-(unscaled) dual infeasibility is less than this
-threshold. The valid range for this real option is 
-$0 <  {\tt dual\_inf\_tol } <  {\tt +inf}$
-and its default value is $0.0001$.
-
-
-\paragraph{constr\_mult\_init\_max:} Maximum allowed least-square guess of constraint multipliers. $\;$ \\
- Determines how large the initial least-square
-guesses of the contraint multipliers are allowed
-to be (in max-norm). If the guess is larger than
-this value, it is discarded and all constraint
-multipliers are set to zero.  This options is
-also used when initializing the restoration
-phase. By default,
-"resto.constr\_mult\_init\_max" (the one used in
-RestoIterateInitializer) is set to zero. The valid range for this real option is 
-$0 \le {\tt constr\_mult\_init\_max } <  {\tt +inf}$
-and its default value is $1000$.
-
-
-\paragraph{constr\_viol\_tol:} Desired threshold for the constraint violation. $\;$ \\
- Absolute tolerance on the constraint violation.
-Successful termination requires that the
-(unscaled) constraint violation is less than this
-threshold. The valid range for this real option is 
-$0 <  {\tt constr\_viol\_tol } <  {\tt +inf}$
-and its default value is $0.0001$.
-
-
-\paragraph{mu\_strategy:} Update strategy for barrier parameter. $\;$ \\
- Determines which barrier parameter update
-strategy is to be used.\\ 
-Possible values:
-\begin{itemize}
-   \item monotone: use the monotone (Fiacco-McCormick) strategy
-   \item adaptive: use the adaptive update strategy
-\end{itemize}
-
-\paragraph{mu\_init:} Initial value for the barrier parameter. $\;$ \\
- This option determines the initial value for the
-barrier parameter (mu).  It is only relevant in
-the monotone, Fiacco-McCormick version of the
-algorithm. (i.e., if "mu\_strategy" is chosen as
-"monotone") The valid range for this real option is 
-$0 <  {\tt mu\_init } <  {\tt +inf}$
-and its default value is $0.1$.
-
-
-\paragraph{mu\_oracle:} Oracle for a new barrier parameter in the adaptive strategy $\;$ \\
- Determines how a new barrier parameter is
-computed in each "free-mode" iteration of the
-adaptive barrier parameter strategy. (Only
-considered if "adaptive" is selected for option
-"mu\_strategy".\\ 
-Possible values:
-\begin{itemize}
-   \item probing: Mehrotra's probing heuristic
-   \item loqo: LOQO's centrality rule
-   \item quality\_function: minimize a quality function
-\end{itemize}
-
-\paragraph{corrector\_type:} The type of corrector steps that should be taken. $\;$ \\
- If "mu\_strategy" is "adaptive", this option
-determines what kind of corrector steps should be
-tried.\\ 
-Possible values:
-\begin{itemize}
-   \item none: no corrector
-   \item affine: corrector step towards mu=0
-   \item primal-dual: corrector step towards current mu
-\end{itemize}
-
-\paragraph{obj\_scaling\_factor:} Scaling factor for the objective function. $\;$ \\
- This option sets a scaling factor for the
-objective function. The scaling is seen
-internally by Ipopt but the unscaled objective is
-reported in the console output. If additional
-scaling parameters are computed (e.g.
-user-scaling or gradient-based), both factors are
-multiplied. If this value is chosen to be
-negative, Ipopt will maximize the objective
-function instead of minimizing it. The valid range for this real option is 
-${\tt -inf} <  {\tt obj\_scaling\_factor } <  {\tt +inf}$
-and its default value is $1$.
-
-
-\paragraph{nlp\_scaling\_method:} Select the technique used for scaling the NLP $\;$ \\
- Selects the technique used for scaling the
-problem before it is solved. For user-scaling,
-the parameters come from the NLP. If you are
-using AMPL, they can be specified through
-suffixes (scaling\_factor)\\ 
-Possible values:
-\begin{itemize}
-   \item none: no problem scaling will be performed
-   \item user\_scaling: scaling parameters will come from the user
-   \item gradient\_based: scale the problem so the maximum gradient at
-the starting point is scaling\_max\_gradient
-\end{itemize}
-
-\paragraph{nlp\_scaling\_max\_gradient:} Maximum gradient after scaling. $\;$ \\
- This is the gradient scaling cut-off. If the
-maximum gradient is above this value, then
-gradient based scaling will be performed. Scaling
-parameters are calculated to scale the maximum
-gradient back to this value. Note: This option is
-only used if "nlp\_scaling\_method" is chosen as
-"gradient\_based". The valid range for this real option is 
-$0 <  {\tt nlp\_scaling\_max\_gradient } <  {\tt +inf}$
-and its default value is $100$.
-
-
-\paragraph{bound\_frac:} Desired minimum relative distance from the initial point to bound $\;$ \\
- Determines how much the initial point might have
-to be modified in order to be sufficiently inside
-the bounds (together with "bound\_push"). The valid range for this real option is 
-$0 <  {\tt bound\_frac } \le 0.5$
-and its default value is $0.01$.
-
-
-\paragraph{bound\_mult\_init\_val:} Initial value for the bound multipliers $\;$ \\
- All dual variables corresponding to bound
-constraints are initialized to this value. The valid range for this real option is 
-$0 <  {\tt bound\_mult\_init\_val } <  {\tt +inf}$
-and its default value is $1$.
-
-
-\paragraph{bound\_push:} Desired minimum absolute distance from the initial point to bound $\;$ \\
- Determines how much the initial point might have
-to be modified in order to be sufficiently inside
-the bounds (together with "bound\_frac"). The valid range for this real option is 
-$0 <  {\tt bound\_push } <  {\tt +inf}$
-and its default value is $0.01$.
-
-
-\paragraph{bound\_relax\_factor:} Factor for initial relaxation of the bounds. $\;$ \\
- Before start of the optimization, the bounds
-given by the user are relaxed.  This option sets
-the factor for this relaxation.  If it is set to
-zero, then then bounds relaxation is disabled.
-(See Eqn.(35) in implmentation paper.) The valid range for this real option is 
-$0 \le {\tt bound\_relax\_factor } <  {\tt +inf}$
-and its default value is $1 \cdot 10^{-08}$.
-
-
-\paragraph{acceptable\_compl\_inf\_tol:} Acceptance threshold for the complementarity conditions. $\;$ \\
- Absolute tolerance on the complementarity.
-Acceptable termination requires that the
-(unscaled) complementarity is less than this
-threshold. The valid range for this real option is 
-$0 <  {\tt acceptable\_compl\_inf\_tol } <  {\tt +inf}$
-and its default value is $0.01$.
-
-
-\paragraph{acceptable\_constr\_viol\_tol:} Acceptance threshold for the constraint violation. $\;$ \\
- Absolute tolerance on the constraint violation.
-Acceptable termination requires that the
-(unscaled) constraint violation is less than this
-threshold. The valid range for this real option is 
-$0 <  {\tt acceptable\_constr\_viol\_tol } <  {\tt +inf}$
-and its default value is $0.01$.
-
-
-\paragraph{acceptable\_dual\_inf\_tol:} Acceptance threshold for the dual infeasibility. $\;$ \\
- Absolute tolerance on the dual infesaibility.
-Acceptable termination requires that the
-(unscaled) dual infeasibility is less than this
-threshold. The valid range for this real option is 
-$0 <  {\tt acceptable\_dual\_inf\_tol } <  {\tt +inf}$
-and its default value is $0.01$.
-
-
-\paragraph{acceptable\_tol:} Acceptable convergence tolerance (relative). $\;$ \\
- Determines which (scaled) overall optimality
-error is considered to be acceptable. If the
-algorithm encounters "acceptable\_iter"
-iterations in a row that are considered
-"acceptable", it will terminate before the
-desired convergence tolerance ("tol",
-"dual\_inf\_tol", etc) is met. The valid range for this real option is 
-$0 <  {\tt acceptable\_tol } <  {\tt +inf}$
-and its default value is $1 \cdot 10^{-06}$.
-
-
-\paragraph{alpha\_for\_y:} Method to determine the step size for constraint multipliers. $\;$ \\
- This option determines how the step size
-(alpha\_y) will be calculated when updating the
-constraint multipliers.\\ 
-Possible values:
-\begin{itemize}
-   \item primal: use primal step size
-   \item bound\_mult: use step size for the bound multipliers
-   \item min: use the min of primal and bound multipliers
-   \item max: use the max of primal and bound multipliers
-   \item full: take a full step of size one
-   \item min\_dual\_infeas: choose step size minimizing new dual
-infeasibility
-   \item safe\_min\_dual\_infeas: like "min\_dual\_infeas", but safeguarded by
-"min" and "max"
-\end{itemize}
-
-\paragraph{expect\_infeasible\_problem:} Enable heuristics to quickly detect an infeasible problem. $\;$ \\
- This options is meant to activate heuristics that
-may speed up the infeasibility determination if
-you expect the problem to be infeasible.  In the
-filter line search procedure, the restoration
-phase is called more qucikly than usually, and
-more reduction in the constraint violation is
-enforced. If the problem is square, this is
-enabled automatically.\\ 
-Possible values:
-\begin{itemize}
-   \item no: the problem probably be feasible
-   \item yes: the problem has a good chance to be infeasible
-\end{itemize}
-
-\paragraph{max\_iter:} Maximum number of iterations. $\;$ \\
- The algorithm terminates with an error message if
-the number of iterations exceeded this number.
-This option is also used in the restoration phase. The valid range for this integer option is
-$0 \le {\tt max\_iter } <  {\tt +inf}$
-and its default value is $3000$.
-
-
-\paragraph{max\_refinement\_steps:} Maximum number of iterative refinement steps per linear system solve. $\;$ \\
- Iterative refinement (on the full unsymmetric
-system) is performed for each right hand side. 
-This option determines the maximum number of
-iterative refinement steps. The valid range for this integer option is
-$0 \le {\tt max\_refinement\_steps } <  {\tt +inf}$
-and its default value is $10$.
-
-
-\paragraph{max\_soc:} Maximum number of second order correction trial steps at each iteration. $\;$ \\
- Choosing 0 disables the second order corrections.
-(This is p\^{max} of Step A-5.9 of Algorithm A in
-implementation paper.) The valid range for this integer option is
-$0 \le {\tt max\_soc } <  {\tt +inf}$
-and its default value is $4$.
-
-
-\paragraph{min\_refinement\_steps:} Minimum number of iterative refinement steps per linear system solve. $\;$ \\
- Iterative refinement (on the full unsymmetric
-system) is performed for each right hand side. 
-This option determines the minimum number of
-iterative refinements (i.e. at least
-"min\_refinement\_steps" iterative refinement
-steps are enforced per right hand side.) The valid range for this integer option is
-$0 \le {\tt min\_refinement\_steps } <  {\tt +inf}$
-and its default value is $1$.
-
-
-\paragraph{output\_file:} File name of desired output file (leave unset for no file output) $\;$ \\
- NOTE: This option only works when read from
-PARAMS.DAT options file! An output file with this
-name will be written (leave unset for no file
-output).  The verbosity level is by default,
-"print\_level", or but can be overridden with
-"file\_print\_level".\\ 
-Possible values:
-\begin{itemize}
-   \item *: Any acceptable standard file name
-\end{itemize}
-
-\paragraph{file\_print\_level:} Verbosity level for output file. $\;$ \\
- NOTE: This option only works when read from
-PARAMS.DAT options file! Determines the verbosity
-level for the file specified by "output\_file". 
-By defauly it is the same as "print\_level". The valid range for this integer option is
-$0 \le {\tt file\_print\_level } \le 10$
-and its default value is $3$.
+\input{options.tex}
 
 \newpage
 \section{Detailed Installation Information}\label{ExpertInstall}

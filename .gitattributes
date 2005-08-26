@@ -4,6 +4,7 @@ Algorithm/IpAlgorithmRegOp.hpp -text
 Algorithm/LinearSolvers/IpLinearSolversRegOp.cpp -text
 Algorithm/LinearSolvers/IpLinearSolversRegOp.hpp -text
 Docs/documentation.pdf -text
+Docs/options.tex -text
 Examples/hs071_c/Makefile.in -text
 Examples/hs071_c/hs071_c.c -text
 Examples/hs071_cpp/Makefile.in -text
