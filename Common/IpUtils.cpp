@@ -4,7 +4,7 @@
 //
 // $Id$
 //
-// Authors:  Andreas Waechter            IBM       2005-08-12
+// Authors:  Carl Laird, Andreas Waechter    IBM       2005-08-12
 
 #include "IpUtils.hpp"
 

@@ -4,7 +4,7 @@
 //
 // $Id$
 //
-// Authors:  Andreas Waechter     IBM    2005-03-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-13
 
 #include "IpTripletToCSRConverter.hpp"
 #include <list>

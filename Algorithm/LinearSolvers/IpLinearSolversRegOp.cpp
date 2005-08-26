@@ -4,7 +4,7 @@
 //
 // $Id: IpLinearSolversRegOp.cpp 430 2005-08-10 00:19:54Z andreasw $
 //
-// Authors:  Carl Laird     IBM    2005-08-16
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-08-16
 
 #include "IpLinearSolversRegOp.hpp"
 #include "IpRegOptions.hpp"

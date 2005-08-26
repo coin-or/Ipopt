@@ -4,7 +4,7 @@
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-17
 
 #ifndef __IPMA27TSOLVERINTERFACE_HPP__
 #define __IPMA27TSOLVERINTERFACE_HPP__

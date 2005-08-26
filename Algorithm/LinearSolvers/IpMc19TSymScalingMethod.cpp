@@ -4,7 +4,7 @@
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #include "IpMc19TSymScalingMethod.hpp"
 

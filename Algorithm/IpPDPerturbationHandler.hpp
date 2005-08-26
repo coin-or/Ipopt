@@ -4,7 +4,7 @@
 //
 // $Id$
 //
-// Authors:  Andreas Waechter              IBM    2005-08-04
+// Authors:  Carl Laird, Andreas Waechter              IBM    2005-08-04
 
 #ifndef __IPPDPERTURBATIONHANDLER_HPP__
 #define __IPPDPERTURBATIONHANDLER_HPP__

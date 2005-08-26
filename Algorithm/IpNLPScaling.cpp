@@ -4,7 +4,7 @@
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-06-25
 
 #include "IpNLPScaling.hpp"
 

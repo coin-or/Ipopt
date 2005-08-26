@@ -4,7 +4,7 @@
 //
 // $Id$
 //
-// Authors:  Andreas Waechter              IBM    2004-09-23
+// Authors:  Carl Laird, Andreas Waechter              IBM    2005-04-01
 
 #include "IpWarmStartIterateInitializer.hpp"
 #include "IpDefaultIterateInitializer.hpp"

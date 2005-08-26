@@ -4,7 +4,7 @@
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-06-18
 
 #ifndef __IPREGOPTIONS_HPP__
 #define __IPREGOPTIONS_HPP__

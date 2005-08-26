@@ -1,10 +1,10 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Andreas Waechter              IBM    2004-09-24
+// Authors:  Carl Laird, Andreas Waechter              IBM    2005-04-01
 
 #ifndef __IPWARMSTARTITERATEINITIALIZER_HPP__
 #define __IPWARMSTARTITERATEINITIALIZER_HPP__

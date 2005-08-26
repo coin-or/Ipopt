@@ -4,7 +4,7 @@
 //
 // $Id$
 //
-// Authors:  Andreas Waechter            IBM    2004-11-12
+// Authors:  Carl Laird, Andreas Waechter            IBM    2004-11-12
 
 #include "IpQualityFunctionMuOracle.hpp"
 

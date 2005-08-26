@@ -4,7 +4,7 @@
 //
 // $Id: IpAlgorithmRegOp.hpp 430 2005-08-10 00:19:54Z andreasw $
 //
-// Authors:  Carl Laird     IBM    2005-08-16
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-08-16
 
 #ifndef __IPALGORITHMREGOP_HPP__
 #define __IPALGORITHMREGOP_HPP__

@@ -4,7 +4,7 @@
 //
 // $Id: IpTNLPAdapter.hpp 430 2005-08-10 00:19:54Z andreasw $
 //
-// Authors:  Andreas Waechter          IBM    2005-08-15
+// Authors:  Carl Laird, Andreas Waechter          IBM    2005-08-15
 
 #ifndef __IPSOLVESTATISTICS_HPP__
 #define __IPSOLVESTATISTICS_HPP__
