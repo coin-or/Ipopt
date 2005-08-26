@@ -165,8 +165,6 @@ namespace Ipopt
   class SmartPtr : public Referencer
   {
   public:
-    // ToDo the following didn't work on AIX
-    //static const Index dbg_smartptr_verbosity = 0;
 #define dbg_smartptr_verbosity 0
 
     /**@name Constructors/Destructors */

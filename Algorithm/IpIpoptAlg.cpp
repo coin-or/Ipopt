@@ -258,17 +258,6 @@ namespace Ipopt
 
     DBG_PRINT_VECTOR(2, "rhs", *rhs);
 
-    //ToDo: allow us to delete entries in IpData to save memory?
-    // To save memory, delete the old search directions
-    //     IpData().SetFromPtr_delta_x(NULL);
-    //     IpData().SetFromPtr_delta_s(NULL);
-    //     IpData().SetFromPtr_delta_y_c(NULL);
-    //     IpData().SetFromPtr_delta_y_d(NULL);
-    //     IpData().SetFromPtr_delta_z_L(NULL);
-    //     IpData().SetFromPtr_delta_z_U(NULL);
-    //     IpData().SetFromPtr_delta_v_L(NULL);
-    //     IpData().SetFromPtr_delta_v_U(NULL);
-
     // Get space for the search direction
     SmartPtr<IteratesVector> delta = IpData().curr()->MakeNewIteratesVector(true);
 

@@ -120,13 +120,13 @@ namespace Ipopt
         if (latex) {
           std::list<std::string> options_to_print;
           options_to_print.push_back("print_level");
-          options_to_print.push_back("pivtol");
-          options_to_print.push_back("pivtolmax");
           options_to_print.push_back("tol");
           options_to_print.push_back("compl_inf_tol");
           options_to_print.push_back("dual_inf_tol");
           options_to_print.push_back("constr_mult_init_max");
           options_to_print.push_back("constr_viol_tol");
+          options_to_print.push_back("pivtol");
+          options_to_print.push_back("pivtolmax");
           options_to_print.push_back("mu_strategy");
           options_to_print.push_back("mu_init");
           options_to_print.push_back("mu_oracle");

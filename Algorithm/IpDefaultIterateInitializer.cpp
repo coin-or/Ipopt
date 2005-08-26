@@ -100,8 +100,6 @@ namespace Ipopt
     // Now we compute the initial values that the algorithm is going to
     // actually use.  We first store them in the trial fields in ip_data.
 
-    // ToDo combine the following code with warm_start_intializer
-
     // Push the x iterates sufficiently inside the bounds
     // Calculate any required shift in x0 and s0
 

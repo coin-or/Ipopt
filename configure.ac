@@ -8,7 +8,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.0.-1],[coin-ipopt@www-124.ibm.com])
+AC_INIT([Ipopt],[3.0.0],[coin-ipopt@www-124.ibm.com])
 
 AC_COPYRIGHT([
 Copyright 2004, 2005 International Business Machines and others.
@@ -16,7 +16,7 @@ All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
 
-AC_REVISION(3.0.-1)
+AC_REVISION(3.0.0)
 
 AC_CONFIG_SRCDIR(Common/IpDebug.hpp)
 
@@ -59,7 +59,7 @@ if test -z "$CXXFLAGS"; then
     case "$CXX" in
       icpc | */icpc) ;;
       *)
-# ToDo decide aboiut unroll-loops
+# ToDo decide about unroll-loops
         opt_cxxflags="-O3"
 #        case $build in
 #          x86_64-* | i686-* | i586-* )

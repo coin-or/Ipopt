@@ -38,7 +38,7 @@ namespace Ipopt
       Index ncoor = (Index)vals_.size();
       DBG_ASSERT((Index)vals.size() == ncoor);
 
-      // ToDo decide where we can get Compare_le from
+      // ToDo decide if we need Compare_le
       bool retval = false;
       for (Index i=0; i<ncoor; i++) {
         if (vals[i] <= vals_[i]) {

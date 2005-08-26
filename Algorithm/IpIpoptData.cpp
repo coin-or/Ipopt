@@ -228,8 +228,6 @@ namespace Ipopt
     // values are set before a new trial point is accepted)
     trial_ = NULL;
 
-    // ToDo: Why don't we free the delta_ here?
-
     // Free the memory for the affine-scaling step
     delta_aff_ = NULL;
 

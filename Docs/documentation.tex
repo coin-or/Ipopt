@@ -44,12 +44,12 @@ A tutorial for downloading, installing, and using \Ipopt.}
 
   The initial version of this document was created by
   Yoshiaki Kawajir\footnote{Department of Chemical Engineering,
-    Carnegie Mellon Univeristy, Pittsburgh PA} as a course project for
+    Carnegie Mellon University, Pittsburgh PA} as a course project for
   \textit{47852 Open Source Software for Optimization}, taught by
   Prof. Fran\c cois Margot at Tepper School of Business, Carnegie
   Mellon University.  The current version is maintained by Carl
   Laird\footnote{Department of Chemical Engineering, Carnegie Mellon
-    Univeristy, Pittsburgh PA} and Andreas
+    University, Pittsburgh PA} and Andreas
   W\"achter\footnote{Department of Mathematical Sciences, IBM T.J.\
     Watson Research Center, Yorktown Heights, NY}.
 \end{abstract}
@@ -60,7 +60,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \begin{small}
 \noindent
 The following names used in this document are trademarks or registered
-trademarks: AMPL, Intel, Miscrosoft, Visual Studio C++, Visual Studio
+trademarks: AMPL, Intel, Microsoft, Visual Studio C++, Visual Studio
 C++ .NET
 \end{small}
 
@@ -123,14 +123,14 @@ In order to build \Ipopt, some third party components are required:
   also get the source code from {\tt www.netlib.org} and have the
   \Ipopt\ distribution compile it automatically.
 \item A sparse symmetric indefinite linear solver. The \Ipopt\ needs
-  to obtain the solution of sparse, symmtric, indefinite linear
+  to obtain the solution of sparse, symmetric, indefinite linear
   systems, and for this it relies on third-party code.  Currently,
   your only option is the solver MA27 from the Harwell Subroutine
   Library (see {\tt http://www.cse.clrc.ac.uk/nag/hsl/}).  We are
   working on interfaces for \Ipopt\ with some other linear solvers.
 
   Furthermore, we also make use a subroutine for scaling the linear
-  systems arsing in \Ipopt, using the HSL routine MC19.  It is not
+  systems arising in \Ipopt, using the HSL routine MC19.  It is not
   required to have MC19 to compile \Ipopt; if this routine is missing,
   the scaling is never performed.
 \item ASL (AMPL Solver Library).  The source code available is at {\tt
@@ -289,7 +289,7 @@ which you are right now (output of \texttt{pwd}).
 
 \subsection{Download External Code}\label{ExternalCode}
 \Ipopt\ uses a few external packages that are not included in the
-\Ipopt\ source code distribution, namely ASL (the Ampl Solver
+\Ipopt\ source code distribution, namely ASL (the AMPL Solver
 Library), BLAS, and some sparse linear algebra routines from the
 Harwell Subroutine Library.
 
@@ -352,7 +352,7 @@ third party code.
 
 Note: Whereas currently obtaining MA27 is essential for using \Ipopt,
 MC19 could be omitted (with the consequence that you cannot use this
-method for scaling the linear systems arsing inside the \Ipopt\
+method for scaling the linear systems arising inside the \Ipopt\
 algorithm).
 
 \subsection{Compiling and Installing \Ipopt} \label{sec.comp_and_inst}
@@ -361,7 +361,7 @@ algorithm).
   configure}, {\tt make}, {\tt make install} commands.  Below are the
 basic steps that should work on most systems.  For special
 compilations and some for troubleshooting see
-Appendix~\ref{ExpertInstall} and consult the \Ipopt\ webpage before
+Appendix~\ref{ExpertInstall} and consult the \Ipopt\ homepage before
 submitting a ticket or sending a message to the mailing list.
 \begin{enumerate}
 \item Go to the main directory of \Ipopt:\\
@@ -402,7 +402,7 @@ submitting a ticket or sending a message to the mailing list.
 \subsection{Installation on Windows}\label{WindowsInstall}
 
 There are two ways to install \Ipopt\ on Windows systems.  The first
-option, described in ection~\ref{CygwinInstall}, is to use Cygwin (see
+option, described in Section~\ref{CygwinInstall}, is to use Cygwin (see
 \texttt{www.cygwin.com}), which offers a UNIX-like environment
 on Windows and in which the installation procedure described earlier
 in this section can be used.  The \Ipopt\ distribution also includes
@@ -1120,7 +1120,7 @@ gradient of the objective with respect to {\tt x[2]} should be put in
 
 The boolean variable {\tt new\_x} will be false if the last call to
 any of the evaluation methods used the same $x$ values. This can be
-helpful when users have efficient implementations that caclulate
+helpful when users have efficient implementations that calculate
 multiple outputs at once. \Ipopt\ internally caches results from the
 {\tt TNLP} and generally, this flag can be ignored.
 
@@ -1230,7 +1230,7 @@ jCol} arguments will be NULL;
 
 The boolean variable {\tt new\_x} will be false if the last call to
 any of the evaluation methods used the same $x$ values. This can be
-helpful when users have efficient implementations that caclulate
+helpful when users have efficient implementations that calculate
 multiple outputs at once. \Ipopt\ internally caches results from the
 {\tt TNLP} and generally, this flag can be ignored.
 
@@ -1323,7 +1323,7 @@ used when specifying the structure). In this case, the {\tt iRow} and
 The boolean variables {\tt new\_x} and {\tt new\_lambda} will both be
 false if the last call to any of the evaluation methods used the same
 values. This can be helpful when users have efficient implementations
-that caclulate multiple outputs at once. \Ipopt\ internally caches
+that calculate multiple outputs at once. \Ipopt\ internally caches
 results from the {\tt TNLP} and generally, this flag can be ignored.
 
 The index variables {\tt n}, {\tt m}, and {\tt nele\_hess} are passed
@@ -1653,7 +1653,7 @@ In order to solve an optimization problem with the C interface, one
 has to create an {\tt IpoptProblem}\footnote{{\tt IpoptProblem} is a
   pointer to a C structure; you should not access this structure
   directly, only through the functions provided in the C interface.}
-with the function {\tt CreateIpoptProblem}, which lateron has to be
+with the function {\tt CreateIpoptProblem}, which later has to be
 passed to the {\tt IpoptSolve} function.
 
 The {\tt IpoptProblem} created by {\tt CreateIpoptProblem} contains
@@ -1679,7 +1679,7 @@ Note the additional argument of type {\tt UserDataPtr} in the callback
 functions.  This pointer argument is available for you to communicate
 information between the main program that calls {\tt IpoptSolve} and
 any of the callback functions.  This pointer is simply passed
-unmodified by \Ipopt\ amoung those functions.  For example, you can
+unmodified by \Ipopt\ among those functions.  For example, you can
 use this to pass constants that define the optimization problem and
 are computed before the optimization in the main C program to the
 callback functions.
@@ -1932,7 +1932,7 @@ The only special things to consider are:
 
   The last argument of the {\tt EV\_*} subroutines, {\tt IERR}, is to
   be set to 0 by the users on return, unless there was a problem
-  during the evaluation of the optimnization problem
+  during the evaluation of the optimization problem
   function/derivative for the given point {\tt X} (then it should
   return a non-zero value).
 \end{itemize}
@@ -1941,13 +1941,13 @@ The only special things to consider are:
 \section{\Ipopt\ Options}\label{sec.options}
 Ipopt has many (maybe too many) options that can be adjusted for the
 algorithm.  Options are all identified by a string name and their
-values can be of one of three types, Number (real), Integer, or
+values can be of one of three types: Number (real), Integer, or
 String. Number options are used for things like tolerances, integer
 options are used for things like maximum number of iterations, and
 string options are used for setting algorithm details, like the NLP
 scaling method. Options can be set through code, through the AMPL
 interface if you are using AMPL, or by creating a {\tt PARAMS.DAT}
-file in the directory you are executing Ipopt.
+file in the directory you are executing \Ipopt.
 
 The {\tt PARAMS.DAT} file is read line by line and each line should
 contain the option name, followed by whitespace, and then the
@@ -1964,7 +1964,6 @@ mu_init 1e-2
 
 # Set the max number of iterations
 max_iter 500
-
 \end{verbatim}
 is a valid {\tt PARAMS.DAT} file.
 
@@ -1974,8 +1973,8 @@ how this is done.
 A subset of \Ipopt\ options are available through AMPL. To set options
 through AMPL, use the internal AMPL command {\tt options}.  For
 example, \\ 
-{\tt options ipopt ``nlp\_scaling\_method=none mu\_init=1e-2
-max\_iter=500''} \\ 
+{\tt options ipopt "nlp\_scaling\_method=none mu\_init=1e-2
+max\_iter=500"} \\ 
 is a valid options command in AMPL. The most common
 options are referenced in Appendix~\ref{app.options_ref}. These are also
 the options that are available through AMPL using the {\tt options}
@@ -1988,7 +1987,7 @@ values in {\tt PARAMS.DAT}.
 For a short list of the valid options, see the Appendix
 \ref{app.options_ref}. You can print the documentation for all \Ipopt\
 options by adding the option, \\ {\tt print\_options\_documentation
-yes} \\ and running \Ipopt\ (like the Ampl executable, for
+yes} \\ and running \Ipopt\ (like the AMPL executable, for
 instance). This will output all of the options documentation to the
 console.
 
@@ -2018,9 +2017,9 @@ will be appended to the iteration number.
 \item[{\tt objective}:] The unscaled objective value at the current point. In restoration, this value remains the unscaled objective value for the original problem.
 \item[{\tt inf\_pr}:] The scaled primal infeasibility at the current point. In restoration, this value is the primal infeasibility of the original problem at the current point.
 \item[{\tt inf\_du}:] The scaled dual infeasibility at the current point. In restoration, this is the value of the dual infeasibility for the restoration problem.
-\item[{\tt lg(mu)}:] The value of the barrier parameter mu ($log_{10}$).
+\item[{\tt lg(mu)}:] $\log_{10}$ of the value of the barrier parameter mu.
 \item[{\tt ||d||}:] The infinity norm (max) of the primal step (in x and s). In restoration, this value includes the values of the additional variables, $p$ and $n$.
-\item[{\tt lg(rg)}:] The value of the regularization term for the Hessian of the Lagrangian ($log_{10}$).
+\item[{\tt lg(rg)}:] $\log_{10}$ of the value of the regularization term for the Hessian of the Lagrangian in the augmented system.
 \item[{\tt alpha\_du}:] The stepsize for the dual variables.
 \item[{\tt alpha\_pr}:] The stepsize for the primal variables.
 \item[{\tt ls}:] The number of backtracking line search steps.
@@ -2032,72 +2031,78 @@ is a list of the possible return codes, their corresponding output message
 to the console, and a brief description.
 \begin{description}
 \item[{\tt Solve\_Succeeded}:] $\;$ \\
-Console Message: {\tt EXIT: Optimal Solution Found.} \\
-This message indicates that \Ipopt\ found a (locally) optimal
-point within the desired tolerances.
+  Console Message: {\tt EXIT: Optimal Solution Found.} \\
+  This message indicates that \Ipopt\ found a (locally) optimal point
+  within the desired tolerances.
 \item[{\tt Solved\_To\_Acceptable\_Level}:]  $\;$ \\
-Console Message: {\tt EXIT: Solved To Acceptable Level.} \\
-This indicates that was not converged to the desired tolerances, but was
-converged to an acceptable level as specified by {\tt acceptable-*}
-options. This may happen if the desired tolerances are too small for the
-current problem.
+  Console Message: {\tt EXIT: Solved To Acceptable Level.} \\
+  This indicates that was not converged to the desired tolerances, but
+  was converged to an acceptable level as specified by {\tt
+    acceptable-*} options. This may happen if the desired tolerances
+  are too small for the current problem.
 \item[{\tt Infeasible\_Problem\_Detected}:]  $\;$ \\
-Console Message: {\tt EXIT: Converged to a point of 
-local infeasibility. Problem may be infeasible.} \\
-The restoration phase converged to a point that was not feasible for the 
-original problem. This indicates that the problem may be infeasible, or that
-the algorithm is stuck at a locally infeasible point. 
+  Console Message: {\tt EXIT: Converged to a point of
+    local infeasibility. Problem may be infeasible.} \\
+  The restoration phase converged to a point that is a minimizer for
+  the constraint violation (in the $\ell_1$-norm), but is not feasible
+  for the original problem. This indicates that the problem may be
+  infeasible (or at least that the algorithm is stuck at a locally
+  infeasible point).  The returned point (the minimizer of the
+  constraint violation) might help you to find which constraint is
+  causing the problem.  If you believe that the NLP is feasible,
+  it might help to start the optimization from a different point.
 \item[{\tt Search\_Direction\_Becomes\_Too\_Small}:]  $\;$ \\
-Console Message: {\tt EXIT: Search Direction is becoming Too Small.} \\
-This indicates that \Ipopt\ is calculating very small step sizes and 
-making very little progress. 
-This could happen if the problem has been solved to the best numerical 
-accuracy possible given the current scaling.
+  Console Message: {\tt EXIT: Search Direction is becoming Too Small.} \\
+  This indicates that \Ipopt\ is calculating very small step sizes and
+  making very little progress.  This could happen if the problem has
+  been solved to the best numerical accuracy possible given the
+  current scaling.
 \item[{\tt Maximum\_Iterations\_Exceeded}:]  $\;$ \\
-Console Message: {\tt EXIT: Maximum Number of Iterations Exceeded.} \\
-This indicates that \Ipopt\ has exceeded the maximum number of 
-iterations as specified by the option {\tt max\_iter}.
+  Console Message: {\tt EXIT: Maximum Number of Iterations Exceeded.} \\
+  This indicates that \Ipopt\ has exceeded the maximum number of
+  iterations as specified by the option {\tt max\_iter}.
 \item[{\tt Restoration\_Failed}:]  $\;$ \\
-Console Message: {\tt EXIT: Restoration Failed!} \\
-This indicates that the restoration phase failed to find
-a feasible point that was acceptable to the filter line
-search for the original problem. This could happen if the
-problem is highly degenerate or if your NLP provides incorrect
-derivative information.
+  Console Message: {\tt EXIT: Restoration Failed!} \\
+  This indicates that the restoration phase failed to find a feasible
+  point that was acceptable to the filter line search for the original
+  problem. This could happen if the problem is highly degenerate or if
+  your NLP provides incorrect derivative information.
 \item[{\tt Invalid\_Option}:]  $\;$ \\
-Console Message: (details about the particular error 
-will be output to the console) \\
-This indicates that there was some problem specifying the options. See the
-specific message for details.
+  Console Message: (details about the particular error
+  will be output to the console) \\
+  This indicates that there was some problem specifying the options.
+  See the specific message for details.
 \item[{\tt Not\_Enough\_Degrees\_Of\_Freedom}:]  $\;$ \\
-Console Message: {\tt EXIT: Problem has too few degrees of freedom.} \\
-This indicates that your problem, as specified, has too few degrees of
-freedom. This can happen if you have too many constraints, or if you 
-fix too many variables (\Ipopt\ removes fixed variables).
+  Console Message: {\tt EXIT: Problem has too few degrees of freedom.} \\
+  This indicates that your problem, as specified, has too few degrees
+  of freedom. This can happen if you have too many equality
+  constraints, or if you fix too many variables (\Ipopt\ removes fixed
+  variables).
 \item[{\tt Invalid\_Problem\_Definition}:]  $\;$ \\
-Console Message: (no console message, this is a return code for the 
-C and Fortran interfaces only.) \\
-This indicates that there was an exception of some sort when building 
-the {\tt IpoptProblem} structure in the C or Fortran interface. Likely
-there is an error in your model or the {\tt main} routine.
+  Console Message: (no console message, this is a return code for the
+  C and Fortran interfaces only.) \\
+  This indicates that there was an exception of some sort when
+  building the {\tt IpoptProblem} structure in the C or Fortran
+  interface. Likely there is an error in your model or the {\tt main}
+  routine.
 \item[{\tt Unrecoverable\_Exception}:]  $\;$ \\
-Console Message: (details about the particular error 
-will be output to the console) \\
-This indicates that \Ipopt\ has thrown an exception that does 
-not have an internal return code. See the specific message for details.
+  Console Message: (details about the particular error
+  will be output to the console) \\
+  This indicates that \Ipopt\ has thrown an exception that does not
+  have an internal return code. See the specific message for details.
 \item[{\tt NonIpopt\_Exception\_Thrown}:]  $\;$ \\
-Console Message: {\tt Unknown Exception caught in Ipopt} \\
-An unknown exception was caught in Ipopt. This exception could
-have originated from your model or any linked in third party code.
+  Console Message: {\tt Unknown Exception caught in Ipopt} \\
+  An unknown exception was caught in \Ipopt. This exception could have
+  originated from your model or any linked in third party code.
 \item[{\tt Insufficient\_Memory}:]  $\;$ \\
-Console Message: {\tt EXIT: Not enough memory.} \\
-An error occurred while trying to allocate memory. The problem may
-be too large for your current memory and swap configuration.
+  Console Message: {\tt EXIT: Not enough memory.} \\
+  An error occurred while trying to allocate memory. The problem may
+  be too large for your current memory and swap configuration.
 \item[{\tt Internal\_Error}:]  $\;$ \\
-Console Message: {\tt EXIT: INTERNAL ERROR: Unknown SolverReturn 
-value - Notify IPOPT Authors.} \\
-An unknown internal error has occurred. Please Notify the 
-authors of \Ipopt.
+  Console Message: {\tt EXIT: INTERNAL ERROR: Unknown SolverReturn
+    value - Notify IPOPT Authors.} \\
+  An unknown internal error has occurred. Please notify the authors of
+  \Ipopt.
 
 \end{description}
 
@@ -2265,28 +2270,29 @@ row     		&       col     	&       value 			    \\
 \newpage
 \section{The Smart Pointer Implementation: {\tt SmartPtr<T>}} \label{app.smart_ptr}
 
-The SmartPtr class is described in {\tt IpSmartPtr.hpp}. It is a
+The {\tt SmartPtr} class is described in {\tt IpSmartPtr.hpp}. It is a
 template class that takes care of deleting objects for us so we need
 not be concerned about memory leaks. Instead of pointing to an object
-with a raw C++ pointer (e.g. {\tt HS071\_NLP*}), we use a SmartPtr.
-Every time a SmartPtr is set to reference an object, it increments a
-counter in that object (see the ReferencedObject base class if you are
-interested). If a SmartPtr is done with the object, either by leaving
-scope or being set to point to another object, the counter is
-decremented. When the count of the object goes to zero, the object is
-automatically deleted. SmartPtr's are very simple, just use them as
-you would a standard pointer.
+with a raw C++ pointer (e.g. {\tt HS071\_NLP*}), we use a {\tt
+  SmartPtr}.  Every time a {\tt SmartPtr} is set to reference an
+object, it increments a counter in that object (see the {\tt
+  ReferencedObject} base class if you are interested). If a {\tt
+  SmartPtr} is done with the object, either by leaving scope or being
+set to point to another object, the counter is decremented. When the
+count of the object goes to zero, the object is automatically deleted.
+{\tt SmartPtr}'s are very simple, just use them as you would a
+standard pointer.
 
-It is very important to use SmartPtr's instead of raw pointers when
-passing objects to \Ipopt. Internally, \Ipopt\ uses smart pointers for
-referencing objects. If you use a raw pointer in your executable, the
-object's counter will NOT get incremented. Then, when \Ipopt\ uses smart
-pointers inside its own code, the counter will get
+It is very important to use {\tt SmartPtr}'s instead of raw pointers
+when passing objects to \Ipopt. Internally, \Ipopt\ uses smart
+pointers for referencing objects. If you use a raw pointer in your
+executable, the object's counter will NOT get incremented. Then, when
+\Ipopt\ uses smart pointers inside its own code, the counter will get
 incremented. However, before \Ipopt\ returns control to your code, it
 will decrement as many times as it incremented and the counter will
-return to zero. Therefore, \Ipopt\ will delete the object. When control
-returns to you, you now have a raw pointer that points to a deleted
-object.
+return to zero. Therefore, \Ipopt\ will delete the object. When
+control returns to you, you now have a raw pointer that points to a
+deleted object.
 
 This might sound difficult to anyone not familiar with the use of
 smart pointers, but just follow one simple rule; always use a SmartPtr
@@ -2341,7 +2347,9 @@ Below a few particular options are discussed:
 
 \item Similarly, if you have a precompiled library containing the
   Harwell Subroutines, you can specify its location with the
-  \verb|--with-hsl| flag.
+  \verb|--with-hsl| flag.  And the location of the AMPL solver library
+  (with the ASL header files) can be specified with
+  \verb|--with-asldir|.
 
 \item If you want to specify that you want to use particular
   compilers, you can do so by adding the variables definitions for
@@ -2369,7 +2377,7 @@ Below a few particular options are discussed:
   If you have problems linking your Fortran or C code with the \Ipopt\
   library {\tt libipopt.a} and the linker complains about missing
   symbols from C++ (e.g., the standard template library), you should
-  specify the C++ libraries with the CXXLIBS variable.  To find out
+  specify the C++ libraries with the {\tt CXXLIBS} variable.  To find out
   what those libraries are, it is probably helpful to link a C++
   program with verbose compiler output.
 
@@ -2378,7 +2386,7 @@ Below a few particular options are discussed:
 
   {\tt ./configure CC=icc F77=ifort CXX=icpc $\backslash$\\ \hspace*{14ex} CXXLIBS='-L/usr/lib/gcc-lib/i386-redhat-linux/3.2.3 -lstdc++'}
 
-\item Compilation in 64bit sometimes requires some espicial
+\item Compilation in 64bit sometimes requires some special
   consideration.  For example, for compilation of 64bit code on AIX,
   we recommend the following configuration
 
@@ -2395,8 +2403,8 @@ Below a few particular options are discussed:
   example the case for some older compilers on SGI and SUN.  For this,
   the {\tt configure} variables {\tt AR}, {\tt ARFLAGS}, and {\tt
     AR\_X} are provided.  Here, {\tt AR} specifies the command for the
-  archiver for creating an archive, and {\tt ARFLAGS} speficies
-  additional flags.  {\tt AR\_X} contains the command for extracing
+  archiver for creating an archive, and {\tt ARFLAGS} specifies
+  additional flags.  {\tt AR\_X} contains the command for extracting
   all files from an archive.  For example, the default setting for SUN
   compilers for our configure script is
 
@@ -2409,6 +2417,18 @@ Below a few particular options are discussed:
   checks are compiled into the code.  This usually leads to a
   significant slowdown of the code, but might be helpful when
   debugging something.
+
+\item It is not necessary to produce the binary files in the
+  directories where the source files are.  If you want to compile the
+  code on different systems on a shared file system, you can keep one
+  single copy of the source files in one directory, and the binary
+  files for each configuration in separate directories.  For this,
+  simply run the configure script in the directory where you want the
+  base directory for the \Ipopt\ binary files.  For example:
+
+  {\tt \$ mkdir \$HOME/Ipopt-objects}\\
+  {\tt \$ cd \$HOME/Ipopt-objects}\\
+  {\tt \$ \$HOME/Ipopt/trunk/configure}
 
 \end{itemize}
 

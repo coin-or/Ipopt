@@ -190,8 +190,8 @@ namespace Ipopt
       std::string buff;
       MakeValidLatexString(default_string_, buff);
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-		   "\nThe default value for this string option is \"%s\".\n",
-		   buff.c_str());
+                   "\nThe default value for this string option is \"%s\".\n",
+                   buff.c_str());
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\\\ \nPossible values:\n");
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\begin{itemize}\n");

@@ -327,8 +327,6 @@ namespace Ipopt
     options.GetIntegerValue("watchdog_trial_iter_max", watchdog_trial_iter_max_, prefix);
     options.GetIntegerValue("watchdog_shortened_iter_trigger", watchdog_shortened_iter_trigger_, prefix);
 
-    // ToDo decide if also the PDSystemSolver should be initialized here...
-
     rigorous_ = true;
     skipped_line_search_ = false;
     tiny_step_last_iteration_ = false;

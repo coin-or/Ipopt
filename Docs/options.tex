@@ -6,20 +6,6 @@ $0 \le {\tt print\_level } \le 10$
 and its default value is $3$.
 
 
-\paragraph{pivtol:} Pivot tolerance for the linear solver MA27. $\;$ \\
- A smaller number pivots for sparsity, a larger
-number pivots for stability. The valid range for this real option is 
-$0 <  {\tt pivtol } <  1$
-and its default value is $1 \cdot 10^{-08}$.
-
-
-\paragraph{pivtolmax:} Maximum pivot tolerance. $\;$ \\
- Ipopt may increase pivtol as high as pivtolmax to
-get a more accurate solution to the linear system. The valid range for this real option is 
-$0 <  {\tt pivtolmax } <  1$
-and its default value is $0.0001$.
-
-
 \paragraph{tol:} Desired convergence tolerance (relative). $\;$ \\
  Determines the convergence tolerance for the
 algorithm.  The algorithm terminates
@@ -74,6 +60,20 @@ Successful termination requires that the
 (unscaled) constraint violation is less than this
 threshold. The valid range for this real option is 
 $0 <  {\tt constr\_viol\_tol } <  {\tt +inf}$
+and its default value is $0.0001$.
+
+
+\paragraph{pivtol:} Pivot tolerance for the linear solver MA27. $\;$ \\
+ A smaller number pivots for sparsity, a larger
+number pivots for stability. The valid range for this real option is 
+$0 <  {\tt pivtol } <  1$
+and its default value is $1 \cdot 10^{-08}$.
+
+
+\paragraph{pivtolmax:} Maximum pivot tolerance. $\;$ \\
+ Ipopt may increase pivtol as high as pivtolmax to
+get a more accurate solution to the linear system. The valid range for this real option is 
+$0 <  {\tt pivtolmax } <  1$
 and its default value is $0.0001$.
 
 

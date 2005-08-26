@@ -414,7 +414,7 @@ namespace Ipopt
     else {
       Index numberOfEVals=rhs.y_c()->Dim()+rhs.y_d()->Dim();
       // counter for the number of trial evaluations
-      // (ToDo is not at the corrent place)
+      // (ToDo is not at the correct place)
       Index count = 0;
 
       // Get the very first perturbation values from the perturbation

@@ -204,9 +204,6 @@ namespace Ipopt
         *IpNLP().Px_L(),
         *IpNLP().Px_U());
 
-    // ToDo: Don't see why this line is required
-    //    IpData().SetTrialPrimalVariablesFromPtr(new_x, new_s);
-
     // Push the primal s variables
     DefaultIterateInitializer::push_variables(Jnlst(),
         warm_start_bound_push_,

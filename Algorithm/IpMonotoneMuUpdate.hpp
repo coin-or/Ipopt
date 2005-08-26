@@ -35,11 +35,11 @@ namespace Ipopt
     virtual bool InitializeImpl(const OptionsList& options,
                                 const std::string& prefix);
 
-    /** Method for determining the barrier parameter for the next iteration.
-     *  When the optimality error for the current barrier parameter is less than
-     *  a tolerance, the barrier parameter is reduced, and the Reset method of the
-     *  LineSearch object linesearch is called.
-     *  TODO: MORE DETAILS HERE */
+    /** Method for determining the barrier parameter for the next
+     *  iteration.  When the optimality error for the current barrier
+     *  parameter is less than a tolerance, the barrier parameter is
+     *  reduced, and the Reset method of the LineSearch object
+     *  linesearch is called. */
     virtual void UpdateBarrierParameter();
 
     /** Methods for IpoptType */
