@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,18 +9,22 @@
 #include "IpMonotoneMuUpdate.hpp"
 #include "IpJournalist.hpp"
 
-#ifdef OLD_C_HEADERS
-# include <math.h>
-#else
+#ifdef HAVE_CMATH
 # include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 namespace Ipopt
 {
 
-  DBG_SET_VERBOSITY(0);
-
-  DefineIpoptType(MonotoneMuUpdate);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   MonotoneMuUpdate::MonotoneMuUpdate(const SmartPtr<LineSearch>& linesearch)
       :
@@ -39,7 +43,7 @@ namespace Ipopt
                    dbg_verbosity);
   }
 
-  void MonotoneMuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  void MonotoneMuUpdate::RegisterOptions(const SmartPtr<RegisteredOptions>& roptions)
   {
     roptions->AddLowerBoundedNumberOption(
       "mu_init", "Initial value for the barrier parameter.",
@@ -47,17 +51,17 @@ namespace Ipopt
       0.1,
       "This option determines the initial value for the barrier parameter "
       "(mu).  It is only relevant in the monotone, Fiacco-McCormick "
-      "version of the algorithm., i.e., if \"mu_strategy\" is chosen "
-      "as \"monotone\"");
+      "version of the algorithm. (i.e., if \"mu_strategy\" is chosen "
+      "as \"monotone\")");
     roptions->AddLowerBoundedNumberOption(
       "barrier_tol_factor",
       "Factor for mu in barrier stop test.",
       0.0, true,
       10.0,
       "The convergence tolerance for each barrier problem in the montone mode "
-      "is the value of the barrier parameter times this value. This option is "
-      "also used in class \"AdaptiveMuUpdate\" during the monotone mode. "
-      "(This is kappa_epsilon in implementation paper).");
+      "is the value of the barrier parameter times \"barrier_tol_factor\". "
+      "This option is also used in the adaptive mu strategy during the "
+      "monotone mode. (This is kappa_epsilon in implementation paper).");
     roptions->AddBoundedNumberOption(
       "mu_linear_decrease_factor",
       "Determines linear decrease rate of barrier parameter.",
@@ -66,8 +70,8 @@ namespace Ipopt
       "For the Fiacco-McCormick update procedure the new barrier parameter mu "
       "is obtained by taking the minimum of mu*\"mu_linear_decrease_factor\" "
       "and mu^\"superlinear_decrease_power\".  (This is kappa_mu in "
-      "implementation paper.) [This option is also used in "
-      "AdaptiveMuUpdate]");
+      "implementation paper.) This option is also used in the adaptive mu "
+      "strategy during the monotone mode.");
     roptions->AddBoundedNumberOption(
       "mu_superlinear_decrease_power",
       "Determines superlinear decrease rate of barrier parameter.",
@@ -76,15 +80,15 @@ namespace Ipopt
       "For the Fiacco-McCormick update procedure the new barrier parameter mu "
       "is obtained by taking the minimum of mu*\"mu_linear_decrease_factor\" "
       "and mu^\"superlinear_decrease_power\".  (This is theta_mu in "
-      "implementation paper.) [This option is also used in "
-      "AdaptiveMuUpdate]");
+      "implementation paper.) This option is also used in the adaptive mu "
+      "strategy during the monotone mode.");
     roptions->AddBoundedNumberOption(
       "tau_min",
       "Lower bound on fraction-to-the-boundary parameter tau.",
       0.0, true, 1.0, true,
       0.99,
-      "(This is tau_min in implementation paper.) [This option is also "
-      "used in AdaptiveMuUpdate]");
+      "(This is tau_min in implementation paper.)  This option is also used "
+      "in the adaptive mu strategy during the monotone mode.");
   }
 
   bool MonotoneMuUpdate::InitializeImpl(const OptionsList& options,

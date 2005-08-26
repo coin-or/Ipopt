@@ -1,16 +1,15 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2004-11-05
 
 #ifndef __MYNLP_HPP__
 #define __MYNLP_HPP__
 
 #include "IpTNLP.hpp"
-#include "IpUtils.hpp"
 
 using namespace Ipopt;
 
@@ -39,7 +38,7 @@ public:
   //@{
   /** Method to return some info about the nlp */
   virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-                            Index& nnz_h_lag);
+                            Index& nnz_h_lag, IndexStyleEnum& index_style);
 
   /** Method to return the bounds for my problem */
   virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,

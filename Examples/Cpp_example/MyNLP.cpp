@@ -1,10 +1,10 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2004-11-05
 
 #include "MyNLP.hpp"
 
@@ -17,7 +17,8 @@ MyNLP::MyNLP()
 MyNLP::~MyNLP()
 {}
 
-bool MyNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, Index& nnz_h_lag)
+bool MyNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, 
+			 Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
   // The problem described in MyNLP.hpp has 2 variables, x1, & x2,
   n = 2;
@@ -32,6 +33,9 @@ bool MyNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, Index& nnz_h_lag)
   // (one in the hessian of the objective for x2,
   //  and one in the hessian of the constraints for x1)
   nnz_h_lag = 2;
+
+  // We use the standard fortran index style for row/col entries
+  index_style = FORTRAN_STYLE;
 
   return true;
 }

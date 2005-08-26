@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -13,9 +13,9 @@
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
-
-  DefineIpoptType(MinC_1NrmRestorationPhase);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   MinC_1NrmRestorationPhase::MinC_1NrmRestorationPhase
   (IpoptAlgorithm& resto_alg,
@@ -35,7 +35,7 @@ namespace Ipopt
   {
     roptions->AddLowerBoundedNumberOption(
       "bound_mult_reset_threshold",
-      "Threshold for resetting bound multipliers after restoration phase.",
+      "Threshold for resetting bound multipliers after the restoration phase.",
       0.0, false,
       1e3,
       "After returning from the restoration phase, the bound multipliers are "
@@ -72,10 +72,17 @@ namespace Ipopt
                          expect_infeasible_problem_,
                          prefix);
 
-    // ToDo take care of this somewhere else?  avoid that the
-    // restoration phase is trigged by user option in first iteration
-    // of the restoration phase
-    resto_options_->SetValue("resto.start_with_resto", "no");
+    // Avoid that the restoration phase is trigged by user option in
+    // first iteration of the restoration phase
+    resto_options_->SetStringValue("resto.start_with_resto", "no");
+
+    // We want the default for the theta_max_fact in the restoration
+    // phase higher than for the regular phase
+    Number theta_max_fact;
+    if (!options.GetNumericValue("resto.theta_max_fact",
+                                 theta_max_fact, "")) {
+      resto_options_->SetNumericValue("resto.theta_max_fact", 1e8);
+    }
 
     count_restorations_ = 0;
 
@@ -158,20 +165,7 @@ namespace Ipopt
                        "Number of Iterations = %d\n", resto_ip_data->iter_count());
       }
       if (Jnlst().ProduceOutput(J_VECTOR, J_LINE_SEARCH)) {
-        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "x", *resto_ip_data->curr()->x());
-        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "y_c", *resto_ip_data->curr()->y_c());
-        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "y_d", *resto_ip_data->curr()->y_d());
-        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "z_L", *resto_ip_data->curr()->z_L());
-        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "z_U", *resto_ip_data->curr()->z_U());
-        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "v_L", *resto_ip_data->curr()->v_L());
-        Jnlst().PrintVector(J_VECTOR, J_LINE_SEARCH,
-                            "v_U", *resto_ip_data->curr()->v_U());
+        resto_ip_data->curr()->Print(Jnlst(), J_VECTOR, J_LINE_SEARCH, "curr");
       }
 
       retval = 0;

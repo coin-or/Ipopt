@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -7,9 +7,17 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpJournalist.hpp"
-#include "IpVector.hpp"
-#include "IpMatrix.hpp"
-#include <stdio.h>
+#include "IpDebug.hpp"
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -109,39 +117,39 @@ namespace Ipopt
     va_end(ap);
   }
 
-  void Journalist::PrintVector(EJournalLevel level,
-                               EJournalCategory category,
-                               const std::string& name,
-                               const Vector& vector,
-                               Index indent,
-                               const std::string prefix) const
-  {
-    // print the msg on every journal that accepts
-    // the category and output level
-    for (Index i=0; i<(Index)journals_.size(); i++) {
-      if (journals_[i]->IsAccepted(category, level)) {
-        // print the message
-        journals_[i]->PrintVector(name, vector, indent, prefix);
-      }
-    }
-  }
+  //   void Journalist::PrintVector(EJournalLevel level,
+  //                                EJournalCategory category,
+  //                                const std::string& name,
+  //                                const Vector& vector,
+  //                                Index indent,
+  //                                const std::string prefix) const
+  //   {
+  //     // print the msg on every journal that accepts
+  //     // the category and output level
+  //     for (Index i=0; i<(Index)journals_.size(); i++) {
+  //       if (journals_[i]->IsAccepted(category, level)) {
+  //         // print the message
+  //         journals_[i]->PrintVector(name, vector, indent, prefix);
+  //       }
+  //     }
+  //   }
 
-  void Journalist::PrintMatrix(EJournalLevel level,
-                               EJournalCategory category,
-                               const std::string& name,
-                               const Matrix& matrix,
-                               Index indent /*=0*/,
-                               std::string prefix /*=""*/) const
-  {
-    // print the msg on every journal that accepts
-    // the category and output level
-    for (Index i=0; i<(Index)journals_.size(); i++) {
-      if (journals_[i]->IsAccepted(category, level)) {
-        // print the message
-        journals_[i]->PrintMatrix(name, matrix, indent, prefix);
-      }
-    }
-  }
+  //   void Journalist::PrintMatrix(EJournalLevel level,
+  //                                EJournalCategory category,
+  //                                const std::string& name,
+  //                                const Matrix& matrix,
+  //                                Index indent /*=0*/,
+  //                                std::string prefix /*=""*/) const
+  //   {
+  //     // print the msg on every journal that accepts
+  //     // the category and output level
+  //     for (Index i=0; i<(Index)journals_.size(); i++) {
+  //       if (journals_[i]->IsAccepted(category, level)) {
+  //         // print the message
+  //         journals_[i]->PrintMatrix(name, matrix, indent, prefix);
+  //       }
+  //     }
+  //   }
 
   void Journalist::VPrintf(
     EJournalLevel level,
@@ -153,10 +161,16 @@ namespace Ipopt
     for (Index i=0; i<(Index)journals_.size(); i++) {
       if (journals_[i]->IsAccepted(category, level)) {
         // print the message
+#ifdef HAVE_VA_COPY
         va_list apcopy;
         va_copy(apcopy, ap);
         journals_[i]->Printf(pformat, apcopy);
         va_end(apcopy);
+#else
+
+        journals_[i]->Printf(pformat, ap);
+#endif
+
       }
     }
   }
@@ -178,10 +192,16 @@ namespace Ipopt
         }
 
         // print the message
+#ifdef HAVE_VA_COPY
         va_list apcopy;
         va_copy(apcopy, ap);
         journals_[i]->Printf(pformat, apcopy);
         va_end(apcopy);
+#else
+
+        journals_[i]->Printf(pformat, ap);
+#endif
+
       }
     }
   }
@@ -376,23 +396,23 @@ namespace Ipopt
     }
   }
 
-  void FileJournal::PrintVectorImpl(const std::string name, const Vector& vector, Index indent, std::string prefix)
-  {
-    DBG_START_METH("Journal::PrintVector", 0);
-    if (file_) {
-      vector.Print(file_, name, indent, prefix);
-      DBG_EXEC(0, fflush(file_));
-    }
-  }
+  //   void FileJournal::PrintVectorImpl(const std::string name, const Vector& vector, Index indent, std::string prefix)
+  //   {
+  //     DBG_START_METH("Journal::PrintVector", 0);
+  //     if (file_) {
+  //       vector.Print(file_, name, indent, prefix);
+  //       DBG_EXEC(0, fflush(file_));
+  //     }
+  //   }
 
-  void FileJournal::PrintMatrixImpl(const std::string name, const Matrix& matrix, Index indent, std::string prefix)
-  {
-    DBG_START_METH("Journal::PrintMatrix", 0);
-    if (file_) {
-      matrix.Print(file_, name, indent, prefix);
-      DBG_EXEC(0, fflush(file_));
-    }
-  }
+  //   void FileJournal::PrintMatrixImpl(const std::string name, const Matrix& matrix, Index indent, std::string prefix)
+  //   {
+  //     DBG_START_METH("Journal::PrintMatrix", 0);
+  //     if (file_) {
+  //       matrix.Print(file_, name, indent, prefix);
+  //       DBG_EXEC(0, fflush(file_));
+  //     }
+  //   }
 
   void FileJournal::FlushBufferImpl()
   {

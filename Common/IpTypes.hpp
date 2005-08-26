@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005, International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -13,14 +13,17 @@
 
 namespace Ipopt
 {
-
+  /** Type of all numbers */
   typedef double Number;
+  /** Type of all indices of vectors, matrices etc */
   typedef int Index;
+  /** Type of default integer */
   typedef int Int;
 
 } // namespace Ipopt
 
 // external to the Ipopt namespace
+/** Type of Fortran integer translated into C */
 typedef int ipfint;
 
 #endif

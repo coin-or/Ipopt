@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,9 +12,9 @@
 namespace Ipopt
 {
 
-  DBG_SET_VERBOSITY(0);
-
-  DefineIpoptType(IpoptData);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   IpoptData::IpoptData()
       :
@@ -40,19 +40,21 @@ namespace Ipopt
   IpoptData::~IpoptData()
   {}
 
-  void IpoptData::RegisterOptions(SmartPtr<RegisteredOptions> reg_options)
+  void IpoptData::RegisterOptions(const SmartPtr<RegisteredOptions>& roptions)
   {
-    reg_options->AddLowerBoundedNumberOption(
+    roptions->SetRegisteringCategory("Convergence");
+    roptions->AddLowerBoundedNumberOption(
       "tol",
-      "Convergence tolerance (relative).",
+      "Desired convergence tolerance (relative).",
       0.0, true,  1e-8,
-      "Determines the convergence tolerance for the algorthim.  The "
+      "Determines the convergence tolerance for the algorithm.  The "
       "algorithm terminates successfully, if the (scaled) NLP error "
       "becomes smaller than this value, and if the (absolute) criteria "
       "according to \"dual_inf_tol\", \"primal_inf_tol\", and "
       "\"cmpl_inf_tol\" are met.  (This is epsilon_tol in Eqn. (6) in "
-      "implementation paper).  [Some other algorithmic features also use "
-      "this quantity.]");
+      "implementation paper).  See also \"acceptable_tol\" as a second "
+      "termination criterion.  Note, some other algorithmic features also use "
+      "this quantity.");
   }
 
   bool IpoptData::Initialize(const Journalist& jnlst,
@@ -225,8 +227,6 @@ namespace Ipopt
     // still referring to it, and it makes sure that indeed all trial
     // values are set before a new trial point is accepted)
     trial_ = NULL;
-
-    // ToDo: Why don't we free the delta_ here?
 
     // Free the memory for the affine-scaling step
     delta_aff_ = NULL;

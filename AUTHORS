@@ -1,7 +1,7 @@
 Main authors:
 
-- Andreas Waechter (IBM)
-- Carl Laird (IBM, CMU)
+Andreas Waechter, project leader (IBM)
+Carl Laird (IBM, Carnegie Mellon University)
 
 
 Contributors:
@@ -10,3 +10,8 @@ Contributors:
 
   PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.hpp
   PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.cpp
+
+- Yoshiaki Kawajiri (Carnegie Mellon Univeristy):
+  First version of Latex documentation file
+
+  Docs/documentation.tex

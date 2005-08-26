@@ -1,4 +1,5 @@
-C Copyright (C) 2002, Carnegie Mellon University, Dominique Orban and others.
+C Copyright (C) 2002, 2004, 2005 Carnegie Mellon University,
+C                                Dominique Orban and others.
 C All Rights Reserved.
 C This code is published under the Common Public License.
 C*******************************************************************************
@@ -31,7 +32,7 @@ CCUS  PARAMETER( CUTE_NZMAX = 10000000 )
 C
 C     
 C
-      INTEGER N, M, NLB, NUB
+      INTEGER N, M
       DOUBLE PRECISION X( CUTE_NMAX )
       DOUBLE PRECISION X_L( CUTE_NMAX )
       DOUBLE PRECISION X_U( CUTE_NMAX )
@@ -42,11 +43,11 @@ C
       DOUBLE PRECISION G_U( CUTE_MMAX )
       DOUBLE PRECISION LAM( CUTE_MMAX )
 
-      INTEGER IERR
+      INTEGER IERR, IPSOLVE
+
+      INTEGER IPROBLEM, IPCREATE
+C64BIT     INTEGER*8 IPROBLEM, IPCREATE
 C
-C     Algorithmic Parameters
-C
-      integer OPTIONS, IPNEWOPTS
       integer NELE_JAC, NELE_HESS
 
       external EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS
@@ -101,16 +102,18 @@ C     Get problem name.
 C
       CALL CNAMES(N, M, PNAME, VNAMES, GNAMES)
 C
-C     Set algorithmic parameters
-C
-      OPTIONS = 0
-C
 C     Call IPOPT
 C
-      call IPOPT(N, X, X_L, X_U, M, G, G_L, G_U, NELE_JAC, NELE_HESS,
-     1     F, LAM, Z_L, Z_U, EV_F, EV_G, EV_GRAD_F, EV_JAC_G,
-     1     EV_HESS, OPTIONS, IDAT, DAT, IERR)
-      call IPDELOPTS(OPTIONS)
+      IPROBLEM = IPCREATE(N, X_L, X_U, M, G_L, G_U, NELE_JAC, NELE_HESS,
+     1     EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS)
+      if (IPROBLEM.eq.0) then
+         write(*,*) 'Error creating Ipopt Problem.'
+         stop
+      endif
+C
+      IERR = IPSOLVE(IPROBLEM, X, G, F, LAM, Z_L, Z_U, IDAT, DAT)
+C
+      call IPFREE(IPROBLEM)
 C
 C     Display CUTEr statistics
 C

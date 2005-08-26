@@ -1,0 +1,8 @@
+This file contain the log of changes for the main release branch (trunk).
+More detailed information for incremetal change can be found in the
+history management of subversion.
+
+
+
+2005-08-26 - version 3.0.0 - dev release number 510
+	First official release of the new C++ implementation of Ipopt.

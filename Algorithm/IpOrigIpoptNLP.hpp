@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,12 +11,9 @@
 
 #include "IpIpoptNLP.hpp"
 #include "IpException.hpp"
-#include "IpIpoptType.hpp"
 
 namespace Ipopt
 {
-
-  DeclareIpoptType(OrigIpoptNLP);
 
   /** This class maps the traditional NLP into
    *  something that is more useful by Ipopt.
@@ -63,8 +60,16 @@ namespace Ipopt
     /** Objective value */
     virtual Number f(const Vector& x);
 
+    /** Objective value (depending in mu) - incorrect version for
+     *  OrigIpoptNLP */
+    virtual Number f(const Vector& x, Number mu);
+
     /** Gradient of the objective */
     virtual SmartPtr<const Vector> grad_f(const Vector& x);
+
+    /** Gradient of the objective (depending in mu) - incorrect
+     *  version for OrigIpoptNLP */
+    virtual SmartPtr<const Vector> grad_f(const Vector& x, Number mu);
 
     /** Equality constraint residual */
     virtual SmartPtr<const Vector> c(const Vector& x);
@@ -85,6 +90,14 @@ namespace Ipopt
                                         const Vector& yc,
                                         const Vector& yd
                                        );
+
+    /** Hessian of the Lagrangian (depending in mu) - incorrect
+     *  version for OrigIpoptNLP */
+    virtual SmartPtr<const SymMatrix> h(const Vector& x,
+                                        Number obj_factor,
+                                        const Vector& yc,
+                                        const Vector& yd,
+                                        Number mu);
 
     /** Lower bounds on x */
     virtual SmartPtr<const Vector> x_L()

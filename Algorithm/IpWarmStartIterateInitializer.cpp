@@ -1,27 +1,32 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Andreas Waechter              IBM    2004-09-23
+// Authors:  Carl Laird, Andreas Waechter              IBM    2005-04-01
 
 #include "IpWarmStartIterateInitializer.hpp"
 #include "IpDefaultIterateInitializer.hpp"
 
 // ToDo make independent of DenseVector
 #include "IpDenseVector.hpp"
-#ifdef OLD_C_HEADERS
-# include <math.h>
-#else
+
+#ifdef HAVE_CMATH
 # include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
 #endif
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
-
-  DefineIpoptType(WarmStartIterateInitializer);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   WarmStartIterateInitializer::WarmStartIterateInitializer()
       :
@@ -36,9 +41,9 @@ namespace Ipopt
                                      0.0, true, 0.5, false, 1e-3);
     roptions->AddLowerBoundedNumberOption("warm_start_mult_bound_push", "same as mult_bound_push for the regular initializer",
                                           0.0, true, 1e-3);
-    roptions->AddNumberOption("warm_start_mult_init_max", "(No Range?) max initial value for the equality multipliers",
+    roptions->AddNumberOption("warm_start_mult_init_max", "Maximum initial value for the equality multipliers",
                               1e6);
-    roptions->AddNumberOption("warm_start_target_mu", "(No range?) - default value in code was 0e-3 ???",
+    roptions->AddNumberOption("warm_start_target_mu", "(No range?) default value in code was 0e-3 ???",
                               0e-3);
   }
 
@@ -69,19 +74,19 @@ namespace Ipopt
     // Get the intial values for x, y_c, y_d, z_L, z_U,
     IpData().InitializeDataStructures(IpNLP(), true, true, true, true, true);
 
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided x",
-                        *IpData().curr()->x());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided y_c",
-                        *IpData().curr()->y_c());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided y_d",
-                        *IpData().curr()->y_d());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided z_L",
-                        *IpData().curr()->z_L());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "user-provided z_U",
-                        *IpData().curr()->z_U());
+    IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                "user-provided x");
+    IpData().curr()->y_c()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                  "user-provided y_c");
+    IpData().curr()->y_d()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                  "user-provided y_d");
+    IpData().curr()->z_L()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                  "user-provided z_L");
+    IpData().curr()->z_U()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                  "user-provided z_U");
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_INITIALIZATION)) {
-      Jnlst().PrintVector(J_MOREVECTOR, J_INITIALIZATION, "d at user-provided x",
-                          *IpCq().curr_d());
+      IpCq().curr_d()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
+                             "d at user-provided x");
     }
 
     SmartPtr<Vector> tmp;
@@ -165,12 +170,6 @@ namespace Ipopt
       process_target_mu(-1., *IpData().trial()->s(), *IpCq().trial_slack_s_U(),
                         *IpData().curr()->v_U(), *IpNLP().Pd_U(),
                         new_s, new_v_U);
-      Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME new_s",
-                          *new_s);
-      Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME d_U",
-                          *IpNLP().d_U());
-      Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME new_v_U",
-                          *new_v_U);
 
       // Now submit the full modified point
       init_vec->Set_x(*new_x);
@@ -205,9 +204,6 @@ namespace Ipopt
         *IpNLP().Px_L(),
         *IpNLP().Px_U());
 
-    // ToDo: Don't see why this line is required
-    //    IpData().SetTrialPrimalVariablesFromPtr(new_x, new_s);
-
     // Push the primal s variables
     DefaultIterateInitializer::push_variables(Jnlst(),
         warm_start_bound_push_,
@@ -219,8 +215,6 @@ namespace Ipopt
         *IpNLP().d_U(),
         *IpNLP().Pd_L(),
         *IpNLP().Pd_U());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME new_s cor",
-                        *new_s);
 
     // Push the multipliers
     SmartPtr<Vector> new_z_L = IpData().curr()->z_L()->MakeNewCopy();
@@ -254,31 +248,31 @@ namespace Ipopt
     IpData().set_trial(init_vec);
     IpData().AcceptTrialPoint();
 
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial x",
-                        *IpData().curr()->x());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial s",
-                        *IpData().curr()->s());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial y_c",
-                        *IpData().curr()->y_c());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial y_d",
-                        *IpData().curr()->y_d());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial z_L",
-                        *IpData().curr()->z_L());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial z_U",
-                        *IpData().curr()->z_U());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial v_L",
-                        *IpData().curr()->v_L());
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "initial v_U",
-                        *IpData().curr()->v_U());
+    IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                "initial x");
+    IpData().curr()->s()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                "initial s");
+    IpData().curr()->y_c()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                  "initial y_c");
+    IpData().curr()->y_d()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                  "initial y_d");
+    IpData().curr()->z_L()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                  "initial z_L");
+    IpData().curr()->z_U()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                  "initial z_U");
+    IpData().curr()->v_L()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                  "initial v_L");
+    IpData().curr()->v_U()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                  "initial v_U");
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_INITIALIZATION)) {
-      Jnlst().PrintVector(J_MOREVECTOR, J_INITIALIZATION, "initial slack_x_L",
-                          *IpCq().curr_slack_x_L());
-      Jnlst().PrintVector(J_MOREVECTOR, J_INITIALIZATION, "initial slack_x_U",
-                          *IpCq().curr_slack_x_U());
-      Jnlst().PrintVector(J_MOREVECTOR, J_INITIALIZATION, "initial slack_s_L",
-                          *IpCq().curr_slack_s_L());
-      Jnlst().PrintVector(J_MOREVECTOR, J_INITIALIZATION, "initial slack_s_U",
-                          *IpCq().curr_slack_s_U());
+      IpCq().curr_slack_x_L()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
+                                     "initial slack_x_L");
+      IpCq().curr_slack_x_U()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
+                                     "initial slack_x_U");
+      IpCq().curr_slack_s_L()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
+                                     "initial slack_s_L");
+      IpCq().curr_slack_s_U()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
+                                     "initial slack_s_U");
     }
 
     return true;
@@ -295,8 +289,6 @@ namespace Ipopt
     SmartPtr<Vector> new_slacks = curr_slacks.MakeNewCopy();
     SmartPtr<Vector> new_mults = curr_mults.MakeNewCopy();
     adapt_to_target_mu(*new_slacks, *new_mults, warm_start_target_mu_);
-    Jnlst().PrintVector(J_VECTOR, J_INITIALIZATION, "DELETEME new_slacks",
-                        *new_slacks);
     new_slacks->Axpy(-1, curr_slacks); // this is now correction step
     SmartPtr<Vector> new_vars = curr_vars.MakeNew();
     new_vars->Copy(curr_vars);

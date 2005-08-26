@@ -1,4 +1,4 @@
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2005 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -8,88 +8,109 @@
 
 AUTOMAKE_OPTIONS = foreign
 
+SUBDIRS = LinearSolvers
+
 noinst_LIBRARIES = libipoptalg.a
 
 libipoptalg_a_SOURCES = \
-	IpAlgBuilder.hpp IpAlgBuilder.cpp \
+	IpAdaptiveMuUpdate.cpp IpAdaptiveMuUpdate.hpp \
+	IpAlgBuilder.cpp IpAlgBuilder.hpp \
+	IpAlgorithmRegOp.cpp IpAlgorithmRegOp.hpp \
 	IpAlgStrategy.hpp \
+	IpAugRestoSystemSolver.cpp IpAugRestoSystemSolver.hpp \
+	IpAugSystemSolver.hpp \
 	IpConvCheck.hpp \
-	IpDefaultIterateInitializer.hpp IpDefaultIterateInitializer.cpp \
-	IpWarmStartIterateInitializer.hpp IpWarmStartIterateInitializer.cpp \
+	IpDefaultIterateInitializer.cpp IpDefaultIterateInitializer.hpp \
+	IpEqMultCalculator.hpp \
 	IpFilter.cpp IpFilter.hpp \
 	IpFilterLineSearch.cpp IpFilterLineSearch.hpp \
-	IpGradientScaling.hpp IpGradientScaling.cpp \
+	IpGradientScaling.cpp IpGradientScaling.hpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
 	IpIpoptData.cpp IpIpoptData.hpp \
-	IpIpoptNLP.hpp  \
+	IpIpoptNLP.hpp \
 	IpIterateInitializer.hpp \
-	IpIteratesVector.hpp IpIteratesVector.cpp \
+	IpIteratesVector.cpp IpIteratesVector.hpp \
 	IpIterationOutput.hpp \
+	IpLeastSquareMults.cpp IpLeastSquareMults.hpp \
 	IpLineSearch.hpp \
-	IpLoqoMuOracle.hpp IpLoqoMuOracle.cpp \
-	IpMonotoneMuUpdate.hpp IpMonotoneMuUpdate.cpp \
+	IpLoqoMuOracle.cpp IpLoqoMuOracle.hpp \
+	IpMonotoneMuUpdate.cpp IpMonotoneMuUpdate.hpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp \
-	IpAdaptiveMuUpdate.hpp IpAdaptiveMuUpdate.cpp \
-	IpNLPScaling.hpp IpNLPScaling.cpp \
+	IpNLPScaling.cpp IpNLPScaling.hpp \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \
 	IpOrigIpoptNLP.cpp IpOrigIpoptNLP.hpp \
-	IpOrigIterationOutput.hpp IpOrigIterationOutput.cpp \
-	IpProbingMuOracle.hpp IpProbingMuOracle.cpp \
-	IpQualityFunctionMuOracle.hpp IpQualityFunctionMuOracle.cpp \
+	IpOrigIterationOutput.cpp IpOrigIterationOutput.hpp \
+	IpPDFullSpaceSolver.cpp IpPDFullSpaceSolver.hpp \
+	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
+	IpPDSystemSolver.hpp \
+	IpProbingMuOracle.cpp IpProbingMuOracle.hpp \
+	IpQualityFunctionMuOracle.cpp IpQualityFunctionMuOracle.hpp \
 	IpRestoFilterConvCheck.cpp IpRestoFilterConvCheck.hpp \
-	IpRestoIpoptNLP.hpp IpRestoIpoptNLP.cpp \
-	IpRestoIterateInitializer.hpp IpRestoIterateInitializer.cpp \
-	IpRestoIterationOutput.hpp IpRestoIterationOutput.cpp \
+	IpRestoIpoptNLP.cpp IpRestoIpoptNLP.hpp \
+	IpRestoIterateInitializer.cpp IpRestoIterateInitializer.hpp \
+	IpRestoIterationOutput.cpp IpRestoIterationOutput.hpp \
 	IpRestoMinC_1Nrm.cpp IpRestoMinC_1Nrm.hpp \
 	IpRestoPhase.hpp \
-	IpRestoRestoPhase.hpp IpRestoRestoPhase.cpp \
-	IpUserScaling.cpp IpUserScaling.hpp
+	IpRestoRestoPhase.cpp IpRestoRestoPhase.hpp \
+	IpStdAugSystemSolver.cpp IpStdAugSystemSolver.hpp \
+	IpUserScaling.cpp IpUserScaling.hpp \
+	IpWarmStartIterateInitializer.cpp IpWarmStartIterateInitializer.hpp
 
-CXXFLAGS += -I$(srcdir)/../Common
-CXXFLAGS += -I$(srcdir)/../Interfaces
-CXXFLAGS += -I$(srcdir)/../PDSystemImpl/PDFullSpace
-CXXFLAGS += -I$(srcdir)/../LinAlgImpl/Serial
+CXXFLAGS += -I$(srcdir)/../Common \
+	-I$(srcdir)/../LinAlg \
+	-I$(srcdir)/../LinAlg/TMatrices \
+	-I$(srcdir)/../Interfaces \
+	-I$(srcdir)/LinearSolvers
 
 # Astyle stuff
 
 ASTYLE_FILES = \
-	IpAlgBuilder.hppbak IpAlgBuilder.cppbak \
+	IpAdaptiveMuUpdate.cppbak IpAdaptiveMuUpdate.hppbak \
+	IpAlgBuilder.cppbak IpAlgBuilder.hppbak \
+	IpAlgorithmRegOp.cppbak IpAlgorithmRegOp.hppbak \
 	IpAlgStrategy.hppbak \
+	IpAugRestoSystemSolver.cppbak IpAugRestoSystemSolver.hppbak \
+	IpAugSystemSolver.hppbak \
 	IpConvCheck.hppbak \
-	IpDefaultIterateInitializer.hppbak IpDefaultIterateInitializer.cppbak \
-	IpWarmStartIterateInitializer.hppbak IpWarmStartIterateInitializer.cppbak \
+	IpDefaultIterateInitializer.cppbak IpDefaultIterateInitializer.hppbak \
+	IpEqMultCalculator.hppbak \
 	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLineSearch.cppbak IpFilterLineSearch.hppbak \
-	IpGradientScaling.hppbak IpGradientScaling.cppbak \
+	IpGradientScaling.cppbak IpGradientScaling.hppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
 	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \
 	IpIpoptData.cppbak IpIpoptData.hppbak \
 	IpIpoptNLP.hppbak \
 	IpIterateInitializer.hppbak \
-	IpIteratesVector.hppbak IpIteratesVector.cppbak \
+	IpIteratesVector.cppbak IpIteratesVector.hppbak \
 	IpIterationOutput.hppbak \
+	IpLeastSquareMults.cppbak IpLeastSquareMults.hppbak \
 	IpLineSearch.hppbak \
-	IpLoqoMuOracle.hppbak IpLoqoMuOracle.cppbak \
-	IpMonotoneMuUpdate.hppbak IpMonotoneMuUpdate.cppbak \
+	IpLoqoMuOracle.cppbak IpLoqoMuOracle.hppbak \
+	IpMonotoneMuUpdate.cppbak IpMonotoneMuUpdate.hppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
-	IpAdaptiveMuUpdate.hppbak IpAdaptiveMuUpdate.cppbak \
-	IpNLPScaling.hppbak IpNLPScaling.cppbak \
+	IpNLPScaling.cppbak IpNLPScaling.hppbak \
 	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
 	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \
-	IpOrigIterationOutput.hppbak IpOrigIterationOutput.cppbak \
-	IpProbingMuOracle.hppbak IpProbingMuOracle.cppbak \
-	IpQualityFunctionMuOracle.hppbak IpQualityFunctionMuOracle.cppbak \
+	IpOrigIterationOutput.cppbak IpOrigIterationOutput.hppbak \
+	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
+	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
+	IpPDSystemSolver.hppbak \
+	IpProbingMuOracle.cppbak IpProbingMuOracle.hppbak \
+	IpQualityFunctionMuOracle.cppbak IpQualityFunctionMuOracle.hppbak \
 	IpRestoFilterConvCheck.cppbak IpRestoFilterConvCheck.hppbak \
-	IpRestoIpoptNLP.hppbak IpRestoIpoptNLP.cppbak \
-	IpRestoIterateInitializer.hppbak IpRestoIterateInitializer.cppbak \
-	IpRestoIterationOutput.hppbak IpRestoIterationOutput.cppbak \
+	IpRestoIpoptNLP.cppbak IpRestoIpoptNLP.hppbak \
+	IpRestoIterateInitializer.cppbak IpRestoIterateInitializer.hppbak \
+	IpRestoIterationOutput.cppbak IpRestoIterationOutput.hppbak \
 	IpRestoMinC_1Nrm.cppbak IpRestoMinC_1Nrm.hppbak \
 	IpRestoPhase.hppbak \
-	IpRestoRestoPhase.hppbak IpRestoRestoPhase.cppbak \
-	IpUserScaling.cppbak IpUserScaling.hppbak
+	IpRestoRestoPhase.cppbak IpRestoRestoPhase.hppbak \
+	IpStdAugSystemSolver.cppbak IpStdAugSystemSolver.hppbak \
+	IpUserScaling.cppbak IpUserScaling.hppbak \
+	IpWarmStartIterateInitializer.cppbak IpWarmStartIterateInitializer.hppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@

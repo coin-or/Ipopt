@@ -1,0 +1,350 @@
+\paragraph{print\_level:} Output verbosity level. $\;$ \\
+ Sets the default verbosity level for console
+output. The larger this value the more detailed
+is the output. The valid range for this integer option is
+$0 \le {\tt print\_level } \le 10$
+and its default value is $3$.
+
+
+\paragraph{tol:} Desired convergence tolerance (relative). $\;$ \\
+ Determines the convergence tolerance for the
+algorithm.  The algorithm terminates
+successfully, if the (scaled) NLP error becomes
+smaller than this value, and if the (absolute)
+criteria according to "dual\_inf\_tol",
+"primal\_inf\_tol", and "cmpl\_inf\_tol" are met.
+ (This is epsilon\_tol in Eqn. (6) in
+implementation paper).  See also
+"acceptable\_tol" as a second termination
+criterion.  Note, some other algorithmic features
+also use this quantity. The valid range for this real option is 
+$0 <  {\tt tol } <  {\tt +inf}$
+and its default value is $1 \cdot 10^{-08}$.
+
+
+\paragraph{compl\_inf\_tol:} Desired threshold for the complementarity conditions. $\;$ \\
+ Absolute tolerance on the complementarity.
+Successful termination requires that the
+(unscaled) complementarity is less than this
+threshold. The valid range for this real option is 
+$0 <  {\tt compl\_inf\_tol } <  {\tt +inf}$
+and its default value is $0.0001$.
+
+
+\paragraph{dual\_inf\_tol:} Desired threshold for the dual infeasibility. $\;$ \\
+ Absolute tolerance on the dual infesaibility.
+Successful termination requires that the
+(unscaled) dual infeasibility is less than this
+threshold. The valid range for this real option is 
+$0 <  {\tt dual\_inf\_tol } <  {\tt +inf}$
+and its default value is $0.0001$.
+
+
+\paragraph{constr\_mult\_init\_max:} Maximum allowed least-square guess of constraint multipliers. $\;$ \\
+ Determines how large the initial least-square
+guesses of the contraint multipliers are allowed
+to be (in max-norm). If the guess is larger than
+this value, it is discarded and all constraint
+multipliers are set to zero.  This options is
+also used when initializing the restoration
+phase. By default,
+"resto.constr\_mult\_init\_max" (the one used in
+RestoIterateInitializer) is set to zero. The valid range for this real option is 
+$0 \le {\tt constr\_mult\_init\_max } <  {\tt +inf}$
+and its default value is $1000$.
+
+
+\paragraph{constr\_viol\_tol:} Desired threshold for the constraint violation. $\;$ \\
+ Absolute tolerance on the constraint violation.
+Successful termination requires that the
+(unscaled) constraint violation is less than this
+threshold. The valid range for this real option is 
+$0 <  {\tt constr\_viol\_tol } <  {\tt +inf}$
+and its default value is $0.0001$.
+
+
+\paragraph{pivtol:} Pivot tolerance for the linear solver MA27. $\;$ \\
+ A smaller number pivots for sparsity, a larger
+number pivots for stability. The valid range for this real option is 
+$0 <  {\tt pivtol } <  1$
+and its default value is $1 \cdot 10^{-08}$.
+
+
+\paragraph{pivtolmax:} Maximum pivot tolerance. $\;$ \\
+ Ipopt may increase pivtol as high as pivtolmax to
+get a more accurate solution to the linear system. The valid range for this real option is 
+$0 <  {\tt pivtolmax } <  1$
+and its default value is $0.0001$.
+
+
+\paragraph{mu\_strategy:} Update strategy for barrier parameter. $\;$ \\
+ Determines which barrier parameter update
+strategy is to be used.
+The default value for this string option is "monotone".
+\\ 
+Possible values:
+\begin{itemize}
+   \item monotone: use the monotone (Fiacco-McCormick) strategy
+   \item adaptive: use the adaptive update strategy
+\end{itemize}
+
+\paragraph{mu\_init:} Initial value for the barrier parameter. $\;$ \\
+ This option determines the initial value for the
+barrier parameter (mu).  It is only relevant in
+the monotone, Fiacco-McCormick version of the
+algorithm. (i.e., if "mu\_strategy" is chosen as
+"monotone") The valid range for this real option is 
+$0 <  {\tt mu\_init } <  {\tt +inf}$
+and its default value is $0.1$.
+
+
+\paragraph{mu\_oracle:} Oracle for a new barrier parameter in the adaptive strategy. $\;$ \\
+ Determines how a new barrier parameter is
+computed in each "free-mode" iteration of the
+adaptive barrier parameter strategy. (Only
+considered if "adaptive" is selected for option
+"mu\_strategy").
+The default value for this string option is "probing".
+\\ 
+Possible values:
+\begin{itemize}
+   \item probing: Mehrotra's probing heuristic
+   \item loqo: LOQO's centrality rule
+   \item quality\_function: minimize a quality function
+\end{itemize}
+
+\paragraph{corrector\_type:} The type of corrector steps that should be taken. $\;$ \\
+ If "mu\_strategy" is "adaptive", this option
+determines what kind of corrector steps should be
+tried.
+The default value for this string option is "none".
+\\ 
+Possible values:
+\begin{itemize}
+   \item none: no corrector
+   \item affine: corrector step towards mu=0
+   \item primal-dual: corrector step towards current mu
+\end{itemize}
+
+\paragraph{obj\_scaling\_factor:} Scaling factor for the objective function. $\;$ \\
+ This option sets a scaling factor for the
+objective function. The scaling is seen
+internally by Ipopt but the unscaled objective is
+reported in the console output. If additional
+scaling parameters are computed (e.g.
+user-scaling or gradient-based), both factors are
+multiplied. If this value is chosen to be
+negative, Ipopt will maximize the objective
+function instead of minimizing it. The valid range for this real option is 
+${\tt -inf} <  {\tt obj\_scaling\_factor } <  {\tt +inf}$
+and its default value is $1$.
+
+
+\paragraph{nlp\_scaling\_method:} Select the technique used for scaling the NLP $\;$ \\
+ Selects the technique used for scaling the
+problem before it is solved. For user-scaling,
+the parameters come from the NLP. If you are
+using AMPL, they can be specified through
+suffixes (scaling\_factor)
+The default value for this string option is "gradient\_based".
+\\ 
+Possible values:
+\begin{itemize}
+   \item none: no problem scaling will be performed
+   \item user\_scaling: scaling parameters will come from the user
+   \item gradient\_based: scale the problem so the maximum gradient at
+the starting point is scaling\_max\_gradient
+\end{itemize}
+
+\paragraph{nlp\_scaling\_max\_gradient:} Maximum gradient after NLP scaling. $\;$ \\
+ This is the gradient scaling cut-off. If the
+maximum gradient is above this value, then
+gradient based scaling will be performed. Scaling
+parameters are calculated to scale the maximum
+gradient back to this value. (This is g\_max in
+Section 3.8 of the implementation paper.) Note:
+This option is only used if
+"nlp\_scaling\_method" is chosen as
+"gradient\_based". The valid range for this real option is 
+$0 <  {\tt nlp\_scaling\_max\_gradient } <  {\tt +inf}$
+and its default value is $100$.
+
+
+\paragraph{bound\_frac:} Desired minimum relative distance from the initial point to bound. $\;$ \\
+ Determines how much the initial point might have
+to be modified in order to be sufficiently inside
+the bounds (together with "bound\_push").  (This
+is kappa\_2 in Section 3.6 of implementation
+paper.) The valid range for this real option is 
+$0 <  {\tt bound\_frac } \le 0.5$
+and its default value is $0.01$.
+
+
+\paragraph{bound\_mult\_init\_val:} Initial value for the bound multipliers. $\;$ \\
+ All dual variables corresponding to bound
+constraints are initialized to this value. The valid range for this real option is 
+$0 <  {\tt bound\_mult\_init\_val } <  {\tt +inf}$
+and its default value is $1$.
+
+
+\paragraph{bound\_push:} Desired minimum absolute distance from the initial point to bound. $\;$ \\
+ Determines how much the initial point might have
+to be modified in order to be sufficiently inside
+the bounds (together with "bound\_frac").  (This
+is kappa\_1 in Section 3.6 of implementation
+paper.) The valid range for this real option is 
+$0 <  {\tt bound\_push } <  {\tt +inf}$
+and its default value is $0.01$.
+
+
+\paragraph{bound\_relax\_factor:} Factor for initial relaxation of the bounds. $\;$ \\
+ Before start of the optimization, the bounds
+given by the user are relaxed.  This option sets
+the factor for this relaxation.  If it is set to
+zero, then then bounds relaxation is disabled.
+(See Eqn.(35) in implmentation paper.) The valid range for this real option is 
+$0 \le {\tt bound\_relax\_factor } <  {\tt +inf}$
+and its default value is $1 \cdot 10^{-08}$.
+
+
+\paragraph{acceptable\_compl\_inf\_tol:} Acceptance threshold for the complementarity conditions. $\;$ \\
+ Absolute tolerance on the complementarity.
+Acceptable termination requires that the
+(unscaled) complementarity is less than this
+threshold; see also acceptable\_tol. The valid range for this real option is 
+$0 <  {\tt acceptable\_compl\_inf\_tol } <  {\tt +inf}$
+and its default value is $0.01$.
+
+
+\paragraph{acceptable\_constr\_viol\_tol:} Acceptance threshold for the constraint violation. $\;$ \\
+ Absolute tolerance on the constraint violation.
+Acceptable termination requires that the
+(unscaled) constraint violation is less than this
+threshold; see also acceptable\_tol. The valid range for this real option is 
+$0 <  {\tt acceptable\_constr\_viol\_tol } <  {\tt +inf}$
+and its default value is $0.01$.
+
+
+\paragraph{acceptable\_dual\_inf\_tol:} Acceptance threshold for the dual infeasibility. $\;$ \\
+ Absolute tolerance on the dual infesaibility.
+Acceptable termination requires that the
+(unscaled) dual infeasibility is less than this
+threshold; see also acceptable\_tol. The valid range for this real option is 
+$0 <  {\tt acceptable\_dual\_inf\_tol } <  {\tt +inf}$
+and its default value is $0.01$.
+
+
+\paragraph{acceptable\_tol:} Acceptable convergence tolerance (relative). $\;$ \\
+ Determines which (scaled) overall optimality
+error is considered to be "acceptable." There are
+two levels of termination criteria.  If the usual
+"desired" tolerances (see tol, dual\_inf\_tol
+etc) are satisfied at an iteration, the algorithm
+immediately terminates with a success message. 
+On the other hand, if the algorithm encounters
+"acceptable\_iter" many iterations in a row that
+are considered "acceptable", it will terminate
+before the desired convergence tolerance is met.
+This is useful in cases where the algorithm might
+not be able to achieve the "desired" level of
+accuracy. The valid range for this real option is 
+$0 <  {\tt acceptable\_tol } <  {\tt +inf}$
+and its default value is $1 \cdot 10^{-06}$.
+
+
+\paragraph{alpha\_for\_y:} Method to determine the step size for constraint multipliers. $\;$ \\
+ This option determines how the step size
+(alpha\_y) will be calculated when updating the
+constraint multipliers.
+The default value for this string option is "primal".
+\\ 
+Possible values:
+\begin{itemize}
+   \item primal: use primal step size
+   \item bound\_mult: use step size for the bound multipliers
+   \item min: use the min of primal and bound multipliers
+   \item max: use the max of primal and bound multipliers
+   \item full: take a full step of size one
+   \item min\_dual\_infeas: choose step size minimizing new dual
+infeasibility
+   \item safe\_min\_dual\_infeas: like "min\_dual\_infeas", but safeguarded by
+"min" and "max"
+\end{itemize}
+
+\paragraph{expect\_infeasible\_problem:} Enable heuristics to quickly detect an infeasible problem. $\;$ \\
+ This options is meant to activate heuristics that
+may speed up the infeasibility determination if
+you expect that there is a good chance for the
+problem to be infeasible.  In the filter line
+search procedure, the restoration phase is called
+more qucikly than usually, and more reduction in
+the constraint violation is enforced. If the
+problem is square, this option is enabled
+automatically.
+The default value for this string option is "no".
+\\ 
+Possible values:
+\begin{itemize}
+   \item no: the problem probably be feasible
+   \item yes: the problem has a good chance to be infeasible
+\end{itemize}
+
+\paragraph{max\_iter:} Maximum number of iterations. $\;$ \\
+ The algorithm terminates with an error message if
+the number of iterations exceeded this number.
+This option is also used in the restoration phase. The valid range for this integer option is
+$0 \le {\tt max\_iter } <  {\tt +inf}$
+and its default value is $3000$.
+
+
+\paragraph{max\_refinement\_steps:} Maximum number of iterative refinement steps per linear system solve. $\;$ \\
+ Iterative refinement (on the full unsymmetric
+system) is performed for each right hand side. 
+This option determines the maximum number of
+iterative refinement steps. The valid range for this integer option is
+$0 \le {\tt max\_refinement\_steps } <  {\tt +inf}$
+and its default value is $10$.
+
+
+\paragraph{max\_soc:} Maximum number of second order correction trial steps at each iteration. $\;$ \\
+ Choosing 0 disables the second order corrections.
+(This is p\^{max} of Step A-5.9 of Algorithm A in
+implementation paper.) The valid range for this integer option is
+$0 \le {\tt max\_soc } <  {\tt +inf}$
+and its default value is $4$.
+
+
+\paragraph{min\_refinement\_steps:} Minimum number of iterative refinement steps per linear system solve. $\;$ \\
+ Iterative refinement (on the full unsymmetric
+system) is performed for each right hand side. 
+This option determines the minimum number of
+iterative refinements (i.e. at least
+"min\_refinement\_steps" iterative refinement
+steps are enforced per right hand side.) The valid range for this integer option is
+$0 \le {\tt min\_refinement\_steps } <  {\tt +inf}$
+and its default value is $1$.
+
+
+\paragraph{output\_file:} File name of desired output file (leave unset for no file output). $\;$ \\
+ NOTE: This option only works when read from the
+PARAMS.DAT options file! An output file with this
+name will be written (leave unset for no file
+output).  The verbosity level is by default set
+to "print\_level", or but can be overridden with
+"file\_print\_level".
+The default value for this string option is "".
+\\ 
+Possible values:
+\begin{itemize}
+   \item *: Any acceptable standard file name
+\end{itemize}
+
+\paragraph{file\_print\_level:} Verbosity level for output file. $\;$ \\
+ NOTE: This option only works when read from the
+PARAMS.DAT options file! Determines the verbosity
+level for the file specified by "output\_file". 
+By default it is the same as "print\_level". The valid range for this integer option is
+$0 \le {\tt file\_print\_level } \le 10$
+and its default value is $3$.
+
+

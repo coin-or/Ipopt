@@ -1,10 +1,10 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Andreas Waechter, Carl Laird       IBM    2004-09-27
+// Authors:  Carl Laird, Andreas Waechter       IBM    2004-09-27
 
 #ifndef __IPRESTOITERATIONOUTPUT_HPP__
 #define __IPRESTOITERATIONOUTPUT_HPP__
@@ -60,7 +60,12 @@ namespace Ipopt
     void operator=(const RestoIterationOutput&);
     //@}
 
+    /** Pointer to output strategy object during regular iterations. */
     SmartPtr<OrigIterationOutput> resto_orig_iteration_output_;
+
+    /** Flag indicating weather info string should be printed at end
+     *  of iteration summary line. */
+    bool print_info_string_;
   };
 
 } // namespace Ipopt

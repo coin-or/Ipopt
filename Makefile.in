@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2005 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -43,7 +43,9 @@ build_triplet = @build@
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in \
 	$(top_srcdir)/Examples/Cpp_example/Makefile.in \
-	$(top_srcdir)/Examples/Fortran_example/Makefile.in \
+	$(top_srcdir)/Examples/hs071_c/Makefile.in \
+	$(top_srcdir)/Examples/hs071_cpp/Makefile.in \
+	$(top_srcdir)/Examples/hs071_f/Makefile.in \
 	$(top_srcdir)/configure $(top_srcdir)/inc/config.h.in AUTHORS \
 	config.guess config.sub depcomp install-sh missing
 subdir = .
@@ -55,8 +57,9 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config.h
-CONFIG_CLEAN_FILES = Examples/Fortran_example/Makefile \
-	Examples/Cpp_example/Makefile
+CONFIG_CLEAN_FILES = Examples/hs071_f/Makefile \
+	Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile \
+	Examples/hs071_c/Makefile
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -86,6 +89,7 @@ AMPL_CPPFLAGS = @AMPL_CPPFLAGS@
 AMTAR = @AMTAR@
 AR = @AR@
 ARFLAGS = @ARFLAGS@
+AR_X = @AR_X@
 ASLLIB = @ASLLIB@
 ASLMAKEFILECMDS = @ASLMAKEFILECMDS@
 ASLMAKEFLAGS = @ASLMAKEFLAGS@
@@ -107,10 +111,6 @@ BUILDHSLDIR_FALSE = @BUILDHSLDIR_FALSE@
 BUILDHSLDIR_TRUE = @BUILDHSLDIR_TRUE@
 BUILDHSL_FALSE = @BUILDHSL_FALSE@
 BUILDHSL_TRUE = @BUILDHSL_TRUE@
-BUILDLAPACKDIR_FALSE = @BUILDLAPACKDIR_FALSE@
-BUILDLAPACKDIR_TRUE = @BUILDLAPACKDIR_TRUE@
-BUILDLAPACK_FALSE = @BUILDLAPACK_FALSE@
-BUILDLAPACK_TRUE = @BUILDLAPACK_TRUE@
 BUILDMA27_FALSE = @BUILDMA27_FALSE@
 BUILDMA27_TRUE = @BUILDMA27_TRUE@
 BUILDMC19_FALSE = @BUILDMC19_FALSE@
@@ -118,9 +118,9 @@ BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
-CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@
 CXXLIBS = @CXXLIBS@
@@ -135,6 +135,10 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
+HAVE_MA27_FALSE = @HAVE_MA27_FALSE@
+HAVE_MA27_TRUE = @HAVE_MA27_TRUE@
+HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
+HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
@@ -208,38 +212,24 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = OTHERS Common LinAlgImpl Algorithm PDSystemImpl Apps
-EXTRA_DIST = Interfaces/IpEqMultCalculator.hpp \
-	Interfaces/IpAlgTypes.hpp \
-	Interfaces/IpMatrix.hpp \
-	Interfaces/IpNLP.hpp \
-	Interfaces/IpPDSystemSolver.hpp \
-	Interfaces/IpSymMatrix.hpp \
-	Interfaces/IpTNLP.hpp \
-	Interfaces/IpVector.hpp \
-	Interfaces/IpStdCInterface.h \
-	Examples/Fortran_example/example.f \
-	README
+SUBDIRS = Extern Common LinAlg Algorithm Interfaces Apps
+EXTRA_DIST = \
+	Examples/Cpp_example/cpp_example.cpp \
+	Examples/Cpp_example/MyNLP.cpp \
+	Examples/Cpp_example/MyNLP.hpp \
+	Examples/hs071_f/hs071_f.f \
+	Examples/hs071_c/hs071_c.c \
+	Examples/hs071_cpp/hs071_main.cpp \
+	Examples/hs071_cpp/hs071_nlp.cpp \
+	Examples/hs071_cpp/hs071_nlp.hpp \
+	README \
+	Docs/documentation.tex
 
 tmpdir = tmpdir
 libipopt = libipopt.a
-
-# Astyle stuff
-ASTYLE_FILES = Interfaces/IpEqMultCalculator.hppbak \
-	Interfaces/IpAlgTypes.hppbak \
-	Interfaces/IpMatrix.hppbak \
-	Interfaces/IpNLP.hppbak \
-	Interfaces/IpPDSystemSolver.hppbak \
-	Interfaces/IpSymMatrix.hppbak \
-	Interfaces/IpTNLP.hppbak \
-	Interfaces/IpVector.hppbak
-
-CLEANFILES = $(ASTYLE_FILES)
-SUFFIXES = .cppbak .hppbak
 all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .cpp .hpp
 am--refresh:
 	@:
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
@@ -290,9 +280,13 @@ $(top_srcdir)/inc/config.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f inc/config.h inc/stamp-h1
-Examples/Fortran_example/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/Fortran_example/Makefile.in
+Examples/hs071_f/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/hs071_f/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 Examples/Cpp_example/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/Cpp_example/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+Examples/hs071_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/hs071_cpp/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+Examples/hs071_c/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/hs071_c/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 uninstall-info-am:
 
@@ -431,7 +425,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/Examples/Cpp_example $(distdir)/Examples/Fortran_example $(distdir)/Interfaces $(distdir)/inc
+	$(mkdir_p) $(distdir)/Docs $(distdir)/Examples/Cpp_example $(distdir)/Examples/hs071_c $(distdir)/Examples/hs071_cpp $(distdir)/Examples/hs071_f $(distdir)/inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -592,7 +586,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -681,7 +674,7 @@ install-exec-local:
 	cd $(tmpdir); \
 	for lib in $(IPALLLIBS); \
 	do \
-	  ar x $$basdir/$$lib; \
+	  $(AR_X) $$basdir/$$lib; \
 	done; \
 	$(AR) $(ARFLAGS) $(libipopt) *.$(OBJEXT)
 	$(INSTALL_DATA) $(tmpdir)/$(libipopt) $(DESTDIR)$(libdir)
@@ -694,26 +687,14 @@ uninstall-local:
 cuter: install
 	cd Apps/CUTErInterface; $(MAKE) cuter
 
-astyle: astyle-local
+astyle:
 	cd Algorithm; $(MAKE) astyle
+	cd Algorithm/LinearSolvers; $(MAKE) astyle
 	cd Apps/AmplSolver; $(MAKE) astyle
-	cd Apps/CompositeInterface; $(MAKE) astyle
-	cd Apps/StdInterface; $(MAKE) astyle
 	cd Common; $(MAKE) astyle
-	cd LinAlgImpl/Serial; $(MAKE) astyle
-	cd PDSystemImpl/PDFullSpace; $(MAKE) astyle
-
-astyle-local: $(ASTYLE_FILES)
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
-	touch $@
+	cd LinAlg; $(MAKE) astyle
+	cd LinAlg/TMatrices; $(MAKE) astyle
+	cd Interfaces; $(MAKE) astyle
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

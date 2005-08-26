@@ -14,11 +14,12 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2005 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+
 
 SOURCES = $(libcommon_a_SOURCES)
 
@@ -44,7 +45,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 subdir = Common
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = $(includeipopt_HEADERS) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -55,17 +57,10 @@ CONFIG_CLEAN_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
 libcommon_a_AR = $(AR) $(ARFLAGS)
 libcommon_a_LIBADD =
-am_libcommon_a_OBJECTS = IpCompoundMatrix.$(OBJEXT) \
-	IpCompoundSymMatrix.$(OBJEXT) IpCompoundVector.$(OBJEXT) \
-	IpDebug.$(OBJEXT) IpDiagMatrix.$(OBJEXT) \
-	IpIdentityMatrix.$(OBJEXT) IpIpoptType.$(OBJEXT) \
-	IpJournalist.$(OBJEXT) IpMatrix.$(OBJEXT) IpObserver.$(OBJEXT) \
-	IpOptionsList.$(OBJEXT) IpRegOptions.$(OBJEXT) \
-	IpReferenced.$(OBJEXT) IpScaledMatrix.$(OBJEXT) \
-	IpSumMatrix.$(OBJEXT) IpSumSymMatrix.$(OBJEXT) \
-	IpSymMatrix.$(OBJEXT) IpSymScaledMatrix.$(OBJEXT) \
-	IpTaggedObject.$(OBJEXT) IpVector.$(OBJEXT) \
-	IpZeroMatrix.$(OBJEXT)
+am_libcommon_a_OBJECTS = IpDebug.$(OBJEXT) IpJournalist.$(OBJEXT) \
+	IpObserver.$(OBJEXT) IpOptionsList.$(OBJEXT) \
+	IpRegOptions.$(OBJEXT) IpTaggedObject.$(OBJEXT) \
+	IpUtils.$(OBJEXT)
 libcommon_a_OBJECTS = $(am_libcommon_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -81,6 +76,15 @@ CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libcommon_a_SOURCES)
 DIST_SOURCES = $(libcommon_a_SOURCES)
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
+am__installdirs = "$(DESTDIR)$(includeipoptdir)"
+includeipoptHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(includeipopt_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -91,6 +95,7 @@ AMPL_CPPFLAGS = @AMPL_CPPFLAGS@
 AMTAR = @AMTAR@
 AR = @AR@
 ARFLAGS = @ARFLAGS@
+AR_X = @AR_X@
 ASLLIB = @ASLLIB@
 ASLMAKEFILECMDS = @ASLMAKEFILECMDS@
 ASLMAKEFLAGS = @ASLMAKEFLAGS@
@@ -112,10 +117,6 @@ BUILDHSLDIR_FALSE = @BUILDHSLDIR_FALSE@
 BUILDHSLDIR_TRUE = @BUILDHSLDIR_TRUE@
 BUILDHSL_FALSE = @BUILDHSL_FALSE@
 BUILDHSL_TRUE = @BUILDHSL_TRUE@
-BUILDLAPACKDIR_FALSE = @BUILDLAPACKDIR_FALSE@
-BUILDLAPACKDIR_TRUE = @BUILDLAPACKDIR_TRUE@
-BUILDLAPACK_FALSE = @BUILDLAPACK_FALSE@
-BUILDLAPACK_TRUE = @BUILDLAPACK_TRUE@
 BUILDMA27_FALSE = @BUILDMA27_FALSE@
 BUILDMA27_TRUE = @BUILDMA27_TRUE@
 BUILDMC19_FALSE = @BUILDMC19_FALSE@
@@ -123,11 +124,11 @@ BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
-CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../Interfaces
+CXXFLAGS = @CXXFLAGS@
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -140,6 +141,10 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
+HAVE_MA27_FALSE = @HAVE_MA27_FALSE@
+HAVE_MA27_TRUE = @HAVE_MA27_TRUE@
+HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
+HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
@@ -213,64 +218,50 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
+includeipoptdir = $(includedir)/ipopt
+includeipopt_HEADERS = \
+	IpCachedResults.hpp \
+	IpDebug.hpp \
+	IpException.hpp \
+	IpJournalist.hpp \
+	IpObserver.hpp \
+	IpOptionsList.hpp \
+	IpReferenced.hpp \
+	IpRegOptions.hpp \
+	IpSmartPtr.hpp \
+	IpTaggedObject.hpp \
+	IpUtils.hpp
+
 noinst_LIBRARIES = libcommon.a
 libcommon_a_SOURCES = \
 	IpCachedResults.hpp \
-	IpCompoundMatrix.cpp IpCompoundMatrix.hpp \
-	IpCompoundSymMatrix.cpp IpCompoundSymMatrix.hpp \
-	IpCompoundVector.cpp IpCompoundVector.hpp \
 	IpDebug.cpp IpDebug.hpp \
-	IpDiagMatrix.cpp IpDiagMatrix.hpp \
 	IpException.hpp \
-	IpIdentityMatrix.cpp IpIdentityMatrix.hpp \
-	IpIpoptType.hpp IpIpoptType.cpp \
 	IpJournalist.cpp IpJournalist.hpp \
-	IpMatrix.cpp \
 	IpObserver.cpp IpObserver.hpp \
 	IpOptionsList.cpp IpOptionsList.hpp \
 	IpRegOptions.cpp IpRegOptions.hpp \
-	IpReferenced.cpp IpReferenced.hpp \
-	IpScaledMatrix.cpp IpScaledMatrix.hpp \
+	IpReferenced.hpp \
 	IpSmartPtr.hpp \
-	IpSumMatrix.cpp IpSumMatrix.hpp \
-	IpSumSymMatrix.cpp IpSumSymMatrix.hpp \
-	IpSymMatrix.cpp \
-	IpSymScaledMatrix.cpp IpSymScaledMatrix.hpp \
 	IpTaggedObject.cpp IpTaggedObject.hpp \
 	IpTypes.hpp \
-	IpUtils.hpp \
-	IpVector.cpp \
-	IpZeroMatrix.cpp IpZeroMatrix.hpp
+	IpUtils.cpp IpUtils.hpp
 
 
 # Astyle stuff
 ASTYLE_FILES = \
 	IpCachedResults.hppbak \
-	IpCompoundMatrix.cppbak IpCompoundMatrix.hppbak \
-	IpCompoundSymMatrix.cppbak IpCompoundSymMatrix.hppbak \
-	IpCompoundVector.cppbak IpCompoundVector.hppbak \
 	IpDebug.cppbak IpDebug.hppbak \
-	IpDiagMatrix.cppbak IpDiagMatrix.hppbak \
 	IpException.hppbak \
-	IpIdentityMatrix.cppbak IpIdentityMatrix.hppbak \
-	IpIpoptType.hppbak IpIpoptType.cppbak \
 	IpJournalist.cppbak IpJournalist.hppbak \
-	IpMatrix.cppbak \
 	IpObserver.cppbak IpObserver.hppbak \
-	IpOptionsList.hppbak \
+	IpOptionsList.cppbak IpOptionsList.hppbak \
 	IpRegOptions.cppbak IpRegOptions.hppbak \
-	IpReferenced.cppbak IpReferenced.hppbak \
-	IpScaledMatrix.cppbak IpScaledMatrix.hppbak \
+	IpReferenced.hppbak \
 	IpSmartPtr.hppbak \
-	IpSumMatrix.cppbak IpSumMatrix.hppbak \
-	IpSumSymMatrix.cppbak IpSumSymMatrix.hppbak \
-	IpSymMatrix.cppbak \
-	IpSymScaledMatrix.cppbak IpSymScaledMatrix.hppbak \
 	IpTaggedObject.cppbak IpTaggedObject.hppbak \
 	IpTypes.hppbak \
-	IpUtils.hppbak \
-	IpVector.cppbak \
-	IpZeroMatrix.cppbak IpZeroMatrix.hppbak
+	IpUtils.cppbak IpUtils.hppbak
 
 CLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
@@ -321,27 +312,13 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpCompoundMatrix.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpCompoundSymMatrix.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpCompoundVector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDebug.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDiagMatrix.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIdentityMatrix.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptType.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpJournalist.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMatrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpObserver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptionsList.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpReferenced.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRegOptions.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpScaledMatrix.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSumMatrix.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSumSymMatrix.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSymMatrix.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSymScaledMatrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTaggedObject.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpVector.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpZeroMatrix.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpUtils.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -357,6 +334,23 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 uninstall-info-am:
+install-includeipoptHEADERS: $(includeipopt_HEADERS)
+	@$(NORMAL_INSTALL)
+	test -z "$(includeipoptdir)" || $(mkdir_p) "$(DESTDIR)$(includeipoptdir)"
+	@list='$(includeipopt_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(includeipoptHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(includeipoptdir)/$$f'"; \
+	  $(includeipoptHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(includeipoptdir)/$$f"; \
+	done
+
+uninstall-includeipoptHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(includeipopt_HEADERS)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(includeipoptdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(includeipoptdir)/$$f"; \
+	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -435,8 +429,11 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LIBRARIES)
+all-am: Makefile $(LIBRARIES) $(HEADERS)
 installdirs:
+	for dir in "$(DESTDIR)$(includeipoptdir)"; do \
+	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
+	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -482,9 +479,9 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-includeipoptHEADERS
 
-install-exec-am:
+install-exec-am: install-exec-local
 
 install-info: install-info-am
 
@@ -509,19 +506,34 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-info-am
+uninstall-am: uninstall-includeipoptHEADERS uninstall-info-am \
+	uninstall-local
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-noinstLIBRARIES ctags distclean distclean-compile \
 	distclean-generic distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
-	install-data-am install-exec install-exec-am install-info \
+	install-data-am install-exec install-exec-am \
+	install-exec-local install-includeipoptHEADERS install-info \
 	install-info-am install-man install-strip installcheck \
 	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-info-am
+	uninstall-am uninstall-includeipoptHEADERS uninstall-info-am \
+	uninstall-local
 
+
+install-exec-local:
+	echo "#ifndef __IPCONFIG__" >bla
+	echo "#define __IPCONFIG__" >>bla
+	cat ../inc/config.h >> bla
+	echo "#endif" >>bla
+	sed -e 's/#include "config.h"//' <$(srcdir)/IpTypes.hpp >> bla
+	$(install_sh_DATA) bla $(includeipoptdir)/IpTypes.hpp
+	rm bla
+
+uninstall-local:
+	rm -f $(includeipoptdir)/IpTypes.hpp
 
 astyle: $(ASTYLE_FILES)
 

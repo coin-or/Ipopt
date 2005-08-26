@@ -1,10 +1,10 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-06-18
 
 #include "IpRegOptions.hpp"
 #include <set>
@@ -34,9 +34,9 @@ namespace Ipopt
     }
 
     jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                 "\n### %s (%s) ###\nClass: %s\nDescription: %s\n",
+                 "\n### %s (%s) ###\nCategory: %s\nDescription: %s\n",
                  name_.c_str(), type_str.c_str(),
-                 registering_class_.c_str(), short_description_.c_str());
+                 registering_category_.c_str(), short_description_.c_str());
 
     if (type_ ==OT_Number) {
       if (has_lower_) {
@@ -96,6 +96,163 @@ namespace Ipopt
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "Default: \"%s\"\n",
                    default_string_.c_str());
     }
+  }
+
+  void RegisteredOption::OutputLatexDescription(const Journalist& jnlst) const
+  {
+    std::string latex_name;
+    MakeValidLatexString(name_, latex_name);
+    std::string latex_desc;
+    MakeValidLatexString(short_description_, latex_desc);
+    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                 "\\paragraph{%s:} %s $\\;$ \\\\\n",
+                 latex_name.c_str(),
+                 latex_desc.c_str());
+
+    //    Index length = name_.length() + short_description_.length();
+    //    DBG_ASSERT(length <= 80);
+    //    jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 0, 50,
+    //                               latex_desc.c_str());
+
+    if (long_description_ != "") {
+      latex_desc = "";
+      MakeValidLatexString(long_description_, latex_desc);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " ");
+      jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 0, 50,
+                                 latex_desc.c_str());
+    }
+
+    if (type_ == OT_Number) {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   " The valid range for this real option is \n$");
+      std::string buff;
+      if (has_lower_) {
+        buff = MakeValidLatexNumber(lower_);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", buff.c_str());
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", "{\\tt -inf}");
+      }
+
+      if (has_lower_ && !lower_strict_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le ");
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
+      }
+
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "{\\tt %s }", latex_name.c_str());
+
+      if (has_upper_ && !upper_strict_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le ");
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
+      }
+
+      if (has_upper_) {
+        buff = MakeValidLatexNumber(upper_);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", buff.c_str());
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", "{\\tt +inf}");
+      }
+
+      buff = MakeValidLatexNumber(default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "$\nand its default value is $%s$.\n\n", buff.c_str());
+
+    }
+    else if (type_ == OT_Integer) {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   " The valid range for this integer option is\n$");
+      if (has_lower_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d \\le ", (Index)lower_);
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s <  ", "{\\tt -inf}");
+      }
+
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "{\\tt %s }", latex_name.c_str());
+
+      if (has_upper_) {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le %d", (Index)upper_);
+      }
+      else {
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  %s", "{\\tt +inf}");
+      }
+
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "$\nand its default value is $%d$.\n\n",
+                   (Index)default_number_);
+    }
+    else if (type_ == OT_String) {
+      std::string buff;
+      MakeValidLatexString(default_string_, buff);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "\nThe default value for this string option is \"%s\".\n",
+                   buff.c_str());
+
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\\\ \nPossible values:\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\begin{itemize}\n");
+      for (std::vector<string_entry>::const_iterator
+           i = valid_strings_.begin();
+           i != valid_strings_.end(); i++) {
+        std::string latex_value;
+        MakeValidLatexString((*i).value_, latex_value);
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   \\item %s: ",
+                     latex_value.c_str());
+
+        std::string latex_desc;
+        MakeValidLatexString((*i).description_, latex_desc);
+        jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 0, 48,
+                                   latex_desc.c_str());
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+      }
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\end{itemize}\n");
+    }
+    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+  }
+
+  void RegisteredOption::MakeValidLatexString(std::string source, std::string& dest) const
+  {
+    std::string::iterator c;
+    for (c=source.begin(); c!=source.end(); c++) {
+      if (*c == '_') {
+        dest.append("\\_");
+      }
+      else if (*c == '^') {
+        dest.append("\\^");
+      }
+      else {
+        dest.push_back(*c);
+      }
+    }
+  }
+
+  std::string RegisteredOption::MakeValidLatexNumber(Number value) const
+  {
+    char buffer[256];
+    sprintf(buffer, "%g", value);
+    std::string source = buffer;
+    std::string dest;
+
+    std::string::iterator c;
+    bool found_e = false;
+    for (c=source.begin(); c!=source.end(); c++) {
+      if (*c == 'e') {
+        found_e = true;
+        dest.append(" \\cdot 10^{");
+      }
+      else {
+        dest.push_back(*c);
+      }
+    }
+    if (found_e) {
+      dest.append("}");
+    }
+
+    return dest;
   }
 
   void RegisteredOption::OutputShortDescription(const Journalist& jnlst) const
@@ -269,7 +426,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(),
@@ -287,7 +444,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetLowerNumber(lower, strict);
@@ -305,7 +462,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetUpperNumber(upper, strict);
@@ -324,7 +481,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetLowerNumber(lower, lower_strict);
@@ -342,7 +499,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
@@ -358,7 +515,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetLowerInteger(lower);
@@ -375,7 +532,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetUpperInteger(upper);
@@ -393,7 +550,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetLowerInteger(lower);
@@ -413,7 +570,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     DBG_ASSERT(settings.size() == descriptions.size());
@@ -435,7 +592,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -456,7 +613,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -480,7 +637,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -507,7 +664,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -537,7 +694,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -570,7 +727,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -606,7 +763,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_class_);
+                           current_registering_category_);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -640,25 +797,27 @@ namespace Ipopt
     return option;
   }
 
-  void RegisteredOptions::OutputOptionDocumentation(const Journalist& jnlst)
+  void RegisteredOptions::OutputOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories)
   {
     // create a set to print sorted output
-    std::set
-      <std::string> classes;
-    std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
-    for (option = registered_options_.begin(); option != registered_options_.end(); option++) {
-      classes.insert(option->second->RegisteringClass());
-    }
+    //     std::set
+    //       <std::string> classes;
+    //     std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
+    //     for (option = registered_options_.begin(); option != registered_options_.end(); option++) {
+    //       classes.insert(option->second->RegisteringCategory());
+    //     }
 
-    std::set
-      <std::string>::iterator i;
-    for (i = classes.begin(); i != classes.end(); i++) {
+
+    std::list
+    <std::string>::iterator i;
+    for (i = categories.begin(); i != categories.end(); i++) {
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                    "\n### %s ###\n\n", (*i).c_str());
       std::map<Index, SmartPtr<RegisteredOption> > class_options;
+      std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
       for (option = registered_options_.begin();
            option != registered_options_.end(); option++) {
-        if (option->second->RegisteringClass() == (*i)) {
+        if (option->second->RegisteringCategory() == (*i)) {
 
           class_options[option->second->Counter()] = option->second;
         }
@@ -671,4 +830,29 @@ namespace Ipopt
     }
   }
 
+  void RegisteredOptions::OutputLatexOptionDocumentation(
+    const Journalist& jnlst,
+    std::list<std::string>& options_to_print)
+  {
+
+    if (!options_to_print.empty()) {
+      std::list<std::string>::iterator coption;
+      for (coption = options_to_print.begin();
+           coption != options_to_print.end();
+           coption++) {
+        //	std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
+        SmartPtr<RegisteredOption> option = registered_options_[*coption];
+        DBG_ASSERT(IsValid(option));
+        option->OutputLatexDescription(jnlst);
+      }
+    }
+    else {
+      std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
+      for (option = registered_options_.begin();
+           option != registered_options_.end();
+           option++) {
+        option->second->OutputLatexDescription(jnlst);
+      }
+    }
+  }
 } // namespace Ipopt

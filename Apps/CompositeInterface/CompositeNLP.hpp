@@ -46,20 +46,20 @@ namespace Ipopt
 
     /** Method for creating the derived vector / matrix types
      *  (Do not delete these, the ). */
-    virtual bool GetSpaces(SmartPtr<VectorSpace>& x_space,
-                           SmartPtr<VectorSpace>& c_space,
-                           SmartPtr<VectorSpace>& d_space,
-                           SmartPtr<VectorSpace>& x_l_space,
-                           SmartPtr<MatrixSpace>& px_l_space,
-                           SmartPtr<VectorSpace>& x_u_space,
-                           SmartPtr<MatrixSpace>& px_u_space,
-                           SmartPtr<VectorSpace>& d_l_space,
-                           SmartPtr<MatrixSpace>& pd_l_space,
-                           SmartPtr<VectorSpace>& d_u_space,
-                           SmartPtr<MatrixSpace>& pd_u_space,
-                           SmartPtr<MatrixSpace>& Jac_c_space,
-                           SmartPtr<MatrixSpace>& Jac_d_space,
-                           SmartPtr<SymMatrixSpace>& Hess_lagrangian_space);
+    virtual bool GetSpaces(SmartPtr<const VectorSpace>& x_space,
+                           SmartPtr<const VectorSpace>& c_space,
+                           SmartPtr<const VectorSpace>& d_space,
+                           SmartPtr<const VectorSpace>& x_l_space,
+                           SmartPtr<const MatrixSpace>& px_l_space,
+                           SmartPtr<const VectorSpace>& x_u_space,
+                           SmartPtr<const MatrixSpace>& px_u_space,
+                           SmartPtr<const VectorSpace>& d_l_space,
+                           SmartPtr<const MatrixSpace>& pd_l_space,
+                           SmartPtr<const VectorSpace>& d_u_space,
+                           SmartPtr<const MatrixSpace>& pd_u_space,
+                           SmartPtr<const MatrixSpace>& Jac_c_space,
+                           SmartPtr<const MatrixSpace>& Jac_d_space,
+                           SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space);
 
     /** Method for obtaining the bounds information */
     virtual bool GetBoundsInformation(Matrix& Px_L,
@@ -74,20 +74,16 @@ namespace Ipopt
     /** Method for obtaining the starting point
      *  for all the iterates. */
     virtual bool GetStartingPoint(
-      Vector& x,
+      SmartPtr<Vector> x,
       bool need_x,
-      Vector& y_c,
+      SmartPtr<Vector> y_c,
       bool need_y_c,
-      Vector& y_d,
+      SmartPtr<Vector> y_d,
       bool need_y_d,
-      Vector& z_L,
+      SmartPtr<Vector> z_L,
       bool need_z_L,
-      Vector& z_U,
-      bool need_z_U,
-      Vector& v_L,
-      bool need_v_L,
-      Vector& v_U,
-      bool need_v_U
+      SmartPtr<Vector> z_U,
+      bool need_z_U
     );
     //@}
 

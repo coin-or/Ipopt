@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,8 +9,8 @@
 #ifndef __IPFILTER_HPP__
 #define __IPFILTER_HPP__
 
-#include "IpUtils.hpp"
 #include "IpJournalist.hpp"
+#include "IpDebug.hpp"
 #include <list>
 #include <vector>
 
@@ -38,7 +38,7 @@ namespace Ipopt
       Index ncoor = (Index)vals_.size();
       DBG_ASSERT((Index)vals.size() == ncoor);
 
-      // ToDo decide where we can get Compare_le from
+      // ToDo decide if we need Compare_le
       bool retval = false;
       for (Index i=0; i<ncoor; i++) {
         if (vals[i] <= vals_[i]) {

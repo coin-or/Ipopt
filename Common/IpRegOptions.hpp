@@ -1,10 +1,10 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-06-18
 
 #ifndef __IPREGOPTIONS_HPP__
 #define __IPREGOPTIONS_HPP__
@@ -51,12 +51,12 @@ namespace Ipopt
     RegisteredOption(const std::string& name,
                      const std::string& short_description,
                      const std::string& long_description,
-                     const std::string& registering_class)
+                     const std::string& registering_category)
         :
         name_(name),
         short_description_(short_description),
         long_description_(long_description),
-        registering_class_(registering_class),
+        registering_category_(registering_category),
         type_(OT_Unknown),
         has_lower_(false),
         has_upper_(false),
@@ -68,7 +68,7 @@ namespace Ipopt
         name_(copy.name_),
         short_description_(copy.short_description_),
         long_description_(copy.long_description_),
-        registering_class_(copy.registering_class_),
+        registering_category_(copy.registering_category_),
         type_(copy.type_),
         has_lower_(copy.has_lower_),
         lower_(copy.lower_),
@@ -117,14 +117,14 @@ namespace Ipopt
       long_description_ = long_description;
     }
     /** Get the registering class */
-    const std::string& RegisteringClass() const
+    const std::string& RegisteringCategory() const
     {
-      return registering_class_;
+      return registering_category_;
     }
     /** Set the registering class */
-    void SetRegisteringClass(const std::string& registering_class)
+    void SetRegisteringCategory(const std::string& registering_category)
     {
-      registering_class_ = registering_class;
+      registering_category_ = registering_category;
     }
     /** Get the Option's type */
     const RegisteredOptionType& Type() const
@@ -143,7 +143,7 @@ namespace Ipopt
     }
     //@}
 
-    /** Get / Set methods valid for specific types - NOTE: the Type
+    /** @name Get / Set methods valid for specific types - NOTE: the Type
      *  must be set before calling these methods.
      */
     //@{
@@ -337,13 +337,14 @@ namespace Ipopt
     void OutputDescription(const Journalist& jnlst) const;
     /** output a more concise version */
     void OutputShortDescription(const Journalist& jnlst) const;
-    //@}
+    /** output a latex version */
+    void OutputLatexDescription(const Journalist& jnlst) const;
 
   private:
     std::string name_;
     std::string short_description_;
     std::string long_description_;
-    std::string registering_class_;
+    std::string registering_category_;
     RegisteredOptionType type_;
 
     bool has_lower_;
@@ -353,6 +354,9 @@ namespace Ipopt
     bool upper_strict_;
     Number upper_;
     Number default_number_;
+
+    void MakeValidLatexString(std::string source, std::string& dest) const;
+    std::string MakeValidLatexNumber(Number value) const;
 
     /** Compare two strings and return true if they are equal (case
     insensitive comparison) */
@@ -389,13 +393,14 @@ namespace Ipopt
     /** Constructors / Destructors */
     //@{
     /** Standard Constructor */
-    RegisteredOptions() : current_registering_class_("Unknown Class")
+    RegisteredOptions()
+        :
+        current_registering_category_("Uncategorized")
     {}
 
     /** Standard Destructor */
     ~RegisteredOptions()
     {}
-    ;
     //@}
 
     DECLARE_STD_EXCEPTION(OPTION_ALREADY_REGISTERED);
@@ -404,10 +409,17 @@ namespace Ipopt
     //@{
     /** set the registering class. All subsequent options will be
      *  added with the registered class */
-    void SetRegisteringClass(const std::string& registering_class)
+    void SetRegisteringCategory(const std::string& registering_category)
     {
-      current_registering_class_ = registering_class;
+      current_registering_category_ = registering_category;
     }
+
+    /** retrieve the value of the current registering category */
+    std::string RegisteringCategory()
+    {
+      return current_registering_category_;
+    }
+
     /** Add a Number option (with no restrictions) */
     void AddNumberOption(const std::string& name,
                          const std::string& short_description,
@@ -554,14 +566,16 @@ namespace Ipopt
 
     /** Output documentation for the options - gives a description,
      *  etc. */
-    void OutputOptionDocumentation(const Journalist& jnlst);
+    void OutputOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories);
+
+    /** Output documentation in Latex format to include in a latex file */
+    void OutputLatexOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories);
     //@}
 
   private:
-    std::string current_registering_class_;
+    std::string current_registering_category_;
     std::map<std::string, SmartPtr<RegisteredOption> > registered_options_;
   };
-
 } // namespace Ipopt
 
 #endif

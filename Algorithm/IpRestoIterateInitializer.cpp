@@ -1,10 +1,10 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Andreas Waechter              IBM    2004-10-12
+// Authors:  Carl Laird, Andreas Waechter              IBM    2004-10-12
 
 #include "IpRestoIterateInitializer.hpp"
 #include "IpRestoIpoptNLP.hpp"
@@ -12,7 +12,9 @@
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   RestoIterateInitializer::RestoIterateInitializer
   (const SmartPtr<EqMultiplierCalculator>& resto_eq_mult_calculator)

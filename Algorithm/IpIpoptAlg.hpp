@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,8 +9,6 @@
 #ifndef __IPIPOPTALG_HPP__
 #define __IPIPOPTALG_HPP__
 
-#include "IpUtils.hpp"
-#include "IpSmartPtr.hpp"
 #include "IpIpoptNLP.hpp"
 #include "IpAlgStrategy.hpp"
 #include "IpPDSystemSolver.hpp"
@@ -20,13 +18,10 @@
 #include "IpOptionsList.hpp"
 #include "IpIterateInitializer.hpp"
 #include "IpIterationOutput.hpp"
-#include "IpIpoptType.hpp"
 #include "IpAlgTypes.hpp"
 
 namespace Ipopt
 {
-
-  DeclareIpoptType(IpoptAlgorithm);
 
   /** The main ipopt algorithm class.
    *  Main Ipopt algorithm class, contains the main optimize method,

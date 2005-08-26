@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,9 +12,9 @@
 
 namespace Ipopt
 {
-  DBG_SET_VERBOSITY(0);
-
-  DefineIpoptType(IpoptAlgorithm);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   IpoptAlgorithm::IpoptAlgorithm(const SmartPtr<PDSystemSolver>& pd_solver,
                                  const SmartPtr<LineSearch>& line_search,
@@ -48,12 +48,14 @@ namespace Ipopt
 
   void IpoptAlgorithm::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
+    roptions->SetRegisteringCategory("Line Search");
     roptions->AddLowerBoundedNumberOption(
       "kappa_sigma",
-      "Factor limiting deviation of dual variables from primal estimates.",
+      "Factor limiting the deviation of dual variables from primal estimates.",
       0, true, 1e10,
-      "(see Eqn. (16) in the implementation paper.) Setting to value less than "
-      "one disables correction.");
+      "If the dual variables deviate from their primal estimates, a correction "
+      "is performed. (See Eqn. (16) in the implementation paper.) "
+      "Setting the to value less than one disables the correction.");
   }
 
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,
@@ -179,27 +181,33 @@ namespace Ipopt
       }
     }
     catch(TINY_STEP_DETECTED& exc) {
-      exc.ReportException(Jnlst());
+      exc.ReportException(Jnlst(), J_DETAILED);
       return STOP_AT_TINY_STEP;
     }
     catch(ACCEPTABLE_POINT_REACHED& exc) {
-      exc.ReportException(Jnlst());
+      exc.ReportException(Jnlst(), J_DETAILED);
       return STOP_AT_ACCEPTABLE_POINT;
     }
     catch(LOCALLY_INFEASIBLE& exc) {
-      exc.ReportException(Jnlst());
+      exc.ReportException(Jnlst(), J_DETAILED);
       return LOCAL_INFEASIBILITY;
     }
     catch(RESTORATION_FAILED& exc) {
-      exc.ReportException(Jnlst());
+      exc.ReportException(Jnlst(), J_DETAILED);
       return RESTORATION_FAILURE;
     }
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
-      exc.ReportException(Jnlst());
+      exc.ReportException(Jnlst(), J_DETAILED);
       return SUCCESS;
+    }
+    catch(INTERNAL_ABORT& exc) {
+      exc.ReportException(Jnlst());
+      return INTERNAL_ERROR;
     }
 
     DBG_ASSERT(false && "Unknown return code in the algorithm");
+
+    return INTERNAL_ERROR;
   }
 
   void IpoptAlgorithm::ActualizeHessian()
@@ -250,17 +258,6 @@ namespace Ipopt
 
     DBG_PRINT_VECTOR(2, "rhs", *rhs);
 
-    //ToDo: allow us to delete entries in IpData to save memory?
-    // To save memory, delete the old search directions
-    //     IpData().SetFromPtr_delta_x(NULL);
-    //     IpData().SetFromPtr_delta_s(NULL);
-    //     IpData().SetFromPtr_delta_y_c(NULL);
-    //     IpData().SetFromPtr_delta_y_d(NULL);
-    //     IpData().SetFromPtr_delta_z_L(NULL);
-    //     IpData().SetFromPtr_delta_z_U(NULL);
-    //     IpData().SetFromPtr_delta_v_L(NULL);
-    //     IpData().SetFromPtr_delta_v_U(NULL);
-
     // Get space for the search direction
     SmartPtr<IteratesVector> delta = IpData().curr()->MakeNewIteratesVector(true);
 
@@ -272,7 +269,7 @@ namespace Ipopt
     Jnlst().Printf(J_MOREVECTOR, J_MAIN,
                    "*** Step Calculated for Iteration: %d\n",
                    IpData().iter_count());
-    Jnlst().PrintVector(J_MOREVECTOR, J_MAIN, "delta", *IpData().delta());
+    IpData().delta()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "delta");
   }
 
   void IpoptAlgorithm::ComputeAcceptableTrialPoint()
@@ -326,10 +323,10 @@ namespace Ipopt
                        adjusted_slacks);
       }
       if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "old_x_L", *IpNLP().x_L());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "old_x_U", *IpNLP().x_U());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "old_d_L", *IpNLP().d_L());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "old_d_U", *IpNLP().d_U());
+        IpNLP().x_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "old_x_L");
+        IpNLP().x_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "old_x_U");
+        IpNLP().d_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "old_d_L");
+        IpNLP().d_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "old_d_U");
       }
 
       SmartPtr<Vector> new_x_l = IpNLP().x_L()->MakeNew();
@@ -355,10 +352,10 @@ namespace Ipopt
       IpNLP().AdjustVariableBounds(*new_x_l, *new_x_u, *new_d_l, *new_d_u);
 
       if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "new_x_L", *IpNLP().x_L());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "new_x_U", *IpNLP().x_U());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "new_d_L", *IpNLP().d_L());
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "new_d_U", *IpNLP().d_U());
+        IpNLP().x_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "new_x_L");
+        IpNLP().x_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "new_x_U");
+        IpNLP().d_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "new_d_L");
+        IpNLP().d_U()->Print(Jnlst(), J_VECTOR, J_MAIN, "new_d_U");
       }
 
     }

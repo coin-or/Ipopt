@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -62,9 +62,13 @@ namespace Ipopt
     //@{
     /** overload this method to return the number of variables
      *  and constraints, and the number of non-zeros in the jacobian and
-     *  the hessian. */
+     *  the hessian. The index_style parameter lets you specify C or Fortran
+     *  style indexing for the sparse matrix iRow and jCol parameters.
+     *  C_STYLE is 0-based, and FORTRAN_STYLE is 1-based.
+     */
+    enum IndexStyleEnum { C_STYLE=0, FORTRAN_STYLE=1 };
     virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-                              Index& nnz_h_lag)=0;
+                              Index& nnz_h_lag, IndexStyleEnum& index_style)=0;
 
     /** overload this method to return the information about the bound
      *  on the variables and constraints. The value that indicates

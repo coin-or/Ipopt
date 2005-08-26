@@ -12,6 +12,9 @@ VPATH = @srcdir@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 
+# Directory with header files
+IPOPTINCDIR = @includedir@/ipopt
+
 # Directory with libipopt.a
 IPOPTLIBDIR = @libdir@
 exec_prefix = @exec_prefix@
@@ -22,13 +25,7 @@ prefix = @prefix@
 LIBS = @ipoptlib@ @IPADDLIBS@ @FLIBS@
 
 # Necessary Include dirs
-IPOPTSRCROOTDIR = $(SRCDIR)/../..
-IPOPTINSTALLROOTDIR = @prefix@
-INCL =  -I$(IPOPTSRCROOTDIR)/Interfaces \
-	-I$(IPOPTSRCROOTDIR)/Apps/StdInterface \
-	-I$(IPOPTSRCROOTDIR)/Common \
-	-I$(IPOPTSRCROOTDIR)/Algorithm \
-	-I$(IPOPTINSTALLROOTDIR)/inc
+INCL =  -I$(IPOPTINCDIR)
 
 # CHANGEME: This should be the name of your executable
 EXE = cpp_example@EXEEXT@

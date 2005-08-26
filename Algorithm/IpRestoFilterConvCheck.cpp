@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,10 +12,9 @@
 
 namespace Ipopt
 {
-
-  DBG_SET_VERBOSITY(0);
-
-  DefineIpoptType(RestoFilterConvergenceCheck);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   RestoFilterConvergenceCheck::RestoFilterConvergenceCheck()
       :
@@ -43,7 +42,7 @@ namespace Ipopt
   {
     roptions->AddBoundedNumberOption(
       "required_infeasibility_reduction",
-      "Required reduction of infeasibility before restoration phase is left.",
+      "Required reduction of infeasibility before leaving restoration phase.",
       0.0, false, 1.0, true,
       0.9,
       "The restoration phase algorithm is performed, until a point is found "

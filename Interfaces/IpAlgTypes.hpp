@@ -1,10 +1,10 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpException.hpp 277 2005-05-04 20:54:12Z andreasw $
+// $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-07-19
 
 #ifndef __IPALGTYPES_HPP__
 #define __IPALGTYPES_HPP__
@@ -25,7 +25,8 @@ namespace Ipopt
     STOP_AT_TINY_STEP,
     STOP_AT_ACCEPTABLE_POINT,
     LOCAL_INFEASIBILITY,
-    RESTORATION_FAILURE
+    RESTORATION_FAILURE,
+    INTERNAL_ERROR
   };
   //@}
 
@@ -36,6 +37,7 @@ namespace Ipopt
   DECLARE_STD_EXCEPTION(TINY_STEP_DETECTED);
   DECLARE_STD_EXCEPTION(ACCEPTABLE_POINT_REACHED);
   DECLARE_STD_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED);
+  DECLARE_STD_EXCEPTION(INTERNAL_ABORT);
   /** Exception FAILED_INITIALIZATION for problem during
    *  initialization of a strategy object (or other problems).  This
    *  is thrown by a strategy object, if a problem arises during
@@ -45,6 +47,6 @@ namespace Ipopt
   //@}
 
 
-};
+}
 
 #endif

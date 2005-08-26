@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -10,9 +10,11 @@
 #define __IPSMARTPTR_HPP__
 
 #include "IpReferenced.hpp"
-#include "IpDebug.hpp"
 
 //#define IP_DEBUG_SMARTPTR
+#ifdef IP_DEBUG_SMARTPTR
+# include "IpDebug.hpp"
+#endif
 
 namespace Ipopt
 {
@@ -163,8 +165,6 @@ namespace Ipopt
   class SmartPtr : public Referencer
   {
   public:
-    // ToDo the following didn't work on AIX
-    //static const Index dbg_smartptr_verbosity = 0;
 #define dbg_smartptr_verbosity 0
 
     /**@name Constructors/Destructors */
@@ -222,7 +222,7 @@ namespace Ipopt
      * user to compare the value of a SmartPtr with a raw pointer. */
     template <class U1, class U2>
     friend
-    bool operator==(const SmartPtr& lhs, U2* raw_rhs);
+    bool operator==(const SmartPtr<U1>& lhs, U2* raw_rhs);
 
     /** Overloaded equality comparison operator, allows the
      * user to compare the value of a raw pointer with a SmartPtr. */
@@ -434,7 +434,10 @@ namespace Ipopt
 #endif
 
     // cannot deref a null pointer
-    DBG_ASSERT(ptr_);
+#ifdef IP_DEBUG
+
+    assert(ptr_);
+#endif
 
     return ptr_;
   }
@@ -448,7 +451,10 @@ namespace Ipopt
 #endif
 
     // cannot dereference a null pointer
-    DBG_ASSERT(ptr_);
+#ifdef IP_DEBUG
+
+    assert(ptr_);
+#endif
 
     return *ptr_;
   }
@@ -583,9 +589,11 @@ namespace Ipopt
   template <class U>
   bool IsNull(const SmartPtr<U>& smart_ptr)
   {
+#ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool IsNull(const SmartPtr<T>& smart_ptr)",
       0);
+#endif
 
     return (smart_ptr.ptr_ == NULL);
   }

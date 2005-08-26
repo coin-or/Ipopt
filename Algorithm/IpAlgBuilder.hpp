@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004,2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,13 +9,10 @@
 #ifndef __IPALGBUILDER_HPP__
 #define __IPALGBUILDER_HPP__
 
-#include "IpUtils.hpp"
 #include "IpIpoptAlg.hpp"
 
 namespace Ipopt
 {
-
-  DeclareIpoptType(AlgorithmBuilder);
 
   /** Builder to create a complete IpoptAlg object.  This object
    *  contains all subelements (such as line search objects etc).  How

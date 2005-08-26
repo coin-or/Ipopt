@@ -65,11 +65,12 @@ PROGRAMS = $(bin_PROGRAMS)
 am_composite_ampl_ipopt_OBJECTS = comp_ampl_ipopt.$(OBJEXT)
 composite_ampl_ipopt_OBJECTS = $(am_composite_ampl_ipopt_OBJECTS)
 am__DEPENDENCIES_1 =
-am__DEPENDENCIES_2 = ../../Algorithm/libipoptalg.a \
-	../../LinAlgImpl/Serial/liblaserial.a \
-	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
-	../../Common/libcommon.a \
-	../../Apps/AmplSolver/libamplinterface.a $(am__DEPENDENCIES_1)
+am__DEPENDENCIES_2 = ../../Interfaces/libinterfaces.a \
+	../../Algorithm/libipoptalg.a \
+	../../Algorithm/LinearSolvers/liblinsolvers.a \
+	../../LinAlg/TMatrices/libtmatrices.a ../../LinAlg/liblinalg.a \
+	../../Common/libcommon.a ../AmplSolver/libamplinterface.a \
+	$(am__DEPENDENCIES_1)
 composite_ampl_ipopt_DEPENDENCIES = $(am__DEPENDENCIES_2) \
 	libcompositenlp.a
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
@@ -97,6 +98,7 @@ AMPL_CPPFLAGS = @AMPL_CPPFLAGS@
 AMTAR = @AMTAR@
 AR = @AR@
 ARFLAGS = @ARFLAGS@
+AR_X = @AR_X@
 ASLLIB = @ASLLIB@
 ASLMAKEFILECMDS = @ASLMAKEFILECMDS@
 ASLMAKEFLAGS = @ASLMAKEFLAGS@
@@ -118,10 +120,6 @@ BUILDHSLDIR_FALSE = @BUILDHSLDIR_FALSE@
 BUILDHSLDIR_TRUE = @BUILDHSLDIR_TRUE@
 BUILDHSL_FALSE = @BUILDHSL_FALSE@
 BUILDHSL_TRUE = @BUILDHSL_TRUE@
-BUILDLAPACKDIR_FALSE = @BUILDLAPACKDIR_FALSE@
-BUILDLAPACKDIR_TRUE = @BUILDLAPACKDIR_TRUE@
-BUILDLAPACK_FALSE = @BUILDLAPACK_FALSE@
-BUILDLAPACK_TRUE = @BUILDLAPACK_TRUE@
 BUILDMA27_FALSE = @BUILDMA27_FALSE@
 BUILDMA27_TRUE = @BUILDMA27_TRUE@
 BUILDMC19_FALSE = @BUILDMC19_FALSE@
@@ -129,18 +127,18 @@ BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
-CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
+
+#CXXFLAGS += -I$(srcdir)/../../Apps/AmplSolver \
+#	    -I$(srcdir)/../../OTHERS/ASL/ \
+#	    -I$(srcdir)/../../OTHERS/ASL/solvers
 CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../../Common \
-	-I$(srcdir)/../../Interfaces \
-	-I$(srcdir)/../../LinAlgImpl/Serial \
-	-I$(srcdir)/../../Algorithm \
-	-I$(srcdir)/../../PDSystemImpl/PDFullSpace \
-	-I$(srcdir)/../../Apps/AmplSolver \
-	-I$(srcdir)/../../OTHERS/ASL/ \
-	-I$(srcdir)/../../OTHERS/ASL/solvers $(AMPL_CPPFLAGS)
+	-I$(srcdir)/../../LinAlg -I$(srcdir)/../../LinAlg/TMatrices \
+	-I$(srcdir)/../../Algorithm -I$(srcdir)/../../Interfaces \
+	-I$(srcdir)/../AmplSolver $(AMPL_CPPFLAGS)
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -228,16 +226,19 @@ target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 noinst_LIBRARIES = libcompositenlp.a
 libcompositenlp_a_SOURCES = \
-	CompositeNLP.hpp CompositeNLP.cpp
+	CompositeNLP.cpp CompositeNLP.hpp
 
 composite_ampl_ipopt_SOURCES = \
 	comp_ampl_ipopt.cpp
 
-IPLIBS = ../../Algorithm/libipoptalg.a \
-	../../LinAlgImpl/Serial/liblaserial.a \
-	../../PDSystemImpl/PDFullSpace/libpdfullspace.a \
+IPLIBS = \
+	../../Interfaces/libinterfaces.a \
+	../../Algorithm/libipoptalg.a \
+	../../Algorithm/LinearSolvers/liblinsolvers.a \
+	../../LinAlg/TMatrices/libtmatrices.a \
+	../../LinAlg/liblinalg.a \
 	../../Common/libcommon.a \
-	../../Apps/AmplSolver/libamplinterface.a \
+	../AmplSolver/libamplinterface.a \
 	$(ASLLIB)
 
 composite_ampl_ipopt_LDADD = $(IPLIBS) \
@@ -246,7 +247,7 @@ composite_ampl_ipopt_LDADD = $(IPLIBS) \
 
 # Astyle stuff
 ASTYLE_FILES = \
-	CompositeNLP.hppbak CompositeNLP.cppbak \
+	CompositeNLP.cppbak CompositeNLP.hppbak \
 	comp_ampl_ipopt.cppbak
 
 CLEANFILES = $(ASTYLE_FILES)

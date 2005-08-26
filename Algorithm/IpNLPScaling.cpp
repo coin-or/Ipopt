@@ -1,17 +1,19 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Carl Laird, Andreas Waechter     IBM    2005-06-25
 
 #include "IpNLPScaling.hpp"
 
 namespace Ipopt
 {
 
-  DBG_SET_VERBOSITY(0);
+#ifdef IP_DEBUG
+  static const Index dbg_verbosity = 0;
+#endif
 
   SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_LU_NonConst(
     const Matrix& Px_LU,
@@ -177,8 +179,6 @@ namespace Ipopt
     }
   }
 
-  DefineIpoptType(StandardScalingBase);
-
   void
   StandardScalingBase::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
@@ -186,12 +186,13 @@ namespace Ipopt
       "obj_scaling_factor",
       "Scaling factor for the objective function.",
       1.,
-      "This option allows to set a scaling factor for the objective function "
-      "that is used to scale the problem that is seen internally by "
-      "Ipopt. If additional scaling parameters are computed "
-      "(e.g. user-scaling or gradient-based), this factor is multiplied "
-      "in addition. If this value is chosen to be negative, Ipopt will "
-      "maximize the objective function.");
+      "This option sets a scaling factor for the objective function. "
+      "The scaling is seen internally by Ipopt but the unscaled objective is "
+      "reported in the console output. "
+      "If additional scaling parameters are computed "
+      "(e.g. user-scaling or gradient-based), both factors are multiplied. "
+      "If this value is chosen to be negative, Ipopt will "
+      "maximize the objective function instead of minimizing it.");
   }
 
   bool StandardScalingBase::InitializeImpl(const OptionsList& options,
@@ -223,19 +224,19 @@ namespace Ipopt
     if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
       Jnlst().Printf(J_VECTOR, J_MAIN, "objective scaling factor = %g\n", df_);
       if (IsValid(dx_)) {
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "x scaling vector", *dx_);
+        dx_->Print(Jnlst(), J_VECTOR, J_MAIN, "x scaling vector");
       }
       else {
         Jnlst().Printf(J_VECTOR, J_MAIN, "No x scaling provided\n");
       }
       if (IsValid(dc)) {
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "c scaling vector", *dc);
+        dc->Print(Jnlst(), J_VECTOR, J_MAIN, "c scaling vector");
       }
       else {
         Jnlst().Printf(J_VECTOR, J_MAIN, "No c scaling provided\n");
       }
       if (IsValid(dd)) {
-        Jnlst().PrintVector(J_VECTOR, J_MAIN, "d scaling vector", *dd);
+        dd->Print(Jnlst(), J_VECTOR, J_MAIN, "d scaling vector");
       }
       else {
         Jnlst().Printf(J_VECTOR, J_MAIN, "No d scaling provided\n");
@@ -298,7 +299,7 @@ namespace Ipopt
       DBG_PRINT((1, "Creating copy in apply_vector_scaling_x_NonConst!"));
     }
     return scaled_x;
-  };
+  }
 
   SmartPtr<const Vector> StandardScalingBase::apply_vector_scaling_x(
     const SmartPtr<const Vector>& v)
