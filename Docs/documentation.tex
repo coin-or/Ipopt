@@ -393,7 +393,7 @@ submitting a ticket or sending a message to the mailing list.
   \end{itemize}
   You can change the default installation directory (here
   \texttt{\$IPOPTDIR}) to something else (such as \texttt{/usr/local})
-  by using the \texttt{--prefix} switch for \texttt{configure}.
+  by using the \verb|--prefix| switch for \texttt{configure}.
 %\item Test the installation \\
 %  {\tt \$ make test}\\
 %  This should ?...?
@@ -845,7 +845,7 @@ deletion) for you.
 After ``\texttt{make install}'' (see Section~\ref{sec.comp_and_inst}),
 the header files are installed in \texttt{\$IPOPTDIR/include/ipopt}
 (or in \texttt{\$PREFIX/include/ipopt} if the switch
-\texttt{--prefix=\$PREFIX} was used for {\tt configure}).
+\verb|--prefix=$PREFIX| was used for {\tt configure}).
 
 \subsubsection{Coding the Problem Representation}\label{sec.cpp_problem}
 We provide the information required in Figure \ref{fig.required_info}
@@ -1646,7 +1646,7 @@ The C interface for \Ipopt\ is declared in the header file {\tt
   IpStdCInterface.h}, which is found in\\
 \texttt{\$IPOPTDIR/include/ipopt} (or in
 \texttt{\$PREFIX/include/ipopt} if the switch
-\texttt{--prefix=\$PREFIX} was used for {\tt configure}); while
+\verb|--prefix=$PREFIX| was used for {\tt configure}); while
 reading this section, it will be helpful to have a look at this file.
 
 In order to solve an optimization problem with the C interface, one
@@ -2565,7 +2565,7 @@ work, or where you need to change the settings to fit your particular
 environment.
 
 In general, you can see the list of options and variables that can be
-set for the {\tt configure} script by typing {\tt configure --help}.
+set for the {\tt configure} script by typing \verb/configure --help/.
 Below a few particular options are discussed:
 
 \begin{itemize}
@@ -2575,18 +2575,18 @@ Below a few particular options are discussed:
   put the source code in the required place.
 
   However, you can specify a BLAS library (such as your local ATLAS
-  library) explicitly, using the {\tt --with-blas} flag for {\tt
+  library) explicitly, using the \verb/--with-blas/ flag for {\tt
     configure}.  For example,
 
-  {\tt ./configure --with=blas="-L \$HOME/lib -latlas"}
+  \verb|./configure --with=blas="-L$HOME/lib -latlas"|
 
   To tell the configure script to compile and use the downloaded BLAS
   source files even if a BLAS library is found on your system, specify
-  {\tt --with-blas=BUILD}.
+  \verb|--with-blas=BUILD|.
 
 \item Similarly, if you have a precompiled library containing the
-  Harwell Subroutines, you can specify its location with the {\tt
-    --with-hsl} flag.
+  Harwell Subroutines, you can specify its location with the
+  \verb|--with-hsl| flag.
 
 \item If you want to specify that you want to use particular
   compilers, you can do so by adding the variables definitions for
@@ -2648,7 +2648,7 @@ Below a few particular options are discussed:
   {\tt AR='CC-xar' ARFLAGS='-o' AR\_X='ar x'}
 
 \item It is possible to compile the \Ipopt\ library in a debug
-  configuration, by specifying {\tt --enable-debug}.  Then the
+  configuration, by specifying \verb|--enable-debug|.  Then the
   compilers will use the debug flags (unless the compilation flag
   variables are overwritten in the command line), and additional debug
   checks are compiled into the code.  This usually leads to a

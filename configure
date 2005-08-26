@@ -2458,7 +2458,7 @@ echo "${ECHO_T}yes" >&6
 fi
 
 # C++ link libraries #
-CXXLIBS=
+
 if test -z "$CXXLIBS"; then
   if test "$GXX" = "yes"; then
     case "$CXX" in

@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: cpp_example.cpp 419 2005-08-01 18:34:28Z andreasw $
+// $Id$
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-08-10
 

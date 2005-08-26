@@ -6,11 +6,6 @@
 
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-## SGI: ./configure CC=cc F77=f77 CXX=CC CXXFLAGS="-g -LANG:std -DOLD_C_HEADERS" AR="CC -ar" ARFLAGS="-o " AR_X="ar x" FFLAGS=-g CFLAGS=-g CXXLIBS='-lCsup -lC -lCio'
-## AIX: ./configure CC=xlc F77=xlf CXX=xlC --with-lapack=$HOME/lib/liblapack.a CFLAGS=-g FFLAGS=-g CXXFLAGS="-g -qrtti=dyna" CXXLIBS="-lC -lc"
-## HP1: configure --with-asl=$HOME/COIN/OBJhp1/OTHERS/ASL/amplsolver.a --with-blas=/opt/fortran/lib/libblas.a --with-hsl=$HOME/COIN/OBJhp1/OTHERS/HSL/libiphsl.a --with-lapack=$HOME/COIN/OBJhp1/OTHERS/lapack/libiplapack.a F77=/opt/fortran/bin/fort77 CC=/opt/ansic/bin/cc CXX=/opt/aCC/bin/aCC FFLAGS='-g' CFLAGS='-g' CXXFLAGS='-AA -DMY_C_FINITE=isfinite -g' CXXLIBS='-L/opt/aCC/lib -l++ -lstd_v2 -lCsup_v2 -lm -lcl -lc'
-# gridsun1: need AR='CC -xar' ARFLAGS='-o'
-
 AC_PREREQ(2.59)
 
 AC_INIT([Ipopt],[3.0.-1],[coin-ipopt@www-124.ibm.com])
@@ -224,7 +219,7 @@ else
 fi
 
 # C++ link libraries #
-AC_ARG_VAR(CXXLIBS,[Libraries necessary for linking C++ code with Fortran compiler])CXXLIBS=
+AC_ARG_VAR(CXXLIBS,[Libraries necessary for linking C++ code with Fortran compiler])
 if test -z "$CXXLIBS"; then
   if test "$GXX" = "yes"; then
     case "$CXX" in

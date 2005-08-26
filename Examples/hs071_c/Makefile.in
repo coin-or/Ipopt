@@ -2,7 +2,7 @@
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
-# $Id: Makefile.in 433 2005-08-11 16:28:35Z andreasw $
+# $Id$
 
 # Directory to the sources for the (example) problem definition files
 SRCDIR = @srcdir@
