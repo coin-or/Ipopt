@@ -19,6 +19,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppExample", "..\CppExample
 		{E139BC7F-6A35-40A3-A09E-5D0001C536F8} = {E139BC7F-6A35-40A3-A09E-5D0001C536F8}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CExample", "..\CExample\CExample.vcproj", "{D0EF08B1-3FDE-495A-A196-D9EBD19933E8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{70C95D45-EB96-4C08-94D5-F1081D021629} = {70C95D45-EB96-4C08-94D5-F1081D021629}
+		{E139BC7F-6A35-40A3-A09E-5D0001C536F8} = {E139BC7F-6A35-40A3-A09E-5D0001C536F8}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -41,6 +47,10 @@ Global
 		{C55A412F-941A-4857-AD30-14635ECB307C}.Debug.Build.0 = Debug|Win32
 		{C55A412F-941A-4857-AD30-14635ECB307C}.Release.ActiveCfg = Release|Win32
 		{C55A412F-941A-4857-AD30-14635ECB307C}.Release.Build.0 = Release|Win32
+		{D0EF08B1-3FDE-495A-A196-D9EBD19933E8}.Debug.ActiveCfg = Debug|Win32
+		{D0EF08B1-3FDE-495A-A196-D9EBD19933E8}.Debug.Build.0 = Debug|Win32
+		{D0EF08B1-3FDE-495A-A196-D9EBD19933E8}.Release.ActiveCfg = Release|Win32
+		{D0EF08B1-3FDE-495A-A196-D9EBD19933E8}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
