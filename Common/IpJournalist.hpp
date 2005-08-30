@@ -36,6 +36,7 @@ namespace Ipopt
   //@{
   /** Print Level Enum. */
   enum EJournalLevel {
+    J_INSUPPRESSIBLE=-1,
     J_NONE=0,
     J_ERROR,
     J_WARNING,

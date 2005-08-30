@@ -82,6 +82,15 @@ namespace Ipopt
       "and mu^\"superlinear_decrease_power\".  (This is theta_mu in "
       "implementation paper.) This option is also used in the adaptive mu "
       "strategy during the monotone mode.");
+    roptions->AddStringOption2(
+      "mu_allow_fast_monotone_decrease",
+      "Allow skipping of barrier problem if barrier test already met.",
+      "yes",
+      "no", "Take at least one iteration per barrier problem",
+      "yes", "Allow fast decrease of mu if barrier test it met",
+      "If set to no, the algorithm enforces at least one iteration per "
+      "barrier problem, even if the barrier test is already met for the "
+      "updated barrier parameter.");
     roptions->AddBoundedNumberOption(
       "tau_min",
       "Lower bound on fraction-to-the-boundary parameter tau.",
@@ -98,6 +107,7 @@ namespace Ipopt
     options.GetNumericValue("barrier_tol_factor", barrier_tol_factor_, prefix);
     options.GetNumericValue("mu_linear_decrease_factor", mu_linear_decrease_factor_, prefix);
     options.GetNumericValue("mu_superlinear_decrease_power", mu_superlinear_decrease_power_, prefix);
+    options.GetBoolValue("mu_allow_fast_monotone_decrease", mu_allow_fast_monotone_decrease_, prefix);
     options.GetNumericValue("tau_min", tau_min_, prefix);
     options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
 
@@ -157,9 +167,10 @@ namespace Ipopt
       mu = new_mu;
       tau = new_tau;
 
-      // If this is the first iteration, we want to check if we can
-      // decrease mu even more
-      if (initialized_) {
+      // If this is the first iteration or if
+      // mu_allow_fast_monotone_decrease_ is true, we want to check if
+      // we can decrease mu even more
+      if (initialized_ && !mu_allow_fast_monotone_decrease_) {
         done = true;
       }
       else {

@@ -115,6 +115,9 @@ C
          goto 9000
       endif
 C
+C     Note: The following options are only examples, they might not be
+C           suitable for your optimization problem.
+C
 C     Set a string option
 C
       IERR = IPADDSTROPTION(IPROBLEM, 'mu_strategy', 'adaptive')
@@ -127,7 +130,7 @@ C
 C
 C     Set a double precision option
 C
-      IERR = IPADDNUMOPTION(IPROBLEM, 'tol', 1.d-9)
+      IERR = IPADDNUMOPTION(IPROBLEM, 'tol', 1.d-7)
       if (IERR.ne.0 ) goto 9990
 C
 C     As a simple example, we pass the constants in the constraints to

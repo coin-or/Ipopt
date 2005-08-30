@@ -22,7 +22,9 @@ int main(int argv, char* argc[])
   SmartPtr<IpoptApplication> app = new IpoptApplication();
 
   // Change some options
-  app->Options()->SetNumericValue("tol", 1e-9);
+  // Note: The following choices are only examples, they might not be
+  //       suitable for your optimization problem.
+  app->Options()->SetNumericValue("tol", 1e-7);
   app->Options()->SetStringValue("mu_strategy", "adaptive");
 
   // Ask Ipopt to solve the problem

@@ -16,6 +16,19 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
+  static bool message_printed = false;
+
+  static void print_message(const Journalist& jnlst)
+  {
+    jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
+                 "\n******************************************************************************\n"
+                 "This program contains Ipopt, a library for large-scale nonlinear optimization.\n"
+                 " Ipopt is released as open source code under the Common Public License (CPL).\n"
+                 "         For more information visit http://projects.coin-or.org/Ipopt\n"
+                 "******************************************************************************\n\n");
+    message_printed = true;
+  }
+
   IpoptAlgorithm::IpoptAlgorithm(const SmartPtr<PDSystemSolver>& pd_solver,
                                  const SmartPtr<LineSearch>& line_search,
                                  const SmartPtr<MuUpdate>& mu_update,
@@ -129,6 +142,10 @@ namespace Ipopt
   SolverReturn IpoptAlgorithm::Optimize()
   {
     DBG_START_METH("IpoptAlgorithm::Optimize", dbg_verbosity);
+
+    if (!message_printed) {
+      print_message(Jnlst());
+    }
 
     // Initialize the iterates
     InitializeIterates();

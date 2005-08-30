@@ -76,6 +76,7 @@ namespace Ipopt
     Number barrier_tol_factor_;
     Number mu_linear_decrease_factor_;
     Number mu_superlinear_decrease_power_;
+    bool mu_allow_fast_monotone_decrease_;
     /** Tau_min for fraction to boundary rule */
     Number tau_min_;
     Number compl_inf_tol_;

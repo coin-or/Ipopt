@@ -69,9 +69,17 @@ int main()
   g_L[0] = 25; g_U[0] = 2e19;
   g_L[1] = 40; g_U[1] = 40;
 
+  /* Number of nonzeros in the Jacobian of the constraints */
+  Index nele_jac = 8;
+  /* Number of nonzeros in the Hessian of the Lagrangian (lower or
+     upper triangual part only) */
+  Index nele_hess = 10;
+  /* indexing style for matrices */
+  Index index_style = 0; /* C-style; start counting of rows and column
+			    indices at 0 */
   /* create the IpoptProblem */
-  nlp = CreateIpoptProblem(n, x_L, x_U, m, g_L, g_U, 8, 10, 0, 
-			   &eval_f, &eval_g, &eval_grad_f, 
+  nlp = CreateIpoptProblem(n, x_L, x_U, m, g_L, g_U, nele_jac, nele_hess,
+			   index_style, &eval_f, &eval_g, &eval_grad_f, 
 			   &eval_jac_g, &eval_h);
   
   /* We can free the memory now - the values for the bounds have been
@@ -81,8 +89,9 @@ int main()
   free(g_L);
   free(g_U);
 
-  /* set some options */
-  AddIpoptNumOption(nlp, "tol", 1e-9);
+  /* Set some options.  Note the following ones are only examples,
+     they might not be suitable for your problem. */
+  AddIpoptNumOption(nlp, "tol", 1e-7);
   AddIpoptStrOption(nlp, "mu_strategy", "adaptive");
 
   /* allocate space for the initial point and set the values */
