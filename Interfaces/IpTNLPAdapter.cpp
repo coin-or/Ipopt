@@ -7,6 +7,17 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpTNLPAdapter.hpp"
+#include "IpBlas.hpp"
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -14,9 +25,11 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  TNLPAdapter::TNLPAdapter(const SmartPtr<TNLP> tnlp)
+  TNLPAdapter::TNLPAdapter(const SmartPtr<TNLP> tnlp,
+                           const SmartPtr<const Journalist> jnlst /* = NULL */)
       :
       tnlp_(tnlp),
+      jnlst_(jnlst),
       n_full_x_(-1),
       n_full_g_(-1),
       nz_jac_c_(-1),
@@ -62,10 +75,46 @@ namespace Ipopt
   void TNLPAdapter::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("NLP");
-    roptions->AddNumberOption("nlp_lower_bound_inf", "any bound less or equal this value will be considered -inf (i.e. not lower bounded).",
-                              -1e19);
-    roptions->AddNumberOption("nlp_upper_bound_inf", "any bound greater or this value will be considered +inf (i.e. not upper bounded).",
-                              1e19);
+    roptions->AddNumberOption(
+      "nlp_lower_bound_inf",
+      "any bound less or equal this value will be considered -inf (i.e. not lower bounded).",
+      -1e19);
+    roptions->AddNumberOption(
+      "nlp_upper_bound_inf",
+      "any bound greater or this value will be considered +inf (i.e. not upper bounded).",
+      1e19);
+    roptions->AddStringOption3(
+      "derivative_test",
+      "Enable derivative checker",
+      "no",
+      "no", "do not perform derivative test",
+      "first-order", "perform test of first derivatives at starting point",
+      "second-order", "perform test of first and second derivatives at starting point",
+      "If this option is enabled, a (slow) derivative test will be performed "
+      "before the optimization.  The test is performed at the user provided "
+      "starting point and marks derivative values that seem suspicious");
+    roptions->AddLowerBoundedNumberOption(
+      "derivative_test_perturbation",
+      "Size of the finite difference perturbation in derivative test.",
+      0., true,
+      1e-8,
+      "This determines the relative perturbation of the variable entries.");
+    roptions->AddLowerBoundedNumberOption(
+      "derivative_test_tol",
+      "Threshold for indicating wrong derivative.",
+      0., true,
+      1e-4,
+      "If the relative deviation of the estimated derivative from the given "
+      "one is larger than this value, the corresponding derivative is marked "
+      "as wrong.");
+    roptions->AddStringOption2(
+      "derivative_test_print_all",
+      "Indicates whether information for all estimated derivatives should be printed.",
+      "no",
+      "no", "Print only suspect derivatives",
+      "yes", "Print all derivatives",
+      "Determines erbosity of derivative checker.");
+    roptions->SetRegisteringCategory("Uncategorized");
     roptions->AddLowerBoundedNumberOption("max_onesided_bound_slack", "???",
                                           0.0, false, 0.0);
   }
@@ -82,6 +131,13 @@ namespace Ipopt
                      "Option \"nlp_lower_bound_inf\" must be smaller than \"nlp_upper_bound_inf\".");
 
     options.GetNumericValue("max_onesided_bound_slack", max_onesided_bound_slack_, prefix);
+
+    Index enum_int;
+    options.GetEnumValue("derivative_test", enum_int, prefix);
+    derivative_test_ = DerivativeTestEnum(enum_int);
+    options.GetNumericValue("derivative_test_perturbation", derivative_test_perturbation_, prefix);
+    options.GetNumericValue("derivative_test_tol", derivative_test_tol_, prefix);
+    options.GetBoolValue("derivative_test_print_all", derivative_test_print_all_, prefix);
 
     // allow TNLP to process some options
     //tnlp_->ProcessOptions(....);
@@ -105,6 +161,15 @@ namespace Ipopt
                               SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space)
   {
     DBG_START_METH("TNLPAdapter::GetSpaces", dbg_verbosity);
+
+    // First, if required, perform derivative test
+    if (derivative_test_ != NO_TEST) {
+      bool retval = CheckDerivatives(derivative_test_);
+      if (!retval) {
+        return retval;
+      }
+    }
+
     // Get the full dimensions of the problem
     TNLP::IndexStyleEnum index_style = TNLP::FORTRAN_STYLE;
     tnlp_->get_nlp_info(n_full_x_, n_full_g_, nz_full_jac_g_,
@@ -122,12 +187,6 @@ namespace Ipopt
 
     // allocate internal space to store the full jacobian
     jac_g_ = new Number[nz_full_jac_g_];
-
-    // allocate internal space to store the full hessian
-    //    h_lag_ = new Number[nz_full_h];
-    //    Index* full_h_lag_iRow = new Number[nz_full_h];
-    //    Index* full_h_lag_jCol = new Number[nz_full_h];
-
 
     //*********************************************************
     // Create the spaces and permutation spaces
@@ -321,7 +380,6 @@ namespace Ipopt
       for (Index i=0; i<nz_full_jac_g_; i++) {
         g_iRow[i] += 1;
         g_jCol[i] += 1;
-        ;
       }
     }
     const Index* c_col_pos = P_x_full_x_->CompressedPosIndices();
@@ -1056,7 +1114,327 @@ namespace Ipopt
     }
 
     x_tag_for_jac_g_ = x_tag_for_iterates_;
-    return tnlp_->eval_jac_g(n_full_x_, full_x_, new_x, n_full_g_,                             nz_full_jac_g_, NULL, NULL, jac_g_);
+    return tnlp_->eval_jac_g(n_full_x_, full_x_, new_x, n_full_g_,
+                             nz_full_jac_g_, NULL, NULL, jac_g_);
+  }
+
+  bool TNLPAdapter::CheckDerivatives(TNLPAdapter::DerivativeTestEnum deriv_test)
+  {
+    if (deriv_test == NO_TEST) {
+      return true;
+    }
+
+    Index nerrors = 0;
+
+    ASSERT_EXCEPTION(IsValid(jnlst_), ERROR_IN_TNLP_DERIVATIVE_TEST,
+                     "No Journalist given to TNLPAdapter.  Need Journalist, otherwise can't produce any output!");
+
+    bool retval = true;
+    // Since this method should be independent of all other internal
+    // data (so that it can be called indpenendent of GetSpace etc),
+    // we are not using any internal fields
+
+    // Obtain the problem size
+    Index nx; // number of variables
+    Index ng; // number of constriants
+    Index nz_jac_g; // number of nonzeros in constraint Jacobian
+    Index nz_hess_lag; // number of nonzeros in Lagrangian Hessian
+    TNLP::IndexStyleEnum index_style = TNLP::FORTRAN_STYLE;
+    tnlp_->get_nlp_info(nx, ng, nz_jac_g, nz_hess_lag, index_style);
+
+    // Obtain starting point as reference point at which derivative
+    // test should be performed
+    Number* xref = new Number[nx];
+    tnlp_->get_starting_point(nx, true, xref, false, NULL, NULL, ng, false, NULL);
+
+    // Obtain value of objective and constraints at reference point
+    bool new_x = true;
+    Number fref;
+    Number* gref = NULL;
+    if (ng>0) {
+      gref = new Number[ng];
+    }
+    retval = tnlp_->eval_f(nx, xref, new_x, fref);
+    ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                     "In TNLP derivative test: f could not be evaluated at reference point.");
+    new_x = false;
+    if (ng>0) {
+      retval = tnlp_->eval_g(nx, xref, new_x, ng, gref);
+      ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                       "In TNLP derivative test: g could not be evaluated at reference point.");
+    }
+
+    // Obtain gradient of objective function at reference pont
+    Number* grad_f = new Number[nx];
+    retval = tnlp_->eval_grad_f(nx, xref, true, grad_f);
+    ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                     "In TNLP derivative test: grad_f could not be evaluated at reference point.");
+
+    Index* g_iRow = NULL;
+    Index* g_jCol = NULL;
+    Number* jac_g = NULL;
+    if (ng>0) {
+      // Obtain constraint Jacobian at reference point (including structure)
+      g_iRow = new Index[nz_jac_g];
+      g_jCol = new Index[nz_jac_g];
+      retval = tnlp_->eval_jac_g(nx, NULL, false, ng, nz_jac_g,
+                                 g_iRow, g_jCol, NULL);
+      ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                       "In TNLP derivative test: Jacobian structure could not be evaluated.");
+      // Correct counting if required to C-style
+      if (index_style == TNLP::FORTRAN_STYLE) {
+        for (Index i=0; i<nz_jac_g; i++) {
+          g_iRow[i] -= 1;
+          g_jCol[i] -= 1;
+        }
+      }
+      // Obtain values at reference pont
+      jac_g = new Number[nz_jac_g];
+      retval = tnlp_->eval_jac_g(nx, xref, new_x, ng,
+                                 nz_jac_g, NULL, NULL, jac_g);
+      ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                       "In TNLP derivative test: Jacobian values could not be evaluated at reference point.");
+    }
+
+    // Space for the perturbed point
+    Number* xpert = new Number[nx];
+    IpBlasDcopy(nx, xref, 1, xpert, 1);
+
+    // Space for constraints at perturbed point
+    Number* gpert = NULL;
+    if (ng>0) {
+      gpert = new Number[ng];
+    }
+
+    Index index_correction = 0;
+    if (index_style == TNLP::FORTRAN_STYLE) {
+      index_correction = 1;
+    }
+
+    // Now go through all variables and check the partial derivatives
+    for (Index ivar=0; ivar<nx; ivar++) {
+      Number this_perturbation =
+        derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
+      xpert[ivar] = xref[ivar] + this_perturbation;
+
+      Number fpert;
+      new_x = true;
+      retval = tnlp_->eval_f(nx, xpert, new_x, fpert);
+      ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                       "In TNLP derivative test: f could not be evaluated at perturbed point.");
+      new_x = false;
+
+      Number deriv_approx = (fpert - fref)/this_perturbation;
+      Number deriv_exact = grad_f[ivar];
+      Number rel_error =
+        fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+      char cflag=' ';
+      if (rel_error >= derivative_test_tol_) {
+        cflag='*';
+        nerrors++;
+      }
+      if (cflag != ' ' || derivative_test_print_all_) {
+        jnlst_->Printf(J_WARNING, J_NLP,
+                       "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n",
+                       cflag, ivar+index_correction,
+                       deriv_exact, deriv_approx, rel_error);
+      }
+
+      if (ng>0) {
+        retval = tnlp_->eval_g(nx, xpert, new_x, ng, gpert);
+        ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                         "In TNLP derivative test: g could not be evaluated at reference point.");
+        for (Index icon=0; icon<ng; icon++) {
+          deriv_approx = (gpert[icon] - gref[icon])/this_perturbation;
+          deriv_exact = 0.;
+          bool found = false;
+          for (Index i=0; i<nz_jac_g; i++) {
+            if (g_iRow[i]==icon && g_jCol[i]==ivar) {
+              found = true;
+              deriv_exact += jac_g[i];
+            }
+          }
+
+          rel_error = fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+          cflag=' ';
+          if (rel_error >= derivative_test_tol_) {
+            cflag='*';
+            nerrors++;
+          }
+          char sflag=' ';
+          if (found) {
+            sflag = 'v';
+          }
+          if (cflag != ' ' || derivative_test_print_all_) {
+            jnlst_->Printf(J_WARNING, J_NLP,
+                           "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
+                           cflag, icon+index_correction, ivar+index_correction,
+                           deriv_exact, sflag, deriv_approx, rel_error);
+          }
+        }
+      }
+
+      xpert[ivar] = xref[ivar];
+    }
+
+    const Number zero = 0.;
+    if (deriv_test == SECOND_ORDER_TEST) {
+      // Get sparsity structure of Hessian
+      Index* h_iRow = new Index[nz_hess_lag];
+      Index* h_jCol = new Index[nz_hess_lag];
+      retval = tnlp_->eval_h(nx, NULL, false, 0., ng, NULL, false,
+                             nz_hess_lag, h_iRow, h_jCol, NULL);
+      ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                       "In TNLP derivative test: Hessian structure could not be evaluated.");
+
+      if (index_style == TNLP::FORTRAN_STYLE) {
+        for (Index i=0; i<nz_hess_lag; i++) {
+          h_iRow[i] -= 1;
+          h_jCol[i] -= 1;
+        }
+      }
+      Number* h_values = new Number[nz_hess_lag];
+
+      Number* lambda = NULL;
+      if (ng>0) {
+        lambda = new Number[ng];
+        IpBlasDcopy(ng, &zero, 0, lambda, 1);
+      }
+      Number* gradref = new Number[nx]; // gradient of objective or constraint at reference point
+      Number* gradpert = new Number[nx]; // gradient of objective or constraint at perturbed point
+      Number* jacpert = new Number[nz_jac_g];
+
+      // Check all Hessians
+      for (Index icon=-1; icon<ng; icon++) {
+        Number objfact = 0.;
+        if (icon == -1) {
+          objfact = 1.;
+          IpBlasDcopy(nx, grad_f, 1, gradref, 1);
+        }
+        else {
+          lambda[icon] = 1.;
+          IpBlasDcopy(nx, &zero, 0, gradref, 1);
+          for (Index i=0; i<nz_jac_g; i++) {
+            if (g_iRow[i]==icon) {
+              gradref[g_jCol[i]] += jac_g[i];
+            }
+          }
+        }
+        // Hessian at reference point
+        new_x = true;
+        bool new_y = true;
+        retval = tnlp_->eval_h(nx, xref, new_x, objfact, ng, lambda, new_y,
+                               nz_hess_lag, NULL, NULL, h_values);
+        new_x = false;
+        new_y = false;
+        ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                         "In TNLP derivative test: Hessian could not be evaluated at reference point.");
+
+        for (Index ivar=0; ivar<nx; ivar++) {
+          Number this_perturbation =
+            derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
+          xpert[ivar] = xref[ivar] + this_perturbation;
+
+          new_x = true;
+          if (icon==-1) {
+            // we are looking at the objective function
+            retval = tnlp_->eval_grad_f(nx, xpert, new_x, gradpert);
+            ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                             "In TNLP derivative test: grad_f could not be evaluated at perturbed point.");
+          }
+          else {
+            // this is the icon-th constraint
+            retval = tnlp_->eval_jac_g(nx, xpert, new_x, ng,
+                                       nz_jac_g, NULL, NULL, jacpert);
+            ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                             "In TNLP derivative test: Jacobian values could not be evaluated at reference point.");
+            // ok, now we need to filter the gradient of the icon-th constraint
+            IpBlasDcopy(nx, &zero, 0, gradpert, 1);
+            IpBlasDcopy(nx, &zero, 0, gradref, 1);
+            for (Index i=0; i<nz_jac_g; i++) {
+              if (g_iRow[i]==icon) {
+                gradpert[g_jCol[i]] += jacpert[i];
+                gradref[g_jCol[i]] += jac_g[i];
+              }
+            }
+          }
+          new_x = false;
+
+          for (Index ivar2=0; ivar2<nx; ivar2++) {
+            Number deriv_approx = (gradpert[ivar2] - gradref[ivar2])/this_perturbation;
+            Number deriv_exact = 0.;
+            bool found = false;
+            for (Index i=0; i<nz_hess_lag; i++) {
+              if ( (h_iRow[i]==ivar && h_jCol[i]==ivar2) ||
+                   (h_jCol[i]==ivar && h_iRow[i]==ivar2) ) {
+                deriv_exact += h_values[i];
+                found = true;
+              }
+            }
+            Number rel_error =
+              fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+            char cflag=' ';
+            if (rel_error >= derivative_test_tol_) {
+              cflag='*';
+              nerrors++;
+            }
+            char sflag = ' ';
+            if (found) {
+              sflag = 'v';
+            }
+            if (cflag != ' ' || derivative_test_print_all_) {
+              if (icon==-1) {
+                jnlst_->Printf(J_WARNING, J_NLP,
+                               "%c             obj_hess[%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
+                               cflag, ivar+index_correction, ivar2+index_correction,
+                               deriv_exact, sflag, deriv_approx, rel_error);
+              }
+              else {
+                jnlst_->Printf(J_WARNING, J_NLP,
+                               "%c %5d-th constr_hess[%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
+                               cflag, icon+index_correction, ivar+index_correction, ivar2+index_correction,
+                               deriv_exact, sflag, deriv_approx, rel_error);
+              }
+            }
+
+          }
+
+          xpert[ivar] = xref[ivar];
+        }
+
+        if (icon>=0) {
+          lambda[icon] = 0.;
+        }
+      }
+
+      delete [] h_iRow;
+      delete [] h_jCol;
+      delete [] h_values;
+      delete [] lambda;
+      delete [] gradref;
+      delete [] gradpert;
+      delete [] jacpert;
+    }
+
+    delete [] xref;
+    delete [] gref;
+    delete [] grad_f;
+    delete [] xpert;
+    delete [] g_iRow;
+    delete [] g_jCol;
+    delete [] jac_g;
+    delete [] gpert;
+
+    if (nerrors==0) {
+      jnlst_->Printf(J_SUMMARY, J_NLP,
+                     "\nNo errors detected by derivative checker.\n\n");
+    }
+    else {
+      jnlst_->Printf(J_WARNING, J_NLP,
+                     "\nDerivative checker detected %d error(s).\n\n", nerrors);
+    }
+
+    return retval;
   }
 
 } // namespace Ipopt

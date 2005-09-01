@@ -272,7 +272,7 @@ namespace Ipopt
   ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp)
   {
     SmartPtr<NLP> nlp_adapter =
-      new TNLPAdapter(GetRawPtr(nlp));
+      new TNLPAdapter(GetRawPtr(nlp), ConstPtr(jnlst_));
 
     return OptimizeNLP(nlp_adapter);
   }

@@ -29,7 +29,8 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Default constructor */
-    TNLPAdapter(const SmartPtr<TNLP> tnlp);
+    TNLPAdapter(const SmartPtr<TNLP> tnlp,
+                const SmartPtr<const Journalist> jnlst = NULL);
 
     /** Default destructor */
     virtual ~TNLPAdapter();
@@ -38,6 +39,7 @@ namespace Ipopt
     /**@name Exceptions */
     //@{
     DECLARE_STD_EXCEPTION(INVALID_TNLP);
+    DECLARE_STD_EXCEPTION(ERROR_IN_TNLP_DERIVATIVE_TEST);
     //@}
 
     /** @name TNLPAdapter Initialization. */
@@ -139,6 +141,15 @@ namespace Ipopt
                     const Vector& x_U, Number* x_U_orig);
     //@}
 
+    /** Enum for specifying which derivative test is to be performed. */
+    enum DerivativeTestEnum {
+      NO_TEST=0,
+      FIRST_ORDER_TEST,
+      SECOND_ORDER_TEST
+    };
+    /** Method for performing the derivative test */
+    bool CheckDerivatives(DerivativeTestEnum deriv_test);
+
     /** Methods for IpoptType */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
@@ -161,12 +172,12 @@ namespace Ipopt
     void operator=(const TNLPAdapter&);
     //@}
 
-    /** Journalist */
-    SmartPtr<const Journalist> jnlst_;
-
     /** Pointer to the TNLP class (class specific to Number* vectors and
      *  harwell triplet matrices) */
     SmartPtr<TNLP> tnlp_;
+
+    /** Journalist */
+    SmartPtr<const Journalist> jnlst_;
 
     /**@name Algorithmic parameters */
     //@{
@@ -179,6 +190,17 @@ namespace Ipopt
      *  upper bound xL + max_onesided_bound_slack_.  If this value is
      *  zero, no upper bound is added. */
     Number max_onesided_bound_slack_;
+    /** Enum indicating whether and which derivative test should be
+     *  performed at starting point. */
+    DerivativeTestEnum derivative_test_;
+    /** Size of the perturbation for the derivative test */
+    Number derivative_test_perturbation_;
+    /** Relative threshold for marking deviation from finite
+     *  difference test */
+    Number derivative_test_tol_;
+    /** Flag indicating if all test values should be printed, or only
+     *  those violating the threshold. */
+    bool derivative_test_print_all_;
     //@}
 
     /**@name Problem Size Data */

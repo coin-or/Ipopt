@@ -64,6 +64,7 @@ namespace Ipopt
     J_LINE_SEARCH,
     J_SOLUTION,
     J_DOCUMENTATION,
+    J_NLP,
     J_LAST_CATEGORY
   };
   //@}
