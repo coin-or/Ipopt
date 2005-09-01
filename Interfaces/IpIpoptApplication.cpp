@@ -43,12 +43,11 @@ namespace Ipopt
       DBG_START_METH("IpoptApplication::IpoptApplication()",
                      dbg_verbosity);
 
-
-      SmartPtr<Journal> stdout_jrnl = NULL;
+      stdout_jrnl_ = NULL;
       if (create_console_out) {
-        stdout_jrnl =
+        stdout_jrnl_ =
           jnlst_->AddFileJournal("console", "stdout", J_SUMMARY);
-        stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
+        stdout_jrnl_->SetPrintLevel(J_DBG, J_NONE);
       }
 
       // Register the valid options
@@ -74,8 +73,8 @@ namespace Ipopt
       EJournalLevel print_level = (EJournalLevel)ivalue;
       if (create_console_out) {
         // Set printlevel for stdout
-        stdout_jrnl->SetAllPrintLevels(print_level);
-        stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
+        stdout_jrnl_->SetAllPrintLevels(print_level);
+        stdout_jrnl_->SetPrintLevel(J_DBG, J_NONE);
       }
 
       bool option_set;
@@ -280,6 +279,16 @@ namespace Ipopt
   ApplicationReturnStatus
   IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp)
   {
+    // Reset the print-level for the screen output
+    Index ivalue;
+    options_->GetIntegerValue("print_level", ivalue, "");
+    EJournalLevel print_level = (EJournalLevel)ivalue;
+    if (IsValid(stdout_jrnl_)) {
+      // Set printlevel for stdout
+      stdout_jrnl_->SetAllPrintLevels(print_level);
+      stdout_jrnl_->SetPrintLevel(J_DBG, J_NONE);
+    }
+
     statistics_ = NULL; /* delete old statistics */
     ApplicationReturnStatus retValue = Internal_Error;
     SmartPtr<IpoptData> ip_data;

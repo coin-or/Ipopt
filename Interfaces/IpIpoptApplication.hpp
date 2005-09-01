@@ -108,6 +108,11 @@ namespace Ipopt
     /** Object for storing statistics about the most recent
      *  optimization run. */
     SmartPtr<SolveStatistics> statistics_;
+
+    /** Pointer for journals (which are also in the Journalist) so
+     *  that we can reset the printlevels if necessary before each
+     *  optimization. */
+    SmartPtr<Journal> stdout_jrnl_;
   };
 
 } // namespace Ipopt
