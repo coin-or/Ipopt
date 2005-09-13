@@ -31,7 +31,9 @@ namespace Ipopt
       :
       jnlst_(new Journalist()),
       options_(new OptionsList()),
-      statistics_(NULL)
+      statistics_(NULL),
+      alg_(NULL),
+      nlp_adapter_(NULL)
   {
     try {
 # ifdef IP_DEBUG
@@ -155,7 +157,7 @@ namespace Ipopt
         else {
           std::list<std::string> categories;
           categories.push_back("Output");
-          categories.push_back("Main Algorithm");
+          /*categories.push_back("Main Algorithm");*/
           categories.push_back("Convergence");
           categories.push_back("NLP Scaling");
           categories.push_back("Mu Update");
@@ -268,32 +270,34 @@ namespace Ipopt
     );
   }
 
-  ApplicationReturnStatus IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& nlp)
+  ApplicationReturnStatus
+  IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& tnlp)
   {
-    SmartPtr<NLP> nlp_adapter =
-      new TNLPAdapter(GetRawPtr(nlp), ConstPtr(jnlst_));
+    nlp_adapter_ = new TNLPAdapter(GetRawPtr(tnlp), ConstPtr(jnlst_));
 
-    return OptimizeNLP(nlp_adapter);
+    return OptimizeNLP(nlp_adapter_);
+  }
+
+  ApplicationReturnStatus
+  IpoptApplication::ReOptimizeTNLP(const SmartPtr<TNLP>& tnlp)
+  {
+    ASSERT_EXCEPTION(IsValid(nlp_adapter_), INVALID_WARMSTART,
+                     "ReOptimizeTNLP called before OptimizeTNLP.");
+    TNLPAdapter* adapter =
+      dynamic_cast<TNLPAdapter*> (GetRawPtr(nlp_adapter_));
+    DBG_ASSERT(adapter);
+    ASSERT_EXCEPTION(adapter->tnlp()==tnlp, INVALID_WARMSTART,
+                     "ReOptimizeTNLP called for different TNLP.")
+
+    return ReOptimizeNLP(nlp_adapter_);
   }
 
   ApplicationReturnStatus
   IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp)
   {
-    // Reset the print-level for the screen output
-    Index ivalue;
-    options_->GetIntegerValue("print_level", ivalue, "");
-    EJournalLevel print_level = (EJournalLevel)ivalue;
-    if (IsValid(stdout_jrnl_)) {
-      // Set printlevel for stdout
-      stdout_jrnl_->SetAllPrintLevels(print_level);
-      stdout_jrnl_->SetPrintLevel(J_DBG, J_NONE);
-    }
-
-    statistics_ = NULL; /* delete old statistics */
     ApplicationReturnStatus retValue = Internal_Error;
-    SmartPtr<IpoptData> ip_data;
-    SmartPtr<IpoptCalculatedQuantities> ip_cq;
-    SmartPtr<IpoptNLP> ip_nlp;
+
+    // Prepare internal data structures of the algorithm
     try {
 
       SmartPtr<NLPScalingObject> nlp_scaling;
@@ -309,24 +313,80 @@ namespace Ipopt
         nlp_scaling = new NoNLPScalingObject();
       }
 
-      ip_nlp =  new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp), nlp_scaling);
+      ip_nlp_ =  new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp), nlp_scaling);
 
       // Create the IpoptData
-      if (IsNull(ip_data)) {
-        ip_data = new IpoptData();
-      }
+      ip_data_ = new IpoptData();
 
       // Create the IpoptCalculators
-      if (IsNull(ip_cq)) {
-        ip_cq = new IpoptCalculatedQuantities(ip_nlp, ip_data);
-      }
+      ip_cq_ = new IpoptCalculatedQuantities(ip_nlp_, ip_data_);
 
       // Create the Algorithm object
-      SmartPtr<IpoptAlgorithm> alg
-      = AlgorithmBuilder::BuildBasicAlgorithm(*jnlst_, *options_, "");
+      alg_ = AlgorithmBuilder::BuildBasicAlgorithm(*jnlst_, *options_, "");
 
+      // finally call the optimization
+      retValue = call_optimize();
+    }
+    catch(TOO_FEW_DOF& exc) {
+      //exc.ReportException(*jnlst_);
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has too few degrees of freedom.\n");
+      retValue = Not_Enough_Degrees_Of_Freedom;
+    }
+    catch(OPTION_INVALID& exc) {
+      exc.ReportException(*jnlst_);
+      retValue = Invalid_Option;
+    }
+    catch(IpoptException& exc) {
+      exc.ReportException(*jnlst_);
+      retValue = Unrecoverable_Exception;
+    }
+    catch(std::bad_alloc& exc) {
+      retValue = Insufficient_Memory;
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
+    }
+    catch(...) {
+      IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
+      exc.ReportException(*jnlst_);
+      retValue = NonIpopt_Exception_Thrown;
+    }
+
+    jnlst_->FlushBuffer();
+
+    return retValue;
+  }
+
+  ApplicationReturnStatus
+  IpoptApplication::ReOptimizeNLP(const SmartPtr<NLP>& nlp)
+  {
+    ASSERT_EXCEPTION(IsValid(alg_), INVALID_WARMSTART,
+                     "ReOptimizeNLP called before OptimizeNLP.");
+    OrigIpoptNLP* orig_nlp =
+      dynamic_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_));
+    DBG_ASSERT(orig_nlp);
+    ASSERT_EXCEPTION(orig_nlp->nlp()==nlp, INVALID_WARMSTART,
+                     "ReOptimizeTNLP called for different NLP.")
+
+    return call_optimize();
+  }
+
+
+  ApplicationReturnStatus IpoptApplication::call_optimize()
+  {
+    // Reset the print-level for the screen output
+    Index ivalue;
+    options_->GetIntegerValue("print_level", ivalue, "");
+    EJournalLevel print_level = (EJournalLevel)ivalue;
+    if (IsValid(stdout_jrnl_)) {
+      // Set printlevel for stdout
+      stdout_jrnl_->SetAllPrintLevels(print_level);
+      stdout_jrnl_->SetPrintLevel(J_DBG, J_NONE);
+    }
+
+    statistics_ = NULL; /* delete old statistics */
+    ApplicationReturnStatus retValue = Internal_Error;
+    try {
       // Set up the algorithm
-      alg->Initialize(*jnlst_, *ip_nlp, *ip_data, *ip_cq, *options_, "");
+      alg_->Initialize(*jnlst_, *ip_nlp_, *ip_data_, *ip_cq_, *options_, "");
 
       if( jnlst_->ProduceOutput(J_DETAILED, J_MAIN) ) {
         // Print out the options (including the number of times they were used
@@ -336,54 +396,64 @@ namespace Ipopt
       }
 
       // Run the algorithm
-      SolverReturn status = alg->Optimize();
+      SolverReturn status = alg_->Optimize();
 
       jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                      "\nNumber of Iterations....: %d\n",
-                     ip_data->iter_count());
+                     ip_data_->iter_count());
 
       jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                      "\n                                   (scaled)                 (unscaled)\n");
       jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                     "Objective...............: %24.16e  %24.16e\n", ip_cq->curr_f(), ip_cq->unscaled_curr_f());
+                     "Objective...............: %24.16e  %24.16e\n",
+                     ip_cq_->curr_f(),
+                     ip_cq_->unscaled_curr_f());
       jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                     "Dual infeasibility......: %24.16e  %24.16e\n", ip_cq->curr_dual_infeasibility(NORM_MAX), ip_cq->unscaled_curr_dual_infeasibility(NORM_MAX));
+                     "Dual infeasibility......: %24.16e  %24.16e\n",
+                     ip_cq_->curr_dual_infeasibility(NORM_MAX),
+                     ip_cq_->unscaled_curr_dual_infeasibility(NORM_MAX));
       jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                     "Constraint violation....: %24.16e  %24.16e\n", ip_cq->curr_nlp_constraint_violation(NORM_MAX), ip_cq->unscaled_curr_nlp_constraint_violation(NORM_MAX));
+                     "Constraint violation....: %24.16e  %24.16e\n",
+                     ip_cq_->curr_nlp_constraint_violation(NORM_MAX),
+                     ip_cq_->unscaled_curr_nlp_constraint_violation(NORM_MAX));
       jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                     "Complementarity.........: %24.16e  %24.16e\n", ip_cq->curr_complementarity(0., NORM_MAX), ip_cq->unscaled_curr_complementarity(0., NORM_MAX));
+                     "Complementarity.........: %24.16e  %24.16e\n",
+                     ip_cq_->curr_complementarity(0., NORM_MAX),
+                     ip_cq_->unscaled_curr_complementarity(0., NORM_MAX));
       jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                     "Overall NLP error.......: %24.16e  %24.16e\n\n", ip_cq->curr_nlp_error(), ip_cq->unscaled_curr_nlp_error());
+                     "Overall NLP error.......: %24.16e  %24.16e\n\n",
+                     ip_cq_->curr_nlp_error(),
+                     ip_cq_->unscaled_curr_nlp_error());
 
-      ip_data->curr()->x()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "x");
-      ip_data->curr()->y_c()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "y_c");
-      ip_data->curr()->y_d()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "y_d");
-      ip_data->curr()->z_L()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "z_L");
-      ip_data->curr()->z_U()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "z_U");
-      ip_data->curr()->v_L()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "v_L");
-      ip_data->curr()->v_U()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "v_U");
+      ip_data_->curr()->x()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "x");
+      ip_data_->curr()->y_c()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "y_c");
+      ip_data_->curr()->y_d()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "y_d");
+      ip_data_->curr()->z_L()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "z_L");
+      ip_data_->curr()->z_U()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "z_U");
+      ip_data_->curr()->v_L()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "v_L");
+      ip_data_->curr()->v_U()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "v_U");
 
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "\nNumber of objective function evaluations             = %d\n",
-                     ip_nlp->f_evals());
+                     ip_nlp_->f_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Number of objective gradient evaluations             = %d\n",
-                     ip_nlp->grad_f_evals());
+                     ip_nlp_->grad_f_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Number of equality constraint evaluations            = %d\n",
-                     ip_nlp->c_evals());
+                     ip_nlp_->c_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Number of inequality constraint evaluations          = %d\n",
-                     ip_nlp->d_evals());
+                     ip_nlp_->d_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Number of equality constraint Jacobian evaluations   = %d\n",
-                     ip_nlp->jac_c_evals());
+                     ip_nlp_->jac_c_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Number of inequality constraint Jacobian evaluations = %d\n",
-                     ip_nlp->jac_d_evals());
+                     ip_nlp_->jac_d_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Number of Lagrangian Hessian evaluations             = %d\n",
-                     ip_nlp->h_evals());
+                     ip_nlp_->h_evals());
 
       // Write EXIT message
       if (status == SUCCESS) {
@@ -415,12 +485,16 @@ namespace Ipopt
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
         return retValue;
       }
-      ip_nlp->FinalizeSolution(status,
-                               *ip_data->curr()->x(), *ip_data->curr()->z_L(), *ip_data->curr()->z_U(),
-                               *ip_cq->curr_c(), *ip_cq->curr_d(), *ip_data->curr()->y_c(), *ip_data->curr()->y_d(),
-                               ip_cq->curr_f());
+      ip_nlp_->FinalizeSolution(status,
+                                *ip_data_->curr()->x(),
+                                *ip_data_->curr()->z_L(),
+                                *ip_data_->curr()->z_U(),
+                                *ip_cq_->curr_c(), *ip_cq_->curr_d(),
+                                *ip_data_->curr()->y_c(),
+                                *ip_data_->curr()->y_d(),
+                                ip_cq_->curr_f());
       // Create a SolveStatistics object
-      statistics_ = new SolveStatistics(ip_nlp, ip_data, ip_cq);
+      statistics_ = new SolveStatistics(ip_nlp_, ip_data_, ip_cq_);
     }
     catch(TOO_FEW_DOF& exc) {
       //exc.ReportException(*jnlst_);
@@ -448,7 +522,6 @@ namespace Ipopt
     jnlst_->FlushBuffer();
 
     return retValue;
-
   }
 
   bool IpoptApplication::OpenOutputFile(std::string file_name,

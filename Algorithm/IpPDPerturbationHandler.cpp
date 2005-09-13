@@ -177,6 +177,7 @@ namespace Ipopt
     if (hess_degenerate_ == DEGENERATE) {
       bool retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                     delta_c, delta_d);
+      Jnlst().Printf(J_ERROR, J_MAIN, "Cannot determine appropriate modification of Hessian matrix.\nThis can happen if there are NaN or Inf numbers in the user-provided Hessian.\n");
       ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
                        "get_deltas_for_wrong_inertia returns false.");
     }

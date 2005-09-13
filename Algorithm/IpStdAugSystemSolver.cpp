@@ -46,8 +46,6 @@ namespace Ipopt
       j_d_tag_(0),
       d_d_tag_(0),
       delta_d_(0.),
-      augsys_tag_(0),
-      augmented_system_(NULL),
       old_w_(NULL)
   {
     DBG_START_METH("StdAugSystemSolver::StdAugSystemSolver()",dbg_verbosity);
@@ -63,6 +61,19 @@ namespace Ipopt
   bool StdAugSystemSolver::InitializeImpl(const OptionsList& options,
                                           const std::string& prefix)
   {
+    // This option is registered by OrigIpoptNLP
+    options.GetBoolValue("warm_start_same_structure",
+                         warm_start_same_structure_, prefix);
+
+    if (!warm_start_same_structure_) {
+      augsys_tag_ = 0;
+      augmented_system_ = NULL;
+    }
+    else {
+      ASSERT_EXCEPTION(IsValid(augmented_system_), INVALID_WARMSTART,
+                       "StdAugSystemSolver called with warm_start_same_structure, but augmented system is not initialized.");
+    }
+
     return linsolver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                   options, prefix);
   }

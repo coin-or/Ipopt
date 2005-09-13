@@ -121,8 +121,11 @@ namespace Ipopt
 
     /** @name Initialization flags */
     //@{
-    /** Flag indicating if internal data is initialized.
+    /** Flag indicating if the internal structures are initialized.
      *  For initialization, this object needs to have seen a matrix */
+    bool have_structure_;
+    /** Flag indicating if the InitializeStructure method has been
+     *  called for the linear solver. */
     bool initialized_;
     //@}
 
@@ -148,6 +151,13 @@ namespace Ipopt
     SmartPtr<TripletToCSRConverter> triplet_to_csr_converter_;
     /** Flag indicating what matrix data format the solver requires. */
     SparseSymLinearSolverInterface::EMatrixFormat matrix_format_;
+    //@}
+
+    /** @name Algorithmic parameters */
+    //@{
+    /** Flag indicating whether the TNLP with identical structure has
+     *  already been solved before. */
+    bool warm_start_same_structure_;
     //@}
 
     /** @name Internal functions */

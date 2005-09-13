@@ -34,7 +34,7 @@ namespace Ipopt
   OrigIterationOutput::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     std::string prev_cat = roptions->RegisteringCategory();
-    roptions->SetRegisteringCategory("Undocumented");
+    roptions->SetRegisteringCategory("Output");
     roptions->AddStringOption2(
       "print_info_string",
       "Enables printing of additional info string at end of iteration output.",

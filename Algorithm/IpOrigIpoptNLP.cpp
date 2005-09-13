@@ -41,6 +41,7 @@ namespace Ipopt
       IpoptNLP(nlp_scaling),
       jnlst_(jnlst),
       nlp_(nlp),
+      x_space_(NULL),
       f_cache_(1),
       grad_f_cache_(1),
       c_cache_(1),
@@ -72,6 +73,15 @@ namespace Ipopt
       "relaxed.  This option sets the factor for this relaxation.  If it "
       "is set to zero, then then bounds relaxation is disabled. "
       "(See Eqn.(35) in implmentation paper.)");
+    roptions->AddStringOption2(
+      "warm_start_same_structure",
+      "Indicates whether a problem with a structure identical to the previous one is to be solved.",
+      "no",
+      "no", "Assume this is a new problem.",
+      "yes", "Assume this is problem has known structure",
+      "If \"yes\" is chosen, then the algorithm assumes that an NLP is now to "
+      "be solved, whose strcture is identical to one that already was "
+      "considered (with the same NLP object).");
   }
 
   bool OrigIpoptNLP::Initialize(const Journalist& jnlst,
@@ -79,6 +89,28 @@ namespace Ipopt
                                 const std::string& prefix)
   {
     options.GetNumericValue("bound_relax_factor", bound_relax_factor_, prefix);
+    options.GetBoolValue("warm_start_same_structure",
+                         warm_start_same_structure_, prefix);
+
+    // Reset the function evaluation counters (for warm start)
+    f_evals_=0;
+    grad_f_evals_=0;
+    c_evals_=0;
+    jac_c_evals_=0;
+    d_evals_=0;
+    jac_d_evals_=0;
+    h_evals_=0;
+
+    // Reset the cache entries belonging to a dummy dependency.  This
+    // is required for repeated solve, since the cache is not updated
+    // if a dimension is zero
+    std::vector<const TaggedObject*> deps(1);
+    deps[0] = NULL;
+    std::vector<Number> sdeps(0);
+    c_cache_.InvalidateResult(deps, sdeps);
+    d_cache_.InvalidateResult(deps, sdeps);
+    jac_c_cache_.InvalidateResult(deps, sdeps);
+    jac_d_cache_.InvalidateResult(deps, sdeps);
 
     if (!nlp_->ProcessOptions(options, prefix)) {
       return false;
@@ -103,43 +135,52 @@ namespace Ipopt
                                          )
   {
     DBG_ASSERT(initialized_);
+    bool retValue;
 
-    bool retValue = nlp_->GetSpaces(x_space_, c_space_, d_space_,
-                                    x_l_space_, px_l_space_,
-                                    x_u_space_, px_u_space_,
-                                    d_l_space_, pd_l_space_,
-                                    d_u_space_, pd_u_space_,
-                                    jac_c_space_, jac_d_space_,
-                                    h_space_);
+    if (!warm_start_same_structure_) {
 
-    if (!retValue) {
-      return false;
+      retValue = nlp_->GetSpaces(x_space_, c_space_, d_space_,
+                                 x_l_space_, px_l_space_,
+                                 x_u_space_, px_u_space_,
+                                 d_l_space_, pd_l_space_,
+                                 d_u_space_, pd_u_space_,
+                                 jac_c_space_, jac_d_space_,
+                                 h_space_);
+
+      if (!retValue) {
+        return false;
+      }
+
+      NLP_scaling()->DetermineScaling(x_space_,
+                                      c_space_, d_space_,
+                                      jac_c_space_, jac_d_space_,
+                                      h_space_,
+                                      scaled_jac_c_space_, scaled_jac_d_space_,
+                                      scaled_h_space_);
+
+      ASSERT_EXCEPTION(x_space_->Dim() >= c_space_->Dim(), TOO_FEW_DOF,
+                       "Too few degrees of freedom!");
+
+      // cannot have any null pointers, want zero length vectors
+      // instead of null - this will later need to be changed for _h;
+      retValue = (IsValid(x_space_) && IsValid(c_space_) && IsValid(d_space_)
+                  && IsValid(x_l_space_) && IsValid(px_l_space_)
+                  && IsValid(x_u_space_) && IsValid(px_u_space_)
+                  && IsValid(d_u_space_) && IsValid(pd_u_space_)
+                  && IsValid(d_l_space_) && IsValid(pd_l_space_)
+                  && IsValid(jac_c_space_) && IsValid(jac_d_space_)
+                  && IsValid(h_space_)
+                  && IsValid(scaled_jac_c_space_)
+                  && IsValid(scaled_jac_d_space_)
+                  && IsValid(scaled_h_space_));
+
+      DBG_ASSERT(retValue && "Model cannot return null vector or matrix prototypes or spaces,"
+                 " please return zero length vectors instead");
     }
-
-    NLP_scaling()->DetermineScaling(x_space_,
-                                    c_space_, d_space_,
-                                    jac_c_space_, jac_d_space_,
-                                    h_space_,
-                                    scaled_jac_c_space_, scaled_jac_d_space_,
-                                    scaled_h_space_);
-
-    ASSERT_EXCEPTION(x_space_->Dim() >= c_space_->Dim(), TOO_FEW_DOF,
-                     "Too few degrees of freedom!");
-
-    // cannot have any null pointers, want zero length vectors
-    // instead of null - this will later need to be changed for _h;
-    retValue = (IsValid(x_space_) && IsValid(c_space_) && IsValid(d_space_)
-                && IsValid(x_l_space_) && IsValid(px_l_space_)
-                && IsValid(x_u_space_) && IsValid(px_u_space_)
-                && IsValid(d_u_space_) && IsValid(pd_u_space_)
-                && IsValid(d_l_space_) && IsValid(pd_l_space_)
-                && IsValid(jac_c_space_) && IsValid(jac_d_space_)
-                && IsValid(h_space_)
-                && IsValid(scaled_jac_c_space_) && IsValid(scaled_jac_d_space_)
-                && IsValid(scaled_h_space_));
-
-    DBG_ASSERT(retValue && "Model cannot return null vector or matrix prototypes or spaces,"
-               " please return zero length vectors instead");
+    else {
+      ASSERT_EXCEPTION(IsValid(x_space_), INVALID_WARMSTART,
+                       "OrigIpoptNLP called with warm_start_same_structure, but the problem is solved for the first time.");
+    }
 
     // Create the bounds structures
     SmartPtr<Vector> x_L = x_l_space_->MakeNew();

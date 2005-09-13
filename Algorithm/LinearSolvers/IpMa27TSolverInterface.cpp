@@ -114,7 +114,8 @@ namespace Ipopt
     options.GetNumericValue("pivtol", pivtol_, prefix);
     if(options.GetNumericValue("pivtolmax", pivtolmax_, prefix)) {
       ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OPTION_INVALID,
-                       "Option \"pivtolmax\": This value must be between pivtol and 1.");
+                       "Option \"pivtolmax\": This value must be between "
+                       "pivtol and 1.");
     }
     else {
       pivtolmax_ = Max(pivtolmax_, pivtol_);
@@ -123,6 +124,9 @@ namespace Ipopt
     options.GetNumericValue("liw_init_factor", liw_init_factor_, prefix);
     options.GetNumericValue("la_init_factor", la_init_factor_, prefix);
     options.GetNumericValue("meminc_factor", meminc_factor_, prefix);
+    // The following option is registered by OrigIpoptNLP
+    options.GetBoolValue("warm_start_same_structure",
+                         warm_start_same_structure_, prefix);
 
     /* Set the default options for MA27 */
     F77_FUNC(ma27id,MA27ID)(icntl_, cntl_);
@@ -133,14 +137,21 @@ namespace Ipopt
 #endif
 
     // Reset all private data
-    dim_=0;
-    nonzeros_=0;
     initialized_=false;
     pivtol_changed_ = false;
     refactorize_ = false;
 
     la_increase_=false;
     liw_increase_=false;
+
+    if (!warm_start_same_structure_) {
+      dim_=0;
+      nonzeros_=0;
+    }
+    else {
+      ASSERT_EXCEPTION(dim_>0 && nonzeros_>0, INVALID_WARMSTART,
+                       "Ma27TSolverInterface called with warm_start_same_structure, but the problem is solved for the first time.");
+    }
 
     return true;
   }
@@ -212,13 +223,21 @@ namespace Ipopt
       const Index* ajcn)
   {
     DBG_START_METH("Ma27TSolverInterface::InitializeStructure",dbg_verbosity);
-    dim_ = dim;
-    nonzeros_ = nonzeros;
 
-    // Do the symbolic facotrization
-    ESymSolverStatus retval = SymbolicFactorization(airn, ajcn);
-    if (retval != SYMSOLVER_SUCCESS ) {
-      return retval;
+    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
+    if (!warm_start_same_structure_) {
+      dim_ = dim;
+      nonzeros_ = nonzeros;
+
+      // Do the symbolic facotrization
+      retval = SymbolicFactorization(airn, ajcn);
+      if (retval != SYMSOLVER_SUCCESS ) {
+        return retval;
+      }
+    }
+    else {
+      ASSERT_EXCEPTION(dim_==dim && nonzeros_==nonzeros, INVALID_WARMSTART,
+                       "Ma27TSolverInterface called with warm_start_same_structure, but the problem size has changed.");
     }
 
     initialized_ = true;

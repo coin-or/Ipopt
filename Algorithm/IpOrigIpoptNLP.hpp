@@ -212,11 +212,17 @@ namespace Ipopt
                           Number obj_value);
     //@}
 
-    /** Methods for IpoptType */
+    /** @name Methods for IpoptType */
     //@{
     /** Called by IpoptType to register the options */
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
+
+    /** Accessor method to the underlying NLP */
+    SmartPtr<NLP> nlp()
+    {
+      return nlp_;
+    }
 
   private:
     /** journalist */
@@ -329,6 +335,9 @@ namespace Ipopt
     //@{
     /** relaxation factor for the bounds */
     Number bound_relax_factor_;
+    /** Flag indicating whether the TNLP with identical structure has
+     *  already been solved before. */
+    bool warm_start_same_structure_;
     //@}
 
     /** @name Counters for the function evaluations */

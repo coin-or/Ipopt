@@ -34,6 +34,7 @@ namespace Ipopt
       dim_(0),
       nonzeros_triplet_(0),
       nonzeros_compressed_(0),
+      have_structure_(false),
       initialized_(false),
 
       solver_interface_(solver_interface),
@@ -58,33 +59,47 @@ namespace Ipopt
   bool TSymLinearSolver::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)
   {
-    // Reset all private data
-    atag_=0;
-    dim_=0;
-    nonzeros_triplet_=0;
-    nonzeros_compressed_=0;
-    initialized_=false;
+    // This option is registered by OrigIpoptNLP
+    options.GetBoolValue("warm_start_same_structure",
+                         warm_start_same_structure_, prefix);
 
     if (!solver_interface_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                        options, prefix)) {
       return false;
     }
 
-    matrix_format_ = solver_interface_->MatrixFormat();
-    switch (matrix_format_) {
-      case SparseSymLinearSolverInterface::CSR_Format_0_Offset:
-      triplet_to_csr_converter_ = new TripletToCSRConverter(0);
-      break;
-      case SparseSymLinearSolverInterface::CSR_Format_1_Offset:
-      triplet_to_csr_converter_ = new TripletToCSRConverter(1);
-      break;
-      case SparseSymLinearSolverInterface::Triplet_Format:
-      triplet_to_csr_converter_ = NULL;
-      break;
-      default:
-      DBG_ASSERT(false && "Invalid MatrixFormat returned from solver interface.");
-      return false;
+    if (!warm_start_same_structure_) {
+      // Reset all private data
+      atag_=0;
+      dim_=0;
+      nonzeros_triplet_=0;
+      nonzeros_compressed_=0;
+      have_structure_=false;
+
+      matrix_format_ = solver_interface_->MatrixFormat();
+      switch (matrix_format_) {
+        case SparseSymLinearSolverInterface::CSR_Format_0_Offset:
+        triplet_to_csr_converter_ = new TripletToCSRConverter(0);
+        break;
+        case SparseSymLinearSolverInterface::CSR_Format_1_Offset:
+        triplet_to_csr_converter_ = new TripletToCSRConverter(1);
+        break;
+        case SparseSymLinearSolverInterface::Triplet_Format:
+        triplet_to_csr_converter_ = NULL;
+        break;
+        default:
+        DBG_ASSERT(false && "Invalid MatrixFormat returned from solver interface.");
+        return false;
+      }
     }
+    else {
+      ASSERT_EXCEPTION(have_structure_, INVALID_WARMSTART,
+                       "TSymLinearSolver called with warm_start_same_structure, but the internal structures are not initialized.");
+    }
+
+    // reset the initialize flag to make sure that InitializeStructure
+    // is called for the linear solver
+    initialized_=false;
 
     bool retval = true;
     if (IsValid(scaling_method_)) {
@@ -201,48 +216,75 @@ namespace Ipopt
                    dbg_verbosity);
     DBG_ASSERT(!initialized_);
 
-    dim_ = sym_A.Dim();
-    nonzeros_triplet_ = TripletHelper::GetNumberEntries(sym_A);
+    ESymSolverStatus retval;
 
-    delete [] airn_;
-    delete [] ajcn_;
-    airn_ = new Index[nonzeros_triplet_];
-    ajcn_ = new Index[nonzeros_triplet_];
+    // have_structure_ is already true if this is a warm start for a
+    // problem with identical structure
+    if (!have_structure_) {
 
-    TripletHelper::FillRowCol(nonzeros_triplet_, sym_A, airn_, ajcn_);
+      dim_ = sym_A.Dim();
+      nonzeros_triplet_ = TripletHelper::GetNumberEntries(sym_A);
 
-    // If the solver wants the compressed format, the converter has to
-    // be initialized
-    const Index *ia;
-    const Index *ja;
-    Index nonzeros;
-    if (matrix_format_ == SparseSymLinearSolverInterface::Triplet_Format) {
-      ia = airn_;
-      ja = ajcn_;
-      nonzeros = nonzeros_triplet_;
+      delete [] airn_;
+      delete [] ajcn_;
+      airn_ = new Index[nonzeros_triplet_];
+      ajcn_ = new Index[nonzeros_triplet_];
+
+      TripletHelper::FillRowCol(nonzeros_triplet_, sym_A, airn_, ajcn_);
+
+      // If the solver wants the compressed format, the converter has to
+      // be initialized
+      const Index *ia;
+      const Index *ja;
+      Index nonzeros;
+      if (matrix_format_ == SparseSymLinearSolverInterface::Triplet_Format) {
+        ia = airn_;
+        ja = ajcn_;
+        nonzeros = nonzeros_triplet_;
+      }
+      else {
+        nonzeros_compressed_ =
+          triplet_to_csr_converter_->InitializeConverter(dim_, nonzeros_triplet_,
+              airn_, ajcn_);
+        ia = triplet_to_csr_converter_->IA();
+        ja = triplet_to_csr_converter_->JA();
+        nonzeros = nonzeros_compressed_;
+      }
+
+      retval = solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
+      if (retval != SYMSOLVER_SUCCESS) {
+        return retval;
+      }
+
+      // Get space for the scaling factors
+      delete [] scaling_factors_;
+      if (IsValid(scaling_method_)) {
+        scaling_factors_ = new double[dim_];
+      }
+
+      have_structure_ = true;
     }
     else {
-      nonzeros_compressed_ =
-        triplet_to_csr_converter_->InitializeConverter(dim_, nonzeros_triplet_,
-            airn_, ajcn_);
-      ia = triplet_to_csr_converter_->IA();
-      ja = triplet_to_csr_converter_->JA();
-      nonzeros = nonzeros_compressed_;
+      ASSERT_EXCEPTION(dim_==sym_A.Dim(), INVALID_WARMSTART,
+                       "TSymLinearSolver called with warm_start_same_structure, but the problem is solved for the first time.");
+      // This is a warm start for identical structure, so we don't need to
+      // recompute the nonzeros location arrays
+      const Index *ia;
+      const Index *ja;
+      Index nonzeros;
+      if (matrix_format_ == SparseSymLinearSolverInterface::Triplet_Format) {
+        ia = airn_;
+        ja = ajcn_;
+        nonzeros = nonzeros_triplet_;
+      }
+      else {
+        ia = triplet_to_csr_converter_->IA();
+        ja = triplet_to_csr_converter_->JA();
+        nonzeros = nonzeros_compressed_;
+      }
+      retval = solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
     }
-
-    ESymSolverStatus retval =
-      solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
-    if (retval != SYMSOLVER_SUCCESS) {
-      return retval;
-    }
-
-    // Get space for the scaling factors
-    delete [] scaling_factors_;
-    if (IsValid(scaling_method_)) {
-      scaling_factors_ = new double[dim_];
-    }
-
-    initialized_ = true;
+    initialized_=true;
     return retval;
   }
 

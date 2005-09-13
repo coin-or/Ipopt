@@ -150,11 +150,16 @@ namespace Ipopt
     /** Method for performing the derivative test */
     bool CheckDerivatives(DerivativeTestEnum deriv_test);
 
-    /** Methods for IpoptType */
+    /** @name Methods for IpoptType */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
+    /** Accessor method for the underlying TNLP. */
+    SmartPtr<TNLP> tnlp() const
+    {
+      return tnlp_;
+    }
 
   private:
     /**@name Default Compiler Generated Methods
@@ -185,11 +190,11 @@ namespace Ipopt
     Number nlp_lower_bound_inf_;
     /** Value for a upper bound that denotes infinity */
     Number nlp_upper_bound_inf_;
-    /** Maximal slack for one-sidedly bounded variables.  If a
+    /* Maximal slack for one-sidedly bounded variables.  If a
      *  variable has only one bound, say a lower bound xL, then an
      *  upper bound xL + max_onesided_bound_slack_.  If this value is
      *  zero, no upper bound is added. */
-    Number max_onesided_bound_slack_;
+    /* Took this out:  Number max_onesided_bound_slack_; */
     /** Enum indicating whether and which derivative test should be
      *  performed at starting point. */
     DerivativeTestEnum derivative_test_;
@@ -201,17 +206,47 @@ namespace Ipopt
     /** Flag indicating if all test values should be printed, or only
      *  those violating the threshold. */
     bool derivative_test_print_all_;
+    /** Flag indicating whether the TNLP with identical structure has
+     *  already been solved before. */
+    bool warm_start_same_structure_;
     //@}
 
     /**@name Problem Size Data */
     //@{
-    Index n_full_x_; /** full dimension of x (fixed + non-fixed) */
-    Index n_full_g_; /** full dimension of g (c + d) */
-    Index nz_jac_c_; /** non-zeros of the jacobian of c */
-    Index nz_jac_d_; /** non-zeros of the jacobian of d */
-    Index nz_full_jac_g_; /** number of non-zeros in full-size Jacobian of g */
-    Index nz_full_h_; /** number of non-zeros in full-size Hessian */
-    Index nz_h_;     /** number of non-zeros in the non-fixed-size Hessian */
+    /** full dimension of x (fixed + non-fixed) */
+    Index n_full_x_;
+    /** full dimension of g (c + d) */
+    Index n_full_g_;
+    /** non-zeros of the jacobian of c */
+    Index nz_jac_c_;
+    /** non-zeros of the jacobian of d */
+    Index nz_jac_d_;
+    /** number of non-zeros in full-size Jacobian of g */
+    Index nz_full_jac_g_;
+    /** number of non-zeros in full-size Hessian */
+    Index nz_full_h_;
+    /** number of non-zeros in the non-fixed-size Hessian */
+    Index nz_h_;
+    /** Number of fixed variables */
+    Index n_x_fixed_;
+    //@}
+
+    /** @name Local copy of spaces (for warm start) */
+    //@{
+    SmartPtr<const VectorSpace> x_space_;
+    SmartPtr<const VectorSpace> c_space_;
+    SmartPtr<const VectorSpace> d_space_;
+    SmartPtr<const VectorSpace> x_l_space_;
+    SmartPtr<const MatrixSpace> px_l_space_;
+    SmartPtr<const VectorSpace> x_u_space_;
+    SmartPtr<const MatrixSpace> px_u_space_;
+    SmartPtr<const VectorSpace> d_l_space_;
+    SmartPtr<const MatrixSpace> pd_l_space_;
+    SmartPtr<const VectorSpace> d_u_space_;
+    SmartPtr<const MatrixSpace> pd_u_space_;
+    SmartPtr<const MatrixSpace> Jac_c_space_;
+    SmartPtr<const MatrixSpace> Jac_d_space_;
+    SmartPtr<const SymMatrixSpace> Hess_lagrangian_space_;
     //@}
 
     /**@name Local Copy of the Data */
@@ -270,6 +305,9 @@ namespace Ipopt
 
     Index* jac_idx_map_;
     Index* h_idx_map_;
+
+    /** Position of fixed variables. This is required for a warm start */
+    Index* x_fixed_map_;
     //@}
   };
 

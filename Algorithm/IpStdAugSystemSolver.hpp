@@ -233,6 +233,13 @@ namespace Ipopt
      *  be called with a NULL W, we keep a copy of the last W passed to keep
      *  the nonzero structure of the augmented_system_ consistent */
     SmartPtr<const SymMatrix> old_w_;
+
+    /** @name Algorithmic parameters */
+    //@{
+    /** Flag indicating whether the TNLP with identical structure has
+     *  already been solved before. */
+    bool warm_start_same_structure_;
+    //@}
   };
 
 } // namespace Ipopt

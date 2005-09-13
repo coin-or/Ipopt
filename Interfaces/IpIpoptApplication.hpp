@@ -17,8 +17,9 @@
 
 namespace Ipopt
 {
-  /* Forward declaration */
+  /* Forward declarations */
   class NLP;
+  class IpoptAlgorithm;
 
   /* Return codes for the Optimize call for an application */
 #include "IpReturnCodes_inc.h"
@@ -34,10 +35,24 @@ namespace Ipopt
     /**@name Solve methods */
     //@{
     /** Solve a problem that inherits from TNLP */
-    ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& nlp);
+    ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& tnlp);
 
     /** Solve a problem that inherits from NLP */
     ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp);
+
+    /** Solve a problem (that inherits from TNLP) for a repeated time.
+     *  The OptimizeTNLP method must have been called before.  The
+     *  TNLP must be the same object, and the structure (number of
+     *  variables and constraints and position of nonzeros in Jacobian
+     *  and Hessian must be the same). */
+    ApplicationReturnStatus ReOptimizeTNLP(const SmartPtr<TNLP>& tnlp);
+
+    /** Solve a problem (that inherits from NLP) for a repeated time.
+     *  The OptimizeNLP method must have been called before.  The
+     *  NLP must be the same object, and the structure (number of
+     *  variables and constraints and position of nonzeros in Jacobian
+     *  and Hessian must be the same). */
+    ApplicationReturnStatus ReOptimizeNLP(const SmartPtr<NLP>& nlp);
     //@}
 
     /** Method for opening an output file with given print_level.
@@ -93,6 +108,10 @@ namespace Ipopt
     /** Method to register all the options */
     void RegisterAllOptions(const SmartPtr<RegisteredOptions>& roptions);
 
+    /** Method for the actual optimize call of the Ipopt algorithm.
+     *  This is used both for Optimize and ReOptimize */
+    ApplicationReturnStatus call_optimize();
+
     /**@name Variables that customize the application behavior */
     //@{
     /** Decide whether or not the PARAMS.DAT file should be read */
@@ -109,10 +128,29 @@ namespace Ipopt
      *  optimization run. */
     SmartPtr<SolveStatistics> statistics_;
 
+    /** Object with the algorithm sceleton */
+    SmartPtr<IpoptAlgorithm> alg_;
+
+    /** IpoptNLP Object for the NLP.  We keep this around for a
+     *  ReOptimize warm start */
+    SmartPtr<IpoptNLP> ip_nlp_;
+
+    /** IpoptData Object for the NLP.  We keep this around for a
+     *  ReOptimize warm start */
+    SmartPtr<IpoptData> ip_data_;
+
+    /** IpoptCalculatedQuantities Object for the NLP.  We keep this
+     *  around for a ReOptimize warm start */
+    SmartPtr<IpoptCalculatedQuantities> ip_cq_;
+
     /** Pointer for journals (which are also in the Journalist) so
      *  that we can reset the printlevels if necessary before each
      *  optimization. */
     SmartPtr<Journal> stdout_jrnl_;
+
+    /** Pointer to the TNLPAdapter used to convert the TNLP to an NLP.
+     *  We keep this around for the ReOptimizerTNLP call. */
+    SmartPtr<NLP> nlp_adapter_;
   };
 
 } // namespace Ipopt

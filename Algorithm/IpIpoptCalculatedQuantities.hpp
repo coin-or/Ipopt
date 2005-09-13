@@ -410,6 +410,9 @@ namespace Ipopt
     Number slack_move_;
     /** Norm type to be used when calculating the constraint violation */
     ENormType constr_viol_normtype_;
+    /** Flag indicating whether the TNLP with identical structure has
+     *  already been solved before. */
+    bool warm_start_same_structure_;
     //@}
 
     /** @name Caches for slacks */

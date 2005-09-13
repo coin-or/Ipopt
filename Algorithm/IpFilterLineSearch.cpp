@@ -1477,7 +1477,7 @@ namespace Ipopt
   FilterLineSearch::PerformMagicStep()
   {
     DBG_START_METH("FilterLineSearch::PerformMagicStep",
-                   dbg_verbosity);
+                   2);//dbg_verbosity);
 
     DBG_PRINT((1,"Incoming barr = %e and constrviol %e\n",
                IpCq().trial_barrier_obj(),
@@ -1559,6 +1559,10 @@ namespace Ipopt
       delta_s_magic->Axpy(1., *IpData().trial()->s());
       SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
       trial->Set_s(*delta_s_magic);
+
+      // also update the set in the dual variables
+
+
       IpData().set_trial(trial);
     }
 

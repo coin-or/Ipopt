@@ -48,7 +48,8 @@ namespace Ipopt
       x_tag_for_g_(0),
       x_tag_for_jac_g_(0),
       jac_idx_map_(NULL),
-      h_idx_map_(NULL)
+      h_idx_map_(NULL),
+      x_fixed_map_(NULL)
   {
     ASSERT_EXCEPTION(IsValid(tnlp_), INVALID_TNLP,
                      "The TNLP passed to TNLPAdapter is NULL. This MUST be a valid TNLP!");
@@ -57,19 +58,13 @@ namespace Ipopt
   TNLPAdapter::~TNLPAdapter()
   {
     delete [] full_x_;
-    full_x_ = NULL;
     delete [] full_lambda_;
-    full_lambda_ = NULL;
     delete [] full_g_;
-    full_g_ = NULL;
     delete [] jac_g_;
-    jac_g_ = NULL;
     delete [] c_rhs_;
-    c_rhs_ = NULL;
     delete [] jac_idx_map_;
-    jac_idx_map_ = NULL;
     delete [] h_idx_map_;
-    h_idx_map_ = NULL;
+    delete [] x_fixed_map_;
   }
 
   void TNLPAdapter::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
@@ -114,9 +109,6 @@ namespace Ipopt
       "no", "Print only suspect derivatives",
       "yes", "Print all derivatives",
       "Determines erbosity of derivative checker.");
-    roptions->SetRegisteringCategory("Uncategorized");
-    roptions->AddLowerBoundedNumberOption("max_onesided_bound_slack", "???",
-                                          0.0, false, 0.0);
   }
 
   bool TNLPAdapter::ProcessOptions(const OptionsList& options,
@@ -130,14 +122,19 @@ namespace Ipopt
                      OPTION_INVALID,
                      "Option \"nlp_lower_bound_inf\" must be smaller than \"nlp_upper_bound_inf\".");
 
-    options.GetNumericValue("max_onesided_bound_slack", max_onesided_bound_slack_, prefix);
-
     Index enum_int;
     options.GetEnumValue("derivative_test", enum_int, prefix);
     derivative_test_ = DerivativeTestEnum(enum_int);
-    options.GetNumericValue("derivative_test_perturbation", derivative_test_perturbation_, prefix);
-    options.GetNumericValue("derivative_test_tol", derivative_test_tol_, prefix);
-    options.GetBoolValue("derivative_test_print_all", derivative_test_print_all_, prefix);
+    options.GetNumericValue("derivative_test_perturbation",
+                            derivative_test_perturbation_, prefix);
+    options.GetNumericValue("derivative_test_tol",
+                            derivative_test_tol_, prefix);
+    options.GetBoolValue("derivative_test_print_all",
+                         derivative_test_print_all_, prefix);
+
+    // The option warm_start_same_structure is registered by OrigIpoptNLP
+    options.GetBoolValue("warm_start_same_structure",
+                         warm_start_same_structure_, prefix);
 
     // allow TNLP to process some options
     //tnlp_->ProcessOptions(....);
@@ -170,313 +167,353 @@ namespace Ipopt
       }
     }
 
+    if (warm_start_same_structure_) {
+      ASSERT_EXCEPTION(full_x_, INVALID_WARMSTART,
+                       "warm_start_same_structure chosen, but TNLPAdapter is called for the first time.");
+      if (IsValid(jnlst_)) {
+        jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
+                       "Reusing previous information for warm start in TNLPAdapter.\n");
+      }
+    }
+    else {
+      // In case the Adapter has been used before, but this is not a
+      // warm start, make sure we delete all previously allocated
+      // memory
+      delete [] full_x_;
+      delete [] full_lambda_;
+      delete [] full_g_;
+      delete [] jac_g_;
+      delete [] c_rhs_;
+      delete [] jac_idx_map_;
+      delete [] h_idx_map_;
+      delete [] x_fixed_map_;
+    }
+
     // Get the full dimensions of the problem
-    TNLP::IndexStyleEnum index_style = TNLP::FORTRAN_STYLE;
-    tnlp_->get_nlp_info(n_full_x_, n_full_g_, nz_full_jac_g_,
-                        nz_full_h_, index_style);
+    TNLP::IndexStyleEnum index_style;
+    Index n_full_x, n_full_g, nz_full_jac_g, nz_full_h;
+    tnlp_->get_nlp_info(n_full_x, n_full_g, nz_full_jac_g,
+                        nz_full_h, index_style);
+    ASSERT_EXCEPTION(!warm_start_same_structure_ ||
+                     (n_full_x == n_full_x_ &&
+                      n_full_g == n_full_g_ &&
+                      nz_full_jac_g == nz_full_jac_g_ &&
+                      nz_full_h == nz_full_h_),
+                     INVALID_WARMSTART,
+                     "warm_start_same_structure chosen, but problem dimensions are different.");
+    n_full_x_ = n_full_x;
+    n_full_g_ = n_full_g;
+    nz_full_jac_g_ = nz_full_jac_g;
+    nz_full_h_ = nz_full_h;
 
-    // create space to store vectors that are the full length of x
-    full_x_ = new Number[n_full_x_];
-    //    full_grad_x_ = new Number[n_full_x_];
+    if (!warm_start_same_structure_) {
+      // create space to store vectors that are the full length of x
+      full_x_ = new Number[n_full_x_];
 
-    // create space to store vectors that area the full length of lambda
-    full_lambda_ = new Number[n_full_g_];
+      // create space to store vectors that area the full length of lambda
+      full_lambda_ = new Number[n_full_g_];
 
-    // create space to store vectors that are the full length of g
-    full_g_ = new Number[n_full_g_];
+      // create space to store vectors that are the full length of g
+      full_g_ = new Number[n_full_g_];
 
-    // allocate internal space to store the full jacobian
-    jac_g_ = new Number[nz_full_jac_g_];
+      // allocate internal space to store the full jacobian
+      jac_g_ = new Number[nz_full_jac_g_];
 
-    //*********************************************************
-    // Create the spaces and permutation spaces
-    //*********************************************************
-    /* Spaces for x, x_L, and x_U. We need to remove the fixed variables
-     * and find out which bounds do not exist. */
-    Number* x_l = new Number[n_full_x_];
-    Number* x_u = new Number[n_full_x_];
-    Number* g_l = new Number[n_full_g_];
-    Number* g_u = new Number[n_full_g_];
-    tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+      //*********************************************************
+      // Create the spaces and permutation spaces
+      //*********************************************************
+      /* Spaces for x, x_L, and x_U. We need to remove the fixed variables
+       * and find out which bounds do not exist. */
+      Number* x_l = new Number[n_full_x_];
+      Number* x_u = new Number[n_full_x_];
+      Number* g_l = new Number[n_full_g_];
+      Number* g_u = new Number[n_full_g_];
+      tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
 
-    Index n_x_not_fixed = 0;
-    Index n_x_fixed = 0;
-    Index n_x_l = 0;
-    Index n_x_u = 0;
-    Index* x_not_fixed_map = new Index[n_full_x_];
-    Index* x_l_map = new Index[n_full_x_];
-    Index* x_u_map = new Index[n_full_x_];
+      Index n_x_not_fixed = 0;
+      Index n_x_l = 0;
+      Index n_x_u = 0;
+      Index* x_not_fixed_map = new Index[n_full_x_];
+      Index* x_fixed_map_tmp = new Index[n_full_x_];
+      Index* x_l_map = new Index[n_full_x_];
+      Index* x_u_map = new Index[n_full_x_];
+      n_x_fixed_ = 0;
 
-    for (Index i=0; i<n_full_x_; i++) {
-      Number lower_bound = x_l[i];
-      Number upper_bound = x_u[i];
-      if (lower_bound == upper_bound) {
-        // Variable is fixed, remove it from the problem
-        //	DBG_ASSERT(false && "ToDo: write code to handle fixed variables. For now, remove the fixed variable from the problem or ensure an interior.\n");
-        n_x_fixed++;
-        full_x_[i] = lower_bound;
-      }
-      else if (lower_bound > upper_bound) {
-        char string[128];
-        sprintf(string, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
-        THROW_EXCEPTION(INVALID_TNLP, string);
-      }
-      else {
-        x_not_fixed_map[n_x_not_fixed] = i;
-        if (lower_bound > nlp_lower_bound_inf_) {
-          x_l_map[n_x_l] = n_x_not_fixed;
-          n_x_l++;
-          if (max_onesided_bound_slack_>0. &&
-              upper_bound >= nlp_upper_bound_inf_) {
-            // Add very large upper bound if only a lower bound is given
-            x_u_map[n_x_u] = n_x_not_fixed;
-            n_x_u++;
-          }
+      for (Index i=0; i<n_full_x_; i++) {
+        Number lower_bound = x_l[i];
+        Number upper_bound = x_u[i];
+        if (lower_bound == upper_bound) {
+          // Variable is fixed, remove it from the problem
+          full_x_[i] = lower_bound;
+          x_fixed_map_tmp[n_x_fixed_] = i;
+          n_x_fixed_++;
         }
-
-        if (upper_bound < nlp_upper_bound_inf_) {
-          x_u_map[n_x_u] = n_x_not_fixed;
-          n_x_u++;
-          if (max_onesided_bound_slack_>0. &&
-              lower_bound <= nlp_lower_bound_inf_) {
-            // Add very small lower bound if only a lower bound is given
+        else if (lower_bound > upper_bound) {
+          char string[128];
+          sprintf(string, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+          THROW_EXCEPTION(INVALID_TNLP, string);
+        }
+        else {
+          x_not_fixed_map[n_x_not_fixed] = i;
+          if (lower_bound > nlp_lower_bound_inf_) {
             x_l_map[n_x_l] = n_x_not_fixed;
             n_x_l++;
           }
+
+          if (upper_bound < nlp_upper_bound_inf_) {
+            x_u_map[n_x_u] = n_x_not_fixed;
+            n_x_u++;
+          }
+          n_x_not_fixed++;
         }
-        n_x_not_fixed++;
       }
-    }
 
-
-    x_space = new DenseVectorSpace(n_x_not_fixed);
-    x_l_space = new DenseVectorSpace(n_x_l);
-    x_u_space = new DenseVectorSpace(n_x_u);
-
-    P_x_full_x_space_ = new ExpansionMatrixSpace(n_full_x_, n_x_not_fixed, x_not_fixed_map);
-    P_x_full_x_ = P_x_full_x_space_->MakeNewExpansionMatrix();
-
-    P_x_x_L_space_ = new ExpansionMatrixSpace(n_x_not_fixed, n_x_l, x_l_map);
-    px_l_space = GetRawPtr(P_x_x_L_space_);
-    P_x_x_L_ = P_x_x_L_space_->MakeNewExpansionMatrix();
-    P_x_x_U_space_ = new ExpansionMatrixSpace(n_x_not_fixed, n_x_u, x_u_map);
-    px_u_space = GetRawPtr(P_x_x_U_space_);
-    P_x_x_U_ = P_x_x_U_space_->MakeNewExpansionMatrix();
-
-    delete [] x_l;
-    x_l = NULL;
-    delete [] x_u;
-    x_u = NULL;
-    delete [] x_not_fixed_map;
-    x_not_fixed_map = NULL;
-    delete [] x_l_map;
-    x_l_map = NULL;
-    delete [] x_u_map;
-    x_u_map = NULL;
-
-    // Create the spaces for c and d
-    // - includes the internal permutation matrices for
-    //  full_g to c and d
-    // - includes the permutation matrices for d_l and d_u
-    // c(x) = (P_c)T * g(x)
-    // d(x) = (P_d)T * g(x)
-    // d_L = (P_d_L)T * (P_d)T * g_l
-    // d_U = (P_d_U)T * (P_d)T * g_u
-    Index n_c = 0;
-    Index n_d = 0;
-    Index n_d_l = 0;
-    Index n_d_u = 0;
-
-    Index* c_map = new Index[n_full_g_]; // we do not know n_c yet!
-    Index* d_map = new Index[n_full_g_]; // we do not know n_d yet!
-    Index* d_l_map = new Index[n_full_g_]; // "
-    Index* d_u_map = new Index[n_full_g_]; // "
-    for (Index i=0; i<n_full_g_; i++) {
-      Number lower_bound = g_l[i];
-      Number upper_bound = g_u[i];
-      if (lower_bound == upper_bound) {
-        // equality constraint
-        c_map[n_c] = i;
-        n_c++;
-      }
-      else if (lower_bound > upper_bound) {
-        char string[128];
-        sprintf(string, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
-        THROW_EXCEPTION(INVALID_TNLP, string);
+      // If there are fixed variables, we keep their position around
+      // for a possible warm start later
+      if (n_x_fixed_>0) {
+        x_fixed_map_ = new Index[n_x_fixed_];
+        for (Index i=0; i<n_x_fixed_; i++) {
+          x_fixed_map_[i] = x_fixed_map_tmp[i];
+        }
       }
       else {
-        // inequality constraint
-        d_map[n_d] = i;
-        if (lower_bound > nlp_lower_bound_inf_) {
-          d_l_map[n_d_l] = n_d;
-          n_d_l++;
-          if (max_onesided_bound_slack_>0. &&
-              upper_bound >= nlp_upper_bound_inf_) {
-            // Add very large upper bound if only a lower bound is given
-            d_u_map[n_d_u] = n_d;
-            n_d_u++;
-          }
+        x_fixed_map_ = NULL;
+      }
+      delete [] x_fixed_map_tmp;
+
+      x_space_ = new DenseVectorSpace(n_x_not_fixed);
+      x_l_space_ = new DenseVectorSpace(n_x_l);
+      x_u_space_ = new DenseVectorSpace(n_x_u);
+
+      P_x_full_x_space_ = new ExpansionMatrixSpace(n_full_x_, n_x_not_fixed, x_not_fixed_map);
+      P_x_full_x_ = P_x_full_x_space_->MakeNewExpansionMatrix();
+
+      P_x_x_L_space_ = new ExpansionMatrixSpace(n_x_not_fixed, n_x_l, x_l_map);
+      px_l_space_ = GetRawPtr(P_x_x_L_space_);
+      P_x_x_L_ = P_x_x_L_space_->MakeNewExpansionMatrix();
+      P_x_x_U_space_ = new ExpansionMatrixSpace(n_x_not_fixed, n_x_u, x_u_map);
+      px_u_space_ = GetRawPtr(P_x_x_U_space_);
+      P_x_x_U_ = P_x_x_U_space_->MakeNewExpansionMatrix();
+
+      delete [] x_l;
+      x_l = NULL;
+      delete [] x_u;
+      x_u = NULL;
+      delete [] x_not_fixed_map;
+      x_not_fixed_map = NULL;
+      delete [] x_l_map;
+      x_l_map = NULL;
+      delete [] x_u_map;
+      x_u_map = NULL;
+
+      // Create the spaces for c and d
+      // - includes the internal permutation matrices for
+      //  full_g to c and d
+      // - includes the permutation matrices for d_l and d_u
+      // c(x) = (P_c)T * g(x)
+      // d(x) = (P_d)T * g(x)
+      // d_L = (P_d_L)T * (P_d)T * g_l
+      // d_U = (P_d_U)T * (P_d)T * g_u
+      Index n_c = 0;
+      Index n_d = 0;
+      Index n_d_l = 0;
+      Index n_d_u = 0;
+
+      Index* c_map = new Index[n_full_g_]; // we do not know n_c yet!
+      Index* d_map = new Index[n_full_g_]; // we do not know n_d yet!
+      Index* d_l_map = new Index[n_full_g_]; // "
+      Index* d_u_map = new Index[n_full_g_]; // "
+      for (Index i=0; i<n_full_g_; i++) {
+        Number lower_bound = g_l[i];
+        Number upper_bound = g_u[i];
+        if (lower_bound == upper_bound) {
+          // equality constraint
+          c_map[n_c] = i;
+          n_c++;
         }
-        if (upper_bound < nlp_upper_bound_inf_) {
-          d_u_map[n_d_u] = n_d;
-          n_d_u++;
-          if (max_onesided_bound_slack_>0. &&
-              lower_bound <= nlp_lower_bound_inf_) {
-            // Add very small lower bound if only a lower bound is given
+        else if (lower_bound > upper_bound) {
+          char string[128];
+          sprintf(string, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+          THROW_EXCEPTION(INVALID_TNLP, string);
+        }
+        else {
+          // inequality constraint
+          d_map[n_d] = i;
+          if (lower_bound > nlp_lower_bound_inf_) {
             d_l_map[n_d_l] = n_d;
             n_d_l++;
           }
+          if (upper_bound < nlp_upper_bound_inf_) {
+            d_u_map[n_d_u] = n_d;
+            n_d_u++;
+          }
+          n_d++;
         }
-        n_d++;
       }
-    }
 
-    // create the required c_space
-    SmartPtr<DenseVectorSpace> dc_space = new DenseVectorSpace(n_c);
-    c_rhs_ = new Number[n_c];
-    c_space = GetRawPtr(dc_space);
-    // create the internal expansion matrix for c to g
-    P_c_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_c, c_map);
-    P_c_g_ = P_c_g_space_->MakeNewExpansionMatrix();
-    delete [] c_map;
-    c_map = NULL;
+      // create the required c_space
+      SmartPtr<DenseVectorSpace> dc_space = new DenseVectorSpace(n_c);
+      c_rhs_ = new Number[n_c];
+      c_space_ = GetRawPtr(dc_space);
+      // create the internal expansion matrix for c to g
+      P_c_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_c, c_map);
+      P_c_g_ = P_c_g_space_->MakeNewExpansionMatrix();
+      delete [] c_map;
+      c_map = NULL;
 
-    // create the required d_space
-    d_space = new DenseVectorSpace(n_d);
-    // create the internal expansion matrix for d to g
-    P_d_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_d, d_map);
-    P_d_g_ = P_d_g_space_->MakeNewExpansionMatrix();
-    delete [] d_map;
-    d_map = NULL;
+      // create the required d_space
+      d_space_ = new DenseVectorSpace(n_d);
+      // create the internal expansion matrix for d to g
+      P_d_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_d, d_map);
+      P_d_g_ = P_d_g_space_->MakeNewExpansionMatrix();
+      delete [] d_map;
+      d_map = NULL;
 
-    // create the required d_l space
-    d_l_space = new DenseVectorSpace(n_d_l);
-    // create the required expansion matrix for d_L to d_L_exp
-    pd_l_space = new ExpansionMatrixSpace(n_d, n_d_l, d_l_map);
-    delete [] d_l_map;
-    d_l_map = NULL;
+      // create the required d_l space
+      d_l_space_ = new DenseVectorSpace(n_d_l);
+      // create the required expansion matrix for d_L to d_L_exp
+      pd_l_space_ = new ExpansionMatrixSpace(n_d, n_d_l, d_l_map);
+      delete [] d_l_map;
+      d_l_map = NULL;
 
-    // create the required d_u space
-    d_u_space = new DenseVectorSpace(n_d_u);
-    // create the required expansion matrix for d_U to d_U_exp
-    pd_u_space = new ExpansionMatrixSpace(n_d, n_d_u, d_u_map);
-    delete [] d_u_map;
-    d_u_map = NULL;
+      // create the required d_u space
+      d_u_space_ = new DenseVectorSpace(n_d_u);
+      // create the required expansion matrix for d_U to d_U_exp
+      pd_u_space_ = new ExpansionMatrixSpace(n_d, n_d_u, d_u_map);
+      delete [] d_u_map;
+      d_u_map = NULL;
 
-    delete [] g_l;
-    g_l = NULL;
-    delete [] g_u;
-    g_u = NULL;
+      delete [] g_l;
+      g_l = NULL;
+      delete [] g_u;
+      g_u = NULL;
 
-    /** Create the matrix space for the jacobians
-     */
-    // Get the non zero structure
-    Index* g_iRow = new Index[nz_full_jac_g_];
-    Index* g_jCol = new Index[nz_full_jac_g_];
-    tnlp_->eval_jac_g(n_full_x_, NULL, false, n_full_g_, nz_full_jac_g_,
-                      g_iRow, g_jCol, NULL);
+      /** Create the matrix space for the jacobians
+       */
+      // Get the non zero structure
+      Index* g_iRow = new Index[nz_full_jac_g_];
+      Index* g_jCol = new Index[nz_full_jac_g_];
+      tnlp_->eval_jac_g(n_full_x_, NULL, false, n_full_g_, nz_full_jac_g_,
+                        g_iRow, g_jCol, NULL);
 
-    if (index_style != TNLP::FORTRAN_STYLE) {
+      if (index_style != TNLP::FORTRAN_STYLE) {
+        for (Index i=0; i<nz_full_jac_g_; i++) {
+          g_iRow[i] += 1;
+          g_jCol[i] += 1;
+        }
+      }
+      const Index* c_col_pos = P_x_full_x_->CompressedPosIndices();
+      const Index* c_row_pos = P_c_g_->CompressedPosIndices();
+
+      // ... build the non-zero structure for jac_c
+      // ... (the permutation from rows in jac_g to jac_c is
+      // ...  the same as P_c_g_)
+      jac_idx_map_ = new Index[nz_full_jac_g_];
+      Index* jac_c_iRow = new Index[nz_full_jac_g_];
+      Index* jac_c_jCol = new Index[nz_full_jac_g_];
+      Index current_nz = 0;
       for (Index i=0; i<nz_full_jac_g_; i++) {
-        g_iRow[i] += 1;
-        g_jCol[i] += 1;
+        const Index c_row = c_row_pos[g_iRow[i]-1];
+        const Index c_col = c_col_pos[g_jCol[i]-1];
+        if (c_col != -1 && c_row != -1) {
+          jac_idx_map_[current_nz] = i;
+          jac_c_iRow[current_nz] = c_row + 1;
+          jac_c_jCol[current_nz] = c_col + 1;
+          current_nz++;
+        }
       }
-    }
-    const Index* c_col_pos = P_x_full_x_->CompressedPosIndices();
-    const Index* c_row_pos = P_c_g_->CompressedPosIndices();
+      nz_jac_c_ = current_nz;
+      Jac_c_space_ = new GenTMatrixSpace(n_c, n_x_not_fixed, nz_jac_c_, jac_c_iRow, jac_c_jCol);
+      delete [] jac_c_iRow;
+      jac_c_iRow = NULL;
+      delete [] jac_c_jCol;
+      jac_c_jCol = NULL;
 
-    // ... build the non-zero structure for jac_c
-    // ... (the permutation from rows in jac_g to jac_c is
-    // ...  the same as P_c_g_)
-    jac_idx_map_ = new Index[nz_full_jac_g_];
-    Index* jac_c_iRow = new Index[nz_full_jac_g_];
-    Index* jac_c_jCol = new Index[nz_full_jac_g_];
-    Index current_nz = 0;
-    for (Index i=0; i<nz_full_jac_g_; i++) {
-      const Index c_row = c_row_pos[g_iRow[i]-1];
-      const Index c_col = c_col_pos[g_jCol[i]-1];
-      if (c_col != -1 && c_row != -1) {
-        jac_idx_map_[current_nz] = i;
-        jac_c_iRow[current_nz] = c_row + 1;
-        jac_c_jCol[current_nz] = c_col + 1;
-        current_nz++;
+      const Index* d_col_pos = P_x_full_x_->CompressedPosIndices();
+      const Index* d_row_pos = P_d_g_->CompressedPosIndices();
+      // ... build the nonzero structure for jac_d
+      // ... (the permuation from rows in jac_g to jac_c is the
+      // ...  the same as P_d_g_)
+      Index* jac_d_iRow = new Index[nz_full_jac_g_];
+      Index* jac_d_jCol = new Index[nz_full_jac_g_];
+      current_nz = 0;
+      for (Index i=0; i<nz_full_jac_g_; i++) {
+        const Index d_row = d_row_pos[g_iRow[i]-1];
+        const Index d_col = d_col_pos[g_jCol[i]-1];
+        if (d_col != -1 && d_row != -1) {
+          jac_idx_map_[current_nz + nz_jac_c_] = i;
+          jac_d_iRow[current_nz] = d_row + 1;
+          jac_d_jCol[current_nz] = d_col + 1;
+          current_nz++;
+        }
       }
-    }
-    nz_jac_c_ = current_nz;
-    Jac_c_space = new GenTMatrixSpace(n_c, n_x_not_fixed, nz_jac_c_, jac_c_iRow, jac_c_jCol);
-    delete [] jac_c_iRow;
-    jac_c_iRow = NULL;
-    delete [] jac_c_jCol;
-    jac_c_jCol = NULL;
+      nz_jac_d_ = current_nz;
+      Jac_d_space_ = new GenTMatrixSpace(n_d, n_x_not_fixed, nz_jac_d_, jac_d_iRow, jac_d_jCol);
+      delete [] jac_d_iRow;
+      jac_d_iRow = NULL;
+      delete [] jac_d_jCol;
+      jac_d_jCol = NULL;
 
-    const Index* d_col_pos = P_x_full_x_->CompressedPosIndices();
-    const Index* d_row_pos = P_d_g_->CompressedPosIndices();
-    // ... build the nonzero structure for jac_d
-    // ... (the permuation from rows in jac_g to jac_c is the
-    // ...  the same as P_d_g_)
-    Index* jac_d_iRow = new Index[nz_full_jac_g_];
-    Index* jac_d_jCol = new Index[nz_full_jac_g_];
-    current_nz = 0;
-    for (Index i=0; i<nz_full_jac_g_; i++) {
-      const Index d_row = d_row_pos[g_iRow[i]-1];
-      const Index d_col = d_col_pos[g_jCol[i]-1];
-      if (d_col != -1 && d_row != -1) {
-        jac_idx_map_[current_nz + nz_jac_c_] = i;
-        jac_d_iRow[current_nz] = d_row + 1;
-        jac_d_jCol[current_nz] = d_col + 1;
-        current_nz++;
+      delete [] g_iRow;
+      g_iRow = NULL;
+      delete [] g_jCol;
+      g_jCol = NULL;
+
+      /** Create the matrix space for the hessian of the lagrangian */
+      Index* full_h_iRow = new Index[nz_full_h_];
+      Index* full_h_jCol = new Index[nz_full_h_];
+      Index* h_iRow = new Index[nz_full_h_];
+      Index* h_jCol = new Index[nz_full_h_];
+      tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_, NULL, false,
+                    nz_full_h_, full_h_iRow, full_h_jCol, NULL);
+
+      if (index_style != TNLP::FORTRAN_STYLE) {
+        for (Index i=0; i<nz_full_h_; i++) {
+          full_h_iRow[i] += 1;
+          full_h_jCol[i] += 1;
+        }
       }
-    }
-    nz_jac_d_ = current_nz;
-    Jac_d_space = new GenTMatrixSpace(n_d, n_x_not_fixed, nz_jac_d_, jac_d_iRow, jac_d_jCol);
-    delete [] jac_d_iRow;
-    jac_d_iRow = NULL;
-    delete [] jac_d_jCol;
-    jac_d_jCol = NULL;
 
-    delete [] g_iRow;
-    g_iRow = NULL;
-    delete [] g_jCol;
-    g_jCol = NULL;
-
-    /** Create the matrix space for the hessian of the lagrangian */
-    Index* full_h_iRow = new Index[nz_full_h_];
-    Index* full_h_jCol = new Index[nz_full_h_];
-    Index* h_iRow = new Index[nz_full_h_];
-    Index* h_jCol = new Index[nz_full_h_];
-    tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_, NULL, false,
-                  nz_full_h_, full_h_iRow, full_h_jCol, NULL);
-
-    if (index_style != TNLP::FORTRAN_STYLE) {
+      h_idx_map_ = new Index[nz_full_h_];
+      const Index* h_pos = P_x_full_x_->CompressedPosIndices();
+      current_nz = 0;
       for (Index i=0; i<nz_full_h_; i++) {
-        full_h_iRow[i] += 1;
-        full_h_jCol[i] += 1;
+        const Index h_row = h_pos[full_h_iRow[i]-1];
+        const Index h_col = h_pos[full_h_jCol[i]-1];
+        if (h_row != -1 && h_col != -1) {
+          h_idx_map_[current_nz] = i;
+          h_iRow[current_nz] = h_row + 1;
+          h_jCol[current_nz] = h_col + 1;
+          current_nz++;
+        }
       }
-    }
+      nz_h_ = current_nz;
+      Hess_lagrangian_space_ = new SymTMatrixSpace(n_x_not_fixed, nz_h_, h_iRow, h_jCol);
+      delete [] full_h_iRow;
+      full_h_iRow = NULL;
+      delete [] full_h_jCol;
+      full_h_jCol = NULL;
+      delete [] h_iRow;
+      h_iRow = NULL;
+      delete [] h_jCol;
+      h_jCol = NULL;
+    } /* if (warm_start_same_structure_) { */
 
-    h_idx_map_ = new Index[nz_full_h_];
-    const Index* h_pos = P_x_full_x_->CompressedPosIndices();
-    current_nz = 0;
-    for (Index i=0; i<nz_full_h_; i++) {
-      const Index h_row = h_pos[full_h_iRow[i]-1];
-      const Index h_col = h_pos[full_h_jCol[i]-1];
-      if (h_row != -1 && h_col != -1) {
-        h_idx_map_[current_nz] = i;
-        h_iRow[current_nz] = h_row + 1;
-        h_jCol[current_nz] = h_col + 1;
-        current_nz++;
-      }
-    }
-    nz_h_ = current_nz;
-    Hess_lagrangian_space = new SymTMatrixSpace(n_x_not_fixed, nz_h_, h_iRow, h_jCol);
-    delete [] full_h_iRow;
-    full_h_iRow = NULL;
-    delete [] full_h_jCol;
-    full_h_jCol = NULL;
-    delete [] h_iRow;
-    h_iRow = NULL;
-    delete [] h_jCol;
-    h_jCol = NULL;
+    // Assign the spaces to the returned pointers
+    x_space = x_space_;
+    c_space = c_space_;
+    d_space = d_space_;
+    x_l_space = x_l_space_;
+    px_l_space = px_l_space_;
+    x_u_space = x_u_space_;
+    px_u_space = px_u_space_;
+    d_l_space = d_l_space_;
+    pd_l_space = pd_l_space_;
+    d_u_space = d_u_space_;
+    pd_u_space = pd_u_space_;
+    Jac_c_space = Jac_c_space_;
+    Jac_d_space = Jac_d_space_;
+    Hess_lagrangian_space = Hess_lagrangian_space_;
 
     return true;
   }
@@ -493,11 +530,18 @@ namespace Ipopt
     // This could be done more efficiently, I have already called this method
     // once to setup the structure for the problem, I could store the values
     // and use them here ?
+    // Actually, this is better for a warm start
     Number* x_l = new Number[n_full_x_];
     Number* x_u = new Number[n_full_x_];
     Number* g_l = new Number[n_full_g_];
     Number* g_u = new Number[n_full_g_];
     tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+
+    // Set the values of fixed variables
+    for (Index i=0; i<n_x_fixed_; i++) {
+      DBG_ASSERT(x_l[x_fixed_map_[i]] == x_u[x_fixed_map_[i]]);
+      full_x_[x_fixed_map_[i]] = x_l[x_fixed_map_[i]];
+    }
 
     // Set the bounds values for x
     DenseVector* dx_L = dynamic_cast<DenseVector*>(&x_L);
@@ -509,14 +553,7 @@ namespace Ipopt
       Index ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
       Index full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
       Number lower_bound = x_l[full_idx];
-      if (lower_bound <= nlp_lower_bound_inf_) {
-        DBG_ASSERT(max_onesided_bound_slack_>0.);
-        DBG_ASSERT(x_u[full_idx] < nlp_upper_bound_inf_);
-        values[i] = x_u[full_idx] - max_onesided_bound_slack_;
-      }
-      else {
-        values[i] = lower_bound;
-      }
+      values[i] = lower_bound;
     }
 
     DenseVector* dx_U = dynamic_cast<DenseVector*>(&x_U);
@@ -528,14 +565,7 @@ namespace Ipopt
       Index ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
       Index full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
       Number upper_bound = x_u[full_idx];
-      if (upper_bound >= nlp_upper_bound_inf_) {
-        DBG_ASSERT(max_onesided_bound_slack_>0.);
-        DBG_ASSERT(x_l[full_idx] > nlp_lower_bound_inf_);
-        values[i] = x_l[full_idx] + max_onesided_bound_slack_;
-      }
-      else {
-        values[i] = upper_bound;
-      }
+      values[i] = upper_bound;
     }
 
     // get the bounds values (rhs values to subtract) for c
@@ -557,14 +587,7 @@ namespace Ipopt
       Index d_exp_idx = em_Pd_L->ExpandedPosIndices()[i];
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
       Number lower_bound = g_l[full_idx];
-      if (lower_bound <= nlp_lower_bound_inf_) {
-        DBG_ASSERT(max_onesided_bound_slack_>0.);
-        DBG_ASSERT(g_u[full_idx] < nlp_upper_bound_inf_);
-        values[i] = g_u[full_idx] - max_onesided_bound_slack_;
-      }
-      else {
-        values[i] = lower_bound;
-      }
+      values[i] = lower_bound;
     }
 
     DenseVector* dd_U = dynamic_cast<DenseVector*>(&d_U);
@@ -576,14 +599,7 @@ namespace Ipopt
       Index d_exp_idx = em_Pd_U->ExpandedPosIndices()[i];
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
       Number upper_bound = g_u[full_idx];
-      if (upper_bound >= nlp_upper_bound_inf_) {
-        DBG_ASSERT(max_onesided_bound_slack_>0.);
-        DBG_ASSERT(g_l[full_idx] > nlp_lower_bound_inf_);
-        values[i] = g_l[full_idx] + max_onesided_bound_slack_;
-      }
-      else {
-        values[i] = upper_bound;
-      }
+      values[i] = upper_bound;
     }
 
     delete [] x_l;
@@ -1127,7 +1143,7 @@ namespace Ipopt
     Index nerrors = 0;
 
     ASSERT_EXCEPTION(IsValid(jnlst_), ERROR_IN_TNLP_DERIVATIVE_TEST,
-                     "No Journalist given to TNLPAdapter.  Need Journalist, otherwise can't produce any output!");
+                     "No Journalist given to TNLPAdapter.  Need Journalist, otherwise can't produce any output in DerivativeChecker!");
 
     bool retval = true;
     // Since this method should be independent of all other internal
@@ -1139,7 +1155,7 @@ namespace Ipopt
     Index ng; // number of constriants
     Index nz_jac_g; // number of nonzeros in constraint Jacobian
     Index nz_hess_lag; // number of nonzeros in Lagrangian Hessian
-    TNLP::IndexStyleEnum index_style = TNLP::FORTRAN_STYLE;
+    TNLP::IndexStyleEnum index_style;
     tnlp_->get_nlp_info(nx, ng, nz_jac_g, nz_hess_lag, index_style);
 
     // Obtain starting point as reference point at which derivative

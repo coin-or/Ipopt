@@ -106,15 +106,6 @@ namespace Ipopt
       "computed when switching to the \"monotone mode\" in the adaptive "
       "strategy. (Only considered if \"adaptive\" is selected for option "
       "\"mu_strategy\".)");
-    roptions->SetRegisteringCategory("Initialization");
-    roptions->AddStringOption2(
-      "warm_start_init_point",
-      "Warm-start for initial point", "no",
-      "no", "do not use the warm start initialization",
-      "yes", "use the warm start initialization",
-      "Indicates whether this optimization should use a warm start "
-      "initialization, where values of primal and dual variables are "
-      "given (e.g., from a previous optimization of a related problem.)");
   }
 
   SmartPtr<IpoptAlgorithm>
@@ -189,22 +180,16 @@ namespace Ipopt
     SmartPtr<PDSystemSolver> PDSolver =
       new PDFullSpaceSolver(*AugSolver, *pertHandler);
 
-    // Create the object for initializing the iterates
-    // Initialization object
+    // Create the object for initializing the iterates Initialization
+    // object.  We include both the warm start and the defaut
+    // initializer, so that the warm start options can be activated
+    // without having to rebuild the algorithm
     SmartPtr<EqMultiplierCalculator> EqMultCalculator =
       new LeastSquareMultipliers(*AugSolver);
-    SmartPtr<IterateInitializer> IterInitializer;
-    bool warm_start_init_point;
-    std::string warm_start_option;
-    options.GetStringValue("warm_start_init_point", warm_start_option, prefix);
-    warm_start_init_point = (warm_start_option == "yes");
-
-    if (warm_start_init_point) {
-      IterInitializer = new WarmStartIterateInitializer();
-    }
-    else {
-      IterInitializer = new DefaultIterateInitializer(EqMultCalculator);
-    }
+    SmartPtr<IterateInitializer> WarmStartInitializer =
+      new WarmStartIterateInitializer();
+    SmartPtr<IterateInitializer> IterInitializer =
+      new DefaultIterateInitializer(EqMultCalculator, WarmStartInitializer);
 
     // Solver for the restoration phase
     SmartPtr<AugSystemSolver> resto_AugSolver =

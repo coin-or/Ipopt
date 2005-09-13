@@ -191,6 +191,30 @@ namespace Ipopt
     options.GetNumericValue("slack_move", slack_move_, prefix);
     options.GetEnumValue("constraint_violation_norm_type", enum_int, prefix);
     constr_viol_normtype_ = ENormType(enum_int);
+    // The following option is registered by OrigIpoptNLP
+    options.GetBoolValue("warm_start_same_structure",
+                         warm_start_same_structure_, prefix);
+
+    if (!warm_start_same_structure_) {
+      dampind_x_L_ = NULL;
+      dampind_x_U_ = NULL;
+      dampind_s_L_ = NULL;
+      dampind_s_U_ = NULL;
+
+      tmp_x_ = NULL;
+      tmp_s_ = NULL;
+      tmp_c_ = NULL;
+      tmp_d_ = NULL;
+      tmp_x_L_ = NULL;
+      tmp_x_U_ = NULL;
+      tmp_s_L_ = NULL;
+      tmp_s_U_ = NULL;
+    }
+
+    num_adjusted_slack_x_L_ = 0;
+    num_adjusted_slack_x_U_ = 0;
+    num_adjusted_slack_s_L_ = 0;
+    num_adjusted_slack_s_U_ = 0;
 
     initialize_called_ = true;
     return true;
@@ -848,7 +872,9 @@ namespace Ipopt
     SmartPtr<const Vector> result;
     SmartPtr<const Vector> x = ip_data_->curr()->x();
 
-    std::vector<const TaggedObject*> tdeps(0);
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = GetRawPtr(ip_nlp_->Px_L());
+    tdeps[1] = GetRawPtr(ip_nlp_->Px_U());
     std::vector<Number> sdeps(1);
     sdeps[0] = kappa_d_;
     if (!grad_kappa_times_damping_x_cache_.GetCachedResult(result, tdeps, sdeps)) {
@@ -936,7 +962,9 @@ namespace Ipopt
     SmartPtr<const Vector> result;
     SmartPtr<const Vector> s = ip_data_->curr()->s();
 
-    std::vector<const TaggedObject*> tdeps(0);
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = GetRawPtr(ip_nlp_->Pd_L());
+    tdeps[1] = GetRawPtr(ip_nlp_->Pd_U());
     std::vector<Number> sdeps(1);
     sdeps[0] = kappa_d_;
     if (!grad_kappa_times_damping_s_cache_.GetCachedResult(result, tdeps, sdeps)) {
@@ -963,10 +991,11 @@ namespace Ipopt
   }
 
   void
-  IpoptCalculatedQuantities::ComputeDampingIndicators(SmartPtr<const Vector>& dampind_x_L,
-      SmartPtr<const Vector>& dampind_x_U,
-      SmartPtr<const Vector>& dampind_s_L,
-      SmartPtr<const Vector>& dampind_s_U)
+  IpoptCalculatedQuantities::ComputeDampingIndicators(
+    SmartPtr<const Vector>& dampind_x_L,
+    SmartPtr<const Vector>& dampind_x_U,
+    SmartPtr<const Vector>& dampind_s_L,
+    SmartPtr<const Vector>& dampind_s_U)
   {
     DBG_START_METH("IpoptCalculatedQuantities::ComputeDampingFilters()",
                    dbg_verbosity);
