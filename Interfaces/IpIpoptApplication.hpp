@@ -11,16 +11,13 @@
 
 #include "IpJournalist.hpp"
 #include "IpTNLP.hpp"
+#include "IpNLP.hpp"
 #include "IpRegOptions.hpp"
 #include "IpOptionsList.hpp"
 #include "IpSolveStatistics.hpp"
 
 namespace Ipopt
 {
-  /* Forward declarations */
-  class NLP;
-  class IpoptAlgorithm;
-
   /* Return codes for the Optimize call for an application */
 #include "IpReturnCodes_inc.h"
 
@@ -128,20 +125,28 @@ namespace Ipopt
      *  optimization run. */
     SmartPtr<SolveStatistics> statistics_;
 
-    /** Object with the algorithm sceleton */
-    SmartPtr<IpoptAlgorithm> alg_;
+    /** Object with the algorithm sceleton.  We need to use a SmartPtr
+     *  to ReferencedObject, since otherwise we would have to include
+     *  too many header files. */
+    SmartPtr<ReferencedObject> alg_;
 
     /** IpoptNLP Object for the NLP.  We keep this around for a
-     *  ReOptimize warm start */
-    SmartPtr<IpoptNLP> ip_nlp_;
+     *  ReOptimize warm start.  We need to use a SmartPtr
+     *  to ReferencedObject, since otherwise we would have to include
+     *  too many header files. */
+    SmartPtr<ReferencedObject> ip_nlp_;
 
     /** IpoptData Object for the NLP.  We keep this around for a
-     *  ReOptimize warm start */
-    SmartPtr<IpoptData> ip_data_;
+     *  ReOptimize warm start.  We need to use a SmartPtr
+     *  to ReferencedObject, since otherwise we would have to include
+     *  too many header files. */
+    SmartPtr<ReferencedObject> ip_data_;
 
     /** IpoptCalculatedQuantities Object for the NLP.  We keep this
-     *  around for a ReOptimize warm start */
-    SmartPtr<IpoptCalculatedQuantities> ip_cq_;
+     *  around for a ReOptimize warm start.  We need to use a SmartPtr
+     *  to ReferencedObject, since otherwise we would have to include
+     *  too many header files. */
+    SmartPtr<ReferencedObject> ip_cq_;
 
     /** Pointer for journals (which are also in the Journalist) so
      *  that we can reset the printlevels if necessary before each
