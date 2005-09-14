@@ -314,7 +314,7 @@ namespace Ipopt
       }
 
       SmartPtr<IpoptNLP> ip_nlp =
-	new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp), nlp_scaling);
+        new OrigIpoptNLP(ConstPtr(jnlst_), GetRawPtr(nlp), nlp_scaling);
       ip_nlp_ = GetRawPtr(ip_nlp);
 
       // Create the IpoptData
@@ -323,7 +323,7 @@ namespace Ipopt
 
       // Create the IpoptCalculators
       SmartPtr<IpoptCalculatedQuantities> ip_cq =
-	new IpoptCalculatedQuantities(ip_nlp, ip_data);
+        new IpoptCalculatedQuantities(ip_nlp, ip_data);
       ip_cq_ = GetRawPtr(ip_cq);
 
       // Create the Algorithm object
@@ -400,7 +400,7 @@ namespace Ipopt
       IpoptCalculatedQuantities* p2ip_cq = dynamic_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_));
       // Set up the algorithm
       p2alg->Initialize(*jnlst_, *p2ip_nlp, *p2ip_data, *p2ip_cq,
-			*options_, "");
+                        *options_, "");
 
       if( jnlst_->ProduceOutput(J_DETAILED, J_MAIN) ) {
         // Print out the options (including the number of times they were used
@@ -500,13 +500,13 @@ namespace Ipopt
         return retValue;
       }
       p2ip_nlp->FinalizeSolution(status,
-				 *p2ip_data->curr()->x(),
-				 *p2ip_data->curr()->z_L(),
-				 *p2ip_data->curr()->z_U(),
-				 *p2ip_cq->curr_c(), *p2ip_cq->curr_d(),
-				 *p2ip_data->curr()->y_c(),
-				 *p2ip_data->curr()->y_d(),
-				 p2ip_cq->curr_f());
+                                 *p2ip_data->curr()->x(),
+                                 *p2ip_data->curr()->z_L(),
+                                 *p2ip_data->curr()->z_U(),
+                                 *p2ip_cq->curr_c(), *p2ip_cq->curr_d(),
+                                 *p2ip_data->curr()->y_c(),
+                                 *p2ip_data->curr()->y_d(),
+                                 p2ip_cq->curr_f());
       // Create a SolveStatistics object
       statistics_ = new SolveStatistics(p2ip_nlp, p2ip_data, p2ip_cq);
     }
