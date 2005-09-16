@@ -61,7 +61,7 @@ namespace Ipopt
     ResetInfo();
 
     initialize_called_ = true;
-    printf("Hallo\n");
+
     return true;
   }
 
