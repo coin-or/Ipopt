@@ -17,24 +17,6 @@ namespace Ipopt
 #endif
 
   IpoptData::IpoptData()
-      :
-      iter_count_(0),
-      curr_mu_(-1.),
-      mu_initialized_(false),
-      curr_tau_(-1.),
-      tau_initialized_(false),
-      initialize_called_(false),
-      have_prototypes_(false),
-
-      free_mu_mode_(false),
-      tiny_step_flag_(false),
-
-      info_regu_x_(0.),
-      info_alpha_primal_(0.),
-      info_alpha_primal_char_(' '),
-      info_alpha_dual_(0.),
-      info_ls_count_(0),
-      info_skip_output_(false)
   {}
 
   IpoptData::~IpoptData()
@@ -63,13 +45,23 @@ namespace Ipopt
   {
     options.GetNumericValue("tol", tol_, prefix);
 
-    iter_count_=0;
-
-    have_prototypes_ = false;
+    iter_count_ = 0;
+    curr_mu_ = -1.;
+    mu_initialized_ = false;
+    curr_tau_ = -1.;
     tau_initialized_ = false;
+    initialize_called_ = false;
+    have_prototypes_ = false;
     have_deltas_ = false;
+    have_affine_deltas_ = false;
+
+    free_mu_mode_ = false;
+    tiny_step_flag_ = false;
+
+    ResetInfo();
 
     initialize_called_ = true;
+    printf("Hallo\n");
     return true;
   }
 

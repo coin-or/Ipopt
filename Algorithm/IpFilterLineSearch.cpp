@@ -43,8 +43,6 @@ namespace Ipopt
                                      const SmartPtr<ConvergenceCheck>& conv_check)
       :
       LineSearch(),
-      theta_max_(-1.0),
-      theta_min_(-1.0),
       filter_(2),
       resto_phase_(resto_phase),
       pd_solver_(pd_solver),
@@ -330,6 +328,8 @@ namespace Ipopt
     rigorous_ = true;
     skipped_line_search_ = false;
     tiny_step_last_iteration_ = false;
+    theta_min_ = -1.;
+    theta_max_ = -1.;
 
     Reset();
 

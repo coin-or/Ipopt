@@ -181,7 +181,7 @@ if test -z "$CXXFLAGS"; then
              dbg_cxxflags="-g";;
       esac;;
     *-sun-*)
-             opt_cxxflags="-O5 -xtarget=native"
+             opt_cxxflags="-O4 -xtarget=native"
              dbg_cxxflags="-g";;
     esac
   fi
@@ -451,7 +451,7 @@ if test -z "$CFLAGS"; then
              add_cflags="-Ae"
              dbg_cflags="-g";;
     *-sun-*)
-             opt_cflags="-xO5 -xtarget=native"
+             opt_cflags="-xO4 -xtarget=native"
              dbg_cflags="-g";;
     *-sgi-*)
              opt_cflags="-O -OPT:Olimit=0"
@@ -648,7 +648,7 @@ if test -z "$FFLAGS"; then
              add_fflags="+U77"
              dbg_fflags="-C -g";;
     *-sun-*)
-             opt_fflags="-O5 -xtarget=native"
+             opt_fflags="-O4 -xtarget=native"
              dbg_fflags="-g";;
     *-sgi-*)
              opt_fflags="-O5 -OPT:Olimit=0"

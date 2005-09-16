@@ -205,6 +205,7 @@ namespace Ipopt
     refs_vals_.clear();
     check_if_no_bounds_ = false;
     no_bounds_ = false;
+    filter_.Clear();
     IpData().SetFreeMuMode(true);
 
     accepted_point_ = NULL;

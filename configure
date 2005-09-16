@@ -2280,7 +2280,7 @@ rm -f conftest.err conftest.$ac_objext \
              dbg_cxxflags="-g";;
       esac;;
     *-sun-*)
-             opt_cxxflags="-O5 -xtarget=native"
+             opt_cxxflags="-O4 -xtarget=native"
              dbg_cxxflags="-g";;
     esac
   fi
@@ -3309,7 +3309,7 @@ rm -f conftest.err conftest.$ac_objext \
              add_cflags="-Ae"
              dbg_cflags="-g";;
     *-sun-*)
-             opt_cflags="-xO5 -xtarget=native"
+             opt_cflags="-xO4 -xtarget=native"
              dbg_cflags="-g";;
     *-sgi-*)
              opt_cflags="-O -OPT:Olimit=0"
@@ -3962,7 +3962,7 @@ rm -f conftest.err conftest.$ac_objext \
              add_fflags="+U77"
              dbg_fflags="-C -g";;
     *-sun-*)
-             opt_fflags="-O5 -xtarget=native"
+             opt_fflags="-O4 -xtarget=native"
              dbg_fflags="-g";;
     *-sgi-*)
              opt_fflags="-O5 -OPT:Olimit=0"
