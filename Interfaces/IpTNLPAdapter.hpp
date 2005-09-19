@@ -65,13 +65,13 @@ namespace Ipopt
                            SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space);
 
     /** Method for obtaining the bounds information */
-    virtual bool GetBoundsInformation(Matrix& Px_L,
+    virtual bool GetBoundsInformation(const Matrix& Px_L,
                                       Vector& x_L,
-                                      Matrix& Px_U,
+                                      const Matrix& Px_U,
                                       Vector& x_U,
-                                      Matrix& Pd_L,
+                                      const Matrix& Pd_L,
                                       Vector& d_L,
-                                      Matrix& Pd_U,
+                                      const Matrix& Pd_U,
                                       Vector& d_U);
 
     /** Method for obtaining the starting point
@@ -129,17 +129,11 @@ namespace Ipopt
                                   Number obj_value);
     //@}
 
-    /** @name Methods for translating data for IpoptNLP into the TNLP
-     *  data.  These methods can be used to obtain the current (or
-     *  final) data for the TNLP formulation from the IpoptNLP
-     *  structure. */
-    //@{
-    /** Sort the primal variables, and add the fixed values in x */
-    void ResortX(const Vector& x, Number* x_orig);
-    void ResortG(const Vector& c, const Vector& d, Number *g_orig);
-    void ResortBnds(const Vector& x_L, Number* x_L_orig,
-                    const Vector& x_U, Number* x_U_orig);
-    //@}
+    /** Enum for treatment of fixed variables option */
+    enum FixedVariableTreatmentEnum {
+      MAKE_PARAMETER=0,
+      MAKE_CONSTRAINT
+    };
 
     /** Enum for specifying which derivative test is to be performed. */
     enum DerivativeTestEnum {
@@ -147,6 +141,7 @@ namespace Ipopt
       FIRST_ORDER_TEST,
       SECOND_ORDER_TEST
     };
+
     /** Method for performing the derivative test */
     bool CheckDerivatives(DerivativeTestEnum deriv_test);
 
@@ -177,6 +172,18 @@ namespace Ipopt
     void operator=(const TNLPAdapter&);
     //@}
 
+    /** @name Methods for translating data for IpoptNLP into the TNLP
+     *  data.  These methods are used to obtain the current (or
+     *  final) data for the TNLP formulation from the IpoptNLP
+     *  structure. */
+    //@{
+    /** Sort the primal variables, and add the fixed values in x */
+    void ResortX(const Vector& x, Number* x_orig);
+    void ResortG(const Vector& c, const Vector& d, Number *g_orig);
+    void ResortBnds(const Vector& x_L, Number* x_L_orig,
+                    const Vector& x_U, Number* x_U_orig);
+    //@}
+
     /** Pointer to the TNLP class (class specific to Number* vectors and
      *  harwell triplet matrices) */
     SmartPtr<TNLP> tnlp_;
@@ -190,6 +197,8 @@ namespace Ipopt
     Number nlp_lower_bound_inf_;
     /** Value for a upper bound that denotes infinity */
     Number nlp_upper_bound_inf_;
+    /** Flag indicating how fixed variables should be handled */
+    FixedVariableTreatmentEnum fixed_variable_treatment_;
     /* Maximal slack for one-sidedly bounded variables.  If a
      *  variable has only one bound, say a lower bound xL, then an
      *  upper bound xL + max_onesided_bound_slack_.  If this value is
@@ -219,6 +228,9 @@ namespace Ipopt
     Index n_full_g_;
     /** non-zeros of the jacobian of c */
     Index nz_jac_c_;
+    /** non-zeros of the jacobian of c without added constraints for
+     *  fixed variables. */
+    Index nz_jac_c_no_fixed_;
     /** non-zeros of the jacobian of d */
     Index nz_jac_d_;
     /** number of non-zeros in full-size Jacobian of g */

@@ -482,7 +482,7 @@ namespace Ipopt
           if (assume_singular) {
             perturbHandler_->PerturbForSingularity(delta_x, delta_s,
                                                    delta_c, delta_d);
-            IpData().Append_info_string("M");
+            IpData().Append_info_string("a");
           }
         }
         else if (retval==SYMSOLVER_WRONG_INERTIA ||

@@ -137,7 +137,7 @@ namespace Ipopt
     const std::string info_string = IpData().info_string();
 
     Jnlst().Printf(J_SUMMARY, J_MAIN,
-                   "%4d%c %13.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d",
+                   "%4d%c%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d",
                    iter, info_iter, f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr,
                    alpha_dual, alpha_primal, alpha_primal_char,
                    ls_count);

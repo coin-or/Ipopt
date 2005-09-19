@@ -71,13 +71,13 @@ namespace Ipopt
                            SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space)=0;
 
     /** Method for obtaining the bounds information */
-    virtual bool GetBoundsInformation(Matrix& Px_L,
+    virtual bool GetBoundsInformation(const Matrix& Px_L,
                                       Vector& x_L,
-                                      Matrix& Px_U,
+                                      const Matrix& Px_U,
                                       Vector& x_U,
-                                      Matrix& Pd_L,
+                                      const Matrix& Pd_L,
                                       Vector& d_L,
-                                      Matrix& Pd_U,
+                                      const Matrix& Pd_U,
                                       Vector& d_U)=0;
 
     /** Method for obtaining the starting point for all the

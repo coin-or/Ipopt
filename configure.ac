@@ -1152,6 +1152,13 @@ if test "$use_asldir" = BUILD; then
     done
     ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
 
+#   Somehow, -qtune=auto makes ASL segfault on AIX compiler, so take them out
+    case $CC in
+      xlc* | */xlc* | mpxlc* | */mpxlc*)
+        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-qtune=auto//g' | sed 's/-qarch=auto//g' | sed 's/-qcache=auto//g'`
+      ;;
+    esac
+
     AC_MSG_CHECKING([whether $am_make is the GNU make])
     rm -f conftest.mak
     ($am_make -v -f conftest.mak > conftest.grp) 2>&5
