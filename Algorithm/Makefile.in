@@ -72,7 +72,7 @@ am_libipoptalg_a_OBJECTS = IpAdaptiveMuUpdate.$(OBJEXT) \
 	IpRestoIterateInitializer.$(OBJEXT) \
 	IpRestoIterationOutput.$(OBJEXT) IpRestoMinC_1Nrm.$(OBJEXT) \
 	IpRestoRestoPhase.$(OBJEXT) IpStdAugSystemSolver.$(OBJEXT) \
-	IpUserScaling.$(OBJEXT) \
+	IpTimingStatistics.$(OBJEXT) IpUserScaling.$(OBJEXT) \
 	IpWarmStartIterateInitializer.$(OBJEXT)
 libipoptalg_a_OBJECTS = $(am_libipoptalg_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
@@ -276,6 +276,7 @@ libipoptalg_a_SOURCES = \
 	IpRestoPhase.hpp \
 	IpRestoRestoPhase.cpp IpRestoRestoPhase.hpp \
 	IpStdAugSystemSolver.cpp IpStdAugSystemSolver.hpp \
+	IpTimingStatistics.cpp IpTimingStatistics.hpp \
 	IpUserScaling.cpp IpUserScaling.hpp \
 	IpWarmStartIterateInitializer.cpp IpWarmStartIterateInitializer.hpp
 
@@ -324,6 +325,7 @@ ASTYLE_FILES = \
 	IpRestoPhase.hppbak \
 	IpRestoRestoPhase.cppbak IpRestoRestoPhase.hppbak \
 	IpStdAugSystemSolver.cppbak IpStdAugSystemSolver.hppbak \
+	IpTimingStatistics.cppbak IpTimingStatistics.hppbak \
 	IpUserScaling.cppbak IpUserScaling.hppbak \
 	IpWarmStartIterateInitializer.cppbak IpWarmStartIterateInitializer.hppbak
 
@@ -406,6 +408,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoMinC_1Nrm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoRestoPhase.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdAugSystemSolver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTimingStatistics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpUserScaling.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpWarmStartIterateInitializer.Po@am__quote@
 

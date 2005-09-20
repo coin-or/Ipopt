@@ -1288,6 +1288,8 @@ namespace Ipopt
       return false;
     }
 
+    IpData().TimingStats().TryCorrector.Start();
+
     bool accept = false;
 
     // Compute the corrector step based on corrector_type parameter
@@ -1438,6 +1440,7 @@ namespace Ipopt
         trial_avrg_compl>=corrector_compl_avrg_red_fact_*curr_avrg_compl) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                      "Rejecting corrector step, because trial complementarity is too large.\n" );
+      IpData().TimingStats().TryCorrector.End();
       return false;
     }
 
@@ -1470,6 +1473,7 @@ namespace Ipopt
       }
     }
 
+    IpData().TimingStats().TryCorrector.End();
     return accept;
   }
 

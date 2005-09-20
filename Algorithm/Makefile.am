@@ -55,6 +55,7 @@ libipoptalg_a_SOURCES = \
 	IpRestoPhase.hpp \
 	IpRestoRestoPhase.cpp IpRestoRestoPhase.hpp \
 	IpStdAugSystemSolver.cpp IpStdAugSystemSolver.hpp \
+	IpTimingStatistics.cpp IpTimingStatistics.hpp \
 	IpUserScaling.cpp IpUserScaling.hpp \
 	IpWarmStartIterateInitializer.cpp IpWarmStartIterateInitializer.hpp
 
@@ -109,6 +110,7 @@ ASTYLE_FILES = \
 	IpRestoPhase.hppbak \
 	IpRestoRestoPhase.cppbak IpRestoRestoPhase.hppbak \
 	IpStdAugSystemSolver.cppbak IpStdAugSystemSolver.hppbak \
+	IpTimingStatistics.cppbak IpTimingStatistics.hppbak \
 	IpUserScaling.cppbak IpUserScaling.hppbak \
 	IpWarmStartIterateInitializer.cppbak IpWarmStartIterateInitializer.hppbak
 

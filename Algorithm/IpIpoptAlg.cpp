@@ -143,6 +143,9 @@ namespace Ipopt
   {
     DBG_START_METH("IpoptAlgorithm::Optimize", dbg_verbosity);
 
+    // Start measuring CPU time
+    IpData().TimingStats().OverallAlgorithm.Start();
+
     if (!message_printed) {
       print_message(Jnlst());
     }
@@ -187,6 +190,8 @@ namespace Ipopt
 
       OutputIteration();
 
+      IpData().TimingStats().OverallAlgorithm.End();
+
       if (conv_status == ConvergenceCheck::CONVERGED) {
         return SUCCESS;
       }
@@ -199,31 +204,38 @@ namespace Ipopt
     }
     catch(TINY_STEP_DETECTED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().OverallAlgorithm.End();
       return STOP_AT_TINY_STEP;
     }
     catch(ACCEPTABLE_POINT_REACHED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().OverallAlgorithm.End();
       return STOP_AT_ACCEPTABLE_POINT;
     }
     catch(LOCALLY_INFEASIBLE& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().OverallAlgorithm.End();
       return LOCAL_INFEASIBILITY;
     }
     catch(RESTORATION_FAILED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().OverallAlgorithm.End();
       return RESTORATION_FAILURE;
     }
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().OverallAlgorithm.End();
       return SUCCESS;
     }
     catch(INTERNAL_ABORT& exc) {
       exc.ReportException(Jnlst());
+      IpData().TimingStats().OverallAlgorithm.End();
       return INTERNAL_ERROR;
     }
 
     DBG_ASSERT(false && "Unknown return code in the algorithm");
 
+    IpData().TimingStats().OverallAlgorithm.End();
     return INTERNAL_ERROR;
   }
 

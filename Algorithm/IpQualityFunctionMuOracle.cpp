@@ -222,6 +222,9 @@ namespace Ipopt
 
     DBG_PRINT_VECTOR(2, "step_cen", *step_cen);
 
+    // Start the timing for the quality function search here
+    IpData().TimingStats().QualityFunctionSearch.Start();
+
     // We now compute the step for the slack variables.  This safes
     // time, because we then don't have to do this any more for each
     // evaluation of the quality function
@@ -396,6 +399,9 @@ namespace Ipopt
 
       sigma = pow(base, l_best);
     }
+
+    // End timing of quality function search
+    IpData().TimingStats().QualityFunctionSearch.End();
 
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "Sigma = %e\n", sigma);

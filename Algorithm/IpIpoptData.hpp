@@ -13,6 +13,7 @@
 #include "IpOptionsList.hpp"
 #include "IpIteratesVector.hpp"
 #include "IpRegOptions.hpp"
+#include "IpTimingStatistics.hpp"
 
 namespace Ipopt
 {
@@ -362,6 +363,12 @@ namespace Ipopt
     }
     //@}
 
+    /** Return Timing Statistics Object */
+    TimingStatistics& TimingStats()
+    {
+      return timing_statistics_;
+    }
+
     /** Methods for IpoptType */
     //@{
     static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
@@ -466,6 +473,10 @@ namespace Ipopt
 
     /** VectorSpace for all the iterates */
     SmartPtr<IteratesVectorSpace> iterates_space_;
+
+    /** TimingStatistics object collecting all Ipopt timing
+     *  statistics */
+    TimingStatistics timing_statistics_;
 
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).

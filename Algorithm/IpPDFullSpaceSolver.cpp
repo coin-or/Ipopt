@@ -109,6 +109,9 @@ namespace Ipopt
   {
     DBG_START_METH("PDFullSpaceSolver::Solve",dbg_verbosity);
 
+    // Timing of PDSystem solver starts here
+    IpData().TimingStats().PDSystemSolver.Start();
+
     DBG_PRINT_VECTOR(2, "rhs_x", *rhs.x());
     DBG_PRINT_VECTOR(2, "rhs_s", *rhs.s());
     DBG_PRINT_VECTOR(2, "rhs_c", *rhs.y_c());
@@ -177,6 +180,7 @@ namespace Ipopt
         // care of this (e.g. call the restoration phase).  ToDo: We
         // might want to use a more explicit cue later.
         res.Set(0.0);
+        IpData().TimingStats().PDSystemSolver.End();
         return;
       }
 
@@ -307,6 +311,7 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "res_vL", *res.v_L());
     DBG_PRINT_VECTOR(2, "res_vU", *res.v_U());
 
+    IpData().TimingStats().PDSystemSolver.End();
   }
 
   bool PDFullSpaceSolver::SolveOnce(bool resolve_with_better_quality,

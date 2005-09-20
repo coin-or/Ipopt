@@ -103,8 +103,10 @@ namespace Ipopt
 
     bool retval = true;
     if (IsValid(scaling_method_)) {
+      IpData().TimingStats().LinearSystemScaling.Start();
       retval = scaling_method_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                            options, prefix);
+      IpData().TimingStats().LinearSystemScaling.End();
     }
     return retval;
   }
@@ -151,9 +153,11 @@ namespace Ipopt
       TripletHelper::FillValuesFromVector(dim_, *rhsV[irhs],
                                           &rhs_vals[irhs*(dim_)]);
       if (IsValid(scaling_method_)) {
+        IpData().TimingStats().LinearSystemScaling.Start();
         for (Index i=0; i<dim_; i++) {
           rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
         }
+        IpData().TimingStats().LinearSystemScaling.End();
       }
     }
 
@@ -193,9 +197,11 @@ namespace Ipopt
     if (retval==SYMSOLVER_SUCCESS) {
       for (Index irhs=0; irhs<nrhs; irhs++) {
         if (IsValid(scaling_method_)) {
+          IpData().TimingStats().LinearSystemScaling.Start();
           for (Index i=0; i<dim_; i++) {
             rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
           }
+          IpData().TimingStats().LinearSystemScaling.End();
         }
         TripletHelper::PutValuesInVector(dim_, &rhs_vals[irhs*(dim_)],
                                          *solV[irhs]);
@@ -259,7 +265,9 @@ namespace Ipopt
       // Get space for the scaling factors
       delete [] scaling_factors_;
       if (IsValid(scaling_method_)) {
+        IpData().TimingStats().LinearSystemScaling.Start();
         scaling_factors_ = new double[dim_];
+        IpData().TimingStats().LinearSystemScaling.End();
       }
 
       have_structure_ = true;
@@ -333,6 +341,7 @@ namespace Ipopt
     }
 
     if (IsValid(scaling_method_)) {
+      IpData().TimingStats().LinearSystemScaling.Start();
       DBG_ASSERT(scaling_factors_);
       if (new_matrix) {
         // only compute scaling factors if the matrix has not been
@@ -361,6 +370,7 @@ namespace Ipopt
           DBG_PRINT((3, "KKTscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
         }
       }
+      IpData().TimingStats().LinearSystemScaling.End();
     }
 
     if (matrix_format_!=SparseSymLinearSolverInterface::Triplet_Format) {

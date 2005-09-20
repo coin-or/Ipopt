@@ -1,6 +1,8 @@
 * text=auto !eol
 Algorithm/IpAlgorithmRegOp.cpp -text
 Algorithm/IpAlgorithmRegOp.hpp -text
+Algorithm/IpTimingStatistics.cpp -text
+Algorithm/IpTimingStatistics.hpp -text
 Algorithm/LinearSolvers/IpLinearSolversRegOp.cpp -text
 Algorithm/LinearSolvers/IpLinearSolversRegOp.hpp -text
 Docs/documentation.pdf -text
