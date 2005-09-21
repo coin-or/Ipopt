@@ -740,6 +740,7 @@ MY_CHECK_CXX_HEADER(assert)
 MY_CHECK_CXX_HEADER(stdio)
 MY_CHECK_CXX_HEADER(stdarg)
 MY_CHECK_CXX_HEADER(float)
+MY_CHECK_CXX_HEADER(time)
 
 ###################
 # Function finite #

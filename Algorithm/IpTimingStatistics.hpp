@@ -159,12 +159,21 @@ namespace Ipopt
     //@{
     TimedTask OverallAlgorithm;
     TimedTask FunctionEvaluations;
-    TimedTask PDSystemSolver;
+    TimedTask PDSystemSolverTotal;
+    TimedTask PDSystemSolverSolveOnce;
     TimedTask LinearSystemScaling;
     TimedTask LinearSystemSymbolicFactorization;
     TimedTask LinearSystemFactorization;
+    TimedTask LinearSystemBackSolve;
     TimedTask QualityFunctionSearch;
     TimedTask TryCorrector;
+
+    TimedTask Task1;
+    TimedTask Task2;
+    TimedTask Task3;
+    TimedTask Task4;
+    TimedTask Task5;
+    TimedTask Task6;
     //@}
 
   private:

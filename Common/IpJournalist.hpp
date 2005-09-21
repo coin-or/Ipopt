@@ -65,6 +65,7 @@ namespace Ipopt
     J_SOLUTION,
     J_DOCUMENTATION,
     J_NLP,
+    J_TIMING_STATISTICS,
     J_LAST_CATEGORY
   };
   //@}

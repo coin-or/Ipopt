@@ -486,6 +486,7 @@ namespace Ipopt
     Index n_comp = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() +
                    IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim();
 
+    IpData().TimingStats().Task1.Start();
     tmp_step_x_L_->AddTwoVectors(1., step_aff_x_L, sigma, step_cen_x_L, 0.);
     tmp_step_x_U_->AddTwoVectors(1., step_aff_x_U, sigma, step_cen_x_U, 0.);
     tmp_step_s_L_->AddTwoVectors(1., step_aff_s_L, sigma, step_cen_s_L, 0.);
@@ -494,8 +495,10 @@ namespace Ipopt
     tmp_step_z_U_->AddTwoVectors(1., step_aff_z_U, sigma, step_cen_z_U, 0.);
     tmp_step_v_L_->AddTwoVectors(1., step_aff_v_L, sigma, step_cen_v_L, 0.);
     tmp_step_v_U_->AddTwoVectors(1., step_aff_v_U, sigma, step_cen_v_U, 0.);
+    IpData().TimingStats().Task1.End();
 
     // Compute the fraction-to-the-boundary step sizes
+    IpData().TimingStats().Task2.Start();
     Number tau = IpData().curr_tau();
     Number alpha_primal = IpCq().slack_frac_to_the_bound(tau,
                           *tmp_step_x_L_,
@@ -508,9 +511,11 @@ namespace Ipopt
                         *tmp_step_z_U_,
                         *tmp_step_v_L_,
                         *tmp_step_v_U_);
+    IpData().TimingStats().Task2.End();
 
     Number xi; // centrality measure
 
+    IpData().TimingStats().Task1.Start();
     tmp_slack_x_L_->AddTwoVectors(1., *IpCq().curr_slack_x_L(),
                                   alpha_primal, *tmp_step_x_L_, 0.);
     tmp_slack_x_U_->AddTwoVectors(1., *IpCq().curr_slack_x_U(),
@@ -528,24 +533,30 @@ namespace Ipopt
                             alpha_dual, *tmp_step_v_L_, 0.);
     tmp_v_U_->AddTwoVectors(1., *IpData().curr()->v_U(),
                             alpha_dual, *tmp_step_v_U_, 0.);
+    IpData().TimingStats().Task1.End();
 
+    IpData().TimingStats().Task3.Start();
     tmp_slack_x_L_->ElementWiseMultiply(*tmp_z_L_);
     tmp_slack_x_U_->ElementWiseMultiply(*tmp_z_U_);
     tmp_slack_s_L_->ElementWiseMultiply(*tmp_v_L_);
     tmp_slack_s_U_->ElementWiseMultiply(*tmp_v_U_);
+    IpData().TimingStats().Task3.End();
 
     DBG_PRINT_VECTOR(2, "compl_x_L", *tmp_slack_x_L_);
     DBG_PRINT_VECTOR(2, "compl_x_U", *tmp_slack_x_U_);
     DBG_PRINT_VECTOR(2, "compl_s_L", *tmp_slack_s_L_);
     DBG_PRINT_VECTOR(2, "compl_s_U", *tmp_slack_s_U_);
 
+    IpData().TimingStats().Task4.Start();
     xi = IpCq().CalcCentralityMeasure(*tmp_slack_x_L_, *tmp_slack_x_U_,
                                       *tmp_slack_s_L_, *tmp_slack_s_U_);
+    IpData().TimingStats().Task4.End();
 
     Number dual_inf=-1.;
     Number primal_inf=-1.;
     Number compl_inf=-1.;
 
+    IpData().TimingStats().Task5.Start();
     switch (quality_function_norm_) {
       case NM_NORM_1:
       dual_inf = (1.-alpha_dual)*(IpCq().curr_grad_lag_x()->Asum() +
@@ -614,6 +625,7 @@ namespace Ipopt
       default:
       DBG_ASSERT(false && "Unknown value for quality_function_norm_");
     }
+    IpData().TimingStats().Task5.End();
 
     Number quality_function = dual_inf + primal_inf + compl_inf;
 

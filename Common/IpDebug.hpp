@@ -25,9 +25,11 @@
 # define DBG_ASSERT(test) assert(test)
 # define DBG_ASSERT_EXCEPTION(__condition, __except_type, __msg) \
    ASSERT_EXCEPTION( (__condition), __except_type, __msg);
+# define DBG_DO(__cmd) __cmd
 #else
 # define DBG_ASSERT(test)
 # define DBG_ASSERT_EXCEPTION(__condition, __except_type, __msg)
+# define DBG_DO(__cmd)
 #endif
 
 #ifndef IP_DEBUG

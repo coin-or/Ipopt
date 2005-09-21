@@ -444,6 +444,7 @@ namespace Ipopt
       double *rhs_vals)
   {
     DBG_START_METH("Ma27TSolverInterface::Backsolve",dbg_verbosity);
+    IpData().TimingStats().LinearSystemBackSolve.Start();
 
     ipfint N=dim_;
     double* W = new double[maxfrt_];
@@ -470,6 +471,7 @@ namespace Ipopt
     delete [] W;
     delete [] IW1;
 
+    IpData().TimingStats().LinearSystemBackSolve.End();
     return SYMSOLVER_SUCCESS;
   }
 

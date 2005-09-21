@@ -110,7 +110,7 @@ namespace Ipopt
     DBG_START_METH("PDFullSpaceSolver::Solve",dbg_verbosity);
 
     // Timing of PDSystem solver starts here
-    IpData().TimingStats().PDSystemSolver.Start();
+    IpData().TimingStats().PDSystemSolverTotal.Start();
 
     DBG_PRINT_VECTOR(2, "rhs_x", *rhs.x());
     DBG_PRINT_VECTOR(2, "rhs_s", *rhs.s());
@@ -180,7 +180,7 @@ namespace Ipopt
         // care of this (e.g. call the restoration phase).  ToDo: We
         // might want to use a more explicit cue later.
         res.Set(0.0);
-        IpData().TimingStats().PDSystemSolver.End();
+        IpData().TimingStats().PDSystemSolverTotal.End();
         return;
       }
 
@@ -311,7 +311,7 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "res_vL", *res.v_L());
     DBG_PRINT_VECTOR(2, "res_vU", *res.v_U());
 
-    IpData().TimingStats().PDSystemSolver.End();
+    IpData().TimingStats().PDSystemSolverTotal.End();
   }
 
   bool PDFullSpaceSolver::SolveOnce(bool resolve_with_better_quality,
@@ -349,6 +349,8 @@ namespace Ipopt
     //    or delta_c and delta_d
     // 6. increase pivot tolerance if number of get evals so too small
     DBG_START_METH("PDFullSpaceSolver::SolveOnce",dbg_verbosity);
+
+    IpData().TimingStats().PDSystemSolverSolveOnce.Start();
 
     // Compute the right hand side for the augmented system formulation
     SmartPtr<Vector> augRhs_x = rhs.x()->MakeNewCopy();
@@ -413,6 +415,7 @@ namespace Ipopt
                                     *sol->y_c_NonConst(), *sol->y_d_NonConst(),
                                     false, 0);
       if (retval!=SYMSOLVER_SUCCESS) {
+        IpData().TimingStats().PDSystemSolverSolveOnce.End();
         return false;
       }
     }
@@ -516,6 +519,8 @@ namespace Ipopt
 
     // Finally let's assemble the res result vectors
     res.AddOneVector(alpha, *sol, beta);
+
+    IpData().TimingStats().PDSystemSolverSolveOnce.End();
 
     return true;
   }

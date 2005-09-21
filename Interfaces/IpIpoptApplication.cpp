@@ -249,6 +249,15 @@ namespace Ipopt
 
 #endif
 
+    roptions->AddStringOption2(
+      "print_timing_statistics",
+      "Switch to print timing statistics.",
+      "no",
+      "no", "don't print statistics",
+      "yes", "print all timing statistics",
+      "If selected, the program will print the CPU usage (user time) for "
+      "selected tasks.");
+
     roptions->SetRegisteringCategory("NLP Scaling");
     roptions->AddStringOption3(
       "nlp_scaling_method",
@@ -468,6 +477,15 @@ namespace Ipopt
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Number of Lagrangian Hessian evaluations             = %d\n",
                      p2ip_nlp->h_evals());
+
+      // Write timing statistics information
+      bool print_timing_statistics;
+      options_->GetBoolValue("print_timing_statistics",
+                             print_timing_statistics, "");
+      if (print_timing_statistics) {
+        p2ip_data->TimingStats().PrintAllTimingStatistics(*jnlst_, J_SUMMARY,
+            J_TIMING_STATISTICS);
+      }
 
       // Write EXIT message
       if (status == SUCCESS) {
