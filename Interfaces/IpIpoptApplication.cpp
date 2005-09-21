@@ -456,6 +456,12 @@ namespace Ipopt
       p2ip_data->curr()->v_L()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "v_L");
       p2ip_data->curr()->v_U()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "v_U");
 
+      if (status==LOCAL_INFEASIBILITY) {
+        p2ip_cq->curr_c()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "curr_c");
+        p2ip_cq->curr_d_minus_s()->Print(*jnlst_, J_VECTOR, J_SOLUTION,
+                                         "curr_d_minus_s");
+      }
+
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "\nNumber of objective function evaluations             = %d\n",
                      p2ip_nlp->f_evals());
