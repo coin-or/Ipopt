@@ -11,6 +11,7 @@
 
 #include "IpIpoptNLP.hpp"
 #include "IpException.hpp"
+#include "IpTimingStatistics.hpp"
 
 namespace Ipopt
 {
@@ -224,6 +225,10 @@ namespace Ipopt
       return nlp_;
     }
 
+    void PrintTimingStatistics(Journalist& jnlst,
+                               EJournalLevel level,
+                               EJournalCategory category) const;
+
   private:
     /** journalist */
     SmartPtr<const Journalist> jnlst_;
@@ -349,9 +354,20 @@ namespace Ipopt
     Index d_evals_;
     Index jac_d_evals_;
     Index h_evals_;
+    //@}
 
     /** Flag indicating if initialization method has been called */
     bool initialized_;
+
+    /**@name Timing statistics for the function evaluations. */
+    //@{
+    TimedTask f_eval_time_;
+    TimedTask grad_f_eval_time_;
+    TimedTask c_eval_time_;
+    TimedTask jac_c_eval_time_;
+    TimedTask d_eval_time_;
+    TimedTask jac_d_eval_time_;
+    TimedTask h_eval_time_;
     //@}
   };
 

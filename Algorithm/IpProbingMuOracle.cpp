@@ -48,7 +48,7 @@ namespace Ipopt
     return true;
   }
 
-  Number ProbingMuOracle::CalculateMu()
+  Number ProbingMuOracle::CalculateMu(Number mu_min, Number mu_max)
   {
     DBG_START_METH("ProbingMuOracle::CalculateMu",
                    dbg_verbosity);
@@ -106,6 +106,7 @@ namespace Ipopt
                    alpha_dual_aff);
 
     // now compute the average complementarity at the affine step
+    // ToDo shoot for mu_min instead of 0?
     Number mu_aff = CalculateAffineMu(alpha_primal_aff, alpha_dual_aff, *step);
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "  The average complementariy at the affine step is %23.16e\n",
@@ -137,7 +138,7 @@ namespace Ipopt
     sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
     IpData().Append_info_string(ssigma);
 
-    return mu;
+    return Max(Min(mu, mu_max), mu_min);
   }
 
   Number ProbingMuOracle::CalculateAffineMu

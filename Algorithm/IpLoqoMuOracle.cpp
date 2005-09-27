@@ -41,7 +41,7 @@ namespace Ipopt
     return true;
   }
 
-  Number LoqoMuOracle::CalculateMu()
+  Number LoqoMuOracle::CalculateMu(Number mu_min, Number mu_max)
   {
     DBG_START_METH("LoqoMuOracle::CalculateMu",
                    dbg_verbosity);
@@ -69,7 +69,7 @@ namespace Ipopt
     sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
     IpData().Append_info_string(ssigma);
 
-    return mu;
+    return Max(Min(mu_max, mu), mu_min);
   }
 
 } // namespace Ipopt

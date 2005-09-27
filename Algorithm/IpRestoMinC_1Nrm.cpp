@@ -108,6 +108,7 @@ namespace Ipopt
 
     DBG_ASSERT(IpCq().curr_constraint_violation()>0.);
 
+    // ToDo set those up during initialize?
     // Create the restoration phase NLP etc objects
     SmartPtr<IpoptData> resto_ip_data = new IpoptData();
     SmartPtr<IpoptNLP> resto_ip_nlp =

@@ -45,7 +45,9 @@ namespace Ipopt
       tmp_z_L_(NULL),
       tmp_z_U_(NULL),
       tmp_v_L_(NULL),
-      tmp_v_U_(NULL)
+      tmp_v_U_(NULL),
+
+      count_qf_evals_(0)
   {
     DBG_ASSERT(IsValid(pd_solver_));
   }
@@ -88,19 +90,27 @@ namespace Ipopt
       "penalizes situations where the complementarity is much smaller "
       "than dual and primal infeasibilities.");
     roptions->AddLowerBoundedIntegerOption(
-      "max_bisection_steps",
+      "quality_function_max_section_steps",
       "Maximum number of search steps during direct search procedure "
       "determining the optimal centering parameter.",
       0, 8,
-      "The bisection search is performed for the quality function based mu "
-      "oractle.");
+      "The golden section search is performed for the quality function based "
+      "mu oractle.");
     roptions->AddBoundedNumberOption(
-      "bisection_tol",
-      "Tolerance for the bisection search procedure determining "
-      "the optimal centering parameter.",
-      0.0, true, 1.0, true,
-      1e-3,
-      "The bisection search is performed for the quality function based mu "
+      "quality_function_section_sigma_tol",
+      "Tolerance for the section search procedure determining "
+      "the optimal centering parameter (in sigma space).",
+      0.0, false, 1.0, true,
+      1e-2,
+      "The golden section search is performed for the quality function based "
+      "mu oractle.");
+    roptions->AddBoundedNumberOption(
+      "quality_function_section_qf_tol",
+      "Tolerance for the golden section search procedure determining "
+      "the optimal centering parameter (in the function value space).",
+      0.0, false, 1.0, true,
+      0e-2,
+      "The section search is performed for the quality function based mu "
       "oractle.");
   }
 
@@ -118,16 +128,22 @@ namespace Ipopt
     quality_function_centrality_ = CentralityEnum(enum_int);
     options.GetEnumValue("quality_function_balancing_term", enum_int, prefix);
     quality_function_balancing_term_ = BalancingTermEnum(enum_int);
-    options.GetIntegerValue("max_bisection_steps", max_bisection_steps_, prefix);
-    options.GetNumericValue("bisection_tol", bisection_tol_, prefix);
+    options.GetIntegerValue("quality_function_max_section_steps",
+                            quality_function_max_section_steps_, prefix);
+    options.GetNumericValue("quality_function_section_sigma_tol",
+                            quality_function_section_sigma_tol_, prefix);
+    options.GetNumericValue("quality_function_section_qf_tol",
+                            quality_function_section_qf_tol_, prefix);
 
     return true;
   }
 
-  Number QualityFunctionMuOracle::CalculateMu()
+  Number QualityFunctionMuOracle::CalculateMu(Number mu_min, Number mu_max)
   {
     DBG_START_METH("QualityFunctionMuOracle::CalculateMu",
                    dbg_verbosity);
+
+    count_qf_evals_ = 0;
 
     ///////////////////////////////////////////////////////////////////////////
     // Reserve memory for temporary vectors used in CalculateQualityFunction //
@@ -246,159 +262,153 @@ namespace Ipopt
     IpNLP().Pd_U()->TransMultVector(-1., *step_cen->s(), 0., *step_cen_s_U);
 
     Number sigma;
-    if (max_bisection_steps_>0) {
-      // Now we do an search for the best centering parameter, that
-      // gives us the lower value of a quality function, using golden
-      // bisection
 
-      Number sigma_up = Min(1., sigma_max_);
-      Number sigma_lo = 1e-9/avrg_compl;
-      sigma = PerformGoldenBisection(sigma_up, sigma_lo, bisection_tol_,
-                                     //sigma = PerformGoldenBisectionLog(sigma_up, sigma_lo, bisection_tol_,
-                                     *step_aff_x_L,
-                                     *step_aff_x_U,
-                                     *step_aff_s_L,
-                                     *step_aff_s_U,
-                                     *step_aff->y_c(),
-                                     *step_aff->y_d(),
-                                     *step_aff->z_L(),
-                                     *step_aff->z_U(),
-                                     *step_aff->v_L(),
-                                     *step_aff->v_U(),
-                                     *step_cen_x_L,
-                                     *step_cen_x_U,
-                                     *step_cen_s_L,
-                                     *step_cen_s_U,
-                                     *step_cen->y_c(),
-                                     *step_cen->y_d(),
-                                     *step_cen->z_L(),
-                                     *step_cen->z_U(),
-                                     *step_cen->v_L(),
-                                     *step_cen->v_U());
+    // First we determine whether we want to search for a value of
+    // sigma larger or smaller than 1.  For this, we estimate the
+    // slope of the quality function at sigma=1.
+    Number qf_1 = CalculateQualityFunction(1.,
+                                           *step_aff_x_L,
+                                           *step_aff_x_U,
+                                           *step_aff_s_L,
+                                           *step_aff_s_U,
+                                           *step_aff->y_c(),
+                                           *step_aff->y_d(),
+                                           *step_aff->z_L(),
+                                           *step_aff->z_U(),
+                                           *step_aff->v_L(),
+                                           *step_aff->v_U(),
+                                           *step_cen_x_L,
+                                           *step_cen_x_U,
+                                           *step_cen_s_L,
+                                           *step_cen_s_U,
+                                           *step_cen->y_c(),
+                                           *step_cen->y_d(),
+                                           *step_cen->z_L(),
+                                           *step_cen->z_U(),
+                                           *step_cen->v_L(),
+                                           *step_cen->v_U());
 
-      if (sigma_max_ > 1. && sigma >= 1.-2*bisection_tol_) {
-        // It seems that the optimal value might be larger than one.
-        sigma_up = sigma_max_;
-        sigma_lo = sigma;
-        sigma = PerformGoldenBisection(sigma_up, sigma_lo, bisection_tol_,
-                                       //sigma = PerformGoldenBisectionLog(sigma_up, sigma_lo, bisection_tol_,
-                                       *step_aff_x_L,
-                                       *step_aff_x_U,
-                                       *step_aff_s_L,
-                                       *step_aff_s_U,
-                                       *step_aff->y_c(),
-                                       *step_aff->y_d(),
-                                       *step_aff->z_L(),
-                                       *step_aff->z_U(),
-                                       *step_aff->v_L(),
-                                       *step_aff->v_U(),
-                                       *step_cen_x_L,
-                                       *step_cen_x_U,
-                                       *step_cen_s_L,
-                                       *step_cen_s_U,
-                                       *step_cen->y_c(),
-                                       *step_cen->y_d(),
-                                       *step_cen->z_L(),
-                                       *step_cen->z_U(),
-                                       *step_cen->v_L(),
-                                       *step_cen->v_U());
-      }
+    Number sigma_1minus = 1.-quality_function_section_sigma_tol_;
+    Number qf_1minus = CalculateQualityFunction(sigma_1minus,
+                       *step_aff_x_L,
+                       *step_aff_x_U,
+                       *step_aff_s_L,
+                       *step_aff_s_U,
+                       *step_aff->y_c(),
+                       *step_aff->y_d(),
+                       *step_aff->z_L(),
+                       *step_aff->z_U(),
+                       *step_aff->v_L(),
+                       *step_aff->v_U(),
+                       *step_cen_x_L,
+                       *step_cen_x_U,
+                       *step_cen_s_L,
+                       *step_cen_s_U,
+                       *step_cen->y_c(),
+                       *step_cen->y_d(),
+                       *step_cen->z_L(),
+                       *step_cen->z_U(),
+                       *step_cen->v_L(),
+                       *step_cen->v_U());
 
-      //#define tracequalityfunction
-#ifdef tracequalityfunction
-      //DELETEME
-      Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
-                     "\n");
-      Number base = 1.2;
-      for (Index l=30;l>=(Index)trunc(-(log(avrg_compl)-log(1e-9))/log(base));l--) {
-        Number sig = pow(base, l);
-        CalculateQualityFunction(sig,
-                                 *step_aff_x_L,
-                                 *step_aff_x_U,
-                                 *step_aff_s_L,
-                                 *step_aff_s_U,
-                                 *step_aff->y_c(),
-                                 *step_aff->y_d(),
-                                 *step_aff->z_L(),
-                                 *step_aff->z_U(),
-                                 *step_aff->v_L(),
-                                 *step_aff->v_U(),
-                                 *step_cen_x_L,
-                                 *step_cen_x_U,
-                                 *step_cen_s_L,
-                                 *step_cen_s_U,
-                                 *step_cen->y_c(),
-                                 *step_cen->y_d(),
-                                 *step_cen->z_L(),
-                                 *step_cen->z_U(),
-                                 *step_cen->v_L(),
-                                 *step_cen->v_U());
-      }
-#endif
-
+    if (qf_1minus > qf_1) {
+      // It seems that the quality function decreases for values
+      // larger than sigma, so perform golden section search for sigma
+      // > 1.
+      Number sigma_up = Min(sigma_max_, mu_max/avrg_compl);
+      Number sigma_lo = 1.;
+      // ToDo maybe we should use different tolerances for sigma>1
+      sigma = PerformGoldenSection(sigma_up, -100., sigma_lo, qf_1,
+                                   quality_function_section_sigma_tol_,
+                                   quality_function_section_qf_tol_,
+                                   *step_aff_x_L,
+                                   *step_aff_x_U,
+                                   *step_aff_s_L,
+                                   *step_aff_s_U,
+                                   *step_aff->y_c(),
+                                   *step_aff->y_d(),
+                                   *step_aff->z_L(),
+                                   *step_aff->z_U(),
+                                   *step_aff->v_L(),
+                                   *step_aff->v_U(),
+                                   *step_cen_x_L,
+                                   *step_cen_x_U,
+                                   *step_cen_s_L,
+                                   *step_cen_s_U,
+                                   *step_cen->y_c(),
+                                   *step_cen->y_d(),
+                                   *step_cen->z_L(),
+                                   *step_cen->z_U(),
+                                   *step_cen->v_L(),
+                                   *step_cen->v_U());
     }
     else {
-      Index l;
-      Index l_best;
-      Number q_best;
+      // Search for sigma less than 1
 
-      Number base = 1.2;
-      l = 20;
-      l_best = l;
-      sigma = pow(base, l);
-      q_best = CalculateQualityFunction(sigma,
-                                        *step_aff_x_L,
-                                        *step_aff_x_U,
-                                        *step_aff_s_L,
-                                        *step_aff_s_U,
-                                        *step_aff->y_c(),
-                                        *step_aff->y_d(),
-                                        *step_aff->z_L(),
-                                        *step_aff->z_U(),
-                                        *step_aff->v_L(),
-                                        *step_aff->v_U(),
-                                        *step_cen_x_L,
-                                        *step_cen_x_U,
-                                        *step_cen_s_L,
-                                        *step_cen_s_U,
-                                        *step_cen->y_c(),
-                                        *step_cen->y_d(),
-                                        *step_cen->z_L(),
-                                        *step_cen->z_U(),
-                                        *step_cen->v_L(),
-                                        *step_cen->v_U());
-      Index l_min = (Index)(-(log(avrg_compl)-log(1e-9))/log(base))-1;
-      for (; l>=l_min; l--) {
-        sigma = pow(base, l);
-        Number q = CalculateQualityFunction(sigma,
-                                            *step_aff_x_L,
-                                            *step_aff_x_U,
-                                            *step_aff_s_L,
-                                            *step_aff_s_U,
-                                            *step_aff->y_c(),
-                                            *step_aff->y_d(),
-                                            *step_aff->z_L(),
-                                            *step_aff->z_U(),
-                                            *step_aff->v_L(),
-                                            *step_aff->v_U(),
-                                            *step_cen_x_L,
-                                            *step_cen_x_U,
-                                            *step_cen_s_L,
-                                            *step_cen_s_U,
-                                            *step_cen->y_c(),
-                                            *step_cen->y_d(),
-                                            *step_cen->z_L(),
-                                            *step_cen->z_U(),
-                                            *step_cen->v_L(),
-                                            *step_cen->v_U());
-        if (q<=q_best) {
-          q_best = q;
-          l_best = l;
-        }
-      }
-
-      sigma = pow(base, l_best);
+      Number sigma_lo = mu_min/avrg_compl;
+      Number sigma_up = Max(sigma_lo, sigma_1minus);
+      // Todo: What if lower bound is less than sigma_lo? Skip search?
+      sigma = PerformGoldenSection(sigma_up, qf_1minus, sigma_lo, -100.,
+                                   quality_function_section_sigma_tol_,
+                                   quality_function_section_qf_tol_,
+                                   *step_aff_x_L,
+                                   *step_aff_x_U,
+                                   *step_aff_s_L,
+                                   *step_aff_s_U,
+                                   *step_aff->y_c(),
+                                   *step_aff->y_d(),
+                                   *step_aff->z_L(),
+                                   *step_aff->z_U(),
+                                   *step_aff->v_L(),
+                                   *step_aff->v_U(),
+                                   *step_cen_x_L,
+                                   *step_cen_x_U,
+                                   *step_cen_s_L,
+                                   *step_cen_s_U,
+                                   *step_cen->y_c(),
+                                   *step_cen->y_d(),
+                                   *step_cen->z_L(),
+                                   *step_cen->z_U(),
+                                   *step_cen->v_L(),
+                                   *step_cen->v_U());
     }
+
+    //#define tracequalityfunction
+#ifdef tracequalityfunction
+    char fname[100];
+    sprintf(fname, "qf_values_%d.dat", IpData().iter_count());
+    FILE* fid = fopen(fname, "w");
+
+    Number sigma_1 = sigma_max_;
+    Number sigma_2 = 1e-9/avrg_compl;
+    Number sigma_trace = sigma_1;
+    while(sigma_trace > sigma_2) {
+      Number qf = CalculateQualityFunction(sigma_trace,
+                                           *step_aff_x_L,
+                                           *step_aff_x_U,
+                                           *step_aff_s_L,
+                                           *step_aff_s_U,
+                                           *step_aff->y_c(),
+                                           *step_aff->y_d(),
+                                           *step_aff->z_L(),
+                                           *step_aff->z_U(),
+                                           *step_aff->v_L(),
+                                           *step_aff->v_U(),
+                                           *step_cen_x_L,
+                                           *step_cen_x_U,
+                                           *step_cen_s_L,
+                                           *step_cen_s_U,
+                                           *step_cen->y_c(),
+                                           *step_cen->y_d(),
+                                           *step_cen->z_L(),
+                                           *step_cen->z_U(),
+                                           *step_cen->v_L(),
+                                           *step_cen->v_U());
+      fprintf(fid, "%9.2e %25.16e\n", sigma_trace, qf);
+      sigma_trace /= 1.1;
+    }
+    fclose(fid);
+#endif
 
     // End timing of quality function search
     IpData().TimingStats().QualityFunctionSearch.End();
@@ -445,11 +455,15 @@ namespace Ipopt
     char ssigma[40];
     sprintf(ssigma, " sigma=%8.2e", sigma);
     IpData().Append_info_string(ssigma);
+    sprintf(ssigma, " qf=%d", count_qf_evals_);
+    IpData().Append_info_string(ssigma);
+    /*
     sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
     IpData().Append_info_string(ssigma);
     if (sigma>1.) {
       IpData().Append_info_string("LARGESIGMA");
     }
+    */
 
     return mu;
   }
@@ -480,6 +494,8 @@ namespace Ipopt
   {
     DBG_START_METH("QualityFunctionMuOracle::CalculateQualityFunction",
                    dbg_verbosity);
+    // DELETEME
+    count_qf_evals_++;
 
     Index n_dual = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
     Index n_pri = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
@@ -500,20 +516,20 @@ namespace Ipopt
     // Compute the fraction-to-the-boundary step sizes
     IpData().TimingStats().Task2.Start();
     Number tau = IpData().curr_tau();
-    Number alpha_primal = IpCq().slack_frac_to_the_bound(tau,
+    Number alpha_primal = IpCq().uncached_slack_frac_to_the_bound(tau,
                           *tmp_step_x_L_,
                           *tmp_step_x_U_,
                           *tmp_step_s_L_,
                           *tmp_step_s_U_);
 
-    Number alpha_dual = IpCq().dual_frac_to_the_bound(tau,
+    Number alpha_dual = IpCq().uncached_dual_frac_to_the_bound(tau,
                         *tmp_step_z_L_,
                         *tmp_step_z_U_,
                         *tmp_step_v_L_,
                         *tmp_step_v_U_);
     IpData().TimingStats().Task2.End();
 
-    Number xi; // centrality measure
+    Number xi = 0.; // centrality measure
 
     IpData().TimingStats().Task1.Start();
     tmp_slack_x_L_->AddTwoVectors(1., *IpCq().curr_slack_x_L(),
@@ -546,11 +562,6 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "compl_x_U", *tmp_slack_x_U_);
     DBG_PRINT_VECTOR(2, "compl_s_L", *tmp_slack_s_L_);
     DBG_PRINT_VECTOR(2, "compl_s_U", *tmp_slack_s_U_);
-
-    IpData().TimingStats().Task4.Start();
-    xi = IpCq().CalcCentralityMeasure(*tmp_slack_x_L_, *tmp_slack_x_U_,
-                                      *tmp_slack_s_L_, *tmp_slack_s_U_);
-    IpData().TimingStats().Task4.End();
 
     Number dual_inf=-1.;
     Number primal_inf=-1.;
@@ -629,6 +640,12 @@ namespace Ipopt
 
     Number quality_function = dual_inf + primal_inf + compl_inf;
 
+    if (quality_function_centrality_!=CEN_NONE) {
+      IpData().TimingStats().Task4.Start();
+      xi = IpCq().CalcCentralityMeasure(*tmp_slack_x_L_, *tmp_slack_x_U_,
+                                        *tmp_slack_s_L_, *tmp_slack_s_U_);
+      IpData().TimingStats().Task4.End();
+    }
     switch (quality_function_centrality_) {
       case CEN_NONE:
       //Nothing
@@ -665,10 +682,13 @@ namespace Ipopt
   }
 
   Number
-  QualityFunctionMuOracle::PerformGoldenBisection
-  (Number sigma_up,
-   Number sigma_lo,
-   Number tol,
+  QualityFunctionMuOracle::PerformGoldenSection
+  (Number sigma_up_in,
+   Number q_up,
+   Number sigma_lo_in,
+   Number q_lo,
+   Number sigma_tol,
+   Number qf_tol,
    const Vector& step_aff_x_L,
    const Vector& step_aff_x_U,
    const Vector& step_aff_s_L,
@@ -691,14 +711,15 @@ namespace Ipopt
    const Vector& step_cen_v_U
   )
   {
+    Number sigma_up = ScaleSigma(sigma_up_in);
+    Number sigma_lo = ScaleSigma(sigma_lo_in);
+
     Number sigma;
-    Number sigma_up_in = sigma_up;
-    Number sigma_lo_in = sigma_lo;
     Number gfac = (3.-sqrt(5.))/2.;
     Number sigma_mid1 = sigma_lo + gfac*(sigma_up-sigma_lo);
     Number sigma_mid2 = sigma_lo + (1.-gfac)*(sigma_up-sigma_lo);
 
-    Number qmid1 = CalculateQualityFunction(sigma_mid1,
+    Number qmid1 = CalculateQualityFunction(UnscaleSigma(sigma_mid1),
                                             step_aff_x_L,
                                             step_aff_x_U,
                                             step_aff_s_L,
@@ -719,7 +740,7 @@ namespace Ipopt
                                             step_cen_z_U,
                                             step_cen_v_L,
                                             step_cen_v_U);
-    Number qmid2 = CalculateQualityFunction(sigma_mid2,
+    Number qmid2 = CalculateQualityFunction(UnscaleSigma(sigma_mid2),
                                             step_aff_x_L,
                                             step_aff_x_U,
                                             step_aff_s_L,
@@ -741,15 +762,20 @@ namespace Ipopt
                                             step_cen_v_L,
                                             step_cen_v_U);
 
-    Index nbisections = 0;
-    while ((sigma_up-sigma_lo)>=tol*sigma_up && nbisections<max_bisection_steps_) {
-      nbisections++;
+    Index nsections = 0;
+    while ((sigma_up-sigma_lo)>=sigma_tol*sigma_up &&
+           //while ((sigma_up-sigma_lo)>=sigma_tol &&  // Note we are using the non-relative criterion here for sigma
+           (1.-Min(q_lo, q_up, qmid1, qmid2)/Max(q_lo, q_up, qmid1, qmid2))>=qf_tol &&
+           nsections<quality_function_max_section_steps_) {
+      nsections++;
+      //printf("sigma_lo=%e sigma_mid1=%e sigma_mid2=%e sigma_up=%e\n",sigma_lo, sigma_mid1, sigma_mid2, sigma_up);
       if (qmid1 > qmid2) {
         sigma_lo = sigma_mid1;
+        q_lo = qmid1;
         sigma_mid1 = sigma_mid2;
         qmid1 = qmid2;
         sigma_mid2 = sigma_lo + (1.-gfac)*(sigma_up-sigma_lo);
-        qmid2 = CalculateQualityFunction(sigma_mid2,
+        qmid2 = CalculateQualityFunction(UnscaleSigma(sigma_mid2),
                                          step_aff_x_L,
                                          step_aff_x_U,
                                          step_aff_s_L,
@@ -773,10 +799,11 @@ namespace Ipopt
       }
       else {
         sigma_up = sigma_mid2;
+        q_up = qmid2;
         sigma_mid2 = sigma_mid1;
         qmid2 = qmid1;
         sigma_mid1 = sigma_lo + gfac*(sigma_up-sigma_lo);
-        qmid1 = CalculateQualityFunction(sigma_mid1,
+        qmid1 = CalculateQualityFunction(UnscaleSigma(sigma_mid1),
                                          step_aff_x_L,
                                          step_aff_x_U,
                                          step_aff_s_L,
@@ -800,78 +827,124 @@ namespace Ipopt
       }
     }
 
-    Number q;
-    if (qmid1 < qmid2) {
-      sigma = sigma_mid1;
-      q = qmid1;
-    }
-    else {
-      sigma = sigma_mid2;
-      q = qmid2;
-    }
-    if (sigma_up == sigma_up_in) {
-      Number qtmp = CalculateQualityFunction(sigma_up,
-                                             step_aff_x_L,
-                                             step_aff_x_U,
-                                             step_aff_s_L,
-                                             step_aff_s_U,
-                                             step_aff_y_c,
-                                             step_aff_y_d,
-                                             step_aff_z_L,
-                                             step_aff_z_U,
-                                             step_aff_v_L,
-                                             step_aff_v_U,
-                                             step_cen_x_L,
-                                             step_cen_x_U,
-                                             step_cen_s_L,
-                                             step_cen_s_U,
-                                             step_cen_y_c,
-                                             step_cen_y_d,
-                                             step_cen_z_L,
-                                             step_cen_z_U,
-                                             step_cen_v_L,
-                                             step_cen_v_U);
-      if (qtmp < q) {
+    if ((sigma_up-sigma_lo)>=sigma_tol*sigma_up &&
+        (1.-Min(q_lo, q_up, qmid1, qmid2)/Max(q_lo, q_up, qmid1, qmid2))<qf_tol) {
+      // The qf tolerance make it stop
+      IpData().Append_info_string("qf_tol ");
+      Number qf_min = Min(q_lo, q_up, qmid1, qmid2);
+      DBG_ASSERT(qf_min>-100.);
+      if (qf_min == q_lo) {
+        sigma = sigma_lo;
+      }
+      else if (qf_min == qmid1) {
+        sigma = sigma_mid1;
+      }
+      else if (qf_min == qmid2) {
+        sigma = sigma_mid2;
+      }
+      else {
         sigma = sigma_up;
-        q = qtmp;
       }
     }
-    else if (sigma_lo == sigma_lo_in) {
-      Number qtmp = CalculateQualityFunction(sigma_lo,
-                                             step_aff_x_L,
-                                             step_aff_x_U,
-                                             step_aff_s_L,
-                                             step_aff_s_U,
-                                             step_aff_y_c,
-                                             step_aff_y_d,
-                                             step_aff_z_L,
-                                             step_aff_z_U,
-                                             step_aff_v_L,
-                                             step_aff_v_U,
-                                             step_cen_x_L,
-                                             step_cen_x_U,
-                                             step_cen_s_L,
-                                             step_cen_s_U,
-                                             step_cen_y_c,
-                                             step_cen_y_d,
-                                             step_cen_z_L,
-                                             step_cen_z_U,
-                                             step_cen_v_L,
-                                             step_cen_v_U);
-      if (qtmp < q) {
-        sigma = sigma_lo;
-        q = qtmp;
+    else {
+      Number q;
+      if (qmid1 < qmid2) {
+        sigma = sigma_mid1;
+        q = qmid1;
+      }
+      else {
+        sigma = sigma_mid2;
+        q = qmid2;
+      }
+      if (sigma_up == ScaleSigma(sigma_up_in)) {
+        Number qtmp;
+        if (q_up<0.) {
+          qtmp = CalculateQualityFunction(UnscaleSigma(sigma_up),
+                                          step_aff_x_L,
+                                          step_aff_x_U,
+                                          step_aff_s_L,
+                                          step_aff_s_U,
+                                          step_aff_y_c,
+                                          step_aff_y_d,
+                                          step_aff_z_L,
+                                          step_aff_z_U,
+                                          step_aff_v_L,
+                                          step_aff_v_U,
+                                          step_cen_x_L,
+                                          step_cen_x_U,
+                                          step_cen_s_L,
+                                          step_cen_s_U,
+                                          step_cen_y_c,
+                                          step_cen_y_d,
+                                          step_cen_z_L,
+                                          step_cen_z_U,
+                                          step_cen_v_L,
+                                          step_cen_v_U);
+        }
+        else {
+          qtmp = q_up;
+        }
+        if (qtmp < q) {
+          sigma = sigma_up;
+          q = qtmp;
+        }
+      }
+      else if (sigma_lo == ScaleSigma(sigma_lo_in)) {
+        Number qtmp;
+        if (q_lo<0.) {
+          qtmp = CalculateQualityFunction(UnscaleSigma(sigma_lo),
+                                          step_aff_x_L,
+                                          step_aff_x_U,
+                                          step_aff_s_L,
+                                          step_aff_s_U,
+                                          step_aff_y_c,
+                                          step_aff_y_d,
+                                          step_aff_z_L,
+                                          step_aff_z_U,
+                                          step_aff_v_L,
+                                          step_aff_v_U,
+                                          step_cen_x_L,
+                                          step_cen_x_U,
+                                          step_cen_s_L,
+                                          step_cen_s_U,
+                                          step_cen_y_c,
+                                          step_cen_y_d,
+                                          step_cen_z_L,
+                                          step_cen_z_U,
+                                          step_cen_v_L,
+                                          step_cen_v_U);
+        }
+        else {
+          qtmp = q_lo;
+        }
+        if (qtmp < q) {
+          sigma = sigma_lo;
+          q = qtmp;
+        }
       }
     }
 
+    return UnscaleSigma(sigma);
+  }
+
+  /*
+  Number QualityFunctionMuOracle::ScaleSigma(Number sigma) {return log(sigma);}
+  Number QualityFunctionMuOracle::UnscaleSigma(Number scaled_sigma) {return exp(scaled_sigma);}
+  */
+  Number QualityFunctionMuOracle::ScaleSigma(Number sigma)
+  {
     return sigma;
+  }
+  Number QualityFunctionMuOracle::UnscaleSigma(Number scaled_sigma)
+  {
+    return scaled_sigma;
   }
 
   /* AW: Tried search in the log space, but that was even worse than
      search in unscaled space */
   /*
   Number
-  QualityFunctionMuOracle::PerformGoldenBisectionLog
+  QualityFunctionMuOracle::PerformGoldenSectionLog
   (Number sigma_up,
    Number sigma_lo,
    Number tol,
@@ -950,9 +1023,9 @@ namespace Ipopt
                                             step_cen_v_L,
                                             step_cen_v_U);
 
-    Index nbisections = 0;
-    while ((log_sigma_up-log_sigma_lo)>=tol*log_sigma_up && nbisections<max_bisection_steps_) {
-      nbisections++;
+    Index nsections = 0;
+    while ((log_sigma_up-log_sigma_lo)>=tol*log_sigma_up && nsections<quality_function_max_section_steps_) {
+      nsections++;
       if (qmid1 > qmid2) {
         log_sigma_lo = log_sigma_mid1;
         log_sigma_mid1 = log_sigma_mid2;

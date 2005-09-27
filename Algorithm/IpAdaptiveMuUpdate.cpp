@@ -347,7 +347,7 @@ namespace Ipopt
       IpData().Set_tau(tau);
 
       // Compute the new barrier parameter via the oracle
-      Number mu = free_mu_oracle_->CalculateMu();
+      Number mu = free_mu_oracle_->CalculateMu(mu_min_, mu_max_);
 
       mu = Max(mu, mu_min_);
       Number mu_lower_safe = lower_mu_safeguard();
@@ -545,7 +545,7 @@ namespace Ipopt
     Number new_mu;
 
     if (IsValid(fix_mu_oracle_)) {
-      new_mu = fix_mu_oracle_->CalculateMu();
+      new_mu = fix_mu_oracle_->CalculateMu(mu_min_, mu_max_);
     }
     else {
       new_mu = adaptive_mu_monotone_init_factor_*IpCq().curr_avrg_compl();

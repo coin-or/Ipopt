@@ -35,7 +35,7 @@ namespace Ipopt
     /** Method for computing the value of the barrier parameter that
      *  could be used in the current iteration (using the LOQO formula).
      */
-    virtual Number CalculateMu();
+    virtual Number CalculateMu(Number mu_min, Number mu_max);
 
   private:
     /**@name Default Compiler Generated Methods

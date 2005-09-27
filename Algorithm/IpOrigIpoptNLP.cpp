@@ -307,7 +307,9 @@ namespace Ipopt
     if (!f_cache_.GetCachedResult1Dep(ret, &x)) {
       f_evals_++;
       SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      f_eval_time_.Start();
       bool success = nlp_->Eval_f(*unscaled_x, ret);
+      f_eval_time_.End();
       DBG_PRINT((1, "success = %d ret = %e\n", success, ret));
       ASSERT_EXCEPTION(success && IsFiniteNumber(ret), Eval_Error,
                        "Error evaluating the objective function");
@@ -333,7 +335,9 @@ namespace Ipopt
       unscaled_grad_f = x_space_->MakeNew();
 
       SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      grad_f_eval_time_.Start();
       bool success = nlp_->Eval_grad_f(*unscaled_x, *unscaled_grad_f);
+      grad_f_eval_time_.End();
       ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_grad_f->Nrm2()),
                        Eval_Error, "Error evaluating the gradient of the objective function");
       retValue = NLP_scaling()->apply_grad_obj_scaling(ConstPtr(unscaled_grad_f));
@@ -368,7 +372,9 @@ namespace Ipopt
         SmartPtr<Vector> unscaled_c = c_space_->MakeNew();
         c_evals_++;
         SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        c_eval_time_.Start();
         bool success = nlp_->Eval_c(*unscaled_x, *unscaled_c);
+        c_eval_time_.End();
         ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_c->Nrm2()),
                          Eval_Error, "Error evaluating the equality constraints");
         retValue = NLP_scaling()->apply_vector_scaling_c(ConstPtr(unscaled_c));
@@ -400,7 +406,9 @@ namespace Ipopt
 
         DBG_PRINT_VECTOR(2, "scaled_x", x);
         SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        d_eval_time_.Start();
         bool success = nlp_->Eval_d(*unscaled_x, *unscaled_d);
+        d_eval_time_.End();
         DBG_PRINT_VECTOR(2, "unscaled_d", *unscaled_d);
         ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_d->Nrm2()),
                          Eval_Error, "Error evaluating the inequality constraints");
@@ -431,7 +439,9 @@ namespace Ipopt
         SmartPtr<Matrix> unscaled_jac_c = jac_c_space_->MakeNew();
 
         SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        jac_c_eval_time_.Start();
         bool success = nlp_->Eval_jac_c(*unscaled_x, *unscaled_jac_c);
+        jac_c_eval_time_.End();
         ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the equality constraints");
         retValue = NLP_scaling()->apply_jac_c_scaling(ConstPtr(unscaled_jac_c));
         jac_c_cache_.AddCachedResult1Dep(retValue, x);
@@ -460,7 +470,9 @@ namespace Ipopt
         SmartPtr<Matrix> unscaled_jac_d = jac_d_space_->MakeNew();
 
         SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        jac_d_eval_time_.Start();
         bool success = nlp_->Eval_jac_d(*unscaled_x, *unscaled_jac_d);
+        jac_d_eval_time_.End();
         ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the inequality constraints");
         retValue = NLP_scaling()->apply_jac_d_scaling(ConstPtr(unscaled_jac_d));
         jac_d_cache_.AddCachedResult1Dep(retValue, x);
@@ -492,7 +504,9 @@ namespace Ipopt
       SmartPtr<const Vector> unscaled_yc = NLP_scaling()->apply_vector_scaling_c(&yc);
       SmartPtr<const Vector> unscaled_yd = NLP_scaling()->apply_vector_scaling_d(&yd);
       Number scaled_obj_factor = NLP_scaling()->apply_obj_scaling(obj_factor);
+      h_eval_time_.Start();
       bool success = nlp_->Eval_h(*unscaled_x, scaled_obj_factor, *unscaled_yc, *unscaled_yd, *unscaled_h);
+      h_eval_time_.End();
       ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the hessian of the lagrangian");
       retValue = NLP_scaling()->apply_hessian_scaling(ConstPtr(unscaled_h));
       h_cache_.AddCachedResult(retValue, deps, scalar_deps);
@@ -622,6 +636,43 @@ namespace Ipopt
     x_U_ = new_x_U.MakeNewCopy();
     d_L_ = new_d_L.MakeNewCopy();
     d_U_ = new_d_U.MakeNewCopy();
+  }
+
+  void
+  OrigIpoptNLP::PrintTimingStatistics(
+    Journalist& jnlst,
+    EJournalLevel level,
+    EJournalCategory category) const
+  {
+    if (!jnlst.ProduceOutput(level, category))
+      return;
+
+    jnlst.Printf(level, category,
+                 "Function Evaluations................: %10.2f\n",
+                 f_eval_time_.TotalTime()+
+                 c_eval_time_.TotalTime()+
+                 d_eval_time_.TotalTime()+
+                 jac_c_eval_time_.TotalTime()+
+                 jac_d_eval_time_.TotalTime()+
+                 h_eval_time_.TotalTime());
+    jnlst.Printf(level, category,
+                 " Objective function.................: %10.2f\n",
+                 f_eval_time_.TotalTime());
+    jnlst.Printf(level, category,
+                 " Equality constraints...............: %10.2f\n",
+                 c_eval_time_.TotalTime());
+    jnlst.Printf(level, category,
+                 " Inequality constraints.............: %10.2f\n",
+                 d_eval_time_.TotalTime());
+    jnlst.Printf(level, category,
+                 " Equality constraint Jacobian.......: %10.2f\n",
+                 jac_c_eval_time_.TotalTime());
+    jnlst.Printf(level, category,
+                 " Inequality constraint Jacobian.....: %10.2f\n",
+                 jac_d_eval_time_.TotalTime());
+    jnlst.Printf(level, category,
+                 " Lagrangian Hessian.................: %10.2f\n",
+                 h_eval_time_.TotalTime());
   }
 
 } // namespace Ipopt

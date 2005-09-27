@@ -38,9 +38,11 @@ namespace Ipopt
                                 const std::string& prefix) = 0;
 
     /** Method for computing the value of the barrier parameter that
-     *  could be used in the current iteration.
+     *  could be used in the current iteration.  Here, mu_min and
+     *  mu_max are the lower and upper bounds on acceptable values for
+     *  the barrier parameter
      */
-    virtual Number CalculateMu() = 0;
+    virtual Number CalculateMu(Number mu_min, Number mu_max) = 0;
 
   private:
     /**@name Default Compiler Generated Methods

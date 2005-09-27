@@ -150,45 +150,66 @@ namespace Ipopt
       print_message(Jnlst());
     }
 
+    IpData().TimingStats().InitializeIterates.Start();
     // Initialize the iterates
     InitializeIterates();
+    IpData().TimingStats().InitializeIterates.End();
 
     if (!skip_print_problem_stats_) {
+      IpData().TimingStats().PrintProblemStatistics.Start();
       PrintProblemStatistics();
+      IpData().TimingStats().PrintProblemStatistics.End();
     }
 
+    IpData().TimingStats().CheckConvergence.Start();
     ConvergenceCheck::ConvergenceStatus conv_status
     = conv_check_->CheckConvergence();
+    IpData().TimingStats().CheckConvergence.End();
 
     try {
       // main loop
       while (conv_status == ConvergenceCheck::CONTINUE) {
         // Set the Hessian Matrix
+        IpData().TimingStats().ActualizeHessian.Start();
         ActualizeHessian();
+        IpData().TimingStats().ActualizeHessian.End();
 
         // do all the output for this iteration
+        IpData().TimingStats().OutputIteration.Start();
         OutputIteration();
         IpData().ResetInfo();
+        IpData().TimingStats().OutputIteration.End();
 
         // update the barrier parameter if necessary
+        IpData().TimingStats().UpdateBarrierParameter.Start();
         UpdateBarrierParameter();
+        IpData().TimingStats().UpdateBarrierParameter.End();
 
         // solve the primal-dual system to get the full step
+        IpData().TimingStats().ComputeSearchDirection.Start();
         ComputeSearchDirection();
+        IpData().TimingStats().ComputeSearchDirection.End();
 
         // Compute the new iterate
+        IpData().TimingStats().ComputeAcceptableTrialPoint.Start();
         ComputeAcceptableTrialPoint();
-        //ApplyFractionToBoundary();
+        IpData().TimingStats().ComputeAcceptableTrialPoint.End();
 
         // Accept the new iterate
+        IpData().TimingStats().AcceptTrialPoint.Start();
         AcceptTrialPoint();
+        IpData().TimingStats().AcceptTrialPoint.End();
 
         IpData().Set_iter_count(IpData().iter_count()+1);
 
+        IpData().TimingStats().CheckConvergence.Start();
         conv_status  = conv_check_->CheckConvergence();
+        IpData().TimingStats().CheckConvergence.End();
       }
 
+      IpData().TimingStats().OutputIteration.Start();
       OutputIteration();
+      IpData().TimingStats().OutputIteration.End();
 
       IpData().TimingStats().OverallAlgorithm.End();
 
@@ -204,26 +225,32 @@ namespace Ipopt
     }
     catch(TINY_STEP_DETECTED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().UpdateBarrierParameter.End();
       IpData().TimingStats().OverallAlgorithm.End();
       return STOP_AT_TINY_STEP;
     }
     catch(ACCEPTABLE_POINT_REACHED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint.End();
       IpData().TimingStats().OverallAlgorithm.End();
       return STOP_AT_ACCEPTABLE_POINT;
     }
     catch(LOCALLY_INFEASIBLE& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint.EndIfStarted();
+      IpData().TimingStats().CheckConvergence.EndIfStarted();
       IpData().TimingStats().OverallAlgorithm.End();
       return LOCAL_INFEASIBILITY;
     }
     catch(RESTORATION_FAILED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint.End();
       IpData().TimingStats().OverallAlgorithm.End();
       return RESTORATION_FAILURE;
     }
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint.End();
       IpData().TimingStats().OverallAlgorithm.End();
       return SUCCESS;
     }

@@ -19,30 +19,54 @@ namespace Ipopt
     if (!jnlst.ProduceOutput(level, category))
       return;
 
-    jnlst.Printf(level, category, "\n\nTiming Statistics:\n\n");
     jnlst.Printf(level, category,
                  "OverallAlgorithm....................: %10.2f\n",
                  OverallAlgorithm.TotalTime());
     jnlst.Printf(level, category,
-                 "FunctionEvaluations.................: %10.2f\n",
-                 FunctionEvaluations.TotalTime());
+                 " PrintProblemStatistics.............: %10.2f\n",
+                 PrintProblemStatistics.TotalTime());
+    jnlst.Printf(level, category,
+                 " InitializeIterates.................: %10.2f\n",
+                 InitializeIterates.TotalTime());
+    jnlst.Printf(level, category,
+                 " ActualizeHessian...................: %10.2f\n",
+                 ActualizeHessian.TotalTime());
+    jnlst.Printf(level, category,
+                 " OutputIteration....................: %10.2f\n",
+                 OutputIteration.TotalTime());
+    jnlst.Printf(level, category,
+                 " UpdateBarrierParameter.............: %10.2f\n",
+                 UpdateBarrierParameter.TotalTime());
+    jnlst.Printf(level, category,
+                 " ComputeSearchDirection.............: %10.2f\n",
+                 ComputeSearchDirection.TotalTime());
+    jnlst.Printf(level, category,
+                 " ComputeAcceptableTrialPoint........: %10.2f\n",
+                 ComputeAcceptableTrialPoint.TotalTime());
+    jnlst.Printf(level, category,
+                 " AcceptTrialPoint...................: %10.2f\n",
+                 AcceptTrialPoint.TotalTime());
+    jnlst.Printf(level, category,
+                 " CheckConvergence...................: %10.2f\n",
+                 CheckConvergence.TotalTime());
+
     jnlst.Printf(level, category,
                  "PDSystemSolverTotal.................: %10.2f\n",
                  PDSystemSolverTotal.TotalTime());
     jnlst.Printf(level, category,
-                 "PDSystemSolverSolveOnce.............: %10.2f\n",
+                 " PDSystemSolverSolveOnce............: %10.2f\n",
                  PDSystemSolverSolveOnce.TotalTime());
     jnlst.Printf(level, category,
-                 "LinearSystemScaling.................: %10.2f\n",
+                 " LinearSystemScaling................: %10.2f\n",
                  LinearSystemScaling.TotalTime());
     jnlst.Printf(level, category,
-                 "LinearSystemSymbolicFactorization...: %10.2f\n",
+                 " LinearSystemSymbolicFactorization..: %10.2f\n",
                  LinearSystemSymbolicFactorization.TotalTime());
     jnlst.Printf(level, category,
-                 "LinearSystemFactorization...........: %10.2f\n",
+                 " LinearSystemFactorization..........: %10.2f\n",
                  LinearSystemFactorization.TotalTime());
     jnlst.Printf(level, category,
-                 "LinearSystemBackSolve...............: %10.2f\n",
+                 " LinearSystemBackSolve..............: %10.2f\n",
                  LinearSystemBackSolve.TotalTime());
     jnlst.Printf(level, category,
                  "QualityFunctionSearch...............: %10.2f\n",

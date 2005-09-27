@@ -37,7 +37,7 @@ namespace Ipopt
     /** Method for computing the value of the barrier parameter that
      *  could be used in the current iteration (using the LOQO formula).
      */
-    virtual Number CalculateMu();
+    virtual Number CalculateMu(Number mu_min, Number mu_max);
 
     /** Methods for IpoptType */
     //@{
@@ -121,35 +121,45 @@ namespace Ipopt
                                     const Vector& step_cen_v_L,
                                     const Vector& step_cen_v_U);
 
-    /** Auxilliary function performing the golden bisection */
-    Number PerformGoldenBisection(Number sigma_up,
-                                  Number sigma_lo,
-                                  Number tol,
-                                  const Vector& step_aff_x_L,
-                                  const Vector& step_aff_x_U,
-                                  const Vector& step_aff_s_L,
-                                  const Vector& step_aff_s_U,
-                                  const Vector& step_aff_y_c,
-                                  const Vector& step_aff_y_d,
-                                  const Vector& step_aff_z_L,
-                                  const Vector& step_aff_z_U,
-                                  const Vector& step_aff_v_L,
-                                  const Vector& step_aff_v_U,
-                                  const Vector& step_cen_x_L,
-                                  const Vector& step_cen_x_U,
-                                  const Vector& step_cen_s_L,
-                                  const Vector& step_cen_s_U,
-                                  const Vector& step_cen_y_c,
-                                  const Vector& step_cen_y_d,
-                                  const Vector& step_cen_z_L,
-                                  const Vector& step_cen_z_U,
-                                  const Vector& step_cen_v_L,
-                                  const Vector& step_cen_v_U);
+    /** Auxilliary function performing the golden section */
+    Number PerformGoldenSection(Number sigma_up,
+                                Number q_up,
+                                Number sigma_lo,
+                                Number q_lo,
+                                Number sigma_tol,
+                                Number qf_tol,
+                                const Vector& step_aff_x_L,
+                                const Vector& step_aff_x_U,
+                                const Vector& step_aff_s_L,
+                                const Vector& step_aff_s_U,
+                                const Vector& step_aff_y_c,
+                                const Vector& step_aff_y_d,
+                                const Vector& step_aff_z_L,
+                                const Vector& step_aff_z_U,
+                                const Vector& step_aff_v_L,
+                                const Vector& step_aff_v_U,
+                                const Vector& step_cen_x_L,
+                                const Vector& step_cen_x_U,
+                                const Vector& step_cen_s_L,
+                                const Vector& step_cen_s_U,
+                                const Vector& step_cen_y_c,
+                                const Vector& step_cen_y_d,
+                                const Vector& step_cen_z_L,
+                                const Vector& step_cen_z_U,
+                                const Vector& step_cen_v_L,
+                                const Vector& step_cen_v_U);
 
-    /** Auxilliary function performing the golden bisection in the
+    /** Auxilliary functions for scaling the sigma axis in the golden
+     *  section procedure */
+    //@{
+    Number ScaleSigma(Number sigma);
+    Number UnscaleSigma(Number scaled_sigma);
+    //@}
+
+    /** Auxilliary function performing the golden section in the
      *  logarithmic scale */
     /* This doesn't seem to work well, so I took it out for now (AW)
-    Number PerformGoldenBisectionLog(Number sigma_up,
+    Number PerformGoldenSectionLog(Number sigma_up,
                                      Number sigma_lo,
                                      Number tol,
                                      const Vector& step_aff_x_L,
@@ -187,11 +197,15 @@ namespace Ipopt
      *  function.
      */
     BalancingTermEnum quality_function_balancing_term_;
-    /** Relative tolerance for golden bi-section algorithm. */
-    Number bisection_tol_;
-    /** Maximal number of bi-section steps in the golden bisection
+    /** Relative tolerance for golden bi-section algorithm in sigma
+     *  space. */
+    Number quality_function_section_sigma_tol_;
+    /** Relative tolerance for golden bi-section algorithm in function
+     *  value space. */
+    Number quality_function_section_qf_tol_;
+    /** Maximal number of bi-section steps in the golden section
      *  search for sigma. */
-    Index max_bisection_steps_;
+    Index quality_function_max_section_steps_;
     //@}
 
     /** @name Temporary work space vectors.  We use those to avoid
@@ -215,6 +229,9 @@ namespace Ipopt
     SmartPtr<Vector> tmp_v_L_;
     SmartPtr<Vector> tmp_v_U_;
     //@}
+
+    // Deleteme
+    Index count_qf_evals_;
   };
 
 } // namespace Ipopt

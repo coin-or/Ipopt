@@ -405,7 +405,7 @@ namespace Ipopt
       // include, too (SmartPtr doesn't work otherwise on AIX)
       IpoptAlgorithm* p2alg = dynamic_cast<IpoptAlgorithm*> (GetRawPtr(alg_));
       IpoptData* p2ip_data = dynamic_cast<IpoptData*> (GetRawPtr(ip_data_));
-      IpoptNLP* p2ip_nlp = dynamic_cast<IpoptNLP*> (GetRawPtr(ip_nlp_));
+      OrigIpoptNLP* p2ip_nlp = dynamic_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_));
       IpoptCalculatedQuantities* p2ip_cq = dynamic_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_));
       // Set up the algorithm
       p2alg->Initialize(*jnlst_, *p2ip_nlp, *p2ip_data, *p2ip_cq,
@@ -489,8 +489,12 @@ namespace Ipopt
       options_->GetBoolValue("print_timing_statistics",
                              print_timing_statistics, "");
       if (print_timing_statistics) {
+        jnlst_->Printf(J_SUMMARY, J_TIMING_STATISTICS,
+                       "\n\nTiming Statistics:\n\n");
         p2ip_data->TimingStats().PrintAllTimingStatistics(*jnlst_, J_SUMMARY,
             J_TIMING_STATISTICS);
+        p2ip_nlp->PrintTimingStatistics(*jnlst_, J_SUMMARY,
+                                        J_TIMING_STATISTICS);
       }
 
       // Write EXIT message
