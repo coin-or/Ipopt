@@ -230,7 +230,6 @@ namespace Ipopt
     SmartPtr<Vector> tmp_v_U_;
     //@}
 
-    // Deleteme
     Index count_qf_evals_;
   };
 

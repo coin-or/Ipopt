@@ -494,7 +494,6 @@ namespace Ipopt
   {
     DBG_START_METH("QualityFunctionMuOracle::CalculateQualityFunction",
                    dbg_verbosity);
-    // DELETEME
     count_qf_evals_++;
 
     Index n_dual = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
