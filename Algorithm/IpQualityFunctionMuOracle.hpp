@@ -188,6 +188,8 @@ namespace Ipopt
     //@{
     /** Upper bound on centering parameter sigma */
     Number sigma_max_;
+    /** Lower bound on centering parameter sigma */
+    Number sigma_min_;
     /** Norm to be used for the quality function. */
     NormEnum quality_function_norm_;
     /** Flag indicating how centrality should be involved in the
@@ -230,7 +232,44 @@ namespace Ipopt
     SmartPtr<Vector> tmp_v_U_;
     //@}
 
+    /* Counter for the qualify function evaluations */
     Index count_qf_evals_;
+
+    /**@name Quantities used many times in CalculateQualityFunction,
+     * which we store here instead of retrieving them from cache every
+     * time.  I (AW) don't know if that really makes a difference, but
+     * some of those things showed up in gprof. */
+    //@{
+    bool initialized_;
+    Index n_dual_;
+    Index n_pri_;
+    Index n_comp_;
+
+    SmartPtr<const Vector> curr_slack_x_L_;
+    SmartPtr<const Vector> curr_slack_x_U_;
+    SmartPtr<const Vector> curr_slack_s_L_;
+    SmartPtr<const Vector> curr_slack_s_U_;
+
+    SmartPtr<const Vector> curr_z_L_;
+    SmartPtr<const Vector> curr_z_U_;
+    SmartPtr<const Vector> curr_v_L_;
+    SmartPtr<const Vector> curr_v_U_;
+
+    Number curr_grad_lag_x_asum_;
+    Number curr_grad_lag_s_asum_;
+    Number curr_c_asum_;
+    Number curr_d_minus_s_asum_;
+
+    Number curr_grad_lag_x_nrm2_;
+    Number curr_grad_lag_s_nrm2_;
+    Number curr_c_nrm2_;
+    Number curr_d_minus_s_nrm2_;
+
+    Number curr_grad_lag_x_amax_;
+    Number curr_grad_lag_s_amax_;
+    Number curr_c_amax_;
+    Number curr_d_minus_s_amax_;
+    //@}
   };
 
 } // namespace Ipopt

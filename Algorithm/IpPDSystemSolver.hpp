@@ -98,13 +98,17 @@ namespace Ipopt
      *  allow_inexact is set to true, it is not necessary to solve the
      *  system to best accuracy; for example, we don't want iterative
      *  refinement during the computation of the second order
-     *  correction.
+     *  correction.  On the other hand, if improve_solution is true,
+     *  the solution given in res should be improved (here beta has to
+     *  be zero, and res is assume to be the solution for the system
+     *  using rhs, without the factor alpha...).
      */
     virtual void Solve(Number alpha,
                        Number beta,
                        const IteratesVector& rhs,
                        IteratesVector& res,
-                       bool allow_inexact=false) =0;
+                       bool allow_inexact=false,
+                       bool improve_solution=false) =0;
 
   private:
     /**@name Default Compiler Generated Methods

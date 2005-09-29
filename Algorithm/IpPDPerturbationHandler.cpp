@@ -33,7 +33,7 @@ namespace Ipopt
       "max_hessian_perturbation",
       "Maximum value of regularization parameter for handling negative curvature.",
       0, true,
-      1e40,
+      1e40, // ToDo make this 1e20 ?
       "In order to guarantee that the search directions are indeed proper "
       "descent directions, Ipopt requires that the inertia of the "
       "(augmented) linear system for the step computation has the "
@@ -175,11 +175,12 @@ namespace Ipopt
     delta_d = delta_d_curr_ = delta_c;
 
     if (hess_degenerate_ == DEGENERATE) {
+      delta_x_curr_ = 0.;
+      delta_s_curr_ = 0.;
       bool retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                     delta_c, delta_d);
-      Jnlst().Printf(J_ERROR, J_MAIN, "Cannot determine appropriate modification of Hessian matrix.\nThis can happen if there are NaN or Inf numbers in the user-provided Hessian.\n");
       ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                       "get_deltas_for_wrong_inertia returns false.");
+                       "get_deltas_for_wrong_inertia returns false for degenerate Hessian before any further modification.");
     }
     else {
       delta_x = 0.;
@@ -263,8 +264,12 @@ namespace Ipopt
         // the same thing as if we were encountering negative curvature
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
-        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                         "get_deltas_for_wrong_inertia returns false.");
+        if (!retval) {
+          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                         "Can't get_deltas_for_wrong_inertia for delta_x_curr_ = %e and delta_c_curr_ = %e\n",
+                         delta_x_curr_, delta_c_curr_);
+          return false;
+        }
       }
       else {
         // Otherwise we now perturb the lower right corner

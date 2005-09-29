@@ -54,7 +54,8 @@ namespace Ipopt
                        Number beta,
                        const IteratesVector& rhs,
                        IteratesVector& res,
-                       bool allow_inexact=false);
+                       bool allow_inexact=false,
+                       bool improve_solution=false);
 
     /** Methods for IpoptType */
     //@{

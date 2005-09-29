@@ -105,12 +105,15 @@ namespace Ipopt
                                 Number beta,
                                 const IteratesVector& rhs,
                                 IteratesVector& res,
-                                bool allow_inexact)
+                                bool allow_inexact,
+                                bool improve_solution /* = false */)
   {
     DBG_START_METH("PDFullSpaceSolver::Solve",dbg_verbosity);
+    DBG_ASSERT(!allow_inexact || !improve_solution);
+    DBG_ASSERT(!improve_solution || beta==0.);
 
     // Timing of PDSystem solver starts here
-    IpData().TimingStats().PDSystemSolverTotal.Start();
+    IpData().TimingStats().PDSystemSolverTotal().Start();
 
     DBG_PRINT_VECTOR(2, "rhs_x", *rhs.x());
     DBG_PRINT_VECTOR(2, "rhs_s", *rhs.s());
@@ -120,6 +123,14 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "rhs_zU", *rhs.z_U());
     DBG_PRINT_VECTOR(2, "rhs_vL", *rhs.v_L());
     DBG_PRINT_VECTOR(2, "rhs_vU", *rhs.v_U());
+    DBG_PRINT_VECTOR(2, "res_x in", *res.x());
+    DBG_PRINT_VECTOR(2, "res_s in", *res.s());
+    DBG_PRINT_VECTOR(2, "res_c in", *res.y_c());
+    DBG_PRINT_VECTOR(2, "res_d in", *res.y_d());
+    DBG_PRINT_VECTOR(2, "res_zL in", *res.z_L());
+    DBG_PRINT_VECTOR(2, "res_zU in", *res.z_U());
+    DBG_PRINT_VECTOR(2, "res_vL in", *res.v_L());
+    DBG_PRINT_VECTOR(2, "res_vU in", *res.v_U());
 
     // if beta is nonzero, keep a copy of the incoming values in res_ */
     SmartPtr<IteratesVector> copy_res;
@@ -166,13 +177,19 @@ namespace Ipopt
     // quality)
     while (!done) {
 
-      bool solve_retval =
-        SolveOnce(resolve_with_better_quality, pretend_singular,
-                  *W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
-                  *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
-                  *sigma_x, *sigma_s, 1., 0., rhs, res);
-      resolve_with_better_quality = false;
-      pretend_singular = false;
+      // if improve_solution is true, we are given already a solution
+      // from the calling function, so we can skip the first solve
+      bool solve_retval = true;
+      if (!improve_solution) {
+        solve_retval =
+          SolveOnce(resolve_with_better_quality, pretend_singular,
+                    *W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
+                    *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
+                    *sigma_x, *sigma_s, 1., 0., rhs, res);
+        resolve_with_better_quality = false;
+        pretend_singular = false;
+      }
+      improve_solution = false;
 
       if (!solve_retval) {
         // If system seems not to be solvable, we set the search
@@ -180,13 +197,19 @@ namespace Ipopt
         // care of this (e.g. call the restoration phase).  ToDo: We
         // might want to use a more explicit cue later.
         res.Set(0.0);
-        IpData().TimingStats().PDSystemSolverTotal.End();
+        IpData().TimingStats().PDSystemSolverTotal().End();
         return;
+      }
+
+      if (allow_inexact) {
+        // no safety checks required
+        break;
       }
 
       // Get space for the residual
       SmartPtr<IteratesVector> resid = res.MakeNewIteratesVector(true);
 
+      // ToDo don't to that after max refinement?
       ComputeResiduals(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U,
                        *z_L, *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U,
                        *slack_s_L, *slack_s_U, *sigma_x, *sigma_s,
@@ -211,7 +234,8 @@ namespace Ipopt
                     *W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U,
                     *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
                     *sigma_x, *sigma_s, -1., 1., *resid, res);
-        DBG_ASSERT(solve_retval);
+        ASSERT_EXCEPTION(solve_retval, INTERNAL_ABORT,
+                         "SolveOnce returns false.");
 
         ComputeResiduals(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U,
                          *z_L, *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U,
@@ -311,7 +335,7 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "res_vL", *res.v_L());
     DBG_PRINT_VECTOR(2, "res_vU", *res.v_U());
 
-    IpData().TimingStats().PDSystemSolverTotal.End();
+    IpData().TimingStats().PDSystemSolverTotal().End();
   }
 
   bool PDFullSpaceSolver::SolveOnce(bool resolve_with_better_quality,
@@ -350,7 +374,7 @@ namespace Ipopt
     // 6. increase pivot tolerance if number of get evals so too small
     DBG_START_METH("PDFullSpaceSolver::SolveOnce",dbg_verbosity);
 
-    IpData().TimingStats().PDSystemSolverSolveOnce.Start();
+    IpData().TimingStats().PDSystemSolverSolveOnce().Start();
 
     // Compute the right hand side for the augmented system formulation
     SmartPtr<Vector> augRhs_x = rhs.x()->MakeNewCopy();
@@ -415,7 +439,7 @@ namespace Ipopt
                                     *sol->y_c_NonConst(), *sol->y_d_NonConst(),
                                     false, 0);
       if (retval!=SYMSOLVER_SUCCESS) {
-        IpData().TimingStats().PDSystemSolverSolveOnce.End();
+        IpData().TimingStats().PDSystemSolverSolveOnce().End();
         return false;
       }
     }
@@ -461,8 +485,15 @@ namespace Ipopt
 
           // Get new perturbation factors from the perturbation
           // handlers for the singular case
-          perturbHandler_->PerturbForSingularity(delta_x, delta_s,
-                                                 delta_c, delta_d);
+          bool pert_return =
+                             perturbHandler_->PerturbForSingularity(delta_x, delta_s,
+                                                                    delta_c, delta_d);
+          if (!pert_return) {
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "PerturbForSingularity can't be done\n");
+            IpData().TimingStats().PDSystemSolverSolveOnce().End();
+            return false;
+          }
         }
         else if (retval==SYMSOLVER_WRONG_INERTIA &&
                  augSysSolver_->NumberOfNegEVals() < numberOfEVals) {
@@ -488,8 +519,15 @@ namespace Ipopt
             }
           }
           if (assume_singular) {
-            perturbHandler_->PerturbForSingularity(delta_x, delta_s,
-                                                   delta_c, delta_d);
+            bool pert_return =
+                               perturbHandler_->PerturbForSingularity(delta_x, delta_s,
+                                                                      delta_c, delta_d);
+            if (!pert_return) {
+              Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                             "PerturbForSingularity can't be done for assume singular.\n");
+              IpData().TimingStats().PDSystemSolverSolveOnce().End();
+              return false;
+            }
             IpData().Append_info_string("a");
           }
         }
@@ -497,8 +535,15 @@ namespace Ipopt
                  retval==SYMSOLVER_SINGULAR) {
           // Get new perturbation factors from the perturbation
           // handlers for the case of wrong inertia
-          perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
-                                                  delta_c, delta_d);
+          bool pert_return =
+                             perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
+                                                                     delta_c, delta_d);
+          if (!pert_return) {
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "PerturbForWrongInertia can't be done for assume singular.\n");
+            IpData().TimingStats().PDSystemSolverSolveOnce().End();
+            return false;
+          }
         }
       } // while (retval!=SYMSOLVER_SUCCESS && !fail) {
 
@@ -520,7 +565,7 @@ namespace Ipopt
     // Finally let's assemble the res result vectors
     res.AddOneVector(alpha, *sol, beta);
 
-    IpData().TimingStats().PDSystemSolverSolveOnce.End();
+    IpData().TimingStats().PDSystemSolverSolveOnce().End();
 
     return true;
   }
@@ -550,6 +595,9 @@ namespace Ipopt
     IteratesVector& resid)
   {
     DBG_START_METH("PDFullSpaceSolver::ComputeResiduals", dbg_verbosity);
+
+    DBG_PRINT_VECTOR(2, "res", res);
+    IpData().TimingStats().ComputeResiduals().Start();
 
     // Get the current sizes of the perturbation factors
     Number delta_x;
@@ -619,6 +667,8 @@ namespace Ipopt
     tmp->ElementWiseMultiply(v_U);
     resid.v_U_NonConst()->AddTwoVectors(-1., *tmp, -1., *rhs.v_U(), 1.);
 
+    DBG_PRINT_VECTOR(2, "resid", resid);
+
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_LINEAR_ALGEBRA)) {
       resid.Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, "resid");
     }
@@ -641,6 +691,7 @@ namespace Ipopt
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "max-norm resid_vU %e\n", resid.v_U()->Amax());
     }
+    IpData().TimingStats().ComputeResiduals().End();
   }
 
   Number PDFullSpaceSolver::ComputeResidualRatio(const IteratesVector& rhs,

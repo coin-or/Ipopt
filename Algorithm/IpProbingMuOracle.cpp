@@ -74,11 +74,13 @@ namespace Ipopt
     // Get space for the affine scaling step
     SmartPtr<IteratesVector> step = rhs->MakeNewIteratesVector(true);
 
-    // Now solve the primal-dual system to get the step
+    // Now solve the primal-dual system to get the affine step.  We
+    // allow a somewhat inexact solution here
+    bool allow_inexact = true;
     pd_solver_->Solve(-1.0, 0.0,
                       *rhs,
-                      *step
-                      //                      true           // don't need high accuracy
+                      *step,
+                      allow_inexact
                      );
 
     DBG_PRINT_VECTOR(2, "step", *step);

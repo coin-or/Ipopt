@@ -171,34 +171,110 @@ namespace Ipopt
                                   EJournalLevel level,
                                   EJournalCategory category) const;
 
-    /**@name All timed tasks. */
+    /**@name Accessor methods to all timed tasks. */
     //@{
-    TimedTask OverallAlgorithm;
-    TimedTask PrintProblemStatistics;
-    TimedTask InitializeIterates;
-    TimedTask ActualizeHessian;
-    TimedTask OutputIteration;
-    TimedTask UpdateBarrierParameter;
-    TimedTask ComputeSearchDirection;
-    TimedTask ComputeAcceptableTrialPoint;
-    TimedTask AcceptTrialPoint;
-    TimedTask CheckConvergence;
+    TimedTask& OverallAlgorithm()
+    {
+      return OverallAlgorithm_;
+    }
+    TimedTask& PrintProblemStatistics()
+    {
+      return PrintProblemStatistics_;
+    }
+    TimedTask& InitializeIterates()
+    {
+      return InitializeIterates_;
+    }
+    TimedTask& ActualizeHessian()
+    {
+      return ActualizeHessian_;
+    }
+    TimedTask& OutputIteration()
+    {
+      return OutputIteration_;
+    }
+    TimedTask& UpdateBarrierParameter()
+    {
+      return UpdateBarrierParameter_;
+    }
+    TimedTask& ComputeSearchDirection()
+    {
+      return ComputeSearchDirection_;
+    }
+    TimedTask& ComputeAcceptableTrialPoint()
+    {
+      return ComputeAcceptableTrialPoint_;
+    }
+    TimedTask& AcceptTrialPoint()
+    {
+      return AcceptTrialPoint_;
+    }
+    TimedTask& CheckConvergence()
+    {
+      return CheckConvergence_;
+    }
 
-    TimedTask PDSystemSolverTotal;
-    TimedTask PDSystemSolverSolveOnce;
-    TimedTask LinearSystemScaling;
-    TimedTask LinearSystemSymbolicFactorization;
-    TimedTask LinearSystemFactorization;
-    TimedTask LinearSystemBackSolve;
-    TimedTask QualityFunctionSearch;
-    TimedTask TryCorrector;
+    TimedTask& PDSystemSolverTotal()
+    {
+      return PDSystemSolverTotal_;
+    }
+    TimedTask& PDSystemSolverSolveOnce()
+    {
+      return PDSystemSolverSolveOnce_;
+    }
+    TimedTask& ComputeResiduals()
+    {
+      return ComputeResiduals_;
+    }
+    TimedTask& LinearSystemScaling()
+    {
+      return LinearSystemScaling_;
+    }
+    TimedTask& LinearSystemSymbolicFactorization()
+    {
+      return LinearSystemSymbolicFactorization_;
+    }
+    TimedTask& LinearSystemFactorization()
+    {
+      return LinearSystemFactorization_;
+    }
+    TimedTask& LinearSystemBackSolve()
+    {
+      return LinearSystemBackSolve_;
+    }
+    TimedTask& QualityFunctionSearch()
+    {
+      return QualityFunctionSearch_;
+    }
+    TimedTask& TryCorrector()
+    {
+      return TryCorrector_;
+    }
 
-    TimedTask Task1;
-    TimedTask Task2;
-    TimedTask Task3;
-    TimedTask Task4;
-    TimedTask Task5;
-    TimedTask Task6;
+    TimedTask& Task1()
+    {
+      return Task1_;
+    }
+    TimedTask& Task2()
+    {
+      return Task2_;
+    }
+    TimedTask& Task3()
+    {
+      return Task3_;
+    }
+    TimedTask& Task4()
+    {
+      return Task4_;
+    }
+    TimedTask& Task5()
+    {
+      return Task5_;
+    }
+    TimedTask& Task6()
+    {
+      return Task6_;
+    }
     //@}
 
   private:
@@ -217,6 +293,36 @@ namespace Ipopt
     void operator=(const TimingStatistics&);
     //@}
 
+    /**@name All timed tasks. */
+    //@{
+    TimedTask OverallAlgorithm_;
+    TimedTask PrintProblemStatistics_;
+    TimedTask InitializeIterates_;
+    TimedTask ActualizeHessian_;
+    TimedTask OutputIteration_;
+    TimedTask UpdateBarrierParameter_;
+    TimedTask ComputeSearchDirection_;
+    TimedTask ComputeAcceptableTrialPoint_;
+    TimedTask AcceptTrialPoint_;
+    TimedTask CheckConvergence_;
+
+    TimedTask PDSystemSolverTotal_;
+    TimedTask PDSystemSolverSolveOnce_;
+    TimedTask ComputeResiduals_;
+    TimedTask LinearSystemScaling_;
+    TimedTask LinearSystemSymbolicFactorization_;
+    TimedTask LinearSystemFactorization_;
+    TimedTask LinearSystemBackSolve_;
+    TimedTask QualityFunctionSearch_;
+    TimedTask TryCorrector_;
+
+    TimedTask Task1_;
+    TimedTask Task2_;
+    TimedTask Task3_;
+    TimedTask Task4_;
+    TimedTask Task5_;
+    TimedTask Task6_;
+    //@}
   };
 
 } // namespace Ipopt

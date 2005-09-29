@@ -648,7 +648,7 @@ namespace Ipopt
       return;
 
     jnlst.Printf(level, category,
-                 "Function Evaluations................: %10.2f\n",
+                 "Function Evaluations................: %10.3f\n",
                  f_eval_time_.TotalTime()+
                  c_eval_time_.TotalTime()+
                  d_eval_time_.TotalTime()+
@@ -656,22 +656,22 @@ namespace Ipopt
                  jac_d_eval_time_.TotalTime()+
                  h_eval_time_.TotalTime());
     jnlst.Printf(level, category,
-                 " Objective function.................: %10.2f\n",
+                 " Objective function.................: %10.3f\n",
                  f_eval_time_.TotalTime());
     jnlst.Printf(level, category,
-                 " Equality constraints...............: %10.2f\n",
+                 " Equality constraints...............: %10.3f\n",
                  c_eval_time_.TotalTime());
     jnlst.Printf(level, category,
-                 " Inequality constraints.............: %10.2f\n",
+                 " Inequality constraints.............: %10.3f\n",
                  d_eval_time_.TotalTime());
     jnlst.Printf(level, category,
-                 " Equality constraint Jacobian.......: %10.2f\n",
+                 " Equality constraint Jacobian.......: %10.3f\n",
                  jac_c_eval_time_.TotalTime());
     jnlst.Printf(level, category,
-                 " Inequality constraint Jacobian.....: %10.2f\n",
+                 " Inequality constraint Jacobian.....: %10.3f\n",
                  jac_d_eval_time_.TotalTime());
     jnlst.Printf(level, category,
-                 " Lagrangian Hessian.................: %10.2f\n",
+                 " Lagrangian Hessian.................: %10.3f\n",
                  h_eval_time_.TotalTime());
   }
 

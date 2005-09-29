@@ -17,6 +17,16 @@
 
 #include <vector>
 
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+
 namespace Ipopt
 {
   /* forward declarations */
@@ -325,22 +335,10 @@ namespace Ipopt
     mutable TaggedObject::Tag sumlogs_cache_tag_;
     mutable Number cached_sumlogs_;
 
-    //     /** Cache for 2-norm */
-    //     mutable CachedResults<Number> nrm2_cache_;
-    //     /** Cache for Asum */
-    //     mutable CachedResults<Number> asum_cache_;
-    //     /** Cache for Amax */
-    //     mutable CachedResults<Number> amax_cache_;
-    //     /** Cache for Max */
-    //     mutable CachedResults<Number> max_cache_;
-    //     /** Cache for Min */
-    //     mutable CachedResults<Number> min_cache_;
-    //     /** Cache for Sum */
-    //     mutable CachedResults<Number> sum_cache_;
-    //     /** Cache for SumLogs */
-    //     mutable CachedResults<Number> sumlogs_cache_;
-    /** Cache for FracToBound */
-    mutable CachedResults<Number> frac_to_bound_cache_;
+    //     AW: I removed this cache since it gets in the way for the
+    //         quality function search
+    //     /** Cache for FracToBound */
+    //     mutable CachedResults<Number> frac_to_bound_cache_;
     //@}
 
   };
@@ -415,8 +413,7 @@ namespace Ipopt
       max_cache_tag_(0),
       min_cache_tag_(0),
       sum_cache_tag_(0),
-      sumlogs_cache_tag_(0),
-      frac_to_bound_cache_(4)
+      sumlogs_cache_tag_(0)
   {
     DBG_ASSERT(IsValid(owner_space_));
   }
@@ -430,6 +427,7 @@ namespace Ipopt
   inline
   Vector* Vector::MakeNewCopy() const
   {
+    // ToDo: We can probably copy also the cached values for Norms etc here
     Vector* copy = MakeNew();
     copy->Copy(*this);
     return copy;
@@ -440,14 +438,86 @@ namespace Ipopt
   {
     CopyImpl(x);
     ObjectChanged();
+    // Also copy any cached scalar values from the original vector
+    // ToDo: Check if that is too much overhead
+    TaggedObject::Tag x_tag = x.GetTag();
+    if (x_tag == x.nrm2_cache_tag_) {
+      nrm2_cache_tag_ = GetTag();
+      cached_nrm2_ = x.cached_nrm2_;
+    }
+    if (x_tag == x.asum_cache_tag_) {
+      asum_cache_tag_ = GetTag();
+      cached_asum_ = x.cached_asum_;
+    }
+    if (x_tag == x.amax_cache_tag_) {
+      amax_cache_tag_ = GetTag();
+      cached_amax_ = x.cached_amax_;
+    }
+    if (x_tag == x.max_cache_tag_) {
+      max_cache_tag_ = GetTag();
+      cached_max_ = x.cached_max_;
+    }
+    if (x_tag == x.min_cache_tag_) {
+      min_cache_tag_ = GetTag();
+      cached_min_ = x.cached_min_;
+    }
+    if (x_tag == x.sum_cache_tag_) {
+      sum_cache_tag_ = GetTag();
+      cached_sum_ = x.cached_sum_;
+    }
+    if (x_tag == x.sumlogs_cache_tag_) {
+      sumlogs_cache_tag_ = GetTag();
+      cached_sumlogs_ = x.cached_sumlogs_;
+    }
   }
 
   inline
   void Vector::Scal(Number alpha)
   {
     if (alpha!=1.) {
+      TaggedObject::Tag old_tag = GetTag();
       ScalImpl(alpha);
       ObjectChanged();
+      if (old_tag == nrm2_cache_tag_) {
+        nrm2_cache_tag_ = GetTag();
+        cached_nrm2_ *= fabs(alpha);
+      }
+      if (old_tag == asum_cache_tag_) {
+        asum_cache_tag_ = GetTag();
+        cached_asum_ *= fabs(alpha);
+      }
+      if (old_tag == amax_cache_tag_) {
+        amax_cache_tag_ = GetTag();
+        cached_amax_ *= fabs(alpha);
+      }
+      if (old_tag == max_cache_tag_) {
+        if (alpha>=0.) {
+          max_cache_tag_ = GetTag();
+          cached_max_ *= alpha;
+        }
+        else if (alpha<0.) {
+          min_cache_tag_ = GetTag();
+          cached_min_ = cached_max_ * alpha;
+        }
+      }
+      if (old_tag == min_cache_tag_) {
+        if (alpha>=0.) {
+          min_cache_tag_ = GetTag();
+          cached_min_ *= alpha;
+        }
+        else if (alpha<0.) {
+          max_cache_tag_ = GetTag();
+          cached_max_ = cached_min_ * alpha;
+        }
+      }
+      if (old_tag == sum_cache_tag_) {
+        sum_cache_tag_ = GetTag();
+        cached_sum_ *= alpha;
+      }
+      if (old_tag == sumlogs_cache_tag_) {
+        sumlogs_cache_tag_ = GetTag();
+        cached_sumlogs_ += ((Number)Dim())*log(alpha);
+      }
     }
   }
 
@@ -529,6 +599,7 @@ namespace Ipopt
   inline
   void Vector::Set(Number alpha)
   {
+    // Could initialize caches here
     SetImpl(alpha);
     ObjectChanged();
   }
@@ -557,6 +628,7 @@ namespace Ipopt
   inline
   void Vector::ElementWiseMax(const Vector& x)
   {
+    // Could initialize some caches here
     ElementWiseMaxImpl(x);
     ObjectChanged();
   }
@@ -564,6 +636,7 @@ namespace Ipopt
   inline
   void Vector::ElementWiseMin(const Vector& x)
   {
+    // Could initialize some caches here
     ElementWiseMinImpl(x);
     ObjectChanged();
   }
@@ -571,6 +644,7 @@ namespace Ipopt
   inline
   void Vector::ElementWiseAbs()
   {
+    // Could initialize some caches here
     ElementWiseAbsImpl();
     ObjectChanged();
   }
@@ -585,6 +659,7 @@ namespace Ipopt
   inline
   void Vector::AddScalar(Number scalar)
   {
+    // Could initialize some caches here
     AddScalarImpl(scalar);
     ObjectChanged();
   }
@@ -626,6 +701,9 @@ namespace Ipopt
   inline
   Number Vector::FracToBound(const Vector& delta, Number tau) const
   {
+    /* AW: I avoid the caching here, since it leads to overhead in the
+       quality function search.  Caches for this are in
+       CalculatedQuantities.
     Number retValue;
     std::vector<const TaggedObject*> tdeps(1);
     tdeps[0] = &delta;
@@ -636,6 +714,8 @@ namespace Ipopt
       frac_to_bound_cache_.AddCachedResult(retValue, tdeps, sdeps);
     }
     return retValue;
+    */
+    return FracToBoundImpl(delta, tau);
   }
 
   inline

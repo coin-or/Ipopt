@@ -51,7 +51,7 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "mu_max",
       "Maximum value for barrier parameter.",
-      0.0, true, 1e10,
+      0.0, true, 1e5,
       "This option specifies an upper bound on the barrier parameter in the "
       "adaptive mu selection mode.");
     roptions->AddLowerBoundedNumberOption(

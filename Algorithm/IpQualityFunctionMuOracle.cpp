@@ -61,6 +61,10 @@ namespace Ipopt
       "sigma_max",
       "Maximum value of the centering parameter.",
       0.0, true, 1e2);
+    roptions->AddLowerBoundedNumberOption(
+      "sigma_min",
+      "Minimum value of the centering parameter.",
+      0.0, false, 1e-6);
     roptions->AddStringOption4(
       "quality_function_norm_type",
       "Norm used for components of the quality function.",
@@ -121,6 +125,7 @@ namespace Ipopt
     Index enum_int;
 
     options.GetNumericValue("sigma_max", sigma_max_, prefix);
+    options.GetNumericValue("sigma_min", sigma_min_, prefix);
 
     options.GetEnumValue("quality_function_norm_type", enum_int, prefix);
     quality_function_norm_ = NormEnum(enum_int);
@@ -135,6 +140,8 @@ namespace Ipopt
     options.GetNumericValue("quality_function_section_qf_tol",
                             quality_function_section_qf_tol_, prefix);
 
+    initialized_ = false;
+
     return true;
   }
 
@@ -142,8 +149,6 @@ namespace Ipopt
   {
     DBG_START_METH("QualityFunctionMuOracle::CalculateMu",
                    dbg_verbosity);
-
-    count_qf_evals_ = 0;
 
     ///////////////////////////////////////////////////////////////////////////
     // Reserve memory for temporary vectors used in CalculateQualityFunction //
@@ -187,14 +192,14 @@ namespace Ipopt
     // Get space for the affine scaling step
     SmartPtr<IteratesVector> step_aff = IpData().curr()->MakeNewIteratesVector(true);
 
-    // Now solve the primal-dual system to get the step
+    // Now solve the primal-dual system to get the step.  We allow a
+    // somewhat inexact solution, iterative refinement will be done
+    // after mu is known
+    bool allow_inexact = true;
     pd_solver_->Solve(-1.0, 0.0,
                       *rhs_aff,
                       *step_aff,
-                      false           // want accurate solution here
-                      // because we can use it to
-                      // compute the overall search
-                      // direction
+                      allow_inexact
                      );
 
     DBG_PRINT_VECTOR(2, "step_aff", *step_aff);
@@ -227,19 +232,117 @@ namespace Ipopt
     SmartPtr<IteratesVector> step_cen = IpData().curr()->MakeNewIteratesVector(true);
 
     // Now solve the primal-dual system to get the step
+    allow_inexact = true;
     pd_solver_->Solve(1.0, 0.0,
                       *rhs_cen,
                       *step_cen,
-                      false           // want accurate solution here
-                      // because we can use it to
-                      // compute the overall search
-                      // direction
+                      allow_inexact
                      );
 
     DBG_PRINT_VECTOR(2, "step_cen", *step_cen);
 
     // Start the timing for the quality function search here
-    IpData().TimingStats().QualityFunctionSearch.Start();
+    IpData().TimingStats().QualityFunctionSearch().Start();
+
+    // Some initializations
+    if (!initialized_) {
+      n_dual_ = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
+      n_pri_ = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
+      n_comp_ = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() +
+                IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim();
+      initialized_ = true;
+    }
+
+    count_qf_evals_ = 0;
+
+    // Compute some quantities used for the quality function evaluations
+    // (This way we try to avoid retrieving numbers from cache...
+
+    curr_slack_x_L_ = IpCq().curr_slack_x_L();
+    curr_slack_x_U_ = IpCq().curr_slack_x_U();
+    curr_slack_s_L_ = IpCq().curr_slack_s_L();
+    curr_slack_s_U_ = IpCq().curr_slack_s_U();
+
+    curr_z_L_ = IpData().curr()->z_L();
+    curr_z_U_ = IpData().curr()->z_U();
+    curr_v_L_ = IpData().curr()->v_L();
+    curr_v_U_ = IpData().curr()->v_U();
+
+    IpData().TimingStats().Task5().Start();
+    switch (quality_function_norm_) {
+      case NM_NORM_1:
+      curr_grad_lag_x_asum_ = IpCq().curr_grad_lag_x()->Asum();
+      curr_grad_lag_s_asum_ = IpCq().curr_grad_lag_s()->Asum();
+      curr_c_asum_ = IpCq().curr_c()->Asum();
+      curr_d_minus_s_asum_ = IpCq().curr_d_minus_s()->Asum();
+      break;
+      case NM_NORM_2_SQUARED:
+      case NM_NORM_2:
+      curr_grad_lag_x_nrm2_ = IpCq().curr_grad_lag_x()->Nrm2();
+      curr_grad_lag_s_nrm2_ = IpCq().curr_grad_lag_s()->Nrm2();
+      curr_c_nrm2_ = IpCq().curr_c()->Nrm2();
+      curr_d_minus_s_nrm2_ = IpCq().curr_d_minus_s()->Nrm2();
+      break;
+      case NM_NORM_MAX:
+      curr_grad_lag_x_amax_ = IpCq().curr_grad_lag_x()->Amax();
+      curr_grad_lag_s_amax_ = IpCq().curr_grad_lag_s()->Amax();
+      curr_c_amax_ = IpCq().curr_c()->Amax();
+      curr_d_minus_s_amax_ = IpCq().curr_d_minus_s()->Amax();
+      break;
+      default:
+      DBG_ASSERT(false && "Unknown value for quality_function_norm_");
+    }
+    IpData().TimingStats().Task5().End();
+
+    // Some initializations
+    if (!initialized_) {
+      n_dual_ = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
+      n_pri_ = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
+      n_comp_ = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() +
+                IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim();
+      initialized_ = true;
+    }
+
+    count_qf_evals_ = 0;
+
+    // Compute some quantities used for the quality function evaluations
+    // (This way we try to avoid retrieving numbers from cache...
+
+    curr_slack_x_L_ = IpCq().curr_slack_x_L();
+    curr_slack_x_U_ = IpCq().curr_slack_x_U();
+    curr_slack_s_L_ = IpCq().curr_slack_s_L();
+    curr_slack_s_U_ = IpCq().curr_slack_s_U();
+
+    curr_z_L_ = IpData().curr()->z_L();
+    curr_z_U_ = IpData().curr()->z_U();
+    curr_v_L_ = IpData().curr()->v_L();
+    curr_v_U_ = IpData().curr()->v_U();
+
+    IpData().TimingStats().Task5().Start();
+    switch (quality_function_norm_) {
+      case NM_NORM_1:
+      curr_grad_lag_x_asum_ = IpCq().curr_grad_lag_x()->Asum();
+      curr_grad_lag_s_asum_ = IpCq().curr_grad_lag_s()->Asum();
+      curr_c_asum_ = IpCq().curr_c()->Asum();
+      curr_d_minus_s_asum_ = IpCq().curr_d_minus_s()->Asum();
+      break;
+      case NM_NORM_2_SQUARED:
+      case NM_NORM_2:
+      curr_grad_lag_x_nrm2_ = IpCq().curr_grad_lag_x()->Nrm2();
+      curr_grad_lag_s_nrm2_ = IpCq().curr_grad_lag_s()->Nrm2();
+      curr_c_nrm2_ = IpCq().curr_c()->Nrm2();
+      curr_d_minus_s_nrm2_ = IpCq().curr_d_minus_s()->Nrm2();
+      break;
+      case NM_NORM_MAX:
+      curr_grad_lag_x_amax_ = IpCq().curr_grad_lag_x()->Amax();
+      curr_grad_lag_s_amax_ = IpCq().curr_grad_lag_s()->Amax();
+      curr_c_amax_ = IpCq().curr_c()->Amax();
+      curr_d_minus_s_amax_ = IpCq().curr_d_minus_s()->Amax();
+      break;
+      default:
+      DBG_ASSERT(false && "Unknown value for quality_function_norm_");
+    }
+    IpData().TimingStats().Task5().End();
 
     // We now compute the step for the slack variables.  This safes
     // time, because we then don't have to do this any more for each
@@ -288,7 +391,7 @@ namespace Ipopt
                                            *step_cen->v_L(),
                                            *step_cen->v_U());
 
-    Number sigma_1minus = 1.-quality_function_section_sigma_tol_;
+    Number sigma_1minus = 1.-Max(1e-4, quality_function_section_sigma_tol_);
     Number qf_1minus = CalculateQualityFunction(sigma_1minus,
                        *step_aff_x_L,
                        *step_aff_x_U,
@@ -317,60 +420,70 @@ namespace Ipopt
       // > 1.
       Number sigma_up = Min(sigma_max_, mu_max/avrg_compl);
       Number sigma_lo = 1.;
-      // ToDo maybe we should use different tolerances for sigma>1
-      sigma = PerformGoldenSection(sigma_up, -100., sigma_lo, qf_1,
-                                   quality_function_section_sigma_tol_,
-                                   quality_function_section_qf_tol_,
-                                   *step_aff_x_L,
-                                   *step_aff_x_U,
-                                   *step_aff_s_L,
-                                   *step_aff_s_U,
-                                   *step_aff->y_c(),
-                                   *step_aff->y_d(),
-                                   *step_aff->z_L(),
-                                   *step_aff->z_U(),
-                                   *step_aff->v_L(),
-                                   *step_aff->v_U(),
-                                   *step_cen_x_L,
-                                   *step_cen_x_U,
-                                   *step_cen_s_L,
-                                   *step_cen_s_U,
-                                   *step_cen->y_c(),
-                                   *step_cen->y_d(),
-                                   *step_cen->z_L(),
-                                   *step_cen->z_U(),
-                                   *step_cen->v_L(),
-                                   *step_cen->v_U());
+      if (sigma_lo >= sigma_up) {
+        sigma = sigma_up;
+      }
+      else {
+        // ToDo maybe we should use different tolerances for sigma>1
+        sigma = PerformGoldenSection(sigma_up, -100., sigma_lo, qf_1,
+                                     quality_function_section_sigma_tol_,
+                                     quality_function_section_qf_tol_,
+                                     *step_aff_x_L,
+                                     *step_aff_x_U,
+                                     *step_aff_s_L,
+                                     *step_aff_s_U,
+                                     *step_aff->y_c(),
+                                     *step_aff->y_d(),
+                                     *step_aff->z_L(),
+                                     *step_aff->z_U(),
+                                     *step_aff->v_L(),
+                                     *step_aff->v_U(),
+                                     *step_cen_x_L,
+                                     *step_cen_x_U,
+                                     *step_cen_s_L,
+                                     *step_cen_s_U,
+                                     *step_cen->y_c(),
+                                     *step_cen->y_d(),
+                                     *step_cen->z_L(),
+                                     *step_cen->z_U(),
+                                     *step_cen->v_L(),
+                                     *step_cen->v_U());
+      }
     }
     else {
       // Search for sigma less than 1
 
-      Number sigma_lo = mu_min/avrg_compl;
-      Number sigma_up = Max(sigma_lo, sigma_1minus);
-      // Todo: What if lower bound is less than sigma_lo? Skip search?
-      sigma = PerformGoldenSection(sigma_up, qf_1minus, sigma_lo, -100.,
-                                   quality_function_section_sigma_tol_,
-                                   quality_function_section_qf_tol_,
-                                   *step_aff_x_L,
-                                   *step_aff_x_U,
-                                   *step_aff_s_L,
-                                   *step_aff_s_U,
-                                   *step_aff->y_c(),
-                                   *step_aff->y_d(),
-                                   *step_aff->z_L(),
-                                   *step_aff->z_U(),
-                                   *step_aff->v_L(),
-                                   *step_aff->v_U(),
-                                   *step_cen_x_L,
-                                   *step_cen_x_U,
-                                   *step_cen_s_L,
-                                   *step_cen_s_U,
-                                   *step_cen->y_c(),
-                                   *step_cen->y_d(),
-                                   *step_cen->z_L(),
-                                   *step_cen->z_U(),
-                                   *step_cen->v_L(),
-                                   *step_cen->v_U());
+      Number sigma_lo = Max(sigma_min_, mu_min/avrg_compl);
+      Number sigma_up = Min(Max(sigma_lo, sigma_1minus), mu_max/avrg_compl);
+      if (sigma_lo >= sigma_up) {
+        // Skip the search, we are already at the minimum
+        sigma = sigma_lo;
+      }
+      else {
+        sigma = PerformGoldenSection(sigma_up, qf_1minus, sigma_lo, -100.,
+                                     quality_function_section_sigma_tol_,
+                                     quality_function_section_qf_tol_,
+                                     *step_aff_x_L,
+                                     *step_aff_x_U,
+                                     *step_aff_s_L,
+                                     *step_aff_s_U,
+                                     *step_aff->y_c(),
+                                     *step_aff->y_d(),
+                                     *step_aff->z_L(),
+                                     *step_aff->z_U(),
+                                     *step_aff->v_L(),
+                                     *step_aff->v_U(),
+                                     *step_cen_x_L,
+                                     *step_cen_x_U,
+                                     *step_cen_s_L,
+                                     *step_cen_s_U,
+                                     *step_cen->y_c(),
+                                     *step_cen->y_d(),
+                                     *step_cen->z_L(),
+                                     *step_cen->z_U(),
+                                     *step_cen->v_L(),
+                                     *step_cen->v_U());
+      }
     }
 
     //#define tracequalityfunction
@@ -411,7 +524,7 @@ namespace Ipopt
 #endif
 
     // End timing of quality function search
-    IpData().TimingStats().QualityFunctionSearch.End();
+    IpData().TimingStats().QualityFunctionSearch().End();
 
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "Sigma = %e\n", sigma);
@@ -426,6 +539,7 @@ namespace Ipopt
     SmartPtr<IteratesVector> step = IpData().curr()->MakeNewIteratesVector(true);
     step->AddTwoVectors(sigma, *step_cen, 1.0, *IpData().delta_aff(), 0.0);
 
+    DBG_PRINT_VECTOR(2, "step", *step);
     IpData().set_delta(step);
     IpData().SetHaveDeltas(true);
 
@@ -450,6 +564,11 @@ namespace Ipopt
     tmp_z_U_ = NULL;
     tmp_v_L_ = NULL;
     tmp_v_U_ = NULL;
+
+    curr_slack_x_L_ = NULL;
+    curr_slack_x_U_ = NULL;
+    curr_slack_s_L_ = NULL;
+    curr_slack_s_U_ = NULL;
 
     // DELETEME
     char ssigma[40];
@@ -496,12 +615,7 @@ namespace Ipopt
                    dbg_verbosity);
     count_qf_evals_++;
 
-    Index n_dual = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
-    Index n_pri = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
-    Index n_comp = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() +
-                   IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim();
-
-    IpData().TimingStats().Task1.Start();
+    IpData().TimingStats().Task1().Start();
     tmp_step_x_L_->AddTwoVectors(1., step_aff_x_L, sigma, step_cen_x_L, 0.);
     tmp_step_x_U_->AddTwoVectors(1., step_aff_x_U, sigma, step_cen_x_U, 0.);
     tmp_step_s_L_->AddTwoVectors(1., step_aff_s_L, sigma, step_cen_s_L, 0.);
@@ -510,10 +624,10 @@ namespace Ipopt
     tmp_step_z_U_->AddTwoVectors(1., step_aff_z_U, sigma, step_cen_z_U, 0.);
     tmp_step_v_L_->AddTwoVectors(1., step_aff_v_L, sigma, step_cen_v_L, 0.);
     tmp_step_v_U_->AddTwoVectors(1., step_aff_v_U, sigma, step_cen_v_U, 0.);
-    IpData().TimingStats().Task1.End();
+    IpData().TimingStats().Task1().End();
 
     // Compute the fraction-to-the-boundary step sizes
-    IpData().TimingStats().Task2.Start();
+    IpData().TimingStats().Task2().Start();
     Number tau = IpData().curr_tau();
     Number alpha_primal = IpCq().uncached_slack_frac_to_the_bound(tau,
                           *tmp_step_x_L_,
@@ -526,36 +640,36 @@ namespace Ipopt
                         *tmp_step_z_U_,
                         *tmp_step_v_L_,
                         *tmp_step_v_U_);
-    IpData().TimingStats().Task2.End();
+    IpData().TimingStats().Task2().End();
 
     Number xi = 0.; // centrality measure
 
-    IpData().TimingStats().Task1.Start();
-    tmp_slack_x_L_->AddTwoVectors(1., *IpCq().curr_slack_x_L(),
+    IpData().TimingStats().Task1().Start();
+    tmp_slack_x_L_->AddTwoVectors(1., *curr_slack_x_L_,
                                   alpha_primal, *tmp_step_x_L_, 0.);
-    tmp_slack_x_U_->AddTwoVectors(1., *IpCq().curr_slack_x_U(),
+    tmp_slack_x_U_->AddTwoVectors(1., *curr_slack_x_U_,
                                   alpha_primal, *tmp_step_x_U_, 0.);
-    tmp_slack_s_L_->AddTwoVectors(1., *IpCq().curr_slack_s_L(),
+    tmp_slack_s_L_->AddTwoVectors(1., *curr_slack_s_L_,
                                   alpha_primal, *tmp_step_s_L_, 0.);
-    tmp_slack_s_U_->AddTwoVectors(1., *IpCq().curr_slack_s_U(),
+    tmp_slack_s_U_->AddTwoVectors(1., *curr_slack_s_U_,
                                   alpha_primal, *tmp_step_s_U_, 0.);
 
-    tmp_z_L_->AddTwoVectors(1., *IpData().curr()->z_L(),
+    tmp_z_L_->AddTwoVectors(1., *curr_z_L_,
                             alpha_dual, *tmp_step_z_L_, 0.);
-    tmp_z_U_->AddTwoVectors(1., *IpData().curr()->z_U(),
+    tmp_z_U_->AddTwoVectors(1., *curr_z_U_,
                             alpha_dual, *tmp_step_z_U_, 0.);
-    tmp_v_L_->AddTwoVectors(1., *IpData().curr()->v_L(),
+    tmp_v_L_->AddTwoVectors(1., *curr_v_L_,
                             alpha_dual, *tmp_step_v_L_, 0.);
-    tmp_v_U_->AddTwoVectors(1., *IpData().curr()->v_U(),
+    tmp_v_U_->AddTwoVectors(1., *curr_v_U_,
                             alpha_dual, *tmp_step_v_U_, 0.);
-    IpData().TimingStats().Task1.End();
+    IpData().TimingStats().Task1().End();
 
-    IpData().TimingStats().Task3.Start();
+    IpData().TimingStats().Task3().Start();
     tmp_slack_x_L_->ElementWiseMultiply(*tmp_z_L_);
     tmp_slack_x_U_->ElementWiseMultiply(*tmp_z_U_);
     tmp_slack_s_L_->ElementWiseMultiply(*tmp_v_L_);
     tmp_slack_s_U_->ElementWiseMultiply(*tmp_v_U_);
-    IpData().TimingStats().Task3.End();
+    IpData().TimingStats().Task3().End();
 
     DBG_PRINT_VECTOR(2, "compl_x_L", *tmp_slack_x_L_);
     DBG_PRINT_VECTOR(2, "compl_x_U", *tmp_slack_x_U_);
@@ -566,84 +680,84 @@ namespace Ipopt
     Number primal_inf=-1.;
     Number compl_inf=-1.;
 
-    IpData().TimingStats().Task5.Start();
+    IpData().TimingStats().Task5().Start();
     switch (quality_function_norm_) {
       case NM_NORM_1:
-      dual_inf = (1.-alpha_dual)*(IpCq().curr_grad_lag_x()->Asum() +
-                                  IpCq().curr_grad_lag_s()->Asum());
+      dual_inf = (1.-alpha_dual)*(curr_grad_lag_x_asum_ +
+                                  curr_grad_lag_s_asum_);
 
-      primal_inf = (1.-alpha_primal)*(IpCq().curr_c()->Asum() +
-                                      IpCq().curr_d_minus_s()->Asum());
+      primal_inf = (1.-alpha_primal)*(curr_c_asum_ +
+                                      curr_d_minus_s_asum_);
 
       compl_inf = tmp_slack_x_L_->Asum() + tmp_slack_x_U_->Asum() +
                   tmp_slack_s_L_->Asum() + tmp_slack_s_U_->Asum();
 
-      dual_inf /= n_dual;
-      if (n_pri>0) {
-        primal_inf /= n_pri;
+      dual_inf /= n_dual_;
+      if (n_pri_>0) {
+        primal_inf /= n_pri_;
       }
-      DBG_ASSERT(n_comp>0);
-      compl_inf /= n_comp;
+      DBG_ASSERT(n_comp_>0);
+      compl_inf /= n_comp_;
       break;
       case NM_NORM_2_SQUARED:
       dual_inf =
-        pow(1.-alpha_dual, 2)*(pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
-                               pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
+        pow(1.-alpha_dual, 2)*(pow(curr_grad_lag_x_nrm2_, 2) +
+                               pow(curr_grad_lag_s_nrm2_, 2));
       primal_inf =
-        pow(1.-alpha_primal, 2)*(pow(IpCq().curr_c()->Nrm2(), 2) +
-                                 pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
+        pow(1.-alpha_primal, 2)*(pow(curr_c_nrm2_, 2) +
+                                 pow(curr_d_minus_s_nrm2_, 2));
       compl_inf =
         pow(tmp_slack_x_L_->Nrm2(), 2) + pow(tmp_slack_x_U_->Nrm2(), 2) +
         pow(tmp_slack_s_L_->Nrm2(), 2) + pow(tmp_slack_s_U_->Nrm2(), 2);
 
-      dual_inf /= n_dual;
-      if (n_pri>0) {
-        primal_inf /= n_pri;
+      dual_inf /= n_dual_;
+      if (n_pri_>0) {
+        primal_inf /= n_pri_;
       }
-      DBG_ASSERT(n_comp>0);
-      compl_inf /= n_comp;
+      DBG_ASSERT(n_comp_>0);
+      compl_inf /= n_comp_;
       break;
       case NM_NORM_MAX:
       dual_inf =
-        (1.-alpha_dual)*Max(IpCq().curr_grad_lag_x()->Amax(),
-                            IpCq().curr_grad_lag_s()->Amax());
+        (1.-alpha_dual)*Max(curr_grad_lag_x_amax_,
+                            curr_grad_lag_s_amax_);
       primal_inf =
-        (1.-alpha_primal)*Max(IpCq().curr_c()->Amax(),
-                              IpCq().curr_d_minus_s()->Amax());
+        (1.-alpha_primal)*Max(curr_c_amax_,
+                              curr_d_minus_s_amax_);
       compl_inf =
         Max(tmp_slack_x_L_->Amax(), tmp_slack_x_U_->Amax(),
             tmp_slack_s_L_->Amax(), tmp_slack_s_U_->Amax());
       break;
       case NM_NORM_2:
       dual_inf =
-        (1.-alpha_dual)*sqrt(pow(IpCq().curr_grad_lag_x()->Nrm2(), 2) +
-                             pow(IpCq().curr_grad_lag_s()->Nrm2(), 2));
+        (1.-alpha_dual)*sqrt(pow(curr_grad_lag_x_nrm2_, 2) +
+                             pow(curr_grad_lag_s_nrm2_, 2));
       primal_inf =
-        (1.-alpha_primal)*sqrt(pow(IpCq().curr_c()->Nrm2(), 2) +
-                               pow(IpCq().curr_d_minus_s()->Nrm2(), 2));
+        (1.-alpha_primal)*sqrt(pow(curr_c_nrm2_, 2) +
+                               pow(curr_d_minus_s_nrm2_, 2));
       compl_inf =
         sqrt(pow(tmp_slack_x_L_->Nrm2(), 2) + pow(tmp_slack_x_U_->Nrm2(), 2) +
              pow(tmp_slack_s_L_->Nrm2(), 2) + pow(tmp_slack_s_U_->Nrm2(), 2));
 
-      dual_inf /= sqrt((Number)n_dual);
-      if (n_pri>0) {
-        primal_inf /= sqrt((Number)n_pri);
+      dual_inf /= sqrt((Number)n_dual_);
+      if (n_pri_>0) {
+        primal_inf /= sqrt((Number)n_pri_);
       }
-      DBG_ASSERT(n_comp>0);
-      compl_inf /= sqrt((Number)n_comp);
+      DBG_ASSERT(n_comp_>0);
+      compl_inf /= sqrt((Number)n_comp_);
       break;
       default:
       DBG_ASSERT(false && "Unknown value for quality_function_norm_");
     }
-    IpData().TimingStats().Task5.End();
+    IpData().TimingStats().Task5().End();
 
     Number quality_function = dual_inf + primal_inf + compl_inf;
 
     if (quality_function_centrality_!=CEN_NONE) {
-      IpData().TimingStats().Task4.Start();
+      IpData().TimingStats().Task4().Start();
       xi = IpCq().CalcCentralityMeasure(*tmp_slack_x_L_, *tmp_slack_x_U_,
                                         *tmp_slack_s_L_, *tmp_slack_s_U_);
-      IpData().TimingStats().Task4.End();
+      IpData().TimingStats().Task4().End();
     }
     switch (quality_function_centrality_) {
       case CEN_NONE:

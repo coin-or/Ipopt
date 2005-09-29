@@ -144,74 +144,74 @@ namespace Ipopt
     DBG_START_METH("IpoptAlgorithm::Optimize", dbg_verbosity);
 
     // Start measuring CPU time
-    IpData().TimingStats().OverallAlgorithm.Start();
+    IpData().TimingStats().OverallAlgorithm().Start();
 
     if (!message_printed) {
       print_message(Jnlst());
     }
 
-    IpData().TimingStats().InitializeIterates.Start();
-    // Initialize the iterates
-    InitializeIterates();
-    IpData().TimingStats().InitializeIterates.End();
-
-    if (!skip_print_problem_stats_) {
-      IpData().TimingStats().PrintProblemStatistics.Start();
-      PrintProblemStatistics();
-      IpData().TimingStats().PrintProblemStatistics.End();
-    }
-
-    IpData().TimingStats().CheckConvergence.Start();
-    ConvergenceCheck::ConvergenceStatus conv_status
-    = conv_check_->CheckConvergence();
-    IpData().TimingStats().CheckConvergence.End();
-
     try {
+      IpData().TimingStats().InitializeIterates().Start();
+      // Initialize the iterates
+      InitializeIterates();
+      IpData().TimingStats().InitializeIterates().End();
+
+      if (!skip_print_problem_stats_) {
+        IpData().TimingStats().PrintProblemStatistics().Start();
+        PrintProblemStatistics();
+        IpData().TimingStats().PrintProblemStatistics().End();
+      }
+
+      IpData().TimingStats().CheckConvergence().Start();
+      ConvergenceCheck::ConvergenceStatus conv_status
+      = conv_check_->CheckConvergence();
+      IpData().TimingStats().CheckConvergence().End();
+
       // main loop
       while (conv_status == ConvergenceCheck::CONTINUE) {
         // Set the Hessian Matrix
-        IpData().TimingStats().ActualizeHessian.Start();
+        IpData().TimingStats().ActualizeHessian().Start();
         ActualizeHessian();
-        IpData().TimingStats().ActualizeHessian.End();
+        IpData().TimingStats().ActualizeHessian().End();
 
         // do all the output for this iteration
-        IpData().TimingStats().OutputIteration.Start();
+        IpData().TimingStats().OutputIteration().Start();
         OutputIteration();
         IpData().ResetInfo();
-        IpData().TimingStats().OutputIteration.End();
+        IpData().TimingStats().OutputIteration().End();
 
         // update the barrier parameter if necessary
-        IpData().TimingStats().UpdateBarrierParameter.Start();
+        IpData().TimingStats().UpdateBarrierParameter().Start();
         UpdateBarrierParameter();
-        IpData().TimingStats().UpdateBarrierParameter.End();
+        IpData().TimingStats().UpdateBarrierParameter().End();
 
         // solve the primal-dual system to get the full step
-        IpData().TimingStats().ComputeSearchDirection.Start();
+        IpData().TimingStats().ComputeSearchDirection().Start();
         ComputeSearchDirection();
-        IpData().TimingStats().ComputeSearchDirection.End();
+        IpData().TimingStats().ComputeSearchDirection().End();
 
         // Compute the new iterate
-        IpData().TimingStats().ComputeAcceptableTrialPoint.Start();
+        IpData().TimingStats().ComputeAcceptableTrialPoint().Start();
         ComputeAcceptableTrialPoint();
-        IpData().TimingStats().ComputeAcceptableTrialPoint.End();
+        IpData().TimingStats().ComputeAcceptableTrialPoint().End();
 
         // Accept the new iterate
-        IpData().TimingStats().AcceptTrialPoint.Start();
+        IpData().TimingStats().AcceptTrialPoint().Start();
         AcceptTrialPoint();
-        IpData().TimingStats().AcceptTrialPoint.End();
+        IpData().TimingStats().AcceptTrialPoint().End();
 
         IpData().Set_iter_count(IpData().iter_count()+1);
 
-        IpData().TimingStats().CheckConvergence.Start();
+        IpData().TimingStats().CheckConvergence().Start();
         conv_status  = conv_check_->CheckConvergence();
-        IpData().TimingStats().CheckConvergence.End();
+        IpData().TimingStats().CheckConvergence().End();
       }
 
-      IpData().TimingStats().OutputIteration.Start();
+      IpData().TimingStats().OutputIteration().Start();
       OutputIteration();
-      IpData().TimingStats().OutputIteration.End();
+      IpData().TimingStats().OutputIteration().End();
 
-      IpData().TimingStats().OverallAlgorithm.End();
+      IpData().TimingStats().OverallAlgorithm().End();
 
       if (conv_status == ConvergenceCheck::CONVERGED) {
         return SUCCESS;
@@ -225,44 +225,44 @@ namespace Ipopt
     }
     catch(TINY_STEP_DETECTED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
-      IpData().TimingStats().UpdateBarrierParameter.End();
-      IpData().TimingStats().OverallAlgorithm.End();
+      IpData().TimingStats().UpdateBarrierParameter().End();
+      IpData().TimingStats().OverallAlgorithm().End();
       return STOP_AT_TINY_STEP;
     }
     catch(ACCEPTABLE_POINT_REACHED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
-      IpData().TimingStats().ComputeAcceptableTrialPoint.End();
-      IpData().TimingStats().OverallAlgorithm.End();
+      IpData().TimingStats().ComputeAcceptableTrialPoint().End();
+      IpData().TimingStats().OverallAlgorithm().End();
       return STOP_AT_ACCEPTABLE_POINT;
     }
     catch(LOCALLY_INFEASIBLE& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
-      IpData().TimingStats().ComputeAcceptableTrialPoint.EndIfStarted();
-      IpData().TimingStats().CheckConvergence.EndIfStarted();
-      IpData().TimingStats().OverallAlgorithm.End();
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
+      IpData().TimingStats().CheckConvergence().EndIfStarted();
+      IpData().TimingStats().OverallAlgorithm().End();
       return LOCAL_INFEASIBILITY;
     }
     catch(RESTORATION_FAILED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
-      IpData().TimingStats().ComputeAcceptableTrialPoint.End();
-      IpData().TimingStats().OverallAlgorithm.End();
+      IpData().TimingStats().ComputeAcceptableTrialPoint().End();
+      IpData().TimingStats().OverallAlgorithm().End();
       return RESTORATION_FAILURE;
     }
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
-      IpData().TimingStats().ComputeAcceptableTrialPoint.End();
-      IpData().TimingStats().OverallAlgorithm.End();
+      IpData().TimingStats().ComputeAcceptableTrialPoint().End();
+      IpData().TimingStats().OverallAlgorithm().End();
       return SUCCESS;
     }
     catch(INTERNAL_ABORT& exc) {
       exc.ReportException(Jnlst());
-      IpData().TimingStats().OverallAlgorithm.End();
+      IpData().TimingStats().OverallAlgorithm().End();
       return INTERNAL_ERROR;
     }
 
     DBG_ASSERT(false && "Unknown return code in the algorithm");
 
-    IpData().TimingStats().OverallAlgorithm.End();
+    IpData().TimingStats().OverallAlgorithm().End();
     return INTERNAL_ERROR;
   }
 
@@ -296,10 +296,14 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "\n**************************************************\n\n");
 
+    bool improve_solution = false;
     if (IpData().HaveDeltas()) {
+      /*
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "No need to compute search direction - it has already been computed.\n");
       return;
+      */
+      improve_solution = true;
     }
 
     SmartPtr<IteratesVector> rhs = IpData().curr()->MakeNewContainer();
@@ -315,9 +319,17 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "rhs", *rhs);
 
     // Get space for the search direction
-    SmartPtr<IteratesVector> delta = IpData().curr()->MakeNewIteratesVector(true);
+    SmartPtr<IteratesVector> delta =
+      IpData().curr()->MakeNewIteratesVector(true);
 
-    pd_solver_->Solve(-1.0, 0.0, *rhs, *delta);
+    if (improve_solution) {
+      // We can probably avoid copying and scaling...
+      delta->AddOneVector(-1., *IpData().delta(), 0.);
+    }
+
+    bool allow_inexact = false;
+    pd_solver_->Solve(-1.0, 0.0, *rhs, *delta, allow_inexact,
+                      improve_solution);
 
     // Store the search directions in the IpData object
     IpData().set_delta(delta);

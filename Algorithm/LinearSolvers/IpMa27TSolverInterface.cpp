@@ -250,7 +250,7 @@ namespace Ipopt
   {
     DBG_START_METH("Ma27TSolverInterface::SymbolicFactorization",dbg_verbosity);
 
-    IpData().TimingStats().LinearSystemSymbolicFactorization.Start();
+    IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
 
     // Get memory for the IW workspace
     delete [] iw_;
@@ -307,7 +307,7 @@ namespace Ipopt
     la_ = Max(nonzeros_,(ipfint)(la_init_factor_ * (double)(nrlnec)));
     a_ = new double[la_];
 
-    IpData().TimingStats().LinearSystemSymbolicFactorization.End();
+    IpData().TimingStats().LinearSystemSymbolicFactorization().End();
 
     return SYMSOLVER_SUCCESS;
   }
@@ -320,7 +320,7 @@ namespace Ipopt
   {
     DBG_START_METH("Ma27TSolverInterface::Factorization",dbg_verbosity);
     // Check if la should be increased
-    IpData().TimingStats().LinearSystemFactorization.Start();
+    IpData().TimingStats().LinearSystemFactorization().Start();
     if (la_increase_) {
       double* a_old = a_;
       ipfint la_old = la_;
@@ -396,18 +396,18 @@ namespace Ipopt
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                      "MA27BD returned iflag=%d.\n Increase liw from %d to %d and la from %d to %d and factorize again.\n",
                      iflag, liw_old, liw_, la_old, la_);
-      IpData().TimingStats().LinearSystemFactorization.End();
+      IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_CALL_AGAIN;
     }
 
     // Check if the system is singular, and if some other error occurred
     if (iflag==-5 || iflag==3) {
-      IpData().TimingStats().LinearSystemFactorization.End();
+      IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_SINGULAR;
     }
     else if (iflag != 0) {
       // There is some error
-      IpData().TimingStats().LinearSystemFactorization.End();
+      IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_FATAL_ERROR;
     }
 
@@ -432,11 +432,11 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "In Ma27TSolverInterface::Factorization: negevals_ = %d, but numberOfNegEVals = %d\n",
                      negevals_, numberOfNegEVals);
-      IpData().TimingStats().LinearSystemFactorization.End();
+      IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_WRONG_INERTIA;
     }
 
-    IpData().TimingStats().LinearSystemFactorization.End();
+    IpData().TimingStats().LinearSystemFactorization().End();
     return SYMSOLVER_SUCCESS;
   }
 
@@ -444,7 +444,7 @@ namespace Ipopt
       double *rhs_vals)
   {
     DBG_START_METH("Ma27TSolverInterface::Backsolve",dbg_verbosity);
-    IpData().TimingStats().LinearSystemBackSolve.Start();
+    IpData().TimingStats().LinearSystemBackSolve().Start();
 
     ipfint N=dim_;
     double* W = new double[maxfrt_];
@@ -471,7 +471,7 @@ namespace Ipopt
     delete [] W;
     delete [] IW1;
 
-    IpData().TimingStats().LinearSystemBackSolve.End();
+    IpData().TimingStats().LinearSystemBackSolve().End();
     return SYMSOLVER_SUCCESS;
   }
 

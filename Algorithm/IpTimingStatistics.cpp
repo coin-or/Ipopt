@@ -20,74 +20,77 @@ namespace Ipopt
       return;
 
     jnlst.Printf(level, category,
-                 "OverallAlgorithm....................: %10.2f\n",
-                 OverallAlgorithm.TotalTime());
+                 "OverallAlgorithm....................: %10.3f\n",
+                 OverallAlgorithm_.TotalTime());
     jnlst.Printf(level, category,
-                 " PrintProblemStatistics.............: %10.2f\n",
-                 PrintProblemStatistics.TotalTime());
+                 " PrintProblemStatistics.............: %10.3f\n",
+                 PrintProblemStatistics_.TotalTime());
     jnlst.Printf(level, category,
-                 " InitializeIterates.................: %10.2f\n",
-                 InitializeIterates.TotalTime());
+                 " InitializeIterates.................: %10.3f\n",
+                 InitializeIterates_.TotalTime());
     jnlst.Printf(level, category,
-                 " ActualizeHessian...................: %10.2f\n",
-                 ActualizeHessian.TotalTime());
+                 " ActualizeHessian...................: %10.3f\n",
+                 ActualizeHessian_.TotalTime());
     jnlst.Printf(level, category,
-                 " OutputIteration....................: %10.2f\n",
-                 OutputIteration.TotalTime());
+                 " OutputIteration....................: %10.3f\n",
+                 OutputIteration_.TotalTime());
     jnlst.Printf(level, category,
-                 " UpdateBarrierParameter.............: %10.2f\n",
-                 UpdateBarrierParameter.TotalTime());
+                 " UpdateBarrierParameter.............: %10.3f\n",
+                 UpdateBarrierParameter_.TotalTime());
     jnlst.Printf(level, category,
-                 " ComputeSearchDirection.............: %10.2f\n",
-                 ComputeSearchDirection.TotalTime());
+                 " ComputeSearchDirection.............: %10.3f\n",
+                 ComputeSearchDirection_.TotalTime());
     jnlst.Printf(level, category,
-                 " ComputeAcceptableTrialPoint........: %10.2f\n",
-                 ComputeAcceptableTrialPoint.TotalTime());
+                 " ComputeAcceptableTrialPoint........: %10.3f\n",
+                 ComputeAcceptableTrialPoint_.TotalTime());
     jnlst.Printf(level, category,
-                 " AcceptTrialPoint...................: %10.2f\n",
-                 AcceptTrialPoint.TotalTime());
+                 " AcceptTrialPoint...................: %10.3f\n",
+                 AcceptTrialPoint_.TotalTime());
     jnlst.Printf(level, category,
-                 " CheckConvergence...................: %10.2f\n",
-                 CheckConvergence.TotalTime());
+                 " CheckConvergence...................: %10.3f\n",
+                 CheckConvergence_.TotalTime());
 
     jnlst.Printf(level, category,
-                 "PDSystemSolverTotal.................: %10.2f\n",
-                 PDSystemSolverTotal.TotalTime());
+                 "PDSystemSolverTotal.................: %10.3f\n",
+                 PDSystemSolverTotal_.TotalTime());
     jnlst.Printf(level, category,
-                 " PDSystemSolverSolveOnce............: %10.2f\n",
-                 PDSystemSolverSolveOnce.TotalTime());
+                 " PDSystemSolverSolveOnce............: %10.3f\n",
+                 PDSystemSolverSolveOnce_.TotalTime());
     jnlst.Printf(level, category,
-                 " LinearSystemScaling................: %10.2f\n",
-                 LinearSystemScaling.TotalTime());
+                 " ComputeResiduals...................: %10.3f\n",
+                 ComputeResiduals_.TotalTime());
     jnlst.Printf(level, category,
-                 " LinearSystemSymbolicFactorization..: %10.2f\n",
-                 LinearSystemSymbolicFactorization.TotalTime());
+                 " LinearSystemScaling................: %10.3f\n",
+                 LinearSystemScaling_.TotalTime());
     jnlst.Printf(level, category,
-                 " LinearSystemFactorization..........: %10.2f\n",
-                 LinearSystemFactorization.TotalTime());
+                 " LinearSystemSymbolicFactorization..: %10.3f\n",
+                 LinearSystemSymbolicFactorization_.TotalTime());
     jnlst.Printf(level, category,
-                 " LinearSystemBackSolve..............: %10.2f\n",
-                 LinearSystemBackSolve.TotalTime());
+                 " LinearSystemFactorization..........: %10.3f\n",
+                 LinearSystemFactorization_.TotalTime());
     jnlst.Printf(level, category,
-                 "QualityFunctionSearch...............: %10.2f\n",
-                 QualityFunctionSearch.TotalTime());
+                 " LinearSystemBackSolve..............: %10.3f\n",
+                 LinearSystemBackSolve_.TotalTime());
     jnlst.Printf(level, category,
-                 "TryCorrector........................: %10.2f\n",
-                 TryCorrector.TotalTime());
+                 "QualityFunctionSearch...............: %10.3f\n",
+                 QualityFunctionSearch_.TotalTime());
     jnlst.Printf(level, category,
-                 "Task1...............................: %10.2f\n",
-                 Task1.TotalTime());
+                 "TryCorrector........................: %10.3f\n",
+                 TryCorrector_.TotalTime());
     jnlst.Printf(level, category,
-                 "Task2...............................: %10.2f\n",
-                 Task2.TotalTime());
+                 "Task1...............................: %10.3f\n",
+                 Task1_.TotalTime());
     jnlst.Printf(level, category,
-                 "Task3...............................: %10.2f\n",
-                 Task3.TotalTime());
+                 "Task2...............................: %10.3f\n",
+                 Task2_.TotalTime());
     jnlst.Printf(level, category,
-                 "Task4...............................: %10.2f\n",
-                 Task4.TotalTime());
+                 "Task3...............................: %10.3f\n",
+                 Task3_.TotalTime());
     jnlst.Printf(level, category,
-                 "Task5...............................: %10.2f\n",
-                 Task5.TotalTime());
+                 "Task4...............................: %10.3f\n",
+                 Task4_.TotalTime());
+    jnlst.Printf(level, category,
+                 "Task5...............................: %10.3f\n",
+                 Task5_.TotalTime());
   }
 } // namespace Ipopt
