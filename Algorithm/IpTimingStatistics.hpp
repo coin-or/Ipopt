@@ -29,10 +29,12 @@
 #  pragma warning(disable:4786)
 #else
 // MacOS-X and FreeBSD needs sys/time.h
-#if defined(__MACH__) || defined (__FreeBSD__)
-#include <sys/time.h>
-#endif
-#include <sys/resource.h>
+# if defined(__MACH__) || defined (__FreeBSD__)
+#  include <sys/time.h>
+# endif
+# if !defined(__MSVCRT__)
+#  include <sys/resource.h>
+# endif
 #endif
 
 namespace Ipopt
@@ -129,7 +131,7 @@ namespace Ipopt
     static inline Number CpuTime()
     {
       double cpu_temp;
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || defined(__MSVCRT__)
 
       unsigned int ticksnow;        /* clock_t is same as int */
 
