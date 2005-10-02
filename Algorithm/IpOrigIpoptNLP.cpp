@@ -134,6 +134,7 @@ namespace Ipopt
                                           SmartPtr<Vector>& v_U
                                          )
   {
+    DBG_START_METH("OrigIpoptNLP::InitializeStructures", dbg_verbosity);
     DBG_ASSERT(initialized_);
     bool retValue;
 
@@ -238,13 +239,16 @@ namespace Ipopt
       return false;
     }
 
+
     Number obj_scal = NLP_scaling()->apply_obj_scaling(1.);
     if (init_x) {
+      x->Print(*jnlst_, J_VECTOR, J_INITIALIZATION, "initial x unscaled");
       if (NLP_scaling()->have_x_scaling()) {
         x = NLP_scaling()->apply_vector_scaling_x_NonConst(ConstPtr(x));
       }
     }
     if (init_y_c) {
+      y_c->Print(*jnlst_, J_VECTOR, J_INITIALIZATION, "initial y_c unscaled");
       if (NLP_scaling()->have_c_scaling()) {
         y_c = NLP_scaling()->unapply_vector_scaling_c_NonConst(ConstPtr(y_c));
       }
@@ -253,6 +257,7 @@ namespace Ipopt
       }
     }
     if (init_y_d) {
+      y_d->Print(*jnlst_, J_VECTOR, J_INITIALIZATION, "initial y_d unscaled");
       if (NLP_scaling()->have_d_scaling()) {
         y_d = NLP_scaling()->unapply_vector_scaling_d_NonConst(ConstPtr(y_d));
       }
@@ -261,6 +266,7 @@ namespace Ipopt
       }
     }
     if (init_z_L) {
+      z_L->Print(*jnlst_, J_VECTOR, J_INITIALIZATION, "initial z_L unscaled");
       if (NLP_scaling()->have_x_scaling()) {
         z_L = NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*Px_L_, ConstPtr(z_L), *x_space_);
       }
@@ -269,6 +275,7 @@ namespace Ipopt
       }
     }
     if (init_z_U) {
+      z_U->Print(*jnlst_, J_VECTOR, J_INITIALIZATION, "initial z_U unscaled");
       if (NLP_scaling()->have_x_scaling()) {
         z_U = NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*Px_U_, ConstPtr(z_U), *x_space_);
       }
@@ -582,6 +589,7 @@ namespace Ipopt
                                       const Vector& y_c, const Vector& y_d,
                                       Number obj_value)
   {
+    DBG_START_METH("OrigIpoptNLP::FinalizeSolution", dbg_verbosity);
     // need to submit the unscaled solution back to the nlp
     SmartPtr<const Vector> unscaled_x =
       NLP_scaling()->unapply_vector_scaling_x(&x);
@@ -621,6 +629,12 @@ namespace Ipopt
       unscaled_y_c = NLP_scaling()->apply_vector_scaling_c(&y_c);
       unscaled_y_d = NLP_scaling()->apply_vector_scaling_d(&y_d);
     }
+
+    unscaled_x->Print(*jnlst_, J_VECTOR, J_SOLUTION, "final x unscaled");
+    unscaled_y_c->Print(*jnlst_, J_VECTOR, J_SOLUTION, "final y_c unscaled");
+    unscaled_y_d->Print(*jnlst_, J_VECTOR, J_SOLUTION, "final y_d unscaled");
+    unscaled_z_L->Print(*jnlst_, J_VECTOR, J_SOLUTION, "final z_L unscaled");
+    unscaled_z_U->Print(*jnlst_, J_VECTOR, J_SOLUTION, "final z_U unscaled");
 
     nlp_->FinalizeSolution(status, *unscaled_x,
                            *unscaled_z_L, *unscaled_z_U,
