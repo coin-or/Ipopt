@@ -293,6 +293,7 @@ namespace Ipopt
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                        "The index a matrix is out of range.\nPlease check your implementation of the Jabobian and Hessian matrices.");
       }
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
       return SYMSOLVER_FATAL_ERROR;
     }
 
@@ -428,15 +429,14 @@ namespace Ipopt
 
     // Check whether the number of negative eigenvalues matches the requested
     // count
+    IpData().TimingStats().LinearSystemFactorization().End();
     if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "In Ma27TSolverInterface::Factorization: negevals_ = %d, but numberOfNegEVals = %d\n",
                      negevals_, numberOfNegEVals);
-      IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_WRONG_INERTIA;
     }
 
-    IpData().TimingStats().LinearSystemFactorization().End();
     return SYMSOLVER_SUCCESS;
   }
 

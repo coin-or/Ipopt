@@ -144,6 +144,12 @@ namespace Ipopt
     ipfint PHASE_;
     //@}
 
+    /**@name Some counters for debugging */
+    //@{
+    Index debug_last_iter_;
+    Index debug_cnt_;
+    //@}
+
     /** @name Internal functions */
     //@{
     /** Call Pardiso to do the analysis phase.

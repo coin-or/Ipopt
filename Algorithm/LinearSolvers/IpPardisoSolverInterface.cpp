@@ -194,6 +194,8 @@ namespace Ipopt
     DBG_START_METH("PardisoSolverInterface::SymbolicFactorization",
                    dbg_verbosity);
 
+    IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+
     // Call Pardiso to do the analysis phase
     ipfint PHASE = 11;
     ipfint N = dim_;
@@ -213,8 +215,11 @@ namespace Ipopt
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pardiso during analysis phase.  ERROR = %d.\n",
                      ERROR);
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
       return SYMSOLVER_FATAL_ERROR;
     }
+
+    IpData().TimingStats().LinearSystemSymbolicFactorization().End();
 
     return SYMSOLVER_SUCCESS;
   }
@@ -226,6 +231,8 @@ namespace Ipopt
                                         Index numberOfNegEVals)
   {
     DBG_START_METH("PardisoSolverInterface::Factorization",dbg_verbosity);
+
+    IpData().TimingStats().LinearSystemFactorization().Start();
 
     // Call Pardiso to do the factorization
     ipfint N = dim_;
@@ -241,8 +248,8 @@ namespace Ipopt
     ipfint  NNZ = ia[N]-1;
     ipfint   i;
 
-    if (IpData().iter_count() != debug_last_iter) {
-      debug_cnt = 0;
+    if (IpData().iter_count() != debug_last_iter_) {
+      debug_cnt_ = 0;
     }
 
     if (getenv ("IPOPT_WRITE_MAT")) {
@@ -256,7 +263,7 @@ namespace Ipopt
       else
         strcpy (mat_pref, "mat-ipopt");
 
-      sprintf (mat_name, "%s_%03d-%02d.iajaa", mat_pref, IpData().iter_count(), debug_cnt);
+      sprintf (mat_name, "%s_%03d-%02d.iajaa", mat_pref, IpData().iter_count(), debug_cnt_);
       mat_file = fopen (mat_name, "w");
 
       fprintf (mat_file, "%d\n", N);
@@ -281,10 +288,8 @@ namespace Ipopt
       fclose (mat_file);
     }
 
-    debug_last_iter = IpData().iter_count();
-    debug_cnt ++;
-
-
+    debug_last_iter_ = IpData().iter_count();
+    debug_cnt_++;
 
     if (PHASE_ == 0)
       PHASE_ = 11;
@@ -294,11 +299,13 @@ namespace Ipopt
                               &ERROR);
     if (ERROR==-4) {
       // I think this means that the matrix is singular
+      IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_SINGULAR;
     }
     else if (ERROR!=0 ) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
+      IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_FATAL_ERROR;
     }
     PHASE_ = 22;
@@ -320,9 +327,11 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Wrong inertia: required are %d, but we got %d.\n",
                      numberOfNegEVals, negevals_);
+      IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_WRONG_INERTIA;
     }
 
+    IpData().TimingStats().LinearSystemFactorization().End();
     return SYMSOLVER_SUCCESS;
   }
 
@@ -333,6 +342,7 @@ namespace Ipopt
   {
     DBG_START_METH("PardisoSolverInterface::Solve",dbg_verbosity);
 
+    IpData().TimingStats().LinearSystemBackSolve().Start();
     // Call Pardiso to do the solve for the given right-hand sides
     ipfint PHASE = 33;
     ipfint N = dim_;
@@ -340,56 +350,6 @@ namespace Ipopt
     ipfint NRHS = nrhs;
     double* X = new double[nrhs*dim_];
     ipfint ERROR;
-
-
-    // // Dump matrix to file...
-    // ipfint  NNZ = ia[N]-1;
-    // ipfint   i;
-
-    // if (IpData().iter_count() != debug_last_iter) {
-    //   debug_cnt = 0;
-    // }
-
-    // if (getenv ("IPOPT_WRITE_MAT"))
-    // {
-    //   /* Write header */
-    //   FILE    *mat_file;
-    //   char     mat_name[128];
-    //   char     mat_pref[32];
-
-    //   if (getenv ("IPOPT_WRITE_PREFIX"))
-    // 	strcpy (mat_pref, getenv ("IPOPT_WRITE_PREFIX"));
-    //   else
-    // 	strcpy (mat_pref, "mat-ipopt");
-
-    //   sprintf (mat_name, "%s_%03d-%02d.iajaa", mat_pref, IpData().iter_count(), debug_cnt);
-    //   mat_file = fopen (mat_name, "w");
-
-    //   fprintf (mat_file, "%d\n", N);
-    //   fprintf (mat_file, "%d\n", NNZ);
-
-    //   /* Write ia's */
-    //   for (i = 0; i < N+1; i++)
-    // 	fprintf (mat_file, "%d\n", ia[i]);
-
-    //   /* Write ja's */
-    //   for (i = 0; i < NNZ; i++)
-    // 	fprintf (mat_file, "%d\n", ja[i]);
-
-    //   /* Write values */
-    //   for (i = 0; i < NNZ; i++)
-    // 	fprintf (mat_file, "%32.24e\n", a_[i]);
-
-    //   /* Write RHS */
-    //   for (i = 0; i < N; i++)
-    // 	fprintf (mat_file, "%32.24e\n", rhs_vals[i]);
-
-    //   fclose (mat_file);
-    // }
-
-    // debug_last_iter = IpData().iter_count();
-    // debug_cnt ++;
-
 
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                               &PHASE, &N, a_, ia, ja, &PERM,
@@ -401,6 +361,7 @@ namespace Ipopt
                      "Number of iterative refinement steps = %d.\n", IPARM_[6]);
     }
 
+    IpData().TimingStats().LinearSystemBackSolve().End();
     if (ERROR!=0 ) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
