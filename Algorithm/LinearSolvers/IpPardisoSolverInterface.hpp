@@ -140,6 +140,8 @@ namespace Ipopt
     ipfint* IPARM_;
     /** Message level. */
     ipfint MSGLVL_;
+    /** Flag indicating in what phase Pardiso is */
+    ipfint PHASE_;
     //@}
 
     /** @name Internal functions */

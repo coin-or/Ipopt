@@ -5,8 +5,12 @@
 // $Id$
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-17
+//
+//           Olaf Schenk                      Univ of Basel 2005-09-20
+//                  - changed options, added PHASE_ flag
 
 #include "IpPardisoSolverInterface.hpp"
+
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -41,17 +45,13 @@ namespace Ipopt
 
   PardisoSolverInterface::PardisoSolverInterface()
       :
-      dim_(0),
-      nonzeros_(0),
+      a_(NULL),
       initialized_(false),
-      negevals_(-1),
 
       MAXFCT_(1),
       MNUM_(1),
       MTYPE_(-2),
-      MSGLVL_(0),
-
-      a_(NULL)
+      MSGLVL_(0)
   {
     DBG_START_METH("PardisoSolverInterface::PardisoSolverInterface()",dbg_verbosity);
 
@@ -84,7 +84,7 @@ namespace Ipopt
   bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    Number value = 0.0;
+    // Number value = 0.0;
 
     // Tell Pardiso to release all memory if it had been used before
     if (initialized_) {
@@ -101,6 +101,7 @@ namespace Ipopt
     // Reset all private data
     dim_=0;
     nonzeros_=0;
+    PHASE_=0;
     initialized_=false;
     delete[] a_;
 
@@ -112,12 +113,16 @@ namespace Ipopt
     IPARM_[0] = 1;  // Don't use the default values
     IPARM_[2] = 1;  // Only one CPU for now
     IPARM_[5] = 1;  // Overwrite right-hand side
-
     // ToDo: decide if we need iterative refinement in Pardiso.  For
     // now, switch it off ?
     IPARM_[7] = 0;
 
-    // IPARM_[20] = 2;
+    // Options suggested by Olaf Schenk
+    IPARM_[9] = 12;
+    IPARM_[10] = 1;
+    IPARM_[12] = 1;
+
+    IPARM_[20] = 1;
 
     return true;
   }
@@ -223,7 +228,6 @@ namespace Ipopt
     DBG_START_METH("PardisoSolverInterface::Factorization",dbg_verbosity);
 
     // Call Pardiso to do the factorization
-    ipfint PHASE = 22;
     ipfint N = dim_;
     ipfint PERM;   // This should not be accessed by Pardiso
     ipfint NRHS = 0;
@@ -233,8 +237,59 @@ namespace Ipopt
     // phase
     ipfint ERROR;
 
+    // Dump matrix to file...
+    ipfint  NNZ = ia[N]-1;
+    ipfint   i;
+
+    if (IpData().iter_count() != debug_last_iter) {
+      debug_cnt = 0;
+    }
+
+    if (getenv ("IPOPT_WRITE_MAT")) {
+      /* Write header */
+      FILE    *mat_file;
+      char     mat_name[128];
+      char     mat_pref[32];
+
+      if (getenv ("IPOPT_WRITE_PREFIX"))
+        strcpy (mat_pref, getenv ("IPOPT_WRITE_PREFIX"));
+      else
+        strcpy (mat_pref, "mat-ipopt");
+
+      sprintf (mat_name, "%s_%03d-%02d.iajaa", mat_pref, IpData().iter_count(), debug_cnt);
+      mat_file = fopen (mat_name, "w");
+
+      fprintf (mat_file, "%d\n", N);
+      fprintf (mat_file, "%d\n", NNZ);
+
+      /* Write ia's */
+      for (i = 0; i < N+1; i++)
+        fprintf (mat_file, "%d\n", ia[i]);
+
+      /* Write ja's */
+      for (i = 0; i < NNZ; i++)
+        fprintf (mat_file, "%d\n", ja[i]);
+
+      /* Write values */
+      for (i = 0; i < NNZ; i++)
+        fprintf (mat_file, "%32.24e\n", a_[i]);
+
+      // /* Write RHS */
+      // for (i = 0; i < N; i++)
+      // 	fprintf (mat_file, "%32.24e\n", rhs_vals[i]);
+
+      fclose (mat_file);
+    }
+
+    debug_last_iter = IpData().iter_count();
+    debug_cnt ++;
+
+
+
+    if (PHASE_ == 0)
+      PHASE_ = 11;
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                              &PHASE, &N, a_, ia, ja, &PERM,
+                              &PHASE_, &N, a_, ia, ja, &PERM,
                               &NRHS, IPARM_, &MSGLVL_, &B, &X,
                               &ERROR);
     if (ERROR==-4) {
@@ -246,13 +301,14 @@ namespace Ipopt
                      "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
       return SYMSOLVER_FATAL_ERROR;
     }
+    PHASE_ = 22;
 
-    /* ToDo ask Olaf what this means
+    /* ToDo ask Olaf what this means. */
     if (IPARM_[13] != 0) {
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                      "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
+      PHASE_ = 12;
     }
-    */
 
     negevals_ = IPARM_[22];
 
@@ -285,10 +341,66 @@ namespace Ipopt
     double* X = new double[nrhs*dim_];
     ipfint ERROR;
 
+
+    // // Dump matrix to file...
+    // ipfint  NNZ = ia[N]-1;
+    // ipfint   i;
+
+    // if (IpData().iter_count() != debug_last_iter) {
+    //   debug_cnt = 0;
+    // }
+
+    // if (getenv ("IPOPT_WRITE_MAT"))
+    // {
+    //   /* Write header */
+    //   FILE    *mat_file;
+    //   char     mat_name[128];
+    //   char     mat_pref[32];
+
+    //   if (getenv ("IPOPT_WRITE_PREFIX"))
+    // 	strcpy (mat_pref, getenv ("IPOPT_WRITE_PREFIX"));
+    //   else
+    // 	strcpy (mat_pref, "mat-ipopt");
+
+    //   sprintf (mat_name, "%s_%03d-%02d.iajaa", mat_pref, IpData().iter_count(), debug_cnt);
+    //   mat_file = fopen (mat_name, "w");
+
+    //   fprintf (mat_file, "%d\n", N);
+    //   fprintf (mat_file, "%d\n", NNZ);
+
+    //   /* Write ia's */
+    //   for (i = 0; i < N+1; i++)
+    // 	fprintf (mat_file, "%d\n", ia[i]);
+
+    //   /* Write ja's */
+    //   for (i = 0; i < NNZ; i++)
+    // 	fprintf (mat_file, "%d\n", ja[i]);
+
+    //   /* Write values */
+    //   for (i = 0; i < NNZ; i++)
+    // 	fprintf (mat_file, "%32.24e\n", a_[i]);
+
+    //   /* Write RHS */
+    //   for (i = 0; i < N; i++)
+    // 	fprintf (mat_file, "%32.24e\n", rhs_vals[i]);
+
+    //   fclose (mat_file);
+    // }
+
+    // debug_last_iter = IpData().iter_count();
+    // debug_cnt ++;
+
+
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                               &PHASE, &N, a_, ia, ja, &PERM,
                               &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
                               &ERROR);
+
+    if (IPARM_[6] != 0) {
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                     "Number of iterative refinement steps = %d.\n", IPARM_[6]);
+    }
+
     if (ERROR!=0 ) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
