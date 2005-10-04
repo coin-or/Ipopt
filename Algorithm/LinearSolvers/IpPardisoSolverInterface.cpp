@@ -231,7 +231,7 @@ namespace Ipopt
       ipfint   i;
 
       if (IpData().iter_count() != debug_last_iter_) {
-	debug_cnt_ = 0;
+        debug_cnt_ = 0;
       }
 
       /* Write header */
@@ -277,60 +277,60 @@ namespace Ipopt
 
     while (!done) {
       if (!have_symbolic_factorization_) {
-	IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
-	PHASE = 11;
-	F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-				  &PHASE, &N, a_, ia, ja, &PERM,
-				  &NRHS, IPARM_, &MSGLVL_, &B, &X,
-				  &ERROR);
-	IpData().TimingStats().LinearSystemSymbolicFactorization().End();
-	if (ERROR!=0 ) {
-	  Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-			 "Error in Pardiso during symbolic factorization phase.  ERROR = %d.\n", ERROR);
-	  return SYMSOLVER_FATAL_ERROR;
-	}
-	have_symbolic_factorization_ = true;
-	just_performed_symbolic_factorization = true;
+        IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+        PHASE = 11;
+        F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                                  &PHASE, &N, a_, ia, ja, &PERM,
+                                  &NRHS, IPARM_, &MSGLVL_, &B, &X,
+                                  &ERROR);
+        IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+        if (ERROR!=0 ) {
+          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                         "Error in Pardiso during symbolic factorization phase.  ERROR = %d.\n", ERROR);
+          return SYMSOLVER_FATAL_ERROR;
+        }
+        have_symbolic_factorization_ = true;
+        just_performed_symbolic_factorization = true;
       }
 
       PHASE = 22;
 
       IpData().TimingStats().LinearSystemFactorization().Start();
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-				&PHASE, &N, a_, ia, ja, &PERM,
-				&NRHS, IPARM_, &MSGLVL_, &B, &X,
-				&ERROR);
+                                &PHASE, &N, a_, ia, ja, &PERM,
+                                &NRHS, IPARM_, &MSGLVL_, &B, &X,
+                                &ERROR);
       IpData().TimingStats().LinearSystemFactorization().End();
 
       if (ERROR==-4) {
-	// I think this means that the matrix is singular
-	// OLAF said that this will never happen (ToDo)
-	return SYMSOLVER_SINGULAR;
+        // I think this means that the matrix is singular
+        // OLAF said that this will never happen (ToDo)
+        return SYMSOLVER_SINGULAR;
       }
       else if (ERROR!=0 ) {
-	Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-		       "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
-	return SYMSOLVER_FATAL_ERROR;
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
+        return SYMSOLVER_FATAL_ERROR;
       }
 
       negevals_ = IPARM_[22];
       if (IPARM_[13] != 0) {
-	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		       "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
-	IpData().Append_info_string("Pp");
-	// trigger a new symblic factorization for the next factorize
-	// call, even if the current inertia estimate is correct
-	// OLAF MICHAEL : Maybe we need to discuss this
-	have_symbolic_factorization_ = false;
-	// If we there were perturbed pivots, and the inertia of the
-	// system is correct, and we haven't redone the symblic
-	// factorization during this call yet, trigger a new
-	// factorization after a symblic factorization
-	done = (just_performed_symbolic_factorization || !check_NegEVals ||
-		numberOfNegEVals==negevals_);
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
+        IpData().Append_info_string("Pp");
+        // trigger a new symblic factorization for the next factorize
+        // call, even if the current inertia estimate is correct
+        // OLAF MICHAEL : Maybe we need to discuss this
+        have_symbolic_factorization_ = false;
+        // If we there were perturbed pivots, and the inertia of the
+        // system is correct, and we haven't redone the symblic
+        // factorization during this call yet, trigger a new
+        // factorization after a symblic factorization
+        done = (just_performed_symbolic_factorization || !check_NegEVals ||
+                numberOfNegEVals==negevals_);
       }
       else {
-	done = true;
+        done = true;
       }
     }
 
