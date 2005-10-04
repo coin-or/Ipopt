@@ -123,6 +123,9 @@ namespace Ipopt
     /** Flag indicating if internal data is initialized.
      *  For initialization, this object needs to have seen a matrix */
     bool initialized_;
+    /** Flag indicating if symbolic factorization has already been
+     *  performed. */
+    bool have_symbolic_factorization_;
     //@}
 
     /** @name Solver specific information */
@@ -140,8 +143,6 @@ namespace Ipopt
     ipfint* IPARM_;
     /** Message level. */
     ipfint MSGLVL_;
-    /** Flag indicating in what phase Pardiso is */
-    ipfint PHASE_;
     //@}
 
     /**@name Some counters for debugging */
