@@ -92,6 +92,13 @@ namespace Ipopt
       "Absolute tolerance on the complementarity. Acceptable termination "
       "requires that the (unscaled) complementarity is less than this "
       "threshold; see also acceptable_tol.");
+    roptions->AddLowerBoundedNumberOption(
+      "diverging_iterates_tol",
+      "Threshold for maximal value of primal iterate.",
+      0.0, true, 1e20,
+      "If any component of the primal iterates exceeded this value (in "
+      "absolute terms), the optimization is abort with the exit message that "
+      "the iterates are diverging.");
   }
 
   bool
@@ -107,6 +114,7 @@ namespace Ipopt
     options.GetNumericValue("acceptable_dual_inf_tol", acceptable_dual_inf_tol_, prefix);
     options.GetNumericValue("acceptable_constr_viol_tol", acceptable_constr_viol_tol_, prefix);
     options.GetNumericValue("acceptable_compl_inf_tol", acceptable_compl_inf_tol_, prefix);
+    options.GetNumericValue("diverging_iterates_tol", diverging_iterates_tol_, prefix);
     acceptable_counter_ = 0;
 
     return true;
@@ -142,6 +150,10 @@ namespace Ipopt
     }
     else {
       acceptable_counter_ = 0;
+    }
+
+    if (IpData().curr()->x()->Amax() > diverging_iterates_tol_) {
+      return ConvergenceCheck::DIVERGING;
     }
 
     return ConvergenceCheck::CONTINUE;

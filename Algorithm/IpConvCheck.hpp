@@ -37,6 +37,7 @@ namespace Ipopt
       CONVERGED,
       CONVERGED_TO_ACCEPTABLE_POINT,
       MAXITER_EXCEEDED,
+      DIVERGING,
       FAILED
     };
 

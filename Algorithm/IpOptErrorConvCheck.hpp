@@ -69,6 +69,8 @@ namespace Ipopt
     Number acceptable_constr_viol_tol_;
     /** Acceptable tolerance on unscaled complementarity */
     Number acceptable_compl_inf_tol_;
+    /** Threshold for primal iterates for divergence test */
+    Number diverging_iterates_tol_;
     //@}
 
   private:
