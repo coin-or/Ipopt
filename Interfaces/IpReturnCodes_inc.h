@@ -19,6 +19,7 @@ enum ApplicationReturnStatus
     Solved_To_Acceptable_Level=1,
     Infeasible_Problem_Detected=2,
     Search_Direction_Becomes_Too_Small=3,
+    Diverging_Iterates=4,
 
     Maximum_Iterations_Exceeded=-1,
     Restoration_Failed=-2,

@@ -143,6 +143,7 @@ namespace Ipopt
           options_to_print.push_back("acceptable_constr_viol_tol");
           options_to_print.push_back("acceptable_dual_inf_tol");
           options_to_print.push_back("acceptable_tol");
+          options_to_print.push_back("diverging_iterates_tol");
           options_to_print.push_back("alpha_for_y");
           options_to_print.push_back("expect_infeasible_problem");
           options_to_print.push_back("max_iter");
@@ -513,6 +514,10 @@ namespace Ipopt
       else if (status == STOP_AT_ACCEPTABLE_POINT) {
         retValue = Solved_To_Acceptable_Level;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Solved To Acceptable Level.\n");
+      }
+      else if (status == DIVERGING_ITERATES) {
+        retValue = Diverging_Iterates;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Iterates divering; problem probably unbounded.\n");
       }
       else if (status == RESTORATION_FAILURE) {
         retValue = Restoration_Failed;
