@@ -10187,7 +10187,7 @@ if test "$use_asldir" = BUILD; then
 #   Somehow, -qtune=auto makes ASL segfault on AIX compiler, so take them out
     case $CC in
       xlc* | */xlc* | mpxlc* | */mpxlc*)
-        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-qtune=auto//g' | sed 's/-qarch=auto//g' | sed 's/-qcache=auto//g'`
+        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-qtune=auto//g' | sed 's/-qarch=auto//g' | sed 's/-qcache=auto//g' | sed 's/-qhot//g' | sed 's/-O3/-O/g'`
       ;;
     esac
 
