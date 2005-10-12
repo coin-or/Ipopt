@@ -78,7 +78,7 @@ namespace Ipopt
       //@}
 
       /** Comparison operator.  This is required for the sort function. */
-      bool operator< (const TripletEntry& Tentry)
+      bool operator< (const TripletEntry& Tentry) const
       {
         return ((i_row_ < Tentry.i_row_) ||
                 (i_row_==Tentry.i_row_ && j_col_<Tentry.j_col_));
