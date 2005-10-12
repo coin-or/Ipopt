@@ -15,10 +15,14 @@
 #include "IpSmartPtr.hpp"
 #include <map>
 
-#ifdef OLD_C_HEADERS
-# include <stdio.h>
-#else
+#ifdef HAVE_CSTDIO
 # include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
 #endif
 
 namespace Ipopt
