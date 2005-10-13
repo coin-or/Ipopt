@@ -25,12 +25,10 @@ namespace Ipopt
     /** Default Constructor */
     LineSearch()
     {}
-    ;
 
     /** Default destructor */
     virtual ~LineSearch()
     {}
-    ;
     //@}
 
     /** Perform the line search.  As search direction the delta

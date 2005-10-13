@@ -58,8 +58,9 @@ libipoptalg_a_LIBADD =
 am_libipoptalg_a_OBJECTS = IpAdaptiveMuUpdate.$(OBJEXT) \
 	IpAlgBuilder.$(OBJEXT) IpAlgorithmRegOp.$(OBJEXT) \
 	IpAugRestoSystemSolver.$(OBJEXT) \
+	IpBacktrackingLineSearch.$(OBJEXT) \
 	IpDefaultIterateInitializer.$(OBJEXT) IpFilter.$(OBJEXT) \
-	IpFilterLineSearch.$(OBJEXT) IpGradientScaling.$(OBJEXT) \
+	IpFilterLSAcceptor.$(OBJEXT) IpGradientScaling.$(OBJEXT) \
 	IpIpoptAlg.$(OBJEXT) IpIpoptCalculatedQuantities.$(OBJEXT) \
 	IpIpoptData.$(OBJEXT) IpIteratesVector.$(OBJEXT) \
 	IpLeastSquareMults.$(OBJEXT) IpLoqoMuOracle.$(OBJEXT) \
@@ -240,11 +241,13 @@ libipoptalg_a_SOURCES = \
 	IpAlgStrategy.hpp \
 	IpAugRestoSystemSolver.cpp IpAugRestoSystemSolver.hpp \
 	IpAugSystemSolver.hpp \
+	IpBacktrackingLSAcceptor.hpp \
+	IpBacktrackingLineSearch.cpp IpBacktrackingLineSearch.hpp \
 	IpConvCheck.hpp \
 	IpDefaultIterateInitializer.cpp IpDefaultIterateInitializer.hpp \
 	IpEqMultCalculator.hpp \
 	IpFilter.cpp IpFilter.hpp \
-	IpFilterLineSearch.cpp IpFilterLineSearch.hpp \
+	IpFilterLSAcceptor.cpp IpFilterLSAcceptor.hpp \
 	IpGradientScaling.cpp IpGradientScaling.hpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
@@ -289,11 +292,13 @@ ASTYLE_FILES = \
 	IpAlgStrategy.hppbak \
 	IpAugRestoSystemSolver.cppbak IpAugRestoSystemSolver.hppbak \
 	IpAugSystemSolver.hppbak \
+	IpBacktrackingLSAcceptor.hppbak \
+	IpBacktrackingLineSearch.cppbak IpBacktrackingLineSearch.hppbak \
 	IpConvCheck.hppbak \
 	IpDefaultIterateInitializer.cppbak IpDefaultIterateInitializer.hppbak \
 	IpEqMultCalculator.hppbak \
 	IpFilter.cppbak IpFilter.hppbak \
-	IpFilterLineSearch.cppbak IpFilterLineSearch.hppbak \
+	IpFilterLSAcceptor.cppbak IpFilterLSAcceptor.hppbak \
 	IpGradientScaling.cppbak IpGradientScaling.hppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
 	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \
@@ -382,9 +387,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAlgBuilder.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAlgorithmRegOp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAugRestoSystemSolver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpBacktrackingLineSearch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDefaultIterateInitializer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilterLineSearch.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilterLSAcceptor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpGradientScaling.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptAlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptCalculatedQuantities.Po@am__quote@

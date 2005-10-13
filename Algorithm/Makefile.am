@@ -19,11 +19,13 @@ libipoptalg_a_SOURCES = \
 	IpAlgStrategy.hpp \
 	IpAugRestoSystemSolver.cpp IpAugRestoSystemSolver.hpp \
 	IpAugSystemSolver.hpp \
+	IpBacktrackingLSAcceptor.hpp \
+	IpBacktrackingLineSearch.cpp IpBacktrackingLineSearch.hpp \
 	IpConvCheck.hpp \
 	IpDefaultIterateInitializer.cpp IpDefaultIterateInitializer.hpp \
 	IpEqMultCalculator.hpp \
 	IpFilter.cpp IpFilter.hpp \
-	IpFilterLineSearch.cpp IpFilterLineSearch.hpp \
+	IpFilterLSAcceptor.cpp IpFilterLSAcceptor.hpp \
 	IpGradientScaling.cpp IpGradientScaling.hpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
@@ -74,11 +76,13 @@ ASTYLE_FILES = \
 	IpAlgStrategy.hppbak \
 	IpAugRestoSystemSolver.cppbak IpAugRestoSystemSolver.hppbak \
 	IpAugSystemSolver.hppbak \
+	IpBacktrackingLSAcceptor.hppbak \
+	IpBacktrackingLineSearch.cppbak IpBacktrackingLineSearch.hppbak \
 	IpConvCheck.hppbak \
 	IpDefaultIterateInitializer.cppbak IpDefaultIterateInitializer.hppbak \
 	IpEqMultCalculator.hppbak \
 	IpFilter.cppbak IpFilter.hppbak \
-	IpFilterLineSearch.cppbak IpFilterLineSearch.hppbak \
+	IpFilterLSAcceptor.cppbak IpFilterLSAcceptor.hppbak \
 	IpGradientScaling.cppbak IpGradientScaling.hppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
 	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \

@@ -13,7 +13,8 @@
 #include "IpPDFullSpaceSolver.hpp"
 #include "IpPDPerturbationHandler.hpp"
 #include "IpOptErrorConvCheck.hpp"
-#include "IpFilterLineSearch.hpp"
+#include "IpBacktrackingLineSearch.hpp"
+#include "IpFilterLSAcceptor.hpp"
 #include "IpMonotoneMuUpdate.hpp"
 #include "IpAdaptiveMuUpdate.hpp"
 #include "IpLoqoMuOracle.hpp"
@@ -206,9 +207,11 @@ namespace Ipopt
     // Line search method for the restoration phase
     SmartPtr<RestoRestorationPhase> resto_resto =
       new RestoRestorationPhase();
-    SmartPtr<FilterLineSearch> resto_LineSearch =
-      new FilterLineSearch(GetRawPtr(resto_resto), GetRawPtr(resto_PDSolver),
-                           GetRawPtr(resto_convCheck));
+    SmartPtr<FilterLSAcceptor> resto_filterLSacceptor =
+      new FilterLSAcceptor(GetRawPtr(resto_PDSolver));
+    SmartPtr<LineSearch> resto_LineSearch =
+      new BacktrackingLineSearch(GetRawPtr(resto_filterLSacceptor),
+                                 GetRawPtr(resto_resto), GetRawPtr(resto_convCheck));
 
     // Create the mu update that will be used by the restoration phase
     // algorithm
@@ -281,15 +284,17 @@ namespace Ipopt
       new MinC_1NrmRestorationPhase(*resto_alg, EqMultCalculator);
 
     // Create the line search to be used by the main algorithm
-    SmartPtr<FilterLineSearch> lineSearch =
-      new FilterLineSearch(GetRawPtr(resto_phase), GetRawPtr(PDSolver),
-                           convCheck);
+    SmartPtr<FilterLSAcceptor> filterLSacceptor =
+      new FilterLSAcceptor(GetRawPtr(PDSolver));
+    SmartPtr<LineSearch> lineSearch =
+      new BacktrackingLineSearch(GetRawPtr(filterLSacceptor),
+                                 GetRawPtr(resto_phase), convCheck);
 
     // The following cross reference is not good: We have to store a
     // pointer to the lineSearch object in resto_convCheck as a
     // non-SmartPtr to make sure that things are properly deleted when
     // the IpoptAlgorithm return by the Builder is destructed.
-    resto_convCheck->SetOrigFilterLineSearch(*lineSearch);
+    resto_convCheck->SetOrigFilterLSAcceptor(*filterLSacceptor);
 
     // Create the mu update that will be used by the main algorithm
     SmartPtr<MuUpdate> MuUpdate;

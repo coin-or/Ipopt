@@ -12,7 +12,8 @@
 #include "IpAdaptiveMuUpdate.hpp"
 #include "IpAlgBuilder.hpp"
 #include "IpDefaultIterateInitializer.hpp"
-#include "IpFilterLineSearch.hpp"
+#include "IpBacktrackingLineSearch.hpp"
+#include "IpFilterLSAcceptor.hpp"
 #include "IpGradientScaling.hpp"
 #include "IpIpoptAlg.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
@@ -44,7 +45,8 @@ namespace Ipopt
     roptions->SetRegisteringCategory("Main Algorithm");
     AlgorithmBuilder::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Line Search");
-    FilterLineSearch::RegisterOptions(roptions);
+    BacktrackingLineSearch::RegisterOptions(roptions);
+    FilterLSAcceptor::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP Scaling");
     StandardScalingBase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP Scaling");

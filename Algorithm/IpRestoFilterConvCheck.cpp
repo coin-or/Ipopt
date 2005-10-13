@@ -9,6 +9,7 @@
 #include "IpRestoFilterConvCheck.hpp"
 #include "IpCompoundVector.hpp"
 #include "IpRestoIpoptNLP.hpp"
+#include "IpRestoPhase.hpp"
 
 namespace Ipopt
 {
@@ -18,7 +19,7 @@ namespace Ipopt
 
   RestoFilterConvergenceCheck::RestoFilterConvergenceCheck()
       :
-      orig_filter_line_search_(NULL)
+      orig_filter_ls_acceptor_(NULL)
   {
     DBG_START_FUN("RestoFilterConvergenceCheck::RestoFilterConvergenceCheck()",
                   dbg_verbosity);
@@ -32,10 +33,10 @@ namespace Ipopt
   }
 
   void
-  RestoFilterConvergenceCheck::SetOrigFilterLineSearch
-  (const FilterLineSearch& orig_filter_line_search)
+  RestoFilterConvergenceCheck::SetOrigFilterLSAcceptor
+  (const FilterLSAcceptor& orig_filter_ls_acceptor)
   {
-    orig_filter_line_search_ = &orig_filter_line_search;
+    orig_filter_ls_acceptor_ = &orig_filter_ls_acceptor;
   }
 
   void RestoFilterConvergenceCheck::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
@@ -53,7 +54,7 @@ namespace Ipopt
   bool RestoFilterConvergenceCheck::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    DBG_ASSERT(orig_filter_line_search_ && "Need to call RestoFilterConvergenceCheck::SetOrigFilterLineSearch before Initialize");
+    DBG_ASSERT(orig_filter_ls_acceptor_ && "Need to call RestoFilterConvergenceCheck::SetOrigFilterLineSearch before Initialize");
     options.GetNumericValue("required_infeasibility_reduction", kappa_resto_, prefix);
     options.GetIntegerValue("max_iter", maximum_iters_, prefix);
 
@@ -128,12 +129,12 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "orig_trial_barr = %8.2e\n", orig_trial_barr);
 
-      if (!orig_filter_line_search_->IsAcceptableToCurrentFilter(orig_trial_barr, orig_trial_theta)) {
+      if (!orig_filter_ls_acceptor_->IsAcceptableToCurrentFilter(orig_trial_barr, orig_trial_theta)) {
         Jnlst().Printf(J_DETAILED, J_MAIN,
                        "Point is not acceptable to the original filter.\n");
         status = CONTINUE;
       }
-      else if (!orig_filter_line_search_->IsAcceptableToCurrentIterate(orig_trial_barr, orig_trial_theta, true) ) {
+      else if (!orig_filter_ls_acceptor_->IsAcceptableToCurrentIterate(orig_trial_barr, orig_trial_theta, true) ) {
         Jnlst().Printf(J_DETAILED, J_MAIN,
                        "Point is not acceptable to the original current point.\n");
         status = CONTINUE;

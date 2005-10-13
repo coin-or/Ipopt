@@ -373,8 +373,9 @@ namespace Ipopt
       IpData().Set_mu(mu);
 
       linesearch_->Reset();
-      // Uncomment the next line if the filter should not switch to
+      // Uncomment the next line if the line search should not switch to
       // the restoration phase in the free mode
+
       // linesearch_->SetRigorousLineSearch(false);
     }
     else {
