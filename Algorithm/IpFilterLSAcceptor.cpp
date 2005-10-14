@@ -375,7 +375,7 @@ namespace Ipopt
     DBG_PRINT((1,"lhs = %27.16e rhs = %27.16e  BasVal = %27.16e\n",lhs,rhs,BasVal));
 
     Number mach_eps = std::numeric_limits<Number>::epsilon();
-    return (lhs - rhs <= 1e10*mach_eps*fabs(BasVal));
+    return (lhs - rhs <= 10.*mach_eps*fabs(BasVal));
   }
 
   void FilterLSAcceptor::StartWatchDog()
