@@ -2077,7 +2077,7 @@ namespace Ipopt
       case NORM_1 :
       return vec1.Asum() + vec2.Asum();
       case NORM_2 :
-      return sqrt(vec1.Nrm2()*vec2.Nrm2());
+      return sqrt(pow(vec1.Nrm2(),2) + pow(vec2.Nrm2(),2));
       case NORM_MAX :
       return Max(vec1.Amax(), vec2.Amax());
       default:
