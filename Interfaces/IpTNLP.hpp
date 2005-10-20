@@ -79,12 +79,14 @@ namespace Ipopt
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
                                  Index m, Number* g_l, Number* g_u)=0;
 
-    /** overload this method to return scaling parameters. This is only
-     *  called if the options are set to retrieve user scaling
+    /** overload this method to return scaling parameters. This is
+     *  only called if the options are set to retrieve user scaling.
+     *  There, use_x_scaling (or use_g_scaling) should get set to true
+     *  only if the variables (or constraints) are to be scaled.
      */
     virtual void get_scaling_parameters(Number& obj_scaling,
-                                        Index n, Number* x_scaling,
-                                        Index m, Number* g_scaling)
+                                        bool& use_x_scaling, Index n, Number* x_scaling,
+                                        bool& use_g_scaling, Index m, Number* g_scaling)
     {
       THROW_EXCEPTION(SCALING_NOT_IMPLEMENTED_FOR_TNLP,
                       "Ipopt options have been set to request scaling from the TNLP"

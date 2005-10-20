@@ -104,7 +104,7 @@ namespace Ipopt
 
     // ToDo: In the following we might want to be more careful with the lower bound
     Number orig_theta_max = Max(kappa_resto_*orig_curr_theta,
-                                1.e1*Min(orig_ip_data->tol(),
+                                1.e2*Min(orig_ip_data->tol(),
                                          constr_viol_tol_));
 
     if (first_resto_iter_) {
@@ -114,7 +114,7 @@ namespace Ipopt
     }
     else if (orig_trial_theta > orig_theta_max) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "Point does not provide sufficient reduction w.r.t the original theta.\n");
+                     "Point does not provide sufficient reduction w.r.t the original theta (orig_theta_max=%e).\n", orig_theta_max);
       status = CONTINUE;
     }
     else if (orig_ip_cq->IsSquareProblem() &&

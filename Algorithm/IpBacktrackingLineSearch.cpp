@@ -113,7 +113,7 @@ namespace Ipopt
       "This options is meant to activate heuristics that may speed up the "
       "infeasibility determination if you expect that there is a good chance for the problem to be "
       "infeasible.  In the filter line search procedure, the restoration "
-      "phase is called more qucikly than usually, and more reduction in "
+      "phase is called more quickly than usually, and more reduction in "
       "the constraint violation is enforced. If the problem is square, this "
       "option is enabled automatically.");
     roptions->AddLowerBoundedNumberOption(
@@ -169,6 +169,12 @@ namespace Ipopt
       "by at least this factor, then the regular restoration phase is called. "
       "Choosing \"0\" here disables the soft "
       "restoration phase.");
+    roptions->AddLowerBoundedIntegerOption(
+      "max_soft_resto_iters",
+      "Maximum number of iterations performed successively in soft restoration phase.",
+      0, 10,
+      "If the soft restoration phase is performed for more than so many "
+      "iteratins in a row, the regular restoration phase is called.");
   }
 
   bool BacktrackingLineSearch::InitializeImpl(const OptionsList& options,
@@ -190,6 +196,8 @@ namespace Ipopt
     options.GetIntegerValue("watchdog_shortened_iter_trigger", watchdog_shortened_iter_trigger_, prefix);
     options.GetNumericValue("soft_resto_pderror_reduction_factor",
                             soft_resto_pderror_reduction_factor_, prefix);
+    options.GetIntegerValue("max_soft_resto_iters", max_soft_resto_iters_,
+                            prefix);
 
     bool retvalue = true;
     if (IsValid(resto_phase_)) {
@@ -267,6 +275,12 @@ namespace Ipopt
       start_with_resto_= false;
     }
 
+    if (expect_infeasible_problem_ &&
+        Max(IpData().curr()->y_c()->Amax(),
+            IpData().curr()->y_d()->Amax()) > 1e8) {
+      goto_resto = true;
+    }
+
     bool accept = false;
     bool corr_taken = false;
     bool soc_taken = false;
@@ -321,18 +335,25 @@ namespace Ipopt
     if (!goto_resto && !tiny_step) {
 
       if (in_soft_resto_phase_) {
-        // If we are currently in the soft restoration phase, continue
-        // that way, and switch back if enough progress is made to the
-        // original criterion (e.g., the filter)
-        bool satisfies_original_criterion = false;
-        // ToDo use tiny_step in TrySoftRestoStep?
-        accept = TrySoftRestoStep(actual_delta,
-                                  satisfies_original_criterion);
-        if (accept) {
-          IpData().Set_info_alpha_primal_char('s');
-          if (satisfies_original_criterion) {
-            in_soft_resto_phase_ = false;
-            IpData().Set_info_alpha_primal_char('S');
+        soft_resto_counter_++;
+        if (soft_resto_counter_ > max_soft_resto_iters_) {
+          accept = false;
+        }
+        else {
+          // If we are currently in the soft restoration phase, continue
+          // that way, and switch back if enough progress is made to the
+          // original criterion (e.g., the filter)
+          bool satisfies_original_criterion = false;
+          // ToDo use tiny_step in TrySoftRestoStep?
+          accept = TrySoftRestoStep(actual_delta,
+                                    satisfies_original_criterion);
+          if (accept) {
+            IpData().Set_info_alpha_primal_char('s');
+            if (satisfies_original_criterion) {
+              in_soft_resto_phase_ = false;
+              soft_resto_counter_ = 0;
+              IpData().Set_info_alpha_primal_char('S');
+            }
           }
         }
       }
@@ -473,6 +494,7 @@ namespace Ipopt
             expect_infeasible_problem_ = false;
           }
           in_soft_resto_phase_ = false;
+          soft_resto_counter_ = 0;
           watchdog_shortened_iter_ = 0;
         }
       }
@@ -644,7 +666,7 @@ namespace Ipopt
       }
     } /* if (!accept) */
 
-    char info_alpha_primal_char;
+    char info_alpha_primal_char='?';
     if (!accept && in_watchdog_) {
       info_alpha_primal_char = 'w';
     }
@@ -712,6 +734,7 @@ namespace Ipopt
   {
     DBG_START_FUN("BacktrackingLineSearch::Reset", dbg_verbosity);
     in_soft_resto_phase_ = false;
+    soft_resto_counter_ = 0;
 
     // Inactivate the watchdog and release all stored data
     in_watchdog_ = false;

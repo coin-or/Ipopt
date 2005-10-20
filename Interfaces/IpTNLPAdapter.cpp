@@ -624,6 +624,15 @@ namespace Ipopt
     Jac_d_space = Jac_d_space_;
     Hess_lagrangian_space = Hess_lagrangian_space_;
 
+    if (IsValid(jnlst_)) {
+      jnlst_->Printf(J_DETAILED, J_STATISTICS,
+                     "Number of nonzero in equality constraint Jacobian....:%9d\n", nz_jac_c_);
+      jnlst_->Printf(J_DETAILED, J_STATISTICS,
+                     "Number of nonzero in inequality constraint Jacobian..:%9d\n", nz_jac_d_);
+      jnlst_->Printf(J_DETAILED, J_STATISTICS,
+                     "Number of nonzero in Lagrangian Hessian..............:%9d\n\n", nz_h_);
+    }
+
     return true;
   }
 
@@ -1078,6 +1087,11 @@ namespace Ipopt
     SmartPtr<Vector>& c_scaling,
     SmartPtr<Vector>& d_scaling) const
   {
+    x_scaling = x_space->MakeNew();
+    c_scaling = c_space->MakeNew();
+    d_scaling = d_space->MakeNew();
+    DBG_ASSERT((c_scaling->Dim()+d_scaling->Dim()) == n_full_g_);
+
     DenseVector* dx = dynamic_cast<DenseVector*>(GetRawPtr(x_scaling));
     DenseVector* dc = dynamic_cast<DenseVector*>(GetRawPtr(c_scaling));
     DenseVector* dd = dynamic_cast<DenseVector*>(GetRawPtr(d_scaling));
@@ -1086,42 +1100,52 @@ namespace Ipopt
     Number* dc_values = dc->Values();
     Number* dd_values = dd->Values();
 
-    x_scaling = x_space->MakeNew();
-    c_scaling = c_space->MakeNew();
-    d_scaling = d_space->MakeNew();
-    DBG_ASSERT((c_scaling->Dim()+d_scaling->Dim()) == n_full_g_);
     Number* full_g_scaling = new Number[n_full_g_];
+    bool use_x_scaling=true;
+    bool use_g_scaling=true;
 
     if (IsValid(P_x_full_x_)) {
       Number* full_x_scaling = new Number[n_full_x_];
       tnlp_->get_scaling_parameters(obj_scaling,
-                                    n_full_x_, full_x_scaling,
-                                    n_full_g_, full_g_scaling);
+                                    use_x_scaling, n_full_x_, full_x_scaling,
+                                    use_g_scaling, n_full_g_, full_g_scaling);
 
-      const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
-      for (Index i=0; i<dx->Dim(); i++) {
-        dx_values[i] = full_x_scaling[x_pos[i]];
+      if (use_x_scaling) {
+        const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
+        for (Index i=0; i<dx->Dim(); i++) {
+          dx_values[i] = full_x_scaling[x_pos[i]];
+        }
       }
       delete [] full_x_scaling;
     }
     else {
       tnlp_->get_scaling_parameters(obj_scaling,
-                                    n_full_x_, dx_values,
-                                    n_full_g_, full_g_scaling);
+                                    use_x_scaling, n_full_x_, dx_values,
+                                    use_g_scaling, n_full_g_, full_g_scaling);
     }
 
-    const Index* c_pos = P_c_g_->ExpandedPosIndices();
-    for (Index i=0; i<P_c_g_->NCols(); i++) {
-      dc_values[i] = full_g_scaling[c_pos[i]];
-    }
-    if (fixed_variable_treatment_==MAKE_CONSTRAINT) {
-      const Number one = 1.;
-      IpBlasDcopy(n_x_fixed_, &one, 0, &dc_values[P_c_g_->NCols()], 1);
+    if (!use_x_scaling) {
+      x_scaling = NULL;
     }
 
-    const Index* d_pos = P_d_g_->ExpandedPosIndices();
-    for (Index i=0; i<dd->Dim(); i++) {
-      dd_values[i] = full_g_scaling[d_pos[i]];
+    if (use_g_scaling) {
+      const Index* c_pos = P_c_g_->ExpandedPosIndices();
+      for (Index i=0; i<P_c_g_->NCols(); i++) {
+        dc_values[i] = full_g_scaling[c_pos[i]];
+      }
+      if (fixed_variable_treatment_==MAKE_CONSTRAINT) {
+        const Number one = 1.;
+        IpBlasDcopy(n_x_fixed_, &one, 0, &dc_values[P_c_g_->NCols()], 1);
+      }
+
+      const Index* d_pos = P_d_g_->ExpandedPosIndices();
+      for (Index i=0; i<dd->Dim(); i++) {
+        dd_values[i] = full_g_scaling[d_pos[i]];
+      }
+    }
+    else {
+      c_scaling = NULL;
+      d_scaling = NULL;
     }
 
     delete [] full_g_scaling;
@@ -1412,6 +1436,9 @@ namespace Ipopt
 
     ASSERT_EXCEPTION(IsValid(jnlst_), ERROR_IN_TNLP_DERIVATIVE_TEST,
                      "No Journalist given to TNLPAdapter.  Need Journalist, otherwise can't produce any output in DerivativeChecker!");
+
+    jnlst_->Printf(J_SUMMARY, J_NLP,
+                   "\nStarting derivative checker.\n\n");
 
     bool retval = true;
     // Since this method should be independent of all other internal

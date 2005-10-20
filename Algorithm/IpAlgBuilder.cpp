@@ -87,7 +87,7 @@ namespace Ipopt
     roptions->AddStringOption3(
       "mu_oracle",
       "Oracle for a new barrier parameter in the adaptive strategy.",
-      "probing",
+      "quality_function",
       "probing", "Mehrotra's probing heuristic",
       "loqo", "LOQO's centrality rule",
       "quality_function", "minimize a quality function",

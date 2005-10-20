@@ -89,6 +89,15 @@ namespace Ipopt
       "Size of the regularization for rank-deficient constraint Jacobians.",
       0., false, 1e-9,
       "(This is delta_c in the implementation paper - assuming that kappa_c=0.)");
+    /*
+    roptions->AddStringOption2(
+      "always_perturb_cd",
+      "Switch to enable perturbation for constraints in all iterations.",
+      "no",
+      "no", "don't do the perturbation in every iteration",
+      "yes", "perturb for the constraints in every iteration",
+      "This might be helpful if the constraints are degenerate.");
+    */
   }
 
   bool PDPerturbationHandler::InitializeImpl(const OptionsList& options,
@@ -101,6 +110,9 @@ namespace Ipopt
     options.GetNumericValue("perturb_dec_fact", delta_xs_dec_fact_, prefix);
     options.GetNumericValue("first_hessian_perturbation", delta_xs_init_, prefix);
     options.GetNumericValue("jacobian_regularization", delta_cd_val_, prefix);
+    /*
+    options.GetBoolValue("always_perturb_cd", always_perturb_cd_, prefix);
+    */
 
     hess_degenerate_ = NOT_YET_DETERMINED;
     jac_degenerate_ = NOT_YET_DETERMINED;

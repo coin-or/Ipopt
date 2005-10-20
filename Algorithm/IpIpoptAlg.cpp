@@ -384,14 +384,14 @@ namespace Ipopt
     if (adjusted_slacks>0) {
       IpCq().ResetAdjustedTrialSlacks();
       if (adjusted_slacks==1) {
-        Jnlst().Printf(J_SUMMARY, J_MAIN,
-                       "%d Slack too small, adjusting variable bound\n",
-                       adjusted_slacks);
+        Jnlst().Printf(J_WARNING, J_MAIN,
+                       "In iteration $d, %d Slack too small, adjusting variable bound\n",
+                       IpData().iter_count(), adjusted_slacks);
       }
       else {
-        Jnlst().Printf(J_SUMMARY, J_MAIN,
-                       "%d Slacks too small, adjusting variable bounds\n",
-                       adjusted_slacks);
+        Jnlst().Printf(J_WARNING, J_MAIN,
+                       "In iteration $d, %d Slacks too small, adjusting variable bounds\n",
+                       IpData().iter_count(), adjusted_slacks);
       }
       if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
         IpNLP().x_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "old_x_L");

@@ -122,18 +122,20 @@ namespace Ipopt
     // Decide if we want to use the original option or want to make
     // some changes
     SmartPtr<OptionsList> actual_resto_options = resto_options_;
-    if (expect_infeasible_problem_ && count_restorations_==1) {
-      actual_resto_options = new OptionsList(*resto_options_);
-      // Ask for significant reduction of infeasibility, in the hope
-      // that we do not return from the restoration phase is the
-      // problem is infeasible
-      actual_resto_options->SetNumericValue("resto.required_infeasibility_reduction", 1e-3);
-    }
-    else if(square_problem) {
+    if(square_problem) {
       actual_resto_options = new OptionsList(*resto_options_);
       // If this is a square problem, the want the restoration phase
       // never to be left until the problem is converged
       actual_resto_options->SetNumericValue("resto.required_infeasibility_reduction", 0.);
+    }
+    else if (expect_infeasible_problem_ && count_restorations_==1) {
+      if (IpCq().curr_constraint_violation()>1e-3) {
+        actual_resto_options = new OptionsList(*resto_options_);
+        // Ask for significant reduction of infeasibility, in the hope
+        // that we do not return from the restoration phase is the
+        // problem is infeasible
+        actual_resto_options->SetNumericValue("resto.required_infeasibility_reduction", 1e-3);
+      }
     }
 
     // Initialize the restoration phase algorithm

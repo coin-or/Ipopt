@@ -600,31 +600,43 @@ namespace Ipopt
   }
 
   void AmplTNLP::get_scaling_parameters(Number& obj_scaling,
-                                        Index n, Number* x_scaling,
-                                        Index m, Number* g_scaling)
+                                        bool& use_x_scaling, Index n, Number* x_scaling,
+                                        bool& use_g_scaling, Index m, Number* g_scaling)
   {
     DBG_ASSERT(IsValid(suffix_handler_));
     const double* obj = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Objective_Source);
     obj_scaling = (obj) ? obj[0] : 1.0;
 
     const double* x = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Variable_Source);
-    for (int i=0; i < n; i++) {
-      if (x && x[i] > 0.0) {
-        x_scaling[i] = x[i];
+    if (x) {
+      use_x_scaling = true;
+      for (int i=0; i < n; i++) {
+        if (x[i] > 0.0) {
+          x_scaling[i] = x[i];
+        }
+        else {
+          x_scaling[i] = 1.0;
+        }
       }
-      else {
-        x_scaling[i] = 1.0;
-      }
+    }
+    else {
+      use_x_scaling = false;
     }
 
     const double* g = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Constraint_Source);
-    for (int i=0; i < m; i++) {
-      if (g && g[i] > 0) {
-        g_scaling[i] = g[i];
+    if (g) {
+      use_g_scaling = true;
+      for (int i=0; i < m; i++) {
+        if (g[i] > 0) {
+          g_scaling[i] = g[i];
+        }
+        else {
+          g_scaling[i] = 1.0;
+        }
       }
-      else {
-        g_scaling[i] = 1.0;
-      }
+    }
+    else {
+      use_g_scaling = false;
     }
   }
 

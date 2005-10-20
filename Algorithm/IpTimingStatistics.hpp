@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpSolveStatistics.hpp 507 2005-08-26 18:33:43Z andreasw $
+// $Id$
 //
 // Authors:  Andreas Waechter               IBM    2005-09-19
 
