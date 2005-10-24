@@ -151,10 +151,10 @@ namespace Ipopt
       Number new_mu;
       Number new_tau;
       Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                     "Updating mu=%e and tau=%e to ", mu, tau);
+                     "Updating mu=%25.16e and tau=%25.16e to ", mu, tau);
       CalcNewMuAndTau(new_mu, new_tau);
       Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                     "new_mu=%e and new_tau=%e\n", new_mu, new_tau);
+                     "new_mu=%25.16e and new_tau=%25.16e\n", new_mu, new_tau);
       bool mu_changed = (mu != new_mu);
       if (!mu_changed && tiny_step_flag) {
         THROW_EXCEPTION(TINY_STEP_DETECTED,
@@ -171,6 +171,9 @@ namespace Ipopt
       // mu_allow_fast_monotone_decrease_ is true, we want to check if
       // we can decrease mu even more
       if (initialized_ && !mu_allow_fast_monotone_decrease_) {
+        done = true;
+      }
+      else if (!mu_changed) {
         done = true;
       }
       else {

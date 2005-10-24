@@ -11,7 +11,7 @@
 
 #include "IpIpoptNLP.hpp"
 #include "IpAlgStrategy.hpp"
-#include "IpPDSystemSolver.hpp"
+#include "IpSearchDirCalculator.hpp"
 #include "IpLineSearch.hpp"
 #include "IpMuUpdate.hpp"
 #include "IpConvCheck.hpp"
@@ -45,7 +45,7 @@ namespace Ipopt
      *  passed-in pieces to make sure that a user of IpoptAlgoroithm
      *  cannot pass in an object created on the stack!)
      */
-    IpoptAlgorithm(const SmartPtr<PDSystemSolver>& pd_solver,
+    IpoptAlgorithm(const SmartPtr<SearchDirectionCalculator>& search_dir_calculator,
                    const SmartPtr<LineSearch>& line_search,
                    const SmartPtr<MuUpdate>& mu_update,
                    const SmartPtr<ConvergenceCheck>& conv_check,
@@ -90,7 +90,7 @@ namespace Ipopt
 
     /** @name Strategy objects */
     //@{
-    SmartPtr<PDSystemSolver> pd_solver_;
+    SmartPtr<SearchDirectionCalculator> search_dir_calculator_;
     SmartPtr<LineSearch> line_search_;
     SmartPtr<MuUpdate> mu_update_;
     SmartPtr<ConvergenceCheck> conv_check_;

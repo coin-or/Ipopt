@@ -11,6 +11,8 @@
 
 #include "IpAdaptiveMuUpdate.hpp"
 #include "IpAlgBuilder.hpp"
+#include "IpCGSearchDirCalc.hpp"
+#include "IpCGPenaltyLSAcceptor.hpp"
 #include "IpDefaultIterateInitializer.hpp"
 #include "IpBacktrackingLineSearch.hpp"
 #include "IpFilterLSAcceptor.hpp"
@@ -25,6 +27,7 @@
 #include "IpOrigIterationOutput.hpp"
 #include "IpPDFullSpaceSolver.hpp"
 #include "IpPDPerturbationHandler.hpp"
+#include "IpPDSearchDirCalc.hpp"
 #include "IpProbingMuOracle.hpp"
 #include "IpQualityFunctionMuOracle.hpp"
 #include "IpRestoFilterConvCheck.hpp"
@@ -46,7 +49,9 @@ namespace Ipopt
     AlgorithmBuilder::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Line Search");
     BacktrackingLineSearch::RegisterOptions(roptions);
+    CGSearchDirCalculator::RegisterOptions(roptions);
     FilterLSAcceptor::RegisterOptions(roptions);
+    CGPenaltyLSAcceptor::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP Scaling");
     StandardScalingBase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP Scaling");

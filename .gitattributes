@@ -1,7 +1,15 @@
 * text=auto !eol
+/.last_merge -text
 Algorithm/IpAlgorithmRegOp.cpp -text
 Algorithm/IpAlgorithmRegOp.hpp -text
 Algorithm/IpBacktrackingLSAcceptor.hpp -text
+Algorithm/IpCGPenaltyLSAcceptor.cpp -text
+Algorithm/IpCGPenaltyLSAcceptor.hpp -text
+Algorithm/IpCGSearchDirCalc.cpp -text
+Algorithm/IpCGSearchDirCalc.hpp -text
+Algorithm/IpPDSearchDirCalc.cpp -text
+Algorithm/IpPDSearchDirCalc.hpp -text
+Algorithm/IpSearchDirCalculator.hpp -text
 Algorithm/IpTimingStatistics.cpp -text
 Algorithm/IpTimingStatistics.hpp -text
 Algorithm/LinearSolvers/IpLinearSolversRegOp.cpp -text

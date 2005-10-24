@@ -70,7 +70,7 @@ namespace Ipopt
                    "\n**************************************************\n\n");
     if (iter%10 == 0 && !IpData().info_skip_output()) {
       // output the header
-      Jnlst().Printf(J_SUMMARY, J_MAIN, header.c_str());
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, header.c_str());
     }
     else {
       Jnlst().Printf(J_DETAILED, J_MAIN, header.c_str());
@@ -109,18 +109,18 @@ namespace Ipopt
     const std::string info_string = IpData().info_string();
 
     if (!IpData().info_skip_output()) {
-      Jnlst().Printf(J_SUMMARY, J_MAIN,
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
                      "%4d%c%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d",
                      iter, info_iter, unscaled_f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr,
                      alpha_dual, alpha_primal, alpha_primal_char,
                      ls_count);
       if (print_info_string_) {
-        Jnlst().Printf(J_SUMMARY, J_MAIN, " %s", info_string.c_str());
+        Jnlst().Printf(J_ITERSUMMARY, J_MAIN, " %s", info_string.c_str());
       }
       else {
         Jnlst().Printf(J_DETAILED, J_MAIN, " %s", info_string.c_str());
       }
-      Jnlst().Printf(J_SUMMARY, J_MAIN, "\n");
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "\n");
     }
 
 

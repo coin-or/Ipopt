@@ -119,13 +119,16 @@
 					RelativePath="..\..\..\Algorithm\IpAugRestoSystemSolver.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\Algorithm\IpBacktrackingLineSearch.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\Algorithm\IpDefaultIterateInitializer.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\Algorithm\IpFilter.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpFilterLineSearch.cpp">
+					RelativePath="..\..\..\Algorithm\IpFilterLSAcceptor.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\Algorithm\IpGradientScaling.cpp">
@@ -204,6 +207,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\Algorithm\IpStdAugSystemSolver.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\Algorithm\IpTimingStatistics.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\Algorithm\LinearSolvers\IpTripletToCSRConverter.cpp">

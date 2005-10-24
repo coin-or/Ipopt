@@ -41,6 +41,7 @@ namespace Ipopt
     J_ERROR,
     J_WARNING,
     J_SUMMARY,
+    J_ITERSUMMARY,
     J_DETAILED,
     J_MOREDETAILED,
     J_VECTOR,

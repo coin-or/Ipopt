@@ -21,6 +21,8 @@ libipoptalg_a_SOURCES = \
 	IpAugSystemSolver.hpp \
 	IpBacktrackingLSAcceptor.hpp \
 	IpBacktrackingLineSearch.cpp IpBacktrackingLineSearch.hpp \
+	IpCGPenaltyLSAcceptor.cpp IpCGPenaltyLSAcceptor.hpp \
+	IpCGSearchDirCalc.cpp IpCGSearchDirCalc.hpp \
 	IpConvCheck.hpp \
 	IpDefaultIterateInitializer.cpp IpDefaultIterateInitializer.hpp \
 	IpEqMultCalculator.hpp \
@@ -46,6 +48,7 @@ libipoptalg_a_SOURCES = \
 	IpOrigIterationOutput.cpp IpOrigIterationOutput.hpp \
 	IpPDFullSpaceSolver.cpp IpPDFullSpaceSolver.hpp \
 	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
+	IpPDSearchDirCalc.cpp IpPDSearchDirCalc.hpp \
 	IpPDSystemSolver.hpp \
 	IpProbingMuOracle.cpp IpProbingMuOracle.hpp \
 	IpQualityFunctionMuOracle.cpp IpQualityFunctionMuOracle.hpp \
@@ -56,6 +59,7 @@ libipoptalg_a_SOURCES = \
 	IpRestoMinC_1Nrm.cpp IpRestoMinC_1Nrm.hpp \
 	IpRestoPhase.hpp \
 	IpRestoRestoPhase.cpp IpRestoRestoPhase.hpp \
+	IpSearchDirCalculator.hpp \
 	IpStdAugSystemSolver.cpp IpStdAugSystemSolver.hpp \
 	IpTimingStatistics.cpp IpTimingStatistics.hpp \
 	IpUserScaling.cpp IpUserScaling.hpp \
@@ -78,6 +82,8 @@ ASTYLE_FILES = \
 	IpAugSystemSolver.hppbak \
 	IpBacktrackingLSAcceptor.hppbak \
 	IpBacktrackingLineSearch.cppbak IpBacktrackingLineSearch.hppbak \
+	IpCGPenaltyLSAcceptor.cppbak IpCGPenaltyLSAcceptor.hppbak \
+	IpCGSearchDirCalc.cppbak IpCGSearchDirCalc.hppbak \
 	IpConvCheck.hppbak \
 	IpDefaultIterateInitializer.cppbak IpDefaultIterateInitializer.hppbak \
 	IpEqMultCalculator.hppbak \
@@ -103,6 +109,7 @@ ASTYLE_FILES = \
 	IpOrigIterationOutput.cppbak IpOrigIterationOutput.hppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
+	IpPDSearchDirCalc.cppbak IpPDSearchDirCalc.hppbak \
 	IpPDSystemSolver.hppbak \
 	IpProbingMuOracle.cppbak IpProbingMuOracle.hppbak \
 	IpQualityFunctionMuOracle.cppbak IpQualityFunctionMuOracle.hppbak \
@@ -113,6 +120,7 @@ ASTYLE_FILES = \
 	IpRestoMinC_1Nrm.cppbak IpRestoMinC_1Nrm.hppbak \
 	IpRestoPhase.hppbak \
 	IpRestoRestoPhase.cppbak IpRestoRestoPhase.hppbak \
+	IpSearchDirCalculator.hppbak \
 	IpStdAugSystemSolver.cppbak IpStdAugSystemSolver.hppbak \
 	IpTimingStatistics.cppbak IpTimingStatistics.hppbak \
 	IpUserScaling.cppbak IpUserScaling.hppbak \

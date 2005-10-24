@@ -38,7 +38,7 @@ namespace Ipopt
     try {
 # ifdef IP_DEBUG
       DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
-      SmartPtr<Journal> debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_SUMMARY);
+      SmartPtr<Journal> debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_ITERSUMMARY);
       debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
 # endif
 
@@ -48,7 +48,7 @@ namespace Ipopt
       stdout_jrnl_ = NULL;
       if (create_console_out) {
         stdout_jrnl_ =
-          jnlst_->AddFileJournal("console", "stdout", J_SUMMARY);
+          jnlst_->AddFileJournal("console", "stdout", J_ITERSUMMARY);
         stdout_jrnl_->SetPrintLevel(J_DBG, J_NONE);
       }
 
@@ -207,7 +207,7 @@ namespace Ipopt
     roptions->AddBoundedIntegerOption(
       "print_level",
       "Output verbosity level.",
-      0, J_LAST_LEVEL-1, J_SUMMARY,
+      0, J_LAST_LEVEL-1, J_ITERSUMMARY,
       "Sets the default verbosity level for console output. The "
       "larger this value the more detailed is the output.");
 
@@ -223,7 +223,7 @@ namespace Ipopt
     roptions->AddBoundedIntegerOption(
       "file_print_level",
       "Verbosity level for output file.",
-      0, J_LAST_LEVEL-1, J_SUMMARY,
+      0, J_LAST_LEVEL-1, J_ITERSUMMARY,
       "NOTE: This option only works when read from the PARAMS.DAT options file! "
       "Determines the verbosity level for the file specified by "
       "\"output_file\".  By default it is the same as \"print_level\".");
@@ -242,7 +242,7 @@ namespace Ipopt
     roptions->AddBoundedIntegerOption(
       "debug_print_level",
       "Verbosity level for debug file.",
-      0, J_LAST_LEVEL-1, J_SUMMARY,
+      0, J_LAST_LEVEL-1, J_ITERSUMMARY,
       "This Ipopt library has been compiled in debug mode, and a file "
       "\"debug.out\" is produced for every run.  This option determines "
       "the verbosity level for this file.  By default it is the same as "
@@ -264,8 +264,8 @@ namespace Ipopt
       "nlp_scaling_method",
       "Select the technique used for scaling the NLP", "gradient_based",
       "none", "no problem scaling will be performed",
-      "user_scaling", "scaling parameters will come from the user",
-      "gradient_based", "scale the problem so the maximum gradient at the starting point is scaling_max_gradient",
+      "user-scaling", "scaling parameters will come from the user",
+      "gradient-based", "scale the problem so the maximum gradient at the starting point is scaling_max_gradient",
       "Selects the technique used for scaling the problem before it is solved."
       " For user-scaling, the parameters come from the NLP. If you are using "
       "AMPL, they can be specified through suffixes (scaling_factor)");
@@ -313,10 +313,10 @@ namespace Ipopt
       SmartPtr<NLPScalingObject> nlp_scaling;
       std::string nlp_scaling_method;
       options_->GetStringValue("nlp_scaling_method", nlp_scaling_method, "");
-      if (nlp_scaling_method == "user_scaling") {
+      if (nlp_scaling_method == "user-scaling") {
         nlp_scaling = new UserScaling(ConstPtr(nlp));
       }
-      else if (nlp_scaling_method == "gradient_based") {
+      else if (nlp_scaling_method == "gradient-based") {
         nlp_scaling = new GradientScaling(nlp);
       }
       else {

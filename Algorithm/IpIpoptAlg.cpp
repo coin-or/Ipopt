@@ -29,14 +29,14 @@ namespace Ipopt
     message_printed = true;
   }
 
-  IpoptAlgorithm::IpoptAlgorithm(const SmartPtr<PDSystemSolver>& pd_solver,
+  IpoptAlgorithm::IpoptAlgorithm(const SmartPtr<SearchDirectionCalculator>& search_dir_calculator,
                                  const SmartPtr<LineSearch>& line_search,
                                  const SmartPtr<MuUpdate>& mu_update,
                                  const SmartPtr<ConvergenceCheck>& conv_check,
                                  const SmartPtr<IterateInitializer>& iterate_initializer,
                                  const SmartPtr<IterationOutput>& iter_output)
       :
-      pd_solver_(pd_solver),
+      search_dir_calculator_(search_dir_calculator),
       line_search_(line_search),
       mu_update_(mu_update),
       conv_check_(conv_check),
@@ -45,7 +45,7 @@ namespace Ipopt
   {
     DBG_START_METH("IpoptAlgorithm::IpoptAlgorithm",
                    dbg_verbosity);
-    DBG_ASSERT(IsValid(pd_solver_));
+    DBG_ASSERT(IsValid(search_dir_calculator_));
     DBG_ASSERT(IsValid(line_search_));
     DBG_ASSERT(IsValid(mu_update_));
     DBG_ASSERT(IsValid(conv_check_));
@@ -107,15 +107,15 @@ namespace Ipopt
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the mu_update strategy failed to initialize.");
 
-    retvalue = pd_solver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                      options, prefix);
-    ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
-                     "the pd_solver strategy failed to initialize.");
-
     retvalue = line_search_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                         options,prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the line_search strategy failed to initialize.");
+
+    retvalue = search_dir_calculator_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
+               options,prefix);
+    ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
+                     "the search_direction_calculator strategy failed to initialize.");
 
     retvalue = conv_check_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                        options, prefix);
@@ -299,43 +299,7 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "\n**************************************************\n\n");
 
-    bool improve_solution = false;
-    if (IpData().HaveDeltas()) {
-      /*
-      Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "No need to compute search direction - it has already been computed.\n");
-      return;
-      */
-      improve_solution = true;
-    }
-
-    SmartPtr<IteratesVector> rhs = IpData().curr()->MakeNewContainer();
-    rhs->Set_x(*IpCq().curr_grad_lag_with_damping_x());
-    rhs->Set_s(*IpCq().curr_grad_lag_with_damping_s());
-    rhs->Set_y_c(*IpCq().curr_c());
-    rhs->Set_y_d(*IpCq().curr_d_minus_s());
-    rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
-    rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
-    rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
-    rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
-
-    DBG_PRINT_VECTOR(2, "rhs", *rhs);
-
-    // Get space for the search direction
-    SmartPtr<IteratesVector> delta =
-      IpData().curr()->MakeNewIteratesVector(true);
-
-    if (improve_solution) {
-      // We can probably avoid copying and scaling...
-      delta->AddOneVector(-1., *IpData().delta(), 0.);
-    }
-
-    bool allow_inexact = false;
-    pd_solver_->Solve(-1.0, 0.0, *rhs, *delta, allow_inexact,
-                      improve_solution);
-
-    // Store the search directions in the IpData object
-    IpData().set_delta(delta);
+    search_dir_calculator_->ComputeSearchDirection();
 
     Jnlst().Printf(J_MOREVECTOR, J_MAIN,
                    "*** Step Calculated for Iteration: %d\n",
@@ -384,14 +348,14 @@ namespace Ipopt
     if (adjusted_slacks>0) {
       IpCq().ResetAdjustedTrialSlacks();
       if (adjusted_slacks==1) {
-        Jnlst().Printf(J_SUMMARY, J_MAIN,
-                       "%d Slack too small, adjusting variable bound\n",
-                       adjusted_slacks);
+        Jnlst().Printf(J_WARNING, J_MAIN,
+                       "In iteration %d, %d Slack too small, adjusting variable bound\n",
+                       IpData().iter_count(), adjusted_slacks);
       }
       else {
-        Jnlst().Printf(J_SUMMARY, J_MAIN,
-                       "%d Slacks too small, adjusting variable bounds\n",
-                       adjusted_slacks);
+        Jnlst().Printf(J_WARNING, J_MAIN,
+                       "In iteration %d, %d Slacks too small, adjusting variable bounds\n",
+                       IpData().iter_count(), adjusted_slacks);
       }
       if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
         IpNLP().x_L()->Print(Jnlst(), J_VECTOR, J_MAIN, "old_x_L");

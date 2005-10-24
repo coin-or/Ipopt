@@ -247,6 +247,10 @@ namespace Ipopt
      *  reducing the optimality error ("soft restoration phase"). If
      *  0., then this restoration phase is not enabled. */
     Number soft_resto_pderror_reduction_factor_;
+    /** Maximal number of iterations that can be done in the soft
+     *  iteration phase before the algorithm reverts to the regular
+     *  restoration phase. */
+    Index max_soft_resto_iters_;
 
     /** Flag indicating whether magic steps should be used. */
     bool magic_steps_;
@@ -314,6 +318,10 @@ namespace Ipopt
      *  reduce the optimality error (see
      *  soft_resto_pderror_reduction_factor) */
     bool in_soft_resto_phase_;
+
+    /** Counter for iteration performed in soft restoration phase in a
+     *  row */
+    Index soft_resto_counter_;
 
     /** Counter for the number of successive iterations in which the
      *  full step was not accepted. */

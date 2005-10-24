@@ -85,8 +85,8 @@ namespace Ipopt
 
     options.GetNumericValue("residual_ratio_max", residual_ratio_max_, prefix);
     options.GetNumericValue("residual_ratio_singular", residual_ratio_singular_, prefix);
-    ASSERT_EXCEPTION(residual_ratio_singular_ > residual_ratio_max_, OPTION_INVALID,
-                     "Option \"residual_ratio_singular\": This value must be larger than residual_ratio_max.");
+    ASSERT_EXCEPTION(residual_ratio_singular_ >= residual_ratio_max_, OPTION_INVALID,
+                     "Option \"residual_ratio_singular\": This value must be not smaller than residual_ratio_max.");
     options.GetNumericValue("residual_improvement_factor", residual_improvement_factor_, prefix);
 
     // Reset internal flags and data

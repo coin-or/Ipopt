@@ -42,6 +42,9 @@
 /* Define to 1 if you have the <cstdio> header file. */
 #define HAVE_CSTDIO 1
 
+/* Define to 1 if you have the <ctime> header file. */
+#define HAVE_CTIME 1
+
 /* Define to 1 if you have the <ctype.h> header file. */
 /* #undef HAVE_CTYPE_H */
 
@@ -95,6 +98,9 @@
 
 /* Define to 1 if TAUCS is available (unsupported) */
 /* #undef HAVE_TAUCS */
+
+/* Define to 1 if you have the <time.h> header file. */
+/* #undef HAVE_TIME_H */
 
 /* Define to 1 if you have the <unistd.h> header file. */
 /* #undef HAVE_UNISTD_H */
