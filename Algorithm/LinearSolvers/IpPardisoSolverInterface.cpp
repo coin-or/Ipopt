@@ -120,7 +120,7 @@ namespace Ipopt
     // Options suggested by Olaf Schenk
     IPARM_[9] = 12;
     IPARM_[10] = 1;
-    // Matching information:  IPARM_[12] = 1 seems ok, but results in a 
+    // Matching information:  IPARM_[12] = 1 seems ok, but results in a
     // large number of pivot perturbation
     // Matching information:  IPARM_[12] = 2 robust,  but more  expensive method
     IPARM_[12] = 2;
@@ -327,26 +327,26 @@ namespace Ipopt
         // trigger a new symblic factorization for the next factorize
         // call, even if the current inertia estimate is correct
         // OLAF MICHAEL : Maybe we need to discuss this
-	have_symbolic_factorization_ = false;
-	// We assume now that if there was just a symbolic
-	// factorization and we still have perturbed pivots, that the
-	// system is actually singular
-	if (just_performed_symbolic_factorization) {
+        have_symbolic_factorization_ = false;
+        // We assume now that if there was just a symbolic
+        // factorization and we still have perturbed pivots, that the
+        // system is actually singular
+        if (just_performed_symbolic_factorization) {
           IpData().Append_info_string("Ps");
           //break; // Declaring this system singular doesn't seem to be
-                 // working well???
-	  return SYMSOLVER_SINGULAR;
-	  }
-	IpData().Append_info_string("Pp");
-	/*
-        // If we there were perturbed pivots, and the inertia of the
-        // system is correct, and we haven't redone the symblic
-        // factorization during this call yet, trigger a new
-        // factorization after a symblic factorization
-        done = (just_performed_symbolic_factorization || !check_NegEVals ||
-                numberOfNegEVals==negevals_);
-	*/
-	done = false;
+          // working well???
+          return SYMSOLVER_SINGULAR;
+        }
+        IpData().Append_info_string("Pp");
+        /*
+               // If we there were perturbed pivots, and the inertia of the
+               // system is correct, and we haven't redone the symblic
+               // factorization during this call yet, trigger a new
+               // factorization after a symblic factorization
+               done = (just_performed_symbolic_factorization || !check_NegEVals ||
+                       numberOfNegEVals==negevals_);
+        */
+        done = false;
       }
       else {
         done = true;

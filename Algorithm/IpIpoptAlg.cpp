@@ -385,12 +385,12 @@ namespace Ipopt
       IpCq().ResetAdjustedTrialSlacks();
       if (adjusted_slacks==1) {
         Jnlst().Printf(J_WARNING, J_MAIN,
-                       "In iteration $d, %d Slack too small, adjusting variable bound\n",
+                       "In iteration %d, %d Slack too small, adjusting variable bound\n",
                        IpData().iter_count(), adjusted_slacks);
       }
       else {
         Jnlst().Printf(J_WARNING, J_MAIN,
-                       "In iteration $d, %d Slacks too small, adjusting variable bounds\n",
+                       "In iteration %d, %d Slacks too small, adjusting variable bounds\n",
                        IpData().iter_count(), adjusted_slacks);
       }
       if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
