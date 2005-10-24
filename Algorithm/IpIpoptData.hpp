@@ -229,7 +229,7 @@ namespace Ipopt
     {
       have_cgpen_deltas_ = have_cgpen_deltas;
     }
-    
+
 
     /** @name Public Methods for updating iterates */
     //@{

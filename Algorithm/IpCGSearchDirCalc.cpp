@@ -137,39 +137,39 @@ namespace Ipopt
     SmartPtr<const Vector> delta_y_d = IpData().delta()->y_d();
 
     Number hat_y_nrm = sqrt(pow(y_c->Nrm2(), 2.) +
-			    pow(y_d->Nrm2(), 2.) +
-			    2.*y_c->Dot(*delta_y_c) +
-			    2.*y_d->Dot(*delta_y_d) +
-			    pow(delta_y_c->Nrm2(), 2.) +
-			    pow(delta_y_d->Nrm2(), 2.));
+                            pow(y_d->Nrm2(), 2.) +
+                            2.*y_c->Dot(*delta_y_c) +
+                            2.*y_d->Dot(*delta_y_d) +
+                            pow(delta_y_c->Nrm2(), 2.) +
+                            pow(delta_y_d->Nrm2(), 2.));
     Number diff_y = sqrt(pow(delta_fast_y_c->Nrm2(), 2.) +
-			 pow(delta_fast_y_d->Nrm2(), 2.) -
-			 2.*delta_y_c->Dot(*delta_fast_y_c) -
-			 2.*delta_y_d->Dot(*delta_fast_y_d) +
-			 pow(delta_y_c->Nrm2(), 2.) +
-			 pow(delta_y_d->Nrm2(), 2.));
+                         pow(delta_fast_y_d->Nrm2(), 2.) -
+                         2.*delta_y_c->Dot(*delta_fast_y_c) -
+                         2.*delta_y_d->Dot(*delta_fast_y_d) +
+                         pow(delta_y_c->Nrm2(), 2.) +
+                         pow(delta_y_d->Nrm2(), 2.));
 
     Number kappa_dis_ = 1e1;
     if (diff_y > kappa_dis_*hat_y_nrm) {
       keep_fast_delta = false;
       IpData().Append_info_string("G");
     }
- 
+
     if (keep_fast_delta) {
       // For now, I just check if the directional derivative for the
       // penalty functions are not too much off
       Number direct_deriv = IpCq().curr_direct_deriv_penalty_function();
       Number fast_direct_deriv = IpCq().curr_fast_direct_deriv_penalty_function();
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-		     "direct_deriv = %23.16e  fast_direct_deriv = %23.15e\n",
-		     direct_deriv, fast_direct_deriv);
+                     "direct_deriv = %23.16e  fast_direct_deriv = %23.15e\n",
+                     direct_deriv, fast_direct_deriv);
       Number need_name_ = 1e-1;
       if (fast_direct_deriv > need_name_*direct_deriv) {
-	// Discard the fast direction
-	//delta_fast = NULL;
-	//IpData().set_delta_cgpen(delta_fast);
-	keep_fast_delta = false;
-	IpData().Append_info_string("g");
+        // Discard the fast direction
+        //delta_fast = NULL;
+        //IpData().set_delta_cgpen(delta_fast);
+        keep_fast_delta = false;
+        IpData().Append_info_string("g");
       }
     }
 

@@ -88,16 +88,16 @@ namespace Ipopt
       reference_penalty_function_ = IpCq().curr_penalty_function();
       // ToDo we need to make this cleaner!
       if (IpData().HaveCgPenDeltas()) {
-	// use the fast step
-	reference_direct_deriv_penalty_function_ =
-	  IpCq().curr_fast_direct_deriv_penalty_function();
-	// Overwrite the original step (hmm.....)
-	SmartPtr<const IteratesVector> delta_cgpen = IpData().delta_cgpen();
-	IpData().set_delta(delta_cgpen);
+        // use the fast step
+        reference_direct_deriv_penalty_function_ =
+          IpCq().curr_fast_direct_deriv_penalty_function();
+        // Overwrite the original step (hmm.....)
+        SmartPtr<const IteratesVector> delta_cgpen = IpData().delta_cgpen();
+        IpData().set_delta(delta_cgpen);
       }
       else {
-	reference_direct_deriv_penalty_function_ =
-	  IpCq().curr_direct_deriv_penalty_function();
+        reference_direct_deriv_penalty_function_ =
+          IpCq().curr_direct_deriv_penalty_function();
       }
     }
     else {
@@ -124,13 +124,13 @@ namespace Ipopt
                    "  New values of penalty function     = %23.16e  (reference %23.16e):\n", trial_penalty_function, reference_penalty_function_);
     if (Jnlst().ProduceOutput(J_DETAILED, J_LINE_SEARCH)) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		     "curr_barr  = %23.16e curr_inf  = %23.16e\n",
-		     IpCq().curr_barrier_obj(),
-		     IpCq().curr_primal_infeasibility(NORM_2));
+                     "curr_barr  = %23.16e curr_inf  = %23.16e\n",
+                     IpCq().curr_barrier_obj(),
+                     IpCq().curr_primal_infeasibility(NORM_2));
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		     "trial_barr = %23.16e trial_inf = %23.16e\n",
-		     IpCq().trial_barrier_obj(),
-		     IpCq().trial_primal_infeasibility(NORM_2));
+                     "trial_barr = %23.16e trial_inf = %23.16e\n",
+                     IpCq().trial_barrier_obj(),
+                     IpCq().trial_primal_infeasibility(NORM_2));
     }
 
     // Now check the Armijo condition
@@ -223,11 +223,11 @@ namespace Ipopt
     // Check if the penalty parameter is to be increased
 
     Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-		   "Starting tests for penalty parameter update:\n");
+                   "Starting tests for penalty parameter update:\n");
     // Lifeng: Should we use the new infeasibility here?
     Number curr_inf = IpCq().curr_primal_infeasibility(NORM_2);
     Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-		   "current infeasibility = %8.2\n", curr_inf);
+                   "current infeasibility = %8.2\n", curr_inf);
     bool increase = (curr_inf >= penalty_update_infeasibility_tol_);
     if (!increase) {
       info_alpha_primal_char='i';
@@ -235,9 +235,9 @@ namespace Ipopt
 
     if (increase) {
       Number max_step = Max(IpData().delta()->x()->Amax(),
-			    IpData().delta()->s()->Amax());
+                            IpData().delta()->s()->Amax());
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-		     "Max norm of step = %8.2\n", max_step);
+                     "Max norm of step = %8.2\n", max_step);
       increase = (max_step <= curr_eta_);
       if (!increase) {
         info_alpha_primal_char='d';
@@ -252,30 +252,30 @@ namespace Ipopt
       Number max_compl = mu;
       if (IpNLP().x_L()->Dim()>0) {
         SmartPtr<const Vector> compl_x_L = IpCq().curr_compl_x_L();
-	min_compl = Min(min_compl, compl_x_L->Min());
-	max_compl = Max(max_compl, compl_x_L->Max());
+        min_compl = Min(min_compl, compl_x_L->Min());
+        max_compl = Max(max_compl, compl_x_L->Max());
       }
       if (IpNLP().x_U()->Dim()>0) {
         SmartPtr<const Vector> compl_x_U = IpCq().curr_compl_x_U();
-	min_compl = Min(min_compl, compl_x_U->Min());
-	max_compl = Max(max_compl, compl_x_U->Max());
+        min_compl = Min(min_compl, compl_x_U->Min());
+        max_compl = Max(max_compl, compl_x_U->Max());
       }
       if (IpNLP().d_L()->Dim()>0) {
         SmartPtr<const Vector> compl_s_L = IpCq().curr_compl_s_L();
-	min_compl = Min(min_compl, compl_s_L->Min());
-	max_compl = Max(max_compl, compl_s_L->Max());
+        min_compl = Min(min_compl, compl_s_L->Min());
+        max_compl = Max(max_compl, compl_s_L->Max());
       }
       if (IpNLP().d_U()->Dim()>0) {
         SmartPtr<const Vector> compl_s_U = IpCq().curr_compl_s_U();
-	min_compl = Min(min_compl, compl_s_U->Min());
-	max_compl = Max(max_compl, compl_s_U->Max());
+        min_compl = Min(min_compl, compl_s_U->Min());
+        max_compl = Max(max_compl, compl_s_U->Max());
       }
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-		      "Minimal compl = %8.2\n", min_compl);
+                     "Minimal compl = %8.2\n", min_compl);
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-		      "Maximal compl = %8.2\n", max_compl);
+                     "Maximal compl = %8.2\n", max_compl);
       increase = (min_compl >= mu*penalty_update_compl_tol_ &&
-		  max_compl <= mu/penalty_update_compl_tol_);
+                  max_compl <= mu/penalty_update_compl_tol_);
       if (!increase) {
         info_alpha_primal_char='c';
       }
@@ -290,17 +290,17 @@ namespace Ipopt
                          1.);
       Number omega_test = vec->Amax();
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-		      "omega_test for c = %8.2\n", omega_test);
+                     "omega_test for c = %8.2\n", omega_test);
       increase = (omega_test < curr_eta_);
       if (increase) {
         SmartPtr<Vector> vec = IpData().curr()->y_d()->MakeNewCopy();
         vec->AddTwoVectors(1., *IpData().delta()->y_d(),
                            -1./IpCq().curr_cg_pert_fact(), *IpCq().curr_d_minus_s(),
                            1.);
-	omega_test = vec->Amax();
-	  Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-			 "omega_test for d = %8.2\n", omega_test);
-	  increase = (omega_test < curr_eta_);
+        omega_test = vec->Amax();
+        Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                       "omega_test for d = %8.2\n", omega_test);
+        increase = (omega_test < curr_eta_);
       }
       if (!increase) {
         info_alpha_primal_char='m';
@@ -314,7 +314,7 @@ namespace Ipopt
       // Update the eta tolerance
       curr_eta_ = Max(eta_min_, curr_eta_/2.);
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-		     "Updating eta to = %8.2\n", curr_eta_);
+                     "Updating eta to = %8.2\n", curr_eta_);
       Number penalty = IpData().curr_penalty();
       Number y_full_step_max;
       SmartPtr<Vector> vec = IpData().curr()->y_c()->MakeNew();
