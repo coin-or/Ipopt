@@ -120,7 +120,10 @@ namespace Ipopt
     // Options suggested by Olaf Schenk
     IPARM_[9] = 12;
     IPARM_[10] = 1;
-    IPARM_[12] = 1;
+    // Matching information:  IPARM_[12] = 1 seems ok, but results in a 
+    // large number of pivot perturbation
+    // Matching information:  IPARM_[12] = 2 robust,  but more  expensive method
+    IPARM_[12] = 2;
 
     IPARM_[20] = 1;
 
@@ -279,6 +282,8 @@ namespace Ipopt
       if (!have_symbolic_factorization_) {
         IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
         PHASE = 11;
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Calling Pardiso for symbolic factorization.\n");
         F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                                   &PHASE, &N, a_, ia, ja, &PERM,
                                   &NRHS, IPARM_, &MSGLVL_, &B, &X,
@@ -296,6 +301,8 @@ namespace Ipopt
       PHASE = 22;
 
       IpData().TimingStats().LinearSystemFactorization().Start();
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Calling Pardiso for factorization.\n");
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                                 &PHASE, &N, a_, ia, ja, &PERM,
                                 &NRHS, IPARM_, &MSGLVL_, &B, &X,
@@ -317,17 +324,29 @@ namespace Ipopt
       if (IPARM_[13] != 0) {
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
-        IpData().Append_info_string("Pp");
         // trigger a new symblic factorization for the next factorize
         // call, even if the current inertia estimate is correct
         // OLAF MICHAEL : Maybe we need to discuss this
-        have_symbolic_factorization_ = false;
+	have_symbolic_factorization_ = false;
+	// We assume now that if there was just a symbolic
+	// factorization and we still have perturbed pivots, that the
+	// system is actually singular
+	if (just_performed_symbolic_factorization) {
+          IpData().Append_info_string("Ps");
+          //break; // Declaring this system singular doesn't seem to be
+                 // working well???
+	  return SYMSOLVER_SINGULAR;
+	  }
+	IpData().Append_info_string("Pp");
+	/*
         // If we there were perturbed pivots, and the inertia of the
         // system is correct, and we haven't redone the symblic
         // factorization during this call yet, trigger a new
         // factorization after a symblic factorization
         done = (just_performed_symbolic_factorization || !check_NegEVals ||
                 numberOfNegEVals==negevals_);
+	*/
+	done = false;
       }
       else {
         done = true;
@@ -368,6 +387,9 @@ namespace Ipopt
                               &PHASE, &N, a_, ia, ja, &PERM,
                               &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
                               &ERROR);
+
+    // The following delete was missing (memory leak?)
+    delete [] X; /* OLAF/MICHAEL: do we really need X? */
 
     if (IPARM_[6] != 0) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
