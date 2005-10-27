@@ -423,10 +423,8 @@ namespace Ipopt
     Number theta_trial = IpCq().trial_constraint_violation();
     Number alpha_primal_soc = alpha_primal;
 
-    SmartPtr<Vector> c_soc = IpCq().curr_c()->MakeNew();
-    SmartPtr<Vector> dms_soc = IpCq().curr_d_minus_s()->MakeNew();
-    c_soc->Copy(*IpCq().curr_c());
-    dms_soc->Copy(*IpCq().curr_d_minus_s());
+    SmartPtr<Vector> c_soc = IpCq().curr_c()->MakeNewCopy();
+    SmartPtr<Vector> dms_soc = IpCq().curr_d_minus_s()->MakeNewCopy();
     while (count_soc<max_soc_ && !accept &&
            (count_soc==0 || theta_trial<=kappa_soc_*theta_soc_old) ) {
       theta_soc_old = theta_trial;

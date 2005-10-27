@@ -115,9 +115,10 @@ namespace Ipopt
     /** get the current delta */
     SmartPtr<const IteratesVector> delta() const;
 
-    /** Set the current delta - like the trial point, this method copies
-     *  the pointer for efficiency (no copy and to keep cache tags the
-     *  same) so after you call set, you cannot modify the data
+    /** Set the current delta - like the trial point, this method
+     *  copies the pointer for efficiency (no copy and to keep cache
+     *  tags the same) so after you call set, you cannot modify the
+     *  data.
      */
     void set_delta(SmartPtr<IteratesVector>& delta);
 
@@ -125,7 +126,7 @@ namespace Ipopt
      *  copies the pointer for efficiency (no copy and to keep cache
      *  tags the same) so after you call set, you cannot modify the
      *  data.  This is the version that is happy with a pointer to
-     *  const IteratesVector
+     *  const IteratesVector.
      */
     void set_delta(SmartPtr<const IteratesVector>& delta);
 
@@ -134,20 +135,38 @@ namespace Ipopt
 
     /** Set the affine delta - like the trial point, this method copies
      *  the pointer for efficiency (no copy and to keep cache tags the
-     *  same) so after you call set, you cannot modify the data
+     *  same) so after you call set, you cannot modify the data.
      */
     void set_delta_aff(SmartPtr<IteratesVector>& delta_aff);
 
-    /** Delta for the fast Chen-Goldfarb search direction */
+    /** Delta for the Chen-Goldfarb search direction */
     SmartPtr<const IteratesVector> delta_cgpen() const;
 
     /** Set the delta_cgpen - like the trial point, this method copies
      *  the pointer for efficiency (no copy and to keep cache tags the
-     *  same) so after you call set, you cannot modify the data
+     *  same) so after you call set, you cannot modify the data.
      */
     void set_delta_cgpen(SmartPtr<IteratesVector>& delta_pen);
 
-    /** Hessian or Hessian approximation (do not hold on to it, it might be changed) */
+    /** Set the delta_cgpen - like the trial point, this method copies
+     *  the pointer for efficiency (no copy and to keep cache tags the
+     *  same) so after you call set, you cannot modify the data.  This
+     *  is the version that is happy with a pointer to const
+     *  IteratesVector.
+     */
+    void set_delta_cgpen(SmartPtr<const IteratesVector>& delta_pen);
+
+    /** Delta for the fast Chen-Goldfarb search direction */
+    SmartPtr<const IteratesVector> delta_cgfast() const;
+
+    /** Set the delta_cgpen - like the trial point, this method copies
+     *  the pointer for efficiency (no copy and to keep cache tags the
+     *  same) so after you call set, you cannot modify the data.
+     */
+    void set_delta_cgfast(SmartPtr<IteratesVector>& delta_fast);
+
+    /** Hessian or Hessian approximation (do not hold on to it, it
+     *  might be changed) */
     SmartPtr<const SymMatrix> W()
     {
       DBG_ASSERT(IsValid(W_));
@@ -228,6 +247,15 @@ namespace Ipopt
     void SetHaveCgPenDeltas(bool have_cgpen_deltas)
     {
       have_cgpen_deltas_ = have_cgpen_deltas;
+    }
+
+    bool HaveCgFastDeltas() const
+    {
+      return have_cgfast_deltas_;
+    }
+    void SetHaveCgFastDeltas(bool have_cgfast_deltas)
+    {
+      have_cgfast_deltas_ = have_cgfast_deltas;
     }
 
 
@@ -474,6 +502,20 @@ namespace Ipopt
     bool have_cgpen_deltas_;
     //@}
 
+    /** @name Fast Chen-Goldfarb step for the penatly function.  This
+     *  used to transfer the information about the step from the
+     *  computation of the overall search direction to the line
+     *  search. */
+    //@{
+    SmartPtr<const IteratesVector> delta_cgfast_;
+    /** The following flag is set to true, if some other part of the
+     *  algorithm has already computed the fast Chen-Goldfarb step.
+     *  This flag is reset when the AcceptTrialPoint method is called.
+     *  * ToDo: we could cue off of a null delta_cgfast_;
+     */
+    bool have_cgfast_deltas_;
+    //@}
+
     /** iteration count */
     Index iter_count_;
 
@@ -571,11 +613,13 @@ namespace Ipopt
     TaggedObject::Tag debug_delta_tag_;
     TaggedObject::Tag debug_delta_aff_tag_;
     TaggedObject::Tag debug_delta_cgpen_tag_;
+    TaggedObject::Tag debug_delta_cgfast_tag_;
     TaggedObject::Tag debug_curr_tag_sum_;
     TaggedObject::Tag debug_trial_tag_sum_;
     TaggedObject::Tag debug_delta_tag_sum_;
     TaggedObject::Tag debug_delta_aff_tag_sum_;
     TaggedObject::Tag debug_delta_cgpen_tag_sum_;
+    TaggedObject::Tag debug_delta_cgfast_tag_sum_;
     //@}
 #endif
 
@@ -629,6 +673,16 @@ namespace Ipopt
 #   endif
 
     return delta_cgpen_;
+  }
+
+  inline
+  SmartPtr<const IteratesVector> IpoptData::delta_cgfast() const
+  {
+#   ifdef IP_DEBUG
+    DBG_ASSERT(IsNull(delta_cgfast_) || (delta_cgfast_->GetTag() == debug_delta_cgfast_tag_ && delta_cgfast_->GetTagSum() == debug_delta_cgfast_tag_sum_) );
+#   endif
+
+    return delta_cgfast_;
   }
 
   inline
@@ -744,6 +798,44 @@ namespace Ipopt
 #endif
 
     delta_cgpen = NULL;
+  }
+
+  inline
+  void IpoptData::set_delta_cgpen(SmartPtr<const IteratesVector>& delta_cgpen)
+  {
+    delta_cgpen_ = delta_cgpen;
+#ifdef IP_DEBUG
+
+    if (IsValid(delta_cgpen)) {
+      debug_delta_cgpen_tag_ = delta_cgpen->GetTag();
+      debug_delta_cgpen_tag_sum_ = delta_cgpen->GetTagSum();
+    }
+    else {
+      debug_delta_cgpen_tag_ = 0;
+      debug_delta_cgpen_tag_sum_ = delta_cgpen->GetTagSum();
+    }
+#endif
+
+    delta_cgpen = NULL;
+  }
+
+  inline
+  void IpoptData::set_delta_cgfast(SmartPtr<IteratesVector>& delta_cgfast)
+  {
+    delta_cgfast_ = ConstPtr(delta_cgfast);
+#ifdef IP_DEBUG
+
+    if (IsValid(delta_cgfast)) {
+      debug_delta_cgfast_tag_ = delta_cgfast->GetTag();
+      debug_delta_cgfast_tag_sum_ = delta_cgfast->GetTagSum();
+    }
+    else {
+      debug_delta_cgfast_tag_ = 0;
+      debug_delta_cgfast_tag_sum_ = delta_cgfast->GetTagSum();
+    }
+#endif
+
+    delta_cgfast = NULL;
   }
 
 } // namespace Ipopt

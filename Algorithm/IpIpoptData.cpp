@@ -56,6 +56,7 @@ namespace Ipopt
     have_deltas_ = false;
     have_affine_deltas_ = false;
     have_cgpen_deltas_ = false;
+    have_cgfast_deltas_ = false;
 
     free_mu_mode_ = false;
     tiny_step_flag_ = false;
@@ -128,7 +129,9 @@ namespace Ipopt
     debug_delta_aff_tag_ = 0;
     debug_delta_aff_tag_sum_ = 0;
     debug_delta_cgpen_tag_ = 0;
+    debug_delta_cgfast_tag_ = 0;
     debug_delta_cgpen_tag_sum_ = 0;
+    debug_delta_cgfast_tag_sum_ = 0;
 #endif
 
     trial_ = NULL;
@@ -137,11 +140,13 @@ namespace Ipopt
     delta_ = NULL;
     delta_aff_ = NULL;
     delta_cgpen_ = NULL;
+    delta_cgfast_ = NULL;
 
     have_prototypes_ = true;
     have_deltas_ = false;
     have_affine_deltas_ = false;
     have_cgpen_deltas_ = false;
+    have_cgfast_deltas_ = false;
 
     return true;
   }
@@ -230,10 +235,12 @@ namespace Ipopt
 
     // Free the memory for the Chen-Goldfarb step
     delta_cgpen_ = NULL;
+    delta_cgfast_ = NULL;
 
     have_deltas_ = false;
     have_affine_deltas_ = false;
     have_cgpen_deltas_ = false;
+    have_cgfast_deltas_ = false;
   }
 
 } // namespace Ipopt

@@ -129,6 +129,8 @@ namespace Ipopt
       CreateAugmentedSystem(W, D_x, delta_x, D_s, delta_s,
                             *J_c, D_c, delta_c, *J_d, D_d, delta_d,
                             rhs_x, rhs_s, rhs_c, rhs_d);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Augmented system has changed, need to refactorize.\n");
     }
 
     // Sanity checks
@@ -178,14 +180,14 @@ namespace Ipopt
     retval = linsolver_->Solve(*augmented_system_, *augmented_rhs, *augmented_sol,
                                check_NegEVals, numberOfNegEVals);
     if (retval==SYMSOLVER_SUCCESS) {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Factorization successful.\n");
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Solution successful.\n");
       augmented_sol->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, "SOL");
     }
     else if (retval==SYMSOLVER_FATAL_ERROR) {
       THROW_EXCEPTION(FATAL_ERROR_IN_LINEAR_SOLVER,"A fatal error occured in the linear solver.");
     }
     else {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Factorization failed with retval = %d\n", retval);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Solution failed with retval = %d\n", retval);
     }
 
     return retval;

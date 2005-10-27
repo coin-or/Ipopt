@@ -36,12 +36,19 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "penalty_init_min",
       "Minimal value for the intial penalty parameter (for Chen-Goldfarb line search).",
-      0, true, 1e-3,
+      0, true, 1.,
       "");
     roptions->AddLowerBoundedNumberOption(
       "penalty_init_max",
       "Maximal value for the intial penalty parameter (for Chen-Goldfarb line search).",
-      0, true, 1.,
+      0, true, 10.,
+      "");
+    roptions->AddStringOption2(
+      "never_use_fact_cgpen_direction",
+      "Toggle to switch off the fast Chen-Goldfarb direction",
+      "no",
+      "no", "always compute the fast direction",
+      "yes", "never compute the fast direction",
       "");
   }
 
@@ -50,6 +57,8 @@ namespace Ipopt
   {
     options.GetNumericValue("penalty_init_min", penalty_init_min_, prefix);
     options.GetNumericValue("penalty_init_max", penalty_init_max_, prefix);
+    options.GetBoolValue("never_use_fact_cgpen_direction",
+                         never_use_fact_cgpen_direction_, prefix);
 
     return pd_solver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                   options, prefix);
@@ -75,14 +84,22 @@ namespace Ipopt
     rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
 
     if (!IpData().PenaltyInitialized()) {
-      Number penalty_init = Max(penalty_init_max_,
-                                Min(Max(IpData().curr()->y_c()->Amax(),
-                                        IpData().curr()->y_d()->Amax()),
-                                    penalty_init_min_));
+      Number y_max = Max(IpData().curr()->y_c()->Amax(),
+                         IpData().curr()->y_d()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "Initializing penalty parameter...\n");
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "Max(||y_c||_inf,||y_d||_inf = %8.2e\n",
+                     y_max);
+      Number penalty_init = Max(penalty_init_min_,
+                                Min(y_max, penalty_init_max_));
       IpData().Set_penalty(penalty_init);
       char spen[40];
       sprintf(spen, " penaltyinit=%8.2e", penalty_init);
       IpData().Append_info_string(spen);
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "Initial value of the penalty parameter = %8.2e\n",
+                     penalty_init);
     }
 
     Number c_over_r = IpCq().curr_cg_pert_fact();
@@ -98,84 +115,101 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "rhs_cgpen", *rhs);
 
     // Get space for the search direction
-    SmartPtr<IteratesVector> delta =
+    SmartPtr<IteratesVector> delta_cgpen =
       IpData().curr()->MakeNewIteratesVector(true);
 
     bool allow_inexact = false;
-    pd_solver_->Solve(-1.0, 0.0, *rhs, *delta, allow_inexact,
+    pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_cgpen, allow_inexact,
                       improve_solution);
 
     // Store the original search direction in the IpData object
-    IpData().set_delta(delta);
-
-    // Now solve it again but for the "fast" search direction
-    rhs->Set_y_c(*IpCq().curr_c());
-    rhs->Set_y_d(*IpCq().curr_d_minus_s());
-
-    // Get space for the search direction
-    SmartPtr<IteratesVector> delta_fast =
-      IpData().curr()->MakeNewIteratesVector(true);
-
-    allow_inexact = false;
-    pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_fast, allow_inexact,
-                      improve_solution);
-
-    // Store the fast search direction in the IpData object
-    IpData().set_delta_cgpen(delta_fast);
+    IpData().set_delta_cgpen(delta_cgpen);
     IpData().SetHaveCgPenDeltas(true);
 
-    // Now we check whether the fast direction is good compatible with
-    // the merit function
-
     bool keep_fast_delta = true;
-    // do the || tilde y - hat y ||_2 <= k_dis ||hat y||_2 test
-    SmartPtr<const Vector> y_c = IpData().curr()->y_c();
-    SmartPtr<const Vector> y_d = IpData().curr()->y_d();
-    SmartPtr<const Vector> delta_fast_y_c = IpData().delta_cgpen()->y_c();
-    SmartPtr<const Vector> delta_fast_y_d = IpData().delta_cgpen()->y_d();
-    SmartPtr<const Vector> delta_y_c = IpData().delta()->y_c();
-    SmartPtr<const Vector> delta_y_d = IpData().delta()->y_d();
-
-    Number hat_y_nrm = sqrt(pow(y_c->Nrm2(), 2.) +
-                            pow(y_d->Nrm2(), 2.) +
-                            2.*y_c->Dot(*delta_y_c) +
-                            2.*y_d->Dot(*delta_y_d) +
-                            pow(delta_y_c->Nrm2(), 2.) +
-                            pow(delta_y_d->Nrm2(), 2.));
-    Number diff_y = sqrt(pow(delta_fast_y_c->Nrm2(), 2.) +
-                         pow(delta_fast_y_d->Nrm2(), 2.) -
-                         2.*delta_y_c->Dot(*delta_fast_y_c) -
-                         2.*delta_y_d->Dot(*delta_fast_y_d) +
-                         pow(delta_y_c->Nrm2(), 2.) +
-                         pow(delta_y_d->Nrm2(), 2.));
-
-    Number kappa_dis_ = 1e1;
-    if (diff_y > kappa_dis_*hat_y_nrm) {
+    if (never_use_fact_cgpen_direction_) {
+      IpData().SetHaveCgFastDeltas(false);
       keep_fast_delta = false;
-      IpData().Append_info_string("G");
     }
+    else {
+      // Now solve it again but for the "fast" search direction
+      rhs->Set_y_c(*IpCq().curr_c());
+      rhs->Set_y_d(*IpCq().curr_d_minus_s());
 
-    if (keep_fast_delta) {
-      // For now, I just check if the directional derivative for the
-      // penalty functions are not too much off
-      Number direct_deriv = IpCq().curr_direct_deriv_penalty_function();
-      Number fast_direct_deriv = IpCq().curr_fast_direct_deriv_penalty_function();
+      // Get space for the search direction
+      SmartPtr<IteratesVector> delta_fast =
+        IpData().curr()->MakeNewIteratesVector(true);
+
+      allow_inexact = false;
+      pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_fast, allow_inexact,
+                        improve_solution);
+
+      // Store the fast search direction in the IpData object
+      IpData().set_delta_cgfast(delta_fast);
+      IpData().SetHaveCgFastDeltas(true);
+
+      // Now we check whether the fast direction is good compatible with
+      // the merit function
+
+      // do the || tilde y - hat y ||_2 <= k_dis ||hat y||_2 test
+      SmartPtr<const Vector> y_c = IpData().curr()->y_c();
+      SmartPtr<const Vector> y_d = IpData().curr()->y_d();
+      SmartPtr<const Vector> delta_fast_y_c = IpData().delta_cgfast()->y_c();
+      SmartPtr<const Vector> delta_fast_y_d = IpData().delta_cgfast()->y_d();
+      SmartPtr<const Vector> delta_y_c = IpData().delta_cgpen()->y_c();
+      SmartPtr<const Vector> delta_y_d = IpData().delta_cgpen()->y_d();
+
+      Number hat_y_nrm = sqrt(pow(y_c->Nrm2(), 2.)
+                              + pow(y_d->Nrm2(), 2.)
+                              + 2.*y_c->Dot(*delta_y_c)
+                              + 2.*y_d->Dot(*delta_y_d)
+                              + pow(delta_y_c->Nrm2(), 2.)
+                              + pow(delta_y_d->Nrm2(), 2.));
+      Number diff_y_nrm = sqrt(pow(delta_fast_y_c->Nrm2(), 2.)
+                               + pow(delta_fast_y_d->Nrm2(), 2.)
+                               - 2.*delta_y_c->Dot(*delta_fast_y_c)
+                               - 2.*delta_y_d->Dot(*delta_fast_y_d)
+                               + pow(delta_y_c->Nrm2(), 2.)
+                               + pow(delta_y_d->Nrm2(), 2.));
+
+      Number kappa_dis_ = 1e1;
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                     "direct_deriv = %23.16e  fast_direct_deriv = %23.15e\n",
-                     direct_deriv, fast_direct_deriv);
-      Number need_name_ = 1e-1;
-      if (fast_direct_deriv > need_name_*direct_deriv) {
-        // Discard the fast direction
-        //delta_fast = NULL;
-        //IpData().set_delta_cgpen(delta_fast);
+                     "Testing if fast direction can be used.\n"
+                     "  diff_y_nrm = %8.2e hat_y_norm = %8.2e\n",
+                     diff_y_nrm, hat_y_nrm);
+      if (diff_y_nrm > kappa_dis_*hat_y_nrm) {
         keep_fast_delta = false;
-        IpData().Append_info_string("g");
+        IpData().Append_info_string("G");
+      }
+
+      if (keep_fast_delta) {
+        // For now, I just check if the directional derivative for the
+        // penalty functions are not too much off
+        Number direct_deriv = IpCq().curr_direct_deriv_penalty_function();
+        Number fast_direct_deriv = IpCq().curr_fast_direct_deriv_penalty_function();
+        Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                       "direct_deriv = %23.15e  fast_direct_deriv = %23.15e\n",
+                       direct_deriv, fast_direct_deriv);
+        Number need_name_ = 1e-1;
+        if (fast_direct_deriv > need_name_*direct_deriv) {
+          // Discard the fast direction
+          //delta_fast = NULL;
+          //IpData().set_delta_cgpen(delta_fast);
+          keep_fast_delta = false;
+          IpData().Append_info_string("g");
+        }
       }
     }
 
+    SmartPtr<const IteratesVector> delta;
     if (!keep_fast_delta) {
-      IpData().SetHaveCgPenDeltas(false);
+      IpData().SetHaveCgFastDeltas(false);
+      delta = IpData().delta_cgpen();
     }
+    else {
+      delta = IpData().delta_cgfast();
+    }
+    IpData().set_delta(delta);
 
   }
 

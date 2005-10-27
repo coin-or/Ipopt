@@ -73,6 +73,9 @@ namespace Ipopt
     Number penalty_init_min_;
     /** Maximal value for initial penalty parameter. */
     Number penalty_init_max_;
+    /** Flag indicating whether the fast Chen-Goldfarb direction
+     *  should never be used */
+    bool never_use_fact_cgpen_direction_;
     //@}
 
     /** @name Strategy objects */

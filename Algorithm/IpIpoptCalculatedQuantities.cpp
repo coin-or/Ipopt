@@ -3336,15 +3336,19 @@ namespace Ipopt
     SmartPtr<const Vector> s = ip_data_->curr()->s();
     SmartPtr<const Vector> y_c = ip_data_->curr()->y_c();
     SmartPtr<const Vector> y_d = ip_data_->curr()->y_d();
-    SmartPtr<const Vector> dy_c = ip_data_->delta()->y_c();
-    SmartPtr<const Vector> dy_d = ip_data_->delta()->y_d();
-    std::vector<const TaggedObject*> tdeps(6);
+    SmartPtr<const Vector> dy_c = ip_data_->delta_cgpen()->y_c();
+    SmartPtr<const Vector> dy_d = ip_data_->delta_cgpen()->y_d();
+    SmartPtr<const Vector> dx = ip_data_->delta_cgpen()->x();
+    SmartPtr<const Vector> ds = ip_data_->delta_cgpen()->s();
+    std::vector<const TaggedObject*> tdeps(8);
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(s);
     tdeps[2] = GetRawPtr(y_c);
     tdeps[3] = GetRawPtr(y_d);
     tdeps[4] = GetRawPtr(dy_c);
     tdeps[5] = GetRawPtr(dy_d);
+    tdeps[6] = GetRawPtr(dx);
+    tdeps[7] = GetRawPtr(ds);
     Number mu = ip_data_->curr_mu();
     Number penalty = ip_data_->curr_penalty();
     std::vector<Number> sdeps(2);
@@ -3354,7 +3358,8 @@ namespace Ipopt
     if (!curr_direct_deriv_penalty_function_cache_.GetCachedResult(result, tdeps, sdeps)) {
       SmartPtr<const Vector> c = curr_c();
       SmartPtr<const Vector> d_minus_s = curr_d_minus_s();
-      result = curr_gradBarrTDelta();
+      result = curr_grad_barrier_obj_x()->Dot(*dx) +
+               curr_grad_barrier_obj_s()->Dot(*ds);
       result -= penalty*curr_primal_infeasibility(NORM_2);
       result += c->Dot(*y_c);
       result += c->Dot(*dy_c);
@@ -3375,13 +3380,17 @@ namespace Ipopt
     SmartPtr<const Vector> x = ip_data_->curr()->x();
     SmartPtr<const Vector> s = ip_data_->curr()->s();
     DBG_ASSERT(ip_data_->HaveCgPenDeltas());
-    SmartPtr<const Vector> dy_c = ip_data_->delta_cgpen()->y_c();
-    SmartPtr<const Vector> dy_d = ip_data_->delta_cgpen()->y_d();
-    std::vector<const TaggedObject*> tdeps(4);
+    SmartPtr<const Vector> dy_c = ip_data_->delta_cgfast()->y_c();
+    SmartPtr<const Vector> dy_d = ip_data_->delta_cgfast()->y_d();
+    SmartPtr<const Vector> dx = ip_data_->delta_cgfast()->x();
+    SmartPtr<const Vector> ds = ip_data_->delta_cgfast()->s();
+    std::vector<const TaggedObject*> tdeps(6);
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(s);
     tdeps[2] = GetRawPtr(dy_c);
     tdeps[3] = GetRawPtr(dy_d);
+    tdeps[4] = GetRawPtr(dx);
+    tdeps[5] = GetRawPtr(ds);
     Number mu = ip_data_->curr_mu();
     Number penalty = ip_data_->curr_penalty();
     std::vector<Number> sdeps(2);
@@ -3391,7 +3400,8 @@ namespace Ipopt
     if (!curr_fast_direct_deriv_penalty_function_cache_.GetCachedResult(result, tdeps, sdeps)) {
       SmartPtr<const Vector> c = curr_c();
       SmartPtr<const Vector> d_minus_s = curr_d_minus_s();
-      result = curr_gradBarrTDelta();
+      result = curr_grad_barrier_obj_x()->Dot(*dx) +
+               curr_grad_barrier_obj_s()->Dot(*ds);
       result -= penalty*curr_primal_infeasibility(NORM_2);
       result += c->Dot(*dy_c);
       result += d_minus_s->Dot(*dy_d);

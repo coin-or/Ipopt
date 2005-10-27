@@ -152,6 +152,12 @@ namespace Ipopt
     Number gamma_tilde_;
     Number penalty_max_;
     Number epsilon_c_;
+    /** Maximal number of second order correction steps */
+    Index max_soc_;
+    /** Required reduction in constraint violation before trying
+     *  multiple second order correction steps \f$ \kappa_{soc}\f$.
+     */
+    Number kappa_soc_;
     //@}
 
     /** Counter for increases of penalty parameter. */
@@ -174,6 +180,9 @@ namespace Ipopt
     /** Directional derivative of penalty function at the point with
      *  respect to which progress is to be made (at watchdog point) */
     Number watchdog_direct_deriv_penalty_function_;
+    /** Backup for the Chen-Goldfarb search direction (needed in the
+     *  update rule for the penalty parameter */
+    SmartPtr<const IteratesVector> watchdog_delta_cgpen_;
     //@}
 
     /** @name Strategy objective that are used */

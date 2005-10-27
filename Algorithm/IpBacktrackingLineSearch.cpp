@@ -529,19 +529,20 @@ namespace Ipopt
     }
   }
 
-  bool BacktrackingLineSearch::DoBacktrackingLineSearch(bool skip_first_trial_point,
-      Number& alpha_primal,
-      bool& corr_taken,
-      bool& soc_taken,
-      Index& n_steps,
-      bool& evaluation_error,
-      SmartPtr<IteratesVector>& actual_delta)
+  bool BacktrackingLineSearch::DoBacktrackingLineSearch(
+    bool skip_first_trial_point,
+    Number& alpha_primal,
+    bool& corr_taken,
+    bool& soc_taken,
+    Index& n_steps,
+    bool& evaluation_error,
+    SmartPtr<IteratesVector>& actual_delta)
   {
-    evaluation_error = false;
-    bool accept = false;
-
     DBG_START_METH("BacktrackingLineSearch::DoBacktrackingLineSearch",
                    dbg_verbosity);
+
+    evaluation_error = false;
+    bool accept = false;
 
     // Compute primal fraction-to-the-boundary value
     Number alpha_primal_max =
@@ -560,7 +561,7 @@ namespace Ipopt
     // Start line search from maximal step size
     alpha_primal = alpha_primal_max;
 
-    // Step size used in ftype and armijo tests
+    // Step size used in Armijo tests
     Number alpha_primal_test = alpha_primal;
     if (in_watchdog_) {
       alpha_primal_test = watchdog_alpha_primal_test_;
@@ -745,9 +746,10 @@ namespace Ipopt
     acceptor_->Reset();
   }
 
-  void BacktrackingLineSearch::PerformDualStep(Number alpha_primal,
-      Number alpha_dual,
-      SmartPtr<IteratesVector>& delta)
+  void BacktrackingLineSearch::PerformDualStep(
+    Number alpha_primal,
+    Number alpha_dual,
+    SmartPtr<IteratesVector>& delta)
   {
     DBG_START_FUN("BacktrackingLineSearch::PerformDualStep", dbg_verbosity);
 
@@ -769,7 +771,7 @@ namespace Ipopt
       alpha_y = Max(alpha_dual, alpha_primal);
       break;
       case FULL_STEP_FOR_Y:
-      alpha_y = 1;
+      alpha_y = 1.;
       break;
       case MIN_DUAL_INFEAS_ALPHA_FOR_Y:
       case SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y:
