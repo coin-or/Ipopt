@@ -357,7 +357,7 @@ namespace Ipopt
 
   char CGPenaltyLSAcceptor::UpdateForNextIteration(Number alpha_primal_test)
   {
-    char info_alpha_primal_char;
+    char info_alpha_primal_char='?';
 
     if (curr_eta_<0.) {
       // We need to initialize the eta tolerance
