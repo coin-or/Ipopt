@@ -22,6 +22,16 @@
 # endif
 #endif
 
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# else
+#  error "don't have header file for stdlib"
+# endif
+#endif
+
 /** Prototypes for Pardiso's subroutines */
 extern "C"
 {
@@ -111,7 +121,21 @@ namespace Ipopt
 
     // Set some parameters for Pardiso
     IPARM_[0] = 1;  // Don't use the default values
-    IPARM_[2] = 1;  // Only one CPU for now
+
+    // Obtain the numbers of processors from the value of OMP_NUM_THREADS
+    char    *var = getenv("OMP_NUM_THREADS");
+    int      num_procs;
+    if(var != NULL) {
+      sscanf( var, "%d", &num_procs );
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Using environment OMP_NUM_THREADS = %d as the number of processors.\n", num_procs);
+    }
+    else {
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "You need to set environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).");
+      return false;
+    }
+    IPARM_[2] = num_procs;  // Set the number of processors
     IPARM_[5] = 1;  // Overwrite right-hand side
     // ToDo: decide if we need iterative refinement in Pardiso.  For
     // now, switch it off ?
@@ -126,6 +150,8 @@ namespace Ipopt
     IPARM_[12] = 2;
 
     IPARM_[20] = 1;
+    IPARM_[23] = 1; // parallel fac
+    IPARM_[24] = 1; // parallel solve
 
     return true;
   }
