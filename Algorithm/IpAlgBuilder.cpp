@@ -34,6 +34,9 @@
 #ifdef HAVE_MA27
 # include "IpMa27TSolverInterface.hpp"
 #endif
+#ifdef HAVE_MA57
+# include "IpMa57TSolverInterface.hpp"
+#endif
 #ifdef HAVE_MC19
 # include "IpMc19TSymScalingMethod.hpp"
 #endif
@@ -53,11 +56,12 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Undocumented");
-    roptions->AddStringOption3(
+    roptions->AddStringOption4(
       "linear_solver",
       "Linear solver used for step computations.",
       "ma27",
       "ma27", "use the Harwell routine MA27",
+      "ma57", "use the Harwell routine MA57",
       "pardiso", "use the Pardiso package",
       "taucs", "use TAUCS package",
       "Determines which linear algebra package is to be used for the "
@@ -146,6 +150,16 @@ namespace Ipopt
 
       THROW_EXCEPTION(OPTION_INVALID,
                       "Selected linear solver MA27 not available.");
+#endif
+
+    }
+    else if (linear_solver=="ma57") {
+#ifdef HAVE_MA57
+      SolverInterface = new Ma57TSolverInterface();
+#else
+
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Selected linear solver MA57 not available.");
 #endif
 
     }

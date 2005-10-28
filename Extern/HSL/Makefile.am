@@ -18,6 +18,10 @@ if BUILDMA27
   nodist_libiphsl_a_SOURCES += ma27ad.f
 endif
 
+if BUILDMA27
+  nodist_libiphsl_a_SOURCES += ma57ad.f
+endif
+
 if BUILDMC19
   nodist_libiphsl_a_SOURCES += mc19ad.f
 endif

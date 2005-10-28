@@ -41,9 +41,11 @@ namespace Ipopt
      *  the number of nonzero elements, and airn and acjn give the
      *  positions of the nonzero elements.
      */
-    virtual ESymSolverStatus InitializeStructure(Index 	 	 dim, Index nonzeros,
-						 const Index 	*airn,
-						 const Index 	*ajcn);
+    virtual ESymSolverStatus InitializeStructure(
+      Index        dim,
+      Index nonzeros,
+      const Index     *airn,
+      const Index     *ajcn);
 
     /** Method returing an internal array into which the nonzero
      *  elements (in the same order as airn and ajcn) are to be stored
@@ -55,13 +57,13 @@ namespace Ipopt
     /** Solve operation for multiple right hand sides.  Overloaded
      *  from SparseSymLinearSolverInterface.
      */
-    virtual ESymSolverStatus MultiSolve(bool 		new_matrix,
-                                        const Index* 	airn,
-                                        const Index* 	ajcn,
-                                        Index 		nrhs,
-                                        double* 	rhs_vals,
-                                        bool 		check_NegEVals,
-                                        Index 		numberOfNegEVals);
+    virtual ESymSolverStatus MultiSolve(bool        new_matrix,
+                                        const Index*    airn,
+                                        const Index*    ajcn,
+                                        Index       nrhs,
+                                        double*     rhs_vals,
+                                        bool        check_NegEVals,
+                                        Index       numberOfNegEVals);
 
     /** Number of negative eigenvalues detected during last
      *  factorization.  Returns the number of negative eigenvalues of
@@ -151,8 +153,10 @@ namespace Ipopt
     //@{
     /** Pivol tolerance */
     Number pivtol_;
-    /** Factor for estimating initial value of la */
-    Number la_init_factor_;
+    /** Maximal pivot tolerance */
+    Number pivtolmax_;
+    /** Factor for estimating initial size of work arrays */
+    Number ma57_pre_alloc_;
     /** Flag indicating whether the TNLP with identical structure has
      *  already been solved before. */
     bool warm_start_same_structure_;
@@ -162,33 +166,25 @@ namespace Ipopt
      * Storing factorization and other solver specific data structure.
      */
     //@{
+    double   wd_cntl_[5];
+    ipfint   wd_icntl_[20];
+
+    ipfint   wd_info_[40];
+    double   wd_rinfo_[20];
+
+    ipfint   wd_lkeep_;      /* LKEEP >= 5*N + NE + max(N,NE) + 42. */
+    ipfint  *wd_keep_;
+
+    ipfint  *wd_iwork_;      /* 5 * N. */
+
+    double  *wd_fact_;
+    ipfint   wd_lfact_;
+    ipfint  *wd_ifact_;
+    ipfint   wd_lifact_;
 
 
-    double   wd_cntl[5];
-    ipfint   wd_icntl[20];
-
-    ipfint   wd_info[40];
-    double   wd_rinfo[20];
-
-    ipfint   wd_lkeep;		/* LKEEP >= 5*N + NE + max(N,NE) + 42. */
-    ipfint  *wd_keep;
-
-    ipfint  *wd_iwork;		/* 5 * N. */
-
-    double  *wd_fact;
-    ipfint   wd_lfact;
-    ipfint  *wd_ifact;
-    ipfint   wd_lifact;
-
-
-    /** length LA of A */
-    ipfint la_;
     /** factor A of matrix */
     double* a_;
-
-    /** flag indicating that la should be increased before next factorization
-     */
-    bool la_increase_;
     //@}
 
     /** @name Internal functions */
@@ -206,13 +202,13 @@ namespace Ipopt
      */
     ESymSolverStatus Factorization(const Index* airn,
                                    const Index* ajcn,
-                                   bool 	check_NegEVals,
-                                   Index 	numberOfNegEVals);
+                                   bool     check_NegEVals,
+                                   Index    numberOfNegEVals);
 
     /** Call MA57CD to do the backsolve.
      */
-    ESymSolverStatus Backsolve(Index 	 nrhs,
-                               double 	*rhs_vals);
+    ESymSolverStatus Backsolve(Index     nrhs,
+                               double   *rhs_vals);
     //@}
   };
 

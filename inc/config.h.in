@@ -41,6 +41,9 @@
 /* Define to 1 if you have the <cstdio> header file. */
 #undef HAVE_CSTDIO
 
+/* Define to 1 if you have the <cstdlib> header file. */
+#undef HAVE_CSTDLIB
+
 /* Define to 1 if you have the <ctime> header file. */
 #undef HAVE_CTIME
 
@@ -58,6 +61,9 @@
 
 /* Define to 1 if MA27 is available */
 #undef HAVE_MA27
+
+/* Define to 1 if MA57 is available */
+#undef HAVE_MA57
 
 /* Define to 1 if you have the <math.h> header file. */
 #undef HAVE_MATH_H

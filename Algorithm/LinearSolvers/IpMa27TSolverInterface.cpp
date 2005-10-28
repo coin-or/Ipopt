@@ -75,33 +75,33 @@ namespace Ipopt
   void Ma27TSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddBoundedNumberOption(
-      "pivtol",
+      "ma27_pivtol",
       "Pivot tolerance for the linear solver MA27.",
       0.0, true, 1.0, true, 1e-8,
       "A smaller number pivots for sparsity, "
       "a larger number pivots for stability.");
     roptions->AddBoundedNumberOption(
-      "pivtolmax",
-      "Maximum pivot tolerance.",
+      "ma27_pivtolmax",
+      "Maximum pivot tolerance for the linear solver MA27.",
       0.0, true, 1.0, true, 1e-4,
       "Ipopt may increase pivtol as high as pivtolmax "
       "to get a more accurate solution to the linear system.");
     roptions->AddLowerBoundedNumberOption(
-      "liw_init_factor",
+      "ma27_liw_init_factor",
       "Integer workspace memory for MA27.",
       1.0, false, 5.0,
       "The initial integer workspace memory = liw_init_factor * memory "
       "required by unfactored system. Ipopt will increase the workspace "
       "size by meminc_factor if required.");
     roptions->AddLowerBoundedNumberOption(
-      "la_init_factor",
+      "ma27_la_init_factor",
       "Real workspace memory for MA27.",
       1.0, false, 5.0,
       "The initial real workspace memory = la_init_factor * memory "
       "required by unfactored system. Ipopt will increase the workspace"
       " size by meminc_factor if required.");
     roptions->AddLowerBoundedNumberOption(
-      "meminc_factor",
+      "ma27_meminc_factor",
       "Increment factor for workspace size for MA27.",
       1.0, false, 10.0,
       "If the integer or real workspace is not large enough, "
@@ -111,8 +111,8 @@ namespace Ipopt
   bool Ma27TSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    options.GetNumericValue("pivtol", pivtol_, prefix);
-    if(options.GetNumericValue("pivtolmax", pivtolmax_, prefix)) {
+    options.GetNumericValue("ma27_pivtol", pivtol_, prefix);
+    if(options.GetNumericValue("ma27_pivtolmax", pivtolmax_, prefix)) {
       ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OPTION_INVALID,
                        "Option \"pivtolmax\": This value must be between "
                        "pivtol and 1.");
@@ -121,9 +121,9 @@ namespace Ipopt
       pivtolmax_ = Max(pivtolmax_, pivtol_);
     }
 
-    options.GetNumericValue("liw_init_factor", liw_init_factor_, prefix);
-    options.GetNumericValue("la_init_factor", la_init_factor_, prefix);
-    options.GetNumericValue("meminc_factor", meminc_factor_, prefix);
+    options.GetNumericValue("ma27_liw_init_factor", liw_init_factor_, prefix);
+    options.GetNumericValue("ma27_la_init_factor", la_init_factor_, prefix);
+    options.GetNumericValue("ma27_meminc_factor", meminc_factor_, prefix);
     // The following option is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
@@ -492,7 +492,7 @@ namespace Ipopt
     pivtol_changed_ = true;
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Indreasing pivot tolerance from %7.2e ",
+                   "Indreasing pivot tolerance  for MA27 from %7.2e ",
                    pivtol_);
     pivtol_ = Min(pivtolmax_, pow(pivtol_,0.75));
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,

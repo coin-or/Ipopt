@@ -738,6 +738,7 @@ MY_CHECK_CXX_HEADER(math)
 MY_CHECK_CXX_HEADER(ctype)
 MY_CHECK_CXX_HEADER(assert)
 MY_CHECK_CXX_HEADER(stdio)
+MY_CHECK_CXX_HEADER(stdlib)
 MY_CHECK_CXX_HEADER(stdarg)
 MY_CHECK_CXX_HEADER(float)
 MY_CHECK_CXX_HEADER(time)
@@ -1020,6 +1021,7 @@ if test "$use_hsl" = BUILD; then
     fi
   fi
   MY_CHECK_HSLFILE(mc19ad,MC19)
+  MY_CHECK_HSLFILE(ma57ad,MA57)
 else
   SAVE_LIBS="$LIBS"
   LIBS="$use_hsl $LIBS $FLIBS"
@@ -1034,6 +1036,7 @@ else
 		 AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
   fi
   MY_CHECK_HSL([mc19ad],[MC19])
+  MY_CHECK_HSL([ma57ad],[MA57])
   LIBS="$use_hsl $SAVE_LIBS"
 fi
 
@@ -1089,7 +1092,7 @@ AC_ARG_ENABLE([distconf],,
     *) AC_MSG_ERROR(bad value ${enableval} for --enable-distconf) ;;
   esac],[distconf=false])
 
-if test "$use_MA27" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no; then
+if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no; then
   if test "$distconf" = false; then
     AC_MSG_ERROR("No linear solver (such as MA27) available")
   fi
@@ -1293,6 +1296,7 @@ if test "$use_hsl" = BUILD ; then
   IPALLLIBS="Extern/HSL/libiphsl.a $IPALLLIBS"
 fi
 AM_CONDITIONAL([BUILDMA27],[test "$use_MA27" = BUILD])
+AM_CONDITIONAL([BUILDMA57],[test "$use_MA57" = BUILD])
 AM_CONDITIONAL([BUILDMC19],[test "$use_MC19" = BUILD])
 
 AM_CONDITIONAL([BUILDBLASDIR],[test "$use_blas" = BUILD])
@@ -1300,6 +1304,7 @@ AM_CONDITIONAL([BUILDBLASDIR],[test "$use_blas" = BUILD])
 AM_CONDITIONAL([BUILDHSLDIR],[test "$use_hsl" = BUILD])
 
 AM_CONDITIONAL([HAVE_MA27],[test ! "$use_MA27" = no])
+AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
 AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])

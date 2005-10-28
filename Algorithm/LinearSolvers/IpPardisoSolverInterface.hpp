@@ -84,6 +84,11 @@ namespace Ipopt
     }
     //@}
 
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -116,6 +121,12 @@ namespace Ipopt
     //@{
     /** Number of negative eigenvalues */
     Index negevals_;
+    //@}
+
+    /** @name Solver specific options */
+    //@{
+    /** Option that controls the matching strategy. */
+    int match_strat_;
     //@}
 
     /** @name Initialization flags */

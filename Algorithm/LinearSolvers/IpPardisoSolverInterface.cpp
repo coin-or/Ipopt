@@ -56,12 +56,14 @@ namespace Ipopt
   PardisoSolverInterface::PardisoSolverInterface()
       :
       a_(NULL),
+      negevals_(-1),
       initialized_(false),
 
       MAXFCT_(1),
       MNUM_(1),
       MTYPE_(-2),
-      MSGLVL_(0)
+      MSGLVL_(0),
+      debug_last_iter_(-1)
   {
     DBG_START_METH("PardisoSolverInterface::PardisoSolverInterface()",dbg_verbosity);
 
@@ -91,9 +93,24 @@ namespace Ipopt
     delete[] a_;
   }
 
+  void PardisoSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    // Todo Use keywords instead of integer numbers
+    roptions->AddIntegerOption(
+      "pardiso_iparm13",
+      "Matching strategy",
+      2,
+      "Matching strategy:  1=Match complete, 2=Match complete+2x2, 3=Match constraints");
+  }
+
   bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
+    options.GetIntegerValue("pardiso_iparm13", match_strat_, prefix);
+
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Pardiso matching strategy (IPARM(13)): %d\n", match_strat_);
+
     // Number value = 0.0;
 
     // Tell Pardiso to release all memory if it had been used before
@@ -147,7 +164,7 @@ namespace Ipopt
     // Matching information:  IPARM_[12] = 1 seems ok, but results in a
     // large number of pivot perturbation
     // Matching information:  IPARM_[12] = 2 robust,  but more  expensive method
-    IPARM_[12] = 2;
+    IPARM_[12] = match_strat_;
 
     IPARM_[20] = 1;
     IPARM_[23] = 1; // parallel fac
@@ -234,6 +251,53 @@ namespace Ipopt
     return SYMSOLVER_SUCCESS;
   }
 
+  static void
+  write_iajaa_matrix (int	    N,
+                      const Index*  ia,
+                      const Index*  ja,
+                      double* 	    a_,
+                      double* 	    rhs_vals,
+                      int   	    iter_cnt,
+                      int   	    sol_cnt)
+  {
+    if (getenv ("IPOPT_WRITE_MAT")) {
+      /* Write header */
+      FILE    *mat_file;
+      char     mat_name[128];
+      char     mat_pref[32];
+
+      ipfint   NNZ = ia[N]-1;
+      ipfint   i;
+
+      if (getenv ("IPOPT_WRITE_PREFIX"))
+        strcpy (mat_pref, getenv ("IPOPT_WRITE_PREFIX"));
+      else
+        strcpy (mat_pref, "mat-ipopt");
+
+      sprintf (mat_name, "%s_%03d-%02d.iajaa", mat_pref, iter_cnt, sol_cnt);
+
+      // Open and write matrix file.
+      mat_file = fopen (mat_name, "w");
+
+      fprintf (mat_file, "%d\n", N);
+      fprintf (mat_file, "%d\n", NNZ);
+
+      for (i = 0; i < N+1; i++)
+        fprintf (mat_file, "%d\n", ia[i]);
+      for (i = 0; i < NNZ; i++)
+        fprintf (mat_file, "%d\n", ja[i]);
+      for (i = 0; i < NNZ; i++)
+        fprintf (mat_file, "%32.24e\n", a_[i]);
+
+      /* Right hand side. */
+      if (rhs_vals)
+        for (i = 0; i < N; i++)
+          fprintf (mat_file, "%32.24e\n", rhs_vals[i]);
+
+      fclose (mat_file);
+    }
+  }
+
   ESymSolverStatus
   PardisoSolverInterface::Factorization(const Index* ia,
                                         const Index* ja,
@@ -243,8 +307,8 @@ namespace Ipopt
     DBG_START_METH("PardisoSolverInterface::Factorization",dbg_verbosity);
 
     // Call Pardiso to do the factorization
+    ipfint PHASE = 12;
     ipfint N = dim_;
-    ipfint PHASE;
     ipfint PERM;   // This should not be accessed by Pardiso
     ipfint NRHS = 0;
     double B;  // This should not be accessed by Pardiso in factorization
@@ -253,52 +317,16 @@ namespace Ipopt
     // phase
     ipfint ERROR;
 
-    if (getenv ("IPOPT_WRITE_MAT")) {
+    // In case of factorization errors, write matrix w/o rhs.
+    // write_iajaa_matrix (N, ia, ja, a_, NULL, IpData().iter_count(), debug_cnt);
 
-      // Dump matrix to file...
-      ipfint  NNZ = ia[N]-1;
-      ipfint   i;
-
-      if (IpData().iter_count() != debug_last_iter_) {
-        debug_cnt_ = 0;
-      }
-
-      /* Write header */
-      FILE    *mat_file;
-      char     mat_name[128];
-      char     mat_pref[32];
-
-      if (getenv ("IPOPT_WRITE_PREFIX"))
-        strcpy (mat_pref, getenv ("IPOPT_WRITE_PREFIX"));
-      else
-        strcpy (mat_pref, "mat-ipopt");
-
-      sprintf (mat_name, "%s_%03d-%02d.iajaa", mat_pref, IpData().iter_count(), debug_cnt_);
-      mat_file = fopen (mat_name, "w");
-
-      fprintf (mat_file, "%d\n", N);
-      fprintf (mat_file, "%d\n", NNZ);
-
-      /* Write ia's */
-      for (i = 0; i < N+1; i++)
-        fprintf (mat_file, "%d\n", ia[i]);
-
-      /* Write ja's */
-      for (i = 0; i < NNZ; i++)
-        fprintf (mat_file, "%d\n", ja[i]);
-
-      /* Write values */
-      for (i = 0; i < NNZ; i++)
-        fprintf (mat_file, "%32.24e\n", a_[i]);
-
-      // /* Write RHS */
-      // for (i = 0; i < N; i++)
-      // 	fprintf (mat_file, "%32.24e\n", rhs_vals[i]);
-
-      fclose (mat_file);
-
-      debug_last_iter_ = IpData().iter_count();
-      debug_cnt_++;
+    F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                              &PHASE, &N, a_, ia, ja, &PERM,
+                              &NRHS, IPARM_, &MSGLVL_, &B, &X,
+                              &ERROR);
+    if (ERROR==-4) {
+      // I think this means that the matrix is singular
+      return SYMSOLVER_SINGULAR;
     }
 
     bool done = false;
@@ -409,12 +437,21 @@ namespace Ipopt
     double* X = new double[nrhs*dim_];
     ipfint ERROR;
 
+
+    // Dump matrix to file, and count number of solution steps.
+    if (IpData().iter_count() != debug_last_iter_)
+      debug_cnt_ = 0;
+
+    write_iajaa_matrix (N, ia, ja, a_, rhs_vals, IpData().iter_count(), debug_cnt_);
+
+    debug_last_iter_ = IpData().iter_count();
+    debug_cnt_ ++;
+
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                               &PHASE, &N, a_, ia, ja, &PERM,
                               &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
                               &ERROR);
 
-    // The following delete was missing (memory leak?)
     delete [] X; /* OLAF/MICHAEL: do we really need X? */
 
     if (IPARM_[6] != 0) {

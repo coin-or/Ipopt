@@ -23,6 +23,11 @@ if HAVE_MA27
 	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp
 endif
 
+if HAVE_MA57
+  liblinsolvers_a_SOURCES += \
+	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp
+endif
+
 if HAVE_MC19
   liblinsolvers_a_SOURCES += \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp
@@ -50,6 +55,7 @@ CXXFLAGS += -I$(srcdir)/../../Common \
 ASTYLE_FILES = \
 	IpLinearSolversRegOp.cppbak IpLinearSolversRegOp.hppbak \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
+	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
 	IpSparseSymLinearSolverInterface.hppbak \
 	IpSymLinearSolver.hppbak \

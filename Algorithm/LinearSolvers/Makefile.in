@@ -46,13 +46,16 @@ build_triplet = @build@
 @HAVE_MA27_TRUE@am__append_1 = \
 @HAVE_MA27_TRUE@	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp
 
-@HAVE_MC19_TRUE@am__append_2 = \
+@HAVE_MA57_TRUE@am__append_2 = \
+@HAVE_MA57_TRUE@	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp
+
+@HAVE_MC19_TRUE@am__append_3 = \
 @HAVE_MC19_TRUE@	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp
 
-@HAVE_PARDISO_TRUE@am__append_3 = \
+@HAVE_PARDISO_TRUE@am__append_4 = \
 @HAVE_PARDISO_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 
-@HAVE_TAUCS_TRUE@am__append_4 = \
+@HAVE_TAUCS_TRUE@am__append_5 = \
 @HAVE_TAUCS_TRUE@	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp
 
 subdir = Algorithm/LinearSolvers
@@ -73,17 +76,19 @@ am__liblinsolvers_a_SOURCES_DIST = IpLinearSolversRegOp.cpp \
 	IpTripletToCSRConverter.hpp IpTSymLinearSolver.cpp \
 	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp \
 	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
+	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
 	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp
 @HAVE_MA27_TRUE@am__objects_1 = IpMa27TSolverInterface.$(OBJEXT)
-@HAVE_MC19_TRUE@am__objects_2 = IpMc19TSymScalingMethod.$(OBJEXT)
-@HAVE_PARDISO_TRUE@am__objects_3 = IpPardisoSolverInterface.$(OBJEXT)
-@HAVE_TAUCS_TRUE@am__objects_4 = IpTAUCSSolverInterface.$(OBJEXT)
+@HAVE_MA57_TRUE@am__objects_2 = IpMa57TSolverInterface.$(OBJEXT)
+@HAVE_MC19_TRUE@am__objects_3 = IpMc19TSymScalingMethod.$(OBJEXT)
+@HAVE_PARDISO_TRUE@am__objects_4 = IpPardisoSolverInterface.$(OBJEXT)
+@HAVE_TAUCS_TRUE@am__objects_5 = IpTAUCSSolverInterface.$(OBJEXT)
 am_liblinsolvers_a_OBJECTS = IpLinearSolversRegOp.$(OBJEXT) \
 	IpTripletToCSRConverter.$(OBJEXT) IpTSymLinearSolver.$(OBJEXT) \
 	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
-	$(am__objects_4)
+	$(am__objects_4) $(am__objects_5)
 liblinsolvers_a_OBJECTS = $(am_liblinsolvers_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -133,6 +138,8 @@ BUILDHSL_FALSE = @BUILDHSL_FALSE@
 BUILDHSL_TRUE = @BUILDHSL_TRUE@
 BUILDMA27_FALSE = @BUILDMA27_FALSE@
 BUILDMA27_TRUE = @BUILDMA27_TRUE@
+BUILDMA57_FALSE = @BUILDMA57_FALSE@
+BUILDMA57_TRUE = @BUILDMA57_TRUE@
 BUILDMC19_FALSE = @BUILDMC19_FALSE@
 BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
@@ -159,6 +166,8 @@ FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
 HAVE_MA27_FALSE = @HAVE_MA27_FALSE@
 HAVE_MA27_TRUE = @HAVE_MA27_TRUE@
+HAVE_MA57_FALSE = @HAVE_MA57_FALSE@
+HAVE_MA57_TRUE = @HAVE_MA57_TRUE@
 HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
 HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
@@ -240,12 +249,14 @@ liblinsolvers_a_SOURCES = IpLinearSolversRegOp.cpp \
 	IpSymLinearSolver.hpp IpTripletToCSRConverter.cpp \
 	IpTripletToCSRConverter.hpp IpTSymLinearSolver.cpp \
 	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp $(am__append_1) \
-	$(am__append_2) $(am__append_3) $(am__append_4)
+	$(am__append_2) $(am__append_3) $(am__append_4) \
+	$(am__append_5)
 
 # Astyle stuff
 ASTYLE_FILES = \
 	IpLinearSolversRegOp.cppbak IpLinearSolversRegOp.hppbak \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
+	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
 	IpSparseSymLinearSolverInterface.hppbak \
 	IpSymLinearSolver.hppbak \
@@ -306,6 +317,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLinearSolversRegOp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa27TSolverInterface.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa57TSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19TSymScalingMethod.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPardisoSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTAUCSSolverInterface.Po@am__quote@

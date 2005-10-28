@@ -12,16 +12,34 @@
 #ifdef HAVE_MA27
 # include "IpMa27TSolverInterface.hpp"
 #endif
+#ifdef HAVE_MA57
+# include "IpMa57TSolverInterface.hpp"
+#endif
+#ifdef HAVE_PARDISO
+# include "IpPardisoSolverInterface.hpp"
+#endif
 
 namespace Ipopt
 {
 
   void RegisterOptions_LinearSolvers(const SmartPtr<RegisteredOptions>& roptions)
   {
-    roptions->SetRegisteringCategory("MA27 Linear Solver");
 #ifdef HAVE_MA27
-
+    \
+    roptions->SetRegisteringCategory("MA27 Linear Solver");
     Ma27TSolverInterface::RegisterOptions(roptions);
+#endif
+
+#ifdef HAVE_MA57
+
+    roptions->SetRegisteringCategory("MA57 Linear Solver");
+    Ma57TSolverInterface::RegisterOptions(roptions);
+#endif
+
+#ifdef HAVE_PARDISO
+
+    PardisoSolverInterface::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Pardiso Linear Solver");
 #endif
 
     roptions->SetRegisteringCategory("Uncategorized");
