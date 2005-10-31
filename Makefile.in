@@ -47,7 +47,7 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(top_srcdir)/Examples/hs071_cpp/Makefile.in \
 	$(top_srcdir)/Examples/hs071_f/Makefile.in \
 	$(top_srcdir)/configure $(top_srcdir)/inc/config.h.in AUTHORS \
-	config.guess config.sub depcomp install-sh missing
+	ChangeLog config.guess config.sub depcomp install-sh missing
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -223,7 +223,14 @@ EXTRA_DIST = \
 	Examples/hs071_cpp/hs071_nlp.cpp \
 	Examples/hs071_cpp/hs071_nlp.hpp \
 	README \
-	Docs/documentation.tex
+	Docs/documentation.tex \
+	Windows/VisualStudio_dotNET/README \
+	Windows/VisualStudio_dotNET/CppExample/CppExample.vcproj \
+	Windows/VisualStudio_dotNET/FortranExample/FortranExample.vfproj \
+	Windows/VisualStudio_dotNET/FortranLinAlg/FortranLinAlg.vfproj \
+	Windows/VisualStudio_dotNET/include/config.h \
+	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
+	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj
 
 tmpdir = tmpdir
 libipopt = libipopt.a
@@ -425,7 +432,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/Docs $(distdir)/Examples/Cpp_example $(distdir)/Examples/hs071_c $(distdir)/Examples/hs071_cpp $(distdir)/Examples/hs071_f $(distdir)/inc
+	$(mkdir_p) $(distdir)/Docs $(distdir)/Examples/Cpp_example $(distdir)/Examples/hs071_c $(distdir)/Examples/hs071_cpp $(distdir)/Examples/hs071_f $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/include $(distdir)/inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

@@ -22,7 +22,14 @@ EXTRA_DIST = \
 	Examples/hs071_cpp/hs071_nlp.cpp \
 	Examples/hs071_cpp/hs071_nlp.hpp \
 	README \
-	Docs/documentation.tex
+	Docs/documentation.tex \
+	Windows/VisualStudio_dotNET/README \
+	Windows/VisualStudio_dotNET/CppExample/CppExample.vcproj \
+	Windows/VisualStudio_dotNET/FortranExample/FortranExample.vfproj \
+	Windows/VisualStudio_dotNET/FortranLinAlg/FortranLinAlg.vfproj \
+	Windows/VisualStudio_dotNET/include/config.h \
+	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
+	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj
 
 .PHONY: doc
 
