@@ -41,8 +41,9 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
-@BUILDMA27_TRUE@am__append_1 = ma27ad.f ma57ad.f
-@BUILDMC19_TRUE@am__append_2 = mc19ad.f
+@BUILDMA27_TRUE@am__append_1 = ma27ad.f
+@BUILDMA57_TRUE@am__append_2 = ma57ad.f
+@BUILDMC19_TRUE@am__append_3 = mc19ad.f
 subdir = Extern/HSL
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -55,9 +56,11 @@ CONFIG_CLEAN_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
 libiphsl_a_AR = $(AR) $(ARFLAGS)
 libiphsl_a_LIBADD =
-@BUILDMA27_TRUE@am__objects_1 = ma27ad.$(OBJEXT) ma57ad.$(OBJEXT)
-@BUILDMC19_TRUE@am__objects_2 = mc19ad.$(OBJEXT)
-nodist_libiphsl_a_OBJECTS = $(am__objects_1) $(am__objects_2)
+@BUILDMA27_TRUE@am__objects_1 = ma27ad.$(OBJEXT)
+@BUILDMA57_TRUE@am__objects_2 = ma57ad.$(OBJEXT)
+@BUILDMC19_TRUE@am__objects_3 = mc19ad.$(OBJEXT)
+nodist_libiphsl_a_OBJECTS = $(am__objects_1) $(am__objects_2) \
+	$(am__objects_3)
 libiphsl_a_OBJECTS = $(nodist_libiphsl_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
@@ -206,7 +209,8 @@ AUTOMAKE_OPTIONS = foreign
 EXTRA_DIST = INSTALL.HSL
 iplibdir = $(top_builddir)/lib
 noinst_LIBRARIES = libiphsl.a
-nodist_libiphsl_a_SOURCES = $(am__append_1) $(am__append_2)
+nodist_libiphsl_a_SOURCES = $(am__append_1) $(am__append_2) \
+	$(am__append_3)
 all: all-am
 
 .SUFFIXES:
