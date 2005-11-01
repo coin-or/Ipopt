@@ -107,7 +107,7 @@ namespace Ipopt
     // Create the compound matrix of the augmented system if it has not
     // yet been created - It is assumed that the structure will not change
     // after this call
-    bool debug_first_time_through = false;
+    DBG_DO(bool debug_first_time_through = false;)
     if (!IsValid(augmented_system_)) {
       // pass in the information to form the structure of the augmented system
       // rhs_? are passed in to provide a prototype vector
@@ -117,7 +117,7 @@ namespace Ipopt
       CreateAugmentedSystem(W, D_x, delta_x, D_s, delta_s,
                             *J_c, D_c, delta_c, *J_d, D_d, delta_d,
                             rhs_x, rhs_s, rhs_c, rhs_d);
-      debug_first_time_through = true;
+      DBG_DO(debug_first_time_through = true;)
     }
 
 

@@ -11,10 +11,6 @@
 namespace Ipopt
 {
 
-#ifdef IP_DEBUG
-  static const Index dbg_verbosity = 0;
-#endif
-
   IteratesVector::IteratesVector(const IteratesVectorSpace* owner_space, bool create_new)
       :
       CompoundVector(owner_space, create_new),

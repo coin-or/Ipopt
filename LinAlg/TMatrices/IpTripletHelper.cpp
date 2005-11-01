@@ -93,7 +93,6 @@ namespace Ipopt
     }
 
     THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::GetNumberEntries");
-    return 0;
   }
 
   void TripletHelper::FillRowCol(Index n_entries, const Matrix& matrix, Index* iRow, Index* jCol, Index row_offset/*=0*/, Index col_offset/*=0*/)
@@ -250,7 +249,6 @@ namespace Ipopt
     }
 
     THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::FillValues");
-    return;
   }
 
   Index TripletHelper::GetNumberEntries_(const SumMatrix& matrix)

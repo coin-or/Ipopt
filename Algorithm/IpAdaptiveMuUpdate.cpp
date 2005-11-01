@@ -418,14 +418,14 @@ namespace Ipopt
       }
       break;
       case FILTER_KKT_ERROR : {
-        DBG_ASSERT("Unknown adaptive_mu_globalization value.");
+        DBG_ASSERT(false && "Unknown adaptive_mu_globalization value.");
       }
       break;
       case NEVER_MONOTONE_MODE :
       retval = true;
       break;
       default:
-      DBG_ASSERT("Unknown adaptive_mu_globalization value.");
+      DBG_ASSERT(false && "Unknown adaptive_mu_globalization value.");
     }
 
     return retval;
@@ -470,11 +470,11 @@ namespace Ipopt
       }
       break;
       case FILTER_KKT_ERROR : {
-        DBG_ASSERT("Unknown corrector_type value.");
+        DBG_ASSERT(false && "Unknown corrector_type value.");
       }
       break;
       default:
-      DBG_ASSERT("Unknown corrector_type value.");
+      DBG_ASSERT(false && "Unknown corrector_type value.");
     }
 
     if (restore_accepted_iterate_) {
@@ -649,7 +649,7 @@ namespace Ipopt
         centrality = complty/pow(xi,3);
         break;
         default:
-        DBG_ASSERT("Unknown value for adaptive_mu_kkt_centrality_");
+        DBG_ASSERT(false && "Unknown value for adaptive_mu_kkt_centrality_");
       }
     }
 
@@ -662,7 +662,7 @@ namespace Ipopt
       balancing_term = pow(Max(0., Max(dual_inf,primal_inf)-complty),3);
       break;
       default:
-      DBG_ASSERT("Unknown value for adaptive_mu_kkt_balancing_term");
+      DBG_ASSERT(false && "Unknown value for adaptive_mu_kkt_balancing_term");
     }
 
     DBG_ASSERT(centrality>=0.);

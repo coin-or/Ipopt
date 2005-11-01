@@ -958,11 +958,9 @@ namespace Ipopt
     // Check if that point is acceptable with respect to the current
     // original filter
 
-    Number trial_barr;
-    Number trial_theta;
     try {
-      trial_barr = IpCq().trial_barrier_obj();
-      trial_theta = IpCq().trial_constraint_violation();
+      IpCq().trial_barrier_obj();
+      IpCq().trial_constraint_violation();
     }
     catch(IpoptNLP::Eval_Error& e) {
       e.ReportException(Jnlst(), J_DETAILED);

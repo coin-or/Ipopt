@@ -772,7 +772,7 @@ namespace Ipopt
       quality_function += compl_inf/pow(xi,3);
       break;
       default:
-      DBG_ASSERT("Unknown value for quality_function_centrality_");
+      DBG_ASSERT(false && "Unknown value for quality_function_centrality_");
     }
 
     switch (quality_function_balancing_term_) {
@@ -783,7 +783,7 @@ namespace Ipopt
       quality_function += pow(Max(0., Max(dual_inf,primal_inf)-compl_inf),3);
       break;
       default:
-      DBG_ASSERT("Unknown value for quality_function_balancing term_");
+      DBG_ASSERT(false && "Unknown value for quality_function_balancing term_");
     }
 
     Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,

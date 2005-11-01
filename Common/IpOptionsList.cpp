@@ -345,7 +345,6 @@ namespace Ipopt
     }
     else {
       THROW_EXCEPTION(OPTION_INVALID, "Tried to get a boolean from an option and failed.");
-      ret = false;
     }
 
     return ret;

@@ -2081,7 +2081,7 @@ namespace Ipopt
       case NORM_MAX :
       return Max(vec1.Amax(), vec2.Amax());
       default:
-      DBG_ASSERT("Unknown NormType.");
+      DBG_ASSERT(false && "Unknown NormType.");
       return 0.0;
     }
   }
@@ -2112,7 +2112,7 @@ namespace Ipopt
       }
       break;
       default:
-      DBG_ASSERT("Unknown NormType.");
+      DBG_ASSERT(false && "Unknown NormType.");
     }
 
     return result;

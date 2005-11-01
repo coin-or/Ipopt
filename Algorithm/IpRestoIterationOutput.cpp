@@ -21,10 +21,6 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
-  static const Index dbg_verbosity = 0;
-#endif
-
   RestoIterationOutput::RestoIterationOutput(const SmartPtr<OrigIterationOutput>& resto_orig_iteration_output)
       :
       resto_orig_iteration_output_(resto_orig_iteration_output)

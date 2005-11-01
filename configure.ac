@@ -43,7 +43,7 @@ AC_LANG_PUSH(C++)
 SAVE_CXXFLAGS="$CXXFLAGS"
 case $build in
   *-cygwin) comps="g++" ;;
-  *)        comps="xlC aCC CC g++ c++ icpc" ;;
+  *)        comps="xlC aCC CC g++ c++ pgCC icpc" ;;
 esac
 AC_PROG_CXX([$comps])
 CXXFLAGS="$SAVE_CXXFLAGS"
@@ -165,6 +165,10 @@ if test -z "$CXXFLAGS"; then
                          [AC_MSG_RESULT([seems so]);
                                add_cxxflags="-i_dynamic $add_cxxflags"])
              ;;
+      pgCC | */pgCC)
+             opt_cxxflags="-fast"
+             add_cxxflags="-Kieee -pc 64"
+             dbg_cxxflags="-g";;
       esac;;
     *-ibm-*)
       case "$CXX" in
@@ -236,6 +240,9 @@ if test -z "$CXXLIBS"; then
       case "$CXX" in
       icpc | */icpc)
         CXXLIBS=""
+             ;;
+      pgCC | */pgCC)
+        CXXLIBS="-lstd -lC -lc"
              ;;
       esac;;
     *-ibm-*)
@@ -310,7 +317,7 @@ AC_LANG_PUSH(C)
 SAVE_CFLAGS="$CFLAGS"
 case $build in
   *-cygwin) comps="gcc" ;;
-  *)        comps="xlc cc gcc icc" ;;
+  *)        comps="xlc cc gcc pgcc icc" ;;
 esac
 AC_PROG_CC([$comps])
 CFLAGS="$SAVE_CFLAGS"
@@ -436,7 +443,7 @@ if test -z "$CFLAGS"; then
              ;;
       pgcc | */pgcc)
              opt_cflags="-fast"
-             add_cflags="-Kieee -Mstabs -pc 64"
+             add_cflags="-Kieee -pc 64"
              dbg_cflags="-g" ;;
       esac;;
     *-ibm-*)
@@ -500,7 +507,7 @@ AC_LANG_PUSH(Fortran 77)
 SAVE_FFLAGS="$FFLAGS"
 case $build in
   *-cygwin) comps="gfortran g77" ;;
-  *)        comps="xlf fort77 gfortran f77 g77 ifort ifc" ;;
+  *)        comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc" ;;
 esac
 AC_PROG_F77($comps)
 FFLAGS="$SAVE_FFLAGS"
@@ -631,9 +638,9 @@ if test -z "$FFLAGS"; then
                          [AC_MSG_RESULT([seems so]);
                                add_fflags="-i_dynamic $add_fflags"])
              ;;
-      pgf77 | */pgf77)
+      pgf77 | */pgf77 | pgf90 | */pgf90)
              opt_fflags="-fast"
-             add_fflags="-Kieee -Mstabs -pc 64"
+             add_fflags="-Kieee -pc 64"
              dbg_fflags="-g" ;;
       esac;;
     *-ibm-*)
@@ -702,6 +709,13 @@ case $build in
        FLIBS="$FLIBS -lm";;
    *-ibm-*)
        FLIBS=`echo $FLIBS | sed 's/-lc)/-lc/g'` ;;
+   *-linux-*)
+     case "$F77" in
+       pgf77 | */pgf77 | pgf90 | */pgf90)
+# ask linker to go through the archives multiple times
+# (the Fortran compiler seems to do that automatically...
+         FLIBS="-Wl,--start-group $FLIBS -Wl,--end-group" ;;
+     esac
 esac
 
 AC_LANG_POP(Fortran 77)
@@ -1160,6 +1174,9 @@ if test "$use_asldir" = BUILD; then
     case $CC in
       xlc* | */xlc* | mpxlc* | */mpxlc*)
         ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-qtune=auto//g' | sed 's/-qarch=auto//g' | sed 's/-qcache=auto//g' | sed 's/-qhot//g' | sed 's/-O3/-O/g'`
+      ;;
+      pgcc | */pgcc)
+        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-fast/-O1/g'`
       ;;
     esac
 

@@ -1494,7 +1494,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 SAVE_CXXFLAGS="$CXXFLAGS"
 case $build in
   *-cygwin) comps="g++" ;;
-  *)        comps="xlC aCC CC g++ c++ icpc" ;;
+  *)        comps="xlC aCC CC g++ c++ pgCC icpc" ;;
 esac
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -2264,6 +2264,10 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
              ;;
+      pgCC | */pgCC)
+             opt_cxxflags="-fast"
+             add_cxxflags="-Kieee -pc 64"
+             dbg_cxxflags="-g";;
       esac;;
     *-ibm-*)
       case "$CXX" in
@@ -2476,6 +2480,9 @@ if test -z "$CXXLIBS"; then
       icpc | */icpc)
         CXXLIBS=""
              ;;
+      pgCC | */pgCC)
+        CXXLIBS="-lstd -lC -lc"
+             ;;
       esac;;
     *-ibm-*)
       CXXLIBS="-lC -lc"
@@ -2564,7 +2571,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 SAVE_CFLAGS="$CFLAGS"
 case $build in
   *-cygwin) comps="gcc" ;;
-  *)        comps="xlc cc gcc icc" ;;
+  *)        comps="xlc cc gcc pgcc icc" ;;
 esac
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -3294,7 +3301,7 @@ rm -f conftest.err conftest.$ac_objext \
              ;;
       pgcc | */pgcc)
              opt_cflags="-fast"
-             add_cflags="-Kieee -Mstabs -pc 64"
+             add_cflags="-Kieee -pc 64"
              dbg_cflags="-g" ;;
       esac;;
     *-ibm-*)
@@ -3507,7 +3514,7 @@ ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 SAVE_FFLAGS="$FFLAGS"
 case $build in
   *-cygwin) comps="gfortran g77" ;;
-  *)        comps="xlf fort77 gfortran f77 g77 ifort ifc" ;;
+  *)        comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc" ;;
 esac
 ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
@@ -3601,7 +3608,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3604:" \
+echo "$as_me:3611:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -3945,9 +3952,9 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
              ;;
-      pgf77 | */pgf77)
+      pgf77 | */pgf77 | pgf90 | */pgf90)
              opt_fflags="-fast"
-             add_fflags="-Kieee -Mstabs -pc 64"
+             add_fflags="-Kieee -pc 64"
              dbg_fflags="-g" ;;
       esac;;
     *-ibm-*)
@@ -4168,7 +4175,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:4171: \"$ac_link\") >&5
+(eval echo $as_me:4178: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4246,7 +4253,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:4249: \"$ac_link\") >&5
+(eval echo $as_me:4256: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4940,6 +4947,13 @@ case $build in
        FLIBS="$FLIBS -lm";;
    *-ibm-*)
        FLIBS=`echo $FLIBS | sed 's/-lc)/-lc/g'` ;;
+   *-linux-*)
+     case "$F77" in
+       pgf77 | */pgf77 | pgf90 | */pgf90)
+# ask linker to go through the archives multiple times
+# (the Fortran compiler seems to do that automatically...
+         FLIBS="-Wl,--start-group $FLIBS -Wl,--end-group" ;;
+     esac
 esac
 
 ac_ext=c
@@ -10601,6 +10615,9 @@ if test "$use_asldir" = BUILD; then
     case $CC in
       xlc* | */xlc* | mpxlc* | */mpxlc*)
         ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-qtune=auto//g' | sed 's/-qarch=auto//g' | sed 's/-qcache=auto//g' | sed 's/-qhot//g' | sed 's/-O3/-O/g'`
+      ;;
+      pgcc | */pgcc)
+        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-fast/-O1/g'`
       ;;
     esac
 

@@ -20,10 +20,6 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
-  static const Index dbg_verbosity = 0;
-#endif
-
   OrigIterationOutput::OrigIterationOutput()
   {}
 

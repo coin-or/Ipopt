@@ -378,7 +378,6 @@ namespace Ipopt
     switch (test_status_) {
       case NO_TEST:
       return;
-      break;
       case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
       if (hess_degenerate_ == NOT_YET_DETERMINED &&
           jac_degenerate_ == NOT_YET_DETERMINED) {

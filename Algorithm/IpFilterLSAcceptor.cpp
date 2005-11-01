@@ -635,7 +635,7 @@ namespace Ipopt
       }
       break;
       default:
-      DBG_ASSERT("Unknown corrector_type value.");
+      DBG_ASSERT(false && "Unknown corrector_type value.");
     }
 
     // Compute step size
