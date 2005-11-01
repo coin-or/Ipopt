@@ -149,7 +149,7 @@ namespace Ipopt
     }
     else {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "You need to set environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).");
+                     "You need to set environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).\n\n");
       return false;
     }
     IPARM_[2] = num_procs;  // Set the number of processors
