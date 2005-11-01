@@ -353,6 +353,7 @@ namespace Ipopt
 #endif
 
 #ifndef __PGI
+
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
     trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;
@@ -371,6 +372,7 @@ namespace Ipopt
 #endif
 
 #ifndef __PGI
+
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
     trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;
@@ -413,6 +415,7 @@ namespace Ipopt
 #endif
 
 #ifndef __PGI
+
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
     trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;

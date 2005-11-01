@@ -78,12 +78,12 @@ extern "C"
    */
   extern void  F77_FUNC (ma57cd, MA57CD) (
       ipfint    *job,       /* Solution job.  Solve for...
-                                                                         JOB <= 1:  A
-                                                                         JOB == 2:  PLP^t
-                                                                         JOB == 3:  PDP^t
-                                                                         JOB >= 4:  PL^t P^t */
+                                     JOB <= 1:  A
+                                     JOB == 2:  PLP^t
+                                     JOB == 3:  PDP^t
+                                     JOB >= 4:  PL^t P^t */
 
-      ipfint    *n,     /* Order of matrix. */
+      ipfint    *n,         /* Order of matrix. */
 
       double    *fact,      /* Entries of factors. */
       ipfint    *lfact,     /* Length of array `fact'. */
