@@ -426,7 +426,7 @@ uninstall-am: uninstall-info-am
 
 ipoma.f: CUTErInterface.f
 	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
-	  $(LN_S) ipoma-dummy.f ipoma.f; \
+	  $(LN_S) $(srcdir)/ipoma-dummy.f ipoma.f; \
 	else \
 	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed > ipoma.f; \
 	fi
