@@ -137,6 +137,13 @@ namespace Ipopt
     /** Flag indicating if symbolic factorization has already been
      *  performed. */
     bool have_symbolic_factorization_;
+    /** Flag indicating whether the symbolic factorization should only
+     *  be done after perturbed elements, if the inertia was wrong */
+    bool pardiso_redo_symbolic_fact_only_if_inertia_wrong_;
+    /** Flag indicating whether repeated perturbed elements even after
+     *  a new symbolic factorization should be interpreted as a
+     *  singular matrix */
+    bool pardiso_repeated_perturbation_means_singular_;
     //@}
 
     /** @name Solver specific information */

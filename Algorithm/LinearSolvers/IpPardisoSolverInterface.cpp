@@ -101,12 +101,32 @@ namespace Ipopt
       "Matching strategy",
       2,
       "Matching strategy:  1=Match complete, 2=Match complete+2x2, 3=Match constraints");
+    roptions->AddStringOption2(
+      "pardiso_redo_symbolic_fact_only_if_inertia_wrong",
+      "Toggel for handling case when elements were pertured by Pardiso.",
+      "no",
+      "no", "Always redo symbolic factorization when elements were perturbed",
+      "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong",
+      "");
+    roptions->AddStringOption2(
+      "pardiso_repeated_perturbation_means_singular",
+      "Interpretation of perturbed elements.",
+      "no",
+      "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
+      "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization",
+      "");
   }
 
   bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
     options.GetIntegerValue("pardiso_iparm13", match_strat_, prefix);
+    options.GetBoolValue("pardiso_redo_symbolic_fact_only_if_inertia_wrong",
+                         pardiso_redo_symbolic_fact_only_if_inertia_wrong_,
+                         prefix);
+    options.GetBoolValue("pardiso_repeated_perturbation_means_singular",
+                         pardiso_repeated_perturbation_means_singular_,
+                         prefix);
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "Pardiso matching strategy (IPARM(13)): %d\n", match_strat_);
@@ -366,29 +386,29 @@ namespace Ipopt
       if (IPARM_[13] != 0) {
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
-        // trigger a new symblic factorization for the next factorize
-        // call, even if the current inertia estimate is correct
-        // OLAF MICHAEL : Maybe we need to discuss this
-        have_symbolic_factorization_ = false;
-        // We assume now that if there was just a symbolic
-        // factorization and we still have perturbed pivots, that the
-        // system is actually singular
-        if (just_performed_symbolic_factorization) {
-          IpData().Append_info_string("Ps");
-          //break; // Declaring this system singular doesn't seem to be
-          // working well???
-          return SYMSOLVER_SINGULAR;
+        if ( !pardiso_redo_symbolic_fact_only_if_inertia_wrong_ ||
+             (negevals_ != numberOfNegEVals) ) {
+          IpData().Append_info_string("Pi");
+          have_symbolic_factorization_ = false;
+          // We assume now that if there was just a symbolic
+          // factorization and we still have perturbed pivots, that
+          // the system is actually singular, if
+          // pardiso_repeated_perturbation_means_singular_ is true
+          if (just_performed_symbolic_factorization) {
+            if (pardiso_repeated_perturbation_means_singular_) {
+              IpData().Append_info_string("Ps");
+              return SYMSOLVER_SINGULAR;
+            }
+            else {
+              done = true;
+            }
+          }
+          done = false;
         }
-        IpData().Append_info_string("Pp");
-        /*
-               // If we there were perturbed pivots, and the inertia of the
-               // system is correct, and we haven't redone the symblic
-               // factorization during this call yet, trigger a new
-               // factorization after a symblic factorization
-               done = (just_performed_symbolic_factorization || !check_NegEVals ||
-                       numberOfNegEVals==negevals_);
-        */
-        done = false;
+        else {
+          IpData().Append_info_string("Pp");
+          done = true;
+        }
       }
       else {
         done = true;
