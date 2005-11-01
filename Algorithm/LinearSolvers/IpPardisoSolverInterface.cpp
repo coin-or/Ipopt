@@ -317,11 +317,6 @@ namespace Ipopt
     // phase
     ipfint ERROR;
 
-    if (ERROR==-4) {
-      // I think this means that the matrix is singular
-      return SYMSOLVER_SINGULAR;
-    }
-
     bool done = false;
     bool just_performed_symbolic_factorization = false;
 
