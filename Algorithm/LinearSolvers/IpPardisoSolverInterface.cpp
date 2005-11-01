@@ -307,7 +307,7 @@ namespace Ipopt
     DBG_START_METH("PardisoSolverInterface::Factorization",dbg_verbosity);
 
     // Call Pardiso to do the factorization
-    ipfint PHASE = 12;
+    ipfint PHASE ;
     ipfint N = dim_;
     ipfint PERM;   // This should not be accessed by Pardiso
     ipfint NRHS = 0;
@@ -317,13 +317,6 @@ namespace Ipopt
     // phase
     ipfint ERROR;
 
-    // In case of factorization errors, write matrix w/o rhs.
-    // write_iajaa_matrix (N, ia, ja, a_, NULL, IpData().iter_count(), debug_cnt);
-
-    F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                              &PHASE, &N, a_, ia, ja, &PERM,
-                              &NRHS, IPARM_, &MSGLVL_, &B, &X,
-                              &ERROR);
     if (ERROR==-4) {
       // I think this means that the matrix is singular
       return SYMSOLVER_SINGULAR;
