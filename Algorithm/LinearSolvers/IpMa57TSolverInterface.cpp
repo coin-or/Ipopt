@@ -78,10 +78,10 @@ extern "C"
    */
   extern void  F77_FUNC (ma57cd, MA57CD) (
       ipfint    *job,       /* Solution job.  Solve for...
-                                                                   JOB <= 1:  A
-                                                                   JOB == 2:  PLP^t
-                                                                   JOB == 3:  PDP^t
-                                                                   JOB >= 4:  PL^t P^t */
+                                                                         JOB <= 1:  A
+                                                                         JOB == 2:  PLP^t
+                                                                         JOB == 3:  PDP^t
+                                                                         JOB >= 4:  PL^t P^t */
 
       ipfint    *n,     /* Order of matrix. */
 
@@ -237,8 +237,6 @@ namespace Ipopt
       pivtol_changed_(false),
       refactorize_(false),
 
-      pivtol_(0.01),
-      warm_start_same_structure_(false),
       wd_keep_(NULL),
       wd_iwork_(NULL),
       wd_fact_(NULL),
