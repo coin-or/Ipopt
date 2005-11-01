@@ -403,7 +403,9 @@ namespace Ipopt
               done = true;
             }
           }
-          done = false;
+          else {
+            done = false;
+          }
         }
         else {
           IpData().Append_info_string("Pp");
