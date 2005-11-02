@@ -245,11 +245,23 @@ namespace Ipopt
       IpData().TimingStats().OverallAlgorithm().End();
       return LOCAL_INFEASIBILITY;
     }
+    catch(RESTORATION_CONVERGED_TO_FEASIBLE_POINT& exc) {
+      exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint().End();
+      IpData().TimingStats().OverallAlgorithm().End();
+      return RESTORATION_FAILURE;
+    }
     catch(RESTORATION_FAILED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().End();
       IpData().TimingStats().OverallAlgorithm().End();
       return RESTORATION_FAILURE;
+    }
+    catch(RESTORATION_MAXITER_EXCEEDED& exc) {
+      exc.ReportException(Jnlst(), J_DETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint().End();
+      IpData().TimingStats().OverallAlgorithm().End();
+      return MAXITER_EXCEEDED;
     }
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);

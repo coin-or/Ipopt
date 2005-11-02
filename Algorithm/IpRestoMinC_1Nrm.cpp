@@ -179,6 +179,8 @@ namespace Ipopt
         IpCq().curr_primal_infeasibility(NORM_MAX);
       // ToDo make the factor in following line an option
       if (orig_primal_inf <= 1e2*IpData().tol()) {
+        Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                       "Restoration phase converged to a point with small primal infeasibility.\n");
         THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
                         "Restoration phase converged to a point with small primal infeasibility");
       }
@@ -188,13 +190,16 @@ namespace Ipopt
       }
     }
     else if (resto_status == MAXITER_EXCEEDED) {
-      THROW_EXCEPTION(IpoptException, "Maximal number of iterations exceeded in restoration phase.");
+      THROW_EXCEPTION(RESTORATION_MAXITER_EXCEEDED,
+		      "Maximal number of iterations exceeded in restoration phase.");
     }
     else if (resto_status == LOCAL_INFEASIBILITY) {
       // converged to locally infeasible point - pass this on to the outer algorithm...
       THROW_EXCEPTION(LOCALLY_INFEASIBLE, "Restoration phase converged to a point of local infeasibility");
     }
     else if (resto_status == RESTORATION_FAILURE) {
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+		     "Restoration phase in the restoration phase failed.\n");
       THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase in the restoration phase failed.");
     }
     else {
