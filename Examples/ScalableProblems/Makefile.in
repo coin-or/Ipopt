@@ -1,0 +1,84 @@
+# Copyright (C) 2003, International Business Machines and others.
+# All Rights Reserved.
+# This file is distributed under the Common Public License.
+
+# $Id$
+
+# Directory to the sources for the (example) problem definition files
+SRCDIR = @srcdir@
+VPATH = @srcdir@
+
+# Compiler options
+CXX = @CXX@
+CXXFLAGS = @CXXFLAGS@
+
+# Directory with header files
+IPOPTINCDIR = @includedir@/ipopt
+
+# Directory with libipopt.a
+IPOPTLIBDIR = @libdir@
+exec_prefix = @exec_prefix@
+prefix = @prefix@
+
+# Libraries necessary to link with IPOPT
+#LIBS = -L$(IPOPTLIBDIR) -lipopt @IPADDLIBS@
+LIBS = @ipoptlib@ @IPADDLIBS@ @FLIBS@
+
+# Necessary Include dirs
+INCL =  -I$(IPOPTINCDIR)
+
+# Name of the executable
+EXE = solve_problem@EXEEXT@
+
+# List of all object files
+OBJS =  solve_problem.@OBJEXT@ \
+        MittelmannDistCntrlNeumA.@OBJEXT@ \
+        MittelmannDistCntrlNeumB.@OBJEXT@ \
+        MittelmannDistCntrlDiri.@OBJEXT@ \
+        MittelmannBndryCntrlDiri.@OBJEXT@ \
+        MittelmannBndryCntrlNeum.@OBJEXT@ \
+        LuksanVlcek1.@OBJEXT@ \
+        LuksanVlcek2.@OBJEXT@ \
+        LuksanVlcek3.@OBJEXT@ \
+        LuksanVlcek4.@OBJEXT@ \
+        LuksanVlcek5.@OBJEXT@ \
+        LuksanVlcek6.@OBJEXT@ \
+        LuksanVlcek7.@OBJEXT@ \
+        RegisteredTNLP.@OBJEXT@
+
+all: $(EXE)
+
+# Dependencies
+LuksanVlcek1.@OBJEXT@ : LuksanVlcek1.hpp
+LuksanVlcek2.@OBJEXT@ : LuksanVlcek2.hpp
+LuksanVlcek3.@OBJEXT@ : LuksanVlcek3.hpp
+LuksanVlcek4.@OBJEXT@ : LuksanVlcek4.hpp
+LuksanVlcek5.@OBJEXT@ : LuksanVlcek5.hpp
+LuksanVlcek6.@OBJEXT@ : LuksanVlcek6.hpp
+LuksanVlcek7.@OBJEXT@ : LuksanVlcek7.hpp
+MittelmannDistCntrlNeumA.@OBJEXT@: MittelmannDistCntrlNeumA.hpp
+MittelmannDistCntrlNeumB.@OBJEXT@: MittelmannDistCntrlNeumB.hpp
+MittelmannDistCntrlDiri.@OBJEXT@: MittelmannDistCntrlDiri.hpp
+MittelmannBndryCntrlDiri.@OBJEXT@: MittelmannBndryCntrlDiri.hpp
+MittelmannBndryCntrlNeum.@OBJEXT@: MittelmannBndryCntrlNeum.hpp
+
+
+# The following is necessary under cygwin, if native compilers are used
+CYGPATH_W = @CYGPATH_W@
+
+.SUFFIXES: .cpp .c .o .obj
+
+$(EXE): $(OBJS)
+	bla=;\
+	for file in $(OBJS); do bla="$$bla `$(CYGPATH_W) $$file`"; done; \
+	$(CXX) $(CXXFLAGS) -o $@ $$bla $(LIBS)
+
+clean:
+	rm -rf $(EXE) $(OBJS)
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
+
+
+.cpp.obj:
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`

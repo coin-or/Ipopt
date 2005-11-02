@@ -262,7 +262,8 @@ namespace Ipopt
     roptions->SetRegisteringCategory("NLP Scaling");
     roptions->AddStringOption3(
       "nlp_scaling_method",
-      "Select the technique used for scaling the NLP", "gradient_based",
+      "Select the technique used for scaling the NLP",
+      "gradient-based",
       "none", "no problem scaling will be performed",
       "user-scaling", "scaling parameters will come from the user",
       "gradient-based", "scale the problem so the maximum gradient at the starting point is scaling_max_gradient",
@@ -517,7 +518,7 @@ namespace Ipopt
       }
       else if (status == DIVERGING_ITERATES) {
         retValue = Diverging_Iterates;
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Iterates divering; problem probably unbounded.\n");
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Iterates divering; problem might be unbounded.\n");
       }
       else if (status == RESTORATION_FAILURE) {
         retValue = Restoration_Failed;

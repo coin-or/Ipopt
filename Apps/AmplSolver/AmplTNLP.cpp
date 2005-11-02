@@ -82,7 +82,7 @@ namespace Ipopt
                      "Either remove the integer variables, or change the flag in the constructor of AmplTNLP"
                     );
     // n_con can be >= 0
-    DBG_ASSERT(n_obj == 1); // Currently can handle only 1 objective
+    DBG_ASSERT(n_obj <= 1); // Currently can handle only 0 or 1 objective
     DBG_ASSERT(nlo == 0 || nlo == 1); // Can handle nonlinear obj.
     DBG_ASSERT(nwv == 0); // Don't know what "linear arc" variables are
     DBG_ASSERT(nlnc == 0); // Don't know what "nonlinear network"constraints are
@@ -296,15 +296,22 @@ namespace Ipopt
 
     apply_new_x(new_x, n, x);
 
-    fint nerror = 0;
-    objgrd(0, non_const_x_, grad_f, &nerror);
-    if (nerror != 0) {
-      DBG_PRINT((1, "nerror = %d\n", nerror));
-      return false;
-    }
-    if (obj_sign_==-1) {
+    if (n_obj==0) {
       for (Index i=0; i<n; i++) {
-        grad_f[i] *= -1.;
+        grad_f[i] = 0.;
+      }
+    }
+    else {
+      fint nerror = 0;
+      objgrd(0, non_const_x_, grad_f, &nerror);
+      if (nerror != 0) {
+        DBG_PRINT((1, "nerror = %d\n", nerror));
+        return false;
+      }
+      if (obj_sign_==-1) {
+        for (Index i=0; i<n; i++) {
+          grad_f[i] *= -1.;
+        }
       }
     }
     return true;
@@ -471,6 +478,9 @@ namespace Ipopt
     else if (status == RESTORATION_FAILURE) {
       message = "Restoration Phase Failed.";
     }
+    else if (status == DIVERGING_ITERATES) {
+      message = "Iterates divering; problem might be unbounded.";
+    }
     else {
       message = "Unknown Error";
     }
@@ -488,16 +498,22 @@ namespace Ipopt
     DBG_ASSERT(asl_);
     objval_called_with_current_x_ = false; // in case the call below fails
 
-    fint nerror = 0;
-    Number retval = objval(0, non_const_x_, &nerror);
-    if (nerror == 0) {
-      obj_val = obj_sign_*retval;
+    if (n_obj==0) {
+      obj_val = 0;
       objval_called_with_current_x_ = true;
       return true;
     }
+    else {
+      fint nerror = 0;
+      Number retval = objval(0, non_const_x_, &nerror);
+      if (nerror == 0) {
+        obj_val = obj_sign_*retval;
+        objval_called_with_current_x_ = true;
+        return true;
+      }
+      DBG_PRINT((1, "nerror = %d\n", nerror));
+    }
 
-    //DBG_ASSERT(false && "Error evaluating AMPL objective.\n");
-    DBG_PRINT((1, "nerror = %d\n", nerror));
     return false;
   }
 

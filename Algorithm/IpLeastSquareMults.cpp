@@ -50,6 +50,7 @@ namespace Ipopt
     // Compute the right hand side
     SmartPtr<Vector> rhs_x = grad_f->MakeNew();
     rhs_x->Copy(*grad_f);
+    DBG_PRINT_VECTOR(2, "rhs_x grad_f", *rhs_x);
     Px_L->MultVector(1., *z_L, -1., *rhs_x);
     Px_U->MultVector(-1., *z_U, 1., *rhs_x);
 

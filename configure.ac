@@ -1354,6 +1354,7 @@ AC_CONFIG_FILES([Makefile Common/Makefile
 		 Examples/Cpp_example/Makefile
 		 Examples/hs071_cpp/Makefile
 		 Examples/hs071_c/Makefile
+		 Examples/ScalableProblems/Makefile
 		 Extern/Makefile Extern/blas/Makefile
 		 Extern/HSL/Makefile
 		 Extern/ASL/Makefile])
