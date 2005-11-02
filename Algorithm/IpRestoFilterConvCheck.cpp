@@ -158,9 +158,9 @@ namespace Ipopt
           orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
         // ToDo make the factor in following line an option
         if (orig_trial_primal_inf <= 1e2*orig_ip_data->tol()) {
-	  Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
-			 "Restoration phase converged to a feasible point that is\n"
-			 "unacceptable to the filter for the original problem.\n");
+          Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                         "Restoration phase converged to a feasible point that is\n"
+                         "unacceptable to the filter for the original problem.\n");
           THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
                           "Restoration phase converged to a feasible point that is "
                           "unacceptable to the filter for the original problem.");

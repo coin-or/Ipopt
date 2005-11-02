@@ -191,7 +191,7 @@ namespace Ipopt
     }
     else if (resto_status == MAXITER_EXCEEDED) {
       THROW_EXCEPTION(RESTORATION_MAXITER_EXCEEDED,
-		      "Maximal number of iterations exceeded in restoration phase.");
+                      "Maximal number of iterations exceeded in restoration phase.");
     }
     else if (resto_status == LOCAL_INFEASIBILITY) {
       // converged to locally infeasible point - pass this on to the outer algorithm...
@@ -199,7 +199,7 @@ namespace Ipopt
     }
     else if (resto_status == RESTORATION_FAILURE) {
       Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
-		     "Restoration phase in the restoration phase failed.\n");
+                     "Restoration phase in the restoration phase failed.\n");
       THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase in the restoration phase failed.");
     }
     else {

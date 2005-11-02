@@ -319,20 +319,20 @@ namespace Ipopt
       // Evaluate functions at trial point - if that fails, don't use
       // the tiny step and continue with regular line search
       try {
-	IpCq().trial_barrier_obj();
-	IpCq().trial_constraint_violation();
+        IpCq().trial_barrier_obj();
+        IpCq().trial_constraint_violation();
       }
       catch(IpoptNLP::Eval_Error& e) {
-	tiny_step = false;
+        tiny_step = false;
       }
 
       if (tiny_step) {
-	IpData().Set_info_ls_count(0);
+        IpData().Set_info_ls_count(0);
 
-	if (tiny_step_last_iteration_) {
-	  IpData().Set_info_alpha_primal_char('T');
-	  IpData().Set_tiny_step_flag(true);
-	}
+        if (tiny_step_last_iteration_) {
+          IpData().Set_info_alpha_primal_char('T');
+          IpData().Set_tiny_step_flag(true);
+        }
       }
       else {
         IpData().Set_info_alpha_primal_char('t');
