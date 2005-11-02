@@ -351,7 +351,12 @@ namespace Ipopt
                                   &NRHS, IPARM_, &MSGLVL_, &B, &X,
                                   &ERROR);
         IpData().TimingStats().LinearSystemSymbolicFactorization().End();
-        if (ERROR!=0 ) {
+        if (ERROR==-7) {
+          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                         "Pardiso symbolic factorization returns ERROR = %d.  Matrix is singular.\n", ERROR);
+          return SYMSOLVER_SINGULAR;
+        }
+        else if (ERROR!=0) {
           Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                          "Error in Pardiso during symbolic factorization phase.  ERROR = %d.\n", ERROR);
           return SYMSOLVER_FATAL_ERROR;
@@ -371,7 +376,12 @@ namespace Ipopt
                                 &ERROR);
       IpData().TimingStats().LinearSystemFactorization().End();
 
-      if (ERROR==-4) {
+      if (ERROR==-7) {
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "Pardiso factorization returns ERROR = %d.  Matrix is singular.\n", ERROR);
+        return SYMSOLVER_SINGULAR;
+      }
+      else if (ERROR==-4) {
         // I think this means that the matrix is singular
         // OLAF said that this will never happen (ToDo)
         return SYMSOLVER_SINGULAR;
