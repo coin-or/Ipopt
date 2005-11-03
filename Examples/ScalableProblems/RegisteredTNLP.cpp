@@ -8,13 +8,16 @@
 
 #include "RegisteredTNLP.hpp"
 
-static std::map<std::string, SmartPtr<RegisteredTNLP> > tnlp_map_;
+std::map<std::string, SmartPtr<RegisteredTNLP> >& RegisteredTNLPListMap() {
+  static std::map<std::string, SmartPtr<RegisteredTNLP> > tnlp_map_;
+  return tnlp_map_;
+}
 
 void
 RegisteredTNLPList::RegisterTNLP(const SmartPtr<RegisteredTNLP>& tnlp,
 				 const std::string name)
 {
-  tnlp_map_[name] = GetRawPtr(tnlp);
+  RegisteredTNLPListMap()[name] = GetRawPtr(tnlp);
 }
 
 SmartPtr<RegisteredTNLP>
@@ -22,8 +25,8 @@ RegisteredTNLPList::GetTNLP(const std::string name)
 {
   SmartPtr<RegisteredTNLP> retval = NULL;
   std::map<std::string, SmartPtr<RegisteredTNLP> >::iterator it;
-  it = tnlp_map_.find(name);
-  if (it != tnlp_map_.end()) {
+  it = RegisteredTNLPListMap().find(name);
+  if (it != RegisteredTNLPListMap().end()) {
     retval = it->second;
   }
   return retval;
@@ -32,8 +35,8 @@ RegisteredTNLPList::GetTNLP(const std::string name)
 void
 RegisteredTNLPList::PrintRegisteredProblems()
 {
-  for (std::map<std::string, SmartPtr<RegisteredTNLP> >::iterator it = tnlp_map_.begin();
-       it != tnlp_map_.end(); it++) {
+  for (std::map<std::string, SmartPtr<RegisteredTNLP> >::iterator it = RegisteredTNLPListMap().begin();
+       it != RegisteredTNLPListMap().end(); it++) {
     printf("%s\n", it->first.c_str());
   }
 }
