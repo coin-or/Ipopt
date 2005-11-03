@@ -398,7 +398,7 @@ namespace Ipopt
                        "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
         if ( !pardiso_redo_symbolic_fact_only_if_inertia_wrong_ ||
              (negevals_ != numberOfNegEVals) ) {
-          IpData().Append_info_string("Pi");
+          IpData().Append_info_string("Pn");
           have_symbolic_factorization_ = false;
           // We assume now that if there was just a symbolic
           // factorization and we still have perturbed pivots, that
