@@ -14,7 +14,7 @@ CXXFLAGS = @CXXFLAGS@
 
 # Archiver (need to build a library on AIX to avoid multiply defined
 # symbols for templates
-AR_X = @AR_X@
+AR = @AR@
 ARFLAGS = @ARFLAGS@
 
 # Directory with header files
