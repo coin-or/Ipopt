@@ -8,9 +8,14 @@
 SRCDIR = @srcdir@
 VPATH = @srcdir@
 
-# Compiler options
+# Compiler and options
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
+
+# Archiver (need to build a library on AIX to avoid multiply defined
+# symbols for templates
+AR_X = @AR_X@
+ARFLAGS = @ARFLAGS@
 
 # Directory with header files
 IPOPTINCDIR = @includedir@/ipopt
@@ -21,8 +26,7 @@ exec_prefix = @exec_prefix@
 prefix = @prefix@
 
 # Libraries necessary to link with IPOPT
-#LIBS = -L$(IPOPTLIBDIR) -lipopt @IPADDLIBS@
-LIBS = @ipoptlib@ @IPADDLIBS@ @FLIBS@
+IPOPTLIBS = @ipoptlib@ @IPADDLIBS@ @FLIBS@
 
 # Necessary Include dirs
 INCL =  -I$(IPOPTINCDIR)
@@ -31,8 +35,11 @@ INCL =  -I$(IPOPTINCDIR)
 EXE = solve_problem@EXEEXT@
 
 # List of all object files
-OBJS =  solve_problem.@OBJEXT@ \
-        MittelmannDistCntrlNeumA.@OBJEXT@ \
+MAINOBJ =  solve_problem.@OBJEXT@
+
+# List of all object files
+LIBOBJS =  \
+	MittelmannDistCntrlNeumA.@OBJEXT@ \
         MittelmannDistCntrlNeumB.@OBJEXT@ \
         MittelmannDistCntrlDiri.@OBJEXT@ \
         MittelmannBndryCntrlDiri.@OBJEXT@ \
@@ -45,6 +52,8 @@ OBJS =  solve_problem.@OBJEXT@ \
         LuksanVlcek6.@OBJEXT@ \
         LuksanVlcek7.@OBJEXT@ \
         RegisteredTNLP.@OBJEXT@
+
+LIB = libscalexamples.a
 
 all: $(EXE)
 
@@ -68,13 +77,14 @@ CYGPATH_W = @CYGPATH_W@
 
 .SUFFIXES: .cpp .c .o .obj
 
-$(EXE): $(OBJS)
-	bla=;\
-	for file in $(OBJS); do bla="$$bla `$(CYGPATH_W) $$file`"; done; \
-	$(CXX) $(CXXFLAGS) -o $@ $$bla $(LIBS)
+$(EXE): $(MAINOBJ) $(LIB)
+	$(CXX) $(CXXFLAGS) -o $@ $(MAINOBJ) $(LIB) $(IPOPTLIBS)
+
+$(LIB): $(LIBOBJS)
+	$(AR) $(ARFLAGS) $(LIB) $(LIBOBJS)
 
 clean:
-	rm -rf $(EXE) $(OBJS)
+	rm -rf $(EXE) $(MAINOBJ) $(LIBOBJS) $(LIB)
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
