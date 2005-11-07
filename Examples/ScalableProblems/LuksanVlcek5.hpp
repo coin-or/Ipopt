@@ -117,8 +117,4 @@ private:
   Number g_u_;
 };
 
-REGISTER_TNLP(LuksanVlcek5(0,0), LukVlE5);
-REGISTER_TNLP(LuksanVlcek5(-1.,0.), LukVlI5);
-//REGISTER_TNLP(LuksanVlcek5(0.,1e20), LukVlI5a);
-
 #endif

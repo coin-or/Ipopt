@@ -625,8 +625,4 @@ private:
   }
 };
 
-REGISTER_TNLP(MittelmannDistCntrlNeumB1, MDistCntrl4a);
-REGISTER_TNLP(MittelmannDistCntrlNeumB2, MDistCntrl5a);
-REGISTER_TNLP(MittelmannDistCntrlNeumB3, MDistCntrl6);
-
 #endif

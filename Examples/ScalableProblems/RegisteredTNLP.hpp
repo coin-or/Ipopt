@@ -26,26 +26,38 @@ public:
   virtual bool InitializeProblem(Index N) = 0;
 };
 
-class RegisteredTNLPList
+class RegisteredTNLPs
 {
 public:
-  static void RegisterTNLP(const SmartPtr<RegisteredTNLP>& tnlp,
-			   const std::string name);
+  RegisteredTNLPs(const SmartPtr<RegisteredTNLP>& tnlp, const std::string name)
+  {
+    RegisterTNLP(tnlp, name);
+  }
+  virtual ~RegisteredTNLPs() {}
   static SmartPtr<RegisteredTNLP> GetTNLP(const std::string name);
   static void PrintRegisteredProblems();
 private:
+  void RegisterTNLP(const SmartPtr<RegisteredTNLP>& tnlp,
+		    const std::string name);
+  SmartPtr<RegisteredTNLP> tnlp_;
 };
 
 #define REGISTER_TNLP(class_constructor, name) \
-class RegisteredTNLP_Setup_ ## name \
+class RegisteredTNLP_Setup_ ## name : public RegisteredTNLPs \
 { \
 public: \
   RegisteredTNLP_Setup_ ## name() \
-  { \
-    RegisteredTNLPList::RegisterTNLP(new class_constructor, #name); \
-  } \
+    : \
+    RegisteredTNLPs(new class_constructor, #name) \
+  { } \
+  RegisteredTNLP_Setup_ ## name* KeepCompilerFromRemovingThis(); \
 }; \
  \
-static RegisteredTNLP_Setup_ ## name RegisteredTNLP_Setup_ ## name ## instance
+RegisteredTNLP_Setup_ ## name RegisteredTNLP_Setup_ ## name ## instance_; \
+RegisteredTNLP_Setup_ ## name* \
+RegisteredTNLP_Setup_ ## name::KeepCompilerFromRemovingThis() \
+{ return &RegisteredTNLP_Setup_ ## name ## instance_; }
 
+
+//static RegisteredTNLP_Setup_ ## name RegisteredTNLP_Setup_ ## name ## instance
 #endif

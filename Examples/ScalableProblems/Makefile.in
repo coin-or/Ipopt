@@ -53,6 +53,7 @@ LIBOBJS =  \
         LuksanVlcek7.@OBJEXT@ \
         RegisteredTNLP.@OBJEXT@
 
+
 LIB = libscalexamples.a
 
 all: $(EXE)
@@ -71,6 +72,20 @@ MittelmannDistCntrlDiri.@OBJEXT@: MittelmannDistCntrlDiri.hpp
 MittelmannBndryCntrlDiri.@OBJEXT@: MittelmannBndryCntrlDiri.hpp
 MittelmannBndryCntrlNeum.@OBJEXT@: MittelmannBndryCntrlNeum.hpp
 
+solve_problem.@OBJEXT@: \
+	LuksanVlcek1.hpp \
+	LuksanVlcek2.hpp \
+	LuksanVlcek3.hpp \
+	LuksanVlcek4.hpp \
+	LuksanVlcek5.hpp \
+	LuksanVlcek6.hpp \
+	LuksanVlcek7.hpp \
+	MittelmannDistCntrlNeumA.hpp \
+	MittelmannDistCntrlNeumB.hpp \
+	MittelmannDistCntrlDiri.hpp \
+	MittelmannBndryCntrlDiri.hpp \
+	MittelmannBndryCntrlNeum.hpp \
+	MittelmannParaCntrl.hpp
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@

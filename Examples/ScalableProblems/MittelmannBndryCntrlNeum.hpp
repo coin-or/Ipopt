@@ -536,9 +536,4 @@ private:
   //@}
 };
 
-REGISTER_TNLP(MittelmannBndryCntrlNeum1, MBndryCntrl5);
-REGISTER_TNLP(MittelmannBndryCntrlNeum2, MBndryCntrl6);
-REGISTER_TNLP(MittelmannBndryCntrlNeum3, MBndryCntrl7);
-REGISTER_TNLP(MittelmannBndryCntrlNeum4, MBndryCntrl8);
-
 #endif
