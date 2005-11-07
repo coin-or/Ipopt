@@ -28,7 +28,7 @@ namespace Ipopt
       "max_hessian_perturbation",
       "Maximum value of regularization parameter for handling negative curvature.",
       0, true,
-      1e40, // ToDo make this 1e20 ?
+      1e25, // ToDo make this 1e20 ?
       "In order to guarantee that the search directions are indeed proper "
       "descent directions, Ipopt requires that the inertia of the "
       "(augmented) linear system for the step computation has the "
@@ -220,6 +220,9 @@ namespace Ipopt
     // Check for structural degeneracy
     if (hess_degenerate_ == NOT_YET_DETERMINED ||
         jac_degenerate_ == NOT_YET_DETERMINED) {
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Degeneracy test for hess_degenerate_ = %d and jac_degenerate_ = %d\ntest_status_ = %d\n",
+                       hess_degenerate_, jac_degenerate_, test_status_);
       switch (test_status_) {
         case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
         DBG_ASSERT(delta_x_curr_ == 0. && delta_c_curr_ == 0.);
@@ -245,7 +248,7 @@ namespace Ipopt
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
         ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                         "get_deltas_for_wrong_inertia returns false.");
+                         "get_deltas_for_wrong_inertia returns false (singular TEST_DELTA_C_GT_0_DELTA_X_EQ_0).");
         DBG_ASSERT(delta_c == 0. && delta_d == 0.);
         test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         break;
@@ -352,7 +355,20 @@ namespace Ipopt
     // perturbation for a test did not result in a singular system)
     finalize_test();
 
-    return get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+    bool retval = get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+    if (!retval && delta_c==0.) {
+      DBG_ASSERT(delta_d == 0.);
+      delta_c_curr_ = delta_cd();
+      delta_d_curr_ = delta_c_curr_;
+      delta_x_curr_ = 0.;
+      delta_s_curr_ = 0.;
+      test_status_ = NO_TEST;
+      if (hess_degenerate_ == DEGENERATE) {
+        hess_degenerate_ = NOT_YET_DETERMINED;
+      }
+      retval = get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+    }
+    return retval;
   }
 
   void
