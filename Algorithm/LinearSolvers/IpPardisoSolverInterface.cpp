@@ -164,6 +164,11 @@ namespace Ipopt
     int      num_procs;
     if(var != NULL) {
       sscanf( var, "%d", &num_procs );
+      if (num_procs < 1) {
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Invalid value for OMP_NUM_THREADS (\"%s\").\n", var);
+        return false;
+      }
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Using environment OMP_NUM_THREADS = %d as the number of processors.\n", num_procs);
     }

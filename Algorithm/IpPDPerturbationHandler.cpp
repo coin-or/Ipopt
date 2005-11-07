@@ -220,9 +220,9 @@ namespace Ipopt
     // Check for structural degeneracy
     if (hess_degenerate_ == NOT_YET_DETERMINED ||
         jac_degenerate_ == NOT_YET_DETERMINED) {
-        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                       "Degeneracy test for hess_degenerate_ = %d and jac_degenerate_ = %d\ntest_status_ = %d\n",
-                       hess_degenerate_, jac_degenerate_, test_status_);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Degeneracy test for hess_degenerate_ = %d and jac_degenerate_ = %d\ntest_status_ = %d\n",
+                     hess_degenerate_, jac_degenerate_, test_status_);
       switch (test_status_) {
         case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
         DBG_ASSERT(delta_x_curr_ == 0. && delta_c_curr_ == 0.);
