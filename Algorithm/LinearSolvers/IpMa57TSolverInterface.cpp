@@ -442,6 +442,8 @@ namespace Ipopt
 
     wd_lkeep_ = 5*n + ne + Max (n,ne) + 42;
 
+    wd_cntl_[1-1]  = pivtol_;    /* Pivot threshold. */
+
     wd_iwork_ = new ipfint[5*n];
     wd_keep_  = new ipfint[wd_lkeep_];
 
@@ -490,6 +492,8 @@ namespace Ipopt
     IpData().TimingStats().LinearSystemFactorization().Start();
 
     int fact_error = 1;
+
+    wd_cntl_[1-1]  = pivtol_;    /* Pivot threshold. */
 
     ipfint n  = dim_;
     ipfint ne = nonzeros_;
