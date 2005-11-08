@@ -25,62 +25,62 @@ using namespace Ipopt;
 // can't get it to work right now.  For now, list explicitly the
 // problems we want to include:
 #include "LuksanVlcek1.hpp"
-REGISTER_TNLP(LuksanVlcek1(0,0), LukVlE1);
-REGISTER_TNLP(LuksanVlcek1(-1.,0.), LukVlI1);
+REGISTER_TNLP(LuksanVlcek1(0,0), LukVlE1)
+REGISTER_TNLP(LuksanVlcek1(-1.,0.), LukVlI1)
 #include "LuksanVlcek2.hpp"
-REGISTER_TNLP(LuksanVlcek2(0,0), LukVlE2);
-REGISTER_TNLP(LuksanVlcek2(-1.,0.), LukVlI2);
+REGISTER_TNLP(LuksanVlcek2(0,0), LukVlE2)
+REGISTER_TNLP(LuksanVlcek2(-1.,0.), LukVlI2)
 #include "LuksanVlcek3.hpp"
-REGISTER_TNLP(LuksanVlcek3(0,0), LukVlE3);
-REGISTER_TNLP(LuksanVlcek3(-1.,0.), LukVlI3);
+REGISTER_TNLP(LuksanVlcek3(0,0), LukVlE3)
+REGISTER_TNLP(LuksanVlcek3(-1.,0.), LukVlI3)
 #include "LuksanVlcek4.hpp"
-REGISTER_TNLP(LuksanVlcek4(0,0), LukVlE4);
-REGISTER_TNLP(LuksanVlcek4(-1.,0.), LukVlI4);
+REGISTER_TNLP(LuksanVlcek4(0,0), LukVlE4)
+REGISTER_TNLP(LuksanVlcek4(-1.,0.), LukVlI4)
 #include "LuksanVlcek5.hpp"
-REGISTER_TNLP(LuksanVlcek5(0,0), LukVlE5);
-REGISTER_TNLP(LuksanVlcek5(-1.,0.), LukVlI5);
+REGISTER_TNLP(LuksanVlcek5(0,0), LukVlE5)
+REGISTER_TNLP(LuksanVlcek5(-1.,0.), LukVlI5)
 #include "LuksanVlcek6.hpp"
-REGISTER_TNLP(LuksanVlcek6(0,0), LukVlE6);
-REGISTER_TNLP(LuksanVlcek6(-1.,0.), LukVlI6);
+REGISTER_TNLP(LuksanVlcek6(0,0), LukVlE6)
+REGISTER_TNLP(LuksanVlcek6(-1.,0.), LukVlI6)
 #include "LuksanVlcek7.hpp"
-REGISTER_TNLP(LuksanVlcek7(0,0), LukVlE7);
-REGISTER_TNLP(LuksanVlcek7(-1.,0.), LukVlI7);
+REGISTER_TNLP(LuksanVlcek7(0,0), LukVlE7)
+REGISTER_TNLP(LuksanVlcek7(-1.,0.), LukVlI7)
 
 
 #include "MittelmannBndryCntrlDiri.hpp"
-REGISTER_TNLP(MittelmannBndryCntrlDiri1, MBndryCntrl1);
-REGISTER_TNLP(MittelmannBndryCntrlDiri2, MBndryCntrl2);
-REGISTER_TNLP(MittelmannBndryCntrlDiri3, MBndryCntrl3);
-REGISTER_TNLP(MittelmannBndryCntrlDiri4, MBndryCntrl4);
+REGISTER_TNLP(MittelmannBndryCntrlDiri1, MBndryCntrl1)
+REGISTER_TNLP(MittelmannBndryCntrlDiri2, MBndryCntrl2)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3, MBndryCntrl3)
+REGISTER_TNLP(MittelmannBndryCntrlDiri4, MBndryCntrl4)
 
 #include "MittelmannBndryCntrlNeum.hpp"
-REGISTER_TNLP(MittelmannBndryCntrlNeum1, MBndryCntrl5);
-REGISTER_TNLP(MittelmannBndryCntrlNeum2, MBndryCntrl6);
-REGISTER_TNLP(MittelmannBndryCntrlNeum3, MBndryCntrl7);
-REGISTER_TNLP(MittelmannBndryCntrlNeum4, MBndryCntrl8);
+REGISTER_TNLP(MittelmannBndryCntrlNeum1, MBndryCntrl5)
+REGISTER_TNLP(MittelmannBndryCntrlNeum2, MBndryCntrl6)
+REGISTER_TNLP(MittelmannBndryCntrlNeum3, MBndryCntrl7)
+REGISTER_TNLP(MittelmannBndryCntrlNeum4, MBndryCntrl8)
 
 #include "MittelmannDistCntrlDiri.hpp"
-REGISTER_TNLP(MittelmannDistCntrlDiri1, MDistCntrl1);
-REGISTER_TNLP(MittelmannDistCntrlDiri2, MDistCntrl2);
-REGISTER_TNLP(MittelmannDistCntrlDiri3, MDistCntrl3);
-REGISTER_TNLP(MittelmannDistCntrlDiri4, MDistCntrl3a);
+REGISTER_TNLP(MittelmannDistCntrlDiri1, MDistCntrl1)
+REGISTER_TNLP(MittelmannDistCntrlDiri2, MDistCntrl2)
+REGISTER_TNLP(MittelmannDistCntrlDiri3, MDistCntrl3)
+REGISTER_TNLP(MittelmannDistCntrlDiri4, MDistCntrl3a)
 
 #include "MittelmannDistCntrlNeumA.hpp"
-REGISTER_TNLP(MittelmannDistCntrlNeumA1, MDistCntrl4);
-REGISTER_TNLP(MittelmannDistCntrlNeumA2, MDistCntrl5);
-REGISTER_TNLP(MittelmannDistCntrlNeumA3, MDistCntrl6a);
+REGISTER_TNLP(MittelmannDistCntrlNeumA1, MDistCntrl4)
+REGISTER_TNLP(MittelmannDistCntrlNeumA2, MDistCntrl5)
+REGISTER_TNLP(MittelmannDistCntrlNeumA3, MDistCntrl6a)
 
 #include "MittelmannDistCntrlNeumB.hpp"
-REGISTER_TNLP(MittelmannDistCntrlNeumB1, MDistCntrl4a);
-REGISTER_TNLP(MittelmannDistCntrlNeumB2, MDistCntrl5a);
-REGISTER_TNLP(MittelmannDistCntrlNeumB3, MDistCntrl6);
+REGISTER_TNLP(MittelmannDistCntrlNeumB1, MDistCntrl4a)
+REGISTER_TNLP(MittelmannDistCntrlNeumB2, MDistCntrl5a)
+REGISTER_TNLP(MittelmannDistCntrlNeumB3, MDistCntrl6)
 
 #include "MittelmannParaCntrl.hpp"
-REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_1>, MPara5_1);
-REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_2_1>, MPara5_2_1);
-REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_2_2>, MPara5_2_2);
-REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_2_3>, MPara5_2_3);
-//REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_try>, MPara5_try);
+REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_1>, MPara5_1)
+REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_2_1>, MPara5_2_1)
+REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_2_2>, MPara5_2_2)
+REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_2_3>, MPara5_2_3)
+//REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_try>, MPara5_try)
 
 static void print_problems()
 {
