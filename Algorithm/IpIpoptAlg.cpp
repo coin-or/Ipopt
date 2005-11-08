@@ -228,13 +228,13 @@ namespace Ipopt
     }
     catch(TINY_STEP_DETECTED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
-      IpData().TimingStats().UpdateBarrierParameter().End();
+      IpData().TimingStats().UpdateBarrierParameter().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return STOP_AT_TINY_STEP;
     }
     catch(ACCEPTABLE_POINT_REACHED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
-      IpData().TimingStats().ComputeAcceptableTrialPoint().End();
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return STOP_AT_ACCEPTABLE_POINT;
     }
@@ -247,25 +247,25 @@ namespace Ipopt
     }
     catch(RESTORATION_CONVERGED_TO_FEASIBLE_POINT& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
-      IpData().TimingStats().ComputeAcceptableTrialPoint().End();
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return RESTORATION_FAILURE;
     }
     catch(RESTORATION_FAILED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
-      IpData().TimingStats().ComputeAcceptableTrialPoint().End();
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return RESTORATION_FAILURE;
     }
     catch(RESTORATION_MAXITER_EXCEEDED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
-      IpData().TimingStats().ComputeAcceptableTrialPoint().End();
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return MAXITER_EXCEEDED;
     }
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
-      IpData().TimingStats().ComputeAcceptableTrialPoint().End();
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return SUCCESS;
     }

@@ -157,13 +157,27 @@ namespace Ipopt
         Number orig_trial_primal_inf =
           orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
         // ToDo make the factor in following line an option
-        if (orig_trial_primal_inf <= 1e2*orig_ip_data->tol()) {
-          Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
-                         "Restoration phase converged to a feasible point that is\n"
-                         "unacceptable to the filter for the original problem.\n");
-          THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
-                          "Restoration phase converged to a feasible point that is "
-                          "unacceptable to the filter for the original problem.");
+        if (orig_trial_primal_inf <= 1e2*IpData().tol()) {
+          //        if (orig_trial_primal_inf <= 1e2*orig_ip_data->tol()) {
+          if (IpData().tol() > 1e-1*orig_ip_data->tol()) {
+            // For once, we tighten the convergence tolerance for the
+            // restoration phase problem in case the problem is only
+            // very slightly infeasible.
+            IpData().Set_tol(1e-2*IpData().tol());
+            status = CONTINUE;
+            Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                           "Tightening restoration phase tolerance to %e.\n",
+                           IpData().tol());
+            IpData().Append_info_string("!");
+          }
+          else {
+            Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                           "Restoration phase converged to a feasible point that is\n"
+                           "unacceptable to the filter for the original problem.\n");
+            THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
+                            "Restoration phase converged to a feasible point that is "
+                            "unacceptable to the filter for the original problem.");
+          }
         }
         else {
           THROW_EXCEPTION(LOCALLY_INFEASIBLE,

@@ -73,6 +73,7 @@ namespace Ipopt
     //@{
     Number mu_max_;
     Number mu_min_;
+    bool mu_min_default_;
     Number tau_min_;
     Number adaptive_mu_safeguard_factor_; //ToDo don't need that?
     Number adaptive_mu_monotone_init_factor_;

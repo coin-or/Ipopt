@@ -194,9 +194,11 @@ namespace Ipopt
     adaptive_mu_kkt_balancing_term_ = QualityFunctionMuOracle::BalancingTermEnum(enum_int);
     options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
     if (!options.GetNumericValue("mu_min", mu_min_, prefix)) {
-      // Defer computation of the default until the scaling of the NLP
-      // is known
-      mu_min_ = -1.;
+      // Compute mu_min based on tolerance (once the NLP scaling is known)
+      mu_min_default_ = true;
+    }
+    else {
+      mu_min_default_ = false;
     }
 
     init_dual_inf_ = -1.;
@@ -226,8 +228,10 @@ namespace Ipopt
 
     // if min_mu_ has not been given, we now set the default (can't do
     // that earlier, because during call of InitializeImpl, the
-    // scaling in the NLP is not yet determined
-    if (mu_min_ < 0.) {
+    // scaling in the NLP is not yet determined).  We compute this
+    // here in every iteration, since the tolerance might be changed
+    // (e.g. in the restoration phase)
+    if (mu_min_default_) {
       mu_min_ = Min(IpData().tol(),
                     IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_))/
                 (barrier_tol_factor_+1.);

@@ -278,14 +278,27 @@ namespace Ipopt
     }
     //@}
 
-    /**@name Algorithm Parameters ("these will later be
-     *  moved to a specific IpoptParameters class, once
-     *  I get time to write one" - he said) */
+    /** Overall convergence tolerance.  It is used in the convergence
+     *  test, but also in some other parts of the algorithm that
+     *  depend on the specified tolerance, such as the minimum value
+     *  for the barrier parameter. */
     //@{
+    /** Obtain the tolerance. */
     Number tol() const
     {
       DBG_ASSERT(initialize_called_);
       return tol_;
+    }
+    /** Set a new value for the tolerance.  One should be very careful
+     *  when using this, since changing the predefined tolerance might
+     *  have unexpected consequences.  This method is for example used
+     *  in the restoration convergence checker to tighten the
+     *  restoration phase convergence tolerance, if the restoration
+     *  phase converged to a point that has not a large value for the
+     *  constraint violation. */
+    void Set_tol(Number tol)
+    {
+      tol_ = tol;
     }
     //@}
 
