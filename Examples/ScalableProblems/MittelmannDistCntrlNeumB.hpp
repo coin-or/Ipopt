@@ -261,7 +261,7 @@ public:
     Number b_1j = 1.;
     Number b_i0 = 1.;
     Number b_i1 = 1.;
-    Number u_init = (ub_u + lb_u)/2.
+    Number u_init = (ub_u + lb_u)/2.;
 
     SetBaseParameters(N, lb_y, ub_y, lb_u, ub_u, b_0j, b_1j, b_i0, b_i1, u_init);
     return true;
@@ -388,7 +388,7 @@ public:
     Number b_1j = 1.;
     Number b_i0 = 1.;
     Number b_i1 = 1.;
-    Number u_init = (ub_u + lb_u)/2.
+    Number u_init = (ub_u + lb_u)/2.;
 
     SetBaseParameters(N, lb_y, ub_y, lb_u, ub_u, b_0j, b_1j, b_i0, b_i1, u_init);
     return true;
@@ -516,7 +516,7 @@ public:
     Number b_1j = 0.;
     Number b_i0 = 1.;
     Number b_i1 = 0.;
-    Number u_init = (ub_u + lb_u)/2.
+    Number u_init = (ub_u + lb_u)/2.;
 
     SetBaseParameters(N, lb_y, ub_y, lb_u, ub_u, b_0j, b_1j, b_i0, b_i1, u_init);
     return true;

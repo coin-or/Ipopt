@@ -63,7 +63,7 @@ REGISTER_TNLP(MittelmannBndryCntrlNeum4, MBndryCntrl8)
 REGISTER_TNLP(MittelmannDistCntrlDiri1, MDistCntrl1)
 REGISTER_TNLP(MittelmannDistCntrlDiri2, MDistCntrl2)
 REGISTER_TNLP(MittelmannDistCntrlDiri3, MDistCntrl3)
-REGISTER_TNLP(MittelmannDistCntrlDiri4, MDistCntrl3a)
+REGISTER_TNLP(MittelmannDistCntrlDiri3a, MDistCntrl3a)
 
 #include "MittelmannDistCntrlNeumA.hpp"
 REGISTER_TNLP(MittelmannDistCntrlNeumA1, MDistCntrl4)

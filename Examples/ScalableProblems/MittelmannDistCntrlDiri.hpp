@@ -211,7 +211,7 @@ public:
     Number ub_y = 0.185;
     Number lb_u = 1.5;
     Number ub_u = 4.5;
-    Number u_init = (ub_u+lb_u)/2.
+    Number u_init = (ub_u+lb_u)/2.;
 
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, u_init);
     return true;
@@ -263,7 +263,7 @@ public:
     Number ub_y = 0.185;
     Number lb_u = 1.5;
     Number ub_u = 4.5;
-    Number u_init = (ub_u+lb_u)/2.
+    Number u_init = (ub_u+lb_u)/2.;
 
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, u_init);
     return true;
@@ -317,7 +317,7 @@ public:
     Number ub_y = 0.11;
     Number lb_u = -5;
     Number ub_u = 5.;
-    Number u_init = (ub_u+lb_u)/2.
+    Number u_init = (ub_u+lb_u)/2.;
 
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, u_init);
     return true;
@@ -372,7 +372,7 @@ public:
     Number ub_y = 0.11;
     Number lb_u = -5;
     Number ub_u = 5.;
-    Number u_init = (ub_u+lb_u)/2.
+    Number u_init = (ub_u+lb_u)/2.;
 
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, u_init);
     return true;
