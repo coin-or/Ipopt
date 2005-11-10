@@ -319,7 +319,6 @@ get_starting_point(Index n, bool init_x, Number* x,
   // for u
   for (Index i=1; i<=Nt_; i++) {
     x[u_index(i)] = (ub_u_+lb_u_)/2.;
-    //    x[u_index(i)] = 0.;//(ub_u_+lb_u_)/2.;
   }
 
   /*

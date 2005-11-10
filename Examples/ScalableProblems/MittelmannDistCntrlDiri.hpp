@@ -211,7 +211,8 @@ public:
     Number ub_y = 0.185;
     Number lb_u = 1.5;
     Number ub_u = 4.5;
-    Number u_init = 3.;
+    Number u_init = (ub_u+lb_u)/2.
+
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, u_init);
     return true;
   }
@@ -262,7 +263,8 @@ public:
     Number ub_y = 0.185;
     Number lb_u = 1.5;
     Number ub_u = 4.5;
-    Number u_init = 3.;
+    Number u_init = (ub_u+lb_u)/2.
+
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, u_init);
     return true;
   }
@@ -315,7 +317,8 @@ public:
     Number ub_y = 0.11;
     Number lb_u = -5;
     Number ub_u = 5.;
-    Number u_init = 0.;
+    Number u_init = (ub_u+lb_u)/2.
+
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, u_init);
     return true;
   }
@@ -350,15 +353,14 @@ private:
   const Number pi_;
 };
 
-/** Class implementating Example 4 */
-class MittelmannDistCntrlDiri4 : public MittelmannDistCntrlDiriBase
+class MittelmannDistCntrlDiri3a : public MittelmannDistCntrlDiriBase
 {
 public:
-  MittelmannDistCntrlDiri4()
+  MittelmannDistCntrlDiri3a()
     : 
     pi_(4.*atan(1.))
   {}
-  virtual ~MittelmannDistCntrlDiri4() {}
+  virtual ~MittelmannDistCntrlDiri3a() {}
   virtual bool InitializeProblem(Index N)
   {
     if (N<1) {
@@ -370,7 +372,8 @@ public:
     Number ub_y = 0.11;
     Number lb_u = -5;
     Number ub_u = 5.;
-    Number u_init = 0.;
+    Number u_init = (ub_u+lb_u)/2.
+
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, u_init);
     return true;
   }
@@ -398,8 +401,8 @@ protected:
 private:
   /**@name hide implicitly defined contructors copy operators */
   //@{
-  MittelmannDistCntrlDiri4(const MittelmannDistCntrlDiri4&);
-  MittelmannDistCntrlDiri4& operator=(const MittelmannDistCntrlDiri4&);
+  MittelmannDistCntrlDiri3a(const MittelmannDistCntrlDiri3a&);
+  MittelmannDistCntrlDiri3a& operator=(const MittelmannDistCntrlDiri3a&);
   //@}
   /** Value of pi (made available for convenience) */
   const Number pi_;

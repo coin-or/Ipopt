@@ -146,8 +146,25 @@ MittelmannBndryCntrlDiriBase::get_starting_point(Index n, bool init_x, Number* x
   for (Index i=0; i<= N_+1; i++) {
     for (Index j=0; j<= N_+1; j++) {
       x[y_index(i,j)] = y_d_[y_index(i,j)]; // 0 in AMPL model
-      //      x[y_index(i,j)] += h_*x1_grid(i) + 2*h_*x2_grid(j);
-    }
+     }
+  }
+
+  Number umid = (ub_u_ + lb_u_)/2.;
+  for (Index i=1; i<=N_; i++) {
+    Index iu = y_index(i,0);
+    x[iu] = umid;
+  }
+  for (Index i=1; i<=N_; i++) {
+    Index iu = y_index(i,N_+1);
+    x[iu] = umid;
+  }
+  for (Index j=1; j<=N_; j++) {
+    Index iu = y_index(0,j);
+    x[iu] = umid;
+  }
+  for (Index j=1; j<=N_; j++) {
+    Index iu = y_index(N_+1,j);
+    x[iu] = umid;
   }
 
   return true;
