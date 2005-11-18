@@ -249,10 +249,17 @@ namespace Ipopt
     Number trial_theta = IpCq().trial_constraint_violation();
     // Check if constraint violation is becoming too large
     if (theta_max_ < 0.0) {
+      // ToDo should 1.0 be based on dimension? (theta is in 1 norm!!!)
       theta_max_ = theta_max_fact_*Max(1.0, reference_theta_);
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "trial_max is initialized to %e\n",
+                     theta_max_);
     }
     if (theta_min_ < 0.0) {
       theta_min_ = theta_min_fact_*Max(1.0, reference_theta_);
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "trial_min is initialized to %e\n",
+                     theta_min_);
     }
 
     if (theta_max_>0 && trial_theta>theta_max_) {
