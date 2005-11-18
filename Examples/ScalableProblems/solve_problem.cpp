@@ -19,6 +19,41 @@
 # endif
 #endif
 
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# else
+#  error "don't have header file for stdlib"
+# endif
+#endif
+
+//**********************************************************************
+// Stuff for benchmarking
+#define TIME_LIMIT
+#ifdef TIME_LIMIT
+
+#include <unistd.h>
+#include <pthread.h>
+
+extern "C" void* killer_thread(void* arg)
+{
+   int runtime = *reinterpret_cast<int *>(arg);
+   if (runtime <= 0) {
+     printf("Invalid argument for run time (%d)\n", runtime);
+     exit(-100);
+   }
+   printf("Limiting wall clock time to %d seconds.\n", runtime);
+   sleep(runtime);
+   printf("EXIT: Exceeding wall clock time limit of %d seconds.\n", runtime);
+   exit(-999);
+   return NULL;
+}
+#endif
+//**********************************************************************
+
+
 using namespace Ipopt;
 
 // This could probably be done more elegant and automatically, but I
@@ -95,6 +130,14 @@ int main(int argv, char* argc[])
     return 0;
   }
 
+#ifdef TIME_LIMIT
+  if (argv==4) {
+    int runtime = atoi(argc[3]);
+    pthread_t thread;
+    pthread_create(&thread, NULL, killer_thread, &runtime);
+  }
+  else
+#endif
   if (argv!=3) {
     printf("Usage: %s ProblemName N\n", argc[0]);
     printf("          where N is a positive parameter determining problem size\n");
