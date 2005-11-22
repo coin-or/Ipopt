@@ -19,3 +19,6 @@ Interfaces/IpSolveStatistics.hpp -text
 /LICENSE -text
 Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln -text
 Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj -text
+Windows/VisualStudio_dotNET/hs071_c/hs071_c.vcproj -text
+Windows/VisualStudio_dotNET/hs071_cpp/hs071_cpp.vcproj -text
+Windows/VisualStudio_dotNET/hs071_f/hs071_f.vfproj -text

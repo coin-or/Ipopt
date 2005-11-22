@@ -20,9 +20,8 @@ Then open the solution file
 
 trunk/Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln
 
-This solution compiles both a Fortran example problem and a C++
-example problem. You should be able to base your development on one of
-these examples.
+This solution compiles a C example, a Fortran example, and two C++ examples. 
+You should be able to base your development on one of these examples.
 
 
 Here are some helpful notes if you are building a new C++ project.
