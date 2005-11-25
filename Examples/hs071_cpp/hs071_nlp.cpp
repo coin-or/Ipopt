@@ -12,11 +12,13 @@ using namespace Ipopt;
 
 // constructor
 HS071_NLP::HS071_NLP()
-{}
+{
+}
 
 //destructor
 HS071_NLP::~HS071_NLP()
-{}
+{
+}
 
 // returns the size of the problem
 bool HS071_NLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, 
