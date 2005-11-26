@@ -25,7 +25,8 @@ namespace Ipopt
   class IpoptApplication : public ReferencedObject
   {
   public:
-    IpoptApplication(bool read_params_dat = true, bool create_console_out = true);
+    IpoptApplication(bool read_params_dat = true, bool create_console_out = true, 
+		     SmartPtr<RegisteredOptions> reg_options = NULL);
 
     virtual ~IpoptApplication();
 
