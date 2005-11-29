@@ -25,8 +25,10 @@ EXTRA_DIST = \
 	Docs/documentation.tex \
 	Windows/VisualStudio_dotNET/README \
 	Windows/VisualStudio_dotNET/CppExample/CppExample.vcproj \
-	Windows/VisualStudio_dotNET/FortranExample/FortranExample.vfproj \
 	Windows/VisualStudio_dotNET/FortranLinAlg/FortranLinAlg.vfproj \
+	Windows/VisualStudio_dotNET/hs071_c/hs071_c.vcproj \
+	Windows/VisualStudio_dotNET/hs071_cpp/hs071_cpp.vcproj \
+	Windows/VisualStudio_dotNET/hs071_f/hs071_f.vfproj \
 	Windows/VisualStudio_dotNET/include/config.h \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj
