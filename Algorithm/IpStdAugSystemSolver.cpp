@@ -223,10 +223,13 @@ namespace Ipopt
     // (1,1) block
     // create the spaces and sum matrix for the upper left corner (W + D_x delta_x*I)
     // of the hessian part for the 1,1 block
+    diag_space_x_ = new DiagMatrixSpace(n_x);
+
     sumsym_space_x_ = new SumSymMatrixSpace(n_x, 2);
+    sumsym_space_x_->SetTermSpace(0, *W.OwnerSymMatrixSpace()); 
+    sumsym_space_x_->SetTermSpace(1, *diag_space_x_);
     augmented_system_space_->SetCompSpace(0,0, *sumsym_space_x_);
 
-    diag_space_x_ = new DiagMatrixSpace(n_x);
 
     // (2,2) block
     // create the spaces and diag matrix for the lower right corner (D_s + delta_s*I)

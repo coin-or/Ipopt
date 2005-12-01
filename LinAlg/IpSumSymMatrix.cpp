@@ -97,8 +97,26 @@ namespace Ipopt
     }
   }
 
+  void SumSymMatrixSpace::SetTermSpace
+  (Index term_idx, const SymMatrixSpace& space)
+  {
+    while(term_idx >= (Index)term_spaces_.size()) {
+      term_spaces_.push_back(NULL);
+    }
+    term_spaces_[term_idx] = &space;
+  }
+
+  SmartPtr<const SymMatrixSpace> SumSymMatrixSpace::GetTermSpace(Index term_idx) const
+  {
+    if (term_idx >= 0 && term_idx < (Index)term_spaces_.size()) {
+      return term_spaces_[term_idx];
+    }
+    return NULL;    
+  }
+
   SumSymMatrix* SumSymMatrixSpace::MakeNewSumSymMatrix() const
   {
+    DBG_ASSERT(nterms_ == (Index)term_spaces_.size());
     return new SumSymMatrix(this);
   }
 

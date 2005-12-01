@@ -14,6 +14,9 @@
 namespace Ipopt
 {
 
+  /* forward declaration */
+  class SymLinearSolver;
+
   /** This class creates a composite NLP from a list of NLP's.
    *  This is a Composite class (Design Patterns) that creates a single NLP from
    *  a list of NLP's with some common variables. This allows users to "link" 
@@ -62,13 +65,13 @@ namespace Ipopt
                            SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space);
 
     /** Method for obtaining the bounds information */
-    virtual bool GetBoundsInformation(Matrix& Px_L,
+    virtual bool GetBoundsInformation(const Matrix& Px_L,
                                       Vector& x_L,
-                                      Matrix& Px_U,
+                                      const Matrix& Px_U,
                                       Vector& x_U,
-                                      Matrix& Pd_L,
+                                      const Matrix& Pd_L,
                                       Vector& d_L,
-                                      Matrix& Pd_U,
+                                      const Matrix& Pd_U,
                                       Vector& d_U);
 
     /** Method for obtaining the starting point
@@ -108,6 +111,11 @@ namespace Ipopt
                         SymMatrix& h);
     //@}
 
+    /** @name Information about the Composite Structure */
+    //@{
+    /** returns an appropriate linear solver for the problem structure */
+    SmartPtr<SymLinearSolver> CreateLinearSolver();
+    //@}
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).

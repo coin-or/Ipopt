@@ -20,6 +20,11 @@ namespace Ipopt
   SymMatrix::~SymMatrix()
   {}
 
+  SmartPtr<const SymMatrixSpace> SymMatrix::OwnerSymMatrixSpace() const
+  {
+    return owner_space_;
+  }
+  
   void SymMatrix::TransMultVectorImpl(Number alpha, const Vector& x, Number beta,
                                       Vector& y) const
   {

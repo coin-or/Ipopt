@@ -120,8 +120,25 @@ namespace Ipopt
     }
   }
 
+  void SumMatrixSpace::SetTermSpace(Index term_idx, const MatrixSpace& mat_space)
+  {
+    while(term_idx >= (Index)term_spaces_.size()) {
+      term_spaces_.push_back(NULL);
+    }
+    term_spaces_[term_idx] = &mat_space;
+  }
+
+  SmartPtr<const MatrixSpace> SumMatrixSpace::GetTermSpace(Index term_idx) const
+  {
+    if (term_idx >= 0 && term_idx < (Index)term_spaces_.size()) {
+      return term_spaces_[term_idx];
+    }
+    return NULL;
+  }
+
   SumMatrix* SumMatrixSpace::MakeNewSumMatrix() const
   {
+    DBG_ASSERT(nterms_ == (Index)term_spaces_.size());
     return new SumMatrix(this);
   }
 

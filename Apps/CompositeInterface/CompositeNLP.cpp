@@ -11,6 +11,10 @@
 #include "IpCompoundMatrix.hpp"
 #include "IpCompoundSymMatrix.hpp"
 #include "IpZeroMatrix.hpp"
+#include "IpMa27TSolverInterface.hpp"
+#include "IpBDSymLinearSolver.hpp"
+#include "IpTSymLinearSolver.hpp"
+#include "IpMPSymLinearSolver.hpp"
 
 namespace Ipopt
 {
@@ -37,7 +41,14 @@ namespace Ipopt
   bool CompositeNLP::ProcessOptions(const OptionsList& options,
                                     const std::string& prefix)
   {
-    return true;
+    bool ret = true;
+    // need to pass the processing down to the other nlps
+    for (Index i=0; i<(Index)nlps_.size(); i++) {
+      if (!nlps_[i]->ProcessOptions(options, prefix)) {
+	ret = false;
+      }
+    }
+    return ret;
   }
 
   bool CompositeNLP::GetSpaces(SmartPtr<const VectorSpace>& x_space,
@@ -303,24 +314,24 @@ namespace Ipopt
     return true;
   }
 
-  bool CompositeNLP::GetBoundsInformation(Matrix& Px_L,
+  bool CompositeNLP::GetBoundsInformation(const Matrix& Px_L,
                                           Vector& x_L,
-                                          Matrix& Px_U,
+                                          const Matrix& Px_U,
                                           Vector& x_U,
-                                          Matrix& Pd_L,
+                                          const Matrix& Pd_L,
                                           Vector& d_L,
-                                          Matrix& Pd_U,
+                                          const Matrix& Pd_U,
                                           Vector& d_U)
   {
     CompoundVector* cx_l = dynamic_cast<CompoundVector*>(&x_L);
-    CompoundMatrix* cpx_l = dynamic_cast<CompoundMatrix*>(&Px_L);
+    const CompoundMatrix* cpx_l = dynamic_cast<const CompoundMatrix*>(&Px_L);
     CompoundVector* cx_u = dynamic_cast<CompoundVector*>(&x_U);
-    CompoundMatrix* cpx_u= dynamic_cast<CompoundMatrix*>(&Px_U);
+    const CompoundMatrix* cpx_u= dynamic_cast<const CompoundMatrix*>(&Px_U);
 
     CompoundVector* cd_l = dynamic_cast<CompoundVector*>(&d_L);
-    CompoundMatrix* cpd_l = dynamic_cast<CompoundMatrix*>(&Pd_L);
+    const CompoundMatrix* cpd_l = dynamic_cast<const CompoundMatrix*>(&Pd_L);
     CompoundVector* cd_u = dynamic_cast<CompoundVector*>(&d_U);
-    CompoundMatrix* cpd_u = dynamic_cast<CompoundMatrix*>(&Pd_U);
+    const CompoundMatrix* cpd_u = dynamic_cast<const CompoundMatrix*>(&Pd_U);
 
     DBG_ASSERT(cx_l && cpx_l && cx_u && cpx_u && cd_l && cpd_l && cd_u && cpd_u);
 
@@ -331,10 +342,10 @@ namespace Ipopt
       SmartPtr<Vector> d_l = cd_l->GetCompNonConst(i);
       SmartPtr<Vector> d_u = cd_u->GetCompNonConst(i);
 
-      SmartPtr<Matrix> px_l = cpx_l->GetCompNonConst(i, i);
-      SmartPtr<Matrix> px_u = cpx_u->GetCompNonConst(i, i);
-      SmartPtr<Matrix> pd_l = cpd_l->GetCompNonConst(i, i);
-      SmartPtr<Matrix> pd_u = cpd_u->GetCompNonConst(i, i);
+      SmartPtr<const Matrix> px_l = cpx_l->GetComp(i, i);
+      SmartPtr<const Matrix> px_u = cpx_u->GetComp(i, i);
+      SmartPtr<const Matrix> pd_l = cpd_l->GetComp(i, i);
+      SmartPtr<const Matrix> pd_u = cpd_u->GetComp(i, i);
 
       DBG_ASSERT(IsValid(x_l) && IsValid(x_u) && IsValid(d_l) && IsValid(d_u)
                  && IsValid(px_l) && IsValid(px_u) && IsValid(pd_l) && IsValid(pd_u));
@@ -361,21 +372,19 @@ namespace Ipopt
     bool need_z_U)
   {
 
-    CompoundVector* cx = dynamic_cast<CompoundVector*>(&x);
-    CompoundVector* cy_c = dynamic_cast<CompoundVector*>(&y_c);
-    CompoundVector* cy_d = dynamic_cast<CompoundVector*>(&y_d);
-    CompoundVector* cz_l = dynamic_cast<CompoundVector*>(&z_L);
-    CompoundVector* cz_u = dynamic_cast<CompoundVector*>(&z_U);
-
-    DBG_ASSERT(cx && cy_c && cy_d && cz_l && cz_u);
+    CompoundVector* cx = dynamic_cast<CompoundVector*>(GetRawPtr(x));
+    CompoundVector* cy_c = dynamic_cast<CompoundVector*>(GetRawPtr(y_c));
+    CompoundVector* cy_d = dynamic_cast<CompoundVector*>(GetRawPtr(y_d));
+    CompoundVector* cz_l = dynamic_cast<CompoundVector*>(GetRawPtr(z_L));
+    CompoundVector* cz_u = dynamic_cast<CompoundVector*>(GetRawPtr(z_U));
 
     Index n_nlps = nlps_.size();
     for (Index i=0; i<n_nlps; i++) {
-      SmartPtr<Vector> xi = cx->GetCompNonConst(i);
-      SmartPtr<Vector> y_ci = cy_c->GetCompNonConst(i);
-      SmartPtr<Vector> y_di = cy_d->GetCompNonConst(i);
-      SmartPtr<Vector> z_li = cz_l->GetCompNonConst(i);
-      SmartPtr<Vector> z_ui = cz_u->GetCompNonConst(i);
+      SmartPtr<Vector> xi = (need_x) ? cx->GetCompNonConst(i) : NULL;
+      SmartPtr<Vector> y_ci = (need_y_c) ? cy_c->GetCompNonConst(i) : NULL;
+      SmartPtr<Vector> y_di = (need_y_d) ? cy_d->GetCompNonConst(i) : NULL;
+      SmartPtr<Vector> z_li = (need_z_L) ? cz_l->GetCompNonConst(i) : NULL;
+      SmartPtr<Vector> z_ui = (need_z_U) ? cz_u->GetCompNonConst(i) : NULL;
 
       if (!nlps_[i]->GetStartingPoint(xi, need_x,
                                       y_ci, need_y_c, y_di, need_y_d,
@@ -477,7 +486,7 @@ namespace Ipopt
       SmartPtr<const Vector> x_i = cx->GetComp(i);
       SmartPtr<Vector> d_i = cd->GetCompNonConst(i);
       DBG_ASSERT(IsValid(x_i) && IsValid(d_i));
-      if (!nlps_[i]->Eval_c(*x_i, *d_i)) {
+      if (!nlps_[i]->Eval_d(*x_i, *d_i)) {
         return false;
       }
     }
@@ -563,4 +572,88 @@ namespace Ipopt
     return true;
   }
 
+  SmartPtr<SymLinearSolver> CompositeNLP::CreateLinearSolver()
+  {
+    // create the block solvers
+    std::vector< SmartPtr<SymLinearSolver> > block_solvers;
+    for (Index i=0; i<(Index)nlps_.size(); i++) {
+      SmartPtr<SparseSymLinearSolverInterface> ma27_i 
+	= new Ma27TSolverInterface();
+      SmartPtr<SymLinearSolver> solver_i
+	= new TSymLinearSolver(ma27_i, NULL);
+      block_solvers.push_back(solver_i);
+    }
+
+    /*
+    // create the permutations
+    std::vector< SmartPtr<CompoundMatrixPermuter> > permuters;
+    for (Index i=0; i<(Index)nlps_.size(); i++) {
+      SmartPtr<CompoundMatrixPermuter> permuter
+	= new CompoundMatrixPermuter();
+
+      // Create the various permutations
+      // H_i
+      SmartPtr<SingleCompoundPermutation> permutation
+	= new SingleCompoundPermutation(0,0);
+      permutation->AddSourceDesignation(0, 0,0);
+      permutation->AddSourceDesignation(1, i,i);
+      permuter->AddPermutation(permutation);
+      
+      // D_s_i
+      permutation = new SingleCompoundPermutation(1,1);
+      permutation->AddSourceDesignation(0, 1,1);
+      permutation->AddSourceDesignation(1, i,i);
+      permuter->AddPermutation(permutation);
+
+      // J_c_i
+      permutation = new SingleCompoundPermutation(2,0);
+      permutation->AddSourceDesignation(0, 2,0);
+      permutation->AddSourceDesignation(1, i*2,i);
+      permuter->AddPermutation(permutation);
+
+      // D_c_i
+      permutation = new SingleCompoundPermutation(2,2);
+      permutation->AddSourceDesignation(0, 2,2);
+      permutation->AddSourceDesignation(1, i,i);
+      permuter->AddPermutation(permutation);
+
+      // Lx_i
+      permutation = new SingleCompoundPermutation(3,0);
+      permutation->AddSourceDesignation(0, 2,0);
+      permutation->AddSourceDesignation(1, i*2+1,i);
+      permuter->AddPermutation(permutation);
+
+      // D_L_i
+      permutation = new SingleCompoundPermutation(3,3);
+      permutation->AddSourceDesignation(0, 2,2);
+      permutation->AddSourceDesignation(1, i*2+1,i*2+1);
+      permuter->AddPermutation(permutation);
+
+      // J_d_i
+      permutation = new SingleCompoundPermutation(4,0);
+      permutation->AddSourceDesignation(0, 3,0);
+      permutation->AddSourceDesignation(1, i,i);
+      permuter->AddPermutation(permutation);
+
+      // J_d_ident_i
+      permutation = new SingleCompoundPermutation(4,1);
+      permutation->AddSourceDesignation(0, 3,1);
+      permutation->AddSourceDesignation(1, i,i);
+      permuter->AddPermutation(permutation);
+
+      // D_d_i
+      permutation = new SingleCompoundPermutation(4,4);
+      permutation->AddSourceDesignation(0, 3,3);
+      permutation->AddSourceDesignation(1, i,i);
+      permuter->AddPermutation(permutation);
+
+      permuters.push_back(permuter);
+    }
+
+    */
+    SmartPtr<SymLinearSolver> mp_solver
+      = new MPSymLinearSolver(block_solvers);
+
+    return mp_solver;
+  }
 } // namespace Ipopt

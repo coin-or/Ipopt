@@ -119,6 +119,14 @@ namespace Ipopt
     }
     //@}
 
+    /** Use this method to set the matrix spaces for the various terms.
+     *  You will not be able to create a matrix until all these spaces
+     *  are set. */
+    void SetTermSpace(Index term_idx, const SymMatrixSpace& space);
+
+    /** Get the matix space for a particular term */
+    SmartPtr<const SymMatrixSpace> GetTermSpace(Index term_idx) const;
+
     /** Method for creating a new matrix of this specific type. */
     SumSymMatrix* MakeNewSumSymMatrix() const;
 
@@ -128,6 +136,8 @@ namespace Ipopt
 
   private:
     Index nterms_;
+
+    std::vector< SmartPtr<const SymMatrixSpace> > term_spaces_;
   };
 
 } // namespace Ipopt

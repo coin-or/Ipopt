@@ -39,6 +39,8 @@ namespace Ipopt
     Index Dim() const;
     //@}
 
+    SmartPtr<const SymMatrixSpace> OwnerSymMatrixSpace() const;
+
   protected:
     /** @name Overloaded methods from Matrix.  Since the matrix is
      *  symmetric, it is only necessary to implement the

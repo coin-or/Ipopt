@@ -281,8 +281,12 @@ namespace Ipopt
     h_space_->SetBlockDim(3, orig_d_space->Dim());
     h_space_->SetBlockDim(4, orig_d_space->Dim());
 
-    SmartPtr<const MatrixSpace> sumsym_mat_space =
+    SmartPtr<DiagMatrixSpace> DR_x_space
+    = new DiagMatrixSpace(orig_x_space->Dim());
+    SmartPtr<SumSymMatrixSpace> sumsym_mat_space =
       new SumSymMatrixSpace(orig_x_space->Dim(), 2);
+    sumsym_mat_space->SetTermSpace(0, *orig_h_space);
+    sumsym_mat_space->SetTermSpace(1, *DR_x_space);
     h_space_->SetCompSpace(0, 0, *sumsym_mat_space, true);
     // All remaining blocks are zero'ed out
 
@@ -390,8 +394,6 @@ namespace Ipopt
     x_ref_ = orig_x_space->MakeNew();
     x_ref_->Copy(*orig_ip_data_->curr()->x());
 
-    SmartPtr<DiagMatrixSpace> DR_x_space
-    = new DiagMatrixSpace(orig_x_space->Dim());
     dr_x_ = orig_x_space->MakeNew();
     dr_x_->Set(1.0);
     SmartPtr<Vector> tmp = dr_x_->MakeNew();
