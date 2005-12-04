@@ -196,6 +196,10 @@ namespace Ipopt
       exc.ReportException(Jnlst(), J_DETAILED);
       return RESTORATION_FAILURE;
     }
+    catch(RESTORATION_MAXITER_EXCEEDED& exc) {
+      exc.ReportException(Jnlst(), J_DETAILED);
+      return MAXITER_EXCEEDED;
+    }
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
       exc.ReportException(Jnlst(), J_DETAILED);
       return SUCCESS;
