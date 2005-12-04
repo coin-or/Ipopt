@@ -185,8 +185,8 @@ namespace Ipopt
       }
     }
     else if (resto_status == MAXITER_EXCEEDED) {
-      THROW_EXCEPTION(IpoptException, "Maximal number of iterations exceeded in restoration phase.");
-      retval = 1;
+      THROW_EXCEPTION(RESTORATION_MAXITER_EXCEEDED,
+                      "Maximal number of iterations exceeded in restoration phase.");
     }
     else if (resto_status == LOCAL_INFEASIBILITY) {
       // converged to locally infeasible point - pass this on to the outer algorithm...

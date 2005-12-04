@@ -24,6 +24,7 @@ namespace Ipopt
    */
   DECLARE_STD_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT);
   DECLARE_STD_EXCEPTION(RESTORATION_FAILED);
+  DECLARE_STD_EXCEPTION(RESTORATION_MAXITER_EXCEEDED);
   //@}
 
   /** Base class for different restoration phases.  The restoration

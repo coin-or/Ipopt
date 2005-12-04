@@ -6,3 +6,7 @@ history management of subversion.
 
 2005-08-26 - version 3.0.0 - dev release number 510
 	First official release of the new C++ implementation of Ipopt.
+
+2005-12-04 - version 3.0.1 - fixes independent of dev (already taken care of there)
+        Several corrections to Windows files
+        Fix termination if number of iterations is exceeded in restoration phase
