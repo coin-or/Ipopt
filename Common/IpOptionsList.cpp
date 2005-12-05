@@ -160,13 +160,15 @@ namespace Ipopt
       return true;
     }
 
-    std::string msg = "Option: \"" + tag;
-    msg += " ";
-    msg += buffer;
-    msg += "\" not taken because a value of\n\"" ;
-    msg += options_[lowercase(tag)].GetValue();
-    msg += "\" already exists and is set to disallow clobbering.\n\n";
-    jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
+    if (IsValid(jnlst_)) {
+      std::string msg = "Option: \"" + tag;
+      msg += " ";
+      msg += buffer;
+      msg += "\" not taken because a value of\n\"" ;
+      msg += options_[lowercase(tag)].GetValue();
+      msg += "\" already exists and is set to disallow clobbering.\n\n";
+      jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
+    }
     return false;
   }
 

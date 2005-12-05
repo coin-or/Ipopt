@@ -436,6 +436,8 @@ namespace Ipopt
                                    Index m, const Number* g, const Number* lambda,
                                    Number obj_value)
   {
+    ASL_pfgh* asl = asl_;
+
     if (!x_sol_) {
       x_sol_ = new Number[n];
     }
@@ -462,28 +464,37 @@ namespace Ipopt
     std::string message;
     if (status == SUCCESS) {
       message = "Optimal Solution Found";
+      solve_result_num = 0;
     }
     else if (status == MAXITER_EXCEEDED) {
       message = "Maximum Number of Iterations Exceeded.";
+      solve_result_num = 400;
     }
     else if (status == STOP_AT_TINY_STEP) {
       message = "Search Direction becomes Too Small.";
+      solve_result_num = 500;
     }
     else if (status == STOP_AT_ACCEPTABLE_POINT) {
       message = "Solved To Acceptable Level.";
+      solve_result_num = 1;
     }
     else if (status == LOCAL_INFEASIBILITY) {
       message = "Converged to a locally infeasible point. Problem may be infeasible.";
+      solve_result_num = 200;
     }
     else if (status == RESTORATION_FAILURE) {
       message = "Restoration Phase Failed.";
+      solve_result_num = 501;
     }
     else if (status == DIVERGING_ITERATES) {
       message = "Iterates divering; problem might be unbounded.";
+      solve_result_num = 300;
     }
     else {
       message = "Unknown Error";
+      solve_result_num = 502;
     }
+    printf("solve_result_num = %d\n", solve_result_num);
 
     // Write the .sol file
     message = " \n" PACKAGE_STRING ": " + message;
