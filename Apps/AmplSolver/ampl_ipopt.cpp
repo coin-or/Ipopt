@@ -33,7 +33,7 @@ int main(int argv, char**argc)
 
   // finalize_solution method in AmplTNLP writes the solution file
 
-  return (int)retval;
+  return 0;
 }
 
 
