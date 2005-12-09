@@ -301,21 +301,21 @@ namespace Ipopt
     // Reserve memory for iw_ for later calls, based on suggested size
     delete [] iw_;
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		   "Size of integer work space recommended by MA27 is %d\n",
-		   nirnec);
+                   "Size of integer work space recommended by MA27 is %d\n",
+                   nirnec);
     liw_ = (ipfint)(liw_init_factor_ * (double)(nirnec));
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		   "Setting integer work space size to %d\n", liw_);
+                   "Setting integer work space size to %d\n", liw_);
     iw_ = new ipfint[liw_];
 
     // Reserve memory for a_
     delete [] a_;
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		   "Size of doublespace recommended by MA27 is %d\n",
-		   nrlnec);
+                   "Size of doublespace recommended by MA27 is %d\n",
+                   nrlnec);
     la_ = Max(nonzeros_,(ipfint)(la_init_factor_ * (double)(nrlnec)));
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		   "Setting double work space size to %d\n", la_);
+                   "Setting double work space size to %d\n", la_);
     a_ = new double[la_];
 
     IpData().TimingStats().LinearSystemSymbolicFactorization().End();

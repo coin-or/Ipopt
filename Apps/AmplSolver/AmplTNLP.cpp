@@ -27,7 +27,9 @@ namespace Ipopt
                      const SmartPtr<OptionsList> options,
                      char**& argv,
                      SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
-                     bool allow_discrete /* = false */)
+                     bool allow_discrete /* = false */,
+                     const SmartPtr<const AmplOptionsList>
+                     ampl_options_list /* = NULL */)
       :
       TNLP(),
       jnlst_(jnlst),

@@ -28,7 +28,7 @@ namespace Ipopt
 
   IpoptApplication::IpoptApplication(bool read_params_dat,
                                      bool create_console_out,
-				     SmartPtr<RegisteredOptions> reg_options)
+                                     SmartPtr<RegisteredOptions> reg_options)
       :
       jnlst_(new Journalist()),
       options_(new OptionsList()),
@@ -55,7 +55,7 @@ namespace Ipopt
 
       // Register the valid options
       if (IsNull(reg_options)) {
-	reg_options = new RegisteredOptions();
+        reg_options = new RegisteredOptions();
       }
 
       RegisterAllOptions(reg_options);

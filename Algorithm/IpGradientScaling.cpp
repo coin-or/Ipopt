@@ -96,6 +96,7 @@ namespace Ipopt
     //
     SmartPtr<Matrix> jac_c = jac_c_space->MakeNew();
     if (nlp_->Eval_jac_c(*x, *jac_c)) {
+      // ToDo: Don't use TripletHelper, have special methods on matrices instead
       Index nnz = TripletHelper::GetNumberEntries(*jac_c);
       Index* irow = new Index[nnz];
       Index* jcol = new Index[nnz];

@@ -226,7 +226,7 @@ namespace Ipopt
     diag_space_x_ = new DiagMatrixSpace(n_x);
 
     sumsym_space_x_ = new SumSymMatrixSpace(n_x, 2);
-    sumsym_space_x_->SetTermSpace(0, *W.OwnerSymMatrixSpace()); 
+    sumsym_space_x_->SetTermSpace(0, *W.OwnerSymMatrixSpace());
     sumsym_space_x_->SetTermSpace(1, *diag_space_x_);
     augmented_system_space_->SetCompSpace(0,0, *sumsym_space_x_);
 

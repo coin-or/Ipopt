@@ -111,7 +111,7 @@ namespace Ipopt
     if (term_idx >= 0 && term_idx < (Index)term_spaces_.size()) {
       return term_spaces_[term_idx];
     }
-    return NULL;    
+    return NULL;
   }
 
   SumSymMatrix* SumSymMatrixSpace::MakeNewSumSymMatrix() const
