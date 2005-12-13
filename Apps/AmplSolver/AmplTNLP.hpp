@@ -26,9 +26,9 @@ namespace Ipopt
   /* forward declarations */
   class AmplSuffixHandler;
 
-  /** Ampl Option class, contains name, type and description for an
-   *  AMPL option */
-  class AmplOption : public ReferencedObject
+  /** Class for storing a number of AMPL options that should be
+   *  registered to the AMPL Solver library interface */
+  class AmplOptionsList : public ReferencedObject
   {
   public:
     enum AmplOptionType {
@@ -37,70 +37,124 @@ namespace Ipopt
       Integer_Option
     };
 
-    AmplOption(const std::string ipopt_option_name,
-               AmplOptionType type,
-               const std::string description)
-        :
-        ipopt_option_name_(ipopt_option_name),
-        type_(type),
-        description_(description)
-    {}
-
-    const std::string& IpoptOptionName()
+    /** Ampl Option class, contains name, type and description for an
+     *  AMPL option */
+  class AmplOption : public ReferencedObject
     {
-      return ipopt_option_name_;
-    }
-    AmplOptionType Type()
+    public:
+      AmplOption(const std::string ipopt_option_name,
+                 AmplOptionType type,
+                 const std::string description)
+          :
+          ipopt_option_name_(ipopt_option_name),
+          type_(type)
+      {
+        description_ = new char[description.size()+1];
+        strcpy(description_, description.c_str());
+      }
+
+      ~AmplOption()
+      {
+        delete [] description_;
+      }
+
+      const std::string& IpoptOptionName() const
+      {
+        return ipopt_option_name_;
+      }
+      AmplOptionType Type() const
+      {
+        return type_;
+      }
+      char* Description() const
+      {
+        return description_;
+      }
+    private:
+      /**@name Default Compiler Generated Methods
+       * (Hidden to avoid implicit creation/calling).
+       * These methods are not implemented and 
+       * we do not want the compiler to implement
+       * them for us, so we declare them private
+       * and do not define them. This ensures that
+       * they will not be implicitly created/called. */
+      //@{
+      /** Default Constructor */
+      AmplOption();
+
+      /** Copy Constructor */
+      AmplOption(const AmplOption&);
+
+      /** Overloaded Equals Operator */
+      void operator=(const AmplOption&);
+      //@}
+
+      const std::string ipopt_option_name_;
+      const AmplOptionType type_;
+      char* description_;
+    };
+
+    class PrivatInfo
     {
-      return type_;
-    }
-    const std::string& Description()
-    {
-      return description_;
-    }
-  private:
-    /**@name Default Compiler Generated Methods
-     * (Hidden to avoid implicit creation/calling).
-     * These methods are not implemented and 
-     * we do not want the compiler to implement
-     * them for us, so we declare them private
-     * and do not define them. This ensures that
-     * they will not be implicitly created/called. */
-    //@{
-    /** Default Constructor */
-    AmplOption();
+    public:
+      PrivatInfo(const std::string ipopt_name,
+                 SmartPtr<OptionsList> options,
+                 SmartPtr<const Journalist> jnlst)
+          :
+          ipopt_name_(ipopt_name),
+          options_(options),
+          jnlst_(jnlst)
+      {}
+      const std::string& IpoptName() const
+      {
+        return ipopt_name_;
+      }
+      const SmartPtr<OptionsList>& Options() const
+      {
+        return options_;
+      }
+      const SmartPtr<const Journalist>& Jnlst() const
+      {
+        return jnlst_;
+      }
+    private:
+      const std::string ipopt_name_;
+      const SmartPtr<OptionsList> options_;
+      const SmartPtr<const Journalist> jnlst_;
+    };
 
-    /** Copy Constructor */
-    AmplOption(const AmplOption&);
-
-    /** Overloaded Equals Operator */
-    void operator=(const AmplOption&);
-    //@}
-
-    const std::string ipopt_option_name_;
-    AmplOptionType type_;
-    const std::string description_;
-  };
-
-  /** Class for storing a number of AMPL options that should be
-   *  registered to the AMPL Solver library interface */
-  class AmplOptionsList : public ReferencedObject
-  {
   public:
     /** Default Constructor */
     AmplOptionsList()
+        :
+        keywds_(NULL),
+        nkeywds_(0)
     {}
+
+    /** Destructor */
+    ~AmplOptionsList();
 
     /** Adding a new AMPL Option */
     void AddAmplOption(const std::string ampl_option_name,
                        const std::string ipopt_option_name,
-                       AmplOption::AmplOptionType type,
+                       AmplOptionsList::AmplOptionType type,
                        const std::string description)
     {
       SmartPtr<AmplOption> new_option =
         new AmplOption(ipopt_option_name, type, description);
       ampl_options_map_[ampl_option_name] = ConstPtr(new_option);
     }
+
+    /** Number of AMPL Options */
+    Index NumberOfAmplOptions()
+    {
+      return ampl_options_map_.size();
+    }
+
+    /** ASL keywords list for the stored options. */
+    void* Keywords(const SmartPtr<OptionsList>& options,
+                   SmartPtr<const Journalist> jnlst);
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -110,6 +164,9 @@ namespace Ipopt
      * and do not define them. This ensures that
      * they will not be implicitly created/called. */
     //@{
+    /** Default Constructor */
+    //AmplOptionsList();
+
     /** Copy Constructor */
     AmplOptionsList(const AmplOptionsList&);
 
@@ -119,6 +176,12 @@ namespace Ipopt
 
     /** map for storing registered AMPL options */
     std::map<const std::string, SmartPtr<const AmplOption> > ampl_options_map_;
+
+    /** pointer to the keywords */
+    void* keywds_;
+
+    /** Number of entries stored in keywds_ */
+    Index nkeywds_;
   };
 
   /** Ampl Interface.
@@ -129,12 +192,12 @@ namespace Ipopt
   public:
     /**@name Constructors/Destructors */
     //@{
-    /** Constructor */
+    /** Constructor. */
     AmplTNLP(const SmartPtr<const Journalist>& jnlst,
              const SmartPtr<OptionsList> options,
              char**& argv, SmartPtr<AmplSuffixHandler>
              suffix_handler = NULL, bool allow_discrete = false,
-             SmartPtr<const AmplOptionsList> ampl_options_list = NULL);
+             SmartPtr<AmplOptionsList> ampl_options_list = NULL);
 
     /** Default destructor */
     virtual ~AmplTNLP();
@@ -310,6 +373,7 @@ namespace Ipopt
      *  set from AMPL.  Returns a pointer to a char* with the name of
      *  the stub */
     char* get_options(const SmartPtr<OptionsList>& options,
+                      SmartPtr<AmplOptionsList>& ampl_options_list,
                       char**& argv);
   };
 
