@@ -28,7 +28,8 @@ namespace Ipopt
                      char**& argv,
                      SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
                      bool allow_discrete /* = false */,
-                     SmartPtr<AmplOptionsList> ampl_options_list /* = NULL */)
+                     SmartPtr<AmplOptionsList> ampl_options_list /* = NULL */,
+                     char* ampl_option_string /* = NULL */)
       :
       TNLP(),
       jnlst_(jnlst),
@@ -60,7 +61,8 @@ namespace Ipopt
     asl_ = asl; // keep the pointer for ourselves to use later...
 
     // Read the options and stub
-    char* stub = get_options(options, ampl_options_list, argv);
+    char* stub = get_options(options, ampl_options_list,
+                             ampl_option_string, argv);
     if (!stub) {
       jnlst_->Printf(J_ERROR, J_MAIN, "No .nl file given!\n");
       exit(-1);
@@ -788,6 +790,7 @@ namespace Ipopt
   char*
   AmplTNLP::get_options(const SmartPtr<OptionsList>& options,
                         SmartPtr<AmplOptionsList>& ampl_options_list,
+                        char* ampl_option_string,
                         char**& argv)
   {
     ASL_pfgh* asl = asl_;
@@ -928,7 +931,14 @@ namespace Ipopt
 
     static char sname[] = "ipopt";
     static char bsname[] = PACKAGE_STRING;
-    static char opname[] = "ipopt_options";
+    static char opname_default[] = "ipopt_options";
+    char* opname;
+    if (ampl_option_string) {
+      opname = ampl_option_string;
+    }
+    else {
+      opname = opname_default;
+    }
     Option_Info Oinfo = {sname,
                          bsname,
                          opname,

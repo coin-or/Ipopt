@@ -197,7 +197,8 @@ namespace Ipopt
              const SmartPtr<OptionsList> options,
              char**& argv, SmartPtr<AmplSuffixHandler>
              suffix_handler = NULL, bool allow_discrete = false,
-             SmartPtr<AmplOptionsList> ampl_options_list = NULL);
+             SmartPtr<AmplOptionsList> ampl_options_list = NULL,
+             char* ampl_option_string = NULL);
 
     /** Default destructor */
     virtual ~AmplTNLP();
@@ -374,7 +375,7 @@ namespace Ipopt
      *  the stub */
     char* get_options(const SmartPtr<OptionsList>& options,
                       SmartPtr<AmplOptionsList>& ampl_options_list,
-                      char**& argv);
+                      char* ampl_option_string, char**& argv);
   };
 
 
