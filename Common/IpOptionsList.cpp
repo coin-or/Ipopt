@@ -84,13 +84,15 @@ namespace Ipopt
     }
 
     if (!will_allow_clobber(tag)) {
-      std::string msg = "WARNING: Option \"" + tag;
-      msg += " ";
-      msg += value;
-      msg += "\" is set to disallow clobbering.\n         Its previous value \"";
-      msg += options_[lowercase(tag)].GetValue();
-      msg += "\" is now overwritten.\n";
-      jnlst_->Printf(J_WARNING, J_MAIN, msg.c_str());
+      if (IsValid(jnlst_)) {
+        std::string msg = "WARNING: Option \"" + tag;
+        msg += " ";
+        msg += value;
+        msg += "\" is set to disallow clobbering.\n         Its previous value \"";
+        msg += options_[lowercase(tag)].GetValue();
+        msg += "\" is now overwritten.\n";
+        jnlst_->Printf(J_WARNING, J_MAIN, msg.c_str());
+      }
       OptionsList::OptionValue optval(lowercase(value), allow_clobber);
       options_[lowercase(tag)] = optval;
     }
@@ -166,22 +168,24 @@ namespace Ipopt
       }
     }
 
-    if (will_allow_clobber(tag)) {
+    if (!will_allow_clobber(tag)) {
+      if (IsValid(jnlst_)) {
+        std::string msg = "WARNING: Option \"" + tag;
+        msg += " ";
+        msg += buffer;
+        msg += "\" is set to disallow clobbering.\n         Its previous value \"";
+        msg += options_[lowercase(tag)].GetValue();
+        msg += "\" is now overwritten.\n";
+        jnlst_->Printf(J_WARNING, J_MAIN, msg.c_str());
+      }
       OptionsList::OptionValue optval(buffer, allow_clobber);
       options_[lowercase(tag)] = optval;
-      return true;
     }
-
-    if (IsValid(jnlst_)) {
-      std::string msg = "Option: \"" + tag;
-      msg += " ";
-      msg += buffer;
-      msg += "\" not taken because a value of\n\"" ;
-      msg += options_[lowercase(tag)].GetValue();
-      msg += "\" already exists and is set to disallow clobbering.\n\n";
-      jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
+    else {
+      OptionsList::OptionValue optval(buffer, allow_clobber);
+      options_[lowercase(tag)] = optval;
     }
-    return false;
+    return true;
   }
 
   bool OptionsList::SetIntegerValue(const std::string& tag, Index value,
@@ -239,20 +243,25 @@ namespace Ipopt
       }
     }
 
-    if (will_allow_clobber(tag)) {
+    if (!will_allow_clobber(tag)) {
+      if (IsValid(jnlst_)) {
+        std::string msg = "WARNING: Option \"" + tag;
+        msg += " ";
+        msg += buffer;
+        msg += "\" is set to disallow clobbering.\n         Its previous value \"";
+        msg += options_[lowercase(tag)].GetValue();
+        msg += "\" is now overwritten.\n";
+        jnlst_->Printf(J_WARNING, J_MAIN, msg.c_str());
+      }
       OptionsList::OptionValue optval(buffer, allow_clobber);
       options_[lowercase(tag)] = optval;
-      return true;
     }
-
-    std::string msg = "Option: \"" + tag;
-    msg += " ";
-    msg += buffer;
-    msg += "\" not taken because a value of \n\"" ;
-    msg += options_[lowercase(tag)].GetValue();
-    msg += "\" already exists and is set to disallow clobbering.\n\n";
-    jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
-    return false;
+    else {
+      //    if (will_allow_clobber(tag)) {
+      OptionsList::OptionValue optval(buffer, allow_clobber);
+      options_[lowercase(tag)] = optval;
+    }
+    return true;
   }
 
   bool OptionsList::GetStringValue(const std::string& tag, std::string& value,
