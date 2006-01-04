@@ -778,7 +778,7 @@ namespace Ipopt
     keyword* keywords = new keyword[n_options];
 
     Index ioption = 0;
-    for (std::map<const std::string, SmartPtr<const AmplOption> >::iterator
+    for (std::map<std::string, SmartPtr<const AmplOption> >::iterator
          iter = ampl_options_map_.begin();
          iter != ampl_options_map_.end(); iter++) {
       keywords[ioption].name = new char[iter->first.size()+1];

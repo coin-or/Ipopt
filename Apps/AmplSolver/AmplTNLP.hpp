@@ -175,7 +175,10 @@ namespace Ipopt
     //@}
 
     /** map for storing registered AMPL options */
-    std::map<const std::string, SmartPtr<const AmplOption> > ampl_options_map_;
+    std::map<std::string, SmartPtr<const AmplOption> > ampl_options_map_;
+    // AW: I think it should be with const like in the following line
+    //     but with const the AIX compiler fails
+    // std::map<const std::string, SmartPtr<const AmplOption> > ampl_options_map_;
 
     /** pointer to the keywords */
     void* keywds_;
