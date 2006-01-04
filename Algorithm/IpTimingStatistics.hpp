@@ -242,6 +242,14 @@ namespace Ipopt
     {
       return LinearSystemBackSolve_;
     }
+    TimedTask& LinearSystemStructureConverter()
+    {
+      return LinearSystemStructureConverter_;
+    }
+    TimedTask& LinearSystemStructureConverterInit()
+    {
+      return LinearSystemStructureConverterInit_;
+    }
     TimedTask& QualityFunctionSearch()
     {
       return QualityFunctionSearch_;
@@ -313,6 +321,8 @@ namespace Ipopt
     TimedTask LinearSystemSymbolicFactorization_;
     TimedTask LinearSystemFactorization_;
     TimedTask LinearSystemBackSolve_;
+    TimedTask LinearSystemStructureConverter_;
+    TimedTask LinearSystemStructureConverterInit_;
     TimedTask QualityFunctionSearch_;
     TimedTask TryCorrector_;
 

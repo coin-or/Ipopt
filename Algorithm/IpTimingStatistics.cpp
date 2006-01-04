@@ -72,6 +72,12 @@ namespace Ipopt
                  " LinearSystemBackSolve..............: %10.3f\n",
                  LinearSystemBackSolve_.TotalTime());
     jnlst.Printf(level, category,
+                 " LinearSystemStructureConverter.....: %10.3f\n",
+                 LinearSystemStructureConverter_.TotalTime());
+    jnlst.Printf(level, category,
+                 "  LinearSystemStructureConverterInit: %10.3f\n",
+                 LinearSystemStructureConverterInit_.TotalTime());
+    jnlst.Printf(level, category,
                  "QualityFunctionSearch...............: %10.3f\n",
                  QualityFunctionSearch_.TotalTime());
     jnlst.Printf(level, category,
