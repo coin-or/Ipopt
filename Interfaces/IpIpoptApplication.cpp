@@ -173,7 +173,20 @@ namespace Ipopt
           categories.push_back("Restoration");
           categories.push_back("NLP");
           categories.push_back("Warm Start");
+          categories.push_back("Hessian Approximation");
+#ifdef HAVE_MA27
+
           categories.push_back("MA27 Linear Solver");
+#endif
+#ifdef HAVE_MA57
+
+          categories.push_back("MA57 Linear Solver");
+#endif
+#ifdef HAVE_PARDISO
+
+          categories.push_back("Pardiso Linear Solver");
+#endif
+
           categories.push_back("Uncategorized");
           reg_options->OutputOptionDocumentation(*jnlst_, categories);
         }

@@ -25,7 +25,7 @@ namespace Ipopt
   void RegisterOptions_LinearSolvers(const SmartPtr<RegisteredOptions>& roptions)
   {
 #ifdef HAVE_MA27
-    \
+
     roptions->SetRegisteringCategory("MA27 Linear Solver");
     Ma27TSolverInterface::RegisterOptions(roptions);
 #endif
