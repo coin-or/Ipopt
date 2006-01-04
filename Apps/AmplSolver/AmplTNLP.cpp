@@ -669,6 +669,25 @@ namespace Ipopt
     }
   }
 
+  Index AmplTNLP::get_number_of_nonlinear_variables()
+  {
+    ASL_pfgh* asl = asl_;
+    return Max(nlvo,nlvc);
+  }
+
+  void AmplTNLP::get_list_of_nonlinear_variables(Index num_nonlin_vars,
+      Index* pos_nonlin_vars)
+  {
+    ASL_pfgh* asl = asl_;
+    DBG_ASSERT(num_nonlin_vars == Max(nlvo,nlvc));
+
+    // The first variables are the nonlinear ones (using Fortran
+    // numbering)
+    for (Index i=0; i<num_nonlin_vars; i++) {
+      pos_nonlin_vars[i] = i+1;
+    }
+  }
+
   extern "C"
   {
     static char* get_num_opt(Option_Info *oi, keyword *kw, char *value) {

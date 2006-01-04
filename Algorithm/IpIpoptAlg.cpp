@@ -34,14 +34,16 @@ namespace Ipopt
                                  const SmartPtr<MuUpdate>& mu_update,
                                  const SmartPtr<ConvergenceCheck>& conv_check,
                                  const SmartPtr<IterateInitializer>& iterate_initializer,
-                                 const SmartPtr<IterationOutput>& iter_output)
+                                 const SmartPtr<IterationOutput>& iter_output,
+                                 const SmartPtr<HessianUpdater>& hessian_updater)
       :
       pd_solver_(pd_solver),
       line_search_(line_search),
       mu_update_(mu_update),
       conv_check_(conv_check),
       iterate_initializer_(iterate_initializer),
-      iter_output_(iter_output)
+      iter_output_(iter_output),
+      hessian_updater_(hessian_updater)
   {
     DBG_START_METH("IpoptAlgorithm::IpoptAlgorithm",
                    dbg_verbosity);
@@ -51,6 +53,7 @@ namespace Ipopt
     DBG_ASSERT(IsValid(conv_check_));
     DBG_ASSERT(IsValid(iterate_initializer_));
     DBG_ASSERT(IsValid(iter_output_));
+    DBG_ASSERT(IsValid(hessian_updater_));
   }
 
   IpoptAlgorithm::~IpoptAlgorithm()
@@ -127,6 +130,11 @@ namespace Ipopt
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the iter_output strategy failed to initialize.");
 
+    retvalue = hessian_updater_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
+                                            options, prefix);
+    ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
+                     "the hessian_updater strategy failed to initialize.");
+
     options.GetNumericValue("kappa_sigma", kappa_sigma_, prefix);
 
     if (prefix=="resto.") {
@@ -170,9 +178,9 @@ namespace Ipopt
       // main loop
       while (conv_status == ConvergenceCheck::CONTINUE) {
         // Set the Hessian Matrix
-        IpData().TimingStats().ActualizeHessian().Start();
-        ActualizeHessian();
-        IpData().TimingStats().ActualizeHessian().End();
+        IpData().TimingStats().UpdateHessian().Start();
+        UpdateHessian();
+        IpData().TimingStats().UpdateHessian().End();
 
         // do all the output for this iteration
         IpData().TimingStats().OutputIteration().Start();
@@ -281,12 +289,13 @@ namespace Ipopt
     return INTERNAL_ERROR;
   }
 
-  void IpoptAlgorithm::ActualizeHessian()
+  void IpoptAlgorithm::UpdateHessian()
   {
-    // At this point, just compute the exact Hessian
-    IpData().Set_W(IpCq().curr_exact_hessian());
+    Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n");
+    Jnlst().Printf(J_DETAILED, J_MAIN, "*** Update HessianMatrix for Iteration %d:", IpData().iter_count());
+    Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n\n");
+    hessian_updater_->UpdateHessian();
   }
-
 
   void IpoptAlgorithm::UpdateBarrierParameter()
   {

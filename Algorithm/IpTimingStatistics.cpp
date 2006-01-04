@@ -29,8 +29,8 @@ namespace Ipopt
                  " InitializeIterates.................: %10.3f\n",
                  InitializeIterates_.TotalTime());
     jnlst.Printf(level, category,
-                 " ActualizeHessian...................: %10.3f\n",
-                 ActualizeHessian_.TotalTime());
+                 " UpdateHessian......................: %10.3f\n",
+                 UpdateHessian_.TotalTime());
     jnlst.Printf(level, category,
                  " OutputIteration....................: %10.3f\n",
                  OutputIteration_.TotalTime());

@@ -470,10 +470,18 @@ namespace Ipopt
       matrix.GetTerm(i, retFactor, retTerm);
       Index term_n_entries = GetNumberEntries(*retTerm);
       total_n_entries += term_n_entries;
-      FillValues(term_n_entries, *retTerm, values);
+      if (retFactor!=0.0) {
+        FillValues(term_n_entries, *retTerm, values);
 
-      // Now adjust the values based on the factor
-      IpBlasDscal(term_n_entries, retFactor, values, 1);
+        if (retFactor!=1.) {
+          // Now adjust the values based on the factor
+          IpBlasDscal(term_n_entries, retFactor, values, 1);
+        }
+      }
+      else {
+        const Number zero = 0.;
+        IpBlasDcopy(term_n_entries, &zero, 0, values, 1);
+      }
 
       // now shift the values pointer for the next term
       values += term_n_entries;

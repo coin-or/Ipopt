@@ -25,11 +25,15 @@
 #include "IpDefaultIterateInitializer.hpp"
 #include "IpWarmStartIterateInitializer.hpp"
 #include "IpOrigIterationOutput.hpp"
+#include "IpLimMemQuasiNewtonUpdater.hpp"
+#include "IpOrigIpoptNLP.hpp"
+#include "IpLowRankAugSystemSolver.hpp"
 #include "IpRestoIterationOutput.hpp"
 #include "IpRestoFilterConvCheck.hpp"
 #include "IpRestoIterateInitializer.hpp"
 #include "IpRestoRestoPhase.hpp"
 #include "IpTSymLinearSolver.hpp"
+#include "IpExactHessianUpdater.hpp"
 
 #ifdef HAVE_MA27
 # include "IpMa27TSolverInterface.hpp"
@@ -188,8 +192,17 @@ namespace Ipopt
       new TSymLinearSolver(SolverInterface, ScalingMethod);
 
     SmartPtr<AugSystemSolver> AugSolver =
-      //        = new AugTSystemSolver(*Ma27Solver);
       new StdAugSystemSolver(*ScaledSolver);
+    Index enum_int;
+    options.GetEnumValue("hessian_information", enum_int, prefix);
+    HessianInformationType hessian_information =
+      HessianInformationType(enum_int);
+    if (hessian_information==LIMITED_MEMORY) {
+      SmartPtr<AugSystemSolver> tmp =
+        new LowRankAugSystemSolver(*AugSolver);
+      AugSolver = tmp;
+    }
+
     SmartPtr<PDPerturbationHandler> pertHandler =
       new PDPerturbationHandler();
     SmartPtr<PDSystemSolver> PDSolver =
@@ -284,6 +297,18 @@ namespace Ipopt
     SmartPtr<IterationOutput> resto_IterOutput =
       new RestoIterationOutput(resto_OrigIterOutput);
 
+    // Get the Hessian updater for the restoration phase
+    SmartPtr<HessianUpdater> resto_HessUpdater;
+    switch(hessian_information) {
+      case EXACT:
+      resto_HessUpdater = new ExactHessianUpdater();
+      break;
+      case LIMITED_MEMORY:
+      // ToDo This needs to be replaced!
+      resto_HessUpdater  = new LimMemQuasiNewtonUpdater(true);
+      break;
+    }
+
     // Put together the overall restoration phase IP algorithm
     SmartPtr<IpoptAlgorithm> resto_alg =
       new IpoptAlgorithm(resto_PDSolver,
@@ -291,7 +316,8 @@ namespace Ipopt
                          GetRawPtr(resto_MuUpdate),
                          GetRawPtr(resto_convCheck),
                          resto_IterInitializer,
-                         resto_IterOutput);
+                         resto_IterOutput,
+                         resto_HessUpdater);
 
     // Set the restoration phase
     SmartPtr<RestorationPhase> resto_phase =
@@ -356,11 +382,24 @@ namespace Ipopt
     SmartPtr<IterationOutput> IterOutput =
       new OrigIterationOutput();
 
+    // Get the Hessian updater for the main algorithm
+    SmartPtr<HessianUpdater> HessUpdater;
+    switch(hessian_information) {
+      case EXACT:
+      HessUpdater = new ExactHessianUpdater();
+      break;
+      case LIMITED_MEMORY:
+      // ToDo This needs to be replaced!
+      HessUpdater  = new LimMemQuasiNewtonUpdater(false);
+      break;
+    }
+
     // Create the main algorithm
     SmartPtr<IpoptAlgorithm> alg =
       new IpoptAlgorithm(PDSolver,
                          GetRawPtr(lineSearch), MuUpdate,
-                         convCheck, IterInitializer, IterOutput);
+                         convCheck, IterInitializer, IterOutput,
+                         HessUpdater);
 
     return alg;
   }

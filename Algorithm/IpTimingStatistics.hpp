@@ -185,9 +185,9 @@ namespace Ipopt
     {
       return InitializeIterates_;
     }
-    TimedTask& ActualizeHessian()
+    TimedTask& UpdateHessian()
     {
-      return ActualizeHessian_;
+      return UpdateHessian_;
     }
     TimedTask& OutputIteration()
     {
@@ -298,7 +298,7 @@ namespace Ipopt
     TimedTask OverallAlgorithm_;
     TimedTask PrintProblemStatistics_;
     TimedTask InitializeIterates_;
-    TimedTask ActualizeHessian_;
+    TimedTask UpdateHessian_;
     TimedTask OutputIteration_;
     TimedTask UpdateBarrierParameter_;
     TimedTask ComputeSearchDirection_;

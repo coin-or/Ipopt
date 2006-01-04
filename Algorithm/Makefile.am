@@ -24,9 +24,11 @@ libipoptalg_a_SOURCES = \
 	IpConvCheck.hpp \
 	IpDefaultIterateInitializer.cpp IpDefaultIterateInitializer.hpp \
 	IpEqMultCalculator.hpp \
+	IpExactHessianUpdater.cpp IpExactHessianUpdater.hpp \
 	IpFilter.cpp IpFilter.hpp \
 	IpFilterLSAcceptor.cpp IpFilterLSAcceptor.hpp \
 	IpGradientScaling.cpp IpGradientScaling.hpp \
+	IpHessianUpdater.hpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
 	IpIpoptData.cpp IpIpoptData.hpp \
@@ -37,6 +39,7 @@ libipoptalg_a_SOURCES = \
 	IpLeastSquareMults.cpp IpLeastSquareMults.hpp \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.cpp IpLoqoMuOracle.hpp \
+	IpLowRankAugSystemSolver.cpp IpLowRankAugSystemSolver.cpp \
 	IpMonotoneMuUpdate.cpp IpMonotoneMuUpdate.hpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp \
@@ -44,6 +47,7 @@ libipoptalg_a_SOURCES = \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \
 	IpOrigIpoptNLP.cpp IpOrigIpoptNLP.hpp \
 	IpOrigIterationOutput.cpp IpOrigIterationOutput.hpp \
+	IpLimMemQuasiNewtonUpdater.cpp IpLimMemQuasiNewtonUpdater.hpp \
 	IpPDFullSpaceSolver.cpp IpPDFullSpaceSolver.hpp \
 	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
 	IpPDSystemSolver.hpp \
@@ -81,9 +85,11 @@ ASTYLE_FILES = \
 	IpConvCheck.hppbak \
 	IpDefaultIterateInitializer.cppbak IpDefaultIterateInitializer.hppbak \
 	IpEqMultCalculator.hppbak \
+	IpExactHessianUpdater.cppbak IpExactHessianUpdater.hppbak \
 	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLSAcceptor.cppbak IpFilterLSAcceptor.hppbak \
 	IpGradientScaling.cppbak IpGradientScaling.hppbak \
+	IpHessianUpdater.hppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
 	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \
 	IpIpoptData.cppbak IpIpoptData.hppbak \
@@ -94,6 +100,7 @@ ASTYLE_FILES = \
 	IpLeastSquareMults.cppbak IpLeastSquareMults.hppbak \
 	IpLineSearch.hppbak \
 	IpLoqoMuOracle.cppbak IpLoqoMuOracle.hppbak \
+	IpLowRankAugSystemSolver.cppbak IpLowRankAugSystemSolver.cppbak \
 	IpMonotoneMuUpdate.cppbak IpMonotoneMuUpdate.hppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
@@ -101,6 +108,7 @@ ASTYLE_FILES = \
 	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
 	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \
 	IpOrigIterationOutput.cppbak IpOrigIterationOutput.hppbak \
+	IpLimMemQuasiNewtonUpdater.cppbak IpLimMemQuasiNewtonUpdater.hppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
 	IpPDSystemSolver.hppbak \

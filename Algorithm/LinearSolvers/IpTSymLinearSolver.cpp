@@ -113,8 +113,8 @@ namespace Ipopt
 
   ESymSolverStatus
   TSymLinearSolver::MultiSolve(const SymMatrix& sym_A,
-                               std::vector<const Vector*>& rhsV,
-                               std::vector<Vector*>& solV,
+                               std::vector<SmartPtr<const Vector> >& rhsV,
+                               std::vector<SmartPtr<Vector> >& solV,
                                bool check_NegEVals,
                                Index numberOfNegEVals)
   {

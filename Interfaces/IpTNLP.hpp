@@ -148,6 +148,31 @@ namespace Ipopt
                                    Number obj_value)=0;
     //@}
 
+    /** @name Methods for quasi-Newton approximation.  If the second
+     *  derivatives are approximated by Ipopt, it is better to do this
+     *  only in the space of nonlinear variables.  The following
+     *  methods are call by Ipopt if the quasi-Newton approximation is
+     *  selected.  If -1 is returned as number of nonlinear variables,
+     *  Ipopt assumes that all variables are nonlinear.  Otherwise, it
+     *  calls get_list_of_nonlinear_variables with an array into which
+     *  the indices of the nonlinear variables should be written - the
+     *  array has the lengths num_nonlin_vars, which is identical with
+     *  the return value of get_number_of_nonlinear_variables().  It
+     *  is assumed that the indices are counted starting with 1 in the
+     *  FORTRAN_STYLE, and 0 for the C_STYLE. */
+    //@{
+    virtual Index get_number_of_nonlinear_variables()
+    {
+      return -1;
+    }
+
+    virtual void get_list_of_nonlinear_variables(Index num_nonlin_vars,
+        Index* pos_nonlin_vars)
+    {
+      assert(false && "This method must be overwritten.");
+    }
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).

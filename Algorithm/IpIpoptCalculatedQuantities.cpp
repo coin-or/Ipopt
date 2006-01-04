@@ -7,6 +7,8 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpIpoptCalculatedQuantities.hpp"
+#include "IpSumSymMatrix.hpp"
+#include "IpLowRankUpdateSymMatrix.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -1538,22 +1540,49 @@ namespace Ipopt
     DBG_START_METH("IpoptCalculatedQuantities::zero_hessian()",
                    dbg_verbosity);
 
-    SmartPtr<const Vector> x = ip_data_->curr()->x();
-    Tmp_c().Set(0.);
-    Tmp_d().Set(0.);
+    SmartPtr<const SymMatrixSpace> h_space = ip_nlp_->HessianMatrixSpace();
+    SmartPtr<SymMatrix> h_tmp = h_space->MakeNewSymMatrix();
 
-    SmartPtr<const SymMatrix> h ;
-    bool objective_depends_on_mu = ip_nlp_->objective_depends_on_mu();
-    if (objective_depends_on_mu) {
-      h = ip_nlp_->h(*x, 0.0, Tmp_c(), Tmp_d(), 0.);
+    // If the matrix space is a LowRankUpdateSymMatrix, we simply set
+    // its diagonal to zero.
+    LowRankUpdateSymMatrix* LR_H =
+      dynamic_cast<LowRankUpdateSymMatrix*> (GetRawPtr(h_tmp));
+    if (LR_H) {
+      SmartPtr<const VectorSpace> LR_Vspace =
+        LR_H->LowRankVectorSpace();
+      SmartPtr<Vector> D = LR_Vspace->MakeNew();
+      D->Set(0.);
+      LR_H->SetDiag(*D);
+      return ConstPtr(h_tmp);
     }
-    else {
-      h = ip_nlp_->h(*x, 0.0, Tmp_c(), Tmp_d());
-    }
 
-    DBG_PRINT_MATRIX(2, "zero_hessian", *h);
+    // Otherwise, we simply define a new matrix as a sum matrix with
+    // only one term and factor zero.
+    SmartPtr<SumSymMatrixSpace> ssm_space =
+      new SumSymMatrixSpace(ip_data_->curr()->x()->Dim(), 1);
+    ssm_space->SetTermSpace(0, *h_space);
+    SmartPtr<SumSymMatrix> zero_matrix = ssm_space->MakeNewSumSymMatrix();
+    zero_matrix->SetTerm(0, 0., *h_tmp);
 
-    return h;
+    return GetRawPtr(zero_matrix);
+
+    //     // This is the old version
+    //     SmartPtr<const Vector> x = ip_data_->curr()->x();
+    //     Tmp_c().Set(0.);
+    //     Tmp_d().Set(0.);
+
+    //     SmartPtr<const SymMatrix> h ;
+    //     bool objective_depends_on_mu = ip_nlp_->objective_depends_on_mu();
+    //     if (objective_depends_on_mu) {
+    //       h = ip_nlp_->h(*x, 0.0, Tmp_c(), Tmp_d(), 0.);
+    //     }
+    //     else {
+    //       h = ip_nlp_->h(*x, 0.0, Tmp_c(), Tmp_d());
+    //     }
+
+    //     DBG_PRINT_MATRIX(2, "zero_hessian", *h);
+
+    //    return h;
   }
 
   ///////////////////////////////////////////////////////////////////////////

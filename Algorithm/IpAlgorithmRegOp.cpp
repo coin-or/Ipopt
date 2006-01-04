@@ -23,6 +23,7 @@
 #include "IpOptErrorConvCheck.hpp"
 #include "IpOrigIpoptNLP.hpp"
 #include "IpOrigIterationOutput.hpp"
+#include "IpLimMemQuasiNewtonUpdater.hpp"
 #include "IpPDFullSpaceSolver.hpp"
 #include "IpPDPerturbationHandler.hpp"
 #include "IpProbingMuOracle.hpp"
@@ -57,6 +58,8 @@ namespace Ipopt
     IpoptData::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Uncategorized");
     IpoptCalculatedQuantities::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Hessian Approximation");
+    LimMemQuasiNewtonUpdater::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Mu Update");
     MonotoneMuUpdate::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Convergence");

@@ -540,7 +540,7 @@ namespace Ipopt
                                                                      delta_c, delta_d);
           if (!pert_return) {
             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                           "PerturbForWrongInertia can't be done for assume singular.\n");
+                           "PerturbForWrongInertia can't be done for wrong interia or singular.\n");
             IpData().TimingStats().PDSystemSolverSolveOnce().End();
             return false;
           }

@@ -142,7 +142,6 @@ namespace Ipopt
     void Set_W(SmartPtr<const SymMatrix> W)
     {
       W_ = W;
-      ;
     }
 
     /** @name ("Main") Primal-dual search direction.  Those fields are

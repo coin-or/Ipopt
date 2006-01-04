@@ -531,6 +531,14 @@ namespace Ipopt
   inline
   Number Vector::Dot(const Vector &x) const
   {
+    // The current implementation of the caching doesn't allow to have
+    // a dependency of something with itself.  Therefore, we use the
+    // Nrm2 method if the dot product is to be taken with the vector
+    // itself.  Might be more efficient anyway.
+    if (this==&x) {
+      Number nrm2 = Nrm2();
+      return nrm2*nrm2;
+    }
     Number retValue;
     if (!dot_cache_.GetCachedResult2Dep(retValue, this, &x)) {
       retValue = DotImpl(x);

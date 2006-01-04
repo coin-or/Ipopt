@@ -268,6 +268,14 @@ namespace Ipopt
                                    Number obj_value);
     //@}
 
+    /** @name Method for quasi-Newton approximation information. */
+    //@{
+    virtual Index get_number_of_nonlinear_variables();
+    virtual void get_list_of_nonlinear_variables(Index num_nonlin_vars,
+        Index* pos_nonlin_vars);
+    //@}
+
+
     /**@name Ampl specific methods */
     //@{
     /** Return the ampl solver object (ASL*) */

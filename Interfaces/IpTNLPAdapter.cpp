@@ -205,10 +205,9 @@ namespace Ipopt
     }
 
     // Get the full dimensions of the problem
-    TNLP::IndexStyleEnum index_style;
     Index n_full_x, n_full_g, nz_full_jac_g, nz_full_h;
     tnlp_->get_nlp_info(n_full_x, n_full_g, nz_full_jac_g,
-                        nz_full_h, index_style);
+                        nz_full_h, index_style_);
     ASSERT_EXCEPTION(!warm_start_same_structure_ ||
                      (n_full_x == n_full_x_ &&
                       n_full_g == n_full_g_ &&
@@ -440,7 +439,7 @@ namespace Ipopt
       tnlp_->eval_jac_g(n_full_x_, NULL, false, n_full_g_, nz_full_jac_g_,
                         g_iRow, g_jCol, NULL);
 
-      if (index_style != TNLP::FORTRAN_STYLE) {
+      if (index_style_ != TNLP::FORTRAN_STYLE) {
         for (Index i=0; i<nz_full_jac_g_; i++) {
           g_iRow[i] += 1;
           g_jCol[i] += 1;
@@ -563,7 +562,7 @@ namespace Ipopt
       tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_, NULL, false,
                     nz_full_h_, full_h_iRow, full_h_jCol, NULL);
 
-      if (index_style != TNLP::FORTRAN_STYLE) {
+      if (index_style_ != TNLP::FORTRAN_STYLE) {
         for (Index i=0; i<nz_full_h_; i++) {
           full_h_iRow[i] += 1;
           full_h_jCol[i] += 1;
@@ -1202,6 +1201,75 @@ namespace Ipopt
     full_z_U = NULL;
     delete [] full_g;
     full_g = NULL;
+  }
+
+  void TNLPAdapter::
+  GetQuasiNewtonApproximationSpaces(SmartPtr<VectorSpace>& approx_space,
+                                    SmartPtr<Matrix>& P_approx)
+  {
+    Index num_nonlin_vars =
+      tnlp_->get_number_of_nonlinear_variables();
+
+    if (num_nonlin_vars<0) {
+      approx_space = NULL;
+      P_approx = NULL;
+    }
+    else {
+      Index* pos_nonlin_vars = new Index[num_nonlin_vars];
+      tnlp_->get_list_of_nonlinear_variables(num_nonlin_vars, pos_nonlin_vars);
+
+      // Correct indices in case user starts counting variables at 1
+      // and not 0
+      if (index_style_ == TNLP::FORTRAN_STYLE) {
+        for (Index i=0; i<num_nonlin_vars; i++) {
+          pos_nonlin_vars[i]--;
+        }
+      }
+
+      if (IsNull(P_x_full_x_)) {
+        if (num_nonlin_vars == n_full_x_) {
+          approx_space = NULL;
+          P_approx = NULL;
+        }
+        else {
+          SmartPtr<ExpansionMatrixSpace> ex_sp =
+            new ExpansionMatrixSpace(n_full_x_, num_nonlin_vars,
+                                     pos_nonlin_vars);
+          P_approx = ex_sp->MakeNew();
+          approx_space = new DenseVectorSpace(num_nonlin_vars);
+        }
+      }
+      else {
+        const Index* compr_pos = P_x_full_x_->CompressedPosIndices();
+        Index* nonfixed_pos_nonlin_vars = new Index[num_nonlin_vars];
+
+        Index nonfixed_nonlin_vars = 0;
+        for (Index i=0; i<num_nonlin_vars; i++) {
+          Index full_pos = pos_nonlin_vars[i];
+          Index nonfixed_pos = compr_pos[full_pos];
+          if (nonfixed_pos>=0) {
+            nonfixed_pos_nonlin_vars[nonfixed_nonlin_vars] = nonfixed_pos;
+            nonfixed_nonlin_vars++;
+          }
+        }
+
+        const Index n_x_free = n_full_x_ - n_x_fixed_;
+        if (nonfixed_nonlin_vars == n_x_free) {
+          approx_space = NULL;
+          P_approx = NULL;
+        }
+        else {
+          SmartPtr<ExpansionMatrixSpace> ex_sp =
+            new ExpansionMatrixSpace(n_x_free, nonfixed_nonlin_vars,
+                                     nonfixed_pos_nonlin_vars);
+          P_approx = ex_sp->MakeNew();
+          approx_space = new DenseVectorSpace(nonfixed_nonlin_vars);
+        }
+
+        delete [] nonfixed_pos_nonlin_vars;
+      }
+      delete [] pos_nonlin_vars;
+    }
   }
 
   void TNLPAdapter::ResortX(const Vector& x, Number* x_orig)

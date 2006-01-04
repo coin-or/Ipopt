@@ -129,6 +129,11 @@ namespace Ipopt
                                   Number obj_value);
     //@}
 
+    /** Method returning information on quasi-Newton approximation. */
+    virtual void
+    GetQuasiNewtonApproximationSpaces(SmartPtr<VectorSpace>& approx_space,
+                                      SmartPtr<Matrix>& P_approx);
+
     /** Enum for treatment of fixed variables option */
     enum FixedVariableTreatmentEnum {
       MAKE_PARAMETER=0,
@@ -242,6 +247,9 @@ namespace Ipopt
     /** Number of fixed variables */
     Index n_x_fixed_;
     //@}
+
+    /** Numbering style of variables and constraints */
+    TNLP::IndexStyleEnum index_style_;
 
     /** @name Local copy of spaces (for warm start) */
     //@{

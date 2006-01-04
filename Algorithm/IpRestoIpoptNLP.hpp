@@ -18,6 +18,7 @@
 #include "IpIdentityMatrix.hpp"
 #include "IpDiagMatrix.hpp"
 #include "IpZeroMatrix.hpp"
+#include "IpOrigIpoptNLP.hpp"
 
 namespace Ipopt
 {
@@ -169,6 +170,11 @@ namespace Ipopt
     {
       return GetRawPtr(Pd_U_);
     }
+
+    virtual SmartPtr<const SymMatrixSpace> HessianMatrixSpace() const
+    {
+      return GetRawPtr(h_space_);
+    }
     //@}
 
     /** Accessor method for vector/matrix spaces pointers */
@@ -248,6 +254,16 @@ namespace Ipopt
       return h_evals_;
     }
     //@}
+
+    /** Method to calculate eta, the factor for the regularization term */
+    Number Eta(Number mu) const;
+
+    /** Method returning the scaling factors for the 2-norm
+     *  penalization term. */
+    SmartPtr<const Vector> DR_x() const
+    {
+      return ConstPtr(dr_x_);
+    }
 
     /** Methods for IpoptType */
     //@{
@@ -343,9 +359,6 @@ namespace Ipopt
     SmartPtr<Vector> x_ref_;
     //@}
 
-    /** Method to calculate eta, the factor for the regularization term */
-    Number Eta(Number mu) const;
-
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
      * These methods are not implemented and 
@@ -364,10 +377,15 @@ namespace Ipopt
     void operator=(const RestoIpoptNLP&);
     //@}
 
+    /** @name Algorithmic parameter */
+    //@{
     /** Flag indicating if evalution of the objective should be
      *  performed for every restoration phase objective function
      *  evaluation. */
     bool evaluate_orig_obj_at_resto_trial_;
+    /** Flag indicating how hessian information is obtained */
+    HessianInformationType hessian_information_;
+    //@}
 
     /** Flag indicating if initialization method has been called */
     bool initialized_;

@@ -7,6 +7,7 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpOrigIpoptNLP.hpp"
+#include "IpLowRankUpdateSymMatrix.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -27,6 +28,9 @@
 #  error "don't have header file for assert"
 # endif
 #endif
+
+// DELETEME!
+#include "IpIdentityMatrix.hpp"
 
 namespace Ipopt
 {
@@ -82,6 +86,15 @@ namespace Ipopt
       "If \"yes\" is chosen, then the algorithm assumes that an NLP is now to "
       "be solved, whose strcture is identical to one that already was "
       "considered (with the same NLP object).");
+    roptions->SetRegisteringCategory("Hessian Approximation");
+    roptions->AddStringOption2(
+      "hessian_information",
+      "Indicates what Hessian information is to be used.",
+      "exact",
+      "exact", "Use second derivatives provided by the NLP.",
+      "limited-memory", "Perform a limited-memory quasi-Newton  approximation",
+      "This determines which kind of information for the Hessian of the "
+      "Lagrangian function is used by the algorithm.");
   }
 
   bool OrigIpoptNLP::Initialize(const Journalist& jnlst,
@@ -91,6 +104,9 @@ namespace Ipopt
     options.GetNumericValue("bound_relax_factor", bound_relax_factor_, prefix);
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
+    Index enum_int;
+    options.GetEnumValue("hessian_information", enum_int, prefix);
+    hessian_information_ = HessianInformationType(enum_int);
 
     // Reset the function evaluation counters (for warm start)
     f_evals_=0;
@@ -150,6 +166,43 @@ namespace Ipopt
 
       if (!retValue) {
         return false;
+      }
+
+      // Check if the Hessian space is actually a limited-memory
+      // approximation.  If so, get the required information from the
+      // NLP and create an appropreate h_space
+      if (hessian_information_==LIMITED_MEMORY) {
+        SmartPtr<VectorSpace> approx_vecspace;
+        SmartPtr<Matrix> P_approx;
+        nlp_->GetQuasiNewtonApproximationSpaces(approx_vecspace,
+                                                P_approx);
+        if (IsValid(approx_vecspace)) {
+          DBG_ASSERT(IsValid(P_approx));
+          h_space_ = new LowRankUpdateSymMatrixSpace(x_space_->Dim(),
+                     ConstPtr(P_approx),
+                     ConstPtr(approx_vecspace),
+                     true);
+          jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
+                         "Hessian approximation will be done in smaller space of dimension %d (instead of %d)\n\n",
+                         P_approx->NCols(), P_approx->NRows());
+        }
+        else {
+          DBG_ASSERT(IsNull(P_approx));
+          /*
+          printf("DELETEME in IpOrigIpoptNLP\n");
+          SmartPtr<IdentityMatrixSpace> idspace =
+            new IdentityMatrixSpace(x_space_->Dim());
+          SmartPtr<Matrix> id = idspace->MakeNew();
+          h_space_ = new LowRankUpdateSymMatrixSpace(x_space_->Dim(),
+          			     ConstPtr(id),
+          			     ConstPtr(x_space_),
+          			     true);
+          */
+          h_space_ = new LowRankUpdateSymMatrixSpace(x_space_->Dim(),
+                     ConstPtr(P_approx),
+                     ConstPtr(x_space_),
+                     true);
+        }
       }
 
       NLP_scaling()->DetermineScaling(x_space_,
@@ -308,6 +361,8 @@ namespace Ipopt
 
   Number OrigIpoptNLP::f(const Vector& x)
   {
+    x.Dot(x);
+    x.Dot(x);
     DBG_START_METH("OrigIpoptNLP::f", dbg_verbosity);
     Number ret = 0.0;
     DBG_PRINT((2, "x.Tag = %d\n", x.GetTag()));

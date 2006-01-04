@@ -533,9 +533,12 @@ namespace Ipopt
 #endif
 
     T* ptr = GetRawPtr(rhs);
-    if (ptr != NULL) {
-      SetFromRawPtr_(ptr);
-    }
+    /* AW: I changed this so that NULL is correctly copied from the
+       right hand side */
+    //     if (ptr != NULL) {
+    //       SetFromRawPtr_(ptr);
+    //     }
+    SetFromRawPtr_(ptr);
 
     return (*this);
   }

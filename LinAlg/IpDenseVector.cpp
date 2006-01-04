@@ -541,6 +541,7 @@ namespace Ipopt
         val = c*scalar_;
       }
       scalar_ = val + a*scalar_v1 + b*scalar_v2;
+      initialized_ = true;
       return;
     }
     if (c==0.) {

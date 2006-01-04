@@ -123,6 +123,10 @@ namespace Ipopt
 
     /** Permutation matrix (d_U_ -> d */
     virtual SmartPtr<const Matrix> Pd_U() = 0;
+
+    /** Accessor method to obtain the MatrixSpace for the Hessian
+     *  matrix (or it's approximation) */
+    virtual SmartPtr<const SymMatrixSpace> HessianMatrixSpace() const = 0;
     //@}
 
     /** Accessor method for vector/matrix spaces pointers. */

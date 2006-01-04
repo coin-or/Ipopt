@@ -55,8 +55,8 @@ namespace Ipopt
      * see the description in the base class SymLinearSolver.
      */
     virtual ESymSolverStatus MultiSolve(const SymMatrix &A,
-                                        std::vector<const Vector*>& rhsV,
-                                        std::vector<Vector*>& solV,
+                                        std::vector<SmartPtr<const Vector> >& rhsV,
+                                        std::vector<SmartPtr<Vector> >& solV,
                                         bool check_NegEVals,
                                         Index numberOfNegEVals);
 

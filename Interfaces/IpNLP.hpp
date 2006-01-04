@@ -148,6 +148,26 @@ namespace Ipopt
     }
     //@}
 
+    /** Method for obtaining the subspace in which the limited-memory
+     *  Hessian approximation should be done.  This is only called if
+     *  the limited-memory Hessian approximation is chosen.  Since the
+     *  Hessian is zero in the space of all variables that appear in
+     *  the problem functions only linearly, this allows the user to
+     *  provide a VectorSpace for all nonlinear variables, and an
+     *  ExpansionMatrix to lift from this VectorSpace to the
+     *  VectorSpace of the primal variables x.  If the returned values
+     *  are NULL, it is assumed that the Hessian is to be approximated
+     *  in the space of all x variables.  The default instantiation of
+     *  this method returns NULL, and a user only has to overwrite
+     *  this method if the approximation is to be done only in a
+     *  subspace. */
+    virtual void
+    GetQuasiNewtonApproximationSpaces(SmartPtr<VectorSpace>& approx_space,
+                                      SmartPtr<Matrix>& P_approx)
+    {
+      approx_space = NULL;
+      P_approx = NULL;
+    }
 
   private:
     /**@name Default Compiler Generated Methods

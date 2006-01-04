@@ -43,10 +43,11 @@ namespace Ipopt
     bool InitializeImpl(const OptionsList& options,
                         const std::string& prefix);
 
-    /** Set up the augmented system and solve it for a given right hand
-     *  side - implementation for GenTMatrices and SymTMatrices.
+    /** Set up the augmented system and solve it for a set of given
+     *  right hand side - implementation for GenTMatrices and
+     *  SymTMatrices.
      */
-    virtual ESymSolverStatus Solve(
+    virtual ESymSolverStatus MultiSolve(
       const SymMatrix* W,
       const Vector* D_x,
       double delta_x,
@@ -58,14 +59,14 @@ namespace Ipopt
       const Matrix* J_d,
       const Vector* D_d,
       double delta_d,
-      const Vector& rhs_x,
-      const Vector& rhs_s,
-      const Vector& rhs_c,
-      const Vector& rhs_d,
-      Vector& sol_x,
-      Vector& sol_s,
-      Vector& sol_c,
-      Vector& sol_d,
+      std::vector<SmartPtr<const Vector> >& rhs_xV,
+      std::vector<SmartPtr<const Vector> >& rhs_sV,
+      std::vector<SmartPtr<const Vector> >& rhs_cV,
+      std::vector<SmartPtr<const Vector> >& rhs_dV,
+      std::vector<SmartPtr<Vector> >& sol_xV,
+      std::vector<SmartPtr<Vector> >& sol_sV,
+      std::vector<SmartPtr<Vector> >& sol_cV,
+      std::vector<SmartPtr<Vector> >& sol_dV,
       bool check_NegEVals,
       Index numberOfNegEVals);
 

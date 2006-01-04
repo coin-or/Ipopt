@@ -11,6 +11,7 @@
 #include "IpSumSymMatrix.hpp"
 #include "IpSumMatrix.hpp"
 #include "IpNLPScaling.hpp"
+#include "IpLowRankUpdateSymMatrix.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -80,6 +81,9 @@ namespace Ipopt
   {
     options.GetBoolValue("evaluate_orig_obj_at_resto_trial",
                          evaluate_orig_obj_at_resto_trial_, prefix);
+    Index enum_int;
+    options.GetEnumValue("hessian_information", enum_int, prefix);
+    hessian_information_ = HessianInformationType(enum_int);
 
     initialized_ = true;
     return IpoptNLP::Initialize(jnlst, options, prefix);
@@ -131,7 +135,6 @@ namespace Ipopt
     // Create the restoration phase problem vector/matrix spaces, based
     // on the original spaces (pretty inconvenient with all the
     // matrix spaces, isn't it?!?)
-
     DBG_PRINT((1, "Creating the x_space_\n"));
     // vector x
     Index total_dim = orig_x_space->Dim() + 2*orig_c_space->Dim()
@@ -283,12 +286,25 @@ namespace Ipopt
 
     SmartPtr<DiagMatrixSpace> DR_x_space
     = new DiagMatrixSpace(orig_x_space->Dim());
-    SmartPtr<SumSymMatrixSpace> sumsym_mat_space =
-      new SumSymMatrixSpace(orig_x_space->Dim(), 2);
-    sumsym_mat_space->SetTermSpace(0, *orig_h_space);
-    sumsym_mat_space->SetTermSpace(1, *DR_x_space);
-    h_space_->SetCompSpace(0, 0, *sumsym_mat_space, true);
-    // All remaining blocks are zero'ed out
+    if (hessian_information_==LIMITED_MEMORY) {
+      const LowRankUpdateSymMatrixSpace* LR_h_space =
+        dynamic_cast<const LowRankUpdateSymMatrixSpace*> (GetRawPtr(orig_h_space));
+      DBG_ASSERT(LR_h_space);
+      SmartPtr<LowRankUpdateSymMatrixSpace> new_orig_h_space =
+        new LowRankUpdateSymMatrixSpace(LR_h_space->Dim(),
+                                        LR_h_space->P_LowRank(),
+                                        LR_h_space->LowRankVectorSpace(),
+                                        false);
+      h_space_->SetCompSpace(0, 0, *new_orig_h_space);
+    }
+    else {
+      SmartPtr<SumSymMatrixSpace> sumsym_mat_space =
+        new SumSymMatrixSpace(orig_x_space->Dim(), 2);
+      sumsym_mat_space->SetTermSpace(0, *orig_h_space);
+      sumsym_mat_space->SetTermSpace(1, *DR_x_space);
+      h_space_->SetCompSpace(0, 0, *sumsym_mat_space, true);
+      // All remaining blocks are zero'ed out
+    }
 
     SmartPtr<const MatrixSpace> scaled_jac_c_space;
     SmartPtr<const MatrixSpace> scaled_jac_d_space;

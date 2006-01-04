@@ -16,6 +16,12 @@
 namespace Ipopt
 {
 
+  /** enumeration for the Hessian information type. */
+  enum HessianInformationType {
+    EXACT=0,
+    LIMITED_MEMORY
+  };
+
   /** This class maps the traditional NLP into
    *  something that is more useful by Ipopt.
    *  This class takes care of storing the
@@ -146,6 +152,11 @@ namespace Ipopt
     virtual SmartPtr<const Matrix> Pd_U()
     {
       return Pd_U_;
+    }
+
+    virtual SmartPtr<const SymMatrixSpace> HessianMatrixSpace() const
+    {
+      return h_space_;
     }
     //@}
 
@@ -343,6 +354,8 @@ namespace Ipopt
     /** Flag indicating whether the TNLP with identical structure has
      *  already been solved before. */
     bool warm_start_same_structure_;
+    /** Flag indicating what Hessian information is to be used. */
+    HessianInformationType hessian_information_;
     //@}
 
     /** @name Counters for the function evaluations */

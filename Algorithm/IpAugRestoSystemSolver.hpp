@@ -42,8 +42,9 @@ namespace Ipopt
     bool InitializeImpl(const OptionsList& options,
                         const std::string& prefix);
 
-    /** Translate the augmented system (in the full space of the restoration variables)
-     *  into the smaller space of the original variables
+    /** Translate the augmented system (in the full space of the
+     *  restoration variables) into the smaller space of the original
+     *  variables
      */
     virtual ESymSolverStatus Solve(
       const SymMatrix* W,

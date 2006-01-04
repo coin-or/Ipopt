@@ -19,6 +19,7 @@
 #include "IpIterateInitializer.hpp"
 #include "IpIterationOutput.hpp"
 #include "IpAlgTypes.hpp"
+#include "IpHessianUpdater.hpp"
 
 namespace Ipopt
 {
@@ -50,7 +51,8 @@ namespace Ipopt
                    const SmartPtr<MuUpdate>& mu_update,
                    const SmartPtr<ConvergenceCheck>& conv_check,
                    const SmartPtr<IterateInitializer>& iterate_initializer,
-                   const SmartPtr<IterationOutput>& iter_output);
+                   const SmartPtr<IterationOutput>& iter_output,
+                   const SmartPtr<HessianUpdater>& hessian_updater);
 
     /** Default destructor */
     virtual ~IpoptAlgorithm();
@@ -96,6 +98,7 @@ namespace Ipopt
     SmartPtr<ConvergenceCheck> conv_check_;
     SmartPtr<IterateInitializer> iterate_initializer_;
     SmartPtr<IterationOutput> iter_output_;
+    SmartPtr<HessianUpdater> hessian_updater_;
     //@}
 
     /** @name Main steps of the algorthim */
@@ -104,7 +107,7 @@ namespace Ipopt
      *  evaluate the exact Hessian (based on the current iterate), or
      *  perform a quasi-Newton update.
      */
-    void ActualizeHessian();
+    void UpdateHessian();
 
     /** Method to update the barrier parameter
      * ( this may later be made a strategy object

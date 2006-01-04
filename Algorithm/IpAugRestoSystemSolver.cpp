@@ -12,6 +12,7 @@
 #include "IpCompoundVector.hpp"
 #include "IpSumSymMatrix.hpp"
 #include "IpDiagMatrix.hpp"
+#include "IpLowRankUpdateSymMatrix.hpp"
 
 namespace Ipopt
 {
@@ -134,24 +135,36 @@ namespace Ipopt
     // Now map the correct entries into the Solve method
     // pull out the parts of the hessian h_orig + diag
     DBG_PRINT_MATRIX(2, "CW", *CW);
+    SmartPtr<const SymMatrix> h_orig;
+    SmartPtr<const Vector> D_xR;
     SmartPtr<const SumSymMatrix> WR_sum =
       dynamic_cast<const SumSymMatrix*>(GetRawPtr(CW->GetComp(0,0)));
-    Number factor;
-    SmartPtr<const SymMatrix> h_orig;
-    WR_sum->GetTerm(0, factor, h_orig);
-    DBG_ASSERT(factor == 1.0);
-    SmartPtr<const SymMatrix> eta_DR;
-    WR_sum->GetTerm(1, factor, eta_DR);
-    SmartPtr<const Vector> wr_d =
-      dynamic_cast<const DiagMatrix*>(GetRawPtr(eta_DR))->GetDiag();
-    DBG_ASSERT(IsValid(wr_d));
+    if (IsValid(WR_sum)) {
+      // We seem to be in the regular situation with exact second
+      // derivatives
+      Number factor;
+      WR_sum->GetTerm(0, factor, h_orig);
+      DBG_ASSERT(factor == 1.0);
+      SmartPtr<const SymMatrix> eta_DR;
+      WR_sum->GetTerm(1, factor, eta_DR);
+      SmartPtr<const Vector> wr_d =
+        dynamic_cast<const DiagMatrix*>(GetRawPtr(eta_DR))->GetDiag();
+      DBG_ASSERT(IsValid(wr_d));
 
-    SmartPtr<const Vector> D_xR;
-    if (IsValid(CD_x)) {
-      D_xR = D_x_plus_wr_d(CD_x->GetComp(0), factor, *wr_d);
+      if (IsValid(CD_x)) {
+        D_xR = D_x_plus_wr_d(CD_x->GetComp(0), factor, *wr_d);
+      }
+      else {
+        D_xR = D_x_plus_wr_d(NULL, factor, *wr_d);
+      }
     }
     else {
-      D_xR = D_x_plus_wr_d(NULL, factor, *wr_d);
+      // Looks like limited memory quasi-Newton stuff
+      const LowRankUpdateSymMatrix* LR_W =
+        dynamic_cast<const LowRankUpdateSymMatrix*>(GetRawPtr(CW->GetComp(0,0)));
+      DBG_ASSERT(LR_W);
+      h_orig = LR_W;
+      D_xR = CD_x->GetComp(0);
     }
 
     Number delta_xR = delta_x;

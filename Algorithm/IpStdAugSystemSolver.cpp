@@ -78,31 +78,41 @@ namespace Ipopt
                                   options, prefix);
   }
 
-
-  ESymSolverStatus StdAugSystemSolver::Solve(const SymMatrix* W,
-      const Vector* D_x,
-      double delta_x,
-      const Vector* D_s,
-      double delta_s,
-      const Matrix* J_c,
-      const Vector* D_c,
-      double delta_c,
-      const Matrix* J_d,
-      const Vector* D_d,
-      double delta_d,
-      const Vector& rhs_x,
-      const Vector& rhs_s,
-      const Vector& rhs_c,
-      const Vector& rhs_d,
-      Vector& sol_x,
-      Vector& sol_s,
-      Vector& sol_c,
-      Vector& sol_d,
-      bool check_NegEVals,
-      Index numberOfNegEVals)
+  ESymSolverStatus StdAugSystemSolver::MultiSolve(
+    const SymMatrix* W,
+    const Vector* D_x,
+    double delta_x,
+    const Vector* D_s,
+    double delta_s,
+    const Matrix* J_c,
+    const Vector* D_c,
+    double delta_c,
+    const Matrix* J_d,
+    const Vector* D_d,
+    double delta_d,
+    std::vector<SmartPtr<const Vector> >& rhs_xV,
+    std::vector<SmartPtr<const Vector> >& rhs_sV,
+    std::vector<SmartPtr<const Vector> >& rhs_cV,
+    std::vector<SmartPtr<const Vector> >& rhs_dV,
+    std::vector<SmartPtr<Vector> >& sol_xV,
+    std::vector<SmartPtr<Vector> >& sol_sV,
+    std::vector<SmartPtr<Vector> >& sol_cV,
+    std::vector<SmartPtr<Vector> >& sol_dV,
+    bool check_NegEVals,
+    Index numberOfNegEVals)
   {
-    DBG_START_METH("StdAugSystemSolver::Solve",dbg_verbosity);
+    DBG_START_METH("StdAugSystemSolver::MultiSolve",dbg_verbosity);
     DBG_ASSERT(J_c && J_d && "Currently, you MUST specify J_c and J_d in the augmented system");
+
+    Index nrhs = (Index)rhs_xV.size();
+    DBG_ASSERT(nrhs>0);
+    DBG_ASSERT(nrhs==(Index)rhs_sV.size());
+    DBG_ASSERT(nrhs==(Index)rhs_cV.size());
+    DBG_ASSERT(nrhs==(Index)rhs_dV.size());
+    DBG_ASSERT(nrhs==(Index)sol_xV.size());
+    DBG_ASSERT(nrhs==(Index)sol_sV.size());
+    DBG_ASSERT(nrhs==(Index)sol_cV.size());
+    DBG_ASSERT(nrhs==(Index)sol_dV.size());
 
     // Create the compound matrix of the augmented system if it has not
     // yet been created - It is assumed that the structure will not change
@@ -113,37 +123,48 @@ namespace Ipopt
       // rhs_? are passed in to provide a prototype vector
       // for D_? (since these may be NULL)
       DBG_ASSERT(W && J_c && J_d); // W must exist during the first call to setup the structure!
-      CreateAugmentedSpace(*W, *J_c, *J_d, rhs_x, rhs_s, rhs_c, rhs_d);
+      CreateAugmentedSpace(*W, *J_c, *J_d, *rhs_xV[0], *rhs_sV[0],
+                           *rhs_cV[0], *rhs_dV[0]);
       CreateAugmentedSystem(W, D_x, delta_x, D_s, delta_s,
                             *J_c, D_c, delta_c, *J_d, D_d, delta_d,
-                            rhs_x, rhs_s, rhs_c, rhs_d);
+                            *rhs_xV[0], *rhs_sV[0], *rhs_cV[0], *rhs_dV[0]);
       DBG_DO(debug_first_time_through = true;)
     }
 
 
-    // Check if anything that was just passed in is different from what is currently
-    // in the compound matrix of the augmented system. If anything is different, then
-    // update the augmented system
-    if ( AugmentedSystemRequiresChange(W, D_x, delta_x, D_s, delta_s, *J_c, D_c, delta_c, *J_d, D_d, delta_d) ) {
+    // Check if anything that was just passed in is different from
+    // what is currently in the compound matrix of the augmented
+    // system. If anything is different, then update the augmented
+    // system
+    if ( AugmentedSystemRequiresChange(W, D_x, delta_x, D_s, delta_s, *J_c,
+                                       D_c, delta_c, *J_d, D_d, delta_d) ) {
       DBG_ASSERT(!debug_first_time_through);
       CreateAugmentedSystem(W, D_x, delta_x, D_s, delta_s,
                             *J_c, D_c, delta_c, *J_d, D_d, delta_d,
-                            rhs_x, rhs_s, rhs_c, rhs_d);
+                            *rhs_xV[0], *rhs_sV[0], *rhs_cV[0], *rhs_dV[0]);
     }
 
     // Sanity checks
-    DBG_ASSERT(rhs_x.Dim() == sol_x.Dim());
-    DBG_ASSERT(rhs_s.Dim() == sol_s.Dim());
-    DBG_ASSERT(rhs_c.Dim() == sol_c.Dim());
-    DBG_ASSERT(rhs_d.Dim() == sol_d.Dim());
+    DBG_ASSERT(rhs_xV[0]->Dim() == sol_xV[0]->Dim());
+    DBG_ASSERT(rhs_sV[0]->Dim() == sol_sV[0]->Dim());
+    DBG_ASSERT(rhs_cV[0]->Dim() == sol_cV[0]->Dim());
+    DBG_ASSERT(rhs_dV[0]->Dim() == sol_dV[0]->Dim());
 
     // Now construct the overall right hand side vector that will be passed
     // to the linear solver
-    SmartPtr<CompoundVector> augmented_rhs = augmented_vector_space_->MakeNewCompoundVector();
-    augmented_rhs->SetComp(0, rhs_x);
-    augmented_rhs->SetComp(1, rhs_s);
-    augmented_rhs->SetComp(2, rhs_c);
-    augmented_rhs->SetComp(3, rhs_d);
+    std::vector<SmartPtr<const Vector> > augmented_rhsV(nrhs);
+    for (Index i=0; i<nrhs; i++) {
+      SmartPtr<CompoundVector> augrhs =
+        augmented_vector_space_->MakeNewCompoundVector();
+      augrhs->SetComp(0, *rhs_xV[i]);
+      augrhs->SetComp(1, *rhs_sV[i]);
+      augrhs->SetComp(2, *rhs_cV[i]);
+      augrhs->SetComp(3, *rhs_dV[i]);
+      char buffer[16];
+      sprintf(buffer, "RHS[%2d]", i);
+      augrhs->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, buffer);
+      augmented_rhsV[i] = GetRawPtr(augrhs);
+    }
 
     augmented_system_->Print(Jnlst(), J_MATRIX, J_LINEAR_ALGEBRA, "KKT");
     if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
@@ -166,20 +187,30 @@ namespace Ipopt
       dbg_values = NULL;
       // ToDo: remove above here
     }
-    augmented_rhs->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, "RHS");
 
     // Call the linear solver
-    SmartPtr<CompoundVector> augmented_sol = augmented_vector_space_->MakeNewCompoundVector();
-    augmented_sol->SetCompNonConst(0, sol_x);
-    augmented_sol->SetCompNonConst(1, sol_s);
-    augmented_sol->SetCompNonConst(2, sol_c);
-    augmented_sol->SetCompNonConst(3, sol_d);
+    std::vector<SmartPtr<Vector> > augmented_solV(nrhs);
+    for (Index i=0; i<nrhs; i++) {
+      SmartPtr<CompoundVector> augsol =
+        augmented_vector_space_->MakeNewCompoundVector();
+      augsol->SetCompNonConst(0, *sol_xV[i]);
+      augsol->SetCompNonConst(1, *sol_sV[i]);
+      augsol->SetCompNonConst(2, *sol_cV[i]);
+      augsol->SetCompNonConst(3, *sol_dV[i]);
+      augmented_solV[i] = GetRawPtr(augsol);
+    }
     ESymSolverStatus retval;
-    retval = linsolver_->Solve(*augmented_system_, *augmented_rhs, *augmented_sol,
-                               check_NegEVals, numberOfNegEVals);
+    retval = linsolver_->MultiSolve(*augmented_system_, augmented_rhsV,
+                                    augmented_solV, check_NegEVals,
+                                    numberOfNegEVals);
     if (retval==SYMSOLVER_SUCCESS) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Factorization successful.\n");
-      augmented_sol->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, "SOL");
+      for (Index i=0; i<nrhs; i++) {
+        char buffer[16];
+        sprintf(buffer, "SOL[%2d]", i);
+        augmented_solV[i]->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA,
+                                 buffer);
+      }
     }
     else if (retval==SYMSOLVER_FATAL_ERROR) {
       THROW_EXCEPTION(FATAL_ERROR_IN_LINEAR_SOLVER,"A fatal error occured in the linear solver.");
