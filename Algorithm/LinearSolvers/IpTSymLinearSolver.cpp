@@ -176,10 +176,10 @@ namespace Ipopt
         ja = ajcn_;
       }
       else {
-	IpData().TimingStats().LinearSystemStructureConverter().Start();
+        IpData().TimingStats().LinearSystemStructureConverter().Start();
         ia = triplet_to_csr_converter_->IA();
         ja = triplet_to_csr_converter_->JA();
-	IpData().TimingStats().LinearSystemStructureConverter().End();
+        IpData().TimingStats().LinearSystemStructureConverter().End();
       }
 
       retval = solver_interface_->MultiSolve(new_matrix, ia, ja,
@@ -251,15 +251,15 @@ namespace Ipopt
         nonzeros = nonzeros_triplet_;
       }
       else {
-	IpData().TimingStats().LinearSystemStructureConverter().Start();
-	IpData().TimingStats().LinearSystemStructureConverterInit().Start();
+        IpData().TimingStats().LinearSystemStructureConverter().Start();
+        IpData().TimingStats().LinearSystemStructureConverterInit().Start();
         nonzeros_compressed_ =
           triplet_to_csr_converter_->InitializeConverter(dim_, nonzeros_triplet_,
               airn_, ajcn_);
-	IpData().TimingStats().LinearSystemStructureConverterInit().End();
+        IpData().TimingStats().LinearSystemStructureConverterInit().End();
         ia = triplet_to_csr_converter_->IA();
         ja = triplet_to_csr_converter_->JA();
-	IpData().TimingStats().LinearSystemStructureConverter().End();
+        IpData().TimingStats().LinearSystemStructureConverter().End();
         nonzeros = nonzeros_compressed_;
       }
 
@@ -292,10 +292,10 @@ namespace Ipopt
         nonzeros = nonzeros_triplet_;
       }
       else {
-	IpData().TimingStats().LinearSystemStructureConverter().Start();
+        IpData().TimingStats().LinearSystemStructureConverter().Start();
         ia = triplet_to_csr_converter_->IA();
         ja = triplet_to_csr_converter_->JA();
-	IpData().TimingStats().LinearSystemStructureConverter().End();
+        IpData().TimingStats().LinearSystemStructureConverter().End();
         nonzeros = nonzeros_compressed_;
       }
       retval = solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);

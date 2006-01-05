@@ -58,6 +58,9 @@ build_triplet = @build@
 @HAVE_TAUCS_TRUE@am__append_5 = \
 @HAVE_TAUCS_TRUE@	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp
 
+@HAVE_WSMP_TRUE@am__append_6 = \
+@HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
+
 subdir = Algorithm/LinearSolvers
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -79,16 +82,18 @@ am__liblinsolvers_a_SOURCES_DIST = IpLinearSolversRegOp.cpp \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
-	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp
+	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp \
+	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
 @HAVE_MA27_TRUE@am__objects_1 = IpMa27TSolverInterface.$(OBJEXT)
 @HAVE_MA57_TRUE@am__objects_2 = IpMa57TSolverInterface.$(OBJEXT)
 @HAVE_MC19_TRUE@am__objects_3 = IpMc19TSymScalingMethod.$(OBJEXT)
 @HAVE_PARDISO_TRUE@am__objects_4 = IpPardisoSolverInterface.$(OBJEXT)
 @HAVE_TAUCS_TRUE@am__objects_5 = IpTAUCSSolverInterface.$(OBJEXT)
+@HAVE_WSMP_TRUE@am__objects_6 = IpWsmpSolverInterface.$(OBJEXT)
 am_liblinsolvers_a_OBJECTS = IpLinearSolversRegOp.$(OBJEXT) \
 	IpTripletToCSRConverter.$(OBJEXT) IpTSymLinearSolver.$(OBJEXT) \
 	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
-	$(am__objects_4) $(am__objects_5)
+	$(am__objects_4) $(am__objects_5) $(am__objects_6)
 liblinsolvers_a_OBJECTS = $(am_liblinsolvers_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -174,6 +179,8 @@ HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
 HAVE_TAUCS_TRUE = @HAVE_TAUCS_TRUE@
+HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
+HAVE_WSMP_TRUE = @HAVE_WSMP_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -250,7 +257,7 @@ liblinsolvers_a_SOURCES = IpLinearSolversRegOp.cpp \
 	IpTripletToCSRConverter.hpp IpTSymLinearSolver.cpp \
 	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp $(am__append_1) \
 	$(am__append_2) $(am__append_3) $(am__append_4) \
-	$(am__append_5)
+	$(am__append_5) $(am__append_6)
 
 # Astyle stuff
 ASTYLE_FILES = \
@@ -264,7 +271,8 @@ ASTYLE_FILES = \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
 	IpTSymScalingMethod.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
-	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak
+	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak \
+	IpWsmpSolverInterface.cppbak IpWsmpSolverInterface.hppbak
 
 CLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
@@ -323,6 +331,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTAUCSSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTSymLinearSolver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTripletToCSRConverter.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpWsmpSolverInterface.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

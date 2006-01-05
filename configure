@@ -319,7 +319,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXLIBS AR ARFLAGS AR_X CC CFLAGS ac_ct_CC F77 FFLAGS ac_ct_F77 FLIBS RANLIB ac_ct_RANLIB LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CXXCPP EGREP IPADDLIBS TAUCS_INCFLAGS ASLMAKEFLAGS ASLMAKEFILECMDS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMA57_TRUE BUILDMA57_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE ASLLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXLIBS AR ARFLAGS AR_X CC CFLAGS ac_ct_CC F77 FFLAGS ac_ct_F77 FLIBS RANLIB ac_ct_RANLIB LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CXXCPP EGREP IPADDLIBS TAUCS_INCFLAGS ASLMAKEFLAGS ASLMAKEFILECMDS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMA57_TRUE BUILDMA57_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE ASLLIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -913,7 +913,8 @@ Optional Packages:
   --with-blas             specify BLAS library (or BUILD for compilation)
   --with-hsl              specify Harwell library (or BUILD for compilation)
   --with-pardiso          specify Pardiso library (unsupported)
-  --with-taucs            specify TAUCS library and dependencies (unsupported)
+  --with-taucs            specify TAUCS library and dependencies
+  --with-wsmp             specify WSMP library
   --with-asldir           specify absolute path to AMPL solver directory (or
                           BUILD for compilation, or "no" for disabling AMPL)
 
@@ -3608,7 +3609,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3611:" \
+echo "$as_me:3612:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -4175,7 +4176,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:4178: \"$ac_link\") >&5
+(eval echo $as_me:4179: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4253,7 +4254,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:4256: \"$ac_link\") >&5
+(eval echo $as_me:4257: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -10428,6 +10429,83 @@ _ACEOF
   CXXFLAGS="$CXXFLAGS $TAUCS_INCFLAGS"
 fi
 
+########
+# WSMP #
+########
+
+
+# Check whether --with-wsmp or --without-wsmp was given.
+if test "${with_wsmp+set}" = set; then
+  withval="$with_wsmp"
+  use_wsmp=$withval
+else
+  use_wsmp=no
+fi;
+
+if test ! "$use_wsmp" = "no"; then
+  LIBS="$use_wsmp $LIBS"
+  IPADDLIBS="$use_wsmp $IPADDLIBS"
+
+  ac_ext=f
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
+
+  echo "$as_me:$LINENO: checking whether user-supplied WSMP library \"$use_wsmp\" works" >&5
+echo $ECHO_N "checking whether user-supplied WSMP library \"$use_wsmp\" works... $ECHO_C" >&6
+  cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call WSSMP()
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+{ { echo "$as_me:$LINENO: error: WSMP library $use_wsmp does not seem to work" >&5
+echo "$as_me: error: WSMP library $use_wsmp does not seem to work" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+  ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_WSMP 1
+_ACEOF
+
+fi
+
 # Check if at least one linear solver was found
 
 # Check whether --enable-distconf or --disable-distconf was given.
@@ -10444,7 +10522,7 @@ else
   distconf=false
 fi;
 
-if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no; then
+if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no; then
   if test "$distconf" = false; then
     { { echo "$as_me:$LINENO: error: \"No linear solver (such as MA27) available\"" >&5
 echo "$as_me: error: \"No linear solver (such as MA27) available\"" >&2;}
@@ -10963,6 +11041,16 @@ fi
 
 
 
+if test ! "$use_wsmp" = no; then
+  HAVE_WSMP_TRUE=
+  HAVE_WSMP_FALSE='#'
+else
+  HAVE_WSMP_TRUE='#'
+  HAVE_WSMP_FALSE=
+fi
+
+
+
 
 if test "$use_asldir" = BUILD; then
   BUILDASLDIR_TRUE=
@@ -11205,6 +11293,13 @@ if test -z "${HAVE_TAUCS_TRUE}" && test -z "${HAVE_TAUCS_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"HAVE_TAUCS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"HAVE_TAUCS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${HAVE_WSMP_TRUE}" && test -z "${HAVE_WSMP_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"HAVE_WSMP\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"HAVE_WSMP\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -11874,6 +11969,8 @@ s,@HAVE_PARDISO_TRUE@,$HAVE_PARDISO_TRUE,;t t
 s,@HAVE_PARDISO_FALSE@,$HAVE_PARDISO_FALSE,;t t
 s,@HAVE_TAUCS_TRUE@,$HAVE_TAUCS_TRUE,;t t
 s,@HAVE_TAUCS_FALSE@,$HAVE_TAUCS_FALSE,;t t
+s,@HAVE_WSMP_TRUE@,$HAVE_WSMP_TRUE,;t t
+s,@HAVE_WSMP_FALSE@,$HAVE_WSMP_FALSE,;t t
 s,@BUILDASLDIR_TRUE@,$BUILDASLDIR_TRUE,;t t
 s,@BUILDASLDIR_FALSE@,$BUILDASLDIR_FALSE,;t t
 s,@BUILDAMPLINTERFACE_TRUE@,$BUILDAMPLINTERFACE_TRUE,;t t

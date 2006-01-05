@@ -7,28 +7,28 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-17
 
 
-#ifndef __IPPARDISOSOLVERINTERFACE_HPP__
-#define __IPPARDISOSOLVERINTERFACE_HPP__
+#ifndef __IPWSMPSOLVERINTERFACE_HPP__
+#define __IPWSMPSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
 
 namespace Ipopt
 {
 
-  /** Interface to the linear solver Pardiso, derived from
+  /** Interface to the linear solver Wsmp, derived from
    *  SparseSymLinearSolverInterface.  For details, see description of
    *  SparseSymLinearSolverInterface base class.
    */
-  class PardisoSolverInterface: public SparseSymLinearSolverInterface
+  class WsmpSolverInterface: public SparseSymLinearSolverInterface
   {
   public:
     /** @name Constructor/Destructor */
     //@{
     /** Constructor */
-    PardisoSolverInterface();
+    WsmpSolverInterface();
 
     /** Destructor */
-    virtual ~PardisoSolverInterface();
+    virtual ~WsmpSolverInterface();
     //@}
 
     /** overloaded from AlgorithmStrategyObject */
@@ -99,10 +99,10 @@ namespace Ipopt
      * they will not be implicitly created/called. */
     //@{
     /** Copy Constructor */
-    PardisoSolverInterface(const PardisoSolverInterface&);
+    WsmpSolverInterface(const WsmpSolverInterface&);
 
     /** Overloaded Equals Operator */
-    void operator=(const PardisoSolverInterface&);
+    void operator=(const WsmpSolverInterface&);
     //@}
 
     /** @name Information about the matrix */
@@ -110,33 +110,22 @@ namespace Ipopt
     /** Number of rows and columns of the matrix */
     Index dim_;
 
-    /** Number of nonzeros of the matrix in triplet representation. */
-    Index nonzeros_;
-
     /** Array for storing the values of the matrix. */
     double* a_;
+    //@}
+
+    /** @name Solver specific options */
+    //@{
+    /** Option that controls the matching strategy. */
+    Index wsmp_num_threads_;
+    /** Ordering option for WSSMP (is IPARM(16)) */
+    Index wsmp_ordering_option_;
     //@}
 
     /** @name Information about most recent factorization/solve */
     //@{
     /** Number of negative eigenvalues */
     Index negevals_;
-    //@}
-
-    /** @name Solver specific options */
-    //@{
-    /** Option that controls the matching strategy. */
-    int match_strat_;
-    /** Flag indicating if symbolic factorization has already been
-     *  performed. */
-    bool have_symbolic_factorization_;
-    /** Flag indicating whether the symbolic factorization should only
-     *  be done after perturbed elements, if the inertia was wrong */
-    bool pardiso_redo_symbolic_fact_only_if_inertia_wrong_;
-    /** Flag indicating whether repeated perturbed elements even after
-     *  a new symbolic factorization should be interpreted as a
-     *  singular matrix */
-    bool pardiso_repeated_perturbation_means_singular_;
     //@}
 
     /** @name Initialization flags */
@@ -148,42 +137,31 @@ namespace Ipopt
 
     /** @name Solver specific information */
     //@{
-    /** Internal data address pointers. */
-    void** PT_;
-    /** Maximal number of factors with identical nonzero
-     *  structure. Here, we only store one factorization. Is always 1.*/
-    ipfint MAXFCT_;
-    /** Actual matrix for the solution phase. Is always 1.*/
-    ipfint MNUM_;
-    /** Matrix type; real and symmetric indefinite.  Is always -2.*/
-    ipfint MTYPE_;
-    /** Parameter and info array for Pardiso. */
+    /** Integer parameter array for WSSMP. */
     ipfint* IPARM_;
-    /** Message level. */
-    ipfint MSGLVL_;
-    //@}
-
-    /**@name Some counters for debugging */
-    //@{
-    Index debug_last_iter_;
-    Index debug_cnt_;
+    /** Double precision parameter array for WSSMP. */
+    double* DPARM_;
+    /** WSSMP's permutation vector */
+    ipfint* PERM_;
+    /** WSSMP's inverse permutation vector */
+    ipfint* INVP_;
     //@}
 
     /** @name Internal functions */
     //@{
-    /** Call Pardiso to do the analysis phase.
+    /** Call Wsmp to do the analysis phase.
      */
     ESymSolverStatus SymbolicFactorization(const Index* ia,
                                            const Index* ja);
 
-    /** Call Pardiso to factorize the Matrix.
+    /** Call Wsmp to factorize the Matrix.
      */
     ESymSolverStatus Factorization(const Index* ia,
                                    const Index* ja,
                                    bool check_NegEVals,
                                    Index numberOfNegEVals);
 
-    /** Call Pardiso to do the Solve.
+    /** Call Wsmpx to do the Solve.
      */
     ESymSolverStatus Solve(const Index* ia,
                            const Index* ja,

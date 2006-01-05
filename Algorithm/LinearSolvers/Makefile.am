@@ -43,6 +43,11 @@ if HAVE_TAUCS
 	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp
 endif
 
+if HAVE_WSMP
+  liblinsolvers_a_SOURCES += \
+	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
+endif
+
 
 CXXFLAGS += -I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
@@ -63,7 +68,8 @@ ASTYLE_FILES = \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
 	IpTSymScalingMethod.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
-	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak
+	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak \
+	IpWsmpSolverInterface.cppbak IpWsmpSolverInterface.hppbak
 
 
 ASTYLE = @ASTYLE@

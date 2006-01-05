@@ -1083,7 +1083,7 @@ fi
 
 AC_ARG_WITH([taucs],
             AC_HELP_STRING([--with-taucs],
-                           [specify TAUCS library and dependencies (unsupported)]),
+                           [specify TAUCS library and dependencies]),
             [use_taucs=$withval], [use_taucs=no])
 
 if test ! "$use_taucs" = "no"; then
@@ -1091,10 +1091,34 @@ if test ! "$use_taucs" = "no"; then
   IPADDLIBS="$use_taucs $IPADDLIBS"
 
   AC_DEFINE(HAVE_TAUCS,1,
-            [Define to 1 if TAUCS is available (unsupported)])
+            [Define to 1 if TAUCS is available])
 
   AC_ARG_VAR(TAUCS_INCFLAGS,[Flags for including taucs header files])
   CXXFLAGS="$CXXFLAGS $TAUCS_INCFLAGS"
+fi
+
+########
+# WSMP #
+########
+
+AC_ARG_WITH([wsmp],
+            AC_HELP_STRING([--with-wsmp],
+                           [specify WSMP library]),
+            [use_wsmp=$withval], [use_wsmp=no])
+
+if test ! "$use_wsmp" = "no"; then
+  LIBS="$use_wsmp $LIBS"
+  IPADDLIBS="$use_wsmp $IPADDLIBS"
+
+  AC_LANG_PUSH(Fortran 77)
+  AC_MSG_CHECKING([whether user-supplied WSMP library \"$use_wsmp\" works])
+  AC_TRY_LINK([],[      call WSSMP()],
+              [AC_MSG_RESULT(yes)],
+              [AC_MSG_ERROR([WSMP library $use_wsmp does not seem to work])])
+  AC_LANG_POP(Fortran 77)
+
+  AC_DEFINE(HAVE_WSMP,1,
+            [Define to 1 if WSMP is available])
 fi
 
 # Check if at least one linear solver was found
@@ -1106,7 +1130,7 @@ AC_ARG_ENABLE([distconf],,
     *) AC_MSG_ERROR(bad value ${enableval} for --enable-distconf) ;;
   esac],[distconf=false])
 
-if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no; then
+if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no; then
   if test "$distconf" = false; then
     AC_MSG_ERROR("No linear solver (such as MA27) available")
   fi
@@ -1325,6 +1349,7 @@ AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
 AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])
+AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
 AM_CONDITIONAL([BUILDASLDIR],[test "$use_asldir" = BUILD])
 AM_CONDITIONAL([BUILDAMPLINTERFACE],[test ! "$use_asldir" = "no"])

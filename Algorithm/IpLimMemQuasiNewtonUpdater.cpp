@@ -444,10 +444,6 @@ namespace Ipopt
         RestoreInternalDataBackup();
         break;
       }
-      if (IsValid(Qminus))
-        DBG_PRINT_MATRIX(3, "Qminus", *Qminus);
-      if (IsValid(Qplus))
-        DBG_PRINT_MATRIX(3, "Qplus", *Qplus);
 
       // Compute Vtilde = Y - B_0*S
       SmartPtr<MultiVectorMatrix> Vtilde = Y_->MakeNewMultiVectorMatrix();

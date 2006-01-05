@@ -18,6 +18,9 @@
 #ifdef HAVE_PARDISO
 # include "IpPardisoSolverInterface.hpp"
 #endif
+#ifdef HAVE_WSMP
+# include "IpWsmpSolverInterface.hpp"
+#endif
 
 namespace Ipopt
 {
@@ -40,6 +43,12 @@ namespace Ipopt
 
     PardisoSolverInterface::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Pardiso Linear Solver");
+#endif
+
+#ifdef HAVE_WSMP
+
+    WsmpSolverInterface::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("WSMP Linear Solver");
 #endif
 
     roptions->SetRegisteringCategory("Uncategorized");

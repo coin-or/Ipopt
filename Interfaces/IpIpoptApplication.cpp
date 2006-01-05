@@ -186,6 +186,10 @@ namespace Ipopt
 
           categories.push_back("Pardiso Linear Solver");
 #endif
+#ifdef HAVE_WSMP
+
+          categories.push_back("WSMP Linear Solver");
+#endif
 
           categories.push_back("Uncategorized");
           reg_options->OutputOptionDocumentation(*jnlst_, categories);

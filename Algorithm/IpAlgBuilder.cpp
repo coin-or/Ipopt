@@ -50,6 +50,9 @@
 #ifdef HAVE_TAUCS
 # include "IpTAUCSSolverInterface.hpp"
 #endif
+#ifdef HAVE_WSMP
+# include "IpWsmpSolverInterface.hpp"
+#endif
 
 namespace Ipopt
 {
@@ -60,7 +63,7 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Undocumented");
-    roptions->AddStringOption4(
+    roptions->AddStringOption5(
       "linear_solver",
       "Linear solver used for step computations.",
       "ma27",
@@ -68,6 +71,7 @@ namespace Ipopt
       "ma57", "use the Harwell routine MA57",
       "pardiso", "use the Pardiso package",
       "taucs", "use TAUCS package",
+      "wsmp", "use WSMP package",
       "Determines which linear algebra package is to be used for the "
       "solution of the augmented linear system (for obtaining the search "
       "directions). "
@@ -184,6 +188,16 @@ namespace Ipopt
 
       THROW_EXCEPTION(OPTION_INVALID,
                       "Selected linear solver TAUCS not available.");
+#endif
+
+    }
+    else if (linear_solver=="wsmp") {
+#ifdef HAVE_WSMP
+      SolverInterface = new WsmpSolverInterface();
+#else
+
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Selected linear solver WSMP not available.");
 #endif
 
     }

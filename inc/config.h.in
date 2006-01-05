@@ -101,7 +101,7 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
-/* Define to 1 if TAUCS is available (unsupported) */
+/* Define to 1 if TAUCS is available */
 #undef HAVE_TAUCS
 
 /* Define to 1 if you have the <time.h> header file. */
@@ -112,6 +112,9 @@
 
 /* Define to 1 if va_copy is avaliable */
 #undef HAVE_VA_COPY
+
+/* Define to 1 if WSMP is available */
+#undef HAVE_WSMP
 
 /* If defined, debug sanity checks are performed during runtime */
 #undef IP_DEBUG
