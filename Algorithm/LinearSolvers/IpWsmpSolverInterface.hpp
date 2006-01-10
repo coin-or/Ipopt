@@ -120,6 +120,10 @@ namespace Ipopt
     Index wsmp_num_threads_;
     /** Ordering option for WSSMP (is IPARM(16)) */
     Index wsmp_ordering_option_;
+    /** Pivol tolerance */
+    Number wsmp_pivtol_;
+    /** Maximal pivot tolerance */
+    Number wsmp_pivtolmax_;
     //@}
 
     /** @name Information about most recent factorization/solve */
@@ -133,6 +137,9 @@ namespace Ipopt
     /** Flag indicating if internal data is initialized.
      *  For initialization, this object needs to have seen a matrix */
     bool initialized_;
+    /** Flag indicating if the matrix has to be refactorized because
+     *  the pivot tolerance has been changed. */
+    bool pivtol_changed_;
     //@}
 
     /** @name Solver specific information */

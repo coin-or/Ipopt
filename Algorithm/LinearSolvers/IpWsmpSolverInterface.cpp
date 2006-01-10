@@ -90,6 +90,18 @@ namespace Ipopt
       "Determines how ordering is done in WSMP",
       -2, 3, 1,
       "This corresponds to the value of WSSMP's IPARM(16).");
+    roptions->AddBoundedNumberOption(
+      "wsmp_pivtol",
+      "Pivot tolerance for the linear solver WSMP.",
+      0.0, true, 1.0, true, 1e-4,
+      "A smaller number pivots for sparsity, "
+      "a larger number pivots for stability.");
+    roptions->AddBoundedNumberOption(
+      "wsmp_pivtolmax",
+      "Maximum pivot tolerance for the linear solver WSMP.",
+      0.0, true, 1.0, true, 1e-2,
+      "Ipopt may increase pivtol as high as pivtolmax "
+      "to get a more accurate solution to the linear system.");
   }
 
   bool WsmpSolverInterface::InitializeImpl(const OptionsList& options,
@@ -98,10 +110,20 @@ namespace Ipopt
     options.GetIntegerValue("wsmp_num_threads", wsmp_num_threads_, prefix);
     options.GetIntegerValue("wsmp_ordering_option", wsmp_ordering_option_,
                             prefix);
+    options.GetNumericValue("wsmp_pivtol", wsmp_pivtol_, prefix);
+    if(options.GetNumericValue("wsmp_pivtolmax", wsmp_pivtolmax_, prefix)) {
+      ASSERT_EXCEPTION(wsmp_pivtolmax_>=wsmp_pivtol_, OPTION_INVALID,
+                       "Option \"wsmp_pivtolmax\": This value must be between "
+                       "wsmp_pivtol and 1.");
+    }
+    else {
+      wsmp_pivtolmax_ = Max(wsmp_pivtolmax_, wsmp_pivtol_);
+    }
 
     // Reset all private data
     dim_=0;
     initialized_=false;
+    pivtol_changed_ = false;
     delete[] a_;
     delete[] PERM_;
     delete[] INVP_;
@@ -118,7 +140,7 @@ namespace Ipopt
     IPARM_[2] = 0;
     F77_FUNC(wssmp,WSSMP)(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                           NULL, NULL, NULL, NULL, NULL, IPARM_, DPARM_);
-    // IPARM_[9] = ?? // scaling
+    // IPARM_[9] = ?? // scaling - if we do this we need to reset a_ after pivtol changed
     IPARM_[14] = 0; // no restrictions on pivoting (ignored for
     // Bunch-Kaufman)
     IPARM_[15] = wsmp_ordering_option_; // ordering option
@@ -132,8 +154,8 @@ namespace Ipopt
     IPARM_[10] = 1; // THis is not used by Bunch/Kaufman, but for L D
     // L^T without pivoting it is the value we used
     // before
-    DPARM_[10] = 4.e-16;
-    DPARM_[20] = 1.e200;
+
+    IPARM_[9] = 0; // TURN OFF SCALING (This should be a user option ToDo)
 
     // Check for SPINLOOPTIME and YIELDLOOPTIME?
 
@@ -154,7 +176,8 @@ namespace Ipopt
     DBG_ASSERT(initialized_);
 
     // check if a factorization has to be done
-    if (new_matrix) {
+    if (new_matrix || pivtol_changed_) {
+      pivtol_changed_ = false;
       // perform the factorization
       ESymSolverStatus retval;
       retval = Factorization(ia, ja, check_NegEVals, numberOfNegEVals);
@@ -265,6 +288,7 @@ namespace Ipopt
     ipfint NAUX = 0;
     IPARM_[1] = 3; // numerical factorization
     IPARM_[2] = 3; // numerical factorization
+    DPARM_[10] = wsmp_pivtol_; // set current pivolt tolerance
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, NULL, PERM_, INVP_, NULL, NULL,
                           NULL, NULL, &NAUX, NULL, IPARM_, DPARM_);
     Index ierror = IPARM_[63];
@@ -328,9 +352,17 @@ namespace Ipopt
     ipfint NRHS = nrhs;
     ipfint NAUX = 0;
     IPARM_[1] = 4; // Forward and Backward Elimintation
-    IPARM_[2] = 5; // Iterative refinement
+    IPARM_[2] = 4; // Iterative refinement
     IPARM_[5] = 0; // ANSHUL: Does that make sense???
 
+    /*
+    // DELETEME
+    for (Index j=0; j<NRHS; j++) {
+      for (Index i=0; i<N; i++) {
+        printf("RHS[%3d,%d] = %e\n",i,j,rhs_vals[i+N*j]);
+      }
+    }
+    */
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, NULL, PERM_, INVP_,
                           rhs_vals, &LDB, &NRHS, NULL, &NAUX,
                           NULL, IPARM_, DPARM_);
@@ -365,8 +397,20 @@ namespace Ipopt
 
   bool WsmpSolverInterface::IncreaseQuality()
   {
-    // Ask Anshul if we can do something here
-    return false;
+    DBG_START_METH("WsmpSolverInterface::IncreaseQuality",dbg_verbosity);
+    if (wsmp_pivtol_ == wsmp_pivtolmax_) {
+      return false;
+    }
+    pivtol_changed_ = true;
+
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Indreasing pivot tolerance for WSMP from %7.2e ",
+                   wsmp_pivtol_);
+    wsmp_pivtol_ = Min(wsmp_pivtolmax_, pow(wsmp_pivtol_,0.75));
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "to %7.2e.\n",
+                   wsmp_pivtol_);
+    return true;
   }
 
 } // namespace Ipopt

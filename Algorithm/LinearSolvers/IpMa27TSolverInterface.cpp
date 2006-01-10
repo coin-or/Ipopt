@@ -114,8 +114,8 @@ namespace Ipopt
     options.GetNumericValue("ma27_pivtol", pivtol_, prefix);
     if(options.GetNumericValue("ma27_pivtolmax", pivtolmax_, prefix)) {
       ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OPTION_INVALID,
-                       "Option \"pivtolmax\": This value must be between "
-                       "pivtol and 1.");
+                       "Option \"ma27_pivtolmax\": This value must be between "
+                       "ma27_pivtol and 1.");
     }
     else {
       pivtolmax_ = Max(pivtolmax_, pivtol_);
@@ -502,7 +502,7 @@ namespace Ipopt
     pivtol_changed_ = true;
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Indreasing pivot tolerance  for MA27 from %7.2e ",
+                   "Indreasing pivot tolerance for MA27 from %7.2e ",
                    pivtol_);
     pivtol_ = Min(pivtolmax_, pow(pivtol_,0.75));
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
