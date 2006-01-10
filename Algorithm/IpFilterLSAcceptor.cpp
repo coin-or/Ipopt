@@ -218,6 +218,17 @@ namespace Ipopt
   {
     DBG_START_METH("FilterLSAcceptor::IsFtype",
                    dbg_verbosity);
+    Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                   "reference_theta = %e reference_gradBarrTDelta = %e\n",
+                   reference_theta_, reference_gradBarrTDelta_);
+    Number mach_eps = std::numeric_limits<Number>::epsilon();
+    if (reference_theta_==0. &&  reference_gradBarrTDelta_ > 0. &&
+        reference_gradBarrTDelta_ < mach_eps) {
+       reference_gradBarrTDelta_ = -mach_eps;
+       Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                      "reference_theta is slightly positive at feasible point.  Setting it to %e\n",
+                      reference_gradBarrTDelta_);
+    }
     DBG_ASSERT(reference_theta_>0. || reference_gradBarrTDelta_ < 0.0);
     return (reference_gradBarrTDelta_ < 0.0 &&
             alpha_primal_test*pow(-reference_gradBarrTDelta_,s_phi_) >
