@@ -103,13 +103,12 @@ namespace Ipopt
     /** Most recent value for eta in the restoration phase objective
      *  function (only for update_for_resto_ = true) */
     Number last_eta_;
-    /** Most recent tag for the scaling factors DR_x in the
-     *  restoration phase objective function (only for
-     *  update_for_resto_ = true) */
-    TaggedObject::Tag last_DR_x_tag_;
     /** Current DR_x scaling factors in the restoration phase
-     *  objective function (only for update_for_resto_ = true) */
+     *  objective function (only for update_for_resto_ = true).  This
+     *  should not change throughout one restoration phase. */
     SmartPtr<const Vector> curr_DR_x_;
+    /** Tag  for curr_DR_x_ */
+    TaggedObject::Tag curr_DR_x_tag_;
     /** Current DR_x scaling factors in the restoration phase
      *  objective function in the smaller space for the approxiation -
      *  this is only computed if the space is indeed smaller than the
@@ -120,7 +119,7 @@ namespace Ipopt
     Number curr_eta_;
     /** Flag inidicating whether DR_x or eta have changed since the
      *  last update */
-    bool eta_dr_changed_;
+    bool eta_changed_;
 
     /** Counter for successive iterations in which the update was
      *  skipped */
@@ -160,6 +159,11 @@ namespace Ipopt
     /** Flag indicating whether SdotS_ is update to date from most
      * recent update. */
     bool SdotS_uptodate_;
+    /** DR * S (only for restoration phase) */
+    SmartPtr<MultiVectorMatrix> DRS_;
+    /** For efficient implementation, we store the S^T S DR * S. Only
+     *  for restoration phase. */
+    SmartPtr<DenseSymMatrix> STDRS_;
     /** Primal variables x from most recent update */
     SmartPtr<const Vector> last_x_;
     /** Gradient of objective function w.r.t. x at x_last_ */
@@ -200,6 +204,11 @@ namespace Ipopt
     /** Flag indicating whether SdotS_ is update to date from most
      *  recent update (backup). */
     bool SdotS_uptodate_old_;
+    /** DR * S (only for restoration phase) (backup) */
+    SmartPtr<MultiVectorMatrix> DRS_old_;
+    /** For efficient implementation, we store the S^T S DR * S. Only
+     *  for restoration phase. (backup) */
+    SmartPtr<DenseSymMatrix> STDRS_old_;
     //@}
 
     /** @name Auxilliary function */
@@ -247,6 +256,16 @@ namespace Ipopt
      *  DenseGenMatrixSpace with dimension one is created. */
     void AugmentSdotSMatrix(SmartPtr<DenseSymMatrix>& V,
                             const MultiVectorMatrix& S);
+    /** Given a DenseSymMatrix V, create a new DenseGenMatrixSpace
+     *  with one more dimension, and return V as a member of that
+     *  space, consisting of all previous elements, and in addition
+     *  elements s_i^TDRs_j for the new entries, where s are the
+     *  vectors in the MultiVector S, and DRs are the vectors in DRS.
+     *  If V is NULL, then a new DenseGenMatrixSpace with dimension
+     *  one is created. */
+    void AugmentSTDRSMatrix(SmartPtr<DenseSymMatrix>& V,
+                            const MultiVectorMatrix& S,
+                            const MultiVectorMatrix& DRS);
 
     /** Given a MutliVector V, get rid of the first column, shift all
      *  other columns to the left, and make v_new the last column.
@@ -275,6 +294,14 @@ namespace Ipopt
      *  method and returned as V. */
     void ShiftSdotSMatrix(SmartPtr<DenseSymMatrix>& V,
                           const MultiVectorMatrix& S);
+    /** Given a DenseSymMatrix V, shift everything up one row and
+     *  column, and fill the new entries as s_i^TDRs_j, where s are
+     *  the vectors in the MultiVector S, and DRs are the vectors in
+     *  DRS. The entity that V points to at the call, is not changed -
+     *  a new entity is created in the method and returned as V. */
+    void ShiftSTDRSMatrix(SmartPtr<DenseSymMatrix>& V,
+                          const MultiVectorMatrix& S,
+                          const MultiVectorMatrix& DRS);
     /** Method for recomputing Y from scratch, using Ypart (only for
      *  restoration phase) */
     void RecalcY(Number eta, const Vector& DR_x,

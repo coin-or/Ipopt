@@ -28,7 +28,7 @@ namespace Ipopt
     roptions->AddLowerBoundedIntegerOption(
       "limited_memory_max_history",
       "Maximum size of the history for the limited quasi-Newton Hessian approximation.",
-      1, 10,
+      0, 10,
       "This option determines the number of most recent iterations that are "
       "taken into account for the limited-memory quasi-Newton approximation.");
 
@@ -96,6 +96,10 @@ namespace Ipopt
     U_ = NULL;
     SdotS_ = NULL;
     SdotS_uptodate_ = false;
+    STDRS_ = NULL;
+    DRS_ = NULL;
+    curr_DR_x_tag_ = 0;
+
     last_x_ = NULL;
     last_grad_f_ = NULL;
     last_jac_c_ = NULL;
@@ -103,7 +107,6 @@ namespace Ipopt
     lm_skipped_iter_ = 0;
 
     last_eta_ = -1.;
-    last_DR_x_tag_ = 0;
 
     return true;
   }
@@ -149,6 +152,8 @@ namespace Ipopt
       DBG_ASSERT(resto_nlp);
       curr_DR_x_ = resto_nlp->DR_x();
       DBG_ASSERT(IsValid(curr_DR_x_));
+      DBG_ASSERT(curr_DR_x_tag_==0 || curr_DR_x_tag_==curr_DR_x_->GetTag());
+      curr_DR_x_tag_ = curr_DR_x_->GetTag();
       if (IsNull(P_LM)) {
         curr_red_DR_x_ = curr_DR_x_;
       }
@@ -158,8 +163,9 @@ namespace Ipopt
         curr_red_DR_x_ = ConstPtr(tmp);
       }
       curr_eta_ = resto_nlp->Eta(IpData().curr_mu());
-      eta_dr_changed_ = (curr_eta_!=last_eta_ ||
-                         last_DR_x_tag_!=curr_DR_x_->GetTag());
+      eta_changed_ = (curr_eta_!=last_eta_);
+      Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                     "curr_eta (for B0) is %e\n", curr_eta_);
     }
 
     // Get the current values
@@ -220,12 +226,18 @@ namespace Ipopt
       U_ = NULL;
       SdotS_ = NULL;
       SdotS_uptodate_ = false;
+      STDRS_ = NULL;
+      DRS_ = NULL;
 
-      // Set up W to be multiple of I
-      sigma_ = limited_memory_init_val_; // not for resto
+      if (update_for_resto_) {
+        sigma_ = -1;
+        last_eta_ = -1.;
+      }
+      else {
+        // Set up W to be multiple of I
+        sigma_ = limited_memory_init_val_; // not for resto
+      }
       SetW();
-      last_eta_ = -1.;
-      last_DR_x_tag_ = 0;
       return;
     }
 
@@ -272,6 +284,7 @@ namespace Ipopt
     y_full_new = NULL;
     DBG_PRINT_VECTOR(2, "s_new", *s_new);
     DBG_PRINT_VECTOR(2, "ypart_new", *y_new);
+
     // In the restoration phase case, y_new is only the y without the
     // objective part, so now we add the explicitly known objective
     // part
@@ -286,194 +299,251 @@ namespace Ipopt
 
     bool skipping = false;
     bool retroactive_skip = false;
-    switch (limited_memory_update_type_) {
-      case BFGS: {
-        skipping = CheckSkippingBFGS(*s_new, *y_new);
-        DBG_PRINT_VECTOR(2, "y_new", *y_new);
-        if (skipping) {
+
+    // Sometimes the change in the primal variables is very small, and
+    // we should then skip the update...
+    // ToDo: Find good number or do relative test?
+    Number s_new_max = s_new->Amax();
+    Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                   "In limited-memory update, s_new_max is %e\n", s_new_max);
+    if (s_new_max<100.*std::numeric_limits<Number>::epsilon()) {
+      skipping = true;
+      IpData().Append_info_string("WS");
+    }
+
+    if (!skipping) {
+      switch (limited_memory_update_type_) {
+        case BFGS: {
+          skipping = CheckSkippingBFGS(*s_new, *y_new);
+          DBG_PRINT_VECTOR(2, "y_new", *y_new);
+          if (skipping) {
+            break;
+          }
+          bool augment_memory = UpdateInternalData(*s_new, *y_new, ypart_new);
+          DBG_PRINT_MATRIX(2, "Y", *Y_);
+
+          Number sTy_new = s_new->Dot(*y_new);
+          if (!update_for_resto_) {
+            // Compute the initial matrix B_0
+            switch (limited_memory_initialization_) {
+              case SCALAR1:
+              sigma_ = sTy_new/pow(s_new->Nrm2(),2);
+              break;
+              case SCALAR2:
+              sigma_ = pow(y_new->Nrm2(),2)/sTy_new;
+              break;
+              case CONSTANT:
+              sigma_ = limited_memory_init_val_;
+              break;
+            }
+            Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                           "sigma (for B0) is %e\n", sigma_);
+          }
+
+          if (limited_memory_max_history_ == 0 ) {
+            break;
+          }
+
+          // First update V - here only the last column is updated
+          DBG_ASSERT(sTy_new > 0.);
+          SmartPtr<Vector> v_new = y_new->MakeNewCopy();
+          v_new->Scal(1./sqrt(sTy_new));
+          if (augment_memory) {
+            AugmentMultiVector(V_, *v_new);
+          }
+          else {
+            ShiftMultiVector(V_, *v_new);
+          }
+
+          // Compute Ltilde = L * diag(D^{-1/2});
+          SmartPtr<DenseVector> Dtilde = D_->MakeNewDenseVector();
+          Dtilde->Copy(*D_);
+          Dtilde->ElementWiseSqrt();
+          Dtilde->ElementWiseReciprocal();
+          SmartPtr<DenseGenMatrix> Ltilde = L_->MakeNewDenseGenMatrix();
+          DBG_PRINT_MATRIX(3, "D", *D_);
+          DBG_PRINT_MATRIX(3, "L", *L_);
+          Ltilde->Copy(*L_);
+          Ltilde->ScaleColumns(*Dtilde);
+          DBG_PRINT_MATRIX(3, "Ltilde", *Ltilde);
+
+          // M = Ltilde * Ltilde^T
+          SmartPtr<DenseSymMatrixSpace> Mspace =
+            new DenseSymMatrixSpace(curr_lm_memory_);
+          SmartPtr<DenseSymMatrix> M = Mspace->MakeNewDenseSymMatrix();
+          M->HighRankUpdate(false, 1., *Ltilde, 0.);
+
+          // M += S^T B_0 S
+          if (!update_for_resto_) {
+            // For now, we assume that B_0 is sigma*I
+            DBG_ASSERT(SdotS_uptodate_);
+            DBG_PRINT_MATRIX(3, "SdotS", *SdotS_);
+            M->AddMatrix(sigma_, *SdotS_, 1.);
+          }
+          else {
+            DBG_PRINT_MATRIX(3, "STDRS", *STDRS_);
+            M->AddMatrix(curr_eta_, *STDRS_, 1.);
+          }
+
+          // Compute Cholesky factor J with M = J J^T
+          DBG_PRINT_MATRIX(3, "M", *M);
+          SmartPtr<DenseGenMatrix> J = L_->MakeNewDenseGenMatrix();
+          bool cholesky_retval = J->ComputeCholeskyFactor(*M);
+          DBG_PRINT_MATRIX(3, "J", *J);
+          DBG_ASSERT(cholesky_retval);
+
+          // Compute C = J^{-T}
+          SmartPtr<DenseGenMatrix> C = J->MakeNewDenseGenMatrix();
+          C->FillIdentity();
+          J->CholeskyBackSolveMatrix(true, 1., *C);
+
+          // Compute U = B_0 * S * C
+          U_ = S_->MakeNewMultiVectorMatrix();
+          if (!update_for_resto_) {
+            DBG_ASSERT(sigma_>0.);
+            U_->AddRightMultMatrix(sigma_, *S_, *C, 0.);
+          }
+          else {
+            DBG_ASSERT(sigma_<0.);
+            U_->AddRightMultMatrix(curr_eta_, *DRS_, *C, 0.);
+          }
+
+          // Compute Lbar = Ltilde^T * C
+          SmartPtr<DenseGenMatrix> Lbar = Ltilde->MakeNewDenseGenMatrix();
+          Lbar->AddMatrixProduct(1., *Ltilde, true, *C, false, 0.);
+
+          // Compute U += V * Lbar;
+          U_->AddRightMultMatrix(1., *V_, *Lbar, 1.);
           break;
         }
-        bool augment_memory = UpdateInternalData(*s_new, *y_new, ypart_new);
-        DBG_PRINT_MATRIX(2, "Y", *Y_);
+        case SR1:
+        // TODO IMPLEMENT WELL!
+        if (IpData().info_regu_x()>0.) {
+          RestoreInternalDataBackup();
+          Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                         "Undoing most recent SR1 update.\n");
+          IpData().Append_info_string("Wb");
+          retroactive_skip = true;
+        }
 
-        // First update V - here only the last column is updated
-        Number sTy_new = s_new->Dot(*y_new);
-        DBG_ASSERT(sTy_new > 0.);
-        SmartPtr<Vector> v_new = y_new->MakeNewCopy();
-        v_new->Scal(1./sqrt(sTy_new));
-        if (augment_memory) {
-          AugmentMultiVector(V_, *v_new);
+        // We don't know if the update has to be skipped, so we store a
+        // backup of all internal data that can be restored in case we
+        // have to skip the update.
+        StoreInternalDataBackup();
+
+        // Update the internal stuff
+        UpdateInternalData(*s_new, *y_new, ypart_new);
+
+        if (!update_for_resto_) {
+          // Set B0 for now as we do for BFGS - except that we take the
+          // abs value?
+          //
+          // It seems that it is not a good idea to use that update if
+          // this is the first contribution to the limited-memory history,
+          // since otherwise the update will be skipped (and then all
+          // updates will be skipped)
+          if (curr_lm_memory_==1) {
+            sigma_ = limited_memory_init_val_;
+          }
+          else {
+            // ToDo: What lower bound to use?
+            Number sTy_new = Max(1e-8, fabs(s_new->Dot(*y_new)));
+            DBG_ASSERT(sTy_new!=0.);
+            switch (limited_memory_initialization_) {
+              case SCALAR1:
+              sigma_ = sTy_new/pow(s_new->Nrm2(),2);
+              break;
+              case SCALAR2:
+              sigma_ = pow(y_new->Nrm2(),2)/sTy_new;
+              break;
+              case CONSTANT:
+              sigma_ = limited_memory_init_val_;
+              break;
+            }
+          }
+          Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                         "sigma (for B0) is %e\n", sigma_);
+          // ToDo Decide what to use for SR1 - or at least use different
+          // skipping rule
+        }
+
+        if (limited_memory_max_history_ == 0 ) {
+          break;
+        }
+
+        DBG_PRINT_VECTOR(2,"S",*S_);
+        DBG_PRINT_VECTOR(2,"Y",*Y_);
+
+        // Compute Z as D + L + L^T - S^TB_0S
+        SmartPtr<DenseSymMatrix> Z;
+        if (!update_for_resto_) {
+          Z = SdotS_->MakeNewDenseSymMatrix();
+          DBG_PRINT_MATRIX(3, "SdotS", *SdotS_);
+          DBG_PRINT((1, "sigma_ = %e\n", sigma_));
+          Z->AddMatrix(-sigma_, *SdotS_, 0.);
         }
         else {
-          ShiftMultiVector(V_, *v_new);
+          Z = STDRS_->MakeNewDenseSymMatrix();
+          Z->AddMatrix(-curr_eta_, *STDRS_, 0.);
         }
 
-        // Compute the initial matrix B_0
-        switch (limited_memory_initialization_) {
-          case SCALAR1:
-          sigma_ = sTy_new/pow(s_new->Nrm2(),2);
-          break;
-          case SCALAR2:
-          sigma_ = pow(y_new->Nrm2(),2)/sTy_new;
-          break;
-          case CONSTANT:
-          sigma_ = limited_memory_init_val_;
-          break;
-        }
-
-        // Compute Ltilde = L * diag(D^{-1/2});
-        SmartPtr<DenseVector> Dtilde = D_->MakeNewDenseVector();
-        Dtilde->Copy(*D_);
-        Dtilde->ElementWiseSqrt();
-        Dtilde->ElementWiseReciprocal();
-        SmartPtr<DenseGenMatrix> Ltilde = L_->MakeNewDenseGenMatrix();
-        DBG_PRINT_MATRIX(3, "D", *D_);
         DBG_PRINT_MATRIX(3, "L", *L_);
-        Ltilde->Copy(*L_);
-        Ltilde->ScaleColumns(*Dtilde);
-        DBG_PRINT_MATRIX(3, "Ltilde", *Ltilde);
-
-        // M = Ltilde * Ltilde^T
-        SmartPtr<DenseSymMatrixSpace> Mspace =
-          new DenseSymMatrixSpace(curr_lm_memory_);
-        SmartPtr<DenseSymMatrix> M = Mspace->MakeNewDenseSymMatrix();
-        M->HighRankUpdate(false, 1., *Ltilde, 0.);
-
-        // M += S^T B_0 S
-        // For now, we assume that B_0 is sigma*I
-        DBG_ASSERT(SdotS_uptodate_);
-        DBG_PRINT_MATRIX(3, "SdotS", *SdotS_);
-        M->AddMatrix(sigma_, *SdotS_, 1.);
-
-        // Compute Cholesky factor J with M = J J^T
-        DBG_PRINT_MATRIX(3, "M", *M);
-        SmartPtr<DenseGenMatrix> J = L_->MakeNewDenseGenMatrix();
-        bool cholesky_retval = J->ComputeCholeskyFactor(*M);
-        DBG_PRINT_MATRIX(3, "J", *J);
-        DBG_ASSERT(cholesky_retval);
-
-        // Compute C = J^{-T}
-        SmartPtr<DenseGenMatrix> C = J->MakeNewDenseGenMatrix();
-        C->FillIdentity();
-        J->CholeskyBackSolveMatrix(true, 1., *C);
-
-        // Compute U = B_0 * S * C
-        U_ = S_->MakeNewMultiVectorMatrix();
-        DBG_ASSERT(sigma_>0.);
-        U_->AddRightMultMatrix(sigma_, *S_, *C, 0.);
-
-        // Compute Lbar = Ltilde^T * C
-        SmartPtr<DenseGenMatrix> Lbar = Ltilde->MakeNewDenseGenMatrix();
-        Lbar->AddMatrixProduct(1., *Ltilde, true, *C, false, 0.);
-
-        // Compute U += V * Lbar;
-        U_->AddRightMultMatrix(1., *V_, *Lbar, 1.);
-        break;
-      }
-      case SR1:
-      // TODO IMPLEMENT WELL!
-      if (IpData().info_regu_x()>0.) {
-        RestoreInternalDataBackup();
-        Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
-                       "Undoing most recent SR1 update.\n");
-        IpData().Append_info_string("Wb");
-        retroactive_skip = true;
-      }
-
-      // We don't know if the update has to be skipped, so we store a
-      // backup of all internal data that can be restored in case we
-      // have to skip the update.
-      StoreInternalDataBackup();
-
-      // Update the internal stuff
-      UpdateInternalData(*s_new, *y_new, ypart_new);
-
-      // Set B0 for now as we do for BFGS - except that we take the
-      // abs value?
-      //
-      // It seems that it is not a good idea to use that update if
-      // this is the first contribution to the limited-memory history,
-      // since otherwise the update will be skipped (and then all
-      // updates will be skipped)
-      if (curr_lm_memory_==1) {
-        sigma_ = limited_memory_init_val_;
-      }
-      else {
-        Number sTy_new = fabs(s_new->Dot(*y_new));
-        DBG_ASSERT(sTy_new!=0.);
-        switch (limited_memory_initialization_) {
-          case SCALAR1:
-          sigma_ = sTy_new/pow(s_new->Nrm2(),2);
-          break;
-          case SCALAR2:
-          sigma_ = pow(y_new->Nrm2(),2)/sTy_new;
-          break;
-          case CONSTANT:
-          sigma_ = limited_memory_init_val_;
+        DBG_PRINT_VECTOR(3, "D", *D_);
+        Z->SpecialAddForLMSR1(*D_, *L_);
+        // Compute the eigenvectors Q and eignevalues E for Z
+        SmartPtr<DenseGenMatrix> Q = L_->MakeNewDenseGenMatrix();
+        SmartPtr<DenseVector> E = D_->MakeNewDenseVector();
+        DBG_PRINT_MATRIX(3, "Z", *Z);
+        bool retval = Q->ComputeEigenVectors(*Z, *E);
+        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
+                         "Eigenvalue decomposition failed for limited-memory SR1 update.");
+        DBG_PRINT_VECTOR(2, "E", *E);
+        DBG_PRINT_MATRIX(3, "Q", *Q);
+        SmartPtr<DenseGenMatrix> Qminus;
+        SmartPtr<DenseGenMatrix> Qplus;
+        // Split the eigenvectors and scale them
+        skipping = SplitEigenvalues(*Q, *E, Qminus, Qplus);
+        if (skipping) {
+          RestoreInternalDataBackup();
           break;
         }
-      }
-      // ToDo Decide what to use for SR1 - or at least use different
-      // skipping rule
 
-      DBG_PRINT_VECTOR(2,"S",*S_);
-      DBG_PRINT_VECTOR(2,"Y",*Y_);
-      DBG_ASSERT(SdotS_uptodate_);
-      // Compute Z as D + L + L^T - S^TB_0S
-      SmartPtr<DenseSymMatrix> Z = SdotS_->MakeNewDenseSymMatrix();
-      DBG_PRINT_MATRIX(3, "SdotS", *SdotS_);
-      DBG_PRINT((1, "sigma_ = %e\n", sigma_));
-      Z->AddMatrix(-sigma_, *SdotS_, 0.);
-      DBG_PRINT_MATRIX(3, "L", *L_);
-      DBG_PRINT_VECTOR(3, "D", *D_);
-      Z->SpecialAddForLMSR1(*D_, *L_);
-      // Compute the eigenvectors Q and eignevalues E for Z
-      SmartPtr<DenseGenMatrix> Q = L_->MakeNewDenseGenMatrix();
-      SmartPtr<DenseVector> E = D_->MakeNewDenseVector();
-      DBG_PRINT_MATRIX(3, "Z", *Z);
-      bool retval = Q->ComputeEigenVectors(*Z, *E);
-      ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                       "Eigenvalue decomposition failed for limited-memory SR1 update.");
-      DBG_PRINT_VECTOR(2, "E", *E);
-      DBG_PRINT_MATRIX(3, "Q", *Q);
-      SmartPtr<DenseGenMatrix> Qminus;
-      SmartPtr<DenseGenMatrix> Qplus;
-      // Split the eigenvectors and scale them
-      skipping = SplitEigenvalues(*Q, *E, Qminus, Qplus);
-      if (skipping) {
-        RestoreInternalDataBackup();
+        // Compute Vtilde = Y - B_0*S
+        SmartPtr<MultiVectorMatrix> Vtilde = Y_->MakeNewMultiVectorMatrix();
+        Vtilde->AddOneMultiVectorMatrix(1., *Y_, 0.);
+        if (!update_for_resto_) {
+          Vtilde->AddOneMultiVectorMatrix(-sigma_, *S_, 1.);
+        }
+        else {
+          DBG_ASSERT(sigma_<0.);
+          Vtilde->AddOneMultiVectorMatrix(-curr_eta_, *DRS_, 1.);
+        }
+
+        // Now get U as the Vtilde * Qminus
+        if (IsValid(Qminus)) {
+          SmartPtr<MultiVectorMatrixSpace> U_space =
+            new MultiVectorMatrixSpace(Qminus->NCols(), *s_new->OwnerSpace());
+          U_ = U_space->MakeNewMultiVectorMatrix();
+          U_->AddRightMultMatrix(1., *Vtilde, *Qminus, 0.);
+          DBG_PRINT_MATRIX(3, "U", *U_);
+        }
+        else {
+          U_ = NULL;
+        }
+
+        // Now get V as the Vtilde * Qplus
+        if (IsValid(Qplus)) {
+          SmartPtr<MultiVectorMatrixSpace> V_space =
+            new MultiVectorMatrixSpace(Qplus->NCols(), *s_new->OwnerSpace());
+          V_ = V_space->MakeNewMultiVectorMatrix();
+          V_->AddRightMultMatrix(1., *Vtilde, *Qplus, 0.);
+          DBG_PRINT_MATRIX(3, "V", *V_);
+        }
+        else {
+          V_ = NULL;
+        }
         break;
       }
-
-      // Compute Vtilde = Y - B_0*S
-      SmartPtr<MultiVectorMatrix> Vtilde = Y_->MakeNewMultiVectorMatrix();
-      Vtilde->AddOneMultiVectorMatrix(1., *Y_, 0.);
-      Vtilde->AddOneMultiVectorMatrix(-sigma_, *S_, 1.);
-
-      // Now get U as the Vtilde * Qminus
-      if (IsValid(Qminus)) {
-        SmartPtr<MultiVectorMatrixSpace> U_space =
-          new MultiVectorMatrixSpace(Qminus->NCols(), *s_new->OwnerSpace());
-        U_ = U_space->MakeNewMultiVectorMatrix();
-        U_->AddRightMultMatrix(1., *Vtilde, *Qminus, 0.);
-        DBG_PRINT_MATRIX(3, "U", *U_);
-      }
-      else {
-        U_ = NULL;
-      }
-
-      // Now get V as the Vtilde * Qplus
-      if (IsValid(Qplus)) {
-        SmartPtr<MultiVectorMatrixSpace> V_space =
-          new MultiVectorMatrixSpace(Qplus->NCols(), *s_new->OwnerSpace());
-        V_ = V_space->MakeNewMultiVectorMatrix();
-        V_->AddRightMultMatrix(1., *Vtilde, *Qplus, 0.);
-        DBG_PRINT_MATRIX(3, "V", *V_);
-      }
-      else {
-        V_ = NULL;
-      }
-      break;
     }
 
     if (!skipping) {
@@ -485,26 +555,6 @@ namespace Ipopt
       else {
         lm_skipped_iter_ = 0;
       }
-
-      /*
-      // DELETEME
-      const DenseVector* dx = dynamic_cast<const DenseVector*>
-      (GetRawPtr(IpData().curr()->x()));
-      DBG_ASSERT(dx);
-      SmartPtr<DenseVector> tmpx = dx->MakeNewDenseVector();
-      SmartPtr<DenseVector> tmpy = dx->MakeNewDenseVector();
-      for (Index i=0; i<dx->Dim(); i++) {
-      Number* tmpx_vals = tmpx->Values();
-      for (Index j=0; j<dx->Dim(); j++) {
-      tmpx_vals[j] = 0.;
-      }
-      tmpx_vals[i] = 1.;
-      W->MultVector(1., *tmpx, 0., *tmpy);
-      tmpx->Print(Jnlst(), J_SUMMARY, J_MAIN, "tmpx");
-      tmpy->Print(Jnlst(), J_SUMMARY, J_MAIN, "tmpy");
-      }
-      // ENDDELETEME
-      */
     }
     else { // if (!skipping) {
       IpData().Append_info_string("Ws");
@@ -526,9 +576,7 @@ namespace Ipopt
 
     if (update_for_resto_) {
       last_eta_ = curr_eta_;
-      last_DR_x_tag_ = curr_DR_x_->GetTag();
       curr_DR_x_ = NULL;
-      curr_red_DR_x_ = NULL;
     }
   }
 
@@ -545,6 +593,8 @@ namespace Ipopt
     L_old_ = L_;
     SdotS_old_ = SdotS_;
     SdotS_uptodate_old_ = SdotS_uptodate_;
+    STDRS_old_ = STDRS_;
+    DRS_old_ = DRS_;
     sigma_old_ = sigma_;
     V_old_ = V_;
     U_old_ = U_;
@@ -563,6 +613,8 @@ namespace Ipopt
     L_ = L_old_;
     SdotS_ = SdotS_old_;
     SdotS_uptodate_ = SdotS_uptodate_old_;
+    STDRS_ = STDRS_old_;
+    DRS_ = DRS_old_;
     sigma_ = sigma_old_;
     V_ = V_old_;
     U_ = U_old_;
@@ -580,6 +632,8 @@ namespace Ipopt
     L_old_ = NULL;
     SdotS_old_ = NULL;
     SdotS_uptodate_old_ = false;
+    STDRS_old_ = NULL;
+    DRS_old_ = NULL;
     V_old_ = NULL;
     U_old_ = NULL;
   }
@@ -590,6 +644,11 @@ namespace Ipopt
   {
     DBG_START_METH("LimMemQuasiNewtonUpdater::UpdateInternalData",
                    dbg_verbosity);
+
+    if (limited_memory_max_history_==0) {
+      return false;
+    }
+
     bool augment_memory;
     if (curr_lm_memory_ < limited_memory_max_history_) {
       augment_memory = true;
@@ -623,18 +682,20 @@ namespace Ipopt
       }
     }
     else {
+      // Compute DR*s_new;
+      SmartPtr<Vector> DRs_new = s_new.MakeNewCopy();
+      DRs_new->ElementWiseMultiply(*curr_red_DR_x_);
       if (augment_memory) {
         AugmentMultiVector(S_, s_new);
+        AugmentMultiVector(DRS_, *DRs_new);
         AugmentMultiVector(Ypart_, *ypart_new);
-        DBG_ASSERT(SdotS_uptodate_ || S_->NCols()==1);
-        AugmentSdotSMatrix(SdotS_, *S_);
-        SdotS_uptodate_ = true;
+        AugmentSTDRSMatrix(STDRS_, *S_, *DRS_);
       }
       else {
         ShiftMultiVector(S_, s_new);
+        ShiftMultiVector(DRS_, *DRs_new);
         ShiftMultiVector(Ypart_, *ypart_new);
-        DBG_ASSERT(SdotS_uptodate_);
-        ShiftSdotSMatrix(SdotS_, *S_);
+        ShiftSTDRSMatrix(STDRS_, *S_, *DRS_);
       }
       DBG_PRINT((1,"curr_eta = %e\n", curr_eta_));
       DBG_PRINT_VECTOR(2,"curr_red_DR_x", *curr_red_DR_x_);
@@ -654,6 +715,9 @@ namespace Ipopt
                    SmartPtr<DenseGenMatrix>& Qminus,
                    SmartPtr<DenseGenMatrix>& Qplus)
   {
+    DBG_START_METH("LimMemQuasiNewtonUpdater::SplitEigenvalues",
+                   dbg_verbosity);
+
     Index dim = E.Dim();
     DBG_ASSERT(dim==Q.NCols());
     DBG_ASSERT(dim==Q.NRows());
@@ -685,9 +749,12 @@ namespace Ipopt
       emin = Min(-Evals[nneg-1],Evals[nneg]);
     }
     Number ratio = emin/emax;
+    Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                   "Eigenvalues in SR1 update: emin=%e emax=%e ratio=%e\n",
+                   emin, emax, ratio);
     DBG_ASSERT(ratio>=0.);
     // ToDo make the following an option?
-    const Number tol = 1e-8;
+    const Number tol = 1e-12;
     if (ratio<tol) {
       return true;
     }
@@ -908,6 +975,42 @@ namespace Ipopt
   }
 
   void LimMemQuasiNewtonUpdater::
+  AugmentSTDRSMatrix(SmartPtr<DenseSymMatrix>& V,
+                     const MultiVectorMatrix& S,
+                     const MultiVectorMatrix& DRS)
+  {
+    Index ndim;
+    if (IsValid(V)) {
+      ndim = V->Dim();
+    }
+    else {
+      ndim = 0;
+    }
+    DBG_ASSERT(S.NCols()==ndim+1);
+
+    SmartPtr<DenseSymMatrixSpace> new_Vspace =
+      new DenseSymMatrixSpace(ndim+1);
+    SmartPtr<DenseSymMatrix> new_V =
+      new_Vspace->MakeNewDenseSymMatrix();
+    Number* newVvalues = new_V->Values();
+    if (IsValid(V)) {
+      const Number* Vvalues = V->Values();
+      for (Index j=0; j<ndim; j++) {
+        for (Index i=j; i<ndim; i++) {
+          newVvalues[i+j*(ndim+1)] = Vvalues[i+j*ndim];
+        }
+      }
+    }
+
+    for (Index j=0; j<ndim+1; j++) {
+      newVvalues[ndim + j*(ndim+1)] =
+        S.GetVector(ndim)->Dot(*DRS.GetVector(j));
+    }
+
+    V = new_V;
+  }
+
+  void LimMemQuasiNewtonUpdater::
   ShiftMultiVector(SmartPtr<MultiVectorMatrix>& V, const Vector& v_new)
   {
     Index ncols = V->NCols();
@@ -997,6 +1100,32 @@ namespace Ipopt
     V = new_V;
   }
 
+  void LimMemQuasiNewtonUpdater::
+  ShiftSTDRSMatrix(SmartPtr<DenseSymMatrix>& V,
+                   const MultiVectorMatrix& S,
+                   const MultiVectorMatrix& DRS)
+  {
+    Index ndim = V->Dim();
+    DBG_ASSERT(S.NCols()==ndim);
+
+    SmartPtr<DenseSymMatrix> new_V = V->MakeNewDenseSymMatrix();
+
+    Number* Vvalues = V->Values();
+    Number* new_Vvalues = new_V->Values();
+    for (Index j=0; j<ndim-1; j++) {
+      for (Index i=j; i<ndim-1; i++) {
+        new_Vvalues[i+j*ndim] = Vvalues[i+1+(j+1)*ndim];
+      }
+    }
+
+    for (Index j=0; j<ndim; j++) {
+      new_Vvalues[ndim-1 + j*ndim] =
+        S.GetVector(ndim-1)->Dot(*DRS.GetVector(j));
+    }
+
+    V = new_V;
+  }
+
   void LimMemQuasiNewtonUpdater::SetW()
   {
     SmartPtr<Vector> B0;
@@ -1033,18 +1162,38 @@ namespace Ipopt
     else {
       IpData().Set_W(GetRawPtr(W));
     }
+
+#ifdef PRINT_W
+    // DELETEME
+    const DenseVector* dx = dynamic_cast<const DenseVector*>
+                            (GetRawPtr(IpData().curr()->x()));
+    DBG_ASSERT(dx);
+    SmartPtr<DenseVector> tmpx = dx->MakeNewDenseVector();
+    SmartPtr<DenseVector> tmpy = dx->MakeNewDenseVector();
+    for (Index i=0; i<dx->Dim(); i++) {
+      Number* tmpx_vals = tmpx->Values();
+      for (Index j=0; j<dx->Dim(); j++) {
+        tmpx_vals[j] = 0.;
+      }
+      tmpx_vals[i] = 1.;
+      W->MultVector(1., *tmpx, 0., *tmpy);
+      tmpx->Print(Jnlst(), J_DETAILED, J_MAIN, "tmpx");
+      tmpy->Print(Jnlst(), J_DETAILED, J_MAIN, "tmpy");
+    }
+    // ENDDELETEME
+#endif
+
   }
 
   void LimMemQuasiNewtonUpdater::RecalcY(Number eta, const Vector& DR_x,
-                                         MultiVectorMatrix& S,
+                                         MultiVectorMatrix& DRS,
                                          MultiVectorMatrix& Ypart,
                                          SmartPtr<MultiVectorMatrix>& Y)
   {
-    SmartPtr<MultiVectorMatrixSpace> mvspace =
-      new MultiVectorMatrixSpace(Ypart.NCols(), *Ypart.ColVectorSpace());
+    SmartPtr<const MultiVectorMatrixSpace> mvspace =
+      Ypart.MultiVectorMatrixOwnerSpace();
     Y = mvspace->MakeNewMultiVectorMatrix();
-    Y->AddOneMultiVectorMatrix(eta, S, 0.);
-    Y->ScaleRows(DR_x);
+    Y->AddOneMultiVectorMatrix(eta, DRS, 0.);
     Y->AddOneMultiVectorMatrix(1., Ypart, 1.);
   }
 

@@ -53,8 +53,9 @@ namespace Ipopt
       return true;
     }
 
-    /** Method for creating the derived vector / matrix types
-     *  (Do not delete these, the ). */
+    /** Method for creating the derived vector / matrix types.  The
+     *  Hess_lagrangian_space pointer can be NULL if a quasi-Newton
+     *  options is chosen. */
     virtual bool GetSpaces(SmartPtr<const VectorSpace>& x_space,
                            SmartPtr<const VectorSpace>& c_space,
                            SmartPtr<const VectorSpace>& d_space,

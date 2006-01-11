@@ -35,6 +35,7 @@ namespace Ipopt
                    dbg_verbosity);
 
     SmartPtr<const SymMatrix> zeroW = IpCq().zero_hessian();
+    DBG_PRINT_MATRIX(2, "zeroW", *zeroW);
     SmartPtr<const Matrix> J_c = IpCq().curr_jac_c();
     SmartPtr<const Matrix> J_d = IpCq().curr_jac_d();
     SmartPtr<const Vector> grad_f = IpCq().curr_grad_f();

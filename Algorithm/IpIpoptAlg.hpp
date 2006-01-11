@@ -20,6 +20,7 @@
 #include "IpIterationOutput.hpp"
 #include "IpAlgTypes.hpp"
 #include "IpHessianUpdater.hpp"
+#include "IpEqMultCalculator.hpp"
 
 namespace Ipopt
 {
@@ -52,7 +53,8 @@ namespace Ipopt
                    const SmartPtr<ConvergenceCheck>& conv_check,
                    const SmartPtr<IterateInitializer>& iterate_initializer,
                    const SmartPtr<IterationOutput>& iter_output,
-                   const SmartPtr<HessianUpdater>& hessian_updater);
+                   const SmartPtr<HessianUpdater>& hessian_updater,
+                   const SmartPtr<EqMultiplierCalculator>& eq_multiplier_calculator = NULL);
 
     /** Default destructor */
     virtual ~IpoptAlgorithm();
@@ -99,6 +101,9 @@ namespace Ipopt
     SmartPtr<IterateInitializer> iterate_initializer_;
     SmartPtr<IterationOutput> iter_output_;
     SmartPtr<HessianUpdater> hessian_updater_;
+    /** The multipler calculator (for y_c and y_d) has to be set only
+     *  if option recalc_y is set to true */
+    SmartPtr<EqMultiplierCalculator> eq_multiplier_calculator_;
     //@}
 
     /** @name Main steps of the algorthim */
@@ -151,6 +156,10 @@ namespace Ipopt
      *  by more than the factors kappa_sigma and 1./kappa_sigma.
      */
     Number kappa_sigma_;
+    /** Flag indicating whether the y multipliers should be
+     *  recalculated with the eq_mutliplier_calculator object for each
+     *  new point. */
+    bool recalc_y_;
     //@}
 
     /** @name auxilliary functions */

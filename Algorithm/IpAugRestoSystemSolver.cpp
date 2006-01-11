@@ -144,7 +144,17 @@ namespace Ipopt
       // derivatives
       Number factor;
       WR_sum->GetTerm(0, factor, h_orig);
-      DBG_ASSERT(factor == 1.0);
+      DBG_ASSERT(factor == 1. || factor == 0.);
+      if (factor==0.) {
+        // ToDo: This is all just so complicated for the zero Hessian!!!
+        SmartPtr<SumSymMatrixSpace> ssm_space =
+          new SumSymMatrixSpace(WR_sum->Dim(), 1);
+        ssm_space->SetTermSpace(0, *h_orig->OwnerSymMatrixSpace());
+        SmartPtr<SumSymMatrix> new_matrix = ssm_space->MakeNewSumSymMatrix();
+        new_matrix->SetTerm(0, 0., *h_orig);
+        h_orig = GetRawPtr(new_matrix);
+
+      }
       SmartPtr<const SymMatrix> eta_DR;
       WR_sum->GetTerm(1, factor, eta_DR);
       SmartPtr<const Vector> wr_d =
@@ -164,7 +174,12 @@ namespace Ipopt
         dynamic_cast<const LowRankUpdateSymMatrix*>(GetRawPtr(CW->GetComp(0,0)));
       DBG_ASSERT(LR_W);
       h_orig = LR_W;
-      D_xR = CD_x->GetComp(0);
+      if (IsValid(CD_x)) {
+        D_xR = CD_x->GetComp(0);
+      }
+      else {
+        D_xR = NULL;
+      }
     }
 
     Number delta_xR = delta_x;

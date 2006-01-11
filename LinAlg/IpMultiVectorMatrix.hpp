@@ -101,6 +101,12 @@ namespace Ipopt
     /** Vector space for the columns */
     SmartPtr<const VectorSpace> ColVectorSpace() const;
 
+    /** Return the MultiVectorMatrixSpace */
+    SmartPtr<const MultiVectorMatrixSpace> MultiVectorMatrixOwnerSpace() const
+    {
+      return owner_space_;
+    }
+
   protected:
     /**@name Overloaded methods from Matrix base class */
     //@{

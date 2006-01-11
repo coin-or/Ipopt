@@ -35,7 +35,8 @@ namespace Ipopt
                                  const SmartPtr<ConvergenceCheck>& conv_check,
                                  const SmartPtr<IterateInitializer>& iterate_initializer,
                                  const SmartPtr<IterationOutput>& iter_output,
-                                 const SmartPtr<HessianUpdater>& hessian_updater)
+                                 const SmartPtr<HessianUpdater>& hessian_updater,
+                                 const SmartPtr<EqMultiplierCalculator>& eq_multiplier_calculator /* = NULL*/)
       :
       pd_solver_(pd_solver),
       line_search_(line_search),
@@ -43,7 +44,8 @@ namespace Ipopt
       conv_check_(conv_check),
       iterate_initializer_(iterate_initializer),
       iter_output_(iter_output),
-      hessian_updater_(hessian_updater)
+      hessian_updater_(hessian_updater),
+      eq_multiplier_calculator_(eq_multiplier_calculator)
   {
     DBG_START_METH("IpoptAlgorithm::IpoptAlgorithm",
                    dbg_verbosity);
@@ -72,6 +74,15 @@ namespace Ipopt
       "If the dual variables deviate from their primal estimates, a correction "
       "is performed. (See Eqn. (16) in the implementation paper.) "
       "Setting the to value less than one disables the correction.");
+    roptions->AddStringOption2(
+      "recalc_y",
+      "Tells algorithm to recalculate the equality and inequality multipliers by least square estimate.",
+      "no",
+      "no", "use the Newton step to update the multipliers",
+      "yes", "use least-square mutliplier estimates",
+      "Choosing yes might be helpful in the quasi-Newton option.  However, "
+      "each recalculation requires an extra factorization of the linear "
+      "system.\n");
   }
 
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,
@@ -136,6 +147,7 @@ namespace Ipopt
                      "the hessian_updater strategy failed to initialize.");
 
     options.GetNumericValue("kappa_sigma", kappa_sigma_, prefix);
+    options.GetBoolValue("recalc_y", recalc_y_, prefix);
 
     if (prefix=="resto.") {
       skip_print_problem_stats_ = true;
@@ -514,6 +526,38 @@ namespace Ipopt
 
     // Accept the step
     IpData().AcceptTrialPoint();
+
+    // If we want to recalculate the multipliers (e.g., as least
+    // square estimates), call the calculator for that
+    //    if (recalc_y_) {
+    if (recalc_y_ && IpCq().curr_constraint_violation()<IpData().tol()) {
+      IpData().Append_info_string("y ");
+      DBG_ASSERT(IsValid(eq_multiplier_calculator_));
+      if (IpData().curr()->y_c()->Dim()+IpData().curr()->y_d()->Dim()>0) {
+        SmartPtr<Vector> y_c = IpData().curr()->y_c()->MakeNew();
+        SmartPtr<Vector> y_d = IpData().curr()->y_d()->MakeNew();
+        bool retval =
+          eq_multiplier_calculator_->CalculateMultipliers(*y_c, *y_d);
+        if (retval) {
+          SmartPtr<const IteratesVector> curr = IpData().curr();
+          SmartPtr<IteratesVector> iterates = curr->MakeNewContainer();
+          iterates->Set_x(*curr->x());
+          iterates->Set_s(*curr->s());
+          iterates->Set_z_L(*curr->z_L());
+          iterates->Set_z_U(*curr->z_U());
+          iterates->Set_v_L(*curr->v_L());
+          iterates->Set_v_U(*curr->v_U());
+          iterates->Set_y_c(*y_c);
+          iterates->Set_y_d(*y_d);
+          IpData().set_trial(iterates);
+          IpData().AcceptTrialPoint();
+        }
+        else {
+          Jnlst().Printf(J_DETAILED, J_MAIN,
+                         "Recalculation of y multipliers skipped because eq_mult_calc returned false.\n");
+        }
+      }
+    }
   }
 
   void IpoptAlgorithm::PrintProblemStatistics()

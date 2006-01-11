@@ -202,6 +202,9 @@ namespace Ipopt
                      ConstPtr(P_approx),
                      ConstPtr(x_space_),
                      true);
+          jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
+                         "Hessian approximation will be done in the space of all %d x variables.\n\n",
+                         x_space_->Dim());
         }
       }
 
@@ -253,6 +256,15 @@ namespace Ipopt
       return false;
     }
 
+    x_L->Print(*jnlst_, J_MOREVECTOR, J_INITIALIZATION,
+               "original x_L unscaled");
+    x_U->Print(*jnlst_, J_MOREVECTOR, J_INITIALIZATION,
+               "original x_U unscaled");
+    d_L->Print(*jnlst_, J_MOREVECTOR, J_INITIALIZATION,
+               "original d_L unscaled");
+    d_U->Print(*jnlst_, J_MOREVECTOR, J_INITIALIZATION,
+               "original d_U unscaled");
+
     relax_bounds(-bound_relax_factor_, *x_L);
     relax_bounds( bound_relax_factor_, *x_U);
     relax_bounds(-bound_relax_factor_, *d_L);
@@ -272,6 +284,15 @@ namespace Ipopt
     x_U_ = NLP_scaling()->apply_vector_scaling_x_LU(*Px_U_, x_U_, *x_space_);
     d_L_ = NLP_scaling()->apply_vector_scaling_d_LU(*Pd_L_, d_L_, *d_space_);
     d_U_ = NLP_scaling()->apply_vector_scaling_d_LU(*Pd_U_, d_U_, *d_space_);
+
+    x_L->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
+               "modified x_L scaled");
+    x_U->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
+               "modified x_U scaled");
+    d_L->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
+               "modified d_L scaled");
+    d_U->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
+               "modified d_U scaled");
 
     // Create the iterates structures
     x = x_space_->MakeNew();

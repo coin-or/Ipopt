@@ -224,10 +224,10 @@ namespace Ipopt
     Number mach_eps = std::numeric_limits<Number>::epsilon();
     if (reference_theta_==0. &&  reference_gradBarrTDelta_ > 0. &&
         reference_gradBarrTDelta_ < mach_eps) {
-       reference_gradBarrTDelta_ = -mach_eps;
-       Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
-                      "reference_theta is slightly positive at feasible point.  Setting it to %e\n",
-                      reference_gradBarrTDelta_);
+      reference_gradBarrTDelta_ = -mach_eps;
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                     "reference_theta is slightly positive at feasible point.  Setting it to %e\n",
+                     reference_gradBarrTDelta_);
     }
     DBG_ASSERT(reference_theta_>0. || reference_gradBarrTDelta_ < 0.0);
     return (reference_gradBarrTDelta_ < 0.0 &&

@@ -142,6 +142,14 @@ namespace Ipopt
       "algorithm accepts the full step without line search.  If this happens "
       "repeatedly, the algorithm will terminate with a corresponding exit "
       "message. The default value is 10 times machine precision.");
+    roptions->AddLowerBoundedNumberOption(
+      "tiny_step_y_tol",
+      "Tolerance for quitting because of numerically insignificant steps.",
+      0.0, false, 1e-2,
+      "If the search direction in the primal variables (x and s) is, in "
+      "relative terms for each component, repeatedly less thantiny_step_tol, "
+      "and the step in the y variables is smaller than this threshold, the "
+      "algorithm will terminate.");
     roptions->AddLowerBoundedIntegerOption(
       "watchdog_shortened_iter_trigger",
       "Number of shortened iterations that trigger the watchdog.",
@@ -192,6 +200,7 @@ namespace Ipopt
     options.GetBoolValue("start_with_resto", start_with_resto_, prefix);
 
     options.GetNumericValue("tiny_step_tol", tiny_step_tol_, prefix);
+    options.GetNumericValue("tiny_step_y_tol", tiny_step_y_tol_, prefix);
     options.GetIntegerValue("watchdog_trial_iter_max", watchdog_trial_iter_max_, prefix);
     options.GetIntegerValue("watchdog_shortened_iter_trigger", watchdog_shortened_iter_trigger_, prefix);
     options.GetNumericValue("soft_resto_pderror_reduction_factor",
@@ -338,7 +347,17 @@ namespace Ipopt
         IpData().Set_info_alpha_primal_char('t');
       }
 
-      tiny_step_last_iteration_ = true;
+      // If the step in the dual variables is also small, we remember
+      // that we just did a tiny step so that next time we might
+      // decide to quit
+      Number delta_y_norm = Max(IpData().curr()->y_c()->Amax(),
+                                IpData().curr()->y_d()->Amax());
+      if (delta_y_norm < tiny_step_y_tol_) {
+        tiny_step_last_iteration_ = true;
+      }
+      else {
+        tiny_step_last_iteration_ = false;
+      }
       accept = true;
     }
     else {
@@ -1037,14 +1056,14 @@ namespace Ipopt
       return false;
 
     // ToDo try to find more efficient implementation
+    DBG_PRINT_VECTOR(2, "curr_x", *IpData().curr()->x());
+    DBG_PRINT_VECTOR(2, "delta_x", *IpData().delta()->x());
 
-    SmartPtr<Vector> tmp = IpData().curr()->x()->MakeNew();
-    tmp->Copy(*IpData().curr()->x());
+    SmartPtr<Vector> tmp = IpData().curr()->x()->MakeNewCopy();
     tmp->ElementWiseAbs();
     tmp->AddScalar(1.);
 
-    SmartPtr<Vector> tmp2 = IpData().curr()->x()->MakeNew();
-    tmp2->Copy(*IpData().delta()->x());
+    SmartPtr<Vector> tmp2 = IpData().delta()->x()->MakeNewCopy();
     tmp2->ElementWiseDivide(*tmp);
     max_step_x = tmp2->Amax();
     Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,

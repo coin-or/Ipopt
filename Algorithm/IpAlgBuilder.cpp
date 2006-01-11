@@ -331,7 +331,8 @@ namespace Ipopt
                          GetRawPtr(resto_convCheck),
                          resto_IterInitializer,
                          resto_IterOutput,
-                         resto_HessUpdater);
+                         resto_HessUpdater,
+                         resto_EqMultCalculator);
 
     // Set the restoration phase
     SmartPtr<RestorationPhase> resto_phase =
@@ -413,7 +414,7 @@ namespace Ipopt
       new IpoptAlgorithm(PDSolver,
                          GetRawPtr(lineSearch), MuUpdate,
                          convCheck, IterInitializer, IterOutput,
-                         HessUpdater);
+                         HessUpdater, EqMultCalculator);
 
     return alg;
   }

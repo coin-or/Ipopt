@@ -271,6 +271,12 @@ namespace Ipopt
     /** Tolerance for detecting tiny steps. */
     Number tiny_step_tol_;
 
+    /** Tolerance for y variables for the tiny step stopping
+     *  heuristic.  If repeatedly a tiny step is detected and the step
+     *  in the y_c and y_d variables is less than this threshold, we
+     *  algorithm will stop. */
+    Number tiny_step_y_tol_;
+
     /** Number of watch dog trial steps. */
     Index watchdog_trial_iter_max_;
     /** Number of shortened iterations that trigger the watchdog. */

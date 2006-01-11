@@ -9,6 +9,7 @@
 #include "IpIpoptCalculatedQuantities.hpp"
 #include "IpSumSymMatrix.hpp"
 #include "IpLowRankUpdateSymMatrix.hpp"
+#include "IpRestoIpoptNLP.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -1541,30 +1542,97 @@ namespace Ipopt
                    dbg_verbosity);
 
     SmartPtr<const SymMatrixSpace> h_space = ip_nlp_->HessianMatrixSpace();
-    SmartPtr<SymMatrix> h_tmp = h_space->MakeNewSymMatrix();
 
-    // If the matrix space is a LowRankUpdateSymMatrix, we simply set
-    // its diagonal to zero.
-    LowRankUpdateSymMatrix* LR_H =
-      dynamic_cast<LowRankUpdateSymMatrix*> (GetRawPtr(h_tmp));
-    if (LR_H) {
-      SmartPtr<const VectorSpace> LR_Vspace =
-        LR_H->LowRankVectorSpace();
-      SmartPtr<Vector> D = LR_Vspace->MakeNew();
-      D->Set(0.);
-      LR_H->SetDiag(*D);
-      return ConstPtr(h_tmp);
+    // Let's first figure out if we are in the restoration phase. ToDo
+    // this is a rather crude way of testing it, we might want to do
+    // this somewhat differently later
+
+    SmartPtr<const SymMatrix> zero_matrix;
+
+    const RestoIpoptNLP* resto_ipnlp =
+      dynamic_cast<const RestoIpoptNLP*> (GetRawPtr(ip_nlp_));
+    if (resto_ipnlp) {
+      const CompoundSymMatrixSpace* csm_space =
+        dynamic_cast<const CompoundSymMatrixSpace*> (GetRawPtr(h_space));
+      DBG_ASSERT(csm_space);
+      SmartPtr<const MatrixSpace> hx_space = csm_space->GetCompSpace(0,0);
+
+      const LowRankUpdateSymMatrixSpace* LR_H_space =
+        dynamic_cast<const LowRankUpdateSymMatrixSpace*> (GetRawPtr(hx_space));
+      SmartPtr<const SymMatrix> new_sm;
+      if (LR_H_space) {
+        DBG_PRINT((1, "LR_H_space is not null\n"));
+        SmartPtr<LowRankUpdateSymMatrix> LR_H =
+          LR_H_space->MakeNewLowRankUpdateSymMatrix();
+        SmartPtr<const VectorSpace> LR_Vspace =
+          LR_H->LowRankVectorSpace();
+        SmartPtr<Vector> D = LR_Vspace->MakeNew();
+        D->Set(0.);
+        LR_H->SetDiag(*D);
+        new_sm = GetRawPtr(LR_H);
+      }
+      else {
+        const CompoundSymMatrixSpace* csm_space =
+          dynamic_cast<const CompoundSymMatrixSpace*> (GetRawPtr(h_space));
+        DBG_ASSERT(csm_space);
+        const SumSymMatrixSpace* sshx_space =
+          dynamic_cast<const SumSymMatrixSpace*>
+          (GetRawPtr(csm_space->GetCompSpace(0,0)));
+        DBG_ASSERT(sshx_space);
+        SmartPtr<SumSymMatrix> sm = sshx_space->MakeNewSumSymMatrix();
+        SmartPtr<const SymMatrixSpace> orig_h_space =
+          sshx_space->GetTermSpace(0);
+        SmartPtr<SymMatrix> orig_h = orig_h_space->MakeNewSymMatrix();
+        DBG_PRINT_MATRIX(2, "orig_h", *orig_h);
+        sm->SetTerm(0, 0., *orig_h);
+        SmartPtr<const SymMatrixSpace> DR_x_space =
+          sshx_space->GetTermSpace(1);
+        SmartPtr<SymMatrix> DR_x = DR_x_space->MakeNewSymMatrix();
+        DiagMatrix* diag_DR_x =
+          dynamic_cast<DiagMatrix*> (GetRawPtr(DR_x));
+        DBG_ASSERT(diag_DR_x);
+        SmartPtr<Vector> diag =
+          resto_ipnlp->OrigIpData().curr()->x()->MakeNew();
+        diag->Set(0.);
+        diag_DR_x->SetDiag(*diag);
+        sm->SetTerm(1, 0., *DR_x);
+        new_sm = GetRawPtr(sm);
+      }
+
+      SmartPtr<CompoundSymMatrix> new_csm =
+        csm_space->MakeNewCompoundSymMatrix();
+      new_csm->SetComp(0,0,*new_sm);
+      zero_matrix = GetRawPtr(new_csm);
+    }
+    else {
+      // If the matrix space is a LowRankUpdateSymMatrix, we simply set
+      // its diagonal to zero.
+      SmartPtr<SymMatrix> h_tmp = h_space->MakeNewSymMatrix();
+      LowRankUpdateSymMatrix* LR_H =
+        dynamic_cast<LowRankUpdateSymMatrix*> (GetRawPtr(h_tmp));
+      if (LR_H) {
+        DBG_PRINT((1, "LR_H is not null\n"));
+        SmartPtr<const VectorSpace> LR_Vspace =
+          LR_H->LowRankVectorSpace();
+        SmartPtr<Vector> D = LR_Vspace->MakeNew();
+        D->Set(0.);
+        LR_H->SetDiag(*D);
+        zero_matrix = ConstPtr(h_tmp);
+      }
+      else {
+        // Otherwise, we simply define a new matrix as a sum matrix with
+        // only one term and factor zero.
+        SmartPtr<SumSymMatrixSpace> ssm_space =
+          new SumSymMatrixSpace(ip_data_->curr()->x()->Dim(), 1);
+        ssm_space->SetTermSpace(0, *h_space);
+        SmartPtr<SumSymMatrix> new_matrix = ssm_space->MakeNewSumSymMatrix();
+        new_matrix->SetTerm(0, 0., *h_tmp);
+        zero_matrix = GetRawPtr(new_matrix);
+      }
     }
 
-    // Otherwise, we simply define a new matrix as a sum matrix with
-    // only one term and factor zero.
-    SmartPtr<SumSymMatrixSpace> ssm_space =
-      new SumSymMatrixSpace(ip_data_->curr()->x()->Dim(), 1);
-    ssm_space->SetTermSpace(0, *h_space);
-    SmartPtr<SumSymMatrix> zero_matrix = ssm_space->MakeNewSumSymMatrix();
-    zero_matrix->SetTerm(0, 0., *h_tmp);
-
-    return GetRawPtr(zero_matrix);
+    DBG_PRINT_MATRIX(2, "zero_matrix", *zero_matrix);
+    return zero_matrix;
 
     //     // This is the old version
     //     SmartPtr<const Vector> x = ip_data_->curr()->x();

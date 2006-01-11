@@ -65,6 +65,9 @@ namespace Ipopt
       return Comp(irow,jcol);
     }
 
+    /** Method for creating a new matrix of this specific type. */
+    SmartPtr<CompoundSymMatrix> MakeNewCompoundSymMatrix() const;
+
     // The following don't seem to be necessary
     /* Number of block rows of this compound matrix. */
     //    Index NComps_NRows() const { return NComps_Dim(); }
@@ -263,6 +266,12 @@ namespace Ipopt
     /** Method to check whether or not the spaces are valid */
     bool DimensionsSet() const;
   };
+
+  inline
+  SmartPtr<CompoundSymMatrix> CompoundSymMatrix::MakeNewCompoundSymMatrix() const
+  {
+    return owner_space_->MakeNewCompoundSymMatrix();
+  }
 
 } // namespace Ipopt
 #endif

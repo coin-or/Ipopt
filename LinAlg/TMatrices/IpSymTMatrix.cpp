@@ -153,7 +153,7 @@ namespace Ipopt
     }
     else {
       jnlst.PrintfIndented(level, category, indent,
-                           "%sUninitialized! ", prefix.c_str());
+                           "%sUninitialized!\n", prefix.c_str());
     }
   }
 
