@@ -102,10 +102,7 @@ namespace Ipopt
     SmartPtr<const VectorSpace> ColVectorSpace() const;
 
     /** Return the MultiVectorMatrixSpace */
-    SmartPtr<const MultiVectorMatrixSpace> MultiVectorMatrixOwnerSpace() const
-    {
-      return owner_space_;
-    }
+    SmartPtr<const MultiVectorMatrixSpace> MultiVectorMatrixOwnerSpace() const;
 
   protected:
     /**@name Overloaded methods from Matrix base class */
@@ -227,6 +224,13 @@ namespace Ipopt
   SmartPtr<const VectorSpace> MultiVectorMatrix::ColVectorSpace() const
   {
     return owner_space_->ColVectorSpace();
+  }
+
+  inline
+  SmartPtr<const MultiVectorMatrixSpace>
+  MultiVectorMatrix::MultiVectorMatrixOwnerSpace() const
+  {
+    return owner_space_;
   }
 
 } // namespace Ipopt
