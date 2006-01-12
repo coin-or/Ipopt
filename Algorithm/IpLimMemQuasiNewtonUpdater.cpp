@@ -390,7 +390,12 @@ namespace Ipopt
           SmartPtr<DenseGenMatrix> J = L_->MakeNewDenseGenMatrix();
           bool cholesky_retval = J->ComputeCholeskyFactor(*M);
           DBG_PRINT_MATRIX(3, "J", *J);
-          DBG_ASSERT(cholesky_retval);
+          if (!cholesky_retval) {
+            Jnlst().Printf(J_WARNING, J_HESSIAN_APPROXIMATION,
+                           "Cholesky factorization failed for LBFGS update! Skipping update.\n");
+            skipping = true;
+            break;
+          }
 
           // Compute C = J^{-T}
           SmartPtr<DenseGenMatrix> C = J->MakeNewDenseGenMatrix();

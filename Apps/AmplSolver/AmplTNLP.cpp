@@ -678,7 +678,7 @@ namespace Ipopt
   void AmplTNLP::get_list_of_nonlinear_variables(Index num_nonlin_vars,
       Index* pos_nonlin_vars)
   {
-    ASL_pfgh* asl = asl_;
+    DBG_DO(ASL_pfgh* asl = asl_;)
     DBG_ASSERT(num_nonlin_vars == Max(nlvo,nlvc));
 
     // The first variables are the nonlinear ones (using Fortran

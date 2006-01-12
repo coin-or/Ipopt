@@ -139,7 +139,7 @@ namespace Ipopt
       DBG_ASSERT(nrhs==(Index)sol_cV.size());
       DBG_ASSERT(nrhs==(Index)sol_dV.size());
 
-      ESymSolverStatus retval;
+      ESymSolverStatus retval=SYMSOLVER_SUCCESS;
       for (Index i=0; i<nrhs; i++) {
         retval = Solve(W, D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c,
                        J_d, D_d, delta_d,
