@@ -124,6 +124,8 @@ namespace Ipopt
     Number wsmp_pivtol_;
     /** Maximal pivot tolerance */
     Number wsmp_pivtolmax_;
+    /** Flag indicating whether WSMP's scaling should be used. */
+    bool wsmp_scaling_;
     //@}
 
     /** @name Information about most recent factorization/solve */

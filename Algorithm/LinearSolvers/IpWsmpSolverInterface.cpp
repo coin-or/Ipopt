@@ -102,6 +102,14 @@ namespace Ipopt
       0.0, true, 1.0, true, 1e-2,
       "Ipopt may increase pivtol as high as pivtolmax "
       "to get a more accurate solution to the linear system.");
+    roptions->AddStringOption2(
+      "wsmp_scaling",
+      "Toggle for swiching on WSMP's internal scaling.",
+      "no",
+      "no", "don't use scaling",
+      "yes", "use scaling",
+      "Yes corresponds to setting WSMP's IPARM(10) to 1, otherwise this is "
+      "set to 0.");
   }
 
   bool WsmpSolverInterface::InitializeImpl(const OptionsList& options,
@@ -119,6 +127,7 @@ namespace Ipopt
     else {
       wsmp_pivtolmax_ = Max(wsmp_pivtolmax_, wsmp_pivtol_);
     }
+    options.GetBoolValue("wsmp_scaling", wsmp_scaling_, prefix);
 
     // Reset all private data
     dim_=0;
@@ -140,7 +149,6 @@ namespace Ipopt
     IPARM_[2] = 0;
     F77_FUNC(wssmp,WSSMP)(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                           NULL, NULL, NULL, NULL, NULL, IPARM_, DPARM_);
-    // IPARM_[9] = ?? // scaling - if we do this we need to reset a_ after pivtol changed
     IPARM_[14] = 0; // no restrictions on pivoting (ignored for
     // Bunch-Kaufman)
     IPARM_[15] = wsmp_ordering_option_; // ordering option
@@ -155,7 +163,13 @@ namespace Ipopt
     // L^T without pivoting it is the value we used
     // before
 
-    IPARM_[9] = 0; // TURN OFF SCALING (This should be a user option ToDo)
+    // Decide whether to use WSMP's scaling
+    if (wsmp_scaling_) {
+      IPARM_[9] = 1;
+    }
+    else {
+      IPARM_[9] = 0;
+    }
 
     // Check for SPINLOOPTIME and YIELDLOOPTIME?
 
