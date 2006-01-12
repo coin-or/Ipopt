@@ -126,7 +126,15 @@ namespace Ipopt
     Number wsmp_pivtolmax_;
     /** Flag indicating whether WSMP's scaling should be used. */
     bool wsmp_scaling_;
+    /** WSMP's singularity threshold.  The smaller this value the less
+     *  likely a matrix is declared singular. */
+    Number wsmp_singularity_threshold_;
+    /** iteration number in which matrices are to be written out */
+    Index wsmp_write_matrix_iteration_;
     //@}
+
+    /** Counter for matrix file numbers */
+    Index matrix_file_number_;
 
     /** @name Information about most recent factorization/solve */
     //@{

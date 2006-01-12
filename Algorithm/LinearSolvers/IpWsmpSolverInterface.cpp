@@ -43,6 +43,7 @@ extern "C"
                              double* AUX, const ipfint* NAUX,
                              ipfint* MRP, ipfint* IPARM,
                              double* DPARM);
+  void F77_FUNC_(wsmp_clear,WSMP_CLEAR)(void);
 }
 
 namespace Ipopt
@@ -70,6 +71,9 @@ namespace Ipopt
   {
     DBG_START_METH("WsmpSolverInterface::~WsmpSolverInterface()",
                    dbg_verbosity);
+
+    // Clear WSMP's memory
+    F77_FUNC_(wsmp_clear,WSMP_CLEAR);
 
     delete[] PERM_;
     delete[] INVP_;
@@ -105,11 +109,23 @@ namespace Ipopt
     roptions->AddStringOption2(
       "wsmp_scaling",
       "Toggle for swiching on WSMP's internal scaling.",
-      "no",
+      "yes",
       "no", "don't use scaling",
       "yes", "use scaling",
       "Yes corresponds to setting WSMP's IPARM(10) to 1, otherwise this is "
       "set to 0.");
+    roptions->AddBoundedNumberOption(
+      "wsmp_singularity_threshold",
+      "WSMP's singularity threshold.",
+      0.0, true, 1.0, true, 1e-18,
+      "WSMP's DPARM(10) parameter.  The smaller this value the less likely "
+      "a matrix is declared singular.");
+    roptions->AddLowerBoundedIntegerOption(
+      "wsmp_write_matrix_iteration",
+      "Iteration in which the matrices are written to files.",
+      -1, -1,
+      "If non-negative, this option determins the iteration in which all "
+      "matrices given to WSMP are written to files.\n");
   }
 
   bool WsmpSolverInterface::InitializeImpl(const OptionsList& options,
@@ -127,7 +143,11 @@ namespace Ipopt
     else {
       wsmp_pivtolmax_ = Max(wsmp_pivtolmax_, wsmp_pivtol_);
     }
+    options.GetNumericValue("wsmp_singularity_threshold",
+			    wsmp_singularity_threshold_, prefix);
     options.GetBoolValue("wsmp_scaling", wsmp_scaling_, prefix);
+    options.GetIntegerValue("wsmp_write_matrix_iteration",
+			    wsmp_write_matrix_iteration_, prefix);
 
     // Reset all private data
     dim_=0;
@@ -170,6 +190,10 @@ namespace Ipopt
     else {
       IPARM_[9] = 0;
     }
+
+    DPARM_[9] = wsmp_singularity_threshold_;
+
+    matrix_file_number_ = 0;
 
     // Check for SPINLOOPTIME and YIELDLOOPTIME?
 
@@ -294,6 +318,27 @@ namespace Ipopt
     Index numberOfNegEVals)
   {
     DBG_START_METH("WsmpSolverInterface::Factorization",dbg_verbosity);
+
+    // If desired, write out the matrix
+    if (IpData().iter_count() == wsmp_write_matrix_iteration_) {
+      matrix_file_number_++;
+      char buf[256];
+      sprintf(buf, "wsmp_matrix_%d_%d.dat", IpData().iter_count(),
+	      matrix_file_number_);
+      Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
+                     "Writing WSMP matrix into file %s.\n", buf);
+      FILE* fp = fopen(buf, "w");
+      fprintf(fp, "%d\n", dim_); // N
+      for (Index icol=0; icol<dim_; icol++) {
+	fprintf(fp, "%d", ia[icol+1]-ia[icol]); // number of elements for this column
+	// Now for each colum we write row indices and values
+	for (Index irow=ia[icol]; irow<ia[icol+1]; irow++) {
+	  fprintf(fp, " %23.16e %d",a_[irow-1],ja[irow-1]);
+	}
+	fprintf(fp, "\n");
+      }
+      fclose(fp);
+    }
 
     IpData().TimingStats().LinearSystemFactorization().Start();
 
