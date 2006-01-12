@@ -111,6 +111,10 @@ namespace Ipopt
     Number delta_d_curr_;
     //@}
 
+    /** Flag indicating if for the given matrix the perturb for wrong
+     *  inertia method has already been called. */
+    bool get_deltas_for_wrong_inertia_called_;
+
     /** @name Handling structural degeneracy */
     //@{
     /** Type for degeneracy flags */

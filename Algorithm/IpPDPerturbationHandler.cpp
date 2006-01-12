@@ -204,6 +204,8 @@ namespace Ipopt
 
     IpData().Set_info_regu_x(delta_x);
 
+    get_deltas_for_wrong_inertia_called_ = false;
+
     return true;
   }
 
@@ -272,7 +274,7 @@ namespace Ipopt
       }
     }
     else {
-      if (delta_c_curr_ > 0.) {
+      if (delta_c_curr_ > 0. || get_deltas_for_wrong_inertia_called_) {
         // If we already used a perturbation for the constraints, we do
         // the same thing as if we were encountering negative curvature
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
@@ -338,6 +340,8 @@ namespace Ipopt
     delta_d = delta_d_curr_;
 
     IpData().Set_info_regu_x(delta_x);
+
+    get_deltas_for_wrong_inertia_called_ = true;
 
     return true;
   }
