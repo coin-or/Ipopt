@@ -144,10 +144,10 @@ namespace Ipopt
       wsmp_pivtolmax_ = Max(wsmp_pivtolmax_, wsmp_pivtol_);
     }
     options.GetNumericValue("wsmp_singularity_threshold",
-			    wsmp_singularity_threshold_, prefix);
+                            wsmp_singularity_threshold_, prefix);
     options.GetBoolValue("wsmp_scaling", wsmp_scaling_, prefix);
     options.GetIntegerValue("wsmp_write_matrix_iteration",
-			    wsmp_write_matrix_iteration_, prefix);
+                            wsmp_write_matrix_iteration_, prefix);
 
     // Reset all private data
     dim_=0;
@@ -324,18 +324,18 @@ namespace Ipopt
       matrix_file_number_++;
       char buf[256];
       sprintf(buf, "wsmp_matrix_%d_%d.dat", IpData().iter_count(),
-	      matrix_file_number_);
+              matrix_file_number_);
       Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
                      "Writing WSMP matrix into file %s.\n", buf);
       FILE* fp = fopen(buf, "w");
       fprintf(fp, "%d\n", dim_); // N
       for (Index icol=0; icol<dim_; icol++) {
-	fprintf(fp, "%d", ia[icol+1]-ia[icol]); // number of elements for this column
-	// Now for each colum we write row indices and values
-	for (Index irow=ia[icol]; irow<ia[icol+1]; irow++) {
-	  fprintf(fp, " %23.16e %d",a_[irow-1],ja[irow-1]);
-	}
-	fprintf(fp, "\n");
+        fprintf(fp, "%d", ia[icol+1]-ia[icol]); // number of elements for this column
+        // Now for each colum we write row indices and values
+        for (Index irow=ia[icol]; irow<ia[icol+1]; irow++) {
+          fprintf(fp, " %23.16e %d",a_[irow-1],ja[irow-1]);
+        }
+        fprintf(fp, "\n");
       }
       fclose(fp);
     }
