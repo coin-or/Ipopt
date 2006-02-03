@@ -48,7 +48,7 @@ C
       INTEGER IPROBLEM, IPCREATE
 C64BIT     INTEGER*8 IPROBLEM, IPCREATE
 C
-      integer NELE_JAC, NELE_HESS
+      integer IDX_STYLE, NELE_JAC, NELE_HESS
 
       external EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS
 C
@@ -104,8 +104,9 @@ C
 C
 C     Call IPOPT
 C
+      IDX_STYLE = 1
       IPROBLEM = IPCREATE(N, X_L, X_U, M, G_L, G_U, NELE_JAC, NELE_HESS,
-     1     EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS)
+     1     IDX_STYLE, EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS)
       if (IPROBLEM.eq.0) then
          write(*,*) 'Error creating Ipopt Problem.'
          stop
