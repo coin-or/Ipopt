@@ -222,8 +222,9 @@ namespace Ipopt
                    "reference_theta = %e reference_gradBarrTDelta = %e\n",
                    reference_theta_, reference_gradBarrTDelta_);
     Number mach_eps = std::numeric_limits<Number>::epsilon();
+    // ToDo find good value
     if (reference_theta_==0. &&  reference_gradBarrTDelta_ > 0. &&
-        reference_gradBarrTDelta_ < mach_eps) {
+        reference_gradBarrTDelta_ < 100.*mach_eps) {
       reference_gradBarrTDelta_ = -mach_eps;
       Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
                      "reference_theta is slightly positive at feasible point.  Setting it to %e\n",
