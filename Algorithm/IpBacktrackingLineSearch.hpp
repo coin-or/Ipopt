@@ -1,4 +1,4 @@
-// Copyright (C) 2004,2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -307,6 +307,7 @@ namespace Ipopt
      *  level of optimality error. */
     //@{
     SmartPtr<const IteratesVector> acceptable_iterate_;
+    Index acceptable_iteration_number_;
     //@}
 
     /** Flag indicating whether the line search is to be performed

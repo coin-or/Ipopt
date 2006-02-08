@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -229,6 +229,7 @@ namespace Ipopt
     count_successive_shortened_steps_ = 0;
 
     acceptable_iterate_ = NULL;
+    acceptable_iteration_number_ = -1;
 
     return retvalue;
   }
@@ -491,6 +492,8 @@ namespace Ipopt
               1e-2*IpData().tol()) {
             bool found_acceptable = RestoreAcceptablePoint();
             if (found_acceptable) {
+              Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                             "Restoration phase is called at almost feasible point,\n  but acceptable point from iteration %d could be restored.\n", acceptable_iteration_number_);
               THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
                               "Restoration phase called at almost feasible point, but acceptable point could be restored.\n");
             }
@@ -1108,6 +1111,7 @@ namespace Ipopt
                    dbg_verbosity);
 
     acceptable_iterate_ = IpData().curr();
+    acceptable_iteration_number_ = IpData().iter_count();
   }
 
   bool BacktrackingLineSearch::RestoreAcceptablePoint()

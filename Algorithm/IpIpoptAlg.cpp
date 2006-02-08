@@ -531,6 +531,11 @@ namespace Ipopt
     // square estimates), call the calculator for that
     //    if (recalc_y_) {
     if (recalc_y_ && IpCq().curr_constraint_violation()<IpData().tol()) {
+      if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
+        Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                       "dual infeasisibility before least square multiplier update = %e\n",
+                       IpCq().curr_dual_infeasibility(NORM_MAX));
+      }
       IpData().Append_info_string("y ");
       DBG_ASSERT(IsValid(eq_multiplier_calculator_));
       if (IpData().curr()->y_c()->Dim()+IpData().curr()->y_d()->Dim()>0) {

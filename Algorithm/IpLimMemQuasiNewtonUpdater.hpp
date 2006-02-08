@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -92,6 +92,10 @@ namespace Ipopt
     /** Number of successive iterations of skipped updates after which
      *  the approximation is reset. */
     Index limited_memory_max_skipping_;
+    /** Minimal safeguard value for sigma */
+    Number sigma_safe_min_;
+    /** Maximal safeguard value for sigma */
+    Number sigma_safe_max_;
     //@}
 
     /** Flag indicating if the update is to be done for the original

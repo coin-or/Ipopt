@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -20,6 +20,8 @@ namespace Ipopt
   LimMemQuasiNewtonUpdater::LimMemQuasiNewtonUpdater(
     bool update_for_resto)
       :
+      sigma_safe_min_(1e-8),
+      sigma_safe_max_(1e+8),
       update_for_resto_(update_for_resto)
   {}
 
@@ -338,6 +340,14 @@ namespace Ipopt
             }
             Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
                            "sigma (for B0) is %e\n", sigma_);
+            if (sigma_ < sigma_safe_min_ ||
+                sigma_ > sigma_safe_max_) {
+              sigma_ = Max(Min(sigma_safe_max_, sigma_), sigma_safe_min_);
+              IpData().Append_info_string("Wp");
+              Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                             "Projecting sigma into safeguards to be %e!\n", sigma_);
+            }
+            printf("sigma_ = %e\n",sigma_);
           }
 
           if (limited_memory_max_history_ == 0 ) {
