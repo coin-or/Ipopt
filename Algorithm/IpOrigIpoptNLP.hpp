@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -318,6 +318,12 @@ namespace Ipopt
 
     /** Permutation matrix (d_U_ -> d */
     SmartPtr<const Matrix> Pd_U_;
+
+    /** Original unmodified lower bounds on x */
+    SmartPtr<const Vector> orig_x_L_;
+
+    /** Original unmodified upper bounds on x */
+    SmartPtr<const Vector> orig_x_U_;
     //@}
 
     /**@name Default Compiler Generated Methods
@@ -351,6 +357,9 @@ namespace Ipopt
     //@{
     /** relaxation factor for the bounds */
     Number bound_relax_factor_;
+    /** Flag indicating whether the primal variables should be
+     *  projected back into original bounds are optimization. */
+    bool honor_original_bounds_;
     /** Flag indicating whether the TNLP with identical structure has
      *  already been solved before. */
     bool warm_start_same_structure_;

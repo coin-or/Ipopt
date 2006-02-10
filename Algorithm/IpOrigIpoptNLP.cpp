@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -78,6 +78,16 @@ namespace Ipopt
       "is set to zero, then then bounds relaxation is disabled. "
       "(See Eqn.(35) in implmentation paper.)");
     roptions->AddStringOption2(
+      "honor_original_bounds",
+      "Indicates whether final points should be projected into original bounds.",
+      "yes",
+      "no", "Leave final point unchanged",
+      "yes", "Project final point back into original bounds",
+      "Ipopt might relax the bounds during the optimization (see e.g. option "
+      "\"bound_relax_factor\").  This option determines whether the final "
+      "point should be projected back into the user-provide original bounds "
+      "after the optimization.");
+    roptions->AddStringOption2(
       "warm_start_same_structure",
       "Indicates whether a problem with a structure identical to the previous one is to be solved.",
       "no",
@@ -102,6 +112,8 @@ namespace Ipopt
                                 const std::string& prefix)
   {
     options.GetNumericValue("bound_relax_factor", bound_relax_factor_, prefix);
+    options.GetBoolValue("honor_original_bounds",
+                         honor_original_bounds_, prefix);
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
     Index enum_int;
@@ -264,6 +276,14 @@ namespace Ipopt
                "original d_L unscaled");
     d_U->Print(*jnlst_, J_MOREVECTOR, J_INITIALIZATION,
                "original d_U unscaled");
+
+    if (honor_original_bounds_) {
+      SmartPtr<Vector> tmp;
+      tmp = x_L->MakeNewCopy();
+      orig_x_L_ = ConstPtr(tmp);
+      tmp = x_U->MakeNewCopy();
+      orig_x_U_ = ConstPtr(tmp);
+    }
 
     relax_bounds(-bound_relax_factor_, *x_L);
     relax_bounds( bound_relax_factor_, *x_U);
@@ -704,6 +724,27 @@ namespace Ipopt
       unscaled_z_U = NLP_scaling()->apply_vector_scaling_x_LU(*Px_U_, &z_U, *x_space_);
       unscaled_y_c = NLP_scaling()->apply_vector_scaling_c(&y_c);
       unscaled_y_d = NLP_scaling()->apply_vector_scaling_d(&y_d);
+    }
+
+    if (honor_original_bounds_ && (Px_L_->NCols()>0 || Px_U_->NCols()>0)) {
+      // Make sure the user specified bounds are satisfied
+      SmartPtr<Vector> tmp;
+      SmartPtr<Vector> un_x = unscaled_x->MakeNewCopy();
+      if (Px_L_->NCols()>0) {
+        tmp = orig_x_L_->MakeNewCopy();
+        Px_L_->TransMultVector(1., *un_x, 0., *tmp);
+        Px_L_->MultVector(-1., *tmp, 1., *un_x);
+        tmp->ElementWiseMax(*orig_x_L_);
+        Px_L_->MultVector(1., *tmp, 1., *un_x);
+      }
+      if (Px_U_->NCols()>0) {
+        tmp = orig_x_U_->MakeNewCopy();
+        Px_U_->TransMultVector(1., *un_x, 0., *tmp);
+        Px_U_->MultVector(-1., *tmp, 1., *un_x);
+        tmp->ElementWiseMin(*orig_x_U_);
+        Px_U_->MultVector(1., *tmp, 1., *un_x);
+      }
+      unscaled_x = ConstPtr(un_x);
     }
 
     unscaled_x->Print(*jnlst_, J_VECTOR, J_SOLUTION, "final x unscaled");
