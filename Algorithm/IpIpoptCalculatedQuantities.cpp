@@ -1561,7 +1561,6 @@ namespace Ipopt
         dynamic_cast<const LowRankUpdateSymMatrixSpace*> (GetRawPtr(hx_space));
       SmartPtr<const SymMatrix> new_sm;
       if (LR_H_space) {
-        DBG_PRINT((1, "LR_H_space is not null\n"));
         SmartPtr<LowRankUpdateSymMatrix> LR_H =
           LR_H_space->MakeNewLowRankUpdateSymMatrix();
         SmartPtr<const VectorSpace> LR_Vspace =

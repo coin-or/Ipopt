@@ -233,6 +233,7 @@ namespace Ipopt
     const LowRankUpdateSymMatrix* LR_W =
       dynamic_cast<const LowRankUpdateSymMatrix*> (W);
     DBG_ASSERT(LR_W);
+    DBG_PRINT_MATRIX(2, "LR_W", *LR_W);
 
     SmartPtr<const Vector> B0 = LR_W->GetDiag();
     SmartPtr<const MultiVectorMatrix> V = LR_W->GetV();
@@ -255,8 +256,8 @@ namespace Ipopt
     if (IsValid(V)) {
       SmartPtr<MultiVectorMatrix> V_x;
       Index nV = V->NCols();
-      DBG_PRINT((1, "delta_x  = %e\n", delta_x));
-      DBG_PRINT_MATRIX(2, "V", *V);
+      //DBG_PRINT((1, "delta_x  = %e\n", delta_x));
+      //DBG_PRINT_MATRIX(2, "V", *V);
       retval = SolveMultiVector(D_x, delta_x, D_s, delta_s, J_c,
                                 D_c, delta_c, J_d, D_d, delta_d,
                                 proto_rhs_x, proto_rhs_s, proto_rhs_c,
@@ -267,14 +268,14 @@ namespace Ipopt
                        "LowRankAugSystemSolver: SolveMultiVector returned retval = %d for V.\n", retval);
         return retval;
       }
-      DBG_PRINT_MATRIX(2, "Vtilde1_x", *Vtilde1_x);
+      //DBG_PRINT_MATRIX(2, "Vtilde1_x", *Vtilde1_x);
 
       SmartPtr<DenseSymMatrixSpace> M1space =
         new DenseSymMatrixSpace(nV);
       SmartPtr<DenseSymMatrix> M1 = M1space->MakeNewDenseSymMatrix();
       M1->FillIdentity();
       M1->HighRankUpdateTranspose(1., *Vtilde1_x, *V_x, 1.);
-      DBG_PRINT_MATRIX(2, "M1", *M1);
+      //DBG_PRINT_MATRIX(2, "M1", *M1);
       SmartPtr<DenseGenMatrixSpace> J1space =
         new DenseGenMatrixSpace(nV, nV);
       J1_ = J1space->MakeNewDenseGenMatrix();
@@ -341,7 +342,7 @@ namespace Ipopt
       SmartPtr<DenseGenMatrixSpace> J2space =
         new DenseGenMatrixSpace(nU, nU);
       J2_ = J2space->MakeNewDenseGenMatrix();
-      DBG_PRINT_MATRIX(2, "M2", *M2);
+      //DBG_PRINT_MATRIX(2, "M2", *M2);
       bool retchol = J2_->ComputeCholeskyFactor(*M2);
       if (!retchol) {
         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,

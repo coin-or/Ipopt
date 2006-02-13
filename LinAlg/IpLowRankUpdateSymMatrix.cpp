@@ -127,6 +127,14 @@ namespace Ipopt
                          "%sLowRankUpdateSymMatrix \"%s\" with %d rows and columns:\n",
                          prefix.c_str(), name.c_str(), Dim());
 
+    if (ReducedDiag()) {
+      jnlst.PrintfIndented(level, category, indent+1,
+                           "%sThis matrix has reduced diagonal.\n", prefix.c_str());
+    }
+    else {
+      jnlst.PrintfIndented(level, category, indent+1,
+                           "%sThis matrix has full diagonal.\n", prefix.c_str());
+    }
     jnlst.PrintfIndented(level, category, indent+1,
                          "%sDiagonal matrix:\n", prefix.c_str());
     if (IsValid(D_)) {

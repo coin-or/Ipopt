@@ -292,8 +292,8 @@ namespace Ipopt
       DBG_ASSERT(LR_h_space);
       SmartPtr<LowRankUpdateSymMatrixSpace> new_orig_h_space =
         new LowRankUpdateSymMatrixSpace(LR_h_space->Dim(),
-                                        LR_h_space->P_LowRank(),
-                                        LR_h_space->LowRankVectorSpace(),
+                                        NULL,
+                                        orig_x_space,
                                         false);
       h_space_->SetCompSpace(0, 0, *new_orig_h_space);
     }

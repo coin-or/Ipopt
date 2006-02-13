@@ -347,7 +347,6 @@ namespace Ipopt
               Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
                              "Projecting sigma into safeguards to be %e!\n", sigma_);
             }
-            printf("sigma_ = %e\n",sigma_);
           }
 
           if (limited_memory_max_history_ == 0 ) {
@@ -1143,6 +1142,9 @@ namespace Ipopt
 
   void LimMemQuasiNewtonUpdater::SetW()
   {
+    DBG_START_METH("LimMemQuasiNewtonUpdater::SetW",
+                   dbg_verbosity);
+
     SmartPtr<Vector> B0;
     if (update_for_resto_) {
       B0 = curr_DR_x_->MakeNew();
@@ -1155,6 +1157,7 @@ namespace Ipopt
       B0 = LM_vecspace->MakeNew();
       B0->Set(sigma_);
     }
+    DBG_PRINT_VECTOR(2, "B0", *B0);
 
     SmartPtr<LowRankUpdateSymMatrix> W =
       h_space_->MakeNewLowRankUpdateSymMatrix();
