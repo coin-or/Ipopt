@@ -12,6 +12,10 @@ if BUILDBLASDIR
   SUBDIRS += blas
 endif
 
+if BUILDLAPACKDIR
+  SUBDIRS += lapack
+endif
+
 if BUILDHSLDIR
   SUBDIRS += HSL
 endif

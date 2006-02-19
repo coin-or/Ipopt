@@ -15,6 +15,7 @@ Examples/hs071_cpp/Makefile.in -text
 Examples/hs071_cpp/hs071_main.cpp -text
 Examples/hs071_cpp/hs071_nlp.cpp -text
 Examples/hs071_cpp/hs071_nlp.hpp -text
+Extern/lapack/get.lapack -text
 Interfaces/IpInterfacesRegOp.cpp -text
 Interfaces/IpInterfacesRegOp.hpp -text
 Interfaces/IpSolveStatistics.cpp -text

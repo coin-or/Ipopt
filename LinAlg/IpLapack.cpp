@@ -34,15 +34,23 @@ namespace Ipopt
   void IpLapackDpotrs(Index ndim, Index nrhs, const Number *a, Index lda,
                       Number *b, Index ldb)
   {
+#ifdef HAVE_LAPACK
     ipfint N=ndim, NRHS=nrhs, LDA=lda, LDB=ldb, INFO;
     char uplo = 'L';
 
     F77_FUNC(dpotrs,DPOTRS)(&uplo, &N, &NRHS, a, &LDA, b, &LDB, &INFO, 1);
     DBG_ASSERT(INFO==0);
+#else
+
+    std::string msg = "Ipopt has been compiled without LAPACK routine DPOTRS, but options are chosen that require this dependency.  Abort.";
+    THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
+#endif
+
   }
 
   void IpLapackDpotrf(Index ndim, Number *a, Index lda, Index& info)
   {
+#ifdef HAVE_LAPACK
     ipfint N=ndim, LDA=lda, INFO;
 
     char UPLO = 'L';
@@ -50,11 +58,18 @@ namespace Ipopt
     F77_FUNC(dpotrf,DPOTRF)(&UPLO, &N, a, &LDA, &INFO, 1);
 
     info = INFO;
+#else
+
+    std::string msg = "Ipopt has been compiled without LAPACK routine DPOTRF, but options are chosen that require this dependency.  Abort.";
+    THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
+#endif
+
   }
 
   void IpLapackDsyev(bool compute_eigenvectors, Index ndim, Number *a,
                      Index lda, Number *w, Index& info)
   {
+#ifdef HAVE_LAPACK
     ipfint N=ndim, LDA=lda, INFO;
 
     char JOBZ;
@@ -87,5 +102,11 @@ namespace Ipopt
     info = INFO;
 
     delete [] WORK;
+#else
+
+    std::string msg = "Ipopt has been compiled without LAPACK routine DSYEV, but options are chosen that require this dependency.  Abort.";
+    THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
+#endif
+
   }
 }

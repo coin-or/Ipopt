@@ -10,9 +10,12 @@
 #define __IPLAPACK_HPP__
 
 #include "IpUtils.hpp"
+#include "IpException.hpp"
 
 namespace Ipopt
 {
+  DECLARE_STD_EXCEPTION(LAPACK_NOT_INCLUDED);
+
   /** Wrapper for LAPACK subroutine DPOTRS.  Solving a linear system
    *  given a Cholesky factorization.  We assume that the Cholesky
    *  factor is lower traiangular. */

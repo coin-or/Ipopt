@@ -14,13 +14,11 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2006, International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
-# Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
-
-SOURCES = $(libtmatrices_a_SOURCES)
+SOURCES = $(nodist_libiplapack_a_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -43,7 +41,41 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
-subdir = LinAlg/TMatrices
+@BUILDLAPACK_TRUE@am__append_1 = \
+@BUILDLAPACK_TRUE@	dlae2.f \
+@BUILDLAPACK_TRUE@	dlaev2.f \
+@BUILDLAPACK_TRUE@	dlamch.f \
+@BUILDLAPACK_TRUE@	dlanst.f \
+@BUILDLAPACK_TRUE@	dlansy.f \
+@BUILDLAPACK_TRUE@	dlapy2.f \
+@BUILDLAPACK_TRUE@	dlarf.f \
+@BUILDLAPACK_TRUE@	dlarfb.f \
+@BUILDLAPACK_TRUE@	dlarfg.f \
+@BUILDLAPACK_TRUE@	dlarft.f \
+@BUILDLAPACK_TRUE@	dlartg.f \
+@BUILDLAPACK_TRUE@	dlascl.f \
+@BUILDLAPACK_TRUE@	dlaset.f \
+@BUILDLAPACK_TRUE@	dlasr.f \
+@BUILDLAPACK_TRUE@	dlasrt.f \
+@BUILDLAPACK_TRUE@	dlassq.f \
+@BUILDLAPACK_TRUE@	dlatrd.f \
+@BUILDLAPACK_TRUE@	dorg2l.f \
+@BUILDLAPACK_TRUE@	dorg2r.f \
+@BUILDLAPACK_TRUE@	dorgql.f \
+@BUILDLAPACK_TRUE@	dorgqr.f \
+@BUILDLAPACK_TRUE@	dorgtr.f \
+@BUILDLAPACK_TRUE@	dpotf2.f \
+@BUILDLAPACK_TRUE@	dpotrf.f \
+@BUILDLAPACK_TRUE@	dpotrs.f \
+@BUILDLAPACK_TRUE@	dsteqr.f \
+@BUILDLAPACK_TRUE@	dsterf.f \
+@BUILDLAPACK_TRUE@	dsyev.f \
+@BUILDLAPACK_TRUE@	dsytd2.f \
+@BUILDLAPACK_TRUE@	dsytrd.f \
+@BUILDLAPACK_TRUE@	ieeeck.f \
+@BUILDLAPACK_TRUE@	ilaenv.f
+
+subdir = Extern/lapack
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -53,25 +85,33 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config.h
 CONFIG_CLEAN_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
-libtmatrices_a_AR = $(AR) $(ARFLAGS)
-libtmatrices_a_LIBADD =
-am_libtmatrices_a_OBJECTS = IpGenTMatrix.$(OBJEXT) \
-	IpSymTMatrix.$(OBJEXT) IpTripletHelper.$(OBJEXT)
-libtmatrices_a_OBJECTS = $(am_libtmatrices_a_OBJECTS)
+libiplapack_a_AR = $(AR) $(ARFLAGS)
+libiplapack_a_LIBADD =
+@BUILDLAPACK_TRUE@am__objects_1 = dlae2.$(OBJEXT) dlaev2.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dlamch.$(OBJEXT) dlanst.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dlansy.$(OBJEXT) dlapy2.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dlarf.$(OBJEXT) dlarfb.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dlarfg.$(OBJEXT) dlarft.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dlartg.$(OBJEXT) dlascl.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dlaset.$(OBJEXT) dlasr.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dlasrt.$(OBJEXT) dlassq.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dlatrd.$(OBJEXT) dorg2l.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dorg2r.$(OBJEXT) dorgql.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dorgqr.$(OBJEXT) dorgtr.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dpotf2.$(OBJEXT) dpotrf.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dpotrs.$(OBJEXT) dsteqr.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dsterf.$(OBJEXT) dsyev.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	dsytd2.$(OBJEXT) dsytrd.$(OBJEXT) \
+@BUILDLAPACK_TRUE@	ieeeck.$(OBJEXT) ilaenv.$(OBJEXT)
+nodist_libiplapack_a_OBJECTS = $(am__objects_1)
+libiplapack_a_OBJECTS = $(nodist_libiplapack_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
-depcomp = $(SHELL) $(top_srcdir)/depcomp
-am__depfiles_maybe = depfiles
-CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-CXXLD = $(CXX)
-CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
-	-o $@
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libtmatrices_a_SOURCES)
-DIST_SOURCES = $(libtmatrices_a_SOURCES)
+F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
+F77LD = $(F77)
+F77LINK = $(F77LD) $(AM_FFLAGS) $(FFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o \
+	$@
+SOURCES = $(nodist_libiplapack_a_SOURCES)
+DIST_SOURCES =
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -121,7 +161,7 @@ CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../../Common -I$(srcdir)/..
+CXXFLAGS = @CXXFLAGS@
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -215,25 +255,14 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-noinst_LIBRARIES = libtmatrices.a
-libtmatrices_a_SOURCES = \
-	IpGenTMatrix.cpp IpGenTMatrix.hpp \
-	IpSymTMatrix.cpp IpSymTMatrix.hpp \
-	IpTripletHelper.cpp IpTripletHelper.hpp
-
-
-# Astyle stuff
-ASTYLE_FILES = \
-	IpGenTMatrix.cppbak IpGenTMatrix.hppbak \
-	IpSymTMatrix.cppbak IpSymTMatrix.hppbak \
-	IpTripletHelper.cppbak IpTripletHelper.hppbak
-
-CLEANFILES = $(ASTYLE_FILES)
-SUFFIXES = .cppbak .hppbak
+EXTRA_DIST = get.lapack INSTALL.LAPACK
+iplibdir = $(top_builddir)/lib
+noinst_LIBRARIES = libiplapack.a
+nodist_libiplapack_a_SOURCES = $(am__append_1)
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .cpp .hpp .o .obj
+.SUFFIXES: .f .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -243,9 +272,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  LinAlg/TMatrices/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  Extern/lapack/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  LinAlg/TMatrices/Makefile
+	  $(AUTOMAKE) --foreign  Extern/lapack/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -266,10 +295,10 @@ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 
 clean-noinstLIBRARIES:
 	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
-libtmatrices.a: $(libtmatrices_a_OBJECTS) $(libtmatrices_a_DEPENDENCIES) 
-	-rm -f libtmatrices.a
-	$(libtmatrices_a_AR) libtmatrices.a $(libtmatrices_a_OBJECTS) $(libtmatrices_a_LIBADD)
-	$(RANLIB) libtmatrices.a
+libiplapack.a: $(libiplapack_a_OBJECTS) $(libiplapack_a_DEPENDENCIES) 
+	-rm -f libiplapack.a
+	$(libiplapack_a_AR) libiplapack.a $(libiplapack_a_OBJECTS) $(libiplapack_a_LIBADD)
+	$(RANLIB) libiplapack.a
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -277,23 +306,11 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpGenTMatrix.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSymTMatrix.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTripletHelper.Po@am__quote@
+.f.o:
+	$(F77COMPILE) -c -o $@ $<
 
-.cpp.o:
-@am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
-
-.cpp.obj:
-@am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+.f.obj:
+	$(F77COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 uninstall-info-am:
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
@@ -392,7 +409,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -405,7 +421,6 @@ clean: clean-am
 clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -431,7 +446,6 @@ install-man:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -460,18 +474,6 @@ uninstall-am: uninstall-info-am
 	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
 	uninstall-am uninstall-info-am
 
-
-astyle: $(ASTYLE_FILES)
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
-	touch $@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

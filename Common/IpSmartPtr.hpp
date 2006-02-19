@@ -190,7 +190,7 @@ namespace Ipopt
     /** Destructor, automatically decrements the
      * reference count, deletes the object if
      * necessary.*/
-    virtual ~SmartPtr();
+    ~SmartPtr();
     //@}
 
     /**@name Overloaded operators. */

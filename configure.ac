@@ -937,62 +937,79 @@ else
   fi
 fi
 
-# ##########
-# # LAPACK #
-# ##########
-# 
-# iplapacklibdir="\$(top_builddir)/Extern/lapack"
-# lapackdir=Extern/lapack/LAPACK/SRC
-# lapacksrcdir=$srcdir/$lapackdir
-# lapackobjdir=Extern/lapack
-# 
-# AC_ARG_WITH([lapack],
-#             AC_HELP_STRING([--with-lapack],
-#                            [specify LAPACK library (or BUILD for compilation)]),
-#             [use_lapack=$withval], [use_lapack=])
-# # Check if user supplied option makes sense
-# if test ! -z "$use_lapack"; then
-#   if test "$use_lapack" = "BUILD"; then
-#     AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[],
-#                   [AC_MSG_ERROR([option \"BUILD\" specified for lapack, but sources are missing])])
-#   else
-#     AC_MSG_CHECKING([whether user supplied LAPACKLIB=\"$use_lapack\" works])
-#     LIBS="$use_lapack $LIBS"
-#     IPADDLIBS="$use_lapack $IPADDLIBS"
-#     AC_TRY_LINK([],[      call dlasr],[AC_MSG_RESULT([yes])],
-#                 [AC_MSG_RESULT([no]); AC_MSG_ERROR([user supplied LAPACK library \"$use_lapack\" does not work])])
-#   fi
-# else
-# # First try to see if LAPACK is already available with BLAS library
-#   AC_MSG_CHECKING([whether LAPACK is already available with BLAS library])
-#   AC_TRY_LINK([],[      call dgetrf()],
-#             [AC_MSG_RESULT([yes]); use_lapack=ok],
-#             [AC_MSG_RESULT([no])])
-#   if test -z "$use_lapack"; then
-#     # Try to autodetect the library for lapack based on build system
-#     case $build in
-#       *-sgi-*)   AC_CHECK_LIB([complib.sgimath],[dgetrf],
-#                             [use_lapack=-lcomplib.sgimath;
-#                              LIBS="-lcomplib.sgimath $LIBS";
-#                              IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"]);;
-#       *-sun-*) SAVE_LDFLAGS="$LDFLAGS"
-#                AC_MSG_CHECKING([whether -xlic_lib=sunperf has LAPACK])
-#                LDFLAGS="-xlic_lib=sunperf $LDFLAGS"
-#                AC_TRY_LINK([],[      call dgetrf],
-#                            [AC_MSG_RESULT([yes]); use_lapack=-xlic_lib=sunperf],
-#                            [AC_MSG_RESULT([no]); LDFLAGS="$SAVE_LDFLAGS"]) ;;
-#     esac
-#   fi
-#   if test -z "$use_lapack"; then
-#     AC_CHECK_LIB(lapack,dgetrf,[use_lapack=-llapack;
-#                                 LIBS="-llapack $LIBS";
-#                                 IPADDLIBS="-llapack $IPADDLIBS"],[])
-#   fi
-#   if test -z "$use_lapack"; then
-#     AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[use_lapack=BUILD],
-#                   [AC_MSG_ERROR([cannot find LAPACK, and sources are missing in $lapacksrcdir])])
-#   fi
-# fi
+##########
+# LAPACK #
+##########
+
+AC_LANG_PUSH(Fortran 77)
+
+iplapacklibdir="\$(top_builddir)/Extern/lapack"
+lapackdir=Extern/lapack/LAPACK/SRC
+lapacksrcdir=$srcdir/$lapackdir
+lapackobjdir=Extern/lapack
+
+AC_ARG_WITH([lapack],
+            AC_HELP_STRING([--with-lapack],
+                           [specify LAPACK library (or BUILD for compilation, NONE for unavailable)]),
+            [use_lapack=$withval], [use_lapack=])
+# Check if user supplied option makes sense
+if test ! -z "$use_lapack"; then
+  if test "$use_lapack" = "BUILD"; then
+    AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[],
+                  [AC_MSG_ERROR([option \"BUILD\" specified for lapack, but sources are missing])])
+  else
+    if test ! "$use_lapack" = "NONE"; then
+      AC_MSG_CHECKING([whether user supplied LAPACKLIB=\"$use_lapack\" works])
+      LIBS="$use_lapack $LIBS"
+      IPADDLIBS="$use_lapack $IPADDLIBS"
+      AC_TRY_LINK([],[      call dsyev],[AC_MSG_RESULT([yes])],
+                  [AC_MSG_RESULT([no]); AC_MSG_ERROR([user supplied LAPACK library \"$use_lapack\" does not work])])
+    fi
+  fi
+else
+# First try to see if LAPACK is already available with BLAS library
+  AC_MSG_CHECKING([whether LAPACK is already available with BLAS library])
+  AC_TRY_LINK([],[      call dsyev()],
+            [AC_MSG_RESULT([yes]); use_lapack=ok],
+            [AC_MSG_RESULT([no])])
+  if test -z "$use_lapack"; then
+    # Try to autodetect the library for lapack based on build system
+    case $build in
+      *-sgi-*) AC_CHECK_LIB([complib.sgimath],[dsyev],
+                            [use_lapack=-lcomplib.sgimath;
+                             LIBS="-lcomplib.sgimath $LIBS";
+                             IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"]);;
+      *-sun-*) SAVE_LIBS="$LIBS"
+               AC_MSG_CHECKING([whether -xlic_lib=sunperf has LAPACK])
+               LIBS="-xlic_lib=sunperf $LIBS"
+               AC_TRY_LINK([],[      call dsyev],
+                           [AC_MSG_RESULT([yes])
+		  	    IPADDLIBS="-xlic_lib=sunperf $IPADDLIBS"
+			    use_blas=-xlic_lib=sunperf],
+                           [AC_MSG_RESULT([no])
+			    LIBS="$SAVE_LIBS"])
+             ;;
+    esac
+  fi
+  if test -z "$use_lapack"; then
+    AC_CHECK_LIB(lapack,dpotrs,[use_lapack=-llapack;
+                                LIBS="-llapack $LIBS";
+                                IPADDLIBS="-llapack $IPADDLIBS"],[])
+  fi
+  if test -z "$use_lapack"; then
+    AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[use_lapack=BUILD],
+                  [AC_MSG_WARN([cannot find LAPACK, and sources are missing in $lapacksrcdir])])
+    use_lapack=NONE;
+  fi
+fi
+
+if test "$use_lapack" = "NONE"; then
+  AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
+else
+  AC_DEFINE(HAVE_LAPACK, 1, [Define to 1 if LAPACK is avaliable])
+fi
+
+AC_LANG_POP(Fortran 77)
 
 #######################
 # HARWELL SUBROUTINES #
@@ -1321,14 +1338,15 @@ if test "$use_blas" = BUILD; then
   IPALLLIBS="Extern/blas/libipblas.a $IPALLLIBS"
 fi
 
-# AM_CONDITIONAL([BUILDLAPACK],[test "$use_lapack" = "BUILD"])
-# if test "$use_lapack" = BUILD; then
-#   LIBS="$iplapacklibdir/libiplapack.a $LIBS"
-#   IPALLLIBS="Extern/lapack/libiplapack.a $IPALLLIBS"
-#   for file in dgesv.f dgetf2.f dgetrf.f dgetrs.f dlabad.f dlacon.f dlacpy.f dlae2.f dlaebz.f dlaev2.f dlagtf.f dlagts.f dlamch.f dlansp.f dlanst.f dlapy2.f dlaqsp.f dlarf.f dlarfg.f dlarnv.f dlartg.f dlaruv.f dlascl.f dlaset.f dlasr.f dlasrt.f dlassq.f dlaswp.f dlatps.f dopgtr.f dopmtr.f dorg2l.f dorg2r.f dppcon.f dppequ.f dpprfs.f dppsv.f dppsvx.f dpptrf.f dpptrs.f drscl.f dspev.f dspevx.f dsptrd.f dstebz.f dstein.f dsteqr.f dsterf.f ieeeck.f ilaenv.f; do
-#     AC_CONFIG_LINKS($lapackobjdir/$file:$lapackdir/$file)
-#   done
-# fi
+AM_CONDITIONAL([BUILDLAPACK],[test "$use_lapack" = "BUILD"])
+if test "$use_lapack" = BUILD; then
+#  LDFLAGS="-L$iplapacklibdir $LDFLAGS"
+  LIBS="$iplapacklibdir/libiplapack.a $LIBS"
+  IPALLLIBS="OTHERS/lapack/libiplapack.a $IPALLLIBS"
+  for file in dlae2.f dlaev2.f dlamch.f dlanst.f dlansy.f dlapy2.f dlarf.f dlarfb.f dlarfg.f dlarft.f dlartg.f dlascl.f dlaset.f dlasr.f dlasrt.f dlassq.f dlatrd.f dorg2l.f dorg2r.f dorgql.f dorgqr.f dorgtr.f dpotf2.f dpotrf.f dpotrs.f dsteqr.f dsterf.f dsyev.f dsytd2.f dsytrd.f ieeeck.f ilaenv.f; do
+    AC_CONFIG_LINKS($lapackobjdir/$file:$lapackdir/$file)
+  done
+fi
 
 AM_CONDITIONAL([BUILDHSL],[test "$use_hsl" = "BUILD"])
 if test "$use_hsl" = BUILD ; then
@@ -1341,7 +1359,7 @@ AM_CONDITIONAL([BUILDMA57],[test "$use_MA57" = BUILD])
 AM_CONDITIONAL([BUILDMC19],[test "$use_MC19" = BUILD])
 
 AM_CONDITIONAL([BUILDBLASDIR],[test "$use_blas" = BUILD])
-# AM_CONDITIONAL([BUILDLAPACKDIR],[test "$use_lapack" = BUILD])
+AM_CONDITIONAL([BUILDLAPACKDIR],[test "$use_lapack" = BUILD])
 AM_CONDITIONAL([BUILDHSLDIR],[test "$use_hsl" = BUILD])
 
 AM_CONDITIONAL([HAVE_MA27],[test ! "$use_MA27" = no])
@@ -1380,7 +1398,8 @@ AC_CONFIG_FILES([Makefile Common/Makefile
 		 Examples/hs071_cpp/Makefile
 		 Examples/hs071_c/Makefile
 		 Examples/ScalableProblems/Makefile
-		 Extern/Makefile Extern/blas/Makefile
+		 Extern/Makefile
+		 Extern/blas/Makefile Extern/lapack/Makefile
 		 Extern/HSL/Makefile
 		 Extern/ASL/Makefile])
 

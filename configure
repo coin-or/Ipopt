@@ -319,7 +319,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXLIBS AR ARFLAGS AR_X CC CFLAGS ac_ct_CC F77 FFLAGS ac_ct_F77 FLIBS RANLIB ac_ct_RANLIB LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CXXCPP EGREP IPADDLIBS TAUCS_INCFLAGS ASLMAKEFLAGS ASLMAKEFILECMDS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMA57_TRUE BUILDMA57_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE ASLLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXLIBS AR ARFLAGS AR_X CC CFLAGS ac_ct_CC F77 FFLAGS ac_ct_F77 FLIBS RANLIB ac_ct_RANLIB LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CXXCPP EGREP IPADDLIBS TAUCS_INCFLAGS ASLMAKEFLAGS ASLMAKEFILECMDS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDLAPACK_TRUE BUILDLAPACK_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMA57_TRUE BUILDMA57_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDLAPACKDIR_TRUE BUILDLAPACKDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE ASLLIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -911,6 +911,8 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-blas             specify BLAS library (or BUILD for compilation)
+  --with-lapack           specify LAPACK library (or BUILD for compilation,
+                          NONE for unavailable)
   --with-hsl              specify Harwell library (or BUILD for compilation)
   --with-pardiso          specify Pardiso library (unsupported)
   --with-taucs            specify TAUCS library and dependencies
@@ -3609,7 +3611,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3612:" \
+echo "$as_me:3614:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -4176,7 +4178,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:4179: \"$ac_link\") >&5
+(eval echo $as_me:4181: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4254,7 +4256,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:4257: \"$ac_link\") >&5
+(eval echo $as_me:4259: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -9854,62 +9856,354 @@ fi
   fi
 fi
 
-# ##########
-# # LAPACK #
-# ##########
-#
-# iplapacklibdir="\$(top_builddir)/Extern/lapack"
-# lapackdir=Extern/lapack/LAPACK/SRC
-# lapacksrcdir=$srcdir/$lapackdir
-# lapackobjdir=Extern/lapack
-#
-# AC_ARG_WITH([lapack],
-#             AC_HELP_STRING([--with-lapack],
-#                            [specify LAPACK library (or BUILD for compilation)]),
-#             [use_lapack=$withval], [use_lapack=])
-# # Check if user supplied option makes sense
-# if test ! -z "$use_lapack"; then
-#   if test "$use_lapack" = "BUILD"; then
-#     AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[],
-#                   [AC_MSG_ERROR([option \"BUILD\" specified for lapack, but sources are missing])])
-#   else
-#     AC_MSG_CHECKING([whether user supplied LAPACKLIB=\"$use_lapack\" works])
-#     LIBS="$use_lapack $LIBS"
-#     IPADDLIBS="$use_lapack $IPADDLIBS"
-#     AC_TRY_LINK([],[      call dlasr],[AC_MSG_RESULT([yes])],
-#                 [AC_MSG_RESULT([no]); AC_MSG_ERROR([user supplied LAPACK library \"$use_lapack\" does not work])])
-#   fi
-# else
-# # First try to see if LAPACK is already available with BLAS library
-#   AC_MSG_CHECKING([whether LAPACK is already available with BLAS library])
-#   AC_TRY_LINK([],[      call dgetrf()],
-#             [AC_MSG_RESULT([yes]); use_lapack=ok],
-#             [AC_MSG_RESULT([no])])
-#   if test -z "$use_lapack"; then
-#     # Try to autodetect the library for lapack based on build system
-#     case $build in
-#       *-sgi-*)   AC_CHECK_LIB([complib.sgimath],[dgetrf],
-#                             [use_lapack=-lcomplib.sgimath;
-#                              LIBS="-lcomplib.sgimath $LIBS";
-#                              IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"]);;
-#       *-sun-*) SAVE_LDFLAGS="$LDFLAGS"
-#                AC_MSG_CHECKING([whether -xlic_lib=sunperf has LAPACK])
-#                LDFLAGS="-xlic_lib=sunperf $LDFLAGS"
-#                AC_TRY_LINK([],[      call dgetrf],
-#                            [AC_MSG_RESULT([yes]); use_lapack=-xlic_lib=sunperf],
-#                            [AC_MSG_RESULT([no]); LDFLAGS="$SAVE_LDFLAGS"]) ;;
-#     esac
-#   fi
-#   if test -z "$use_lapack"; then
-#     AC_CHECK_LIB(lapack,dgetrf,[use_lapack=-llapack;
-#                                 LIBS="-llapack $LIBS";
-#                                 IPADDLIBS="-llapack $IPADDLIBS"],[])
-#   fi
-#   if test -z "$use_lapack"; then
-#     AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[use_lapack=BUILD],
-#                   [AC_MSG_ERROR([cannot find LAPACK, and sources are missing in $lapacksrcdir])])
-#   fi
-# fi
+##########
+# LAPACK #
+##########
+
+ac_ext=f
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
+
+
+iplapacklibdir="\$(top_builddir)/Extern/lapack"
+lapackdir=Extern/lapack/LAPACK/SRC
+lapacksrcdir=$srcdir/$lapackdir
+lapackobjdir=Extern/lapack
+
+
+# Check whether --with-lapack or --without-lapack was given.
+if test "${with_lapack+set}" = set; then
+  withval="$with_lapack"
+  use_lapack=$withval
+else
+  use_lapack=
+fi;
+# Check if user supplied option makes sense
+if test ! -z "$use_lapack"; then
+  if test "$use_lapack" = "BUILD"; then
+    as_ac_File=`echo "ac_cv_file_$lapacksrcdir/dlarf.f" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $lapacksrcdir/dlarf.f" >&5
+echo $ECHO_N "checking for $lapacksrcdir/dlarf.f... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$lapacksrcdir/dlarf.f"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for lapack, but sources are missing" >&5
+echo "$as_me: error: option \"BUILD\" specified for lapack, but sources are missing" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+  else
+    if test ! "$use_lapack" = "NONE"; then
+      echo "$as_me:$LINENO: checking whether user supplied LAPACKLIB=\"$use_lapack\" works" >&5
+echo $ECHO_N "checking whether user supplied LAPACKLIB=\"$use_lapack\" works... $ECHO_C" >&6
+      LIBS="$use_lapack $LIBS"
+      IPADDLIBS="$use_lapack $IPADDLIBS"
+      cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call dsyev
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; { { echo "$as_me:$LINENO: error: user supplied LAPACK library \"$use_lapack\" does not work" >&5
+echo "$as_me: error: user supplied LAPACK library \"$use_lapack\" does not work" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+    fi
+  fi
+else
+# First try to see if LAPACK is already available with BLAS library
+  echo "$as_me:$LINENO: checking whether LAPACK is already available with BLAS library" >&5
+echo $ECHO_N "checking whether LAPACK is already available with BLAS library... $ECHO_C" >&6
+  cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call dsyev()
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; use_lapack=ok
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+  if test -z "$use_lapack"; then
+    # Try to autodetect the library for lapack based on build system
+    case $build in
+      *-sgi-*) echo "$as_me:$LINENO: checking for dsyev in -lcomplib.sgimath" >&5
+echo $ECHO_N "checking for dsyev in -lcomplib.sgimath... $ECHO_C" >&6
+if test "${ac_cv_lib_complib_sgimath_dsyev+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lcomplib.sgimath  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call dsyev
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_complib_sgimath_dsyev=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_complib_sgimath_dsyev=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_complib_sgimath_dsyev" >&5
+echo "${ECHO_T}$ac_cv_lib_complib_sgimath_dsyev" >&6
+if test $ac_cv_lib_complib_sgimath_dsyev = yes; then
+  use_lapack=-lcomplib.sgimath;
+                             LIBS="-lcomplib.sgimath $LIBS";
+                             IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"
+fi
+;;
+      *-sun-*) SAVE_LIBS="$LIBS"
+               echo "$as_me:$LINENO: checking whether -xlic_lib=sunperf has LAPACK" >&5
+echo $ECHO_N "checking whether -xlic_lib=sunperf has LAPACK... $ECHO_C" >&6
+               LIBS="-xlic_lib=sunperf $LIBS"
+               cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call dsyev
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		  	    IPADDLIBS="-xlic_lib=sunperf $IPADDLIBS"
+			    use_blas=-xlic_lib=sunperf
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+			    LIBS="$SAVE_LIBS"
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+             ;;
+    esac
+  fi
+  if test -z "$use_lapack"; then
+    echo "$as_me:$LINENO: checking for dpotrs in -llapack" >&5
+echo $ECHO_N "checking for dpotrs in -llapack... $ECHO_C" >&6
+if test "${ac_cv_lib_lapack_dpotrs+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-llapack  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call dpotrs
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_lapack_dpotrs=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_lapack_dpotrs=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_lapack_dpotrs" >&5
+echo "${ECHO_T}$ac_cv_lib_lapack_dpotrs" >&6
+if test $ac_cv_lib_lapack_dpotrs = yes; then
+  use_lapack=-llapack;
+                                LIBS="-llapack $LIBS";
+                                IPADDLIBS="-llapack $IPADDLIBS"
+fi
+
+  fi
+  if test -z "$use_lapack"; then
+    as_ac_File=`echo "ac_cv_file_$lapacksrcdir/dlarf.f" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $lapacksrcdir/dlarf.f" >&5
+echo $ECHO_N "checking for $lapacksrcdir/dlarf.f... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$lapacksrcdir/dlarf.f"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  use_lapack=BUILD
+else
+  { echo "$as_me:$LINENO: WARNING: cannot find LAPACK, and sources are missing in $lapacksrcdir" >&5
+echo "$as_me: WARNING: cannot find LAPACK, and sources are missing in $lapacksrcdir" >&2;}
+fi
+
+    use_lapack=NONE;
+  fi
+fi
+
+if test "$use_lapack" = "NONE"; then
+  { echo "$as_me:$LINENO: WARNING: Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work." >&5
+echo "$as_me: WARNING: Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work." >&2;}
+else
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_LAPACK 1
+_ACEOF
+
+fi
+
+ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
 
 #######################
 # HARWELL SUBROUTINES #
@@ -10912,14 +11206,25 @@ if test "$use_blas" = BUILD; then
   IPALLLIBS="Extern/blas/libipblas.a $IPALLLIBS"
 fi
 
-# AM_CONDITIONAL([BUILDLAPACK],[test "$use_lapack" = "BUILD"])
-# if test "$use_lapack" = BUILD; then
-#   LIBS="$iplapacklibdir/libiplapack.a $LIBS"
-#   IPALLLIBS="Extern/lapack/libiplapack.a $IPALLLIBS"
-#   for file in dgesv.f dgetf2.f dgetrf.f dgetrs.f dlabad.f dlacon.f dlacpy.f dlae2.f dlaebz.f dlaev2.f dlagtf.f dlagts.f dlamch.f dlansp.f dlanst.f dlapy2.f dlaqsp.f dlarf.f dlarfg.f dlarnv.f dlartg.f dlaruv.f dlascl.f dlaset.f dlasr.f dlasrt.f dlassq.f dlaswp.f dlatps.f dopgtr.f dopmtr.f dorg2l.f dorg2r.f dppcon.f dppequ.f dpprfs.f dppsv.f dppsvx.f dpptrf.f dpptrs.f drscl.f dspev.f dspevx.f dsptrd.f dstebz.f dstein.f dsteqr.f dsterf.f ieeeck.f ilaenv.f; do
-#     AC_CONFIG_LINKS($lapackobjdir/$file:$lapackdir/$file)
-#   done
-# fi
+
+
+if test "$use_lapack" = "BUILD"; then
+  BUILDLAPACK_TRUE=
+  BUILDLAPACK_FALSE='#'
+else
+  BUILDLAPACK_TRUE='#'
+  BUILDLAPACK_FALSE=
+fi
+
+if test "$use_lapack" = BUILD; then
+#  LDFLAGS="-L$iplapacklibdir $LDFLAGS"
+  LIBS="$iplapacklibdir/libiplapack.a $LIBS"
+  IPALLLIBS="OTHERS/lapack/libiplapack.a $IPALLLIBS"
+  for file in dlae2.f dlaev2.f dlamch.f dlanst.f dlansy.f dlapy2.f dlarf.f dlarfb.f dlarfg.f dlarft.f dlartg.f dlascl.f dlaset.f dlasr.f dlasrt.f dlassq.f dlatrd.f dorg2l.f dorg2r.f dorgql.f dorgqr.f dorgtr.f dpotf2.f dpotrf.f dpotrs.f dsteqr.f dsterf.f dsyev.f dsytd2.f dsytrd.f ieeeck.f ilaenv.f; do
+              ac_config_links="$ac_config_links $lapackobjdir/$file:$lapackdir/$file"
+
+  done
+fi
 
 
 
@@ -10977,7 +11282,16 @@ else
   BUILDBLASDIR_FALSE=
 fi
 
-# AM_CONDITIONAL([BUILDLAPACKDIR],[test "$use_lapack" = BUILD])
+
+
+if test "$use_lapack" = BUILD; then
+  BUILDLAPACKDIR_TRUE=
+  BUILDLAPACKDIR_FALSE='#'
+else
+  BUILDLAPACKDIR_TRUE='#'
+  BUILDLAPACKDIR_FALSE=
+fi
+
 
 
 if test "$use_hsl" = BUILD; then
@@ -11087,7 +11401,7 @@ elif test ! "$use_asldir" = no; then
 fi
 
 
-                                                                                                                                                                                              ac_config_files="$ac_config_files Makefile Common/Makefile LinAlg/Makefile LinAlg/TMatrices/Makefile Interfaces/Makefile Algorithm/Makefile Algorithm/LinearSolvers/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/CUTErInterface/Makefile Examples/hs071_f/Makefile Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile Examples/hs071_c/Makefile Examples/ScalableProblems/Makefile Extern/Makefile Extern/blas/Makefile Extern/HSL/Makefile Extern/ASL/Makefile"
+                                                                                                                                                                                                        ac_config_files="$ac_config_files Makefile Common/Makefile LinAlg/Makefile LinAlg/TMatrices/Makefile Interfaces/Makefile Algorithm/Makefile Algorithm/LinearSolvers/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/CUTErInterface/Makefile Examples/hs071_f/Makefile Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile Examples/hs071_c/Makefile Examples/ScalableProblems/Makefile Extern/Makefile Extern/blas/Makefile Extern/lapack/Makefile Extern/HSL/Makefile Extern/ASL/Makefile"
 
 
           ac_config_headers="$ac_config_headers inc/config.h"
@@ -11219,6 +11533,13 @@ echo "$as_me: error: conditional \"BUILDBLAS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
+if test -z "${BUILDLAPACK_TRUE}" && test -z "${BUILDLAPACK_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDLAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDLAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 if test -z "${BUILDHSL_TRUE}" && test -z "${BUILDHSL_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"BUILDHSL\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
@@ -11251,6 +11572,13 @@ if test -z "${BUILDBLASDIR_TRUE}" && test -z "${BUILDBLASDIR_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"BUILDBLASDIR\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"BUILDBLASDIR\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${BUILDLAPACKDIR_TRUE}" && test -z "${BUILDLAPACKDIR_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"BUILDLAPACKDIR\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"BUILDLAPACKDIR\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -11781,8 +12109,10 @@ do
   "Examples/ScalableProblems/Makefile" ) CONFIG_FILES="$CONFIG_FILES Examples/ScalableProblems/Makefile" ;;
   "Extern/Makefile" ) CONFIG_FILES="$CONFIG_FILES Extern/Makefile" ;;
   "Extern/blas/Makefile" ) CONFIG_FILES="$CONFIG_FILES Extern/blas/Makefile" ;;
+  "Extern/lapack/Makefile" ) CONFIG_FILES="$CONFIG_FILES Extern/lapack/Makefile" ;;
   "Extern/HSL/Makefile" ) CONFIG_FILES="$CONFIG_FILES Extern/HSL/Makefile" ;;
   "Extern/ASL/Makefile" ) CONFIG_FILES="$CONFIG_FILES Extern/ASL/Makefile" ;;
+  "$lapackobjdir/$file" ) CONFIG_LINKS="$CONFIG_LINKS $lapackobjdir/$file:$lapackdir/$file" ;;
   "Extern/ASL/ASLsolvers" ) CONFIG_LINKS="$CONFIG_LINKS Extern/ASL/ASLsolvers:$asldir" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "inc/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS inc/config.h" ;;
@@ -11947,6 +12277,8 @@ s,@AMPL_CPPFLAGS@,$AMPL_CPPFLAGS,;t t
 s,@IPALLLIBS@,$IPALLLIBS,;t t
 s,@BUILDBLAS_TRUE@,$BUILDBLAS_TRUE,;t t
 s,@BUILDBLAS_FALSE@,$BUILDBLAS_FALSE,;t t
+s,@BUILDLAPACK_TRUE@,$BUILDLAPACK_TRUE,;t t
+s,@BUILDLAPACK_FALSE@,$BUILDLAPACK_FALSE,;t t
 s,@BUILDHSL_TRUE@,$BUILDHSL_TRUE,;t t
 s,@BUILDHSL_FALSE@,$BUILDHSL_FALSE,;t t
 s,@BUILDMA27_TRUE@,$BUILDMA27_TRUE,;t t
@@ -11957,6 +12289,8 @@ s,@BUILDMC19_TRUE@,$BUILDMC19_TRUE,;t t
 s,@BUILDMC19_FALSE@,$BUILDMC19_FALSE,;t t
 s,@BUILDBLASDIR_TRUE@,$BUILDBLASDIR_TRUE,;t t
 s,@BUILDBLASDIR_FALSE@,$BUILDBLASDIR_FALSE,;t t
+s,@BUILDLAPACKDIR_TRUE@,$BUILDLAPACKDIR_TRUE,;t t
+s,@BUILDLAPACKDIR_FALSE@,$BUILDLAPACKDIR_FALSE,;t t
 s,@BUILDHSLDIR_TRUE@,$BUILDHSLDIR_TRUE,;t t
 s,@BUILDHSLDIR_FALSE@,$BUILDHSLDIR_FALSE,;t t
 s,@HAVE_MA27_TRUE@,$HAVE_MA27_TRUE,;t t

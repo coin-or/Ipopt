@@ -39,8 +39,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 @BUILDBLASDIR_TRUE@am__append_1 = blas
-@BUILDHSLDIR_TRUE@am__append_2 = HSL
-@BUILDASLDIR_TRUE@am__append_3 = ASL
+@BUILDLAPACKDIR_TRUE@am__append_2 = lapack
+@BUILDHSLDIR_TRUE@am__append_3 = HSL
+@BUILDASLDIR_TRUE@am__append_4 = ASL
 subdir = Extern
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -60,7 +61,7 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	uninstall-recursive
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = blas HSL ASL
+DIST_SUBDIRS = blas lapack HSL ASL
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -91,6 +92,10 @@ BUILDHSLDIR_FALSE = @BUILDHSLDIR_FALSE@
 BUILDHSLDIR_TRUE = @BUILDHSLDIR_TRUE@
 BUILDHSL_FALSE = @BUILDHSL_FALSE@
 BUILDHSL_TRUE = @BUILDHSL_TRUE@
+BUILDLAPACKDIR_FALSE = @BUILDLAPACKDIR_FALSE@
+BUILDLAPACKDIR_TRUE = @BUILDLAPACKDIR_TRUE@
+BUILDLAPACK_FALSE = @BUILDLAPACK_FALSE@
+BUILDLAPACK_TRUE = @BUILDLAPACK_TRUE@
 BUILDMA27_FALSE = @BUILDMA27_FALSE@
 BUILDMA27_TRUE = @BUILDMA27_TRUE@
 BUILDMA57_FALSE = @BUILDMA57_FALSE@
@@ -198,7 +203,8 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = $(am__append_1) $(am__append_2) $(am__append_3)
+SUBDIRS = $(am__append_1) $(am__append_2) $(am__append_3) \
+	$(am__append_4)
 all: all-recursive
 
 .SUFFIXES:
