@@ -10180,10 +10180,9 @@ if test `eval echo '${'$as_ac_File'}'` = yes; then
   use_lapack=BUILD
 else
   { echo "$as_me:$LINENO: WARNING: cannot find LAPACK, and sources are missing in $lapacksrcdir" >&5
-echo "$as_me: WARNING: cannot find LAPACK, and sources are missing in $lapacksrcdir" >&2;}
+echo "$as_me: WARNING: cannot find LAPACK, and sources are missing in $lapacksrcdir" >&2;}; use_lapack=NONE
 fi
 
-    use_lapack=NONE;
   fi
 fi
 

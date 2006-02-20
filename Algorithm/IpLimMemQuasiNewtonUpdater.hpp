@@ -114,7 +114,7 @@ namespace Ipopt
     /** Tag  for curr_DR_x_ */
     TaggedObject::Tag curr_DR_x_tag_;
     /** Current DR_x scaling factors in the restoration phase
-     *  objective function in the smaller space for the approxiation -
+     *  objective function in the smaller space for the approximation -
      *  this is only computed if the space is indeed smaller than the
      *  x space (only for update_for_resto_ = true) */
     SmartPtr<const Vector> curr_red_DR_x_;

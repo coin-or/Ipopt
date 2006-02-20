@@ -71,6 +71,7 @@ namespace Ipopt
 
     /** @name Algorithmic parameters */
     //@{
+    Number mu_max_fact_;
     Number mu_max_;
     Number mu_min_;
     bool mu_min_default_;

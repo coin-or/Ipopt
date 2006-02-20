@@ -49,11 +49,19 @@ namespace Ipopt
   void AdaptiveMuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddLowerBoundedNumberOption(
+      "mu_max_fact",
+      "Maximum value for barrier parameter.",
+      0.0, true, 1e3,
+      "This option determines the upper bound on the barrier parameter.  This "
+      "upper bound is computed as the average complementarity times the value "
+      "of this option.");
+    roptions->AddLowerBoundedNumberOption(
       "mu_max",
       "Maximum value for barrier parameter.",
       0.0, true, 1e5,
       "This option specifies an upper bound on the barrier parameter in the "
-      "adaptive mu selection mode.");
+      "adaptive mu selection mode.  If this option is set, it overwrites the "
+      "effect of mu_max_fact.");
     roptions->AddLowerBoundedNumberOption(
       "mu_min",
       "Minimum value for barrier parameter.",
@@ -155,7 +163,12 @@ namespace Ipopt
   bool AdaptiveMuUpdate::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)
   {
-    options.GetNumericValue("mu_max", mu_max_, prefix);
+    options.GetNumericValue("mu_max_fact", mu_max_fact_, prefix);
+    if (!options.GetNumericValue("mu_max", mu_max_, prefix)) {
+      // Set to a negative value as a hint that this value still has
+      // to be computed
+      mu_max_ = -1.;
+    }
     options.GetNumericValue("tau_min", tau_min_, prefix);
     options.GetNumericValue("adaptive_mu_safeguard_factor", adaptive_mu_safeguard_factor_, prefix);
     options.GetNumericValue("adaptive_mu_kkterror_red_fact", refs_red_fact_, prefix);
@@ -235,6 +248,14 @@ namespace Ipopt
       mu_min_ = Min(IpData().tol(),
                     IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_))/
                 (barrier_tol_factor_+1.);
+    }
+
+    // if mu_max has not yet been computed, do so now, based on the
+    // current average complementarity
+    if (mu_max_<0.) {
+      mu_max_ = mu_max_fact_*IpCq().curr_avrg_compl();
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "Setting mu_max to %e.\n", mu_max_);
     }
 
     // if there are not bounds, we always return the minimum MU value

@@ -9,6 +9,7 @@
 #include "IpIpoptAlg.hpp"
 #include "IpJournalist.hpp"
 #include "IpRestoPhase.hpp"
+#include "IpOrigIpoptNLP.hpp"
 
 namespace Ipopt
 {
@@ -80,9 +81,18 @@ namespace Ipopt
       "no",
       "no", "use the Newton step to update the multipliers",
       "yes", "use least-square mutliplier estimates",
+      "This asks the algorithm to recompute the multipliers, whenever the "
+      "current infeasibility is less than recalc_y_feas_tol. "
       "Choosing yes might be helpful in the quasi-Newton option.  However, "
       "each recalculation requires an extra factorization of the linear "
-      "system.\n");
+      "system.  If a limited memory quasi-Newton option is chosen, this is "
+      "used by default.");
+    roptions->AddLowerBoundedNumberOption(
+      "recalc_y_feas_tol",
+      "Feasibility threshold for recomputation of multipliers.",
+      0, true, 1e-6,
+      "If recalc_y is chosen and the current infeasibility is less than this "
+      "value, then the multipliers are recomputed.");
   }
 
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,
@@ -147,7 +157,19 @@ namespace Ipopt
                      "the hessian_updater strategy failed to initialize.");
 
     options.GetNumericValue("kappa_sigma", kappa_sigma_, prefix);
-    options.GetBoolValue("recalc_y", recalc_y_, prefix);
+    if (!options.GetBoolValue("recalc_y", recalc_y_, prefix)) {
+      Index enum_int;
+      if (options.GetEnumValue("hessian_information", enum_int, prefix)) {
+        HessianInformationType hessian_information =
+          HessianInformationType(enum_int);
+        if (hessian_information==LIMITED_MEMORY) {
+          recalc_y_ = true;
+        }
+      }
+    }
+    if (recalc_y_) {
+      options.GetNumericValue("recalc_y_feas_tol", recalc_y_feas_tol_, prefix);
+    }
 
     if (prefix=="resto.") {
       skip_print_problem_stats_ = true;
@@ -530,7 +552,7 @@ namespace Ipopt
     // If we want to recalculate the multipliers (e.g., as least
     // square estimates), call the calculator for that
     //    if (recalc_y_) {
-    if (recalc_y_ && IpCq().curr_constraint_violation()<IpData().tol()) {
+    if (recalc_y_ && IpCq().curr_constraint_violation()<recalc_y_feas_tol_) {
       if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                        "dual infeasisibility before least square multiplier update = %e\n",

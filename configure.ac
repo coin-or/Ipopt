@@ -998,8 +998,7 @@ else
   fi
   if test -z "$use_lapack"; then
     AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[use_lapack=BUILD],
-                  [AC_MSG_WARN([cannot find LAPACK, and sources are missing in $lapacksrcdir])])
-    use_lapack=NONE;
+                  [AC_MSG_WARN([cannot find LAPACK, and sources are missing in $lapacksrcdir]); use_lapack=NONE])
   fi
 fi
 

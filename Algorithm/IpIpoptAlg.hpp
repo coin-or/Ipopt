@@ -160,6 +160,8 @@ namespace Ipopt
      *  recalculated with the eq_mutliplier_calculator object for each
      *  new point. */
     bool recalc_y_;
+    /** Feasibility threshold for recalc_y */
+    Number recalc_y_feas_tol_;
     //@}
 
     /** @name auxilliary functions */

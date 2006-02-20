@@ -321,8 +321,33 @@ namespace Ipopt
           if (skipping) {
             break;
           }
+
+          if (update_for_resto_) {
+            // In the restoration phase we don't know if the update has
+            // to be skipped yet, since a change in curr_eta_ might
+            // cause some of the s^Ty pairs to become negative.  For
+            // now, we then just skip the update and use what we had
+            // before.
+            //
+            // ToDo: It would probably be better just to reset the
+            // entire update.
+            StoreInternalDataBackup();
+          }
+
           bool augment_memory = UpdateInternalData(*s_new, *y_new, ypart_new);
-          DBG_PRINT_MATRIX(2, "Y", *Y_);
+
+          if (update_for_resto_) {
+            Number dmin = D_->Min();
+            if (dmin <= 0.) {
+              Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                             "Skipping BFGS update in restoration phase because Dmin is %e\n", dmin);
+              // Check if any of the s^Ty pairs are non-positive.  If so, skip
+              IpData().Append_info_string("We");
+              skipping = true;
+              RestoreInternalDataBackup();
+              break;
+            }
+          }
 
           Number sTy_new = s_new->Dot(*y_new);
           if (!update_for_resto_) {
