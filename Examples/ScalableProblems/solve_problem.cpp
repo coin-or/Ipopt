@@ -169,6 +169,7 @@ int main(int argv, char* argc[])
 
   // Create an instance of the IpoptApplication
   SmartPtr<IpoptApplication> app = new IpoptApplication();
+  app->ProcessParams();
 
   ApplicationReturnStatus status = app->OptimizeTNLP(GetRawPtr(tnlp));
 
