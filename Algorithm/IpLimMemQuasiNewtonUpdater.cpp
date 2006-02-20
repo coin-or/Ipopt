@@ -30,7 +30,7 @@ namespace Ipopt
     roptions->AddLowerBoundedIntegerOption(
       "limited_memory_max_history",
       "Maximum size of the history for the limited quasi-Newton Hessian approximation.",
-      0, 10,
+      0, 6,
       "This option determines the number of most recent iterations that are "
       "taken into account for the limited-memory quasi-Newton approximation.");
 
@@ -65,7 +65,7 @@ namespace Ipopt
     roptions->AddLowerBoundedIntegerOption(
       "limited_memory_max_skipping",
       "Threshold for successive iterations where update is skipped.",
-      1, 10,
+      1, 2,
       "If the update is skipped more than this number of successive "
       "iterations, we quasi-Newton approximation is reset.");
   }
