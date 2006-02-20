@@ -8,6 +8,10 @@
 
 #include "IpAlgBuilder.hpp"
 
+#include "IpOrigIpoptNLP.hpp"
+#include "IpIpoptData.hpp"
+#include "IpIpoptCalculatedQuantities.hpp"
+
 #include "IpStdAugSystemSolver.hpp"
 #include "IpAugRestoSystemSolver.hpp"
 #include "IpPDFullSpaceSolver.hpp"
@@ -33,6 +37,8 @@
 #include "IpRestoIterateInitializer.hpp"
 #include "IpRestoRestoPhase.hpp"
 #include "IpTSymLinearSolver.hpp"
+#include "IpUserScaling.hpp"
+#include "IpGradientScaling.hpp"
 #include "IpExactHessianUpdater.hpp"
 
 #ifdef HAVE_MA27
@@ -60,6 +66,38 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
+  void AlgorithmBuilder::BuildIpoptObjects(const Journalist& jnlst,
+				   const OptionsList& options,
+				   const std::string& prefix,
+				   const SmartPtr<NLP>& nlp, 
+				   SmartPtr<IpoptNLP>& ip_nlp,
+				   SmartPtr<IpoptData>& ip_data,
+				   SmartPtr<IpoptCalculatedQuantities>& ip_cq)
+  {
+    DBG_ASSERT(prefix == "");
+
+    SmartPtr<NLPScalingObject> nlp_scaling ;
+    std::string nlp_scaling_method;
+    options.GetStringValue("nlp_scaling_method", nlp_scaling_method, "");
+    if (nlp_scaling_method == "user-scaling") {
+      nlp_scaling = new UserScaling(ConstPtr(nlp));
+    }
+    else if (nlp_scaling_method == "gradient-based") {
+      nlp_scaling = new GradientScaling(nlp);
+    }
+    else {
+      nlp_scaling = new NoNLPScalingObject();
+    }
+    
+    ip_nlp = new OrigIpoptNLP(&jnlst, GetRawPtr(nlp), nlp_scaling);
+    
+    // Create the IpoptData
+    ip_data = new IpoptData();
+    
+    // Create the IpoptCalculators
+    ip_cq = new IpoptCalculatedQuantities(ip_nlp, ip_data);
+  }
+				   
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Undocumented");

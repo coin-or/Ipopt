@@ -14,6 +14,7 @@ int main(int argv, char**argc)
   using namespace Ipopt;
 
   SmartPtr<IpoptApplication> app = new IpoptApplication();
+  app->ProcessParams();
 
   // Add the suffix handler for scaling
   SmartPtr<AmplSuffixHandler> suffix_handler = new AmplSuffixHandler();

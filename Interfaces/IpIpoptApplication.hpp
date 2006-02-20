@@ -12,23 +12,31 @@
 #include "IpJournalist.hpp"
 #include "IpTNLP.hpp"
 #include "IpNLP.hpp"
-#include "IpRegOptions.hpp"
-#include "IpOptionsList.hpp"
-#include "IpSolveStatistics.hpp"
 
 namespace Ipopt
 {
   /* Return codes for the Optimize call for an application */
 #include "IpReturnCodes_inc.h"
 
+  /* forward declarations */
+  class IpoptAlgorithm;
+  class IpoptNLP;
+  class IpoptData;
+  class IpoptCalculatedQuantities;
+  class AlgorithmBuilder;
+  class RegisteredOptions;
+  class OptionsList;
+  class SolveStatistics;
+
   /** This is the main application class for making calls to Ipopt. */
   class IpoptApplication : public ReferencedObject
   {
   public:
-    IpoptApplication(bool read_params_dat = true, bool create_console_out = true,
-                     SmartPtr<RegisteredOptions> reg_options = NULL);
+    IpoptApplication(bool create_console_out = true);
 
     virtual ~IpoptApplication();
+
+    void ProcessParams(bool read_params_dat = true);
 
     /**@name Solve methods */
     //@{
@@ -36,7 +44,7 @@ namespace Ipopt
     ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& tnlp);
 
     /** Solve a problem that inherits from NLP */
-    ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp);
+    ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp, SmartPtr<AlgorithmBuilder> alg_builder=NULL);
 
     /** Solve a problem (that inherits from TNLP) for a repeated time.
      *  The OptimizeTNLP method must have been called before.  The
@@ -65,6 +73,13 @@ namespace Ipopt
       return jnlst_;
     }
 
+    /** Get a pointer to RegisteredOptions object to
+     *  add new options */
+    SmartPtr<RegisteredOptions> RegOptions()
+    {
+      return reg_options_;
+    }
+    
     /** Get the options list for setting options */
     SmartPtr<OptionsList> Options()
     {
@@ -73,10 +88,7 @@ namespace Ipopt
 
     /** Get the object with the statistics about the most recent
      *  optimization run. */
-    SmartPtr<SolveStatistics> Statistics()
-    {
-      return statistics_;
-    }
+    SmartPtr<SolveStatistics> Statistics();
     //@}
 
     /** @name Methods for IpoptTypeInfo */
@@ -119,6 +131,9 @@ namespace Ipopt
     /** Journalist for reporting output */
     SmartPtr<Journalist> jnlst_;
 
+    /** RegisteredOptions */
+    SmartPtr<RegisteredOptions> reg_options_;
+
     /** OptionsList used for the application */
     SmartPtr<OptionsList> options_;
 
@@ -126,33 +141,23 @@ namespace Ipopt
      *  optimization run. */
     SmartPtr<SolveStatistics> statistics_;
 
-    /** Object with the algorithm sceleton.  We need to use a SmartPtr
-     *  to ReferencedObject, since otherwise we would have to include
-     *  too many header files. */
-    SmartPtr<ReferencedObject> alg_;
+    /** Object with the algorithm sceleton.  
+     */
+    SmartPtr<IpoptAlgorithm> alg_;
 
     /** IpoptNLP Object for the NLP.  We keep this around for a
-     *  ReOptimize warm start.  We need to use a SmartPtr
-     *  to ReferencedObject, since otherwise we would have to include
-     *  too many header files. */
-    SmartPtr<ReferencedObject> ip_nlp_;
+     *  ReOptimize warm start. */
+    SmartPtr<IpoptNLP> ip_nlp_;
 
     /** IpoptData Object for the NLP.  We keep this around for a
-     *  ReOptimize warm start.  We need to use a SmartPtr
-     *  to ReferencedObject, since otherwise we would have to include
-     *  too many header files. */
-    SmartPtr<ReferencedObject> ip_data_;
+     *  ReOptimize warm start.
+     */
+    SmartPtr<IpoptData> ip_data_;
 
     /** IpoptCalculatedQuantities Object for the NLP.  We keep this
-     *  around for a ReOptimize warm start.  We need to use a SmartPtr
-     *  to ReferencedObject, since otherwise we would have to include
-     *  too many header files. */
-    SmartPtr<ReferencedObject> ip_cq_;
-
-    /** Pointer for journals (which are also in the Journalist) so
-     *  that we can reset the printlevels if necessary before each
-     *  optimization. */
-    SmartPtr<Journal> stdout_jrnl_;
+     *  around for a ReOptimize warm start.
+     */
+    SmartPtr<IpoptCalculatedQuantities> ip_cq_;
 
     /** Pointer to the TNLPAdapter used to convert the TNLP to an NLP.
      *  We keep this around for the ReOptimizerTNLP call. */
