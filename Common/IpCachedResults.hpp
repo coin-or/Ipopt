@@ -705,14 +705,18 @@ namespace Ipopt
       return;
 
     typename std::list< DependentResult<T>* >::iterator iter;
-    for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
-      if ( (*iter)->IsStale() ) {
+    iter = cached_results_->begin();
+    while (iter != cached_results_->end()) {
+      if ((*iter)->IsStale()) {
         typename std::list< DependentResult<T>* >::iterator
         iter_to_remove = iter;
-        iter--;
+        iter++;
         DependentResult<T>* result_to_delete = (*iter_to_remove);
         cached_results_->erase(iter_to_remove);
         delete result_to_delete;
+      }
+      else {
+	iter++;
       }
     }
   }
