@@ -67,12 +67,12 @@ namespace Ipopt
 #endif
 
   void AlgorithmBuilder::BuildIpoptObjects(const Journalist& jnlst,
-				   const OptionsList& options,
-				   const std::string& prefix,
-				   const SmartPtr<NLP>& nlp, 
-				   SmartPtr<IpoptNLP>& ip_nlp,
-				   SmartPtr<IpoptData>& ip_data,
-				   SmartPtr<IpoptCalculatedQuantities>& ip_cq)
+      const OptionsList& options,
+      const std::string& prefix,
+      const SmartPtr<NLP>& nlp,
+      SmartPtr<IpoptNLP>& ip_nlp,
+      SmartPtr<IpoptData>& ip_data,
+      SmartPtr<IpoptCalculatedQuantities>& ip_cq)
   {
     DBG_ASSERT(prefix == "");
 
@@ -88,16 +88,16 @@ namespace Ipopt
     else {
       nlp_scaling = new NoNLPScalingObject();
     }
-    
+
     ip_nlp = new OrigIpoptNLP(&jnlst, GetRawPtr(nlp), nlp_scaling);
-    
+
     // Create the IpoptData
     ip_data = new IpoptData();
-    
+
     // Create the IpoptCalculators
     ip_cq = new IpoptCalculatedQuantities(ip_nlp, ip_data);
   }
-				   
+
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Undocumented");

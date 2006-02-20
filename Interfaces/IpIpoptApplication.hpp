@@ -79,7 +79,7 @@ namespace Ipopt
     {
       return reg_options_;
     }
-    
+
     /** Get the options list for setting options */
     SmartPtr<OptionsList> Options()
     {
@@ -141,7 +141,7 @@ namespace Ipopt
      *  optimization run. */
     SmartPtr<SolveStatistics> statistics_;
 
-    /** Object with the algorithm sceleton.  
+    /** Object with the algorithm sceleton.
      */
     SmartPtr<IpoptAlgorithm> alg_;
 

@@ -29,26 +29,28 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
-    AlgorithmBuilder() {}
+    AlgorithmBuilder()
+    {}
 
     /** Destructor */
-    virtual ~AlgorithmBuilder() {}
+    virtual ~AlgorithmBuilder()
+    {}
 
     //@}
 
     /** @name Methods to build parts of the algorithm */
     //@{
     virtual void BuildIpoptObjects(const Journalist& jnlst,
-				   const OptionsList& options,
-				   const std::string& prefix,
-				   const SmartPtr<NLP>& nlp,
-				   SmartPtr<IpoptNLP>& ip_nlp,
-				   SmartPtr<IpoptData>& ip_data,
-				   SmartPtr<IpoptCalculatedQuantities>& ip_cq);
-				   
+                                   const OptionsList& options,
+                                   const std::string& prefix,
+                                   const SmartPtr<NLP>& nlp,
+                                   SmartPtr<IpoptNLP>& ip_nlp,
+                                   SmartPtr<IpoptData>& ip_data,
+                                   SmartPtr<IpoptCalculatedQuantities>& ip_cq);
+
     virtual SmartPtr<IpoptAlgorithm> BuildBasicAlgorithm(const Journalist& jnlst,
-							 const OptionsList& options,
-							 const std::string& prefix);
+        const OptionsList& options,
+        const std::string& prefix);
     //@}
 
     /** Methods for IpoptTypeInfo */

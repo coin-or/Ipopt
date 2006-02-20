@@ -716,7 +716,7 @@ namespace Ipopt
         delete result_to_delete;
       }
       else {
-	iter++;
+        iter++;
       }
     }
   }

@@ -85,12 +85,12 @@ namespace Ipopt
 
     if (!will_allow_clobber(tag)) {
       if (IsValid(jnlst_)) {
-	std::string msg = "WARNING: Tried to set option \"" + tag;
-	msg += "\" to a value of \"" + value;
-	msg += "\",\nbut the previous value is set to disallow clobbering.\n";
-	msg += "The setting will remain as: \"" + tag;
-	msg += " " + options_[lowercase(tag)].GetValue();
-	msg += "\"\n";
+        std::string msg = "WARNING: Tried to set option \"" + tag;
+        msg += "\" to a value of \"" + value;
+        msg += "\",\nbut the previous value is set to disallow clobbering.\n";
+        msg += "The setting will remain as: \"" + tag;
+        msg += " " + options_[lowercase(tag)].GetValue();
+        msg += "\"\n";
         jnlst_->Printf(J_WARNING, J_MAIN, msg.c_str());
       }
     }
@@ -168,13 +168,13 @@ namespace Ipopt
 
     if (!will_allow_clobber(tag)) {
       if (IsValid(jnlst_)) {
-	std::string msg = "WARNING: Tried to set option \"" + tag;
-	msg += "\" to a value of \"";
-	msg += buffer;
-	msg += "\",\nbut the previous value is set to disallow clobbering.\n";
-	msg += "The setting will remain as: \"" + tag;
-	msg += " " + options_[lowercase(tag)].GetValue();
-	msg += "\"\n";
+        std::string msg = "WARNING: Tried to set option \"" + tag;
+        msg += "\" to a value of \"";
+        msg += buffer;
+        msg += "\",\nbut the previous value is set to disallow clobbering.\n";
+        msg += "The setting will remain as: \"" + tag;
+        msg += " " + options_[lowercase(tag)].GetValue();
+        msg += "\"\n";
         jnlst_->Printf(J_WARNING, J_MAIN, msg.c_str());
       }
     }
@@ -242,13 +242,13 @@ namespace Ipopt
 
     if (!will_allow_clobber(tag)) {
       if (IsValid(jnlst_)) {
-	std::string msg = "WARNING: Tried to set option \"" + tag;
-	msg += "\" to a value of \"";
-	msg += buffer;
-	msg += "\",\nbut the previous value is set to disallow clobbering.\n";
-	msg += "The setting will remain as: \"" + tag;
-	msg += " " + options_[lowercase(tag)].GetValue();
-	msg += "\"\n";
+        std::string msg = "WARNING: Tried to set option \"" + tag;
+        msg += "\" to a value of \"";
+        msg += buffer;
+        msg += "\",\nbut the previous value is set to disallow clobbering.\n";
+        msg += "The setting will remain as: \"" + tag;
+        msg += " " + options_[lowercase(tag)].GetValue();
+        msg += "\"\n";
         jnlst_->Printf(J_WARNING, J_MAIN, msg.c_str());
       }
     }

@@ -75,37 +75,37 @@ namespace Ipopt
     try {
       // Get the options
       if (read_params_dat) {
-	FILE* fp_options = fopen("PARAMS.DAT", "r");
-	if (fp_options) {
-	  // PARAMS.DAT exists, read the content
-	  options_->ReadFromFile(*jnlst_, fp_options);
-	  fclose(fp_options);
-	  fp_options=NULL;
-	}
+        FILE* fp_options = fopen("PARAMS.DAT", "r");
+        if (fp_options) {
+          // PARAMS.DAT exists, read the content
+          options_->ReadFromFile(*jnlst_, fp_options);
+          fclose(fp_options);
+          fp_options=NULL;
+        }
       }
-	
+
       Index ivalue;
       options_->GetIntegerValue("print_level", ivalue, "");
       EJournalLevel print_level = (EJournalLevel)ivalue;
       SmartPtr<Journal> stdout_jrnl = jnlst_->GetJournal("console");
       if (IsValid(stdout_jrnl)) {
-	// Set printlevel for stdout
-	stdout_jrnl->SetAllPrintLevels(print_level);
-	stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
+        // Set printlevel for stdout
+        stdout_jrnl->SetAllPrintLevels(print_level);
+        stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
       }
-	
+
       bool option_set;
 
 #ifdef IP_DEBUG
       // Set printlevel for debug
       option_set = options_->GetIntegerValue("debug_print_level",
-					     ivalue, "");
+                                             ivalue, "");
       EJournalLevel debug_print_level;
       if (option_set) {
-	debug_print_level = (EJournalLevel)ivalue;
+        debug_print_level = (EJournalLevel)ivalue;
       }
       else {
-	debug_print_level = print_level;
+        debug_print_level = print_level;
       }
       SmartPtr<Journal> debug_jrnl = jnlst_->GetJournal("Debug");
       debug_jrnl->SetAllPrintLevels(debug_print_level);
@@ -116,58 +116,58 @@ namespace Ipopt
       std::string output_filename;
       options_->GetStringValue("output_file", output_filename, "");
       if (output_filename != "") {
-	EJournalLevel file_print_level;
-	option_set = options_->GetIntegerValue("file_print_level", ivalue, "");
-	if (option_set) {
-	  file_print_level = (EJournalLevel)ivalue;
-	}
-	else {
-	  file_print_level = print_level;
-	}
-	OpenOutputFile(output_filename, file_print_level);
+        EJournalLevel file_print_level;
+        option_set = options_->GetIntegerValue("file_print_level", ivalue, "");
+        if (option_set) {
+          file_print_level = (EJournalLevel)ivalue;
+        }
+        else {
+          file_print_level = print_level;
+        }
+        OpenOutputFile(output_filename, file_print_level);
       }
 
       // output a description of all the options
       bool print_options_documentation;
       options_->GetBoolValue("print_options_documentation",
-			     print_options_documentation, "");
+                             print_options_documentation, "");
       if (print_options_documentation) {
-	bool latex;
-	options_->GetBoolValue("print_options_latex_mode", latex, "");
-	if (latex) {
-	  std::list<std::string> options_to_print;
-	  options_to_print.push_back("print_level");
-	  options_to_print.push_back("tol");
-	  options_to_print.push_back("compl_inf_tol");
-	  options_to_print.push_back("dual_inf_tol");
-	  options_to_print.push_back("constr_mult_init_max");
-	  options_to_print.push_back("constr_viol_tol");
-	  options_to_print.push_back("pivtol");
-	  options_to_print.push_back("pivtolmax");
-	  options_to_print.push_back("mu_strategy");
-	  options_to_print.push_back("mu_init");
-	  options_to_print.push_back("mu_oracle");
-	  options_to_print.push_back("corrector_type");
-	  options_to_print.push_back("obj_scaling_factor");
-	  options_to_print.push_back("nlp_scaling_method");
-	  options_to_print.push_back("nlp_scaling_max_gradient");
-	  options_to_print.push_back("bound_frac");
-	  options_to_print.push_back("bound_mult_init_val");
-	  options_to_print.push_back("bound_push");
-	  options_to_print.push_back("bound_relax_factor");
-	  options_to_print.push_back("acceptable_compl_inf_tol");
-	  options_to_print.push_back("acceptable_constr_viol_tol");
-	  options_to_print.push_back("acceptable_dual_inf_tol");
-	  options_to_print.push_back("acceptable_tol");
-	  options_to_print.push_back("diverging_iterates_tol");
-	  options_to_print.push_back("alpha_for_y");
-	  options_to_print.push_back("expect_infeasible_problem");
-	  options_to_print.push_back("max_iter");
-	  options_to_print.push_back("max_refinement_steps");
-	  options_to_print.push_back("max_soc");
-	  options_to_print.push_back("min_refinement_steps");
-	  options_to_print.push_back("output_file");
-	  options_to_print.push_back("file_print_level");
+        bool latex;
+        options_->GetBoolValue("print_options_latex_mode", latex, "");
+        if (latex) {
+          std::list<std::string> options_to_print;
+          options_to_print.push_back("print_level");
+          options_to_print.push_back("tol");
+          options_to_print.push_back("compl_inf_tol");
+          options_to_print.push_back("dual_inf_tol");
+          options_to_print.push_back("constr_mult_init_max");
+          options_to_print.push_back("constr_viol_tol");
+          options_to_print.push_back("pivtol");
+          options_to_print.push_back("pivtolmax");
+          options_to_print.push_back("mu_strategy");
+          options_to_print.push_back("mu_init");
+          options_to_print.push_back("mu_oracle");
+          options_to_print.push_back("corrector_type");
+          options_to_print.push_back("obj_scaling_factor");
+          options_to_print.push_back("nlp_scaling_method");
+          options_to_print.push_back("nlp_scaling_max_gradient");
+          options_to_print.push_back("bound_frac");
+          options_to_print.push_back("bound_mult_init_val");
+          options_to_print.push_back("bound_push");
+          options_to_print.push_back("bound_relax_factor");
+          options_to_print.push_back("acceptable_compl_inf_tol");
+          options_to_print.push_back("acceptable_constr_viol_tol");
+          options_to_print.push_back("acceptable_dual_inf_tol");
+          options_to_print.push_back("acceptable_tol");
+          options_to_print.push_back("diverging_iterates_tol");
+          options_to_print.push_back("alpha_for_y");
+          options_to_print.push_back("expect_infeasible_problem");
+          options_to_print.push_back("max_iter");
+          options_to_print.push_back("max_refinement_steps");
+          options_to_print.push_back("max_soc");
+          options_to_print.push_back("min_refinement_steps");
+          options_to_print.push_back("output_file");
+          options_to_print.push_back("file_print_level");
 
           reg_options_->OutputLatexOptionDocumentation(*jnlst_, options_to_print);
         }
@@ -345,11 +345,11 @@ namespace Ipopt
     try {
 
       if (IsNull(alg_builder)) {
-	alg_builder = new AlgorithmBuilder();
+        alg_builder = new AlgorithmBuilder();
       }
 
       alg_builder->BuildIpoptObjects(*jnlst_, *options_, "", nlp,
-				     ip_nlp_, ip_data_, ip_cq_);
+                                     ip_nlp_, ip_data_, ip_cq_);
 
       alg_ = GetRawPtr(alg_builder->BuildBasicAlgorithm(*jnlst_, *options_, ""));
 
