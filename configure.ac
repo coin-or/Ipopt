@@ -1341,7 +1341,7 @@ AM_CONDITIONAL([BUILDLAPACK],[test "$use_lapack" = "BUILD"])
 if test "$use_lapack" = BUILD; then
 #  LDFLAGS="-L$iplapacklibdir $LDFLAGS"
   LIBS="$iplapacklibdir/libiplapack.a $LIBS"
-  IPALLLIBS="OTHERS/lapack/libiplapack.a $IPALLLIBS"
+  IPALLLIBS="Extern/lapack/libiplapack.a $IPALLLIBS"
   for file in dlae2.f dlaev2.f dlamch.f dlanst.f dlansy.f dlapy2.f dlarf.f dlarfb.f dlarfg.f dlarft.f dlartg.f dlascl.f dlaset.f dlasr.f dlasrt.f dlassq.f dlatrd.f dorg2l.f dorg2r.f dorgql.f dorgqr.f dorgtr.f dpotf2.f dpotrf.f dpotrs.f dsteqr.f dsterf.f dsyev.f dsytd2.f dsytrd.f ieeeck.f ilaenv.f; do
     AC_CONFIG_LINKS($lapackobjdir/$file:$lapackdir/$file)
   done
