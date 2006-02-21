@@ -20,6 +20,7 @@ int main(int argv, char* argc[])
   // Create a new instance of IpoptApplication
   //  (use a SmartPtr, not raw)
   SmartPtr<IpoptApplication> app = new IpoptApplication();
+  app->Initialize();
 
   // Change some options
   // Note: The following choices are only examples, they might not be

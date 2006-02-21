@@ -101,6 +101,7 @@ IpoptProblem CreateIpoptProblem(
   retval->eval_h = eval_h;
 
   retval->app = new Ipopt::IpoptApplication();
+  retval->app->Initialize();
 
   return retval;
 }

@@ -36,7 +36,12 @@ namespace Ipopt
 
     virtual ~IpoptApplication();
 
-    void ProcessParams(bool read_params_dat = true);
+    /** Initialize method. This method reads the params file and initializes
+     *  the journalists. You should call this method at some point before the 
+     *  first optimize call. Note: you can skip the processing of a params
+     *  file by setting params_file to ""
+     */
+    void Initialize(std::string params_file = "PARAMS.DAT");
 
     /**@name Solve methods */
     //@{

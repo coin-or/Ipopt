@@ -7,6 +7,7 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-11-05
 
 #include "IpIpoptApplication.hpp"
+#include "IpSolveStatistics.hpp"
 #include "MyNLP.hpp"
 
 using namespace Ipopt;
@@ -18,6 +19,7 @@ int main(int argv, char* argc[])
 
   // Create an instance of the IpoptApplication
   SmartPtr<IpoptApplication> app = new IpoptApplication();
+  app->Initialize();
 
   ApplicationReturnStatus status = app->OptimizeTNLP(mynlp);
 

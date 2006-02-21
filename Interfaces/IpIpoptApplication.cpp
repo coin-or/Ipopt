@@ -70,12 +70,12 @@ namespace Ipopt
     }
   }
 
-  void IpoptApplication::ProcessParams(bool read_params_dat)
+  void IpoptApplication::Initialize(std::string params_file)
   {
     try {
       // Get the options
-      if (read_params_dat) {
-        FILE* fp_options = fopen("PARAMS.DAT", "r");
+      if (params_file != "") {
+        FILE* fp_options = fopen(params_file.c_str(), "r");
         if (fp_options) {
           // PARAMS.DAT exists, read the content
           options_->ReadFromFile(*jnlst_, fp_options);
@@ -589,9 +589,14 @@ namespace Ipopt
   bool IpoptApplication::OpenOutputFile(std::string file_name,
                                         EJournalLevel print_level)
   {
-    SmartPtr<Journal> file_jrnl = jnlst_->AddFileJournal("OutputFile:"+file_name,
-                                  file_name.c_str(),
-                                  print_level);
+    SmartPtr<Journal> file_jrnl = jnlst_->GetJournal("OutputFile:"+file_name);
+
+    if (IsNull(file_jrnl)) {
+      file_jrnl = jnlst_->AddFileJournal("OutputFile:"+file_name,
+                                         file_name.c_str(),
+                                         print_level);
+    }
+
     file_jrnl->SetPrintLevel(J_DBG, J_NONE);
 
     return true;
