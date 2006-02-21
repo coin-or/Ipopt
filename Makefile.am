@@ -40,6 +40,9 @@ tmpdir = tmpdir
 
 libipopt = libipopt.a
 
+ipopt_addlibs_cpp_txt = ipopt_addlibs_cpp.txt
+ipopt_addlibs_f_txt = ipopt_addlibs_f.txt
+
 install-exec-local:
 	set -x; \
 	$(mkinstalldirs) $(DESTDIR)$(libdir); \
@@ -53,11 +56,17 @@ install-exec-local:
 	done; \
 	$(AR) $(ARFLAGS) $(libipopt) *.$(OBJEXT)
 	$(INSTALL_DATA) $(tmpdir)/$(libipopt) $(DESTDIR)$(libdir)
+	echo "$(IPADDLIBS) $(FLIBS)" >$(tmpdir)/$(ipopt_addlibs_cpp_txt)
+	echo "$(IPADDLIBS)" >$(tmpdir)/$(ipopt_addlibs_f_txt)
+	$(INSTALL_DATA) $(tmpdir)/$(ipopt_addlibs_cpp_txt) $(DESTDIR)$(libdir)
+	$(INSTALL_DATA) $(tmpdir)/$(ipopt_addlibs_f_txt) $(DESTDIR)$(libdir)
 	rm -rf $(tmpdir)
 	$(RANLIB) $(DESTDIR)$(libdir)/$(libipopt)
 
 uninstall-local:
 	rm -f $(DESTDIR)$(libdir)/$(libipopt)
+	rm -f $(DESTDIR)$(libdir)/$(ipopt_addlibs_c_txt)
+	rm -f $(DESTDIR)$(libdir)/$(ipopt_addlibs_f_txt)
 
 cuter: install
 	cd Apps/CUTErInterface; $(MAKE) cuter
