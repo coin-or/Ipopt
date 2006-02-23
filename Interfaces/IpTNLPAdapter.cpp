@@ -624,12 +624,12 @@ namespace Ipopt
     Hess_lagrangian_space = Hess_lagrangian_space_;
 
     if (IsValid(jnlst_)) {
-      jnlst_->Printf(J_DETAILED, J_STATISTICS,
-                     "Number of nonzero in equality constraint Jacobian....:%9d\n", nz_jac_c_);
-      jnlst_->Printf(J_DETAILED, J_STATISTICS,
-                     "Number of nonzero in inequality constraint Jacobian..:%9d\n", nz_jac_d_);
-      jnlst_->Printf(J_DETAILED, J_STATISTICS,
-                     "Number of nonzero in Lagrangian Hessian..............:%9d\n\n", nz_h_);
+      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS,
+                     "Number of nonzeros in equality constraint Jacobian...:%9d\n", nz_jac_c_);
+      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS,
+                     "Number of nonzeros in inequality constraint Jacobian.:%9d\n", nz_jac_d_);
+      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS,
+                     "Number of nonzeros in Lagrangian Hessian.............:%9d\n\n", nz_h_);
     }
 
     return true;

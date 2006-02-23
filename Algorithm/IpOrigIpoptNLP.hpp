@@ -240,6 +240,8 @@ namespace Ipopt
                                EJournalLevel level,
                                EJournalCategory category) const;
 
+    Number TotalFunctionEvaluationCPUTime() const;
+
   private:
     /** journalist */
     SmartPtr<const Journalist> jnlst_;

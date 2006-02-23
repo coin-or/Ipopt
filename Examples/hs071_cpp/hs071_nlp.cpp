@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -197,16 +197,16 @@ bool HS071_NLP::eval_h(Index n, const Number* x, bool new_x,
     values[0] = obj_factor * (2*x[3]); // 0,0
 
     values[1] = obj_factor * (x[3]);   // 1,0
-    values[2] = 0;                   // 1,1
+    values[2] = 0.;                    // 1,1
 
     values[3] = obj_factor * (x[3]);   // 2,0
-    values[4] = 0;                   // 2,1
-    values[5] = 0;                   // 2,2
+    values[4] = 0.;                    // 2,1
+    values[5] = 0.;                    // 2,2
 
     values[6] = obj_factor * (2*x[0] + x[1] + x[2]); // 3,0
-    values[7] = obj_factor * (x[0]);             // 3,1
-    values[8] = obj_factor * (x[0]);             // 3,2
-    values[9] = 0;                             // 3,3
+    values[7] = obj_factor * (x[0]);                 // 3,1
+    values[8] = obj_factor * (x[0]);                 // 3,2
+    values[9] = 0.;                                  // 3,3
 
 
     // add the portion for the first constraint

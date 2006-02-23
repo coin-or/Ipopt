@@ -29,9 +29,6 @@
 # endif
 #endif
 
-// DELETEME!
-#include "IpIdentityMatrix.hpp"
-
 namespace Ipopt
 {
 #ifdef IP_DEBUG
@@ -200,16 +197,6 @@ namespace Ipopt
         }
         else {
           DBG_ASSERT(IsNull(P_approx));
-          /*
-          printf("DELETEME in IpOrigIpoptNLP\n");
-          SmartPtr<IdentityMatrixSpace> idspace =
-            new IdentityMatrixSpace(x_space_->Dim());
-          SmartPtr<Matrix> id = idspace->MakeNew();
-          h_space_ = new LowRankUpdateSymMatrixSpace(x_space_->Dim(),
-          			     ConstPtr(id),
-          			     ConstPtr(x_space_),
-          			     true);
-          */
           h_space_ = new LowRankUpdateSymMatrixSpace(x_space_->Dim(),
                      ConstPtr(P_approx),
                      ConstPtr(x_space_),
@@ -780,12 +767,7 @@ namespace Ipopt
 
     jnlst.Printf(level, category,
                  "Function Evaluations................: %10.3f\n",
-                 f_eval_time_.TotalTime()+
-                 c_eval_time_.TotalTime()+
-                 d_eval_time_.TotalTime()+
-                 jac_c_eval_time_.TotalTime()+
-                 jac_d_eval_time_.TotalTime()+
-                 h_eval_time_.TotalTime());
+                 TotalFunctionEvaluationCPUTime());
     jnlst.Printf(level, category,
                  " Objective function.................: %10.3f\n",
                  f_eval_time_.TotalTime());
@@ -804,6 +786,17 @@ namespace Ipopt
     jnlst.Printf(level, category,
                  " Lagrangian Hessian.................: %10.3f\n",
                  h_eval_time_.TotalTime());
+  }
+
+  Number
+  OrigIpoptNLP::TotalFunctionEvaluationCPUTime() const
+  {
+    return f_eval_time_.TotalTime()+
+           c_eval_time_.TotalTime()+
+           d_eval_time_.TotalTime()+
+           jac_c_eval_time_.TotalTime()+
+           jac_d_eval_time_.TotalTime()+
+           h_eval_time_.TotalTime();
   }
 
 } // namespace Ipopt
