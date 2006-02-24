@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -16,7 +16,6 @@ namespace Ipopt
 
   PDPerturbationHandler::PDPerturbationHandler()
       :
-      always_perturb_cd_(false),
       reset_last_(false),
       degen_iters_max_(3)
   {}
@@ -28,7 +27,7 @@ namespace Ipopt
       "max_hessian_perturbation",
       "Maximum value of regularization parameter for handling negative curvature.",
       0, true,
-      1e25, // ToDo make this 1e20 ?
+      1e20,
       "In order to guarantee that the search directions are indeed proper "
       "descent directions, Ipopt requires that the inertia of the "
       "(augmented) linear system for the step computation has the "
@@ -89,7 +88,6 @@ namespace Ipopt
       "Exponent for mu in the regularization for rank-deficient constraint Jacobians.",
       0., false, 0.25,
       "(This is kappa_c in the implementation paper.)");
-    /*
     roptions->AddStringOption2(
       "always_perturb_cd",
       "Switch to enable perturbation for constraints in all iterations.",
@@ -97,7 +95,6 @@ namespace Ipopt
       "no", "don't do the perturbation in every iteration",
       "yes", "perturb for the constraints in every iteration",
       "This might be helpful if the constraints are degenerate.");
-    */
   }
 
   bool PDPerturbationHandler::InitializeImpl(const OptionsList& options,
@@ -111,6 +108,7 @@ namespace Ipopt
     options.GetNumericValue("first_hessian_perturbation", delta_xs_init_, prefix);
     options.GetNumericValue("jacobian_regularization_value", delta_cd_val_, prefix);
     options.GetNumericValue("jacobian_regularization_exponent", delta_cd_exp_, prefix);
+    options.GetBoolValue("always_perturb_cd", always_perturb_cd_, prefix);
 
     hess_degenerate_ = NOT_YET_DETERMINED;
     jac_degenerate_ = NOT_YET_DETERMINED;
@@ -189,8 +187,9 @@ namespace Ipopt
       delta_s_curr_ = 0.;
       bool retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                     delta_c, delta_d);
-      ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                       "get_deltas_for_wrong_inertia returns false for degenerate Hessian before any further modification.");
+      if (!retval) {
+        return false;
+      }
     }
     else {
       delta_x = 0.;
@@ -223,7 +222,7 @@ namespace Ipopt
     if (hess_degenerate_ == NOT_YET_DETERMINED ||
         jac_degenerate_ == NOT_YET_DETERMINED) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Degeneracy test for hess_degenerate_ = %d and jac_degenerate_ = %d\ntest_status_ = %d\n",
+                     "Degeneracy test for hess_degenerate_ = %d and jac_degenerate_ = %d\n       test_status_ = %d\n",
                      hess_degenerate_, jac_degenerate_, test_status_);
       switch (test_status_) {
         case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
@@ -237,8 +236,9 @@ namespace Ipopt
           DBG_ASSERT(hess_degenerate_ == NOT_YET_DETERMINED);
           retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                                 delta_c, delta_d);
-          ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                           "get_deltas_for_wrong_inertia returns false.");
+          if (!retval) {
+            return false;
+          }
           DBG_ASSERT(delta_c == 0. && delta_d == 0.);
           test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         }
@@ -249,8 +249,9 @@ namespace Ipopt
         delta_d_curr_ = delta_c_curr_ = 0.;
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
-        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                         "get_deltas_for_wrong_inertia returns false (singular TEST_DELTA_C_GT_0_DELTA_X_EQ_0).");
+        if (!retval) {
+          return false;
+        }
         DBG_ASSERT(delta_c == 0. && delta_d == 0.);
         test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         break;
@@ -259,15 +260,17 @@ namespace Ipopt
         delta_d_curr_ = delta_c_curr_ = delta_cd();
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
-        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                         "get_deltas_for_wrong_inertia returns false.");
+        if (!retval) {
+          return false;
+        }
         test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
         break;
         case TEST_DELTA_C_GT_0_DELTA_X_GT_0:
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
-        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                         "get_deltas_for_wrong_inertia returns false.");
+        if (!retval) {
+          return false;
+        }
         break;
         case NO_TEST:
         DBG_ASSERT(false && "we should not get here.");
@@ -328,7 +331,10 @@ namespace Ipopt
       }
     }
     if (delta_x_curr_ > delta_xs_max_) {
-      // Give up trying to solve the linear system
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "delta_x perturbation is becoming too large: %e\n",
+                     delta_x_curr_);
+      IpData().Append_info_string("dx");
       return false;
     }
 

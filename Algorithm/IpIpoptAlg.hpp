@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -24,6 +24,11 @@
 
 namespace Ipopt
 {
+
+  /** @name Exceptions */
+  //@{
+  DECLARE_STD_EXCEPTION(STEP_COMPUTATION_FAILED);
+  //@}
 
   /** The main ipopt algorithm class.
    *  Main Ipopt algorithm class, contains the main optimize method,
@@ -114,13 +119,17 @@ namespace Ipopt
      */
     void UpdateHessian();
 
-    /** Method to update the barrier parameter
-     * ( this may later be made a strategy object
-     *   and passed in ) */
-    void UpdateBarrierParameter();
+    /** Method to update the barrier parameter.  Returns false, if the
+     *  algorithm can't continue with the regular procedure and needs
+     *  to revert to a fallback mechanism in the line search (such as
+     *  restoration phase) */
+    bool UpdateBarrierParameter();
 
-    /** Method to setup the call to the PDSystemSolver */
-    void ComputeSearchDirection();
+    /** Method to setup the call to the PDSystemSolver.  Returns
+     *  false, if the algorithm can't continue with the regular
+     *  procedure and needs to revert to a fallback mechanism in the
+     *  line search (such as restoration phase) */
+    bool ComputeSearchDirection();
 
     /** Method computing the new iterate (usually vialine search).
      *  The acceptable point is the one in trial after return.

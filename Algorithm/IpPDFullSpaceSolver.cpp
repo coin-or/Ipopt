@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -101,7 +101,7 @@ namespace Ipopt
                                        options, prefix);
   }
 
-  void PDFullSpaceSolver::Solve(Number alpha,
+  bool PDFullSpaceSolver::Solve(Number alpha,
                                 Number beta,
                                 const IteratesVector& rhs,
                                 IteratesVector& res,
@@ -192,13 +192,10 @@ namespace Ipopt
       improve_solution = false;
 
       if (!solve_retval) {
-        // If system seems not to be solvable, we set the search
-        // direction to zero, and hope that the line search will take
-        // care of this (e.g. call the restoration phase).  ToDo: We
-        // might want to use a more explicit cue later.
-        res.Set(0.0);
+        // If system seems not to be solvable, we return with false
+        // and let the calling routine deal with it.
         IpData().TimingStats().PDSystemSolverTotal().End();
-        return;
+        return false;
       }
 
       if (allow_inexact) {
@@ -235,7 +232,7 @@ namespace Ipopt
                     *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U,
                     *sigma_x, *sigma_s, -1., 1., *resid, res);
         ASSERT_EXCEPTION(solve_retval, INTERNAL_ABORT,
-                         "SolveOnce returns false.");
+                         "SolveOnce returns false during iterative refinement.");
 
         ComputeResiduals(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U,
                          *z_L, *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U,
@@ -336,6 +333,8 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "res_vU", *res.v_U());
 
     IpData().TimingStats().PDSystemSolverTotal().End();
+
+    return true;
   }
 
   bool PDFullSpaceSolver::SolveOnce(bool resolve_with_better_quality,

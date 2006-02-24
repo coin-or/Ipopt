@@ -98,6 +98,10 @@ namespace Ipopt
       return skipped_line_search_;
     }
 
+    /** Activate fallback mechanism.  Return false, if that is not
+     *  possible. */
+    virtual bool ActivateFallbackMechanism();
+
     /** Methods for OptionsList */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
@@ -309,6 +313,10 @@ namespace Ipopt
     SmartPtr<const IteratesVector> acceptable_iterate_;
     Index acceptable_iteration_number_;
     //@}
+
+    /** Flag indicating whether the algorithm has asked to immediately
+     *  switch to the fallback mechanism (restoration phase) */
+    bool fallback_activated_;
 
     /** Flag indicating whether the line search is to be performed
      * robust (usually this is true, unless SetRigorousLineSearch is

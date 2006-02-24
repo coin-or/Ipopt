@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -48,7 +48,8 @@ namespace Ipopt
     return true;
   }
 
-  Number ProbingMuOracle::CalculateMu(Number mu_min, Number mu_max)
+  bool ProbingMuOracle::CalculateMu(Number mu_min, Number mu_max,
+                                    Number& new_mu)
   {
     DBG_START_METH("ProbingMuOracle::CalculateMu",
                    dbg_verbosity);
@@ -77,11 +78,16 @@ namespace Ipopt
     // Now solve the primal-dual system to get the affine step.  We
     // allow a somewhat inexact solution here
     bool allow_inexact = true;
-    pd_solver_->Solve(-1.0, 0.0,
-                      *rhs,
-                      *step,
-                      allow_inexact
-                     );
+    bool retval = pd_solver_->Solve(-1.0, 0.0,
+                                    *rhs,
+                                    *step,
+                                    allow_inexact
+                                   );
+    if (!retval) {
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "The linear system could not be solved for the affine step!\n");
+      return false;
+    }
 
     DBG_PRINT_VECTOR(2, "step", *step);
 
@@ -140,7 +146,8 @@ namespace Ipopt
     sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
     IpData().Append_info_string(ssigma);
 
-    return Max(Min(mu, mu_max), mu_min);
+    new_mu = Max(Min(mu, mu_max), mu_min);
+    return true;
   }
 
   Number ProbingMuOracle::CalculateAffineMu

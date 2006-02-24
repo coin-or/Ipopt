@@ -181,7 +181,8 @@ namespace Ipopt
     /** @name Auxilliary methods */
     //@{
     /** Internal version of PerturbForWrongInertia with the
-     *  difference, that finalize_test is not called. */
+     *  difference, that finalize_test is not called.  Returns false
+     *  if the delta_x and delta_s parameters become too large. */
     bool get_deltas_for_wrong_inertia(Number& delta_x, Number& delta_s,
                                       Number& delta_c, Number& delta_d);
 

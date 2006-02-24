@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -128,7 +128,7 @@ namespace Ipopt
     return true;
   }
 
-  void MonotoneMuUpdate::UpdateBarrierParameter()
+  bool MonotoneMuUpdate::UpdateBarrierParameter()
   {
     Number mu = IpData().curr_mu();
     Number tau = IpData().curr_tau();
@@ -192,6 +192,8 @@ namespace Ipopt
 
     first_iter_resto_ = false;
     initialized_ = true;
+
+    return true;
   }
 
   void MonotoneMuUpdate::CalcNewMuAndTau(Number &new_mu,

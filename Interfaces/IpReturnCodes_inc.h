@@ -23,6 +23,7 @@ enum ApplicationReturnStatus
 
     Maximum_Iterations_Exceeded=-1,
     Restoration_Failed=-2,
+    Error_In_Step_Computation=-3,
     Not_Enough_Degrees_Of_Freedom=-10,
     Invalid_Problem_Definition=-11,
     Invalid_Option=-12,

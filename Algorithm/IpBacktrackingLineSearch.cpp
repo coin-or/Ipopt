@@ -223,6 +223,7 @@ namespace Ipopt
     rigorous_ = true;
     skipped_line_search_ = false;
     tiny_step_last_iteration_ = false;
+    fallback_activated_ = false;
 
     Reset();
 
@@ -270,11 +271,11 @@ namespace Ipopt
       IpData().delta()->MakeNewContainer();
 
     bool goto_resto = false;
-    if (actual_delta->Asum() == 0. ) {
-      // In this case, a search direction could not be computed, and
-      // we should immediately go to the restoration phase.  ToDo: Cue
-      // off of a something else than the norm of the search direction
+    if (fallback_activated_) {
+      // In this case, the algorithm had trouble to continue and wants
+      // to call the restoration phase immediately
       goto_resto = true;
+      fallback_activated_ = false; // reset the flag
     }
 
     if (start_with_resto_) {
@@ -1130,5 +1131,26 @@ namespace Ipopt
     return true;
   }
 
+  bool BacktrackingLineSearch::ActivateFallbackMechanism()
+  {
+    // If we don't have a restoration phase, we don't know what to do
+    if (IsNull(resto_phase_)) {
+      return false;
+    }
+
+    // Reverting to the restoration phase only makes sense if there
+    // are constraints
+    if (IpData().curr()->y_c()->Dim()+IpData().curr()->y_d()->Dim()==0) {
+      return false;
+    }
+
+    fallback_activated_ = true;
+    rigorous_ = true;
+
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                   "Fallback option activated in BacktrackingLineSearch!\n");
+
+    return true;
+  }
 
 } // namespace Ipopt

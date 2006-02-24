@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -234,7 +234,7 @@ namespace Ipopt
     return retvalue;
   }
 
-  void AdaptiveMuUpdate::UpdateBarrierParameter()
+  bool AdaptiveMuUpdate::UpdateBarrierParameter()
   {
     DBG_START_METH("AdaptiveMuUpdate::UpdateBarrierParameter",
                    dbg_verbosity);
@@ -273,7 +273,7 @@ namespace Ipopt
     }
 
     if (no_bounds_)
-      return;
+      return true;
 
     bool tiny_step_flag = IpData().tiny_step_flag();
     if (!IpData().FreeMuMode()) {
@@ -372,7 +372,13 @@ namespace Ipopt
       IpData().Set_tau(tau);
 
       // Compute the new barrier parameter via the oracle
-      Number mu = free_mu_oracle_->CalculateMu(mu_min_, mu_max_);
+      Number mu;
+      bool retval = free_mu_oracle_->CalculateMu(mu_min_, mu_max_, mu);
+      if (!retval) {
+        Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                       "The mu oracle could not compute a new value of the barrier parameter.\n");
+        return false;
+      }
 
       mu = Max(mu, mu_min_);
       Number mu_lower_safe = lower_mu_safeguard();
@@ -407,6 +413,8 @@ namespace Ipopt
       IpData().Append_info_string("F");
       linesearch_->SetRigorousLineSearch(true);
     }
+
+    return true;
   }
 
   bool
@@ -569,11 +577,16 @@ namespace Ipopt
     */
 
     Number new_mu;
-
+    bool have_mu = false;
+    ;
     if (IsValid(fix_mu_oracle_)) {
-      new_mu = fix_mu_oracle_->CalculateMu(mu_min_, mu_max_);
+      have_mu = fix_mu_oracle_->CalculateMu(mu_min_, mu_max_, new_mu);
+      if (!have_mu) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "New fixed value for mu could not be computed from the mu_oracle.\n");
+      }
     }
-    else {
+    if (!have_mu) {
       new_mu = adaptive_mu_monotone_init_factor_*IpCq().curr_avrg_compl();
     }
     new_mu = Max(new_mu, lower_mu_safeguard());

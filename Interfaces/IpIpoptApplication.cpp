@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -545,6 +545,10 @@ namespace Ipopt
       else if (status == RESTORATION_FAILURE) {
         retValue = Restoration_Failed;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Restoration Failed!\n");
+      }
+      else if (status == ERROR_IN_STEP_COMPUTATION) {
+        retValue = Error_In_Step_Computation;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Error in step computation (regularization becomes too large?)!\n");
       }
       else if (status == LOCAL_INFEASIBILITY) {
         retValue = Infeasible_Problem_Detected;

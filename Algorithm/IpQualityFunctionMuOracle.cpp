@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -145,7 +145,8 @@ namespace Ipopt
     return true;
   }
 
-  Number QualityFunctionMuOracle::CalculateMu(Number mu_min, Number mu_max)
+  bool QualityFunctionMuOracle::CalculateMu(Number mu_min, Number mu_max,
+      Number& new_mu)
   {
     DBG_START_METH("QualityFunctionMuOracle::CalculateMu",
                    dbg_verbosity);
@@ -196,11 +197,16 @@ namespace Ipopt
     // somewhat inexact solution, iterative refinement will be done
     // after mu is known
     bool allow_inexact = true;
-    pd_solver_->Solve(-1.0, 0.0,
-                      *rhs_aff,
-                      *step_aff,
-                      allow_inexact
-                     );
+    bool retval = pd_solver_->Solve(-1.0, 0.0,
+                                    *rhs_aff,
+                                    *step_aff,
+                                    allow_inexact
+                                   );
+    if (!retval) {
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "The linear system could not be solved for the affine step!\n");
+      return false;
+    }
 
     DBG_PRINT_VECTOR(2, "step_aff", *step_aff);
 
@@ -233,11 +239,16 @@ namespace Ipopt
 
     // Now solve the primal-dual system to get the step
     allow_inexact = true;
-    pd_solver_->Solve(1.0, 0.0,
-                      *rhs_cen,
-                      *step_cen,
-                      allow_inexact
-                     );
+    retval = pd_solver_->Solve(1.0, 0.0,
+                               *rhs_cen,
+                               *step_cen,
+                               allow_inexact
+                              );
+    if (!retval) {
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "The linear system could not be solved for the centering step!\n");
+      return false;
+    }
 
     DBG_PRINT_VECTOR(2, "step_cen", *step_cen);
 
@@ -584,7 +595,8 @@ namespace Ipopt
     }
     */
 
-    return mu;
+    new_mu = mu;
+    return true;
   }
 
   Number QualityFunctionMuOracle::CalculateQualityFunction

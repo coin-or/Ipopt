@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -222,15 +222,40 @@ namespace Ipopt
         IpData().ResetInfo();
         IpData().TimingStats().OutputIteration().End();
 
-        // update the barrier parameter if necessary
+        // initialize the flag that is set to true if the algorithm
+        // has to continue with an emergency fallback mode.  For
+        // example, when no search direction can be computed, continue
+        // with the restoration phase
+        bool emergency_mode = false;
+
+        // update the barrier parameter
         IpData().TimingStats().UpdateBarrierParameter().Start();
-        UpdateBarrierParameter();
+        emergency_mode = !UpdateBarrierParameter();
         IpData().TimingStats().UpdateBarrierParameter().End();
 
-        // solve the primal-dual system to get the full step
-        IpData().TimingStats().ComputeSearchDirection().Start();
-        ComputeSearchDirection();
-        IpData().TimingStats().ComputeSearchDirection().End();
+        if (!emergency_mode) {
+          // solve the primal-dual system to get the full step
+          IpData().TimingStats().ComputeSearchDirection().Start();
+          emergency_mode = !ComputeSearchDirection();
+          IpData().TimingStats().ComputeSearchDirection().End();
+        }
+
+        // If we are in the emergency mode, ask to line search object
+        // to go to the fallback options.  If that isn't possible,
+        // issue error message
+        if (emergency_mode) {
+          bool retval = line_search_->ActivateFallbackMechanism();
+          if (retval) {
+            Jnlst().Printf(J_WARNING, J_MAIN,
+                           "WARNING: Problem in step computation; switching to emergency mode.\n");
+          }
+          else {
+            Jnlst().Printf(J_ERROR, J_MAIN,
+                           "ERROR: Problem in step computation, but emergency mode cannot be activated.\n");
+            THROW_EXCEPTION(STEP_COMPUTATION_FAILED,
+                            "Step computation failed.");
+          }
+        }
 
         // Compute the new iterate
         IpData().TimingStats().ComputeAcceptableTrialPoint().Start();
@@ -269,44 +294,50 @@ namespace Ipopt
       }
     }
     catch(TINY_STEP_DETECTED& exc) {
-      exc.ReportException(Jnlst(), J_DETAILED);
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().UpdateBarrierParameter().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return STOP_AT_TINY_STEP;
     }
     catch(ACCEPTABLE_POINT_REACHED& exc) {
-      exc.ReportException(Jnlst(), J_DETAILED);
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return STOP_AT_ACCEPTABLE_POINT;
     }
     catch(LOCALLY_INFEASIBLE& exc) {
-      exc.ReportException(Jnlst(), J_DETAILED);
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().CheckConvergence().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return LOCAL_INFEASIBILITY;
     }
     catch(RESTORATION_CONVERGED_TO_FEASIBLE_POINT& exc) {
-      exc.ReportException(Jnlst(), J_DETAILED);
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return RESTORATION_FAILURE;
     }
     catch(RESTORATION_FAILED& exc) {
-      exc.ReportException(Jnlst(), J_DETAILED);
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return RESTORATION_FAILURE;
     }
     catch(RESTORATION_MAXITER_EXCEEDED& exc) {
-      exc.ReportException(Jnlst(), J_DETAILED);
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return MAXITER_EXCEEDED;
     }
+    catch(STEP_COMPUTATION_FAILED& exc) {
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
+      IpData().TimingStats().OverallAlgorithm().End();
+      return ERROR_IN_STEP_COMPUTATION;
+    }
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
-      exc.ReportException(Jnlst(), J_DETAILED);
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return SUCCESS;
@@ -331,18 +362,26 @@ namespace Ipopt
     hessian_updater_->UpdateHessian();
   }
 
-  void IpoptAlgorithm::UpdateBarrierParameter()
+  bool IpoptAlgorithm::UpdateBarrierParameter()
   {
     Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n");
     Jnlst().Printf(J_DETAILED, J_MAIN, "*** Update Barrier Parameter for Iteration %d:", IpData().iter_count());
     Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n\n");
-    mu_update_->UpdateBarrierParameter();
+    bool retval = mu_update_->UpdateBarrierParameter();
 
-    Jnlst().Printf(J_DETAILED, J_MAIN, "Barrier Parameter: %e\n", IpData().curr_mu());
+    if (retval) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Barrier Parameter: %e\n", IpData().curr_mu());
+    }
+    else {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Barrier parameter could not be updated!\n");
+    }
 
+    return retval;
   }
 
-  void IpoptAlgorithm::ComputeSearchDirection()
+  bool IpoptAlgorithm::ComputeSearchDirection()
   {
     DBG_START_METH("IpoptAlgorithm::ComputeSearchDirection", dbg_verbosity);
 
@@ -356,11 +395,6 @@ namespace Ipopt
 
     bool improve_solution = false;
     if (IpData().HaveDeltas()) {
-      /*
-      Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "No need to compute search direction - it has already been computed.\n");
-      return;
-      */
       improve_solution = true;
     }
 
@@ -386,16 +420,25 @@ namespace Ipopt
     }
 
     bool allow_inexact = false;
-    pd_solver_->Solve(-1.0, 0.0, *rhs, *delta, allow_inexact,
-                      improve_solution);
+    bool retval = pd_solver_->Solve(-1.0, 0.0, *rhs, *delta, allow_inexact,
+                                    improve_solution);
 
-    // Store the search directions in the IpData object
-    IpData().set_delta(delta);
+    if (retval) {
+      // Store the search directions in the IpData object
+      IpData().set_delta(delta);
 
-    Jnlst().Printf(J_MOREVECTOR, J_MAIN,
-                   "*** Step Calculated for Iteration: %d\n",
-                   IpData().iter_count());
-    IpData().delta()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "delta");
+      Jnlst().Printf(J_MOREVECTOR, J_MAIN,
+                     "*** Step Calculated for Iteration: %d\n",
+                     IpData().iter_count());
+      IpData().delta()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "delta");
+    }
+    else {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "*** Step could not be computed in iteration %d!\n",
+                     IpData().iter_count());
+    }
+
+    return retval;
   }
 
   void IpoptAlgorithm::ComputeAcceptableTrialPoint()

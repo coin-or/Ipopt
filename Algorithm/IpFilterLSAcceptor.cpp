@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -469,7 +469,13 @@ namespace Ipopt
       rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
       rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
       rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
-      pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_soc, true);
+
+      bool retval = pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_soc, true);
+      if (!retval) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "The linear system could not be solved for the corrector step.\n");
+        return false;
+      }
 
       // Compute step size
       alpha_primal_soc =
