@@ -262,13 +262,9 @@ namespace Ipopt
     // First assume that line search will find an acceptable trial point
     skipped_line_search_ = false;
 
-    // Initialize the acceptor for this backtracking line search
-    acceptor_->InitThisLineSearch(in_watchdog_);
-
     // Get the search directions (this will store the actual search
     // direction, possibly including higher order corrections)
-    SmartPtr<IteratesVector> actual_delta =
-      IpData().delta()->MakeNewContainer();
+    SmartPtr<IteratesVector> actual_delta;
 
     bool goto_resto = false;
     if (fallback_activated_) {
@@ -276,6 +272,11 @@ namespace Ipopt
       // to call the restoration phase immediately
       goto_resto = true;
       fallback_activated_ = false; // reset the flag
+    }
+    else {
+      // Initialize the acceptor for this backtracking line search
+      acceptor_->InitThisLineSearch(in_watchdog_);
+      actual_delta = IpData().delta()->MakeNewContainer();
     }
 
     if (start_with_resto_) {
