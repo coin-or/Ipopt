@@ -232,6 +232,8 @@ namespace Ipopt
     acceptable_iterate_ = NULL;
     acceptable_iteration_number_ = -1;
 
+    last_mu_ = -1.;
+
     return retvalue;
   }
 
@@ -242,6 +244,18 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "--> Starting filter line search in iteration %d <--\n",
                    IpData().iter_count());
+
+    Number curr_mu = IpData().curr_mu();
+    if (last_mu_!=curr_mu) {
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Mu has changed in line search - resetting watchdog counters.\n");
+      // Inactivate the watchdog and release all stored data
+      in_watchdog_ = false;
+      watchdog_iterate_ = NULL;
+      watchdog_delta_ = NULL;
+      watchdog_shortened_iter_ = 0;
+      last_mu_ = curr_mu;
+    }
 
     // If the problem is square, we want to enable the
     // expect_infeasible_problem option automatically so that the
@@ -774,12 +788,6 @@ namespace Ipopt
     DBG_START_FUN("BacktrackingLineSearch::Reset", dbg_verbosity);
     in_soft_resto_phase_ = false;
     soft_resto_counter_ = 0;
-
-    // Inactivate the watchdog and release all stored data
-    in_watchdog_ = false;
-    watchdog_iterate_ = NULL;
-    watchdog_delta_ = NULL;
-    watchdog_shortened_iter_ = 0;
 
     acceptor_->Reset();
   }

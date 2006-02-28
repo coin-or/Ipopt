@@ -594,7 +594,12 @@ namespace Ipopt
 
     // If we want to recalculate the multipliers (e.g., as least
     // square estimates), call the calculator for that
-    //    if (recalc_y_) {
+    if (recalc_y_) {
+      // There is no point in doing this if there are no constraints
+      if (IpData().curr()->y_c()->Dim()+IpData().curr()->y_d()->Dim()==0) {
+        recalc_y_ = false;
+      }
+    }
     if (recalc_y_ && IpCq().curr_constraint_violation()<recalc_y_feas_tol_) {
       if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
         Jnlst().Printf(J_MOREDETAILED, J_MAIN,

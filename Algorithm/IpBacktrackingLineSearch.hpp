@@ -305,6 +305,8 @@ namespace Ipopt
     SmartPtr<const IteratesVector> watchdog_iterate_;
     /** Watchdog search direction at reference point */
     SmartPtr<const IteratesVector> watchdog_delta_;
+    /** Barrier parameter value during last line search */
+    Number last_mu_;
     //@}
 
     /** @name Storage for last iterate that satisfies the acceptable

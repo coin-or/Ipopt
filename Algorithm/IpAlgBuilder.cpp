@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -296,7 +296,17 @@ namespace Ipopt
     // algorithm
     SmartPtr<MuUpdate> resto_MuUpdate;
     std::string resto_smuupdate;
-    options.GetStringValue("mu_strategy", resto_smuupdate, "resto."+prefix);
+    if (!options.GetStringValue("mu_strategy", resto_smuupdate, "resto."+prefix)) {
+      // Change default for quasi-Newton option (then we use adaptive)
+      Index enum_int;
+      if (options.GetEnumValue("hessian_information", enum_int, prefix)) {
+        HessianInformationType hessian_information =
+          HessianInformationType(enum_int);
+        if (hessian_information==LIMITED_MEMORY) {
+          resto_smuupdate = "adaptive";
+        }
+      }
+    }
 
     std::string resto_smuoracle;
     std::string resto_sfixmuoracle;
@@ -392,7 +402,17 @@ namespace Ipopt
     // Create the mu update that will be used by the main algorithm
     SmartPtr<MuUpdate> MuUpdate;
     std::string smuupdate;
-    options.GetStringValue("mu_strategy", smuupdate, prefix);
+    if (!options.GetStringValue("mu_strategy", smuupdate, prefix)) {
+      // Change default for quasi-Newton option (then we use adaptive)
+      Index enum_int;
+      if (options.GetEnumValue("hessian_information", enum_int, prefix)) {
+        HessianInformationType hessian_information =
+          HessianInformationType(enum_int);
+        if (hessian_information==LIMITED_MEMORY) {
+          smuupdate = "adaptive";
+        }
+      }
+    }
     std::string smuoracle;
     std::string sfixmuoracle;
     if (smuupdate=="adaptive" ) {
