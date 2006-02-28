@@ -47,6 +47,8 @@ namespace Ipopt
     //@{
     /** Iteration counts. */
     Index IterationCount() const;
+    /** Total CPU time, including function evaluations. */
+    Number TotalCPUTime() const;
     /** Number of NLP function evaluations. */
     void NumberOfEvaluations(Index& num_obj_evals,
                              Index& num_constr_evals,
@@ -92,6 +94,8 @@ namespace Ipopt
     //@{
     /** Number of iterations. */
     Index num_iters_;
+    /* Total CPU time */
+    Number total_cpu_time_;
     /** Number of objective function evaluations. */
     Index num_obj_evals_;
     /** Number of constraints evaluations (max of equality and
