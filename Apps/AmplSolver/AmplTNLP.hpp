@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -201,7 +201,9 @@ namespace Ipopt
              char**& argv, SmartPtr<AmplSuffixHandler>
              suffix_handler = NULL, bool allow_discrete = false,
              SmartPtr<AmplOptionsList> ampl_options_list = NULL,
-             char* ampl_option_string = NULL);
+             char* ampl_option_string = NULL,
+             char* ampl_invokation_string = NULL,
+             char* ampl_banner_string = NULL);
 
     /** Default destructor */
     virtual ~AmplTNLP();
@@ -386,7 +388,8 @@ namespace Ipopt
      *  the stub */
     char* get_options(const SmartPtr<OptionsList>& options,
                       SmartPtr<AmplOptionsList>& ampl_options_list,
-                      char* ampl_option_string, char**& argv);
+                      char* ampl_option_string, char* ampl_invokation_string,
+                      char* ampl_banner_string, char**& argv);
   };
 
 

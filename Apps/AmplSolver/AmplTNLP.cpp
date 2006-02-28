@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -29,7 +29,9 @@ namespace Ipopt
                      SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
                      bool allow_discrete /* = false */,
                      SmartPtr<AmplOptionsList> ampl_options_list /* = NULL */,
-                     char* ampl_option_string /* = NULL */)
+                     char* ampl_option_string /* = NULL */,
+                     char* ampl_invokation_string /* = NULL */,
+                     char* ampl_banner_string /* = NULL */)
       :
       TNLP(),
       jnlst_(jnlst),
@@ -62,7 +64,8 @@ namespace Ipopt
 
     // Read the options and stub
     char* stub = get_options(options, ampl_options_list,
-                             ampl_option_string, argv);
+                             ampl_option_string, ampl_invokation_string,
+                             ampl_banner_string, argv);
     if (!stub) {
       jnlst_->Printf(J_ERROR, J_MAIN, "No .nl file given!\n");
       exit(-1);
@@ -809,8 +812,8 @@ namespace Ipopt
   char*
   AmplTNLP::get_options(const SmartPtr<OptionsList>& options,
                         SmartPtr<AmplOptionsList>& ampl_options_list,
-                        char* ampl_option_string,
-                        char**& argv)
+                        char* ampl_option_string, char* ampl_invokation_string,
+                        char* ampl_banner_string, char**& argv)
   {
     ASL_pfgh* asl = asl_;
 
@@ -948,15 +951,29 @@ namespace Ipopt
     //    keyword* keywds = new keyword[n_options];
     keyword* keywds = (keyword*) ampl_options_list->Keywords(options, jnlst_);
 
-    static char sname[] = "ipopt";
-    static char bsname[] = PACKAGE_STRING;
+    static char sname_default[] = "ipopt";
+    static char bsname_default[] = PACKAGE_STRING;
     static char opname_default[] = "ipopt_options";
+    char* sname;
+    char* bsname;
     char* opname;
     if (ampl_option_string) {
       opname = ampl_option_string;
     }
     else {
       opname = opname_default;
+    }
+    if (ampl_invokation_string) {
+      sname = ampl_invokation_string;
+    }
+    else {
+      sname = sname_default;
+    }
+    if (ampl_banner_string) {
+      bsname = ampl_banner_string;
+    }
+    else {
+      bsname = bsname_default;
     }
     Option_Info Oinfo = {sname,
                          bsname,
