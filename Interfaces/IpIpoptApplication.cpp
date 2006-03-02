@@ -413,6 +413,9 @@ namespace Ipopt
     }
 
     statistics_ = NULL; /* delete old statistics */
+    // Reset Timing statistics
+    ip_data_->TimingStats().ResetTimes();
+
     ApplicationReturnStatus retValue = Internal_Error;
     try {
       // Get the pointers to the real objects (need to do it that
@@ -553,6 +556,10 @@ namespace Ipopt
       else if (status == LOCAL_INFEASIBILITY) {
         retValue = Infeasible_Problem_Detected;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Converged to a point of local infeasibility. Problem may be infeasible.\n");
+      }
+      else if (status == USER_REQUESTED_STOP) {
+        retValue = User_Requested_Stop;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Stopping optimization at current point as requested by user.\n");
       }
       else {
         retValue = Internal_Error;

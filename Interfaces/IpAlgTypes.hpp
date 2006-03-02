@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -25,6 +25,7 @@ namespace Ipopt
     STOP_AT_TINY_STEP,
     STOP_AT_ACCEPTABLE_POINT,
     LOCAL_INFEASIBILITY,
+    USER_REQUESTED_STOP,
     DIVERGING_ITERATES,
     RESTORATION_FAILURE,
     ERROR_IN_STEP_COMPUTATION,

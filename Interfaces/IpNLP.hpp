@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -16,9 +16,13 @@
 #include "IpSymMatrix.hpp"
 #include "IpOptionsList.hpp"
 #include "IpAlgTypes.hpp"
+#include "IpReturnCodes.hpp"
 
 namespace Ipopt
 {
+  // forward declarations
+  class IpoptData;
+  class IpoptCalculatedQuantities;
 
   /** Brief Class Description.
    *  Detailed Class Description.
@@ -120,14 +124,49 @@ namespace Ipopt
                         SymMatrix& h) = 0;
     //@}
 
-    /** @name NLP solution routines. (Overload in derived classes.) */
+    /** @name NLP solution routines. Have default dummy
+     *  implementations that can be overloaded. */
     //@{
+    /** This method is called at the very end of the optimization.  It
+     *  provides the final iterate to the user, so that it can be
+     *  stored as the solution.  The status flag indicates the outcome
+     *  of the optimization, where SolverReturn is defined in
+     *  IpAlgTypes.hpp.  */
     virtual void FinalizeSolution(SolverReturn status,
-                                  const Vector& x, const Vector& z_L, const Vector& z_U,
+                                  const Vector& x, const Vector& z_L,
+                                  const Vector& z_U,
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,
                                   Number obj_value)
     {}
+
+    /** This method is called once per iteration, after the iteration
+     *  summary output has been printed.  It provides the current
+     *  information to the user to do with it anything she wants.  It
+     *  also allows the user to ask for a premature termination of the
+     *  optimization by returning false, in which case Ipopt will
+     *  terminate with a corresponding return status.  The basic
+     *  information provided in the argument list has the quantities
+     *  values printed in the iteration summary line.  If more
+     *  information is required, a user can obtain it from the IpData
+     *  and IpCalculatedQuantities objects.  However, note that the
+     *  provided quantities are all for the problem that Ipopt sees,
+     *  i.e., the quantities might be scaled, fixed variables might be
+     *  sorted out, etc.  The status indicates things like whether the
+     *  algorithm is in the restoration phase...  In the restoration
+     *  phase, the dual variables are probably not not changing. */
+    virtual bool IntermediateCallBack(AlgorithmMode mode,
+                                      Index iter, Number obj_value,
+                                      Number inf_pr, Number inf_du,
+                                      Number mu, Number d_norm,
+                                      Number regularization_size,
+                                      Number alpha_du, Number alpha_pr,
+                                      Index ls_trials,
+                                      SmartPtr<const IpoptData> ip_data,
+                                      SmartPtr<IpoptCalculatedQuantities> ip_cq)
+    {
+      return true;
+    }
     //@}
 
     /** Routines to get the scaling parameters. These do not need to

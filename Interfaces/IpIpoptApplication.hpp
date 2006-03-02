@@ -12,11 +12,11 @@
 #include "IpJournalist.hpp"
 #include "IpTNLP.hpp"
 #include "IpNLP.hpp"
+/* Return codes for the Optimize call for an application */
+#include "IpReturnCodes.hpp"
 
 namespace Ipopt
 {
-  /* Return codes for the Optimize call for an application */
-#include "IpReturnCodes_inc.h"
 
   /* forward declarations */
   class IpoptAlgorithm;

@@ -59,6 +59,14 @@ namespace Ipopt
     {}
     //@}
 
+    /** Method for resetting time to zero. */
+    void Reset()
+    {
+      total_time_ = 0.;
+      start_called_ = false;
+      end_called_ = true;
+    }
+
     /** Method that is called before execution of the task. */
     void Start()
     {
@@ -165,6 +173,9 @@ namespace Ipopt
     virtual ~TimingStatistics()
     {}
     //@}
+
+    /** Method for resetting all times. */
+    void ResetTimes();
 
     /** Method for printing all timing information */
     void PrintAllTimingStatistics(Journalist& jnlst,

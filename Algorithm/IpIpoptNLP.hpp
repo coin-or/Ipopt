@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -194,13 +194,23 @@ namespace Ipopt
                                         Number mu) = 0;
     //@}
 
-    /** solution routines */
+    /**@name solution routines */
     //@{
     virtual void FinalizeSolution(SolverReturn status,
                                   const Vector& x, const Vector& z_L, const Vector& z_U,
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,
                                   Number obj_value)=0;
+
+    virtual bool IntermediateCallBack(AlgorithmMode mode,
+                                      Index iter, Number obj_value,
+                                      Number inf_pr, Number inf_du,
+                                      Number mu, Number d_norm,
+                                      Number regularization_size,
+                                      Number alpha_du, Number alpha_pr,
+                                      Index ls_trials,
+                                      SmartPtr<const IpoptData> ip_data,
+                                      SmartPtr<IpoptCalculatedQuantities> ip_cq)=0;
     //@}
 
     /** Returns the scaling strategy object */

@@ -13,9 +13,13 @@
 #include "IpReferenced.hpp"
 #include "IpException.hpp"
 #include "IpAlgTypes.hpp"
+#include "IpReturnCodes.hpp"
 
 namespace Ipopt
 {
+  // forward declarations
+  class IpoptData;
+  class IpoptCalculatedQuantities;
 
   /** Base class for all NLP's that use standard triplet matrix form
    *  and dense vectors.  This is the standard base class for all
@@ -146,6 +150,22 @@ namespace Ipopt
                                    Index n, const Number* x, const Number* z_L, const Number* z_U,
                                    Index m, const Number* g, const Number* lambda,
                                    Number obj_value)=0;
+
+    /** Intermediate Callback method for the user.  Providing dummy
+     *  default implementation.  For details see IntermediateCallBack
+     *  in IpNLP.hpp. */
+    virtual bool intermediate_callback(AlgorithmMode mode,
+                                       Index iter, Number obj_value,
+                                       Number inf_pr, Number inf_du,
+                                       Number mu, Number d_norm,
+                                       Number regularization_size,
+                                       Number alpha_du, Number alpha_pr,
+                                       Index ls_trials,
+                                       SmartPtr<const IpoptData> ip_data,
+                                       SmartPtr<IpoptCalculatedQuantities> ip_cq)
+    {
+      return true;
+    }
     //@}
 
     /** @name Methods for quasi-Newton approximation.  If the second

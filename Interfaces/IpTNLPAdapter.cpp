@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -8,6 +8,8 @@
 
 #include "IpTNLPAdapter.hpp"
 #include "IpBlas.hpp"
+#include "IpIpoptData.hpp"
+#include "IpIpoptCalculatedQuantities.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -1202,6 +1204,24 @@ namespace Ipopt
     delete [] full_g;
     full_g = NULL;
   }
+
+  bool TNLPAdapter::
+  IntermediateCallBack(AlgorithmMode mode,
+                       Index iter, Number obj_value,
+                       Number inf_pr, Number inf_du,
+                       Number mu, Number d_norm,
+                       Number regularization_size,
+                       Number alpha_du, Number alpha_pr,
+                       Index ls_trials,
+                       SmartPtr<const IpoptData> ip_data,
+                       SmartPtr<IpoptCalculatedQuantities> ip_cq)
+  {
+    return tnlp_->intermediate_callback(mode, iter, obj_value, inf_pr, inf_du,
+                                        mu, d_norm, regularization_size,
+                                        alpha_du, alpha_pr, ls_trials,
+                                        ip_data, ip_cq);
+  }
+
 
   void TNLPAdapter::
   GetQuasiNewtonApproximationSpaces(SmartPtr<VectorSpace>& approx_space,

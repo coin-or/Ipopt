@@ -8,6 +8,8 @@
 
 #include "IpOrigIpoptNLP.hpp"
 #include "IpLowRankUpdateSymMatrix.hpp"
+#include "IpIpoptData.hpp"
+#include "IpIpoptCalculatedQuantities.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -745,6 +747,22 @@ namespace Ipopt
                            *unscaled_c, *unscaled_d,
                            *unscaled_y_c, *unscaled_y_d,
                            unscaled_obj);
+  }
+
+  bool OrigIpoptNLP::IntermediateCallBack(AlgorithmMode mode,
+                                          Index iter, Number obj_value,
+                                          Number inf_pr, Number inf_du,
+                                          Number mu, Number d_norm,
+                                          Number regularization_size,
+                                          Number alpha_du, Number alpha_pr,
+                                          Index ls_trials,
+                                          SmartPtr<const IpoptData> ip_data,
+                                          SmartPtr<IpoptCalculatedQuantities> ip_cq)
+  {
+    return nlp_->IntermediateCallBack(mode, iter, obj_value, inf_pr, inf_du,
+                                      mu, d_norm, regularization_size,
+                                      alpha_du, alpha_pr, ls_trials,
+                                      ip_data, ip_cq);
   }
 
   void OrigIpoptNLP::AdjustVariableBounds(const Vector& new_x_L, const Vector& new_x_U,

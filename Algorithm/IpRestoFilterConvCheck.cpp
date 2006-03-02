@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -64,7 +64,7 @@ namespace Ipopt
   }
 
   ConvergenceCheck::ConvergenceStatus
-  RestoFilterConvergenceCheck::CheckConvergence()
+  RestoFilterConvergenceCheck::CheckConvergence(bool call_intermediate_callback /*= true*/)
   {
     if (IpData().iter_count() >= maximum_iters_) {
       return ConvergenceCheck::MAXITER_EXCEEDED;
@@ -152,7 +152,7 @@ namespace Ipopt
 
     if (status==CONTINUE) {
 
-      status = OptimalityErrorConvergenceCheck::CheckConvergence();
+      status = OptimalityErrorConvergenceCheck::CheckConvergence(false);
       if (status == CONVERGED || status == CONVERGED_TO_ACCEPTABLE_POINT) {
         Number orig_trial_primal_inf =
           orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
@@ -187,6 +187,40 @@ namespace Ipopt
     }
 
     first_resto_iter_ = false;
+
+    if (call_intermediate_callback) {
+      // Check if user requested termination by calling the intermediate
+      // user callback function
+      AlgorithmMode mode = RestorationPhaseMode;
+      // Gather the information also used in the iteration output
+      Index iter = IpData().iter_count();
+      Number inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
+      Number inf_du = IpCq().curr_dual_infeasibility(NORM_MAX);
+      Number mu = IpData().curr_mu();
+      Number dnrm;
+      if (IsValid(IpData().delta()) && IsValid(IpData().delta()->x()) && IsValid(IpData().delta()->s())) {
+        dnrm = Max(IpData().delta()->x()->Amax(), IpData().delta()->s()->Amax());
+      }
+      else {
+        // This is the first iteration - no search direction has been
+        // computed yet.
+        dnrm = 0.;
+      }
+      Number alpha_primal = IpData().info_alpha_primal();
+      Number alpha_dual = IpData().info_alpha_dual();
+      Number regu_x = IpData().info_regu_x();
+      Number unscaled_f = orig_ip_cq->unscaled_trial_f();
+      Index ls_count = IpData().info_ls_count();
+      bool request_stop =
+        !IpNLP().IntermediateCallBack(mode, iter, unscaled_f, inf_pr, inf_du,
+                                      mu, dnrm, regu_x, alpha_dual,
+                                      alpha_primal, ls_count,
+                                      &IpData(), &IpCq());
+
+      if (request_stop) {
+        return ConvergenceCheck::USER_STOP;
+      }
+    }
 
     return status;
   }

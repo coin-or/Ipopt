@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -198,6 +198,17 @@ namespace Ipopt
                                       const Vector& new_x_U,
                                       const Vector& new_d_L,
                                       const Vector& new_d_U);
+
+    /** User callback method */
+    bool IntermediateCallBack(AlgorithmMode mode,
+                              Index iter, Number obj_value,
+                              Number inf_pr, Number inf_du,
+                              Number mu, Number d_norm,
+                              Number regularization_size,
+                              Number alpha_du, Number alpha_pr,
+                              Index ls_trials,
+                              SmartPtr<const IpoptData> ip_data,
+                              SmartPtr<IpoptCalculatedQuantities> ip_cq);
 
     /** @name Accessor method for the information of the original NLP.
      *  These methods are not overloaded from IpoptNLP */

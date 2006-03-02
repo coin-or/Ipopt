@@ -127,6 +127,15 @@ namespace Ipopt
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,
                                   Number obj_value);
+    virtual bool IntermediateCallBack(AlgorithmMode mode,
+                                      Index iter, Number obj_value,
+                                      Number inf_pr, Number inf_du,
+                                      Number mu, Number d_norm,
+                                      Number regularization_size,
+                                      Number alpha_du, Number alpha_pr,
+                                      Index ls_trials,
+                                      SmartPtr<const IpoptData> ip_data,
+                                      SmartPtr<IpoptCalculatedQuantities> ip_cq);
     //@}
 
     /** Method returning information on quasi-Newton approximation. */

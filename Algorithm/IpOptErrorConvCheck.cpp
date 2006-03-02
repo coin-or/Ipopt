@@ -121,7 +121,7 @@ namespace Ipopt
   }
 
   ConvergenceCheck::ConvergenceStatus
-  OptimalityErrorConvergenceCheck::CheckConvergence()
+  OptimalityErrorConvergenceCheck::CheckConvergence(bool call_intermediate_callback /*= true*/)
   {
     DBG_START_METH("OptimalityErrorConvergenceCheck::CheckConvergence", dbg_verbosity);
 
@@ -154,6 +154,40 @@ namespace Ipopt
 
     if (IpData().curr()->x()->Amax() > diverging_iterates_tol_) {
       return ConvergenceCheck::DIVERGING;
+    }
+
+    if (call_intermediate_callback) {
+      // Check if user requested termination by calling the intermediate
+      // user callback function
+      AlgorithmMode mode = RegularMode;
+      // Gather the information also used in the iteration output
+      Index iter = IpData().iter_count();
+      Number inf_pr = IpCq().curr_primal_infeasibility(NORM_MAX);
+      Number inf_du = IpCq().curr_dual_infeasibility(NORM_MAX);
+      Number mu = IpData().curr_mu();
+      Number dnrm;
+      if (IsValid(IpData().delta()) && IsValid(IpData().delta()->x()) && IsValid(IpData().delta()->s())) {
+        dnrm = Max(IpData().delta()->x()->Amax(), IpData().delta()->s()->Amax());
+      }
+      else {
+        // This is the first iteration - no search direction has been
+        // computed yet.
+        dnrm = 0.;
+      }
+      Number alpha_primal = IpData().info_alpha_primal();
+      Number alpha_dual = IpData().info_alpha_dual();
+      Number regu_x = IpData().info_regu_x();
+      Number unscaled_f = IpCq().unscaled_curr_f();
+      Index ls_count = IpData().info_ls_count();
+      bool request_stop =
+        !IpNLP().IntermediateCallBack(mode, iter, unscaled_f, inf_pr, inf_du,
+                                      mu, dnrm, regu_x, alpha_dual,
+                                      alpha_primal, ls_count,
+                                      &IpData(), &IpCq());
+
+      if (request_stop) {
+        return ConvergenceCheck::USER_STOP;
+      }
     }
 
     return ConvergenceCheck::CONTINUE;

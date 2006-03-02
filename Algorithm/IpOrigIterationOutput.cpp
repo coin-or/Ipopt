@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -230,7 +230,6 @@ namespace Ipopt
     }
 
     Jnlst().Printf(J_DETAILED, J_MAIN, "\n\n");
-
   }
 
 } // namespace Ipopt

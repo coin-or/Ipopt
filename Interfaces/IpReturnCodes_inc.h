@@ -1,5 +1,5 @@
 /***********************************************************************
-// Copyright (C) 2004, 2005, International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -20,6 +20,7 @@ enum ApplicationReturnStatus
     Infeasible_Problem_Detected=2,
     Search_Direction_Becomes_Too_Small=3,
     Diverging_Iterates=4,
+    User_Requested_Stop=5,
 
     Maximum_Iterations_Exceeded=-1,
     Restoration_Failed=-2,
@@ -32,4 +33,11 @@ enum ApplicationReturnStatus
     NonIpopt_Exception_Thrown=-101,
     Insufficient_Memory=-102,
     Internal_Error=-199
+  };
+
+/** enum to indicate the mode in which the algorithm is */
+enum AlgorithmMode
+  {
+    RegularMode=0,
+    RestorationPhaseMode=1
   };

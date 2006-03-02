@@ -292,6 +292,9 @@ namespace Ipopt
       else if (conv_status == ConvergenceCheck::DIVERGING) {
         return DIVERGING_ITERATES;
       }
+      else if (conv_status == ConvergenceCheck::USER_STOP) {
+        return USER_REQUESTED_STOP;
+      }
     }
     catch(TINY_STEP_DETECTED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
@@ -329,6 +332,12 @@ namespace Ipopt
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return MAXITER_EXCEEDED;
+    }
+    catch(RESTORATION_USER_STOP& exc) {
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
+      IpData().TimingStats().OverallAlgorithm().End();
+      return USER_REQUESTED_STOP;
     }
     catch(STEP_COMPUTATION_FAILED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);

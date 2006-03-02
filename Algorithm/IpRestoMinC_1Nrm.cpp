@@ -202,6 +202,10 @@ namespace Ipopt
                      "Restoration phase in the restoration phase failed.\n");
       THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase in the restoration phase failed.");
     }
+    else if (resto_status == USER_REQUESTED_STOP) {
+      // Use requested stop during restoration phase - rethrow exception
+      THROW_EXCEPTION(RESTORATION_USER_STOP, "User requested stop during restoration phase");
+    }
     else {
       Jnlst().Printf(J_ERROR, J_MAIN, "Sorry, things failed ?!?!\n");
       retval = 1;

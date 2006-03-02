@@ -11,6 +11,38 @@
 namespace Ipopt
 {
   void
+  TimingStatistics::ResetTimes()
+  {
+    OverallAlgorithm_.Reset();
+    PrintProblemStatistics_.Reset();
+    InitializeIterates_.Reset();
+    UpdateHessian_.Reset();
+    OutputIteration_.Reset();
+    UpdateBarrierParameter_.Reset();
+    ComputeSearchDirection_.Reset();
+    ComputeAcceptableTrialPoint_.Reset();
+    AcceptTrialPoint_.Reset();
+    CheckConvergence_.Reset();
+    PDSystemSolverTotal_.Reset();
+    PDSystemSolverSolveOnce_.Reset();
+    ComputeResiduals_.Reset();
+    LinearSystemScaling_.Reset();
+    LinearSystemSymbolicFactorization_.Reset();
+    LinearSystemFactorization_.Reset();
+    LinearSystemBackSolve_.Reset();
+    LinearSystemStructureConverter_.Reset();
+    LinearSystemStructureConverterInit_.Reset();
+    QualityFunctionSearch_.Reset();
+    TryCorrector_.Reset();
+    Task1_.Reset();
+    Task2_.Reset();
+    Task3_.Reset();
+    Task4_.Reset();
+    Task5_.Reset();
+    Task6_.Reset();
+  }
+
+  void
   TimingStatistics::PrintAllTimingStatistics(
     Journalist& jnlst,
     EJournalLevel level,

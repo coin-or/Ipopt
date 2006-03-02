@@ -34,7 +34,8 @@ namespace Ipopt
                                 const std::string& prefix);
 
     /** Overloaded convergence check */
-    virtual ConvergenceStatus CheckConvergence();
+    virtual ConvergenceStatus
+    CheckConvergence(bool call_intermediate_callback = true);
 
     /** Auxilliary function for testing whether current iterate
      *  satisfies the acceptable level of optimality */
