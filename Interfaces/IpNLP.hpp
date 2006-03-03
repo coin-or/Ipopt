@@ -23,6 +23,7 @@ namespace Ipopt
   // forward declarations
   class IpoptData;
   class IpoptCalculatedQuantities;
+  class IteratesVector;
 
   /** Brief Class Description.
    *  Detailed Class Description.
@@ -100,6 +101,14 @@ namespace Ipopt
       SmartPtr<Vector> z_U,
       bool need_z_U
     )=0;
+
+    /** Method for obtaining an entire iterate as a warmstart point.
+     *  The incoming IteratesVector has to be filled.  The default
+     *  dummy implementation returns false. */
+    virtual bool GetWarmStartIterate(IteratesVector& warm_start_iterate)
+    {
+      return false;
+    }
     //@}
 
     /** @name NLP evaluation routines (overload

@@ -10,6 +10,10 @@
 #include "IpBlas.hpp"
 #include "IpIpoptData.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
+#include "IpDenseVector.hpp"
+#include "IpExpansionMatrix.hpp"
+#include "IpGenTMatrix.hpp"
+#include "IpSymTMatrix.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -884,6 +888,11 @@ namespace Ipopt
     full_lambda = NULL;
 
     return true;
+  }
+
+  bool TNLPAdapter::GetWarmStartIterate(IteratesVector& warm_start_iterate)
+  {
+    return tnlp_->get_warm_start_iterate(warm_start_iterate);
   }
 
   bool TNLPAdapter::Eval_f(const Vector& x, Number& f)

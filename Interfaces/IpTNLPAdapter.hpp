@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,13 +11,14 @@
 
 #include "IpNLP.hpp"
 #include "IpTNLP.hpp"
-#include "IpDenseVector.hpp"
-#include "IpExpansionMatrix.hpp"
-#include "IpGenTMatrix.hpp"
-#include "IpSymTMatrix.hpp"
-#include "IpRegOptions.hpp"
+
 namespace Ipopt
 {
+
+  // forward declarations
+  class ExpansionMatrix;
+  class ExpansionMatrixSpace;
+  class IteratesVector;
 
   /** This class Adapts the TNLP interface so it looks like an NLP interface.
    *  This is an Adapter class (Design Patterns) that converts  a TNLP to an
@@ -88,6 +89,10 @@ namespace Ipopt
       SmartPtr<Vector> z_U,
       bool need_z_U
     );
+
+    /** Method for obtaining an entire iterate as a warmstart point.
+     *  The incoming IteratesVector has to be filled. */
+    virtual bool GetWarmStartIterate(IteratesVector& warm_start_iterate);
     //@}
 
     /** @name TNLPAdapter evaluation routines. */

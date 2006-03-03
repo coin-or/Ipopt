@@ -20,6 +20,7 @@ namespace Ipopt
   // forward declarations
   class IpoptData;
   class IpoptCalculatedQuantities;
+  class IteratesVector;
 
   /** Base class for all NLP's that use standard triplet matrix form
    *  and dense vectors.  This is the standard base class for all
@@ -108,6 +109,15 @@ namespace Ipopt
                                     bool init_z, Number* z_L, Number* z_U,
                                     Index m, bool init_lambda,
                                     Number* lambda)=0;
+
+    /** overload this method to provide an Ipopt iterate (already in
+     *  the form Ipopt requires it internally) for a warm start.
+     *  Since this is only for expert users, a default dummy
+     *  implementation is provided and returns false. */
+    virtual bool get_warm_start_iterate(IteratesVector& warm_start_iterate)
+    {
+      return false;
+    }
 
     /** overload this method to return the value of the objective function */
     virtual bool eval_f(Index n, const Number* x, bool new_x,
