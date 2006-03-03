@@ -500,25 +500,23 @@ namespace Ipopt
     }
   }
 
-  bool OptionsList::ReadFromFile(const Journalist& jnlst,
-                                 FILE* fp)
+  bool OptionsList::ReadFromStream(const Journalist& jnlst,
+                                   std::istream& is)
   {
-    DBG_ASSERT(fp);
-
-    jnlst.Printf(J_DETAILED, J_MAIN, "Start reading options from file.\n");
+    jnlst.Printf(J_DETAILED, J_MAIN, "Start reading options from stream.\n");
 
     while (true) {
       std::string tag;
       std::string value;
 
-      if (!readnexttoken(fp, tag)) {
+      if (!readnexttoken(is, tag)) {
         // That's it - end of file reached.
         jnlst.Printf(J_DETAILED, J_MAIN,
                      "Finished reading options from file.\n");
         return true;
       }
 
-      if (!readnexttoken(fp, value)) {
+      if (!readnexttoken(is, value)) {
         // Can't read value for a given tag
         jnlst.Printf(J_ERROR, J_MAIN,
                      "Error reading value for tag %s from file.\n",
@@ -627,29 +625,15 @@ namespace Ipopt
     return allow_clobber;
   }
 
-  bool OptionsList::readnexttoken(FILE* fp, std::string& token)
+  bool OptionsList::readnexttoken(std::istream& is, std::string& token)
   {
-    token.clear();
-    int c = fgetc(fp);
-
-    // First get rid of all comments and white spaces
-    while (c!=EOF && (isspace(c) || c=='#') ) {
-      if (c=='#') {
-        for (c=fgetc(fp);
-             c!='\n' && c!=EOF;
-             c=fgetc(fp))
-          ;
-      }
-      c=fgetc(fp);
+    while (!is.eof()) {
+      is >> token;
+      if (token[0] != '#')
+        break;
+      is.ignore(10000000, '\n');
     }
-
-    // Now read the token
-    while (c!=EOF && !isspace(c)) {
-      token += c;
-      c = fgetc(fp);
-    }
-
-    return (c!=EOF);
+    return (!is.eof());
   }
 
 } // namespace Ipopt

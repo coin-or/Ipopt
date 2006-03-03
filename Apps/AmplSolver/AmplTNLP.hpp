@@ -15,6 +15,7 @@
 #include "IpOptionsList.hpp"
 
 #include <map>
+#include <string>
 
 /* non Ipopt forward declaration */
 struct ASL_pfgh;
@@ -203,7 +204,8 @@ namespace Ipopt
              SmartPtr<AmplOptionsList> ampl_options_list = NULL,
              char* ampl_option_string = NULL,
              char* ampl_invokation_string = NULL,
-             char* ampl_banner_string = NULL);
+             char* ampl_banner_string = NULL,
+             std::string* nl_file_content = NULL);
 
     /** Default destructor */
     virtual ~AmplTNLP();

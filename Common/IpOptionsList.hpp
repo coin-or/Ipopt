@@ -9,6 +9,8 @@
 #ifndef __IPOPTLIST_HPP__
 #define __IPOPTLIST_HPP__
 
+#include <iostream>
+
 #include "IpUtils.hpp"
 #include "IpReferenced.hpp"
 #include "IpException.hpp"
@@ -189,9 +191,9 @@ namespace Ipopt
     /** Get a string with the list of all options (tag, value, counter) */
     void PrintList(std::string& list) const;
 
-    /** Read options from a file with name filename.  Returns false if
+    /** Read options from the stream is.  Returns false if
      *  an error was encountered. */
-    bool ReadFromFile(const Journalist& jnlst, FILE* fp);
+    bool ReadFromStream(const Journalist& jnlst, std::istream& is);
 
   private:
     /**@name Default Compiler Generated Methods
@@ -235,9 +237,9 @@ namespace Ipopt
      */
     bool will_allow_clobber(const std::string& tag) const;
 
-    /** read the next token from stream fp.  Returns false, if EOF was
+    /** read the next token from stream is.  Returns false, if EOF was
      *  reached before a tokens was ecountered. */
-    bool readnexttoken(FILE* fp, std::string& token);
+    bool readnexttoken(std::istream& is, std::string& token);
 
     /** auxilliary string set by lowercase method */
     mutable std::string lowercase_buffer_;

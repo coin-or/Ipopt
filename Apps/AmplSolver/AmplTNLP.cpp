@@ -31,7 +31,8 @@ namespace Ipopt
                      SmartPtr<AmplOptionsList> ampl_options_list /* = NULL */,
                      char* ampl_option_string /* = NULL */,
                      char* ampl_invokation_string /* = NULL */,
-                     char* ampl_banner_string /* = NULL */)
+                     char* ampl_banner_string /* = NULL */,
+                     std::string* nl_file_content /* = NULL */)
       :
       TNLP(),
       jnlst_(jnlst),
@@ -66,13 +67,19 @@ namespace Ipopt
     char* stub = get_options(options, ampl_options_list,
                              ampl_option_string, ampl_invokation_string,
                              ampl_banner_string, argv);
-    if (!stub) {
-      jnlst_->Printf(J_ERROR, J_MAIN, "No .nl file given!\n");
-      exit(-1);
+    FILE*nl = NULL;
+    if (nl_file_content) {
+      nl = jac0dim(const_cast<char*>(nl_file_content->c_str()),
+                   -nl_file_content->length());
     }
-
-    FILE* nl = jac0dim(stub, (fint)strlen(stub));
-    DBG_ASSERT(nl);
+    else {
+      if (!stub) {
+        jnlst_->Printf(J_ERROR, J_MAIN, "No .nl file given!\n");
+        exit(-1);
+      }
+      nl = jac0dim(stub, (fint)strlen(stub));
+      DBG_ASSERT(nl);
+    }
     jnlst_->Printf(J_SUMMARY, J_MAIN, "\n");
 
     // check the problem statistics (see Table 1 in AMPL doc)

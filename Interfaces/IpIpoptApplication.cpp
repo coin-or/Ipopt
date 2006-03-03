@@ -6,6 +6,8 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-09-02
 
+#include <fstream>
+
 #include "IpIpoptApplication.hpp"
 #include "IpTNLPAdapter.hpp"
 #include "IpIpoptAlg.hpp"
@@ -72,16 +74,34 @@ namespace Ipopt
 
   void IpoptApplication::Initialize(std::string params_file)
   {
+    std::ifstream* is = NULL;
+    if (params_file != "") {
+      try {
+        is = new std::ifstream(params_file.c_str());
+      }
+      catch(std::bad_alloc& exc) {
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
+        exit(-1);
+      }
+      catch(...) {
+        IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
+        exc.ReportException(*jnlst_);
+        exit(-1);
+      }
+    }
+    Initialize(is);
+    if (is) {
+      is->close();
+    }
+  }
+
+  void IpoptApplication::Initialize(std::istream* is)
+  {
     try {
       // Get the options
-      if (params_file != "") {
-        FILE* fp_options = fopen(params_file.c_str(), "r");
-        if (fp_options) {
-          // PARAMS.DAT exists, read the content
-          options_->ReadFromFile(*jnlst_, fp_options);
-          fclose(fp_options);
-          fp_options=NULL;
-        }
+      if (is != NULL) {
+        // PARAMS.DAT exists, read the content
+        options_->ReadFromStream(*jnlst_, *is);
       }
 
       Index ivalue;

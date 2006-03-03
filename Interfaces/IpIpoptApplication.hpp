@@ -9,6 +9,8 @@
 #ifndef __IPIPOPTAPPLICATION_HPP__
 #define __IPIPOPTAPPLICATION_HPP__
 
+#include <iostream>
+
 #include "IpJournalist.hpp"
 #include "IpTNLP.hpp"
 #include "IpNLP.hpp"
@@ -42,6 +44,7 @@ namespace Ipopt
      *  file by setting params_file to ""
      */
     void Initialize(std::string params_file = "PARAMS.DAT");
+    void Initialize(std::istream* is);
 
     /**@name Solve methods */
     //@{
