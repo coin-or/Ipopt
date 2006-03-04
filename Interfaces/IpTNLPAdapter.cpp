@@ -1508,7 +1508,14 @@ namespace Ipopt
     }
 
     x_tag_for_g_ = x_tag_for_iterates_;
-    return tnlp_->eval_g(n_full_x_, full_x_, new_x, n_full_g_, full_g_);
+
+    bool retval = tnlp_->eval_g(n_full_x_, full_x_, new_x, n_full_g_, full_g_);
+
+    if (!retval) {
+      x_tag_for_jac_g_ = 0;
+    }
+
+    return retval;
   }
 
   bool TNLPAdapter::internal_eval_jac_g(bool new_x)
@@ -1519,8 +1526,15 @@ namespace Ipopt
     }
 
     x_tag_for_jac_g_ = x_tag_for_iterates_;
-    return tnlp_->eval_jac_g(n_full_x_, full_x_, new_x, n_full_g_,
-                             nz_full_jac_g_, NULL, NULL, jac_g_);
+
+    bool retval = tnlp_->eval_jac_g(n_full_x_, full_x_, new_x, n_full_g_,
+                                    nz_full_jac_g_, NULL, NULL, jac_g_);
+
+    if (!retval) {
+      x_tag_for_jac_g_ = 0;
+    }
+
+    return retval;
   }
 
   bool TNLPAdapter::CheckDerivatives(TNLPAdapter::DerivativeTestEnum deriv_test)
