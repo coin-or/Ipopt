@@ -75,6 +75,17 @@ namespace Ipopt
     SmartPtr<IpoptCalculatedQuantities> orig_ip_cq =
       &resto_ipopt_nlp->OrigIpCq();
 
+    // set the trial point for the original problem
+    SmartPtr<const Vector> x = IpData().curr()->x();
+    const CompoundVector* cx =
+      dynamic_cast<const CompoundVector*>(GetRawPtr(x));
+    DBG_ASSERT(cx);
+
+    SmartPtr<IteratesVector> trial = orig_ip_data->curr()->MakeNewContainer();
+    trial->Set_x(*cx->GetComp(0));
+    trial->Set_s(*IpData().curr()->s());
+    orig_ip_data->set_trial(trial);
+
     if (call_intermediate_callback) {
       // Check if user requested termination by calling the intermediate
       // user callback function
@@ -115,17 +126,6 @@ namespace Ipopt
 
     // First check if the point is now acceptable for the outer filter
     ConvergenceStatus status;
-
-    // set the trial point for the original problem
-    SmartPtr<const Vector> x = IpData().curr()->x();
-    const CompoundVector* cx =
-      dynamic_cast<const CompoundVector*>(GetRawPtr(x));
-    DBG_ASSERT(cx);
-
-    SmartPtr<IteratesVector> trial = orig_ip_data->curr()->MakeNewContainer();
-    trial->Set_x(*cx->GetComp(0));
-    trial->Set_s(*IpData().curr()->s());
-    orig_ip_data->set_trial(trial);
 
     // Calculate the f and theta for the original problem
     Number orig_trial_theta = orig_ip_cq->trial_constraint_violation();
