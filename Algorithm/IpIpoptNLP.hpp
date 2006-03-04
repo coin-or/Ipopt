@@ -15,6 +15,8 @@
 
 namespace Ipopt
 {
+  // forward declarations
+  class IteratesVector;
 
   /** This is the abstract base class for classes that map
    *  the traditional NLP into
@@ -71,6 +73,9 @@ namespace Ipopt
                                       SmartPtr<Vector>& v_L,
                                       SmartPtr<Vector>& v_U
                                      ) = 0;
+
+    /** Method accessing the GetWarmStartIterate of the NLP */
+    virtual bool GetWarmStartIterate(IteratesVector& warm_start_iterate)=0;
 
     /** Accessor methods for model data */
     //@{

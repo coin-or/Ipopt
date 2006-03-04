@@ -63,6 +63,12 @@ namespace Ipopt
                                       SmartPtr<Vector>& v_U
                                      );
 
+    /** Method accessing the GetWarmStartIterate of the NLP */
+    virtual bool GetWarmStartIterate(IteratesVector& warm_start_iterate)
+    {
+      return false;
+    }
+
     /** Solution Routines - overloaded from IpoptNLP*/
     //@{
     void FinalizeSolution(SolverReturn status,

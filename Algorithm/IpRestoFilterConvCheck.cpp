@@ -66,13 +66,6 @@ namespace Ipopt
   ConvergenceCheck::ConvergenceStatus
   RestoFilterConvergenceCheck::CheckConvergence(bool call_intermediate_callback /*= true*/)
   {
-    if (IpData().iter_count() >= maximum_iters_) {
-      return ConvergenceCheck::MAXITER_EXCEEDED;
-    }
-
-    // First check if the point is now acceptable for the outer filter
-    ConvergenceStatus status;
-
     // Get pointers to the Original NLP objects
     const RestoIpoptNLP* resto_ipopt_nlp =
       dynamic_cast<const RestoIpoptNLP*>(&IpNLP());
@@ -81,6 +74,47 @@ namespace Ipopt
     SmartPtr<IpoptData> orig_ip_data = &resto_ipopt_nlp->OrigIpData();
     SmartPtr<IpoptCalculatedQuantities> orig_ip_cq =
       &resto_ipopt_nlp->OrigIpCq();
+
+    if (call_intermediate_callback) {
+      // Check if user requested termination by calling the intermediate
+      // user callback function
+      AlgorithmMode mode = RestorationPhaseMode;
+      // Gather the information also used in the iteration output
+      Index iter = IpData().iter_count();
+      Number inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
+      Number inf_du = IpCq().curr_dual_infeasibility(NORM_MAX);
+      Number mu = IpData().curr_mu();
+      Number dnrm;
+      if (IsValid(IpData().delta()) && IsValid(IpData().delta()->x()) && IsValid(IpData().delta()->s())) {
+        dnrm = Max(IpData().delta()->x()->Amax(), IpData().delta()->s()->Amax());
+      }
+      else {
+        // This is the first iteration - no search direction has been
+        // computed yet.
+        dnrm = 0.;
+      }
+      Number alpha_primal = IpData().info_alpha_primal();
+      Number alpha_dual = IpData().info_alpha_dual();
+      Number regu_x = IpData().info_regu_x();
+      Number unscaled_f = orig_ip_cq->unscaled_trial_f();
+      Index ls_count = IpData().info_ls_count();
+      bool request_stop =
+        !IpNLP().IntermediateCallBack(mode, iter, unscaled_f, inf_pr, inf_du,
+                                      mu, dnrm, regu_x, alpha_dual,
+                                      alpha_primal, ls_count,
+                                      &IpData(), &IpCq());
+
+      if (request_stop) {
+        return ConvergenceCheck::USER_STOP;
+      }
+    }
+
+    if (IpData().iter_count() >= maximum_iters_) {
+      return ConvergenceCheck::MAXITER_EXCEEDED;
+    }
+
+    // First check if the point is now acceptable for the outer filter
+    ConvergenceStatus status;
 
     // set the trial point for the original problem
     SmartPtr<const Vector> x = IpData().curr()->x();
@@ -187,40 +221,6 @@ namespace Ipopt
     }
 
     first_resto_iter_ = false;
-
-    if (call_intermediate_callback) {
-      // Check if user requested termination by calling the intermediate
-      // user callback function
-      AlgorithmMode mode = RestorationPhaseMode;
-      // Gather the information also used in the iteration output
-      Index iter = IpData().iter_count();
-      Number inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
-      Number inf_du = IpCq().curr_dual_infeasibility(NORM_MAX);
-      Number mu = IpData().curr_mu();
-      Number dnrm;
-      if (IsValid(IpData().delta()) && IsValid(IpData().delta()->x()) && IsValid(IpData().delta()->s())) {
-        dnrm = Max(IpData().delta()->x()->Amax(), IpData().delta()->s()->Amax());
-      }
-      else {
-        // This is the first iteration - no search direction has been
-        // computed yet.
-        dnrm = 0.;
-      }
-      Number alpha_primal = IpData().info_alpha_primal();
-      Number alpha_dual = IpData().info_alpha_dual();
-      Number regu_x = IpData().info_regu_x();
-      Number unscaled_f = orig_ip_cq->unscaled_trial_f();
-      Index ls_count = IpData().info_ls_count();
-      bool request_stop =
-        !IpNLP().IntermediateCallBack(mode, iter, unscaled_f, inf_pr, inf_du,
-                                      mu, dnrm, regu_x, alpha_dual,
-                                      alpha_primal, ls_count,
-                                      &IpData(), &IpCq());
-
-      if (request_stop) {
-        return ConvergenceCheck::USER_STOP;
-      }
-    }
 
     return status;
   }

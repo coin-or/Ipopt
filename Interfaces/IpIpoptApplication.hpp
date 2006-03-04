@@ -44,7 +44,7 @@ namespace Ipopt
      *  file by setting params_file to ""
      */
     void Initialize(std::string params_file = "PARAMS.DAT");
-    void Initialize(std::istream* is);
+    void Initialize(std::istream& is);
 
     /**@name Solve methods */
     //@{

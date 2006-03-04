@@ -62,6 +62,11 @@ namespace Ipopt
                                       SmartPtr<Vector>& v_U
                                      );
 
+    /** Method accessing the GetWarmStartIterate of the NLP */
+    virtual bool GetWarmStartIterate(IteratesVector& warm_start_iterate)
+    {
+      return nlp_->GetWarmStartIterate(warm_start_iterate);
+    }
     /** Accessor methods for model data */
     //@{
     /** Objective value */

@@ -125,37 +125,6 @@ namespace Ipopt
   {
     DBG_START_METH("OptimalityErrorConvergenceCheck::CheckConvergence", dbg_verbosity);
 
-    if (IpData().iter_count() >= max_iterations_) {
-      return ConvergenceCheck::MAXITER_EXCEEDED;
-    }
-
-    Number overall_error = IpCq().curr_nlp_error();
-    Number dual_inf = IpCq().unscaled_curr_dual_infeasibility(NORM_MAX);
-    Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
-    Number compl_inf = IpCq().unscaled_curr_complementarity(0., NORM_MAX);
-
-    if (overall_error <= IpData().tol() &&
-        dual_inf <= dual_inf_tol_ &&
-        constr_viol <= constr_viol_tol_ &&
-        compl_inf <= compl_inf_tol_) {
-      return ConvergenceCheck::CONVERGED;
-    }
-
-    if (acceptable_iter_>0 && CurrentIsAcceptable()) {
-      IpData().Append_info_string("A");
-      acceptable_counter_++;
-      if (acceptable_counter_ >= acceptable_iter_) {
-        return ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT;
-      }
-    }
-    else {
-      acceptable_counter_ = 0;
-    }
-
-    if (IpData().curr()->x()->Amax() > diverging_iterates_tol_) {
-      return ConvergenceCheck::DIVERGING;
-    }
-
     if (call_intermediate_callback) {
       // Check if user requested termination by calling the intermediate
       // user callback function
@@ -188,6 +157,37 @@ namespace Ipopt
       if (request_stop) {
         return ConvergenceCheck::USER_STOP;
       }
+    }
+
+    if (IpData().iter_count() >= max_iterations_) {
+      return ConvergenceCheck::MAXITER_EXCEEDED;
+    }
+
+    Number overall_error = IpCq().curr_nlp_error();
+    Number dual_inf = IpCq().unscaled_curr_dual_infeasibility(NORM_MAX);
+    Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
+    Number compl_inf = IpCq().unscaled_curr_complementarity(0., NORM_MAX);
+
+    if (overall_error <= IpData().tol() &&
+        dual_inf <= dual_inf_tol_ &&
+        constr_viol <= constr_viol_tol_ &&
+        compl_inf <= compl_inf_tol_) {
+      return ConvergenceCheck::CONVERGED;
+    }
+
+    if (acceptable_iter_>0 && CurrentIsAcceptable()) {
+      IpData().Append_info_string("A");
+      acceptable_counter_++;
+      if (acceptable_counter_ >= acceptable_iter_) {
+        return ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT;
+      }
+    }
+    else {
+      acceptable_counter_ = 0;
+    }
+
+    if (IpData().curr()->x()->Amax() > diverging_iterates_tol_) {
+      return ConvergenceCheck::DIVERGING;
     }
 
     return ConvergenceCheck::CONTINUE;

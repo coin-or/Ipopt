@@ -74,10 +74,10 @@ namespace Ipopt
 
   void IpoptApplication::Initialize(std::string params_file)
   {
-    std::ifstream* is = NULL;
+    std::ifstream is;
     if (params_file != "") {
       try {
-        is = new std::ifstream(params_file.c_str());
+        is.open(params_file.c_str());
       }
       catch(std::bad_alloc& exc) {
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
@@ -91,17 +91,17 @@ namespace Ipopt
     }
     Initialize(is);
     if (is) {
-      is->close();
+      is.close();
     }
   }
 
-  void IpoptApplication::Initialize(std::istream* is)
+  void IpoptApplication::Initialize(std::istream& is)
   {
     try {
       // Get the options
-      if (is != NULL) {
+      if (is.good()) {
         // PARAMS.DAT exists, read the content
-        options_->ReadFromStream(*jnlst_, *is);
+        options_->ReadFromStream(*jnlst_, is);
       }
 
       Index ivalue;
