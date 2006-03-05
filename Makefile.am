@@ -54,6 +54,7 @@ install-exec-local:
 	do \
 	  $(AR_X) $$basdir/$$lib; \
 	done; \
+	$(BLUEGENEEXTRA); \
 	$(AR) $(ARFLAGS) $(libipopt) *.$(OBJEXT)
 	$(INSTALL_DATA) $(tmpdir)/$(libipopt) $(DESTDIR)$(libdir)
 	echo "$(IPADDLIBS) $(FLIBS)" >$(tmpdir)/$(ipopt_addlibs_cpp_txt)

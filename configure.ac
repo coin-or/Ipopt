@@ -1322,6 +1322,15 @@ esac
 CFLAGS="$CFLAGS $warn_cflags"
 CXXFLAGS="$CXXFLAGS $warn_cxxflags"
 
+# Some extra stuff for blue gene on Laci's request
+AC_SUBST(BLUEGENEEXTRA)
+BLUEGENEEXTRA="echo"
+AC_ARG_ENABLE([bg],,
+  [case "${enableval}" in
+    yes)  BLUEGENEEXTRA="chmod 644 *.o; cp ../Extern/ASL/amplsolver.a ../lib/libamplsolver.a"
+          ;;
+  esac],[debugcompile=false])
+
 #########################
 # Makefile conditionals #
 #########################
