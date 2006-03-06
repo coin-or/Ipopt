@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -110,8 +110,8 @@ namespace Ipopt
       "wsmp_scaling",
       "Toggle for swiching on WSMP's internal scaling.",
       "yes",
-      "no", "don't use scaling",
-      "yes", "use scaling",
+      "no", "don't use expensive scaling",
+      "yes", "use expensive scaling",
       "Yes corresponds to setting WSMP's IPARM(10) to 1, otherwise this is "
       "set to 0.");
     roptions->AddBoundedNumberOption(
@@ -153,6 +153,7 @@ namespace Ipopt
     dim_=0;
     initialized_=false;
     pivtol_changed_ = false;
+    have_symbolic_factorization_ = false;
     delete[] a_;
     delete[] PERM_;
     delete[] INVP_;
@@ -173,7 +174,7 @@ namespace Ipopt
     // Bunch-Kaufman)
     IPARM_[15] = wsmp_ordering_option_; // ordering option
     IPARM_[17] = 1; // use local minimum fill-in ordering
-    //    IPARM_[19] = 1; // for ordering in IP methods?
+    IPARM_[19] = 1; // for ordering in IP methods?
     IPARM_[30] = 2; // want L D L^T factorization with diagonal
     // pivoting (Bunch/Kaufman)
     //IPARM_[31] = 1; // need D to see where first negative eigenvalue occurs
@@ -185,10 +186,10 @@ namespace Ipopt
 
     // Decide whether to use WSMP's scaling
     if (wsmp_scaling_) {
-      IPARM_[9] = 1;
+      IPARM_[9] = 3;
     }
     else {
-      IPARM_[9] = 0;
+      IPARM_[9] = 1;
     }
 
     DPARM_[9] = wsmp_singularity_threshold_;
@@ -269,44 +270,8 @@ namespace Ipopt
     DBG_START_METH("WsmpSolverInterface::SymbolicFactorization",
                    dbg_verbosity);
 
-    IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
-
-    // Create space for the permutations
-    delete [] PERM_;
-    delete [] INVP_;
-    PERM_ = new ipfint[dim_];
-    INVP_ = new ipfint[dim_];
-
-    // Call WSSMP for ordering and symbolic factorization
-    ipfint N = dim_;
-    ipfint NAUX = 0;
-    IPARM_[1] = 1; // ordering
-    IPARM_[2] = 2; // symbolic factorization
-    F77_FUNC(wssmp,WSSMP)(&N, ia, ja, NULL, NULL, PERM_, INVP_,
-                          NULL, NULL, NULL, NULL, &NAUX, NULL,
-                          IPARM_, DPARM_);
-
-    Index ierror = IPARM_[63];
-    if (ierror!=0) {
-      if (ierror==-102) {
-        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                       "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
-      }
-      else {
-        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                       "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
-      }
-      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
-      return SYMSOLVER_FATAL_ERROR;
-    }
-    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n",
-                   IPARM_[22]);
-    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
-                   IPARM_[23]);
-
-    IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+    // This is postpone until the first factorization call, since the
+    // we the values in the matrix are known
     return SYMSOLVER_SUCCESS;
   }
 
@@ -340,6 +305,57 @@ namespace Ipopt
       fclose(fp);
     }
 
+    // Check if we have to do the symbolic factorization and ordering
+    // phase yet
+    if (!have_symbolic_factorization_) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+
+      // Create space for the permutations
+      delete [] PERM_;
+      delete [] INVP_;
+      PERM_ = new ipfint[dim_];
+      INVP_ = new ipfint[dim_];
+
+      // Call WSSMP for ordering and symbolic factorization
+      ipfint N = dim_;
+      ipfint NAUX = 0;
+      IPARM_[1] = 1; // ordering
+      IPARM_[2] = 2; // symbolic factorization
+      F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, NULL, PERM_, INVP_,
+			    NULL, NULL, NULL, NULL, &NAUX, NULL,
+			    IPARM_, DPARM_);
+
+      Index ierror = IPARM_[63];
+      if (ierror!=0) {
+	if (ierror==-102) {
+	  Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+			 "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
+	}
+	else if (ierror>0) {
+	  Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+			 "Matrix appears to be singular (with ierror = %d).\n",
+			 ierror);
+	  IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+	  return SYMSOLVER_SINGULAR;
+	}
+	else {
+	  Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+			 "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
+	}
+	IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+	return SYMSOLVER_FATAL_ERROR;
+      }
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		     "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+		     IPARM_[22]);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+		     IPARM_[23]);
+
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+      have_symbolic_factorization_ = true;
+    }
+
     IpData().TimingStats().LinearSystemFactorization().Start();
 
     // Call WSSMP for numerical factorization
@@ -360,11 +376,11 @@ namespace Ipopt
     else if (ierror != 0) {
       if (ierror == -102) {
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                       "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
+                       "Error: WSMP is not able to allocate sufficient amount of memory during factorization.\n");
       }
       else {
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                       "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
+                       "Error in WSMP during factorization phase.\n     Error code is %d.\n", ierror);
       }
       IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_FATAL_ERROR;
@@ -411,8 +427,9 @@ namespace Ipopt
     ipfint NRHS = nrhs;
     ipfint NAUX = 0;
     IPARM_[1] = 4; // Forward and Backward Elimintation
-    IPARM_[2] = 4; // Iterative refinement
-    IPARM_[5] = 0; // ANSHUL: Does that make sense???
+    IPARM_[2] = 5; // Iterative refinement
+    IPARM_[5] = 1;
+    DPARM_[5] = 1e-12;
 
     /*
     // DELETEME

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -150,6 +150,9 @@ namespace Ipopt
     /** Flag indicating if the matrix has to be refactorized because
      *  the pivot tolerance has been changed. */
     bool pivtol_changed_;
+    /** Flag indicating whether symbolic factorization and order has
+     *  already been performed. */
+    bool have_symbolic_factorization_;
     //@}
 
     /** @name Solver specific information */
