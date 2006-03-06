@@ -18,7 +18,7 @@ echo "Uncompressing the tarball..."
 gunzip -f lapack.tgz
 
 echo "Unpacking the source code..."
-tar xf lapack.tar
+tar xf lapack.tar LAPACK/SRC
 
 echo "Deleting the tar file..."
 rm lapack.tar
