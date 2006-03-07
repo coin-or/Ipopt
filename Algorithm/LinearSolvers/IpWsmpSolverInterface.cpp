@@ -322,35 +322,35 @@ namespace Ipopt
       IPARM_[1] = 1; // ordering
       IPARM_[2] = 2; // symbolic factorization
       F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, NULL, PERM_, INVP_,
-			    NULL, NULL, NULL, NULL, &NAUX, NULL,
-			    IPARM_, DPARM_);
+                            NULL, NULL, NULL, NULL, &NAUX, NULL,
+                            IPARM_, DPARM_);
 
       Index ierror = IPARM_[63];
       if (ierror!=0) {
-	if (ierror==-102) {
-	  Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-			 "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
-	}
-	else if (ierror>0) {
-	  Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-			 "Matrix appears to be singular (with ierror = %d).\n",
-			 ierror);
-	  IpData().TimingStats().LinearSystemSymbolicFactorization().End();
-	  return SYMSOLVER_SINGULAR;
-	}
-	else {
-	  Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-			 "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
-	}
-	IpData().TimingStats().LinearSystemSymbolicFactorization().End();
-	return SYMSOLVER_FATAL_ERROR;
+        if (ierror==-102) {
+          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                         "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
+        }
+        else if (ierror>0) {
+          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                         "Matrix appears to be singular (with ierror = %d).\n",
+                         ierror);
+          IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+          return SYMSOLVER_SINGULAR;
+        }
+        else {
+          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                         "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
+        }
+        IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+        return SYMSOLVER_FATAL_ERROR;
       }
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		     "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n",
-		     IPARM_[22]);
+                     "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+                     IPARM_[22]);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
-		     IPARM_[23]);
+                     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+                     IPARM_[23]);
 
       IpData().TimingStats().LinearSystemSymbolicFactorization().End();
       have_symbolic_factorization_ = true;
