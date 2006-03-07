@@ -627,12 +627,23 @@ namespace Ipopt
 
   bool OptionsList::readnexttoken(std::istream& is, std::string& token)
   {
-    while (!is.eof()) {
-      is >> token;
-      if (token[0] != '#')
-        break;
-      is.ignore(10000000, '\n');
+    token.clear();
+    int c = is.get();
+
+    // First get rid of all comments and white spaces
+    while (!is.eof() && (isspace(c) || c=='#') ) {
+      if (c=='#') {
+        is.ignore(10000000, '\n');
+      }
+      c=is.get();
     }
+
+    // Now read the token
+    while (!is.eof() && !isspace(c)) {
+      token += c;
+      c = is.get();
+    }
+
     return (!is.eof());
   }
 
