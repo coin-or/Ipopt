@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -130,6 +130,13 @@ namespace Ipopt
   {
     DBG_ASSERT(initialized_);
     IpBlasDcopy(Nonzeros(), values_, 1, Values, 1);
+  }
+
+  bool SymTMatrix::HasValidNumbersImpl() const
+  {
+    DBG_ASSERT(initialized_);
+    Number sum = IpBlasDasum(Nonzeros(), values_, 1);
+    return IsFiniteNumber(sum);
   }
 
   void SymTMatrix::PrintImpl(const Journalist& jnlst,

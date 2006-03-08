@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -256,6 +256,13 @@ namespace Ipopt
     bool trans = true;
     IpBlasDgemv(trans, NRows(), NCols(), alpha, values_, NRows(),
                 dense_x->Values(), 1, beta, dense_y->Values(), 1);
+  }
+
+  bool DenseGenMatrix::HasValidNumbersImpl() const
+  {
+    DBG_ASSERT(initialized_);
+    Number sum = IpBlasDasum(NRows()*NCols(), values_, 1);
+    return IsFiniteNumber(sum);
   }
 
   void DenseGenMatrix::PrintImpl(const Journalist& jnlst,

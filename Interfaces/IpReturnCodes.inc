@@ -1,4 +1,4 @@
-C Copyright (C) 2005 Carnegie Mellon University and others.
+C Copyright (C) 2005, 2006 Carnegie Mellon University and others.
 C All Rights Reserved.
 C This code is published under the Common Public License.
 C
@@ -41,6 +41,9 @@ C
 
       INTEGER IP_INVALID_OPTION
       PARAMETER( IP_INVALID_OPTION = -12 )
+
+      INTEGER IP_INVALID_NUMBER_DETECTED
+      PARAMETER( IP_INVALID_NUMBER_DETECTED = -13 )
 
       INTEGER IP_UNRECOVERABLE_EXCEPTION
       PARAMETER( IP_UNRECOVERABLE_EXCEPTION = -100 )

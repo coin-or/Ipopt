@@ -28,6 +28,7 @@ enum ApplicationReturnStatus
     Not_Enough_Degrees_Of_Freedom=-10,
     Invalid_Problem_Definition=-11,
     Invalid_Option=-12,
+    Invalid_Number_Detected=-13,
 
     Unrecoverable_Exception=-100,
     NonIpopt_Exception_Thrown=-101,

@@ -464,28 +464,30 @@ namespace Ipopt
                      "\nNumber of Iterations....: %d\n",
                      p2ip_data->iter_count());
 
-      jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                     "\n                                   (scaled)                 (unscaled)\n");
-      jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                     "Objective...............: %24.16e  %24.16e\n",
-                     p2ip_cq->curr_f(),
-                     p2ip_cq->unscaled_curr_f());
-      jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                     "Dual infeasibility......: %24.16e  %24.16e\n",
-                     p2ip_cq->curr_dual_infeasibility(NORM_MAX),
-                     p2ip_cq->unscaled_curr_dual_infeasibility(NORM_MAX));
-      jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                     "Constraint violation....: %24.16e  %24.16e\n",
-                     p2ip_cq->curr_nlp_constraint_violation(NORM_MAX),
-                     p2ip_cq->unscaled_curr_nlp_constraint_violation(NORM_MAX));
-      jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                     "Complementarity.........: %24.16e  %24.16e\n",
-                     p2ip_cq->curr_complementarity(0., NORM_MAX),
-                     p2ip_cq->unscaled_curr_complementarity(0., NORM_MAX));
-      jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                     "Overall NLP error.......: %24.16e  %24.16e\n\n",
-                     p2ip_cq->curr_nlp_error(),
-                     p2ip_cq->unscaled_curr_nlp_error());
+      if (!status==INVALID_NUMBER_DETECTED) {
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "\n                                   (scaled)                 (unscaled)\n");
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Objective...............: %24.16e  %24.16e\n",
+                       p2ip_cq->curr_f(),
+                       p2ip_cq->unscaled_curr_f());
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Dual infeasibility......: %24.16e  %24.16e\n",
+                       p2ip_cq->curr_dual_infeasibility(NORM_MAX),
+                       p2ip_cq->unscaled_curr_dual_infeasibility(NORM_MAX));
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Constraint violation....: %24.16e  %24.16e\n",
+                       p2ip_cq->curr_nlp_constraint_violation(NORM_MAX),
+                       p2ip_cq->unscaled_curr_nlp_constraint_violation(NORM_MAX));
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Complementarity.........: %24.16e  %24.16e\n",
+                       p2ip_cq->curr_complementarity(0., NORM_MAX),
+                       p2ip_cq->unscaled_curr_complementarity(0., NORM_MAX));
+        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                       "Overall NLP error.......: %24.16e  %24.16e\n\n",
+                       p2ip_cq->curr_nlp_error(),
+                       p2ip_cq->unscaled_curr_nlp_error());
+      }
 
       p2ip_data->curr()->x()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "x");
       p2ip_data->curr()->y_c()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "y_c");
@@ -581,6 +583,10 @@ namespace Ipopt
         retValue = User_Requested_Stop;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Stopping optimization at current point as requested by user.\n");
       }
+      else if (status == INVALID_NUMBER_DETECTED) {
+        retValue = Invalid_Number_Detected;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Invalid number in NLP function or derivative detected.\n");
+      }
       else {
         retValue = Internal_Error;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
@@ -594,8 +600,11 @@ namespace Ipopt
                                  *p2ip_data->curr()->y_c(),
                                  *p2ip_data->curr()->y_d(),
                                  p2ip_cq->curr_f());
-      // Create a SolveStatistics object
-      statistics_ = new SolveStatistics(p2ip_nlp, p2ip_data, p2ip_cq);
+
+      if (status!=INVALID_NUMBER_DETECTED) {
+        // Create a SolveStatistics object
+        statistics_ = new SolveStatistics(p2ip_nlp, p2ip_data, p2ip_cq);
+      }
     }
     catch(TOO_FEW_DOF& exc) {
       //exc.ReportException(*jnlst_);

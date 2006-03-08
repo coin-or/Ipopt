@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -169,6 +169,10 @@ namespace Ipopt
                            Number c);
     //@}
 
+    /** Method for determining if all stored numbers are valid (i.e.,
+     *  no Inf or Nan). */
+    bool HasValidNumbers() const;
+
     /** @name Accessor methods */
     //@{
     /** Dimension of the Vector */
@@ -278,6 +282,11 @@ namespace Ipopt
     virtual void AddVectorQuotientImpl(Number a, const Vector& z,
                                        const Vector& s, Number c);
 
+    /** Method for determining if all stored numbers are valid (i.e.,
+     *  no Inf or Nan). A default implementation using Asum is
+     *  provided. */
+    virtual bool HasValidNumbersImpl() const;
+
     /** Print the entire vector */
     virtual void PrintImpl(const Journalist& jnlst,
                            EJournalLevel level,
@@ -334,6 +343,9 @@ namespace Ipopt
 
     mutable TaggedObject::Tag sumlogs_cache_tag_;
     mutable Number cached_sumlogs_;
+
+    mutable TaggedObject::Tag valid_cache_tag_;
+    mutable bool cached_valid_;
 
     //     AW: I removed this cache since it gets in the way for the
     //         quality function search
@@ -413,7 +425,8 @@ namespace Ipopt
       max_cache_tag_(0),
       min_cache_tag_(0),
       sum_cache_tag_(0),
-      sumlogs_cache_tag_(0)
+      sumlogs_cache_tag_(0),
+      cached_valid_(0)
   {
     DBG_ASSERT(IsValid(owner_space_));
   }
@@ -732,6 +745,16 @@ namespace Ipopt
   {
     AddVectorQuotientImpl(a, z, s, c);
     ObjectChanged();
+  }
+
+  inline
+  bool Vector::HasValidNumbers() const
+  {
+    if (valid_cache_tag_ != GetTag()) {
+      cached_valid_ = HasValidNumbersImpl();
+      valid_cache_tag_ = GetTag();
+    }
+    return cached_valid_;
   }
 
   inline

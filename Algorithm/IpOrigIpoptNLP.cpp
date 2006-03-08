@@ -95,6 +95,16 @@ namespace Ipopt
       "If \"yes\" is chosen, then the algorithm assumes that an NLP is now to "
       "be solved, whose strcture is identical to one that already was "
       "considered (with the same NLP object).");
+    roptions->AddStringOption2(
+      "check_derivatives_for_naninf",
+      "Indicates whether it is desired to check for Nan/Inf in derivative matrices",
+      "no",
+      "no", "Don't check (faster).",
+      "yes", "Check Jacobians and Hessian for Nan and Ind.",
+      "Activating this option will cause an error if an invalid number is "
+      "detected in the constraint Jacobians or the Lagrangian Hessian.  If "
+      "this is not activated, the test is skipped, and the algorithm might "
+      "proceed with invalid numbers and fail.");
     roptions->SetRegisteringCategory("Hessian Approximation");
     roptions->AddStringOption2(
       "hessian_information",
@@ -115,6 +125,8 @@ namespace Ipopt
                          honor_original_bounds_, prefix);
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
+    options.GetBoolValue("check_derivatives_for_naninf",
+                         check_derivatives_for_naninf_, prefix);
     Index enum_int;
     options.GetEnumValue("hessian_information", enum_int, prefix);
     hessian_information_ = HessianInformationType(enum_int);
@@ -535,6 +547,13 @@ namespace Ipopt
         bool success = nlp_->Eval_jac_c(*unscaled_x, *unscaled_jac_c);
         jac_c_eval_time_.End();
         ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the equality constraints");
+        if (check_derivatives_for_naninf_) {
+          if (!unscaled_jac_c->HasValidNumbers()) {
+            jnlst_->Printf(J_WARNING, J_NLP,
+                           "The Jacobian for the equality constraints contains an invalid number\n");
+            THROW_EXCEPTION(Eval_Error, "The Jacobian for the equality constraints contains an invalid number");
+          }
+        }
         retValue = NLP_scaling()->apply_jac_c_scaling(ConstPtr(unscaled_jac_c));
         jac_c_cache_.AddCachedResult1Dep(retValue, x);
       }

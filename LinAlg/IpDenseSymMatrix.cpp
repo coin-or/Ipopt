@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -172,6 +172,20 @@ namespace Ipopt
       }
     }
     ObjectChanged();
+  }
+
+  bool DenseSymMatrix::HasValidNumbersImpl() const
+  {
+    DBG_ASSERT(initialized_);
+    Number sum = 0.;
+    const Index dim = Dim();
+    for (Index j=0; j<dim; j++) {
+      sum += values_[j + j*dim];
+      for (Index i=j+1; i<dim; i++) {
+        sum += values_[i + j*dim];
+      }
+    }
+    return IsFiniteNumber(sum);
   }
 
   void DenseSymMatrix::PrintImpl(const Journalist& jnlst,

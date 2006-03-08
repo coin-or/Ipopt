@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -113,6 +113,25 @@ namespace Ipopt
         P_LR->MultVector(alpha, *small_y, 1., y);
       }
     }
+  }
+
+  bool LowRankUpdateSymMatrix::HasValidNumbersImpl() const
+  {
+    DBG_ASSERT(IsValid(D_));
+    if (!D_->HasValidNumbers()) {
+      return false;
+    }
+    if (IsValid(V_)) {
+      if (!V_->HasValidNumbers()) {
+        return false;
+      }
+    }
+    if (IsValid(U_)) {
+      if (!U_->HasValidNumbers()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   void LowRankUpdateSymMatrix::PrintImpl(const Journalist& jnlst,

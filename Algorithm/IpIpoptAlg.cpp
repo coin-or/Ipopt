@@ -345,6 +345,12 @@ namespace Ipopt
       IpData().TimingStats().OverallAlgorithm().End();
       return ERROR_IN_STEP_COMPUTATION;
     }
+    catch(IpoptNLP::Eval_Error& exc) {
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
+      IpData().TimingStats().OverallAlgorithm().End();
+      return INVALID_NUMBER_DETECTED;
+    }
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();

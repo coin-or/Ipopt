@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -375,6 +375,17 @@ namespace Ipopt
       Comp(i)->AddVectorQuotient(a, *comp_z->GetComp(i),
                                  *comp_s->GetComp(i), c);
     }
+  }
+
+  bool CompoundVector::HasValidNumbersImpl() const
+  {
+    DBG_ASSERT(vectors_valid_);
+    for(Index i=0; i<NComps(); i++) {
+      if (!ConstComp(i)->HasValidNumbers()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   void CompoundVector::PrintImpl(const Journalist& jnlst,

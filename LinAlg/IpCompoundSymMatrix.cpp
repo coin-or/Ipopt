@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -141,6 +141,25 @@ namespace Ipopt
         }
       }
     }
+  }
+
+  bool CompoundSymMatrix::HasValidNumbersImpl() const
+  {
+    if (!matrices_valid_) {
+      matrices_valid_ = MatricesValid();
+    }
+    DBG_ASSERT(matrices_valid_);
+
+    for (Index irow=0; irow<NComps_Dim(); irow++) {
+      for (Index jcol=0; jcol<=irow; jcol++) {
+        if (ConstComp(irow,jcol)) {
+          if (!ConstComp(irow,jcol)->HasValidNumbers()) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 
   void CompoundSymMatrix::PrintImpl(const Journalist& jnlst,

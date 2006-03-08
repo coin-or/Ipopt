@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -132,6 +132,13 @@ namespace Ipopt
         }
       }
     }
+  }
+
+  bool GenTMatrix::HasValidNumbersImpl() const
+  {
+    DBG_ASSERT(initialized_);
+    Number sum = IpBlasDasum(Nonzeros(), values_, 1);
+    return IsFiniteNumber(sum);
   }
 
   void GenTMatrix::PrintImpl(const Journalist& jnlst,

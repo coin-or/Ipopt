@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -223,6 +223,16 @@ namespace Ipopt
       U.MultVector(a, *mydvec, b, *Vec(i));
     }
     ObjectChanged();
+  }
+
+  bool MultiVectorMatrix::HasValidNumbersImpl() const
+  {
+    for (Index i=0; i<NCols(); i++) {
+      if (!ConstVec(i)->HasValidNumbers()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   void MultiVectorMatrix::PrintImpl(const Journalist& jnlst,

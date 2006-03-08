@@ -381,6 +381,9 @@ namespace Ipopt
     bool warm_start_same_structure_;
     /** Flag indicating what Hessian information is to be used. */
     HessianInformationType hessian_information_;
+    /** Flag indicating whether it is desired to check if there are
+     *  Nan or Inf entries in first and second derivative matrices. */
+    bool check_derivatives_for_naninf_;
     //@}
 
     /** @name Counters for the function evaluations */
