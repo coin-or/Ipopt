@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2005 International Business Machines and others.
+# Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -1204,7 +1204,7 @@ if test "$use_asldir" = BUILD; then
                      asladdcflags="$asladdcflags -DNO_fpu_control";;
                 esac
                 if test "$is_bg" = "yes"; then
-                  asladdcflags="$asladdcflags -DNo_Control87"
+                  asladdcflags="$asladdcflags -DNo_Control87 -DBLUE_GENE"
                 fi
                 ;;
       *-cygwin*) asladdcflags="-DNON_STDIO"
