@@ -35,6 +35,17 @@ AC_ARG_ENABLE([debug],
     *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
   esac],[debugcompile=false])
 
+# Some extra stuff for blue gene on Laci's request
+is_bg=no
+AC_SUBST(BLUEGENEEXTRA)
+BLUEGENEEXTRA="echo"
+AC_ARG_ENABLE([bg],,
+  [case "${enableval}" in
+    yes)  BLUEGENEEXTRA="chmod 644 *.o; cp ../Extern/ASL/amplsolver.a ../lib/libamplsolver.a"
+          is_bg=yes
+          ;;
+  esac],[debugcompile=false])
+
 ########################
 # C++ Compiler Options #
 ########################
@@ -1192,7 +1203,10 @@ if test "$use_asldir" = BUILD; then
                   pgcc | */pgcc)
                      asladdcflags="$asladdcflags -DNO_fpu_control";;
                 esac
-                  ;;
+                if test "$is_bg" = "yes"; then
+                  asladdcflags="$asladdcflags -DNo_Control87"
+                fi
+                ;;
       *-cygwin*) asladdcflags="-DNON_STDIO"
                 if test "$use_mingw" = yes; then
                   asladdcflags="$asladdcflags -DNo_Control87 -DNO_RUSAGE"
@@ -1321,15 +1335,6 @@ case $build in
 esac
 CFLAGS="$CFLAGS $warn_cflags"
 CXXFLAGS="$CXXFLAGS $warn_cxxflags"
-
-# Some extra stuff for blue gene on Laci's request
-AC_SUBST(BLUEGENEEXTRA)
-BLUEGENEEXTRA="echo"
-AC_ARG_ENABLE([bg],,
-  [case "${enableval}" in
-    yes)  BLUEGENEEXTRA="chmod 644 *.o; cp ../Extern/ASL/amplsolver.a ../lib/libamplsolver.a"
-          ;;
-  esac],[debugcompile=false])
 
 #########################
 # Makefile conditionals #
