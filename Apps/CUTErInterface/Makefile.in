@@ -82,6 +82,9 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BIT32FCOMMENT = @BIT32FCOMMENT@
+BIT64FCOMMENT = @BIT64FCOMMENT@
+BITS_PER_POINTER = @BITS_PER_POINTER@
 BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDAMPLINTERFACE_FALSE = @BUILDAMPLINTERFACE_FALSE@
 BUILDAMPLINTERFACE_TRUE = @BUILDAMPLINTERFACE_TRUE@
@@ -108,6 +111,7 @@ BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
+CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
@@ -436,7 +440,7 @@ ipoma.f: CUTErInterface.f
 	  rm -f  ipoma.f; \
 	  $(LN_S) $(srcdir)/ipoma-dummy.f ipoma.f; \
 	else \
-	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed > ipoma.f; \
+	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed | sed "s/C$(BITS_PER_POINTER)BIT//" > ipoma.f; \
 	fi
 
 ipo: ipo.pro

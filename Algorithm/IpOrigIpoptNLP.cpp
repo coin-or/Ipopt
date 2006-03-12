@@ -230,6 +230,8 @@ namespace Ipopt
 
       ASSERT_EXCEPTION(x_space_->Dim() >= c_space_->Dim(), TOO_FEW_DOF,
                        "Too few degrees of freedom!");
+      ASSERT_EXCEPTION(x_space_->Dim() > 0, TOO_FEW_DOF,
+                       "Too few degrees of freedom (no free variables)!");
 
       // cannot have any null pointers, want zero length vectors
       // instead of null - this will later need to be changed for _h;

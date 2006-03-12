@@ -61,7 +61,6 @@ namespace Ipopt
     //@}
 
     DECLARE_STD_EXCEPTION(INVALID_TNLP);
-    DECLARE_STD_EXCEPTION(SCALING_NOT_IMPLEMENTED_FOR_TNLP);
 
     /**@name methods to gather information about the NLP */
     //@{
@@ -87,15 +86,17 @@ namespace Ipopt
     /** overload this method to return scaling parameters. This is
      *  only called if the options are set to retrieve user scaling.
      *  There, use_x_scaling (or use_g_scaling) should get set to true
-     *  only if the variables (or constraints) are to be scaled.
+     *  only if the variables (or constraints) are to be scaled.  This
+     *  method should return true only if the scaling parameters could
+     *  be provided.
      */
-    virtual void get_scaling_parameters(Number& obj_scaling,
-                                        bool& use_x_scaling, Index n, Number* x_scaling,
-                                        bool& use_g_scaling, Index m, Number* g_scaling)
+    virtual bool get_scaling_parameters(Number& obj_scaling,
+                                        bool& use_x_scaling, Index n,
+                                        Number* x_scaling,
+                                        bool& use_g_scaling, Index m,
+                                        Number* g_scaling)
     {
-      THROW_EXCEPTION(SCALING_NOT_IMPLEMENTED_FOR_TNLP,
-                      "Ipopt options have been set to request scaling from the TNLP"
-                      ", but the TNLP has not implemented get_scaling_parameters");
+      return false;
     }
 
     /** overload this method to return the starting point. The bools
@@ -146,11 +147,16 @@ namespace Ipopt
      *  structure only (iRow and jCol will be non-NULL, and values
      *  will be NULL) For subsequent calls, iRow and jCol will be
      *  NULL. This matrix is symmetric - specify the lower diagonal
-     *  only */
+     *  only.  A default implementation is provided, in case the user
+     *  wants to se quasi-Newton approximations to estimate the second
+     *  derivatives and doesn't not neet to implement this method. */
     virtual bool eval_h(Index n, const Number* x, bool new_x,
                         Number obj_factor, Index m, const Number* lambda,
                         bool new_lambda, Index nele_hess,
-                        Index* iRow, Index* jCol, Number* values)=0;
+                        Index* iRow, Index* jCol, Number* values)
+    {
+      return false;
+    }
     //@}
 
     /** @name Solution Methods */
@@ -196,10 +202,10 @@ namespace Ipopt
       return -1;
     }
 
-    virtual void get_list_of_nonlinear_variables(Index num_nonlin_vars,
+    virtual bool get_list_of_nonlinear_variables(Index num_nonlin_vars,
         Index* pos_nonlin_vars)
     {
-      assert(false && "This method must be overwritten.");
+      return false;
     }
     //@}
 

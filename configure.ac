@@ -8,15 +8,15 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.0.0],[coin-ipopt@www-124.ibm.com])
+AC_INIT([Ipopt],[3.1.0],[coin-ipopt@www-124.ibm.com])
 
 AC_COPYRIGHT([
-Copyright 2004, 2005 International Business Machines and others.
+Copyright 2004, 2005, 2006 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
 
-AC_REVISION(3.0.0)
+AC_REVISION(3.1.0)
 
 AC_CONFIG_SRCDIR(Common/IpDebug.hpp)
 
@@ -36,7 +36,6 @@ AC_ARG_ENABLE([debug],
   esac],[debugcompile=false])
 
 # Some extra stuff for blue gene on Laci's request
-is_bg=no
 AC_SUBST(BLUEGENEEXTRA)
 BLUEGENEEXTRA="echo"
 AC_ARG_ENABLE([bg],,
@@ -44,7 +43,7 @@ AC_ARG_ENABLE([bg],,
     yes)  BLUEGENEEXTRA="chmod 644 *.o; cp ../Extern/ASL/amplsolver.a ../lib/libamplsolver.a"
           is_bg=yes
           ;;
-  esac],[debugcompile=false])
+  esac],[is_bg=no])
 
 ########################
 # C++ Compiler Options #
@@ -731,6 +730,24 @@ esac
 
 AC_LANG_POP(Fortran 77)
 
+# find out how long an int pointer is to know if we need INTEGER*4 or
+# INTEGER*8 in Fortran to capture pointers.
+AC_LANG_PUSH(C)
+AC_CHECK_SIZEOF(int *)
+AC_LANG_POP(C)
+AC_SUBST(BITS_PER_POINTER)
+AC_SUBST(BIT32FCOMMENT)
+AC_SUBST(BIT64FCOMMENT)
+case $ac_cv_sizeof_int_p in
+  4) BITS_PER_POINTER=32
+     BIT32FCOMMENT=''
+     BIT64FCOMMENT='C' ;;
+  8) BITS_PER_POINTER=64
+     BIT32FCOMMENT='C'
+     BIT64FCOMMENT='' ;;
+  *) AC_MSG_ERROR([Unknown length of int *]);;
+esac
+
 AC_PROG_RANLIB
 
 AC_PREFIX_DEFAULT([`pwd`])
@@ -1159,7 +1176,7 @@ AC_ARG_ENABLE([distconf],,
 
 if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no; then
   if test "$distconf" = false; then
-    AC_MSG_ERROR("No linear solver (such as MA27) available")
+    AC_MSG_ERROR("No linear solver (such as MA27) available.  You need to provide at least one.")
   fi
 fi
 
@@ -1407,6 +1424,7 @@ AC_CONFIG_FILES([Makefile Common/Makefile
 		 Apps/Makefile Apps/AmplSolver/Makefile
 		 Apps/CUTErInterface/Makefile
 		 Examples/hs071_f/Makefile
+		 Examples/hs071_f/hs071_f.f
 		 Examples/Cpp_example/Makefile
 		 Examples/hs071_cpp/Makefile
 		 Examples/hs071_c/Makefile

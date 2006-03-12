@@ -100,8 +100,8 @@ namespace Ipopt
     roptions->AddStringOption3(
       "derivative_test",
       "Enable derivative checker",
-      "no",
-      "no", "do not perform derivative test",
+      "none",
+      "none", "do not perform derivative test",
       "first-order", "perform test of first derivatives at starting point",
       "second-order", "perform test of first and second derivatives at starting point",
       "If this option is enabled, a (slow) derivative test will be performed "
@@ -565,8 +565,14 @@ namespace Ipopt
       Index* full_h_jCol = new Index[nz_full_h_];
       Index* h_iRow = new Index[nz_full_h_];
       Index* h_jCol = new Index[nz_full_h_];
-      tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_, NULL, false,
-                    nz_full_h_, full_h_iRow, full_h_jCol, NULL);
+      bool retval =tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_,
+                                 NULL, false,
+                                 nz_full_h_, full_h_iRow, full_h_jCol, NULL);
+      if (!retval) {
+        jnlst_->Printf(J_ERROR, J_INITIALIZATION,
+                       "Option hessian_information is not chosen as limited_memory, but eval_h returns false.\n");
+        THROW_EXCEPTION(OPTION_INVALID, "eval_h is called but has not been implemented");
+      }
 
       if (index_style_ != TNLP::FORTRAN_STYLE) {
         for (Index i=0; i<nz_full_h_; i++) {
@@ -1116,9 +1122,17 @@ namespace Ipopt
 
     if (IsValid(P_x_full_x_)) {
       Number* full_x_scaling = new Number[n_full_x_];
-      tnlp_->get_scaling_parameters(obj_scaling,
-                                    use_x_scaling, n_full_x_, full_x_scaling,
-                                    use_g_scaling, n_full_g_, full_g_scaling);
+      bool retval = tnlp_->get_scaling_parameters(obj_scaling,
+                    use_x_scaling, n_full_x_,
+                    full_x_scaling,
+                    use_g_scaling, n_full_g_,
+                    full_g_scaling);
+      if (!retval) {
+        jnlst_->Printf(J_ERROR, J_INITIALIZATION,
+                       "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
+        THROW_EXCEPTION(OPTION_INVALID,
+                        "User scaling chosen, but get_scaling_parameters returned false.");
+      }
 
       if (use_x_scaling) {
         const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
@@ -1129,9 +1143,17 @@ namespace Ipopt
       delete [] full_x_scaling;
     }
     else {
-      tnlp_->get_scaling_parameters(obj_scaling,
-                                    use_x_scaling, n_full_x_, dx_values,
-                                    use_g_scaling, n_full_g_, full_g_scaling);
+      bool retval = tnlp_->get_scaling_parameters(obj_scaling,
+                    use_x_scaling, n_full_x_,
+                    dx_values,
+                    use_g_scaling, n_full_g_,
+                    full_g_scaling);
+      if (!retval) {
+        jnlst_->Printf(J_ERROR, J_INITIALIZATION,
+                       "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
+        THROW_EXCEPTION(OPTION_INVALID,
+                        "User scaling chosen, but get_scaling_parameters returned false.");
+      }
     }
 
     if (!use_x_scaling) {
@@ -1245,7 +1267,15 @@ namespace Ipopt
     }
     else {
       Index* pos_nonlin_vars = new Index[num_nonlin_vars];
-      tnlp_->get_list_of_nonlinear_variables(num_nonlin_vars, pos_nonlin_vars);
+      if (num_nonlin_vars>0) {
+        bool retval = tnlp_->get_list_of_nonlinear_variables(num_nonlin_vars,
+                      pos_nonlin_vars);
+        if (!retval) {
+          jnlst_->Printf(J_ERROR, J_INITIALIZATION,
+                         "TNLP's get_number_of_nonlinear_variables returns non-negative number, but get_list_of_nonlinear_variables returns false.\n");
+          THROW_EXCEPTION(INVALID_TNLP, "get_list_of_nonlinear_variables has not been overwritten");
+        }
+      }
 
       // Correct indices in case user starts counting variables at 1
       // and not 0

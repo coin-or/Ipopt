@@ -200,11 +200,11 @@ namespace Ipopt
           categories.push_back("Mu Update");
           categories.push_back("Line Search");
           categories.push_back("Initialization");
+          categories.push_back("Warm Start");
           categories.push_back("Linear Solver");
           categories.push_back("Step Calculation");
           categories.push_back("Restoration");
           categories.push_back("NLP");
-          categories.push_back("Warm Start");
           categories.push_back("Hessian Approximation");
 #ifdef HAVE_MA27
 
@@ -376,17 +376,14 @@ namespace Ipopt
       // finally call the optimization
       retValue = call_optimize();
     }
-    catch(TOO_FEW_DOF& exc) {
-      //exc.ReportException(*jnlst_);
-      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has too few degrees of freedom.\n");
-      retValue = Not_Enough_Degrees_Of_Freedom;
-    }
     catch(OPTION_INVALID& exc) {
-      exc.ReportException(*jnlst_);
+      exc.ReportException(*jnlst_, J_MOREDETAILED);
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Invalid option encountered.\n");
       retValue = Invalid_Option;
     }
     catch(IpoptException& exc) {
-      exc.ReportException(*jnlst_);
+      exc.ReportException(*jnlst_, J_MOREDETAILED);
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Some uncaught Ipopt exception encountered.\n");
       retValue = Unrecoverable_Exception;
     }
     catch(std::bad_alloc& exc) {
@@ -395,7 +392,7 @@ namespace Ipopt
     }
     catch(...) {
       IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
-      exc.ReportException(*jnlst_);
+      exc.ReportException(*jnlst_, J_MOREDETAILED);
       retValue = NonIpopt_Exception_Thrown;
     }
 
@@ -459,6 +456,11 @@ namespace Ipopt
 
       // Run the algorithm
       SolverReturn status = p2alg->Optimize();
+
+      // Since all the output below doesn't make any sense in this
+      // case, we rethrow the TOO_FEW_DOF exception here
+      ASSERT_EXCEPTION(status != TOO_FEW_DEGREES_OF_FREEDOM, TOO_FEW_DOF,
+                       "Too few degrees of freedom (rethrown)!");
 
       jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                      "\nNumber of Iterations....: %d\n",
@@ -607,16 +609,18 @@ namespace Ipopt
       }
     }
     catch(TOO_FEW_DOF& exc) {
-      //exc.ReportException(*jnlst_);
+      exc.ReportException(*jnlst_, J_MOREDETAILED);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has too few degrees of freedom.\n");
       retValue = Not_Enough_Degrees_Of_Freedom;
     }
     catch(OPTION_INVALID& exc) {
-      exc.ReportException(*jnlst_);
+      exc.ReportException(*jnlst_, J_MOREDETAILED);
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Invalid option encountered.\n");
       retValue = Invalid_Option;
     }
     catch(IpoptException& exc) {
-      exc.ReportException(*jnlst_);
+      exc.ReportException(*jnlst_, J_ERROR);
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Some uncaught Ipopt exception encountered.\n");
       retValue = Unrecoverable_Exception;
     }
     catch(std::bad_alloc& exc) {
@@ -625,7 +629,7 @@ namespace Ipopt
     }
     catch(...) {
       IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
-      exc.ReportException(*jnlst_);
+      exc.ReportException(*jnlst_, J_MOREDETAILED);
       retValue = NonIpopt_Exception_Thrown;
     }
 

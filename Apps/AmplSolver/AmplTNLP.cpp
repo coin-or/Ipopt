@@ -638,9 +638,11 @@ namespace Ipopt
     niv_ = niv;
   }
 
-  void AmplTNLP::get_scaling_parameters(Number& obj_scaling,
-                                        bool& use_x_scaling, Index n, Number* x_scaling,
-                                        bool& use_g_scaling, Index m, Number* g_scaling)
+  bool AmplTNLP::get_scaling_parameters(Number& obj_scaling,
+                                        bool& use_x_scaling, Index n,
+                                        Number* x_scaling,
+                                        bool& use_g_scaling, Index m,
+                                        Number* g_scaling)
   {
     DBG_ASSERT(IsValid(suffix_handler_));
     const double* obj = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Objective_Source);
@@ -677,6 +679,8 @@ namespace Ipopt
     else {
       use_g_scaling = false;
     }
+
+    return true;
   }
 
   Index AmplTNLP::get_number_of_nonlinear_variables()
@@ -685,7 +689,7 @@ namespace Ipopt
     return Max(nlvo,nlvc);
   }
 
-  void AmplTNLP::get_list_of_nonlinear_variables(Index num_nonlin_vars,
+  bool AmplTNLP::get_list_of_nonlinear_variables(Index num_nonlin_vars,
       Index* pos_nonlin_vars)
   {
     DBG_DO(ASL_pfgh* asl = asl_;)
@@ -696,6 +700,7 @@ namespace Ipopt
     for (Index i=0; i<num_nonlin_vars; i++) {
       pos_nonlin_vars[i] = i+1;
     }
+    return true;
   }
 
   extern "C"

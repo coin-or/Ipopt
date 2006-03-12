@@ -20,7 +20,7 @@ ipoma.f: CUTErInterface.f
 	  rm -f  ipoma.f; \
 	  $(LN_S) $(srcdir)/ipoma-dummy.f ipoma.f; \
 	else \
-	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed > ipoma.f; \
+	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed | sed "s/C$(BITS_PER_POINTER)BIT//" > ipoma.f; \
 	fi
 
 ipo: ipo.pro

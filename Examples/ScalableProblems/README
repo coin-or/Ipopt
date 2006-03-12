@@ -16,3 +16,8 @@ integer determining the size of the problem (the actual number of
 variables can be much larger, e.g. N*N).  For some problems, certain
 restrictions apply; if an invalid N is given, those conditions will be
 printed.
+
+The implementation in MittelmannDist* examples are using virtual
+methods to overload the specific problem functions for the individual
+examples.  A more efficient implementation using templates is done in
+ittelmannParaCntrl.hpp, which is a better example for coding.

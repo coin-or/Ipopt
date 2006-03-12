@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -87,9 +87,11 @@ public:
   //@}
 
   /** Method for returning scaling parameters */
-  virtual void get_scaling_parameters(Number& obj_scaling,
-				      bool& use_x_scaling, Index n, Number* x_scaling,
-				      bool& use_g_scaling, Index m, Number* g_scaling);
+  virtual bool get_scaling_parameters(Number& obj_scaling,
+				      bool& use_x_scaling, Index n,
+				      Number* x_scaling,
+				      bool& use_g_scaling, Index m,
+				      Number* g_scaling);
 
   /** @name Solution Methods */
   //@{

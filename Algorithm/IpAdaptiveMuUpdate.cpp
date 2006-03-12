@@ -53,8 +53,8 @@ namespace Ipopt
       "Maximum value for barrier parameter.",
       0.0, true, 1e3,
       "This option determines the upper bound on the barrier parameter.  This "
-      "upper bound is computed as the average complementarity times the value "
-      "of this option.");
+      "upper bound is computed as the average complementarity at the initial "
+      "point times the value of this option.");
     roptions->AddLowerBoundedNumberOption(
       "mu_max",
       "Maximum value for barrier parameter.",

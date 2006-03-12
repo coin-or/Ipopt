@@ -77,7 +77,7 @@ namespace Ipopt
       "Setting the to value less than one disables the correction.");
     roptions->AddStringOption2(
       "recalc_y",
-      "Tells algorithm to recalculate the equality and inequality multipliers by least square estimate.",
+      "Tells the algorithm to recalculate the equality and inequality multipliers as least square estimates.",
       "no",
       "no", "use the Newton step to update the multipliers",
       "yes", "use least-square mutliplier estimates",
@@ -356,6 +356,12 @@ namespace Ipopt
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return SUCCESS;
+    }
+    catch(TOO_FEW_DOF& exc) {
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
+      IpData().TimingStats().OverallAlgorithm().End();
+      return TOO_FEW_DEGREES_OF_FREEDOM;
     }
     catch(INTERNAL_ABORT& exc) {
       exc.ReportException(Jnlst());

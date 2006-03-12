@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -157,7 +157,7 @@ MittelmannDistCntrlNeumABase::get_starting_point(Index n, bool init_x, Number* x
   return true;
 }
 
-void
+bool
 MittelmannDistCntrlNeumABase::get_scaling_parameters(Number& obj_scaling,
 						 bool& use_x_scaling,
 						 Index n, Number* x_scaling,
@@ -167,6 +167,7 @@ MittelmannDistCntrlNeumABase::get_scaling_parameters(Number& obj_scaling,
   obj_scaling = 1./hh_;
   use_x_scaling = false;
   use_g_scaling = false;
+  return true;
 }
 
 bool

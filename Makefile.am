@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2005 International Business Machines and others.
+# Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -14,15 +14,52 @@ IPALLLIBS = @IPALLLIBS@
 
 EXTRA_DIST = \
 	Examples/Cpp_example/cpp_example.cpp \
+	Examples/Cpp_example/Makefile.in \
 	Examples/Cpp_example/MyNLP.cpp \
 	Examples/Cpp_example/MyNLP.hpp \
-	Examples/hs071_f/hs071_f.f \
+	Examples/hs071_f/Makefile.in \
+	Examples/hs071_f/hs071_f.in \
+	Examples/hs071_c/Makefile.in \
 	Examples/hs071_c/hs071_c.c \
+	Examples/hs071_cpp/Makefile.in \
 	Examples/hs071_cpp/hs071_main.cpp \
 	Examples/hs071_cpp/hs071_nlp.cpp \
 	Examples/hs071_cpp/hs071_nlp.hpp \
+	Examples/ScalableProblems/LuksanVlcek1.cpp \
+	Examples/ScalableProblems/LuksanVlcek1.hpp \
+	Examples/ScalableProblems/LuksanVlcek2.cpp \
+	Examples/ScalableProblems/LuksanVlcek2.hpp \
+	Examples/ScalableProblems/LuksanVlcek3.cpp \
+	Examples/ScalableProblems/LuksanVlcek3.hpp \
+	Examples/ScalableProblems/LuksanVlcek4.cpp \
+	Examples/ScalableProblems/LuksanVlcek4.hpp \
+	Examples/ScalableProblems/LuksanVlcek5.cpp \
+	Examples/ScalableProblems/LuksanVlcek5.hpp \
+	Examples/ScalableProblems/LuksanVlcek6.cpp \
+	Examples/ScalableProblems/LuksanVlcek6.hpp \
+	Examples/ScalableProblems/LuksanVlcek7.cpp \
+	Examples/ScalableProblems/LuksanVlcek7.hpp \
+	Examples/ScalableProblems/Makefile.in \
+	Examples/ScalableProblems/MittelmannBndryCntrlDiri.cpp \
+	Examples/ScalableProblems/MittelmannBndryCntrlDiri.hpp \
+	Examples/ScalableProblems/MittelmannBndryCntrlNeum.cpp \
+	Examples/ScalableProblems/MittelmannBndryCntrlNeum.hpp \
+	Examples/ScalableProblems/MittelmannDistCntrlDiri.cpp \
+	Examples/ScalableProblems/MittelmannDistCntrlDiri.hpp \
+	Examples/ScalableProblems/MittelmannDistCntrlNeumA.cpp \
+	Examples/ScalableProblems/MittelmannDistCntrlNeumA.hpp \
+	Examples/ScalableProblems/MittelmannDistCntrlNeumB.cpp \
+	Examples/ScalableProblems/MittelmannDistCntrlNeumB.hpp \
+	Examples/ScalableProblems/MittelmannParaCntrl.hpp \
+	Examples/ScalableProblems/README \
+	Examples/ScalableProblems/RegisteredTNLP.cpp \
+	Examples/ScalableProblems/RegisteredTNLP.hpp \
+	Examples/ScalableProblems/solve_problem.cpp \
 	README \
+	Docs/documentation.bbl \
 	Docs/documentation.tex \
+	Docs/documentation.pdf \
+	Docs/options.tex \
 	Windows/VisualStudio_dotNET/README \
 	Windows/VisualStudio_dotNET/CppExample/CppExample.vcproj \
 	Windows/VisualStudio_dotNET/FortranExample/FortranExample.vfproj \
@@ -63,6 +100,8 @@ install-exec-local:
 	$(INSTALL_DATA) $(tmpdir)/$(ipopt_addlibs_f_txt) $(DESTDIR)$(libdir)
 	rm -rf $(tmpdir)
 	$(RANLIB) $(DESTDIR)$(libdir)/$(libipopt)
+
+#	sed "s/C$(BITS_PER_POINTER)BIT//" < $(srcdir)/Examples/hs071_f/hs071_f.in > Examples/hs071_f/hs071_f.f
 
 uninstall-local:
 	rm -f $(DESTDIR)$(libdir)/$(libipopt)
