@@ -29,6 +29,8 @@
 # endif
 #endif
 
+#include <iostream>
+
 //**********************************************************************
 // Stuff for benchmarking
 // #define TIME_LIMIT
@@ -55,6 +57,7 @@ extern "C" void* killer_thread(void* arg)
 
 
 using namespace Ipopt;
+using namespace std;
 
 // This could probably be done more elegant and automatically, but I
 // can't get it to work right now.  For now, list explicitly the
@@ -115,7 +118,6 @@ REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_1>, MPara5_1)
 REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_2_1>, MPara5_2_1)
 REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_2_2>, MPara5_2_2)
 REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_2_3>, MPara5_2_3)
-//REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_try>, MPara5_try)
 
 static void print_problems()
 {
@@ -138,24 +140,52 @@ int main(int argv, char* argc[])
   }
   else
 #endif
-    if (argv!=3) {
-      printf("Usage: %s ProblemName N\n", argc[0]);
+    if (argv!=3 && argv!=1) {
+      printf("Usage: %s (this will ask for problem name)\n");
+      printf("       %s ProblemName N\n", argc[0]);
       printf("          where N is a positive parameter determining problem size\n");
       printf("       %s list\n", argc[0]);
       printf("          to list all registered problems.\n");
       return -1;
     }
 
-  // Create an instance of your nlp...
-  SmartPtr<RegisteredTNLP> tnlp =
-    RegisteredTNLPs::GetTNLP(argc[1]);
-  if (!IsValid(tnlp)) {
-    printf("Problem with name \"%s\" not known.\n", argc[1]);
-    print_problems();
-    return -2;
+  SmartPtr<RegisteredTNLP> tnlp;
+  Index N;
+
+  if (argv!=1) {
+    // Create an instance of your nlp...
+    tnlp = RegisteredTNLPs::GetTNLP(argc[1]);
+    if (!IsValid(tnlp)) {
+      printf("Problem with name \"%s\" not known.\n", argc[1]);
+      print_problems();
+      return -2;
+    }
+
+    N = atoi(argc[2]);
+  }
+  else {
+    bool done = false;
+    while (!done) {
+      string inputword;
+      cout << "Enter problem name (or \"list\" for all available names):\n";
+      cin >> inputword;
+      if (inputword=="list") {
+	print_problems();
+      }
+      else {
+	tnlp = RegisteredTNLPs::GetTNLP(inputword.c_str());
+	if (!IsValid(tnlp)) {
+	  printf("Problem with name \"%s\" not known.\n", inputword.c_str());
+	}
+	else {
+	  done = true;
+	}
+      }
+    }
+    cout << "Enter problem size:\n";
+    cin >> N;
   }
 
-  Index N = atoi(argc[2]);
   if (N <= 0) {
     printf("Given problem size is invalid.\n");
     return -3;
