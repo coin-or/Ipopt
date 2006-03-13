@@ -189,7 +189,7 @@ enum ApplicationReturnStatus IpoptSolve(
                                 obj_val, user_data);
   }
   catch(INVALID_STDINTERFACE_NLP& exc) {
-	exc.ReportException(*ipopt_problem->app->Jnlst(), J_ERROR);
+    exc.ReportException(*ipopt_problem->app->Jnlst(), J_ERROR);
     skip_optimize = true;
   }
 

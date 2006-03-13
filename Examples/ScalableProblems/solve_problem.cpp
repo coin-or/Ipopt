@@ -141,7 +141,7 @@ int main(int argv, char* argc[])
   else
 #endif
     if (argv!=3 && argv!=1) {
-      printf("Usage: %s (this will ask for problem name)\n");
+      printf("Usage: %s (this will ask for problem name)\n", argc[0]);
       printf("       %s ProblemName N\n", argc[0]);
       printf("          where N is a positive parameter determining problem size\n");
       printf("       %s list\n", argc[0]);
@@ -170,16 +170,16 @@ int main(int argv, char* argc[])
       cout << "Enter problem name (or \"list\" for all available names):\n";
       cin >> inputword;
       if (inputword=="list") {
-	print_problems();
+        print_problems();
       }
       else {
-	tnlp = RegisteredTNLPs::GetTNLP(inputword.c_str());
-	if (!IsValid(tnlp)) {
-	  printf("Problem with name \"%s\" not known.\n", inputword.c_str());
-	}
-	else {
-	  done = true;
-	}
+        tnlp = RegisteredTNLPs::GetTNLP(inputword.c_str());
+        if (!IsValid(tnlp)) {
+          printf("Problem with name \"%s\" not known.\n", inputword.c_str());
+        }
+        else {
+          done = true;
+        }
       }
     }
     cout << "Enter problem size:\n";
