@@ -61,7 +61,7 @@ namespace Ipopt
       exc.ReportException(*jnlst_);
       exit(-1);
     }
-    catch(std::bad_alloc& exc) {
+    catch(std::bad_alloc) {
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
       exit(-1);
     }
@@ -79,7 +79,7 @@ namespace Ipopt
       try {
         is.open(params_file.c_str());
       }
-      catch(std::bad_alloc& exc) {
+      catch(std::bad_alloc) {
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
         exit(-1);
       }
@@ -237,7 +237,7 @@ namespace Ipopt
       exc.ReportException(*jnlst_);
       exit(-1);
     }
-    catch(std::bad_alloc& exc) {
+    catch(std::bad_alloc) {
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
       exit(-1);
     }
@@ -386,7 +386,7 @@ namespace Ipopt
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Some uncaught Ipopt exception encountered.\n");
       retValue = Unrecoverable_Exception;
     }
-    catch(std::bad_alloc& exc) {
+    catch(std::bad_alloc) {
       retValue = Insufficient_Memory;
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
     }
@@ -466,7 +466,7 @@ namespace Ipopt
                      "\nNumber of Iterations....: %d\n",
                      p2ip_data->iter_count());
 
-      if (!status==INVALID_NUMBER_DETECTED) {
+      if (status!=INVALID_NUMBER_DETECTED) {
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                        "\n                                   (scaled)                 (unscaled)\n");
         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
@@ -623,7 +623,7 @@ namespace Ipopt
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Some uncaught Ipopt exception encountered.\n");
       retValue = Unrecoverable_Exception;
     }
-    catch(std::bad_alloc& exc) {
+    catch(std::bad_alloc) {
       retValue = Insufficient_Memory;
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
     }

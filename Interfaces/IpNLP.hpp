@@ -171,8 +171,8 @@ namespace Ipopt
                                       Number regularization_size,
                                       Number alpha_du, Number alpha_pr,
                                       Index ls_trials,
-                                      SmartPtr<const IpoptData> ip_data,
-                                      SmartPtr<IpoptCalculatedQuantities> ip_cq)
+                                      const IpoptData* ip_data,
+                                      IpoptCalculatedQuantities* ip_cq)
     {
       return true;
     }

@@ -22,5 +22,7 @@ Interfaces/IpSolveStatistics.cpp -text
 Interfaces/IpSolveStatistics.hpp -text
 /LICENSE -text
 Windows/VisualStudio_dotNET/CExample/CExample.vcproj -text
+Windows/VisualStudio_dotNET/FortranExample/hs071_f.f -text
 Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln -text
 Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj -text
+Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj -text

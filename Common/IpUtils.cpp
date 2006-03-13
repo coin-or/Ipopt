@@ -40,7 +40,7 @@ namespace Ipopt
   bool IsFiniteNumber(Number val)
   {
 #ifdef MY_C_FINITE
-    return MY_C_FINITE(val);
+    return (bool)MY_C_FINITE(val);
 #else
 
     return true;

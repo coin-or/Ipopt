@@ -783,7 +783,7 @@ namespace Ipopt
     return nlp_->IntermediateCallBack(mode, iter, obj_value, inf_pr, inf_du,
                                       mu, d_norm, regularization_size,
                                       alpha_du, alpha_pr, ls_trials,
-                                      ip_data, ip_cq);
+                                      GetRawPtr(ip_data), GetRawPtr(ip_cq));
   }
 
   void OrigIpoptNLP::AdjustVariableBounds(const Vector& new_x_L, const Vector& new_x_U,

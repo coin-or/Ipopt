@@ -1244,8 +1244,8 @@ namespace Ipopt
                        Number regularization_size,
                        Number alpha_du, Number alpha_pr,
                        Index ls_trials,
-                       SmartPtr<const IpoptData> ip_data,
-                       SmartPtr<IpoptCalculatedQuantities> ip_cq)
+                       const IpoptData* ip_data,
+                       IpoptCalculatedQuantities* ip_cq)
   {
     return tnlp_->intermediate_callback(mode, iter, obj_value, inf_pr, inf_du,
                                         mu, d_norm, regularization_size,

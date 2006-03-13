@@ -31,7 +31,7 @@
 
 //**********************************************************************
 // Stuff for benchmarking
-#define TIME_LIMIT
+// #define TIME_LIMIT
 #ifdef TIME_LIMIT
 
 #include <unistd.h>

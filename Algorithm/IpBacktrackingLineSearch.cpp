@@ -349,6 +349,7 @@ namespace Ipopt
         IpCq().trial_constraint_violation();
       }
       catch(IpoptNLP::Eval_Error& e) {
+		e.ReportException(Jnlst(), J_DETAILED);
         tiny_step = false;
       }
 
