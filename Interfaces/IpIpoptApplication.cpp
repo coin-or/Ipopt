@@ -72,7 +72,7 @@ namespace Ipopt
     }
   }
 
-  void IpoptApplication::Initialize(std::string params_file)
+  void IpoptApplication::Initialize(std::string params_file /*= "ipopt.par"*/)
   {
     std::ifstream is;
     if (params_file != "") {
@@ -382,7 +382,7 @@ namespace Ipopt
       retValue = Invalid_Option;
     }
     catch(IpoptException& exc) {
-      exc.ReportException(*jnlst_, J_MOREDETAILED);
+      exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Some uncaught Ipopt exception encountered.\n");
       retValue = Unrecoverable_Exception;
     }
@@ -392,7 +392,7 @@ namespace Ipopt
     }
     catch(...) {
       IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
-      exc.ReportException(*jnlst_, J_MOREDETAILED);
+      exc.ReportException(*jnlst_, J_ERROR);
       retValue = NonIpopt_Exception_Thrown;
     }
 

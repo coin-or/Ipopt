@@ -119,7 +119,11 @@ namespace Ipopt
     roptions->AddStringOption2(
       "linear_system_scaling",
       "Method for scaling the linear system.",
+#ifdef HAVE_MC19
+      "mc19",
+#else
       "none",
+#endif
       "none", "no scaling will be performed",
       "mc19", "use the Harwell routine mc19",
       "Determines the method used to compute symmetric scaling "

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -56,9 +56,27 @@ namespace Ipopt
     delete [] scaling_factors_;
   }
 
+  void TSymLinearSolver::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddStringOption2(
+      "linear_scaling_on_demand",
+      "Flag indicating that linear scaling is only done if it seems required.",
+      "yes",
+      "no", "Always scaling the linear system.",
+      "yes", "Start using linear system if solutions seem not good.",
+      "This option is only important if a linear scaling method (e.g., MC19) "
+      "is used.  If you choose \"no\", then the scaling factors are computed "
+      "for every linear system from the start.  This can be quite expensive. "
+      "Choosing \"yes\" means that the algorithm will starting the scaling "
+      "method only when the solutions to the linear system seem not good, and "
+      "then use it until the end.");
+  }
+
   bool TSymLinearSolver::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)
   {
+    options.GetBoolValue("linear_scaling_on_demand",
+                         linear_scaling_on_demand_, prefix);
     // This option is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
@@ -101,6 +119,14 @@ namespace Ipopt
     // is called for the linear solver
     initialized_=false;
 
+    if (IsValid(scaling_method_) && !linear_scaling_on_demand_) {
+      use_scaling_ = true;
+    }
+    else {
+      use_scaling_ = false;
+    }
+    just_switched_on_scaling_ = false;
+
     bool retval = true;
     if (IsValid(scaling_method_)) {
       IpData().TimingStats().LinearSystemScaling().Start();
@@ -142,7 +168,7 @@ namespace Ipopt
     // entries from the linear solver interface, fill in the new
     // values, compute the new scaling factors (if required), and
     // scale the matrix
-    if (new_matrix) {
+    if (new_matrix || just_switched_on_scaling_) {
       GiveMatrixToSolver(true, sym_A);
     }
 
@@ -152,7 +178,7 @@ namespace Ipopt
     for (Index irhs=0; irhs<nrhs; irhs++) {
       TripletHelper::FillValuesFromVector(dim_, *rhsV[irhs],
                                           &rhs_vals[irhs*(dim_)]);
-      if (IsValid(scaling_method_)) {
+      if (use_scaling_) {
         IpData().TimingStats().LinearSystemScaling().Start();
         for (Index i=0; i<dim_; i++) {
           rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
@@ -198,7 +224,7 @@ namespace Ipopt
     // and transfer the result into the Vectors
     if (retval==SYMSOLVER_SUCCESS) {
       for (Index irhs=0; irhs<nrhs; irhs++) {
-        if (IsValid(scaling_method_)) {
+        if (use_scaling_) {
           IpData().TimingStats().LinearSystemScaling().Start();
           for (Index i=0; i<dim_; i++) {
             rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
@@ -314,6 +340,16 @@ namespace Ipopt
   {
     DBG_START_METH("TSymLinearSolver::IncreaseQuality",dbg_verbosity);
 
+    if (IsValid(scaling_method_) && !use_scaling_ &&
+        linear_scaling_on_demand_) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Switching on scaling of the linear system (on demand).\n");
+      IpData().Append_info_string("Mc");
+      use_scaling_ = true;
+      just_switched_on_scaling_ = true;
+      return true;
+    }
+
     return solver_interface_->IncreaseQuality();
   }
 
@@ -348,18 +384,21 @@ namespace Ipopt
       }
     }
 
-    if (IsValid(scaling_method_)) {
+    if (use_scaling_) {
       IpData().TimingStats().LinearSystemScaling().Start();
       DBG_ASSERT(scaling_factors_);
-      if (new_matrix) {
+      if (new_matrix || just_switched_on_scaling_) {
         // only compute scaling factors if the matrix has not been
         // changed since the last call to this method
         bool retval =
           scaling_method_->ComputeSymTScalingFactors(dim_, nonzeros_triplet_,
               airn_, ajcn_,
               atriplet, scaling_factors_);
-        DBG_ASSERT(retval);
-        retval = false; // is added to make sure compiles doesn't
+        if (!retval) {
+          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                         "Error during computation of scaling factors.\n");
+          THROW_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD, "scaling_method_->ComputeSymTScalingFactors returned false.")
+        }
         // complain if not in debug mode
         if (Jnlst().ProduceOutput(J_MOREVECTOR, J_LINEAR_ALGEBRA)) {
           for (Index i=0; i<dim_; i++) {
@@ -368,6 +407,7 @@ namespace Ipopt
                            i, scaling_factors_[i]);
           }
         }
+        just_switched_on_scaling_ = false;
       }
       for (Index i=0; i<nonzeros_triplet_; i++) {
         atriplet[i] *=

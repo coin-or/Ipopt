@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -82,6 +82,11 @@ namespace Ipopt
     virtual bool ProvidesInertia() const;
     //@}
 
+    /** Methods for OptionsList */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -124,6 +129,9 @@ namespace Ipopt
     /** Flag indicating if the internal structures are initialized.
      *  For initialization, this object needs to have seen a matrix */
     bool have_structure_;
+    /** Flag indicating whether the scaling objected is to be switched
+     *  on when increased quality is requested */
+    bool linear_scaling_on_demand_;
     /** Flag indicating if the InitializeStructure method has been
      *  called for the linear solver. */
     bool initialized_;
@@ -131,11 +139,18 @@ namespace Ipopt
 
     /** Strategy Object for an interface to a linear solver. */
     SmartPtr<SparseSymLinearSolverInterface> solver_interface_;
+    /** @name Stuff for scaling of the linear system. */
+    //@{
     /** Strategy Object for a method that computes scaling factors for
      *  the matrices.  If NULL, no scaling is performed. */
     SmartPtr<TSymScalingMethod> scaling_method_;
     /** Array storing the scaling factors */
     double* scaling_factors_;
+    /** Flag indicating whether scaling should be performed */
+    bool use_scaling_;
+    /** Flag indicating whether we just switched on the scaling */
+    bool just_switched_on_scaling_;
+    //@}
 
     /** @name information about the matrix. */
     //@{

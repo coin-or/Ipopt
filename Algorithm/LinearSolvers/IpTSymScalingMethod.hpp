@@ -15,6 +15,8 @@
 namespace Ipopt
 {
 
+  DECLARE_STD_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD);
+
   /** Base class for the method for computing scaling factors for symmetric
    *  matrices in triplet format.
    */
