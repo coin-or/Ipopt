@@ -72,7 +72,7 @@ namespace Ipopt
     }
   }
 
-  void IpoptApplication::Initialize(std::string params_file /*= "ipopt.par"*/)
+  void IpoptApplication::Initialize(std::string params_file /*= "ipopt.opt"*/)
   {
     std::ifstream is;
     if (params_file != "") {

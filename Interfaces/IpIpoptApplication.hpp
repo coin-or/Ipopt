@@ -43,7 +43,7 @@ namespace Ipopt
      *  first optimize call. Note: you can skip the processing of a params
      *  file by setting params_file to ""
      */
-    void Initialize(std::string params_file = "ipopt.par");
+    void Initialize(std::string params_file = "ipopt.opt");
     void Initialize(std::istream& is);
 
     /**@name Solve methods */
