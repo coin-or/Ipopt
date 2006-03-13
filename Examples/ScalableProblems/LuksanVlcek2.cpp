@@ -37,8 +37,8 @@ bool LuksanVlcek2::InitializeProblem(Index N)
 }
 
 // returns the size of the problem
-bool LuksanVlcek2::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, 
-				Index& nnz_h_lag, IndexStyleEnum& index_style)
+bool LuksanVlcek2::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
+                                Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
   // The problem described in LuksanVlcek2.hpp has 4 variables, x[0]
   // through x[3]
@@ -58,7 +58,7 @@ bool LuksanVlcek2::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 
 // returns the variable bounds
 bool LuksanVlcek2::get_bounds_info(Index n, Number* x_l, Number* x_u,
-				   Index m, Number* g_l, Number* g_u)
+                                   Index m, Number* g_l, Number* g_u)
 {
   // none of the variables have bounds
   for (Index i=0; i<n; i++) {
@@ -77,9 +77,9 @@ bool LuksanVlcek2::get_bounds_info(Index n, Number* x_l, Number* x_u,
 
 // returns the initial point for the problem
 bool LuksanVlcek2::get_starting_point(Index n, bool init_x, Number* x,
-				      bool init_z, Number* z_L, Number* z_U,
-				      Index m, bool init_lambda,
-				      Number* lambda)
+                                      bool init_z, Number* z_L, Number* z_U,
+                                      Index m, bool init_lambda,
+                                      Number* lambda)
 {
   if (!init_x || init_z || init_lambda) {
     return false;
@@ -126,13 +126,13 @@ bool LuksanVlcek2::eval_grad_f(Index n, const Number* x, bool new_x, Number* gra
   for (Index i=0; i<N_/2; i++) {
     grad_f[2*i] += 400.*x[2*i]*(x[2*i]*x[2*i]-x[2*i+1]) + 2.*(x[2*i]-1.);
     grad_f[2*i+1] += -200.*(x[2*i]*x[2*i]-x[2*i+1])
-      + 20*(x[2*i+1] + x[2*i+3] - 2.)
-      + 0.2*(x[2*i+1] - x[2*i+3]);
+                     + 20*(x[2*i+1] + x[2*i+3] - 2.)
+                     + 0.2*(x[2*i+1] - x[2*i+3]);
     grad_f[2*i+2] = 360.*x[2*i+2]*(x[2*i+2]*x[2*i+2] - x[2*i+3])
-      + 2.*(x[2*i+2] -1.);
+                    + 2.*(x[2*i+2] -1.);
     grad_f[2*i+3] = -180.*(x[2*i+2]*x[2*i+2] - x[2*i+3])
-      + 20.*(x[2*i+1] + x[2*i+3] -2.)
-      - 0.2*(x[2*i+1] - x[2*i+3]);
+                    + 20.*(x[2*i+1] + x[2*i+3] -2.)
+                    - 0.2*(x[2*i+1] - x[2*i+3]);
   }
 
   return true;
@@ -153,8 +153,8 @@ bool LuksanVlcek2::eval_g(Index n, const Number* x, bool new_x, Index m, Number*
 
 // return the structure or values of the jacobian
 bool LuksanVlcek2::eval_jac_g(Index n, const Number* x, bool new_x,
-                       Index m, Index nele_jac, Index* iRow, Index *jCol,
-                       Number* values)
+                              Index m, Index nele_jac, Index* iRow, Index *jCol,
+                              Number* values)
 {
   if (values == NULL) {
     // return the structure of the jacobian
@@ -162,9 +162,9 @@ bool LuksanVlcek2::eval_jac_g(Index n, const Number* x, bool new_x,
     Index ijac=0;
     for (Index i=0; i<N_-7; i++) {
       for (Index k=Max(0,i-5); k<=i+1; k++) {
-	iRow[ijac] = i;
-	jCol[ijac] = k;
-	ijac++;
+        iRow[ijac] = i;
+        jCol[ijac] = k;
+        ijac++;
       }
       iRow[ijac] = i;
       jCol[ijac] = i+5;
@@ -178,8 +178,8 @@ bool LuksanVlcek2::eval_jac_g(Index n, const Number* x, bool new_x,
     Index ijac=0;
     for (Index i=0; i<N_-7; i++) {
       for (Index k=Max(0,i-5); k<=i+1; k++) {
-	values[ijac] = 2.*x[k] + 1.;
-	ijac++;
+        values[ijac] = 2.*x[k] + 1.;
+        ijac++;
       }
       values[ijac] = 2. + 15.*x[i+5]*x[i+5];
       ijac++;
@@ -191,9 +191,9 @@ bool LuksanVlcek2::eval_jac_g(Index n, const Number* x, bool new_x,
 
 //return the structure or values of the hessian
 bool LuksanVlcek2::eval_h(Index n, const Number* x, bool new_x,
-			  Number obj_factor, Index m, const Number* lambda,
-			  bool new_lambda, Index nele_hess, Index* iRow,
-			  Index* jCol, Number* values)
+                          Number obj_factor, Index m, const Number* lambda,
+                          bool new_lambda, Index nele_hess, Index* iRow,
+                          Index* jCol, Number* values)
 {
   if (values == NULL) {
     Index ihes=0;
@@ -214,7 +214,7 @@ bool LuksanVlcek2::eval_h(Index n, const Number* x, bool new_x,
     }
     iRow[ihes] = n-2;
     jCol[ihes] = n-1;
-    ihes++;    
+    ihes++;
     DBG_ASSERT(ihes == nele_hess);
   }
   else {
@@ -243,7 +243,7 @@ bool LuksanVlcek2::eval_h(Index n, const Number* x, bool new_x,
     // Ok, now the diagonal elements from the constraints
     for (Index i=0; i<N_-7; i++) {
       for (Index k=Max(0,i-5); k<=i+1; k++) {
-	values[k] += lambda[i]*2.;
+        values[k] += lambda[i]*2.;
       }
       values[i+5] += lambda[i]*30.*x[i+5];
     }
@@ -253,9 +253,8 @@ bool LuksanVlcek2::eval_h(Index n, const Number* x, bool new_x,
 }
 
 void LuksanVlcek2::finalize_solution(SolverReturn status,
-                              Index n, const Number* x, const Number* z_L, const Number* z_U,
-                              Index m, const Number* g, const Number* lambda,
-                              Number obj_value)
-{
-}
+                                     Index n, const Number* x, const Number* z_L, const Number* z_U,
+                                     Index m, const Number* g, const Number* lambda,
+                                     Number obj_value)
+{}
 

@@ -12,8 +12,8 @@ using namespace Ipopt;
 
 /* Constructor. */
 MittelmannDistCntrlNeumABase::MittelmannDistCntrlNeumABase()
-  :
-  y_d_(NULL)
+    :
+    y_d_(NULL)
 {}
 
 MittelmannDistCntrlNeumABase::~MittelmannDistCntrlNeumABase()
@@ -23,10 +23,10 @@ MittelmannDistCntrlNeumABase::~MittelmannDistCntrlNeumABase()
 
 void
 MittelmannDistCntrlNeumABase::SetBaseParameters(Index N, Number lb_y, Number ub_y,
-					    Number lb_u, Number ub_u,
-					    Number b_0j, Number b_1j,
-					    Number b_i0, Number b_i1,
-					    Number u_init)
+    Number lb_u, Number ub_u,
+    Number b_0j, Number b_1j,
+    Number b_i0, Number b_i1,
+    Number u_init)
 {
   N_ = N;
   h_ = 1./(N+1);
@@ -47,13 +47,13 @@ MittelmannDistCntrlNeumABase::SetBaseParameters(Index N, Number lb_y, Number ub_
   for (Index j=0; j<= N_+1; j++) {
     for (Index i=0; i<= N_+1; i++) {
       y_d_[y_index(i,j)] = y_d_cont(x1_grid(i),x2_grid(j));
-    } 
+    }
   }
 }
 
 bool MittelmannDistCntrlNeumABase::get_nlp_info(
-   Index& n, Index& m, Index& nnz_jac_g, 
-   Index& nnz_h_lag, IndexStyleEnum& index_style)
+  Index& n, Index& m, Index& nnz_jac_g,
+  Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
   // We for each of the N_+2 times N_+2 mesh points we have the value
   // of the functions y, and for each N_ times N_ interior mesh points
@@ -91,7 +91,7 @@ bool MittelmannDistCntrlNeumABase::get_nlp_info(
 
 bool
 MittelmannDistCntrlNeumABase::get_bounds_info(Index n, Number* x_l, Number* x_u,
-					Index m, Number* g_l, Number* g_u)
+    Index m, Number* g_l, Number* g_u)
 {
   // Set overall bounds on the variables
   for (Index i=0; i<=N_+1; i++) {
@@ -127,9 +127,9 @@ MittelmannDistCntrlNeumABase::get_bounds_info(Index n, Number* x_l, Number* x_u,
 
 bool
 MittelmannDistCntrlNeumABase::get_starting_point(Index n, bool init_x, Number* x,
-					   bool init_z, Number* z_L, Number* z_U,
-					   Index m, bool init_lambda,
-					   Number* lambda)
+    bool init_z, Number* z_L, Number* z_U,
+    Index m, bool init_lambda,
+    Number* lambda)
 {
   // Here, we assume we only have starting values for x, if you code
   // your own NLP, you can provide starting values for the others if
@@ -159,10 +159,10 @@ MittelmannDistCntrlNeumABase::get_starting_point(Index n, bool init_x, Number* x
 
 bool
 MittelmannDistCntrlNeumABase::get_scaling_parameters(Number& obj_scaling,
-						 bool& use_x_scaling,
-						 Index n, Number* x_scaling,
-						 bool& use_g_scaling,
-						 Index m, Number* g_scaling)
+    bool& use_x_scaling,
+    Index n, Number* x_scaling,
+    bool& use_g_scaling,
+    Index m, Number* g_scaling)
 {
   obj_scaling = 1./hh_;
   use_x_scaling = false;
@@ -172,7 +172,7 @@ MittelmannDistCntrlNeumABase::get_scaling_parameters(Number& obj_scaling,
 
 bool
 MittelmannDistCntrlNeumABase::eval_f(Index n, const Number* x,
-				 bool new_x, Number& obj_value)
+                                     bool new_x, Number& obj_value)
 {
   // return the value of the objective function
   obj_value = 0.;
@@ -221,7 +221,7 @@ MittelmannDistCntrlNeumABase::eval_grad_f(Index n, const Number* x, bool new_x, 
 }
 
 bool MittelmannDistCntrlNeumABase::eval_g(Index n, const Number* x, bool new_x,
-				    Index m, Number* g)
+    Index m, Number* g)
 {
   // return the value of the constraints: g(x)
 
@@ -232,12 +232,12 @@ bool MittelmannDistCntrlNeumABase::eval_g(Index n, const Number* x, bool new_x,
 
       // Start with the discretized Laplacian operator
       val = 4.* x[y_index(i,j)]
-	- x[y_index(i-1,j)] - x[y_index(i+1,j)]
-	- x[y_index(i,j-1)] - x[y_index(i,j+1)];
+            - x[y_index(i-1,j)] - x[y_index(i+1,j)]
+            - x[y_index(i,j-1)] - x[y_index(i,j+1)];
 
       // Add the forcing term (including the step size here)
       val += hh_*d_cont(x1_grid(i), x2_grid(j),
-			x[y_index(i,j)], x[u_index(i,j)]);
+                        x[y_index(i,j)], x[u_index(i,j)]);
       g[pde_index(i,j)] = val;
     }
   }
@@ -267,8 +267,8 @@ bool MittelmannDistCntrlNeumABase::eval_g(Index n, const Number* x, bool new_x,
 }
 
 bool MittelmannDistCntrlNeumABase::eval_jac_g(Index n, const Number* x, bool new_x,
-                       Index m, Index nele_jac, Index* iRow, Index *jCol,
-                       Number* values)
+    Index m, Index nele_jac, Index* iRow, Index *jCol,
+    Number* values)
 {
   if (values == NULL) {
     // return the structure of the jacobian of the constraints
@@ -277,37 +277,37 @@ bool MittelmannDistCntrlNeumABase::eval_jac_g(Index n, const Number* x, bool new
     Index ijac = 0;
     for (Index i=1; i<= N_; i++) {
       for (Index j=1; j<= N_; j++) {
-	Index ig = pde_index(i,j);
+        Index ig = pde_index(i,j);
 
-	// y(i,j)
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(i,j);
-	ijac++;
+        // y(i,j)
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(i,j);
+        ijac++;
 
-	// y(i-1,j)
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(i-1,j);
-	ijac++;
+        // y(i-1,j)
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(i-1,j);
+        ijac++;
 
-	// y(i+1,j)
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(i+1,j);
-	ijac++;
+        // y(i+1,j)
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(i+1,j);
+        ijac++;
 
-	// y(i,j-1)
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(i,j-1);
-	ijac++;
+        // y(i,j-1)
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(i,j-1);
+        ijac++;
 
-	// y(i,j+1)
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(i,j+1);
-	ijac++;
+        // y(i,j+1)
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(i,j+1);
+        ijac++;
 
-	// u(i,j)
-	iRow[ijac] = ig;
-	jCol[ijac] = u_index(i,j);
-	ijac++;
+        // u(i,j)
+        iRow[ijac] = ig;
+        jCol[ijac] = u_index(i,j);
+        ijac++;
       }
     }
 
@@ -357,31 +357,31 @@ bool MittelmannDistCntrlNeumABase::eval_jac_g(Index n, const Number* x, bool new
     Index ijac = 0;
     for (Index i=1; i<= N_; i++) {
       for (Index j=1; j<= N_; j++) {
-	// y(i,j)
-	values[ijac] = 4. + hh_*d_cont_dy(x1_grid(i), x2_grid(j),
-					  x[y_index(i,j)], x[u_index(i,j)]);
-	ijac++;
+        // y(i,j)
+        values[ijac] = 4. + hh_*d_cont_dy(x1_grid(i), x2_grid(j),
+                                          x[y_index(i,j)], x[u_index(i,j)]);
+        ijac++;
 
-	// y(i-1,j)
-	values[ijac] = -1.;
-	ijac++;
+        // y(i-1,j)
+        values[ijac] = -1.;
+        ijac++;
 
-	// y(i+1,j)
-	values[ijac] = -1.;
-	ijac++;
+        // y(i+1,j)
+        values[ijac] = -1.;
+        ijac++;
 
-	// y(1,j-1)
-	values[ijac] = -1.;
-	ijac++;
+        // y(1,j-1)
+        values[ijac] = -1.;
+        ijac++;
 
-	// y(1,j+1)
-	values[ijac] = -1.;
-	ijac++;
+        // y(1,j+1)
+        values[ijac] = -1.;
+        ijac++;
 
-	// y(i,j)
-	values[ijac] = hh_*d_cont_du(x1_grid(i), x2_grid(j),
-				     x[y_index(i,j)], x[u_index(i,j)]);
-	ijac++;
+        // y(i,j)
+        values[ijac] = hh_*d_cont_du(x1_grid(i), x2_grid(j),
+                                     x[y_index(i,j)], x[u_index(i,j)]);
+        ijac++;
       }
     }
 
@@ -418,10 +418,10 @@ bool MittelmannDistCntrlNeumABase::eval_jac_g(Index n, const Number* x, bool new
 
 bool
 MittelmannDistCntrlNeumABase::eval_h(Index n, const Number* x, bool new_x,
-			       Number obj_factor, Index m,
-			       const Number* lambda,
-			       bool new_lambda, Index nele_hess, Index* iRow,
-			       Index* jCol, Number* values)
+                                     Number obj_factor, Index m,
+                                     const Number* lambda,
+                                     bool new_lambda, Index nele_hess, Index* iRow,
+                                     Index* jCol, Number* values)
 {
   if (values == NULL) {
     // return the structure. This is a symmetric matrix, fill the lower left
@@ -431,34 +431,34 @@ MittelmannDistCntrlNeumABase::eval_h(Index n, const Number* x, bool new_x,
     if (!fint_cont_dydy_alwayszero() || !d_cont_dydy_alwayszero()) {
       // First the diagonal entries for dydy
       for (Index i=1; i<= N_; i++) {
-	for (Index j=1; j<= N_; j++) {
-	  iRow[ihes] = y_index(i,j);
-	  jCol[ihes] = y_index(i,j);
-	  ihes++;
-	}
+        for (Index j=1; j<= N_; j++) {
+          iRow[ihes] = y_index(i,j);
+          jCol[ihes] = y_index(i,j);
+          ihes++;
+        }
       }
     }
 
     if (!fint_cont_dudu_alwayszero() || !d_cont_dudu_alwayszero()) {
       // Now the diagonal entries for dudu
       for (Index i=1; i<= N_; i++) {
-	for (Index j=1; j<= N_; j++) {
-	  iRow[ihes] = u_index(i,j);
-	  jCol[ihes] = u_index(i,j);
-	  ihes++;
-	}
+        for (Index j=1; j<= N_; j++) {
+          iRow[ihes] = u_index(i,j);
+          jCol[ihes] = u_index(i,j);
+          ihes++;
+        }
       }
     }
- 
+
     if (!fint_cont_dydu_alwayszero() || !d_cont_dydu_alwayszero()) {
       // Now the diagonal entries for dydu
       for (Index i=1; i<= N_; i++) {
-	for (Index j=1; j<= N_; j++) {
-	  iRow[ihes] = y_index(i,j);
-	  jCol[ihes] = u_index(i,j);
-	  ihes++;
-	}
-      }   
+        for (Index j=1; j<= N_; j++) {
+          iRow[ihes] = y_index(i,j);
+          jCol[ihes] = u_index(i,j);
+          ihes++;
+        }
+      }
     }
 
     DBG_ASSERT(ihes==nele_hess);
@@ -472,35 +472,35 @@ MittelmannDistCntrlNeumABase::eval_h(Index n, const Number* x, bool new_x,
     if (!fint_cont_dydy_alwayszero() || !d_cont_dydy_alwayszero()) {
       ihes_store = ihes;
       if (!fint_cont_dydy_alwayszero()) {
-	// Contribution from the objective function
-	for (Index i=1; i<= N_; i++) {
-	  for (Index j=1; j<= N_; j++) {
-	    values[ihes] =
-	      obj_factor*hh_*fint_cont_dydy(x1_grid(i), x2_grid(j),
-					    x[y_index(i,j)], x[u_index(i,j)]);
-	    ihes++;
-	  }
-	}
+        // Contribution from the objective function
+        for (Index i=1; i<= N_; i++) {
+          for (Index j=1; j<= N_; j++) {
+            values[ihes] =
+              obj_factor*hh_*fint_cont_dydy(x1_grid(i), x2_grid(j),
+                                            x[y_index(i,j)], x[u_index(i,j)]);
+            ihes++;
+          }
+        }
       }
       else {
-	for (Index i=1; i<= N_; i++) {
-	  for (Index j=1; j<= N_; j++) {
-	    values[ihes] = 0.;
-	    ihes++;
-	  }
-	}
+        for (Index i=1; i<= N_; i++) {
+          for (Index j=1; j<= N_; j++) {
+            values[ihes] = 0.;
+            ihes++;
+          }
+        }
       }
       if (!d_cont_dydy_alwayszero()) {
-	ihes = ihes_store;
-	// Contribution from the constraints
-	for (Index i=1; i<= N_; i++) {
-	  for (Index j=1; j<= N_; j++) {
-	    values[ihes] +=
-	      lambda[pde_index(i,j)]*hh_*d_cont_dydy(x1_grid(i), x2_grid(j),
-						     x[y_index(i,j)], x[u_index(i,j)]);
-	    ihes++;
-	  }
-	}
+        ihes = ihes_store;
+        // Contribution from the constraints
+        for (Index i=1; i<= N_; i++) {
+          for (Index j=1; j<= N_; j++) {
+            values[ihes] +=
+              lambda[pde_index(i,j)]*hh_*d_cont_dydy(x1_grid(i), x2_grid(j),
+                                                     x[y_index(i,j)], x[u_index(i,j)]);
+            ihes++;
+          }
+        }
       }
     }
 
@@ -508,35 +508,35 @@ MittelmannDistCntrlNeumABase::eval_h(Index n, const Number* x, bool new_x,
     if (!fint_cont_dudu_alwayszero() || !d_cont_dudu_alwayszero()) {
       ihes_store = ihes;
       if (!fint_cont_dudu_alwayszero()) {
-	// Contribution from the objective function
-	for (Index i=1; i<= N_; i++) {
-	  for (Index j=1; j<= N_; j++) {
-	    values[ihes] =
-	      obj_factor*hh_*fint_cont_dudu(x1_grid(i), x2_grid(j),
-					    x[y_index(i,j)], x[u_index(i,j)]);
-	    ihes++;
-	  }
-	}
+        // Contribution from the objective function
+        for (Index i=1; i<= N_; i++) {
+          for (Index j=1; j<= N_; j++) {
+            values[ihes] =
+              obj_factor*hh_*fint_cont_dudu(x1_grid(i), x2_grid(j),
+                                            x[y_index(i,j)], x[u_index(i,j)]);
+            ihes++;
+          }
+        }
       }
       else {
-	for (Index i=1; i<= N_; i++) {
-	  for (Index j=1; j<= N_; j++) {
-	    values[ihes] = 0.;
-	    ihes++;
-	  }
-	}
+        for (Index i=1; i<= N_; i++) {
+          for (Index j=1; j<= N_; j++) {
+            values[ihes] = 0.;
+            ihes++;
+          }
+        }
       }
       if (!d_cont_dudu_alwayszero()) {
-	ihes = ihes_store;
-	// Contribution from the constraints
-	for (Index i=1; i<= N_; i++) {
-	  for (Index j=1; j<= N_; j++) {
-	    values[ihes] +=
-	      lambda[pde_index(i,j)]*hh_*d_cont_dudu(x1_grid(i), x2_grid(j),
-						     x[y_index(i,j)], x[u_index(i,j)]);
-	    ihes++;
-	  }
-	}
+        ihes = ihes_store;
+        // Contribution from the constraints
+        for (Index i=1; i<= N_; i++) {
+          for (Index j=1; j<= N_; j++) {
+            values[ihes] +=
+              lambda[pde_index(i,j)]*hh_*d_cont_dudu(x1_grid(i), x2_grid(j),
+                                                     x[y_index(i,j)], x[u_index(i,j)]);
+            ihes++;
+          }
+        }
       }
     }
 
@@ -544,35 +544,35 @@ MittelmannDistCntrlNeumABase::eval_h(Index n, const Number* x, bool new_x,
     if (!fint_cont_dydu_alwayszero() || !d_cont_dydu_alwayszero()) {
       ihes_store = ihes;
       if (!fint_cont_dydu_alwayszero()) {
-	// Contribution from the objective function
-	for (Index i=1; i<= N_; i++) {
-	  for (Index j=1; j<= N_; j++) {
-	    values[ihes] =
-	      obj_factor*hh_*fint_cont_dydu(x1_grid(i), x2_grid(j),
-					    x[y_index(i,j)], x[u_index(i,j)]);
-	    ihes++;
-	  }
-	}
+        // Contribution from the objective function
+        for (Index i=1; i<= N_; i++) {
+          for (Index j=1; j<= N_; j++) {
+            values[ihes] =
+              obj_factor*hh_*fint_cont_dydu(x1_grid(i), x2_grid(j),
+                                            x[y_index(i,j)], x[u_index(i,j)]);
+            ihes++;
+          }
+        }
       }
       else {
-	for (Index i=1; i<= N_; i++) {
-	  for (Index j=1; j<= N_; j++) {
-	    values[ihes] = 0.;
-	    ihes++;
-	  }
-	}
+        for (Index i=1; i<= N_; i++) {
+          for (Index j=1; j<= N_; j++) {
+            values[ihes] = 0.;
+            ihes++;
+          }
+        }
       }
       if (!d_cont_dydu_alwayszero()) {
-	ihes = ihes_store;
-	// Contribution from the constraints
-	for (Index i=1; i<= N_; i++) {
-	  for (Index j=1; j<= N_; j++) {
-	    values[ihes] +=
-	      lambda[pde_index(i,j)]*hh_*d_cont_dydu(x1_grid(i), x2_grid(j),
-						     x[y_index(i,j)], x[u_index(i,j)]);
-	    ihes++;
-	  }
-	}
+        ihes = ihes_store;
+        // Contribution from the constraints
+        for (Index i=1; i<= N_; i++) {
+          for (Index j=1; j<= N_; j++) {
+            values[ihes] +=
+              lambda[pde_index(i,j)]*hh_*d_cont_dydu(x1_grid(i), x2_grid(j),
+                                                     x[y_index(i,j)], x[u_index(i,j)]);
+            ihes++;
+          }
+        }
       }
     }
   }

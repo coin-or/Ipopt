@@ -84,10 +84,10 @@ public:
 
   /** Method for returning scaling parameters */
   virtual bool get_scaling_parameters(Number& obj_scaling,
-				      bool& use_x_scaling, Index n,
-				      Number* x_scaling,
-				      bool& use_g_scaling, Index m,
-				      Number* g_scaling);
+                                      bool& use_x_scaling, Index n,
+                                      Number* x_scaling,
+                                      bool& use_g_scaling, Index m,
+                                      Number* g_scaling);
 
   /** @name Solution Methods */
   //@{
@@ -156,18 +156,22 @@ private:
   //@{
   /** Translation of mesh point indices to NLP variable indices for
    *  y(x_ij) */
-  inline Index y_index(Index jx, Index it) const {
+  inline Index y_index(Index jx, Index it) const
+  {
     return jx + (Nx_+1)*it;
   }
-  inline Index u_index(Index it) const {
+  inline Index u_index(Index it) const
+  {
     return (Nt_+1)*(Nx_+1) + it - 1;
   }
   /** Compute the grid coordinate for given index in t direction */
-  inline Number t_grid(Index i) const {
+  inline Number t_grid(Index i) const
+  {
     return dt_*(Number)i;
   }
   /** Compute the grid coordinate for given index in x direction */
-  inline Number x_grid(Index j) const {
+  inline Number x_grid(Index j) const
+  {
     return dx_*(Number)j;
   }
   //@}
@@ -175,12 +179,11 @@ private:
 
 template <class T>
 MittelmannParaCntrlBase<T>::MittelmannParaCntrlBase()
-  :
-  y_T_(NULL),
-  a_y_(NULL),
-  a_u_(NULL)
-{
-}
+    :
+    y_T_(NULL),
+    a_y_(NULL),
+    a_u_(NULL)
+{}
 
 template <class T>
 MittelmannParaCntrlBase<T>::~MittelmannParaCntrlBase()
@@ -233,7 +236,7 @@ InitializeProblem(Index N)
 template <class T>
 bool MittelmannParaCntrlBase<T>::
 get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-	     Index& nnz_h_lag, IndexStyleEnum& index_style)
+             Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
   typename T::ProblemSpecs p;
 
@@ -256,7 +259,7 @@ get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 template <class T>
 bool MittelmannParaCntrlBase<T>::
 get_bounds_info(Index n, Number* x_l, Number* x_u,
-		Index m, Number* g_l, Number* g_u)
+                Index m, Number* g_l, Number* g_u)
 {
   typename T::ProblemSpecs p;
 
@@ -296,7 +299,7 @@ get_bounds_info(Index n, Number* x_l, Number* x_u,
   // but we put b on the right hand side for the x=L boundary condition
   for (Index i=0; i<Nt_; i++) {
     g_l[Nt_*(Nx_-1) + Nt_ + i]
-      = g_u[Nt_*(Nx_-1) + Nt_ + i]
+    = g_u[Nt_*(Nx_-1) + Nt_ + i]
       = p.b(t_grid(i+1));
   }
 
@@ -306,9 +309,9 @@ get_bounds_info(Index n, Number* x_l, Number* x_u,
 template <class T>
 bool MittelmannParaCntrlBase<T>::
 get_starting_point(Index n, bool init_x, Number* x,
-		   bool init_z, Number* z_L, Number* z_U,
-		   Index m, bool init_lambda,
-		   Number* lambda)
+                   bool init_z, Number* z_L, Number* z_U,
+                   Index m, bool init_lambda,
+                   Number* lambda)
 {
   DBG_ASSERT(init_x==true && init_z==false && init_lambda==false);
 
@@ -336,10 +339,10 @@ get_starting_point(Index n, bool init_x, Number* x,
 template <class T>
 bool MittelmannParaCntrlBase<T>::
 get_scaling_parameters(Number& obj_scaling,
-		       bool& use_x_scaling,
-		       Index n, Number* x_scaling,
-		       bool& use_g_scaling,
-		       Index m, Number* g_scaling)
+                       bool& use_x_scaling,
+                       Index n, Number* x_scaling,
+                       bool& use_g_scaling,
+                       Index m, Number* g_scaling)
 {
   obj_scaling = 1./Min(dx_,dt_);
   use_x_scaling = false;
@@ -428,9 +431,9 @@ eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
   for (Index jx=1; jx<Nx_; jx++) {
     for (Index it=0; it<Nt_; it++) {
       g[ig] = (x[y_index(jx,it)]-x[y_index(jx,it+1)])/dt_
-	+ f*(x[y_index(jx-1,it)] - 2.*x[y_index(jx,it)]
-	     + x[y_index(jx+1,it)] + x[y_index(jx-1,it+1)]
-	     - 2.*x[y_index(jx,it+1)] + x[y_index(jx+1,it+1)]);
+              + f*(x[y_index(jx-1,it)] - 2.*x[y_index(jx,it)]
+                   + x[y_index(jx+1,it)] + x[y_index(jx-1,it+1)]
+                   - 2.*x[y_index(jx,it+1)] + x[y_index(jx+1,it+1)]);
       ig++;
     }
   }
@@ -444,7 +447,7 @@ eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
   for (Index it=1; it<=Nt_; it++) {
     g[ig] =
       f*(x[y_index(Nx_-2,it)] - 4.*x[y_index(Nx_-1,it)]
-	 + 3.*x[y_index(Nx_,it)]) + beta_*x[y_index(Nx_,it)]
+         + 3.*x[y_index(Nx_,it)]) + beta_*x[y_index(Nx_,it)]
       - x[u_index(it)] + p.phi(x[y_index(Nx_,it)]);
     ig++;
   }
@@ -457,8 +460,8 @@ eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
 template <class T>
 bool MittelmannParaCntrlBase<T>::
 eval_jac_g(Index n, const Number* x, bool new_x,
-	   Index m, Index nele_jac, Index* iRow, Index *jCol,
-	   Number* values)
+           Index m, Index nele_jac, Index* iRow, Index *jCol,
+           Number* values)
 {
   typename T::ProblemSpecs p;
 
@@ -468,26 +471,26 @@ eval_jac_g(Index n, const Number* x, bool new_x,
     Index ig = 0;
     for (Index jx=1; jx<Nx_; jx++) {
       for (Index it=0; it<Nt_; it++) {
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(jx-1,it);
-	ijac++;
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(jx,it);
-	ijac++;
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(jx+1,it);
-	ijac++;
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(jx-1,it+1);
-	ijac++;
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(jx,it+1);
-	ijac++;
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(jx+1,it+1);
-	ijac++;
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(jx-1,it);
+        ijac++;
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(jx,it);
+        ijac++;
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(jx+1,it);
+        ijac++;
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(jx-1,it+1);
+        ijac++;
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(jx,it+1);
+        ijac++;
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(jx+1,it+1);
+        ijac++;
 
-	ig++;
+        ig++;
       }
     }
 
@@ -501,7 +504,7 @@ eval_jac_g(Index n, const Number* x, bool new_x,
       iRow[ijac] = ig;
       jCol[ijac] = y_index(2,it);
       ijac++;
-	
+
       ig++;
     }
 
@@ -518,7 +521,7 @@ eval_jac_g(Index n, const Number* x, bool new_x,
       iRow[ijac] = ig;
       jCol[ijac] = u_index(it);
       ijac++;
-	
+
       ig++;
     }
     DBG_ASSERT(ig == m);
@@ -528,12 +531,12 @@ eval_jac_g(Index n, const Number* x, bool new_x,
     Number f2 = 1./dt_;
     for (Index jx=1; jx<Nx_; jx++) {
       for (Index it=0; it<Nt_; it++) {
-	values[ijac++] = f;
-	values[ijac++] = f2 - 2.*f;
-	values[ijac++] = f;
-	values[ijac++] = f;
-	values[ijac++] = -f2 - 2.*f;
-	values[ijac++] = f;
+        values[ijac++] = f;
+        values[ijac++] = f2 - 2.*f;
+        values[ijac++] = f;
+        values[ijac++] = f;
+        values[ijac++] = -f2 - 2.*f;
+        values[ijac++] = f;
       }
     }
 
@@ -584,9 +587,9 @@ eval_h(Index n, const Number* x, bool new_x,
     // constraint
     if (!p.phi_dydy_always_zero()) {
       for (Index it=1; it<=Nt_; it++) {
-	iRow[ihes] = y_index(Nx_,it);
-	jCol[ihes] = y_index(Nx_,it);
-	ihes++;	
+        iRow[ihes] = y_index(Nx_,it);
+        jCol[ihes] = y_index(Nx_,it);
+        ihes++;
       }
     }
   }
@@ -607,7 +610,7 @@ eval_h(Index n, const Number* x, bool new_x,
     if (!p.phi_dydy_always_zero()) {
       Index ig = (Nx_-1)*Nt_ + Nt_;
       for (Index it=1; it<=Nt_; it++) {
-	values[ihes++] = lambda[ig++]*p.phi_dydy(x[y_index(Nx_,it)]);
+        values[ihes++] = lambda[ig++]*p.phi_dydy(x[y_index(Nx_,it)]);
       }
     }
   }
@@ -620,47 +623,96 @@ eval_h(Index n, const Number* x, bool new_x,
 template <class T>
 void MittelmannParaCntrlBase<T>::
 finalize_solution(SolverReturn status,
-		  Index n, const Number* x, const Number* z_L,
-		  const Number* z_U,
-		  Index m, const Number* g, const Number* lambda,
-		  Number obj_value)
-{
-}
+                  Index n, const Number* x, const Number* z_L,
+                  const Number* z_U,
+                  Index m, const Number* g, const Number* lambda,
+                  Number obj_value)
+{}
 
 class MittelmannParaCntrl5_1
 {
 public:
-  class ProblemSpecs {
+  class ProblemSpecs
+  {
   public:
     ProblemSpecs ()
-      :
-      pi_(4.*atan(1.)),
-      exp13_(exp(1./3.)),
-      exp23_(exp(2./3.)),
-      exp1_(exp(1.)),
-      expm1_(exp(-1.)),
-      sqrt2_(sqrt(2.))
+        :
+        pi_(4.*atan(1.)),
+        exp13_(exp(1./3.)),
+        exp23_(exp(2./3.)),
+        exp1_(exp(1.)),
+        expm1_(exp(-1.)),
+        sqrt2_(sqrt(2.))
     {}
-    Number T() { return 1.; }
-    Number l() { return pi_/4.; }
-    Number lb_y() { return -1e20; }
-    Number ub_y() { return 1e20; }
-    Number lb_u() { return 0.; }
-    Number ub_u() { return 1.; }
-    Number alpha() { return sqrt2_/2.*(exp23_-exp13_); }
-    Number beta() { return 1.; }
-    inline Number y_T(Number x) { return (exp1_ + expm1_)*cos(x); }
-    inline Number a(Number x){ return cos(x); }
-    inline Number a_y(Number t) { return -exp(-2.*t); }
-    inline Number a_u(Number t) { return sqrt2_/2.*exp13_; }
-    inline Number b(Number t) {
-      return exp(-4.*t)/4.
-	- Min(1.,Max(0.,(exp(t)-exp13_)/(exp23_-exp13_)));
+    Number T()
+    {
+      return 1.;
     }
-    inline Number phi(Number y) { return y*pow(fabs(y),3); }
-    inline Number phi_dy(Number y) { return 4.*pow(fabs(y),3); }
-    inline Number phi_dydy(Number y) { return 12.*y*y; }
-    inline bool phi_dydy_always_zero() { return false; }
+    Number l()
+    {
+      return pi_/4.;
+    }
+    Number lb_y()
+    {
+      return -1e20;
+    }
+    Number ub_y()
+    {
+      return 1e20;
+    }
+    Number lb_u()
+    {
+      return 0.;
+    }
+    Number ub_u()
+    {
+      return 1.;
+    }
+    Number alpha()
+    {
+      return sqrt2_/2.*(exp23_-exp13_);
+    }
+    Number beta()
+    {
+      return 1.;
+    }
+    inline Number y_T(Number x)
+    {
+      return (exp1_ + expm1_)*cos(x);
+    }
+    inline Number a(Number x)
+    {
+      return cos(x);
+    }
+    inline Number a_y(Number t)
+    {
+      return -exp(-2.*t);
+    }
+    inline Number a_u(Number t)
+    {
+      return sqrt2_/2.*exp13_;
+    }
+    inline Number b(Number t)
+    {
+      return exp(-4.*t)/4.
+             - Min(1.,Max(0.,(exp(t)-exp13_)/(exp23_-exp13_)));
+    }
+    inline Number phi(Number y)
+    {
+      return y*pow(fabs(y),3);
+    }
+    inline Number phi_dy(Number y)
+    {
+      return 4.*pow(fabs(y),3);
+    }
+    inline Number phi_dydy(Number y)
+    {
+      return 12.*y*y;
+    }
+    inline bool phi_dydy_always_zero()
+    {
+      return false;
+    }
   private:
     const Number pi_;
     const Number exp13_;
@@ -674,115 +726,325 @@ public:
 class MittelmannParaCntrl5_2_1
 {
 public:
-  class ProblemSpecs {
+  class ProblemSpecs
+  {
   public:
-    ProblemSpecs () {}
-    Number T() { return 1.58; }
-    Number l() { return 1.; }
-    Number lb_y() { return -1e20; }
-    Number ub_y() { return 1e20; }
-    Number lb_u() { return -1.; }
-    Number ub_u() { return 1.; }
-    Number alpha() { return 0.001; }
-    Number beta() { return 1.; }
-    inline Number y_T(Number x) { return .5*(1.-x*x); }
-    inline Number a(Number x){ return 0.; }
-    inline Number a_y(Number t) { return 0.; }
-    inline Number a_u(Number t) { return 0.; }
-    inline Number b(Number t) { return 0.; }
-    inline Number phi(Number y) { return 0.; }
-    inline Number phi_dy(Number y) { return 0.; }
-    inline Number phi_dydy(Number y) { DBG_ASSERT(false); return 0.; }
-    inline bool phi_dydy_always_zero() { return true; }
+    ProblemSpecs ()
+    {}
+    Number T()
+    {
+      return 1.58;
+    }
+    Number l()
+    {
+      return 1.;
+    }
+    Number lb_y()
+    {
+      return -1e20;
+    }
+    Number ub_y()
+    {
+      return 1e20;
+    }
+    Number lb_u()
+    {
+      return -1.;
+    }
+    Number ub_u()
+    {
+      return 1.;
+    }
+    Number alpha()
+    {
+      return 0.001;
+    }
+    Number beta()
+    {
+      return 1.;
+    }
+    inline Number y_T(Number x)
+    {
+      return .5*(1.-x*x);
+    }
+    inline Number a(Number x)
+    {
+      return 0.;
+    }
+    inline Number a_y(Number t)
+    {
+      return 0.;
+    }
+    inline Number a_u(Number t)
+    {
+      return 0.;
+    }
+    inline Number b(Number t)
+    {
+      return 0.;
+    }
+    inline Number phi(Number y)
+    {
+      return 0.;
+    }
+    inline Number phi_dy(Number y)
+    {
+      return 0.;
+    }
+    inline Number phi_dydy(Number y)
+    {
+      DBG_ASSERT(false);
+      return 0.;
+    }
+    inline bool phi_dydy_always_zero()
+    {
+      return true;
+    }
   };
 };
 
 class MittelmannParaCntrl5_2_2
 {
 public:
-  class ProblemSpecs {
+  class ProblemSpecs
+  {
   public:
-    ProblemSpecs () {}
-    Number T() { return 1.58; }
-    Number l() { return 1.; }
-    Number lb_y() { return -1e20; }
-    Number ub_y() { return 1e20; }
-    Number lb_u() { return -1.; }
-    Number ub_u() { return 1.; }
-    Number alpha() { return 0.001; }
-    Number beta() { return 0.; }
-    inline Number y_T(Number x) { return .5*(1.-x*x); }
-    inline Number a(Number x){ return 0.; }
-    inline Number a_y(Number t) { return 0.; }
-    inline Number a_u(Number t) { return 0.; }
-    inline Number b(Number t) { return 0.; }
-    inline Number phi(Number y) { return y*y; }
-    inline Number phi_dy(Number y) { return 2.*y; }
-    inline Number phi_dydy(Number y) { return 2.; }
-    inline bool phi_dydy_always_zero() { return false; }
+    ProblemSpecs ()
+    {}
+    Number T()
+    {
+      return 1.58;
+    }
+    Number l()
+    {
+      return 1.;
+    }
+    Number lb_y()
+    {
+      return -1e20;
+    }
+    Number ub_y()
+    {
+      return 1e20;
+    }
+    Number lb_u()
+    {
+      return -1.;
+    }
+    Number ub_u()
+    {
+      return 1.;
+    }
+    Number alpha()
+    {
+      return 0.001;
+    }
+    Number beta()
+    {
+      return 0.;
+    }
+    inline Number y_T(Number x)
+    {
+      return .5*(1.-x*x);
+    }
+    inline Number a(Number x)
+    {
+      return 0.;
+    }
+    inline Number a_y(Number t)
+    {
+      return 0.;
+    }
+    inline Number a_u(Number t)
+    {
+      return 0.;
+    }
+    inline Number b(Number t)
+    {
+      return 0.;
+    }
+    inline Number phi(Number y)
+    {
+      return y*y;
+    }
+    inline Number phi_dy(Number y)
+    {
+      return 2.*y;
+    }
+    inline Number phi_dydy(Number y)
+    {
+      return 2.;
+    }
+    inline bool phi_dydy_always_zero()
+    {
+      return false;
+    }
   };
 };
 
 class MittelmannParaCntrl5_2_3
 {
 public:
-  class ProblemSpecs {
+  class ProblemSpecs
+  {
   public:
-    ProblemSpecs () {}
-    Number T() { return 1.58; }
-    Number l() { return 1.; }
-    Number lb_y() { return 0.; }
-    Number ub_y() { return 0.675; }
-    Number lb_u() { return -1.; }
-    Number ub_u() { return 1.; }
-    Number alpha() { return 0.001; }
-    Number beta() { return 0.; }
-    inline Number y_T(Number x) { return .5*(1.-x*x); }
-    inline Number a(Number x){ return 0.; }
-    inline Number a_y(Number t) { return 0.; }
-    inline Number a_u(Number t) { return 0.; }
-    inline Number b(Number t) { return 0.; }
-    inline Number phi(Number y) { return y*y; }
-    inline Number phi_dy(Number y) { return 2.*y; }
-    inline Number phi_dydy(Number y) { return 2.; }
-    inline bool phi_dydy_always_zero() { return false; }
+    ProblemSpecs ()
+    {}
+    Number T()
+    {
+      return 1.58;
+    }
+    Number l()
+    {
+      return 1.;
+    }
+    Number lb_y()
+    {
+      return 0.;
+    }
+    Number ub_y()
+    {
+      return 0.675;
+    }
+    Number lb_u()
+    {
+      return -1.;
+    }
+    Number ub_u()
+    {
+      return 1.;
+    }
+    Number alpha()
+    {
+      return 0.001;
+    }
+    Number beta()
+    {
+      return 0.;
+    }
+    inline Number y_T(Number x)
+    {
+      return .5*(1.-x*x);
+    }
+    inline Number a(Number x)
+    {
+      return 0.;
+    }
+    inline Number a_y(Number t)
+    {
+      return 0.;
+    }
+    inline Number a_u(Number t)
+    {
+      return 0.;
+    }
+    inline Number b(Number t)
+    {
+      return 0.;
+    }
+    inline Number phi(Number y)
+    {
+      return y*y;
+    }
+    inline Number phi_dy(Number y)
+    {
+      return 2.*y;
+    }
+    inline Number phi_dydy(Number y)
+    {
+      return 2.;
+    }
+    inline bool phi_dydy_always_zero()
+    {
+      return false;
+    }
   };
 };
 
 class MittelmannParaCntrl5_try
 {
 public:
-  class ProblemSpecs {
+  class ProblemSpecs
+  {
   public:
     ProblemSpecs ()
-      :
-      pi_(4.*atan(1.)),
-      exp13_(exp(1./3.)),
-      exp23_(exp(2./3.)),
-      exp1_(exp(1.)),
-      expm1_(exp(-1.)),
-      sqrt2_(sqrt(2.))
+        :
+        pi_(4.*atan(1.)),
+        exp13_(exp(1./3.)),
+        exp23_(exp(2./3.)),
+        exp1_(exp(1.)),
+        expm1_(exp(-1.)),
+        sqrt2_(sqrt(2.))
     {}
-    Number T() { return 1.; }
-    Number l() { return pi_/4.; }
-    Number lb_y() { return -1e20; }
-    Number ub_y() { return 1e20; }
-    Number lb_u() { return 0.; }
-    Number ub_u() { return 1.; }
-    Number alpha() { return sqrt2_/2.*(exp23_-exp13_); }
-    Number beta() { return 1.; }
-    inline Number y_T(Number x) { return (exp1_ + expm1_)*cos(x); }
-    inline Number a(Number x){ return cos(x); }
-    inline Number a_y(Number t) { return -exp(-2.*t); }
-    inline Number a_u(Number t) { return sqrt2_/2.*exp13_; }
-    inline Number b(Number t) {
-      return exp(-4.*t)/4.
-	- Min(1.,Max(0.,(exp(t)-exp13_)/(exp23_-exp13_)));
+    Number T()
+    {
+      return 1.;
     }
-    inline Number phi(Number y) { return -y*sin(y/10.); }
-    inline Number phi_dy(Number y) { return -y*cos(y/10.)/10. - sin(y/10.); }
-    inline Number phi_dydy(Number y) { return y*sin(y/10.)/100.; }
-    inline bool phi_dydy_always_zero() { return false; }
+    Number l()
+    {
+      return pi_/4.;
+    }
+    Number lb_y()
+    {
+      return -1e20;
+    }
+    Number ub_y()
+    {
+      return 1e20;
+    }
+    Number lb_u()
+    {
+      return 0.;
+    }
+    Number ub_u()
+    {
+      return 1.;
+    }
+    Number alpha()
+    {
+      return sqrt2_/2.*(exp23_-exp13_);
+    }
+    Number beta()
+    {
+      return 1.;
+    }
+    inline Number y_T(Number x)
+    {
+      return (exp1_ + expm1_)*cos(x);
+    }
+    inline Number a(Number x)
+    {
+      return cos(x);
+    }
+    inline Number a_y(Number t)
+    {
+      return -exp(-2.*t);
+    }
+    inline Number a_u(Number t)
+    {
+      return sqrt2_/2.*exp13_;
+    }
+    inline Number b(Number t)
+    {
+      return exp(-4.*t)/4.
+             - Min(1.,Max(0.,(exp(t)-exp13_)/(exp23_-exp13_)));
+    }
+    inline Number phi(Number y)
+    {
+      return -y*sin(y/10.);
+    }
+    inline Number phi_dy(Number y)
+    {
+      return -y*cos(y/10.)/10. - sin(y/10.);
+    }
+    inline Number phi_dydy(Number y)
+    {
+      return y*sin(y/10.)/100.;
+    }
+    inline bool phi_dydy_always_zero()
+    {
+      return false;
+    }
   private:
     const Number pi_;
     const Number exp13_;

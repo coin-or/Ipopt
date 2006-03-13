@@ -8,14 +8,15 @@
 
 #include "RegisteredTNLP.hpp"
 
-std::map<std::string, SmartPtr<RegisteredTNLP> >& RegisteredTNLPListMap() {
+std::map<std::string, SmartPtr<RegisteredTNLP> >& RegisteredTNLPListMap()
+{
   static std::map<std::string, SmartPtr<RegisteredTNLP> > tnlp_map_;
   return tnlp_map_;
 }
 
 void
 RegisteredTNLPs::RegisterTNLP(const SmartPtr<RegisteredTNLP>& tnlp,
-				 const std::string name)
+                              const std::string name)
 {
   RegisteredTNLPListMap()[name] = GetRawPtr(tnlp);
 }

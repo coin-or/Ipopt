@@ -37,8 +37,8 @@ bool LuksanVlcek3::InitializeProblem(Index N)
 }
 
 // returns the size of the problem
-bool LuksanVlcek3::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, 
-				Index& nnz_h_lag, IndexStyleEnum& index_style)
+bool LuksanVlcek3::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
+                                Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
   // The problem described in LuksanVlcek3.hpp has 4 variables, x[0] through x[3]
   n = N_+2;
@@ -57,7 +57,7 @@ bool LuksanVlcek3::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 
 // returns the variable bounds
 bool LuksanVlcek3::get_bounds_info(Index n, Number* x_l, Number* x_u,
-				   Index m, Number* g_l, Number* g_u)
+                                   Index m, Number* g_l, Number* g_u)
 {
   // none of the variables have bounds
   for (Index i=0; i<n; i++) {
@@ -76,9 +76,9 @@ bool LuksanVlcek3::get_bounds_info(Index n, Number* x_l, Number* x_u,
 
 // returns the initial point for the problem
 bool LuksanVlcek3::get_starting_point(Index n, bool init_x, Number* x,
-				      bool init_z, Number* z_L, Number* z_U,
-				      Index m, bool init_lambda,
-				      Number* lambda)
+                                      bool init_z, Number* z_L, Number* z_U,
+                                      Index m, bool init_lambda,
+                                      Number* lambda)
 {
   if (!init_x || init_z || init_lambda) {
     return false;
@@ -140,14 +140,15 @@ bool LuksanVlcek3::eval_grad_f(Index n, const Number* x, bool new_x, Number* gra
 bool LuksanVlcek3::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
 {
   g[0] = 3.*pow(x[0],3) + 2.*x[1] - 5. + sin(x[0]-x[1])*sin(x[0]+x[1]);
-  g[1] = 4.*x[n-3] - x[n-4]*exp(x[n-4]-x[n-3]) - 3;;
+  g[1] = 4.*x[n-3] - x[n-4]*exp(x[n-4]-x[n-3]) - 3;
+  ;
   return true;
 }
 
 // return the structure or values of the jacobian
 bool LuksanVlcek3::eval_jac_g(Index n, const Number* x, bool new_x,
-                       Index m, Index nele_jac, Index* iRow, Index *jCol,
-                       Number* values)
+                              Index m, Index nele_jac, Index* iRow, Index *jCol,
+                              Number* values)
 {
   if (values == NULL) {
     // return the structure of the jacobian
@@ -165,7 +166,7 @@ bool LuksanVlcek3::eval_jac_g(Index n, const Number* x, bool new_x,
     iRow[ijac] = 1;
     jCol[ijac] = n-3;
     ijac++;
-    
+
     DBG_ASSERT(ijac == nele_jac);
   }
   else {
@@ -173,12 +174,12 @@ bool LuksanVlcek3::eval_jac_g(Index n, const Number* x, bool new_x,
 
     Index ijac = 0;
     values[ijac] = 9.*x[0]*x[0]
-      + cos(x[0]-x[1])*sin(x[0]+x[1])
-      + sin(x[0]-x[1])*cos(x[0]+x[1]);
+                   + cos(x[0]-x[1])*sin(x[0]+x[1])
+                   + sin(x[0]-x[1])*cos(x[0]+x[1]);
     ijac++;
     values[ijac] = 2.
-      - cos(x[0]-x[1])*sin(x[0]+x[1])
-      + sin(x[0]-x[1])*cos(x[0]+x[1]);
+                   - cos(x[0]-x[1])*sin(x[0]+x[1])
+                   + sin(x[0]-x[1])*cos(x[0]+x[1]);
     ijac++;
     values[ijac] = -(1.+x[n-4])*exp(x[n-4]-x[n-3]);
     ijac++;
@@ -191,9 +192,9 @@ bool LuksanVlcek3::eval_jac_g(Index n, const Number* x, bool new_x,
 
 //return the structure or values of the hessian
 bool LuksanVlcek3::eval_h(Index n, const Number* x, bool new_x,
-			  Number obj_factor, Index m, const Number* lambda,
-			  bool new_lambda, Index nele_hess, Index* iRow,
-			  Index* jCol, Number* values)
+                          Number obj_factor, Index m, const Number* lambda,
+                          bool new_lambda, Index nele_hess, Index* iRow,
+                          Index* jCol, Number* values)
 {
   if (values == NULL) {
     Index ihes=0;
@@ -287,11 +288,11 @@ bool LuksanVlcek3::eval_h(Index n, const Number* x, bool new_x,
     Number d1 = x[0] - x[1];
     Number d2 = x[0] + x[1];
     values[ihes] += lambda[0]*(18.*x[0]
-			       -2.*sin(d1)*sin(d2)
-			       +2.*cos(d1)*cos(d2));
+                               -2.*sin(d1)*sin(d2)
+                               +2.*cos(d1)*cos(d2));
     ihes+=3;
     values[ihes] += lambda[0]*(-2.*sin(d1)*sin(d2)
-			       -2.*cos(d1)*cos(d2));
+                               -2.*cos(d1)*cos(d2));
 
     d1 = x[n-4]-x[n-3];
 
@@ -311,9 +312,8 @@ bool LuksanVlcek3::eval_h(Index n, const Number* x, bool new_x,
 }
 
 void LuksanVlcek3::finalize_solution(SolverReturn status,
-                              Index n, const Number* x, const Number* z_L, const Number* z_U,
-                              Index m, const Number* g, const Number* lambda,
-                              Number obj_value)
-{
-}
+                                     Index n, const Number* x, const Number* z_L, const Number* z_U,
+                                     Index m, const Number* g, const Number* lambda,
+                                     Number obj_value)
+{}
 

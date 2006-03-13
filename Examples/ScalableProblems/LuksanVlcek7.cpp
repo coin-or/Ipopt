@@ -37,8 +37,8 @@ bool LuksanVlcek7::InitializeProblem(Index N)
 }
 
 // returns the size of the problem
-bool LuksanVlcek7::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, 
-				Index& nnz_h_lag, IndexStyleEnum& index_style)
+bool LuksanVlcek7::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
+                                Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
   // The problem described in LuksanVlcek7.hpp has 4 variables, x[0] through x[3]
   n = N_+2;
@@ -57,7 +57,7 @@ bool LuksanVlcek7::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 
 // returns the variable bounds
 bool LuksanVlcek7::get_bounds_info(Index n, Number* x_l, Number* x_u,
-				   Index m, Number* g_l, Number* g_u)
+                                   Index m, Number* g_l, Number* g_u)
 {
   // none of the variables have bounds
   for (Index i=0; i<n; i++) {
@@ -76,9 +76,9 @@ bool LuksanVlcek7::get_bounds_info(Index n, Number* x_l, Number* x_u,
 
 // returns the initial point for the problem
 bool LuksanVlcek7::get_starting_point(Index n, bool init_x, Number* x,
-				      bool init_z, Number* z_L, Number* z_U,
-				      Index m, bool init_lambda,
-				      Number* lambda)
+                                      bool init_z, Number* z_L, Number* z_U,
+                                      Index m, bool init_lambda,
+                                      Number* lambda)
 {
   if (!init_x || init_z || init_lambda) {
     return false;
@@ -129,21 +129,21 @@ bool LuksanVlcek7::eval_g(Index n, const Number* x, bool new_x, Index m, Number*
 {
   g[0] = 4.*(x[1]-x[2]*x[2]) + x[2] - x[3]*x[3];
   g[1] = 8.*x[2]*(x[2]*x[2]-x[1])
-    - 2.*(1.-x[2]) + 4.*(x[2]-x[3]*x[3]) + x[3] - x[4]*x[4];
+         - 2.*(1.-x[2]) + 4.*(x[2]-x[3]*x[3]) + x[3] - x[4]*x[4];
   g[2] = 8.*x[N_-1]*(x[N_-1]*x[N_-1]-x[N_-2])
-    - 2.*(1.-x[N_-1])
-    + 4.*(x[N_-1]-x[N_]*x[N_])
-    + x[N_-2]*x[N_-2]
-    - x[N_-3];
+         - 2.*(1.-x[N_-1])
+         + 4.*(x[N_-1]-x[N_]*x[N_])
+         + x[N_-2]*x[N_-2]
+         - x[N_-3];
   g[3] = 8.*x[N_]*(x[N_]*x[N_]-x[N_-1])
-    - 2.*(1.-x[N_]) + x[N_-1]*x[N_-1] - x[N_-2];
+         - 2.*(1.-x[N_]) + x[N_-1]*x[N_-1] - x[N_-2];
   return true;
 }
 
 // return the structure or values of the jacobian
 bool LuksanVlcek7::eval_jac_g(Index n, const Number* x, bool new_x,
-                       Index m, Index nele_jac, Index* iRow, Index *jCol,
-                       Number* values)
+                              Index m, Index nele_jac, Index* iRow, Index *jCol,
+                              Number* values)
 {
   if (values == NULL) {
     // return the structure of the jacobian
@@ -244,9 +244,9 @@ bool LuksanVlcek7::eval_jac_g(Index n, const Number* x, bool new_x,
 
 //return the structure or values of the hessian
 bool LuksanVlcek7::eval_h(Index n, const Number* x, bool new_x,
-			  Number obj_factor, Index m, const Number* lambda,
-			  bool new_lambda, Index nele_hess, Index* iRow,
-			  Index* jCol, Number* values)
+                          Number obj_factor, Index m, const Number* lambda,
+                          bool new_lambda, Index nele_hess, Index* iRow,
+                          Index* jCol, Number* values)
 {
   if (values == NULL) {
     // The diagonal
@@ -298,9 +298,8 @@ bool LuksanVlcek7::eval_h(Index n, const Number* x, bool new_x,
 }
 
 void LuksanVlcek7::finalize_solution(SolverReturn status,
-                              Index n, const Number* x, const Number* z_L, const Number* z_U,
-                              Index m, const Number* g, const Number* lambda,
-                              Number obj_value)
-{
-}
+                                     Index n, const Number* x, const Number* z_L, const Number* z_U,
+                                     Index m, const Number* g, const Number* lambda,
+                                     Number obj_value)
+{}
 

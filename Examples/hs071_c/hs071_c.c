@@ -13,24 +13,24 @@
 #include <stdio.h>
 
 /* Function Declarations */
-Bool eval_f(Index n, Number* x, Bool new_x, 
-	    Number* obj_value, UserDataPtr user_data);
+Bool eval_f(Index n, Number* x, Bool new_x,
+            Number* obj_value, UserDataPtr user_data);
 
 Bool eval_grad_f(Index n, Number* x, Bool new_x,
-		 Number* grad_f, UserDataPtr user_data);
+                 Number* grad_f, UserDataPtr user_data);
 
 Bool eval_g(Index n, Number* x, Bool new_x,
-	    Index m, Number* g, UserDataPtr user_data);
+            Index m, Number* g, UserDataPtr user_data);
 
 Bool eval_jac_g(Index n, Number *x, Bool new_x,
-		Index m, Index nele_jac,
-		Index *iRow, Index *jCol, Number *values,
-		UserDataPtr user_data);
+                Index m, Index nele_jac,
+                Index *iRow, Index *jCol, Number *values,
+                UserDataPtr user_data);
 
 Bool eval_h(Index n, Number *x, Bool new_x, Number obj_factor,
-	    Index m, Number *lambda, Bool new_lambda,
-	    Index nele_hess, Index *iRow, Index *jCol,
-	    Number *values, UserDataPtr user_data);
+            Index m, Number *lambda, Bool new_lambda,
+            Index nele_hess, Index *iRow, Index *jCol,
+            Number *values, UserDataPtr user_data);
 
 /* Main Program */
 int main()
@@ -44,10 +44,10 @@ int main()
   IpoptProblem nlp = NULL;             /* IpoptProblem */
   enum ApplicationReturnStatus status; /* Solve return code */
   Number* x = NULL;                    /* starting point and solution vector */
-  Number* mult_x_L = NULL;             /* lower bound multipliers 
-					  at the solution */
-  Number* mult_x_U = NULL;             /* upper bound multipliers 
-					  at the solution */
+  Number* mult_x_L = NULL;             /* lower bound multipliers
+  					  at the solution */
+  Number* mult_x_U = NULL;             /* upper bound multipliers
+  					  at the solution */
   Number obj;                          /* objective value */
   Index i;                             /* generic counter */
 
@@ -58,8 +58,8 @@ int main()
   Index nele_hess = 10;
   /* indexing style for matrices */
   Index index_style = 0; /* C-style; start counting of rows and column
-			    indices at 0 */
-  
+  			    indices at 0 */
+
   /* set the number of variables and allocate space for the bounds */
   n=4;
   x_L = (Number*)malloc(sizeof(Number)*n);
@@ -75,14 +75,16 @@ int main()
   g_L = (Number*)malloc(sizeof(Number)*m);
   g_U = (Number*)malloc(sizeof(Number)*m);
   /* set the values of the constraint bounds */
-  g_L[0] = 25; g_U[0] = 2e19;
-  g_L[1] = 40; g_U[1] = 40;
+  g_L[0] = 25;
+  g_U[0] = 2e19;
+  g_L[1] = 40;
+  g_U[1] = 40;
 
   /* create the IpoptProblem */
   nlp = CreateIpoptProblem(n, x_L, x_U, m, g_L, g_U, nele_jac, nele_hess,
-			   index_style, &eval_f, &eval_g, &eval_grad_f, 
-			   &eval_jac_g, &eval_h);
-  
+                           index_style, &eval_f, &eval_g, &eval_grad_f,
+                           &eval_jac_g, &eval_h);
+
   /* We can free the memory now - the values for the bounds have been
      copied internally in CreateIpoptProblem */
   free(x_L);
@@ -112,21 +114,21 @@ int main()
   if (status == Solve_Succeeded) {
     printf("\n\nSolution of the primal variables, x\n");
     for (i=0; i<n; i++) {
-      printf("x[%d] = %e\n", i, x[i]); 
+      printf("x[%d] = %e\n", i, x[i]);
     }
 
     printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
     for (i=0; i<n; i++) {
-      printf("z_L[%d] = %e\n", i, mult_x_L[i]); 
+      printf("z_L[%d] = %e\n", i, mult_x_L[i]);
     }
     for (i=0; i<n; i++) {
-      printf("z_U[%d] = %e\n", i, mult_x_U[i]); 
+      printf("z_U[%d] = %e\n", i, mult_x_U[i]);
     }
 
     printf("\n\nObjective value\n");
-    printf("f(x*) = %e\n", obj); 
+    printf("f(x*) = %e\n", obj);
   }
- 
+
   /* free allocated memory */
   FreeIpoptProblem(nlp);
   free(x);
@@ -138,8 +140,8 @@ int main()
 
 
 /* Function Implementations */
-Bool eval_f(Index n, Number* x, Bool new_x, 
-	    Number* obj_value, UserDataPtr user_data)
+Bool eval_f(Index n, Number* x, Bool new_x,
+            Number* obj_value, UserDataPtr user_data)
 {
   assert(n == 4);
 
@@ -149,7 +151,7 @@ Bool eval_f(Index n, Number* x, Bool new_x,
 }
 
 Bool eval_grad_f(Index n, Number* x, Bool new_x,
-		 Number* grad_f, UserDataPtr user_data)
+                 Number* grad_f, UserDataPtr user_data)
 {
   assert(n == 4);
 
@@ -162,7 +164,7 @@ Bool eval_grad_f(Index n, Number* x, Bool new_x,
 }
 
 Bool eval_g(Index n, Number* x, Bool new_x,
-	    Index m, Number* g, UserDataPtr user_data)
+            Index m, Number* g, UserDataPtr user_data)
 {
   assert(n == 4);
   assert(m == 2);
@@ -174,26 +176,34 @@ Bool eval_g(Index n, Number* x, Bool new_x,
 }
 
 Bool eval_jac_g(Index n, Number *x, Bool new_x,
-		Index m, Index nele_jac,
-		Index *iRow, Index *jCol, Number *values,
-		UserDataPtr user_data)
+                Index m, Index nele_jac,
+                Index *iRow, Index *jCol, Number *values,
+                UserDataPtr user_data)
 {
   if (values == NULL) {
     /* return the structure of the jacobian */
 
     /* this particular jacobian is dense */
-    iRow[0] = 0; jCol[0] = 0;
-    iRow[1] = 0; jCol[1] = 1;
-    iRow[2] = 0; jCol[2] = 2;
-    iRow[3] = 0; jCol[3] = 3;
-    iRow[4] = 1; jCol[4] = 0;
-    iRow[5] = 1; jCol[5] = 1;
-    iRow[6] = 1; jCol[6] = 2;
-    iRow[7] = 1; jCol[7] = 3;
+    iRow[0] = 0;
+    jCol[0] = 0;
+    iRow[1] = 0;
+    jCol[1] = 1;
+    iRow[2] = 0;
+    jCol[2] = 2;
+    iRow[3] = 0;
+    jCol[3] = 3;
+    iRow[4] = 1;
+    jCol[4] = 0;
+    iRow[5] = 1;
+    jCol[5] = 1;
+    iRow[6] = 1;
+    jCol[6] = 2;
+    iRow[7] = 1;
+    jCol[7] = 3;
   }
   else {
     /* return the values of the jacobian of the constraints */
-    
+
     values[0] = x[1]*x[2]*x[3]; /* 0,0 */
     values[1] = x[0]*x[2]*x[3]; /* 0,1 */
     values[2] = x[0]*x[1]*x[3]; /* 0,2 */
@@ -209,9 +219,9 @@ Bool eval_jac_g(Index n, Number *x, Bool new_x,
 }
 
 Bool eval_h(Index n, Number *x, Bool new_x, Number obj_factor,
-	    Index m, Number *lambda, Bool new_lambda,
-	    Index nele_hess, Index *iRow, Index *jCol,
-	    Number *values, UserDataPtr user_data)
+            Index m, Number *lambda, Bool new_lambda,
+            Index nele_hess, Index *iRow, Index *jCol,
+            Number *values, UserDataPtr user_data)
 {
   Index idx = 0; /* nonzero element counter */
   Index row = 0; /* row counter for loop */
@@ -224,12 +234,12 @@ Bool eval_h(Index n, Number *x, Bool new_x, Number obj_factor,
     idx=0;
     for (row = 0; row < 4; row++) {
       for (col = 0; col <= row; col++) {
-	iRow[idx] = row; 
-	jCol[idx] = col;
-	idx++;
+        iRow[idx] = row;
+        jCol[idx] = col;
+        idx++;
       }
     }
-    
+
     assert(idx == nele_hess);
   }
   else {
@@ -254,7 +264,7 @@ Bool eval_h(Index n, Number *x, Bool new_x, Number obj_factor,
 
     /* add the portion for the first constraint */
     values[1] += lambda[0] * (x[2] * x[3]);          /* 1,0 */
-    
+
     values[3] += lambda[0] * (x[1] * x[3]);          /* 2,0 */
     values[4] += lambda[0] * (x[0] * x[3]);          /* 2,1 */
 

@@ -39,16 +39,16 @@
 
 extern "C" void* killer_thread(void* arg)
 {
-   int runtime = *reinterpret_cast<int *>(arg);
-   if (runtime <= 0) {
-     printf("Invalid argument for run time (%d)\n", runtime);
-     exit(-100);
-   }
-   printf("Limiting wall clock time to %d seconds.\n", runtime);
-   sleep(runtime);
-   printf("EXIT: Exceeding wall clock time limit of %d seconds.\n", runtime);
-   exit(-999);
-   return NULL;
+  int runtime = *reinterpret_cast<int *>(arg);
+  if (runtime <= 0) {
+    printf("Invalid argument for run time (%d)\n", runtime);
+    exit(-100);
+  }
+  printf("Limiting wall clock time to %d seconds.\n", runtime);
+  sleep(runtime);
+  printf("EXIT: Exceeding wall clock time limit of %d seconds.\n", runtime);
+  exit(-999);
+  return NULL;
 }
 #endif
 //**********************************************************************
@@ -138,13 +138,13 @@ int main(int argv, char* argc[])
   }
   else
 #endif
-  if (argv!=3) {
-    printf("Usage: %s ProblemName N\n", argc[0]);
-    printf("          where N is a positive parameter determining problem size\n");
-    printf("       %s list\n", argc[0]);
-    printf("          to list all registered problems.\n");
-    return -1;
-  }
+    if (argv!=3) {
+      printf("Usage: %s ProblemName N\n", argc[0]);
+      printf("          where N is a positive parameter determining problem size\n");
+      printf("       %s list\n", argc[0]);
+      printf("          to list all registered problems.\n");
+      return -1;
+    }
 
   // Create an instance of your nlp...
   SmartPtr<RegisteredTNLP> tnlp =

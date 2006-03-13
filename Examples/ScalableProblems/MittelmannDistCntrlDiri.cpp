@@ -12,10 +12,9 @@ using namespace Ipopt;
 
 /* Constructor. */
 MittelmannDistCntrlDiriBase::MittelmannDistCntrlDiriBase()
-  :
-  y_d_(NULL)
-{
-}
+    :
+    y_d_(NULL)
+{}
 
 MittelmannDistCntrlDiriBase::~MittelmannDistCntrlDiriBase()
 {
@@ -24,8 +23,8 @@ MittelmannDistCntrlDiriBase::~MittelmannDistCntrlDiriBase()
 
 void
 MittelmannDistCntrlDiriBase::SetBaseParameters(Index N, Number alpha, Number lb_y,
-					  Number ub_y, Number lb_u, Number ub_u,
-					  Number u_init)
+    Number ub_y, Number lb_u, Number ub_u,
+    Number u_init)
 {
   N_ = N;
   h_ = 1./(N+1);
@@ -43,13 +42,13 @@ MittelmannDistCntrlDiriBase::SetBaseParameters(Index N, Number alpha, Number lb_
   for (Index j=0; j<= N_+1; j++) {
     for (Index i=0; i<= N_+1; i++) {
       y_d_[y_index(i,j)] = y_d_cont(x1_grid(i),x2_grid(j));
-    } 
+    }
   }
 }
 
 bool MittelmannDistCntrlDiriBase::get_nlp_info(
-   Index& n, Index& m, Index& nnz_jac_g, 
-   Index& nnz_h_lag, IndexStyleEnum& index_style)
+  Index& n, Index& m, Index& nnz_jac_g,
+  Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
   // We for each of the N_+2 times N_+2 mesh points we have the value
   // of the functions y, and for each N_ tiems N_ interior mesh points
@@ -80,7 +79,7 @@ bool MittelmannDistCntrlDiriBase::get_nlp_info(
 
 bool
 MittelmannDistCntrlDiriBase::get_bounds_info(Index n, Number* x_l, Number* x_u,
-					Index m, Number* g_l, Number* g_u)
+    Index m, Number* g_l, Number* g_u)
 {
   // Set overall bounds on the variables
   for (Index i=0; i<=N_+1; i++) {
@@ -127,9 +126,9 @@ MittelmannDistCntrlDiriBase::get_bounds_info(Index n, Number* x_l, Number* x_u,
 
 bool
 MittelmannDistCntrlDiriBase::get_starting_point(Index n, bool init_x, Number* x,
-					   bool init_z, Number* z_L, Number* z_U,
-					   Index m, bool init_lambda,
-					   Number* lambda)
+    bool init_z, Number* z_L, Number* z_U,
+    Index m, bool init_lambda,
+    Number* lambda)
 {
   // Here, we assume we only have starting values for x, if you code
   // your own NLP, you can provide starting values for the others if
@@ -159,8 +158,8 @@ MittelmannDistCntrlDiriBase::get_starting_point(Index n, bool init_x, Number* x,
 
 bool
 MittelmannDistCntrlDiriBase::get_scaling_parameters(Number& obj_scaling,
-					       bool& use_x_scaling, Index n, Number* x_scaling,
-					       bool& use_g_scaling, Index m, Number* g_scaling)
+    bool& use_x_scaling, Index n, Number* x_scaling,
+    bool& use_g_scaling, Index m, Number* g_scaling)
 {
   obj_scaling = 1./hh_;
   use_x_scaling = false;
@@ -170,7 +169,7 @@ MittelmannDistCntrlDiriBase::get_scaling_parameters(Number& obj_scaling,
 
 bool
 MittelmannDistCntrlDiriBase::eval_f(Index n, const Number* x,
-			       bool new_x, Number& obj_value)
+                                    bool new_x, Number& obj_value)
 {
   // return the value of the objective function
   obj_value = 0.;
@@ -187,8 +186,8 @@ MittelmannDistCntrlDiriBase::eval_f(Index n, const Number* x,
     Number usum = 0.;
     for (Index i=1; i<=N_; i++) {
       for (Index j=1; j<= N_; j++) {
-	Index iu = u_index(i,j);
-	usum += x[iu]*x[iu];
+        Index iu = u_index(i,j);
+        usum += x[iu]*x[iu];
       }
     }
     obj_value += alpha_*hh_/2.*usum;
@@ -227,16 +226,16 @@ MittelmannDistCntrlDiriBase::eval_grad_f(Index n, const Number* x, bool new_x, N
   if (alpha_>0.) {
     for (Index i=1; i<=N_; i++) {
       for (Index j=1; j<= N_; j++) {
-	Index iu = u_index(i,j);
-	grad_f[iu] = alpha_*hh_*x[iu];
+        Index iu = u_index(i,j);
+        grad_f[iu] = alpha_*hh_*x[iu];
       }
     }
   }
   else {
     for (Index i=1; i<=N_; i++) {
       for (Index j=1; j<=N_; j++) {
-	Index iu = u_index(i,j);
-	grad_f[iu] = 0.;
+        Index iu = u_index(i,j);
+        grad_f[iu] = 0.;
       }
     }
   }
@@ -245,7 +244,7 @@ MittelmannDistCntrlDiriBase::eval_grad_f(Index n, const Number* x, bool new_x, N
 }
 
 bool MittelmannDistCntrlDiriBase::eval_g(Index n, const Number* x, bool new_x,
-				    Index m, Number* g)
+    Index m, Number* g)
 {
   // return the value of the constraints: g(x)
 
@@ -256,12 +255,12 @@ bool MittelmannDistCntrlDiriBase::eval_g(Index n, const Number* x, bool new_x,
 
       // Start with the discretized Laplacian operator
       val = 4.* x[y_index(i,j)]
-	- x[y_index(i-1,j)] - x[y_index(i+1,j)]
-	- x[y_index(i,j-1)] - x[y_index(i,j+1)];
+            - x[y_index(i-1,j)] - x[y_index(i+1,j)]
+            - x[y_index(i,j-1)] - x[y_index(i,j+1)];
 
       // Add the forcing term (including the step size here)
       val += hh_*d_cont(x1_grid(i), x2_grid(j),
-			x[y_index(i,j)], x[u_index(i,j)]);
+                        x[y_index(i,j)], x[u_index(i,j)]);
       g[pde_index(i,j)] = val;
     }
   }
@@ -270,8 +269,8 @@ bool MittelmannDistCntrlDiriBase::eval_g(Index n, const Number* x, bool new_x,
 }
 
 bool MittelmannDistCntrlDiriBase::eval_jac_g(Index n, const Number* x, bool new_x,
-                       Index m, Index nele_jac, Index* iRow, Index *jCol,
-                       Number* values)
+    Index m, Index nele_jac, Index* iRow, Index *jCol,
+    Number* values)
 {
   if (values == NULL) {
     // return the structure of the jacobian of the constraints
@@ -279,37 +278,37 @@ bool MittelmannDistCntrlDiriBase::eval_jac_g(Index n, const Number* x, bool new_
     Index ijac = 0;
     for (Index i=1; i<= N_; i++) {
       for (Index j=1; j<= N_; j++) {
-	Index ig = pde_index(i,j);
+        Index ig = pde_index(i,j);
 
-	// y(i,j)
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(i,j);
-	ijac++;
+        // y(i,j)
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(i,j);
+        ijac++;
 
-	// y(i-1,j)
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(i-1,j);
-	ijac++;
+        // y(i-1,j)
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(i-1,j);
+        ijac++;
 
-	// y(i+1,j)
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(i+1,j);
-	ijac++;
+        // y(i+1,j)
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(i+1,j);
+        ijac++;
 
-	// y(i,j-1)
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(i,j-1);
-	ijac++;
+        // y(i,j-1)
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(i,j-1);
+        ijac++;
 
-	// y(i,j+1)
-	iRow[ijac] = ig;
-	jCol[ijac] = y_index(i,j+1);
-	ijac++;
+        // y(i,j+1)
+        iRow[ijac] = ig;
+        jCol[ijac] = y_index(i,j+1);
+        ijac++;
 
-	// u(i,j)
-	iRow[ijac] = ig;
-	jCol[ijac] = u_index(i,j);
-	ijac++;
+        // u(i,j)
+        iRow[ijac] = ig;
+        jCol[ijac] = u_index(i,j);
+        ijac++;
       }
     }
 
@@ -320,31 +319,31 @@ bool MittelmannDistCntrlDiriBase::eval_jac_g(Index n, const Number* x, bool new_
     Index ijac = 0;
     for (Index i=1; i<= N_; i++) {
       for (Index j=1; j<= N_; j++) {
-	// y(i,j)
-	values[ijac] = 4. + hh_*d_cont_dy(x1_grid(i), x2_grid(j),
-					  x[y_index(i,j)], x[u_index(i,j)]);
-	ijac++;
+        // y(i,j)
+        values[ijac] = 4. + hh_*d_cont_dy(x1_grid(i), x2_grid(j),
+                                          x[y_index(i,j)], x[u_index(i,j)]);
+        ijac++;
 
-	// y(i-1,j)
-	values[ijac] = -1.;
-	ijac++;
+        // y(i-1,j)
+        values[ijac] = -1.;
+        ijac++;
 
-	// y(i+1,j)
-	values[ijac] = -1.;
-	ijac++;
+        // y(i+1,j)
+        values[ijac] = -1.;
+        ijac++;
 
-	// y(1,j-1)
-	values[ijac] = -1.;
-	ijac++;
+        // y(1,j-1)
+        values[ijac] = -1.;
+        ijac++;
 
-	// y(1,j+1)
-	values[ijac] = -1.;
-	ijac++;
+        // y(1,j+1)
+        values[ijac] = -1.;
+        ijac++;
 
-	// y(i,j)
-	values[ijac] = hh_*d_cont_du(x1_grid(i), x2_grid(j),
-				     x[y_index(i,j)], x[u_index(i,j)]);
-	ijac++;
+        // y(i,j)
+        values[ijac] = hh_*d_cont_du(x1_grid(i), x2_grid(j),
+                                     x[y_index(i,j)], x[u_index(i,j)]);
+        ijac++;
       }
     }
 
@@ -356,10 +355,10 @@ bool MittelmannDistCntrlDiriBase::eval_jac_g(Index n, const Number* x, bool new_
 
 bool
 MittelmannDistCntrlDiriBase::eval_h(Index n, const Number* x, bool new_x,
-			       Number obj_factor, Index m,
-			       const Number* lambda,
-			       bool new_lambda, Index nele_hess, Index* iRow,
-			       Index* jCol, Number* values)
+                                    Number obj_factor, Index m,
+                                    const Number* lambda,
+                                    bool new_lambda, Index nele_hess, Index* iRow,
+                                    Index* jCol, Number* values)
 {
   if (values == NULL) {
     // return the structure. This is a symmetric matrix, fill the lower left
@@ -369,21 +368,21 @@ MittelmannDistCntrlDiriBase::eval_h(Index n, const Number* x, bool new_x,
     // First the diagonal entries for y(i,j)
     for (Index i=1; i<= N_; i++) {
       for (Index j=1; j<= N_; j++) {
-	iRow[ihes] = y_index(i,j);
-	jCol[ihes] = y_index(i,j);
-	ihes++;
+        iRow[ihes] = y_index(i,j);
+        jCol[ihes] = y_index(i,j);
+        ihes++;
       }
     }
 
     if (alpha_>0.) {
       // Now the diagonal entries for u(i,j)
       for (Index i=1; i<= N_; i++) {
-	for (Index j=1; j<= N_; j++) {
-	  iRow[ihes] = u_index(i,j);
-	  jCol[ihes] = u_index(i,j);
-	  ihes++;
-	}
-      }      
+        for (Index j=1; j<= N_; j++) {
+          iRow[ihes] = u_index(i,j);
+          jCol[ihes] = u_index(i,j);
+          ihes++;
+        }
+      }
     }
 
     DBG_ASSERT(ihes==nele_hess);
@@ -396,26 +395,26 @@ MittelmannDistCntrlDiriBase::eval_h(Index n, const Number* x, bool new_x,
     for (Index i=1; i<= N_; i++) {
       for (Index j=1; j<= N_; j++) {
 
-	// Contribution from the objective function
-	values[ihes] = obj_factor*hh_;
+        // Contribution from the objective function
+        values[ihes] = obj_factor*hh_;
 
-	// Contribution from the PDE constraint
-	values[ihes] += lambda[pde_index(i,j)] * hh_ *
-	  d_cont_dydy(x1_grid(i), x2_grid(j),
-		      x[y_index(i,j)], x[u_index(i,j)]);
+        // Contribution from the PDE constraint
+        values[ihes] += lambda[pde_index(i,j)] * hh_ *
+                        d_cont_dydy(x1_grid(i), x2_grid(j),
+                                    x[y_index(i,j)], x[u_index(i,j)]);
 
-	ihes++;
+        ihes++;
       }
     }
 
     // Now the diagonal entries for u(i,j)
     if (alpha_>0.) {
       for (Index i=1; i<= N_; i++) {
-	for (Index j=1; j<= N_; j++) {
-	  // Contribution from the objective function
-	  values[ihes] = obj_factor*hh_*alpha_;
-	  ihes++;
-	}
+        for (Index j=1; j<= N_; j++) {
+          // Contribution from the objective function
+          values[ihes] = obj_factor*hh_*alpha_;
+          ihes++;
+        }
       }
     }
 

@@ -14,7 +14,7 @@
 
 using namespace Ipopt;
 
-/** Class implemented the NLP discretization of 
+/** Class implemented the NLP discretization of
  *
  */
 class RegisteredTNLP : public TNLP
@@ -33,12 +33,13 @@ public:
   {
     RegisterTNLP(tnlp, name);
   }
-  virtual ~RegisteredTNLPs() {}
+  virtual ~RegisteredTNLPs()
+  {}
   static SmartPtr<RegisteredTNLP> GetTNLP(const std::string name);
   static void PrintRegisteredProblems();
 private:
   void RegisterTNLP(const SmartPtr<RegisteredTNLP>& tnlp,
-		    const std::string name);
+                    const std::string name);
   SmartPtr<RegisteredTNLP> tnlp_;
 };
 

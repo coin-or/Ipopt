@@ -26,7 +26,9 @@ public:
   LuksanVlcek6(Number g_l, Number g_u);
 
   /** Default destructor */
-  virtual ~LuksanVlcek6() {};
+  virtual ~LuksanVlcek6()
+  {}
+  ;
 
   /** Overloaded from RegisteredTNLP. */
   virtual bool InitializeProblem(Index N);

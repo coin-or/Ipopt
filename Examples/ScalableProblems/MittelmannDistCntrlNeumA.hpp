@@ -87,10 +87,10 @@ public:
 
   /** Method for returning scaling parameters */
   virtual bool get_scaling_parameters(Number& obj_scaling,
-				      bool& use_x_scaling, Index n,
-				      Number* x_scaling,
-				      bool& use_g_scaling, Index m,
-				      Number* g_scaling);
+                                      bool& use_x_scaling, Index n,
+                                      Number* x_scaling,
+                                      bool& use_g_scaling, Index m,
+                                      Number* g_scaling);
 
   /** @name Solution Methods */
   //@{
@@ -107,9 +107,9 @@ protected:
    *  problem. It must be called by the child class in its
    *  implementation of InitializeParameters. */
   void SetBaseParameters(Index N, Number lb_y,
-			 Number ub_y, Number lb_u, Number ub_u,
-			 Number b_0j, Number b_1j, Number b_i0, Number b_i1,
-			 Number u_init);
+                         Number ub_y, Number lb_u, Number ub_u,
+                         Number b_0j, Number b_1j, Number b_i0, Number b_i1,
+                         Number u_init);
 
   /**@name Functions that defines a particular instance. */
   //@{
@@ -213,25 +213,30 @@ private:
   //@{
   /** Translation of mesh point indices to NLP variable indices for
    *  y(x_ij) */
-  inline Index y_index(Index i, Index j) const {
+  inline Index y_index(Index i, Index j) const
+  {
     return j + (N_+2)*i;
   }
   /** Translation of mesh point indices to NLP variable indices for
    *  u(x_ij) */
-  inline Index u_index(Index i, Index j) const {
+  inline Index u_index(Index i, Index j) const
+  {
     return (N_+2)*(N_+2) + (j-1) + (N_)*(i-1);
   }
   /** Translation of interior mesh point indices to the corresponding
    *  PDE constraint number */
-  inline Index pde_index(Index i, Index j) const {
+  inline Index pde_index(Index i, Index j) const
+  {
     return (j-1) + N_*(i-1);
   }
   /** Compute the grid coordinate for given index in x1 direction */
-  inline Number x1_grid(Index i) const {
+  inline Number x1_grid(Index i) const
+  {
     return h_*(Number)i;
   }
   /** Compute the grid coordinate for given index in x2 direction */
-  inline Number x2_grid(Index i) const {
+  inline Number x2_grid(Index i) const
+  {
     return h_*(Number)i;
   }
   //@}
@@ -242,12 +247,13 @@ class MittelmannDistCntrlNeumA1 : public MittelmannDistCntrlNeumABase
 {
 public:
   MittelmannDistCntrlNeumA1()
-    : 
-    pi_(4.*atan(1.)),
-    alpha_(0.001)
+      :
+      pi_(4.*atan(1.)),
+      alpha_(0.001)
   {}
 
-  virtual ~MittelmannDistCntrlNeumA1() {}
+  virtual ~MittelmannDistCntrlNeumA1()
+  {}
 
   virtual bool InitializeProblem(Index N)
   {
@@ -270,87 +276,106 @@ public:
   }
 protected:
   /** Target profile function for y */
-  virtual Number y_d_cont(Number x1, Number x2)  const {
+  virtual Number y_d_cont(Number x1, Number x2)  const
+  {
     return sin(2.*pi_*x1)*sin(2.*pi_*x2);
   }
   /** Integrant in objective function */
-  virtual Number fint_cont(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont(Number x1, Number x2, Number y, Number u) const
+  {
     Number diff_y = y-y_d_cont(x1,x2);
     return 0.5*(diff_y*diff_y + alpha_*u*u);
   }
   /** First partial derivative of fint_cont w.r.t. y */
-  virtual Number fint_cont_dy(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dy(Number x1, Number x2, Number y, Number u) const
+  {
     return  y-y_d_cont(x1,x2);
   }
 
   /** First partial derivative of fint_cont w.r.t. u */
-  virtual Number fint_cont_du(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_du(Number x1, Number x2, Number y, Number u) const
+  {
     return alpha_*u;
   }
   /** Second partial derivative of fint_cont w.r.t. y,y */
-  virtual Number fint_cont_dydy(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dydy(Number x1, Number x2, Number y, Number u) const
+  {
     return 1.;
   }
   /** returns true if second partial derivative of fint_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool fint_cont_dydy_alwayszero() const {
+  virtual bool fint_cont_dydy_alwayszero() const
+  {
     return false;
   }
   /** Second partial derivative of fint_cont w.r.t. u,u */
-  virtual Number fint_cont_dudu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dudu(Number x1, Number x2, Number y, Number u) const
+  {
     return alpha_;
   }
   /** returns true if second partial derivative of fint_cont
    *  w.r.t. u,u is always zero. */
-  virtual bool fint_cont_dudu_alwayszero() const {
+  virtual bool fint_cont_dudu_alwayszero() const
+  {
     return false;
   }
   /** Second partial derivative of fint_cont w.r.t. y,u */
-  virtual Number fint_cont_dydu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dydu(Number x1, Number x2, Number y, Number u) const
+  {
     return 0.;
   }
   /** returns true if second partial derivative of fint_cont
    *  w.r.t. y,u is always zero. */
-  virtual bool fint_cont_dydu_alwayszero() const {
+  virtual bool fint_cont_dydu_alwayszero() const
+  {
     return true;
   }
   /** Forcing function for the elliptic equation */
-  virtual Number d_cont(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont(Number x1, Number x2, Number y, Number u)  const
+  {
     return -exp(y) - u;
   }
   /** First partial derivative of forcing function w.r.t. y */
-  virtual Number d_cont_dy(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont_dy(Number x1, Number x2, Number y, Number u)  const
+  {
     return -exp(y);
   }
   /** First partial derivative of forcing function w.r.t. u */
-  virtual Number d_cont_du(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont_du(Number x1, Number x2, Number y, Number u)  const
+  {
     return -1.;
   }
   /** Second partial derivative of forcing function w.r.t y,y */
-  virtual Number d_cont_dydy(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont_dydy(Number x1, Number x2, Number y, Number u)  const
+  {
     return -exp(y);
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool d_cont_dydy_alwayszero() const {
+  virtual bool d_cont_dydy_alwayszero() const
+  {
     return false;
   }
   /** Second partial derivative of forcing function w.r.t. u,u */
-  virtual Number d_cont_dudu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number d_cont_dudu(Number x1, Number x2, Number y, Number u) const
+  {
     return 0.;
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool d_cont_dudu_alwayszero() const {
+  virtual bool d_cont_dudu_alwayszero() const
+  {
     return true;
   }
   /** Second partial derivative of forcing function w.r.t. y,u */
-  virtual Number d_cont_dydu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number d_cont_dydu(Number x1, Number x2, Number y, Number u) const
+  {
     return 0.;
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,u is always zero. */
-  virtual bool d_cont_dydu_alwayszero() const {
+  virtual bool d_cont_dydu_alwayszero() const
+  {
     return true;
   }
 private:
@@ -370,11 +395,12 @@ class MittelmannDistCntrlNeumA2 : public MittelmannDistCntrlNeumABase
 {
 public:
   MittelmannDistCntrlNeumA2()
-    : 
-    pi_(4.*atan(1.))
+      :
+      pi_(4.*atan(1.))
   {}
 
-  virtual ~MittelmannDistCntrlNeumA2() {}
+  virtual ~MittelmannDistCntrlNeumA2()
+  {}
 
   virtual bool InitializeProblem(Index N)
   {
@@ -397,87 +423,106 @@ public:
   }
 protected:
   /** Target profile function for y */
-  virtual Number y_d_cont(Number x1, Number x2)  const {
+  virtual Number y_d_cont(Number x1, Number x2)  const
+  {
     return sin(2.*pi_*x1)*sin(2.*pi_*x2);
   }
   /** Integrant in objective function */
-  virtual Number fint_cont(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont(Number x1, Number x2, Number y, Number u) const
+  {
     Number diff_y = y-y_d_cont(x1,x2);
     return 0.5*diff_y*diff_y;
   }
   /** First partial derivative of fint_cont w.r.t. y */
-  virtual Number fint_cont_dy(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dy(Number x1, Number x2, Number y, Number u) const
+  {
     return  y-y_d_cont(x1,x2);
   }
 
   /** First partial derivative of fint_cont w.r.t. u */
-  virtual Number fint_cont_du(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_du(Number x1, Number x2, Number y, Number u) const
+  {
     return 0.;
   }
   /** Second partial derivative of fint_cont w.r.t. y,y */
-  virtual Number fint_cont_dydy(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dydy(Number x1, Number x2, Number y, Number u) const
+  {
     return 1.;
   }
   /** returns true if second partial derivative of fint_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool fint_cont_dydy_alwayszero() const {
+  virtual bool fint_cont_dydy_alwayszero() const
+  {
     return false;
   }
   /** Second partial derivative of fint_cont w.r.t. u,u */
-  virtual Number fint_cont_dudu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dudu(Number x1, Number x2, Number y, Number u) const
+  {
     return 0.;
   }
   /** returns true if second partial derivative of fint_cont
    *  w.r.t. u,u is always zero. */
-  virtual bool fint_cont_dudu_alwayszero() const {
+  virtual bool fint_cont_dudu_alwayszero() const
+  {
     return true;
   }
   /** Second partial derivative of fint_cont w.r.t. y,u */
-  virtual Number fint_cont_dydu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dydu(Number x1, Number x2, Number y, Number u) const
+  {
     return 0.;
   }
   /** returns true if second partial derivative of fint_cont
    *  w.r.t. y,u is always zero. */
-  virtual bool fint_cont_dydu_alwayszero() const {
+  virtual bool fint_cont_dydu_alwayszero() const
+  {
     return true;
   }
   /** Forcing function for the elliptic equation */
-  virtual Number d_cont(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont(Number x1, Number x2, Number y, Number u)  const
+  {
     return -exp(y) - u;
   }
   /** First partial derivative of forcing function w.r.t. y */
-  virtual Number d_cont_dy(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont_dy(Number x1, Number x2, Number y, Number u)  const
+  {
     return -exp(y);
   }
   /** First partial derivative of forcing function w.r.t. u */
-  virtual Number d_cont_du(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont_du(Number x1, Number x2, Number y, Number u)  const
+  {
     return -1.;
   }
   /** Second partial derivative of forcing function w.r.t y,y */
-  virtual Number d_cont_dydy(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont_dydy(Number x1, Number x2, Number y, Number u)  const
+  {
     return -exp(y);
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool d_cont_dydy_alwayszero() const {
+  virtual bool d_cont_dydy_alwayszero() const
+  {
     return false;
   }
   /** Second partial derivative of forcing function w.r.t. u,u */
-  virtual Number d_cont_dudu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number d_cont_dudu(Number x1, Number x2, Number y, Number u) const
+  {
     return 0.;
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool d_cont_dudu_alwayszero() const {
+  virtual bool d_cont_dudu_alwayszero() const
+  {
     return true;
   }
   /** Second partial derivative of forcing function w.r.t. y,u */
-  virtual Number d_cont_dydu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number d_cont_dydu(Number x1, Number x2, Number y, Number u) const
+  {
     return 0.;
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,u is always zero. */
-  virtual bool d_cont_dydu_alwayszero() const {
+  virtual bool d_cont_dydu_alwayszero() const
+  {
     return true;
   }
 private:
@@ -495,14 +540,15 @@ class MittelmannDistCntrlNeumA3 : public MittelmannDistCntrlNeumABase
 {
 public:
   MittelmannDistCntrlNeumA3()
-    : 
-    pi_(4.*atan(1.)),
-    M_(1.),
-    K_(0.8),
-    b_(1.)
+      :
+      pi_(4.*atan(1.)),
+      M_(1.),
+      K_(0.8),
+      b_(1.)
   {}
 
-  virtual ~MittelmannDistCntrlNeumA3() {}
+  virtual ~MittelmannDistCntrlNeumA3()
+  {}
 
   virtual bool InitializeProblem(Index N)
   {
@@ -525,86 +571,105 @@ public:
   }
 protected:
   /** Profile function for initial y */
-  virtual Number y_d_cont(Number x1, Number x2)  const {
+  virtual Number y_d_cont(Number x1, Number x2)  const
+  {
     return 6.;
   }
   /** Integrant in objective function */
-  virtual Number fint_cont(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont(Number x1, Number x2, Number y, Number u) const
+  {
     return u*(M_*u - K_*y);
   }
   /** First partial derivative of fint_cont w.r.t. y */
-  virtual Number fint_cont_dy(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dy(Number x1, Number x2, Number y, Number u) const
+  {
     return -K_*u;
   }
 
   /** First partial derivative of fint_cont w.r.t. u */
-  virtual Number fint_cont_du(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_du(Number x1, Number x2, Number y, Number u) const
+  {
     return 2.*M_*u - K_*y;
   }
   /** Second partial derivative of fint_cont w.r.t. y,y */
-  virtual Number fint_cont_dydy(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dydy(Number x1, Number x2, Number y, Number u) const
+  {
     return 0.;
   }
   /** returns true if second partial derivative of fint_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool fint_cont_dydy_alwayszero() const {
+  virtual bool fint_cont_dydy_alwayszero() const
+  {
     return true;
   }
   /** Second partial derivative of fint_cont w.r.t. u,u */
-  virtual Number fint_cont_dudu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dudu(Number x1, Number x2, Number y, Number u) const
+  {
     return 2.*M_;
   }
   /** returns true if second partial derivative of fint_cont
    *  w.r.t. u,u is always zero. */
-  virtual bool fint_cont_dudu_alwayszero() const {
+  virtual bool fint_cont_dudu_alwayszero() const
+  {
     return false;
   }
   /** Second partial derivative of fint_cont w.r.t. y,u */
-  virtual Number fint_cont_dydu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number fint_cont_dydu(Number x1, Number x2, Number y, Number u) const
+  {
     return -K_;
   }
   /** returns true if second partial derivative of fint_cont
    *  w.r.t. y,u is always zero. */
-  virtual bool fint_cont_dydu_alwayszero() const {
+  virtual bool fint_cont_dydu_alwayszero() const
+  {
     return false;
   }
   /** Forcing function for the elliptic equation */
-  virtual Number d_cont(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont(Number x1, Number x2, Number y, Number u)  const
+  {
     return y*(u + b_*y - a(x1,x2));
   }
   /** First partial derivative of forcing function w.r.t. y */
-  virtual Number d_cont_dy(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont_dy(Number x1, Number x2, Number y, Number u)  const
+  {
     return (u + 2.*b_*y -a(x1,x2));
   }
   /** First partial derivative of forcing function w.r.t. u */
-  virtual Number d_cont_du(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont_du(Number x1, Number x2, Number y, Number u)  const
+  {
     return y;
   }
   /** Second partial derivative of forcing function w.r.t y,y */
-  virtual Number d_cont_dydy(Number x1, Number x2, Number y, Number u)  const {
+  virtual Number d_cont_dydy(Number x1, Number x2, Number y, Number u)  const
+  {
     return 2.*b_;
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool d_cont_dydy_alwayszero() const {
+  virtual bool d_cont_dydy_alwayszero() const
+  {
     return false;
   }
   /** Second partial derivative of forcing function w.r.t. u,u */
-  virtual Number d_cont_dudu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number d_cont_dudu(Number x1, Number x2, Number y, Number u) const
+  {
     return 0.;
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool d_cont_dudu_alwayszero() const {
+  virtual bool d_cont_dudu_alwayszero() const
+  {
     return true;
   }
   /** Second partial derivative of forcing function w.r.t. y,u */
-  virtual Number d_cont_dydu(Number x1, Number x2, Number y, Number u) const {
+  virtual Number d_cont_dydu(Number x1, Number x2, Number y, Number u) const
+  {
     return 1.;
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,u is always zero. */
-  virtual bool d_cont_dydu_alwayszero() const {
+  virtual bool d_cont_dydu_alwayszero() const
+  {
     return false;
   }
 private:
@@ -622,7 +687,8 @@ private:
   const Number b_;
   //@}
   //* Auxiliary function for state equation */
-  inline Number a(Number x1, Number x2) const {
+  inline Number a(Number x1, Number x2) const
+  {
     return 7. + 4.*sin(2.*pi_*x1*x2);
   }
 };

@@ -17,8 +17,8 @@ MyNLP::MyNLP()
 MyNLP::~MyNLP()
 {}
 
-bool MyNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g, 
-			 Index& nnz_h_lag, IndexStyleEnum& index_style)
+bool MyNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
+                         Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
   // The problem described in MyNLP.hpp has 2 variables, x1, & x2,
   n = 2;

@@ -86,10 +86,10 @@ public:
 
   /** Method for returning scaling parameters */
   virtual bool get_scaling_parameters(Number& obj_scaling,
-				      bool& use_x_scaling, Index n,
-				      Number* x_scaling,
-				      bool& use_g_scaling, Index m,
-				      Number* g_scaling);
+                                      bool& use_x_scaling, Index n,
+                                      Number* x_scaling,
+                                      bool& use_g_scaling, Index m,
+                                      Number* g_scaling);
 
   /** @name Solution Methods */
   //@{
@@ -106,8 +106,8 @@ protected:
    *  problem. It must be called by the child class in its
    *  implementation of InitializeParameters. */
   void SetBaseParameters(Index N, Number alpha, Number lb_y,
-			 Number ub_y, Number lb_u, Number ub_u,
-			 Number u_init);
+                         Number ub_y, Number lb_u, Number ub_u,
+                         Number u_init);
 
   /**@name Functions that defines a particular instance. */
   //@{
@@ -180,35 +180,42 @@ private:
   //@{
   /** Translation of mesh point indices to NLP variable indices for
    *  y(x_ij) */
-  inline Index y_index(Index i, Index j) const {
+  inline Index y_index(Index i, Index j) const
+  {
     return j + (N_+2)*i;
   }
   /** Translation of mesh point indices to NLP variable indices for
    *  u(x_ij) on {0} x (0,1) boudnary*/
-  inline Index u0j_index(Index j) const {
+  inline Index u0j_index(Index j) const
+  {
     return (N_+2)*(N_+2) + j-1;
   }
   /** Translation of mesh point indices to NLP variable indices for
    *  u(x_ij) on {1} x (0,1) boudnary*/
-  inline Index u1j_index(Index j) const {
+  inline Index u1j_index(Index j) const
+  {
     return (N_+2)*(N_+2) + N_ + j-1;
   }
   /** Translation of mesh point indices to NLP variable indices for
    *  u(x_ij) on (0,1) x {0} boudnary*/
-  inline Index ui0_index(Index j) const {
+  inline Index ui0_index(Index j) const
+  {
     return (N_+2)*(N_+2) + 2*N_ + j-1;
   }
   /** Translation of mesh point indices to NLP variable indices for
    *  u(x_ij) on (0,1) x {1} boudnary*/
-  inline Index ui1_index(Index j) const {
+  inline Index ui1_index(Index j) const
+  {
     return (N_+2)*(N_+2) + 3*N_ + j-1;
   }
   /** Compute the grid coordinate for given index in x1 direction */
-  inline Number x1_grid(Index i) const {
+  inline Number x1_grid(Index i) const
+  {
     return h_*(Number)i;
   }
   /** Compute the grid coordinate for given index in x2 direction */
-  inline Number x2_grid(Index j) const {
+  inline Number x2_grid(Index j) const
+  {
     return h_*(Number)j;
   }
   //@}
@@ -221,7 +228,8 @@ public:
   MittelmannBndryCntrlNeum1()
   {}
 
-  virtual ~MittelmannBndryCntrlNeum1() {}
+  virtual ~MittelmannBndryCntrlNeum1()
+  {}
 
   virtual bool InitializeProblem(Index N)
   {
@@ -241,24 +249,29 @@ public:
   }
 protected:
   /** Target profile function for y */
-  virtual Number y_d_cont(Number x1, Number x2)  const {
+  virtual Number y_d_cont(Number x1, Number x2)  const
+  {
     return 2. - 2.*(x1*(x1-1.) + x2*(x2-1.));
   }
   /** Forcing function for the elliptic equation */
-  virtual Number d_cont(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont(Number x1, Number x2, Number y)  const
+  {
     return 0.;
   }
   /** First partial derivative of forcing function w.r.t. y */
-  virtual Number d_cont_dy(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont_dy(Number x1, Number x2, Number y)  const
+  {
     return 0.;
   }
   /** Second partial derivative of forcing function w.r.t y,y */
-  virtual Number d_cont_dydy(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont_dydy(Number x1, Number x2, Number y)  const
+  {
     return 0.;
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool d_cont_dydy_alwayszero() const {
+  virtual bool d_cont_dydy_alwayszero() const
+  {
     return true;
   }
   /** Function in Neuman boundary condition */
@@ -302,7 +315,8 @@ public:
   MittelmannBndryCntrlNeum2()
   {}
 
-  virtual ~MittelmannBndryCntrlNeum2() {}
+  virtual ~MittelmannBndryCntrlNeum2()
+  {}
 
   virtual bool InitializeProblem(Index N)
   {
@@ -322,24 +336,29 @@ public:
   }
 protected:
   /** Target profile function for y */
-  virtual Number y_d_cont(Number x1, Number x2)  const {
+  virtual Number y_d_cont(Number x1, Number x2)  const
+  {
     return 2. - 2.*(x1*(x1-1.) + x2*(x2-1.));
   }
   /** Forcing function for the elliptic equation */
-  virtual Number d_cont(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont(Number x1, Number x2, Number y)  const
+  {
     return 0.;
   }
   /** First partial derivative of forcing function w.r.t. y */
-  virtual Number d_cont_dy(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont_dy(Number x1, Number x2, Number y)  const
+  {
     return 0.;
   }
   /** Second partial derivative of forcing function w.r.t y,y */
-  virtual Number d_cont_dydy(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont_dydy(Number x1, Number x2, Number y)  const
+  {
     return 0.;
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool d_cont_dydy_alwayszero() const {
+  virtual bool d_cont_dydy_alwayszero() const
+  {
     return true;
   }
   /** Function in Neuman boundary condition */
@@ -383,7 +402,8 @@ public:
   MittelmannBndryCntrlNeum3()
   {}
 
-  virtual ~MittelmannBndryCntrlNeum3() {}
+  virtual ~MittelmannBndryCntrlNeum3()
+  {}
 
   virtual bool InitializeProblem(Index N)
   {
@@ -403,24 +423,29 @@ public:
   }
 protected:
   /** Target profile function for y */
-  virtual Number y_d_cont(Number x1, Number x2)  const {
+  virtual Number y_d_cont(Number x1, Number x2)  const
+  {
     return 2. - 2.*(x1*(x1-1.) + x2*(x2-1.));
   }
   /** Forcing function for the elliptic equation */
-  virtual Number d_cont(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont(Number x1, Number x2, Number y)  const
+  {
     return y*y*y-y;
   }
   /** First partial derivative of forcing function w.r.t. y */
-  virtual Number d_cont_dy(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont_dy(Number x1, Number x2, Number y)  const
+  {
     return 3.*y*y-1.;
   }
   /** Second partial derivative of forcing function w.r.t y,y */
-  virtual Number d_cont_dydy(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont_dydy(Number x1, Number x2, Number y)  const
+  {
     return 6.*y;
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool d_cont_dydy_alwayszero() const {
+  virtual bool d_cont_dydy_alwayszero() const
+  {
     return false;
   }
   /** Function in Neuman boundary condition */
@@ -464,7 +489,8 @@ public:
   MittelmannBndryCntrlNeum4()
   {}
 
-  virtual ~MittelmannBndryCntrlNeum4() {}
+  virtual ~MittelmannBndryCntrlNeum4()
+  {}
 
   virtual bool InitializeProblem(Index N)
   {
@@ -484,24 +510,29 @@ public:
   }
 protected:
   /** Target profile function for y */
-  virtual Number y_d_cont(Number x1, Number x2)  const {
+  virtual Number y_d_cont(Number x1, Number x2)  const
+  {
     return 2. - 2.*(x1*(x1-1.) + x2*(x2-1.));
   }
   /** Forcing function for the elliptic equation */
-  virtual Number d_cont(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont(Number x1, Number x2, Number y)  const
+  {
     return y*y*y-y;
   }
   /** First partial derivative of forcing function w.r.t. y */
-  virtual Number d_cont_dy(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont_dy(Number x1, Number x2, Number y)  const
+  {
     return 3.*y*y-1.;
   }
   /** Second partial derivative of forcing function w.r.t y,y */
-  virtual Number d_cont_dydy(Number x1, Number x2, Number y)  const {
+  virtual Number d_cont_dydy(Number x1, Number x2, Number y)  const
+  {
     return 6.*y;
   }
   /** returns true if second partial derivative of d_cont
    *  w.r.t. y,y is always zero. */
-  virtual bool d_cont_dydy_alwayszero() const {
+  virtual bool d_cont_dydy_alwayszero() const
+  {
     return false;
   }
   /** Function in Neuman boundary condition */

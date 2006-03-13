@@ -13,7 +13,7 @@ using namespace Ipopt;
 
 int main(int argv, char* argc[])
 {
-  // Create a new instance of your nlp 
+  // Create a new instance of your nlp
   //  (use a SmartPtr, not raw)
   SmartPtr<TNLP> mynlp = new HS071_NLP();
 
@@ -41,7 +41,7 @@ int main(int argv, char* argc[])
   }
 
   // As the SmartPtrs go out of scope, the reference count
-  // will be decremented and the objects will automatically 
+  // will be decremented and the objects will automatically
   // be deleted.
 
   return (int) status;
