@@ -74,13 +74,13 @@ namespace Ipopt
       0, true, 1e10,
       "If the dual variables deviate from their primal estimates, a correction "
       "is performed. (See Eqn. (16) in the implementation paper.) "
-      "Setting the to value less than one disables the correction.");
+      "Setting the value to less than 1 disables the correction.");
     roptions->AddStringOption2(
       "recalc_y",
       "Tells the algorithm to recalculate the equality and inequality multipliers as least square estimates.",
       "no",
       "no", "use the Newton step to update the multipliers",
-      "yes", "use least-square mutliplier estimates",
+      "yes", "use least-square multiplier estimates",
       "This asks the algorithm to recompute the multipliers, whenever the "
       "current infeasibility is less than recalc_y_feas_tol. "
       "Choosing yes might be helpful in the quasi-Newton option.  However, "
@@ -159,10 +159,10 @@ namespace Ipopt
     options.GetNumericValue("kappa_sigma", kappa_sigma_, prefix);
     if (!options.GetBoolValue("recalc_y", recalc_y_, prefix)) {
       Index enum_int;
-      if (options.GetEnumValue("hessian_information", enum_int, prefix)) {
-        HessianInformationType hessian_information =
-          HessianInformationType(enum_int);
-        if (hessian_information==LIMITED_MEMORY) {
+      if (options.GetEnumValue("hessian_approximation", enum_int, prefix)) {
+        HessianApproximationType hessian_approximation =
+          HessianApproximationType(enum_int);
+        if (hessian_approximation==LIMITED_MEMORY) {
           recalc_y_ = true;
         }
       }

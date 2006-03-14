@@ -125,8 +125,14 @@ namespace Ipopt
 
     /** @name Solver specific options */
     //@{
+    /** Type for mathcing strategies */
+    enum PardisoMatchingStrategy {
+      COMPLETE,
+      COMPLETE2x2,
+      CONSTRAINT
+    };
     /** Option that controls the matching strategy. */
-    int match_strat_;
+    PardisoMatchingStrategy match_strat_;
     /** Flag indicating if symbolic factorization has already been
      *  performed. */
     bool have_symbolic_factorization_;

@@ -52,7 +52,7 @@ namespace Ipopt
       0e3,
       "After returning from the restoration phase, the constraint multipliers "
       "are recomputed by a least square estimate.  This option triggers when "
-      "those least-square esimates should be ignored.");
+      "those least-square estimates should be ignored.");
   }
 
   bool MinC_1NrmRestorationPhase::InitializeImpl(const OptionsList& options,

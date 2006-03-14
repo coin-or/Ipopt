@@ -156,38 +156,117 @@ namespace Ipopt
         options_->GetBoolValue("print_options_latex_mode", latex, "");
         if (latex) {
           std::list<std::string> options_to_print;
+          // Output
           options_to_print.push_back("print_level");
+          options_to_print.push_back("print_options_documentation");
+          options_to_print.push_back("output_file");
+          options_to_print.push_back("file_print_level");
+          // Termination
           options_to_print.push_back("tol");
+          options_to_print.push_back("max_iter");
           options_to_print.push_back("compl_inf_tol");
           options_to_print.push_back("dual_inf_tol");
-          options_to_print.push_back("constr_mult_init_max");
           options_to_print.push_back("constr_viol_tol");
-          options_to_print.push_back("pivtol");
-          options_to_print.push_back("pivtolmax");
-          options_to_print.push_back("mu_strategy");
-          options_to_print.push_back("mu_init");
-          options_to_print.push_back("mu_oracle");
-          options_to_print.push_back("corrector_type");
-          options_to_print.push_back("obj_scaling_factor");
-          options_to_print.push_back("nlp_scaling_method");
-          options_to_print.push_back("nlp_scaling_max_gradient");
-          options_to_print.push_back("bound_frac");
-          options_to_print.push_back("bound_mult_init_val");
-          options_to_print.push_back("bound_push");
-          options_to_print.push_back("bound_relax_factor");
+          options_to_print.push_back("acceptable_tol");
           options_to_print.push_back("acceptable_compl_inf_tol");
           options_to_print.push_back("acceptable_constr_viol_tol");
           options_to_print.push_back("acceptable_dual_inf_tol");
-          options_to_print.push_back("acceptable_tol");
           options_to_print.push_back("diverging_iterates_tol");
+          options_to_print.push_back("barrier_tol_factor");
+          // NLP scaling
+          options_to_print.push_back("obj_scaling_factor");
+          options_to_print.push_back("nlp_scaling_method");
+          options_to_print.push_back("nlp_scaling_max_gradient");
+          // NLP corrections
+          options_to_print.push_back("bound_relax_factor");
+          options_to_print.push_back("honor_original_bounds");
+          options_to_print.push_back("check_derivatives_for_naninf");
+          // Barrier parameter
+          options_to_print.push_back("mu_strategy");
+          options_to_print.push_back("mu_oracle");
+          options_to_print.push_back("quality_function_max_section_steps");
+          options_to_print.push_back("fixed_mu_oracle");
+          options_to_print.push_back("mu_init");
+          options_to_print.push_back("mu_max_fact");
+          options_to_print.push_back("mu_max");
+          options_to_print.push_back("mu_min");
+          options_to_print.push_back("mu_linear_decrease_factor");
+          options_to_print.push_back("mu_superlinear_decrease_power");
+          //options_to_print.push_back("corrector_type");
+          // Initialization
+          options_to_print.push_back("bound_frac");
+          options_to_print.push_back("bound_mult_init_val");
+          options_to_print.push_back("bound_push");
+          options_to_print.push_back("constr_mult_init_max");
+          options_to_print.push_back("bound_mult_init_val");
+          // Warm start
+          options_to_print.push_back("warm_start_init_point");
+          options_to_print.push_back("warm_start_bound_push");
+          options_to_print.push_back("warm_start_bound_frac");
+          options_to_print.push_back("warm_start_mult_bound_push");
+          options_to_print.push_back("warm_start_mult_init_max");
+          // Multiplier updates
           options_to_print.push_back("alpha_for_y");
-          options_to_print.push_back("expect_infeasible_problem");
-          options_to_print.push_back("max_iter");
-          options_to_print.push_back("max_refinement_steps");
+          options_to_print.push_back("recalc_y");
+          options_to_print.push_back("recalc_y_feas_tol");
+          // Line search
           options_to_print.push_back("max_soc");
+          options_to_print.push_back("watchdog_shortened_iter_trigger");
+          options_to_print.push_back("watchdog_trial_iter_max");
+          // Restoration phase
+          options_to_print.push_back("expect_infeasible_problem");
+          options_to_print.push_back("expect_infeasible_problem_ctol");
+          options_to_print.push_back("start_with_resto");
+          options_to_print.push_back("soft_resto_pderror_reduction_factor");
+          options_to_print.push_back("required_infeasibility_reduction");
+          options_to_print.push_back("bound_mult_reset_threshold");
+          options_to_print.push_back("constr_mult_reset_threshold");
+          options_to_print.push_back("evaluate_orig_obj_at_resto_trial");
+          // Linear solver
+          options_to_print.push_back("linear_solver");
+          options_to_print.push_back("linear_system_scaling");
+          options_to_print.push_back("linear_scaling_on_demand");
+          options_to_print.push_back("max_refinement_steps");
           options_to_print.push_back("min_refinement_steps");
-          options_to_print.push_back("output_file");
-          options_to_print.push_back("file_print_level");
+          // Hessian perturbation
+          options_to_print.push_back("max_hessian_perturbation");
+          options_to_print.push_back("min_hessian_perturbation");
+          options_to_print.push_back("first_hessian_perturbation");
+          options_to_print.push_back("perturb_inc_fact_first");
+          options_to_print.push_back("perturb_inc_fact");
+          options_to_print.push_back("perturb_dec_fact");
+          options_to_print.push_back("jacobian_regularization_value");
+          // Quasi-Newton
+          options_to_print.push_back("hessian_approximation");
+          options_to_print.push_back("limited_memory_max_history");
+          options_to_print.push_back("limited_memory_max_skipping");
+          // Derivative test
+          options_to_print.push_back("derivative_test");
+          options_to_print.push_back("derivative_test_perturbation");
+          options_to_print.push_back("derivative_test_tol");
+          options_to_print.push_back("derivative_test_print_all");
+
+          // Special linear solver
+#ifdef HAVE_MA27
+
+          options_to_print.push_back("ma27_pivtol");
+          options_to_print.push_back("ma27_pivtolmax");
+          options_to_print.push_back("ma27_liw_init_factor");
+          options_to_print.push_back("ma27_la_init_factor");
+          options_to_print.push_back("ma27_meminc_factor");
+#endif
+
+#ifdef HAVE_MA57
+
+          options_to_print.push_back("ma57_pivtol");
+          options_to_print.push_back("ma57_pivtolmax");
+          options_to_print.push_back("ma57_pre_alloc");
+#endif
+
+#ifdef HAVE_PARDISO
+
+          options_to_print.push_back("pardiso_matching_strategy");
+#endif
 
           reg_options_->OutputLatexOptionDocumentation(*jnlst_, options_to_print);
         }
@@ -197,7 +276,7 @@ namespace Ipopt
           /*categories.push_back("Main Algorithm");*/
           categories.push_back("Convergence");
           categories.push_back("NLP Scaling");
-          categories.push_back("Mu Update");
+          categories.push_back("Barrier Parameter Update");
           categories.push_back("Line Search");
           categories.push_back("Initialization");
           categories.push_back("Warm Start");
@@ -205,6 +284,7 @@ namespace Ipopt
           categories.push_back("Step Calculation");
           categories.push_back("Restoration Phase");
           categories.push_back("NLP");
+          categories.push_back("Derivative Checker");
           categories.push_back("Hessian Approximation");
 #ifdef HAVE_MA27
 
@@ -224,6 +304,7 @@ namespace Ipopt
 #endif
 
           categories.push_back("Uncategorized");
+          //categories.push_back("Undocumented Options");
           reg_options_->OutputOptionDocumentation(*jnlst_, categories);
         }
       }
@@ -271,9 +352,9 @@ namespace Ipopt
       "*", "Any acceptable standard file name",
       "NOTE: This option only works when read from the ipopt.opt options file! "
       "An output file with this name will be written (leave unset for no "
-      "file output).  The verbosity level is by default set to \"print_level\", or "
-      "but can be overridden with \"file_print_level\".  The file name will "
-      "use only small letters.");
+      "file output).  The verbosity level is by default set to \"print_level\", "
+      "but can be overridden with \"file_print_level\".  The file name is "
+      "changed to use only small letters.");
     roptions->AddBoundedIntegerOption(
       "file_print_level",
       "Verbosity level for output file.",
@@ -313,19 +394,7 @@ namespace Ipopt
       "If selected, the program will print the CPU usage (user time) for "
       "selected tasks.");
 
-    roptions->SetRegisteringCategory("NLP Scaling");
-    roptions->AddStringOption3(
-      "nlp_scaling_method",
-      "Select the technique used for scaling the NLP",
-      "gradient-based",
-      "none", "no problem scaling will be performed",
-      "user-scaling", "scaling parameters will come from the user",
-      "gradient-based", "scale the problem so the maximum gradient at the starting point is scaling_max_gradient",
-      "Selects the technique used for scaling the problem before it is solved."
-      " For user-scaling, the parameters come from the NLP. If you are using "
-      "AMPL, they can be specified through suffixes (scaling_factor)");
-
-    roptions->SetRegisteringCategory("Undocumented Options");
+    roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption2(
       "print_options_latex_mode",
       "Undocumented", "no",

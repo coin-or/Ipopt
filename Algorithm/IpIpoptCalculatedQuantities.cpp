@@ -169,16 +169,16 @@ namespace Ipopt
       "determines how large the move should be.  Its default value is "
       "mach_eps^{3/4}.  (See also end of Section 3.5 in implementation paper "
       "- but actual implementation might be somewhat different.)");
-    roptions->SetRegisteringCategory("Convergence");
+    roptions->SetRegisteringCategory("Line search");
     roptions->AddStringOption3(
       "constraint_violation_norm_type",
-      "Norm to be used for the constraint violation.",
+      "Norm to be used for the constraint violation in the line search.",
       "1-norm",
       "1-norm", "use the 1-norm",
       "2-norm", "use the 2-norm",
       "max-norm", "use the infinity norm",
       "Determines which norm should be used when the algorithm computes the "
-      "constraint violation (for example, in the line search).");
+      "constraint violation in the line search.");
   }
 
   bool IpoptCalculatedQuantities::Initialize(const Journalist& jnlst,

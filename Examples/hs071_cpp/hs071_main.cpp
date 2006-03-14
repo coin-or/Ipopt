@@ -21,14 +21,15 @@ int main(int argv, char* argc[])
   //  (use a SmartPtr, not raw)
   SmartPtr<IpoptApplication> app = new IpoptApplication();
 
-  // Intialized the IpoptApplication
-  app->Initialize();
-
   // Change some options
   // Note: The following choices are only examples, they might not be
   //       suitable for your optimization problem.
   app->Options()->SetNumericValue("tol", 1e-7);
   app->Options()->SetStringValue("mu_strategy", "adaptive");
+  app->Options()->SetStringValue("output_file", "ipopt.out");
+
+  // Intialize the IpoptApplication and process the options
+  app->Initialize();
 
   // Ask Ipopt to solve the problem
   ApplicationReturnStatus status = app->OptimizeTNLP(mynlp);

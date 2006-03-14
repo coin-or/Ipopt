@@ -37,23 +37,23 @@ namespace Ipopt
   {
     roptions->AddLowerBoundedNumberOption(
       "warm_start_bound_push",
-      "same as bound_push for the regular initializer",
+      "same as bound_push for the regular initializer.",
       0.0, true, 1e-3);
     roptions->AddBoundedNumberOption(
       "warm_start_bound_frac",
-      "same as bound_frac for the regular initializer",
+      "same as bound_frac for the regular initializer.",
       0.0, true, 0.5, false, 1e-3);
     roptions->AddLowerBoundedNumberOption(
       "warm_start_mult_bound_push",
-      "same as mult_bound_push for the regular initializer",
+      "same as mult_bound_push for the regular initializer.",
       0.0, true, 1e-3);
     roptions->AddNumberOption(
       "warm_start_mult_init_max",
-      "Maximum initial value for the equality multipliers",
+      "Maximum initial value for the equality multipliers.",
       1e6);
     roptions->AddNumberOption(
       "warm_start_target_mu",
-      "(No range?) default value in code was 0e-3 ???",
+      "Unsupported!",
       0e-3);
     roptions->AddStringOption2(
       "warm_start_entire_iterate",

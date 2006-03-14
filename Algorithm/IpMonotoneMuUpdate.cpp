@@ -58,7 +58,7 @@ namespace Ipopt
       "Factor for mu in barrier stop test.",
       0.0, true,
       10.0,
-      "The convergence tolerance for each barrier problem in the montone mode "
+      "The convergence tolerance for each barrier problem in the monotone mode "
       "is the value of the barrier parameter times \"barrier_tol_factor\". "
       "This option is also used in the adaptive mu strategy during the "
       "monotone mode. (This is kappa_epsilon in implementation paper).");
@@ -84,11 +84,11 @@ namespace Ipopt
       "strategy during the monotone mode.");
     roptions->AddStringOption2(
       "mu_allow_fast_monotone_decrease",
-      "Allow skipping of barrier problem if barrier test already met.",
+      "Allow skipping of barrier problem if barrier test is already met.",
       "yes",
       "no", "Take at least one iteration per barrier problem",
       "yes", "Allow fast decrease of mu if barrier test it met",
-      "If set to no, the algorithm enforces at least one iteration per "
+      "If set to \"no\", the algorithm enforces at least one iteration per "
       "barrier problem, even if the barrier test is already met for the "
       "updated barrier parameter.");
     roptions->AddBoundedNumberOption(

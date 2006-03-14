@@ -1,4 +1,4 @@
-// Copyright (C) 2005, International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -39,7 +39,7 @@ namespace Ipopt
 
   void RegisterOptions_Algorithm(const SmartPtr<RegisteredOptions>& roptions)
   {
-    roptions->SetRegisteringCategory("Mu Update");
+    roptions->SetRegisteringCategory("Barrier Parameter Update");
     AdaptiveMuUpdate::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Initialization");
     DefaultIterateInitializer::RegisterOptions(roptions);
@@ -60,7 +60,7 @@ namespace Ipopt
     IpoptCalculatedQuantities::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Hessian Approximation");
     LimMemQuasiNewtonUpdater::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Mu Update");
+    roptions->SetRegisteringCategory("Barrier Parameter Update");
     MonotoneMuUpdate::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Convergence");
     OptimalityErrorConvergenceCheck::RegisterOptions(roptions);
@@ -72,9 +72,9 @@ namespace Ipopt
     PDFullSpaceSolver::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Step Calculation");
     PDPerturbationHandler::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Mu Update");
+    roptions->SetRegisteringCategory("Barrier Parameter Update");
     ProbingMuOracle::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Mu Update");
+    roptions->SetRegisteringCategory("Barrier Parameter Update");
     QualityFunctionMuOracle::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Restoration Phase");
     RestoFilterConvergenceCheck::RegisterOptions(roptions);

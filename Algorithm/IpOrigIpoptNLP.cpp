@@ -75,14 +75,14 @@ namespace Ipopt
       "Before start of the optimization, the bounds given by the user are "
       "relaxed.  This option sets the factor for this relaxation.  If it "
       "is set to zero, then then bounds relaxation is disabled. "
-      "(See Eqn.(35) in implmentation paper.)");
+      "(See Eqn.(35) in implementation paper.)");
     roptions->AddStringOption2(
       "honor_original_bounds",
       "Indicates whether final points should be projected into original bounds.",
       "yes",
       "no", "Leave final point unchanged",
       "yes", "Project final point back into original bounds",
-      "Ipopt might relax the bounds during the optimization (see e.g. option "
+      "Ipopt might relax the bounds during the optimization (see, e.g., option "
       "\"bound_relax_factor\").  This option determines whether the final "
       "point should be projected back into the user-provide original bounds "
       "after the optimization.");
@@ -102,14 +102,14 @@ namespace Ipopt
       "Indicates whether it is desired to check for Nan/Inf in derivative matrices",
       "no",
       "no", "Don't check (faster).",
-      "yes", "Check Jacobians and Hessian for Nan and Ind.",
+      "yes", "Check Jacobians and Hessian for Nan and Inf.",
       "Activating this option will cause an error if an invalid number is "
       "detected in the constraint Jacobians or the Lagrangian Hessian.  If "
       "this is not activated, the test is skipped, and the algorithm might "
       "proceed with invalid numbers and fail.");
     roptions->SetRegisteringCategory("Hessian Approximation");
     roptions->AddStringOption2(
-      "hessian_information",
+      "hessian_approximation",
       "Indicates what Hessian information is to be used.",
       "exact",
       "exact", "Use second derivatives provided by the NLP.",
@@ -130,8 +130,8 @@ namespace Ipopt
     options.GetBoolValue("check_derivatives_for_naninf",
                          check_derivatives_for_naninf_, prefix);
     Index enum_int;
-    options.GetEnumValue("hessian_information", enum_int, prefix);
-    hessian_information_ = HessianInformationType(enum_int);
+    options.GetEnumValue("hessian_approximation", enum_int, prefix);
+    hessian_approximation_ = HessianApproximationType(enum_int);
 
     // Reset the function evaluation counters (for warm start)
     f_evals_=0;
@@ -196,7 +196,7 @@ namespace Ipopt
       // Check if the Hessian space is actually a limited-memory
       // approximation.  If so, get the required information from the
       // NLP and create an appropreate h_space
-      if (hessian_information_==LIMITED_MEMORY) {
+      if (hessian_approximation_==LIMITED_MEMORY) {
         SmartPtr<VectorSpace> approx_vecspace;
         SmartPtr<Matrix> P_approx;
         nlp_->GetQuasiNewtonApproximationSpaces(approx_vecspace,

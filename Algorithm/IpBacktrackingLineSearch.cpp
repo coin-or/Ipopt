@@ -88,14 +88,15 @@ namespace Ipopt
       "no", "don't arbitrarily accept the full step",
       "yes", "always accept the full step",
       "Setting this option to \"yes\" essentially disables the line search "
-      "and makes the algorithm take aggressive steps.");
+      "and makes the algorithm take aggressive steps, without global "
+      "convergence guarantees.");
 
     roptions->AddStringOption7(
       "alpha_for_y",
       "Method to determine the step size for constraint multipliers.",
       "primal",
       "primal", "use primal step size",
-      "bound_mult", "use step size for the bound multipliers",
+      "bound_mult", "use step size for the bound multipliers (good for LPs)",
       "min", "use the min of primal and bound multipliers",
       "max", "use the max of primal and bound multipliers",
       "full", "take a full step of size one",
@@ -104,35 +105,6 @@ namespace Ipopt
       "This option determines how the step size (alpha_y) will be calculated when updating the "
       "constraint multipliers.");
 
-    roptions->AddStringOption2(
-      "expect_infeasible_problem",
-      "Enable heuristics to quickly detect an infeasible problem.",
-      "no",
-      "no", "the problem probably be feasible",
-      "yes", "the problem has a good chance to be infeasible",
-      "This options is meant to activate heuristics that may speed up the "
-      "infeasibility determination if you expect that there is a good chance for the problem to be "
-      "infeasible.  In the filter line search procedure, the restoration "
-      "phase is called more quickly than usually, and more reduction in "
-      "the constraint violation is enforced. If the problem is square, this "
-      "option is enabled automatically.");
-    roptions->AddLowerBoundedNumberOption(
-      "expect_infeasible_problem_ctol",
-      "Threshold for disabling \"expect_infeasible_problem\" option.",
-      0.0, false, 1e-3,
-      "If the constraint violation becomes smaller than this threshold, "
-      "the \"expect_infeasible_problem\" heuristics in the filter line "
-      "search are disabled. If the problem is square, this options is set to "
-      "0.");
-    roptions->AddStringOption2(
-      "start_with_resto",
-      "Tells algorithm to switch to restoration phase in first iteration.",
-      "no",
-      "no", "don't force start in restoration phase",
-      "yes", "force start in restoration phase",
-      "Setting this option to \"yes\" forces the algorithm to switch to the "
-      "feasibility restoration phase in the first iteration. If the initial "
-      "point is feasible, the algorithm will abort with a failure.");
     roptions->AddLowerBoundedNumberOption(
       "tiny_step_tol",
       "Tolerance for detecting numerically insignificant steps.",
@@ -154,8 +126,8 @@ namespace Ipopt
       "watchdog_shortened_iter_trigger",
       "Number of shortened iterations that trigger the watchdog.",
       0, 10,
-      "If the number of iterations in which the backtracking line search "
-      "did not accept the first trial point exceedes this number, the "
+      "If the number of successive iterations in which the backtracking line search "
+      "did not accept the first trial point exceeds this number, the "
       "watchdog procedure is activated.  Choosing \"0\" here disables the "
       "watchdog procedure.");
     roptions->AddLowerBoundedIntegerOption(
@@ -166,6 +138,36 @@ namespace Ipopt
       "allowed before the watchdog "
       "procedure is aborted and the algorithm returns to the stored point.");
 
+    roptions->SetRegisteringCategory("Restoration Phase");
+    roptions->AddStringOption2(
+      "expect_infeasible_problem",
+      "Enable heuristics to quickly detect an infeasible problem.",
+      "no",
+      "no", "the problem probably be feasible",
+      "yes", "the problem has a good chance to be infeasible",
+      "This options is meant to activate heuristics that may speed up the "
+      "infeasibility determination if you expect that there is a good chance for the problem to be "
+      "infeasible.  In the filter line search procedure, the restoration "
+      "phase is called more quickly than usually, and more reduction in "
+      "the constraint violation is enforced before the restoration phase is "
+      "left. If the problem is square, this option is enabled automatically.");
+    roptions->AddLowerBoundedNumberOption(
+      "expect_infeasible_problem_ctol",
+      "Threshold for disabling \"expect_infeasible_problem\" option.",
+      0.0, false, 1e-3,
+      "If the constraint violation becomes smaller than this threshold, "
+      "the \"expect_infeasible_problem\" heuristics in the filter line "
+      "search are disabled. If the problem is square, this options is set to "
+      "0.");
+    roptions->AddStringOption2(
+      "start_with_resto",
+      "Tells algorithm to switch to restoration phase in first iteration.",
+      "no",
+      "no", "don't force start in restoration phase",
+      "yes", "force start in restoration phase",
+      "Setting this option to \"yes\" forces the algorithm to switch to the "
+      "feasibility restoration phase in the first iteration. If the initial "
+      "point is feasible, the algorithm will abort with a failure.");
     roptions->AddLowerBoundedNumberOption(
       "soft_resto_pderror_reduction_factor",
       "Required reduction in primal-dual error in the soft restoration phase.",

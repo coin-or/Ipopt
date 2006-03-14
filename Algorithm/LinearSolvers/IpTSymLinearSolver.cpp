@@ -64,7 +64,7 @@ namespace Ipopt
       "yes",
       "no", "Always scaling the linear system.",
       "yes", "Start using linear system if solutions seem not good.",
-      "This option is only important if a linear scaling method (e.g., MC19) "
+      "This option is only important if a linear scaling method (e.g., mc19) "
       "is used.  If you choose \"no\", then the scaling factors are computed "
       "for every linear system from the start.  This can be quite expensive. "
       "Choosing \"yes\" means that the algorithm will starting the scaling "

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -19,6 +19,8 @@ int main(int argv, char* argc[])
 
   // Create an instance of the IpoptApplication
   SmartPtr<IpoptApplication> app = new IpoptApplication();
+
+  // Initialize the IpoptApplication and process the options
   app->Initialize();
 
   ApplicationReturnStatus status = app->OptimizeTNLP(mynlp);

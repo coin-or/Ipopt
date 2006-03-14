@@ -97,6 +97,7 @@ namespace Ipopt
       "evaluated with the fixed values for those variables.  Also, for "
       "\"make_constraints\", bound multipliers are computed for the fixed "
       "variables.");
+    roptions->SetRegisteringCategory("Derivative Checker");
     roptions->AddStringOption3(
       "derivative_test",
       "Enable derivative checker",
@@ -127,7 +128,7 @@ namespace Ipopt
       "no",
       "no", "Print only suspect derivatives",
       "yes", "Print all derivatives",
-      "Determines erbosity of derivative checker.");
+      "Determines verbosity of derivative checker.");
   }
 
   bool TNLPAdapter::ProcessOptions(const OptionsList& options,

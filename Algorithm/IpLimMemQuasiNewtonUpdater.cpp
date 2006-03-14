@@ -39,7 +39,7 @@ namespace Ipopt
       "Quasi-Newton update formula for the limited memory approximation.",
       "bfgs",
       "bfgs", "BFGS update (with skipping)",
-      "sr1", "SR1",
+      "sr1", "SR1 (not working well)",
       "Determines which update formula is to be used for the limited-memory "
       "quasi-Newton approximation.");
 

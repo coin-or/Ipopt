@@ -61,11 +61,11 @@ namespace Ipopt
   {
     roptions->AddStringOption2(
       "evaluate_orig_obj_at_resto_trial",
-      "Determines if the original objective function should be evalutated at restoration phase trial points.",
+      "Determines if the original objective function should be evaluated at restoration phase trial points.",
       "yes",
       "no", "skip evaluation",
       "yes", "evaluate at every trial point",
-      "Setting this option to true makes the restoration phase algorithm "
+      "Setting this option to \"yes\" makes the restoration phase algorithm "
       "evaluate the objective function of the original problem at every trial "
       "point encountered during the restoration phase, even if this value is "
       "not required.  In this way, it is guaranteed that the original "
@@ -84,8 +84,8 @@ namespace Ipopt
     options.GetBoolValue("evaluate_orig_obj_at_resto_trial",
                          evaluate_orig_obj_at_resto_trial_, prefix);
     Index enum_int;
-    options.GetEnumValue("hessian_information", enum_int, prefix);
-    hessian_information_ = HessianInformationType(enum_int);
+    options.GetEnumValue("hessian_approximation", enum_int, prefix);
+    hessian_approximation_ = HessianApproximationType(enum_int);
 
     initialized_ = true;
     return IpoptNLP::Initialize(jnlst, options, prefix);
@@ -288,7 +288,7 @@ namespace Ipopt
 
     SmartPtr<DiagMatrixSpace> DR_x_space
     = new DiagMatrixSpace(orig_x_space->Dim());
-    if (hessian_information_==LIMITED_MEMORY) {
+    if (hessian_approximation_==LIMITED_MEMORY) {
       const LowRankUpdateSymMatrixSpace* LR_h_space =
         dynamic_cast<const LowRankUpdateSymMatrixSpace*> (GetRawPtr(orig_h_space));
       DBG_ASSERT(LR_h_space);

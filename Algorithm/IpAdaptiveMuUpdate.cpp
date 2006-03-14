@@ -50,18 +50,20 @@ namespace Ipopt
   {
     roptions->AddLowerBoundedNumberOption(
       "mu_max_fact",
-      "Maximum value for barrier parameter.",
+      "Factor for initialization of maximum value for barrier parameter.",
       0.0, true, 1e3,
       "This option determines the upper bound on the barrier parameter.  This "
       "upper bound is computed as the average complementarity at the initial "
-      "point times the value of this option.");
+      "point times the value of this option. (Only used if option "
+      "\"mu_strategy\" is chosen as \"adaptive\".)");
     roptions->AddLowerBoundedNumberOption(
       "mu_max",
       "Maximum value for barrier parameter.",
       0.0, true, 1e5,
       "This option specifies an upper bound on the barrier parameter in the "
       "adaptive mu selection mode.  If this option is set, it overwrites the "
-      "effect of mu_max_fact.");
+      "effect of mu_max_fact. (Only used if option "
+      "\"mu_strategy\" is chosen as \"adaptive\".)");
     roptions->AddLowerBoundedNumberOption(
       "mu_min",
       "Minimum value for barrier parameter.",
@@ -69,7 +71,8 @@ namespace Ipopt
       "This option specifies the lower bound on the barrier parameter in the "
       "adaptive mu selection mode. By default, it is set to "
       "min(\"tol\",\"compl_inf_tol\")/(\"barrier_tol_factor\"+1), which "
-      "should be a very reasonable value.");
+      "should be a reasonable value. (Only used if option "
+      "\"mu_strategy\" is chosen as \"adaptive\".)");
     std::string prev_cat = roptions->RegisteringCategory();
     roptions->SetRegisteringCategory("Undocumented");
     roptions->AddLowerBoundedNumberOption(
@@ -80,7 +83,7 @@ namespace Ipopt
 
     roptions->AddStringOption3(
       "adaptive_mu_globalization",
-      "Globalization strategy for the adaptive mu selection mode",
+      "Globalization strategy for the adaptive mu selection mode.",
       "obj-constr-filter",
       "kkt-error", "nonmonotone decrease of kkt-error",
       "obj-constr-filter", "2-dim filter for objective and constraint violation",
@@ -88,7 +91,8 @@ namespace Ipopt
       "To achieve global convergence of the adaptive version, the algorithm "
       "has to switch to the monotone mode (Fiacco-McCormick approach) when "
       "convergence does not seem to appear.  This option sets the "
-      "criterion used to decide when to do this switch.");
+      "criterion used to decide when to do this switch. (Only used if option "
+      "\"mu_strategy\" is chosen as \"adaptive\".)");
 
     roptions->AddLowerBoundedIntegerOption(
       "adaptive_mu_kkterror_red_iters",
@@ -120,14 +124,14 @@ namespace Ipopt
       "the \"kkt-error-filter\" option see \"filter_max_margin\".");
     roptions->AddLowerBoundedNumberOption(
       "filter_max_margin",
-      "Maximum width of margin in obj-constr--filter adaptive globalization strategy.",
+      "Maximum width of margin in obj-constr-filter adaptive globalization strategy.",
       0.0, true,
       1.0,
       // ToDo Detailed description later
       "");
     roptions->AddStringOption2(
       "adaptive_mu_restore_previous_iterate",
-      "Should the previous iterate be restored if the monotone mode is entered.",
+      "Indicates if the previous iterate should be restored if the monotone mode is entered.",
       "no",
       "no", "don't restore accepted iterate",
       "yes", "restore accepted iterate",

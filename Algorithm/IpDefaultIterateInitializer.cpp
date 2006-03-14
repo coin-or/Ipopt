@@ -45,7 +45,7 @@ namespace Ipopt
       "constr_mult_init_max",
       "Maximum allowed least-square guess of constraint multipliers.",
       0, false, 1e3,
-      "Determines how large the initial least-square guesses of the contraint "
+      "Determines how large the initial least-square guesses of the constraint "
       "multipliers are allowed to be (in max-norm). If the guess is larger "
       "than this value, it is discarded and all constraint multipliers are "
       "set to zero.  This options is also used when initializing the "

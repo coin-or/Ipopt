@@ -122,7 +122,7 @@ namespace Ipopt
 
     roptions->AddStringOption3(
       "corrector_type",
-      "The type of corrector steps that should be taken.",
+      "The type of corrector steps that should be taken (unsupported!).",
       "none",
       "none", "no corrector",
       "affine", "corrector step towards mu=0",
@@ -132,7 +132,7 @@ namespace Ipopt
 
     roptions->AddStringOption2(
       "skip_corr_if_neg_curv",
-      "Skip the corrector step in negative curvature iteration.",
+      "Skip the corrector step in negative curvature iteration (unsupported!).",
       "yes",
       "no", "don't skip",
       "yes", "skip",
@@ -143,7 +143,7 @@ namespace Ipopt
 
     roptions->AddStringOption2(
       "skip_corr_in_monotone_mode",
-      "Skip the corrector step during monotone barrier parameter mode.",
+      "Skip the corrector step during monotone barrier parameter mode (unsupported!).",
       "yes",
       "no", "don't skip",
       "yes", "skip",
@@ -153,7 +153,7 @@ namespace Ipopt
 
     roptions->AddLowerBoundedNumberOption(
       "corrector_compl_avrg_red_fact",
-      "Complementarity tolerance factor for accepting corrector step.",
+      "Complementarity tolerance factor for accepting corrector step (unsupported!).",
       0.0, true, 1.0,
       "This option determines the factor by which complementarity is allowed to increase "
       "for a corrector step to be accepted.");

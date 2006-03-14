@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -33,7 +33,7 @@ namespace Ipopt
       " scale the maximum gradient back to this value. (This is g_max in "
       "Section 3.8 of the implementation paper.) Note: This"
       " option is only used if \"nlp_scaling_method\" is chosen as"
-      " \"gradient_based\".");
+      " \"gradient-based\".");
   }
 
   bool GradientScaling::InitializeImpl(const OptionsList& options,

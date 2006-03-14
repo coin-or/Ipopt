@@ -401,7 +401,7 @@ namespace Ipopt
      *  evaluation. */
     bool evaluate_orig_obj_at_resto_trial_;
     /** Flag indicating how hessian information is obtained */
-    HessianInformationType hessian_information_;
+    HessianApproximationType hessian_approximation_;
     //@}
 
     /** Flag indicating if initialization method has been called */

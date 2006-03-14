@@ -96,11 +96,14 @@ namespace Ipopt
   void PardisoSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     // Todo Use keywords instead of integer numbers
-    roptions->AddIntegerOption(
-      "pardiso_iparm13",
-      "Matching strategy",
-      2,
-      "Matching strategy:  1=Match complete, 2=Match complete+2x2, 3=Match constraints");
+    roptions->AddStringOption3(
+      "pardiso_matching_strategy",
+      "Matching strategy to be used by Pardiso",
+      "complete+2x2"
+      "complete", "Match complete (IPAR(13)=1)",
+      "complete+2x2", "Match complete+2x2 (IPAR(13)=2)",
+      "constraints", "Match constraints (IPAR(13)=3)",
+      "This is IPAR(13) in Pardiso manual.");
     roptions->AddStringOption2(
       "pardiso_redo_symbolic_fact_only_if_inertia_wrong",
       "Toggel for handling case when elements were pertured by Pardiso.",
@@ -120,16 +123,15 @@ namespace Ipopt
   bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    options.GetIntegerValue("pardiso_iparm13", match_strat_, prefix);
+    Index enum_int;
+    options.GetEnumValue("pardiso_matching_strategy", enum_int, prefix);
+    match_strat_ = PardisoMatchingStrategy(enum_int);
     options.GetBoolValue("pardiso_redo_symbolic_fact_only_if_inertia_wrong",
                          pardiso_redo_symbolic_fact_only_if_inertia_wrong_,
                          prefix);
     options.GetBoolValue("pardiso_repeated_perturbation_means_singular",
                          pardiso_repeated_perturbation_means_singular_,
                          prefix);
-
-    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Pardiso matching strategy (IPARM(13)): %d\n", match_strat_);
 
     // Number value = 0.0;
 
@@ -189,7 +191,9 @@ namespace Ipopt
     // Matching information:  IPARM_[12] = 1 seems ok, but results in a
     // large number of pivot perturbation
     // Matching information:  IPARM_[12] = 2 robust,  but more  expensive method
-    IPARM_[12] = match_strat_;
+    IPARM_[12] = (int)match_strat_;
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Pardiso matching strategy (IPARM(13)): %d\n", IPARM_[12]);
 
     IPARM_[20] = 1;
     IPARM_[23] = 1; // parallel fac

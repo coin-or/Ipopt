@@ -272,7 +272,7 @@ namespace Ipopt
       "ma57_pivtolmax",
       "Maximum pivot tolerance for the linear solver MA57.",
       0.0, true, 1.0, true, 1e-4,
-      "Ipopt may increase pivtol as high as pivtolmax "
+      "Ipopt may increase pivtol as high as ma57_pivtolmax "
       "to get a more accurate solution to the linear system.");
     roptions->AddLowerBoundedNumberOption(
       "ma57_pre_alloc",

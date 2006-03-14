@@ -104,7 +104,22 @@ namespace Ipopt
     roptions->AddStringOption5(
       "linear_solver",
       "Linear solver used for step computations.",
+#ifdef HAVE_MA27
       "ma27",
+#else
+#ifdef HAVE_MA57
+      "ma57",
+#else
+#ifdef HAVE_PARDISO
+      "pardiso",
+#else
+#endif
+#ifdef HAVE_WSMP
+      "wsmp",
+#else
+#endif
+#endif
+#endif
       "ma27", "use the Harwell routine MA27",
       "ma57", "use the Harwell routine MA57",
       "pardiso", "use the Pardiso package",
@@ -131,7 +146,19 @@ namespace Ipopt
       "factors for the augmented system. This scaling is independent "
       "of the NLP problem scaling.");
 
-    roptions->SetRegisteringCategory("Mu Update");
+    roptions->SetRegisteringCategory("NLP Scaling");
+    roptions->AddStringOption3(
+      "nlp_scaling_method",
+      "Select the technique used for scaling the NLP.",
+      "gradient-based",
+      "none", "no problem scaling will be performed",
+      "user-scaling", "scaling parameters will come from the user",
+      "gradient-based", "scale the problem so the maximum gradient at the starting point is scaling_max_gradient",
+      "Selects the technique used for scaling the problem internally before it is solved."
+      " For user-scaling, the parameters come from the NLP. If you are using "
+      "AMPL, they can be specified through suffixes (\"scaling_factor\")");
+
+    roptions->SetRegisteringCategory("Barrier Parameter Update");
     roptions->AddStringOption2(
       "mu_strategy",
       "Update strategy for barrier parameter.",
@@ -142,10 +169,10 @@ namespace Ipopt
     roptions->AddStringOption3(
       "mu_oracle",
       "Oracle for a new barrier parameter in the adaptive strategy.",
-      "quality_function",
+      "quality-function",
       "probing", "Mehrotra's probing heuristic",
       "loqo", "LOQO's centrality rule",
-      "quality_function", "minimize a quality function",
+      "quality-function", "minimize a quality function",
       "Determines how a new barrier parameter is computed in each "
       "\"free-mode\" iteration of the adaptive barrier parameter "
       "strategy. (Only considered if \"adaptive\" is selected for "
@@ -156,7 +183,7 @@ namespace Ipopt
       "average_compl",
       "probing", "Mehrotra's probing heuristic",
       "loqo", "LOQO's centrality rule",
-      "quality_function", "minimize a quality function",
+      "quality-function", "minimize a quality function",
       "average_compl", "base on current average complementarity",
       "Determines how the first value of the barrier parameter should be "
       "computed when switching to the \"monotone mode\" in the adaptive "
@@ -251,10 +278,10 @@ namespace Ipopt
     SmartPtr<AugSystemSolver> AugSolver =
       new StdAugSystemSolver(*ScaledSolver);
     Index enum_int;
-    options.GetEnumValue("hessian_information", enum_int, prefix);
-    HessianInformationType hessian_information =
-      HessianInformationType(enum_int);
-    if (hessian_information==LIMITED_MEMORY) {
+    options.GetEnumValue("hessian_approximation", enum_int, prefix);
+    HessianApproximationType hessian_approximation =
+      HessianApproximationType(enum_int);
+    if (hessian_approximation==LIMITED_MEMORY) {
       SmartPtr<AugSystemSolver> tmp =
         new LowRankAugSystemSolver(*AugSolver);
       AugSolver = tmp;
@@ -304,10 +331,10 @@ namespace Ipopt
     if (!options.GetStringValue("mu_strategy", resto_smuupdate, "resto."+prefix)) {
       // Change default for quasi-Newton option (then we use adaptive)
       Index enum_int;
-      if (options.GetEnumValue("hessian_information", enum_int, prefix)) {
-        HessianInformationType hessian_information =
-          HessianInformationType(enum_int);
-        if (hessian_information==LIMITED_MEMORY) {
+      if (options.GetEnumValue("hessian_approximation", enum_int, prefix)) {
+        HessianApproximationType hessian_approximation =
+          HessianApproximationType(enum_int);
+        if (hessian_approximation==LIMITED_MEMORY) {
           resto_smuupdate = "adaptive";
         }
       }
@@ -331,7 +358,7 @@ namespace Ipopt
       else if (resto_smuoracle=="probing") {
         resto_MuOracle = new ProbingMuOracle(resto_PDSolver);
       }
-      else if (resto_smuoracle=="quality_function") {
+      else if (resto_smuoracle=="quality-function") {
         resto_MuOracle = new QualityFunctionMuOracle(resto_PDSolver);
       }
       SmartPtr<MuOracle> resto_FixMuOracle;
@@ -341,7 +368,7 @@ namespace Ipopt
       else if (resto_sfixmuoracle=="probing") {
         resto_FixMuOracle = new ProbingMuOracle(resto_PDSolver);
       }
-      else if (resto_sfixmuoracle=="quality_function") {
+      else if (resto_sfixmuoracle=="quality-function") {
         resto_FixMuOracle = new QualityFunctionMuOracle(resto_PDSolver);
       }
       else {
@@ -366,7 +393,7 @@ namespace Ipopt
 
     // Get the Hessian updater for the restoration phase
     SmartPtr<HessianUpdater> resto_HessUpdater;
-    switch(hessian_information) {
+    switch(hessian_approximation) {
       case EXACT:
       resto_HessUpdater = new ExactHessianUpdater();
       break;
@@ -410,10 +437,10 @@ namespace Ipopt
     if (!options.GetStringValue("mu_strategy", smuupdate, prefix)) {
       // Change default for quasi-Newton option (then we use adaptive)
       Index enum_int;
-      if (options.GetEnumValue("hessian_information", enum_int, prefix)) {
-        HessianInformationType hessian_information =
-          HessianInformationType(enum_int);
-        if (hessian_information==LIMITED_MEMORY) {
+      if (options.GetEnumValue("hessian_approximation", enum_int, prefix)) {
+        HessianApproximationType hessian_approximation =
+          HessianApproximationType(enum_int);
+        if (hessian_approximation==LIMITED_MEMORY) {
           smuupdate = "adaptive";
         }
       }
@@ -436,7 +463,7 @@ namespace Ipopt
       else if (smuoracle=="probing") {
         muOracle = new ProbingMuOracle(PDSolver);
       }
-      else if (smuoracle=="quality_function") {
+      else if (smuoracle=="quality-function") {
         muOracle = new QualityFunctionMuOracle(PDSolver);
       }
       SmartPtr<MuOracle> FixMuOracle;
@@ -446,7 +473,7 @@ namespace Ipopt
       else if (sfixmuoracle=="probing") {
         FixMuOracle = new ProbingMuOracle(PDSolver);
       }
-      else if (sfixmuoracle=="quality_function") {
+      else if (sfixmuoracle=="quality-function") {
         FixMuOracle = new QualityFunctionMuOracle(PDSolver);
       }
       else {
@@ -462,7 +489,7 @@ namespace Ipopt
 
     // Get the Hessian updater for the main algorithm
     SmartPtr<HessianUpdater> HessUpdater;
-    switch(hessian_information) {
+    switch(hessian_approximation) {
       case EXACT:
       HessUpdater = new ExactHessianUpdater();
       break;
