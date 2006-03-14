@@ -147,7 +147,7 @@ namespace Ipopt
       "Tolerance for quitting because of numerically insignificant steps.",
       0.0, false, 1e-2,
       "If the search direction in the primal variables (x and s) is, in "
-      "relative terms for each component, repeatedly less thantiny_step_tol, "
+      "relative terms for each component, repeatedly less than tiny_step_tol, "
       "and the step in the y variables is smaller than this threshold, the "
       "algorithm will terminate.");
     roptions->AddLowerBoundedIntegerOption(

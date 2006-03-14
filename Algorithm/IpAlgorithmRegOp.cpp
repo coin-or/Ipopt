@@ -76,12 +76,12 @@ namespace Ipopt
     ProbingMuOracle::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Mu Update");
     QualityFunctionMuOracle::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Restoration");
+    roptions->SetRegisteringCategory("Restoration Phase");
     RestoFilterConvergenceCheck::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Restoration");
+    roptions->SetRegisteringCategory("Restoration Phase");
     RestoIpoptNLP::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Uncategorized");
-    roptions->SetRegisteringCategory("Restoration");
+    roptions->SetRegisteringCategory("Restoration Phase");
     MinC_1NrmRestorationPhase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Warm Start");
     WarmStartIterateInitializer::RegisterOptions(roptions);

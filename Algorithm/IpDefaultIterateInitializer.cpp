@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -57,6 +57,7 @@ namespace Ipopt
       0, true, 1.0,
       "All dual variables corresponding to bound constraints are "
       "initialized to this value.");
+    reg_options->SetRegisteringCategory("Warm Start");
     reg_options->AddStringOption2(
       "warm_start_init_point",
       "Warm-start for initial point", "no",

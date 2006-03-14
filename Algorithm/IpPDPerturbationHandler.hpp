@@ -168,8 +168,6 @@ namespace Ipopt
     Number delta_cd_val_;
     /** Exponent on mu in formula for of perturbation for c and d blocks. */
     Number delta_cd_exp_;
-    /** Flag indicating whether c and d block should always be perturbed */
-    bool always_perturb_cd_;
     /** Flag indicating whether the new values are based on the
      *  perturbations in the last iteration or in the more recent
      *  iteration in which a perturbation was done. */

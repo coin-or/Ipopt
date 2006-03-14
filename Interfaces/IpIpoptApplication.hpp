@@ -132,7 +132,7 @@ namespace Ipopt
 
     /**@name Variables that customize the application behavior */
     //@{
-    /** Decide whether or not the PARAMS.DAT file should be read */
+    /** Decide whether or not the ipopt.opt file should be read */
     bool read_params_dat_;
     //@}
 

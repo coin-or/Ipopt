@@ -86,6 +86,7 @@ namespace Ipopt
       "\"bound_relax_factor\").  This option determines whether the final "
       "point should be projected back into the user-provide original bounds "
       "after the optimization.");
+    roptions->SetRegisteringCategory("Warm Start");
     roptions->AddStringOption2(
       "warm_start_same_structure",
       "Indicates whether a problem with a structure identical to the previous one is to be solved.",
@@ -95,6 +96,7 @@ namespace Ipopt
       "If \"yes\" is chosen, then the algorithm assumes that an NLP is now to "
       "be solved, whose strcture is identical to one that already was "
       "considered (with the same NLP object).");
+    roptions->SetRegisteringCategory("NLP");
     roptions->AddStringOption2(
       "check_derivatives_for_naninf",
       "Indicates whether it is desired to check for Nan/Inf in derivative matrices",

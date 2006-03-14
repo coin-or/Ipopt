@@ -108,13 +108,14 @@ namespace Ipopt
       "ma27", "use the Harwell routine MA27",
       "ma57", "use the Harwell routine MA57",
       "pardiso", "use the Pardiso package",
-      "taucs", "use TAUCS package",
-      "wsmp", "use WSMP package",
+      "wsmp", "use WSMP package (not yet working)",
+      "taucs", "use TAUCS package (not yet working)",
       "Determines which linear algebra package is to be used for the "
       "solution of the augmented linear system (for obtaining the search "
       "directions). "
-      "Note that depending on your Ipopt installation, not all "
-      "options may be available.");
+      "Note, the code must have been compiled with the linear solver you want "
+      "to choose. Depending on your Ipopt installation, not all options are "
+      "available.");
     roptions->SetRegisteringCategory("Linear Solver");
     roptions->AddStringOption2(
       "linear_system_scaling",

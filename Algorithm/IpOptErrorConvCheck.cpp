@@ -34,21 +34,21 @@ namespace Ipopt
       "Desired threshold for the dual infeasibility.",
       0.0, true, 1e-4,
       "Absolute tolerance on the dual infesaibility. Successful termination "
-      "requires that the (unscaled) dual infeasibility is less than this "
+      "requires that the (unscaled) dual infeasibility (in max-norm) is less than this "
       "threshold.");
     roptions->AddLowerBoundedNumberOption(
       "constr_viol_tol",
       "Desired threshold for the constraint violation.",
       0.0, true, 1e-4,
       "Absolute tolerance on the constraint violation. Successful termination "
-      "requires that the (unscaled) constraint violation is less than this "
+      "requires that the (unscaled) constraint violation is (in max-norm) less than this "
       "threshold.");
     roptions->AddLowerBoundedNumberOption(
       "compl_inf_tol",
       "Desired threshold for the complementarity conditions.",
       0.0, true, 1e-4,
       "Absolute tolerance on the complementarity. Successful termination "
-      "requires that the (unscaled) complementarity is less than this "
+      "requires that the (unscaled) complementarity is (in max-norm) less than this "
       "threshold.");
     roptions->AddLowerBoundedIntegerOption(
       "acceptable_iter",
@@ -76,21 +76,21 @@ namespace Ipopt
       "Acceptance threshold for the dual infeasibility.",
       0.0, true, 1e-2,
       "Absolute tolerance on the dual infesaibility. Acceptable termination "
-      "requires that the (unscaled) dual infeasibility is less than this "
+      "requires that the (unscaled) dual infeasibility (in max-norm) is less than this "
       "threshold; see also acceptable_tol.");
     roptions->AddLowerBoundedNumberOption(
       "acceptable_constr_viol_tol",
       "Acceptance threshold for the constraint violation.",
       0.0, true, 1e-2,
       "Absolute tolerance on the constraint violation. Acceptable termination "
-      "requires that the (unscaled) constraint violation is less than this "
+      "requires that the (unscaled) constraint violation (in max-norm) is less than this "
       "threshold; see also acceptable_tol.");
     roptions->AddLowerBoundedNumberOption(
       "acceptable_compl_inf_tol",
       "Acceptance threshold for the complementarity conditions.",
       0.0, true, 1e-2,
       "Absolute tolerance on the complementarity. Acceptable termination "
-      "requires that the (unscaled) complementarity is less than this "
+      "requires that the (unscaled) complementarity (in max-norm) is less than this "
       "threshold; see also acceptable_tol.");
     roptions->AddLowerBoundedNumberOption(
       "diverging_iterates_tol",

@@ -100,7 +100,7 @@ namespace Ipopt
     try {
       // Get the options
       if (is.good()) {
-        // PARAMS.DAT exists, read the content
+        // stream exists, read the content
         options_->ReadFromStream(*jnlst_, is);
       }
 
@@ -203,7 +203,7 @@ namespace Ipopt
           categories.push_back("Warm Start");
           categories.push_back("Linear Solver");
           categories.push_back("Step Calculation");
-          categories.push_back("Restoration");
+          categories.push_back("Restoration Phase");
           categories.push_back("NLP");
           categories.push_back("Hessian Approximation");
 #ifdef HAVE_MA27
@@ -269,15 +269,16 @@ namespace Ipopt
       "File name of desired output file (leave unset for no file output).",
       "",
       "*", "Any acceptable standard file name",
-      "NOTE: This option only works when read from the PARAMS.DAT options file! "
+      "NOTE: This option only works when read from the ipopt.opt options file! "
       "An output file with this name will be written (leave unset for no "
       "file output).  The verbosity level is by default set to \"print_level\", or "
-      "but can be overridden with \"file_print_level\".");
+      "but can be overridden with \"file_print_level\".  The file name will "
+      "use only small letters.");
     roptions->AddBoundedIntegerOption(
       "file_print_level",
       "Verbosity level for output file.",
       0, J_LAST_LEVEL-1, J_ITERSUMMARY,
-      "NOTE: This option only works when read from the PARAMS.DAT options file! "
+      "NOTE: This option only works when read from the ipopt.opt options file! "
       "Determines the verbosity level for the file specified by "
       "\"output_file\".  By default it is the same as \"print_level\".");
     roptions->AddStringOption2(
