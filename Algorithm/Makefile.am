@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2005 International Business Machines and others.
+# Copyright (C) 2004, 2005, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -65,11 +65,11 @@ libipoptalg_a_SOURCES = \
 	IpUserScaling.cpp IpUserScaling.hpp \
 	IpWarmStartIterateInitializer.cpp IpWarmStartIterateInitializer.hpp
 
-CXXFLAGS += -I$(srcdir)/../Common \
-	-I$(srcdir)/../LinAlg \
-	-I$(srcdir)/../LinAlg/TMatrices \
-	-I$(srcdir)/../Interfaces \
-	-I$(srcdir)/LinearSolvers
+CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
+	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
+	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
+	-I`$(CYGPATH_W) $(srcdir)/../Interfaces` \
+	-I`$(CYGPATH_W) $(srcdir)/LinearSolvers`
 
 # Astyle stuff
 

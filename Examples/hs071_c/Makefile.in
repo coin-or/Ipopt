@@ -1,4 +1,4 @@
-# Copyright (C) 2003, International Business Machines and others.
+# Copyright (C) 2003, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -24,8 +24,9 @@ prefix = @prefix@
 #LIBS = -L$(IPOPTLIBDIR) -lipopt @IPADDLIBS@
 LIBS = @ipoptlib@ @IPADDLIBS@ @CXXLIBS@ @FLIBS@
 
-# Necessary Include dirs
-INCL =  -I$(IPOPTINCDIR)
+# Necessary Include dirs (we use the CYGPATH_W variables to allow
+# compilation with Windows compilers)
+INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)`
 
 # CHANGEME: This should be the name of your executable
 EXE = hs071_c@EXEEXT@

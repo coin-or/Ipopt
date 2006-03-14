@@ -1,4 +1,4 @@
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -49,11 +49,11 @@ if HAVE_WSMP
 endif
 
 
-CXXFLAGS += -I$(srcdir)/../../Common \
-	-I$(srcdir)/../../LinAlg \
-	-I$(srcdir)/../../LinAlg/TMatrices \
-	-I$(srcdir)/.. \
-	-I$(srcdir)/../../Interfaces
+CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
+	-I`$(CYGPATH_W) $(srcdir)/..` \
+	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
 
 # Astyle stuff
 

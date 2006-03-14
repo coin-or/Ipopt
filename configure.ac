@@ -8,7 +8,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.1.0],[coin-ipopt@www-124.ibm.com])
+AC_INIT([Ipopt],[3.1.0],[coin-ipopt@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2004, 2005, 2006 International Business Machines and others.

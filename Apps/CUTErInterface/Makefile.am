@@ -18,7 +18,7 @@ libdummy_a_SOURCES = ipoma.f
 ipoma.f: CUTErInterface.f
 	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
 	  rm -f  ipoma.f; \
-	  $(LN_S) $(srcdir)/ipoma-dummy.f ipoma.f; \
+	  cp $(srcdir)/ipoma-dummy.f ipoma.f; \
 	else \
 	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed | sed "s/C$(BITS_PER_POINTER)BIT//" > ipoma.f; \
 	fi

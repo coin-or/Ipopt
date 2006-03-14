@@ -1,4 +1,4 @@
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -41,7 +41,7 @@ liblinalg_a_SOURCES = \
 	IpVector.cpp IpVector.hpp \
 	IpZeroMatrix.cpp IpZeroMatrix.hpp
 
-CXXFLAGS += -I$(srcdir)/../Common
+CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common`
 
 # Astyle stuff
 

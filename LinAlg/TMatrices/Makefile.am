@@ -1,4 +1,4 @@
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -15,8 +15,8 @@ libtmatrices_a_SOURCES = \
 	IpSymTMatrix.cpp IpSymTMatrix.hpp \
 	IpTripletHelper.cpp IpTripletHelper.hpp
 
-CXXFLAGS += -I$(srcdir)/../../Common \
-	-I$(srcdir)/..
+CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+	-I`$(CYGPATH_W) $(srcdir)/..`
 
 # Astyle stuff
 

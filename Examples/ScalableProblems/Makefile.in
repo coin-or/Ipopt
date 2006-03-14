@@ -1,4 +1,4 @@
-# Copyright (C) 2003, International Business Machines and others.
+# Copyright (C) 2005, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -28,8 +28,9 @@ prefix = @prefix@
 # Libraries necessary to link with IPOPT
 IPOPTLIBS = @ipoptlib@ @IPADDLIBS@ @FLIBS@
 
-# Necessary Include dirs
-INCL =  -I$(IPOPTINCDIR)
+# Necessary Include dirs (we use the CYGPATH_W variables to allow
+# compilation with Windows compilers)
+INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)`
 
 # Name of the executable
 EXE = solve_problem@EXEEXT@
@@ -55,6 +56,8 @@ LIBOBJS =  \
 
 
 LIB = libscalexamples.a
+
+LIBS = $(LIB) $(IPOPTLIBS)
 
 all: $(EXE)
 
@@ -93,7 +96,7 @@ CYGPATH_W = @CYGPATH_W@
 .SUFFIXES: .cpp .c .o .obj
 
 $(EXE): $(MAINOBJ) $(LIB)
-	$(CXX) $(CXXFLAGS) -o $@ $(MAINOBJ) $(LIB) $(IPOPTLIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $(MAINOBJ) $(LIBS)
 
 $(LIB): $(LIBOBJS)
 	$(AR) $(ARFLAGS) $(LIB) $(LIBOBJS)

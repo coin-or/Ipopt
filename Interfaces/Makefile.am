@@ -37,11 +37,11 @@ libinterfaces_a_SOURCES = \
 	IpTNLP.hpp \
 	IpTNLPAdapter.cpp IpTNLPAdapter.hpp
 
-CXXFLAGS += -I$(srcdir)/../Common \
-	-I$(srcdir)/../LinAlg \
-	-I$(srcdir)/../Algorithm/LinearSolvers \
-	-I$(srcdir)/../LinAlg/TMatrices \
-	-I$(srcdir)/../Algorithm
+CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
+	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
+	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/LinearSolvers` \
+	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
+	-I`$(CYGPATH_W) $(srcdir)/../Algorithm`
 
 CFLAGS += -I$(srcdir)/../Common
 
