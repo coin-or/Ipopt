@@ -101,7 +101,6 @@ IpoptProblem CreateIpoptProblem(
   retval->eval_h = eval_h;
 
   retval->app = new Ipopt::IpoptApplication();
-  retval->app->Initialize();
 
   return retval;
 }
@@ -161,6 +160,9 @@ enum ApplicationReturnStatus IpoptSolve(
   UserDataPtr user_data)
 {
   using namespace Ipopt;
+
+  // Initialize and process options
+  ipopt_problem->app->Initialize();
 
   // For now only copy the values of the x's.  When we allow warm
   // starts we also need to copy the values of the multipliers

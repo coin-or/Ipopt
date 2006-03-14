@@ -96,6 +96,7 @@ int main()
      they might not be suitable for your problem. */
   AddIpoptNumOption(nlp, "tol", 1e-7);
   AddIpoptStrOption(nlp, "mu_strategy", "adaptive");
+  AddIpoptStrOption(nlp, "output_file", "ipopt.out");
 
   /* allocate space for the initial point and set the values */
   x = (Number*)malloc(sizeof(Number)*n);
