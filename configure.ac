@@ -52,7 +52,7 @@ AC_ARG_ENABLE([bg],,
 AC_LANG_PUSH(C++)
 SAVE_CXXFLAGS="$CXXFLAGS"
 case $build in
-  *-cygwin) comps="g++" ;;
+  *-cygwin) comps="g++ cl" ;;
   *)        comps="xlC aCC CC g++ c++ pgCC icpc" ;;
 esac
 AC_PROG_CXX([$comps])
@@ -326,7 +326,7 @@ AC_MSG_NOTICE([Using AR_X=\"$AR_X\".])
 AC_LANG_PUSH(C)
 SAVE_CFLAGS="$CFLAGS"
 case $build in
-  *-cygwin) comps="gcc" ;;
+  *-cygwin) comps="gcc cl" ;;
   *)        comps="xlc cc gcc pgcc icc" ;;
 esac
 AC_PROG_CC([$comps])
@@ -516,7 +516,7 @@ AC_LANG_POP(C)
 AC_LANG_PUSH(Fortran 77)
 SAVE_FFLAGS="$FFLAGS"
 case $build in
-  *-cygwin) comps="gfortran g77" ;;
+  *-cygwin) comps="gfortran g77 ifort" ;;
   *)        comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc" ;;
 esac
 AC_PROG_F77($comps)
