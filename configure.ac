@@ -134,7 +134,7 @@ if test -z "$CXXFLAGS"; then
 #          ;;
 #        esac
         add_cxxflags="-pipe"
-        dbg_cxxflags="-g"
+        dbg_cxxflags="-g -DCHECK_SMARTPTR"
         warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -Wconversion"
         case $build in
           *-cygwin*) AC_MSG_CHECKING([whether flag \" -mno-cygwin\" works])

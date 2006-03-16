@@ -35,6 +35,7 @@ libcommon_a_SOURCES = \
 	IpReferenced.hpp \
 	IpSmartPtr.hpp \
 	IpTaggedObject.cpp IpTaggedObject.hpp \
+	IpTimedTask.hpp \
 	IpTypes.hpp \
 	IpUtils.cpp IpUtils.hpp
 
@@ -51,6 +52,7 @@ ASTYLE_FILES = \
 	IpReferenced.hppbak \
 	IpSmartPtr.hppbak \
 	IpTaggedObject.cppbak IpTaggedObject.hppbak \
+	IpTimedTask.hppbak \
 	IpTypes.hppbak \
 	IpUtils.cppbak IpUtils.hppbak
 

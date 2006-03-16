@@ -352,7 +352,7 @@ namespace Ipopt
     DBG_START_METH("SmartPtr<T>::SmartPtr()", dbg_smartptr_verbosity);
 #endif
 
-#ifndef __PGI
+#ifdef CHECK_SMARTPTR
 
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
@@ -371,7 +371,7 @@ namespace Ipopt
     DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<T>& copy)", dbg_smartptr_verbosity);
 #endif
 
-#ifndef __PGI
+#ifdef CHECK_SMARTPTR
 
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
@@ -414,7 +414,7 @@ namespace Ipopt
     DBG_START_METH("SmartPtr<T>::SmartPtr(T* ptr)", dbg_smartptr_verbosity);
 #endif
 
-#ifndef __PGI
+#ifdef CHECK_SMARTPTR
 
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;

@@ -78,6 +78,7 @@ namespace Ipopt
     J_DOCUMENTATION,
     J_NLP,
     J_TIMING_STATISTICS,
+    J_USER_APPLICATION /** This can be used by the user's application*/ ,
     J_LAST_CATEGORY
   };
   //@}
