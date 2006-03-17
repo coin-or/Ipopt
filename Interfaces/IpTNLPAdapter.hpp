@@ -11,6 +11,7 @@
 
 #include "IpNLP.hpp"
 #include "IpTNLP.hpp"
+#include "IpOrigIpoptNLP.hpp"
 
 namespace Ipopt
 {
@@ -237,6 +238,8 @@ namespace Ipopt
     /** Flag indicating whether the TNLP with identical structure has
      *  already been solved before. */
     bool warm_start_same_structure_;
+    /** Flag indicating what Hessian information is to be used. */
+    HessianApproximationType hessian_approximation_;
     //@}
 
     /**@name Problem Size Data */

@@ -157,9 +157,9 @@ namespace Ipopt
     // The option warm_start_same_structure is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
-
-    // allow TNLP to process some options
-    //tnlp_->ProcessOptions(....);
+    // The following is registered in OrigIpoptNLP
+    options.GetEnumValue("hessian_approximation", enum_int, prefix);
+    hessian_approximation_ = HessianApproximationType(enum_int);
 
     return true;
   }
@@ -561,63 +561,69 @@ namespace Ipopt
       delete [] g_jCol;
       g_jCol = NULL;
 
-      /** Create the matrix space for the hessian of the lagrangian */
-      Index* full_h_iRow = new Index[nz_full_h_];
-      Index* full_h_jCol = new Index[nz_full_h_];
-      Index* h_iRow = new Index[nz_full_h_];
-      Index* h_jCol = new Index[nz_full_h_];
-      bool retval =tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_,
-                                 NULL, false,
-                                 nz_full_h_, full_h_iRow, full_h_jCol, NULL);
-      if (!retval) {
-        jnlst_->Printf(J_ERROR, J_INITIALIZATION,
-                       "Option hessian_information is not chosen as limited_memory, but eval_h returns false.\n");
-        THROW_EXCEPTION(OPTION_INVALID, "eval_h is called but has not been implemented");
-      }
-
-      if (index_style_ != TNLP::FORTRAN_STYLE) {
-        for (Index i=0; i<nz_full_h_; i++) {
-          full_h_iRow[i] += 1;
-          full_h_jCol[i] += 1;
+      if (hessian_approximation_==EXACT) {
+        /** Create the matrix space for the hessian of the lagrangian */
+        Index* full_h_iRow = new Index[nz_full_h_];
+        Index* full_h_jCol = new Index[nz_full_h_];
+        Index* h_iRow = new Index[nz_full_h_];
+        Index* h_jCol = new Index[nz_full_h_];
+        bool retval =tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_,
+                                   NULL, false,
+                                   nz_full_h_, full_h_iRow, full_h_jCol, NULL);
+        if (!retval) {
+          jnlst_->Printf(J_ERROR, J_INITIALIZATION,
+                         "Option hessian_information is not chosen as limited_memory, but eval_h returns false.\n");
+          THROW_EXCEPTION(OPTION_INVALID, "eval_h is called but has not been implemented");
         }
-      }
 
-      current_nz = 0;
-      if (IsValid(P_x_full_x_)) {
-        h_idx_map_ = new Index[nz_full_h_];
-        const Index* h_pos = P_x_full_x_->CompressedPosIndices();
-        for (Index i=0; i<nz_full_h_; i++) {
-          const Index h_row = h_pos[full_h_iRow[i]-1];
-          const Index h_col = h_pos[full_h_jCol[i]-1];
-          if (h_row != -1 && h_col != -1) {
-            h_idx_map_[current_nz] = i;
-            h_iRow[current_nz] = h_row + 1;
-            h_jCol[current_nz] = h_col + 1;
-            current_nz++;
+        if (index_style_ != TNLP::FORTRAN_STYLE) {
+          for (Index i=0; i<nz_full_h_; i++) {
+            full_h_iRow[i] += 1;
+            full_h_jCol[i] += 1;
           }
         }
+
+        current_nz = 0;
+        if (IsValid(P_x_full_x_)) {
+          h_idx_map_ = new Index[nz_full_h_];
+          const Index* h_pos = P_x_full_x_->CompressedPosIndices();
+          for (Index i=0; i<nz_full_h_; i++) {
+            const Index h_row = h_pos[full_h_iRow[i]-1];
+            const Index h_col = h_pos[full_h_jCol[i]-1];
+            if (h_row != -1 && h_col != -1) {
+              h_idx_map_[current_nz] = i;
+              h_iRow[current_nz] = h_row + 1;
+              h_jCol[current_nz] = h_col + 1;
+              current_nz++;
+            }
+          }
+        }
+        else {
+          h_idx_map_ = NULL;
+          for (Index i=0; i<nz_full_h_; i++) {
+            const Index h_row = full_h_iRow[i]-1;
+            const Index h_col = full_h_jCol[i]-1;
+            h_iRow[i] = h_row + 1;
+            h_jCol[i] = h_col + 1;
+            current_nz++;
+          }
+          current_nz = nz_full_h_;
+        }
+        nz_h_ = current_nz;
+        Hess_lagrangian_space_ = new SymTMatrixSpace(n_x_var, nz_h_, h_iRow, h_jCol);
+        delete [] full_h_iRow;
+        full_h_iRow = NULL;
+        delete [] full_h_jCol;
+        full_h_jCol = NULL;
+        delete [] h_iRow;
+        h_iRow = NULL;
+        delete [] h_jCol;
+        h_jCol = NULL;
       }
       else {
-        h_idx_map_ = NULL;
-        for (Index i=0; i<nz_full_h_; i++) {
-          const Index h_row = full_h_iRow[i]-1;
-          const Index h_col = full_h_jCol[i]-1;
-          h_iRow[i] = h_row + 1;
-          h_jCol[i] = h_col + 1;
-          current_nz++;
-        }
-        current_nz = nz_full_h_;
+        nz_h_ = current_nz;
+        Hess_lagrangian_space_ = NULL;
       }
-      nz_h_ = current_nz;
-      Hess_lagrangian_space_ = new SymTMatrixSpace(n_x_var, nz_h_, h_iRow, h_jCol);
-      delete [] full_h_iRow;
-      full_h_iRow = NULL;
-      delete [] full_h_jCol;
-      full_h_jCol = NULL;
-      delete [] h_iRow;
-      h_iRow = NULL;
-      delete [] h_jCol;
-      h_jCol = NULL;
     } /* if (warm_start_same_structure_) { */
 
     // Assign the spaces to the returned pointers
