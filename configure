@@ -934,7 +934,7 @@ Some influential environment variables:
   CXXLIBS     Libraries necessary for linking C++ code with Fortran compiler
   AR          Command for handling archives (default is `ar')
   ARFLAGS     Flags for adding file for archive command (default is `crv')
-  AR_X        Command for extracing an archive (default is `ar x')
+  AR_X        Command for extracing an archive (default is `$AR x')
   CC          C compiler command
   CFLAGS      C compiler flags
   F77         Fortran 77 compiler command
@@ -2575,7 +2575,7 @@ fi
 echo "$as_me: Using ARFLAGS=\"$ARFLAGS\"." >&6;}
 
 if test -z "$AR_X"; then
-  AR_X="ar x"
+  AR_X="$AR x"
 fi
 
 { echo "$as_me:$LINENO: Using AR_X=\"$AR_X\"." >&5
