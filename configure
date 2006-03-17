@@ -10170,6 +10170,15 @@ if test "${with_blas+set}" = set; then
 else
   use_blas=
 fi;
+
+# On cygwin, unless otherwise specified, recompile blas because it
+# otherwise links with the cygwin blas which doesn't run under DOS>
+if test -z "$use_blas"; then
+  case $build in
+    *-cygwin) use_blas="BUILD" ;;
+  esac
+fi
+
 # Check if user supplied option makes sense
 if test ! -z "$use_blas"; then
   if test "$use_blas" = "BUILD"; then
@@ -10633,6 +10642,15 @@ if test "${with_lapack+set}" = set; then
 else
   use_lapack=
 fi;
+
+# On cygwin, unless otherwise specified, recompile lapack because it
+# otherwise links with the cygwin lapack which doesn't run under DOS>
+if test -z "$use_lapack"; then
+  case $build in
+    *-cygwin) use_lapack="BUILD" ;;
+  esac
+fi
+
 # Check if user supplied option makes sense
 if test ! -z "$use_lapack"; then
   if test "$use_lapack" = "BUILD"; then

@@ -907,6 +907,15 @@ AC_ARG_WITH([blas],
             AC_HELP_STRING([--with-blas],
                            [specify BLAS library (or BUILD for compilation)]),
             [use_blas=$withval], [use_blas=])
+
+# On cygwin, unless otherwise specified, recompile blas because it
+# otherwise links with the cygwin blas which doesn't run under DOS>
+if test -z "$use_blas"; then
+  case $build in
+    *-cygwin) use_blas="BUILD" ;;
+  esac
+fi
+
 # Check if user supplied option makes sense
 if test ! -z "$use_blas"; then
   if test "$use_blas" = "BUILD"; then
@@ -980,6 +989,15 @@ AC_ARG_WITH([lapack],
             AC_HELP_STRING([--with-lapack],
                            [specify LAPACK library (or BUILD for compilation, NONE for unavailable)]),
             [use_lapack=$withval], [use_lapack=])
+
+# On cygwin, unless otherwise specified, recompile lapack because it
+# otherwise links with the cygwin lapack which doesn't run under DOS>
+if test -z "$use_lapack"; then
+  case $build in
+    *-cygwin) use_lapack="BUILD" ;;
+  esac
+fi
+
 # Check if user supplied option makes sense
 if test ! -z "$use_lapack"; then
   if test "$use_lapack" = "BUILD"; then
