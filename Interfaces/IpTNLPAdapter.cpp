@@ -621,7 +621,7 @@ namespace Ipopt
         h_jCol = NULL;
       }
       else {
-        nz_h_ = current_nz;
+        nz_h_ = 0;
         Hess_lagrangian_space_ = NULL;
       }
     } /* if (warm_start_same_structure_) { */

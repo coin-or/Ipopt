@@ -94,6 +94,12 @@ namespace Ipopt
       return options_;
     }
 
+    /** Get the options list for setting options (const version) */
+    SmartPtr<const OptionsList> Options() const
+    {
+      return ConstPtr(options_);
+    }
+
     /** Get the object with the statistics about the most recent
      *  optimization run. */
     SmartPtr<SolveStatistics> Statistics();
