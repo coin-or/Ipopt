@@ -120,9 +120,6 @@ namespace Ipopt
     // read the rest of the nl file
     int retcode = pfgh_read(nl, ASL_return_read_err | ASL_findgroups);
 
-    // see "changes" in solvers directory of ampl code...
-    hesset(1,0,1,0,nlc);
-
     switch (retcode) {
       case ASL_readerr_none : {}
       break;
@@ -157,12 +154,20 @@ namespace Ipopt
         exit(-1);
       }
       break;
+      case ASL_readerr_CLP : {
+        jnlst_->Printf(J_ERROR, J_MAIN, "ASL error message: \"solver cannot handle CLP extensions\"\n");
+        exit(-1);
+      }
+      break;
       default: {
-        jnlst_->Printf(J_ERROR, J_MAIN, "Unknown error in stub file read\n");
+        jnlst_->Printf(J_ERROR, J_MAIN, "Unknown error in stub file read. retcode = %d\n", retcode);
         exit(-1);
       }
       break;
     }
+
+    // see "changes" in solvers directory of ampl code...
+    hesset(1,0,1,0,nlc);
 
     obj_sign_ = 1; // minimization
     if (objtype[obj_no] != 0) {
