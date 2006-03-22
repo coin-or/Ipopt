@@ -71,6 +71,10 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../Interfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/LinearSolvers`
 
+if HAVE_MUMPS
+CXXFLAGS += $(MUMPS_INCFLAGS)
+endif
+
 # Astyle stuff
 
 ASTYLE_FILES = \

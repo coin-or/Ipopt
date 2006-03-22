@@ -1159,6 +1159,29 @@ if test ! "$use_taucs" = "no"; then
   CXXFLAGS="$CXXFLAGS $TAUCS_INCFLAGS"
 fi
 
+#########
+# MUMPS #
+#########
+
+AC_ARG_WITH([mumps],
+            AC_HELP_STRING([--with-mumps],
+                           [specify MUMPS library and dependencies]),
+            [use_mumps="$withval"], [use_mumps=no])
+
+if test ! "$use_mumps" = "no"; then
+  LIBS="$use_mumps $LIBS"
+  IPADDLIBS="$use_mumps $IPADDLIBS"
+
+  AC_DEFINE(HAVE_MUMPS,1,
+            [Define to 1 if MUMPS is available])
+
+  AC_ARG_VAR(MUMPS_INCFLAGS,[Flags for including mumps and (psydo) mpi header files.])
+  if test -z "$MUMPS_INCFLAGS"; then
+    AC_MSG_ERROR([You need to specify MUMPS_INCFLAGS if you want to use MUMPS.])
+  fi
+  CXXFLAGS="$CXXFLAGS $MUMPS_INCFLAGS"
+fi
+
 ########
 # WSMP #
 ########
@@ -1192,7 +1215,7 @@ AC_ARG_ENABLE([distconf],,
     *) AC_MSG_ERROR(bad value ${enableval} for --enable-distconf) ;;
   esac],[distconf=false])
 
-if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no; then
+if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$use_mumps" = no; then
   if test "$distconf" = false; then
     AC_MSG_ERROR("No linear solver (such as MA27) available.  You need to provide at least one.")
   fi
@@ -1415,6 +1438,7 @@ AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
 AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])
+AM_CONDITIONAL([HAVE_MUMPS],[test ! "$use_mumps" = no])
 AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
 AM_CONDITIONAL([BUILDASLDIR],[test "$use_asldir" = BUILD])

@@ -170,6 +170,7 @@ namespace Ipopt
     // scale the matrix
     if (new_matrix || just_switched_on_scaling_) {
       GiveMatrixToSolver(true, sym_A);
+      new_matrix = true;
     }
 
     // Retrieve the right hand sides and scale if required

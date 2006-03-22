@@ -2723,30 +2723,37 @@ namespace Ipopt
     tdeps[7] = GetRawPtr(v_U);
 
     if (!curr_nlp_error_cache_.GetCachedResult(result, tdeps)) {
-      Number s_d = 0;
-      Number s_c = 0;
-      ComputeOptimalityErrorScaling(*ip_data_->curr()->y_c(), *ip_data_->curr()->y_d(),
-                                    *ip_data_->curr()->z_L(), *ip_data_->curr()->z_U(),
-                                    *ip_data_->curr()->v_L(), *ip_data_->curr()->v_U(),
-                                    s_max_,
-                                    s_d, s_c);
-      DBG_PRINT((1, "s_d = %lf, s_c = %lf\n", s_d, s_c));
+      if (ip_data_->curr()->x()->Dim()==ip_data_->curr()->y_c()->Dim()) {
+        // This is a square problem, we only need to consider the
+        // infeasibility
+        result = curr_nlp_constraint_violation(NORM_MAX);
+      }
+      else {
+        Number s_d = 0;
+        Number s_c = 0;
+        ComputeOptimalityErrorScaling(*ip_data_->curr()->y_c(), *ip_data_->curr()->y_d(),
+                                      *ip_data_->curr()->z_L(), *ip_data_->curr()->z_U(),
+                                      *ip_data_->curr()->v_L(), *ip_data_->curr()->v_U(),
+                                      s_max_,
+                                      s_d, s_c);
+        DBG_PRINT((1, "s_d = %lf, s_c = %lf\n", s_d, s_c));
 
-      // Dual infeasibility
-      DBG_PRINT((1, "curr_dual_infeasibility(NORM_MAX) = %8.2e\n",
-                 curr_dual_infeasibility(NORM_MAX)));
-      result = curr_dual_infeasibility(NORM_MAX)/s_d;
-      /*
-      // Primal infeasibility
-      DBG_PRINT((1, "curr_primal_infeasibility(NORM_MAX) = %8.2e\n",
-                 curr_primal_infeasibility(NORM_MAX)));
-      result = Max(result, curr_primal_infeasibility(NORM_MAX));
-      */
-      result = Max(result, curr_nlp_constraint_violation(NORM_MAX));
-      // Complementarity
-      DBG_PRINT((1, "curr_complementarity(0., NORM_MAX) = %8.2e\n",
-                 curr_complementarity(0., NORM_MAX)));
-      result = Max(result, curr_complementarity(0., NORM_MAX)/s_c);
+        // Dual infeasibility
+        DBG_PRINT((1, "curr_dual_infeasibility(NORM_MAX) = %8.2e\n",
+                   curr_dual_infeasibility(NORM_MAX)));
+        result = curr_dual_infeasibility(NORM_MAX)/s_d;
+        /*
+        // Primal infeasibility
+        DBG_PRINT((1, "curr_primal_infeasibility(NORM_MAX) = %8.2e\n",
+        curr_primal_infeasibility(NORM_MAX)));
+        result = Max(result, curr_primal_infeasibility(NORM_MAX));
+        */
+        result = Max(result, curr_nlp_constraint_violation(NORM_MAX));
+        // Complementarity
+        DBG_PRINT((1, "curr_complementarity(0., NORM_MAX) = %8.2e\n",
+                   curr_complementarity(0., NORM_MAX)));
+        result = Max(result, curr_complementarity(0., NORM_MAX)/s_c);
+      }
 
       curr_nlp_error_cache_.AddCachedResult(result, tdeps);
     }

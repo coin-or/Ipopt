@@ -61,6 +61,10 @@ build_triplet = @build@
 @HAVE_WSMP_TRUE@am__append_6 = \
 @HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
 
+@HAVE_MUMPS_TRUE@am__append_7 = \
+@HAVE_MUMPS_TRUE@	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+
+@HAVE_MUMPS_TRUE@am__append_8 = $(MUMPS_INCFLAGS)
 subdir = Algorithm/LinearSolvers
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -83,17 +87,20 @@ am__liblinsolvers_a_SOURCES_DIST = IpLinearSolversRegOp.cpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
 	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp \
-	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
+	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
+	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 @HAVE_MA27_TRUE@am__objects_1 = IpMa27TSolverInterface.$(OBJEXT)
 @HAVE_MA57_TRUE@am__objects_2 = IpMa57TSolverInterface.$(OBJEXT)
 @HAVE_MC19_TRUE@am__objects_3 = IpMc19TSymScalingMethod.$(OBJEXT)
 @HAVE_PARDISO_TRUE@am__objects_4 = IpPardisoSolverInterface.$(OBJEXT)
 @HAVE_TAUCS_TRUE@am__objects_5 = IpTAUCSSolverInterface.$(OBJEXT)
 @HAVE_WSMP_TRUE@am__objects_6 = IpWsmpSolverInterface.$(OBJEXT)
+@HAVE_MUMPS_TRUE@am__objects_7 = IpMumpsSolverInterface.$(OBJEXT)
 am_liblinsolvers_a_OBJECTS = IpLinearSolversRegOp.$(OBJEXT) \
 	IpTripletToCSRConverter.$(OBJEXT) IpTSymLinearSolver.$(OBJEXT) \
 	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
-	$(am__objects_4) $(am__objects_5) $(am__objects_6)
+	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
+	$(am__objects_7)
 liblinsolvers_a_OBJECTS = $(am_liblinsolvers_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -166,7 +173,8 @@ CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg/TMatrices` -I`$(CYGPATH_W) \
-	$(srcdir)/..` -I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
+	$(srcdir)/..` -I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
+	$(am__append_8)
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -185,6 +193,8 @@ HAVE_MA57_FALSE = @HAVE_MA57_FALSE@
 HAVE_MA57_TRUE = @HAVE_MA57_TRUE@
 HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
 HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
+HAVE_MUMPS_FALSE = @HAVE_MUMPS_FALSE@
+HAVE_MUMPS_TRUE = @HAVE_MUMPS_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
@@ -206,6 +216,7 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
+MUMPS_INCFLAGS = @MUMPS_INCFLAGS@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -267,7 +278,7 @@ liblinsolvers_a_SOURCES = IpLinearSolversRegOp.cpp \
 	IpTripletToCSRConverter.hpp IpTSymLinearSolver.cpp \
 	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp $(am__append_1) \
 	$(am__append_2) $(am__append_3) $(am__append_4) \
-	$(am__append_5) $(am__append_6)
+	$(am__append_5) $(am__append_6) $(am__append_7)
 
 # Astyle stuff
 ASTYLE_FILES = \
@@ -275,6 +286,7 @@ ASTYLE_FILES = \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
+	IpMumpsSolverInterface.cppbak IpMumpsSolverInterface.hppbak \
 	IpSparseSymLinearSolverInterface.hppbak \
 	IpSymLinearSolver.hppbak \
 	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
@@ -337,6 +349,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa27TSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa57TSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19TSymScalingMethod.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMumpsSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPardisoSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTAUCSSolverInterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTSymLinearSolver.Po@am__quote@

@@ -994,31 +994,40 @@ namespace Ipopt
                                     *actual_delta->z_U(),
                                     *actual_delta->v_L(),
                                     *actual_delta->v_U());
-    Number alpha_max =  Min(alpha_primal_max, alpha_dual_max);
+    Number alpha =  Min(alpha_primal_max, alpha_dual_max);
 
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "Trying soft restoration phase step with step length %13.6e\n",
-                   alpha_max);
+                   alpha);
 
-    // Set the trial point
-    IpData().SetTrialPrimalVariablesFromStep(alpha_max, *actual_delta->x(), *actual_delta->s());
-    PerformDualStep(alpha_max, alpha_max,
-                    actual_delta);
+    // We allow up to three trials in case there is an evaluation
+    // error for the functions
+    bool done=false;
+    Index count=3;
+    while (!done && count>0) {
+      // Set the trial point
+      IpData().SetTrialPrimalVariablesFromStep(alpha, *actual_delta->x(), *actual_delta->s());
+      PerformDualStep(alpha, alpha, actual_delta);
 
-    // Check if that point is acceptable with respect to the current
-    // original filter
-
-    try {
-      IpCq().trial_barrier_obj();
-      IpCq().trial_constraint_violation();
+      // Check if that point is acceptable with respect to the current
+      // original filter
+      try {
+        IpCq().trial_barrier_obj();
+        IpCq().trial_constraint_violation();
+        done=true;
+      }
+      catch(IpoptNLP::Eval_Error& e) {
+        e.ReportException(Jnlst(), J_DETAILED);
+        Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                       "Warning: Evaluation error during soft restoration phase step.\n");
+        IpData().Append_info_string("e");
+        count--;
+      }
     }
-    catch(IpoptNLP::Eval_Error& e) {
-      e.ReportException(Jnlst(), J_DETAILED);
-      Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
-                     "Warning: Evaluation error during soft restoration phase step.\n");
-      IpData().Append_info_string("e");
+    if (!done) {
       return false;
     }
+
     if (acceptor_->CheckAcceptabilityOfTrialPoint(0.)) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                      "  Trial step acceptable with respect to original backtracking globalization.\n");

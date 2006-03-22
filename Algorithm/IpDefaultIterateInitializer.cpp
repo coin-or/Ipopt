@@ -341,8 +341,14 @@ namespace Ipopt
     iterates->create_new_y_c();
     iterates->create_new_y_d();
 
-    if (IsValid(eq_mult_calculator) && constr_mult_init_max>0. &&
-        iterates->y_c_NonConst()->Dim()+iterates->y_d_NonConst()->Dim()>0) {
+    if (iterates->y_c_NonConst()->Dim()==iterates->x()->Dim()) {
+      // This problem is square, we just set the multipliers to zero
+      iterates->y_c_NonConst()->Set(0.0);
+      iterates->y_d_NonConst()->Set(0.0);
+      ip_data.Append_info_string("s");
+    }
+    else if (IsValid(eq_mult_calculator) && constr_mult_init_max>0. &&
+             iterates->y_c_NonConst()->Dim()+iterates->y_d_NonConst()->Dim()>0) {
       // First move all the trial data into the current fields, since
       // those values are needed to compute the initial values for
       // the multipliers

@@ -167,6 +167,13 @@ namespace Ipopt
     Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
     Number compl_inf = IpCq().unscaled_curr_complementarity(0., NORM_MAX);
 
+    if (IpData().curr()->x()->Dim()==IpData().curr()->y_c()->Dim()) {
+      // the problem is square, there is no point in looking at dual
+      // infeasibility and complementarity as termination criterion
+      dual_inf_tol_ = 1e300;
+      compl_inf_tol_ = 1e300;
+    }
+
     if (overall_error <= IpData().tol() &&
         dual_inf <= dual_inf_tol_ &&
         constr_viol <= constr_viol_tol_ &&
@@ -211,6 +218,13 @@ namespace Ipopt
     DBG_PRINT((1, "acceptable_dual_inf_tol_ = %e\n", acceptable_dual_inf_tol_));
     DBG_PRINT((1, "acceptable_constr_viol_tol_ = %e\n", acceptable_constr_viol_tol_));
     DBG_PRINT((1, "acceptable_compl_inf_tol_ = %e\n", acceptable_compl_inf_tol_));
+
+    if (IpData().curr()->x()->Dim()==IpData().curr()->y_c()->Dim()) {
+      // the problem is square, there is no point in looking at dual
+      // infeasibility and complementarity as termination criterion
+      acceptable_dual_inf_tol_ = 1e300;
+      acceptable_compl_inf_tol_ = 1e300;
+    }
 
     return (overall_error <= acceptable_tol_ &&
             dual_inf <= acceptable_dual_inf_tol_ &&

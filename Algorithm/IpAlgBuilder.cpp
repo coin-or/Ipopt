@@ -59,6 +59,9 @@
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
 #endif
+#ifdef HAVE_MUMPS
+# include "IpMumpsSolverInterface.hpp"
+#endif
 
 namespace Ipopt
 {
@@ -101,7 +104,7 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption5(
+    roptions->AddStringOption6(
       "linear_solver",
       "Linear solver used for step computations.",
 #ifdef HAVE_MA27
@@ -125,6 +128,7 @@ namespace Ipopt
       "pardiso", "use the Pardiso package",
       "wsmp", "use WSMP package (not yet working)",
       "taucs", "use TAUCS package (not yet working)",
+      "mumps", "use MUMPS package (not yet working)",
       "Determines which linear algebra package is to be used for the "
       "solution of the augmented linear system (for obtaining the search "
       "directions). "
@@ -268,6 +272,16 @@ namespace Ipopt
 
       THROW_EXCEPTION(OPTION_INVALID,
                       "Selected linear solver WSMP not available.");
+#endif
+
+    }
+    else if (linear_solver=="mumps") {
+#ifdef HAVE_MUMPS
+      SolverInterface = new MumpsSolverInterface();
+#else
+
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Selected linear solver MUMPS not available.");
 #endif
 
     }

@@ -55,6 +55,12 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
 
+if HAVE_MUMPS
+liblinsolvers_a_SOURCES += \
+	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+CXXFLAGS += $(MUMPS_INCFLAGS)
+endif
+
 # Astyle stuff
 
 ASTYLE_FILES = \
@@ -62,6 +68,7 @@ ASTYLE_FILES = \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
+	IpMumpsSolverInterface.cppbak IpMumpsSolverInterface.hppbak \
 	IpSparseSymLinearSolverInterface.hppbak \
 	IpSymLinearSolver.hppbak \
 	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
