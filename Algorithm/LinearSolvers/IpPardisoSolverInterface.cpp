@@ -99,7 +99,7 @@ namespace Ipopt
     roptions->AddStringOption3(
       "pardiso_matching_strategy",
       "Matching strategy to be used by Pardiso",
-      "complete+2x2"
+      "complete+2x2",
       "complete", "Match complete (IPAR(13)=1)",
       "complete+2x2", "Match complete+2x2 (IPAR(13)=2)",
       "constraints", "Match constraints (IPAR(13)=3)",
