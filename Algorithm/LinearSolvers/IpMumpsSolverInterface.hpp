@@ -2,8 +2,11 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// Author: Damien Hocking                 KBC    2006-03-20
+// Authors: Damien Hocking                 KBC    2006-03-20
 //        (included his original contribution into Ipopt package on 2006-03-25)
+//          Andreas Waechter               IBM    2006-03-25
+//           (minor changes and corrections)
+
 
 #ifndef __IPMUMPSSOLVERINTERFACE_HPP__
 #define __IPMUMPSSOLVERINTERFACE_HPP__
@@ -12,7 +15,7 @@
 
 extern "C"
 {
-#include "\ipopt-3.0.1\Extern\MUMPS_4.6.1\include\dmumps_c.h"
+#include "dmumps_c.h"
 }
 
 namespace Ipopt
@@ -73,16 +76,16 @@ namespace Ipopt
      *  Returns true, if linear solver provides inertia.
      */
     virtual bool ProvidesInertia() const
-       {
-       return true;
-       }
+    {
+      return true;
+    }
     /** Query of requested matrix type that the linear solver
      *  understands.
      */
     EMatrixFormat MatrixFormat() const
-       {
-       return Triplet_Format;
-       }
+    {
+      return Triplet_Format;
+    }
     //@}
 
     /** Methods for IpoptType */
@@ -108,7 +111,7 @@ namespace Ipopt
 
     /** @name Information about the matrix */
     //@{
-        /** @name Information about the matrix */
+    /** @name Information about the matrix */
     //@{
     /** Number of rows and columns of the matrix */
     Index n;
@@ -117,8 +120,13 @@ namespace Ipopt
     Index nz;
 
     /** Array for storing the values of the matrix. */
-    //@}
     double* a;
+
+    /** Array for storing the row indices of the matrix */
+    int* irn_;
+    /** Array for storing the column indices of the matrix */
+    int* jcn_;
+    //@}
     /** @name Information about most recent factorization/solve */
     //@{
     /** Number of negative eigenvalues */
