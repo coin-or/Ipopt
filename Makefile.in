@@ -49,8 +49,8 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(top_srcdir)/Examples/hs071_f/Makefile.in \
 	$(top_srcdir)/Examples/hs071_f/hs071_f.f.in \
 	$(top_srcdir)/Test/run_unitTests.in $(top_srcdir)/configure \
-	$(top_srcdir)/inc/config.h.in AUTHORS config.guess config.sub \
-	depcomp install-sh missing
+	$(top_srcdir)/inc/config.h.in AUTHORS INSTALL config.guess \
+	config.sub depcomp install-sh missing
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -279,6 +279,9 @@ EXTRA_DIST = \
 	Examples/ScalableProblems/RegisteredTNLP.hpp \
 	Examples/ScalableProblems/solve_problem.cpp \
 	README \
+	INSTALL \
+	LICENSE \
+	AUTHORS \
 	Docs/documentation.bbl \
 	Docs/documentation.tex \
 	Docs/documentation.pdf \
