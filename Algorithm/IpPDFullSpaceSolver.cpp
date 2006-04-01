@@ -430,7 +430,7 @@ namespace Ipopt
       // method has already asked the augSysSolver to increase the
       // quality at the end solve, and we are now getting the solution
       // with that better quality
-      retval = augSysSolver_->Solve(&W, &sigma_x, delta_x,
+      retval = augSysSolver_->Solve(&W, 1.0, &sigma_x, delta_x,
                                     &sigma_s, delta_s, &J_c, NULL,
                                     delta_c, &J_d, NULL, delta_d,
                                     *augRhs_x, *augRhs_s, *rhs.y_c(), *rhs.y_d(),
@@ -470,7 +470,7 @@ namespace Ipopt
           Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                          "Solving system with delta_x=%e delta_s=%e\n                    delta_c=%e delta_d=%e\n",
                          delta_x, delta_s, delta_c, delta_d);
-          retval = augSysSolver_->Solve(&W, &sigma_x, delta_x,
+          retval = augSysSolver_->Solve(&W, 1.0, &sigma_x, delta_x,
                                         &sigma_s, delta_s, &J_c, NULL,
                                         delta_c, &J_d, NULL, delta_d,
                                         *augRhs_x, *augRhs_s, *rhs.y_c(), *rhs.y_d(),

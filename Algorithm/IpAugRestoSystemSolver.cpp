@@ -59,6 +59,7 @@ namespace Ipopt
   }
 
   ESymSolverStatus AugRestoSystemSolver::Solve(const SymMatrix* W,
+					       double W_factor,
       const Vector* D_x,
       double delta_x,
       const Vector* D_s,
@@ -83,7 +84,10 @@ namespace Ipopt
     DBG_START_METH("AugRestoSystemSolver::Solve",dbg_verbosity);
     DBG_ASSERT(J_c && J_d); // should pass these by ref
 
+    // I think the comment below is incorrect
     // Remember, W and the D's may be NULL!
+    // ToDo: I don't think the W's can ever be NULL (we always need the structure)
+    DBG_ASSERT(W);
 
     SmartPtr<const CompoundSymMatrix> CW =
       dynamic_cast<const CompoundSymMatrix*>(W);
@@ -139,23 +143,16 @@ namespace Ipopt
     SmartPtr<const Vector> D_xR;
     SmartPtr<const SumSymMatrix> WR_sum =
       dynamic_cast<const SumSymMatrix*>(GetRawPtr(CW->GetComp(0,0)));
+    Number orig_W_factor = W_factor;
     if (IsValid(WR_sum)) {
       // We seem to be in the regular situation with exact second
       // derivatives
-      Number factor;
-      WR_sum->GetTerm(0, factor, h_orig);
-      DBG_ASSERT(factor == 1. || factor == 0.);
-      if (factor==0.) {
-        // ToDo: This is all just so complicated for the zero Hessian!!!
-        SmartPtr<SumSymMatrixSpace> ssm_space =
-          new SumSymMatrixSpace(WR_sum->Dim(), 1);
-        ssm_space->SetTermSpace(0, *h_orig->OwnerSymMatrixSpace());
-        SmartPtr<SumSymMatrix> new_matrix = ssm_space->MakeNewSumSymMatrix();
-        new_matrix->SetTerm(0, 0., *h_orig);
-        h_orig = GetRawPtr(new_matrix);
-
-      }
+      double temp_factor;
+      WR_sum->GetTerm(0, temp_factor, h_orig);
+      DBG_ASSERT(temp_factor == 1. || temp_factor == 0.);
+      orig_W_factor = temp_factor * W_factor;
       SmartPtr<const SymMatrix> eta_DR;
+      double factor;
       WR_sum->GetTerm(1, factor, eta_DR);
       SmartPtr<const Vector> wr_d =
         dynamic_cast<const DiagMatrix*>(GetRawPtr(eta_DR))->GetDiag();
@@ -212,6 +209,7 @@ namespace Ipopt
     Vector& sol_dR = sol_d;
 
     ESymSolverStatus status = orig_aug_solver_->Solve(GetRawPtr(h_orig),
+			      orig_W_factor,
                               GetRawPtr(D_xR), delta_xR,
                               GetRawPtr(D_sR), delta_sR,
                               GetRawPtr(J_cR), GetRawPtr(D_cR),

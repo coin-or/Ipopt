@@ -989,13 +989,16 @@ namespace Ipopt
       else {
         scalar_ = c * scalar_ + a * dense_z->scalar_ / dense_s->scalar_;
       }
+      initialized_ = true;
       homogeneous_ = true;
       if (values_) {
         owner_space_->FreeInternalStorage(values_);
         values_ = NULL;
       }
+      return;
     }
 
+    // At least one is not homogeneous
     // Make sure we have memory to store a non-homogeneous vector
     values_allocated();
 
@@ -1069,6 +1072,8 @@ namespace Ipopt
       }
     }
 
+    // just added, seems that initialized_ should be true...
+    initialized_ = true;
     homogeneous_ = false;
   }
 

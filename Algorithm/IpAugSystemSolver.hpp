@@ -59,6 +59,7 @@ namespace Ipopt
      */
     virtual ESymSolverStatus Solve(
       const SymMatrix* W,
+      double W_factor,
       const Vector* D_x,
       double delta_x,
       const Vector* D_s,
@@ -96,7 +97,7 @@ namespace Ipopt
       sol_cV[0] = &sol_c;
       std::vector<SmartPtr<Vector> > sol_dV(1);
       sol_dV[0] = &sol_d;
-      return MultiSolve(W, D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c,
+      return MultiSolve(W, W_factor, D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c,
                         J_d, D_d, delta_d, rhs_xV, rhs_sV, rhs_cV, rhs_dV,
                         sol_xV, sol_sV, sol_cV, sol_dV, check_NegEVals,
                         numberOfNegEVals);
@@ -107,6 +108,7 @@ namespace Ipopt
      *  MultiSolve. */
     virtual ESymSolverStatus MultiSolve(
       const SymMatrix* W,
+      double W_factor,
       const Vector* D_x,
       double delta_x,
       const Vector* D_s,
@@ -141,7 +143,7 @@ namespace Ipopt
 
       ESymSolverStatus retval=SYMSOLVER_SUCCESS;
       for (Index i=0; i<nrhs; i++) {
-        retval = Solve(W, D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c,
+        retval = Solve(W, W_factor, D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c,
                        J_d, D_d, delta_d,
                        *rhs_xV[i], *rhs_sV[i], *rhs_cV[i], *rhs_dV[i],
                        *sol_xV[i], *sol_sV[i], *sol_cV[i], *sol_dV[i],

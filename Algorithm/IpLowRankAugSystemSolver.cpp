@@ -58,6 +58,7 @@ namespace Ipopt
 
   ESymSolverStatus LowRankAugSystemSolver::Solve(
     const SymMatrix* W,
+    double W_factor,
     const Vector* D_x,
     double delta_x,
     const Vector* D_s,
@@ -94,7 +95,7 @@ namespace Ipopt
     if (first_call_ ||
         AugmentedSystemRequiresChange(W, D_x, delta_x, D_s, delta_s, *J_c,
                                       D_c, delta_c, *J_d, D_d, delta_d) ) {
-      retval = UpdateFactorization(W, D_x, delta_x, D_s, delta_s, *J_c,
+      retval = UpdateFactorization(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c,
                                    D_c, delta_c, *J_d, D_d, delta_d,
                                    rhs_x, rhs_s, rhs_c, rhs_d,
                                    check_NegEVals, numberOfNegEVals);
@@ -151,7 +152,7 @@ namespace Ipopt
     // Now solve the system for the given right hand side, using the
     // Sherman-Morrison formula with factorization information already
     // computed.
-    retval = aug_system_solver_->Solve(GetRawPtr(Wdiag_),
+    retval = aug_system_solver_->Solve(GetRawPtr(Wdiag_), W_factor,
                                        D_x, delta_x, D_s, delta_s,
                                        J_c, D_c, delta_c, J_d, D_d, delta_d,
                                        rhs_x, rhs_s, rhs_c, rhs_d,
@@ -207,6 +208,7 @@ namespace Ipopt
 
   ESymSolverStatus LowRankAugSystemSolver::UpdateFactorization(
     const SymMatrix* W,
+    double W_factor,
     const Vector* D_x,
     double delta_x,
     const Vector* D_s,
@@ -227,6 +229,7 @@ namespace Ipopt
     DBG_START_METH("LowRankAugSystemSolver::UpdateFactorization",
                    dbg_verbosity);
 
+    DBG_ASSERT(W_factor == 0.0 || W_factor == 1.0);
     ESymSolverStatus retval = SYMSOLVER_SUCCESS;
 
     // Get the low update information out of W
@@ -235,15 +238,27 @@ namespace Ipopt
     DBG_ASSERT(LR_W);
     DBG_PRINT_MATRIX(2, "LR_W", *LR_W);
 
-    SmartPtr<const Vector> B0 = LR_W->GetDiag();
-    SmartPtr<const MultiVectorMatrix> V = LR_W->GetV();
-    SmartPtr<const MultiVectorMatrix> U = LR_W->GetU();
+    SmartPtr<const Vector> B0;
+    SmartPtr<const MultiVectorMatrix> V;
+    SmartPtr<const MultiVectorMatrix> U;
+    if (W_factor == 1.0) {
+      V = LR_W->GetV();
+      U = LR_W->GetU();
+      B0 = LR_W->GetDiag();
+    }
     SmartPtr<const Matrix> P_LM = LR_W->P_LowRank();
     SmartPtr<const VectorSpace> LR_VecSpace = LR_W->LowRankVectorSpace();
+
+    if (IsNull(B0)) {
+      SmartPtr<Vector> zero_B0 = (IsValid(P_LM)) ? LR_VecSpace->MakeNew() : proto_rhs_x.MakeNew();
+      zero_B0->Set(0.0);
+      B0 = GetRawPtr(zero_B0);
+    }
 
     // set up the Hessian for the underlying augmented system solver
     // without the low-rank update
     if (IsValid(P_LM) && LR_W->ReducedDiag()) {
+      DBG_ASSERT(IsValid(B0));
       SmartPtr<Vector> fullx = proto_rhs_x.MakeNew();
       P_LM->MultVector(1., *B0, 0., *fullx);
       Wdiag_->SetDiag(*fullx);
@@ -437,7 +452,7 @@ namespace Ipopt
     }
 
     // Call the actual augmented system solver to obtain Vtilde
-    retval = aug_system_solver_->MultiSolve(GetRawPtr(Wdiag_), D_x, delta_x, D_s, delta_s,
+    retval = aug_system_solver_->MultiSolve(GetRawPtr(Wdiag_), 1.0, D_x, delta_x, D_s, delta_s,
                                             &J_c, D_c, delta_c, &J_d, D_d, delta_d,
                                             rhs_xV, rhs_sV, rhs_cV, rhs_dV,
                                             sol_xV, sol_sV, sol_cV, sol_dV,

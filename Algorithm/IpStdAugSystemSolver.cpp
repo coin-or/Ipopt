@@ -80,6 +80,7 @@ namespace Ipopt
 
   ESymSolverStatus StdAugSystemSolver::MultiSolve(
     const SymMatrix* W,
+    double W_factor,
     const Vector* D_x,
     double delta_x,
     const Vector* D_s,
@@ -104,6 +105,8 @@ namespace Ipopt
     DBG_START_METH("StdAugSystemSolver::MultiSolve",dbg_verbosity);
     DBG_ASSERT(J_c && J_d && "Currently, you MUST specify J_c and J_d in the augmented system");
 
+    DBG_ASSERT(W_factor == 0.0 || W_factor == 1.0);
+
     Index nrhs = (Index)rhs_xV.size();
     DBG_ASSERT(nrhs>0);
     DBG_ASSERT(nrhs==(Index)rhs_sV.size());
@@ -125,7 +128,7 @@ namespace Ipopt
       DBG_ASSERT(W && J_c && J_d); // W must exist during the first call to setup the structure!
       CreateAugmentedSpace(*W, *J_c, *J_d, *rhs_xV[0], *rhs_sV[0],
                            *rhs_cV[0], *rhs_dV[0]);
-      CreateAugmentedSystem(W, D_x, delta_x, D_s, delta_s,
+      CreateAugmentedSystem(W, W_factor, D_x, delta_x, D_s, delta_s,
                             *J_c, D_c, delta_c, *J_d, D_d, delta_d,
                             *rhs_xV[0], *rhs_sV[0], *rhs_cV[0], *rhs_dV[0]);
       DBG_DO(debug_first_time_through = true;)
@@ -139,7 +142,7 @@ namespace Ipopt
     if ( AugmentedSystemRequiresChange(W, D_x, delta_x, D_s, delta_s, *J_c,
                                        D_c, delta_c, *J_d, D_d, delta_d) ) {
       DBG_ASSERT(!debug_first_time_through);
-      CreateAugmentedSystem(W, D_x, delta_x, D_s, delta_s,
+      CreateAugmentedSystem(W, W_factor, D_x, delta_x, D_s, delta_s,
                             *J_c, D_c, delta_c, *J_d, D_d, delta_d,
                             *rhs_xV[0], *rhs_sV[0], *rhs_cV[0], *rhs_dV[0]);
     }
@@ -298,7 +301,9 @@ namespace Ipopt
 
   }
 
-  void StdAugSystemSolver::CreateAugmentedSystem(const SymMatrix* W,
+  void StdAugSystemSolver::CreateAugmentedSystem(
+      const SymMatrix* W,
+      double W_factor,
       const Vector* D_x,
       double delta_x,
       const Vector* D_s,
@@ -320,7 +325,7 @@ namespace Ipopt
     SmartPtr<SumSymMatrix> sumsym_x = sumsym_space_x_->MakeNewSumSymMatrix();
 
     if (W) {
-      sumsym_x->SetTerm(0, 1.0, *W);
+      sumsym_x->SetTerm(0, W_factor, *W);
       old_w_ = W;
       w_tag_ = W->GetTag();
     }

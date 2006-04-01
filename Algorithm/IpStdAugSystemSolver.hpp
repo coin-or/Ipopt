@@ -49,6 +49,7 @@ namespace Ipopt
      */
     virtual ESymSolverStatus MultiSolve(
       const SymMatrix* W,
+      double W_factor,
       const Vector* D_x,
       double delta_x,
       const Vector* D_s,
@@ -126,6 +127,7 @@ namespace Ipopt
      *  augmented system. This is done EVERY time Solve is called
      *  with ANY different information */
     void CreateAugmentedSystem(const SymMatrix* W,
+			       double W_factor,
                                const Vector* D_x,
                                double delta_x,
                                const Vector* D_s,

@@ -48,6 +48,7 @@ namespace Ipopt
      */
     virtual ESymSolverStatus Solve(
       const SymMatrix* W,
+      double W_factor,
       const Vector* D_x,
       double delta_x,
       const Vector* D_s,
