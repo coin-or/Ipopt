@@ -21,6 +21,8 @@ Interfaces/IpInterfacesRegOp.hpp -text
 Interfaces/IpSolveStatistics.cpp -text
 Interfaces/IpSolveStatistics.hpp -text
 /LICENSE -text
+Test/mytoy.nl -text
+Test/run_unitTests.in -text
 Windows/VisualStudio_dotNET/CExample/CExample.vcproj -text
 Windows/VisualStudio_dotNET/FortranExample/hs071_f.f -text
 Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln -text

@@ -48,8 +48,9 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(top_srcdir)/Examples/hs071_cpp/Makefile.in \
 	$(top_srcdir)/Examples/hs071_f/Makefile.in \
 	$(top_srcdir)/Examples/hs071_f/hs071_f.f.in \
-	$(top_srcdir)/configure $(top_srcdir)/inc/config.h.in AUTHORS \
-	config.guess config.sub depcomp install-sh missing
+	$(top_srcdir)/Test/run_unitTests.in $(top_srcdir)/configure \
+	$(top_srcdir)/inc/config.h.in AUTHORS config.guess config.sub \
+	depcomp install-sh missing
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -62,7 +63,7 @@ CONFIG_HEADER = $(top_builddir)/inc/config.h
 CONFIG_CLEAN_FILES = Examples/hs071_f/Makefile \
 	Examples/hs071_f/hs071_f.f Examples/Cpp_example/Makefile \
 	Examples/hs071_cpp/Makefile Examples/hs071_c/Makefile \
-	Examples/ScalableProblems/Makefile
+	Examples/ScalableProblems/Makefile Test/run_unitTests
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -359,6 +360,8 @@ Examples/hs071_c/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 Examples/ScalableProblems/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/ScalableProblems/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+Test/run_unitTests: $(top_builddir)/config.status $(top_srcdir)/Test/run_unitTests.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 uninstall-info-am:
 
 # This directory's subdirectories are mostly independent; you can cd
@@ -496,7 +499,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/Docs $(distdir)/Examples/Cpp_example $(distdir)/Examples/ScalableProblems $(distdir)/Examples/hs071_c $(distdir)/Examples/hs071_cpp $(distdir)/Examples/hs071_f $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/include $(distdir)/inc
+	$(mkdir_p) $(distdir)/Docs $(distdir)/Examples/Cpp_example $(distdir)/Examples/ScalableProblems $(distdir)/Examples/hs071_c $(distdir)/Examples/hs071_cpp $(distdir)/Examples/hs071_f $(distdir)/Test $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/include $(distdir)/inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -766,6 +769,16 @@ uninstall-local:
 
 cuter: install
 	cd Apps/CUTErInterface; $(MAKE) cuter
+
+test: unitTest
+
+unitTests: unitTest
+
+unitTest:
+	cd Examples/hs071_cpp; make clean; make
+	cd Examples/hs071_c; make clean; make
+	cd Examples/hs071_f; make clean; make
+	cd Test; chmod u+x ./run_unitTests; ./run_unitTests
 
 astyle:
 	cd Algorithm; $(MAKE) astyle

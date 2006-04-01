@@ -1474,7 +1474,8 @@ AC_CONFIG_FILES([Makefile Common/Makefile
 		 Extern/Makefile
 		 Extern/blas/Makefile Extern/lapack/Makefile
 		 Extern/HSL/Makefile
-		 Extern/ASL/Makefile])
+		 Extern/ASL/Makefile
+		 Test/run_unitTests])
 
 AC_CONFIG_HEADER([inc/config.h])
 

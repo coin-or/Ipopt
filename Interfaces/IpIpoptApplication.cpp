@@ -311,11 +311,11 @@ namespace Ipopt
 
     }
     catch(OPTION_INVALID& exc) {
-      exc.ReportException(*jnlst_);
+      exc.ReportException(*jnlst_, J_ERROR);
       exit(-1);
     }
     catch(IpoptException& exc) {
-      exc.ReportException(*jnlst_);
+      exc.ReportException(*jnlst_, J_ERROR);
       exit(-1);
     }
     catch(std::bad_alloc) {
@@ -447,7 +447,7 @@ namespace Ipopt
       retValue = call_optimize();
     }
     catch(OPTION_INVALID& exc) {
-      exc.ReportException(*jnlst_, J_MOREDETAILED);
+      exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Invalid option encountered.\n");
       retValue = Invalid_Option;
     }

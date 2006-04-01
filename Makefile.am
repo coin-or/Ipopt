@@ -60,8 +60,11 @@ EXTRA_DIST = \
 	Docs/documentation.tex \
 	Docs/documentation.pdf \
 	Docs/options.tex \
+	Test/run_unitTests.in \
+	Test/mytoy.nl \
 	Windows/VisualStudio_dotNET/README \
 	Windows/VisualStudio_dotNET/CppExample/CppExample.vcproj \
+	Windows/VisualStudio_dotNET/CExample/CExample.vcproj \
 	Windows/VisualStudio_dotNET/FortranExample/FortranExample.vfproj \
 	Windows/VisualStudio_dotNET/FortranLinAlg/FortranLinAlg.vfproj \
 	Windows/VisualStudio_dotNET/include/config.h \
@@ -110,6 +113,16 @@ uninstall-local:
 
 cuter: install
 	cd Apps/CUTErInterface; $(MAKE) cuter
+
+test: unitTest
+
+unitTests: unitTest
+
+unitTest:
+	cd Examples/hs071_cpp; make clean; make
+	cd Examples/hs071_c; make clean; make
+	cd Examples/hs071_f; make clean; make
+	cd Test; chmod u+x ./run_unitTests; ./run_unitTests
 
 astyle:
 	cd Algorithm; $(MAKE) astyle

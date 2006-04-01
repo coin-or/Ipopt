@@ -12224,7 +12224,7 @@ elif test ! "$use_asldir" = no; then
 fi
 
 
-                                                                                                                                                                                                                  ac_config_files="$ac_config_files Makefile Common/Makefile LinAlg/Makefile LinAlg/TMatrices/Makefile Interfaces/Makefile Algorithm/Makefile Algorithm/LinearSolvers/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/CUTErInterface/Makefile Examples/hs071_f/Makefile Examples/hs071_f/hs071_f.f Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile Examples/hs071_c/Makefile Examples/ScalableProblems/Makefile Extern/Makefile Extern/blas/Makefile Extern/lapack/Makefile Extern/HSL/Makefile Extern/ASL/Makefile"
+                                                                                                                                                                                                                            ac_config_files="$ac_config_files Makefile Common/Makefile LinAlg/Makefile LinAlg/TMatrices/Makefile Interfaces/Makefile Algorithm/Makefile Algorithm/LinearSolvers/Makefile Apps/Makefile Apps/AmplSolver/Makefile Apps/CUTErInterface/Makefile Examples/hs071_f/Makefile Examples/hs071_f/hs071_f.f Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile Examples/hs071_c/Makefile Examples/ScalableProblems/Makefile Extern/Makefile Extern/blas/Makefile Extern/lapack/Makefile Extern/HSL/Makefile Extern/ASL/Makefile Test/run_unitTests"
 
 
           ac_config_headers="$ac_config_headers inc/config.h"
@@ -12943,6 +12943,7 @@ do
   "Extern/lapack/Makefile" ) CONFIG_FILES="$CONFIG_FILES Extern/lapack/Makefile" ;;
   "Extern/HSL/Makefile" ) CONFIG_FILES="$CONFIG_FILES Extern/HSL/Makefile" ;;
   "Extern/ASL/Makefile" ) CONFIG_FILES="$CONFIG_FILES Extern/ASL/Makefile" ;;
+  "Test/run_unitTests" ) CONFIG_FILES="$CONFIG_FILES Test/run_unitTests" ;;
   "$lapackobjdir/$file" ) CONFIG_LINKS="$CONFIG_LINKS $lapackobjdir/$file:$lapackdir/$file" ;;
   "Extern/ASL/ASLsolvers" ) CONFIG_LINKS="$CONFIG_LINKS Extern/ASL/ASLsolvers:$asldir" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
