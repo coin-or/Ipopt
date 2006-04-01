@@ -118,7 +118,7 @@ test: unitTest
 
 unitTests: unitTest
 
-unitTest:
+unitTest: install
 	cd Examples/hs071_cpp; make clean; make
 	cd Examples/hs071_c; make clean; make
 	cd Examples/hs071_f; make clean; make

@@ -139,12 +139,11 @@ namespace Ipopt
     IpData().set_delta_aff(step);
     IpData().SetHaveAffineDeltas(true);
 
-    // DELETEME
     char ssigma[40];
     sprintf(ssigma, " sigma=%8.2e", sigma);
     IpData().Append_info_string(ssigma);
-    sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
-    IpData().Append_info_string(ssigma);
+    //sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
+    //IpData().Append_info_string(ssigma);
 
     new_mu = Max(Min(mu, mu_max), mu_min);
     return true;

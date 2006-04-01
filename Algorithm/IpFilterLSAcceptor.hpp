@@ -220,6 +220,13 @@ namespace Ipopt
     /** Flag indicating whether the corrector should be skipped during
      *  the monotone mu mode. */
     bool skip_corr_in_monotone_mode_;
+    /** maximal allowed number of filter resets. */
+    Index max_filter_resets_;
+    /** interation counter trigger for filter reset.  If the
+     *  successive number of iterations in which the last rejected
+     *  step was due to the filter, and max_filter_resets is non-zero,
+     *  then the filter is reset. */
+    Index filter_reset_trigger_;
     //@}
 
     /** @name Information related to watchdog procedure */
@@ -243,6 +250,17 @@ namespace Ipopt
 
     /** Filter with entries */
     Filter filter_;
+
+    /** @name Filter reset stuff */
+    //@{
+    /** True, if last rejected was due to the filter. */
+    Number last_rejection_due_to_filter_;
+    /** Counter of successive iterations in which filter was reason
+     *  for last rejection. */
+    Index count_successive_filter_rejections_;
+    /** Counter for the filter resets done so far. */
+    Index n_filter_resets_;
+    //@}
 
     /** @name Strategy objective that are used */
     //@{

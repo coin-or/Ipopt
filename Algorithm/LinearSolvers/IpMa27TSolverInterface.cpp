@@ -405,7 +405,7 @@ namespace Ipopt
       iw_ = new ipfint[liw_];
       a_ = new double[la_];
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                     "MA27BD returned iflag=%d.\n Increase liw from %d to %d and la from %d to %d and factorize again.\n",
+                     "MA27BD returned iflag=%d and requires more memory.\n Increase liw from %d to %d and la from %d to %d and factorize again.\n",
                      iflag, liw_old, liw_, la_old, la_);
       IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_CALL_AGAIN;

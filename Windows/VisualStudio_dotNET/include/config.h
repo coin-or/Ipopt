@@ -78,6 +78,9 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
+/* Define to 1 if MUMPS is available */
+/* #undef HAVE_MUMPS */
+
 /* Define to 1 if Pardiso is available (unsupported) */
 /* #undef HAVE_PARDISO */
 
@@ -130,7 +133,7 @@
 #define PACKAGE "ipopt"
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "coin-ipopt@www-124.ibm.com"
+#define PACKAGE_BUGREPORT "coin-ipopt@list.coin-or.org"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "Ipopt"

@@ -120,6 +120,23 @@ namespace Ipopt
       "barrier objective function by more than obj_max_inc orders "
       "of magnitude.");
 
+    roptions->AddLowerBoundedIntegerOption(
+      "max_filter_resets",
+      "Maximal allowed number of filter resets",
+      0, 5,
+      "A positive number enables a heuristic that resets the filter, whenever "
+      "in more than \"filter_reset_trigger\" successive iterations the last "
+      "rejected trial steps size was rejected because of the filter.  This "
+      "option determine the maximal number of resets that are allowed to take "
+      "place.");
+    roptions->AddLowerBoundedIntegerOption(
+      "filter_reset_trigger",
+      "Number of iterations that trigger the filter reset.",
+      1, 5,
+      "If the filter reset heuristic is active and the number of successive "
+      "iterations in which the last rejected trial step size was rejected "
+      "because of the filter, the filter is reset.");
+
     roptions->AddStringOption3(
       "corrector_type",
       "The type of corrector steps that should be taken (unsupported!).",
@@ -179,6 +196,9 @@ namespace Ipopt
                        "Option \"max_soc\": This option is non-negative, but no linear solver for computing the SOC given to FilterLSAcceptor object.");
     }
     options.GetNumericValue("kappa_soc", kappa_soc_, prefix);
+    options.GetIntegerValue("max_filter_resets", max_filter_resets_, prefix);
+    options.GetIntegerValue("filter_reset_trigger", filter_reset_trigger_,
+                            prefix);
     options.GetNumericValue("obj_max_inc", obj_max_inc_, prefix);
     Index enum_int;
     options.GetEnumValue("corrector_type", enum_int, prefix);
@@ -189,6 +209,8 @@ namespace Ipopt
 
     theta_min_ = -1.;
     theta_max_ = -1.;
+
+    n_filter_resets_ = 0;
 
     Reset();
 
@@ -306,6 +328,7 @@ namespace Ipopt
 
     if (!accept) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Failed...\n");
+      last_rejection_due_to_filter_ = false;
       return accept;
     }
     else {
@@ -317,11 +340,36 @@ namespace Ipopt
     accept = IsAcceptableToCurrentFilter(trial_barr, trial_theta);
     if (!accept) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Failed...\n");
+      last_rejection_due_to_filter_ = true;
       return accept;
     }
     else {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Succeeded...\n");
     }
+
+    // Filter reset heuristic
+    if (max_filter_resets_>0) {
+      if (n_filter_resets_<max_filter_resets_) {
+        if (last_rejection_due_to_filter_) {
+          count_successive_filter_rejections_++;
+          if (count_successive_filter_rejections_>=filter_reset_trigger_) {
+            Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                           "Resetting filter because in %d iterations last rejection was due to filter", count_successive_filter_rejections_);
+            IpData().Append_info_string("F+");
+            Reset();
+          }
+        }
+        else {
+          count_successive_filter_rejections_ = 0;
+        }
+      }
+      else {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "Filter should be reset, but maximal number of resets already exceeded.\n");
+        IpData().Append_info_string("F-");
+      }
+    }
+    last_rejection_due_to_filter_= false;
 
     return accept;
   }
@@ -418,6 +466,9 @@ namespace Ipopt
   void FilterLSAcceptor::Reset()
   {
     DBG_START_FUN("FilterLSAcceptor::Reset", dbg_verbosity);
+
+    last_rejection_due_to_filter_ = false;
+    count_successive_filter_rejections_ = 0;
 
     filter_.Clear();
   }

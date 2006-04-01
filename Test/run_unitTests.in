@@ -15,9 +15,13 @@ echo " "
 
 # AMPL Solver executable
 echo Testing AMPL Solver Executable...
-if test -x ../Apps/AmplSolver/ipopt && test -f $srcdir/mytoy.nl; then
-  rm -rf mytol.nl
-  eval cp "$srcdir/mytoy.nl" .
+if test -x ../Apps/AmplSolver/ipopt ; then
+  if test -f mytoy.nl; then
+    remove_mytoy=no
+  else
+    eval cp "$srcdir/mytoy.nl" .
+    remove_mytoy=yes
+  fi
   (eval ../Apps/AmplSolver/ipopt mytoy.nl ) >tmpfile 2>&1
   grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
   if test $? = 0; then
@@ -31,7 +35,10 @@ if test -x ../Apps/AmplSolver/ipopt && test -f $srcdir/mytoy.nl; then
     echo "    ******** Test FAILED! ********"
     echo "Output of the test program is above."
   fi
-  rm -rf tmpfile mytoy.nl mytoy.sol
+  rm -rf tmpfile  mytoy.sol
+  if test "$remove_mytoy" = "yes"; then
+    rm -rf mytoy.nl
+  fi
 else
   echo "    no AMPL solver executable found, skipping test..."
 fi
@@ -91,4 +98,4 @@ rm -rf tmpfile
 
 
 # clean up
-rm -rf tmpfile debug.out ipopt.out mytoy.nl mytoy.sol IPOPT.OUT
+rm -rf tmpfile debug.out ipopt.out IPOPT.OUT
