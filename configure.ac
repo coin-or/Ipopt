@@ -1094,8 +1094,9 @@ if test "$use_hsl" = BUILD; then
 # Check which files are available
   MY_CHECK_HSLFILE(ma27ad,MA27)
   if test "$use_MA27" = BUILD; then
+    AC_PROG_EGREP
     AC_MSG_CHECKING([whether MA27 is threadsafe])
-    if $EGREP MA27UD $hslsrcdir/ma27ad.f >&5 ; then
+    if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
       AC_MSG_RESULT(yes)
     else
       AC_MSG_RESULT(no)

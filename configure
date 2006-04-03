@@ -11043,9 +11043,24 @@ else
 fi
 
   if test "$use_MA27" = BUILD; then
+    echo "$as_me:$LINENO: checking for egrep" >&5
+echo $ECHO_N "checking for egrep... $ECHO_C" >&6
+if test "${ac_cv_prog_egrep+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if echo a | (grep -E '(a|b)') >/dev/null 2>&1
+    then ac_cv_prog_egrep='grep -E'
+    else ac_cv_prog_egrep='egrep'
+    fi
+fi
+echo "$as_me:$LINENO: result: $ac_cv_prog_egrep" >&5
+echo "${ECHO_T}$ac_cv_prog_egrep" >&6
+ EGREP=$ac_cv_prog_egrep
+
+
     echo "$as_me:$LINENO: checking whether MA27 is threadsafe" >&5
 echo $ECHO_N "checking whether MA27 is threadsafe... $ECHO_C" >&6
-    if $EGREP MA27UD $hslsrcdir/ma27ad.f >&5 ; then
+    if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
       echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
