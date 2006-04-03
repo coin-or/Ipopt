@@ -302,22 +302,22 @@ namespace Ipopt
   }
 
   void StdAugSystemSolver::CreateAugmentedSystem(
-      const SymMatrix* W,
-      double W_factor,
-      const Vector* D_x,
-      double delta_x,
-      const Vector* D_s,
-      double delta_s,
-      const Matrix& J_c,
-      const Vector* D_c,
-      double delta_c,
-      const Matrix& J_d,
-      const Vector* D_d,
-      double delta_d,
-      const Vector& proto_x,
-      const Vector& proto_s,
-      const Vector& proto_c,
-      const Vector& proto_d)
+    const SymMatrix* W,
+    double W_factor,
+    const Vector* D_x,
+    double delta_x,
+    const Vector* D_s,
+    double delta_s,
+    const Matrix& J_c,
+    const Vector* D_c,
+    double delta_c,
+    const Matrix& J_d,
+    const Vector* D_d,
+    double delta_d,
+    const Vector& proto_x,
+    const Vector& proto_s,
+    const Vector& proto_c,
+    const Vector& proto_d)
   {
     augmented_system_ = augmented_system_space_->MakeNewCompoundSymMatrix();
 

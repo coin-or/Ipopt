@@ -59,7 +59,7 @@ namespace Ipopt
   }
 
   ESymSolverStatus AugRestoSystemSolver::Solve(const SymMatrix* W,
-					       double W_factor,
+      double W_factor,
       const Vector* D_x,
       double delta_x,
       const Vector* D_s,
@@ -209,7 +209,7 @@ namespace Ipopt
     Vector& sol_dR = sol_d;
 
     ESymSolverStatus status = orig_aug_solver_->Solve(GetRawPtr(h_orig),
-			      orig_W_factor,
+                              orig_W_factor,
                               GetRawPtr(D_xR), delta_xR,
                               GetRawPtr(D_sR), delta_sR,
                               GetRawPtr(J_cR), GetRawPtr(D_cR),
