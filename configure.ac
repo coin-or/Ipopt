@@ -732,9 +732,15 @@ AC_LANG_POP(Fortran 77)
 
 # find out how long an int pointer is to know if we need INTEGER*4 or
 # INTEGER*8 in Fortran to capture pointers.
-AC_LANG_PUSH(C)
-AC_CHECK_SIZEOF(int *)
-AC_LANG_POP(C)
+#
+# This test doesn't work on BlueGene
+if test "$is_bg" = no; then
+  AC_LANG_PUSH(C)
+  AC_CHECK_SIZEOF(int *)
+  AC_LANG_POP(C)
+else
+  ac_cv_sizeof_int_p=4
+fi
 AC_SUBST(BITS_PER_POINTER)
 AC_SUBST(BIT32FCOMMENT)
 AC_SUBST(BIT64FCOMMENT)
