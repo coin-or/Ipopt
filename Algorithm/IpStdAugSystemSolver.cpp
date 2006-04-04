@@ -139,8 +139,8 @@ namespace Ipopt
     // what is currently in the compound matrix of the augmented
     // system. If anything is different, then update the augmented
     // system
-    if ( AugmentedSystemRequiresChange(W, D_x, delta_x, D_s, delta_s, *J_c,
-                                       D_c, delta_c, *J_d, D_d, delta_d) ) {
+    if ( AugmentedSystemRequiresChange(W, W_factor, D_x, delta_x, D_s, delta_s,
+                                       *J_c, D_c, delta_c, *J_d, D_d, delta_d) ) {
       DBG_ASSERT(!debug_first_time_through);
       CreateAugmentedSystem(W, W_factor, D_x, delta_x, D_s, delta_s,
                             *J_c, D_c, delta_c, *J_d, D_d, delta_d,
@@ -333,6 +333,7 @@ namespace Ipopt
       sumsym_x->SetTerm(0, 0.0, *old_w_);
       w_tag_ = 0;
     }
+    w_factor_ = W_factor;
 
     SmartPtr<DiagMatrix> diag_x = diag_space_x_->MakeNewDiagMatrix();
     if (D_x) {
@@ -443,17 +444,19 @@ namespace Ipopt
   }
 
 
-  bool StdAugSystemSolver::AugmentedSystemRequiresChange(const SymMatrix* W,
-      const Vector* D_x,
-      double delta_x,
-      const Vector* D_s,
-      double delta_s,
-      const Matrix& J_c,
-      const Vector* D_c,
-      double delta_c,
-      const Matrix& J_d,
-      const Vector* D_d,
-      double delta_d)
+  bool StdAugSystemSolver::AugmentedSystemRequiresChange(
+    const SymMatrix* W,
+    double W_factor,
+    const Vector* D_x,
+    double delta_x,
+    const Vector* D_s,
+    double delta_s,
+    const Matrix& J_c,
+    const Vector* D_c,
+    double delta_c,
+    const Matrix& J_d,
+    const Vector* D_d,
+    double delta_d)
   {
     DBG_START_METH("StdAugSystemSolver::AugmentedSystemRequiresChange",dbg_verbosity);
     DBG_ASSERT(augsys_tag_ == augmented_system_->GetTag() && "Someone has changed the augmented system outside of the AugSystemSolver. This should NOT happen.");
@@ -462,6 +465,7 @@ namespace Ipopt
 
     bool Wtest = (W && W->GetTag() != w_tag_);
     bool iWtest = (!W && w_tag_ != 0);
+    bool wfactor_test = (W_factor != w_factor_);
     bool D_xtest = (D_x && D_x->GetTag() != d_x_tag_);
     bool iD_xtest = (!D_x && d_x_tag_ != 0);
     bool delta_xtest = (delta_x != delta_x_);
@@ -480,6 +484,7 @@ namespace Ipopt
 
     DBG_PRINT((2,"Wtest = %d\n", Wtest));
     DBG_PRINT((2,"iWtest = %d\n", iWtest));
+    DBG_PRINT((2,"wfactor_test = %d\n", wfactor_test));
     DBG_PRINT((2,"D_xtest = %d\n", D_xtest));
     DBG_PRINT((2,"iD_xtest = %d\n", iD_xtest));
     DBG_PRINT((2,"delta_xtest = %d\n", delta_xtest));
@@ -497,6 +502,7 @@ namespace Ipopt
 
     if ( (W && W->GetTag() != w_tag_)
          || (!W && w_tag_ != 0)
+         || (W_factor != w_factor_)
          || (D_x && D_x->GetTag() != d_x_tag_)
          || (!D_x && d_x_tag_ != 0)
          || (delta_x != delta_x_)

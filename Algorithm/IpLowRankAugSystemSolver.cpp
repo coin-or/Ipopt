@@ -21,6 +21,7 @@ namespace Ipopt
       AugSystemSolver(),
       aug_system_solver_(&aug_system_solver),
       w_tag_(0),
+      w_factor_(0.),
       d_x_tag_(0),
       delta_x_(0.),
       d_s_tag_(0),
@@ -93,10 +94,11 @@ namespace Ipopt
     }
 
     if (first_call_ ||
-        AugmentedSystemRequiresChange(W, D_x, delta_x, D_s, delta_s, *J_c,
-                                      D_c, delta_c, *J_d, D_d, delta_d) ) {
-      retval = UpdateFactorization(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c,
-                                   D_c, delta_c, *J_d, D_d, delta_d,
+        AugmentedSystemRequiresChange(W, W_factor, D_x, delta_x, D_s, delta_s,
+                                      *J_c, D_c, delta_c, *J_d, D_d,
+                                      delta_d) ) {
+      retval = UpdateFactorization(W, W_factor, D_x, delta_x, D_s, delta_s,
+                                   *J_c, D_c, delta_c, *J_d, D_d, delta_d,
                                    rhs_x, rhs_s, rhs_c, rhs_d,
                                    check_NegEVals, numberOfNegEVals);
       if (retval != SYMSOLVER_SUCCESS) {
@@ -105,6 +107,7 @@ namespace Ipopt
 
       // Store the tags
       w_tag_ = W->GetTag();
+      w_factor_ = W_factor;
       if (D_x) {
         d_x_tag_ = D_x->GetTag();
       }
@@ -500,6 +503,7 @@ namespace Ipopt
 
   bool LowRankAugSystemSolver::AugmentedSystemRequiresChange(
     const SymMatrix* W,
+    double W_factor,
     const Vector* D_x,
     double delta_x,
     const Vector* D_s,
@@ -518,6 +522,7 @@ namespace Ipopt
 
     bool Wtest = (W && W->GetTag() != w_tag_);
     bool iWtest = (!W && w_tag_ != 0);
+    bool wfactor_test = (W_factor != w_factor_);
     bool D_xtest = (D_x && D_x->GetTag() != d_x_tag_);
     bool iD_xtest = (!D_x && d_x_tag_ != 0);
     bool delta_xtest = (delta_x != delta_x_);
@@ -536,6 +541,7 @@ namespace Ipopt
 
     DBG_PRINT((2,"Wtest = %d\n", Wtest));
     DBG_PRINT((2,"iWtest = %d\n", iWtest));
+    DBG_PRINT((2,"wfactor_test = %d\n", wfactor_test));
     DBG_PRINT((2,"D_xtest = %d\n", D_xtest));
     DBG_PRINT((2,"iD_xtest = %d\n", iD_xtest));
     DBG_PRINT((2,"delta_xtest = %d\n", delta_xtest));
@@ -553,6 +559,7 @@ namespace Ipopt
 
     if ( (W && W->GetTag() != w_tag_)
          || (!W && w_tag_ != 0)
+         || (W_factor != w_factor_)
          || (D_x && D_x->GetTag() != d_x_tag_)
          || (!D_x && d_x_tag_ != 0)
          || (delta_x != delta_x_)

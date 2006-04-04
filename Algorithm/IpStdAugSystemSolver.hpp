@@ -146,6 +146,7 @@ namespace Ipopt
     /** Check the internal tags and decide if the passed variables are
      *  different from what is in the augmented_system_ */
     bool AugmentedSystemRequiresChange(const SymMatrix* W,
+                                       double W_factor,
                                        const Vector* D_x,
                                        double delta_x,
                                        const Vector* D_s,
@@ -182,6 +183,8 @@ namespace Ipopt
      *  this tag is set to 0
      */
     TaggedObject::Tag w_tag_;
+    /** Most recent value of W_factor */
+    double w_factor_;
     /** Tag for D_x vector, representing the diagonal matrix D_x.  If
      *  D_x has been given to Set as NULL, then this tag is set to 0
      */

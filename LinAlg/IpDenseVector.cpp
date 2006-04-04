@@ -1072,7 +1072,6 @@ namespace Ipopt
       }
     }
 
-    // just added, seems that initialized_ should be true...
     initialized_ = true;
     homogeneous_ = false;
   }
