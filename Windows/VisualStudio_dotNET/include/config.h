@@ -84,6 +84,9 @@
 /* Define to 1 if Pardiso is available (unsupported) */
 /* #undef HAVE_PARDISO */
 
+/* Define to 1 if you are using the parallel version of Pardiso */
+/* #undef HAVE_PARDISO_PARALLEL */
+
 /* Define to 1 if you have the <stdarg.h> header file. */
 /* #undef HAVE_STDARG_H */
 

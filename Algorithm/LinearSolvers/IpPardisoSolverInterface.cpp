@@ -161,6 +161,7 @@ namespace Ipopt
     // Set some parameters for Pardiso
     IPARM_[0] = 1;  // Don't use the default values
 
+#ifdef HAVE_PARDISO_PARALLEL
     // Obtain the numbers of processors from the value of OMP_NUM_THREADS
     char    *var = getenv("OMP_NUM_THREADS");
     int      num_procs;
@@ -180,6 +181,11 @@ namespace Ipopt
       return false;
     }
     IPARM_[2] = num_procs;  // Set the number of processors
+#else
+
+    IPARM_[2] = 1;
+#endif
+
     IPARM_[5] = 1;  // Overwrite right-hand side
     // ToDo: decide if we need iterative refinement in Pardiso.  For
     // now, switch it off ?

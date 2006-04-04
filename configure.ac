@@ -53,6 +53,7 @@ AC_LANG_PUSH(C++)
 SAVE_CXXFLAGS="$CXXFLAGS"
 case $build in
   *-cygwin) comps="g++ cl" ;;
+  *-darwin*) comps="g++ c++ CC" ;;
   *)        comps="xlC aCC CC g++ c++ pgCC icpc" ;;
 esac
 AC_PROG_CXX([$comps])
@@ -1127,6 +1128,7 @@ fi
 # PARDISO #
 ###########
 
+AC_LANG_PUSH(Fortran 77)
 AC_ARG_WITH([pardiso],
             AC_HELP_STRING([--with-pardiso],
                            [specify Pardiso library (unsupported)]),
@@ -1137,14 +1139,22 @@ if test ! "$use_pardiso" = "no"; then
   IPADDLIBS="$use_pardiso $IPADDLIBS"
 
 # ToDo put this back in
-#  AC_MSG_CHECKING([whether user-supplied Pardiso library \"$use_pardiso\" works])
-#  AC_TRY_LINK([],[      call PARDISO()],
-#              [AC_MSG_RESULT(yes)],
-#              [AC_MSG_ERROR([Pardiso library $use_pardiso does not seem to work])])
+  AC_MSG_CHECKING([whether user-supplied Pardiso library \"$use_pardiso\" works])
+  AC_TRY_LINK([],[      call PARDISO()],
+              [AC_MSG_RESULT(yes)],
+              [AC_MSG_ERROR([Pardiso library $use_pardiso does not seem to work])])
 
-  AC_DEFINE(HAVE_PARDISO,1,
-            [Define to 1 if Pardiso is available (unsupported)])
+
+# Test if this is the parallel version of Pardiso
+  AC_DEFINE(HAVE_PARDISO_PARALLEL,1,
+            [Define to 1 if you are using the parallel version of Pardiso])
+  AC_MSG_CHECKING([whether Pardiso library is the parallel version])
+  AC_TRY_LINK([],[      call pardiso_exist_parallel()],
+              [AC_MSG_RESULT(yes)
+               AC_DEFINE(HAVE_PARDISO,1,[Define to 1 if Pardiso is available])],
+              [AC_MSG_RESULT(no)])
 fi
+AC_LANG_POP(Fortran 77)
 
 #########
 # TAUCS #

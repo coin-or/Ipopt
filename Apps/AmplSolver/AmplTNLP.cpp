@@ -48,6 +48,7 @@ namespace Ipopt
       obj_sol_(0.0),
       objval_called_with_current_x_(false),
       conval_called_with_current_x_(false),
+      Oinfo_ptr_(NULL),
       suffix_handler_(suffix_handler)
   {
     DBG_START_METH("AmplTNLP::AmplTNLP",
@@ -219,6 +220,14 @@ namespace Ipopt
     g_sol_ = NULL;
     delete [] lambda_sol_;
     lambda_sol_ = NULL;
+
+    if (Oinfo_ptr_) {
+      Option_Info* Oinfo = (Option_Info*) Oinfo_ptr_;
+      delete [] Oinfo->sname;
+      delete [] Oinfo->bsname;
+      delete [] Oinfo->opname;
+      delete Oinfo;
+    }
   }
 
   bool AmplTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
@@ -616,7 +625,7 @@ namespace Ipopt
     char* cmessage = new char[message.length()+1];
     strcpy(cmessage, message.c_str());
 
-    write_sol(cmessage, x_sol_, lambda_sol_, NULL);
+    write_sol(cmessage, x_sol_, lambda_sol_, (Option_Info*)Oinfo_ptr_);
 
     delete [] cmessage;
   }
@@ -794,13 +803,26 @@ namespace Ipopt
       nkeywds_ = 0;
     }
 
-    Index n_options = NumberOfAmplOptions();
+    Index n_options = NumberOfAmplOptions()+1; // add one for AMPL's "wantsol"
     keyword* keywords = new keyword[n_options];
 
     Index ioption = 0;
+    bool have_wantsol = false;
+    const char wantsol_str[] = "wantsol";
     for (std::map<std::string, SmartPtr<const AmplOption> >::iterator
          iter = ampl_options_map_.begin();
          iter != ampl_options_map_.end(); iter++) {
+      if (strcmp(wantsol_str, iter->first.c_str())<0) {
+        DBG_ASSERT(strcmp(wantsol_str, iter->first.c_str())!=0);
+        // Add the keyword for wantsol
+        keywords[ioption].name = new char[8];
+        strcpy(keywords[ioption].name, wantsol_str);
+        keywords[ioption].kf = WS_val;
+        keywords[ioption].info = NULL;
+        keywords[ioption].desc = WS_desc_ASL+5;
+        ioption++;
+        have_wantsol = true;
+      }
       keywords[ioption].name = new char[iter->first.size()+1];
       strcpy(keywords[ioption].name, iter->first.c_str());
       PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst);
@@ -820,6 +842,17 @@ namespace Ipopt
       }
       ioption++;
     }
+
+    if (!have_wantsol) {
+      // Add the keyword for wantsol
+      keywords[ioption].name = new char[8];
+      strcpy(keywords[ioption].name, wantsol_str);
+      keywords[ioption].kf = WS_val;
+      keywords[ioption].info = NULL;
+      keywords[ioption].desc = WS_desc_ASL+1;
+      ioption++;
+    }
+
     DBG_ASSERT(ioption==n_options);
     nkeywds_ = n_options;
     keywds_ = (void*) keywords;
@@ -964,8 +997,9 @@ namespace Ipopt
                                      "Desired convergence tolerance (relative)");
 
     int n_options = ampl_options_list->NumberOfAmplOptions();
-    // of options defined below
-    //    keyword* keywds = new keyword[n_options];
+    // Add an extra one for the "wantsol" AMPL option
+    n_options++;
+
     keyword* keywds = (keyword*) ampl_options_list->Keywords(options, jnlst_);
 
     static char sname_default[] = "ipopt";
@@ -992,13 +1026,39 @@ namespace Ipopt
     else {
       bsname = bsname_default;
     }
-    Option_Info Oinfo = {sname,
-                         bsname,
-                         opname,
-                         keywds,
-                         n_options};
 
-    char* stub = getstops(argv, &Oinfo);
+    DBG_ASSERT(!Oinfo_ptr_);
+    Option_Info* Oinfo = new Option_Info;
+    Oinfo->sname = new char[strlen(sname)];
+    strcpy(Oinfo->sname, sname);
+    Oinfo->bsname = new char[strlen(bsname)];
+    strcpy(Oinfo->bsname, bsname);
+    Oinfo->opname = new char[strlen(opname)];
+    strcpy(Oinfo->opname, opname);
+    Oinfo->keywds = keywds;
+    Oinfo->n_keywds = n_options;
+    // Set the default for the remaining entries
+    Oinfo->flags = 0;
+    Oinfo->version = NULL;
+    Oinfo->usage = NULL;
+    Oinfo->kwf = NULL;
+    Oinfo->feq = NULL;
+    Oinfo->options = NULL;
+    Oinfo->n_options = 0;
+    Oinfo->driver_date = 0;
+    Oinfo->wantsol = 0;
+    Oinfo->nS = 0;
+    Oinfo->S = NULL;
+    Oinfo->uinfo = NULL;
+    Oinfo->asl = NULL;
+    Oinfo->eqsign = NULL;
+    Oinfo->n_badopts = 0;
+    Oinfo->option_echo = 0;
+    Oinfo->nnl = 0;
+
+    Oinfo_ptr_ = Oinfo;
+
+    char* stub = getstops(argv, Oinfo);
 
     return stub;
   }

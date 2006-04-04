@@ -373,6 +373,8 @@ namespace Ipopt
     bool conval_called_with_current_x_;
     //@}
 
+    /** Pointer to the Oinfo structure */
+    void* Oinfo_ptr_;
 
     /** Suffix Handler */
     SmartPtr<AmplSuffixHandler> suffix_handler_;
