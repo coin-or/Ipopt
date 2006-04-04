@@ -1524,6 +1524,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 SAVE_CXXFLAGS="$CXXFLAGS"
 case $build in
   *-cygwin) comps="g++ cl" ;;
+  *-darwin*) comps="g++ c++ CC" ;;
   *)        comps="xlC aCC CC g++ c++ pgCC icpc" ;;
 esac
 ac_ext=cc
@@ -3638,7 +3639,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3641:" \
+echo "$as_me:3642:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -4205,7 +4206,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:4208: \"$ac_link\") >&5
+(eval echo $as_me:4209: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4283,7 +4284,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:4286: \"$ac_link\") >&5
+(eval echo $as_me:4287: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -11469,6 +11470,11 @@ fi
 # PARDISO #
 ###########
 
+ac_ext=f
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
+
 
 # Check whether --with-pardiso or --without-pardiso was given.
 if test "${with_pardiso+set}" = set; then
@@ -11483,17 +11489,107 @@ if test ! "$use_pardiso" = "no"; then
   IPADDLIBS="$use_pardiso $IPADDLIBS"
 
 # ToDo put this back in
-#  AC_MSG_CHECKING([whether user-supplied Pardiso library \"$use_pardiso\" works])
-#  AC_TRY_LINK([],[      call PARDISO()],
-#              [AC_MSG_RESULT(yes)],
-#              [AC_MSG_ERROR([Pardiso library $use_pardiso does not seem to work])])
+  echo "$as_me:$LINENO: checking whether user-supplied Pardiso library \"$use_pardiso\" works" >&5
+echo $ECHO_N "checking whether user-supplied Pardiso library \"$use_pardiso\" works... $ECHO_C" >&6
+  cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call PARDISO()
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
 
+{ { echo "$as_me:$LINENO: error: Pardiso library $use_pardiso does not seem to work" >&5
+echo "$as_me: error: Pardiso library $use_pardiso does not seem to work" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+
+
+# Test if this is the parallel version of Pardiso
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PARDISO_PARALLEL 1
+_ACEOF
+
+  echo "$as_me:$LINENO: checking whether Pardiso library is the parallel version" >&5
+echo $ECHO_N "checking whether Pardiso library is the parallel version... $ECHO_C" >&6
+  cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call pardiso_exist_parallel()
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_PARDISO 1
 _ACEOF
 
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
 fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
 
 #########
 # TAUCS #
