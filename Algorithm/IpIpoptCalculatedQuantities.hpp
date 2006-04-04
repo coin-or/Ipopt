@@ -189,9 +189,6 @@ namespace Ipopt
     //@{
     /** exact Hessian at current iterate (uncached) */
     SmartPtr<const SymMatrix> curr_exact_hessian();
-    /** return a matrix of the same type and structure as the Hessian
-     *  matrix, but with all "values" set to zero (uncached) */
-    SmartPtr<const SymMatrix> zero_hessian();
     //@}
 
     /** @name primal-dual error and its components */
