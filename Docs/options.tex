@@ -1,3 +1,4 @@
+
 \paragraph{print\_level:} Output verbosity level. $\;$ \\
  Sets the default verbosity level for console
 output. The larger this value the more detailed
@@ -5,6 +6,18 @@ is the output. The valid range for this integer option is
 $0 \le {\tt print\_level } \le 11$
 and its default value is $4$.
 
+
+\paragraph{print\_user\_options:} Print all options set by the user. $\;$ \\
+ If selected, the algorithm will print the list of
+all options set by the user including their
+values and whether they have been used.
+The default value for this string option is "no".
+\\ 
+Possible values:
+\begin{itemize}
+   \item no: don't print options
+   \item yes: print options
+\end{itemize}
 
 \paragraph{print\_options\_documentation:} Switch to print all algorithmic options. $\;$ \\
  If selected, the algorithm will print the list of
@@ -645,6 +658,7 @@ Possible values:
    \item pardiso: use the Pardiso package
    \item wsmp: use WSMP package (not yet working)
    \item taucs: use TAUCS package (not yet working)
+   \item mumps: use MUMPS package (not yet working)
 \end{itemize}
 
 \paragraph{linear\_system\_scaling:} Method for scaling the linear system. $\;$ \\
@@ -885,3 +899,84 @@ factor. The valid range for this real option is
 $1 \le {\tt ma27\_meminc\_factor } <  {\tt +inf}$
 and its default value is $10$.
 
+
+\paragraph{ma57\_pivtol:} Pivot tolerance for the linear solver MA57. $\;$ \\
+ A smaller number pivots for sparsity, a larger
+number pivots for stability. The valid range for this real option is 
+$0 <  {\tt ma57\_pivtol } <  1$
+and its default value is $1 \cdot 10^{-08}$.
+
+
+\paragraph{ma57\_pivtolmax:} Maximum pivot tolerance for the linear solver MA57. $\;$ \\
+ Ipopt may increase pivtol as high as
+ma57\_pivtolmax to get a more accurate solution
+to the linear system. The valid range for this real option is 
+$0 <  {\tt ma57\_pivtolmax } <  1$
+and its default value is $0.0001$.
+
+
+\paragraph{ma57\_pre\_alloc:} Safety factor for work space memory allocation for the linear solver MA57. $\;$ \\
+ If 1 is chosen, the suggested amount of work
+space is used.  However, choosen a larger number
+might avoid reallocation if the suggest values do
+not suffice. The valid range for this real option is 
+$1 \le {\tt ma57\_pre\_alloc } <  {\tt +inf}$
+and its default value is $3$.
+
+
+\paragraph{pardiso\_matching\_strategy:} Matching strategy to be used by Pardiso $\;$ \\
+ This is IPAR(13) in Pardiso manual.
+The default value for this string option is "complete+2x2".
+\\ 
+Possible values:
+\begin{itemize}
+   \item complete: Match complete (IPAR(13)=1)
+   \item complete+2x2: Match complete+2x2 (IPAR(13)=2)
+   \item constraints: Match constraints (IPAR(13)=3)
+\end{itemize}
+
+\paragraph{wsmp\_num\_threads:} Number of threads to be used in WSMP $\;$ \\
+ This determine on how many SMP CPUs WSMP is
+running on. The valid range for this integer option is
+$1 \le {\tt wsmp\_num\_threads } <  {\tt +inf}$
+and its default value is $1$.
+
+
+\paragraph{wsmp\_ordering\_option:} Determines how ordering is done in WSMP $\;$ \\
+ This corresponds to the value of WSSMP's
+IPARM(16). The valid range for this integer option is
+$-2 \le {\tt wsmp\_ordering\_option } \le 3$
+and its default value is $1$.
+
+
+\paragraph{wsmp\_pivtol:} Pivot tolerance for the linear solver WSMP. $\;$ \\
+ A smaller number pivots for sparsity, a larger
+number pivots for stability. The valid range for this real option is 
+$0 <  {\tt wsmp\_pivtol } <  1$
+and its default value is $0.0001$.
+
+
+\paragraph{wsmp\_pivtolmax:} Maximum pivot tolerance for the linear solver WSMP. $\;$ \\
+ Ipopt may increase pivtol as high as pivtolmax to
+get a more accurate solution to the linear system. The valid range for this real option is 
+$0 <  {\tt wsmp\_pivtolmax } <  1$
+and its default value is $0.01$.
+
+
+\paragraph{wsmp\_scaling:} Toggle for swiching on WSMP's internal scaling. $\;$ \\
+ Yes corresponds to setting WSMP's IPARM(10) to 1,
+otherwise this is set to 0.
+The default value for this string option is "yes".
+\\ 
+Possible values:
+\begin{itemize}
+   \item no: don't use expensive scaling
+   \item yes: use expensive scaling
+\end{itemize}
+
+\paragraph{wsmp\_singularity\_threshold:} WSMP's singularity threshold. $\;$ \\
+ WSMP's DPARM(10) parameter.  The smaller this
+value the less likely a matrix is declared
+singular. The valid range for this real option is 
+$0 <  {\tt wsmp\_singularity\_threshold } <  1$
+and its default value is $1 \cdot 10^{-18}$.

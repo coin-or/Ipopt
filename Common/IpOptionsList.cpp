@@ -33,7 +33,8 @@ namespace Ipopt
 
   bool OptionsList::SetStringValue(const std::string& tag,
                                    const std::string& value,
-                                   bool allow_clobber /* = true */)
+                                   bool allow_clobber, /* = true */
+                                   bool dont_print /* = false */)
   {
     if (IsValid(reg_options_)) {
       SmartPtr<const RegisteredOption> option = reg_options_->GetOption(tag);
@@ -96,7 +97,8 @@ namespace Ipopt
     }
     else {
       //    if (will_allow_clobber(tag)) {
-      OptionsList::OptionValue optval(lowercase(value), allow_clobber);
+      OptionsList::OptionValue optval(lowercase(value), allow_clobber,
+                                      dont_print);
       options_[lowercase(tag)] = optval;
     }
     return true;
@@ -112,7 +114,8 @@ namespace Ipopt
   }
 
   bool OptionsList::SetNumericValue(const std::string& tag, Number value,
-                                    bool allow_clobber /* = true */)
+                                    bool allow_clobber, /* = true */
+                                    bool dont_print /* = false */)
   {
     char buffer[256];
     sprintf(buffer, "%g", value);
@@ -179,14 +182,15 @@ namespace Ipopt
       }
     }
     else {
-      OptionsList::OptionValue optval(buffer, allow_clobber);
+      OptionsList::OptionValue optval(buffer, allow_clobber, dont_print);
       options_[lowercase(tag)] = optval;
     }
     return true;
   }
 
   bool OptionsList::SetIntegerValue(const std::string& tag, Index value,
-                                    bool allow_clobber /* = true */)
+                                    bool allow_clobber, /* = true */
+                                    bool dont_print /* = false */)
   {
     char buffer[256];
     sprintf(buffer, "%d", value);
@@ -254,7 +258,7 @@ namespace Ipopt
     }
     else {
       //    if (will_allow_clobber(tag)) {
-      OptionsList::OptionValue optval(buffer, allow_clobber);
+      OptionsList::OptionValue optval(buffer, allow_clobber, dont_print);
       options_[lowercase(tag)] = optval;
     }
     return true;
@@ -497,6 +501,32 @@ namespace Ipopt
       sprintf(buffer, "%40s = %-20s %6d\n", p->first.c_str(),
               p->second.Value().c_str(), p->second.Counter());
       list += buffer;
+    }
+  }
+
+  void OptionsList::PrintUserOptions(std::string& list) const
+  {
+    list.clear();
+    char buffer[256];
+    sprintf(buffer, "%40s   %-20s %s\n", "Name", "Value", "used");
+    list += buffer;
+    for(std::map< std::string, OptionValue >::const_iterator p = options_.begin();
+        p != options_.end();
+        p++ ) {
+      if (!p->second.DontPrint()) {
+        const char yes[] = "yes";
+        const char no[] = "no";
+        const char* used;
+        if (p->second.Counter()>0) {
+          used = yes;
+        }
+        else {
+          used = no;
+        }
+        sprintf(buffer, "%40s = %-20s %4s\n", p->first.c_str(),
+                p->second.Value().c_str(), used);
+        list += buffer;
+      }
     }
   }
 

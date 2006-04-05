@@ -45,12 +45,13 @@ namespace Ipopt
       {}
 
       /** Constructor given the value */
-      OptionValue(std::string value, bool allow_clobber)
+      OptionValue(std::string value, bool allow_clobber, bool dont_print)
           :
           value_(value),
           counter_(0),
           initialized_(true),
-          allow_clobber_(allow_clobber)
+          allow_clobber_(allow_clobber),
+          dont_print_(dont_print)
       {}
 
       /** Copy Constructor */
@@ -59,7 +60,8 @@ namespace Ipopt
           value_(copy.value_),
           counter_(copy.counter_),
           initialized_(copy.initialized_),
-          allow_clobber_(copy.allow_clobber_)
+          allow_clobber_(copy.allow_clobber_),
+          dont_print_(copy.dont_print_)
       {}
 
       /** Equals operator */
@@ -69,6 +71,7 @@ namespace Ipopt
         counter_=copy.counter_;
         initialized_=copy.initialized_;
         allow_clobber_=copy.allow_clobber_;
+        dont_print_=copy.dont_print_;
       }
 
       /** Default Destructor */
@@ -107,6 +110,14 @@ namespace Ipopt
         return allow_clobber_;
       }
 
+      /** True if this option is not to show up in the
+       *  print_user_options output */
+      bool DontPrint() const
+      {
+        DBG_ASSERT(initialized_);
+        return dont_print_;
+      }
+
     private:
       /** Value for this option */
       std::string value_;
@@ -119,6 +130,10 @@ namespace Ipopt
 
       /** True if the option can be overwritten */
       bool allow_clobber_;
+
+      /** True if this option is not to show up in the
+       *  print_user_options output */
+      bool dont_print_;
     };
 
   public:
@@ -165,11 +180,11 @@ namespace Ipopt
     /** @name Methods for setting options */
     //@{
     bool SetStringValue(const std::string& tag, const std::string& value,
-                        bool allow_clobber = true);
+                        bool allow_clobber = true, bool dont_print = false);
     bool SetNumericValue(const std::string& tag, Number value,
-                         bool allow_clobber = true);
+                         bool allow_clobber = true, bool dont_print = false);
     bool SetIntegerValue(const std::string& tag, Index value,
-                         bool allow_clobber = true);
+                         bool allow_clobber = true, bool dont_print = false);
     //@}
 
     /** @name Methods for retrieving values from the options list.  If
@@ -190,6 +205,11 @@ namespace Ipopt
 
     /** Get a string with the list of all options (tag, value, counter) */
     void PrintList(std::string& list) const;
+
+    /** Get a string with the list of all options set by the user
+     *  (tag, value, use/notused).  Here, options with dont_print flag
+     *  set to true are not printed. */
+    void PrintUserOptions(std::string& list) const;
 
     /** Read options from the stream is.  Returns false if
      *  an error was encountered. */

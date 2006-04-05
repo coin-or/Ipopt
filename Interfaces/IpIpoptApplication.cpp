@@ -158,6 +158,7 @@ namespace Ipopt
           std::list<std::string> options_to_print;
           // Output
           options_to_print.push_back("print_level");
+          options_to_print.push_back("print_user_options");
           options_to_print.push_back("print_options_documentation");
           options_to_print.push_back("output_file");
           options_to_print.push_back("file_print_level");
@@ -268,6 +269,16 @@ namespace Ipopt
           options_to_print.push_back("pardiso_matching_strategy");
 #endif
 
+#ifdef HAVE_WSMP
+
+          options_to_print.push_back("wsmp_num_threads");
+          options_to_print.push_back("wsmp_ordering_option");
+          options_to_print.push_back("wsmp_pivtol");
+          options_to_print.push_back("wsmp_pivtolmax");
+          options_to_print.push_back("wsmp_scaling");
+          options_to_print.push_back("wsmp_singularity_threshold");
+#endif
+
           reg_options_->OutputLatexOptionDocumentation(*jnlst_, options_to_print);
         }
         else {
@@ -362,6 +373,14 @@ namespace Ipopt
       "NOTE: This option only works when read from the ipopt.opt options file! "
       "Determines the verbosity level for the file specified by "
       "\"output_file\".  By default it is the same as \"print_level\".");
+    roptions->AddStringOption2(
+      "print_user_options",
+      "Print all options set by the user.",
+      "no",
+      "no", "don't print options",
+      "yes", "print options",
+      "If selected, the algorithm will print the list of all options set by "
+      "the user including their values and whether they have been used.");
     roptions->AddStringOption2(
       "print_options_documentation",
       "Switch to print all algorithmic options.",
@@ -517,6 +536,20 @@ namespace Ipopt
       p2alg->Initialize(*jnlst_, *p2ip_nlp, *p2ip_data, *p2ip_cq,
                         *options_, "");
 
+      // Process the options used below
+      bool print_timing_statistics;
+      options_->GetBoolValue("print_timing_statistics",
+                             print_timing_statistics, "");
+
+      // If selected, print the user options
+      bool print_user_options;
+      options_->GetBoolValue("print_user_options", print_user_options, "");
+      if (print_user_options) {
+        std::string liststr;
+        options_->PrintUserOptions(liststr);
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nList of user-set options:\n\n%s", liststr.c_str());
+      }
+
       if( jnlst_->ProduceOutput(J_DETAILED, J_MAIN) ) {
         // Print out the options (including the number of times they were used
         std::string liststr;
@@ -606,9 +639,6 @@ namespace Ipopt
                      time_funcs);
 
       // Write timing statistics information
-      bool print_timing_statistics;
-      options_->GetBoolValue("print_timing_statistics",
-                             print_timing_statistics, "");
       if (print_timing_statistics) {
         jnlst_->Printf(J_SUMMARY, J_TIMING_STATISTICS,
                        "\n\nTiming Statistics:\n\n");

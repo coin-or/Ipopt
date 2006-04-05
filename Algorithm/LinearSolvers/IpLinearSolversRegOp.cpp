@@ -44,14 +44,14 @@ namespace Ipopt
 
 #ifdef HAVE_PARDISO
 
-    PardisoSolverInterface::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Pardiso Linear Solver");
+    PardisoSolverInterface::RegisterOptions(roptions);
 #endif
 
 #ifdef HAVE_WSMP
 
-    WsmpSolverInterface::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("WSMP Linear Solver");
+    WsmpSolverInterface::RegisterOptions(roptions);
 #endif
 
     roptions->SetRegisteringCategory("Uncategorized");

@@ -991,6 +991,10 @@ namespace Ipopt
                                      "print_level",
                                      AmplOptionsList::Integer_Option,
                                      "Verbosity level");
+    ampl_options_list->AddAmplOption("print_user_options",
+                                     "print_user_options",
+                                     AmplOptionsList::String_Option,
+                                     "Toggle printing of user options");
     ampl_options_list->AddAmplOption("tol",
                                      "tol",
                                      AmplOptionsList::Number_Option,
@@ -1029,11 +1033,11 @@ namespace Ipopt
 
     DBG_ASSERT(!Oinfo_ptr_);
     Option_Info* Oinfo = new Option_Info;
-    Oinfo->sname = new char[strlen(sname)];
+    Oinfo->sname = new char[strlen(sname)+1];
     strcpy(Oinfo->sname, sname);
-    Oinfo->bsname = new char[strlen(bsname)];
+    Oinfo->bsname = new char[strlen(bsname)+1];
     strcpy(Oinfo->bsname, bsname);
-    Oinfo->opname = new char[strlen(opname)];
+    Oinfo->opname = new char[strlen(opname)+1];
     strcpy(Oinfo->opname, opname);
     Oinfo->keywds = keywds;
     Oinfo->n_keywds = n_options;

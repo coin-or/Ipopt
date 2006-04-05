@@ -73,7 +73,7 @@ namespace Ipopt
                    dbg_verbosity);
 
     // Clear WSMP's memory
-    F77_FUNC_(wsmp_clear,WSMP_CLEAR);
+    F77_FUNC_(wsmp_clear,WSMP_CLEAR)();
 
     delete[] PERM_;
     delete[] INVP_;

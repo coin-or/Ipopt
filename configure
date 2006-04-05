@@ -11531,12 +11531,12 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
-
 # Test if this is the parallel version of Pardiso
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_PARDISO_PARALLEL 1
+#define HAVE_PARDISO 1
 _ACEOF
+
 
   echo "$as_me:$LINENO: checking whether Pardiso library is the parallel version" >&5
 echo $ECHO_N "checking whether Pardiso library is the parallel version... $ECHO_C" >&6
@@ -11571,7 +11571,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
 echo "${ECHO_T}yes" >&6
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_PARDISO 1
+#define HAVE_PARDISO_PARALLEL 1
 _ACEOF
 
 else

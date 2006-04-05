@@ -1144,14 +1144,14 @@ if test ! "$use_pardiso" = "no"; then
               [AC_MSG_RESULT(yes)],
               [AC_MSG_ERROR([Pardiso library $use_pardiso does not seem to work])])
 
-
 # Test if this is the parallel version of Pardiso
-  AC_DEFINE(HAVE_PARDISO_PARALLEL,1,
-            [Define to 1 if you are using the parallel version of Pardiso])
+  AC_DEFINE(HAVE_PARDISO,1,[Define to 1 if Pardiso is available])
+  
   AC_MSG_CHECKING([whether Pardiso library is the parallel version])
   AC_TRY_LINK([],[      call pardiso_exist_parallel()],
               [AC_MSG_RESULT(yes)
-               AC_DEFINE(HAVE_PARDISO,1,[Define to 1 if Pardiso is available])],
+               AC_DEFINE(HAVE_PARDISO_PARALLEL,1,
+                [Define to 1 if you are using the parallel version of Pardiso])],
               [AC_MSG_RESULT(no)])
 fi
 AC_LANG_POP(Fortran 77)
