@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -266,21 +266,24 @@ namespace Ipopt
       "ma57_pivtol",
       "Pivot tolerance for the linear solver MA57.",
       0.0, true, 1.0, true, 1e-8,
-      "A smaller number pivots for sparsity, "
-      "a larger number pivots for stability.");
+      "A smaller number pivots for sparsity, a larger number pivots for "
+      "stability. This option is only available if Ipopt has been compiled "
+      "with MA57.");
     roptions->AddBoundedNumberOption(
       "ma57_pivtolmax",
       "Maximum pivot tolerance for the linear solver MA57.",
       0.0, true, 1.0, true, 1e-4,
-      "Ipopt may increase pivtol as high as ma57_pivtolmax "
-      "to get a more accurate solution to the linear system.");
+      "Ipopt may increase pivtol as high as ma57_pivtolmax to get a more "
+      "accurate solution to the linear system.  This option is only available "
+      "if Ipopt has been compiled with MA57.");
     roptions->AddLowerBoundedNumberOption(
       "ma57_pre_alloc",
       "Safety factor for work space memory allocation for the linear solver MA57.",
       1., false, 3.,
       "If 1 is chosen, the suggested amount of work space is used.  However, "
-      "choosen a larger number might avoid reallocation if the suggest values "
-      "do not suffice.");
+      "choosing a larger number might avoid reallocation if the suggest values "
+      "do not suffice.  This option is only available if Ipopt has been "
+      "compiled with MA57.");
   }
 
   bool Ma57TSolverInterface::InitializeImpl(const OptionsList&  options,

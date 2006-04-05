@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -196,8 +196,8 @@ namespace Ipopt
           //options_to_print.push_back("corrector_type");
           // Initialization
           options_to_print.push_back("bound_frac");
-          options_to_print.push_back("bound_mult_init_val");
           options_to_print.push_back("bound_push");
+          options_to_print.push_back("bound_mult_init_val");
           options_to_print.push_back("constr_mult_init_max");
           options_to_print.push_back("bound_mult_init_val");
           // Warm start
@@ -267,6 +267,7 @@ namespace Ipopt
 #ifdef HAVE_PARDISO
 
           options_to_print.push_back("pardiso_matching_strategy");
+          options_to_print.push_back("pardiso_out_of_core_power");
 #endif
 
 #ifdef HAVE_WSMP

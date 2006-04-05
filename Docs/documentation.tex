@@ -38,9 +38,9 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.1 (the new C++ version
+  This document is a guide to using \Ipopt\ 3.1.0 (the new C++ version
   of \Ipopt).  It includes instructions on how to obtain and compile
-  \Ipopt, a description of the interface, user options, etc.,, as
+  \Ipopt, a description of the interface, user options, etc., as
   well as a tutorial on how to solve a nonlinear optimization problem
   with \Ipopt.
 
@@ -62,8 +62,8 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \begin{small}
 \noindent
 The following names used in this document are trademarks or registered
-trademarks: AMPL, IBM, Intel, Microsoft, Visual Studio C++, Visual
-Studio C++ .NET
+trademarks: AMPL, IBM, Intel, Matlab, Microsoft, Visual Studio C++,
+Visual Studio C++ .NET
 \end{small}
 
 \section{Introduction}
@@ -113,8 +113,11 @@ Also, if you are using \Ipopt\ to obtain results for a publication, we
 politely ask you to point out in your paper that you used \Ipopt, and
 to cite the publication \cite{WaecBieg06:mp}.  Writing high-quality
 numerical software takes a lot of time and effort, and does usually
-not translate into a large number of publications, therefore we believe
-this request is only fair :).
+not translate into a large number of publications, therefore we
+believe this request is only fair :).  We also have space at the
+\Ipopt\ project home page where we list publications, projects, etc.,
+in which \Ipopt\ has been used.  We would be very happy to hear about
+your experiences
 
 \subsection{Prerequisites}
 In order to build \Ipopt, some third party components are required:
@@ -145,15 +148,15 @@ In order to build \Ipopt, some third party components are required:
       http://www.cse.clrc.ac.uk/nag/hsl/}).
   \item MA57 from the Harwell Subroutine Library\\ (see {\tt
       http://www.cse.clrc.ac.uk/nag/hsl/}).
-  \item The Watson Sparse Matrix Package (WSMP)\\ (see {\tt
-      http://www-users.cs.umn.edu/\verb|~|agupta/wsmp.html})
+%   \item The Watson Sparse Matrix Package (WSMP)\\ (see {\tt
+%       http://www-users.cs.umn.edu/\verb|~|agupta/wsmp.html})
   \item The Parallel Sparse Direct Linear Solver (PARDISO)\\ (see {\tt
       http://www.computational.unibas.ch/cs/scicomp/software/pardiso/}).
   \end{itemize}
   You need to include at least one of the linear solvers above in
   order to run \Ipopt.  Currently, there is development on integrating
-  also TAUCS and MUMPS by contributors, but this work has not yet been
-  completed.
+  also MUMPS, TAUCS, and WSMP by contributors, but this work has not
+  yet been completed.
 
   Interfaces to other linear solvers might be added in the future; if
   you are interested in contributing such an interface please contact
@@ -256,6 +259,8 @@ you have a challenging optimization problem and are interested in
 consulting services by IBM Research, please contact the \Ipopt\
 project leader, Andreas W\"achter.
 
+{\bf ToDo: Add information about the Wiki pages here!}
+
 \subsection{History of \Ipopt}
 The original \Ipopt\ (Fortran version) was a product of the dissertation
 research of Andreas W\"achter \cite{WaechterPhD}, under Lorenz
@@ -317,10 +322,13 @@ which you are right now (output of \texttt{pwd}).
 To use the tarball, follow the steps below:
 \begin{enumerate}
 \item Download the latest tarball from
-\texttt{http://www.coin-or.org/Tarballs}.  The file you should look
-for has the form \texttt{ipopt-3.x.x.tar.gz} (where
-``\texttt{3.x.x.}'' is the version number).  Put this file in a
-directory under which you want to put the \Ipopt\ installation.
+  \texttt{http://www.coin-or.org/Tarballs}.  The file you should look
+  for has the form \texttt{ipopt-3.x.x.tar.gz} (where
+  ``\texttt{3.x.x.}'' is the version number).  Make sure you are
+  getting the correct file; it is localted towards the bottom of that
+  page; don't confuse it with the tarball of the old (Fortran) \Ipopt\
+  version ({\tt Ipopt\_{\em date}.tgz}).  Put this file in a directory
+  under which you want to put the \Ipopt\ installation.
 \item Issue the following commands to unpack the archive file: \\
 \texttt{\$ gunzip ipopt-3.x.x.tar.gz} \\
 \texttt{\$ tar xvf ipopt-3.x.x.tar} \\
@@ -336,8 +344,8 @@ which you are right now (output of \texttt{pwd}).
 \subsection{Download External Code}\label{ExternalCode}
 \Ipopt\ uses a few external packages that are not included in the
 \Ipopt\ source code distribution, namely ASL (the AMPL Solver
-Library), BLAS, LAPACK.  It also requires a sparse symmetric linear
-solver.
+Library), BLAS, LAPACK.  It also requires at least one sparse
+symmetric linear solver.
 
 Since this third party software released under different licenses than
 \Ipopt, we cannot distribute that code together with the \Ipopt\
@@ -420,6 +428,11 @@ dependencies), you can simply put it into the {\tt
 will then find this file and compile it into the \Ipopt\ library (just
 as is would compile MA27).
 
+Yet another note: If you have a precompile library containing the
+Harwell codes, you can specify the location of this library with the
+\verb|--with-hsl| flag for the {\tt configure} script described in
+Section~\ref{sec.comp_and_inst}.
+
 \subsection{Compiling and Installing \Ipopt} \label{sec.comp_and_inst}
 
 \Ipopt\ can be easily compiled and installed with the usual {\tt
@@ -466,9 +479,6 @@ submitting a ticket or sending a message to the mailing list.
   You can change the default installation directory (here
   \texttt{\$IPOPTDIR}) to something else (such as \texttt{/usr/local})
   by using the \verb|--prefix| switch for \texttt{configure}.
-%\item Test the installation \\
-%  {\tt \$ make test}\\
-%  This should ?...?
 \item Install \Ipopt\ for use with {\tt CUTEr}\\
   If you have {\tt CUTEr} already installed on your system and you
   want to use \Ipopt\ as a solver for problems modeled in {\tt SIF},
@@ -478,6 +488,26 @@ submitting a ticket or sending a message to the mailing list.
   defined according to the {\tt CUTEr} instructions.  After this, you
   can use the script {\tt sdipo} as the {\tt CUTEr} script to solve a
   {\tt SIF} model.
+\item If you want, you can run a short test to verify that the
+  compilation and installation was successful.  For this, you just
+  enter\\
+  {\tt \$ make test}\\
+  This will test if the AMPL solver executable works (if you got the
+  ASL code), and if the included C++, C, and Fortran examples work.
+
+  Note: The {\tt configure} script is not able to automatically
+  determine the C++ runtime libraries for the C++ compiler.  For
+  certain compilers we enabled default values for this, but those
+  might not exist or be wrong for your compiler.  In that case, the C
+  and Fortran example in the test will most probably fail to compile.
+  If you don't want to hook up the compiled \Ipopt\ library to some
+  Fortran or C code that you wrote you don't need to worry about this.
+  If you do want to link the \Ipopt\ library with a C or Fortran
+  compiler, you need to find out the C++ runtime libraries (e.g., by
+  running the C++ compiler in verbose mode for a simple example
+  program) and run {\tt configure} again, and this time specify all
+  C++ runtime libraries with the {\tt CXXLIBS} variable (see also
+  Appendix~\ref{ExpertInstall}).
 \end{enumerate}
 
 Note: It is possible to compile the code in directories separate from
@@ -2288,7 +2318,7 @@ include this partial derivative in the list of non-zero elements.  In
 the above output, the partial derivative ``{\tt jac\_g[4,4]}'' is
 non-zero (based on the finite difference approximation), but it is not
 included in the list of non-zero elements (missing ``{\tt v}''), so
-that user probably made a mistake in the sparsity structure.  The
+that the user probably made a mistake in the sparsity structure.  The
 other two Jacobian entries are provided in the non-zero structure but
 their values seem to be off.
 
@@ -2329,12 +2359,13 @@ In general, when second derivatives can be computed with reasonable
 computational effort, it is usually a good idea to use them, since
 then \Ipopt\ normally converges in fewer iterations and is more
 robust.  An exception here might be the case, where your optimization
-problem has a dense Hessian, and then using the quasi-Newton
-approximation might be better, even if it the number of iterations
-increases, since the computation time per iteration might be
-significantly higher due to the very large number of non-zero elements
-in the linear systems that \Ipopt\ solves in order to compute the
-search direction.
+problem has a dense Hessian or a large percentage of non-zero entries
+in the Hessian, and then using the quasi-Newton approximation might be
+better, even if it the number of iterations increases, since the
+computation time per iteration might be significantly higher due to
+the very large number of non-zero elements in the linear systems that
+\Ipopt\ solves in order to compute the search direction, if exact
+second derivatives are used.
 
 Since the Hessian of the Lagrangian is zero for all variables that
 appear only linearly in the objective and constraint functions, the
@@ -2346,7 +2377,9 @@ nonlinear, using the {\tt get\_number\_of\_nonlinear\_variables} and
 class, see Section~\ref{sec:add_meth}.  (Those methods have been
 implemented for the AMPL interface, so you would automatically only
 approximate the Hessian in the space of the nonlinear variables, if
-you are using the quasi-Newton option for AMPL models.)
+you are using the quasi-Newton option for AMPL models.)  Currently,
+those two methods are not available through the C or Fortran
+interface.
 
 \section{\Ipopt\ Options}\label{sec:options}
 Ipopt has many (maybe too many) options that can be adjusted for the
@@ -2382,21 +2415,21 @@ how this is done.
 
 A subset of \Ipopt\ options are available through AMPL. To set options
 through AMPL, use the internal AMPL command {\tt options}.  For
-example, \\ 
-{\tt options ipopt "nlp\_scaling\_method=none mu\_init=1e-2
-max\_iter=500"} \\ 
-is a valid options command in AMPL. The most common
-options are referenced in Appendix~\ref{app.options_ref}. These are also
-the options that are available through AMPL using the {\tt options}
-command {\bf TODO: CHECK IF THAT IS CORRECT}. To specify other options when using AMPL, you can always
-create {\tt ipopt.opt}.  Note, the {\tt ipopt.opt} file is given
-preference when setting options. This way, you can easily override any
-options set in a particular executable or AMPL model by specifying new
-values in {\tt ipopt.opt}.
+example, \\
+{\tt options ipopt\_options "nlp\_scaling\_method=none mu\_init=1e-2
+  max\_iter=500"} \\
+is a valid options command in AMPL. The most important options are
+referenced in Appendix~\ref{app.options_ref}. To see which options are
+available through AMPL, you can run the AMPL solver executable with
+the ``{\tt -=}'' flag from the command prompt.  To specify other
+options when using AMPL, you can always create {\tt ipopt.opt}.  Note,
+the {\tt ipopt.opt} file is given preference when setting options.
+This way, you can easily override any options set in a particular
+executable or AMPL model by specifying new values in {\tt ipopt.opt}.
 
-For a short list of the valid options, see the Appendix
+For a list of the most important valid options, see the Appendix
 \ref{app.options_ref}. You can print the documentation for all \Ipopt\
-options by adding the option, \\
+options by using the option \\
 
 {\tt print\_options\_documentation yes} \\
 
@@ -2411,10 +2444,9 @@ provide a quick summary of each iteration as \Ipopt\ solves the problem.
 
 Before \Ipopt\ starts to solve the problem, it displays the problem
 statistics (number of nonzero-elements in the matrices, number of
-varialbes variables, etc.). Note that if you have fixed variables
-(both upper and lower bounds are equal), \Ipopt\ may remove these
-variables from the problem internally and not include them in the
-problem statistics.
+variables, etc.). Note that if you have fixed variables (both upper
+and lower bounds are equal), \Ipopt\ may remove these variables from
+the problem internally and not include them in the problem statistics.
 
 Following the problem statistics, \Ipopt\ will begin to solve the
 problem and you will see output resembling the following,
@@ -2733,7 +2765,7 @@ when creating or passing an \Ipopt\ object.
 Options can be set using {\tt ipopt.opt}, through your own code, or through the 
 AMPL {\tt ipopt\_options} command. See Section \ref{sec:options} for an explanation of
 how to use these commands.
-Shown here is a short list of the most common options for Ipopt. To view
+Shown here is a list of the most important options for Ipopt. To view
 the full list of options, run the ipopt executable with the option,
 \begin{verbatim}
 print_options_documentation yes
@@ -2785,8 +2817,11 @@ Below a few particular options are discussed:
   Harwell Subroutines, you can specify its location with the
   \verb|--with-hsl| flag.  And the location of the AMPL solver library
   (with the ASL header files) can be specified with
-  \verb|--with-asldir|.
-  {\bf TODO Other linear solvers}
+  \verb|--with-asldir|.  If you want to compile \Ipopt\ with the
+  linear solver Pardiso\footnote{see {\tt
+      http://www.computational.unibas.ch/cs/scicomp/software/pardiso/}},
+  you need to specify the location of the library with the
+  \verb|--with-pardiso| flag.
 
 \item If you want to specify that you want to use particular
   compilers, you can do so by adding the variables definitions for

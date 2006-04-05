@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -103,21 +103,30 @@ namespace Ipopt
       "complete", "Match complete (IPAR(13)=1)",
       "complete+2x2", "Match complete+2x2 (IPAR(13)=2)",
       "constraints", "Match constraints (IPAR(13)=3)",
-      "This is IPAR(13) in Pardiso manual.");
+      "This is IPAR(13) in Pardiso manual.  This option is only available if "
+      "Ipopt has been compiled with Pardiso.");
     roptions->AddStringOption2(
       "pardiso_redo_symbolic_fact_only_if_inertia_wrong",
       "Toggel for handling case when elements were pertured by Pardiso.",
       "no",
       "no", "Always redo symbolic factorization when elements were perturbed",
       "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong",
-      "");
+      "This option is only available if Ipopt has been compiled with Pardiso.");
     roptions->AddStringOption2(
       "pardiso_repeated_perturbation_means_singular",
       "Interpretation of perturbed elements.",
       "no",
       "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
       "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization",
-      "");
+      "This option is only available if Ipopt has been compiled with Pardiso.");
+    roptions->AddLowerBoundedIntegerOption(
+      "pardiso_out_of_core_power",
+      "Enables out-f-core variant of Pardiso",
+      0, 0,
+      "Setting this option to a positive integer k makes Pardiso work in the "
+      "out-of-core variant where the factor is split in 2^k subdomains.  This "
+      "is IPARM(50) in the Pardiso manual.  This option is only available if "
+      "Ipopt has been compiled with Pardiso.");
   }
 
   bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
@@ -132,6 +141,9 @@ namespace Ipopt
     options.GetBoolValue("pardiso_repeated_perturbation_means_singular",
                          pardiso_repeated_perturbation_means_singular_,
                          prefix);
+    Index pardiso_out_of_core_power;
+    options.GetIntegerValue("pardiso_out_of_core_power",
+                            pardiso_out_of_core_power, prefix);
 
     // Number value = 0.0;
 
@@ -204,6 +216,9 @@ namespace Ipopt
     IPARM_[20] = 1;
     IPARM_[23] = 1; // parallel fac
     IPARM_[24] = 1; // parallel solve
+
+    // Option for the out of core variant
+    IPARM_[49] = pardiso_out_of_core_power;
 
     return true;
   }
@@ -378,6 +393,13 @@ namespace Ipopt
         }
         have_symbolic_factorization_ = true;
         just_performed_symbolic_factorization = true;
+
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Memory in KB required for the symbolic factorization  = %d.\n", IPARM_[14]);
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Integer memory in KB required for the numerical factorization  = %d.\n", IPARM_[15]);
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Double  memory in KB required for the numerical factorization  = %d.\n", IPARM_[16]);
       }
 
       PHASE = 22;
@@ -385,6 +407,12 @@ namespace Ipopt
       IpData().TimingStats().LinearSystemFactorization().Start();
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "Calling Pardiso for factorization.\n");
+      // Dump matrix to file, and count number of solution steps.
+      if (IpData().iter_count() != debug_last_iter_)
+        debug_cnt_ = 0;
+      debug_last_iter_ = IpData().iter_count();
+      debug_cnt_ ++;
+
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                                 &PHASE, &N, a_, ia, ja, &PERM,
                                 &NRHS, IPARM_, &MSGLVL_, &B, &X,
@@ -472,15 +500,8 @@ namespace Ipopt
     double* X = new double[nrhs*dim_];
     ipfint ERROR;
 
-
-    // Dump matrix to file, and count number of solution steps.
-    if (IpData().iter_count() != debug_last_iter_)
-      debug_cnt_ = 0;
-
+    // Dump matrix to file if requested
     write_iajaa_matrix (N, ia, ja, a_, rhs_vals, IpData().iter_count(), debug_cnt_);
-
-    debug_last_iter_ = IpData().iter_count();
-    debug_cnt_ ++;
 
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                               &PHASE, &N, a_, ia, ja, &PERM,

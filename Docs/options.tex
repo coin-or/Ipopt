@@ -385,13 +385,6 @@ $0 <  {\tt bound\_frac } \le 0.5$
 and its default value is $0.01$.
 
 
-\paragraph{bound\_mult\_init\_val:} Initial value for the bound multipliers. $\;$ \\
- All dual variables corresponding to bound
-constraints are initialized to this value. The valid range for this real option is 
-$0 <  {\tt bound\_mult\_init\_val } <  {\tt +inf}$
-and its default value is $1$.
-
-
 \paragraph{bound\_push:} Desired minimum absolute distance from the initial point to bound. $\;$ \\
  Determines how much the initial point might have
 to be modified in order to be sufficiently inside
@@ -400,6 +393,13 @@ is kappa\_1 in Section 3.6 of implementation
 paper.) The valid range for this real option is 
 $0 <  {\tt bound\_push } <  {\tt +inf}$
 and its default value is $0.01$.
+
+
+\paragraph{bound\_mult\_init\_val:} Initial value for the bound multipliers. $\;$ \\
+ All dual variables corresponding to bound
+constraints are initialized to this value. The valid range for this real option is 
+$0 <  {\tt bound\_mult\_init\_val } <  {\tt +inf}$
+and its default value is $1$.
 
 
 \paragraph{constr\_mult\_init\_max:} Maximum allowed least-square guess of constraint multipliers. $\;$ \\
@@ -664,7 +664,9 @@ Possible values:
 \paragraph{linear\_system\_scaling:} Method for scaling the linear system. $\;$ \\
  Determines the method used to compute symmetric
 scaling factors for the augmented system. This
-scaling is independent of the NLP problem scaling.
+scaling is independent of the NLP problem
+scaling.  This option is only available if Ipopt
+has been compiled with MC19.
 The default value for this string option is "mc19".
 \\ 
 Possible values:
@@ -679,16 +681,16 @@ method (e.g., mc19) is used.  If you choose "no",
 then the scaling factors are computed for every
 linear system from the start.  This can be quite
 expensive. Choosing "yes" means that the
-algorithm will starting the scaling method only
-when the solutions to the linear system seem not
-good, and then use it until the end.
-The default value for this string option is "yes".
+algorithm will start the scaling method only when
+the solutions to the linear system seem not good,
+and then use it until the end.
+The default value for this string option is "no".
 \\ 
 Possible values:
 \begin{itemize}
-   \item no: Always scaling the linear system.
-   \item yes: Start using linear system if solutions seem not
-good.
+   \item no: Always scale the linear system.
+   \item yes: Start using linear system scaling if solutions
+seem not good.
 \end{itemize}
 
 \paragraph{max\_refinement\_steps:} Maximum number of iterative refinement steps per linear system solve. $\;$ \\
@@ -862,14 +864,17 @@ Possible values:
 
 \paragraph{ma27\_pivtol:} Pivot tolerance for the linear solver MA27. $\;$ \\
  A smaller number pivots for sparsity, a larger
-number pivots for stability. The valid range for this real option is 
+number pivots for stability.  This option is only
+available if Ipopt has been compiled with MA27. The valid range for this real option is 
 $0 <  {\tt ma27\_pivtol } <  1$
 and its default value is $1 \cdot 10^{-08}$.
 
 
 \paragraph{ma27\_pivtolmax:} Maximum pivot tolerance for the linear solver MA27. $\;$ \\
  Ipopt may increase pivtol as high as pivtolmax to
-get a more accurate solution to the linear system. The valid range for this real option is 
+get a more accurate solution to the linear
+system.  This option is only available if Ipopt
+has been compiled with MA27. The valid range for this real option is 
 $0 <  {\tt ma27\_pivtolmax } <  1$
 and its default value is $0.0001$.
 
@@ -878,7 +883,8 @@ and its default value is $0.0001$.
  The initial integer workspace memory =
 liw\_init\_factor * memory required by unfactored
 system. Ipopt will increase the workspace size by
-meminc\_factor if required. The valid range for this real option is 
+meminc\_factor if required.  This option is only
+available if Ipopt has been compiled with MA27. The valid range for this real option is 
 $1 \le {\tt ma27\_liw\_init\_factor } <  {\tt +inf}$
 and its default value is $5$.
 
@@ -887,7 +893,8 @@ and its default value is $5$.
  The initial real workspace memory =
 la\_init\_factor * memory required by unfactored
 system. Ipopt will increase the workspace size by
-meminc\_factor if required. The valid range for this real option is 
+meminc\_factor if required.  This option is only
+available if  Ipopt has been compiled with MA27. The valid range for this real option is 
 $1 \le {\tt ma27\_la\_init\_factor } <  {\tt +inf}$
 and its default value is $5$.
 
@@ -895,14 +902,16 @@ and its default value is $5$.
 \paragraph{ma27\_meminc\_factor:} Increment factor for workspace size for MA27. $\;$ \\
  If the integer or real workspace is not large
 enough, Ipopt will increase its size by this
-factor. The valid range for this real option is 
+factor.  This option is only available if Ipopt
+has been compiled with MA27. The valid range for this real option is 
 $1 \le {\tt ma27\_meminc\_factor } <  {\tt +inf}$
 and its default value is $10$.
 
 
 \paragraph{ma57\_pivtol:} Pivot tolerance for the linear solver MA57. $\;$ \\
  A smaller number pivots for sparsity, a larger
-number pivots for stability. The valid range for this real option is 
+number pivots for stability. This option is only
+available if Ipopt has been compiled with MA57. The valid range for this real option is 
 $0 <  {\tt ma57\_pivtol } <  1$
 and its default value is $1 \cdot 10^{-08}$.
 
@@ -910,22 +919,26 @@ and its default value is $1 \cdot 10^{-08}$.
 \paragraph{ma57\_pivtolmax:} Maximum pivot tolerance for the linear solver MA57. $\;$ \\
  Ipopt may increase pivtol as high as
 ma57\_pivtolmax to get a more accurate solution
-to the linear system. The valid range for this real option is 
+to the linear system.  This option is only
+available if Ipopt has been compiled with MA57. The valid range for this real option is 
 $0 <  {\tt ma57\_pivtolmax } <  1$
 and its default value is $0.0001$.
 
 
 \paragraph{ma57\_pre\_alloc:} Safety factor for work space memory allocation for the linear solver MA57. $\;$ \\
  If 1 is chosen, the suggested amount of work
-space is used.  However, choosen a larger number
+space is used.  However, choosing a larger number
 might avoid reallocation if the suggest values do
-not suffice. The valid range for this real option is 
+not suffice.  This option is only available if
+Ipopt has been compiled with MA57. The valid range for this real option is 
 $1 \le {\tt ma57\_pre\_alloc } <  {\tt +inf}$
 and its default value is $3$.
 
 
 \paragraph{pardiso\_matching\_strategy:} Matching strategy to be used by Pardiso $\;$ \\
- This is IPAR(13) in Pardiso manual.
+ This is IPAR(13) in Pardiso manual.  This option
+is only available if Ipopt has been compiled with
+Pardiso.
 The default value for this string option is "complete+2x2".
 \\ 
 Possible values:
@@ -935,48 +948,12 @@ Possible values:
    \item constraints: Match constraints (IPAR(13)=3)
 \end{itemize}
 
-\paragraph{wsmp\_num\_threads:} Number of threads to be used in WSMP $\;$ \\
- This determine on how many SMP CPUs WSMP is
-running on. The valid range for this integer option is
-$1 \le {\tt wsmp\_num\_threads } <  {\tt +inf}$
-and its default value is $1$.
-
-
-\paragraph{wsmp\_ordering\_option:} Determines how ordering is done in WSMP $\;$ \\
- This corresponds to the value of WSSMP's
-IPARM(16). The valid range for this integer option is
-$-2 \le {\tt wsmp\_ordering\_option } \le 3$
-and its default value is $1$.
-
-
-\paragraph{wsmp\_pivtol:} Pivot tolerance for the linear solver WSMP. $\;$ \\
- A smaller number pivots for sparsity, a larger
-number pivots for stability. The valid range for this real option is 
-$0 <  {\tt wsmp\_pivtol } <  1$
-and its default value is $0.0001$.
-
-
-\paragraph{wsmp\_pivtolmax:} Maximum pivot tolerance for the linear solver WSMP. $\;$ \\
- Ipopt may increase pivtol as high as pivtolmax to
-get a more accurate solution to the linear system. The valid range for this real option is 
-$0 <  {\tt wsmp\_pivtolmax } <  1$
-and its default value is $0.01$.
-
-
-\paragraph{wsmp\_scaling:} Toggle for swiching on WSMP's internal scaling. $\;$ \\
- Yes corresponds to setting WSMP's IPARM(10) to 1,
-otherwise this is set to 0.
-The default value for this string option is "yes".
-\\ 
-Possible values:
-\begin{itemize}
-   \item no: don't use expensive scaling
-   \item yes: use expensive scaling
-\end{itemize}
-
-\paragraph{wsmp\_singularity\_threshold:} WSMP's singularity threshold. $\;$ \\
- WSMP's DPARM(10) parameter.  The smaller this
-value the less likely a matrix is declared
-singular. The valid range for this real option is 
-$0 <  {\tt wsmp\_singularity\_threshold } <  1$
-and its default value is $1 \cdot 10^{-18}$.
+\paragraph{pardiso\_out\_of\_core\_power:} Enables out-f-core variant of Pardiso $\;$ \\
+ Setting this option to a positive integer k makes
+Pardiso work in the out-of-core variant where the
+factor is split in 2\^k subdomains.  This is
+IPARM(50) in the Pardiso manual.  This option is
+only available if Ipopt has been compiled with
+Pardiso. The valid range for this integer option is
+$0 \le {\tt pardiso\_out\_of\_core\_power } <  {\tt +inf}$
+and its default value is $0$.

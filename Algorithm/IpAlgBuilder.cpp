@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -148,7 +148,8 @@ namespace Ipopt
       "mc19", "use the Harwell routine mc19",
       "Determines the method used to compute symmetric scaling "
       "factors for the augmented system. This scaling is independent "
-      "of the NLP problem scaling.");
+      "of the NLP problem scaling.  This option is only available if Ipopt "
+      "has been compiled with MC19.");
 
     roptions->SetRegisteringCategory("NLP Scaling");
     roptions->AddStringOption3(
