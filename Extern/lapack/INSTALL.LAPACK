@@ -31,3 +31,6 @@ tar xf lapack.tar
 
 If you then run the configure script again, it would automatically detect the 
 sources and prepare the Makefiles so that they will be automaticall compiled.
+
+NOTE: The LAPACK source files are expected to be in the subdirectory
+      LAPACK/SRC of this directory.
