@@ -326,6 +326,8 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "delta_x perturbation is becoming too large: %e\n",
                      delta_x_curr_);
+      delta_x_last_ = 0.;
+      delta_s_last_ = 0.;
       IpData().Append_info_string("dx");
       return false;
     }
