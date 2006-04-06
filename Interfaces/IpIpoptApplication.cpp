@@ -548,7 +548,7 @@ namespace Ipopt
       if (print_user_options) {
         std::string liststr;
         options_->PrintUserOptions(liststr);
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nList of user-set options:\n\n%s", liststr.c_str());
+        jnlst_->Printf(J_ERROR, J_MAIN, "\nList of user-set options:\n\n%s", liststr.c_str());
       }
 
       if( jnlst_->ProduceOutput(J_DETAILED, J_MAIN) ) {
