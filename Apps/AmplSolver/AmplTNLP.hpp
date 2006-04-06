@@ -22,6 +22,8 @@ struct ASL_pfgh;
 struct SufDecl;
 struct SufDesc;
 
+typedef long int ampl_fint;
+
 namespace Ipopt
 {
   /* forward declarations */
@@ -379,6 +381,9 @@ namespace Ipopt
     /** Suffix Handler */
     SmartPtr<AmplSuffixHandler> suffix_handler_;
 
+    /** nerror flag passed to ampl calls - set to NULL to halt on error */
+    ampl_fint* nerror_;
+
     /** Make the objective call to ampl */
     bool internal_objval(Number& obj_val);
 
@@ -387,7 +392,7 @@ namespace Ipopt
 
     /** Internal function to update the internal and ampl state if the
      *  x value changes */
-    void apply_new_x(bool new_x, Index n, const Number* x);
+    bool apply_new_x(bool new_x, Index n, const Number* x);
 
     /** Method for obtaining the name of the NL file and the options
      *  set from AMPL.  Returns a pointer to a char* with the name of
@@ -396,6 +401,9 @@ namespace Ipopt
                       SmartPtr<AmplOptionsList>& ampl_options_list,
                       char* ampl_option_string, char* ampl_invokation_string,
                       char* ampl_banner_string, char**& argv);
+
+    /** returns true if the ampl nerror code is ok */
+    bool nerror_ok(ampl_fint* nerror);
   };
 
 

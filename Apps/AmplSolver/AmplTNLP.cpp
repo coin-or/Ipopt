@@ -20,7 +20,7 @@
 namespace Ipopt
 {
 #ifdef IP_DEBUG
-  static const Index dbg_verbosity = 0;
+  static const Index dbg_verbosity = 5;
 #endif
 
   AmplTNLP::AmplTNLP(const SmartPtr<const Journalist>& jnlst,
@@ -49,7 +49,8 @@ namespace Ipopt
       objval_called_with_current_x_(false),
       conval_called_with_current_x_(false),
       Oinfo_ptr_(NULL),
-      suffix_handler_(suffix_handler)
+      suffix_handler_(suffix_handler),
+      nerror_(NULL)
   {
     DBG_START_METH("AmplTNLP::AmplTNLP",
                    dbg_verbosity);
@@ -58,6 +59,15 @@ namespace Ipopt
     // These variables then appear as though they are
     // global variables when, in fact, they are not
     // Most of them are data members of an asl object
+
+
+    //    if (want_to_halt) {
+    //      nerror_ = NULL
+    //    }
+    //    else {
+    nerror_ = new ampl_fint;
+    *nerror_ = 0;
+    //    }
 
     // Create the ASL structure
     ASL_pfgh* asl = (ASL_pfgh*)ASL_alloc(ASL_read_pfgh);
@@ -228,6 +238,8 @@ namespace Ipopt
       delete [] Oinfo->opname;
       delete Oinfo;
     }
+
+    delete nerror_;
   }
 
   bool AmplTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
@@ -309,7 +321,9 @@ namespace Ipopt
   {
     DBG_START_METH("AmplTNLP::eval_f",
                    dbg_verbosity);
-    apply_new_x(new_x, n, x);
+    if (!apply_new_x(new_x, n, x)) {
+      return false;
+    }
 
     return internal_objval(obj_value);
   }
@@ -321,7 +335,9 @@ namespace Ipopt
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
 
-    apply_new_x(new_x, n, x);
+    if (!apply_new_x(new_x, n, x)) {
+      return false;
+    }
 
     if (n_obj==0) {
       for (Index i=0; i<n; i++) {
@@ -329,12 +345,11 @@ namespace Ipopt
       }
     }
     else {
-      fint nerror = 0;
-      objgrd(0, non_const_x_, grad_f, &nerror);
-      if (nerror != 0) {
-        DBG_PRINT((1, "nerror = %d\n", nerror));
+      objgrd(0, non_const_x_, grad_f, nerror_);
+      if (!nerror_ok(nerror_)) {
         return false;
       }
+
       if (obj_sign_==-1) {
         for (Index i=0; i<n; i++) {
           grad_f[i] *= -1.;
@@ -354,7 +369,9 @@ namespace Ipopt
     DBG_ASSERT(m == n_con);
 #endif
 
-    apply_new_x(new_x, n, x);
+    if (!apply_new_x(new_x, n, x)) {
+      return false;
+    }
 
     return internal_conval(m, g);
   }
@@ -386,15 +403,14 @@ namespace Ipopt
       return true;
     }
     else if (!iRow && !jCol && values) {
-      apply_new_x(new_x, n, x);
+      if (!apply_new_x(new_x, n, x)) {
+        return false;
+      }
 
-      fint nerror = 0;
-      jacval(non_const_x_, values, &nerror);
-
-      if (nerror == 0) {
+      jacval(non_const_x_, values, nerror_);
+      if (nerror_ok(nerror_)) {
         return true;
       }
-      DBG_PRINT((1, "nerror = %d\n", nerror));
     }
     else {
       DBG_ASSERT(false && "Invalid combination of iRow, jCol, and values pointers");
@@ -429,7 +445,9 @@ namespace Ipopt
       return true;
     }
     else if (!iRow & !jCol && values) {
-      apply_new_x(new_x, n, x);
+      if (!apply_new_x(new_x, n, x)) {
+        return false;
+      }
       if (!objval_called_with_current_x_) {
         Number dummy;
         internal_objval(dummy);
@@ -541,14 +559,12 @@ namespace Ipopt
       return true;
     }
     else {
-      fint nerror = 0;
-      Number retval = objval(0, non_const_x_, &nerror);
-      if (nerror == 0) {
+      Number retval = objval(0, non_const_x_, nerror_);
+      if (nerror_ok(nerror_)) {
         obj_val = obj_sign_*retval;
         objval_called_with_current_x_ = true;
         return true;
       }
-      DBG_PRINT((1, "nerror = %d\n", nerror));
     }
 
     return false;
@@ -569,27 +585,26 @@ namespace Ipopt
       allocated = true;
     }
 
-    fint nerror = 0;
-    conval(non_const_x_, g, &nerror);
+    conval(non_const_x_, g, nerror_);
 
     if (allocated) {
       delete [] g;
       g = NULL;
     }
 
-    if (nerror == 0) {
+    if (nerror_ok(nerror_)) {
       conval_called_with_current_x_ = true;
       return true;
     }
-    DBG_PRINT((1, "nerror = %d\n", nerror));
     return false;
   }
 
 
-  void AmplTNLP::apply_new_x(bool new_x, Index n, const Number* x)
+  bool AmplTNLP::apply_new_x(bool new_x, Index n, const Number* x)
   {
     DBG_START_METH("AmplTNLP::apply_new_x",
                    dbg_verbosity);
+
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
 
@@ -610,8 +625,11 @@ namespace Ipopt
       }
 
       // tell ampl that we have a new x
-      xknown(non_const_x_);
+      xknowne(non_const_x_, nerror_);
+      return nerror_ok(nerror_);
     }
+
+    return true;
   }
 
   void AmplTNLP::write_solution_file(const std::string& message) const
@@ -1155,6 +1173,19 @@ namespace Ipopt
     return stub;
   }
 
+  bool AmplTNLP::nerror_ok(fint* nerror)
+  {
+    DBG_START_METH("AmplTNLP::nerror_ok",
+                   dbg_verbosity);
+
+    if (nerror == NULL || *nerror == 0) {
+      return true;
+    }
+    jnlst_->Printf(J_ERROR, J_MAIN, "Error in an AMPL evaluation. Run with \"halt_on_ampl_error yes\" to see details.\n");
+    DBG_PRINT((1, "nerror = %d\n", *nerror_));
+    return false;
+  }
+
   AmplSuffixHandler::AmplSuffixHandler()
       :
       asl_(NULL),
@@ -1269,7 +1300,6 @@ namespace Ipopt
     SufDesc* dp = suf_get(suffix_string.c_str(), kind);
     return dp->u.r;
   }
-
 } // namespace Ipopt
 
 
