@@ -531,15 +531,21 @@ configuration and compiled code.
 
 \subsection{Installation on Windows}\label{WindowsInstall}
 
-There are two ways to install \Ipopt\ on Windows systems.  The first
-option, described in Section~\ref{CygwinInstall}, is to use Cygwin (see
-\texttt{www.cygwin.com}), which offers a UNIX-like environment
-on Windows and in which the installation procedure described earlier
-in this section can be used.  The \Ipopt\ distribution also includes
-projects files for the Microsoft Visual Studio (see
-Section~\ref{VisualStudioInstall}).
+There are three ways to install \Ipopt\ on Windows systems.  The first
+two option, described in Sections~\ref{CygwinInstall} and
+\ref{CygwinInstallNative}, is to use Cygwin (see
+\texttt{www.cygwin.com}), which offers a UNIX-like environment on
+Windows and in which the installation procedure described earlier in
+this section can be used.  If you want to use the (free) GNU
+compilers, follow the instructions in Section~\ref{CygwinInstall}.  If
+you have the Microsoft C++ compiler (executable called {\tt cl.exe})
+and the Intel Fortran compiler (called {\tt ifort.exe}) and want to
+use those to compile \Ipopt, please see Section~\ref{CygwinInstall}.
+%
+The \Ipopt\ distribution also includes projects files for the
+Microsoft Visual Studio (see Section~\ref{VisualStudioInstall}).
 
-\subsubsection{Installation with Cygwin}\label{CygwinInstall}
+\subsubsection{Installation with Cygwin using GNU compilers}\label{CygwinInstall}
 
 Cygwin is a Linux-like environment for Windows; if you don't know what
 it is you might want to have a look at the Cygwin homepage,
@@ -594,18 +600,18 @@ to choose some connection settings differently):
   the installation of third party dependencies for \Ipopt\ easier)
 
   This will automatically also select some other packages.
-\item Then you click on next, and Cygwin will be installed (follow the
-  rest of the instructions and choose everything else to your liking).
-  At a later point you can easily add/remove packages with the setup
-  program.
+\item\label{it:cyg_done} Then you click on next, and Cygwin will be
+  installed (follow the rest of the instructions and choose everything
+  else to your liking).  At a later point you can easily add/remove
+  packages with the setup program.
 
 \item Now that you have Cygwin, you can open a Cygwin window, which is
   like a UNIX shell window.
 
-\item Now you just follow the instructions in the beginning of
-  Sections~\ref{Installing}:  You download the \Ipopt\ code into
-  your Cygwin home directory (from the Windows explorer that is
-  usually something like
+\item\label{it:cyg_inst} Now you just follow the instructions in the
+  beginning of Sections~\ref{Installing}: You download the \Ipopt\
+  code into your Cygwin home directory (from the Windows explorer that
+  is usually something like
   \texttt{C:$\backslash$Cygwin$\backslash$home$\backslash$your\_user\_name}).
   After that you obtain the third party code (like on Linux/UNIX),
   type
@@ -618,7 +624,102 @@ to choose some connection settings differently):
 
   in the correct directories, and hopefully that will work.  The
   \Ipopt\ AMPL solver executable will be in the subdirectory
-  \texttt{bin} (called ``\texttt{ipopt.exe}'').
+  \texttt{bin} (called ``\texttt{ipopt.exe}'').  If you want to set
+  the installation, type
+
+  \textt{make test}
+\end{enumerate}
+
+\subsubsection{Installation with Cygwin using native compilers}\label{CygwinInstallNative}
+
+The \Ipopt\ configure script and Makefiles have been tested with the
+Microsoft Visual C++ .NET 2003 Standard compiler together with the
+Intel Visual Fortran Compiler 8.1.  It might also work with other
+compilers.
+
+Here are the steps that work on my system:
+
+\begin{enumerate}
+\item Follow the instructions in Section~\ref{CygwinInstall} until
+  Step~\ref{it:cyg_inst} and stop after your downloaded the third
+  party code.
+\item\label{it:ASLcompile} If want to compile the AMPL solver
+  executable, you need to compile the ASL library ``by hand''.  There
+  are instructions in {\tt Extern/ASL/solvers/README}.  On my system,
+  those steps are:
+  \begin{enumerate}
+  \item Open a DOS prompt window.
+  \item\label{it:ASLcompileSetup} Run the Intel Fortran compiler setup
+  script, e.g.,
+
+  \begin{equation}\label{eq:intelsetup}
+    \texttt{``C:$\backslash$Program
+    Files$\backslash$Intel$\backslash$Fortran$\backslash$compiler80$\backslash$IA32$\backslash$BIN$\backslash$ifortvars.bat''}
+  \end{equation}
+
+    (Consult your compiler documentation if that doesn't work for you)
+  \item Change into the directory where the ASL source code has been
+    downloaded, e.g.,
+
+    \texttt{cd $\backslash$cygwin$\backslash$home$\backslash${\em
+	username}$\backslash$Ipopt$\backslash$Extern$\backslash$ASL$\backslash$solvers}
+
+  \item Copy the file {\tt makefile.vc} to {\tt makefile}
+
+    \texttt{copy makefile.vc makefile}
+
+  \item Copy the file {\tt details.c0} to {\tt details.c}
+
+    \texttt{copy details.c0 details.c}
+
+    and edit the file {\tt details.c} to change the string to
+    something meadingful like ``{\tt MS VC++ .NET 2003}''.
+
+  \item Compile the library usgin {\tt nmake}
+
+    \texttt{nmake}
+
+  \item Rename the generated library to {\tt amplsolver.a}
+
+    \texttt{ren amplsolv.lib amplsolver.a}
+
+  \item Close the DOS Window
+  \end{enumerate}
+
+\item Now you need to make sure that Cygwin knows about the native
+  compilers.  For this you need to edit the file {\tt cygwin.bat} in
+  the Cygwin base directory (usually {\tt C:$\backslash$cygwin}).
+  Here you need need to add the line
+
+  \texttt{call ``C:$\backslash$Program
+    Files$\backslash$Intel$\backslash$Fortran$\backslash$compiler80$\backslash$IA32$\backslash$BIN$\backslash$ifortvars.bat''}
+
+  or whatever you used in \ref{eq:intelsetup}.
+
+\item Now open a new Cygwin window and change into the directory where
+  you put the \Ipopt\ source code (where the {\tt configure} file is)
+
+\item Now run the configuration script.  If you want to compile the
+  AMPL solver executable (i.e., you followed the instruction in
+  Step~\ref{it:ASLcompile} above), you type
+
+  \texttt{./configure CC=cl CXX=cl F77=ifort --with-asldir=Extern/ASL/solvers}
+
+  If you don't want to compile the AMPL solver executable and just
+  want to generate the \Ipopt\ library, just type
+
+  \texttt{./configure CC=cl CXX=cl F77=ifort}
+
+  Make sure the last message is
+
+  \texttt{Configuration successful}
+
+\item Now you can compile the code with
+
+  \texttt{make install}
+
+  and if desired, test the installation with {\tt make test}
+
 \end{enumerate}
 
 \subsubsection{Using Visual Studio}\label{VisualStudioInstall}
@@ -631,11 +732,14 @@ Compiler 8.1.
 
 In order to use those project files, download the \Ipopt\ source code,
 as well as the required third party code (put it into the {\tt
-  Extern/blas}, {\tt Extern/lapack}, and {\tt Extern/HSL}
-directories---ASL is not required for the Fortran and C
-examples). Then open the solution file\\
+Extern$\backslash$blas}, {\tt Extern$\backslash$lapack}, and {\tt
+Extern$\backslash$HSL} directories---ASL is not required for the
+Fortran and C examples). Then open the solution file:\\
 
 \texttt{\$IPOPTDIR$\backslash$Windows$\backslash$VisualStudio\_dotNET$\backslash$Ipopt$\backslash$Ipopt.sln}\\
+
+Please also read the README file in
+\texttt{\$IPOPTDIR$\backslash$Windows$\backslash$VisualStudio\_dotNET}
 
 Note: Since the project files were created only with the Standard
 edition of the C++ compiler, code optimization might be disabled; for

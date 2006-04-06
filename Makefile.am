@@ -18,7 +18,7 @@ EXTRA_DIST = \
 	Examples/Cpp_example/MyNLP.cpp \
 	Examples/Cpp_example/MyNLP.hpp \
 	Examples/hs071_f/Makefile.in \
-	Examples/hs071_f/hs071_f.in \
+	Examples/hs071_f/hs071_f.f.in \
 	Examples/hs071_c/Makefile.in \
 	Examples/hs071_c/hs071_c.c \
 	Examples/hs071_cpp/Makefile.in \
@@ -69,10 +69,12 @@ EXTRA_DIST = \
 	Windows/VisualStudio_dotNET/CppExample/CppExample.vcproj \
 	Windows/VisualStudio_dotNET/CExample/CExample.vcproj \
 	Windows/VisualStudio_dotNET/FortranExample/FortranExample.vfproj \
+	Windows/VisualStudio_dotNET/FortranExample/hs071_f.f \
 	Windows/VisualStudio_dotNET/FortranLinAlg/FortranLinAlg.vfproj \
 	Windows/VisualStudio_dotNET/include/config.h \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
-	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj
+	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj \
+	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj
 
 .PHONY: doc
 

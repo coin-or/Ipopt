@@ -6,32 +6,37 @@
 		<Configuration Name="Debug|Win32" DeleteExtensionsOnClean="*.obj;*.mod;*.pdb;*.asm;*.map;*.dyn;*.dpi;*.tmp;*.log;*.lib;$(TargetPath)" ConfigurationType="typeStaticLibrary">
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TypeLibraryName="$(IntDir)/$(InputName).tlb"/>
 				<Tool Name="VFPreBuildEventTool"/>
-				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" ModulePath="$(INTDIR)/" ObjectFile="$(INTDIR)/" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtSingleThreadedDebug" CompileOnly="true"/>
+				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFCustomBuildTool"/>
-				<Tool Name="VFLibrarianTool" MustRebuild="true" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/>
+				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/>
 				<Tool Name="VFPreLinkEventTool"/>
-				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/></Configuration>
+				<Tool Name="VFLibrarianTool" MustRebuild="true" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/></Configuration>
 		<Configuration Name="Release|Win32" DeleteExtensionsOnClean="*.obj;*.mod;*.pdb;*.asm;*.map;*.dyn;*.dpi;*.tmp;*.log;*.lib;$(TargetPath)" ConfigurationType="typeStaticLibrary">
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TypeLibraryName="$(IntDir)/$(InputName).tlb"/>
 				<Tool Name="VFPreBuildEventTool"/>
-				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" ModulePath="$(INTDIR)/" ObjectFile="$(INTDIR)/" CompileOnly="true"/>
+				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFCustomBuildTool"/>
-				<Tool Name="VFLibrarianTool" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/>
+				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/>
 				<Tool Name="VFPreLinkEventTool"/>
-				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/></Configuration></Configurations>
+				<Tool Name="VFLibrarianTool" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<Filter Name="blas">
-		<File RelativePath="..\..\..\Extern\blas\caxpy.f"/>
 		<File RelativePath="..\..\..\Extern\blas\dasum.f"/>
 		<File RelativePath="..\..\..\Extern\blas\daxpy.f"/>
 		<File RelativePath="..\..\..\Extern\blas\dcopy.f"/>
 		<File RelativePath="..\..\..\Extern\blas\ddot.f"/>
-		<File RelativePath="..\..\..\Extern\blas\dgemm.f"/>
-		<File RelativePath="..\..\..\Extern\blas\dgemv.f"/>
-		<File RelativePath="..\..\..\Extern\blas\dger.f"/>
+		<File RelativePath="..\..\..\Extern\blas\dgemm.f">
+			<FileConfiguration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
+		<File RelativePath="..\..\..\Extern\blas\dgemv.f">
+			<FileConfiguration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
+		<File RelativePath="..\..\..\Extern\blas\dger.f">
+			<FileConfiguration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
 		<File RelativePath="..\..\..\Extern\blas\dnrm2.f"/>
 		<File RelativePath="..\..\..\Extern\blas\dscal.f"/>
 		<File RelativePath="..\..\..\Extern\blas\dswap.f"/>

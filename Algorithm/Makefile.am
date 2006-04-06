@@ -39,7 +39,7 @@ libipoptalg_a_SOURCES = \
 	IpLeastSquareMults.cpp IpLeastSquareMults.hpp \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.cpp IpLoqoMuOracle.hpp \
-	IpLowRankAugSystemSolver.cpp IpLowRankAugSystemSolver.cpp \
+	IpLowRankAugSystemSolver.cpp IpLowRankAugSystemSolver.hpp \
 	IpMonotoneMuUpdate.cpp IpMonotoneMuUpdate.hpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp \

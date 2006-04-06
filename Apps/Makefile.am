@@ -10,7 +10,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = CUTErInterface
 
-if BUILDASLDIR
+if BUILDAMPLINTERFACE
   SUBDIRS += AmplSolver
 #  SUBDIRS += CompositeInterface
 endif
