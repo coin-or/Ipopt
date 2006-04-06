@@ -315,7 +315,17 @@ AC_ARG_VAR(ARFLAGS,[Flags for adding file for archive command (default is `crv')
 AC_MSG_NOTICE([Using ARFLAGS=\"$ARFLAGS\".])
 
 if test -z "$AR_X"; then
-  AR_X="$AR x"
+  case $build in
+    *-sun-*)
+      AR_X="ar x"
+      ;;
+    *-sgi-*)
+      AR_X="ar x"
+      ;;
+    *)
+      AR_X="$AR x"
+      ;;
+  esac
 fi
 AC_ARG_VAR(AR_X,[Command for extracing an archive (default is `$AR x')])
 AC_MSG_NOTICE([Using AR_X=\"$AR_X\".])

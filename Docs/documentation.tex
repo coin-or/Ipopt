@@ -62,7 +62,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \begin{small}
 \noindent
 The following names used in this document are trademarks or registered
-trademarks: AMPL, IBM, Intel, Matlab, Microsoft, Visual Studio C++,
+trademarks: AMPL, IBM, Intel, Matlab, Microsoft, MKL, Visual Studio C++,
 Visual Studio C++ .NET
 \end{small}
 
@@ -151,7 +151,9 @@ In order to build \Ipopt, some third party components are required:
 %   \item The Watson Sparse Matrix Package (WSMP)\\ (see {\tt
 %       http://www-users.cs.umn.edu/\verb|~|agupta/wsmp.html})
   \item The Parallel Sparse Direct Linear Solver (PARDISO)\\ (see {\tt
-      http://www.computational.unibas.ch/cs/scicomp/software/pardiso/}).
+      http://www.computational.unibas.ch/cs/scicomp/software/pardiso/}).\\
+    Note: The Pardiso version in Intel's MKL library does not yet
+    support the features necessary for \Ipopt.
   \end{itemize}
   You need to include at least one of the linear solvers above in
   order to run \Ipopt.  Currently, there is development on integrating
@@ -225,20 +227,21 @@ More and up-to-date information can be found at the \Ipopt\ homepage,
 
 Here, you can find FAQs, some (hopefully useful) hints, a bug report
 system etc.  The website is managed with Wiki, which means that every
-user can edit the webpages from the regular web browser.  In
-particular, we encourage \Ipopt\ users to share their experiences and
-usage hints on the ``Success Stories'' and ``Hints and Tricks''
-pages\footnote{Since we had some malicious hacker attacks destroying
-  the content of the web pages in the past, you are now required to
-  enter a user name and password; simply follow the instructions in
-  the last paragraph of the Documentation section on the main project
-  page.}
+user can edit the webpages from the regular web browser.  {\bf In
+  particular, we encourage \Ipopt\ users to share their experiences
+  and usage hints on the ``Success Stories'' and ``Hints and Tricks''
+  pages, or to list the publications discussing applications of
+  \Ipopt\ in the ``Papers related to Ipopt'' page}\footnote{Since we
+  had some malicious hacker attacks destroying the content of the web
+  pages in the past, you are now required to enter a user name and
+  password; simply follow the instructions in the last paragraph of
+  the Documentation section on the main project page.}
 
 \Ipopt\ is an open source project, and we encourage people to
 contribute code (such as interfaces to appropriate linear solvers,
 modeling environments, or even algorithmic features).  If you are
 interested in contributing code, please have a look at the COIN
-constributions webpage\footnote{see \tt
+contributions webpage\footnote{see \tt
   http://www.coin-or.org/contributions.html}, and contact the \Ipopt\
 project leader.
 
@@ -258,8 +261,6 @@ you model and debug your particular optimization problem.  However, if
 you have a challenging optimization problem and are interested in
 consulting services by IBM Research, please contact the \Ipopt\
 project leader, Andreas W\"achter.
-
-{\bf ToDo: Add information about the Wiki pages here!}
 
 \subsection{History of \Ipopt}
 The original \Ipopt\ (Fortran version) was a product of the dissertation
@@ -325,7 +326,7 @@ To use the tarball, follow the steps below:
   \texttt{http://www.coin-or.org/Tarballs}.  The file you should look
   for has the form \texttt{ipopt-3.x.x.tar.gz} (where
   ``\texttt{3.x.x.}'' is the version number).  Make sure you are
-  getting the correct file; it is localted towards the bottom of that
+  getting the correct file; it is located toward the bottom of that
   page; don't confuse it with the tarball of the old (Fortran) \Ipopt\
   version ({\tt Ipopt\_{\em date}.tgz}).  Put this file in a directory
   under which you want to put the \Ipopt\ installation.
@@ -428,10 +429,17 @@ dependencies), you can simply put it into the {\tt
 will then find this file and compile it into the \Ipopt\ library (just
 as is would compile MA27).
 
-Yet another note: If you have a precompile library containing the
+Yet another note: If you have a precompiled library containing the
 Harwell codes, you can specify the location of this library with the
 \verb|--with-hsl| flag for the {\tt configure} script described in
 Section~\ref{sec.comp_and_inst}.
+
+\subsubsection{Other Linear Solvers}
+
+If you would like to compile \Ipopt\ with another linear solver, you
+need to obtain the corresponding library on your own and, if
+necessary, compile it yourself if it is not available in precompiled
+form.
 
 \subsection{Compiling and Installing \Ipopt} \label{sec.comp_and_inst}
 
@@ -455,7 +463,8 @@ submitting a ticket or sending a message to the mailing list.
 
   The default configure (without any options) is sufficient for most
   users. If you want to see the configure options, consult
-  Appendix~\ref{ExpertInstall}.
+  Appendix~\ref{ExpertInstall}, for example, if you want to use a
+  non-HSL linear solver.
 \item Build the code \\
 {\tt \$ make}
 \item Install \Ipopt \\
@@ -1012,7 +1021,7 @@ has a feature that can help you to debug the derivative code, using
 finite differences, see Section~\ref{sec:deriv-checker}.
 
 Note that the return value of any {\tt bool}-valued function should be
-{\tt true}, unless an error occured, for example, because the value of
+{\tt true}, unless an error occurred, for example, because the value of
 a problem function could not be evaluated at the required point.
 
 \paragraph{Method {\texttt{get\_nlp\_info}}} with prototype
@@ -1594,13 +1603,13 @@ algorithm has finished (successfully or even with most errors).
     local infeasibility. Problem may be infeasible.
   \item {\tt USER\_REQUESTED\_STOP}: The user call-back function {\tt
       intermediate\_callback} (see Section~\ref{sec:add_meth})
-    returned {\tt flase}, i.e., the user code requested a premature
+    returned {\tt false}, i.e., the user code requested a premature
     termination of the optimization.
   \item {\tt DIVERGING\_ITERATES}: It seems that the iterates diverge.
   \item {\tt RESTORATION\_FAILURE}: Restoration phase failed,
     algorithm doesn't know how to proceed.
   \item {\tt ERROR\_IN\_STEP\_COMPUTATION}: An unrecoverable error
-    occured while \Ipopt\ tried to compute the search direction.
+    occurred while \Ipopt\ tried to compute the search direction.
   \item {\tt INVALID\_NUMBER\_DETECTED}:  Algorithm received an
     invalid number (such as {\tt NaN} or {\tt Inf}) from the NLP; see
     also option {\tt check\_derivatives\_for\_naninf}.
@@ -1732,8 +1741,8 @@ int main(int argv, char* argc[])
 The first line of code in {\tt main} creates an instance of {\tt
   HS071\_NLP}. We then create an instance of the \Ipopt\ solver, {\tt
   IpoptApplication}. The call to {\tt app->Initialize(...)} will
-inialize that object, process this options (particularly the output
-relatex options), and the call to {\tt app->OptimizeTNLP(...)}  will
+initialize that object, process this options (particularly the output
+related options), and the call to {\tt app->OptimizeTNLP(...)}  will
 run \Ipopt\ and try to solve the problem. By default, \Ipopt\ will
 write to its progress to the console, and return the {\tt
   SolverReturn} status.
@@ -1893,10 +1902,10 @@ This method is called if the {\tt nlp\_scaling\_method} is chosen as
 {\tt user-scaling}.  Then the user is to provide scaling factors for
 the objective function, as well as for the optimization variables
 and/or constraints.  The return value should be true, unless an error
-occured, and the program is to be aborted.
+occurred, and the program is to be aborted.
 
 The value returned in {\tt obj\_scaling} determines, how \Ipopt\
-should interally scale the objective function.  For example, if this
+should internally scale the objective function.  For example, if this
 number is chosen to be 10, then \Ipopt\ solves internally an
 optimization problem that has 10 times the value of the original
 objective function provided by the {\tt TNLP}.  In particular, if this
@@ -2348,7 +2357,7 @@ your code through some memory checker, such as {\tt valgrind} on Linux.
 
 \Ipopt\ has an option to approximate the Hessian of the Lagrangian by
 a limited-memory quasi-Newton method (L-BFGS).  You can use this
-feature using the {\tt hessian\_information} and {\tt
+feature using the {\tt hessian\_approximation} and {\tt
   limited\_memory...} options.  In this case, it is not necessary to
 implement the Hessian computation method {\tt eval\_h} in {\tt TNLP}.
 If you are using the C or Fortran interface, you still need to
@@ -2667,7 +2676,7 @@ if there are multiple items for the same nonzero position, the values
 provided for those positions are added.
 
 The Hessian of the Lagrangian is a symmetric matrix. In the case of a
-symmetric matrix, you only need to specify the lower left triangual
+symmetric matrix, you only need to specify the lower left triangular
 part (or, alternatively, the upper right triangular part). For
 example, given the matrix,
 \begin{equation}
