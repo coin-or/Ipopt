@@ -67,7 +67,6 @@ am_libipoptalg_a_OBJECTS = IpAdaptiveMuUpdate.$(OBJEXT) \
 	IpIpoptData.$(OBJEXT) IpIteratesVector.$(OBJEXT) \
 	IpLeastSquareMults.$(OBJEXT) IpLoqoMuOracle.$(OBJEXT) \
 	IpLowRankAugSystemSolver.$(OBJEXT) \
-	IpLowRankAugSystemSolver.$(OBJEXT) \
 	IpMonotoneMuUpdate.$(OBJEXT) IpNLPScaling.$(OBJEXT) \
 	IpOptErrorConvCheck.$(OBJEXT) IpOrigIpoptNLP.$(OBJEXT) \
 	IpOrigIterationOutput.$(OBJEXT) \
@@ -287,7 +286,7 @@ libipoptalg_a_SOURCES = \
 	IpLeastSquareMults.cpp IpLeastSquareMults.hpp \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.cpp IpLoqoMuOracle.hpp \
-	IpLowRankAugSystemSolver.cpp IpLowRankAugSystemSolver.cpp \
+	IpLowRankAugSystemSolver.cpp IpLowRankAugSystemSolver.hpp \
 	IpMonotoneMuUpdate.cpp IpMonotoneMuUpdate.hpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp \

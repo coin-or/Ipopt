@@ -627,7 +627,7 @@ to choose some connection settings differently):
   \texttt{bin} (called ``\texttt{ipopt.exe}'').  If you want to set
   the installation, type
 
-  \textt{make test}
+  \texttt{make test}
 \end{enumerate}
 
 \subsubsection{Installation with Cygwin using native compilers}\label{CygwinInstallNative}
@@ -650,16 +650,17 @@ Here are the steps that work on my system:
   \begin{enumerate}
   \item Open a DOS prompt window.
   \item\label{it:ASLcompileSetup} Run the Intel Fortran compiler setup
-  script, e.g.,
+    script, so that the compiler executables are in the path.  On my
+    system, I need to run
 
   \begin{equation}\label{eq:intelsetup}
     \texttt{``C:$\backslash$Program
     Files$\backslash$Intel$\backslash$Fortran$\backslash$compiler80$\backslash$IA32$\backslash$BIN$\backslash$ifortvars.bat''}
   \end{equation}
 
-    (Consult your compiler documentation if that doesn't work for you)
-  \item Change into the directory where the ASL source code has been
-    downloaded, e.g.,
+    (Consult your compiler documentation if that doesn't work for you.)
+  \item Change into the directory into which the ASL source code has
+    been downloaded, e.g.,
 
     \texttt{cd $\backslash$cygwin$\backslash$home$\backslash${\em
 	username}$\backslash$Ipopt$\backslash$Extern$\backslash$ASL$\backslash$solvers}
@@ -694,19 +695,19 @@ Here are the steps that work on my system:
   \texttt{call ``C:$\backslash$Program
     Files$\backslash$Intel$\backslash$Fortran$\backslash$compiler80$\backslash$IA32$\backslash$BIN$\backslash$ifortvars.bat''}
 
-  or whatever you used in \ref{eq:intelsetup}.
+  or whatever you used in (\ref{eq:intelsetup}) above.
 
-\item Now open a new Cygwin window and change into the directory where
-  you put the \Ipopt\ source code (where the {\tt configure} file is)
+\item Open a new Cygwin window and change into the directory where you
+  put the \Ipopt\ source code (where the {\tt configure} file is)
 
-\item Now run the configuration script.  If you want to compile the
-  AMPL solver executable (i.e., you followed the instruction in
+\item Run the configuration script.  If you want to compile the AMPL
+  solver executable (i.e., you followed the instruction in
   Step~\ref{it:ASLcompile} above), you type
 
   \texttt{./configure CC=cl CXX=cl F77=ifort --with-asldir=Extern/ASL/solvers}
 
   If you don't want to compile the AMPL solver executable and just
-  want to generate the \Ipopt\ library, just type
+  want to generate the \Ipopt\ library, type only
 
   \texttt{./configure CC=cl CXX=cl F77=ifort}
 
@@ -718,7 +719,7 @@ Here are the steps that work on my system:
 
   \texttt{make install}
 
-  and if desired, test the installation with {\tt make test}
+  and, if desired, test the installation with {\tt make test}
 
 \end{enumerate}
 
