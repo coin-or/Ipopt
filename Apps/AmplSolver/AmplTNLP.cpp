@@ -49,30 +49,26 @@ namespace Ipopt
       objval_called_with_current_x_(false),
       conval_called_with_current_x_(false),
       Oinfo_ptr_(NULL),
-      suffix_handler_(suffix_handler),
-      nerror_(NULL)
+      suffix_handler_(suffix_handler)
   {
     DBG_START_METH("AmplTNLP::AmplTNLP",
                    dbg_verbosity);
+
     // The ASL include files #define certain
     // variables that they expect you to work with.
     // These variables then appear as though they are
     // global variables when, in fact, they are not
     // Most of them are data members of an asl object
 
-
-    //    if (want_to_halt) {
-    //      nerror_ = NULL
-    //    }
-    //    else {
-    nerror_ = new ampl_fint;
-    *nerror_ = 0;
-    //    }
-
     // Create the ASL structure
     ASL_pfgh* asl = (ASL_pfgh*)ASL_alloc(ASL_read_pfgh);
     DBG_ASSERT(asl);
     asl_ = asl; // keep the pointer for ourselves to use later...
+
+    // First assume that we don't want to halt on error (default)
+    fint* fint_nerror = new fint;
+    *fint_nerror = 0;
+    nerror_ = (void*) fint_nerror;
 
     // Read the options and stub
     char* stub = get_options(options, ampl_options_list,
@@ -239,7 +235,7 @@ namespace Ipopt
       delete Oinfo;
     }
 
-    delete nerror_;
+    delete (fint*) nerror_;
   }
 
   bool AmplTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
@@ -345,7 +341,7 @@ namespace Ipopt
       }
     }
     else {
-      objgrd(0, non_const_x_, grad_f, nerror_);
+      objgrd(0, non_const_x_, grad_f, (fint*)nerror_);
       if (!nerror_ok(nerror_)) {
         return false;
       }
@@ -407,7 +403,7 @@ namespace Ipopt
         return false;
       }
 
-      jacval(non_const_x_, values, nerror_);
+      jacval(non_const_x_, values, (fint*)nerror_);
       if (nerror_ok(nerror_)) {
         return true;
       }
@@ -559,7 +555,7 @@ namespace Ipopt
       return true;
     }
     else {
-      Number retval = objval(0, non_const_x_, nerror_);
+      Number retval = objval(0, non_const_x_, (fint*)nerror_);
       if (nerror_ok(nerror_)) {
         obj_val = obj_sign_*retval;
         objval_called_with_current_x_ = true;
@@ -585,7 +581,7 @@ namespace Ipopt
       allocated = true;
     }
 
-    conval(non_const_x_, g, nerror_);
+    conval(non_const_x_, g, (fint*)nerror_);
 
     if (allocated) {
       delete [] g;
@@ -625,7 +621,7 @@ namespace Ipopt
       }
 
       // tell ampl that we have a new x
-      xknowne(non_const_x_, nerror_);
+      xknowne(non_const_x_, (fint*)nerror_);
       return nerror_ok(nerror_);
     }
 
@@ -748,7 +744,7 @@ namespace Ipopt
 
       if (!pinfo->Options()->SetNumericValue(pinfo->IpoptName().c_str(), real_val)) {
         pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
-                               "\nInvalid value for option %s.\n", kw->name);
+                               "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
         exit(-1);
       }
 
@@ -766,7 +762,7 @@ namespace Ipopt
 
       if (!pinfo->Options()->SetIntegerValue(pinfo->IpoptName().c_str(), int_val)) {
         pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
-                               "\nInvalid value for option %s.\n", kw->name);
+                               "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
         exit(-1);
       }
 
@@ -784,7 +780,36 @@ namespace Ipopt
 
       if (!pinfo->Options()->SetStringValue(pinfo->IpoptName().c_str(), str_val)) {
         pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
-                               "\nInvalid value for option %s.\n", kw->name);
+                               "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
+        exit(-1);
+      }
+
+      return retval;
+    }
+
+    static char* get_haltonerror_opt(Option_Info *oi, keyword *kw, char *value) {
+      AmplOptionsList::PrivatInfo*
+      pinfo = (AmplOptionsList::PrivatInfo*) kw->info;
+
+      char* str_val;
+      kw->info = &str_val;
+      char* retval = C_val(oi, kw, value);
+      kw->info = (void*) pinfo;
+
+      fint** nerror = (fint**) pinfo->NError();
+
+      if (strcmp(str_val, "yes")==0) {
+        delete *nerror;
+        *nerror = NULL;
+      }
+      else if (strcmp(str_val, "no")==0) {
+        delete *nerror;
+        *nerror = new fint;
+        **nerror = 0;
+      }
+      else {
+        pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
+                               "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
         exit(-1);
       }
 
@@ -807,7 +832,8 @@ namespace Ipopt
   }
 
   void* AmplOptionsList::Keywords(const SmartPtr<OptionsList>& options,
-                                  SmartPtr<const Journalist> jnlst)
+                                  SmartPtr<const Journalist> jnlst,
+                                  void** nerror)
   {
     if (keywds_) {
       DBG_ASSERT(nkeywds_>0);
@@ -821,53 +847,45 @@ namespace Ipopt
       nkeywds_ = 0;
     }
 
-    Index n_options = NumberOfAmplOptions()+1; // add one for AMPL's "wantsol"
+    Index n_options = NumberOfAmplOptions();
     keyword* keywords = new keyword[n_options];
 
     Index ioption = 0;
-    bool have_wantsol = false;
-    const char wantsol_str[] = "wantsol";
     for (std::map<std::string, SmartPtr<const AmplOption> >::iterator
          iter = ampl_options_map_.begin();
          iter != ampl_options_map_.end(); iter++) {
-      if (strcmp(wantsol_str, iter->first.c_str())<0) {
-        DBG_ASSERT(strcmp(wantsol_str, iter->first.c_str())!=0);
-        // Add the keyword for wantsol
-        keywords[ioption].name = new char[8];
-        strcpy(keywords[ioption].name, wantsol_str);
-        keywords[ioption].kf = WS_val;
-        keywords[ioption].info = NULL;
-        keywords[ioption].desc = WS_desc_ASL+5;
-        ioption++;
-        have_wantsol = true;
-      }
       keywords[ioption].name = new char[iter->first.size()+1];
       strcpy(keywords[ioption].name, iter->first.c_str());
-      PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst);
-      //      privat_info pinfo = {iter->second->IpoptOptionName(), options, jnlst};
-      keywords[ioption].info = (void*) pinfo;
       keywords[ioption].desc = iter->second->Description();
       switch (iter->second->Type()) {
-        case String_Option:
-        keywords[ioption].kf = get_str_opt;
+        case String_Option: {
+          PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst);
+          keywords[ioption].info = (void*) pinfo;
+          keywords[ioption].kf = get_str_opt;
+        }
         break;
-        case Number_Option:
-        keywords[ioption].kf = get_num_opt;
+        case Number_Option: {
+          PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst);
+          keywords[ioption].info = (void*) pinfo;
+          keywords[ioption].kf = get_num_opt;
+        }
         break;
-        case Integer_Option:
-        keywords[ioption].kf = get_int_opt;
+        case Integer_Option: {
+          PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst);
+          keywords[ioption].info = (void*) pinfo;
+          keywords[ioption].kf = get_int_opt;
+        }
+        break;
+        case WS_Option:
+        keywords[ioption].info = NULL;
+        keywords[ioption].kf = WS_val;
+        break;
+        case HaltOnError_Option:
+        PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst, nerror);
+        keywords[ioption].info = (void*) pinfo;
+        keywords[ioption].kf = get_haltonerror_opt;
         break;
       }
-      ioption++;
-    }
-
-    if (!have_wantsol) {
-      // Add the keyword for wantsol
-      keywords[ioption].name = new char[8];
-      strcpy(keywords[ioption].name, wantsol_str);
-      keywords[ioption].kf = WS_val;
-      keywords[ioption].info = NULL;
-      keywords[ioption].desc = WS_desc_ASL+1;
       ioption++;
     }
 
@@ -1106,11 +1124,22 @@ namespace Ipopt
                                      "Enables out-of-core version of linear solver Pardiso");
 #endif
 
-    int n_options = ampl_options_list->NumberOfAmplOptions();
-    // Add an extra one for the "wantsol" AMPL option
-    n_options++;
+    // AMPL's wantsol option
+    ampl_options_list->AddAmplOption("wantsol", "",
+                                     AmplOptionsList::WS_Option,
+                                     WS_desc_ASL+5);
 
-    keyword* keywds = (keyword*) ampl_options_list->Keywords(options, jnlst_);
+    // special AMPL option to exit when there is in error in the
+    // function evaluation
+    ampl_options_list->AddAmplOption("halt_on_ampl_error", "",
+                                     AmplOptionsList::HaltOnError_Option,
+                                     "Exit with message on evaluation error");
+
+    int n_options = ampl_options_list->NumberOfAmplOptions();
+
+    keyword* keywds =
+      (keyword*) ampl_options_list->Keywords(options, jnlst_,
+                                             (void**)&nerror_);
 
     static char sname_default[] = "ipopt";
     static char bsname_default[] = PACKAGE_STRING;
@@ -1173,16 +1202,16 @@ namespace Ipopt
     return stub;
   }
 
-  bool AmplTNLP::nerror_ok(fint* nerror)
+  bool AmplTNLP::nerror_ok(void* nerror)
   {
     DBG_START_METH("AmplTNLP::nerror_ok",
                    dbg_verbosity);
 
-    if (nerror == NULL || *nerror == 0) {
+    if (nerror == NULL || *((fint*)nerror) == 0) {
       return true;
     }
     jnlst_->Printf(J_ERROR, J_MAIN, "Error in an AMPL evaluation. Run with \"halt_on_ampl_error yes\" to see details.\n");
-    DBG_PRINT((1, "nerror = %d\n", *nerror_));
+    DBG_PRINT((1, "nerror = %d\n", *((fint*)nerror)));
     return false;
   }
 

@@ -22,8 +22,6 @@ struct ASL_pfgh;
 struct SufDecl;
 struct SufDesc;
 
-typedef long int ampl_fint;
-
 namespace Ipopt
 {
   /* forward declarations */
@@ -37,7 +35,9 @@ namespace Ipopt
     enum AmplOptionType {
       String_Option,
       Number_Option,
-      Integer_Option
+      Integer_Option,
+      WS_Option,  /* this is for AMPL's internal wantsol callback */
+      HaltOnError_Option /* this is for our setting of the nerror_ member */
     };
 
     /** Ampl Option class, contains name, type and description for an
@@ -102,11 +102,13 @@ namespace Ipopt
     public:
       PrivatInfo(const std::string ipopt_name,
                  SmartPtr<OptionsList> options,
-                 SmartPtr<const Journalist> jnlst)
+                 SmartPtr<const Journalist> jnlst,
+                 void** nerror = NULL)
           :
           ipopt_name_(ipopt_name),
           options_(options),
-          jnlst_(jnlst)
+          jnlst_(jnlst),
+          nerror_(nerror)
       {}
       const std::string& IpoptName() const
       {
@@ -120,10 +122,15 @@ namespace Ipopt
       {
         return jnlst_;
       }
+      void** NError()
+      {
+        return nerror_;
+      }
     private:
       const std::string ipopt_name_;
       const SmartPtr<OptionsList> options_;
       const SmartPtr<const Journalist> jnlst_;
+      void** nerror_;
     };
 
   public:
@@ -156,7 +163,8 @@ namespace Ipopt
 
     /** ASL keywords list for the stored options. */
     void* Keywords(const SmartPtr<OptionsList>& options,
-                   SmartPtr<const Journalist> jnlst);
+                   SmartPtr<const Journalist> jnlst,
+                   void** nerror);
 
   private:
     /**@name Default Compiler Generated Methods
@@ -378,11 +386,11 @@ namespace Ipopt
     /** Pointer to the Oinfo structure */
     void* Oinfo_ptr_;
 
+    /** nerror flag passed to ampl calls - set to NULL to halt on error */
+    void* nerror_;
+
     /** Suffix Handler */
     SmartPtr<AmplSuffixHandler> suffix_handler_;
-
-    /** nerror flag passed to ampl calls - set to NULL to halt on error */
-    ampl_fint* nerror_;
 
     /** Make the objective call to ampl */
     bool internal_objval(Number& obj_val);
@@ -403,7 +411,7 @@ namespace Ipopt
                       char* ampl_banner_string, char**& argv);
 
     /** returns true if the ampl nerror code is ok */
-    bool nerror_ok(ampl_fint* nerror);
+    bool nerror_ok(void* nerror);
   };
 
 
