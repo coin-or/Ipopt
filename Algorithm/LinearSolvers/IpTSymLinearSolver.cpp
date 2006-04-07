@@ -61,7 +61,7 @@ namespace Ipopt
     roptions->AddStringOption2(
       "linear_scaling_on_demand",
       "Flag indicating that linear scaling is only done if it seems required.",
-      "no",
+      "yes",
       "no", "Always scale the linear system.",
       "yes", "Start using linear system scaling if solutions seem not good.",
       "This option is only important if a linear scaling method (e.g., mc19) "

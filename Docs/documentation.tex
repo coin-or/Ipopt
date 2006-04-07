@@ -148,17 +148,18 @@ In order to build \Ipopt, some third party components are required:
       http://www.cse.clrc.ac.uk/nag/hsl/}).
   \item MA57 from the Harwell Subroutine Library\\ (see {\tt
       http://www.cse.clrc.ac.uk/nag/hsl/}).
-%   \item The Watson Sparse Matrix Package (WSMP)\\ (see {\tt
-%       http://www-users.cs.umn.edu/\verb|~|agupta/wsmp.html})
   \item The Parallel Sparse Direct Linear Solver (PARDISO)\\ (see {\tt
       http://www.computational.unibas.ch/cs/scicomp/software/pardiso/}).\\
     Note: The Pardiso version in Intel's MKL library does not yet
     support the features necessary for \Ipopt.
+  \item The Watson Sparse Matrix Package (WSMP)\\ (see {\tt
+       http://www-users.cs.umn.edu/\verb|~|agupta/wsmp.html})
   \end{itemize}
   You need to include at least one of the linear solvers above in
-  order to run \Ipopt.  Currently, there is development on integrating
-  also MUMPS, TAUCS, and WSMP by contributors, but this work has not
-  yet been completed.
+  order to run \Ipopt, and if you want to be able to switch easily
+  between different options, you can compile \Ipopt\ with all of them.
+  Currently, there is development by contributors on integrating also
+  MUMPS and TAUCS, but this work has not yet been completed.
 
   Interfaces to other linear solvers might be added in the future; if
   you are interested in contributing such an interface please contact
@@ -249,10 +250,10 @@ There is also a mailing list for \Ipopt, available from the webpage
 \begin{center}
 \texttt{http://list.coin-or.org/mailman/listinfo/coin-ipopt},
 \end{center}
-where you can
-subscribe to get notified of updates, and to ask general questions
-regarding installation and usage. (You might want to look at the
-archives before posting a question.)
+where you can subscribe to get notified of updates, to ask general
+questions regarding installation and usage, or to share your
+experience with \Ipopt. (You might want to look at the archives before
+posting a question.)
 
 We try to answer questions posted to the mailing list in a reasonable
 manner.  Please understand that we cannot answer all questions in
@@ -345,8 +346,8 @@ which you are right now (output of \texttt{pwd}).
 \subsection{Download External Code}\label{ExternalCode}
 \Ipopt\ uses a few external packages that are not included in the
 \Ipopt\ source code distribution, namely ASL (the AMPL Solver
-Library), BLAS, LAPACK.  It also requires at least one sparse
-symmetric linear solver.
+Library), BLAS, LAPACK.  It also requires at least one linear solver
+for symmetric indefinite matrices.
 
 Since this third party software released under different licenses than
 \Ipopt, we cannot distribute that code together with the \Ipopt\
@@ -392,9 +393,9 @@ non-commercial, academic use, but it is your responsibility to
 investigate the licensing of all third party code.
 
 The use of alternative linear solvers is described in
-Appendix~\ref{ExpertInstall}.  You do not necessarily have to use MA27
-as described in this section, but at least one linear solver is
-required for \Ipopt\ to function.
+Sections~\ref{sec:Pardiso}-\ref{sec:WSMP}.  You do not necessarily
+have to use MA27 as described in this section, but at least one linear
+solver is required for \Ipopt\ to function.
 
 \begin{enumerate}
 \item Go to {\tt http://hsl.rl.ac.uk/archive/hslarchive.html}
@@ -417,10 +418,13 @@ required for \Ipopt\ to function.
   the file, so you may have to rename it.
 \end{enumerate}
 
-Note: Whereas currently obtaining MA27 is essential for using \Ipopt,
-MC19 could be omitted (with the consequence that you cannot use this
-method for scaling the linear systems arising inside the \Ipopt\
-algorithm).
+Note: Whereas it is essential to have at least one linear solver, the
+package MC19 could be omitted (with the consequence that you cannot
+use this method for scaling the linear systems arising inside the
+\Ipopt\ algorithm).  By default, MC19 only used to scale the linear
+system when using one of the Harwell solvers, but it can also be
+switched on for other linear solvers (which usually have internal
+scaling mechanisms).
 
 Note: If you have the source code for the linear solver MA57
 (successor of MA27) in a file called ma57ad.f (including all
@@ -434,12 +438,52 @@ Harwell codes, you can specify the location of this library with the
 \verb|--with-hsl| flag for the {\tt configure} script described in
 Section~\ref{sec.comp_and_inst}.
 
-\subsubsection{Other Linear Solvers}
+\subsubsection{Obtaining the Linear Solver Pardiso}\label{sec:Pardiso}
 
-If you would like to compile \Ipopt\ with another linear solver, you
-need to obtain the corresponding library on your own and, if
-necessary, compile it yourself if it is not available in precompiled
-form.
+If you would like to compile \Ipopt\ with the Parallel Sparse Direct
+Linear Solver (Pardiso), you need to obtain the Pardiso library for
+your operating system.  Information about Pardiso can be found at
+
+\texttt{http://www.computational.unibas.ch/cs/scicomp/software/pardiso}
+
+You can obtain a free download for Pardiso if you want to use it for
+``non-commercial and non-profit internal research purposes'' and are
+an ``academic, non-profit, or government agency'' (taken from the
+license agreement).  Instructions for this are on the above mentioned
+website; make sure you read the license agreement before filling out
+the download form.
+
+Note: Pardiso is included in Intel's MKL library.  However, that
+version does not yet include the changes done by the Pardiso
+developers to make the linear solver work smoothly with \Ipopt.
+
+Please consult Appendix~\ref{ExpertInstall} to find out how to
+configure your \Ipopt\ installation to work with Pardiso.
+
+\subsubsection{Obtaining the Linear Solver WSMP}\label{sec:WSMP}
+
+If you would like to compile \Ipopt\ with the Watson Sparse Matrix
+Package (WSMP), you need to obtain the WSMP library for your operating
+system.  Information about WSMP can be found at
+
+\texttt{http://www.alphaworks.ibm.com/tech/wsmp}
+
+At this website you can obtain a ``complimentary 90-day evaluation
+license'' and download the library for several operating systems; make
+sure you read the license agreement before downloading the code.  Once
+you obtained the code and the license, please check if there are
+bugfix releases of the WSMP library available at
+
+{\tt http://www-users.cs.umn.edu/\verb|~|agupta/wsmp}
+
+You can use those bugfix releases with the license you obtained from
+alphaWorks.
+
+Note: Only the interface to the shared-memory version of WSMP is
+currently supported.
+
+Please consult Appendix~\ref{ExpertInstall} to find out how to
+configure your \Ipopt\ installation to work with WSMP.
 
 \subsection{Compiling and Installing \Ipopt} \label{sec.comp_and_inst}
 
@@ -674,9 +718,9 @@ Here are the steps that work on my system:
     \texttt{copy details.c0 details.c}
 
     and edit the file {\tt details.c} to change the string to
-    something meadingful like ``{\tt MS VC++ .NET 2003}''.
+    something meaningful like ``{\tt MS VC++ .NET 2003}''.
 
-  \item Compile the library usgin {\tt nmake}
+  \item Compile the library using {\tt nmake}
 
     \texttt{nmake}
 
@@ -690,7 +734,7 @@ Here are the steps that work on my system:
 \item Now you need to make sure that Cygwin knows about the native
   compilers.  For this you need to edit the file {\tt cygwin.bat} in
   the Cygwin base directory (usually {\tt C:$\backslash$cygwin}).
-  Here you need need to add the line
+  Here you need to add the line
 
   \texttt{call ``C:$\backslash$Program
     Files$\backslash$Intel$\backslash$Fortran$\backslash$compiler80$\backslash$IA32$\backslash$BIN$\backslash$ifortvars.bat''}
@@ -2916,7 +2960,7 @@ Below a few particular options are discussed:
   explicitly, using the \verb/--with-blas/ flag for {\tt configure}.
   For example,
 
-  \verb|./configure --with=blas="-L$HOME/lib -latlas"|
+  \verb|./configure --with-blas="-L$HOME/lib -latlas"|
 
   To tell the configure script to compile and use the downloaded BLAS
   source files even if a BLAS library is found on your system, specify
@@ -2929,13 +2973,33 @@ Below a few particular options are discussed:
 
 \item Similarly, if you have a precompiled library containing the
   Harwell Subroutines, you can specify its location with the
-  \verb|--with-hsl| flag.  And the location of the AMPL solver library
-  (with the ASL header files) can be specified with
-  \verb|--with-asldir|.  If you want to compile \Ipopt\ with the
-  linear solver Pardiso\footnote{see {\tt
-      http://www.computational.unibas.ch/cs/scicomp/software/pardiso/}},
-  you need to specify the location of the library with the
-  \verb|--with-pardiso| flag.
+  \verb|--with-hsl| flag.  And the location of the directory with the
+  AMPL solver library {\tt amplsolver.a} and the ASL header files can
+  be specified with \verb|--with-asldir|.
+
+\item If you want to compile \Ipopt\ with the linear solver Pardiso
+  (see Section~\ref{sec:Pardiso}), you need to specify the location of
+  the library with the \verb|--with-pardiso| flag, including required
+  additional libraries and flags.  For example, if you want to compile
+  \Ipopt\ with the parallel version of Pardiso (located in {\tt
+    \$HOME/lib}) on an AIX system in 64bit mode, you should add the
+  flag
+
+  \verb|--with-pardiso="-qsmp=omp $HOME/lib/libpardiso_P4AIX51_64_P.so"|
+
+  If you are using the parallel version of Pardiso, you need to
+  specify the number of processors it should run on with the
+  environment variable \verb|OMP_NUM_THREADS|, as described in the
+  Pardiso manual.
+
+\item If you want to compile \Ipopt\ with the linear solver WSMP (see
+  Section~\ref{sec:WSMP}), you need to specify the location of the
+  library with the \verb|--with-wsmp| flag, including required
+  additional libraries and flags.  For example, if you want to compile
+  \Ipopt\ with WSMP (located in {\tt \$HOME/lib}) on an Intel IA32
+  Linux system, you should add the flag
+
+  \verb|--with-wsmp="$HOME/lib/libwsmp.a"|
 
 \item If you want to specify that you want to use particular
   compilers, you can do so by adding the variables definitions for

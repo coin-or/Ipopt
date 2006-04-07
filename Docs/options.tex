@@ -656,23 +656,26 @@ Possible values:
    \item ma27: use the Harwell routine MA27
    \item ma57: use the Harwell routine MA57
    \item pardiso: use the Pardiso package
-   \item wsmp: use WSMP package (not yet working)
+   \item wsmp: use WSMP package
    \item taucs: use TAUCS package (not yet working)
    \item mumps: use MUMPS package (not yet working)
 \end{itemize}
 
 \paragraph{linear\_system\_scaling:} Method for scaling the linear system. $\;$ \\
  Determines the method used to compute symmetric
-scaling factors for the augmented system. This
-scaling is independent of the NLP problem
-scaling.  This option is only available if Ipopt
-has been compiled with MC19.
+scaling factors for the augmented system (see
+also the "linear\_scaling\_on\_demand" option). 
+This scaling is independentof the NLP problem
+scaling.  By default, MC19 is only used if MA27
+or MA57 are selected as linear solvers. This
+option is only available if Ipopt has been
+compiled with MC19.
 The default value for this string option is "mc19".
 \\ 
 Possible values:
 \begin{itemize}
    \item none: no scaling will be performed
-   \item mc19: use the Harwell routine mc19
+   \item mc19: use the Harwell routine MC19
 \end{itemize}
 
 \paragraph{linear\_scaling\_on\_demand:} Flag indicating that linear scaling is only done if it seems required. $\;$ \\
@@ -684,7 +687,7 @@ expensive. Choosing "yes" means that the
 algorithm will start the scaling method only when
 the solutions to the linear system seem not good,
 and then use it until the end.
-The default value for this string option is "no".
+The default value for this string option is "yes".
 \\ 
 Possible values:
 \begin{itemize}
@@ -948,7 +951,7 @@ Possible values:
    \item constraints: Match constraints (IPAR(13)=3)
 \end{itemize}
 
-\paragraph{pardiso\_out\_of\_core\_power:} Enables out-f-core variant of Pardiso $\;$ \\
+\paragraph{pardiso\_out\_of\_core\_power:} Enables out-of-core variant of Pardiso $\;$ \\
  Setting this option to a positive integer k makes
 Pardiso work in the out-of-core variant where the
 factor is split in 2\^k subdomains.  This is
@@ -957,3 +960,45 @@ only available if Ipopt has been compiled with
 Pardiso. The valid range for this integer option is
 $0 \le {\tt pardiso\_out\_of\_core\_power } <  {\tt +inf}$
 and its default value is $0$.
+
+
+\paragraph{wsmp\_num\_threads:} Number of threads to be used in WSMP $\;$ \\
+ This determines on how many processors WSMP is
+running on.  This option is only available if
+Ipopt has been compiled with WSMP. The valid range for this integer option is
+$1 \le {\tt wsmp\_num\_threads } <  {\tt +inf}$
+and its default value is $1$.
+
+
+\paragraph{wsmp\_ordering\_option:} Determines how ordering is done in WSMP $\;$ \\
+ This corresponds to the value of WSSMP's
+IPARM(16).  This option is only available if
+Ipopt has been compiled with WSMP. The valid range for this integer option is
+$-2 \le {\tt wsmp\_ordering\_option } \le 3$
+and its default value is $1$.
+
+
+\paragraph{wsmp\_pivtol:} Pivot tolerance for the linear solver WSMP. $\;$ \\
+ A smaller number pivots for sparsity, a larger
+number pivots for stability.  This option is only
+available if Ipopt has been compiled with WSMP. The valid range for this real option is 
+$0 <  {\tt wsmp\_pivtol } <  1$
+and its default value is $0.0001$.
+
+
+\paragraph{wsmp\_pivtolmax:} Maximum pivot tolerance for the linear solver WSMP. $\;$ \\
+ Ipopt may increase pivtol as high as pivtolmax to
+get a more accurate solution to the linear
+system.  This option is only available if Ipopt
+has been compiled with WSMP. The valid range for this real option is 
+$0 <  {\tt wsmp\_pivtolmax } <  1$
+and its default value is $0.1$.
+
+
+\paragraph{wsmp\_scaling:} Determines how the matrix is scaled by WSMP $\;$ \\
+ This corresponds to the value of WSSMP's
+IPARM(10). This option is only available if Ipopt
+has been compiled with WSMP. The valid range for this integer option is
+$0 \le {\tt wsmp\_scaling } \le 3$
+and its default value is $0$.
+

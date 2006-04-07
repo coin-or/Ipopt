@@ -112,7 +112,7 @@ namespace Ipopt
       "has been compiled with WSMP.");
     roptions->AddBoundedIntegerOption(
       "wsmp_scaling",
-      "Determins how the matrix is scaled by WSMP",
+      "Determines how the matrix is scaled by WSMP",
       0, 3, 0,
       "This corresponds to the value of WSSMP's IPARM(10). "
       "This option is only available if Ipopt has been compiled "

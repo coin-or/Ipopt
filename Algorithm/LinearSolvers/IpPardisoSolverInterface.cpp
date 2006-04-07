@@ -121,7 +121,7 @@ namespace Ipopt
       "This option is only available if Ipopt has been compiled with Pardiso.");
     roptions->AddLowerBoundedIntegerOption(
       "pardiso_out_of_core_power",
-      "Enables out-f-core variant of Pardiso",
+      "Enables out-of-core variant of Pardiso",
       0, 0,
       "Setting this option to a positive integer k makes Pardiso work in the "
       "out-of-core variant where the factor is split in 2^k subdomains.  This "

@@ -277,7 +277,6 @@ namespace Ipopt
           options_to_print.push_back("wsmp_pivtol");
           options_to_print.push_back("wsmp_pivtolmax");
           options_to_print.push_back("wsmp_scaling");
-          options_to_print.push_back("wsmp_singularity_threshold");
 #endif
 
           reg_options_->OutputLatexOptionDocumentation(*jnlst_, options_to_print);
