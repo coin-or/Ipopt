@@ -279,7 +279,7 @@ namespace Ipopt
     if (!options.GetStringValue("linear_system_scaling",
                                 linear_system_scaling, prefix)) {
       // By default, don't use mc19 for non-HSL solvers
-      if (linear_solver!="ma2a7" && linear_solver!="ma57") {
+      if (linear_solver!="ma27" && linear_solver!="ma57") {
         linear_system_scaling="none";
       }
     }
