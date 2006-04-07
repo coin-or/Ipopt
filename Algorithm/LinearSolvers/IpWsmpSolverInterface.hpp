@@ -124,8 +124,8 @@ namespace Ipopt
     Number wsmp_pivtol_;
     /** Maximal pivot tolerance */
     Number wsmp_pivtolmax_;
-    /** Flag indicating whether WSMP's scaling should be used. */
-    bool wsmp_scaling_;
+    /** Indicating which of WSMP's scaling methods should be used. */
+    Index wsmp_scaling_;
     /** WSMP's singularity threshold.  The smaller this value the less
      *  likely a matrix is declared singular. */
     Number wsmp_singularity_threshold_;

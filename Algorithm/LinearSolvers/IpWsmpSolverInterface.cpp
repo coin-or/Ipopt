@@ -88,7 +88,7 @@ namespace Ipopt
       "wsmp_num_threads",
       "Number of threads to be used in WSMP",
       1, 1,
-      "This determine on how many SMP CPUs WSMP is running on.  This option "
+      "This determines on how many processors WSMP is running on.  This option "
       "is only available if Ipopt has been compiled with WSMP.");
     roptions->AddBoundedIntegerOption(
       "wsmp_ordering_option",
@@ -106,18 +106,16 @@ namespace Ipopt
     roptions->AddBoundedNumberOption(
       "wsmp_pivtolmax",
       "Maximum pivot tolerance for the linear solver WSMP.",
-      0.0, true, 1.0, true, 1e-2,
+      0.0, true, 1.0, true, 1e-1,
       "Ipopt may increase pivtol as high as pivtolmax to get a more accurate "
       "solution to the linear system.  This option is only available if Ipopt "
       "has been compiled with WSMP.");
-    roptions->AddStringOption2(
+    roptions->AddBoundedIntegerOption(
       "wsmp_scaling",
-      "Toggle for switching on WSMP's internal scaling.",
-      "yes",
-      "no", "don't use expensive scaling",
-      "yes", "use expensive scaling",
-      "Yes corresponds to setting WSMP's IPARM(10) to 1, otherwise this is "
-      "set to 0.  This option is only available if Ipopt has been compiled "
+      "Determins how the matrix is scaled by WSMP",
+      0, 3, 0,
+      "This corresponds to the value of WSSMP's IPARM(10). "
+      "This option is only available if Ipopt has been compiled "
       "with WSMP.");
     roptions->AddBoundedNumberOption(
       "wsmp_singularity_threshold",
@@ -126,6 +124,7 @@ namespace Ipopt
       "WSMP's DPARM(10) parameter.  The smaller this value the less likely "
       "a matrix is declared singular.  This option is only available if Ipopt "
       "has been compiled with WSMP.");
+    roptions->SetRegisteringCategory("Uncategorized");
     roptions->AddLowerBoundedIntegerOption(
       "wsmp_write_matrix_iteration",
       "Iteration in which the matrices are written to files.",
@@ -152,7 +151,7 @@ namespace Ipopt
     }
     options.GetNumericValue("wsmp_singularity_threshold",
                             wsmp_singularity_threshold_, prefix);
-    options.GetBoolValue("wsmp_scaling", wsmp_scaling_, prefix);
+    options.GetIntegerValue("wsmp_scaling", wsmp_scaling_, prefix);
     options.GetIntegerValue("wsmp_write_matrix_iteration",
                             wsmp_write_matrix_iteration_, prefix);
 
@@ -191,13 +190,8 @@ namespace Ipopt
     // L^T without pivoting it is the value we used
     // before
 
-    // Decide whether to use WSMP's scaling
-    if (wsmp_scaling_) {
-      IPARM_[9] = 3;
-    }
-    else {
-      IPARM_[9] = 1;
-    }
+    // Set WSMP's scaling option
+    IPARM_[9] = wsmp_scaling_;
 
     DPARM_[9] = wsmp_singularity_threshold_;
 

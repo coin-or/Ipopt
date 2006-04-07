@@ -20,7 +20,7 @@
 namespace Ipopt
 {
 #ifdef IP_DEBUG
-  static const Index dbg_verbosity = 5;
+  static const Index dbg_verbosity = 0;
 #endif
 
   AmplTNLP::AmplTNLP(const SmartPtr<const Journalist>& jnlst,

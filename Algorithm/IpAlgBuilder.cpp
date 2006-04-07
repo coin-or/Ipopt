@@ -126,7 +126,7 @@ namespace Ipopt
       "ma27", "use the Harwell routine MA27",
       "ma57", "use the Harwell routine MA57",
       "pardiso", "use the Pardiso package",
-      "wsmp", "use WSMP package (not yet working)",
+      "wsmp", "use WSMP package",
       "taucs", "use TAUCS package (not yet working)",
       "mumps", "use MUMPS package (not yet working)",
       "Determines which linear algebra package is to be used for the "
@@ -145,11 +145,12 @@ namespace Ipopt
       "none",
 #endif
       "none", "no scaling will be performed",
-      "mc19", "use the Harwell routine mc19",
+      "mc19", "use the Harwell routine MC19",
       "Determines the method used to compute symmetric scaling "
       "factors for the augmented system. This scaling is independent "
-      "of the NLP problem scaling.  This option is only available if Ipopt "
-      "has been compiled with MC19.");
+      "of the NLP problem scaling.  By default, MC19 is only used if MA27 or "
+      "MA57 are selected as linear solvers. This option is only available if "
+      "Ipopt has been compiled with MC19.");
 
     roptions->SetRegisteringCategory("NLP Scaling");
     roptions->AddStringOption3(
@@ -208,20 +209,6 @@ namespace Ipopt
       new OptimalityErrorConvergenceCheck();
 
     // Create the solvers that will be used by the main algorithm
-    SmartPtr<TSymScalingMethod> ScalingMethod;
-    std::string linear_system_scaling;
-    options.GetStringValue("linear_system_scaling",
-                           linear_system_scaling, prefix);
-    if (linear_system_scaling=="mc19") {
-#ifdef HAVE_MC19
-      ScalingMethod = new Mc19TSymScalingMethod();
-#else
-
-      THROW_EXCEPTION(OPTION_INVALID,
-                      "Selected linear system scaling method MC19 not available.");
-#endif
-
-    }
 
     SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
     std::string linear_solver;
@@ -283,6 +270,26 @@ namespace Ipopt
 
       THROW_EXCEPTION(OPTION_INVALID,
                       "Selected linear solver MUMPS not available.");
+#endif
+
+    }
+
+    SmartPtr<TSymScalingMethod> ScalingMethod;
+    std::string linear_system_scaling;
+    if (!options.GetStringValue("linear_system_scaling",
+                                linear_system_scaling, prefix)) {
+      // By default, don't use mc19 for non-HSL solvers
+      if (linear_solver!="ma2a7" && linear_solver!="ma57") {
+        linear_system_scaling="none";
+      }
+    }
+    if (linear_system_scaling=="mc19") {
+#ifdef HAVE_MC19
+      ScalingMethod = new Mc19TSymScalingMethod();
+#else
+
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Selected linear system scaling method MC19 not available.");
 #endif
 
     }
