@@ -67,8 +67,8 @@ Then open the solution file
 
 Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln
 
-This solution compiles both a Fortran example problem and a C++
-example problem. You should be able to base your development on one of
+This solution compiles all examples coming with the Ipopt
+distribution. You should be able to base your development on one of
 these examples.
 
 
@@ -76,22 +76,29 @@ Here are some helpful notes if you are building a new C++ project.
 - The project type used for the example was "Win32 Console" (Not .NET Console!)
 
 - Precompiled headers were turned off:
-	Project Properties | C/C++ | Precompiled-Headers | Create/Use Precompiled Headers = "Not Using Precompiled Headers"
+        Project Properties | C/C++ | Precompiled-Headers |
+          Create/Use Precompiled Headers = "Not Using Precompiled Headers"
 
 - You will need to add the include directories to your C++ project
-	you can copy these from the Ipopt project:
-	Project Properties | C/C++ | General | Additional Include Directories = <copy from Ipopt>
+        you can copy these from the Ipopt project:
+        Project Properties | C/C++ | General |
+          Additional Include Directories = <copy from Ipopt>
 
-- You must ensure that the run-time libraries between FortranLinAlg and the C++ project are 
-	compatible. Look at the "Mixed Language" area of the Intel Fortran compiler html help for
-	a table of compatible settings (look for something about consistent run-time libraries in help)
-	These are set by:
-	1) for the C++ project
-		Project Properties | C/C++ | Code Generation | Runtime Library
-	2) for the Fortran project
-		FortranLinAlg Properties | Fortran | Libraries | Runtime Library
+- You must ensure that the run-time libraries between FortranLinAlg
+        and the C++ project are compatible. Look at the "Mixed
+        Language" area of the Intel Fortran compiler html help for a
+        table of compatible settings (look for something about
+        consistent run-time libraries in help)
+
+        These are set by:
+        1) for the C++ project
+           Project Properties | C/C++ | Code Generation |
+              Runtime Library
+        2) for the Fortran project
+           FortranLinAlg Properties | Fortran | Libraries | Runtime Library
 
 - You must add the Fortran compiler LIB path to the C++ project
-	This is something like "C:\Program Files\Intel\Fortran\compiler80\IA32\LIB":
-	Project Properties | Linker | General | Additional Library Directories = <LIB path>
+  This is something like "C:\Program Files\Intel\Fortran\compiler80\IA32\LIB":
+     Project Properties | Linker | General |
+        Additional Library Directories = <LIB path>
 		

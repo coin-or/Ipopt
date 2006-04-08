@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="CExample"
+	Name="hs071_c"
 	ProjectGUID="{D0EF08B1-3FDE-495A-A196-D9EBD19933E8}"
 	Keyword="Win32Proj">
 	<Platforms>
@@ -32,11 +32,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/CExample.exe"
+				OutputFile="$(OutDir)/hs071_c.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Intel\Fortran\compiler80\IA32\LIB&quot;"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/CExample.pdb"
+				ProgramDatabaseFile="$(OutDir)/hs071_c.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -79,7 +79,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/CExample.exe"
+				OutputFile="$(OutDir)/hs071_c.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Intel\Fortran\compiler80\IA32\LIB&quot;"
 				GenerateDebugInformation="TRUE"
