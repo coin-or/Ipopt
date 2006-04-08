@@ -93,7 +93,7 @@ namespace Ipopt
       "threshold; see also acceptable_tol.");
     roptions->AddLowerBoundedNumberOption(
       "diverging_iterates_tol",
-      "Threshold for maximal value of primal iterate.",
+      "Threshold for maximal value of primal iterates.",
       0.0, true, 1e20,
       "If any component of the primal iterates exceeded this value (in "
       "absolute terms), the optimization is aborted with the exit message "

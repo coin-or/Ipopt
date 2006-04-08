@@ -82,9 +82,11 @@ namespace Ipopt
       ipfint N = dim_;
       ipfint NRHS = 0;
       ipfint ERROR;
+      ipfint idmy;
+      double ddmy;
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
-                                NULL, NULL, NULL, NULL, &NRHS, IPARM_,
-                                &MSGLVL_, NULL, NULL, &ERROR);
+                                &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
+                                &MSGLVL_, &ddmy, &ddmy, &ERROR);
       DBG_ASSERT(ERROR==0);
     }
 
@@ -153,9 +155,11 @@ namespace Ipopt
       ipfint N = dim_;
       ipfint NRHS = 0;
       ipfint ERROR;
+      ipfint idmy;
+      double ddmy;
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
-                                NULL, NULL, NULL, NULL, &NRHS, IPARM_,
-                                &MSGLVL_, NULL, NULL, &ERROR);
+                                &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
+                                &MSGLVL_, &ddmy, &ddmy, &ERROR);
       DBG_ASSERT(ERROR==0);
     }
 

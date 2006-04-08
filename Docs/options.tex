@@ -155,7 +155,7 @@ $0 <  {\tt acceptable\_dual\_inf\_tol } <  {\tt +inf}$
 and its default value is $0.01$.
 
 
-\paragraph{diverging\_iterates\_tol:} Threshold for maximal value of primal iterate. $\;$ \\
+\paragraph{diverging\_iterates\_tol:} Threshold for maximal value of primal iterates. $\;$ \\
  If any component of the primal iterates exceeded
 this value (in absolute terms), the optimization
 is aborted with the exit message that the
@@ -995,10 +995,9 @@ $0 <  {\tt wsmp\_pivtolmax } <  1$
 and its default value is $0.1$.
 
 
-\paragraph{wsmp\_scaling:} Determines how the matrix is scaled by WSMP $\;$ \\
+\paragraph{wsmp\_scaling:} Determines how the matrix is scaled by WSMP. $\;$ \\
  This corresponds to the value of WSSMP's
 IPARM(10). This option is only available if Ipopt
 has been compiled with WSMP. The valid range for this integer option is
 $0 \le {\tt wsmp\_scaling } \le 3$
 and its default value is $0$.
-

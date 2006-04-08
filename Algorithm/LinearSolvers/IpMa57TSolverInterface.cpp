@@ -528,10 +528,11 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Reallocating lfact (%d)\n", wd_lfact_);
 
+        ipfint idmy;
         F77_FUNC (ma57ed, MA57ED)
         (&n, &ic, wd_keep_,
          wd_fact_,  &wd_info_[1], temp, &wd_lfact_,
-         wd_ifact_, &wd_info_[1], NULL, &wd_lfact_,
+         wd_ifact_, &wd_info_[1], &idmy, &wd_lfact_,
          wd_info_);
 
         delete [] wd_fact_;
@@ -554,9 +555,10 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Reallocating lifact (%d)\n", wd_lifact_);
 
+        double ddmy;
         F77_FUNC (ma57ed, MA57ED)
         (&n, &ic, wd_keep_,
-         wd_fact_,  &wd_info_[1], NULL, &wd_lifact_,
+         wd_fact_,  &wd_info_[1], &ddmy, &wd_lifact_,
          wd_ifact_, &wd_info_[1], temp, &wd_lifact_,
          wd_info_);
 

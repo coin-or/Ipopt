@@ -41,40 +41,7 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
-@BUILDLAPACK_TRUE@am__append_1 = \
-@BUILDLAPACK_TRUE@	dlae2.f \
-@BUILDLAPACK_TRUE@	dlaev2.f \
-@BUILDLAPACK_TRUE@	dlamch.f \
-@BUILDLAPACK_TRUE@	dlanst.f \
-@BUILDLAPACK_TRUE@	dlansy.f \
-@BUILDLAPACK_TRUE@	dlapy2.f \
-@BUILDLAPACK_TRUE@	dlarf.f \
-@BUILDLAPACK_TRUE@	dlarfb.f \
-@BUILDLAPACK_TRUE@	dlarfg.f \
-@BUILDLAPACK_TRUE@	dlarft.f \
-@BUILDLAPACK_TRUE@	dlartg.f \
-@BUILDLAPACK_TRUE@	dlascl.f \
-@BUILDLAPACK_TRUE@	dlaset.f \
-@BUILDLAPACK_TRUE@	dlasr.f \
-@BUILDLAPACK_TRUE@	dlasrt.f \
-@BUILDLAPACK_TRUE@	dlassq.f \
-@BUILDLAPACK_TRUE@	dlatrd.f \
-@BUILDLAPACK_TRUE@	dorg2l.f \
-@BUILDLAPACK_TRUE@	dorg2r.f \
-@BUILDLAPACK_TRUE@	dorgql.f \
-@BUILDLAPACK_TRUE@	dorgqr.f \
-@BUILDLAPACK_TRUE@	dorgtr.f \
-@BUILDLAPACK_TRUE@	dpotf2.f \
-@BUILDLAPACK_TRUE@	dpotrf.f \
-@BUILDLAPACK_TRUE@	dpotrs.f \
-@BUILDLAPACK_TRUE@	dsteqr.f \
-@BUILDLAPACK_TRUE@	dsterf.f \
-@BUILDLAPACK_TRUE@	dsyev.f \
-@BUILDLAPACK_TRUE@	dsytd2.f \
-@BUILDLAPACK_TRUE@	dsytrd.f \
-@BUILDLAPACK_TRUE@	ieeeck.f \
-@BUILDLAPACK_TRUE@	ilaenv.f
-
+@BUILDLAPACK_TRUE@am__append_1 = $(LAPACK_FILES)
 subdir = Extern/lapack
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -87,23 +54,19 @@ CONFIG_CLEAN_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
 libiplapack_a_AR = $(AR) $(ARFLAGS)
 libiplapack_a_LIBADD =
-@BUILDLAPACK_TRUE@am__objects_1 = dlae2.$(OBJEXT) dlaev2.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dlamch.$(OBJEXT) dlanst.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dlansy.$(OBJEXT) dlapy2.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dlarf.$(OBJEXT) dlarfb.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dlarfg.$(OBJEXT) dlarft.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dlartg.$(OBJEXT) dlascl.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dlaset.$(OBJEXT) dlasr.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dlasrt.$(OBJEXT) dlassq.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dlatrd.$(OBJEXT) dorg2l.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dorg2r.$(OBJEXT) dorgql.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dorgqr.$(OBJEXT) dorgtr.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dpotf2.$(OBJEXT) dpotrf.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dpotrs.$(OBJEXT) dsteqr.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dsterf.$(OBJEXT) dsyev.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	dsytd2.$(OBJEXT) dsytrd.$(OBJEXT) \
-@BUILDLAPACK_TRUE@	ieeeck.$(OBJEXT) ilaenv.$(OBJEXT)
-nodist_libiplapack_a_OBJECTS = $(am__objects_1)
+am__objects_1 = dlae2.$(OBJEXT) dlaev2.$(OBJEXT) dlamch.$(OBJEXT) \
+	dlanst.$(OBJEXT) dlansy.$(OBJEXT) dlapy2.$(OBJEXT) \
+	dlarf.$(OBJEXT) dlarfb.$(OBJEXT) dlarfg.$(OBJEXT) \
+	dlarft.$(OBJEXT) dlartg.$(OBJEXT) dlascl.$(OBJEXT) \
+	dlaset.$(OBJEXT) dlasr.$(OBJEXT) dlasrt.$(OBJEXT) \
+	dlassq.$(OBJEXT) dlatrd.$(OBJEXT) dorg2l.$(OBJEXT) \
+	dorg2r.$(OBJEXT) dorgql.$(OBJEXT) dorgqr.$(OBJEXT) \
+	dorgtr.$(OBJEXT) dpotf2.$(OBJEXT) dpotrf.$(OBJEXT) \
+	dpotrs.$(OBJEXT) dsteqr.$(OBJEXT) dsterf.$(OBJEXT) \
+	dsyev.$(OBJEXT) dsytd2.$(OBJEXT) dsytrd.$(OBJEXT) \
+	ieeeck.$(OBJEXT) ilaenv.$(OBJEXT)
+@BUILDLAPACK_TRUE@am__objects_2 = $(am__objects_1)
+nodist_libiplapack_a_OBJECTS = $(am__objects_2)
 libiplapack_a_OBJECTS = $(nodist_libiplapack_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
@@ -267,6 +230,41 @@ EXTRA_DIST = get.lapack INSTALL.LAPACK
 iplibdir = $(top_builddir)/lib
 noinst_LIBRARIES = libiplapack.a
 nodist_libiplapack_a_SOURCES = $(am__append_1)
+LAPACK_FILES = \
+	dlae2.f \
+	dlaev2.f \
+	dlamch.f \
+	dlanst.f \
+	dlansy.f \
+	dlapy2.f \
+	dlarf.f \
+	dlarfb.f \
+	dlarfg.f \
+	dlarft.f \
+	dlartg.f \
+	dlascl.f \
+	dlaset.f \
+	dlasr.f \
+	dlasrt.f \
+	dlassq.f \
+	dlatrd.f \
+	dorg2l.f \
+	dorg2r.f \
+	dorgql.f \
+	dorgqr.f \
+	dorgtr.f \
+	dpotf2.f \
+	dpotrf.f \
+	dpotrs.f \
+	dsteqr.f \
+	dsterf.f \
+	dsyev.f \
+	dsytd2.f \
+	dsytrd.f \
+	ieeeck.f \
+	ilaenv.f
+
+DISTCLEANFILES = $(LAPACK_FILES)
 all: all-am
 
 .SUFFIXES:
@@ -420,6 +418,7 @@ clean-generic:
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"

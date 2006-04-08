@@ -2611,8 +2611,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 SAVE_CFLAGS="$CFLAGS"
 case $build in
-  *-cygwin) comps="gcc cl" ;;
-  *)        comps="xlc cc gcc pgcc icc" ;;
+  *-cygwin)  comps="gcc cl" ;;
+  *-linux-*) comps="xlc gcc cc pgcc icc" ;;
+  *)         comps="xlc cc gcc pgcc icc" ;;
 esac
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -3649,7 +3650,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3652:" \
+echo "$as_me:3653:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -4216,7 +4217,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:4219: \"$ac_link\") >&5
+(eval echo $as_me:4220: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4294,7 +4295,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:4297: \"$ac_link\") >&5
+(eval echo $as_me:4298: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS

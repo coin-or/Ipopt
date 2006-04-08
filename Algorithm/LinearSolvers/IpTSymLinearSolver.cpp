@@ -75,8 +75,13 @@ namespace Ipopt
   bool TSymLinearSolver::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)
   {
-    options.GetBoolValue("linear_scaling_on_demand",
-                         linear_scaling_on_demand_, prefix);
+    if (IsValid(scaling_method_)) {
+      options.GetBoolValue("linear_scaling_on_demand",
+                           linear_scaling_on_demand_, prefix);
+    }
+    else {
+      linear_scaling_on_demand_ = false;
+    }
     // This option is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);

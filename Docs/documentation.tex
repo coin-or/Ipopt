@@ -148,7 +148,7 @@ In order to build \Ipopt, some third party components are required:
       http://www.cse.clrc.ac.uk/nag/hsl/}).
   \item MA57 from the Harwell Subroutine Library\\ (see {\tt
       http://www.cse.clrc.ac.uk/nag/hsl/}).
-  \item The Parallel Sparse Direct Linear Solver (PARDISO)\\ (see {\tt
+  \item The Parallel Sparse Direct Solver (PARDISO)\\ (see {\tt
       http://www.computational.unibas.ch/cs/scicomp/software/pardiso/}).\\
     Note: The Pardiso version in Intel's MKL library does not yet
     support the features necessary for \Ipopt.
@@ -235,8 +235,13 @@ user can edit the webpages from the regular web browser.  {\bf In
   \Ipopt\ in the ``Papers related to Ipopt'' page}\footnote{Since we
   had some malicious hacker attacks destroying the content of the web
   pages in the past, you are now required to enter a user name and
-  password; simply follow the instructions in the last paragraph of
-  the Documentation section on the main project page.}
+  password; simply follow the instructions on top of the main project
+  page.}.  In particular, if you have trouble getting \Ipopt\ work
+well for your optimization problem, you might find some ideas here.
+Also, if you had some difficulties to solve a problem and found a way
+around it (e.g., by reformulating your problem or by using certain
+\Ipopt\ options), it would be very nice if you help other users by
+sharing your experience at the ``Hints and Tricks'' page.
 
 \Ipopt\ is an open source project, and we encourage people to
 contribute code (such as interfaces to appropriate linear solvers,
@@ -471,12 +476,17 @@ system.  Information about WSMP can be found at
 At this website you can obtain a ``complimentary 90-day evaluation
 license'' and download the library for several operating systems; make
 sure you read the license agreement before downloading the code.  Once
-you obtained the code and the license, please check if there are
-bugfix releases of the WSMP library available at
+you obtained the code and the license, please check if the version
+number of the library matches the one on the WSMP website at
 
 {\tt http://www-users.cs.umn.edu/\verb|~|agupta/wsmp}
 
-You can use those bugfix releases with the license you obtained from
+If a newer version is announced on that website, you can (and
+probably should) request the current version by sending a message to
+\verb|wsmp@watson.ibm.com|.  Please include the operating system and
+other details to describe which particular version of WSMP you need.
+
+You can use the bugfix releases with the license you obtained from
 alphaWorks.
 
 Note: Only the interface to the shared-memory version of WSMP is
@@ -2675,6 +2685,19 @@ to the console, and a brief description.
   making very little progress.  This could happen if the problem has
   been solved to the best numerical accuracy possible given the
   current scaling.
+\item[{\tt Diverging\_Iterates}:]  $\;$ \\
+  Console Message: {\tt EXIT: Iterates divering; problem might be
+    unbounded.} \\
+  This message is printed if the max-norm of the iterates becomes
+  larger than the value of the option {\tt diverging\_iterates\_tol}.
+  This can happen if the problem is unbounded below and the iterates
+  are diverging.
+\item[{\tt User\_Requested\_Stop}:]  $\;$ \\
+  Console Message: {\tt EXIT: Stopping optimization at current point
+    as requested by user.} \\
+  This message is printed if the user call-back method {\tt
+    intermediate\_callback} returned {\tt false} (see
+  Section~\ref{sec:add_meth}).
 \item[{\tt Maximum\_Iterations\_Exceeded}:]  $\;$ \\
   Console Message: {\tt EXIT: Maximum Number of Iterations Exceeded.} \\
   This indicates that \Ipopt\ has exceeded the maximum number of
@@ -2686,6 +2709,14 @@ to the console, and a brief description.
   problem. This could happen if the problem is highly degenerate, does
   not satisfy the constraint qualification, or if your NLP code
   provides incorrect derivative information.
+\item[{\tt Error\_In\_Step\_Computation}:]  $\;$ \\
+  Console Message: {\tt EXIT: Error in step computation (regularization becomes too large?)!} \\
+  This messages is printed if \Ipopt\ is unable to compute a search
+  direction, despite several attempts to modify the iteration matrix.
+  Usually, the value of the regularization parameter then becomes too
+  large.  One situation where this can happen is when values in the
+  Hessian are invalid ({\tt NaN} or {\tt Inf}).  You can check whether this
+  is true by using the {\tt check\_derivatives\_for\_naninf} option.
 \item[{\tt Invalid\_Option}:]  $\;$ \\
   Console Message: (details about the particular error
   will be output to the console) \\
@@ -2721,7 +2752,7 @@ to the console, and a brief description.
   Console Message: {\tt EXIT: INTERNAL ERROR: Unknown SolverReturn
     value - Notify IPOPT Authors.} \\
   An unknown internal error has occurred. Please notify the authors of
-  \Ipopt.
+  \Ipopt\ via the mailing list.
 
 \end{description}
 

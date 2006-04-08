@@ -112,7 +112,7 @@ namespace Ipopt
       "has been compiled with WSMP.");
     roptions->AddBoundedIntegerOption(
       "wsmp_scaling",
-      "Determines how the matrix is scaled by WSMP",
+      "Determines how the matrix is scaled by WSMP.",
       0, 3, 0,
       "This corresponds to the value of WSSMP's IPARM(10). "
       "This option is only available if Ipopt has been compiled "
@@ -174,8 +174,11 @@ namespace Ipopt
     IPARM_[0] = 0;
     IPARM_[1] = 0;
     IPARM_[2] = 0;
-    F77_FUNC(wssmp,WSSMP)(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                          NULL, NULL, NULL, NULL, NULL, IPARM_, DPARM_);
+    ipfint idmy;
+    double ddmy;
+    F77_FUNC(wssmp,WSSMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy,
+                          &idmy, &ddmy, &idmy, &idmy, &ddmy, &idmy,
+                          &idmy, IPARM_, DPARM_);
     IPARM_[14] = 0; // no restrictions on pivoting (ignored for
     // Bunch-Kaufman)
     IPARM_[15] = wsmp_ordering_option_; // ordering option
@@ -322,8 +325,10 @@ namespace Ipopt
       ipfint NAUX = 0;
       IPARM_[1] = 1; // ordering
       IPARM_[2] = 2; // symbolic factorization
-      F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, NULL, PERM_, INVP_,
-                            NULL, NULL, NULL, NULL, &NAUX, NULL,
+      ipfint idmy;
+      double ddmy;
+      F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
+                            &ddmy, &idmy, &idmy, &ddmy, &NAUX, &idmy,
                             IPARM_, DPARM_);
 
       Index ierror = IPARM_[63];
@@ -365,8 +370,10 @@ namespace Ipopt
     IPARM_[1] = 3; // numerical factorization
     IPARM_[2] = 3; // numerical factorization
     DPARM_[10] = wsmp_pivtol_; // set current pivolt tolerance
-    F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, NULL, PERM_, INVP_, NULL, NULL,
-                          NULL, NULL, &NAUX, NULL, IPARM_, DPARM_);
+    ipfint idmy;
+    double ddmy;
+    F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+                          &idmy, &ddmy, &NAUX, &idmy, IPARM_, DPARM_);
     Index ierror = IPARM_[63];
     if (ierror > 0) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -432,17 +439,11 @@ namespace Ipopt
     IPARM_[5] = 1;
     DPARM_[5] = 1e-12;
 
-    /*
-    // DELETEME
-    for (Index j=0; j<NRHS; j++) {
-      for (Index i=0; i<N; i++) {
-        printf("RHS[%3d,%d] = %e\n",i,j,rhs_vals[i+N*j]);
-      }
-    }
-    */
-    F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, NULL, PERM_, INVP_,
-                          rhs_vals, &LDB, &NRHS, NULL, &NAUX,
-                          NULL, IPARM_, DPARM_);
+    ipfint idmy;
+    double ddmy;
+    F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
+                          rhs_vals, &LDB, &NRHS, &ddmy, &NAUX,
+                          &idmy, IPARM_, DPARM_);
     IpData().TimingStats().LinearSystemBackSolve().End();
 
     Index ierror = IPARM_[63];

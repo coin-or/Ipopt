@@ -76,7 +76,28 @@ EXTRA_DIST = \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj \
 	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj
 
+
 .PHONY: doc
+
+# Stuff to clean up from "make test"
+
+DISTCLEANFILES = \
+	Examples/hs071_cpp/hs071_cpp \
+	Examples/hs071_cpp/hs071_cpp.exe \
+	Examples/hs071_cpp/hs071_main.o \
+	Examples/hs071_cpp/hs071_main.obj \
+	Examples/hs071_cpp/hs071_nlp.o \
+	Examples/hs071_cpp/hs071_nlp.obj \
+	Examples/hs071_cpp/ipopt.out \
+	Examples/hs071_c/hs071_c \
+	Examples/hs071_c/hs071_c.exe \
+	Examples/hs071_c/hs071_c.o \
+	Examples/hs071_c/hs071_c.obj \
+	Examples/hs071_c/ipopt.out \
+	Examples/hs071_f/hs071_f \
+	Examples/hs071_f/hs071_f.exe \
+	Examples/hs071_f/hs071_f.o \
+	Examples/hs071_f/hs071_f.obj
 
 doc:
 	doxygen
@@ -109,11 +130,12 @@ install-exec-local:
 	rm -rf $(tmpdir)
 	$(RANLIB) $(DESTDIR)$(libdir)/$(libipopt)
 
-#	sed "s/C$(BITS_PER_POINTER)BIT//" < $(srcdir)/Examples/hs071_f/hs071_f.in > Examples/hs071_f/hs071_f.f
-
 uninstall-local:
+	echo DESTDIR $(DESTDIR)
+	echo libdir $(libdir)
+	echo libipopt $(libipopt)
 	rm -f $(DESTDIR)$(libdir)/$(libipopt)
-	rm -f $(DESTDIR)$(libdir)/$(ipopt_addlibs_c_txt)
+	rm -f $(DESTDIR)$(libdir)/$(ipopt_addlibs_cpp_txt)
 	rm -f $(DESTDIR)$(libdir)/$(ipopt_addlibs_f_txt)
 
 cuter: install
@@ -123,7 +145,7 @@ test: unitTest
 
 unitTests: unitTest
 
-unitTest: install
+unitTest:
 	cd Examples/hs071_cpp; make clean; make
 	cd Examples/hs071_c; make clean; make
 	cd Examples/hs071_f; make clean; make

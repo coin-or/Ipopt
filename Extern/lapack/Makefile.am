@@ -14,8 +14,7 @@ noinst_LIBRARIES = libiplapack.a
 
 nodist_libiplapack_a_SOURCES =
 
-if BUILDLAPACK
-nodist_libiplapack_a_SOURCES += \
+LAPACK_FILES = \
 	dlae2.f \
 	dlaev2.f \
 	dlamch.f \
@@ -48,4 +47,10 @@ nodist_libiplapack_a_SOURCES += \
 	dsytrd.f \
 	ieeeck.f \
 	ilaenv.f
+
+if BUILDLAPACK
+nodist_libiplapack_a_SOURCES += $(LAPACK_FILES)
 endif
+
+DISTCLEANFILES = $(LAPACK_FILES)
+

@@ -337,8 +337,9 @@ AC_MSG_NOTICE([Using AR_X=\"$AR_X\".])
 AC_LANG_PUSH(C)
 SAVE_CFLAGS="$CFLAGS"
 case $build in
-  *-cygwin) comps="gcc cl" ;;
-  *)        comps="xlc cc gcc pgcc icc" ;;
+  *-cygwin)  comps="gcc cl" ;;
+  *-linux-*) comps="xlc gcc cc pgcc icc" ;;
+  *)         comps="xlc cc gcc pgcc icc" ;;
 esac
 AC_PROG_CC([$comps])
 CFLAGS="$SAVE_CFLAGS"

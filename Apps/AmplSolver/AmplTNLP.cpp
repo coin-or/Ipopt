@@ -210,7 +210,8 @@ namespace Ipopt
         delete [] havepi0;
         havepi0 = NULL;
       }
-      ASL_free((ASL**)&asl_);
+      ASL* asl_to_free = (ASL*)asl_;
+      ASL_free(&asl_to_free);
       asl_ = NULL;
     }
 
@@ -933,7 +934,7 @@ namespace Ipopt
                                      AmplOptionsList::Integer_Option,
                                      "Verbosity level for output file");
 
-    // Terminaition
+    // Termination
     ampl_options_list->AddAmplOption("tol",
                                      "tol",
                                      AmplOptionsList::Number_Option,
@@ -974,6 +975,11 @@ namespace Ipopt
                                      "acceptable_constr_viol_tol",
                                      AmplOptionsList::Number_Option,
                                      "Acceptance threshold for the constraint violation");
+
+    ampl_options_list->AddAmplOption("diverging_iterates_tol",
+                                     "diverging_iterates_tol",
+                                     AmplOptionsList::Number_Option,
+                                     "Threshold for maximal value of primal iterates");
 
     // NLP scaling
     ampl_options_list->AddAmplOption("obj_scaling_factor",
@@ -1122,6 +1128,26 @@ namespace Ipopt
                                      "pardiso_out_of_core_power",
                                      AmplOptionsList::Integer_Option,
                                      "Enables out-of-core version of linear solver Pardiso");
+#endif
+
+#ifdef HAVE_WSMP
+
+    ampl_options_list->AddAmplOption("wsmp_num_threads",
+                                     "wsmp_num_threads",
+                                     AmplOptionsList::Integer_Option,
+                                     "Number of threads to be used in WSMP");
+    ampl_options_list->AddAmplOption("wsmp_pivtol",
+                                     "wsmp_pivtol",
+                                     AmplOptionsList::Number_Option,
+                                     "Pivot tolerance for the linear solver WSMP");
+    ampl_options_list->AddAmplOption("wsmp_pivtolmax",
+                                     "wsmp_pivtolmax",
+                                     AmplOptionsList::Number_Option,
+                                     "Maximum pivot tolerance for the linear solver WSMP");
+    ampl_options_list->AddAmplOption("wsmp_scaling",
+                                     "wsmp_scaling",
+                                     AmplOptionsList::Integer_Option,
+                                     "Determines how the matrix is scaled by WSMP");
 #endif
 
     // AMPL's wantsol option
