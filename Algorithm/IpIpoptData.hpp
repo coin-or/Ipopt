@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -13,6 +13,7 @@
 #include "IpOptionsList.hpp"
 #include "IpIteratesVector.hpp"
 #include "IpRegOptions.hpp"
+#include "IpTimingStatistics.hpp"
 
 namespace Ipopt
 {
@@ -141,7 +142,6 @@ namespace Ipopt
     void Set_W(SmartPtr<const SymMatrix> W)
     {
       W_ = W;
-      ;
     }
 
     /** @name ("Main") Primal-dual search direction.  Those fields are
@@ -277,14 +277,27 @@ namespace Ipopt
     }
     //@}
 
-    /**@name Algorithm Parameters ("these will later be
-     *  moved to a specific IpoptParameters class, once
-     *  I get time to write one" - he said) */
+    /** Overall convergence tolerance.  It is used in the convergence
+     *  test, but also in some other parts of the algorithm that
+     *  depend on the specified tolerance, such as the minimum value
+     *  for the barrier parameter. */
     //@{
+    /** Obtain the tolerance. */
     Number tol() const
     {
       DBG_ASSERT(initialize_called_);
       return tol_;
+    }
+    /** Set a new value for the tolerance.  One should be very careful
+     *  when using this, since changing the predefined tolerance might
+     *  have unexpected consequences.  This method is for example used
+     *  in the restoration convergence checker to tighten the
+     *  restoration phase convergence tolerance, if the restoration
+     *  phase converged to a point that has not a large value for the
+     *  constraint violation. */
+    void Set_tol(Number tol)
+    {
+      tol_ = tol;
     }
     //@}
 
@@ -356,11 +369,17 @@ namespace Ipopt
       info_alpha_primal_ = 0;
       info_alpha_dual_ = 0.;
       info_alpha_primal_char_ = ' ';
-      info_ls_count_ = -1;
+      info_ls_count_ = 0;
       info_skip_output_ = false;
       info_string_.clear();
     }
     //@}
+
+    /** Return Timing Statistics Object */
+    TimingStatistics& TimingStats()
+    {
+      return timing_statistics_;
+    }
 
     /** Methods for IpoptType */
     //@{
@@ -466,6 +485,10 @@ namespace Ipopt
 
     /** VectorSpace for all the iterates */
     SmartPtr<IteratesVectorSpace> iterates_space_;
+
+    /** TimingStatistics object collecting all Ipopt timing
+     *  statistics */
+    TimingStatistics timing_statistics_;
 
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).

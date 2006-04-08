@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -49,11 +49,21 @@ namespace Ipopt
   void AdaptiveMuUpdate::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddLowerBoundedNumberOption(
+      "mu_max_fact",
+      "Factor for initialization of maximum value for barrier parameter.",
+      0.0, true, 1e3,
+      "This option determines the upper bound on the barrier parameter.  This "
+      "upper bound is computed as the average complementarity at the initial "
+      "point times the value of this option. (Only used if option "
+      "\"mu_strategy\" is chosen as \"adaptive\".)");
+    roptions->AddLowerBoundedNumberOption(
       "mu_max",
       "Maximum value for barrier parameter.",
-      0.0, true, 1e10,
+      0.0, true, 1e5,
       "This option specifies an upper bound on the barrier parameter in the "
-      "adaptive mu selection mode.");
+      "adaptive mu selection mode.  If this option is set, it overwrites the "
+      "effect of mu_max_fact. (Only used if option "
+      "\"mu_strategy\" is chosen as \"adaptive\".)");
     roptions->AddLowerBoundedNumberOption(
       "mu_min",
       "Minimum value for barrier parameter.",
@@ -61,7 +71,8 @@ namespace Ipopt
       "This option specifies the lower bound on the barrier parameter in the "
       "adaptive mu selection mode. By default, it is set to "
       "min(\"tol\",\"compl_inf_tol\")/(\"barrier_tol_factor\"+1), which "
-      "should be a very reasonable value.");
+      "should be a reasonable value. (Only used if option "
+      "\"mu_strategy\" is chosen as \"adaptive\".)");
     std::string prev_cat = roptions->RegisteringCategory();
     roptions->SetRegisteringCategory("Undocumented");
     roptions->AddLowerBoundedNumberOption(
@@ -72,7 +83,7 @@ namespace Ipopt
 
     roptions->AddStringOption3(
       "adaptive_mu_globalization",
-      "Globalization strategy for the adaptive mu selection mode",
+      "Globalization strategy for the adaptive mu selection mode.",
       "obj-constr-filter",
       "kkt-error", "nonmonotone decrease of kkt-error",
       "obj-constr-filter", "2-dim filter for objective and constraint violation",
@@ -80,7 +91,8 @@ namespace Ipopt
       "To achieve global convergence of the adaptive version, the algorithm "
       "has to switch to the monotone mode (Fiacco-McCormick approach) when "
       "convergence does not seem to appear.  This option sets the "
-      "criterion used to decide when to do this switch.");
+      "criterion used to decide when to do this switch. (Only used if option "
+      "\"mu_strategy\" is chosen as \"adaptive\".)");
 
     roptions->AddLowerBoundedIntegerOption(
       "adaptive_mu_kkterror_red_iters",
@@ -112,14 +124,14 @@ namespace Ipopt
       "the \"kkt-error-filter\" option see \"filter_max_margin\".");
     roptions->AddLowerBoundedNumberOption(
       "filter_max_margin",
-      "Maximum width of margin in obj-constr--filter adaptive globalization strategy.",
+      "Maximum width of margin in obj-constr-filter adaptive globalization strategy.",
       0.0, true,
       1.0,
       // ToDo Detailed description later
       "");
     roptions->AddStringOption2(
       "adaptive_mu_restore_previous_iterate",
-      "Should the previous iterate be restored if the monotone mode is entered.",
+      "Indicates if the previous iterate should be restored if the monotone mode is entered.",
       "no",
       "no", "don't restore accepted iterate",
       "yes", "restore accepted iterate",
@@ -155,7 +167,12 @@ namespace Ipopt
   bool AdaptiveMuUpdate::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)
   {
-    options.GetNumericValue("mu_max", mu_max_, prefix);
+    options.GetNumericValue("mu_max_fact", mu_max_fact_, prefix);
+    if (!options.GetNumericValue("mu_max", mu_max_, prefix)) {
+      // Set to a negative value as a hint that this value still has
+      // to be computed
+      mu_max_ = -1.;
+    }
     options.GetNumericValue("tau_min", tau_min_, prefix);
     options.GetNumericValue("adaptive_mu_safeguard_factor", adaptive_mu_safeguard_factor_, prefix);
     options.GetNumericValue("adaptive_mu_kkterror_red_fact", refs_red_fact_, prefix);
@@ -194,9 +211,11 @@ namespace Ipopt
     adaptive_mu_kkt_balancing_term_ = QualityFunctionMuOracle::BalancingTermEnum(enum_int);
     options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
     if (!options.GetNumericValue("mu_min", mu_min_, prefix)) {
-      // Defer computation of the default until the scaling of the NLP
-      // is known
-      mu_min_ = -1.;
+      // Compute mu_min based on tolerance (once the NLP scaling is known)
+      mu_min_default_ = true;
+    }
+    else {
+      mu_min_default_ = false;
     }
 
     init_dual_inf_ = -1.;
@@ -205,6 +224,7 @@ namespace Ipopt
     refs_vals_.clear();
     check_if_no_bounds_ = false;
     no_bounds_ = false;
+    filter_.Clear();
     IpData().SetFreeMuMode(true);
 
     accepted_point_ = NULL;
@@ -218,18 +238,28 @@ namespace Ipopt
     return retvalue;
   }
 
-  void AdaptiveMuUpdate::UpdateBarrierParameter()
+  bool AdaptiveMuUpdate::UpdateBarrierParameter()
   {
     DBG_START_METH("AdaptiveMuUpdate::UpdateBarrierParameter",
                    dbg_verbosity);
 
     // if min_mu_ has not been given, we now set the default (can't do
     // that earlier, because during call of InitializeImpl, the
-    // scaling in the NLP is not yet determined
-    if (mu_min_ < 0.) {
+    // scaling in the NLP is not yet determined).  We compute this
+    // here in every iteration, since the tolerance might be changed
+    // (e.g. in the restoration phase)
+    if (mu_min_default_) {
       mu_min_ = Min(IpData().tol(),
                     IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_))/
                 (barrier_tol_factor_+1.);
+    }
+
+    // if mu_max has not yet been computed, do so now, based on the
+    // current average complementarity
+    if (mu_max_<0.) {
+      mu_max_ = mu_max_fact_*IpCq().curr_avrg_compl();
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "Setting mu_max to %e.\n", mu_max_);
     }
 
     // if there are not bounds, we always return the minimum MU value
@@ -247,7 +277,7 @@ namespace Ipopt
     }
 
     if (no_bounds_)
-      return;
+      return true;
 
     bool tiny_step_flag = IpData().tiny_step_flag();
     if (!IpData().FreeMuMode()) {
@@ -346,7 +376,13 @@ namespace Ipopt
       IpData().Set_tau(tau);
 
       // Compute the new barrier parameter via the oracle
-      Number mu = free_mu_oracle_->CalculateMu();
+      Number mu;
+      bool retval = free_mu_oracle_->CalculateMu(mu_min_, mu_max_, mu);
+      if (!retval) {
+        Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                       "The mu oracle could not compute a new value of the barrier parameter.\n");
+        return false;
+      }
 
       mu = Max(mu, mu_min_);
       Number mu_lower_safe = lower_mu_safeguard();
@@ -372,14 +408,17 @@ namespace Ipopt
       IpData().Set_mu(mu);
 
       linesearch_->Reset();
-      // Uncomment the next line if the filter should not switch to
+      // Uncomment the next line if the line search should not switch to
       // the restoration phase in the free mode
+
       // linesearch_->SetRigorousLineSearch(false);
     }
     else {
       IpData().Append_info_string("F");
       linesearch_->SetRigorousLineSearch(true);
     }
+
+    return true;
   }
 
   bool
@@ -416,14 +455,14 @@ namespace Ipopt
       }
       break;
       case FILTER_KKT_ERROR : {
-        DBG_ASSERT("Unknown adaptive_mu_globalization value.");
+        DBG_ASSERT(false && "Unknown adaptive_mu_globalization value.");
       }
       break;
       case NEVER_MONOTONE_MODE :
       retval = true;
       break;
       default:
-      DBG_ASSERT("Unknown adaptive_mu_globalization value.");
+      DBG_ASSERT(false && "Unknown adaptive_mu_globalization value.");
     }
 
     return retval;
@@ -468,11 +507,11 @@ namespace Ipopt
       }
       break;
       case FILTER_KKT_ERROR : {
-        DBG_ASSERT("Unknown corrector_type value.");
+        DBG_ASSERT(false && "Unknown corrector_type value.");
       }
       break;
       default:
-      DBG_ASSERT("Unknown corrector_type value.");
+      DBG_ASSERT(false && "Unknown corrector_type value.");
     }
 
     if (restore_accepted_iterate_) {
@@ -542,11 +581,16 @@ namespace Ipopt
     */
 
     Number new_mu;
-
+    bool have_mu = false;
+    ;
     if (IsValid(fix_mu_oracle_)) {
-      new_mu = fix_mu_oracle_->CalculateMu();
+      have_mu = fix_mu_oracle_->CalculateMu(mu_min_, mu_max_, new_mu);
+      if (!have_mu) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "New fixed value for mu could not be computed from the mu_oracle.\n");
+      }
     }
-    else {
+    if (!have_mu) {
       new_mu = adaptive_mu_monotone_init_factor_*IpCq().curr_avrg_compl();
     }
     new_mu = Max(new_mu, lower_mu_safeguard());
@@ -647,7 +691,7 @@ namespace Ipopt
         centrality = complty/pow(xi,3);
         break;
         default:
-        DBG_ASSERT("Unknown value for adaptive_mu_kkt_centrality_");
+        DBG_ASSERT(false && "Unknown value for adaptive_mu_kkt_centrality_");
       }
     }
 
@@ -660,7 +704,7 @@ namespace Ipopt
       balancing_term = pow(Max(0., Max(dual_inf,primal_inf)-complty),3);
       break;
       default:
-      DBG_ASSERT("Unknown value for adaptive_mu_kkt_balancing_term");
+      DBG_ASSERT(false && "Unknown value for adaptive_mu_kkt_balancing_term");
     }
 
     DBG_ASSERT(centrality>=0.);

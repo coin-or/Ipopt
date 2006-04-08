@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -58,6 +58,11 @@ namespace Ipopt
     //@{
     virtual void MultVectorImpl(Number alpha, const Vector& x,
                                 Number beta, Vector& y) const;
+
+    /** Method for determining if all stored numbers are valid (i.e.,
+     *  no Inf or Nan).  It is assumed here that the scaling factors
+     *  are always valid numbers. */
+    virtual bool HasValidNumbersImpl() const;
 
     virtual void PrintImpl(const Journalist& jnlst,
                            EJournalLevel level,

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -190,7 +190,7 @@ namespace Ipopt
     /** Destructor, automatically decrements the
      * reference count, deletes the object if
      * necessary.*/
-    virtual ~SmartPtr();
+    ~SmartPtr();
     //@}
 
     /**@name Overloaded operators. */
@@ -352,9 +352,12 @@ namespace Ipopt
     DBG_START_METH("SmartPtr<T>::SmartPtr()", dbg_smartptr_verbosity);
 #endif
 
+#ifdef CHECK_SMARTPTR
+
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
     trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;
+#endif
 
   }
 
@@ -368,9 +371,12 @@ namespace Ipopt
     DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<T>& copy)", dbg_smartptr_verbosity);
 #endif
 
+#ifdef CHECK_SMARTPTR
+
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
     trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;
+#endif
 
     (void) SetFromSmartPtr_(copy);
   }
@@ -408,9 +414,12 @@ namespace Ipopt
     DBG_START_METH("SmartPtr<T>::SmartPtr(T* ptr)", dbg_smartptr_verbosity);
 #endif
 
+#ifdef CHECK_SMARTPTR
+
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
     trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;
+#endif
 
     (void) SetFromRawPtr_(ptr);
   }
@@ -524,9 +533,12 @@ namespace Ipopt
 #endif
 
     T* ptr = GetRawPtr(rhs);
-    if (ptr != NULL) {
-      SetFromRawPtr_(ptr);
-    }
+    /* AW: I changed this so that NULL is correctly copied from the
+       right hand side */
+    //     if (ptr != NULL) {
+    //       SetFromRawPtr_(ptr);
+    //     }
+    SetFromRawPtr_(ptr);
 
     return (*this);
   }

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -27,9 +27,12 @@ namespace Ipopt
     //@{
     /** Constructor.  If eq_mult_calculator is not NULL, it will be
      *  used to compute the initial values for equality constraint
-     *  multipliers. */
+     *  multipliers.  If warm_start_initializer is not NULL, it will
+     *  be used to compute the initial values if the option
+     *  warm_start_init_point is chosen. */
     DefaultIterateInitializer
-    (const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator);
+    (const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
+     const SmartPtr<IterateInitializer>& warm_start_initializer);
 
     /** Default destructor */
     virtual ~DefaultIterateInitializer()
@@ -104,18 +107,23 @@ namespace Ipopt
     /** Parameters for bumping x0 */
     Number bound_frac_;
 
-    // Qu: Why wouldn't this go in the EqMultiplierCalculator?
     /** If max-norm of the initial equality constraint multiplier
      *  estimate is larger than this, the initial y_* variables are
      *  set to zero. */
     Number constr_mult_init_max_;
     /** Initial value for all bound mulitpliers. */
     Number bound_mult_init_val_;
+    /** Flag indicating whether warm_start_initializer should be used
+     *  instead of the default initialization */
+    bool warm_start_init_point_;
     //@}
 
     /** object to be used for the initialization of the equality
      *  constraint multipliers. */
     SmartPtr<EqMultiplierCalculator> eq_mult_calculator_;
+
+    /** object to be used for a warm start initialization */
+    SmartPtr<IterateInitializer> warm_start_initializer_;
   };
 
 } // namespace Ipopt

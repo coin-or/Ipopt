@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -78,8 +78,8 @@ namespace Ipopt
      *  returns false.
      */
     virtual ESymSolverStatus MultiSolve(const SymMatrix &A,
-                                        std::vector<const Vector*>& rhsV,
-                                        std::vector<Vector*>& solV,
+                                        std::vector<SmartPtr<const Vector> >& rhsV,
+                                        std::vector<SmartPtr<Vector> >& solV,
                                         bool check_NegEVals,
                                         Index numberOfNegEVals)=0;
 
@@ -91,9 +91,9 @@ namespace Ipopt
                            bool check_NegEVals,
                            Index numberOfNegEVals)
     {
-      std::vector<const Vector*> rhsV(1);
+      std::vector<SmartPtr<const Vector> > rhsV(1);
       rhsV[0] = &rhs;
-      std::vector<Vector*> solV(1);
+      std::vector<SmartPtr<Vector> > solV(1);
       solV[0] = &sol;
       return MultiSolve(A, rhsV, solV, check_NegEVals,
                         numberOfNegEVals);

@@ -1,4 +1,4 @@
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -14,6 +14,7 @@ includeipopt_HEADERS = \
 	IpIpoptApplication.hpp \
 	IpNLP.hpp \
 	IpReturnCodes.h \
+	IpReturnCodes.hpp \
 	IpReturnCodes_inc.h \
 	IpReturnCodes.inc \
 	IpSolveStatistics.hpp \
@@ -28,6 +29,7 @@ libinterfaces_a_SOURCES = \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
 	IpReturnCodes.h \
+	IpReturnCodes.hpp \
 	IpSolveStatistics.cpp IpSolveStatistics.hpp \
 	IpStdCInterface.cpp IpStdCInterface.h \
 	IpStdFInterface.c \
@@ -35,11 +37,11 @@ libinterfaces_a_SOURCES = \
 	IpTNLP.hpp \
 	IpTNLPAdapter.cpp IpTNLPAdapter.hpp
 
-CXXFLAGS += -I$(srcdir)/../Common \
-	-I$(srcdir)/../LinAlg \
-	-I$(srcdir)/../Algorithm/LinearSolvers \
-	-I$(srcdir)/../LinAlg/TMatrices \
-	-I$(srcdir)/../Algorithm
+CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
+	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
+	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/LinearSolvers` \
+	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
+	-I`$(CYGPATH_W) $(srcdir)/../Algorithm`
 
 CFLAGS += -I$(srcdir)/../Common
 

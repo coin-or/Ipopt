@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -25,12 +25,10 @@ namespace Ipopt
     /** Default Constructor */
     LineSearch()
     {}
-    ;
 
     /** Default destructor */
     virtual ~LineSearch()
     {}
-    ;
     //@}
 
     /** Perform the line search.  As search direction the delta
@@ -64,6 +62,16 @@ namespace Ipopt
      *  
      */
     virtual bool CheckSkippedLineSearch() = 0;
+
+    /** This method should be called if the optimization process
+     *  requires the line search object to switch to some fallback
+     *  mechanism (like the restoration phase), when the regular
+     *  optimization procedure cannot be continued (for example,
+     *  because the search direction could not be computed).  This
+     *  will cause the line search object to immediately proceed with
+     *  this mechanism when FindAcceptableTrialPoint() is call.  This
+     *  method returns false if no fallback mechanism is available. */
+    virtual bool ActivateFallbackMechanism() = 0;
 
   private:
     /**@name Default Compiler Generated Methods

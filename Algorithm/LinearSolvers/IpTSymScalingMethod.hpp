@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -14,6 +14,8 @@
 
 namespace Ipopt
 {
+
+  DECLARE_STD_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD);
 
   /** Base class for the method for computing scaling factors for symmetric
    *  matrices in triplet format.

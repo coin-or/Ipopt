@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -27,7 +27,12 @@ namespace Ipopt
                      const SmartPtr<OptionsList> options,
                      char**& argv,
                      SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
-                     bool allow_discrete /* = false */)
+                     bool allow_discrete /* = false */,
+                     SmartPtr<AmplOptionsList> ampl_options_list /* = NULL */,
+                     char* ampl_option_string /* = NULL */,
+                     char* ampl_invokation_string /* = NULL */,
+                     char* ampl_banner_string /* = NULL */,
+                     std::string* nl_file_content /* = NULL */)
       :
       TNLP(),
       jnlst_(jnlst),
@@ -43,10 +48,12 @@ namespace Ipopt
       obj_sol_(0.0),
       objval_called_with_current_x_(false),
       conval_called_with_current_x_(false),
+      Oinfo_ptr_(NULL),
       suffix_handler_(suffix_handler)
   {
     DBG_START_METH("AmplTNLP::AmplTNLP",
                    dbg_verbosity);
+
     // The ASL include files #define certain
     // variables that they expect you to work with.
     // These variables then appear as though they are
@@ -58,15 +65,28 @@ namespace Ipopt
     DBG_ASSERT(asl);
     asl_ = asl; // keep the pointer for ourselves to use later...
 
-    // Read the options and stub
-    char* stub = get_options(options, argv);
-    if (!stub) {
-      jnlst_->Printf(J_ERROR, J_MAIN, "No .nl file given!\n");
-      exit(-1);
-    }
+    // First assume that we don't want to halt on error (default)
+    fint* fint_nerror = new fint;
+    *fint_nerror = 0;
+    nerror_ = (void*) fint_nerror;
 
-    FILE* nl = jac0dim(stub, (fint)strlen(stub));
-    DBG_ASSERT(nl);
+    // Read the options and stub
+    char* stub = get_options(options, ampl_options_list,
+                             ampl_option_string, ampl_invokation_string,
+                             ampl_banner_string, argv);
+    FILE*nl = NULL;
+    if (nl_file_content) {
+      nl = jac0dim(const_cast<char*>(nl_file_content->c_str()),
+                   -nl_file_content->length());
+    }
+    else {
+      if (!stub) {
+        jnlst_->Printf(J_ERROR, J_MAIN, "No .nl file given!\n");
+        exit(-1);
+      }
+      nl = jac0dim(stub, (fint)strlen(stub));
+      DBG_ASSERT(nl);
+    }
     jnlst_->Printf(J_SUMMARY, J_MAIN, "\n");
 
     // check the problem statistics (see Table 1 in AMPL doc)
@@ -82,7 +102,7 @@ namespace Ipopt
                      "Either remove the integer variables, or change the flag in the constructor of AmplTNLP"
                     );
     // n_con can be >= 0
-    DBG_ASSERT(n_obj == 1); // Currently can handle only 1 objective
+    DBG_ASSERT(n_obj <= 1); // Currently can handle only 0 or 1 objective
     DBG_ASSERT(nlo == 0 || nlo == 1); // Can handle nonlinear obj.
     DBG_ASSERT(nwv == 0); // Don't know what "linear arc" variables are
     DBG_ASSERT(nlnc == 0); // Don't know what "nonlinear network"constraints are
@@ -106,9 +126,6 @@ namespace Ipopt
 
     // read the rest of the nl file
     int retcode = pfgh_read(nl, ASL_return_read_err | ASL_findgroups);
-
-    // see "changes" in solvers directory of ampl code...
-    hesset(1,0,1,0,nlc);
 
     switch (retcode) {
       case ASL_readerr_none : {}
@@ -144,12 +161,20 @@ namespace Ipopt
         exit(-1);
       }
       break;
+      case ASL_readerr_CLP : {
+        jnlst_->Printf(J_ERROR, J_MAIN, "ASL error message: \"solver cannot handle CLP extensions\"\n");
+        exit(-1);
+      }
+      break;
       default: {
-        jnlst_->Printf(J_ERROR, J_MAIN, "Unknown error in stub file read\n");
+        jnlst_->Printf(J_ERROR, J_MAIN, "Unknown error in stub file read. retcode = %d\n", retcode);
         exit(-1);
       }
       break;
     }
+
+    // see "changes" in solvers directory of ampl code...
+    hesset(1,0,1,0,nlc);
 
     obj_sign_ = 1; // minimization
     if (objtype[obj_no] != 0) {
@@ -185,7 +210,8 @@ namespace Ipopt
         delete [] havepi0;
         havepi0 = NULL;
       }
-      ASL_free((ASL**)&asl_);
+      ASL* asl_to_free = (ASL*)asl_;
+      ASL_free(&asl_to_free);
       asl_ = NULL;
     }
 
@@ -201,6 +227,16 @@ namespace Ipopt
     g_sol_ = NULL;
     delete [] lambda_sol_;
     lambda_sol_ = NULL;
+
+    if (Oinfo_ptr_) {
+      Option_Info* Oinfo = (Option_Info*) Oinfo_ptr_;
+      delete [] Oinfo->sname;
+      delete [] Oinfo->bsname;
+      delete [] Oinfo->opname;
+      delete Oinfo;
+    }
+
+    delete (fint*) nerror_;
   }
 
   bool AmplTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
@@ -282,7 +318,9 @@ namespace Ipopt
   {
     DBG_START_METH("AmplTNLP::eval_f",
                    dbg_verbosity);
-    apply_new_x(new_x, n, x);
+    if (!apply_new_x(new_x, n, x)) {
+      return false;
+    }
 
     return internal_objval(obj_value);
   }
@@ -294,17 +332,25 @@ namespace Ipopt
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
 
-    apply_new_x(new_x, n, x);
-
-    fint nerror = 0;
-    objgrd(0, non_const_x_, grad_f, &nerror);
-    if (nerror != 0) {
-      DBG_PRINT((1, "nerror = %d\n", nerror));
+    if (!apply_new_x(new_x, n, x)) {
       return false;
     }
-    if (obj_sign_==-1) {
+
+    if (n_obj==0) {
       for (Index i=0; i<n; i++) {
-        grad_f[i] *= -1.;
+        grad_f[i] = 0.;
+      }
+    }
+    else {
+      objgrd(0, non_const_x_, grad_f, (fint*)nerror_);
+      if (!nerror_ok(nerror_)) {
+        return false;
+      }
+
+      if (obj_sign_==-1) {
+        for (Index i=0; i<n; i++) {
+          grad_f[i] *= -1.;
+        }
       }
     }
     return true;
@@ -320,7 +366,9 @@ namespace Ipopt
     DBG_ASSERT(m == n_con);
 #endif
 
-    apply_new_x(new_x, n, x);
+    if (!apply_new_x(new_x, n, x)) {
+      return false;
+    }
 
     return internal_conval(m, g);
   }
@@ -352,15 +400,14 @@ namespace Ipopt
       return true;
     }
     else if (!iRow && !jCol && values) {
-      apply_new_x(new_x, n, x);
+      if (!apply_new_x(new_x, n, x)) {
+        return false;
+      }
 
-      fint nerror = 0;
-      jacval(non_const_x_, values, &nerror);
-
-      if (nerror == 0) {
+      jacval(non_const_x_, values, (fint*)nerror_);
+      if (nerror_ok(nerror_)) {
         return true;
       }
-      DBG_PRINT((1, "nerror = %d\n", nerror));
     }
     else {
       DBG_ASSERT(false && "Invalid combination of iRow, jCol, and values pointers");
@@ -395,7 +442,9 @@ namespace Ipopt
       return true;
     }
     else if (!iRow & !jCol && values) {
-      apply_new_x(new_x, n, x);
+      if (!apply_new_x(new_x, n, x)) {
+        return false;
+      }
       if (!objval_called_with_current_x_) {
         Number dummy;
         internal_objval(dummy);
@@ -479,6 +528,10 @@ namespace Ipopt
       message = "Restoration Phase Failed.";
       solve_result_num = 501;
     }
+    else if (status == DIVERGING_ITERATES) {
+      message = "Iterates divering; problem might be unbounded.";
+      solve_result_num = 300;
+    }
     else {
       message = "Unknown Error";
       solve_result_num = 502;
@@ -497,16 +550,20 @@ namespace Ipopt
     DBG_ASSERT(asl_);
     objval_called_with_current_x_ = false; // in case the call below fails
 
-    fint nerror = 0;
-    Number retval = objval(0, non_const_x_, &nerror);
-    if (nerror == 0) {
-      obj_val = obj_sign_*retval;
+    if (n_obj==0) {
+      obj_val = 0;
       objval_called_with_current_x_ = true;
       return true;
     }
+    else {
+      Number retval = objval(0, non_const_x_, (fint*)nerror_);
+      if (nerror_ok(nerror_)) {
+        obj_val = obj_sign_*retval;
+        objval_called_with_current_x_ = true;
+        return true;
+      }
+    }
 
-    //DBG_ASSERT(false && "Error evaluating AMPL objective.\n");
-    DBG_PRINT((1, "nerror = %d\n", nerror));
     return false;
   }
 
@@ -525,27 +582,26 @@ namespace Ipopt
       allocated = true;
     }
 
-    fint nerror = 0;
-    conval(non_const_x_, g, &nerror);
+    conval(non_const_x_, g, (fint*)nerror_);
 
     if (allocated) {
       delete [] g;
       g = NULL;
     }
 
-    if (nerror == 0) {
+    if (nerror_ok(nerror_)) {
       conval_called_with_current_x_ = true;
       return true;
     }
-    DBG_PRINT((1, "nerror = %d\n", nerror));
     return false;
   }
 
 
-  void AmplTNLP::apply_new_x(bool new_x, Index n, const Number* x)
+  bool AmplTNLP::apply_new_x(bool new_x, Index n, const Number* x)
   {
     DBG_START_METH("AmplTNLP::apply_new_x",
                    dbg_verbosity);
+
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
 
@@ -566,8 +622,11 @@ namespace Ipopt
       }
 
       // tell ampl that we have a new x
-      xknown(non_const_x_);
+      xknowne(non_const_x_, (fint*)nerror_);
+      return nerror_ok(nerror_);
     }
+
+    return true;
   }
 
   void AmplTNLP::write_solution_file(const std::string& message) const
@@ -581,7 +640,7 @@ namespace Ipopt
     char* cmessage = new char[message.length()+1];
     strcpy(cmessage, message.c_str());
 
-    write_sol(cmessage, x_sol_, lambda_sol_, NULL);
+    write_sol(cmessage, x_sol_, lambda_sol_, (Option_Info*)Oinfo_ptr_);
 
     delete [] cmessage;
   }
@@ -608,54 +667,85 @@ namespace Ipopt
     niv_ = niv;
   }
 
-  void AmplTNLP::get_scaling_parameters(Number& obj_scaling,
-                                        Index n, Number* x_scaling,
-                                        Index m, Number* g_scaling)
+  bool AmplTNLP::get_scaling_parameters(Number& obj_scaling,
+                                        bool& use_x_scaling, Index n,
+                                        Number* x_scaling,
+                                        bool& use_g_scaling, Index m,
+                                        Number* g_scaling)
   {
     DBG_ASSERT(IsValid(suffix_handler_));
     const double* obj = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Objective_Source);
     obj_scaling = (obj) ? obj[0] : 1.0;
 
     const double* x = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Variable_Source);
-    for (int i=0; i < n; i++) {
-      if (x && x[i] > 0.0) {
-        x_scaling[i] = x[i];
+    if (x) {
+      use_x_scaling = true;
+      for (int i=0; i < n; i++) {
+        if (x[i] > 0.0) {
+          x_scaling[i] = x[i];
+        }
+        else {
+          x_scaling[i] = 1.0;
+        }
       }
-      else {
-        x_scaling[i] = 1.0;
-      }
+    }
+    else {
+      use_x_scaling = false;
     }
 
     const double* g = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Constraint_Source);
-    for (int i=0; i < m; i++) {
-      if (g && g[i] > 0) {
-        g_scaling[i] = g[i];
-      }
-      else {
-        g_scaling[i] = 1.0;
+    if (g) {
+      use_g_scaling = true;
+      for (int i=0; i < m; i++) {
+        if (g[i] > 0) {
+          g_scaling[i] = g[i];
+        }
+        else {
+          g_scaling[i] = 1.0;
+        }
       }
     }
+    else {
+      use_g_scaling = false;
+    }
+
+    return true;
   }
 
-  struct privat_info
+  Index AmplTNLP::get_number_of_nonlinear_variables()
   {
-    SmartPtr<OptionsList> options;
-    SmartPtr<const Journalist> jnlst;
-  };
+    ASL_pfgh* asl = asl_;
+    return Max(nlvo,nlvc);
+  }
+
+  bool AmplTNLP::get_list_of_nonlinear_variables(Index num_nonlin_vars,
+      Index* pos_nonlin_vars)
+  {
+    DBG_DO(ASL_pfgh* asl = asl_;)
+    DBG_ASSERT(num_nonlin_vars == Max(nlvo,nlvc));
+
+    // The first variables are the nonlinear ones (using Fortran
+    // numbering)
+    for (Index i=0; i<num_nonlin_vars; i++) {
+      pos_nonlin_vars[i] = i+1;
+    }
+    return true;
+  }
 
   extern "C"
   {
     static char* get_num_opt(Option_Info *oi, keyword *kw, char *value) {
-      privat_info* pinfo = (privat_info*) kw->info;
+      AmplOptionsList::PrivatInfo*
+      pinfo = (AmplOptionsList::PrivatInfo*) kw->info;
 
       real real_val;
       kw->info = &real_val;
       char* retval = D_val(oi, kw, value);
       kw->info = (void*) pinfo;
 
-      if (!pinfo->options->SetNumericValue(kw->name, real_val)) {
-        pinfo->jnlst->Printf(J_ERROR, J_MAIN,
-                             "\nInvalid value for option %s.\n", kw->name);
+      if (!pinfo->Options()->SetNumericValue(pinfo->IpoptName().c_str(), real_val)) {
+        pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
+                               "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
         exit(-1);
       }
 
@@ -663,16 +753,17 @@ namespace Ipopt
     }
 
     static char* get_int_opt(Option_Info *oi, keyword *kw, char *value) {
-      privat_info* pinfo = (privat_info*) kw->info;
+      AmplOptionsList::PrivatInfo*
+      pinfo = (AmplOptionsList::PrivatInfo*) kw->info;
 
       int int_val;
       kw->info = &int_val;
       char* retval = I_val(oi, kw, value);
       kw->info = (void*) pinfo;
 
-      if (!pinfo->options->SetIntegerValue(kw->name, int_val)) {
-        pinfo->jnlst->Printf(J_ERROR, J_MAIN,
-                             "\nInvalid value for option %s.\n", kw->name);
+      if (!pinfo->Options()->SetIntegerValue(pinfo->IpoptName().c_str(), int_val)) {
+        pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
+                               "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
         exit(-1);
       }
 
@@ -680,16 +771,46 @@ namespace Ipopt
     }
 
     static char* get_str_opt(Option_Info *oi, keyword *kw, char *value) {
-      privat_info* pinfo = (privat_info*) kw->info;
+      AmplOptionsList::PrivatInfo*
+      pinfo = (AmplOptionsList::PrivatInfo*) kw->info;
 
       char* str_val;
       kw->info = &str_val;
       char* retval = C_val(oi, kw, value);
       kw->info = (void*) pinfo;
 
-      if (!pinfo->options->SetStringValue(kw->name, str_val)) {
-        pinfo->jnlst->Printf(J_ERROR, J_MAIN,
-                             "\nInvalid value for option %s.\n", kw->name);
+      if (!pinfo->Options()->SetStringValue(pinfo->IpoptName().c_str(), str_val)) {
+        pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
+                               "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
+        exit(-1);
+      }
+
+      return retval;
+    }
+
+    static char* get_haltonerror_opt(Option_Info *oi, keyword *kw, char *value) {
+      AmplOptionsList::PrivatInfo*
+      pinfo = (AmplOptionsList::PrivatInfo*) kw->info;
+
+      char* str_val;
+      kw->info = &str_val;
+      char* retval = C_val(oi, kw, value);
+      kw->info = (void*) pinfo;
+
+      fint** nerror = (fint**) pinfo->NError();
+
+      if (strcmp(str_val, "yes")==0) {
+        delete *nerror;
+        *nerror = NULL;
+      }
+      else if (strcmp(str_val, "no")==0) {
+        delete *nerror;
+        *nerror = new fint;
+        **nerror = 0;
+      }
+      else {
+        pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
+                               "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
         exit(-1);
       }
 
@@ -697,127 +818,427 @@ namespace Ipopt
     }
   }
 
-  // Define some macros for convenience
-#define ADDNUMOPT(__NAME__, __DESC__) \
-    static char name_ ## __NAME__ [] = #__NAME__; \
-    static char desc_ ## __NAME__ [] = __DESC__; \
-    privat_info pinfo_ ## __NAME__ = {options, jnlst_}; \
-    keywds[count_options].name = name_ ## __NAME__; \
-    keywds[count_options].kf = get_num_opt; \
-    keywds[count_options].info = (void*) &pinfo_ ## __NAME__; \
-    keywds[count_options].desc = desc_ ## __NAME__; \
-    count_options++;
+  AmplOptionsList::~AmplOptionsList()
+  {
+    if (keywds_) {
+      DBG_ASSERT(nkeywds_>0);
+      keyword* keywords = (keyword*) keywds_;
+      for (Index i=0; i<nkeywds_; i++) {
+        PrivatInfo* pinfo = (PrivatInfo*) keywords[i].info;
+        delete pinfo;
+        delete [] keywords[i].name;
+      }
+      delete [] keywords;
+    }
+  }
 
-#define ADDINTOPT(__NAME__, __DESC__) \
-    static char name_ ## __NAME__ [] = #__NAME__; \
-    static char desc_ ## __NAME__ [] = __DESC__; \
-    privat_info pinfo_ ## __NAME__ = {options, jnlst_}; \
-    keywds[count_options].name = name_ ## __NAME__; \
-    keywds[count_options].kf = get_int_opt; \
-    keywds[count_options].info = (void*) &pinfo_ ## __NAME__; \
-    keywds[count_options].desc = desc_ ## __NAME__; \
-    count_options++;
+  void* AmplOptionsList::Keywords(const SmartPtr<OptionsList>& options,
+                                  SmartPtr<const Journalist> jnlst,
+                                  void** nerror)
+  {
+    if (keywds_) {
+      DBG_ASSERT(nkeywds_>0);
+      keyword* keywords = (keyword*) keywds_;
+      for (Index i=0; i<nkeywds_; i++) {
+        PrivatInfo* pinfo = (PrivatInfo*) keywords[i].info;
+        delete pinfo;
+        delete [] keywords[i].name;
+      }
+      delete [] keywords;
+      nkeywds_ = 0;
+    }
 
-#define ADDSTROPT(__NAME__, __DESC__) \
-    static char name_ ## __NAME__ [] = #__NAME__; \
-    static char desc_ ## __NAME__ [] = __DESC__; \
-    privat_info pinfo_ ## __NAME__ = {options, jnlst_}; \
-    keywds[count_options].name = name_ ## __NAME__; \
-    keywds[count_options].kf = get_str_opt; \
-    keywds[count_options].info = (void*) &pinfo_ ## __NAME__; \
-    keywds[count_options].desc = desc_ ## __NAME__; \
-    count_options++;
+    Index n_options = NumberOfAmplOptions();
+    keyword* keywords = new keyword[n_options];
+
+    Index ioption = 0;
+    for (std::map<std::string, SmartPtr<const AmplOption> >::iterator
+         iter = ampl_options_map_.begin();
+         iter != ampl_options_map_.end(); iter++) {
+      keywords[ioption].name = new char[iter->first.size()+1];
+      strcpy(keywords[ioption].name, iter->first.c_str());
+      keywords[ioption].desc = iter->second->Description();
+      switch (iter->second->Type()) {
+        case String_Option: {
+          PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst);
+          keywords[ioption].info = (void*) pinfo;
+          keywords[ioption].kf = get_str_opt;
+        }
+        break;
+        case Number_Option: {
+          PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst);
+          keywords[ioption].info = (void*) pinfo;
+          keywords[ioption].kf = get_num_opt;
+        }
+        break;
+        case Integer_Option: {
+          PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst);
+          keywords[ioption].info = (void*) pinfo;
+          keywords[ioption].kf = get_int_opt;
+        }
+        break;
+        case WS_Option:
+        keywords[ioption].info = NULL;
+        keywords[ioption].kf = WS_val;
+        break;
+        case HaltOnError_Option:
+        PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst, nerror);
+        keywords[ioption].info = (void*) pinfo;
+        keywords[ioption].kf = get_haltonerror_opt;
+        break;
+      }
+      ioption++;
+    }
+
+    DBG_ASSERT(ioption==n_options);
+    nkeywds_ = n_options;
+    keywds_ = (void*) keywords;
+    return keywds_;
+  }
 
   char*
   AmplTNLP::get_options(const SmartPtr<OptionsList>& options,
-                        char**& argv)
+                        SmartPtr<AmplOptionsList>& ampl_options_list,
+                        char* ampl_option_string, char* ampl_invokation_string,
+                        char* ampl_banner_string, char**& argv)
   {
     ASL_pfgh* asl = asl_;
 
-    // Now we list all options with one-line descriptions, using the
-    // macros defined above.  The names must be ordered
-    // alphabetically!!!
-    static const int n_options = 31; // This must be the total number
-    // of options defined below
-    keyword keywds[n_options];
-    int count_options=0;
-    ADDNUMOPT(acceptable_compl_inf_tol,
-              "Acceptance threshold for the complementarity conditions");
-    ADDNUMOPT(acceptable_constr_viol_tol,
-              "Acceptance threshold for the constraint violation");
-    ADDNUMOPT(acceptable_dual_inf_tol,
-              "Acceptance threshold for the dual infeasibility");
-    ADDNUMOPT(acceptable_tol,
-              "Acceptable convergence tolerance (relative)");
-    ADDSTROPT(alpha_for_y,
-              "Step size for constraint multipliers");
-    ADDNUMOPT(bound_frac,
-              "Desired minimal relative distance of initial point to bound");
-    ADDNUMOPT(bound_mult_init_val,
-              "Initial value for the bound multipliers");
-    ADDNUMOPT(bound_push,
-              "Desired minimal absolute distance of initial point to bound");
-    ADDNUMOPT(bound_relax_factor,
-              "Factor for initial relaxation of the bounds");
-    ADDNUMOPT(compl_inf_tol,
-              "Acceptance threshold for the complementarity conditions");
-    ADDNUMOPT(constr_mult_init_max,
-              "Maximal allowed least-square guess of constraint multipliers");
-    ADDNUMOPT(constr_viol_tol,
-              "Desired threshold for the constraint violation");
-    ADDSTROPT(corrector_type,
-              "Type of corrector steps");
-    ADDNUMOPT(dual_inf_tol,
-              "Desired threshold for the dual infeasibility");
-    ADDSTROPT(expect_infeasible_problem,
-              "Enable heuristics to quickly detect an infeasible problem");
-    ADDINTOPT(file_print_level,
-              "Verbosity level for output file");
-    ADDINTOPT(max_iter,
-              "Maximum number of iterations");
-    ADDINTOPT(max_refinement_steps,
-              "Maximal number of iterative refinement steps per linear system solve");
-    ADDINTOPT(max_soc,
-              "Maximal number of second order correction trial steps");
-    ADDINTOPT(min_refinement_steps,
-              "Minimum number of iterative refinement steps per linear system solve");
-    ADDNUMOPT(mu_init,
-              "Initial value for the barrier parameter");
-    ADDSTROPT(mu_oracle,
-              "Oracle for a new barrier parameter in the adaptive strategy");
-    ADDSTROPT(mu_strategy,
-              "Update strategy for barrier parameter");
-    ADDNUMOPT(nlp_scaling_max_gradient,
-              "Maximum gradient after scaling");
-    ADDSTROPT(nlp_scaling_method,
-              "Select the technique used for scaling the NLP");
-    ADDNUMOPT(obj_scaling_factor,
-              "Scaling factor for the objective function");
-    ADDSTROPT(output_file,
-              "File name of an output file (leave unset for no file output)");
-    ADDNUMOPT(pivtol,
-              "Pivot tolerance for the linear solver");
-    ADDNUMOPT(pivtolmax,
-              "Maximal pivot tolerance for the linear solver");
-    ADDINTOPT(print_level,
-              "Verbosity level");
-    ADDNUMOPT(tol,
-              "Desired convergence tolerance (relative)");
+    if (!IsValid(ampl_options_list)) {
+      ampl_options_list = new AmplOptionsList();
+    }
 
-    DBG_ASSERT(count_options == n_options);
+    // Output
+    ampl_options_list->AddAmplOption("print_level",
+                                     "print_level",
+                                     AmplOptionsList::Integer_Option,
+                                     "Verbosity level");
+    ampl_options_list->AddAmplOption("outlev",
+                                     "print_level",
+                                     AmplOptionsList::Integer_Option,
+                                     "Verbosity level (same as print_level)");
+    ampl_options_list->AddAmplOption("print_user_options",
+                                     "print_user_options",
+                                     AmplOptionsList::String_Option,
+                                     "Toggle printing of user options");
+    ampl_options_list->AddAmplOption("print_options_documentation",
+                                     "print_options_documentation",
+                                     AmplOptionsList::String_Option,
+                                     "Print all available options (for ipopt.opt)");
+    ampl_options_list->AddAmplOption("output_file",
+                                     "output_file",
+                                     AmplOptionsList::String_Option,
+                                     "File name of an output file (leave unset for no file output)");
+    ampl_options_list->AddAmplOption("file_print_level",
+                                     "file_print_level",
+                                     AmplOptionsList::Integer_Option,
+                                     "Verbosity level for output file");
 
-    static char sname[] = "ipopt";
-    static char bsname[] = PACKAGE_STRING;
-    static char opname[] = "ipopt_options";
-    Option_Info Oinfo = {sname,
-                         bsname,
-                         opname,
-                         keywds,
-                         n_options};
+    // Termination
+    ampl_options_list->AddAmplOption("tol",
+                                     "tol",
+                                     AmplOptionsList::Number_Option,
+                                     "Desired convergence tolerance (relative)");
+    ampl_options_list->AddAmplOption("max_iter",
+                                     "max_iter",
+                                     AmplOptionsList::Integer_Option,
+                                     "Maximum number of iterations");
+    ampl_options_list->AddAmplOption("maxit",
+                                     "max_iter",
+                                     AmplOptionsList::Integer_Option,
+                                     "Maximum number of iterations (same as max_iter)");
+    ampl_options_list->AddAmplOption("compl_inf_tol",
+                                     "compl_inf_tol",
+                                     AmplOptionsList::Number_Option,
+                                     "Acceptance threshold for the complementarity conditions");
+    ampl_options_list->AddAmplOption("dual_inf_tol",
+                                     "dual_inf_tol",
+                                     AmplOptionsList::Number_Option,
+                                     "Desired threshold for the dual infeasibility");
+    ampl_options_list->AddAmplOption("constr_viol_tol",
+                                     "constr_viol_tol",
+                                     AmplOptionsList::Number_Option,
+                                     "Desired threshold for the constraint violation");
+    ampl_options_list->AddAmplOption("acceptable_tol",
+                                     "acceptable_tol",
+                                     AmplOptionsList::Number_Option,
+                                     "Acceptable convergence tolerance (relative)");
+    ampl_options_list->AddAmplOption("acceptable_compl_inf_tol",
+                                     "acceptable_compl_inf_tol",
+                                     AmplOptionsList::Number_Option,
+                                     "Acceptance threshold for the complementarity conditions");
+    ampl_options_list->AddAmplOption("acceptable_dual_inf_tol",
+                                     "acceptable_dual_inf_tol",
+                                     AmplOptionsList::Number_Option,
+                                     "Acceptance threshold for the dual infeasibility");
+    ampl_options_list->AddAmplOption("acceptable_constr_viol_tol",
+                                     "acceptable_constr_viol_tol",
+                                     AmplOptionsList::Number_Option,
+                                     "Acceptance threshold for the constraint violation");
 
-    char* stub = getstops(argv, &Oinfo);
+    ampl_options_list->AddAmplOption("diverging_iterates_tol",
+                                     "diverging_iterates_tol",
+                                     AmplOptionsList::Number_Option,
+                                     "Threshold for maximal value of primal iterates");
+
+    // NLP scaling
+    ampl_options_list->AddAmplOption("obj_scaling_factor",
+                                     "obj_scaling_factor",
+                                     AmplOptionsList::Number_Option,
+                                     "Scaling factor for the objective function");
+    ampl_options_list->AddAmplOption("nlp_scaling_method",
+                                     "nlp_scaling_method",
+                                     AmplOptionsList::String_Option,
+                                     "Select the technique used for scaling the NLP");
+    ampl_options_list->AddAmplOption("nlp_scaling_max_gradient",
+                                     "nlp_scaling_max_gradient",
+                                     AmplOptionsList::Number_Option,
+                                     "Maximum gradient after scaling");
+
+    // NLP corrections
+    ampl_options_list->AddAmplOption("bound_relax_factor",
+                                     "bound_relax_factor",
+                                     AmplOptionsList::Number_Option,
+                                     "Factor for initial relaxation of the bounds");
+    ampl_options_list->AddAmplOption("honor_original_bounds",
+                                     "honor_original_bounds",
+                                     AmplOptionsList::String_Option,
+                                     "If no, solution might slightly violate bounds");
+
+    // Barrier parameter
+    ampl_options_list->AddAmplOption("mu_strategy",
+                                     "mu_strategy",
+                                     AmplOptionsList::String_Option,
+                                     "Update strategy for barrier parameter");
+    ampl_options_list->AddAmplOption("mu_oracle",
+                                     "mu_oracle",
+                                     AmplOptionsList::String_Option,
+                                     "Oracle for a new barrier parameter in the adaptive strategy");
+    ampl_options_list->AddAmplOption("mu_init",
+                                     "mu_init",
+                                     AmplOptionsList::Number_Option,
+                                     "Initial value for the barrier parameter");
+
+    // Initialization
+    ampl_options_list->AddAmplOption("bound_frac",
+                                     "bound_frac",
+                                     AmplOptionsList::Number_Option,
+                                     "Desired minimal relative distance of initial point to bound");
+    ampl_options_list->AddAmplOption("bound_push",
+                                     "bound_push",
+                                     AmplOptionsList::Number_Option,
+                                     "Desired minimal absolute distance of initial point to bound");
+    ampl_options_list->AddAmplOption("bound_mult_init_val",
+                                     "bound_mult_init_val",
+                                     AmplOptionsList::Number_Option,
+                                     "Initial value for the bound multipliers");
+    ampl_options_list->AddAmplOption("constr_mult_init_max",
+                                     "constr_mult_init_max",
+                                     AmplOptionsList::Number_Option,
+                                     "Maximal allowed least-square guess of constraint multipliers");
+
+    // Multiplier updates
+    ampl_options_list->AddAmplOption("alpha_for_y",
+                                     "alpha_for_y",
+                                     AmplOptionsList::String_Option,
+                                     "Step size for constraint multipliers");
+
+    // Line search
+    ampl_options_list->AddAmplOption("max_soc",
+                                     "max_soc",
+                                     AmplOptionsList::Integer_Option,
+                                     "Maximal number of second order correction trial steps");
+    ampl_options_list->AddAmplOption("watchdog_shortened_iter_trigger",
+                                     "watchdog_shortened_iter_trigger",
+                                     AmplOptionsList::Integer_Option,
+                                     "Trigger counter for watchdog procedure");
+
+    // Restoration phase
+    ampl_options_list->AddAmplOption("expect_infeasible_problem",
+                                     "expect_infeasible_problem",
+                                     AmplOptionsList::String_Option,
+                                     "Enable heuristics to quickly detect an infeasible problem");
+    ampl_options_list->AddAmplOption("required_infeasibility_reduction",
+                                     "required_infeasibility_reduction",
+                                     AmplOptionsList::Number_Option,
+                                     "Required infeasibility reduction in restoration phase");
+
+
+    // Linear solver
+    ampl_options_list->AddAmplOption("linear_solver",
+                                     "linear_solver",
+                                     AmplOptionsList::String_Option,
+                                     "Linear solver to be used for step calculation");
+    ampl_options_list->AddAmplOption("linear_system_scaling",
+                                     "linear_system_scaling",
+                                     AmplOptionsList::String_Option,
+                                     "Method for scaling the linear systems");
+    ampl_options_list->AddAmplOption("linear_scaling_on_demand",
+                                     "linear_scaling_on_demand",
+                                     AmplOptionsList::String_Option,
+                                     "Enables heuristic for scaling only when seems required");
+    ampl_options_list->AddAmplOption("max_refinement_steps",
+                                     "max_refinement_steps",
+                                     AmplOptionsList::Integer_Option,
+                                     "Maximal number of iterative refinement steps per linear system solve");
+    ampl_options_list->AddAmplOption("min_refinement_steps",
+                                     "min_refinement_steps",
+                                     AmplOptionsList::Integer_Option,
+                                     "Minimum number of iterative refinement steps per linear system solve");
+
+
+    // Quasi-Newton
+    ampl_options_list->AddAmplOption("hessian_approximation",
+                                     "hessian_approximation",
+                                     AmplOptionsList::String_Option,
+                                     "Can enable Quasi-Newton approximation of hessian");
+
+    // Special linear solver options
+#ifdef HAVE_MA27
+
+    ampl_options_list->AddAmplOption("ma27_pivtol",
+                                     "ma27_pivtol",
+                                     AmplOptionsList::Number_Option,
+                                     "Pivot tolerance for the linear solver MA27");
+    ampl_options_list->AddAmplOption("ma27_pivtolmax",
+                                     "ma27_pivtolmax",
+                                     AmplOptionsList::Number_Option,
+                                     "Maximal pivot tolerance for the linear solver MA27");
+#endif
+
+#ifdef HAVE_MA57
+
+    ampl_options_list->AddAmplOption("ma57_pivtol",
+                                     "ma57_pivtol",
+                                     AmplOptionsList::Number_Option,
+                                     "Pivot tolerance for the linear solver MA57");
+    ampl_options_list->AddAmplOption("ma57_pivtolmax",
+                                     "ma57_pivtolmax",
+                                     AmplOptionsList::Number_Option,
+                                     "Maximal pivot tolerance for the linear solver MA57");
+#endif
+
+#ifdef HAVE_PARDISO
+
+    ampl_options_list->AddAmplOption("pardiso_matching_strategy",
+                                     "pardiso_matching_strategy",
+                                     AmplOptionsList::String_Option,
+                                     "Matching strategy for linear solver Pardiso");
+    ampl_options_list->AddAmplOption("pardiso_out_of_core_power",
+                                     "pardiso_out_of_core_power",
+                                     AmplOptionsList::Integer_Option,
+                                     "Enables out-of-core version of linear solver Pardiso");
+#endif
+
+#ifdef HAVE_WSMP
+
+    ampl_options_list->AddAmplOption("wsmp_num_threads",
+                                     "wsmp_num_threads",
+                                     AmplOptionsList::Integer_Option,
+                                     "Number of threads to be used in WSMP");
+    ampl_options_list->AddAmplOption("wsmp_pivtol",
+                                     "wsmp_pivtol",
+                                     AmplOptionsList::Number_Option,
+                                     "Pivot tolerance for the linear solver WSMP");
+    ampl_options_list->AddAmplOption("wsmp_pivtolmax",
+                                     "wsmp_pivtolmax",
+                                     AmplOptionsList::Number_Option,
+                                     "Maximum pivot tolerance for the linear solver WSMP");
+    ampl_options_list->AddAmplOption("wsmp_scaling",
+                                     "wsmp_scaling",
+                                     AmplOptionsList::Integer_Option,
+                                     "Determines how the matrix is scaled by WSMP");
+#endif
+
+    // AMPL's wantsol option
+    ampl_options_list->AddAmplOption("wantsol", "",
+                                     AmplOptionsList::WS_Option,
+                                     WS_desc_ASL+5);
+
+    // special AMPL option to exit when there is in error in the
+    // function evaluation
+    ampl_options_list->AddAmplOption("halt_on_ampl_error", "",
+                                     AmplOptionsList::HaltOnError_Option,
+                                     "Exit with message on evaluation error");
+
+    int n_options = ampl_options_list->NumberOfAmplOptions();
+
+    keyword* keywds =
+      (keyword*) ampl_options_list->Keywords(options, jnlst_,
+                                             (void**)&nerror_);
+
+    static char sname_default[] = "ipopt";
+    static char bsname_default[] = PACKAGE_STRING;
+    static char opname_default[] = "ipopt_options";
+    char* sname;
+    char* bsname;
+    char* opname;
+    if (ampl_option_string) {
+      opname = ampl_option_string;
+    }
+    else {
+      opname = opname_default;
+    }
+    if (ampl_invokation_string) {
+      sname = ampl_invokation_string;
+    }
+    else {
+      sname = sname_default;
+    }
+    if (ampl_banner_string) {
+      bsname = ampl_banner_string;
+    }
+    else {
+      bsname = bsname_default;
+    }
+
+    DBG_ASSERT(!Oinfo_ptr_);
+    Option_Info* Oinfo = new Option_Info;
+    Oinfo->sname = new char[strlen(sname)+1];
+    strcpy(Oinfo->sname, sname);
+    Oinfo->bsname = new char[strlen(bsname)+1];
+    strcpy(Oinfo->bsname, bsname);
+    Oinfo->opname = new char[strlen(opname)+1];
+    strcpy(Oinfo->opname, opname);
+    Oinfo->keywds = keywds;
+    Oinfo->n_keywds = n_options;
+    // Set the default for the remaining entries
+    Oinfo->flags = 0;
+    Oinfo->version = NULL;
+    Oinfo->usage = NULL;
+    Oinfo->kwf = NULL;
+    Oinfo->feq = NULL;
+    Oinfo->options = NULL;
+    Oinfo->n_options = 0;
+    Oinfo->driver_date = 0;
+    Oinfo->wantsol = 0;
+    Oinfo->nS = 0;
+    Oinfo->S = NULL;
+    Oinfo->uinfo = NULL;
+    Oinfo->asl = NULL;
+    Oinfo->eqsign = NULL;
+    Oinfo->n_badopts = 0;
+    Oinfo->option_echo = 0;
+    Oinfo->nnl = 0;
+
+    Oinfo_ptr_ = Oinfo;
+
+    char* stub = getstops(argv, Oinfo);
 
     return stub;
+  }
+
+  bool AmplTNLP::nerror_ok(void* nerror)
+  {
+    DBG_START_METH("AmplTNLP::nerror_ok",
+                   dbg_verbosity);
+
+    if (nerror == NULL || *((fint*)nerror) == 0) {
+      return true;
+    }
+    jnlst_->Printf(J_ERROR, J_MAIN, "Error in an AMPL evaluation. Run with \"halt_on_ampl_error yes\" to see details.\n");
+    DBG_PRINT((1, "nerror = %d\n", *((fint*)nerror)));
+    return false;
   }
 
   AmplSuffixHandler::AmplSuffixHandler()
@@ -934,7 +1355,6 @@ namespace Ipopt
     SufDesc* dp = suf_get(suffix_string.c_str(), kind);
     return dp->u.r;
   }
-
 } // namespace Ipopt
 
 

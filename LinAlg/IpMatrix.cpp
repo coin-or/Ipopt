@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -10,16 +10,6 @@
 
 namespace Ipopt
 {
-
-  Matrix::Matrix(const MatrixSpace* owner_space)
-      :
-      TaggedObject(),
-      owner_space_(owner_space)
-  {}
-
-  Matrix::~Matrix()
-  {}
-
   void Matrix::MultVector(Number alpha, const Vector& x, Number beta,
                           Vector& y) const
   {
@@ -62,6 +52,15 @@ namespace Ipopt
     X.ElementWiseMultiply(Z);
     X.Axpy(1., R);
     X.ElementWiseDivide(S);
+  }
+
+  bool Matrix::HasValidNumbers() const
+  {
+    if (valid_cache_tag_ != GetTag()) {
+      cached_valid_ = HasValidNumbersImpl();
+      valid_cache_tag_ = GetTag();
+    }
+    return cached_valid_;
   }
 
   void Matrix::Print(SmartPtr<const Journalist> jnlst,

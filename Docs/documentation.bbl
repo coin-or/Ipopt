@@ -23,14 +23,6 @@ A.~W\"achter.
 \newblock PhD thesis, Carnegie Mellon University, Pittsburgh, PA, USA, January
   2002.
 
-\bibitem{WaeBie:IpoptImpl}
-A.~W{\"a}chter and L.~T. Biegler.
-\newblock On the implementation of an interior-point filter line-search
-  algorithm for large-scale nonlinear programming.
-\newblock Technical Report RC 23149, IBM T.J. Watson Research Center, Yorktown
-  Heights, USA, March 2004.
-\newblock To appear in Mathematical Programming.
-
 \bibitem{WaeBie05:filterlocal}
 A.~W{\"a}chter and L.~T. Biegler.
 \newblock Line search filter methods for nonlinear programming: {L}ocal
@@ -42,5 +34,11 @@ A.~W{\"a}chter and L.~T. Biegler.
 \newblock Line search filter methods for nonlinear programming: {M}otivation
   and global convergence.
 \newblock {\em SIAM Journal on Optimization}, 16(1):1--31, 2005.
+
+\bibitem{WaecBieg06:mp}
+A.~W\"achter and L.~T. Biegler.
+\newblock On the implementation of a primal-dual interior point filter line
+  search algorithm for large-scale nonlinear programming.
+\newblock {\em Mathematical Programming}, 106(1):25--57, 2006.
 
 \end{thebibliography}

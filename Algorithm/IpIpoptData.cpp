@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,29 +12,7 @@
 namespace Ipopt
 {
 
-#ifdef IP_DEBUG
-  static const Index dbg_verbosity = 0;
-#endif
-
   IpoptData::IpoptData()
-      :
-      iter_count_(0),
-      curr_mu_(-1.),
-      mu_initialized_(false),
-      curr_tau_(-1.),
-      tau_initialized_(false),
-      initialize_called_(false),
-      have_prototypes_(false),
-
-      free_mu_mode_(false),
-      tiny_step_flag_(false),
-
-      info_regu_x_(0.),
-      info_alpha_primal_(0.),
-      info_alpha_primal_char_(' '),
-      info_alpha_dual_(0.),
-      info_ls_count_(0),
-      info_skip_output_(false)
   {}
 
   IpoptData::~IpoptData()
@@ -54,7 +32,7 @@ namespace Ipopt
       "\"cmpl_inf_tol\" are met.  (This is epsilon_tol in Eqn. (6) in "
       "implementation paper).  See also \"acceptable_tol\" as a second "
       "termination criterion.  Note, some other algorithmic features also use "
-      "this quantity.");
+      "this quantity to determine thresholds etc.");
   }
 
   bool IpoptData::Initialize(const Journalist& jnlst,
@@ -63,13 +41,23 @@ namespace Ipopt
   {
     options.GetNumericValue("tol", tol_, prefix);
 
-    iter_count_=0;
-
-    have_prototypes_ = false;
+    iter_count_ = 0;
+    curr_mu_ = -1.;
+    mu_initialized_ = false;
+    curr_tau_ = -1.;
     tau_initialized_ = false;
+    initialize_called_ = false;
+    have_prototypes_ = false;
     have_deltas_ = false;
+    have_affine_deltas_ = false;
+
+    free_mu_mode_ = false;
+    tiny_step_flag_ = false;
+
+    ResetInfo();
 
     initialize_called_ = true;
+
     return true;
   }
 

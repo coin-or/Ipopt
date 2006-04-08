@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -132,6 +132,13 @@ namespace Ipopt
     IpBlasDcopy(Nonzeros(), values_, 1, Values, 1);
   }
 
+  bool SymTMatrix::HasValidNumbersImpl() const
+  {
+    DBG_ASSERT(initialized_);
+    Number sum = IpBlasDasum(Nonzeros(), values_, 1);
+    return IsFiniteNumber(sum);
+  }
+
   void SymTMatrix::PrintImpl(const Journalist& jnlst,
                              EJournalLevel level,
                              EJournalCategory category,
@@ -153,7 +160,7 @@ namespace Ipopt
     }
     else {
       jnlst.PrintfIndented(level, category, indent,
-                           "%sUninitialized! ", prefix.c_str());
+                           "%sUninitialized!\n", prefix.c_str());
     }
   }
 

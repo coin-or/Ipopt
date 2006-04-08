@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -21,10 +21,6 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
-  static const Index dbg_verbosity = 0;
-#endif
-
   RestoIterationOutput::RestoIterationOutput(const SmartPtr<OrigIterationOutput>& resto_orig_iteration_output)
       :
       resto_orig_iteration_output_(resto_orig_iteration_output)
@@ -83,7 +79,7 @@ namespace Ipopt
                    "\n**************************************************\n\n");
     if (iter%10 == 0 && !IsValid(resto_orig_iteration_output_)) {
       // output the header
-      Jnlst().Printf(J_SUMMARY, J_MAIN, header.c_str());
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, header.c_str());
     }
     else {
       Jnlst().Printf(J_DETAILED, J_MAIN, header.c_str());
@@ -136,18 +132,18 @@ namespace Ipopt
     Index ls_count = IpData().info_ls_count();
     const std::string info_string = IpData().info_string();
 
-    Jnlst().Printf(J_SUMMARY, J_MAIN,
-                   "%4d%c %13.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d",
+    Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
+                   "%4d%c%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d",
                    iter, info_iter, f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr,
                    alpha_dual, alpha_primal, alpha_primal_char,
                    ls_count);
     if (print_info_string_) {
-      Jnlst().Printf(J_SUMMARY, J_MAIN, " %s", info_string.c_str());
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, " %s", info_string.c_str());
     }
     else {
       Jnlst().Printf(J_DETAILED, J_MAIN, " %s", info_string.c_str());
     }
-    Jnlst().Printf(J_SUMMARY, J_MAIN, "\n");
+    Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "\n");
 
     //////////////////////////////////////////////////////////////////////
     //           Now if desired more detail on the iterates             //
@@ -257,7 +253,7 @@ namespace Ipopt
     if (Jnlst().ProduceOutput(J_MATRIX, J_MAIN)) {
       IpCq().curr_jac_c()->Print(Jnlst(), J_MATRIX, J_MAIN, "jac_c");
       IpCq().curr_jac_d()->Print(Jnlst(), J_MATRIX, J_MAIN, "jac_d");
-      IpCq().curr_exact_hessian()->Print(Jnlst(), J_MATRIX, J_MAIN, "h");
+      IpData().W()->Print(Jnlst(), J_MATRIX, J_MAIN, "W");
     }
 
     Jnlst().Printf(J_DETAILED, J_MAIN, "\n\n");

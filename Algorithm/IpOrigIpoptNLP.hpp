@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,9 +11,16 @@
 
 #include "IpIpoptNLP.hpp"
 #include "IpException.hpp"
+#include "IpTimingStatistics.hpp"
 
 namespace Ipopt
 {
+
+  /** enumeration for the Hessian information type. */
+  enum HessianApproximationType {
+    EXACT=0,
+    LIMITED_MEMORY
+  };
 
   /** This class maps the traditional NLP into
    *  something that is more useful by Ipopt.
@@ -55,6 +62,11 @@ namespace Ipopt
                                       SmartPtr<Vector>& v_U
                                      );
 
+    /** Method accessing the GetWarmStartIterate of the NLP */
+    virtual bool GetWarmStartIterate(IteratesVector& warm_start_iterate)
+    {
+      return nlp_->GetWarmStartIterate(warm_start_iterate);
+    }
     /** Accessor methods for model data */
     //@{
     /** Objective value */
@@ -146,6 +158,11 @@ namespace Ipopt
     {
       return Pd_U_;
     }
+
+    virtual SmartPtr<const SymMatrixSpace> HessianMatrixSpace() const
+    {
+      return h_space_;
+    }
     //@}
 
     /** Accessor method for vector/matrix spaces pointers */
@@ -210,13 +227,34 @@ namespace Ipopt
                           const Vector& c, const Vector& d,
                           const Vector& y_c, const Vector& y_d,
                           Number obj_value);
+    bool IntermediateCallBack(AlgorithmMode mode,
+                              Index iter, Number obj_value,
+                              Number inf_pr, Number inf_du,
+                              Number mu, Number d_norm,
+                              Number regularization_size,
+                              Number alpha_du, Number alpha_pr,
+                              Index ls_trials,
+                              SmartPtr<const IpoptData> ip_data,
+                              SmartPtr<IpoptCalculatedQuantities> ip_cq);
     //@}
 
-    /** Methods for IpoptType */
+    /** @name Methods for IpoptType */
     //@{
     /** Called by IpoptType to register the options */
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
+
+    /** Accessor method to the underlying NLP */
+    SmartPtr<NLP> nlp()
+    {
+      return nlp_;
+    }
+
+    void PrintTimingStatistics(Journalist& jnlst,
+                               EJournalLevel level,
+                               EJournalCategory category) const;
+
+    Number TotalFunctionEvaluationCPUTime() const;
 
   private:
     /** journalist */
@@ -296,6 +334,12 @@ namespace Ipopt
 
     /** Permutation matrix (d_U_ -> d */
     SmartPtr<const Matrix> Pd_U_;
+
+    /** Original unmodified lower bounds on x */
+    SmartPtr<const Vector> orig_x_L_;
+
+    /** Original unmodified upper bounds on x */
+    SmartPtr<const Vector> orig_x_U_;
     //@}
 
     /**@name Default Compiler Generated Methods
@@ -329,6 +373,17 @@ namespace Ipopt
     //@{
     /** relaxation factor for the bounds */
     Number bound_relax_factor_;
+    /** Flag indicating whether the primal variables should be
+     *  projected back into original bounds are optimization. */
+    bool honor_original_bounds_;
+    /** Flag indicating whether the TNLP with identical structure has
+     *  already been solved before. */
+    bool warm_start_same_structure_;
+    /** Flag indicating what Hessian information is to be used. */
+    HessianApproximationType hessian_approximation_;
+    /** Flag indicating whether it is desired to check if there are
+     *  Nan or Inf entries in first and second derivative matrices. */
+    bool check_derivatives_for_naninf_;
     //@}
 
     /** @name Counters for the function evaluations */
@@ -340,9 +395,20 @@ namespace Ipopt
     Index d_evals_;
     Index jac_d_evals_;
     Index h_evals_;
+    //@}
 
     /** Flag indicating if initialization method has been called */
     bool initialized_;
+
+    /**@name Timing statistics for the function evaluations. */
+    //@{
+    TimedTask f_eval_time_;
+    TimedTask grad_f_eval_time_;
+    TimedTask c_eval_time_;
+    TimedTask jac_c_eval_time_;
+    TimedTask d_eval_time_;
+    TimedTask jac_d_eval_time_;
+    TimedTask h_eval_time_;
     //@}
   };
 

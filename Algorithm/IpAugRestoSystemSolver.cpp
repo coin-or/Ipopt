@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,6 +12,7 @@
 #include "IpCompoundVector.hpp"
 #include "IpSumSymMatrix.hpp"
 #include "IpDiagMatrix.hpp"
+#include "IpLowRankUpdateSymMatrix.hpp"
 
 namespace Ipopt
 {
@@ -58,6 +59,7 @@ namespace Ipopt
   }
 
   ESymSolverStatus AugRestoSystemSolver::Solve(const SymMatrix* W,
+      double W_factor,
       const Vector* D_x,
       double delta_x,
       const Vector* D_s,
@@ -82,7 +84,10 @@ namespace Ipopt
     DBG_START_METH("AugRestoSystemSolver::Solve",dbg_verbosity);
     DBG_ASSERT(J_c && J_d); // should pass these by ref
 
+    // I think the comment below is incorrect
     // Remember, W and the D's may be NULL!
+    // ToDo: I don't think the W's can ever be NULL (we always need the structure)
+    DBG_ASSERT(W);
 
     SmartPtr<const CompoundSymMatrix> CW =
       dynamic_cast<const CompoundSymMatrix*>(W);
@@ -134,24 +139,44 @@ namespace Ipopt
     // Now map the correct entries into the Solve method
     // pull out the parts of the hessian h_orig + diag
     DBG_PRINT_MATRIX(2, "CW", *CW);
+    SmartPtr<const SymMatrix> h_orig;
+    SmartPtr<const Vector> D_xR;
     SmartPtr<const SumSymMatrix> WR_sum =
       dynamic_cast<const SumSymMatrix*>(GetRawPtr(CW->GetComp(0,0)));
-    Number factor;
-    SmartPtr<const SymMatrix> h_orig;
-    WR_sum->GetTerm(0, factor, h_orig);
-    DBG_ASSERT(factor == 1.0);
-    SmartPtr<const SymMatrix> eta_DR;
-    WR_sum->GetTerm(1, factor, eta_DR);
-    SmartPtr<const Vector> wr_d =
-      dynamic_cast<const DiagMatrix*>(GetRawPtr(eta_DR))->GetDiag();
-    DBG_ASSERT(IsValid(wr_d));
+    Number orig_W_factor = W_factor;
+    if (IsValid(WR_sum)) {
+      // We seem to be in the regular situation with exact second
+      // derivatives
+      double temp_factor;
+      WR_sum->GetTerm(0, temp_factor, h_orig);
+      DBG_ASSERT(temp_factor == 1. || temp_factor == 0.);
+      orig_W_factor = temp_factor * W_factor;
+      SmartPtr<const SymMatrix> eta_DR;
+      double factor;
+      WR_sum->GetTerm(1, factor, eta_DR);
+      SmartPtr<const Vector> wr_d =
+        dynamic_cast<const DiagMatrix*>(GetRawPtr(eta_DR))->GetDiag();
+      DBG_ASSERT(IsValid(wr_d));
 
-    SmartPtr<const Vector> D_xR;
-    if (IsValid(CD_x)) {
-      D_xR = D_x_plus_wr_d(CD_x->GetComp(0), factor, *wr_d);
+      if (IsValid(CD_x)) {
+        D_xR = D_x_plus_wr_d(CD_x->GetComp(0), factor, *wr_d);
+      }
+      else {
+        D_xR = D_x_plus_wr_d(NULL, factor, *wr_d);
+      }
     }
     else {
-      D_xR = D_x_plus_wr_d(NULL, factor, *wr_d);
+      // Looks like limited memory quasi-Newton stuff
+      const LowRankUpdateSymMatrix* LR_W =
+        dynamic_cast<const LowRankUpdateSymMatrix*>(GetRawPtr(CW->GetComp(0,0)));
+      DBG_ASSERT(LR_W);
+      h_orig = LR_W;
+      if (IsValid(CD_x)) {
+        D_xR = CD_x->GetComp(0);
+      }
+      else {
+        D_xR = NULL;
+      }
     }
 
     Number delta_xR = delta_x;
@@ -184,6 +209,7 @@ namespace Ipopt
     Vector& sol_dR = sol_d;
 
     ESymSolverStatus status = orig_aug_solver_->Solve(GetRawPtr(h_orig),
+                              orig_W_factor,
                               GetRawPtr(D_xR), delta_xR,
                               GetRawPtr(D_sR), delta_sR,
                               GetRawPtr(J_cR), GetRawPtr(D_cR),

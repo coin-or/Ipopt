@@ -3,8 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="hs071_cpp"
-	ProjectGUID="{C55A412F-941A-4857-AD30-14635ECB307C}"
-	RootNamespace="hs071_cpp"
+	ProjectGUID="{84B04F75-86DB-4056-8A02-6A2374E72A4E}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -25,8 +24,6 @@
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
-				DisableLanguageExtensions="TRUE"
-				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -39,7 +36,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Intel\Fortran\compiler80\IA32\LIB&quot;"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
+				ProgramDatabaseFile="$(OutDir)/hs071_cpp.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -74,8 +71,6 @@
 				AdditionalIncludeDirectories="..\..\..\Interfaces;..\..\..\Common;..\include;..\..\..\Algorithm;..\..\..\LinAlg"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="4"
-				DisableLanguageExtensions="TRUE"
-				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"

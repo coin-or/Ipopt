@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -7,6 +7,16 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpSumMatrix.hpp"
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -86,7 +96,16 @@ namespace Ipopt
     }
   }
 
-
+  bool SumMatrix::HasValidNumbersImpl() const
+  {
+    for (Index iterm=0; iterm<NTerms(); iterm++) {
+      DBG_ASSERT(IsValid(matrices_[iterm]));
+      if (!matrices_[iterm]->HasValidNumbers()) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   void SumMatrix::PrintImpl(const Journalist& jnlst,
                             EJournalLevel level,
@@ -110,8 +129,25 @@ namespace Ipopt
     }
   }
 
+  void SumMatrixSpace::SetTermSpace(Index term_idx, const MatrixSpace& mat_space)
+  {
+    while(term_idx >= (Index)term_spaces_.size()) {
+      term_spaces_.push_back(NULL);
+    }
+    term_spaces_[term_idx] = &mat_space;
+  }
+
+  SmartPtr<const MatrixSpace> SumMatrixSpace::GetTermSpace(Index term_idx) const
+  {
+    if (term_idx >= 0 && term_idx < (Index)term_spaces_.size()) {
+      return term_spaces_[term_idx];
+    }
+    return NULL;
+  }
+
   SumMatrix* SumMatrixSpace::MakeNewSumMatrix() const
   {
+    DBG_ASSERT(nterms_ == (Index)term_spaces_.size());
     return new SumMatrix(this);
   }
 

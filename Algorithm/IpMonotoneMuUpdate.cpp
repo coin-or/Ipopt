@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -58,7 +58,7 @@ namespace Ipopt
       "Factor for mu in barrier stop test.",
       0.0, true,
       10.0,
-      "The convergence tolerance for each barrier problem in the montone mode "
+      "The convergence tolerance for each barrier problem in the monotone mode "
       "is the value of the barrier parameter times \"barrier_tol_factor\". "
       "This option is also used in the adaptive mu strategy during the "
       "monotone mode. (This is kappa_epsilon in implementation paper).");
@@ -82,6 +82,15 @@ namespace Ipopt
       "and mu^\"superlinear_decrease_power\".  (This is theta_mu in "
       "implementation paper.) This option is also used in the adaptive mu "
       "strategy during the monotone mode.");
+    roptions->AddStringOption2(
+      "mu_allow_fast_monotone_decrease",
+      "Allow skipping of barrier problem if barrier test is already met.",
+      "yes",
+      "no", "Take at least one iteration per barrier problem",
+      "yes", "Allow fast decrease of mu if barrier test it met",
+      "If set to \"no\", the algorithm enforces at least one iteration per "
+      "barrier problem, even if the barrier test is already met for the "
+      "updated barrier parameter.");
     roptions->AddBoundedNumberOption(
       "tau_min",
       "Lower bound on fraction-to-the-boundary parameter tau.",
@@ -98,6 +107,7 @@ namespace Ipopt
     options.GetNumericValue("barrier_tol_factor", barrier_tol_factor_, prefix);
     options.GetNumericValue("mu_linear_decrease_factor", mu_linear_decrease_factor_, prefix);
     options.GetNumericValue("mu_superlinear_decrease_power", mu_superlinear_decrease_power_, prefix);
+    options.GetBoolValue("mu_allow_fast_monotone_decrease", mu_allow_fast_monotone_decrease_, prefix);
     options.GetNumericValue("tau_min", tau_min_, prefix);
     options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
 
@@ -118,7 +128,7 @@ namespace Ipopt
     return true;
   }
 
-  void MonotoneMuUpdate::UpdateBarrierParameter()
+  bool MonotoneMuUpdate::UpdateBarrierParameter()
   {
     Number mu = IpData().curr_mu();
     Number tau = IpData().curr_tau();
@@ -141,10 +151,10 @@ namespace Ipopt
       Number new_mu;
       Number new_tau;
       Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                     "Updating mu=%e and tau=%e to ", mu, tau);
+                     "Updating mu=%25.16e and tau=%25.16e to ", mu, tau);
       CalcNewMuAndTau(new_mu, new_tau);
       Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                     "new_mu=%e and new_tau=%e\n", new_mu, new_tau);
+                     "new_mu=%25.16e and new_tau=%25.16e\n", new_mu, new_tau);
       bool mu_changed = (mu != new_mu);
       if (!mu_changed && tiny_step_flag) {
         THROW_EXCEPTION(TINY_STEP_DETECTED,
@@ -157,9 +167,13 @@ namespace Ipopt
       mu = new_mu;
       tau = new_tau;
 
-      // If this is the first iteration, we want to check if we can
-      // decrease mu even more
-      if (initialized_) {
+      // If this is the first iteration or if
+      // mu_allow_fast_monotone_decrease_ is true, we want to check if
+      // we can decrease mu even more
+      if (initialized_ && !mu_allow_fast_monotone_decrease_) {
+        done = true;
+      }
+      else if (!mu_changed) {
         done = true;
       }
       else {
@@ -178,6 +192,8 @@ namespace Ipopt
 
     first_iter_resto_ = false;
     initialized_ = true;
+
+    return true;
   }
 
   void MonotoneMuUpdate::CalcNewMuAndTau(Number &new_mu,

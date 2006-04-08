@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -47,7 +47,7 @@ namespace Ipopt
    *  whereas for the other one it starts at 1 (Fortran-style
    *  numbering).
    *
-   *  3. After this, the InitializeStructure method is call (once).
+   *  3. After this, the InitializeStructure method is called (once).
    *  Here, the structure of the matrix is provided.  If the linear
    *  solver requires a symbolic preprocessing phase that can be done
    *  without knowledge of the matrix element values, it can be done
@@ -86,7 +86,15 @@ namespace Ipopt
    *
    *  Note, if the matrix is given in triplet format, entries might be
    *  listed multiple times, in which case the corresponsing elements
-   *  have to be added.  */
+   *  have to be added.
+   *
+   *  A note for warm starts: If the option
+   *  "warm_start_same_structure" is specified with "yes", the
+   *  algorithm assumes that a problem with the same sparsity
+   *  structure is solved for a repeated time.  In that case, the
+   *  linear solver might reuse information from the previous
+   *  optimization.  See Ma27TSolverInterface for an example.
+  */
   class SparseSymLinearSolverInterface: public AlgorithmStrategyObject
   {
   public:

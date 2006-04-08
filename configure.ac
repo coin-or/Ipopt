@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2005 International Business Machines and others.
+# Copyright (C) 2004, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -8,15 +8,15 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.0.1],[coin-ipopt@www-124.ibm.com])
+AC_INIT([Ipopt],[3.1.0],[coin-ipopt@list.coin-or.org])
 
 AC_COPYRIGHT([
-Copyright 2004, 2005 International Business Machines and others.
+Copyright 2004, 2005, 2006 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
 
-AC_REVISION(3.0.1)
+AC_REVISION(3.1.0)
 
 AC_CONFIG_SRCDIR(Common/IpDebug.hpp)
 
@@ -35,6 +35,16 @@ AC_ARG_ENABLE([debug],
     *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
   esac],[debugcompile=false])
 
+# Some extra stuff for blue gene on Laci's request
+AC_SUBST(BLUEGENEEXTRA)
+BLUEGENEEXTRA="echo"
+AC_ARG_ENABLE([bg],,
+  [case "${enableval}" in
+    yes)  BLUEGENEEXTRA="chmod 644 *.o; cp ../Extern/ASL/amplsolver.a ../lib/libamplsolver.a"
+          is_bg=yes
+          ;;
+  esac],[is_bg=no])
+
 ########################
 # C++ Compiler Options #
 ########################
@@ -42,8 +52,9 @@ AC_ARG_ENABLE([debug],
 AC_LANG_PUSH(C++)
 SAVE_CXXFLAGS="$CXXFLAGS"
 case $build in
-  *-cygwin) comps="g++" ;;
-  *)        comps="xlC aCC CC g++ c++ icpc" ;;
+  *-cygwin) comps="g++ cl" ;;
+  *-darwin*) comps="g++ c++ CC" ;;
+  *)        comps="xlC aCC CC g++ c++ pgCC icpc" ;;
 esac
 AC_PROG_CXX([$comps])
 CXXFLAGS="$SAVE_CXXFLAGS"
@@ -124,7 +135,7 @@ if test -z "$CXXFLAGS"; then
 #          ;;
 #        esac
         add_cxxflags="-pipe"
-        dbg_cxxflags="-g"
+        dbg_cxxflags="-g -DCHECK_SMARTPTR"
         warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -Wconversion"
         case $build in
           *-cygwin*) AC_MSG_CHECKING([whether flag \" -mno-cygwin\" works])
@@ -165,6 +176,10 @@ if test -z "$CXXFLAGS"; then
                          [AC_MSG_RESULT([seems so]);
                                add_cxxflags="-i_dynamic $add_cxxflags"])
              ;;
+      pgCC | */pgCC)
+             opt_cxxflags="-fast"
+             add_cxxflags="-Kieee -pc 64"
+             dbg_cxxflags="-g";;
       esac;;
     *-ibm-*)
       case "$CXX" in
@@ -181,7 +196,7 @@ if test -z "$CXXFLAGS"; then
              dbg_cxxflags="-g";;
       esac;;
     *-sun-*)
-             opt_cxxflags="-O5 -xtarget=native"
+             opt_cxxflags="-O4 -xtarget=native"
              dbg_cxxflags="-g";;
     esac
   fi
@@ -236,6 +251,9 @@ if test -z "$CXXLIBS"; then
       case "$CXX" in
       icpc | */icpc)
         CXXLIBS=""
+             ;;
+      pgCC | */pgCC)
+        CXXLIBS="-lstd -lC -lc"
              ;;
       esac;;
     *-ibm-*)
@@ -297,9 +315,19 @@ AC_ARG_VAR(ARFLAGS,[Flags for adding file for archive command (default is `crv')
 AC_MSG_NOTICE([Using ARFLAGS=\"$ARFLAGS\".])
 
 if test -z "$AR_X"; then
-  AR_X="ar x"
+  case $build in
+    *-sun-*)
+      AR_X="ar x"
+      ;;
+    *-sgi-*)
+      AR_X="ar x"
+      ;;
+    *)
+      AR_X="$AR x"
+      ;;
+  esac
 fi
-AC_ARG_VAR(AR_X,[Command for extracing an archive (default is `ar x')])
+AC_ARG_VAR(AR_X,[Command for extracing an archive (default is `$AR x')])
 AC_MSG_NOTICE([Using AR_X=\"$AR_X\".])
 
 ######################
@@ -309,8 +337,9 @@ AC_MSG_NOTICE([Using AR_X=\"$AR_X\".])
 AC_LANG_PUSH(C)
 SAVE_CFLAGS="$CFLAGS"
 case $build in
-  *-cygwin) comps="gcc" ;;
-  *)        comps="xlc cc gcc icc" ;;
+  *-cygwin)  comps="gcc cl" ;;
+  *-linux-*) comps="xlc gcc cc pgcc icc" ;;
+  *)         comps="xlc cc gcc pgcc icc" ;;
 esac
 AC_PROG_CC([$comps])
 CFLAGS="$SAVE_CFLAGS"
@@ -436,7 +465,7 @@ if test -z "$CFLAGS"; then
              ;;
       pgcc | */pgcc)
              opt_cflags="-fast"
-             add_cflags="-Kieee -Mstabs -pc 64"
+             add_cflags="-Kieee -pc 64"
              dbg_cflags="-g" ;;
       esac;;
     *-ibm-*)
@@ -451,7 +480,7 @@ if test -z "$CFLAGS"; then
              add_cflags="-Ae"
              dbg_cflags="-g";;
     *-sun-*)
-             opt_cflags="-xO5 -xtarget=native"
+             opt_cflags="-xO4 -xtarget=native"
              dbg_cflags="-g";;
     *-sgi-*)
              opt_cflags="-O -OPT:Olimit=0"
@@ -499,8 +528,8 @@ AC_LANG_POP(C)
 AC_LANG_PUSH(Fortran 77)
 SAVE_FFLAGS="$FFLAGS"
 case $build in
-  *-cygwin) comps="gfortran g77" ;;
-  *)        comps="xlf fort77 gfortran f77 g77 ifort ifc" ;;
+  *-cygwin) comps="gfortran g77 ifort" ;;
+  *)        comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc" ;;
 esac
 AC_PROG_F77($comps)
 FFLAGS="$SAVE_FFLAGS"
@@ -631,9 +660,9 @@ if test -z "$FFLAGS"; then
                          [AC_MSG_RESULT([seems so]);
                                add_fflags="-i_dynamic $add_fflags"])
              ;;
-      pgf77 | */pgf77)
+      pgf77 | */pgf77 | pgf90 | */pgf90)
              opt_fflags="-fast"
-             add_fflags="-Kieee -Mstabs -pc 64"
+             add_fflags="-Kieee -pc 64"
              dbg_fflags="-g" ;;
       esac;;
     *-ibm-*)
@@ -648,7 +677,7 @@ if test -z "$FFLAGS"; then
              add_fflags="+U77"
              dbg_fflags="-C -g";;
     *-sun-*)
-             opt_fflags="-O5 -xtarget=native"
+             opt_fflags="-O4 -xtarget=native"
              dbg_fflags="-g";;
     *-sgi-*)
              opt_fflags="-O5 -OPT:Olimit=0"
@@ -702,9 +731,40 @@ case $build in
        FLIBS="$FLIBS -lm";;
    *-ibm-*)
        FLIBS=`echo $FLIBS | sed 's/-lc)/-lc/g'` ;;
+   *-linux-*)
+     case "$F77" in
+       pgf77 | */pgf77 | pgf90 | */pgf90)
+# ask linker to go through the archives multiple times
+# (the Fortran compiler seems to do that automatically...
+         FLIBS="-Wl,--start-group $FLIBS -Wl,--end-group" ;;
+     esac
 esac
 
 AC_LANG_POP(Fortran 77)
+
+# find out how long an int pointer is to know if we need INTEGER*4 or
+# INTEGER*8 in Fortran to capture pointers.
+#
+# This test doesn't work on BlueGene
+if test "$is_bg" = no; then
+  AC_LANG_PUSH(C)
+  AC_CHECK_SIZEOF(int *)
+  AC_LANG_POP(C)
+else
+  ac_cv_sizeof_int_p=4
+fi
+AC_SUBST(BITS_PER_POINTER)
+AC_SUBST(BIT32FCOMMENT)
+AC_SUBST(BIT64FCOMMENT)
+case $ac_cv_sizeof_int_p in
+  4) BITS_PER_POINTER=32
+     BIT32FCOMMENT=''
+     BIT64FCOMMENT='C' ;;
+  8) BITS_PER_POINTER=64
+     BIT32FCOMMENT='C'
+     BIT64FCOMMENT='' ;;
+  *) AC_MSG_ERROR([Unknown length of int *]);;
+esac
 
 AC_PROG_RANLIB
 
@@ -738,8 +798,10 @@ MY_CHECK_CXX_HEADER(math)
 MY_CHECK_CXX_HEADER(ctype)
 MY_CHECK_CXX_HEADER(assert)
 MY_CHECK_CXX_HEADER(stdio)
+MY_CHECK_CXX_HEADER(stdlib)
 MY_CHECK_CXX_HEADER(stdarg)
 MY_CHECK_CXX_HEADER(float)
+MY_CHECK_CXX_HEADER(time)
 
 ###################
 # Function finite #
@@ -863,6 +925,15 @@ AC_ARG_WITH([blas],
             AC_HELP_STRING([--with-blas],
                            [specify BLAS library (or BUILD for compilation)]),
             [use_blas=$withval], [use_blas=])
+
+# On cygwin, unless otherwise specified, recompile blas because it
+# otherwise links with the cygwin blas which doesn't run under DOS>
+if test -z "$use_blas"; then
+  case $build in
+    *-cygwin) use_blas="BUILD" ;;
+  esac
+fi
+
 # Check if user supplied option makes sense
 if test ! -z "$use_blas"; then
   if test "$use_blas" = "BUILD"; then
@@ -921,62 +992,87 @@ else
   fi
 fi
 
-# ##########
-# # LAPACK #
-# ##########
-# 
-# iplapacklibdir="\$(top_builddir)/Extern/lapack"
-# lapackdir=Extern/lapack/LAPACK/SRC
-# lapacksrcdir=$srcdir/$lapackdir
-# lapackobjdir=Extern/lapack
-# 
-# AC_ARG_WITH([lapack],
-#             AC_HELP_STRING([--with-lapack],
-#                            [specify LAPACK library (or BUILD for compilation)]),
-#             [use_lapack=$withval], [use_lapack=])
-# # Check if user supplied option makes sense
-# if test ! -z "$use_lapack"; then
-#   if test "$use_lapack" = "BUILD"; then
-#     AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[],
-#                   [AC_MSG_ERROR([option \"BUILD\" specified for lapack, but sources are missing])])
-#   else
-#     AC_MSG_CHECKING([whether user supplied LAPACKLIB=\"$use_lapack\" works])
-#     LIBS="$use_lapack $LIBS"
-#     IPADDLIBS="$use_lapack $IPADDLIBS"
-#     AC_TRY_LINK([],[      call dlasr],[AC_MSG_RESULT([yes])],
-#                 [AC_MSG_RESULT([no]); AC_MSG_ERROR([user supplied LAPACK library \"$use_lapack\" does not work])])
-#   fi
-# else
-# # First try to see if LAPACK is already available with BLAS library
-#   AC_MSG_CHECKING([whether LAPACK is already available with BLAS library])
-#   AC_TRY_LINK([],[      call dgetrf()],
-#             [AC_MSG_RESULT([yes]); use_lapack=ok],
-#             [AC_MSG_RESULT([no])])
-#   if test -z "$use_lapack"; then
-#     # Try to autodetect the library for lapack based on build system
-#     case $build in
-#       *-sgi-*)   AC_CHECK_LIB([complib.sgimath],[dgetrf],
-#                             [use_lapack=-lcomplib.sgimath;
-#                              LIBS="-lcomplib.sgimath $LIBS";
-#                              IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"]);;
-#       *-sun-*) SAVE_LDFLAGS="$LDFLAGS"
-#                AC_MSG_CHECKING([whether -xlic_lib=sunperf has LAPACK])
-#                LDFLAGS="-xlic_lib=sunperf $LDFLAGS"
-#                AC_TRY_LINK([],[      call dgetrf],
-#                            [AC_MSG_RESULT([yes]); use_lapack=-xlic_lib=sunperf],
-#                            [AC_MSG_RESULT([no]); LDFLAGS="$SAVE_LDFLAGS"]) ;;
-#     esac
-#   fi
-#   if test -z "$use_lapack"; then
-#     AC_CHECK_LIB(lapack,dgetrf,[use_lapack=-llapack;
-#                                 LIBS="-llapack $LIBS";
-#                                 IPADDLIBS="-llapack $IPADDLIBS"],[])
-#   fi
-#   if test -z "$use_lapack"; then
-#     AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[use_lapack=BUILD],
-#                   [AC_MSG_ERROR([cannot find LAPACK, and sources are missing in $lapacksrcdir])])
-#   fi
-# fi
+##########
+# LAPACK #
+##########
+
+AC_LANG_PUSH(Fortran 77)
+
+iplapacklibdir="\$(top_builddir)/Extern/lapack"
+lapackdir=Extern/lapack/LAPACK/SRC
+lapacksrcdir=$srcdir/$lapackdir
+lapackobjdir=Extern/lapack
+
+AC_ARG_WITH([lapack],
+            AC_HELP_STRING([--with-lapack],
+                           [specify LAPACK library (or BUILD for compilation, NONE for unavailable)]),
+            [use_lapack=$withval], [use_lapack=])
+
+# On cygwin, unless otherwise specified, recompile lapack because it
+# otherwise links with the cygwin lapack which doesn't run under DOS>
+if test -z "$use_lapack"; then
+  case $build in
+    *-cygwin) use_lapack="BUILD" ;;
+  esac
+fi
+
+# Check if user supplied option makes sense
+if test ! -z "$use_lapack"; then
+  if test "$use_lapack" = "BUILD"; then
+    AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[],
+                  [AC_MSG_ERROR([option \"BUILD\" specified for lapack, but sources are missing])])
+  else
+    if test ! "$use_lapack" = "NONE"; then
+      AC_MSG_CHECKING([whether user supplied LAPACKLIB=\"$use_lapack\" works])
+      LIBS="$use_lapack $LIBS"
+      IPADDLIBS="$use_lapack $IPADDLIBS"
+      AC_TRY_LINK([],[      call dsyev],[AC_MSG_RESULT([yes])],
+                  [AC_MSG_RESULT([no]); AC_MSG_ERROR([user supplied LAPACK library \"$use_lapack\" does not work])])
+    fi
+  fi
+else
+# First try to see if LAPACK is already available with BLAS library
+  AC_MSG_CHECKING([whether LAPACK is already available with BLAS library])
+  AC_TRY_LINK([],[      call dsyev()],
+            [AC_MSG_RESULT([yes]); use_lapack=ok],
+            [AC_MSG_RESULT([no])])
+  if test -z "$use_lapack"; then
+    # Try to autodetect the library for lapack based on build system
+    case $build in
+      *-sgi-*) AC_CHECK_LIB([complib.sgimath],[dsyev],
+                            [use_lapack=-lcomplib.sgimath;
+                             LIBS="-lcomplib.sgimath $LIBS";
+                             IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"]);;
+      *-sun-*) SAVE_LIBS="$LIBS"
+               AC_MSG_CHECKING([whether -xlic_lib=sunperf has LAPACK])
+               LIBS="-xlic_lib=sunperf $LIBS"
+               AC_TRY_LINK([],[      call dsyev],
+                           [AC_MSG_RESULT([yes])
+		  	    IPADDLIBS="-xlic_lib=sunperf $IPADDLIBS"
+			    use_blas=-xlic_lib=sunperf],
+                           [AC_MSG_RESULT([no])
+			    LIBS="$SAVE_LIBS"])
+             ;;
+    esac
+  fi
+  if test -z "$use_lapack"; then
+    AC_CHECK_LIB(lapack,dpotrs,[use_lapack=-llapack;
+                                LIBS="-llapack $LIBS";
+                                IPADDLIBS="-llapack $IPADDLIBS"],[])
+  fi
+  if test -z "$use_lapack"; then
+    AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[use_lapack=BUILD],
+                  [AC_MSG_WARN([cannot find LAPACK, and sources are missing in $lapacksrcdir]); use_lapack=NONE])
+  fi
+fi
+
+if test "$use_lapack" = "NONE"; then
+  AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
+else
+  AC_DEFINE(HAVE_LAPACK, 1, [Define to 1 if LAPACK is avaliable])
+fi
+
+AC_LANG_POP(Fortran 77)
 
 #######################
 # HARWELL SUBROUTINES #
@@ -1010,8 +1106,9 @@ if test "$use_hsl" = BUILD; then
 # Check which files are available
   MY_CHECK_HSLFILE(ma27ad,MA27)
   if test "$use_MA27" = BUILD; then
+    AC_PROG_EGREP
     AC_MSG_CHECKING([whether MA27 is threadsafe])
-    if $EGREP MA27UD $hslsrcdir/ma27ad.f >&5 ; then
+    if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
       AC_MSG_RESULT(yes)
     else
       AC_MSG_RESULT(no)
@@ -1019,6 +1116,7 @@ if test "$use_hsl" = BUILD; then
     fi
   fi
   MY_CHECK_HSLFILE(mc19ad,MC19)
+  MY_CHECK_HSLFILE(ma57ad,MA57)
 else
   SAVE_LIBS="$LIBS"
   LIBS="$use_hsl $LIBS $FLIBS"
@@ -1033,6 +1131,7 @@ else
 		 AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
   fi
   MY_CHECK_HSL([mc19ad],[MC19])
+  MY_CHECK_HSL([ma57ad],[MA57])
   LIBS="$use_hsl $SAVE_LIBS"
 fi
 
@@ -1040,6 +1139,7 @@ fi
 # PARDISO #
 ###########
 
+AC_LANG_PUSH(Fortran 77)
 AC_ARG_WITH([pardiso],
             AC_HELP_STRING([--with-pardiso],
                            [specify Pardiso library (unsupported)]),
@@ -1050,14 +1150,22 @@ if test ! "$use_pardiso" = "no"; then
   IPADDLIBS="$use_pardiso $IPADDLIBS"
 
 # ToDo put this back in
-#  AC_MSG_CHECKING([whether user-supplied Pardiso library \"$use_pardiso\" works])
-#  AC_TRY_LINK([],[      call PARDISO()],
-#              [AC_MSG_RESULT(yes)],
-#              [AC_MSG_ERROR([Pardiso library $use_pardiso does not seem to work])])
+  AC_MSG_CHECKING([whether user-supplied Pardiso library \"$use_pardiso\" works])
+  AC_TRY_LINK([],[      call PARDISO()],
+              [AC_MSG_RESULT(yes)],
+              [AC_MSG_ERROR([Pardiso library $use_pardiso does not seem to work])])
 
-  AC_DEFINE(HAVE_PARDISO,1,
-            [Define to 1 if Pardiso is available (unsupported)])
+# Test if this is the parallel version of Pardiso
+  AC_DEFINE(HAVE_PARDISO,1,[Define to 1 if Pardiso is available])
+  
+  AC_MSG_CHECKING([whether Pardiso library is the parallel version])
+  AC_TRY_LINK([],[      call pardiso_exist_parallel()],
+              [AC_MSG_RESULT(yes)
+               AC_DEFINE(HAVE_PARDISO_PARALLEL,1,
+                [Define to 1 if you are using the parallel version of Pardiso])],
+              [AC_MSG_RESULT(no)])
 fi
+AC_LANG_POP(Fortran 77)
 
 #########
 # TAUCS #
@@ -1065,7 +1173,7 @@ fi
 
 AC_ARG_WITH([taucs],
             AC_HELP_STRING([--with-taucs],
-                           [specify TAUCS library and dependencies (unsupported)]),
+                           [specify TAUCS library and dependencies]),
             [use_taucs=$withval], [use_taucs=no])
 
 if test ! "$use_taucs" = "no"; then
@@ -1073,10 +1181,57 @@ if test ! "$use_taucs" = "no"; then
   IPADDLIBS="$use_taucs $IPADDLIBS"
 
   AC_DEFINE(HAVE_TAUCS,1,
-            [Define to 1 if TAUCS is available (unsupported)])
+            [Define to 1 if TAUCS is available])
 
   AC_ARG_VAR(TAUCS_INCFLAGS,[Flags for including taucs header files])
   CXXFLAGS="$CXXFLAGS $TAUCS_INCFLAGS"
+fi
+
+#########
+# MUMPS #
+#########
+
+AC_ARG_WITH([mumps],
+            AC_HELP_STRING([--with-mumps],
+                           [specify MUMPS library and dependencies]),
+            [use_mumps="$withval"], [use_mumps=no])
+
+if test ! "$use_mumps" = "no"; then
+  LIBS="$use_mumps $LIBS"
+  IPADDLIBS="$use_mumps $IPADDLIBS"
+
+  AC_DEFINE(HAVE_MUMPS,1,
+            [Define to 1 if MUMPS is available])
+
+  AC_ARG_VAR(MUMPS_INCFLAGS,[Flags for including mumps and (psydo) mpi header files.])
+  if test -z "$MUMPS_INCFLAGS"; then
+    AC_MSG_ERROR([You need to specify MUMPS_INCFLAGS if you want to use MUMPS.])
+  fi
+  CXXFLAGS="$CXXFLAGS $MUMPS_INCFLAGS"
+fi
+
+########
+# WSMP #
+########
+
+AC_ARG_WITH([wsmp],
+            AC_HELP_STRING([--with-wsmp],
+                           [specify WSMP library]),
+            [use_wsmp=$withval], [use_wsmp=no])
+
+if test ! "$use_wsmp" = "no"; then
+  LIBS="$use_wsmp $LIBS"
+  IPADDLIBS="$use_wsmp $IPADDLIBS"
+
+  AC_LANG_PUSH(Fortran 77)
+  AC_MSG_CHECKING([whether user-supplied WSMP library \"$use_wsmp\" works])
+  AC_TRY_LINK([],[      call WSSMP()],
+              [AC_MSG_RESULT(yes)],
+              [AC_MSG_ERROR([WSMP library $use_wsmp does not seem to work])])
+  AC_LANG_POP(Fortran 77)
+
+  AC_DEFINE(HAVE_WSMP,1,
+            [Define to 1 if WSMP is available])
 fi
 
 # Check if at least one linear solver was found
@@ -1088,9 +1243,9 @@ AC_ARG_ENABLE([distconf],,
     *) AC_MSG_ERROR(bad value ${enableval} for --enable-distconf) ;;
   esac],[distconf=false])
 
-if test "$use_MA27" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no; then
+if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$use_mumps" = no; then
   if test "$distconf" = false; then
-    AC_MSG_ERROR("No linear solver (such as MA27) available")
+    AC_MSG_ERROR("No linear solver (such as MA27) available.  You need to provide at least one.")
   fi
 fi
 
@@ -1134,7 +1289,10 @@ if test "$use_asldir" = BUILD; then
                   pgcc | */pgcc)
                      asladdcflags="$asladdcflags -DNO_fpu_control";;
                 esac
-                  ;;
+                if test "$is_bg" = "yes"; then
+                  asladdcflags="$asladdcflags -DNo_Control87 -DBLUE_GENE"
+                fi
+                ;;
       *-cygwin*) asladdcflags="-DNON_STDIO"
                 if test "$use_mingw" = yes; then
                   asladdcflags="$asladdcflags -DNo_Control87 -DNO_RUSAGE"
@@ -1151,6 +1309,16 @@ if test "$use_asldir" = BUILD; then
       fi
     done
     ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
+
+#   Somehow, -qtune=auto makes ASL segfault on AIX compiler, so take them out
+    case $CC in
+      xlc* | */xlc* | mpxlc* | */mpxlc*)
+        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-qtune=auto//g' | sed 's/-qarch=auto//g' | sed 's/-qcache=auto//g' | sed 's/-qhot//g' | sed 's/-O3/-O/g'`
+      ;;
+      pgcc | */pgcc)
+        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-fast/-O1/g'`
+      ;;
+    esac
 
     AC_MSG_CHECKING([whether $am_make is the GNU make])
     rm -f conftest.mak
@@ -1269,14 +1437,15 @@ if test "$use_blas" = BUILD; then
   IPALLLIBS="Extern/blas/libipblas.a $IPALLLIBS"
 fi
 
-# AM_CONDITIONAL([BUILDLAPACK],[test "$use_lapack" = "BUILD"])
-# if test "$use_lapack" = BUILD; then
-#   LIBS="$iplapacklibdir/libiplapack.a $LIBS"
-#   IPALLLIBS="Extern/lapack/libiplapack.a $IPALLLIBS"
-#   for file in dgesv.f dgetf2.f dgetrf.f dgetrs.f dlabad.f dlacon.f dlacpy.f dlae2.f dlaebz.f dlaev2.f dlagtf.f dlagts.f dlamch.f dlansp.f dlanst.f dlapy2.f dlaqsp.f dlarf.f dlarfg.f dlarnv.f dlartg.f dlaruv.f dlascl.f dlaset.f dlasr.f dlasrt.f dlassq.f dlaswp.f dlatps.f dopgtr.f dopmtr.f dorg2l.f dorg2r.f dppcon.f dppequ.f dpprfs.f dppsv.f dppsvx.f dpptrf.f dpptrs.f drscl.f dspev.f dspevx.f dsptrd.f dstebz.f dstein.f dsteqr.f dsterf.f ieeeck.f ilaenv.f; do
-#     AC_CONFIG_LINKS($lapackobjdir/$file:$lapackdir/$file)
-#   done
-# fi
+AM_CONDITIONAL([BUILDLAPACK],[test "$use_lapack" = "BUILD"])
+if test "$use_lapack" = BUILD; then
+#  LDFLAGS="-L$iplapacklibdir $LDFLAGS"
+  LIBS="$iplapacklibdir/libiplapack.a $LIBS"
+  IPALLLIBS="Extern/lapack/libiplapack.a $IPALLLIBS"
+  for file in dlae2.f dlaev2.f dlamch.f dlanst.f dlansy.f dlapy2.f dlarf.f dlarfb.f dlarfg.f dlarft.f dlartg.f dlascl.f dlaset.f dlasr.f dlasrt.f dlassq.f dlatrd.f dorg2l.f dorg2r.f dorgql.f dorgqr.f dorgtr.f dpotf2.f dpotrf.f dpotrs.f dsteqr.f dsterf.f dsyev.f dsytd2.f dsytrd.f ieeeck.f ilaenv.f; do
+    AC_CONFIG_LINKS($lapackobjdir/$file:$lapackdir/$file)
+  done
+fi
 
 AM_CONDITIONAL([BUILDHSL],[test "$use_hsl" = "BUILD"])
 if test "$use_hsl" = BUILD ; then
@@ -1285,16 +1454,20 @@ if test "$use_hsl" = BUILD ; then
   IPALLLIBS="Extern/HSL/libiphsl.a $IPALLLIBS"
 fi
 AM_CONDITIONAL([BUILDMA27],[test "$use_MA27" = BUILD])
+AM_CONDITIONAL([BUILDMA57],[test "$use_MA57" = BUILD])
 AM_CONDITIONAL([BUILDMC19],[test "$use_MC19" = BUILD])
 
 AM_CONDITIONAL([BUILDBLASDIR],[test "$use_blas" = BUILD])
-# AM_CONDITIONAL([BUILDLAPACKDIR],[test "$use_lapack" = BUILD])
+AM_CONDITIONAL([BUILDLAPACKDIR],[test "$use_lapack" = BUILD])
 AM_CONDITIONAL([BUILDHSLDIR],[test "$use_hsl" = BUILD])
 
 AM_CONDITIONAL([HAVE_MA27],[test ! "$use_MA27" = no])
+AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
 AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])
+AM_CONDITIONAL([HAVE_MUMPS],[test ! "$use_mumps" = no])
+AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
 AM_CONDITIONAL([BUILDASLDIR],[test "$use_asldir" = BUILD])
 AM_CONDITIONAL([BUILDAMPLINTERFACE],[test ! "$use_asldir" = "no"])
@@ -1321,12 +1494,16 @@ AC_CONFIG_FILES([Makefile Common/Makefile
 		 Apps/Makefile Apps/AmplSolver/Makefile
 		 Apps/CUTErInterface/Makefile
 		 Examples/hs071_f/Makefile
+		 Examples/hs071_f/hs071_f.f
 		 Examples/Cpp_example/Makefile
 		 Examples/hs071_cpp/Makefile
 		 Examples/hs071_c/Makefile
-		 Extern/Makefile Extern/blas/Makefile
+		 Examples/ScalableProblems/Makefile
+		 Extern/Makefile
+		 Extern/blas/Makefile Extern/lapack/Makefile
 		 Extern/HSL/Makefile
-		 Extern/ASL/Makefile])
+		 Extern/ASL/Makefile
+		 Test/run_unitTests])
 
 AC_CONFIG_HEADER([inc/config.h])
 

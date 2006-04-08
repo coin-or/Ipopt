@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -38,6 +38,8 @@ namespace Ipopt
     /** Dimension of the matrix (number of rows and columns) */
     Index Dim() const;
     //@}
+
+    SmartPtr<const SymMatrixSpace> OwnerSymMatrixSpace() const;
 
   protected:
     /** @name Overloaded methods from Matrix.  Since the matrix is

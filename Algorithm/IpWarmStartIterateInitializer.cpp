@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -35,26 +35,50 @@ namespace Ipopt
 
   void WarmStartIterateInitializer::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedNumberOption("warm_start_bound_push", "same as bound_push for the regular initializer",
-                                          0.0, true, 1e-3);
-    roptions->AddBoundedNumberOption("warm_start_bound_frac", "same as bound_frac for the regular initializer",
-                                     0.0, true, 0.5, false, 1e-3);
-    roptions->AddLowerBoundedNumberOption("warm_start_mult_bound_push", "same as mult_bound_push for the regular initializer",
-                                          0.0, true, 1e-3);
-    roptions->AddNumberOption("warm_start_mult_init_max", "Maximum initial value for the equality multipliers",
-                              1e6);
-    roptions->AddNumberOption("warm_start_target_mu", "(No range?) default value in code was 0e-3 ???",
-                              0e-3);
+    roptions->AddLowerBoundedNumberOption(
+      "warm_start_bound_push",
+      "same as bound_push for the regular initializer.",
+      0.0, true, 1e-3);
+    roptions->AddBoundedNumberOption(
+      "warm_start_bound_frac",
+      "same as bound_frac for the regular initializer.",
+      0.0, true, 0.5, false, 1e-3);
+    roptions->AddLowerBoundedNumberOption(
+      "warm_start_mult_bound_push",
+      "same as mult_bound_push for the regular initializer.",
+      0.0, true, 1e-3);
+    roptions->AddNumberOption(
+      "warm_start_mult_init_max",
+      "Maximum initial value for the equality multipliers.",
+      1e6);
+    roptions->AddNumberOption(
+      "warm_start_target_mu",
+      "Unsupported!",
+      0e-3);
+    roptions->AddStringOption2(
+      "warm_start_entire_iterate",
+      "Tells algorithm whether to use the GetWarmStartIterate method in the NLP.",
+      "no",
+      "no", "call GetStartingPoint in the NLP",
+      "yes", "call GetWarmStartIterate in the NLP",
+      "");
   }
 
   bool WarmStartIterateInitializer::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    options.GetNumericValue("warm_start_bound_push", warm_start_bound_push_, prefix);
-    options.GetNumericValue("warm_start_bound_frac", warm_start_bound_frac_, prefix);
-    options.GetNumericValue("warm_start_mult_bound_push", warm_start_mult_bound_push_, prefix);
-    options.GetNumericValue("warm_start_mult_init_max", warm_start_mult_init_max_, prefix);
-    options.GetNumericValue("warm_start_target_mu", warm_start_target_mu_, prefix);
+    options.GetNumericValue("warm_start_bound_push",
+                            warm_start_bound_push_, prefix);
+    options.GetNumericValue("warm_start_bound_frac",
+                            warm_start_bound_frac_, prefix);
+    options.GetNumericValue("warm_start_mult_bound_push",
+                            warm_start_mult_bound_push_, prefix);
+    options.GetNumericValue("warm_start_mult_init_max",
+                            warm_start_mult_init_max_, prefix);
+    options.GetNumericValue("warm_start_target_mu",
+                            warm_start_target_mu_, prefix);
+    options.GetBoolValue("warm_start_entire_iterate",
+                         warm_start_entire_iterate_, prefix);
 
     return true;
   }
@@ -67,74 +91,132 @@ namespace Ipopt
     // Get the starting values provided by the NLP and store them
     // in the ip_data current fields.
 
-    /////////////////////////////////////////////////////////////////////
-    //                   Initialize primal variables                   //
-    /////////////////////////////////////////////////////////////////////
+    SmartPtr<IteratesVector> init_vec;
+    bool have_iterate = false;
 
-    // Get the intial values for x, y_c, y_d, z_L, z_U,
-    IpData().InitializeDataStructures(IpNLP(), true, true, true, true, true);
+    if (warm_start_entire_iterate_) {
+      IpData().InitializeDataStructures(IpNLP(), false, false, false,
+                                        false, false);
 
-    IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                "user-provided x");
-    IpData().curr()->y_c()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                  "user-provided y_c");
-    IpData().curr()->y_d()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                  "user-provided y_d");
-    IpData().curr()->z_L()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                  "user-provided z_L");
-    IpData().curr()->z_U()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                  "user-provided z_U");
-    if (Jnlst().ProduceOutput(J_MOREVECTOR, J_INITIALIZATION)) {
-      IpCq().curr_d()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
-                             "d at user-provided x");
+      init_vec = IpData().curr()->MakeNewIteratesVector(true);
+
+      have_iterate = IpNLP().GetWarmStartIterate(*init_vec);
+
+      if (!have_iterate) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "Tried to obtain entire warm start iterate from NLP, but it returned false.\n");
+        IpData().Append_info_string("NW");
+      }
+
+      // Make sure given bounds are respected
+      if (have_iterate && warm_start_mult_init_max_>0.) {
+        SmartPtr<Vector> y_c = init_vec->create_new_y_c_copy();
+        SmartPtr<Vector> tmp = y_c->MakeNew();
+        tmp->Set(warm_start_mult_init_max_);
+        y_c->ElementWiseMin(*tmp);
+        tmp->Set(-warm_start_mult_init_max_);
+        y_c->ElementWiseMax(*tmp);
+
+        SmartPtr<Vector> y_d = init_vec->create_new_y_d_copy();
+        tmp = y_d->MakeNew();
+        tmp->Set(warm_start_mult_init_max_);
+        y_d->ElementWiseMin(*tmp);
+        tmp->Set(-warm_start_mult_init_max_);
+        y_d->ElementWiseMax(*tmp);
+
+        SmartPtr<Vector> z_L = init_vec->create_new_z_L_copy();
+        tmp = z_L->MakeNew();
+        tmp->Set(warm_start_mult_init_max_);
+        z_L->ElementWiseMin(*tmp);
+
+        SmartPtr<Vector> z_U = init_vec->create_new_z_U_copy();
+        tmp = z_U->MakeNew();
+        tmp->Set(warm_start_mult_init_max_);
+        z_U->ElementWiseMin(*tmp);
+
+        SmartPtr<Vector> v_L = init_vec->create_new_v_L_copy();
+        tmp = v_L->MakeNew();
+        tmp->Set(warm_start_mult_init_max_);
+        v_L->ElementWiseMin(*tmp);
+
+        SmartPtr<Vector> v_U = init_vec->create_new_v_U_copy();
+        tmp = v_U->MakeNew();
+        tmp->Set(warm_start_mult_init_max_);
+        v_U->ElementWiseMin(*tmp);
+      }
     }
 
-    SmartPtr<Vector> tmp;
+    if (!have_iterate) {
 
-    SmartPtr<IteratesVector> init_vec = IpData().curr()->MakeNewContainer();
+      /////////////////////////////////////////////////////////////////////
+      //                   Initialize primal variables                   //
+      /////////////////////////////////////////////////////////////////////
 
-    // If requested, make sure that the multipliers are not too large
-    if (warm_start_mult_init_max_>0.) {
-      SmartPtr<Vector> y_c = init_vec->create_new_y_c_copy();
-      tmp = y_c->MakeNew();
-      tmp->Set(warm_start_mult_init_max_);
-      y_c->ElementWiseMin(*tmp);
-      tmp->Set(-warm_start_mult_init_max_);
-      y_c->ElementWiseMax(*tmp);
+      // Get the intial values for x, y_c, y_d, z_L, z_U,
+      IpData().InitializeDataStructures(IpNLP(), true, true, true, true, true);
 
-      SmartPtr<Vector> y_d = init_vec->create_new_y_d_copy();
-      tmp = y_d->MakeNew();
-      tmp->Set(warm_start_mult_init_max_);
-      y_d->ElementWiseMin(*tmp);
-      tmp->Set(-warm_start_mult_init_max_);
-      y_d->ElementWiseMax(*tmp);
+      IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                  "user-provided x");
+      IpData().curr()->y_c()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                    "user-provided y_c");
+      IpData().curr()->y_d()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                    "user-provided y_d");
+      IpData().curr()->z_L()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                    "user-provided z_L");
+      IpData().curr()->z_U()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
+                                    "user-provided z_U");
+      if (Jnlst().ProduceOutput(J_MOREVECTOR, J_INITIALIZATION)) {
+        IpCq().curr_d()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
+                               "d at user-provided x");
+      }
 
-      SmartPtr<Vector> z_L = init_vec->create_new_z_L_copy();
-      tmp = z_L->MakeNew();
-      tmp->Set(warm_start_mult_init_max_);
-      z_L->ElementWiseMin(*tmp);
+      SmartPtr<Vector> tmp;
 
-      SmartPtr<Vector> z_U = init_vec->create_new_z_U_copy();
-      tmp = z_U->MakeNew();
-      tmp->Set(warm_start_mult_init_max_);
-      z_U->ElementWiseMin(*tmp);
+      init_vec = IpData().curr()->MakeNewContainer();
+
+      // If requested, make sure that the multipliers are not too large
+      if (warm_start_mult_init_max_>0.) {
+        SmartPtr<Vector> y_c = init_vec->create_new_y_c_copy();
+        tmp = y_c->MakeNew();
+        tmp->Set(warm_start_mult_init_max_);
+        y_c->ElementWiseMin(*tmp);
+        tmp->Set(-warm_start_mult_init_max_);
+        y_c->ElementWiseMax(*tmp);
+
+        SmartPtr<Vector> y_d = init_vec->create_new_y_d_copy();
+        tmp = y_d->MakeNew();
+        tmp->Set(warm_start_mult_init_max_);
+        y_d->ElementWiseMin(*tmp);
+        tmp->Set(-warm_start_mult_init_max_);
+        y_d->ElementWiseMax(*tmp);
+
+        SmartPtr<Vector> z_L = init_vec->create_new_z_L_copy();
+        tmp = z_L->MakeNew();
+        tmp->Set(warm_start_mult_init_max_);
+        z_L->ElementWiseMin(*tmp);
+
+        SmartPtr<Vector> z_U = init_vec->create_new_z_U_copy();
+        tmp = z_U->MakeNew();
+        tmp->Set(warm_start_mult_init_max_);
+        z_U->ElementWiseMin(*tmp);
+      }
+
+      // Get the initial values for v_L and v_U out of y_d
+      SmartPtr<Vector> v_L = init_vec->create_new_v_L();
+      IpNLP().Pd_L()->TransMultVector(-1., *init_vec->y_d(), 0., *v_L);
+      tmp = v_L->MakeNew();
+      tmp->Set(warm_start_mult_bound_push_);
+      v_L->ElementWiseMax(*tmp);
+
+      SmartPtr<Vector> v_U = init_vec->create_new_v_U();
+      IpNLP().Pd_U()->TransMultVector(1., *init_vec->y_d(), 0., *v_U);
+      tmp = v_U->MakeNew();
+      tmp->Set(warm_start_mult_bound_push_);
+      v_U->ElementWiseMax(*tmp);
+
+      // Initialize slack variables
+      init_vec->Set_s(*IpCq().curr_d());
     }
-
-    // Get the initial values for v_L and v_U out of y_d
-    SmartPtr<Vector> v_L = init_vec->create_new_v_L();
-    IpNLP().Pd_L()->TransMultVector(-1., *init_vec->y_d(), 0., *v_L);
-    tmp = v_L->MakeNew();
-    tmp->Set(warm_start_mult_bound_push_);
-    v_L->ElementWiseMax(*tmp);
-
-    SmartPtr<Vector> v_U = init_vec->create_new_v_U();
-    IpNLP().Pd_U()->TransMultVector(1., *init_vec->y_d(), 0., *v_U);
-    tmp = v_U->MakeNew();
-    tmp->Set(warm_start_mult_bound_push_);
-    v_U->ElementWiseMax(*tmp);
-
-    // Initialize slack variables
-    init_vec->Set_s(*IpCq().curr_d());
 
     // Make the corrected values current (and initialize s)
     IpData().set_trial(init_vec);
@@ -218,7 +300,7 @@ namespace Ipopt
 
     // Push the multipliers
     SmartPtr<Vector> new_z_L = IpData().curr()->z_L()->MakeNewCopy();
-    tmp = IpData().curr()->z_L()->MakeNew();
+    SmartPtr<Vector> tmp = IpData().curr()->z_L()->MakeNew();
     tmp->Set(warm_start_mult_bound_push_);
     new_z_L->ElementWiseMax(*tmp);
 

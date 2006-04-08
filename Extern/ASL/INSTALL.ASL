@@ -31,6 +31,14 @@ Otherwise, follow those instructions:
    ftp> get solvers.tar
    ftp> quit
 
+   ---
+
+   If the netlib server is down, you can also obtain a tarball from
+
+   http://cm.bell-labs.com/netlib/ampl/index.html
+
+   (at the "tar" link for "solvers")   
+
 2. Unpack this package, so that the directory solvers is now located
    in $SRCROOTDIR/OTHERS/ASL , i.e. you have a directory
    $SRCROOTDIR/OTHERS/ASL/solvers containing the source code for the

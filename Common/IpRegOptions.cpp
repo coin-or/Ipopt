@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,10 +9,14 @@
 #include "IpRegOptions.hpp"
 #include <set>
 
-#ifdef OLD_C_HEADERS
-# include <ctype.h>
-#else
+#ifdef HAVE_CCTYPE
 # include <cctype>
+#else
+# ifdef HAVE_CTYPE_H
+#  include <ctype.h>
+# else
+#  error "don't have header file for ctype"
+# endif
 #endif
 
 namespace Ipopt

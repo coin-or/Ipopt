@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -7,6 +7,9 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpIpoptCalculatedQuantities.hpp"
+#include "IpSumSymMatrix.hpp"
+#include "IpLowRankUpdateSymMatrix.hpp"
+#include "IpRestoIpoptNLP.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -115,7 +118,6 @@ namespace Ipopt
 
       primal_frac_to_the_bound_cache_(5),
       dual_frac_to_the_bound_cache_(5),
-      slack_frac_to_the_bound_cache_(5),
 
       curr_sigma_x_cache_(1),
       curr_sigma_s_cache_(1),
@@ -167,16 +169,16 @@ namespace Ipopt
       "determines how large the move should be.  Its default value is "
       "mach_eps^{3/4}.  (See also end of Section 3.5 in implementation paper "
       "- but actual implementation might be somewhat different.)");
-    roptions->SetRegisteringCategory("Convergence");
+    roptions->SetRegisteringCategory("Line search");
     roptions->AddStringOption3(
       "constraint_violation_norm_type",
-      "Norm to be used for the constraint violation.",
+      "Norm to be used for the constraint violation in the line search.",
       "1-norm",
       "1-norm", "use the 1-norm",
       "2-norm", "use the 2-norm",
       "max-norm", "use the infinity norm",
       "Determines which norm should be used when the algorithm computes the "
-      "constraint violation (for example, in the line search).");
+      "constraint violation in the line search.");
   }
 
   bool IpoptCalculatedQuantities::Initialize(const Journalist& jnlst,
@@ -191,6 +193,30 @@ namespace Ipopt
     options.GetNumericValue("slack_move", slack_move_, prefix);
     options.GetEnumValue("constraint_violation_norm_type", enum_int, prefix);
     constr_viol_normtype_ = ENormType(enum_int);
+    // The following option is registered by OrigIpoptNLP
+    options.GetBoolValue("warm_start_same_structure",
+                         warm_start_same_structure_, prefix);
+
+    if (!warm_start_same_structure_) {
+      dampind_x_L_ = NULL;
+      dampind_x_U_ = NULL;
+      dampind_s_L_ = NULL;
+      dampind_s_U_ = NULL;
+
+      tmp_x_ = NULL;
+      tmp_s_ = NULL;
+      tmp_c_ = NULL;
+      tmp_d_ = NULL;
+      tmp_x_L_ = NULL;
+      tmp_x_U_ = NULL;
+      tmp_s_L_ = NULL;
+      tmp_s_U_ = NULL;
+    }
+
+    num_adjusted_slack_x_L_ = 0;
+    num_adjusted_slack_x_U_ = 0;
+    num_adjusted_slack_s_L_ = 0;
+    num_adjusted_slack_s_U_ = 0;
 
     initialize_called_ = true;
     return true;
@@ -848,7 +874,9 @@ namespace Ipopt
     SmartPtr<const Vector> result;
     SmartPtr<const Vector> x = ip_data_->curr()->x();
 
-    std::vector<const TaggedObject*> tdeps(0);
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = GetRawPtr(ip_nlp_->Px_L());
+    tdeps[1] = GetRawPtr(ip_nlp_->Px_U());
     std::vector<Number> sdeps(1);
     sdeps[0] = kappa_d_;
     if (!grad_kappa_times_damping_x_cache_.GetCachedResult(result, tdeps, sdeps)) {
@@ -936,7 +964,9 @@ namespace Ipopt
     SmartPtr<const Vector> result;
     SmartPtr<const Vector> s = ip_data_->curr()->s();
 
-    std::vector<const TaggedObject*> tdeps(0);
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = GetRawPtr(ip_nlp_->Pd_L());
+    tdeps[1] = GetRawPtr(ip_nlp_->Pd_U());
     std::vector<Number> sdeps(1);
     sdeps[0] = kappa_d_;
     if (!grad_kappa_times_damping_s_cache_.GetCachedResult(result, tdeps, sdeps)) {
@@ -963,10 +993,11 @@ namespace Ipopt
   }
 
   void
-  IpoptCalculatedQuantities::ComputeDampingIndicators(SmartPtr<const Vector>& dampind_x_L,
-      SmartPtr<const Vector>& dampind_x_U,
-      SmartPtr<const Vector>& dampind_s_L,
-      SmartPtr<const Vector>& dampind_s_U)
+  IpoptCalculatedQuantities::ComputeDampingIndicators(
+    SmartPtr<const Vector>& dampind_x_L,
+    SmartPtr<const Vector>& dampind_x_U,
+    SmartPtr<const Vector>& dampind_s_L,
+    SmartPtr<const Vector>& dampind_s_U)
   {
     DBG_START_METH("IpoptCalculatedQuantities::ComputeDampingFilters()",
                    dbg_verbosity);
@@ -1501,34 +1532,6 @@ namespace Ipopt
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  //                             Zero Hessian                              //
-  ///////////////////////////////////////////////////////////////////////////
-
-  SmartPtr<const SymMatrix>
-  IpoptCalculatedQuantities::zero_hessian()
-  {
-    DBG_START_METH("IpoptCalculatedQuantities::zero_hessian()",
-                   dbg_verbosity);
-
-    SmartPtr<const Vector> x = ip_data_->curr()->x();
-    Tmp_c().Set(0.);
-    Tmp_d().Set(0.);
-
-    SmartPtr<const SymMatrix> h ;
-    bool objective_depends_on_mu = ip_nlp_->objective_depends_on_mu();
-    if (objective_depends_on_mu) {
-      h = ip_nlp_->h(*x, 0.0, Tmp_c(), Tmp_d(), 0.);
-    }
-    else {
-      h = ip_nlp_->h(*x, 0.0, Tmp_c(), Tmp_d());
-    }
-
-    DBG_PRINT_MATRIX(2, "zero_hessian", *h);
-
-    return h;
-  }
-
-  ///////////////////////////////////////////////////////////////////////////
   //                  Optimality Error and its components                  //
   ///////////////////////////////////////////////////////////////////////////
 
@@ -2049,11 +2052,11 @@ namespace Ipopt
       case NORM_1 :
       return vec1.Asum() + vec2.Asum();
       case NORM_2 :
-      return sqrt(vec1.Nrm2()*vec2.Nrm2());
+      return sqrt(pow(vec1.Nrm2(),2) + pow(vec2.Nrm2(),2));
       case NORM_MAX :
       return Max(vec1.Amax(), vec2.Amax());
       default:
-      DBG_ASSERT("Unknown NormType.");
+      DBG_ASSERT(false && "Unknown NormType.");
       return 0.0;
     }
   }
@@ -2084,7 +2087,7 @@ namespace Ipopt
       }
       break;
       default:
-      DBG_ASSERT("Unknown NormType.");
+      DBG_ASSERT(false && "Unknown NormType.");
     }
 
     return result;
@@ -2599,30 +2602,37 @@ namespace Ipopt
     tdeps[7] = GetRawPtr(v_U);
 
     if (!curr_nlp_error_cache_.GetCachedResult(result, tdeps)) {
-      Number s_d = 0;
-      Number s_c = 0;
-      ComputeOptimalityErrorScaling(*ip_data_->curr()->y_c(), *ip_data_->curr()->y_d(),
-                                    *ip_data_->curr()->z_L(), *ip_data_->curr()->z_U(),
-                                    *ip_data_->curr()->v_L(), *ip_data_->curr()->v_U(),
-                                    s_max_,
-                                    s_d, s_c);
-      DBG_PRINT((1, "s_d = %lf, s_c = %lf\n", s_d, s_c));
+      if (ip_data_->curr()->x()->Dim()==ip_data_->curr()->y_c()->Dim()) {
+        // This is a square problem, we only need to consider the
+        // infeasibility
+        result = curr_nlp_constraint_violation(NORM_MAX);
+      }
+      else {
+        Number s_d = 0;
+        Number s_c = 0;
+        ComputeOptimalityErrorScaling(*ip_data_->curr()->y_c(), *ip_data_->curr()->y_d(),
+                                      *ip_data_->curr()->z_L(), *ip_data_->curr()->z_U(),
+                                      *ip_data_->curr()->v_L(), *ip_data_->curr()->v_U(),
+                                      s_max_,
+                                      s_d, s_c);
+        DBG_PRINT((1, "s_d = %lf, s_c = %lf\n", s_d, s_c));
 
-      // Dual infeasibility
-      DBG_PRINT((1, "curr_dual_infeasibility(NORM_MAX) = %8.2e\n",
-                 curr_dual_infeasibility(NORM_MAX)));
-      result = curr_dual_infeasibility(NORM_MAX)/s_d;
-      /*
-      // Primal infeasibility
-      DBG_PRINT((1, "curr_primal_infeasibility(NORM_MAX) = %8.2e\n",
-                 curr_primal_infeasibility(NORM_MAX)));
-      result = Max(result, curr_primal_infeasibility(NORM_MAX));
-      */
-      result = Max(result, curr_nlp_constraint_violation(NORM_MAX));
-      // Complementarity
-      DBG_PRINT((1, "curr_complementarity(0., NORM_MAX) = %8.2e\n",
-                 curr_complementarity(0., NORM_MAX)));
-      result = Max(result, curr_complementarity(0., NORM_MAX)/s_c);
+        // Dual infeasibility
+        DBG_PRINT((1, "curr_dual_infeasibility(NORM_MAX) = %8.2e\n",
+                   curr_dual_infeasibility(NORM_MAX)));
+        result = curr_dual_infeasibility(NORM_MAX)/s_d;
+        /*
+        // Primal infeasibility
+        DBG_PRINT((1, "curr_primal_infeasibility(NORM_MAX) = %8.2e\n",
+        curr_primal_infeasibility(NORM_MAX)));
+        result = Max(result, curr_primal_infeasibility(NORM_MAX));
+        */
+        result = Max(result, curr_nlp_constraint_violation(NORM_MAX));
+        // Complementarity
+        DBG_PRINT((1, "curr_complementarity(0., NORM_MAX) = %8.2e\n",
+                   curr_complementarity(0., NORM_MAX)));
+        result = Max(result, curr_complementarity(0., NORM_MAX)/s_c);
+      }
 
       curr_nlp_error_cache_.AddCachedResult(result, tdeps);
     }
@@ -2916,11 +2926,32 @@ namespace Ipopt
   }
 
   Number
-  IpoptCalculatedQuantities::dual_frac_to_the_bound(Number tau,
-      const Vector& delta_z_L,
-      const Vector& delta_z_U,
-      const Vector& delta_v_L,
-      const Vector& delta_v_U)
+  IpoptCalculatedQuantities::uncached_dual_frac_to_the_bound(
+    Number tau,
+    const Vector& delta_z_L,
+    const Vector& delta_z_U,
+    const Vector& delta_v_L,
+    const Vector& delta_v_U)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::uncached_dual_frac_to_the_bound",
+                   dbg_verbosity);
+    Number result;
+
+    result = ip_data_->curr()->z_L()->FracToBound(delta_z_L, tau);
+    result = Min(result, ip_data_->curr()->z_U()->FracToBound(delta_z_U, tau));
+    result = Min(result, ip_data_->curr()->v_L()->FracToBound(delta_v_L, tau));
+    result = Min(result, ip_data_->curr()->v_U()->FracToBound(delta_v_U, tau));
+
+    return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::dual_frac_to_the_bound(
+    Number tau,
+    const Vector& delta_z_L,
+    const Vector& delta_z_U,
+    const Vector& delta_v_L,
+    const Vector& delta_v_U)
   {
     DBG_START_METH("IpoptCalculatedQuantities::dual_frac_to_the_bound",
                    dbg_verbosity);
@@ -2967,11 +2998,12 @@ namespace Ipopt
   }
 
   Number
-  IpoptCalculatedQuantities::slack_frac_to_the_bound(Number tau,
-      const Vector& delta_x_L,
-      const Vector& delta_x_U,
-      const Vector& delta_s_L,
-      const Vector& delta_s_U)
+  IpoptCalculatedQuantities::uncached_slack_frac_to_the_bound(
+    Number tau,
+    const Vector& delta_x_L,
+    const Vector& delta_x_U,
+    const Vector& delta_s_L,
+    const Vector& delta_s_U)
   {
     DBG_START_METH("IpoptCalculatedQuantities::slack_frac_to_the_bound",
                    dbg_verbosity);
@@ -2981,27 +3013,11 @@ namespace Ipopt
     SmartPtr<const Vector> x_U = curr_slack_x_U();
     SmartPtr<const Vector> s_L = curr_slack_s_L();
     SmartPtr<const Vector> s_U = curr_slack_s_U();
-    std::vector<const TaggedObject*> tdeps(8);
-    tdeps[0] = GetRawPtr(x_L);
-    tdeps[1] = GetRawPtr(x_U);
-    tdeps[2] = GetRawPtr(s_L);
-    tdeps[3] = GetRawPtr(s_U);
-    tdeps[4] = &delta_x_L;
-    tdeps[5] = &delta_x_U;
-    tdeps[6] = &delta_s_L;
-    tdeps[7] = &delta_s_U;
 
-    std::vector<Number> sdeps(1);
-    sdeps[0] = tau;
-
-    if (!slack_frac_to_the_bound_cache_.GetCachedResult(result, tdeps, sdeps)) {
-      result = x_L->FracToBound(delta_x_L, tau);
-      result = Min(result, x_U->FracToBound(delta_x_U, tau));
-      result = Min(result, s_L->FracToBound(delta_s_L, tau));
-      result = Min(result, s_U->FracToBound(delta_s_U, tau));
-
-      slack_frac_to_the_bound_cache_.AddCachedResult(result, tdeps, sdeps);
-    }
+    result = x_L->FracToBound(delta_x_L, tau);
+    result = Min(result, x_U->FracToBound(delta_x_U, tau));
+    result = Min(result, s_L->FracToBound(delta_s_L, tau));
+    result = Min(result, s_U->FracToBound(delta_s_U, tau));
 
     return result;
   }

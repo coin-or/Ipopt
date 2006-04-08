@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -266,13 +266,18 @@ namespace Ipopt
       new_jac_d_space =jac_d_space ;
     }
 
-    if (IsValid(dx_)) {
-      scaled_h_space_ = new SymScaledMatrixSpace(ConstPtr(dx_), true, h_space);
-      new_h_space = GetRawPtr(scaled_h_space_);
+    if (IsValid(h_space)) {
+      if (IsValid(dx_)) {
+        scaled_h_space_ = new SymScaledMatrixSpace(ConstPtr(dx_), true, h_space);
+        new_h_space = GetRawPtr(scaled_h_space_);
+      }
+      else {
+        scaled_h_space_ = NULL;
+        new_h_space = h_space;
+      }
     }
     else {
-      scaled_h_space_ = NULL;
-      new_h_space = h_space;
+      new_h_space = NULL;
     }
   }
 

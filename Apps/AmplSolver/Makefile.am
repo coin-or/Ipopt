@@ -1,4 +1,4 @@
-# Copyright (C) 2004, International Business Machines and others.
+# Copyright (C) 2004, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -29,11 +29,11 @@ IPLIBS = \
 
 ipopt_LDADD = $(IPLIBS)
 
-CXXFLAGS += -I$(srcdir)/../../Common \
-	-I$(srcdir)/../../LinAlg \
-	-I$(srcdir)/../../LinAlg/TMatrices \
-	-I$(srcdir)/../../Algorithm \
-	-I$(srcdir)/../../Interfaces
+CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
+	-I`$(CYGPATH_W) $(srcdir)/../../Algorithm` \
+	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
 
 CXXFLAGS += $(AMPL_CPPFLAGS)
 

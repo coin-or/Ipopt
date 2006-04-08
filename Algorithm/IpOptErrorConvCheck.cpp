@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -27,40 +27,31 @@ namespace Ipopt
       "Maximum number of iterations.",
       0, 3000,
       "The algorithm terminates with an error message if the number of "
-      "iterations exceeded this number. This option is also used in the "
-      "restoration phase.");
+      "iterations exceeded this number.");
     roptions->AddLowerBoundedNumberOption(
       "dual_inf_tol",
       "Desired threshold for the dual infeasibility.",
       0.0, true, 1e-4,
-      "Absolute tolerance on the dual infesaibility. Successful termination "
-      "requires that the (unscaled) dual infeasibility is less than this "
+      "Absolute tolerance on the dual infeasibility. Successful termination "
+      "requires that the max-norm of the (unscaled) dual infeasibility is less than this "
       "threshold.");
     roptions->AddLowerBoundedNumberOption(
       "constr_viol_tol",
       "Desired threshold for the constraint violation.",
       0.0, true, 1e-4,
       "Absolute tolerance on the constraint violation. Successful termination "
-      "requires that the (unscaled) constraint violation is less than this "
+      "requires that the max-norm of the (unscaled) constraint violation is less than this "
       "threshold.");
     roptions->AddLowerBoundedNumberOption(
       "compl_inf_tol",
       "Desired threshold for the complementarity conditions.",
       0.0, true, 1e-4,
       "Absolute tolerance on the complementarity. Successful termination "
-      "requires that the (unscaled) complementarity is less than this "
+      "requires that the max-norm of the (unscaled) complementarity is less than this "
       "threshold.");
-    roptions->AddLowerBoundedIntegerOption(
-      "acceptable_iter",
-      "Number of acceptable iterates before triggering termination.",
-      0, 15,
-      "If the algorithm encounters this many successive acceptable iterates "
-      "(see \"acceptable_tol\"), it terminates, assuming that the problem "
-      "has been solved to best possible accuracy given round-off.  If it is "
-      "set to zero, this heuristic is disabled.");
     roptions->AddLowerBoundedNumberOption(
       "acceptable_tol",
-      "Acceptable convergence tolerance (relative).",
+      "\"Acceptable\" convergence tolerance (relative).",
       0.0, true,  1e-6,
       "Determines which (scaled) overall optimality error is considered to be"
       " \"acceptable.\" There are two levels of termination criteria.  If the "
@@ -71,27 +62,42 @@ namespace Ipopt
       "\"acceptable\", it will terminate before the desired convergence "
       "tolerance is met. This is useful in cases where the algorithm might "
       "not be able to achieve the \"desired\" level of accuracy.");
+    roptions->AddLowerBoundedIntegerOption(
+      "acceptable_iter",
+      "Number of \"acceptable\" iterates before triggering termination.",
+      0, 15,
+      "If the algorithm encounters this many successive \"acceptable\" iterates "
+      "(see \"acceptable_tol\"), it terminates, assuming that the problem "
+      "has been solved to best possible accuracy given round-off.  If it is "
+      "set to zero, this heuristic is disabled.");
     roptions->AddLowerBoundedNumberOption(
       "acceptable_dual_inf_tol",
-      "Acceptance threshold for the dual infeasibility.",
+      "\"Acceptance\" threshold for the dual infeasibility.",
       0.0, true, 1e-2,
-      "Absolute tolerance on the dual infesaibility. Acceptable termination "
-      "requires that the (unscaled) dual infeasibility is less than this "
+      "Absolute tolerance on the dual infeasibility. \"Acceptable\" termination "
+      "requires that the (max-norm of the unscaled) dual infeasibility is less than this "
       "threshold; see also acceptable_tol.");
     roptions->AddLowerBoundedNumberOption(
       "acceptable_constr_viol_tol",
-      "Acceptance threshold for the constraint violation.",
+      "\"Acceptance\" threshold for the constraint violation.",
       0.0, true, 1e-2,
-      "Absolute tolerance on the constraint violation. Acceptable termination "
-      "requires that the (unscaled) constraint violation is less than this "
+      "Absolute tolerance on the constraint violation. \"Acceptable\" termination "
+      "requires that the max-norm of the (unscaled) constraint violation is less than this "
       "threshold; see also acceptable_tol.");
     roptions->AddLowerBoundedNumberOption(
       "acceptable_compl_inf_tol",
-      "Acceptance threshold for the complementarity conditions.",
+      "\"Acceptance\" threshold for the complementarity conditions.",
       0.0, true, 1e-2,
-      "Absolute tolerance on the complementarity. Acceptable termination "
-      "requires that the (unscaled) complementarity is less than this "
+      "Absolute tolerance on the complementarity. \"Acceptable\" termination "
+      "requires that the max-norm of the (unscaled) complementarity is less than this "
       "threshold; see also acceptable_tol.");
+    roptions->AddLowerBoundedNumberOption(
+      "diverging_iterates_tol",
+      "Threshold for maximal value of primal iterates.",
+      0.0, true, 1e20,
+      "If any component of the primal iterates exceeded this value (in "
+      "absolute terms), the optimization is aborted with the exit message "
+      "that the iterates seem to be diverging.");
   }
 
   bool
@@ -107,15 +113,50 @@ namespace Ipopt
     options.GetNumericValue("acceptable_dual_inf_tol", acceptable_dual_inf_tol_, prefix);
     options.GetNumericValue("acceptable_constr_viol_tol", acceptable_constr_viol_tol_, prefix);
     options.GetNumericValue("acceptable_compl_inf_tol", acceptable_compl_inf_tol_, prefix);
+    options.GetNumericValue("diverging_iterates_tol", diverging_iterates_tol_, prefix);
     acceptable_counter_ = 0;
 
     return true;
   }
 
   ConvergenceCheck::ConvergenceStatus
-  OptimalityErrorConvergenceCheck::CheckConvergence()
+  OptimalityErrorConvergenceCheck::CheckConvergence(bool call_intermediate_callback /*= true*/)
   {
     DBG_START_METH("OptimalityErrorConvergenceCheck::CheckConvergence", dbg_verbosity);
+
+    if (call_intermediate_callback) {
+      // Check if user requested termination by calling the intermediate
+      // user callback function
+      AlgorithmMode mode = RegularMode;
+      // Gather the information also used in the iteration output
+      Index iter = IpData().iter_count();
+      Number inf_pr = IpCq().curr_primal_infeasibility(NORM_MAX);
+      Number inf_du = IpCq().curr_dual_infeasibility(NORM_MAX);
+      Number mu = IpData().curr_mu();
+      Number dnrm;
+      if (IsValid(IpData().delta()) && IsValid(IpData().delta()->x()) && IsValid(IpData().delta()->s())) {
+        dnrm = Max(IpData().delta()->x()->Amax(), IpData().delta()->s()->Amax());
+      }
+      else {
+        // This is the first iteration - no search direction has been
+        // computed yet.
+        dnrm = 0.;
+      }
+      Number alpha_primal = IpData().info_alpha_primal();
+      Number alpha_dual = IpData().info_alpha_dual();
+      Number regu_x = IpData().info_regu_x();
+      Number unscaled_f = IpCq().unscaled_curr_f();
+      Index ls_count = IpData().info_ls_count();
+      bool request_stop =
+        !IpNLP().IntermediateCallBack(mode, iter, unscaled_f, inf_pr, inf_du,
+                                      mu, dnrm, regu_x, alpha_dual,
+                                      alpha_primal, ls_count,
+                                      &IpData(), &IpCq());
+
+      if (request_stop) {
+        return ConvergenceCheck::USER_STOP;
+      }
+    }
 
     if (IpData().iter_count() >= max_iterations_) {
       return ConvergenceCheck::MAXITER_EXCEEDED;
@@ -125,6 +166,13 @@ namespace Ipopt
     Number dual_inf = IpCq().unscaled_curr_dual_infeasibility(NORM_MAX);
     Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
     Number compl_inf = IpCq().unscaled_curr_complementarity(0., NORM_MAX);
+
+    if (IpData().curr()->x()->Dim()==IpData().curr()->y_c()->Dim()) {
+      // the problem is square, there is no point in looking at dual
+      // infeasibility and complementarity as termination criterion
+      dual_inf_tol_ = 1e300;
+      compl_inf_tol_ = 1e300;
+    }
 
     if (overall_error <= IpData().tol() &&
         dual_inf <= dual_inf_tol_ &&
@@ -142,6 +190,10 @@ namespace Ipopt
     }
     else {
       acceptable_counter_ = 0;
+    }
+
+    if (IpData().curr()->x()->Amax() > diverging_iterates_tol_) {
+      return ConvergenceCheck::DIVERGING;
     }
 
     return ConvergenceCheck::CONTINUE;
@@ -166,6 +218,13 @@ namespace Ipopt
     DBG_PRINT((1, "acceptable_dual_inf_tol_ = %e\n", acceptable_dual_inf_tol_));
     DBG_PRINT((1, "acceptable_constr_viol_tol_ = %e\n", acceptable_constr_viol_tol_));
     DBG_PRINT((1, "acceptable_compl_inf_tol_ = %e\n", acceptable_compl_inf_tol_));
+
+    if (IpData().curr()->x()->Dim()==IpData().curr()->y_c()->Dim()) {
+      // the problem is square, there is no point in looking at dual
+      // infeasibility and complementarity as termination criterion
+      acceptable_dual_inf_tol_ = 1e300;
+      acceptable_compl_inf_tol_ = 1e300;
+    }
 
     return (overall_error <= acceptable_tol_ &&
             dual_inf <= acceptable_dual_inf_tol_ &&

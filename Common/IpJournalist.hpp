@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -25,6 +25,16 @@
 # endif
 #endif
 
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
+
 namespace Ipopt
 {
 
@@ -36,10 +46,12 @@ namespace Ipopt
   //@{
   /** Print Level Enum. */
   enum EJournalLevel {
+    J_INSUPPRESSIBLE=-1,
     J_NONE=0,
     J_ERROR,
     J_WARNING,
     J_SUMMARY,
+    J_ITERSUMMARY,
     J_DETAILED,
     J_MOREDETAILED,
     J_VECTOR,
@@ -61,8 +73,12 @@ namespace Ipopt
     J_FRAC_TO_BOUND,
     J_LINEAR_ALGEBRA,
     J_LINE_SEARCH,
+    J_HESSIAN_APPROXIMATION,
     J_SOLUTION,
     J_DOCUMENTATION,
+    J_NLP,
+    J_TIMING_STATISTICS,
+    J_USER_APPLICATION /** This can be used by the user's application*/ ,
     J_LAST_CATEGORY
   };
   //@}

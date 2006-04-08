@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -40,7 +40,7 @@ namespace Ipopt
      *  parameter is less than a tolerance, the barrier parameter is
      *  reduced, and the Reset method of the LineSearch object
      *  linesearch is called. */
-    virtual void UpdateBarrierParameter();
+    virtual bool UpdateBarrierParameter();
 
     /** Methods for IpoptType */
     //@{
@@ -76,6 +76,7 @@ namespace Ipopt
     Number barrier_tol_factor_;
     Number mu_linear_decrease_factor_;
     Number mu_superlinear_decrease_power_;
+    bool mu_allow_fast_monotone_decrease_;
     /** Tau_min for fraction to boundary rule */
     Number tau_min_;
     Number compl_inf_tol_;

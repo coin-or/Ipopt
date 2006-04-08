@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -541,6 +541,7 @@ namespace Ipopt
         val = c*scalar_;
       }
       scalar_ = val + a*scalar_v1 + b*scalar_v2;
+      initialized_ = true;
       return;
     }
     if (c==0.) {
@@ -988,13 +989,16 @@ namespace Ipopt
       else {
         scalar_ = c * scalar_ + a * dense_z->scalar_ / dense_s->scalar_;
       }
+      initialized_ = true;
       homogeneous_ = true;
       if (values_) {
         owner_space_->FreeInternalStorage(values_);
         values_ = NULL;
       }
+      return;
     }
 
+    // At least one is not homogeneous
     // Make sure we have memory to store a non-homogeneous vector
     values_allocated();
 
@@ -1068,6 +1072,7 @@ namespace Ipopt
       }
     }
 
+    initialized_ = true;
     homogeneous_ = false;
   }
 

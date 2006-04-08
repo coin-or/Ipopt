@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -49,6 +49,11 @@ namespace Ipopt
     }
 
     y.Axpy(1.0, *tmp_y);
+  }
+
+  bool SymScaledMatrix::HasValidNumbersImpl() const
+  {
+    return matrix_->HasValidNumbers();
   }
 
   void SymScaledMatrix::PrintImpl(const Journalist& jnlst,

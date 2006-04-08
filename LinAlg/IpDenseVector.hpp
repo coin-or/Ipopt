@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -37,6 +37,9 @@ namespace Ipopt
 
     /** @name Additional public methods not in Vector base class. */
     //@{
+    /** Create a new DenseVector from same VectorSpace */
+    SmartPtr<DenseVector> MakeNewDenseVector() const;
+
     /** Set elements in the vector to the Number array x. */
     void SetValues(const Number *x);
 
@@ -315,6 +318,12 @@ namespace Ipopt
   void DenseVectorSpace::FreeInternalStorage(Number* values) const
   {
     delete [] values;
+  }
+
+  inline
+  SmartPtr<DenseVector> DenseVector::MakeNewDenseVector() const
+  {
+    return owner_space_->MakeNewDenseVector();
   }
 
 } // namespace Ipopt

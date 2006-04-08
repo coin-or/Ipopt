@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -35,12 +35,15 @@ namespace Ipopt
     virtual bool InitializeImpl(const OptionsList& options,
                                 const std::string& prefix) = 0;
 
-    /** Method for determining the barrier parameter for the next iteration.
-     *  A LineSearch object is passed, so that this method can call the
-     *  Reset method in the LineSearch object, for example when then
-     *  barrier parameter is changed. This method is also responsible
-     *  for setting the fraction-to-the-boundary parameter tau */
-    virtual void UpdateBarrierParameter() = 0;
+    /** Method for determining the barrier parameter for the next
+     *  iteration.  A LineSearch object is passed, so that this method
+     *  can call the Reset method in the LineSearch object, for
+     *  example when then barrier parameter is changed. This method is
+     *  also responsible for setting the fraction-to-the-boundary
+     *  parameter tau.  This method returns false if the update could
+     *  not be performed and the algorithm should revert to an
+     *  emergency fallback mechanism. */
+    virtual bool UpdateBarrierParameter() = 0;
 
   private:
     /**@name Default Compiler Generated Methods

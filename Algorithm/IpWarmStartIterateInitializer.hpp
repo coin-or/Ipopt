@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -74,6 +74,9 @@ namespace Ipopt
     /** Target values for the barrier parameter in warm start option.
      */
     Number warm_start_target_mu_;
+    /** Indicator for which method in the NLP should be used to get
+     *  the warm start  */
+    bool warm_start_entire_iterate_;
     //@}
 
     /** @name Auxilliary functions */

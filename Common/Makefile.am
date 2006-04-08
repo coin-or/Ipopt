@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2005 International Business Machines and others.
+# Copyright (C) 2004, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -20,6 +20,7 @@ includeipopt_HEADERS = \
 	IpRegOptions.hpp \
 	IpSmartPtr.hpp \
 	IpTaggedObject.hpp \
+	IpTimedTask.hpp \
 	IpUtils.hpp
 
 noinst_LIBRARIES = libcommon.a
@@ -35,6 +36,7 @@ libcommon_a_SOURCES = \
 	IpReferenced.hpp \
 	IpSmartPtr.hpp \
 	IpTaggedObject.cpp IpTaggedObject.hpp \
+	IpTimedTask.hpp \
 	IpTypes.hpp \
 	IpUtils.cpp IpUtils.hpp
 
@@ -51,6 +53,7 @@ ASTYLE_FILES = \
 	IpReferenced.hppbak \
 	IpSmartPtr.hppbak \
 	IpTaggedObject.cppbak IpTaggedObject.hppbak \
+	IpTimedTask.hppbak \
 	IpTypes.hppbak \
 	IpUtils.cppbak IpUtils.hppbak
 

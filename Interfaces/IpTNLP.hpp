@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -13,9 +13,14 @@
 #include "IpReferenced.hpp"
 #include "IpException.hpp"
 #include "IpAlgTypes.hpp"
+#include "IpReturnCodes.hpp"
 
 namespace Ipopt
 {
+  // forward declarations
+  class IpoptData;
+  class IpoptCalculatedQuantities;
+  class IteratesVector;
 
   /** Base class for all NLP's that use standard triplet matrix form
    *  and dense vectors.  This is the standard base class for all
@@ -56,7 +61,6 @@ namespace Ipopt
     //@}
 
     DECLARE_STD_EXCEPTION(INVALID_TNLP);
-    DECLARE_STD_EXCEPTION(SCALING_NOT_IMPLEMENTED_FOR_TNLP);
 
     /**@name methods to gather information about the NLP */
     //@{
@@ -79,16 +83,20 @@ namespace Ipopt
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
                                  Index m, Number* g_l, Number* g_u)=0;
 
-    /** overload this method to return scaling parameters. This is only
-     *  called if the options are set to retrieve user scaling
+    /** overload this method to return scaling parameters. This is
+     *  only called if the options are set to retrieve user scaling.
+     *  There, use_x_scaling (or use_g_scaling) should get set to true
+     *  only if the variables (or constraints) are to be scaled.  This
+     *  method should return true only if the scaling parameters could
+     *  be provided.
      */
-    virtual void get_scaling_parameters(Number& obj_scaling,
-                                        Index n, Number* x_scaling,
-                                        Index m, Number* g_scaling)
+    virtual bool get_scaling_parameters(Number& obj_scaling,
+                                        bool& use_x_scaling, Index n,
+                                        Number* x_scaling,
+                                        bool& use_g_scaling, Index m,
+                                        Number* g_scaling)
     {
-      THROW_EXCEPTION(SCALING_NOT_IMPLEMENTED_FOR_TNLP,
-                      "Ipopt options have been set to request scaling from the TNLP"
-                      ", but the TNLP has not implemented get_scaling_parameters");
+      return false;
     }
 
     /** overload this method to return the starting point. The bools
@@ -102,6 +110,15 @@ namespace Ipopt
                                     bool init_z, Number* z_L, Number* z_U,
                                     Index m, bool init_lambda,
                                     Number* lambda)=0;
+
+    /** overload this method to provide an Ipopt iterate (already in
+     *  the form Ipopt requires it internally) for a warm start.
+     *  Since this is only for expert users, a default dummy
+     *  implementation is provided and returns false. */
+    virtual bool get_warm_start_iterate(IteratesVector& warm_start_iterate)
+    {
+      return false;
+    }
 
     /** overload this method to return the value of the objective function */
     virtual bool eval_f(Index n, const Number* x, bool new_x,
@@ -130,11 +147,16 @@ namespace Ipopt
      *  structure only (iRow and jCol will be non-NULL, and values
      *  will be NULL) For subsequent calls, iRow and jCol will be
      *  NULL. This matrix is symmetric - specify the lower diagonal
-     *  only */
+     *  only.  A default implementation is provided, in case the user
+     *  wants to se quasi-Newton approximations to estimate the second
+     *  derivatives and doesn't not neet to implement this method. */
     virtual bool eval_h(Index n, const Number* x, bool new_x,
                         Number obj_factor, Index m, const Number* lambda,
                         bool new_lambda, Index nele_hess,
-                        Index* iRow, Index* jCol, Number* values)=0;
+                        Index* iRow, Index* jCol, Number* values)
+    {
+      return false;
+    }
     //@}
 
     /** @name Solution Methods */
@@ -144,6 +166,47 @@ namespace Ipopt
                                    Index n, const Number* x, const Number* z_L, const Number* z_U,
                                    Index m, const Number* g, const Number* lambda,
                                    Number obj_value)=0;
+
+    /** Intermediate Callback method for the user.  Providing dummy
+     *  default implementation.  For details see IntermediateCallBack
+     *  in IpNLP.hpp. */
+    virtual bool intermediate_callback(AlgorithmMode mode,
+                                       Index iter, Number obj_value,
+                                       Number inf_pr, Number inf_du,
+                                       Number mu, Number d_norm,
+                                       Number regularization_size,
+                                       Number alpha_du, Number alpha_pr,
+                                       Index ls_trials,
+                                       const IpoptData* ip_data,
+                                       IpoptCalculatedQuantities* ip_cq)
+    {
+      return true;
+    }
+    //@}
+
+    /** @name Methods for quasi-Newton approximation.  If the second
+     *  derivatives are approximated by Ipopt, it is better to do this
+     *  only in the space of nonlinear variables.  The following
+     *  methods are call by Ipopt if the quasi-Newton approximation is
+     *  selected.  If -1 is returned as number of nonlinear variables,
+     *  Ipopt assumes that all variables are nonlinear.  Otherwise, it
+     *  calls get_list_of_nonlinear_variables with an array into which
+     *  the indices of the nonlinear variables should be written - the
+     *  array has the lengths num_nonlin_vars, which is identical with
+     *  the return value of get_number_of_nonlinear_variables().  It
+     *  is assumed that the indices are counted starting with 1 in the
+     *  FORTRAN_STYLE, and 0 for the C_STYLE. */
+    //@{
+    virtual Index get_number_of_nonlinear_variables()
+    {
+      return -1;
+    }
+
+    virtual bool get_list_of_nonlinear_variables(Index num_nonlin_vars,
+        Index* pos_nonlin_vars)
+    {
+      return false;
+    }
     //@}
 
   private:

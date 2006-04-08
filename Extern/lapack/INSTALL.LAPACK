@@ -1,0 +1,36 @@
+Installation of LAPACK subroutines within IPOPT.
+
+**********************************************************************
+Note: It is YOUR RESPONSIBILITY to ensure that you are entitled to
+      download and use this third party package.
+**********************************************************************
+
+If you are working under Unix/Linux-like system and you have `wget'
+installed, you can downloaded the required source code for LAPACK
+by executing the included script `get.lapack' in this directory.
+
+Otherwise, follow those instructions:
+
+LAPACK is available at
+
+http://www.netlib.org/lapack
+
+There you can find precompiled libraries for some operating systems, or
+obtain the source code (with instructions on how to build it).  If you decide
+to build the LAPACK library according to those instructions, make sure that
+you tell the configure script where it is (using 
+--with-lapack="-LPATH/TO/LAPACKLIBDIR -llapack)
+
+Alternatively, if you want to have the necessary LAPACK routines compiled 
+within this distribution, please download the 'lapack.tgz' tarball from 
+http://www.netlib.org/lapack and unpack it in this directory 
+(COIN/Ipopt/SOURCES/OTHERS/lapack):
+
+gunzip lapack.tgz
+tar xf lapack.tar
+
+If you then run the configure script again, it would automatically detect the 
+sources and prepare the Makefiles so that they will be automaticall compiled.
+
+NOTE: The LAPACK source files are expected to be in the subdirectory
+      LAPACK/SRC of this directory.
