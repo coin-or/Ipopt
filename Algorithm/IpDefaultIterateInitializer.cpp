@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -15,10 +15,12 @@ namespace Ipopt
 #endif
 
   DefaultIterateInitializer::DefaultIterateInitializer
-  (const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator)
+  (const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
+   const SmartPtr<IterateInitializer>& warm_start_initializer)
       :
       IterateInitializer(),
-      eq_mult_calculator_(eq_mult_calculator)
+      eq_mult_calculator_(eq_mult_calculator),
+      warm_start_initializer_(warm_start_initializer)
   {}
 
   void DefaultIterateInitializer::RegisterOptions(SmartPtr<RegisteredOptions> reg_options)
@@ -43,7 +45,7 @@ namespace Ipopt
       "constr_mult_init_max",
       "Maximum allowed least-square guess of constraint multipliers.",
       0, false, 1e3,
-      "Determines how large the initial least-square guesses of the contraint "
+      "Determines how large the initial least-square guesses of the constraint "
       "multipliers are allowed to be (in max-norm). If the guess is larger "
       "than this value, it is discarded and all constraint multipliers are "
       "set to zero.  This options is also used when initializing the "
@@ -55,6 +57,15 @@ namespace Ipopt
       0, true, 1.0,
       "All dual variables corresponding to bound constraints are "
       "initialized to this value.");
+    reg_options->SetRegisteringCategory("Warm Start");
+    reg_options->AddStringOption2(
+      "warm_start_init_point",
+      "Warm-start for initial point", "no",
+      "no", "do not use the warm start initialization",
+      "yes", "use the warm start initialization",
+      "Indicates whether this optimization should use a warm start "
+      "initialization, where values of primal and dual variables are "
+      "given (e.g., from a previous optimization of a related problem.)");
   }
 
   bool DefaultIterateInitializer::InitializeImpl(const OptionsList& options,
@@ -63,13 +74,25 @@ namespace Ipopt
     // Check for the algorithm options
     options.GetNumericValue("bound_push", bound_push_, prefix);
     options.GetNumericValue("bound_frac", bound_frac_, prefix);
-    options.GetNumericValue("constr_mult_init_max", constr_mult_init_max_, prefix);
-    options.GetNumericValue("bound_mult_init_val", bound_mult_init_val_, prefix);
+    options.GetNumericValue("constr_mult_init_max",
+                            constr_mult_init_max_, prefix);
+    options.GetNumericValue("bound_mult_init_val",
+                            bound_mult_init_val_, prefix);
+    options.GetBoolValue("warm_start_init_point",
+                         warm_start_init_point_, prefix);
 
     bool retvalue = true;
     if (IsValid(eq_mult_calculator_)) {
       retvalue = eq_mult_calculator_->Initialize(Jnlst(), IpNLP(), IpData(),
                  IpCq(), options, prefix);
+      if (!retvalue) {
+        return retvalue;
+      }
+    }
+    if (IsValid(warm_start_initializer_)) {
+      retvalue =
+        warm_start_initializer_->Initialize(Jnlst(), IpNLP(), IpData(),
+                                            IpCq(), options, prefix);
     }
     return retvalue;
   }
@@ -78,6 +101,11 @@ namespace Ipopt
   {
     DBG_START_METH("DefaultIterateInitializer::SetInitialIterates",
                    dbg_verbosity);
+
+    if (warm_start_init_point_) {
+      DBG_ASSERT(IsValid(warm_start_initializer_));
+      return warm_start_initializer_->SetInitialIterates();
+    }
 
     // Get the starting values provided by the NLP and store them
     // in the ip_data current fields.  The following line only requests
@@ -313,8 +341,14 @@ namespace Ipopt
     iterates->create_new_y_c();
     iterates->create_new_y_d();
 
-    if (IsValid(eq_mult_calculator) && constr_mult_init_max>0. &&
-        iterates->y_c_NonConst()->Dim()+iterates->y_d_NonConst()->Dim()>0) {
+    if (iterates->y_c_NonConst()->Dim()==iterates->x()->Dim()) {
+      // This problem is square, we just set the multipliers to zero
+      iterates->y_c_NonConst()->Set(0.0);
+      iterates->y_d_NonConst()->Set(0.0);
+      ip_data.Append_info_string("s");
+    }
+    else if (IsValid(eq_mult_calculator) && constr_mult_init_max>0. &&
+             iterates->y_c_NonConst()->Dim()+iterates->y_d_NonConst()->Dim()>0) {
       // First move all the trial data into the current fields, since
       // those values are needed to compute the initial values for
       // the multipliers

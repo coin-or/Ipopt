@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -16,9 +16,14 @@
 #include "IpSymMatrix.hpp"
 #include "IpOptionsList.hpp"
 #include "IpAlgTypes.hpp"
+#include "IpReturnCodes.hpp"
 
 namespace Ipopt
 {
+  // forward declarations
+  class IpoptData;
+  class IpoptCalculatedQuantities;
+  class IteratesVector;
 
   /** Brief Class Description.
    *  Detailed Class Description.
@@ -53,8 +58,9 @@ namespace Ipopt
       return true;
     }
 
-    /** Method for creating the derived vector / matrix types
-     *  (Do not delete these, the ). */
+    /** Method for creating the derived vector / matrix types.  The
+     *  Hess_lagrangian_space pointer can be NULL if a quasi-Newton
+     *  options is chosen. */
     virtual bool GetSpaces(SmartPtr<const VectorSpace>& x_space,
                            SmartPtr<const VectorSpace>& c_space,
                            SmartPtr<const VectorSpace>& d_space,
@@ -71,13 +77,13 @@ namespace Ipopt
                            SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space)=0;
 
     /** Method for obtaining the bounds information */
-    virtual bool GetBoundsInformation(Matrix& Px_L,
+    virtual bool GetBoundsInformation(const Matrix& Px_L,
                                       Vector& x_L,
-                                      Matrix& Px_U,
+                                      const Matrix& Px_U,
                                       Vector& x_U,
-                                      Matrix& Pd_L,
+                                      const Matrix& Pd_L,
                                       Vector& d_L,
-                                      Matrix& Pd_U,
+                                      const Matrix& Pd_U,
                                       Vector& d_U)=0;
 
     /** Method for obtaining the starting point for all the
@@ -95,6 +101,14 @@ namespace Ipopt
       SmartPtr<Vector> z_U,
       bool need_z_U
     )=0;
+
+    /** Method for obtaining an entire iterate as a warmstart point.
+     *  The incoming IteratesVector has to be filled.  The default
+     *  dummy implementation returns false. */
+    virtual bool GetWarmStartIterate(IteratesVector& warm_start_iterate)
+    {
+      return false;
+    }
     //@}
 
     /** @name NLP evaluation routines (overload
@@ -119,14 +133,49 @@ namespace Ipopt
                         SymMatrix& h) = 0;
     //@}
 
-    /** @name NLP solution routines. (Overload in derived classes.) */
+    /** @name NLP solution routines. Have default dummy
+     *  implementations that can be overloaded. */
     //@{
+    /** This method is called at the very end of the optimization.  It
+     *  provides the final iterate to the user, so that it can be
+     *  stored as the solution.  The status flag indicates the outcome
+     *  of the optimization, where SolverReturn is defined in
+     *  IpAlgTypes.hpp.  */
     virtual void FinalizeSolution(SolverReturn status,
-                                  const Vector& x, const Vector& z_L, const Vector& z_U,
+                                  const Vector& x, const Vector& z_L,
+                                  const Vector& z_U,
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,
                                   Number obj_value)
     {}
+
+    /** This method is called once per iteration, after the iteration
+     *  summary output has been printed.  It provides the current
+     *  information to the user to do with it anything she wants.  It
+     *  also allows the user to ask for a premature termination of the
+     *  optimization by returning false, in which case Ipopt will
+     *  terminate with a corresponding return status.  The basic
+     *  information provided in the argument list has the quantities
+     *  values printed in the iteration summary line.  If more
+     *  information is required, a user can obtain it from the IpData
+     *  and IpCalculatedQuantities objects.  However, note that the
+     *  provided quantities are all for the problem that Ipopt sees,
+     *  i.e., the quantities might be scaled, fixed variables might be
+     *  sorted out, etc.  The status indicates things like whether the
+     *  algorithm is in the restoration phase...  In the restoration
+     *  phase, the dual variables are probably not not changing. */
+    virtual bool IntermediateCallBack(AlgorithmMode mode,
+                                      Index iter, Number obj_value,
+                                      Number inf_pr, Number inf_du,
+                                      Number mu, Number d_norm,
+                                      Number regularization_size,
+                                      Number alpha_du, Number alpha_pr,
+                                      Index ls_trials,
+                                      const IpoptData* ip_data,
+                                      IpoptCalculatedQuantities* ip_cq)
+    {
+      return true;
+    }
     //@}
 
     /** Routines to get the scaling parameters. These do not need to
@@ -148,6 +197,26 @@ namespace Ipopt
     }
     //@}
 
+    /** Method for obtaining the subspace in which the limited-memory
+     *  Hessian approximation should be done.  This is only called if
+     *  the limited-memory Hessian approximation is chosen.  Since the
+     *  Hessian is zero in the space of all variables that appear in
+     *  the problem functions only linearly, this allows the user to
+     *  provide a VectorSpace for all nonlinear variables, and an
+     *  ExpansionMatrix to lift from this VectorSpace to the
+     *  VectorSpace of the primal variables x.  If the returned values
+     *  are NULL, it is assumed that the Hessian is to be approximated
+     *  in the space of all x variables.  The default instantiation of
+     *  this method returns NULL, and a user only has to overwrite
+     *  this method if the approximation is to be done only in a
+     *  subspace. */
+    virtual void
+    GetQuasiNewtonApproximationSpaces(SmartPtr<VectorSpace>& approx_space,
+                                      SmartPtr<Matrix>& P_approx)
+    {
+      approx_space = NULL;
+      P_approx = NULL;
+    }
 
   private:
     /**@name Default Compiler Generated Methods

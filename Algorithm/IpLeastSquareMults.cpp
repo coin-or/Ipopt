@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -34,7 +34,8 @@ namespace Ipopt
     DBG_START_METH("LeastSquareMultipliers::CalculateMultipliers",
                    dbg_verbosity);
 
-    SmartPtr<const SymMatrix> zeroW = IpCq().zero_hessian();
+    SmartPtr<const SymMatrix> zeroW = IpNLP().HessianMatrixSpace()->MakeNewSymMatrix();
+    DBG_PRINT_MATRIX(2, "zeroW", *zeroW);
     SmartPtr<const Matrix> J_c = IpCq().curr_jac_c();
     SmartPtr<const Matrix> J_d = IpCq().curr_jac_d();
     SmartPtr<const Vector> grad_f = IpCq().curr_grad_f();
@@ -50,6 +51,7 @@ namespace Ipopt
     // Compute the right hand side
     SmartPtr<Vector> rhs_x = grad_f->MakeNew();
     rhs_x->Copy(*grad_f);
+    DBG_PRINT_VECTOR(2, "rhs_x grad_f", *rhs_x);
     Px_L->MultVector(1., *z_L, -1., *rhs_x);
     Px_U->MultVector(-1., *z_U, 1., *rhs_x);
 
@@ -72,7 +74,7 @@ namespace Ipopt
 
     enum ESymSolverStatus retval;
     Index numberOfEVals=rhs_c->Dim()+rhs_d->Dim();
-    retval = augsyssolver_->Solve(GetRawPtr(zeroW), NULL, 1.0, NULL,
+    retval = augsyssolver_->Solve(GetRawPtr(zeroW), 0.0, NULL, 1.0, NULL,
                                   1.0, GetRawPtr(J_c), NULL, 0.,
                                   GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s,
                                   *rhs_c, *rhs_d, *sol_x, *sol_s,

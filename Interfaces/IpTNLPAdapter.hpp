@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,13 +11,15 @@
 
 #include "IpNLP.hpp"
 #include "IpTNLP.hpp"
-#include "IpDenseVector.hpp"
-#include "IpExpansionMatrix.hpp"
-#include "IpGenTMatrix.hpp"
-#include "IpSymTMatrix.hpp"
-#include "IpRegOptions.hpp"
+#include "IpOrigIpoptNLP.hpp"
+
 namespace Ipopt
 {
+
+  // forward declarations
+  class ExpansionMatrix;
+  class ExpansionMatrixSpace;
+  class IteratesVector;
 
   /** This class Adapts the TNLP interface so it looks like an NLP interface.
    *  This is an Adapter class (Design Patterns) that converts  a TNLP to an
@@ -29,7 +31,8 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Default constructor */
-    TNLPAdapter(const SmartPtr<TNLP> tnlp);
+    TNLPAdapter(const SmartPtr<TNLP> tnlp,
+                const SmartPtr<const Journalist> jnlst = NULL);
 
     /** Default destructor */
     virtual ~TNLPAdapter();
@@ -38,6 +41,7 @@ namespace Ipopt
     /**@name Exceptions */
     //@{
     DECLARE_STD_EXCEPTION(INVALID_TNLP);
+    DECLARE_STD_EXCEPTION(ERROR_IN_TNLP_DERIVATIVE_TEST);
     //@}
 
     /** @name TNLPAdapter Initialization. */
@@ -63,13 +67,13 @@ namespace Ipopt
                            SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space);
 
     /** Method for obtaining the bounds information */
-    virtual bool GetBoundsInformation(Matrix& Px_L,
+    virtual bool GetBoundsInformation(const Matrix& Px_L,
                                       Vector& x_L,
-                                      Matrix& Px_U,
+                                      const Matrix& Px_U,
                                       Vector& x_U,
-                                      Matrix& Pd_L,
+                                      const Matrix& Pd_L,
                                       Vector& d_L,
-                                      Matrix& Pd_U,
+                                      const Matrix& Pd_U,
                                       Vector& d_U);
 
     /** Method for obtaining the starting point
@@ -86,6 +90,10 @@ namespace Ipopt
       SmartPtr<Vector> z_U,
       bool need_z_U
     );
+
+    /** Method for obtaining an entire iterate as a warmstart point.
+     *  The incoming IteratesVector has to be filled. */
+    virtual bool GetWarmStartIterate(IteratesVector& warm_start_iterate);
     //@}
 
     /** @name TNLPAdapter evaluation routines. */
@@ -125,25 +133,48 @@ namespace Ipopt
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,
                                   Number obj_value);
+    virtual bool IntermediateCallBack(AlgorithmMode mode,
+                                      Index iter, Number obj_value,
+                                      Number inf_pr, Number inf_du,
+                                      Number mu, Number d_norm,
+                                      Number regularization_size,
+                                      Number alpha_du, Number alpha_pr,
+                                      Index ls_trials,
+                                      const IpoptData* ip_data,
+                                      IpoptCalculatedQuantities* ip_cq);
     //@}
 
-    /** @name Methods for translating data for IpoptNLP into the TNLP
-     *  data.  These methods can be used to obtain the current (or
-     *  final) data for the TNLP formulation from the IpoptNLP
-     *  structure. */
-    //@{
-    /** Sort the primal variables, and add the fixed values in x */
-    void ResortX(const Vector& x, Number* x_orig);
-    void ResortG(const Vector& c, const Vector& d, Number *g_orig);
-    void ResortBnds(const Vector& x_L, Number* x_L_orig,
-                    const Vector& x_U, Number* x_U_orig);
-    //@}
+    /** Method returning information on quasi-Newton approximation. */
+    virtual void
+    GetQuasiNewtonApproximationSpaces(SmartPtr<VectorSpace>& approx_space,
+                                      SmartPtr<Matrix>& P_approx);
 
-    /** Methods for IpoptType */
+    /** Enum for treatment of fixed variables option */
+    enum FixedVariableTreatmentEnum {
+      MAKE_PARAMETER=0,
+      MAKE_CONSTRAINT
+    };
+
+    /** Enum for specifying which derivative test is to be performed. */
+    enum DerivativeTestEnum {
+      NO_TEST=0,
+      FIRST_ORDER_TEST,
+      SECOND_ORDER_TEST
+    };
+
+    /** Method for performing the derivative test */
+    bool CheckDerivatives(DerivativeTestEnum deriv_test);
+
+    /** @name Methods for IpoptType */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
+    /** Accessor method for the underlying TNLP. */
+    SmartPtr<TNLP> tnlp() const
+    {
+      return tnlp_;
+    }
 
   private:
     /**@name Default Compiler Generated Methods
@@ -161,12 +192,24 @@ namespace Ipopt
     void operator=(const TNLPAdapter&);
     //@}
 
-    /** Journalist */
-    SmartPtr<const Journalist> jnlst_;
+    /** @name Methods for translating data for IpoptNLP into the TNLP
+     *  data.  These methods are used to obtain the current (or
+     *  final) data for the TNLP formulation from the IpoptNLP
+     *  structure. */
+    //@{
+    /** Sort the primal variables, and add the fixed values in x */
+    void ResortX(const Vector& x, Number* x_orig);
+    void ResortG(const Vector& c, const Vector& d, Number *g_orig);
+    void ResortBnds(const Vector& x_L, Number* x_L_orig,
+                    const Vector& x_U, Number* x_U_orig);
+    //@}
 
     /** Pointer to the TNLP class (class specific to Number* vectors and
      *  harwell triplet matrices) */
     SmartPtr<TNLP> tnlp_;
+
+    /** Journalist */
+    SmartPtr<const Journalist> jnlst_;
 
     /**@name Algorithmic parameters */
     //@{
@@ -174,22 +217,73 @@ namespace Ipopt
     Number nlp_lower_bound_inf_;
     /** Value for a upper bound that denotes infinity */
     Number nlp_upper_bound_inf_;
-    /** Maximal slack for one-sidedly bounded variables.  If a
+    /** Flag indicating how fixed variables should be handled */
+    FixedVariableTreatmentEnum fixed_variable_treatment_;
+    /* Maximal slack for one-sidedly bounded variables.  If a
      *  variable has only one bound, say a lower bound xL, then an
      *  upper bound xL + max_onesided_bound_slack_.  If this value is
      *  zero, no upper bound is added. */
-    Number max_onesided_bound_slack_;
+    /* Took this out:  Number max_onesided_bound_slack_; */
+    /** Enum indicating whether and which derivative test should be
+     *  performed at starting point. */
+    DerivativeTestEnum derivative_test_;
+    /** Size of the perturbation for the derivative test */
+    Number derivative_test_perturbation_;
+    /** Relative threshold for marking deviation from finite
+     *  difference test */
+    Number derivative_test_tol_;
+    /** Flag indicating if all test values should be printed, or only
+     *  those violating the threshold. */
+    bool derivative_test_print_all_;
+    /** Flag indicating whether the TNLP with identical structure has
+     *  already been solved before. */
+    bool warm_start_same_structure_;
+    /** Flag indicating what Hessian information is to be used. */
+    HessianApproximationType hessian_approximation_;
     //@}
 
     /**@name Problem Size Data */
     //@{
-    Index n_full_x_; /** full dimension of x (fixed + non-fixed) */
-    Index n_full_g_; /** full dimension of g (c + d) */
-    Index nz_jac_c_; /** non-zeros of the jacobian of c */
-    Index nz_jac_d_; /** non-zeros of the jacobian of d */
-    Index nz_full_jac_g_; /** number of non-zeros in full-size Jacobian of g */
-    Index nz_full_h_; /** number of non-zeros in full-size Hessian */
-    Index nz_h_;     /** number of non-zeros in the non-fixed-size Hessian */
+    /** full dimension of x (fixed + non-fixed) */
+    Index n_full_x_;
+    /** full dimension of g (c + d) */
+    Index n_full_g_;
+    /** non-zeros of the jacobian of c */
+    Index nz_jac_c_;
+    /** non-zeros of the jacobian of c without added constraints for
+     *  fixed variables. */
+    Index nz_jac_c_no_fixed_;
+    /** non-zeros of the jacobian of d */
+    Index nz_jac_d_;
+    /** number of non-zeros in full-size Jacobian of g */
+    Index nz_full_jac_g_;
+    /** number of non-zeros in full-size Hessian */
+    Index nz_full_h_;
+    /** number of non-zeros in the non-fixed-size Hessian */
+    Index nz_h_;
+    /** Number of fixed variables */
+    Index n_x_fixed_;
+    //@}
+
+    /** Numbering style of variables and constraints */
+    TNLP::IndexStyleEnum index_style_;
+
+    /** @name Local copy of spaces (for warm start) */
+    //@{
+    SmartPtr<const VectorSpace> x_space_;
+    SmartPtr<const VectorSpace> c_space_;
+    SmartPtr<const VectorSpace> d_space_;
+    SmartPtr<const VectorSpace> x_l_space_;
+    SmartPtr<const MatrixSpace> px_l_space_;
+    SmartPtr<const VectorSpace> x_u_space_;
+    SmartPtr<const MatrixSpace> px_u_space_;
+    SmartPtr<const VectorSpace> d_l_space_;
+    SmartPtr<const MatrixSpace> pd_l_space_;
+    SmartPtr<const VectorSpace> d_u_space_;
+    SmartPtr<const MatrixSpace> pd_u_space_;
+    SmartPtr<const MatrixSpace> Jac_c_space_;
+    SmartPtr<const MatrixSpace> Jac_d_space_;
+    SmartPtr<const SymMatrixSpace> Hess_lagrangian_space_;
     //@}
 
     /**@name Local Copy of the Data */
@@ -248,6 +342,9 @@ namespace Ipopt
 
     Index* jac_idx_map_;
     Index* h_idx_map_;
+
+    /** Position of fixed variables. This is required for a warm start */
+    Index* x_fixed_map_;
     //@}
   };
 

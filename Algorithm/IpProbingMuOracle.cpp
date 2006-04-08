@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -48,7 +48,8 @@ namespace Ipopt
     return true;
   }
 
-  Number ProbingMuOracle::CalculateMu()
+  bool ProbingMuOracle::CalculateMu(Number mu_min, Number mu_max,
+                                    Number& new_mu)
   {
     DBG_START_METH("ProbingMuOracle::CalculateMu",
                    dbg_verbosity);
@@ -74,12 +75,19 @@ namespace Ipopt
     // Get space for the affine scaling step
     SmartPtr<IteratesVector> step = rhs->MakeNewIteratesVector(true);
 
-    // Now solve the primal-dual system to get the step
-    pd_solver_->Solve(-1.0, 0.0,
-                      *rhs,
-                      *step
-                      //                      true           // don't need high accuracy
-                     );
+    // Now solve the primal-dual system to get the affine step.  We
+    // allow a somewhat inexact solution here
+    bool allow_inexact = true;
+    bool retval = pd_solver_->Solve(-1.0, 0.0,
+                                    *rhs,
+                                    *step,
+                                    allow_inexact
+                                   );
+    if (!retval) {
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "The linear system could not be solved for the affine step!\n");
+      return false;
+    }
 
     DBG_PRINT_VECTOR(2, "step", *step);
 
@@ -106,6 +114,7 @@ namespace Ipopt
                    alpha_dual_aff);
 
     // now compute the average complementarity at the affine step
+    // ToDo shoot for mu_min instead of 0?
     Number mu_aff = CalculateAffineMu(alpha_primal_aff, alpha_dual_aff, *step);
     Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                    "  The average complementariy at the affine step is %23.16e\n",
@@ -130,14 +139,14 @@ namespace Ipopt
     IpData().set_delta_aff(step);
     IpData().SetHaveAffineDeltas(true);
 
-    // DELETEME
     char ssigma[40];
     sprintf(ssigma, " sigma=%8.2e", sigma);
     IpData().Append_info_string(ssigma);
-    sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
-    IpData().Append_info_string(ssigma);
+    //sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
+    //IpData().Append_info_string(ssigma);
 
-    return mu;
+    new_mu = Max(Min(mu, mu_max), mu_min);
+    return true;
   }
 
   Number ProbingMuOracle::CalculateAffineMu

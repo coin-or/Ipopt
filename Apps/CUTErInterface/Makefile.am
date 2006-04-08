@@ -1,4 +1,4 @@
-# Copyright (C) 2003, International Business Machines and others.
+# Copyright (C) 2003, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -17,9 +17,10 @@ libdummy_a_SOURCES = ipoma.f
 
 ipoma.f: CUTErInterface.f
 	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
-	  touch ipoma.f; \
+	  rm -f  ipoma.f; \
+	  cp $(srcdir)/ipoma-dummy.f ipoma.f; \
 	else \
-	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed > ipoma.f; \
+	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed | sed "s/C$(BITS_PER_POINTER)BIT//" > ipoma.f; \
 	fi
 
 ipo: ipo.pro

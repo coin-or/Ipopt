@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -19,6 +19,11 @@ namespace Ipopt
 
   SymMatrix::~SymMatrix()
   {}
+
+  SmartPtr<const SymMatrixSpace> SymMatrix::OwnerSymMatrixSpace() const
+  {
+    return owner_space_;
+  }
 
   void SymMatrix::TransMultVectorImpl(Number alpha, const Vector& x, Number beta,
                                       Vector& y) const

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -65,6 +65,9 @@ namespace Ipopt
       return Comp(irow,jcol);
     }
 
+    /** Method for creating a new matrix of this specific type. */
+    SmartPtr<CompoundSymMatrix> MakeNewCompoundSymMatrix() const;
+
     // The following don't seem to be necessary
     /* Number of block rows of this compound matrix. */
     //    Index NComps_NRows() const { return NComps_Dim(); }
@@ -80,6 +83,10 @@ namespace Ipopt
     //@{
     virtual void MultVectorImpl(Number alpha, const Vector& x,
                                 Number beta, Vector& y) const;
+
+    /** Method for determining if all stored numbers are valid (i.e.,
+     *  no Inf or Nan). */
+    virtual bool HasValidNumbersImpl() const;
 
     virtual void PrintImpl(const Journalist& jnlst,
                            EJournalLevel level,
@@ -263,6 +270,12 @@ namespace Ipopt
     /** Method to check whether or not the spaces are valid */
     bool DimensionsSet() const;
   };
+
+  inline
+  SmartPtr<CompoundSymMatrix> CompoundSymMatrix::MakeNewCompoundSymMatrix() const
+  {
+    return owner_space_->MakeNewCompoundSymMatrix();
+  }
 
 } // namespace Ipopt
 #endif

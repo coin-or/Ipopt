@@ -2,11 +2,22 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2006-04-08 - version 3.1.0 - dev release number 714
+        Several bug-fixes, improvements and additions. In particular:
+	- new quasi-Newton approximation using L-BFGS
+        - interfaces to linear solver MA57, WSMP, Pardiso
+          (MUMPS and TAUCS not yet completed)
+        - derivative checker
+        - unit test
+        - configure supports compilation under Cygwin with native
+          Windows compilers
+        - ScalableExample
+        - user call-back method in TNLP
 
-
-2005-08-26 - version 3.0.0 - dev release number 510
-	First official release of the new C++ implementation of Ipopt.
-
-2005-12-04 - version 3.0.1 - fixes independent of dev (already taken care of there)
+2005-12-04 - version 3.0.1 - fixes independent of dev
+        (already taken care of there)
         Several corrections to Windows files
         Fix termination if number of iterations is exceeded in restoration phase
+2005-08-26 - version 3.0.0 - dev release number 510
+        First official release of the new C++ implementation of Ipopt.
+

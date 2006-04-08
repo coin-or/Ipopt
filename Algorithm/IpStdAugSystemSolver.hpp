@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -43,11 +43,13 @@ namespace Ipopt
     bool InitializeImpl(const OptionsList& options,
                         const std::string& prefix);
 
-    /** Set up the augmented system and solve it for a given right hand
-     *  side - implementation for GenTMatrices and SymTMatrices.
+    /** Set up the augmented system and solve it for a set of given
+     *  right hand side - implementation for GenTMatrices and
+     *  SymTMatrices.
      */
-    virtual ESymSolverStatus Solve(
+    virtual ESymSolverStatus MultiSolve(
       const SymMatrix* W,
+      double W_factor,
       const Vector* D_x,
       double delta_x,
       const Vector* D_s,
@@ -58,14 +60,14 @@ namespace Ipopt
       const Matrix* J_d,
       const Vector* D_d,
       double delta_d,
-      const Vector& rhs_x,
-      const Vector& rhs_s,
-      const Vector& rhs_c,
-      const Vector& rhs_d,
-      Vector& sol_x,
-      Vector& sol_s,
-      Vector& sol_c,
-      Vector& sol_d,
+      std::vector<SmartPtr<const Vector> >& rhs_xV,
+      std::vector<SmartPtr<const Vector> >& rhs_sV,
+      std::vector<SmartPtr<const Vector> >& rhs_cV,
+      std::vector<SmartPtr<const Vector> >& rhs_dV,
+      std::vector<SmartPtr<Vector> >& sol_xV,
+      std::vector<SmartPtr<Vector> >& sol_sV,
+      std::vector<SmartPtr<Vector> >& sol_cV,
+      std::vector<SmartPtr<Vector> >& sol_dV,
       bool check_NegEVals,
       Index numberOfNegEVals);
 
@@ -125,6 +127,7 @@ namespace Ipopt
      *  augmented system. This is done EVERY time Solve is called
      *  with ANY different information */
     void CreateAugmentedSystem(const SymMatrix* W,
+                               double W_factor,
                                const Vector* D_x,
                                double delta_x,
                                const Vector* D_s,
@@ -143,6 +146,7 @@ namespace Ipopt
     /** Check the internal tags and decide if the passed variables are
      *  different from what is in the augmented_system_ */
     bool AugmentedSystemRequiresChange(const SymMatrix* W,
+                                       double W_factor,
                                        const Vector* D_x,
                                        double delta_x,
                                        const Vector* D_s,
@@ -179,6 +183,8 @@ namespace Ipopt
      *  this tag is set to 0
      */
     TaggedObject::Tag w_tag_;
+    /** Most recent value of W_factor */
+    double w_factor_;
     /** Tag for D_x vector, representing the diagonal matrix D_x.  If
      *  D_x has been given to Set as NULL, then this tag is set to 0
      */
@@ -233,6 +239,13 @@ namespace Ipopt
      *  be called with a NULL W, we keep a copy of the last W passed to keep
      *  the nonzero structure of the augmented_system_ consistent */
     SmartPtr<const SymMatrix> old_w_;
+
+    /** @name Algorithmic parameters */
+    //@{
+    /** Flag indicating whether the TNLP with identical structure has
+     *  already been solved before. */
+    bool warm_start_same_structure_;
+    //@}
   };
 
 } // namespace Ipopt

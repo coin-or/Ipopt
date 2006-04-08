@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -33,7 +33,8 @@ namespace Ipopt
 
   bool OptionsList::SetStringValue(const std::string& tag,
                                    const std::string& value,
-                                   bool allow_clobber /* = true */)
+                                   bool allow_clobber, /* = true */
+                                   bool dont_print /* = false */)
   {
     if (IsValid(reg_options_)) {
       SmartPtr<const RegisteredOption> option = reg_options_->GetOption(tag);
@@ -83,24 +84,38 @@ namespace Ipopt
       }
     }
 
-    if (will_allow_clobber(tag)) {
-      OptionsList::OptionValue optval(lowercase(value), allow_clobber);
-      options_[lowercase(tag)] = optval;
-      return true;
+    if (!will_allow_clobber(tag)) {
+      if (IsValid(jnlst_)) {
+        std::string msg = "WARNING: Tried to set option \"" + tag;
+        msg += "\" to a value of \"" + value;
+        msg += "\",\n         but the previous value is set to disallow clobbering.\n";
+        msg += "         The setting will remain as: \"" + tag;
+        msg += " " + options_[lowercase(tag)].GetValue();
+        msg += "\"\n";
+        jnlst_->Printf(J_WARNING, J_MAIN, msg.c_str());
+      }
     }
+    else {
+      //    if (will_allow_clobber(tag)) {
+      OptionsList::OptionValue optval(lowercase(value), allow_clobber,
+                                      dont_print);
+      options_[lowercase(tag)] = optval;
+    }
+    return true;
 
-    std::string msg = "Option: \"" + tag;
-    msg += " ";
-    msg += value;
-    msg += "\" not taken because a value of \n\"" ;
-    msg += options_[lowercase(tag)].GetValue();
-    msg += "\" already exists and is set to disallow clobbering.\n\n";
-    jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
-    return false;
+    //     std::string msg = "Option: \"" + tag;
+    //     msg += " ";
+    //     msg += value;
+    //     msg += "\" not taken because a value of \n\"" ;
+    //     msg += options_[lowercase(tag)].GetValue();
+    //     msg += "\" already exists and is set to disallow clobbering.\n\n";
+    //     jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
+    //     return false;
   }
 
   bool OptionsList::SetNumericValue(const std::string& tag, Number value,
-                                    bool allow_clobber /* = true */)
+                                    bool allow_clobber, /* = true */
+                                    bool dont_print /* = false */)
   {
     char buffer[256];
     sprintf(buffer, "%g", value);
@@ -154,24 +169,28 @@ namespace Ipopt
       }
     }
 
-    if (will_allow_clobber(tag)) {
-      OptionsList::OptionValue optval(buffer, allow_clobber);
-      options_[lowercase(tag)] = optval;
-      return true;
+    if (!will_allow_clobber(tag)) {
+      if (IsValid(jnlst_)) {
+        std::string msg = "WARNING: Tried to set option \"" + tag;
+        msg += "\" to a value of \"";
+        msg += buffer;
+        msg += "\",\n         but the previous value is set to disallow clobbering.\n";
+        msg += "         The setting will remain as: \"" + tag;
+        msg += " " + options_[lowercase(tag)].GetValue();
+        msg += "\"\n";
+        jnlst_->Printf(J_WARNING, J_MAIN, msg.c_str());
+      }
     }
-
-    std::string msg = "Option: \"" + tag;
-    msg += " ";
-    msg += buffer;
-    msg += "\" not taken because a value of\n\"" ;
-    msg += options_[lowercase(tag)].GetValue();
-    msg += "\" already exists and is set to disallow clobbering.\n\n";
-    jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
-    return false;
+    else {
+      OptionsList::OptionValue optval(buffer, allow_clobber, dont_print);
+      options_[lowercase(tag)] = optval;
+    }
+    return true;
   }
 
   bool OptionsList::SetIntegerValue(const std::string& tag, Index value,
-                                    bool allow_clobber /* = true */)
+                                    bool allow_clobber, /* = true */
+                                    bool dont_print /* = false */)
   {
     char buffer[256];
     sprintf(buffer, "%d", value);
@@ -225,20 +244,24 @@ namespace Ipopt
       }
     }
 
-    if (will_allow_clobber(tag)) {
-      OptionsList::OptionValue optval(buffer, allow_clobber);
-      options_[lowercase(tag)] = optval;
-      return true;
+    if (!will_allow_clobber(tag)) {
+      if (IsValid(jnlst_)) {
+        std::string msg = "WARNING: Tried to set option \"" + tag;
+        msg += "\" to a value of \"";
+        msg += buffer;
+        msg += "\",\n         but the previous value is set to disallow clobbering.\n";
+        msg += "         The setting will remain as: \"" + tag;
+        msg += " " + options_[lowercase(tag)].GetValue();
+        msg += "\"\n";
+        jnlst_->Printf(J_WARNING, J_MAIN, msg.c_str());
+      }
     }
-
-    std::string msg = "Option: \"" + tag;
-    msg += " ";
-    msg += buffer;
-    msg += "\" not taken because a value of \n\"" ;
-    msg += options_[lowercase(tag)].GetValue();
-    msg += "\" already exists and is set to disallow clobbering.\n\n";
-    jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
-    return false;
+    else {
+      //    if (will_allow_clobber(tag)) {
+      OptionsList::OptionValue optval(buffer, allow_clobber, dont_print);
+      options_[lowercase(tag)] = optval;
+    }
+    return true;
   }
 
   bool OptionsList::GetStringValue(const std::string& tag, std::string& value,
@@ -345,7 +368,6 @@ namespace Ipopt
     }
     else {
       THROW_EXCEPTION(OPTION_INVALID, "Tried to get a boolean from an option and failed.");
-      ret = false;
     }
 
     return ret;
@@ -482,25 +504,49 @@ namespace Ipopt
     }
   }
 
-  bool OptionsList::ReadFromFile(const Journalist& jnlst,
-                                 FILE* fp)
+  void OptionsList::PrintUserOptions(std::string& list) const
   {
-    DBG_ASSERT(fp);
+    list.clear();
+    char buffer[256];
+    sprintf(buffer, "%40s   %-20s %s\n", "Name", "Value", "used");
+    list += buffer;
+    for(std::map< std::string, OptionValue >::const_iterator p = options_.begin();
+        p != options_.end();
+        p++ ) {
+      if (!p->second.DontPrint()) {
+        const char yes[] = "yes";
+        const char no[] = "no";
+        const char* used;
+        if (p->second.Counter()>0) {
+          used = yes;
+        }
+        else {
+          used = no;
+        }
+        sprintf(buffer, "%40s = %-20s %4s\n", p->first.c_str(),
+                p->second.Value().c_str(), used);
+        list += buffer;
+      }
+    }
+  }
 
-    jnlst.Printf(J_DETAILED, J_MAIN, "Start reading options from file.\n");
+  bool OptionsList::ReadFromStream(const Journalist& jnlst,
+                                   std::istream& is)
+  {
+    jnlst.Printf(J_DETAILED, J_MAIN, "Start reading options from stream.\n");
 
     while (true) {
       std::string tag;
       std::string value;
 
-      if (!readnexttoken(fp, tag)) {
+      if (!readnexttoken(is, tag)) {
         // That's it - end of file reached.
         jnlst.Printf(J_DETAILED, J_MAIN,
                      "Finished reading options from file.\n");
         return true;
       }
 
-      if (!readnexttoken(fp, value)) {
+      if (!readnexttoken(is, value)) {
         // Can't read value for a given tag
         jnlst.Printf(J_ERROR, J_MAIN,
                      "Error reading value for tag %s from file.\n",
@@ -609,29 +655,26 @@ namespace Ipopt
     return allow_clobber;
   }
 
-  bool OptionsList::readnexttoken(FILE* fp, std::string& token)
+  bool OptionsList::readnexttoken(std::istream& is, std::string& token)
   {
     token.clear();
-    int c = fgetc(fp);
+    int c = is.get();
 
     // First get rid of all comments and white spaces
-    while (c!=EOF && (isspace(c) || c=='#') ) {
+    while (!is.eof() && (isspace(c) || c=='#') ) {
       if (c=='#') {
-        for (c=fgetc(fp);
-             c!='\n' && c!=EOF;
-             c=fgetc(fp))
-          ;
+        is.ignore(10000000, '\n');
       }
-      c=fgetc(fp);
+      c=is.get();
     }
 
     // Now read the token
-    while (c!=EOF && !isspace(c)) {
+    while (!is.eof() && !isspace(c)) {
       token += c;
-      c = fgetc(fp);
+      c = is.get();
     }
 
-    return (c!=EOF);
+    return (!is.eof());
   }
 
 } // namespace Ipopt

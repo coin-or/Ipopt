@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -39,6 +39,12 @@ namespace Ipopt
     tmp_vec->Copy(x);
     tmp_vec->ElementWiseMultiply(*diag_);
     y.Axpy(alpha, *tmp_vec);
+  }
+
+  bool DiagMatrix::HasValidNumbersImpl() const
+  {
+    DBG_ASSERT(IsValid(diag_));
+    return diag_->HasValidNumbers();
   }
 
   void DiagMatrix::PrintImpl(const Journalist& jnlst,

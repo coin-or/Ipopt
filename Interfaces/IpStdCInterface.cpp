@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005, International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -161,6 +161,9 @@ enum ApplicationReturnStatus IpoptSolve(
 {
   using namespace Ipopt;
 
+  // Initialize and process options
+  ipopt_problem->app->Initialize();
+
   // For now only copy the values of the x's.  When we allow warm
   // starts we also need to copy the values of the multipliers
   ::Number* start_x = new ::Number[ipopt_problem->n];
@@ -188,6 +191,7 @@ enum ApplicationReturnStatus IpoptSolve(
                                 obj_val, user_data);
   }
   catch(INVALID_STDINTERFACE_NLP& exc) {
+    exc.ReportException(*ipopt_problem->app->Jnlst(), J_ERROR);
     skip_optimize = true;
   }
 

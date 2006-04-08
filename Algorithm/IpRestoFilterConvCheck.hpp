@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -10,7 +10,7 @@
 #define __IPRESTOFILTERCONVCHECK_HPP__
 
 #include "IpOptErrorConvCheck.hpp"
-#include "IpFilterLineSearch.hpp"
+#include "IpFilterLSAcceptor.hpp"
 
 namespace Ipopt
 {
@@ -46,14 +46,14 @@ namespace Ipopt
      *  the restoration phase object with this object is given.  This
      *  method must be called to finish the definition of the
      *  algorithm, before Initialize is called. */
-    void SetOrigFilterLineSearch(const FilterLineSearch& orig_filter_line_search);
+    void SetOrigFilterLSAcceptor(const FilterLSAcceptor& orig_filter_ls_acceptor);
 
     /** overloaded from AlgorithmStrategyObject */
     virtual bool InitializeImpl(const OptionsList& options,
                                 const std::string& prefix);
 
     /** overloaded from ConvergenceCheck */
-    virtual ConvergenceStatus CheckConvergence();
+    virtual ConvergenceStatus CheckConvergence(bool call_intermediate_callback = true);
 
     /** Methods used by IpoptType */
     //@{
@@ -92,7 +92,7 @@ namespace Ipopt
      *  with a SmartPtr, because have otherwise circular references
      *  that prevent the destructor of the line search object to be
      *  called! */
-    const FilterLineSearch* orig_filter_line_search_;
+    const FilterLSAcceptor* orig_filter_ls_acceptor_;
   };
 
 } // namespace Ipopt

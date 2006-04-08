@@ -1,4 +1,4 @@
-// Copyright (C) 2005, International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -111,6 +111,10 @@ namespace Ipopt
     Number delta_d_curr_;
     //@}
 
+    /** Flag indicating if for the given matrix the perturb for wrong
+     *  inertia method has already been called. */
+    bool get_deltas_for_wrong_inertia_called_;
+
     /** @name Handling structural degeneracy */
     //@{
     /** Type for degeneracy flags */
@@ -160,10 +164,10 @@ namespace Ipopt
     Number delta_xs_dec_fact_;
     /** Very first trial value for delta_xs perturbation. */
     Number delta_xs_init_;
-    /** Size of pertiburbation for c and d blocks. */
+    /** Size of perturbation for c and d blocks. */
     Number delta_cd_val_;
-    /** Flag indicating whether c and d block should always be perturbed */
-    bool always_perturb_cd_;
+    /** Exponent on mu in formula for of perturbation for c and d blocks. */
+    Number delta_cd_exp_;
     /** Flag indicating whether the new values are based on the
      *  perturbations in the last iteration or in the more recent
      *  iteration in which a perturbation was done. */
@@ -175,7 +179,8 @@ namespace Ipopt
     /** @name Auxilliary methods */
     //@{
     /** Internal version of PerturbForWrongInertia with the
-     *  difference, that finalize_test is not called. */
+     *  difference, that finalize_test is not called.  Returns false
+     *  if the delta_x and delta_s parameters become too large. */
     bool get_deltas_for_wrong_inertia(Number& delta_x, Number& delta_s,
                                       Number& delta_c, Number& delta_d);
 
@@ -183,6 +188,8 @@ namespace Ipopt
      *  and is not singular.  In here, we can evaluate the outcome of
      *  the deneracy test heuristics. */
     void finalize_test();
+    /** Compute perturbation value for constraints */
+    Number delta_cd();
     //@}
 
   };

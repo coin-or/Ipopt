@@ -1,4 +1,4 @@
-// Copyright (C) 2005, International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -78,7 +78,7 @@ namespace Ipopt
       //@}
 
       /** Comparison operator.  This is required for the sort function. */
-      bool operator< (const TripletEntry& Tentry)
+      bool operator< (const TripletEntry& Tentry) const
       {
         return ((i_row_ < Tentry.i_row_) ||
                 (i_row_==Tentry.i_row_ && j_col_<Tentry.j_col_));

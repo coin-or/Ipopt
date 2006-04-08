@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -91,20 +91,24 @@ namespace Ipopt
     virtual bool InitializeImpl(const OptionsList& options,
                                 const std::string& prefix) = 0;
 
-    /** Solve the primal dual system, given one right hand side.  For
-     *  the time being, we don't pass a state object, but all items
-     *  individually, including the calculated quantity \f$\Sigma =
-     *  P_L^TS_L^{-1}Z_L + P_U^TS_U^{-1}Z_U\f$.  If the flag
-     *  allow_inexact is set to true, it is not necessary to solve the
-     *  system to best accuracy; for example, we don't want iterative
-     *  refinement during the computation of the second order
-     *  correction.
+    /** Solve the primal dual system, given one right hand side.  If
+     *  the flag allow_inexact is set to true, it is not necessary to
+     *  solve the system to best accuracy; for example, we don't want
+     *  iterative refinement during the computation of the second
+     *  order correction.  On the other hand, if improve_solution is
+     *  true, the solution given in res should be improved (here beta
+     *  has to be zero, and res is assume to be the solution for the
+     *  system using rhs, without the factor alpha...).  THe return
+     *  value is false, if a solution could not be computed (for
+     *  example, when the Hessian regularization parameter becomes too
+     *  large.)
      */
-    virtual void Solve(Number alpha,
+    virtual bool Solve(Number alpha,
                        Number beta,
                        const IteratesVector& rhs,
                        IteratesVector& res,
-                       bool allow_inexact=false) =0;
+                       bool allow_inexact=false,
+                       bool improve_solution=false) =0;
 
   private:
     /**@name Default Compiler Generated Methods

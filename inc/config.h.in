@@ -41,6 +41,12 @@
 /* Define to 1 if you have the <cstdio> header file. */
 #undef HAVE_CSTDIO
 
+/* Define to 1 if you have the <cstdlib> header file. */
+#undef HAVE_CSTDLIB
+
+/* Define to 1 if you have the <ctime> header file. */
+#undef HAVE_CTIME
+
 /* Define to 1 if you have the <ctype.h> header file. */
 #undef HAVE_CTYPE_H
 
@@ -53,8 +59,14 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if LAPACK is avaliable */
+#undef HAVE_LAPACK
+
 /* Define to 1 if MA27 is available */
 #undef HAVE_MA27
+
+/* Define to 1 if MA57 is available */
+#undef HAVE_MA57
 
 /* Define to 1 if you have the <math.h> header file. */
 #undef HAVE_MATH_H
@@ -65,8 +77,14 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
-/* Define to 1 if Pardiso is available (unsupported) */
+/* Define to 1 if MUMPS is available */
+#undef HAVE_MUMPS
+
+/* Define to 1 if Pardiso is available */
 #undef HAVE_PARDISO
+
+/* Define to 1 if you are using the parallel version of Pardiso */
+#undef HAVE_PARDISO_PARALLEL
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H
@@ -92,14 +110,20 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
-/* Define to 1 if TAUCS is available (unsupported) */
+/* Define to 1 if TAUCS is available */
 #undef HAVE_TAUCS
+
+/* Define to 1 if you have the <time.h> header file. */
+#undef HAVE_TIME_H
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
 /* Define to 1 if va_copy is avaliable */
 #undef HAVE_VA_COPY
+
+/* Define to 1 if WSMP is available */
+#undef HAVE_WSMP
 
 /* If defined, debug sanity checks are performed during runtime */
 #undef IP_DEBUG
@@ -124,6 +148,9 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* The size of a `int *', as computed by sizeof. */
+#undef SIZEOF_INT_P
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

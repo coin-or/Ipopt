@@ -45,8 +45,8 @@ C
 
       INTEGER IERR, IPSOLVE
 
-      INTEGER IPROBLEM, IPCREATE
-C64BIT     INTEGER*8 IPROBLEM, IPCREATE
+C32BIT      INTEGER IPROBLEM, IPCREATE
+C64BIT      INTEGER*8 IPROBLEM, IPCREATE
 C
       integer IDX_STYLE, NELE_JAC, NELE_HESS
 
@@ -63,8 +63,9 @@ C
       DOUBLE PRECISION F
 C
       logical equatn(CUTE_MMAX), linear(CUTE_MMAX)
-      integer cnr_input
-      logical efirst, lfirst, nvfrst
+      integer i, cnr_input
+      logical efirst, lfirst, nvfrst, ex
+      double precision init_val
 C
 C     Initialize the CUTEr interface and get the initial point
 C
@@ -79,6 +80,18 @@ C
      1     equatn, linear, LAM, G_L, G_U, CUTE_MMAX,
      2     efirst, lfirst, nvfrst)
       close(cnr_input)
+C
+C     See if we want to set a different initial point
+C
+      inquire(file='INITPOINT.VAL', exist=ex)
+      if (ex) then
+         open(70, file='INITPOINT.VAL', status='old')
+         read(70,'(d25.16)') init_val
+         do i = 1, N
+            X(i) = init_val
+         enddo
+         close(70)
+      endif
 C
 C     Obtain the number of nonzeros in Jacobian and Hessian
 C

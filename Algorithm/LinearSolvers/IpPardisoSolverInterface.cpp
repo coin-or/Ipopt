@@ -1,12 +1,16 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-17
+//
+//           Olaf Schenk                      Univ of Basel 2005-09-20
+//                  - changed options, added PHASE_ flag
 
 #include "IpPardisoSolverInterface.hpp"
+
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -15,6 +19,16 @@
 #  include <math.h>
 # else
 #  error "don't have header file for math"
+# endif
+#endif
+
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# else
+#  error "don't have header file for stdlib"
 # endif
 #endif
 
@@ -41,17 +55,15 @@ namespace Ipopt
 
   PardisoSolverInterface::PardisoSolverInterface()
       :
-      dim_(0),
-      nonzeros_(0),
-      initialized_(false),
+      a_(NULL),
       negevals_(-1),
+      initialized_(false),
 
       MAXFCT_(1),
       MNUM_(1),
       MTYPE_(-2),
       MSGLVL_(0),
-
-      a_(NULL)
+      debug_last_iter_(-1)
   {
     DBG_START_METH("PardisoSolverInterface::PardisoSolverInterface()",dbg_verbosity);
 
@@ -70,9 +82,11 @@ namespace Ipopt
       ipfint N = dim_;
       ipfint NRHS = 0;
       ipfint ERROR;
+      ipfint idmy;
+      double ddmy;
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
-                                NULL, NULL, NULL, NULL, &NRHS, IPARM_,
-                                &MSGLVL_, NULL, NULL, &ERROR);
+                                &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
+                                &MSGLVL_, &ddmy, &ddmy, &ERROR);
       DBG_ASSERT(ERROR==0);
     }
 
@@ -81,10 +95,59 @@ namespace Ipopt
     delete[] a_;
   }
 
+  void PardisoSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    // Todo Use keywords instead of integer numbers
+    roptions->AddStringOption3(
+      "pardiso_matching_strategy",
+      "Matching strategy to be used by Pardiso",
+      "complete+2x2",
+      "complete", "Match complete (IPAR(13)=1)",
+      "complete+2x2", "Match complete+2x2 (IPAR(13)=2)",
+      "constraints", "Match constraints (IPAR(13)=3)",
+      "This is IPAR(13) in Pardiso manual.  This option is only available if "
+      "Ipopt has been compiled with Pardiso.");
+    roptions->AddStringOption2(
+      "pardiso_redo_symbolic_fact_only_if_inertia_wrong",
+      "Toggel for handling case when elements were pertured by Pardiso.",
+      "no",
+      "no", "Always redo symbolic factorization when elements were perturbed",
+      "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong",
+      "This option is only available if Ipopt has been compiled with Pardiso.");
+    roptions->AddStringOption2(
+      "pardiso_repeated_perturbation_means_singular",
+      "Interpretation of perturbed elements.",
+      "no",
+      "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
+      "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization",
+      "This option is only available if Ipopt has been compiled with Pardiso.");
+    roptions->AddLowerBoundedIntegerOption(
+      "pardiso_out_of_core_power",
+      "Enables out-of-core variant of Pardiso",
+      0, 0,
+      "Setting this option to a positive integer k makes Pardiso work in the "
+      "out-of-core variant where the factor is split in 2^k subdomains.  This "
+      "is IPARM(50) in the Pardiso manual.  This option is only available if "
+      "Ipopt has been compiled with Pardiso.");
+  }
+
   bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    Number value = 0.0;
+    Index enum_int;
+    options.GetEnumValue("pardiso_matching_strategy", enum_int, prefix);
+    match_strat_ = PardisoMatchingStrategy(enum_int);
+    options.GetBoolValue("pardiso_redo_symbolic_fact_only_if_inertia_wrong",
+                         pardiso_redo_symbolic_fact_only_if_inertia_wrong_,
+                         prefix);
+    options.GetBoolValue("pardiso_repeated_perturbation_means_singular",
+                         pardiso_repeated_perturbation_means_singular_,
+                         prefix);
+    Index pardiso_out_of_core_power;
+    options.GetIntegerValue("pardiso_out_of_core_power",
+                            pardiso_out_of_core_power, prefix);
+
+    // Number value = 0.0;
 
     // Tell Pardiso to release all memory if it had been used before
     if (initialized_) {
@@ -92,15 +155,18 @@ namespace Ipopt
       ipfint N = dim_;
       ipfint NRHS = 0;
       ipfint ERROR;
+      ipfint idmy;
+      double ddmy;
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
-                                NULL, NULL, NULL, NULL, &NRHS, IPARM_,
-                                &MSGLVL_, NULL, NULL, &ERROR);
+                                &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
+                                &MSGLVL_, &ddmy, &ddmy, &ERROR);
       DBG_ASSERT(ERROR==0);
     }
 
     // Reset all private data
     dim_=0;
     nonzeros_=0;
+    have_symbolic_factorization_=false;
     initialized_=false;
     delete[] a_;
 
@@ -110,14 +176,53 @@ namespace Ipopt
 
     // Set some parameters for Pardiso
     IPARM_[0] = 1;  // Don't use the default values
-    IPARM_[2] = 1;  // Only one CPU for now
-    IPARM_[5] = 1;  // Overwrite right-hand side
 
+#ifdef HAVE_PARDISO_PARALLEL
+    // Obtain the numbers of processors from the value of OMP_NUM_THREADS
+    char    *var = getenv("OMP_NUM_THREADS");
+    int      num_procs;
+    if(var != NULL) {
+      sscanf( var, "%d", &num_procs );
+      if (num_procs < 1) {
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Invalid value for OMP_NUM_THREADS (\"%s\").\n", var);
+        return false;
+      }
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Using environment OMP_NUM_THREADS = %d as the number of processors.\n", num_procs);
+    }
+    else {
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "You need to set environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).\n\n");
+      return false;
+    }
+    IPARM_[2] = num_procs;  // Set the number of processors
+#else
+
+    IPARM_[2] = 1;
+#endif
+
+    IPARM_[5] = 1;  // Overwrite right-hand side
     // ToDo: decide if we need iterative refinement in Pardiso.  For
     // now, switch it off ?
     IPARM_[7] = 0;
 
-    // IPARM_[20] = 2;
+    // Options suggested by Olaf Schenk
+    IPARM_[9] = 12;
+    IPARM_[10] = 1;
+    // Matching information:  IPARM_[12] = 1 seems ok, but results in a
+    // large number of pivot perturbation
+    // Matching information:  IPARM_[12] = 2 robust,  but more  expensive method
+    IPARM_[12] = (int)match_strat_;
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Pardiso matching strategy (IPARM(13)): %d\n", IPARM_[12]);
+
+    IPARM_[20] = 1;
+    IPARM_[23] = 1; // parallel fac
+    IPARM_[24] = 1; // parallel solve
+
+    // Option for the out of core variant
+    IPARM_[49] = pardiso_out_of_core_power;
 
     return true;
   }
@@ -189,29 +294,62 @@ namespace Ipopt
     DBG_START_METH("PardisoSolverInterface::SymbolicFactorization",
                    dbg_verbosity);
 
-    // Call Pardiso to do the analysis phase
-    ipfint PHASE = 11;
-    ipfint N = dim_;
-    ipfint PERM;   // This should not be accessed by Pardiso
-    ipfint NRHS = 0;
-    double B;  // This should not be accessed by Pardiso in analysis
-    // phase
-    double X;  // This should not be accessed by Pardiso in analysis
-    // phase
-    ipfint ERROR;
+    // Since Pardiso requires the values of the nonzeros of the matrix
+    // for an efficient symbolic factorization, we postpone that task
+    // until the first call of Factorize.  All we do here is to reset
+    // the flag (in case this interface is called for a matrix with a
+    // new structure).
 
-    F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                              &PHASE, &N, a_, ia, ja, &PERM,
-                              &NRHS, IPARM_, &MSGLVL_, &B, &X,
-                              &ERROR);
-    if (ERROR!=0) {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "Error in Pardiso during analysis phase.  ERROR = %d.\n",
-                     ERROR);
-      return SYMSOLVER_FATAL_ERROR;
-    }
+    have_symbolic_factorization_ = false;
 
     return SYMSOLVER_SUCCESS;
+  }
+
+  static void
+  write_iajaa_matrix (int	    N,
+                      const Index*  ia,
+                      const Index*  ja,
+                      double* 	    a_,
+                      double* 	    rhs_vals,
+                      int   	    iter_cnt,
+                      int   	    sol_cnt)
+  {
+    if (getenv ("IPOPT_WRITE_MAT")) {
+      /* Write header */
+      FILE    *mat_file;
+      char     mat_name[128];
+      char     mat_pref[32];
+
+      ipfint   NNZ = ia[N]-1;
+      ipfint   i;
+
+      if (getenv ("IPOPT_WRITE_PREFIX"))
+        strcpy (mat_pref, getenv ("IPOPT_WRITE_PREFIX"));
+      else
+        strcpy (mat_pref, "mat-ipopt");
+
+      sprintf (mat_name, "%s_%03d-%02d.iajaa", mat_pref, iter_cnt, sol_cnt);
+
+      // Open and write matrix file.
+      mat_file = fopen (mat_name, "w");
+
+      fprintf (mat_file, "%d\n", N);
+      fprintf (mat_file, "%d\n", NNZ);
+
+      for (i = 0; i < N+1; i++)
+        fprintf (mat_file, "%d\n", ia[i]);
+      for (i = 0; i < NNZ; i++)
+        fprintf (mat_file, "%d\n", ja[i]);
+      for (i = 0; i < NNZ; i++)
+        fprintf (mat_file, "%32.24e\n", a_[i]);
+
+      /* Right hand side. */
+      if (rhs_vals)
+        for (i = 0; i < N; i++)
+          fprintf (mat_file, "%32.24e\n", rhs_vals[i]);
+
+      fclose (mat_file);
+    }
   }
 
   ESymSolverStatus
@@ -223,7 +361,7 @@ namespace Ipopt
     DBG_START_METH("PardisoSolverInterface::Factorization",dbg_verbosity);
 
     // Call Pardiso to do the factorization
-    ipfint PHASE = 22;
+    ipfint PHASE ;
     ipfint N = dim_;
     ipfint PERM;   // This should not be accessed by Pardiso
     ipfint NRHS = 0;
@@ -233,28 +371,108 @@ namespace Ipopt
     // phase
     ipfint ERROR;
 
-    F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                              &PHASE, &N, a_, ia, ja, &PERM,
-                              &NRHS, IPARM_, &MSGLVL_, &B, &X,
-                              &ERROR);
-    if (ERROR==-4) {
-      // I think this means that the matrix is singular
-      return SYMSOLVER_SINGULAR;
-    }
-    else if (ERROR!=0 ) {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
-      return SYMSOLVER_FATAL_ERROR;
-    }
+    bool done = false;
+    bool just_performed_symbolic_factorization = false;
 
-    /* ToDo ask Olaf what this means
-    if (IPARM_[13] != 0) {
-      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                     "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
-    }
-    */
+    while (!done) {
+      if (!have_symbolic_factorization_) {
+        IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+        PHASE = 11;
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Calling Pardiso for symbolic factorization.\n");
+        F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                                  &PHASE, &N, a_, ia, ja, &PERM,
+                                  &NRHS, IPARM_, &MSGLVL_, &B, &X,
+                                  &ERROR);
+        IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+        if (ERROR==-7) {
+          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                         "Pardiso symbolic factorization returns ERROR = %d.  Matrix is singular.\n", ERROR);
+          return SYMSOLVER_SINGULAR;
+        }
+        else if (ERROR!=0) {
+          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                         "Error in Pardiso during symbolic factorization phase.  ERROR = %d.\n", ERROR);
+          return SYMSOLVER_FATAL_ERROR;
+        }
+        have_symbolic_factorization_ = true;
+        just_performed_symbolic_factorization = true;
 
-    negevals_ = IPARM_[22];
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Memory in KB required for the symbolic factorization  = %d.\n", IPARM_[14]);
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Integer memory in KB required for the numerical factorization  = %d.\n", IPARM_[15]);
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Double  memory in KB required for the numerical factorization  = %d.\n", IPARM_[16]);
+      }
+
+      PHASE = 22;
+
+      IpData().TimingStats().LinearSystemFactorization().Start();
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Calling Pardiso for factorization.\n");
+      // Dump matrix to file, and count number of solution steps.
+      if (IpData().iter_count() != debug_last_iter_)
+        debug_cnt_ = 0;
+      debug_last_iter_ = IpData().iter_count();
+      debug_cnt_ ++;
+
+      F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                                &PHASE, &N, a_, ia, ja, &PERM,
+                                &NRHS, IPARM_, &MSGLVL_, &B, &X,
+                                &ERROR);
+      IpData().TimingStats().LinearSystemFactorization().End();
+
+      if (ERROR==-7) {
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "Pardiso factorization returns ERROR = %d.  Matrix is singular.\n", ERROR);
+        return SYMSOLVER_SINGULAR;
+      }
+      else if (ERROR==-4) {
+        // I think this means that the matrix is singular
+        // OLAF said that this will never happen (ToDo)
+        return SYMSOLVER_SINGULAR;
+      }
+      else if (ERROR!=0 ) {
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
+        return SYMSOLVER_FATAL_ERROR;
+      }
+
+      negevals_ = IPARM_[22];
+      if (IPARM_[13] != 0) {
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
+        if ( !pardiso_redo_symbolic_fact_only_if_inertia_wrong_ ||
+             (negevals_ != numberOfNegEVals) ) {
+          IpData().Append_info_string("Pn");
+          have_symbolic_factorization_ = false;
+          // We assume now that if there was just a symbolic
+          // factorization and we still have perturbed pivots, that
+          // the system is actually singular, if
+          // pardiso_repeated_perturbation_means_singular_ is true
+          if (just_performed_symbolic_factorization) {
+            if (pardiso_repeated_perturbation_means_singular_) {
+              IpData().Append_info_string("Ps");
+              return SYMSOLVER_SINGULAR;
+            }
+            else {
+              done = true;
+            }
+          }
+          else {
+            done = false;
+          }
+        }
+        else {
+          IpData().Append_info_string("Pp");
+          done = true;
+        }
+      }
+      else {
+        done = true;
+      }
+    }
 
     DBG_ASSERT(IPARM_[21]+IPARM_[22] == dim_);
 
@@ -277,6 +495,7 @@ namespace Ipopt
   {
     DBG_START_METH("PardisoSolverInterface::Solve",dbg_verbosity);
 
+    IpData().TimingStats().LinearSystemBackSolve().Start();
     // Call Pardiso to do the solve for the given right-hand sides
     ipfint PHASE = 33;
     ipfint N = dim_;
@@ -285,10 +504,23 @@ namespace Ipopt
     double* X = new double[nrhs*dim_];
     ipfint ERROR;
 
+    // Dump matrix to file if requested
+    write_iajaa_matrix (N, ia, ja, a_, rhs_vals, IpData().iter_count(), debug_cnt_);
+
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                               &PHASE, &N, a_, ia, ja, &PERM,
                               &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
                               &ERROR);
+
+    delete [] X; /* OLAF/MICHAEL: do we really need X? */
+
+    if (IPARM_[6] != 0) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Number of iterative refinement steps = %d.\n", IPARM_[6]);
+      IpData().Append_info_string("Pi");
+    }
+
+    IpData().TimingStats().LinearSystemBackSolve().End();
     if (ERROR!=0 ) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);

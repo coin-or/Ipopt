@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, 2005 International Business Machines and others.
+# Copyright (C) 2004, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -43,6 +43,7 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
+@HAVE_MUMPS_TRUE@am__append_1 = $(MUMPS_INCFLAGS)
 subdir = Algorithm
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -58,21 +59,26 @@ libipoptalg_a_LIBADD =
 am_libipoptalg_a_OBJECTS = IpAdaptiveMuUpdate.$(OBJEXT) \
 	IpAlgBuilder.$(OBJEXT) IpAlgorithmRegOp.$(OBJEXT) \
 	IpAugRestoSystemSolver.$(OBJEXT) \
-	IpDefaultIterateInitializer.$(OBJEXT) IpFilter.$(OBJEXT) \
-	IpFilterLineSearch.$(OBJEXT) IpGradientScaling.$(OBJEXT) \
+	IpBacktrackingLineSearch.$(OBJEXT) \
+	IpDefaultIterateInitializer.$(OBJEXT) \
+	IpExactHessianUpdater.$(OBJEXT) IpFilter.$(OBJEXT) \
+	IpFilterLSAcceptor.$(OBJEXT) IpGradientScaling.$(OBJEXT) \
 	IpIpoptAlg.$(OBJEXT) IpIpoptCalculatedQuantities.$(OBJEXT) \
 	IpIpoptData.$(OBJEXT) IpIteratesVector.$(OBJEXT) \
 	IpLeastSquareMults.$(OBJEXT) IpLoqoMuOracle.$(OBJEXT) \
+	IpLowRankAugSystemSolver.$(OBJEXT) \
 	IpMonotoneMuUpdate.$(OBJEXT) IpNLPScaling.$(OBJEXT) \
 	IpOptErrorConvCheck.$(OBJEXT) IpOrigIpoptNLP.$(OBJEXT) \
-	IpOrigIterationOutput.$(OBJEXT) IpPDFullSpaceSolver.$(OBJEXT) \
+	IpOrigIterationOutput.$(OBJEXT) \
+	IpLimMemQuasiNewtonUpdater.$(OBJEXT) \
+	IpPDFullSpaceSolver.$(OBJEXT) \
 	IpPDPerturbationHandler.$(OBJEXT) IpProbingMuOracle.$(OBJEXT) \
 	IpQualityFunctionMuOracle.$(OBJEXT) \
 	IpRestoFilterConvCheck.$(OBJEXT) IpRestoIpoptNLP.$(OBJEXT) \
 	IpRestoIterateInitializer.$(OBJEXT) \
 	IpRestoIterationOutput.$(OBJEXT) IpRestoMinC_1Nrm.$(OBJEXT) \
 	IpRestoRestoPhase.$(OBJEXT) IpStdAugSystemSolver.$(OBJEXT) \
-	IpUserScaling.$(OBJEXT) \
+	IpTimingStatistics.$(OBJEXT) IpUserScaling.$(OBJEXT) \
 	IpWarmStartIterateInitializer.$(OBJEXT)
 libipoptalg_a_OBJECTS = $(am_libipoptalg_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
@@ -116,6 +122,10 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BIT32FCOMMENT = @BIT32FCOMMENT@
+BIT64FCOMMENT = @BIT64FCOMMENT@
+BITS_PER_POINTER = @BITS_PER_POINTER@
+BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDAMPLINTERFACE_FALSE = @BUILDAMPLINTERFACE_FALSE@
 BUILDAMPLINTERFACE_TRUE = @BUILDAMPLINTERFACE_TRUE@
 BUILDASLDIR_FALSE = @BUILDASLDIR_FALSE@
@@ -128,20 +138,29 @@ BUILDHSLDIR_FALSE = @BUILDHSLDIR_FALSE@
 BUILDHSLDIR_TRUE = @BUILDHSLDIR_TRUE@
 BUILDHSL_FALSE = @BUILDHSL_FALSE@
 BUILDHSL_TRUE = @BUILDHSL_TRUE@
+BUILDLAPACKDIR_FALSE = @BUILDLAPACKDIR_FALSE@
+BUILDLAPACKDIR_TRUE = @BUILDLAPACKDIR_TRUE@
+BUILDLAPACK_FALSE = @BUILDLAPACK_FALSE@
+BUILDLAPACK_TRUE = @BUILDLAPACK_TRUE@
 BUILDMA27_FALSE = @BUILDMA27_FALSE@
 BUILDMA27_TRUE = @BUILDMA27_TRUE@
+BUILDMA57_FALSE = @BUILDMA57_FALSE@
+BUILDMA57_TRUE = @BUILDMA57_TRUE@
 BUILDMC19_FALSE = @BUILDMC19_FALSE@
 BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
+CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../Common -I$(srcdir)/../LinAlg \
-	-I$(srcdir)/../LinAlg/TMatrices -I$(srcdir)/../Interfaces \
-	-I$(srcdir)/LinearSolvers
+CXXFLAGS = @CXXFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` \
+	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` -I`$(CYGPATH_W) \
+	$(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
+	$(srcdir)/../Interfaces` -I`$(CYGPATH_W) \
+	$(srcdir)/LinearSolvers` $(am__append_1)
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -156,12 +175,18 @@ FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
 HAVE_MA27_FALSE = @HAVE_MA27_FALSE@
 HAVE_MA27_TRUE = @HAVE_MA27_TRUE@
+HAVE_MA57_FALSE = @HAVE_MA57_FALSE@
+HAVE_MA57_TRUE = @HAVE_MA57_TRUE@
 HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
 HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
+HAVE_MUMPS_FALSE = @HAVE_MUMPS_FALSE@
+HAVE_MUMPS_TRUE = @HAVE_MUMPS_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
 HAVE_TAUCS_TRUE = @HAVE_TAUCS_TRUE@
+HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
+HAVE_WSMP_TRUE = @HAVE_WSMP_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -177,6 +202,7 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
+MUMPS_INCFLAGS = @MUMPS_INCFLAGS@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -240,12 +266,16 @@ libipoptalg_a_SOURCES = \
 	IpAlgStrategy.hpp \
 	IpAugRestoSystemSolver.cpp IpAugRestoSystemSolver.hpp \
 	IpAugSystemSolver.hpp \
+	IpBacktrackingLSAcceptor.hpp \
+	IpBacktrackingLineSearch.cpp IpBacktrackingLineSearch.hpp \
 	IpConvCheck.hpp \
 	IpDefaultIterateInitializer.cpp IpDefaultIterateInitializer.hpp \
 	IpEqMultCalculator.hpp \
+	IpExactHessianUpdater.cpp IpExactHessianUpdater.hpp \
 	IpFilter.cpp IpFilter.hpp \
-	IpFilterLineSearch.cpp IpFilterLineSearch.hpp \
+	IpFilterLSAcceptor.cpp IpFilterLSAcceptor.hpp \
 	IpGradientScaling.cpp IpGradientScaling.hpp \
+	IpHessianUpdater.hpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
 	IpIpoptCalculatedQuantities.cpp IpIpoptCalculatedQuantities.hpp \
 	IpIpoptData.cpp IpIpoptData.hpp \
@@ -256,6 +286,7 @@ libipoptalg_a_SOURCES = \
 	IpLeastSquareMults.cpp IpLeastSquareMults.hpp \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.cpp IpLoqoMuOracle.hpp \
+	IpLowRankAugSystemSolver.cpp IpLowRankAugSystemSolver.hpp \
 	IpMonotoneMuUpdate.cpp IpMonotoneMuUpdate.hpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp \
@@ -263,6 +294,7 @@ libipoptalg_a_SOURCES = \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \
 	IpOrigIpoptNLP.cpp IpOrigIpoptNLP.hpp \
 	IpOrigIterationOutput.cpp IpOrigIterationOutput.hpp \
+	IpLimMemQuasiNewtonUpdater.cpp IpLimMemQuasiNewtonUpdater.hpp \
 	IpPDFullSpaceSolver.cpp IpPDFullSpaceSolver.hpp \
 	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
 	IpPDSystemSolver.hpp \
@@ -276,6 +308,7 @@ libipoptalg_a_SOURCES = \
 	IpRestoPhase.hpp \
 	IpRestoRestoPhase.cpp IpRestoRestoPhase.hpp \
 	IpStdAugSystemSolver.cpp IpStdAugSystemSolver.hpp \
+	IpTimingStatistics.cpp IpTimingStatistics.hpp \
 	IpUserScaling.cpp IpUserScaling.hpp \
 	IpWarmStartIterateInitializer.cpp IpWarmStartIterateInitializer.hpp
 
@@ -288,12 +321,16 @@ ASTYLE_FILES = \
 	IpAlgStrategy.hppbak \
 	IpAugRestoSystemSolver.cppbak IpAugRestoSystemSolver.hppbak \
 	IpAugSystemSolver.hppbak \
+	IpBacktrackingLSAcceptor.hppbak \
+	IpBacktrackingLineSearch.cppbak IpBacktrackingLineSearch.hppbak \
 	IpConvCheck.hppbak \
 	IpDefaultIterateInitializer.cppbak IpDefaultIterateInitializer.hppbak \
 	IpEqMultCalculator.hppbak \
+	IpExactHessianUpdater.cppbak IpExactHessianUpdater.hppbak \
 	IpFilter.cppbak IpFilter.hppbak \
-	IpFilterLineSearch.cppbak IpFilterLineSearch.hppbak \
+	IpFilterLSAcceptor.cppbak IpFilterLSAcceptor.hppbak \
 	IpGradientScaling.cppbak IpGradientScaling.hppbak \
+	IpHessianUpdater.hppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
 	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \
 	IpIpoptData.cppbak IpIpoptData.hppbak \
@@ -304,6 +341,7 @@ ASTYLE_FILES = \
 	IpLeastSquareMults.cppbak IpLeastSquareMults.hppbak \
 	IpLineSearch.hppbak \
 	IpLoqoMuOracle.cppbak IpLoqoMuOracle.hppbak \
+	IpLowRankAugSystemSolver.cppbak IpLowRankAugSystemSolver.cppbak \
 	IpMonotoneMuUpdate.cppbak IpMonotoneMuUpdate.hppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
@@ -311,6 +349,7 @@ ASTYLE_FILES = \
 	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
 	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \
 	IpOrigIterationOutput.cppbak IpOrigIterationOutput.hppbak \
+	IpLimMemQuasiNewtonUpdater.cppbak IpLimMemQuasiNewtonUpdater.hppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
 	IpPDSystemSolver.hppbak \
@@ -324,6 +363,7 @@ ASTYLE_FILES = \
 	IpRestoPhase.hppbak \
 	IpRestoRestoPhase.cppbak IpRestoRestoPhase.hppbak \
 	IpStdAugSystemSolver.cppbak IpStdAugSystemSolver.hppbak \
+	IpTimingStatistics.cppbak IpTimingStatistics.hppbak \
 	IpUserScaling.cppbak IpUserScaling.hppbak \
 	IpWarmStartIterateInitializer.cppbak IpWarmStartIterateInitializer.hppbak
 
@@ -380,16 +420,20 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAlgBuilder.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAlgorithmRegOp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAugRestoSystemSolver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpBacktrackingLineSearch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDefaultIterateInitializer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpExactHessianUpdater.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilterLineSearch.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilterLSAcceptor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpGradientScaling.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptAlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptCalculatedQuantities.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptData.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIteratesVector.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLeastSquareMults.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLimMemQuasiNewtonUpdater.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLoqoMuOracle.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLowRankAugSystemSolver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMonotoneMuUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNLPScaling.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptErrorConvCheck.Po@am__quote@
@@ -406,6 +450,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoMinC_1Nrm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoRestoPhase.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdAugSystemSolver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTimingStatistics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpUserScaling.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpWarmStartIterateInitializer.Po@am__quote@
 

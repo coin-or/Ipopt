@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -52,7 +52,7 @@ namespace Ipopt
       0e3,
       "After returning from the restoration phase, the constraint multipliers "
       "are recomputed by a least square estimate.  This option triggers when "
-      "those least-square esimates should be ignored.");
+      "those least-square estimates should be ignored.");
   }
 
   bool MinC_1NrmRestorationPhase::InitializeImpl(const OptionsList& options,
@@ -108,6 +108,7 @@ namespace Ipopt
 
     DBG_ASSERT(IpCq().curr_constraint_violation()>0.);
 
+    // ToDo set those up during initialize?
     // Create the restoration phase NLP etc objects
     SmartPtr<IpoptData> resto_ip_data = new IpoptData();
     SmartPtr<IpoptNLP> resto_ip_nlp =
@@ -121,18 +122,20 @@ namespace Ipopt
     // Decide if we want to use the original option or want to make
     // some changes
     SmartPtr<OptionsList> actual_resto_options = resto_options_;
-    if (expect_infeasible_problem_ && count_restorations_==1) {
-      actual_resto_options = new OptionsList(*resto_options_);
-      // Ask for significant reduction of infeasibility, in the hope
-      // that we do not return from the restoration phase is the
-      // problem is infeasible
-      actual_resto_options->SetNumericValue("resto.required_infeasibility_reduction", 1e-3);
-    }
-    else if(square_problem) {
+    if(square_problem) {
       actual_resto_options = new OptionsList(*resto_options_);
       // If this is a square problem, the want the restoration phase
       // never to be left until the problem is converged
       actual_resto_options->SetNumericValue("resto.required_infeasibility_reduction", 0.);
+    }
+    else if (expect_infeasible_problem_ && count_restorations_==1) {
+      if (IpCq().curr_constraint_violation()>1e-3) {
+        actual_resto_options = new OptionsList(*resto_options_);
+        // Ask for significant reduction of infeasibility, in the hope
+        // that we do not return from the restoration phase is the
+        // problem is infeasible
+        actual_resto_options->SetNumericValue("resto.required_infeasibility_reduction", 1e-3);
+      }
     }
 
     // Initialize the restoration phase algorithm
@@ -176,6 +179,8 @@ namespace Ipopt
         IpCq().curr_primal_infeasibility(NORM_MAX);
       // ToDo make the factor in following line an option
       if (orig_primal_inf <= 1e2*IpData().tol()) {
+        Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                       "Restoration phase converged to a point with small primal infeasibility.\n");
         THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
                         "Restoration phase converged to a point with small primal infeasibility");
       }
@@ -193,7 +198,13 @@ namespace Ipopt
       THROW_EXCEPTION(LOCALLY_INFEASIBLE, "Restoration phase converged to a point of local infeasibility");
     }
     else if (resto_status == RESTORATION_FAILURE) {
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                     "Restoration phase in the restoration phase failed.\n");
       THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase in the restoration phase failed.");
+    }
+    else if (resto_status == USER_REQUESTED_STOP) {
+      // Use requested stop during restoration phase - rethrow exception
+      THROW_EXCEPTION(RESTORATION_USER_STOP, "User requested stop during restoration phase");
     }
     else {
       Jnlst().Printf(J_ERROR, J_MAIN, "Sorry, things failed ?!?!\n");

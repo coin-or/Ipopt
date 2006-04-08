@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -37,6 +37,8 @@ namespace Ipopt
       CONVERGED,
       CONVERGED_TO_ACCEPTABLE_POINT,
       MAXITER_EXCEEDED,
+      DIVERGING,
+      USER_STOP,
       FAILED
     };
 
@@ -44,8 +46,12 @@ namespace Ipopt
     virtual bool InitializeImpl(const OptionsList& options,
                                 const std::string& prefix) = 0;
 
-    /** Pure virtual method for performing the convergence test */
-    virtual ConvergenceStatus CheckConvergence()=0;
+    /** Pure virtual method for performing the convergence test.  If
+     *  call_intermediate_callback is true, the user callback method
+     *  in the NLP should be called in order to see if the user
+     *  requests an early termination. */
+    virtual ConvergenceStatus
+    CheckConvergence(bool call_intermediate_callback = true) = 0;
 
     /** Method for testing if the current iterate is considered to
      *  satisfy the "accptable level" of accuracy.  The idea is that

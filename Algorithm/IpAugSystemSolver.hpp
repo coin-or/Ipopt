@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -59,6 +59,7 @@ namespace Ipopt
      */
     virtual ESymSolverStatus Solve(
       const SymMatrix* W,
+      double W_factor,
       const Vector* D_x,
       double delta_x,
       const Vector* D_s,
@@ -78,7 +79,81 @@ namespace Ipopt
       Vector& sol_c,
       Vector& sol_d,
       bool check_NegEVals,
-      Index numberOfNegEVals) =0;
+      Index numberOfNegEVals)
+    {
+      std::vector<SmartPtr<const Vector> > rhs_xV(1);
+      rhs_xV[0] = &rhs_x;
+      std::vector<SmartPtr<const Vector> > rhs_sV(1);
+      rhs_sV[0] = &rhs_s;
+      std::vector<SmartPtr<const Vector> > rhs_cV(1);
+      rhs_cV[0] = &rhs_c;
+      std::vector<SmartPtr<const Vector> > rhs_dV(1);
+      rhs_dV[0] = &rhs_d;
+      std::vector<SmartPtr<Vector> > sol_xV(1);
+      sol_xV[0] = &sol_x;
+      std::vector<SmartPtr<Vector> > sol_sV(1);
+      sol_sV[0] = &sol_s;
+      std::vector<SmartPtr<Vector> > sol_cV(1);
+      sol_cV[0] = &sol_c;
+      std::vector<SmartPtr<Vector> > sol_dV(1);
+      sol_dV[0] = &sol_d;
+      return MultiSolve(W, W_factor, D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c,
+                        J_d, D_d, delta_d, rhs_xV, rhs_sV, rhs_cV, rhs_dV,
+                        sol_xV, sol_sV, sol_cV, sol_dV, check_NegEVals,
+                        numberOfNegEVals);
+    }
+
+    /** Like Solve, but for multiple right hand sides.  The inheriting
+     *  class has to be overload at least one of Solve and
+     *  MultiSolve. */
+    virtual ESymSolverStatus MultiSolve(
+      const SymMatrix* W,
+      double W_factor,
+      const Vector* D_x,
+      double delta_x,
+      const Vector* D_s,
+      double delta_s,
+      const Matrix* J_c,
+      const Vector* D_c,
+      double delta_c,
+      const Matrix* J_d,
+      const Vector* D_d,
+      double delta_d,
+      std::vector<SmartPtr<const Vector> >& rhs_xV,
+      std::vector<SmartPtr<const Vector> >& rhs_sV,
+      std::vector<SmartPtr<const Vector> >& rhs_cV,
+      std::vector<SmartPtr<const Vector> >& rhs_dV,
+      std::vector<SmartPtr<Vector> >& sol_xV,
+      std::vector<SmartPtr<Vector> >& sol_sV,
+      std::vector<SmartPtr<Vector> >& sol_cV,
+      std::vector<SmartPtr<Vector> >& sol_dV,
+      bool check_NegEVals,
+      Index numberOfNegEVals)
+    {
+      // Solve for one right hand side after the other
+      Index nrhs = (Index)rhs_xV.size();
+      DBG_ASSERT(nrhs>0);
+      DBG_ASSERT(nrhs==(Index)rhs_sV.size());
+      DBG_ASSERT(nrhs==(Index)rhs_cV.size());
+      DBG_ASSERT(nrhs==(Index)rhs_dV.size());
+      DBG_ASSERT(nrhs==(Index)sol_xV.size());
+      DBG_ASSERT(nrhs==(Index)sol_sV.size());
+      DBG_ASSERT(nrhs==(Index)sol_cV.size());
+      DBG_ASSERT(nrhs==(Index)sol_dV.size());
+
+      ESymSolverStatus retval=SYMSOLVER_SUCCESS;
+      for (Index i=0; i<nrhs; i++) {
+        retval = Solve(W, W_factor, D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c,
+                       J_d, D_d, delta_d,
+                       *rhs_xV[i], *rhs_sV[i], *rhs_cV[i], *rhs_dV[i],
+                       *sol_xV[i], *sol_sV[i], *sol_cV[i], *sol_dV[i],
+                       check_NegEVals, numberOfNegEVals);
+        if (retval!=SYMSOLVER_SUCCESS) {
+          break;
+        }
+      }
+      return retval;
+    }
 
     /** Number of negative eigenvalues detected during last
      * solve.  Returns the number of negative eigenvalues of

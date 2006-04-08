@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -84,6 +84,11 @@ namespace Ipopt
     }
     //@}
 
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -118,6 +123,28 @@ namespace Ipopt
     Index negevals_;
     //@}
 
+    /** @name Solver specific options */
+    //@{
+    /** Type for mathcing strategies */
+    enum PardisoMatchingStrategy {
+      COMPLETE,
+      COMPLETE2x2,
+      CONSTRAINT
+    };
+    /** Option that controls the matching strategy. */
+    PardisoMatchingStrategy match_strat_;
+    /** Flag indicating if symbolic factorization has already been
+     *  performed. */
+    bool have_symbolic_factorization_;
+    /** Flag indicating whether the symbolic factorization should only
+     *  be done after perturbed elements, if the inertia was wrong */
+    bool pardiso_redo_symbolic_fact_only_if_inertia_wrong_;
+    /** Flag indicating whether repeated perturbed elements even after
+     *  a new symbolic factorization should be interpreted as a
+     *  singular matrix */
+    bool pardiso_repeated_perturbation_means_singular_;
+    //@}
+
     /** @name Initialization flags */
     //@{
     /** Flag indicating if internal data is initialized.
@@ -140,6 +167,12 @@ namespace Ipopt
     ipfint* IPARM_;
     /** Message level. */
     ipfint MSGLVL_;
+    //@}
+
+    /**@name Some counters for debugging */
+    //@{
+    Index debug_last_iter_;
+    Index debug_cnt_;
     //@}
 
     /** @name Internal functions */

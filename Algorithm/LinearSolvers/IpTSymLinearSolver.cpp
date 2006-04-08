@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -34,6 +34,7 @@ namespace Ipopt
       dim_(0),
       nonzeros_triplet_(0),
       nonzeros_compressed_(0),
+      have_structure_(false),
       initialized_(false),
 
       solver_interface_(solver_interface),
@@ -55,49 +56,96 @@ namespace Ipopt
     delete [] scaling_factors_;
   }
 
+  void TSymLinearSolver::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddStringOption2(
+      "linear_scaling_on_demand",
+      "Flag indicating that linear scaling is only done if it seems required.",
+      "yes",
+      "no", "Always scale the linear system.",
+      "yes", "Start using linear system scaling if solutions seem not good.",
+      "This option is only important if a linear scaling method (e.g., mc19) "
+      "is used.  If you choose \"no\", then the scaling factors are computed "
+      "for every linear system from the start.  This can be quite expensive. "
+      "Choosing \"yes\" means that the algorithm will start the scaling "
+      "method only when the solutions to the linear system seem not good, and "
+      "then use it until the end.");
+  }
+
   bool TSymLinearSolver::InitializeImpl(const OptionsList& options,
                                         const std::string& prefix)
   {
-    // Reset all private data
-    atag_=0;
-    dim_=0;
-    nonzeros_triplet_=0;
-    nonzeros_compressed_=0;
-    initialized_=false;
+    if (IsValid(scaling_method_)) {
+      options.GetBoolValue("linear_scaling_on_demand",
+                           linear_scaling_on_demand_, prefix);
+    }
+    else {
+      linear_scaling_on_demand_ = false;
+    }
+    // This option is registered by OrigIpoptNLP
+    options.GetBoolValue("warm_start_same_structure",
+                         warm_start_same_structure_, prefix);
 
     if (!solver_interface_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                        options, prefix)) {
       return false;
     }
 
-    matrix_format_ = solver_interface_->MatrixFormat();
-    switch (matrix_format_) {
-      case SparseSymLinearSolverInterface::CSR_Format_0_Offset:
-      triplet_to_csr_converter_ = new TripletToCSRConverter(0);
-      break;
-      case SparseSymLinearSolverInterface::CSR_Format_1_Offset:
-      triplet_to_csr_converter_ = new TripletToCSRConverter(1);
-      break;
-      case SparseSymLinearSolverInterface::Triplet_Format:
-      triplet_to_csr_converter_ = NULL;
-      break;
-      default:
-      DBG_ASSERT(false && "Invalid MatrixFormat returned from solver interface.");
-      return false;
+    if (!warm_start_same_structure_) {
+      // Reset all private data
+      atag_=0;
+      dim_=0;
+      nonzeros_triplet_=0;
+      nonzeros_compressed_=0;
+      have_structure_=false;
+
+      matrix_format_ = solver_interface_->MatrixFormat();
+      switch (matrix_format_) {
+        case SparseSymLinearSolverInterface::CSR_Format_0_Offset:
+        triplet_to_csr_converter_ = new TripletToCSRConverter(0);
+        break;
+        case SparseSymLinearSolverInterface::CSR_Format_1_Offset:
+        triplet_to_csr_converter_ = new TripletToCSRConverter(1);
+        break;
+        case SparseSymLinearSolverInterface::Triplet_Format:
+        triplet_to_csr_converter_ = NULL;
+        break;
+        default:
+        DBG_ASSERT(false && "Invalid MatrixFormat returned from solver interface.");
+        return false;
+      }
     }
+    else {
+      ASSERT_EXCEPTION(have_structure_, INVALID_WARMSTART,
+                       "TSymLinearSolver called with warm_start_same_structure, but the internal structures are not initialized.");
+    }
+
+    // reset the initialize flag to make sure that InitializeStructure
+    // is called for the linear solver
+    initialized_=false;
+
+    if (IsValid(scaling_method_) && !linear_scaling_on_demand_) {
+      use_scaling_ = true;
+    }
+    else {
+      use_scaling_ = false;
+    }
+    just_switched_on_scaling_ = false;
 
     bool retval = true;
     if (IsValid(scaling_method_)) {
+      IpData().TimingStats().LinearSystemScaling().Start();
       retval = scaling_method_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                            options, prefix);
+      IpData().TimingStats().LinearSystemScaling().End();
     }
     return retval;
   }
 
   ESymSolverStatus
   TSymLinearSolver::MultiSolve(const SymMatrix& sym_A,
-                               std::vector<const Vector*>& rhsV,
-                               std::vector<Vector*>& solV,
+                               std::vector<SmartPtr<const Vector> >& rhsV,
+                               std::vector<SmartPtr<Vector> >& solV,
                                bool check_NegEVals,
                                Index numberOfNegEVals)
   {
@@ -125,8 +173,9 @@ namespace Ipopt
     // entries from the linear solver interface, fill in the new
     // values, compute the new scaling factors (if required), and
     // scale the matrix
-    if (new_matrix) {
+    if (new_matrix || just_switched_on_scaling_) {
       GiveMatrixToSolver(true, sym_A);
+      new_matrix = true;
     }
 
     // Retrieve the right hand sides and scale if required
@@ -135,10 +184,12 @@ namespace Ipopt
     for (Index irhs=0; irhs<nrhs; irhs++) {
       TripletHelper::FillValuesFromVector(dim_, *rhsV[irhs],
                                           &rhs_vals[irhs*(dim_)]);
-      if (IsValid(scaling_method_)) {
+      if (use_scaling_) {
+        IpData().TimingStats().LinearSystemScaling().Start();
         for (Index i=0; i<dim_; i++) {
           rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
         }
+        IpData().TimingStats().LinearSystemScaling().End();
       }
     }
 
@@ -157,8 +208,10 @@ namespace Ipopt
         ja = ajcn_;
       }
       else {
+        IpData().TimingStats().LinearSystemStructureConverter().Start();
         ia = triplet_to_csr_converter_->IA();
         ja = triplet_to_csr_converter_->JA();
+        IpData().TimingStats().LinearSystemStructureConverter().End();
       }
 
       retval = solver_interface_->MultiSolve(new_matrix, ia, ja,
@@ -177,10 +230,12 @@ namespace Ipopt
     // and transfer the result into the Vectors
     if (retval==SYMSOLVER_SUCCESS) {
       for (Index irhs=0; irhs<nrhs; irhs++) {
-        if (IsValid(scaling_method_)) {
+        if (use_scaling_) {
+          IpData().TimingStats().LinearSystemScaling().Start();
           for (Index i=0; i<dim_; i++) {
             rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
           }
+          IpData().TimingStats().LinearSystemScaling().End();
         }
         TripletHelper::PutValuesInVector(dim_, &rhs_vals[irhs*(dim_)],
                                          *solV[irhs]);
@@ -201,48 +256,83 @@ namespace Ipopt
                    dbg_verbosity);
     DBG_ASSERT(!initialized_);
 
-    dim_ = sym_A.Dim();
-    nonzeros_triplet_ = TripletHelper::GetNumberEntries(sym_A);
+    ESymSolverStatus retval;
 
-    delete [] airn_;
-    delete [] ajcn_;
-    airn_ = new Index[nonzeros_triplet_];
-    ajcn_ = new Index[nonzeros_triplet_];
+    // have_structure_ is already true if this is a warm start for a
+    // problem with identical structure
+    if (!have_structure_) {
 
-    TripletHelper::FillRowCol(nonzeros_triplet_, sym_A, airn_, ajcn_);
+      dim_ = sym_A.Dim();
+      nonzeros_triplet_ = TripletHelper::GetNumberEntries(sym_A);
 
-    // If the solver wants the compressed format, the converter has to
-    // be initialized
-    const Index *ia;
-    const Index *ja;
-    Index nonzeros;
-    if (matrix_format_ == SparseSymLinearSolverInterface::Triplet_Format) {
-      ia = airn_;
-      ja = ajcn_;
-      nonzeros = nonzeros_triplet_;
+      delete [] airn_;
+      delete [] ajcn_;
+      airn_ = new Index[nonzeros_triplet_];
+      ajcn_ = new Index[nonzeros_triplet_];
+
+      TripletHelper::FillRowCol(nonzeros_triplet_, sym_A, airn_, ajcn_);
+
+      // If the solver wants the compressed format, the converter has to
+      // be initialized
+      const Index *ia;
+      const Index *ja;
+      Index nonzeros;
+      if (matrix_format_ == SparseSymLinearSolverInterface::Triplet_Format) {
+        ia = airn_;
+        ja = ajcn_;
+        nonzeros = nonzeros_triplet_;
+      }
+      else {
+        IpData().TimingStats().LinearSystemStructureConverter().Start();
+        IpData().TimingStats().LinearSystemStructureConverterInit().Start();
+        nonzeros_compressed_ =
+          triplet_to_csr_converter_->InitializeConverter(dim_, nonzeros_triplet_,
+              airn_, ajcn_);
+        IpData().TimingStats().LinearSystemStructureConverterInit().End();
+        ia = triplet_to_csr_converter_->IA();
+        ja = triplet_to_csr_converter_->JA();
+        IpData().TimingStats().LinearSystemStructureConverter().End();
+        nonzeros = nonzeros_compressed_;
+      }
+
+      retval = solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
+      if (retval != SYMSOLVER_SUCCESS) {
+        return retval;
+      }
+
+      // Get space for the scaling factors
+      delete [] scaling_factors_;
+      if (IsValid(scaling_method_)) {
+        IpData().TimingStats().LinearSystemScaling().Start();
+        scaling_factors_ = new double[dim_];
+        IpData().TimingStats().LinearSystemScaling().End();
+      }
+
+      have_structure_ = true;
     }
     else {
-      nonzeros_compressed_ =
-        triplet_to_csr_converter_->InitializeConverter(dim_, nonzeros_triplet_,
-            airn_, ajcn_);
-      ia = triplet_to_csr_converter_->IA();
-      ja = triplet_to_csr_converter_->JA();
-      nonzeros = nonzeros_compressed_;
+      ASSERT_EXCEPTION(dim_==sym_A.Dim(), INVALID_WARMSTART,
+                       "TSymLinearSolver called with warm_start_same_structure, but the problem is solved for the first time.");
+      // This is a warm start for identical structure, so we don't need to
+      // recompute the nonzeros location arrays
+      const Index *ia;
+      const Index *ja;
+      Index nonzeros;
+      if (matrix_format_ == SparseSymLinearSolverInterface::Triplet_Format) {
+        ia = airn_;
+        ja = ajcn_;
+        nonzeros = nonzeros_triplet_;
+      }
+      else {
+        IpData().TimingStats().LinearSystemStructureConverter().Start();
+        ia = triplet_to_csr_converter_->IA();
+        ja = triplet_to_csr_converter_->JA();
+        IpData().TimingStats().LinearSystemStructureConverter().End();
+        nonzeros = nonzeros_compressed_;
+      }
+      retval = solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
     }
-
-    ESymSolverStatus retval =
-      solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
-    if (retval != SYMSOLVER_SUCCESS) {
-      return retval;
-    }
-
-    // Get space for the scaling factors
-    delete [] scaling_factors_;
-    if (IsValid(scaling_method_)) {
-      scaling_factors_ = new double[dim_];
-    }
-
-    initialized_ = true;
+    initialized_=true;
     return retval;
   }
 
@@ -255,6 +345,16 @@ namespace Ipopt
   bool TSymLinearSolver::IncreaseQuality()
   {
     DBG_START_METH("TSymLinearSolver::IncreaseQuality",dbg_verbosity);
+
+    if (IsValid(scaling_method_) && !use_scaling_ &&
+        linear_scaling_on_demand_) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Switching on scaling of the linear system (on demand).\n");
+      IpData().Append_info_string("Mc");
+      use_scaling_ = true;
+      just_switched_on_scaling_ = true;
+      return true;
+    }
 
     return solver_interface_->IncreaseQuality();
   }
@@ -290,17 +390,21 @@ namespace Ipopt
       }
     }
 
-    if (IsValid(scaling_method_)) {
+    if (use_scaling_) {
+      IpData().TimingStats().LinearSystemScaling().Start();
       DBG_ASSERT(scaling_factors_);
-      if (new_matrix) {
+      if (new_matrix || just_switched_on_scaling_) {
         // only compute scaling factors if the matrix has not been
         // changed since the last call to this method
         bool retval =
           scaling_method_->ComputeSymTScalingFactors(dim_, nonzeros_triplet_,
               airn_, ajcn_,
               atriplet, scaling_factors_);
-        DBG_ASSERT(retval);
-        retval = false; // is added to make sure compiles doesn't
+        if (!retval) {
+          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                         "Error during computation of scaling factors.\n");
+          THROW_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD, "scaling_method_->ComputeSymTScalingFactors returned false.")
+        }
         // complain if not in debug mode
         if (Jnlst().ProduceOutput(J_MOREVECTOR, J_LINEAR_ALGEBRA)) {
           for (Index i=0; i<dim_; i++) {
@@ -309,6 +413,7 @@ namespace Ipopt
                            i, scaling_factors_[i]);
           }
         }
+        just_switched_on_scaling_ = false;
       }
       for (Index i=0; i<nonzeros_triplet_; i++) {
         atriplet[i] *=
@@ -319,11 +424,14 @@ namespace Ipopt
           DBG_PRINT((3, "KKTscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
         }
       }
+      IpData().TimingStats().LinearSystemScaling().End();
     }
 
     if (matrix_format_!=SparseSymLinearSolverInterface::Triplet_Format) {
+      IpData().TimingStats().LinearSystemStructureConverter().Start();
       triplet_to_csr_converter_->ConvertValues(nonzeros_triplet_, atriplet,
           nonzeros_compressed_, pa);
+      IpData().TimingStats().LinearSystemStructureConverter().End();
       delete[] atriplet;
     }
 

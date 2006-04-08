@@ -42,6 +42,12 @@
 /* Define to 1 if you have the <cstdio> header file. */
 #define HAVE_CSTDIO 1
 
+/* Define to 1 if you have the <cstdlib> header file. */
+#define HAVE_CSTDLIB 1
+
+/* Define to 1 if you have the <ctime> header file. */
+#define HAVE_CTIME 1
+
 /* Define to 1 if you have the <ctype.h> header file. */
 /* #undef HAVE_CTYPE_H */
 
@@ -54,8 +60,14 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 /* #undef HAVE_INTTYPES_H */
 
+/* Define to 1 if LAPACK is avaliable */
+#define HAVE_LAPACK 1
+
 /* Define to 1 if MA27 is available */
 #define HAVE_MA27 1
+
+/* Define to 1 if MA57 is available */
+/* #undef HAVE_MA57 */
 
 /* Define to 1 if you have the <math.h> header file. */
 /* #undef HAVE_MATH_H */
@@ -66,8 +78,14 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
+/* Define to 1 if MUMPS is available */
+/* #undef HAVE_MUMPS */
+
 /* Define to 1 if Pardiso is available (unsupported) */
 /* #undef HAVE_PARDISO */
+
+/* Define to 1 if you are using the parallel version of Pardiso */
+/* #undef HAVE_PARDISO_PARALLEL */
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 /* #undef HAVE_STDARG_H */
@@ -79,7 +97,7 @@
 /* #undef HAVE_STDIO_H */
 
 /* Define to 1 if you have the <stdlib.h> header file. */
-/* #undef HAVE_STDLIB_H */
+#define HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the <strings.h> header file. */
 /* #undef HAVE_STRINGS_H */
@@ -93,14 +111,20 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #define HAVE_SYS_TYPES_H 1
 
-/* Define to 1 if TAUCS is available (unsupported) */
+/* Define to 1 if TAUCS is available */
 /* #undef HAVE_TAUCS */
+
+/* Define to 1 if you have the <time.h> header file. */
+/* #undef HAVE_TIME_H */
 
 /* Define to 1 if you have the <unistd.h> header file. */
 /* #undef HAVE_UNISTD_H */
 
 /* Define to 1 if va_copy is avaliable */
 /* #undef HAVE_VA_COPY */
+
+/* Define to 1 if WSMP is available */
+/* #undef HAVE_WSMP */
 
 /* If defined, debug sanity checks are performed during runtime */
 /* #undef IP_DEBUG */
@@ -112,22 +136,25 @@
 #define PACKAGE "ipopt"
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "coin-ipopt@www-124.ibm.com"
+#define PACKAGE_BUGREPORT "coin-ipopt@list.coin-or.org"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "Ipopt"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Ipopt 3.0.0"
+#define PACKAGE_STRING "Ipopt 3.1.0"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "ipopt"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "3.0.0"
+#define PACKAGE_VERSION "3.1.0"
+
+/* The size of a `int *', as computed by sizeof. */
+#define SIZEOF_INT_P 4
 
 /* Define to 1 if you have the ANSI C header files. */
-/* #undef STDC_HEADERS */
+#define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "3.0.0"
+#define VERSION "3.1.0"

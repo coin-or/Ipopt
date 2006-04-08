@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -40,7 +40,7 @@ namespace Ipopt
   bool IsFiniteNumber(Number val)
   {
 #ifdef MY_C_FINITE
-    return MY_C_FINITE(val);
+    return (bool)MY_C_FINITE(val);
 #else
 
     return true;

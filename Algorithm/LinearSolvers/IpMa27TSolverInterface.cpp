@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -75,54 +75,63 @@ namespace Ipopt
   void Ma27TSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddBoundedNumberOption(
-      "pivtol",
+      "ma27_pivtol",
       "Pivot tolerance for the linear solver MA27.",
       0.0, true, 1.0, true, 1e-8,
-      "A smaller number pivots for sparsity, "
-      "a larger number pivots for stability.");
+      "A smaller number pivots for sparsity, a larger number pivots for "
+      "stability.  This option is only available if Ipopt has been compiled "
+      "with MA27.");
     roptions->AddBoundedNumberOption(
-      "pivtolmax",
-      "Maximum pivot tolerance.",
+      "ma27_pivtolmax",
+      "Maximum pivot tolerance for the linear solver MA27.",
       0.0, true, 1.0, true, 1e-4,
-      "Ipopt may increase pivtol as high as pivtolmax "
-      "to get a more accurate solution to the linear system.");
+      "Ipopt may increase pivtol as high as pivtolmax to get a more accurate "
+      "solution to the linear system.  This option is only available if "
+      "Ipopt has been compiled with MA27.");
     roptions->AddLowerBoundedNumberOption(
-      "liw_init_factor",
+      "ma27_liw_init_factor",
       "Integer workspace memory for MA27.",
       1.0, false, 5.0,
       "The initial integer workspace memory = liw_init_factor * memory "
       "required by unfactored system. Ipopt will increase the workspace "
-      "size by meminc_factor if required.");
+      "size by meminc_factor if required.  This option is only available if "
+      "Ipopt has been compiled with MA27.");
     roptions->AddLowerBoundedNumberOption(
-      "la_init_factor",
+      "ma27_la_init_factor",
       "Real workspace memory for MA27.",
       1.0, false, 5.0,
       "The initial real workspace memory = la_init_factor * memory "
       "required by unfactored system. Ipopt will increase the workspace"
-      " size by meminc_factor if required.");
+      " size by meminc_factor if required.  This option is only available if "
+      " Ipopt has been compiled with MA27.");
     roptions->AddLowerBoundedNumberOption(
-      "meminc_factor",
+      "ma27_meminc_factor",
       "Increment factor for workspace size for MA27.",
       1.0, false, 10.0,
       "If the integer or real workspace is not large enough, "
-      "Ipopt will increase its size by this factor.");
+      "Ipopt will increase its size by this factor.  This option is only "
+      "available if Ipopt has been compiled with MA27.");
   }
 
   bool Ma27TSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    options.GetNumericValue("pivtol", pivtol_, prefix);
-    if(options.GetNumericValue("pivtolmax", pivtolmax_, prefix)) {
+    options.GetNumericValue("ma27_pivtol", pivtol_, prefix);
+    if(options.GetNumericValue("ma27_pivtolmax", pivtolmax_, prefix)) {
       ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OPTION_INVALID,
-                       "Option \"pivtolmax\": This value must be between pivtol and 1.");
+                       "Option \"ma27_pivtolmax\": This value must be between "
+                       "ma27_pivtol and 1.");
     }
     else {
       pivtolmax_ = Max(pivtolmax_, pivtol_);
     }
 
-    options.GetNumericValue("liw_init_factor", liw_init_factor_, prefix);
-    options.GetNumericValue("la_init_factor", la_init_factor_, prefix);
-    options.GetNumericValue("meminc_factor", meminc_factor_, prefix);
+    options.GetNumericValue("ma27_liw_init_factor", liw_init_factor_, prefix);
+    options.GetNumericValue("ma27_la_init_factor", la_init_factor_, prefix);
+    options.GetNumericValue("ma27_meminc_factor", meminc_factor_, prefix);
+    // The following option is registered by OrigIpoptNLP
+    options.GetBoolValue("warm_start_same_structure",
+                         warm_start_same_structure_, prefix);
 
     /* Set the default options for MA27 */
     F77_FUNC(ma27id,MA27ID)(icntl_, cntl_);
@@ -133,14 +142,21 @@ namespace Ipopt
 #endif
 
     // Reset all private data
-    dim_=0;
-    nonzeros_=0;
     initialized_=false;
     pivtol_changed_ = false;
     refactorize_ = false;
 
     la_increase_=false;
     liw_increase_=false;
+
+    if (!warm_start_same_structure_) {
+      dim_=0;
+      nonzeros_=0;
+    }
+    else {
+      ASSERT_EXCEPTION(dim_>0 && nonzeros_>0, INVALID_WARMSTART,
+                       "Ma27TSolverInterface called with warm_start_same_structure, but the problem is solved for the first time.");
+    }
 
     return true;
   }
@@ -212,13 +228,21 @@ namespace Ipopt
       const Index* ajcn)
   {
     DBG_START_METH("Ma27TSolverInterface::InitializeStructure",dbg_verbosity);
-    dim_ = dim;
-    nonzeros_ = nonzeros;
 
-    // Do the symbolic facotrization
-    ESymSolverStatus retval = SymbolicFactorization(airn, ajcn);
-    if (retval != SYMSOLVER_SUCCESS ) {
-      return retval;
+    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
+    if (!warm_start_same_structure_) {
+      dim_ = dim;
+      nonzeros_ = nonzeros;
+
+      // Do the symbolic facotrization
+      retval = SymbolicFactorization(airn, ajcn);
+      if (retval != SYMSOLVER_SUCCESS ) {
+        return retval;
+      }
+    }
+    else {
+      ASSERT_EXCEPTION(dim_==dim && nonzeros_==nonzeros, INVALID_WARMSTART,
+                       "Ma27TSolverInterface called with warm_start_same_structure, but the problem size has changed.");
     }
 
     initialized_ = true;
@@ -230,6 +254,8 @@ namespace Ipopt
       const Index* ajcn)
   {
     DBG_START_METH("Ma27TSolverInterface::SymbolicFactorization",dbg_verbosity);
+
+    IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
 
     // Get memory for the IW workspace
     delete [] iw_;
@@ -272,19 +298,32 @@ namespace Ipopt
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                        "The index a matrix is out of range.\nPlease check your implementation of the Jabobian and Hessian matrices.");
       }
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
       return SYMSOLVER_FATAL_ERROR;
     }
 
     // ToDo: try and catch
     // Reserve memory for iw_ for later calls, based on suggested size
     delete [] iw_;
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Size of integer work space recommended by MA27 is %d\n",
+                   nirnec);
     liw_ = (ipfint)(liw_init_factor_ * (double)(nirnec));
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Setting integer work space size to %d\n", liw_);
     iw_ = new ipfint[liw_];
 
     // Reserve memory for a_
     delete [] a_;
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Size of doublespace recommended by MA27 is %d\n",
+                   nrlnec);
     la_ = Max(nonzeros_,(ipfint)(la_init_factor_ * (double)(nrlnec)));
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Setting double work space size to %d\n", la_);
     a_ = new double[la_];
+
+    IpData().TimingStats().LinearSystemSymbolicFactorization().End();
 
     return SYMSOLVER_SUCCESS;
   }
@@ -297,6 +336,7 @@ namespace Ipopt
   {
     DBG_START_METH("Ma27TSolverInterface::Factorization",dbg_verbosity);
     // Check if la should be increased
+    IpData().TimingStats().LinearSystemFactorization().Start();
     if (la_increase_) {
       double* a_old = a_;
       ipfint la_old = la_;
@@ -370,17 +410,20 @@ namespace Ipopt
       iw_ = new ipfint[liw_];
       a_ = new double[la_];
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                     "MA27BD returned iflag=%d.\n Increase liw from %d to %d and la from %d to %d and factorize again.\n",
+                     "MA27BD returned iflag=%d and requires more memory.\n Increase liw from %d to %d and la from %d to %d and factorize again.\n",
                      iflag, liw_old, liw_, la_old, la_);
+      IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_CALL_AGAIN;
     }
 
     // Check if the system is singular, and if some other error occurred
     if (iflag==-5 || iflag==3) {
+      IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_SINGULAR;
     }
     else if (iflag != 0) {
       // There is some error
+      IpData().TimingStats().LinearSystemFactorization().End();
       return SYMSOLVER_FATAL_ERROR;
     }
 
@@ -401,6 +444,7 @@ namespace Ipopt
 
     // Check whether the number of negative eigenvalues matches the requested
     // count
+    IpData().TimingStats().LinearSystemFactorization().End();
     if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "In Ma27TSolverInterface::Factorization: negevals_ = %d, but numberOfNegEVals = %d\n",
@@ -415,6 +459,7 @@ namespace Ipopt
       double *rhs_vals)
   {
     DBG_START_METH("Ma27TSolverInterface::Backsolve",dbg_verbosity);
+    IpData().TimingStats().LinearSystemBackSolve().Start();
 
     ipfint N=dim_;
     double* W = new double[maxfrt_];
@@ -441,6 +486,7 @@ namespace Ipopt
     delete [] W;
     delete [] IW1;
 
+    IpData().TimingStats().LinearSystemBackSolve().End();
     return SYMSOLVER_SUCCESS;
   }
 
@@ -461,7 +507,7 @@ namespace Ipopt
     pivtol_changed_ = true;
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Indreasing pivot tolerance from %7.2e ",
+                   "Indreasing pivot tolerance for MA27 from %7.2e ",
                    pivtol_);
     pivtol_ = Min(pivtolmax_, pow(pivtol_,0.75));
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,

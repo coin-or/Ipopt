@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -10,10 +10,6 @@
 
 namespace Ipopt
 {
-
-#ifdef IP_DEBUG
-  static const Index dbg_verbosity = 0;
-#endif
 
   IteratesVector::IteratesVector(const IteratesVectorSpace* owner_space, bool create_new)
       :

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,6 +11,9 @@
 #include "IpSumSymMatrix.hpp"
 #include "IpSumMatrix.hpp"
 #include "IpNLPScaling.hpp"
+#include "IpLowRankUpdateSymMatrix.hpp"
+#include "IpIpoptData.hpp"
+#include "IpIpoptCalculatedQuantities.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -58,11 +61,11 @@ namespace Ipopt
   {
     roptions->AddStringOption2(
       "evaluate_orig_obj_at_resto_trial",
-      "Determines if the original objective function should be evalutated at restoration phase trial points.",
+      "Determines if the original objective function should be evaluated at restoration phase trial points.",
       "yes",
       "no", "skip evaluation",
       "yes", "evaluate at every trial point",
-      "Setting this option to true makes the restoration phase algorithm "
+      "Setting this option to \"yes\" makes the restoration phase algorithm "
       "evaluate the objective function of the original problem at every trial "
       "point encountered during the restoration phase, even if this value is "
       "not required.  In this way, it is guaranteed that the original "
@@ -80,6 +83,9 @@ namespace Ipopt
   {
     options.GetBoolValue("evaluate_orig_obj_at_resto_trial",
                          evaluate_orig_obj_at_resto_trial_, prefix);
+    Index enum_int;
+    options.GetEnumValue("hessian_approximation", enum_int, prefix);
+    hessian_approximation_ = HessianApproximationType(enum_int);
 
     initialized_ = true;
     return IpoptNLP::Initialize(jnlst, options, prefix);
@@ -131,7 +137,6 @@ namespace Ipopt
     // Create the restoration phase problem vector/matrix spaces, based
     // on the original spaces (pretty inconvenient with all the
     // matrix spaces, isn't it?!?)
-
     DBG_PRINT((1, "Creating the x_space_\n"));
     // vector x
     Index total_dim = orig_x_space->Dim() + 2*orig_c_space->Dim()
@@ -281,10 +286,27 @@ namespace Ipopt
     h_space_->SetBlockDim(3, orig_d_space->Dim());
     h_space_->SetBlockDim(4, orig_d_space->Dim());
 
-    SmartPtr<const MatrixSpace> sumsym_mat_space =
-      new SumSymMatrixSpace(orig_x_space->Dim(), 2);
-    h_space_->SetCompSpace(0, 0, *sumsym_mat_space, true);
-    // All remaining blocks are zero'ed out
+    SmartPtr<DiagMatrixSpace> DR_x_space
+    = new DiagMatrixSpace(orig_x_space->Dim());
+    if (hessian_approximation_==LIMITED_MEMORY) {
+      const LowRankUpdateSymMatrixSpace* LR_h_space =
+        dynamic_cast<const LowRankUpdateSymMatrixSpace*> (GetRawPtr(orig_h_space));
+      DBG_ASSERT(LR_h_space);
+      SmartPtr<LowRankUpdateSymMatrixSpace> new_orig_h_space =
+        new LowRankUpdateSymMatrixSpace(LR_h_space->Dim(),
+                                        NULL,
+                                        orig_x_space,
+                                        false);
+      h_space_->SetCompSpace(0, 0, *new_orig_h_space);
+    }
+    else {
+      SmartPtr<SumSymMatrixSpace> sumsym_mat_space =
+        new SumSymMatrixSpace(orig_x_space->Dim(), 2);
+      sumsym_mat_space->SetTermSpace(0, *orig_h_space);
+      sumsym_mat_space->SetTermSpace(1, *DR_x_space);
+      h_space_->SetCompSpace(0, 0, *sumsym_mat_space, true);
+      // All remaining blocks are zero'ed out
+    }
 
     SmartPtr<const MatrixSpace> scaled_jac_c_space;
     SmartPtr<const MatrixSpace> scaled_jac_d_space;
@@ -390,8 +412,6 @@ namespace Ipopt
     x_ref_ = orig_x_space->MakeNew();
     x_ref_->Copy(*orig_ip_data_->curr()->x());
 
-    SmartPtr<DiagMatrixSpace> DR_x_space
-    = new DiagMatrixSpace(orig_x_space->Dim());
     dr_x_ = orig_x_space->MakeNew();
     dr_x_->Set(1.0);
     SmartPtr<Vector> tmp = dr_x_->MakeNew();
@@ -684,6 +704,22 @@ namespace Ipopt
     x_L_->GetCompNonConst(3)->Copy(*new_nd_L);
     x_L_->GetCompNonConst(4)->Copy(*new_pd_L);
 
+  }
+
+  bool RestoIpoptNLP::IntermediateCallBack(AlgorithmMode mode,
+      Index iter, Number obj_value,
+      Number inf_pr, Number inf_du,
+      Number mu, Number d_norm,
+      Number regularization_size,
+      Number alpha_du, Number alpha_pr,
+      Index ls_trials,
+      SmartPtr<const IpoptData> ip_data,
+      SmartPtr<IpoptCalculatedQuantities> ip_cq)
+  {
+    return orig_ip_nlp_->IntermediateCallBack(mode, iter, obj_value, inf_pr, inf_du,
+           mu, d_norm, regularization_size,
+           alpha_du, alpha_pr, ls_trials,
+           ip_data, ip_cq);
   }
 
 } // namespace Ipopt

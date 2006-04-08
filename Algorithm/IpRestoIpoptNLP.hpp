@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -18,6 +18,7 @@
 #include "IpIdentityMatrix.hpp"
 #include "IpDiagMatrix.hpp"
 #include "IpZeroMatrix.hpp"
+#include "IpOrigIpoptNLP.hpp"
 
 namespace Ipopt
 {
@@ -61,6 +62,12 @@ namespace Ipopt
                                       SmartPtr<Vector>& v_L,
                                       SmartPtr<Vector>& v_U
                                      );
+
+    /** Method accessing the GetWarmStartIterate of the NLP */
+    virtual bool GetWarmStartIterate(IteratesVector& warm_start_iterate)
+    {
+      return false;
+    }
 
     /** Solution Routines - overloaded from IpoptNLP*/
     //@{
@@ -169,6 +176,11 @@ namespace Ipopt
     {
       return GetRawPtr(Pd_U_);
     }
+
+    virtual SmartPtr<const SymMatrixSpace> HessianMatrixSpace() const
+    {
+      return GetRawPtr(h_space_);
+    }
     //@}
 
     /** Accessor method for vector/matrix spaces pointers */
@@ -192,6 +204,17 @@ namespace Ipopt
                                       const Vector& new_x_U,
                                       const Vector& new_d_L,
                                       const Vector& new_d_U);
+
+    /** User callback method */
+    bool IntermediateCallBack(AlgorithmMode mode,
+                              Index iter, Number obj_value,
+                              Number inf_pr, Number inf_du,
+                              Number mu, Number d_norm,
+                              Number regularization_size,
+                              Number alpha_du, Number alpha_pr,
+                              Index ls_trials,
+                              SmartPtr<const IpoptData> ip_data,
+                              SmartPtr<IpoptCalculatedQuantities> ip_cq);
 
     /** @name Accessor method for the information of the original NLP.
      *  These methods are not overloaded from IpoptNLP */
@@ -248,6 +271,16 @@ namespace Ipopt
       return h_evals_;
     }
     //@}
+
+    /** Method to calculate eta, the factor for the regularization term */
+    Number Eta(Number mu) const;
+
+    /** Method returning the scaling factors for the 2-norm
+     *  penalization term. */
+    SmartPtr<const Vector> DR_x() const
+    {
+      return ConstPtr(dr_x_);
+    }
 
     /** Methods for IpoptType */
     //@{
@@ -343,9 +376,6 @@ namespace Ipopt
     SmartPtr<Vector> x_ref_;
     //@}
 
-    /** Method to calculate eta, the factor for the regularization term */
-    Number Eta(Number mu) const;
-
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
      * These methods are not implemented and 
@@ -364,10 +394,15 @@ namespace Ipopt
     void operator=(const RestoIpoptNLP&);
     //@}
 
+    /** @name Algorithmic parameter */
+    //@{
     /** Flag indicating if evalution of the objective should be
      *  performed for every restoration phase objective function
      *  evaluation. */
     bool evaluate_orig_obj_at_resto_trial_;
+    /** Flag indicating how hessian information is obtained */
+    HessianApproximationType hessian_approximation_;
+    //@}
 
     /** Flag indicating if initialization method has been called */
     bool initialized_;

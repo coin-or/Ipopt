@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -53,6 +53,10 @@ namespace Ipopt
 
     virtual void TransMultVectorImpl(Number alpha, const Vector& x,
                                      Number beta, Vector& y) const;
+
+    /** Method for determining if all stored numbers are valid (i.e.,
+     *  no Inf or Nan). */
+    virtual bool HasValidNumbersImpl() const;
 
     virtual void PrintImpl(const Journalist& jnlst,
                            EJournalLevel level,
@@ -117,6 +121,13 @@ namespace Ipopt
       return nterms_;
     }
 
+    /** Set the appropriate matrix space for each term. This must
+     *  be called for each term or a runtime error will occur */
+    void SetTermSpace(Index term_idx, const MatrixSpace& mat_space);
+
+    /** Get the matrix space for a particular term */
+    SmartPtr<const MatrixSpace> GetTermSpace(Index term_idx) const;
+
     /** Method for creating a new matrix of this specific type. */
     SumMatrix* MakeNewSumMatrix() const;
 
@@ -144,6 +155,8 @@ namespace Ipopt
     //@}
 
     const Index nterms_;
+
+    std::vector< SmartPtr<const MatrixSpace> > term_spaces_;
   };
 
 } // namespace Ipopt

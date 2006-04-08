@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -42,11 +42,13 @@ namespace Ipopt
     bool InitializeImpl(const OptionsList& options,
                         const std::string& prefix);
 
-    /** Translate the augmented system (in the full space of the restoration variables)
-     *  into the smaller space of the original variables
+    /** Translate the augmented system (in the full space of the
+     *  restoration variables) into the smaller space of the original
+     *  variables
      */
     virtual ESymSolverStatus Solve(
       const SymMatrix* W,
+      double W_factor,
       const Vector* D_x,
       double delta_x,
       const Vector* D_s,

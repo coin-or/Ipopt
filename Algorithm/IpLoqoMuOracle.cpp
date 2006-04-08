@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -41,7 +41,8 @@ namespace Ipopt
     return true;
   }
 
-  Number LoqoMuOracle::CalculateMu()
+  bool LoqoMuOracle::CalculateMu(Number mu_min, Number mu_max,
+                                 Number& new_mu)
   {
     DBG_START_METH("LoqoMuOracle::CalculateMu",
                    dbg_verbosity);
@@ -69,7 +70,8 @@ namespace Ipopt
     sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
     IpData().Append_info_string(ssigma);
 
-    return mu;
+    new_mu = Max(Min(mu_max, mu), mu_min);
+    return true;
   }
 
 } // namespace Ipopt

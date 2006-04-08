@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -8,6 +8,16 @@
 
 #include "IpCompoundMatrix.hpp"
 #include "IpCompoundVector.hpp"
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -358,6 +368,26 @@ namespace Ipopt
                                               *D_i, *X_i);
       }
     }
+  }
+
+  bool CompoundMatrix::HasValidNumbersImpl() const
+  {
+    if (!matrices_valid_) {
+      matrices_valid_ = MatricesValid();
+    }
+    DBG_ASSERT(matrices_valid_);
+
+    for( Index irow = 0; irow < NComps_Rows(); irow++ ) {
+      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ ) {
+        if ( (owner_space_->Diagonal() && irow == jcol)
+             || (!owner_space_->Diagonal() && ConstComp(irow,jcol)) ) {
+          if (!ConstComp(irow, jcol)->HasValidNumbers()) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 
   void CompoundMatrix::PrintImpl(const Journalist& jnlst,

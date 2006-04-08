@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -44,6 +44,34 @@ namespace Ipopt
   /** Wrapper for BLAS subroutine DSCAL.  Scaling vector x by scalar
       alpha */
   void IpBlasDscal(Index size, Number alpha, Number *x, Index incX);
+
+  /** Wrapper for BLAS subroutine DGEMV.  Multiplying a matrix with a
+      vector. */
+  void IpBlasDgemv(bool trans, Index nRows, Index nCols, Number alpha,
+                   const Number* A, Index ldA, const Number* x,
+                   Index incX, Number beta, Number* y, Index incY);
+
+  /** Wrapper for BLAS subroutine DSYMV.  Multiplying a symmetric
+      matrix with a vector. */
+  void IpBlasDsymv(Index n, Number alpha, const Number* A, Index ldA,
+                   const Number* x, Index incX, Number beta, Number* y,
+                   Index incY);
+
+  /** Wrapper for BLAS subroutine DGEMM.  Multiplying two matrices */
+  void IpBlasDgemm(bool transa, bool transb, Index m, Index n, Index k,
+                   Number alpha, const Number* A, Index ldA, const Number* B,
+                   Index ldB, Number beta, Number* C, Index ldC);
+
+  /** Wrapper for BLAS subroutine DSYRK.  Adding a high-rank update to
+   *  a matrix */
+  void IpBlasDsyrk(bool trans, Index ndim, Index nrank,
+                   Number alpha, const Number* A, Index ldA,
+                   Number beta, Number* C, Index ldC);
+
+  /** Wrapper for BLAS subroutine DTRSM.  Backsolve for a lower triangular
+   *  matrix.  */
+  void IpBlasDtrsm(bool trans, Index ndim, Index nrhs, Number alpha,
+                   const Number* A, Index ldA, Number* B, Index ldB);
 
 } // namespace Ipopt
 

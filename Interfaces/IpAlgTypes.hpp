@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -25,7 +25,12 @@ namespace Ipopt
     STOP_AT_TINY_STEP,
     STOP_AT_ACCEPTABLE_POINT,
     LOCAL_INFEASIBILITY,
+    USER_REQUESTED_STOP,
+    DIVERGING_ITERATES,
     RESTORATION_FAILURE,
+    ERROR_IN_STEP_COMPUTATION,
+    INVALID_NUMBER_DETECTED,
+    TOO_FEW_DEGREES_OF_FREEDOM,
     INTERNAL_ERROR
   };
   //@}
@@ -37,6 +42,7 @@ namespace Ipopt
   DECLARE_STD_EXCEPTION(TINY_STEP_DETECTED);
   DECLARE_STD_EXCEPTION(ACCEPTABLE_POINT_REACHED);
   DECLARE_STD_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED);
+  DECLARE_STD_EXCEPTION(INVALID_WARMSTART);
   DECLARE_STD_EXCEPTION(INTERNAL_ABORT);
   /** Exception FAILED_INITIALIZATION for problem during
    *  initialization of a strategy object (or other problems).  This

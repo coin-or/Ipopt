@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -15,6 +15,10 @@ int main(int argv, char**argc)
 
   SmartPtr<IpoptApplication> app = new IpoptApplication();
 
+  // Call Initialize the first time to create a journalist, but ignore
+  // any options file
+  app->Initialize("");
+
   // Add the suffix handler for scaling
   SmartPtr<AmplSuffixHandler> suffix_handler = new AmplSuffixHandler();
   suffix_handler->AddAvailableSuffix("scaling_factor", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
@@ -24,6 +28,9 @@ int main(int argv, char**argc)
   SmartPtr<TNLP> ampl_tnlp = new AmplTNLP(ConstPtr(app->Jnlst()),
                                           app->Options(),
                                           argc, suffix_handler);
+
+  // Call Initialize again to process output related options
+  app->Initialize();
 
   ApplicationReturnStatus retval;
   const int n_loops = 1; // make larger for profiling

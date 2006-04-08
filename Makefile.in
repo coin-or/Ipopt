@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, 2005 International Business Machines and others.
+# Copyright (C) 2004, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -43,11 +43,14 @@ build_triplet = @build@
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in \
 	$(top_srcdir)/Examples/Cpp_example/Makefile.in \
+	$(top_srcdir)/Examples/ScalableProblems/Makefile.in \
 	$(top_srcdir)/Examples/hs071_c/Makefile.in \
 	$(top_srcdir)/Examples/hs071_cpp/Makefile.in \
 	$(top_srcdir)/Examples/hs071_f/Makefile.in \
-	$(top_srcdir)/configure $(top_srcdir)/inc/config.h.in AUTHORS \
-	ChangeLog config.guess config.sub depcomp install-sh missing
+	$(top_srcdir)/Examples/hs071_f/hs071_f.f.in \
+	$(top_srcdir)/Test/run_unitTests.in $(top_srcdir)/configure \
+	$(top_srcdir)/inc/config.h.in AUTHORS ChangeLog INSTALL \
+	config.guess config.sub depcomp install-sh missing
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -58,8 +61,9 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config.h
 CONFIG_CLEAN_FILES = Examples/hs071_f/Makefile \
-	Examples/Cpp_example/Makefile Examples/hs071_cpp/Makefile \
-	Examples/hs071_c/Makefile
+	Examples/hs071_f/hs071_f.f Examples/Cpp_example/Makefile \
+	Examples/hs071_cpp/Makefile Examples/hs071_c/Makefile \
+	Examples/ScalableProblems/Makefile Test/run_unitTests
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -99,6 +103,10 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BIT32FCOMMENT = @BIT32FCOMMENT@
+BIT64FCOMMENT = @BIT64FCOMMENT@
+BITS_PER_POINTER = @BITS_PER_POINTER@
+BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDAMPLINTERFACE_FALSE = @BUILDAMPLINTERFACE_FALSE@
 BUILDAMPLINTERFACE_TRUE = @BUILDAMPLINTERFACE_TRUE@
 BUILDASLDIR_FALSE = @BUILDASLDIR_FALSE@
@@ -111,13 +119,20 @@ BUILDHSLDIR_FALSE = @BUILDHSLDIR_FALSE@
 BUILDHSLDIR_TRUE = @BUILDHSLDIR_TRUE@
 BUILDHSL_FALSE = @BUILDHSL_FALSE@
 BUILDHSL_TRUE = @BUILDHSL_TRUE@
+BUILDLAPACKDIR_FALSE = @BUILDLAPACKDIR_FALSE@
+BUILDLAPACKDIR_TRUE = @BUILDLAPACKDIR_TRUE@
+BUILDLAPACK_FALSE = @BUILDLAPACK_FALSE@
+BUILDLAPACK_TRUE = @BUILDLAPACK_TRUE@
 BUILDMA27_FALSE = @BUILDMA27_FALSE@
 BUILDMA27_TRUE = @BUILDMA27_TRUE@
+BUILDMA57_FALSE = @BUILDMA57_FALSE@
+BUILDMA57_TRUE = @BUILDMA57_TRUE@
 BUILDMC19_FALSE = @BUILDMC19_FALSE@
 BUILDMC19_TRUE = @BUILDMC19_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
+CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
@@ -137,12 +152,18 @@ FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
 HAVE_MA27_FALSE = @HAVE_MA27_FALSE@
 HAVE_MA27_TRUE = @HAVE_MA27_TRUE@
+HAVE_MA57_FALSE = @HAVE_MA57_FALSE@
+HAVE_MA57_TRUE = @HAVE_MA57_TRUE@
 HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
 HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
+HAVE_MUMPS_FALSE = @HAVE_MUMPS_FALSE@
+HAVE_MUMPS_TRUE = @HAVE_MUMPS_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
 HAVE_TAUCS_TRUE = @HAVE_TAUCS_TRUE@
+HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
+HAVE_WSMP_TRUE = @HAVE_WSMP_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -158,6 +179,7 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
+MUMPS_INCFLAGS = @MUMPS_INCFLAGS@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -215,27 +237,93 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = Extern Common LinAlg Algorithm Interfaces Apps
 EXTRA_DIST = \
 	Examples/Cpp_example/cpp_example.cpp \
+	Examples/Cpp_example/Makefile.in \
 	Examples/Cpp_example/MyNLP.cpp \
 	Examples/Cpp_example/MyNLP.hpp \
-	Examples/hs071_f/hs071_f.f \
+	Examples/hs071_f/Makefile.in \
+	Examples/hs071_f/hs071_f.f.in \
+	Examples/hs071_c/Makefile.in \
 	Examples/hs071_c/hs071_c.c \
+	Examples/hs071_cpp/Makefile.in \
 	Examples/hs071_cpp/hs071_main.cpp \
 	Examples/hs071_cpp/hs071_nlp.cpp \
 	Examples/hs071_cpp/hs071_nlp.hpp \
+	Examples/ScalableProblems/LuksanVlcek1.cpp \
+	Examples/ScalableProblems/LuksanVlcek1.hpp \
+	Examples/ScalableProblems/LuksanVlcek2.cpp \
+	Examples/ScalableProblems/LuksanVlcek2.hpp \
+	Examples/ScalableProblems/LuksanVlcek3.cpp \
+	Examples/ScalableProblems/LuksanVlcek3.hpp \
+	Examples/ScalableProblems/LuksanVlcek4.cpp \
+	Examples/ScalableProblems/LuksanVlcek4.hpp \
+	Examples/ScalableProblems/LuksanVlcek5.cpp \
+	Examples/ScalableProblems/LuksanVlcek5.hpp \
+	Examples/ScalableProblems/LuksanVlcek6.cpp \
+	Examples/ScalableProblems/LuksanVlcek6.hpp \
+	Examples/ScalableProblems/LuksanVlcek7.cpp \
+	Examples/ScalableProblems/LuksanVlcek7.hpp \
+	Examples/ScalableProblems/Makefile.in \
+	Examples/ScalableProblems/MittelmannBndryCntrlDiri.cpp \
+	Examples/ScalableProblems/MittelmannBndryCntrlDiri.hpp \
+	Examples/ScalableProblems/MittelmannBndryCntrlNeum.cpp \
+	Examples/ScalableProblems/MittelmannBndryCntrlNeum.hpp \
+	Examples/ScalableProblems/MittelmannDistCntrlDiri.cpp \
+	Examples/ScalableProblems/MittelmannDistCntrlDiri.hpp \
+	Examples/ScalableProblems/MittelmannDistCntrlNeumA.cpp \
+	Examples/ScalableProblems/MittelmannDistCntrlNeumA.hpp \
+	Examples/ScalableProblems/MittelmannDistCntrlNeumB.cpp \
+	Examples/ScalableProblems/MittelmannDistCntrlNeumB.hpp \
+	Examples/ScalableProblems/MittelmannParaCntrl.hpp \
+	Examples/ScalableProblems/README \
+	Examples/ScalableProblems/RegisteredTNLP.cpp \
+	Examples/ScalableProblems/RegisteredTNLP.hpp \
+	Examples/ScalableProblems/solve_problem.cpp \
 	README \
+	INSTALL \
+	LICENSE \
+	AUTHORS \
+	Docs/documentation.bbl \
 	Docs/documentation.tex \
+	Docs/documentation.pdf \
+	Docs/options.tex \
+	Test/run_unitTests.in \
+	Test/mytoy.nl \
 	Windows/VisualStudio_dotNET/README \
 	Windows/VisualStudio_dotNET/CppExample/CppExample.vcproj \
-	Windows/VisualStudio_dotNET/FortranLinAlg/FortranLinAlg.vfproj \
-	Windows/VisualStudio_dotNET/hs071_c/hs071_c.vcproj \
 	Windows/VisualStudio_dotNET/hs071_cpp/hs071_cpp.vcproj \
+	Windows/VisualStudio_dotNET/hs071_c/hs071_c.vcproj \
 	Windows/VisualStudio_dotNET/hs071_f/hs071_f.vfproj \
+	Windows/VisualStudio_dotNET/hs071_f/hs071_f.f \
+	Windows/VisualStudio_dotNET/FortranLinAlg/FortranLinAlg.vfproj \
 	Windows/VisualStudio_dotNET/include/config.h \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
-	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj
+	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj \
+	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj
+
+
+# Stuff to clean up from "make test"
+DISTCLEANFILES = \
+	Examples/hs071_cpp/hs071_cpp \
+	Examples/hs071_cpp/hs071_cpp.exe \
+	Examples/hs071_cpp/hs071_main.o \
+	Examples/hs071_cpp/hs071_main.obj \
+	Examples/hs071_cpp/hs071_nlp.o \
+	Examples/hs071_cpp/hs071_nlp.obj \
+	Examples/hs071_cpp/ipopt.out \
+	Examples/hs071_c/hs071_c \
+	Examples/hs071_c/hs071_c.exe \
+	Examples/hs071_c/hs071_c.o \
+	Examples/hs071_c/hs071_c.obj \
+	Examples/hs071_c/ipopt.out \
+	Examples/hs071_f/hs071_f \
+	Examples/hs071_f/hs071_f.exe \
+	Examples/hs071_f/hs071_f.o \
+	Examples/hs071_f/hs071_f.obj
 
 tmpdir = tmpdir
 libipopt = libipopt.a
+ipopt_addlibs_cpp_txt = ipopt_addlibs_cpp.txt
+ipopt_addlibs_f_txt = ipopt_addlibs_f.txt
 all: all-recursive
 
 .SUFFIXES:
@@ -291,11 +379,17 @@ distclean-hdr:
 	-rm -f inc/config.h inc/stamp-h1
 Examples/hs071_f/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/hs071_f/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+Examples/hs071_f/hs071_f.f: $(top_builddir)/config.status $(top_srcdir)/Examples/hs071_f/hs071_f.f.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 Examples/Cpp_example/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/Cpp_example/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 Examples/hs071_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/hs071_cpp/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 Examples/hs071_c/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/hs071_c/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+Examples/ScalableProblems/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/ScalableProblems/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+Test/run_unitTests: $(top_builddir)/config.status $(top_srcdir)/Test/run_unitTests.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 uninstall-info-am:
 
@@ -434,7 +528,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/Docs $(distdir)/Examples/Cpp_example $(distdir)/Examples/hs071_c $(distdir)/Examples/hs071_cpp $(distdir)/Examples/hs071_f $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/Windows/VisualStudio_dotNET/include $(distdir)/inc
+	$(mkdir_p) $(distdir)/Docs $(distdir)/Examples/Cpp_example $(distdir)/Examples/ScalableProblems $(distdir)/Examples/hs071_c $(distdir)/Examples/hs071_cpp $(distdir)/Examples/hs071_f $(distdir)/Test $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/Windows/VisualStudio_dotNET/include $(distdir)/inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -598,6 +692,7 @@ clean-generic:
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -685,16 +780,36 @@ install-exec-local:
 	do \
 	  $(AR_X) $$basdir/$$lib; \
 	done; \
+	$(BLUEGENEEXTRA); \
 	$(AR) $(ARFLAGS) $(libipopt) *.$(OBJEXT)
 	$(INSTALL_DATA) $(tmpdir)/$(libipopt) $(DESTDIR)$(libdir)
+	echo "$(IPADDLIBS) $(FLIBS)" >$(tmpdir)/$(ipopt_addlibs_cpp_txt)
+	echo "$(IPADDLIBS)" >$(tmpdir)/$(ipopt_addlibs_f_txt)
+	$(INSTALL_DATA) $(tmpdir)/$(ipopt_addlibs_cpp_txt) $(DESTDIR)$(libdir)
+	$(INSTALL_DATA) $(tmpdir)/$(ipopt_addlibs_f_txt) $(DESTDIR)$(libdir)
 	rm -rf $(tmpdir)
 	$(RANLIB) $(DESTDIR)$(libdir)/$(libipopt)
 
 uninstall-local:
+	echo DESTDIR $(DESTDIR)
+	echo libdir $(libdir)
+	echo libipopt $(libipopt)
 	rm -f $(DESTDIR)$(libdir)/$(libipopt)
+	rm -f $(DESTDIR)$(libdir)/$(ipopt_addlibs_cpp_txt)
+	rm -f $(DESTDIR)$(libdir)/$(ipopt_addlibs_f_txt)
 
 cuter: install
 	cd Apps/CUTErInterface; $(MAKE) cuter
+
+test: unitTest
+
+unitTests: unitTest
+
+unitTest:
+	cd Examples/hs071_cpp; make clean; make
+	cd Examples/hs071_c; make clean; make
+	cd Examples/hs071_f; make clean; make
+	cd Test; chmod u+x ./run_unitTests; ./run_unitTests
 
 astyle:
 	cd Algorithm; $(MAKE) astyle

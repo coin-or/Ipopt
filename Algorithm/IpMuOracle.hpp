@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -38,9 +38,14 @@ namespace Ipopt
                                 const std::string& prefix) = 0;
 
     /** Method for computing the value of the barrier parameter that
-     *  could be used in the current iteration.
+     *  could be used in the current iteration.  Here, mu_min and
+     *  mu_max are the lower and upper bounds on acceptable values for
+     *  the barrier parameter.  The new value of mu is returned in
+     *  new_mu, and the method returns false if a new value could not
+     *  be determined (e.g., because the linear system could not be
+     *  solved for a predictor step).
      */
-    virtual Number CalculateMu() = 0;
+    virtual bool CalculateMu(Number mu_min, Number mu_max, Number& new_mu) = 0;
 
   private:
     /**@name Default Compiler Generated Methods

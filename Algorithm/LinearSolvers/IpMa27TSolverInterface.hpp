@@ -1,4 +1,4 @@
-// Copyright (C) 2004, International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -160,6 +160,9 @@ namespace Ipopt
     Number la_init_factor_;
     /** Factor for increaseing memory */
     Number meminc_factor_;
+    /** Flag indicating whether the TNLP with identical structure has
+     *  already been solved before. */
+    bool warm_start_same_structure_;
     //@}
 
     /** @name Data for the linear solver.

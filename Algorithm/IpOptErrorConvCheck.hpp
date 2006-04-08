@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -34,7 +34,8 @@ namespace Ipopt
                                 const std::string& prefix);
 
     /** Overloaded convergence check */
-    virtual ConvergenceStatus CheckConvergence();
+    virtual ConvergenceStatus
+    CheckConvergence(bool call_intermediate_callback = true);
 
     /** Auxilliary function for testing whether current iterate
      *  satisfies the acceptable level of optimality */
@@ -69,6 +70,8 @@ namespace Ipopt
     Number acceptable_constr_viol_tol_;
     /** Acceptable tolerance on unscaled complementarity */
     Number acceptable_compl_inf_tol_;
+    /** Threshold for primal iterates for divergence test */
+    Number diverging_iterates_tol_;
     //@}
 
   private:

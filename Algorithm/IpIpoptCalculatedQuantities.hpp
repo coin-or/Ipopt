@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -189,9 +189,6 @@ namespace Ipopt
     //@{
     /** exact Hessian at current iterate (uncached) */
     SmartPtr<const SymMatrix> curr_exact_hessian();
-    /** return a matrix of the same type and structure as the Hessian
-     *  matrix, but with all "values" set to zero (uncached) */
-    SmartPtr<const SymMatrix> zero_hessian();
     //@}
 
     /** @name primal-dual error and its components */
@@ -314,6 +311,13 @@ namespace Ipopt
                                   const Vector& delta_v_L,
                                   const Vector& delta_v_U);
     /** Fraction to the boundary from (current) dual variables z and v
+     *  for a given step, without caching */
+    Number uncached_dual_frac_to_the_bound(Number tau,
+                                           const Vector& delta_z_L,
+                                           const Vector& delta_z_U,
+                                           const Vector& delta_v_L,
+                                           const Vector& delta_v_U);
+    /** Fraction to the boundary from (current) dual variables z and v
      *  for internal (current) step */
     Number curr_dual_frac_to_the_bound(Number tau);
     /** Fraction to the boundary from (current) slacks for a given
@@ -321,12 +325,13 @@ namespace Ipopt
      *  primal_frac_to_the_bound method to compute the primal fraction
      *  to the boundary step size, but if it is cheaper to provide the
      *  steps in the slacks directly (e.g. when the primal step sizes
-     *  are only temporary), the this method is more efficient. */
-    Number slack_frac_to_the_bound(Number tau,
-                                   const Vector& delta_x_L,
-                                   const Vector& delta_x_U,
-                                   const Vector& delta_s_L,
-                                   const Vector& delta_s_U);
+     *  are only temporary), the this method is more efficient.  This
+     *  method does not cache computations. */
+    Number uncached_slack_frac_to_the_bound(Number tau,
+                                            const Vector& delta_x_L,
+                                            const Vector& delta_x_U,
+                                            const Vector& delta_s_L,
+                                            const Vector& delta_s_U);
     //@}
 
     /** @name Sigma matrices */
@@ -410,6 +415,9 @@ namespace Ipopt
     Number slack_move_;
     /** Norm type to be used when calculating the constraint violation */
     ENormType constr_viol_normtype_;
+    /** Flag indicating whether the TNLP with identical structure has
+     *  already been solved before. */
+    bool warm_start_same_structure_;
     //@}
 
     /** @name Caches for slacks */
@@ -512,7 +520,6 @@ namespace Ipopt
     //@{
     CachedResults<Number> primal_frac_to_the_bound_cache_;
     CachedResults<Number> dual_frac_to_the_bound_cache_;
-    CachedResults<Number> slack_frac_to_the_bound_cache_;
     //@}
 
     /** @name Caches for sigma matrices */

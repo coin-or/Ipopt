@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -50,11 +50,12 @@ namespace Ipopt
 
     /** Solve the primal dual system, given one right hand side.
      */
-    virtual void Solve(Number alpha,
+    virtual bool Solve(Number alpha,
                        Number beta,
                        const IteratesVector& rhs,
                        IteratesVector& res,
-                       bool allow_inexact=false);
+                       bool allow_inexact=false,
+                       bool improve_solution=false);
 
     /** Methods for IpoptType */
     //@{

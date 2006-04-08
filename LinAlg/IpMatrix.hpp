@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -32,10 +32,16 @@ namespace Ipopt
     /** Constructor.  It has to be given a pointer to the
      *  corresponding MatrixSpace.
      */
-    Matrix(const MatrixSpace* owner_space);
+    Matrix(const MatrixSpace* owner_space)
+        :
+        TaggedObject(),
+        owner_space_(owner_space),
+        valid_cache_tag_(0)
+    {}
 
     /** Destructor */
-    virtual ~Matrix();
+    virtual ~Matrix()
+    {}
     //@}
 
     /**@name Operations of the Matrix on a Vector */
@@ -72,6 +78,10 @@ namespace Ipopt
                         const Vector& R, const Vector& Z,
                         const Vector& D, Vector& X) const;
     //@}
+
+    /** Method for determining if all stored numbers are valid (i.e.,
+     *  no Inf or Nan). */
+    bool HasValidNumbers() const;
 
     //* @name Information about the size of the matrix */
     //@{
@@ -132,6 +142,14 @@ namespace Ipopt
                                     const Vector& R, const Vector& Z,
                                     const Vector& D, Vector& X) const;
 
+    /** Method for determining if all stored numbers are valid (i.e.,
+     *  no Inf or Nan). A default implementation always returning true
+     *  is provided, but if possible it should be implemented. */
+    virtual bool HasValidNumbersImpl() const
+    {
+      return true;
+    }
+
     /** Print detailed information about the matrix. */
     virtual void PrintImpl(const Journalist& jnlst,
                            EJournalLevel level,
@@ -161,6 +179,12 @@ namespace Ipopt
     //@}
 
     const SmartPtr<const MatrixSpace> owner_space_;
+
+    /**@name CachedResults data members */
+    //@{
+    mutable TaggedObject::Tag valid_cache_tag_;
+    mutable bool cached_valid_;
+    //@}
   };
 
 

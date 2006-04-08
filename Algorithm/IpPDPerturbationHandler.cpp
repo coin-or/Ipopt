@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -16,12 +16,6 @@ namespace Ipopt
 
   PDPerturbationHandler::PDPerturbationHandler()
       :
-      delta_xs_first_inc_fact_(100.),
-      delta_xs_inc_fact_(8.),
-      delta_xs_dec_fact_(1./3.),
-      delta_xs_init_(1e-4),
-      delta_cd_val_(1e-9),
-      always_perturb_cd_(false),
       reset_last_(false),
       degen_iters_max_(3)
   {}
@@ -33,7 +27,7 @@ namespace Ipopt
       "max_hessian_perturbation",
       "Maximum value of regularization parameter for handling negative curvature.",
       0, true,
-      1e40,
+      1e20,
       "In order to guarantee that the search directions are indeed proper "
       "descent directions, Ipopt requires that the inertia of the "
       "(augmented) linear system for the step computation has the "
@@ -85,10 +79,15 @@ namespace Ipopt
       "correction scheme."
       "(This is delta_0 in the implementation paper.)");
     roptions->AddLowerBoundedNumberOption(
-      "jacobian_regularization",
+      "jacobian_regularization_value",
       "Size of the regularization for rank-deficient constraint Jacobians.",
-      0., false, 1e-9,
-      "(This is delta_c in the implementation paper - assuming that kappa_c=0.)");
+      0., false, 1e-8,
+      "(This is bar delta_c in the implementation paper.)");
+    roptions->AddLowerBoundedNumberOption(
+      "jacobian_regularization_exponent",
+      "Exponent for mu in the regularization for rank-deficient constraint Jacobians.",
+      0., false, 0.25,
+      "(This is kappa_c in the implementation paper.)");
   }
 
   bool PDPerturbationHandler::InitializeImpl(const OptionsList& options,
@@ -100,7 +99,8 @@ namespace Ipopt
     options.GetNumericValue("perturb_inc_fact", delta_xs_inc_fact_, prefix);
     options.GetNumericValue("perturb_dec_fact", delta_xs_dec_fact_, prefix);
     options.GetNumericValue("first_hessian_perturbation", delta_xs_init_, prefix);
-    options.GetNumericValue("jacobian_regularization", delta_cd_val_, prefix);
+    options.GetNumericValue("jacobian_regularization_value", delta_cd_val_, prefix);
+    options.GetNumericValue("jacobian_regularization_exponent", delta_cd_exp_, prefix);
 
     hess_degenerate_ = NOT_YET_DETERMINED;
     jac_degenerate_ = NOT_YET_DETERMINED;
@@ -166,7 +166,7 @@ namespace Ipopt
     }
 
     if (jac_degenerate_ == DEGENERATE) {
-      delta_c = delta_c_curr_ = delta_cd_val_;
+      delta_c = delta_c_curr_ = delta_cd();
       IpData().Append_info_string("l");
     }
     else {
@@ -175,10 +175,13 @@ namespace Ipopt
     delta_d = delta_d_curr_ = delta_c;
 
     if (hess_degenerate_ == DEGENERATE) {
+      delta_x_curr_ = 0.;
+      delta_s_curr_ = 0.;
       bool retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                     delta_c, delta_d);
-      ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                       "get_deltas_for_wrong_inertia returns false.");
+      if (!retval) {
+        return false;
+      }
     }
     else {
       delta_x = 0.;
@@ -191,6 +194,8 @@ namespace Ipopt
     delta_d_curr_ = delta_d;
 
     IpData().Set_info_regu_x(delta_x);
+
+    get_deltas_for_wrong_inertia_called_ = false;
 
     return true;
   }
@@ -208,20 +213,24 @@ namespace Ipopt
     // Check for structural degeneracy
     if (hess_degenerate_ == NOT_YET_DETERMINED ||
         jac_degenerate_ == NOT_YET_DETERMINED) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Degeneracy test for hess_degenerate_ = %d and jac_degenerate_ = %d\n       test_status_ = %d\n",
+                     hess_degenerate_, jac_degenerate_, test_status_);
       switch (test_status_) {
         case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
         DBG_ASSERT(delta_x_curr_ == 0. && delta_c_curr_ == 0.);
         // in this case we haven't tried anything for this matrix yet
         if (jac_degenerate_ == NOT_YET_DETERMINED) {
-          delta_d_curr_ = delta_c_curr_ = delta_cd_val_;
+          delta_d_curr_ = delta_c_curr_ = delta_cd();
           test_status_ = TEST_DELTA_C_GT_0_DELTA_X_EQ_0;
         }
         else {
           DBG_ASSERT(hess_degenerate_ == NOT_YET_DETERMINED);
           retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                                 delta_c, delta_d);
-          ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                           "get_deltas_for_wrong_inertia returns false.");
+          if (!retval) {
+            return false;
+          }
           DBG_ASSERT(delta_c == 0. && delta_d == 0.);
           test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         }
@@ -232,42 +241,49 @@ namespace Ipopt
         delta_d_curr_ = delta_c_curr_ = 0.;
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
-        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                         "get_deltas_for_wrong_inertia returns false.");
+        if (!retval) {
+          return false;
+        }
         DBG_ASSERT(delta_c == 0. && delta_d == 0.);
         test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         break;
         case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
         DBG_ASSERT(delta_x_curr_ > 0. && delta_c_curr_ == 0.);
-        delta_d_curr_ = delta_c_curr_ = delta_cd_val_;
+        delta_d_curr_ = delta_c_curr_ = delta_cd();
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
-        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                         "get_deltas_for_wrong_inertia returns false.");
+        if (!retval) {
+          return false;
+        }
         test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
         break;
         case TEST_DELTA_C_GT_0_DELTA_X_GT_0:
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
-        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                         "get_deltas_for_wrong_inertia returns false.");
+        if (!retval) {
+          return false;
+        }
         break;
         case NO_TEST:
         DBG_ASSERT(false && "we should not get here.");
       }
     }
     else {
-      if (delta_c_curr_ > 0.) {
+      if (delta_c_curr_ > 0. || get_deltas_for_wrong_inertia_called_) {
         // If we already used a perturbation for the constraints, we do
         // the same thing as if we were encountering negative curvature
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
-        ASSERT_EXCEPTION(retval, INTERNAL_ABORT,
-                         "get_deltas_for_wrong_inertia returns false.");
+        if (!retval) {
+          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                         "Can't get_deltas_for_wrong_inertia for delta_x_curr_ = %e and delta_c_curr_ = %e\n",
+                         delta_x_curr_, delta_c_curr_);
+          return false;
+        }
       }
       else {
         // Otherwise we now perturb the lower right corner
-        delta_d_curr_ = delta_c_curr_ = delta_cd_val_;
+        delta_d_curr_ = delta_c_curr_ = delta_cd();
 
         // ToDo - also perturb Hessian?
         IpData().Append_info_string("L");
@@ -307,7 +323,12 @@ namespace Ipopt
       }
     }
     if (delta_x_curr_ > delta_xs_max_) {
-      // Give up trying to solve the linear system
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "delta_x perturbation is becoming too large: %e\n",
+                     delta_x_curr_);
+      delta_x_last_ = 0.;
+      delta_s_last_ = 0.;
+      IpData().Append_info_string("dx");
       return false;
     }
 
@@ -319,6 +340,8 @@ namespace Ipopt
     delta_d = delta_d_curr_;
 
     IpData().Set_info_regu_x(delta_x);
+
+    get_deltas_for_wrong_inertia_called_ = true;
 
     return true;
   }
@@ -336,7 +359,20 @@ namespace Ipopt
     // perturbation for a test did not result in a singular system)
     finalize_test();
 
-    return get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+    bool retval = get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+    if (!retval && delta_c==0.) {
+      DBG_ASSERT(delta_d == 0.);
+      delta_c_curr_ = delta_cd();
+      delta_d_curr_ = delta_c_curr_;
+      delta_x_curr_ = 0.;
+      delta_s_curr_ = 0.;
+      test_status_ = NO_TEST;
+      if (hess_degenerate_ == DEGENERATE) {
+        hess_degenerate_ = NOT_YET_DETERMINED;
+      }
+      retval = get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+    }
+    return retval;
   }
 
   void
@@ -350,13 +386,18 @@ namespace Ipopt
     delta_d = delta_d_curr_;
   }
 
+  Number
+  PDPerturbationHandler::delta_cd()
+  {
+    return delta_cd_val_ * pow(IpData().curr_mu(), delta_cd_exp_);
+  }
+
   void
   PDPerturbationHandler::finalize_test()
   {
     switch (test_status_) {
       case NO_TEST:
       return;
-      break;
       case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
       if (hess_degenerate_ == NOT_YET_DETERMINED &&
           jac_degenerate_ == NOT_YET_DETERMINED) {

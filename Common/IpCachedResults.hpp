@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -156,8 +156,6 @@ namespace Ipopt
                              const TaggedObject* dependent2,
                              const TaggedObject* dependent3);
 
-    // CARL: What do you think about the following?  I added this at
-    // some point because then now GetRawPtr was necessary
     /** @name Pointer-free version of the Add and Get methods */
     //@{
     bool GetCachedResult1Dep(T& retResult, const TaggedObject& dependent1)
@@ -196,6 +194,12 @@ namespace Ipopt
       AddCachedResult3Dep(result, &dependent1, &dependent2, &dependent3);
     }
     //@}
+
+    /** Invalidates the result for given dependecies. Sets the stale
+     *  flag for the corresponding cached result to true if it is
+     *  found.  Returns true, if the result was found. */
+    bool InvalidateResult(const std::vector<const TaggedObject*>& dependents,
+                          const std::vector<Number>& scalar_dependents);
 
   private:
     /**@name Default Compiler Generated Methods
@@ -261,6 +265,9 @@ namespace Ipopt
     //@{
     /** This returns true, if the DependentResult is no longer valid. */
     bool IsStale() const;
+
+    /** Invalidates the cached result. */
+    void Invalidate();
 
     /** Returns the cached result. */
     const T& GetResult() const;
@@ -378,6 +385,11 @@ namespace Ipopt
     return stale_;
   }
 
+  template <class T>
+  void DependentResult<T>::Invalidate()
+  {
+    stale_ = true;
+  }
 
   template <class T>
   void DependentResult<T>::RecieveNotification(NotifyType notify_type, const Subject* subject)
@@ -661,6 +673,28 @@ namespace Ipopt
   }
 
   template <class T>
+  bool CachedResults<T>::InvalidateResult(const std::vector<const TaggedObject*>& dependents,
+                                          const std::vector<Number>& scalar_dependents)
+  {
+    if (!cached_results_)
+      return false;
+
+    CleanupInvalidatedResults();
+
+    bool retValue = false;
+    typename std::list< DependentResult<T>* >::const_iterator iter;
+    for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
+      if ((*iter)->DependentsIdentical(dependents, scalar_dependents)) {
+        (*iter)->Invalidate();
+        retValue = true;
+        break;
+      }
+    }
+
+    return retValue;
+  }
+
+  template <class T>
   void CachedResults<T>::CleanupInvalidatedResults() const
   {
 #ifdef IP_DEBUG_CACHE
@@ -671,14 +705,18 @@ namespace Ipopt
       return;
 
     typename std::list< DependentResult<T>* >::iterator iter;
-    for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
-      if ( (*iter)->IsStale() ) {
+    iter = cached_results_->begin();
+    while (iter != cached_results_->end()) {
+      if ((*iter)->IsStale()) {
         typename std::list< DependentResult<T>* >::iterator
         iter_to_remove = iter;
-        iter--;
+        iter++;
         DependentResult<T>* result_to_delete = (*iter_to_remove);
         cached_results_->erase(iter_to_remove);
         delete result_to_delete;
+      }
+      else {
+        iter++;
       }
     }
   }

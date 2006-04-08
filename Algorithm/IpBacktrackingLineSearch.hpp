@@ -1,45 +1,59 @@
-// Copyright (C) 2004,2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+//           Andreas Waechter                 IBM    2005-10-13
+//               derived file from IpFilterLineSearch.hpp
 
-#ifndef __IPFILTERLINESEARCH_HPP__
-#define __IPFILTERLINESEARCH_HPP__
+#ifndef __IPBACKTRACKINGLINESEARCH_HPP__
+#define __IPBACKTRACKINGLINESEARCH_HPP__
 
-#include "IpFilter.hpp"
 #include "IpLineSearch.hpp"
+#include "IpBacktrackingLSAcceptor.hpp"
 #include "IpRestoPhase.hpp"
-#include "IpPDSystemSolver.hpp"
 #include "IpConvCheck.hpp"
 
 namespace Ipopt
 {
 
-  /** Filter line search.  This class implements the filter line
-   *  search procedure. 
+  /** General implementation of a backtracking line search.  This
+   *  class can be used to perform the filter line search procedure or
+   *  other procedures.  The BacktrackingLSAcceptor is used to
+   *  determine whether trial points are acceptable (e.g., based on a
+   *  filter or other methods).
+   *
+   *  This backtracking line search knows of a restoration phase
+   *  (which is called when the trial step size becomes too small or
+   *  no search direction could be computed).  It also has the notion
+   *  of a "soft restoration phase," which uses the regular steps but
+   *  decides on the acceptability based on other measures than the
+   *  regular ones (e.g., reduction of the PD error instead of
+   *  acceptability to a filter mechanism).
    */
-  class FilterLineSearch : public LineSearch
+  class BacktrackingLineSearch : public LineSearch
   {
   public:
     /**@name Constructors/Destructors */
     //@{
-    /** Constructor.  The PDSystemSolver object only needs to be
+    /** Constructor.  The acceptor implements the acceptance test for
+     *  the line search. The PDSystemSolver object only needs to be
      *  provided (i.e. not NULL) if second order correction is to be
      *  used.  The ConvergenceCheck object is used to determine
      *  whether the current iterate is acceptable (for example, the
      *  restoration phase is not started if the acceptability level
      *  has been reached).  If conv_check is NULL, we assume that the
-     *  current iterate is not acceptable. */
-    FilterLineSearch(const SmartPtr<RestorationPhase>& resto_phase,
-                     const SmartPtr<PDSystemSolver>& pd_solver,
-                     const SmartPtr<ConvergenceCheck>& conv_check
-                    );
+     *  current iterate is not acceptable (in the sense of the
+     *  acceptable_tol option). */
+    BacktrackingLineSearch(const SmartPtr<BacktrackingLSAcceptor>& acceptor,
+                           const SmartPtr<RestorationPhase>& resto_phase,
+                           const SmartPtr<ConvergenceCheck>& conv_check
+                          );
 
     /** Default destructor */
-    virtual ~FilterLineSearch();
+    virtual ~BacktrackingLineSearch();
     //@}
 
     /** InitializeImpl - overloaded from AlgorithmStrategyObject */
@@ -84,18 +98,9 @@ namespace Ipopt
       return skipped_line_search_;
     }
 
-    /**@name Trial Point Accepting Methods. Used internally to check certain
-     * acceptability criteria and used externally (by the restoration phase
-     * convergence check object, for instance)
-     */
-    //@{
-    /** Checks if a trial point is acceptable to the current iterate */
-    bool IsAcceptableToCurrentIterate(Number trial_barr, Number trial_theta,
-                                      bool called_from_restoration=false) const;
-
-    /** Checks if a trial point is acceptable to the current filter */
-    bool IsAcceptableToCurrentFilter(Number trial_barr, Number trial_theta) const;
-    //@}
+    /** Activate fallback mechanism.  Return false, if that is not
+     *  possible. */
+    virtual bool ActivateFallbackMechanism();
 
     /** Methods for OptionsList */
     //@{
@@ -112,43 +117,11 @@ namespace Ipopt
      * they will not be implicitly created/called. */
     //@{
     /** Copy Constructor */
-    FilterLineSearch(const FilterLineSearch&);
+    BacktrackingLineSearch(const BacktrackingLineSearch&);
 
     /** Overloaded Equals Operator */
-    void operator=(const FilterLineSearch&);
+    void operator=(const BacktrackingLineSearch&);
     //@}
-
-    /** @name Filter information */
-    //@{
-    /** Upper bound on infeasibility */
-    Number theta_max_;
-    Number theta_max_fact_;
-
-    /** Infeasibility switching bound */
-    Number theta_min_;
-    Number theta_min_fact_;
-    //@}
-
-    /** Method for checking if the current step size satisfies the
-     *  f-type switching condition.  Here, we use the search direction
-     *  stored in ip_data
-     */
-    bool IsFtype(Number alpha_primal_test);
-
-    /** Method for checking the Armijo condition, given a trial step
-     *  size.  The test uses the search direction stored in ip_data,
-     *  and the values of the functions at the trial point in ip_data.
-     */
-    bool ArmijoHolds(Number alpha_primal_test);
-
-    /** Method to calculate alpha_min (minimum alpha before going to
-     *  restoration
-     */
-    Number CalculateAlphaMin();
-
-    /** Augment the filter used on the current values of the barrier
-     *  objective function and the contraint violation */
-    void AugmentFilter();
 
     /** Method performing the backtracking line search.  The return
      *  value indicates if the step acceptance criteria are met.  If
@@ -193,13 +166,15 @@ namespace Ipopt
 
     /** Try a step for the soft restoration phase and check if it is
      *  acceptable.  The step size is identical for all variables.  A
-     *  point is accepted if it is acceptable for the original filter
-     *  (in which case satisfies_original_filter = true on return), or
-     *  if the primal-dual system error was decrease by at least the
-     *  factor soft_resto_pderror_reduction_factor_.  The return value is
-     *  true, if the trial point was acceptable. */
+     *  point is accepted if it is acceptable for the original
+     *  acceptability criterion (in which case
+     *  satisfies_original_criterion = true on return), or if the
+     *  primal-dual system error was decrease by at least the factor
+     *  soft_resto_pderror_reduction_factor_.  The return value is
+     *  true, if the trial point was acceptable for the soft
+     *  restoration phase. */
     bool TrySoftRestoStep(SmartPtr<IteratesVector>& actual_delta,
-                          bool &satisfies_original_filter);
+                          bool &satisfies_original_criterion);
 
     /** Try a second order correction for the constraints.  If the
      *  first trial step (with incoming alpha_primal) has been reject,
@@ -244,41 +219,17 @@ namespace Ipopt
      *  found. Returns true if such as point is available. */
     bool RestoreAcceptablePoint();
 
-    /** Method for determining if the current iterate is acceptable.
-     *  This is a wrapper for same method from ConvergenceCheck, but
-     *  returns false, if no ConvergenceCheck object is provided. */
+    /** Method for determining if the current iterate is acceptable
+     *  (in the sense of the acceptable_tol options).  This is a
+     *  wrapper for same method from ConvergenceCheck, but returns
+     *  false, if no ConvergenceCheck object is provided. */
     bool CurrentIsAcceptable();
 
     /** @name Parameters for the filter algorithm.  Names as in the paper */
     //@{
-    /** \f$ \eta_{\varphi} \f$ */
-    Number eta_phi_;
-    /** \f$ \delta \f$ */
-    Number delta_;
-    /** \f$ s_{\varphi} \f$ */
-    Number s_phi_;
-    /** \f$ s_{\Theta} \f$ */
-    Number s_theta_;
-    /** \f$ \gamma_{\varphi} \f$ */
-    Number gamma_phi_;
-    /** \f$ \gamma_{\Theta} \f$ */
-    Number gamma_theta_;
-    /** \f$ \gamma_{\alpha} \f$ */
-    Number alpha_min_frac_;
     /** factor by which search direction is to be shortened if trial
      *  point is rejected. */
     Number alpha_red_factor_;
-    /** Maximal number of second order correction steps */
-    Index max_soc_;
-    /** Required reduction in constraint violation before trying
-     *  multiple second order correction steps \f$ \kappa_{soc}\f$.
-     */
-    Number kappa_soc_;
-    /** Maximal increase in objective function in orders of magnitute
-     *  (log10).  If the log10(barrier objective function) is
-     *  increased more than this compared to the current point, the
-     *  trial point is rejected. */
-    Number obj_max_inc_;
 
     /** enumeration for the different alpha_for_y_ settings */
     enum AlphaForYEnum {
@@ -296,28 +247,20 @@ namespace Ipopt
      *  of both. */
     AlphaForYEnum alpha_for_y_;
 
+    /** Reduction factor for the restoration phase that accepts steps
+     *  reducing the optimality error ("soft restoration phase"). If
+     *  0., then this restoration phase is not enabled. */
+    Number soft_resto_pderror_reduction_factor_;
+    /** Maximal number of iterations that can be done in the soft
+     *  iteration phase before the algorithm reverts to the regular
+     *  restoration phase. */
+    Index max_soft_resto_iters_;
+
     /** Flag indicating whether magic steps should be used. */
     bool magic_steps_;
-    /** enumeration for the corrector type */
-    enum CorrectorTypeEnum {
-      NO_CORRECTOR=0,
-      AFFINE_CORRECTOR,
-      PRIMAL_DUAL_CORRECTOR
-    };
-    /** Type of corrector steps that should be tried. */
-    CorrectorTypeEnum corrector_type_;
     /** Flag indicating whether the line search should always accept
      *  the full (fraction-to-the-boundary) step. */
     bool accept_every_trial_step_;
-    /** parameter in heurstic that determines whether corrector step
-    should be tried. */
-    Number corrector_compl_avrg_red_fact_;
-    /** Flag indicating whether the corrector should be skipped in an
-     *  iteration in which negative curvature is detected */
-    bool skip_corr_if_neg_curv_;
-    /** Flag indicating whether the corrector should be skipped during
-     *  the monotone mu mode. */
-    bool skip_corr_in_monotone_mode_;
     /** Indicates whether problem can be expected to be infeasible.
      *  This will trigger requesting a tighter reduction in
      *  infeasibility the first time the restoration phase is
@@ -328,13 +271,15 @@ namespace Ipopt
      *  violation becomes that than this value, the heuristic is
      *  disabled for the rest of the optimization run. */
     Number expect_infeasible_problem_ctol_;
-    /** Reduction factor for the restoration phase that accepts steps
-     *  reducing the optimality error ("soft restoration phase"). If
-     *  0., then this restoration phase is not enabled. */
-    Number soft_resto_pderror_reduction_factor_;
 
     /** Tolerance for detecting tiny steps. */
     Number tiny_step_tol_;
+
+    /** Tolerance for y variables for the tiny step stopping
+     *  heuristic.  If repeatedly a tiny step is detected and the step
+     *  in the y_c and y_d variables is less than this threshold, we
+     *  algorithm will stop. */
+    Number tiny_step_y_tol_;
 
     /** Number of watch dog trial steps. */
     Index watchdog_trial_iter_max_;
@@ -348,15 +293,6 @@ namespace Ipopt
 
     /** @name Information related to watchdog procedure */
     //@{
-    /** Constraint violation at the point with respect to which
-     *  progress is to be made */
-    Number reference_theta_;
-    /** Barrier objective function at the point with respect to which
-     *  progress is to be made */
-    Number reference_barr_;
-    /** Barrier gradient transpose search direction at the point with
-     *  respect to which progress is to be made */
-    Number reference_gradBarrTDelta_;
     /** Flag indicating if the watchdog is active */
     bool in_watchdog_;
     /** Counter for shortened iterations. */
@@ -365,26 +301,24 @@ namespace Ipopt
     Index watchdog_trial_iter_;
     /** Step size for Armijo test in watch dog */
     Number watchdog_alpha_primal_test_;
-    /** Constraint violation at reference point */
-    Number watchdog_theta_;
-    /** Barrier objective function at reference point */
-    Number watchdog_barr_;
-    /** Barrier gradient transpose search direction at reference point */
-    Number watchdog_gradBarrTDelta_;
     /** Watchdog reference iterate */
     SmartPtr<const IteratesVector> watchdog_iterate_;
     /** Watchdog search direction at reference point */
     SmartPtr<const IteratesVector> watchdog_delta_;
+    /** Barrier parameter value during last line search */
+    Number last_mu_;
     //@}
 
     /** @name Storage for last iterate that satisfies the acceptable
      *  level of optimality error. */
     //@{
     SmartPtr<const IteratesVector> acceptable_iterate_;
+    Index acceptable_iteration_number_;
     //@}
 
-    /** Filter with entries */
-    Filter filter_;
+    /** Flag indicating whether the algorithm has asked to immediately
+     *  switch to the fallback mechanism (restoration phase) */
+    bool fallback_activated_;
 
     /** Flag indicating whether the line search is to be performed
      * robust (usually this is true, unless SetRigorousLineSearch is
@@ -402,6 +336,10 @@ namespace Ipopt
      *  soft_resto_pderror_reduction_factor) */
     bool in_soft_resto_phase_;
 
+    /** Counter for iteration performed in soft restoration phase in a
+     *  row */
+    Index soft_resto_counter_;
+
     /** Counter for the number of successive iterations in which the
      *  full step was not accepted. */
     Index count_successive_shortened_steps_;
@@ -412,8 +350,8 @@ namespace Ipopt
 
     /** @name Strategy objective that are used */
     //@{
+    SmartPtr<BacktrackingLSAcceptor> acceptor_;
     SmartPtr<RestorationPhase> resto_phase_;
-    SmartPtr<PDSystemSolver> pd_solver_;
     SmartPtr<ConvergenceCheck> conv_check_;
     //@}
   };

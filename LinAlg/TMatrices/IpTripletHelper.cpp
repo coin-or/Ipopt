@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -93,7 +93,6 @@ namespace Ipopt
     }
 
     THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::GetNumberEntries");
-    return 0;
   }
 
   void TripletHelper::FillRowCol(Index n_entries, const Matrix& matrix, Index* iRow, Index* jCol, Index row_offset/*=0*/, Index col_offset/*=0*/)
@@ -250,7 +249,6 @@ namespace Ipopt
     }
 
     THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::FillValues");
-    return;
   }
 
   Index TripletHelper::GetNumberEntries_(const SumMatrix& matrix)
@@ -472,10 +470,18 @@ namespace Ipopt
       matrix.GetTerm(i, retFactor, retTerm);
       Index term_n_entries = GetNumberEntries(*retTerm);
       total_n_entries += term_n_entries;
-      FillValues(term_n_entries, *retTerm, values);
+      if (retFactor!=0.0) {
+        FillValues(term_n_entries, *retTerm, values);
 
-      // Now adjust the values based on the factor
-      IpBlasDscal(term_n_entries, retFactor, values, 1);
+        if (retFactor!=1.) {
+          // Now adjust the values based on the factor
+          IpBlasDscal(term_n_entries, retFactor, values, 1);
+        }
+      }
+      else {
+        const Number zero = 0.;
+        IpBlasDcopy(term_n_entries, &zero, 0, values, 1);
+      }
 
       // now shift the values pointer for the next term
       values += term_n_entries;

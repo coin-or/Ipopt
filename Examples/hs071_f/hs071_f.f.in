@@ -1,4 +1,4 @@
-C Copyright (C) 2002, 2004, 2005 Carnegie Mellon University and others.
+C Copyright (C) 2002, 2006 Carnegie Mellon University and others.
 C All Rights Reserved.
 C This code is published under the Common Public License.
 C
@@ -66,11 +66,12 @@ C
 C
 C     Place for storing the Ipopt Problem Handle
 C
-      integer IPROBLEM
-      integer IPCREATE
-C     for 64 platforms:
-C64   integer*8 IPROBLEM
-C64   integer*8 IPCREATE
+@BIT32FCOMMENT@C     for 32 bit platforms
+@BIT32FCOMMENT@      integer IPROBLEM
+@BIT32FCOMMENT@      integer IPCREATE
+@BIT64FCOMMENT@C     for 64 bit platforms:
+@BIT64FCOMMENT@      integer*8 IPROBLEM
+@BIT64FCOMMENT@      integer*8 IPCREATE
 C
       integer IERR
       integer IPSOLVE, IPADDSTROPTION
@@ -115,6 +116,9 @@ C
          goto 9000
       endif
 C
+C     Note: The following options are only examples, they might not be
+C           suitable for your optimization problem.
+C
 C     Set a string option
 C
       IERR = IPADDSTROPTION(IPROBLEM, 'mu_strategy', 'adaptive')
@@ -127,7 +131,7 @@ C
 C
 C     Set a double precision option
 C
-      IERR = IPADDNUMOPTION(IPROBLEM, 'tol', 1.d-9)
+      IERR = IPADDNUMOPTION(IPROBLEM, 'tol', 1.d-7)
       if (IERR.ne.0 ) goto 9990
 C
 C     As a simple example, we pass the constants in the constraints to
