@@ -274,61 +274,61 @@ else
 fi
 AC_LANG_POP(C++)
 
-###############################################
-# Set variables for the archiver              #
-# (for AIX in 64bit mode also on SGI, SUN...) #
-###############################################
-if test -z "$AR"; then
-  if test ! "$GXX" = "yes"; then
-    case $build in
-      *-sun-*)
-        AR="CC -xar"
-        ;;
-      *-sgi-*)
-        AR="CC -ar"
-        ;;
-    esac
-  fi
-  if test -z "$AR"; then
-    AR="ar"
-  fi
-fi
-AC_ARG_VAR(AR,[Command for handling archives (default is `ar')])
-AC_MSG_NOTICE([Using AR=\"$AR\".])
-
-if test -z "$ARFLAGS"; then
-  if test ! "$GXX" = "yes"; then
-    case $build in
-      *-sun-*)
-        ARFLAGS="-o"
-        ;;
-      *-sgi-*)
-        ARFLAGS="-o"
-        ;;
-    esac
-  fi
-  if test -z "$ARFLAGS"; then
-    ARFLAGS="crv"
-  fi
-fi
-AC_ARG_VAR(ARFLAGS,[Flags for adding file for archive command (default is `crv')])
-AC_MSG_NOTICE([Using ARFLAGS=\"$ARFLAGS\".])
-
-if test -z "$AR_X"; then
-  case $build in
-    *-sun-*)
-      AR_X="ar x"
-      ;;
-    *-sgi-*)
-      AR_X="ar x"
-      ;;
-    *)
-      AR_X="$AR x"
-      ;;
-  esac
-fi
-AC_ARG_VAR(AR_X,[Command for extracing an archive (default is `$AR x')])
-AC_MSG_NOTICE([Using AR_X=\"$AR_X\".])
+################################################
+## Set variables for the archiver              #
+## (for AIX in 64bit mode also on SGI, SUN...) #
+################################################
+#if test -z "$AR"; then
+#  if test ! "$GXX" = "yes"; then
+#    case $build in
+#      *-sun-*)
+#        AR="CC -xar"
+#        ;;
+#      *-sgi-*)
+#        AR="CC -ar"
+#        ;;
+#    esac
+#  fi
+#  if test -z "$AR"; then
+#    AR="ar"
+#  fi
+#fi
+#AC_ARG_VAR(AR,[Command for handling archives (default is `ar')])
+#AC_MSG_NOTICE([Using AR=\"$AR\".])
+#
+#if test -z "$ARFLAGS"; then
+#  if test ! "$GXX" = "yes"; then
+#    case $build in
+#      *-sun-*)
+#        ARFLAGS="-o"
+#        ;;
+#      *-sgi-*)
+#        ARFLAGS="-o"
+#        ;;
+#    esac
+#  fi
+#  if test -z "$ARFLAGS"; then
+#    ARFLAGS="crv"
+#  fi
+#fi
+#AC_ARG_VAR(ARFLAGS,[Flags for adding file for archive command (default is `crv')])
+#AC_MSG_NOTICE([Using ARFLAGS=\"$ARFLAGS\".])
+#
+#if test -z "$AR_X"; then
+#  case $build in
+#    *-sun-*)
+#      AR_X="ar x"
+#      ;;
+#    *-sgi-*)
+#      AR_X="ar x"
+#      ;;
+#    *)
+#      AR_X="$AR x"
+#      ;;
+#  esac
+#fi
+#AC_ARG_VAR(AR_X,[Command for extracing an archive (default is `$AR x')])
+#AC_MSG_NOTICE([Using AR_X=\"$AR_X\".])
 
 ######################
 # C Compiler Options #
