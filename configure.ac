@@ -1355,7 +1355,7 @@ if test "$use_asldir" = BUILD; then
 #      AC_LANG_POP(Fortran 77)
 #    fi
   fi
-  ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR $ARFLAGS/' makefile.u | sed 's/ar ruv/$AR $ARFLAGS/' "
+  ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR \$\$(ARFLAGS)/' makefile.u | sed 's/ar ruv/$AR ruv/' "
   if test "$EXEEXT" = ".exe"; then
     ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's/a.out/a.exe/'"
   fi
