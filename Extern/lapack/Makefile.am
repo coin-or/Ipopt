@@ -10,9 +10,9 @@ EXTRA_DIST = get.lapack INSTALL.LAPACK
 
 iplibdir = $(top_builddir)/lib
 
-noinst_LIBRARIES = libiplapack.a
+noinst_LTLIBRARIES = libiplapack.la
 
-nodist_libiplapack_a_SOURCES =
+nodist_libiplapack_la_SOURCES =
 
 LAPACK_FILES = \
 	dlae2.f \
@@ -49,8 +49,10 @@ LAPACK_FILES = \
 	ilaenv.f
 
 if BUILDLAPACK
-nodist_libiplapack_a_SOURCES += $(LAPACK_FILES)
+nodist_libiplapack_la_SOURCES += $(LAPACK_FILES)
 endif
+
+libiplapack_la_LDFLAGS = -no-undefined
 
 DISTCLEANFILES = $(LAPACK_FILES)
 

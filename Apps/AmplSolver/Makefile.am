@@ -8,10 +8,10 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LIBRARIES = libamplinterface.a
+noinst_LTLIBRARIES = libamplinterface.la
 bin_PROGRAMS = ipopt
 
-libamplinterface_a_SOURCES = \
+libamplinterface_la_SOURCES = \
 	AmplTNLP.cpp AmplTNLP.hpp
 
 ipopt_SOURCES = \
@@ -27,7 +27,7 @@ IPLIBS = \
 	libamplinterface.a \
 	$(ASLLIB)
 
-ipopt_LDADD = $(IPLIBS)
+ipopt_LDADD = ../../Interfaces/libipopt.la libamplinterface.la $(ASLLIB)
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \

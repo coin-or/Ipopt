@@ -16,9 +16,9 @@ includeipopt_HEADERS = \
 	IpSymMatrix.hpp \
 	IpVector.hpp
 
-noinst_LIBRARIES = liblinalg.a
+noinst_LTLIBRARIES = liblinalg.la
 
-liblinalg_a_SOURCES = \
+liblinalg_la_SOURCES = \
 	IpBlas.cpp IpBlas.hpp \
 	IpCompoundMatrix.cpp IpCompoundMatrix.hpp \
 	IpCompoundSymMatrix.cpp IpCompoundSymMatrix.hpp \
@@ -40,6 +40,8 @@ liblinalg_a_SOURCES = \
 	IpSymScaledMatrix.cpp IpSymScaledMatrix.hpp \
 	IpVector.cpp IpVector.hpp \
 	IpZeroMatrix.cpp IpZeroMatrix.hpp
+
+liblinalg_la_LDFLAGS = -no-undefined
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common`
 

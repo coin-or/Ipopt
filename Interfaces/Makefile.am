@@ -21,9 +21,9 @@ includeipopt_HEADERS = \
 	IpStdCInterface.h \
 	IpTNLP.hpp
 
-noinst_LIBRARIES = libinterfaces.a
+lib_LTLIBRARIES = libipopt.la
 
-libinterfaces_a_SOURCES = \
+libipopt_la_SOURCES = \
 	IpAlgTypes.hpp \
 	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
@@ -36,6 +36,12 @@ libinterfaces_a_SOURCES = \
 	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \
 	IpTNLP.hpp \
 	IpTNLPAdapter.cpp IpTNLPAdapter.hpp
+
+#libipopt_la_LIBADD = ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la
+
+libipopt_la_LIBADD = $(IPALLLIBS)
+
+libipopt_la_LDFLAGS = -no-undefined
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \

@@ -8,9 +8,9 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LIBRARIES = liblinsolvers.a
+noinst_LTLIBRARIES = liblinsolvers.la
 
-liblinsolvers_a_SOURCES = \
+liblinsolvers_la_SOURCES = \
 	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
 	IpSparseSymLinearSolverInterface.hpp \
 	IpSymLinearSolver.hpp \
@@ -19,35 +19,36 @@ liblinsolvers_a_SOURCES = \
 	IpTSymScalingMethod.hpp
 
 if HAVE_MA27
-  liblinsolvers_a_SOURCES += \
+  liblinsolvers_la_SOURCES += \
 	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp
 endif
 
 if HAVE_MA57
-  liblinsolvers_a_SOURCES += \
+  liblinsolvers_la_SOURCES += \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp
 endif
 
 if HAVE_MC19
-  liblinsolvers_a_SOURCES += \
+  liblinsolvers_la_SOURCES += \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp
 endif
 
 if HAVE_PARDISO
-  liblinsolvers_a_SOURCES += \
+  liblinsolvers_la_SOURCES += \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 endif
 
 if HAVE_TAUCS
-  liblinsolvers_a_SOURCES += \
+  liblinsolvers_la_SOURCES += \
 	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp
 endif
 
 if HAVE_WSMP
-  liblinsolvers_a_SOURCES += \
+  liblinsolvers_la_SOURCES += \
 	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
 endif
 
+liblinsolvers_la_LDFLAGS = -no-undefined
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
@@ -56,7 +57,7 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
 
 if HAVE_MUMPS
-liblinsolvers_a_SOURCES += \
+liblinsolvers_la_SOURCES += \
 	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 CXXFLAGS += $(MUMPS_INCFLAGS)
 endif

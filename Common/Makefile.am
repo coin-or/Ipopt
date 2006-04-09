@@ -23,9 +23,9 @@ includeipopt_HEADERS = \
 	IpTimedTask.hpp \
 	IpUtils.hpp
 
-noinst_LIBRARIES = libcommon.a
+noinst_LTLIBRARIES = libcommon.la
 
-libcommon_a_SOURCES = \
+libcommon_la_SOURCES = \
 	IpCachedResults.hpp \
 	IpDebug.cpp IpDebug.hpp \
 	IpException.hpp \
@@ -39,6 +39,8 @@ libcommon_a_SOURCES = \
 	IpTimedTask.hpp \
 	IpTypes.hpp \
 	IpUtils.cpp IpUtils.hpp
+
+libcommon_la_LDFLAGS = -no-undefined
 
 # Astyle stuff
 

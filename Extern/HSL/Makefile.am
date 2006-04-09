@@ -10,18 +10,21 @@ EXTRA_DIST = INSTALL.HSL
 
 iplibdir = $(top_builddir)/lib
 
-noinst_LIBRARIES = libiphsl.a
+noinst_LTLIBRARIES = libiphsl.la
 
-nodist_libiphsl_a_SOURCES =
+nodist_libiphsl_la_SOURCES =
 
 if BUILDMA27
-  nodist_libiphsl_a_SOURCES += ma27ad.f
+  nodist_libiphsl_la_SOURCES += ma27ad.f
 endif
 
 if BUILDMA57
-  nodist_libiphsl_a_SOURCES += ma57ad.f
+  nodist_libiphsl_la_SOURCES += ma57ad.f
 endif
 
 if BUILDMC19
-  nodist_libiphsl_a_SOURCES += mc19ad.f
+  nodist_libiphsl_la_SOURCES += mc19ad.f
 endif
+
+libiphsl_la_LDFLAGS = -no-undefined
+

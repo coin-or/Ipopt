@@ -10,9 +10,9 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = LinearSolvers
 
-noinst_LIBRARIES = libipoptalg.a
+noinst_LTLIBRARIES = libipoptalg.la
 
-libipoptalg_a_SOURCES = \
+libipoptalg_la_SOURCES = \
 	IpAdaptiveMuUpdate.cpp IpAdaptiveMuUpdate.hpp \
 	IpAlgBuilder.cpp IpAlgBuilder.hpp \
 	IpAlgorithmRegOp.cpp IpAlgorithmRegOp.hpp \
@@ -64,6 +64,8 @@ libipoptalg_a_SOURCES = \
 	IpTimingStatistics.cpp IpTimingStatistics.hpp \
 	IpUserScaling.cpp IpUserScaling.hpp \
 	IpWarmStartIterateInitializer.cpp IpWarmStartIterateInitializer.hpp
+
+libipoptalg_la_LDFLAGS = -no-undefined
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \

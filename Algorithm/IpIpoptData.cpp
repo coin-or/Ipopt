@@ -39,7 +39,19 @@ namespace Ipopt
                              const OptionsList& options,
                              const std::string& prefix)
   {
-    options.GetNumericValue("tol", tol_, prefix);
+    if (prefix=="resto.") {
+      // The default for the restoration phase is 1e-2 time the value
+      // for the regular algorithm
+      if (!options.GetNumericValue("resto.tol", tol_, "")) {
+        options.GetNumericValue("tol", tol_, prefix);
+        printf("tol = %e\n", tol_);
+        tol_ *= 1e-2;
+      }
+    }
+    else {
+      options.GetNumericValue("tol", tol_, prefix);
+    }
+    printf("prefix = %s tol = %e\n", prefix.c_str(), tol_);
 
     iter_count_ = 0;
     curr_mu_ = -1.;

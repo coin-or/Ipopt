@@ -766,8 +766,6 @@ case $ac_cv_sizeof_int_p in
   *) AC_MSG_ERROR([Unknown length of int *]);;
 esac
 
-AC_PROG_RANLIB
-
 AC_PREFIX_DEFAULT([`pwd`])
 
 AC_PROG_LN_S 
@@ -775,6 +773,9 @@ AC_PROG_LN_S
 # Stuff for automake
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
+
+AC_LIBTOOL_WIN32_DLL
+AC_PROG_LIBTOOL
 
 ############################################################################
 ############################################################################
@@ -1426,22 +1427,24 @@ CXXFLAGS="$CXXFLAGS $warn_cxxflags"
 # Makefile conditionals #
 #########################
 
-# The following variable collects the names of libraries that should be
-# included into libipopt.a
+# The following variable collects the names of libraries that should
+# be included into libipopt.a (relative to subdir Interfaces, where it
+# is made)
+
 AC_SUBST(IPALLLIBS)
-IPALLLIBS="Algorithm/libipoptalg.a Algorithm/LinearSolvers/liblinsolvers.a Interfaces/libinterfaces.a Common/libcommon.a LinAlg/liblinalg.a LinAlg/TMatrices/libtmatrices.a"
+IPALLLIBS="../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
 AM_CONDITIONAL([BUILDBLAS],[test "$use_blas" = "BUILD"])
 if test "$use_blas" = BUILD; then
-  LIBS="$ipblaslibdir/libipblas.a $LIBS"
-  IPALLLIBS="Extern/blas/libipblas.a $IPALLLIBS"
+#  LIBS="$ipblaslibdir/libipblas.a $LIBS"
+  IPALLLIBS="../Extern/blas/libipblas.la $IPALLLIBS"
 fi
 
 AM_CONDITIONAL([BUILDLAPACK],[test "$use_lapack" = "BUILD"])
 if test "$use_lapack" = BUILD; then
 #  LDFLAGS="-L$iplapacklibdir $LDFLAGS"
-  LIBS="$iplapacklibdir/libiplapack.a $LIBS"
-  IPALLLIBS="Extern/lapack/libiplapack.a $IPALLLIBS"
+#  LIBS="$iplapacklibdir/libiplapack.a $LIBS"
+  IPALLLIBS="../Extern/lapack/libiplapack.la $IPALLLIBS"
   for file in dlae2.f dlaev2.f dlamch.f dlanst.f dlansy.f dlapy2.f dlarf.f dlarfb.f dlarfg.f dlarft.f dlartg.f dlascl.f dlaset.f dlasr.f dlasrt.f dlassq.f dlatrd.f dorg2l.f dorg2r.f dorgql.f dorgqr.f dorgtr.f dpotf2.f dpotrf.f dpotrs.f dsteqr.f dsterf.f dsyev.f dsytd2.f dsytrd.f ieeeck.f ilaenv.f; do
     AC_CONFIG_LINKS($lapackobjdir/$file:$lapackdir/$file)
   done
@@ -1450,8 +1453,8 @@ fi
 AM_CONDITIONAL([BUILDHSL],[test "$use_hsl" = "BUILD"])
 if test "$use_hsl" = BUILD ; then
 #  LDFLAGS="-L$hsllibdir $LDFLAGS"
-  LIBS="$hsllibdir/libiphsl.a $LIBS"
-  IPALLLIBS="Extern/HSL/libiphsl.a $IPALLLIBS"
+#  LIBS="$hsllibdir/libiphsl.la $LIBS"
+  IPALLLIBS="../Extern/HSL/libiphsl.la $IPALLLIBS"
 fi
 AM_CONDITIONAL([BUILDMA27],[test "$use_MA27" = BUILD])
 AM_CONDITIONAL([BUILDMA57],[test "$use_MA57" = BUILD])

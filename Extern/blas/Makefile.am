@@ -10,12 +10,12 @@ EXTRA_DIST = get.blas INSTALL.BLAS
 
 iplibdir = $(top_builddir)/lib
 
-noinst_LIBRARIES = libipblas.a
+noinst_LTLIBRARIES = libipblas.la
 
-nodist_libipblas_a_SOURCES =
+nodist_libipblas_la_SOURCES =
 
 if BUILDBLAS
-nodist_libipblas_a_SOURCES += dasum.f \
+nodist_libipblas_la_SOURCES += dasum.f \
 	daxpy.f \
 	dcopy.f \
 	ddot.f \
@@ -53,3 +53,6 @@ nodist_libipblas_a_SOURCES += dasum.f \
 	lsame.f \
 	xerbla.f
 endif
+
+libipblas_la_LDFLAGS = -no-undefined
+

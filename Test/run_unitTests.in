@@ -9,6 +9,19 @@
 
 srcdir="@srcdir@"
 
+## in case we are using shared objects for the Ipopt library, set
+## LD_LIBRARY_PATH
+#
+#prefix="@prefix@"
+#exec_prefix="@exec_prefix@"
+#libdir="@libdir@"
+#
+#if test x"$LD_LIBRARY_PATH" = x; then
+#  export LD_LIBRARY_PATH="$libdir"
+#else
+#  export LD_LIBRARY_PATH="${libdir}:$LD_LIBRARY_PATH"
+#fi
+
 echo " "
 echo Running unitTests...
 echo " "

@@ -67,9 +67,10 @@ EXTRA_DIST = \
 	Test/mytoy.nl \
 	Windows/VisualStudio_dotNET/README \
 	Windows/VisualStudio_dotNET/CppExample/CppExample.vcproj \
-	Windows/VisualStudio_dotNET/CExample/CExample.vcproj \
-	Windows/VisualStudio_dotNET/FortranExample/FortranExample.vfproj \
-	Windows/VisualStudio_dotNET/FortranExample/hs071_f.f \
+	Windows/VisualStudio_dotNET/hs071_cpp/hs071_cpp.vcproj \
+	Windows/VisualStudio_dotNET/hs071_c/hs071_c.vcproj \
+	Windows/VisualStudio_dotNET/hs071_f/hs071_f.vfproj \
+	Windows/VisualStudio_dotNET/hs071_f/hs071_f.f \
 	Windows/VisualStudio_dotNET/FortranLinAlg/FortranLinAlg.vfproj \
 	Windows/VisualStudio_dotNET/include/config.h \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
@@ -97,7 +98,12 @@ DISTCLEANFILES = \
 	Examples/hs071_f/hs071_f \
 	Examples/hs071_f/hs071_f.exe \
 	Examples/hs071_f/hs071_f.o \
-	Examples/hs071_f/hs071_f.obj
+	Examples/hs071_f/hs071_f.obj \
+	Examples/ScalableProblems/*.o \
+	Examples/ScalableProblems/*.obj \
+	Examples/ScalableProblems/solve_problem \
+	Examples/ScalableProblems/solve_problem.exe \
+	Examples/ScalableProblems/solution.txt
 
 doc:
 	doxygen
@@ -110,31 +116,15 @@ ipopt_addlibs_cpp_txt = ipopt_addlibs_cpp.txt
 ipopt_addlibs_f_txt = ipopt_addlibs_f.txt
 
 install-exec-local:
-	set -x; \
-	$(mkinstalldirs) $(DESTDIR)$(libdir); \
-	rm -rf $(tmpdir); \
-	mkdir $(tmpdir); \
-	basdir=`pwd`; \
-	cd $(tmpdir); \
-	for lib in $(IPALLLIBS); \
-	do \
-	  $(AR_X) $$basdir/$$lib; \
-	done; \
-	$(BLUEGENEEXTRA); \
-	$(AR) $(ARFLAGS) $(libipopt) *.$(OBJEXT)
-	$(INSTALL_DATA) $(tmpdir)/$(libipopt) $(DESTDIR)$(libdir)
+	rm -rf $(tmpdir)
+	mkdir $(tmpdir)
 	echo "$(IPADDLIBS) $(FLIBS)" >$(tmpdir)/$(ipopt_addlibs_cpp_txt)
 	echo "$(IPADDLIBS)" >$(tmpdir)/$(ipopt_addlibs_f_txt)
 	$(INSTALL_DATA) $(tmpdir)/$(ipopt_addlibs_cpp_txt) $(DESTDIR)$(libdir)
 	$(INSTALL_DATA) $(tmpdir)/$(ipopt_addlibs_f_txt) $(DESTDIR)$(libdir)
 	rm -rf $(tmpdir)
-	$(RANLIB) $(DESTDIR)$(libdir)/$(libipopt)
 
 uninstall-local:
-	echo DESTDIR $(DESTDIR)
-	echo libdir $(libdir)
-	echo libipopt $(libipopt)
-	rm -f $(DESTDIR)$(libdir)/$(libipopt)
 	rm -f $(DESTDIR)$(libdir)/$(ipopt_addlibs_cpp_txt)
 	rm -f $(DESTDIR)$(libdir)/$(ipopt_addlibs_f_txt)
 

@@ -8,12 +8,14 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LIBRARIES = libtmatrices.a
+noinst_LTLIBRARIES = libtmatrices.la
 
-libtmatrices_a_SOURCES = \
+libtmatrices_la_SOURCES = \
 	IpGenTMatrix.cpp IpGenTMatrix.hpp \
 	IpSymTMatrix.cpp IpSymTMatrix.hpp \
 	IpTripletHelper.cpp IpTripletHelper.hpp
+
+libtmatrices_la_LDFLAGS = -no-undefined
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/..`
