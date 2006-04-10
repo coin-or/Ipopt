@@ -777,6 +777,38 @@ AM_MAINTAINER_MODE
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
+# Find out which options are needed to tell the linker about the
+# shared objects path (for example Makefiles)
+RPATH_CMD=
+
+if test $enable_shared == "yes"; then
+  if test "$GXX" = "yes"; then
+    RPATH_CMD='-Wl,--rpath -Wl,$(IPOPTLIBDIR)'
+  else
+    case $build in
+      *-linux-*)
+        case "$CXX" in
+        icpc | */icpc)
+          RPATH_CMD='-Wl,--rpath -Wl,$(IPOPTLIBDIR)' ;;
+        esac ;;
+      *-ibm-*)
+        case "$CXX" in
+        xlC* | */xlC* | mpxlC* | */mpxlC*)
+          RPATH_CMD=nothing ;;
+        esac ;;
+     esac
+  fi
+
+  if test "$RPATH_CMD" == ""; then
+    AC_MSG_WARN([Could not automatically determine how to tell the linker about automatic inclusion of the path for shared libraries.  The test examples might not work if you link against shared objects.  You will need to set the LD_LIBRARY_PATH or LIBDIR variable manually.])
+  fi
+  if test "$RPATH_CMD" == "nothing"; then
+    RPATH_CMD=
+  fi
+fi
+
+AC_SUBST(RPATH_CMD)
+
 ############################################################################
 ############################################################################
 #                   Stuff that we need for C++ programs                    #
