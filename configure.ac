@@ -90,9 +90,9 @@ if test -z "$CXXFLAGS"; then
      *-cygwin*)
       case "$CXX" in
       cl | */cl)
-             opt_cxxflags="-Ot1"
-             add_cxxflags="-nologo -EHsc -GR"
-             dbg_cxxflags="-Yd";;
+             opt_cxxflags="/Ot1"
+             add_cxxflags="/nologo /EHsc /GR"
+             dbg_cxxflags="/Yd";;
       esac;;
      *-linux-*)
       case "$CXX" in
@@ -104,7 +104,7 @@ if test -z "$CXXFLAGS"; then
 #                               [AC_MSG_RESULT([no]); opt_cxxflags="-O3 -ip -static"])
 #               CXXFLAGS=
              opt_cxxflags="-O3 -ip"
-             add_cxxflags="-mp -pc64"
+             add_cxxflags=""
              dbg_cxxflags="-g"
              # Check if -i_dynamic is necessary (for new glibc library)
              AC_MSG_CHECKING([whether flag \"-i_dynamic\" is needed])
@@ -256,9 +256,9 @@ if test -z "$CFLAGS"; then
      *-cygwin*)
       case "$CC" in
       cl | */cl)
-             opt_cflags="-Ot1"
-             add_cflags="-nologo"
-             dbg_cflags="-Yd";;
+             opt_cflags="/Ot1"
+             add_cflags="/nologo"
+             dbg_cflags="/Yd";;
       esac;;
      *-linux-*)
       case "$CC" in
@@ -270,7 +270,7 @@ if test -z "$CFLAGS"; then
 #                               [AC_MSG_RESULT([no]); opt_cflags="-O3 -ipo -static"])
 #               CFLAGS=
              opt_cflags="-O3 -ip"
-             add_cflags="-mp -pc64"
+             add_cflags=""
              dbg_cflags="-g"
              # Check if -i_dynamic is necessary (for new glibc library)
              AC_MSG_CHECKING([whether flag \"-i_dynamic\" is needed])
@@ -373,9 +373,9 @@ if test -z "$FFLAGS"; then
     *-cygwin*)
       case $F77 in
       ifort | */ifort)
-             opt_fflags="-O3"
-             add_fflags="-nologo -Qprec -fpp"
-             dbg_fflags="-debug" ;;
+             opt_fflags="/O3"
+             add_fflags="/nologo /fpp"
+             dbg_fflags="/debug" ;;
       esac;;
     *-linux-*)
       case $F77 in
@@ -387,8 +387,8 @@ if test -z "$FFLAGS"; then
 #                               [AC_MSG_RESULT([no]); opt_fflags="-O3 -ipo -static"])
 #               FFLAGS= 
              opt_fflags="-O3 -ip"
-             add_fflags="-mp -pc64 -cm -w90 -w95"
-             dbg_fflags="-g -CA -CB -CS -CU"
+             add_fflags="-cm -w90 -w95"
+             dbg_fflags="-g -CA -CB -CS"
              # Check if -i_dynamic is necessary (for new glibc library)
              AC_MSG_CHECKING([whether flag \"-i_dynamic\" is needed])
              FFLAGS=
