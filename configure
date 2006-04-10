@@ -26172,7 +26172,8 @@ if test "$use_asldir" = BUILD; then
 
     echo "$as_me:$LINENO: checking whether $am_make is the GNU make" >&5
 echo $ECHO_N "checking whether $am_make is the GNU make... $ECHO_C" >&6
-    ($am_make -v > conftest.grp) 2>&5
+    rm -rf conftest.mak
+    ($am_make -v -f conftest.mak > conftest.grp) 2>&5
     if $EGREP GNU conftest.grp >&5 ; then
       echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26181,7 +26182,7 @@ echo "${ECHO_T}yes" >&6
       echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
-    rm -f conftest.grp
+    rm -f conftest.mak conftest.grp
   fi
   ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR \$\$(ARFLAGS)/' makefile.u | sed 's/ar ruv/$AR ruv/' "
   if test "$EXEEXT" = ".exe"; then

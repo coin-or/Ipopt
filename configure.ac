@@ -1118,14 +1118,15 @@ if test "$use_asldir" = BUILD; then
     esac
 
     AC_MSG_CHECKING([whether $am_make is the GNU make])
-    ($am_make -v > conftest.grp) 2>&5
+    rm -rf conftest.mak
+    ($am_make -v -f conftest.mak > conftest.grp) 2>&5
     if $EGREP GNU conftest.grp >&5 ; then
       AC_MSG_RESULT([yes])
       ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
     else
       AC_MSG_RESULT([no])
     fi
-    rm -f conftest.grp
+    rm -f conftest.mak conftest.grp
   fi
   ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR \$\$(ARFLAGS)/' makefile.u | sed 's/ar ruv/$AR ruv/' "
   if test "$EXEEXT" = ".exe"; then
