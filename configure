@@ -473,7 +473,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix=`pwd`
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os BLUEGENEEXTRA CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXLIBS CC CFLAGS ac_ct_CC F77 FFLAGS ac_ct_F77 FLIBS CPP EGREP BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXXCPP LIBTOOL RPATH_CMD IPADDLIBS TAUCS_INCFLAGS MUMPS_INCFLAGS ASLMAKEFLAGS ASLMAKEFILECMDS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDLAPACK_TRUE BUILDLAPACK_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMA57_TRUE BUILDMA57_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDLAPACKDIR_TRUE BUILDLAPACKDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE HAVE_MUMPS_TRUE HAVE_MUMPS_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE ASLLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os BLUEGENEEXTRA CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXLIBS CC CFLAGS ac_ct_CC F77 FFLAGS ac_ct_F77 FLIBS CPP EGREP BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXXCPP LIBTOOL RPATH_CMD CXXAR IPADDLIBS TAUCS_INCFLAGS MUMPS_INCFLAGS ASLMAKEFLAGS ASLMAKEFILECMDS ASTYLE ASTYLEFLAGS ipoptlib AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDLAPACK_TRUE BUILDLAPACK_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMA57_TRUE BUILDMA57_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDLAPACKDIR_TRUE BUILDLAPACKDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE HAVE_MUMPS_TRUE HAVE_MUMPS_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE ASLLIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -958,6 +958,10 @@ ac_env_CXXCPP_set=${CXXCPP+set}
 ac_env_CXXCPP_value=$CXXCPP
 ac_cv_env_CXXCPP_set=${CXXCPP+set}
 ac_cv_env_CXXCPP_value=$CXXCPP
+ac_env_CXXAR_set=${CXXAR+set}
+ac_env_CXXAR_value=$CXXAR
+ac_cv_env_CXXAR_set=${CXXAR+set}
+ac_cv_env_CXXAR_value=$CXXAR
 ac_env_TAUCS_INCFLAGS_set=${TAUCS_INCFLAGS+set}
 ac_env_TAUCS_INCFLAGS_value=$TAUCS_INCFLAGS
 ac_cv_env_TAUCS_INCFLAGS_set=${TAUCS_INCFLAGS+set}
@@ -1098,6 +1102,8 @@ Some influential environment variables:
   FFLAGS      Fortran 77 compiler flags
   CPP         C preprocessor
   CXXCPP      C++ preprocessor
+  CXXAR       Command for making archives from C++ objects (default is AR crv)
+              - only needed for Example
   TAUCS_INCFLAGS
               Flags for including taucs header files
   MUMPS_INCFLAGS
@@ -2250,68 +2256,6 @@ if test -z "$CXXFLAGS"; then
       *)
 # ToDo decide about unroll-loops
         opt_cxxflags="-O3"
-#        case $build in
-#          x86_64-* | i686-* | i586-* )
-#            # Check for enabling special instructions
-#            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
-#            have_sse=no
-#            for i in $myflags; do
-#              case $i in
-#                sse3) CXXFLAGS="-mfpmath=sse -msse3"
-#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CXXFLAGS=
-#                     ;;
-#                sse2)
-#                     CXXFLAGS="-mfpmath=sse -msse2"
-#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_cxxflags="$opt_cxxflags $CXXFLAGS"
-#			 else
-#			   opt_cxxflags="$opt_cxxflags -msse2"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CXXFLAGS=
-#                     ;;
-#                sse)
-#                     CXXFLAGS="-mfpmath=sse -msse"
-#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_cxxflags="$opt_cxxflags $CXXFLAGS"
-#			 else
-#			   opt_cxxflags="$opt_cxxflags -msse"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CXXFLAGS=
-#                     ;;
-#                mmx) CXXFLAGS="-mmmx"
-#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     CXXFLAGS= ;;
-#                3dnow) CXXFLAGS="-m3dnow"
-#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     CXXFLAGS= ;;
-#              esac
-#            done
-#          ;;
-#        esac
         add_cxxflags="-pipe"
         dbg_cxxflags="-g -DCHECK_SMARTPTR"
         warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -Wconversion"
@@ -2691,62 +2635,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
-################################################
-## Set variables for the archiver              #
-## (for AIX in 64bit mode also on SGI, SUN...) #
-################################################
-#if test -z "$AR"; then
-#  if test ! "$GXX" = "yes"; then
-#    case $build in
-#      *-sun-*)
-#        AR="CC -xar"
-#        ;;
-#      *-sgi-*)
-#        AR="CC -ar"
-#        ;;
-#    esac
-#  fi
-#  if test -z "$AR"; then
-#    AR="ar"
-#  fi
-#fi
-#AC_ARG_VAR(AR,[Command for handling archives (default is `ar')])
-#AC_MSG_NOTICE([Using AR=\"$AR\".])
-#
-#if test -z "$ARFLAGS"; then
-#  if test ! "$GXX" = "yes"; then
-#    case $build in
-#      *-sun-*)
-#        ARFLAGS="-o"
-#        ;;
-#      *-sgi-*)
-#        ARFLAGS="-o"
-#        ;;
-#    esac
-#  fi
-#  if test -z "$ARFLAGS"; then
-#    ARFLAGS="crv"
-#  fi
-#fi
-#AC_ARG_VAR(ARFLAGS,[Flags for adding file for archive command (default is `crv')])
-#AC_MSG_NOTICE([Using ARFLAGS=\"$ARFLAGS\".])
-#
-#if test -z "$AR_X"; then
-#  case $build in
-#    *-sun-*)
-#      AR_X="ar x"
-#      ;;
-#    *-sgi-*)
-#      AR_X="ar x"
-#      ;;
-#    *)
-#      AR_X="$AR x"
-#      ;;
-#  esac
-#fi
-#AC_ARG_VAR(AR_X,[Command for extracing an archive (default is `$AR x')])
-#AC_MSG_NOTICE([Using AR_X=\"$AR_X\".])
 
 ######################
 # C Compiler Options #
@@ -3290,71 +3178,6 @@ if test -z "$CFLAGS"; then
       icc | */icc) ;;
       *)
         opt_cflags="-O3"
-#        case $build in
-#          x86_64-* | i686-* | i586-* )
-#            # Check for enabling special instructions
-#            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
-#            have_sse=no
-#            SAVE_LIBS="$LIBS"
-#            LIBS="$LIBS -lm"
-#            for i in $myflags; do
-#              case $i in
-#                sse3) CFLAGS="-mfpmath=sse -msse3"
-#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cflags="$opt_cflags $CFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CFLAGS=
-#                     ;;
-#                sse2)
-#                     CFLAGS="-mfpmath=sse -msse2"
-#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_cflags="$opt_cflags $CFLAGS"
-#			 else
-#			   opt_cflags="$opt_cflags -msse2"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CFLAGS=
-#                     ;;
-#                sse)
-#                     CFLAGS="-mfpmath=sse -msse"
-#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_cflags="$opt_cflags $CFLAGS"
-#			 else
-#			   opt_cflags="$opt_cflags -msse"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CFLAGS=
-#                     ;;
-#                mmx) CFLAGS="-mmmx"
-#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cflags="$opt_cflags $CFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     CFLAGS= ;;
-#                3dnow) CFLAGS="-m3dnow"
-#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cflags="$opt_cflags $CFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     CFLAGS= ;;
-#              esac
-#            done
-#            LIBS="$SAVE_LIBS"
-#          ;;
-#        esac
         add_cflags="-pipe"
         dbg_cflags="-g"
 	warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Werror "
@@ -3799,7 +3622,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3802:" \
+echo "$as_me:3625:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -3951,86 +3774,6 @@ if test -z "$FFLAGS"; then
 
   if test "$G77" = "yes"; then
     opt_fflags="-O3"
-#        case $build in
-#          x86_64-* | i686-* | i586-* )
-#            # Check for enabling special instructions
-#            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
-#            have_sse=no
-#            for i in $myflags; do
-#              case $i in
-#                sse3) FFLAGS="-mfpmath=sse -msse3"
-#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-#                     AC_TRY_LINK(,[      double precision x
-#      x = sin(1.d0)],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_fflags="$opt_fflags $FFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     FFLAGS=
-#                     ;;
-#                sse2)
-#                     FFLAGS="-mfpmath=sse -msse2"
-#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-#                     AC_TRY_LINK(,[      double precision x
-#      x = sin(1.d0)],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_fflags="$opt_fflags $FFLAGS"
-#			 else
-#			   opt_fflags="$opt_fflags -msse2"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     FFLAGS=
-#                     ;;
-#                sse)
-#                     FFLAGS="-mfpmath=sse -msse"
-#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-#                     AC_TRY_LINK(,[      double precision x
-#      x = sin(1.d0)],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_fflags="$opt_fflags $FFLAGS"
-#			 else
-#			   opt_fflags="$opt_fflags -msse"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     FFLAGS=
-#                     ;;
-#                mmx) FFLAGS="-mmmx"
-#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-#                     AC_TRY_LINK(,[      double precision x
-#      x = sin(1.d0)],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_fflags="$opt_fflags $FFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     FFLAGS= ;;
-#                3dnow) FFLAGS="-m3dnow"
-#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-#                     AC_TRY_LINK(,[      double precision x
-#      x = sin(1.d0)],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_fflags="$opt_fflags $FFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     FFLAGS= ;;
-#              esac
-#            done
-#          ;;
-#        esac
-
-#    case $build in
-#      i686-* )
-#        FFLAGS="-march=i686 -mfpmath=sse -msse"
-#        AC_MSG_CHECKING([whether flags \"$FFLAGS\" work])
-#        AC_TRY_LINK(,[
-#      double precision x
-#      x = sin(1.d0)],
-#                       [AC_MSG_RESULT([yes]); opt_fflags="$opt_fflags $FFLAGS"],
-#                       [AC_MSG_RESULT([no])])
-#        FFLAGS=
-#      ;;
-#    esac
     add_fflags="-pipe"
     dbg_fflags="-g"
     case $build in
@@ -4366,7 +4109,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:4369: \"$ac_link\") >&5
+(eval echo $as_me:4112: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4444,7 +4187,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:4447: \"$ac_link\") >&5
+(eval echo $as_me:4190: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -6168,6 +5911,21 @@ else
 echo "${ECHO_T}no, using $LN_S" >&6
 fi
 
+echo "$as_me:$LINENO: checking for egrep" >&5
+echo $ECHO_N "checking for egrep... $ECHO_C" >&6
+if test "${ac_cv_prog_egrep+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if echo a | (grep -E '(a|b)') >/dev/null 2>&1
+    then ac_cv_prog_egrep='grep -E'
+    else ac_cv_prog_egrep='egrep'
+    fi
+fi
+echo "$as_me:$LINENO: result: $ac_cv_prog_egrep" >&5
+echo "${ECHO_T}$ac_cv_prog_egrep" >&6
+ EGREP=$ac_cv_prog_egrep
+
+
 
 # Stuff for automake
 am__api_version="1.9"
@@ -7453,7 +7211,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7456 "configure"' > conftest.$ac_ext
+  echo '#line 7214 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9194,11 +8952,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9197: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8955: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9201: \$? = $ac_status" >&5
+   echo "$as_me:8959: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9462,11 +9220,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9465: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9223: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9469: \$? = $ac_status" >&5
+   echo "$as_me:9227: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9566,11 +9324,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9569: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9327: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9573: \$? = $ac_status" >&5
+   echo "$as_me:9331: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11983,7 +11741,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11986 "configure"
+#line 11744 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12083,7 +11841,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12086 "configure"
+#line 11844 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -14443,11 +14201,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14446: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14204: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14450: \$? = $ac_status" >&5
+   echo "$as_me:14208: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14547,11 +14305,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14550: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14308: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14554: \$? = $ac_status" >&5
+   echo "$as_me:14312: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16117,11 +15875,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16120: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15878: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16124: \$? = $ac_status" >&5
+   echo "$as_me:15882: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16221,11 +15979,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16224: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15982: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16228: \$? = $ac_status" >&5
+   echo "$as_me:15986: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18428,11 +18186,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18431: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18189: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18435: \$? = $ac_status" >&5
+   echo "$as_me:18193: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18696,11 +18454,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18699: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18457: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18703: \$? = $ac_status" >&5
+   echo "$as_me:18461: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18800,11 +18558,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18803: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18561: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18807: \$? = $ac_status" >&5
+   echo "$as_me:18565: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -21488,7 +21246,7 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
 # shared objects path (for example Makefiles)
 RPATH_CMD=
 
-if test $enable_shared == "yes"; then
+if test $enable_shared = "yes"; then
   if test "$GXX" = "yes"; then
     RPATH_CMD='-Wl,--rpath -Wl,$(IPOPTLIBDIR)'
   else
@@ -21503,19 +21261,47 @@ if test $enable_shared == "yes"; then
         xlC* | */xlC* | mpxlC* | */mpxlC*)
           RPATH_CMD=nothing ;;
         esac ;;
+      *-hp-*)
+          RPATH_CMD=nothing ;;
+      *-sun-*)
+          RPATH_CMD='-R$(IPOPTLIBDIR)' ;;
      esac
   fi
 
-  if test "$RPATH_CMD" == ""; then
+  if test "$RPATH_CMD" = ""; then
     { echo "$as_me:$LINENO: WARNING: Could not automatically determine how to tell the linker about automatic inclusion of the path for shared libraries.  The test examples might not work if you link against shared objects.  You will need to set the LD_LIBRARY_PATH or LIBDIR variable manually." >&5
 echo "$as_me: WARNING: Could not automatically determine how to tell the linker about automatic inclusion of the path for shared libraries.  The test examples might not work if you link against shared objects.  You will need to set the LD_LIBRARY_PATH or LIBDIR variable manually." >&2;}
   fi
-  if test "$RPATH_CMD" == "nothing"; then
+  if test "$RPATH_CMD" = "nothing"; then
     RPATH_CMD=
   fi
 fi
 
 
+
+########################################################
+## Set variables for the archiver for C++ object files #
+## (for AIX in 64bit mode also on SGI, SUN...)         #
+########################################################
+
+if test -z "$CXXAR"; then
+  if test ! "$GXX" = "yes"; then
+    case $build in
+      *-sun-*)
+        CXXAR="CC -xar -o"
+        ;;
+      *-sgi-*)
+        CXXAR="CC -ar -o"
+        ;;
+    esac
+  fi
+  if test -z "$CXXAR"; then
+    CXXAR="$AR cru"
+  fi
+fi
+
+{ echo "$as_me:$LINENO: Using CXXAR=\"$CXXAR\"." >&5
+echo "$as_me: Using CXXAR=\"$CXXAR\"." >&6;}
 
 ############################################################################
 ############################################################################
@@ -25520,21 +25306,6 @@ else
 fi
 
   if test "$use_MA27" = BUILD; then
-    echo "$as_me:$LINENO: checking for egrep" >&5
-echo $ECHO_N "checking for egrep... $ECHO_C" >&6
-if test "${ac_cv_prog_egrep+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if echo a | (grep -E '(a|b)') >/dev/null 2>&1
-    then ac_cv_prog_egrep='grep -E'
-    else ac_cv_prog_egrep='egrep'
-    fi
-fi
-echo "$as_me:$LINENO: result: $ac_cv_prog_egrep" >&5
-echo "${ECHO_T}$ac_cv_prog_egrep" >&6
- EGREP=$ac_cv_prog_egrep
-
-
     echo "$as_me:$LINENO: checking whether MA27 is threadsafe" >&5
 echo $ECHO_N "checking whether MA27 is threadsafe... $ECHO_C" >&6
     if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
@@ -26401,8 +26172,7 @@ if test "$use_asldir" = BUILD; then
 
     echo "$as_me:$LINENO: checking whether $am_make is the GNU make" >&5
 echo $ECHO_N "checking whether $am_make is the GNU make... $ECHO_C" >&6
-    rm -f conftest.mak
-    ($am_make -v -f conftest.mak > conftest.grp) 2>&5
+    ($am_make -v > conftest.grp) 2>&5
     if $EGREP GNU conftest.grp >&5 ; then
       echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -26411,30 +26181,7 @@ echo "${ECHO_T}yes" >&6
       echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     fi
-    rm -f conftest.mak conftest.grp
-
-#    if test $USE_MAINTAINER_MODE = 'yes'; then
-#      AC_MSG_WARN([Assuming that maintainer mode is only used for GNU make])
-#      ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
-#    else
-#      AC_LANG_PUSH(Fortran 77)
-#      AC_MSG_CHECKING([whether $am_make understands the `-j 1' flag])
-#      AC_LANG_CONFTEST([[bladfaoekja:]])
-#      if ($am_make -f conftest.c -j 1 bladfaoekja >&5) 2>&5 ; then
-#        AC_MSG_RESULT([yes])
-#        ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
-#      else
-#        AC_MSG_RESULT([no])
-#        AC_MSG_CHECKING([whether $am_make understands the `-J 1' flag])
-#        if ($am_make -f conftest.c -J 1 bladfaoekja >&5) 2>&5 ; then
-#          AC_MSG_RESULT([yes])
-#          ASLMAKEFLAGS="-J 1 $ASLMAKEFLAGS"
-#        else
-#          AC_MSG_RESULT([no])
-#        fi
-#      fi
-#      AC_LANG_POP(Fortran 77)
-#    fi
+    rm -f conftest.grp
   fi
   ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR \$\$(ARFLAGS)/' makefile.u | sed 's/ar ruv/$AR ruv/' "
   if test "$EXEEXT" = ".exe"; then
@@ -27710,6 +27457,7 @@ s,@ac_ct_OBJDUMP@,$ac_ct_OBJDUMP,;t t
 s,@CXXCPP@,$CXXCPP,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
 s,@RPATH_CMD@,$RPATH_CMD,;t t
+s,@CXXAR@,$CXXAR,;t t
 s,@IPADDLIBS@,$IPADDLIBS,;t t
 s,@TAUCS_INCFLAGS@,$TAUCS_INCFLAGS,;t t
 s,@MUMPS_INCFLAGS@,$MUMPS_INCFLAGS,;t t

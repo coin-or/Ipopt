@@ -12,10 +12,12 @@ VPATH = @srcdir@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 
-# Archiver (need to build a library on AIX to avoid multiply defined
-# symbols for templates
-AR = @AR@
-ARFLAGS = @ARFLAGS@
+# Archiver for C++ object files (e.g., needed to build a library on AIX to
+# avoid multiply defined symbols for templates)
+CXXAR = @CXXAR@
+
+# additional C++ Compiler options for linking
+CXXLINKFLAGS = @RPATH_CMD@
 
 # Directory with header files
 IPOPTINCDIR = @includedir@/ipopt
@@ -96,10 +98,10 @@ CYGPATH_W = @CYGPATH_W@
 .SUFFIXES: .cpp .c .o .obj
 
 $(EXE): $(MAINOBJ) $(LIB)
-	$(CXX) $(CXXFLAGS) -o $@ $(MAINOBJ) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(CXXLINKFLAGS) -o $@ $(MAINOBJ) $(LIBS)
 
 $(LIB): $(LIBOBJS)
-	$(AR) $(ARFLAGS) $(LIB) $(LIBOBJS)
+	$(CXXAR) $(LIB) $(LIBOBJS)
 
 clean:
 	rm -rf $(EXE) $(MAINOBJ) $(LIBOBJS) $(LIB)

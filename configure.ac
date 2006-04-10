@@ -72,68 +72,6 @@ if test -z "$CXXFLAGS"; then
       *)
 # ToDo decide about unroll-loops
         opt_cxxflags="-O3"
-#        case $build in
-#          x86_64-* | i686-* | i586-* )
-#            # Check for enabling special instructions
-#            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
-#            have_sse=no
-#            for i in $myflags; do
-#              case $i in
-#                sse3) CXXFLAGS="-mfpmath=sse -msse3"
-#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CXXFLAGS=
-#                     ;;
-#                sse2)
-#                     CXXFLAGS="-mfpmath=sse -msse2"
-#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_cxxflags="$opt_cxxflags $CXXFLAGS"
-#			 else
-#			   opt_cxxflags="$opt_cxxflags -msse2"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CXXFLAGS=
-#                     ;;
-#                sse)
-#                     CXXFLAGS="-mfpmath=sse -msse"
-#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_cxxflags="$opt_cxxflags $CXXFLAGS"
-#			 else
-#			   opt_cxxflags="$opt_cxxflags -msse"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CXXFLAGS=
-#                     ;;
-#                mmx) CXXFLAGS="-mmmx"
-#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     CXXFLAGS= ;;
-#                3dnow) CXXFLAGS="-m3dnow"
-#                     AC_MSG_CHECKING([whether flag \"$CXXFLAGS\" works])
-#                     AC_TRY_LINK([#include <cmath>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cxxflags="$opt_cxxflags $CXXFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     CXXFLAGS= ;;
-#              esac
-#            done
-#          ;;
-#        esac
         add_cxxflags="-pipe"
         dbg_cxxflags="-g -DCHECK_SMARTPTR"
         warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -Wconversion"
@@ -274,62 +212,6 @@ else
 fi
 AC_LANG_POP(C++)
 
-################################################
-## Set variables for the archiver              #
-## (for AIX in 64bit mode also on SGI, SUN...) #
-################################################
-#if test -z "$AR"; then
-#  if test ! "$GXX" = "yes"; then
-#    case $build in
-#      *-sun-*)
-#        AR="CC -xar"
-#        ;;
-#      *-sgi-*)
-#        AR="CC -ar"
-#        ;;
-#    esac
-#  fi
-#  if test -z "$AR"; then
-#    AR="ar"
-#  fi
-#fi
-#AC_ARG_VAR(AR,[Command for handling archives (default is `ar')])
-#AC_MSG_NOTICE([Using AR=\"$AR\".])
-#
-#if test -z "$ARFLAGS"; then
-#  if test ! "$GXX" = "yes"; then
-#    case $build in
-#      *-sun-*)
-#        ARFLAGS="-o"
-#        ;;
-#      *-sgi-*)
-#        ARFLAGS="-o"
-#        ;;
-#    esac
-#  fi
-#  if test -z "$ARFLAGS"; then
-#    ARFLAGS="crv"
-#  fi
-#fi
-#AC_ARG_VAR(ARFLAGS,[Flags for adding file for archive command (default is `crv')])
-#AC_MSG_NOTICE([Using ARFLAGS=\"$ARFLAGS\".])
-#
-#if test -z "$AR_X"; then
-#  case $build in
-#    *-sun-*)
-#      AR_X="ar x"
-#      ;;
-#    *-sgi-*)
-#      AR_X="ar x"
-#      ;;
-#    *)
-#      AR_X="$AR x"
-#      ;;
-#  esac
-#fi
-#AC_ARG_VAR(AR_X,[Command for extracing an archive (default is `$AR x')])
-#AC_MSG_NOTICE([Using AR_X=\"$AR_X\".])
-
 ######################
 # C Compiler Options #
 ######################
@@ -356,71 +238,6 @@ if test -z "$CFLAGS"; then
       icc | */icc) ;;
       *)
         opt_cflags="-O3"
-#        case $build in
-#          x86_64-* | i686-* | i586-* )
-#            # Check for enabling special instructions
-#            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
-#            have_sse=no
-#            SAVE_LIBS="$LIBS"
-#            LIBS="$LIBS -lm"
-#            for i in $myflags; do
-#              case $i in
-#                sse3) CFLAGS="-mfpmath=sse -msse3"
-#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cflags="$opt_cflags $CFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CFLAGS=
-#                     ;;
-#                sse2)
-#                     CFLAGS="-mfpmath=sse -msse2"
-#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_cflags="$opt_cflags $CFLAGS"
-#			 else
-#			   opt_cflags="$opt_cflags -msse2"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CFLAGS=
-#                     ;;
-#                sse)
-#                     CFLAGS="-mfpmath=sse -msse"
-#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_cflags="$opt_cflags $CFLAGS"
-#			 else
-#			   opt_cflags="$opt_cflags -msse"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     CFLAGS=
-#                     ;;
-#                mmx) CFLAGS="-mmmx"
-#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cflags="$opt_cflags $CFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     CFLAGS= ;;
-#                3dnow) CFLAGS="-m3dnow"
-#                     AC_MSG_CHECKING([whether flag \"$CFLAGS\" works])
-#                     AC_TRY_LINK([#include <math.h>],[double s = sin(1.0);],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_cflags="$opt_cflags $CFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     CFLAGS= ;;
-#              esac
-#            done
-#            LIBS="$SAVE_LIBS"
-#          ;;
-#        esac
         add_cflags="-pipe"
         dbg_cflags="-g"
 	warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Werror "
@@ -541,86 +358,6 @@ if test -z "$FFLAGS"; then
 
   if test "$G77" = "yes"; then
     opt_fflags="-O3"
-#        case $build in
-#          x86_64-* | i686-* | i586-* )
-#            # Check for enabling special instructions
-#            myflags=`grep flags /proc/cpuinfo | tail -1 | cut -d: -f2-`
-#            have_sse=no
-#            for i in $myflags; do
-#              case $i in
-#                sse3) FFLAGS="-mfpmath=sse -msse3"
-#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-#                     AC_TRY_LINK(,[      double precision x
-#      x = sin(1.d0)],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_fflags="$opt_fflags $FFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     FFLAGS=
-#                     ;;
-#                sse2)
-#                     FFLAGS="-mfpmath=sse -msse2"
-#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-#                     AC_TRY_LINK(,[      double precision x
-#      x = sin(1.d0)],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_fflags="$opt_fflags $FFLAGS"
-#			 else
-#			   opt_fflags="$opt_fflags -msse2"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     FFLAGS=
-#                     ;;
-#                sse)
-#                     FFLAGS="-mfpmath=sse -msse"
-#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-#                     AC_TRY_LINK(,[      double precision x
-#      x = sin(1.d0)],
-#	                [AC_MSG_RESULT([yes])
-#                         if test $have_sse = no; then
-#                           opt_fflags="$opt_fflags $FFLAGS"
-#			 else
-#			   opt_fflags="$opt_fflags -msse"
-#                         fi],
-#                        [AC_MSG_RESULT([no])])
-#                     have_sse=yes;
-#                     FFLAGS=
-#                     ;;
-#                mmx) FFLAGS="-mmmx"
-#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-#                     AC_TRY_LINK(,[      double precision x
-#      x = sin(1.d0)],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_fflags="$opt_fflags $FFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     FFLAGS= ;;
-#                3dnow) FFLAGS="-m3dnow"
-#                     AC_MSG_CHECKING([whether flag \"$FFLAGS\" works])
-#                     AC_TRY_LINK(,[      double precision x
-#      x = sin(1.d0)],
-#	                [AC_MSG_RESULT([yes])
-#                         opt_fflags="$opt_fflags $FFLAGS"],
-#                        [AC_MSG_RESULT([no])])
-#                     FFLAGS= ;;
-#              esac
-#            done
-#          ;;
-#        esac
-
-#    case $build in
-#      i686-* )
-#        FFLAGS="-march=i686 -mfpmath=sse -msse"
-#        AC_MSG_CHECKING([whether flags \"$FFLAGS\" work])
-#        AC_TRY_LINK(,[
-#      double precision x
-#      x = sin(1.d0)],
-#                       [AC_MSG_RESULT([yes]); opt_fflags="$opt_fflags $FFLAGS"],
-#                       [AC_MSG_RESULT([no])])
-#        FFLAGS=
-#      ;;
-#    esac
     add_fflags="-pipe"
     dbg_fflags="-g"
     case $build in
@@ -769,6 +506,7 @@ esac
 AC_PREFIX_DEFAULT([`pwd`])
 
 AC_PROG_LN_S 
+AC_PROG_EGREP
 
 # Stuff for automake
 AM_INIT_AUTOMAKE
@@ -781,7 +519,7 @@ AC_PROG_LIBTOOL
 # shared objects path (for example Makefiles)
 RPATH_CMD=
 
-if test $enable_shared == "yes"; then
+if test $enable_shared = "yes"; then
   if test "$GXX" = "yes"; then
     RPATH_CMD='-Wl,--rpath -Wl,$(IPOPTLIBDIR)'
   else
@@ -796,18 +534,45 @@ if test $enable_shared == "yes"; then
         xlC* | */xlC* | mpxlC* | */mpxlC*)
           RPATH_CMD=nothing ;;
         esac ;;
+      *-hp-*)
+          RPATH_CMD=nothing ;;
+      *-sun-*)
+          RPATH_CMD='-R$(IPOPTLIBDIR)' ;;
      esac
   fi
 
-  if test "$RPATH_CMD" == ""; then
+  if test "$RPATH_CMD" = ""; then
     AC_MSG_WARN([Could not automatically determine how to tell the linker about automatic inclusion of the path for shared libraries.  The test examples might not work if you link against shared objects.  You will need to set the LD_LIBRARY_PATH or LIBDIR variable manually.])
   fi
-  if test "$RPATH_CMD" == "nothing"; then
+  if test "$RPATH_CMD" = "nothing"; then
     RPATH_CMD=
   fi
 fi
 
 AC_SUBST(RPATH_CMD)
+
+########################################################
+## Set variables for the archiver for C++ object files #
+## (for AIX in 64bit mode also on SGI, SUN...)         #
+########################################################
+
+if test -z "$CXXAR"; then
+  if test ! "$GXX" = "yes"; then
+    case $build in
+      *-sun-*)
+        CXXAR="CC -xar -o"
+        ;;
+      *-sgi-*)
+        CXXAR="CC -ar -o"
+        ;;
+    esac
+  fi
+  if test -z "$CXXAR"; then
+    CXXAR="$AR cru"
+  fi
+fi
+AC_ARG_VAR(CXXAR,[Command for making archives from C++ objects (default is AR crv) - only needed for Example])
+AC_MSG_NOTICE([Using CXXAR=\"$CXXAR\".])
 
 ############################################################################
 ############################################################################
@@ -1139,7 +904,6 @@ if test "$use_hsl" = BUILD; then
 # Check which files are available
   MY_CHECK_HSLFILE(ma27ad,MA27)
   if test "$use_MA27" = BUILD; then
-    AC_PROG_EGREP
     AC_MSG_CHECKING([whether MA27 is threadsafe])
     if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
       AC_MSG_RESULT(yes)
@@ -1354,38 +1118,14 @@ if test "$use_asldir" = BUILD; then
     esac
 
     AC_MSG_CHECKING([whether $am_make is the GNU make])
-    rm -f conftest.mak
-    ($am_make -v -f conftest.mak > conftest.grp) 2>&5
+    ($am_make -v > conftest.grp) 2>&5
     if $EGREP GNU conftest.grp >&5 ; then
       AC_MSG_RESULT([yes])
       ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
     else
       AC_MSG_RESULT([no])
     fi
-    rm -f conftest.mak conftest.grp
-
-#    if test $USE_MAINTAINER_MODE = 'yes'; then
-#      AC_MSG_WARN([Assuming that maintainer mode is only used for GNU make])
-#      ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
-#    else
-#      AC_LANG_PUSH(Fortran 77)
-#      AC_MSG_CHECKING([whether $am_make understands the `-j 1' flag])
-#      AC_LANG_CONFTEST([[bladfaoekja:]])
-#      if ($am_make -f conftest.c -j 1 bladfaoekja >&5) 2>&5 ; then
-#        AC_MSG_RESULT([yes])
-#        ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
-#      else
-#        AC_MSG_RESULT([no])
-#        AC_MSG_CHECKING([whether $am_make understands the `-J 1' flag])
-#        if ($am_make -f conftest.c -J 1 bladfaoekja >&5) 2>&5 ; then
-#          AC_MSG_RESULT([yes])
-#          ASLMAKEFLAGS="-J 1 $ASLMAKEFLAGS"
-#        else
-#          AC_MSG_RESULT([no])
-#        fi
-#      fi
-#      AC_LANG_POP(Fortran 77)
-#    fi
+    rm -f conftest.grp
   fi
   ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR \$\$(ARFLAGS)/' makefile.u | sed 's/ar ruv/$AR ruv/' "
   if test "$EXEEXT" = ".exe"; then
