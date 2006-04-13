@@ -41,6 +41,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+LIBOBJDIR =
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in \
 	$(top_srcdir)/Examples/Cpp_example/Makefile.in \
@@ -805,8 +806,8 @@ install-exec-local:
 	mkdir $(tmpdir)
 	echo "$(IPADDLIBS) $(FLIBS)" >$(tmpdir)/$(ipopt_addlibs_cpp_txt)
 	echo "$(IPADDLIBS)" >$(tmpdir)/$(ipopt_addlibs_f_txt)
-	$(INSTALL_DATA) $(tmpdir)/$(ipopt_addlibs_cpp_txt) $(DESTDIR)$(libdir)
-	$(INSTALL_DATA) $(tmpdir)/$(ipopt_addlibs_f_txt) $(DESTDIR)$(libdir)
+	cd $(tmpdir) ; $(INSTALL_DATA) '$(ipopt_addlibs_cpp_txt)' '$(DESTDIR)$(libdir)'
+	cd $(tmpdir) ; $(INSTALL_DATA) '$(ipopt_addlibs_f_txt)' '$(DESTDIR)$(libdir)'
 	rm -rf $(tmpdir)
 
 uninstall-local:

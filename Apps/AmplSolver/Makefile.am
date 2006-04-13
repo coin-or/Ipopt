@@ -27,7 +27,8 @@ IPLIBS = \
 	libamplinterface.a \
 	$(ASLLIB)
 
-ipopt_LDADD = ../../Interfaces/libipopt.la libamplinterface.la $(ASLLIB)
+ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
+	$(IPADDLIBS) $(ASLLIB) $(FLIBS)
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \

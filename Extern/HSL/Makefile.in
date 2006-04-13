@@ -40,6 +40,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+LIBOBJDIR =
 @BUILDMA27_TRUE@am__append_1 = ma27ad.f
 @BUILDMA57_TRUE@am__append_2 = ma57ad.f
 @BUILDMC19_TRUE@am__append_3 = mc19ad.f

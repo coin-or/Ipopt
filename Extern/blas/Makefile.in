@@ -40,6 +40,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+LIBOBJDIR =
 @BUILDBLAS_TRUE@am__append_1 = dasum.f \
 @BUILDBLAS_TRUE@	daxpy.f \
 @BUILDBLAS_TRUE@	dcopy.f \

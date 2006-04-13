@@ -42,6 +42,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+LIBOBJDIR =
 @HAVE_MUMPS_TRUE@am__append_1 = $(MUMPS_INCFLAGS)
 subdir = Algorithm
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in

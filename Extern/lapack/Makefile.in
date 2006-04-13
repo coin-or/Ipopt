@@ -40,6 +40,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+LIBOBJDIR =
 @BUILDLAPACK_TRUE@am__append_1 = $(LAPACK_FILES)
 subdir = Extern/lapack
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in

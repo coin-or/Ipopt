@@ -41,6 +41,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+LIBOBJDIR =
 @BUILDAMPLINTERFACE_TRUE@am__append_1 = AmplSolver
 subdir = Apps
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in

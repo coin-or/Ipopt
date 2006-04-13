@@ -120,8 +120,8 @@ install-exec-local:
 	mkdir $(tmpdir)
 	echo "$(IPADDLIBS) $(FLIBS)" >$(tmpdir)/$(ipopt_addlibs_cpp_txt)
 	echo "$(IPADDLIBS)" >$(tmpdir)/$(ipopt_addlibs_f_txt)
-	$(INSTALL_DATA) $(tmpdir)/$(ipopt_addlibs_cpp_txt) $(DESTDIR)$(libdir)
-	$(INSTALL_DATA) $(tmpdir)/$(ipopt_addlibs_f_txt) $(DESTDIR)$(libdir)
+	cd $(tmpdir) ; $(INSTALL_DATA) '$(ipopt_addlibs_cpp_txt)' '$(DESTDIR)$(libdir)'
+	cd $(tmpdir) ; $(INSTALL_DATA) '$(ipopt_addlibs_f_txt)' '$(DESTDIR)$(libdir)'
 	rm -rf $(tmpdir)
 
 uninstall-local:

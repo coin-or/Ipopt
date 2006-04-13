@@ -39,7 +39,7 @@ libipopt_la_SOURCES = \
 
 #libipopt_la_LIBADD = ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la
 
-libipopt_la_LIBADD = $(IPALLLIBS)
+libipopt_la_LIBADD = $(IPALLLIBS) $(FLIBS)
 
 libipopt_la_LDFLAGS = -no-undefined
 

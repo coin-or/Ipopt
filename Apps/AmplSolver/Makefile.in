@@ -43,6 +43,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+LIBOBJDIR =
 bin_PROGRAMS = ipopt$(EXEEXT)
 subdir = Apps/AmplSolver
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
@@ -64,7 +65,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am_ipopt_OBJECTS = ampl_ipopt.$(OBJEXT)
 ipopt_OBJECTS = $(am_ipopt_OBJECTS)
 am__DEPENDENCIES_1 =
-ipopt_DEPENDENCIES = ../../Interfaces/libipopt.la libamplinterface.la \
+ipopt_DEPENDENCIES = libamplinterface.la ../../Interfaces/libipopt.la \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -272,7 +274,9 @@ IPLIBS = \
 	libamplinterface.a \
 	$(ASLLIB)
 
-ipopt_LDADD = ../../Interfaces/libipopt.la libamplinterface.la $(ASLLIB)
+ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
+	$(IPADDLIBS) $(ASLLIB) $(FLIBS)
+
 
 # Astyle stuff
 ASTYLE_FILES = \

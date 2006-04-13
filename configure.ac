@@ -8,15 +8,15 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.1.0],[coin-ipopt@list.coin-or.org])
+AC_INIT([Ipopt],[3.1.0dev],[coin-ipopt@list.coin-or.org])
 
 AC_COPYRIGHT([
-Copyright 2004, 2005, 2006 International Business Machines and others.
+Copyright 2004, 2006 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
 
-AC_REVISION(3.1.0)
+AC_REVISION(3.1.0dev)
 
 AC_CONFIG_SRCDIR(Common/IpDebug.hpp)
 
@@ -52,7 +52,7 @@ AC_ARG_ENABLE([bg],,
 AC_LANG_PUSH(C++)
 SAVE_CXXFLAGS="$CXXFLAGS"
 case $build in
-  *-cygwin) comps="g++ cl" ;;
+  *-cygwin*) comps="g++ cl" ;;
   *-darwin*) comps="g++ c++ CC" ;;
   *)        comps="xlC aCC CC g++ c++ pgCC icpc" ;;
 esac
@@ -90,9 +90,9 @@ if test -z "$CXXFLAGS"; then
      *-cygwin*)
       case "$CXX" in
       cl | */cl)
-             opt_cxxflags="/Ot1"
-             add_cxxflags="/nologo /EHsc /GR"
-             dbg_cxxflags="/Yd";;
+             opt_cxxflags='/Ot1'
+             add_cxxflags='/nologo /EHsc /GR /MT'
+             dbg_cxxflags='/-Yd';;
       esac;;
      *-linux-*)
       case "$CXX" in
@@ -180,7 +180,7 @@ if test -z "$CXXLIBS"; then
         CXXLIBS=""
         ;;
       *)
-        CXXLIBS="-lstdc++ -lm -lgcc"
+        CXXLIBS="-lstdc++ -lm" # -lgcc"
         ;;
     esac
   else
@@ -219,7 +219,7 @@ AC_LANG_POP(C++)
 AC_LANG_PUSH(C)
 SAVE_CFLAGS="$CFLAGS"
 case $build in
-  *-cygwin)  comps="gcc cl" ;;
+  *-cygwin*) comps="gcc cl" ;;
   *-linux-*) comps="xlc gcc cc pgcc icc" ;;
   *)         comps="xlc cc gcc pgcc icc" ;;
 esac
@@ -256,9 +256,9 @@ if test -z "$CFLAGS"; then
      *-cygwin*)
       case "$CC" in
       cl | */cl)
-             opt_cflags="/Ot1"
-             add_cflags="/nologo"
-             dbg_cflags="/Yd";;
+             opt_cflags='/Ot1'
+             add_cflags='/nologo'
+             dbg_cflags='/Yd';;
       esac;;
      *-linux-*)
       case "$CC" in
@@ -345,8 +345,8 @@ AC_LANG_POP(C)
 AC_LANG_PUSH(Fortran 77)
 SAVE_FFLAGS="$FFLAGS"
 case $build in
-  *-cygwin) comps="gfortran g77 ifort" ;;
-  *)        comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc" ;;
+  *-cygwin*) comps="gfortran g77 ifort" ;;
+  *)         comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc" ;;
 esac
 AC_PROG_F77($comps)
 FFLAGS="$SAVE_FFLAGS"
@@ -373,9 +373,9 @@ if test -z "$FFLAGS"; then
     *-cygwin*)
       case $F77 in
       ifort | */ifort)
-             opt_fflags="/O3"
-             add_fflags="/nologo /fpp"
-             dbg_fflags="/debug" ;;
+             opt_fflags='/O3'
+             add_fflags='/nologo'
+             dbg_fflags='/debug' ;;
       esac;;
     *-linux-*)
       case $F77 in
@@ -462,7 +462,8 @@ case $build in
    *-cygwin*)
      case $F77 in
        ifort | */ifort)
-           FLIBS="libifcorert.lib libcmt.lib /link /NODEFAULTLIB:libc.lib $LIBS";;
+           FLIBS="/link libifcorert.lib $LIBS /NODEFAULTLIB:libc.lib";;
+#           FLIBS="/link libifcorert.lib libcmt.lib /NODEFAULTLIB:libc.lib $LIBS";;
      esac;;
    *-hp-*)
        FLIBS="$FLIBS -lm";;
@@ -512,8 +513,52 @@ AC_PROG_EGREP
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
 
+# Stuff for libtool
+
+# On Cygwin, building DLLs doesn't work
+case $build in
+  *-cygwin*)
+    AC_DISABLE_SHARED
+  ;;
+esac
+AC_LIBTOOL_DLOPEN
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
+
+# Fix bugs in libtool script for Windows native compilation:
+# - cygpath is not correctly quoted in fix_srcfile_path
+# - paths generated for .lib files is not run through cygpath -w
+
+
+# - lib includes subdirectory information; we want to replace
+#
+# old_archive_cmds="lib /OUT:\$oldlib\$oldobjs\$old_deplibs"
+#
+# by
+#
+# old_archive_cmds="echo \$oldlib | grep .libs >/dev/null; if test \$? = 0; then cd .libs; lib /OUT:\`echo \$oldlib\$oldobjs\$old_deplibs | sed -e s@\.libs/@@g\`; cd .. ; else lib /OUT:\$oldlib\$oldobjs\$old_deplibs ; fi"
+#
+#          -e 's%old_archive_cmds="lib /OUT:\\\$oldlib\\\$oldobjs\\\$old_deplibs"%old_archive_cmds="echo \\\$oldlib \| grep .libs >/dev/null; if test \\\$? = 0; then cd .libs; lib /OUT:\\\`echo \\\$oldlib\\\$oldobjs\\\$old_deplibs \| sed -e s@\\.libs/@@g\\\`; cd .. ; else lib /OUT:\\\$oldlib\\\$oldobjs\\\$old_deplibs; fi"%' \
+
+# The following was a hack for chaniing @BACKSLASH to \
+#          -e 'sYcompile_command=`\$echo "X\$compile_command" | \$Xsed -e '"'"'s%@OUTPUT@%'"'"'"\$output"'"'"'%g'"'"'`Ycompile_command=`\$echo "X\$compile_command" | \$Xsed -e '"'"'s%@OUTPUT@%'"'"'"\$output"'"'"'%g'"'"' | \$Xsed -e '"'"'s%@BACKSLASH@%\\\\\\\\\\\\\\\\%g'"'"'`Y' \
+
+case $build in
+  *-cygwin*)
+  case "$CXX" in
+    cl | */cl) 
+
+      sed -e 's|fix_srcfile_path=\"`cygpath -w \"\$srcfile\"`\"|fix_srcfile_path=\"\\\`cygpath -w \\\"\\$srcfile\\\"\\\`\"|' \
+          -e 's|fix_srcfile_path=\"\"|fix_srcfile_path=\"\\\`cygpath -w \\\"\\$srcfile\\\"\\\`\"|' \
+          -e 's%compile_deplibs=\"\$dir/\$old_library \$compile_deplibs\"%compile_deplibs="`cygpath -w \$dir/\$old_library | sed -e '"'"'sY\\\\\\\\Y/Yg'"'"'` \$compile_deplibs\"'% \
+          -e 's%compile_deplibs=\"\$dir/\$linklib \$compile_deplibs\"%compile_deplibs="`cygpath -w \$dir/\$linklib | sed -e '"'"'sY\\\\\\\\Y/Yg'"'"'` \$compile_deplibs\"'% \
+      libtool > conftest.bla
+
+      mv conftest.bla libtool
+      chmod 755 libtool
+      ;;
+  esac
+esac
 
 # Find out which options are needed to tell the linker about the
 # shared objects path (for example Makefiles)
@@ -587,9 +632,15 @@ AC_LANG_PUSH(C++)
 ################
 
 AC_DEFUN([MY_CHECK_CXX_HEADER],
-         [AC_CHECK_HEADERS([c$1])
+         [AC_CHECK_HEADERS([c$1],,,
+[[
+#include <c$1>
+]])
           if test ! "$ac_cv_header_c$1" = "yes"; then
-            AC_CHECK_HEADERS([$1.h])
+            AC_CHECK_HEADERS([$1.h],,,
+[[
+#include <$1.h>
+]])
           fi])
 
 MY_CHECK_CXX_HEADER(math)
@@ -710,8 +761,13 @@ AC_CHECK_DECL([va_copy],[AC_DEFINE([HAVE_VA_COPY],[1],
 
 # Additional libraries and packages
 
+# IPADDLIBS will contain all libraries for additional packages
 IPADDLIBS=
 AC_SUBST(IPADDLIBS)
+
+# We need to restore the value of LIBS before those test, otherwise libtool
+# will hick-up
+LIBS_without_IPADDLIBS="$LIBS"
 
 ##########
 #  BLAS  #
@@ -728,7 +784,7 @@ AC_ARG_WITH([blas],
 # otherwise links with the cygwin blas which doesn't run under DOS>
 if test -z "$use_blas"; then
   case $build in
-    *-cygwin) use_blas="BUILD" ;;
+    *-cygwin*) use_blas="BUILD" ;;
   esac
 fi
 
@@ -810,7 +866,7 @@ AC_ARG_WITH([lapack],
 # otherwise links with the cygwin lapack which doesn't run under DOS>
 if test -z "$use_lapack"; then
   case $build in
-    *-cygwin) use_lapack="BUILD" ;;
+    *-cygwin*) use_lapack="BUILD" ;;
   esac
 fi
 
@@ -1057,6 +1113,11 @@ LIBS="$LIBS $FLIBS"
 asldir=Extern/ASL/solvers
 aslsrcdir=$srcdir/$asldir
 
+case $CXX in
+  cl | */cl)   ampllib=amplsolv.lib ;;
+  *)           ampllib=amplsolver.a ;;
+esac
+
 AC_ARG_WITH([asldir],
             AC_HELP_STRING([--with-asldir],
                            [specify absolute path to AMPL solver directory (or BUILD for compilation, or "no" for disabling AMPL)]),
@@ -1069,7 +1130,7 @@ elif test -z "$use_asldir"; then
  # try to find sources - if not given don't compile
   AC_CHECK_FILE([$aslsrcdir/asl.h],[use_asldir=BUILD],[use_asldir=no])
 elif test ! "$use_asldir" = "no"; then
-  AC_CHECK_FILE([$use_asldir/amplsolver.a],[],[AC_MSG_ERROR([ASL directory \"$use_asldir\" specified, but library missing])])
+  AC_CHECK_FILE([$use_asldir/$ampllib],[],[AC_MSG_ERROR([ASL directory \"$use_asldir\" specified, but library missing])])
   AC_CHECK_FILE([$use_asldir/asl.h],[],[AC_MSG_ERROR([ASL directory \"$use_asldir\" specified, but header files are missing])])
   use_asldir=`cd $use_asldir; pwd`
   case $build in
@@ -1090,10 +1151,14 @@ if test "$use_asldir" = BUILD; then
                   asladdcflags="$asladdcflags -DNo_Control87 -DBLUE_GENE"
                 fi
                 ;;
-      *-cygwin*) asladdcflags="-DNON_STDIO"
+      *-cygwin*)
+                asladdcflags="-DNON_STDIO"
                 if test "$use_mingw" = yes; then
                   asladdcflags="$asladdcflags -DNo_Control87 -DNO_RUSAGE"
                 fi
+                ;;
+      *-mingw32)
+                asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
                 ;;
     esac
 #    ASLMAKEFLAGS="CFLAGS=\"\$(CFLAGS) $asladdcflags\""
@@ -1165,6 +1230,7 @@ AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fo
 
 
 IPADDLIBS="$IPADDLIBS"
+LIBS="$LIBS_without_IPADDLIBS"
 
 ##########
 # ASTYLE #
@@ -1176,14 +1242,41 @@ AC_SUBST(ASTYLEFLAGS)
 
 # The following one is for the example makefiles
 case $build in
-  *-cygwin*) ipoptlib='`cygpath -w \$(IPOPTLIBDIR)`\\libipopt.a';;
+#  *-cygwin*) ipoptlib='`cygpath -w \$(IPOPTLIBDIR)`\\libipopt.a';;
   *)         ipoptlib="-L\$(IPOPTLIBDIR) -lipopt";;
 esac
 AC_SUBST(ipoptlib)
 
 # For ASL
-AC_SUBST(AMPL_CPPFLAGS)
+ASLLIB=
 AMPL_CPPFLAGS="-I\$(top_builddir)/Extern/ASL -I\$(top_srcdir)/Extern/ASL/solvers"
+
+if test "$use_asldir" = BUILD; then
+  ASLLIB="\$(top_builddir)/Extern/ASL//$ampllib"
+  case $build in
+    *-mingw32)
+      # This is a hack for mingw where AC_CONFIG_LINKS doesn't work for directories
+      rm -rf Extern/ASL/ASLsolvers
+      $LN_S $asldir Extern/ASL/ASLsolvers
+      ;;
+    *)
+      AC_CONFIG_LINKS(Extern/ASL/ASLsolvers:$asldir)
+      ;;
+  esac
+elif test ! "$use_asldir" = no; then
+  case "$CXX" in
+    cl | */cl)
+      use_asldir="`cygpath -w $use_asldir | sed -e sX\\\\\\\\X/Xg`"
+      AMPL_CPPFLAGS="-I$use_asldir"
+      ASLLIB="$use_asldir/$ampllib"
+    ;;
+  esac
+fi
+if test x"$ASLLIB" = x; then
+  ASLLIB="$use_asldir/$ampllib"
+fi
+AC_SUBST(ASLLIB)
+AC_SUBST(AMPL_CPPFLAGS)
 
 # Add the compiler warning flags for GNU compilers
 # (we can't use them during tests)
@@ -1247,21 +1340,6 @@ AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
 AM_CONDITIONAL([BUILDASLDIR],[test "$use_asldir" = BUILD])
 AM_CONDITIONAL([BUILDAMPLINTERFACE],[test ! "$use_asldir" = "no"])
-AC_SUBST(ASLLIB)
-AC_SUBST(AMPL_CPPFLAGS)
-if test "$use_asldir" = BUILD; then
-  ASLLIB="\$(top_builddir)/Extern/ASL/amplsolver.a"
-  AMPL_CPPFLAGS="-I\$(top_builddir)/Extern/ASL -I\$(top_srcdir)/Extern/ASL/solvers"
-  AC_CONFIG_LINKS(Extern/ASL/ASLsolvers:$asldir)
-elif test ! "$use_asldir" = no; then
-  case $build in
-    *-cygwin*) AMPL_CPPFLAGS="-I\"$use_asldir\""
-               ASLLIB="\"$use_asldir\amplsolver.a\"" ;;
-    *)         AMPL_CPPFLAGS="-I$use_asldir"
-               ASLLIB="$use_asldir/amplsolver.a";;
-  esac
-fi
-
 
 AC_CONFIG_FILES([Makefile Common/Makefile
                  LinAlg/Makefile LinAlg/TMatrices/Makefile 

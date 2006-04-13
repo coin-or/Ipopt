@@ -39,6 +39,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+LIBOBJDIR =
 @BUILDBLASDIR_TRUE@am__append_1 = blas
 @BUILDLAPACKDIR_TRUE@am__append_2 = lapack
 @BUILDHSLDIR_TRUE@am__append_3 = HSL
