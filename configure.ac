@@ -1206,9 +1206,41 @@ fi
 AC_ARG_VAR(ASLMAKEFLAGS,[Compilation flags necessary for compiling the AMPL solver library])
 AC_SUBST(ASLMAKEFILECMDS)
 
-if test ! "$use_asldir" = no; then
-  AC_CHECK_LIB(dl,[dlopen],[LIBS="$LIBS -ldl"],[])
+# For AmplApplication Makefile
+ASLLIB=
+AMPL_CPPFLAGS="-I\$(top_builddir)/Extern/ASL -I\$(top_srcdir)/Extern/ASL/solvers"
+
+if test "$use_asldir" = BUILD; then
+  ASLLIB="\$(top_builddir)/Extern/ASL//$ampllib"
+  case $build in
+    *-mingw32)
+      # This is a hack for mingw where AC_CONFIG_LINKS doesn't work for directories
+      rm -rf Extern/ASL/ASLsolvers
+      $LN_S $asldir Extern/ASL/ASLsolvers
+      ;;
+    *)
+      AC_CONFIG_LINKS(Extern/ASL/ASLsolvers:$asldir)
+      ;;
+  esac
+elif test ! "$use_asldir" = no; then
+  case "$CXX" in
+    cl | */cl)
+      use_asldir="`cygpath -w $use_asldir | sed -e sX\\\\\\\\X/Xg`"
+      AMPL_CPPFLAGS="-I$use_asldir"
+      ASLLIB="$use_asldir/$ampllib"
+    ;;
+  esac
 fi
+if test x"$ASLLIB" = x; then
+  ASLLIB="$use_asldir/$ampllib"
+fi
+
+if test ! "$use_asldir" = no; then
+  AC_CHECK_LIB(dl,[dlopen],[ASLLIB="$ASLLIB -ldl"],[])
+fi
+
+AC_SUBST(ASLLIB)
+AC_SUBST(AMPL_CPPFLAGS)
 
 AC_LANG_POP(C++)
 
@@ -1247,37 +1279,6 @@ case $build in
   *)         ipoptlib="-L\$(IPOPTLIBDIR) -lipopt";;
 esac
 AC_SUBST(ipoptlib)
-
-# For ASL
-ASLLIB=
-AMPL_CPPFLAGS="-I\$(top_builddir)/Extern/ASL -I\$(top_srcdir)/Extern/ASL/solvers"
-
-if test "$use_asldir" = BUILD; then
-  ASLLIB="\$(top_builddir)/Extern/ASL//$ampllib"
-  case $build in
-    *-mingw32)
-      # This is a hack for mingw where AC_CONFIG_LINKS doesn't work for directories
-      rm -rf Extern/ASL/ASLsolvers
-      $LN_S $asldir Extern/ASL/ASLsolvers
-      ;;
-    *)
-      AC_CONFIG_LINKS(Extern/ASL/ASLsolvers:$asldir)
-      ;;
-  esac
-elif test ! "$use_asldir" = no; then
-  case "$CXX" in
-    cl | */cl)
-      use_asldir="`cygpath -w $use_asldir | sed -e sX\\\\\\\\X/Xg`"
-      AMPL_CPPFLAGS="-I$use_asldir"
-      ASLLIB="$use_asldir/$ampllib"
-    ;;
-  esac
-fi
-if test x"$ASLLIB" = x; then
-  ASLLIB="$use_asldir/$ampllib"
-fi
-AC_SUBST(ASLLIB)
-AC_SUBST(AMPL_CPPFLAGS)
 
 # Add the compiler warning flags for GNU compilers
 # (we can't use them during tests)
