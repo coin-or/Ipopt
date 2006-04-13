@@ -51,7 +51,6 @@ namespace Ipopt
     else {
       options.GetNumericValue("tol", tol_, prefix);
     }
-    printf("prefix = %s tol = %e\n", prefix.c_str(), tol_);
 
     iter_count_ = 0;
     curr_mu_ = -1.;
