@@ -473,7 +473,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix=`pwd`
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os BLUEGENEEXTRA CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXLIBS CC CFLAGS ac_ct_CC F77 FFLAGS ac_ct_F77 FLIBS CPP EGREP BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB DLLTOOL ac_ct_DLLTOOL AS ac_ct_AS OBJDUMP ac_ct_OBJDUMP CXXCPP LIBTOOL RPATH_CMD CXXAR IPADDLIBS TAUCS_INCFLAGS MUMPS_INCFLAGS ASLMAKEFLAGS ASLMAKEFILECMDS ASTYLE ASTYLEFLAGS ipoptlib ASLLIB AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDLAPACK_TRUE BUILDLAPACK_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMA57_TRUE BUILDMA57_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDLAPACKDIR_TRUE BUILDLAPACKDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE HAVE_MUMPS_TRUE HAVE_MUMPS_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os BLUEGENEEXTRA CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXLIBS CC CFLAGS ac_ct_CC F77 FFLAGS ac_ct_F77 FLIBS CPP EGREP BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CXXCPP LIBTOOL RPATH_CMD CXXAR IPADDLIBS TAUCS_INCFLAGS MUMPS_INCFLAGS ASLMAKEFLAGS ASLMAKEFILECMDS ASTYLE ASTYLEFLAGS ipoptlib ASLLIB AMPL_CPPFLAGS IPALLLIBS BUILDBLAS_TRUE BUILDBLAS_FALSE BUILDLAPACK_TRUE BUILDLAPACK_FALSE BUILDHSL_TRUE BUILDHSL_FALSE BUILDMA27_TRUE BUILDMA27_FALSE BUILDMA57_TRUE BUILDMA57_FALSE BUILDMC19_TRUE BUILDMC19_FALSE BUILDBLASDIR_TRUE BUILDBLASDIR_FALSE BUILDLAPACKDIR_TRUE BUILDLAPACKDIR_FALSE BUILDHSLDIR_TRUE BUILDHSLDIR_FALSE HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE HAVE_MUMPS_TRUE HAVE_MUMPS_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILDASLDIR_TRUE BUILDASLDIR_FALSE BUILDAMPLINTERFACE_TRUE BUILDAMPLINTERFACE_FALSE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1062,7 +1062,7 @@ Optional Features:
   --enable-maintainer-mode  enable make rules and dependencies not useful
 			  (and sometimes confusing) to the casual installer
   --enable-shared[=PKGS]
-                          build shared libraries [default=no]
+                          build shared libraries [default=yes]
   --enable-static[=PKGS]
                           build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -6651,10 +6651,16 @@ fi
 
 # Stuff for libtool
 
-# On Cygwin, building DLLs doesn't work
-case $build in
-  *-cygwin*)
-    # Check whether --enable-shared or --disable-shared was given.
+## On Cygwin, building DLLs doesn't work (we cannot do the following)
+#case $build in
+#  *-cygwin*)
+#    AC_DISABLE_SHARED
+#  ;;
+#esac
+
+# The codes is not yet "DLL clean"
+#AC_LIBTOOL_WIN32_DLL
+# Check whether --enable-shared or --disable-shared was given.
 if test "${enable_shared+set}" = set; then
   enableval="$enable_shared"
   p=${PACKAGE-default}
@@ -6675,15 +6681,8 @@ if test "${enable_shared+set}" = set; then
       ;;
     esac
 else
-  enable_shared=no
+  enable_shared=yes
 fi;
-
-
-  ;;
-esac
-
-
-
 
 # Check whether --enable-static or --disable-static was given.
 if test "${enable_static+set}" = set; then
@@ -7222,7 +7221,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7225 "configure"' > conftest.$ac_ext
+  echo '#line 7224 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7406,248 +7405,6 @@ sparc*-*solaris*)
   rm -rf conftest*
   ;;
 
-*-*-cygwin* | *-*-mingw* | *-*-pw32*)
-  if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}dlltool", so it can be a program name with args.
-set dummy ${ac_tool_prefix}dlltool; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_prog_DLLTOOL+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test -n "$DLLTOOL"; then
-  ac_cv_prog_DLLTOOL="$DLLTOOL" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_DLLTOOL="${ac_tool_prefix}dlltool"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-fi
-fi
-DLLTOOL=$ac_cv_prog_DLLTOOL
-if test -n "$DLLTOOL"; then
-  echo "$as_me:$LINENO: result: $DLLTOOL" >&5
-echo "${ECHO_T}$DLLTOOL" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-fi
-if test -z "$ac_cv_prog_DLLTOOL"; then
-  ac_ct_DLLTOOL=$DLLTOOL
-  # Extract the first word of "dlltool", so it can be a program name with args.
-set dummy dlltool; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_prog_ac_ct_DLLTOOL+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test -n "$ac_ct_DLLTOOL"; then
-  ac_cv_prog_ac_ct_DLLTOOL="$ac_ct_DLLTOOL" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_ac_ct_DLLTOOL="dlltool"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  test -z "$ac_cv_prog_ac_ct_DLLTOOL" && ac_cv_prog_ac_ct_DLLTOOL="false"
-fi
-fi
-ac_ct_DLLTOOL=$ac_cv_prog_ac_ct_DLLTOOL
-if test -n "$ac_ct_DLLTOOL"; then
-  echo "$as_me:$LINENO: result: $ac_ct_DLLTOOL" >&5
-echo "${ECHO_T}$ac_ct_DLLTOOL" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-  DLLTOOL=$ac_ct_DLLTOOL
-else
-  DLLTOOL="$ac_cv_prog_DLLTOOL"
-fi
-
-  if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}as", so it can be a program name with args.
-set dummy ${ac_tool_prefix}as; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_prog_AS+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test -n "$AS"; then
-  ac_cv_prog_AS="$AS" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_AS="${ac_tool_prefix}as"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-fi
-fi
-AS=$ac_cv_prog_AS
-if test -n "$AS"; then
-  echo "$as_me:$LINENO: result: $AS" >&5
-echo "${ECHO_T}$AS" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-fi
-if test -z "$ac_cv_prog_AS"; then
-  ac_ct_AS=$AS
-  # Extract the first word of "as", so it can be a program name with args.
-set dummy as; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_prog_ac_ct_AS+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test -n "$ac_ct_AS"; then
-  ac_cv_prog_ac_ct_AS="$ac_ct_AS" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_ac_ct_AS="as"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  test -z "$ac_cv_prog_ac_ct_AS" && ac_cv_prog_ac_ct_AS="false"
-fi
-fi
-ac_ct_AS=$ac_cv_prog_ac_ct_AS
-if test -n "$ac_ct_AS"; then
-  echo "$as_me:$LINENO: result: $ac_ct_AS" >&5
-echo "${ECHO_T}$ac_ct_AS" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-  AS=$ac_ct_AS
-else
-  AS="$ac_cv_prog_AS"
-fi
-
-  if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}objdump", so it can be a program name with args.
-set dummy ${ac_tool_prefix}objdump; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_prog_OBJDUMP+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test -n "$OBJDUMP"; then
-  ac_cv_prog_OBJDUMP="$OBJDUMP" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_OBJDUMP="${ac_tool_prefix}objdump"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-fi
-fi
-OBJDUMP=$ac_cv_prog_OBJDUMP
-if test -n "$OBJDUMP"; then
-  echo "$as_me:$LINENO: result: $OBJDUMP" >&5
-echo "${ECHO_T}$OBJDUMP" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-fi
-if test -z "$ac_cv_prog_OBJDUMP"; then
-  ac_ct_OBJDUMP=$OBJDUMP
-  # Extract the first word of "objdump", so it can be a program name with args.
-set dummy objdump; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_prog_ac_ct_OBJDUMP+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test -n "$ac_ct_OBJDUMP"; then
-  ac_cv_prog_ac_ct_OBJDUMP="$ac_ct_OBJDUMP" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_ac_ct_OBJDUMP="objdump"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  test -z "$ac_cv_prog_ac_ct_OBJDUMP" && ac_cv_prog_ac_ct_OBJDUMP="false"
-fi
-fi
-ac_ct_OBJDUMP=$ac_cv_prog_ac_ct_OBJDUMP
-if test -n "$ac_ct_OBJDUMP"; then
-  echo "$as_me:$LINENO: result: $ac_ct_OBJDUMP" >&5
-echo "${ECHO_T}$ac_ct_OBJDUMP" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-  OBJDUMP=$ac_ct_OBJDUMP
-else
-  OBJDUMP="$ac_cv_prog_OBJDUMP"
-fi
-
-  ;;
 
 esac
 
@@ -8866,8 +8623,8 @@ fi
   ;;
 esac
 
-enable_dlopen=yes
-enable_win32_dll=yes
+enable_dlopen=no
+enable_win32_dll=no
 
 # Check whether --enable-libtool-lock or --disable-libtool-lock was given.
 if test "${enable_libtool_lock+set}" = set; then
@@ -8963,11 +8720,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8966: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8723: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8970: \$? = $ac_status" >&5
+   echo "$as_me:8727: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9231,11 +8988,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9234: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8991: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9238: \$? = $ac_status" >&5
+   echo "$as_me:8995: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9335,11 +9092,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9338: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9095: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9342: \$? = $ac_status" >&5
+   echo "$as_me:9099: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11752,7 +11509,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11755 "configure"
+#line 11512 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11852,7 +11609,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11855 "configure"
+#line 11612 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -14212,11 +13969,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14215: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13972: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14219: \$? = $ac_status" >&5
+   echo "$as_me:13976: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14316,11 +14073,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14319: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14076: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14323: \$? = $ac_status" >&5
+   echo "$as_me:14080: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15886,11 +15643,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15889: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15646: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15893: \$? = $ac_status" >&5
+   echo "$as_me:15650: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15990,11 +15747,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15993: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15750: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15997: \$? = $ac_status" >&5
+   echo "$as_me:15754: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18197,11 +17954,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18200: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17957: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18204: \$? = $ac_status" >&5
+   echo "$as_me:17961: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18465,11 +18222,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18468: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18225: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18472: \$? = $ac_status" >&5
+   echo "$as_me:18229: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18569,11 +18326,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18572: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18329: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18576: \$? = $ac_status" >&5
+   echo "$as_me:18333: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -25161,10 +24918,9 @@ for ac_i in : $LIBOBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
   ac_i=`echo "$ac_i" |
 	 sed 's/\$U\././;s/\.o$//;s/\.obj$//'`
-  # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
-  #    will be set to the directory where LIBOBJS objects are built.
-  ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"
-  ac_ltlibobjs="$ac_ltlibobjs \${LIBOBJDIR}$ac_i"'$U.lo'
+  # 2. Add them.
+  ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
+  ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'
 done
 LIBOBJS=$ac_libobjs
 
@@ -25956,12 +25712,6 @@ s,@AR@,$AR,;t t
 s,@ac_ct_AR@,$ac_ct_AR,;t t
 s,@RANLIB@,$RANLIB,;t t
 s,@ac_ct_RANLIB@,$ac_ct_RANLIB,;t t
-s,@DLLTOOL@,$DLLTOOL,;t t
-s,@ac_ct_DLLTOOL@,$ac_ct_DLLTOOL,;t t
-s,@AS@,$AS,;t t
-s,@ac_ct_AS@,$ac_ct_AS,;t t
-s,@OBJDUMP@,$OBJDUMP,;t t
-s,@ac_ct_OBJDUMP@,$ac_ct_OBJDUMP,;t t
 s,@CXXCPP@,$CXXCPP,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
 s,@RPATH_CMD@,$RPATH_CMD,;t t

@@ -515,14 +515,15 @@ AM_MAINTAINER_MODE
 
 # Stuff for libtool
 
-# On Cygwin, building DLLs doesn't work
-case $build in
-  *-cygwin*)
-    AC_DISABLE_SHARED
-  ;;
-esac
-AC_LIBTOOL_DLOPEN
-AC_LIBTOOL_WIN32_DLL
+## On Cygwin, building DLLs doesn't work (we cannot do the following)
+#case $build in
+#  *-cygwin*)
+#    AC_DISABLE_SHARED
+#  ;;
+#esac
+
+# The codes is not yet "DLL clean"
+#AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
 # Fix bugs in libtool script for Windows native compilation:
