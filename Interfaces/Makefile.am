@@ -56,12 +56,12 @@ CFLAGS += -I$(srcdir)/../Common
 # Make sure the addlibs files are installed in lib
 install-exec-local:
 	for i in $(ADDLIBS_FILES); do \
-	  $(install_sh_DATA) $$i $(DESTDIR)/$(libdir)/$$i; \
+	  $(install_sh_DATA) $$i $(DESTDIR)$(libdir)/$$i; \
 	done
 
 uninstall-local:
 	for i in $(ADDLIBS_FILES); do \
-	  rm -f $(DESTDIR)/$(libdir)/$$i; \
+	  rm -f $(DESTDIR)$(libdir)/$$i; \
 	done
 
 # Astyle stuff

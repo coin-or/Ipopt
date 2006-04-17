@@ -669,7 +669,7 @@ if test "$enable_maintainer_mode" = yes; then
 
   # Check if we can find the libtool file
   if test "${LIBTOOLPREFIX:+set}" != set; then
-    for p in $HOME /usr/local /usr ; do
+    for p in $HOME ; do
       AC_CHECK_FILE([$p/share/aclocal/libtool.m4],
                     [LIBTOOLM4="$p/share/aclocal/libtool.m4"
                      LIBTOOLPREFIX="$p"],)
@@ -678,7 +678,7 @@ if test "$enable_maintainer_mode" = yes; then
       fi
     done
     if test x"$LIBTOOLM4" = x; then
-      AC_MSG_ERROR([You specified you want to use maintainer mode, but I cannot find the file libtool.m4 on your system.  Please set the prefix of the location of the correct file with the LIBTOOLPREFIX variable, so that it is in $LIBTOOLPREFIX/share/aclocal.])
+      AC_MSG_ERROR([You specified you want to use maintainer mode, but I cannot find the file libtool.m4 on your system.  Please set the prefix of the location of the correct file with the LIBTOOLPREFIX variable, so that it is in $LIBTOOLPREFIX/share/aclocal.  We assume here that it is the plain version obtained from the GNU tarball.])
     fi
   else
     AC_CHECK_FILE([$LIBTOOLPREFIX/share/aclocal/libtool.m4],
@@ -704,9 +704,6 @@ if test "$enable_maintainer_mode" = yes; then
     AC_MSG_ERROR([I cannot find the file ltmain.sh in $LIBTOOLPREFIX/share/libtool])
   fi  
 fi
-
-# This can be used for automatically recreating acinclude
-LIBTOOLM4=$HOME/share/aclocal/libtool.m4
 
 # helpful variable for the base directory of this package
 pkg_source_dir=`cd $srcdir; pwd`
