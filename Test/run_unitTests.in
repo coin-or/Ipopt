@@ -9,19 +9,6 @@
 
 srcdir="@srcdir@"
 
-## in case we are using shared objects for the Ipopt library, set
-## LD_LIBRARY_PATH
-#
-#prefix="@prefix@"
-#exec_prefix="@exec_prefix@"
-#libdir="@libdir@"
-#
-#if test x"$LD_LIBRARY_PATH" = x; then
-#  export LD_LIBRARY_PATH="$libdir"
-#else
-#  export LD_LIBRARY_PATH="${libdir}:$LD_LIBRARY_PATH"
-#fi
-
 echo " "
 echo Running unitTests...
 echo " "
@@ -35,7 +22,7 @@ if test -x ../Apps/AmplSolver/ipopt ; then
     eval cp "$srcdir/mytoy.nl" .
     remove_mytoy=yes
   fi
-  (eval ../Apps/AmplSolver/ipopt mytoy.nl ) >tmpfile 2>&1
+  (eval ../bin/ipopt mytoy.nl ) >tmpfile 2>&1
   grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
   if test $? = 0; then
     echo "    Test passed!"

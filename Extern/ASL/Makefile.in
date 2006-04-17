@@ -413,7 +413,7 @@ stdio1.h arith.h funcadd0.o: $(libampl)
 # ASLsolvers
 
 distclean-local:
-	rm -f ASLsolvers
+	rm -rf ASLsolvers
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

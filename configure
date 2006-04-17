@@ -5958,6 +5958,17 @@ echo "$as_me: error: Unknown length of int *" >&2;}
    { (exit 1); exit 1; }; };;
 esac
 
+# On Cygwin, building DLLs doesn't work
+case $build in
+  *-cygwin*)
+    if test x"$enable_shared" = xyes; then
+      { echo "$as_me:$LINENO: WARNING: On Cygwin, shared objects are not supported. I'm disabling your choice." >&5
+echo "$as_me: WARNING: On Cygwin, shared objects are not supported. I'm disabling your choice." >&2;}
+    fi
+    enable_shared=no
+  ;;
+esac
+
 # By default, we only want the shared objects to be compiled
 # Check whether --enable-static or --disable-static was given.
 if test "${enable_static+set}" = set; then
@@ -6932,7 +6943,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6935 "configure"' > conftest.$ac_ext
+  echo '#line 6946 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8644,10 +8655,6 @@ _lt_linker_boilerplate=`cat conftest.err`
 $rm conftest*
 
 
-## CAVEAT EMPTOR:
-## There is no encapsulation within the following macros, do not change
-## the running order or otherwise move them around unless you know exactly
-## what you are doing...
 
 lt_prog_compiler_no_builtin_flag=
 
@@ -8673,11 +8680,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8676: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8683: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8680: \$? = $ac_status" >&5
+   echo "$as_me:8687: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8941,11 +8948,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8944: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8951: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8948: \$? = $ac_status" >&5
+   echo "$as_me:8955: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9045,11 +9052,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9048: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9055: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9052: \$? = $ac_status" >&5
+   echo "$as_me:9059: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11462,7 +11469,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11465 "configure"
+#line 11472 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11562,7 +11569,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11565 "configure"
+#line 11572 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13484,10 +13491,6 @@ test "$ld_shlibs_CXX" = no && can_build_shared=no
 GCC_CXX="$GXX"
 LD_CXX="$LD"
 
-## CAVEAT EMPTOR:
-## There is no encapsulation within the following macros, do not change
-## the running order or otherwise move them around unless you know exactly
-## what you are doing...
 
 cat > conftest.$ac_ext <<EOF
 class Foo
@@ -13921,11 +13924,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13924: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13927: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13928: \$? = $ac_status" >&5
+   echo "$as_me:13931: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14025,11 +14028,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14028: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14031: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14032: \$? = $ac_status" >&5
+   echo "$as_me:14035: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15594,11 +15597,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15597: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15600: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15601: \$? = $ac_status" >&5
+   echo "$as_me:15604: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15698,11 +15701,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15701: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15704: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15705: \$? = $ac_status" >&5
+   echo "$as_me:15708: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17875,10 +17878,6 @@ archive_cmds_need_lc_GCJ=no
 
 old_archive_cmds_GCJ=$old_archive_cmds
 
-## CAVEAT EMPTOR:
-## There is no encapsulation within the following macros, do not change
-## the running order or otherwise move them around unless you know exactly
-## what you are doing...
 
 lt_prog_compiler_no_builtin_flag_GCJ=
 
@@ -17904,11 +17903,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17907: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17906: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17911: \$? = $ac_status" >&5
+   echo "$as_me:17910: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18172,11 +18171,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18175: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18174: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18179: \$? = $ac_status" >&5
+   echo "$as_me:18178: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18276,11 +18275,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18279: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18278: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18283: \$? = $ac_status" >&5
+   echo "$as_me:18282: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -21493,7 +21492,7 @@ echo "$as_me: error: You don't have the correct version of automake as the first
 
   # Check if we can find the libtool file
   if test "${LIBTOOLPREFIX:+set}" != set; then
-    for p in $HOME /usr/local /usr ; do
+    for p in $HOME ; do
       as_ac_File=`echo "ac_cv_file_$p/share/aclocal/libtool.m4" | $as_tr_sh`
 echo "$as_me:$LINENO: checking for $p/share/aclocal/libtool.m4" >&5
 echo $ECHO_N "checking for $p/share/aclocal/libtool.m4... $ECHO_C" >&6
@@ -21522,8 +21521,8 @@ fi
       fi
     done
     if test x"$LIBTOOLM4" = x; then
-      { { echo "$as_me:$LINENO: error: You specified you want to use maintainer mode, but I cannot find the file libtool.m4 on your system.  Please set the prefix of the location of the correct file with the LIBTOOLPREFIX variable, so that it is in $LIBTOOLPREFIX/share/aclocal." >&5
-echo "$as_me: error: You specified you want to use maintainer mode, but I cannot find the file libtool.m4 on your system.  Please set the prefix of the location of the correct file with the LIBTOOLPREFIX variable, so that it is in $LIBTOOLPREFIX/share/aclocal." >&2;}
+      { { echo "$as_me:$LINENO: error: You specified you want to use maintainer mode, but I cannot find the file libtool.m4 on your system.  Please set the prefix of the location of the correct file with the LIBTOOLPREFIX variable, so that it is in $LIBTOOLPREFIX/share/aclocal.  We assume here that it is the plain version obtained from the GNU tarball." >&5
+echo "$as_me: error: You specified you want to use maintainer mode, but I cannot find the file libtool.m4 on your system.  Please set the prefix of the location of the correct file with the LIBTOOLPREFIX variable, so that it is in $LIBTOOLPREFIX/share/aclocal.  We assume here that it is the plain version obtained from the GNU tarball." >&2;}
    { (exit 1); exit 1; }; }
     fi
   else
@@ -21601,9 +21600,6 @@ echo "$as_me: error: I cannot find the file ltmain.sh in $LIBTOOLPREFIX/share/li
    { (exit 1); exit 1; }; }
   fi
 fi
-
-# This can be used for automatically recreating acinclude
-LIBTOOLM4=$HOME/share/aclocal/libtool.m4
 
 # helpful variable for the base directory of this package
 pkg_source_dir=`cd $srcdir; pwd`
@@ -25228,7 +25224,7 @@ if test "$use_asldir" = BUILD; then
     *-mingw32)
       # This is a hack for mingw where AC_CONFIG_LINKS doesn't work for directories
       rm -rf Extern/ASL/ASLsolvers
-      $LN_S $asldir Extern/ASL/ASLsolvers
+      $LN_S $srcdir/$asldir Extern/ASL/ASLsolvers
       ;;
     *)
                 ac_config_links="$ac_config_links Extern/ASL/ASLsolvers:$asldir"

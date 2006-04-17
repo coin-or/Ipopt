@@ -44,4 +44,4 @@ CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.o
 # ASLsolvers
 
 distclean-local:
-	rm -f ASLsolvers
+	rm -rf ASLsolvers

@@ -136,7 +136,6 @@ astyle:
 	cd LinAlg/TMatrices; $(MAKE) astyle
 	cd Interfaces; $(MAKE) astyle
 
-
 # Here we automatically rebuild acinclude.m4 if coin.m4 has changed
 $(top_srcdir)/acinclude.m4: $(top_srcdir)/coin.m4
 	cat $(LIBTOOLM4) $(top_srcdir)/coin.m4 > $(top_srcdir)/acinclude.m4

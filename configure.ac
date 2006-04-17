@@ -91,6 +91,16 @@ case $ac_cv_sizeof_int_p in
   *) AC_MSG_ERROR([Unknown length of int *]);;
 esac
 
+# On Cygwin, building DLLs doesn't work
+case $build in
+  *-cygwin*)
+    if test x"$enable_shared" = xyes; then
+      AC_MSG_WARN([On Cygwin, shared objects are not supported. I'm disabling your choice.])
+    fi
+    enable_shared=no
+  ;;
+esac
+
 # By default, we only want the shared objects to be compiled
 AC_DISABLE_STATIC
 
@@ -711,7 +721,7 @@ if test "$use_asldir" = BUILD; then
     *-mingw32)
       # This is a hack for mingw where AC_CONFIG_LINKS doesn't work for directories
       rm -rf Extern/ASL/ASLsolvers
-      $LN_S $asldir Extern/ASL/ASLsolvers
+      $LN_S $srcdir/$asldir Extern/ASL/ASLsolvers
       ;;
     *)
       AC_CONFIG_LINKS(Extern/ASL/ASLsolvers:$asldir)
