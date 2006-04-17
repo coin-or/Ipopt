@@ -29,9 +29,9 @@ namespace Ipopt
                      SmartPtr<AmplSuffixHandler> suffix_handler /* = NULL */,
                      bool allow_discrete /* = false */,
                      SmartPtr<AmplOptionsList> ampl_options_list /* = NULL */,
-                     char* ampl_option_string /* = NULL */,
-                     char* ampl_invokation_string /* = NULL */,
-                     char* ampl_banner_string /* = NULL */,
+                     const char* ampl_option_string /* = NULL */,
+                     const char* ampl_invokation_string /* = NULL */,
+                     const char* ampl_banner_string /* = NULL */,
                      std::string* nl_file_content /* = NULL */)
       :
       TNLP(),
@@ -899,8 +899,9 @@ namespace Ipopt
   char*
   AmplTNLP::get_options(const SmartPtr<OptionsList>& options,
                         SmartPtr<AmplOptionsList>& ampl_options_list,
-                        char* ampl_option_string, char* ampl_invokation_string,
-                        char* ampl_banner_string, char**& argv)
+                        const char* ampl_option_string,
+			const char* ampl_invokation_string,
+                        const char* ampl_banner_string, char**& argv)
   {
     ASL_pfgh* asl = asl_;
 
@@ -1167,12 +1168,12 @@ namespace Ipopt
       (keyword*) ampl_options_list->Keywords(options, jnlst_,
                                              (void**)&nerror_);
 
-    static char sname_default[] = "ipopt";
-    static char bsname_default[] = PACKAGE_STRING;
-    static char opname_default[] = "ipopt_options";
-    char* sname;
-    char* bsname;
-    char* opname;
+    static const char sname_default[] = "ipopt";
+    static const char bsname_default[] = PACKAGE_STRING;
+    static const char opname_default[] = "ipopt_options";
+    const char* sname;
+    const char* bsname;
+    const char* opname;
     if (ampl_option_string) {
       opname = ampl_option_string;
     }

@@ -44,7 +44,6 @@ namespace Ipopt
       // for the regular algorithm
       if (!options.GetNumericValue("resto.tol", tol_, "")) {
         options.GetNumericValue("tol", tol_, prefix);
-        printf("tol = %e\n", tol_);
         tol_ *= 1e-2;
       }
     }

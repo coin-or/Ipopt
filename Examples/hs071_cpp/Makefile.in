@@ -40,7 +40,7 @@ CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 
 # additional C++ Compiler options for linking
-CXXLINKFLAGS = @RPATH_CMD@
+CXXLINKFLAGS = @RPATH_FLAGS@
 
 # Directory with header files
 IPOPTINCDIR = @includedir@/ipopt

@@ -37,11 +37,13 @@ libipopt_la_SOURCES = \
 	IpTNLP.hpp \
 	IpTNLPAdapter.cpp IpTNLPAdapter.hpp
 
-#libipopt_la_LIBADD = ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la
-
 libipopt_la_LIBADD = $(IPALLLIBS) $(FLIBS)
 
 libipopt_la_LDFLAGS = -no-undefined
+
+ADDLIBS_FILES = \
+	ipopt_addlibs_cpp.txt \
+	ipopt_addlibs_f.txt
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
@@ -50,6 +52,17 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm`
 
 CFLAGS += -I$(srcdir)/../Common
+
+# Make sure the addlibs files are installed in lib
+install-exec-local:
+	for i in $(ADDLIBS_FILES); do \
+	  $(install_sh_DATA) $$i $(DESTDIR)/$(libdir)/$$i; \
+	done
+
+uninstall-local:
+	for i in $(ADDLIBS_FILES); do \
+	  rm -f $(DESTDIR)/$(libdir)/$$i; \
+	done
 
 # Astyle stuff
 

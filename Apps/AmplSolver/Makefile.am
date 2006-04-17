@@ -17,16 +17,6 @@ libamplinterface_la_SOURCES = \
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
-IPLIBS = \
-	../../Interfaces/libinterfaces.a \
-	../../Algorithm/libipoptalg.a \
-	../../Algorithm/LinearSolvers/liblinsolvers.a \
-	../../LinAlg/TMatrices/libtmatrices.a \
-	../../LinAlg/liblinalg.a \
-	../../Common/libcommon.a \
-	libamplinterface.a \
-	$(ASLLIB)
-
 ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
 	$(IPADDLIBS) $(ASLLIB) $(FLIBS)
 

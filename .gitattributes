@@ -21,6 +21,8 @@ Interfaces/IpInterfacesRegOp.cpp -text
 Interfaces/IpInterfacesRegOp.hpp -text
 Interfaces/IpSolveStatistics.cpp -text
 Interfaces/IpSolveStatistics.hpp -text
+Interfaces/ipopt_addlibs_cpp.txt.in -text
+Interfaces/ipopt_addlibs_f.txt.in -text
 /LICENSE -text
 Test/mytoy.nl -text
 Test/run_unitTests.in -text

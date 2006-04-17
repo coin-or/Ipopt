@@ -10,8 +10,6 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = Extern Common LinAlg Algorithm Interfaces Apps
 
-IPALLLIBS = @IPALLLIBS@
-
 EXTRA_DIST = \
 	Examples/Cpp_example/cpp_example.cpp \
 	Examples/Cpp_example/Makefile.in \
@@ -75,10 +73,11 @@ EXTRA_DIST = \
 	Windows/VisualStudio_dotNET/include/config.h \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj \
-	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj
+	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj \
+	coin.m4
 
 
-.PHONY: doc
+.PHONY: doc cuter test unitTest unitTests astyle
 
 # Stuff to clean up from "make test"
 
@@ -115,19 +114,6 @@ libipopt = libipopt.a
 ipopt_addlibs_cpp_txt = ipopt_addlibs_cpp.txt
 ipopt_addlibs_f_txt = ipopt_addlibs_f.txt
 
-install-exec-local:
-	rm -rf $(tmpdir)
-	mkdir $(tmpdir)
-	echo "$(IPADDLIBS) $(FLIBS)" >$(tmpdir)/$(ipopt_addlibs_cpp_txt)
-	echo "$(IPADDLIBS)" >$(tmpdir)/$(ipopt_addlibs_f_txt)
-	cd $(tmpdir) ; $(INSTALL_DATA) '$(ipopt_addlibs_cpp_txt)' '$(DESTDIR)$(libdir)'
-	cd $(tmpdir) ; $(INSTALL_DATA) '$(ipopt_addlibs_f_txt)' '$(DESTDIR)$(libdir)'
-	rm -rf $(tmpdir)
-
-uninstall-local:
-	rm -f $(DESTDIR)$(libdir)/$(ipopt_addlibs_cpp_txt)
-	rm -f $(DESTDIR)$(libdir)/$(ipopt_addlibs_f_txt)
-
 cuter: install
 	cd Apps/CUTErInterface; $(MAKE) cuter
 
@@ -150,3 +136,7 @@ astyle:
 	cd LinAlg/TMatrices; $(MAKE) astyle
 	cd Interfaces; $(MAKE) astyle
 
+
+# Here we automatically rebuild acinclude.m4 if coin.m4 has changed
+$(top_srcdir)/acinclude.m4: $(top_srcdir)/coin.m4
+	cat $(LIBTOOLM4) $(top_srcdir)/coin.m4 > $(top_srcdir)/acinclude.m4

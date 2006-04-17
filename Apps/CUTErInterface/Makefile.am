@@ -9,11 +9,12 @@ AUTOMAKE_OPTIONS = foreign
 EXTRA_DIST = \
 	CUTErInterface.f \
 	ipo.pro \
+	ipoma-dummy.f \
 	sdipo.pro
 
 noinst_LIBRARIES = libdummy.a
 
-libdummy_a_SOURCES = ipoma.f
+nodist_libdummy_a_SOURCES = ipoma.f
 
 ipoma.f: CUTErInterface.f
 	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \

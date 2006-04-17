@@ -38,7 +38,7 @@ F77 = @F77@
 FFLAGS = @FFLAGS@
 
 # additional Fortran Compiler options for linking
-F77LINKFLAGS = @RPATH_CMD@
+F77LINKFLAGS = @RPATH_FLAGS@
 
 # Directory with include file
 IPOPTINCDIR = @includedir@/ipopt

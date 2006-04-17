@@ -1,5 +1,8 @@
 /* inc/config.h.in.  Generated from configure.ac by autoheader.  */
 
+/* If defined, debug sanity checks are performed during runtime */
+#undef COIN_DEBUG
+
 /* Define to dummy `main' function (if any) required to link to the Fortran
    libraries. */
 #undef F77_DUMMY_MAIN
@@ -128,7 +131,7 @@
 /* Define to 1 if WSMP is available */
 #undef HAVE_WSMP
 
-/* If defined, debug sanity checks are performed during runtime */
+/* If defined, debug sanity checks are performed in Ipopt during runtime */
 #undef IP_DEBUG
 
 /* Define to be the name of C-function for NaNInf check */

@@ -39,7 +39,7 @@ CC = @CC@
 CFLAGS = @CFLAGS@
 
 # additional C Compiler options for linking
-CLINKFLAGS = @RPATH_CMD@
+CLINKFLAGS = @RPATH_FLAGS@
 
 # Directory with include file
 IPOPTINCDIR = @includedir@/ipopt

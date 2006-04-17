@@ -8,7 +8,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.1.0dev],[coin-ipopt@list.coin-or.org])
+AC_INIT([Ipopt],[3.1.0dev],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT([
 Copyright 2004, 2006 International Business Machines and others.
@@ -23,17 +23,18 @@ AC_CONFIG_SRCDIR(Common/IpDebug.hpp)
 # Get the system type
 AC_CANONICAL_BUILD
 
+AC_PREFIX_DEFAULT([`pwd`])
+
+AC_PROG_LN_S 
+AC_PROG_EGREP
+
 # Check if user wants to produce debugging code
-AC_ARG_ENABLE([debug],
-  AC_HELP_STRING([--enable-debug], [compile with debug options and runtime tests]),
-  [case "${enableval}" in
-    yes) debugcompile=true
-         AC_DEFINE([IP_DEBUG],[1],
-                   [If defined, debug sanity checks are performed during runtime])
-         ;;
-    no)  debugcompile=false ;;
-    *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
-  esac],[debugcompile=false])
+AC_COIN_DEBUG_COMPILE
+
+if test "$coin_debug_compile" = true; then
+  AC_DEFINE([IP_DEBUG],[1],
+            [If defined, debug sanity checks are performed in Ipopt during runtime])
+fi
 
 # Some extra stuff for blue gene on Laci's request
 AC_SUBST(BLUEGENEEXTRA)
@@ -45,440 +46,26 @@ AC_ARG_ENABLE([bg],,
           ;;
   esac],[is_bg=no])
 
-########################
-# C++ Compiler Options #
-########################
+# Get the name of the C++ compiler and appropriate options
+AC_COIN_PROG_CXX
+AC_COIN_CXXLIBS
 
-AC_LANG_PUSH(C++)
-SAVE_CXXFLAGS="$CXXFLAGS"
-case $build in
-  *-cygwin*) comps="g++ cl" ;;
-  *-darwin*) comps="g++ c++ CC" ;;
-  *)        comps="xlC aCC CC g++ c++ pgCC icpc" ;;
-esac
-AC_PROG_CXX([$comps])
-CXXFLAGS="$SAVE_CXXFLAGS"
-
-warn_cxxflags=
-
-if test -z "$CXXFLAGS"; then
-  add_cxxflags=
-  opt_cxxflags=
-  dbg_cxxflags=
-
-  if test "$GXX" = "yes"; then
-    case "$CXX" in
-      icpc | */icpc) ;;
-      *)
-# ToDo decide about unroll-loops
-        opt_cxxflags="-O3"
-        add_cxxflags="-pipe"
-        dbg_cxxflags="-g -DCHECK_SMARTPTR"
-        warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -Wconversion"
-        case $build in
-          *-cygwin*) AC_MSG_CHECKING([whether flag \" -mno-cygwin\" works])
-                    CXXFLAGS="-mno-cygwin"
-                    AC_TRY_LINK(,[int i=0; i++;],
-                                    [AC_MSG_RESULT([yes]); add_cxxflags="-mno-cygwin $add_cxxflags"; use_mingw=yes],
-                                    [AC_MSG_RESULT([no])])
-                    CXXFLAGS= ;;
-        esac ;;
-    esac
-  fi
-  if test -z "$opt_cxxflags"; then
-    case $build in
-     *-cygwin*)
-      case "$CXX" in
-      cl | */cl)
-             opt_cxxflags='/Ot1'
-             add_cxxflags='/nologo /EHsc /GR /MT'
-             dbg_cxxflags='/-Yd';;
-      esac;;
-     *-linux-*)
-      case "$CXX" in
-      icpc | */icpc)
-#             AC_MSG_CHECKING([whether flag \"-fast\" works])
-#               CXXFLAGS="-fast"
-#               AC_TRY_RUN(,[int i=0; i++;],
-#                               [AC_MSG_RESULT([yes]); opt_cxxflags="-fast"],
-#                               [AC_MSG_RESULT([no]); opt_cxxflags="-O3 -ip -static"])
-#               CXXFLAGS=
-             opt_cxxflags="-O3 -ip"
-             add_cxxflags=""
-             dbg_cxxflags="-g"
-             # Check if -i_dynamic is necessary (for new glibc library)
-             AC_MSG_CHECKING([whether flag \"-i_dynamic\" is needed])
-             CXXFLAGS=
-             AC_TRY_LINK(,[int i=0; i++;],
-                         [AC_MSG_RESULT([apparently not])],
-                         [AC_MSG_RESULT([seems so]);
-                               add_cxxflags="-i_dynamic $add_cxxflags"])
-             ;;
-      pgCC | */pgCC)
-             opt_cxxflags="-fast"
-             add_cxxflags="-Kieee -pc 64"
-             dbg_cxxflags="-g";;
-      esac;;
-    *-ibm-*)
-      case "$CXX" in
-      xlC* | */xlC* | mpxlC* | */mpxlC*)
-             opt_cxxflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
-             add_cxxflags="-bmaxdata:0x80000000 -qrtti=dyna"
-             dbg_cxxflags="-g";;
-      esac;;
-    *-hp-*)
-      case "$CXX" in
-      aCC | */aCC )
-             opt_cxxflags="-O"
-             add_cxxflags="-AA"
-             dbg_cxxflags="-g";;
-      esac;;
-    *-sun-*)
-             opt_cxxflags="-O4 -xtarget=native"
-             dbg_cxxflags="-g";;
-    esac
-  fi
-
-  if test "$ac_cv_prog_cxx_g" = yes && test -z "$dbg_cxxflags" ; then
-    dbg_cxxflags="-g"
-  fi
-
-  if test "$debugcompile" = "true"; then
-    CXXFLAGS="$dbg_cxxflags $add_cxxflags"
-  else
-    if test -z "$opt_cxxflags"; then
-# Try if -O option works if nothing else is set
-      CXXFLAGS="-O"
-      AC_TRY_LINK([],[int i=0; i++;],[opt_cxxflags="-O"],[])
-    fi
-    CXXFLAGS="$opt_cxxflags $add_cxxflags"
+# We add one more definition in if we are using g++ compilers and are
+# in debug mode
+if test "$coin_debug_compile" = true; then
+  if test "$GXX" = yes; then
+    CXXFLAGS="$CXXFLAGS -DCHECK_SMARTPTR"
   fi
 fi
 
-# Try if CXXFLAGS works
-AC_MSG_CHECKING([whether CXXFLAGS=\"$CXXFLAGS\" works])
-AC_TRY_LINK([],[int i=0; i++;],[],[CXXFLAGS=])
-if test -z "$CXXFLAGS"; then
-  AC_MSG_RESULT([no])
-  AC_MSG_WARN([This value for CXXFLAGS does not work.  I will now just try '-O', but you might want to set CXXFLAGS manually.])
-  CXXFLAGS='-O'
-  AC_TRY_LINK([],[int i=0; i++;],[],[CXXFLAGS=])
-  if test -z "$CXXFLAGS"; then
-    AC_MSG_RESULT([no])
-    AC_MSG_WARN([This value for CXXFLAGS does not work.  I will continue with empty CXXFLAGS, but you might want to set CXXFLAGS manually.])
-  fi
-else
-  AC_MSG_RESULT([yes])
-fi
+# C compiler
+AC_COIN_PROG_CC
 
-# C++ link libraries #
-AC_ARG_VAR(CXXLIBS,[Libraries necessary for linking C++ code with Fortran compiler])
-if test -z "$CXXLIBS"; then
-  if test "$GXX" = "yes"; then
-    case "$CXX" in
-      icpc | */icpc)
-        CXXLIBS=""
-        ;;
-      *)
-        CXXLIBS="-lstdc++ -lm" # -lgcc"
-        ;;
-    esac
-  else
-    case $build in
-     *-linux-*)
-      case "$CXX" in
-      icpc | */icpc)
-        CXXLIBS=""
-             ;;
-      pgCC | */pgCC)
-        CXXLIBS="-lstd -lC -lc"
-             ;;
-      esac;;
-    *-ibm-*)
-      CXXLIBS="-lC -lc"
-      ;;
-    *-hp-*)
-      CXXLIBS="-L/opt/aCC/lib -l++ -lstd_v2 -lCsup_v2 -lm -lcl -lc"
-      ;;
-    *-sun-*)
-      CXXLIBS="-lCstd -lCrun"
-    esac
-  fi
-fi
-if test -z "$CXXLIBS"; then
-  AC_MSG_WARN([Could not automatically determine CXXLIBS (C++ link libraries; necessary if main program is in Fortran of C).])
-else
-  AC_MSG_NOTICE([Assuming that CXXLIBS is \"$CXXLIBS\".])
-fi
-AC_LANG_POP(C++)
+# Fortran compiler
+AC_COIN_PROG_F77
 
-######################
-# C Compiler Options #
-######################
-
-AC_LANG_PUSH(C)
-SAVE_CFLAGS="$CFLAGS"
-case $build in
-  *-cygwin*) comps="gcc cl" ;;
-  *-linux-*) comps="xlc gcc cc pgcc icc" ;;
-  *)         comps="xlc cc gcc pgcc icc" ;;
-esac
-AC_PROG_CC([$comps])
-CFLAGS="$SAVE_CFLAGS"
-
-warn_cflags=
-
-if test -z "$CFLAGS"; then
-  add_cflags=
-  opt_cflags=
-  dbg_cflags=
-
-  if test "$GCC" = "yes"; then
-    case "$CC" in
-      icc | */icc) ;;
-      *)
-        opt_cflags="-O3"
-        add_cflags="-pipe"
-        dbg_cflags="-g"
-	warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Werror "
-        case $build in
-          *-cygwin*) AC_MSG_CHECKING([whether flag \"-mno-cygwin\" works])
-                    CFLAGS="-mno-cygwin"
-                    AC_TRY_LINK(,[int i=0; i++;],
-                                    [AC_MSG_RESULT([yes]); add_cflags="-mno-cygwin $add_cflags"; use_mingw=yes],
-                                    [AC_MSG_RESULT([no])])
-                    CFLAGS= ;;
-        esac ;;
-    esac
-  fi
-  if test -z "$opt_cflags"; then
-    case $build in
-     *-cygwin*)
-      case "$CC" in
-      cl | */cl)
-             opt_cflags='/Ot1'
-             add_cflags='/nologo'
-             dbg_cflags='/Yd';;
-      esac;;
-     *-linux-*)
-      case "$CC" in
-      icc | */icc)
-#             AC_MSG_CHECKING([whether flag \"-fast\" works])
-#               CFLAGS="-fast"
-#               AC_TRY_RUN(,[int i=0; i++;],
-#                               [AC_MSG_RESULT([yes]); opt_cflags="-fast"],
-#                               [AC_MSG_RESULT([no]); opt_cflags="-O3 -ipo -static"])
-#               CFLAGS=
-             opt_cflags="-O3 -ip"
-             add_cflags=""
-             dbg_cflags="-g"
-             # Check if -i_dynamic is necessary (for new glibc library)
-             AC_MSG_CHECKING([whether flag \"-i_dynamic\" is needed])
-             CFLAGS=
-             AC_TRY_LINK(,[int i=0; i++;],
-                         [AC_MSG_RESULT([apparently not])],
-                         [AC_MSG_RESULT([seems so]);
-                               add_cflags="-i_dynamic $add_cflags"])
-             ;;
-      pgcc | */pgcc)
-             opt_cflags="-fast"
-             add_cflags="-Kieee -pc 64"
-             dbg_cflags="-g" ;;
-      esac;;
-    *-ibm-*)
-      case "$CC" in
-      xlc* | */xlc* | mpxlc* | */mpxlc*)
-             opt_cflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
-             add_cflags="-bmaxdata:0x80000000"
-             dbg_cflags="-g";;
-      esac;;
-    *-hp-*)
-             opt_cflags="-O"
-             add_cflags="-Ae"
-             dbg_cflags="-g";;
-    *-sun-*)
-             opt_cflags="-xO4 -xtarget=native"
-             dbg_cflags="-g";;
-    *-sgi-*)
-             opt_cflags="-O -OPT:Olimit=0"
-             dbg_cflags="-g";;
-    esac
-  fi
-
-  if test "$ac_cv_prog_cc_g" = yes && test -z "$dbg_cflags" ; then
-    dbg_cflags="-g"
-  fi
-
-  if test "$debugcompile" = "true"; then
-    CFLAGS="$dbg_cflags $add_cflags"
-  else
-    if test -z "$opt_cflags"; then
-# Try if -O option works if nothing else is set
-      CFLAGS="-O"
-      AC_TRY_LINK([],[int i=0; i++;],[opt_cflags="-O"],[])
-    fi
-    CFLAGS="$opt_cflags $add_cflags"
-  fi
-fi
-
-# Try if CFLAGS works
-AC_MSG_CHECKING([whether CFLAGS=\"$CFLAGS\" works])
-AC_TRY_LINK([],[int i=0; i++;],[],[CFLAGS=])
-if test -z "$CFLAGS"; then
-  AC_MSG_RESULT([no])
-  AC_MSG_WARN([This value for CFLAGS does not work.  I will now just try '-O', but you might want to set CFLAGS manually.])
-  CFLAGS='-O'
-  AC_TRY_LINK([],[int i=0; i++;],[],[CFLAGS=])
-  if test -z "$CFLAGS"; then
-    AC_MSG_RESULT([no])
-    AC_MSG_WARN([This value for CFLAGS does not work.  I will continue with empty CFLAGS, but you might want to set CFLAGS manually.])
-  fi
-else
-  AC_MSG_RESULT([yes])
-fi
-AC_LANG_POP(C)
-
-###################################
-#   Fortran 77 compiler options   #
-###################################
-
-AC_LANG_PUSH(Fortran 77)
-SAVE_FFLAGS="$FFLAGS"
-case $build in
-  *-cygwin*) comps="gfortran g77 ifort" ;;
-  *)         comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc" ;;
-esac
-AC_PROG_F77($comps)
-FFLAGS="$SAVE_FFLAGS"
-
-if test -z "$FFLAGS"; then
-  add_fflags=
-  opt_fflags=
-  dbg_fflags=
-
-  if test "$G77" = "yes"; then
-    opt_fflags="-O3"
-    add_fflags="-pipe"
-    dbg_fflags="-g"
-    case $build in
-      *-cygwin*) AC_MSG_CHECKING([whether flag \"-mno-cygwin\" works])
-                FFLAGS="-mno-cygwin"
-                AC_TRY_LINK(,[      write(*,*) 'Hello world'],
-                                [AC_MSG_RESULT([yes]); add_fflags="-mno-cygwin $add_fflags"],
-                                [AC_MSG_RESULT([no])])
-                FFLAGS= ;;
-    esac
-  else
-    case $build in
-    *-cygwin*)
-      case $F77 in
-      ifort | */ifort)
-             opt_fflags='/O3'
-             add_fflags='/nologo'
-             dbg_fflags='/debug' ;;
-      esac;;
-    *-linux-*)
-      case $F77 in
-      ifc | */ifc | ifort | */ifort)
-#             AC_MSG_CHECKING([whether flag \"-fast\" works])
-#               FFLAGS="-fast"
-#               AC_TRY_RUN(,[      write(*,*) 'Hello world'],
-#                               [AC_MSG_RESULT([yes]); opt_fflags="-fast"],
-#                               [AC_MSG_RESULT([no]); opt_fflags="-O3 -ipo -static"])
-#               FFLAGS= 
-             opt_fflags="-O3 -ip"
-             add_fflags="-cm -w90 -w95"
-             dbg_fflags="-g -CA -CB -CS"
-             # Check if -i_dynamic is necessary (for new glibc library)
-             AC_MSG_CHECKING([whether flag \"-i_dynamic\" is needed])
-             FFLAGS=
-             AC_TRY_LINK(,[      write(*,*) 'Hello world'],
-                         [AC_MSG_RESULT([apparently not])],
-                         [AC_MSG_RESULT([seems so]);
-                               add_fflags="-i_dynamic $add_fflags"])
-             ;;
-      pgf77 | */pgf77 | pgf90 | */pgf90)
-             opt_fflags="-fast"
-             add_fflags="-Kieee -pc 64"
-             dbg_fflags="-g" ;;
-      esac;;
-    *-ibm-*)
-      case $F77 in
-      xlf* | */xlf* | mpxlf* | */mpxlf* )
-             opt_fflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
-             add_fflags="-bmaxdata:0x80000000"
-             dbg_fflags="-g -C";;
-      esac;;
-    *-hp-*)
-             opt_fflags="+O3"
-             add_fflags="+U77"
-             dbg_fflags="-C -g";;
-    *-sun-*)
-             opt_fflags="-O4 -xtarget=native"
-             dbg_fflags="-g";;
-    *-sgi-*)
-             opt_fflags="-O5 -OPT:Olimit=0"
-             dbg_fflags="-g";;
-    esac
-  fi
-
-  if test "$ac_cv_prog_f77_g" = yes && test -z "$dbg_fflags" ; then
-    dbg_fflags="-g"
-  fi
-
-  if test "$debugcompile" = true; then
-    FFLAGS="$dbg_fflags $add_fflags"
-  else
-    if test -z "$opt_fflags"; then
-# Try if -O option works if nothing else is set
-      AC_MSG_CHECKING([whether FFLAGS=\"-O\" works])
-      FFLAGS=-O
-      AC_TRY_LINK(,[      integer i],[AC_MSG_RESULT([yes]); opt_fflags="-O"],[AC_MSG_RESULT([no])])
-    fi
-    FFLAGS="$opt_fflags $add_fflags"
-  fi
-fi
-
-# Try if FFLAGS works
-AC_MSG_CHECKING([whether FFLAGS=\"$FFLAGS\" works])
-AC_TRY_LINK([],[      integer i],[],[FFLAGS=])
-if test -z "$FFLAGS"; then
-  AC_MSG_RESULT([no])
-  AC_MSG_WARN([This value for FFLAGS does not work.  I will now just try '-O', but you might want to set FFLAGS manually.])
-  FFLAGS='-O'
-  AC_TRY_LINK([],[      integer i],[],[FFLAGS=])
-  if test -z "$FFLAGS"; then
-    AC_MSG_RESULT([no])
-    AC_MSG_WARN([This value for FFLAGS does not work.  I will continue with empty FFLAGS, but you might want to set FFLAGS manually.])
-  fi
-else
-  AC_MSG_RESULT([yes])
-fi
-
-AC_F77_WRAPPERS
-
-case $build in
-# The following is a fix to define FLIBS for ifort on Windows
-   *-cygwin*)
-     case $F77 in
-       ifort | */ifort)
-           FLIBS="/link libifcorert.lib $LIBS /NODEFAULTLIB:libc.lib";;
-#           FLIBS="/link libifcorert.lib libcmt.lib /NODEFAULTLIB:libc.lib $LIBS";;
-     esac;;
-   *-hp-*)
-       FLIBS="$FLIBS -lm";;
-   *-ibm-*)
-       FLIBS=`echo $FLIBS | sed 's/-lc)/-lc/g'` ;;
-   *-linux-*)
-     case "$F77" in
-       pgf77 | */pgf77 | pgf90 | */pgf90)
-# ask linker to go through the archives multiple times
-# (the Fortran compiler seems to do that automatically...
-         FLIBS="-Wl,--start-group $FLIBS -Wl,--end-group" ;;
-     esac
-esac
-
-AC_LANG_POP(Fortran 77)
+# Find out how to call Fortran from C and determine Fortran runtime libraries
+AC_COIN_F77_WRAPPERS
 
 # find out how long an int pointer is to know if we need INTEGER*4 or
 # INTEGER*8 in Fortran to capture pointers.
@@ -504,98 +91,17 @@ case $ac_cv_sizeof_int_p in
   *) AC_MSG_ERROR([Unknown length of int *]);;
 esac
 
-AC_PREFIX_DEFAULT([`pwd`])
+# By default, we only want the shared objects to be compiled
+AC_DISABLE_STATIC
 
-AC_PROG_LN_S 
-AC_PROG_EGREP
-
-# Stuff for automake
-AM_INIT_AUTOMAKE
-AM_MAINTAINER_MODE
-
+# The codes is not yet "DLL clean" (ToDo?)
+AC_LIBTOOL_WIN32_DLL
 # Stuff for libtool
-
-## On Cygwin, building DLLs doesn't work (we cannot do the following)
-#case $build in
-#  *-cygwin*)
-#    AC_DISABLE_SHARED
-#  ;;
-#esac
-
-# The codes is not yet "DLL clean"
-#AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
-
-# Fix bugs in libtool script for Windows native compilation:
-# - cygpath is not correctly quoted in fix_srcfile_path
-# - paths generated for .lib files is not run through cygpath -w
-
-
-# - lib includes subdirectory information; we want to replace
-#
-# old_archive_cmds="lib /OUT:\$oldlib\$oldobjs\$old_deplibs"
-#
-# by
-#
-# old_archive_cmds="echo \$oldlib | grep .libs >/dev/null; if test \$? = 0; then cd .libs; lib /OUT:\`echo \$oldlib\$oldobjs\$old_deplibs | sed -e s@\.libs/@@g\`; cd .. ; else lib /OUT:\$oldlib\$oldobjs\$old_deplibs ; fi"
-#
-#          -e 's%old_archive_cmds="lib /OUT:\\\$oldlib\\\$oldobjs\\\$old_deplibs"%old_archive_cmds="echo \\\$oldlib \| grep .libs >/dev/null; if test \\\$? = 0; then cd .libs; lib /OUT:\\\`echo \\\$oldlib\\\$oldobjs\\\$old_deplibs \| sed -e s@\\.libs/@@g\\\`; cd .. ; else lib /OUT:\\\$oldlib\\\$oldobjs\\\$old_deplibs; fi"%' \
-
-# The following was a hack for chaniing @BACKSLASH to \
-#          -e 'sYcompile_command=`\$echo "X\$compile_command" | \$Xsed -e '"'"'s%@OUTPUT@%'"'"'"\$output"'"'"'%g'"'"'`Ycompile_command=`\$echo "X\$compile_command" | \$Xsed -e '"'"'s%@OUTPUT@%'"'"'"\$output"'"'"'%g'"'"' | \$Xsed -e '"'"'s%@BACKSLASH@%\\\\\\\\\\\\\\\\%g'"'"'`Y' \
-
-case $build in
-  *-cygwin*)
-  case "$CXX" in
-    cl | */cl) 
-
-      sed -e 's|fix_srcfile_path=\"`cygpath -w \"\$srcfile\"`\"|fix_srcfile_path=\"\\\`cygpath -w \\\"\\$srcfile\\\"\\\`\"|' \
-          -e 's|fix_srcfile_path=\"\"|fix_srcfile_path=\"\\\`cygpath -w \\\"\\$srcfile\\\"\\\`\"|' \
-          -e 's%compile_deplibs=\"\$dir/\$old_library \$compile_deplibs\"%compile_deplibs="`cygpath -w \$dir/\$old_library | sed -e '"'"'sY\\\\\\\\Y/Yg'"'"'` \$compile_deplibs\"'% \
-          -e 's%compile_deplibs=\"\$dir/\$linklib \$compile_deplibs\"%compile_deplibs="`cygpath -w \$dir/\$linklib | sed -e '"'"'sY\\\\\\\\Y/Yg'"'"'` \$compile_deplibs\"'% \
-      libtool > conftest.bla
-
-      mv conftest.bla libtool
-      chmod 755 libtool
-      ;;
-  esac
-esac
+AC_COIN_INIT_AUTO_TOOLS
 
 # Find out which options are needed to tell the linker about the
 # shared objects path (for example Makefiles)
-RPATH_CMD=
-
-if test $enable_shared = "yes"; then
-  if test "$GXX" = "yes"; then
-    RPATH_CMD='-Wl,--rpath -Wl,$(IPOPTLIBDIR)'
-  else
-    case $build in
-      *-linux-*)
-        case "$CXX" in
-        icpc | */icpc)
-          RPATH_CMD='-Wl,--rpath -Wl,$(IPOPTLIBDIR)' ;;
-        esac ;;
-      *-ibm-*)
-        case "$CXX" in
-        xlC* | */xlC* | mpxlC* | */mpxlC*)
-          RPATH_CMD=nothing ;;
-        esac ;;
-      *-hp-*)
-          RPATH_CMD=nothing ;;
-      *-sun-*)
-          RPATH_CMD='-R$(IPOPTLIBDIR)' ;;
-     esac
-  fi
-
-  if test "$RPATH_CMD" = ""; then
-    AC_MSG_WARN([Could not automatically determine how to tell the linker about automatic inclusion of the path for shared libraries.  The test examples might not work if you link against shared objects.  You will need to set the LD_LIBRARY_PATH or LIBDIR variable manually.])
-  fi
-  if test "$RPATH_CMD" = "nothing"; then
-    RPATH_CMD=
-  fi
-fi
-
-AC_SUBST(RPATH_CMD)
+AC_COIN_RPATH_FLAGS(['$(IPOPTLIBDIR)'])
 
 ########################################################
 ## Set variables for the archiver for C++ object files #
@@ -632,26 +138,15 @@ AC_LANG_PUSH(C++)
 # Header Files #
 ################
 
-AC_DEFUN([MY_CHECK_CXX_HEADER],
-         [AC_CHECK_HEADERS([c$1],,,
-[[
-#include <c$1>
-]])
-          if test ! "$ac_cv_header_c$1" = "yes"; then
-            AC_CHECK_HEADERS([$1.h],,,
-[[
-#include <$1.h>
-]])
-          fi])
 
-MY_CHECK_CXX_HEADER(math)
-MY_CHECK_CXX_HEADER(ctype)
-MY_CHECK_CXX_HEADER(assert)
-MY_CHECK_CXX_HEADER(stdio)
-MY_CHECK_CXX_HEADER(stdlib)
-MY_CHECK_CXX_HEADER(stdarg)
-MY_CHECK_CXX_HEADER(float)
-MY_CHECK_CXX_HEADER(time)
+AC_COIN_CHECK_CXX_CHEADER(math)
+AC_COIN_CHECK_CXX_CHEADER(ctype)
+AC_COIN_CHECK_CXX_CHEADER(assert)
+AC_COIN_CHECK_CXX_CHEADER(stdio)
+AC_COIN_CHECK_CXX_CHEADER(stdlib)
+AC_COIN_CHECK_CXX_CHEADER(stdarg)
+AC_COIN_CHECK_CXX_CHEADER(float)
+AC_COIN_CHECK_CXX_CHEADER(time)
 
 ###################
 # Function finite #
@@ -661,7 +156,7 @@ MY_CHECK_CXX_HEADER(time)
 
 case $build in
   *-cygwin*) ;;
-  *) MY_CHECK_CXX_HEADER([ieeefp]) ;;
+  *) AC_COIN_CHECK_CXX_CHEADER([ieeefp]) ;;
 esac
 
 # now try to guess the correct name of the finite function
@@ -851,7 +346,7 @@ fi
 # LAPACK #
 ##########
 
-AC_LANG_PUSH(Fortran 77)
+AC_LANG_PUSH([Fortran 77])
 
 iplapacklibdir="\$(top_builddir)/Extern/lapack"
 lapackdir=Extern/lapack/LAPACK/SRC
@@ -927,7 +422,7 @@ else
   AC_DEFINE(HAVE_LAPACK, 1, [Define to 1 if LAPACK is avaliable])
 fi
 
-AC_LANG_POP(Fortran 77)
+AC_LANG_POP([Fortran 77])
 
 #######################
 # HARWELL SUBROUTINES #
@@ -993,7 +488,7 @@ fi
 # PARDISO #
 ###########
 
-AC_LANG_PUSH(Fortran 77)
+AC_LANG_PUSH([Fortran 77])
 AC_ARG_WITH([pardiso],
             AC_HELP_STRING([--with-pardiso],
                            [specify Pardiso library (unsupported)]),
@@ -1019,7 +514,7 @@ if test ! "$use_pardiso" = "no"; then
                 [Define to 1 if you are using the parallel version of Pardiso])],
               [AC_MSG_RESULT(no)])
 fi
-AC_LANG_POP(Fortran 77)
+AC_LANG_POP([Fortran 77])
 
 #########
 # TAUCS #
@@ -1077,12 +572,12 @@ if test ! "$use_wsmp" = "no"; then
   LIBS="$use_wsmp $LIBS"
   IPADDLIBS="$use_wsmp $IPADDLIBS"
 
-  AC_LANG_PUSH(Fortran 77)
+  AC_LANG_PUSH([Fortran 77])
   AC_MSG_CHECKING([whether user-supplied WSMP library \"$use_wsmp\" works])
   AC_TRY_LINK([],[      call WSSMP()],
               [AC_MSG_RESULT(yes)],
               [AC_MSG_ERROR([WSMP library $use_wsmp does not seem to work])])
-  AC_LANG_POP(Fortran 77)
+  AC_LANG_POP([Fortran 77])
 
   AC_DEFINE(HAVE_WSMP,1,
             [Define to 1 if WSMP is available])
@@ -1280,16 +775,7 @@ case $build in
 esac
 AC_SUBST(ipoptlib)
 
-# Add the compiler warning flags for GNU compilers
-# (we can't use them during tests)
-case $build in
-# Cygwin seems to be giving too many error messages
-  *-cygwin*) warn_cflags=""
-             warn_cxxflags=""
-             ;;
-esac
-CFLAGS="$CFLAGS $warn_cflags"
-CXXFLAGS="$CXXFLAGS $warn_cxxflags"
+AC_COIN_ADD_WARN_FLAGS
 
 #########################
 # Makefile conditionals #
@@ -1343,11 +829,17 @@ AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 AM_CONDITIONAL([BUILDASLDIR],[test "$use_asldir" = BUILD])
 AM_CONDITIONAL([BUILDAMPLINTERFACE],[test ! "$use_asldir" = "no"])
 
-AC_CONFIG_FILES([Makefile Common/Makefile
-                 LinAlg/Makefile LinAlg/TMatrices/Makefile 
-		 Interfaces/Makefile Algorithm/Makefile
+AC_CONFIG_FILES([Makefile
+		 Common/Makefile
+                 LinAlg/Makefile
+		 LinAlg/TMatrices/Makefile 
+		 Interfaces/Makefile
+		 Interfaces/ipopt_addlibs_f.txt
+		 Interfaces/ipopt_addlibs_cpp.txt
+		 Algorithm/Makefile
 		 Algorithm/LinearSolvers/Makefile
-		 Apps/Makefile Apps/AmplSolver/Makefile
+		 Apps/Makefile
+		 Apps/AmplSolver/Makefile
 		 Apps/CUTErInterface/Makefile
 		 Examples/hs071_f/Makefile
 		 Examples/hs071_f/hs071_f.f
@@ -1356,7 +848,8 @@ AC_CONFIG_FILES([Makefile Common/Makefile
 		 Examples/hs071_c/Makefile
 		 Examples/ScalableProblems/Makefile
 		 Extern/Makefile
-		 Extern/blas/Makefile Extern/lapack/Makefile
+		 Extern/blas/Makefile
+		 Extern/lapack/Makefile
 		 Extern/HSL/Makefile
 		 Extern/ASL/Makefile
 		 Test/run_unitTests])

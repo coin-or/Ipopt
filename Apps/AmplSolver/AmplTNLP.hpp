@@ -212,9 +212,9 @@ namespace Ipopt
              char**& argv, SmartPtr<AmplSuffixHandler>
              suffix_handler = NULL, bool allow_discrete = false,
              SmartPtr<AmplOptionsList> ampl_options_list = NULL,
-             char* ampl_option_string = NULL,
-             char* ampl_invokation_string = NULL,
-             char* ampl_banner_string = NULL,
+             const char* ampl_option_string = NULL,
+             const char* ampl_invokation_string = NULL,
+             const char* ampl_banner_string = NULL,
              std::string* nl_file_content = NULL);
 
     /** Default destructor */
@@ -407,8 +407,9 @@ namespace Ipopt
      *  the stub */
     char* get_options(const SmartPtr<OptionsList>& options,
                       SmartPtr<AmplOptionsList>& ampl_options_list,
-                      char* ampl_option_string, char* ampl_invokation_string,
-                      char* ampl_banner_string, char**& argv);
+                      const char* ampl_option_string,
+		      const char* ampl_invokation_string,
+                      const char* ampl_banner_string, char**& argv);
 
     /** returns true if the ampl nerror code is ok */
     bool nerror_ok(void* nerror);
