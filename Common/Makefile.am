@@ -21,7 +21,10 @@ includeipopt_HEADERS = \
 	IpSmartPtr.hpp \
 	IpTaggedObject.hpp \
 	IpTimedTask.hpp \
+	IpTypes.hpp \
 	IpUtils.hpp
+
+nodist_includeipopt_HEADERS = ../inc/IpConfig.hpp
 
 noinst_LTLIBRARIES = libcommon.la
 
@@ -41,6 +44,32 @@ libcommon_la_SOURCES = \
 	IpUtils.cpp IpUtils.hpp
 
 libcommon_la_LDFLAGS = -no-undefined
+
+$(libcommon_la_OBJECTS): ../inc/IpConfig.hpp
+
+# Here we automatically generate IpConfig.hpp so that we can distribute it
+# without having unnecessary stuff in it (e.g., PACKAGE_NAME will conflict
+# with another packages that uses autoconf)
+
+../inc/IpConfig.hpp: ../inc/config_ipopt.h
+	echo "/** Required defines from config_ipopt.h */" >IpConfig.tmp
+	echo "#ifndef __IPCONFIG_HPP__" >>IpConfig.tmp
+	echo "#define __IPCONFIG_HPP__" >>IpConfig.tmp
+	$(EGREP) 'ASSERT|MATH|STDARG|STDLIB|TIME|IP_DEBUG' $< >>IpConfig.tmp
+	echo " " >>IpConfig.tmp
+	echo "/** Type of Fortran integer translated into C */" >>IpConfig.tmp
+	echo "typedef `$(EGREP) 'FORTRAN_INTEGER_TYPE' $< | sed -e 's/#define FORTRAN_INTEGER_TYPE//'` ipfint;" >>IpConfig.tmp
+	echo "#endif" >>IpConfig.tmp
+	if test -r ../inc/IpConfig.hpp; then \
+	  if diff ./inc/IpConfig.hpp IpConfig.tmp >/dev/null 2>1 ; then \
+	    rm -f IpConfig.tmp; \
+	  else \
+	    rm -f ../inc/IpConfig.hpp; \
+	    mv IpConfig.tmp ../inc/IpConfig.hpp; \
+	  fi; \
+	else \
+	  mv IpConfig.tmp ../inc/IpConfig.hpp; \
+	fi
 
 # Astyle stuff
 
@@ -62,21 +91,9 @@ ASTYLE_FILES = \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_FILES)
+CLEANFILES = $(ASTYLE_FILES) IpConfig.tmp
 
 SUFFIXES = .cppbak .hppbak
-
-install-exec-local:
-	echo "#ifndef __IPCONFIG__" >bla
-	echo "#define __IPCONFIG__" >>bla
-	cat ../inc/config.h >> bla
-	echo "#endif" >>bla
-	sed -e 's/#include "config.h"//' <$(srcdir)/IpTypes.hpp >> bla
-	$(install_sh_DATA) bla $(includeipoptdir)/IpTypes.hpp
-	rm bla
-
-uninstall-local:
-	rm -f $(includeipoptdir)/IpTypes.hpp
 
 astyle: $(ASTYLE_FILES)
 

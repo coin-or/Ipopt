@@ -14,26 +14,6 @@ extern "C"
 #include "mpi.h"
 }
 
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# else
-#  error "don't have header file for math"
-# endif
-#endif
-
-#ifdef HAVE_CSTDLIB
-# include <cstdlib>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# else
-#  error "don't have header file for stdlib"
-# endif
-#endif
-
 namespace Ipopt
 {
 #ifdef IP_DEBUG

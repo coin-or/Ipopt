@@ -9,8 +9,6 @@
 #ifndef __IPTYPES_HPP__
 #define __IPTYPES_HPP__
 
-#include "config.h"
-
 namespace Ipopt
 {
   /** Type of all numbers */
@@ -21,9 +19,5 @@ namespace Ipopt
   typedef int Int;
 
 } // namespace Ipopt
-
-// external to the Ipopt namespace
-/** Type of Fortran integer translated into C */
-typedef int ipfint;
 
 #endif

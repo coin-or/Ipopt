@@ -408,7 +408,7 @@ namespace Ipopt
     char* get_options(const SmartPtr<OptionsList>& options,
                       SmartPtr<AmplOptionsList>& ampl_options_list,
                       const char* ampl_option_string,
-		      const char* ampl_invokation_string,
+                      const char* ampl_invokation_string,
                       const char* ampl_banner_string, char**& argv);
 
     /** returns true if the ampl nerror code is ok */

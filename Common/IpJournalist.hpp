@@ -9,8 +9,7 @@
 #ifndef __IPJOURNALIST_HPP__
 #define __IPJOURNALIST_HPP__
 
-#include <string>
-#include <vector>
+#include "IpConfig.hpp"
 #include "IpTypes.hpp"
 #include "IpReferenced.hpp"
 #include "IpSmartPtr.hpp"
@@ -25,15 +24,8 @@
 # endif
 #endif
 
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
+#include <string>
+#include <vector>
 
 namespace Ipopt
 {

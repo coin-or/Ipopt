@@ -50,8 +50,8 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(top_srcdir)/Examples/hs071_f/Makefile.in \
 	$(top_srcdir)/Examples/hs071_f/hs071_f.f.in \
 	$(top_srcdir)/Test/run_unitTests.in $(top_srcdir)/configure \
-	$(top_srcdir)/inc/config.h.in AUTHORS INSTALL config.guess \
-	config.sub depcomp install-sh ltmain.sh missing
+	$(top_srcdir)/inc/config_ipopt.h.in AUTHORS INSTALL \
+	config.guess config.sub depcomp install-sh ltmain.sh missing
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -61,7 +61,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/inc/config.h
+CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES = Examples/hs071_f/Makefile \
 	Examples/hs071_f/hs071_f.f Examples/Cpp_example/Makefile \
 	Examples/hs071_cpp/Makefile Examples/hs071_c/Makefile \
@@ -390,22 +390,22 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 
-inc/config.h: inc/stamp-h1
+inc/config_ipopt.h: inc/stamp-h1
 	@if test ! -f $@; then \
 	  rm -f inc/stamp-h1; \
 	  $(MAKE) inc/stamp-h1; \
 	else :; fi
 
-inc/stamp-h1: $(top_srcdir)/inc/config.h.in $(top_builddir)/config.status
+inc/stamp-h1: $(top_srcdir)/inc/config_ipopt.h.in $(top_builddir)/config.status
 	@rm -f inc/stamp-h1
-	cd $(top_builddir) && $(SHELL) ./config.status inc/config.h
-$(top_srcdir)/inc/config.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps) 
+	cd $(top_builddir) && $(SHELL) ./config.status inc/config_ipopt.h
+$(top_srcdir)/inc/config_ipopt.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps) 
 	cd $(top_srcdir) && $(AUTOHEADER)
 	rm -f inc/stamp-h1
 	touch $@
 
 distclean-hdr:
-	-rm -f inc/config.h inc/stamp-h1
+	-rm -f inc/config_ipopt.h inc/stamp-h1
 Examples/hs071_f/Makefile: $(top_builddir)/config.status $(top_srcdir)/Examples/hs071_f/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 Examples/hs071_f/hs071_f.f: $(top_builddir)/config.status $(top_srcdir)/Examples/hs071_f/hs071_f.f.in

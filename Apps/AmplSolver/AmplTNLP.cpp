@@ -6,6 +6,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
+#include "config_ipopt.h"
 #include "AmplTNLP.hpp"
 #include "IpDenseVector.hpp"
 #include "IpGenTMatrix.hpp"
@@ -900,7 +901,7 @@ namespace Ipopt
   AmplTNLP::get_options(const SmartPtr<OptionsList>& options,
                         SmartPtr<AmplOptionsList>& ampl_options_list,
                         const char* ampl_option_string,
-			const char* ampl_invokation_string,
+                        const char* ampl_invokation_string,
                         const char* ampl_banner_string, char**& argv)
   {
     ASL_pfgh* asl = asl_;

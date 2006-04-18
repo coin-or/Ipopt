@@ -6,6 +6,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter    IBM       2005-08-12
 
+#include "config_ipopt.h"
 #include "IpUtils.hpp"
 
 #ifdef HAVE_CMATH

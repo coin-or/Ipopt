@@ -6,7 +6,18 @@
 //
 // Author:  Yifan Hu              2005-04-06
 
+#include "config_ipopt.h"
 #include "IpTAUCSSolverInterface.hpp"
+
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# else
+#  error "don't have header file for stdlib"
+# endif
+#endif
 
 #ifdef HAVE_CMATH
 # include <cmath>

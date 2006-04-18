@@ -20,7 +20,6 @@ ASLMAKEFILECMDS=@ASLMAKEFILECMDS@
 all-local: $(libampl) stdio1.h arith.h funcadd0.o
 
 $(libampl):
-	set -x; \
 	rm -rf $(compdir) ; \
 	$(mkinstalldirs) $(compdir); \
 	files=`cd ASLsolvers; ls -d *`; \

@@ -6,8 +6,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-09-02
 
-#include <fstream>
-
+#include "config_ipopt.h"
 #include "IpIpoptApplication.hpp"
 #include "IpTNLPAdapter.hpp"
 #include "IpIpoptAlg.hpp"
@@ -19,6 +18,18 @@
 #include "IpLinearSolversRegOp.hpp"
 #include "IpInterfacesRegOp.hpp"
 #include "IpAlgorithmRegOp.hpp"
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+
+#include <fstream>
 
 namespace Ipopt
 {
@@ -59,16 +70,19 @@ namespace Ipopt
     }
     catch(IpoptException& exc) {
       exc.ReportException(*jnlst_);
-      exit(-1);
+      THROW_EXCEPTION(IPOPT_APPLICATION_ERROR,
+                      "Caught unknown Ipopt exception");
     }
     catch(std::bad_alloc) {
-      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
-      exit(-1);
+      jnlst_->Printf(J_ERROR, J_MAIN, "\nEXIT: Not enough memory.\n");
+      THROW_EXCEPTION(IPOPT_APPLICATION_ERROR,
+                      "Not enough memory");
     }
     catch(...) {
       IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
       exc.ReportException(*jnlst_);
-      exit(-1);
+      THROW_EXCEPTION(IPOPT_APPLICATION_ERROR,
+                      "Caught unknown exception");
     }
   }
 

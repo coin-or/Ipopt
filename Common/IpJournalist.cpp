@@ -6,8 +6,19 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
+#include "config_ipopt.h"
 #include "IpJournalist.hpp"
 #include "IpDebug.hpp"
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
 
 namespace Ipopt
 {

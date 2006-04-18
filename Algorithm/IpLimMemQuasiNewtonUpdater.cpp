@@ -8,6 +8,17 @@
 
 #include "IpLimMemQuasiNewtonUpdater.hpp"
 #include "IpRestoIpoptNLP.hpp"
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+
 #include <limits>
 
 namespace Ipopt

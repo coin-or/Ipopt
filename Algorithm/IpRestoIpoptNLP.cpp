@@ -25,16 +25,6 @@
 # endif
 #endif
 
-#ifdef HAVE_CASSERT
-# include <cassert>
-#else
-# ifdef HAVE_ASSERT_H
-#  include <assert.h>
-# else
-#  error "don't have header file for assert"
-# endif
-#endif
-
 namespace Ipopt
 {
 #ifdef IP_DEBUG
@@ -429,7 +419,8 @@ namespace Ipopt
 
   Number RestoIpoptNLP::f(const Vector& x)
   {
-    assert(false && "ERROR: In RestoIpoptNLP f() is called without mu!");
+    THROW_EXCEPTION(INTERNAL_ABORT,
+                    "ERROR: In RestoIpoptNLP f() is called without mu!");
     return 0.;
   }
 
@@ -507,8 +498,8 @@ namespace Ipopt
 
   SmartPtr<const Vector> RestoIpoptNLP::grad_f(const Vector& x)
   {
-    assert(false && "ERROR: In RestoIpoptNLP grad_f() is called without mu!");
-    return NULL;
+    THROW_EXCEPTION(INTERNAL_ABORT,
+                    "ERROR: In RestoIpoptNLP grad_f() is called without mu!");
   }
 
   SmartPtr<const Vector> RestoIpoptNLP::d(const Vector& x)

@@ -47,7 +47,7 @@ am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/inc/config.h
+CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES = ASLsolvers
 SOURCES =
 DIST_SOURCES =
@@ -391,7 +391,6 @@ uninstall-am: uninstall-info-am
 all-local: $(libampl) stdio1.h arith.h funcadd0.o
 
 $(libampl):
-	set -x; \
 	rm -rf $(compdir) ; \
 	$(mkinstalldirs) $(compdir); \
 	files=`cd ASLsolvers; ls -d *`; \

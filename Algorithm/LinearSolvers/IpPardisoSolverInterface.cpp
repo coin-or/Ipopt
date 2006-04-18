@@ -9,16 +9,16 @@
 //           Olaf Schenk                      Univ of Basel 2005-09-20
 //                  - changed options, added PHASE_ flag
 
+#include "config_ipopt.h"
 #include "IpPardisoSolverInterface.hpp"
 
-
-#ifdef HAVE_CMATH
-# include <cmath>
+#ifdef HAVE_CSTDIO
+# include <cstdio>
 #else
-# ifdef HAVE_MATH_H
-#  include <math.h>
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
 # else
-#  error "don't have header file for math"
+#  error "don't have header file for stdio"
 # endif
 #endif
 

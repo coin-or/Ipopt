@@ -19,6 +19,7 @@
 
 namespace Ipopt
 {
+  DECLARE_STD_EXCEPTION(IPOPT_APPLICATION_ERROR);
 
   /* forward declarations */
   class IpoptAlgorithm;

@@ -9,7 +9,7 @@
  ********************************************************************/
 
 #include "IpStdCInterface.h"
-#include "config.h"
+#include "config_ipopt.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

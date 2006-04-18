@@ -7,6 +7,7 @@
 // Authors:  Michael Hagemann               Univ of Basel 2005-10-28
 //               original version (based on MA27TSolverInterface.cpp)
 
+#include "config_ipopt.h"
 #include "IpMa57TSolverInterface.hpp"
 
 #ifdef HAVE_CMATH
@@ -20,7 +21,6 @@
 #endif
 
 #include <iostream>
-
 
 /** Prototypes for MA57's Fortran subroutines */
 extern "C"

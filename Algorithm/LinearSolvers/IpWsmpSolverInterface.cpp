@@ -7,8 +7,8 @@
 // Authors:  Andreas Waechter                 IBM    2006-01-04
 //
 
+#include "config_ipopt.h"
 #include "IpWsmpSolverInterface.hpp"
-
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -17,16 +17,6 @@
 #  include <math.h>
 # else
 #  error "don't have header file for math"
-# endif
-#endif
-
-#ifdef HAVE_CSTDLIB
-# include <cstdlib>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# else
-#  error "don't have header file for stdlib"
 # endif
 #endif
 

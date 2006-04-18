@@ -13,17 +13,8 @@
 #include "IpReferenced.hpp"
 #include "IpException.hpp"
 #include "IpSmartPtr.hpp"
-#include <map>
 
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
+#include <map>
 
 namespace Ipopt
 {

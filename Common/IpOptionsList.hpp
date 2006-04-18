@@ -9,12 +9,12 @@
 #ifndef __IPOPTLIST_HPP__
 #define __IPOPTLIST_HPP__
 
-#include <iostream>
-
 #include "IpUtils.hpp"
 #include "IpReferenced.hpp"
 #include "IpException.hpp"
 #include "IpRegOptions.hpp"
+
+#include <iostream>
 #include <map>
 
 namespace Ipopt

@@ -8,8 +8,6 @@
 
 #include "IpLoqoMuOracle.hpp"
 
-#include <limits>
-
 #ifdef HAVE_CMATH
 # include <cmath>
 #else
@@ -19,6 +17,8 @@
 #  error "don't have header file for math"
 # endif
 #endif
+
+#include <limits>
 
 namespace Ipopt
 {

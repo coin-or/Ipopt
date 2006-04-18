@@ -6,8 +6,20 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-06-18
 
+#include "config_ipopt.h"
 #include "IpRegOptions.hpp"
+
 #include <set>
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
 
 #ifdef HAVE_CCTYPE
 # include <cctype>

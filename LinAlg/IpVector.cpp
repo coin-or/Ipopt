@@ -8,6 +8,16 @@
 
 #include "IpVector.hpp"
 
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+
 namespace Ipopt
 {
 
@@ -107,6 +117,57 @@ namespace Ipopt
     }
 
     return alpha;
+  }
+
+  // Need to put this here so that we don't need to include math.h in
+  // the IpVector.hpp header file
+  void Vector::Scal(Number alpha)
+  {
+    if (alpha!=1.) {
+      TaggedObject::Tag old_tag = GetTag();
+      ScalImpl(alpha);
+      ObjectChanged();
+      if (old_tag == nrm2_cache_tag_) {
+        nrm2_cache_tag_ = GetTag();
+        cached_nrm2_ *= fabs(alpha);
+      }
+      if (old_tag == asum_cache_tag_) {
+        asum_cache_tag_ = GetTag();
+        cached_asum_ *= fabs(alpha);
+      }
+      if (old_tag == amax_cache_tag_) {
+        amax_cache_tag_ = GetTag();
+        cached_amax_ *= fabs(alpha);
+      }
+      if (old_tag == max_cache_tag_) {
+        if (alpha>=0.) {
+          max_cache_tag_ = GetTag();
+          cached_max_ *= alpha;
+        }
+        else if (alpha<0.) {
+          min_cache_tag_ = GetTag();
+          cached_min_ = cached_max_ * alpha;
+        }
+      }
+      if (old_tag == min_cache_tag_) {
+        if (alpha>=0.) {
+          min_cache_tag_ = GetTag();
+          cached_min_ *= alpha;
+        }
+        else if (alpha<0.) {
+          max_cache_tag_ = GetTag();
+          cached_max_ = cached_min_ * alpha;
+        }
+      }
+      if (old_tag == sum_cache_tag_) {
+        sum_cache_tag_ = GetTag();
+        cached_sum_ *= alpha;
+      }
+      if (old_tag == sumlogs_cache_tag_) {
+        sumlogs_cache_tag_ = GetTag();
+        cached_sumlogs_ += ((Number)Dim())*log(alpha);
+      }
+    }
   }
 
   void Vector::AddVectorQuotientImpl(Number a, const Vector& z,

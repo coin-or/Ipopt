@@ -52,7 +52,7 @@ am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/inc/config.h
+CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libcommon_la_LIBADD =
@@ -86,9 +86,11 @@ am__vpath_adj = case $$p in \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(includeipoptdir)"
+am__installdirs = "$(DESTDIR)$(includeipoptdir)" \
+	"$(DESTDIR)$(includeipoptdir)"
 includeipoptHEADERS_INSTALL = $(INSTALL_HEADER)
-HEADERS = $(includeipopt_HEADERS)
+nodist_includeipoptHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(includeipopt_HEADERS) $(nodist_includeipopt_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -274,8 +276,10 @@ includeipopt_HEADERS = \
 	IpSmartPtr.hpp \
 	IpTaggedObject.hpp \
 	IpTimedTask.hpp \
+	IpTypes.hpp \
 	IpUtils.hpp
 
+nodist_includeipopt_HEADERS = ../inc/IpConfig.hpp
 noinst_LTLIBRARIES = libcommon.la
 libcommon_la_SOURCES = \
 	IpCachedResults.hpp \
@@ -310,7 +314,7 @@ ASTYLE_FILES = \
 	IpTypes.hppbak \
 	IpUtils.cppbak IpUtils.hppbak
 
-CLEANFILES = $(ASTYLE_FILES)
+CLEANFILES = $(ASTYLE_FILES) IpConfig.tmp
 SUFFIXES = .cppbak .hppbak
 all: all-am
 
@@ -418,6 +422,23 @@ uninstall-includeipoptHEADERS:
 	  echo " rm -f '$(DESTDIR)$(includeipoptdir)/$$f'"; \
 	  rm -f "$(DESTDIR)$(includeipoptdir)/$$f"; \
 	done
+install-nodist_includeipoptHEADERS: $(nodist_includeipopt_HEADERS)
+	@$(NORMAL_INSTALL)
+	test -z "$(includeipoptdir)" || $(mkdir_p) "$(DESTDIR)$(includeipoptdir)"
+	@list='$(nodist_includeipopt_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(nodist_includeipoptHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(includeipoptdir)/$$f'"; \
+	  $(nodist_includeipoptHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(includeipoptdir)/$$f"; \
+	done
+
+uninstall-nodist_includeipoptHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(nodist_includeipopt_HEADERS)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(includeipoptdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(includeipoptdir)/$$f"; \
+	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -498,7 +519,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(includeipoptdir)"; do \
+	for dir in "$(DESTDIR)$(includeipoptdir)" "$(DESTDIR)$(includeipoptdir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -547,9 +568,10 @@ info: info-am
 
 info-am:
 
-install-data-am: install-includeipoptHEADERS
+install-data-am: install-includeipoptHEADERS \
+	install-nodist_includeipoptHEADERS
 
-install-exec-am: install-exec-local
+install-exec-am:
 
 install-info: install-info-am
 
@@ -576,33 +598,48 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-includeipoptHEADERS uninstall-info-am \
-	uninstall-local
+	uninstall-nodist_includeipoptHEADERS
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-libtool clean-noinstLTLIBRARIES ctags distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-exec \
-	install-exec-am install-exec-local install-includeipoptHEADERS \
-	install-info install-info-am install-man install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-includeipoptHEADERS \
-	uninstall-info-am uninstall-local
+	install-exec-am install-includeipoptHEADERS install-info \
+	install-info-am install-man install-nodist_includeipoptHEADERS \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am \
+	uninstall-includeipoptHEADERS uninstall-info-am \
+	uninstall-nodist_includeipoptHEADERS
 
 
-install-exec-local:
-	echo "#ifndef __IPCONFIG__" >bla
-	echo "#define __IPCONFIG__" >>bla
-	cat ../inc/config.h >> bla
-	echo "#endif" >>bla
-	sed -e 's/#include "config.h"//' <$(srcdir)/IpTypes.hpp >> bla
-	$(install_sh_DATA) bla $(includeipoptdir)/IpTypes.hpp
-	rm bla
+$(libcommon_la_OBJECTS): ../inc/IpConfig.hpp
 
-uninstall-local:
-	rm -f $(includeipoptdir)/IpTypes.hpp
+# Here we automatically generate IpConfig.hpp so that we can distribute it
+# without having unnecessary stuff in it (e.g., PACKAGE_NAME will conflict
+# with another packages that uses autoconf)
+
+../inc/IpConfig.hpp: ../inc/config_ipopt.h
+	echo "/** Required defines from config_ipopt.h */" >IpConfig.tmp
+	echo "#ifndef __IPCONFIG_HPP__" >>IpConfig.tmp
+	echo "#define __IPCONFIG_HPP__" >>IpConfig.tmp
+	$(EGREP) 'ASSERT|MATH|STDARG|STDLIB|TIME|IP_DEBUG' $< >>IpConfig.tmp
+	echo " " >>IpConfig.tmp
+	echo "/** Type of Fortran integer translated into C */" >>IpConfig.tmp
+	echo "typedef `$(EGREP) 'FORTRAN_INTEGER_TYPE' $< | sed -e 's/#define FORTRAN_INTEGER_TYPE//'` ipfint;" >>IpConfig.tmp
+	echo "#endif" >>IpConfig.tmp
+	if test -r ../inc/IpConfig.hpp; then \
+	  if diff ./inc/IpConfig.hpp IpConfig.tmp >/dev/null 2>1 ; then \
+	    rm -f IpConfig.tmp; \
+	  else \
+	    rm -f ../inc/IpConfig.hpp; \
+	    mv IpConfig.tmp ../inc/IpConfig.hpp; \
+	  fi; \
+	else \
+	  mv IpConfig.tmp ../inc/IpConfig.hpp; \
+	fi
 
 astyle: $(ASTYLE_FILES)
 

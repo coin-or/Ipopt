@@ -6,6 +6,7 @@
 //
 // Authors:  Andreas Waechter              IBM    2005-12-25
 
+#include "config_ipopt.h"
 #include "IpLapack.hpp"
 
 // Prototypes for the LAPACK routines

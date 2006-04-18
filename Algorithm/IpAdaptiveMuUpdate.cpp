@@ -21,8 +21,6 @@
 
 namespace Ipopt
 {
-  // ToDo Make the different globalization strategies extra classes
-
 #ifdef IP_DEBUG
   static const Index dbg_verbosity = 0;
 #endif

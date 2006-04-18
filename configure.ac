@@ -753,18 +753,20 @@ AC_LANG_POP(C++)
 # Equivalent int Fortran and C types #
 ######################################
 
+AC_LANG_PUSH(C)
 AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
-#AC_CHECK_SIZEOF([long])
-#AC_CHECK_SIZEOF([int])
-#AC_CHECK_SIZEOF([double])
-#AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
-#if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
-#  AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
-#  AC_MSG_RESULT([int])
-#else
-#  AC_DEFINE([FORTRAN_INTEGER_TYPE],[long])
-#  AC_MSG_RESULT([long])
-#fi
+AC_CHECK_SIZEOF([long])
+AC_CHECK_SIZEOF([int])
+AC_CHECK_SIZEOF([double])
+AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
+if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
+  AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
+  AC_MSG_RESULT([int])
+else
+  AC_DEFINE([FORTRAN_INTEGER_TYPE],[long])
+  AC_MSG_RESULT([long])
+fi
+AC_LANG_POP(C)
 
 
 IPADDLIBS="$IPADDLIBS"
@@ -864,7 +866,7 @@ AC_CONFIG_FILES([Makefile
 		 Extern/ASL/Makefile
 		 Test/run_unitTests])
 
-AC_CONFIG_HEADER([inc/config.h])
+AC_CONFIG_HEADER([inc/config_ipopt.h])
 
 AC_OUTPUT
 

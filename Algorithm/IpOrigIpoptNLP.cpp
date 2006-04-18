@@ -11,26 +11,6 @@
 #include "IpIpoptData.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
 
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# else
-#  error "don't have header file for math"
-# endif
-#endif
-
-#ifdef HAVE_CASSERT
-# include <cassert>
-#else
-# ifdef HAVE_ASSERT_H
-#  include <assert.h>
-# else
-#  error "don't have header file for assert"
-# endif
-#endif
-
 namespace Ipopt
 {
 #ifdef IP_DEBUG
@@ -457,7 +437,8 @@ namespace Ipopt
 
   SmartPtr<const Vector> OrigIpoptNLP::grad_f(const Vector& x, Number mu)
   {
-    assert(false && "ERROR: This method is only a placeholder for grad_f(mu) and should not be called");
+    THROW_EXCEPTION(INTERNAL_ABORT,
+                    "ERROR: This method is only a placeholder for grad_f(mu) and should not be called");
     return NULL;
   }
 
@@ -636,8 +617,8 @@ namespace Ipopt
       const Vector& yd,
       Number mu)
   {
-    assert(false &&
-           "ERROR: This method is only a for h(mu) and should not be called");
+    THROW_EXCEPTION(INTERNAL_ABORT,
+                    "ERROR: This method is only a for h(mu) and should not be called");
     return NULL;
   }
 
