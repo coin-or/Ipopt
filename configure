@@ -25382,7 +25382,7 @@ ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 # Equivalent int Fortran and C types #
 ######################################
 
-if test "$cross_compiling" = no; then
+if test "$cross_compiling" = no && test "$is_bg" != yes; then
   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'

@@ -750,7 +750,7 @@ AC_LANG_POP(C++)
 # Equivalent int Fortran and C types #
 ######################################
 
-if test "$cross_compiling" = no; then
+if test "$cross_compiling" = no && test "$is_bg" != yes; then
   AC_LANG_PUSH(C)
   AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
   AC_CHECK_SIZEOF([long])
