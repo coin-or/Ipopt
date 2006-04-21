@@ -657,11 +657,8 @@ if test "$use_asldir" = BUILD; then
                   asladdcflags="$asladdcflags -DNo_Control87 -DBLUE_GENE"
                 fi
                 ;;
-      *-cygwin*)
-                asladdcflags="-DNON_STDIO"
-                if test "$use_mingw" = yes; then
-                  asladdcflags="$asladdcflags -DNo_Control87 -DNO_RUSAGE"
-                fi
+      *-cygwin*) # ToDo: If on Cygwin but not using -mno-cygwin, we should not define -DNo_Control87 -DNO_RUSAGE
+                asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
                 ;;
       *-mingw32)
                 asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
@@ -753,22 +750,25 @@ AC_LANG_POP(C++)
 # Equivalent int Fortran and C types #
 ######################################
 
-AC_LANG_PUSH(C)
-AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
-AC_CHECK_SIZEOF([long])
-AC_CHECK_SIZEOF([int])
-AC_CHECK_SIZEOF([double])
-AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
-if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
+if test "$cross_compiling" = no; then
+  AC_LANG_PUSH(C)
   AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
-  AC_MSG_RESULT([int])
+  AC_CHECK_SIZEOF([long])
+  AC_CHECK_SIZEOF([int])
+  AC_CHECK_SIZEOF([double])
+  AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
+  if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
+    AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
+    AC_MSG_RESULT([int])
+  else
+    AC_DEFINE([FORTRAN_INTEGER_TYPE],[long])
+    AC_MSG_RESULT([long])
+  fi
+  AC_LANG_POP(C)
 else
-  AC_DEFINE([FORTRAN_INTEGER_TYPE],[long])
-  AC_MSG_RESULT([long])
+  AC_MSG_WARN([We are cross compiling, assuming Fortran `INTEGER' type corresponds to C `int' type])
+  AC_DEFINE([FORTRAN_INTEGER_TYPE],[int])
 fi
-AC_LANG_POP(C)
-
-
 IPADDLIBS="$IPADDLIBS"
 LIBS="$LIBS_without_IPADDLIBS"
 
@@ -870,4 +870,4 @@ AC_CONFIG_HEADER([inc/config_ipopt.h])
 
 AC_OUTPUT
 
-AC_MSG_NOTICE([Configuration successful])
+AC_MSG_NOTICE([Ipopt configuration successful])

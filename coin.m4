@@ -28,6 +28,8 @@ AC_DEFUN([AC_COIN_DEBUG_COMPILE],
 AC_BEFORE([$0],[AC_COIN_PROG_CC])dnl
 AC_BEFORE([$0],[AC_COIN_PROG_F77])dnl
 
+AC_MSG_CHECKING([whether we want to compile in debug mode])
+
 AC_ARG_ENABLE([debug],
 [AC_HELP_STRING([--enable-debug],
                 [compile with debug options and runtime tests])],
@@ -43,6 +45,12 @@ AC_ARG_ENABLE([debug],
                  esac],
                 [coin_debug_compile=false])
 
+if test $coin_debug_compile = true; then
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
+fi
+
 AM_CONDITIONAL([COIN_DEBUG_COMPILE],[test "$coin_debug_compile" = true])
 ]) # AC_COIN_DEBUG_COMPILE
 
@@ -57,123 +65,135 @@ AM_CONDITIONAL([COIN_DEBUG_COMPILE],[test "$coin_debug_compile" = true])
 
 AC_DEFUN([AC_COIN_PROG_CXX],
 [AC_LANG_PUSH(C++)
-SAVE_CXXFLAGS="$CXXFLAGS"
+
+coin_use_cxx=yes
+
+save_cxxflags="$CXXFLAGS"
 case $build in
   *-cygwin*) comps="g++ cl" ;;
+  *-mingw*)  comps="g++ cl" ;;
   *-darwin*) comps="g++ c++ CC" ;;
-  *)        comps="xlC aCC CC g++ c++ pgCC icpc" ;;
+          *) comps="xlC aCC CC g++ c++ pgCC icpc" ;;
 esac
 AC_PROG_CXX([$comps])
-CXXFLAGS="$SAVE_CXXFLAGS"
+CXXFLAGS="$save_cxxflags"
 
-warn_cxxflags=
+if test x"$CXXFLAGS" != x; then
+  coin_user_set_cxxflags=yes
+fi
 
-if test -z "$CXXFLAGS"; then
-  add_cxxflags=
-  opt_cxxflags=
-  dbg_cxxflags=
+AC_CACHE_CHECK([for C++ compiler options],[coin_cv_cxxflags],
+[if test "$coin_user_set_cxxflags" != yes; then
+
+  coin_add_cxxflags=
+  coin_opt_cxxflags=
+  coin_dbg_cxxflags=
 
   if test "$GXX" = "yes"; then
     case "$CXX" in
-      icpc | */icpc) ;;
+      icpc | */icpc)
+        ;;
       *)
 # ToDo decide about unroll-loops
-        opt_cxxflags="-O3"
-        add_cxxflags="-pipe"
-        dbg_cxxflags="-g"
-        warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Werror -Wconversion"
+        coin_opt_cxxflags="-O3"
+        coin_add_cxxflags="-pipe"
+        coin_dbg_cxxflags="-g"
+ 
         case $build in
-          *-cygwin*) AC_MSG_CHECKING([whether flag \" -mno-cygwin\" works])
-                     CXXFLAGS="-mno-cygwin"
-                     AC_TRY_LINK([],
-                                 [int i=0; i++;],
-                                 [AC_MSG_RESULT([yes])
-                                  add_cxxflags="-mno-cygwin $add_cxxflags"
-                                  use_mingw=yes],
-                                 [AC_MSG_RESULT([no])])
-                     CXXFLAGS= ;;
-        esac ;;
+          *-cygwin*)
+            CXXFLAGS="-mno-cygwin"
+            AC_TRY_LINK([],[int i=0; i++;],
+                        [coin_add_cxxflags="-mno-cygwin $coin_add_cxxflags"])
+            CXXFLAGS=
+            ;;
+        esac
+        ;;
     esac
   fi
-  if test -z "$opt_cxxflags"; then
+  if test -z "$coin_opt_cxxflags"; then
     case $build in
-     *-cygwin*)
-      case "$CXX" in
-      cl | */cl)
-             opt_cxxflags='/Ot1'
-             add_cxxflags='/nologo /EHsc /GR /MT'
-             dbg_cxxflags='/-Yd';;
-      esac;;
-     *-linux-*)
-      case "$CXX" in
-      icpc | */icpc)
-             opt_cxxflags="-O3 -ip"
-             add_cxxflags=""
-             dbg_cxxflags="-g"
-             # Check if -i_dynamic is necessary (for new glibc library)
-             AC_MSG_CHECKING([whether flag \"-i_dynamic\" is needed])
-             CXXFLAGS=
-             AC_TRY_LINK([],[int i=0; i++;],
-                         [AC_MSG_RESULT([apparently not])],
-                         [AC_MSG_RESULT([seems so])
-                          add_cxxflags="-i_dynamic $add_cxxflags"])
-             ;;
-      pgCC | */pgCC)
-             opt_cxxflags="-fast"
-             add_cxxflags="-Kieee -pc 64"
-             dbg_cxxflags="-g";;
-      esac;;
-    *-ibm-*)
-      case "$CXX" in
-      xlC* | */xlC* | mpxlC* | */mpxlC*)
-             opt_cxxflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
-             add_cxxflags="-bmaxdata:0x80000000 -qrtti=dyna"
-             dbg_cxxflags="-g";;
-      esac;;
-    *-hp-*)
-      case "$CXX" in
-      aCC | */aCC )
-             opt_cxxflags="-O"
-             add_cxxflags="-AA"
-             dbg_cxxflags="-g";;
-      esac;;
-    *-sun-*)
-             opt_cxxflags="-O4 -xtarget=native"
-             dbg_cxxflags="-g";;
+      *-cygwin*)
+        case "$CXX" in
+          cl | */cl)
+            coin_opt_cxxflags='/Ot1'
+            coin_add_cxxflags='/nologo /EHsc /GR /MT'
+            coin_dbg_cxxflags='/-Yd'
+            ;;
+        esac
+        ;;
+      *-linux-*)
+        case "$CXX" in
+          icpc | */icpc)
+            coin_opt_cxxflags="-O3 -ip"
+            coin_add_cxxflags=""
+            coin_dbg_cxxflags="-g"
+            # Check if -i_dynamic is necessary (for new glibc library)
+            CXXFLAGS=
+            AC_TRY_LINK([],[int i=0; i++;],[],
+                        [coin_add_cxxflags="-i_dynamic $coin_add_cxxflags"])
+            ;;
+          pgCC | */pgCC)
+            coin_opt_cxxflags="-fast"
+            coin_add_cxxflags="-Kieee -pc 64"
+            coin_dbg_cxxflags="-g"
+            ;;
+        esac
+        ;;
+      *-ibm-*)
+        case "$CXX" in
+          xlC* | */xlC* | mpxlC* | */mpxlC*)
+            coin_opt_cxxflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
+            coin_add_cxxflags="-bmaxdata:0x80000000 -qrtti=dyna"
+            coin_dbg_cxxflags="-g"
+            ;;
+        esac
+        ;;
+      *-hp-*)
+        case "$CXX" in
+          aCC | */aCC )
+            coin_opt_cxxflags="-O"
+            coin_add_cxxflags="-AA"
+            coin_dbg_cxxflags="-g"
+            ;;
+        esac
+        ;;
+      *-sun-*)
+          coin_opt_cxxflags="-O4 -xtarget=native"
+          coin_dbg_cxxflags="-g"
+        ;;
     esac
   fi
 
-  if test "$ac_cv_prog_cxx_g" = yes && test -z "$dbg_cxxflags" ; then
-    dbg_cxxflags="-g"
+  if test "$ac_cv_prog_cxx_g" = yes && test -z "$coin_dbg_cxxflags" ; then
+    coin_dbg_cxxflags="-g"
   fi
 
   if test "$coin_debug_compile" = "true"; then
-    CXXFLAGS="$dbg_cxxflags $add_cxxflags"
+    CXXFLAGS="$coin_dbg_cxxflags $coin_add_cxxflags"
   else
-    if test -z "$opt_cxxflags"; then
-# Try if -O option works if nothing else is set
+    if test -z "$coin_opt_cxxflags"; then
+      # Try if -O option works if nothing else is set
       CXXFLAGS="-O"
-      AC_TRY_LINK([],[int i=0; i++;],[opt_cxxflags="-O"],[])
+      AC_TRY_LINK([],[int i=0; i++;],[coin_opt_cxxflags="-O"])
     fi
-    CXXFLAGS="$opt_cxxflags $add_cxxflags"
+    CXXFLAGS="$coin_opt_cxxflags $coin_add_cxxflags"
   fi
 fi
 
 # Try if CXXFLAGS works
-AC_MSG_CHECKING([whether CXXFLAGS=\"$CXXFLAGS\" works])
 AC_TRY_LINK([],[int i=0; i++;],[],[CXXFLAGS=])
 if test -z "$CXXFLAGS"; then
-  AC_MSG_RESULT([no])
-  AC_MSG_WARN([This value for CXXFLAGS does not work.  I will now just try '-O', but you might want to set CXXFLAGS manually.])
+  AC_MSG_WARN([The flags CXXFLAGS="$CXXFLAGS" do not work.  I will now just try '-O', but you might want to set CXXFLAGS manually.])
   CXXFLAGS='-O'
   AC_TRY_LINK([],[int i=0; i++;],[],[CXXFLAGS=])
   if test -z "$CXXFLAGS"; then
-    AC_MSG_RESULT([no])
     AC_MSG_WARN([This value for CXXFLAGS does not work.  I will continue with empty CXXFLAGS, but you might want to set CXXFLAGS manually.])
   fi
-else
-  AC_MSG_RESULT([yes])
 fi
+coin_cv_cxxflags="$CXXFLAGS"
+]) # AC_CACHE_CHECK([for C++ compiler options CXXFLAGS]
+CXXFLAGS="$coin_cv_cxxflags"
+
 AC_LANG_POP(C++)
 ]) # AC_COIN_PROG_CXX
 
@@ -281,121 +301,134 @@ AC_LANG_POP(C++)
 
 AC_DEFUN([AC_COIN_PROG_CC],
 [AC_LANG_PUSH(C)
-SAVE_CFLAGS="$CFLAGS"
+
+coin_use_cc=yes
+
+save_cflags="$CFLAGS"
 case $build in
   *-cygwin*) comps="gcc cl" ;;
+  *-mingw*)  comps="gcc cl" ;;
   *-linux-*) comps="xlc gcc cc pgcc icc" ;;
   *)         comps="xlc cc gcc pgcc icc" ;;
 esac
 AC_PROG_CC([$comps])
-CFLAGS="$SAVE_CFLAGS"
+CFLAGS="$save_cflags"
 
-warn_cflags=
+if test x"$CFLAGS" != x; then
+  coin_user_set_cflags=yes
+fi
 
-if test -z "$CFLAGS"; then
-  add_cflags=
-  opt_cflags=
-  dbg_cflags=
+AC_CACHE_CHECK([for C compiler options],[coin_cv_cflags],
+[if test "$coin_user_set_cflags" != yes; then
+
+  coin_add_cflags=
+  coin_opt_cflags=
+  coin_dbg_cflags=
 
   if test "$GCC" = "yes"; then
     case "$CC" in
-      icc | */icc) ;;
+      icc | */icc)
+        ;;
       *)
-        opt_cflags="-O3"
-        add_cflags="-pipe"
-        dbg_cflags="-g"
-	warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Werror "
+        coin_opt_cflags="-O3"
+        coin_add_cflags="-pipe"
+        coin_dbg_cflags="-g"
+
         case $build in
-          *-cygwin*) AC_MSG_CHECKING([whether flag \"-mno-cygwin\" works])
-                     CFLAGS="-mno-cygwin"
-                     AC_TRY_LINK([],[int i=0; i++;],
-                                 [AC_MSG_RESULT([yes])
-                                  add_cflags="-mno-cygwin $add_cflags"
-                                  use_mingw=yes],
-                                 [AC_MSG_RESULT([no])])
-                     CFLAGS= ;;
-        esac ;;
+          *-cygwin*)
+            CFLAGS="-mno-cygwin"
+            AC_TRY_LINK([],[int i=0; i++;],
+                        [coin_add_cflags="-mno-cygwin $coin_add_cflags"])
+            CFLAGS=
+          ;;
+        esac
+        ;;
     esac
   fi
-  if test -z "$opt_cflags"; then
+  if test -z "$coin_opt_cflags"; then
     case $build in
-     *-cygwin*)
-      case "$CC" in
-      cl | */cl)
-             opt_cflags='/Ot1'
-             add_cflags='/nologo'
-             dbg_cflags='/Yd';;
-      esac;;
-     *-linux-*)
-      case "$CC" in
-      icc | */icc)
-             opt_cflags="-O3 -ip"
-             add_cflags=""
-             dbg_cflags="-g"
-             # Check if -i_dynamic is necessary (for new glibc library)
-             AC_MSG_CHECKING([whether flag \"-i_dynamic\" is needed])
-             CFLAGS=
-             AC_TRY_LINK([],[int i=0; i++;],
-                         [AC_MSG_RESULT([apparently not])],
-                         [AC_MSG_RESULT([seems so])
-                          add_cflags="-i_dynamic $add_cflags"])
-             ;;
-      pgcc | */pgcc)
-             opt_cflags="-fast"
-             add_cflags="-Kieee -pc 64"
-             dbg_cflags="-g" ;;
-      esac;;
-    *-ibm-*)
-      case "$CC" in
-      xlc* | */xlc* | mpxlc* | */mpxlc*)
-             opt_cflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
-             add_cflags="-bmaxdata:0x80000000"
-             dbg_cflags="-g";;
-      esac;;
-    *-hp-*)
-             opt_cflags="-O"
-             add_cflags="-Ae"
-             dbg_cflags="-g";;
-    *-sun-*)
-             opt_cflags="-xO4 -xtarget=native"
-             dbg_cflags="-g";;
-    *-sgi-*)
-             opt_cflags="-O -OPT:Olimit=0"
-             dbg_cflags="-g";;
+      *-cygwin*)
+        case "$CC" in
+          cl | */cl)
+            coin_opt_cflags='/Ot1'
+            coin_add_cflags='/nologo'
+            coin_dbg_cflags='/Yd'
+            ;;
+        esac
+        ;;
+      *-linux-*)
+        case "$CC" in
+          icc | */icc)
+            coin_opt_cflags="-O3 -ip"
+            coin_add_cflags=""
+            coin_dbg_cflags="-g"
+            # Check if -i_dynamic is necessary (for new glibc library)
+            CFLAGS=
+            AC_TRY_LINK([],[int i=0; i++;],[],
+                        [coin_add_cflags="-i_dynamic $coin_add_cflags"])
+            ;;
+          pgcc | */pgcc)
+            coin_opt_cflags="-fast"
+            coin_add_cflags="-Kieee -pc 64"
+            coin_dbg_cflags="-g"
+            ;;
+        esac
+        ;;
+      *-ibm-*)
+        case "$CC" in
+          xlc* | */xlc* | mpxlc* | */mpxlc*)
+            coin_opt_cflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
+            coin_add_cflags="-bmaxdata:0x80000000"
+            coin_dbg_cflags="-g"
+          ;;
+        esac
+        ;;
+      *-hp-*)
+        coin_opt_cflags="-O"
+        coin_add_cflags="-Ae"
+        coin_dbg_cflags="-g"
+        ;;
+      *-sun-*)
+        coin_opt_cflags="-xO4 -xtarget=native"
+        coin_dbg_cflags="-g"
+        ;;
+      *-sgi-*)
+        coin_opt_cflags="-O -OPT:Olimit=0"
+        coin_dbg_cflags="-g"
+        ;;
     esac
   fi
 
-  if test "$ac_cv_prog_cc_g" = yes && test -z "$dbg_cflags" ; then
-    dbg_cflags="-g"
+  if test "$ac_cv_prog_cc_g" = yes && test -z "$coin_dbg_cflags" ; then
+    coin_dbg_cflags="-g"
   fi
 
   if test "$coin_debug_compile" = "true"; then
-    CFLAGS="$dbg_cflags $add_cflags"
+    CFLAGS="$coin_dbg_cflags $coin_add_cflags"
   else
-    if test -z "$opt_cflags"; then
-# Try if -O option works if nothing else is set
+    if test -z "$coin_opt_cflags"; then
+      # Try if -O option works if nothing else is set
       CFLAGS="-O"
-      AC_TRY_LINK([],[int i=0; i++;],[opt_cflags="-O"],[])
+      AC_TRY_LINK([],[int i=0; i++;],[coin_opt_cflags="-O"],[])
     fi
-    CFLAGS="$opt_cflags $add_cflags"
+    CFLAGS="$coin_opt_cflags $coin_add_cflags"
   fi
 fi
 
 # Try if CFLAGS works
-AC_MSG_CHECKING([whether CFLAGS=\"$CFLAGS\" works])
 AC_TRY_LINK([],[int i=0; i++;],[],[CFLAGS=])
 if test -z "$CFLAGS"; then
-  AC_MSG_RESULT([no])
-  AC_MSG_WARN([This value for CFLAGS does not work.  I will now just try '-O', but you might want to set CFLAGS manually.])
+  AC_MSG_WARN([The value CFLAGS="$CFLAGS" do not work.  I will now just try '-O', but you might want to set CFLAGS manually.])
   CFLAGS='-O'
   AC_TRY_LINK([],[int i=0; i++;],[],[CFLAGS=])
   if test -z "$CFLAGS"; then
-    AC_MSG_RESULT([no])
     AC_MSG_WARN([This value for CFLAGS does not work.  I will continue with empty CFLAGS, but you might want to set CFLAGS manually.])
   fi
-else
-  AC_MSG_RESULT([yes])
 fi
+coin_cv_cflags="$CFLAGS"
+]) # AC_CACHE_CHECK([for C compiler options CXXFLAGS]
+CFLAGS="$coin_cv_cflags"
+
 AC_LANG_POP(C)
 ]) # AC_COIN_PROG_CC
 
@@ -409,116 +442,125 @@ AC_LANG_POP(C)
 
 AC_DEFUN([AC_COIN_PROG_F77],
 [AC_LANG_PUSH([Fortran 77])
-SAVE_FFLAGS="$FFLAGS"
+
+coin_use_f77=yes
+
+save_fflags="$FFLAGS"
 case $build in
   *-cygwin*) comps="gfortran g77 ifort" ;;
+  *-mingw*)  comps="gfortran g77 ifort" ;;
   *)         comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc" ;;
 esac
-
 AC_PROG_F77($comps)
-FFLAGS="$SAVE_FFLAGS"
+FFLAGS="$save_fflags"
 
-if test -z "$FFLAGS"; then
-  add_fflags=
-  opt_fflags=
-  dbg_fflags=
+if test x"$FFLAGS" != x; then
+  coin_user_set_fflags=yes
+fi
+
+AC_CACHE_CHECK([for Fortran compiler options],[coin_cv_fflags],
+[if test "$coin_user_set_fflags" != yes; then
+
+  coin_add_fflags=
+  coin_opt_fflags=
+  coin_dbg_fflags=
 
   if test "$G77" = "yes"; then
-    opt_fflags="-O3"
-    add_fflags="-pipe"
-    dbg_fflags="-g"
+    coin_opt_fflags="-O3"
+    coin_add_fflags="-pipe"
+    coin_dbg_fflags="-g"
     case $build in
-      *-cygwin*) AC_MSG_CHECKING([whether flag \"-mno-cygwin\" works])
-                FFLAGS="-mno-cygwin"
-                AC_TRY_LINK([],[      write(*,*) 'Hello world'],
-                            [AC_MSG_RESULT([yes])
-                             add_fflags="-mno-cygwin $add_fflags"],
-                            [AC_MSG_RESULT([no])])
-                FFLAGS= ;;
+      *-cygwin*)
+        FFLAGS="-mno-cygwin"
+        AC_TRY_LINK([],[      write(*,*) 'Hello world'],
+                    [coin_add_fflags="-mno-cygwin $coin_add_fflags"])
+        FFLAGS=
+      ;;
     esac
   else
     case $build in
-    *-cygwin*)
-      case $F77 in
-      ifort | */ifort)
-             opt_fflags='/O3'
-             add_fflags='/nologo'
-             dbg_fflags='/debug' ;;
-      esac;;
-    *-linux-*)
-      case $F77 in
-      ifc | */ifc | ifort | */ifort)
-             opt_fflags="-O3 -ip"
-             add_fflags="-cm -w90 -w95"
-             dbg_fflags="-g -CA -CB -CS"
-             # Check if -i_dynamic is necessary (for new glibc library)
-             AC_MSG_CHECKING([whether flag \"-i_dynamic\" is needed])
-             FFLAGS=
-             AC_TRY_LINK([],[      write(*,*) 'Hello world'],
-                         [AC_MSG_RESULT([apparently not])],
-                         [AC_MSG_RESULT([seems so])
-                          add_fflags="-i_dynamic $add_fflags"])
-             ;;
-      pgf77 | */pgf77 | pgf90 | */pgf90)
-             opt_fflags="-fast"
-             add_fflags="-Kieee -pc 64"
-             dbg_fflags="-g" ;;
-      esac;;
-    *-ibm-*)
-      case $F77 in
-      xlf* | */xlf* | mpxlf* | */mpxlf* )
-             opt_fflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
-             add_fflags="-bmaxdata:0x80000000"
-             dbg_fflags="-g -C";;
-      esac;;
-    *-hp-*)
-             opt_fflags="+O3"
-             add_fflags="+U77"
-             dbg_fflags="-C -g";;
-    *-sun-*)
-             opt_fflags="-O4 -xtarget=native"
-             dbg_fflags="-g";;
-    *-sgi-*)
-             opt_fflags="-O5 -OPT:Olimit=0"
-             dbg_fflags="-g";;
+      *-cygwin*)
+        case $F77 in
+          ifort | */ifort)
+            coin_opt_fflags='/O3'
+            coin_add_fflags='/nologo'
+            coin_dbg_fflags='/debug'
+          ;;
+        esac
+        ;;
+      *-linux-*)
+        case $F77 in
+          ifc | */ifc | ifort | */ifort)
+            coin_opt_fflags="-O3 -ip"
+            coin_add_fflags="-cm -w90 -w95"
+            coin_dbg_fflags="-g -CA -CB -CS"
+            # Check if -i_dynamic is necessary (for new glibc library)
+            FFLAGS=
+            AC_TRY_LINK([],[      write(*,*) 'Hello world'],[],
+                        [coin_add_fflags="-i_dynamic $coin_add_fflags"])
+            ;;
+          pgf77 | */pgf77 | pgf90 | */pgf90)
+            coin_opt_fflags="-fast"
+            coin_add_fflags="-Kieee -pc 64"
+            coin_dbg_fflags="-g"
+          ;;
+        esac
+        ;;
+      *-ibm-*)
+        case $F77 in
+          xlf* | */xlf* | mpxlf* | */mpxlf* )
+            coin_opt_fflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
+            coin_add_fflags="-bmaxdata:0x80000000"
+            coin_dbg_fflags="-g -C"
+            ;;
+        esac
+        ;;
+      *-hp-*)
+        coin_opt_fflags="+O3"
+        coin_add_fflags="+U77"
+        coin_dbg_fflags="-C -g"
+        ;;
+      *-sun-*)
+        coin_opt_fflags="-O4 -xtarget=native"
+        coin_dbg_fflags="-g"
+        ;;
+      *-sgi-*)
+        coin_opt_fflags="-O5 -OPT:Olimit=0"
+        coin_dbg_fflags="-g"
+        ;;
     esac
   fi
 
-  if test "$ac_cv_prog_f77_g" = yes && test -z "$dbg_fflags" ; then
-    dbg_fflags="-g"
+  if test "$ac_cv_prog_f77_g" = yes && test -z "$coin_dbg_fflags" ; then
+    coin_dbg_fflags="-g"
   fi
 
   if test "$coin_debug_compile" = true; then
-    FFLAGS="$dbg_fflags $add_fflags"
+    FFLAGS="$coin_dbg_fflags $coin_add_fflags"
   else
-    if test -z "$opt_fflags"; then
-# Try if -O option works if nothing else is set
-      AC_MSG_CHECKING([whether FFLAGS=\"-O\" works])
+    if test -z "$coin_opt_fflags"; then
+      # Try if -O option works if nothing else is set
       FFLAGS=-O
       AC_TRY_LINK([],[      integer i],
-                  [AC_MSG_RESULT([yes])
-                   opt_fflags="-O"],
-                  [AC_MSG_RESULT([no])])
+                  [coin_opt_fflags="-O"])
     fi
-    FFLAGS="$opt_fflags $add_fflags"
+    FFLAGS="$coin_opt_fflags $coin_add_fflags"
   fi
 fi
 
 # Try if FFLAGS works
-AC_MSG_CHECKING([whether FFLAGS=\"$FFLAGS\" works])
 AC_TRY_LINK([],[      integer i],[],[FFLAGS=])
 if test -z "$FFLAGS"; then
-  AC_MSG_RESULT([no])
-  AC_MSG_WARN([This value for FFLAGS does not work.  I will now just try '-O', but you might want to set FFLAGS manually.])
+  AC_MSG_WARN([The flags FFLAGS="$FFLAGS" do not work.  I will now just try '-O', but you might want to set FFLAGS manually.])
   FFLAGS='-O'
   AC_TRY_LINK([],[      integer i],[],[FFLAGS=])
   if test -z "$FFLAGS"; then
-    AC_MSG_RESULT([no])
     AC_MSG_WARN([This value for FFLAGS does not work.  I will continue with empty FFLAGS, but you might want to set FFLAGS manually.])
   fi
-else
-  AC_MSG_RESULT([yes])
 fi
+coin_cv_fflags="$FFLAGS"
+]) # AC_CACHE_CHECK([for Fortran compiler options FFLAGS]
+FFLAGS="$coin_cv_fflags"
 
 AC_LANG_POP([Fortran 77])
 ]) # AC_COIN_PROG_F77
@@ -586,8 +628,51 @@ AC_DEFUN([AC_COIN_ADD_WARN_FLAGS],
 AC_BEFORE([AC_COIN_PROG_CC],[$0])dnl
 AC_BEFORE([AC_COIN_PROG_F77],[$0])dnl
 
-CFLAGS="$CFLAGS $warn_cflags"
-CXXFLAGS="$CXXFLAGS $warn_cxxflags"
+# ToDo find more compiler options
+if test x"$coin_use_cxx" = xyes && test x"$coin_user_set_cxxflags" != xyes; then
+
+  AC_MSG_CHECKING([for warning flags for C++ compiler])
+  coin_warn_cxxflags=
+
+  if test "$GXX" = "yes"; then
+    case "$CXX" in
+      icpc | */icpc)
+        ;;
+      *)
+        coin_warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wconversion"
+        ;;
+    esac
+  fi
+
+  AC_MSG_RESULT([$coin_warn_cxxflags])
+  CXXFLAGS="$CXXFLAGS $coin_warn_cxxflags"
+fi
+
+if test x"$coin_use_cc" = xyes && test x"$coin_user_set_cflags" != xyes; then
+
+  AC_MSG_CHECKING([for warning flags for C compiler])
+  coin_warn_cflags=
+
+  if test "$GCC" = "yes"; then
+    case "$CC" in
+      icc | */icc)
+        ;;
+      *)
+	coin_warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall"
+        ;;
+    esac
+  fi
+
+  AC_MSG_RESULT([$coin_warn_cflags])
+  CFLAGS="$CFLAGS $coin_warn_cflags"
+fi
+
+if test x"$coin_use_f77" = xyes && test x"$coin_user_set_fflags" != xyes; then
+  AC_MSG_CHECKING([for warning flags for Fortran compiler])
+  coin_warn_fflags=
+  AC_MSG_RESULT([$coin_warn_fflags])
+fi
+
 ]) # AC_COIN_ADD_WARN_FLAGS
 
 ###########################################################################
@@ -636,7 +721,7 @@ if test "$enable_maintainer_mode" = yes; then
   # Check whether autoconf is the correct version
   correct_version='2.59'
   grep_version=`echo  $correct_version | sed -e 's/\\./\\\\\\./g'`
-  AC_MSG_CHECKING([Checking whether we are using the correct version ($correct_version) of autoconf])
+  AC_MSG_CHECKING([whether we are using the correct version ($correct_version) of autoconf])
   autoconf --version > confauto.out 2>&1
   if $EGREP $grep_version confauto.out >/dev/null 2>&1; then
     AC_MSG_RESULT([yes])
@@ -656,7 +741,7 @@ if test "$enable_maintainer_mode" = yes; then
   # Check whether automake is the correct version
   correct_version='1.9.6'
   grep_version=`echo  $correct_version | sed -e 's/\\./\\\\\\./g'`
-  AC_MSG_CHECKING([Checking whether we are using the correct version ($correct_version) of automake])
+  AC_MSG_CHECKING([whether we are using the correct version ($correct_version) of automake])
   automake --version > confauto.out 2>&1
   if $EGREP $grep_version confauto.out >/dev/null 2>&1; then
     AC_MSG_RESULT([yes])
@@ -692,7 +777,7 @@ if test "$enable_maintainer_mode" = yes; then
   AC_CHECK_FILE([$LIBTOOLPREFIX/share/libtool/ltmain.sh],
 	        [have_ltmain=yes],
                 [have_ltmain=no])
-  AC_MSG_CHECKING([Checking whether we are using the correct version ($correct_version) of libtool.])
+  AC_MSG_CHECKING([whether we are using the correct version ($correct_version) of libtool.])
   if test $have_ltmain = yes; then
     if $EGREP $grep_version $LIBTOOLPREFIX/share/libtool/ltmain.sh >/dev/null 2>&1; then
       AC_MSG_RESULT([yes])
