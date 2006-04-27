@@ -112,12 +112,12 @@ AC_CACHE_CHECK([for C++ compiler options],[coin_cv_cxxflags],
   fi
   if test -z "$coin_opt_cxxflags"; then
     case $build in
-      *-cygwin*)
+      *-cygwin* | *-mingw*)
         case "$CXX" in
           cl | */cl)
-            coin_opt_cxxflags='/Ot1'
-            coin_add_cxxflags='/nologo /EHsc /GR /MT'
-            coin_dbg_cxxflags='/-Yd'
+            coin_opt_cxxflags='-Ot1'
+            coin_add_cxxflags='-nologo -EHsc -GR -MT'
+            coin_dbg_cxxflags='-Yd'
             ;;
         esac
         ;;
@@ -347,12 +347,12 @@ AC_CACHE_CHECK([for C compiler options],[coin_cv_cflags],
   fi
   if test -z "$coin_opt_cflags"; then
     case $build in
-      *-cygwin*)
+      *-cygwin* | *-mingw*)
         case "$CC" in
           cl | */cl)
-            coin_opt_cflags='/Ot1'
-            coin_add_cflags='/nologo'
-            coin_dbg_cflags='/Yd'
+            coin_opt_cflags='-Ot1'
+            coin_add_cflags='-nologo'
+            coin_dbg_cflags='-Yd'
             ;;
         esac
         ;;
@@ -479,12 +479,12 @@ AC_CACHE_CHECK([for Fortran compiler options],[coin_cv_fflags],
     esac
   else
     case $build in
-      *-cygwin*)
+      *-cygwin* | *-mingw*)
         case $F77 in
           ifort | */ifort)
-            coin_opt_fflags='/O3'
-            coin_add_fflags='/nologo'
-            coin_dbg_fflags='/debug'
+            coin_opt_fflags='-O3'
+            coin_add_fflags='-nologo'
+            coin_dbg_fflags='-debug'
           ;;
         esac
         ;;
@@ -836,20 +836,30 @@ AC_PROG_LIBTOOL
 # The following was a hack for chaniing @BACKSLASH to \
 #          -e 'sYcompile_command=`\$echo "X\$compile_command" | \$Xsed -e '"'"'s%@OUTPUT@%'"'"'"\$output"'"'"'%g'"'"'`Ycompile_command=`\$echo "X\$compile_command" | \$Xsed -e '"'"'s%@OUTPUT@%'"'"'"\$output"'"'"'%g'"'"' | \$Xsed -e '"'"'s%@BACKSLASH@%\\\\\\\\\\\\\\\\%g'"'"'`Y' \
 
+# Correct cygpath for minGW (ToDo!)
 case $build in
-  *-cygwin*)
+  *-mingw*)
+    CYGPATH_W=echo
+    ;;
+esac
+
+case $build in
+  *-cygwin* | *-mingw*)
   case "$CXX" in
     cl | */cl) 
 
-      sed -e 's|fix_srcfile_path=\"`cygpath -w \"\$srcfile\"`\"|fix_srcfile_path=\"\\\`cygpath -w \\\"\\$srcfile\\\"\\\`\"|' \
-          -e 's|fix_srcfile_path=\"\"|fix_srcfile_path=\"\\\`cygpath -w \\\"\\$srcfile\\\"\\\`\"|' \
-          -e 's%compile_deplibs=\"\$dir/\$old_library \$compile_deplibs\"%compile_deplibs="`cygpath -w \$dir/\$old_library | sed -e '"'"'sY\\\\\\\\Y/Yg'"'"'` \$compile_deplibs\"'% \
-          -e 's%compile_deplibs=\"\$dir/\$linklib \$compile_deplibs\"%compile_deplibs="`cygpath -w \$dir/\$linklib | sed -e '"'"'sY\\\\\\\\Y/Yg'"'"'` \$compile_deplibs\"'% \
+      sed -e 's|fix_srcfile_path=\"`cygpath -w \"\$srcfile\"`\"|fix_srcfile_path=\"\\\`'"$CYGPATH_W"' \\\"\\$srcfile\\\"\\\`\"|' \
+          -e 's|fix_srcfile_path=\"\"|fix_srcfile_path=\"\\\`'"$CYGPATH_W"' \\\"\\$srcfile\\\"\\\`\"|' \
+          -e 's%compile_deplibs=\"\$dir/\$old_library \$compile_deplibs\"%compile_deplibs="`$CYGPATH_W \$dir/\$old_library | sed -e '"'"'sY\\\\\\\\Y/Yg'"'"'` \$compile_deplibs\"'% \
+          -e 's%compile_deplibs=\"\$dir/\$linklib \$compile_deplibs\"%compile_deplibs="`$CYGPATH_W \$dir/\$linklib | sed -e '"'"'sY\\\\\\\\Y/Yg'"'"'` \$compile_deplibs\"'% \
+	  -e 's%lib /OUT:%lib -OUT:%' \
+	  -e "s%cygpath -w%$CYGPATH_W%"\
       libtool > conftest.bla
 
       mv conftest.bla libtool
       chmod 755 libtool
       ;;
+    
   esac
 esac
 ]) # AC_COIN_PROG_LIBTOOL
