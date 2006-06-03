@@ -696,7 +696,7 @@ if test "$use_asldir" = BUILD; then
     fi
     rm -f conftest.mak conftest.grp
   fi
-  ASLMAKEFILECMDS="sed 's/ar \$\$(ARFLAGS)/$AR \$\$(ARFLAGS)/' makefile.u | sed 's/ar ruv/$AR ruv/' "
+  ASLMAKEFILECMDS="sed 's%ar \$\$(ARFLAGS)%$AR \$\$(ARFLAGS)%' makefile.u | sed 's%ar ruv%$AR ruv%' "
   if test "$EXEEXT" = ".exe"; then
     ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's/a.out/a.exe/'"
   fi
