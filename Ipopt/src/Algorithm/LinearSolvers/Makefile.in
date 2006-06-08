@@ -605,11 +605,11 @@ uninstall-am: uninstall-info-am
 
 # Workaround a bug in the AIX C++ compiler
 @AIX_FIX_COMPILER_BUG_TRUE@IpTSymLinearSolver.lo: IpTSymLinearSolver.cpp
-@AIX_FIX_COMPILER_BUG_TRUE@@am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -g -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+@AIX_FIX_COMPILER_BUG_TRUE@@am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -qnooptimize -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
 @AIX_FIX_COMPILER_BUG_TRUE@@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
 @AIX_FIX_COMPILER_BUG_TRUE@@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AIX_FIX_COMPILER_BUG_TRUE@@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@AIX_FIX_COMPILER_BUG_TRUE@@am__fastdepCXX_FALSE@	$(LTCXXCOMPILEFIX) -g -c -o $@ $<
+@AIX_FIX_COMPILER_BUG_TRUE@@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -qnooptimize -c -o $@ $<
 
 astyle: $(ASTYLE_FILES)
 
