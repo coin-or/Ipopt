@@ -126,6 +126,8 @@ CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 ADDLIBS = @ADDLIBS@
+AIX_FIX_COMPILER_BUG_FALSE = @AIX_FIX_COMPILER_BUG_FALSE@
+AIX_FIX_COMPILER_BUG_TRUE = @AIX_FIX_COMPILER_BUG_TRUE@
 ALWAYS_FALSE_FALSE = @ALWAYS_FALSE_FALSE@
 ALWAYS_FALSE_TRUE = @ALWAYS_FALSE_TRUE@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -255,6 +257,7 @@ VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
 abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
 abs_lib_dir = @abs_lib_dir@
+abs_source_dir = @abs_source_dir@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
@@ -599,6 +602,14 @@ uninstall-am: uninstall-info-am
 	pdf pdf-am ps ps-am tags uninstall uninstall-am \
 	uninstall-info-am
 
+
+# Workaround a bug in the AIX C++ compiler
+@AIX_FIX_COMPILER_BUG_TRUE@IpTSymLinearSolver.lo: IpTSymLinearSolver.cpp
+@AIX_FIX_COMPILER_BUG_TRUE@@am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -g -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+@AIX_FIX_COMPILER_BUG_TRUE@@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@AIX_FIX_COMPILER_BUG_TRUE@@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AIX_FIX_COMPILER_BUG_TRUE@@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@AIX_FIX_COMPILER_BUG_TRUE@@am__fastdepCXX_FALSE@	$(LTCXXCOMPILEFIX) -g -c -o $@ $<
 
 astyle: $(ASTYLE_FILES)
 

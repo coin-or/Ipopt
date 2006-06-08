@@ -66,6 +66,16 @@ endif
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
+# Workaround a bug in the AIX C++ compiler
+if AIX_FIX_COMPILER_BUG
+IpTSymLinearSolver.lo: IpTSymLinearSolver.cpp
+@am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -g -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LTCXXCOMPILEFIX) -g -c -o $@ $<
+endif
+
 # Astyle stuff
 
 ASTYLE_FILES = \

@@ -90,6 +90,9 @@ AC_ARG_ENABLE([bg],,
           ;;
   esac],[is_bg=no])
 
+# A Fix for the AIX compiler
+AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
+
 #############################################################################
 #                              COIN components                              #
 #############################################################################
