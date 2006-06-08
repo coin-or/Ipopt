@@ -34,8 +34,7 @@ namespace Ipopt
     MultiVectorMatrix(const MultiVectorMatrixSpace* owner_space);
 
     /** Destructor */
-    ~MultiVectorMatrix()
-    {}
+    ~MultiVectorMatrix();
     //@}
 
     /** Create a new MultiVectorMatrix from same MatrixSpace */
@@ -217,6 +216,9 @@ namespace Ipopt
     SmartPtr<const VectorSpace> vec_space_;
 
   };
+
+  inline
+  MultiVectorMatrix::~MultiVectorMatrix() {}
 
   inline
   SmartPtr<MultiVectorMatrix> MultiVectorMatrix::MakeNewMultiVectorMatrix() const

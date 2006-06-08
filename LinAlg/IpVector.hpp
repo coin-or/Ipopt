@@ -60,8 +60,7 @@ namespace Ipopt
     Vector(const VectorSpace* owner_space);
 
     /** Destructor */
-    virtual ~Vector()
-    {}
+    virtual ~Vector();
     //@}
 
     /** Create new Vector of the same type with uninitialized data */
@@ -413,6 +412,9 @@ namespace Ipopt
   };
 
   /* inline methods */
+  inline
+  Vector::~Vector() {}
+
   inline
   Vector::Vector(const VectorSpace* owner_space)
       :
