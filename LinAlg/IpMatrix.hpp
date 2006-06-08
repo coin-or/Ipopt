@@ -32,16 +32,10 @@ namespace Ipopt
     /** Constructor.  It has to be given a pointer to the
      *  corresponding MatrixSpace.
      */
-    Matrix(const MatrixSpace* owner_space)
-        :
-        TaggedObject(),
-        owner_space_(owner_space),
-        valid_cache_tag_(0)
-    {}
+    Matrix(const MatrixSpace* owner_space);
 
     /** Destructor */
-    virtual ~Matrix()
-    {}
+    virtual ~Matrix();
     //@}
 
     /**@name Operations of the Matrix on a Vector */
@@ -256,7 +250,19 @@ namespace Ipopt
     const Index nCols_;
   };
 
+  
   /* Inline Methods */
+  inline
+  Matrix::Matrix(const MatrixSpace* owner_space)
+    :
+    TaggedObject(),
+    owner_space_(owner_space),
+    valid_cache_tag_(0)
+  {}
+
+  inline
+  Matrix::~Matrix() {}
+
   inline
   Index  Matrix::NRows() const
   {
