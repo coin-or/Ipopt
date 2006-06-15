@@ -9,7 +9,7 @@
 #ifndef __IPJOURNALIST_HPP__
 #define __IPJOURNALIST_HPP__
 
-#include "IpConfig.hpp"
+#include "IpoptConfig.h"
 #include "IpTypes.hpp"
 #include "IpReferenced.hpp"
 #include "IpSmartPtr.hpp"

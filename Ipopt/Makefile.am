@@ -8,7 +8,11 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = Extern src/Common src/LinAlg src/Algorithm src/Interfaces src/Apps
+SUBDIRS = src/Common src/LinAlg src/Algorithm src/Interfaces src/Apps
+
+if ALWAYS_FALSE
+  SUBDIRS += test
+endif
 
 EXTRA_DIST = \
 	examples/Cpp_example/cpp_example.cpp \
@@ -75,7 +79,7 @@ EXTRA_DIST = \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj \
 	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj
 
-.PHONY: cuter test unitTest unitTests astyle
+.PHONY: cuter test unitTest astyle
 
 # Stuff to clean up from "make test"
 
@@ -114,13 +118,8 @@ cuter: install
 
 test: unitTest
 
-unitTests: unitTest
-
-unitTest:
-	cd examples/hs071_cpp; make clean; make
-	cd examples/hs071_c; make clean; make
-	cd examples/hs071_f; make clean; make
-	cd test; chmod u+x ./run_unitTests; ./run_unitTests
+unitTest: all
+	cd test; make test
 
 astyle:
 	cd src/Algorithm; $(MAKE) astyle

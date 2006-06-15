@@ -9,7 +9,7 @@
 //           Olaf Schenk                      Univ of Basel 2005-09-20
 //                  - changed options, added PHASE_ flag
 
-#include "config_ipopt.h"
+#include "IpoptConfig.h"
 #include "IpPardisoSolverInterface.hpp"
 
 #ifdef HAVE_CSTDIO

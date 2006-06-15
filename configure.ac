@@ -40,6 +40,15 @@ AC_PREFIX_DEFAULT([`pwd`])
 AC_COIN_INIT_AUTOMAKE
 
 #############################################################################
+#             Check which ThirdParty sources are available                  #
+#############################################################################
+
+AC_COIN_THIRDPARTY_SUBDIRS([Blas],[ThirdParty/Blas],[daxpy.f])
+AC_COIN_THIRDPARTY_SUBDIRS([Lapack],[ThirdParty/Lapack],[LAPACK/SRC/dlarf.f])
+AC_COIN_THIRDPARTY_SUBDIRS([HSL],[ThirdParty/HSL],[configure.ac])
+AC_COIN_THIRDPARTY_SUBDIRS([ASL],[ThirdParty/ASL],[solvers/asl.h])
+
+#############################################################################
 #                  Check which subprojects are there                        #
 #############################################################################
 

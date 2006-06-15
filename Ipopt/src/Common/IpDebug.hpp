@@ -9,7 +9,7 @@
 #ifndef __IPDEBUG_HPP__
 #define __IPDEBUG_HPP__
 
-#include "IpConfig.hpp"
+#include "IpoptConfig.h"
 #include "IpTypes.hpp"
 
 #ifdef HAVE_CASSERT

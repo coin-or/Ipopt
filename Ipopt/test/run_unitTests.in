@@ -19,10 +19,10 @@ if test -x ../src/Apps/AmplSolver/ipopt ; then
   if test -f mytoy.nl; then
     remove_mytoy=no
   else
-    eval cp "$srcdir/mytoy.nl" .
+    cp "$srcdir/mytoy.nl" .
     remove_mytoy=yes
   fi
-  (eval @abs_bin_dir@/ipopt mytoy.nl ) >tmpfile 2>&1
+  ../src/Apps/AmplSolver/ipopt mytoy.nl >tmpfile 2>&1
   grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
   if test $? = 0; then
     echo "    Test passed!"
@@ -45,7 +45,7 @@ fi
 
 # C++ Example
 echo Testing C++ Example...
-(eval ../examples/hs071_cpp/hs071_cpp ) >tmpfile 2>&1
+./hs071_cpp >tmpfile 2>&1
 grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
 if test $? = 0; then
   echo "    Test passed!"
@@ -62,7 +62,7 @@ rm -rf tmpfile
 
 # C Example
 echo Testing C Example...
-(eval ../examples/hs071_c/hs071_c ) >tmpfile 2>&1
+./hs071_c >tmpfile 2>&1
 grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
 if test $? = 0; then
   echo "    Test passed!"
@@ -79,7 +79,7 @@ rm -rf tmpfile
 
 # Fortran Example
 echo Testing Fortran Example...
-(eval ../examples/hs071_f/hs071_f ) >tmpfile 2>&1
+./hs071_f >tmpfile 2>&1
 grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
 if test $? = 0; then
   echo "    Test passed!"

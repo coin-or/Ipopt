@@ -3,8 +3,17 @@
 /* If defined, debug sanity checks are performed during runtime */
 #undef COIN_DEBUG
 
+/* If defined, the Ampl Solver Library is available. */
+#undef COIN_HAS_ASL
+
+/* If defined, the BLAS Library is available. */
+#undef COIN_HAS_BLAS
+
 /* Define to 1 if the Ipopt package is used */
 #undef COIN_HAS_IPOPT
+
+/* If defined, the LAPACK Library is available. */
+#undef COIN_HAS_LAPACK
 
 /* Define to dummy `main' function (if any) required to link to the Fortran
    libraries. */
@@ -68,9 +77,6 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if LAPACK is avaliable */
-#undef HAVE_LAPACK
-
 /* Define to 1 if MA27 is available */
 #undef HAVE_MA27
 
@@ -133,9 +139,6 @@
 
 /* Define to 1 if WSMP is available */
 #undef HAVE_WSMP
-
-/* If defined, debug sanity checks are performed in Ipopt during runtime */
-#undef IP_DEBUG
 
 /* Define to be the name of C-function for NaNInf check */
 #undef MY_C_FINITE

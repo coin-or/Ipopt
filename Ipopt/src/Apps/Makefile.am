@@ -10,7 +10,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = CUTErInterface
 
-if BUILDAMPLINTERFACE
+if COIN_HAS_ASL
   SUBDIRS += AmplSolver
 #  SUBDIRS += CompositeInterface
 endif

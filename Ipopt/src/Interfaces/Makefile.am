@@ -39,6 +39,8 @@ libipopt_la_SOURCES = \
 
 libipopt_la_LIBADD = $(IPALLLIBS) $(FLIBS)
 
+libipopt_la_DEPENDENCIES = $(IPALLLIBS)
+
 libipopt_la_LDFLAGS = -no-undefined
 
 ADDLIBS_FILES = \

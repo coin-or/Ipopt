@@ -6,7 +6,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-03-17
 
-#include "config_ipopt.h"
+#include "IpoptConfig.h"
 #include "IpMc19TSymScalingMethod.hpp"
 
 #ifdef HAVE_CMATH

@@ -6,7 +6,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-08-16
 
-#include "config_ipopt.h"
+#include "IpoptConfig.h"
 #include "IpLinearSolversRegOp.hpp"
 #include "IpRegOptions.hpp"
 #include "IpTSymLinearSolver.hpp"

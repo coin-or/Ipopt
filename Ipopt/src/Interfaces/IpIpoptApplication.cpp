@@ -6,7 +6,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-09-02
 
-#include "config_ipopt.h"
+#include "IpoptConfig.h"
 #include "IpIpoptApplication.hpp"
 #include "IpTNLPAdapter.hpp"
 #include "IpIpoptAlg.hpp"
@@ -405,7 +405,7 @@ namespace Ipopt
       "algorithmic options with some documentation before solving the "
       "optimization problem.");
 
-#if IP_DEBUG
+#ifdef IP_DEBUG
 
     roptions->AddBoundedIntegerOption(
       "debug_print_level",

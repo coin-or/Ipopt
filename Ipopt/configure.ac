@@ -14,8 +14,8 @@ AC_PREREQ(2.59)
 
 AC_INIT([Ipopt],[3.1.0dev],[http://projects.coin-or.org/Ipopt/newticket])
 
-AC_COPYRIGHT([
-Copyright 2004, 2006 International Business Machines and others.
+AC_COPYRIGHT(
+[Copyright 2004, 2006 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
@@ -45,10 +45,6 @@ AC_COIN_PROJECTDIR_INIT
 
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE
-if test "$coin_debug_compile" = true; then
-  AC_DEFINE([IP_DEBUG],[1],
-            [If defined, debug sanity checks are performed in Ipopt during runtime])
-fi
 
 # We need egrep and ln -s somewherw
 AC_PROG_EGREP
@@ -281,179 +277,34 @@ AC_CHECK_DECL([va_copy],[AC_DEFINE([HAVE_VA_COPY],[1],
 
 # Additional libraries and packages
 
-# IPADDLIBS will contain all libraries for additional packages
-IPADDLIBS=
-AC_SUBST(IPADDLIBS)
-
 # We need to restore the value of LIBS before those test, otherwise libtool
 # will hick-up
-LIBS_without_IPADDLIBS="$LIBS"
+LIBS_without_ADDLIBS="$LIBS"
 
-##########
-#  BLAS  #
-##########
+#######################
+#        BLAS         #
+#######################
 
-ipblaslibdir="\$(top_builddir)/Extern/blas"
-
-AC_ARG_WITH([blas],
-            AC_HELP_STRING([--with-blas],
-                           [specify BLAS library (or BUILD for compilation)]),
-            [use_blas=$withval], [use_blas=])
-
-# On cygwin, unless otherwise specified, recompile blas because it
-# otherwise links with the cygwin blas which doesn't run under DOS>
-if test -z "$use_blas"; then
-  case $build in
-    *-cygwin*) use_blas="BUILD" ;;
-  esac
+AC_COIN_HAS_BLAS
+if test $coin_has_blas = no; then
+  AC_MSG_ERROR([cannot find BLAS])
 fi
 
-# Check if user supplied option makes sense
-if test ! -z "$use_blas"; then
-  if test "$use_blas" = "BUILD"; then
-    AC_CHECK_FILE([$srcdir/Extern/blas/dgemm.f],[],
-                  [AC_MSG_ERROR([option \"BUILD\" specified for blas, but sources are missing])])
-  else
-    AC_MSG_CHECKING([whether user supplied BLASLIB=\"$use_blas\" works])
-    LIBS="$use_blas $LIBS"
-    IPADDLIBS="$use_blas $IPADDLIBS"
-    # Probably the blas library requires the Fortran libraries, so add
-    # them for this test.  They are added at the end anyway
-    SAVE_LIBS="$LIBS"
-    LIBS="$LIBS $FLIBS"
-    AC_F77_FUNC(daxpy,cfunc)
-    AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc()],
-                [AC_MSG_RESULT([yes])],
-                [AC_MSG_RESULT([no])
-                 AC_MSG_ERROR([user supplied BLAS library \"$use_blas\" does not work])])
-    LIBS="$SAVE_LIBS"
-  fi
-else
-# Try to autodetect the library for blas based on build system
-  case $build in
-    *-sgi-*) AC_F77_FUNC(daxpy,cfunc)
-             AC_CHECK_LIB([complib.sgimath],[$cfunc],
-                          [use_blas=-lcomplib.sgimath;
-                           LIBS="-lcomplib.sgimath $LIBS";
-                           IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"])
-             ;;
-    *-sun-*) SAVE_LIBS="$LIBS"
-             AC_MSG_CHECKING([whether -xlic_lib=sunperf has BLAS])
-             LIBS="-xlic_lib=sunperf $LIBS"
-             AC_F77_FUNC(daxpy,cfunc)
-             AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc()],
-                         [AC_MSG_RESULT([yes])
-			  IPADDLIBS="-xlic_lib=sunperf $IPADDLIBS"
-			  use_blas=-xlic_lib=sunperf],
-                         [AC_MSG_RESULT([no])
-			  LIBS="$SAVE_LIBS"])
-             ;;
-  esac
-  if test -z "$use_blas"; then
-    # Probably the blas library requires the Fortran libraries, so add
-    # them for this test.  They are added at the end anyway
-    AC_F77_FUNC(daxpy,cdaxpy)
-    SAVE_LIBS="$LIBS"
-    LIBS="$LIBS $FLIBS"
-    AC_CHECK_LIB(blas,$cdaxpy,[use_blas=-lblas;
-                               LIBS="-lblas $SAVE_LIBS";
-                               IPADDLIBS="-lblas $IPADDLIBS"],
-                              [LIBS="$SAVE_LIBS"])
-  fi
-  if test -z "$use_blas"; then
-    AC_CHECK_FILE([$srcdir/Extern/blas/dgemm.f],[use_blas=BUILD],
-                  [AC_MSG_ERROR([cannot find BLAS, and sources are missing in $srcdir/Extern/blas/])])
-  fi
-fi
+#######################
+#       LAPACK        #
+#######################
 
-##########
-# LAPACK #
-##########
-
-AC_LANG_PUSH([Fortran 77])
-
-iplapacklibdir="\$(top_builddir)/Extern/lapack"
-lapackdir=Extern/lapack/LAPACK/SRC
-lapacksrcdir=$srcdir/$lapackdir
-lapackobjdir=Extern/lapack
-
-AC_ARG_WITH([lapack],
-            AC_HELP_STRING([--with-lapack],
-                           [specify LAPACK library (or BUILD for compilation, NONE for unavailable)]),
-            [use_lapack=$withval], [use_lapack=])
-
-# On cygwin, unless otherwise specified, recompile lapack because it
-# otherwise links with the cygwin lapack which doesn't run under DOS>
-if test -z "$use_lapack"; then
-  case $build in
-    *-cygwin*) use_lapack="BUILD" ;;
-  esac
-fi
-
-# Check if user supplied option makes sense
-if test ! -z "$use_lapack"; then
-  if test "$use_lapack" = "BUILD"; then
-    AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[],
-                  [AC_MSG_ERROR([option \"BUILD\" specified for lapack, but sources are missing])])
-  else
-    if test ! "$use_lapack" = "NONE"; then
-      AC_MSG_CHECKING([whether user supplied LAPACKLIB=\"$use_lapack\" works])
-      LIBS="$use_lapack $LIBS"
-      IPADDLIBS="$use_lapack $IPADDLIBS"
-      AC_TRY_LINK([],[      call dsyev],[AC_MSG_RESULT([yes])],
-                  [AC_MSG_RESULT([no]); AC_MSG_ERROR([user supplied LAPACK library \"$use_lapack\" does not work])])
-    fi
-  fi
-else
-# First try to see if LAPACK is already available with BLAS library
-  AC_MSG_CHECKING([whether LAPACK is already available with BLAS library])
-  AC_TRY_LINK([],[      call dsyev()],
-            [AC_MSG_RESULT([yes]); use_lapack=ok],
-            [AC_MSG_RESULT([no])])
-  if test -z "$use_lapack"; then
-    # Try to autodetect the library for lapack based on build system
-    case $build in
-      *-sgi-*) AC_CHECK_LIB([complib.sgimath],[dsyev],
-                            [use_lapack=-lcomplib.sgimath;
-                             LIBS="-lcomplib.sgimath $LIBS";
-                             IPADDLIBS="-lcomplib.sgimath $IPADDLIBS"]);;
-      *-sun-*) SAVE_LIBS="$LIBS"
-               AC_MSG_CHECKING([whether -xlic_lib=sunperf has LAPACK])
-               LIBS="-xlic_lib=sunperf $LIBS"
-               AC_TRY_LINK([],[      call dsyev],
-                           [AC_MSG_RESULT([yes])
-		  	    IPADDLIBS="-xlic_lib=sunperf $IPADDLIBS"
-			    use_blas=-xlic_lib=sunperf],
-                           [AC_MSG_RESULT([no])
-			    LIBS="$SAVE_LIBS"])
-             ;;
-    esac
-  fi
-  if test -z "$use_lapack"; then
-    AC_CHECK_LIB(lapack,dpotrs,[use_lapack=-llapack;
-                                LIBS="-llapack $LIBS";
-                                IPADDLIBS="-llapack $IPADDLIBS"],[])
-  fi
-  if test -z "$use_lapack"; then
-    AC_CHECK_FILE([$lapacksrcdir/dlarf.f],[use_lapack=BUILD],
-                  [AC_MSG_WARN([cannot find LAPACK, and sources are missing in $lapacksrcdir]); use_lapack=NONE])
-  fi
-fi
-
-if test "$use_lapack" = "NONE"; then
+AC_COIN_HAS_LAPACK
+if test $coin_has_lapack = no; then
   AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
-else
-  AC_DEFINE(HAVE_LAPACK, 1, [Define to 1 if LAPACK is avaliable])
 fi
-
-AC_LANG_POP([Fortran 77])
 
 #######################
 # HARWELL SUBROUTINES #
 #######################
 
-hslsrcdir="$srcdir/Extern/HSL"
-hsllibdir="\$(top_builddir)/Extern/HSL"
+hslobjdir=../ThirdParty/HSL
+hslsrcdir=$srcdir/$hslobjdir
 
 AC_DEFUN([MY_CHECK_HSL],
          [AC_MSG_CHECKING([for $1 in $use_hsl])
@@ -479,21 +330,22 @@ AC_ARG_WITH([hsl],
 if test "$use_hsl" = BUILD; then
 # Check which files are available
   MY_CHECK_HSLFILE(ma27ad,MA27)
-  if test "$use_MA27" = BUILD; then
-    AC_MSG_CHECKING([whether MA27 is threadsafe])
-    if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
-      AC_MSG_RESULT(yes)
-    else
-      AC_MSG_RESULT(no)
-      AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])
-    fi
-  fi
+## This test is already done in ThirdParty configure
+#  if test "$use_MA27" = BUILD; then
+#    AC_MSG_CHECKING([whether MA27 is threadsafe])
+#    if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
+#      AC_MSG_RESULT(yes)
+#    else
+#      AC_MSG_RESULT(no)
+#      AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])
+#    fi
+#  fi
   MY_CHECK_HSLFILE(mc19ad,MC19)
   MY_CHECK_HSLFILE(ma57ad,MA57)
 else
   SAVE_LIBS="$LIBS"
   LIBS="$use_hsl $LIBS $FLIBS"
-  IPADDLIBS="$use_hsl $IPADDLIBS"
+  ADDLIBS="$use_hsl $ADDLIBS"
   MY_CHECK_HSL([ma27ad],[MA27])
   if test "$use_MA27" = "yes"; then
     AC_MSG_CHECKING([whether MA27 is threadsafe])
@@ -520,7 +372,7 @@ AC_ARG_WITH([pardiso],
 
 if test ! "$use_pardiso" = "no"; then
   LIBS="$use_pardiso $LIBS"
-  IPADDLIBS="$use_pardiso $IPADDLIBS"
+  ADDLIBS="$use_pardiso $ADDLIBS"
 
 # ToDo put this back in
   AC_MSG_CHECKING([whether user-supplied Pardiso library \"$use_pardiso\" works])
@@ -551,7 +403,7 @@ AC_ARG_WITH([taucs],
 
 if test ! "$use_taucs" = "no"; then
   LIBS="$use_taucs $LIBS"
-  IPADDLIBS="$use_taucs $IPADDLIBS"
+  ADDLIBS="$use_taucs $ADDLIBS"
 
   AC_DEFINE(HAVE_TAUCS,1,
             [Define to 1 if TAUCS is available])
@@ -571,7 +423,7 @@ AC_ARG_WITH([mumps],
 
 if test ! "$use_mumps" = "no"; then
   LIBS="$use_mumps $LIBS"
-  IPADDLIBS="$use_mumps $IPADDLIBS"
+  ADDLIBS="$use_mumps $ADDLIBS"
 
   AC_DEFINE(HAVE_MUMPS,1,
             [Define to 1 if MUMPS is available])
@@ -594,7 +446,7 @@ AC_ARG_WITH([wsmp],
 
 if test ! "$use_wsmp" = "no"; then
   LIBS="$use_wsmp $LIBS"
-  IPADDLIBS="$use_wsmp $IPADDLIBS"
+  ADDLIBS="$use_wsmp $ADDLIBS"
 
   AC_LANG_PUSH([Fortran 77])
   AC_MSG_CHECKING([whether user-supplied WSMP library \"$use_wsmp\" works])
@@ -630,133 +482,7 @@ LIBS="$LIBS $FLIBS"
 # AMPL SOLVER LIBRARY #
 #######################
 
-asldir=Extern/ASL/solvers
-aslsrcdir=$srcdir/$asldir
-
-case $CXX in
-  cl | */cl)   ampllib=amplsolv.lib ;;
-  *)           ampllib=amplsolver.a ;;
-esac
-
-AC_ARG_WITH([asldir],
-            AC_HELP_STRING([--with-asldir],
-                           [specify absolute path to AMPL solver directory (or BUILD for compilation, or "no" for disabling AMPL)]),
-            [use_asldir=$withval], [use_asldir=])
-
-if test "$use_asldir" = BUILD; then
-  AC_CHECK_FILE([$aslsrcdir/asl.h],[],
-                [AC_MSG_ERROR([option \"BUILD\" specified for asldir, but sources are missing])])
-elif test -z "$use_asldir"; then
- # try to find sources - if not given don't compile
-  AC_CHECK_FILE([$aslsrcdir/asl.h],[use_asldir=BUILD],[use_asldir=no])
-elif test ! "$use_asldir" = "no"; then
-  AC_CHECK_FILE([$use_asldir/$ampllib],[],[AC_MSG_ERROR([ASL directory \"$use_asldir\" specified, but library missing])])
-  AC_CHECK_FILE([$use_asldir/asl.h],[],[AC_MSG_ERROR([ASL directory \"$use_asldir\" specified, but header files are missing])])
-  use_asldir=`cd $use_asldir; pwd`
-  case $build in
-    *-cygwin*) use_asldir=`cygpath -w $use_asldir` ;;
-  esac
-fi
-
-if test "$use_asldir" = BUILD; then
-  if test -z "$ASLMAKEFLAGS" ; then
-    asladdcflags=
-    case $build in
-      *-linux*) asladdcflags="-DNON_STDIO"
-                case $CC in
-                  pgcc | */pgcc)
-                     asladdcflags="$asladdcflags -DNO_fpu_control";;
-                esac
-                if test "$is_bg" = "yes"; then
-                  asladdcflags="$asladdcflags -DNo_Control87 -DBLUE_GENE"
-                fi
-                ;;
-      *-cygwin*) # ToDo: If on Cygwin but not using -mno-cygwin, we should not define -DNo_Control87 -DNO_RUSAGE
-                asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
-                ;;
-      *-mingw32)
-                asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
-                ;;
-    esac
-#    ASLMAKEFLAGS="CFLAGS=\"\$(CFLAGS) $asladdcflags\""
-# Do the following for now to make sure we are not interupting compilation
-# of ASL because of warning message:
-    bla=
-    for i in $CFLAGS; do
-      if test ! "$i" = "-Werror"; then
-        bla="$bla $i"
-      fi
-    done
-    ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
-
-#   Somehow, -qtune=auto makes ASL segfault on AIX compiler, so take them out
-    case $CC in
-      xlc* | */xlc* | mpxlc* | */mpxlc*)
-        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-qtune=auto//g' | sed 's/-qarch=auto//g' | sed 's/-qcache=auto//g' | sed 's/-qhot//g' | sed 's/-O3/-O/g'`
-      ;;
-      pgcc | */pgcc)
-        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-fast/-O1/g'`
-      ;;
-    esac
-
-    AC_MSG_CHECKING([whether $am_make is the GNU make])
-    rm -rf conftest.mak
-    ($am_make -v -f conftest.mak > conftest.grp) 2>&5
-    if $EGREP GNU conftest.grp >&5 ; then
-      AC_MSG_RESULT([yes])
-      ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
-    else
-      AC_MSG_RESULT([no])
-    fi
-    rm -f conftest.mak conftest.grp
-  fi
-  ASLMAKEFILECMDS="sed 's%ar \$\$(ARFLAGS)%$AR \$\$(ARFLAGS)%' makefile.u | sed 's%ar ruv%$AR ruv%' "
-  if test "$EXEEXT" = ".exe"; then
-    ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's/a.out/a.exe/'"
-  fi
-  case $build in
-    *-cygwin*) ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's%s/System_details/\`uname -sr\`/%s|System_details|\`uname -sr\`|%'" ;;
-  esac
-  ASLMAKEFILECMDS="$ASLMAKEFILECMDS > makefile"
-fi
-AC_ARG_VAR(ASLMAKEFLAGS,[Compilation flags necessary for compiling the AMPL solver library])
-AC_SUBST(ASLMAKEFILECMDS)
-
-# For AmplApplication Makefile
-ASLLIB=
-AMPL_CPPFLAGS="-I\$(top_builddir)/Extern/ASL -I\$(top_srcdir)/Extern/ASL/solvers"
-
-if test "$use_asldir" = BUILD; then
-  ASLLIB="\$(top_builddir)/Extern/ASL//$ampllib"
-  case $build in
-    *-mingw32)
-      # This is a hack for mingw where AC_CONFIG_LINKS doesn't work for directories
-      rm -rf Extern/ASL/ASLsolvers
-      $LN_S $srcdir/$asldir Extern/ASL/ASLsolvers
-      ;;
-    *)
-      AC_CONFIG_LINKS(Extern/ASL/ASLsolvers:$asldir)
-      ;;
-  esac
-elif test ! "$use_asldir" = no; then
-  case "$CXX" in
-    cl | */cl)
-      use_asldir="`cygpath -w $use_asldir | sed -e sX\\\\\\\\X/Xg`"
-      AMPL_CPPFLAGS="-I$use_asldir"
-      ASLLIB="$use_asldir/$ampllib"
-    ;;
-  esac
-fi
-if test x"$ASLLIB" = x; then
-  ASLLIB="$use_asldir/$ampllib"
-fi
-
-if test ! "$use_asldir" = no; then
-  AC_CHECK_LIB(dl,[dlopen],[ASLLIB="$ASLLIB -ldl"],[])
-fi
-
-AC_SUBST(ASLLIB)
-AC_SUBST(AMPL_CPPFLAGS)
+AC_COIN_HAS_ASL
 
 AC_LANG_POP(C++)
 
@@ -783,8 +509,8 @@ else
   AC_MSG_WARN([We are cross compiling, assuming Fortran `INTEGER' type corresponds to C `int' type])
   AC_DEFINE([FORTRAN_INTEGER_TYPE],[int])
 fi
-IPADDLIBS="$IPADDLIBS"
-LIBS="$LIBS_without_IPADDLIBS"
+
+LIBS="$LIBS_without_ADDLIBS"
 
 ##########
 # ASTYLE #
@@ -812,35 +538,17 @@ AC_SUBST(ipoptlib)
 AC_SUBST(IPALLLIBS)
 IPALLLIBS="../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
-AM_CONDITIONAL([BUILDBLAS],[test "$use_blas" = "BUILD"])
 if test "$use_blas" = BUILD; then
-#  LIBS="$ipblaslibdir/libipblas.a $LIBS"
-  IPALLLIBS="../../Extern/blas/libipblas.la $IPALLLIBS"
+  IPALLLIBS="../../../ThirdParty/Blas/libcoinblas.la $IPALLLIBS"
 fi
 
-AM_CONDITIONAL([BUILDLAPACK],[test "$use_lapack" = "BUILD"])
 if test "$use_lapack" = BUILD; then
-#  LDFLAGS="-L$iplapacklibdir $LDFLAGS"
-#  LIBS="$iplapacklibdir/libiplapack.a $LIBS"
-  IPALLLIBS="../../Extern/lapack/libiplapack.la $IPALLLIBS"
-  for file in dlae2.f dlaev2.f dlamch.f dlanst.f dlansy.f dlapy2.f dlarf.f dlarfb.f dlarfg.f dlarft.f dlartg.f dlascl.f dlaset.f dlasr.f dlasrt.f dlassq.f dlatrd.f dorg2l.f dorg2r.f dorgql.f dorgqr.f dorgtr.f dpotf2.f dpotrf.f dpotrs.f dsteqr.f dsterf.f dsyev.f dsytd2.f dsytrd.f ieeeck.f ilaenv.f; do
-    AC_CONFIG_LINKS($lapackobjdir/$file:$lapackdir/$file)
-  done
+  IPALLLIBS="../../../ThirdParty/Lapack/libcoinlapack.la $IPALLLIBS"
 fi
 
-AM_CONDITIONAL([BUILDHSL],[test "$use_hsl" = "BUILD"])
 if test "$use_hsl" = BUILD ; then
-#  LDFLAGS="-L$hsllibdir $LDFLAGS"
-#  LIBS="$hsllibdir/libiphsl.la $LIBS"
-  IPALLLIBS="../../Extern/HSL/libiphsl.la $IPALLLIBS"
+  IPALLLIBS="../../../ThirdParty/HSL/libcoinhsl.la $IPALLLIBS"
 fi
-AM_CONDITIONAL([BUILDMA27],[test "$use_MA27" = BUILD])
-AM_CONDITIONAL([BUILDMA57],[test "$use_MA57" = BUILD])
-AM_CONDITIONAL([BUILDMC19],[test "$use_MC19" = BUILD])
-
-AM_CONDITIONAL([BUILDBLASDIR],[test "$use_blas" = BUILD])
-AM_CONDITIONAL([BUILDLAPACKDIR],[test "$use_lapack" = BUILD])
-AM_CONDITIONAL([BUILDHSLDIR],[test "$use_hsl" = BUILD])
 
 AM_CONDITIONAL([HAVE_MA27],[test ! "$use_MA27" = no])
 AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
@@ -850,8 +558,14 @@ AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])
 AM_CONDITIONAL([HAVE_MUMPS],[test ! "$use_mumps" = no])
 AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
-AM_CONDITIONAL([BUILDASLDIR],[test "$use_asldir" = BUILD])
-AM_CONDITIONAL([BUILDAMPLINTERFACE],[test ! "$use_asldir" = "no"])
+########################################################################
+##             Create links for the test source files                 ##
+########################################################################
+
+AC_CONFIG_LINKS([test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp
+                 test/hs071_nlp.cpp:examples/hs071_cpp/hs071_nlp.cpp
+                 test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp
+                 test/hs071_c.c:examples/hs071_c/hs071_c.c])
 
 AC_CONFIG_FILES([Makefile
 		 src/Common/Makefile
@@ -871,11 +585,7 @@ AC_CONFIG_FILES([Makefile
 		 examples/hs071_cpp/Makefile
 		 examples/hs071_c/Makefile
 		 examples/ScalableProblems/Makefile
-		 Extern/Makefile
-		 Extern/blas/Makefile
-		 Extern/lapack/Makefile
-		 Extern/HSL/Makefile
-		 Extern/ASL/Makefile
+		 test/Makefile
 		 test/run_unitTests])
 
 AC_CONFIG_HEADER([inc/config_ipopt.h])

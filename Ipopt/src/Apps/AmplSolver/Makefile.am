@@ -18,7 +18,7 @@ ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
 ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
-	$(IPADDLIBS) $(ASLLIB) $(FLIBS)
+	$(ADDLIBS) $(ASLLIB)
 
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
@@ -26,7 +26,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Algorithm` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
 
-AM_CPPFLAGS += $(AMPL_CPPFLAGS)
+AM_CPPFLAGS += $(ASL_CPPFLAGS)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

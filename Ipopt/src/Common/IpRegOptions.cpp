@@ -6,7 +6,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-06-18
 
-#include "config_ipopt.h"
+#include "IpoptConfig.h"
 #include "IpRegOptions.hpp"
 
 #include <set>

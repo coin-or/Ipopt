@@ -10,6 +10,7 @@ AUTOMAKE_OPTIONS = foreign
 
 includeipoptdir = $(includedir)/ipopt
 includeipopt_HEADERS = \
+	../../inc/config_ipopt.h \
 	IpCachedResults.hpp \
 	IpDebug.hpp \
 	IpException.hpp \
@@ -24,11 +25,10 @@ includeipopt_HEADERS = \
 	IpTypes.hpp \
 	IpUtils.hpp
 
-nodist_includeipopt_HEADERS = ../../inc/IpConfig.hpp
-
 noinst_LTLIBRARIES = libcommon.la
 
 libcommon_la_SOURCES = \
+	IpoptConfig.h \
 	IpCachedResults.hpp \
 	IpDebug.cpp IpDebug.hpp \
 	IpException.hpp \
@@ -45,33 +45,23 @@ libcommon_la_SOURCES = \
 
 libcommon_la_LDFLAGS = $(LT_LDFLAGS)
 
-IpConfigFile = ../../inc/IpConfig.hpp
+#############################################################################
+# Create the Config.h file that always defines HAVE_CONFIG_H and install it #
+#############################################################################
 
-$(libcommon_la_OBJECTS): $(IpConfigFile)
+# You only need to adapt the following line
+ConfigHeader = IpoptConfig.h
 
-# Here we automatically generate IpConfig.hpp so that we can distribute it
-# without having unnecessary stuff in it (e.g., PACKAGE_NAME will conflict
-# with another packages that uses autoconf)
+install-exec-local:
+	echo "#ifndef HAVE_CONFIG_H" >bla
+	echo "#define HAVE_CONFIG_H" >>bla
+	echo "#endif" >> bla
+	cat $(srcdir)/$(ConfigHeader) >> bla
+	$(install_sh_DATA) bla $(DESTDIR)$(includeipoptdir)/$(ConfigHeader)
+	rm -f bla
 
-$(IpConfigFile): ../../inc/config_ipopt.h
-	echo "/** Required defines from config_ipopt.h */" >IpConfig.tmp
-	echo "#ifndef __IPCONFIG_HPP__" >>IpConfig.tmp
-	echo "#define __IPCONFIG_HPP__" >>IpConfig.tmp
-	$(EGREP) 'ASSERT|MATH|STDARG|STDLIB|TIME|IP_DEBUG' $< >>IpConfig.tmp
-	echo " " >>IpConfig.tmp
-	echo "/** Type of Fortran integer translated into C */" >>IpConfig.tmp
-	echo "typedef `$(EGREP) 'FORTRAN_INTEGER_TYPE' $< | sed -e 's/#define FORTRAN_INTEGER_TYPE//'` ipfint;" >>IpConfig.tmp
-	echo "#endif" >>IpConfig.tmp
-	if test -r $(IpConfigFile); then \
-	  if diff $(IpConfigFile) IpConfig.tmp >/dev/null 2>1 ; then \
-	    rm -f IpConfig.tmp; \
-	  else \
-	    rm -f $(IpConfigFile); \
-	    mv IpConfig.tmp $(IpConfigFile); \
-	  fi; \
-	else \
-	  mv IpConfig.tmp $(IpConfigFile); \
-	fi
+uninstall-local:
+	rm -f $(DESTDIR)$(includeipoptdir)/$(ConfigHeader)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -97,7 +87,7 @@ ASTYLE_FILES = \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_FILES) IpConfig.tmp
+CLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 

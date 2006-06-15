@@ -6,7 +6,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-17
 
-#include "config_ipopt.h"
+#include "IpoptConfig.h"
 #include "IpMa27TSolverInterface.hpp"
 
 #ifdef HAVE_CMATH

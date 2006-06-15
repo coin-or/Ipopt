@@ -51,6 +51,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@ALWAYS_FALSE@am__append_1 = test
 DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/../BuildTools/Makemain.inc $(srcdir)/../config.guess \
 	$(srcdir)/../config.sub $(srcdir)/../install-sh \
@@ -60,13 +61,16 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/examples/Cpp_example/Makefile.in \
 	$(top_srcdir)/examples/ScalableProblems/Makefile.in \
 	$(top_srcdir)/examples/hs071_c/Makefile.in \
+	$(top_srcdir)/examples/hs071_c/hs071_c.c \
 	$(top_srcdir)/examples/hs071_cpp/Makefile.in \
+	$(top_srcdir)/examples/hs071_cpp/hs071_main.cpp \
+	$(top_srcdir)/examples/hs071_cpp/hs071_nlp.cpp \
+	$(top_srcdir)/examples/hs071_cpp/hs071_nlp.hpp \
 	$(top_srcdir)/examples/hs071_f/Makefile.in \
 	$(top_srcdir)/examples/hs071_f/hs071_f.f.in \
-	$(top_srcdir)/inc/config_ipopt.h.in \
-	$(top_srcdir)/test/run_unitTests.in AUTHORS INSTALL
-@HAVE_EXTERNALS_TRUE@am__append_1 = Externals
-@HAVE_EXTERNALS_TRUE@am__append_2 = .Externals-stamp
+	$(top_srcdir)/inc/config_ipopt.h.in AUTHORS INSTALL
+@HAVE_EXTERNALS_TRUE@am__append_2 = Externals
+@HAVE_EXTERNALS_TRUE@am__append_3 = .Externals-stamp
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -80,7 +84,7 @@ CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES = examples/hs071_f/Makefile \
 	examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile \
 	examples/hs071_cpp/Makefile examples/hs071_c/Makefile \
-	examples/ScalableProblems/Makefile test/run_unitTests
+	examples/ScalableProblems/Makefile
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -91,7 +95,8 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	uninstall-recursive
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = $(SUBDIRS)
+DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm src/Interfaces \
+	src/Apps test
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -105,18 +110,19 @@ distuninstallcheck_listfiles = find . -type f -print
 distcleancheck_listfiles = find . -type f -print
 ACLOCAL = @ACLOCAL@
 ADDLIBS = @ADDLIBS@
+ADD_CFLAGS = @ADD_CFLAGS@
+ADD_CXXFLAGS = @ADD_CXXFLAGS@
+ADD_FFLAGS = @ADD_FFLAGS@
 AIX_FIX_COMPILER_BUG_FALSE = @AIX_FIX_COMPILER_BUG_FALSE@
 AIX_FIX_COMPILER_BUG_TRUE = @AIX_FIX_COMPILER_BUG_TRUE@
 ALWAYS_FALSE_FALSE = @ALWAYS_FALSE_FALSE@
 ALWAYS_FALSE_TRUE = @ALWAYS_FALSE_TRUE@
 AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
-AMPL_CPPFLAGS = @AMPL_CPPFLAGS@
 AMTAR = @AMTAR@
 AR = @AR@
 ASLLIB = @ASLLIB@
-ASLMAKEFILECMDS = @ASLMAKEFILECMDS@
-ASLMAKEFLAGS = @ASLMAKEFLAGS@
+ASL_CPPFLAGS = @ASL_CPPFLAGS@
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 AUTOCONF = @AUTOCONF@
@@ -128,37 +134,25 @@ BIT32FCOMMENT = @BIT32FCOMMENT@
 BIT64FCOMMENT = @BIT64FCOMMENT@
 BITS_PER_POINTER = @BITS_PER_POINTER@
 BLUEGENEEXTRA = @BLUEGENEEXTRA@
-BUILDAMPLINTERFACE_FALSE = @BUILDAMPLINTERFACE_FALSE@
-BUILDAMPLINTERFACE_TRUE = @BUILDAMPLINTERFACE_TRUE@
-BUILDASLDIR_FALSE = @BUILDASLDIR_FALSE@
-BUILDASLDIR_TRUE = @BUILDASLDIR_TRUE@
-BUILDBLASDIR_FALSE = @BUILDBLASDIR_FALSE@
-BUILDBLASDIR_TRUE = @BUILDBLASDIR_TRUE@
-BUILDBLAS_FALSE = @BUILDBLAS_FALSE@
-BUILDBLAS_TRUE = @BUILDBLAS_TRUE@
-BUILDHSLDIR_FALSE = @BUILDHSLDIR_FALSE@
-BUILDHSLDIR_TRUE = @BUILDHSLDIR_TRUE@
-BUILDHSL_FALSE = @BUILDHSL_FALSE@
-BUILDHSL_TRUE = @BUILDHSL_TRUE@
-BUILDLAPACKDIR_FALSE = @BUILDLAPACKDIR_FALSE@
-BUILDLAPACKDIR_TRUE = @BUILDLAPACKDIR_TRUE@
-BUILDLAPACK_FALSE = @BUILDLAPACK_FALSE@
-BUILDLAPACK_TRUE = @BUILDLAPACK_TRUE@
-BUILDMA27_FALSE = @BUILDMA27_FALSE@
-BUILDMA27_TRUE = @BUILDMA27_TRUE@
-BUILDMA57_FALSE = @BUILDMA57_FALSE@
-BUILDMA57_TRUE = @BUILDMA57_TRUE@
-BUILDMC19_FALSE = @BUILDMC19_FALSE@
-BUILDMC19_TRUE = @BUILDMC19_TRUE@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
 CFLAGS = @CFLAGS@
+COIN_BUILD_BLAS_FALSE = @COIN_BUILD_BLAS_FALSE@
+COIN_BUILD_BLAS_TRUE = @COIN_BUILD_BLAS_TRUE@
+COIN_BUILD_LAPACK_FALSE = @COIN_BUILD_LAPACK_FALSE@
+COIN_BUILD_LAPACK_TRUE = @COIN_BUILD_LAPACK_TRUE@
 COIN_DEBUG_FALSE = @COIN_DEBUG_FALSE@
 COIN_DEBUG_TRUE = @COIN_DEBUG_TRUE@
+COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
+COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
+COIN_HAS_BLAS_FALSE = @COIN_HAS_BLAS_FALSE@
+COIN_HAS_BLAS_TRUE = @COIN_HAS_BLAS_TRUE@
 COIN_HAS_IPOPT_FALSE = @COIN_HAS_IPOPT_FALSE@
 COIN_HAS_IPOPT_TRUE = @COIN_HAS_IPOPT_TRUE@
+COIN_HAS_LAPACK_FALSE = @COIN_HAS_LAPACK_FALSE@
+COIN_HAS_LAPACK_TRUE = @COIN_HAS_LAPACK_TRUE@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -200,7 +194,6 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-IPADDLIBS = @IPADDLIBS@
 IPALLLIBS = @IPALLLIBS@
 IPOPTOBJDIR = @IPOPTOBJDIR@
 IPOPTSRCDIR = @IPOPTSRCDIR@
@@ -265,6 +258,7 @@ datadir = @datadir@
 exec_prefix = @exec_prefix@
 have_autoconf = @have_autoconf@
 have_automake = @have_automake@
+have_svn = @have_svn@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -287,7 +281,8 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = Extern src/Common src/LinAlg src/Algorithm src/Interfaces src/Apps
+SUBDIRS = src/Common src/LinAlg src/Algorithm src/Interfaces src/Apps \
+	$(am__append_1)
 EXTRA_DIST = examples/Cpp_example/cpp_example.cpp \
 	examples/Cpp_example/Makefile.in \
 	examples/Cpp_example/MyNLP.cpp examples/Cpp_example/MyNLP.hpp \
@@ -340,7 +335,7 @@ EXTRA_DIST = examples/Cpp_example/cpp_example.cpp \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj \
 	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj \
-	$(am__append_1)
+	$(am__append_2)
 
 # Stuff to clean up from "make test"
 DISTCLEANFILES = examples/hs071_cpp/hs071_cpp \
@@ -357,7 +352,7 @@ DISTCLEANFILES = examples/hs071_cpp/hs071_cpp \
 	examples/ScalableProblems/*.obj \
 	examples/ScalableProblems/solve_problem \
 	examples/ScalableProblems/solve_problem.exe \
-	examples/ScalableProblems/solution.txt $(am__append_2) \
+	examples/ScalableProblems/solution.txt $(am__append_3) \
 	$(VPATH_DISTCLEANFILES)
 tmpdir = tmpdir
 libipopt = libipopt.a
@@ -427,8 +422,6 @@ examples/hs071_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/example
 examples/hs071_c/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_c/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/ScalableProblems/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/ScalableProblems/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-test/run_unitTests: $(top_builddir)/config.status $(top_srcdir)/test/run_unitTests.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
@@ -813,20 +806,15 @@ uninstall-info: uninstall-info-recursive
 	tags tags-recursive uninstall uninstall-am uninstall-info-am
 
 
-.PHONY: cuter test unitTest unitTests astyle
+.PHONY: cuter test unitTest astyle
 
 cuter: install
 	cd src/Apps/CUTErInterface; $(MAKE) cuter
 
 test: unitTest
 
-unitTests: unitTest
-
-unitTest:
-	cd examples/hs071_cpp; make clean; make
-	cd examples/hs071_c; make clean; make
-	cd examples/hs071_f; make clean; make
-	cd test; chmod u+x ./run_unitTests; ./run_unitTests
+unitTest: all
+	cd test; make test
 
 astyle:
 	cd src/Algorithm; $(MAKE) astyle

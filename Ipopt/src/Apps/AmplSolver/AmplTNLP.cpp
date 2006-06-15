@@ -6,6 +6,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
+#include "IpoptConfig.h"
 #include "config_ipopt.h"
 #include "AmplTNLP.hpp"
 #include "IpDenseVector.hpp"

@@ -282,8 +282,12 @@ PACKAGE_BUGREPORT='http://projects.coin-or.org/Ipopt/newticket'
 
 ac_unique_file="configure.ac"
 ac_default_prefix=`pwd`
+ac_subdirs_all="$ac_subdirs_all ThirdParty/Blas"
+ac_subdirs_all="$ac_subdirs_all ThirdParty/Lapack"
+ac_subdirs_all="$ac_subdirs_all ThirdParty/HSL"
+ac_subdirs_all="$ac_subdirs_all ThirdParty/ASL"
 ac_subdirs_all="$ac_subdirs_all Ipopt"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake BUILDTOOLSDIR AUX_DIR HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE subdirs LIBOBJS LTLIBOBJS VPATH_DISTCLEANFILES'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE subdirs COIN_SKIP_PROJECTS LIBOBJS LTLIBOBJS VPATH_DISTCLEANFILES'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -724,6 +728,10 @@ ac_env_target_alias_set=${target_alias+set}
 ac_env_target_alias_value=$target_alias
 ac_cv_env_target_alias_set=${target_alias+set}
 ac_cv_env_target_alias_value=$target_alias
+ac_env_COIN_SKIP_PROJECTS_set=${COIN_SKIP_PROJECTS+set}
+ac_env_COIN_SKIP_PROJECTS_value=$COIN_SKIP_PROJECTS
+ac_cv_env_COIN_SKIP_PROJECTS_set=${COIN_SKIP_PROJECTS+set}
+ac_cv_env_COIN_SKIP_PROJECTS_value=$COIN_SKIP_PROJECTS
 
 #
 # Report the --help message.
@@ -803,6 +811,14 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-maintainer-mode  enable make rules and dependencies not useful
 			  (and sometimes confusing) to the casual installer
+
+Some influential environment variables:
+  COIN_SKIP_PROJECTS
+              Set to the subdirectories of projects that should be skipped in
+              the configuration
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <http://projects.coin-or.org/Ipopt/newticket>.
 _ACEOF
@@ -2018,6 +2034,57 @@ echo "$as_me: error: I cannot find the ltmain.sh file." >&2;}
   if test -r $srcdir/Externals; then
     coin_have_externals=yes
   fi
+  # Check if subversion is installed and understands https
+  # Extract the first word of "svn", so it can be a program name with args.
+set dummy svn; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_have_svn+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$have_svn"; then
+  ac_cv_prog_have_svn="$have_svn" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_have_svn="yes"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_prog_have_svn" && ac_cv_prog_have_svn="no"
+fi
+fi
+have_svn=$ac_cv_prog_have_svn
+if test -n "$have_svn"; then
+  echo "$as_me:$LINENO: result: $have_svn" >&5
+echo "${ECHO_T}$have_svn" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  if test x$have_svn = xyes; then
+    echo "$as_me:$LINENO: checking svn understands https" >&5
+echo $ECHO_N "checking svn understands https... $ECHO_C" >&6
+    svn --version > confauto.out 2>&1
+    if $EGREP https confauto.out >/dev/null 2>&1; then
+      echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+      echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+      have_svn=no
+    fi
+    rm -f confauto.out
+  fi
 
   # Find the location of the BuildTools directory
   BUILDTOOLSDIR=
@@ -2044,8 +2111,27 @@ echo "$as_me: error: Cannot find the BuildTools directory" >&2;}
   AUX_DIR=$ac_aux_dir
 fi
 
+# helpful variable for the base directory of this package
+abs_source_dir=`cd $srcdir; pwd`
 
-if test $coin_have_externals = yes; then
+
+# Stuff for example Makefiles
+if test x$prefix = xNONE; then
+  full_prefix=$ac_default_prefix
+else
+  full_prefix=$prefix
+fi
+full_prefix=`cd $full_prefix ; pwd`
+
+abs_lib_dir=$full_prefix/lib
+
+abs_include_dir=$full_prefix/include
+
+abs_bin_dir=$full_prefix/bin
+
+
+
+if test $coin_have_externals = yes && test x$have_svn = xyes; then
   HAVE_EXTERNALS_TRUE=
   HAVE_EXTERNALS_FALSE='#'
 else
@@ -2056,13 +2142,134 @@ fi
 
 
 #############################################################################
+#             Check which ThirdParty sources are available                  #
+#############################################################################
+
+echo "$as_me:$LINENO: checking whether code for third party package Blas is available" >&5
+echo $ECHO_N "checking whether code for third party package Blas is available... $ECHO_C" >&6
+coin_skip=no
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = ThirdParty/Blas; then
+      coin_skip=yes
+    fi
+  done
+fi
+if test $coin_skip = yes; then
+  echo "$as_me:$LINENO: result: skipping" >&5
+echo "${ECHO_T}skipping" >&6
+elif test -r $srcdir/ThirdParty/Blas/daxpy.f; then
+  coin_subdirs="$coin_subdirs ThirdParty/Blas"
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+
+
+subdirs="$subdirs ThirdParty/Blas"
+
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+echo "$as_me:$LINENO: checking whether code for third party package Lapack is available" >&5
+echo $ECHO_N "checking whether code for third party package Lapack is available... $ECHO_C" >&6
+coin_skip=no
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = ThirdParty/Lapack; then
+      coin_skip=yes
+    fi
+  done
+fi
+if test $coin_skip = yes; then
+  echo "$as_me:$LINENO: result: skipping" >&5
+echo "${ECHO_T}skipping" >&6
+elif test -r $srcdir/ThirdParty/Lapack/LAPACK/SRC/dlarf.f; then
+  coin_subdirs="$coin_subdirs ThirdParty/Lapack"
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+
+
+subdirs="$subdirs ThirdParty/Lapack"
+
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+echo "$as_me:$LINENO: checking whether code for third party package HSL is available" >&5
+echo $ECHO_N "checking whether code for third party package HSL is available... $ECHO_C" >&6
+coin_skip=no
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = ThirdParty/HSL; then
+      coin_skip=yes
+    fi
+  done
+fi
+if test $coin_skip = yes; then
+  echo "$as_me:$LINENO: result: skipping" >&5
+echo "${ECHO_T}skipping" >&6
+elif test -r $srcdir/ThirdParty/HSL/configure.ac; then
+  coin_subdirs="$coin_subdirs ThirdParty/HSL"
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+
+
+subdirs="$subdirs ThirdParty/HSL"
+
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+echo "$as_me:$LINENO: checking whether code for third party package ASL is available" >&5
+echo $ECHO_N "checking whether code for third party package ASL is available... $ECHO_C" >&6
+coin_skip=no
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = ThirdParty/ASL; then
+      coin_skip=yes
+    fi
+  done
+fi
+if test $coin_skip = yes; then
+  echo "$as_me:$LINENO: result: skipping" >&5
+echo "${ECHO_T}skipping" >&6
+elif test -r $srcdir/ThirdParty/ASL/solvers/asl.h; then
+  coin_subdirs="$coin_subdirs ThirdParty/ASL"
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+
+
+subdirs="$subdirs ThirdParty/ASL"
+
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+
+#############################################################################
 #                  Check which subprojects are there                        #
 #############################################################################
 
-coin_subdirs=
+
+
 echo "$as_me:$LINENO: checking whether directory Ipopt is available" >&5
 echo $ECHO_N "checking whether directory Ipopt is available... $ECHO_C" >&6
-                if test -r $srcdir/Ipopt/configure; then
+                coin_skip=no
+                if test x"$COIN_SKIP_PROJECTS" != x; then
+                  for dir in $COIN_SKIP_PROJECTS; do
+                    if test $dir = Ipopt; then
+                      coin_skip=yes
+                    fi
+                  done
+                fi
+                if test $coin_skip = yes; then
+                  echo "$as_me:$LINENO: result: skipping" >&5
+echo "${ECHO_T}skipping" >&6
+                elif test -r $srcdir/Ipopt/configure; then
                   coin_subdirs="$coin_subdirs Ipopt"
                   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -2096,6 +2303,10 @@ echo "${ECHO_T}no" >&6
 
 
 # Finally, we let configure write all the output...
+
+if test x"$coin_need_flibs" = xyes; then
+  ADDLIBS="$ADDLIBS $FLIBS"
+fi
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -2775,11 +2986,17 @@ s,@MAINT@,$MAINT,;t t
 s,@LIBTOOLM4@,$LIBTOOLM4,;t t
 s,@have_autoconf@,$have_autoconf,;t t
 s,@have_automake@,$have_automake,;t t
+s,@have_svn@,$have_svn,;t t
 s,@BUILDTOOLSDIR@,$BUILDTOOLSDIR,;t t
 s,@AUX_DIR@,$AUX_DIR,;t t
+s,@abs_source_dir@,$abs_source_dir,;t t
+s,@abs_lib_dir@,$abs_lib_dir,;t t
+s,@abs_include_dir@,$abs_include_dir,;t t
+s,@abs_bin_dir@,$abs_bin_dir,;t t
 s,@HAVE_EXTERNALS_TRUE@,$HAVE_EXTERNALS_TRUE,;t t
 s,@HAVE_EXTERNALS_FALSE@,$HAVE_EXTERNALS_FALSE,;t t
 s,@subdirs@,$subdirs,;t t
+s,@COIN_SKIP_PROJECTS@,$COIN_SKIP_PROJECTS,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF

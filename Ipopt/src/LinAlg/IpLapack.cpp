@@ -6,7 +6,7 @@
 //
 // Authors:  Andreas Waechter              IBM    2005-12-25
 
-#include "config_ipopt.h"
+#include "IpoptConfig.h"
 #include "IpLapack.hpp"
 
 // Prototypes for the LAPACK routines
@@ -35,7 +35,7 @@ namespace Ipopt
   void IpLapackDpotrs(Index ndim, Index nrhs, const Number *a, Index lda,
                       Number *b, Index ldb)
   {
-#ifdef HAVE_LAPACK
+#ifdef COIN_HAS_LAPACK
     ipfint N=ndim, NRHS=nrhs, LDA=lda, LDB=ldb, INFO;
     char uplo = 'L';
 
@@ -51,7 +51,7 @@ namespace Ipopt
 
   void IpLapackDpotrf(Index ndim, Number *a, Index lda, Index& info)
   {
-#ifdef HAVE_LAPACK
+#ifdef COIN_HAS_LAPACK
     ipfint N=ndim, LDA=lda, INFO;
 
     char UPLO = 'L';
@@ -70,7 +70,7 @@ namespace Ipopt
   void IpLapackDsyev(bool compute_eigenvectors, Index ndim, Number *a,
                      Index lda, Number *w, Index& info)
   {
-#ifdef HAVE_LAPACK
+#ifdef COIN_HAS_LAPACK
     ipfint N=ndim, LDA=lda, INFO;
 
     char JOBZ;

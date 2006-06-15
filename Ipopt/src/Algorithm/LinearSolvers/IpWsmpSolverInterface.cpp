@@ -7,7 +7,7 @@
 // Authors:  Andreas Waechter                 IBM    2006-01-04
 //
 
-#include "config_ipopt.h"
+#include "IpoptConfig.h"
 #include "IpWsmpSolverInterface.hpp"
 
 #ifdef HAVE_CMATH

@@ -6,7 +6,7 @@
 //
 // Author:  Yifan Hu              2005-04-06
 
-#include "config_ipopt.h"
+#include "IpoptConfig.h"
 #include "IpTAUCSSolverInterface.hpp"
 
 #ifdef HAVE_CSTDLIB
