@@ -33,6 +33,7 @@ Ipopt/src/Interfaces/IpSolveStatistics.cpp -text
 Ipopt/src/Interfaces/IpSolveStatistics.hpp -text
 Ipopt/src/Interfaces/ipopt_addlibs_cpp.txt.in -text
 Ipopt/src/Interfaces/ipopt_addlibs_f.txt.in -text
+Ipopt/test/Makefile.am -text
 Ipopt/test/mytoy.nl -text
 Ipopt/test/run_unitTests.in -text
 /Makefile.am -text
