@@ -4515,7 +4515,7 @@ fi
 
           ;;
           # Ignore these flags.
-        -lang* | -lcrt*.o | -lc | -lgcc | -libmil | -LANG:=*)
+        -lang* | -lcrt[01].o | -lcrtbegin.o | -lc | -lgcc | -libmil | -LANG:=*)
           ;;
         -lkernel32)
           test x"$CYGWIN" != xyes && ac_cv_f77_libs="$ac_cv_f77_libs $ac_arg"
@@ -31672,7 +31672,7 @@ if test x"$coin_vpath_link_files" = x; then : ; else
 echo "$as_me: Creating VPATH links for data files" >&6;}
   for file in $coin_vpath_link_files; do
     rm -f $file
-    $LN_S $srcdir/$file $file
+    $LN_S $abs_source_dir/$file $file
   done
 fi
 
