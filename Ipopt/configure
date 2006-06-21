@@ -21302,15 +21302,26 @@ echo $ECHO_N "checking for COIN project Ipopt... $ECHO_C" >&6
 # other locations)
 
 coin_has_ipopt=unavailable
-if test $PACKAGE_TARNAME = ipopt; then
-  coin_has_ipopt=.
-else
-  if test -d $srcdir/../Ipopt; then
-    coin_has_ipopt=../Ipopt
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = Ipopt; then
+      coin_has_ipopt=skipping
+    fi
+  done
+fi
+
+if test $coin_has_ipopt != skipping; then
+  if test $PACKAGE_TARNAME = ipopt; then
+    coin_has_ipopt=.
+  else
+    if test -d $srcdir/../Ipopt; then
+      coin_has_ipopt=../Ipopt
+    fi
   fi
 fi
 
-if test $coin_has_ipopt != unavailable; then
+if test $coin_has_ipopt != unavailable &&
+   test $coin_has_ipopt != skipping; then
   # Set the #define if the component is available
 
 cat >>confdefs.h <<\_ACEOF
@@ -21328,7 +21339,8 @@ fi
   # Define the Makefile conditional
 
 
-if test $coin_has_ipopt != unavailable; then
+if test $coin_has_ipopt != unavailable &&
+                test $coin_has_ipopt != skipping; then
   COIN_HAS_IPOPT_TRUE=
   COIN_HAS_IPOPT_FALSE='#'
 else
@@ -28177,10 +28189,10 @@ if test "$use_asldir" = BUILD; then
   coin_aslobjdir=`cd $coin_aslobjdir; pwd`
   ASLLIB="$coin_aslobjdir/$ampllib"
   coin_aslsrcdir=`cd $coin_aslsrcdir; pwd`
-  ASL_CPPFLAGS="-I"`$CYGPATH_W $coin_aslobjdir`" -I"`$CYGPATH_W $coin_aslsrcdir/solvers`
+  ASL_CPPFLAGS="-I"`$CYGPATH_W $coin_aslobjdir | sed -e sX\\\\\\\\X/Xg`" -I"`$CYGPATH_W $coin_aslsrcdir/solvers | sed -e sX\\\\\\\\X/Xg`
 elif test "$use_asldir" != no; then
   ASLLIB="$use_asldir/$ampllib"
-  ASL_CPPFLAGS="-I"`$CYGPATH_W $use_asldir`
+  ASL_CPPFLAGS="-I"`$CYGPATH_W $use_asldir | sed -e sX\\\\\\\\X/Xg`
 fi
 
 if test "$use_asldir" != no; then
