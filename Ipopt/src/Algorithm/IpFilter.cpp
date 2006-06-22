@@ -59,14 +59,17 @@ namespace Ipopt
     DBG_START_METH("FilterLineSearch::Filter::AddEntry", dbg_verbosity);
     DBG_ASSERT((Index)vals.size()==dim_);
     std::list<FilterEntry*>::iterator iter;
-    for (iter = filter_list_.begin(); iter != filter_list_.end();
-         iter++) {
+    iter = filter_list_.begin();
+    while (iter != filter_list_.end()) {
       if ((*iter)->Dominated(vals)) {
         std::list<FilterEntry*>::iterator iter_to_remove = iter;
-        iter--;
+        iter++;
         FilterEntry* entry_to_remove = *iter_to_remove;
         filter_list_.erase(iter_to_remove);
         delete entry_to_remove;
+      }
+      else {
+	iter++;
       }
     }
     FilterEntry* new_entry = new FilterEntry(vals, iteration);
