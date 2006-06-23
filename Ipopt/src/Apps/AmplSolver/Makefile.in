@@ -153,6 +153,7 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
+FADDLIBS = @FADDLIBS@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
@@ -270,7 +271,7 @@ ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
 ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
-	$(ADDLIBS) $(ASLLIB)
+	$(ASLLIB) $(ADDLIBS)
 
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg` -I`$(CYGPATH_W) \

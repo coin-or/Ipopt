@@ -342,6 +342,7 @@ if test "$use_hsl" = BUILD; then
 #  fi
   MY_CHECK_HSLFILE(mc19ad,MC19)
   MY_CHECK_HSLFILE(ma57ad,MA57)
+  coin_need_flibs=yes
 else
   SAVE_LIBS="$LIBS"
   LIBS="$use_hsl $LIBS $FLIBS"
@@ -476,7 +477,8 @@ fi
 
 # For the remaining tests we need to include FLIBS into LIBS, so that
 # the C compiler can link programs
-LIBS="$LIBS $FLIBS"
+#LIBS="$LIBS $FLIBS"
+# ToDo should this go into BLAS and LAPACK test????
 
 #######################
 # AMPL SOLVER LIBRARY #

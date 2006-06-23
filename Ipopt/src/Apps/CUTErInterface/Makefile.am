@@ -12,9 +12,9 @@ EXTRA_DIST = \
 	ipoma-dummy.f \
 	sdipo.pro
 
-noinst_LIBRARIES = libdummy.a
+noinst_LTLIBRARIES = libdummy.la
 
-nodist_libdummy_a_SOURCES = ipoma.f
+nodist_libdummy_la_SOURCES = ipoma.f
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -40,12 +40,12 @@ IPADDLIBS = @IPADDLIBS@
 
 CLEANFILES = ipoma.f ipo sdipo
 
-cuter:	ipoma.o ipo sdipo
+cuter:	ipoma.$(OBJEXT) ipo sdipo
 	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
 	  echo CUTEr environment variables not set - cannot install ipoma.f; \
 	else \
 	  echo "-L$(libdir) -lipopt $(ADDLIBS) $(CXXLIBS)" >$$MYCUTER/double/lib/ipo.liblist ;\
-	  cp ipoma.o $(MYCUTER)/double/bin/ipoma.o; \
+	  cp ipoma.o $(MYCUTER)/double/bin/ipoma.$(OBJEXT); \
 	  cp ipo $(MYCUTER)/bin/ipo ;\
 	  cp sdipo $(MYCUTER)/bin/sdipo ;\
 	fi

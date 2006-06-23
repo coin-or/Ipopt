@@ -50,19 +50,17 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES =
-LIBRARIES = $(noinst_LIBRARIES)
-ARFLAGS = cru
-libdummy_a_AR = $(AR) $(ARFLAGS)
-libdummy_a_LIBADD =
-nodist_libdummy_a_OBJECTS = ipoma.$(OBJEXT)
-libdummy_a_OBJECTS = $(nodist_libdummy_a_OBJECTS)
+LTLIBRARIES = $(noinst_LTLIBRARIES)
+libdummy_la_LIBADD =
+nodist_libdummy_la_OBJECTS = ipoma.lo
+libdummy_la_OBJECTS = $(nodist_libdummy_la_OBJECTS)
 F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
 LTF77COMPILE = $(LIBTOOL) --tag=F77 --mode=compile $(F77) $(AM_FFLAGS) \
 	$(FFLAGS)
 F77LD = $(F77)
 F77LINK = $(LIBTOOL) --tag=F77 --mode=link $(F77LD) $(AM_FFLAGS) \
 	$(FFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(nodist_libdummy_a_SOURCES)
+SOURCES = $(nodist_libdummy_la_SOURCES)
 DIST_SOURCES =
 ETAGS = etags
 CTAGS = ctags
@@ -131,6 +129,7 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
+FADDLIBS = @FADDLIBS@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
@@ -246,8 +245,8 @@ EXTRA_DIST = \
 	ipoma-dummy.f \
 	sdipo.pro
 
-noinst_LIBRARIES = libdummy.a
-nodist_libdummy_a_SOURCES = ipoma.f
+noinst_LTLIBRARIES = libdummy.la
+nodist_libdummy_la_SOURCES = ipoma.f
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -288,12 +287,16 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 
-clean-noinstLIBRARIES:
-	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
-libdummy.a: $(libdummy_a_OBJECTS) $(libdummy_a_DEPENDENCIES) 
-	-rm -f libdummy.a
-	$(libdummy_a_AR) libdummy.a $(libdummy_a_OBJECTS) $(libdummy_a_LIBADD)
-	$(RANLIB) libdummy.a
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
+	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+	  test "$$dir" != "$$p" || dir=.; \
+	  echo "rm -f \"$${dir}/so_locations\""; \
+	  rm -f "$${dir}/so_locations"; \
+	done
+libdummy.la: $(libdummy_la_OBJECTS) $(libdummy_la_DEPENDENCIES) 
+	$(F77LINK)  $(libdummy_la_LDFLAGS) $(libdummy_la_OBJECTS) $(libdummy_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -397,7 +400,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LIBRARIES)
+all-am: Makefile $(LTLIBRARIES)
 installdirs:
 install: install-am
 install-exec: install-exec-am
@@ -426,7 +429,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-noinstLIBRARIES \
+clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 	mostlyclean-am
 
 distclean: distclean-am
@@ -474,7 +477,7 @@ ps-am:
 uninstall-am: uninstall-info-am
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-noinstLIBRARIES ctags distclean \
+	clean-libtool clean-noinstLTLIBRARIES ctags distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-exec \
@@ -502,12 +505,12 @@ sdipo: sdipo.pro
 	sed -f $$MYCUTER/double/config/script.sed $< > $@
 	chmod a+x $@
 
-cuter:	ipoma.o ipo sdipo
+cuter:	ipoma.$(OBJEXT) ipo sdipo
 	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
 	  echo CUTEr environment variables not set - cannot install ipoma.f; \
 	else \
 	  echo "-L$(libdir) -lipopt $(ADDLIBS) $(CXXLIBS)" >$$MYCUTER/double/lib/ipo.liblist ;\
-	  cp ipoma.o $(MYCUTER)/double/bin/ipoma.o; \
+	  cp ipoma.o $(MYCUTER)/double/bin/ipoma.$(OBJEXT); \
 	  cp ipo $(MYCUTER)/bin/ipo ;\
 	  cp sdipo $(MYCUTER)/bin/sdipo ;\
 	fi

@@ -18,7 +18,7 @@ ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
 ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
-	$(ADDLIBS) $(ASLLIB)
+	$(ASLLIB) $(ADDLIBS)
 
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
