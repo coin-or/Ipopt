@@ -110,9 +110,6 @@ tmpdir = tmpdir
 
 libipopt = libipopt.a
 
-ipopt_addlibs_cpp_txt = ipopt_addlibs_cpp.txt
-ipopt_addlibs_f_txt = ipopt_addlibs_f.txt
-
 cuter: install
 	cd src/Apps/CUTErInterface; $(MAKE) cuter
 

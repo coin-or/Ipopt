@@ -523,9 +523,11 @@ ASTYLEFLAGS="--mode=c --indent=spaces=2 --indent-cases --indent-namespaces --min
 AC_SUBST(ASTYLEFLAGS)
 
 # The following one is for the example makefiles
-case $build in
-#  *-cygwin*) ipoptlib='`cygpath -w \$(IPOPTLIBDIR)`\\libipopt.a';;
-  *)         ipoptlib="-L\$(IPOPTLIBDIR) -lipopt";;
+case $CXX in
+  cl*)
+    ipoptlib='`$(CYGPATH_W) $(IPOPTLIBDIR)`\\libipopt.lib';;
+  *)
+    ipoptlib="-L\$(IPOPTLIBDIR) -lipopt";;
 esac
 AC_SUBST(ipoptlib)
 

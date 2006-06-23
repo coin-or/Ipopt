@@ -28,7 +28,7 @@ exec_prefix = @exec_prefix@
 prefix = @prefix@
 
 # Libraries necessary to link with IPOPT
-IPOPTLIBS = @ipoptlib@ @ADDLIBS@ @FLIBS@
+IPOPTLIBS = @ipoptlib@ @ADDLIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)
@@ -57,7 +57,7 @@ LIBOBJS =  \
         RegisteredTNLP.@OBJEXT@
 
 
-LIB = libscalexamples.a
+LIB = libscalexamples.@LIBEXT@
 
 LIBS = $(LIB) $(IPOPTLIBS)
 

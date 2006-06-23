@@ -199,6 +199,7 @@ IPALLLIBS = @IPALLLIBS@
 IPOPTOBJDIR = @IPOPTOBJDIR@
 IPOPTSRCDIR = @IPOPTSRCDIR@
 LDFLAGS = @LDFLAGS@
+LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -357,8 +358,6 @@ DISTCLEANFILES = examples/hs071_cpp/hs071_cpp \
 	$(VPATH_DISTCLEANFILES)
 tmpdir = tmpdir
 libipopt = libipopt.a
-ipopt_addlibs_cpp_txt = ipopt_addlibs_cpp.txt
-ipopt_addlibs_f_txt = ipopt_addlibs_f.txt
 all: all-recursive
 
 .SUFFIXES:

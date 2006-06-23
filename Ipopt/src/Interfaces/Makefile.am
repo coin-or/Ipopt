@@ -37,7 +37,7 @@ libipopt_la_SOURCES = \
 	IpTNLP.hpp \
 	IpTNLPAdapter.cpp IpTNLPAdapter.hpp
 
-libipopt_la_LIBADD = $(IPALLLIBS) $(FLIBS)
+libipopt_la_LIBADD = $(IPALLLIBS)
 
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
