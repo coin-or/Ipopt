@@ -3713,7 +3713,7 @@ if test -z "$CXXLIBS"; then
       case "$CXX" in
       cl*)
         CXXLIBS=nothing;;
-      esac
+      esac;;
      *-linux-*)
       case "$CXX" in
       icpc* | */icpc*)
