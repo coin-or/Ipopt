@@ -41,7 +41,7 @@ libipopt_la_LIBADD = $(IPALLLIBS)
 
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
-libipopt_la_LDFLAGS = -no-undefined
+libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
 ADDLIBS_FILES = \
 	ipopt_addlibs_cpp.txt \
