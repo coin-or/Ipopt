@@ -20,7 +20,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\Interfaces;..\..\..\Common;..\include;..\..\..\Algorithm;..\..\..\LinAlg"
+				AdditionalIncludeDirectories="..\..\..\src\Interfaces;..\..\..\src\Common;..\..\..\..\BuildTools\headers;..\..\..\src\Algorithm;..\..\..\src\LinAlg"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -71,7 +71,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\Interfaces;..\..\..\Common;..\include;..\..\..\Algorithm;..\..\..\LinAlg"
+				AdditionalIncludeDirectories="..\..\..\src\Interfaces;..\..\..\src\Common;..\..\..\..\BuildTools\headers;..\..\..\src\Algorithm;..\..\..\src\LinAlg"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="4"
 				DisableLanguageExtensions="TRUE"
@@ -122,10 +122,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath="..\..\..\Examples\Cpp_example\cpp_example.cpp">
+				RelativePath="..\..\..\examples\Cpp_example\cpp_example.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\Cpp_example\MyNLP.cpp">
+				RelativePath="..\..\..\examples\Cpp_example\MyNLP.cpp">
 			</File>
 		</Filter>
 		<Filter

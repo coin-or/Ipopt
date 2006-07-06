@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\Interfaces;..\..\..\Common;..\include;..\..\..\Algorithm;..\..\..\LinAlg"
+				AdditionalIncludeDirectories="..\..\..\src\Interfaces;..\..\..\src\Common;..\..\..\..\BuildTools\headers;..\..\..\src\Algorithm;..\..\..\src\LinAlg"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -68,7 +68,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\Interfaces;..\..\..\Common;..\include;..\..\..\Algorithm;..\..\..\LinAlg"
+				AdditionalIncludeDirectories="..\..\..\src\Interfaces;..\..\..\src\Common;..\..\..\..\BuildTools\headers;..\..\..\src\Algorithm;..\..\..\src\LinAlg"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="4"
 				UsePrecompiledHeader="0"
@@ -117,46 +117,46 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\LuksanVlcek1.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\LuksanVlcek1.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\LuksanVlcek2.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\LuksanVlcek2.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\LuksanVlcek3.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\LuksanVlcek3.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\LuksanVlcek4.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\LuksanVlcek4.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\LuksanVlcek5.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\LuksanVlcek5.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\LuksanVlcek6.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\LuksanVlcek6.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\LuksanVlcek7.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\LuksanVlcek7.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\MittelmannBndryCntrlDiri.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\MittelmannBndryCntrlDiri.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\MittelmannBndryCntrlNeum.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\MittelmannBndryCntrlNeum.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\MittelmannDistCntrlDiri.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\MittelmannDistCntrlDiri.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\MittelmannDistCntrlNeumA.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\MittelmannDistCntrlNeumA.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\MittelmannDistCntrlNeumB.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\MittelmannDistCntrlNeumB.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\RegisteredTNLP.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\RegisteredTNLP.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Examples\ScalableProblems\solve_problem.cpp">
+				RelativePath="..\..\..\examples\ScalableProblems\solve_problem.cpp">
 			</File>
 		</Filter>
 		<Filter

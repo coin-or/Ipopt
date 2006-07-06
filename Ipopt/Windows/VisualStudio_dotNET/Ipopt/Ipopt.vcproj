@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\Interfaces;..\..\..\Common;..\include;..\..\..\Algorithm;..\..\..\Algorithm\LinearSolvers;..\..\..\LinAlg;..\..\..\LinAlg\TMatrices"
+				AdditionalIncludeDirectories="..\..\..\src\Interfaces;..\..\..\src\Common;..\..\..\src\Algorithm;..\..\..\src\Algorithm\LinearSolvers;..\..\..\src\LinAlg;..\..\..\src\LinAlg\TMatrices;..\..\..\..\BuildTools\headers"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -62,7 +62,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\Interfaces;..\..\..\Common;..\include;..\..\..\Algorithm;..\..\..\Algorithm\LinearSolvers;..\..\..\LinAlg;..\..\..\LinAlg\TMatrices"
+				AdditionalIncludeDirectories="..\..\..\src\Interfaces;..\..\..\src\Common;..\..\..\src\Algorithm;..\..\..\src\Algorithm\LinearSolvers;..\..\..\src\LinAlg;..\..\..\src\LinAlg\TMatrices;..\..\..\..\BuildTools\headers"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="4"
 				DisableLanguageExtensions="TRUE"
@@ -107,280 +107,280 @@
 				Name="Algorithm"
 				Filter="">
 				<File
-					RelativePath="..\..\..\Algorithm\IpAdaptiveMuUpdate.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpAdaptiveMuUpdate.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpAlgBuilder.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpAlgBuilder.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpAlgorithmRegOp.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpAlgorithmRegOp.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpAugRestoSystemSolver.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpAugRestoSystemSolver.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpBacktrackingLineSearch.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpBacktrackingLineSearch.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpDefaultIterateInitializer.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpDefaultIterateInitializer.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpExactHessianUpdater.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpExactHessianUpdater.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpExactHessianUpdater.hpp">
+					RelativePath="..\..\..\src\Algorithm\IpExactHessianUpdater.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpFilter.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpFilter.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpFilterLSAcceptor.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpFilterLSAcceptor.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpGradientScaling.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpGradientScaling.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpIpoptAlg.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpIpoptAlg.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpIpoptCalculatedQuantities.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpIpoptCalculatedQuantities.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpIpoptData.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpIpoptData.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpIteratesVector.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpIteratesVector.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpLeastSquareMults.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpLeastSquareMults.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpLimMemQuasiNewtonUpdater.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpLimMemQuasiNewtonUpdater.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpLimMemQuasiNewtonUpdater.hpp">
+					RelativePath="..\..\..\src\Algorithm\IpLimMemQuasiNewtonUpdater.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\LinearSolvers\IpLinearSolversRegOp.cpp">
+					RelativePath="..\..\..\src\Algorithm\LinearSolvers\IpLinearSolversRegOp.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpLoqoMuOracle.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpLoqoMuOracle.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpLowRankAugSystemSolver.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpLowRankAugSystemSolver.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpLowRankAugSystemSolver.hpp">
+					RelativePath="..\..\..\src\Algorithm\IpLowRankAugSystemSolver.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\LinearSolvers\IpMa27TSolverInterface.cpp">
+					RelativePath="..\..\..\src\Algorithm\LinearSolvers\IpMa27TSolverInterface.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\LinearSolvers\IpMc19TSymScalingMethod.cpp">
+					RelativePath="..\..\..\src\Algorithm\LinearSolvers\IpMc19TSymScalingMethod.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpMonotoneMuUpdate.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpMonotoneMuUpdate.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpNLPScaling.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpNLPScaling.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpOptErrorConvCheck.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpOptErrorConvCheck.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpOrigIpoptNLP.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpOrigIpoptNLP.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpOrigIterationOutput.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpOrigIterationOutput.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpPDFullSpaceSolver.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpPDFullSpaceSolver.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpPDPerturbationHandler.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpPDPerturbationHandler.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpProbingMuOracle.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpProbingMuOracle.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpQualityFunctionMuOracle.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpQualityFunctionMuOracle.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpRestoFilterConvCheck.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpRestoFilterConvCheck.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpRestoIpoptNLP.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpRestoIpoptNLP.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpRestoIterateInitializer.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpRestoIterateInitializer.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpRestoIterationOutput.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpRestoIterationOutput.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpRestoMinC_1Nrm.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpRestoMinC_1Nrm.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpRestoRestoPhase.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpRestoRestoPhase.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpStdAugSystemSolver.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpStdAugSystemSolver.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpTimingStatistics.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpTimingStatistics.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\LinearSolvers\IpTripletToCSRConverter.cpp">
+					RelativePath="..\..\..\src\Algorithm\LinearSolvers\IpTripletToCSRConverter.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\LinearSolvers\IpTSymLinearSolver.cpp">
+					RelativePath="..\..\..\src\Algorithm\LinearSolvers\IpTSymLinearSolver.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpUserScaling.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpUserScaling.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Algorithm\IpWarmStartIterateInitializer.cpp">
+					RelativePath="..\..\..\src\Algorithm\IpWarmStartIterateInitializer.cpp">
 				</File>
 			</Filter>
 			<Filter
 				Name="LinAlg"
 				Filter="">
 				<File
-					RelativePath="..\..\..\LinAlg\IpBlas.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpBlas.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpCompoundMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpCompoundMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpCompoundSymMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpCompoundSymMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpCompoundVector.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpCompoundVector.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpDenseGenMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpDenseGenMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpDenseGenMatrix.hpp">
+					RelativePath="..\..\..\src\LinAlg\IpDenseGenMatrix.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpDenseSymMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpDenseSymMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpDenseSymMatrix.hpp">
+					RelativePath="..\..\..\src\LinAlg\IpDenseSymMatrix.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpDenseVector.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpDenseVector.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpDiagMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpDiagMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpExpansionMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpExpansionMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\TMatrices\IpGenTMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\TMatrices\IpGenTMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpIdentityMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpIdentityMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpLapack.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpLapack.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpLapack.hpp">
+					RelativePath="..\..\..\src\LinAlg\IpLapack.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpLowRankUpdateSymMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpLowRankUpdateSymMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpLowRankUpdateSymMatrix.hpp">
+					RelativePath="..\..\..\src\LinAlg\IpLowRankUpdateSymMatrix.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpMultiVectorMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpMultiVectorMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpMultiVectorMatrix.hpp">
+					RelativePath="..\..\..\src\LinAlg\IpMultiVectorMatrix.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpScaledMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpScaledMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpSumMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpSumMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpSumSymMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpSumSymMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpSymMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpSymMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpSymScaledMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpSymScaledMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\TMatrices\IpSymTMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\TMatrices\IpSymTMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\TMatrices\IpTripletHelper.cpp">
+					RelativePath="..\..\..\src\LinAlg\TMatrices\IpTripletHelper.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpVector.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpVector.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\LinAlg\IpZeroMatrix.cpp">
+					RelativePath="..\..\..\src\LinAlg\IpZeroMatrix.cpp">
 				</File>
 			</Filter>
 			<Filter
 				Name="Common"
 				Filter="">
 				<File
-					RelativePath="..\..\..\Common\IpDebug.cpp">
+					RelativePath="..\..\..\src\Common\IpDebug.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Common\IpJournalist.cpp">
+					RelativePath="..\..\..\src\Common\IpJournalist.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Common\IpObserver.cpp">
+					RelativePath="..\..\..\src\Common\IpObserver.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Common\IpOptionsList.cpp">
+					RelativePath="..\..\..\src\Common\IpOptionsList.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Common\IpRegOptions.cpp">
+					RelativePath="..\..\..\src\Common\IpRegOptions.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Common\IpTaggedObject.cpp">
+					RelativePath="..\..\..\src\Common\IpTaggedObject.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Common\IpUtils.cpp">
+					RelativePath="..\..\..\src\Common\IpUtils.cpp">
 				</File>
 			</Filter>
 			<Filter
 				Name="Interfaces"
 				Filter="">
 				<File
-					RelativePath="..\..\..\Interfaces\IpInterfacesRegOp.cpp">
+					RelativePath="..\..\..\src\Interfaces\IpInterfacesRegOp.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Interfaces\IpIpoptApplication.cpp">
+					RelativePath="..\..\..\src\Interfaces\IpIpoptApplication.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Interfaces\IpSolveStatistics.cpp">
+					RelativePath="..\..\..\src\Interfaces\IpSolveStatistics.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Interfaces\IpStdCInterface.cpp">
+					RelativePath="..\..\..\src\Interfaces\IpStdCInterface.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Interfaces\IpStdFInterface.c">
+					RelativePath="..\..\..\src\Interfaces\IpStdFInterface.c">
 				</File>
 				<File
-					RelativePath="..\..\..\Interfaces\IpStdInterfaceTNLP.cpp">
+					RelativePath="..\..\..\src\Interfaces\IpStdInterfaceTNLP.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\Interfaces\IpTNLPAdapter.cpp">
+					RelativePath="..\..\..\src\Interfaces\IpTNLPAdapter.cpp">
 				</File>
 			</Filter>
 		</Filter>
