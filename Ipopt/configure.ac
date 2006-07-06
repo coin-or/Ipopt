@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.1.0dev],[http://projects.coin-or.org/Ipopt/newticket])
+AC_INIT([Ipopt],[3.2.0],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT(
 [Copyright 2004, 2006 International Business Machines and others.
@@ -484,6 +484,8 @@ fi
 # AMPL SOLVER LIBRARY #
 #######################
 
+LIBS="$LIBS_without_ADDLIBS"
+
 AC_COIN_HAS_ASL
 
 AC_LANG_POP(C++)
@@ -511,8 +513,6 @@ else
   AC_MSG_WARN([We are cross compiling, assuming Fortran `INTEGER' type corresponds to C `int' type])
   AC_DEFINE([FORTRAN_INTEGER_TYPE],[int])
 fi
-
-LIBS="$LIBS_without_ADDLIBS"
 
 ##########
 # ASTYLE #

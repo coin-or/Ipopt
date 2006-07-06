@@ -607,7 +607,10 @@ unitTests: tests
 doxydoc:
 	cd $(srcdir); doxygen doxydoc/doxygen.conf
 
-.PHONY: test unitTest tests unitTests doxydoc
+cuter:
+	cd Ipopt; make cuter
+
+.PHONY: test unitTest tests unitTests doxydoc cuter
 
 # Make sure acinclude is using most recent coin.m4
 @MAINTAINER_MODE_TRUE@$(srcdir)/acinclude.m4: $(BUILDTOOLSDIR)/coin.m4

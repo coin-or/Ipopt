@@ -38,7 +38,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.1.0 (the new C++ version
+  This document is a guide to using \Ipopt\ 3.2.0 (the C++ version
   of \Ipopt).  It includes instructions on how to obtain and compile
   \Ipopt, a description of the interface, user options, etc., as
   well as a tutorial on how to solve a nonlinear optimization problem
@@ -314,11 +314,11 @@ directory in which you want to create a subdirectory {\tt Ipopt} with
 the \Ipopt\ source code.  Then follow the steps below:
 \begin{enumerate}
 \item{Download the code from the repository}\\
-{\tt \$ svn co https://www.coin-or.org/svn/Ipopt/trunk Ipopt} \\
+{\tt \$ svn co https://projects.coin-or.org/svn/Ipopt/trunk CoinIpopt} \\
 Note: The {\tt \$} indicates the command line
 prompt, do not type {\tt \$}, only the text following it.
 \item Change into the root directory of the \Ipopt\ distribution\\
-{\tt \$ cd Ipopt}
+{\tt \$ cd CoinIpopt}
 \end{enumerate}
 
 In the following, ``\texttt{\$IPOPTDIR}'' will refer to the directory in
@@ -329,20 +329,20 @@ which you are right now (output of \texttt{pwd}).
 To use the tarball, follow the steps below:
 \begin{enumerate}
 \item Download the latest tarball from
-  \texttt{http://www.coin-or.org/Tarballs}.  The file you should look
-  for has the form \texttt{ipopt-3.x.x.tar.gz} (where
-  ``\texttt{3.x.x.}'' is the version number).  Make sure you are
-  getting the correct file; it is located toward the bottom of that
-  page; don't confuse it with the tarball of the old (Fortran) \Ipopt\
-  version ({\tt Ipopt\_{\em date}.tgz}).  Put this file in a directory
-  under which you want to put the \Ipopt\ installation.
+  \texttt{http://www.coin-or.org/Tarballs/Ipopt}.  The file you should look
+  for has the form {\tt Ipopt\_{\em date}.tgz}.  It contains the daily
+  snapshot of the official ``trunk'' release of \Ipopt.  Note that the
+  file {\tt Ipopt\_2.2.1\_Fortran.tgz} contains the latest Fortran version of
+  Ipopt, and is not described in this document.
 \item Issue the following commands to unpack the archive file: \\
-\texttt{\$ gunzip ipopt-3.x.x.tar.gz} \\
-\texttt{\$ tar xvf ipopt-3.x.x.tar} \\
+\texttt{\$ gunzip Ipopt\_{\em date}.tgz} \\
+\texttt{\$ tar xvf Ipopt\_{\em date}.tar} \\
 Note: The {\tt \$} indicates the command line
 prompt, do not type {\tt \$}, only the text following it.
+\item Rename the directory you just extracted:\\
+\texttt{\$ mv Ipopt\_{\em date} CoinIpopt}
 \item Change into the root directory of the \Ipopt\ distribution\\
-{\tt \$ cd ipopt-3.x.x}
+{\tt \$ cd CoinIpopt}
 \end{enumerate}
 
 In the following, ``\texttt{\$IPOPTDIR}'' will refer to the directory in
@@ -376,18 +376,20 @@ the required files from the Netlib Repository
 (\texttt{www.netlib.org}).\\
 
 \noindent
-{\tt \$ cd \$IPOPTDIR/Extern/blas}\\
-{\tt \$ ./get.blas}\\
-{\tt \$ cd ../lapack}\\
-{\tt \$ ./get.lapack}\\
+{\tt \$ cd \$IPOPTDIR/ThirdParty/Blas}\\
+{\tt \$ ./get.Blas}\\
+{\tt \$ cd ../Lapack}\\
+{\tt \$ ./get.Lapack}\\
 {\tt \$ cd ../ASL}\\
 {\tt \$ ./get.ASL}\\
 
 \noindent
 If you do not have \texttt{wget} installed on your system, please read
-the \texttt{INSTALL.*} files in the \texttt{\$IPOPTDIR/Extern/blas},
-\texttt{\$IPOPTDIR/Extern/lapack} and \texttt{\$IPOPTDIR/Extern/ASL}
-directories for alternative instructions.
+the \texttt{INSTALL.*} files in the
+\texttt{\$IPOPTDIR/ThirdParty/Blas},
+\texttt{\$IPOPTDIR/ThirdParty/Lapack} and
+\texttt{\$IPOPTDIR/ThirdParty/ASL} directories for alternative
+instructions.
 
 \subsubsection{Download HSL Subroutines}
 \Ipopt\ requires a sparse symmetric linear solver.  There are
@@ -410,7 +412,7 @@ solver is required for \Ipopt\ to function.
 \item In your browser window, click on \textit{MA27}.
 \item Make sure that \textit{Double precision:} is checked. 
   Click \textit{Download package (comments removed)}
-\item Save the file as {\tt ma27ad.f} in {\tt \$IPOPTDIR/Extern/HSL/}\\
+\item Save the file as {\tt ma27ad.f} in {\tt \$IPOPTDIR/ThirdParty/HSL/}\\
   Note: Some browsers append a file extension ({\tt .txt}) when you save
   the file, in which case you have to rename it.
 \item Go back to the package list using the back button of your browser.
@@ -418,7 +420,7 @@ solver is required for \Ipopt\ to function.
 \item Make sure \textit{Double precision:} is checked. Click 
   \textit{Download package (comments removed)}
 \item Save the file as {\tt mc19ad.f} in {\tt
-    \$IPOPTDIR/Extern/HSL/}\\
+    \$IPOPTDIR/ThirdParty/HSL/}\\
   Note: Some browsers append a file extension ({\tt .txt}) when you save
   the file, so you may have to rename it.
 \end{enumerate}
@@ -426,7 +428,7 @@ solver is required for \Ipopt\ to function.
 Note: Whereas it is essential to have at least one linear solver, the
 package MC19 could be omitted (with the consequence that you cannot
 use this method for scaling the linear systems arising inside the
-\Ipopt\ algorithm).  By default, MC19 only used to scale the linear
+\Ipopt\ algorithm).  By default, MC19 is only used to scale the linear
 system when using one of the Harwell solvers, but it can also be
 switched on for other linear solvers (which usually have internal
 scaling mechanisms).
@@ -434,7 +436,7 @@ scaling mechanisms).
 Note: If you have the source code for the linear solver MA57
 (successor of MA27) in a file called ma57ad.f (including all
 dependencies), you can simply put it into the {\tt
-  \$IPOPTDIR/Extern/HSL/} directory.  The \Ipopt\ configuration script
+  \$IPOPTDIR/ThirdParty/HSL/} directory.  The \Ipopt\ configuration script
 will then find this file and compile it into the \Ipopt\ library (just
 as is would compile MA27).
 
@@ -498,11 +500,16 @@ configure your \Ipopt\ installation to work with WSMP.
 \subsection{Compiling and Installing \Ipopt} \label{sec.comp_and_inst}
 
 \Ipopt\ can be easily compiled and installed with the usual {\tt
-  configure}, {\tt make}, {\tt make install} commands.  Below are the
-basic steps that should work on most systems.  For special
-compilations and for some troubleshooting see
-Appendix~\ref{ExpertInstall} and consult the \Ipopt\ homepage before
-submitting a ticket or sending a message to the mailing list.
+  configure}, {\tt make}, {\tt make install} commands.  We follow the
+precedure that is used for most of the COIN-OR projects, based on the
+GNU autotools.  At \texttt{https://projects.coin-or.org/BuildTools}
+you can find a general description of the tools.
+
+Below are the basic steps for the \Ipopt\ compilation that should work
+on most systems.  For special compilations and for some
+troubleshooting see Appendix~\ref{ExpertInstall} and consult the
+\Ipopt\ homepage before submitting a ticket or sending a message to
+the mailing list.
 \begin{enumerate}
 \item Go to the main directory of \Ipopt:\\
   {\tt \$ cd \$IPOPTDIR} 
@@ -510,9 +517,9 @@ submitting a ticket or sending a message to the mailing list.
   {\tt \$ ./configure}
 
   If the last output line of the script reads ``\texttt{configure:
-    Configuration successful}'' then everything worked fine.
-  Otherwise, look at the screen output, have a look at the
-  \texttt{config.log} output file and/or consult
+    Main configuration of Ipopt successful}'' then everything worked
+  fine.  Otherwise, look at the screen output, have a look at the
+  \texttt{config.log} output files and/or consult
   Appendix~\ref{ExpertInstall}.
 
   The default configure (without any options) is sufficient for most
@@ -521,38 +528,8 @@ submitting a ticket or sending a message to the mailing list.
   non-HSL linear solver.
 \item Build the code \\
 {\tt \$ make}
-\item Install \Ipopt \\
-  {\tt \$ make install}\\
-  This installs
-  \begin{itemize}
-  \item the \Ipopt\ AMPL solver executable (if ASL source was
-    downloaded) in \texttt{\$IPOPTDIR/bin},
-  \item the \Ipopt\ library (\texttt{libipopt.a}) in
-    \texttt{\$IPOPTDIR/lib},
-  \item text files {\tt ipopt\_addlibs\_cpp.txt} and {\tt
-      ipopt\_addlibs\_f.txt} in \texttt{\$IPOPTDIR/lib} that contain a
-    line each with additional linking flags that are required for
-    linking code with the ipopt library, for C++ and Fortran main
-    programs, respectively. (This is only for convenience if you want
-    to find out what additional flags are required, for example, to
-    include the Fortran runtime libraries with a C++ compiler.)
-  \item the necessary header files in
-    \texttt{\$IPOPTDIR/include/ipopt}.
-  \end{itemize}
-  You can change the default installation directory (here
-  \texttt{\$IPOPTDIR}) to something else (such as \texttt{/usr/local})
-  by using the \verb|--prefix| switch for \texttt{configure}.
-\item Install \Ipopt\ for use with {\tt CUTEr}\\
-  If you have {\tt CUTEr} already installed on your system and you
-  want to use \Ipopt\ as a solver for problems modeled in {\tt SIF},
-  type\\
-  {\tt \$ make cuter}\\
-  This assumes that you have the environment variable {\tt MYCUTER}
-  defined according to the {\tt CUTEr} instructions.  After this, you
-  can use the script {\tt sdipo} as the {\tt CUTEr} script to solve a
-  {\tt SIF} model.
 \item If you want, you can run a short test to verify that the
-  compilation and installation was successful.  For this, you just
+  compilation was successful.  For this, you just
   enter\\
   {\tt \$ make test}\\
   This will test if the AMPL solver executable works (if you got the
@@ -571,6 +548,36 @@ submitting a ticket or sending a message to the mailing list.
   program) and run {\tt configure} again, and this time specify all
   C++ runtime libraries with the {\tt CXXLIBS} variable (see also
   Appendix~\ref{ExpertInstall}).
+\item Install \Ipopt \\
+  {\tt \$ make install}\\
+  This installs
+  \begin{itemize}
+  \item the \Ipopt\ AMPL solver executable (if ASL source was
+    downloaded) in \texttt{\$IPOPTDIR/bin},
+  \item the \Ipopt\ library (\texttt{libipopt.a}) in
+    \texttt{\$IPOPTDIR/lib},
+  \item text files {\tt ipopt\_addlibs\_cpp.txt} and {\tt
+      ipopt\_addlibs\_f.txt} in \texttt{\$IPOPTDIR/lib} that contain a
+    line each with additional linking flags that are required for
+    linking code with the \Ipopt\ library, for C++ and Fortran main
+    programs, respectively. (This is only for convenience if you want
+    to find out what additional flags are required, for example, to
+    include the Fortran runtime libraries with a C++ compiler.)
+  \item the necessary header files in
+    \texttt{\$IPOPTDIR/include/ipopt}.
+  \end{itemize}
+  You can change the default installation directory (here
+  \texttt{\$IPOPTDIR}) to something else (such as \texttt{/usr/local})
+  by using the \verb|--prefix| switch for \texttt{configure}.
+\item Install \Ipopt\ for use with {\tt CUTEr}\\
+  If you have {\tt CUTEr} already installed on your system and you
+  want to use \Ipopt\ as a solver for problems modeled in {\tt SIF},
+  type\\
+  {\tt \$ make cuter}\\
+  This assumes that you have the environment variable {\tt MYCUTER}
+  defined according to the {\tt CUTEr} instructions.  After this, you
+  can use the script {\tt sdipo} as the {\tt CUTEr} script to solve a
+  {\tt SIF} model.
 \end{enumerate}
 
 Note: It is possible to compile the code in directories separate from
@@ -699,7 +706,7 @@ Here are the steps that work on my system:
   party code.
 \item\label{it:ASLcompile} If want to compile the AMPL solver
   executable, you need to compile the ASL library ``by hand''.  There
-  are instructions in {\tt Extern/ASL/solvers/README}.  On my system,
+  are instructions in {\tt ThirdParty/ASL/solvers/README}.  On my system,
   those steps are:
   \begin{enumerate}
   \item Open a DOS prompt window.
@@ -717,7 +724,7 @@ Here are the steps that work on my system:
     been downloaded, e.g.,
 
     \texttt{cd $\backslash$cygwin$\backslash$home$\backslash${\em
-	username}$\backslash$Ipopt$\backslash$Extern$\backslash$ASL$\backslash$solvers}
+	username}$\backslash$Ipopt$\backslash$ThirdParty$\backslash$ASL$\backslash$solvers}
 
   \item Copy the file {\tt makefile.vc} to {\tt makefile}
 
@@ -758,7 +765,7 @@ Here are the steps that work on my system:
   solver executable (i.e., you followed the instruction in
   Step~\ref{it:ASLcompile} above), you type
 
-  \texttt{./configure CC=cl CXX=cl F77=ifort --with-asldir=Extern/ASL/solvers}
+  \texttt{./configure CC=cl CXX=cl F77=ifort --with-asldir=ThirdParty/ASL/solvers}
 
   If you don't want to compile the AMPL solver executable and just
   want to generate the \Ipopt\ library, type only
@@ -787,8 +794,8 @@ Compiler 8.1.
 
 In order to use those project files, download the \Ipopt\ source code,
 as well as the required third party code (put it into the {\tt
-Extern$\backslash$blas}, {\tt Extern$\backslash$lapack}, and {\tt
-Extern$\backslash$HSL} directories---ASL is not required for the
+ThirdParty$\backslash$Blas}, {\tt ThirdParty$\backslash$Lapack}, and {\tt
+ThirdParty$\backslash$HSL} directories---ASL is not required for the
 Fortran and C examples). Then open the solution file:\\
 
 \texttt{\$IPOPTDIR$\backslash$Windows$\backslash$VisualStudio\_dotNET$\backslash$Ipopt$\backslash$Ipopt.sln}\\
@@ -840,7 +847,7 @@ x_* = (1.00000000, 4.74299963, 3.82114998, 1.37940829). \nonumber
 \]
 
 You can find further, less documented examples for using \Ipopt\ from
-your own source code in the {\tt Examples} subdirectory.
+your own source code in the {\tt Ipopt/examples} subdirectory.
 
 \subsection{Using \Ipopt\ through AMPL}
 Using the AMPL solver executable is by far the easiest way to
@@ -1119,7 +1126,7 @@ The remaining sections of the tutorial will lead you through
 the coding required to solve example problem
 (\ref{eq:ex_obj})--(\ref{eq:ex_bounds}) using, first C++, then C, and finally
 Fortran. Completed versions of these examples can be found in {\tt
-\$IPOPTDIR/Examples} under {\tt hs071\_cpp}, {\tt hs071\_c}, {\tt
+\$IPOPTDIR/Ipopt/examples} under {\tt hs071\_cpp}, {\tt hs071\_c}, {\tt
 hs071\_f}.
 
 As a user, you are responsible for coding two sections of the program
@@ -1158,9 +1165,9 @@ by coding the {\tt HS071\_NLP} class, a specific implementation of the
 of the {\tt HS071\_NLP} class and give this class to \Ipopt\ so it can
 evaluate the problem functions through the {\tt TNLP} interface. If
 you have any difficulty as the implementation proceeds, have a look at
-the completed example in the {\tt Examples/hs071\_cpp} directory.
+the completed example in the {\tt Ipopt/examples/hs071\_cpp} directory.
 
-Start by creating a new directory under Examples, called {\tt
+Start by creating a new directory under {\tt examples}, called {\tt
   MyExample} and create the files {\tt hs071\_nlp.hpp} and {\tt
   hs071\_nlp.cpp}. In {\tt hs071\_nlp.hpp}, include {\tt IpTNLP.hpp}
 (the base class), tell the compiler that we are using the \Ipopt\
@@ -1172,7 +1179,7 @@ of the methods in {\tt HS071\_NLP.cpp} using the descriptions given
 below. In {\tt hs071\_nlp.cpp}, first include the header file for your
 class and tell the compiler that you are using the \Ipopt\ namespace.
 A full version of these files can be found in the {\tt
-  Examples/hs071\_cpp} directory.
+  Ipopt/examples/hs071\_cpp} directory.
 
 It is very easy to make mistakes in the implementation of the function
 evaluation methods, in particular regarding the derivatives.  \Ipopt\
@@ -1913,7 +1920,7 @@ code, including the \Ipopt\ library {\tt libipopt.a} (and other
 necessary libraries, as listed in the {\tt ipopt\_addlibs\_cpp.txt}
 and {\tt ipopt\_addlibs\_f.txt} files).  If you are using Linux/UNIX,
 then a sample makefile exists already that was created by configure.
-Copy {\tt Examples/hs071\_cpp/Makefile} into your {\tt MyExample}
+Copy {\tt Ipopt/examples/hs071\_cpp/Makefile} into your {\tt MyExample}
 directory.  This makefile was created for the {\tt hs071\_cpp} code,
 but it can be easily modified for your example problem. Edit the file,
 making the following changes,
@@ -2009,7 +2016,7 @@ This completes the basic C++ tutorial, but see Section
 and Section \ref{sec:options} for information about the use of options
 to customize the behavior of \Ipopt.
 
-The {\tt Examples/ScalableProblems} directory contains other NLP
+The {\tt Ipopt/examples/ScalableProblems} directory contains other NLP
 problems coded in C++.
 
 \subsubsection{Additional methods in {\tt TNLP}}\label{sec:add_meth}
@@ -2172,7 +2179,7 @@ is still allocated inside \Ipopt.
 In the remainder of this section we discuss how the example problem
 (\ref{eq:ex_obj})--(\ref{eq:ex_bounds}) can be solved using the C
 interface.  A completed version of this example can be found in {\tt
-  Examples/hs071\_c}.
+  Ipopt/examples/hs071\_c}.
 
 % We first create the necessary callback
 % functions for evaluating the NLP. As just discussed, the \Ipopt\ C
@@ -2197,7 +2204,7 @@ C++ implementation for {\tt eval\_f}, {\tt eval\_g}, {\tt
   eval\_grad\_f}, {\tt eval\_jac\_g}, and {\tt eval\_h} in Section
 \ref{sec.cpp_problem}. The C implementations have somewhat different
 prototypes, but are implemented almost identically to the C++ code.
-See the completed example in {\tt Examples/hs071\_c/hs071\_c.c} if you
+See the completed example in {\tt Ipopt/examples/hs071\_c/hs071\_c.c} if you
 are not sure how to do this.
 
 We now need to implement the {\tt main} function, create the {\tt
@@ -2381,7 +2388,7 @@ interface, and the functions of the Fortran interface correspond
 one-to-one to the those of the C and C++ interface, including their
 arguments.  You can find an implementation of the example problem
 (\ref{eq:ex_obj})--(\ref{eq:ex_bounds}) in {\tt
-  \$IPOPTDIR/Examples/hs071\_f}.
+  \$IPOPTDIR/Ipopt/examples/hs071\_f}.
 
 The only special things to consider are:
 \begin{itemize}
@@ -3047,6 +3054,12 @@ Below a few particular options are discussed:
   Some compilers need to be given special flags to do that (e.g.,
   ``{\tt -qrtti=dyna}'' for the AIX {\tt xlC} compiler).
 
+\item By default, the \Ipopt\ library is compiled as a shared library,
+  on systems where this is supported.  If you want to generate a
+  static library, you need to specify the {\tt --disable-shared}
+  flag.  If you want to compile both shared and static libraries, you
+  should specify the {\tt --enable-static} flag.
+
 \item If you want to link the \Ipopt\ library with a main program
   written in C or Fortran, the C and Fortran compiler doing the
   linking of the executable needs to be told about the C++ runtime
@@ -3071,25 +3084,25 @@ Below a few particular options are discussed:
   consideration.  For example, for compilation of 64bit code on AIX,
   we recommend the following configuration
 
-  {\tt ./configure AR='ar -X64' AR\_X='ar -X64 x' $\backslash$\\
+  {\tt ./configure AR='ar -X64' NM='nm -X64' $\backslash$\\
     \hspace*{14ex} CC='xlc -q64' F77='xlf -q64' CXX='xlC
     -q64'$\backslash$\\ \hspace*{14ex} CFLAGS='-O3
     -bmaxdata:0x3f0000000'
     $\backslash$\\ \hspace*{14ex} FFLAGS='-O3 -bmaxdata:0x3f0000000' $\backslash$\\
     \hspace*{14ex} CXXFLAGS='-qrtti=dyna -O3 -bmaxdata:0x3f0000000'}
 
-\item To build library/archive files (with the ending {\tt .a})
-  including C++ code in some environments, it is necessary to use the
-  C++ compiler instead of {\tt ar} to build the archive.  This is for
-  example the case for some older compilers on SGI and SUN.  For this,
-  the {\tt configure} variables {\tt AR}, {\tt ARFLAGS}, and {\tt
-    AR\_X} are provided.  Here, {\tt AR} specifies the command for the
-  archiver for creating an archive, and {\tt ARFLAGS} specifies
-  additional flags.  {\tt AR\_X} contains the command for extracting
-  all files from an archive.  For example, the default setting for SUN
-  compilers for our configure script is
+% \item To build library/archive files (with the ending {\tt .a})
+%   including C++ code in some environments, it is necessary to use the
+%   C++ compiler instead of {\tt ar} to build the archive.  This is for
+%   example the case for some older compilers on SGI and SUN.  For this,
+%   the {\tt configure} variables {\tt AR}, {\tt ARFLAGS}, and {\tt
+%     AR\_X} are provided.  Here, {\tt AR} specifies the command for the
+%   archiver for creating an archive, and {\tt ARFLAGS} specifies
+%   additional flags.  {\tt AR\_X} contains the command for extracting
+%   all files from an archive.  For example, the default setting for SUN
+%   compilers for our configure script is
 
-  {\tt AR='CC -xar' ARFLAGS='-o' AR\_X='ar x'}
+%   {\tt AR='CC -xar' ARFLAGS='-o' AR\_X='ar x'}
 
 \item It is possible to compile the \Ipopt\ library in a debug
   configuration, by specifying \verb|--enable-debug|.  Then the
@@ -3110,7 +3123,7 @@ Below a few particular options are discussed:
 
   {\tt \$ mkdir \$HOME/Ipopt-objects}\\
   {\tt \$ cd \$HOME/Ipopt-objects}\\
-  {\tt \$ \$HOME/Ipopt/configure}  (or {\tt \$HOME/ipopt-3.1.0/configure})
+  {\tt \$ \$HOME/CoinIpopt/configure}
 
 \end{itemize}
 

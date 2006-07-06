@@ -39,7 +39,10 @@ unitTests: tests
 doxydoc:
 	cd $(srcdir); doxygen doxydoc/doxygen.conf
 
-.PHONY: test unitTest tests unitTests doxydoc
+cuter:
+	cd Ipopt; make cuter
+
+.PHONY: test unitTest tests unitTests doxydoc cuter
 
 ########################################################################
 #                         Maintainer Stuff                             #
