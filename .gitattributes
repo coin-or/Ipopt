@@ -1,6 +1,5 @@
 * text=auto !eol
 /Externals -text
-Ipopt/Extern/lapack/get.lapack -text
 Ipopt/INSTALL -text
 Ipopt/LICENSE -text
 Ipopt/Makefile.in -text
