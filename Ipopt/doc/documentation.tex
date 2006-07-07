@@ -592,7 +592,7 @@ configuration and compiled code.
 
 \subsection{Installation on Windows}\label{WindowsInstall}
 
-There are three ways to install \Ipopt\ on Windows systems.  The first
+There are several ways to install \Ipopt\ on Windows systems.  The first
 two option, described in Sections~\ref{CygwinInstall} and
 \ref{CygwinInstallNative}, is to use Cygwin (see
 \texttt{www.cygwin.com}), which offers a UNIX-like environment on
@@ -602,6 +602,7 @@ compilers, follow the instructions in Section~\ref{CygwinInstall}.  If
 you have the Microsoft C++ compiler (executable called {\tt cl.exe})
 and the Intel Fortran compiler (called {\tt ifort.exe}) and want to
 use those to compile \Ipopt, please see Section~\ref{CygwinInstall}.
+If you use MinGW, please consider the notes in Section~\ref{MinGWInstall}.
 %
 The \Ipopt\ distribution also includes projects files for the
 Microsoft Visual Studio (see Section~\ref{VisualStudioInstall}).
@@ -704,49 +705,6 @@ Here are the steps that work on my system:
 \item Follow the instructions in Section~\ref{CygwinInstall} until
   Step~\ref{it:cyg_inst} and stop after your downloaded the third
   party code.
-\item\label{it:ASLcompile} If want to compile the AMPL solver
-  executable, you need to compile the ASL library ``by hand''.  There
-  are instructions in {\tt ThirdParty/ASL/solvers/README}.  On my system,
-  those steps are:
-  \begin{enumerate}
-  \item Open a DOS prompt window.
-  \item\label{it:ASLcompileSetup} Run the Intel Fortran compiler setup
-    script, so that the compiler executables are in the path.  On my
-    system, I need to run
-
-  \begin{equation}\label{eq:intelsetup}
-    \texttt{``C:$\backslash$Program
-    Files$\backslash$Intel$\backslash$Fortran$\backslash$compiler80$\backslash$IA32$\backslash$BIN$\backslash$ifortvars.bat''}
-  \end{equation}
-
-    (Consult your compiler documentation if that doesn't work for you.)
-  \item Change into the directory into which the ASL source code has
-    been downloaded, e.g.,
-
-    \texttt{cd $\backslash$cygwin$\backslash$home$\backslash${\em
-	username}$\backslash$Ipopt$\backslash$ThirdParty$\backslash$ASL$\backslash$solvers}
-
-  \item Copy the file {\tt makefile.vc} to {\tt makefile}
-
-    \texttt{copy makefile.vc makefile}
-
-  \item Copy the file {\tt details.c0} to {\tt details.c}
-
-    \texttt{copy details.c0 details.c}
-
-    and edit the file {\tt details.c} to change the string to
-    something meaningful like ``{\tt MS VC++ .NET 2003}''.
-
-  \item Compile the library using {\tt nmake}
-
-    \texttt{nmake}
-
-  \item Rename the generated library to {\tt amplsolver.a}
-
-    \texttt{ren amplsolv.lib amplsolver.a}
-
-  \item Close the DOS Window
-  \end{enumerate}
 
 \item Now you need to make sure that Cygwin knows about the native
   compilers.  For this you need to edit the file {\tt cygwin.bat} in
@@ -756,33 +714,57 @@ Here are the steps that work on my system:
   \texttt{call ``C:$\backslash$Program
     Files$\backslash$Intel$\backslash$Fortran$\backslash$compiler80$\backslash$IA32$\backslash$BIN$\backslash$ifortvars.bat''}
 
-  or whatever you used in (\ref{eq:intelsetup}) above.
+  or whatever the location of that batch file is on your computer.
 
-\item Open a new Cygwin window and change into the directory where you
-  put the \Ipopt\ source code (where the {\tt configure} file is)
-
-\item Run the configuration script.  If you want to compile the AMPL
-  solver executable (i.e., you followed the instruction in
-  Step~\ref{it:ASLcompile} above), you type
-
-  \texttt{./configure CC=cl CXX=cl F77=ifort --with-asldir=ThirdParty/ASL/solvers}
-
-  If you don't want to compile the AMPL solver executable and just
-  want to generate the \Ipopt\ library, type only
+\item Run the configuration script, and tell it that you want to use
+  the native compilers:
 
   \texttt{./configure CC=cl CXX=cl F77=ifort}
 
   Make sure the last message is
 
-  \texttt{Configuration successful}
+  \texttt{Main Ipopt configuration successful}
+
+\item\label{it:ASLcompile} If want to compile the AMPL solver
+  executable, you need to compile the ASL library from a script.  For
+  this you need to change into the ASL compilation directory, execute
+  the script \texttt{compile\_MS\_ASL}, and go back to the directory
+  where you were:
+
+  \texttt{cd ThirdParty/ASL}
+
+  \texttt{./compile\_MS\_ASL}
+
+  \texttt{cd -}
 
 \item Now you can compile the code with
 
+  \texttt{make},
+
+  test the installation with
+
+  \texttt{make test},
+
+  and install everything with
+
   \texttt{make install}
-
-  and, if desired, test the installation with {\tt make test}
-
 \end{enumerate}
+
+\subsubsection{Installation with MinGW}\label{MinGWInstall}
+
+You can compile \Ipopt\ also under MinGW, which is another UNIX-like
+environment for Windows.  It can be obtained from
+\texttt{http://www.mingw.org/}.
+
+A compilation with the GNU compilers works just like with any other
+UNIX system, as described in Section~\ref{sec.comp_and_inst}.  If you
+want to use the native compilers (e.g., {\tt cl} and {\tt ifort}), you
+need to make sure they are in the path for the MSys prompt.  Also, as
+for the procedure described in Section~\ref{CygwinInstallNative}, you
+need to run the \texttt{compile\_MS\_ASL} script in the
+\texttt{ThirdParty/ASL} immediately after you run the configuration
+script. 
+
 
 \subsubsection{Using Visual Studio}\label{VisualStudioInstall}
 
@@ -798,10 +780,10 @@ ThirdParty$\backslash$Blas}, {\tt ThirdParty$\backslash$Lapack}, and {\tt
 ThirdParty$\backslash$HSL} directories---ASL is not required for the
 Fortran and C examples). Then open the solution file:\\
 
-\texttt{\$IPOPTDIR$\backslash$Windows$\backslash$VisualStudio\_dotNET$\backslash$Ipopt$\backslash$Ipopt.sln}\\
+\texttt{\$IPOPTDIR$\backslash$Ipopt$\backslash$Windows$\backslash$VisualStudio\_dotNET$\backslash$Ipopt$\backslash$Ipopt.sln}\\
 
 Please also read the README file in
-\texttt{\$IPOPTDIR$\backslash$Windows$\backslash$VisualStudio\_dotNET}
+\texttt{\$IPOPTDIR$\backslash$Ipopt$\backslash$Windows$\backslash$VisualStudio\_dotNET}
 
 Note: Since the project files were created only with the Standard
 edition of the C++ compiler, code optimization might be disabled; for
