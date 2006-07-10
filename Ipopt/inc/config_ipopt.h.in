@@ -1,8 +1,5 @@
 /* inc/config_ipopt.h.in.  Generated from configure.ac by autoheader.  */
 
-/* If defined, debug sanity checks are performed during runtime */
-#undef COIN_DEBUG
-
 /* If defined, the Ampl Solver Library is available. */
 #undef COIN_HAS_ASL
 
@@ -14,6 +11,12 @@
 
 /* If defined, the LAPACK Library is available. */
 #undef COIN_HAS_LAPACK
+
+/* Define to the debug sanity check level (0 is no test) */
+#undef COIN_IPOPT_CHECKLEVEL
+
+/* Define to the debug verbosity level (0 is no output) */
+#undef COIN_IPOPT_VERBOSITY
 
 /* Define to dummy `main' function (if any) required to link to the Fortran
    libraries. */

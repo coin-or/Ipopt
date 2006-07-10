@@ -42,8 +42,11 @@
 /*             HERE DEFINE THE CONFIGURATION SPECIFIC MACROS               */
 /***************************************************************************/
 
-/* If defined, debug sanity checks are performed during runtime */
-/* #define COIN_DEBUG 1 */
+/* Define to the debug sanity check level (0 is no test) */
+#define COIN_IPOPT_CHECKLEVEL 0
+
+/* Define to the debug verbosity level (0 is no output) */
+#define COIN_IPOPT_VERBOSITY 0
 
 /* If defined, the Ampl Solver Library is available. */
 #define COIN_HAS_ASL 1
@@ -84,7 +87,7 @@
 #endif /* HAVE_CONFIG_H */
 
 /* In the Ipopt code, we use IP_DEBUG to indicate debug compile */
-#ifdef COIN_DEBUG
+#if COIN_IPOPT_DEBUG > 0
 #define IP_DEBUG 1
 #endif
 

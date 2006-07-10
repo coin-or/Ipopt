@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE COIN_DEBUG_TRUE COIN_DEBUG_FALSE EGREP LN_S CDEFS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT ADD_CFLAGS MPICC CXXDEFS CXX CXXFLAGS ac_ct_CXX ADD_CXXFLAGS MPICXX CXXLIBS F77 FFLAGS ac_ct_F77 ADD_FFLAGS MPIF77 FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL LT_LDFLAGS RPATH_FLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE IPOPTSRCDIR IPOPTOBJDIR COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE COIN_BUILD_BLAS_TRUE COIN_BUILD_BLAS_FALSE COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE COIN_BUILD_LAPACK_TRUE COIN_BUILD_LAPACK_FALSE TAUCS_INCFLAGS MUMPS_INCFLAGS ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE HAVE_MUMPS_TRUE HAVE_MUMPS_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL LT_LDFLAGS RPATH_FLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE IPOPTSRCDIR IPOPTOBJDIR COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE COIN_BUILD_BLAS_TRUE COIN_BUILD_BLAS_FALSE COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE COIN_BUILD_LAPACK_TRUE COIN_BUILD_LAPACK_FALSE TAUCS_INCFLAGS MUMPS_INCFLAGS ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE HAVE_MUMPS_TRUE HAVE_MUMPS_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -916,6 +916,18 @@ ac_env_CDEFS_set=${CDEFS+set}
 ac_env_CDEFS_value=$CDEFS
 ac_cv_env_CDEFS_set=${CDEFS+set}
 ac_cv_env_CDEFS_value=$CDEFS
+ac_env_ADD_CFLAGS_set=${ADD_CFLAGS+set}
+ac_env_ADD_CFLAGS_value=$ADD_CFLAGS
+ac_cv_env_ADD_CFLAGS_set=${ADD_CFLAGS+set}
+ac_cv_env_ADD_CFLAGS_value=$ADD_CFLAGS
+ac_env_DBG_CFLAGS_set=${DBG_CFLAGS+set}
+ac_env_DBG_CFLAGS_value=$DBG_CFLAGS
+ac_cv_env_DBG_CFLAGS_set=${DBG_CFLAGS+set}
+ac_cv_env_DBG_CFLAGS_value=$DBG_CFLAGS
+ac_env_OPT_CFLAGS_set=${OPT_CFLAGS+set}
+ac_env_OPT_CFLAGS_value=$OPT_CFLAGS
+ac_cv_env_OPT_CFLAGS_set=${OPT_CFLAGS+set}
+ac_cv_env_OPT_CFLAGS_value=$OPT_CFLAGS
 ac_env_CC_set=${CC+set}
 ac_env_CC_value=$CC
 ac_cv_env_CC_set=${CC+set}
@@ -932,10 +944,6 @@ ac_env_CPPFLAGS_set=${CPPFLAGS+set}
 ac_env_CPPFLAGS_value=$CPPFLAGS
 ac_cv_env_CPPFLAGS_set=${CPPFLAGS+set}
 ac_cv_env_CPPFLAGS_value=$CPPFLAGS
-ac_env_ADD_CFLAGS_set=${ADD_CFLAGS+set}
-ac_env_ADD_CFLAGS_value=$ADD_CFLAGS
-ac_cv_env_ADD_CFLAGS_set=${ADD_CFLAGS+set}
-ac_cv_env_ADD_CFLAGS_value=$ADD_CFLAGS
 ac_env_MPICC_set=${MPICC+set}
 ac_env_MPICC_value=$MPICC
 ac_cv_env_MPICC_set=${MPICC+set}
@@ -944,6 +952,18 @@ ac_env_CXXDEFS_set=${CXXDEFS+set}
 ac_env_CXXDEFS_value=$CXXDEFS
 ac_cv_env_CXXDEFS_set=${CXXDEFS+set}
 ac_cv_env_CXXDEFS_value=$CXXDEFS
+ac_env_ADD_CXXFLAGS_set=${ADD_CXXFLAGS+set}
+ac_env_ADD_CXXFLAGS_value=$ADD_CXXFLAGS
+ac_cv_env_ADD_CXXFLAGS_set=${ADD_CXXFLAGS+set}
+ac_cv_env_ADD_CXXFLAGS_value=$ADD_CXXFLAGS
+ac_env_DBG_CXXFLAGS_set=${DBG_CXXFLAGS+set}
+ac_env_DBG_CXXFLAGS_value=$DBG_CXXFLAGS
+ac_cv_env_DBG_CXXFLAGS_set=${DBG_CXXFLAGS+set}
+ac_cv_env_DBG_CXXFLAGS_value=$DBG_CXXFLAGS
+ac_env_OPT_CXXFLAGS_set=${OPT_CXXFLAGS+set}
+ac_env_OPT_CXXFLAGS_value=$OPT_CXXFLAGS
+ac_cv_env_OPT_CXXFLAGS_set=${OPT_CXXFLAGS+set}
+ac_cv_env_OPT_CXXFLAGS_value=$OPT_CXXFLAGS
 ac_env_CXX_set=${CXX+set}
 ac_env_CXX_value=$CXX
 ac_cv_env_CXX_set=${CXX+set}
@@ -952,10 +972,6 @@ ac_env_CXXFLAGS_set=${CXXFLAGS+set}
 ac_env_CXXFLAGS_value=$CXXFLAGS
 ac_cv_env_CXXFLAGS_set=${CXXFLAGS+set}
 ac_cv_env_CXXFLAGS_value=$CXXFLAGS
-ac_env_ADD_CXXFLAGS_set=${ADD_CXXFLAGS+set}
-ac_env_ADD_CXXFLAGS_value=$ADD_CXXFLAGS
-ac_cv_env_ADD_CXXFLAGS_set=${ADD_CXXFLAGS+set}
-ac_cv_env_ADD_CXXFLAGS_value=$ADD_CXXFLAGS
 ac_env_MPICXX_set=${MPICXX+set}
 ac_env_MPICXX_value=$MPICXX
 ac_cv_env_MPICXX_set=${MPICXX+set}
@@ -964,6 +980,18 @@ ac_env_CXXLIBS_set=${CXXLIBS+set}
 ac_env_CXXLIBS_value=$CXXLIBS
 ac_cv_env_CXXLIBS_set=${CXXLIBS+set}
 ac_cv_env_CXXLIBS_value=$CXXLIBS
+ac_env_ADD_FFLAGS_set=${ADD_FFLAGS+set}
+ac_env_ADD_FFLAGS_value=$ADD_FFLAGS
+ac_cv_env_ADD_FFLAGS_set=${ADD_FFLAGS+set}
+ac_cv_env_ADD_FFLAGS_value=$ADD_FFLAGS
+ac_env_DBG_FFLAGS_set=${DBG_FFLAGS+set}
+ac_env_DBG_FFLAGS_value=$DBG_FFLAGS
+ac_cv_env_DBG_FFLAGS_set=${DBG_FFLAGS+set}
+ac_cv_env_DBG_FFLAGS_value=$DBG_FFLAGS
+ac_env_OPT_FFLAGS_set=${OPT_FFLAGS+set}
+ac_env_OPT_FFLAGS_value=$OPT_FFLAGS
+ac_cv_env_OPT_FFLAGS_set=${OPT_FFLAGS+set}
+ac_cv_env_OPT_FFLAGS_value=$OPT_FFLAGS
 ac_env_F77_set=${F77+set}
 ac_env_F77_value=$F77
 ac_cv_env_F77_set=${F77+set}
@@ -972,10 +1000,6 @@ ac_env_FFLAGS_set=${FFLAGS+set}
 ac_env_FFLAGS_value=$FFLAGS
 ac_cv_env_FFLAGS_set=${FFLAGS+set}
 ac_cv_env_FFLAGS_value=$FFLAGS
-ac_env_ADD_FFLAGS_set=${ADD_FFLAGS+set}
-ac_env_ADD_FFLAGS_value=$ADD_FFLAGS
-ac_cv_env_ADD_FFLAGS_set=${ADD_FFLAGS+set}
-ac_cv_env_ADD_FFLAGS_value=$ADD_FFLAGS
 ac_env_MPIF77_set=${MPIF77+set}
 ac_env_MPIF77_value=$MPIF77
 ac_cv_env_MPIF77_set=${MPIF77+set}
@@ -1081,7 +1105,8 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-debug          compile with debug options and runtime tests
+  --enable-debug          compile all projects with debug options tests
+  --enable-debug-ipopt compile this project (Ipopt) with debug options
   --enable-static[=PKGS]
                           build static libraries [default=no]
   --disable-dependency-tracking  speeds up one-time build
@@ -1098,6 +1123,8 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-ipopt-verbosity specify the debug verbosity level for project Ipopt
+  --with-ipopt-checklevel specify the sanity check level for project Ipopt
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-pic              try to use only PIC/non-PIC objects [default=use
                           both]
@@ -1115,24 +1142,32 @@ Optional Packages:
 
 Some influential environment variables:
   CDEFS       Additional -D flags to be used when compiling C code.
+  ADD_CFLAGS  Additional C compiler options
+  DBG_CFLAGS  Debug C compiler options
+  OPT_CFLAGS  Optimize C compiler options
   CC          C compiler command
   CFLAGS      C compiler flags
   LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
               nonstandard directory <lib dir>
   CPPFLAGS    C/C++ preprocessor flags, e.g. -I<include dir> if you have
               headers in a nonstandard directory <include dir>
-  ADD_CFLAGS  Additional C compiler options
   MPICC       C MPI Compiler
   CXXDEFS     Additional -D flags to be used when compiling C++ code.
-  CXX         C++ compiler command
-  CXXFLAGS    C++ compiler flags
   ADD_CXXFLAGS
               Additional C++ compiler options
+  DBG_CXXFLAGS
+              Debug C++ compiler options
+  OPT_CXXFLAGS
+              Optimize C++ compiler options
+  CXX         C++ compiler command
+  CXXFLAGS    C++ compiler flags
   MPICXX      C++ MPI Compiler
   CXXLIBS     Libraries necessary for linking C++ code with Fortran compiler
+  ADD_FFLAGS  Additional Fortran compiler options
+  DBG_FFLAGS  Debug Fortran compiler options
+  OPT_FFLAGS  Optimize Fortran compiler options
   F77         Fortran 77 compiler command
   FFLAGS      Fortran 77 compiler flags
-  ADD_FFLAGS  Additional Fortran compiler options
   MPIF77      Fortran MPI Compiler
   CPP         C preprocessor
   CXXCPP      C++ preprocessor
@@ -1712,24 +1747,39 @@ echo $ECHO_N "checking whether we want to compile in debug mode... $ECHO_C" >&6
 if test "${enable_debug+set}" = set; then
   enableval="$enable_debug"
   case "${enableval}" in
-                   yes) coin_debug_compile=true
-
-cat >>confdefs.h <<\_ACEOF
-#define COIN_DEBUG 1
-_ACEOF
-
-                     enable_shared=no
-                     ;;
-                   no)  coin_debug_compile=false
-                     ;;
-                    *) { { echo "$as_me:$LINENO: error: bad value ${enableval} for --enable-debug" >&5
+   yes) coin_debug_compile=true
+        enable_shared=no
+        ;;
+   no)  coin_debug_compile=false
+        ;;
+   *) { { echo "$as_me:$LINENO: error: bad value ${enableval} for --enable-debug" >&5
 echo "$as_me: error: bad value ${enableval} for --enable-debug" >&2;}
    { (exit 1); exit 1; }; }
-                     ;;
-                 esac
+        ;;
+esac
 else
   coin_debug_compile=false
 fi;
+
+# Check whether --enable-debug-ipopt or --disable-debug-ipopt was given.
+if test "${enable_debug_ipopt+set}" = set; then
+  enableval="$enable_debug_ipopt"
+  case "${enableval}" in
+    yes) coin_debug_compile=true
+         enable_shared=no
+         ;;
+    no)  coin_debug_compile=false
+         ;;
+    *) { { echo "$as_me:$LINENO: error: bad value ${enableval} for --enable-debug-ipopt" >&5
+echo "$as_me: error: bad value ${enableval} for --enable-debug-ipopt" >&2;}
+   { (exit 1); exit 1; }; }
+         ;;
+ esac
+else
+  :
+fi;
+
+ # m4_ifvaln([Ipopt],
 
 if test $coin_debug_compile = true; then
   echo "$as_me:$LINENO: result: yes" >&5
@@ -1740,14 +1790,39 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-
-if test "$coin_debug_compile" = true; then
-  COIN_DEBUG_TRUE=
-  COIN_DEBUG_FALSE='#'
+# Check whether --with-ipopt-verbosity or --without-ipopt-verbosity was given.
+if test "${with_ipopt_verbosity+set}" = set; then
+  withval="$with_ipopt_verbosity"
+  coin_ipopt_verbosity=$withval
 else
-  COIN_DEBUG_TRUE='#'
-  COIN_DEBUG_FALSE=
-fi
+  coin_ipopt_verbosity=0
+fi;
+
+cat >>confdefs.h <<_ACEOF
+#define COIN_IPOPT_VERBOSITY $coin_ipopt_verbosity
+_ACEOF
+
+
+
+# Check whether --with-ipopt-checklevel or --without-ipopt-checklevel was given.
+if test "${with_ipopt_checklevel+set}" = set; then
+  withval="$with_ipopt_checklevel"
+  coin_ipopt_checklevel=$withval
+else
+  coin_ipopt_checklevel=0
+fi;
+
+cat >>confdefs.h <<_ACEOF
+#define COIN_IPOPT_CHECKLEVEL $coin_ipopt_checklevel
+_ACEOF
+
+
+# We use the following variable to have a string with the upper case
+# version of the project name
+COIN_PRJCT=IPOPT
+
+
+ # m4_ifvaln([Ipopt],
 
 
 
@@ -1813,6 +1888,9 @@ fi
 
 
 
+
+
+
 coin_has_cc=yes
 
 save_cflags="$CFLAGS"
@@ -1820,12 +1898,12 @@ case $build in
   *-cygwin* | *-mingw*)
              comps="gcc cl" ;;
   *-linux-*) comps="xlc gcc cc pgcc icc" ;;
-  *)         comps="xlc cc gcc pgcc icc" ;;
+  *)         comps="xlc_r xlc cc gcc pgcc icc" ;;
 esac
 
 # We delete the cached value, since the test might not have been
 # performed with out choise of compilers earlier
-ac_cv_prog_CC=
+$as_unset ac_cv_prog_CC || test "${ac_cv_prog_CC+set}" != set || { ac_cv_prog_CC=; export ac_cv_prog_CC; }
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -2541,12 +2619,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 CFLAGS="$save_cflags"
 
-echo "$as_me:$LINENO: checking for C compiler options" >&5
-echo $ECHO_N "checking for C compiler options... $ECHO_C" >&6
-if test "${coin_cv_cflags+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test x"$CFLAGS" = x; then
+# Check if a project specific CFLAGS variable has been set
+if test x$COIN_PRJCT != x; then
+  eval coin_tmp=\${${COIN_PRJCT}_CFLAGS+set}
+  if test x$coin_tmp = xset; then
+    eval CFLAGS=\${${COIN_PRJCT}_CFLAGS}
+  fi
+fi
+
+if test x"$CFLAGS" = x; then
 
   coin_add_cflags=
   coin_opt_cflags=
@@ -2719,13 +2800,10 @@ rm -f conftest.err conftest.$ac_objext \
     coin_dbg_cflags="-g"
   fi
 
-  if test "$coin_debug_compile" = "true"; then
-    CFLAGS="$coin_dbg_cflags $coin_add_cflags $CDEFS $coin_warn_cflags"
-  else
-    if test -z "$coin_opt_cflags"; then
-      # Try if -O option works if nothing else is set
-      CFLAGS="-O"
-      cat >conftest.$ac_ext <<_ACEOF
+  if test -z "$coin_opt_cflags"; then
+    # Try if -O option works if nothing else is set
+    CFLAGS="-O"
+    cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -2770,8 +2848,30 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-    fi
-    CFLAGS="$coin_opt_cflags $coin_add_cflags -DNDEBUG $CDEFS $coin_warn_cflags"
+  fi
+
+  if test x${DBG_CFLAGS+set} != xset; then
+    DBG_CFLAGS="$coin_dbg_cflags $coin_add_cflags $coin_warn_cflags"
+  fi
+  if test x${OPT_CFLAGS+set} != xset; then
+    OPT_CFLAGS="$coin_opt_cflags $coin_add_cflags -DNDEBUG $coin_warn_cflags"
+  fi
+
+  DBG_CFLAGS="$DBG_CFLAGS $ADD_CFLAGS $CDEFS"
+  OPT_CFLAGS="$OPT_CFLAGS $ADD_CFLAGS $CDEFS"
+
+  if test "$coin_debug_compile" = "true"; then
+    CFLAGS="$DBG_CFLAGS"
+  else
+    CFLAGS="$OPT_CFLAGS"
+  fi
+else
+  CFLAGS="$CFLAGS $ADD_CFLAGS $CDEFS"
+  if test x${DBG_CFLAGS+set} != xset; then
+    DBG_CFLAGS="$CFLAGS"
+  fi
+  if test x${OPT_CFLAGS+set} != xset; then
+    OPT_CFLAGS="$CFLAGS"
   fi
 fi
 
@@ -2782,6 +2882,7 @@ if test x"$ADD_CFLAGS" != x; then
 fi
 
 # Try if CFLAGS works
+save_CFLAGS="$CFLAGS"
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -2829,8 +2930,8 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 if test -z "$CFLAGS"; then
-  { echo "$as_me:$LINENO: WARNING: The value CFLAGS=\"$CFLAGS\" do not work.  I will now just try '-O', but you might want to set CFLAGS manually." >&5
-echo "$as_me: WARNING: The value CFLAGS=\"$CFLAGS\" do not work.  I will now just try '-O', but you might want to set CFLAGS manually." >&2;}
+  { echo "$as_me:$LINENO: WARNING: The value CFLAGS=\"$save_CFLAGS\" do not work.  I will now just try '-O', but you might want to set CFLAGS manually." >&5
+echo "$as_me: WARNING: The value CFLAGS=\"$save_CFLAGS\" do not work.  I will now just try '-O', but you might want to set CFLAGS manually." >&2;}
   CFLAGS='-O'
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -2883,12 +2984,9 @@ rm -f conftest.err conftest.$ac_objext \
 echo "$as_me: WARNING: This value for CFLAGS does not work.  I will continue with empty CFLAGS, but you might want to set CFLAGS manually." >&2;}
   fi
 fi
-coin_cv_cflags="$CFLAGS"
 
-fi
-echo "$as_me:$LINENO: result: $coin_cv_cflags" >&5
-echo "${ECHO_T}$coin_cv_cflags" >&6 # AC_CACHE_CHECK([for C compiler options CXXFLAGS]
-CFLAGS="$coin_cv_cflags"
+{ echo "$as_me:$LINENO: C compiler options are: $CFLAGS" >&5
+echo "$as_me: C compiler options are: $CFLAGS" >&6;}
 
 
 if test x"$MPICC" = x; then :; else
@@ -2932,6 +3030,9 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
+
+
+
 coin_has_cxx=yes
 
 save_cxxflags="$CXXFLAGS"
@@ -2939,12 +3040,12 @@ case $build in
   *-cygwin* | *-mingw*)
              comps="g++ cl" ;;
   *-darwin*) comps="g++ c++ CC" ;;
-          *) comps="xlC aCC CC g++ c++ pgCC icpc" ;;
+          *) comps="xlC aCC CC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
 esac
 
 # We delete the cached value, since the test might not have been
 # performed with out choise of compilers earlier
-ac_cv_prog_CXX=
+$as_unset ac_cv_prog_CXX || test "${ac_cv_prog_CXX+set}" != set || { ac_cv_prog_CXX=; export ac_cv_prog_CXX; }
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3302,12 +3403,15 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 CXXFLAGS="$save_cxxflags"
 
-echo "$as_me:$LINENO: checking for C++ compiler options" >&5
-echo $ECHO_N "checking for C++ compiler options... $ECHO_C" >&6
-if test "${coin_cv_cxxflags+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test x"$CXXFLAGS" = x; then
+# Check if a project specific CXXFLAGS variable has been set
+if test x$COIN_PRJCT != x; then
+  eval coin_tmp=\${${COIN_PRJCT}_CXXFLAGS+set}
+  if test x$coin_tmp = xset; then
+    eval CXXFLAGS=\${${COIN_PRJCT}_CXXFLAGS}
+  fi
+fi
+
+if test x"$CXXFLAGS" = x; then
 
 # ToDo decide whether we want -DNDEBUG for optimization
   coin_add_cxxflags=
@@ -3482,13 +3586,10 @@ rm -f conftest.err conftest.$ac_objext \
     coin_dbg_cxxflags="-g"
   fi
 
-  if test "$coin_debug_compile" = "true"; then
-    CXXFLAGS="$coin_dbg_cxxflags $coin_add_cxxflags $CXXDEFS $coin_warn_cxxflags"
-  else
-    if test -z "$coin_opt_cxxflags"; then
-      # Try if -O option works if nothing else is set
-      CXXFLAGS="-O"
-      cat >conftest.$ac_ext <<_ACEOF
+  if test -z "$coin_opt_cxxflags"; then
+    # Try if -O option works if nothing else is set
+    CXXFLAGS=-O
+    cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -3533,18 +3634,35 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-    fi
-    CXXFLAGS="$coin_opt_cxxflags $coin_add_cxxflags -DNDEBUG $CXXDEFS $coin_warn_cxxflags"
+  fi
+
+  if test x${DBG_CXXFLAGS+set} != xset; then
+    DBG_CXXFLAGS="$coin_dbg_cxxflags $coin_add_cxxflags $coin_warn_cxxflags"
+  fi
+  if test x${OPT_CXXFLAGS+set} != xset; then
+    OPT_CXXFLAGS="$coin_opt_cxxflags $coin_add_cxxflags -DNDEBUG $coin_warn_cxxflags"
+  fi
+
+  DBG_CXXFLAGS="$DBG_CXXFLAGS $ADD_CXXFLAGS $CXXDEFS"
+  OPT_CXXFLAGS="$OPT_CXXFLAGS $ADD_CXXFLAGS $CXXDEFS"
+
+  if test "$coin_debug_compile" = "true"; then
+    CXXFLAGS="$DBG_CXXFLAGS"
+  else
+    CXXFLAGS="$OPT_CXXFLAGS"
+  fi
+else
+  CXXFLAGS="$CXXFLAGS $ADD_CXXFLAGS $CXXDEFS"
+  if test x${DBG_CXXFLAGS+set} != xset; then
+    DBG_CXXFLAGS="$CXXFLAGS"
+  fi
+  if test x${OPT_CXXFLAGS+set} != xset; then
+    OPT_CXXFLAGS="$CXXFLAGS"
   fi
 fi
 
-# Check if user wants to have additional CXXFLAGS options
-
-if test x"$ADD_CXXFLAGS" != x; then
-  CXXFLAGS="$CXXFLAGS $ADD_CXXFLAGS"
-fi
-
 # Try if CXXFLAGS works
+save_CXXFLAGS="$CXXFLAGS"
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -3592,8 +3710,8 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 if test -z "$CXXFLAGS"; then
-  { echo "$as_me:$LINENO: WARNING: The flags CXXFLAGS=\"$CXXFLAGS\" do not work.  I will now just try '-O', but you might want to set CXXFLAGS manually." >&5
-echo "$as_me: WARNING: The flags CXXFLAGS=\"$CXXFLAGS\" do not work.  I will now just try '-O', but you might want to set CXXFLAGS manually." >&2;}
+  { echo "$as_me:$LINENO: WARNING: The flags CXXFLAGS=\"$save_CXXFLAGS\" do not work.  I will now just try '-O', but you might want to set CXXFLAGS manually." >&5
+echo "$as_me: WARNING: The flags CXXFLAGS=\"$save_CXXFLAGS\" do not work.  I will now just try '-O', but you might want to set CXXFLAGS manually." >&2;}
   CXXFLAGS='-O'
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -3646,12 +3764,9 @@ rm -f conftest.err conftest.$ac_objext \
 echo "$as_me: WARNING: This value for CXXFLAGS does not work.  I will continue with empty CXXFLAGS, but you might want to set CXXFLAGS manually." >&2;}
   fi
 fi
-coin_cv_cxxflags="$CXXFLAGS"
 
-fi
-echo "$as_me:$LINENO: result: $coin_cv_cxxflags" >&5
-echo "${ECHO_T}$coin_cv_cxxflags" >&6 # AC_CACHE_CHECK([for C++ compiler options CXXFLAGS]
-CXXFLAGS="$coin_cv_cxxflags"
+{ echo "$as_me:$LINENO: C++ compiler options are: $CXXFLAGS" >&5
+echo "$as_me: C++ compiler options are: $CXXFLAGS" >&6;}
 
 
 if test x"$MPICXX" = x; then :; else
@@ -3761,18 +3876,22 @@ ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 
 
+
+
+
+
 coin_has_f77=yes
 
 save_fflags="$FFLAGS"
 case $build in
   *-cygwin* | *-mingw*)
-             comps="gfortran g77 ifort" ;;
-  *)         comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc" ;;
+             comps="gfortran g77 ifort fl32" ;;
+  *)         comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc frt af77" ;;
 esac
 
 # We delete the cached value, since the test might not have been
 # performed with out choise of compilers earlier
-ac_cv_prog_F77=
+$as_unset ac_cv_prog_F77 || test "${ac_cv_prog_F77+set}" != set || { ac_cv_prog_F77=; export ac_cv_prog_F77; }
 ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -3865,7 +3984,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3868:" \
+echo "$as_me:3987:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -4010,12 +4129,15 @@ ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 
 FFLAGS="$save_fflags"
 
-echo "$as_me:$LINENO: checking for Fortran compiler options" >&5
-echo $ECHO_N "checking for Fortran compiler options... $ECHO_C" >&6
-if test "${coin_cv_fflags+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test x"$FFLAGS" = x; then
+# Check if a project specific FFLAGS variable has been set
+if test x$COIN_PRJCT != x; then
+  eval coin_tmp=\${${COIN_PRJCT}_FFLAGS+set}
+  if test x$coin_tmp = xset; then
+    eval FFLAGS=\${${COIN_PRJCT}_FFLAGS}
+  fi
+fi
+
+if test x"$FFLAGS" = x; then
 
   coin_add_fflags=
   coin_opt_fflags=
@@ -4159,13 +4281,10 @@ rm -f conftest.err conftest.$ac_objext \
     coin_dbg_fflags="-g"
   fi
 
-  if test "$coin_debug_compile" = true; then
-    FFLAGS="$coin_dbg_fflags $coin_add_fflags $coin_warn_fflags"
-  else
-    if test -z "$coin_opt_fflags"; then
-      # Try if -O option works if nothing else is set
-      FFLAGS=-O
-      cat >conftest.$ac_ext <<_ACEOF
+  if test -z "$coin_opt_fflags"; then
+    # Try if -O option works if nothing else is set
+    FFLAGS=-O
+    cat >conftest.$ac_ext <<_ACEOF
       program main
       integer i
       end
@@ -4200,15 +4319,31 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-    fi
-    FFLAGS="$coin_opt_fflags $coin_add_fflags $coin_warn_fflags"
   fi
-fi
 
-# Check if user wants to have additional FFLAGS options
+  if test x${DBG_FFLAGS+set} != xset; then
+    DBG_FFLAGS="$coin_dbg_fflags $coin_add_fflags $coin_warn_fflags"
+  fi
+  if test x${OPT_FFLAGS+set} != xset; then
+    OPT_FFLAGS="$coin_opt_fflags $coin_add_fflags -DNDEBUG $coin_warn_fflags"
+  fi
 
-if test x"$ADD_FFLAGS" != x; then
+  DBG_FFLAGS="$DBG_FFLAGS $ADD_FFLAGS"
+  OPT_FFLAGS="$OPT_FFLAGS $ADD_FFLAGS"
+
+  if test "$coin_debug_compile" = "true"; then
+    FFLAGS="$DBG_FFLAGS"
+  else
+    FFLAGS="$OPT_FFLAGS"
+  fi
+else
   FFLAGS="$FFLAGS $ADD_FFLAGS"
+  if test x${DBG_FFLAGS+set} != xset; then
+    DBG_FFLAGS="$FFLAGS"
+  fi
+  if test x${OPT_FFLAGS+set} != xset; then
+    OPT_FFLAGS="$FFLAGS"
+  fi
 fi
 
 # Try if FFLAGS works
@@ -4293,12 +4428,9 @@ rm -f conftest.err conftest.$ac_objext \
 echo "$as_me: WARNING: This value for FFLAGS does not work.  I will continue with empty FFLAGS, but you might want to set FFLAGS manually." >&2;}
   fi
 fi
-coin_cv_fflags="$FFLAGS"
 
-fi
-echo "$as_me:$LINENO: result: $coin_cv_fflags" >&5
-echo "${ECHO_T}$coin_cv_fflags" >&6 # AC_CACHE_CHECK([for Fortran compiler options FFLAGS]
-FFLAGS="$coin_cv_fflags"
+{ echo "$as_me:$LINENO: Fortran compiler options are: $FFLAGS" >&5
+echo "$as_me: Fortran compiler options are: $FFLAGS" >&6;}
 
 
 if test x"$MPIF77" = x; then :; else
@@ -4380,7 +4512,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:4383: \"$ac_link\") >&5
+(eval echo $as_me:4515: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4458,7 +4590,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:4461: \"$ac_link\") >&5
+(eval echo $as_me:4593: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -6178,7 +6310,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6181 "configure"' > conftest.$ac_ext
+  echo '#line 6313 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8158,11 +8290,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8161: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8293: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8165: \$? = $ac_status" >&5
+   echo "$as_me:8297: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8426,11 +8558,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8429: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8561: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8433: \$? = $ac_status" >&5
+   echo "$as_me:8565: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8530,11 +8662,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8533: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8665: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8537: \$? = $ac_status" >&5
+   echo "$as_me:8669: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10947,7 +11079,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10950 "configure"
+#line 11082 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11047,7 +11179,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11050 "configure"
+#line 11182 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13406,11 +13538,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13409: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13541: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13413: \$? = $ac_status" >&5
+   echo "$as_me:13545: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13510,11 +13642,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13513: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13645: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13517: \$? = $ac_status" >&5
+   echo "$as_me:13649: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15079,11 +15211,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15082: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15214: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15086: \$? = $ac_status" >&5
+   echo "$as_me:15218: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15183,11 +15315,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15186: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15318: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15190: \$? = $ac_status" >&5
+   echo "$as_me:15322: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17389,11 +17521,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17392: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17524: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17396: \$? = $ac_status" >&5
+   echo "$as_me:17528: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17657,11 +17789,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17660: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17792: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17664: \$? = $ac_status" >&5
+   echo "$as_me:17796: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17761,11 +17893,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17764: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17896: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17768: \$? = $ac_status" >&5
+   echo "$as_me:17900: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -30032,13 +30164,6 @@ echo "$as_me: error: conditional \"ALWAYS_FALSE\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
-if test -z "${COIN_DEBUG_TRUE}" && test -z "${COIN_DEBUG_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_DEBUG\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_DEBUG\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
 if test -z "${AMDEP_TRUE}" && test -z "${AMDEP_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"AMDEP\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
@@ -30739,11 +30864,12 @@ s,@ADDLIBS@,$ADDLIBS,;t t
 s,@FADDLIBS@,$FADDLIBS,;t t
 s,@ALWAYS_FALSE_TRUE@,$ALWAYS_FALSE_TRUE,;t t
 s,@ALWAYS_FALSE_FALSE@,$ALWAYS_FALSE_FALSE,;t t
-s,@COIN_DEBUG_TRUE@,$COIN_DEBUG_TRUE,;t t
-s,@COIN_DEBUG_FALSE@,$COIN_DEBUG_FALSE,;t t
 s,@EGREP@,$EGREP,;t t
 s,@LN_S@,$LN_S,;t t
 s,@CDEFS@,$CDEFS,;t t
+s,@ADD_CFLAGS@,$ADD_CFLAGS,;t t
+s,@DBG_CFLAGS@,$DBG_CFLAGS,;t t
+s,@OPT_CFLAGS@,$OPT_CFLAGS,;t t
 s,@CC@,$CC,;t t
 s,@CFLAGS@,$CFLAGS,;t t
 s,@LDFLAGS@,$LDFLAGS,;t t
@@ -30751,19 +30877,22 @@ s,@CPPFLAGS@,$CPPFLAGS,;t t
 s,@ac_ct_CC@,$ac_ct_CC,;t t
 s,@EXEEXT@,$EXEEXT,;t t
 s,@OBJEXT@,$OBJEXT,;t t
-s,@ADD_CFLAGS@,$ADD_CFLAGS,;t t
 s,@MPICC@,$MPICC,;t t
 s,@CXXDEFS@,$CXXDEFS,;t t
+s,@ADD_CXXFLAGS@,$ADD_CXXFLAGS,;t t
+s,@DBG_CXXFLAGS@,$DBG_CXXFLAGS,;t t
+s,@OPT_CXXFLAGS@,$OPT_CXXFLAGS,;t t
 s,@CXX@,$CXX,;t t
 s,@CXXFLAGS@,$CXXFLAGS,;t t
 s,@ac_ct_CXX@,$ac_ct_CXX,;t t
-s,@ADD_CXXFLAGS@,$ADD_CXXFLAGS,;t t
 s,@MPICXX@,$MPICXX,;t t
 s,@CXXLIBS@,$CXXLIBS,;t t
+s,@ADD_FFLAGS@,$ADD_FFLAGS,;t t
+s,@DBG_FFLAGS@,$DBG_FFLAGS,;t t
+s,@OPT_FFLAGS@,$OPT_FFLAGS,;t t
 s,@F77@,$F77,;t t
 s,@FFLAGS@,$FFLAGS,;t t
 s,@ac_ct_F77@,$ac_ct_F77,;t t
-s,@ADD_FFLAGS@,$ADD_FFLAGS,;t t
 s,@MPIF77@,$MPIF77,;t t
 s,@FLIBS@,$FLIBS,;t t
 s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
