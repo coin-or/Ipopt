@@ -287,7 +287,7 @@ namespace Ipopt
                                         NULL,
                                         orig_x_space,
                                         false);
-      h_space_->SetCompSpace(0, 0, *new_orig_h_space);
+      h_space_->SetCompSpace(0, 0, *new_orig_h_space, true);
     }
     else {
       SmartPtr<SumSymMatrixSpace> sumsym_mat_space =
@@ -631,6 +631,24 @@ namespace Ipopt
     SmartPtr<SumSymMatrix> h_sum = dynamic_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
     h_sum->SetTerm(0, 1.0, *h_con_orig);
     h_sum->SetTerm(1, obj_factor*Eta(mu), *DR_x_);
+
+    return GetRawPtr(retPtr);
+  }
+
+  SmartPtr<const SymMatrix> RestoIpoptNLP::uninitialized_h()
+  {
+    SmartPtr<CompoundSymMatrix> retPtr;
+    if (hessian_approximation_==LIMITED_MEMORY) {
+      retPtr = h_space_->MakeNewCompoundSymMatrix();
+    }
+    else {
+      SmartPtr<const SymMatrix> h_con_orig = orig_ip_nlp_->uninitialized_h();
+      retPtr = h_space_->MakeNewCompoundSymMatrix();
+      SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0,0);
+      SmartPtr<SumSymMatrix> h_sum = dynamic_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
+      h_sum->SetTerm(0, 1.0, *h_con_orig);
+      h_sum->SetTerm(1, 1.0, *DR_x_);
+    }
 
     return GetRawPtr(retPtr);
   }

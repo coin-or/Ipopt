@@ -578,6 +578,11 @@ namespace Ipopt
     return retValue;
   }
 
+  SmartPtr<const SymMatrix> OrigIpoptNLP::uninitialized_h()
+  {
+    return h_space_->MakeNewSymMatrix();
+  }
+
   SmartPtr<const SymMatrix> OrigIpoptNLP::h(const Vector& x,
       Number obj_factor,
       const Vector& yc,
