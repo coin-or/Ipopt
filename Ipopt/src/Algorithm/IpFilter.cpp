@@ -69,7 +69,7 @@ namespace Ipopt
         delete entry_to_remove;
       }
       else {
-	iter++;
+        iter++;
       }
     }
     FilterEntry* new_entry = new FilterEntry(vals, iteration);

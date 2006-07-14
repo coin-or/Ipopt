@@ -2,6 +2,14 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2006-07-14 - version 3.2.1 - dev release number 764
+        - Bugfix in least square multiplier estimate.
+          It mainly showed up in LBFGS with restoration phase as seg fault
+
+2006-07-07 - version 3.2.0 - dev 757
+        - changed installation procedure and directory structure to
+          conform with new COIN-OR convention
+
 2006-04-08 - version 3.1.0 - dev release number 714
         Several bug-fixes, improvements and additions. In particular:
 	- new quasi-Newton approximation using L-BFGS

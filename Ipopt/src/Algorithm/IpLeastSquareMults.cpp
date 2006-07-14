@@ -34,7 +34,7 @@ namespace Ipopt
     DBG_START_METH("LeastSquareMultipliers::CalculateMultipliers",
                    dbg_verbosity);
 
-    SmartPtr<const SymMatrix> zeroW = IpNLP().HessianMatrixSpace()->MakeNewSymMatrix();
+    SmartPtr<const SymMatrix> zeroW = IpNLP().uninitialized_h();
     DBG_PRINT_MATRIX(2, "zeroW", *zeroW);
     SmartPtr<const Matrix> J_c = IpCq().curr_jac_c();
     SmartPtr<const Matrix> J_d = IpCq().curr_jac_d();
