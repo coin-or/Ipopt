@@ -197,6 +197,11 @@ namespace Ipopt
                                         const Vector& yc,
                                         const Vector& yd,
                                         Number mu) = 0;
+
+    /** Provides a Hessian matrix from the correct matrix space with
+     *  uninitialized values.  This can be used in LeastSquareMults to
+     *  obtain a "zero Hessian". */
+    virtual SmartPtr<const SymMatrix> uninitialized_h() = 0;
     //@}
 
     /**@name solution routines */
