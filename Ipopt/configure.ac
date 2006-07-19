@@ -494,20 +494,22 @@ AC_LANG_POP(C++)
 # Equivalent int Fortran and C types #
 ######################################
 
+# FIXME: The following test should be active, but this requires chance in
+#        code to copy Index* to ipfint* arrays...
 if test "$cross_compiling" = no && test "$is_bg" != yes; then
   AC_LANG_PUSH(C)
   AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
-  AC_CHECK_SIZEOF([long])
-  AC_CHECK_SIZEOF([int])
-  AC_CHECK_SIZEOF([double])
-  AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
-  if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
-    AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
-    AC_MSG_RESULT([int])
-  else
-    AC_DEFINE([FORTRAN_INTEGER_TYPE],[long])
-    AC_MSG_RESULT([long])
-  fi
+#  AC_CHECK_SIZEOF([long])
+#  AC_CHECK_SIZEOF([int])
+#  AC_CHECK_SIZEOF([double])
+#  AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
+#  if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
+#    AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
+#    AC_MSG_RESULT([int])
+#  else
+#    AC_DEFINE([FORTRAN_INTEGER_TYPE],[long])
+#    AC_MSG_RESULT([long])
+#  fi
   AC_LANG_POP(C)
 else
   AC_MSG_WARN([We are cross compiling, assuming Fortran `INTEGER' type corresponds to C `int' type])
