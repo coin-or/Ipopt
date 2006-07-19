@@ -164,17 +164,8 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* The size of a `double', as computed by sizeof. */
-#undef SIZEOF_DOUBLE
-
-/* The size of a `int', as computed by sizeof. */
-#undef SIZEOF_INT
-
 /* The size of a `int *', as computed by sizeof. */
 #undef SIZEOF_INT_P
-
-/* The size of a `long', as computed by sizeof. */
-#undef SIZEOF_LONG
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
