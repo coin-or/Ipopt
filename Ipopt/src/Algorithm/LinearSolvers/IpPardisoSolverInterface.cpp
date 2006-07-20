@@ -169,6 +169,7 @@ namespace Ipopt
     have_symbolic_factorization_=false;
     initialized_=false;
     delete[] a_;
+    a_ = NULL;
 
     // Call Pardiso's initialization routine
     IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
