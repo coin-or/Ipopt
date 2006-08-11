@@ -112,6 +112,16 @@ namespace Ipopt
       "If the integer or real workspace is not large enough, "
       "Ipopt will increase its size by this factor.  This option is only "
       "available if Ipopt has been compiled with MA27.");
+    roptions->AddStringOption2(
+      "ma27_skip_inertia_check",
+      "Always present inertia is correct.",
+      "no",
+      "no", "check interia",
+      "yes", "skip inertia check",
+      "Setting this option to \"yes\" essentially disables inertia check. "
+      "This option makes the algorithm non-robust and easily fail, but it "
+      "might give some insight into the necessity of interia control.");
+
   }
 
   bool Ma27TSolverInterface::InitializeImpl(const OptionsList& options,
@@ -130,6 +140,8 @@ namespace Ipopt
     options.GetNumericValue("ma27_liw_init_factor", liw_init_factor_, prefix);
     options.GetNumericValue("ma27_la_init_factor", la_init_factor_, prefix);
     options.GetNumericValue("ma27_meminc_factor", meminc_factor_, prefix);
+    options.GetBoolValue("ma27_skip_inertia_check",
+                         skip_inertia_check_, prefix);
     // The following option is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
@@ -446,7 +458,7 @@ namespace Ipopt
     // Check whether the number of negative eigenvalues matches the requested
     // count
     IpData().TimingStats().LinearSystemFactorization().End();
-    if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
+    if (!skip_inertia_check_ && check_NegEVals && (numberOfNegEVals!=negevals_)) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "In Ma27TSolverInterface::Factorization: negevals_ = %d, but numberOfNegEVals = %d\n",
                      negevals_, numberOfNegEVals);

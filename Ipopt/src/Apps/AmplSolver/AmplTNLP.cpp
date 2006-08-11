@@ -1031,6 +1031,14 @@ namespace Ipopt
                                      "bound_push",
                                      AmplOptionsList::Number_Option,
                                      "Desired minimal absolute distance of initial point to bound");
+    ampl_options_list->AddAmplOption("slack_bound_frac",
+                                     "slack_bound_frac",
+                                     AmplOptionsList::Number_Option,
+                                     "Desired minimal relative distance of initial slack to bound");
+    ampl_options_list->AddAmplOption("slack_bound_push",
+                                     "slack_bound_push",
+                                     AmplOptionsList::Number_Option,
+                                     "Desired minimal absolute distance of initial slack to bound");
     ampl_options_list->AddAmplOption("bound_mult_init_val",
                                      "bound_mult_init_val",
                                      AmplOptionsList::Number_Option,

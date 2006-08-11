@@ -60,10 +60,14 @@ namespace Ipopt
 
     /**@name Algorithmic Parameters */
     //@{
-    /** Parameters for bumping x0 in warm start mode */
+    /** Abolsute parameters for bumping x0 in warm start mode */
     Number warm_start_bound_push_;
-    /** Parameters for bumping x0 in warm start mode */
+    /** Relateive parameters for bumping x0 in warm start mode */
     Number warm_start_bound_frac_;
+    /** Abolsute parameters for bumping s0 in warm start mode */
+    Number warm_start_slack_bound_push_;
+    /** Relateive parameters for bumping s0 in warm start mode */
+    Number warm_start_slack_bound_frac_;
     /** Parameters for bumping initial bound multipliers */
     Number warm_start_mult_bound_push_;
     /** Maximal size of entries in bound and equality constraint

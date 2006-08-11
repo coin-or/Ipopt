@@ -44,6 +44,14 @@ namespace Ipopt
       "same as bound_frac for the regular initializer.",
       0.0, true, 0.5, false, 1e-3);
     roptions->AddLowerBoundedNumberOption(
+      "warm_start_slack_bound_push",
+      "same as slack_bound_push for the regular initializer.",
+      0.0, true, 1e-3);
+    roptions->AddBoundedNumberOption(
+      "warm_start_slack_bound_frac",
+      "same as slack_bound_frac for the regular initializer.",
+      0.0, true, 0.5, false, 1e-3);
+    roptions->AddLowerBoundedNumberOption(
       "warm_start_mult_bound_push",
       "same as mult_bound_push for the regular initializer.",
       0.0, true, 1e-3);
@@ -71,6 +79,10 @@ namespace Ipopt
                             warm_start_bound_push_, prefix);
     options.GetNumericValue("warm_start_bound_frac",
                             warm_start_bound_frac_, prefix);
+    options.GetNumericValue("warm_start_slack_bound_push",
+                            warm_start_slack_bound_push_, prefix);
+    options.GetNumericValue("warm_start_slack_bound_frac",
+                            warm_start_slack_bound_frac_, prefix);
     options.GetNumericValue("warm_start_mult_bound_push",
                             warm_start_mult_bound_push_, prefix);
     options.GetNumericValue("warm_start_mult_init_max",
@@ -288,8 +300,8 @@ namespace Ipopt
 
     // Push the primal s variables
     DefaultIterateInitializer::push_variables(Jnlst(),
-        warm_start_bound_push_,
-        warm_start_bound_frac_,
+        warm_start_slack_bound_push_,
+        warm_start_slack_bound_frac_,
         "s",
         *IpData().curr()->s(),
         new_s,

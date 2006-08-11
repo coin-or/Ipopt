@@ -42,6 +42,22 @@ namespace Ipopt
       "the bounds (together with \"bound_push\").  (This is kappa_2 in "
       "Section 3.6 of implementation paper.)");
     reg_options->AddLowerBoundedNumberOption(
+      "slack_bound_push",
+      "Desired minimum absolute distance from the initial slack to bound.",
+      0.0, true, 0.01,
+      "Determines how much the initial slack variables might have to "
+      "be modified in order to be sufficiently inside "
+      "the inequality bounds (together with \"slack_bound_frac\").  (This is kappa_1 in "
+      "Section 3.6 of implementation paper.)");
+    reg_options->AddBoundedNumberOption(
+      "slack_bound_frac",
+      "Desired minimum relative distance from the initial slack to bound.",
+      0, true, 0.5, false, 0.01,
+      "Determines how much the initial slack variables might have to "
+      "be modified in order to be sufficiently inside "
+      "the inequality bounds (together with \"slack_bound_push\").  (This is kappa_2 in "
+      "Section 3.6 of implementation paper.)");
+    reg_options->AddLowerBoundedNumberOption(
       "constr_mult_init_max",
       "Maximum allowed least-square guess of constraint multipliers.",
       0, false, 1e3,
@@ -74,6 +90,8 @@ namespace Ipopt
     // Check for the algorithm options
     options.GetNumericValue("bound_push", bound_push_, prefix);
     options.GetNumericValue("bound_frac", bound_frac_, prefix);
+    options.GetNumericValue("slack_bound_push", slack_bound_push_, prefix);
+    options.GetNumericValue("slack_bound_frac", slack_bound_frac_, prefix);
     options.GetNumericValue("constr_mult_init_max",
                             constr_mult_init_max_, prefix);
     options.GetNumericValue("bound_mult_init_val",
@@ -144,7 +162,7 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "s", *s);
 
     SmartPtr<const Vector> new_s;
-    push_variables(Jnlst(), bound_push_, bound_frac_,
+    push_variables(Jnlst(), slack_bound_push_, slack_bound_frac_,
                    "s", *s, new_s, *IpNLP().d_L(),
                    *IpNLP().d_U(), *IpNLP().Pd_L(), *IpNLP().Pd_U());
 

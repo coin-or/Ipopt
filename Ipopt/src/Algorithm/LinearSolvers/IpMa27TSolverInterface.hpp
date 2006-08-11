@@ -163,6 +163,9 @@ namespace Ipopt
     /** Flag indicating whether the TNLP with identical structure has
      *  already been solved before. */
     bool warm_start_same_structure_;
+    /** Flag indicating if the interia is always assumed to be
+     *  correct. */
+    bool skip_inertia_check_;
     //@}
 
     /** @name Data for the linear solver.

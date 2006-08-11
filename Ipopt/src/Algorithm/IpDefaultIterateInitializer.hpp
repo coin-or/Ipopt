@@ -102,10 +102,14 @@ namespace Ipopt
 
     /**@name Algorithmic Parameters */
     //@{
-    /** Parameters for bumping x0 */
+    /** Absolute parameter for bumping x0 */
     Number bound_push_;
-    /** Parameters for bumping x0 */
+    /** Relative parameter for bumping x0 */
     Number bound_frac_;
+    /** Absolute parameter for bumping s0 */
+    Number slack_bound_push_;
+    /** Relative parameter for bumping s0 */
+    Number slack_bound_frac_;
 
     /** If max-norm of the initial equality constraint multiplier
      *  estimate is larger than this, the initial y_* variables are

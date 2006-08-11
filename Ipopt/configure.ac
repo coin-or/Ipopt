@@ -368,7 +368,7 @@ fi
 AC_LANG_PUSH([Fortran 77])
 AC_ARG_WITH([pardiso],
             AC_HELP_STRING([--with-pardiso],
-                           [specify Pardiso library (unsupported)]),
+                           [specify Pardiso library]),
             [use_pardiso=$withval], [use_pardiso=no])
 
 if test ! "$use_pardiso" = "no"; then

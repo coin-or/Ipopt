@@ -211,6 +211,8 @@ namespace Ipopt
           // Initialization
           options_to_print.push_back("bound_frac");
           options_to_print.push_back("bound_push");
+          options_to_print.push_back("slack_bound_frac");
+          options_to_print.push_back("slack_bound_push");
           options_to_print.push_back("bound_mult_init_val");
           options_to_print.push_back("constr_mult_init_max");
           options_to_print.push_back("bound_mult_init_val");
@@ -218,6 +220,8 @@ namespace Ipopt
           options_to_print.push_back("warm_start_init_point");
           options_to_print.push_back("warm_start_bound_push");
           options_to_print.push_back("warm_start_bound_frac");
+          options_to_print.push_back("warm_start_slack_bound_frac");
+          options_to_print.push_back("warm_start_slack_bound_push");
           options_to_print.push_back("warm_start_mult_bound_push");
           options_to_print.push_back("warm_start_mult_init_max");
           // Multiplier updates
@@ -366,7 +370,7 @@ namespace Ipopt
     roptions->AddBoundedIntegerOption(
       "print_level",
       "Output verbosity level.",
-      0, J_LAST_LEVEL-1, J_ITERSUMMARY,
+      -2, J_LAST_LEVEL-1, J_ITERSUMMARY,
       "Sets the default verbosity level for console output. The "
       "larger this value the more detailed is the output.");
 

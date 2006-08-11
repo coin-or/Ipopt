@@ -1133,7 +1133,7 @@ Optional Packages:
   --with-blas             specify BLAS library (or BUILD for compilation)
   --with-lapack           specify LAPACK library (or BUILD for compilation)
   --with-hsl              specify Harwell library (or BUILD for compilation)
-  --with-pardiso          specify Pardiso library (unsupported)
+  --with-pardiso          specify Pardiso library
   --with-taucs            specify TAUCS library and dependencies
   --with-mumps            specify MUMPS library and dependencies
   --with-wsmp             specify WSMP library
