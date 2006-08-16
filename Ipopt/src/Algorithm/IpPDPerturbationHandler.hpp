@@ -174,6 +174,9 @@ namespace Ipopt
     bool reset_last_;
     /** Required number of iterations for degeneracy conclusions. */
     Index degen_iters_max_;
+    /** Flag indicating that the delta_c, delta_d perturbation should
+     *  always be used */
+    bool perturb_always_cd_;
     //@}
 
     /** @name Auxilliary methods */

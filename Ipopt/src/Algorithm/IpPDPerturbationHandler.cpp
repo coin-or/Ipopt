@@ -98,6 +98,15 @@ namespace Ipopt
       "Exponent for mu in the regularization for rank-deficient constraint Jacobians.",
       0., false, 0.25,
       "(This is kappa_c in the implementation paper.)");
+    roptions->AddStringOption2(
+      "perturb_always_cd",
+      "Active permanent perturbation of constraint linearization.",
+      "no",
+      "no", "perturbation only used when required",
+      "yes", "always use perturbation",
+      "This options makes the delta_c and delta_d perturbation be used for "
+      "the computation of every search direction.  Usually, it is only used "
+      "when the iteration matrix is singular.");
   }
 
   bool PDPerturbationHandler::InitializeImpl(const OptionsList& options,
@@ -111,9 +120,15 @@ namespace Ipopt
     options.GetNumericValue("first_hessian_perturbation", delta_xs_init_, prefix);
     options.GetNumericValue("jacobian_regularization_value", delta_cd_val_, prefix);
     options.GetNumericValue("jacobian_regularization_exponent", delta_cd_exp_, prefix);
+    options.GetBoolValue("perturb_always_cd", perturb_always_cd_, prefix);
 
     hess_degenerate_ = NOT_YET_DETERMINED;
-    jac_degenerate_ = NOT_YET_DETERMINED;
+    if (!perturb_always_cd_) {
+      jac_degenerate_ = NOT_YET_DETERMINED;
+    }
+    else {
+      jac_degenerate_ = NOT_DEGENERATE;
+    }
     degen_iters_ = 0;
 
     delta_x_curr_ = 0.;
@@ -169,7 +184,12 @@ namespace Ipopt
 
     if (hess_degenerate_ == NOT_YET_DETERMINED ||
         jac_degenerate_ == NOT_YET_DETERMINED) {
-      test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_EQ_0;
+      if (!perturb_always_cd_) {
+        test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_EQ_0;
+      }
+      else {
+        test_status_ = TEST_DELTA_C_GT_0_DELTA_X_EQ_0;
+      }
     }
     else {
       test_status_ = NO_TEST;
@@ -178,6 +198,9 @@ namespace Ipopt
     if (jac_degenerate_ == DEGENERATE) {
       delta_c = delta_c_curr_ = delta_cd();
       IpData().Append_info_string("l");
+    }
+    else if (perturb_always_cd_) {
+      delta_c = delta_c_curr_ = delta_cd();
     }
     else {
       delta_c = delta_c_curr_ = 0.;
@@ -248,14 +271,25 @@ namespace Ipopt
         case TEST_DELTA_C_GT_0_DELTA_X_EQ_0:
         DBG_ASSERT(delta_x_curr_ == 0. && delta_c_curr_ > 0.);
         DBG_ASSERT(jac_degenerate_ == NOT_YET_DETERMINED);
-        delta_d_curr_ = delta_c_curr_ = 0.;
-        retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-                                              delta_c, delta_d);
-        if (!retval) {
-          return false;
+        if (!perturb_always_cd_) {
+          delta_d_curr_ = delta_c_curr_ = 0.;
+          retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
+                                                delta_c, delta_d);
+          if (!retval) {
+            return false;
+          }
+          DBG_ASSERT(delta_c == 0. && delta_d == 0.);
+          test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         }
-        DBG_ASSERT(delta_c == 0. && delta_d == 0.);
-        test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
+        else {
+          retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
+                                                delta_c, delta_d);
+          if (!retval) {
+            return false;
+          }
+          DBG_ASSERT(delta_c > 0. && delta_d > 0.);
+          test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
+        }
         break;
         case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
         DBG_ASSERT(delta_x_curr_ > 0. && delta_c_curr_ == 0.);
