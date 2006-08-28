@@ -278,6 +278,7 @@ namespace Ipopt
       return true;
 
     bool tiny_step_flag = IpData().tiny_step_flag();
+    IpData().Set_tiny_step_flag(false);
     if (!IpData().FreeMuMode()) {
       // if we are in the fixed mu mode, we need to check if the
       // current iterate is good enough to continue with the free mode

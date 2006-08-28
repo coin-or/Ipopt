@@ -156,6 +156,31 @@ namespace Ipopt
 
     int retval=-1;
 
+    if (resto_status != SUCCESS) {
+      // In case of a failure, we still copy the values of primal and
+      // dual variables into the data fields of the regular NLP, so
+      // that they will be returned to the user
+      SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
+
+      SmartPtr<const CompoundVector> cx =
+        dynamic_cast<const CompoundVector*>(GetRawPtr(resto_ip_data->curr()->x()));
+      DBG_ASSERT(IsValid(cx));
+      trial->Set_primal(*cx->GetComp(0), *resto_ip_data->curr()->s());
+
+      trial->Set_eq_mult(*resto_ip_data->curr()->y_c(),
+                         *resto_ip_data->curr()->y_d());
+
+      cx = dynamic_cast<const CompoundVector*>
+           (GetRawPtr(resto_ip_data->curr()->z_L()));
+      DBG_ASSERT(IsValid(cx));
+      trial->Set_bound_mult(*cx->GetComp(0), *resto_ip_data->curr()->z_U(),
+                            *resto_ip_data->curr()->v_L(),
+                            *resto_ip_data->curr()->v_U());
+
+      IpData().set_trial(trial);
+      IpData().AcceptTrialPoint();
+    }
+
     if (resto_status == SUCCESS) {
       if (Jnlst().ProduceOutput(J_DETAILED, J_LINE_SEARCH)) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,

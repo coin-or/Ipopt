@@ -142,6 +142,7 @@ namespace Ipopt
 
     bool done = false;
     bool tiny_step_flag = IpData().tiny_step_flag();
+    IpData().Set_tiny_step_flag(false);
     while ((sub_problem_error <= kappa_eps_mu || tiny_step_flag)
            && !done && !first_iter_resto_) {
       Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
