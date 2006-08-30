@@ -721,7 +721,7 @@ namespace Ipopt
 } // namespace Ipopt
 
 // Macro definitions for debugging vectors
-#ifndef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY == 0
 # define DBG_PRINT_VECTOR(__verbose_level, __vec_name, __vec)
 #else
 # define DBG_PRINT_VECTOR(__verbose_level, __vec_name, __vec) \

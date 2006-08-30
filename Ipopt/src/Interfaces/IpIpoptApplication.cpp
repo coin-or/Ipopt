@@ -46,7 +46,7 @@ namespace Ipopt
       nlp_adapter_(NULL)
   {
     try {
-# ifdef IP_DEBUG
+# if COIN_IPOPT_VERBOSITY > 0
       DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
       SmartPtr<Journal> debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_ITERSUMMARY);
       debug_jrnl->SetPrintLevel(J_DBG, J_ALL);

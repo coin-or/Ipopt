@@ -285,7 +285,7 @@ namespace Ipopt
 } // namespace Ipopt
 
 // Macro definitions for debugging matrices
-#ifndef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY == 0
 # define DBG_PRINT_MATRIX(__verbose_level, __mat_name, __mat)
 #else
 # define DBG_PRINT_MATRIX(__verbose_level, __mat_name, __mat) \

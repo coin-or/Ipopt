@@ -11,7 +11,7 @@
 #include "IpDebug.hpp"
 #include "IpJournalist.hpp"
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
 
 namespace Ipopt
 {

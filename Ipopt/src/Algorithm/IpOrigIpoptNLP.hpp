@@ -22,6 +22,12 @@ namespace Ipopt
     LIMITED_MEMORY
   };
 
+  /** enumeration for the Hessian approximation space. */
+  enum HessianApproximationSpace {
+    NONLINEAR_VARS=0,
+    ALL_VARS
+  };
+
   /** This class maps the traditional NLP into
    *  something that is more useful by Ipopt.
    *  This class takes care of storing the
@@ -386,6 +392,8 @@ namespace Ipopt
     bool warm_start_same_structure_;
     /** Flag indicating what Hessian information is to be used. */
     HessianApproximationType hessian_approximation_;
+    /** Flag indicating in which space Hessian is to be approximated. */
+    HessianApproximationSpace hessian_approximation_space_;
     /** Flag indicating whether it is desired to check if there are
      *  Nan or Inf entries in first and second derivative matrices. */
     bool check_derivatives_for_naninf_;

@@ -87,7 +87,7 @@
 #endif /* HAVE_CONFIG_H */
 
 /* In the Ipopt code, we use IP_DEBUG to indicate debug compile */
-#if COIN_IPOPT_DEBUG > 0
+#if COIN_IPOPT_CHECKLEVEL > 0
 #define IP_DEBUG 1
 #endif
 

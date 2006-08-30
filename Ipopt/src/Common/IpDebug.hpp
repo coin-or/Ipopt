@@ -33,7 +33,7 @@
 # define DBG_DO(__cmd)
 #endif
 
-#ifndef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY < 1
 # define DBG_START_FUN(__func_name, __verbose_level)
 # define DBG_START_METH(__func_name, __verbose_level)
 # define DBG_PRINT(__printf_args)

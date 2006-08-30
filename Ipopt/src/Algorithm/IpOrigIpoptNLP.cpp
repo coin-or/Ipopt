@@ -93,9 +93,15 @@ namespace Ipopt
       "Indicates what Hessian information is to be used.",
       "exact",
       "exact", "Use second derivatives provided by the NLP.",
-      "limited-memory", "Perform a limited-memory quasi-Newton  approximation",
+      "limited-memory", "Perform a limited-memory quasi-Newton approximation",
       "This determines which kind of information for the Hessian of the "
       "Lagrangian function is used by the algorithm.");
+    roptions->AddStringOption2(
+      "hessian_approximation_space",
+      "Indicates in which subspace the Hessian information is to be approximated.",
+      "nonlinear-variables",
+      "nonlinear-variables", "only in space of nonlinear variables.",
+      "all-variables", "in space of all variables (without slacks)");
   }
 
   bool OrigIpoptNLP::Initialize(const Journalist& jnlst,
@@ -112,6 +118,8 @@ namespace Ipopt
     Index enum_int;
     options.GetEnumValue("hessian_approximation", enum_int, prefix);
     hessian_approximation_ = HessianApproximationType(enum_int);
+    options.GetEnumValue("hessian_approximation_space", enum_int, prefix);
+    hessian_approximation_space_ = HessianApproximationSpace(enum_int);
 
     // Reset the function evaluation counters (for warm start)
     f_evals_=0;
@@ -179,8 +187,10 @@ namespace Ipopt
       if (hessian_approximation_==LIMITED_MEMORY) {
         SmartPtr<VectorSpace> approx_vecspace;
         SmartPtr<Matrix> P_approx;
-        nlp_->GetQuasiNewtonApproximationSpaces(approx_vecspace,
-                                                P_approx);
+        if (hessian_approximation_space_==NONLINEAR_VARS) {
+          nlp_->GetQuasiNewtonApproximationSpaces(approx_vecspace,
+                                                  P_approx);
+        }
         if (IsValid(approx_vecspace)) {
           DBG_ASSERT(IsValid(P_approx));
           h_space_ = new LowRankUpdateSymMatrixSpace(x_space_->Dim(),
