@@ -80,6 +80,9 @@ namespace Ipopt
 
     /** maximum allowed gradient before scaling is performed */
     Number scaling_max_gradient_;
+
+    /** target size of norm for objective gradient */
+    Number scaling_obj_target_gradient_;
   };
 } // namespace Ipopt
 #endif

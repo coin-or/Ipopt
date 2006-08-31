@@ -49,6 +49,13 @@ namespace Ipopt
       "The restoration phase algorithm is performed, until a point is found "
       "that is acceptable to the filter and the infeasibility has been "
       "reduced by at least the fraction given by this option.");
+    roptions->AddLowerBoundedIntegerOption(
+      "max_resto_iter",
+      "Maximum number of successive iterations in restoration phase.",
+      0, 3000000,
+      "The algorithm terminates with an error message if the number of "
+      "iterations successively taken in the restoration phase exceeds this "
+      "number.");
   }
 
   bool RestoFilterConvergenceCheck::InitializeImpl(const OptionsList& options,
@@ -57,8 +64,10 @@ namespace Ipopt
     DBG_ASSERT(orig_filter_ls_acceptor_ && "Need to call RestoFilterConvergenceCheck::SetOrigFilterLineSearch before Initialize");
     options.GetNumericValue("required_infeasibility_reduction", kappa_resto_, prefix);
     options.GetIntegerValue("max_iter", maximum_iters_, prefix);
+    options.GetIntegerValue("max_resto_iter", maximum_resto_iters_, prefix);
 
     first_resto_iter_ = true;
+    successive_resto_iter_ = 0;
 
     return OptimalityErrorConvergenceCheck::InitializeImpl(options, prefix);
   }
@@ -123,6 +132,14 @@ namespace Ipopt
     if (IpData().iter_count() >= maximum_iters_) {
       return ConvergenceCheck::MAXITER_EXCEEDED;
     }
+
+    if (successive_resto_iter_ > maximum_resto_iters_) {
+      Jnlst().Printf(J_WARNING, J_MAIN,
+                     "More than %d successive iterations taken in restoration phase.\n",
+                     maximum_resto_iters_);
+      return ConvergenceCheck::MAXITER_EXCEEDED;
+    }
+    successive_resto_iter_++;
 
     // First check if the point is now acceptable for the outer filter
     ConvergenceStatus status;
