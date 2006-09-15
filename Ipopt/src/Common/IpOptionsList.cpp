@@ -265,6 +265,45 @@ namespace Ipopt
     return true;
   }
 
+  bool OptionsList::SetStringValueIfUnset(const std::string& tag,
+					  const std::string& value,
+					  bool allow_clobber, /* = true */
+					  bool dont_print /* = false */)
+  {
+    std::string val;
+    bool found = GetStringValue(tag, val, "");
+    if (!found) {
+      return SetStringValue(tag, value, allow_clobber, dont_print);
+    }
+    return true;
+  }
+
+  bool OptionsList::SetNumericValueIfUnset(const std::string& tag,
+					   Number value,
+					   bool allow_clobber, /* = true */
+					   bool dont_print /* = false */)
+  {
+    Number val;
+    bool found = GetNumericValue(tag, val, "");
+    if (!found) {
+      return SetNumericValue(tag, value, allow_clobber, dont_print);
+    }
+    return true;
+  }
+
+  bool OptionsList::SetIntegerValueIfUnset(const std::string& tag,
+					   Index value,
+					   bool allow_clobber, /* = true */
+					   bool dont_print /* = false */)
+  {
+    Index val;
+    bool found = GetIntegerValue(tag, val, "");
+    if (!found) {
+      return SetIntegerValue(tag, value, allow_clobber, dont_print);
+    }
+    return true;
+  }
+
   bool OptionsList::GetStringValue(const std::string& tag, std::string& value,
                                    const std::string& prefix) const
   {
