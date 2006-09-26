@@ -1,4 +1,4 @@
-C Copyright (C) 2005, 2006 Carnegie Mellon University and others.
+C Copyright (C) 2005, 2006 International Business Machines and others.
 C All Rights Reserved.
 C This code is published under the Common Public License.
 C
