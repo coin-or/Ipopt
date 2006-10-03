@@ -505,7 +505,7 @@ namespace Ipopt
     void operator=(const IpoptData&);
     //@}
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
     /** Some debug flags to make sure vectors are not changed
      *  behind the IpoptData's back
      */
@@ -526,9 +526,7 @@ namespace Ipopt
   inline
   SmartPtr<const IteratesVector> IpoptData::curr() const
   {
-#ifdef IP_DEBUG
     DBG_ASSERT(IsNull(curr_) || (curr_->GetTag() == debug_curr_tag_ && curr_->GetTagSum() == debug_curr_tag_sum_) );
-#endif
 
     return curr_;
   }
@@ -536,9 +534,7 @@ namespace Ipopt
   inline
   SmartPtr<const IteratesVector> IpoptData::trial() const
   {
-#ifdef IP_DEBUG
     DBG_ASSERT(IsNull(trial_) || (trial_->GetTag() == debug_trial_tag_ && trial_->GetTagSum() == debug_trial_tag_sum_) );
-#endif
 
     return trial_;
   }
@@ -546,9 +542,7 @@ namespace Ipopt
   inline
   SmartPtr<const IteratesVector> IpoptData::delta() const
   {
-#   ifdef IP_DEBUG
     DBG_ASSERT(IsNull(delta_) || (delta_->GetTag() == debug_delta_tag_ && delta_->GetTagSum() == debug_delta_tag_sum_) );
-#   endif
 
     return delta_;
   }
@@ -556,9 +550,7 @@ namespace Ipopt
   inline
   SmartPtr<const IteratesVector> IpoptData::delta_aff() const
   {
-#   ifdef IP_DEBUG
     DBG_ASSERT(IsNull(delta_aff_) || (delta_aff_->GetTag() == debug_delta_aff_tag_ && delta_aff_->GetTagSum() == debug_delta_aff_tag_sum_) );
-#   endif
 
     return delta_aff_;
   }
@@ -567,7 +559,7 @@ namespace Ipopt
   void IpoptData::CopyTrialToCurrent()
   {
     curr_ = trial_;
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
 
     if (IsValid(curr_)) {
       debug_curr_tag_ = curr_->GetTag();
@@ -586,7 +578,7 @@ namespace Ipopt
   {
     trial_ = ConstPtr(trial);
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
     // verify the correct space
     DBG_ASSERT(trial_->OwnerSpace() == (VectorSpace*)GetRawPtr(iterates_space_));
     if (IsValid(trial)) {
@@ -606,7 +598,7 @@ namespace Ipopt
   void IpoptData::set_delta(SmartPtr<IteratesVector>& delta)
   {
     delta_ = ConstPtr(delta);
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
 
     if (IsValid(delta)) {
       debug_delta_tag_ = delta->GetTag();
@@ -625,7 +617,7 @@ namespace Ipopt
   void IpoptData::set_delta_aff(SmartPtr<IteratesVector>& delta_aff)
   {
     delta_aff_ = ConstPtr(delta_aff);
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
 
     if (IsValid(delta_aff)) {
       debug_delta_aff_tag_ = delta_aff->GetTag();

@@ -191,11 +191,11 @@ namespace Ipopt
      *  set before*/
     //@{
     bool SetStringValueIfUnset(const std::string& tag, const std::string& value,
-			       bool allow_clobber = true, bool dont_print = false);
+                               bool allow_clobber = true, bool dont_print = false);
     bool SetNumericValueIfUnset(const std::string& tag, Number value,
-				bool allow_clobber = true, bool dont_print = false);
+                                bool allow_clobber = true, bool dont_print = false);
     bool SetIntegerValueIfUnset(const std::string& tag, Index value,
-				bool allow_clobber = true, bool dont_print = false);
+                                bool allow_clobber = true, bool dont_print = false);
     //@}
 
     /** @name Methods for retrieving values from the options list.  If

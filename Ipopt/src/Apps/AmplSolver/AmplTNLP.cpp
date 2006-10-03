@@ -21,7 +21,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -361,12 +361,10 @@ namespace Ipopt
   bool AmplTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
   {
     DBG_START_METH("AmplTNLP::eval_g", dbg_verbosity);
-#ifdef IP_DEBUG
 
-    ASL_pfgh* asl = asl_;
+    DBG_DO(ASL_pfgh* asl = asl_);
     DBG_ASSERT(n == n_var);
     DBG_ASSERT(m == n_con);
-#endif
 
     if (!apply_new_x(new_x, n, x)) {
       return false;

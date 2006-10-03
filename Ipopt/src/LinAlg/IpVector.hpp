@@ -734,6 +734,6 @@ namespace Ipopt
 		      "# "); \
       } \
    }
-#endif // IP_DEBUG
+#endif //if COIN_IPOPT_VERBOSITY == 0
 
 #endif

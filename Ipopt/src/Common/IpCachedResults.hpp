@@ -11,12 +11,18 @@
 
 #include "IpTaggedObject.hpp"
 #include "IpObserver.hpp"
-#include "IpDebug.hpp"
 #include <algorithm>
 #include <vector>
 #include <list>
 
 namespace Ipopt
+      //#define IP_DEBUG_CACHE
+#if COIN_IPOPT_CHECKLEVEL > 2
+# define IP_DEBUG_CACHE
+#endif
+#ifdef IP_DEBUG_CACHE
+# include "IpDebug.hpp"
+#endif
 {
 
   // Forward Declarations
@@ -372,8 +378,8 @@ namespace Ipopt
   {
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::~DependentResult()", dbg_verbosity);
-#endif
     //DBG_ASSERT(stale_ == true);
+#endif
     // Nothing to be done here, destructor
     // of T should sufficiently remove
     // any memory, etc.
@@ -411,10 +417,9 @@ namespace Ipopt
   {
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::DependentsIdentical", dbg_verbosity);
-#endif
-
     DBG_ASSERT(stale_ == false);
     DBG_ASSERT(dependents.size() == dependent_tags_.size());
+#endif
 
     bool retVal = true;
 
@@ -448,9 +453,9 @@ namespace Ipopt
   {
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::GetResult()", dbg_verbosity);
+    DBG_ASSERT(stale_ == false);
 #endif
 
-    DBG_ASSERT(stale_ == false);
     return result_;
   }
 

@@ -40,7 +40,7 @@ extern "C"
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -148,7 +148,7 @@ namespace Ipopt
 
     /* Set the default options for MA27 */
     F77_FUNC(ma27id,MA27ID)(icntl_, cntl_);
-#ifndef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY == 0
 
     icntl_[0] = 0;       // Suppress error messages
     icntl_[1] = 0;       // Suppress diagnostic messages

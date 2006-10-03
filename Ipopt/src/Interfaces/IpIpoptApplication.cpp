@@ -33,7 +33,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -130,7 +130,7 @@ namespace Ipopt
 
       bool option_set;
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
       // Set printlevel for debug
       option_set = options_->GetIntegerValue("debug_print_level",
                                              ivalue, "");
@@ -409,7 +409,7 @@ namespace Ipopt
       "algorithmic options with some documentation before solving the "
       "optimization problem.");
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
 
     roptions->AddBoundedIntegerOption(
       "debug_print_level",

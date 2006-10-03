@@ -12,6 +12,9 @@
 #include "IpReferenced.hpp"
 
 //#define IP_DEBUG_SMARTPTR
+#if COIN_IPOPT_CHECKLEVEL > 2
+# define IP_DEBUG_SMARTPTR
+#endif
 #ifdef IP_DEBUG_SMARTPTR
 # include "IpDebug.hpp"
 #endif
@@ -443,7 +446,7 @@ namespace Ipopt
 #endif
 
     // cannot deref a null pointer
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
 
     assert(ptr_);
 #endif
@@ -460,7 +463,7 @@ namespace Ipopt
 #endif
 
     // cannot dereference a null pointer
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
 
     assert(ptr_);
 #endif

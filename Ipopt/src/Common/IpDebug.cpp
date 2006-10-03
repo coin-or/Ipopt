@@ -105,4 +105,4 @@ namespace Ipopt
 
 } // namespace Ipopt
 
-#endif // #ifdef IP_DEBUG
+#endif // #if COIN_IPOPT_VERBOSITY > 0

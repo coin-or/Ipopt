@@ -2018,8 +2018,8 @@ virtual bool intermediate_callback(AlgorithmMode mode,
                                    Number regularization_size,
                                    Number alpha_du, Number alpha_pr,
                                    Index ls_trials,
-                                   SmartPtr<const IpoptData> ip_data,
-                                   SmartPtr<IpoptCalculatedQuantities> ip_cq)
+                                   const IpoptData* ip_data,
+                                   IpoptCalculatedQuantities* ip_cq)
 \end{verbatim}
 It is not required to implement (overload) this method.  This method
 is called once per iteration (during the convergence check), and can

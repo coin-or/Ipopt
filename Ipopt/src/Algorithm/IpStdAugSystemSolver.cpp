@@ -20,7 +20,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -461,7 +461,7 @@ namespace Ipopt
     DBG_START_METH("StdAugSystemSolver::AugmentedSystemRequiresChange",dbg_verbosity);
     DBG_ASSERT(augsys_tag_ == augmented_system_->GetTag() && "Someone has changed the augmented system outside of the AugSystemSolver. This should NOT happen.");
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
 
     bool Wtest = (W && W->GetTag() != w_tag_);
     bool iWtest = (!W && w_tag_ != 0);

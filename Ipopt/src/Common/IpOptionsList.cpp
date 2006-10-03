@@ -266,9 +266,9 @@ namespace Ipopt
   }
 
   bool OptionsList::SetStringValueIfUnset(const std::string& tag,
-					  const std::string& value,
-					  bool allow_clobber, /* = true */
-					  bool dont_print /* = false */)
+                                          const std::string& value,
+                                          bool allow_clobber, /* = true */
+                                          bool dont_print /* = false */)
   {
     std::string val;
     bool found = GetStringValue(tag, val, "");
@@ -279,9 +279,9 @@ namespace Ipopt
   }
 
   bool OptionsList::SetNumericValueIfUnset(const std::string& tag,
-					   Number value,
-					   bool allow_clobber, /* = true */
-					   bool dont_print /* = false */)
+      Number value,
+      bool allow_clobber, /* = true */
+      bool dont_print /* = false */)
   {
     Number val;
     bool found = GetNumericValue(tag, val, "");
@@ -292,9 +292,9 @@ namespace Ipopt
   }
 
   bool OptionsList::SetIntegerValueIfUnset(const std::string& tag,
-					   Index value,
-					   bool allow_clobber, /* = true */
-					   bool dont_print /* = false */)
+      Index value,
+      bool allow_clobber, /* = true */
+      bool dont_print /* = false */)
   {
     Index val;
     bool found = GetIntegerValue(tag, val, "");

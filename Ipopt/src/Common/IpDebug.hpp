@@ -22,7 +22,7 @@
 # endif
 #endif
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
 # define DBG_ASSERT(test) assert(test)
 # define DBG_ASSERT_EXCEPTION(__condition, __except_type, __msg) \
    ASSERT_EXCEPTION( (__condition), __except_type, __msg);

@@ -11,7 +11,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -230,7 +230,7 @@ namespace Ipopt
     Index numberOfNegEVals)
   {
     DBG_START_METH("LowRankAugSystemSolver::UpdateFactorization",
-                   dbg_verbosity);
+                   2);
 
     DBG_ASSERT(W_factor == 0.0 || W_factor == 1.0);
     ESymSolverStatus retval = SYMSOLVER_SUCCESS;
@@ -268,6 +268,7 @@ namespace Ipopt
     }
     else {
       Wdiag_->SetDiag(*B0);
+      DBG_PRINT_VECTOR(2, "B0", *B0);
     }
 
     SmartPtr<MultiVectorMatrix> Vtilde1_x;
@@ -518,7 +519,7 @@ namespace Ipopt
     DBG_START_METH("LowRankAugSystemSolver::AugmentedSystemRequiresChange",
                    dbg_verbosity);
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
 
     bool Wtest = (W && W->GetTag() != w_tag_);
     bool iWtest = (!W && w_tag_ != 0);

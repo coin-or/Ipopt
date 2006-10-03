@@ -121,7 +121,7 @@ namespace Ipopt
             *new_z_U,
             *new_v_L,
             *new_v_U);
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
 
     debug_curr_tag_ = curr_->GetTag();
     debug_curr_tag_sum_ = curr_->GetTagSum();
