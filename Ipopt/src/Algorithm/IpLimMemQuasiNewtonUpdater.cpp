@@ -271,8 +271,10 @@ namespace Ipopt
                                   1., *y_full_new);
     }
     else {
-      y_full_new->AddTwoVectors(1., *IpCq().curr_grad_lag_x(),
+      y_full_new->AddTwoVectors(1., *IpCq().curr_grad_f(),
                                 -1, *last_grad_f_, 0.);
+      y_full_new->AddTwoVectors(1., *IpCq().curr_jac_cT_times_curr_y_c(),
+                                1., *IpCq().curr_jac_dT_times_curr_y_d(), 1.);
     }
     last_jac_c_->TransMultVector(-1., *IpData().curr()->y_c(),
                                  1., *y_full_new);
