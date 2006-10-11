@@ -113,11 +113,11 @@ fi
 AC_SUBST(BITS_PER_POINTER)
 AC_SUBST(BIT32FCOMMENT)
 AC_SUBST(BIT64FCOMMENT)
-case $ac_cv_sizeof_int_p in
-  4) BITS_PER_POINTER=32
+case "$ac_cv_sizeof_int_p" in
+  4 | 4?) BITS_PER_POINTER=32
      BIT32FCOMMENT=''
      BIT64FCOMMENT='C' ;;
-  8) BITS_PER_POINTER=64
+  8 | 8?) BITS_PER_POINTER=64
      BIT32FCOMMENT='C'
      BIT64FCOMMENT='' ;;
   *) AC_MSG_ERROR([Unknown length of int *]);;
