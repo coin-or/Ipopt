@@ -4325,7 +4325,7 @@ rm -f conftest.err conftest.$ac_objext \
     DBG_FFLAGS="$coin_dbg_fflags $coin_add_fflags $coin_warn_fflags"
   fi
   if test x${OPT_FFLAGS+set} != xset; then
-    OPT_FFLAGS="$coin_opt_fflags $coin_add_fflags -DNDEBUG $coin_warn_fflags"
+    OPT_FFLAGS="$coin_opt_fflags $coin_add_fflags $coin_warn_fflags"
   fi
 
   DBG_FFLAGS="$DBG_FFLAGS $ADD_FFLAGS"
@@ -22011,11 +22011,11 @@ fi
 
 
 
-case $ac_cv_sizeof_int_p in
-  4) BITS_PER_POINTER=32
+case "$ac_cv_sizeof_int_p" in
+  4 | 4?) BITS_PER_POINTER=32
      BIT32FCOMMENT=''
      BIT64FCOMMENT='C' ;;
-  8) BITS_PER_POINTER=64
+  8 | 8?) BITS_PER_POINTER=64
      BIT32FCOMMENT='C'
      BIT64FCOMMENT='' ;;
   *) { { echo "$as_me:$LINENO: error: Unknown length of int *" >&5
