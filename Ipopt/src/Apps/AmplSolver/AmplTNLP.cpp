@@ -278,6 +278,25 @@ namespace Ipopt
     return true;
   }
 
+
+  bool AmplTNLP::get_constraints_linearity(Index n,
+      LinearityType* const_types)
+  {
+    ASL_pfgh* asl = AmplSolverObject();
+    //check that n is good
+    DBG_ASSERT(n == n_con);
+    // check that there are no network constraints
+    DBG_ASSERT(nlnc == 0 && lnc == 0);
+    //the first nlc constraints are non linear the rest is linear
+    for (Index i=0; i<nlc; i++) {
+      const_types[i]=NON_LINEAR;
+    }
+    // the rest is linear
+    for (Index i=nlc; i<n_con; i++)
+      const_types[i]=LINEAR;
+    return true;
+  }
+
   bool AmplTNLP::get_starting_point(Index n, bool init_x, Number* x, bool init_z, Number* z_L, Number* z_U, Index m, bool init_lambda, Number* lambda)
   {
     ASL_pfgh* asl = asl_;

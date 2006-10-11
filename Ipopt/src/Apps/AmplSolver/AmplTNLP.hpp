@@ -236,6 +236,12 @@ namespace Ipopt
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
                                  Index m, Number* g_l, Number* g_u);
 
+    /** Returns the constraint linearity.
+     * array will be alocated with length n. (default implementation
+     *  just return false and does not fill the array). */
+    virtual bool get_constraints_linearity(Index m,
+                                           LinearityType* const_types);
+
     /** provides a starting point for the nlp variables. Overloaded
     from TNLP */
     virtual bool get_starting_point(Index n, bool init_x, Number* x,

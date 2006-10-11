@@ -48,6 +48,13 @@ namespace Ipopt
   class TNLP : public ReferencedObject
   {
   public:
+    /** Type of the constraints*/
+    enum LinearityType
+    {
+      LINEAR/** Constraint/Variable is linear.*/,
+      NON_LINEAR/**Constraint/Varaible is non-linear.*/
+    };
+
     /**@name Constructors/Destructors */
     //@{
     TNLP()
@@ -98,6 +105,24 @@ namespace Ipopt
     {
       return false;
     }
+
+    /** overload this method to return the variables linearity
+     * (TNLP::Linear or TNLP::NonLinear). The var_types
+     *  array should be allocated with length at least n. (default implementation
+     *  just return false and does not fill the array).*/
+    virtual bool get_variables_linearity(Index n, LinearityType* var_types)
+    {
+      return false;
+    }
+
+    /** overload this method to return the constraint linearity.
+     * array should be alocated with length at least n. (default implementation
+     *  just return false and does not fill the array).*/
+    virtual bool get_constraints_linearity(Index m, LinearityType* const_types)
+    {
+      return false;
+    }
+
 
     /** overload this method to return the starting point. The bools
      *  init_x and init_lambda are both inputs and outputs. As inputs,
