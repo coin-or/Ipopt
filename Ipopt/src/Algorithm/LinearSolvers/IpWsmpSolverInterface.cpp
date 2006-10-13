@@ -279,10 +279,14 @@ namespace Ipopt
     DBG_START_METH("WsmpSolverInterface::Factorization",dbg_verbosity);
 
     // If desired, write out the matrix
-    if (IpData().iter_count() == wsmp_write_matrix_iteration_) {
+    Index iter_count = -1;
+    if (HaveIpData()) {
+      iter_count = IpData().iter_count();
+    }
+    if (iter_count == wsmp_write_matrix_iteration_) {
       matrix_file_number_++;
       char buf[256];
-      sprintf(buf, "wsmp_matrix_%d_%d.dat", IpData().iter_count(),
+      sprintf(buf, "wsmp_matrix_%d_%d.dat", iter_count,
               matrix_file_number_);
       Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
                      "Writing WSMP matrix into file %s.\n", buf);
@@ -302,7 +306,9 @@ namespace Ipopt
     // Check if we have to do the symbolic factorization and ordering
     // phase yet
     if (!have_symbolic_factorization_) {
-      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+      }
 
       // Create space for the permutations
       delete [] PERM_;
@@ -331,14 +337,18 @@ namespace Ipopt
           Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                          "Matrix appears to be singular (with ierror = %d).\n",
                          ierror);
-          IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+          if (HaveIpData()) {
+            IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+          }
           return SYMSOLVER_SINGULAR;
         }
         else {
           Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                          "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
         }
-        IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+        }
         return SYMSOLVER_FATAL_ERROR;
       }
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -348,11 +358,15 @@ namespace Ipopt
                      "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
                      IPARM_[23]);
 
-      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+      }
       have_symbolic_factorization_ = true;
     }
 
-    IpData().TimingStats().LinearSystemFactorization().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemFactorization().Start();
+    }
 
     // Call WSSMP for numerical factorization
     ipfint N = dim_;
@@ -368,7 +382,9 @@ namespace Ipopt
     if (ierror > 0) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "WSMP detected that the matrix is singular and encountered %d zero pivots.\n", dim_+1-ierror);
-      IpData().TimingStats().LinearSystemFactorization().End();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemFactorization().End();
+      }
       return SYMSOLVER_SINGULAR;
     }
     else if (ierror != 0) {
@@ -380,7 +396,9 @@ namespace Ipopt
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                        "Error in WSMP during factorization phase.\n     Error code is %d.\n", ierror);
       }
-      IpData().TimingStats().LinearSystemFactorization().End();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemFactorization().End();
+      }
       return SYMSOLVER_FATAL_ERROR;
     }
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -399,11 +417,15 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Wrong inertia: required are %d, but we got %d.\n",
                      numberOfNegEVals, negevals_);
-      IpData().TimingStats().LinearSystemFactorization().End();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemFactorization().End();
+      }
       return SYMSOLVER_WRONG_INERTIA;
     }
 
-    IpData().TimingStats().LinearSystemFactorization().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemFactorization().End();
+    }
     return SYMSOLVER_SUCCESS;
   }
 
@@ -415,7 +437,9 @@ namespace Ipopt
   {
     DBG_START_METH("WsmpSolverInterface::Solve",dbg_verbosity);
 
-    IpData().TimingStats().LinearSystemBackSolve().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().Start();
+    }
 
     // Call WSMP to solve for some right hand sides (including
     // iterative refinement)
@@ -434,7 +458,9 @@ namespace Ipopt
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
                           rhs_vals, &LDB, &NRHS, &ddmy, &NAUX,
                           &idmy, IPARM_, DPARM_);
-    IpData().TimingStats().LinearSystemBackSolve().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().End();
+    }
 
     Index ierror = IPARM_[63];
     if (ierror!=0) {

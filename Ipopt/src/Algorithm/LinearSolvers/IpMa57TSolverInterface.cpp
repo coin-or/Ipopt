@@ -438,7 +438,10 @@ namespace Ipopt
       const Index*  ajcn)
   {
     DBG_START_METH("Ma57TSolverInterface::SymbolicFactorization",dbg_verbosity);
-    IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+    }
 
     ipfint n  = dim_;
     ipfint ne = nonzeros_;
@@ -481,7 +484,9 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "Suggested lifact (*%e):  %d\n", ma57_pre_alloc_, wd_lifact_);
 
-    IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+    }
     return SYMSOLVER_SUCCESS;
   }
 
@@ -492,7 +497,9 @@ namespace Ipopt
                                       Index         numberOfNegEVals)
   {
     DBG_START_METH("Ma57TSolverInterface::Factorization",dbg_verbosity);
-    IpData().TimingStats().LinearSystemFactorization().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemFactorization().Start();
+    }
 
     int fact_error = 1;
 
@@ -575,7 +582,9 @@ namespace Ipopt
       }
       // Check if the system is singular.
       else if (wd_info_[0] == 4) {
-        IpData().TimingStats().LinearSystemFactorization().End();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemFactorization().End();
+        }
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "System singular, rank = %d\n", wd_info_[25-1]);
         return SYMSOLVER_SINGULAR;
@@ -596,7 +605,9 @@ namespace Ipopt
 
     // Check whether the number of negative eigenvalues matches the
     // requested count.
-    IpData().TimingStats().LinearSystemFactorization().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemFactorization().End();
+    }
     if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "In Ma57TSolverInterface::Factorization: "
@@ -613,7 +624,9 @@ namespace Ipopt
     double    *rhs_vals)
   {
     DBG_START_METH("Ma27TSolverInterface::Backsolve",dbg_verbosity);
-    IpData().TimingStats().LinearSystemBackSolve().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().Start();
+    }
 
     ipfint  n      = dim_;
     ipfint  job    = 1;
@@ -658,7 +671,9 @@ namespace Ipopt
 
     delete [] work;
 
-    IpData().TimingStats().LinearSystemBackSolve().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().End();
+    }
     return SYMSOLVER_SUCCESS;
   }
 

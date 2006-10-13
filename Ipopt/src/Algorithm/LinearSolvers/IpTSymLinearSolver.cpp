@@ -76,8 +76,15 @@ namespace Ipopt
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
 
-    if (!solver_interface_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                       options, prefix)) {
+    bool retval;
+    if (HaveIpData()) {
+      retval = solver_interface_->Initialize(Jnlst(), IpNLP(), IpData(),
+                                             IpCq(), options, prefix);
+    }
+    else {
+      retval = solver_interface_->ReducedInitialize(Jnlst(), options, prefix);
+    }
+    if (!retval) {
       return false;
     }
 
@@ -122,12 +129,16 @@ namespace Ipopt
     }
     just_switched_on_scaling_ = false;
 
-    bool retval = true;
     if (IsValid(scaling_method_)) {
-      IpData().TimingStats().LinearSystemScaling().Start();
-      retval = scaling_method_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                           options, prefix);
-      IpData().TimingStats().LinearSystemScaling().End();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemScaling().Start();
+        retval = scaling_method_->Initialize(Jnlst(), IpNLP(), IpData(),
+                                             IpCq(), options, prefix);
+        IpData().TimingStats().LinearSystemScaling().End();
+      }
+      else {
+        retval = scaling_method_->ReducedInitialize(Jnlst(), options, prefix);
+      }
     }
     return retval;
   }
@@ -175,11 +186,15 @@ namespace Ipopt
       TripletHelper::FillValuesFromVector(dim_, *rhsV[irhs],
                                           &rhs_vals[irhs*(dim_)]);
       if (use_scaling_) {
-        IpData().TimingStats().LinearSystemScaling().Start();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemScaling().Start();
+        }
         for (Index i=0; i<dim_; i++) {
           rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
         }
-        IpData().TimingStats().LinearSystemScaling().End();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemScaling().End();
+        }
       }
     }
 
@@ -198,10 +213,14 @@ namespace Ipopt
         ja = ajcn_;
       }
       else {
-        IpData().TimingStats().LinearSystemStructureConverter().Start();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemStructureConverter().Start();
+        }
         ia = triplet_to_csr_converter_->IA();
         ja = triplet_to_csr_converter_->JA();
-        IpData().TimingStats().LinearSystemStructureConverter().End();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemStructureConverter().End();
+        }
       }
 
       retval = solver_interface_->MultiSolve(new_matrix, ia, ja,
@@ -221,11 +240,15 @@ namespace Ipopt
     if (retval==SYMSOLVER_SUCCESS) {
       for (Index irhs=0; irhs<nrhs; irhs++) {
         if (use_scaling_) {
-          IpData().TimingStats().LinearSystemScaling().Start();
+          if (HaveIpData()) {
+            IpData().TimingStats().LinearSystemScaling().Start();
+          }
           for (Index i=0; i<dim_; i++) {
             rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
           }
-          IpData().TimingStats().LinearSystemScaling().End();
+          if (HaveIpData()) {
+            IpData().TimingStats().LinearSystemScaling().End();
+          }
         }
         TripletHelper::PutValuesInVector(dim_, &rhs_vals[irhs*(dim_)],
                                          *solV[irhs]);
@@ -273,15 +296,21 @@ namespace Ipopt
         nonzeros = nonzeros_triplet_;
       }
       else {
-        IpData().TimingStats().LinearSystemStructureConverter().Start();
-        IpData().TimingStats().LinearSystemStructureConverterInit().Start();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemStructureConverter().Start();
+          IpData().TimingStats().LinearSystemStructureConverterInit().Start();
+        }
         nonzeros_compressed_ =
           triplet_to_csr_converter_->InitializeConverter(dim_, nonzeros_triplet_,
               airn_, ajcn_);
-        IpData().TimingStats().LinearSystemStructureConverterInit().End();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemStructureConverterInit().End();
+        }
         ia = triplet_to_csr_converter_->IA();
         ja = triplet_to_csr_converter_->JA();
-        IpData().TimingStats().LinearSystemStructureConverter().End();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemStructureConverter().End();
+        }
         nonzeros = nonzeros_compressed_;
       }
 
@@ -293,9 +322,13 @@ namespace Ipopt
       // Get space for the scaling factors
       delete [] scaling_factors_;
       if (IsValid(scaling_method_)) {
-        IpData().TimingStats().LinearSystemScaling().Start();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemScaling().Start();
+        }
         scaling_factors_ = new double[dim_];
-        IpData().TimingStats().LinearSystemScaling().End();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemScaling().End();
+        }
       }
 
       have_structure_ = true;
