@@ -38,7 +38,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.2.1 (the C++ version
+  This document is a guide to using \Ipopt\ 3.2.2 (the C++ version
   of \Ipopt).  It includes instructions on how to obtain and compile
   \Ipopt, a description of the interface, user options, etc., as
   well as a tutorial on how to solve a nonlinear optimization problem
@@ -2018,8 +2018,8 @@ virtual bool intermediate_callback(AlgorithmMode mode,
                                    Number regularization_size,
                                    Number alpha_du, Number alpha_pr,
                                    Index ls_trials,
-                                   SmartPtr<const IpoptData> ip_data,
-                                   SmartPtr<IpoptCalculatedQuantities> ip_cq)
+                                   const IpoptData* ip_data,
+                                   IpoptCalculatedQuantities* ip_cq)
 \end{verbatim}
 It is not required to implement (overload) this method.  This method
 is called once per iteration (during the convergence check), and can
