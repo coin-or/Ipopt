@@ -111,6 +111,10 @@ namespace Ipopt
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
+    /** Method to registering all Ipopt options. */
+    static void
+    RegisterAllIpoptOptions(const SmartPtr<RegisteredOptions>& roptions);
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -129,9 +133,6 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const IpoptApplication&);
     //@}
-
-    /** Method to register all the options */
-    void RegisterAllOptions(const SmartPtr<RegisteredOptions>& roptions);
 
     /** Method for the actual optimize call of the Ipopt algorithm.
      *  This is used both for Optimize and ReOptimize */

@@ -63,7 +63,7 @@ namespace Ipopt
 
       // Register the valid options
       reg_options_ = new RegisteredOptions();
-      RegisterAllOptions(reg_options_);
+      RegisterAllIpoptOptions(reg_options_);
 
       options_->SetJournalist(jnlst_);
       options_->SetRegisteredOptions(reg_options_);
@@ -772,7 +772,7 @@ namespace Ipopt
     return true;
   }
 
-  void IpoptApplication::RegisterAllOptions(const SmartPtr<RegisteredOptions>& roptions)
+  void IpoptApplication::RegisterAllIpoptOptions(const SmartPtr<RegisteredOptions>& roptions)
   {
     RegisterOptions_Interfaces(roptions);
     RegisterOptions_Algorithm(roptions);
