@@ -178,6 +178,8 @@ namespace Ipopt
                                  h_space_);
 
       if (!retValue) {
+        jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                       "GetSpaces method for the NLP returns false.\n");
         return false;
       }
 

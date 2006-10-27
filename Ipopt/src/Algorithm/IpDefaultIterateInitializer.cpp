@@ -134,8 +134,10 @@ namespace Ipopt
     //                   Initialize primal variables                   //
     /////////////////////////////////////////////////////////////////////
 
-    IpData().InitializeDataStructures(IpNLP(), true, false, false,
-                                      false, false);
+    if (!IpData().InitializeDataStructures(IpNLP(), true, false, false,
+                                           false, false)) {
+      return false;
+    }
 
     // get a container of the current point. We will modify parts of this
     // IteratesVector to set the trial point.

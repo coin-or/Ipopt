@@ -107,8 +107,10 @@ namespace Ipopt
     bool have_iterate = false;
 
     if (warm_start_entire_iterate_) {
-      IpData().InitializeDataStructures(IpNLP(), false, false, false,
-                                        false, false);
+      if (!IpData().InitializeDataStructures(IpNLP(), false, false, false,
+                                             false, false)) {
+        return false;
+      }
 
       init_vec = IpData().curr()->MakeNewIteratesVector(true);
 
@@ -165,7 +167,9 @@ namespace Ipopt
       /////////////////////////////////////////////////////////////////////
 
       // Get the intial values for x, y_c, y_d, z_L, z_U,
-      IpData().InitializeDataStructures(IpNLP(), true, true, true, true, true);
+      if (!IpData().InitializeDataStructures(IpNLP(), true, true, true, true, true)) {
+        return false;
+      }
 
       IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
                                   "user-provided x");

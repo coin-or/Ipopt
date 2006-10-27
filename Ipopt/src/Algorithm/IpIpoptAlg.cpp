@@ -483,7 +483,9 @@ namespace Ipopt
   {
     DBG_START_METH("IpoptAlgorithm::InitializeIterates", dbg_verbosity);
 
-    iterate_initializer_->SetInitialIterates();
+    bool retval = iterate_initializer_->SetInitialIterates();
+    ASSERT_EXCEPTION(retval, FAILED_INITIALIZATION,
+                     "Error while obtaining initial iterates.");
   }
 
   void IpoptAlgorithm::AcceptTrialPoint()
