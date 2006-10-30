@@ -148,8 +148,8 @@ namespace Ipopt
   {
     jnlst.Printf(level, category, "\n");
     jnlst.PrintfIndented(level, category, indent,
-                         "%sSymTMatrix \"%s\" with %d nonzero elements:\n",
-                         prefix.c_str(), name.c_str(), Nonzeros());
+                         "%sSymTMatrix \"%s\" of dimension %d with %d nonzero elements:\n",
+                         prefix.c_str(), name.c_str(), Dim(), Nonzeros());
     if (initialized_) {
       for (Index i=0; i<Nonzeros(); i++) {
         jnlst.PrintfIndented(level, category, indent,

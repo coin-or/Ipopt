@@ -1211,8 +1211,8 @@ namespace Ipopt
     Number* full_z_L = new Number[n_full_x_];
     Number* full_z_U = new Number[n_full_x_];
     for (int i=0; i<n_full_x_; i++) {
-      full_z_L[i] = nlp_lower_bound_inf_;
-      full_z_U[i] = nlp_upper_bound_inf_;
+      full_z_L[i] = 0.;//nlp_lower_bound_inf_;
+      full_z_U[i] = 0.;//nlp_upper_bound_inf_;
     }
     ResortBnds(z_L, full_z_L, z_U, full_z_U);
 

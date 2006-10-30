@@ -150,8 +150,8 @@ namespace Ipopt
   {
     jnlst.Printf(level, category, "\n");
     jnlst.PrintfIndented(level, category, indent,
-                         "%sGenTMatrix \"%s\" with %d nonzero elements:\n",
-                         prefix.c_str(), name.c_str(), Nonzeros());
+                         "%sGenTMatrix \"%s\" of dimension %d by %d with %d nonzero elements:\n",
+                         prefix.c_str(), name.c_str(), NRows(), NCols(), Nonzeros());
     if (initialized_) {
       for (Index i=0; i<Nonzeros(); i++) {
         jnlst.PrintfIndented(level, category, indent,

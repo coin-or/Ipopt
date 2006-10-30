@@ -287,6 +287,15 @@ namespace Ipopt
     delete [] ikeep_;
     ikeep_ = new ipfint[3*dim_];
 
+    if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
+      Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+		     "\nMatrix structure given to MA27 with dimension %d and %d nonzero entries:\n", dim_, nonzeros_);
+      for (Index i=0; i<nonzeros_; i++) {
+	Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "A[%5d,%5d]\n",
+		       airn[i], ajcn[i]);
+      }
+    }
+
     // Call MA27AD (cast to ipfint for Index types)
     ipfint N = dim_;
     ipfint NZ = nonzeros_;
@@ -300,10 +309,14 @@ namespace Ipopt
     delete [] IW1;  // No longer required
 
     // Receive several information
-    ipfint iflag = INFO[0];   // Information flag
-    ipfint ierror = INFO[1];  // Error flag
-    ipfint nrlnec = INFO[4];  // recommended value for la
-    ipfint nirnec = INFO[5];  // recommended value for liw
+    const ipfint &iflag = INFO[0];   // Information flag
+    const ipfint &ierror = INFO[1];  // Error flag
+    const ipfint &nrlnec = INFO[4];  // recommended value for la
+    const ipfint &nirnec = INFO[5];  // recommended value for liw
+
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+		   "Return values from MA27AD: IFLAG = %d, IERROR = %d\n",
+		   iflag, ierror);
 
     // Check if error occurred
     if (iflag!=0) {
@@ -311,7 +324,7 @@ namespace Ipopt
                      "*** Error from MA27AD *** IFLAG = %d IERROR = %d\n", iflag, ierror);
       if (iflag==1) {
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                       "The index a matrix is out of range.\nPlease check your implementation of the Jabobian and Hessian matrices.");
+                       "The index of a matrix is out of range.\nPlease check your implementation of the Jabobian and Hessian matrices.");
       }
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -403,12 +416,16 @@ namespace Ipopt
 
     // Receive information about the factorization
     iflag = INFO[0];        // Information flag
-    ipfint ierror = INFO[1];  // Error flag
+    const ipfint &ierror = INFO[1];  // Error flag
     ncmpbr = INFO[11];      // Number of double compressions
     ncmpbi = INFO[12];      // Number of integer compressions
     negevals_ = INFO[14];   // Number of negative eigenvalues
 
-    DBG_PRINT((1,"Return from MA27 iflag = %d and ierror = %d\n",
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+		   "Return values from MA27BD: IFLAG = %d, IERROR = %d\n",
+		   iflag, ierror);
+
+    DBG_PRINT((1,"Return from MA27BD iflag = %d and ierror = %d\n",
                iflag, ierror));
 
     // Check if factorization failed due to insufficient memory space
