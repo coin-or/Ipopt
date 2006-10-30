@@ -289,10 +289,10 @@ namespace Ipopt
 
     if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
       Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-		     "\nMatrix structure given to MA27 with dimension %d and %d nonzero entries:\n", dim_, nonzeros_);
+                     "\nMatrix structure given to MA27 with dimension %d and %d nonzero entries:\n", dim_, nonzeros_);
       for (Index i=0; i<nonzeros_; i++) {
-	Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "A[%5d,%5d]\n",
-		       airn[i], ajcn[i]);
+        Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "A[%5d,%5d]\n",
+                       airn[i], ajcn[i]);
       }
     }
 
@@ -315,8 +315,8 @@ namespace Ipopt
     const ipfint &nirnec = INFO[5];  // recommended value for liw
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-		   "Return values from MA27AD: IFLAG = %d, IERROR = %d\n",
-		   iflag, ierror);
+                   "Return values from MA27AD: IFLAG = %d, IERROR = %d\n",
+                   iflag, ierror);
 
     // Check if error occurred
     if (iflag!=0) {
@@ -422,8 +422,8 @@ namespace Ipopt
     negevals_ = INFO[14];   // Number of negative eigenvalues
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-		   "Return values from MA27BD: IFLAG = %d, IERROR = %d\n",
-		   iflag, ierror);
+                   "Return values from MA27BD: IFLAG = %d, IERROR = %d\n",
+                   iflag, ierror);
 
     DBG_PRINT((1,"Return from MA27BD iflag = %d and ierror = %d\n",
                iflag, ierror));
