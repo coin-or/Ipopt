@@ -6,6 +6,9 @@
 //        (included his original contribution into Ipopt package on 2006-03-25)
 //          Andreas Waechter               IBM    2006-03-25
 //           (minor changes and corrections)
+//          Scott Turnberg                 CMU    2006-05-12
+//           (major revision)
+//           (incorporated by AW on 2006-11-11 into Ipopt package)
 
 #include "IpMumpsSolverInterface.hpp"
 
@@ -14,207 +17,330 @@ extern "C"
 #include "mpi.h"
 }
 
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# else
+#  error "don't have header file for stdlib"
+# endif
+#endif
+
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
-#define JOB_INIT -1
-#define JOB_END -2
 #define USE_COMM_WORLD -987654
 
   MumpsSolverInterface::MumpsSolverInterface()
-      :
-      n(0),
-      nz(0),
-      a(NULL),
-      irn_(NULL),
-      jcn_(NULL),
-      negevals(-1)
   {
-    DBG_START_METH("MumpsSolverInterface::MumpsSolverInterface()", dbg_verbosity);
-    mumps_data.a = 0;
-    mumps_data.n = 0;
-    mumps_data.nz = 0;
+    DBG_START_METH("MumpsSolverInterface::MumpsSolverInterface()",
+                   dbg_verbosity);
+    //initialize mumps
+    int argc=1;
+    char ** argv = 0;
+    int myid, ierr;
+    ierr = MPI_Init(&argc, &argv);
+    ierr = MPI_Comm_rank(MPI_COMM_WORLD, &myid);
+    mumps_.n = 0;
+    mumps_.nz = 0;
+    mumps_.a = NULL;
+    mumps_.jcn = NULL;
+    mumps_.irn = NULL;
+    mumps_.job = -1;//initialize mumps
+    mumps_.par = 1;//working host for sequential version
+    mumps_.sym = 2;//general symetric matrix
+    mumps_.comm_fortran = USE_COMM_WORLD;
+    dmumps_c(&mumps_);
   }
 
 
   MumpsSolverInterface::~MumpsSolverInterface()
   {
-    DBG_START_METH("MumpsSolverInterface::~MumpsSolverInterface()", dbg_verbosity);
-    mumps_data.job = JOB_END;
-    dmumps_c(&mumps_data); /* Terminate instance */
-    MPI_Finalize();
+    DBG_START_METH("MumpsSolverInterface::~MumpsSolverInterface()",
+                   dbg_verbosity);
 
-    delete [] a;
-    delete [] irn_;
-    delete [] jcn_;
+    mumps_.job = -2; //terminate mumps
+    dmumps_c(&mumps_);
+    MPI_Finalize();
+    delete [] mumps_.a;
   }
 
   void MumpsSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
-  {}
+  {
+    roptions->AddBoundedNumberOption(
+      "mumps_pivtol",
+      "Pivot tolerance for the linear solver MUMPS.",
+      0, false, 1, false, 1e-6,
+      "A smaller number pivots for sparsity, a larger number pivots for "
+      "stability.  This option is only available if Ipopt has been compiled "
+      "with MUMPS.");
+    roptions->AddBoundedNumberOption(
+      "mumps_pivtolmax",
+      "Maximum pivot tolerance for the linear solver MUMPS.",
+      0, false, 1, false, 0.1,
+      "Ipopt may increase pivtol as high as pivtolmax to get a more accurate "
+      "solution to the linear system.  This option is only available if "
+      "Ipopt has been compiled with MUMPS.");
+    roptions->AddLowerBoundedIntegerOption(
+      "mumps_mem_percent",
+      "Percentage increase in the estimated working space for MUMPS.",
+      0, 1000,
+      "In MUMPS when significant extra fill-in is caused by numerical "
+      "pivoting, larger values of mumps_mem_percent may help use the "
+      "workspace more efficiently.");
+  }
 
   bool MumpsSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
+    options.GetNumericValue("mumps_pivtol", pivtol_, prefix);
+    if(options.GetNumericValue("mumps_pivtolmax", pivtolmax_, prefix)) {
+      ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OPTION_INVALID,
+                       "Option \"mumps_pivtolmax\": This value must be between "
+                       "mumps_pivtol and 1.");
+    }
+    else {
+      pivtolmax_ = Max(pivtolmax_, pivtol_);
+    }
+
+    options.GetIntegerValue("mumps_mem_percent",
+                            mem_percent_, prefix);
+
+    // The following option is registered by OrigIpoptNLP
+    options.GetBoolValue("warm_start_same_structure",
+                         warm_start_same_structure_, prefix);
+
+    // Reset all private data
+    initialized_ = false;
+    pivtol_changed_ = false;
+    refactorize_ = false;
+
+    if (!warm_start_same_structure_) {
+      mumps_.n = 0;
+      mumps_.nz = 0;
+    }
+    else {
+      ASSERT_EXCEPTION(mumps_.n>0 && mumps_.nz>0, INVALID_WARMSTART,
+                       "MumpsSolverInterface called with warm_start_same_structure, but the problem is solved for the first time.");
+    }
+
     return true;
   }
 
-  ESymSolverStatus MumpsSolverInterface::MultiSolve(bool new_matrix, const Index* ia, const Index* ja,
-      Index nrhs, double* rhs_vals, bool check_NegEVals,
+  ESymSolverStatus MumpsSolverInterface::MultiSolve(bool new_matrix,
+      const Index* ia,
+      const Index* ja,
+      Index nrhs,
+      double* rhs_vals,
+      bool check_NegEVals,
       Index numberOfNegEVals)
   {
     DBG_START_METH("MumpsSolverInterface::MultiSolve", dbg_verbosity);
     DBG_ASSERT(!check_NegEVals || ProvidesInertia());
-    //DBG_ASSERT(initialized_);
+    DBG_ASSERT(initialized_);
+    DBG_ASSERT(mumps_.irn == ia);
+    DBG_ASSERT(mumps_.jcn == ja);
+
+    if (pivtol_changed_) {
+      DBG_PRINT((1,"Pivot tolerance has changed.\n"));
+      pivtol_changed_ = false;
+      // If the pivot tolerance has been changed but the matrix is not
+      // new, we have to request the values for the matrix again to do
+      // the factorization again.
+      if (!new_matrix) {
+        DBG_PRINT((1,"Ask caller to call again.\n"));
+        refactorize_ = true;
+        return SYMSOLVER_CALL_AGAIN;
+      }
+    }
 
     // check if a factorization has to be done
-    // perform the factorization
-    if (new_matrix) {
-      ESymSolverStatus retval = Factorization(ia, ja, check_NegEVals, numberOfNegEVals);
+    DBG_PRINT((1, "new_matrix = %d\n", new_matrix));
+    if (new_matrix || refactorize_) {
+      // perform the factorization
+      ESymSolverStatus retval;
+      retval = Factorization(&mumps_, check_NegEVals, numberOfNegEVals);
       if (retval != SYMSOLVER_SUCCESS)  {
         DBG_PRINT((1, "FACTORIZATION FAILED!\n"));
         return retval;  // Matrix singular or error occurred
       }
+      refactorize_ = false;
     }
     // do the solve
-    return Solve(ia, ja, nrhs, rhs_vals);
+    return Solve(&mumps_, nrhs, rhs_vals);
   }
 
 
   double* MumpsSolverInterface::GetValuesArrayPtr()
   {
-    return a;
+    DBG_START_METH("MumpsSolverInterface::GetValuesArrayPtr",dbg_verbosity)
+    DBG_ASSERT(initialized_);
+    return mumps_.a;
   }
+
 
   /** Initialize the local copy of the positions of the nonzero
       elements */
-  ESymSolverStatus MumpsSolverInterface::InitializeStructure(Index dim, Index nonzeros,
-      const Index* ia, const Index* ja)
+  ESymSolverStatus MumpsSolverInterface::InitializeStructure(Index dim,
+      Index nonzeros,
+      const Index* ia,
+      const Index* ja)
   {
-    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
     DBG_START_METH("MumpsSolverInterface::InitializeStructure", dbg_verbosity);
-    if (a) {
-      delete [] a;
+
+    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
+    if (!warm_start_same_structure_) {
+      mumps_.n = dim;
+      mumps_.nz = nonzeros;
+      delete [] mumps_.a;
+
+      mumps_.a = new double[nonzeros];
+      mumps_.irn = const_cast<int*>(ia);
+      mumps_.jcn = const_cast<int*>(ja);
+
+      // Do the symbolic facotrization
+      retval = SymbolicFactorization(&mumps_);
+      if (retval != SYMSOLVER_SUCCESS ) {
+        return retval;
+      }
     }
-    n = dim;
-    nz = nonzeros;
-    delete [] a;
-    delete [] irn_;
-    delete [] jcn_;
-    a = new double[nz];
-    irn_ = new int[nz];
-    jcn_ = new int[nz];
-    for (Index i=0; i<nz; i++) {
-      irn_[i] = ia[i];
-      jcn_[i] = ja[i];
+    else {
+      ASSERT_EXCEPTION(mumps_.n==dim && mumps_.nz==nonzeros,
+                       INVALID_WARMSTART,"MumpsSolverInterface called with warm_start_same_structure, but the problem size has changed.");
     }
 
-    int argc=1;
-    //const char* name = "ipopt";
-    char ** argv = 0;
-    int myid, ierr;
-    ierr = MPI_Init(&argc, &argv);
-    ierr = MPI_Comm_rank(MPI_COMM_WORLD, &myid);
-    mumps_data.job = JOB_INIT;
-    mumps_data.par = 1;//working host
-    mumps_data.sym = 2;//general symmetric
-    mumps_data.comm_fortran = USE_COMM_WORLD;
-    dmumps_c(&mumps_data);
-
-    mumps_data.a = a;
-    mumps_data.irn = irn_;
-    mumps_data.jcn = jcn_;
-    mumps_data.n = n;
-    mumps_data.nz = nz;
-
+    initialized_ = true;
     return retval;
   }
 
 
-  ESymSolverStatus MumpsSolverInterface::Factorization(const Index* ia, const Index* ja,
-      bool check_NegEVals, Index numberOfNegEVals)
+  ESymSolverStatus MumpsSolverInterface::SymbolicFactorization(DMUMPS_STRUC_C *mumps_data)
   {
     DBG_START_METH("MumpsSolverInterface::Factorization", dbg_verbosity);
-    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
-    //Do symbolic pass
-    mumps_data.job = 1;//symbolic ordering pass
-    mumps_data.icntl[1] = 0;
-    mumps_data.icntl[2] = 0;//QUIETLY!
-    mumps_data.icntl[3] = 0;
-    //mumps_data.icntl[5] = 0;//no column permutation
-    //mumps_data.icntl[6] = 0;//AMD ordering
-    mumps_data.icntl[7] = 2;//MC29 scaling
-    mumps_data.icntl[9] = 3;//Iterative refinement iterations
-    //mumps_data.icntl[13] = 1000.0;//Allowed % increase in workspace
-    //mumps_data.cntl[0] = 0.0001;//Pivot tolerance
-    mumps_data.cntl[0] = 0.01;//Pivot tolerance TODO: make option and flexible
-    dmumps_c(&mumps_data);
-    int error = mumps_data.info[0];
+
+    IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+
+    mumps_data->job = 1;//symbolic ordering pass
+
+    mumps_data->icntl[1] = 0;
+    mumps_data->icntl[2] = 0;//QUIETLY!
+    mumps_data->icntl[3] = 0;
+
+    //Todo: reveal and tune these options
+    mumps_data->icntl[5] = 0;//no column permutation
+    mumps_data->icntl[6] = 0;//AMD ordering
+    //orig mumps_data->icntl[7] = 0;//no scalling
+    mumps_data->icntl[7] = 1;//no scalling
+    mumps_data->icntl[9] = 0;//no iterative refinement iterations
+
+
+    mumps_data->icntl[12] = 1;//avoid lapack bug, ensures proper inertia
+    mumps_data->icntl[13] = mem_percent_; //% memory to allocate over expected
+    mumps_data->cntl[0] = pivtol_;  // Set pivot tolerance
+
+    dmumps_c(mumps_data);
+    int error = mumps_data->info[0];
+
+    //return appropriat value
+    if (error == -6) {//system is singular
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "MUMPS returned INFO(1) = %d matrix is singular.\n",error);
+      return SYMSOLVER_SINGULAR;
+    }
     if (error < 0) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error=%d returned from MUMPS in Factorization.\n",
                      error);
-      retval = SYMSOLVER_FATAL_ERROR;
-    }
-    else {
-      retval = SYMSOLVER_SUCCESS;
-    }
-    //int sizeMAXS = mumps_data.info[6];
-    //int sizeMAXIS = mumps_data.info[7];
-    //mumps_data.info[6] = 10*sizeMAXS;
-    //mumps_data.info[7] = 10*sizeMAXIS;
-    mumps_data.job = 2;//numerical factorisation
-    int trycount = 0;
-    while (trycount < 5) {
-      dmumps_c(&mumps_data);
-      error = mumps_data.info[0];
-      if (error < 0) {
-        if (error == -8 || error == -9)//not enough memory
-        {
-          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                         "MUMPS requires more memory, reallocating.  Attempt %d\n",
-                         trycount+1);
-          double mem_percent = mumps_data.icntl[13];
-          mumps_data.icntl[13] = (Index)(2.0 * mem_percent);
-          trycount++;
-          continue;
-        }
-      }
-      else {
-        break;
-      }
+      return SYMSOLVER_FATAL_ERROR;
     }
 
-    if (trycount == 5) {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "MUMPS was not able to obtain enough memory.\n");
-      retval = SYMSOLVER_FATAL_ERROR;
-    }
-    else {
-      negevals = mumps_data.infog[11];
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "MUMPS determined %d negative eigenvalues.\n",
-                     negevals);
-      if (check_NegEVals && (numberOfNegEVals!=negevals)) {
-        retval = SYMSOLVER_WRONG_INERTIA;
-      }
-    }
-    return retval;
+    IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+
+    return SYMSOLVER_SUCCESS;
   }
 
-  ESymSolverStatus MumpsSolverInterface::Solve(const Index* ia, const Index* ja, Index nrhs, double *rhs_vals)
+  ESymSolverStatus MumpsSolverInterface::Factorization(DMUMPS_STRUC_C *mumps_data,
+      bool check_NegEVals, Index numberOfNegEVals)
+  {
+    DBG_START_METH("MumpsSolverInterface::Factorization", dbg_verbosity);
+
+    mumps_data->job = 2;//numerical factorization
+
+    dmumps_c(mumps_data);
+    int error = mumps_data->info[0];
+
+    //Check for errors
+    if (error == -8 || error == -9) {//not enough memory
+      for(int trycount=0; trycount<5; trycount++) {
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                       "MUMPS returned INFO(1) = %d and requires more memory, reallocating.  Attempt %d\n",
+                       error,trycount+1);
+        double mem_percent = mumps_data->icntl[13];
+        mumps_data->icntl[13] = (Index)(2.0 * mem_percent);
+
+        dmumps_c(mumps_data);
+        error = mumps_data->info[0];
+        if (error != -8 & error != -9)
+          break;
+      }
+      if (error == -8 || error == -9) {
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "MUMPS was not able to obtain enough memory.\n");
+        return SYMSOLVER_FATAL_ERROR;
+      }
+    }
+
+
+    if (error == -10) {//system is singular
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "MUMPS returned INFO(1) = %d matrix is singular.\n",error);
+      return SYMSOLVER_SINGULAR;
+    }
+
+    negevals_ = mumps_data->infog[11];
+
+    if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "In MumpsSolverInterface::Factorization: negevals_ = %d, but numberOfNegEVals = %d\n",
+                     negevals_, numberOfNegEVals);
+      return SYMSOLVER_WRONG_INERTIA;
+    }
+
+    if (error < 0) {//some other error
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "MUMPS returned INFO(1) =%d MUMPS failure.\n",
+                     error);
+      return SYMSOLVER_FATAL_ERROR;
+    }
+
+    return SYMSOLVER_SUCCESS;
+  }
+
+  ESymSolverStatus MumpsSolverInterface::Solve(DMUMPS_STRUC_C *mumps_data, Index nrhs, double *rhs_vals)
   {
     DBG_START_METH("MumpsSolverInterface::Solve", dbg_verbosity);
     ESymSolverStatus retval = SYMSOLVER_SUCCESS;
     IpData().TimingStats().LinearSystemBackSolve().Start();
     for (Index i = 0; i < nrhs; i++) {
-      Index offset = i * mumps_data.n;
-      mumps_data.rhs = &(rhs_vals[offset]);
-      mumps_data.job = 3;//solve
-      dmumps_c(&mumps_data);
-      int error = mumps_data.info[0];
+      Index offset = i * mumps_data->n;
+      mumps_data->rhs = &(rhs_vals[offset]);
+      mumps_data->job = 3;//solve
+      dmumps_c(mumps_data);
+      int error = mumps_data->info[0];
       if (error < 0) {
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                        "Error=%d returned from MUMPS in Solve.\n",
@@ -229,13 +355,29 @@ namespace Ipopt
   Index MumpsSolverInterface::NumberOfNegEVals() const
   {
     DBG_START_METH("MumpsSolverInterface::NumberOfNegEVals", dbg_verbosity);
-    DBG_ASSERT(negevals >= 0);
-    return negevals;
+    DBG_ASSERT(negevals_ >= 0);
+    return negevals_;
   }
 
   bool MumpsSolverInterface::IncreaseQuality()
   {
-    return false;
+    DBG_START_METH("MumpsTSolverInterface::IncreaseQuality",dbg_verbosity);
+    if (pivtol_ == pivtolmax_) {
+      return false;
+    }
+    pivtol_changed_ = true;
+
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Increasing pivot tolerance for MUMPS from %7.2e ",
+                   pivtol_);
+
+    //this is a more aggresive update then MA27
+    //this should be tuned
+    pivtol_ = Min(pivtolmax_, pow(pivtol_,0.5));
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "to %7.2e.\n",
+                   pivtol_);
+    return true;
   }
 
 }//end Ipopt namespace

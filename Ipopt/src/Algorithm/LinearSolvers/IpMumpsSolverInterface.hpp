@@ -6,6 +6,9 @@
 //        (included his original contribution into Ipopt package on 2006-03-25)
 //          Andreas Waechter               IBM    2006-03-25
 //           (minor changes and corrections)
+//          Scott Turnberg                 CMU    2006-05-12
+//           (major revision)
+//           (incorporated by AW on 2006-11-11 into Ipopt package)
 
 
 #ifndef __IPMUMPSSOLVERINTERFACE_HPP__
@@ -41,27 +44,40 @@ namespace Ipopt
     bool InitializeImpl(const OptionsList& options,
                         const std::string& prefix);
 
-
     /** @name Methods for requesting solution of the linear system. */
     //@{
-    /** Method for initializing internal stuctures. */
-    virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros, const Index *ia, const Index *ja);
+    /** Method for initializing internal stuctures.  Here, ndim gives
+     *  the number of rows and columns of the matrix, nonzeros give
+     *  the number of nonzero elements, and airn and acjn give the
+     *  positions of the nonzero elements.
+     */
+    virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
+        const Index *airn,
+        const Index *ajcn);
 
     /** Method returing an internal array into which the nonzero
-     *  elements are to be stored. */
+     *  elements (in the same order as airn and ajcn) are to be stored
+     *  by the calling routine before a call to MultiSolve with a
+     *  new_matrix=true.  The returned array must have space for at least
+     *  nonzero elements. */
     virtual double* GetValuesArrayPtr();
 
-    /** Solve operation for multiple right hand sides. */
+    /** Solve operation for multiple right hand sides.  Overloaded
+     *  from SparseSymLinearSolverInterface.
+     */
     virtual ESymSolverStatus MultiSolve(bool new_matrix,
-                                        const Index* ia,
-                                        const Index* ja,
+                                        const Index* airn,
+                                        const Index* ajcn,
                                         Index nrhs,
                                         double* rhs_vals,
                                         bool check_NegEVals,
                                         Index numberOfNegEVals);
 
     /** Number of negative eigenvalues detected during last
-     *  factorization.
+     *  factorization.  Returns the number of negative eigenvalues of
+     *  the most recent factorized matrix.  This must not be called if
+     *  the linear solver does not compute this quantities (see
+     *  ProvidesInertia).
      */
     virtual Index NumberOfNegEVals() const;
     //@}
@@ -69,11 +85,14 @@ namespace Ipopt
     //* @name Options of Linear solver */
     //@{
     /** Request to increase quality of solution for next solve.
+     * Ask linear solver to increase quality of solution for the next
+     * solve (e.g. increase pivot tolerance).  Returns false, if this
+     * is not possible (e.g. maximal pivot tolerance already used.)
      */
     virtual bool IncreaseQuality();
 
     /** Query whether inertia is computed by linear solver.
-     *  Returns true, if linear solver provides inertia.
+     * Returns true, if linear solver provides inertia.
      */
     virtual bool ProvidesInertia() const
     {
@@ -111,63 +130,73 @@ namespace Ipopt
 
     /** @name Information about the matrix */
     //@{
-    /** @name Information about the matrix */
-    //@{
-    /** Number of rows and columns of the matrix */
-    Index n;
-
-    /** Number of nonzeros of the matrix in triplet representation. */
-    Index nz;
-
-    /** Array for storing the values of the matrix. */
-    double* a;
-
-    /** Array for storing the row indices of the matrix */
-    int* irn_;
-    /** Array for storing the column indices of the matrix */
-    int* jcn_;
+    /** Primary MUMP data structure */
+    DMUMPS_STRUC_C mumps_;
     //@}
+
     /** @name Information about most recent factorization/solve */
     //@{
     /** Number of negative eigenvalues */
-    Index negevals;
-    //@}
-
-    /** @name Solver specific options */
-    //@{
+    Index negevals_;
     //@}
 
     /** @name Initialization flags */
     //@{
+    /** Flag indicating if internal data is initialized.
+     *  For initialization, this object needs to have seen a matrix */
+    bool initialized_;
+    /** Flag indicating if the matrix has to be refactorized because
+     *  the pivot tolerance has been changed. */
+    bool pivtol_changed_;
+    /** Flag that is true if we just requested the values of the
+     *  matrix again (SYMSOLVER_CALL_AGAIN) and have to factorize
+     *  again. */
+    bool refactorize_;
     //@}
 
-    /** @name Solver specific information */
+    /** @name Solver specific data/options */
     //@{
-    /**@name Some counters for debugging */
+    /** Pivol tolerance */
+    Number pivtol_;
+
+    /** Maximal pivot tolerance */
+    Number pivtolmax_;
+
+    /** Percent increase in memory */
+    Index mem_percent_;
+
+    /** Flag indicating whether the TNLP with identical structure has
+     *  already been solved before. */
+    bool warm_start_same_structure_;
+    //@}
+
+    /** @name Data for the linear solver.
+     * Storing factorization and other solver specific data structure.
+     */
     //@{
     //@}
 
     /** @name Internal functions */
     //@{
-    /** Call Mumps to do the analysis phase.
+    /** Call MUMPS (job=1) to perform symbolic manipulations, and reserve
+     *  memory.
      */
-    /** Call Mumps to factorize the Matrix.
+    ESymSolverStatus SymbolicFactorization(DMUMPS_STRUC_C *mumps_data);
+
+    /** Call MUMPS (job=2) to factorize the Matrix.
+     *  It is assumed that the first nonzeros_ element of a_ contain the values
+     *  of the matrix to be factorized.
      */
-    ESymSolverStatus Factorization(const Index* ia,
-                                   const Index* ja,
+    ESymSolverStatus Factorization(DMUMPS_STRUC_C *mumps_data,
                                    bool check_NegEVals,
                                    Index numberOfNegEVals);
 
-    /** Call Mumps to do the Solve.
+    /** Call MUMPS (job=3) to do the solve.
      */
-    ESymSolverStatus Solve(const Index* ia,
-                           const Index* ja,
+    ESymSolverStatus Solve(DMUMPS_STRUC_C *mumps_data,
                            Index nrhs,
                            double *rhs_vals);
     //@}
-    //MUMPS data structure
-    DMUMPS_STRUC_C mumps_data;
-
   };
 
 } // namespace Ipopt
