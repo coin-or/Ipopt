@@ -1,0 +1,40 @@
+Main authors:
+
+Andreas Waechter, project leader (IBM)
+Carl Laird (IBM, Carnegie Mellon University)
+
+
+Contributors:
+
+- Yifan Hu (Wolfram): Contributed TAUCS interface, implemented in the files
+
+  PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.hpp
+  PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.cpp
+
+- Yoshiaki Kawajiri (Carnegie Mellon Univeristy):
+  First version of Latex documentation file
+
+  Docs/documentation.tex
+
+- Olaf Schenk (Universirty of Basel):
+  Modifications to the PARDISO interface in the files
+
+  Algorithm/LinearSolvers/IpPardisoSolverInterface.cpp
+  Algorithm/LinearSolvers/IpPardisoSolverInterface.hpp
+
+- Michael Hagemann (Universirty of Basel):
+  MA57 interface
+
+  Algorithm/LinearSolvers/IpMa57SolverInterface.cpp
+  Algorithm/LinearSolvers/IpMa57SolverInterface.hpp
+
+- Damien Hocking (KBC Advanced Technologies)
+  MUMPS interface
+
+  Algorithm/LinearSolvers/IpMumpsSolverInterface.cpp
+  Algorithm/LinearSolvers/IpMumpsSolverInterface.hpp
+
+- Jon Lee
+  example nl file (writting by hand) for unitTest
+
+  Test/mytoy.nl
