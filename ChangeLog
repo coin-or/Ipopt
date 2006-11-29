@@ -2,6 +2,10 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2006-11-29 release/3.2.3
+        - updated download script for Lapack to fit to netlib's
+          recent changes
+
 2006-10-11 stable/3.2 r795
         - Bugfix in L-BFGS update
         - fix in configure with detection of sizeof(int *) on Cygwin
