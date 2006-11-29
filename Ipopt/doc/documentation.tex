@@ -38,7 +38,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.2.2 (the C++ version
+  This document is a guide to using \Ipopt\ 3.2.3 (the C++ version
   of \Ipopt).  It includes instructions on how to obtain and compile
   \Ipopt, a description of the interface, user options, etc., as
   well as a tutorial on how to solve a nonlinear optimization problem
@@ -288,7 +288,10 @@ occasional bug fix releases.
 
 The following sections describe the installation procedures on
 UNIX/Linux systems.  For installation instructions on Windows
-see Section~\ref{WindowsInstall}.
+see Section~\ref{WindowsInstall}.\\
+
+\noindent {\bf Note:} The COIN-wide installation help at {\tt
+  https://projects.coin-or.org/CoinHelp} might also be useful.
 
 \subsection{Getting the \Ipopt\ Code}
 \Ipopt\ is available from the COIN-OR subversion repository. You can
@@ -314,7 +317,7 @@ directory in which you want to create a subdirectory {\tt Ipopt} with
 the \Ipopt\ source code.  Then follow the steps below:
 \begin{enumerate}
 \item{Download the code from the repository}\\
-{\tt \$ svn co https://projects.coin-or.org/svn/Ipopt/trunk CoinIpopt} \\
+{\tt \$ svn co https://projects.coin-or.org/svn/Ipopt/stable/3.2 CoinIpopt} \\
 Note: The {\tt \$} indicates the command line
 prompt, do not type {\tt \$}, only the text following it.
 \item Change into the root directory of the \Ipopt\ distribution\\
@@ -324,23 +327,31 @@ prompt, do not type {\tt \$}, only the text following it.
 In the following, ``\texttt{\$IPOPTDIR}'' will refer to the directory in
 which you are right now (output of \texttt{pwd}).
 
+Note, the instruction above give you the ``stable branch'' of the
+Ipopt project.  This is meant to be the latest stable version of Ipopt
+(possible not yet put into an official ``release'').  We suggest you
+download this, because it will enable you to easily obtain
+improvements and updated.
+
+For a discuss of the COIN release policy please have a look at
+
+
 \subsubsection{Getting the \Ipopt\ code as a tarball}
 
 To use the tarball, follow the steps below:
 \begin{enumerate}
 \item Download the latest tarball from
-  \texttt{http://www.coin-or.org/Tarballs/Ipopt}.  The file you should look
-  for has the form {\tt Ipopt\_{\em date}.tgz}.  It contains the daily
-  snapshot of the official ``trunk'' release of \Ipopt.  Note that the
-  file {\tt Ipopt\_2.2.1\_Fortran.tgz} contains the latest Fortran version of
-  Ipopt, and is not described in this document.
+  \texttt{http://www.coin-or.org/Tarballs/Ipopt}.  The file you should
+  look for has the form {\tt Ipopt\_\emph{x.y.z}.tgz}.  If you choose
+  the ``highest'' number {\em x.y.z} it contains the
+  latest release of \Ipopt.
 \item Issue the following commands to unpack the archive file: \\
-\texttt{\$ gunzip Ipopt\_{\em date}.tgz} \\
-\texttt{\$ tar xvf Ipopt\_{\em date}.tar} \\
+\texttt{\$ gunzip Ipopt\_{\em x.y.z}.tgz} \\
+\texttt{\$ tar xvf Ipopt\_{\em x.y.z}.tar} \\
 Note: The {\tt \$} indicates the command line
 prompt, do not type {\tt \$}, only the text following it.
 \item Rename the directory you just extracted:\\
-\texttt{\$ mv Ipopt\_{\em date} CoinIpopt}
+\texttt{\$ mv Ipopt\_{\em x.y.z} CoinIpopt}
 \item Change into the root directory of the \Ipopt\ distribution\\
 {\tt \$ cd CoinIpopt}
 \end{enumerate}
