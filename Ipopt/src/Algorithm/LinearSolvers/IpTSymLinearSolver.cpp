@@ -185,6 +185,15 @@ namespace Ipopt
     for (Index irhs=0; irhs<nrhs; irhs++) {
       TripletHelper::FillValuesFromVector(dim_, *rhsV[irhs],
                                           &rhs_vals[irhs*(dim_)]);
+      if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
+        Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                       "Right hand side %d in TSymLinearSolver:\n", irhs);
+        for (Index i=0; i<dim_; i++) {
+          Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                         "Trhs[%5d,%5d] = %23.16e\n", irhs, i,
+                         rhs_vals[irhs*(dim_)+i]);
+        }
+      }
       if (use_scaling_) {
         if (HaveIpData()) {
           IpData().TimingStats().LinearSystemScaling().Start();
@@ -248,6 +257,15 @@ namespace Ipopt
           }
           if (HaveIpData()) {
             IpData().TimingStats().LinearSystemScaling().End();
+          }
+        }
+        if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
+          Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                         "Solution %d in TSymLinearSolver:\n", irhs);
+          for (Index i=0; i<dim_; i++) {
+            Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                           "Tsol[%5d,%5d] = %23.16e\n", irhs, i,
+                           rhs_vals[irhs*(dim_)+i]);
           }
         }
         TripletHelper::PutValuesInVector(dim_, &rhs_vals[irhs*(dim_)],
