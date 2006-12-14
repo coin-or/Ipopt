@@ -175,6 +175,15 @@ extern "C"
   Bool OpenIpoptOutputFile(IpoptProblem ipopt_problem, char* file_name,
                            Int print_level);
 
+  /** Optional function for setting scaling parameter for the NLP.
+   *  This corresponds to the get_scaling_parameters method in TNLP.
+   *  If the pointers x_scaling or g_scaling are NULL, then no scaling
+   *  for x resp. g is done. */
+  Bool SetIpoptProblemScaling(IpoptProblem ipopt_problem,
+			      Number obj_scaling,
+			      Number* x_scaling,
+			      Number* g_scaling);
+
   /** Function calling the Ipopt optimization algorithm for a problem
       previously defined with CreateIpoptProblem.  The return
       specified outcome of the optimization procedure (e.g., success,

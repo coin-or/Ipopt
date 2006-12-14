@@ -28,6 +28,9 @@ struct IpoptProblemInfo
   Eval_Jac_G_CB eval_jac_g;
   Eval_H_CB eval_h;
   Ipopt::SmartPtr<Ipopt::IpoptApplication> app;
+  Number obj_scaling;
+  Number* x_scaling;
+  Number* g_scaling;
 };
 
 IpoptProblem CreateIpoptProblem(
@@ -92,6 +95,10 @@ IpoptProblem CreateIpoptProblem(
 
   retval->app = new Ipopt::IpoptApplication();
 
+  retval->obj_scaling = 1;
+  retval->x_scaling = NULL;
+  retval->g_scaling = NULL;
+
   return retval;
 }
 
@@ -106,7 +113,11 @@ void FreeIpoptProblem(IpoptProblem ipopt_problem)
 
   ipopt_problem->app = NULL;
 
+  delete [] ipopt_problem->x_scaling;
+  delete [] ipopt_problem->g_scaling;
+
   delete ipopt_problem;
+
 }
 
 
@@ -137,6 +148,40 @@ Bool OpenIpoptOutputFile(IpoptProblem ipopt_problem, char* file_name,
   std::string name(file_name);
   Ipopt::EJournalLevel level = Ipopt::EJournalLevel(print_level);
   return (Bool) ipopt_problem->app->OpenOutputFile(name, level);
+}
+
+Bool SetIpoptProblemScaling(IpoptProblem ipopt_problem,
+                            Number obj_scaling,
+                            Number* x_scaling,
+                            Number* g_scaling)
+{
+  ipopt_problem->obj_scaling = obj_scaling;
+  if (x_scaling) {
+    if (!ipopt_problem->x_scaling) {
+      ipopt_problem->x_scaling = new Number[ipopt_problem->n];
+    }
+    for (::Index i=0; i<ipopt_problem->n; i++) {
+      ipopt_problem->x_scaling[i] = x_scaling[i];
+    }
+  }
+  else {
+    delete [] ipopt_problem->x_scaling;
+    ipopt_problem->x_scaling = NULL;
+  }
+  if (g_scaling) {
+    if (!ipopt_problem->g_scaling) {
+      ipopt_problem->g_scaling = new Number[ipopt_problem->m];
+    }
+    for (::Index i=0; i<ipopt_problem->m; i++) {
+      ipopt_problem->g_scaling[i] = g_scaling[i];
+    }
+  }
+  else {
+    delete [] ipopt_problem->g_scaling;
+    ipopt_problem->g_scaling = NULL;
+  }
+
+  return (Bool)true;
 }
 
 enum ApplicationReturnStatus IpoptSolve(
@@ -178,7 +223,10 @@ enum ApplicationReturnStatus IpoptSolve(
                                 ipopt_problem->eval_jac_g,
                                 ipopt_problem->eval_h,
                                 x, mult_x_L, mult_x_U, g, mult_g,
-                                obj_val, user_data);
+                                obj_val, user_data,
+                                ipopt_problem->obj_scaling,
+                                ipopt_problem->x_scaling,
+                                ipopt_problem->g_scaling);
   }
   catch(INVALID_STDINTERFACE_NLP& exc) {
     exc.ReportException(*ipopt_problem->app->Jnlst(), J_ERROR);
