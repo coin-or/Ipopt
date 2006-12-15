@@ -167,7 +167,7 @@ namespace Ipopt
     obj_scaling = obj_scaling_;
     if (x_scaling_) {
       use_x_scaling = true;
-      for (Index i; i<n_var_; i++) {
+      for (Index i=0; i<n_var_; i++) {
         x_scaling[i] = x_scaling_[i];
       }
     }
@@ -176,7 +176,7 @@ namespace Ipopt
     }
     if (g_scaling_) {
       use_g_scaling = true;
-      for (Index i; i<n_con_; i++) {
+      for (Index i=0; i<n_con_; i++) {
         g_scaling[i] = g_scaling_[i];
       }
     }
