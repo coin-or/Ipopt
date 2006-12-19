@@ -123,7 +123,6 @@ namespace Ipopt
       return false;
     }
 
-
     /** overload this method to return the starting point. The bools
      *  init_x and init_lambda are both inputs and outputs. As inputs,
      *  they indicate whether or not the algorithm wants you to
@@ -179,6 +178,17 @@ namespace Ipopt
                         Number obj_factor, Index m, const Number* lambda,
                         bool new_lambda, Index nele_hess,
                         Index* iRow, Index* jCol, Number* values)
+    {
+      return false;
+    }
+
+    /** this method is called if option ??? is set.  In that case, the
+    algorithm calls this method with the values of variables and
+    multipliers that will be used for the next calls of any
+    evaluation method.  */
+    virtual bool set_variable_values(Index n, const Number* x, bool new_x,
+                                     Index m, const Number* lambda,
+                                     bool new_lambda)
     {
       return false;
     }

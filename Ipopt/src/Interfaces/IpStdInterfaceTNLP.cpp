@@ -33,7 +33,10 @@ namespace Ipopt
                                      Number* g_sol,
                                      Number* lam_sol,
                                      Number* obj_sol,
-                                     UserDataPtr user_data)
+                                     UserDataPtr user_data,
+                                     Number obj_scaling/*=1*/,
+                                     const Number* x_scaling /*= NULL*/,
+                                     const Number* g_scaling /*= NULL*/)
       :
       TNLP(),
       n_var_(n_var),
@@ -55,6 +58,9 @@ namespace Ipopt
       eval_jac_g_(eval_jac_g),
       eval_h_(eval_h),
       user_data_(user_data),
+      obj_scaling_(obj_scaling),
+      x_scaling_(NULL),
+      g_scaling_(NULL),
       non_const_x_(NULL),
       x_sol_(x_sol),
       z_L_sol_(z_L_sol),
@@ -93,11 +99,28 @@ namespace Ipopt
                      "No callback function for evaluating the Jacobian of the constraints provided.");
     ASSERT_EXCEPTION(eval_h_, INVALID_STDINTERFACE_NLP,
                      "No callback function for evaluating the Hessian of the constraints provided.");
+
+    if (x_scaling) {
+      Number* tmp = new Number[n_var_];
+      for (Index i=0; i<n_var_; i++) {
+        tmp[i] = x_scaling[i];
+      }
+      x_scaling_ = tmp;
+    }
+    if (g_scaling) {
+      Number* tmp = new Number[n_con_];
+      for (Index i=0; i<n_con_; i++) {
+        tmp[i] = g_scaling[i];
+      }
+      g_scaling_ = tmp;
+    }
   }
 
   StdInterfaceTNLP::~StdInterfaceTNLP()
   {
     delete [] non_const_x_;
+    delete [] x_scaling_;
+    delete [] g_scaling_;
   }
 
   bool StdInterfaceTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
@@ -129,6 +152,37 @@ namespace Ipopt
       g_u[i] = g_U_[i];
     }
 
+    return true;
+  }
+
+  bool StdInterfaceTNLP::get_scaling_parameters(
+    Number& obj_scaling,
+    bool& use_x_scaling, Index n,
+    Number* x_scaling,
+    bool& use_g_scaling, Index m,
+    Number* g_scaling)
+  {
+    DBG_ASSERT(n==n_var_);
+    DBG_ASSERT(m==n_con_);
+    obj_scaling = obj_scaling_;
+    if (x_scaling_) {
+      use_x_scaling = true;
+      for (Index i=0; i<n_var_; i++) {
+        x_scaling[i] = x_scaling_[i];
+      }
+    }
+    else {
+      use_x_scaling = false;
+    }
+    if (g_scaling_) {
+      use_g_scaling = true;
+      for (Index i=0; i<n_con_; i++) {
+        g_scaling[i] = g_scaling_[i];
+      }
+    }
+    else {
+      use_g_scaling = false;
+    }
     return true;
   }
 

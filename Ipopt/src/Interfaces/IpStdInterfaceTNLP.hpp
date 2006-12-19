@@ -58,7 +58,10 @@ namespace Ipopt
                      Number* g_sol,
                      Number* lam_sol,
                      Number* obj_sol,
-                     UserDataPtr user_data);
+                     UserDataPtr user_data,
+                     Number obj_scaling=1,
+                     const Number* x_scaling = NULL,
+                     const Number* g_scaling = NULL);
 
     /** Default destructor */
     virtual ~StdInterfaceTNLP();
@@ -74,6 +77,14 @@ namespace Ipopt
     /** returns bounds of the nlp. Overloaded from TNLP */
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
                                  Index m, Number* g_l, Number* g_u);
+
+    /** returns scaling parameters (if nlp_scaling_method is selected
+     * as user-scaling). Overloaded from TNLP */
+    virtual bool get_scaling_parameters(Number& obj_scaling,
+                                        bool& use_x_scaling, Index n,
+                                        Number* x_scaling,
+                                        bool& use_g_scaling, Index m,
+                                        Number* g_scaling);
 
     /** provides a starting point for the nlp variables. Overloaded from TNLP */
     virtual bool get_starting_point(Index n, bool init_x, Number* x,
@@ -164,6 +175,12 @@ namespace Ipopt
     Eval_H_CB eval_h_;
     /** Pointer to user data */
     UserDataPtr user_data_;
+    /** Objective scaling factor */
+    Number obj_scaling_;
+    /** Scaling factors for variables (if not NULL) */
+    const Number* x_scaling_;
+    /** Scaling factors for constraints (if not NULL) */
+    const Number* g_scaling_;
     //@}
 
 

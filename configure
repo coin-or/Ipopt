@@ -287,7 +287,7 @@ ac_subdirs_all="$ac_subdirs_all ThirdParty/Lapack"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/HSL"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/ASL"
 ac_subdirs_all="$ac_subdirs_all Ipopt"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE subdirs COIN_SKIP_PROJECTS LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE subdirs COIN_SKIP_PROJECTS LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS LN_S'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1775,14 +1775,28 @@ coin_have_externals=no
 if test "$enable_maintainer_mode" = yes; then
 
   # If maintainer mode is chosen, we make sure that the correct versions
-  # of the tools are used, and that we know where libtoo.m4 is (to
+  # of the tools are used, and that we know where libtool.m4 is (to
   # recreate acinclude.m4)
 
 
   LIBTOOLM4=
+  # Normally, $HOME
+  AUTOTOOLS_DFLT=$HOME
 
-  # Check if we have autoconf
-  # Extract the first word of "autoconf", so it can be a program name with args.
+  echo "$as_me:$LINENO: checking whether we are using the correct autotools" >&5
+echo $ECHO_N "checking whether we are using the correct autotools... $ECHO_C" >&6
+if test "${ac_cv_use_correct_autotools+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_use_correct_autotools=check
+fi
+echo "$as_me:$LINENO: result: $ac_cv_use_correct_autotools" >&5
+echo "${ECHO_T}$ac_cv_use_correct_autotools" >&6
+
+  if test $ac_cv_use_correct_autotools = check; then
+    ac_cv_use_correct_autotools=yes
+    # Check if we have autoconf
+    # Extract the first word of "autoconf", so it can be a program name with args.
 set dummy autoconf; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
@@ -1818,55 +1832,55 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
-  if test $have_autoconf = no; then
-    { { echo "$as_me:$LINENO: error: You specified you want to use maintainer mode, but I cannot find autoconf in your path." >&5
+    if test $have_autoconf = no; then
+      { { echo "$as_me:$LINENO: error: You specified you want to use maintainer mode, but I cannot find autoconf in your path." >&5
 echo "$as_me: error: You specified you want to use maintainer mode, but I cannot find autoconf in your path." >&2;}
    { (exit 1); exit 1; }; }
-  fi
+    fi
 
-  # Check whether autoconf is the correct version
-  correct_version='2.59'
-  grep_version=`echo  $correct_version | sed -e 's/\\./\\\\\\./g'`
-  echo "$as_me:$LINENO: checking whether we are using the correct version ($correct_version) of autoconf" >&5
+    # Check whether autoconf is the correct version
+    correct_version='2.59'
+    grep_version=`echo  $correct_version | sed -e 's/\\./\\\\\\./g'`
+    echo "$as_me:$LINENO: checking whether we are using the correct version ($correct_version) of autoconf" >&5
 echo $ECHO_N "checking whether we are using the correct version ($correct_version) of autoconf... $ECHO_C" >&6
-  autoconf --version > confauto.out 2>&1
-  if $EGREP $grep_version confauto.out >/dev/null 2>&1; then
-    echo "$as_me:$LINENO: result: yes" >&5
+    autoconf --version > confauto.out 2>&1
+    if $EGREP $grep_version confauto.out >/dev/null 2>&1; then
+      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-  else
-    rm -f confauto.out
-    echo "$as_me:$LINENO: result: no" >&5
+    else
+      rm -f confauto.out
+      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-    { { echo "$as_me:$LINENO: error: You don't have the correct version of autoconf as the first one in your path." >&5
+      { { echo "$as_me:$LINENO: error: You don't have the correct version of autoconf as the first one in your path." >&5
 echo "$as_me: error: You don't have the correct version of autoconf as the first one in your path." >&2;}
    { (exit 1); exit 1; }; }
-  fi
-  rm -f confauto.out
-
-  # Check if the executable autoconf is picked up from the correct location
-  echo "$as_me:$LINENO: checking whether autoconf is coming from the correct location" >&5
-echo $ECHO_N "checking whether autoconf is coming from the correct location... $ECHO_C" >&6
-  autoconf_dir=`which autoconf | sed -e 's=/autoconf=='`
-  autoconf_dir=`cd $autoconf_dir; pwd`
-  if test x$AUTOTOOLS_DIR = x; then
-    want_dir=$HOME/bin
-  else
-    want_dir=$AUTOTOOLS_DIR/bin
-  fi
-  if test $autoconf_dir = `cd $want_dir; pwd`; then
-    echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-  else
+    fi
     rm -f confauto.out
-    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-    { { echo "$as_me:$LINENO: error: The autoconf executable should be picked up from \$HOME/bin or \$AUTOTOOLS_DIR/bin." >&5
-echo "$as_me: error: The autoconf executable should be picked up from \$HOME/bin or \$AUTOTOOLS_DIR/bin." >&2;}
-   { (exit 1); exit 1; }; }
-  fi
 
-  # Check if we have automake
-  # Extract the first word of "automake", so it can be a program name with args.
+    # Check if the executable autoconf is picked up from the correct location
+    echo "$as_me:$LINENO: checking whether autoconf is coming from the correct location" >&5
+echo $ECHO_N "checking whether autoconf is coming from the correct location... $ECHO_C" >&6
+    autoconf_dir=`which autoconf | sed -e 's=/autoconf=='`
+    autoconf_dir=`cd $autoconf_dir; pwd`
+    if test x$AUTOTOOLS_DIR = x; then
+      want_dir=$AUTOTOOLS_DFLT/bin
+    else
+      want_dir=$AUTOTOOLS_DIR/bin
+    fi
+    if test $autoconf_dir = `cd $want_dir; pwd`; then
+      echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+      rm -f confauto.out
+      echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+      { { echo "$as_me:$LINENO: error: The autoconf executable should be picked up from \$AUTOTOOLS_DFLT/bin or \$AUTOTOOLS_DIR/bin." >&5
+echo "$as_me: error: The autoconf executable should be picked up from \$AUTOTOOLS_DFLT/bin or \$AUTOTOOLS_DIR/bin." >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+
+    # Check if we have automake
+    # Extract the first word of "automake", so it can be a program name with args.
 set dummy automake; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
@@ -1902,56 +1916,110 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
-  if test $have_automake = no; then
-    { { echo "$as_me:$LINENO: error: You specified you want to use maintainer mode, but I cannot find automake in your path." >&5
+    if test $have_automake = no; then
+      { { echo "$as_me:$LINENO: error: You specified you want to use maintainer mode, but I cannot find automake in your path." >&5
 echo "$as_me: error: You specified you want to use maintainer mode, but I cannot find automake in your path." >&2;}
    { (exit 1); exit 1; }; }
-  fi
+    fi
 
-  # Check whether automake is the correct version
-  correct_version='1.9.6'
-  grep_version=`echo  $correct_version | sed -e 's/\\./\\\\\\./g'`
-  echo "$as_me:$LINENO: checking whether we are using the correct version ($correct_version) of automake" >&5
+    # Check whether automake is the correct version
+    correct_version='1.9.6'
+    grep_version=`echo  $correct_version | sed -e 's/\\./\\\\\\./g'`
+    echo "$as_me:$LINENO: checking whether we are using the correct version ($correct_version) of automake" >&5
 echo $ECHO_N "checking whether we are using the correct version ($correct_version) of automake... $ECHO_C" >&6
-  automake --version > confauto.out 2>&1
-  if $EGREP $grep_version confauto.out >/dev/null 2>&1; then
-    echo "$as_me:$LINENO: result: yes" >&5
+    automake --version > confauto.out 2>&1
+    if $EGREP $grep_version confauto.out >/dev/null 2>&1; then
+      echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-  else
-    rm -f confauto.out
-    echo "$as_me:$LINENO: result: no" >&5
+    else
+      rm -f confauto.out
+      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-    { { echo "$as_me:$LINENO: error: You don't have the correct version of automake as the first one in your path." >&5
+      { { echo "$as_me:$LINENO: error: You don't have the correct version of automake as the first one in your path." >&5
 echo "$as_me: error: You don't have the correct version of automake as the first one in your path." >&2;}
    { (exit 1); exit 1; }; }
-  fi
-  rm -f confauto.out
-
-  # Check if the executable automake is picked up from the correct location
-  echo "$as_me:$LINENO: checking whether automake is coming from the correct location" >&5
-echo $ECHO_N "checking whether automake is coming from the correct location... $ECHO_C" >&6
-  automake_dir=`which automake | sed -e 's=/automake=='`
-  automake_dir=`cd $automake_dir; pwd`
-  if test x$AUTOTOOLS_DIR = x; then
-    want_dir=$HOME/bin
-  else
-    want_dir=$AUTOTOOLS_DIR/bin
-  fi
-  if test $automake_dir = `cd $want_dir; pwd`; then
-    echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-  else
+    fi
     rm -f confauto.out
-    echo "$as_me:$LINENO: result: no" >&5
+
+    # Check if the executable automake is picked up from the correct location
+    echo "$as_me:$LINENO: checking whether automake is coming from the correct location" >&5
+echo $ECHO_N "checking whether automake is coming from the correct location... $ECHO_C" >&6
+    automake_dir=`which automake | sed -e 's=/automake=='`
+    automake_dir=`cd $automake_dir; pwd`
+    if test x$AUTOTOOLS_DIR = x; then
+      want_dir=$AUTOTOOLS_DFLT/bin
+    else
+      want_dir=$AUTOTOOLS_DIR/bin
+    fi
+    if test $automake_dir = `cd $want_dir; pwd`; then
+      echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+      rm -f confauto.out
+      echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-    { { echo "$as_me:$LINENO: error: The automake executable should be picked up from \$HOME/bin or \$AUTOTOOLS_DIR/bin." >&5
-echo "$as_me: error: The automake executable should be picked up from \$HOME/bin or \$AUTOTOOLS_DIR/bin." >&2;}
+      { { echo "$as_me:$LINENO: error: The automake executable should be picked up from \$AUTOTOOLS_DFLT/bin or \$AUTOTOOLS_DIR/bin." >&5
+echo "$as_me: error: The automake executable should be picked up from \$AUTOTOOLS_DFLT/bin or \$AUTOTOOLS_DIR/bin." >&2;}
    { (exit 1); exit 1; }; }
+    fi
+
+    # Check if this is the correct version of libtool (with escaped dots)
+    if test x$AUTOTOOLS_DIR = x; then
+      want_dir=$AUTOTOOLS_DFLT/share
+    else
+      want_dir=$AUTOTOOLS_DIR/share
+    fi
+    correct_version='1.5.22'
+    grep_version=`echo  $correct_version | sed -e 's/\\./\\\\\\./g'`
+    as_ac_File=`echo "ac_cv_file_$want_dir/libtool/ltmain.sh" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $want_dir/libtool/ltmain.sh" >&5
+echo $ECHO_N "checking for $want_dir/libtool/ltmain.sh... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$want_dir/libtool/ltmain.sh"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  have_ltmain=yes
+else
+  have_ltmain=no
+fi
+
+    echo "$as_me:$LINENO: checking whether we are using the correct version ($correct_version) of libtool." >&5
+echo $ECHO_N "checking whether we are using the correct version ($correct_version) of libtool.... $ECHO_C" >&6
+    if test $have_ltmain = yes; then
+    if $EGREP $grep_version $want_dir/libtool/ltmain.sh >/dev/null 2>&1; then
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+      else
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+        { { echo "$as_me:$LINENO: error: You don't have the correct version of libtool." >&5
+echo "$as_me: error: You don't have the correct version of libtool." >&2;}
+   { (exit 1); exit 1; }; }
+      fi
+    else
+      echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+      { { echo "$as_me:$LINENO: error: I cannot find the ltmain.sh file." >&5
+echo "$as_me: error: I cannot find the ltmain.sh file." >&2;}
+   { (exit 1); exit 1; }; }
+    fi
   fi
 
   # Check if we can find the libtool file
   if test x$AUTOTOOLS_DIR = x; then
-    want_dir=$HOME/share
+    want_dir=$AUTOTOOLS_DFLT/share
   else
     want_dir=$AUTOTOOLS_DIR/share
   fi
@@ -1981,54 +2049,6 @@ echo "$as_me: error: I cannot find the libtool.m4 file." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-
-  # Check if this is the correct version of libtool (with escaped dots)
-  correct_version='1.5.22'
-  grep_version=`echo  $correct_version | sed -e 's/\\./\\\\\\./g'`
-  as_ac_File=`echo "ac_cv_file_$want_dir/libtool/ltmain.sh" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $want_dir/libtool/ltmain.sh" >&5
-echo $ECHO_N "checking for $want_dir/libtool/ltmain.sh... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$want_dir/libtool/ltmain.sh"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  have_ltmain=yes
-else
-  have_ltmain=no
-fi
-
-  echo "$as_me:$LINENO: checking whether we are using the correct version ($correct_version) of libtool." >&5
-echo $ECHO_N "checking whether we are using the correct version ($correct_version) of libtool.... $ECHO_C" >&6
-  if test $have_ltmain = yes; then
-    if $EGREP $grep_version $want_dir/libtool/ltmain.sh >/dev/null 2>&1; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    else
-      echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-      { { echo "$as_me:$LINENO: error: You don't have the correct version of libtool." >&5
-echo "$as_me: error: You don't have the correct version of libtool." >&2;}
-   { (exit 1); exit 1; }; }
-    fi
-  else
-    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-    { { echo "$as_me:$LINENO: error: I cannot find the ltmain.sh file." >&5
-echo "$as_me: error: I cannot find the ltmain.sh file." >&2;}
-   { (exit 1); exit 1; }; }
-  fi
 
   # Check if we have an Externals file
   if test -r $srcdir/Externals; then
@@ -2072,18 +2092,23 @@ echo "${ECHO_T}no" >&6
 fi
 
   if test x$have_svn = xyes; then
-    echo "$as_me:$LINENO: checking svn understands https" >&5
-echo $ECHO_N "checking svn understands https... $ECHO_C" >&6
-    svn --version > confauto.out 2>&1
-    if $EGREP https confauto.out >/dev/null 2>&1; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    else
-      echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-      have_svn=no
-    fi
-    rm -f confauto.out
+    echo "$as_me:$LINENO: checking whether svn understands https" >&5
+echo $ECHO_N "checking whether svn understands https... $ECHO_C" >&6
+if test "${ac_cv_svn_understands_https+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  svn --version > confauto.out 2>&1
+                    if $EGREP https confauto.out >/dev/null 2>&1; then
+                      ac_cv_svn_understands_https=yes
+                    else
+                      ac_cv_svn_understands_https=no
+                      have_svn=no
+                      ac_cv_prog_have_svn=no
+                    fi
+                    rm -f confauto.out
+fi
+echo "$as_me:$LINENO: result: $ac_cv_svn_understands_https" >&5
+echo "${ECHO_T}$ac_cv_svn_understands_https" >&6
   fi
 
   # Find the location of the BuildTools directory
@@ -2312,7 +2337,8 @@ fi
 # library extension
 
 case "$CC" in
-  cl*) LIBEXT=lib ;;
+  cl* | */cl*)
+       LIBEXT=lib ;;
     *) LIBEXT=a ;;
 esac
 
@@ -3461,11 +3487,75 @@ fi
 
 
 if test x"$coin_vpath_link_files" = x; then : ; else
-  { echo "$as_me:$LINENO: Creating VPATH links for data files" >&5
+  lnkcmd=
+  if test "$enable_doscompile" = yes; then
+    lnkcmd=cp
+  fi
+  case "$CC" in
+    cl* | */cl*)
+      lnkcmd=cp ;;
+  esac
+  if test "$lnkcmd" = cp; then
+    { echo "$as_me:$LINENO: Copying data files for VPATH configuration" >&5
+echo "$as_me: Copying data files for VPATH configuration" >&6;}
+  else
+    echo "$as_me:$LINENO: checking whether ln -s works" >&5
+echo $ECHO_N "checking whether ln -s works... $ECHO_C" >&6
+LN_S=$as_ln_s
+if test "$LN_S" = "ln -s"; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me:$LINENO: result: no, using $LN_S" >&5
+echo "${ECHO_T}no, using $LN_S" >&6
+fi
+
+    { echo "$as_me:$LINENO: Creating VPATH links for data files" >&5
 echo "$as_me: Creating VPATH links for data files" >&6;}
+    lnkcmd="$LN_S"
+  fi
   for file in $coin_vpath_link_files; do
+    dir=`(dirname "./$file") 2>/dev/null ||
+$as_expr X"./$file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"./$file" : 'X\(//\)[^/]' \| \
+	 X"./$file" : 'X\(//\)$' \| \
+	 X"./$file" : 'X\(/\)' \| \
+	 .     : '\(.\)' 2>/dev/null ||
+echo X"./$file" |
+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
+    if test -d $dir; then : ; else
+      { if $as_mkdir_p; then
+    mkdir -p $dir
+  else
+    as_dir=$dir
+    as_dirs=
+    while test ! -d "$as_dir"; do
+      as_dirs="$as_dir $as_dirs"
+      as_dir=`(dirname "$as_dir") 2>/dev/null ||
+$as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"$as_dir" : 'X\(//\)[^/]' \| \
+	 X"$as_dir" : 'X\(//\)$' \| \
+	 X"$as_dir" : 'X\(/\)' \| \
+	 .     : '\(.\)' 2>/dev/null ||
+echo X"$as_dir" |
+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
+    done
+    test ! -n "$as_dirs" || mkdir $as_dirs
+  fi || { { echo "$as_me:$LINENO: error: cannot create directory $dir" >&5
+echo "$as_me: error: cannot create directory $dir" >&2;}
+   { (exit 1); exit 1; }; }; }
+
+    fi
     rm -f $file
-    $LN_S $abs_source_dir/$file $file
+    $lnkcmd $abs_source_dir/$file $file
   done
 fi
 
