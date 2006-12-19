@@ -2312,7 +2312,7 @@ fi
 # library extension
 
 case "$CC" in
-  cl*) LIBEXT=lib ;;
+  cl* | */cl* | CL* | */CL*) LIBEXT=lib ;;
     *) LIBEXT=a ;;
 esac
 
@@ -3466,7 +3466,7 @@ if test x"$coin_vpath_link_files" = x; then : ; else
     lnkcmd=cp
   fi
   case "$CC" in
-    cl* | */cl*)
+    cl* | */cl* | CL* | */CL*)
       lnkcmd=cp ;;
   esac
   if test "$lnkcmd" = cp; then
