@@ -2119,13 +2119,13 @@ echo "${ECHO_T}$ac_cv_svn_understands_https" >&6
     if test -r $srcdir/../BuildTools/coin.m4; then
       BUILDTOOLSDIR=$srcdir/../BuildTools
     else
-#      if test -r $srcdir/../../BuildTools/coin.m4; then
-#        BUILDTOOLSDIR=$srcdir/../../BuildTools
-#      else
+      if test -r $srcdir/../../BuildTools/coin.m4; then
+        BUILDTOOLSDIR=$srcdir/../../BuildTools
+      else
         { { echo "$as_me:$LINENO: error: Cannot find the BuildTools directory" >&5
 echo "$as_me: error: Cannot find the BuildTools directory" >&2;}
    { (exit 1); exit 1; }; }
-#      fi
+      fi
     fi
   fi
 
