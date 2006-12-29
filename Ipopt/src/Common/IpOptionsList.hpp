@@ -163,6 +163,8 @@ namespace Ipopt
     void operator=(const OptionsList& source)
     {
       options_ = source.options_;
+      reg_options_ = source.reg_options_;
+      jnlst_ = source.jnlst_;
     }
     //@}
 

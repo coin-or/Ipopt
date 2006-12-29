@@ -37,14 +37,14 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  IpoptApplication::IpoptApplication(bool create_console_out)
-      :
-      jnlst_(new Journalist()),
-      options_(new OptionsList()),
-      statistics_(NULL),
-      alg_(NULL),
-      nlp_adapter_(NULL)
+  IpoptApplication::IpoptApplication(bool create_console_out /* = true */,
+                                     bool create_empty /* = false */)
   {
+    options_ = new OptionsList();
+    if (create_empty)
+      return;
+
+    jnlst_ = new Journalist();
     try {
 # if COIN_IPOPT_VERBOSITY > 0
       DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
@@ -84,6 +84,16 @@ namespace Ipopt
       THROW_EXCEPTION(IPOPT_APPLICATION_ERROR,
                       "Caught unknown exception");
     }
+  }
+
+  SmartPtr<IpoptApplication> IpoptApplication::clone()
+  {
+    SmartPtr<IpoptApplication> retval = new IpoptApplication(false, true);
+    retval->jnlst_ = Jnlst();
+    retval->reg_options_ = RegOptions();
+    *retval->options_ = *Options();
+
+    return retval;
   }
 
   void IpoptApplication::Initialize(std::string params_file /*= "ipopt.opt"*/)

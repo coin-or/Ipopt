@@ -35,9 +35,15 @@ namespace Ipopt
   class IpoptApplication : public ReferencedObject
   {
   public:
-    IpoptApplication(bool create_console_out = true);
+    IpoptApplication(bool create_console_out = true,
+                     bool create_empty = false);
 
     virtual ~IpoptApplication();
+
+    /** Method for creating a new IpoptApplication that uses the same
+     *  journalist and registered options, and a copy of the options
+    list. */
+    SmartPtr<IpoptApplication> clone();
 
     /** Initialize method. This method reads the params file and initializes
      *  the journalists. You should call this method at some point before the 
