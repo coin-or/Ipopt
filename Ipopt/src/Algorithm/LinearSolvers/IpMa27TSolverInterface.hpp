@@ -166,6 +166,9 @@ namespace Ipopt
     /** Flag indicating if the interia is always assumed to be
      *  correct. */
     bool skip_inertia_check_;
+    /** Flag indicating if MA27 should continue if a singular matrix
+    is detected, but right hands sides are still accepted. */
+    bool ignore_singularity_;
     //@}
 
     /** @name Data for the linear solver.

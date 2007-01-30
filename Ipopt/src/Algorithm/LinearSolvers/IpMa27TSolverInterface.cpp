@@ -121,6 +121,17 @@ namespace Ipopt
       "Setting this option to \"yes\" essentially disables inertia check. "
       "This option makes the algorithm non-robust and easily fail, but it "
       "might give some insight into the necessity of interia control.");
+    roptions->AddStringOption2(
+      "ma27_ignore_singularity",
+      "Enables MA27's ability to solve a linear system even if the matrix is singular.",
+      "no",
+      "no", "Don't have MA27 solve singular systems",
+      "yes", "Have MA27 solve singular systems",
+      "Setting this option to \"yes\" means that Ipopt will call MA27 to "
+      "compute solutions for right hand sides, even if MA27 has detected that "
+      "the matrix is singular (but is still able to solve the linear system). "
+      "In some cases this might be better than using Ipopt's heuristic of "
+      "small perturbation of the lower diagonal of the KKT matrix.");
 
   }
 
@@ -142,6 +153,8 @@ namespace Ipopt
     options.GetNumericValue("ma27_meminc_factor", meminc_factor_, prefix);
     options.GetBoolValue("ma27_skip_inertia_check",
                          skip_inertia_check_, prefix);
+    options.GetBoolValue("ma27_ignore_singularity",
+                         ignore_singularity_, prefix);
     // The following option is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
@@ -457,11 +470,21 @@ namespace Ipopt
     }
 
     // Check if the system is singular, and if some other error occurred
-    if (iflag==-5 || iflag==3) {
+    if (iflag==-5 || (!ignore_singularity_ && iflag==3)) {
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().End();
       }
       return SYMSOLVER_SINGULAR;
+    }
+    else if (iflag==3) {
+      Index missing_rank = dim_-INFO[1];
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                     "MA27BD returned iflag=%d and detected rank deficiency of degree %d.\n",
+                     iflag, missing_rank);
+      // We correct the number of negative eigenvalues here to include
+      // the zero eigenvalues, since otherwise we indicate the wrong
+      // inertia.
+      negevals_ += missing_rank;
     }
     else if (iflag != 0) {
       // There is some error
