@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -15,7 +15,7 @@ AC_PREREQ(2.59)
 AC_INIT([Ipopt],[3.2.1dev],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT(
-[Copyright 2004, 2006 International Business Machines and others.
+[Copyright 2004, 2007 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
@@ -342,6 +342,7 @@ if test "$use_hsl" = BUILD; then
 #  fi
   MY_CHECK_HSLFILE(mc19ad,MC19)
   MY_CHECK_HSLFILE(ma57ad,MA57)
+  MY_CHECK_HSLFILE(ma28ad,MA28)
   coin_need_flibs=yes
 else
   SAVE_LIBS="$LIBS"
@@ -358,6 +359,7 @@ else
   fi
   MY_CHECK_HSL([mc19ad],[MC19])
   MY_CHECK_HSL([ma57ad],[MA57])
+  MY_CHECK_HSL([ma28ad],[MA28])
   LIBS="$use_hsl $SAVE_LIBS"
 fi
 
@@ -558,6 +560,7 @@ fi
 
 AM_CONDITIONAL([HAVE_MA27],[test ! "$use_MA27" = no])
 AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
+AM_CONDITIONAL([HAVE_MA28],[test ! "$use_MA28" = no])
 AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])

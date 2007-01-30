@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -60,10 +60,13 @@ host_triplet = @host@
 @HAVE_WSMP_TRUE@am__append_6 = \
 @HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
 
-@HAVE_MUMPS_TRUE@am__append_7 = \
+@HAVE_MA28_TRUE@am__append_7 = \
+@HAVE_MA28_TRUE@	IpMa28Partition.f
+
+@HAVE_MUMPS_TRUE@am__append_8 = \
 @HAVE_MUMPS_TRUE@	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 
-@HAVE_MUMPS_TRUE@am__append_8 = $(MUMPS_INCFLAGS)
+@HAVE_MUMPS_TRUE@am__append_9 = $(MUMPS_INCFLAGS)
 subdir = src/Algorithm/LinearSolvers
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -87,19 +90,21 @@ am__liblinsolvers_la_SOURCES_DIST = IpLinearSolversRegOp.cpp \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
 	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp \
 	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
-	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+	IpMa28Partition.f IpMumpsSolverInterface.cpp \
+	IpMumpsSolverInterface.hpp
 @HAVE_MA27_TRUE@am__objects_1 = IpMa27TSolverInterface.lo
 @HAVE_MA57_TRUE@am__objects_2 = IpMa57TSolverInterface.lo
 @HAVE_MC19_TRUE@am__objects_3 = IpMc19TSymScalingMethod.lo
 @HAVE_PARDISO_TRUE@am__objects_4 = IpPardisoSolverInterface.lo
 @HAVE_TAUCS_TRUE@am__objects_5 = IpTAUCSSolverInterface.lo
 @HAVE_WSMP_TRUE@am__objects_6 = IpWsmpSolverInterface.lo
-@HAVE_MUMPS_TRUE@am__objects_7 = IpMumpsSolverInterface.lo
+@HAVE_MA28_TRUE@am__objects_7 = IpMa28Partition.lo
+@HAVE_MUMPS_TRUE@am__objects_8 = IpMumpsSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpTripletToCSRConverter.lo IpTSymLinearSolver.lo \
 	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
 	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
-	$(am__objects_7)
+	$(am__objects_7) $(am__objects_8)
 liblinsolvers_la_OBJECTS = $(am_liblinsolvers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -111,6 +116,12 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
+LTF77COMPILE = $(LIBTOOL) --tag=F77 --mode=compile $(F77) $(AM_FFLAGS) \
+	$(FFLAGS)
+F77LD = $(F77)
+F77LINK = $(LIBTOOL) --tag=F77 --mode=link $(F77LD) $(AM_FFLAGS) \
+	$(FFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
@@ -196,6 +207,8 @@ HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
 HAVE_MA27_FALSE = @HAVE_MA27_FALSE@
 HAVE_MA27_TRUE = @HAVE_MA27_TRUE@
+HAVE_MA28_FALSE = @HAVE_MA28_FALSE@
+HAVE_MA28_TRUE = @HAVE_MA28_TRUE@
 HAVE_MA57_FALSE = @HAVE_MA57_FALSE@
 HAVE_MA57_TRUE = @HAVE_MA57_TRUE@
 HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
@@ -255,12 +268,14 @@ abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
 abs_lib_dir = @abs_lib_dir@
 abs_source_dir = @abs_source_dir@
+ac_c_preproc_warn_flag = @ac_c_preproc_warn_flag@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_F77 = @ac_ct_F77@
 ac_ct_RANLIB = @ac_ct_RANLIB@
 ac_ct_STRIP = @ac_ct_STRIP@
+ac_cxx_preproc_warn_flag = @ac_cxx_preproc_warn_flag@
 am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
 am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
 am__fastdepCXX_FALSE = @am__fastdepCXX_FALSE@
@@ -310,13 +325,14 @@ liblinsolvers_la_SOURCES = IpLinearSolversRegOp.cpp \
 	IpTripletToCSRConverter.hpp IpTSymLinearSolver.cpp \
 	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp $(am__append_1) \
 	$(am__append_2) $(am__append_3) $(am__append_4) \
-	$(am__append_5) $(am__append_6) $(am__append_7)
+	$(am__append_5) $(am__append_6) $(am__append_7) \
+	$(am__append_8)
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/..` -I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
-	$(am__append_8)
+	$(am__append_9)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -343,7 +359,7 @@ SUFFIXES = .cppbak .hppbak
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .cpp .hpp .lo .o .obj
+.SUFFIXES: .cppbak .hppbak .cpp .f .hpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -422,6 +438,15 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
+
+.f.o:
+	$(F77COMPILE) -c -o $@ $<
+
+.f.obj:
+	$(F77COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.f.lo:
+	$(LTF77COMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo

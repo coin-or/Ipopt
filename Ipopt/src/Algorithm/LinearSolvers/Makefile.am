@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -46,6 +46,11 @@ endif
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
 	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
+endif
+
+if HAVE_MA28
+  liblinsolvers_la_SOURCES += \
+	IpMa28Partition.f
 endif
 
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)

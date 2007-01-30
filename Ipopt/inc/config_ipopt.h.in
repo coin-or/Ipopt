@@ -83,6 +83,9 @@
 /* Define to 1 if MA27 is available */
 #undef HAVE_MA27
 
+/* Define to 1 if MA28 is available */
+#undef HAVE_MA28
+
 /* Define to 1 if MA57 is available */
 #undef HAVE_MA57
 
