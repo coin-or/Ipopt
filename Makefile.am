@@ -23,14 +23,14 @@ SUBDIRS = $(subdirs)
 ########################################################################
 
 test: all
-	cd Ipopt; make test
+	cd Ipopt; $(MAKE) test
 
 unitTest: test
 
 tests: all
 	for dir in $(subdirs); do \
 	  if test -r $$dir/test/Makefile; then \
-	    (cd $$dir; make test) \
+	    (cd $$dir; $(MAKE) test) \
 	  fi; \
 	done
 
@@ -40,7 +40,7 @@ doxydoc:
 	cd $(srcdir); doxygen doxydoc/doxygen.conf
 
 cuter:
-	cd Ipopt; make cuter
+	cd Ipopt; $(MAKE) cuter
 
 .PHONY: test unitTest tests unitTests doxydoc cuter
 

@@ -240,6 +240,10 @@ namespace Ipopt
     mumps_data->icntl[2] = 0;//QUIETLY!
     mumps_data->icntl[3] = 0;
 
+    //mumps_data->icntl[1] = 0;
+    //mumps_data->icntl[2] = 0;//QUIETLY!
+    //mumps_data->icntl[3] = 4;
+
     //Todo: reveal and tune these options
     mumps_data->icntl[5] = 0;//no column permutation
     mumps_data->icntl[6] = 0;//AMD ordering
@@ -285,12 +289,16 @@ namespace Ipopt
 
     //Check for errors
     if (error == -8 || error == -9) {//not enough memory
-      for(int trycount=0; trycount<5; trycount++) {
+      const Index trycount_max = 20;
+      for(int trycount=0; trycount<trycount_max; trycount++) {
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                        "MUMPS returned INFO(1) = %d and requires more memory, reallocating.  Attempt %d\n",
                        error,trycount+1);
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                       "  Increasing icntl[13] from %d to ", mumps_data->icntl[13]);
         double mem_percent = mumps_data->icntl[13];
         mumps_data->icntl[13] = (Index)(2.0 * mem_percent);
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "%d.\n", mumps_data->icntl[13]);
 
         dmumps_c(mumps_data);
         error = mumps_data->info[0];
