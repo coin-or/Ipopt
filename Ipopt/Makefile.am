@@ -116,7 +116,7 @@ cuter: install
 test: unitTest
 
 unitTest: all
-	cd test; make test
+	cd test; $(MAKE) test
 
 astyle:
 	cd src/Algorithm; $(MAKE) astyle
