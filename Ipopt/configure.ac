@@ -327,23 +327,33 @@ AC_ARG_WITH([hsl],
                            [specify Harwell library (or BUILD for compilation)]),
             [use_hsl=$withval], [use_hsl=BUILD])
 
+# First check if there is a working HSL ThirdParty project
 if test "$use_hsl" = BUILD; then
-# Check which files are available
-  MY_CHECK_HSLFILE(ma27ad,MA27)
-## This test is already done in ThirdParty configure
-#  if test "$use_MA27" = BUILD; then
-#    AC_MSG_CHECKING([whether MA27 is threadsafe])
-#    if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
-#      AC_MSG_RESULT(yes)
-#    else
-#      AC_MSG_RESULT(no)
-#      AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])
-#    fi
-#  fi
-  MY_CHECK_HSLFILE(mc19ad,MC19)
-  MY_CHECK_HSLFILE(ma57ad,MA57)
-  MY_CHECK_HSLFILE(ma28ad,MA28)
-  coin_need_flibs=yes
+  AC_CHECK_FILE([$hslobjdir/Makefile],[],[use_hsl=])
+fi
+
+if test "$use_hsl" = BUILD; then
+  # First check if there is a working HSL ThirdParty project
+  AC_CHECK_FILE([$hslobjdir/Makefile],[],[use_hsl=unavailable])
+
+  if test "$use_hsl" = BUILD; then
+    # Check which files are available
+    MY_CHECK_HSLFILE(ma27ad,MA27)
+    ## This test is already done in ThirdParty configure
+    #  if test "$use_MA27" = BUILD; then
+    #    AC_MSG_CHECKING([whether MA27 is threadsafe])
+    #    if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
+    #      AC_MSG_RESULT(yes)
+    #    else
+    #      AC_MSG_RESULT(no)
+    #      AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])
+    #    fi
+    #  fi
+    MY_CHECK_HSLFILE(mc19ad,MC19)
+    MY_CHECK_HSLFILE(ma57ad,MA57)
+    MY_CHECK_HSLFILE(ma28ad,MA28)
+    coin_need_flibs=yes
+  fi
 else
   SAVE_LIBS="$LIBS"
   LIBS="$use_hsl $LIBS $FLIBS"
