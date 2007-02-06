@@ -117,10 +117,13 @@ namespace Ipopt
 #ifdef HAVE_PARDISO
       "pardiso",
 #else
-#endif
 #ifdef HAVE_WSMP
       "wsmp",
 #else
+#ifdef HAVE_MUMPS
+      "mumps",
+#endif
+#endif
 #endif
 #endif
 #endif
