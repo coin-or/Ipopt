@@ -207,6 +207,7 @@ namespace Ipopt
       mumps_.n = dim;
       mumps_.nz = nonzeros;
       delete [] mumps_.a;
+      mumps_.a = NULL;
 
       mumps_.a = new double[nonzeros];
       mumps_.irn = const_cast<int*>(ia);

@@ -241,6 +241,7 @@ namespace Ipopt
 
     if (la_increase_) {
       delete [] a_;
+      a_ = NULL;
       a_ = new double [nonzeros_];
     }
 
@@ -287,6 +288,7 @@ namespace Ipopt
 
     // Get memory for the IW workspace
     delete [] iw_;
+    iw_ = NULL;
 
     // Overstimation factor for LIW (20% recommended in MA27 documentation)
     const double LiwFact = 2.0;   // This is 100% overestimation
@@ -298,6 +300,7 @@ namespace Ipopt
 
     // Get memory for IKEEP
     delete [] ikeep_;
+    ikeep_ = NULL;
     ikeep_ = new ipfint[3*dim_];
 
     if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
@@ -348,6 +351,7 @@ namespace Ipopt
     // ToDo: try and catch
     // Reserve memory for iw_ for later calls, based on suggested size
     delete [] iw_;
+    iw_ = NULL;
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "Size of integer work space recommended by MA27 is %d\n",
                    nirnec);
@@ -358,6 +362,7 @@ namespace Ipopt
 
     // Reserve memory for a_
     delete [] a_;
+    a_ = NULL;
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "Size of doublespace recommended by MA27 is %d\n",
                    nrlnec);
@@ -402,6 +407,7 @@ namespace Ipopt
     // Check if liw should be increased
     if (liw_increase_) {
       delete [] iw_;
+      iw_ = NULL;
       ipfint liw_old = liw_;
       liw_ = (ipfint)(meminc_factor_ * (double)(liw_));
       iw_ = new ipfint[liw_];
@@ -447,7 +453,9 @@ namespace Ipopt
     if (iflag==-3 || iflag==-4) {
       // Increase size of both LIW and LA
       delete [] iw_;
+      iw_ = NULL;
       delete [] a_;
+      a_ = NULL;
       ipfint liw_old = liw_;
       ipfint la_old = la_;
       if(iflag==-3) {

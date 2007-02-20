@@ -275,6 +275,7 @@ namespace Ipopt
 
     // Make space for storing the matrix elements
     delete[] a_;
+    a_ = NULL;
     a_ = new double[nonzeros_];
 
     // Do the symbolic facotrization

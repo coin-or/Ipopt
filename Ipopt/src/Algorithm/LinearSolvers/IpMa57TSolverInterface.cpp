@@ -414,6 +414,7 @@ namespace Ipopt
       // for MA57, a_ only has to be as long as the number of nonzero
       // elements
       delete [] a_;
+      a_ = NULL;
       a_ = new double [nonzeros_];
 
       // Do the symbolic facotrization
@@ -474,7 +475,9 @@ namespace Ipopt
     // amount of memory here.  I don't think there is any need to
     // reallocate it later for every factorization
     delete [] wd_fact_;
+    wd_fact_ = NULL;
     delete [] wd_ifact_;
+    wd_ifact_ = NULL;
 
     wd_fact_  = new double[wd_lfact_];
     wd_ifact_ = new int[wd_lifact_];
