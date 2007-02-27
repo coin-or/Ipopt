@@ -40,10 +40,7 @@ namespace Ipopt
     Index Dim() const;
     //@}
 
-    SmartPtr<const SymMatrixSpace> OwnerSymMatrixSpace() const
-    {
-      return owner_space_;
-    }
+    SmartPtr<const SymMatrixSpace> OwnerSymMatrixSpace() const;
 
   protected:
     /** @name Overloaded methods from Matrix.  Since the matrix is
@@ -138,6 +135,12 @@ namespace Ipopt
   Index SymMatrix::Dim() const
   {
     return owner_space_->Dim();
+  }
+
+  inline
+  SmartPtr<const SymMatrixSpace> SymMatrix::OwnerSymMatrixSpace() const
+  {
+    return owner_space_;
   }
 
 } // namespace Ipopt
