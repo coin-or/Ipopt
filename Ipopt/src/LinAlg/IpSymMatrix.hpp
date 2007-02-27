@@ -30,7 +30,8 @@ namespace Ipopt
     SymMatrix(const SymMatrixSpace* owner_space);
 
     /** Destructor */
-    virtual ~SymMatrix();
+    virtual ~SymMatrix()
+    {}
     //@}
 
     /** @name Information about the size of the matrix */
@@ -39,7 +40,10 @@ namespace Ipopt
     Index Dim() const;
     //@}
 
-    SmartPtr<const SymMatrixSpace> OwnerSymMatrixSpace() const;
+    SmartPtr<const SymMatrixSpace> OwnerSymMatrixSpace() const
+    {
+      return owner_space_;
+    }
 
   protected:
     /** @name Overloaded methods from Matrix.  Since the matrix is
@@ -71,10 +75,14 @@ namespace Ipopt
     /** Constructor, given the dimension (identical to the number of
      *  rows and columns).
      */
-    SymMatrixSpace(Index dim);
+    SymMatrixSpace(Index dim)
+        :
+        MatrixSpace(dim,dim)
+    {}
 
     /** Destructor */
-    virtual ~SymMatrixSpace();
+    virtual ~SymMatrixSpace()
+    {}
     //@}
 
     /** Pure virtual method for creating a new matrix of this specific
@@ -83,12 +91,19 @@ namespace Ipopt
 
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual Matrix* MakeNew() const;
+    virtual Matrix* MakeNew() const
+    {
+      return MakeNewSymMatrix();
+    }
 
     /** Accessor method for the dimension of the matrices in this
      *  matrix space.
      */
-    Index Dim() const;
+    Index Dim() const
+    {
+      DBG_ASSERT(NRows() == NCols());
+      return NRows();
+    }
 
   private:
     /**@name Default Compiler Generated Methods
@@ -113,11 +128,11 @@ namespace Ipopt
 
   /* inline methods */
   inline
-  Index SymMatrixSpace::Dim() const
-  {
-    DBG_ASSERT(NRows() == NCols());
-    return NRows();
-  }
+  SymMatrix::SymMatrix(const SymMatrixSpace* owner_space)
+      :
+      Matrix(owner_space),
+      owner_space_(owner_space)
+  {}
 
   inline
   Index SymMatrix::Dim() const

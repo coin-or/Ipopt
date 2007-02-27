@@ -10,18 +10,6 @@
 
 namespace Ipopt
 {
-  void Matrix::MultVector(Number alpha, const Vector& x, Number beta,
-                          Vector& y) const
-  {
-    MultVectorImpl(alpha, x, beta, y);
-  }
-
-  void Matrix::TransMultVector(Number alpha, const Vector& x, Number beta,
-                               Vector& y) const
-  {
-    TransMultVectorImpl(alpha, x, beta, y);
-  }
-
   void Matrix::AddMSinvZ(Number alpha, const Vector& S, const Vector& Z,
                          Vector& X) const
   {
@@ -85,20 +73,6 @@ namespace Ipopt
     if (jnlst.ProduceOutput(level, category)) {
       PrintImpl(jnlst, level, category, name, indent, prefix);
     }
-  }
-
-  MatrixSpace::MatrixSpace(Index nRows, Index nCols)
-      :
-      nRows_(nRows),
-      nCols_(nCols)
-  {}
-
-  MatrixSpace::~MatrixSpace()
-  {}
-
-  bool MatrixSpace::IsMatrixFromSpace(const Matrix& matrix) const
-  {
-    return (matrix.OwnerSpace() == this);
   }
 
 } // namespace Ipopt

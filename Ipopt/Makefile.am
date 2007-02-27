@@ -74,7 +74,6 @@ EXTRA_DIST = \
 	Windows/VisualStudio_dotNET/hs071_f/hs071_f.vfproj \
 	Windows/VisualStudio_dotNET/hs071_f/hs071_f.f \
 	Windows/VisualStudio_dotNET/FortranLinAlg/FortranLinAlg.vfproj \
-	Windows/VisualStudio_dotNET/include/config.h \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj \
 	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj

@@ -192,6 +192,29 @@ namespace Ipopt
     return mumps_.a;
   }
 
+  void dump_matrix(DMUMPS_STRUC_C *mumps_data)
+  {
+#ifdef write_matrices
+    // Dump the matrix
+    for (int i=0; i<40; i++) {
+      printf("%d\n", mumps_data->icntl[i]);
+    }
+    for (int i=0; i<5; i++) {
+      printf("%25.15e\n", mumps_data->cntl[i]);
+    }
+    printf("%-15d :N\n",mumps_data->n);
+    printf("%-15d :NZ", mumps_data->nz);
+    for (int i=0; i<mumps_data->nz; i++) {
+      printf("\n%d %d %25.15e", mumps_data->irn[i], mumps_data->jcn[i], mumps_data->a[i]);
+    }
+    printf("       :values");
+    // Dummy RHS for now
+    for (int i=0; i<mumps_data->n; i++) {
+      printf("\n%25.15e", 0.);
+    }
+    printf("    :RHS\n");
+#endif
+  }
 
   /** Initialize the local copy of the positions of the nonzero
       elements */
@@ -241,8 +264,8 @@ namespace Ipopt
     mumps_data->icntl[2] = 0;//QUIETLY!
     mumps_data->icntl[3] = 0;
 
-    //mumps_data->icntl[1] = 0;
-    //mumps_data->icntl[2] = 0;//QUIETLY!
+    //mumps_data->icntl[1] = 6;
+    //mumps_data->icntl[2] = 6;//QUIETLY!
     //mumps_data->icntl[3] = 4;
 
     //Todo: reveal and tune these options
@@ -256,6 +279,8 @@ namespace Ipopt
     mumps_data->icntl[12] = 1;//avoid lapack bug, ensures proper inertia
     mumps_data->icntl[13] = mem_percent_; //% memory to allocate over expected
     mumps_data->cntl[0] = pivtol_;  // Set pivot tolerance
+
+    dump_matrix(mumps_data);
 
     dmumps_c(mumps_data);
     int error = mumps_data->info[0];
@@ -285,6 +310,7 @@ namespace Ipopt
 
     mumps_data->job = 2;//numerical factorization
 
+    dump_matrix(mumps_data);
     dmumps_c(mumps_data);
     int error = mumps_data->info[0];
 
@@ -301,6 +327,7 @@ namespace Ipopt
         mumps_data->icntl[13] = (Index)(2.0 * mem_percent);
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "%d.\n", mumps_data->icntl[13]);
 
+        dump_matrix(mumps_data);
         dmumps_c(mumps_data);
         error = mumps_data->info[0];
         if (error != -8 & error != -9)
