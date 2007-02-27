@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -41,8 +41,9 @@ namespace Ipopt
     J_INSUPPRESSIBLE=-1,
     J_NONE=0,
     J_ERROR,
-    J_WARNING,
+    J_STRONGWARNING,
     J_SUMMARY,
+    J_WARNING,
     J_ITERSUMMARY,
     J_DETAILED,
     J_MOREDETAILED,
