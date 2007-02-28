@@ -214,6 +214,7 @@ namespace Ipopt
     }
     printf("    :RHS\n");
 #endif
+
   }
 
   /** Initialize the local copy of the positions of the nonzero

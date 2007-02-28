@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -46,14 +46,6 @@ namespace Ipopt
       :
       tnlp_(tnlp),
       jnlst_(jnlst),
-      n_full_x_(-1),
-      n_full_g_(-1),
-      nz_jac_c_(-1),
-      nz_jac_c_no_fixed_(-1),
-      nz_jac_d_(-1),
-      nz_full_jac_g_(-1),
-      nz_full_h_(-1),
-      nz_h_(-1),
       full_x_(NULL),
       full_lambda_(NULL),
       full_g_(NULL),
@@ -113,7 +105,22 @@ namespace Ipopt
       "no",
       "no", "don't check; no extra work at beginning",
       "yes", "try to guess dependent constraints (might take some time)",
-      "If yes, MA28 is used to guess indices of linearly dependent equality constraints.");
+      "If yes, MA28 is used to guess indices of linearly dependent equality constraints.  This is only available if Ipopt has been compiled with MA28.");
+    roptions->AddLowerBoundedNumberOption(
+      "point_perturbation_radius",
+      "Maximal perturbation of an evaluation point.",
+      0., false,
+      10.,
+      "If a random perturbation of a points is required, this number "
+      "indicates the maximal perturbation.  Currently, this is only used when "
+      "we perturb the initial point in order to get a random Jacobian for the "
+      "linear dependency detection of equality constraints.");
+
+    roptions->AddBoundedNumberOption(
+      "ma28_pivtol",
+      "Pivot tolerance for linear solver MA28.",
+      0.0, true, 1., false, 0.01,
+      "This is used when MA28 tried to find the dependent constraints.");
     roptions->SetRegisteringCategory("Derivative Checker");
     roptions->AddStringOption3(
       "derivative_test",
@@ -180,6 +187,11 @@ namespace Ipopt
 
     options.GetBoolValue("check_for_dependent_constraints",
                          check_for_dependent_constraints_, prefix);
+    options.GetNumericValue("point_perturbation_radius",
+                            point_perturbation_radius_, prefix);
+
+    options.GetNumericValue("ma28_pivtol",
+                            ma28_pivtol_, prefix);
 
     return true;
   }
@@ -305,6 +317,14 @@ namespace Ipopt
         else if (lower_bound > upper_bound) {
           char string[128];
           sprintf(string, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+          delete [] x_l;
+          delete [] x_u;
+          delete [] g_l;
+          delete [] g_u;
+          delete [] x_not_fixed_map;
+          delete [] x_fixed_map_tmp;
+          delete [] x_l_map;
+          delete [] x_u_map;
           THROW_EXCEPTION(INVALID_TNLP, string);
         }
         else {
@@ -336,33 +356,6 @@ namespace Ipopt
       }
       delete [] x_fixed_map_tmp;
 
-      x_space_ = new DenseVectorSpace(n_x_var);
-      x_l_space_ = new DenseVectorSpace(n_x_l);
-      x_u_space_ = new DenseVectorSpace(n_x_u);
-
-      if (n_x_fixed_>0 && fixed_variable_treatment_==MAKE_PARAMETER) {
-        P_x_full_x_space_ = new ExpansionMatrixSpace(n_full_x_, n_x_var, x_not_fixed_map);
-        P_x_full_x_ = P_x_full_x_space_->MakeNewExpansionMatrix();
-      }
-      else {
-        P_x_full_x_space_ = NULL;
-        P_x_full_x_ = NULL;
-      }
-
-      P_x_x_L_space_ = new ExpansionMatrixSpace(n_x_var, n_x_l, x_l_map);
-      px_l_space_ = GetRawPtr(P_x_x_L_space_);
-      P_x_x_L_ = P_x_x_L_space_->MakeNewExpansionMatrix();
-      P_x_x_U_space_ = new ExpansionMatrixSpace(n_x_var, n_x_u, x_u_map);
-      px_u_space_ = GetRawPtr(P_x_x_U_space_);
-      P_x_x_U_ = P_x_x_U_space_->MakeNewExpansionMatrix();
-
-      delete [] x_not_fixed_map;
-      x_not_fixed_map = NULL;
-      delete [] x_l_map;
-      x_l_map = NULL;
-      delete [] x_u_map;
-      x_u_map = NULL;
-
       // Create the spaces for c and d
       // - includes the internal permutation matrices for
       //  full_g to c and d
@@ -389,6 +382,17 @@ namespace Ipopt
           n_c++;
         }
         else if (lower_bound > upper_bound) {
+          delete [] x_l;
+          delete [] x_u;
+          delete [] g_l;
+          delete [] g_u;
+          delete [] x_not_fixed_map;
+          delete [] x_l_map;
+          delete [] x_u_map;
+          delete [] c_map;
+          delete [] d_map;
+          delete [] d_l_map;
+          delete [] d_u_map;
           char string[128];
           sprintf(string, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
           THROW_EXCEPTION(INVALID_TNLP, string);
@@ -412,14 +416,21 @@ namespace Ipopt
       // constraints
       if (n_c>0 && check_for_dependent_constraints_) {
         std::list<Index> c_deps;
-        if (!DetermineDependentConstraints(n_c, c_map, c_deps)) {
+        if (!DetermineDependentConstraints(n_x_var, x_not_fixed_map,
+                                           x_l, x_u, n_c, c_map, c_deps)) {
           jnlst_->Printf(J_WARNING, J_INITIALIZATION,
                          "Dependent constraint detector had a problem, assume full rank.\n");
         }
         c_deps.sort();
-        jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-                       "Detected %d dependent constraints; taking those out.\n\n",
-                       c_deps.size());
+        if (c_deps.size() > 0) {
+          jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                         "\nDetected %d dependent constraints; taking those out.\n\n",
+                         c_deps.size());
+        }
+        else {
+          jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
+                         "\nNo dependent constraints detected.\n\n");
+        }
         if (jnlst_->ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
           jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
                          "\nList of indices of dependent constraints:\n");
@@ -458,6 +469,36 @@ namespace Ipopt
       x_l = NULL;
       delete [] x_u;
       x_u = NULL;
+
+      // create x spaces
+      x_space_ = new DenseVectorSpace(n_x_var);
+      x_l_space_ = new DenseVectorSpace(n_x_l);
+      x_u_space_ = new DenseVectorSpace(n_x_u);
+
+      if (n_x_fixed_>0 && fixed_variable_treatment_==MAKE_PARAMETER) {
+        P_x_full_x_space_ =
+          new ExpansionMatrixSpace(n_full_x_, n_x_var,
+                                   x_not_fixed_map);
+        P_x_full_x_ = P_x_full_x_space_->MakeNewExpansionMatrix();
+      }
+      else {
+        P_x_full_x_space_ = NULL;
+        P_x_full_x_ = NULL;
+      }
+
+      P_x_x_L_space_ = new ExpansionMatrixSpace(n_x_var, n_x_l, x_l_map);
+      px_l_space_ = GetRawPtr(P_x_x_L_space_);
+      P_x_x_L_ = P_x_x_L_space_->MakeNewExpansionMatrix();
+      P_x_x_U_space_ = new ExpansionMatrixSpace(n_x_var, n_x_u, x_u_map);
+      px_u_space_ = GetRawPtr(P_x_x_U_space_);
+      P_x_x_U_ = P_x_x_U_space_->MakeNewExpansionMatrix();
+
+      delete [] x_not_fixed_map;
+      x_not_fixed_map = NULL;
+      delete [] x_l_map;
+      x_l_map = NULL;
+      delete [] x_u_map;
+      x_u_map = NULL;
 
       // create the required c_space
 
@@ -561,14 +602,14 @@ namespace Ipopt
           }
         }
       }
-      nz_jac_c_no_fixed_ = current_nz;
+      nz_jac_c_no_extra_ = current_nz;
       Index n_added_constr;
       if (fixed_variable_treatment_==MAKE_PARAMETER) {
-        nz_jac_c_ = nz_jac_c_no_fixed_;
+        nz_jac_c_ = nz_jac_c_no_extra_;
         n_added_constr = 0;
       }
       else {
-        nz_jac_c_ = nz_jac_c_no_fixed_ + n_x_fixed_;
+        nz_jac_c_ = nz_jac_c_no_extra_ + n_x_fixed_;
         for (Index i=0; i<n_x_fixed_; i++) {
           jac_c_iRow[current_nz] = n_c + i + 1;
           jac_c_jCol[current_nz] = x_fixed_map_[i]+1;
@@ -597,7 +638,7 @@ namespace Ipopt
           const Index& d_row = d_row_pos[g_iRow[i]-1];
           const Index& d_col = d_col_pos[g_jCol[i]-1];
           if (d_col != -1 && d_row != -1) {
-            jac_idx_map_[current_nz + nz_jac_c_no_fixed_] = i;
+            jac_idx_map_[current_nz + nz_jac_c_no_extra_] = i;
             jac_d_iRow[current_nz] = d_row + 1;
             jac_d_jCol[current_nz] = d_col + 1;
             current_nz++;
@@ -609,7 +650,7 @@ namespace Ipopt
           const Index& d_row = d_row_pos[g_iRow[i]-1];
           const Index& d_col = g_jCol[i]-1;
           if (d_row != -1) {
-            jac_idx_map_[current_nz + nz_jac_c_no_fixed_] = i;
+            jac_idx_map_[current_nz + nz_jac_c_no_extra_] = i;
             jac_d_iRow[current_nz] = d_row + 1;
             jac_d_jCol[current_nz] = d_col + 1;
             current_nz++;
@@ -638,6 +679,10 @@ namespace Ipopt
                                    NULL, false,
                                    nz_full_h_, full_h_iRow, full_h_jCol, NULL);
         if (!retval) {
+          delete [] full_h_iRow;
+          delete [] full_h_jCol;
+          delete [] h_iRow;
+          delete [] h_jCol;
           jnlst_->Printf(J_ERROR, J_INITIALIZATION,
                          "Option hessian_information is not chosen as limited_memory, but eval_h returns false.\n");
           THROW_EXCEPTION(OPTION_INVALID, "eval_h is called but has not been implemented");
@@ -655,8 +700,8 @@ namespace Ipopt
           h_idx_map_ = new Index[nz_full_h_];
           const Index* h_pos = P_x_full_x_->CompressedPosIndices();
           for (Index i=0; i<nz_full_h_; i++) {
-            const Index h_row = h_pos[full_h_iRow[i]-1];
-            const Index h_col = h_pos[full_h_jCol[i]-1];
+            const Index& h_row = h_pos[full_h_iRow[i]-1];
+            const Index& h_col = h_pos[full_h_jCol[i]-1];
             if (h_row != -1 && h_col != -1) {
               h_idx_map_[current_nz] = i;
               h_iRow[current_nz] = h_row + 1;
@@ -668,8 +713,8 @@ namespace Ipopt
         else {
           h_idx_map_ = NULL;
           for (Index i=0; i<nz_full_h_; i++) {
-            const Index h_row = full_h_iRow[i]-1;
-            const Index h_col = full_h_jCol[i]-1;
+            const Index& h_row = full_h_iRow[i]-1;
+            const Index& h_col = full_h_jCol[i]-1;
             h_iRow[i] = h_row + 1;
             h_jCol[i] = h_col + 1;
             current_nz++;
@@ -757,16 +802,16 @@ namespace Ipopt
     DBG_ASSERT(em_Px_L);
     if (IsValid(P_x_full_x_)) {
       for (Index i=0; i<Px_L.NCols(); i++) {
-        const Index ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
-        const Index full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
-        const Number lower_bound = x_l[full_idx];
+        const Index& ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
+        const Index& full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
+        const Number& lower_bound = x_l[full_idx];
         values[i] = lower_bound;
       }
     }
     else {
       for (Index i=0; i<Px_L.NCols(); i++) {
-        const Index ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
-        const Number lower_bound = x_l[ipopt_idx];
+        const Index& ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
+        const Number& lower_bound = x_l[ipopt_idx];
         values[i] = lower_bound;
       }
     }
@@ -779,16 +824,16 @@ namespace Ipopt
     DBG_ASSERT(em_Px_U);
     if (IsValid(P_x_full_x_)) {
       for (Index i=0; i<Px_U.NCols(); i++) {
-        const Index ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
-        const Index full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
-        const Number upper_bound = x_u[full_idx];
+        const Index& ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
+        const Index& full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
+        const Number& upper_bound = x_u[full_idx];
         values[i] = upper_bound;
       }
     }
     else {
       for (Index i=0; i<Px_U.NCols(); i++) {
-        const Index ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
-        const Number upper_bound = x_u[ipopt_idx];
+        const Index& ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
+        const Number& upper_bound = x_u[ipopt_idx];
         values[i] = upper_bound;
       }
     }
@@ -873,6 +918,10 @@ namespace Ipopt
       tnlp_->get_starting_point(n_full_x_, init_x, full_x, init_z, full_z_l, full_z_u, n_full_g_, init_lambda, full_lambda);
 
     if (!retvalue) {
+      delete [] full_x;
+      delete [] full_z_l;
+      delete [] full_z_u;
+      delete [] full_lambda;
       return false;
     }
 
@@ -880,14 +929,15 @@ namespace Ipopt
       DenseVector* dx = dynamic_cast<DenseVector*>(GetRawPtr(x));
       DBG_ASSERT(dx);
       Number* values = dx->Values();
+      const Index& n_x_var = x->Dim();
       if (IsValid(P_x_full_x_)) {
         const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
-        for (Index i=0; i<x->Dim(); i++) {
+        for (Index i=0; i<n_x_var; i++) {
           values[i] = full_x[x_pos[i]];
         }
       }
       else {
-        IpBlasDcopy(x->Dim(), full_x, 1, values, 1);
+        IpBlasDcopy(n_x_var, full_x, 1, values, 1);
       }
     }
 
@@ -920,17 +970,18 @@ namespace Ipopt
       DenseVector* dz_l = dynamic_cast<DenseVector*>(GetRawPtr(z_L));
       DBG_ASSERT(dz_l);
       Number* values = dz_l->Values();
+      const Index& n_z_l = z_L->Dim();
       const Index* z_l_pos = P_x_x_L_->ExpandedPosIndices();
       if (IsValid(P_x_full_x_)) {
         const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
-        for (Index i=0; i<z_L->Dim(); i++) {
+        for (Index i=0; i<n_z_l; i++) {
           Index idx = z_l_pos[i]; // convert from x_L to x (ipopt)
           idx = x_pos[idx]; // convert from x (ipopt) to x_full
           values[i] = full_z_l[idx];
         }
       }
       else {
-        for (Index i=0; i<z_L->Dim(); i++) {
+        for (Index i=0; i<n_z_l; i++) {
           Index idx = z_l_pos[i]; // convert from x_L to x (ipopt)
           values[i] = full_z_l[idx];
         }
@@ -992,14 +1043,13 @@ namespace Ipopt
       new_x = true;
     }
 
+    DenseVector* dg_f = dynamic_cast<DenseVector*>(&g_f);
+    DBG_ASSERT(dg_f);
+    Number* values = dg_f->Values();
     if (IsValid(P_x_full_x_)) {
       Number* full_grad_f = new Number[n_full_x_];
       if (tnlp_->eval_grad_f(n_full_x_, full_x_, new_x, full_grad_f)) {
         const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
-        DenseVector* dg_f = dynamic_cast<DenseVector*>(&g_f);
-        DBG_ASSERT(dg_f);
-        Number* values = dg_f->Values();
-
         for (Index i=0; i<g_f.Dim(); i++) {
           values[i] = full_grad_f[x_pos[i]];
         }
@@ -1008,9 +1058,6 @@ namespace Ipopt
       delete [] full_grad_f;
     }
     else {
-      DenseVector* dg_f = dynamic_cast<DenseVector*>(&g_f);
-      DBG_ASSERT(dg_f);
-      Number* values = dg_f->Values();
       retvalue = tnlp_->eval_grad_f(n_full_x_, full_x_, new_x, values);
     }
 
@@ -1024,10 +1071,10 @@ namespace Ipopt
       new_x = true;
     }
 
-    DenseVector* dc = dynamic_cast<DenseVector*>(&c);
-    DBG_ASSERT(dc);
-    Number* values = dc->Values();
     if (internal_eval_g(new_x)) {
+      DenseVector* dc = dynamic_cast<DenseVector*>(&c);
+      DBG_ASSERT(dc);
+      Number* values = dc->Values();
       const Index* c_pos = P_c_g_->ExpandedPosIndices();
       Index n_c_no_fixed = P_c_g_->NCols();
       for (Index i=0; i<n_c_no_fixed; i++) {
@@ -1058,13 +1105,13 @@ namespace Ipopt
       DBG_ASSERT(gt_jac_c);
       Number* values = gt_jac_c->Values();
 
-      for (Index i=0; i<nz_jac_c_no_fixed_; i++) {
+      for (Index i=0; i<nz_jac_c_no_extra_; i++) {
         // Assume the same structure as initially given
         values[i] = jac_g_[jac_idx_map_[i]];
       }
       if (fixed_variable_treatment_==MAKE_CONSTRAINT) {
         const Number one = 1.;
-        IpBlasDcopy(n_x_fixed_, &one, 0, &values[nz_jac_c_no_fixed_], 1);
+        IpBlasDcopy(n_x_fixed_, &one, 0, &values[nz_jac_c_no_extra_], 1);
       }
       return true;
     }
@@ -1106,7 +1153,7 @@ namespace Ipopt
 
       for (Index i=0; i<nz_jac_d_; i++) {
         // Assume the same structure as initially given
-        values[i] = jac_g_[jac_idx_map_[nz_jac_c_no_fixed_ + i]];
+        values[i] = jac_g_[jac_idx_map_[nz_jac_c_no_extra_ + i]];
       }
       return true;
     }
@@ -1202,6 +1249,7 @@ namespace Ipopt
                     use_g_scaling, n_full_g_,
                     full_g_scaling);
       if (!retval) {
+        delete [] full_x_scaling;
         jnlst_->Printf(J_ERROR, J_INITIALIZATION,
                        "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
         THROW_EXCEPTION(OPTION_INVALID,
@@ -1324,10 +1372,11 @@ namespace Ipopt
     Number* g_u = new Number[n_full_g_];
     tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
     for (Index i=0; i<n_full_g_; i++) {
+      //printf("%d %23.16e %23.16e %23.16e\n",i,full_g_[i], g_l[i], g_u[i]);
       max_viol = Max(max_viol, full_g_[i]-g_u[i], g_l[i]-full_g_[i]);
     }
     jnlst_->Printf(J_SUMMARY, J_INITIALIZATION,
-		   "Constraint violation for all real constraints is %e\n", max_viol);
+                   "Constraint violation for all real constraints is %e\n", max_viol);
     delete [] x_l;
     delete [] x_u;
     delete [] g_l;
@@ -1438,7 +1487,7 @@ namespace Ipopt
       const Index* x_pos = P_x_full_x_->CompressedPosIndices();
 
       if (dx->IsHomogeneous()) {
-        Number scalar = dx->Scalar();
+        const Number& scalar = dx->Scalar();
         for (Index i=0; i<n_full_x_; i++) {
           Index idx = x_pos[i];
           if (idx != -1) {
@@ -1464,7 +1513,7 @@ namespace Ipopt
     }
     else {
       if (dx->IsHomogeneous()) {
-        Number scalar = dx->Scalar();
+        const Number& scalar = dx->Scalar();
         IpBlasDcopy(n_full_x_, &scalar, 0, x_orig, 1);
       }
       else {
@@ -1518,12 +1567,13 @@ namespace Ipopt
       DBG_ASSERT(dx_L);
 
       const Index* bnds_pos_not_fixed = P_x_x_L_->ExpandedPosIndices();
+      const Index& n_xL = x_L.Dim();
 
       if (IsValid(P_x_full_x_)) {
         const Index* bnds_pos_full = P_x_full_x_->ExpandedPosIndices();
         if (dx_L->IsHomogeneous()) {
           Number scalar = dx_L->Scalar();
-          for (Index i=0; i<x_L.Dim(); i++) {
+          for (Index i=0; i<n_xL; i++) {
             int idx = bnds_pos_not_fixed[i];
             idx = bnds_pos_full[idx];
             x_L_orig[idx] = scalar;
@@ -1531,7 +1581,7 @@ namespace Ipopt
         }
         else {
           const Number* x_L_values = dx_L->Values();
-          for (Index i=0; i<x_L.Dim(); i++) {
+          for (Index i=0; i<n_xL; i++) {
             int idx = bnds_pos_not_fixed[i];
             idx = bnds_pos_full[idx];
             x_L_orig[idx] = x_L_values[i];
@@ -1541,14 +1591,14 @@ namespace Ipopt
       else {
         if (dx_L->IsHomogeneous()) {
           Number scalar = dx_L->Scalar();
-          for (Index i=0; i<x_L.Dim(); i++) {
+          for (Index i=0; i<n_xL; i++) {
             int idx = bnds_pos_not_fixed[i];
             x_L_orig[idx] = scalar;
           }
         }
         else {
           const Number* x_L_values = dx_L->Values();
-          for (Index i=0; i<x_L.Dim(); i++) {
+          for (Index i=0; i<n_xL; i++) {
             int idx = bnds_pos_not_fixed[i];
             x_L_orig[idx] = x_L_values[i];
           }
@@ -1988,7 +2038,9 @@ namespace Ipopt
   }
 
   bool TNLPAdapter::DetermineDependentConstraints(
-    Index n_c, const Index* c_map, std::list<Index>& c_deps)
+    Index n_x_var, const Index* x_not_fixed_map,
+    const Number* x_l, const Number* x_u, Index n_c,
+    const Index* c_map, std::list<Index>& c_deps)
   {
     // First get a temporary expansion matrix for getting the equality
     // constraints
@@ -2019,9 +2071,16 @@ namespace Ipopt
     ipfint* jac_c_jCol = new ipfint[nz_full_jac_g_];
     Index nz_jac_c = 0;
     const Index* c_row_pos = P_c_g->CompressedPosIndices();
-    if (IsValid(P_x_full_x_)) {
-      // there are missing variables x
-      const Index* c_col_pos = P_x_full_x_->CompressedPosIndices();
+    Index n_fixed = n_full_x_ - n_x_var;
+    if (n_fixed>0) {
+      // Get the reverse map for the fixed variables
+      Index* c_col_pos = new Index[n_full_x_];
+      for (Index i=0; i<n_full_x_; i++) {
+        c_col_pos[i] = -1;
+      }
+      for(Index i=0; i<n_x_var; i++) {
+        c_col_pos[x_not_fixed_map[i]] = i;
+      }
       for (Index i=0; i<nz_full_jac_g_; i++) {
         const Index& c_row = c_row_pos[g_iRow[i]];
         const Index& c_col = c_col_pos[g_jCol[i]];
@@ -2032,11 +2091,12 @@ namespace Ipopt
           nz_jac_c++;
         }
       }
+      delete [] c_col_pos;
     }
     else {
       for (Index i=0; i<nz_full_jac_g_; i++) {
-        const Index c_row = c_row_pos[g_iRow[i]];
-        const Index c_col = g_jCol[i];
+        const Index& c_row = c_row_pos[g_iRow[i]];
+        const Index& c_col = g_jCol[i];
         if (c_row != -1) {
           jac_c_map[nz_jac_c] = i;
           jac_c_iRow[nz_jac_c] = c_row + 1;
@@ -2057,22 +2117,19 @@ namespace Ipopt
       delete [] jac_c_map;
       return false;
     }
-    Number* x_l = new Number[n_full_x_];
-    Number* x_u = new Number[n_full_x_];
-    Number* g_l = new Number[n_full_g_];
-    Number* g_u = new Number[n_full_g_];
-    tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
-    delete [] g_l;
-    delete [] g_u;
+    // Here we reset the random number generator
+    srandom(1);
     for (Index i=0; i<n_full_x_; i++) {
-      Number radius = Min(10., x_u[i]-x_l[i]);
-      Number xi = full_x_[i] + (0.5-drand48())*radius;
+      Number radius = Min(point_perturbation_radius_, x_u[i]-x_l[i]);
+      Number random_number = Number(random())/Number(RAND_MAX);
+      Number xi = full_x_[i] + (0.5-random_number)*radius;
       full_x_[i] = Max(x_l[i], Min(xi, x_u[i]));
+      random_number = Number(random())/Number(RAND_MAX);
       if (full_x_[i] == x_l[i]) {
-        full_x_[i] = x_l[i] + radius*drand48();
+        full_x_[i] = x_l[i] + radius*random_number;
       }
       if (full_x_[i] == x_u[i]) {
-        full_x_[i] = x_u[i] - radius*drand48();
+        full_x_[i] = x_u[i] - radius*random_number;
       }
     }
     if (!tnlp_->eval_jac_g(n_full_x_, full_x_, true, n_full_g_,
@@ -2080,8 +2137,6 @@ namespace Ipopt
       delete [] jac_c_iRow;
       delete [] jac_c_jCol;
       delete [] jac_c_map;
-      delete [] x_l;
-      delete [] x_u;
       return false;
     }
 
@@ -2094,10 +2149,10 @@ namespace Ipopt
     // Now comes the interesting part:
     // Call Ma28 (or something else later) to get the dependencies
     ipfint TASK = 0;
-    ipfint N = x_space_->Dim();
+    ipfint N = n_x_var;
     ipfint M = n_c;
     ipfint NZ = nz_jac_c;
-    double PIVTOL = 1e-2;
+    double PIVTOL = ma28_pivtol_;
     ipfint FILLFACT = 40;
     ipfint* IVAR;
     ipfint NDEGEN;
@@ -2134,8 +2189,6 @@ namespace Ipopt
       delete [] jac_c_jCol;
       delete [] jac_c_map;
       delete [] jac_c_vals;
-      delete [] x_l;
-      delete [] x_u;
       return false;
     }
 #else
@@ -2143,8 +2196,6 @@ namespace Ipopt
     delete [] jac_c_jCol;
     delete [] jac_c_map;
     delete [] jac_c_vals;
-    delete [] x_l;
-    delete [] x_u;
     THROW_EXCEPTION(OPTION_INVALID,
                     "Detection of dependent constraints is only possible if MA28 is available.");
 #endif
@@ -2159,8 +2210,6 @@ namespace Ipopt
     delete [] jac_c_jCol;
     delete [] jac_c_map;
     delete [] jac_c_vals;
-    delete [] x_l;
-    delete [] x_u;
 
     return true;
   }

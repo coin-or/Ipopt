@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -207,7 +207,10 @@ namespace Ipopt
 
     /** @name Method implementing the detection of linearly dependent
     equality constraints */
-    bool DetermineDependentConstraints(Index n_c, const Index* c_map,
+    bool DetermineDependentConstraints(Index n_x_var,
+                                       const Index* x_not_fixed_map,
+                                       const Number* x_l, const Number* x_u,
+                                       Index n_c, const Index* c_map,
                                        std::list<Index>& c_deps);
 
     /** Pointer to the TNLP class (class specific to Number* vectors and
@@ -247,8 +250,13 @@ namespace Ipopt
     /** Flag indicating what Hessian information is to be used. */
     HessianApproximationType hessian_approximation_;
     /** Flag indicating if we should check for linearly dependent
-    equality constraints */
+     *  equality constraints. */
     bool check_for_dependent_constraints_;
+    /** Maximal perturbation of the initial point */
+    Number point_perturbation_radius_;
+
+    /** Pivot tolerance for MA28 for check for dependent constraints */
+    Number ma28_pivtol_;
     //@}
 
     /**@name Problem Size Data */
@@ -261,7 +269,7 @@ namespace Ipopt
     Index nz_jac_c_;
     /** non-zeros of the jacobian of c without added constraints for
      *  fixed variables. */
-    Index nz_jac_c_no_fixed_;
+    Index nz_jac_c_no_extra_;
     /** non-zeros of the jacobian of d */
     Index nz_jac_d_;
     /** number of non-zeros in full-size Jacobian of g */
