@@ -12,6 +12,7 @@
 #include "IpNLP.hpp"
 #include "IpTNLP.hpp"
 #include "IpOrigIpoptNLP.hpp"
+#include <list>
 
 namespace Ipopt
 {
@@ -204,6 +205,11 @@ namespace Ipopt
                     const Vector& x_U, Number* x_U_orig);
     //@}
 
+    /** @name Method implementing the detection of linearly dependent
+    equality constraints */
+    bool DetermineDependentConstraints(Index n_c, const Index* c_map,
+                                       std::list<Index>& c_deps);
+
     /** Pointer to the TNLP class (class specific to Number* vectors and
      *  harwell triplet matrices) */
     SmartPtr<TNLP> tnlp_;
@@ -240,6 +246,9 @@ namespace Ipopt
     bool warm_start_same_structure_;
     /** Flag indicating what Hessian information is to be used. */
     HessianApproximationType hessian_approximation_;
+    /** Flag indicating if we should check for linearly dependent
+    equality constraints */
+    bool check_for_dependent_constraints_;
     //@}
 
     /**@name Problem Size Data */

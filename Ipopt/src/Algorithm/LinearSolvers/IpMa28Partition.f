@@ -9,8 +9,8 @@ C This code provides an interface to MA28. Since Fortran COMMON blocks
 C might be difficult to access from C++, we write this interface in Fortran
 C and not C.
 C
-      subroutine MA28PART(TASK, N, M, NZ, A, IROW, ICOL, IVAR, PIVTOL,
-     1     FILLFACT, NDEGEN, IDEGEN, LRW, RW, LIW, IW, IERR)
+      subroutine MA28PART(TASK, N, M, NZ, A, IROW, ICOL, PIVTOL,
+     1     FILLFACT, IVAR, NDEGEN, IDEGEN, LIW, IW, LRW, RW, IERR)
 C
 C*******************************************************************************
 C

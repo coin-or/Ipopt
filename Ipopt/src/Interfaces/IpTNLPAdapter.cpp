@@ -25,6 +25,16 @@
 # endif
 #endif
 
+extern "C"
+{
+  void
+  F77_FUNC(ma28part,MA28PART)(ipfint* TASK, ipfint* N, ipfint* M, ipfint* NZ,
+                              double* A, ipfint* IROW, ipfint* ICOL,
+                              double* PIVTOL, ipfint* FILLFACT, ipfint* IVAR,
+                              ipfint* NDEGEN, ipfint* IDEGEN, ipfint* LIW,
+                              ipfint* IW, ipfint* LRW, double* RW, ipfint* IERR);
+}
+
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
@@ -97,6 +107,13 @@ namespace Ipopt
       "evaluated with the fixed values for those variables.  Also, for "
       "\"make_constraints\", bound multipliers are computed for the fixed "
       "variables.");
+    roptions->AddStringOption2(
+      "check_for_dependent_constraints",
+      "Indicates if Ipopt should check for linearly dependent equality constraints.",
+      "no",
+      "no", "don't check; no extra work at beginning",
+      "yes", "try to guess dependent constraints (might take some time)",
+      "If yes, MA28 is used to guess indices of linearly dependent equality constraints.");
     roptions->SetRegisteringCategory("Derivative Checker");
     roptions->AddStringOption3(
       "derivative_test",
@@ -160,6 +177,9 @@ namespace Ipopt
     // The following is registered in OrigIpoptNLP
     options.GetEnumValue("hessian_approximation", enum_int, prefix);
     hessian_approximation_ = HessianApproximationType(enum_int);
+
+    options.GetBoolValue("check_for_dependent_constraints",
+                         check_for_dependent_constraints_, prefix);
 
     return true;
   }
@@ -336,10 +356,6 @@ namespace Ipopt
       px_u_space_ = GetRawPtr(P_x_x_U_space_);
       P_x_x_U_ = P_x_x_U_space_->MakeNewExpansionMatrix();
 
-      delete [] x_l;
-      x_l = NULL;
-      delete [] x_u;
-      x_u = NULL;
       delete [] x_not_fixed_map;
       x_not_fixed_map = NULL;
       delete [] x_l_map;
@@ -391,6 +407,57 @@ namespace Ipopt
           n_d++;
         }
       }
+
+      // If requested, check if there are linearly dependent equality
+      // constraints
+      if (n_c>0 && check_for_dependent_constraints_) {
+        std::list<Index> c_deps;
+        if (!DetermineDependentConstraints(n_c, c_map, c_deps)) {
+          jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                         "Dependent constraint detector had a problem, assume full rank.\n");
+        }
+        c_deps.sort();
+        jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                       "Detected %d dependent constraints; taking those out.\n\n",
+                       c_deps.size());
+        if (jnlst_->ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
+          jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
+                         "\nList of indices of dependent constraints:\n");
+          int count=0;
+          for (std::list<Index>::iterator i=c_deps.begin(); i!=c_deps.end(); i++) {
+            jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
+                           "c_dep[%d] = %d\n", count++, *i);
+          }
+          jnlst_->Printf(J_DETAILED, J_INITIALIZATION, "\n");
+        }
+        if (c_deps.size()>0) {
+          // Take the dependent constraints out.
+          // We assume that the list in i_c_dep is sorted
+          std::list<Index>::iterator idep = c_deps.begin();
+          Index new_n_c = *idep;
+          for (Index i=*idep; i<n_c; i++) {
+            if (i == *idep) {
+              idep++;
+            }
+            else {
+              c_map[new_n_c] = c_map[i];
+              new_n_c++;
+            }
+            if (idep == c_deps.end()) {
+              // just copy the rest and done
+              for (Index j=i+1; j<n_c; j++) {
+                c_map[new_n_c++] = c_map[j];
+              }
+              break;
+            }
+          }
+          n_c = new_n_c;
+        }
+      }
+      delete [] x_l;
+      x_l = NULL;
+      delete [] x_u;
+      x_u = NULL;
 
       // create the required c_space
 
@@ -472,8 +539,8 @@ namespace Ipopt
         // there are missing variables x
         const Index* c_col_pos = P_x_full_x_->CompressedPosIndices();
         for (Index i=0; i<nz_full_jac_g_; i++) {
-          const Index c_row = c_row_pos[g_iRow[i]-1];
-          const Index c_col = c_col_pos[g_jCol[i]-1];
+          const Index& c_row = c_row_pos[g_iRow[i]-1];
+          const Index& c_col = c_col_pos[g_jCol[i]-1];
           if (c_col != -1 && c_row != -1) {
             jac_idx_map_[current_nz] = i;
             jac_c_iRow[current_nz] = c_row + 1;
@@ -484,8 +551,8 @@ namespace Ipopt
       }
       else {
         for (Index i=0; i<nz_full_jac_g_; i++) {
-          const Index c_row = c_row_pos[g_iRow[i]-1];
-          const Index c_col = g_jCol[i]-1;
+          const Index& c_row = c_row_pos[g_iRow[i]-1];
+          const Index& c_col = g_jCol[i]-1;
           if (c_row != -1) {
             jac_idx_map_[current_nz] = i;
             jac_c_iRow[current_nz] = c_row + 1;
@@ -527,8 +594,8 @@ namespace Ipopt
       if (IsValid(P_x_full_x_)) {
         const Index* d_col_pos = P_x_full_x_->CompressedPosIndices();
         for (Index i=0; i<nz_full_jac_g_; i++) {
-          const Index d_row = d_row_pos[g_iRow[i]-1];
-          const Index d_col = d_col_pos[g_jCol[i]-1];
+          const Index& d_row = d_row_pos[g_iRow[i]-1];
+          const Index& d_col = d_col_pos[g_jCol[i]-1];
           if (d_col != -1 && d_row != -1) {
             jac_idx_map_[current_nz + nz_jac_c_no_fixed_] = i;
             jac_d_iRow[current_nz] = d_row + 1;
@@ -539,8 +606,8 @@ namespace Ipopt
       }
       else {
         for (Index i=0; i<nz_full_jac_g_; i++) {
-          const Index d_row = d_row_pos[g_iRow[i]-1];
-          const Index d_col = g_jCol[i]-1;
+          const Index& d_row = d_row_pos[g_iRow[i]-1];
+          const Index& d_col = g_jCol[i]-1;
           if (d_row != -1) {
             jac_idx_map_[current_nz + nz_jac_c_no_fixed_] = i;
             jac_d_iRow[current_nz] = d_row + 1;
@@ -1248,6 +1315,23 @@ namespace Ipopt
     full_z_U = NULL;
     delete [] full_g;
     full_g = NULL;
+
+    // Temporary: Check if we really have a feasible point:
+    Number max_viol = 0.;
+    Number* x_l = new Number[n_full_x_];
+    Number* x_u = new Number[n_full_x_];
+    Number* g_l = new Number[n_full_g_];
+    Number* g_u = new Number[n_full_g_];
+    tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+    for (Index i=0; i<n_full_g_; i++) {
+      max_viol = Max(max_viol, full_g_[i]-g_u[i], g_l[i]-full_g_[i]);
+    }
+    jnlst_->Printf(J_SUMMARY, J_INITIALIZATION,
+		   "Constraint violation for all real constraints is %e\n", max_viol);
+    delete [] x_l;
+    delete [] x_u;
+    delete [] g_l;
+    delete [] g_u;
   }
 
   bool TNLPAdapter::
@@ -1901,6 +1985,184 @@ namespace Ipopt
     }
 
     return retval;
+  }
+
+  bool TNLPAdapter::DetermineDependentConstraints(
+    Index n_c, const Index* c_map, std::list<Index>& c_deps)
+  {
+    // First get a temporary expansion matrix for getting the equality
+    // constraints
+    SmartPtr<ExpansionMatrixSpace> P_c_g_space =
+      new ExpansionMatrixSpace(n_full_g_, n_c, c_map);
+    SmartPtr<ExpansionMatrix> P_c_g = P_c_g_space->MakeNewExpansionMatrix();
+
+    // Get the structure of the big Jacobian of g and get the map for
+    // the equality constraints entries
+    Index* g_iRow = new Index[nz_full_jac_g_];
+    Index* g_jCol = new Index[nz_full_jac_g_];
+    if (!tnlp_->eval_jac_g(n_full_x_, NULL, false, n_full_g_, nz_full_jac_g_,
+                           g_iRow, g_jCol, NULL)) {
+      delete [] g_iRow;
+      delete [] g_jCol;
+      return false;
+    }
+    if (index_style_ == TNLP::FORTRAN_STYLE) {
+      for (Index i=0; i<nz_full_jac_g_; i++) {
+        g_iRow[i] -= 1;
+        g_jCol[i] -= 1;
+      }
+    }
+    // TODO: Here we don't handle
+    // fixed_variable_treatment_==MAKE_PARAMETER correctly (yet?)
+    Index* jac_c_map = new Index[nz_full_jac_g_];
+    ipfint* jac_c_iRow = new ipfint[nz_full_jac_g_];
+    ipfint* jac_c_jCol = new ipfint[nz_full_jac_g_];
+    Index nz_jac_c = 0;
+    const Index* c_row_pos = P_c_g->CompressedPosIndices();
+    if (IsValid(P_x_full_x_)) {
+      // there are missing variables x
+      const Index* c_col_pos = P_x_full_x_->CompressedPosIndices();
+      for (Index i=0; i<nz_full_jac_g_; i++) {
+        const Index& c_row = c_row_pos[g_iRow[i]];
+        const Index& c_col = c_col_pos[g_jCol[i]];
+        if (c_col != -1 && c_row != -1) {
+          jac_c_map[nz_jac_c] = i;
+          jac_c_iRow[nz_jac_c] = c_row + 1;
+          jac_c_jCol[nz_jac_c] = c_col + 1;
+          nz_jac_c++;
+        }
+      }
+    }
+    else {
+      for (Index i=0; i<nz_full_jac_g_; i++) {
+        const Index c_row = c_row_pos[g_iRow[i]];
+        const Index c_col = g_jCol[i];
+        if (c_row != -1) {
+          jac_c_map[nz_jac_c] = i;
+          jac_c_iRow[nz_jac_c] = c_row + 1;
+          jac_c_jCol[nz_jac_c] = c_col + 1;
+          nz_jac_c++;
+        }
+      }
+    }
+    delete [] g_iRow;
+    delete [] g_jCol;
+
+    // First we evaluate the equality constraint Jacobian at the
+    // starting point with some random perturbation (projected into bounds)
+    if (!tnlp_->get_starting_point(n_full_x_, true, full_x_, false, NULL,
+                                   NULL, n_full_g_, false, NULL)) {
+      delete [] jac_c_iRow;
+      delete [] jac_c_jCol;
+      delete [] jac_c_map;
+      return false;
+    }
+    Number* x_l = new Number[n_full_x_];
+    Number* x_u = new Number[n_full_x_];
+    Number* g_l = new Number[n_full_g_];
+    Number* g_u = new Number[n_full_g_];
+    tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+    delete [] g_l;
+    delete [] g_u;
+    for (Index i=0; i<n_full_x_; i++) {
+      Number radius = Min(10., x_u[i]-x_l[i]);
+      Number xi = full_x_[i] + (0.5-drand48())*radius;
+      full_x_[i] = Max(x_l[i], Min(xi, x_u[i]));
+      if (full_x_[i] == x_l[i]) {
+        full_x_[i] = x_l[i] + radius*drand48();
+      }
+      if (full_x_[i] == x_u[i]) {
+        full_x_[i] = x_u[i] - radius*drand48();
+      }
+    }
+    if (!tnlp_->eval_jac_g(n_full_x_, full_x_, true, n_full_g_,
+                           nz_full_jac_g_, NULL, NULL, jac_g_)) {
+      delete [] jac_c_iRow;
+      delete [] jac_c_jCol;
+      delete [] jac_c_map;
+      delete [] x_l;
+      delete [] x_u;
+      return false;
+    }
+
+    // Get the equality constraint Jacobian out
+    double* jac_c_vals = new double[nz_jac_c];
+    for (Index i=0; i<nz_jac_c; i++) {
+      jac_c_vals[i] = jac_g_[jac_c_map[i]];
+    }
+
+    // Now comes the interesting part:
+    // Call Ma28 (or something else later) to get the dependencies
+    ipfint TASK = 0;
+    ipfint N = x_space_->Dim();
+    ipfint M = n_c;
+    ipfint NZ = nz_jac_c;
+    double PIVTOL = 1e-2;
+    ipfint FILLFACT = 40;
+    ipfint* IVAR;
+    ipfint NDEGEN;
+    ipfint* IDEGEN;
+    ipfint LRW;
+    ipfint LIW;
+    double ddummy;
+    ipfint idummy;
+    ipfint IERR;
+#if HAVE_MA28
+    // First determine how much work space we need to allocate
+    IVAR = new ipfint[N];
+    IDEGEN = new ipfint[M];
+    F77_FUNC(ma28part,MA28PART)(&TASK, &N, &M, &NZ, &ddummy, jac_c_iRow,
+                                jac_c_jCol, &PIVTOL, &FILLFACT, IVAR, &NDEGEN,
+                                IDEGEN, &LIW, &idummy, &LRW, &ddummy, &IERR);
+    ipfint* IW = new ipfint[LIW];
+    double* RW = new double[LRW];
+
+    // Now do the actual factorization and determine dependent constraints
+    TASK = 1;
+    F77_FUNC(ma28part,MA28PART)(&TASK, &N, &M, &NZ, jac_c_vals, jac_c_iRow,
+                                jac_c_jCol, &PIVTOL, &FILLFACT, IVAR, &NDEGEN,
+                                IDEGEN, &LIW, IW, &LRW, RW, &IERR);
+    delete [] IVAR;
+    delete [] IW;
+    delete [] RW;
+    if (IERR != 0) {
+      jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                     "MA28 returns IERR = %d when trying to determine dependent constraints\n", IERR);
+
+      delete [] IDEGEN;
+      delete [] jac_c_iRow;
+      delete [] jac_c_jCol;
+      delete [] jac_c_map;
+      delete [] jac_c_vals;
+      delete [] x_l;
+      delete [] x_u;
+      return false;
+    }
+#else
+    delete [] jac_c_iRow;
+    delete [] jac_c_jCol;
+    delete [] jac_c_map;
+    delete [] jac_c_vals;
+    delete [] x_l;
+    delete [] x_u;
+    THROW_EXCEPTION(OPTION_INVALID,
+                    "Detection of dependent constraints is only possible if MA28 is available.");
+#endif
+
+    c_deps.clear();
+    for (Index i=0; i<NDEGEN; i++) {
+      c_deps.push_back(IDEGEN[i]-1);
+    }
+
+    delete [] IDEGEN;
+    delete [] jac_c_iRow;
+    delete [] jac_c_jCol;
+    delete [] jac_c_map;
+    delete [] jac_c_vals;
+    delete [] x_l;
+    delete [] x_u;
+
+    return true;
   }
 
 } // namespace Ipopt
