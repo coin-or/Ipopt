@@ -78,7 +78,7 @@ C
       integer IPADDNUMOPTION, IPADDINTOPTION
       integer IPOPENOUTPUTFILE
 C
-      double precision f
+      double precision F
       integer i
 C
 C     Set initial point and bounds:
@@ -150,7 +150,7 @@ C
          write(*,*)
          write(*,*) 'The solution was found.'
          write(*,*)
-         write(*,*) 'The final value of the objective function is ',f
+         write(*,*) 'The final value of the objective function is ',F
          write(*,*)
          write(*,*) 'The optimal values of X are:'
          write(*,*)
