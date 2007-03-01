@@ -27,6 +27,7 @@ libipoptalg_la_SOURCES = \
 	IpExactHessianUpdater.cpp IpExactHessianUpdater.hpp \
 	IpFilter.cpp IpFilter.hpp \
 	IpFilterLSAcceptor.cpp IpFilterLSAcceptor.hpp \
+	IpGenAugSystemSolver.cpp IpGenAugSystemSolver.hpp \
 	IpGradientScaling.cpp IpGradientScaling.hpp \
 	IpHessianUpdater.hpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
@@ -98,6 +99,7 @@ ASTYLE_FILES = \
 	IpExactHessianUpdater.cppbak IpExactHessianUpdater.hppbak \
 	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLSAcceptor.cppbak IpFilterLSAcceptor.hppbak \
+	IpGenAugSystemSolver.cppbak IpGenAugSystemSolver.hppbak \
 	IpGradientScaling.cppbak IpGradientScaling.hppbak \
 	IpHessianUpdater.hppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \

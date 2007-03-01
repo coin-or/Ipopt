@@ -79,19 +79,19 @@ CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 liblinsolvers_la_LIBADD =
-am__liblinsolvers_la_SOURCES_DIST = IpLinearSolversRegOp.cpp \
-	IpLinearSolversRegOp.hpp IpSparseSymLinearSolverInterface.hpp \
-	IpSymLinearSolver.hpp IpTripletToCSRConverter.cpp \
-	IpTripletToCSRConverter.hpp IpTSymLinearSolver.cpp \
-	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp \
-	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
-	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
-	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
-	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp \
-	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
-	IpMa28Partition.f IpMumpsSolverInterface.cpp \
-	IpMumpsSolverInterface.hpp
+am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
+	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
+	IpSparseSymLinearSolverInterface.hpp IpSymLinearSolver.hpp \
+	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
+	IpTSymLinearSolver.cpp IpTSymLinearSolver.hpp \
+	IpTSymScalingMethod.hpp IpMa27TSolverInterface.cpp \
+	IpMa27TSolverInterface.hpp IpMa57TSolverInterface.cpp \
+	IpMa57TSolverInterface.hpp IpMc19TSymScalingMethod.cpp \
+	IpMc19TSymScalingMethod.hpp IpPardisoSolverInterface.cpp \
+	IpPardisoSolverInterface.hpp IpTAUCSSolverInterface.cpp \
+	IpTAUCSSolverInterface.hpp IpWsmpSolverInterface.cpp \
+	IpWsmpSolverInterface.hpp IpMa28Partition.f \
+	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 @HAVE_MA27_TRUE@am__objects_1 = IpMa27TSolverInterface.lo
 @HAVE_MA57_TRUE@am__objects_2 = IpMa57TSolverInterface.lo
 @HAVE_MC19_TRUE@am__objects_3 = IpMc19TSymScalingMethod.lo
@@ -319,14 +319,14 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 noinst_LTLIBRARIES = liblinsolvers.la
-liblinsolvers_la_SOURCES = IpLinearSolversRegOp.cpp \
-	IpLinearSolversRegOp.hpp IpSparseSymLinearSolverInterface.hpp \
-	IpSymLinearSolver.hpp IpTripletToCSRConverter.cpp \
-	IpTripletToCSRConverter.hpp IpTSymLinearSolver.cpp \
-	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp $(am__append_1) \
-	$(am__append_2) $(am__append_3) $(am__append_4) \
-	$(am__append_5) $(am__append_6) $(am__append_7) \
-	$(am__append_8)
+liblinsolvers_la_SOURCES = IpGenKKTSolverInterface.hpp \
+	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
+	IpSparseSymLinearSolverInterface.hpp IpSymLinearSolver.hpp \
+	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
+	IpTSymLinearSolver.cpp IpTSymLinearSolver.hpp \
+	IpTSymScalingMethod.hpp $(am__append_1) $(am__append_2) \
+	$(am__append_3) $(am__append_4) $(am__append_5) \
+	$(am__append_6) $(am__append_7) $(am__append_8)
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg` -I`$(CYGPATH_W) \
@@ -340,6 +340,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Astyle stuff
 ASTYLE_FILES = \
+	IpGenKKTSolverInterface.hppbak \
 	IpLinearSolversRegOp.cppbak IpLinearSolversRegOp.hppbak \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \

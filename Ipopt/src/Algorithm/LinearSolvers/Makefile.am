@@ -11,6 +11,7 @@ AUTOMAKE_OPTIONS = foreign
 noinst_LTLIBRARIES = liblinsolvers.la
 
 liblinsolvers_la_SOURCES = \
+	IpGenKKTSolverInterface.hpp \
 	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
 	IpSparseSymLinearSolverInterface.hpp \
 	IpSymLinearSolver.hpp \
@@ -84,6 +85,7 @@ endif
 # Astyle stuff
 
 ASTYLE_FILES = \
+	IpGenKKTSolverInterface.hppbak \
 	IpLinearSolversRegOp.cppbak IpLinearSolversRegOp.hppbak \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \

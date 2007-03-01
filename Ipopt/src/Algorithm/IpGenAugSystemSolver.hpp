@@ -1,39 +1,34 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Andreas Waechter     IBM    2007-03-01
 
 #ifndef __IP_STDAUGSYSTEMSOLVER_HPP__
 #define __IP_STDAUGSYSTEMSOLVER_HPP__
 
 #include "IpAugSystemSolver.hpp"
-#include "IpCompoundMatrix.hpp"
-#include "IpCompoundSymMatrix.hpp"
-#include "IpCompoundVector.hpp"
-#include "IpSumSymMatrix.hpp"
-#include "IpDiagMatrix.hpp"
-#include "IpIdentityMatrix.hpp"
+#include "IpGenKKTSolverInterface.hpp"
 
 namespace Ipopt
 {
-  /** Solver for the augmented system for triple type matrices.
+  /** Solver for the augmented system using GenKKTSolverInterfaces.
    *
-   *  The current implemetation assumes that all matrices are of the
-   *  type SymTMatrix, and all vectors are of the type DenseVector.
+   *  This takes any Vector values out and provides Number*'s, but
+   *  Matrices are provided as given from the NLP.
    */
-  class StdAugSystemSolver : public AugSystemSolver
+  class GenAugSystemSolver : public AugSystemSolver
   {
   public:
     /**@name Constructors/Destructors */
     //@{
     /** Constructor using only a linear solver object */
-    StdAugSystemSolver(SymLinearSolver& LinSolver);
+    GenAugSystemSolver(GenKKTSolverInterface& SolverInterface);
 
     /** Default destructor */
-    virtual ~StdAugSystemSolver();
+    virtual ~GenAugSystemSolver();
     //@}
 
     /** overloaded from AlgorithmStrategyObject */
@@ -99,77 +94,46 @@ namespace Ipopt
      * they will not be implicitly created/called. */
     //@{
     /** Default constructor. */
-    StdAugSystemSolver();
+    GenAugSystemSolver();
     /** Copy Constructor */
-    StdAugSystemSolver(const StdAugSystemSolver&);
+    GenAugSystemSolver(const GenAugSystemSolver&);
 
     /** Overloaded Equals Operator */
-    void operator=(const StdAugSystemSolver&);
+    void operator=(const GenAugSystemSolver&);
     //@}
-
-
-    /** Create the matrix space for the Compound Sym Matrix that
-     *  represents the augmented system. This signifies the "first"
-     *  time through and requires all structural knowledge */
-    void CreateAugmentedSpace(const SymMatrix& W,
-                              const Matrix& J_c,
-                              const Matrix& J_d,
-                              const Vector& proto_x,
-                              const Vector& proto_s,
-                              const Vector& proto_c,
-                              const Vector& proto_d);
-
-
-    /** Create the new compound sym matrix that represents the
-     *  augmented system. This is done EVERY time Solve is called
-     *  with ANY different information */
-    void CreateAugmentedSystem(const SymMatrix* W,
-                               double W_factor,
-                               const Vector* D_x,
-                               double delta_x,
-                               const Vector* D_s,
-                               double delta_s,
-                               const Matrix& J_c,
-                               const Vector* D_c,
-                               double delta_c,
-                               const Matrix& J_d,
-                               const Vector* D_d,
-                               double delta_d,
-                               const Vector& proto_x,
-                               const Vector& proto_s,
-                               const Vector& proto_c,
-                               const Vector& proto_d);
 
     /** Check the internal tags and decide if the passed variables are
      *  different from what is in the augmented_system_ */
-    bool AugmentedSystemRequiresChange(const SymMatrix* W,
-                                       double W_factor,
-                                       const Vector* D_x,
-                                       double delta_x,
-                                       const Vector* D_s,
-                                       double delta_s,
-                                       const Matrix& J_c,
-                                       const Vector* D_c,
-                                       double delta_c,
-                                       const Matrix& J_d,
-                                       const Vector* D_d,
-                                       double delta_d);
+    bool AugmentedSystemChanged(const SymMatrix* W,
+                                double W_factor,
+                                const Vector* D_x,
+                                double delta_x,
+                                const Vector* D_s,
+                                double delta_s,
+                                const Matrix& J_c,
+                                const Vector* D_c,
+                                double delta_c,
+                                const Matrix& J_d,
+                                const Vector* D_d,
+                                double delta_d);
+
+    void UpdateTags(const SymMatrix* W,
+                    double W_factor,
+                    const Vector* D_x,
+                    double delta_x,
+                    const Vector* D_s,
+                    double delta_s,
+                    const Matrix& J_c,
+                    const Vector* D_c,
+                    double delta_c,
+                    const Matrix& J_d,
+                    const Vector* D_d,
+                    double delta_d);
 
     /** The linear solver object that is to be used to solve the
      *  linear systems.
      */
-    SmartPtr<SymLinearSolver> linsolver_;
-
-    /** Spaces for piecing together the augmented system */
-    SmartPtr<CompoundSymMatrixSpace> augmented_system_space_;
-    SmartPtr<SumSymMatrixSpace> sumsym_space_x_;
-    SmartPtr<DiagMatrixSpace> diag_space_x_;
-    SmartPtr<DiagMatrixSpace> diag_space_s_;
-    SmartPtr<DiagMatrixSpace> diag_space_c_;
-    SmartPtr<IdentityMatrixSpace> ident_space_ds_;
-    SmartPtr<DiagMatrixSpace> diag_space_d_;
-
-    SmartPtr<CompoundVectorSpace> augmented_vector_space_;
+    SmartPtr<GenKKTSolverInterface> solver_interface_;
 
     /**@name Tags and values to track in order to decide whether the
        matrix has to be updated compared to the most recent call of
@@ -214,28 +178,16 @@ namespace Ipopt
     TaggedObject::Tag d_d_tag_;
     /** Most recent value of delta_d from Set method */
     double delta_d_;
-
-    /** This is the tag of the matrix storing the augmented system.  Since
-     *  this object owns this matrix, no changes should happen outside.
-     *  However, since it is given away as a smart pointer, someone outside
-     *  might change it.  For debugging purposes, we now track its tag as
-     *  well.
-     */
-    TaggedObject::Tag augsys_tag_;
     //@}
 
-    /** The resulting augmented matrix.
-     *  This matrix is stored as follows:  First we have the diagonal elements
-     *  for the upper left block (for D_W and delta_W), then the elements for
-     *  the Hessian W, then the Jacobian A, and finally the diagonal elements
-     *  for the lower right block (for D_C and delta_C).
-     */
-    SmartPtr<CompoundSymMatrix> augmented_system_;
-
-    /** A copy of a previous W used in the augmented_system_. Since Solve can
-     *  be called with a NULL W, we keep a copy of the last W passed to keep
-     *  the nonzero structure of the augmented_system_ consistent */
-    SmartPtr<const SymMatrix> old_w_;
+    /** @name Space for storing the diagonal matrices.  If the matrix
+     *  hasn't changed, we can use it from the last call. */
+    //@{
+    Number* dx_vals_copy_;
+    Number* ds_vals_copy_;
+    Number* dc_vals_copy_;
+    Number* dd_vals_copy_;
+    //@}
 
     /** @name Algorithmic parameters */
     //@{
