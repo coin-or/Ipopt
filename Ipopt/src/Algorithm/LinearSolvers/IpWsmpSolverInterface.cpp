@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -151,8 +151,11 @@ namespace Ipopt
     pivtol_changed_ = false;
     have_symbolic_factorization_ = false;
     delete[] a_;
+    a_ = NULL;
     delete[] PERM_;
+    PERM_ = NULL;
     delete[] INVP_;
+    INVP_ = NULL;
 
     // Set the number of threads
     ipfint NTHREADS = wsmp_num_threads_;
@@ -243,6 +246,7 @@ namespace Ipopt
 
     // Make space for storing the matrix elements
     delete[] a_;
+    a_ = NULL;
     a_ = new double[nonzeros];
 
     // Do the symbolic facotrization
@@ -312,7 +316,9 @@ namespace Ipopt
 
       // Create space for the permutations
       delete [] PERM_;
+      PERM_ = NULL;
       delete [] INVP_;
+      INVP_ = NULL;
       PERM_ = new ipfint[dim_];
       INVP_ = new ipfint[dim_];
 

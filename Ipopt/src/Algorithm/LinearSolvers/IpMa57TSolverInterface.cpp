@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -329,10 +329,15 @@ namespace Ipopt
       dim_=0;
       nonzeros_=0;
       delete [] a_;
+      a_ = NULL;
       delete [] wd_fact_;
+      wd_fact_ = NULL;
       delete [] wd_ifact_;
+      wd_ifact_ = NULL;
       delete [] wd_iwork_;
+      wd_iwork_ = NULL;
       delete [] wd_keep_;
+      wd_keep_ = NULL;
     }
     else {
       ASSERT_EXCEPTION(dim_>0 && nonzeros_>0, INVALID_WARMSTART,

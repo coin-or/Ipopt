@@ -414,7 +414,7 @@ AC_ARG_WITH([taucs],
                            [specify TAUCS library and dependencies]),
             [use_taucs=$withval], [use_taucs=no])
 
-if test ! "$use_taucs" = "no"; then
+if test "$use_taucs" != "no"; then
   LIBS="$use_taucs $LIBS"
   ADDLIBS="$use_taucs $ADDLIBS"
 
@@ -429,23 +429,36 @@ fi
 # MUMPS #
 #########
 
-AC_ARG_WITH([mumps],
-            AC_HELP_STRING([--with-mumps],
-                           [specify MUMPS library and dependencies]),
+AC_ARG_WITH([mumps-dir],
+            AC_HELP_STRING([--with-mumps-dir],
+                           [specify directory where MUMPS is installed]),
             [use_mumps="$withval"], [use_mumps=no])
 
-if test ! "$use_mumps" = "no"; then
-  LIBS="$use_mumps $LIBS"
-  ADDLIBS="$use_mumps $ADDLIBS"
+if test "$use_mumps" != "no"; then
+  mumps_dir="$use_mumps"
 
-  AC_DEFINE(HAVE_MUMPS,1,
-            [Define to 1 if MUMPS is available])
+  AC_LANG_PUSH(C)
+  AC_CHECK_LIB([pthread],[pthread_create],[LIBS="-lpthread $LIBS"; ADDLIBS="-lpthread $ADDLIBS"],[])
+  AC_LANG_POP(C)
 
-  AC_ARG_VAR(MUMPS_INCFLAGS,[Flags for including mumps and (psydo) mpi header files.])
-  if test -z "$MUMPS_INCFLAGS"; then
-    AC_MSG_ERROR([You need to specify MUMPS_INCFLAGS if you want to use MUMPS.])
-  fi
-  CXXFLAGS="$CXXFLAGS $MUMPS_INCFLAGS"
+  # Check if hearders are there
+  AC_CHECK_FILE([$mumps_dir/include/dmumps_c.h],
+                [],
+                [AC_MSG_ERROR([I cannot find headers for MUMPS])])
+  CPPFLAGS="$CPPFLAGS -I$mumps_dir/libseq -I$mumps_dir/include"
+
+  LIBS="-L$mumps_dir/lib -ldmumps -lpord -L$mumps_dir/libseq -lmpiseq $LIBS"
+  ADDLIBS="-L$mumps_dir/lib -ldmumps -lpord -L$mumps_dir/libseq -lmpiseq $ADDLIBS"
+  # Check if MUMPS actually works
+  AC_LANG_PUSH(C)
+  save_LIBS="$LIBS"
+  LIBS="$LIBS $FLIBS"
+  AC_TRY_LINK([void dmumps_c();],[dmumps_c()],[],
+              [AC_MSG_ERROR([User provided MUMPS library doesn't work])])
+  LIBS="$save_LIBS"
+  AC_LANG_POP(C)
+
+  AC_DEFINE(HAVE_MUMPS,1, [Define to 1 if MUMPS is available])
 fi
 
 ########
@@ -457,7 +470,7 @@ AC_ARG_WITH([wsmp],
                            [specify WSMP library]),
             [use_wsmp=$withval], [use_wsmp=no])
 
-if test ! "$use_wsmp" = "no"; then
+if test "$use_wsmp" != "no"; then
   LIBS="$use_wsmp $LIBS"
   ADDLIBS="$use_wsmp $ADDLIBS"
 

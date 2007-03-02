@@ -1,4 +1,4 @@
-// Copyright (C) 2006 Damien Hocking, KBC Advanced Technologies
+// Copyright (C) 2006, 2007 Damien Hocking, KBC Advanced Technologies
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -14,6 +14,7 @@
 
 extern "C"
 {
+#include "dmumps_c.h"
 #include "mpi.h"
 }
 
@@ -50,21 +51,23 @@ namespace Ipopt
     DBG_START_METH("MumpsSolverInterface::MumpsSolverInterface()",
                    dbg_verbosity);
     //initialize mumps
+    DMUMPS_STRUC_C* mumps_ = new DMUMPS_STRUC_C;
     int argc=1;
     char ** argv = 0;
     int myid, ierr;
     ierr = MPI_Init(&argc, &argv);
     ierr = MPI_Comm_rank(MPI_COMM_WORLD, &myid);
-    mumps_.n = 0;
-    mumps_.nz = 0;
-    mumps_.a = NULL;
-    mumps_.jcn = NULL;
-    mumps_.irn = NULL;
-    mumps_.job = -1;//initialize mumps
-    mumps_.par = 1;//working host for sequential version
-    mumps_.sym = 2;//general symetric matrix
-    mumps_.comm_fortran = USE_COMM_WORLD;
-    dmumps_c(&mumps_);
+    mumps_->n = 0;
+    mumps_->nz = 0;
+    mumps_->a = NULL;
+    mumps_->jcn = NULL;
+    mumps_->irn = NULL;
+    mumps_->job = -1;//initialize mumps
+    mumps_->par = 1;//working host for sequential version
+    mumps_->sym = 2;//general symetric matrix
+    mumps_->comm_fortran = USE_COMM_WORLD;
+    dmumps_c(mumps_);
+    mumps_ptr_ = (void*)mumps_;
   }
 
 
@@ -73,10 +76,12 @@ namespace Ipopt
     DBG_START_METH("MumpsSolverInterface::~MumpsSolverInterface()",
                    dbg_verbosity);
 
-    mumps_.job = -2; //terminate mumps
-    dmumps_c(&mumps_);
+    DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*)mumps_ptr_;
+    mumps_->job = -2; //terminate mumps
+    dmumps_c(mumps_);
     MPI_Finalize();
-    delete [] mumps_.a;
+    delete [] mumps_->a;
+    delete mumps_;
   }
 
   void MumpsSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
@@ -129,12 +134,13 @@ namespace Ipopt
     pivtol_changed_ = false;
     refactorize_ = false;
 
+    DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*)mumps_ptr_;
     if (!warm_start_same_structure_) {
-      mumps_.n = 0;
-      mumps_.nz = 0;
+      mumps_->n = 0;
+      mumps_->nz = 0;
     }
     else {
-      ASSERT_EXCEPTION(mumps_.n>0 && mumps_.nz>0, INVALID_WARMSTART,
+      ASSERT_EXCEPTION(mumps_->n>0 && mumps_->nz>0, INVALID_WARMSTART,
                        "MumpsSolverInterface called with warm_start_same_structure, but the problem is solved for the first time.");
     }
 
@@ -152,8 +158,8 @@ namespace Ipopt
     DBG_START_METH("MumpsSolverInterface::MultiSolve", dbg_verbosity);
     DBG_ASSERT(!check_NegEVals || ProvidesInertia());
     DBG_ASSERT(initialized_);
-    DBG_ASSERT(mumps_.irn == ia);
-    DBG_ASSERT(mumps_.jcn == ja);
+    DBG_ASSERT((DMUMPS_STRUC_C*)mumps_->irn == ia);
+    DBG_ASSERT((DMUMPS_STRUC_C*)mumps_->jcn == ja);
 
     if (pivtol_changed_) {
       DBG_PRINT((1,"Pivot tolerance has changed.\n"));
@@ -173,7 +179,7 @@ namespace Ipopt
     if (new_matrix || refactorize_) {
       // perform the factorization
       ESymSolverStatus retval;
-      retval = Factorization(&mumps_, check_NegEVals, numberOfNegEVals);
+      retval = Factorization(check_NegEVals, numberOfNegEVals);
       if (retval != SYMSOLVER_SUCCESS)  {
         DBG_PRINT((1, "FACTORIZATION FAILED!\n"));
         return retval;  // Matrix singular or error occurred
@@ -181,18 +187,19 @@ namespace Ipopt
       refactorize_ = false;
     }
     // do the solve
-    return Solve(&mumps_, nrhs, rhs_vals);
+    return Solve(nrhs, rhs_vals);
   }
 
 
   double* MumpsSolverInterface::GetValuesArrayPtr()
   {
+    DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*)mumps_ptr_;
     DBG_START_METH("MumpsSolverInterface::GetValuesArrayPtr",dbg_verbosity)
     DBG_ASSERT(initialized_);
-    return mumps_.a;
+    return mumps_->a;
   }
 
-  void dump_matrix(DMUMPS_STRUC_C *mumps_data)
+  void dump_matrix(DMUMPS_STRUC_C* mumps_data)
   {
 #ifdef write_matrices
     // Dump the matrix
@@ -217,34 +224,35 @@ namespace Ipopt
 
   }
 
-  /** Initialize the local copy of the positions of the nonzero
+  /* Initialize the local copy of the positions of the nonzero
       elements */
   ESymSolverStatus MumpsSolverInterface::InitializeStructure(Index dim,
       Index nonzeros,
       const Index* ia,
       const Index* ja)
   {
+    DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*)mumps_ptr_;
     DBG_START_METH("MumpsSolverInterface::InitializeStructure", dbg_verbosity);
 
     ESymSolverStatus retval = SYMSOLVER_SUCCESS;
     if (!warm_start_same_structure_) {
-      mumps_.n = dim;
-      mumps_.nz = nonzeros;
-      delete [] mumps_.a;
-      mumps_.a = NULL;
+      mumps_->n = dim;
+      mumps_->nz = nonzeros;
+      delete [] mumps_->a;
+      mumps_->a = NULL;
 
-      mumps_.a = new double[nonzeros];
-      mumps_.irn = const_cast<int*>(ia);
-      mumps_.jcn = const_cast<int*>(ja);
+      mumps_->a = new double[nonzeros];
+      mumps_->irn = const_cast<int*>(ia);
+      mumps_->jcn = const_cast<int*>(ja);
 
       // Do the symbolic facotrization
-      retval = SymbolicFactorization(&mumps_);
+      retval = SymbolicFactorization();
       if (retval != SYMSOLVER_SUCCESS ) {
         return retval;
       }
     }
     else {
-      ASSERT_EXCEPTION(mumps_.n==dim && mumps_.nz==nonzeros,
+      ASSERT_EXCEPTION(mumps_->n==dim && mumps_->nz==nonzeros,
                        INVALID_WARMSTART,"MumpsSolverInterface called with warm_start_same_structure, but the problem size has changed.");
     }
 
@@ -253,9 +261,10 @@ namespace Ipopt
   }
 
 
-  ESymSolverStatus MumpsSolverInterface::SymbolicFactorization(DMUMPS_STRUC_C *mumps_data)
+  ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
   {
     DBG_START_METH("MumpsSolverInterface::Factorization", dbg_verbosity);
+    DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*)mumps_ptr_;
 
     IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
 
@@ -304,10 +313,11 @@ namespace Ipopt
     return SYMSOLVER_SUCCESS;
   }
 
-  ESymSolverStatus MumpsSolverInterface::Factorization(DMUMPS_STRUC_C *mumps_data,
+  ESymSolverStatus MumpsSolverInterface::Factorization(
       bool check_NegEVals, Index numberOfNegEVals)
   {
     DBG_START_METH("MumpsSolverInterface::Factorization", dbg_verbosity);
+    DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*)mumps_ptr_;
 
     mumps_data->job = 2;//numerical factorization
 
@@ -367,9 +377,10 @@ namespace Ipopt
     return SYMSOLVER_SUCCESS;
   }
 
-  ESymSolverStatus MumpsSolverInterface::Solve(DMUMPS_STRUC_C *mumps_data, Index nrhs, double *rhs_vals)
+  ESymSolverStatus MumpsSolverInterface::Solve(Index nrhs, double *rhs_vals)
   {
     DBG_START_METH("MumpsSolverInterface::Solve", dbg_verbosity);
+    DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*)mumps_ptr_;
     ESymSolverStatus retval = SYMSOLVER_SUCCESS;
     IpData().TimingStats().LinearSystemBackSolve().Start();
     for (Index i = 0; i < nrhs; i++) {
