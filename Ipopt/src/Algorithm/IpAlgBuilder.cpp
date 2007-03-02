@@ -70,6 +70,11 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
+  AlgorithmBuilder::AlgorithmBuilder(SmartPtr<AugSystemSolver> custom_solver /*=NULL*/)
+      :
+      custom_solver_(custom_solver)
+  {}
+
   void AlgorithmBuilder::BuildIpoptObjects(const Journalist& jnlst,
       const OptionsList& options,
       const std::string& prefix,
@@ -105,7 +110,7 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption6(
+    roptions->AddStringOption7(
       "linear_solver",
       "Linear solver used for step computations.",
 #ifdef HAVE_MA27
@@ -132,7 +137,8 @@ namespace Ipopt
       "pardiso", "use the Pardiso package",
       "wsmp", "use WSMP package",
       "taucs", "use TAUCS package (not yet working)",
-      "mumps", "use MUMPS package (not yet working)",
+      "mumps", "use MUMPS package",
+      "custom", "use custom linear solver",
       "Determines which linear algebra package is to be used for the "
       "solution of the augmented linear system (for obtaining the search "
       "directions). "
@@ -218,6 +224,7 @@ namespace Ipopt
     SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
     std::string linear_solver;
     options.GetStringValue("linear_solver", linear_solver, prefix);
+    bool use_custom_solver = false;
     if (linear_solver=="ma27") {
 #ifdef HAVE_MA27
       SolverInterface = new Ma27TSolverInterface();
@@ -278,32 +285,44 @@ namespace Ipopt
 #endif
 
     }
-
-    SmartPtr<TSymScalingMethod> ScalingMethod;
-    std::string linear_system_scaling;
-    if (!options.GetStringValue("linear_system_scaling",
-                                linear_system_scaling, prefix)) {
-      // By default, don't use mc19 for non-HSL solvers
-      if (linear_solver!="ma27" && linear_solver!="ma57") {
-        linear_system_scaling="none";
-      }
+    else if (linear_solver=="custom") {
+      ASSERT_EXCEPTION(IsValid(custom_solver_), OPTION_INVALID,
+                       "Selected linear solver CUSTOM not available.");
+      use_custom_solver = false;
     }
-    if (linear_system_scaling=="mc19") {
+
+    SmartPtr<AugSystemSolver> AugSolver;
+    if (use_custom_solver) {
+      AugSolver = custom_solver_;
+    }
+    else {
+
+      SmartPtr<TSymScalingMethod> ScalingMethod;
+      std::string linear_system_scaling;
+      if (!options.GetStringValue("linear_system_scaling",
+                                  linear_system_scaling, prefix)) {
+        // By default, don't use mc19 for non-HSL solvers
+        if (linear_solver!="ma27" && linear_solver!="ma57") {
+          linear_system_scaling="none";
+        }
+      }
+      if (linear_system_scaling=="mc19") {
 #ifdef HAVE_MC19
-      ScalingMethod = new Mc19TSymScalingMethod();
+        ScalingMethod = new Mc19TSymScalingMethod();
 #else
 
-      THROW_EXCEPTION(OPTION_INVALID,
-                      "Selected linear system scaling method MC19 not available.");
+        THROW_EXCEPTION(OPTION_INVALID,
+                        "Selected linear system scaling method MC19 not available.");
 #endif
 
+      }
+
+      SmartPtr<SymLinearSolver> ScaledSolver =
+        new TSymLinearSolver(SolverInterface, ScalingMethod);
+
+      AugSolver = new StdAugSystemSolver(*ScaledSolver);
     }
 
-    SmartPtr<SymLinearSolver> ScaledSolver =
-      new TSymLinearSolver(SolverInterface, ScalingMethod);
-
-    SmartPtr<AugSystemSolver> AugSolver =
-      new StdAugSystemSolver(*ScaledSolver);
     Index enum_int;
     options.GetEnumValue("hessian_approximation", enum_int, prefix);
     HessianApproximationType hessian_approximation =

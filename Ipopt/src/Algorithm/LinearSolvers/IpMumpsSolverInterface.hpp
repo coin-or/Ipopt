@@ -19,117 +19,117 @@
 namespace Ipopt
 {
 
-/** Interface to the linear solver Mumps, derived from
-*  SparseSymLinearSolverInterface.  For details, see description of
-*  SparseSymLinearSolverInterface base class.
-*/
-class MumpsSolverInterface: public SparseSymLinearSolverInterface
-{
-public:
-/** @name Constructor/Destructor */
-//@{
-/** Constructor */
-MumpsSolverInterface();
+  /** Interface to the linear solver Mumps, derived from
+  *  SparseSymLinearSolverInterface.  For details, see description of
+  *  SparseSymLinearSolverInterface base class.
+  */
+  class MumpsSolverInterface: public SparseSymLinearSolverInterface
+  {
+  public:
+    /** @name Constructor/Destructor */
+    //@{
+    /** Constructor */
+    MumpsSolverInterface();
 
-/** Destructor */
-virtual ~MumpsSolverInterface();
-//@}
+    /** Destructor */
+    virtual ~MumpsSolverInterface();
+    //@}
 
-/** overloaded from AlgorithmStrategyObject */
-bool InitializeImpl(const OptionsList& options,
-		const std::string& prefix);
+    /** overloaded from AlgorithmStrategyObject */
+    bool InitializeImpl(const OptionsList& options,
+                        const std::string& prefix);
 
-/** @name Methods for requesting solution of the linear system. */
-//@{
-/** Method for initializing internal stuctures.  Here, ndim gives
-*  the number of rows and columns of the matrix, nonzeros give
-*  the number of nonzero elements, and airn and acjn give the
-*  positions of the nonzero elements.
-*/
-virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
-const Index *airn,
-const Index *ajcn);
+    /** @name Methods for requesting solution of the linear system. */
+    //@{
+    /** Method for initializing internal stuctures.  Here, ndim gives
+    *  the number of rows and columns of the matrix, nonzeros give
+    *  the number of nonzero elements, and airn and acjn give the
+    *  positions of the nonzero elements.
+    */
+    virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
+        const Index *airn,
+        const Index *ajcn);
 
-/** Method returing an internal array into which the nonzero
-*  elements (in the same order as airn and ajcn) are to be stored
-*  by the calling routine before a call to MultiSolve with a
-*  new_matrix=true.  The returned array must have space for at least
-*  nonzero elements. */
-virtual double* GetValuesArrayPtr();
+    /** Method returing an internal array into which the nonzero
+    *  elements (in the same order as airn and ajcn) are to be stored
+    *  by the calling routine before a call to MultiSolve with a
+    *  new_matrix=true.  The returned array must have space for at least
+    *  nonzero elements. */
+    virtual double* GetValuesArrayPtr();
 
-/** Solve operation for multiple right hand sides.  Overloaded
-*  from SparseSymLinearSolverInterface.
-*/
-virtual ESymSolverStatus MultiSolve(bool new_matrix,
-				const Index* airn,
-				const Index* ajcn,
-				Index nrhs,
-				double* rhs_vals,
-				bool check_NegEVals,
-				Index numberOfNegEVals);
+    /** Solve operation for multiple right hand sides.  Overloaded
+    *  from SparseSymLinearSolverInterface.
+    */
+    virtual ESymSolverStatus MultiSolve(bool new_matrix,
+                                        const Index* airn,
+                                        const Index* ajcn,
+                                        Index nrhs,
+                                        double* rhs_vals,
+                                        bool check_NegEVals,
+                                        Index numberOfNegEVals);
 
-/** Number of negative eigenvalues detected during last
-*  factorization.  Returns the number of negative eigenvalues of
-*  the most recent factorized matrix.  This must not be called if
-*  the linear solver does not compute this quantities (see
-*  ProvidesInertia).
-*/
-virtual Index NumberOfNegEVals() const;
-//@}
+    /** Number of negative eigenvalues detected during last
+    *  factorization.  Returns the number of negative eigenvalues of
+    *  the most recent factorized matrix.  This must not be called if
+    *  the linear solver does not compute this quantities (see
+    *  ProvidesInertia).
+    */
+    virtual Index NumberOfNegEVals() const;
+    //@}
 
-//* @name Options of Linear solver */
-//@{
-/** Request to increase quality of solution for next solve.
-* Ask linear solver to increase quality of solution for the next
-* solve (e.g. increase pivot tolerance).  Returns false, if this
-* is not possible (e.g. maximal pivot tolerance already used.)
-*/
-virtual bool IncreaseQuality();
+    //* @name Options of Linear solver */
+    //@{
+    /** Request to increase quality of solution for next solve.
+    * Ask linear solver to increase quality of solution for the next
+    * solve (e.g. increase pivot tolerance).  Returns false, if this
+    * is not possible (e.g. maximal pivot tolerance already used.)
+    */
+    virtual bool IncreaseQuality();
 
-/** Query whether inertia is computed by linear solver.
-* Returns true, if linear solver provides inertia.
-*/
-virtual bool ProvidesInertia() const
-{
-return true;
-}
-/** Query of requested matrix type that the linear solver
-*  understands.
-*/
-EMatrixFormat MatrixFormat() const
-{
-return Triplet_Format;
-}
-//@}
+    /** Query whether inertia is computed by linear solver.
+    * Returns true, if linear solver provides inertia.
+    */
+    virtual bool ProvidesInertia() const
+    {
+      return true;
+    }
+    /** Query of requested matrix type that the linear solver
+    *  understands.
+    */
+    EMatrixFormat MatrixFormat() const
+    {
+      return Triplet_Format;
+    }
+    //@}
 
-/** Methods for IpoptType */
-//@{
-static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
-//@}
+    /** Methods for IpoptType */
+    //@{
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
 
-private:
-/**@name Default Compiler Generated Methods
-* (Hidden to avoid implicit creation/calling).
-* These methods are not implemented and 
-* we do not want the compiler to implement
-* them for us, so we declare them private
-* and do not define them. This ensures that
-* they will not be implicitly created/called. */
-//@{
-/** Copy Constructor */
-MumpsSolverInterface(const MumpsSolverInterface&);
+  private:
+    /**@name Default Compiler Generated Methods
+    * (Hidden to avoid implicit creation/calling).
+    * These methods are not implemented and 
+    * we do not want the compiler to implement
+    * them for us, so we declare them private
+    * and do not define them. This ensures that
+    * they will not be implicitly created/called. */
+    //@{
+    /** Copy Constructor */
+    MumpsSolverInterface(const MumpsSolverInterface&);
 
-/** Overloaded Equals Operator */
-void operator=(const MumpsSolverInterface&);
-//@}
+    /** Overloaded Equals Operator */
+    void operator=(const MumpsSolverInterface&);
+    //@}
 
-/** @name Information about the matrix */
-//@{
-/** Primary MUMP data structure */
-void* mumps_ptr_;
-//@}
+    /** @name Information about the matrix */
+    //@{
+    /** Primary MUMP data structure */
+    void* mumps_ptr_;
+    //@}
 
-/** @name Information about most recent factorization/solve */
+    /** @name Information about most recent factorization/solve */
     //@{
     /** Number of negative eigenvalues */
     Index negevals_;

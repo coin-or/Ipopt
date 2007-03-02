@@ -314,7 +314,7 @@ namespace Ipopt
   }
 
   ESymSolverStatus MumpsSolverInterface::Factorization(
-      bool check_NegEVals, Index numberOfNegEVals)
+    bool check_NegEVals, Index numberOfNegEVals)
   {
     DBG_START_METH("MumpsSolverInterface::Factorization", dbg_verbosity);
     DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*)mumps_ptr_;

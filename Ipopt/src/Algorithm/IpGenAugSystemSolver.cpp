@@ -173,20 +173,21 @@ namespace Ipopt
     const Index dim = n_x+n_d+n_c+n_d;
     Number* rhssol = new Number[nrhs*dim];
     for (Index irhs=0; irhs<nrhs; irhs++) {
+      // TODO: make order an option
       TripletHelper::FillValuesFromVector(n_x, *rhs_xV[irhs],
                                           &rhssol[irhs*dim]);
-      TripletHelper::FillValuesFromVector(n_d, *rhs_sV[irhs],
-                                          &rhssol[irhs*dim+n_x]);
       TripletHelper::FillValuesFromVector(n_c, *rhs_cV[irhs],
                                           &rhssol[irhs*dim+n_x+n_d]);
       TripletHelper::FillValuesFromVector(n_d, *rhs_dV[irhs],
                                           &rhssol[irhs*dim+n_x+n_d+n_c]);
+      TripletHelper::FillValuesFromVector(n_d, *rhs_sV[irhs],
+                                          &rhssol[irhs*dim+n_x]);
     }
 
     bool done = false;
     ESymSolverStatus retval;
     const SymMatrix* Wgive = NULL;
-    if (W) {
+    if (W && W_factor==1.0) {
       Wgive = W;
     }
     while (!done) {
@@ -211,12 +212,12 @@ namespace Ipopt
       for (Index irhs=0; irhs<nrhs; irhs++) {
         TripletHelper::PutValuesInVector(n_x, &rhssol[irhs*dim],
                                          *sol_xV[irhs]);
-        TripletHelper::PutValuesInVector(n_d, &rhssol[irhs*dim+n_x],
-                                         *sol_sV[irhs]);
         TripletHelper::PutValuesInVector(n_c, &rhssol[irhs*dim+n_x+n_d],
                                          *sol_cV[irhs]);
         TripletHelper::PutValuesInVector(n_d, &rhssol[irhs*dim+n_x+n_d+n_c],
                                          *sol_dV[irhs]);
+        TripletHelper::PutValuesInVector(n_d, &rhssol[irhs*dim+n_x],
+                                         *sol_sV[irhs]);
       }
     }
     else if (retval==SYMSOLVER_FATAL_ERROR) {
