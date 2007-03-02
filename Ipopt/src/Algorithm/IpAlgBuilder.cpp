@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -288,7 +288,7 @@ namespace Ipopt
     else if (linear_solver=="custom") {
       ASSERT_EXCEPTION(IsValid(custom_solver_), OPTION_INVALID,
                        "Selected linear solver CUSTOM not available.");
-      use_custom_solver = false;
+      use_custom_solver = true;
     }
 
     SmartPtr<AugSystemSolver> AugSolver;

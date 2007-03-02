@@ -2042,6 +2042,7 @@ namespace Ipopt
     const Number* x_l, const Number* x_u, Index n_c,
     const Index* c_map, std::list<Index>& c_deps)
   {
+#if HAVE_MA28
     // First get a temporary expansion matrix for getting the equality
     // constraints
     SmartPtr<ExpansionMatrixSpace> P_c_g_space =
@@ -2162,7 +2163,6 @@ namespace Ipopt
     double ddummy;
     ipfint idummy;
     ipfint IERR;
-#if HAVE_MA28
     // First determine how much work space we need to allocate
     IVAR = new ipfint[N];
     IDEGEN = new ipfint[M];
@@ -2191,14 +2191,6 @@ namespace Ipopt
       delete [] jac_c_vals;
       return false;
     }
-#else
-    delete [] jac_c_iRow;
-    delete [] jac_c_jCol;
-    delete [] jac_c_map;
-    delete [] jac_c_vals;
-    THROW_EXCEPTION(OPTION_INVALID,
-                    "Detection of dependent constraints is only possible if MA28 is available.");
-#endif
 
     c_deps.clear();
     for (Index i=0; i<NDEGEN; i++) {
@@ -2210,6 +2202,10 @@ namespace Ipopt
     delete [] jac_c_jCol;
     delete [] jac_c_map;
     delete [] jac_c_vals;
+#else
+    THROW_EXCEPTION(OPTION_INVALID,
+                    "Detection of dependent constraints is only possible if MA28 is available.");
+#endif
 
     return true;
   }
