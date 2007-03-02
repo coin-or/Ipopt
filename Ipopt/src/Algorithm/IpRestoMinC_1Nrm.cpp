@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -163,14 +163,14 @@ namespace Ipopt
       SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
 
       SmartPtr<const CompoundVector> cx =
-        dynamic_cast<const CompoundVector*>(GetRawPtr(resto_ip_data->curr()->x()));
+        static_cast<const CompoundVector*>(GetRawPtr(resto_ip_data->curr()->x()));
       DBG_ASSERT(IsValid(cx));
       trial->Set_primal(*cx->GetComp(0), *resto_ip_data->curr()->s());
 
       trial->Set_eq_mult(*resto_ip_data->curr()->y_c(),
                          *resto_ip_data->curr()->y_d());
 
-      cx = dynamic_cast<const CompoundVector*>
+      cx = static_cast<const CompoundVector*>
            (GetRawPtr(resto_ip_data->curr()->z_L()));
       DBG_ASSERT(IsValid(cx));
       trial->Set_bound_mult(*cx->GetComp(0), *resto_ip_data->curr()->z_U(),
@@ -240,7 +240,7 @@ namespace Ipopt
       // Copy the results into the trial fields;. They will be
       // accepted later in the full algorithm
       SmartPtr<const CompoundVector> cx =
-        dynamic_cast<const CompoundVector*>(GetRawPtr(resto_ip_data->curr()->x()));
+        static_cast<const CompoundVector*>(GetRawPtr(resto_ip_data->curr()->x()));
       DBG_ASSERT(IsValid(cx));
       SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
       trial->Set_primal(*cx->GetComp(0), *resto_ip_data->curr()->s());

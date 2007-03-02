@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -41,10 +41,10 @@ namespace Ipopt
     }
 
     // See if we can understand the data
-    const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dense_x); /* ToDo: Implement others */
-    DenseVector* dense_y = dynamic_cast<DenseVector*>(&y);
-    DBG_ASSERT(dense_y); /* ToDo: Implement others */
+    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
+    DenseVector* dense_y = static_cast<DenseVector*>(&y);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
     const Index* exp_pos = ExpandedPosIndices();
 
@@ -81,10 +81,10 @@ namespace Ipopt
     }
 
     // See if we can understand the data
-    const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dense_x); /* ToDo: Implement others */
-    DenseVector* dense_y = dynamic_cast<DenseVector*>(&y);
-    DBG_ASSERT(dense_y); /* ToDo: Implement others */
+    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
+    DenseVector* dense_y = static_cast<DenseVector*>(&y);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
     const Index* exp_pos = ExpandedPosIndices();
 
@@ -113,12 +113,12 @@ namespace Ipopt
     DBG_ASSERT(NCols()==Z.Dim());
     DBG_ASSERT(NRows()==X.Dim());
 
-    const DenseVector* dense_S = dynamic_cast<const DenseVector*>(&S);
-    DBG_ASSERT(dense_S);
-    const DenseVector* dense_Z = dynamic_cast<const DenseVector*>(&Z);
-    DBG_ASSERT(dense_Z);
-    DenseVector* dense_X = dynamic_cast<DenseVector*>(&X);
-    DBG_ASSERT(dense_X);
+    const DenseVector* dense_S = static_cast<const DenseVector*>(&S);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&S));
+    const DenseVector* dense_Z = static_cast<const DenseVector*>(&Z);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&Z));
+    DenseVector* dense_X = static_cast<DenseVector*>(&X);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&X));
 
     // if vector S is homogeneous type, call the default implementation
     // ToDo: find out how often the default implementation is called and
@@ -173,16 +173,16 @@ namespace Ipopt
     DBG_ASSERT(NRows()==D.Dim());
     DBG_ASSERT(NCols()==X.Dim());
 
-    const DenseVector* dense_S = dynamic_cast<const DenseVector*>(&S);
-    DBG_ASSERT(dense_S);
-    const DenseVector* dense_R = dynamic_cast<const DenseVector*>(&R);
-    DBG_ASSERT(dense_R);
-    const DenseVector* dense_Z = dynamic_cast<const DenseVector*>(&Z);
-    DBG_ASSERT(dense_Z);
-    const DenseVector* dense_D = dynamic_cast<const DenseVector*>(&D);
-    DBG_ASSERT(dense_D);
-    DenseVector* dense_X = dynamic_cast<DenseVector*>(&X);
-    DBG_ASSERT(dense_X);
+    const DenseVector* dense_S = static_cast<const DenseVector*>(&S);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&S));
+    const DenseVector* dense_R = static_cast<const DenseVector*>(&R);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&R));
+    const DenseVector* dense_Z = static_cast<const DenseVector*>(&Z);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&Z));
+    const DenseVector* dense_D = static_cast<const DenseVector*>(&D);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&D));
+    DenseVector* dense_X = static_cast<DenseVector*>(&X);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&X));
 
     // if the vectors S or D are of the homogeneous type, revert to the
     // default implementation

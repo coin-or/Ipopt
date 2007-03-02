@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -90,24 +90,24 @@ namespace Ipopt
     DBG_ASSERT(W);
 
     SmartPtr<const CompoundSymMatrix> CW =
-      dynamic_cast<const CompoundSymMatrix*>(W);
+      static_cast<const CompoundSymMatrix*>(W);
 
     SmartPtr<const CompoundVector> CD_x =
-      dynamic_cast<const CompoundVector*>(D_x);
+      static_cast<const CompoundVector*>(D_x);
 
     SmartPtr<const CompoundMatrix> CJ_c =
-      dynamic_cast<const CompoundMatrix*>(J_c);
+      static_cast<const CompoundMatrix*>(J_c);
     DBG_ASSERT(IsValid(CJ_c));
 
     SmartPtr<const CompoundMatrix> CJ_d =
-      dynamic_cast<const CompoundMatrix*>(J_d);
+      static_cast<const CompoundMatrix*>(J_d);
     DBG_ASSERT(IsValid(CJ_d));
 
     SmartPtr<const CompoundVector> Crhs_x =
-      dynamic_cast<const CompoundVector*>(&rhs_x);
+      static_cast<const CompoundVector*>(&rhs_x);
     DBG_ASSERT(IsValid(Crhs_x));
 
-    SmartPtr<CompoundVector> Csol_x = dynamic_cast<CompoundVector*>(&sol_x);
+    SmartPtr<CompoundVector> Csol_x = static_cast<CompoundVector*>(&sol_x);
     DBG_ASSERT(IsValid(Csol_x));
 
     // Get the Sigma inverses
@@ -155,8 +155,7 @@ namespace Ipopt
       double factor;
       WR_sum->GetTerm(1, factor, eta_DR);
       SmartPtr<const Vector> wr_d =
-        dynamic_cast<const DiagMatrix*>(GetRawPtr(eta_DR))->GetDiag();
-      DBG_ASSERT(IsValid(wr_d));
+        static_cast<const DiagMatrix*>(GetRawPtr(eta_DR))->GetDiag();
 
       if (IsValid(CD_x)) {
         D_xR = D_x_plus_wr_d(CD_x->GetComp(0), factor, *wr_d);
@@ -168,7 +167,7 @@ namespace Ipopt
     else {
       // Looks like limited memory quasi-Newton stuff
       const LowRankUpdateSymMatrix* LR_W =
-        dynamic_cast<const LowRankUpdateSymMatrix*>(GetRawPtr(CW->GetComp(0,0)));
+        static_cast<const LowRankUpdateSymMatrix*>(GetRawPtr(CW->GetComp(0,0)));
       DBG_ASSERT(LR_W);
       h_orig = LR_W;
       if (IsValid(CD_x)) {

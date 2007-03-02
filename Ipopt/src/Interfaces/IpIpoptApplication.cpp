@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -465,8 +465,8 @@ namespace Ipopt
     ASSERT_EXCEPTION(IsValid(nlp_adapter_), INVALID_WARMSTART,
                      "ReOptimizeTNLP called before OptimizeTNLP.");
     TNLPAdapter* adapter =
-      dynamic_cast<TNLPAdapter*> (GetRawPtr(nlp_adapter_));
-    DBG_ASSERT(adapter);
+      static_cast<TNLPAdapter*> (GetRawPtr(nlp_adapter_));
+    DBG_ASSERT(dynamic_cast<TNLPAdapter*> (GetRawPtr(nlp_adapter_)));
     ASSERT_EXCEPTION(adapter->tnlp()==tnlp, INVALID_WARMSTART,
                      "ReOptimizeTNLP called for different TNLP.")
 
@@ -524,8 +524,8 @@ namespace Ipopt
     ASSERT_EXCEPTION(IsValid(alg_), INVALID_WARMSTART,
                      "ReOptimizeNLP called before OptimizeNLP.");
     OrigIpoptNLP* orig_nlp =
-      dynamic_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_));
-    DBG_ASSERT(orig_nlp);
+      static_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_));
+    DBG_ASSERT(dynamic_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_)));
     ASSERT_EXCEPTION(orig_nlp->nlp()==nlp, INVALID_WARMSTART,
                      "ReOptimizeTNLP called for different NLP.")
 
@@ -556,10 +556,15 @@ namespace Ipopt
       // awkwardly since otherwise we would have to include so many
       // things in IpoptApplication, which a user would have to
       // include, too (SmartPtr doesn't work otherwise on AIX)
-      IpoptAlgorithm* p2alg = dynamic_cast<IpoptAlgorithm*> (GetRawPtr(alg_));
-      IpoptData* p2ip_data = dynamic_cast<IpoptData*> (GetRawPtr(ip_data_));
-      OrigIpoptNLP* p2ip_nlp = dynamic_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_));
-      IpoptCalculatedQuantities* p2ip_cq = dynamic_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_));
+      IpoptAlgorithm* p2alg = static_cast<IpoptAlgorithm*> (GetRawPtr(alg_));
+      DBG_ASSERT(dynamic_cast<IpoptAlgorithm*> (GetRawPtr(alg_)));
+      IpoptData* p2ip_data = static_cast<IpoptData*> (GetRawPtr(ip_data_));
+      DBG_ASSERT(dynamic_cast<IpoptData*> (GetRawPtr(ip_data_)));
+      OrigIpoptNLP* p2ip_nlp = static_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_));
+      DBG_ASSERT(dynamic_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_)));
+      IpoptCalculatedQuantities* p2ip_cq = static_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_));
+      DBG_ASSERT(dynamic_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_)));
+
       // Set up the algorithm
       p2alg->Initialize(*jnlst_, *p2ip_nlp, *p2ip_data, *p2ip_cq,
                         *options_, "");

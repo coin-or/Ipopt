@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -40,18 +40,18 @@ namespace Ipopt
     // Get a grip on the restoration phase NLP and obtain the pointers
     // to the original NLP data
     SmartPtr<RestoIpoptNLP> resto_ip_nlp =
-      dynamic_cast<RestoIpoptNLP*> (&IpNLP());
-    DBG_ASSERT(IsValid(resto_ip_nlp));
+      static_cast<RestoIpoptNLP*> (&IpNLP());
+    DBG_ASSERT(dynamic_cast<RestoIpoptNLP*> (&IpNLP()));
     SmartPtr<IpoptNLP> orig_ip_nlp =
-      dynamic_cast<IpoptNLP*> (&resto_ip_nlp->OrigIpNLP());
-    DBG_ASSERT(IsValid(orig_ip_nlp));
+      static_cast<IpoptNLP*> (&resto_ip_nlp->OrigIpNLP());
+    DBG_ASSERT(dynamic_cast<IpoptNLP*> (&resto_ip_nlp->OrigIpNLP()));
 
     // Get the current point and create a new vector for the result
     SmartPtr<const CompoundVector> Ccurr_x =
-      dynamic_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->x()));
+      static_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->x()));
     SmartPtr<Vector> new_x = IpData().curr()->x()->MakeNew();
     SmartPtr<CompoundVector> Cnew_x =
-      dynamic_cast<CompoundVector*> (GetRawPtr(new_x));
+      static_cast<CompoundVector*> (GetRawPtr(new_x));
 
     // The x values remain unchanged
     SmartPtr<Vector> x = Cnew_x->GetCompNonConst(0);

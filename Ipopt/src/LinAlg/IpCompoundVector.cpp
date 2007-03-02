@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -93,8 +93,9 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::CopyImpl(const Vector& x)", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
-    DBG_ASSERT(comp_x);
+    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
+
     DBG_ASSERT(NComps() == comp_x->NComps());
     for(Index i=0; i<NComps(); i++) {
       Comp(i)->Copy(*comp_x->GetComp(i));
@@ -115,8 +116,9 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::AxpyImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
-    DBG_ASSERT(comp_x);
+    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
+
     DBG_ASSERT(NComps() == comp_x->NComps());
     for(Index i=0; i<NComps(); i++) {
       DBG_ASSERT(Comp(i));
@@ -128,8 +130,8 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::DotImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
-    DBG_ASSERT(comp_x);
+    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
     DBG_ASSERT(NComps() == comp_x->NComps());
     Number dot = 0.;
     for(Index i=0; i<NComps(); i++) {
@@ -186,8 +188,8 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::ElementWiseDivideImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
-    DBG_ASSERT(comp_x);
+    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
     DBG_ASSERT(NComps() == comp_x->NComps());
     for(Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseDivide(*comp_x->GetComp(i));
@@ -198,8 +200,8 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::ElementWiseMultiplyImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
-    DBG_ASSERT(comp_x);
+    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
     DBG_ASSERT(NComps() == comp_x->NComps());
     for(Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseMultiply(*comp_x->GetComp(i));
@@ -210,8 +212,8 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::ElementWiseMaxImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
-    DBG_ASSERT(comp_x);
+    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
     DBG_ASSERT(NComps() == comp_x->NComps());
     for(Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseMax(*comp_x->GetComp(i));
@@ -222,8 +224,8 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::ElementWiseMinImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
-    DBG_ASSERT(comp_x);
+    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
     DBG_ASSERT(NComps() == comp_x->NComps());
     for(Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseMin(*comp_x->GetComp(i));
@@ -330,11 +332,11 @@ namespace Ipopt
                                          Number b, const Vector& v2, Number c)
   {
     DBG_ASSERT(vectors_valid_);
-    const CompoundVector* comp_v1 = dynamic_cast<const CompoundVector*>(&v1);
-    DBG_ASSERT(comp_v1);
+    const CompoundVector* comp_v1 = static_cast<const CompoundVector*>(&v1);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&v1));
     DBG_ASSERT(NComps() == comp_v1->NComps());
-    const CompoundVector* comp_v2 = dynamic_cast<const CompoundVector*>(&v2);
-    DBG_ASSERT(comp_v2);
+    const CompoundVector* comp_v2 = static_cast<const CompoundVector*>(&v2);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&v2));
     DBG_ASSERT(NComps() == comp_v2->NComps());
 
     for(Index i=0; i<NComps(); i++) {
@@ -347,8 +349,8 @@ namespace Ipopt
   {
     DBG_ASSERT(vectors_valid_);
     const CompoundVector* comp_delta =
-      dynamic_cast<const CompoundVector*>(&delta);
-    DBG_ASSERT(comp_delta);
+      static_cast<const CompoundVector*>(&delta);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&delta));
     DBG_ASSERT(NComps() == comp_delta->NComps());
 
     Number alpha = 1.;
@@ -363,13 +365,11 @@ namespace Ipopt
       const Vector& s, Number c)
   {
     DBG_ASSERT(vectors_valid_);
-    const CompoundVector* comp_z =
-      dynamic_cast<const CompoundVector*>(&z);
-    DBG_ASSERT(comp_z);
+    const CompoundVector* comp_z = static_cast<const CompoundVector*>(&z);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&z));
     DBG_ASSERT(NComps() == comp_z->NComps());
-    const CompoundVector* comp_s =
-      dynamic_cast<const CompoundVector*>(&s);
-    DBG_ASSERT(comp_s);
+    const CompoundVector* comp_s = static_cast<const CompoundVector*>(&s);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&s));
     DBG_ASSERT(NComps() == comp_s->NComps());
 
     for(Index i=0; i<NComps(); i++) {

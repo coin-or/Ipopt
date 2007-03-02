@@ -794,12 +794,12 @@ namespace Ipopt
     }
 
     // Set the bounds values for x
-    DenseVector* dx_L = dynamic_cast<DenseVector*>(&x_L);
-    DBG_ASSERT(dx_L);
+    DenseVector* dx_L = static_cast<DenseVector*>(&x_L);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&x_L));
     Number* values = dx_L->Values();
     const ExpansionMatrix* em_Px_L =
-      dynamic_cast<const ExpansionMatrix*>(&Px_L);
-    DBG_ASSERT(em_Px_L);
+      static_cast<const ExpansionMatrix*>(&Px_L);
+    DBG_ASSERT(dynamic_cast<const ExpansionMatrix*>(&Px_L));
     if (IsValid(P_x_full_x_)) {
       for (Index i=0; i<Px_L.NCols(); i++) {
         const Index& ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
@@ -816,12 +816,12 @@ namespace Ipopt
       }
     }
 
-    DenseVector* dx_U = dynamic_cast<DenseVector*>(&x_U);
-    DBG_ASSERT(dx_U);
+    DenseVector* dx_U = static_cast<DenseVector*>(&x_U);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&x_U));
     values = dx_U->Values();
     const ExpansionMatrix* em_Px_U =
-      dynamic_cast<const ExpansionMatrix*>(&Px_U);
-    DBG_ASSERT(em_Px_U);
+      static_cast<const ExpansionMatrix*>(&Px_U);
+    DBG_ASSERT(dynamic_cast<const ExpansionMatrix*>(&Px_U));
     if (IsValid(P_x_full_x_)) {
       for (Index i=0; i<Px_U.NCols(); i++) {
         const Index& ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
@@ -856,12 +856,12 @@ namespace Ipopt
     }
 
     // get the bounds values for d
-    DenseVector* dd_L = dynamic_cast<DenseVector*>(&d_L);
-    DBG_ASSERT(dd_L);
+    DenseVector* dd_L = static_cast<DenseVector*>(&d_L);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&d_L));
     values = dd_L->Values();
     const ExpansionMatrix* em_Pd_L =
-      dynamic_cast<const ExpansionMatrix*>(&Pd_L);
-    DBG_ASSERT(em_Pd_L);
+      static_cast<const ExpansionMatrix*>(&Pd_L);
+    DBG_ASSERT(dynamic_cast<const ExpansionMatrix*>(&Pd_L));
     for (Index i=0; i<Pd_L.NCols(); i++) {
       Index d_exp_idx = em_Pd_L->ExpandedPosIndices()[i];
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
@@ -869,12 +869,12 @@ namespace Ipopt
       values[i] = lower_bound;
     }
 
-    DenseVector* dd_U = dynamic_cast<DenseVector*>(&d_U);
-    DBG_ASSERT(dd_U);
+    DenseVector* dd_U = static_cast<DenseVector*>(&d_U);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&d_U));
     values = dd_U->Values();
     const ExpansionMatrix* em_Pd_U =
-      dynamic_cast<const ExpansionMatrix*>(&Pd_U);
-    DBG_ASSERT(em_Pd_U);
+      static_cast<const ExpansionMatrix*>(&Pd_U);
+    DBG_ASSERT(dynamic_cast<const ExpansionMatrix*>(&Pd_U));
     for (Index i=0; i<Pd_U.NCols(); i++) {
       Index d_exp_idx = em_Pd_U->ExpandedPosIndices()[i];
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
@@ -926,8 +926,8 @@ namespace Ipopt
     }
 
     if (need_x) {
-      DenseVector* dx = dynamic_cast<DenseVector*>(GetRawPtr(x));
-      DBG_ASSERT(dx);
+      DenseVector* dx = static_cast<DenseVector*>(GetRawPtr(x));
+      DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(x)));
       Number* values = dx->Values();
       const Index& n_x_var = x->Dim();
       if (IsValid(P_x_full_x_)) {
@@ -942,8 +942,8 @@ namespace Ipopt
     }
 
     if (need_y_c) {
-      DenseVector* dy_c = dynamic_cast<DenseVector*>(GetRawPtr(y_c));
-      DBG_ASSERT(dy_c);
+      DenseVector* dy_c = static_cast<DenseVector*>(GetRawPtr(y_c));
+      DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(y_c)));
       Number* values = dy_c->Values();
       const Index* y_c_pos = P_c_g_->ExpandedPosIndices();
       for (Index i=0; i<P_c_g_->NCols(); i++) {
@@ -957,8 +957,8 @@ namespace Ipopt
     }
 
     if (need_y_d) {
-      DenseVector* dy_d = dynamic_cast<DenseVector*>(GetRawPtr(y_d));
-      DBG_ASSERT(dy_d);
+      DenseVector* dy_d = static_cast<DenseVector*>(GetRawPtr(y_d));
+      DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(y_d)));
       Number* values = dy_d->Values();
       const Index* y_d_pos = P_d_g_->ExpandedPosIndices();
       for (Index i=0; i<y_d->Dim(); i++) {
@@ -967,8 +967,8 @@ namespace Ipopt
     }
 
     if (need_z_L) {
-      DenseVector* dz_l = dynamic_cast<DenseVector*>(GetRawPtr(z_L));
-      DBG_ASSERT(dz_l);
+      DenseVector* dz_l = static_cast<DenseVector*>(GetRawPtr(z_L));
+      DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(z_L)));
       Number* values = dz_l->Values();
       const Index& n_z_l = z_L->Dim();
       const Index* z_l_pos = P_x_x_L_->ExpandedPosIndices();
@@ -989,8 +989,8 @@ namespace Ipopt
     }
 
     if (need_z_U) {
-      DenseVector* dz_u = dynamic_cast<DenseVector*>(GetRawPtr(z_U));
-      DBG_ASSERT(dz_u);
+      DenseVector* dz_u = static_cast<DenseVector*>(GetRawPtr(z_U));
+      DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(z_U)));
       Number* values = dz_u->Values();
       const Index* z_u_pos = P_x_x_U_->ExpandedPosIndices();
       if (IsValid(P_x_full_x_)) {
@@ -1043,8 +1043,8 @@ namespace Ipopt
       new_x = true;
     }
 
-    DenseVector* dg_f = dynamic_cast<DenseVector*>(&g_f);
-    DBG_ASSERT(dg_f);
+    DenseVector* dg_f = static_cast<DenseVector*>(&g_f);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&g_f));
     Number* values = dg_f->Values();
     if (IsValid(P_x_full_x_)) {
       Number* full_grad_f = new Number[n_full_x_];
@@ -1072,8 +1072,8 @@ namespace Ipopt
     }
 
     if (internal_eval_g(new_x)) {
-      DenseVector* dc = dynamic_cast<DenseVector*>(&c);
-      DBG_ASSERT(dc);
+      DenseVector* dc = static_cast<DenseVector*>(&c);
+      DBG_ASSERT(dynamic_cast<DenseVector*>(&c));
       Number* values = dc->Values();
       const Index* c_pos = P_c_g_->ExpandedPosIndices();
       Index n_c_no_fixed = P_c_g_->NCols();
@@ -1101,8 +1101,8 @@ namespace Ipopt
     }
 
     if (internal_eval_jac_g(new_x)) {
-      GenTMatrix* gt_jac_c = dynamic_cast<GenTMatrix*>(&jac_c);
-      DBG_ASSERT(gt_jac_c);
+      GenTMatrix* gt_jac_c = static_cast<GenTMatrix*>(&jac_c);
+      DBG_ASSERT(dynamic_cast<GenTMatrix*>(&jac_c));
       Number* values = gt_jac_c->Values();
 
       for (Index i=0; i<nz_jac_c_no_extra_; i++) {
@@ -1125,8 +1125,8 @@ namespace Ipopt
       new_x = true;
     }
 
-    DenseVector* dd = dynamic_cast<DenseVector*>(&d);
-    DBG_ASSERT(dd);
+    DenseVector* dd = static_cast<DenseVector*>(&d);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&d));
     Number* values = dd->Values();
     if (internal_eval_g(new_x)) {
       const Index* d_pos = P_d_g_->ExpandedPosIndices();
@@ -1147,8 +1147,8 @@ namespace Ipopt
     }
 
     if (internal_eval_jac_g(new_x)) {
-      GenTMatrix* gt_jac_d = dynamic_cast<GenTMatrix*>(&jac_d);
-      DBG_ASSERT(gt_jac_d);
+      GenTMatrix* gt_jac_d = static_cast<GenTMatrix*>(&jac_d);
+      DBG_ASSERT(dynamic_cast<GenTMatrix*>(&jac_d));
       Number* values = gt_jac_d->Values();
 
       for (Index i=0; i<nz_jac_d_; i++) {
@@ -1171,8 +1171,8 @@ namespace Ipopt
     // we do).  In that case, there is no need to compute values, just
     // set them to zero.
     if (obj_factor==0. && yc.Asum()==0. && yd.Asum()==0.) {
-      SymTMatrix* st_h = dynamic_cast<SymTMatrix*>(&h);
-      DBG_ASSERT(st_h);
+      SymTMatrix* st_h = static_cast<SymTMatrix*>(&h);
+      DBG_ASSERT(dynamic_cast<SymTMatrix*>(&h));
       Number* values = st_h->Values();
       for (Index i=0; i<nz_h_; i++) {
         values[i] = 0.;
@@ -1190,8 +1190,8 @@ namespace Ipopt
       new_y = true;
     }
 
-    SymTMatrix* st_h = dynamic_cast<SymTMatrix*>(&h);
-    DBG_ASSERT(st_h);
+    SymTMatrix* st_h = static_cast<SymTMatrix*>(&h);
+    DBG_ASSERT(dynamic_cast<SymTMatrix*>(&h));
     Number* values = st_h->Values();
 
     if (h_idx_map_) {
@@ -1229,10 +1229,12 @@ namespace Ipopt
     d_scaling = d_space->MakeNew();
     DBG_ASSERT((c_scaling->Dim()+d_scaling->Dim()) == n_full_g_);
 
-    DenseVector* dx = dynamic_cast<DenseVector*>(GetRawPtr(x_scaling));
-    DenseVector* dc = dynamic_cast<DenseVector*>(GetRawPtr(c_scaling));
-    DenseVector* dd = dynamic_cast<DenseVector*>(GetRawPtr(d_scaling));
-    DBG_ASSERT(dx && dc && dd);
+    DenseVector* dx = static_cast<DenseVector*>(GetRawPtr(x_scaling));
+    DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(x_scaling)));
+    DenseVector* dc = static_cast<DenseVector*>(GetRawPtr(c_scaling));
+    DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(c_scaling)));
+    DenseVector* dd = static_cast<DenseVector*>(GetRawPtr(d_scaling));
+    DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(d_scaling)));
     Number* dx_values = dx->Values();
     Number* dc_values = dc->Values();
     Number* dd_values = dd->Values();
@@ -1341,8 +1343,8 @@ namespace Ipopt
     // Hopefully the following is correct to recover the bound
     // multipliers for fixed variables (sign ok?)
     if (fixed_variable_treatment_==MAKE_CONSTRAINT && n_x_fixed_>0) {
-      const DenseVector* dy_c = dynamic_cast<const DenseVector*>(&y_c);
-      DBG_ASSERT(dy_c);
+      const DenseVector* dy_c = static_cast<const DenseVector*>(&y_c);
+      DBG_ASSERT(dynamic_cast<const DenseVector*>(&y_c));
       DBG_ASSERT(!dy_c->IsHomogeneous());
       const Number* values = dy_c->Values();
       Index n_c_no_fixed = y_c.Dim() - n_x_fixed_;
@@ -1480,8 +1482,8 @@ namespace Ipopt
 
   void TNLPAdapter::ResortX(const Vector& x, Number* x_orig)
   {
-    const DenseVector* dx = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dx);
+    const DenseVector* dx = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
 
     if (IsValid(P_x_full_x_)) {
       const Index* x_pos = P_x_full_x_->CompressedPosIndices();
@@ -1524,8 +1526,8 @@ namespace Ipopt
 
   void TNLPAdapter::ResortG(const Vector& c, const Vector& d, Number* g_orig)
   {
-    const DenseVector* dc = dynamic_cast<const DenseVector*>(&c);
-    DBG_ASSERT(dc);
+    const DenseVector* dc = static_cast<const DenseVector*>(&c);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&c));
 
     const Index* c_pos = P_c_g_->ExpandedPosIndices();
     if (dc->IsHomogeneous()) {
@@ -1541,8 +1543,8 @@ namespace Ipopt
       }
     }
 
-    const DenseVector* dd = dynamic_cast<const DenseVector*>(&d);
-    DBG_ASSERT(dd);
+    const DenseVector* dd = static_cast<const DenseVector*>(&d);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&d));
 
     const Index* d_pos = P_d_g_->ExpandedPosIndices();
     if (dd->IsHomogeneous()) {
@@ -1563,8 +1565,8 @@ namespace Ipopt
                                const Vector& x_U, Number* x_U_orig)
   {
     if (x_L_orig) {
-      const DenseVector* dx_L = dynamic_cast<const DenseVector*>(&x_L);
-      DBG_ASSERT(dx_L);
+      const DenseVector* dx_L = static_cast<const DenseVector*>(&x_L);
+      DBG_ASSERT(dynamic_cast<const DenseVector*>(&x_L));
 
       const Index* bnds_pos_not_fixed = P_x_x_L_->ExpandedPosIndices();
       const Index& n_xL = x_L.Dim();
@@ -1607,8 +1609,8 @@ namespace Ipopt
     }
 
     if (x_U_orig) {
-      const DenseVector* dx_U = dynamic_cast<const DenseVector*>(&x_U);
-      DBG_ASSERT(dx_U);
+      const DenseVector* dx_U = static_cast<const DenseVector*>(&x_U);
+      DBG_ASSERT(dynamic_cast<const DenseVector*>(&x_U));
 
       const Index* bnds_pos_not_fixed = P_x_x_U_->ExpandedPosIndices();
 
@@ -2203,6 +2205,7 @@ namespace Ipopt
     delete [] jac_c_map;
     delete [] jac_c_vals;
 #else
+
     THROW_EXCEPTION(OPTION_INVALID,
                     "Detection of dependent constraints is only possible if MA28 is available.");
 #endif

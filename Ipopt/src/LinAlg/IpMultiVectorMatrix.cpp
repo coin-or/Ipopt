@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -57,8 +57,8 @@ namespace Ipopt
     }
 
     // See if we can understand the data
-    const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dense_x);
+    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
 
     // We simply add all the Vectors one after the other
     if (dense_x->IsHomogeneous()) {
@@ -83,8 +83,8 @@ namespace Ipopt
     DBG_ASSERT(NRows()==x.Dim());
 
     // See if we can understand the data
-    DenseVector* dense_y = dynamic_cast<DenseVector*>(&y);
-    DBG_ASSERT(dense_y);
+    DenseVector* dense_y = static_cast<DenseVector*>(&y);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
     // Use the individual dot products to get the matrix (transpose)
     // vector product
@@ -156,8 +156,8 @@ namespace Ipopt
 
     // See if we can understand the data
     const DenseVector* dense_scal_vec =
-      dynamic_cast<const DenseVector*>(&scal_vec);
-    DBG_ASSERT(dense_scal_vec);
+      static_cast<const DenseVector*>(&scal_vec);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&scal_vec));
 
     if (dense_scal_vec->IsHomogeneous()) {
       Number val = dense_scal_vec->Scalar();
@@ -212,8 +212,8 @@ namespace Ipopt
     SmartPtr<const DenseVectorSpace> mydspace = new DenseVectorSpace(C.NRows());
     SmartPtr<DenseVector> mydvec = mydspace->MakeNewDenseVector();
 
-    const DenseGenMatrix* dgm_C = dynamic_cast<const DenseGenMatrix*>(&C);
-    DBG_ASSERT(dgm_C);
+    const DenseGenMatrix* dgm_C = static_cast<const DenseGenMatrix*>(&C);
+    DBG_ASSERT(dynamic_cast<const DenseGenMatrix*>(&C));
     for (Index i=0; i<NCols(); i++) {
       const Number* CValues = dgm_C->Values();
       Number* myvalues = mydvec->Values();

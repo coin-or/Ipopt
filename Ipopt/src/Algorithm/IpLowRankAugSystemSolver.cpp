@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -237,7 +237,7 @@ namespace Ipopt
 
     // Get the low update information out of W
     const LowRankUpdateSymMatrix* LR_W =
-      dynamic_cast<const LowRankUpdateSymMatrix*> (W);
+      static_cast<const LowRankUpdateSymMatrix*> (W);
     DBG_ASSERT(LR_W);
     DBG_PRINT_MATRIX(2, "LR_W", *LR_W);
 
@@ -347,7 +347,7 @@ namespace Ipopt
         Utilde2_x = Utilde1_x->MakeNewMultiVectorMatrix();
         for (Index i=0; i<Utilde1_x->NCols(); i++) {
           const CompoundVector* cvec =
-            dynamic_cast<const CompoundVector*> (GetRawPtr(Utilde2_->GetVector(i)));
+            static_cast<const CompoundVector*> (GetRawPtr(Utilde2_->GetVector(i)));
           DBG_ASSERT(cvec);
           Utilde2_x->SetVector(i, *cvec->GetComp(0));
         }

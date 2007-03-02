@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -177,15 +177,6 @@ namespace Ipopt
 
     /** Copy constructor, initialized from copy */
     SmartPtr(const SmartPtr<T>& copy);
-
-    /** Copy Constructor, initialized from copy of
-     * a different type, will cause run-time error
-     * if type is not valid. 
-     */
-    /* Don't support this, use dynamic_cast(GetRawPtr(copy))
-    template <class U>
-    SmartPtr(const SmartPtr<U> &copy);
-    */
 
     /** Constructor, initialized from T* ptr */
     SmartPtr(T* ptr);
@@ -385,29 +376,6 @@ namespace Ipopt
   }
 
 
-  /* Don't support this, use dynamic_cast(GetRawPtr(copy))
-  template <class T>
-  template <class U> SmartPtr<T>::SmartPtr(const SmartPtr<U>& copy)
-   :
-   ptr_(NULL)
-   {
-     DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<U>& copy)", dbg_smartptr_verbosity);
-     
-     U* raw_U_ptr = GetRawPtr(copy);
-     
-     // try to cast to type T
-     T* raw_T_ptr = dynamic_cast<T*>(raw_U_ptr);
-     
-     // Don't try to point to type U with a 
-     // type T SmartPtr if the types U & T 
-     // are not related
-     DBG_ASSERT(raw_T_ptr);
-     
-     (void) SetFromRawPtr_(raw_T_ptr);
-   }
-   */
-
-
   template <class T>
   SmartPtr<T>::SmartPtr(T* ptr)
       :
@@ -510,17 +478,6 @@ namespace Ipopt
     if (rhs != NULL) {
       rhs->AddRef(this);
       ptr_ = rhs;
-      //       const ReferencedObject* r_ptr =
-      //         dynamic_cast<const ReferencedObject*>(rhs);
-
-      //       // All objects pointed to by a SmartPtr MUST
-      //       // inherit off of ReferencedObject
-      //       DBG_ASSERT(r_ptr && "This is not inherited from ReferencedObject");
-
-      //       if (r_ptr) {
-      //         r_ptr->AddRef(this);
-      //         ptr_ = rhs;
-      //       }
     }
 
     return *this;
@@ -563,16 +520,6 @@ namespace Ipopt
       }
       ptr_ = NULL;
     }
-    //     if (ptr_ != NULL) {
-    //       const ReferencedObject* r_ptr =
-    //         dynamic_cast<const ReferencedObject*>(ptr_);
-
-    //       r_ptr->ReleaseRef(this);
-    //       if (r_ptr->ReferenceCount() == 0) {
-    //         delete ptr_;
-    //       }
-    //       ptr_ = NULL;
-    //     }
   }
 
 
@@ -631,8 +578,8 @@ namespace Ipopt
     // with different interfaces U1 and U2, we cannot guarantee that
     // the value of the pointers will be equivalent. We can
     // guarantee this if we convert to void*
-    const void* v_lhs = dynamic_cast<const void*>(lhs);
-    const void* v_rhs = dynamic_cast<const void*>(rhs);
+    const void* v_lhs = static_cast<const void*>(lhs);
+    const void* v_rhs = static_cast<const void*>(rhs);
     if (v_lhs == v_rhs) {
       return true;
     }

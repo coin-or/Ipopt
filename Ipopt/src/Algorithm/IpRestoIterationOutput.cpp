@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -47,7 +47,7 @@ namespace Ipopt
   {
     // Get pointers to the Original NLP objects
     const RestoIpoptNLP* resto_ipopt_nlp =
-      dynamic_cast<const RestoIpoptNLP*>(&IpNLP());
+      static_cast<const RestoIpoptNLP*>(&IpNLP());
     DBG_ASSERT(resto_ipopt_nlp);
 
     SmartPtr<IpoptData> orig_ip_data = &resto_ipopt_nlp->OrigIpData();
@@ -100,7 +100,7 @@ namespace Ipopt
     // current restoration phase values
     SmartPtr<const Vector> x = IpData().curr()->x();
     const CompoundVector* cx =
-      dynamic_cast<const CompoundVector*>(GetRawPtr(x));
+      static_cast<const CompoundVector*>(GetRawPtr(x));
     DBG_ASSERT(cx);
 
     SmartPtr<IteratesVector> trial = orig_ip_data->trial()->MakeNewContainer();

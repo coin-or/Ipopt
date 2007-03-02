@@ -71,43 +71,25 @@ namespace Ipopt
      *  returns false.
      */
     virtual ESymSolverStatus MultiSolve(
-      bool new_matrix /** If this flag is false, the same matrix as in
-            			  the most recent call is given to the solver
-            			  again */
+      bool new_matrix /** If this flag is false, the same matrix as in the most recent call is given to the solver again */
       , Index n_x  /** Dimension of D_x */
       , Index n_c /** Dimension of D_s and D_c */
       , Index n_d /** Dimension of D_d */
-      , SmartPtr<const SymMatrix> W /** Hessian of Lagrangian (as
-            					given by NLP) */
-      , SmartPtr<const Matrix> Jac_c /** Jacobian of equality
-            					 constraints (as given by
-            					 NLP) */
-      , SmartPtr<const Matrix> Jac_d /** Jacobian of inequality
-            					 constraints (as given by
-            					 NLP) */
-      , const Number* D_x /** Array with the elements D_x (if NULL,
-            			      assume all zero) */
-      , const Number* D_s /** Array with the elements D_s (if NULL,
-            			      assume all zero) */
-      , const Number* D_c /** Array with the elements D_c (if NULL,
-            			      assume all zero) */
-      , const Number* D_d /** Array with the elements D_d (if NULL,
-            			      assume all zero) */
+      , SmartPtr<const SymMatrix> W /** Hessian of Lagrangian (as given by NLP) */
+      , SmartPtr<const Matrix> Jac_c /** Jacobian of equality constraints (as given by NLP) */
+      , SmartPtr<const Matrix> Jac_d /** Jacobian of inequality constraints (as given by NLP) */
+      , const Number* D_x /** Array with the elements D_x (if NULL, assume all zero) */
+      , const Number* D_s /** Array with the elements D_s (if NULL, assume all zero) */
+      , const Number* D_c /** Array with the elements D_c (if NULL, assume all zero) */
+      , const Number* D_d /** Array with the elements D_d (if NULL, assume all zero) */
       , Number delta_x /** /f$ \delta_x\f$ */
       , Number delta_s /** /f$ \delta_s\f$ */
       , Number delta_c /** /f$ \delta_c\f$ */
       , Number delta_d /** /f$ \delta_d\f$ */
       , Index n_rhs  /** Number of right hand sides */
-      , Number* rhssol /** On input, this containts the right hand
-            			   sides, and on successful termination of the
-            			   solver, the solutions are expected in there
-            			   on return. At the moment, the order is
-            			   x,d,c,s, but this can be made flexible and
-            			   chosen according to an option. */
-      , bool check_NegEVals /** if true, we want to ensure that the
-            				inertia is correct */
-      , Index numberOfNegEVals /** Required number of negative eigenvalues
-            				   if check_NegEVals is true */
+      , Number* rhssol /** On input, this containts the right hand sides, and on successful termination of the solver, the solutions are expected in there on return. At the moment, the order is x,d,c,s, but this can be made flexible and chosen according to an option. */
+      , bool check_NegEVals /** if true, we want to ensure that the inertia is correct */
+      , Index numberOfNegEVals /** Required number of negative eigenvalues if check_NegEVals is true */
     )=0;
 
     /** Number of negative eigenvalues detected during last

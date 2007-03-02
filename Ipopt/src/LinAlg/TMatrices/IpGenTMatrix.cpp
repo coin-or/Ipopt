@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -56,10 +56,10 @@ namespace Ipopt
     }
 
     // See if we can understand the data
-    const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dense_x); /* ToDo: Implement others */
-    DenseVector* dense_y = dynamic_cast<DenseVector*>(&y);
-    DBG_ASSERT(dense_y); /* ToDo: Implement others */
+    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
+    DenseVector* dense_y = static_cast<DenseVector*>(&y);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
     if (dense_x && dense_y) {
       const Index*  irows=Irows();
@@ -103,10 +103,10 @@ namespace Ipopt
     }
 
     // See if we can understand the data
-    const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dense_x); /* ToDo: Implement others */
-    DenseVector* dense_y = dynamic_cast<DenseVector*>(&y);
-    DBG_ASSERT(dense_y); /* ToDo: Implement others */
+    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
+    DenseVector* dense_y = static_cast<DenseVector*>(&y);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
     if (dense_x && dense_y) {
       const Index*  irows=Irows();
