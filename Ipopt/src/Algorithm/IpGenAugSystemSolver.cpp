@@ -120,7 +120,7 @@ namespace Ipopt
     const Number* dx_vals=NULL;
     if (D_x) {
       const DenseVector* dD_x = dynamic_cast<const DenseVector*> (D_x);
-      if (dD_x) {
+      if (dD_x && !dD_x->IsHomogeneous()) {
         dx_vals = dD_x->Values();
       }
       else if (D_x->GetTag() != d_x_tag_) {
@@ -133,7 +133,7 @@ namespace Ipopt
     const Number* ds_vals=NULL;
     if (D_s) {
       const DenseVector* dD_s = dynamic_cast<const DenseVector*> (D_s);
-      if (dD_s) {
+      if (dD_s && !dD_s->IsHomogeneous()) {
         ds_vals = dD_s->Values();
       }
       else if (D_s->GetTag() != d_s_tag_) {
@@ -146,7 +146,7 @@ namespace Ipopt
     const Number* dc_vals=NULL;
     if (D_c) {
       const DenseVector* dD_c = dynamic_cast<const DenseVector*> (D_c);
-      if (dD_c) {
+      if (dD_c && !dD_c->IsHomogeneous()) {
         dc_vals = dD_c->Values();
       }
       else if (D_c->GetTag() != d_c_tag_) {
@@ -159,7 +159,7 @@ namespace Ipopt
     const Number* dd_vals=NULL;
     if (D_d) {
       const DenseVector* dD_d = dynamic_cast<const DenseVector*> (D_d);
-      if (dD_d) {
+      if (dD_d && !dD_d->IsHomogeneous()) {
         dd_vals = dD_d->Values();
       }
       else if (D_d->GetTag() != d_d_tag_) {
@@ -185,7 +185,7 @@ namespace Ipopt
     }
 
     bool done = false;
-    ESymSolverStatus retval;
+    ESymSolverStatus retval = SYMSOLVER_FATAL_ERROR;
     const SymMatrix* Wgive = NULL;
     if (W && W_factor==1.0) {
       Wgive = W;
