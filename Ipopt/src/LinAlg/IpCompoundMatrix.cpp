@@ -80,10 +80,8 @@ namespace Ipopt
     DBG_ASSERT(matrices_valid_);
 
     // The vectors are assumed to be compound Vectors as well
-    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
-    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
-    CompoundVector* comp_y = static_cast<CompoundVector*>(&y);
-    DBG_ASSERT(dynamic_cast<CompoundVector*>(&y));
+    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
+    CompoundVector* comp_y = dynamic_cast<CompoundVector*>(&y);
 
     //  A few sanity checks
     if (comp_x) {
@@ -146,10 +144,8 @@ namespace Ipopt
     DBG_ASSERT(matrices_valid_);
 
     // The vectors are assumed to be compound Vectors as well
-    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
-    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
-    CompoundVector* comp_y = static_cast<CompoundVector*>(&y);
-    DBG_ASSERT(dynamic_cast<CompoundVector*>(&y));
+    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
+    CompoundVector* comp_y = dynamic_cast<CompoundVector*>(&y);
 
     //  A few sanity checks
     if (comp_y) {
@@ -209,12 +205,9 @@ namespace Ipopt
   {
     // The vectors are assumed to be compound Vectors as well (unless they
     // are assumed to consist of only one component
-    const CompoundVector* comp_S = static_cast<const CompoundVector*>(&S);
-    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&S));
-    const CompoundVector* comp_Z = static_cast<const CompoundVector*>(&Z);
-    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&Z));
-    CompoundVector* comp_X = static_cast<CompoundVector*>(&X);
-    DBG_ASSERT(dynamic_cast<CompoundVector*>(&X));
+    const CompoundVector* comp_S = dynamic_cast<const CompoundVector*>(&S);
+    const CompoundVector* comp_Z = dynamic_cast<const CompoundVector*>(&Z);
+    CompoundVector* comp_X = dynamic_cast<CompoundVector*>(&X);
 
     //  A few sanity checks for sizes
     if (comp_S) {
@@ -291,16 +284,11 @@ namespace Ipopt
     else {
       // The vectors are assumed to be compound Vectors as well (unless they
       // are assumed to consist of only one component
-      const CompoundVector* comp_S = static_cast<const CompoundVector*>(&S);
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(&S));
-      const CompoundVector* comp_R = static_cast<const CompoundVector*>(&R);
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(&R));
-      const CompoundVector* comp_Z = static_cast<const CompoundVector*>(&Z);
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(&Z));
-      const CompoundVector* comp_D = static_cast<const CompoundVector*>(&D);
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(&D));
-      CompoundVector* comp_X = static_cast<CompoundVector*>(&X);
-      DBG_ASSERT(dynamic_cast<CompoundVector*>(&X));
+      const CompoundVector* comp_S = dynamic_cast<const CompoundVector*>(&S);
+      const CompoundVector* comp_R = dynamic_cast<const CompoundVector*>(&R);
+      const CompoundVector* comp_Z = dynamic_cast<const CompoundVector*>(&Z);
+      const CompoundVector* comp_D = dynamic_cast<const CompoundVector*>(&D);
+      CompoundVector* comp_X = dynamic_cast<CompoundVector*>(&X);
 
       //  A few sanity checks for sizes
       if (comp_S) {
