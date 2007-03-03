@@ -277,15 +277,17 @@ namespace Ipopt
     ) const;
 
     /** Print to the designated output location */
-    void Print(const char* str)
+    void Print(EJournalCategory category, EJournalLevel level,
+               const char* str)
     {
-      PrintImpl(str);
+      PrintImpl(category, level, str);
     }
 
     /** Printf to the designated output location */
-    void Printf(const char* pformat, va_list ap)
+    void Printf(EJournalCategory category, EJournalLevel level,
+                const char* pformat, va_list ap)
     {
-      PrintfImpl(pformat, ap);
+      PrintfImpl(category, level, pformat, ap);
     }
 
     /** Flush output buffer.*/
@@ -301,10 +303,12 @@ namespace Ipopt
      */
     //@{
     /** Print to the designated output location */
-    virtual void PrintImpl(const char* str)=0;
+    virtual void PrintImpl(EJournalCategory category, EJournalLevel level,
+                           const char* str)=0;
 
     /** Printf to the designated output location */
-    virtual void PrintfImpl(const char* pformat, va_list ap)=0;
+    virtual void PrintfImpl(EJournalCategory category, EJournalLevel level,
+                            const char* pformat, va_list ap)=0;
 
     /** Flush output buffer.*/
     virtual void FlushBufferImpl()=0;
@@ -365,10 +369,12 @@ namespace Ipopt
      */
     //@{
     /** Print to the designated output location */
-    virtual void PrintImpl(const char* str);
+    virtual void PrintImpl(EJournalCategory category, EJournalLevel level,
+                           const char* str);
 
     /** Printf to the designated output location */
-    virtual void PrintfImpl(const char* pformat, va_list ap);
+    virtual void PrintfImpl(EJournalCategory category, EJournalLevel level,
+                            const char* pformat, va_list ap);
 
     /** Flush output buffer.*/
     virtual void FlushBufferImpl();
