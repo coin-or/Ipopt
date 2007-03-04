@@ -742,12 +742,12 @@ namespace Ipopt
       }
     }
     catch(TOO_FEW_DOF& exc) {
-      exc.ReportException(*jnlst_, J_MOREDETAILED);
+      exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has too few degrees of freedom.\n");
       retValue = Not_Enough_Degrees_Of_Freedom;
     }
     catch(OPTION_INVALID& exc) {
-      exc.ReportException(*jnlst_, J_MOREDETAILED);
+      exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Invalid option encountered.\n");
       retValue = Invalid_Option;
     }
@@ -762,7 +762,7 @@ namespace Ipopt
     }
     catch(...) {
       IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
-      exc.ReportException(*jnlst_, J_MOREDETAILED);
+      exc.ReportException(*jnlst_, J_ERROR);
       retValue = NonIpopt_Exception_Thrown;
     }
 
