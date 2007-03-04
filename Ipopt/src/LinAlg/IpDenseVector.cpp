@@ -33,6 +33,7 @@ namespace Ipopt
       Vector(owner_space),
       owner_space_(owner_space),
       values_(NULL),
+      expanded_values_(NULL),
       initialized_(false)
   {
     DBG_START_METH("DenseVector::DenseVector(Index dim)", dbg_verbosity);
@@ -48,6 +49,9 @@ namespace Ipopt
     if (values_) {
       owner_space_->FreeInternalStorage(values_);
     }
+    if (expanded_values_) {
+      owner_space_->FreeInternalStorage(expanded_values_);
+    }
   }
 
   void DenseVector::SetValues(const Number* x)
@@ -59,6 +63,20 @@ namespace Ipopt
     // Vector. Here, we must call ObjectChanged()
     // manually.
     ObjectChanged();
+  }
+
+  const Number* DenseVector::ExpandedValues() const
+  {
+    if (IsHomogeneous()) {
+      if (!expanded_values_) {
+        expanded_values_ = owner_space_->AllocateInternalStorage();
+      }
+      IpBlasDcopy(Dim(), &scalar_, 0, expanded_values_, 1);
+      return expanded_values_;
+    }
+    else {
+      return values_;
+    }
   }
 
   void DenseVector::set_values_from_scalar()

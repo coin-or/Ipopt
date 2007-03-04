@@ -71,6 +71,18 @@ namespace Ipopt
      */
     inline const Number* Values() const;
 
+    /** The same as the const version of Values, but we ensure that we
+     *  always return a valid array, even if IsHomogeneous returns
+     *  true. */
+    const Number* ExpandedValues() const;
+
+    /** This is the same as Values, but we add it here so that
+     *  ExpandedValues can also be used for the non-const case. */
+    inline Number* ExpandedValues()
+    {
+      return Values();
+    }
+
     /** Indicates if the vector is homogeneous (i.e., all entries have
      *  the value Scalar() */
     bool IsHomogeneous() const
@@ -214,6 +226,9 @@ namespace Ipopt
 
     /** Dense Number array of vector values. */
     Number* values_;
+
+    /** Dense Number array pointer that is used for ExpandedValues */
+    mutable Number* expanded_values_;
 
     /** Method of getting the internal values array, making sure that
      *  memory has been allocated */
