@@ -25728,7 +25728,11 @@ LIBS_without_ADDLIBS="$LIBS"
 #        BLAS         #
 #######################
 
-coin_blasobjdir=../ThirdParty/Blas
+if test "$PACKAGE_NAME" = ThirdPartyBlas || test "$PACKAGE_NAME" = ThirdPartyLapack; then
+  coin_blasobjdir=../Blas
+else
+  coin_blasobjdir=../ThirdParty/Blas
+fi
 coin_blassrcdir=$srcdir/$coin_blasobjdir
 
 
@@ -26927,7 +26931,7 @@ esac
 # On cygwin, consider -lblas only if doscompile is disabled. The prebuilt
 # library will want to link with cygwin, hence won't run standalone in DOS.
     *-cygwin*)
-      if test "$enable_doscompile" = no; then
+      if test "$enable_doscompile" = mingw; then
 	skip_lblas_check=yes
       fi
       ;;
@@ -28957,7 +28961,7 @@ esac
 # On cygwin, do this check only if doscompile is disabled. The prebuilt library
 # will want to link with cygwin, hence won't run standalone in DOS.
       *-cygwin*)
-	if test "$enable_doscompile" = no; then
+	if test "$enable_doscompile" = mingw; then
 	  skip_llapack_check=yes
 	fi
 	;;
