@@ -119,7 +119,7 @@ namespace Ipopt
     const Index n_d = rhs_dV[0]->Dim();
     const Number* dx_vals=NULL;
     if (D_x) {
-      const DenseVector* dD_x = static_cast<const DenseVector*> (D_x);
+      const DenseVector* dD_x = dynamic_cast<const DenseVector*> (D_x);
       if (dD_x && !dD_x->IsHomogeneous()) {
         dx_vals = dD_x->Values();
       }
@@ -132,7 +132,7 @@ namespace Ipopt
     }
     const Number* ds_vals=NULL;
     if (D_s) {
-      const DenseVector* dD_s = static_cast<const DenseVector*> (D_s);
+      const DenseVector* dD_s = dynamic_cast<const DenseVector*> (D_s);
       if (dD_s && !dD_s->IsHomogeneous()) {
         ds_vals = dD_s->Values();
       }
@@ -145,7 +145,7 @@ namespace Ipopt
     }
     const Number* dc_vals=NULL;
     if (D_c) {
-      const DenseVector* dD_c = static_cast<const DenseVector*> (D_c);
+      const DenseVector* dD_c = dynamic_cast<const DenseVector*> (D_c);
       if (dD_c && !dD_c->IsHomogeneous()) {
         dc_vals = dD_c->Values();
       }
@@ -158,7 +158,7 @@ namespace Ipopt
     }
     const Number* dd_vals=NULL;
     if (D_d) {
-      const DenseVector* dD_d = static_cast<const DenseVector*> (D_d);
+      const DenseVector* dD_d = dynamic_cast<const DenseVector*> (D_d);
       if (dD_d && !dD_d->IsHomogeneous()) {
         dd_vals = dD_d->Values();
       }
