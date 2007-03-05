@@ -90,8 +90,12 @@ namespace Ipopt
     // Check for the algorithm options
     options.GetNumericValue("bound_push", bound_push_, prefix);
     options.GetNumericValue("bound_frac", bound_frac_, prefix);
-    options.GetNumericValue("slack_bound_push", slack_bound_push_, prefix);
-    options.GetNumericValue("slack_bound_frac", slack_bound_frac_, prefix);
+    if (!options.GetNumericValue("slack_bound_push", slack_bound_push_, prefix)) {
+      slack_bound_push_ = bound_push_;
+    }
+    if (!options.GetNumericValue("slack_bound_frac", slack_bound_frac_, prefix)) {
+      slack_bound_frac_ = bound_frac_;
+    }
     options.GetNumericValue("constr_mult_init_max",
                             constr_mult_init_max_, prefix);
     options.GetNumericValue("bound_mult_init_val",
