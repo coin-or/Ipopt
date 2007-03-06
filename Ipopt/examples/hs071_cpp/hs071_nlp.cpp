@@ -264,4 +264,9 @@ void HS071_NLP::finalize_solution(SolverReturn status,
 
   printf("\n\nObjective value\n");
   printf("f(x*) = %e\n", obj_value);
+
+  printf("\nFinal value of the constraints:\n");
+  for (Index i=0; i<m ;i++) {
+    printf("g(%d) = %e\n", i, g[i]);
+  }
 }
