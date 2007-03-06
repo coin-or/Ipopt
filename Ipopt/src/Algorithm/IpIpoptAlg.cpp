@@ -93,6 +93,17 @@ namespace Ipopt
       0, true, 1e-6,
       "If recalc_y is chosen and the current infeasibility is less than this "
       "value, then the multipliers are recomputed.");
+    roptions->SetRegisteringCategory("Step Calculation");
+    roptions->AddStringOption2(
+      "fast_step_computation",
+      "Indicates if the linear system should be solved quickly.",
+      "no",
+      "no", "Verify solution of linear system by computing residuals",
+      "yes", "Trust that linear systems are solved well.",
+      "If set to yes, the algorithm assumes that the linear system that is "
+      "solved to obtain the search direction, is solved sufficiently well. "
+      "In that case, no residuals are computed, and the computation of the "
+      "search direction is a little faster.");
   }
 
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,
@@ -170,6 +181,9 @@ namespace Ipopt
     if (recalc_y_) {
       options.GetNumericValue("recalc_y_feas_tol", recalc_y_feas_tol_, prefix);
     }
+
+    options.GetBoolValue("fast_step_computation", fast_step_computation_,
+                         prefix);
 
     if (prefix=="resto.") {
       skip_print_problem_stats_ = true;
@@ -419,35 +433,42 @@ namespace Ipopt
       improve_solution = true;
     }
 
-    SmartPtr<IteratesVector> rhs = IpData().curr()->MakeNewContainer();
-    rhs->Set_x(*IpCq().curr_grad_lag_with_damping_x());
-    rhs->Set_s(*IpCq().curr_grad_lag_with_damping_s());
-    rhs->Set_y_c(*IpCq().curr_c());
-    rhs->Set_y_d(*IpCq().curr_d_minus_s());
-    rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
-    rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
-    rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
-    rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
+    bool retval;
+    if (improve_solution && fast_step_computation_) {
+      retval = true;
+    }
+    else {
+      SmartPtr<IteratesVector> rhs = IpData().curr()->MakeNewContainer();
+      rhs->Set_x(*IpCq().curr_grad_lag_with_damping_x());
+      rhs->Set_s(*IpCq().curr_grad_lag_with_damping_s());
+      rhs->Set_y_c(*IpCq().curr_c());
+      rhs->Set_y_d(*IpCq().curr_d_minus_s());
+      rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
+      rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
+      rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
+      rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
 
-    DBG_PRINT_VECTOR(2, "rhs", *rhs);
+      DBG_PRINT_VECTOR(2, "rhs", *rhs);
 
-    // Get space for the search direction
-    SmartPtr<IteratesVector> delta =
-      IpData().curr()->MakeNewIteratesVector(true);
+      // Get space for the search direction
+      SmartPtr<IteratesVector> delta =
+        IpData().curr()->MakeNewIteratesVector(true);
 
-    if (improve_solution) {
-      // We can probably avoid copying and scaling...
-      delta->AddOneVector(-1., *IpData().delta(), 0.);
+      if (improve_solution) {
+        // We can probably avoid copying and scaling...
+        delta->AddOneVector(-1., *IpData().delta(), 0.);
+      }
+
+      bool& allow_inexact = fast_step_computation_;
+      retval = pd_solver_->Solve(-1.0, 0.0, *rhs, *delta, allow_inexact,
+                                 improve_solution);
+      if (retval) {
+        // Store the search directions in the IpData object
+        IpData().set_delta(delta);
+      }
     }
 
-    bool allow_inexact = false;
-    bool retval = pd_solver_->Solve(-1.0, 0.0, *rhs, *delta, allow_inexact,
-                                    improve_solution);
-
     if (retval) {
-      // Store the search directions in the IpData object
-      IpData().set_delta(delta);
-
       Jnlst().Printf(J_MOREVECTOR, J_MAIN,
                      "*** Step Calculated for Iteration: %d\n",
                      IpData().iter_count());

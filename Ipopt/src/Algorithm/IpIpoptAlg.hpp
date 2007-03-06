@@ -171,6 +171,10 @@ namespace Ipopt
     bool recalc_y_;
     /** Feasibility threshold for recalc_y */
     Number recalc_y_feas_tol_;
+    /** Flag indicating that we trust that the steps from the linear
+     *  solver are very good and that we don't need any residual
+     *  checks */
+    bool fast_step_computation_;
     //@}
 
     /** @name auxilliary functions */
