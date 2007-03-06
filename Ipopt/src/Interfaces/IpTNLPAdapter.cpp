@@ -1207,6 +1207,13 @@ namespace Ipopt
 
     Number* full_g = new Number[n_full_g_];
     ResortG(c, d, full_g);
+    // To Ipopt, the equality constraints are presented with right
+    // hand side zero, so we correct for the original right hand side.
+    const Index* c_pos = P_c_g_->ExpandedPosIndices();
+    Index n_c_no_fixed = P_c_g_->NCols();
+    for (Index i=0; i<n_c_no_fixed; i++) {
+      full_g[c_pos[i]] += c_rhs_[i];
+    }
 
     Number* full_z_L = new Number[n_full_x_];
     Number* full_z_U = new Number[n_full_x_];
