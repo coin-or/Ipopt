@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -95,10 +95,25 @@ namespace Ipopt
       "value, then the multipliers are recomputed.");
     roptions->SetRegisteringCategory("Step Calculation");
     roptions->AddStringOption2(
+      "mehrotra_algorithm",
+      "Indicates if we want to do Mehrotra's algorithm.",
+      "no",
+      "no", "Do the usual Ipopt algorithm.",
+      "yes", "Do Mehrotra's predictor-corrector algorithm.",
+      "If set to yes, Ipopt runs as Mehrotra's predictor-corrector algorithm. "
+      "This works usually very well for LPs and convex QPs.  This "
+      "automatically disables the line search, and chooses the (unglobalized) "
+      "adaptive mu strategy with the \"probing\" oracle, and uses "
+      "\"corrector_type=affine\" without any safeguards; you should not set "
+      "any of those options explicitly in addition.  Also, unless"
+      "otherwise specified, the values of \"bound_push\", \"bound_frac\", and "
+      "\"bound_mult_init_val\" are set more aggressive, and sets "
+      "\"alpha_for_y=bound_mult\".");
+    roptions->AddStringOption2(
       "fast_step_computation",
       "Indicates if the linear system should be solved quickly.",
       "no",
-      "no", "Verify solution of linear system by computing residuals",
+      "no", "Verify solution of linear system by computing residuals.",
       "yes", "Trust that linear systems are solved well.",
       "If set to yes, the algorithm assumes that the linear system that is "
       "solved to obtain the search direction, is solved sufficiently well. "
@@ -112,65 +127,112 @@ namespace Ipopt
     DBG_START_METH("IpoptAlgorithm::InitializeImpl",
                    dbg_verbosity);
 
+    SmartPtr<const OptionsList> my_options;
+    options.GetBoolValue("mehrotra_algorithm", mehrotra_algorithm_, prefix);
+    if (mehrotra_algorithm_) {
+      // Verify a few options and set a few new ones.  But we better
+      // make a copy of the incoming options.
+      SmartPtr<OptionsList> new_options = new OptionsList(options);
+      // Check required options are set correctly
+      std::string string_option;
+      if (new_options->GetStringValue("adaptive_mu_globalization", string_option, prefix)) {
+        ASSERT_EXCEPTION(string_option=="never-monotone-mode", OPTION_INVALID,
+                         "If mehrotra_algorithm=yes, adaptive_mu_globalization must be \"never-monotone-mode\".");
+      }
+      else {
+        new_options->SetStringValue("adaptive_mu_globalization",
+                                    "never-monotone-mode", false);
+      }
+      // The corrector step is already taken case of in
+      // ComputeSearchDirection below
+      if (new_options->GetStringValue("corrector_type", string_option, prefix)) {
+        ASSERT_EXCEPTION(string_option=="none", OPTION_INVALID,
+                         "If mehrotra_algorithm=yes, corrector_type must be \"afnone\".");
+      }
+      else {
+        new_options->SetStringValue("corrector_type", "none", false);
+      }
+      if (new_options->GetStringValue("accept_every_trial_step", string_option, prefix)) {
+        ASSERT_EXCEPTION(string_option=="yes", OPTION_INVALID,
+                         "If mehrotra_algorithm=yes, accept_every_trial_step must be \"yes\".");
+      }
+      else {
+        new_options->SetStringValue("accept_every_trial_step", "yes", false);
+      }
+
+      // Change some default options
+      new_options->SetNumericValueIfUnset("bound_push", 10.);
+      new_options->SetNumericValueIfUnset("bound_frac", 0.2);
+      new_options->SetNumericValueIfUnset("bound_mult_init_val", 10.);
+      new_options->SetNumericValueIfUnset("constr_mult_init_max", 0.);
+      new_options->SetStringValueIfUnset("alpha_for_y", "bound_mult");
+
+
+      new_options->PrintList(string_option);
+      printf("%s",string_option.c_str());
+
+      my_options = ConstPtr(new_options);
+    }
+    else {
+      my_options = &options;
+    }
+
     // Read the IpoptAlgorithm options
     // Initialize the Data object
-    bool retvalue = IpData().Initialize(Jnlst(),
-                                        options, prefix);
+    bool retvalue = IpData().Initialize(Jnlst(), *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptData object failed to initialize.");
 
     // Initialize the CQ object
-    retvalue = IpCq().Initialize(Jnlst(),
-                                 options, prefix);
+    retvalue = IpCq().Initialize(Jnlst(), *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptCalculatedQuantities object failed to initialize.");
 
     // Initialize the CQ object
-    retvalue = IpNLP().Initialize(Jnlst(),
-                                  options, prefix);
+    retvalue = IpNLP().Initialize(Jnlst(), *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptNLP object failed to initialize.");
 
     // Initialize all the strategies
     retvalue = iterate_initializer_->Initialize(Jnlst(), IpNLP(), IpData(),
-               IpCq(), options, prefix);
+               IpCq(), *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the iterate_initializer strategy failed to initialize.");
 
     retvalue = mu_update_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                      options, prefix);
+                                      *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the mu_update strategy failed to initialize.");
 
     retvalue = pd_solver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                      options, prefix);
+                                      *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the pd_solver strategy failed to initialize.");
 
     retvalue = line_search_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                        options,prefix);
+                                        *my_options,prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the line_search strategy failed to initialize.");
 
     retvalue = conv_check_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                       options, prefix);
+                                       *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the conv_check strategy failed to initialize.");
 
     retvalue = iter_output_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                        options, prefix);
+                                        *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the iter_output strategy failed to initialize.");
 
     retvalue = hessian_updater_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                            options, prefix);
+                                            *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the hessian_updater strategy failed to initialize.");
 
-    options.GetNumericValue("kappa_sigma", kappa_sigma_, prefix);
-    if (!options.GetBoolValue("recalc_y", recalc_y_, prefix)) {
+    my_options->GetNumericValue("kappa_sigma", kappa_sigma_, prefix);
+    if (!my_options->GetBoolValue("recalc_y", recalc_y_, prefix)) {
       Index enum_int;
-      if (options.GetEnumValue("hessian_approximation", enum_int, prefix)) {
+      if (my_options->GetEnumValue("hessian_approximation", enum_int, prefix)) {
         HessianApproximationType hessian_approximation =
           HessianApproximationType(enum_int);
         if (hessian_approximation==LIMITED_MEMORY) {
@@ -179,11 +241,12 @@ namespace Ipopt
       }
     }
     if (recalc_y_) {
-      options.GetNumericValue("recalc_y_feas_tol", recalc_y_feas_tol_, prefix);
+      my_options->GetNumericValue("recalc_y_feas_tol", recalc_y_feas_tol_,
+                                  prefix);
     }
 
-    options.GetBoolValue("fast_step_computation", fast_step_computation_,
-                         prefix);
+    my_options->GetBoolValue("fast_step_computation", fast_step_computation_,
+                             prefix);
 
     if (prefix=="resto.") {
       skip_print_problem_stats_ = true;
@@ -443,10 +506,44 @@ namespace Ipopt
       rhs->Set_s(*IpCq().curr_grad_lag_with_damping_s());
       rhs->Set_y_c(*IpCq().curr_c());
       rhs->Set_y_d(*IpCq().curr_d_minus_s());
-      rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
-      rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
-      rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
-      rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
+      Index nbounds = IpNLP().x_L()->Dim()+ IpNLP().x_U()->Dim() +
+                      IpNLP().d_L()->Dim()+ IpNLP().d_U()->Dim();
+      if (nbounds>0 && mehrotra_algorithm_) {
+        // set up the right hand side a la Mehrotra
+        DBG_ASSERT(IpData().HaveAffineDeltas());
+        DBG_ASSERT(!IpData().HaveDeltas());
+        const SmartPtr<const IteratesVector> delta_aff = IpData().delta_aff();
+
+        SmartPtr<Vector> tmpvec = delta_aff->z_L()->MakeNew();
+        IpNLP().Px_L()->TransMultVector(1., *delta_aff->x(), 0., *tmpvec);
+        tmpvec->ElementWiseMultiply(*delta_aff->z_L());
+        tmpvec->Axpy(1., *IpCq().curr_relaxed_compl_x_L());
+        rhs->Set_z_L(*tmpvec);
+
+        tmpvec = delta_aff->z_U()->MakeNew();
+        IpNLP().Px_U()->TransMultVector(-1., *delta_aff->x(), 0., *tmpvec);
+        tmpvec->ElementWiseMultiply(*delta_aff->z_U());
+        tmpvec->Axpy(1., *IpCq().curr_relaxed_compl_x_U());
+        rhs->Set_z_U(*tmpvec);
+
+        tmpvec = delta_aff->v_L()->MakeNew();
+        IpNLP().Pd_L()->TransMultVector(1., *delta_aff->s(), 0., *tmpvec);
+        tmpvec->ElementWiseMultiply(*delta_aff->v_L());
+        tmpvec->Axpy(1., *IpCq().curr_relaxed_compl_s_L());
+        rhs->Set_v_L(*tmpvec);
+
+        tmpvec = delta_aff->v_U()->MakeNew();
+        IpNLP().Pd_U()->TransMultVector(-1., *delta_aff->s(), 0., *tmpvec);
+        tmpvec->ElementWiseMultiply(*delta_aff->v_U());
+        tmpvec->Axpy(1., *IpCq().curr_relaxed_compl_s_U());
+        rhs->Set_v_U(*tmpvec);
+      }
+      else {
+        rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
+        rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
+        rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
+        rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
+      }
 
       DBG_PRINT_VECTOR(2, "rhs", *rhs);
 

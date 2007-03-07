@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -175,6 +175,10 @@ namespace Ipopt
      *  solver are very good and that we don't need any residual
      *  checks */
     bool fast_step_computation_;
+    /** Flag indicating if we want to do Mehrotras's algorithm.  This
+     *  means that a number of options are ignored, or have to be set
+     *  (or are automatically set) to certain values. */
+    bool mehrotra_algorithm_;
     //@}
 
     /** @name auxilliary functions */

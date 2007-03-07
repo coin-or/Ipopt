@@ -215,6 +215,10 @@ namespace Ipopt
   {
     DBG_START_FUN("AlgorithmBuilder::BuildBasicAlgorithm",
                   dbg_verbosity);
+
+    bool mehrotra_algorithm;
+    options.GetBoolValue("mehrotra_algorithm", mehrotra_algorithm, prefix);
+
     // Create the convergence check
     SmartPtr<ConvergenceCheck> convCheck =
       new OptimalityErrorConvergenceCheck();
@@ -490,12 +494,23 @@ namespace Ipopt
           smuupdate = "adaptive";
         }
       }
+      if (mehrotra_algorithm)
+        smuupdate = "adaptive";
     }
+    ASSERT_EXCEPTION(!mehrotra_algorithm || smuupdate=="adaptive",
+                     OPTION_INVALID,
+                     "If mehrotra_algorithm=yes, mu_strategy must be \"adaptive\".");
     std::string smuoracle;
     std::string sfixmuoracle;
     if (smuupdate=="adaptive" ) {
-      options.GetStringValue("mu_oracle", smuoracle, prefix);
+      if (!options.GetStringValue("mu_oracle", smuoracle, prefix)) {
+        if (mehrotra_algorithm)
+          smuoracle = "probing";
+      }
       options.GetStringValue("fixed_mu_oracle", sfixmuoracle, prefix);
+      ASSERT_EXCEPTION(!mehrotra_algorithm || smuoracle=="probing",
+                       OPTION_INVALID,
+                       "If mehrotra_algorithm=yes, mu_oracle must be \"probing\".");
     }
 
     if (smuupdate=="monotone" ) {
