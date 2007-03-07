@@ -520,7 +520,7 @@ namespace Ipopt
   void DenseVector::AddTwoVectorsImpl(Number a, const Vector& v1,
                                       Number b, const Vector& v2, Number c)
   {
-    Number* values_v1=NULL;
+    const Number* values_v1=NULL;
     bool homogeneous_v1=false;
     Number scalar_v1 = 0;
     if (a!=0.) {
@@ -534,7 +534,7 @@ namespace Ipopt
       if (homogeneous_v1)
         scalar_v1 = dense_v1->scalar_;
     }
-    Number* values_v2=NULL;
+    const Number* values_v2=NULL;
     bool homogeneous_v2=false;
     Number scalar_v2 = 0;
     if (b!=0.) {
@@ -577,9 +577,7 @@ namespace Ipopt
     if (c==0 ) {
       if (a==1.) {
         if (b==0.) {
-          for (Index i=0; i<Dim(); i++) {
-            values_[i] = values_v1[i];
-          }
+          IpBlasDcopy(Dim(), values_v1, 1, values_, 1);
         }
         else if (b==1.) {
           for (Index i=0; i<Dim(); i++) {
@@ -621,13 +619,12 @@ namespace Ipopt
       }
       else if (a==0.) {
         if (b==0.) {
-          for (Index i=0; i<Dim(); i++) {
-            values_[i] = 0.;
-          }
+          Number zero = 0.;
+          IpBlasDcopy(Dim(), &zero, 0, values_, 1);
         }
         else if (b==1.) {
           for (Index i=0; i<Dim(); i++) {
-            values_[i] = values_v2[i];
+            IpBlasDcopy(Dim(), values_v2, 1, values_, 1);
           }
         }
         else if (b==-1.) {
@@ -667,9 +664,7 @@ namespace Ipopt
     else if (c==1.) {
       if (a==1.) {
         if (b==0.) {
-          for (Index i=0; i<Dim(); i++) {
-            values_[i] += values_v1[i];
-          }
+          IpBlasDaxpy(Dim(), 1., values_v1, 1, values_, 1);
         }
         else if (b==1.) {
           for (Index i=0; i<Dim(); i++) {
@@ -689,9 +684,7 @@ namespace Ipopt
       }
       else if (a==-1.) {
         if (b==0.) {
-          for (Index i=0; i<Dim(); i++) {
-            values_[i] -= values_v1[i];
-          }
+          IpBlasDaxpy(Dim(), -1., values_v1, 1, values_, 1);
         }
         else if (b==1.) {
           for (Index i=0; i<Dim(); i++) {
@@ -715,25 +708,19 @@ namespace Ipopt
         }
         else if (b==1.) {
           for (Index i=0; i<Dim(); i++) {
-            values_[i] += values_v2[i];
+            IpBlasDaxpy(Dim(), 1., values_v2, 1, values_, 1);
           }
         }
         else if (b==-1.) {
-          for (Index i=0; i<Dim(); i++) {
-            values_[i] -= values_v2[i];
-          }
+          IpBlasDaxpy(Dim(), -1., values_v2, 1, values_, 1);
         }
         else {
-          for (Index i=0; i<Dim(); i++) {
-            values_[i] += b*values_v2[i];
-          }
+          IpBlasDaxpy(Dim(), b, values_v2, 1, values_, 1);
         }
       }
       else {
         if (b==0.) {
-          for (Index i=0; i<Dim(); i++) {
-            values_[i] += a*values_v1[i];
-          }
+          IpBlasDaxpy(Dim(), a, values_v1, 1, values_, 1);
         }
         else if (b==1.) {
           for (Index i=0; i<Dim(); i++) {
@@ -799,9 +786,7 @@ namespace Ipopt
       }
       else if (a==0.) {
         if (b==0.) {
-          for (Index i=0; i<Dim(); i++) {
-            values_[i] *= -1.;
-          }
+          IpBlasDscal(Dim(), -1., values_, 1);
         }
         else if (b==1.) {
           for (Index i=0; i<Dim(); i++) {
@@ -889,9 +874,7 @@ namespace Ipopt
       }
       else if (a==0.) {
         if (b==0.) {
-          for (Index i=0; i<Dim(); i++) {
-            values_[i] *= c;
-          }
+          IpBlasDscal(Dim(), c, values_, 1);
         }
         else if (b==1.) {
           for (Index i=0; i<Dim(); i++) {
