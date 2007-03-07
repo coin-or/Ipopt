@@ -351,7 +351,8 @@ namespace Ipopt
     SmartPtr<IterateInitializer> WarmStartInitializer =
       new WarmStartIterateInitializer();
     SmartPtr<IterateInitializer> IterInitializer =
-      new DefaultIterateInitializer(EqMultCalculator, WarmStartInitializer);
+      new DefaultIterateInitializer(EqMultCalculator, WarmStartInitializer,
+                                    AugSolver);
 
     // Solver for the restoration phase
     SmartPtr<AugSystemSolver> resto_AugSolver =

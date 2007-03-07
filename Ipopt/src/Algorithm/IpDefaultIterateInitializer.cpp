@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -16,11 +16,13 @@ namespace Ipopt
 
   DefaultIterateInitializer::DefaultIterateInitializer
   (const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
-   const SmartPtr<IterateInitializer>& warm_start_initializer)
+   const SmartPtr<IterateInitializer>& warm_start_initializer,
+   const SmartPtr<AugSystemSolver> aug_system_solver /*= NULL*/)
       :
       IterateInitializer(),
       eq_mult_calculator_(eq_mult_calculator),
-      warm_start_initializer_(warm_start_initializer)
+      warm_start_initializer_(warm_start_initializer),
+      aug_system_solver_(aug_system_solver)
   {}
 
   void DefaultIterateInitializer::RegisterOptions(SmartPtr<RegisteredOptions> reg_options)
@@ -73,6 +75,27 @@ namespace Ipopt
       0, true, 1.0,
       "All dual variables corresponding to bound constraints are "
       "initialized to this value.");
+    reg_options->AddStringOption2(
+      "least_square_init_primal",
+      "Least square initialization of the primal variables", "no",
+      "no", "take user-provided point",
+      "yes", "overwrite user-provided point with least-square estimates",
+      "If set to yes, Ipopt ignores the user provided point and solves a "
+      "least square problem for the primal variables (x and s), to fit the "
+      "linearize equality and inequality constraints.  This might be useful "
+      "if the user doesn't know anything about the starting point, or for "
+      "solving an LP or QP.");
+    reg_options->AddStringOption2(
+      "least_square_init_duals",
+      "Least square initialization of all dual variables", "no",
+      "no", "use bound_mult_init_val and least-square equality constraint multipliers",
+      "yes", "overwrite user-provided point wiht least-square estimates",
+      "If set to yes, Ipopt tries to compute least-square multipliers "
+      "(considering ALL dual variables).  If successful, the bound "
+      "multipliers are possibly corrected to be at least bound_mult_init_val. "
+      "This might be useful"
+      "if the user doesn't know anything about the starting point, or for "
+      "solving an LP or QP.");
     reg_options->SetRegisteringCategory("Warm Start");
     reg_options->AddStringOption2(
       "warm_start_init_point",
@@ -102,6 +125,16 @@ namespace Ipopt
                             bound_mult_init_val_, prefix);
     options.GetBoolValue("warm_start_init_point",
                          warm_start_init_point_, prefix);
+    options.GetBoolValue("least_square_init_primal",
+                         least_square_init_primal_, prefix);
+    ASSERT_EXCEPTION(!least_square_init_primal_ || IsValid(aug_system_solver_),
+                     OPTION_INVALID,
+                     "The least_square_init_primal can only be chosen if the DefaultInitializer object has an AugSystemSolver.\n");
+    options.GetBoolValue("least_square_init_duals",
+                         least_square_init_duals_, prefix);
+    ASSERT_EXCEPTION(!least_square_init_duals_ || IsValid(aug_system_solver_),
+                     OPTION_INVALID,
+                     "The least_square_init_duals can only be chosen if the DefaultInitializer object has an AugSystemSolver.\n");
 
     bool retvalue = true;
     if (IsValid(eq_mult_calculator_)) {
@@ -143,10 +176,29 @@ namespace Ipopt
       return false;
     }
 
-    // get a container of the current point. We will modify parts of this
-    // IteratesVector to set the trial point.
+    // get a container of the current point. We will modify parts of
+    // this IteratesVector to set the trial point.
     SmartPtr<IteratesVector> iterates = IpData().curr()->MakeNewContainer();
-
+    if (least_square_init_primal_) {
+      // If least_square_init_primal, then we compute the least square x
+      // and s that satisfy the linearized constraints, and push it into
+      // bounds later.
+      SmartPtr<Vector> x_ls = iterates->x()->MakeNew();
+      SmartPtr<Vector> s_ls = iterates->s()->MakeNew();
+      bool retval =CalculateLeastSquarePrimals(*x_ls, *s_ls);
+      if (retval) {
+        Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                       "Least square intial values for x and s computed.\n");
+        x_ls->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "x_ls");
+        s_ls->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "s_ls");
+        iterates->Set_x(*x_ls);
+        iterates->Set_s(*s_ls);
+      }
+      else {
+        Jnlst().Printf(J_WARNING, J_INITIALIZATION,
+                       "Least square initialization of x and s failed!\n");
+      }
+    }
     DBG_PRINT_VECTOR(2, "curr_x", *iterates->x());
 
     // Now we compute the initial values that the algorithm is going to
@@ -191,15 +243,182 @@ namespace Ipopt
 
     IpData().set_trial(iterates);
 
-    /////////////////////////////////////////////////////////////////////
-    //           Initialize equality constraint multipliers            //
-    /////////////////////////////////////////////////////////////////////
+    bool call_least_square_mults = true;
+    if (least_square_init_duals_) {
+      // We try to compute a least square estimate of all multiplers,
+      // and if successful,we make sure they are sufficiently positive
+      SmartPtr<Vector> zL_new = IpData().trial()->z_L()->MakeNew();
+      SmartPtr<Vector> zU_new = IpData().trial()->z_U()->MakeNew();
+      SmartPtr<Vector> vL_new = IpData().trial()->v_L()->MakeNew();
+      SmartPtr<Vector> vU_new = IpData().trial()->v_U()->MakeNew();
+      SmartPtr<Vector> yc_new = IpData().trial()->y_c()->MakeNew();
+      SmartPtr<Vector> yd_new = IpData().trial()->y_d()->MakeNew();
+      bool retval = CalculateLeastSquareDuals(*zL_new, *zU_new, *vL_new,
+                                              *vU_new, *yc_new, *yd_new);
+      if (retval) {
+        // z_L etc are still at bound_mult_init_val_
+        zL_new->ElementWiseMax(*IpData().trial()->z_L());
+        zU_new->ElementWiseMax(*IpData().trial()->z_U());
+        vL_new->ElementWiseMax(*IpData().trial()->v_L());
+        vU_new->ElementWiseMax(*IpData().trial()->v_U());
+        iterates = IpData().trial()->MakeNewContainer();
+        iterates->Set_z_L(*zL_new);
+        iterates->Set_z_U(*zU_new);
+        iterates->Set_v_L(*vL_new);
+        iterates->Set_v_U(*vU_new);
+        iterates->Set_y_c(*yc_new);
+        iterates->Set_y_d(*yd_new);
+        IpData().set_trial(iterates);
 
-    least_square_mults(Jnlst(), IpNLP(), IpData(), IpCq(),
-                       eq_mult_calculator_, constr_mult_init_max_);
+        Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                       "Least square intial values for z_L, z_U,v_L, v_U, y_c, y_d computed.\n");
+        zL_new->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "zL_new");
+        zU_new->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "zU_new");
+        vL_new->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "vL_new");
+        vU_new->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "vU_new");
+        yc_new->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "yc_new");
+        yd_new->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "yd_new");
+        call_least_square_mults = false;
+      }
+      else {
+        Jnlst().Printf(J_WARNING, J_INITIALIZATION,
+                       "Least square initialization of z_L, z_U,v_L, v_U, y_c, y_d failed!\n");
+      }
+    }
+    if (call_least_square_mults) {
+      /////////////////////////////////////////////////////////////////////
+      //           Initialize equality constraint multipliers            //
+      /////////////////////////////////////////////////////////////////////
+
+      least_square_mults(Jnlst(), IpNLP(), IpData(), IpCq(),
+                         eq_mult_calculator_, constr_mult_init_max_);
+    }
 
     // upgrade the trial to the current point
     IpData().AcceptTrialPoint();
+
+    return true;
+  }
+
+  bool
+  DefaultIterateInitializer::CalculateLeastSquarePrimals(Vector& x_ls, Vector& s_ls)
+  {
+    DBG_START_METH("DefaultIterateInitializer::CalculateLeastSquarePrimals",
+                   dbg_verbosity);
+    SmartPtr<const SymMatrix> zeroW = IpNLP().uninitialized_h();
+    DBG_PRINT_MATRIX(2, "zeroW", *zeroW);
+    SmartPtr<const Matrix> J_c = IpCq().curr_jac_c();
+    SmartPtr<const Matrix> J_d = IpCq().curr_jac_d();
+
+    // Compute the right hand side
+    SmartPtr<Vector> rhs_x = x_ls.MakeNew();
+    rhs_x->Set(0.);
+    SmartPtr<Vector> rhs_s = s_ls.MakeNew();
+    rhs_s->Set(0.);
+
+    SmartPtr<const Vector> rhs_c = IpCq().curr_c();
+    SmartPtr<const Vector> rhs_d = IpCq().curr_d();
+
+    SmartPtr<Vector> sol_c = rhs_c->MakeNew();
+    SmartPtr<Vector> sol_d = rhs_d->MakeNew();
+
+    DBG_PRINT_VECTOR(2, "rhs_x", *rhs_x);
+    DBG_PRINT_VECTOR(2, "rhs_s", *rhs_s);
+    DBG_PRINT_VECTOR(2, "rhs_c", *rhs_c);
+    DBG_PRINT_VECTOR(2, "rhs_d", *rhs_d);
+
+    enum ESymSolverStatus retval;
+    Index numberOfEVals=rhs_c->Dim()+rhs_d->Dim();
+    retval = aug_system_solver_->Solve(GetRawPtr(zeroW), 0.0, NULL, 1.0, NULL,
+                                       1.0, GetRawPtr(J_c), NULL, 0.,
+                                       GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s,
+                                       *rhs_c, *rhs_d, x_ls, s_ls, *sol_c, *sol_d,
+                                       true, numberOfEVals);
+    if (retval!=SYMSOLVER_SUCCESS) {
+      return false;
+    }
+    x_ls.Scal(-1.);
+    s_ls.Scal(-1.);
+
+    DBG_PRINT_VECTOR(2, "sol_x", x_ls);
+    DBG_PRINT_VECTOR(2, "sol_s", s_ls);
+    DBG_PRINT_VECTOR(2, "sol_c", *sol_c);
+    DBG_PRINT_VECTOR(2, "sol_d", *sol_d);
+
+    return true;
+  }
+
+  bool
+  DefaultIterateInitializer::
+  CalculateLeastSquareDuals(Vector& zL_new, Vector& zU_new,
+                            Vector& vL_new, Vector& vU_new,
+                            Vector& yc_new, Vector& yd_new)
+  {
+    DBG_START_METH("DefaultIterateInitializer::CalculateLeastSquarePrimals",
+                   dbg_verbosity);
+
+    SmartPtr<const SymMatrix> zeroW = IpNLP().uninitialized_h();
+    DBG_PRINT_MATRIX(2, "zeroW", *zeroW);
+    SmartPtr<const Matrix> J_c = IpCq().curr_jac_c();
+    SmartPtr<const Matrix> J_d = IpCq().curr_jac_d();
+
+    // Compute the entries in Hessian diagonals
+    SmartPtr<Vector> Dx = IpData().trial()->x()->MakeNew();
+    SmartPtr<Vector> tmp = IpNLP().x_L()->MakeNew();
+    tmp->Set(-1.);
+    IpNLP().Px_L()->MultVector(1., *tmp, 0., *Dx);
+    tmp = IpNLP().x_U()->MakeNew();
+    tmp->Set(-1.);
+    IpNLP().Px_U()->MultVector(1., *tmp, 1., *Dx);
+    SmartPtr<Vector> Ds = IpData().trial()->s()->MakeNew();
+    tmp = IpNLP().d_L()->MakeNew();
+    tmp->Set(-1.);
+    IpNLP().Pd_L()->MultVector(1., *tmp, 0., *Ds);
+    tmp = IpNLP().d_U()->MakeNew();
+    tmp->Set(-1.);
+    IpNLP().Pd_U()->MultVector(1., *tmp, 1., *Ds);
+
+    // Get the right hand side
+    SmartPtr<const Vector> rhs_x = IpCq().trial_grad_f();
+    SmartPtr<Vector> rhs_s = Ds->MakeNew();
+    rhs_s->Set(0.);
+    SmartPtr<Vector> rhs_c = yc_new.MakeNew();
+    rhs_c->Set(0.);
+    SmartPtr<Vector> rhs_d = yd_new.MakeNew();
+    rhs_d->Set(0.);
+
+    // Space for the solution
+    SmartPtr<Vector> sol_x = rhs_x->MakeNew();
+    SmartPtr<Vector> sol_s = rhs_s->MakeNew();
+
+    DBG_PRINT_VECTOR(2, "rhs_x", *rhs_x);
+    DBG_PRINT_VECTOR(2, "rhs_s", *rhs_s);
+    DBG_PRINT_VECTOR(2, "rhs_c", *rhs_c);
+    DBG_PRINT_VECTOR(2, "rhs_d", *rhs_d);
+
+    enum ESymSolverStatus retval;
+    Index numberOfEVals=rhs_x->Dim()+rhs_s->Dim();
+    retval =
+      aug_system_solver_->Solve(GetRawPtr(zeroW), 0.0, GetRawPtr(Dx), 0.0, GetRawPtr(Ds),
+                                0.0, GetRawPtr(J_c), NULL, 0.,
+                                GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s,
+                                *rhs_c, *rhs_d, *sol_x, *sol_s,
+                                yc_new, yd_new, true, numberOfEVals);
+    if (retval!=SYMSOLVER_SUCCESS) {
+      return false;
+    }
+    DBG_PRINT_VECTOR(2, "sol_x", *sol_x);
+    DBG_PRINT_VECTOR(2, "sol_s", *sol_s);
+    DBG_PRINT_VECTOR(2, "sol_c", yc_new);
+    DBG_PRINT_VECTOR(2, "sol_d", yd_new);
+
+    // Get the output right
+    yc_new.Scal(-1.0);
+    yd_new.Scal(-1.0);
+    IpNLP().Px_L()->TransMultVector(-1., *sol_x, 0., zL_new);
+    IpNLP().Px_U()->TransMultVector(1., *sol_x, 0., zU_new);
+    IpNLP().Pd_L()->TransMultVector(-1., *sol_s, 0., vL_new);
+    IpNLP().Pd_U()->TransMultVector(1., *sol_s, 0., vU_new);
 
     return true;
   }

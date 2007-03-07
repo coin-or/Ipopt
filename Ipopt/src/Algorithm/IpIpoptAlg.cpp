@@ -166,10 +166,7 @@ namespace Ipopt
       new_options->SetNumericValueIfUnset("bound_mult_init_val", 10.);
       new_options->SetNumericValueIfUnset("constr_mult_init_max", 0.);
       new_options->SetStringValueIfUnset("alpha_for_y", "bound_mult");
-
-
-      new_options->PrintList(string_option);
-      printf("%s",string_option.c_str());
+      new_options->SetStringValueIfUnset("least_square_init_primal", "yes");
 
       my_options = ConstPtr(new_options);
     }
