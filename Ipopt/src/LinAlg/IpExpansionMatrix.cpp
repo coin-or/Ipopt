@@ -52,14 +52,28 @@ namespace Ipopt
       Number* yvals=dense_y->Values();
       if (dense_x->IsHomogeneous()) {
         Number val = alpha * dense_x->Scalar();
-        for(Index i=0; i<NCols(); i++) {
-          yvals[exp_pos[i]] += val;
+        if (val != 0.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[exp_pos[i]] += val;
+          }
         }
       }
       else {
         const Number* xvals=dense_x->Values();
-        for(Index i=0; i<NCols(); i++) {
-          yvals[exp_pos[i]] += alpha * xvals[i];
+        if (alpha == 1.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[exp_pos[i]] += xvals[i];
+          }
+        }
+        else if (alpha == -1.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[exp_pos[i]] -= xvals[i];
+          }
+        }
+        else {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[exp_pos[i]] += alpha * xvals[i];
+          }
         }
       }
     }
@@ -92,14 +106,28 @@ namespace Ipopt
       Number* yvals=dense_y->Values();
       if (dense_x->IsHomogeneous()) {
         Number val = alpha * dense_x->Scalar();
-        for(Index i=0; i<NCols(); i++) {
-          yvals[i] += val;
+        if (val != 0.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[i] += val;
+          }
         }
       }
       else {
         const Number* xvals=dense_x->Values();
-        for(Index i=0; i<NCols(); i++) {
-          yvals[i] += alpha * xvals[exp_pos[i]];
+        if (alpha == 1.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[i] += xvals[exp_pos[i]];
+          }
+        }
+        else if (alpha == -1.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[i] -= xvals[exp_pos[i]];
+          }
+        }
+        else {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[i] += alpha * xvals[exp_pos[i]];
+          }
         }
       }
     }
@@ -136,8 +164,10 @@ namespace Ipopt
 
     if (dense_Z->IsHomogeneous()) {
       Number val = alpha*dense_Z->Scalar();
-      for(Index i=0; i<NCols(); i++) {
-        vals_X[exp_pos[i]] += val/vals_S[i];
+      if (val != 0.) {
+        for(Index i=0; i<NCols(); i++) {
+          vals_X[exp_pos[i]] += val/vals_S[i];
+        }
       }
     }
     else {
