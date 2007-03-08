@@ -435,7 +435,17 @@ AC_ARG_WITH([mumps-dir],
             [use_mumps="$withval"], [use_mumps=no])
 
 if test "$use_mumps" != "no"; then
-  mumps_dir="$use_mumps"
+  if test -d $use_mumps; then :; else
+    AC_MSG_ERROR([User provided MUMPS directory $use_mumps does not exist.])
+  fi
+  mumps_dir=`cd $use_mumps; pwd`
+
+  # library extension
+  case "$CC" in
+    cl* | */cl* | CL* | */CL*)
+         libe=lib ;;
+      *) libe=a ;;
+  esac
 
   AC_LANG_PUSH(C)
   AC_CHECK_LIB([pthread],[pthread_create],[LIBS="-lpthread $LIBS"; ADDLIBS="-lpthread $ADDLIBS"],[])
@@ -447,8 +457,8 @@ if test "$use_mumps" != "no"; then
                 [AC_MSG_ERROR([I cannot find headers for MUMPS])])
   CPPFLAGS="$CPPFLAGS -I$mumps_dir/libseq -I$mumps_dir/include"
 
-  LIBS="-L$mumps_dir/lib -ldmumps -lpord -L$mumps_dir/libseq -lmpiseq $LIBS"
-  ADDLIBS="-L$mumps_dir/lib -ldmumps -lpord -L$mumps_dir/libseq -lmpiseq $ADDLIBS"
+  LIBS="$mumps_dir/lib/libdmumps.$libe $mumps_dir/lib/libpord.$libe $mumps_dir/libseq/libmpiseq.$libe $LIBS"
+  ADDLIBS="$mumps_dir/lib/libdmumps.$libe $mumps_dir/lib/libpord.$libe $mumps_dir/libseq/libmpiseq.$libe $ADDLIBS"
   # Check if MUMPS actually works
   AC_LANG_PUSH(C)
   save_LIBS="$LIBS"
