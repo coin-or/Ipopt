@@ -1507,10 +1507,9 @@ namespace Ipopt
     Number* g_u = new Number[n_full_g_];
     tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
     for (Index i=0; i<n_full_g_; i++) {
-      //printf("%d %23.16e %23.16e %23.16e\n",i,full_g_[i], g_l[i], g_u[i]);
       max_viol = Max(max_viol, full_g_[i]-g_u[i], g_l[i]-full_g_[i]);
     }
-    jnlst_->Printf(J_SUMMARY, J_INITIALIZATION,
+    jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
                    "Constraint violation for all real constraints is %e\n", max_viol);
     delete [] x_l;
     delete [] x_u;

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -206,6 +206,12 @@ namespace Ipopt
      *  found.  Returns true, if the result was found. */
     bool InvalidateResult(const std::vector<const TaggedObject*>& dependents,
                           const std::vector<Number>& scalar_dependents);
+
+    /** Invalidates all cached results */
+    void Clear();
+
+    /** Invalidate all cached results and changes max_cache_size */
+    void Clear(Int max_cache_size);
 
   private:
     /**@name Default Compiler Generated Methods
@@ -688,7 +694,8 @@ namespace Ipopt
 
     bool retValue = false;
     typename std::list< DependentResult<T>* >::const_iterator iter;
-    for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
+    for (iter = cached_results_->begin(); iter != cached_results_->end();
+         iter++) {
       if ((*iter)->DependentsIdentical(dependents, scalar_dependents)) {
         (*iter)->Invalidate();
         retValue = true;
@@ -697,6 +704,28 @@ namespace Ipopt
     }
 
     return retValue;
+  }
+
+  template <class T>
+  void CachedResults<T>::Clear()
+  {
+    if (!cached_results_)
+      return;
+
+    typename std::list< DependentResult<T>* >::const_iterator iter;
+    for (iter = cached_results_->begin(); iter != cached_results_->end();
+         iter++) {
+      (*iter)->Invalidate();
+    }
+
+    CleanupInvalidatedResults();
+  }
+
+  template <class T>
+  void CachedResults<T>::Clear(Int max_cache_size)
+  {
+    Clear();
+    max_cache_size_ = max_cache_size;
   }
 
   template <class T>
