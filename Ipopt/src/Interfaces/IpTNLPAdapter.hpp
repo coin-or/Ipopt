@@ -153,7 +153,8 @@ namespace Ipopt
     /** Enum for treatment of fixed variables option */
     enum FixedVariableTreatmentEnum {
       MAKE_PARAMETER=0,
-      MAKE_CONSTRAINT
+      MAKE_CONSTRAINT,
+      RELAX_BOUNDS
     };
 
     /** Enum for specifying which derivative test is to be performed. */
@@ -228,6 +229,8 @@ namespace Ipopt
     Number nlp_upper_bound_inf_;
     /** Flag indicating how fixed variables should be handled */
     FixedVariableTreatmentEnum fixed_variable_treatment_;
+    /* Determines relaxation of fixing bound for RELAX_BOUNDS. */
+    Number bound_relax_factor_;
     /* Maximal slack for one-sidedly bounded variables.  If a
      *  variable has only one bound, say a lower bound xL, then an
      *  upper bound xL + max_onesided_bound_slack_.  If this value is
@@ -257,6 +260,9 @@ namespace Ipopt
 
     /** Pivot tolerance for MA28 for check for dependent constraints */
     Number ma28_pivtol_;
+
+    /** Overall convergence tolerance */
+    Number tol_;
     //@}
 
     /**@name Problem Size Data */

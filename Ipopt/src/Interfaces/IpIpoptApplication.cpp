@@ -751,6 +751,11 @@ namespace Ipopt
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Invalid option encountered.\n");
       retValue = Invalid_Option;
     }
+    catch(NO_FREE_VARIABLES_BUT_FEASIBLE& exc) {
+      exc.ReportException(*jnlst_, J_MOREDETAILED);
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Optimal Solution Found\n");
+      retValue = Solve_Succeeded;
+    }
     catch(IpoptException& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Some uncaught Ipopt exception encountered.\n");
