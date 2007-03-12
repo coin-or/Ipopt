@@ -200,7 +200,9 @@ namespace Ipopt
     virtual void finalize_solution(SolverReturn status,
                                    Index n, const Number* x, const Number* z_L, const Number* z_U,
                                    Index m, const Number* g, const Number* lambda,
-                                   Number obj_value)=0;
+                                   Number obj_value,
+                                   const IpoptData* ip_data,
+                                   IpoptCalculatedQuantities* ip_cq)=0;
 
     /** Intermediate Callback method for the user.  Providing dummy
      *  default implementation.  For details see IntermediateCallBack

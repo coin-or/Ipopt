@@ -734,7 +734,9 @@ namespace Ipopt
                                  *p2ip_cq->curr_c(), *p2ip_cq->curr_d(),
                                  *p2ip_data->curr()->y_c(),
                                  *p2ip_data->curr()->y_d(),
-                                 p2ip_cq->curr_f());
+                                 p2ip_cq->curr_f(),
+                                 p2ip_data,
+                                 p2ip_cq);
 
       if (status!=INVALID_NUMBER_DETECTED) {
         // Create a SolveStatistics object

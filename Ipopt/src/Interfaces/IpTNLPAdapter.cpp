@@ -503,7 +503,7 @@ namespace Ipopt
         tnlp_->finalize_solution(status,
                                  n_full_x_, full_x_, full_z_L, full_z_U,
                                  n_full_g_, full_g_, full_lambda,
-                                 obj_value);
+                                 obj_value, NULL, NULL);
         delete [] full_z_L;
         delete [] full_z_U;
         delete [] full_lambda;
@@ -1445,7 +1445,9 @@ namespace Ipopt
                                      const Vector& x, const Vector& z_L, const Vector& z_U,
                                      const Vector& c, const Vector& d,
                                      const Vector& y_c, const Vector& y_d,
-                                     Number obj_value)
+                                     Number obj_value,
+                                     const IpoptData* ip_data,
+                                     IpoptCalculatedQuantities* ip_cq)
   {
     DBG_START_METH("TNLPAdapter::FinalizeSolution", dbg_verbosity);
 
@@ -1490,7 +1492,7 @@ namespace Ipopt
     tnlp_->finalize_solution(status,
                              n_full_x_, full_x_, full_z_L, full_z_U,
                              n_full_g_, full_g, full_lambda_,
-                             obj_value);
+                             obj_value, ip_data, ip_cq);
 
     delete [] full_z_L;
     full_z_L = NULL;

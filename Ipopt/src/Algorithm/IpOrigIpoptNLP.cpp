@@ -753,7 +753,9 @@ namespace Ipopt
                                       const Vector& x, const Vector& z_L, const Vector& z_U,
                                       const Vector& c, const Vector& d,
                                       const Vector& y_c, const Vector& y_d,
-                                      Number obj_value)
+                                      Number obj_value,
+                                      const IpoptData* ip_data,
+                                      IpoptCalculatedQuantities* ip_cq)
   {
     DBG_START_METH("OrigIpoptNLP::FinalizeSolution", dbg_verbosity);
     // need to submit the unscaled solution back to the nlp
@@ -827,7 +829,7 @@ namespace Ipopt
                            *unscaled_z_L, *unscaled_z_U,
                            *unscaled_c, *unscaled_d,
                            *unscaled_y_c, *unscaled_y_d,
-                           unscaled_obj);
+                           unscaled_obj, ip_data, ip_cq);
   }
 
   bool OrigIpoptNLP::IntermediateCallBack(AlgorithmMode mode,
