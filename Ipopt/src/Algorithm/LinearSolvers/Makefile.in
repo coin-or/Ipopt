@@ -63,10 +63,10 @@ host_triplet = @host@
 @HAVE_MA28_TRUE@am__append_7 = \
 @HAVE_MA28_TRUE@	IpMa28Partition.f
 
-@HAVE_MUMPS_TRUE@am__append_8 = \
-@HAVE_MUMPS_TRUE@	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+@COIN_HAS_MUMPS_TRUE@am__append_8 = \
+@COIN_HAS_MUMPS_TRUE@	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 
-@HAVE_MUMPS_TRUE@am__append_9 = $(MUMPS_INCFLAGS)
+@COIN_HAS_MUMPS_TRUE@am__append_9 = $(MUMPS_INCFLAGS)
 subdir = src/Algorithm/LinearSolvers
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -99,7 +99,7 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 @HAVE_TAUCS_TRUE@am__objects_5 = IpTAUCSSolverInterface.lo
 @HAVE_WSMP_TRUE@am__objects_6 = IpWsmpSolverInterface.lo
 @HAVE_MA28_TRUE@am__objects_7 = IpMa28Partition.lo
-@HAVE_MUMPS_TRUE@am__objects_8 = IpMumpsSolverInterface.lo
+@COIN_HAS_MUMPS_TRUE@am__objects_8 = IpMumpsSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpTripletToCSRConverter.lo IpTSymLinearSolver.lo \
 	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
@@ -170,6 +170,8 @@ COIN_BUILD_BLAS_FALSE = @COIN_BUILD_BLAS_FALSE@
 COIN_BUILD_BLAS_TRUE = @COIN_BUILD_BLAS_TRUE@
 COIN_BUILD_LAPACK_FALSE = @COIN_BUILD_LAPACK_FALSE@
 COIN_BUILD_LAPACK_TRUE = @COIN_BUILD_LAPACK_TRUE@
+COIN_BUILD_MUMPS_FALSE = @COIN_BUILD_MUMPS_FALSE@
+COIN_BUILD_MUMPS_TRUE = @COIN_BUILD_MUMPS_TRUE@
 COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
 COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
 COIN_HAS_BLAS_FALSE = @COIN_HAS_BLAS_FALSE@
@@ -178,6 +180,8 @@ COIN_HAS_IPOPT_FALSE = @COIN_HAS_IPOPT_FALSE@
 COIN_HAS_IPOPT_TRUE = @COIN_HAS_IPOPT_TRUE@
 COIN_HAS_LAPACK_FALSE = @COIN_HAS_LAPACK_FALSE@
 COIN_HAS_LAPACK_TRUE = @COIN_HAS_LAPACK_TRUE@
+COIN_HAS_MUMPS_FALSE = @COIN_HAS_MUMPS_FALSE@
+COIN_HAS_MUMPS_TRUE = @COIN_HAS_MUMPS_TRUE@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -213,8 +217,6 @@ HAVE_MA57_FALSE = @HAVE_MA57_FALSE@
 HAVE_MA57_TRUE = @HAVE_MA57_TRUE@
 HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
 HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
-HAVE_MUMPS_FALSE = @HAVE_MUMPS_FALSE@
-HAVE_MUMPS_TRUE = @HAVE_MUMPS_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
@@ -244,6 +246,7 @@ MAKEINFO = @MAKEINFO@
 MPICC = @MPICC@
 MPICXX = @MPICXX@
 MPIF77 = @MPIF77@
+MUMPS_INCFLAGS = @MUMPS_INCFLAGS@
 OBJEXT = @OBJEXT@
 OPT_CFLAGS = @OPT_CFLAGS@
 OPT_CXXFLAGS = @OPT_CXXFLAGS@
@@ -354,7 +357,7 @@ ASTYLE_FILES = \
 	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak \
 	IpWsmpSolverInterface.cppbak IpWsmpSolverInterface.hppbak
 
-CLEANFILES = $(ASTYLE_FILES)
+DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
 all: all-am
 
@@ -554,10 +557,10 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"

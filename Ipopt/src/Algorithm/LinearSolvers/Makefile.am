@@ -62,7 +62,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
 
-if HAVE_MUMPS
+if COIN_HAS_MUMPS
 liblinsolvers_la_SOURCES += \
 	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 AM_CPPFLAGS += $(MUMPS_INCFLAGS)
@@ -104,7 +104,7 @@ ASTYLE_FILES = \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_FILES)
+DISTCLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 

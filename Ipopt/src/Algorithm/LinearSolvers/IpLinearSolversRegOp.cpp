@@ -17,7 +17,7 @@
 #ifdef HAVE_MA57
 # include "IpMa57TSolverInterface.hpp"
 #endif
-#ifdef HAVE_MUMPS
+#ifdef COIN_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
 #ifdef HAVE_PARDISO
@@ -46,7 +46,7 @@ namespace Ipopt
     Ma57TSolverInterface::RegisterOptions(roptions);
 #endif
 
-#ifdef HAVE_MUMPS
+#ifdef COIN_HAS_MUMPS
 
     roptions->SetRegisteringCategory("Mumps Linear Solver");
     MumpsSolverInterface::RegisterOptions(roptions);
