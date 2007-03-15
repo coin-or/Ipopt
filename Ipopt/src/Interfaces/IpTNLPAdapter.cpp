@@ -369,6 +369,7 @@ namespace Ipopt
             THROW_EXCEPTION(INVALID_TNLP, string);
           }
           else {
+	    x_not_fixed_map[n_x_var] = i;
             if (lower_bound > nlp_lower_bound_inf_) {
               x_l_map[n_x_l] = n_x_var;
               n_x_l++;
