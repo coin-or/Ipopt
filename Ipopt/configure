@@ -29509,10 +29509,11 @@ fi
     coin_need_flibs=yes
   fi
 else
-  SAVE_LIBS="$LIBS"
-  LIBS="$use_hsl $LIBS $FLIBS"
-  ADDLIBS="$use_hsl $ADDLIBS"
-  echo "$as_me:$LINENO: checking for ma27ad in $use_hsl" >&5
+  if test "$use_hsl" != no; then
+    SAVE_LIBS="$LIBS"
+    LIBS="$use_hsl $LIBS $FLIBS"
+    ADDLIBS="$use_hsl $ADDLIBS"
+    echo "$as_me:$LINENO: checking for ma27ad in $use_hsl" >&5
 echo $ECHO_N "checking for ma27ad in $use_hsl... $ECHO_C" >&6
           use_MA27=
           ac_ext=f
@@ -29595,10 +29596,10 @@ echo "${ECHO_T}no" >&6; use_MA27=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-  if test "$use_MA27" = "yes"; then
-    echo "$as_me:$LINENO: checking whether MA27 is threadsafe" >&5
+    if test "$use_MA27" = "yes"; then
+      echo "$as_me:$LINENO: checking whether MA27 is threadsafe" >&5
 echo $ECHO_N "checking whether MA27 is threadsafe... $ECHO_C" >&6
-    ac_ext=f
+      ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_f77_compiler_gnu
@@ -29617,7 +29618,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-    cat >conftest.$ac_ext <<_ACEOF
+      cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -29670,14 +29671,14 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-		 { { echo "$as_me:$LINENO: error: Please obtain the threadsafe (newer) version of MA27" >&5
+  		 { { echo "$as_me:$LINENO: error: Please obtain the threadsafe (newer) version of MA27" >&5
 echo "$as_me: error: Please obtain the threadsafe (newer) version of MA27" >&2;}
    { (exit 1); exit 1; }; }
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-  fi
-  echo "$as_me:$LINENO: checking for mc19ad in $use_hsl" >&5
+    fi
+    echo "$as_me:$LINENO: checking for mc19ad in $use_hsl" >&5
 echo $ECHO_N "checking for mc19ad in $use_hsl... $ECHO_C" >&6
           use_MC19=
           ac_ext=f
@@ -29760,7 +29761,7 @@ echo "${ECHO_T}no" >&6; use_MC19=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-  echo "$as_me:$LINENO: checking for ma57ad in $use_hsl" >&5
+    echo "$as_me:$LINENO: checking for ma57ad in $use_hsl" >&5
 echo $ECHO_N "checking for ma57ad in $use_hsl... $ECHO_C" >&6
           use_MA57=
           ac_ext=f
@@ -29843,7 +29844,7 @@ echo "${ECHO_T}no" >&6; use_MA57=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-  echo "$as_me:$LINENO: checking for ma28ad in $use_hsl" >&5
+    echo "$as_me:$LINENO: checking for ma28ad in $use_hsl" >&5
 echo $ECHO_N "checking for ma28ad in $use_hsl... $ECHO_C" >&6
           use_MA28=
           ac_ext=f
@@ -29926,7 +29927,8 @@ echo "${ECHO_T}no" >&6; use_MA28=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-  LIBS="$use_hsl $SAVE_LIBS"
+    LIBS="$use_hsl $SAVE_LIBS"
+  fi
 fi
 
 ###########
@@ -29947,7 +29949,7 @@ else
   use_pardiso=no
 fi;
 
-if test ! "$use_pardiso" = "no"; then
+if test "$use_pardiso" != "no"; then
   LIBS="$use_pardiso $LIBS"
   ADDLIBS="$use_pardiso $ADDLIBS"
 

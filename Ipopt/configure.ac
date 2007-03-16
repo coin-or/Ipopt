@@ -355,22 +355,24 @@ if test "$use_hsl" = BUILD; then
     coin_need_flibs=yes
   fi
 else
-  SAVE_LIBS="$LIBS"
-  LIBS="$use_hsl $LIBS $FLIBS"
-  ADDLIBS="$use_hsl $ADDLIBS"
-  MY_CHECK_HSL([ma27ad],[MA27])
-  if test "$use_MA27" = "yes"; then
-    AC_MSG_CHECKING([whether MA27 is threadsafe])
-    AC_F77_FUNC(ma27ud, cfunc)
-    AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc],
-                [AC_MSG_RESULT(yes)],
-                [AC_MSG_RESULT(no)
-		 AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
+  if test "$use_hsl" != no; then
+    SAVE_LIBS="$LIBS"
+    LIBS="$use_hsl $LIBS $FLIBS"
+    ADDLIBS="$use_hsl $ADDLIBS"
+    MY_CHECK_HSL([ma27ad],[MA27])
+    if test "$use_MA27" = "yes"; then
+      AC_MSG_CHECKING([whether MA27 is threadsafe])
+      AC_F77_FUNC(ma27ud, cfunc)
+      AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc],
+                  [AC_MSG_RESULT(yes)],
+                  [AC_MSG_RESULT(no)
+  		 AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
+    fi
+    MY_CHECK_HSL([mc19ad],[MC19])
+    MY_CHECK_HSL([ma57ad],[MA57])
+    MY_CHECK_HSL([ma28ad],[MA28])
+    LIBS="$use_hsl $SAVE_LIBS"
   fi
-  MY_CHECK_HSL([mc19ad],[MC19])
-  MY_CHECK_HSL([ma57ad],[MA57])
-  MY_CHECK_HSL([ma28ad],[MA28])
-  LIBS="$use_hsl $SAVE_LIBS"
 fi
 
 ###########
@@ -383,7 +385,7 @@ AC_ARG_WITH([pardiso],
                            [specify Pardiso library]),
             [use_pardiso=$withval], [use_pardiso=no])
 
-if test ! "$use_pardiso" = "no"; then
+if test "$use_pardiso" != "no"; then
   LIBS="$use_pardiso $LIBS"
   ADDLIBS="$use_pardiso $ADDLIBS"
 

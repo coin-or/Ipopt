@@ -1821,9 +1821,9 @@ case $build in
 	       comps="gcc cl"
 	     fi ;;
   sparc-sun-solaris*)
-  	     comps="cc xlc icc gcc pgcc icc" ;;
-  *-linux-*) comps="xlc icc gcc cc pgcc icc" ;;
-  *)         comps="xlc_r xlc icc cc gcc pgcc icc" ;;
+  	     comps="cc xlc gcc pgcc icc" ;;
+  *-linux-*) comps="xlc gcc cc pgcc icc" ;;
+  *)         comps="xlc_r xlc cc gcc pgcc icc" ;;
 esac
 
 # We delete the cached value, since the test might not have been
@@ -3007,9 +3007,9 @@ case $build in
 	       comps="g++ cl"
 	     fi ;;
   sparc-sun-solaris*)
-  	     comps="CC xlC aCC icpc g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
+  	     comps="CC xlC aCC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
   *-darwin*) comps="g++ c++ CC" ;;
-          *) comps="xlC aCC CC icpc g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
+          *) comps="xlC aCC CC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
 esac
 
 # We delete the cached value, since the test might not have been
@@ -3824,11 +3824,11 @@ case $build in
      if test "$enable_doscompile" = msvc ; then
        coin_f77_comps="ifort fl32"
      else
-       coin_f77_comps="ifort gfortran g77 fl32"
+       coin_f77_comps="gfortran ifort g77 fl32"
      fi ;;
   sparc-sun-solaris*)
      coin_f77_comps="f95 f90 f77 xlf fort77 gfortran g77 pgf90 pgf77 ifort ifc frt af77" ;;
-  *) coin_f77_comps="xlf fort77 ifort ifc gfortran f77 g77 pgf90 pgf77 frt af77" ;;
+  *) coin_f77_comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc frt af77" ;;
  esac
 
 
