@@ -30123,6 +30123,8 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+  save_LIBS="$LIBS"
+  LIBS="$LIBS $FLIBS"
   echo "$as_me:$LINENO: checking for pthread_create in -lpthread" >&5
 echo $ECHO_N "checking for pthread_create in -lpthread... $ECHO_C" >&6
 if test "${ac_cv_lib_pthread_pthread_create+set}" = set; then
@@ -30196,7 +30198,9 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_pthread_pthread_create" >&5
 echo "${ECHO_T}$ac_cv_lib_pthread_pthread_create" >&6
 if test $ac_cv_lib_pthread_pthread_create = yes; then
-  LIBS="-lpthread $LIBS"; ADDLIBS="-lpthread $ADDLIBS"
+  LIBS="-lpthread $save_LIBS"; ADDLIBS="-lpthread $ADDLIBS"
+else
+  LIBS="$save_LIBS"
 fi
 
   ac_ext=cc
@@ -30328,6 +30332,8 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+      save_LIBS="$LIBS"
+      LIBS="$LIBS $FLIBS"
       echo "$as_me:$LINENO: checking for pthread_create in -lpthread" >&5
 echo $ECHO_N "checking for pthread_create in -lpthread... $ECHO_C" >&6
 if test "${ac_cv_lib_pthread_pthread_create+set}" = set; then
@@ -30401,7 +30407,9 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_pthread_pthread_create" >&5
 echo "${ECHO_T}$ac_cv_lib_pthread_pthread_create" >&6
 if test $ac_cv_lib_pthread_pthread_create = yes; then
-  LIBS="-lpthread $LIBS"; ADDLIBS="-lpthread $ADDLIBS"
+  LIBS="-lpthread $save_LIBS"; ADDLIBS="-lpthread $ADDLIBS"
+else
+  LIBS="save_LIBS"
 fi
 
       ac_ext=cc
