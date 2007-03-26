@@ -3824,7 +3824,7 @@ case $build in
      if test "$enable_doscompile" = msvc ; then
        coin_f77_comps="ifort fl32"
      else
-       coin_f77_comps="gfortran ifort g77 fl32"
+       coin_f77_comps="gfortran g77 ifort fl32"
      fi ;;
   sparc-sun-solaris*)
      coin_f77_comps="f95 f90 f77 xlf fort77 gfortran g77 pgf90 pgf77 ifort ifc frt af77" ;;
@@ -20772,7 +20772,7 @@ if test $coin_skip = yes; then
   echo "$as_me:$LINENO: result: skipping" >&5
 echo "${ECHO_T}skipping" >&6
 else
-  coin_tmp=`echo $srcdir/ThirdParty/Mumps/MUMPS_4.6.4/src/dmumps_part1.F`
+  coin_tmp=`echo $srcdir/ThirdParty/Mumps/MUMPS/src/dmumps_part1.F`
   # There is probably a more elegant way to get the first thing out here...
   for i in $coin_tmp; do
     coin_tmp2=$i
