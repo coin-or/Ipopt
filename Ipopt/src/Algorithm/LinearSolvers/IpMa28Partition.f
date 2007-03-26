@@ -123,7 +123,7 @@ C                            Local varibales
 C-------------------------------------------------------------------------------
 C
       integer LIRN, LICN, p_a, p_icn, p_ikeep
-      integer i, k, ii, l, j, iflag, nind
+      integer i, k, ii, l, j, iflag, nind, nsize
       integer p_iwend, p_rwend, p_irn, p_iw, p_w
 C
 C*******************************************************************************
@@ -145,6 +145,9 @@ C
       ABORT1 = .true.
       ABORT2 = .true.
 
+C     Allow for more constraints than variables
+      nsize = MAX(N, M)
+
       goto (10, 100) TASK+1
 
 C     Wrong argument for TASK
@@ -158,11 +161,11 @@ C-------------------------------------------------------------------------------
 
 C     Determine storage space
       LRW = LICN
-      LIW = LICN + 5*N
+      LIW = LICN + 5*nsize
 
 C     TASK = 1
-      LIW = LIW + LIRN + 8*N
-      LRW = LRW + N
+      LIW = LIW + LIRN + 8*nsize
+      LRW = LRW + nsize
 
 C-------------------------------------------------------------------------------
 C     End:   Compute work space requirement
@@ -179,13 +182,13 @@ C     Get work space pointers
 C
       p_icn   = p_iwend
       p_ikeep = p_icn   + LICN
-      p_irn   = p_ikeep + 5*N
+      p_irn   = p_ikeep + 5*nsize
       p_iw    = p_irn   + LIRN
-      p_iwend = p_iw    + 8*N
+      p_iwend = p_iw    + 8*nsize
 
       p_a     = p_rwend
       p_w     = p_a     + LICN
-      p_rwend = p_w     + N
+      p_rwend = p_w     + nsize
 
       if( p_rwend.gt.LRW ) then
          IERR = 98
@@ -208,7 +211,7 @@ C
       ABORT1 = .false.
       ABORT2 = .false.
 
-      call MA28AD(N, NZ, RW(p_a+1), LICN, IW(p_irn+1), LIRN,
+      call MA28AD(nsize, NZ, RW(p_a+1), LICN, IW(p_irn+1), LIRN,
      1            IW(p_icn+1), PIVTOL, IW(p_ikeep+1), IW(p_iw+1),
      1            RW(p_w+1), iflag)
       if( iflag.lt.0 ) then
