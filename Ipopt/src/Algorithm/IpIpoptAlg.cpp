@@ -352,6 +352,14 @@ namespace Ipopt
       OutputIteration();
       IpData().TimingStats().OutputIteration().End();
 
+      if (conv_status == ConvergenceCheck::CONVERGED ||
+          conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT) {
+        if (IpCq().IsSquareProblem()) {
+          // make the sure multipliers are computed properly
+          ComputeFeasibilityMultipliers();
+        }
+      }
+
       IpData().TimingStats().OverallAlgorithm().End();
 
       if (conv_status == ConvergenceCheck::CONVERGED) {
@@ -379,6 +387,10 @@ namespace Ipopt
     catch(ACCEPTABLE_POINT_REACHED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
+      if (IpCq().IsSquareProblem()) {
+        // make the sure multipliers are computed properly
+        ComputeFeasibilityMultipliers();
+      }
       IpData().TimingStats().OverallAlgorithm().End();
       return STOP_AT_ACCEPTABLE_POINT;
     }
@@ -428,6 +440,10 @@ namespace Ipopt
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
+      if (IpCq().IsSquareProblem()) {
+        // make the sure multipliers are computed properly
+        ComputeFeasibilityMultipliers();
+      }
       IpData().TimingStats().OverallAlgorithm().End();
       return SUCCESS;
     }
@@ -819,6 +835,52 @@ namespace Ipopt
     Jnlst().Printf(J_SUMMARY, J_STATISTICS,
                    "        inequality constraints with only upper bounds: %8d\n\n",
                    ns_only_upper);
+  }
+
+  void IpoptAlgorithm::ComputeFeasibilityMultipliers()
+  {
+    DBG_START_METH("IpoptAlgorithm::ComputeFeasibilityMultipliers",
+                   dbg_verbosity);
+    DBG_ASSERT(IpCq().IsSquareProblem());
+
+    // if we don't have an object for computing least square
+    // multipliers we don't compute them
+    if (IsNull(eq_multiplier_calculator_)) {
+      Jnlst().Printf(J_WARNING, J_SOLUTION,
+                     "This is a square problem, but multipliers cannot be recomputed at solution, since no eq_mult_calculator object is available in IpoptAlgorithm\n");
+      return;
+    }
+
+    SmartPtr<IteratesVector> iterates = IpData().curr()->MakeNewContainer();
+    SmartPtr<Vector> tmp = iterates->z_L()->MakeNew();
+    tmp->Set(0.);
+    iterates->Set_z_L(*tmp);
+    tmp = iterates->z_U()->MakeNew();
+    tmp->Set(0.);
+    iterates->Set_z_U(*tmp);
+    tmp = iterates->v_L()->MakeNew();
+    tmp->Set(0.);
+    iterates->Set_v_L(*tmp);
+    tmp = iterates->v_U()->MakeNew();
+    tmp->Set(0.);
+    iterates->Set_v_U(*tmp);
+    SmartPtr<Vector> y_c = iterates->y_c()->MakeNew();
+    SmartPtr<Vector> y_d = iterates->y_d()->MakeNew();
+    IpData().set_trial(iterates);
+    IpData().AcceptTrialPoint();
+    bool retval = eq_multiplier_calculator_->CalculateMultipliers(*y_c, *y_d);
+    if (retval) {
+      //Check if following line is really necessary
+      iterates = IpData().curr()->MakeNewContainer();
+      iterates->Set_y_c(*y_c);
+      iterates->Set_y_d(*y_d);
+      IpData().set_trial(iterates);
+      IpData().AcceptTrialPoint();
+    }
+    else {
+      Jnlst().Printf(J_WARNING, J_SOLUTION,
+                     "Cannot recompute multipliers for feasibility problem.  Error in eq_mult_calculator\n");
+    }
   }
 
   void IpoptAlgorithm::calc_number_of_bounds(

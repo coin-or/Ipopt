@@ -265,8 +265,11 @@ namespace Ipopt
                                       scaled_jac_c_space_, scaled_jac_d_space_,
                                       scaled_h_space_);
 
-      ASSERT_EXCEPTION(x_space_->Dim() >= c_space_->Dim(), TOO_FEW_DOF,
-                       "Too few degrees of freedom!");
+      if (x_space_->Dim() < c_space_->Dim()) {
+        char msg[128];
+        sprintf(msg,"Too few degrees of freedom: %d equality constriants but only %d variables", c_space_->Dim(), x_space_->Dim());
+        THROW_EXCEPTION(TOO_FEW_DOF, msg);
+      }
       ASSERT_EXCEPTION(x_space_->Dim() > 0, TOO_FEW_DOF,
                        "Too few degrees of freedom (no free variables)!");
 
