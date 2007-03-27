@@ -437,107 +437,142 @@ namespace Ipopt
   {
     DBG_START_FUN("DefaultIterateInitializer::push_variables",
                   dbg_verbosity);
-    // Calculate any required shift in x0 and s0
-    const double dbl_min = std::numeric_limits<double>::min();
-    const double tiny_double = 100.0*dbl_min;
 
-    SmartPtr<Vector> tmp = orig_x.MakeNew();
-    SmartPtr<Vector> tmp_l = x_L.MakeNew();
-    SmartPtr<Vector> tmp_u = x_U.MakeNew();
-    SmartPtr<Vector> tiny_l = x_L.MakeNew();
-    tiny_l->Set(tiny_double);
+    SmartPtr<const Vector> my_orig_x = &orig_x;
+    // ToDo: Make this more efficient...?
 
-    // Calculate p_l
-    SmartPtr<Vector> q_l = x_L.MakeNew();
-    SmartPtr<Vector> p_l = x_L.MakeNew();
+    // To avoid round-off error, move variables first at the bounds
+    if (bound_push>0. || bound_frac>0.) {
+      push_variables(jnlst, 0., 0., name, orig_x, new_x, x_L, x_U, Px_L, Px_U);
+      my_orig_x = new_x;
+    }
 
-    DBG_PRINT_VECTOR(2,"orig_x", orig_x);
+    DBG_PRINT_VECTOR(2,"orig_x", *my_orig_x);
     DBG_PRINT_MATRIX(2,"Px_L", Px_L);
     DBG_PRINT_VECTOR(2, "x_L", x_L);
     DBG_PRINT_MATRIX(2,"Px_U", Px_U);
     DBG_PRINT_VECTOR(2, "x_U", x_U);
 
-    Px_L.MultVector(1.0, x_L, 0.0, *tmp);
-    Px_U.TransMultVector(1.0, *tmp, 0.0, *tmp_u);
-    tmp_u->AddOneVector(1., x_U, -1.);
-    Px_U.MultVector(1.0, *tmp_u, 0.0, *tmp);
-    Px_L.TransMultVector(1.0, *tmp, 0.0, *q_l);
-    q_l->AddOneVector(-1.0, *tiny_l, bound_frac);
-    DBG_PRINT_VECTOR(2, "q_l", *q_l);
-    // At this point, q_l is
-    // bound_frac * Px_L^T Px_U(x_U - Px_U^T Px_L x_L)  -  tiny_double
-    // i.e., it is bound_frac*(x_U - x_L) for those components that have
-    //          two bounds
-    //       and - tiny_double for those that have only one or no bounds
+    SmartPtr<Vector> tmp_l = x_L.MakeNew();
+    SmartPtr<Vector> tmp_u = x_U.MakeNew();
 
-    tmp_l->Set(bound_push);
-    p_l->AddOneVector(bound_push, x_L, 0.);
-    p_l->ElementWiseAbs();
-    p_l->ElementWiseMax(*tmp_l);
-    // now p_l is bound_push * max(|x_L|,1)
+    const double dbl_min = std::numeric_limits<double>::min();
+    const double tiny_double = 100.0*dbl_min;
 
-    q_l->ElementWiseReciprocal();
-    p_l->ElementWiseReciprocal();
+    // Calculate any required shift in x0 and s0
+    SmartPtr<Vector> tmp = my_orig_x->MakeNew();
+    SmartPtr<Vector> tiny_l = x_L.MakeNew();
+    tiny_l->Set(tiny_double);
 
-    p_l->ElementWiseMax(*q_l);
-    p_l->ElementWiseReciprocal();
-    //    p_l->Axpy(1.0, *tiny_l);  we shouldn't need this
-
-    // At this point, p_l is
-    //  min(bound_push * max(|x_L|,1), bound_frac*(x_U-x_L)  for components
-    //                                                       with two bounds
-    //  bound_push * max(|x_L|,1)                            otherwise
-    // This is the margin we want to the lower bound
-    DBG_PRINT_VECTOR(1, "p_l", *p_l);
-
-    // Calculate p_u
-    SmartPtr<Vector> q_u = x_U.MakeNew();
-    SmartPtr<Vector> p_u = x_U.MakeNew();
-    SmartPtr<Vector> tiny_u = x_U.MakeNew();
-    tiny_u->Set(tiny_double);
-
-    Px_U.MultVector(1.0, x_U, 0.0, *tmp);
-    Px_L.TransMultVector(1.0, *tmp, 0.0, *tmp_l);
-    tmp_l->Axpy(-1.0, x_L);
-    Px_L.MultVector(1.0, *tmp_l, 0.0, *tmp);
-    Px_U.TransMultVector(1.0, *tmp, 0.0, *q_u);
-    q_u->AddOneVector(-1.0, *tiny_u, bound_frac);
-    DBG_PRINT_VECTOR(2,"q_u",*q_u);
-    // q_u is now the same as q_l above, but of the same dimension as x_L
-
-    tmp_u->Set(bound_push);
-    p_u->Copy(x_U);
-    p_u->AddOneVector(bound_push, x_U, 0.);
-    p_u->ElementWiseAbs();
-    p_u->ElementWiseMax(*tmp_u);
-    DBG_PRINT_VECTOR(2,"p_u",*p_u);
-
-    q_u->ElementWiseReciprocal();
-    p_u->ElementWiseReciprocal();
-
-    p_u->ElementWiseMax(*q_u);
-    p_u->ElementWiseReciprocal();
-    p_u->Axpy(1.0, *tiny_u);
-    // At this point, p_l is
-    //  min(bound_push * max(|x_U|,1), bound_frac*(x_U-x_L)  for components
-    //                                                       with two bounds
-    //  bound_push * max(|x_U|,1)                            otherwise
-    // This is the margin we want to the upper bound
-    DBG_PRINT_VECTOR(2,"actual_p_u",*p_u);
-
-    // Calculate the new x
-    SmartPtr<Vector> delta_x = orig_x.MakeNew();
+    SmartPtr<Vector> q_l = x_L.MakeNew();
+    SmartPtr<Vector> p_l = x_L.MakeNew();
+    SmartPtr<Vector> delta_x = my_orig_x->MakeNew();
 
     SmartPtr<Vector> zero_l = x_L.MakeNew();
     zero_l->Set(0.0);
     SmartPtr<Vector> zero_u = x_U.MakeNew();
     zero_u->Set(0.0);
 
-    Px_L.TransMultVector(-1.0, orig_x, 0.0, *tmp_l);
-    tmp_l->AddTwoVectors(1.0, x_L, 1.0, *p_l, 1.);
-    tmp_l->ElementWiseMax(*zero_l);
-    // tmp_l is now max(x_L + p_l - x, 0), i.e., the amount by how
-    // much need to correct the variable
+    if (bound_frac>0.) {
+      DBG_ASSERT(bound_push>0.);
+
+      // Calculate p_l
+      Px_L.MultVector(1.0, x_L, 0.0, *tmp);
+      Px_U.TransMultVector(1.0, *tmp, 0.0, *tmp_u);
+      tmp_u->AddOneVector(1., x_U, -1.);
+      Px_U.MultVector(1.0, *tmp_u, 0.0, *tmp);
+      Px_L.TransMultVector(1.0, *tmp, 0.0, *q_l);
+      q_l->AddOneVector(-1.0, *tiny_l, bound_frac);
+      DBG_PRINT_VECTOR(2, "q_l", *q_l);
+      // At this point, q_l is
+      // bound_frac * Px_L^T Px_U(x_U - Px_U^T Px_L x_L)  -  tiny_double
+      // i.e., it is bound_frac*(x_U - x_L) for those components that have
+      //          two bounds
+      //       and - tiny_double for those that have only one or no bounds
+
+      tmp_l->Set(bound_push);
+      p_l->AddOneVector(bound_push, x_L, 0.);
+      p_l->ElementWiseAbs();
+      p_l->ElementWiseMax(*tmp_l);
+      // now p_l is bound_push * max(|x_L|,1)
+
+      q_l->ElementWiseReciprocal();
+      p_l->ElementWiseReciprocal();
+
+      p_l->ElementWiseMax(*q_l);
+      p_l->ElementWiseReciprocal();
+      //    p_l->Axpy(1.0, *tiny_l);  we shouldn't need this
+
+      // At this point, p_l is
+      //  min(bound_push * max(|x_L|,1), bound_frac*(x_U-x_L)  for components
+      //                                                       with two bounds
+      //  bound_push * max(|x_L|,1)                            otherwise
+      // This is the margin we want to the lower bound
+      DBG_PRINT_VECTOR(1, "p_l", *p_l);
+
+      // Calculate p_u
+      SmartPtr<Vector> q_u = x_U.MakeNew();
+      SmartPtr<Vector> p_u = x_U.MakeNew();
+      SmartPtr<Vector> tiny_u = x_U.MakeNew();
+      tiny_u->Set(tiny_double);
+
+      Px_U.MultVector(1.0, x_U, 0.0, *tmp);
+      Px_L.TransMultVector(1.0, *tmp, 0.0, *tmp_l);
+      tmp_l->Axpy(-1.0, x_L);
+      Px_L.MultVector(1.0, *tmp_l, 0.0, *tmp);
+      Px_U.TransMultVector(1.0, *tmp, 0.0, *q_u);
+      q_u->AddOneVector(-1.0, *tiny_u, bound_frac);
+      DBG_PRINT_VECTOR(2,"q_u",*q_u);
+      // q_u is now the same as q_l above, but of the same dimension as x_L
+
+      tmp_u->Set(bound_push);
+      p_u->Copy(x_U);
+      p_u->AddOneVector(bound_push, x_U, 0.);
+      p_u->ElementWiseAbs();
+      p_u->ElementWiseMax(*tmp_u);
+      DBG_PRINT_VECTOR(2,"p_u",*p_u);
+
+      q_u->ElementWiseReciprocal();
+      p_u->ElementWiseReciprocal();
+
+      p_u->ElementWiseMax(*q_u);
+      p_u->ElementWiseReciprocal();
+      p_u->Axpy(1.0, *tiny_u);
+      // At this point, p_l is
+      //  min(bound_push * max(|x_U|,1), bound_frac*(x_U-x_L)  for components
+      //                                                       with two bounds
+      //  bound_push * max(|x_U|,1)                            otherwise
+      // This is the margin we want to the upper bound
+      DBG_PRINT_VECTOR(2,"actual_p_u",*p_u);
+
+      // Calculate the new x
+
+      Px_L.TransMultVector(-1.0, *my_orig_x, 0.0, *tmp_l);
+      DBG_PRINT_VECTOR(1, "tmp_l1", *tmp_l);
+      tmp_l->AddTwoVectors(1.0, x_L, 1.0, *p_l, 1.);
+      tmp_l->ElementWiseMax(*zero_l);
+      DBG_PRINT_VECTOR(1, "tmp_l2", *tmp_l);
+      // tmp_l is now max(x_L + p_l - x, 0), i.e., the amount by how
+      // much need to correct the variable
+
+      Px_U.TransMultVector(1.0, *my_orig_x, 0.0, *tmp_u);
+      tmp_u->AddTwoVectors(-1.0, x_U, 1.0, *p_u, 1.);
+      tmp_u->ElementWiseMax(*zero_u);
+      // tmp_u is now max(x - (x_U-p_u), 0), i.e., the amount by how
+      // much need to correct the variable
+    }
+    else {
+      DBG_ASSERT(bound_push == 0.);
+      tmp_l = x_L.MakeNewCopy();
+      Px_L.TransMultVector(-1.0, *my_orig_x, 1.0, *tmp_l);
+      tmp_l->ElementWiseMax(*zero_l);
+      DBG_PRINT_VECTOR(1, "tmp_l3", *tmp_l);
+
+      tmp_u = x_U.MakeNewCopy();
+      Px_U.TransMultVector(1.0, *my_orig_x, -1.0, *tmp_u);
+      tmp_u->ElementWiseMax(*zero_u);
+    }
+
     Number nrm_l = tmp_l->Amax();
     if (nrm_l>0.) {
       Px_L.MultVector(1.0, *tmp_l, 0.0, *delta_x);
@@ -545,27 +580,27 @@ namespace Ipopt
     else {
       delta_x->Set(0.);
     }
-
-    Px_U.TransMultVector(1.0, orig_x, 0.0, *tmp_u);
-    tmp_u->AddTwoVectors(-1.0, x_U, 1.0, *p_u, 1.);
-    tmp_u->ElementWiseMax(*zero_u);
-    // tmp_u is now max(x - (x_U-p_u), 0), i.e., the amount by how
-    // much need to correct the variable
     Number nrm_u = tmp_u->Amax();
     if (nrm_u>0.) {
       Px_U.MultVector(-1.0, *tmp_u, 1.0, *delta_x);
     }
 
     if (nrm_l > 0 || nrm_u > 0) {
-      delta_x->Axpy(1.0, orig_x);
+      delta_x->Axpy(1.0, *my_orig_x);
       new_x = ConstPtr(delta_x);
-      jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of %s sufficiently inside the bounds.\n", name.c_str());
-      orig_x.Print(jnlst, J_VECTOR, J_INITIALIZATION, "original vars");
-      new_x->Print(jnlst, J_VECTOR, J_INITIALIZATION, "new vars");
+      if (bound_push > 0.) {
+        jnlst.Printf(J_DETAILED, J_INITIALIZATION,
+                     "Moved initial values of %s sufficiently inside the bounds.\n", name.c_str());
+        my_orig_x->Print(jnlst, J_VECTOR, J_INITIALIZATION, "original vars");
+        new_x->Print(jnlst, J_VECTOR, J_INITIALIZATION, "new vars");
+      }
     }
     else {
-      new_x = &orig_x;
-      jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Initial values of %s sufficiently inside the bounds.\n", name.c_str());
+      new_x = my_orig_x;
+      if (bound_push > 0.) {
+        jnlst.Printf(J_DETAILED, J_INITIALIZATION,
+                     "Initial values of %s sufficiently inside the bounds.\n", name.c_str());
+      }
     }
   }
 

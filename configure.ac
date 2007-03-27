@@ -1,4 +1,4 @@
-# Copyright (C) 2006 International Business Machines.
+# Copyright (C) 2007 International Business Machines.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -15,7 +15,7 @@ AC_PREREQ(2.59)
 AC_INIT([Ipopt],[3.2.3dev],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT([
-Copyright 2006 International Business Machines and others.
+Copyright 2006, 2007 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package Coin which is distributed
 under the Common Public License.])
@@ -46,6 +46,7 @@ AC_COIN_THIRDPARTY_SUBDIRS([Blas],[ThirdParty/Blas],[daxpy.f])
 AC_COIN_THIRDPARTY_SUBDIRS([Lapack],[ThirdParty/Lapack],[LAPACK/SRC/dlarf.f])
 AC_COIN_THIRDPARTY_SUBDIRS([HSL],[ThirdParty/HSL],[*.f])
 AC_COIN_THIRDPARTY_SUBDIRS([ASL],[ThirdParty/ASL],[solvers/asl.h])
+AC_COIN_THIRDPARTY_SUBDIRS([Mumps],[ThirdParty/Mumps],[MUMPS/src/dmumps_part1.F])
 
 #############################################################################
 #                  Check which subprojects are there                        #

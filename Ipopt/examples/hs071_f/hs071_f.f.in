@@ -1,4 +1,4 @@
-C Copyright (C) 2002, 2006 Carnegie Mellon University and others.
+C Copyright (C) 2002, 2007 Carnegie Mellon University and others.
 C All Rights Reserved.
 C This code is published under the Common Public License.
 C
@@ -7,7 +7,7 @@ C
 C =============================================================================
 C
 C     This is an example for the usage of IPOPT.
-C     It implements problem 71 from the Hock-Schittkowsky test suite:
+C     It implements problem 71 from the Hock-Schittkowski test suite:
 C
 C     min   x1*x4*(x1 + x2 + x3)  +  x3
 C     s.t.  x1*x2*x3*x4                   >=  25

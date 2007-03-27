@@ -1104,6 +1104,13 @@ namespace Ipopt
     if (max_step_s > tiny_step_tol_)
       return false;
 
+    // make sure that the infeasibility is not large - in that case we
+    // might be at a starting point that is already a local minimizer
+    // of the constraint violation
+    const Number cviol = IpCq().curr_constraint_violation();
+    if (cviol > 1e-4) // ToDo: adapt parameter?
+      return false;
+
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "Tiny step of relative size %e detected.\n",
                    Max(max_step_x, max_step_s));

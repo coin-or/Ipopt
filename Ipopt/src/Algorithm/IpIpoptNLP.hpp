@@ -210,7 +210,9 @@ namespace Ipopt
                                   const Vector& x, const Vector& z_L, const Vector& z_U,
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,
-                                  Number obj_value)=0;
+                                  Number obj_value,
+                                  const IpoptData* ip_data,
+                                  IpoptCalculatedQuantities* ip_cq)=0;
 
     virtual bool IntermediateCallBack(AlgorithmMode mode,
                                       Index iter, Number obj_value,

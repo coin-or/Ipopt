@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -237,7 +237,9 @@ namespace Ipopt
                           const Vector& x, const Vector& z_L, const Vector& z_U,
                           const Vector& c, const Vector& d,
                           const Vector& y_c, const Vector& y_d,
-                          Number obj_value);
+                          Number obj_value,
+                          const IpoptData* ip_data,
+                          IpoptCalculatedQuantities* ip_cq);
     bool IntermediateCallBack(AlgorithmMode mode,
                               Index iter, Number obj_value,
                               Number inf_pr, Number inf_du,
@@ -397,6 +399,14 @@ namespace Ipopt
     /** Flag indicating whether it is desired to check if there are
      *  Nan or Inf entries in first and second derivative matrices. */
     bool check_derivatives_for_naninf_;
+    /** Flag indicating if we need to ask for equality constraint
+     *  Jacobians only once */
+    bool jac_c_constant_;
+    /** Flag indicating if we need to ask for inequality constraint
+     *  Jacobians only once */
+    bool jac_d_constant_;
+    /** Flag indicating if we need to ask for Hessian only once */
+    bool hessian_constant_;
     //@}
 
     /** @name Counters for the function evaluations */

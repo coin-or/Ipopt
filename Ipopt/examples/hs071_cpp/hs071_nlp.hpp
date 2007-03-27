@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -15,7 +15,7 @@ using namespace Ipopt;
 
 /** C++ Example NLP for interfacing a problem with IPOPT.
  *  HS071_NLP implements a C++ example of problem 71 of the
- *  Hock-Schittkowsky test suite. This example is designed to go
+ *  Hock-Schittkowski test suite. This example is designed to go
  *  along with the tutorial document and show how to interface
  *  with IPOPT through the TNLP interface. 
  *
@@ -93,7 +93,9 @@ public:
   virtual void finalize_solution(SolverReturn status,
                                  Index n, const Number* x, const Number* z_L, const Number* z_U,
                                  Index m, const Number* g, const Number* lambda,
-                                 Number obj_value);
+                                 Number obj_value,
+				 const IpoptData* ip_data,
+				 IpoptCalculatedQuantities* ip_cq);
   //@}
 
 private:

@@ -177,11 +177,11 @@ namespace Ipopt
       TripletHelper::FillValuesFromVector(n_x, *rhs_xV[irhs],
                                           &rhssol[irhs*dim]);
       TripletHelper::FillValuesFromVector(n_c, *rhs_cV[irhs],
-                                          &rhssol[irhs*dim+n_x+n_d]);
-      TripletHelper::FillValuesFromVector(n_d, *rhs_dV[irhs],
-                                          &rhssol[irhs*dim+n_x+n_d+n_c]);
-      TripletHelper::FillValuesFromVector(n_d, *rhs_sV[irhs],
                                           &rhssol[irhs*dim+n_x]);
+      TripletHelper::FillValuesFromVector(n_d, *rhs_dV[irhs],
+                                          &rhssol[irhs*dim+n_x+n_c]);
+      TripletHelper::FillValuesFromVector(n_d, *rhs_sV[irhs],
+                                          &rhssol[irhs*dim+n_x+n_c+n_d]);
     }
 
     bool done = false;
@@ -212,11 +212,11 @@ namespace Ipopt
       for (Index irhs=0; irhs<nrhs; irhs++) {
         TripletHelper::PutValuesInVector(n_x, &rhssol[irhs*dim],
                                          *sol_xV[irhs]);
-        TripletHelper::PutValuesInVector(n_c, &rhssol[irhs*dim+n_x+n_d],
+        TripletHelper::PutValuesInVector(n_c, &rhssol[irhs*dim+n_x],
                                          *sol_cV[irhs]);
-        TripletHelper::PutValuesInVector(n_d, &rhssol[irhs*dim+n_x+n_d+n_c],
+        TripletHelper::PutValuesInVector(n_d, &rhssol[irhs*dim+n_x+n_c],
                                          *sol_dV[irhs]);
-        TripletHelper::PutValuesInVector(n_d, &rhssol[irhs*dim+n_x],
+        TripletHelper::PutValuesInVector(n_d, &rhssol[irhs*dim+n_x+n_c+n_d],
                                          *sol_sV[irhs]);
       }
     }

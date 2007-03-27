@@ -74,8 +74,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../Interfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/LinearSolvers`
 
-if HAVE_MUMPS
-AM_CPPFLAGS += $(MUMPS_INCFLAGS)
+if COIN_HAS_MUMPS
+  AM_CPPFLAGS += $(MUMPS_INCFLAGS)
 endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
@@ -141,7 +141,7 @@ ASTYLE_FILES = \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_FILES)
+DISTCLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 

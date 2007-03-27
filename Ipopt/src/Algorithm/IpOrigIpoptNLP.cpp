@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -32,13 +32,6 @@ namespace Ipopt
       d_cache_(1),
       jac_d_cache_(1),
       h_cache_(1),
-      f_evals_(0),
-      grad_f_evals_(0),
-      c_evals_(0),
-      jac_c_evals_(0),
-      d_evals_(0),
-      jac_d_evals_(0),
-      h_evals_(0),
       initialized_(false)
   {}
 
@@ -87,6 +80,33 @@ namespace Ipopt
       "detected in the constraint Jacobians or the Lagrangian Hessian.  If "
       "this is not activated, the test is skipped, and the algorithm might "
       "proceed with invalid numbers and fail.");
+    roptions->AddStringOption2(
+      "jac_c_constant",
+      "Indicates whether all equality constraints are linear",
+      "no",
+      "no", "Don't assume that all equality constraints are linear",
+      "yes", "Assume that equality constraints Jacobian are constant",
+      "Activating this option will cause Ipopt to ask for the Jacobian of the "
+      "equality constraints only once from the NLP and reuse this information "
+      "later.");
+    roptions->AddStringOption2(
+      "jac_d_constant",
+      "Indicates whether all inequality constraints are linear",
+      "no",
+      "no", "Don't assume that all inequality constraints are linear",
+      "yes", "Assume that equality constraints Jacobian are constant",
+      "Activating this option will cause Ipopt to ask for the Jacobian of the "
+      "inequality constraints only once from the NLP and reuse this information "
+      "later.");
+    roptions->AddStringOption2(
+      "hessian_constant",
+      "Indicates whether the problem is a quadratic problem",
+      "no",
+      "no", "Assume that Hessian changes",
+      "yes", "Assume that Hessian is constant",
+      "Activating this option will cause Ipopt to ask for the Hessian of the "
+      "Lagrangian function only once from the NLP and reuse this information "
+      "later.");
     roptions->SetRegisteringCategory("Hessian Approximation");
     roptions->AddStringOption2(
       "hessian_approximation",
@@ -121,6 +141,10 @@ namespace Ipopt
     options.GetEnumValue("hessian_approximation_space", enum_int, prefix);
     hessian_approximation_space_ = HessianApproximationSpace(enum_int);
 
+    options.GetBoolValue("jac_c_constant", jac_c_constant_, prefix);
+    options.GetBoolValue("jac_d_constant", jac_d_constant_, prefix);
+    options.GetBoolValue("hessian_constant", hessian_constant_, prefix);
+
     // Reset the function evaluation counters (for warm start)
     f_evals_=0;
     grad_f_evals_=0;
@@ -130,9 +154,27 @@ namespace Ipopt
     jac_d_evals_=0;
     h_evals_=0;
 
+    if (!warm_start_same_structure_) {
+      // Reset all caches.
+      grad_f_cache_.Clear();
+      c_cache_.Clear();
+      jac_c_cache_.Clear();
+      d_cache_.Clear();
+      jac_d_cache_.Clear();
+      // If the hessian is constant, we want two hessians to be
+      // cached, one for regular iterations and one for restoration
+      // phase
+      if (hessian_constant_)
+        h_cache_.Clear(2);
+      else
+        h_cache_.Clear(1);
+    }
+
     // Reset the cache entries belonging to a dummy dependency.  This
     // is required for repeated solve, since the cache is not updated
-    // if a dimension is zero
+    // if a dimension is zero.  It is also required if we choose
+    // jac_[cd]_constant and hessian_constant differently between
+    // runs
     std::vector<const TaggedObject*> deps(1);
     deps[0] = NULL;
     std::vector<Number> sdeps(0);
@@ -140,6 +182,7 @@ namespace Ipopt
     d_cache_.InvalidateResult(deps, sdeps);
     jac_c_cache_.InvalidateResult(deps, sdeps);
     jac_d_cache_.InvalidateResult(deps, sdeps);
+    h_cache_.InvalidateResult(deps, sdeps);
 
     if (!nlp_->ProcessOptions(options, prefix)) {
       return false;
@@ -222,8 +265,11 @@ namespace Ipopt
                                       scaled_jac_c_space_, scaled_jac_d_space_,
                                       scaled_h_space_);
 
-      ASSERT_EXCEPTION(x_space_->Dim() >= c_space_->Dim(), TOO_FEW_DOF,
-                       "Too few degrees of freedom!");
+      if (x_space_->Dim() < c_space_->Dim()) {
+        char msg[128];
+        sprintf(msg,"Too few degrees of freedom: %d equality constriants but only %d variables", c_space_->Dim(), x_space_->Dim());
+        THROW_EXCEPTION(TOO_FEW_DOF, msg);
+      }
       ASSERT_EXCEPTION(x_space_->Dim() > 0, TOO_FEW_DOF,
                        "Too few degrees of freedom (no free variables)!");
 
@@ -535,7 +581,11 @@ namespace Ipopt
       }
     }
     else {
-      if (!jac_c_cache_.GetCachedResult1Dep(retValue, x)) {
+      SmartPtr<const Vector> dep = NULL;
+      if (!jac_c_constant_) {
+        dep = &x;
+      }
+      if (!jac_c_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
         jac_c_evals_++;
         SmartPtr<Matrix> unscaled_jac_c = jac_c_space_->MakeNew();
 
@@ -552,7 +602,7 @@ namespace Ipopt
           }
         }
         retValue = NLP_scaling()->apply_jac_c_scaling(ConstPtr(unscaled_jac_c));
-        jac_c_cache_.AddCachedResult1Dep(retValue, x);
+        jac_c_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
       }
     }
 
@@ -573,7 +623,12 @@ namespace Ipopt
       }
     }
     else {
-      if (!jac_d_cache_.GetCachedResult1Dep(retValue, x)) {
+      SmartPtr<const Vector> dep = NULL;
+      if (!jac_d_constant_) {
+        dep = &x;
+      }
+
+      if (!jac_d_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
         jac_d_evals_++;
         SmartPtr<Matrix> unscaled_jac_d = jac_d_space_->MakeNew();
 
@@ -583,7 +638,7 @@ namespace Ipopt
         jac_d_eval_time_.End();
         ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the inequality constraints");
         retValue = NLP_scaling()->apply_jac_d_scaling(ConstPtr(unscaled_jac_d));
-        jac_d_cache_.AddCachedResult1Dep(retValue, x);
+        jac_d_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
       }
     }
 
@@ -600,15 +655,23 @@ namespace Ipopt
       const Vector& yc,
       const Vector& yd)
   {
+    SmartPtr<SymMatrix> unscaled_h;
+    SmartPtr<const SymMatrix> retValue;
+
     std::vector<const TaggedObject*> deps(3);
-    deps[0] = &x;
-    deps[1] = &yc;
-    deps[2] = &yd;
+    if (!hessian_constant_) {
+      deps[0] = &x;
+      deps[1] = &yc;
+      deps[2] = &yd;
+    }
+    else {
+      deps[0] = NULL;
+      deps[1] = NULL;
+      deps[2] = NULL;
+    }
     std::vector<Number> scalar_deps(1);
     scalar_deps[0] = obj_factor;
 
-    SmartPtr<SymMatrix> unscaled_h;
-    SmartPtr<const SymMatrix> retValue;
     if (!h_cache_.GetCachedResult(retValue, deps, scalar_deps)) {
       h_evals_++;
       unscaled_h = h_space_->MakeNewSymMatrix();
@@ -693,7 +756,9 @@ namespace Ipopt
                                       const Vector& x, const Vector& z_L, const Vector& z_U,
                                       const Vector& c, const Vector& d,
                                       const Vector& y_c, const Vector& y_d,
-                                      Number obj_value)
+                                      Number obj_value,
+                                      const IpoptData* ip_data,
+                                      IpoptCalculatedQuantities* ip_cq)
   {
     DBG_START_METH("OrigIpoptNLP::FinalizeSolution", dbg_verbosity);
     // need to submit the unscaled solution back to the nlp
@@ -767,7 +832,7 @@ namespace Ipopt
                            *unscaled_z_L, *unscaled_z_U,
                            *unscaled_c, *unscaled_d,
                            *unscaled_y_c, *unscaled_y_d,
-                           unscaled_obj);
+                           unscaled_obj, ip_data, ip_cq);
   }
 
   bool OrigIpoptNLP::IntermediateCallBack(AlgorithmMode mode,

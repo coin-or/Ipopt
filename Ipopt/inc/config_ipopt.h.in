@@ -12,6 +12,9 @@
 /* If defined, the LAPACK Library is available. */
 #undef COIN_HAS_LAPACK
 
+/* If defined, the MUMPS Library is available. */
+#undef COIN_HAS_MUMPS
+
 /* Define to the debug sanity check level (0 is no test) */
 #undef COIN_IPOPT_CHECKLEVEL
 
@@ -97,9 +100,6 @@
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
-
-/* Define to 1 if MUMPS is available */
-#undef HAVE_MUMPS
 
 /* Define to 1 if Pardiso is available */
 #undef HAVE_PARDISO
