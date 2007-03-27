@@ -130,10 +130,14 @@ namespace Ipopt
     /** @name Solution Reporting Methods */
     //@{
     virtual void FinalizeSolution(SolverReturn status,
-                                  const Vector& x, const Vector& z_L, const Vector& z_U,
+                                  const Vector& x,
+                                  const Vector& z_L, const Vector& z_U,
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,
-                                  Number obj_value);
+                                  Number obj_value,
+                                  const IpoptData* ip_data,
+                                  IpoptCalculatedQuantities* ip_cq);
+
     virtual bool IntermediateCallBack(AlgorithmMode mode,
                                       Index iter, Number obj_value,
                                       Number inf_pr, Number inf_du,
@@ -153,7 +157,8 @@ namespace Ipopt
     /** Enum for treatment of fixed variables option */
     enum FixedVariableTreatmentEnum {
       MAKE_PARAMETER=0,
-      MAKE_CONSTRAINT
+      MAKE_CONSTRAINT,
+      RELAX_BOUNDS
     };
 
     /** Enum for specifying which derivative test is to be performed. */
@@ -228,6 +233,8 @@ namespace Ipopt
     Number nlp_upper_bound_inf_;
     /** Flag indicating how fixed variables should be handled */
     FixedVariableTreatmentEnum fixed_variable_treatment_;
+    /* Determines relaxation of fixing bound for RELAX_BOUNDS. */
+    Number bound_relax_factor_;
     /* Maximal slack for one-sidedly bounded variables.  If a
      *  variable has only one bound, say a lower bound xL, then an
      *  upper bound xL + max_onesided_bound_slack_.  If this value is
@@ -257,6 +264,9 @@ namespace Ipopt
 
     /** Pivot tolerance for MA28 for check for dependent constraints */
     Number ma28_pivtol_;
+
+    /** Overall convergence tolerance */
+    Number tol_;
     //@}
 
     /**@name Problem Size Data */

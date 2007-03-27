@@ -87,18 +87,21 @@ namespace Ipopt
       "nlp_upper_bound_inf",
       "any bound greater or this value will be considered +inf (i.e. not upper bounded).",
       1e19);
-    roptions->AddStringOption2(
+    roptions->AddStringOption3(
       "fixed_variable_treatment",
       "Determines how fixed variables should be handled.",
       "make_parameter",
       "make_parameter", "Remove fixed variable from optimization variables",
       "make_constraint", "Add equality constraints fixing variables",
-      "The main difference between those two options is that the starting "
+      "relax_bounds", "Relax fixing bound constraints"
+      "The main difference between those options is that the starting "
       "point in the \"make_constraint\" case still has the fixed variables at "
-      "their given values, whereas in the other case the functions are always "
-      "evaluated with the fixed values for those variables.  Also, for "
-      "\"make_constraints\", bound multipliers are computed for the fixed "
-      "variables.");
+      "their given values, whereas in the case \"make_parameter\" the "
+      "functions are always evaluated with the fixed values for those "
+      "variables.  For Also, for \"relax_bounds\", the fixing bound "
+      "constraints are relaxed (according to\" bound_relax_factor\"). For "
+      "both \"make_constraints\" and \"relax_bounds\", bound multipliers are "
+      "computed for the fixed variables.");
     roptions->AddStringOption2(
       "check_for_dependent_constraints",
       "Indicates if Ipopt should check for linearly dependent equality constraints.",
@@ -166,6 +169,9 @@ namespace Ipopt
                      OPTION_INVALID,
                      "Option \"nlp_lower_bound_inf\" must be smaller than \"nlp_upper_bound_inf\".");
 
+    // Registered in IpOrigIpoptNLP
+    options.GetNumericValue("bound_relax_factor", bound_relax_factor_, prefix);
+
     Index enum_int;
     options.GetEnumValue("fixed_variable_treatment", enum_int, prefix);
     fixed_variable_treatment_ = FixedVariableTreatmentEnum(enum_int);
@@ -190,8 +196,9 @@ namespace Ipopt
     options.GetNumericValue("point_perturbation_radius",
                             point_perturbation_radius_, prefix);
 
-    options.GetNumericValue("ma28_pivtol",
-                            ma28_pivtol_, prefix);
+    options.GetNumericValue("ma28_pivtol", ma28_pivtol_, prefix);
+
+    options.GetNumericValue("tol", tol_, prefix);
 
     return true;
   }
@@ -234,13 +241,21 @@ namespace Ipopt
       // warm start, make sure we delete all previously allocated
       // memory
       delete [] full_x_;
+      full_x_ = NULL;
       delete [] full_lambda_;
+      full_lambda_ = NULL;
       delete [] full_g_;
+      full_g_ = NULL;
       delete [] jac_g_;
+      jac_g_ = NULL;
       delete [] c_rhs_;
+      c_rhs_ = NULL;
       delete [] jac_idx_map_;
+      jac_idx_map_ = NULL;
       delete [] h_idx_map_;
+      h_idx_map_ = NULL;
       delete [] x_fixed_map_;
+      x_fixed_map_ = NULL;
     }
 
     // Get the full dimensions of the problem
@@ -272,9 +287,6 @@ namespace Ipopt
       // allocate internal space to store the full jacobian
       jac_g_ = new Number[nz_full_jac_g_];
 
-      //*********************************************************
-      // Create the spaces and permutation spaces
-      //*********************************************************
       /* Spaces for x, x_L, and x_U. We need to remove the fixed variables
        * and find out which bounds do not exist. */
       Number* x_l = new Number[n_full_x_];
@@ -283,132 +295,244 @@ namespace Ipopt
       Number* g_u = new Number[n_full_g_];
       tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
 
-      Index n_x_var = 0;
-      Index n_x_l = 0;
-      Index n_x_u = 0;
+      //*********************************************************
+      // Create the spaces and permutation spaces
+      //*********************************************************
+
+      Index n_x_var;
+      Index n_x_l;
+      Index n_x_u;
       Index* x_not_fixed_map = new Index[n_full_x_];
-      Index* x_fixed_map_tmp = new Index[n_full_x_];
       Index* x_l_map = new Index[n_full_x_];
       Index* x_u_map = new Index[n_full_x_];
-      n_x_fixed_ = 0;
 
-      for (Index i=0; i<n_full_x_; i++) {
-        Number lower_bound = x_l[i];
-        Number upper_bound = x_u[i];
-        if (lower_bound == upper_bound) {
-          switch (fixed_variable_treatment_) {
-            case MAKE_PARAMETER:
-            // Variable is fixed, remove it from the problem
-            full_x_[i] = lower_bound;
-            x_fixed_map_tmp[n_x_fixed_] = i;
-            n_x_fixed_++;
-            break;
-            case MAKE_CONSTRAINT:
-            x_fixed_map_tmp[n_x_fixed_] = i; // don't really need this
-            // array then
-            n_x_fixed_++;
-            x_not_fixed_map[n_x_var] = i;
-            n_x_var++;
-            break;
-            default:
-            DBG_ASSERT(false && "invalid fixed_variable_treatment_");
-          }
-        }
-        else if (lower_bound > upper_bound) {
-          char string[128];
-          sprintf(string, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
-          delete [] x_l;
-          delete [] x_u;
-          delete [] g_l;
-          delete [] g_u;
-          delete [] x_not_fixed_map;
-          delete [] x_fixed_map_tmp;
-          delete [] x_l_map;
-          delete [] x_u_map;
-          THROW_EXCEPTION(INVALID_TNLP, string);
-        }
-        else {
-          x_not_fixed_map[n_x_var] = i;
-          if (lower_bound > nlp_lower_bound_inf_) {
-            x_l_map[n_x_l] = n_x_var;
-            n_x_l++;
-          }
-
-          if (upper_bound < nlp_upper_bound_inf_) {
-            x_u_map[n_x_u] = n_x_var;
-            n_x_u++;
-          }
-          n_x_var++;
-        }
-      }
-
-      // If there are fixed variables, we keep their position around
-      // for a possible warm start later or if fixed variables are
-      // treated by added equality constraints
-      if (n_x_fixed_>0) {
-        x_fixed_map_ = new Index[n_x_fixed_];
-        for (Index i=0; i<n_x_fixed_; i++) {
-          x_fixed_map_[i] = x_fixed_map_tmp[i];
-        }
-      }
-      else {
-        x_fixed_map_ = NULL;
-      }
-      delete [] x_fixed_map_tmp;
-
-      // Create the spaces for c and d
-      // - includes the internal permutation matrices for
-      //  full_g to c and d
-      // - includes the permutation matrices for d_l and d_u
-      // c(x) = (P_c)T * g(x)
-      // d(x) = (P_d)T * g(x)
-      // d_L = (P_d_L)T * (P_d)T * g_l
-      // d_U = (P_d_U)T * (P_d)T * g_u
-      Index n_c = 0;
-      Index n_d = 0;
-      Index n_d_l = 0;
-      Index n_d_u = 0;
-
+      Index n_c;
+      Index n_d;
+      Index n_d_l;
+      Index n_d_u;
       Index* c_map = new Index[n_full_g_]; // we do not know n_c yet!
       Index* d_map = new Index[n_full_g_]; // we do not know n_d yet!
       Index* d_l_map = new Index[n_full_g_]; // "
       Index* d_u_map = new Index[n_full_g_]; // "
-      for (Index i=0; i<n_full_g_; i++) {
-        Number lower_bound = g_l[i];
-        Number upper_bound = g_u[i];
-        if (lower_bound == upper_bound) {
-          // equality constraint
-          c_map[n_c] = i;
-          n_c++;
+
+      bool done=false;
+      // We might have to do the following twice: If we detect that we
+      // don't have enought degrees of freedom, we simply redo
+      // everything with fixed_variable_treatment to set RELAX_BOUNDS
+      while (!done) {
+        n_x_var = 0;
+        n_x_l = 0;
+        n_x_u = 0;
+        n_x_fixed_ = 0;
+        Index* x_fixed_map_tmp = new Index[n_full_x_];
+
+        for (Index i=0; i<n_full_x_; i++) {
+          Number lower_bound = x_l[i];
+          Number upper_bound = x_u[i];
+          if (lower_bound == upper_bound) {
+            switch (fixed_variable_treatment_) {
+              case MAKE_PARAMETER:
+              // Variable is fixed, remove it from the problem
+              full_x_[i] = lower_bound;
+              x_fixed_map_tmp[n_x_fixed_] = i;
+              n_x_fixed_++;
+              break;
+              case MAKE_CONSTRAINT:
+              x_fixed_map_tmp[n_x_fixed_] = i; // don't really need this
+              // array then
+              n_x_fixed_++;
+              x_not_fixed_map[n_x_var] = i;
+              n_x_var++;
+              break;
+              case RELAX_BOUNDS:
+              x_l_map[n_x_l] = n_x_var;
+              n_x_l++;
+              x_u_map[n_x_u] = n_x_var;
+              n_x_u++;
+              n_x_var++;
+              break;
+              default:
+              DBG_ASSERT(false && "invalid fixed_variable_treatment_");
+            }
+          }
+          else if (lower_bound > upper_bound) {
+            char string[128];
+            sprintf(string, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+            delete [] x_l;
+            delete [] x_u;
+            delete [] g_l;
+            delete [] g_u;
+            delete [] x_not_fixed_map;
+            delete [] x_fixed_map_tmp;
+            delete [] x_l_map;
+            delete [] x_u_map;
+            THROW_EXCEPTION(INVALID_TNLP, string);
+          }
+          else {
+            x_not_fixed_map[n_x_var] = i;
+            if (lower_bound > nlp_lower_bound_inf_) {
+              x_l_map[n_x_l] = n_x_var;
+              n_x_l++;
+            }
+
+            if (upper_bound < nlp_upper_bound_inf_) {
+              x_u_map[n_x_u] = n_x_var;
+              n_x_u++;
+            }
+            n_x_var++;
+          }
         }
-        else if (lower_bound > upper_bound) {
-          delete [] x_l;
-          delete [] x_u;
-          delete [] g_l;
-          delete [] g_u;
-          delete [] x_not_fixed_map;
-          delete [] x_l_map;
-          delete [] x_u_map;
-          delete [] c_map;
-          delete [] d_map;
-          delete [] d_l_map;
-          delete [] d_u_map;
-          char string[128];
-          sprintf(string, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
-          THROW_EXCEPTION(INVALID_TNLP, string);
+
+        // If there are fixed variables, we keep their position around
+        // for a possible warm start later or if fixed variables are
+        // treated by added equality constraints
+        if (n_x_fixed_>0) {
+          delete [] x_fixed_map_;
+          x_fixed_map_ = NULL;
+          x_fixed_map_ = new Index[n_x_fixed_];
+          for (Index i=0; i<n_x_fixed_; i++) {
+            x_fixed_map_[i] = x_fixed_map_tmp[i];
+          }
         }
         else {
-          // inequality constraint
-          d_map[n_d] = i;
-          if (lower_bound > nlp_lower_bound_inf_) {
-            d_l_map[n_d_l] = n_d;
-            n_d_l++;
+          delete [] x_fixed_map_;
+          x_fixed_map_ = NULL;
+        }
+        delete [] x_fixed_map_tmp;
+
+        // Create the spaces for c and d
+        // - includes the internal permutation matrices for
+        //  full_g to c and d
+        // - includes the permutation matrices for d_l and d_u
+        // c(x) = (P_c)T * g(x)
+        // d(x) = (P_d)T * g(x)
+        // d_L = (P_d_L)T * (P_d)T * g_l
+        // d_U = (P_d_U)T * (P_d)T * g_u
+        n_c = 0;
+        n_d = 0;
+        n_d_l = 0;
+        n_d_u = 0;
+
+        for (Index i=0; i<n_full_g_; i++) {
+          Number lower_bound = g_l[i];
+          Number upper_bound = g_u[i];
+          if (lower_bound == upper_bound) {
+            // equality constraint
+            c_map[n_c] = i;
+            n_c++;
           }
-          if (upper_bound < nlp_upper_bound_inf_) {
-            d_u_map[n_d_u] = n_d;
-            n_d_u++;
+          else if (lower_bound > upper_bound) {
+            delete [] x_l;
+            delete [] x_u;
+            delete [] g_l;
+            delete [] g_u;
+            delete [] x_not_fixed_map;
+            delete [] x_l_map;
+            delete [] x_u_map;
+            delete [] c_map;
+            delete [] d_map;
+            delete [] d_l_map;
+            delete [] d_u_map;
+            char string[128];
+            sprintf(string, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+            THROW_EXCEPTION(INVALID_TNLP, string);
           }
-          n_d++;
+          else {
+            // inequality constraint
+            d_map[n_d] = i;
+            if (lower_bound > nlp_lower_bound_inf_) {
+              d_l_map[n_d_l] = n_d;
+              n_d_l++;
+            }
+            if (upper_bound < nlp_upper_bound_inf_) {
+              d_u_map[n_d_u] = n_d;
+              n_d_u++;
+            }
+            n_d++;
+          }
+        }
+
+        if (fixed_variable_treatment_ == RELAX_BOUNDS ||
+            n_x_fixed_ == 0 || n_x_var >= n_c) {
+          done = true;
+        }
+        else {
+          fixed_variable_treatment_ = RELAX_BOUNDS;
+          jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                         "Too few degrees of freedom (n_x = %d, n_c = %d).\n  Trying fixed_variable_treatment = RELAX_BOUNDS\n\n", n_x_var, n_c);
+        }
+      } // while (!done)
+
+      if (n_x_var == 0) {
+        // Check of all constraints are satisfied:
+        for (Index i=0; i<n_full_x_; i++) {
+          DBG_ASSERT(x_l[i]==x_u[i]);
+          full_x_[i] = x_l[i];
+          bool retval = tnlp_->eval_g(n_full_x_, full_x_, true,
+                                      n_full_g_, full_g_);
+          ASSERT_EXCEPTION(retval, IpoptNLP::Eval_Error,
+                           "All variables are fixed, but constraints cannot be evaluated at fixed point.");
+        }
+        Number max_viol = 0.;
+        for (Index i=0; i<n_full_g_; i++) {
+          //printf("%d %23.16e %23.16e %23.16e\n",i,full_g_[i], g_l[i], g_u[i]);
+          max_viol = Max(max_viol, full_g_[i]-g_u[i], g_l[i]-full_g_[i]);
+        }
+
+        Number tol = 1e-6;  //ToDo: base on tol option etc
+        SolverReturn status;
+        if (max_viol <= tol) {
+          status = SUCCESS;
+        }
+        else {
+          status = LOCAL_INFEASIBILITY;
+        }
+
+        Number obj_value;
+        bool retval = tnlp_->eval_f(n_full_x_, full_x_, false, obj_value);
+        ASSERT_EXCEPTION(retval, IpoptNLP::Eval_Error,
+                         "All variables are fixed, but objective cannot be evaluated at fixed point.");
+        // Call finalize_solution so that user has required information
+        Number* full_z_L = new Number[n_full_x_];
+        Number* full_z_U = new Number[n_full_x_];
+        Number* full_lambda = new Number[n_full_g_];
+        // For now, we return zeros are multipliers... (ToDo?)
+        const Number zero = 0.;
+        IpBlasDcopy(n_full_x_, &zero, 0, full_z_L, 1);
+        IpBlasDcopy(n_full_x_, &zero, 0, full_z_U, 1);
+        IpBlasDcopy(n_full_g_, &zero, 0, full_lambda, 1);
+        tnlp_->finalize_solution(status,
+                                 n_full_x_, full_x_, full_z_L, full_z_U,
+                                 n_full_g_, full_g_, full_lambda,
+                                 obj_value, NULL, NULL);
+        delete [] full_z_L;
+        delete [] full_z_U;
+        delete [] full_lambda;
+
+        // Free memory
+        delete [] x_not_fixed_map;
+        delete [] x_l_map;
+        delete [] x_u_map;
+        delete [] c_map;
+        delete [] d_map;
+        delete [] d_l_map;
+        delete [] d_u_map;
+        delete [] x_l;
+        delete [] x_u;
+        delete [] g_l;
+        delete [] g_u;
+
+        char string[128];
+        sprintf(string, "All variables are fixed, and constraint violation is %e", max_viol);
+        if (status == SUCCESS) {
+          jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                         "All variables are fixed and constraint violation %e\n   is below tolerance %e. Declaring success.\n", max_viol, tol_);
+          THROW_EXCEPTION(NO_FREE_VARIABLES_BUT_FEASIBLE, string);
+        }
+        else {
+          jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                         "All variables are fixed and constraint violation %e\n  is above tolerance %e. Declaring that problem is infeasible.\n", max_viol, tol_);
+          THROW_EXCEPTION(LOCALLY_INFEASIBLE, string);
         }
       }
 
@@ -790,6 +914,16 @@ namespace Ipopt
       for (Index i=0; i<n_x_fixed_; i++) {
         DBG_ASSERT(x_l[x_fixed_map_[i]] == x_u[x_fixed_map_[i]]);
         full_x_[x_fixed_map_[i]] = x_l[x_fixed_map_[i]];
+      }
+    }
+    else if (fixed_variable_treatment_==RELAX_BOUNDS) {
+      // Relax the bounds for fixed variables
+      const Number bound_relax = Max(1e-8, bound_relax_factor_);
+      for (Index i=0; i<n_x_fixed_; i++) {
+        if (x_l[i] == x_u[i]) {
+          x_l[i] -= bound_relax*Max(1.,fabs(x_l[i]));
+          x_u[i] += bound_relax*Max(1.,fabs(x_u[i]));
+        }
       }
     }
 
@@ -1312,7 +1446,9 @@ namespace Ipopt
                                      const Vector& x, const Vector& z_L, const Vector& z_U,
                                      const Vector& c, const Vector& d,
                                      const Vector& y_c, const Vector& y_d,
-                                     Number obj_value)
+                                     Number obj_value,
+                                     const IpoptData* ip_data,
+                                     IpoptCalculatedQuantities* ip_cq)
   {
     DBG_START_METH("TNLPAdapter::FinalizeSolution", dbg_verbosity);
 
@@ -1357,7 +1493,7 @@ namespace Ipopt
     tnlp_->finalize_solution(status,
                              n_full_x_, full_x_, full_z_L, full_z_U,
                              n_full_g_, full_g, full_lambda_,
-                             obj_value);
+                             obj_value, ip_data, ip_cq);
 
     delete [] full_z_L;
     full_z_L = NULL;
@@ -1374,10 +1510,9 @@ namespace Ipopt
     Number* g_u = new Number[n_full_g_];
     tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
     for (Index i=0; i<n_full_g_; i++) {
-      //printf("%d %23.16e %23.16e %23.16e\n",i,full_g_[i], g_l[i], g_u[i]);
       max_viol = Max(max_viol, full_g_[i]-g_u[i], g_l[i]-full_g_[i]);
     }
-    jnlst_->Printf(J_SUMMARY, J_INITIALIZATION,
+    jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
                    "Constraint violation for all real constraints is %e\n", max_viol);
     delete [] x_l;
     delete [] x_u;

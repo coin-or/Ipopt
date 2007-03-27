@@ -150,6 +150,9 @@ namespace Ipopt
 
     /** Print the problem size statistics */
     void PrintProblemStatistics();
+
+    /** Compute the Lagrangian multipliers for a feasibility problem*/
+    void ComputeFeasibilityMultipliers();
     //@}
 
     /** @name internal flags */

@@ -243,7 +243,9 @@ bool HS071_NLP::eval_h(Index n, const Number* x, bool new_x,
 void HS071_NLP::finalize_solution(SolverReturn status,
                                   Index n, const Number* x, const Number* z_L, const Number* z_U,
                                   Index m, const Number* g, const Number* lambda,
-                                  Number obj_value)
+                                  Number obj_value,
+				  const IpoptData* ip_data,
+				  IpoptCalculatedQuantities* ip_cq)
 {
   // here is where we would store the solution to variables, or write to a file, etc
   // so we could use the solution.

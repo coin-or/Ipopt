@@ -355,22 +355,24 @@ if test "$use_hsl" = BUILD; then
     coin_need_flibs=yes
   fi
 else
-  SAVE_LIBS="$LIBS"
-  LIBS="$use_hsl $LIBS $FLIBS"
-  ADDLIBS="$use_hsl $ADDLIBS"
-  MY_CHECK_HSL([ma27ad],[MA27])
-  if test "$use_MA27" = "yes"; then
-    AC_MSG_CHECKING([whether MA27 is threadsafe])
-    AC_F77_FUNC(ma27ud, cfunc)
-    AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc],
-                [AC_MSG_RESULT(yes)],
-                [AC_MSG_RESULT(no)
-		 AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
+  if test "$use_hsl" != no; then
+    SAVE_LIBS="$LIBS"
+    LIBS="$use_hsl $LIBS $FLIBS"
+    ADDLIBS="$use_hsl $ADDLIBS"
+    MY_CHECK_HSL([ma27ad],[MA27])
+    if test "$use_MA27" = "yes"; then
+      AC_MSG_CHECKING([whether MA27 is threadsafe])
+      AC_F77_FUNC(ma27ud, cfunc)
+      AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc],
+                  [AC_MSG_RESULT(yes)],
+                  [AC_MSG_RESULT(no)
+  		 AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
+    fi
+    MY_CHECK_HSL([mc19ad],[MC19])
+    MY_CHECK_HSL([ma57ad],[MA57])
+    MY_CHECK_HSL([ma28ad],[MA28])
+    LIBS="$use_hsl $SAVE_LIBS"
   fi
-  MY_CHECK_HSL([mc19ad],[MC19])
-  MY_CHECK_HSL([ma57ad],[MA57])
-  MY_CHECK_HSL([ma28ad],[MA28])
-  LIBS="$use_hsl $SAVE_LIBS"
 fi
 
 ###########
@@ -383,7 +385,7 @@ AC_ARG_WITH([pardiso],
                            [specify Pardiso library]),
             [use_pardiso=$withval], [use_pardiso=no])
 
-if test ! "$use_pardiso" = "no"; then
+if test "$use_pardiso" != "no"; then
   LIBS="$use_pardiso $LIBS"
   ADDLIBS="$use_pardiso $ADDLIBS"
 
@@ -429,37 +431,7 @@ fi
 # MUMPS #
 #########
 
-AC_ARG_WITH([mumps-dir],
-            AC_HELP_STRING([--with-mumps-dir],
-                           [specify directory where MUMPS is installed]),
-            [use_mumps="$withval"], [use_mumps=no])
-
-if test "$use_mumps" != "no"; then
-  mumps_dir="$use_mumps"
-
-  AC_LANG_PUSH(C)
-  AC_CHECK_LIB([pthread],[pthread_create],[LIBS="-lpthread $LIBS"; ADDLIBS="-lpthread $ADDLIBS"],[])
-  AC_LANG_POP(C)
-
-  # Check if hearders are there
-  AC_CHECK_FILE([$mumps_dir/include/dmumps_c.h],
-                [],
-                [AC_MSG_ERROR([I cannot find headers for MUMPS])])
-  CPPFLAGS="$CPPFLAGS -I$mumps_dir/libseq -I$mumps_dir/include"
-
-  LIBS="-L$mumps_dir/lib -ldmumps -lpord -L$mumps_dir/libseq -lmpiseq $LIBS"
-  ADDLIBS="-L$mumps_dir/lib -ldmumps -lpord -L$mumps_dir/libseq -lmpiseq $ADDLIBS"
-  # Check if MUMPS actually works
-  AC_LANG_PUSH(C)
-  save_LIBS="$LIBS"
-  LIBS="$LIBS $FLIBS"
-  AC_TRY_LINK([void dmumps_c();],[dmumps_c()],[],
-              [AC_MSG_ERROR([User provided MUMPS library doesn't work])])
-  LIBS="$save_LIBS"
-  AC_LANG_POP(C)
-
-  AC_DEFINE(HAVE_MUMPS,1, [Define to 1 if MUMPS is available])
-fi
+AC_COIN_HAS_MUMPS
 
 ########
 # WSMP #
@@ -494,9 +466,9 @@ AC_ARG_ENABLE([distconf],,
     *) AC_MSG_ERROR(bad value ${enableval} for --enable-distconf) ;;
   esac],[distconf=false])
 
-if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$use_mumps" = no; then
+if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" = no; then
   if test "$distconf" = false; then
-    AC_MSG_ERROR("No linear solver (such as MA27) available.  You need to provide at least one.")
+    AC_MSG_ERROR("No linear solver (such as MUMPS) available.  You need to provide at least one.")
   fi
 fi
 
@@ -581,13 +553,16 @@ if test "$use_hsl" = BUILD ; then
   IPALLLIBS="../../../ThirdParty/HSL/libcoinhsl.la $IPALLLIBS"
 fi
 
+if test "$use_mumps" = BUILD ; then
+  IPALLLIBS="../../../ThirdParty/Mumps/libcoinmumps.la $IPALLLIBS"
+fi
+
 AM_CONDITIONAL([HAVE_MA27],[test ! "$use_MA27" = no])
 AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
 AM_CONDITIONAL([HAVE_MA28],[test ! "$use_MA28" = no])
 AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])
-AM_CONDITIONAL([HAVE_MUMPS],[test ! "$use_mumps" = no])
 AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
 ########################################################################

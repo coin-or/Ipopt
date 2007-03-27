@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE IPOPTSRCDIR IPOPTOBJDIR COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE COIN_BUILD_BLAS_TRUE COIN_BUILD_BLAS_FALSE COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE COIN_BUILD_LAPACK_TRUE COIN_BUILD_LAPACK_FALSE TAUCS_INCFLAGS ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE HAVE_MUMPS_TRUE HAVE_MUMPS_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE IPOPTSRCDIR IPOPTOBJDIR COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE COIN_BUILD_BLAS_TRUE COIN_BUILD_BLAS_FALSE COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE COIN_BUILD_LAPACK_TRUE COIN_BUILD_LAPACK_FALSE TAUCS_INCFLAGS MUMPS_INCFLAGS COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE COIN_BUILD_MUMPS_TRUE COIN_BUILD_MUMPS_FALSE ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_TAUCS_TRUE HAVE_TAUCS_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -25715,32 +25715,11 @@ if test x"$use_blas" != x; then
   if test "$use_blas" = "BUILD"; then
     # Don't check for course code if this is executed in ThirdParty/Blas
     if test "$PACKAGE_NAME" != ThirdPartyBlas; then
-      as_ac_File=`echo "ac_cv_file_$coin_blasobjdir/.MakeOk" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $coin_blasobjdir/.MakeOk" >&5
-echo $ECHO_N "checking for $coin_blasobjdir/.MakeOk... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$coin_blasobjdir/.MakeOk"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  :
-else
-  { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for Blas, but $coin_blasobjdir directory is not properly configured" >&5
+      if test -r $coin_blasobjdir/.MakeOk; then :; else
+        { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for Blas, but $coin_blasobjdir directory is not properly configured" >&5
 echo "$as_me: error: option \"BUILD\" specified for Blas, but $coin_blasobjdir directory is not properly configured" >&2;}
    { (exit 1); exit 1; }; }
-fi
-
+      fi
     fi
   elif test "$use_blas" != no ; then
     echo "$as_me:$LINENO: checking whether user supplied BLASLIB=\"$use_blas\" works" >&5
@@ -27288,30 +27267,9 @@ esac
 # If we have no other ideas, consider building BLAS.
   if test -z "$use_blas"; then
     if test "$PACKAGE_NAME" != ThirdPartyBlas; then
-      echo "$as_me:$LINENO: checking if BLAS can be built." >&5
-echo $ECHO_N "checking if BLAS can be built.... $ECHO_C" >&6
-      as_ac_File=`echo "ac_cv_file_$coin_blasobjdir/.MakeOk" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $coin_blasobjdir/.MakeOk" >&5
-echo $ECHO_N "checking for $coin_blasobjdir/.MakeOk... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$coin_blasobjdir/.MakeOk"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  use_blas=BUILD
-fi
-
+      if test -r $coin_blasobjdir/.MakeOk; then
+        use_blas=BUILD
+      fi
     fi
   fi
 fi
@@ -27379,32 +27337,11 @@ if test x"$use_lapack" != x; then
   if test "$use_lapack" = "BUILD"; then
     # Don't check for course code if this is executed in ThirdParty/Blas
     if test "$PACKAGE_NAME" != ThirdPartyLapack; then
-      as_ac_File=`echo "ac_cv_file_$coin_lapackobjdir/.MakeOk" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $coin_lapackobjdir/.MakeOk" >&5
-echo $ECHO_N "checking for $coin_lapackobjdir/.MakeOk... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$coin_lapackobjdir/.MakeOk"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  :
-else
-  { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for LAPACK, but $coin_lapackobjdir directory is not configured" >&5
+      if test -r $coin_lapackobjdir/.MakeOk; then :; else
+        { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for LAPACK, but $coin_lapackobjdir directory is not configured" >&5
 echo "$as_me: error: option \"BUILD\" specified for LAPACK, but $coin_lapackobjdir directory is not configured" >&2;}
    { (exit 1); exit 1; }; }
-fi
-
+      fi
     fi
   else
     echo "$as_me:$LINENO: checking whether user supplied LAPACKLIB=\"$use_lapack\" works" >&5
@@ -29319,28 +29256,9 @@ esac
 # If we have no other ideas, consider building LAPACK.
   if test -z "$use_lapack"; then
     if test "$PACKAGE_NAME" != ThirdPartyLapack; then
-      as_ac_File=`echo "ac_cv_file_$coin_lapackobjdir/.MakeOk" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $coin_lapackobjdir/.MakeOk" >&5
-echo $ECHO_N "checking for $coin_lapackobjdir/.MakeOk... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$coin_lapackobjdir/.MakeOk"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  use_lapack=BUILD
-fi
-
+      if test -r $coin_lapackobjdir/.MakeOk; then
+        use_lapack=BUILD
+      fi
     fi
   fi
 fi
@@ -29591,10 +29509,11 @@ fi
     coin_need_flibs=yes
   fi
 else
-  SAVE_LIBS="$LIBS"
-  LIBS="$use_hsl $LIBS $FLIBS"
-  ADDLIBS="$use_hsl $ADDLIBS"
-  echo "$as_me:$LINENO: checking for ma27ad in $use_hsl" >&5
+  if test "$use_hsl" != no; then
+    SAVE_LIBS="$LIBS"
+    LIBS="$use_hsl $LIBS $FLIBS"
+    ADDLIBS="$use_hsl $ADDLIBS"
+    echo "$as_me:$LINENO: checking for ma27ad in $use_hsl" >&5
 echo $ECHO_N "checking for ma27ad in $use_hsl... $ECHO_C" >&6
           use_MA27=
           ac_ext=f
@@ -29677,10 +29596,10 @@ echo "${ECHO_T}no" >&6; use_MA27=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-  if test "$use_MA27" = "yes"; then
-    echo "$as_me:$LINENO: checking whether MA27 is threadsafe" >&5
+    if test "$use_MA27" = "yes"; then
+      echo "$as_me:$LINENO: checking whether MA27 is threadsafe" >&5
 echo $ECHO_N "checking whether MA27 is threadsafe... $ECHO_C" >&6
-    ac_ext=f
+      ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_f77_compiler_gnu
@@ -29699,7 +29618,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-    cat >conftest.$ac_ext <<_ACEOF
+      cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -29752,14 +29671,14 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-		 { { echo "$as_me:$LINENO: error: Please obtain the threadsafe (newer) version of MA27" >&5
+  		 { { echo "$as_me:$LINENO: error: Please obtain the threadsafe (newer) version of MA27" >&5
 echo "$as_me: error: Please obtain the threadsafe (newer) version of MA27" >&2;}
    { (exit 1); exit 1; }; }
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-  fi
-  echo "$as_me:$LINENO: checking for mc19ad in $use_hsl" >&5
+    fi
+    echo "$as_me:$LINENO: checking for mc19ad in $use_hsl" >&5
 echo $ECHO_N "checking for mc19ad in $use_hsl... $ECHO_C" >&6
           use_MC19=
           ac_ext=f
@@ -29842,7 +29761,7 @@ echo "${ECHO_T}no" >&6; use_MC19=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-  echo "$as_me:$LINENO: checking for ma57ad in $use_hsl" >&5
+    echo "$as_me:$LINENO: checking for ma57ad in $use_hsl" >&5
 echo $ECHO_N "checking for ma57ad in $use_hsl... $ECHO_C" >&6
           use_MA57=
           ac_ext=f
@@ -29925,7 +29844,7 @@ echo "${ECHO_T}no" >&6; use_MA57=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-  echo "$as_me:$LINENO: checking for ma28ad in $use_hsl" >&5
+    echo "$as_me:$LINENO: checking for ma28ad in $use_hsl" >&5
 echo $ECHO_N "checking for ma28ad in $use_hsl... $ECHO_C" >&6
           use_MA28=
           ac_ext=f
@@ -30008,7 +29927,8 @@ echo "${ECHO_T}no" >&6; use_MA28=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-  LIBS="$use_hsl $SAVE_LIBS"
+    LIBS="$use_hsl $SAVE_LIBS"
+  fi
 fi
 
 ###########
@@ -30029,7 +29949,7 @@ else
   use_pardiso=no
 fi;
 
-if test ! "$use_pardiso" = "no"; then
+if test "$use_pardiso" != "no"; then
   LIBS="$use_pardiso $LIBS"
   ADDLIBS="$use_pardiso $ADDLIBS"
 
@@ -30168,6 +30088,16 @@ fi
 #########
 
 
+if test "$PACKAGE_NAME" = ThirdPartyMumps; then
+  coin_mumpsobjdir=../Mumps
+else
+  coin_mumpsobjdir=../ThirdParty/Mumps
+fi
+coin_mumpssrcdir=$abs_source_dir/$coin_mumpsobjdir
+
+MAKEOKFILE=.MakeOk
+
+
 # Check whether --with-mumps-dir or --without-mumps-dir was given.
 if test "${with_mumps_dir+set}" = set; then
   withval="$with_mumps_dir"
@@ -30177,14 +30107,22 @@ else
 fi;
 
 if test "$use_mumps" != "no"; then
-  mumps_dir="$use_mumps"
+  if test -d $use_mumps; then :; else
+    { { echo "$as_me:$LINENO: error: User provided MUMPS directory $use_mumps does not exist." >&5
+echo "$as_me: error: User provided MUMPS directory $use_mumps does not exist." >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+  mumps_dir=`cd $use_mumps; pwd`
 
+  # library extension
   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+  save_LIBS="$LIBS"
+  LIBS="$LIBS $FLIBS"
   echo "$as_me:$LINENO: checking for pthread_create in -lpthread" >&5
 echo $ECHO_N "checking for pthread_create in -lpthread... $ECHO_C" >&6
 if test "${ac_cv_lib_pthread_pthread_create+set}" = set; then
@@ -30258,7 +30196,9 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_pthread_pthread_create" >&5
 echo "${ECHO_T}$ac_cv_lib_pthread_pthread_create" >&6
 if test $ac_cv_lib_pthread_pthread_create = yes; then
-  LIBS="-lpthread $LIBS"; ADDLIBS="-lpthread $ADDLIBS"
+  LIBS="-lpthread $save_LIBS"; ADDLIBS="-lpthread $ADDLIBS"
+else
+  LIBS="$save_LIBS"
 fi
 
   ac_ext=cc
@@ -30267,6 +30207,12 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
+
+  case "$CC" in
+    cl* | */cl* | CL* | */CL*)
+         libe=lib ;;
+      *) libe=a ;;
+  esac
 
   # Check if hearders are there
   as_ac_File=`echo "ac_cv_file_$mumps_dir/include/dmumps_c.h" | $as_tr_sh`
@@ -30295,10 +30241,8 @@ echo "$as_me: error: I cannot find headers for MUMPS" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-  CPPFLAGS="$CPPFLAGS -I$mumps_dir/libseq -I$mumps_dir/include"
-
-  LIBS="-L$mumps_dir/lib -ldmumps -lpord -L$mumps_dir/libseq -lmpiseq $LIBS"
-  ADDLIBS="-L$mumps_dir/lib -ldmumps -lpord -L$mumps_dir/libseq -lmpiseq $ADDLIBS"
+  LIBS="$mumps_dir/lib/libdmumps.$libe $mumps_dir/lib/libpord.$libe $mumps_dir/libseq/libmpiseq.$libe $LIBS"
+  ADDLIBS="$mumps_dir/lib/libdmumps.$libe $mumps_dir/lib/libpord.$libe $mumps_dir/libseq/libmpiseq.$libe $ADDLIBS"
   # Check if MUMPS actually works
   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -30372,12 +30316,153 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
+else
+  use_mumps=BUILD
+
+  # Check if the MUMPS' ThirdParty project has been configured
+  if test "$PACKAGE_NAME" != ThirdPartyMumps; then
+    if test -r $coin_mumpsobjdir/.MakeOk; then
+      use_mumps=BUILD
+      # Mumps needs pthreads
+      ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+      save_LIBS="$LIBS"
+      LIBS="$LIBS $FLIBS"
+      echo "$as_me:$LINENO: checking for pthread_create in -lpthread" >&5
+echo $ECHO_N "checking for pthread_create in -lpthread... $ECHO_C" >&6
+if test "${ac_cv_lib_pthread_pthread_create+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lpthread  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char pthread_create ();
+#ifdef F77_DUMMY_MAIN
+
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+
+#endif
+int
+main ()
+{
+pthread_create ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_pthread_pthread_create=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_pthread_pthread_create=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_pthread_pthread_create" >&5
+echo "${ECHO_T}$ac_cv_lib_pthread_pthread_create" >&6
+if test $ac_cv_lib_pthread_pthread_create = yes; then
+  LIBS="-lpthread $save_LIBS"; ADDLIBS="-lpthread $ADDLIBS"
+else
+  LIBS="save_LIBS"
+fi
+
+      ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+    else
+      use_mumps=
+    fi
+  fi
+fi
+
+if test x"$use_mumps" != x; then
+
+  # and we need the Fortran runtime libraries if we want to link with C/C++
+  coin_need_flibs=yes
+
+  MUMPS_INCFLAGS="-I`$CYGPATH_W $coin_mumpssrcdir/MUMPS/libseq` -I`$CYGPATH_W $coin_mumpssrcdir/MUMPS/include`"
+
+fi
+
+
+
+if test x"$use_mumps" != x; then
+  COIN_HAS_MUMPS_TRUE=
+  COIN_HAS_MUMPS_FALSE='#'
+else
+  COIN_HAS_MUMPS_TRUE='#'
+  COIN_HAS_MUMPS_FALSE=
+fi
+
+
+
+if test "$use_mumps" = BUILD; then
+  COIN_BUILD_MUMPS_TRUE=
+  COIN_BUILD_MUMPS_FALSE='#'
+else
+  COIN_BUILD_MUMPS_TRUE='#'
+  COIN_BUILD_MUMPS_FALSE=
+fi
+
+
+if test x"$use_mumps" = x || test "$use_mumps" = no; then
+  coin_has_mumps=no
+else
+  coin_has_mumps=yes
 
 cat >>confdefs.h <<\_ACEOF
-#define HAVE_MUMPS 1
+#define COIN_HAS_MUMPS 1
 _ACEOF
 
 fi
+
 
 ########
 # WSMP #
@@ -30472,10 +30557,10 @@ else
   distconf=false
 fi;
 
-if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$use_mumps" = no; then
+if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" = no; then
   if test "$distconf" = false; then
-    { { echo "$as_me:$LINENO: error: \"No linear solver (such as MA27) available.  You need to provide at least one.\"" >&5
-echo "$as_me: error: \"No linear solver (such as MA27) available.  You need to provide at least one.\"" >&2;}
+    { { echo "$as_me:$LINENO: error: \"No linear solver (such as MUMPS) available.  You need to provide at least one.\"" >&5
+echo "$as_me: error: \"No linear solver (such as MUMPS) available.  You need to provide at least one.\"" >&2;}
    { (exit 1); exit 1; }; }
   fi
 fi
@@ -30514,60 +30599,20 @@ fi;
 if test "$use_asldir" = BUILD; then
   if test "$PACKAGE_NAME" != ThirdPartyASL; then
     # If we are configuring ThirdParty/ASL, don't check
-    as_ac_File=`echo "ac_cv_file_$coin_aslobjdir/.MakeOk" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $coin_aslobjdir/.MakeOk" >&5
-echo $ECHO_N "checking for $coin_aslobjdir/.MakeOk... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$coin_aslobjdir/.MakeOk"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  :
-else
-  { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for asldir, but directory is not configure (sources missing?)" >&5
+    if test -r $coin_aslobjdir/.MakeOk; then :; else
+      { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for asldir, but directory is not configure (sources missing?)" >&5
 echo "$as_me: error: option \"BUILD\" specified for asldir, but directory is not configure (sources missing?)" >&2;}
    { (exit 1); exit 1; }; }
-fi
-
+    fi
   fi
 elif test -z "$use_asldir"; then
  # try to find sources - if not given don't compile
   if test "$PACKAGE_NAME" != ThirdPartyASL; then
-    as_ac_File=`echo "ac_cv_file_$coin_aslobjdir/.MakeOk" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $coin_aslobjdir/.MakeOk" >&5
-echo $ECHO_N "checking for $coin_aslobjdir/.MakeOk... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$coin_aslobjdir/.MakeOk"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  use_asldir=BUILD
-else
-  use_asldir=no
-fi
-
+    if test -r $coin_aslobjdir/.MakeOk; then
+      use_asldir=BUILD
+    else
+      use_asldir=no
+    fi
   else
     use_asldir=no
   fi
@@ -30844,6 +30889,10 @@ if test "$use_hsl" = BUILD ; then
   IPALLLIBS="../../../ThirdParty/HSL/libcoinhsl.la $IPALLLIBS"
 fi
 
+if test "$use_mumps" = BUILD ; then
+  IPALLLIBS="../../../ThirdParty/Mumps/libcoinmumps.la $IPALLLIBS"
+fi
+
 
 
 if test ! "$use_MA27" = no; then
@@ -30902,16 +30951,6 @@ if test ! "$use_taucs" = no; then
 else
   HAVE_TAUCS_TRUE='#'
   HAVE_TAUCS_FALSE=
-fi
-
-
-
-if test ! "$use_mumps" = no; then
-  HAVE_MUMPS_TRUE=
-  HAVE_MUMPS_FALSE='#'
-else
-  HAVE_MUMPS_TRUE='#'
-  HAVE_MUMPS_FALSE=
 fi
 
 
@@ -31152,6 +31191,20 @@ echo "$as_me: error: conditional \"COIN_BUILD_LAPACK\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
+if test -z "${COIN_HAS_MUMPS_TRUE}" && test -z "${COIN_HAS_MUMPS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_MUMPS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_MUMPS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_BUILD_MUMPS_TRUE}" && test -z "${COIN_BUILD_MUMPS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_BUILD_MUMPS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_BUILD_MUMPS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_ASL\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
@@ -31198,13 +31251,6 @@ if test -z "${HAVE_TAUCS_TRUE}" && test -z "${HAVE_TAUCS_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"HAVE_TAUCS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"HAVE_TAUCS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_MUMPS_TRUE}" && test -z "${HAVE_MUMPS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_MUMPS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_MUMPS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -31898,6 +31944,11 @@ s,@COIN_HAS_LAPACK_FALSE@,$COIN_HAS_LAPACK_FALSE,;t t
 s,@COIN_BUILD_LAPACK_TRUE@,$COIN_BUILD_LAPACK_TRUE,;t t
 s,@COIN_BUILD_LAPACK_FALSE@,$COIN_BUILD_LAPACK_FALSE,;t t
 s,@TAUCS_INCFLAGS@,$TAUCS_INCFLAGS,;t t
+s,@MUMPS_INCFLAGS@,$MUMPS_INCFLAGS,;t t
+s,@COIN_HAS_MUMPS_TRUE@,$COIN_HAS_MUMPS_TRUE,;t t
+s,@COIN_HAS_MUMPS_FALSE@,$COIN_HAS_MUMPS_FALSE,;t t
+s,@COIN_BUILD_MUMPS_TRUE@,$COIN_BUILD_MUMPS_TRUE,;t t
+s,@COIN_BUILD_MUMPS_FALSE@,$COIN_BUILD_MUMPS_FALSE,;t t
 s,@ASLLIB@,$ASLLIB,;t t
 s,@ASL_CPPFLAGS@,$ASL_CPPFLAGS,;t t
 s,@COIN_HAS_ASL_TRUE@,$COIN_HAS_ASL_TRUE,;t t
@@ -31918,8 +31969,6 @@ s,@HAVE_PARDISO_TRUE@,$HAVE_PARDISO_TRUE,;t t
 s,@HAVE_PARDISO_FALSE@,$HAVE_PARDISO_FALSE,;t t
 s,@HAVE_TAUCS_TRUE@,$HAVE_TAUCS_TRUE,;t t
 s,@HAVE_TAUCS_FALSE@,$HAVE_TAUCS_FALSE,;t t
-s,@HAVE_MUMPS_TRUE@,$HAVE_MUMPS_TRUE,;t t
-s,@HAVE_MUMPS_FALSE@,$HAVE_MUMPS_FALSE,;t t
 s,@HAVE_WSMP_TRUE@,$HAVE_WSMP_TRUE,;t t
 s,@HAVE_WSMP_FALSE@,$HAVE_WSMP_FALSE,;t t
 s,@LIBEXT@,$LIBEXT,;t t

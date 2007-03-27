@@ -146,7 +146,9 @@ namespace Ipopt
                                   const Vector& z_U,
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,
-                                  Number obj_value)
+                                  Number obj_value,
+                                  const IpoptData* ip_data,
+                                  IpoptCalculatedQuantities* ip_cq)
     {}
 
     /** This method is called once per iteration, after the iteration

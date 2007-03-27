@@ -60,7 +60,7 @@
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
 #endif
-#ifdef HAVE_MUMPS
+#ifdef COIN_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
 
@@ -125,7 +125,7 @@ namespace Ipopt
 #ifdef HAVE_WSMP
       "wsmp",
 #else
-#ifdef HAVE_MUMPS
+#ifdef COIN_HAS_MUMPS
       "mumps",
 #endif
 #endif
@@ -280,7 +280,7 @@ namespace Ipopt
 
     }
     else if (linear_solver=="mumps") {
-#ifdef HAVE_MUMPS
+#ifdef COIN_HAS_MUMPS
       SolverInterface = new MumpsSolverInterface();
 #else
 
