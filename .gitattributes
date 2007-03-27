@@ -37,7 +37,5 @@ Ipopt/test/Makefile.am -text
 Ipopt/test/mytoy.nl -text
 Ipopt/test/run_unitTests.in -text
 /Makefile.am -text
-devel/Externals -text
-devel/Makefile.am -text
 doxydoc/doxydoc/doxygen.conf -text
 doxydoc/doxygen.conf -text
