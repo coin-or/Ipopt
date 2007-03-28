@@ -69,7 +69,6 @@ am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
 	IpSolveStatistics.lo IpStdCInterface.lo IpStdFInterface.lo \
 	IpStdInterfaceTNLP.lo IpTNLPAdapter.lo
 libipopt_la_OBJECTS = $(am_libipopt_la_OBJECTS)
-DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -125,7 +124,7 @@ BUILDTOOLSDIR = @BUILDTOOLSDIR@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
-CFLAGS = @CFLAGS@ -I$(srcdir)/../Common
+CFLAGS = @CFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common`
 COIN_BUILD_BLAS_FALSE = @COIN_BUILD_BLAS_FALSE@
 COIN_BUILD_BLAS_TRUE = @COIN_BUILD_BLAS_TRUE@
 COIN_BUILD_LAPACK_FALSE = @COIN_BUILD_LAPACK_FALSE@
@@ -319,6 +318,10 @@ ADDLIBS_FILES = \
 	ipopt_addlibs_cpp.txt \
 	ipopt_addlibs_f.txt
 
+
+# This line is necessary to allow VPATH compilation with MS compilers
+# on Cygwin
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Astyle stuff
 ASTYLE_FILES = \
