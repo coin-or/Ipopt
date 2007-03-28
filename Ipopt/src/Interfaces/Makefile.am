@@ -53,7 +53,11 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm`
 
-CFLAGS += -I$(srcdir)/../Common
+CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common`
+
+# This line is necessary to allow VPATH compilation with MS compilers
+# on Cygwin
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Make sure the addlibs files are installed in lib
 install-exec-local:
