@@ -6,26 +6,30 @@
 		<Configuration Name="Debug|Win32" DeleteExtensionsOnClean="*.obj;*.mod;*.pdb;*.asm;*.map;*.dyn;*.dpi;*.tmp;*.log;*.lib;$(TargetPath)" ConfigurationType="typeStaticLibrary">
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TypeLibraryName="$(IntDir)/$(InputName).tlb"/>
 				<Tool Name="VFPreBuildEventTool"/>
-				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" ModulePath="$(INTDIR)/" ObjectFile="$(INTDIR)/" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtSingleThreadedDebug" CompileOnly="true"/>
+				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFCustomBuildTool"/>
-				<Tool Name="VFLibrarianTool" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/>
+				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/>
 				<Tool Name="VFPreLinkEventTool"/>
-				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/></Configuration>
+				<Tool Name="VFLibrarianTool" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/></Configuration>
 		<Configuration Name="Release|Win32" DeleteExtensionsOnClean="*.obj;*.mod;*.pdb;*.asm;*.map;*.dyn;*.dpi;*.tmp;*.log;*.lib;$(TargetPath)" ConfigurationType="typeStaticLibrary">
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TypeLibraryName="$(IntDir)/$(InputName).tlb"/>
 				<Tool Name="VFPreBuildEventTool"/>
-				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" ModulePath="$(INTDIR)/" ObjectFile="$(INTDIR)/" CompileOnly="true"/>
+				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFCustomBuildTool"/>
-				<Tool Name="VFLibrarianTool" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/>
+				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/>
 				<Tool Name="VFPreLinkEventTool"/>
-				<Tool Name="VFResourceCompilerTool" ResourceOutputFileName="$(IntDir)/$(InputName).res"/></Configuration></Configurations>
+				<Tool Name="VFLibrarianTool" MustRebuild="true" OutputFile="$(OUTDIR)/FortranLinAlg.lib" SuppressStartupBanner="true"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<Filter Name="blas">
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dasum.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\daxpy.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dasum.f">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\daxpy.f">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Blas\dcopy.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Blas\ddot.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Blas\dgemm.f">
@@ -51,14 +55,22 @@
 		<File RelativePath="..\..\..\..\ThirdParty\Blas\lsame.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Blas\xerbla.f"/></Filter>
 		<Filter Name="HSL">
-		<File RelativePath="..\..\..\..\ThirdParty\HSL\ma27ad.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\HSL\mc19ad.f"/></Filter>
+		<File RelativePath="..\..\..\..\ThirdParty\HSL\ma27ad.f">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
+		<File RelativePath="..\..\..\..\ThirdParty\HSL\mc19ad.f">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File></Filter>
 		<Filter Name="lapack">
-		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlae2.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlae2.f">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaev2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlamch.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\INSTALL\dlamch.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlanst.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlansy.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlansy.f">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlapy2.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlarf.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlarfb.f"/>
@@ -66,7 +78,9 @@
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlarft.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlartg.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlascl.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaset.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaset.f">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlasr.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlasrt.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlassq.f"/>
@@ -84,10 +98,13 @@
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsyev.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsytd2.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsytrd.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\ieeeck.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\ieeeck.f">
+			<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\ilaenv.f">
 			<FileConfiguration Name="Debug|Win32">
-				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File></Filter></Filter>
+				<Tool Name="VFFortranCompilerTool"/></FileConfiguration></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\iparmq.f"/></Filter></Filter>
 		<Filter Name="Header Files" Filter="fi;fd"/>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/></Files>
 	<Globals/></VisualStudioProject>
