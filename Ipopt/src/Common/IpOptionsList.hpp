@@ -168,6 +168,11 @@ namespace Ipopt
     }
     //@}
 
+    /** Method for clearing all previously set options */
+    void clear() {
+      options_.clear();
+    }
+
     /** @name Get / Set Methods */
     //@{
     void SetRegisteredOptions(const SmartPtr<RegisteredOptions> reg_options)
