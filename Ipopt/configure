@@ -21609,6 +21609,16 @@ echo "$as_me: Applying patches to libtool for GNU compiler" >&6;}
         chmod 755 libtool
         ;;
     esac
+    ;;
+    *-darwin*)
+      { echo "$as_me:$LINENO: Applying patches to libtool for Darwin" >&5
+echo "$as_me: Applying patches to libtool for Darwin" >&6;}
+      sed -e 's/verstring="${wl}-compatibility_version ${wl}$minor_current ${wl}-current_version ${wl}$minor_current.$revision"/verstring="-compatibility_version $minor_current -current_version $minor_current.$revision"/' \
+      libtool > conftest.bla
+
+      mv conftest.bla libtool
+      chmod 755 libtool
+      ;;
   esac
 # This fi matches the commented `if test "x$LIBTOOL" = x;' up at the head of
 # the macro. -- lh, 061214 --
