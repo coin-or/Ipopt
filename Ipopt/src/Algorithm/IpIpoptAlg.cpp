@@ -119,6 +119,13 @@ namespace Ipopt
       "solved to obtain the search direction, is solved sufficiently well. "
       "In that case, no residuals are computed, and the computation of the "
       "search direction is a little faster.");
+    roptions->SetRegisteringCategory("");
+    roptions->AddStringOption2(
+      "sb",
+      "",
+      "no",
+      "no", "",
+      "yes", "");
   }
 
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,
@@ -172,6 +179,11 @@ namespace Ipopt
     }
     else {
       my_options = &options;
+    }
+    bool bval;
+    options.GetBoolValue("sb", bval, prefix);
+    if (bval) {
+      message_printed = true;
     }
 
     // Read the IpoptAlgorithm options

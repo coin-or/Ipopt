@@ -414,7 +414,7 @@ namespace Ipopt
                    "Number of nonzeros in WSSMP after factorization IPARM(24) = %d\n",
                    IPARM_[23]);
 
-    negevals_ = IPARM_[20]; // Number of negative eigenvalues
+    negevals_ = IPARM_[21]; // Number of negative eigenvalues
     // determined during factorization
 
     // Check whether the number of negative eigenvalues matches the requested
