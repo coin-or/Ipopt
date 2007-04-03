@@ -1,5 +1,4 @@
 * text=auto !eol
-/Externals -text
 Ipopt/INSTALL -text
 Ipopt/LICENSE -text
 Ipopt/Makefile.in -text
@@ -35,5 +34,4 @@ Ipopt/src/Interfaces/ipopt_addlibs_f.txt.in -text
 Ipopt/test/Makefile.am -text
 Ipopt/test/mytoy.nl -text
 Ipopt/test/run_unitTests.in -text
-/Makefile.am -text
-doxydoc/doxygen.conf -text
+/README -text
