@@ -160,16 +160,23 @@ namespace Ipopt
     /** Percent increase in memory */
     Index mem_percent_;
 
+    /** Permution and scaling method in MUMPS */
+    Index mumps_permuting_scaling_;
+
+    /** Pivot order in MUMPS. */
+    Index mumps_pivot_order_;
+
+    /** Scaling in MUMPS */
+    Index mumps_scaling_;
+
     /** Flag indicating whether the TNLP with identical structure has
      *  already been solved before. */
     bool warm_start_same_structure_;
     //@}
 
-    /** @name Data for the linear solver.
-     * Storing factorization and other solver specific data structure.
-     */
-    //@{
-    //@}
+    /** Flag indicating if symbolic factorization has already been
+     *  called */
+    bool have_symbolic_factorization_;
 
     /** @name Internal functions */
     //@{
