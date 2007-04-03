@@ -107,6 +107,21 @@ namespace Ipopt
       "In MUMPS when significant extra fill-in is caused by numerical "
       "pivoting, larger values of mumps_mem_percent may help use the "
       "workspace more efficiently.");
+    roptions->AddBoundedIntegerOption(
+      "mumps_permuting_scaling",
+      "Controls permuting and scaling in MUMPS",
+      0, 7, 7,
+      "This is ICTL(6) in MUMPS.");
+    roptions->AddBoundedIntegerOption(
+      "mumps_pivot_order",
+      "Controls pivot order in MUMPS",
+      0, 7, 7,
+      "This is ICTL(7) in MUMPS.");
+    roptions->AddBoundedIntegerOption(
+      "mumps_scaling",
+      "Controls scaling in MUMPS",
+      0, 7, 7,
+      "This is ICTL(8) in MUMPS.");
   }
 
   bool MumpsSolverInterface::InitializeImpl(const OptionsList& options,
@@ -133,6 +148,7 @@ namespace Ipopt
     initialized_ = false;
     pivtol_changed_ = false;
     refactorize_ = false;
+    have_symbolic_factorization_ = false;
 
     DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*)mumps_ptr_;
     if (!warm_start_same_structure_) {
@@ -177,8 +193,16 @@ namespace Ipopt
     // check if a factorization has to be done
     DBG_PRINT((1, "new_matrix = %d\n", new_matrix));
     if (new_matrix || refactorize_) {
-      // perform the factorization
       ESymSolverStatus retval;
+      // Do the symbolic facotrization if it hasn't been done yet
+      if (!have_symbolic_factorization_) {
+        retval = SymbolicFactorization();
+        if (retval != SYMSOLVER_SUCCESS ) {
+          return retval;
+        }
+        have_symbolic_factorization_ = true;
+      }
+      // perform the factorization
       retval = Factorization(check_NegEVals, numberOfNegEVals);
       if (retval != SYMSOLVER_SUCCESS)  {
         DBG_PRINT((1, "FACTORIZATION FAILED!\n"));
@@ -245,11 +269,9 @@ namespace Ipopt
       mumps_->irn = const_cast<int*>(ia);
       mumps_->jcn = const_cast<int*>(ja);
 
-      // Do the symbolic facotrization
-      retval = SymbolicFactorization();
-      if (retval != SYMSOLVER_SUCCESS ) {
-        return retval;
-      }
+      // make sure we do the symbolic factorization before a real
+      // factorization
+      have_symbolic_factorization_ = false;
     }
     else {
       ASSERT_EXCEPTION(mumps_->n==dim && mumps_->nz==nonzeros,
@@ -278,11 +300,9 @@ namespace Ipopt
     //mumps_data->icntl[2] = 6;//QUIETLY!
     //mumps_data->icntl[3] = 4;
 
-    //Todo: reveal and tune these options
-    mumps_data->icntl[5] = 0;//no column permutation
-    mumps_data->icntl[6] = 0;//AMD ordering
-    //orig mumps_data->icntl[7] = 0;//no scalling
-    mumps_data->icntl[7] = 1;//no scalling
+    mumps_data->icntl[5] = mumps_permuting_scaling_;
+    mumps_data->icntl[6] = mumps_pivot_order_;
+    mumps_data->icntl[7] = mumps_scaling_;
     mumps_data->icntl[9] = 0;//no iterative refinement iterations
 
 

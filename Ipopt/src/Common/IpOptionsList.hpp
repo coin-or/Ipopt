@@ -169,7 +169,8 @@ namespace Ipopt
     //@}
 
     /** Method for clearing all previously set options */
-    void clear() {
+    void clear()
+    {
       options_.clear();
     }
 
