@@ -86,6 +86,15 @@ namespace Ipopt
     }
   }
 
+  IpoptApplication::IpoptApplication(SmartPtr<RegisteredOptions> reg_options,
+                                     SmartPtr<OptionsList> options,
+                                     SmartPtr<Journalist> jnlst)
+      :
+      reg_options_(reg_options),
+      options_(options),
+      jnlst_(jnlst)
+  {}
+
   SmartPtr<IpoptApplication> IpoptApplication::clone()
   {
     SmartPtr<IpoptApplication> retval = new IpoptApplication(false, true);

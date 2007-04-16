@@ -38,6 +38,12 @@ namespace Ipopt
     IpoptApplication(bool create_console_out = true,
                      bool create_empty = false);
 
+    /** Another constructor that assumes that the code in the
+     *  (default) constructor has already been executed */
+    IpoptApplication(SmartPtr<RegisteredOptions> reg_options,
+                     SmartPtr<OptionsList> options,
+                     SmartPtr<Journalist> jnlst);
+
     virtual ~IpoptApplication();
 
     /** Method for creating a new IpoptApplication that uses the same
