@@ -14,6 +14,18 @@
 #include "IpExpansionMatrix.hpp"
 #include "IpGenTMatrix.hpp"
 #include "IpSymTMatrix.hpp"
+#include "IpTDependencyDetector.hpp"
+#include "IpTSymDependencyDetector.hpp"
+
+#ifdef COIN_HAS_MUMPS
+# include "IpMumpsSolverInterface.hpp"
+#endif
+#ifdef HAVE_WSMP
+# include "IpWsmpSolverInterface.hpp"
+#endif
+#ifdef HAVE_MA28
+# include "IpMa28TDependencyDetector.hpp"
+#endif
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -24,16 +36,6 @@
 #  error "don't have header file for math"
 # endif
 #endif
-
-extern "C"
-{
-  void
-  F77_FUNC(ma28part,MA28PART)(ipfint* TASK, ipfint* N, ipfint* M, ipfint* NZ,
-                              double* A, ipfint* IROW, ipfint* ICOL,
-                              double* PIVTOL, ipfint* FILLFACT, ipfint* IVAR,
-                              ipfint* NDEGEN, ipfint* IDEGEN, ipfint* LIW,
-                              ipfint* IW, ipfint* LRW, double* RW, ipfint* IERR);
-}
 
 namespace Ipopt
 {
@@ -102,13 +104,15 @@ namespace Ipopt
       "constraints are relaxed (according to\" bound_relax_factor\"). For "
       "both \"make_constraints\" and \"relax_bounds\", bound multipliers are "
       "computed for the fixed variables.");
-    roptions->AddStringOption2(
-      "check_for_dependent_constraints",
-      "Indicates if Ipopt should check for linearly dependent equality constraints.",
-      "no",
-      "no", "don't check; no extra work at beginning",
-      "yes", "try to guess dependent constraints (might take some time)",
-      "If yes, MA28 is used to guess indices of linearly dependent equality constraints.  This is only available if Ipopt has been compiled with MA28.");
+    roptions->AddStringOption4(
+      "dependency_detector",
+      "Indicates which linear solver should be used to detect linearly dependent equality constraints.",
+      "none",
+      "none", "don't check; no extra work at beginning",
+      "mumps", "use MUMPS",
+      "wsmp", "use WSMP",
+      "ma28", "use MA28",
+      "The default and available choices depend on how Ipopt has been compiled.");
     roptions->AddLowerBoundedNumberOption(
       "point_perturbation_radius",
       "Maximal perturbation of an evaluation point.",
@@ -119,11 +123,6 @@ namespace Ipopt
       "we perturb the initial point in order to get a random Jacobian for the "
       "linear dependency detection of equality constraints.");
 
-    roptions->AddBoundedNumberOption(
-      "ma28_pivtol",
-      "Pivot tolerance for linear solver MA28.",
-      0.0, true, 1., false, 0.01,
-      "This is used when MA28 tried to find the dependent constraints.");
     roptions->SetRegisteringCategory("Derivative Checker");
     roptions->AddStringOption3(
       "derivative_test",
@@ -191,14 +190,57 @@ namespace Ipopt
     options.GetEnumValue("hessian_approximation", enum_int, prefix);
     hessian_approximation_ = HessianApproximationType(enum_int);
 
-    options.GetBoolValue("check_for_dependent_constraints",
-                         check_for_dependent_constraints_, prefix);
     options.GetNumericValue("point_perturbation_radius",
                             point_perturbation_radius_, prefix);
 
-    options.GetNumericValue("ma28_pivtol", ma28_pivtol_, prefix);
-
     options.GetNumericValue("tol", tol_, prefix);
+
+    std::string dependency_detector;
+    options.GetStringValue("dependency_detector",
+                           dependency_detector, prefix);
+    if (dependency_detector != "none") {
+      if (dependency_detector == "mumps") {
+#ifdef COIN_HAS_MUMPS
+        SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
+        SolverInterface = new MumpsSolverInterface();
+        SmartPtr<TSymLinearSolver> ScaledSolver =
+          new TSymLinearSolver(SolverInterface, NULL);
+        dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
+#else
+
+        THROW_EXCEPTION(OPTION_INVALID, "Ipopt has not been compiled with MUMPS.  You cannot choose \"mumps\" for \"dependency_detector\".");
+#endif
+
+      }
+      else if (dependency_detector == "wsmp") {
+#ifdef HAVE_WSMP
+        SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
+        SolverInterface = new WsmpSolverInterface();
+        SmartPtr<TSymLinearSolver> ScaledSolver =
+          new TSymLinearSolver(SolverInterface, NULL);
+        dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
+#else
+
+        THROW_EXCEPTION(OPTION_INVALID, "Ipopt has not been compiled with WSMP.  You cannot choose \"wsmp\" for \"dependency_detector\".");
+#endif
+
+      }
+      else if (dependency_detector == "ma28") {
+#ifdef HAVE_MA28
+        dependency_detector_ = new Ma28TDependencyDetector();
+#else
+
+        THROW_EXCEPTION(OPTION_INVALID, "Ipopt has not been compiled with MA28.  You cannot choose \"ma28\" for \"dependency_detector\".");
+#endif
+
+      }
+      else {
+        THROW_EXCEPTION(OPTION_INVALID, "Something internally wrong for \"dependency_detector\".");
+      }
+      if (!dependency_detector_->ReducedInitialize(*jnlst_, options, prefix)) {
+        return false;
+      }
+    }
 
     return true;
   }
@@ -538,7 +580,7 @@ namespace Ipopt
 
       // If requested, check if there are linearly dependent equality
       // constraints
-      if (n_c>0 && check_for_dependent_constraints_) {
+      if (n_c>0 && IsValid(dependency_detector_)) {
         std::list<Index> c_deps;
         if (!DetermineDependentConstraints(n_x_var, x_not_fixed_map,
                                            x_l, x_u, n_c, c_map, c_deps)) {
@@ -548,7 +590,7 @@ namespace Ipopt
         c_deps.sort();
         if (c_deps.size() > 0) {
           jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-                         "\nDetected %d dependent constraints; taking those out.\n\n",
+                         "\nDetected %d linearly dependent equality constraints; taking those out.\n\n",
                          c_deps.size());
         }
         else {
@@ -567,7 +609,7 @@ namespace Ipopt
         }
         if (c_deps.size()>0) {
           // Take the dependent constraints out.
-          // We assume that the list in i_c_dep is sorted
+          // We assume that the list in c_dep is sorted
           std::list<Index>::iterator idep = c_deps.begin();
           Index new_n_c = *idep;
           for (Index i=*idep; i<n_c; i++) {
@@ -587,6 +629,11 @@ namespace Ipopt
             }
           }
           n_c = new_n_c;
+          // We also need to set the multipliers for the constraints
+          // to zero (could do only for dependent ones... was too lazy
+          // right now)
+          const Number zero = 0.;
+          IpBlasDcopy(n_full_g_, &zero, 0, full_lambda_, 1);
         }
       }
       delete [] x_l;
@@ -1459,6 +1506,11 @@ namespace Ipopt
     ResortG(y_c, y_d, full_lambda_);
 
     Number* full_g = new Number[n_full_g_];
+    // TODO:
+    if (c.Dim() + d.Dim() < n_full_g_) {
+      const Number zero = 0.;
+      IpBlasDcopy(n_full_g_, &zero, 0, full_g, 1);
+    }
     ResortG(c, d, full_g);
     // To Ipopt, the equality constraints are presented with right
     // hand side zero, so we correct for the original right hand side.
@@ -1502,22 +1554,24 @@ namespace Ipopt
     delete [] full_g;
     full_g = NULL;
 
-    // Temporary: Check if we really have a feasible point:
-    Number max_viol = 0.;
-    Number* x_l = new Number[n_full_x_];
-    Number* x_u = new Number[n_full_x_];
-    Number* g_l = new Number[n_full_g_];
-    Number* g_u = new Number[n_full_g_];
-    tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
-    for (Index i=0; i<n_full_g_; i++) {
-      max_viol = Max(max_viol, full_g_[i]-g_u[i], g_l[i]-full_g_[i]);
+    if (c.Dim() + d.Dim() < n_full_g_) {
+      // Temporary: Check if we really have a feasible point:
+      Number max_viol = 0.;
+      Number* x_l = new Number[n_full_x_];
+      Number* x_u = new Number[n_full_x_];
+      Number* g_l = new Number[n_full_g_];
+      Number* g_u = new Number[n_full_g_];
+      tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+      for (Index i=0; i<n_full_g_; i++) {
+        max_viol = Max(max_viol, full_g_[i]-g_u[i], g_l[i]-full_g_[i]);
+      }
+      jnlst_->Printf(J_ITERSUMMARY, J_INITIALIZATION,
+                     "Constraint violation for ALL constraints is %e.\n", max_viol);
+      delete [] x_l;
+      delete [] x_u;
+      delete [] g_l;
+      delete [] g_u;
     }
-    jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
-                   "Constraint violation for all real constraints is %e\n", max_viol);
-    delete [] x_l;
-    delete [] x_u;
-    delete [] g_l;
-    delete [] g_u;
   }
 
   bool TNLPAdapter::
@@ -2179,7 +2233,6 @@ namespace Ipopt
     const Number* x_l, const Number* x_u, Index n_c,
     const Index* c_map, std::list<Index>& c_deps)
   {
-#if HAVE_MA28
     // First get a temporary expansion matrix for getting the equality
     // constraints
     SmartPtr<ExpansionMatrixSpace> P_c_g_space =
@@ -2256,19 +2309,13 @@ namespace Ipopt
       return false;
     }
     // Here we reset the random number generator
-    srandom(1);
+    srand(1);
     for (Index i=0; i<n_full_x_; i++) {
-      Number radius = Min(point_perturbation_radius_, x_u[i]-x_l[i]);
-      Number random_number = Number(random())/Number(RAND_MAX);
-      Number xi = full_x_[i] + (0.5-random_number)*radius;
-      full_x_[i] = Max(x_l[i], Min(xi, x_u[i]));
-      random_number = Number(random())/Number(RAND_MAX);
-      if (full_x_[i] == x_l[i]) {
-        full_x_[i] = x_l[i] + radius*random_number;
-      }
-      if (full_x_[i] == x_u[i]) {
-        full_x_[i] = x_u[i] - radius*random_number;
-      }
+      const Number lower = Max(x_l[i], full_x_[i]-point_perturbation_radius_);
+      const Number upper = Min(x_u[i], full_x_[i]+point_perturbation_radius_);
+      const Number interval = upper - lower;
+      const Number random_number = Number(rand())/Number(RAND_MAX);
+      full_x_[i] = lower + random_number*interval;
     }
     if (!tnlp_->eval_jac_g(n_full_x_, full_x_, true, n_full_g_,
                            nz_full_jac_g_, NULL, NULL, jac_g_)) {
@@ -2284,68 +2331,25 @@ namespace Ipopt
       jac_c_vals[i] = jac_g_[jac_c_map[i]];
     }
 
-    // Now comes the interesting part:
-    // Call Ma28 (or something else later) to get the dependencies
-    ipfint TASK = 0;
-    ipfint N = n_x_var;
-    ipfint M = n_c;
-    ipfint NZ = nz_jac_c;
-    double PIVTOL = ma28_pivtol_;
-    ipfint FILLFACT = 40;
-    ipfint* IVAR;
-    ipfint NDEGEN;
-    ipfint* IDEGEN;
-    ipfint LRW;
-    ipfint LIW;
-    double ddummy;
-    ipfint idummy;
-    ipfint IERR;
-    // First determine how much work space we need to allocate
-    IVAR = new ipfint[N];
-    IDEGEN = new ipfint[M];
-    F77_FUNC(ma28part,MA28PART)(&TASK, &N, &M, &NZ, &ddummy, jac_c_iRow,
-                                jac_c_jCol, &PIVTOL, &FILLFACT, IVAR, &NDEGEN,
-                                IDEGEN, &LIW, &idummy, &LRW, &ddummy, &IERR);
-    ipfint* IW = new ipfint[LIW];
-    double* RW = new double[LRW];
+    ASSERT_EXCEPTION(IsValid(dependency_detector_), OPTION_INVALID,
+                     "No dependency_detector_ object available in TNLPAdapter::DetermineDependentConstraints");
 
-    // Now do the actual factorization and determine dependent constraints
-    TASK = 1;
-    F77_FUNC(ma28part,MA28PART)(&TASK, &N, &M, &NZ, jac_c_vals, jac_c_iRow,
-                                jac_c_jCol, &PIVTOL, &FILLFACT, IVAR, &NDEGEN,
-                                IDEGEN, &LIW, IW, &LRW, RW, &IERR);
-    delete [] IVAR;
-    delete [] IW;
-    delete [] RW;
-    if (IERR != 0) {
-      jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-                     "MA28 returns IERR = %d when trying to determine dependent constraints\n", IERR);
+    bool retval = dependency_detector_->DetermineDependentRows(
+                    n_c, n_x_var, nz_jac_c, jac_c_vals, jac_c_iRow, jac_c_jCol,
+                    c_deps);
 
-      delete [] IDEGEN;
-      delete [] jac_c_iRow;
-      delete [] jac_c_jCol;
-      delete [] jac_c_map;
-      delete [] jac_c_vals;
-      return false;
-    }
+    // For now, we just get rid of the dependency_detector_ object, in
+    // order to save memory.  Maybe we need to add a clean method at
+    // some point if we think that this is actually used more than
+    // once...
+    dependency_detector_ = NULL;
 
-    c_deps.clear();
-    for (Index i=0; i<NDEGEN; i++) {
-      c_deps.push_back(IDEGEN[i]-1);
-    }
-
-    delete [] IDEGEN;
     delete [] jac_c_iRow;
     delete [] jac_c_jCol;
     delete [] jac_c_map;
     delete [] jac_c_vals;
-#else
 
-    THROW_EXCEPTION(OPTION_INVALID,
-                    "Detection of dependent constraints is only possible if MA28 is available.");
-#endif
-
-    return true;
+    return retval;
   }
 
 } // namespace Ipopt

@@ -99,7 +99,7 @@ C
       integer FILLFACT
       integer IVAR(N)
       integer NDEGEN
-      integer IDEGEN(NDEGEN)
+      integer IDEGEN(*)
       integer LRW
       double precision RW(LRW)
       integer LIW

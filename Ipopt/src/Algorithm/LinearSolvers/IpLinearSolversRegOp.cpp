@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -25,6 +25,9 @@
 #endif
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
+#endif
+#ifdef HAVE_MA28
+# include "IpMa28TDependencyDetector.hpp"
 #endif
 
 namespace Ipopt
@@ -62,6 +65,12 @@ namespace Ipopt
 
     roptions->SetRegisteringCategory("WSMP Linear Solver");
     WsmpSolverInterface::RegisterOptions(roptions);
+#endif
+
+#ifdef HAVE_MA28
+
+    roptions->SetRegisteringCategory("MA28 Linear Solver");
+    Ma28TDependencyDetector::RegisterOptions(roptions);
 #endif
 
     roptions->SetRegisteringCategory("Uncategorized");
