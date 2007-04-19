@@ -300,7 +300,6 @@ namespace Ipopt
       AugSolver = custom_solver_;
     }
     else {
-
       SmartPtr<TSymScalingMethod> ScalingMethod;
       std::string linear_system_scaling;
       if (!options.GetStringValue("linear_system_scaling",

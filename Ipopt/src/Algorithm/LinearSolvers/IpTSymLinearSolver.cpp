@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -8,6 +8,7 @@
 
 #include "IpTSymLinearSolver.hpp"
 #include "IpTripletHelper.hpp"
+#include "IpBlas.hpp"
 
 namespace Ipopt
 {
@@ -476,6 +477,169 @@ namespace Ipopt
       delete[] atriplet;
     }
 
+  }
+
+  bool TSymLinearSolver::ProvidesDegeneracyDetection() const
+  {
+    return solver_interface_->ProvidesDegeneracyDetection();
+  }
+
+  ESymSolverStatus TSymLinearSolver::
+  DetermineDependentRows(Index n_rows, Index n_cols,
+                         Index n_jac_nz,
+                         Number* jac_c_vals,
+                         Index* jac_c_iRow,
+                         Index* jac_c_jCol,
+                         std::list<Index>& c_deps)
+  {
+    DBG_START_METH("TSymLinearSolver::DetermineDependentRows",dbg_verbosity);
+
+    // Convert the input data into what this class expects.  We here
+    // give ALL diagonal elements, so that the linear solver will not
+    // quite because of structural singularity
+    dim_ = n_rows + n_cols;
+    nonzeros_triplet_ = n_jac_nz + dim_;
+
+    delete [] airn_;
+    delete [] ajcn_;
+    airn_ = new Index[nonzeros_triplet_];
+    ajcn_ = new Index[nonzeros_triplet_];
+
+    for (int i=0; i<n_jac_nz; i++) {
+      airn_[i] = jac_c_iRow[i] + n_cols;
+      ajcn_[i] = jac_c_jCol[i];
+    }
+    for (int i=0; i<dim_; i++) {
+      airn_[n_jac_nz+i] = i+1;
+      ajcn_[n_jac_nz+i] = i+1;
+    }
+
+    // If the solver wants the compressed format, the converter has to
+    // be initialized
+    const Index *ia;
+    const Index *ja;
+    Index nonzeros;
+    if (matrix_format_ == SparseSymLinearSolverInterface::Triplet_Format) {
+      ia = airn_;
+      ja = ajcn_;
+      nonzeros = nonzeros_triplet_;
+    }
+    else {
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemStructureConverter().Start();
+        IpData().TimingStats().LinearSystemStructureConverterInit().Start();
+      }
+      nonzeros_compressed_ =
+        triplet_to_csr_converter_->InitializeConverter(dim_, nonzeros_triplet_,
+            airn_, ajcn_);
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemStructureConverterInit().End();
+      }
+      ia = triplet_to_csr_converter_->IA();
+      ja = triplet_to_csr_converter_->JA();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemStructureConverter().End();
+      }
+      nonzeros = nonzeros_compressed_;
+    }
+
+    ESymSolverStatus retval =
+      solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
+    if (retval != SYMSOLVER_SUCCESS) {
+      return retval;
+    }
+
+    // Get space for the scaling factors
+    delete [] scaling_factors_;
+    if (IsValid(scaling_method_)) {
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemScaling().Start();
+      }
+      scaling_factors_ = new double[dim_];
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemScaling().End();
+      }
+    }
+
+    double* pa = solver_interface_->GetValuesArrayPtr();
+    double* atriplet;
+
+    if (matrix_format_!=SparseSymLinearSolverInterface::Triplet_Format) {
+      atriplet = new double[nonzeros_triplet_];
+    }
+    else {
+      atriplet = pa;
+    }
+
+    IpBlasDcopy(n_jac_nz, jac_c_vals, 1, atriplet, 1);
+    const Number one = 1.;
+    IpBlasDcopy(n_cols, &one, 0, atriplet+n_jac_nz, 1);
+    const Number zero = 0.;
+    IpBlasDcopy(n_rows, &zero, 0, atriplet+n_jac_nz+n_cols, 1);
+
+    if (DBG_VERBOSITY()>=3) {
+      for (Index i=0; i<nonzeros_triplet_; i++) {
+        DBG_PRINT((3, "KKTunscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
+      }
+    }
+
+    if (use_scaling_) {
+      IpData().TimingStats().LinearSystemScaling().Start();
+      DBG_ASSERT(scaling_factors_);
+      // only compute scaling factors if the matrix has not been
+      // changed since the last call to this method
+      bool retval2 =
+        scaling_method_->ComputeSymTScalingFactors(dim_, nonzeros_triplet_,
+            airn_, ajcn_,
+            atriplet, scaling_factors_);
+      if (!retval2) {
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Error during computation of scaling factors.\n");
+        THROW_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD, "scaling_method_->ComputeSymTScalingFactors returned false.")
+      }
+      // complain if not in debug mode
+      if (Jnlst().ProduceOutput(J_MOREVECTOR, J_LINEAR_ALGEBRA)) {
+        for (Index i=0; i<dim_; i++) {
+          Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA,
+                         "scaling factor[%6d] = %22.17e\n",
+                         i, scaling_factors_[i]);
+        }
+      }
+      for (Index i=0; i<nonzeros_triplet_; i++) {
+        atriplet[i] *=
+          scaling_factors_[airn_[i]-1] * scaling_factors_[ajcn_[i]-1];
+      }
+      if (DBG_VERBOSITY()>=3) {
+        for (Index i=0; i<nonzeros_triplet_; i++) {
+          DBG_PRINT((3, "KKTscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
+        }
+      }
+      IpData().TimingStats().LinearSystemScaling().End();
+    }
+
+    if (matrix_format_!=SparseSymLinearSolverInterface::Triplet_Format) {
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemStructureConverter().Start();
+      }
+      triplet_to_csr_converter_->ConvertValues(nonzeros_triplet_, atriplet,
+          nonzeros_compressed_, pa);
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemStructureConverter().End();
+      }
+      delete[] atriplet;
+    }
+
+    retval = solver_interface_->DetermineDependentRows(ia, ja, c_deps);
+
+    // We need to correct the indices
+    if (retval == SYMSOLVER_SUCCESS) {
+      for (std::list<Index>::iterator i = c_deps.begin();
+           i != c_deps.end(); i++) {
+        *i -= n_cols;
+      }
+    }
+
+    return retval;
   }
 
 } // namespace Ipopt

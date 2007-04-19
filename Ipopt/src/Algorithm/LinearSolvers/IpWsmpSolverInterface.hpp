@@ -89,6 +89,16 @@ namespace Ipopt
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
+    /** Query whether the indices of linearly dependent rows/columns
+     *  can be determined by this linear solver. */
+    virtual bool ProvidesDegeneracyDetection() const;
+
+    /** This method determines the list of row indices of the linearly
+     *  dependent rows. */
+    virtual ESymSolverStatus DetermineDependentRows(const Index* ia,
+        const Index* ja,
+        std::list<Index>& c_deps);
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -171,8 +181,10 @@ namespace Ipopt
     //@{
     /** Call Wsmp to do the analysis phase.
      */
-    ESymSolverStatus SymbolicFactorization(const Index* ia,
-                                           const Index* ja);
+    ESymSolverStatus SymbolicFactorization(const Index* ia, const Index* ja);
+
+    /** Call Wsmp to really do the analysis phase. */
+    ESymSolverStatus InternalSymFact(const Index* ia, const Index* ja);
 
     /** Call Wsmp to factorize the Matrix.
      */

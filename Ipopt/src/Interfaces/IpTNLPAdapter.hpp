@@ -21,6 +21,7 @@ namespace Ipopt
   class ExpansionMatrix;
   class ExpansionMatrixSpace;
   class IteratesVector;
+  class TDependencyDetector;
 
   /** This class Adapts the TNLP interface so it looks like an NLP interface.
    *  This is an Adapter class (Design Patterns) that converts  a TNLP to an
@@ -225,6 +226,10 @@ namespace Ipopt
     /** Journalist */
     SmartPtr<const Journalist> jnlst_;
 
+    /** Object that can be used to detect linearly dependent rows in
+     *  the equality constraint Jacobian */
+    SmartPtr<TDependencyDetector> dependency_detector_;
+
     /**@name Algorithmic parameters */
     //@{
     /** Value for a lower bound that denotes -infinity */
@@ -256,14 +261,8 @@ namespace Ipopt
     bool warm_start_same_structure_;
     /** Flag indicating what Hessian information is to be used. */
     HessianApproximationType hessian_approximation_;
-    /** Flag indicating if we should check for linearly dependent
-     *  equality constraints. */
-    bool check_for_dependent_constraints_;
     /** Maximal perturbation of the initial point */
     Number point_perturbation_radius_;
-
-    /** Pivot tolerance for MA28 for check for dependent constraints */
-    Number ma28_pivtol_;
 
     /** Overall convergence tolerance */
     Number tol_;

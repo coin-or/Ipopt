@@ -15,7 +15,9 @@ liblinsolvers_la_SOURCES = \
 	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
 	IpSparseSymLinearSolverInterface.hpp \
 	IpSymLinearSolver.hpp \
+	IpTDependencyDetector.hpp \
 	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
+	IpTSymDependencyDetector.cpp IpTSymDependencyDetector.hpp \
 	IpTSymLinearSolver.cpp IpTSymLinearSolver.hpp \
 	IpTSymScalingMethod.hpp
 
@@ -51,7 +53,8 @@ endif
 
 if HAVE_MA28
   liblinsolvers_la_SOURCES += \
-	IpMa28Partition.f
+	IpMa28Partition.f \
+	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
 endif
 
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
@@ -88,12 +91,15 @@ ASTYLE_FILES = \
 	IpGenKKTSolverInterface.hppbak \
 	IpLinearSolversRegOp.cppbak IpLinearSolversRegOp.hppbak \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
+	IpMa28TDependencyDetector.cppbak IpMa28TDependencyDetector.hppbak \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
 	IpMumpsSolverInterface.cppbak IpMumpsSolverInterface.hppbak \
 	IpSparseSymLinearSolverInterface.hppbak \
 	IpSymLinearSolver.hppbak \
+	IpTDependencyDetector.hppbak \
 	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
+	IpTSymDependencyDetector.cppbak IpTSymDependencyDetector.hppbak \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
 	IpTSymScalingMethod.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \

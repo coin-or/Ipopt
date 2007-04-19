@@ -61,7 +61,8 @@ host_triplet = @host@
 @HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
 
 @HAVE_MA28_TRUE@am__append_7 = \
-@HAVE_MA28_TRUE@	IpMa28Partition.f
+@HAVE_MA28_TRUE@	IpMa28Partition.f \
+@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
 
 @COIN_HAS_MUMPS_TRUE@am__append_8 = \
 @COIN_HAS_MUMPS_TRUE@	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
@@ -82,29 +83,33 @@ liblinsolvers_la_LIBADD =
 am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
 	IpSparseSymLinearSolverInterface.hpp IpSymLinearSolver.hpp \
-	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
-	IpTSymLinearSolver.cpp IpTSymLinearSolver.hpp \
-	IpTSymScalingMethod.hpp IpMa27TSolverInterface.cpp \
-	IpMa27TSolverInterface.hpp IpMa57TSolverInterface.cpp \
-	IpMa57TSolverInterface.hpp IpMc19TSymScalingMethod.cpp \
-	IpMc19TSymScalingMethod.hpp IpPardisoSolverInterface.cpp \
-	IpPardisoSolverInterface.hpp IpTAUCSSolverInterface.cpp \
-	IpTAUCSSolverInterface.hpp IpWsmpSolverInterface.cpp \
-	IpWsmpSolverInterface.hpp IpMa28Partition.f \
-	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+	IpTDependencyDetector.hpp IpTripletToCSRConverter.cpp \
+	IpTripletToCSRConverter.hpp IpTSymDependencyDetector.cpp \
+	IpTSymDependencyDetector.hpp IpTSymLinearSolver.cpp \
+	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp \
+	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
+	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
+	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
+	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
+	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp \
+	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
+	IpMa28Partition.f IpMa28TDependencyDetector.cpp \
+	IpMa28TDependencyDetector.hpp IpMumpsSolverInterface.cpp \
+	IpMumpsSolverInterface.hpp
 @HAVE_MA27_TRUE@am__objects_1 = IpMa27TSolverInterface.lo
 @HAVE_MA57_TRUE@am__objects_2 = IpMa57TSolverInterface.lo
 @HAVE_MC19_TRUE@am__objects_3 = IpMc19TSymScalingMethod.lo
 @HAVE_PARDISO_TRUE@am__objects_4 = IpPardisoSolverInterface.lo
 @HAVE_TAUCS_TRUE@am__objects_5 = IpTAUCSSolverInterface.lo
 @HAVE_WSMP_TRUE@am__objects_6 = IpWsmpSolverInterface.lo
-@HAVE_MA28_TRUE@am__objects_7 = IpMa28Partition.lo
+@HAVE_MA28_TRUE@am__objects_7 = IpMa28Partition.lo \
+@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.lo
 @COIN_HAS_MUMPS_TRUE@am__objects_8 = IpMumpsSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
-	IpTripletToCSRConverter.lo IpTSymLinearSolver.lo \
-	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
-	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
-	$(am__objects_7) $(am__objects_8)
+	IpTripletToCSRConverter.lo IpTSymDependencyDetector.lo \
+	IpTSymLinearSolver.lo $(am__objects_1) $(am__objects_2) \
+	$(am__objects_3) $(am__objects_4) $(am__objects_5) \
+	$(am__objects_6) $(am__objects_7) $(am__objects_8)
 liblinsolvers_la_OBJECTS = $(am_liblinsolvers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -324,11 +329,13 @@ noinst_LTLIBRARIES = liblinsolvers.la
 liblinsolvers_la_SOURCES = IpGenKKTSolverInterface.hpp \
 	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
 	IpSparseSymLinearSolverInterface.hpp IpSymLinearSolver.hpp \
-	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
-	IpTSymLinearSolver.cpp IpTSymLinearSolver.hpp \
-	IpTSymScalingMethod.hpp $(am__append_1) $(am__append_2) \
-	$(am__append_3) $(am__append_4) $(am__append_5) \
-	$(am__append_6) $(am__append_7) $(am__append_8)
+	IpTDependencyDetector.hpp IpTripletToCSRConverter.cpp \
+	IpTripletToCSRConverter.hpp IpTSymDependencyDetector.cpp \
+	IpTSymDependencyDetector.hpp IpTSymLinearSolver.cpp \
+	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp $(am__append_1) \
+	$(am__append_2) $(am__append_3) $(am__append_4) \
+	$(am__append_5) $(am__append_6) $(am__append_7) \
+	$(am__append_8)
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg` -I`$(CYGPATH_W) \
@@ -345,12 +352,15 @@ ASTYLE_FILES = \
 	IpGenKKTSolverInterface.hppbak \
 	IpLinearSolversRegOp.cppbak IpLinearSolversRegOp.hppbak \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
+	IpMa28TDependencyDetector.cppbak IpMa28TDependencyDetector.hppbak \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
 	IpMumpsSolverInterface.cppbak IpMumpsSolverInterface.hppbak \
 	IpSparseSymLinearSolverInterface.hppbak \
 	IpSymLinearSolver.hppbak \
+	IpTDependencyDetector.hppbak \
 	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
+	IpTSymDependencyDetector.cppbak IpTSymDependencyDetector.hppbak \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
 	IpTSymScalingMethod.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
@@ -412,11 +422,13 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLinearSolversRegOp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa27TSolverInterface.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa28TDependencyDetector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa57TSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19TSymScalingMethod.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMumpsSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPardisoSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTAUCSSolverInterface.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTSymDependencyDetector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTSymLinearSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTripletToCSRConverter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpWsmpSolverInterface.Plo@am__quote@

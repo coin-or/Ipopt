@@ -90,9 +90,9 @@ namespace Ipopt
                                      SmartPtr<OptionsList> options,
                                      SmartPtr<Journalist> jnlst)
       :
+      jnlst_(jnlst),
       reg_options_(reg_options),
-      options_(options),
-      jnlst_(jnlst)
+      options_(options)
   {}
 
   SmartPtr<IpoptApplication> IpoptApplication::clone()

@@ -120,8 +120,15 @@ namespace Ipopt
     roptions->AddBoundedIntegerOption(
       "mumps_scaling",
       "Controls scaling in MUMPS",
-      0, 7, 7,
+      -2, 7, 7,
       "This is ICTL(8) in MUMPS.");
+    roptions->AddNumberOption(
+      "mumps_dep_tol",
+      "Pivot threshold for detecion of linearly dependent constraints in MUMPS.",
+      1e-10,
+      "When MUMPS is used to determine linearly dependent constraints, this "
+      "is determines the threshold for a pivot to be considered zero.  This "
+      "is CNTL(3) in MUMPS.");
   }
 
   bool MumpsSolverInterface::InitializeImpl(const OptionsList& options,
@@ -143,6 +150,12 @@ namespace Ipopt
     // The following option is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
+
+    options.GetIntegerValue("mumps_permuting_scaling",
+                            mumps_permuting_scaling_, prefix);
+    options.GetIntegerValue("mumps_pivot_order", mumps_pivot_order_, prefix);
+    options.GetIntegerValue("mumps_scaling", mumps_scaling_, prefix);
+    options.GetNumericValue("mumps_dep_tol", mumps_dep_tol_, prefix);
 
     // Reset all private data
     initialized_ = false;
@@ -285,10 +298,13 @@ namespace Ipopt
 
   ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
   {
-    DBG_START_METH("MumpsSolverInterface::Factorization", dbg_verbosity);
+    DBG_START_METH("MumpsSolverInterface::SymbolicFactorization",
+                   dbg_verbosity);
     DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*)mumps_ptr_;
 
-    IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+    }
 
     mumps_data->job = 1;//symbolic ordering pass
 
@@ -314,6 +330,14 @@ namespace Ipopt
 
     dmumps_c(mumps_data);
     int error = mumps_data->info[0];
+    const int& mumps_permuting_scaling_used = mumps_data->infog[22];
+    const int& mumps_pivot_order_used = mumps_data->infog[6];
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "MUMPS used permuting_scaling %d and pivot_order %d.\n",
+                   mumps_permuting_scaling_used, mumps_pivot_order_used);
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "           scaling will be %d.\n",
+                   mumps_data->icntl[7]);
 
     //return appropriat value
     if (error == -6) {//system is singular
@@ -328,7 +352,9 @@ namespace Ipopt
       return SYMSOLVER_FATAL_ERROR;
     }
 
-    IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+    }
 
     return SYMSOLVER_SUCCESS;
   }
@@ -402,7 +428,9 @@ namespace Ipopt
     DBG_START_METH("MumpsSolverInterface::Solve", dbg_verbosity);
     DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*)mumps_ptr_;
     ESymSolverStatus retval = SYMSOLVER_SUCCESS;
-    IpData().TimingStats().LinearSystemBackSolve().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().Start();
+    }
     for (Index i = 0; i < nrhs; i++) {
       Index offset = i * mumps_data->n;
       mumps_data->rhs = &(rhs_vals[offset]);
@@ -416,7 +444,9 @@ namespace Ipopt
         retval = SYMSOLVER_FATAL_ERROR;
       }
     }
-    IpData().TimingStats().LinearSystemBackSolve().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().End();
+    }
     return retval;
   }
 
@@ -446,6 +476,93 @@ namespace Ipopt
                    "to %7.2e.\n",
                    pivtol_);
     return true;
+  }
+
+  bool MumpsSolverInterface::ProvidesDegeneracyDetection() const
+  {
+    return true;
+  }
+
+  ESymSolverStatus MumpsSolverInterface::
+  DetermineDependentRows(const Index* ia, const Index* ja,
+                         std::list<Index>& c_deps)
+  {
+    DBG_START_METH("MumpsSolverInterface::DetermineDependentRows",
+                   dbg_verbosity);
+    DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*)mumps_ptr_;
+
+    c_deps.clear();
+
+    ESymSolverStatus retval;
+    // Do the symbolic facotrization if it hasn't been done yet
+    if (!have_symbolic_factorization_) {
+      const Index mumps_permuting_scaling_orig = mumps_permuting_scaling_;
+      const Index mumps_scaling_orig = mumps_scaling_;
+      mumps_permuting_scaling_ = 0;
+      mumps_scaling_ = 6;
+      retval = SymbolicFactorization();
+      mumps_permuting_scaling_ = mumps_permuting_scaling_orig;
+      mumps_scaling_ = mumps_scaling_orig;
+      if (retval != SYMSOLVER_SUCCESS ) {
+        return retval;
+      }
+      have_symbolic_factorization_ = true;
+    }
+    // perform the factorization, in order to find dependent rows/columns
+
+    //Set flags to ask MUMPS for checking linearly dependent rows
+    mumps_data->icntl[23] = 1;
+    mumps_data->cntl[2] = mumps_dep_tol_;
+    mumps_data->job = 2;//numerical factorization
+
+    dump_matrix(mumps_data);
+    dmumps_c(mumps_data);
+    int error = mumps_data->info[0];
+
+    //Check for errors
+    if (error == -8 || error == -9) {//not enough memory
+      const Index trycount_max = 20;
+      for(int trycount=0; trycount<trycount_max; trycount++) {
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                       "MUMPS returned INFO(1) = %d and requires more memory, reallocating.  Attempt %d\n",
+                       error,trycount+1);
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                       "  Increasing icntl[13] from %d to ", mumps_data->icntl[13]);
+        double mem_percent = mumps_data->icntl[13];
+        mumps_data->icntl[13] = (Index)(2.0 * mem_percent);
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "%d.\n", mumps_data->icntl[13]);
+
+        dump_matrix(mumps_data);
+        dmumps_c(mumps_data);
+        error = mumps_data->info[0];
+        if (error != -8 & error != -9)
+          break;
+      }
+      if (error == -8 || error == -9) {
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "MUMPS was not able to obtain enough memory.\n");
+        // Reset flags
+        mumps_data->icntl[23] = 0;
+        return SYMSOLVER_FATAL_ERROR;
+      }
+    }
+
+    // Reset flags
+    mumps_data->icntl[23] = 0;
+
+    if (error < 0) {//some other error
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "MUMPS returned INFO(1) =%d MUMPS failure.\n",
+                     error);
+      return SYMSOLVER_FATAL_ERROR;
+    }
+
+    const Index n_deps = mumps_data->infog[27];
+    for (Index i=0; i<n_deps; i++) {
+      c_deps.push_back(mumps_data->pivnul_list[i]-1);
+    }
+
+    return SYMSOLVER_SUCCESS;
   }
 
 }//end Ipopt namespace

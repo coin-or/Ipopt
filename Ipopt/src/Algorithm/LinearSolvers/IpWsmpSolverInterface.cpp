@@ -39,7 +39,7 @@ extern "C"
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
-  static const Index dbg_verbosity = 0;
+  static const Index dbg_verbosity = 3;
 #endif
 
   WsmpSolverInterface::WsmpSolverInterface()
@@ -268,8 +268,74 @@ namespace Ipopt
     DBG_START_METH("WsmpSolverInterface::SymbolicFactorization",
                    dbg_verbosity);
 
-    // This is postpone until the first factorization call, since the
-    // we the values in the matrix are known
+    // This is postponed until the first factorization call, since
+    // then the values in the matrix are known
+    return SYMSOLVER_SUCCESS;
+  }
+
+  ESymSolverStatus
+  WsmpSolverInterface::InternalSymFact(
+    const Index* ia,
+    const Index* ja)
+  {
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+    }
+
+    // Create space for the permutations
+    delete [] PERM_;
+    PERM_ = NULL;
+    delete [] INVP_;
+    INVP_ = NULL;
+    PERM_ = new ipfint[dim_];
+    INVP_ = new ipfint[dim_];
+
+    // Call WSSMP for ordering and symbolic factorization
+    ipfint N = dim_;
+    ipfint NAUX = 0;
+    IPARM_[1] = 1; // ordering
+    IPARM_[2] = 2; // symbolic factorization
+    ipfint idmy;
+    double ddmy;
+    F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
+                          &ddmy, &idmy, &idmy, &ddmy, &NAUX, &idmy,
+                          IPARM_, DPARM_);
+
+    Index ierror = IPARM_[63];
+    if (ierror!=0) {
+      if (ierror==-102) {
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
+      }
+      else if (ierror>0) {
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Matrix appears to be singular (with ierror = %d).\n",
+                       ierror);
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+        }
+        return SYMSOLVER_SINGULAR;
+      }
+      else {
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
+      }
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+      }
+      return SYMSOLVER_FATAL_ERROR;
+    }
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+                   IPARM_[22]);
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+                   IPARM_[23]);
+
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+    }
+
     return SYMSOLVER_SUCCESS;
   }
 
@@ -310,62 +376,9 @@ namespace Ipopt
     // Check if we have to do the symbolic factorization and ordering
     // phase yet
     if (!have_symbolic_factorization_) {
-      if (HaveIpData()) {
-        IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
-      }
-
-      // Create space for the permutations
-      delete [] PERM_;
-      PERM_ = NULL;
-      delete [] INVP_;
-      INVP_ = NULL;
-      PERM_ = new ipfint[dim_];
-      INVP_ = new ipfint[dim_];
-
-      // Call WSSMP for ordering and symbolic factorization
-      ipfint N = dim_;
-      ipfint NAUX = 0;
-      IPARM_[1] = 1; // ordering
-      IPARM_[2] = 2; // symbolic factorization
-      ipfint idmy;
-      double ddmy;
-      F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
-                            &ddmy, &idmy, &idmy, &ddmy, &NAUX, &idmy,
-                            IPARM_, DPARM_);
-
-      Index ierror = IPARM_[63];
-      if (ierror!=0) {
-        if (ierror==-102) {
-          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                         "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
-        }
-        else if (ierror>0) {
-          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                         "Matrix appears to be singular (with ierror = %d).\n",
-                         ierror);
-          if (HaveIpData()) {
-            IpData().TimingStats().LinearSystemSymbolicFactorization().End();
-          }
-          return SYMSOLVER_SINGULAR;
-        }
-        else {
-          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                         "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
-        }
-        if (HaveIpData()) {
-          IpData().TimingStats().LinearSystemSymbolicFactorization().End();
-        }
-        return SYMSOLVER_FATAL_ERROR;
-      }
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n",
-                     IPARM_[22]);
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
-                     IPARM_[23]);
-
-      if (HaveIpData()) {
-        IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+      ESymSolverStatus retval = InternalSymFact(ia, ja);
+      if (retval != SYMSOLVER_SUCCESS) {
+        return retval;
       }
       have_symbolic_factorization_ = true;
     }
@@ -379,12 +392,14 @@ namespace Ipopt
     ipfint NAUX = 0;
     IPARM_[1] = 3; // numerical factorization
     IPARM_[2] = 3; // numerical factorization
-    DPARM_[10] = wsmp_pivtol_; // set current pivolt tolerance
+    DPARM_[10] = wsmp_pivtol_; // set current pivot tolerance
     ipfint idmy;
     double ddmy;
+
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
                           &idmy, &ddmy, &NAUX, &idmy, IPARM_, DPARM_);
-    Index ierror = IPARM_[63];
+
+    const Index ierror = IPARM_[63];
     if (ierror > 0) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "WSMP detected that the matrix is singular and encountered %d zero pivots.\n", dim_+1-ierror);
@@ -512,5 +527,109 @@ namespace Ipopt
                    wsmp_pivtol_);
     return true;
   }
+
+  bool WsmpSolverInterface::ProvidesDegeneracyDetection() const
+  {
+    return true;
+  }
+
+  ESymSolverStatus WsmpSolverInterface::
+  DetermineDependentRows(const Index* ia, const Index* ja,
+                         std::list<Index>& c_deps)
+  {
+    DBG_START_METH("WsmpSolverInterface::DetermineDependentRows",
+                   dbg_verbosity);
+
+    c_deps.clear();
+
+    //DELETEME
+
+    char buf[256];
+    sprintf(buf, "wsmp_matrix.dat");
+    Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
+                   "Writing WSMP matrix into file %s.\n", buf);
+    FILE* fp = fopen(buf, "w");
+    fprintf(fp, "%d\n", dim_); // N
+    for (Index icol=0; icol<dim_; icol++) {
+      fprintf(fp, "%d", ia[icol+1]-ia[icol]); // number of elements for this column
+      // Now for each colum we write row indices and values
+      for (Index irow=ia[icol]; irow<ia[icol+1]; irow++) {
+        fprintf(fp, " %23.16e %d",a_[irow-1],ja[irow-1]);
+      }
+      fprintf(fp, "\n");
+    }
+    fclose(fp);
+
+    //DELETEME
+
+    if (!have_symbolic_factorization_) {
+      ESymSolverStatus retval = InternalSymFact(ia, ja);
+      if (retval != SYMSOLVER_SUCCESS) {
+        return retval;
+      }
+      have_symbolic_factorization_ = true;
+    }
+
+    // Call WSSMP for numerical factorization to detect degenerate
+    // rows/columns
+    ipfint N = dim_;
+    ipfint NAUX = 0;
+    IPARM_[1] = 3; // numerical factorization
+    IPARM_[2] = 3; // numerical factorization
+    DPARM_[10] = wsmp_pivtol_; // set current pivot tolerance
+    ipfint idmy;
+    double ddmy;
+
+    printf(" N = %d\n", N);
+    IPARM_[10] = 2;  // Yes, get the indices of bad rows/columns
+    IPARM_[12] = -1; // This is the marker value
+    ipfint* MRP = new ipfint[N];
+    for (int i=0; i<N; i++) {
+      MRP[i] = 0;  // and that is the good value
+    }
+    F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+                          &idmy, &ddmy, &NAUX, MRP, IPARM_, DPARM_);
+    const Index ierror = IPARM_[63];
+    if (ierror == 0) {
+      printf(" N = %d\n", N);
+      Index ndegen = IPARM_[20];
+      int ii = 0;
+      for (int i=0; i<N; i++) {
+        printf("MRP[%d] = %d\n", i, MRP[i]);
+        if (MRP[i] == -1) {
+          c_deps.push_back(i);
+          ii++;
+        }
+      }
+      printf("ii=%d ndegen=%d\n",ii,ndegen);
+      assert(ii == ndegen);
+    }
+    delete [] MRP;
+    if (ierror > 0) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "WSMP detected that the matrix is singular and encountered %d zero pivots.\n", dim_+1-ierror);
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemFactorization().End();
+      }
+      return SYMSOLVER_SINGULAR;
+    }
+    else if (ierror != 0) {
+      if (ierror == -102) {
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Error: WSMP is not able to allocate sufficient amount of memory during factorization.\n");
+      }
+      else {
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Error in WSMP during factorization phase.\n     Error code is %d.\n", ierror);
+      }
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemFactorization().End();
+      }
+      return SYMSOLVER_FATAL_ERROR;
+    }
+
+    return SYMSOLVER_SUCCESS;
+  }
+
 
 } // namespace Ipopt

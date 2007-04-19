@@ -107,6 +107,16 @@ namespace Ipopt
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
+    /** Query whether the indices of linearly dependent rows/columns
+     *  can be determined by this linear solver. */
+    virtual bool ProvidesDegeneracyDetection() const;
+
+    /** This method determines the list of row indices of the linearly
+     *  dependent rows. */
+    virtual ESymSolverStatus DetermineDependentRows(const Index* ia,
+        const Index* ja,
+        std::list<Index>& c_deps);
+
   private:
     /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
@@ -168,6 +178,10 @@ namespace Ipopt
 
     /** Scaling in MUMPS */
     Index mumps_scaling_;
+
+    /** Threshold in MUMPS to stay that a constraint is linearly
+     *  dependent */
+    Number mumps_dep_tol_;
 
     /** Flag indicating whether the TNLP with identical structure has
      *  already been solved before. */
