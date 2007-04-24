@@ -2,6 +2,11 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2007-04-24 releases/3.2.4
+        - updated download script for Blas to fit netlib's
+          recent changes
+        - using a more recent version of BuildTools
+
 2006-11-29 release/3.2.3
         - updated download script for Lapack to fit to netlib's
           recent changes
