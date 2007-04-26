@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -331,6 +331,15 @@ namespace Ipopt
                            Index& niv_) const;
     //@}
 
+    /** A method for setting the index of the objective function to be
+     *  considered.  This method must be called after the constructor,
+     *  and before anything else is called.  It can only be called
+     *  once.  If this method is not called, it is assume that the
+     *  first objective function (ASL index 0) is the active one.
+     *  Usually, we only have one objective function, but there might
+     *  be exceptions. */
+    void set_active_objective(Index obj_no);
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -389,6 +398,10 @@ namespace Ipopt
      *  current x, set to false in apply_new_x, and set to true in
      *  internal_conval */
     bool conval_called_with_current_x_;
+    /** true when we have called hesset */
+    bool hesset_called_;
+    /** true when set_active_objective has been called */
+    bool set_active_objective_called_;
     //@}
 
     /** Pointer to the Oinfo structure */
@@ -421,6 +434,9 @@ namespace Ipopt
 
     /** returns true if the ampl nerror code is ok */
     bool nerror_ok(void* nerror);
+
+    /** calls hesset ASL function */
+    void call_hesset();
   };
 
 
