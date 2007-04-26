@@ -49,7 +49,8 @@ namespace Ipopt
       initialized_(false),
 
       PERM_(NULL),
-      INVP_(NULL)
+      INVP_(NULL),
+      MRP_(NULL)
   {
     DBG_START_METH("WsmpSolverInterface::WsmpSolverInterface()",dbg_verbosity);
 
@@ -67,6 +68,7 @@ namespace Ipopt
 
     delete[] PERM_;
     delete[] INVP_;
+    delete[] MRP_;
     delete[] IPARM_;
     delete[] DPARM_;
     delete[] a_;
@@ -156,6 +158,8 @@ namespace Ipopt
     PERM_ = NULL;
     delete[] INVP_;
     INVP_ = NULL;
+    delete[] MRP_;
+    MRP_ = NULL;
 
     // Set the number of threads
     ipfint NTHREADS = wsmp_num_threads_;
@@ -182,9 +186,7 @@ namespace Ipopt
     //IPARM_[31] = 1; // need D to see where first negative eigenvalue occurs
     //                   if we change this, we need DIAG arguments below!
 
-    IPARM_[10] = 1; // THis is not used by Bunch/Kaufman, but for L D
-    // L^T without pivoting it is the value we used
-    // before
+    IPARM_[10] = 2; // Mark bad pivots
 
     // Set WSMP's scaling option
     IPARM_[9] = wsmp_scaling_;
@@ -287,8 +289,11 @@ namespace Ipopt
     PERM_ = NULL;
     delete [] INVP_;
     INVP_ = NULL;
+    delete [] MRP_;
+    MRP_ = NULL;
     PERM_ = new ipfint[dim_];
     INVP_ = new ipfint[dim_];
+    MRP_ = new ipfint[dim_];
 
     // Call WSSMP for ordering and symbolic factorization
     ipfint N = dim_;
@@ -298,7 +303,7 @@ namespace Ipopt
     ipfint idmy;
     double ddmy;
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
-                          &ddmy, &idmy, &idmy, &ddmy, &NAUX, &idmy,
+                          &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_,
                           IPARM_, DPARM_);
 
     Index ierror = IPARM_[63];
@@ -397,7 +402,7 @@ namespace Ipopt
     double ddmy;
 
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
-                          &idmy, &ddmy, &NAUX, &idmy, IPARM_, DPARM_);
+                          &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
 
     const Index ierror = IPARM_[63];
     if (ierror > 0) {
@@ -478,7 +483,7 @@ namespace Ipopt
     double ddmy;
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
                           rhs_vals, &LDB, &NRHS, &ddmy, &NAUX,
-                          &idmy, IPARM_, DPARM_);
+                          MRP_, IPARM_, DPARM_);
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemBackSolve().End();
     }
@@ -542,26 +547,6 @@ namespace Ipopt
 
     c_deps.clear();
 
-    //DELETEME
-
-    char buf[256];
-    sprintf(buf, "wsmp_matrix.dat");
-    Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
-                   "Writing WSMP matrix into file %s.\n", buf);
-    FILE* fp = fopen(buf, "w");
-    fprintf(fp, "%d\n", dim_); // N
-    for (Index icol=0; icol<dim_; icol++) {
-      fprintf(fp, "%d", ia[icol+1]-ia[icol]); // number of elements for this column
-      // Now for each colum we write row indices and values
-      for (Index irow=ia[icol]; irow<ia[icol+1]; irow++) {
-        fprintf(fp, " %23.16e %d",a_[irow-1],ja[irow-1]);
-      }
-      fprintf(fp, "\n");
-    }
-    fclose(fp);
-
-    //DELETEME
-
     if (!have_symbolic_factorization_) {
       ESymSolverStatus retval = InternalSymFact(ia, ja);
       if (retval != SYMSOLVER_SUCCESS) {
@@ -580,31 +565,20 @@ namespace Ipopt
     ipfint idmy;
     double ddmy;
 
-    printf(" N = %d\n", N);
-    IPARM_[10] = 2;  // Yes, get the indices of bad rows/columns
-    IPARM_[12] = -1; // This is the marker value
-    ipfint* MRP = new ipfint[N];
-    for (int i=0; i<N; i++) {
-      MRP[i] = 0;  // and that is the good value
-    }
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
-                          &idmy, &ddmy, &NAUX, MRP, IPARM_, DPARM_);
+                          &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
     const Index ierror = IPARM_[63];
     if (ierror == 0) {
-      printf(" N = %d\n", N);
       Index ndegen = IPARM_[20];
       int ii = 0;
       for (int i=0; i<N; i++) {
-        printf("MRP[%d] = %d\n", i, MRP[i]);
-        if (MRP[i] == -1) {
+        if (MRP_[i] == -1) {
           c_deps.push_back(i);
           ii++;
         }
       }
-      printf("ii=%d ndegen=%d\n",ii,ndegen);
-      assert(ii == ndegen);
+      DBG_ASSERT(ii == ndegen);
     }
-    delete [] MRP;
     if (ierror > 0) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "WSMP detected that the matrix is singular and encountered %d zero pivots.\n", dim_+1-ierror);

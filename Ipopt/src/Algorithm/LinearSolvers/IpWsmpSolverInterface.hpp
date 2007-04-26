@@ -175,6 +175,8 @@ namespace Ipopt
     ipfint* PERM_;
     /** WSSMP's inverse permutation vector */
     ipfint* INVP_;
+    /** WSSMP's internal MRP array */
+    ipfint* MRP_;
     //@}
 
     /** @name Internal functions */
