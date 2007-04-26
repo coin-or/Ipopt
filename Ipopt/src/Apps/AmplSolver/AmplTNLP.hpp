@@ -334,10 +334,8 @@ namespace Ipopt
     /** A method for setting the index of the objective function to be
      *  considered.  This method must be called after the constructor,
      *  and before anything else is called.  It can only be called
-     *  once.  If this method is not called, it is assume that the
-     *  first objective function (ASL index 0) is the active one.
-     *  Usually, we only have one objective function, but there might
-     *  be exceptions. */
+     *  once, and if there is more than one objective function in the
+     *  AMPL model, it MUST be called. */
     void set_active_objective(Index obj_no);
 
   private:
@@ -376,9 +374,6 @@ namespace Ipopt
 
     /**@name Internal copies of data */
     //@{
-    /** A non-const copy of x - this is kept up-to-date in apply_new_x */
-    Number* non_const_x_;
-
     /** Solution Vectors */
     Number* x_sol_;
     Number* z_L_sol_;
@@ -414,10 +409,10 @@ namespace Ipopt
     SmartPtr<AmplSuffixHandler> suffix_handler_;
 
     /** Make the objective call to ampl */
-    bool internal_objval(Number& obj_val);
+    bool internal_objval(const Number* x, Number& obj_val);
 
     /** Make the constraint call to ampl*/
-    bool internal_conval(Index m, Number* g=NULL);
+    bool internal_conval(const Number* x, Index m, Number* g=NULL);
 
     /** Internal function to update the internal and ampl state if the
      *  x value changes */

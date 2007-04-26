@@ -41,7 +41,6 @@ namespace Ipopt
       asl_(NULL),
       obj_sign_(1),
       nz_h_full_(-1),
-      non_const_x_(NULL),
       x_sol_(NULL),
       z_L_sol_(NULL),
       z_U_sol_(NULL),
@@ -251,8 +250,6 @@ namespace Ipopt
       asl_ = NULL;
     }
 
-    delete [] non_const_x_;
-    non_const_x_ = NULL;
     delete [] x_sol_;
     x_sol_ = NULL;
     delete [] z_L_sol_;
@@ -381,7 +378,7 @@ namespace Ipopt
       return false;
     }
 
-    return internal_objval(obj_value);
+    return internal_objval(x, obj_value);
   }
 
   bool AmplTNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
@@ -401,7 +398,7 @@ namespace Ipopt
       }
     }
     else {
-      objgrd(obj_no, non_const_x_, grad_f, (fint*)nerror_);
+      objgrd(obj_no, const_cast<Number*>(x), grad_f, (fint*)nerror_);
       if (!nerror_ok(nerror_)) {
         return false;
       }
@@ -427,7 +424,7 @@ namespace Ipopt
       return false;
     }
 
-    return internal_conval(m, g);
+    return internal_conval(x, m, g);
   }
 
   bool AmplTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
@@ -461,7 +458,7 @@ namespace Ipopt
         return false;
       }
 
-      jacval(non_const_x_, values, (fint*)nerror_);
+      jacval(const_cast<Number*>(x), values, (fint*)nerror_);
       if (nerror_ok(nerror_)) {
         return true;
       }
@@ -504,11 +501,11 @@ namespace Ipopt
       }
       if (!objval_called_with_current_x_) {
         Number dummy;
-        internal_objval(dummy);
-        internal_conval(m);
+        internal_objval(x, dummy);
+        internal_conval(x, m);
       }
       if (!conval_called_with_current_x_) {
-        internal_conval(m);
+        internal_conval(x, m);
       }
 
       real* OW = new real[Max(1,n_obj)];
@@ -600,7 +597,7 @@ namespace Ipopt
     write_solution_file(message.c_str());
   }
 
-  bool AmplTNLP::internal_objval(Number& obj_val)
+  bool AmplTNLP::internal_objval(const Number* x, Number& obj_val)
   {
     DBG_START_METH("AmplTNLP::internal_objval",
                    dbg_verbosity);
@@ -614,7 +611,7 @@ namespace Ipopt
       return true;
     }
     else {
-      Number retval = objval(obj_no, non_const_x_, (fint*)nerror_);
+      Number retval = objval(obj_no, const_cast<Number*>(x), (fint*)nerror_);
       if (nerror_ok(nerror_)) {
         obj_val = obj_sign_*retval;
         objval_called_with_current_x_ = true;
@@ -625,7 +622,7 @@ namespace Ipopt
     return false;
   }
 
-  bool AmplTNLP::internal_conval(Index m, Number* g)
+  bool AmplTNLP::internal_conval(const Number* x, Index m, Number* g)
   {
     DBG_START_METH("AmplTNLP::internal_conval",
                    dbg_verbosity);
@@ -640,7 +637,7 @@ namespace Ipopt
       allocated = true;
     }
 
-    conval(non_const_x_, g, (fint*)nerror_);
+    conval(const_cast<Number*>(x), g, (fint*)nerror_);
 
     if (allocated) {
       delete [] g;
@@ -674,17 +671,8 @@ namespace Ipopt
       conval_called_with_current_x_ = false;
       objval_called_with_current_x_ = false;
 
-      //copy the data to the non_const_x_
-      if (!non_const_x_) {
-        non_const_x_ = new Number[n];
-      }
-
-      for (Index i=0; i<n; i++) {
-        non_const_x_[i] = x[i];
-      }
-
       // tell ampl that we have a new x
-      xknowne(non_const_x_, (fint*)nerror_);
+      xknowne(const_cast<Number*>(x), (fint*)nerror_);
       return nerror_ok(nerror_);
     }
 
