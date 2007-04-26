@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -50,6 +50,8 @@ namespace Ipopt
       obj_sol_(0.0),
       objval_called_with_current_x_(false),
       conval_called_with_current_x_(false),
+      hesset_called_(false),
+      set_active_objective_called_(false),
       Oinfo_ptr_(NULL),
       suffix_handler_(suffix_handler)
   {
@@ -103,8 +105,7 @@ namespace Ipopt
                      "Discrete variables not allowed when the allow_discrete flag is false, "
                      "Either remove the integer variables, or change the flag in the constructor of AmplTNLP"
                     );
-    // n_con can be >= 0
-    DBG_ASSERT(n_obj <= 1); // Currently can handle only 0 or 1 objective
+
     DBG_ASSERT(nlo == 0 || nlo == 1); // Can handle nonlinear obj.
     DBG_ASSERT(nwv == 0); // Don't know what "linear arc" variables are
     DBG_ASSERT(nlnc == 0); // Don't know what "nonlinear network"constraints are
@@ -112,8 +113,8 @@ namespace Ipopt
 
     // Set options in the asl structure
     want_xpi0 = 1 | 2;  // allocate initial values for primal and dual if available
+    obj_no = 0;
     DBG_ASSERT((want_xpi0 & 1) == 1 && (want_xpi0 & 2) == 2);
-    obj_no = 0; // always want to work with the first (and only?) objective
 
     // allocate space for initial values
     X0 = new real[n_var];
@@ -174,21 +175,54 @@ namespace Ipopt
       }
       break;
     }
+  }
 
-    // see "changes" in solvers directory of ampl code...
-    hesset(1,0,1,0,nlc);
+  void AmplTNLP::set_active_objective(Index in_obj_no)
+  {
+    if (hesset_called_) {
+      jnlst_->Printf(J_ERROR, J_MAIN, "Internal error: AmplTNLP::set_active_objective called after AmplTNLP::call_hesset.\n");
+      exit(-1);
+    }
+    ASL_pfgh* asl = asl_;
+    obj_no = in_obj_no;
+    set_active_objective_called_ = true;
+  }
+
+  void AmplTNLP::call_hesset()
+  {
+    if (hesset_called_) {
+      jnlst_->Printf(J_ERROR, J_MAIN, "Internal error: AmplTNLP::call_hesset is called twice.\n");
+      exit(-1);
+    }
+
+    ASL_pfgh* asl = asl_;
+
+    if (n_obj == 0) {
+      hesset(1,0,0,0,nlc);
+    }
+    else {
+      if (n_obj>1 && !set_active_objective_called_) {
+        jnlst_->Printf(J_ERROR, J_MAIN,
+                       "There is more than one objective function in the AMPL model, but AmplTNLP::set_active_objective has not been called.\n");
+        exit(-2);
+      }
+      // see "changes" in solvers directory of ampl code...
+      hesset(1,obj_no,1,0,nlc);
+    }
 
     obj_sign_ = 1; // minimization
     if (objtype[obj_no] != 0) {
       obj_sign_ = -1;
     }
 
-    // find the nonzero structure for the hessian
-    // parameters to sphsetup:
-    int coeff_obj = 1; // coefficient of the objective fn ???
+    // find the nonzero structure for the hessian parameters to
+    // sphsetup:
+    int coeff_obj = 1;
     int mult_supplied = 1; // multipliers will be supplied
     int uptri = 1; // only need the upper triangular part
     nz_h_full_ = sphsetup(-1, coeff_obj, mult_supplied, uptri);
+
+    hesset_called_ = true;
   }
 
   AmplTNLP::~AmplTNLP()
@@ -246,6 +280,10 @@ namespace Ipopt
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
+
+    if (!hesset_called_) {
+      call_hesset();
+    }
 
     n = n_var; // # of variables (variable types have been asserted in the constructor
     m = n_con; // # of constraints
@@ -363,7 +401,7 @@ namespace Ipopt
       }
     }
     else {
-      objgrd(0, non_const_x_, grad_f, (fint*)nerror_);
+      objgrd(obj_no, non_const_x_, grad_f, (fint*)nerror_);
       if (!nerror_ok(nerror_)) {
         return false;
       }
@@ -472,17 +510,16 @@ namespace Ipopt
       if (!conval_called_with_current_x_) {
         internal_conval(m);
       }
-      // copy lambda to non_const_lambda - note, we do not store a copy like
-      // we do with x since lambda is only used here and not in other calls
-      Number* non_const_lambda = new Number[m];
-      for (Index i=0; i<m; i++) {
-        non_const_lambda[i] = lambda[i];
+
+      real* OW = new real[Max(1,n_obj)];
+      if (n_obj>0) {
+        for(Index i=0; i<n_obj; i++) {
+          OW[i] = 0.;
+        }
+        OW[obj_no] = obj_sign_*obj_factor;
       }
-
-      real ow=obj_sign_*obj_factor;
-      sphes(values, -1, &ow, non_const_lambda);
-
-      delete [] non_const_lambda;
+      sphes(values, -1, OW, const_cast<Number*>(lambda));
+      delete [] OW;
       return true;
     }
     else {
@@ -577,7 +614,7 @@ namespace Ipopt
       return true;
     }
     else {
-      Number retval = objval(0, non_const_x_, (fint*)nerror_);
+      Number retval = objval(obj_no, non_const_x_, (fint*)nerror_);
       if (nerror_ok(nerror_)) {
         obj_val = obj_sign_*retval;
         objval_called_with_current_x_ = true;
@@ -627,6 +664,10 @@ namespace Ipopt
     DBG_ASSERT(asl_);
 
     if (new_x) {
+      if (!hesset_called_) {
+        call_hesset();
+      }
+
       DBG_PRINT((1, "Set new x.\n"));
       // update the flags so these methods are called
       // before evaluating the hessian
