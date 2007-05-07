@@ -125,7 +125,7 @@ namespace Ipopt
     roptions->AddNumberOption(
       "mumps_dep_tol",
       "Pivot threshold for detecion of linearly dependent constraints in MUMPS.",
-      1e-10,
+      -1.,
       "When MUMPS is used to determine linearly dependent constraints, this "
       "is determines the threshold for a pivot to be considered zero.  This "
       "is CNTL(3) in MUMPS.");

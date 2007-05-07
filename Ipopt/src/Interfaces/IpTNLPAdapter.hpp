@@ -216,6 +216,7 @@ namespace Ipopt
     bool DetermineDependentConstraints(Index n_x_var,
                                        const Index* x_not_fixed_map,
                                        const Number* x_l, const Number* x_u,
+                                       const Number* g_l, const Number* g_u,
                                        Index n_c, const Index* c_map,
                                        std::list<Index>& c_deps);
 
@@ -263,6 +264,9 @@ namespace Ipopt
     HessianApproximationType hessian_approximation_;
     /** Maximal perturbation of the initial point */
     Number point_perturbation_radius_;
+    /** Flag indicating if rhs should be considered during dependency
+     *  detection */
+    bool dependency_detection_with_rhs_;
 
     /** Overall convergence tolerance */
     Number tol_;

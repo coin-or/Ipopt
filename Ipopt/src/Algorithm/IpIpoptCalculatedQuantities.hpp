@@ -368,6 +368,13 @@ namespace Ipopt
     /** Method returning true if this is a square problem */
     bool IsSquareProblem() const;
 
+    /** Method returning the IpoptNLP object.  This should only be
+     *  used with case! */
+    SmartPtr<IpoptNLP> GetIpoptNLP()
+    {
+      return ip_nlp_;
+    }
+
     /** Methods for IpoptType */
     //@{
     /** Called by IpoptType to register the options */
