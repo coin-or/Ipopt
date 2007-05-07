@@ -113,6 +113,13 @@ namespace Ipopt
       "wsmp", "use WSMP",
       "ma28", "use MA28",
       "The default and available choices depend on how Ipopt has been compiled.");
+    roptions->AddStringOption2(
+      "dependency_detection_with_rhs",
+      "Indicates if the right hand sides of the constraints should be considered during dependency detection",
+      "no",
+      "no", "only look at gradients",
+      "yes", "also consider right hand side",
+      "");
     roptions->AddLowerBoundedNumberOption(
       "point_perturbation_radius",
       "Maximal perturbation of an evaluation point.",
@@ -195,6 +202,8 @@ namespace Ipopt
 
     options.GetNumericValue("tol", tol_, prefix);
 
+    options.GetBoolValue("dependency_detection_with_rhs",
+                         dependency_detection_with_rhs_, prefix);
     std::string dependency_detector;
     options.GetStringValue("dependency_detector",
                            dependency_detector, prefix);
@@ -583,7 +592,8 @@ namespace Ipopt
       if (n_c>0 && IsValid(dependency_detector_)) {
         std::list<Index> c_deps;
         if (!DetermineDependentConstraints(n_x_var, x_not_fixed_map,
-                                           x_l, x_u, n_c, c_map, c_deps)) {
+                                           x_l, x_u, g_l, g_u, n_c,
+                                           c_map, c_deps)) {
           jnlst_->Printf(J_WARNING, J_INITIALIZATION,
                          "Dependent constraint detector had a problem, assume full rank.\n");
         }
@@ -2230,7 +2240,8 @@ namespace Ipopt
 
   bool TNLPAdapter::DetermineDependentConstraints(
     Index n_x_var, const Index* x_not_fixed_map,
-    const Number* x_l, const Number* x_u, Index n_c,
+    const Number* x_l, const Number* x_u,
+    const Number* g_l, const Number* g_u, Index n_c,
     const Index* c_map, std::list<Index>& c_deps)
   {
     // First get a temporary expansion matrix for getting the equality
@@ -2257,9 +2268,10 @@ namespace Ipopt
     }
     // TODO: Here we don't handle
     // fixed_variable_treatment_==MAKE_PARAMETER correctly (yet?)
+    // Include space for the RHS
     Index* jac_c_map = new Index[nz_full_jac_g_];
-    ipfint* jac_c_iRow = new ipfint[nz_full_jac_g_];
-    ipfint* jac_c_jCol = new ipfint[nz_full_jac_g_];
+    ipfint* jac_c_iRow = new ipfint[nz_full_jac_g_+n_c];
+    ipfint* jac_c_jCol = new ipfint[nz_full_jac_g_+n_c];
     Index nz_jac_c = 0;
     const Index* c_row_pos = P_c_g->CompressedPosIndices();
     Index n_fixed = n_full_x_ - n_x_var;
@@ -2317,26 +2329,49 @@ namespace Ipopt
       const Number random_number = Number(rand())/Number(RAND_MAX);
       full_x_[i] = lower + random_number*interval;
     }
-    if (!tnlp_->eval_jac_g(n_full_x_, full_x_, true, n_full_g_,
+    Number* g_vals = NULL;
+    if (dependency_detection_with_rhs_) {
+      g_vals = new Number[n_full_g_];
+      if (!tnlp_->eval_g(n_full_x_, full_x_, true, n_full_g_, g_vals)) {
+        delete [] jac_c_iRow;
+        delete [] jac_c_jCol;
+        delete [] jac_c_map;
+        delete [] g_vals;
+        return false;
+      }
+    }
+    if (!tnlp_->eval_jac_g(n_full_x_, full_x_, false, n_full_g_,
                            nz_full_jac_g_, NULL, NULL, jac_g_)) {
       delete [] jac_c_iRow;
       delete [] jac_c_jCol;
       delete [] jac_c_map;
+      delete [] g_vals;
       return false;
     }
 
     // Get the equality constraint Jacobian out
-    double* jac_c_vals = new double[nz_jac_c];
+    double* jac_c_vals = new double[nz_jac_c + n_c];
     for (Index i=0; i<nz_jac_c; i++) {
       jac_c_vals[i] = jac_g_[jac_c_map[i]];
+    }
+    if (dependency_detection_with_rhs_) {
+      // Add the right hand side column
+      const Index* c_row_pos2 = P_c_g->ExpandedPosIndices();
+      for (Index i=0; i<n_c; i++) {
+        jac_c_iRow[nz_jac_c+i] = i+1;
+        jac_c_jCol[nz_jac_c+i] = n_x_var+1;
+        jac_c_vals[nz_jac_c+i] = g_vals[c_row_pos2[i]] - g_l[c_row_pos2[i]];
+      }
+      n_x_var += 1;
+      nz_jac_c += n_c;
     }
 
     ASSERT_EXCEPTION(IsValid(dependency_detector_), OPTION_INVALID,
                      "No dependency_detector_ object available in TNLPAdapter::DetermineDependentConstraints");
 
     bool retval = dependency_detector_->DetermineDependentRows(
-                    n_c, n_x_var, nz_jac_c, jac_c_vals, jac_c_iRow, jac_c_jCol,
-                    c_deps);
+                    n_c, n_x_var, nz_jac_c, jac_c_vals,
+                    jac_c_iRow, jac_c_jCol, c_deps);
 
     // For now, we just get rid of the dependency_detector_ object, in
     // order to save memory.  Maybe we need to add a clean method at
@@ -2348,6 +2383,7 @@ namespace Ipopt
     delete [] jac_c_jCol;
     delete [] jac_c_map;
     delete [] jac_c_vals;
+    delete [] g_vals;
 
     return retval;
   }
