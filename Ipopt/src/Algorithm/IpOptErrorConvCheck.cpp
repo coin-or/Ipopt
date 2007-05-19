@@ -73,7 +73,7 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "acceptable_dual_inf_tol",
       "\"Acceptance\" threshold for the dual infeasibility.",
-      0.0, true, 1e-2,
+      0.0, true, 1e10,
       "Absolute tolerance on the dual infeasibility. \"Acceptable\" termination "
       "requires that the (max-norm of the unscaled) dual infeasibility is less than this "
       "threshold; see also acceptable_tol.");
