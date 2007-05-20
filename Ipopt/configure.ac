@@ -593,7 +593,8 @@ AC_CONFIG_FILES([Makefile
 		 examples/hs071_c/Makefile
 		 examples/ScalableProblems/Makefile
 		 test/Makefile
-		 test/run_unitTests])
+		 test/run_unitTests
+		 contrib/MatlabInterface/src/Makefile])
 
 AC_CONFIG_HEADER([inc/config_ipopt.h])
 

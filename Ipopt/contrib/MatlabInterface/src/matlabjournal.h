@@ -26,8 +26,8 @@ namespace Ipopt {
     virtual ~MatlabJournal() { };
 
   protected:
-    virtual void PrintImpl      (const char* str);
-    virtual void PrintfImpl     (const char* pformat, va_list ap);
+    virtual void PrintImpl      (EJournalCategory category, EJournalLevel level, const char* str);
+    virtual void PrintfImpl     (EJournalCategory category, EJournalLevel level, const char* pformat, va_list ap);
     virtual void FlushBufferImpl();
   };
 }

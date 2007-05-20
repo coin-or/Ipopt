@@ -1,0 +1,61 @@
+# Copyright (C) 2007 Peter Carbonetto. All Rights Reserved.
+# This code is published under the Common Public License.
+#
+# Author: Peter Carbonetto
+#         Dept. of Computer Science
+#         University of British Columbia
+#         May 19, 2007
+
+# You should only have to adapt the first two variable definitions:
+
+# Here you need to speficy the base directory of your matlab installation
+MATLAB_HOME   = /usr/local/R2006b
+
+# Set the suffix for matlab mex functions:
+MEXSUFFIX     = mexglx    # Linux 32bit
+#MEXSUFFIX     = mexmac    # Mac OS X settings
+
+#############################################################################
+
+CXX           = @CXX@
+CXXFLAGS      = @CXXFLAGS@
+
+IPOPT_INCLUDE = -I@includedir@
+IPOPTLIBDIR   = @libdir@
+exec_prefix   = @exec_prefix@
+prefix        = @prefix@
+LIBS          = @ipoptlib@ @ADDLIBS@
+
+MEX           = mex
+
+TARGET = ipopt.$(MEXSUFFIX)
+
+OBJS   = matlabexception.o matlabscalar.o matlabstring.o matlabjournal.o \
+         matlabmatrix.o arrayofmatrices.o sparsematrix.o matlabprogram.o \
+         matlaboption.o ipopt.o
+
+MATLAB_INCLUDE = -I$(MATLAB_HOME)/extern/include
+INCLUDE        = $(IPOPT_INCLUDE) $(MATLAB_INCLUDE) 
+CXXFLAGS       += -DMATLAB_MEXFILE
+CXXOPTIMFLAGS  = $(CXXFLAGS)
+LDOPTIMFLAGS   = $(CXXFLAGS) @RPATH_FLAGS@
+MEXFLAGS       = -v -cxx -O CXX="$(CXX)" CXXOPTIMFLAGS="$(CXXOPTIMFLAGS)" LDOPTIMFLAGS="$(LDOPTIMFLAGS)" LD="$(CXX)"
+
+SRCDIR = @srcdir@
+VPATH = $(SRCDIR)
+
+all: install
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $@ -c $^
+
+$(TARGET): $(OBJS)
+	$(MEX) $(MEXFLAGS) $(LIBS) -output $@ $^
+
+install: $(TARGET)
+	cp $(TARGET) ..
+	test `cd $(SRCDIR); pwd` != `pwd` && cp $(SRCDIR)/../ipopt.m  $(SRCDIR)/../genericcallback.m ..
+
+clean:
+	rm -f *.o $(TARGET)
+

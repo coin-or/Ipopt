@@ -30993,7 +30993,7 @@ fi
                                         ac_config_links="$ac_config_links test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp test/hs071_nlp.cpp:examples/hs071_cpp/hs071_nlp.cpp test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp test/hs071_c.c:examples/hs071_c/hs071_c.c"
 
 
-                                                                                                                                                                                                        ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Interfaces/ipopt_addlibs_f.txt src/Interfaces/ipopt_addlibs_cpp.txt src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile test/Makefile test/run_unitTests"
+                                                                                                                                                                                                                  ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Interfaces/ipopt_addlibs_f.txt src/Interfaces/ipopt_addlibs_cpp.txt src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile"
 
 
           ac_config_headers="$ac_config_headers inc/config_ipopt.h"
@@ -31750,6 +31750,7 @@ do
   "examples/ScalableProblems/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/ScalableProblems/Makefile" ;;
   "test/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
   "test/run_unitTests" ) CONFIG_FILES="$CONFIG_FILES test/run_unitTests" ;;
+  "contrib/MatlabInterface/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/MatlabInterface/src/Makefile" ;;
   "test/hs071_main.cpp" ) CONFIG_LINKS="$CONFIG_LINKS test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp" ;;
   "test/hs071_nlp.cpp" ) CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.cpp:examples/hs071_cpp/hs071_nlp.cpp" ;;
   "test/hs071_nlp.hpp" ) CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp" ;;

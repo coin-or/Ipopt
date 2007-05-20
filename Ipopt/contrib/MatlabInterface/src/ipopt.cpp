@@ -1,3 +1,11 @@
+// Copyright (C) 2007 Peter Carbonetto. All Rights Reserved.
+// This code is published under the Common Public License.
+//
+// Author: Peter Carbonetto
+//         Dept. of Computer Science
+//         University of British Columbia
+//         May 19, 2007
+
 #include "matlabexception.h"
 #include "array.h"
 #include "matlabscalar.h"
@@ -110,7 +118,8 @@ should have the same number of elements");
 
     // Create a new instance of IpoptApplication.
     SmartPtr<Journal> console = new MatlabJournal(defaultPrintLevel);
-    IpoptApplication  app(console);
+    IpoptApplication  app(false);
+    app.Jnlst()->AddJournal(console);
     if (!iterFunc->isempty())
       app.Options()->SetIntegerValue("print_level",Ipopt::J_NONE);
     
