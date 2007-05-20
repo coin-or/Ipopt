@@ -1,0 +1,401 @@
+This Matlab interface has been contributed to the Ipopt distribution by
+
+ Peter Carbonetto
+ Dept. of Computer Science
+ University of British Columbia
+
+on May 19, 2007.
+
+Contents of this file
+---------------------
+1. Installation instructions
+2. Installation instructions on Mac OS X
+4. Tutorial by example
+5. Brief description of archive contents
+6. Some implementation issues
+7. Sparse matrix implementation
+8. Integrating the MATLAB interface with the IPOPT release
+
+1. Installation instructions
+----------------------------
+
+I'm assuming you have a UNIX-based operating system, such as Mac OS X,
+Solaris or Linux. I can't help you if you have a Windows operating
+system, but I presume you have enough experience to figure out how to
+modify these steps for your setup, if necessary. I am also, of course,
+assuming that you have a recent version of MATLAB installed on your
+computer, and that you are relatively familiar with the MATLAB
+programming language (if not, it is a very simple language and you
+could learn it in a few hours). I've tested the software on MATLAB
+versions 7.2 and 7.3. It might very well work on earlier versions of
+MATLAB, but there is also a good chance that it will not. I highly
+doubt that the software will run with versions prior to MATLAB 6.5.
+
+INSTALL COMPILERS. The first thing you need to do is install a C++
+compiler and a Fortran 77 compiler. Now, you might already have these
+installed. However, you may not be able to use these installed
+compilers because you must use the precise compilers supported by
+MATLAB (a pain, I know). For instance, on my Linux machine I have
+MATLAB version 7.3, so the people at MathWorks tell me that I need to
+use one of the GCC versions 3.4.1 to 3.4.5. If you use the incorrect
+version of GCC, you will likely encounter linking errors. In order to
+find out which compiler is supported by your version of MATLAB, see
+[1].
+
+CONFIGURE MATLAB. Once you've installed the appropriate compilers, set
+up and configure MATLAB to build MEX files. This is explained quite
+nicely at [2].
+
+INSTALL IPOPT. Regardless of how familiar you are with this step,
+MATLAB adds several complicating matters. What follows are the steps I
+followed on my Linux machine. First, I downloaded the Ipopt source
+files and the third-party source code (Blas, Lapack, HSL).
+
+MATLAB demands that you compile Fortran code with the flags -fPIC and
+-fexceptions. The first flag tells the compiler to generate
+position-independent code, and the second flag enables exception
+handling.  Usually these flags coincide with your MEX options
+file. See [2] for more information on the options file.
+
+Now that I have all necessary source code, I call the Ipopt configure 
+script. On my Linux machine, the call is
+
+./configure --prefix=$HOME/ipopt/install                    \
+     CXX=g++-3.4.5 CC=g++-3.4.5 F77=g77-3.4.5
+
+After this, I just do the regular Ipopt 'make install'.
+
+MODIFY THE MAKEFILE. Before building the MEX File, you will need to
+modify some of the variables in the Makefile so that it coincides with
+your system setup (Andreas, I know you are in favour of configure
+scripts---I've taken the less sophisticated route). The variable MEX
+is the executable called to build the MEX file. The variables CXX and
+F77 must be the names of your C++ and Fortran 77 compilers. MEXSUFFIX
+is the MEX file extension specific to your platform. In Linux, the
+extension is mexglx. The variable MATLAB_HOME must point to the base
+directory of your MATLAB installation. Finally, CFLAGS is the set of
+options passed to your C++ compiler. We've already discussed what kind
+of flags you will need to set. It's probably best that you leave
+everything else in the Makefile as is.
+
+Typing "make all" in the command prompt will first compile the C++ source files 
+into object code, then it executes the mex script which links all the object 
+files together into a single MEX file. Even if mex terminates successfully, 
+there's still the possibility that you didn't link the libraries and object 
+files properly, in which case executing the resulting MEX file will cause 
+MATLAB to crash.
+
+Before we start using IPOPT in MATLAB, let me make a couple of additional 
+points here.
+
+- On my Apple computer, I didn't need to link to the BLAS
+   library. That's because the mex script automatically links to the
+   vecLib framework, which contains optimized implementations of BLAS.
+
+- MATLAB versions 7.2 and 7.3 have slightly different implementations
+   of sparse matrices, the latter offering more flexibility. To ensure
+   compatibility with both these versions, I use the preprocessor flag
+   MWINDEXISINT. When g++ is called with the flag -DMWINDEXISINT, the
+   sparse matrix indices are defined to be of type int. See the header
+   file sparsematrix.h for more information.
+
+2. Installation issues on Mac OS X
+----------------------------------
+
+Unfortunately, the installation is not quite so smooth for my Apple
+Powerbook G4. The culprit, I'm afraid, is the configure script. The
+configure script appears to make judgements about what installation is
+appropriate based on the system settings. However, some of those
+judgements may be inappropriate because the ipopt routines are called
+from MATLAB (which has its own set of rules), not from the operating
+system. It's kind of like compiling the IPOPT library for Linux then
+trying to use it in Windows.
+
+While it may be possible to get the configure script to work in my
+particular installation of Mac OS X, I think this is neglecting the
+bigger picture: either the configure script must specially handle
+MATLAB, or there needs to be a realistic way for the user to bypass
+the configure script and start with a Makefile (with a number of
+environment variables, and some documentation that explains what these
+environment variables represent).
+
+4. Tutorial by example
+----------------------
+
+In this section, I will go through four examples which demonstrate the 
+principal features of the MATLAB interface. For more information, you can 
+always type "help ipopt" in the MATLAB prompt.
+
+First, let's look at the Hock & Schittkowski test problem #51 [3]. It
+is an optimization problem with 5 variables, no inequality constraints
+and 3 equality constraints. I've written a script examplehs051.m which
+runs the limited-memory BFGS algorithm with the starting point [2.5
+0.5 2 -1 0.5] and obtains the solution [1 1 1 1 1]. The line in the
+script which executes the IPOPT solver is
+
+   x = ipopt(x0,lb,ub,lbc,ubc,'computeObjectiveHS051',
+             'computeGradientHS051','computeConstraintsHS051',...
+ 	    'computeJacobianHS051','',[],'',...
+ 	    'hessian_approximation','limited-memory',...
+ 	    'mu_strategy','adaptive','tol',1e-7);
+
+The first input is the initial point. The second and third inputs
+specify the lower and upper bounds on the variables. Since there are
+no such bounds, we set the entries of these two vectors to -Inf and
++Inf. The fourth and fifth inputs specify the lower and upper bounds
+on the 3 constraint functions. The next five inputs specify the
+required callback routines. Since we are using a limited-memory
+approximation to the Hessian, we don't need to know the values of the
+second-order partial derivatives, so we set the Hessian callback
+routine to the empty string. The rest of the input arguments set some
+options for the solver, as detailed in the IPOPT documentation.
+
+If you examine the files computeObjectiveHS051.m and
+computeGradientHS051.m, you will see that computing the objective
+function and gradient vector is relatively straightforward. The M-file
+computeConstraintsHS051.m returns a vector of length equal to the
+number of constraint functions. The callback function
+computeJacobianHS051.m returns an M x N sparse matrix, where M is the
+number of constraint functions and N is the number of variables. It is
+important to always return a sparse matrix, even if there is no
+computational advantage in doing so. Otherwise, MATLAB will report an
+error.
+
+Next, let's look at the script examplehs038.m. It demonstrates the use
+of IPOPT on an optimization problem with 4 variables and no
+constraints other than simple bound constraints. This time, we've
+implemented a callback routine for evaluating the Hessian. The Hessian
+callback function takes as input the current value of the variables
+"x", the factor in front of the objective term "sigma", an the values
+of the constraint multipliers "lambda" (which in this case is
+empty). If the last input is true, then the callback routine must
+return a sparse matrix that has zeros in locations where the
+second-order derivative at that location will ALWAYS be zero. The
+return value H must always be a lower triangular matrix (type HELP
+TRIL). As explained in the IPOPT documentation, the Hessian matrix is
+symmetric so the information contained in the upper triangular part is
+redundant.
+
+This example also demonstrates the use an iterative callback function,
+which can be useful for displaying the status of the solver. This is
+specified by the twelfth input. The M-file genericcallback.m takes as
+input the current iteration "t", the current value of the objective
+"f", and the current point "x".
+
+The third slightly more complicated example script is examplehs071.m,
+which is the same as the problem explored in the IPOPT documentation
+(Hock and Schittkowski test problem #71). It is worth taking a peek at
+the files computeHessianHS071.m and computeJacobianHS071.m. In the
+Hessian callback function, we make use of the input lambda. Since the
+Hessian is dense, its structure is returned with the line
+
+   H = sparse(tril(ones(n)))
+
+where n is the number of variables. The Jacobian is dense, so we can
+return its structure in a single line:
+
+   J = sparse(ones(m,n))
+
+where m is the number of constraint functions.
+
+The last example is the script examplelauritzen.m. It is vastly more
+complicated than the other three, and it pertains to my research on
+inference in probabilistic models in artificial intelligence. This
+script demonstrates the problem of inferring the most probable states
+of random variables given a model. In this case, the model represents
+the interaction between causes (e.g.  smoking) and diseases (e.g. lung
+cancer). We are given a patient that is a smoker, has tested positive
+for some X-ray, and has recently visited Asia. In many ways this is a
+silly and highly overused example, but it suits our needs here because
+it demonstrates how to treat inference as an optimization problem, and
+how to solve this optimization problem using IPOPT [4]. This code
+should NOT be used to solve large inference problems because it is not
+particularly efficient.
+
+The call to IPOPT is buried in the file bopt.m. It is
+
+   [qR qS] = ipopt({qR qS},{ repmat(eps,nqr,1) repmat(eps,nqs,1) },...
+                   { repmat(inf,nqr,1) repmat(inf,nqs,1) },...
+                   [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
+                   [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
+                   'computeJGObjective','computeJGGradient',...
+                   'computeJGConstraints','computeJGJacobian',...
+                   'computeJGHessian',{ K C f Rv Rf Sv Sf NS d },'',...
+                   'mu_strategy','adaptive','max_iter',maxiter,...
+                   'tol',tolerance,'print_level',verbose*4);
+
+As you can see, it is rather complicated! The first input, as usual,
+is the starting point. (The variables actually represent probability
+estimates.)  Notice that we are passing a cell array, and each entry
+of the cell array is a matrix. Likewise, the bound constraints are
+specified as cell arrays. This is permitted as long as the starting
+point and the bound constraints have the same structure. If not, the
+MATLAB will report an error. (Note that the lower bounds on the
+variables are set to floating-point precision. Type HELP EPS. In this
+way, we ensure that the logarithm of a variable never evaluates to
+zero.)
+
+This cell array syntax is useful when your program has several
+different types of variables. These sets of variables are then passed
+as separate input arguments to the MATLAB callback functions. For
+instance, qR and qS are passed as separate arguments to the objective
+callback function computeJGObjective.m.  The entries of the cell array
+are also treated as separate outputs from the gradient callback
+function (see computeJGGradient.m), and from the main call to ipopt.
+
+In this example, the constraint functions are all linear, so they have
+no impact on the value of the Hessian. In fact, the Hessian is a
+diagonal matrix (but not positive definite). The Jacobian can be
+extremely large, but it is also very sparse; the number of entries is
+a multiple of the number of variables.
+
+This example also demonstrates the use of auxiliary data. In bopt.m,
+notice that the input after 'computeJGHessian' is a cell array. This
+cell array is passed as input to every MATLAB callback routine.
+
+The tutorial is over!
+
+5. Brief description of the MatlabInterface contents
+----------------------------------------------------
+
+- C++ source and header files for MATLAB interface to IPOPT (21):
+   array.h                 matlabexception.h  matlaboption.h
+   arrayofmatrices.cpp     matlabjournal.cpp  matlabprogram.cpp
+   arrayofmatrices.h       matlabjournal.h    matlabprogram.h
+   IpIpoptApplication.cpp  matlabmatrix.cpp   matlabscalar.cpp
+   ipopt.cpp               matlabmatrix.h     matlabscalar.h
+   matlabexception.cpp     matlaboption.cpp   matlabstring.cpp
+   matlabstring.h          sparsematrix.cpp   sparsematrix.h
+
+- MATLAB documentation for "ipopt" function (1):
+   ipopt.m
+
+- M-files used by script examplehs038 (4):
+   computeGradientHS038.m   computeHessianHS038.m
+   computeObjectiveHS038.m  examplehs051.m
+
+- M-files used by script examplehs051 (6):
+   computeConstraintsHS051.m  computeJacobianHS051.m
+   computeGradientHS051.m     computeObjectiveHS051.m
+   examplehs051.m             genericcallback.m
+
+- M-files used by script examplehs071 (6):
+   computeConstraintsHS071.m  computeHessianHS071.m
+   computeGradientHS071.m     computeJacobianHS071.m
+   computeObjectiveHS071.m    examplehs071.m
+
+- M-files used by script examplelauritzen (13):
+   computeJGConstraints.m  computeJGHessian.m   computeJGObjective.m
+   computeJGGradient.m     computeJGJacobian.m  bopt.m
+   examplelauritzen.m      margfactor.m         multiplyfactors.m
+   ndsum.m                 spzeros.m            reshapemarginals.m
+   vectorize.m
+
+6. Some implementation issues
+-----------------------------
+
+I'm not going to bore you with all the details of the
+implementation. I would, however, like to briefly point out a few of
+them. (I will discuss issues surrounding sparse matrices in the next
+section.) I refer you to the source files ipopt.cpp, matlabprogram.h
+and matlabprogram.cpp. They contain the code of primary interest.
+
+- In ipopt.cpp, I check to see if the user requests limited-memory
+   approximations to the Hessian. If so, then I ensure that a Hessian
+   callback routine is never called.
+
+- The MATLAB interface will necessarily be slower than the C++
+   interface. That's because MATLAB dynamically allocates new memory
+   for all the outputs passed back from a function. Thus, for large
+   problems each iteration of IPOPT will involve the dynamic allocation
+   and deallocation of large amounts of memory.
+
+- To acquire the necessary information for get_nlp_info, I call the
+   Jacobian and Hessian MATLAB callback routines with
+   returnStructureOnly set to true.
+
+- I admit to breaking one rule in my implementation: the inputs lb,
+   ub, constraintlb and constraintub in the MATLAB interface should not
+   be altered, but they are: the Inf entries are changed to 1e+19, or
+   whatever value is treated as infinity in IPOPT.
+
+7. Sparse matrix implementation
+-------------------------------
+
+The greatest challenge was most definitely the conversion of sparse
+matrices from MATLAB to IPOPT. There is a very nice document that
+discusses the design and implementation of sparse matrices in the
+MATLAB environment [5]. The problem is that IPOPT assumes a static
+sparse matrix structure, but in MATLAB there is no way to ensure that
+the size of the matrix (the number of non-zero elements) does not
+change over time; if an entry of a sparse matrix is set to zero, then
+the arrays are automatically adjusted so that no storage is expended
+for that entry. This may seem like a highly inefficient way to
+implement sparse matrices, and indeed it is. However, the authors of
+[5] emphasize efficient matrix-level operations over efficient
+element-level operations.
+
+We can legitimately make the following assumption: the non-zero
+entries of a sparse matrix passed back from MATLAB are a SUBSET of the
+non-zero entries in IPOPT's respective sparse matrix.
+
+The class SparseMatrixStructure keeps track of the structure of a
+sparse MATLAB matrix. It does not store the values of the non-zero
+entries. We use it for the Jacobian of the constraints and the Hessian
+of the Lagrangian. Even though these two matrices are fundamentally
+different (one is square and lower triangular, the other is
+rectangular), we can treat their structures in the same way.
+
+The principal functions of interest in class SparseMatrixStructure are
+getColsAndRows and copyElems. The function getColsAndRows converts the
+MATLAB sparse matrix format into the equivalent IPOPT format. The
+function copyElems copies the entries from one sparse matrix to
+another when one sparse matrix has a different structure than the
+other. Obviously, for the copy operation to be plausible, the set of
+non-zero entries of the destination matrix must be a superset of the
+non-zero entries of the source matrix. Due to efficiency concerns, no
+checks are made to ensure that this is satisfied; it is up to the user
+to ensure that a sparse matrix passed back to IPOPT never has a
+non-zero entry that was not declared initially when
+returnStructureOnly = true. In my implementation, I have gone through
+great pains to ensure: 1. that the copy function only makes one pass
+through the entries of the sparse matrix, and 2.  that there are no if
+statements inside the for loops, which can severely impinge on the
+speed of the copy operation.
+
+8. Integrating the MATLAB interface with the IPOPT release
+----------------------------------------------------------
+
+I'll end this long email with a question: what is the best way to make
+the MATLAB interface available to the public? One possibility is to
+integrate it into the main release on your webpage, provided that I am
+properly credited for my contribution. Another possibility is to make
+it available on my webpage here at the University of British Columbia,
+and perhaps you could then link to my webpage from the IPOPT project
+website. There are certainly pros and cons to both alternatives, and I
+would be interested to hear your thoughts on the matter.
+
+Footnotes
+---------
+[1] http://www.mathworks.com/support/tech-notes/1600/1601.html
+[2] http://www.mathworks.com/support/tech-notes/1600/1605.html
+[3] Willi Hock and Klaus Schittkowski. (1981) Test Examples for
+     Nonlinear Programming Codes. Lecture Notes in Economics and
+     Mathematical Systems Vol. 187, Springer-Verlag.
+[4] If you want to learn more about junction graphs for approximate
+     inference, and a special case of this is called the "junction tree
+     algorithm". I recommend reading:
+     * Aji and McEliece (2001). The generalized distributive law and
+       free energy minimization. Proceedings of the 39th Allerton
+       Conference
+     * Yedidia, Freeman and Weiss (2005). Constructing free-energy
+       approximations and generalized belief propagation algorithms.
+       IEEE Transactions on Information Theory 51(7).
+[5] Gilbert, Moler and Schreiber (1992). Sparse matrices in MATLAB:
+     design and implementation. SIAM Journal of Matrix Analysis
+     and Applications 13(1).
+
+Peter Carbonetto
+Ph.D. Candidate
+Dept. of Computer Science
+University of British Columbia

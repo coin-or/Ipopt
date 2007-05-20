@@ -97,7 +97,9 @@ public:
 				  const double* variables, const double* zl, 
 				  const double* zu, int numConstraints, 
 				  const double* constraints, 
-				  const double* lambda, double objective);
+				  const double* lambda, double objective,
+                                  const IpoptData* ip_data,
+                                  IpoptCalculatedQuantities* ip_cq);
 
   // Intermediate callback method. It is called once per iteration
   // of the IPOPT algorithm.
