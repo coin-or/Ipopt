@@ -4,7 +4,7 @@
 // Author: Peter Carbonetto
 //         Dept. of Computer Science
 //         University of British Columbia
-//         May 19, 2007
+//         May 22, 2007
 
 #ifndef INCLUDE_MATLABMATRIX
 #define INCLUDE_MATLABMATRIX
