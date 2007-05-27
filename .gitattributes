@@ -34,13 +34,13 @@ Ipopt/contrib/MatlabInterface/examples/lauritzen/computeJGHessian.m -text
 Ipopt/contrib/MatlabInterface/examples/lauritzen/computeJGJacobian.m -text
 Ipopt/contrib/MatlabInterface/examples/lauritzen/computeJGObjective.m -text
 Ipopt/contrib/MatlabInterface/examples/lauritzen/examplelauritzen.m -text
+Ipopt/contrib/MatlabInterface/examples/lauritzen/genericcallback.m -text
 Ipopt/contrib/MatlabInterface/examples/lauritzen/margfactor.m -text
 Ipopt/contrib/MatlabInterface/examples/lauritzen/multiplyfactors.m -text
 Ipopt/contrib/MatlabInterface/examples/lauritzen/ndsum.m -text
 Ipopt/contrib/MatlabInterface/examples/lauritzen/reshapemarginals.m -text
 Ipopt/contrib/MatlabInterface/examples/lauritzen/spzeros.m -text
 Ipopt/contrib/MatlabInterface/examples/lauritzen/vectorize.m -text
-Ipopt/contrib/MatlabInterface/genericcallback.m -text
 Ipopt/contrib/MatlabInterface/ipopt.m -text
 Ipopt/doc/documentation.pdf -text
 Ipopt/doc/options.tex -text

@@ -8,14 +8,19 @@
 
 # You should only have to adapt the first two variable definitions:
 
-# Here you need to speficy the base directory of your matlab installation
+# Here you need to speficy the base directory of your matlab installation.
+# This is the directory so that in its 'bin/' subdirectory you see all the
+# matlab executables (such as 'matlab', 'mex', etc.)
 MATLAB_HOME   = /usr/local/R2006b
 
-# Set the suffix for matlab mex functions:
+# Set the suffix for matlab mex files.
+# The content of the $(MATLAB_HOME)/extern/examples/mex directory might
+# be able to help you.
 MEXSUFFIX     = mexglx    # Linux 32bit
 #MEXSUFFIX     = mexmac    # Mac OS X settings
 
 #############################################################################
+# Everything below here should be correct
 
 CXX           = @CXX@
 CXXFLAGS      = @CXXFLAGS@
@@ -30,13 +35,13 @@ MEX           = mex
 
 TARGET = ipopt.$(MEXSUFFIX)
 
-OBJS   = matlabexception.o matlabscalar.o matlabstring.o matlabjournal.o \
-         matlabmatrix.o arrayofmatrices.o sparsematrix.o matlabprogram.o \
-         matlaboption.o ipopt.o
+OBJS   = matlabexception.@OBJEXT@ matlabscalar.@OBJEXT@ matlabstring.@OBJEXT@ matlabjournal.@OBJEXT@ \
+         matlabmatrix.@OBJEXT@ arrayofmatrices.@OBJEXT@ sparsematrix.@OBJEXT@ matlabprogram.@OBJEXT@ \
+         matlaboption.@OBJEXT@ ipopt.@OBJEXT@
 
 MATLAB_INCLUDE = -I$(MATLAB_HOME)/extern/include
 INCLUDE        = $(IPOPT_INCLUDE) $(MATLAB_INCLUDE) 
-CXXFLAGS       += -DMATLAB_MEXFILE
+CXXFLAGS       += -DMATLAB_MEXFILE #-DMWINDEXISINT
 CXXOPTIMFLAGS  = $(CXXFLAGS)
 LDOPTIMFLAGS   = $(CXXFLAGS) @RPATH_FLAGS@
 MEXFLAGS       = -v -cxx -O CXX="$(CXX)" CXXOPTIMFLAGS="$(CXXOPTIMFLAGS)" LDOPTIMFLAGS="$(LDOPTIMFLAGS)" LD="$(CXX)"
@@ -46,7 +51,7 @@ VPATH = $(SRCDIR)
 
 all: install
 
-%.o: %.cpp
+%.@OBJEXT@: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $@ -c $^
 
 $(TARGET): $(OBJS)
@@ -54,8 +59,7 @@ $(TARGET): $(OBJS)
 
 install: $(TARGET)
 	cp $(TARGET) ..
-	test `cd $(SRCDIR); pwd` != `pwd` && cp $(SRCDIR)/../ipopt.m  $(SRCDIR)/../genericcallback.m ..
 
 clean:
-	rm -f *.o $(TARGET)
+	rm -f $(OBJS) $(TARGET)
 
