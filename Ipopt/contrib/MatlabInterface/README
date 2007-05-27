@@ -10,11 +10,10 @@ Contents of this file
 ---------------------
 1. Installation instructions
 2. Installation instructions on Mac OS X
-4. Tutorial by example
-5. Brief description of archive contents
-6. Some implementation issues
-7. Sparse matrix implementation
-8. Integrating the MATLAB interface with the IPOPT release
+3. Tutorial by example
+4. Brief description of archive contents
+5. Some implementation issues
+6. Sparse matrix implementation
 
 1. Installation instructions
 ----------------------------
@@ -38,8 +37,9 @@ compilers because you must use the precise compilers supported by
 MATLAB (a pain, I know). For instance, on my Linux machine I have
 MATLAB version 7.3, so the people at MathWorks tell me that I need to
 use one of the GCC versions 3.4.1 to 3.4.5. If you use the incorrect
-version of GCC, you will likely encounter linking errors. In order to
-find out which compiler is supported by your version of MATLAB, see
+version of GCC, you will likely encounter linking errors (and the
+"mex" command will tell you which compiler versions are Ok). In order
+to find out which compiler is supported by your version of MATLAB, see
 [1].
 
 CONFIGURE MATLAB. Once you've installed the appropriate compilers, set
@@ -51,42 +51,53 @@ MATLAB adds several complicating matters. What follows are the steps I
 followed on my Linux machine. First, I downloaded the Ipopt source
 files and the third-party source code (Blas, Lapack, HSL).
 
-MATLAB demands that you compile Fortran code with the flags -fPIC and
--fexceptions. The first flag tells the compiler to generate
-position-independent code, and the second flag enables exception
-handling.  Usually these flags coincide with your MEX options
-file. See [2] for more information on the options file.
+MATLAB demands that you compile the code with the certain flags, such
+as -fPIC and -fexceptions on Linux. The first flag tells the compiler
+to generate position-independent code, and the second flag enables
+exception handling.  Usually these flags coincide with your MEX
+options file. You can see those options by running the mex compiler
+with the '-v' flag on a simple example source file (Hello-world is
+your friend). See [2] for more information on the options file.
 
 Now that I have all necessary source code, I call the Ipopt configure 
 script. On my Linux machine, the call is
 
-./configure --prefix=$HOME/ipopt/install                    \
-     CXX=g++-3.4.5 CC=g++-3.4.5 F77=g77-3.4.5
+./configure --prefix=$HOME/ipopt/install            \
+     CXX=g++-3.4.5 CC=g++-3.4.5 F77=g77-3.4.5       \
+     ADD_CXXFLAGS="-fPIC -fexceptions"              \
+     ADD_CFLAGS="-fPIC -fexceptions"                \
+     ADD_FFLAGS="-fPIC -fexceptions"
 
 After this, I just do the regular Ipopt 'make install'.
 
 MODIFY THE MAKEFILE. Before building the MEX File, you will need to
 modify some of the variables in the Makefile so that it coincides with
-your system setup (Andreas, I know you are in favour of configure
-scripts---I've taken the less sophisticated route). The variable MEX
-is the executable called to build the MEX file. The variables CXX and
-F77 must be the names of your C++ and Fortran 77 compilers. MEXSUFFIX
-is the MEX file extension specific to your platform. In Linux, the
-extension is mexglx. The variable MATLAB_HOME must point to the base
-directory of your MATLAB installation. Finally, CFLAGS is the set of
-options passed to your C++ compiler. We've already discussed what kind
-of flags you will need to set. It's probably best that you leave
-everything else in the Makefile as is.
+your MATLAB system setup.  For this, go into the directory
+  Ipopt/contrib/MatlabInterface/src open the file 'Makefile' with an
+editor, and adapt the first two variables (as described in the
+Makefile).
 
-Typing "make all" in the command prompt will first compile the C++ source files 
-into object code, then it executes the mex script which links all the object 
-files together into a single MEX file. Even if mex terminates successfully, 
-there's still the possibility that you didn't link the libraries and object 
-files properly, in which case executing the resulting MEX file will cause 
+COMPILING THE IPOPT MEXFILE. Still in the directory where the modified
+Makefile is, typing "make all" in the command prompt will first
+compile the C++ source files into object code, then it executes the
+mex script which links all the object files together into a single MEX
+file. Even if mex terminates successfully, there's still the
+possibility that you didn't link the libraries and object files
+properly, in which case executing the resulting MEX file will cause
 MATLAB to crash.
 
-Before we start using IPOPT in MATLAB, let me make a couple of additional 
-points here.
+FINAL SETUP. In order to make the new MATLAB command 'ipopt' available
+in MATLAB, you need to include the directory with the Ipopt mexfile in
+your MATLABPATH.  For example, if you are in the
+Ipopt/contrib/MatlabInterface directory (into which the Ipopt mexfile
+has just been installed), you can do this with
+  export MATLABPATH=`pwd`  [if you are using sh/bash]
+or
+  setenv MATLABPATH `pwd`  [if you are using csh/tcsh]
+
+
+Before we start using IPOPT in MATLAB, let me make a couple of
+additional points here.
 
 - On my Apple computer, I didn't need to link to the BLAS
    library. That's because the mex script automatically links to the
@@ -119,12 +130,20 @@ the configure script and start with a Makefile (with a number of
 environment variables, and some documentation that explains what these
 environment variables represent).
 
-4. Tutorial by example
+3. Tutorial by example
 ----------------------
 
 In this section, I will go through four examples which demonstrate the 
 principal features of the MATLAB interface. For more information, you can 
 always type "help ipopt" in the MATLAB prompt.
+
+The matlab files for the Hock & Schittkowski problems are in
+  Ipopt/contrib/MatlabInterface/examples/HS
+and files for the last tutorial example is in
+  Ipopt/contrib/MatlabInterface/examples/lauritzen
+Those directories are in the source code directory tree for Ipopt,
+which might be different from the directories in which you compiled
+the Ipopt code.
 
 First, let's look at the Hock & Schittkowski test problem #51 [3]. It
 is an optimization problem with 5 variables, no inequality constraints
@@ -255,7 +274,7 @@ cell array is passed as input to every MATLAB callback routine.
 
 The tutorial is over!
 
-5. Brief description of the MatlabInterface contents
+4. Brief description of the MatlabInterface contents
 ----------------------------------------------------
 
 - C++ source and header files for MATLAB interface to IPOPT (21):
@@ -291,7 +310,7 @@ The tutorial is over!
    ndsum.m                 spzeros.m            reshapemarginals.m
    vectorize.m
 
-6. Some implementation issues
+5. Some implementation issues
 -----------------------------
 
 I'm not going to bore you with all the details of the
@@ -319,7 +338,7 @@ and matlabprogram.cpp. They contain the code of primary interest.
    be altered, but they are: the Inf entries are changed to 1e+19, or
    whatever value is treated as infinity in IPOPT.
 
-7. Sparse matrix implementation
+6. Sparse matrix implementation
 -------------------------------
 
 The greatest challenge was most definitely the conversion of sparse
@@ -362,18 +381,6 @@ great pains to ensure: 1. that the copy function only makes one pass
 through the entries of the sparse matrix, and 2.  that there are no if
 statements inside the for loops, which can severely impinge on the
 speed of the copy operation.
-
-8. Integrating the MATLAB interface with the IPOPT release
-----------------------------------------------------------
-
-I'll end this long email with a question: what is the best way to make
-the MATLAB interface available to the public? One possibility is to
-integrate it into the main release on your webpage, provided that I am
-properly credited for my contribution. Another possibility is to make
-it available on my webpage here at the University of British Columbia,
-and perhaps you could then link to my webpage from the IPOPT project
-website. There are certainly pros and cons to both alternatives, and I
-would be interested to hear your thoughts on the matter.
 
 Footnotes
 ---------
