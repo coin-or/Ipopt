@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -203,6 +203,7 @@ namespace Ipopt
     IPARM_[2] = 1;
 #endif
 
+    IPARM_[1] = 5;
     IPARM_[5] = 1;  // Overwrite right-hand side
     // ToDo: decide if we need iterative refinement in Pardiso.  For
     // now, switch it off ?
@@ -218,9 +219,20 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "Pardiso matching strategy (IPARM(13)): %d\n", IPARM_[12]);
 
-    IPARM_[20] = 1;
+    IPARM_[20] = 3; // Results in better accuracy
     IPARM_[23] = 1; // parallel fac
     IPARM_[24] = 1; // parallel solve
+    IPARM_[29] = 1; // we need this for IPOPT interface
+
+    IPARM_[39] = 4 ;  // max fill for factor
+    IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
+    IPARM_[41] =-2 ;  // exponent dropping value for schur complement
+    IPARM_[42] = 300; // max number of iterations
+    IPARM_[43] = 50 ; // norm of the inverse for algebraic solver
+    IPARM_[44] =-2 ;  // exponent dropping value for incomplete factor
+    IPARM_[46] = 1 ;  // mantisse dropping value for incomplete factor
+    IPARM_[45] =-9 ;  // residual tolerance
+    IPARM_[48] = 0 ;  // active direct solver
 
     // Option for the out of core variant
     IPARM_[49] = pardiso_out_of_core_power;
