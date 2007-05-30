@@ -30,6 +30,7 @@ Ipopt/contrib/MatlabInterface/examples/hs038/computeGradientHS038.m -text
 Ipopt/contrib/MatlabInterface/examples/hs038/computeHessianHS038.m -text
 Ipopt/contrib/MatlabInterface/examples/hs038/computeObjectiveHS038.m -text
 Ipopt/contrib/MatlabInterface/examples/hs038/examplehs038.m -text
+Ipopt/contrib/MatlabInterface/examples/hs038/genericcallback.m -text
 Ipopt/contrib/MatlabInterface/examples/hs051/computeConstraintsHS051.m -text
 Ipopt/contrib/MatlabInterface/examples/hs051/computeGradientHS051.m -text
 Ipopt/contrib/MatlabInterface/examples/hs051/computeJacobianHS051.m -text
