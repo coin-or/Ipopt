@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.2.1dev],[http://projects.coin-or.org/Ipopt/newticket])
+AC_INIT([Ipopt],[3.2.3dev],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT(
 [Copyright 2004, 2007 International Business Machines and others.

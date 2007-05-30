@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -35,6 +35,14 @@
 # endif
 #endif
 
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+
 namespace Ipopt
 {
 
@@ -47,6 +55,16 @@ namespace Ipopt
     return true;
 #endif
 
+  }
+
+  Number IpRandom01()
+  {
+    return Number(rand())/Number(RAND_MAX);
+  }
+
+  void IpResetRandom01()
+  {
+    srand(1);
   }
 
 } //namespace Ipopt

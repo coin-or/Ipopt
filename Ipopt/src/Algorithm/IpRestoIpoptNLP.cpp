@@ -298,21 +298,6 @@ namespace Ipopt
       // All remaining blocks are zero'ed out
     }
 
-    SmartPtr<const MatrixSpace> scaled_jac_c_space;
-    SmartPtr<const MatrixSpace> scaled_jac_d_space;
-    SmartPtr<const SymMatrixSpace> scaled_h_space;
-    NLP_scaling()->DetermineScaling(GetRawPtr(x_space_),
-                                    c_space_, d_space_,
-                                    GetRawPtr(jac_c_space_),
-                                    GetRawPtr(jac_d_space_),
-                                    GetRawPtr(h_space_),
-                                    scaled_jac_c_space, scaled_jac_d_space,
-                                    scaled_h_space);
-    // For now we assume that no scaling is done inside the NLP_Scaling
-    DBG_ASSERT(scaled_jac_c_space == jac_c_space_);
-    DBG_ASSERT(scaled_jac_d_space == jac_d_space_);
-    DBG_ASSERT(scaled_h_space == h_space_);
-
     ///////////////////////////
     // Create the bound data //
     ///////////////////////////
@@ -350,6 +335,24 @@ namespace Ipopt
 
     // Pd_U
     Pd_U_ = orig_ip_nlp_->Pd_U();
+
+    // Getting the NLP scaling
+
+    SmartPtr<const MatrixSpace> scaled_jac_c_space;
+    SmartPtr<const MatrixSpace> scaled_jac_d_space;
+    SmartPtr<const SymMatrixSpace> scaled_h_space;
+    NLP_scaling()->DetermineScaling(GetRawPtr(x_space_),
+                                    c_space_, d_space_,
+                                    GetRawPtr(jac_c_space_),
+                                    GetRawPtr(jac_d_space_),
+                                    GetRawPtr(h_space_),
+                                    scaled_jac_c_space, scaled_jac_d_space,
+                                    scaled_h_space,
+                                    *Px_L_, *x_L_, *Px_U_, *x_U_);
+    // For now we assume that no scaling is done inside the NLP_Scaling
+    DBG_ASSERT(scaled_jac_c_space == jac_c_space_);
+    DBG_ASSERT(scaled_jac_d_space == jac_d_space_);
+    DBG_ASSERT(scaled_h_space == h_space_);
 
     /////////////////////////////////////////////////////////////////////////
     // Create and initialize the vectors for the restoration phase problem //

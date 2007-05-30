@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -15,6 +15,7 @@
 #include "IpBacktrackingLineSearch.hpp"
 #include "IpFilterLSAcceptor.hpp"
 #include "IpGradientScaling.hpp"
+#include "IpEquilibrationScaling.hpp"
 #include "IpIpoptAlg.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
 #include "IpIpoptData.hpp"
@@ -52,6 +53,7 @@ namespace Ipopt
     StandardScalingBase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP Scaling");
     GradientScaling::RegisterOptions(roptions);
+    EquilibrationScaling::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Uncategorized");
     IpoptAlgorithm::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Uncategorized");

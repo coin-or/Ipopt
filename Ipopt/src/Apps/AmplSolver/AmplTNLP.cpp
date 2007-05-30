@@ -85,7 +85,7 @@ namespace Ipopt
     else {
       if (!stub) {
         jnlst_->Printf(J_ERROR, J_MAIN, "No .nl file given!\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "No .nl file given!\n");
       }
       nl = jac0dim(stub, (fint)strlen(stub));
       DBG_ASSERT(nl);
@@ -134,43 +134,43 @@ namespace Ipopt
       break;
       case ASL_readerr_nofile : {
         jnlst_->Printf(J_ERROR, J_MAIN, "Cannot open .nl file\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "Cannot open .nl file");
       }
       break;
       case ASL_readerr_nonlin : {
         DBG_ASSERT(false); // this better not be an error!
         jnlst_->Printf(J_ERROR, J_MAIN, "model involves nonlinearities (ed0read)\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "model involves nonlinearities (ed0read)");
       }
       break;
       case  ASL_readerr_argerr : {
         jnlst_->Printf(J_ERROR, J_MAIN, "user-defined function with bad args\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "user-defined function with bad args");
       }
       break;
       case ASL_readerr_unavail : {
         jnlst_->Printf(J_ERROR, J_MAIN, "user-defined function not available\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "user-defined function not available");
       }
       break;
       case ASL_readerr_corrupt : {
         jnlst_->Printf(J_ERROR, J_MAIN, "corrupt .nl file\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "corrupt .nl file");
       }
       break;
       case ASL_readerr_bug : {
         jnlst_->Printf(J_ERROR, J_MAIN, "bug in .nl reader\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "bug in .nl reader");
       }
       break;
       case ASL_readerr_CLP : {
         jnlst_->Printf(J_ERROR, J_MAIN, "Ampl model contains a constraint without \"=\", \">=\", or \"<=\".\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "Ampl model contains a constraint without \"=\", \">=\", or \"<=\".");
       }
       break;
       default: {
         jnlst_->Printf(J_ERROR, J_MAIN, "Unknown error in stub file read. retcode = %d\n", retcode);
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "Unknown error in stub file read");
       }
       break;
     }
@@ -180,7 +180,7 @@ namespace Ipopt
   {
     if (hesset_called_) {
       jnlst_->Printf(J_ERROR, J_MAIN, "Internal error: AmplTNLP::set_active_objective called after AmplTNLP::call_hesset.\n");
-      exit(-1);
+      THROW_EXCEPTION(INVALID_TNLP, "Internal error: AmplTNLP::set_active_objective called after AmplTNLP::call_hesset.");
     }
     ASL_pfgh* asl = asl_;
     obj_no = in_obj_no;
@@ -191,7 +191,7 @@ namespace Ipopt
   {
     if (hesset_called_) {
       jnlst_->Printf(J_ERROR, J_MAIN, "Internal error: AmplTNLP::call_hesset is called twice.\n");
-      exit(-1);
+      THROW_EXCEPTION(INVALID_TNLP, "Internal error: AmplTNLP::call_hesset is called twice.");
     }
 
     ASL_pfgh* asl = asl_;
@@ -203,7 +203,7 @@ namespace Ipopt
       if (n_obj>1 && !set_active_objective_called_) {
         jnlst_->Printf(J_ERROR, J_MAIN,
                        "There is more than one objective function in the AMPL model, but AmplTNLP::set_active_objective has not been called.\n");
-        exit(-2);
+        THROW_EXCEPTION(INVALID_TNLP, "There is more than one objective function in the AMPL model, but AmplTNLP::set_active_objective has not been called");
       }
       // see "changes" in solvers directory of ampl code...
       hesset(1,obj_no,1,0,nlc);
@@ -796,7 +796,7 @@ namespace Ipopt
       if (!pinfo->Options()->SetNumericValue(pinfo->IpoptName().c_str(), real_val)) {
         pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
                                "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
-        exit(-1);
+        THROW_EXCEPTION(OPTION_INVALID, "Invalid numeric option");
       }
 
       return retval;
@@ -814,7 +814,7 @@ namespace Ipopt
       if (!pinfo->Options()->SetIntegerValue(pinfo->IpoptName().c_str(), int_val)) {
         pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
                                "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
-        exit(-1);
+        THROW_EXCEPTION(OPTION_INVALID, "Invalid integer option");
       }
 
       return retval;
@@ -832,7 +832,7 @@ namespace Ipopt
       if (!pinfo->Options()->SetStringValue(pinfo->IpoptName().c_str(), str_val)) {
         pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
                                "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
-        exit(-1);
+        THROW_EXCEPTION(OPTION_INVALID, "Invalid string option");
       }
 
       return retval;
@@ -861,7 +861,7 @@ namespace Ipopt
       else {
         pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
                                "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
-        exit(-1);
+        THROW_EXCEPTION(OPTION_INVALID, "Invalid option");
       }
 
       return retval;

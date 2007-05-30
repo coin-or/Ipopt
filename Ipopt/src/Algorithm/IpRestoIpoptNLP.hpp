@@ -137,49 +137,49 @@ namespace Ipopt
     virtual SmartPtr<const SymMatrix> uninitialized_h();
 
     /** Lower bounds on x */
-    virtual SmartPtr<const Vector> x_L()
+    virtual SmartPtr<const Vector> x_L() const
     {
       return GetRawPtr(x_L_);
     }
 
     /** Permutation matrix (x_L_ -> x) */
-    virtual SmartPtr<const Matrix> Px_L()
+    virtual SmartPtr<const Matrix> Px_L() const
     {
       return GetRawPtr(Px_L_);
     }
 
     /** Upper bounds on x */
-    virtual SmartPtr<const Vector> x_U()
+    virtual SmartPtr<const Vector> x_U() const
     {
       return GetRawPtr(x_U_);
     }
 
     /** Permutation matrix (x_U_ -> x */
-    virtual SmartPtr<const Matrix> Px_U()
+    virtual SmartPtr<const Matrix> Px_U() const
     {
       return GetRawPtr(Px_U_);
     }
 
     /** Lower bounds on d */
-    virtual SmartPtr<const Vector> d_L()
+    virtual SmartPtr<const Vector> d_L() const
     {
       return GetRawPtr(d_L_);
     }
 
     /** Permutation matrix (d_L_ -> d) */
-    virtual SmartPtr<const Matrix> Pd_L()
+    virtual SmartPtr<const Matrix> Pd_L() const
     {
       return GetRawPtr(Pd_L_);
     }
 
     /** Upper bounds on d */
-    virtual SmartPtr<const Vector> d_U()
+    virtual SmartPtr<const Vector> d_U() const
     {
       return GetRawPtr(d_U_);
     }
 
     /** Permutation matrix (d_U_ -> d */
-    virtual SmartPtr<const Matrix> Pd_U()
+    virtual SmartPtr<const Matrix> Pd_U() const
     {
       return GetRawPtr(Pd_U_);
     }

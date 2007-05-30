@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -16,15 +16,45 @@
 namespace Ipopt
 {
 
-  inline ipfint Max(ipfint a, ipfint b)
+  inline Index Max(Index a, Index b)
   {
     return ((a) > (b) ? (a) : (b));
   }
 
-  inline ipfint Min(ipfint a, ipfint b)
+  inline Index Max(Index a, Index b, Index c)
+  {
+    Index max = Max(a,b);
+    max = Max(max, c);
+    return max;
+  }
+
+  inline Index Max(Index a, Index b, Index c, Index d)
+  {
+    Index max = Max(a, b, c);
+    max = Max(max, d);
+    return max;
+  }
+
+  inline Index Min(Index a, Index b)
   {
     return ((a) < (b) ? (a) : (b));
   }
+
+  inline Index Min(Index a, Index b, Index c)
+  {
+    Index min = Min(a,b);
+    min = Min(min, c);
+    return min;
+  }
+
+  inline Index Min(Index a, Index b, Index c, Index d)
+  {
+    Index min = Min(a, b, c);
+    min = Min(min, d);
+    return min;
+  }
+
+  ///////////////////////////////////////////
 
   inline Number Max(Number a, Number b)
   {
@@ -67,6 +97,12 @@ namespace Ipopt
   /** Function returning true iff the argument is a valid double number
    *  (not NaN or Inf). */
   bool IsFiniteNumber(Number val);
+
+  /** Function returning a random number between 0 and 1 */
+  Number IpRandom01();
+
+  /** Function resetting the random number generator */
+  void IpResetRandom01();
 
 } //namespace Ipopt
 
