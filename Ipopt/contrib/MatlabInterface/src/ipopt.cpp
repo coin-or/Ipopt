@@ -187,7 +187,10 @@ should have the same number of elements");
     }
 
     // Intialize the IpoptApplication object and process the options.
-    app.Initialize();
+    ApplicationReturnStatus exitstatus = app.Initialize();
+    if (exitstatus != Ipopt::Solve_Succeeded) {
+      throw MatlabException("IPOPT solver initialization failed");
+    }
 
     // Create a new instance of the constrained, nonlinear program.
     SmartPtr<TNLP> program 
@@ -196,7 +199,7 @@ should have the same number of elements");
 			  *iterFunc,auxData,x,useQuasiNewton);
 
     // Ask Ipopt to solve the problem.
-    ApplicationReturnStatus exitstatus = app.OptimizeTNLP(program);
+    exitstatus = app.OptimizeTNLP(program);
 
     // Get rid of the dynamically allocated memory.
     delete iterFunc;
