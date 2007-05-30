@@ -117,12 +117,13 @@ should have the same number of elements");
       iterFunc = new MatlabString("");
 
     // Create a new instance of IpoptApplication.
-    SmartPtr<Journal> console = new MatlabJournal(defaultPrintLevel);
+    EJournalLevel printLevel = defaultPrintLevel;
+    if (!iterFunc->isempty())
+      printLevel = Ipopt::J_NONE;
+    SmartPtr<Journal> console = new MatlabJournal(printLevel);
     IpoptApplication  app(false);
     app.Jnlst()->AddJournal(console);
-    if (!iterFunc->isempty())
-      app.Options()->SetIntegerValue("print_level",Ipopt::J_NONE);
-    
+
     // If an upper/lower bound is set to infinity, then it means that
     // the variable is not upper/lower bounded.
     double lower_infty;
