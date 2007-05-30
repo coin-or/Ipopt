@@ -51,13 +51,15 @@ namespace Ipopt
     list. */
     SmartPtr<IpoptApplication> clone();
 
-    /** Initialize method. This method reads the params file and initializes
-     *  the journalists. You should call this method at some point before the 
-     *  first optimize call. Note: you can skip the processing of a params
-     *  file by setting params_file to ""
+    /** Initialize method. This method reads the params file and
+     *  initializes the journalists. You should call this method at
+     *  some point before the first optimize call. Note: you can skip
+     *  the processing of a params file by setting params_file to "".
+     *  It returns something other than Solve_Succeeded if there was a
+     *  problem in the initialization (such as an invalid option).
      */
-    void Initialize(std::string params_file = "ipopt.opt");
-    void Initialize(std::istream& is);
+    ApplicationReturnStatus Initialize(std::string params_file = "ipopt.opt");
+    ApplicationReturnStatus Initialize(std::istream& is);
 
     /**@name Solve methods */
     //@{

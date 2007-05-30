@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -197,7 +197,10 @@ enum ApplicationReturnStatus IpoptSolve(
   using namespace Ipopt;
 
   // Initialize and process options
-  ipopt_problem->app->Initialize();
+  Ipopt::ApplicationReturnStatus retval = ipopt_problem->app->Initialize();
+  if (retval!=Ipopt::Solve_Succeeded) {
+    return (::ApplicationReturnStatus) retval;
+  }
 
   // For now only copy the values of the x's.  When we allow warm
   // starts we also need to copy the values of the multipliers

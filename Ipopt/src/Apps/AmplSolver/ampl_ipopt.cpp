@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -17,7 +17,12 @@ int main(int argv, char**argc)
 
   // Call Initialize the first time to create a journalist, but ignore
   // any options file
-  app->Initialize("");
+  ApplicationReturnStatus retval;
+  retval = app->Initialize("");
+  if (retval != Solve_Succeeded) {
+    printf("ampl_ipopt.cpp: Error in first Initialize!!!!\n");
+    exit(-100);
+  }
 
   // Add the suffix handler for scaling
   SmartPtr<AmplSuffixHandler> suffix_handler = new AmplSuffixHandler();
@@ -30,9 +35,12 @@ int main(int argv, char**argc)
                                           argc, suffix_handler);
 
   // Call Initialize again to process output related options
-  app->Initialize();
+  retval = app->Initialize();
+  if (retval != Solve_Succeeded) {
+    printf("ampl_ipopt.cpp: Error in second Initialize!!!!\n");
+    exit(-101);
+  }
 
-  ApplicationReturnStatus retval;
   const int n_loops = 1; // make larger for profiling
   for (Index i=0; i<n_loops; i++) {
     retval = app->OptimizeTNLP(ampl_tnlp);

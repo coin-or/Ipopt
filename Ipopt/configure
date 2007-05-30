@@ -30993,6 +30993,26 @@ fi
                                         ac_config_links="$ac_config_links test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp test/hs071_nlp.cpp:examples/hs071_cpp/hs071_nlp.cpp test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp test/hs071_c.c:examples/hs071_c/hs071_c.c"
 
 
+########################################################################
+##          Create links for VPATH config of certain files            ##
+########################################################################
+
+echo "$as_me:$LINENO: checking whether this is a VPATH configuration" >&5
+echo $ECHO_N "checking whether this is a VPATH configuration... $ECHO_C" >&6
+if test `cd $srcdir; pwd` != `pwd`; then
+  coin_vpath_config=yes;
+else
+  coin_vpath_config=no;
+fi
+echo "$as_me:$LINENO: result: $coin_vpath_config" >&5
+echo "${ECHO_T}$coin_vpath_config" >&6
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files contrib/MatlabInterface/ipopt.m"
+fi
+
+
                                                                                                                                                                                                                   ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Interfaces/ipopt_addlibs_f.txt src/Interfaces/ipopt_addlibs_cpp.txt src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile"
 
 
