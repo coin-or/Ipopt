@@ -15,6 +15,7 @@
 // Type definitions.
 // -----------------------------------------------------------------
 #ifdef MWINDEXISINT
+// This line is needed for versions of MATLAB prior to 7.3.
 typedef int mwIndex;
 #endif
 
