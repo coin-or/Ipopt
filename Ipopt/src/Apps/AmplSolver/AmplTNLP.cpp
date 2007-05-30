@@ -164,7 +164,7 @@ namespace Ipopt
       }
       break;
       case ASL_readerr_CLP : {
-        jnlst_->Printf(J_ERROR, J_MAIN, "ASL error message: \"solver cannot handle CLP extensions\"\n");
+        jnlst_->Printf(J_ERROR, J_MAIN, "Ampl model contains a constraint without \"=\", \">=\", or \"<=\".\n");
         exit(-1);
       }
       break;

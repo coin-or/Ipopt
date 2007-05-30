@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -29,10 +29,15 @@ int main(int argv, char* argc[])
   app->Options()->SetStringValue("output_file", "ipopt.out");
 
   // Intialize the IpoptApplication and process the options
-  app->Initialize();
+  ApplicationReturnStatus status;
+  status = app->Initialize();
+  if (status != Solve_Succeeded) {
+    printf("\n\n*** Error during initialization!\n");
+    return (int) status;
+  }
 
   // Ask Ipopt to solve the problem
-  ApplicationReturnStatus status = app->OptimizeTNLP(mynlp);
+  status = app->OptimizeTNLP(mynlp);
 
   if (status == Solve_Succeeded) {
     printf("\n\n*** The problem solved!\n");

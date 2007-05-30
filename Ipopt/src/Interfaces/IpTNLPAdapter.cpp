@@ -2321,12 +2321,12 @@ namespace Ipopt
       return false;
     }
     // Here we reset the random number generator
-    srand(1);
+    IpResetRandom01();
     for (Index i=0; i<n_full_x_; i++) {
       const Number lower = Max(x_l[i], full_x_[i]-point_perturbation_radius_);
       const Number upper = Min(x_u[i], full_x_[i]+point_perturbation_radius_);
       const Number interval = upper - lower;
-      const Number random_number = Number(rand())/Number(RAND_MAX);
+      const Number random_number = IpRandom01();
       full_x_[i] = lower + random_number*interval;
     }
     Number* g_vals = NULL;

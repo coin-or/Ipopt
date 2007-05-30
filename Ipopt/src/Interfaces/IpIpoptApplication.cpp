@@ -105,7 +105,8 @@ namespace Ipopt
     return retval;
   }
 
-  void IpoptApplication::Initialize(std::string params_file /*= "ipopt.opt"*/)
+  ApplicationReturnStatus
+  IpoptApplication::Initialize(std::string params_file /*= "ipopt.opt"*/)
   {
     std::ifstream is;
     if (params_file != "") {
@@ -114,21 +115,23 @@ namespace Ipopt
       }
       catch(std::bad_alloc) {
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
-        exit(-1);
+        return Insufficient_Memory;
       }
       catch(...) {
         IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
         exc.ReportException(*jnlst_);
-        exit(-1);
+        return NonIpopt_Exception_Thrown;
       }
     }
-    Initialize(is);
+    ApplicationReturnStatus retval = Initialize(is);
     if (is) {
       is.close();
     }
+    return retval;
   }
 
-  void IpoptApplication::Initialize(std::istream& is)
+  ApplicationReturnStatus
+  IpoptApplication::Initialize(std::istream& is)
   {
     try {
       // Get the options
@@ -360,21 +363,22 @@ namespace Ipopt
     }
     catch(OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
-      exit(-1);
+      return Invalid_Option;
     }
     catch(IpoptException& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
-      exit(-1);
+      return Unrecoverable_Exception;
     }
     catch(std::bad_alloc) {
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
-      exit(-1);
+      return Insufficient_Memory;
     }
     catch(...) {
       IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
       exc.ReportException(*jnlst_);
-      exit(-1);
+      return NonIpopt_Exception_Thrown;
     }
+    return Solve_Succeeded;
   }
 
   IpoptApplication::~IpoptApplication()

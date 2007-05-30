@@ -574,6 +574,12 @@ AC_CONFIG_LINKS([test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp
                  test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp
                  test/hs071_c.c:examples/hs071_c/hs071_c.c])
 
+########################################################################
+##          Create links for VPATH config of certain files            ##
+########################################################################
+
+AC_COIN_VPATH_LINK(contrib/MatlabInterface/ipopt.m)
+
 AC_CONFIG_FILES([Makefile
 		 src/Common/Makefile
                  src/LinAlg/Makefile
