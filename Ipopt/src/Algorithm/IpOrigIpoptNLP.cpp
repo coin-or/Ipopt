@@ -210,6 +210,15 @@ namespace Ipopt
     DBG_ASSERT(initialized_);
     bool retValue;
 
+    SmartPtr<Vector> x_L;
+    SmartPtr<Matrix> Px_L;
+    SmartPtr<Vector> x_U;
+    SmartPtr<Matrix> Px_U;
+    SmartPtr<Vector> d_L;
+    SmartPtr<Matrix> Pd_L;
+    SmartPtr<Vector> d_U;
+    SmartPtr<Matrix> Pd_U;
+
     if (!warm_start_same_structure_) {
 
       retValue = nlp_->GetSpaces(x_space_, c_space_, d_space_,
@@ -258,12 +267,29 @@ namespace Ipopt
         }
       }
 
+      // Create the bounds structures
+      x_L = x_l_space_->MakeNew();
+      Px_L = px_l_space_->MakeNew();
+      x_U = x_u_space_->MakeNew();
+      Px_U = px_u_space_->MakeNew();
+      d_L = d_l_space_->MakeNew();
+      Pd_L = pd_l_space_->MakeNew();
+      d_U = d_u_space_->MakeNew();
+      Pd_U = pd_u_space_->MakeNew();
+
+      retValue = nlp_->GetBoundsInformation(*Px_L, *x_L, *Px_U, *x_U,
+                                            *Pd_L, *d_L, *Pd_U, *d_U);
+      if (!retValue) {
+        return false;
+      }
+
       NLP_scaling()->DetermineScaling(x_space_,
                                       c_space_, d_space_,
                                       jac_c_space_, jac_d_space_,
                                       h_space_,
                                       scaled_jac_c_space_, scaled_jac_d_space_,
-                                      scaled_h_space_);
+                                      scaled_h_space_,
+                                      *Px_L, *x_L, *Px_U, *x_U);
 
       if (x_space_->Dim() < c_space_->Dim()) {
         char msg[128];
@@ -292,23 +318,21 @@ namespace Ipopt
     else {
       ASSERT_EXCEPTION(IsValid(x_space_), INVALID_WARMSTART,
                        "OrigIpoptNLP called with warm_start_same_structure, but the problem is solved for the first time.");
-    }
+      // Create the bounds structures
+      x_L = x_l_space_->MakeNew();
+      Px_L = px_l_space_->MakeNew();
+      x_U = x_u_space_->MakeNew();
+      Px_U = px_u_space_->MakeNew();
+      d_L = d_l_space_->MakeNew();
+      Pd_L = pd_l_space_->MakeNew();
+      d_U = d_u_space_->MakeNew();
+      Pd_U = pd_u_space_->MakeNew();
 
-    // Create the bounds structures
-    SmartPtr<Vector> x_L = x_l_space_->MakeNew();
-    SmartPtr<Matrix> Px_L = px_l_space_->MakeNew();
-    SmartPtr<Vector> x_U = x_u_space_->MakeNew();
-    SmartPtr<Matrix> Px_U = px_u_space_->MakeNew();
-    SmartPtr<Vector> d_L = d_l_space_->MakeNew();
-    SmartPtr<Matrix> Pd_L = pd_l_space_->MakeNew();
-    SmartPtr<Vector> d_U = d_u_space_->MakeNew();
-    SmartPtr<Matrix> Pd_U = pd_u_space_->MakeNew();
-
-    retValue = nlp_->GetBoundsInformation(*Px_L, *x_L, *Px_U, *x_U,
-                                          *Pd_L, *d_L, *Pd_U, *d_U);
-
-    if (!retValue) {
-      return false;
+      retValue = nlp_->GetBoundsInformation(*Px_L, *x_L, *Px_U, *x_U,
+                                            *Pd_L, *d_L, *Pd_U, *d_U);
+      if (!retValue) {
+        return false;
+      }
     }
 
     x_L->Print(*jnlst_, J_MOREVECTOR, J_INITIALIZATION,

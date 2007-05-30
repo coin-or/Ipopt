@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -62,6 +62,8 @@ namespace Ipopt
     const SmartPtr<const MatrixSpace> jac_c_space,
     const SmartPtr<const MatrixSpace> jac_d_space,
     const SmartPtr<const SymMatrixSpace> h_space,
+    const Matrix& Px_L, const Vector& x_L,
+    const Matrix& Px_U, const Vector& x_U,
     Number& df,
     SmartPtr<Vector>& dx,
     SmartPtr<Vector>& dc,

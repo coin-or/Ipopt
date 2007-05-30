@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -211,13 +211,16 @@ namespace Ipopt
     const SmartPtr<const SymMatrixSpace> h_space,
     SmartPtr<const MatrixSpace>& new_jac_c_space,
     SmartPtr<const MatrixSpace>& new_jac_d_space,
-    SmartPtr<const SymMatrixSpace>& new_h_space)
+    SmartPtr<const SymMatrixSpace>& new_h_space,
+    const Matrix& Px_L, const Vector& x_L,
+    const Matrix& Px_U, const Vector& x_U)
   {
     SmartPtr<Vector> dc;
     SmartPtr<Vector> dd;
     DetermineScalingParametersImpl(x_space, c_space, d_space,
                                    jac_c_space, jac_d_space,
-                                   h_space, df_, dx_, dc, dd);
+                                   h_space, Px_L, x_L, Px_U, x_U,
+                                   df_, dx_, dc, dd);
 
     df_ *= obj_scaling_factor_;
 
@@ -525,6 +528,8 @@ namespace Ipopt
     const SmartPtr<const MatrixSpace> jac_c_space,
     const SmartPtr<const MatrixSpace> jac_d_space,
     const SmartPtr<const SymMatrixSpace> h_space,
+    const Matrix& Px_L, const Vector& x_L,
+    const Matrix& Px_U, const Vector& x_U,
     Number& df,
     SmartPtr<Vector>& dx,
     SmartPtr<Vector>& dc,

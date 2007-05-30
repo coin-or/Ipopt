@@ -40,6 +40,7 @@
 #include "IpTSymLinearSolver.hpp"
 #include "IpUserScaling.hpp"
 #include "IpGradientScaling.hpp"
+#include "IpEquilibrationScaling.hpp"
 #include "IpExactHessianUpdater.hpp"
 
 #ifdef HAVE_MA27
@@ -93,6 +94,9 @@ namespace Ipopt
     }
     else if (nlp_scaling_method == "gradient-based") {
       nlp_scaling = new GradientScaling(nlp);
+    }
+    else if (nlp_scaling_method == "equilibration-based") {
+      nlp_scaling = new EquilibrationScaling(nlp);
     }
     else {
       nlp_scaling = new NoNLPScalingObject();
@@ -164,13 +168,14 @@ namespace Ipopt
       "Ipopt has been compiled with MC19.");
 
     roptions->SetRegisteringCategory("NLP Scaling");
-    roptions->AddStringOption3(
+    roptions->AddStringOption4(
       "nlp_scaling_method",
       "Select the technique used for scaling the NLP.",
       "gradient-based",
       "none", "no problem scaling will be performed",
       "user-scaling", "scaling parameters will come from the user",
       "gradient-based", "scale the problem so the maximum gradient at the starting point is scaling_max_gradient",
+      "equilibration-based", "scale the problem so that first derivatives are of order 1 at random points (only available with MC19)",
       "Selects the technique used for scaling the problem internally before it is solved."
       " For user-scaling, the parameters come from the NLP. If you are using "
       "AMPL, they can be specified through suffixes (\"scaling_factor\")");

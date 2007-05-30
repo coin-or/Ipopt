@@ -58,8 +58,9 @@ libipoptalg_la_LIBADD =
 am_libipoptalg_la_OBJECTS = IpAdaptiveMuUpdate.lo IpAlgBuilder.lo \
 	IpAlgorithmRegOp.lo IpAugRestoSystemSolver.lo \
 	IpBacktrackingLineSearch.lo IpDefaultIterateInitializer.lo \
-	IpExactHessianUpdater.lo IpFilter.lo IpFilterLSAcceptor.lo \
-	IpGenAugSystemSolver.lo IpGradientScaling.lo IpIpoptAlg.lo \
+	IpEquilibrationScaling.lo IpExactHessianUpdater.lo IpFilter.lo \
+	IpFilterLSAcceptor.lo IpGenAugSystemSolver.lo \
+	IpGradientScaling.lo IpIpoptAlg.lo \
 	IpIpoptCalculatedQuantities.lo IpIpoptData.lo \
 	IpIteratesVector.lo IpLeastSquareMults.lo IpLoqoMuOracle.lo \
 	IpLowRankAugSystemSolver.lo IpMonotoneMuUpdate.lo \
@@ -302,6 +303,7 @@ libipoptalg_la_SOURCES = \
 	IpConvCheck.hpp \
 	IpDefaultIterateInitializer.cpp IpDefaultIterateInitializer.hpp \
 	IpEqMultCalculator.hpp \
+	IpEquilibrationScaling.cpp IpEquilibrationScaling.hpp \
 	IpExactHessianUpdater.cpp IpExactHessianUpdater.hpp \
 	IpFilter.cpp IpFilter.hpp \
 	IpFilterLSAcceptor.cpp IpFilterLSAcceptor.hpp \
@@ -368,6 +370,7 @@ ASTYLE_FILES = \
 	IpConvCheck.hppbak \
 	IpDefaultIterateInitializer.cppbak IpDefaultIterateInitializer.hppbak \
 	IpEqMultCalculator.hppbak \
+	IpEquilibrationScaling.cppbak IpEquilibrationScaling.hppbak \
 	IpExactHessianUpdater.cppbak IpExactHessianUpdater.hppbak \
 	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLSAcceptor.cppbak IpFilterLSAcceptor.hppbak \
@@ -469,6 +472,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpAugRestoSystemSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpBacktrackingLineSearch.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDefaultIterateInitializer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpEquilibrationScaling.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpExactHessianUpdater.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpFilterLSAcceptor.Plo@am__quote@
