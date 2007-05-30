@@ -42,6 +42,7 @@ Ipopt/contrib/MatlabInterface/examples/hs071/computeJacobianHS071.m -text
 Ipopt/contrib/MatlabInterface/examples/hs071/computeObjectiveHS071.m -text
 Ipopt/contrib/MatlabInterface/examples/hs071/examplehs071.m -text
 Ipopt/contrib/MatlabInterface/ipopt.m -text
+Ipopt/contrib/MatlabInterface/readme.html -text
 Ipopt/doc/documentation.pdf -text
 Ipopt/doc/options.tex -text
 Ipopt/examples/ScalableProblems/README -text

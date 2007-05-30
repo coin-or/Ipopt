@@ -1,15 +1,11 @@
-% NDSUM    Multi-dimensional summation.
-% NDSUM(X,DIM) sums out the dimensions in DIM, and squeezes the result.
-%
-% (c) Microsoft Corporation. All rights reserved.
-% Authors: Written by Tom Minka and modified by Peter Carbonetto.
-
-function x = ndsum(x,dim)
-
+function X = ndsum (X, dims)
   
-  sz = size(x);
-  for i = dim
-    x = sum(x,i);
+  % Sum over requested dimensions.
+  s = size(X);
+  for i = dims
+    X = sum(X,i);
   end
-  sz(dim) = [];
-  x = reshape(x,[sz 1 1]);
+  
+  % Remove singleton dimensions.
+  s(dims) = [];
+  X       = reshape(X,[s 1 1]);
