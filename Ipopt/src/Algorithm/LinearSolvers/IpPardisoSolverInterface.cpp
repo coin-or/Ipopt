@@ -211,7 +211,7 @@ namespace Ipopt
 
     // Options suggested by Olaf Schenk
     IPARM_[9] = 12;
-    IPARM_[10] = 1;
+    IPARM_[10] = 2; // Results in better scaling
     // Matching information:  IPARM_[12] = 1 seems ok, but results in a
     // large number of pivot perturbation
     // Matching information:  IPARM_[12] = 2 robust,  but more  expensive method
