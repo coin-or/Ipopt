@@ -36,7 +36,7 @@ interface to the IPOPT optimization engine, specially designed so it can be
 easily used in the <a href="www.mathworks.com/products/matlab/">MATLAB</a> 
 programming environment.</p> 
 
-<p>Let's start by installing the MATLAB interface.</p>
+<p>Let's start this tutorial by installing the MATLAB interface.</p>
 
 <a name="install"><h3>Installation</h3>
 
@@ -44,24 +44,23 @@ programming environment.</p>
 UNIX-based operating system, such as Mac OS X, Solaris or Linux. We
 can't help you if you have a Windows operating system, but we'll
 presume you have enough experience with Windows to figure out how to
-modify these steps for your setup, if necessary. Of course, you will
+modify these steps for your setup, if necessary. Of course, you'll
 need to have a version of MATLAB installed on your computer (hopefully
 a more recent version), and that you are relatively familiar with the
 MATLAB programming language (if not, it is a very simple language and
-you could learn it in a few hours). This software has been tested on
-MATLAB versions 7.2 and 7.3. It might very well work on earlier
-versions of MATLAB, but there is also a good chance that it will
-not. It is unlikely that the software will run with versions prior to
-MATLAB 6.5.</p>
+you could learn it in a few hours). This software package has been
+tested on MATLAB versions 7.2 and 7.3. It might very well work on
+earlier versions of MATLAB, but there is also a good chance that it
+will not. It is unlikely that the software will run with versions
+prior to MATLAB 6.5.</p>
 
-<p><b>Install compilers.</b> The first thing you need to do is
-install a C++ compiler and a Fortran 77 compiler. Now, you might
-already have these installed. However, you may not be able to use
-these installed compilers because you must use the precise compilers
-supported by MATLAB (a pain, I know). For instance, on my Linux
-machine I have MATLAB version 7.3, so the people at MathWorks tell me
-that I need to have the <a
-href="href=http://www.gnu.org/software/gcc">GNU Compiler
+<p><b>Install compilers.</b> The first thing you need to do is install
+a C++ compiler and a Fortran 77 compiler. Now, you might already have
+these installed. However, you may not be able to use these installed
+compilers because you must use the precise compilers supported by
+MATLAB (yes, it's a pain). For instance, on my Linux machine I have
+MATLAB version 7.3, so the people at MathWorks tell me that I need to
+have the <a href="href=http://www.gnu.org/software/gcc">GNU Compiler
 Collection</a> (GCC) version 3.4.5. If you use the incorrect version
 of GCC, you will likely encounter linking errors (and the "mex"
 command will tell you which compiler versions are Ok). In order to
@@ -75,50 +74,63 @@ webpage</a>.</p>
 compilers, set up and configure MATLAB to build MEX files. This is
 explained quite nicely <a
 href="http://www.mathworks.com/support/tech-notes/1600/1605.html">here</a>.</p>
-<p><b>Install IPOPT.</b> The MATLAB interface adds several complicating
-matters to the <a
+<p><b>Install IPOPT.</b> The MATLAB interface adds several
+complicating matters to the <a
 href="http://www.coin-or.org/Ipopt/documentation">standard IPOPT
-installation procedure</a>. Please familiarize yourself with the
-standard procedure. What follows are the steps followed on a typical
-Linux machine. First, download the Ipopt source files and the
-third-party source code (BLAS, LAPACK, HSL, etc.).</p>
+installation procedure</a>. Before you continue, please familiarize
+yourself with the standard procedure. What follows are the steps
+followed on a typical Linux machine. First, download the IPOPT source
+files and the third-party source code (BLAS, LAPACK, HSL, etc.).</p>
 
-<p>MATLAB demands that you compile the code with the certain flags, such
-as <code>-fPIC</code> and <code>-fexceptions</code> on Linux. The
+<p>MATLAB demands that you compile the code with certain flags, such
+as <code>-fPIC</code> and <code>-fexceptions</code> (on Linux). The
 first flag tells the compiler to generate position-independent code,
 and the second flag enables exception handling. Usually these flags
-coincide with your MEX options file. You can see those options by
-running the mex compiler with the <code>-v</code> flag on a simple
-example source file (Hello World is your friend). See <a
+coincide with your MEX options file. You figure out which flags are
+used on your system by running the mex compiler with the
+<code>-v</code> flag on a simple example source file (<a href="http://www.mathworks.com/support/tech-notes/1600/1605.html#example1">Hello
+World</a> is your friend). See <a
 href="http://www.mathworks.com/support/tech-notes/1600/1605.html">this</a>
 MathWorks technical support webpage for more information on the
-options file.</p>
+MEX options file.</p>
 
 <p>Once you have all the necessary source code, call the IPOPT configure 
 script. On a Linux machine, the call should look something like</p>
 
-<p><code><pre>  ./configure --prefix=$HOME/ipopt/install            \
-       CXX=g++-3.4.5 CC=gcc-3.4.5 F77=g77-3.4.5       \
-       ADD_CXXFLAGS="-fPIC -fexceptions"              \
-       ADD_CFLAGS="-fPIC -fexceptions"                \
+<p><code><pre>  ./configure --prefix=$HOME/ipopt/install      \
+       CXX=g++-3.4.5 CC=gcc-3.4.5 F77=g77-3.4.5 \
+       ADD_CXXFLAGS="-fPIC -fexceptions"        \
+       ADD_CFLAGS="-fPIC -fexceptions"          \
        ADD_FFLAGS="-fPIC -fexceptions"</pre></code></p>
 
 <p>After this, follow the standard installation steps: type
-<code>make</code> then <code>make install</code> in the UNIX command
-line. This compiles all the source code into a single
-library. However, it has not compiled the code for the MATLAB
+<code>make</code>, wait a few minutes, then <code>make install</code>
+in the UNIX command line. This compiles all the source code into a
+single library and places it in the install directory as specified by
+the <code>prefix</code> variable above.</p>
+
+<p>What we haven't yet done is compile the code for the MATLAB
 interface. We'll do this next.</p>
 
-<p><b>Modify the Makefile.</b> Go to into the directory
-<code>Ipopt/contrib/MatlabInterface/src</code> and open the file
-called <code>Makefile</code> with your favourite text editor. We need
-to change this file a little bit so that it coincides with your MATLAB
-setup. You will find that most of the variables, such as
-<code>CXX</code> and <code>CXXFLAGS</code>, have been automatically
-set according to the flags specified during the initial call to
-<code>configure</code>. However, you may need to modify
-<code>MATLAB_HOME</code> and <code>MEXSUFFIX</code>, as explained in
-the comments of the Makefile.</p>
+<p><b>Modify the Makefile and build the MEX file.</b> Go to into the
+subdirectory <code>Ipopt/contrib/MatlabInterface/src</code> and open
+the file called <code>Makefile</code> with your favourite text
+editor. We need to change this file a little bit so that it coincides
+with your MATLAB setup. You will find that most of the variables, such
+as <code>CXX</code> and <code>CXXFLAGS</code>, have been automatically
+(and hopefully, correctly) set according to the flags specified during
+your initial call to <code>configure</code> script. However, you may
+need to modify <code>MATLAB_HOME</code> and <code>MEXSUFFIX</code>, as
+explained in the comments of the Makefile. On one of our Linux
+machines, we had set these Makefile variables to</p>
+
+<p><code><pre>  MATLAB_HOME = /cs/local/generic/lib/pkg/matlab-7.3/bin/matlab
+  MEXSUFFIX   = mexglx
+</pre></code></p>
+
+<p>Once you think you've set up the Makefile properly, type <code>make
+all</code> in the same directory as the Makefile. If you didn't get
+any errors, then you're pretty much all set to go!</p>
 
 <p>There's a great possibility you will encounter problems with the
 installation instructions we have just described here. I'm afraid some
@@ -140,10 +152,12 @@ type</p>
 <p><code><pre>  addpath sourcedir</pre></code></p>
 
 <p>in the MATLAB command prompt, where <code>sourcedir</code> is the
-location of the MEX file you created. You can also achieve the same
-thing by modifying the <code>MATLABPATH</code> environment variable in
-the UNIX command line, using either the <code>export</code> command
-(in Bash shell), or the <code>setenv</code> command (in C-shell).</p>
+location of the MEX file you created. It is basically the full
+pathname that ends in <code>Ipopt/contrib/MatlabInterface</code>. You
+can also achieve the same thing by modifying the
+<code>MATLABPATH</code> environment variable in the UNIX command line,
+using either the <code>export</code> command (in Bash shell), or the
+<code>setenv</code> command (in C-shell).</p>
 
 <a name="tutorial"><h3>Tutorial by example</h3>
 
@@ -234,11 +248,12 @@ dense, so we can return its structure in a single line:</p>
 
 <p>where <code>m</code> is the number of constraint functions.</p>
 
-<p>The last example is the script <code>examplelauritzen.m</code>. It
-is vastly more complicated than the other three. It pertains to
-research in inference in probabilistic models in artificial
-intelligence. This script demonstrates the problem of inferring the
-most probable states of random variables given a Bayesian network.<a
+<p>The last example is the script <code>examplelauritzen.m</code> in
+the subdirectory <code>bayesnet</code>. It is vastly more complicated
+than the other three. It pertains to research in inference in
+probabilistic models in artificial intelligence. This script
+demonstrates the problem of inferring the most probable states of
+random variables given a Bayesian network.<a
 href="#footnote2"><sup>2</sup></a> In this case, the model represents
 the interaction between causes (e.g. smoking) and diseases (e.g. lung
 cancer). We are given a patient that is a smoker, has tested positive
@@ -251,15 +266,15 @@ particularly efficient.</p>
 
 <p>The call to IPOPT is buried in the file <code>bopt.m</code>. It is</p>
 
-<p><code><pre>[qR qS] = ipopt({qR qS},{ repmat(eps,nqr,1) repmat(eps,nqs,1) },...
-                { repmat(inf,nqr,1) repmat(inf,nqs,1) },...
-                [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
-                [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
-                'computeJGObjective','computeJGGradient',...
-                'computeJGConstraints','computeJGJacobian',...
-                'computeJGHessian',{ K C f Rv Rf Sv Sf NS d },'',...
-                'mu_strategy','adaptive','max_iter',maxiter,...
-                'tol',tolerance,'print_level',verbose*4);</pre></code></p>
+<p><code><pre>[qR qS] = ipopt({qR qS},{repmat(eps,nqr,1) repmat(eps,nqs,1)},...
+            { repmat(inf,nqr,1) repmat(inf,nqs,1) },...
+            [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
+            [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
+            'computeJGObjective','computeJGGradient',...
+            'computeJGConstraints','computeJGJacobian',...
+            'computeJGHessian',{ K C f Rv Rf Sv Sf NS d },'',...
+            'mu_strategy','adaptive','max_iter',maxiter,...
+            'tol',tolerance,'print_level',verbose*4);</pre></code></p>
 
 <p>As you can see, it is rather complicated! The first input, as
 usual, is the starting point. (The variables actually represent
@@ -361,12 +376,25 @@ problems, it is highly recommended that you follow the standard
 installation of IPOPT first, and then test the installation by running
 some examples, either in C++ or in AMPL.</p>
 
-<p>Even if you didn't get any errors during compilation, there's still
-a possibility that you didn't link the MEX file properly, in which
-case executing IPOPT in MATLAB will cause MATLAB to crash. This is a
-common problem, and usually arises because you did not choose the
-proper compiler or set the proper compilation flags when you ran the
-<code>configure</code> script at the very beginning.</p>
+<p>What follows are a list of common errors encountered, along
+with a suggested remedy:</p>
+
+<ul>
+
+<li><b>Compilation is successful, but MATLAB crashes.</b> Even if you
+didn't get any errors during compilation, there's still a possibility
+that you didn't link the MEX file properly. In this case, executing
+IPOPT in MATLAB will cause MATLAB to crash. This is a common problem,
+and usually arises because you did not choose the proper compiler or
+set the proper compilation flags (e.g. <code>-fPIC</code>) when you
+ran the <code>configure</code> script at the very beginning.</p>
+
+<li><b>&quot;mwIndex&quot; is not defined.</b> You may get a
+compilation error that says something to the effect that mwIndex is
+not defined. This error will surface on version of MATLAB prior to
+7.3.
+
+</ul>
 
 <h3>Footnotes</h3>
 
@@ -380,9 +408,9 @@ Economics and Mathematical Systems Vol. 187, Springer-Verlag.</p>
      case of this is called the <emph>junction tree
      algorithm</emph>. Recommended reading includes: <ul><li>Aji and
      McEliece (2001). The generalized distributive law and free energy
-     minimization. Proceedings of the 39th Allerton Conference.  <li>
-     Yedidia, Freeman and Weiss (2005). Constructing free-energy
+     minimization. <i>Proceedings of the 39th Allerton Conference.</i>
+     <li> Yedidia, Freeman and Weiss (2005). Constructing free-energy
      approximations and generalized belief propagation algorithms.
-     IEEE Transactions on Information Theory 51(7).</ul></p>
+     <i>IEEE Transactions on Information Theory</i> 51(7).</ul></p>
 
 </html>
