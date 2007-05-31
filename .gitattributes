@@ -11,7 +11,6 @@ Ipopt/Windows/VisualStudio_dotNET/hs071_c/hs071_c.vcproj -text
 Ipopt/Windows/VisualStudio_dotNET/hs071_cpp/hs071_cpp.vcproj -text
 Ipopt/Windows/VisualStudio_dotNET/hs071_f/hs071_f.f -text
 Ipopt/configure -text
-Ipopt/contrib/MatlabInterface/README -text
 Ipopt/contrib/MatlabInterface/examples/bayesnet/bopt.m -text
 Ipopt/contrib/MatlabInterface/examples/bayesnet/computeJGConstraints.m -text
 Ipopt/contrib/MatlabInterface/examples/bayesnet/computeJGGradient.m -text
