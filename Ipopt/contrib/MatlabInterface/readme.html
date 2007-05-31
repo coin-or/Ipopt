@@ -1,8 +1,11 @@
 <html>
 
 <STYLE type="text/css">
-code, pre { font:        12px monospace;
-            color:       #000066 }
+code { font:        12px monospace;
+       color:       #000066 }
+
+pre { font:        10px monospace;
+      color:       #000066 }
 
 p, ul { font:  12px Geneva, Arial, Helvetica, sans-serif;
     color: #000000 ;}
@@ -94,14 +97,26 @@ href="http://www.mathworks.com/support/tech-notes/1600/1605.html">this</a>
 MathWorks technical support webpage for more information on the
 MEX options file.</p>
 
-<p>Once you have all the necessary source code, call the IPOPT configure 
-script. On a Linux machine, the call should look something like</p>
+<p>Once you have all the necessary source code, call the IPOPT
+configure script. On a Linux machine with MATLAB 7.3 installed, the
+call should look something like</p>
 
 <p><code><pre>  ./configure --prefix=$HOME/ipopt/install      \
        CXX=g++-3.4.5 CC=gcc-3.4.5 F77=g77-3.4.5 \
        ADD_CXXFLAGS="-fPIC -fexceptions"        \
        ADD_CFLAGS="-fPIC -fexceptions"          \
        ADD_FFLAGS="-fPIC -fexceptions"</pre></code></p>
+
+<p>We also installed the MATLAB interface to IPOPT on an Apple
+computer running Mac OS X 10.3.9 and MATLAB 7.2. For this machine, we
+ran the fconfigure script with the following command:</p>
+
+<p><code><pre>  ./configure --prefix=/Users/pcarbo/Desktop/ipopt/install        \
+    ADD_CFLAGS="-fno-common -fexceptions -no-cpp-precomp -fPIC"   \
+    ADD_CXXFLAGS="-fno-common -fexceptions -no-cpp-precomp -fPIC" \
+    ADD_FFLAGS="-x f77-cpp-input -fPIC -fno-common"               \
+    FLIBS="-lg2c -lfrtbegin -lSystem"                             \
+    F77=g77 CC=gcc CXX=g++</pre></code></p>
 
 <p>After this, follow the standard installation steps: type
 <code>make</code>, wait a few minutes, then <code>make install</code>
