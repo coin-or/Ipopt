@@ -55,6 +55,9 @@ Ipopt/examples/hs071_cpp/hs071_nlp.hpp -text
 Ipopt/src/Algorithm/IpAlgorithmRegOp.cpp -text
 Ipopt/src/Algorithm/IpAlgorithmRegOp.hpp -text
 Ipopt/src/Algorithm/IpBacktrackingLSAcceptor.hpp -text
+Ipopt/src/Algorithm/IpPDSearchDirCalc.cpp -text
+Ipopt/src/Algorithm/IpPDSearchDirCalc.hpp -text
+Ipopt/src/Algorithm/IpSearchDirCalculator.hpp -text
 Ipopt/src/Algorithm/IpTimingStatistics.cpp -text
 Ipopt/src/Algorithm/IpTimingStatistics.hpp -text
 Ipopt/src/Algorithm/LinearSolvers/IpLinearSolversRegOp.cpp -text
@@ -65,6 +68,14 @@ Ipopt/src/Interfaces/IpSolveStatistics.cpp -text
 Ipopt/src/Interfaces/IpSolveStatistics.hpp -text
 Ipopt/src/Interfaces/ipopt_addlibs_cpp.txt.in -text
 Ipopt/src/Interfaces/ipopt_addlibs_f.txt.in -text
+Ipopt/src/contrib/CGPenalty/IpCGPenaltyLSAcceptor.cpp -text
+Ipopt/src/contrib/CGPenalty/IpCGPenaltyLSAcceptor.hpp -text
+Ipopt/src/contrib/CGPenalty/IpCGPenaltyRegOp.cpp -text
+Ipopt/src/contrib/CGPenalty/IpCGPenaltyRegOp.hpp -text
+Ipopt/src/contrib/CGPenalty/IpCGSearchDirCalc.cpp -text
+Ipopt/src/contrib/CGPenalty/IpCGSearchDirCalc.hpp -text
+Ipopt/src/contrib/CGPenalty/Makefile.am -text
+Ipopt/src/contrib/CGPenalty/Makefile.in -text
 Ipopt/test/Makefile.am -text
 Ipopt/test/mytoy.nl -text
 Ipopt/test/run_unitTests.in -text

@@ -349,6 +349,24 @@ namespace Ipopt
      *  current search direction */
     Number curr_gradBarrTDelta();
 
+    /**@name Methods for the Chen-Goldfarb line search */
+    //@{
+    /** Method for the penalty function at current point */
+    Number curr_penalty_function();
+    /** Method for the penalty function at trial point */
+    Number trial_penalty_function();
+    /** Method for the directional derivative of the penalty function
+     *  at current point with current step in delta */
+    Number curr_direct_deriv_penalty_function();
+    /** Method for the directional derivative of the penalty function
+     *  at current point with current "fast" step in delta_cgpen */
+    Number curr_fast_direct_deriv_penalty_function();
+    /** Method for the current value for the perturbation factor for
+     *  the Chen-Goldfarb method.  The factor is computed as 2-norm of
+     *  the constraints devided by the current penbalty parameter */
+    Number curr_cg_pert_fact();
+    //@}
+
     /** Compute the norm of a specific type of a set of vectors (uncached) */
     Number
     CalcNormOfType(ENormType NormType,
@@ -542,6 +560,22 @@ namespace Ipopt
 
     /** Cache for grad barrier obj. fn inner product with step */
     CachedResults<Number> curr_gradBarrTDelta_cache_;
+
+    /**@name Caches for the Chen-Goldfarb line search */
+    //@{
+    /** Cache for the penalty function at current point */
+    CachedResults<Number> curr_penalty_function_cache_;
+    /** Cache for the penalty function at trial point */
+    CachedResults<Number> trial_penalty_function_cache_;
+    /** Cache for the directional derivative of the penalty function
+     *  at current point with step in delta */
+    CachedResults<Number> curr_direct_deriv_penalty_function_cache_;
+    /** Cache for the directional derivative of the penalty function
+     *  at current point with fast step in delta_cgpen */
+    CachedResults<Number> curr_fast_direct_deriv_penalty_function_cache_;
+    /** Cache for Chen-Goldfarb perturbation factor. */
+    CachedResults<Number> curr_cg_pert_fact_cache_;
+    //@}
 
     /** @name Indicator vectors required for the linear damping terms
      *  to handle unbounded solution sets. */

@@ -539,7 +539,7 @@ AC_SUBST(ipoptlib)
 # is made)
 
 AC_SUBST(IPALLLIBS)
-IPALLLIBS="../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
+IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
 if test "$use_blas" = BUILD; then
   IPALLLIBS="../../../ThirdParty/Blas/libcoinblas.la $IPALLLIBS"
@@ -589,6 +589,7 @@ AC_CONFIG_FILES([Makefile
 		 src/Interfaces/ipopt_addlibs_cpp.txt
 		 src/Algorithm/Makefile
 		 src/Algorithm/LinearSolvers/Makefile
+		 src/contrib/CGPenalty/Makefile
 		 src/Apps/Makefile
 		 src/Apps/AmplSolver/Makefile
 		 src/Apps/CUTErInterface/Makefile

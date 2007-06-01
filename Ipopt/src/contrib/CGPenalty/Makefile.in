@@ -14,12 +14,11 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
-# Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
-
+# Authors:  Andreas Waechter        IBM       2007-06-01
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -27,7 +26,7 @@ VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-top_builddir = ../..
+top_builddir = ../../..
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = @INSTALL@
 install_sh_DATA = $(install_sh) -c -m 644
@@ -43,10 +42,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = src/Interfaces
-DIST_COMMON = $(includeipopt_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/ipopt_addlibs_cpp.txt.in \
-	$(srcdir)/ipopt_addlibs_f.txt.in
+subdir = src/contrib/CGPenalty
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.ac
@@ -54,31 +51,14 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
-CONFIG_CLEAN_FILES = ipopt_addlibs_f.txt ipopt_addlibs_cpp.txt
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"
-libLTLIBRARIES_INSTALL = $(INSTALL)
-LTLIBRARIES = $(lib_LTLIBRARIES)
-am__DEPENDENCIES_1 =
-am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
-	IpSolveStatistics.lo IpStdCInterface.lo IpStdFInterface.lo \
-	IpStdInterfaceTNLP.lo IpTNLPAdapter.lo
-libipopt_la_OBJECTS = $(am_libipopt_la_OBJECTS)
+CONFIG_CLEAN_FILES =
+LTLIBRARIES = $(noinst_LTLIBRARIES)
+libcgpenalty_la_LIBADD =
+am_libcgpenalty_la_OBJECTS = IpCGPenaltyLSAcceptor.lo \
+	IpCGPenaltyRegOp.lo IpCGSearchDirCalc.lo
+libcgpenalty_la_OBJECTS = $(am_libcgpenalty_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
@@ -87,10 +67,16 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libipopt_la_SOURCES)
-DIST_SOURCES = $(libipopt_la_SOURCES)
-includeipoptHEADERS_INSTALL = $(INSTALL_HEADER)
-HEADERS = $(includeipopt_HEADERS)
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+SOURCES = $(libcgpenalty_la_SOURCES)
+DIST_SOURCES = $(libcgpenalty_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -124,7 +110,7 @@ BUILDTOOLSDIR = @BUILDTOOLSDIR@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
-CFLAGS = @CFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common`
+CFLAGS = @CFLAGS@
 COIN_BUILD_BLAS_FALSE = @COIN_BUILD_BLAS_FALSE@
 COIN_BUILD_BLAS_TRUE = @COIN_BUILD_BLAS_TRUE@
 COIN_BUILD_LAPACK_FALSE = @COIN_BUILD_LAPACK_FALSE@
@@ -148,12 +134,7 @@ CXXAR = @CXXAR@
 CXXCPP = @CXXCPP@
 CXXDEFS = @CXXDEFS@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` \
-	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` -I`$(CYGPATH_W) \
-	$(srcdir)/../Algorithm/LinearSolvers` -I`$(CYGPATH_W) \
-	$(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
-	$(srcdir)/../Algorithm` -I`$(CYGPATH_W) \
-	$(srcdir)/../contrib/CGPenalty`
+CXXFLAGS = @CXXFLAGS@
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DBG_CFLAGS = @DBG_CFLAGS@
@@ -284,40 +265,18 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-includeipoptdir = $(includedir)/ipopt
-includeipopt_HEADERS = \
-	IpAlgTypes.hpp \
-	IpIpoptApplication.hpp \
-	IpNLP.hpp \
-	IpReturnCodes.h \
-	IpReturnCodes.hpp \
-	IpReturnCodes_inc.h \
-	IpReturnCodes.inc \
-	IpSolveStatistics.hpp \
-	IpStdCInterface.h \
-	IpTNLP.hpp
+noinst_LTLIBRARIES = libcgpenalty.la
+libcgpenalty_la_SOURCES = \
+	IpCGPenaltyLSAcceptor.cpp IpCGPenaltyLSAcceptor.hpp \
+	IpCGPenaltyRegOp.cpp IpCGPenaltyRegOp.hpp \
+	IpCGSearchDirCalc.cpp IpCGSearchDirCalc.hpp
 
-lib_LTLIBRARIES = libipopt.la
-libipopt_la_SOURCES = \
-	IpAlgTypes.hpp \
-	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
-	IpIpoptApplication.cpp IpIpoptApplication.hpp \
-	IpNLP.hpp \
-	IpReturnCodes.h \
-	IpReturnCodes.hpp \
-	IpSolveStatistics.cpp IpSolveStatistics.hpp \
-	IpStdCInterface.cpp IpStdCInterface.h \
-	IpStdFInterface.c \
-	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \
-	IpTNLP.hpp \
-	IpTNLPAdapter.cpp IpTNLPAdapter.hpp
-
-libipopt_la_LIBADD = $(IPALLLIBS)
-libipopt_la_DEPENDENCIES = $(IPALLLIBS)
-libipopt_la_LDFLAGS = $(LT_LDFLAGS)
-ADDLIBS_FILES = \
-	ipopt_addlibs_cpp.txt \
-	ipopt_addlibs_f.txt
+libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
+	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
+	-I`$(CYGPATH_W) $(srcdir)/../../Algorithm`
 
 
 # This line is necessary to allow VPATH compilation with MS compilers
@@ -326,22 +285,16 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Astyle stuff
 ASTYLE_FILES = \
-	IpAlgTypes.hppbak \
-	IpInterfacesRegOp.cppbak IpInterfacesRegOp.hppbak \
-	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
-	IpNLP.hppbak \
-	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
-	IpStdCInterface.cppbak \
-	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
-	IpTNLP.hppbak \
-	IpTNLPAdapter.cppbak IpTNLPAdapter.hppbak
+	IpCGPenaltyLSAcceptor.cppbak IpCGPenaltyLSAcceptor.hppbak \
+	IpCGPenaltyRegOp.cppbak IpCGPenaltyRegOp.hppbak \
+	IpCGSearchDirCalc.cppbak IpCGSearchDirCalc.hppbak
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .c .cpp .hpp .lo .o .obj
+.SUFFIXES: .cppbak .hppbak .cpp .hpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -351,9 +304,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/Interfaces/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/contrib/CGPenalty/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/Interfaces/Makefile
+	  $(AUTOMAKE) --foreign  src/contrib/CGPenalty/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -371,39 +324,17 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-ipopt_addlibs_f.txt: $(top_builddir)/config.status $(srcdir)/ipopt_addlibs_f.txt.in
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-ipopt_addlibs_cpp.txt: $(top_builddir)/config.status $(srcdir)/ipopt_addlibs_cpp.txt.in
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	test -z "$(libdir)" || $(mkdir_p) "$(DESTDIR)$(libdir)"
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    f=$(am__strip_dir) \
-	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
-	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
-	  else :; fi; \
-	done
 
-uninstall-libLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@set -x; list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  p=$(am__strip_dir) \
-	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$p'"; \
-	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$p"; \
-	done
-
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
 	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
 	  test "$$dir" != "$$p" || dir=.; \
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libipopt.la: $(libipopt_la_OBJECTS) $(libipopt_la_DEPENDENCIES) 
-	$(CXXLINK) -rpath $(libdir) $(libipopt_la_LDFLAGS) $(libipopt_la_OBJECTS) $(libipopt_la_LIBADD) $(LIBS)
+libcgpenalty.la: $(libcgpenalty_la_OBJECTS) $(libcgpenalty_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libcgpenalty_la_LDFLAGS) $(libcgpenalty_la_OBJECTS) $(libcgpenalty_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -411,34 +342,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInterfacesRegOp.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptApplication.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSolveStatistics.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdCInterface.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdFInterface.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdInterfaceTNLP.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTNLPAdapter.Plo@am__quote@
-
-.c.o:
-@am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c $<
-
-.c.obj:
-@am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-.c.lo:
-@am__fastdepCC_TRUE@	if $(LTCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpCGPenaltyLSAcceptor.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpCGPenaltyRegOp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpCGSearchDirCalc.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -470,23 +376,6 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-install-includeipoptHEADERS: $(includeipopt_HEADERS)
-	@$(NORMAL_INSTALL)
-	test -z "$(includeipoptdir)" || $(mkdir_p) "$(DESTDIR)$(includeipoptdir)"
-	@list='$(includeipopt_HEADERS)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(includeipoptHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(includeipoptdir)/$$f'"; \
-	  $(includeipoptHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(includeipoptdir)/$$f"; \
-	done
-
-uninstall-includeipoptHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(includeipopt_HEADERS)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(includeipoptdir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(includeipoptdir)/$$f"; \
-	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -565,11 +454,8 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"; do \
-	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
-	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -597,7 +483,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 	mostlyclean-am
 
 distclean: distclean-am
@@ -616,9 +502,9 @@ info: info-am
 
 info-am:
 
-install-data-am: install-includeipoptHEADERS
+install-data-am:
 
-install-exec-am: install-exec-local install-libLTLIBRARIES
+install-exec-am:
 
 install-info: install-info-am
 
@@ -644,34 +530,20 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-includeipoptHEADERS uninstall-info-am \
-	uninstall-libLTLIBRARIES uninstall-local
+uninstall-am: uninstall-info-am
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libLTLIBRARIES clean-libtool ctags distclean \
+	clean-libtool clean-noinstLTLIBRARIES ctags distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-exec \
-	install-exec-am install-exec-local install-includeipoptHEADERS \
-	install-info install-info-am install-libLTLIBRARIES \
-	install-man install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-includeipoptHEADERS uninstall-info-am \
-	uninstall-libLTLIBRARIES uninstall-local
+	install-exec-am install-info install-info-am install-man \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am \
+	uninstall-info-am
 
-
-# Make sure the addlibs files are installed in lib
-install-exec-local:
-	for i in $(ADDLIBS_FILES); do \
-	  $(install_sh_DATA) $$i $(DESTDIR)$(libdir)/$$i; \
-	done
-
-uninstall-local:
-	for i in $(ADDLIBS_FILES); do \
-	  rm -f $(DESTDIR)$(libdir)/$$i; \
-	done
 
 astyle: $(ASTYLE_FILES)
 

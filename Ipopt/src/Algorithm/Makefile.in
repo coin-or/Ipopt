@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -67,11 +67,12 @@ am_libipoptalg_la_OBJECTS = IpAdaptiveMuUpdate.lo IpAlgBuilder.lo \
 	IpNLPScaling.lo IpOptErrorConvCheck.lo IpOrigIpoptNLP.lo \
 	IpOrigIterationOutput.lo IpLimMemQuasiNewtonUpdater.lo \
 	IpPDFullSpaceSolver.lo IpPDPerturbationHandler.lo \
-	IpProbingMuOracle.lo IpQualityFunctionMuOracle.lo \
-	IpRestoFilterConvCheck.lo IpRestoIpoptNLP.lo \
-	IpRestoIterateInitializer.lo IpRestoIterationOutput.lo \
-	IpRestoMinC_1Nrm.lo IpRestoRestoPhase.lo \
-	IpStdAugSystemSolver.lo IpTimingStatistics.lo IpUserScaling.lo \
+	IpPDSearchDirCalc.lo IpProbingMuOracle.lo \
+	IpQualityFunctionMuOracle.lo IpRestoFilterConvCheck.lo \
+	IpRestoIpoptNLP.lo IpRestoIterateInitializer.lo \
+	IpRestoIterationOutput.lo IpRestoMinC_1Nrm.lo \
+	IpRestoRestoPhase.lo IpStdAugSystemSolver.lo \
+	IpTimingStatistics.lo IpUserScaling.lo \
 	IpWarmStartIterateInitializer.lo
 libipoptalg_la_OBJECTS = $(am_libipoptalg_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -331,6 +332,7 @@ libipoptalg_la_SOURCES = \
 	IpLimMemQuasiNewtonUpdater.cpp IpLimMemQuasiNewtonUpdater.hpp \
 	IpPDFullSpaceSolver.cpp IpPDFullSpaceSolver.hpp \
 	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
+	IpPDSearchDirCalc.cpp IpPDSearchDirCalc.hpp \
 	IpPDSystemSolver.hpp \
 	IpProbingMuOracle.cpp IpProbingMuOracle.hpp \
 	IpQualityFunctionMuOracle.cpp IpQualityFunctionMuOracle.hpp \
@@ -341,6 +343,7 @@ libipoptalg_la_SOURCES = \
 	IpRestoMinC_1Nrm.cpp IpRestoMinC_1Nrm.hpp \
 	IpRestoPhase.hpp \
 	IpRestoRestoPhase.cpp IpRestoRestoPhase.hpp \
+	IpSearchDirCalculator.hpp \
 	IpStdAugSystemSolver.cpp IpStdAugSystemSolver.hpp \
 	IpTimingStatistics.cpp IpTimingStatistics.hpp \
 	IpUserScaling.cpp IpUserScaling.hpp \
@@ -351,7 +354,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../Common` -I`$(CYGPATH_W) \
 	$(srcdir)/../LinAlg` -I`$(CYGPATH_W) \
 	$(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/../Interfaces` -I`$(CYGPATH_W) \
-	$(srcdir)/LinearSolvers` $(am__append_1)
+	$(srcdir)/LinearSolvers` -I`$(CYGPATH_W) \
+	$(srcdir)/../contrib/CGPenalty` $(am__append_1)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -398,6 +402,7 @@ ASTYLE_FILES = \
 	IpLimMemQuasiNewtonUpdater.cppbak IpLimMemQuasiNewtonUpdater.hppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
+	IpPDSearchDirCalc.cppbak IpPDSearchDirCalc.hppbak \
 	IpPDSystemSolver.hppbak \
 	IpProbingMuOracle.cppbak IpProbingMuOracle.hppbak \
 	IpQualityFunctionMuOracle.cppbak IpQualityFunctionMuOracle.hppbak \
@@ -408,6 +413,7 @@ ASTYLE_FILES = \
 	IpRestoMinC_1Nrm.cppbak IpRestoMinC_1Nrm.hppbak \
 	IpRestoPhase.hppbak \
 	IpRestoRestoPhase.cppbak IpRestoRestoPhase.hppbak \
+	IpSearchDirCalculator.hppbak \
 	IpStdAugSystemSolver.cppbak IpStdAugSystemSolver.hppbak \
 	IpTimingStatistics.cppbak IpTimingStatistics.hppbak \
 	IpUserScaling.cppbak IpUserScaling.hppbak \
@@ -493,6 +499,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOrigIterationOutput.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDFullSpaceSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDPerturbationHandler.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDSearchDirCalc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpProbingMuOracle.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpQualityFunctionMuOracle.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoFilterConvCheck.Plo@am__quote@

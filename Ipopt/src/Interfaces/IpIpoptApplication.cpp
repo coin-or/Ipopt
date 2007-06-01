@@ -18,6 +18,7 @@
 #include "IpLinearSolversRegOp.hpp"
 #include "IpInterfacesRegOp.hpp"
 #include "IpAlgorithmRegOp.hpp"
+#include "IpCGPenaltyRegOp.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -811,6 +812,7 @@ namespace Ipopt
   {
     RegisterOptions_Interfaces(roptions);
     RegisterOptions_Algorithm(roptions);
+    RegisterOptions_CGPenalty(roptions);
     RegisterOptions_LinearSolvers(roptions);
   }
 

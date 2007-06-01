@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -8,7 +8,8 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = src/Common src/LinAlg src/Algorithm src/Interfaces src/Apps
+SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
+	src/Interfaces src/Apps
 
 if ALWAYS_FALSE
   SUBDIRS += test
@@ -124,6 +125,7 @@ astyle:
 	cd src/Common; $(MAKE) astyle
 	cd src/LinAlg; $(MAKE) astyle
 	cd src/LinAlg/TMatrices; $(MAKE) astyle
+	cd src/contrib/CGPenalty; $(MAKE) astyle
 	cd src/Interfaces; $(MAKE) astyle
 
 include ../BuildTools/Makemain.inc

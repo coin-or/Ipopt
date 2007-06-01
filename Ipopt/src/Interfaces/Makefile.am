@@ -51,7 +51,8 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/LinearSolvers` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
-	-I`$(CYGPATH_W) $(srcdir)/../Algorithm`
+	-I`$(CYGPATH_W) $(srcdir)/../Algorithm` \
+	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty`
 
 CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common`
 

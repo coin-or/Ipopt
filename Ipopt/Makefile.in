@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -97,8 +97,8 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	uninstall-recursive
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm src/Interfaces \
-	src/Apps test
+DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm \
+	src/contrib/CGPenalty src/Interfaces src/Apps test
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -295,8 +295,8 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = src/Common src/LinAlg src/Algorithm src/Interfaces src/Apps \
-	$(am__append_1)
+SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
+	src/Interfaces src/Apps $(am__append_1)
 EXTRA_DIST = examples/Cpp_example/cpp_example.cpp \
 	examples/Cpp_example/Makefile.in \
 	examples/Cpp_example/MyNLP.cpp examples/Cpp_example/MyNLP.hpp \
@@ -836,6 +836,7 @@ astyle:
 	cd src/Common; $(MAKE) astyle
 	cd src/LinAlg; $(MAKE) astyle
 	cd src/LinAlg/TMatrices; $(MAKE) astyle
+	cd src/contrib/CGPenalty; $(MAKE) astyle
 	cd src/Interfaces; $(MAKE) astyle
 
 # Make sure acinclude is using most recent coin.m4
