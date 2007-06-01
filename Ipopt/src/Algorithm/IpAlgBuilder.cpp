@@ -20,6 +20,9 @@
 #include "IpOptErrorConvCheck.hpp"
 #include "IpBacktrackingLineSearch.hpp"
 #include "IpFilterLSAcceptor.hpp"
+#include "IpCGPenaltyLSAcceptor.hpp"
+#include "IpPDSearchDirCalc.hpp"
+#include "IpCGSearchDirCalc.hpp"
 #include "IpMonotoneMuUpdate.hpp"
 #include "IpAdaptiveMuUpdate.hpp"
 #include "IpLoqoMuOracle.hpp"
@@ -211,6 +214,14 @@ namespace Ipopt
       "computed when switching to the \"monotone mode\" in the adaptive "
       "strategy. (Only considered if \"adaptive\" is selected for option "
       "\"mu_strategy\".)");
+
+    roptions->AddStringOption2(
+      "line_search_method",
+      "Globalization method used in backtracking line search",
+      "filter",
+      "filter", "Filter method",
+      "penalty", "Chen-Goldfarb penalty function",
+      "");
   }
 
   SmartPtr<IpoptAlgorithm>
@@ -373,11 +384,20 @@ namespace Ipopt
     // Line search method for the restoration phase
     SmartPtr<RestoRestorationPhase> resto_resto =
       new RestoRestorationPhase();
-    SmartPtr<FilterLSAcceptor> resto_filterLSacceptor =
-      new FilterLSAcceptor(GetRawPtr(resto_PDSolver));
+
+    SmartPtr<BacktrackingLSAcceptor> resto_LSacceptor;
+    std::string resto_lsacceptor;
+    options.GetStringValue("line_search_method", resto_lsacceptor,
+                           "resto."+prefix);
+    if (resto_lsacceptor=="filter") {
+      resto_LSacceptor = new FilterLSAcceptor(GetRawPtr(resto_PDSolver));
+    }
+    else if (resto_lsacceptor=="penalty") {
+      resto_LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(resto_PDSolver));
+    }
     SmartPtr<LineSearch> resto_LineSearch =
-      new BacktrackingLineSearch(GetRawPtr(resto_filterLSacceptor),
-                                 GetRawPtr(resto_resto), GetRawPtr(resto_convCheck));
+      new BacktrackingLineSearch(resto_LSacceptor, GetRawPtr(resto_resto),
+                                 GetRawPtr(resto_convCheck));
 
     // Create the mu update that will be used by the restoration phase
     // algorithm
@@ -459,8 +479,16 @@ namespace Ipopt
     }
 
     // Put together the overall restoration phase IP algorithm
+    SmartPtr<SearchDirectionCalculator> resto_SearchDirCalc;
+    if (resto_lsacceptor=="filter") {
+      resto_SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(resto_PDSolver));
+    }
+    else if (resto_lsacceptor=="penalty") {
+      resto_SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(resto_PDSolver));
+    }
+
     SmartPtr<IpoptAlgorithm> resto_alg =
-      new IpoptAlgorithm(resto_PDSolver,
+      new IpoptAlgorithm(resto_SearchDirCalc,
                          GetRawPtr(resto_LineSearch),
                          GetRawPtr(resto_MuUpdate),
                          GetRawPtr(resto_convCheck),
@@ -474,17 +502,26 @@ namespace Ipopt
       new MinC_1NrmRestorationPhase(*resto_alg, EqMultCalculator);
 
     // Create the line search to be used by the main algorithm
-    SmartPtr<FilterLSAcceptor> filterLSacceptor =
+    SmartPtr<BacktrackingLSAcceptor> LSacceptor;
+    SmartPtr<FilterLSAcceptor> FilterLSacceptor =
       new FilterLSAcceptor(GetRawPtr(PDSolver));
+    std::string lsmethod;
+    options.GetStringValue("line_search_method", lsmethod, prefix);
+    if (lsmethod=="filter") {
+      LSacceptor = GetRawPtr(FilterLSacceptor);
+    }
+    else if (lsmethod=="penalty") {
+      LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(PDSolver));
+    }
     SmartPtr<LineSearch> lineSearch =
-      new BacktrackingLineSearch(GetRawPtr(filterLSacceptor),
+      new BacktrackingLineSearch(LSacceptor,
                                  GetRawPtr(resto_phase), convCheck);
 
     // The following cross reference is not good: We have to store a
     // pointer to the lineSearch object in resto_convCheck as a
     // non-SmartPtr to make sure that things are properly deleted when
     // the IpoptAlgorithm return by the Builder is destructed.
-    resto_convCheck->SetOrigFilterLSAcceptor(*filterLSacceptor);
+    resto_convCheck->SetOrigFilterLSAcceptor(*FilterLSacceptor);
 
     // Create the mu update that will be used by the main algorithm
     SmartPtr<MuUpdate> MuUpdate;
@@ -566,8 +603,15 @@ namespace Ipopt
     }
 
     // Create the main algorithm
+    SmartPtr<SearchDirectionCalculator> SearchDirCalc;
+    if (lsmethod=="filter") {
+      SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(PDSolver));
+    }
+    else if (lsmethod=="penalty") {
+      SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(PDSolver));
+    }
     SmartPtr<IpoptAlgorithm> alg =
-      new IpoptAlgorithm(PDSolver,
+      new IpoptAlgorithm(SearchDirCalc,
                          GetRawPtr(lineSearch), MuUpdate,
                          convCheck, IterInitializer, IterOutput,
                          HessUpdater, EqMultCalculator);

@@ -27352,7 +27352,7 @@ fi;
 # Check if user supplied option makes sense
 if test x"$use_lapack" != x; then
   if test "$use_lapack" = "BUILD"; then
-    # Don't check for course code if this is executed in ThirdParty/Blas
+    # Don't check for course code if this is executed in ThirdParty/Lapack
     if test "$PACKAGE_NAME" != ThirdPartyLapack; then
       if test -r $coin_lapackobjdir/.MakeOk; then :; else
         { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for LAPACK, but $coin_lapackobjdir directory is not configured" >&5
@@ -30897,7 +30897,7 @@ esac
 # is made)
 
 
-IPALLLIBS="../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
+IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
 if test "$use_blas" = BUILD; then
   IPALLLIBS="../../../ThirdParty/Blas/libcoinblas.la $IPALLLIBS"
@@ -31013,7 +31013,7 @@ if test $coin_vpath_config = yes; then
 fi
 
 
-                                                                                                                                                                                                                  ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Interfaces/ipopt_addlibs_f.txt src/Interfaces/ipopt_addlibs_cpp.txt src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile"
+                                                                                                                                                                                                                            ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Interfaces/ipopt_addlibs_f.txt src/Interfaces/ipopt_addlibs_cpp.txt src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/contrib/CGPenalty/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile"
 
 
           ac_config_headers="$ac_config_headers inc/config_ipopt.h"
@@ -31759,6 +31759,7 @@ do
   "src/Interfaces/ipopt_addlibs_cpp.txt" ) CONFIG_FILES="$CONFIG_FILES src/Interfaces/ipopt_addlibs_cpp.txt" ;;
   "src/Algorithm/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Algorithm/Makefile" ;;
   "src/Algorithm/LinearSolvers/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Algorithm/LinearSolvers/Makefile" ;;
+  "src/contrib/CGPenalty/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/contrib/CGPenalty/Makefile" ;;
   "src/Apps/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Apps/Makefile" ;;
   "src/Apps/AmplSolver/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Apps/AmplSolver/Makefile" ;;
   "src/Apps/CUTErInterface/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Apps/CUTErInterface/Makefile" ;;

@@ -27,6 +27,7 @@
 #include "IpLimMemQuasiNewtonUpdater.hpp"
 #include "IpPDFullSpaceSolver.hpp"
 #include "IpPDPerturbationHandler.hpp"
+#include "IpPDSearchDirCalc.hpp"
 #include "IpProbingMuOracle.hpp"
 #include "IpQualityFunctionMuOracle.hpp"
 #include "IpRestoFilterConvCheck.hpp"
@@ -70,6 +71,8 @@ namespace Ipopt
     OrigIpoptNLP::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Output");
     OrigIterationOutput::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Step Calculation");
+    PDSearchDirCalculator::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Step Calculation");
     PDFullSpaceSolver::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Step Calculation");

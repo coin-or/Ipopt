@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -52,6 +52,7 @@ libipoptalg_la_SOURCES = \
 	IpLimMemQuasiNewtonUpdater.cpp IpLimMemQuasiNewtonUpdater.hpp \
 	IpPDFullSpaceSolver.cpp IpPDFullSpaceSolver.hpp \
 	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
+	IpPDSearchDirCalc.cpp IpPDSearchDirCalc.hpp \
 	IpPDSystemSolver.hpp \
 	IpProbingMuOracle.cpp IpProbingMuOracle.hpp \
 	IpQualityFunctionMuOracle.cpp IpQualityFunctionMuOracle.hpp \
@@ -62,6 +63,7 @@ libipoptalg_la_SOURCES = \
 	IpRestoMinC_1Nrm.cpp IpRestoMinC_1Nrm.hpp \
 	IpRestoPhase.hpp \
 	IpRestoRestoPhase.cpp IpRestoRestoPhase.hpp \
+	IpSearchDirCalculator.hpp \
 	IpStdAugSystemSolver.cpp IpStdAugSystemSolver.hpp \
 	IpTimingStatistics.cpp IpTimingStatistics.hpp \
 	IpUserScaling.cpp IpUserScaling.hpp \
@@ -73,7 +75,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/../Interfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/LinearSolvers`
+	-I`$(CYGPATH_W) $(srcdir)/LinearSolvers` \
+	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty`
 
 if COIN_HAS_MUMPS
   AM_CPPFLAGS += $(MUMPS_INCFLAGS)
@@ -125,6 +128,7 @@ ASTYLE_FILES = \
 	IpLimMemQuasiNewtonUpdater.cppbak IpLimMemQuasiNewtonUpdater.hppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
+	IpPDSearchDirCalc.cppbak IpPDSearchDirCalc.hppbak \
 	IpPDSystemSolver.hppbak \
 	IpProbingMuOracle.cppbak IpProbingMuOracle.hppbak \
 	IpQualityFunctionMuOracle.cppbak IpQualityFunctionMuOracle.hppbak \
@@ -135,6 +139,7 @@ ASTYLE_FILES = \
 	IpRestoMinC_1Nrm.cppbak IpRestoMinC_1Nrm.hppbak \
 	IpRestoPhase.hppbak \
 	IpRestoRestoPhase.cppbak IpRestoRestoPhase.hppbak \
+	IpSearchDirCalculator.hppbak \
 	IpStdAugSystemSolver.cppbak IpStdAugSystemSolver.hppbak \
 	IpTimingStatistics.cppbak IpTimingStatistics.hppbak \
 	IpUserScaling.cppbak IpUserScaling.hppbak \
