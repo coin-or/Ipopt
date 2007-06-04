@@ -43,34 +43,34 @@ namespace Ipopt
      *  is thought to be structurally singular, they might be
      *  positive.  If the return value is false, no suitable
      *  perturbation could be found. */
-    bool ConsiderNewSystem(Number& delta_x, Number& delta_s,
-                           Number& delta_c, Number& delta_d);
+    virtual bool ConsiderNewSystem(Number& delta_x, Number& delta_s,
+				   Number& delta_c, Number& delta_d);
 
     /** This method returns pertubation factors for the case when the
      *  most recent factorization resulted in a singular matrix. If
      *  the return value is false, no suitable perturbation could be
      *  found. */
-    bool PerturbForSingularity(Number& delta_x, Number& delta_s,
-                               Number& delta_c, Number& delta_d);
+    virtual bool PerturbForSingularity(Number& delta_x, Number& delta_s,
+				       Number& delta_c, Number& delta_d);
 
     /** This method returns pertubation factors for the case when the
      *  most recent factorization resulted in a matrix with an
      *  incorrect number of negative eigenvalues. If the return value
      *  is false, no suitable perturbation could be found. */
-    bool PerturbForWrongInertia(Number& delta_x, Number& delta_s,
-                                Number& delta_c, Number& delta_d);
+    virtual bool PerturbForWrongInertia(Number& delta_x, Number& delta_s,
+					Number& delta_c, Number& delta_d);
 
     /** Just return the perturbation values that have been determined
      *  most recently */
-    void CurrentPerturbation(Number& delta_x, Number& delta_s,
-                             Number& delta_c, Number& delta_d);
+    virtual void CurrentPerturbation(Number& delta_x, Number& delta_s,
+				     Number& delta_c, Number& delta_d);
 
     /** Methods for IpoptType */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
-  private:
+  protected:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
      * These methods are not implemented and 
