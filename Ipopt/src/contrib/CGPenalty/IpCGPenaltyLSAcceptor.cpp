@@ -131,7 +131,7 @@ namespace Ipopt
 
     counter_penalty_updates_ = 0;
     curr_eta_ = -1.;
-    IpData().SetPenaltyUninitialized();
+    IpData().CGPenData().SetPenaltyUninitialized();
 
     return true;
   }
@@ -143,15 +143,15 @@ namespace Ipopt
 
     // Set the values for the reference point
     if (!in_watchdog) {
-      reference_penalty_function_ = IpCq().curr_penalty_function();
-      if (IpData().HaveCgFastDeltas()) {
+      reference_penalty_function_ = IpCq().CGPenCq().curr_penalty_function();
+      if (IpData().CGPenData().HaveCgFastDeltas()) {
         // use the fast step
         reference_direct_deriv_penalty_function_ =
-          IpCq().curr_fast_direct_deriv_penalty_function();
+          IpCq().CGPenCq().curr_fast_direct_deriv_penalty_function();
       }
       else {
         reference_direct_deriv_penalty_function_ =
-          IpCq().curr_direct_deriv_penalty_function();
+          IpCq().CGPenCq().curr_direct_deriv_penalty_function();
       }
     }
     else {
@@ -169,7 +169,7 @@ namespace Ipopt
 
     bool accept;
 
-    Number trial_penalty_function = IpCq().trial_penalty_function();
+    Number trial_penalty_function = IpCq().CGPenCq().trial_penalty_function();
     DBG_ASSERT(IsFiniteNumber(trial_penalty_function));
 
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
@@ -215,10 +215,10 @@ namespace Ipopt
   {
     DBG_START_FUN("CGPenaltyLSAcceptor::StartWatchDog", dbg_verbosity);
 
-    watchdog_penalty_function_ = IpCq().curr_penalty_function();
+    watchdog_penalty_function_ = IpCq().CGPenCq().curr_penalty_function();
     watchdog_direct_deriv_penalty_function_ =
-      IpCq().curr_direct_deriv_penalty_function();
-    watchdog_delta_cgpen_ = IpData().delta_cgpen();
+      IpCq().CGPenCq().curr_direct_deriv_penalty_function();
+    watchdog_delta_cgpen_ = IpData().CGPenData().delta_cgpen();
   }
 
   void CGPenaltyLSAcceptor::StopWatchDog()
@@ -228,7 +228,7 @@ namespace Ipopt
     reference_penalty_function_ = watchdog_penalty_function_;
     reference_direct_deriv_penalty_function_ =
       watchdog_direct_deriv_penalty_function_;
-    IpData().set_delta_cgpen(watchdog_delta_cgpen_);
+    IpData().CGPenData().set_delta_cgpen(watchdog_delta_cgpen_);
     watchdog_delta_cgpen_ = NULL;
   }
 
@@ -238,7 +238,7 @@ namespace Ipopt
     /*
     counter_penalty_updates_ = 0;
     curr_eta_ = -1.;
-    IpData().SetPenaltyUninitialized();
+    IpData().CGPenData().SetPenaltyUninitialized();
     */
   }
 
@@ -279,7 +279,7 @@ namespace Ipopt
                      count_soc+1);
 
       // Compute SOC constraint violation
-      Number c_over_r = IpCq().curr_cg_pert_fact();
+      Number c_over_r = IpCq().CGPenCq().curr_cg_pert_fact();
       c_soc->AddTwoVectors(1.0, *IpCq().trial_c(),
                            -c_over_r, *delta_y_c,
                            alpha_primal_soc);
@@ -379,8 +379,8 @@ namespace Ipopt
     }
 
     if (increase) {
-      Number max_step = Max(IpData().delta_cgpen()->x()->Amax(),
-                            IpData().delta_cgpen()->s()->Amax());
+      Number max_step = Max(IpData().CGPenData().delta_cgpen()->x()->Amax(),
+                            IpData().CGPenData().delta_cgpen()->s()->Amax());
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                      "Max norm of step = %8.2\n", max_step);
       increase = (max_step <= curr_eta_);
@@ -430,8 +430,8 @@ namespace Ipopt
     // and the current infeasibility
     if (increase) {
       SmartPtr<Vector> vec = IpData().curr()->y_c()->MakeNewCopy();
-      vec->AddTwoVectors(1., *IpData().delta_cgpen()->y_c(),
-                         -1./IpCq().curr_cg_pert_fact(), *IpCq().curr_c(),
+      vec->AddTwoVectors(1., *IpData().CGPenData().delta_cgpen()->y_c(),
+                         -1./IpCq().CGPenCq().curr_cg_pert_fact(), *IpCq().curr_c(),
                          1.);
       Number omega_test = vec->Amax();
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
@@ -440,7 +440,7 @@ namespace Ipopt
       if (increase) {
         SmartPtr<Vector> vec = IpData().curr()->y_d()->MakeNewCopy();
         vec->AddTwoVectors(1., *IpData().delta()->y_d(),
-                           -1./IpCq().curr_cg_pert_fact(), *IpCq().curr_d_minus_s(),
+                           -1./IpCq().CGPenCq().curr_cg_pert_fact(), *IpCq().curr_d_minus_s(),
                            1.);
         omega_test = vec->Amax();
         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
@@ -460,15 +460,15 @@ namespace Ipopt
       curr_eta_ = Max(eta_min_, curr_eta_/2.);
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                      "Updating eta to = %8.2\n", curr_eta_);
-      Number penalty = IpData().curr_penalty();
+      Number penalty = IpData().CGPenData().curr_penalty();
       Number y_full_step_max;
       SmartPtr<Vector> vec = IpData().curr()->y_c()->MakeNew();
       vec->AddTwoVectors(1., *IpData().curr()->y_c(),
-                         1., *IpData().delta_cgpen()->y_c(), 0.);
+                         1., *IpData().CGPenData().delta_cgpen()->y_c(), 0.);
       y_full_step_max = vec->Amax();
       vec = IpData().curr()->y_d()->MakeNew();
       vec->AddTwoVectors(1., *IpData().curr()->y_d(),
-                         1., *IpData().delta_cgpen()->y_d(), 0.);
+                         1., *IpData().CGPenData().delta_cgpen()->y_d(), 0.);
       y_full_step_max = Max(y_full_step_max, vec->Amax());
       if (IpCq().curr_primal_infeasibility(NORM_2) >= epsilon_c_) {
         penalty = Max(chi_hat_*penalty, y_full_step_max + 1.);
@@ -481,7 +481,7 @@ namespace Ipopt
       if (penalty > penalty_max_) {
         THROW_EXCEPTION(IpoptException, "Penalty parameter becomes too large.");
       }
-      IpData().Set_penalty(penalty);
+      IpData().CGPenData().Set_penalty(penalty);
 
       char spen[40];
       sprintf(spen, " penalty=%8.2e", penalty);

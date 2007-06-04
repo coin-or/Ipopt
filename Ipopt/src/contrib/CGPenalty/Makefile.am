@@ -11,6 +11,8 @@ AUTOMAKE_OPTIONS = foreign
 noinst_LTLIBRARIES = libcgpenalty.la
 
 libcgpenalty_la_SOURCES = \
+	IpCGPenaltyCq.cpp IpCGPenaltyCq.hpp \
+	IpCGPenaltyData.cpp IpCGPenaltyData.hpp \
 	IpCGPenaltyLSAcceptor.cpp IpCGPenaltyLSAcceptor.hpp \
 	IpCGPenaltyRegOp.cpp IpCGPenaltyRegOp.hpp \
 	IpCGSearchDirCalc.cpp IpCGSearchDirCalc.hpp
@@ -30,6 +32,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # Astyle stuff
 
 ASTYLE_FILES = \
+	IpCGPenaltyCq.cppbak IpCGPenaltyCq.hppbak \
+	IpCGPenaltyData.cppbak IpCGPenaltyData.hppbak \
 	IpCGPenaltyLSAcceptor.cppbak IpCGPenaltyLSAcceptor.hppbak \
 	IpCGPenaltyRegOp.cppbak IpCGPenaltyRegOp.hppbak \
 	IpCGSearchDirCalc.cppbak IpCGSearchDirCalc.hppbak

@@ -56,13 +56,9 @@ namespace Ipopt
     mu_initialized_ = false;
     curr_tau_ = -1.;
     tau_initialized_ = false;
-    penalty_initialized_ = false;
-    initialize_called_ = false;
     have_prototypes_ = false;
     have_deltas_ = false;
     have_affine_deltas_ = false;
-    have_cgpen_deltas_ = false;
-    have_cgfast_deltas_ = false;
 
     free_mu_mode_ = false;
     tiny_step_flag_ = false;
@@ -71,7 +67,7 @@ namespace Ipopt
 
     initialize_called_ = true;
 
-    return true;
+    return cgpen_data_.Initialize(jnlst, options, prefix);
   }
 
   bool IpoptData::InitializeDataStructures(IpoptNLP& ip_nlp,
@@ -134,10 +130,6 @@ namespace Ipopt
     debug_delta_tag_sum_ = 0;
     debug_delta_aff_tag_ = 0;
     debug_delta_aff_tag_sum_ = 0;
-    debug_delta_cgpen_tag_ = 0;
-    debug_delta_cgfast_tag_ = 0;
-    debug_delta_cgpen_tag_sum_ = 0;
-    debug_delta_cgfast_tag_sum_ = 0;
 #endif
 
     trial_ = NULL;
@@ -145,16 +137,12 @@ namespace Ipopt
     // Set the pointers for storing steps to NULL
     delta_ = NULL;
     delta_aff_ = NULL;
-    delta_cgpen_ = NULL;
-    delta_cgfast_ = NULL;
 
     have_prototypes_ = true;
     have_deltas_ = false;
     have_affine_deltas_ = false;
-    have_cgpen_deltas_ = false;
-    have_cgfast_deltas_ = false;
 
-    return true;
+    return cgpen_data_.InitializeDataStructures();
   }
 
   void IpoptData::SetTrialPrimalVariablesFromStep(Number alpha,
@@ -239,14 +227,10 @@ namespace Ipopt
     // Free the memory for the affine-scaling step
     delta_aff_ = NULL;
 
-    // Free the memory for the Chen-Goldfarb step
-    delta_cgpen_ = NULL;
-    delta_cgfast_ = NULL;
-
     have_deltas_ = false;
     have_affine_deltas_ = false;
-    have_cgpen_deltas_ = false;
-    have_cgfast_deltas_ = false;
+
+    cgpen_data_.AcceptTrialPoint();
   }
 
 } // namespace Ipopt

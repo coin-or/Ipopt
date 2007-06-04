@@ -68,6 +68,10 @@ Ipopt/src/Interfaces/IpSolveStatistics.cpp -text
 Ipopt/src/Interfaces/IpSolveStatistics.hpp -text
 Ipopt/src/Interfaces/ipopt_addlibs_cpp.txt.in -text
 Ipopt/src/Interfaces/ipopt_addlibs_f.txt.in -text
+Ipopt/src/contrib/CGPenalty/IpCGPenaltyCq.cpp -text
+Ipopt/src/contrib/CGPenalty/IpCGPenaltyCq.hpp -text
+Ipopt/src/contrib/CGPenalty/IpCGPenaltyData.cpp -text
+Ipopt/src/contrib/CGPenalty/IpCGPenaltyData.hpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyLSAcceptor.cpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyLSAcceptor.hpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyRegOp.cpp -text
