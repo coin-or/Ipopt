@@ -93,7 +93,7 @@ namespace Ipopt
     rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
     rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
 
-    if (!IpData().PenaltyInitialized()) {
+    if (!IpData().CGPenData().PenaltyInitialized()) {
       Number y_max = Max(IpData().curr()->y_c()->Amax(),
                          IpData().curr()->y_d()->Amax());
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
@@ -103,7 +103,7 @@ namespace Ipopt
                      y_max);
       Number penalty_init = Max(penalty_init_min_,
                                 Min(y_max, penalty_init_max_));
-      IpData().Set_penalty(penalty_init);
+      IpData().CGPenData().Set_penalty(penalty_init);
       char spen[40];
       sprintf(spen, " penaltyinit=%8.2e", penalty_init);
       IpData().Append_info_string(spen);
@@ -112,7 +112,7 @@ namespace Ipopt
                      penalty_init);
     }
 
-    Number c_over_r = IpCq().curr_cg_pert_fact();
+    Number c_over_r = IpCq().CGPenCq().curr_cg_pert_fact();
     SmartPtr<Vector> rhs_c = IpData().curr()->y_c()->MakeNew();
     rhs_c->AddTwoVectors(1., *IpCq().curr_c(),
                          -c_over_r, *IpData().curr()->y_c(), 0.);
@@ -135,12 +135,12 @@ namespace Ipopt
     }
 
     // Store the original search direction in the IpData object
-    IpData().set_delta_cgpen(delta_cgpen);
-    IpData().SetHaveCgPenDeltas(true);
+    IpData().CGPenData().set_delta_cgpen(delta_cgpen);
+    IpData().CGPenData().SetHaveCgPenDeltas(true);
 
     bool keep_fast_delta = true;
     if (never_use_fact_cgpen_direction_) {
-      IpData().SetHaveCgFastDeltas(false);
+      IpData().CGPenData().SetHaveCgFastDeltas(false);
       keep_fast_delta = false;
     }
     else {
@@ -159,8 +159,8 @@ namespace Ipopt
       }
 
       // Store the fast search direction in the IpData object
-      IpData().set_delta_cgfast(delta_fast);
-      IpData().SetHaveCgFastDeltas(true);
+      IpData().CGPenData().set_delta_cgfast(delta_fast);
+      IpData().CGPenData().SetHaveCgFastDeltas(true);
 
       // Now we check whether the fast direction is good compatible with
       // the merit function
@@ -168,10 +168,10 @@ namespace Ipopt
       // do the || tilde y - hat y ||_2 <= k_dis ||hat y||_2 test
       SmartPtr<const Vector> y_c = IpData().curr()->y_c();
       SmartPtr<const Vector> y_d = IpData().curr()->y_d();
-      SmartPtr<const Vector> delta_fast_y_c = IpData().delta_cgfast()->y_c();
-      SmartPtr<const Vector> delta_fast_y_d = IpData().delta_cgfast()->y_d();
-      SmartPtr<const Vector> delta_y_c = IpData().delta_cgpen()->y_c();
-      SmartPtr<const Vector> delta_y_d = IpData().delta_cgpen()->y_d();
+      SmartPtr<const Vector> delta_fast_y_c = IpData().CGPenData().delta_cgfast()->y_c();
+      SmartPtr<const Vector> delta_fast_y_d = IpData().CGPenData().delta_cgfast()->y_d();
+      SmartPtr<const Vector> delta_y_c = IpData().CGPenData().delta_cgpen()->y_c();
+      SmartPtr<const Vector> delta_y_d = IpData().CGPenData().delta_cgpen()->y_d();
 
       Number hat_y_nrm = sqrt(pow(y_c->Nrm2(), 2.)
                               + pow(y_d->Nrm2(), 2.)
@@ -199,8 +199,8 @@ namespace Ipopt
       if (keep_fast_delta) {
         // For now, I just check if the directional derivative for the
         // penalty functions are not too much off
-        Number direct_deriv = IpCq().curr_direct_deriv_penalty_function();
-        Number fast_direct_deriv = IpCq().curr_fast_direct_deriv_penalty_function();
+        Number direct_deriv = IpCq().CGPenCq().curr_direct_deriv_penalty_function();
+        Number fast_direct_deriv = IpCq().CGPenCq().curr_fast_direct_deriv_penalty_function();
         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                        "direct_deriv = %23.15e  fast_direct_deriv = %23.15e\n",
                        direct_deriv, fast_direct_deriv);
@@ -208,7 +208,7 @@ namespace Ipopt
         if (fast_direct_deriv > need_name_*direct_deriv) {
           // Discard the fast direction
           //delta_fast = NULL;
-          //IpData().set_delta_cgpen(delta_fast);
+          //IpData().CGPenData().set_delta_cgpen(delta_fast);
           keep_fast_delta = false;
           IpData().Append_info_string("g");
         }
@@ -217,11 +217,11 @@ namespace Ipopt
 
     SmartPtr<const IteratesVector> delta;
     if (!keep_fast_delta) {
-      IpData().SetHaveCgFastDeltas(false);
-      delta = IpData().delta_cgpen();
+      IpData().CGPenData().SetHaveCgFastDeltas(false);
+      delta = IpData().CGPenData().delta_cgpen();
     }
     else {
-      delta = IpData().delta_cgfast();
+      delta = IpData().CGPenData().delta_cgfast();
     }
     IpData().set_delta(delta);
 

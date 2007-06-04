@@ -63,7 +63,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
+	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
+	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty`
 
 if COIN_HAS_MUMPS
 liblinsolvers_la_SOURCES += \
