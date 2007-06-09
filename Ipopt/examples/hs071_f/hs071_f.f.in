@@ -81,6 +81,12 @@ C
       double precision F
       integer i
 C
+C     The following are the Fortran routines for computing the model
+C     functions and their derivatives - their code can be found furhter
+C     down in this file.
+C
+      external EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS
+C
 C     Set initial point and bounds:
 C
       data X   / 1d0, 5d0, 5d0, 1d0/
@@ -91,12 +97,6 @@ C     Set bounds for the constraints
 C
       data G_L / 25d0, 40d0 /
       data G_U / 1d40, 40d0 /
-C
-C     The following are the Fortran routines for computing the model
-C     functions and their derivatives - their code can be found furhter
-C     down in this file.
-C
-      external EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS
 C
 C     First create a handle for the Ipopt problem (and read the options
 C     file)
