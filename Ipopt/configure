@@ -4023,7 +4023,7 @@ case $build in
      if test "$enable_doscompile" = msvc ; then
        coin_f77_comps="ifort fl32 compile_f2c"
      else
-       coin_f77_comps="gfortran g77 ifort fl32"
+       coin_f77_comps="gfortran g77 ifort fl32 compile_f2c"
      fi ;;
   sparc-sun-solaris*)
      coin_f77_comps="f95 f90 f77 xlf fort77 gfortran g77 pgf90 pgf77 ifort ifc frt af77" ;;
