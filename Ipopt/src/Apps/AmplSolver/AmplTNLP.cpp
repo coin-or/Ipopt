@@ -7,7 +7,11 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpoptConfig.h"
-#include "config_ipopt.h"
+#ifdef HAVE_CONFIG_H
+# include "config_ipopt.h"
+#else
+# define PACKAGE_STRING "Ipopt 3.2.3dev"
+#endif
 #include "AmplTNLP.hpp"
 #include "IpDenseVector.hpp"
 #include "IpGenTMatrix.hpp"
