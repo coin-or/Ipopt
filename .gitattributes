@@ -1,6 +1,7 @@
 * text=auto !eol
 /ChangeLog -text
 /Externals -text
+/INSTALL -text
 Ipopt/INSTALL -text
 Ipopt/LICENSE -text
 Ipopt/Makefile.in -text
@@ -83,6 +84,8 @@ Ipopt/src/contrib/CGPenalty/Makefile.in -text
 Ipopt/test/Makefile.am -text
 Ipopt/test/mytoy.nl -text
 Ipopt/test/run_unitTests.in -text
+/LICENSE -text
 /Makefile.am -text
+/README -text
 doxydoc/doxydoc/doxygen.conf -text
 doxydoc/doxygen.conf -text

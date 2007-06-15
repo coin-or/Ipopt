@@ -38,7 +38,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.2.1 (the C++ version
+  This document is a guide to using \Ipopt\ 3.3.1 (the C++ version
   of \Ipopt).  It includes instructions on how to obtain and compile
   \Ipopt, a description of the interface, user options, etc., as
   well as a tutorial on how to solve a nonlinear optimization problem
@@ -148,6 +148,8 @@ In order to build \Ipopt, some third party components are required:
       http://www.cse.clrc.ac.uk/nag/hsl/}).
   \item MA57 from the Harwell Subroutine Library\\ (see {\tt
       http://www.cse.clrc.ac.uk/nag/hsl/}).
+  \item MUMPS (MUltifrontal Massively Parallel sparse direct Solver)\\
+    (see {\tt http://graal.ens-lyon.fr/MUMPS/})
   \item The Parallel Sparse Direct Solver (PARDISO)\\ (see {\tt
       http://www.computational.unibas.ch/cs/scicomp/software/pardiso/}).\\
     Note: The Pardiso version in Intel's MKL library does not yet
@@ -158,8 +160,8 @@ In order to build \Ipopt, some third party components are required:
   You need to include at least one of the linear solvers above in
   order to run \Ipopt, and if you want to be able to switch easily
   between different options, you can compile \Ipopt\ with all of them.
-  Currently, there is development by contributors on integrating also
-  MUMPS and TAUCS, but this work has not yet been completed.
+  %Currently, there is development by contributors on integrating also
+  %MUMPS and TAUCS, but this work has not yet been completed.
 
   Interfaces to other linear solvers might be added in the future; if
   you are interested in contributing such an interface please contact
@@ -195,24 +197,38 @@ libraries, those compilers are in principle not necessary.  Also, it
 is possible to use the Fortran-to-C compiler {\tt f2c} from {\tt
   www.netlib.org} to convert Fortran code to C, and compile the
 resulting C files with a C compiler and create a library containing
-the required third party dependencies.  But so far we have not tested
-this ourselves, and currently the configuration script for \Ipopt\
-looks for a Fortran compiler.
+the required third party dependencies.  We have tested and used this
+in connection with the Microsoft Visual C++ compiler, and instructions
+on how to use it in this context are given below.
 
 \subsection{How to use \Ipopt}
 If desired, the \Ipopt\ distribution generates an executable for the
 modeling environment AMPL. As well, you can link your problem
 statement with \Ipopt\ using interfaces for C++, C, or Fortran.
 \Ipopt\ can be used with most Linux/Unix environments, and on Windows
-using Visual Studio .NET or Cygwin.  Below in
+using Visual Studio .NET, Cygwin or MSys/MinGW.  Below in
 Section~\ref{sec:tutorial-example} this document demonstrates how to
 solve problems using \Ipopt. This includes installation and
 compilation of \Ipopt\ for use with AMPL as well as linking with your
 own code.
 
-Finally, the \Ipopt\ distribution includes an interface for {\tt
-  CUTEr}\footnote{see {\tt http://cuter.rl.ac.uk/cuter-www/}}, if you
-want to use \Ipopt\ to solve problems modeled in SIF.
+The \Ipopt\ distribution includes an interface for {\tt
+  CUTEr}\footnote{see {\tt http://cuter.rl.ac.uk/cuter-www/}} (for
+  solving problems modeled in SIF), and also a Matlab (mex) interface
+  which allows you to use Ipopt from Matlab).
+
+There are also interfaces maintained by other people:
+\begin{itemize}
+\item GAMS (modeling environment)
+
+  The GAMSlinks project on COIN-OR, maintained my Stefan Vigerske,
+  includes a GAMS interface for Ipopt, see {\tt
+  https://projects.coin-or.org/GAMSlinks}.
+\item Scilab (free Matlab-like envirnoment):
+
+  Edson Cordeiro do Valle has written an interface to use Ipopt from
+  Scilab, see {\tt http://www.scilab.org/contrib/displayContribution.php?fileID=839}
+\end{itemize}
 
 The old (Fortran 2.x) version of \Ipopt\ has been interfaced with
 Matlab, the NLPAPI on COIN, and is also available on NEOS.  The new
