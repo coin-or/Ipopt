@@ -23,6 +23,9 @@
 #ifdef HAVE_CONFIG_H
 #include "config_ipopt.h"
 
+/* keep this around */
+#define IPOPT_PACKAGE_STRING PACKAGE_STRING
+
 /* undefine macros that could conflict with those in other config.h
    files */
 #undef PACKAGE
@@ -83,6 +86,9 @@
 
 /* Define to 1 if WSMP is available */
 /* #undef HAVE_WSMP */
+
+/* Define to the string setting the Ipopt version */
+#define IPOPT_PACKAGE_STRING "Ipopt 3.2.3dev"
 
 #endif /* HAVE_CONFIG_H */
 
