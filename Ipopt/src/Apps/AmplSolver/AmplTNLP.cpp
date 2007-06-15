@@ -7,6 +7,11 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpoptConfig.h"
+#ifdef HAVE_CONFIG_H
+# include "config_ipopt.h"
+#else
+# define PACKAGE_STRING "Ipopt 3.2.3dev"
+#endif
 
 #include "AmplTNLP.hpp"
 #include "IpDenseVector.hpp"
@@ -593,7 +598,7 @@ namespace Ipopt
     }
 
     // Write the .sol file
-    message = " \n" IPOPT_PACKAGE_STRING ": " + message;
+    message = " \n" PACKAGE_STRING ": " + message;
     write_solution_file(message.c_str());
   }
 
@@ -1227,7 +1232,7 @@ namespace Ipopt
                                              (void**)&nerror_);
 
     static const char sname_default[] = "ipopt";
-    static const char bsname_default[] = IPOPT_PACKAGE_STRING;
+    static const char bsname_default[] = PACKAGE_STRING;
     static const char opname_default[] = "ipopt_options";
     const char* sname;
     const char* bsname;
