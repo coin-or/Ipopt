@@ -215,6 +215,7 @@ namespace Ipopt
       "strategy. (Only considered if \"adaptive\" is selected for option "
       "\"mu_strategy\".)");
 
+    roptions->SetRegisteringCategory("Line Search");
     roptions->AddStringOption2(
       "line_search_method",
       "Globalization method used in backtracking line search",

@@ -15,6 +15,28 @@ int main(int argv, char**argc)
 
   SmartPtr<IpoptApplication> app = new IpoptApplication();
 
+  // Check if executable is run only to print out options documentation
+  if (argv == 2) {
+    bool print_options = false;
+    bool print_latex_options = false;
+    if (!strcmp(argc[1],"--print-options")) {
+      print_options = true;
+    }
+    else if (!strcmp(argc[1],"--print-latex-options")) {
+      print_options = true;
+      print_latex_options = true;
+    }
+    if (print_options) {
+      SmartPtr<OptionsList> options = app->Options();
+      options->SetStringValue("print_options_documentation", "yes");
+      if (print_latex_options) {
+	options->SetStringValue("print_options_latex_mode", "yes");
+      }
+      app->Initialize("");
+      return 0;
+    }
+  }
+
   // Call Initialize the first time to create a journalist, but ignore
   // any options file
   ApplicationReturnStatus retval;
