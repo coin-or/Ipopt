@@ -193,33 +193,52 @@ namespace Ipopt
         options_->GetBoolValue("print_options_latex_mode", latex, "");
         if (latex) {
           std::list<std::string> options_to_print;
-          // Output
+          options_to_print.push_back("#Output");
           options_to_print.push_back("print_level");
           options_to_print.push_back("print_user_options");
           options_to_print.push_back("print_options_documentation");
           options_to_print.push_back("output_file");
           options_to_print.push_back("file_print_level");
-          // Termination
+
+          options_to_print.push_back("#Termination");
           options_to_print.push_back("tol");
           options_to_print.push_back("max_iter");
-          options_to_print.push_back("compl_inf_tol");
           options_to_print.push_back("dual_inf_tol");
           options_to_print.push_back("constr_viol_tol");
+          options_to_print.push_back("compl_inf_tol");
           options_to_print.push_back("acceptable_tol");
-          options_to_print.push_back("acceptable_compl_inf_tol");
           options_to_print.push_back("acceptable_constr_viol_tol");
           options_to_print.push_back("acceptable_dual_inf_tol");
+          options_to_print.push_back("acceptable_compl_inf_tol");
           options_to_print.push_back("diverging_iterates_tol");
-          options_to_print.push_back("barrier_tol_factor");
-          // NLP scaling
+
+          options_to_print.push_back("#NLP Scaling");
           options_to_print.push_back("obj_scaling_factor");
           options_to_print.push_back("nlp_scaling_method");
           options_to_print.push_back("nlp_scaling_max_gradient");
-          // NLP corrections
+
+          options_to_print.push_back("#NLP");
           options_to_print.push_back("bound_relax_factor");
           options_to_print.push_back("honor_original_bounds");
           options_to_print.push_back("check_derivatives_for_naninf");
-          // Barrier parameter
+          options_to_print.push_back("nlp_lower_bound_inf");
+          options_to_print.push_back("nlp_upper_bound_inf");
+          options_to_print.push_back("fixed_variable_treatment");
+          options_to_print.push_back("jac_c_constant");
+          options_to_print.push_back("jac_d_constant");
+          options_to_print.push_back("hessian_constant");
+
+          options_to_print.push_back("#Initialization");
+          options_to_print.push_back("bound_frac");
+          options_to_print.push_back("bound_push");
+          options_to_print.push_back("slack_bound_frac");
+          options_to_print.push_back("slack_bound_push");
+          options_to_print.push_back("bound_mult_init_val");
+          options_to_print.push_back("constr_mult_init_max");
+          options_to_print.push_back("bound_mult_init_val");
+
+	  options_to_print.push_back("#Barrier Parameter");
+	  options_to_print.push_back("mehrotra_algorithm");
           options_to_print.push_back("mu_strategy");
           options_to_print.push_back("mu_oracle");
           options_to_print.push_back("quality_function_max_section_steps");
@@ -228,18 +247,22 @@ namespace Ipopt
           options_to_print.push_back("mu_max_fact");
           options_to_print.push_back("mu_max");
           options_to_print.push_back("mu_min");
+          options_to_print.push_back("barrier_tol_factor");
           options_to_print.push_back("mu_linear_decrease_factor");
           options_to_print.push_back("mu_superlinear_decrease_power");
-          //options_to_print.push_back("corrector_type");
-          // Initialization
-          options_to_print.push_back("bound_frac");
-          options_to_print.push_back("bound_push");
-          options_to_print.push_back("slack_bound_frac");
-          options_to_print.push_back("slack_bound_push");
-          options_to_print.push_back("bound_mult_init_val");
-          options_to_print.push_back("constr_mult_init_max");
-          options_to_print.push_back("bound_mult_init_val");
-          // Warm start
+
+          options_to_print.push_back("#Multiplier Updates");
+          options_to_print.push_back("alpha_for_y");
+          options_to_print.push_back("recalc_y");
+          options_to_print.push_back("recalc_y_feas_tol");
+
+          options_to_print.push_back("#Line Search");
+          options_to_print.push_back("max_soc");
+          options_to_print.push_back("watchdog_shortened_iter_trigger");
+          options_to_print.push_back("watchdog_trial_iter_max");
+          options_to_print.push_back("corrector_type");
+
+          options_to_print.push_back("#Warm Start");
           options_to_print.push_back("warm_start_init_point");
           options_to_print.push_back("warm_start_bound_push");
           options_to_print.push_back("warm_start_bound_frac");
@@ -247,15 +270,8 @@ namespace Ipopt
           options_to_print.push_back("warm_start_slack_bound_push");
           options_to_print.push_back("warm_start_mult_bound_push");
           options_to_print.push_back("warm_start_mult_init_max");
-          // Multiplier updates
-          options_to_print.push_back("alpha_for_y");
-          options_to_print.push_back("recalc_y");
-          options_to_print.push_back("recalc_y_feas_tol");
-          // Line search
-          options_to_print.push_back("max_soc");
-          options_to_print.push_back("watchdog_shortened_iter_trigger");
-          options_to_print.push_back("watchdog_trial_iter_max");
-          // Restoration phase
+
+          options_to_print.push_back("#Restoration Phase");
           options_to_print.push_back("expect_infeasible_problem");
           options_to_print.push_back("expect_infeasible_problem_ctol");
           options_to_print.push_back("start_with_resto");
@@ -264,13 +280,15 @@ namespace Ipopt
           options_to_print.push_back("bound_mult_reset_threshold");
           options_to_print.push_back("constr_mult_reset_threshold");
           options_to_print.push_back("evaluate_orig_obj_at_resto_trial");
-          // Linear solver
+
+          options_to_print.push_back("#Linear Solver");
           options_to_print.push_back("linear_solver");
           options_to_print.push_back("linear_system_scaling");
           options_to_print.push_back("linear_scaling_on_demand");
           options_to_print.push_back("max_refinement_steps");
           options_to_print.push_back("min_refinement_steps");
-          // Hessian perturbation
+
+          options_to_print.push_back("#Hessian Perturbation");
           options_to_print.push_back("max_hessian_perturbation");
           options_to_print.push_back("min_hessian_perturbation");
           options_to_print.push_back("first_hessian_perturbation");
@@ -278,11 +296,13 @@ namespace Ipopt
           options_to_print.push_back("perturb_inc_fact");
           options_to_print.push_back("perturb_dec_fact");
           options_to_print.push_back("jacobian_regularization_value");
-          // Quasi-Newton
+
+          options_to_print.push_back("#Quasi-Newton");
           options_to_print.push_back("hessian_approximation");
           options_to_print.push_back("limited_memory_max_history");
           options_to_print.push_back("limited_memory_max_skipping");
-          // Derivative test
+
+          options_to_print.push_back("#Derivative Test");
           options_to_print.push_back("derivative_test");
           options_to_print.push_back("derivative_test_perturbation");
           options_to_print.push_back("derivative_test_tol");
@@ -291,6 +311,7 @@ namespace Ipopt
           // Special linear solver
 #ifdef HAVE_MA27
 
+          options_to_print.push_back("#MA27 Linear Solver");
           options_to_print.push_back("ma27_pivtol");
           options_to_print.push_back("ma27_pivtolmax");
           options_to_print.push_back("ma27_liw_init_factor");
@@ -300,19 +321,33 @@ namespace Ipopt
 
 #ifdef HAVE_MA57
 
+          options_to_print.push_back("#MA57 Linear Solver");
           options_to_print.push_back("ma57_pivtol");
           options_to_print.push_back("ma57_pivtolmax");
           options_to_print.push_back("ma57_pre_alloc");
 #endif
 
+#ifdef COIN_HAS_MUMPS
+
+          options_to_print.push_back("#MUMPS Linear Solver");
+          options_to_print.push_back("mumps_pivtol");
+          options_to_print.push_back("mumps_pivtolmax");
+          options_to_print.push_back("mumps_mem_percent");
+          options_to_print.push_back("mumps_permuting_scaling");
+          options_to_print.push_back("mumps_pivot_order");
+          options_to_print.push_back("mumps_scaling");
+#endif
+
 #ifdef HAVE_PARDISO
 
+          options_to_print.push_back("#Pardiso Linear Solver");
           options_to_print.push_back("pardiso_matching_strategy");
           options_to_print.push_back("pardiso_out_of_core_power");
 #endif
 
 #ifdef HAVE_WSMP
 
+          options_to_print.push_back("#WSMP Linear Solver");
           options_to_print.push_back("wsmp_num_threads");
           options_to_print.push_back("wsmp_ordering_option");
           options_to_print.push_back("wsmp_pivtol");
@@ -328,14 +363,14 @@ namespace Ipopt
           /*categories.push_back("Main Algorithm");*/
           categories.push_back("Convergence");
           categories.push_back("NLP Scaling");
+          categories.push_back("NLP");
+          categories.push_back("Initialization");
           categories.push_back("Barrier Parameter Update");
           categories.push_back("Line Search");
-          categories.push_back("Initialization");
           categories.push_back("Warm Start");
           categories.push_back("Linear Solver");
           categories.push_back("Step Calculation");
           categories.push_back("Restoration Phase");
-          categories.push_back("NLP");
           categories.push_back("Derivative Checker");
           categories.push_back("Hessian Approximation");
 #ifdef HAVE_MA27
@@ -353,6 +388,14 @@ namespace Ipopt
 #ifdef HAVE_WSMP
 
           categories.push_back("WSMP Linear Solver");
+#endif
+#ifdef COIN_HAS_MUMPS
+
+          categories.push_back("Mumps Linear Solver");
+#endif
+#ifdef HAVE_MA28
+
+          categories.push_back("MA28 Linear Solver");
 #endif
 
           categories.push_back("Uncategorized");
@@ -422,7 +465,9 @@ namespace Ipopt
       "no", "don't print options",
       "yes", "print options",
       "If selected, the algorithm will print the list of all options set by "
-      "the user including their values and whether they have been used.");
+      "the user including their values and whether they have been used.  In "
+      "some cases this information might be incorrect, due to the internal "
+      "program flow.");
     roptions->AddStringOption2(
       "print_options_documentation",
       "Switch to print all algorithmic options.",

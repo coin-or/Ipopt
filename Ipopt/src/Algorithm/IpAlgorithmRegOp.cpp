@@ -49,11 +49,13 @@ namespace Ipopt
     AlgorithmBuilder::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Line Search");
     BacktrackingLineSearch::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Line Search");
     FilterLSAcceptor::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP Scaling");
     StandardScalingBase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP Scaling");
     GradientScaling::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("NLP Scaling");
     EquilibrationScaling::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Uncategorized");
     IpoptAlgorithm::RegisterOptions(roptions);
@@ -85,7 +87,6 @@ namespace Ipopt
     RestoFilterConvergenceCheck::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Restoration Phase");
     RestoIpoptNLP::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Uncategorized");
     roptions->SetRegisteringCategory("Restoration Phase");
     MinC_1NrmRestorationPhase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Warm Start");

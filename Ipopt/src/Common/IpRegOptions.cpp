@@ -940,9 +940,15 @@ namespace Ipopt
            coption != options_to_print.end();
            coption++) {
         //	std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
-        SmartPtr<RegisteredOption> option = registered_options_[*coption];
-        DBG_ASSERT(IsValid(option));
-        option->OutputLatexDescription(jnlst);
+	if (coption->c_str()[0] == '#') {
+	  jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n",
+		       &coption->c_str()[1]);
+	}
+	else {
+	  SmartPtr<RegisteredOption> option = registered_options_[*coption];
+	  DBG_ASSERT(IsValid(option));
+	  option->OutputLatexDescription(jnlst);
+	}
       }
     }
     else {

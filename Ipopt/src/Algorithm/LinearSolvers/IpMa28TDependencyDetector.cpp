@@ -36,7 +36,7 @@ namespace Ipopt
       "ma28_pivtol",
       "Pivot tolerance for linear solver MA28.",
       0.0, true, 1., false, 0.01,
-      "This is used when MA28 tried to find the dependent constraints.");
+      "This is used when MA28 tries to find the dependent constraints.");
   }
 
   bool Ma28TDependencyDetector::InitializeImpl(

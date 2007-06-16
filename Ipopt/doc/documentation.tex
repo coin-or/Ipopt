@@ -38,11 +38,10 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.3.1 (the C++ version
-  of \Ipopt).  It includes instructions on how to obtain and compile
-  \Ipopt, a description of the interface, user options, etc., as
-  well as a tutorial on how to solve a nonlinear optimization problem
-  with \Ipopt.
+  This document is a guide to using \Ipopt\ 3.3.1.  It includes
+  instructions on how to obtain and compile \Ipopt, a description of
+  the interface, user options, etc., as well as a tutorial on how to
+  solve a nonlinear optimization problem with \Ipopt.
 
   The initial version of this document was created by
   Yoshiaki Kawajir\footnote{Department of Chemical Engineering,
@@ -159,7 +158,8 @@ In order to build \Ipopt, some third party components are required:
   \end{itemize}
   You need to include at least one of the linear solvers above in
   order to run \Ipopt, and if you want to be able to switch easily
-  between different options, you can compile \Ipopt\ with all of them.
+  between different alternatives, you can compile \Ipopt\ with all of
+  them.
   %Currently, there is development by contributors on integrating also
   %MUMPS and TAUCS, but this work has not yet been completed.
 
@@ -195,7 +195,7 @@ Fortran, since some of the dependencies above are written in Fortran.
 If all third party dependencies are available as self-contained
 libraries, those compilers are in principle not necessary.  Also, it
 is possible to use the Fortran-to-C compiler {\tt f2c} from {\tt
-  www.netlib.org} to convert Fortran code to C, and compile the
+  www.netlib.org/f2c} to convert Fortran code to C, and compile the
 resulting C files with a C compiler and create a library containing
 the required third party dependencies.  We have tested and used this
 in connection with the Microsoft Visual C++ compiler, and instructions
@@ -206,7 +206,7 @@ If desired, the \Ipopt\ distribution generates an executable for the
 modeling environment AMPL. As well, you can link your problem
 statement with \Ipopt\ using interfaces for C++, C, or Fortran.
 \Ipopt\ can be used with most Linux/Unix environments, and on Windows
-using Visual Studio .NET, Cygwin or MSys/MinGW.  Below in
+using Visual Studio .NET, Cygwin or MSYS/MinGW.  Below in
 Section~\ref{sec:tutorial-example} this document demonstrates how to
 solve problems using \Ipopt. This includes installation and
 compilation of \Ipopt\ for use with AMPL as well as linking with your
@@ -215,7 +215,7 @@ own code.
 The \Ipopt\ distribution includes an interface for {\tt
   CUTEr}\footnote{see {\tt http://cuter.rl.ac.uk/cuter-www/}} (for
   solving problems modeled in SIF), and also a Matlab (mex) interface
-  which allows you to use Ipopt from Matlab).
+  which allows you to use Ipopt from Matlab.
 
 There are also interfaces maintained by other people:
 \begin{itemize}
@@ -227,7 +227,7 @@ There are also interfaces maintained by other people:
 \item Scilab (free Matlab-like envirnoment):
 
   Edson Cordeiro do Valle has written an interface to use Ipopt from
-  Scilab, see {\tt http://www.scilab.org/contrib/displayContribution.php?fileID=839}
+  Scilab,\\ see {\tt http://www.scilab.org/contrib/displayContribution.php?fileID=839}
 \end{itemize}
 
 The old (Fortran 2.x) version of \Ipopt\ has been interfaced with
@@ -294,11 +294,16 @@ been actively developed under COIN-OR since 2002.
 
 To continue natural extension of the code and allow easy addition of
 new features, IBM Research decided to invest in an open source
-re-write of \Ipopt\ in C++.  The new C++ version of the \Ipopt\
-optimization code (\Ipopt\ 3.0.0 and beyond) is currently developed at
-IBM Research and remains part of the COIN-OR initiative. Future
-development on the Fortran version will cease with the exception of
-occasional bug fix releases.
+re-write of \Ipopt\ in C++.  With the help of Carl Laird, who came to
+the Mathematical Sciences Department at IBM Research as a summer
+student in 2004 and 2005, the code was re-implemented from
+scratch.
+
+The new C++ version of the \Ipopt\ optimization code (\Ipopt\ 3.0.0
+and beyond) is maintained at IBM Research and remains part of the
+COIN-OR initiative. The development on the Fortran version has
+ceased, but the source code can still be downloaded from\\ {\tt
+  http://www.coin-or.org/download/source/Ipopt-Fortran/}.
 
 \section{Installing \Ipopt}\label{Installing}
 
@@ -344,19 +349,19 @@ which you are right now (output of \texttt{pwd}).
 
 To use the tarball, follow the steps below:
 \begin{enumerate}
-\item Download the latest tarball from
-  \texttt{http://www.coin-or.org/Tarballs/Ipopt}.  The file you should look
-  for has the form {\tt Ipopt\_{\em date}.tgz}.  It contains the daily
-  snapshot of the official ``trunk'' release of \Ipopt.  Note that the
-  file {\tt Ipopt\_2.2.1\_Fortran.tgz} contains the latest Fortran version of
-  Ipopt, and is not described in this document.
+\item Download the desired tarball from
+  \texttt{http://www.coin-or.org/Tarballs/Ipopt}, it has the form {\tt
+    Ipopt-{\em x.y.z}.tgz}, where {\tt\em x.y.z} is the version
+  number, such as {\tt 3.3.1}.  There might also be daily snapshot
+  from the stable branch.  The number of the latest official release
+  can be found on the \Ipopt\ Trac page.
 \item Issue the following commands to unpack the archive file: \\
-\texttt{\$ gunzip Ipopt\_{\em date}.tgz} \\
-\texttt{\$ tar xvf Ipopt\_{\em date}.tar} \\
+\texttt{\$ gunzip Ipopt-{\em x.y.z}.tgz} \\
+\texttt{\$ tar xvf Ipopt-{\em x.y.z}.tar} \\
 Note: The {\tt \$} indicates the command line
 prompt, do not type {\tt \$}, only the text following it.
 \item Rename the directory you just extracted:\\
-\texttt{\$ mv Ipopt\_{\em date} CoinIpopt}
+\texttt{\$ mv Ipopt-{\em x.y.z} CoinIpopt}
 \item Change into the root directory of the \Ipopt\ distribution\\
 {\tt \$ cd CoinIpopt}
 \end{enumerate}
@@ -366,9 +371,10 @@ which you are right now (output of \texttt{pwd}).
 
 \subsection{Download External Code}\label{ExternalCode}
 \Ipopt\ uses a few external packages that are not included in the
-\Ipopt\ source code distribution, namely ASL (the AMPL Solver
-Library), BLAS, LAPACK.  It also requires at least one linear solver
-for symmetric indefinite matrices.
+\Ipopt\ source code distribution, namely ASL (the AMPL Solver Library
+if you want to compile the Ipopt AMPL solver executable), Blas,
+Lapack.  It also requires at least one linear solver for symmetric
+indefinite matrices.
 
 Since this third party software released under different licenses than
 \Ipopt, we cannot distribute that code together with the \Ipopt\
@@ -381,7 +387,7 @@ with their licenses.
 Note that you only need to obtain the ASL if you intend to use \Ipopt\
 from AMPL.  It is not required if you want to specify your
 optimization problem in a programming language (C++, C, or Fortran).
-Also, currently, LAPACK is only required if you intend to use the
+Also, currently, Lapack is only required if you intend to use the
 quasi-Newton options implemented in \Ipopt.
 
 \subsubsection{Download BLAS, LAPACK and ASL}
@@ -409,14 +415,20 @@ instructions.
 
 \subsubsection{Download HSL Subroutines}
 \Ipopt\ requires a sparse symmetric linear solver.  There are
-different possibilities.  In this section we describe how to obtain
-the source code for MA27 (and MC19) from the Harwell Subroutine
-Library (HSL).  Those routines are freely available for
-non-commercial, academic use, but it is your responsibility to
-investigate the licensing of all third party code.
+different possibilities.  It is important to keep in mind that usually
+the largest fraction of computation time in the optimizer is spent for
+solving the linear system, and that your choice of the linear solver
+impacts \Ipopt's speed and robustness.  It might be worthwhile to try
+different linear solver to experiment with what is best for your
+application.
+
+In this section we describe how to obtain the source code for MA27
+(and MC19) from the Harwell Subroutine Library (HSL).  Those routines
+are freely available for non-commercial, academic use, but it is your
+responsibility to investigate the licensing of all third party code.
 
 The use of alternative linear solvers is described in
-Sections~\ref{sec:Pardiso}-\ref{sec:WSMP}.  You do not necessarily
+Sections~\ref{sec:MUMPS}-\ref{sec:WSMP}.  You do not necessarily
 have to use MA27 as described in this section, but at least one linear
 solver is required for \Ipopt\ to function.
 
@@ -450,16 +462,44 @@ switched on for other linear solvers (which usually have internal
 scaling mechanisms).
 
 Note: If you have the source code for the linear solver MA57
-(successor of MA27) in a file called ma57ad.f (including all
-dependencies), you can simply put it into the {\tt
-  \$IPOPTDIR/ThirdParty/HSL/} directory.  The \Ipopt\ configuration script
-will then find this file and compile it into the \Ipopt\ library (just
-as is would compile MA27).
+(successor of MA27; it is not available for free) in a \emph{single}
+file called ma57ad.f (\emph{including all dependencies}), you can
+simply put it into the {\tt \$IPOPTDIR/ThirdParty/HSL/} directory.
+The \Ipopt\ configuration script will then find this file and compile
+it into the \Ipopt\ library (just as is would compile MA27).
 
 Yet another note: If you have a precompiled library containing the
 Harwell codes, you can specify the location of this library with the
 \verb|--with-hsl| flag for the {\tt configure} script described in
 Section~\ref{sec.comp_and_inst}.
+
+\subsubsection{Obtaining the MUMPS Linear Solver}\label{sec:MUMPS}
+
+You can also use the (public domain) sparse linear solver MUMPS.
+Please visit the MUMPS home page {\tt http://graal.ens-lyon.fr/MUMPS/}
+for more information about the solver. MUMPS is provided as Fortran 90
+and C source code.  You need to have a Fortran 90 compiler (for
+example, the GNU compiler {\tt gfortran} is a free one) to be able to
+use it.
+
+You can obtain the MUMPS source code by requesting the latest version
+from the MUMPS home page, and then extract the source code in the
+directory {\tt \$IPOPTDIR/ThirdParty/Mumps}.  The extracted MUMPS
+directory usually has the MUMPS version number in it, and you need to
+rename it to {\tt MUMPS} so that you have a file called
+{\tt \$IPOPTDIR/ThirdParty/Mumps/MUMPS/Conditions\_of\_Use}.
+
+You can also try to run the script {\tt get.Mumps} in {\tt
+  \$IPOPTDIR/ThirdParty/Mumps} if you have {\tt wget} installed in
+your system.  The MUMPS version number in that file might be out of
+date; in that case edit the value assigned to the {\tt mumps\_ver}
+variable at the beginning of the script.
+
+Once you put the MUMPS source code into the correct place, the \Ipopt\
+configuration scripts will automatically detect it and compile MUMPS
+together with \Ipopt, \emph{if your Fortran compiler is able to compile
+Fortran 90 code}.
+
 
 \subsubsection{Obtaining the Linear Solver Pardiso}\label{sec:Pardiso}
 
@@ -518,19 +558,32 @@ configure your \Ipopt\ installation to work with WSMP.
 \Ipopt\ can be easily compiled and installed with the usual {\tt
   configure}, {\tt make}, {\tt make install} commands.  We follow the
 precedure that is used for most of the COIN-OR projects, based on the
-GNU autotools.  At \texttt{https://projects.coin-or.org/BuildTools}
+GNU autotools.  At \texttt{https://projects.coin-or.org/CoinHelp}
 you can find a general description of the tools.
 
 Below are the basic steps for the \Ipopt\ compilation that should work
 on most systems.  For special compilations and for some
 troubleshooting see Appendix~\ref{ExpertInstall} and consult the
-\Ipopt\ homepage before submitting a ticket or sending a message to
-the mailing list.
+generic COIN-OR help page
+\texttt{https://projects.coin-or.org/CoinHelp} before submitting a
+ticket or sending a message to the mailing list.
+
 \begin{enumerate}
-\item Go to the main directory of \Ipopt:\\
-  {\tt \$ cd \$IPOPTDIR} 
+\item Create a directory where you want to compile \Ipopt, for example\\
+  {\tt \$ mkdir \$IPOPTDIR/build}\\
+  and go into this direcrory\\
+  {\tt \$ cd \$IPOPTDIR/build}
+
+  Note: You can choose any location, including {\tt \$IPOPTDIR}
+  itself, as the location of your compilation.  However, on COIN-OR we
+  recommend to keep the source and compiled files separate.
+
 \item Run the configure script\\
-  {\tt \$ ./configure}
+  {\tt \$ \$IPOPTDIR/configure}
+
+  One might have to give options to the configure script, e.g., in
+  order to choose a non-default compiler, or to tell it where some
+  third party code is installed, see Appendix~\ref{ExpertInstall}.
 
   If the last output line of the script reads ``\texttt{configure:
     Main configuration of Ipopt successful}'' then everything worked
@@ -539,11 +592,22 @@ the mailing list.
   Appendix~\ref{ExpertInstall}.
 
   The default configure (without any options) is sufficient for most
-  users. If you want to see the configure options, consult
-  Appendix~\ref{ExpertInstall}, for example, if you want to use a
-  non-HSL linear solver.
+  users that downloaded the source code for the linear solver. If you
+  want to see the configure options, consult
+  Appendix~\ref{ExpertInstall}, and also visit the generic COIN-OR
+  configuration instruction page at
+
+  \centerline{\texttt{https://projects.coin-or.org/CoinHelp/wiki/user-configure}}
+
 \item Build the code \\
-{\tt \$ make}
+  {\tt \$ make}
+
+  Note: If you are using GNU make, you can also try to speed up the
+  compilation by using the {\tt -jN} flag (e.g., {\tt make -j3}),
+  where {\tt N} is the number of parallel compilation jobs.  A good
+  number for {\tt N} is the number of available processors plus one.
+  Under some circumstances, this fails, and you might have to re-issue
+  the command, or omit the {\tt -j} flag.
 \item If you want, you can run a short test to verify that the
   compilation was successful.  For this, you just
   enter\\
@@ -569,23 +633,23 @@ the mailing list.
   This installs
   \begin{itemize}
   \item the \Ipopt\ AMPL solver executable (if ASL source was
-    downloaded) in \texttt{\$IPOPTDIR/bin},
-  \item the \Ipopt\ library (\texttt{libipopt.a}) in
-    \texttt{\$IPOPTDIR/lib},
+    downloaded) in \texttt{\$IPOPTDIR/build/bin},
+  \item the \Ipopt\ library (\texttt{libipopt.so}, \texttt{libipopt.a}
+    or similar) in \texttt{\$IPOPTDIR/build/lib},
   \item text files {\tt ipopt\_addlibs\_cpp.txt} and {\tt
-      ipopt\_addlibs\_f.txt} in \texttt{\$IPOPTDIR/lib} that contain a
+      ipopt\_addlibs\_f.txt} in \texttt{\$IPOPTDIR/build/lib} that contain a
     line each with additional linking flags that are required for
     linking code with the \Ipopt\ library, for C++ and Fortran main
     programs, respectively. (This is only for convenience if you want
     to find out what additional flags are required, for example, to
     include the Fortran runtime libraries with a C++ compiler.)
   \item the necessary header files in
-    \texttt{\$IPOPTDIR/include/ipopt}.
+    \texttt{\$IPOPTDIR/build/include/ipopt}.
   \end{itemize}
   You can change the default installation directory (here
   \texttt{\$IPOPTDIR}) to something else (such as \texttt{/usr/local})
   by using the \verb|--prefix| switch for \texttt{configure}.
-\item Install \Ipopt\ for use with {\tt CUTEr}\\
+\item (Optional) Install \Ipopt\ for use with {\tt CUTEr}\\
   If you have {\tt CUTEr} already installed on your system and you
   want to use \Ipopt\ as a solver for problems modeled in {\tt SIF},
   type\\
@@ -596,29 +660,30 @@ the mailing list.
   {\tt SIF} model.
 \end{enumerate}
 
-Note: It is possible to compile the code in directories separate from
-the source files.  This comes in handy when you want to compile the
-code with different compilers, compiler options, or different
-operating system that share a common file system.  To use this
-feature, change into the directory where you want to compile the code,
-and then type {\tt \$IPOPTDIR/configure} with all the options
-(replacing {\tt \$IPOPTDIR} by the path to {\tt configure}).  For
-this, the directories with the \Ipopt\ source must not have any
+Note: The above procedures show how to compile the code in directories
+separate from the source files.  This comes in handy when you want to
+compile the code with different compilers, compiler options, or
+different operating system that share a common file system.  To use
+this feature, change into the directory where you want to compile the
+code, and then type {\tt \$IPOPTDIR/configure} with all the options.
+For this, the directories with the \Ipopt\ source must not have any
 configuration and compiled code.
 
 \subsection{Installation on Windows}\label{WindowsInstall}
 
-There are several ways to install \Ipopt\ on Windows systems.  The first
-two option, described in Sections~\ref{CygwinInstall} and
+There are several ways to install \Ipopt\ on Windows systems.  The
+first two option, described in Sections~\ref{CygwinInstall} and
 \ref{CygwinInstallNative}, is to use Cygwin (see
-\texttt{www.cygwin.com}), which offers a UNIX-like environment on
-Windows and in which the installation procedure described earlier in
-this section can be used.  If you want to use the (free) GNU
-compilers, follow the instructions in Section~\ref{CygwinInstall}.  If
-you have the Microsoft C++ compiler (executable called {\tt cl.exe})
-and the Intel Fortran compiler (called {\tt ifort.exe}) and want to
-use those to compile \Ipopt, please see Section~\ref{CygwinInstall}.
-If you use MinGW, please consider the notes in Section~\ref{MinGWInstall}.
+\texttt{www.cygwin.com}), which offers a comprehensive UNIX-like
+environment on Windows and in which the installation procedure
+described earlier in this section can be used.  If you want to use the
+(free) GNU compilers, follow the instructions in
+Section~\ref{CygwinInstall}.  If you have the Microsoft C++ compiler
+and possibly a ``native'' Fortran compiler (e.g., the Intel Fortran
+compiler) and want to use those to compile \Ipopt, please see
+Section~\ref{CygwinInstallNative}.  If you use MSYS/MinGW (a
+light-weight UNIX-like environment for Windows), please consider the
+notes in Section~\ref{MinGWInstall}.
 %
 The \Ipopt\ distribution also includes projects files for the
 Microsoft Visual Studio (see Section~\ref{VisualStudioInstall}).
@@ -706,36 +771,70 @@ to choose some connection settings differently):
   the installation, type
 
   \texttt{make test}
+
+  \textbf{NOTE:} By default, the compiled binaries (library and
+  executables) will be ``Cygwin-native'', i.e., in order to run
+  executables using this, the {\tt Cygwin1.dll} has to be present
+  (e.g., in a Cygwin window).  If you want to compile things in a way
+  that allow your executables to run outside of Cygwin, e.g., in a
+  regular DOS prompt, you need to specify the option ``{\tt
+    --enable-doscompile}'' when you run {\tt configure}.
 \end{enumerate}
 
-\subsubsection{Installation with Cygwin using native compilers}\label{CygwinInstallNative}
+\subsubsection{Installation with Cygwin using the MSCV++ compiler}
+\label{CygwinInstallNative}
 
-The \Ipopt\ configure script and Makefiles have been tested with the
-Microsoft Visual C++ .NET 2003 Standard compiler together with the
-Intel Visual Fortran Compiler 8.1.  It might also work with other
-compilers.
+This section describes how you can compile \Ipopt\ with the Microsoft
+Visual C++ compiler under Cygwin.  Here you have two options for
+compiling the Fortran code in the third party dependencies:
 
-Here are the steps that work on my system:
+\begin{itemize}
+\item Using a Windows Fortran compiler, e.g. the Intel Fortran
+  compiler, which is also able to compile Fortran 90 code.  This would
+  allow you to compile the MUMPS linear solver if you desire to do so.
+\item Using the {\tt f2c} Fortran to C compiler, available for free at
+  Netlib (see {\tt http://www.netlib.org/f2c}).  This can only compile
+  Fortran 77 code (i.e., you won't be able to compile MUMPS).  Before
+  doing the following installation steps, you need to follow the
+  instructions in\\ {\tt\$IPOPTDIR/BuildTools/compile\_f2c/INSTALL}.
+\end{itemize}
+
+\noindent
+Once you have settled on this, do the following:
 
 \begin{enumerate}
 \item Follow the instructions in Section~\ref{CygwinInstall} until
   Step~\ref{it:cyg_inst} and stop after your downloaded the third
   party code.
 
-\item Now you need to make sure that Cygwin knows about the native
-  compilers.  For this you need to edit the file {\tt cygwin.bat} in
-  the Cygwin base directory (usually {\tt C:$\backslash$cygwin}).
-  Here you need to add the line
+\item\label{it:setupmsvcpath} Now you need to make sure that Cygwin
+  knows about the native compilers.  For this you need to edit the
+  file {\tt cygwin.bat} in the Cygwin base directory (usually {\tt
+    C:$\backslash$cygwin}).  Here you need to add a line like the
+  following:
 
-  \texttt{call ``C:$\backslash$Program
-    Files$\backslash$Intel$\backslash$Fortran$\backslash$compiler80$\backslash$IA32$\backslash$BIN$\backslash$ifortvars.bat''}
+  \texttt{call "C:$\backslash$Program Files$\backslash$Microsoft Visual
+    Studio 8$\backslash$VC$\backslash$vcvarsall.bat"}
 
-  or whatever the location of that batch file is on your computer.
+  On my computer, this set the environment variables to that I can use
+  the MSVC++ compiler.
+
+  If you want to use also a native Fortran compiler, you need to
+  include something like this
+
+  \texttt{call "C:$\backslash$Program
+    Files$\backslash$Intel$\backslash$Fortran$\backslash$compiler80$\backslash$IA32$\backslash$BIN$\backslash$ifortvars.bat"}
+
+  You might have to search around a bit.  The important thing is that,
+  after your change, you can type ``{\tt cl}'' in a newly opened
+  Cygwin windows, and it finds the Microsoft C++ compiler (and if you
+  want to use it, the Fortran compiler, such as the Intel's {\tt
+    ifort}).
 
 \item Run the configuration script, and tell it that you want to use
   the native compilers:
 
-  \texttt{./configure CC=cl CXX=cl F77=ifort}
+  \texttt{./configure --enable-doscompile=msvc}
 
   Make sure the last message is
 
@@ -766,44 +865,55 @@ Here are the steps that work on my system:
   \texttt{make install}
 \end{enumerate}
 
-\subsubsection{Installation with MinGW}\label{MinGWInstall}
+\subsubsection{Installation with MSYS/MinGW}\label{MinGWInstall}
 
-You can compile \Ipopt\ also under MinGW, which is another UNIX-like
-environment for Windows.  It can be obtained from
-\texttt{http://www.mingw.org/}.
+You can compile \Ipopt\ also under MSYS/MinGW, which is another, more
+light-weight UNIX-like environment for Windows.  It can be obtained
+from \texttt{http://www.mingw.org/}.
+
+If you want to use MSYS/MinGW to compiler \Ipopt\ with native Windows
+compilers (see Section~\ref{CygwinInstallNative}), all you need to
+install is the basic version\footnote{which used to come as a
+  convenient Windows install program, but as I'm writing this, I can't
+  find it on the web\ldots}.  If you also want to use the GNU
+compilers, you need to install those as well, of course.
 
 A compilation with the GNU compilers works just like with any other
 UNIX system, as described in Section~\ref{sec.comp_and_inst}.  If you
-want to use the native compilers (e.g., {\tt cl} and {\tt ifort}), you
-need to make sure they are in the path for the MSys prompt.  Also, as
-for the procedure described in Section~\ref{CygwinInstallNative}, you
-need to run the \texttt{compile\_MS\_ASL} script in the
-\texttt{ThirdParty/ASL} immediately after you run the configuration
-script. 
+want to use the native MSVC++ compiler (with {\tt f2c} or a native
+Fortran compiler), you essentially follow the steps outlined in
+Section~\ref{CygwinInstallNative}.  In the latter case, you again need
+to make sure that the environment variables are set for the compilers
+(see step~\ref{it:setupmsvcpath}), this time adding the line to the
+{\tt msys.bat} file.  Also, you need to run the
+\texttt{compile\_MS\_ASL} script in the \texttt{ThirdParty/ASL}
+immediately after you run the configuration script.
 
-
-\subsubsection{Using Visual Studio}\label{VisualStudioInstall}
+\subsubsection{Using Microsoft Visual Studio}\label{VisualStudioInstall}
 
 The \Ipopt\ distribution includes project files that can be used to
-compile the \Ipopt\ library and a Fortran and C++ example within the
-Microsoft Visual Studio.  The project files have been created with
-Microsoft Visual C++ .NET 2003 Standard, and the Intel Visual Fortran
-Compiler 8.1.
+compile the \Ipopt\ library, the AMPL solver executable, and a C++
+example within the Microsoft Visual Studio.  The project files have
+been created with Microsoft Visual 8 Express.  Fortran files in the
+third party dependencies need to be converted to C code using the {\tt
+  f2c} Fortran to C compiler\footnote{Projects files for a previous
+  version of \Ipopt\ that used the Intel Fortran compiler are in
+  {\$IPOPTDIR$\backslash$Ipopt$\backslash$NoLongerMaintainedWindows},
+  but they are probably outdated, and you will have to correct them.}.
 
 In order to use those project files, download the \Ipopt\ source code,
 as well as the required third party code (put it into the {\tt
-ThirdParty$\backslash$Blas}, {\tt ThirdParty$\backslash$Lapack}, and {\tt
-ThirdParty$\backslash$HSL} directories---ASL is not required for the
-Fortran and C examples). Then open the solution file:\\
+  ThirdParty$\backslash$Blas}, {\tt ThirdParty$\backslash$Lapack},
+{\tt ThirdParty$\backslash$HSL}, {\tt  ThirdParty$\backslash$ASL}
+directories.  Detailed step-by-step instructions on how to install
+{\tt f2c}, translate the Fortran code to C files, and further details
+are described in the file
 
-\texttt{\$IPOPTDIR$\backslash$Ipopt$\backslash$Windows$\backslash$VisualStudio\_dotNET$\backslash$Ipopt$\backslash$Ipopt.sln}\\
+\texttt{\$IPOPTDIR$\backslash$MSVisualStudio$\backslash$v8$\backslash$Ipopt$\backslash$README.TXT}
 
-Please also read the README file in
-\texttt{\$IPOPTDIR$\backslash$Ipopt$\backslash$Windows$\backslash$VisualStudio\_dotNET}
+After that, you can open the solution file
 
-Note: Since the project files were created only with the Standard
-edition of the C++ compiler, code optimization might be disabled; for
-fast performance make sure you enable code optimization.
+\texttt{\$IPOPTDIR$\backslash$MSVisualStudio$\backslash$v8$\backslash$Ipopt$\backslash$Ipopt.sln}
 
 \section{Interfacing your NLP to \Ipopt: A tutorial example.}
 \label{sec:tutorial-example}
@@ -1744,7 +1854,9 @@ bool HS071_NLP::eval_h(Index n, const Number* x, bool new_x,
 virtual void finalize_solution(SolverReturn status, Index n,
                                const Number* x, const Number* z_L,
                                const Number* z_U, Index m, const Number* g,
-                               const Number* lambda, Number obj_value)
+                               const Number* lambda, Number obj_value,
+                               const IpoptData* ip_data,
+                               IpoptCalculatedQuantities* ip_cq)
 \end{verbatim}
 This is the only method that is not mentioned in Figure
 \ref{fig.required_info}. This method is called by \Ipopt\ after the
@@ -1796,6 +1908,7 @@ algorithm has finished (successfully or even with most errors).
   multipliers, $\lambda_*$.
 \item {\tt obj\_value}: (in), the final value of the objective,
   $f(x_*)$.
+\item {\tt ip\_data} and {\tt ip\_cq} are provided for expert users.
 \end{itemize}
 
 This method gives you the return status of the algorithm
@@ -1881,10 +1994,15 @@ int main(int argv, char* argc[])
   app->Options()->SetStringValue("output_file", "ipopt.out");
 
   // Intialize the IpoptApplication and process the options
-  app->Initialize();
+  ApplicationReturnStatus status;
+  status = app->Initialize();
+  if (status != Solve_Succeeded) {
+    printf("\n\n*** Error during initialization!\n");
+    return (int) status;
+  }
 
   // Ask Ipopt to solve the problem
-  ApplicationReturnStatus status = app->OptimizeTNLP(mynlp);
+  status = app->OptimizeTNLP(mynlp);
 
   if (status == Solve_Succeeded) {
     printf("\n\n*** The problem solved!\n");
@@ -1914,11 +2032,12 @@ write to its progress to the console, and return the {\tt
 \subsubsection{Compiling and Testing the Example}
 Our next task is to compile and test the code. If you are familiar
 with the compiler and linker used on your system, you can build the
-code, including the \Ipopt\ library {\tt libipopt.a} (and other
-necessary libraries, as listed in the {\tt ipopt\_addlibs\_cpp.txt}
-and {\tt ipopt\_addlibs\_f.txt} files).  If you are using Linux/UNIX,
-then a sample makefile exists already that was created by configure.
-Copy {\tt Ipopt/examples/hs071\_cpp/Makefile} into your {\tt MyExample}
+code, telling the linker about the \Ipopt\ library {\tt libipopt.so}
+(or {\tt libipopt.a}), as well as other necessary libraries, as listed
+in the {\tt ipopt\_addlibs\_cpp.txt} and {\tt ipopt\_addlibs\_f.txt}
+files.  If you are using Linux/UNIX, then a sample makefile exists
+already that was created by configure.  Copy {\tt
+  Ipopt/examples/hs071\_cpp/Makefile} into your {\tt MyExample}
 directory.  This makefile was created for the {\tt hs071\_cpp} code,
 but it can be easily modified for your example problem. Edit the file,
 making the following changes,
@@ -2956,14 +3075,20 @@ when creating or passing an \Ipopt\ object.
 
 \newpage
 \section{Options Reference} \label{app.options_ref}
-Options can be set using {\tt ipopt.opt}, through your own code, or through the 
-AMPL {\tt ipopt\_options} command. See Section \ref{sec:options} for an explanation of
-how to use these commands.
+
+Options can be set using {\tt ipopt.opt}, through your own code, or
+through the AMPL {\tt ipopt\_options} command. See Section
+\ref{sec:options} for an explanation of how to use these commands.
 Shown here is a list of the most important options for Ipopt. To view
-the full list of options, run the ipopt executable with the option,
+the full list of options, you can set the option 
 \begin{verbatim}
 print_options_documentation yes
 \end{verbatim}
+or simply run the \Ipopt\ AMPL solver executable as
+\begin{verbatim}
+ipopt --print-options
+\end{verbatim}
+
 
 The most common options are:
 
@@ -2983,6 +3108,11 @@ environment.
 
 In general, you can see the list of options and variables that can be
 set for the {\tt configure} script by typing \verb/configure --help/.
+Also, the generic COIN-OR Help pages are a valuable resource of
+information:
+
+\centerline{\tt https://projects.coin-or.org/CoinHelp}
+
 Below a few particular options are discussed:
 
 \begin{itemize}
@@ -3008,17 +3138,17 @@ Below a few particular options are discussed:
   \Ipopt.
 
 \item Similarly, if you have a precompiled library containing the
-  Harwell Subroutines, you can specify its location with the
-  \verb|--with-hsl| flag.  And the location of the directory with the
-  AMPL solver library {\tt amplsolver.a} and the ASL header files can
-  be specified with \verb|--with-asldir|.
+  Harwell Subroutines, you can specify the link flags with the
+  \verb|--with-hsl| flag.  And the \emph{location of the directory}
+  with the AMPL solver library {\tt amplsolver.a} and the ASL header
+  files can be specified with \verb|--with-asldir|.
 
 \item If you want to compile \Ipopt\ with the linear solver Pardiso
-  (see Section~\ref{sec:Pardiso}), you need to specify the location of
-  the library with the \verb|--with-pardiso| flag, including required
-  additional libraries and flags.  For example, if you want to compile
-  \Ipopt\ with the parallel version of Pardiso (located in {\tt
-    \$HOME/lib}) on an AIX system in 64bit mode, you should add the
+  (see Section~\ref{sec:Pardiso}), you need to specify the link flags
+  for the library with the \verb|--with-pardiso| flag, including
+  required additional libraries and flags.  For example, if you want
+  to compile \Ipopt\ with the parallel version of Pardiso (located in
+  {\tt \$HOME/lib}) on an AIX system in 64bit mode, you should add the
   flag
 
   \verb|--with-pardiso="-qsmp=omp $HOME/lib/libpardiso_P4AIX51_64_P.so"|
@@ -3029,13 +3159,20 @@ Below a few particular options are discussed:
   Pardiso manual.
 
 \item If you want to compile \Ipopt\ with the linear solver WSMP (see
-  Section~\ref{sec:WSMP}), you need to specify the location of the
+  Section~\ref{sec:WSMP}), you need to specify the link flags for the
   library with the \verb|--with-wsmp| flag, including required
   additional libraries and flags.  For example, if you want to compile
   \Ipopt\ with WSMP (located in {\tt \$HOME/lib}) on an Intel IA32
   Linux system, you should add the flag
 
-  \verb|--with-wsmp="$HOME/lib/libwsmp.a"|
+  \verb|--with-wsmp="$HOME/lib/wsmp/wsmp-Linux/lib/IA32/libwsmp.a -lpthread"|
+
+\item If you want to compile \Ipopt\ with a precompiled MUMPS library
+  (see Section~\ref{sec:MUMPS}), you need to specify the directory in
+  which MUMPS has been compiled with the \verb|--with-mumps-dir| flag,
+  e.g.,
+
+  \verb|--with-mumps-dir="$HOME/MUMPS"|
 
 \item If you want to specify that you want to use particular
   compilers, you can do so by adding the variables definitions for
@@ -3043,7 +3180,7 @@ Below a few particular options are discussed:
   line, to specify the C++, C, and Fortran compiler, respectively.
   For example,
 
-  {\tt ./configure CXX=g++ CC=gcc F77=g77}
+  {\tt ./configure CXX=g++-4.2.0 CC=gcc-4.2.0 F77=gfortran-4.2.0}
 
   In order to set the compiler flags, you should use the variables
   {\tt CXXFLAGS}, {\tt CFLAGS}, {\tt FFLAGS}.  Note, that the \Ipopt\
@@ -3051,6 +3188,13 @@ Below a few particular options are discussed:
   the C++ code is compiled including RTTI (Run-Time Type Information).
   Some compilers need to be given special flags to do that (e.g.,
   ``{\tt -qrtti=dyna}'' for the AIX {\tt xlC} compiler).
+
+  Please also check the generic COIN-OR help page at
+
+  \centerline{\tt https://projects.coin-or.org/CoinHelp/wiki/user-configure\#GivingOptions}
+
+  for the description of more variables that can be set for {\tt
+    configure}.
 
 \item By default, the \Ipopt\ library is compiled as a shared library,
   on systems where this is supported.  If you want to generate a
@@ -3105,10 +3249,13 @@ Below a few particular options are discussed:
 \item It is possible to compile the \Ipopt\ library in a debug
   configuration, by specifying \verb|--enable-debug|.  Then the
   compilers will use the debug flags (unless the compilation flag
-  variables are overwritten in the {\tt configure} command line), and
-  additional debug checks are compiled into the code (see {\tt
-    IpDebug.hpp}).  This usually leads to a significant slowdown of
-  the code, but might be helpful when debugging something.
+  variables are overwritten in the {\tt configure} command line)
+
+  Also, you can tell \Ipopt\ to do some additional runtime sanity
+  checks, by specifying the flag {\tt --with-ipopt-checklevel=1}.
+
+  This usually leads to a significant slowdown of the code, but might
+  be helpful when debugging something.
 
 \item It is not necessary to produce the binary files in the
   directories where the source files are.  If you want to compile the

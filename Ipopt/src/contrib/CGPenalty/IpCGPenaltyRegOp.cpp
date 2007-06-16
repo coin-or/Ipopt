@@ -17,7 +17,7 @@ namespace Ipopt
 
   void RegisterOptions_CGPenalty(const SmartPtr<RegisteredOptions>& roptions)
   {
-    roptions->SetRegisteringCategory("Line Search");
+    roptions->SetRegisteringCategory("Undocumented");
     CGSearchDirCalculator::RegisterOptions(roptions);
     CGPenaltyLSAcceptor::RegisterOptions(roptions);
   }

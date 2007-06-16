@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -23,6 +23,9 @@
 #endif
 
 #if COIN_IPOPT_CHECKLEVEL > 0
+# ifdef NDEBUG
+#  undef NDEBUG
+# endif
 # define DBG_ASSERT(test) assert(test)
 # define DBG_ASSERT_EXCEPTION(__condition, __except_type, __msg) \
    ASSERT_EXCEPTION( (__condition), __except_type, __msg);

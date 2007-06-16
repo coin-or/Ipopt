@@ -11,12 +11,9 @@
 
 #include "IpReferenced.hpp"
 
-//#define IP_DEBUG_SMARTPTR
+#include "IpDebug.hpp"
 #if COIN_IPOPT_CHECKLEVEL > 2
 # define IP_DEBUG_SMARTPTR
-#endif
-#ifdef IP_DEBUG_SMARTPTR
-# include "IpDebug.hpp"
 #endif
 
 namespace Ipopt

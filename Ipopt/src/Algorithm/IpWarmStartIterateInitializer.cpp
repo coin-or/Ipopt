@@ -59,10 +59,6 @@ namespace Ipopt
       "warm_start_mult_init_max",
       "Maximum initial value for the equality multipliers.",
       1e6);
-    roptions->AddNumberOption(
-      "warm_start_target_mu",
-      "Unsupported!",
-      0e-3);
     roptions->AddStringOption2(
       "warm_start_entire_iterate",
       "Tells algorithm whether to use the GetWarmStartIterate method in the NLP.",
@@ -70,6 +66,11 @@ namespace Ipopt
       "no", "call GetStartingPoint in the NLP",
       "yes", "call GetWarmStartIterate in the NLP",
       "");
+    roptions->SetRegisteringCategory("Uncategorized");
+    roptions->AddNumberOption(
+      "warm_start_target_mu",
+      "Unsupported!",
+      0e-3);
   }
 
   bool WarmStartIterateInitializer::InitializeImpl(const OptionsList& options,
