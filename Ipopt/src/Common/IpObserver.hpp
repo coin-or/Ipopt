@@ -134,7 +134,6 @@ namespace Ipopt
     /** Default Constructor */
     Subject()
     {}
-    ;
 
     /** Default destructor */
     virtual ~Subject();

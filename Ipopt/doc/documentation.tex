@@ -160,6 +160,13 @@ In order to build \Ipopt, some third party components are required:
   order to run \Ipopt, and if you want to be able to switch easily
   between different alternatives, you can compile \Ipopt\ with all of
   them.
+
+  \textbf{NOTE: The solution of the linear systems is a central
+    ingredient in \Ipopt\ and the optimizer's performance and
+    robustness depends on your choice.  Please keep this in mind,
+    particularly when you are comparing \Ipopt\ with other
+    optimization codes.}
+
   %Currently, there is development by contributors on integrating also
   %MUMPS and TAUCS, but this work has not yet been completed.
 
@@ -415,12 +422,12 @@ instructions.
 
 \subsubsection{Download HSL Subroutines}
 \Ipopt\ requires a sparse symmetric linear solver.  There are
-different possibilities.  It is important to keep in mind that usually
+different possibilities.  {\bf It is important to keep in mind that usually
 the largest fraction of computation time in the optimizer is spent for
 solving the linear system, and that your choice of the linear solver
 impacts \Ipopt's speed and robustness.  It might be worthwhile to try
 different linear solver to experiment with what is best for your
-application.
+application.}
 
 In this section we describe how to obtain the source code for MA27
 (and MC19) from the Harwell Subroutine Library (HSL).  Those routines

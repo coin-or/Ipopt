@@ -29,6 +29,16 @@
 # endif
 #endif
 
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# else
+#  error "don't have header file for stdlib"
+# endif
+#endif
+
 namespace Ipopt
 {
 
