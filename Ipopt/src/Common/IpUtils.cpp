@@ -59,12 +59,28 @@ namespace Ipopt
 
   Number IpRandom01()
   {
+#ifdef HAVE_DRAND48
     return Number(rand())/Number(RAND_MAX);
+#else
+# ifdef HAVE_RAND
+    return Number(rand())/Number(RAND_MAX);
+# else
+#  error "don't have function for random number generator"
+# endif
+#endif
   }
 
   void IpResetRandom01()
   {
+#ifdef HAVE_DRAND48
+    srand48(1);
+#else
+# ifdef HAVE_RAND
     srand(1);
+# else
+#  error "don't have function for random number generator"
+# endif
+#endif
   }
 
 } //namespace Ipopt
