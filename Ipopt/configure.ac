@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.2.3dev],[http://projects.coin-or.org/Ipopt/newticket])
+AC_INIT([Ipopt],[3.3dev],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT(
 [Copyright 2004, 2007 International Business Machines and others.
@@ -165,6 +165,7 @@ AC_COIN_CHECK_CXX_CHEADER(assert)
 AC_COIN_CHECK_CXX_CHEADER(stdio)
 AC_COIN_CHECK_CXX_CHEADER(stdlib)
 AC_COIN_CHECK_CXX_CHEADER(stdarg)
+AC_COIN_CHECK_CXX_CHEADER(string)
 AC_COIN_CHECK_CXX_CHEADER(float)
 AC_COIN_CHECK_CXX_CHEADER(time)
 

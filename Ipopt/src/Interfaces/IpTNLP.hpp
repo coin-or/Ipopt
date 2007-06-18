@@ -59,12 +59,10 @@ namespace Ipopt
     //@{
     TNLP()
     {}
-    ;
 
     /** Default destructor */
     virtual ~TNLP()
     {}
-    ;
     //@}
 
     DECLARE_STD_EXCEPTION(INVALID_TNLP);

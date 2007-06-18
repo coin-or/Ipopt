@@ -9,6 +9,17 @@
 #include "AmplTNLP.hpp"
 #include "IpIpoptApplication.hpp"
 
+#include "IpoptConfig.h"
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
+#endif
+
 int main(int argv, char**argc)
 {
   using namespace Ipopt;
