@@ -43,6 +43,10 @@
 # endif
 #endif
 
+// It seems that on some systems (SUN), the random functions are in
+// the std namespace
+using namespace std;
+
 namespace Ipopt
 {
 
@@ -60,7 +64,7 @@ namespace Ipopt
   Number IpRandom01()
   {
 #ifdef HAVE_DRAND48
-    return Number(rand())/Number(RAND_MAX);
+    return Number(drand48())/Number(RAND_MAX);
 #else
 # ifdef HAVE_RAND
     return Number(rand())/Number(RAND_MAX);
