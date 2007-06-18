@@ -24332,6 +24332,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 #  include <stdlib.h>
 # endif
 #endif
+using namespace std;
 
 #ifdef F77_DUMMY_MAIN
 
@@ -24413,6 +24414,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 #  include <stdlib.h>
 # endif
 #endif
+using namespace std;
 
 #ifdef F77_DUMMY_MAIN
 
@@ -24473,6 +24475,7 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 fi
+
 
 
 
