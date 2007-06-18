@@ -274,6 +274,31 @@ AC_CHECK_DECL([va_copy],[AC_DEFINE([HAVE_VA_COPY],[1],
 # endif
 #endif])
 
+###########################
+# Random number generator #
+###########################
+
+AC_CHECK_DECL([drand48],[AC_DEFINE([HAVE_DRAND48],[1],
+                                   [Define to 1 if drand48 is avaliable])],,[
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif])
+
+AC_CHECK_DECL([rand],[AC_DEFINE([HAVE_RAND],[1],
+                                [Define to 1 if rand is avaliable])],,[
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif])
+
+
 ##########################################################################
 
 # Additional libraries and packages
