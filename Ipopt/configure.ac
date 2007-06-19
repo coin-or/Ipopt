@@ -287,7 +287,7 @@ AC_CHECK_DECL([drand48],[AC_DEFINE([HAVE_DRAND48],[1],
 #  include <stdlib.h>
 # endif
 #endif
-using namespace std;])
+])
 
 AC_CHECK_DECL([rand],[AC_DEFINE([HAVE_RAND],[1],
                                 [Define to 1 if rand is avaliable])],,[
@@ -298,8 +298,18 @@ AC_CHECK_DECL([rand],[AC_DEFINE([HAVE_RAND],[1],
 #  include <stdlib.h>
 # endif
 #endif
-using namespace std;])
+])
 
+AC_CHECK_DECL([std::rand],[AC_DEFINE([HAVE_STD__RAND],[1],
+                                     [Define to 1 if std::rand is avaliable])],,[
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+])
 
 
 ##########################################################################
