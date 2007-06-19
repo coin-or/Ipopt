@@ -24485,9 +24485,9 @@ _ACEOF
 fi
 
 
-echo "$as_me:$LINENO: checking whether std::rand is declared" >&5
-echo $ECHO_N "checking whether std::rand is declared... $ECHO_C" >&6
-if test "${ac_cv_have_decl_std__rand+set}" = set; then
+echo "$as_me:$LINENO: checking whether srand is declared" >&5
+echo $ECHO_N "checking whether srand is declared... $ECHO_C" >&6
+if test "${ac_cv_have_decl_srand+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   cat >conftest.$ac_ext <<_ACEOF
@@ -24504,7 +24504,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 #  include <stdlib.h>
 # endif
 #endif
-
+using namespace std;
 
 #ifdef F77_DUMMY_MAIN
 
@@ -24517,8 +24517,8 @@ cat >>conftest.$ac_ext <<_ACEOF
 int
 main ()
 {
-#ifndef std::rand
-  char *p = (char *) std::rand;
+#ifndef srand
+  char *p = (char *) srand;
 #endif
 
   ;
@@ -24547,18 +24547,18 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_have_decl_std__rand=yes
+  ac_cv_have_decl_srand=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_have_decl_std__rand=no
+ac_cv_have_decl_srand=no
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
-echo "$as_me:$LINENO: result: $ac_cv_have_decl_std__rand" >&5
-echo "${ECHO_T}$ac_cv_have_decl_std__rand" >&6
-if test $ac_cv_have_decl_std__rand = yes; then
+echo "$as_me:$LINENO: result: $ac_cv_have_decl_srand" >&5
+echo "${ECHO_T}$ac_cv_have_decl_srand" >&6
+if test $ac_cv_have_decl_srand = yes; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_STD__RAND 1
