@@ -43,10 +43,6 @@
 # endif
 #endif
 
-// It seems that on some systems (SUN), the random functions are in
-// the std namespace
-using namespace std;
-
 namespace Ipopt
 {
 
@@ -69,7 +65,11 @@ namespace Ipopt
 # ifdef HAVE_RAND
     return Number(rand())/Number(RAND_MAX);
 # else
-#  error "don't have function for random number generator"
+#  ifdef HAVE_STD__RAND
+    return Number(std::rand())/Number(std::RAND_MAX);
+#  else
+#   error "don't have function for random number generator"
+#  endif
 # endif
 #endif
   }
@@ -82,7 +82,11 @@ namespace Ipopt
 # ifdef HAVE_RAND
     srand(1);
 # else
-#  error "don't have function for random number generator"
+#  ifdef HAVE_STD__RAND
+    std::srand(1);
+#  else
+#   error "don't have function for random number generator"
+#  endif
 # endif
 #endif
   }
