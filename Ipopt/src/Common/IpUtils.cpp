@@ -66,7 +66,7 @@ namespace Ipopt
     return Number(rand())/Number(RAND_MAX);
 # else
 #  ifdef HAVE_STD__RAND
-    return Number(std::rand())/Number(std::RAND_MAX);
+    return Number(std::rand())/Number(RAND_MAX);
 #  else
 #   error "don't have function for random number generator"
 #  endif

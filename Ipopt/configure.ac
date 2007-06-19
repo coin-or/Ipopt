@@ -300,8 +300,8 @@ AC_CHECK_DECL([rand],[AC_DEFINE([HAVE_RAND],[1],
 #endif
 ])
 
-AC_CHECK_DECL([std::rand],[AC_DEFINE([HAVE_STD__RAND],[1],
-                                     [Define to 1 if function std::rand is available])],,[
+AC_CHECK_DECL([srand],[AC_DEFINE([HAVE_STD__RAND],[1],
+                                 [Define to 1 if function std::rand is available])],,[
 #ifdef HAVE_CSTDLIB
 # include <cstdlib>
 #else
@@ -309,7 +309,7 @@ AC_CHECK_DECL([std::rand],[AC_DEFINE([HAVE_STD__RAND],[1],
 #  include <stdlib.h>
 # endif
 #endif
-])
+using namespace std;])
 
 
 ##########################################################################
