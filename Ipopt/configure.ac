@@ -279,7 +279,7 @@ AC_CHECK_DECL([va_copy],[AC_DEFINE([HAVE_VA_COPY],[1],
 ###########################
 
 AC_CHECK_DECL([drand48],[AC_DEFINE([HAVE_DRAND48],[1],
-                                   [Define to 1 if drand48 is avaliable])],,[
+                                   [Define to 1 if function drand48 is available])],,[
 #ifdef HAVE_CSTDLIB
 # include <cstdlib>
 #else
@@ -290,7 +290,7 @@ AC_CHECK_DECL([drand48],[AC_DEFINE([HAVE_DRAND48],[1],
 ])
 
 AC_CHECK_DECL([rand],[AC_DEFINE([HAVE_RAND],[1],
-                                [Define to 1 if rand is avaliable])],,[
+                                [Define to 1 if function rand is available])],,[
 #ifdef HAVE_CSTDLIB
 # include <cstdlib>
 #else
@@ -301,7 +301,7 @@ AC_CHECK_DECL([rand],[AC_DEFINE([HAVE_RAND],[1],
 ])
 
 AC_CHECK_DECL([std::rand],[AC_DEFINE([HAVE_STD__RAND],[1],
-                                     [Define to 1 if std::rand is avaliable])],,[
+                                     [Define to 1 if function std::rand is available])],,[
 #ifdef HAVE_CSTDLIB
 # include <cstdlib>
 #else

@@ -77,7 +77,7 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
-/* Define to 1 if drand48 is avaliable */
+/* Define to 1 if function drand48 is available */
 #undef HAVE_DRAND48
 
 /* Define to 1 if you have the <float.h> header file. */
@@ -113,7 +113,7 @@
 /* Define to 1 if you are using the parallel version of Pardiso */
 #undef HAVE_PARDISO_PARALLEL
 
-/* Define to 1 if rand is avaliable */
+/* Define to 1 if function rand is available */
 #undef HAVE_RAND
 
 /* Define to 1 if you have the <stdarg.h> header file. */
@@ -128,7 +128,7 @@
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
 
-/* Define to 1 if std::rand is avaliable */
+/* Define to 1 if function std::rand is available */
 #undef HAVE_STD__RAND
 
 /* Define to 1 if you have the <strings.h> header file. */
