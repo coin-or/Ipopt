@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -13,7 +13,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -30,7 +30,7 @@ namespace Ipopt
     message_printed = true;
   }
 
-  IpoptAlgorithm::IpoptAlgorithm(const SmartPtr<PDSystemSolver>& pd_solver,
+  IpoptAlgorithm::IpoptAlgorithm(const SmartPtr<SearchDirectionCalculator>& search_dir_calculator,
                                  const SmartPtr<LineSearch>& line_search,
                                  const SmartPtr<MuUpdate>& mu_update,
                                  const SmartPtr<ConvergenceCheck>& conv_check,
@@ -39,7 +39,7 @@ namespace Ipopt
                                  const SmartPtr<HessianUpdater>& hessian_updater,
                                  const SmartPtr<EqMultiplierCalculator>& eq_multiplier_calculator /* = NULL*/)
       :
-      pd_solver_(pd_solver),
+      search_dir_calculator_(search_dir_calculator),
       line_search_(line_search),
       mu_update_(mu_update),
       conv_check_(conv_check),
@@ -50,7 +50,7 @@ namespace Ipopt
   {
     DBG_START_METH("IpoptAlgorithm::IpoptAlgorithm",
                    dbg_verbosity);
-    DBG_ASSERT(IsValid(pd_solver_));
+    DBG_ASSERT(IsValid(search_dir_calculator_));
     DBG_ASSERT(IsValid(line_search_));
     DBG_ASSERT(IsValid(mu_update_));
     DBG_ASSERT(IsValid(conv_check_));
@@ -93,6 +93,29 @@ namespace Ipopt
       0, true, 1e-6,
       "If recalc_y is chosen and the current infeasibility is less than this "
       "value, then the multipliers are recomputed.");
+    roptions->SetRegisteringCategory("Step Calculation");
+    roptions->AddStringOption2(
+      "mehrotra_algorithm",
+      "Indicates if we want to do Mehrotra's algorithm.",
+      "no",
+      "no", "Do the usual Ipopt algorithm.",
+      "yes", "Do Mehrotra's predictor-corrector algorithm.",
+      "If set to yes, Ipopt runs as Mehrotra's predictor-corrector algorithm. "
+      "This works usually very well for LPs and convex QPs.  This "
+      "automatically disables the line search, and chooses the (unglobalized) "
+      "adaptive mu strategy with the \"probing\" oracle, and uses "
+      "\"corrector_type=affine\" without any safeguards; you should not set "
+      "any of those options explicitly in addition.  Also, unless"
+      "otherwise specified, the values of \"bound_push\", \"bound_frac\", and "
+      "\"bound_mult_init_val\" are set more aggressive, and sets "
+      "\"alpha_for_y=bound_mult\".");
+    roptions->SetRegisteringCategory("");
+    roptions->AddStringOption2(
+      "sb",
+      "",
+      "no",
+      "no", "",
+      "yes", "");
   }
 
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,
@@ -101,65 +124,113 @@ namespace Ipopt
     DBG_START_METH("IpoptAlgorithm::InitializeImpl",
                    dbg_verbosity);
 
+    SmartPtr<const OptionsList> my_options;
+    options.GetBoolValue("mehrotra_algorithm", mehrotra_algorithm_, prefix);
+    if (mehrotra_algorithm_) {
+      // Verify a few options and set a few new ones.  But we better
+      // make a copy of the incoming options.
+      SmartPtr<OptionsList> new_options = new OptionsList(options);
+      // Check required options are set correctly
+      std::string string_option;
+      if (new_options->GetStringValue("adaptive_mu_globalization", string_option, prefix)) {
+        ASSERT_EXCEPTION(string_option=="never-monotone-mode", OPTION_INVALID,
+                         "If mehrotra_algorithm=yes, adaptive_mu_globalization must be \"never-monotone-mode\".");
+      }
+      else {
+        new_options->SetStringValue("adaptive_mu_globalization",
+                                    "never-monotone-mode", false);
+      }
+      // The corrector step is already taken case of in
+      // ComputeSearchDirection below
+      if (new_options->GetStringValue("corrector_type", string_option, prefix)) {
+        ASSERT_EXCEPTION(string_option=="none", OPTION_INVALID,
+                         "If mehrotra_algorithm=yes, corrector_type must be \"afnone\".");
+      }
+      else {
+        new_options->SetStringValue("corrector_type", "none", false);
+      }
+      if (new_options->GetStringValue("accept_every_trial_step", string_option, prefix)) {
+        ASSERT_EXCEPTION(string_option=="yes", OPTION_INVALID,
+                         "If mehrotra_algorithm=yes, accept_every_trial_step must be \"yes\".");
+      }
+      else {
+        new_options->SetStringValue("accept_every_trial_step", "yes", false);
+      }
+
+      // Change some default options
+      new_options->SetNumericValueIfUnset("bound_push", 10.);
+      new_options->SetNumericValueIfUnset("bound_frac", 0.2);
+      new_options->SetNumericValueIfUnset("bound_mult_init_val", 10.);
+      new_options->SetNumericValueIfUnset("constr_mult_init_max", 0.);
+      new_options->SetStringValueIfUnset("alpha_for_y", "bound_mult");
+      new_options->SetStringValueIfUnset("least_square_init_primal", "yes");
+
+      my_options = ConstPtr(new_options);
+    }
+    else {
+      my_options = &options;
+    }
+    bool bval;
+    options.GetBoolValue("sb", bval, prefix);
+    if (bval) {
+      message_printed = true;
+    }
+
     // Read the IpoptAlgorithm options
     // Initialize the Data object
-    bool retvalue = IpData().Initialize(Jnlst(),
-                                        options, prefix);
+    bool retvalue = IpData().Initialize(Jnlst(), *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptData object failed to initialize.");
 
     // Initialize the CQ object
-    retvalue = IpCq().Initialize(Jnlst(),
-                                 options, prefix);
+    retvalue = IpCq().Initialize(Jnlst(), *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptCalculatedQuantities object failed to initialize.");
 
-    // Initialize the CQ object
-    retvalue = IpNLP().Initialize(Jnlst(),
-                                  options, prefix);
+    // Initialize the NLP object
+    retvalue = IpNLP().Initialize(Jnlst(), *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the IpIpoptNLP object failed to initialize.");
 
     // Initialize all the strategies
     retvalue = iterate_initializer_->Initialize(Jnlst(), IpNLP(), IpData(),
-               IpCq(), options, prefix);
+               IpCq(), *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the iterate_initializer strategy failed to initialize.");
 
     retvalue = mu_update_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                      options, prefix);
+                                      *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the mu_update strategy failed to initialize.");
 
-    retvalue = pd_solver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                      options, prefix);
+    retvalue = search_dir_calculator_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
+               options,prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
-                     "the pd_solver strategy failed to initialize.");
-
+                     "the search_direction_calculator strategy failed to initialize.");
     retvalue = line_search_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                        options,prefix);
+                                        *my_options,prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the line_search strategy failed to initialize.");
 
     retvalue = conv_check_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                       options, prefix);
+                                       *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the conv_check strategy failed to initialize.");
 
     retvalue = iter_output_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                        options, prefix);
+                                        *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the iter_output strategy failed to initialize.");
 
     retvalue = hessian_updater_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                            options, prefix);
+                                            *my_options, prefix);
     ASSERT_EXCEPTION(retvalue, FAILED_INITIALIZATION,
                      "the hessian_updater strategy failed to initialize.");
 
-    options.GetNumericValue("kappa_sigma", kappa_sigma_, prefix);
-    if (!options.GetBoolValue("recalc_y", recalc_y_, prefix)) {
+    my_options->GetNumericValue("kappa_sigma", kappa_sigma_, prefix);
+    if (!my_options->GetBoolValue("recalc_y", recalc_y_, prefix)) {
       Index enum_int;
-      if (options.GetEnumValue("hessian_approximation", enum_int, prefix)) {
+      if (my_options->GetEnumValue("hessian_approximation", enum_int, prefix)) {
         HessianApproximationType hessian_approximation =
           HessianApproximationType(enum_int);
         if (hessian_approximation==LIMITED_MEMORY) {
@@ -168,7 +239,8 @@ namespace Ipopt
       }
     }
     if (recalc_y_) {
-      options.GetNumericValue("recalc_y_feas_tol", recalc_y_feas_tol_, prefix);
+      my_options->GetNumericValue("recalc_y_feas_tol", recalc_y_feas_tol_,
+                                  prefix);
     }
 
     if (prefix=="resto.") {
@@ -278,6 +350,14 @@ namespace Ipopt
       OutputIteration();
       IpData().TimingStats().OutputIteration().End();
 
+      if (conv_status == ConvergenceCheck::CONVERGED ||
+          conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT) {
+        if (IpCq().IsSquareProblem()) {
+          // make the sure multipliers are computed properly
+          ComputeFeasibilityMultipliers();
+        }
+      }
+
       IpData().TimingStats().OverallAlgorithm().End();
 
       if (conv_status == ConvergenceCheck::CONVERGED) {
@@ -305,6 +385,10 @@ namespace Ipopt
     catch(ACCEPTABLE_POINT_REACHED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
+      if (IpCq().IsSquareProblem()) {
+        // make the sure multipliers are computed properly
+        ComputeFeasibilityMultipliers();
+      }
       IpData().TimingStats().OverallAlgorithm().End();
       return STOP_AT_ACCEPTABLE_POINT;
     }
@@ -354,6 +438,10 @@ namespace Ipopt
     catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
+      if (IpCq().IsSquareProblem()) {
+        // make the sure multipliers are computed properly
+        ComputeFeasibilityMultipliers();
+      }
       IpData().TimingStats().OverallAlgorithm().End();
       return SUCCESS;
     }
@@ -414,40 +502,10 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "\n**************************************************\n\n");
 
-    bool improve_solution = false;
-    if (IpData().HaveDeltas()) {
-      improve_solution = true;
-    }
-
-    SmartPtr<IteratesVector> rhs = IpData().curr()->MakeNewContainer();
-    rhs->Set_x(*IpCq().curr_grad_lag_with_damping_x());
-    rhs->Set_s(*IpCq().curr_grad_lag_with_damping_s());
-    rhs->Set_y_c(*IpCq().curr_c());
-    rhs->Set_y_d(*IpCq().curr_d_minus_s());
-    rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
-    rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
-    rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
-    rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
-
-    DBG_PRINT_VECTOR(2, "rhs", *rhs);
-
-    // Get space for the search direction
-    SmartPtr<IteratesVector> delta =
-      IpData().curr()->MakeNewIteratesVector(true);
-
-    if (improve_solution) {
-      // We can probably avoid copying and scaling...
-      delta->AddOneVector(-1., *IpData().delta(), 0.);
-    }
-
-    bool allow_inexact = false;
-    bool retval = pd_solver_->Solve(-1.0, 0.0, *rhs, *delta, allow_inexact,
-                                    improve_solution);
+    bool retval =
+      search_dir_calculator_->ComputeSearchDirection();
 
     if (retval) {
-      // Store the search directions in the IpData object
-      IpData().set_delta(delta);
-
       Jnlst().Printf(J_MOREVECTOR, J_MAIN,
                      "*** Step Calculated for Iteration: %d\n",
                      IpData().iter_count());
@@ -483,7 +541,9 @@ namespace Ipopt
   {
     DBG_START_METH("IpoptAlgorithm::InitializeIterates", dbg_verbosity);
 
-    iterate_initializer_->SetInitialIterates();
+    bool retval = iterate_initializer_->SetInitialIterates();
+    ASSERT_EXCEPTION(retval, FAILED_INITIALIZATION,
+                     "Error while obtaining initial iterates.");
   }
 
   void IpoptAlgorithm::AcceptTrialPoint()
@@ -702,6 +762,52 @@ namespace Ipopt
     Jnlst().Printf(J_SUMMARY, J_STATISTICS,
                    "        inequality constraints with only upper bounds: %8d\n\n",
                    ns_only_upper);
+  }
+
+  void IpoptAlgorithm::ComputeFeasibilityMultipliers()
+  {
+    DBG_START_METH("IpoptAlgorithm::ComputeFeasibilityMultipliers",
+                   dbg_verbosity);
+    DBG_ASSERT(IpCq().IsSquareProblem());
+
+    // if we don't have an object for computing least square
+    // multipliers we don't compute them
+    if (IsNull(eq_multiplier_calculator_)) {
+      Jnlst().Printf(J_WARNING, J_SOLUTION,
+                     "This is a square problem, but multipliers cannot be recomputed at solution, since no eq_mult_calculator object is available in IpoptAlgorithm\n");
+      return;
+    }
+
+    SmartPtr<IteratesVector> iterates = IpData().curr()->MakeNewContainer();
+    SmartPtr<Vector> tmp = iterates->z_L()->MakeNew();
+    tmp->Set(0.);
+    iterates->Set_z_L(*tmp);
+    tmp = iterates->z_U()->MakeNew();
+    tmp->Set(0.);
+    iterates->Set_z_U(*tmp);
+    tmp = iterates->v_L()->MakeNew();
+    tmp->Set(0.);
+    iterates->Set_v_L(*tmp);
+    tmp = iterates->v_U()->MakeNew();
+    tmp->Set(0.);
+    iterates->Set_v_U(*tmp);
+    SmartPtr<Vector> y_c = iterates->y_c()->MakeNew();
+    SmartPtr<Vector> y_d = iterates->y_d()->MakeNew();
+    IpData().set_trial(iterates);
+    IpData().AcceptTrialPoint();
+    bool retval = eq_multiplier_calculator_->CalculateMultipliers(*y_c, *y_d);
+    if (retval) {
+      //Check if following line is really necessary
+      iterates = IpData().curr()->MakeNewContainer();
+      iterates->Set_y_c(*y_c);
+      iterates->Set_y_d(*y_d);
+      IpData().set_trial(iterates);
+      IpData().AcceptTrialPoint();
+    }
+    else {
+      Jnlst().Printf(J_WARNING, J_SOLUTION,
+                     "Cannot recompute multipliers for feasibility problem.  Error in eq_mult_calculator\n");
+    }
   }
 
   void IpoptAlgorithm::calc_number_of_bounds(

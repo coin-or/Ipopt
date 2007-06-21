@@ -51,7 +51,7 @@ namespace Ipopt
     /**@name Changing the Values.*/
     //@{
     /** Set values of nonzero elements.  The values of the nonzero
-     *  elements is copied from the incoming Number array.  Important:
+     *  elements are copied from the incoming Number array.  Important:
      *  It is assume that the order of the values in Values
      *  corresponds to the one of Irn and Jcn given to one of the
      *  constructors above. */

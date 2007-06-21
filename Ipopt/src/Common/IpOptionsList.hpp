@@ -163,8 +163,16 @@ namespace Ipopt
     void operator=(const OptionsList& source)
     {
       options_ = source.options_;
+      reg_options_ = source.reg_options_;
+      jnlst_ = source.jnlst_;
     }
     //@}
+
+    /** Method for clearing all previously set options */
+    void clear()
+    {
+      options_.clear();
+    }
 
     /** @name Get / Set Methods */
     //@{
@@ -185,6 +193,17 @@ namespace Ipopt
                          bool allow_clobber = true, bool dont_print = false);
     bool SetIntegerValue(const std::string& tag, Index value,
                          bool allow_clobber = true, bool dont_print = false);
+    //@}
+
+    /** @name Methods for setting options only if they have not been
+     *  set before*/
+    //@{
+    bool SetStringValueIfUnset(const std::string& tag, const std::string& value,
+                               bool allow_clobber = true, bool dont_print = false);
+    bool SetNumericValueIfUnset(const std::string& tag, Number value,
+                                bool allow_clobber = true, bool dont_print = false);
+    bool SetIntegerValueIfUnset(const std::string& tag, Index value,
+                                bool allow_clobber = true, bool dont_print = false);
     //@}
 
     /** @name Methods for retrieving values from the options list.  If

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -56,7 +56,6 @@ namespace Ipopt
     mu_initialized_ = false;
     curr_tau_ = -1.;
     tau_initialized_ = false;
-    initialize_called_ = false;
     have_prototypes_ = false;
     have_deltas_ = false;
     have_affine_deltas_ = false;
@@ -68,7 +67,7 @@ namespace Ipopt
 
     initialize_called_ = true;
 
-    return true;
+    return cgpen_data_.Initialize(jnlst, options, prefix);
   }
 
   bool IpoptData::InitializeDataStructures(IpoptNLP& ip_nlp,
@@ -121,7 +120,7 @@ namespace Ipopt
             *new_z_U,
             *new_v_L,
             *new_v_U);
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
 
     debug_curr_tag_ = curr_->GetTag();
     debug_curr_tag_sum_ = curr_->GetTagSum();
@@ -137,14 +136,13 @@ namespace Ipopt
 
     // Set the pointers for storing steps to NULL
     delta_ = NULL;
-
-    // Set the pointers for storing steps to NULL
     delta_aff_ = NULL;
 
     have_prototypes_ = true;
     have_deltas_ = false;
+    have_affine_deltas_ = false;
 
-    return true;
+    return cgpen_data_.InitializeDataStructures();
   }
 
   void IpoptData::SetTrialPrimalVariablesFromStep(Number alpha,
@@ -231,6 +229,8 @@ namespace Ipopt
 
     have_deltas_ = false;
     have_affine_deltas_ = false;
+
+    cgpen_data_.AcceptTrialPoint();
   }
 
 } // namespace Ipopt

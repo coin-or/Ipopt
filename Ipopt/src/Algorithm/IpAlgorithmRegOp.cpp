@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -15,6 +15,7 @@
 #include "IpBacktrackingLineSearch.hpp"
 #include "IpFilterLSAcceptor.hpp"
 #include "IpGradientScaling.hpp"
+#include "IpEquilibrationScaling.hpp"
 #include "IpIpoptAlg.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
 #include "IpIpoptData.hpp"
@@ -26,6 +27,7 @@
 #include "IpLimMemQuasiNewtonUpdater.hpp"
 #include "IpPDFullSpaceSolver.hpp"
 #include "IpPDPerturbationHandler.hpp"
+#include "IpPDSearchDirCalc.hpp"
 #include "IpProbingMuOracle.hpp"
 #include "IpQualityFunctionMuOracle.hpp"
 #include "IpRestoFilterConvCheck.hpp"
@@ -47,11 +49,14 @@ namespace Ipopt
     AlgorithmBuilder::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Line Search");
     BacktrackingLineSearch::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Line Search");
     FilterLSAcceptor::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP Scaling");
     StandardScalingBase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP Scaling");
     GradientScaling::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("NLP Scaling");
+    EquilibrationScaling::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Uncategorized");
     IpoptAlgorithm::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Uncategorized");
@@ -69,6 +74,8 @@ namespace Ipopt
     roptions->SetRegisteringCategory("Output");
     OrigIterationOutput::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Step Calculation");
+    PDSearchDirCalculator::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Step Calculation");
     PDFullSpaceSolver::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Step Calculation");
     PDPerturbationHandler::RegisterOptions(roptions);
@@ -80,7 +87,6 @@ namespace Ipopt
     RestoFilterConvergenceCheck::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Restoration Phase");
     RestoIpoptNLP::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Uncategorized");
     roptions->SetRegisteringCategory("Restoration Phase");
     MinC_1NrmRestorationPhase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Warm Start");

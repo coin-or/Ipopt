@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -20,6 +20,12 @@ namespace Ipopt
   enum HessianApproximationType {
     EXACT=0,
     LIMITED_MEMORY
+  };
+
+  /** enumeration for the Hessian approximation space. */
+  enum HessianApproximationSpace {
+    NONLINEAR_VARS=0,
+    ALL_VARS
   };
 
   /** This class maps the traditional NLP into
@@ -117,49 +123,49 @@ namespace Ipopt
     virtual SmartPtr<const SymMatrix> uninitialized_h();
 
     /** Lower bounds on x */
-    virtual SmartPtr<const Vector> x_L()
+    virtual SmartPtr<const Vector> x_L() const
     {
       return x_L_;
     }
 
     /** Permutation matrix (x_L_ -> x) */
-    virtual SmartPtr<const Matrix> Px_L()
+    virtual SmartPtr<const Matrix> Px_L() const
     {
       return Px_L_;
     }
 
     /** Upper bounds on x */
-    virtual SmartPtr<const Vector> x_U()
+    virtual SmartPtr<const Vector> x_U() const
     {
       return x_U_;
     }
 
     /** Permutation matrix (x_U_ -> x */
-    virtual SmartPtr<const Matrix> Px_U()
+    virtual SmartPtr<const Matrix> Px_U() const
     {
       return Px_U_;
     }
 
     /** Lower bounds on d */
-    virtual SmartPtr<const Vector> d_L()
+    virtual SmartPtr<const Vector> d_L() const
     {
       return d_L_;
     }
 
     /** Permutation matrix (d_L_ -> d) */
-    virtual SmartPtr<const Matrix> Pd_L()
+    virtual SmartPtr<const Matrix> Pd_L() const
     {
       return Pd_L_;
     }
 
     /** Upper bounds on d */
-    virtual SmartPtr<const Vector> d_U()
+    virtual SmartPtr<const Vector> d_U() const
     {
       return d_U_;
     }
 
     /** Permutation matrix (d_U_ -> d */
-    virtual SmartPtr<const Matrix> Pd_U()
+    virtual SmartPtr<const Matrix> Pd_U() const
     {
       return Pd_U_;
     }
@@ -231,7 +237,9 @@ namespace Ipopt
                           const Vector& x, const Vector& z_L, const Vector& z_U,
                           const Vector& c, const Vector& d,
                           const Vector& y_c, const Vector& y_d,
-                          Number obj_value);
+                          Number obj_value,
+                          const IpoptData* ip_data,
+                          IpoptCalculatedQuantities* ip_cq);
     bool IntermediateCallBack(AlgorithmMode mode,
                               Index iter, Number obj_value,
                               Number inf_pr, Number inf_du,
@@ -386,9 +394,19 @@ namespace Ipopt
     bool warm_start_same_structure_;
     /** Flag indicating what Hessian information is to be used. */
     HessianApproximationType hessian_approximation_;
+    /** Flag indicating in which space Hessian is to be approximated. */
+    HessianApproximationSpace hessian_approximation_space_;
     /** Flag indicating whether it is desired to check if there are
      *  Nan or Inf entries in first and second derivative matrices. */
     bool check_derivatives_for_naninf_;
+    /** Flag indicating if we need to ask for equality constraint
+     *  Jacobians only once */
+    bool jac_c_constant_;
+    /** Flag indicating if we need to ask for inequality constraint
+     *  Jacobians only once */
+    bool jac_d_constant_;
+    /** Flag indicating if we need to ask for Hessian only once */
+    bool hessian_constant_;
     //@}
 
     /** @name Counters for the function evaluations */

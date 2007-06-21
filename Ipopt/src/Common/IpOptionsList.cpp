@@ -29,6 +29,16 @@
 # endif
 #endif
 
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# else
+#  error "don't have header file for stdlib"
+# endif
+#endif
+
 namespace Ipopt
 {
 
@@ -261,6 +271,45 @@ namespace Ipopt
       //    if (will_allow_clobber(tag)) {
       OptionsList::OptionValue optval(buffer, allow_clobber, dont_print);
       options_[lowercase(tag)] = optval;
+    }
+    return true;
+  }
+
+  bool OptionsList::SetStringValueIfUnset(const std::string& tag,
+                                          const std::string& value,
+                                          bool allow_clobber, /* = true */
+                                          bool dont_print /* = false */)
+  {
+    std::string val;
+    bool found = GetStringValue(tag, val, "");
+    if (!found) {
+      return SetStringValue(tag, value, allow_clobber, dont_print);
+    }
+    return true;
+  }
+
+  bool OptionsList::SetNumericValueIfUnset(const std::string& tag,
+      Number value,
+      bool allow_clobber, /* = true */
+      bool dont_print /* = false */)
+  {
+    Number val;
+    bool found = GetNumericValue(tag, val, "");
+    if (!found) {
+      return SetNumericValue(tag, value, allow_clobber, dont_print);
+    }
+    return true;
+  }
+
+  bool OptionsList::SetIntegerValueIfUnset(const std::string& tag,
+      Index value,
+      bool allow_clobber, /* = true */
+      bool dont_print /* = false */)
+  {
+    Index val;
+    bool found = GetIntegerValue(tag, val, "");
+    if (!found) {
+      return SetIntegerValue(tag, value, allow_clobber, dont_print);
     }
     return true;
   }

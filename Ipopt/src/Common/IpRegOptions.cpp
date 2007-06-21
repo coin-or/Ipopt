@@ -794,6 +794,89 @@ namespace Ipopt
     registered_options_[name] = option;
   }
 
+  void
+  RegisteredOptions::AddStringOption8(const std::string& name,
+                                      const std::string& short_description,
+                                      const std::string& default_value,
+                                      const std::string& setting1,
+                                      const std::string& description1,
+                                      const std::string& setting2,
+                                      const std::string& description2,
+                                      const std::string& setting3,
+                                      const std::string& description3,
+                                      const std::string& setting4,
+                                      const std::string& description4,
+                                      const std::string& setting5,
+                                      const std::string& description5,
+                                      const std::string& setting6,
+                                      const std::string& description6,
+                                      const std::string& setting7,
+                                      const std::string& description7,
+                                      const std::string& setting8,
+                                      const std::string& description8,
+                                      const std::string& long_description)
+  {
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_category_);
+    option->SetType(OT_String);
+    option->SetDefaultString(default_value);
+    option->AddValidStringSetting(setting1, description1);
+    option->AddValidStringSetting(setting2, description2);
+    option->AddValidStringSetting(setting3, description3);
+    option->AddValidStringSetting(setting4, description4);
+    option->AddValidStringSetting(setting5, description5);
+    option->AddValidStringSetting(setting6, description6);
+    option->AddValidStringSetting(setting7, description7);
+    option->AddValidStringSetting(setting8, description8);
+    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
+                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
+    registered_options_[name] = option;
+  }
+
+  void
+  RegisteredOptions::AddStringOption9(const std::string& name,
+                                      const std::string& short_description,
+                                      const std::string& default_value,
+                                      const std::string& setting1,
+                                      const std::string& description1,
+                                      const std::string& setting2,
+                                      const std::string& description2,
+                                      const std::string& setting3,
+                                      const std::string& description3,
+                                      const std::string& setting4,
+                                      const std::string& description4,
+                                      const std::string& setting5,
+                                      const std::string& description5,
+                                      const std::string& setting6,
+                                      const std::string& description6,
+                                      const std::string& setting7,
+                                      const std::string& description7,
+                                      const std::string& setting8,
+                                      const std::string& description8,
+                                      const std::string& setting9,
+                                      const std::string& description9,
+                                      const std::string& long_description)
+  {
+    SmartPtr<RegisteredOption> option =
+      new RegisteredOption(name, short_description, long_description,
+                           current_registering_category_);
+    option->SetType(OT_String);
+    option->SetDefaultString(default_value);
+    option->AddValidStringSetting(setting1, description1);
+    option->AddValidStringSetting(setting2, description2);
+    option->AddValidStringSetting(setting3, description3);
+    option->AddValidStringSetting(setting4, description4);
+    option->AddValidStringSetting(setting5, description5);
+    option->AddValidStringSetting(setting6, description6);
+    option->AddValidStringSetting(setting7, description7);
+    option->AddValidStringSetting(setting8, description8);
+    option->AddValidStringSetting(setting9, description9);
+    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
+                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
+    registered_options_[name] = option;
+  }
+
   SmartPtr<const RegisteredOption> RegisteredOptions::GetOption(const std::string& name)
   {
     std::string tag_only = name;
@@ -857,9 +940,15 @@ namespace Ipopt
            coption != options_to_print.end();
            coption++) {
         //	std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
-        SmartPtr<RegisteredOption> option = registered_options_[*coption];
-        DBG_ASSERT(IsValid(option));
-        option->OutputLatexDescription(jnlst);
+	if (coption->c_str()[0] == '#') {
+	  jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n",
+		       &coption->c_str()[1]);
+	}
+	else {
+	  SmartPtr<RegisteredOption> option = registered_options_[*coption];
+	  DBG_ASSERT(IsValid(option));
+	  option->OutputLatexDescription(jnlst);
+	}
       }
     }
     else {

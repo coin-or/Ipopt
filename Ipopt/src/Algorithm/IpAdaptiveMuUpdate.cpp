@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -21,7 +21,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -65,9 +65,9 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "mu_min",
       "Minimum value for barrier parameter.",
-      0.0, true, 1e-9,
+      0.0, true, 1e-12,
       "This option specifies the lower bound on the barrier parameter in the "
-      "adaptive mu selection mode. By default, it is set to "
+      "adaptive mu selection mode. By default, it is set to the minimum of 1e-12 and "
       "min(\"tol\",\"compl_inf_tol\")/(\"barrier_tol_factor\"+1), which "
       "should be a reasonable value. (Only used if option "
       "\"mu_strategy\" is chosen as \"adaptive\".)");
@@ -247,9 +247,9 @@ namespace Ipopt
     // here in every iteration, since the tolerance might be changed
     // (e.g. in the restoration phase)
     if (mu_min_default_) {
-      mu_min_ = Min(IpData().tol(),
-                    IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_))/
-                (barrier_tol_factor_+1.);
+      mu_min_ = Min(1e-12, Min(IpData().tol(),
+                               IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_))/
+                    (barrier_tol_factor_+1.));
     }
 
     // if mu_max has not yet been computed, do so now, based on the
@@ -278,6 +278,7 @@ namespace Ipopt
       return true;
 
     bool tiny_step_flag = IpData().tiny_step_flag();
+    IpData().Set_tiny_step_flag(false);
     if (!IpData().FreeMuMode()) {
       // if we are in the fixed mu mode, we need to check if the
       // current iterate is good enough to continue with the free mode
@@ -452,10 +453,6 @@ namespace Ipopt
                                     IpCq().curr_constraint_violation() + margin);
       }
       break;
-      case FILTER_KKT_ERROR : {
-        DBG_ASSERT(false && "Unknown adaptive_mu_globalization value.");
-      }
-      break;
       case NEVER_MONOTONE_MODE :
       retval = true;
       break;
@@ -504,8 +501,8 @@ namespace Ipopt
         filter_.Print(Jnlst());
       }
       break;
-      case FILTER_KKT_ERROR : {
-        DBG_ASSERT(false && "Unknown corrector_type value.");
+      case NEVER_MONOTONE_MODE : {
+        // Nothing to be done
       }
       break;
       default:

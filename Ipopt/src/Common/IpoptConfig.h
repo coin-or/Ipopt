@@ -86,11 +86,6 @@
 
 #endif /* HAVE_CONFIG_H */
 
-/* In the Ipopt code, we use IP_DEBUG to indicate debug compile */
-#if COIN_IPOPT_DEBUG > 0
-#define IP_DEBUG 1
-#endif
-
 /* Type of Fortran integer translated into C */
 typedef FORTRAN_INTEGER_TYPE ipfint;
 

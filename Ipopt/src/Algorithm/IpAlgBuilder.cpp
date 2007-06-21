@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -20,6 +20,9 @@
 #include "IpOptErrorConvCheck.hpp"
 #include "IpBacktrackingLineSearch.hpp"
 #include "IpFilterLSAcceptor.hpp"
+#include "IpCGPenaltyLSAcceptor.hpp"
+#include "IpPDSearchDirCalc.hpp"
+#include "IpCGSearchDirCalc.hpp"
 #include "IpMonotoneMuUpdate.hpp"
 #include "IpAdaptiveMuUpdate.hpp"
 #include "IpLoqoMuOracle.hpp"
@@ -40,6 +43,7 @@
 #include "IpTSymLinearSolver.hpp"
 #include "IpUserScaling.hpp"
 #include "IpGradientScaling.hpp"
+#include "IpEquilibrationScaling.hpp"
 #include "IpExactHessianUpdater.hpp"
 
 #ifdef HAVE_MA27
@@ -60,15 +64,20 @@
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
 #endif
-#ifdef HAVE_MUMPS
+#ifdef COIN_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
+
+  AlgorithmBuilder::AlgorithmBuilder(SmartPtr<AugSystemSolver> custom_solver /*=NULL*/)
+      :
+      custom_solver_(custom_solver)
+  {}
 
   void AlgorithmBuilder::BuildIpoptObjects(const Journalist& jnlst,
       const OptionsList& options,
@@ -89,6 +98,9 @@ namespace Ipopt
     else if (nlp_scaling_method == "gradient-based") {
       nlp_scaling = new GradientScaling(nlp);
     }
+    else if (nlp_scaling_method == "equilibration-based") {
+      nlp_scaling = new EquilibrationScaling(nlp);
+    }
     else {
       nlp_scaling = new NoNLPScalingObject();
     }
@@ -105,7 +117,7 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption6(
+    roptions->AddStringOption7(
       "linear_solver",
       "Linear solver used for step computations.",
 #ifdef HAVE_MA27
@@ -117,10 +129,13 @@ namespace Ipopt
 #ifdef HAVE_PARDISO
       "pardiso",
 #else
-#endif
 #ifdef HAVE_WSMP
       "wsmp",
 #else
+#ifdef COIN_HAS_MUMPS
+      "mumps",
+#endif
+#endif
 #endif
 #endif
 #endif
@@ -129,7 +144,8 @@ namespace Ipopt
       "pardiso", "use the Pardiso package",
       "wsmp", "use WSMP package",
       "taucs", "use TAUCS package (not yet working)",
-      "mumps", "use MUMPS package (not yet working)",
+      "mumps", "use MUMPS package",
+      "custom", "use custom linear solver",
       "Determines which linear algebra package is to be used for the "
       "solution of the augmented linear system (for obtaining the search "
       "directions). "
@@ -155,13 +171,14 @@ namespace Ipopt
       "Ipopt has been compiled with MC19.");
 
     roptions->SetRegisteringCategory("NLP Scaling");
-    roptions->AddStringOption3(
+    roptions->AddStringOption4(
       "nlp_scaling_method",
       "Select the technique used for scaling the NLP.",
       "gradient-based",
       "none", "no problem scaling will be performed",
       "user-scaling", "scaling parameters will come from the user",
       "gradient-based", "scale the problem so the maximum gradient at the starting point is scaling_max_gradient",
+      "equilibration-based", "scale the problem so that first derivatives are of order 1 at random points (only available with MC19)",
       "Selects the technique used for scaling the problem internally before it is solved."
       " For user-scaling, the parameters come from the NLP. If you are using "
       "AMPL, they can be specified through suffixes (\"scaling_factor\")");
@@ -197,6 +214,15 @@ namespace Ipopt
       "computed when switching to the \"monotone mode\" in the adaptive "
       "strategy. (Only considered if \"adaptive\" is selected for option "
       "\"mu_strategy\".)");
+
+    roptions->SetRegisteringCategory("Line Search");
+    roptions->AddStringOption2(
+      "line_search_method",
+      "Globalization method used in backtracking line search",
+      "filter",
+      "filter", "Filter method",
+      "penalty", "Chen-Goldfarb penalty function",
+      "");
   }
 
   SmartPtr<IpoptAlgorithm>
@@ -206,6 +232,10 @@ namespace Ipopt
   {
     DBG_START_FUN("AlgorithmBuilder::BuildBasicAlgorithm",
                   dbg_verbosity);
+
+    bool mehrotra_algorithm;
+    options.GetBoolValue("mehrotra_algorithm", mehrotra_algorithm, prefix);
+
     // Create the convergence check
     SmartPtr<ConvergenceCheck> convCheck =
       new OptimalityErrorConvergenceCheck();
@@ -215,6 +245,7 @@ namespace Ipopt
     SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
     std::string linear_solver;
     options.GetStringValue("linear_solver", linear_solver, prefix);
+    bool use_custom_solver = false;
     if (linear_solver=="ma27") {
 #ifdef HAVE_MA27
       SolverInterface = new Ma27TSolverInterface();
@@ -266,7 +297,7 @@ namespace Ipopt
 
     }
     else if (linear_solver=="mumps") {
-#ifdef HAVE_MUMPS
+#ifdef COIN_HAS_MUMPS
       SolverInterface = new MumpsSolverInterface();
 #else
 
@@ -275,32 +306,43 @@ namespace Ipopt
 #endif
 
     }
-
-    SmartPtr<TSymScalingMethod> ScalingMethod;
-    std::string linear_system_scaling;
-    if (!options.GetStringValue("linear_system_scaling",
-                                linear_system_scaling, prefix)) {
-      // By default, don't use mc19 for non-HSL solvers
-      if (linear_solver!="ma27" && linear_solver!="ma57") {
-        linear_system_scaling="none";
-      }
+    else if (linear_solver=="custom") {
+      ASSERT_EXCEPTION(IsValid(custom_solver_), OPTION_INVALID,
+                       "Selected linear solver CUSTOM not available.");
+      use_custom_solver = true;
     }
-    if (linear_system_scaling=="mc19") {
+
+    SmartPtr<AugSystemSolver> AugSolver;
+    if (use_custom_solver) {
+      AugSolver = custom_solver_;
+    }
+    else {
+      SmartPtr<TSymScalingMethod> ScalingMethod;
+      std::string linear_system_scaling;
+      if (!options.GetStringValue("linear_system_scaling",
+                                  linear_system_scaling, prefix)) {
+        // By default, don't use mc19 for non-HSL solvers
+        if (linear_solver!="ma27" && linear_solver!="ma57") {
+          linear_system_scaling="none";
+        }
+      }
+      if (linear_system_scaling=="mc19") {
 #ifdef HAVE_MC19
-      ScalingMethod = new Mc19TSymScalingMethod();
+        ScalingMethod = new Mc19TSymScalingMethod();
 #else
 
-      THROW_EXCEPTION(OPTION_INVALID,
-                      "Selected linear system scaling method MC19 not available.");
+        THROW_EXCEPTION(OPTION_INVALID,
+                        "Selected linear system scaling method MC19 not available.");
 #endif
 
+      }
+
+      SmartPtr<SymLinearSolver> ScaledSolver =
+        new TSymLinearSolver(SolverInterface, ScalingMethod);
+
+      AugSolver = new StdAugSystemSolver(*ScaledSolver);
     }
 
-    SmartPtr<SymLinearSolver> ScaledSolver =
-      new TSymLinearSolver(SolverInterface, ScalingMethod);
-
-    SmartPtr<AugSystemSolver> AugSolver =
-      new StdAugSystemSolver(*ScaledSolver);
     Index enum_int;
     options.GetEnumValue("hessian_approximation", enum_int, prefix);
     HessianApproximationType hessian_approximation =
@@ -325,7 +367,8 @@ namespace Ipopt
     SmartPtr<IterateInitializer> WarmStartInitializer =
       new WarmStartIterateInitializer();
     SmartPtr<IterateInitializer> IterInitializer =
-      new DefaultIterateInitializer(EqMultCalculator, WarmStartInitializer);
+      new DefaultIterateInitializer(EqMultCalculator, WarmStartInitializer,
+                                    AugSolver);
 
     // Solver for the restoration phase
     SmartPtr<AugSystemSolver> resto_AugSolver =
@@ -342,11 +385,20 @@ namespace Ipopt
     // Line search method for the restoration phase
     SmartPtr<RestoRestorationPhase> resto_resto =
       new RestoRestorationPhase();
-    SmartPtr<FilterLSAcceptor> resto_filterLSacceptor =
-      new FilterLSAcceptor(GetRawPtr(resto_PDSolver));
+
+    SmartPtr<BacktrackingLSAcceptor> resto_LSacceptor;
+    std::string resto_lsacceptor;
+    options.GetStringValue("line_search_method", resto_lsacceptor,
+                           "resto."+prefix);
+    if (resto_lsacceptor=="filter") {
+      resto_LSacceptor = new FilterLSAcceptor(GetRawPtr(resto_PDSolver));
+    }
+    else if (resto_lsacceptor=="penalty") {
+      resto_LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(resto_PDSolver));
+    }
     SmartPtr<LineSearch> resto_LineSearch =
-      new BacktrackingLineSearch(GetRawPtr(resto_filterLSacceptor),
-                                 GetRawPtr(resto_resto), GetRawPtr(resto_convCheck));
+      new BacktrackingLineSearch(resto_LSacceptor, GetRawPtr(resto_resto),
+                                 GetRawPtr(resto_convCheck));
 
     // Create the mu update that will be used by the restoration phase
     // algorithm
@@ -428,8 +480,16 @@ namespace Ipopt
     }
 
     // Put together the overall restoration phase IP algorithm
+    SmartPtr<SearchDirectionCalculator> resto_SearchDirCalc;
+    if (resto_lsacceptor=="filter") {
+      resto_SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(resto_PDSolver));
+    }
+    else if (resto_lsacceptor=="penalty") {
+      resto_SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(resto_PDSolver));
+    }
+
     SmartPtr<IpoptAlgorithm> resto_alg =
-      new IpoptAlgorithm(resto_PDSolver,
+      new IpoptAlgorithm(resto_SearchDirCalc,
                          GetRawPtr(resto_LineSearch),
                          GetRawPtr(resto_MuUpdate),
                          GetRawPtr(resto_convCheck),
@@ -443,17 +503,26 @@ namespace Ipopt
       new MinC_1NrmRestorationPhase(*resto_alg, EqMultCalculator);
 
     // Create the line search to be used by the main algorithm
-    SmartPtr<FilterLSAcceptor> filterLSacceptor =
+    SmartPtr<BacktrackingLSAcceptor> LSacceptor;
+    SmartPtr<FilterLSAcceptor> FilterLSacceptor =
       new FilterLSAcceptor(GetRawPtr(PDSolver));
+    std::string lsmethod;
+    options.GetStringValue("line_search_method", lsmethod, prefix);
+    if (lsmethod=="filter") {
+      LSacceptor = GetRawPtr(FilterLSacceptor);
+    }
+    else if (lsmethod=="penalty") {
+      LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(PDSolver));
+    }
     SmartPtr<LineSearch> lineSearch =
-      new BacktrackingLineSearch(GetRawPtr(filterLSacceptor),
+      new BacktrackingLineSearch(LSacceptor,
                                  GetRawPtr(resto_phase), convCheck);
 
     // The following cross reference is not good: We have to store a
     // pointer to the lineSearch object in resto_convCheck as a
     // non-SmartPtr to make sure that things are properly deleted when
     // the IpoptAlgorithm return by the Builder is destructed.
-    resto_convCheck->SetOrigFilterLSAcceptor(*filterLSacceptor);
+    resto_convCheck->SetOrigFilterLSAcceptor(*FilterLSacceptor);
 
     // Create the mu update that will be used by the main algorithm
     SmartPtr<MuUpdate> MuUpdate;
@@ -468,12 +537,23 @@ namespace Ipopt
           smuupdate = "adaptive";
         }
       }
+      if (mehrotra_algorithm)
+        smuupdate = "adaptive";
     }
+    ASSERT_EXCEPTION(!mehrotra_algorithm || smuupdate=="adaptive",
+                     OPTION_INVALID,
+                     "If mehrotra_algorithm=yes, mu_strategy must be \"adaptive\".");
     std::string smuoracle;
     std::string sfixmuoracle;
     if (smuupdate=="adaptive" ) {
-      options.GetStringValue("mu_oracle", smuoracle, prefix);
+      if (!options.GetStringValue("mu_oracle", smuoracle, prefix)) {
+        if (mehrotra_algorithm)
+          smuoracle = "probing";
+      }
       options.GetStringValue("fixed_mu_oracle", sfixmuoracle, prefix);
+      ASSERT_EXCEPTION(!mehrotra_algorithm || smuoracle=="probing",
+                       OPTION_INVALID,
+                       "If mehrotra_algorithm=yes, mu_oracle must be \"probing\".");
     }
 
     if (smuupdate=="monotone" ) {
@@ -524,8 +604,15 @@ namespace Ipopt
     }
 
     // Create the main algorithm
+    SmartPtr<SearchDirectionCalculator> SearchDirCalc;
+    if (lsmethod=="filter") {
+      SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(PDSolver));
+    }
+    else if (lsmethod=="penalty") {
+      SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(PDSolver));
+    }
     SmartPtr<IpoptAlgorithm> alg =
-      new IpoptAlgorithm(PDSolver,
+      new IpoptAlgorithm(SearchDirCalc,
                          GetRawPtr(lineSearch), MuUpdate,
                          convCheck, IterInitializer, IterOutput,
                          HessUpdater, EqMultCalculator);

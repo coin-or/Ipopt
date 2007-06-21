@@ -12,7 +12,7 @@
 namespace Ipopt
 {
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -556,10 +556,10 @@ namespace Ipopt
     }
 
     // Compute the remaining sol Vectors
-    Px_L.SinvBlrmZMTdBr(-1., slack_x_L, *rhs.z_L(), z_L, *sol->x_NonConst(), *sol->z_L_NonConst());
-    Px_U.SinvBlrmZMTdBr(1., slack_x_U, *rhs.z_U(), z_U, *sol->x_NonConst(), *sol->z_U_NonConst());
-    Pd_L.SinvBlrmZMTdBr(-1., slack_s_L, *rhs.v_L(), v_L, *sol->s_NonConst(), *sol->v_L_NonConst());
-    Pd_U.SinvBlrmZMTdBr(1., slack_s_U, *rhs.v_U(), v_U, *sol->s_NonConst(), *sol->v_U_NonConst());
+    Px_L.SinvBlrmZMTdBr(-1., slack_x_L, *rhs.z_L(), z_L, *sol->x(), *sol->z_L_NonConst());
+    Px_U.SinvBlrmZMTdBr(1., slack_x_U, *rhs.z_U(), z_U, *sol->x(), *sol->z_U_NonConst());
+    Pd_L.SinvBlrmZMTdBr(-1., slack_s_L, *rhs.v_L(), v_L, *sol->s(), *sol->v_L_NonConst());
+    Pd_U.SinvBlrmZMTdBr(1., slack_s_U, *rhs.v_U(), v_U, *sol->s(), *sol->v_U_NonConst());
 
     // Finally let's assemble the res result vectors
     res.AddOneVector(alpha, *sol, beta);

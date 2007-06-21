@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -24,7 +24,7 @@
 namespace Ipopt
 {
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -135,15 +135,15 @@ namespace Ipopt
       if (update_for_resto_) {
         SmartPtr<const SymMatrixSpace> sp = IpNLP().HessianMatrixSpace();
         const CompoundSymMatrixSpace* csp =
-          dynamic_cast<const CompoundSymMatrixSpace*> (GetRawPtr(sp));
+          static_cast<const CompoundSymMatrixSpace*> (GetRawPtr(sp));
         DBG_ASSERT(csp);
-        h_space_ = dynamic_cast<const LowRankUpdateSymMatrixSpace*>
+        h_space_ = static_cast<const LowRankUpdateSymMatrixSpace*>
                    (GetRawPtr(csp->GetCompSpace(0,0)));
       }
       else {
         // ToDo don't need that?!? Can always get the space from the NLP?
         SmartPtr<const SymMatrixSpace> sp = IpNLP().HessianMatrixSpace();
-        h_space_ = dynamic_cast<const LowRankUpdateSymMatrixSpace*>(GetRawPtr(sp));
+        h_space_ = static_cast<const LowRankUpdateSymMatrixSpace*>(GetRawPtr(sp));
         ASSERT_EXCEPTION(IsValid(h_space_), OPTION_INVALID,
                          "Limited-memory quasi-Newton option chosen, but NLP doesn't provide LowRankUpdateSymMatrixSpace.");
       }
@@ -160,8 +160,7 @@ namespace Ipopt
     // for the structured update
     if (update_for_resto_) {
       DBG_ASSERT(IpNLP().objective_depends_on_mu());
-      RestoIpoptNLP* resto_nlp = dynamic_cast<RestoIpoptNLP*>
-                                 (&IpNLP());
+      RestoIpoptNLP* resto_nlp = static_cast<RestoIpoptNLP*>(&IpNLP());
       DBG_ASSERT(resto_nlp);
       curr_DR_x_ = resto_nlp->DR_x();
       DBG_ASSERT(IsValid(curr_DR_x_));
@@ -188,14 +187,14 @@ namespace Ipopt
     SmartPtr<const Matrix> curr_jac_d;
     if (update_for_resto_) {
       const CompoundVector* cv =
-        dynamic_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->x()));
+        static_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->x()));
       DBG_ASSERT(cv);
       //DBG_PRINT_VECTOR(2, "cv", *cv);
       curr_x = cv->GetComp(0);
       const CompoundMatrix* cm =
-        dynamic_cast<const CompoundMatrix*> (GetRawPtr(IpCq().curr_jac_c()));
+        static_cast<const CompoundMatrix*> (GetRawPtr(IpCq().curr_jac_c()));
       curr_jac_c = cm->GetComp(0,0);
-      cm = dynamic_cast<const CompoundMatrix*> (GetRawPtr(IpCq().curr_jac_d()));
+      cm = static_cast<const CompoundMatrix*> (GetRawPtr(IpCq().curr_jac_d()));
       curr_jac_d = cm->GetComp(0,0);
     }
     else {
@@ -1209,7 +1208,7 @@ namespace Ipopt
     if (update_for_resto_) {
       SmartPtr<const SymMatrixSpace> sp = IpNLP().HessianMatrixSpace();
       const CompoundSymMatrixSpace* csp =
-        dynamic_cast<const CompoundSymMatrixSpace*> (GetRawPtr(sp));
+        static_cast<const CompoundSymMatrixSpace*> (GetRawPtr(sp));
       SmartPtr<CompoundSymMatrix> CW =
         csp->MakeNewCompoundSymMatrix();
       CW->SetComp(0,0,*W);
@@ -1221,7 +1220,7 @@ namespace Ipopt
 
 #ifdef PRINT_W
     // DELETEME
-    const DenseVector* dx = dynamic_cast<const DenseVector*>
+    const DenseVector* dx = static_cast<const DenseVector*>
                             (GetRawPtr(IpData().curr()->x()));
     DBG_ASSERT(dx);
     SmartPtr<DenseVector> tmpx = dx->MakeNewDenseVector();

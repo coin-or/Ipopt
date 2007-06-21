@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -14,6 +14,7 @@
 #include "IpIteratesVector.hpp"
 #include "IpRegOptions.hpp"
 #include "IpTimingStatistics.hpp"
+#include "IpCGPenaltyData.hpp"
 
 namespace Ipopt
 {
@@ -121,6 +122,14 @@ namespace Ipopt
      */
     void set_delta(SmartPtr<IteratesVector>& delta);
 
+    /** Set the current delta - like the trial point, this method
+     *  copies the pointer for efficiency (no copy and to keep cache
+     *  tags the same) so after you call set, you cannot modify the
+     *  data.  This is the version that is happy with a pointer to
+     *  const IteratesVector.
+     */
+    void set_delta(SmartPtr<const IteratesVector>& delta);
+
     /** Affine Delta */
     SmartPtr<const IteratesVector> delta_aff() const;
 
@@ -129,7 +138,6 @@ namespace Ipopt
      *  same) so after you call set, you cannot modify the data
      */
     void set_delta_aff(SmartPtr<IteratesVector>& delta_aff);
-
 
     /** Hessian or Hessian approximation (do not hold on to it, it might be changed) */
     SmartPtr<const SymMatrix> W()
@@ -203,7 +211,6 @@ namespace Ipopt
       have_affine_deltas_ = have_affine_deltas;
     }
     //@}
-
 
     /** @name Public Methods for updating iterates */
     //@{
@@ -381,6 +388,12 @@ namespace Ipopt
       return timing_statistics_;
     }
 
+    /** Get access to the Chen-Goldbarb penalty method specific data */
+    CGPenaltyData& CGPenData()
+    {
+      return cgpen_data_;
+    }
+
     /** Methods for IpoptType */
     //@{
     static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
@@ -490,6 +503,10 @@ namespace Ipopt
      *  statistics */
     TimingStatistics timing_statistics_;
 
+    /** Object for the data specific for the Chen-Goldfarb penalty
+     *  method algorithm */
+    CGPenaltyData cgpen_data_;
+
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
      * These methods are not implemented and 
@@ -505,7 +522,7 @@ namespace Ipopt
     void operator=(const IpoptData&);
     //@}
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
     /** Some debug flags to make sure vectors are not changed
      *  behind the IpoptData's back
      */
@@ -526,9 +543,7 @@ namespace Ipopt
   inline
   SmartPtr<const IteratesVector> IpoptData::curr() const
   {
-#ifdef IP_DEBUG
     DBG_ASSERT(IsNull(curr_) || (curr_->GetTag() == debug_curr_tag_ && curr_->GetTagSum() == debug_curr_tag_sum_) );
-#endif
 
     return curr_;
   }
@@ -536,9 +551,7 @@ namespace Ipopt
   inline
   SmartPtr<const IteratesVector> IpoptData::trial() const
   {
-#ifdef IP_DEBUG
     DBG_ASSERT(IsNull(trial_) || (trial_->GetTag() == debug_trial_tag_ && trial_->GetTagSum() == debug_trial_tag_sum_) );
-#endif
 
     return trial_;
   }
@@ -546,9 +559,7 @@ namespace Ipopt
   inline
   SmartPtr<const IteratesVector> IpoptData::delta() const
   {
-#   ifdef IP_DEBUG
     DBG_ASSERT(IsNull(delta_) || (delta_->GetTag() == debug_delta_tag_ && delta_->GetTagSum() == debug_delta_tag_sum_) );
-#   endif
 
     return delta_;
   }
@@ -556,9 +567,7 @@ namespace Ipopt
   inline
   SmartPtr<const IteratesVector> IpoptData::delta_aff() const
   {
-#   ifdef IP_DEBUG
     DBG_ASSERT(IsNull(delta_aff_) || (delta_aff_->GetTag() == debug_delta_aff_tag_ && delta_aff_->GetTagSum() == debug_delta_aff_tag_sum_) );
-#   endif
 
     return delta_aff_;
   }
@@ -567,7 +576,7 @@ namespace Ipopt
   void IpoptData::CopyTrialToCurrent()
   {
     curr_ = trial_;
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
 
     if (IsValid(curr_)) {
       debug_curr_tag_ = curr_->GetTag();
@@ -586,7 +595,7 @@ namespace Ipopt
   {
     trial_ = ConstPtr(trial);
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
     // verify the correct space
     DBG_ASSERT(trial_->OwnerSpace() == (VectorSpace*)GetRawPtr(iterates_space_));
     if (IsValid(trial)) {
@@ -606,7 +615,26 @@ namespace Ipopt
   void IpoptData::set_delta(SmartPtr<IteratesVector>& delta)
   {
     delta_ = ConstPtr(delta);
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
+
+    if (IsValid(delta)) {
+      debug_delta_tag_ = delta->GetTag();
+      debug_delta_tag_sum_ = delta->GetTagSum();
+    }
+    else {
+      debug_delta_tag_ = 0;
+      debug_delta_tag_sum_ = 0;
+    }
+#endif
+
+    delta = NULL;
+  }
+
+  inline
+  void IpoptData::set_delta(SmartPtr<const IteratesVector>& delta)
+  {
+    delta_ = delta;
+#if COIN_IPOPT_CHECKLEVEL > 0
 
     if (IsValid(delta)) {
       debug_delta_tag_ = delta->GetTag();
@@ -625,7 +653,7 @@ namespace Ipopt
   void IpoptData::set_delta_aff(SmartPtr<IteratesVector>& delta_aff)
   {
     delta_aff_ = ConstPtr(delta_aff);
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
 
     if (IsValid(delta_aff)) {
       debug_delta_aff_tag_ = delta_aff->GetTag();

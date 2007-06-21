@@ -83,6 +83,29 @@ namespace Ipopt
       return retval;
     }
 
+    /** Reduced version of the Initialize method, which does not
+     *  require special Ipopt information.  This is useful for
+     *  algorithm objects that could be used outside Ipopt, such as
+     *  linear solvers. */
+    bool ReducedInitialize(const Journalist& jnlst,
+                           const OptionsList& options,
+                           const std::string& prefix)
+    {
+      initialize_called_ = true;
+      // Copy the pointers for the problem defining objects
+      jnlst_ = &jnlst;
+      ip_nlp_ = NULL;
+      ip_data_ = NULL;
+      ip_cq_ = NULL;
+
+      bool retval = InitializeImpl(options, prefix);
+      if (!retval) {
+        initialize_called_ = false;
+      }
+
+      return retval;
+    }
+
   protected:
     /** Implementation of the initialization method that has to be
      *  overloaded by for each derived class. */
@@ -100,17 +123,24 @@ namespace Ipopt
     IpoptNLP& IpNLP() const
     {
       DBG_ASSERT(initialize_called_);
+      DBG_ASSERT(IsValid(ip_nlp_));
       return *ip_nlp_;
     }
     IpoptData& IpData() const
     {
       DBG_ASSERT(initialize_called_);
+      DBG_ASSERT(IsValid(ip_data_));
       return *ip_data_;
     }
     IpoptCalculatedQuantities& IpCq() const
     {
       DBG_ASSERT(initialize_called_);
+      DBG_ASSERT(IsValid(ip_cq_));
       return *ip_cq_;
+    }
+    bool HaveIpData() const
+    {
+      return IsValid(ip_data_);
     }
     //@}
 

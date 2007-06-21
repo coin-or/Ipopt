@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -10,6 +10,7 @@
 #include "IpSumSymMatrix.hpp"
 #include "IpLowRankUpdateSymMatrix.hpp"
 #include "IpRestoIpoptNLP.hpp"
+#include "IpCGPenaltyCq.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -25,7 +26,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -133,13 +134,17 @@ namespace Ipopt
 
       initialize_called_(false)
   {
+    cgpen_cq_ = new CGPenaltyCq(GetRawPtr(ip_nlp), GetRawPtr(ip_data), this);
+
     DBG_START_METH("IpoptCalculatedQuantities::IpoptCalculatedQuantities",
                    dbg_verbosity);
-    DBG_ASSERT(IsValid(ip_nlp_) && IsValid(ip_data_));
+    DBG_ASSERT(IsValid(ip_nlp_) && IsValid(ip_data_));    
   }
 
   IpoptCalculatedQuantities::~IpoptCalculatedQuantities()
-  {}
+  {
+    delete cgpen_cq_;
+  }
 
   void IpoptCalculatedQuantities::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
@@ -179,6 +184,8 @@ namespace Ipopt
       "max-norm", "use the infinity norm",
       "Determines which norm should be used when the algorithm computes the "
       "constraint violation in the line search.");
+
+    CGPenaltyCq::RegisterOptions(roptions);
   }
 
   bool IpoptCalculatedQuantities::Initialize(const Journalist& jnlst,
@@ -219,7 +226,7 @@ namespace Ipopt
     num_adjusted_slack_s_U_ = 0;
 
     initialize_called_ = true;
-    return true;
+    return cgpen_cq_->Initialize(jnlst, options, prefix);
   }
 
   ///////////////////////////////////////////////////////////////////////////

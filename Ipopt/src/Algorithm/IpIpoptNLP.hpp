@@ -106,28 +106,28 @@ namespace Ipopt
                                        ) = 0;
 
     /** Lower bounds on x */
-    virtual SmartPtr<const Vector> x_L() = 0;
+    virtual SmartPtr<const Vector> x_L() const = 0;
 
     /** Permutation matrix (x_L_ -> x) */
-    virtual SmartPtr<const Matrix> Px_L() = 0;
+    virtual SmartPtr<const Matrix> Px_L() const = 0;
 
     /** Upper bounds on x */
-    virtual SmartPtr<const Vector> x_U() = 0;
+    virtual SmartPtr<const Vector> x_U() const = 0;
 
     /** Permutation matrix (x_U_ -> x */
-    virtual SmartPtr<const Matrix> Px_U() = 0;
+    virtual SmartPtr<const Matrix> Px_U() const = 0;
 
     /** Lower bounds on d */
-    virtual SmartPtr<const Vector> d_L() = 0;
+    virtual SmartPtr<const Vector> d_L() const = 0;
 
     /** Permutation matrix (d_L_ -> d) */
-    virtual SmartPtr<const Matrix> Pd_L() = 0;
+    virtual SmartPtr<const Matrix> Pd_L() const = 0;
 
     /** Upper bounds on d */
-    virtual SmartPtr<const Vector> d_U() = 0;
+    virtual SmartPtr<const Vector> d_U() const = 0;
 
     /** Permutation matrix (d_U_ -> d */
-    virtual SmartPtr<const Matrix> Pd_U() = 0;
+    virtual SmartPtr<const Matrix> Pd_U() const = 0;
 
     /** Accessor method to obtain the MatrixSpace for the Hessian
      *  matrix (or it's approximation) */
@@ -210,7 +210,9 @@ namespace Ipopt
                                   const Vector& x, const Vector& z_L, const Vector& z_U,
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,
-                                  Number obj_value)=0;
+                                  Number obj_value,
+                                  const IpoptData* ip_data,
+                                  IpoptCalculatedQuantities* ip_cq)=0;
 
     virtual bool IntermediateCallBack(AlgorithmMode mode,
                                       Index iter, Number obj_value,

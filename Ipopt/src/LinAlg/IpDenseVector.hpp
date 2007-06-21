@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -18,7 +18,18 @@ namespace Ipopt
   /* forward declarations */
   class DenseVectorSpace;
 
-  /** Dense Vector Implementation.
+  /** Dense Vector Implementation.  This is the default Vector class
+   *  in Ipopt.  It stores vectors in contiguous Number arrays, unless
+   *  the vector has the same value in all entires.  In the latter
+   *  case, we call the vector "homogeneous", and we store only the
+   *  values that is repeated in all elements.  If you want to obtain
+   *  the values of vector, use the IsHomogeneous() method to find out
+   *  what status the vector is in, and then use either Values() const
+   *  or Scalar() const methods to get the values.  To set the values
+   *  of a homogeneous method, use the Set method.  To set the values
+   *  of a non-homogeneous vector, use the SetValues method, or use
+   *  the non-const Values method to get an array that you can
+   *  overwrite.  In the latter case, storage is ensured.
    */
   class DenseVector : public Vector
   {
@@ -46,16 +57,31 @@ namespace Ipopt
     /** Obtain pointer to the internal Number array with vector
      *  elements with the indention to change the vector data (USE
      *  WITH CARE!). This does not produce a copy, and lifetime is not
-     *  guaranteed!
+     *  guaranteed!. 
      */
     inline Number* Values();
 
     /** Obtain pointer to the internal Number array with vector
      *  elements without the intention to change the vector data (USE
      *  WITH CARE!). This does not produce a copy, and lifetime is not
-     *  guaranteed!
+     *  guaranteed!  IMPORTANT: If this method is currently
+     *  homogeneous (i.e. IsHomogeneous returns true), then you cannot
+     *  call this method.  Instead, you need to use the Scalar()
+     *  method.
      */
     inline const Number* Values() const;
+
+    /** The same as the const version of Values, but we ensure that we
+     *  always return a valid array, even if IsHomogeneous returns
+     *  true. */
+    const Number* ExpandedValues() const;
+
+    /** This is the same as Values, but we add it here so that
+     *  ExpandedValues can also be used for the non-const case. */
+    inline Number* ExpandedValues()
+    {
+      return Values();
+    }
 
     /** Indicates if the vector is homogeneous (i.e., all entries have
      *  the value Scalar() */
@@ -200,6 +226,9 @@ namespace Ipopt
 
     /** Dense Number array of vector values. */
     Number* values_;
+
+    /** Dense Number array pointer that is used for ExpandedValues */
+    mutable Number* expanded_values_;
 
     /** Method of getting the internal values array, making sure that
      *  memory has been allocated */

@@ -34,7 +34,12 @@ Contributors:
   Algorithm/LinearSolvers/IpMumpsSolverInterface.cpp
   Algorithm/LinearSolvers/IpMumpsSolverInterface.hpp
 
-- Jon Lee
+- Jon Lee (IBM Research)
   example nl file (writting by hand) for unitTest
 
   Test/mytoy.nl
+
+- Peter Carbonetto (University of British Columbia)
+  Matlab interface files in directory (and subdirctories of)
+
+  contrib/MatlabInterface

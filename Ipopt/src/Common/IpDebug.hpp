@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -22,7 +22,10 @@
 # endif
 #endif
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_CHECKLEVEL > 0
+# ifdef NDEBUG
+#  undef NDEBUG
+# endif
 # define DBG_ASSERT(test) assert(test)
 # define DBG_ASSERT_EXCEPTION(__condition, __except_type, __msg) \
    ASSERT_EXCEPTION( (__condition), __except_type, __msg);
@@ -33,7 +36,7 @@
 # define DBG_DO(__cmd)
 #endif
 
-#ifndef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY < 1
 # define DBG_START_FUN(__func_name, __verbose_level)
 # define DBG_START_METH(__func_name, __verbose_level)
 # define DBG_PRINT(__printf_args)

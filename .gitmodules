@@ -18,3 +18,7 @@
 	path = ThirdParty/Lapack
 	url = git://github.com/coin-or-tools/ThirdParty-Lapack.git
 	branch = stable/1.0
+[submodule "ThirdParty/Mumps"]
+	path = ThirdParty/Mumps
+	url = git://github.com/coin-or-tools/ThirdParty-Mumps.git
+	branch = stable/1.0

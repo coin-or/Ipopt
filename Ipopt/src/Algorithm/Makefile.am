@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -24,9 +24,11 @@ libipoptalg_la_SOURCES = \
 	IpConvCheck.hpp \
 	IpDefaultIterateInitializer.cpp IpDefaultIterateInitializer.hpp \
 	IpEqMultCalculator.hpp \
+	IpEquilibrationScaling.cpp IpEquilibrationScaling.hpp \
 	IpExactHessianUpdater.cpp IpExactHessianUpdater.hpp \
 	IpFilter.cpp IpFilter.hpp \
 	IpFilterLSAcceptor.cpp IpFilterLSAcceptor.hpp \
+	IpGenAugSystemSolver.cpp IpGenAugSystemSolver.hpp \
 	IpGradientScaling.cpp IpGradientScaling.hpp \
 	IpHessianUpdater.hpp \
 	IpIpoptAlg.cpp IpIpoptAlg.hpp \
@@ -50,6 +52,7 @@ libipoptalg_la_SOURCES = \
 	IpLimMemQuasiNewtonUpdater.cpp IpLimMemQuasiNewtonUpdater.hpp \
 	IpPDFullSpaceSolver.cpp IpPDFullSpaceSolver.hpp \
 	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
+	IpPDSearchDirCalc.cpp IpPDSearchDirCalc.hpp \
 	IpPDSystemSolver.hpp \
 	IpProbingMuOracle.cpp IpProbingMuOracle.hpp \
 	IpQualityFunctionMuOracle.cpp IpQualityFunctionMuOracle.hpp \
@@ -60,6 +63,7 @@ libipoptalg_la_SOURCES = \
 	IpRestoMinC_1Nrm.cpp IpRestoMinC_1Nrm.hpp \
 	IpRestoPhase.hpp \
 	IpRestoRestoPhase.cpp IpRestoRestoPhase.hpp \
+	IpSearchDirCalculator.hpp \
 	IpStdAugSystemSolver.cpp IpStdAugSystemSolver.hpp \
 	IpTimingStatistics.cpp IpTimingStatistics.hpp \
 	IpUserScaling.cpp IpUserScaling.hpp \
@@ -71,10 +75,11 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/../Interfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/LinearSolvers`
+	-I`$(CYGPATH_W) $(srcdir)/LinearSolvers` \
+	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty`
 
-if HAVE_MUMPS
-AM_CPPFLAGS += $(MUMPS_INCFLAGS)
+if COIN_HAS_MUMPS
+  AM_CPPFLAGS += $(MUMPS_INCFLAGS)
 endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
@@ -95,9 +100,11 @@ ASTYLE_FILES = \
 	IpConvCheck.hppbak \
 	IpDefaultIterateInitializer.cppbak IpDefaultIterateInitializer.hppbak \
 	IpEqMultCalculator.hppbak \
+	IpEquilibrationScaling.cppbak IpEquilibrationScaling.hppbak \
 	IpExactHessianUpdater.cppbak IpExactHessianUpdater.hppbak \
 	IpFilter.cppbak IpFilter.hppbak \
 	IpFilterLSAcceptor.cppbak IpFilterLSAcceptor.hppbak \
+	IpGenAugSystemSolver.cppbak IpGenAugSystemSolver.hppbak \
 	IpGradientScaling.cppbak IpGradientScaling.hppbak \
 	IpHessianUpdater.hppbak \
 	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
@@ -121,6 +128,7 @@ ASTYLE_FILES = \
 	IpLimMemQuasiNewtonUpdater.cppbak IpLimMemQuasiNewtonUpdater.hppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
+	IpPDSearchDirCalc.cppbak IpPDSearchDirCalc.hppbak \
 	IpPDSystemSolver.hppbak \
 	IpProbingMuOracle.cppbak IpProbingMuOracle.hppbak \
 	IpQualityFunctionMuOracle.cppbak IpQualityFunctionMuOracle.hppbak \
@@ -131,6 +139,7 @@ ASTYLE_FILES = \
 	IpRestoMinC_1Nrm.cppbak IpRestoMinC_1Nrm.hppbak \
 	IpRestoPhase.hppbak \
 	IpRestoRestoPhase.cppbak IpRestoRestoPhase.hppbak \
+	IpSearchDirCalculator.hppbak \
 	IpStdAugSystemSolver.cppbak IpStdAugSystemSolver.hppbak \
 	IpTimingStatistics.cppbak IpTimingStatistics.hppbak \
 	IpUserScaling.cppbak IpUserScaling.hppbak \
@@ -139,7 +148,7 @@ ASTYLE_FILES = \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_FILES)
+DISTCLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 

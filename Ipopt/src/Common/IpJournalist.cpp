@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -17,6 +17,16 @@
 #  include <stdio.h>
 # else
 #  error "don't have header file for stdio"
+# endif
+#endif
+
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
 # endif
 #endif
 
@@ -165,11 +175,11 @@ namespace Ipopt
 #ifdef HAVE_VA_COPY
         va_list apcopy;
         va_copy(apcopy, ap);
-        journals_[i]->Printf(pformat, apcopy);
+        journals_[i]->Printf(category, level, pformat, apcopy);
         va_end(apcopy);
 #else
 
-        journals_[i]->Printf(pformat, ap);
+        journals_[i]->Printf(category, level, pformat, ap);
 #endif
 
       }
@@ -189,18 +199,18 @@ namespace Ipopt
 
         // indent the appropriate amount
         for (Index s=0; s<indent_level; s++) {
-          journals_[i]->Print("  ");
+          journals_[i]->Print(category, level, "  ");
         }
 
         // print the message
 #ifdef HAVE_VA_COPY
         va_list apcopy;
         va_copy(apcopy, ap);
-        journals_[i]->Printf(pformat, apcopy);
+        journals_[i]->Printf(category, level, pformat, apcopy);
         va_end(apcopy);
 #else
 
-        journals_[i]->Printf(pformat, ap);
+        journals_[i]->Printf(category, level, pformat, ap);
 #endif
 
       }
@@ -379,7 +389,8 @@ namespace Ipopt
   }
 
 
-  void FileJournal::PrintImpl(const char* str)
+  void FileJournal::PrintImpl(EJournalCategory category, EJournalLevel level,
+                              const char* str)
   {
     DBG_START_METH("Journal::Print", 0);
     if (file_) {
@@ -388,7 +399,8 @@ namespace Ipopt
     }
   }
 
-  void FileJournal::PrintfImpl(const char* pformat, va_list ap)
+  void FileJournal::PrintfImpl(EJournalCategory category, EJournalLevel level,
+                               const char* pformat, va_list ap)
   {
     DBG_START_METH("Journal::Printf", 0);
     if (file_) {
@@ -396,24 +408,6 @@ namespace Ipopt
       DBG_EXEC(0, fflush(file_));
     }
   }
-
-  //   void FileJournal::PrintVectorImpl(const std::string name, const Vector& vector, Index indent, std::string prefix)
-  //   {
-  //     DBG_START_METH("Journal::PrintVector", 0);
-  //     if (file_) {
-  //       vector.Print(file_, name, indent, prefix);
-  //       DBG_EXEC(0, fflush(file_));
-  //     }
-  //   }
-
-  //   void FileJournal::PrintMatrixImpl(const std::string name, const Matrix& matrix, Index indent, std::string prefix)
-  //   {
-  //     DBG_START_METH("Journal::PrintMatrix", 0);
-  //     if (file_) {
-  //       matrix.Print(file_, name, indent, prefix);
-  //       DBG_EXEC(0, fflush(file_));
-  //     }
-  //   }
 
   void FileJournal::FlushBufferImpl()
   {

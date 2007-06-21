@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,6 +11,7 @@
 
 #include "IpIpoptNLP.hpp"
 #include "IpIpoptData.hpp"
+#include "IpCGPenaltyCq.hpp"
 
 namespace Ipopt
 {
@@ -21,6 +22,9 @@ namespace Ipopt
     NORM_2,
     NORM_MAX
   };
+
+  // forward definition
+  class CGPenaltyCq;
 
   /** Class for all IPOPT specific calculated quantities.
    *  
@@ -368,6 +372,18 @@ namespace Ipopt
     /** Method returning true if this is a square problem */
     bool IsSquareProblem() const;
 
+    /** Method returning the IpoptNLP object.  This should only be
+     *  used with care! */
+    SmartPtr<IpoptNLP>& GetIpoptNLP()
+    {
+      return ip_nlp_;
+    }
+
+    CGPenaltyCq& CGPenCq()
+    {
+      return *cgpen_cq_;
+    }
+
     /** Methods for IpoptType */
     //@{
     /** Called by IpoptType to register the options */
@@ -399,6 +415,8 @@ namespace Ipopt
     SmartPtr<IpoptNLP> ip_nlp_;
     /** Ipopt Data object */
     SmartPtr<IpoptData> ip_data_;
+    /** Chen-Goldfarb specific calculated quantities */
+    CGPenaltyCq* cgpen_cq_;
     //@}
 
     /** @name Algorithmic Parameters that can be set throught the

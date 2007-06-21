@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -14,6 +14,18 @@
 #include "IpExpansionMatrix.hpp"
 #include "IpGenTMatrix.hpp"
 #include "IpSymTMatrix.hpp"
+#include "IpTDependencyDetector.hpp"
+#include "IpTSymDependencyDetector.hpp"
+
+#ifdef COIN_HAS_MUMPS
+# include "IpMumpsSolverInterface.hpp"
+#endif
+#ifdef HAVE_WSMP
+# include "IpWsmpSolverInterface.hpp"
+#endif
+#ifdef HAVE_MA28
+# include "IpMa28TDependencyDetector.hpp"
+#endif
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -27,7 +39,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -36,14 +48,6 @@ namespace Ipopt
       :
       tnlp_(tnlp),
       jnlst_(jnlst),
-      n_full_x_(-1),
-      n_full_g_(-1),
-      nz_jac_c_(-1),
-      nz_jac_c_no_fixed_(-1),
-      nz_jac_d_(-1),
-      nz_full_jac_g_(-1),
-      nz_full_h_(-1),
-      nz_h_(-1),
       full_x_(NULL),
       full_lambda_(NULL),
       full_g_(NULL),
@@ -85,18 +89,47 @@ namespace Ipopt
       "nlp_upper_bound_inf",
       "any bound greater or this value will be considered +inf (i.e. not upper bounded).",
       1e19);
-    roptions->AddStringOption2(
+    roptions->AddStringOption3(
       "fixed_variable_treatment",
       "Determines how fixed variables should be handled.",
       "make_parameter",
       "make_parameter", "Remove fixed variable from optimization variables",
       "make_constraint", "Add equality constraints fixing variables",
-      "The main difference between those two options is that the starting "
+      "relax_bounds", "Relax fixing bound constraints"
+      "The main difference between those options is that the starting "
       "point in the \"make_constraint\" case still has the fixed variables at "
-      "their given values, whereas in the other case the functions are always "
-      "evaluated with the fixed values for those variables.  Also, for "
-      "\"make_constraints\", bound multipliers are computed for the fixed "
-      "variables.");
+      "their given values, whereas in the case \"make_parameter\" the "
+      "functions are always evaluated with the fixed values for those "
+      "variables.  For Also, for \"relax_bounds\", the fixing bound "
+      "constraints are relaxed (according to\" bound_relax_factor\"). For "
+      "both \"make_constraints\" and \"relax_bounds\", bound multipliers are "
+      "computed for the fixed variables.");
+    roptions->AddStringOption4(
+      "dependency_detector",
+      "Indicates which linear solver should be used to detect linearly dependent equality constraints.",
+      "none",
+      "none", "don't check; no extra work at beginning",
+      "mumps", "use MUMPS",
+      "wsmp", "use WSMP",
+      "ma28", "use MA28",
+      "The default and available choices depend on how Ipopt has been compiled.");
+    roptions->AddStringOption2(
+      "dependency_detection_with_rhs",
+      "Indicates if the right hand sides of the constraints should be considered during dependency detection",
+      "no",
+      "no", "only look at gradients",
+      "yes", "also consider right hand side",
+      "");
+    roptions->AddLowerBoundedNumberOption(
+      "point_perturbation_radius",
+      "Maximal perturbation of an evaluation point.",
+      0., false,
+      10.,
+      "If a random perturbation of a points is required, this number "
+      "indicates the maximal perturbation.  Currently, this is only used when "
+      "we perturb the initial point in order to get a random Jacobian for the "
+      "linear dependency detection of equality constraints.");
+
     roptions->SetRegisteringCategory("Derivative Checker");
     roptions->AddStringOption3(
       "derivative_test",
@@ -142,6 +175,9 @@ namespace Ipopt
                      OPTION_INVALID,
                      "Option \"nlp_lower_bound_inf\" must be smaller than \"nlp_upper_bound_inf\".");
 
+    // Registered in IpOrigIpoptNLP
+    options.GetNumericValue("bound_relax_factor", bound_relax_factor_, prefix);
+
     Index enum_int;
     options.GetEnumValue("fixed_variable_treatment", enum_int, prefix);
     fixed_variable_treatment_ = FixedVariableTreatmentEnum(enum_int);
@@ -160,6 +196,60 @@ namespace Ipopt
     // The following is registered in OrigIpoptNLP
     options.GetEnumValue("hessian_approximation", enum_int, prefix);
     hessian_approximation_ = HessianApproximationType(enum_int);
+
+    options.GetNumericValue("point_perturbation_radius",
+                            point_perturbation_radius_, prefix);
+
+    options.GetNumericValue("tol", tol_, prefix);
+
+    options.GetBoolValue("dependency_detection_with_rhs",
+                         dependency_detection_with_rhs_, prefix);
+    std::string dependency_detector;
+    options.GetStringValue("dependency_detector",
+                           dependency_detector, prefix);
+    if (dependency_detector != "none") {
+      if (dependency_detector == "mumps") {
+#ifdef COIN_HAS_MUMPS
+        SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
+        SolverInterface = new MumpsSolverInterface();
+        SmartPtr<TSymLinearSolver> ScaledSolver =
+          new TSymLinearSolver(SolverInterface, NULL);
+        dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
+#else
+
+        THROW_EXCEPTION(OPTION_INVALID, "Ipopt has not been compiled with MUMPS.  You cannot choose \"mumps\" for \"dependency_detector\".");
+#endif
+
+      }
+      else if (dependency_detector == "wsmp") {
+#ifdef HAVE_WSMP
+        SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
+        SolverInterface = new WsmpSolverInterface();
+        SmartPtr<TSymLinearSolver> ScaledSolver =
+          new TSymLinearSolver(SolverInterface, NULL);
+        dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
+#else
+
+        THROW_EXCEPTION(OPTION_INVALID, "Ipopt has not been compiled with WSMP.  You cannot choose \"wsmp\" for \"dependency_detector\".");
+#endif
+
+      }
+      else if (dependency_detector == "ma28") {
+#ifdef HAVE_MA28
+        dependency_detector_ = new Ma28TDependencyDetector();
+#else
+
+        THROW_EXCEPTION(OPTION_INVALID, "Ipopt has not been compiled with MA28.  You cannot choose \"ma28\" for \"dependency_detector\".");
+#endif
+
+      }
+      else {
+        THROW_EXCEPTION(OPTION_INVALID, "Something internally wrong for \"dependency_detector\".");
+      }
+      if (!dependency_detector_->ReducedInitialize(*jnlst_, options, prefix)) {
+        return false;
+      }
+    }
 
     return true;
   }
@@ -202,13 +292,21 @@ namespace Ipopt
       // warm start, make sure we delete all previously allocated
       // memory
       delete [] full_x_;
+      full_x_ = NULL;
       delete [] full_lambda_;
+      full_lambda_ = NULL;
       delete [] full_g_;
+      full_g_ = NULL;
       delete [] jac_g_;
+      jac_g_ = NULL;
       delete [] c_rhs_;
+      c_rhs_ = NULL;
       delete [] jac_idx_map_;
+      jac_idx_map_ = NULL;
       delete [] h_idx_map_;
+      h_idx_map_ = NULL;
       delete [] x_fixed_map_;
+      x_fixed_map_ = NULL;
     }
 
     // Get the full dimensions of the problem
@@ -240,9 +338,6 @@ namespace Ipopt
       // allocate internal space to store the full jacobian
       jac_g_ = new Number[nz_full_jac_g_];
 
-      //*********************************************************
-      // Create the spaces and permutation spaces
-      //*********************************************************
       /* Spaces for x, x_L, and x_U. We need to remove the fixed variables
        * and find out which bounds do not exist. */
       Number* x_l = new Number[n_full_x_];
@@ -251,77 +346,320 @@ namespace Ipopt
       Number* g_u = new Number[n_full_g_];
       tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
 
-      Index n_x_var = 0;
-      Index n_x_l = 0;
-      Index n_x_u = 0;
+      //*********************************************************
+      // Create the spaces and permutation spaces
+      //*********************************************************
+
+      Index n_x_var;
+      Index n_x_l;
+      Index n_x_u;
       Index* x_not_fixed_map = new Index[n_full_x_];
-      Index* x_fixed_map_tmp = new Index[n_full_x_];
       Index* x_l_map = new Index[n_full_x_];
       Index* x_u_map = new Index[n_full_x_];
-      n_x_fixed_ = 0;
 
-      for (Index i=0; i<n_full_x_; i++) {
-        Number lower_bound = x_l[i];
-        Number upper_bound = x_u[i];
-        if (lower_bound == upper_bound) {
-          switch (fixed_variable_treatment_) {
-            case MAKE_PARAMETER:
-            // Variable is fixed, remove it from the problem
-            full_x_[i] = lower_bound;
-            x_fixed_map_tmp[n_x_fixed_] = i;
-            n_x_fixed_++;
-            break;
-            case MAKE_CONSTRAINT:
-            x_fixed_map_tmp[n_x_fixed_] = i; // don't really need this
-            // array then
-            n_x_fixed_++;
+      Index n_c;
+      Index n_d;
+      Index n_d_l;
+      Index n_d_u;
+      Index* c_map = new Index[n_full_g_]; // we do not know n_c yet!
+      Index* d_map = new Index[n_full_g_]; // we do not know n_d yet!
+      Index* d_l_map = new Index[n_full_g_]; // "
+      Index* d_u_map = new Index[n_full_g_]; // "
+
+      bool done=false;
+      // We might have to do the following twice: If we detect that we
+      // don't have enought degrees of freedom, we simply redo
+      // everything with fixed_variable_treatment to set RELAX_BOUNDS
+      while (!done) {
+        n_x_var = 0;
+        n_x_l = 0;
+        n_x_u = 0;
+        n_x_fixed_ = 0;
+        Index* x_fixed_map_tmp = new Index[n_full_x_];
+
+        for (Index i=0; i<n_full_x_; i++) {
+          Number lower_bound = x_l[i];
+          Number upper_bound = x_u[i];
+          if (lower_bound == upper_bound) {
+            switch (fixed_variable_treatment_) {
+              case MAKE_PARAMETER:
+              // Variable is fixed, remove it from the problem
+              full_x_[i] = lower_bound;
+              x_fixed_map_tmp[n_x_fixed_] = i;
+              n_x_fixed_++;
+              break;
+              case MAKE_CONSTRAINT:
+              x_fixed_map_tmp[n_x_fixed_] = i; // don't really need this
+              // array then
+              n_x_fixed_++;
+              x_not_fixed_map[n_x_var] = i;
+              n_x_var++;
+              break;
+              case RELAX_BOUNDS:
+              x_l_map[n_x_l] = n_x_var;
+              n_x_l++;
+              x_u_map[n_x_u] = n_x_var;
+              n_x_u++;
+              n_x_var++;
+              break;
+              default:
+              DBG_ASSERT(false && "invalid fixed_variable_treatment_");
+            }
+          }
+          else if (lower_bound > upper_bound) {
+            char string[128];
+            sprintf(string, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+            delete [] x_l;
+            delete [] x_u;
+            delete [] g_l;
+            delete [] g_u;
+            delete [] x_not_fixed_map;
+            delete [] x_fixed_map_tmp;
+            delete [] x_l_map;
+            delete [] x_u_map;
+            THROW_EXCEPTION(INVALID_TNLP, string);
+          }
+          else {
             x_not_fixed_map[n_x_var] = i;
+            if (lower_bound > nlp_lower_bound_inf_) {
+              x_l_map[n_x_l] = n_x_var;
+              n_x_l++;
+            }
+
+            if (upper_bound < nlp_upper_bound_inf_) {
+              x_u_map[n_x_u] = n_x_var;
+              n_x_u++;
+            }
             n_x_var++;
-            break;
-            default:
-            DBG_ASSERT(false && "invalid fixed_variable_treatment_");
           }
         }
-        else if (lower_bound > upper_bound) {
-          char string[128];
-          sprintf(string, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
-          THROW_EXCEPTION(INVALID_TNLP, string);
+
+        // If there are fixed variables, we keep their position around
+        // for a possible warm start later or if fixed variables are
+        // treated by added equality constraints
+        if (n_x_fixed_>0) {
+          delete [] x_fixed_map_;
+          x_fixed_map_ = NULL;
+          x_fixed_map_ = new Index[n_x_fixed_];
+          for (Index i=0; i<n_x_fixed_; i++) {
+            x_fixed_map_[i] = x_fixed_map_tmp[i];
+          }
         }
         else {
-          x_not_fixed_map[n_x_var] = i;
-          if (lower_bound > nlp_lower_bound_inf_) {
-            x_l_map[n_x_l] = n_x_var;
-            n_x_l++;
-          }
+          delete [] x_fixed_map_;
+          x_fixed_map_ = NULL;
+        }
+        delete [] x_fixed_map_tmp;
 
-          if (upper_bound < nlp_upper_bound_inf_) {
-            x_u_map[n_x_u] = n_x_var;
-            n_x_u++;
+        // Create the spaces for c and d
+        // - includes the internal permutation matrices for
+        //  full_g to c and d
+        // - includes the permutation matrices for d_l and d_u
+        // c(x) = (P_c)T * g(x)
+        // d(x) = (P_d)T * g(x)
+        // d_L = (P_d_L)T * (P_d)T * g_l
+        // d_U = (P_d_U)T * (P_d)T * g_u
+        n_c = 0;
+        n_d = 0;
+        n_d_l = 0;
+        n_d_u = 0;
+
+        for (Index i=0; i<n_full_g_; i++) {
+          Number lower_bound = g_l[i];
+          Number upper_bound = g_u[i];
+          if (lower_bound == upper_bound) {
+            // equality constraint
+            c_map[n_c] = i;
+            n_c++;
           }
-          n_x_var++;
+          else if (lower_bound > upper_bound) {
+            delete [] x_l;
+            delete [] x_u;
+            delete [] g_l;
+            delete [] g_u;
+            delete [] x_not_fixed_map;
+            delete [] x_l_map;
+            delete [] x_u_map;
+            delete [] c_map;
+            delete [] d_map;
+            delete [] d_l_map;
+            delete [] d_u_map;
+            char string[128];
+            sprintf(string, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+            THROW_EXCEPTION(INVALID_TNLP, string);
+          }
+          else {
+            // inequality constraint
+            d_map[n_d] = i;
+            if (lower_bound > nlp_lower_bound_inf_) {
+              d_l_map[n_d_l] = n_d;
+              n_d_l++;
+            }
+            if (upper_bound < nlp_upper_bound_inf_) {
+              d_u_map[n_d_u] = n_d;
+              n_d_u++;
+            }
+            n_d++;
+          }
+        }
+
+        if (fixed_variable_treatment_ == RELAX_BOUNDS ||
+            n_x_fixed_ == 0 || n_x_var >= n_c) {
+          done = true;
+        }
+        else {
+          fixed_variable_treatment_ = RELAX_BOUNDS;
+          jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                         "Too few degrees of freedom (n_x = %d, n_c = %d).\n  Trying fixed_variable_treatment = RELAX_BOUNDS\n\n", n_x_var, n_c);
+        }
+      } // while (!done)
+
+      if (n_x_var == 0) {
+        // Check of all constraints are satisfied:
+        for (Index i=0; i<n_full_x_; i++) {
+          DBG_ASSERT(x_l[i]==x_u[i]);
+          full_x_[i] = x_l[i];
+          bool retval = tnlp_->eval_g(n_full_x_, full_x_, true,
+                                      n_full_g_, full_g_);
+          ASSERT_EXCEPTION(retval, IpoptNLP::Eval_Error,
+                           "All variables are fixed, but constraints cannot be evaluated at fixed point.");
+        }
+        Number max_viol = 0.;
+        for (Index i=0; i<n_full_g_; i++) {
+          //printf("%d %23.16e %23.16e %23.16e\n",i,full_g_[i], g_l[i], g_u[i]);
+          max_viol = Max(max_viol, full_g_[i]-g_u[i], g_l[i]-full_g_[i]);
+        }
+
+        Number tol = 1e-6;  //ToDo: base on tol option etc
+        SolverReturn status;
+        if (max_viol <= tol) {
+          status = SUCCESS;
+        }
+        else {
+          status = LOCAL_INFEASIBILITY;
+        }
+
+        Number obj_value;
+        bool retval = tnlp_->eval_f(n_full_x_, full_x_, false, obj_value);
+        ASSERT_EXCEPTION(retval, IpoptNLP::Eval_Error,
+                         "All variables are fixed, but objective cannot be evaluated at fixed point.");
+        // Call finalize_solution so that user has required information
+        Number* full_z_L = new Number[n_full_x_];
+        Number* full_z_U = new Number[n_full_x_];
+        Number* full_lambda = new Number[n_full_g_];
+        // For now, we return zeros are multipliers... (ToDo?)
+        const Number zero = 0.;
+        IpBlasDcopy(n_full_x_, &zero, 0, full_z_L, 1);
+        IpBlasDcopy(n_full_x_, &zero, 0, full_z_U, 1);
+        IpBlasDcopy(n_full_g_, &zero, 0, full_lambda, 1);
+        tnlp_->finalize_solution(status,
+                                 n_full_x_, full_x_, full_z_L, full_z_U,
+                                 n_full_g_, full_g_, full_lambda,
+                                 obj_value, NULL, NULL);
+        delete [] full_z_L;
+        delete [] full_z_U;
+        delete [] full_lambda;
+
+        // Free memory
+        delete [] x_not_fixed_map;
+        delete [] x_l_map;
+        delete [] x_u_map;
+        delete [] c_map;
+        delete [] d_map;
+        delete [] d_l_map;
+        delete [] d_u_map;
+        delete [] x_l;
+        delete [] x_u;
+        delete [] g_l;
+        delete [] g_u;
+
+        char string[128];
+        sprintf(string, "All variables are fixed, and constraint violation is %e", max_viol);
+        if (status == SUCCESS) {
+          jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                         "All variables are fixed and constraint violation %e\n   is below tolerance %e. Declaring success.\n", max_viol, tol_);
+          THROW_EXCEPTION(NO_FREE_VARIABLES_BUT_FEASIBLE, string);
+        }
+        else {
+          jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                         "All variables are fixed and constraint violation %e\n  is above tolerance %e. Declaring that problem is infeasible.\n", max_viol, tol_);
+          THROW_EXCEPTION(LOCALLY_INFEASIBLE, string);
         }
       }
 
-      // If there are fixed variables, we keep their position around
-      // for a possible warm start later or if fixed variables are
-      // treated by added equality constraints
-      if (n_x_fixed_>0) {
-        x_fixed_map_ = new Index[n_x_fixed_];
-        for (Index i=0; i<n_x_fixed_; i++) {
-          x_fixed_map_[i] = x_fixed_map_tmp[i];
+      // If requested, check if there are linearly dependent equality
+      // constraints
+      if (n_c>0 && IsValid(dependency_detector_)) {
+        std::list<Index> c_deps;
+        if (!DetermineDependentConstraints(n_x_var, x_not_fixed_map,
+                                           x_l, x_u, g_l, g_u, n_c,
+                                           c_map, c_deps)) {
+          jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                         "Dependent constraint detector had a problem, assume full rank.\n");
+        }
+        c_deps.sort();
+        if (c_deps.size() > 0) {
+          jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+                         "\nDetected %d linearly dependent equality constraints; taking those out.\n\n",
+                         c_deps.size());
+        }
+        else {
+          jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
+                         "\nNo dependent constraints detected.\n\n");
+        }
+        if (jnlst_->ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
+          jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
+                         "\nList of indices of dependent constraints:\n");
+          int count=0;
+          for (std::list<Index>::iterator i=c_deps.begin(); i!=c_deps.end(); i++) {
+            jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
+                           "c_dep[%d] = %d\n", count++, *i);
+          }
+          jnlst_->Printf(J_DETAILED, J_INITIALIZATION, "\n");
+        }
+        if (c_deps.size()>0) {
+          // Take the dependent constraints out.
+          // We assume that the list in c_dep is sorted
+          std::list<Index>::iterator idep = c_deps.begin();
+          Index new_n_c = *idep;
+          for (Index i=*idep; i<n_c; i++) {
+            if (i == *idep) {
+              idep++;
+            }
+            else {
+              c_map[new_n_c] = c_map[i];
+              new_n_c++;
+            }
+            if (idep == c_deps.end()) {
+              // just copy the rest and done
+              for (Index j=i+1; j<n_c; j++) {
+                c_map[new_n_c++] = c_map[j];
+              }
+              break;
+            }
+          }
+          n_c = new_n_c;
+          // We also need to set the multipliers for the constraints
+          // to zero (could do only for dependent ones... was too lazy
+          // right now)
+          const Number zero = 0.;
+          IpBlasDcopy(n_full_g_, &zero, 0, full_lambda_, 1);
         }
       }
-      else {
-        x_fixed_map_ = NULL;
-      }
-      delete [] x_fixed_map_tmp;
+      delete [] x_l;
+      x_l = NULL;
+      delete [] x_u;
+      x_u = NULL;
 
+      // create x spaces
       x_space_ = new DenseVectorSpace(n_x_var);
       x_l_space_ = new DenseVectorSpace(n_x_l);
       x_u_space_ = new DenseVectorSpace(n_x_u);
 
       if (n_x_fixed_>0 && fixed_variable_treatment_==MAKE_PARAMETER) {
-        P_x_full_x_space_ = new ExpansionMatrixSpace(n_full_x_, n_x_var, x_not_fixed_map);
+        P_x_full_x_space_ =
+          new ExpansionMatrixSpace(n_full_x_, n_x_var,
+                                   x_not_fixed_map);
         P_x_full_x_ = P_x_full_x_space_->MakeNewExpansionMatrix();
       }
       else {
@@ -336,61 +674,12 @@ namespace Ipopt
       px_u_space_ = GetRawPtr(P_x_x_U_space_);
       P_x_x_U_ = P_x_x_U_space_->MakeNewExpansionMatrix();
 
-      delete [] x_l;
-      x_l = NULL;
-      delete [] x_u;
-      x_u = NULL;
       delete [] x_not_fixed_map;
       x_not_fixed_map = NULL;
       delete [] x_l_map;
       x_l_map = NULL;
       delete [] x_u_map;
       x_u_map = NULL;
-
-      // Create the spaces for c and d
-      // - includes the internal permutation matrices for
-      //  full_g to c and d
-      // - includes the permutation matrices for d_l and d_u
-      // c(x) = (P_c)T * g(x)
-      // d(x) = (P_d)T * g(x)
-      // d_L = (P_d_L)T * (P_d)T * g_l
-      // d_U = (P_d_U)T * (P_d)T * g_u
-      Index n_c = 0;
-      Index n_d = 0;
-      Index n_d_l = 0;
-      Index n_d_u = 0;
-
-      Index* c_map = new Index[n_full_g_]; // we do not know n_c yet!
-      Index* d_map = new Index[n_full_g_]; // we do not know n_d yet!
-      Index* d_l_map = new Index[n_full_g_]; // "
-      Index* d_u_map = new Index[n_full_g_]; // "
-      for (Index i=0; i<n_full_g_; i++) {
-        Number lower_bound = g_l[i];
-        Number upper_bound = g_u[i];
-        if (lower_bound == upper_bound) {
-          // equality constraint
-          c_map[n_c] = i;
-          n_c++;
-        }
-        else if (lower_bound > upper_bound) {
-          char string[128];
-          sprintf(string, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
-          THROW_EXCEPTION(INVALID_TNLP, string);
-        }
-        else {
-          // inequality constraint
-          d_map[n_d] = i;
-          if (lower_bound > nlp_lower_bound_inf_) {
-            d_l_map[n_d_l] = n_d;
-            n_d_l++;
-          }
-          if (upper_bound < nlp_upper_bound_inf_) {
-            d_u_map[n_d_u] = n_d;
-            n_d_u++;
-          }
-          n_d++;
-        }
-      }
 
       // create the required c_space
 
@@ -472,8 +761,8 @@ namespace Ipopt
         // there are missing variables x
         const Index* c_col_pos = P_x_full_x_->CompressedPosIndices();
         for (Index i=0; i<nz_full_jac_g_; i++) {
-          const Index c_row = c_row_pos[g_iRow[i]-1];
-          const Index c_col = c_col_pos[g_jCol[i]-1];
+          const Index& c_row = c_row_pos[g_iRow[i]-1];
+          const Index& c_col = c_col_pos[g_jCol[i]-1];
           if (c_col != -1 && c_row != -1) {
             jac_idx_map_[current_nz] = i;
             jac_c_iRow[current_nz] = c_row + 1;
@@ -484,8 +773,8 @@ namespace Ipopt
       }
       else {
         for (Index i=0; i<nz_full_jac_g_; i++) {
-          const Index c_row = c_row_pos[g_iRow[i]-1];
-          const Index c_col = g_jCol[i]-1;
+          const Index& c_row = c_row_pos[g_iRow[i]-1];
+          const Index& c_col = g_jCol[i]-1;
           if (c_row != -1) {
             jac_idx_map_[current_nz] = i;
             jac_c_iRow[current_nz] = c_row + 1;
@@ -494,14 +783,14 @@ namespace Ipopt
           }
         }
       }
-      nz_jac_c_no_fixed_ = current_nz;
+      nz_jac_c_no_extra_ = current_nz;
       Index n_added_constr;
       if (fixed_variable_treatment_==MAKE_PARAMETER) {
-        nz_jac_c_ = nz_jac_c_no_fixed_;
+        nz_jac_c_ = nz_jac_c_no_extra_;
         n_added_constr = 0;
       }
       else {
-        nz_jac_c_ = nz_jac_c_no_fixed_ + n_x_fixed_;
+        nz_jac_c_ = nz_jac_c_no_extra_ + n_x_fixed_;
         for (Index i=0; i<n_x_fixed_; i++) {
           jac_c_iRow[current_nz] = n_c + i + 1;
           jac_c_jCol[current_nz] = x_fixed_map_[i]+1;
@@ -527,10 +816,10 @@ namespace Ipopt
       if (IsValid(P_x_full_x_)) {
         const Index* d_col_pos = P_x_full_x_->CompressedPosIndices();
         for (Index i=0; i<nz_full_jac_g_; i++) {
-          const Index d_row = d_row_pos[g_iRow[i]-1];
-          const Index d_col = d_col_pos[g_jCol[i]-1];
+          const Index& d_row = d_row_pos[g_iRow[i]-1];
+          const Index& d_col = d_col_pos[g_jCol[i]-1];
           if (d_col != -1 && d_row != -1) {
-            jac_idx_map_[current_nz + nz_jac_c_no_fixed_] = i;
+            jac_idx_map_[current_nz + nz_jac_c_no_extra_] = i;
             jac_d_iRow[current_nz] = d_row + 1;
             jac_d_jCol[current_nz] = d_col + 1;
             current_nz++;
@@ -539,10 +828,10 @@ namespace Ipopt
       }
       else {
         for (Index i=0; i<nz_full_jac_g_; i++) {
-          const Index d_row = d_row_pos[g_iRow[i]-1];
-          const Index d_col = g_jCol[i]-1;
+          const Index& d_row = d_row_pos[g_iRow[i]-1];
+          const Index& d_col = g_jCol[i]-1;
           if (d_row != -1) {
-            jac_idx_map_[current_nz + nz_jac_c_no_fixed_] = i;
+            jac_idx_map_[current_nz + nz_jac_c_no_extra_] = i;
             jac_d_iRow[current_nz] = d_row + 1;
             jac_d_jCol[current_nz] = d_col + 1;
             current_nz++;
@@ -571,6 +860,10 @@ namespace Ipopt
                                    NULL, false,
                                    nz_full_h_, full_h_iRow, full_h_jCol, NULL);
         if (!retval) {
+          delete [] full_h_iRow;
+          delete [] full_h_jCol;
+          delete [] h_iRow;
+          delete [] h_jCol;
           jnlst_->Printf(J_ERROR, J_INITIALIZATION,
                          "Option hessian_information is not chosen as limited_memory, but eval_h returns false.\n");
           THROW_EXCEPTION(OPTION_INVALID, "eval_h is called but has not been implemented");
@@ -588,8 +881,8 @@ namespace Ipopt
           h_idx_map_ = new Index[nz_full_h_];
           const Index* h_pos = P_x_full_x_->CompressedPosIndices();
           for (Index i=0; i<nz_full_h_; i++) {
-            const Index h_row = h_pos[full_h_iRow[i]-1];
-            const Index h_col = h_pos[full_h_jCol[i]-1];
+            const Index& h_row = h_pos[full_h_iRow[i]-1];
+            const Index& h_col = h_pos[full_h_jCol[i]-1];
             if (h_row != -1 && h_col != -1) {
               h_idx_map_[current_nz] = i;
               h_iRow[current_nz] = h_row + 1;
@@ -601,8 +894,8 @@ namespace Ipopt
         else {
           h_idx_map_ = NULL;
           for (Index i=0; i<nz_full_h_; i++) {
-            const Index h_row = full_h_iRow[i]-1;
-            const Index h_col = full_h_jCol[i]-1;
+            const Index& h_row = full_h_iRow[i]-1;
+            const Index& h_col = full_h_jCol[i]-1;
             h_iRow[i] = h_row + 1;
             h_jCol[i] = h_col + 1;
             current_nz++;
@@ -680,48 +973,58 @@ namespace Ipopt
         full_x_[x_fixed_map_[i]] = x_l[x_fixed_map_[i]];
       }
     }
+    else if (fixed_variable_treatment_==RELAX_BOUNDS) {
+      // Relax the bounds for fixed variables
+      const Number bound_relax = Max(1e-8, bound_relax_factor_);
+      for (Index i=0; i<n_x_fixed_; i++) {
+        if (x_l[i] == x_u[i]) {
+          x_l[i] -= bound_relax*Max(1.,fabs(x_l[i]));
+          x_u[i] += bound_relax*Max(1.,fabs(x_u[i]));
+        }
+      }
+    }
 
     // Set the bounds values for x
-    DenseVector* dx_L = dynamic_cast<DenseVector*>(&x_L);
-    DBG_ASSERT(dx_L);
+    DenseVector* dx_L = static_cast<DenseVector*>(&x_L);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&x_L));
     Number* values = dx_L->Values();
     const ExpansionMatrix* em_Px_L =
-      dynamic_cast<const ExpansionMatrix*>(&Px_L);
-    DBG_ASSERT(em_Px_L);
+      static_cast<const ExpansionMatrix*>(&Px_L);
+    DBG_ASSERT(dynamic_cast<const ExpansionMatrix*>(&Px_L));
     if (IsValid(P_x_full_x_)) {
       for (Index i=0; i<Px_L.NCols(); i++) {
-        const Index ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
-        const Index full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
-        const Number lower_bound = x_l[full_idx];
+        const Index& ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
+        const Index& full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
+        const Number& lower_bound = x_l[full_idx];
         values[i] = lower_bound;
       }
     }
     else {
       for (Index i=0; i<Px_L.NCols(); i++) {
-        const Index ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
-        const Number lower_bound = x_l[ipopt_idx];
+        const Index& ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
+        const Number& lower_bound = x_l[ipopt_idx];
         values[i] = lower_bound;
       }
     }
 
-    DenseVector* dx_U = dynamic_cast<DenseVector*>(&x_U);
-    DBG_ASSERT(dx_U);
+    DenseVector* dx_U = static_cast<DenseVector*>(&x_U);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&x_U));
     values = dx_U->Values();
     const ExpansionMatrix* em_Px_U =
-      dynamic_cast<const ExpansionMatrix*>(&Px_U);
-    DBG_ASSERT(em_Px_U);
+      static_cast<const ExpansionMatrix*>(&Px_U);
+    DBG_ASSERT(dynamic_cast<const ExpansionMatrix*>(&Px_U));
     if (IsValid(P_x_full_x_)) {
       for (Index i=0; i<Px_U.NCols(); i++) {
-        const Index ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
-        const Index full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
-        const Number upper_bound = x_u[full_idx];
+        const Index& ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
+        const Index& full_idx = P_x_full_x_->ExpandedPosIndices()[ipopt_idx];
+        const Number& upper_bound = x_u[full_idx];
         values[i] = upper_bound;
       }
     }
     else {
       for (Index i=0; i<Px_U.NCols(); i++) {
-        const Index ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
-        const Number upper_bound = x_u[ipopt_idx];
+        const Index& ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
+        const Number& upper_bound = x_u[ipopt_idx];
         values[i] = upper_bound;
       }
     }
@@ -744,12 +1047,12 @@ namespace Ipopt
     }
 
     // get the bounds values for d
-    DenseVector* dd_L = dynamic_cast<DenseVector*>(&d_L);
-    DBG_ASSERT(dd_L);
+    DenseVector* dd_L = static_cast<DenseVector*>(&d_L);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&d_L));
     values = dd_L->Values();
     const ExpansionMatrix* em_Pd_L =
-      dynamic_cast<const ExpansionMatrix*>(&Pd_L);
-    DBG_ASSERT(em_Pd_L);
+      static_cast<const ExpansionMatrix*>(&Pd_L);
+    DBG_ASSERT(dynamic_cast<const ExpansionMatrix*>(&Pd_L));
     for (Index i=0; i<Pd_L.NCols(); i++) {
       Index d_exp_idx = em_Pd_L->ExpandedPosIndices()[i];
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
@@ -757,12 +1060,12 @@ namespace Ipopt
       values[i] = lower_bound;
     }
 
-    DenseVector* dd_U = dynamic_cast<DenseVector*>(&d_U);
-    DBG_ASSERT(dd_U);
+    DenseVector* dd_U = static_cast<DenseVector*>(&d_U);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&d_U));
     values = dd_U->Values();
     const ExpansionMatrix* em_Pd_U =
-      dynamic_cast<const ExpansionMatrix*>(&Pd_U);
-    DBG_ASSERT(em_Pd_U);
+      static_cast<const ExpansionMatrix*>(&Pd_U);
+    DBG_ASSERT(dynamic_cast<const ExpansionMatrix*>(&Pd_U));
     for (Index i=0; i<Pd_U.NCols(); i++) {
       Index d_exp_idx = em_Pd_U->ExpandedPosIndices()[i];
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
@@ -806,27 +1109,32 @@ namespace Ipopt
       tnlp_->get_starting_point(n_full_x_, init_x, full_x, init_z, full_z_l, full_z_u, n_full_g_, init_lambda, full_lambda);
 
     if (!retvalue) {
+      delete [] full_x;
+      delete [] full_z_l;
+      delete [] full_z_u;
+      delete [] full_lambda;
       return false;
     }
 
     if (need_x) {
-      DenseVector* dx = dynamic_cast<DenseVector*>(GetRawPtr(x));
-      DBG_ASSERT(dx);
+      DenseVector* dx = static_cast<DenseVector*>(GetRawPtr(x));
+      DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(x)));
       Number* values = dx->Values();
+      const Index& n_x_var = x->Dim();
       if (IsValid(P_x_full_x_)) {
         const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
-        for (Index i=0; i<x->Dim(); i++) {
+        for (Index i=0; i<n_x_var; i++) {
           values[i] = full_x[x_pos[i]];
         }
       }
       else {
-        IpBlasDcopy(x->Dim(), full_x, 1, values, 1);
+        IpBlasDcopy(n_x_var, full_x, 1, values, 1);
       }
     }
 
     if (need_y_c) {
-      DenseVector* dy_c = dynamic_cast<DenseVector*>(GetRawPtr(y_c));
-      DBG_ASSERT(dy_c);
+      DenseVector* dy_c = static_cast<DenseVector*>(GetRawPtr(y_c));
+      DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(y_c)));
       Number* values = dy_c->Values();
       const Index* y_c_pos = P_c_g_->ExpandedPosIndices();
       for (Index i=0; i<P_c_g_->NCols(); i++) {
@@ -840,8 +1148,8 @@ namespace Ipopt
     }
 
     if (need_y_d) {
-      DenseVector* dy_d = dynamic_cast<DenseVector*>(GetRawPtr(y_d));
-      DBG_ASSERT(dy_d);
+      DenseVector* dy_d = static_cast<DenseVector*>(GetRawPtr(y_d));
+      DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(y_d)));
       Number* values = dy_d->Values();
       const Index* y_d_pos = P_d_g_->ExpandedPosIndices();
       for (Index i=0; i<y_d->Dim(); i++) {
@@ -850,20 +1158,21 @@ namespace Ipopt
     }
 
     if (need_z_L) {
-      DenseVector* dz_l = dynamic_cast<DenseVector*>(GetRawPtr(z_L));
-      DBG_ASSERT(dz_l);
+      DenseVector* dz_l = static_cast<DenseVector*>(GetRawPtr(z_L));
+      DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(z_L)));
       Number* values = dz_l->Values();
+      const Index& n_z_l = z_L->Dim();
       const Index* z_l_pos = P_x_x_L_->ExpandedPosIndices();
       if (IsValid(P_x_full_x_)) {
         const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
-        for (Index i=0; i<z_L->Dim(); i++) {
+        for (Index i=0; i<n_z_l; i++) {
           Index idx = z_l_pos[i]; // convert from x_L to x (ipopt)
           idx = x_pos[idx]; // convert from x (ipopt) to x_full
           values[i] = full_z_l[idx];
         }
       }
       else {
-        for (Index i=0; i<z_L->Dim(); i++) {
+        for (Index i=0; i<n_z_l; i++) {
           Index idx = z_l_pos[i]; // convert from x_L to x (ipopt)
           values[i] = full_z_l[idx];
         }
@@ -871,8 +1180,8 @@ namespace Ipopt
     }
 
     if (need_z_U) {
-      DenseVector* dz_u = dynamic_cast<DenseVector*>(GetRawPtr(z_U));
-      DBG_ASSERT(dz_u);
+      DenseVector* dz_u = static_cast<DenseVector*>(GetRawPtr(z_U));
+      DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(z_U)));
       Number* values = dz_u->Values();
       const Index* z_u_pos = P_x_x_U_->ExpandedPosIndices();
       if (IsValid(P_x_full_x_)) {
@@ -925,14 +1234,13 @@ namespace Ipopt
       new_x = true;
     }
 
+    DenseVector* dg_f = static_cast<DenseVector*>(&g_f);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&g_f));
+    Number* values = dg_f->Values();
     if (IsValid(P_x_full_x_)) {
       Number* full_grad_f = new Number[n_full_x_];
       if (tnlp_->eval_grad_f(n_full_x_, full_x_, new_x, full_grad_f)) {
         const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
-        DenseVector* dg_f = dynamic_cast<DenseVector*>(&g_f);
-        DBG_ASSERT(dg_f);
-        Number* values = dg_f->Values();
-
         for (Index i=0; i<g_f.Dim(); i++) {
           values[i] = full_grad_f[x_pos[i]];
         }
@@ -941,9 +1249,6 @@ namespace Ipopt
       delete [] full_grad_f;
     }
     else {
-      DenseVector* dg_f = dynamic_cast<DenseVector*>(&g_f);
-      DBG_ASSERT(dg_f);
-      Number* values = dg_f->Values();
       retvalue = tnlp_->eval_grad_f(n_full_x_, full_x_, new_x, values);
     }
 
@@ -957,10 +1262,10 @@ namespace Ipopt
       new_x = true;
     }
 
-    DenseVector* dc = dynamic_cast<DenseVector*>(&c);
-    DBG_ASSERT(dc);
-    Number* values = dc->Values();
     if (internal_eval_g(new_x)) {
+      DenseVector* dc = static_cast<DenseVector*>(&c);
+      DBG_ASSERT(dynamic_cast<DenseVector*>(&c));
+      Number* values = dc->Values();
       const Index* c_pos = P_c_g_->ExpandedPosIndices();
       Index n_c_no_fixed = P_c_g_->NCols();
       for (Index i=0; i<n_c_no_fixed; i++) {
@@ -987,17 +1292,17 @@ namespace Ipopt
     }
 
     if (internal_eval_jac_g(new_x)) {
-      GenTMatrix* gt_jac_c = dynamic_cast<GenTMatrix*>(&jac_c);
-      DBG_ASSERT(gt_jac_c);
+      GenTMatrix* gt_jac_c = static_cast<GenTMatrix*>(&jac_c);
+      DBG_ASSERT(dynamic_cast<GenTMatrix*>(&jac_c));
       Number* values = gt_jac_c->Values();
 
-      for (Index i=0; i<nz_jac_c_no_fixed_; i++) {
+      for (Index i=0; i<nz_jac_c_no_extra_; i++) {
         // Assume the same structure as initially given
         values[i] = jac_g_[jac_idx_map_[i]];
       }
       if (fixed_variable_treatment_==MAKE_CONSTRAINT) {
         const Number one = 1.;
-        IpBlasDcopy(n_x_fixed_, &one, 0, &values[nz_jac_c_no_fixed_], 1);
+        IpBlasDcopy(n_x_fixed_, &one, 0, &values[nz_jac_c_no_extra_], 1);
       }
       return true;
     }
@@ -1011,8 +1316,8 @@ namespace Ipopt
       new_x = true;
     }
 
-    DenseVector* dd = dynamic_cast<DenseVector*>(&d);
-    DBG_ASSERT(dd);
+    DenseVector* dd = static_cast<DenseVector*>(&d);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&d));
     Number* values = dd->Values();
     if (internal_eval_g(new_x)) {
       const Index* d_pos = P_d_g_->ExpandedPosIndices();
@@ -1033,13 +1338,13 @@ namespace Ipopt
     }
 
     if (internal_eval_jac_g(new_x)) {
-      GenTMatrix* gt_jac_d = dynamic_cast<GenTMatrix*>(&jac_d);
-      DBG_ASSERT(gt_jac_d);
+      GenTMatrix* gt_jac_d = static_cast<GenTMatrix*>(&jac_d);
+      DBG_ASSERT(dynamic_cast<GenTMatrix*>(&jac_d));
       Number* values = gt_jac_d->Values();
 
       for (Index i=0; i<nz_jac_d_; i++) {
         // Assume the same structure as initially given
-        values[i] = jac_g_[jac_idx_map_[nz_jac_c_no_fixed_ + i]];
+        values[i] = jac_g_[jac_idx_map_[nz_jac_c_no_extra_ + i]];
       }
       return true;
     }
@@ -1057,8 +1362,8 @@ namespace Ipopt
     // we do).  In that case, there is no need to compute values, just
     // set them to zero.
     if (obj_factor==0. && yc.Asum()==0. && yd.Asum()==0.) {
-      SymTMatrix* st_h = dynamic_cast<SymTMatrix*>(&h);
-      DBG_ASSERT(st_h);
+      SymTMatrix* st_h = static_cast<SymTMatrix*>(&h);
+      DBG_ASSERT(dynamic_cast<SymTMatrix*>(&h));
       Number* values = st_h->Values();
       for (Index i=0; i<nz_h_; i++) {
         values[i] = 0.;
@@ -1076,8 +1381,8 @@ namespace Ipopt
       new_y = true;
     }
 
-    SymTMatrix* st_h = dynamic_cast<SymTMatrix*>(&h);
-    DBG_ASSERT(st_h);
+    SymTMatrix* st_h = static_cast<SymTMatrix*>(&h);
+    DBG_ASSERT(dynamic_cast<SymTMatrix*>(&h));
     Number* values = st_h->Values();
 
     if (h_idx_map_) {
@@ -1115,10 +1420,12 @@ namespace Ipopt
     d_scaling = d_space->MakeNew();
     DBG_ASSERT((c_scaling->Dim()+d_scaling->Dim()) == n_full_g_);
 
-    DenseVector* dx = dynamic_cast<DenseVector*>(GetRawPtr(x_scaling));
-    DenseVector* dc = dynamic_cast<DenseVector*>(GetRawPtr(c_scaling));
-    DenseVector* dd = dynamic_cast<DenseVector*>(GetRawPtr(d_scaling));
-    DBG_ASSERT(dx && dc && dd);
+    DenseVector* dx = static_cast<DenseVector*>(GetRawPtr(x_scaling));
+    DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(x_scaling)));
+    DenseVector* dc = static_cast<DenseVector*>(GetRawPtr(c_scaling));
+    DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(c_scaling)));
+    DenseVector* dd = static_cast<DenseVector*>(GetRawPtr(d_scaling));
+    DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(d_scaling)));
     Number* dx_values = dx->Values();
     Number* dc_values = dc->Values();
     Number* dd_values = dd->Values();
@@ -1135,6 +1442,7 @@ namespace Ipopt
                     use_g_scaling, n_full_g_,
                     full_g_scaling);
       if (!retval) {
+        delete [] full_x_scaling;
         jnlst_->Printf(J_ERROR, J_INITIALIZATION,
                        "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
         THROW_EXCEPTION(OPTION_INVALID,
@@ -1195,7 +1503,9 @@ namespace Ipopt
                                      const Vector& x, const Vector& z_L, const Vector& z_U,
                                      const Vector& c, const Vector& d,
                                      const Vector& y_c, const Vector& y_d,
-                                     Number obj_value)
+                                     Number obj_value,
+                                     const IpoptData* ip_data,
+                                     IpoptCalculatedQuantities* ip_cq)
   {
     DBG_START_METH("TNLPAdapter::FinalizeSolution", dbg_verbosity);
 
@@ -1206,6 +1516,11 @@ namespace Ipopt
     ResortG(y_c, y_d, full_lambda_);
 
     Number* full_g = new Number[n_full_g_];
+    // TODO:
+    if (c.Dim() + d.Dim() < n_full_g_) {
+      const Number zero = 0.;
+      IpBlasDcopy(n_full_g_, &zero, 0, full_g, 1);
+    }
     ResortG(c, d, full_g);
     // To Ipopt, the equality constraints are presented with right
     // hand side zero, so we correct for the original right hand side.
@@ -1218,16 +1533,16 @@ namespace Ipopt
     Number* full_z_L = new Number[n_full_x_];
     Number* full_z_U = new Number[n_full_x_];
     for (int i=0; i<n_full_x_; i++) {
-      full_z_L[i] = nlp_lower_bound_inf_;
-      full_z_U[i] = nlp_upper_bound_inf_;
+      full_z_L[i] = 0.;//nlp_lower_bound_inf_;
+      full_z_U[i] = 0.;//nlp_upper_bound_inf_;
     }
     ResortBnds(z_L, full_z_L, z_U, full_z_U);
 
     // Hopefully the following is correct to recover the bound
     // multipliers for fixed variables (sign ok?)
     if (fixed_variable_treatment_==MAKE_CONSTRAINT && n_x_fixed_>0) {
-      const DenseVector* dy_c = dynamic_cast<const DenseVector*>(&y_c);
-      DBG_ASSERT(dy_c);
+      const DenseVector* dy_c = static_cast<const DenseVector*>(&y_c);
+      DBG_ASSERT(dynamic_cast<const DenseVector*>(&y_c));
       DBG_ASSERT(!dy_c->IsHomogeneous());
       const Number* values = dy_c->Values();
       Index n_c_no_fixed = y_c.Dim() - n_x_fixed_;
@@ -1240,7 +1555,7 @@ namespace Ipopt
     tnlp_->finalize_solution(status,
                              n_full_x_, full_x_, full_z_L, full_z_U,
                              n_full_g_, full_g, full_lambda_,
-                             obj_value);
+                             obj_value, ip_data, ip_cq);
 
     delete [] full_z_L;
     full_z_L = NULL;
@@ -1248,6 +1563,25 @@ namespace Ipopt
     full_z_U = NULL;
     delete [] full_g;
     full_g = NULL;
+
+    if (c.Dim() + d.Dim() < n_full_g_) {
+      // Temporary: Check if we really have a feasible point:
+      Number max_viol = 0.;
+      Number* x_l = new Number[n_full_x_];
+      Number* x_u = new Number[n_full_x_];
+      Number* g_l = new Number[n_full_g_];
+      Number* g_u = new Number[n_full_g_];
+      tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+      for (Index i=0; i<n_full_g_; i++) {
+        max_viol = Max(max_viol, full_g_[i]-g_u[i], g_l[i]-full_g_[i]);
+      }
+      jnlst_->Printf(J_ITERSUMMARY, J_INITIALIZATION,
+                     "Constraint violation for ALL constraints is %e.\n", max_viol);
+      delete [] x_l;
+      delete [] x_u;
+      delete [] g_l;
+      delete [] g_u;
+    }
   }
 
   bool TNLPAdapter::
@@ -1347,14 +1681,14 @@ namespace Ipopt
 
   void TNLPAdapter::ResortX(const Vector& x, Number* x_orig)
   {
-    const DenseVector* dx = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dx);
+    const DenseVector* dx = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
 
     if (IsValid(P_x_full_x_)) {
       const Index* x_pos = P_x_full_x_->CompressedPosIndices();
 
       if (dx->IsHomogeneous()) {
-        Number scalar = dx->Scalar();
+        const Number& scalar = dx->Scalar();
         for (Index i=0; i<n_full_x_; i++) {
           Index idx = x_pos[i];
           if (idx != -1) {
@@ -1380,7 +1714,7 @@ namespace Ipopt
     }
     else {
       if (dx->IsHomogeneous()) {
-        Number scalar = dx->Scalar();
+        const Number& scalar = dx->Scalar();
         IpBlasDcopy(n_full_x_, &scalar, 0, x_orig, 1);
       }
       else {
@@ -1391,8 +1725,8 @@ namespace Ipopt
 
   void TNLPAdapter::ResortG(const Vector& c, const Vector& d, Number* g_orig)
   {
-    const DenseVector* dc = dynamic_cast<const DenseVector*>(&c);
-    DBG_ASSERT(dc);
+    const DenseVector* dc = static_cast<const DenseVector*>(&c);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&c));
 
     const Index* c_pos = P_c_g_->ExpandedPosIndices();
     if (dc->IsHomogeneous()) {
@@ -1408,8 +1742,8 @@ namespace Ipopt
       }
     }
 
-    const DenseVector* dd = dynamic_cast<const DenseVector*>(&d);
-    DBG_ASSERT(dd);
+    const DenseVector* dd = static_cast<const DenseVector*>(&d);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&d));
 
     const Index* d_pos = P_d_g_->ExpandedPosIndices();
     if (dd->IsHomogeneous()) {
@@ -1430,16 +1764,17 @@ namespace Ipopt
                                const Vector& x_U, Number* x_U_orig)
   {
     if (x_L_orig) {
-      const DenseVector* dx_L = dynamic_cast<const DenseVector*>(&x_L);
-      DBG_ASSERT(dx_L);
+      const DenseVector* dx_L = static_cast<const DenseVector*>(&x_L);
+      DBG_ASSERT(dynamic_cast<const DenseVector*>(&x_L));
 
       const Index* bnds_pos_not_fixed = P_x_x_L_->ExpandedPosIndices();
+      const Index& n_xL = x_L.Dim();
 
       if (IsValid(P_x_full_x_)) {
         const Index* bnds_pos_full = P_x_full_x_->ExpandedPosIndices();
         if (dx_L->IsHomogeneous()) {
           Number scalar = dx_L->Scalar();
-          for (Index i=0; i<x_L.Dim(); i++) {
+          for (Index i=0; i<n_xL; i++) {
             int idx = bnds_pos_not_fixed[i];
             idx = bnds_pos_full[idx];
             x_L_orig[idx] = scalar;
@@ -1447,7 +1782,7 @@ namespace Ipopt
         }
         else {
           const Number* x_L_values = dx_L->Values();
-          for (Index i=0; i<x_L.Dim(); i++) {
+          for (Index i=0; i<n_xL; i++) {
             int idx = bnds_pos_not_fixed[i];
             idx = bnds_pos_full[idx];
             x_L_orig[idx] = x_L_values[i];
@@ -1457,14 +1792,14 @@ namespace Ipopt
       else {
         if (dx_L->IsHomogeneous()) {
           Number scalar = dx_L->Scalar();
-          for (Index i=0; i<x_L.Dim(); i++) {
+          for (Index i=0; i<n_xL; i++) {
             int idx = bnds_pos_not_fixed[i];
             x_L_orig[idx] = scalar;
           }
         }
         else {
           const Number* x_L_values = dx_L->Values();
-          for (Index i=0; i<x_L.Dim(); i++) {
+          for (Index i=0; i<n_xL; i++) {
             int idx = bnds_pos_not_fixed[i];
             x_L_orig[idx] = x_L_values[i];
           }
@@ -1473,8 +1808,8 @@ namespace Ipopt
     }
 
     if (x_U_orig) {
-      const DenseVector* dx_U = dynamic_cast<const DenseVector*>(&x_U);
-      DBG_ASSERT(dx_U);
+      const DenseVector* dx_U = static_cast<const DenseVector*>(&x_U);
+      DBG_ASSERT(dynamic_cast<const DenseVector*>(&x_U));
 
       const Index* bnds_pos_not_fixed = P_x_x_U_->ExpandedPosIndices();
 
@@ -1899,6 +2234,156 @@ namespace Ipopt
       jnlst_->Printf(J_WARNING, J_NLP,
                      "\nDerivative checker detected %d error(s).\n\n", nerrors);
     }
+
+    return retval;
+  }
+
+  bool TNLPAdapter::DetermineDependentConstraints(
+    Index n_x_var, const Index* x_not_fixed_map,
+    const Number* x_l, const Number* x_u,
+    const Number* g_l, const Number* g_u, Index n_c,
+    const Index* c_map, std::list<Index>& c_deps)
+  {
+    // First get a temporary expansion matrix for getting the equality
+    // constraints
+    SmartPtr<ExpansionMatrixSpace> P_c_g_space =
+      new ExpansionMatrixSpace(n_full_g_, n_c, c_map);
+    SmartPtr<ExpansionMatrix> P_c_g = P_c_g_space->MakeNewExpansionMatrix();
+
+    // Get the structure of the big Jacobian of g and get the map for
+    // the equality constraints entries
+    Index* g_iRow = new Index[nz_full_jac_g_];
+    Index* g_jCol = new Index[nz_full_jac_g_];
+    if (!tnlp_->eval_jac_g(n_full_x_, NULL, false, n_full_g_, nz_full_jac_g_,
+                           g_iRow, g_jCol, NULL)) {
+      delete [] g_iRow;
+      delete [] g_jCol;
+      return false;
+    }
+    if (index_style_ == TNLP::FORTRAN_STYLE) {
+      for (Index i=0; i<nz_full_jac_g_; i++) {
+        g_iRow[i] -= 1;
+        g_jCol[i] -= 1;
+      }
+    }
+    // TODO: Here we don't handle
+    // fixed_variable_treatment_==MAKE_PARAMETER correctly (yet?)
+    // Include space for the RHS
+    Index* jac_c_map = new Index[nz_full_jac_g_];
+    ipfint* jac_c_iRow = new ipfint[nz_full_jac_g_+n_c];
+    ipfint* jac_c_jCol = new ipfint[nz_full_jac_g_+n_c];
+    Index nz_jac_c = 0;
+    const Index* c_row_pos = P_c_g->CompressedPosIndices();
+    Index n_fixed = n_full_x_ - n_x_var;
+    if (n_fixed>0) {
+      // Get the reverse map for the fixed variables
+      Index* c_col_pos = new Index[n_full_x_];
+      for (Index i=0; i<n_full_x_; i++) {
+        c_col_pos[i] = -1;
+      }
+      for(Index i=0; i<n_x_var; i++) {
+        c_col_pos[x_not_fixed_map[i]] = i;
+      }
+      for (Index i=0; i<nz_full_jac_g_; i++) {
+        const Index& c_row = c_row_pos[g_iRow[i]];
+        const Index& c_col = c_col_pos[g_jCol[i]];
+        if (c_col != -1 && c_row != -1) {
+          jac_c_map[nz_jac_c] = i;
+          jac_c_iRow[nz_jac_c] = c_row + 1;
+          jac_c_jCol[nz_jac_c] = c_col + 1;
+          nz_jac_c++;
+        }
+      }
+      delete [] c_col_pos;
+    }
+    else {
+      for (Index i=0; i<nz_full_jac_g_; i++) {
+        const Index& c_row = c_row_pos[g_iRow[i]];
+        const Index& c_col = g_jCol[i];
+        if (c_row != -1) {
+          jac_c_map[nz_jac_c] = i;
+          jac_c_iRow[nz_jac_c] = c_row + 1;
+          jac_c_jCol[nz_jac_c] = c_col + 1;
+          nz_jac_c++;
+        }
+      }
+    }
+    delete [] g_iRow;
+    delete [] g_jCol;
+
+    // First we evaluate the equality constraint Jacobian at the
+    // starting point with some random perturbation (projected into bounds)
+    if (!tnlp_->get_starting_point(n_full_x_, true, full_x_, false, NULL,
+                                   NULL, n_full_g_, false, NULL)) {
+      delete [] jac_c_iRow;
+      delete [] jac_c_jCol;
+      delete [] jac_c_map;
+      return false;
+    }
+    // Here we reset the random number generator
+    IpResetRandom01();
+    for (Index i=0; i<n_full_x_; i++) {
+      const Number lower = Max(x_l[i], full_x_[i]-point_perturbation_radius_);
+      const Number upper = Min(x_u[i], full_x_[i]+point_perturbation_radius_);
+      const Number interval = upper - lower;
+      const Number random_number = IpRandom01();
+      full_x_[i] = lower + random_number*interval;
+    }
+    Number* g_vals = NULL;
+    if (dependency_detection_with_rhs_) {
+      g_vals = new Number[n_full_g_];
+      if (!tnlp_->eval_g(n_full_x_, full_x_, true, n_full_g_, g_vals)) {
+        delete [] jac_c_iRow;
+        delete [] jac_c_jCol;
+        delete [] jac_c_map;
+        delete [] g_vals;
+        return false;
+      }
+    }
+    if (!tnlp_->eval_jac_g(n_full_x_, full_x_, false, n_full_g_,
+                           nz_full_jac_g_, NULL, NULL, jac_g_)) {
+      delete [] jac_c_iRow;
+      delete [] jac_c_jCol;
+      delete [] jac_c_map;
+      delete [] g_vals;
+      return false;
+    }
+
+    // Get the equality constraint Jacobian out
+    double* jac_c_vals = new double[nz_jac_c + n_c];
+    for (Index i=0; i<nz_jac_c; i++) {
+      jac_c_vals[i] = jac_g_[jac_c_map[i]];
+    }
+    if (dependency_detection_with_rhs_) {
+      // Add the right hand side column
+      const Index* c_row_pos2 = P_c_g->ExpandedPosIndices();
+      for (Index i=0; i<n_c; i++) {
+        jac_c_iRow[nz_jac_c+i] = i+1;
+        jac_c_jCol[nz_jac_c+i] = n_x_var+1;
+        jac_c_vals[nz_jac_c+i] = g_vals[c_row_pos2[i]] - g_l[c_row_pos2[i]];
+      }
+      n_x_var += 1;
+      nz_jac_c += n_c;
+    }
+
+    ASSERT_EXCEPTION(IsValid(dependency_detector_), OPTION_INVALID,
+                     "No dependency_detector_ object available in TNLPAdapter::DetermineDependentConstraints");
+
+    bool retval = dependency_detector_->DetermineDependentRows(
+                    n_c, n_x_var, nz_jac_c, jac_c_vals,
+                    jac_c_iRow, jac_c_jCol, c_deps);
+
+    // For now, we just get rid of the dependency_detector_ object, in
+    // order to save memory.  Maybe we need to add a clean method at
+    // some point if we think that this is actually used more than
+    // once...
+    dependency_detector_ = NULL;
+
+    delete [] jac_c_iRow;
+    delete [] jac_c_jCol;
+    delete [] jac_c_map;
+    delete [] jac_c_vals;
+    delete [] g_vals;
 
     return retval;
   }

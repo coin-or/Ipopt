@@ -10,21 +10,6 @@
 
 namespace Ipopt
 {
-
-  SymMatrix::SymMatrix(const SymMatrixSpace* owner_space)
-      :
-      Matrix(owner_space),
-      owner_space_(owner_space)
-  {}
-
-  SymMatrix::~SymMatrix()
-  {}
-
-  SmartPtr<const SymMatrixSpace> SymMatrix::OwnerSymMatrixSpace() const
-  {
-    return owner_space_;
-  }
-
   void SymMatrix::TransMultVectorImpl(Number alpha, const Vector& x, Number beta,
                                       Vector& y) const
   {
@@ -32,19 +17,4 @@ namespace Ipopt
     // MultVector
     MultVector(alpha, x, beta, y);
   }
-
-  SymMatrixSpace::SymMatrixSpace(Index dim)
-      :
-      MatrixSpace(dim,dim)
-  {}
-
-  SymMatrixSpace::~SymMatrixSpace()
-  {}
-
-
-  Matrix* SymMatrixSpace::MakeNew() const
-  {
-    return MakeNewSymMatrix();
-  }
-
 } // namespace Ipopt

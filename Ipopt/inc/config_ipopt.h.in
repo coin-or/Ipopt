@@ -12,6 +12,9 @@
 /* If defined, the LAPACK Library is available. */
 #undef COIN_HAS_LAPACK
 
+/* If defined, the MUMPS Library is available. */
+#undef COIN_HAS_MUMPS
+
 /* Define to the debug sanity check level (0 is no test) */
 #undef COIN_IPOPT_CHECKLEVEL
 
@@ -62,6 +65,9 @@
 /* Define to 1 if you have the <cstdlib> header file. */
 #undef HAVE_CSTDLIB
 
+/* Define to 1 if you have the <cstring> header file. */
+#undef HAVE_CSTRING
+
 /* Define to 1 if you have the <ctime> header file. */
 #undef HAVE_CTIME
 
@@ -70,6 +76,9 @@
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
+
+/* Define to 1 if function drand48 is available */
+#undef HAVE_DRAND48
 
 /* Define to 1 if you have the <float.h> header file. */
 #undef HAVE_FLOAT_H
@@ -83,6 +92,9 @@
 /* Define to 1 if MA27 is available */
 #undef HAVE_MA27
 
+/* Define to 1 if MA28 is available */
+#undef HAVE_MA28
+
 /* Define to 1 if MA57 is available */
 #undef HAVE_MA57
 
@@ -95,14 +107,14 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
-/* Define to 1 if MUMPS is available */
-#undef HAVE_MUMPS
-
 /* Define to 1 if Pardiso is available */
 #undef HAVE_PARDISO
 
 /* Define to 1 if you are using the parallel version of Pardiso */
 #undef HAVE_PARDISO_PARALLEL
+
+/* Define to 1 if function rand is available */
+#undef HAVE_RAND
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H
@@ -115,6 +127,9 @@
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
+
+/* Define to 1 if function std::rand is available */
+#undef HAVE_STD__RAND
 
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H

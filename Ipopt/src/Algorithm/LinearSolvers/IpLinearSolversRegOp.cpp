@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -17,11 +17,17 @@
 #ifdef HAVE_MA57
 # include "IpMa57TSolverInterface.hpp"
 #endif
+#ifdef COIN_HAS_MUMPS
+# include "IpMumpsSolverInterface.hpp"
+#endif
 #ifdef HAVE_PARDISO
 # include "IpPardisoSolverInterface.hpp"
 #endif
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
+#endif
+#ifdef HAVE_MA28
+# include "IpMa28TDependencyDetector.hpp"
 #endif
 
 namespace Ipopt
@@ -43,6 +49,12 @@ namespace Ipopt
     Ma57TSolverInterface::RegisterOptions(roptions);
 #endif
 
+#ifdef COIN_HAS_MUMPS
+
+    roptions->SetRegisteringCategory("Mumps Linear Solver");
+    MumpsSolverInterface::RegisterOptions(roptions);
+#endif
+
 #ifdef HAVE_PARDISO
 
     roptions->SetRegisteringCategory("Pardiso Linear Solver");
@@ -53,6 +65,12 @@ namespace Ipopt
 
     roptions->SetRegisteringCategory("WSMP Linear Solver");
     WsmpSolverInterface::RegisterOptions(roptions);
+#endif
+
+#ifdef HAVE_MA28
+
+    roptions->SetRegisteringCategory("MA28 Linear Solver");
+    Ma28TDependencyDetector::RegisterOptions(roptions);
 #endif
 
     roptions->SetRegisteringCategory("Uncategorized");

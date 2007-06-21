@@ -35,17 +35,31 @@ namespace Ipopt
   class IpoptApplication : public ReferencedObject
   {
   public:
-    IpoptApplication(bool create_console_out = true);
+    IpoptApplication(bool create_console_out = true,
+                     bool create_empty = false);
+
+    /** Another constructor that assumes that the code in the
+     *  (default) constructor has already been executed */
+    IpoptApplication(SmartPtr<RegisteredOptions> reg_options,
+                     SmartPtr<OptionsList> options,
+                     SmartPtr<Journalist> jnlst);
 
     virtual ~IpoptApplication();
 
-    /** Initialize method. This method reads the params file and initializes
-     *  the journalists. You should call this method at some point before the 
-     *  first optimize call. Note: you can skip the processing of a params
-     *  file by setting params_file to ""
+    /** Method for creating a new IpoptApplication that uses the same
+     *  journalist and registered options, and a copy of the options
+    list. */
+    SmartPtr<IpoptApplication> clone();
+
+    /** Initialize method. This method reads the params file and
+     *  initializes the journalists. You should call this method at
+     *  some point before the first optimize call. Note: you can skip
+     *  the processing of a params file by setting params_file to "".
+     *  It returns something other than Solve_Succeeded if there was a
+     *  problem in the initialization (such as an invalid option).
      */
-    void Initialize(std::string params_file = "ipopt.opt");
-    void Initialize(std::istream& is);
+    ApplicationReturnStatus Initialize(std::string params_file = "ipopt.opt");
+    ApplicationReturnStatus Initialize(std::istream& is);
 
     /**@name Solve methods */
     //@{
@@ -111,6 +125,10 @@ namespace Ipopt
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
+    /** Method to registering all Ipopt options. */
+    static void
+    RegisterAllIpoptOptions(const SmartPtr<RegisteredOptions>& roptions);
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -129,9 +147,6 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const IpoptApplication&);
     //@}
-
-    /** Method to register all the options */
-    void RegisterAllOptions(const SmartPtr<RegisteredOptions>& roptions);
 
     /** Method for the actual optimize call of the Ipopt algorithm.
      *  This is used both for Optimize and ReOptimize */

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -84,8 +84,10 @@ namespace Ipopt
     DBG_ASSERT(matrices_valid_);
 
     // The vectors are assumed to be compound Vectors as well
-    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
-    CompoundVector* comp_y = dynamic_cast<CompoundVector*>(&y);
+    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
+    CompoundVector* comp_y = static_cast<CompoundVector*>(&y);
+    DBG_ASSERT(dynamic_cast<CompoundVector*>(&y));
 
     //  A few sanity checks
     if (comp_x) {

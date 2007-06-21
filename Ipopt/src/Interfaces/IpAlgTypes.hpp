@@ -44,6 +44,7 @@ namespace Ipopt
   DECLARE_STD_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED);
   DECLARE_STD_EXCEPTION(INVALID_WARMSTART);
   DECLARE_STD_EXCEPTION(INTERNAL_ABORT);
+  DECLARE_STD_EXCEPTION(NO_FREE_VARIABLES_BUT_FEASIBLE);
   /** Exception FAILED_INITIALIZATION for problem during
    *  initialization of a strategy object (or other problems).  This
    *  is thrown by a strategy object, if a problem arises during

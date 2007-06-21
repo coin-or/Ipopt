@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,7 +12,7 @@
 namespace Ipopt
 {
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -41,10 +41,10 @@ namespace Ipopt
     }
 
     // See if we can understand the data
-    const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dense_x); /* ToDo: Implement others */
-    DenseVector* dense_y = dynamic_cast<DenseVector*>(&y);
-    DBG_ASSERT(dense_y); /* ToDo: Implement others */
+    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
+    DenseVector* dense_y = static_cast<DenseVector*>(&y);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
     const Index* exp_pos = ExpandedPosIndices();
 
@@ -52,14 +52,28 @@ namespace Ipopt
       Number* yvals=dense_y->Values();
       if (dense_x->IsHomogeneous()) {
         Number val = alpha * dense_x->Scalar();
-        for(Index i=0; i<NCols(); i++) {
-          yvals[exp_pos[i]] += val;
+        if (val != 0.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[exp_pos[i]] += val;
+          }
         }
       }
       else {
         const Number* xvals=dense_x->Values();
-        for(Index i=0; i<NCols(); i++) {
-          yvals[exp_pos[i]] += alpha * xvals[i];
+        if (alpha == 1.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[exp_pos[i]] += xvals[i];
+          }
+        }
+        else if (alpha == -1.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[exp_pos[i]] -= xvals[i];
+          }
+        }
+        else {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[exp_pos[i]] += alpha * xvals[i];
+          }
         }
       }
     }
@@ -81,10 +95,10 @@ namespace Ipopt
     }
 
     // See if we can understand the data
-    const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dense_x); /* ToDo: Implement others */
-    DenseVector* dense_y = dynamic_cast<DenseVector*>(&y);
-    DBG_ASSERT(dense_y); /* ToDo: Implement others */
+    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
+    DenseVector* dense_y = static_cast<DenseVector*>(&y);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
     const Index* exp_pos = ExpandedPosIndices();
 
@@ -92,14 +106,28 @@ namespace Ipopt
       Number* yvals=dense_y->Values();
       if (dense_x->IsHomogeneous()) {
         Number val = alpha * dense_x->Scalar();
-        for(Index i=0; i<NCols(); i++) {
-          yvals[i] += val;
+        if (val != 0.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[i] += val;
+          }
         }
       }
       else {
         const Number* xvals=dense_x->Values();
-        for(Index i=0; i<NCols(); i++) {
-          yvals[i] += alpha * xvals[exp_pos[i]];
+        if (alpha == 1.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[i] += xvals[exp_pos[i]];
+          }
+        }
+        else if (alpha == -1.) {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[i] -= xvals[exp_pos[i]];
+          }
+        }
+        else {
+          for(Index i=0; i<NCols(); i++) {
+            yvals[i] += alpha * xvals[exp_pos[i]];
+          }
         }
       }
     }
@@ -113,12 +141,12 @@ namespace Ipopt
     DBG_ASSERT(NCols()==Z.Dim());
     DBG_ASSERT(NRows()==X.Dim());
 
-    const DenseVector* dense_S = dynamic_cast<const DenseVector*>(&S);
-    DBG_ASSERT(dense_S);
-    const DenseVector* dense_Z = dynamic_cast<const DenseVector*>(&Z);
-    DBG_ASSERT(dense_Z);
-    DenseVector* dense_X = dynamic_cast<DenseVector*>(&X);
-    DBG_ASSERT(dense_X);
+    const DenseVector* dense_S = static_cast<const DenseVector*>(&S);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&S));
+    const DenseVector* dense_Z = static_cast<const DenseVector*>(&Z);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&Z));
+    DenseVector* dense_X = static_cast<DenseVector*>(&X);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&X));
 
     // if vector S is homogeneous type, call the default implementation
     // ToDo: find out how often the default implementation is called and
@@ -136,8 +164,10 @@ namespace Ipopt
 
     if (dense_Z->IsHomogeneous()) {
       Number val = alpha*dense_Z->Scalar();
-      for(Index i=0; i<NCols(); i++) {
-        vals_X[exp_pos[i]] += val/vals_S[i];
+      if (val != 0.) {
+        for(Index i=0; i<NCols(); i++) {
+          vals_X[exp_pos[i]] += val/vals_S[i];
+        }
       }
     }
     else {
@@ -173,16 +203,16 @@ namespace Ipopt
     DBG_ASSERT(NRows()==D.Dim());
     DBG_ASSERT(NCols()==X.Dim());
 
-    const DenseVector* dense_S = dynamic_cast<const DenseVector*>(&S);
-    DBG_ASSERT(dense_S);
-    const DenseVector* dense_R = dynamic_cast<const DenseVector*>(&R);
-    DBG_ASSERT(dense_R);
-    const DenseVector* dense_Z = dynamic_cast<const DenseVector*>(&Z);
-    DBG_ASSERT(dense_Z);
-    const DenseVector* dense_D = dynamic_cast<const DenseVector*>(&D);
-    DBG_ASSERT(dense_D);
-    DenseVector* dense_X = dynamic_cast<DenseVector*>(&X);
-    DBG_ASSERT(dense_X);
+    const DenseVector* dense_S = static_cast<const DenseVector*>(&S);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&S));
+    const DenseVector* dense_R = static_cast<const DenseVector*>(&R);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&R));
+    const DenseVector* dense_Z = static_cast<const DenseVector*>(&Z);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&Z));
+    const DenseVector* dense_D = static_cast<const DenseVector*>(&D);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&D));
+    DenseVector* dense_X = static_cast<DenseVector*>(&X);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&X));
 
     // if the vectors S or D are of the homogeneous type, revert to the
     // default implementation
