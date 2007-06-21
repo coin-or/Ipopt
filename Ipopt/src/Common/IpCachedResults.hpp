@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,12 +11,18 @@
 
 #include "IpTaggedObject.hpp"
 #include "IpObserver.hpp"
-#include "IpDebug.hpp"
 #include <algorithm>
 #include <vector>
 #include <list>
 
 namespace Ipopt
+      //#define IP_DEBUG_CACHE
+#if COIN_IPOPT_CHECKLEVEL > 2
+# define IP_DEBUG_CACHE
+#endif
+#ifdef IP_DEBUG_CACHE
+# include "IpDebug.hpp"
+#endif
 {
 
   // Forward Declarations
@@ -201,6 +207,12 @@ namespace Ipopt
     bool InvalidateResult(const std::vector<const TaggedObject*>& dependents,
                           const std::vector<Number>& scalar_dependents);
 
+    /** Invalidates all cached results */
+    void Clear();
+
+    /** Invalidate all cached results and changes max_cache_size */
+    void Clear(Int max_cache_size);
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -372,8 +384,8 @@ namespace Ipopt
   {
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::~DependentResult()", dbg_verbosity);
-#endif
     //DBG_ASSERT(stale_ == true);
+#endif
     // Nothing to be done here, destructor
     // of T should sufficiently remove
     // any memory, etc.
@@ -411,10 +423,9 @@ namespace Ipopt
   {
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::DependentsIdentical", dbg_verbosity);
-#endif
-
     DBG_ASSERT(stale_ == false);
     DBG_ASSERT(dependents.size() == dependent_tags_.size());
+#endif
 
     bool retVal = true;
 
@@ -448,9 +459,9 @@ namespace Ipopt
   {
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("DependentResult<T>::GetResult()", dbg_verbosity);
+    DBG_ASSERT(stale_ == false);
 #endif
 
-    DBG_ASSERT(stale_ == false);
     return result_;
   }
 
@@ -683,7 +694,8 @@ namespace Ipopt
 
     bool retValue = false;
     typename std::list< DependentResult<T>* >::const_iterator iter;
-    for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++) {
+    for (iter = cached_results_->begin(); iter != cached_results_->end();
+         iter++) {
       if ((*iter)->DependentsIdentical(dependents, scalar_dependents)) {
         (*iter)->Invalidate();
         retValue = true;
@@ -692,6 +704,28 @@ namespace Ipopt
     }
 
     return retValue;
+  }
+
+  template <class T>
+  void CachedResults<T>::Clear()
+  {
+    if (!cached_results_)
+      return;
+
+    typename std::list< DependentResult<T>* >::const_iterator iter;
+    for (iter = cached_results_->begin(); iter != cached_results_->end();
+         iter++) {
+      (*iter)->Invalidate();
+    }
+
+    CleanupInvalidatedResults();
+  }
+
+  template <class T>
+  void CachedResults<T>::Clear(Int max_cache_size)
+  {
+    Clear();
+    max_cache_size_ = max_cache_size;
   }
 
   template <class T>

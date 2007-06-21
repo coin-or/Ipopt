@@ -2,6 +2,16 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2007-06-20 releases/3.3.1
+        synchronized with all changes in trunk; probably more than to be
+        remembered.  In the following a few:
+        - support for Mumps linear solver (contributed by Damian Hocking)
+        - --print-options flag for ipopt ASL solver executable to see all
+          Ipopt options (available through ipopt.opt file)
+        - added Matlab interface (contributed by Peter Carbonetto)
+        - a number of small changes/bug fixes/improvements
+        - change in interface (e.g., FinalizeSolution method)
+
 2007-04-24 releases/3.2.4
         - updated download script for Blas to fit netlib's
           recent changes

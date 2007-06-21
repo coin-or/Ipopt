@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -49,7 +49,7 @@ extern "C"
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -203,6 +203,7 @@ namespace Ipopt
     IPARM_[2] = 1;
 #endif
 
+    IPARM_[1] = 5;
     IPARM_[5] = 1;  // Overwrite right-hand side
     // ToDo: decide if we need iterative refinement in Pardiso.  For
     // now, switch it off ?
@@ -210,7 +211,7 @@ namespace Ipopt
 
     // Options suggested by Olaf Schenk
     IPARM_[9] = 12;
-    IPARM_[10] = 1;
+    IPARM_[10] = 2; // Results in better scaling
     // Matching information:  IPARM_[12] = 1 seems ok, but results in a
     // large number of pivot perturbation
     // Matching information:  IPARM_[12] = 2 robust,  but more  expensive method
@@ -218,9 +219,20 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "Pardiso matching strategy (IPARM(13)): %d\n", IPARM_[12]);
 
-    IPARM_[20] = 1;
+    IPARM_[20] = 3; // Results in better accuracy
     IPARM_[23] = 1; // parallel fac
     IPARM_[24] = 1; // parallel solve
+    IPARM_[29] = 1; // we need this for IPOPT interface
+
+    IPARM_[39] = 4 ;  // max fill for factor
+    IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
+    IPARM_[41] =-2 ;  // exponent dropping value for schur complement
+    IPARM_[42] = 300; // max number of iterations
+    IPARM_[43] = 50 ; // norm of the inverse for algebraic solver
+    IPARM_[44] =-2 ;  // exponent dropping value for incomplete factor
+    IPARM_[46] = 1 ;  // mantisse dropping value for incomplete factor
+    IPARM_[45] =-9 ;  // residual tolerance
+    IPARM_[48] = 0 ;  // active direct solver
 
     // Option for the out of core variant
     IPARM_[49] = pardiso_out_of_core_power;
@@ -275,6 +287,7 @@ namespace Ipopt
 
     // Make space for storing the matrix elements
     delete[] a_;
+    a_ = NULL;
     a_ = new double[nonzeros_];
 
     // Do the symbolic facotrization
@@ -377,7 +390,9 @@ namespace Ipopt
 
     while (!done) {
       if (!have_symbolic_factorization_) {
-        IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+        }
         PHASE = 11;
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Calling Pardiso for symbolic factorization.\n");
@@ -385,7 +400,9 @@ namespace Ipopt
                                   &PHASE, &N, a_, ia, ja, &PERM,
                                   &NRHS, IPARM_, &MSGLVL_, &B, &X,
                                   &ERROR);
-        IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+        }
         if (ERROR==-7) {
           Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                          "Pardiso symbolic factorization returns ERROR = %d.  Matrix is singular.\n", ERROR);
@@ -409,20 +426,30 @@ namespace Ipopt
 
       PHASE = 22;
 
-      IpData().TimingStats().LinearSystemFactorization().Start();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemFactorization().Start();
+      }
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "Calling Pardiso for factorization.\n");
       // Dump matrix to file, and count number of solution steps.
-      if (IpData().iter_count() != debug_last_iter_)
+      if (HaveIpData()) {
+        if (IpData().iter_count() != debug_last_iter_)
+          debug_cnt_ = 0;
+        debug_last_iter_ = IpData().iter_count();
+        debug_cnt_ ++;
+      }
+      else {
         debug_cnt_ = 0;
-      debug_last_iter_ = IpData().iter_count();
-      debug_cnt_ ++;
+        debug_last_iter_ = 0;
+      }
 
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                                 &PHASE, &N, a_, ia, ja, &PERM,
                                 &NRHS, IPARM_, &MSGLVL_, &B, &X,
                                 &ERROR);
-      IpData().TimingStats().LinearSystemFactorization().End();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemFactorization().End();
+      }
 
       if (ERROR==-7) {
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -446,7 +473,9 @@ namespace Ipopt
                        "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
         if ( !pardiso_redo_symbolic_fact_only_if_inertia_wrong_ ||
              (negevals_ != numberOfNegEVals) ) {
-          IpData().Append_info_string("Pn");
+          if (HaveIpData()) {
+            IpData().Append_info_string("Pn");
+          }
           have_symbolic_factorization_ = false;
           // We assume now that if there was just a symbolic
           // factorization and we still have perturbed pivots, that
@@ -454,7 +483,9 @@ namespace Ipopt
           // pardiso_repeated_perturbation_means_singular_ is true
           if (just_performed_symbolic_factorization) {
             if (pardiso_repeated_perturbation_means_singular_) {
-              IpData().Append_info_string("Ps");
+              if (HaveIpData()) {
+                IpData().Append_info_string("Ps");
+              }
               return SYMSOLVER_SINGULAR;
             }
             else {
@@ -466,7 +497,9 @@ namespace Ipopt
           }
         }
         else {
-          IpData().Append_info_string("Pp");
+          if (HaveIpData()) {
+            IpData().Append_info_string("Pp");
+          }
           done = true;
         }
       }
@@ -496,7 +529,9 @@ namespace Ipopt
   {
     DBG_START_METH("PardisoSolverInterface::Solve",dbg_verbosity);
 
-    IpData().TimingStats().LinearSystemBackSolve().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().Start();
+    }
     // Call Pardiso to do the solve for the given right-hand sides
     ipfint PHASE = 33;
     ipfint N = dim_;
@@ -506,7 +541,11 @@ namespace Ipopt
     ipfint ERROR;
 
     // Dump matrix to file if requested
-    write_iajaa_matrix (N, ia, ja, a_, rhs_vals, IpData().iter_count(), debug_cnt_);
+    Index iter_count = 0;
+    if (HaveIpData()) {
+      iter_count = IpData().iter_count();
+    }
+    write_iajaa_matrix (N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
 
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                               &PHASE, &N, a_, ia, ja, &PERM,
@@ -518,10 +557,14 @@ namespace Ipopt
     if (IPARM_[6] != 0) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Number of iterative refinement steps = %d.\n", IPARM_[6]);
-      IpData().Append_info_string("Pi");
+      if (HaveIpData()) {
+        IpData().Append_info_string("Pi");
+      }
     }
 
-    IpData().TimingStats().LinearSystemBackSolve().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().End();
+    }
     if (ERROR!=0 ) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);

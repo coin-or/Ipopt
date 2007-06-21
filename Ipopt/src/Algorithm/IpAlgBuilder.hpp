@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,6 +11,7 @@
 
 #include "IpIpoptAlg.hpp"
 #include "IpReferenced.hpp"
+#include "IpAugSystemSolver.hpp"
 
 namespace Ipopt
 {
@@ -18,7 +19,12 @@ namespace Ipopt
   /** Builder to create a complete IpoptAlg object.  This object
    *  contains all subelements (such as line search objects etc).  How
    *  the resulting IpoptAlg object is built can be influenced by the
-   *  options. 
+   *  options.
+   *
+   *  The optional argument custom_solver allows the expert user to
+   *  provide a specialized linear solver (e.g., of the type
+   *  GenAugSystemSolver), possibly for selfmade matrix objects.
+   *
    * TODO: Currently, this is a basic implementation with everything
    *  in one method that can be overloaded. This will need to be expanded
    *  to allow customization of different parts without recoding everything. 
@@ -29,8 +35,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
-    AlgorithmBuilder()
-    {}
+    AlgorithmBuilder(SmartPtr<AugSystemSolver> custom_solver=NULL);
 
     /** Destructor */
     virtual ~AlgorithmBuilder()
@@ -69,7 +74,7 @@ namespace Ipopt
      * they will not be implicitly created/called. */
     //@{
     /** Default Constructor */
-    // AlgorithmBuilder();
+    //AlgorithmBuilder();
 
     /** Copy Constructor */
     AlgorithmBuilder(const AlgorithmBuilder&);
@@ -77,6 +82,11 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const AlgorithmBuilder&);
     //@}
+
+    /** Optional pointer to AugSystemSolver.  If this is set in the
+     *  contructor, we will use this to solver the linear systems if
+     *  the option linear_solver=custerm is chosen. */
+    SmartPtr<AugSystemSolver> custom_solver_;
 
   };
 } // namespace Ipopt

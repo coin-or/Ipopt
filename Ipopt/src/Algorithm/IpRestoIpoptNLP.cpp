@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -27,7 +27,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -280,7 +280,7 @@ namespace Ipopt
     = new DiagMatrixSpace(orig_x_space->Dim());
     if (hessian_approximation_==LIMITED_MEMORY) {
       const LowRankUpdateSymMatrixSpace* LR_h_space =
-        dynamic_cast<const LowRankUpdateSymMatrixSpace*> (GetRawPtr(orig_h_space));
+        static_cast<const LowRankUpdateSymMatrixSpace*> (GetRawPtr(orig_h_space));
       DBG_ASSERT(LR_h_space);
       SmartPtr<LowRankUpdateSymMatrixSpace> new_orig_h_space =
         new LowRankUpdateSymMatrixSpace(LR_h_space->Dim(),
@@ -297,21 +297,6 @@ namespace Ipopt
       h_space_->SetCompSpace(0, 0, *sumsym_mat_space, true);
       // All remaining blocks are zero'ed out
     }
-
-    SmartPtr<const MatrixSpace> scaled_jac_c_space;
-    SmartPtr<const MatrixSpace> scaled_jac_d_space;
-    SmartPtr<const SymMatrixSpace> scaled_h_space;
-    NLP_scaling()->DetermineScaling(GetRawPtr(x_space_),
-                                    c_space_, d_space_,
-                                    GetRawPtr(jac_c_space_),
-                                    GetRawPtr(jac_d_space_),
-                                    GetRawPtr(h_space_),
-                                    scaled_jac_c_space, scaled_jac_d_space,
-                                    scaled_h_space);
-    // For now we assume that no scaling is done inside the NLP_Scaling
-    DBG_ASSERT(scaled_jac_c_space == jac_c_space_);
-    DBG_ASSERT(scaled_jac_d_space == jac_d_space_);
-    DBG_ASSERT(scaled_h_space == h_space_);
 
     ///////////////////////////
     // Create the bound data //
@@ -350,6 +335,24 @@ namespace Ipopt
 
     // Pd_U
     Pd_U_ = orig_ip_nlp_->Pd_U();
+
+    // Getting the NLP scaling
+
+    SmartPtr<const MatrixSpace> scaled_jac_c_space;
+    SmartPtr<const MatrixSpace> scaled_jac_d_space;
+    SmartPtr<const SymMatrixSpace> scaled_h_space;
+    NLP_scaling()->DetermineScaling(GetRawPtr(x_space_),
+                                    c_space_, d_space_,
+                                    GetRawPtr(jac_c_space_),
+                                    GetRawPtr(jac_d_space_),
+                                    GetRawPtr(h_space_),
+                                    scaled_jac_c_space, scaled_jac_d_space,
+                                    scaled_h_space,
+                                    *Px_L_, *x_L_, *Px_U_, *x_U_);
+    // For now we assume that no scaling is done inside the NLP_Scaling
+    DBG_ASSERT(scaled_jac_c_space == jac_c_space_);
+    DBG_ASSERT(scaled_jac_d_space == jac_d_space_);
+    DBG_ASSERT(scaled_h_space == h_space_);
 
     /////////////////////////////////////////////////////////////////////////
     // Create and initialize the vectors for the restoration phase problem //
@@ -430,7 +433,7 @@ namespace Ipopt
                    dbg_verbosity);
     Number ret = 0.0;
     // rho*(pcTe + ncTe + pdT*e + ndT*e) + eta/2*||Dr*(x-xr)||_2^2
-    const CompoundVector* c_vec = dynamic_cast<const CompoundVector*>(&x);
+    const CompoundVector* c_vec = static_cast<const CompoundVector*>(&x);
     DBG_ASSERT(c_vec);
     SmartPtr<const Vector> x_only = c_vec->GetComp(0);
     ret = x.Sum() - x_only->Sum();
@@ -466,10 +469,10 @@ namespace Ipopt
     // Scale the p's and n's by rho (Scale all, take out the x part later)
     retPtr->Set(rho_);
 
-    const CompoundVector* c_vec_in = dynamic_cast<const CompoundVector*>(&x);
+    const CompoundVector* c_vec_in = static_cast<const CompoundVector*>(&x);
     SmartPtr<const Vector> x_only_in = c_vec_in->GetComp(0);
 
-    CompoundVector* c_vec = dynamic_cast<CompoundVector*>(GetRawPtr(retPtr));
+    CompoundVector* c_vec = static_cast<CompoundVector*>(GetRawPtr(retPtr));
     DBG_ASSERT(c_vec);
     SmartPtr<Vector> x_only = c_vec->GetCompNonConst(0);
     x_only->Copy(*x_only_in);
@@ -482,7 +485,7 @@ namespace Ipopt
 
   SmartPtr<const Vector> RestoIpoptNLP::c(const Vector& x)
   {
-    const CompoundVector* c_vec = dynamic_cast<const CompoundVector*>(&x);
+    const CompoundVector* c_vec = static_cast<const CompoundVector*>(&x);
     SmartPtr<const Vector> x_only = c_vec->GetComp(0);
     SmartPtr<const Vector> nc_only = c_vec->GetComp(1);
     SmartPtr<const Vector> pc_only = c_vec->GetComp(2);
@@ -504,7 +507,7 @@ namespace Ipopt
 
   SmartPtr<const Vector> RestoIpoptNLP::d(const Vector& x)
   {
-    const CompoundVector* c_vec = dynamic_cast<const CompoundVector*>(&x);
+    const CompoundVector* c_vec = static_cast<const CompoundVector*>(&x);
     SmartPtr<const Vector> x_only = c_vec->GetComp(0);
     SmartPtr<const Vector> nd_only = c_vec->GetComp(3);
     SmartPtr<const Vector> pd_only = c_vec->GetComp(4);
@@ -525,7 +528,7 @@ namespace Ipopt
     // original jac_c and set the factor for the -I (jac w.r.t. p_c)
 
     // get out the x_only part
-    const CompoundVector* c_vec = dynamic_cast<const CompoundVector*>(&x);
+    const CompoundVector* c_vec = static_cast<const CompoundVector*>(&x);
     DBG_ASSERT(c_vec);
     SmartPtr<const Vector> x_only = c_vec->GetComp(0);
 
@@ -546,7 +549,7 @@ namespace Ipopt
     // This could easily be changed to include special processing
     // for identities in the CompoundMatrixSpace (and a factor)
     SmartPtr<Matrix> jac_c_pc_mat = retPtr->GetCompNonConst(0,2);
-    IdentityMatrix* jac_c_pc = dynamic_cast<IdentityMatrix*>(GetRawPtr(jac_c_pc_mat));
+    IdentityMatrix* jac_c_pc = static_cast<IdentityMatrix*>(GetRawPtr(jac_c_pc_mat));
     DBG_ASSERT(jac_c_pc);
     jac_c_pc->SetFactor(-1.0);
 
@@ -561,7 +564,7 @@ namespace Ipopt
     // original jac_d and set the factor for the -I (jac w.r.t. p_d)
 
     // get out the x_only part
-    const CompoundVector* c_vec = dynamic_cast<const CompoundVector*>(&x);
+    const CompoundVector* c_vec = static_cast<const CompoundVector*>(&x);
     DBG_ASSERT(c_vec);
     SmartPtr<const Vector> x_only = c_vec->GetComp(0);
 
@@ -582,7 +585,7 @@ namespace Ipopt
     // set the factor for the identity matrix for the pd variables
     // (likr in jac_c)
     SmartPtr<Matrix> jac_d_pd_mat = retPtr->GetCompNonConst(0,4);
-    IdentityMatrix* jac_d_pd = dynamic_cast<IdentityMatrix*>(GetRawPtr(jac_d_pd_mat));
+    IdentityMatrix* jac_d_pd = static_cast<IdentityMatrix*>(GetRawPtr(jac_d_pd_mat));
     DBG_ASSERT(jac_d_pd);
     jac_d_pd->SetFactor(-1.0);
 
@@ -613,7 +616,7 @@ namespace Ipopt
     // All other blocks are zero'ed (NULL)
 
     // get the x_only part
-    const CompoundVector* c_vec = dynamic_cast<const CompoundVector*>(&x);
+    const CompoundVector* c_vec = static_cast<const CompoundVector*>(&x);
     DBG_ASSERT(c_vec);
     SmartPtr<const Vector> x_only = c_vec->GetComp(0);
 
@@ -628,7 +631,7 @@ namespace Ipopt
 
     // Set the entries in the SumSymMatrix
     SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0,0);
-    SmartPtr<SumSymMatrix> h_sum = dynamic_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
+    SmartPtr<SumSymMatrix> h_sum = static_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
     h_sum->SetTerm(0, 1.0, *h_con_orig);
     h_sum->SetTerm(1, obj_factor*Eta(mu), *DR_x_);
 
@@ -645,7 +648,7 @@ namespace Ipopt
       SmartPtr<const SymMatrix> h_con_orig = orig_ip_nlp_->uninitialized_h();
       retPtr = h_space_->MakeNewCompoundSymMatrix();
       SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0,0);
-      SmartPtr<SumSymMatrix> h_sum = dynamic_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
+      SmartPtr<SumSymMatrix> h_sum = static_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
       h_sum->SetTerm(0, 1.0, *h_con_orig);
       h_sum->SetTerm(1, 1.0, *DR_x_);
     }
@@ -694,7 +697,7 @@ namespace Ipopt
   {
 
     const CompoundVector* comp_new_x_L =
-      dynamic_cast<const CompoundVector*>(&new_x_L);
+      static_cast<const CompoundVector*>(&new_x_L);
     DBG_ASSERT(comp_new_x_L);
 
     SmartPtr<const Vector> new_orig_x_L = comp_new_x_L->GetComp(0);

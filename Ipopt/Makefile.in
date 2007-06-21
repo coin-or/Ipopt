@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -58,6 +58,7 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/../ltmain.sh $(srcdir)/../missing \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/configure \
+	$(top_srcdir)/contrib/MatlabInterface/src/Makefile.in \
 	$(top_srcdir)/examples/Cpp_example/Makefile.in \
 	$(top_srcdir)/examples/ScalableProblems/Makefile.in \
 	$(top_srcdir)/examples/hs071_c/Makefile.in \
@@ -84,7 +85,8 @@ CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES = examples/hs071_f/Makefile \
 	examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile \
 	examples/hs071_cpp/Makefile examples/hs071_c/Makefile \
-	examples/ScalableProblems/Makefile
+	examples/ScalableProblems/Makefile \
+	contrib/MatlabInterface/src/Makefile
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -95,8 +97,8 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	uninstall-recursive
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm src/Interfaces \
-	src/Apps test
+DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm \
+	src/contrib/CGPenalty src/Interfaces src/Apps test
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -143,6 +145,8 @@ COIN_BUILD_BLAS_FALSE = @COIN_BUILD_BLAS_FALSE@
 COIN_BUILD_BLAS_TRUE = @COIN_BUILD_BLAS_TRUE@
 COIN_BUILD_LAPACK_FALSE = @COIN_BUILD_LAPACK_FALSE@
 COIN_BUILD_LAPACK_TRUE = @COIN_BUILD_LAPACK_TRUE@
+COIN_BUILD_MUMPS_FALSE = @COIN_BUILD_MUMPS_FALSE@
+COIN_BUILD_MUMPS_TRUE = @COIN_BUILD_MUMPS_TRUE@
 COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
 COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
 COIN_HAS_BLAS_FALSE = @COIN_HAS_BLAS_FALSE@
@@ -151,6 +155,8 @@ COIN_HAS_IPOPT_FALSE = @COIN_HAS_IPOPT_FALSE@
 COIN_HAS_IPOPT_TRUE = @COIN_HAS_IPOPT_TRUE@
 COIN_HAS_LAPACK_FALSE = @COIN_HAS_LAPACK_FALSE@
 COIN_HAS_LAPACK_TRUE = @COIN_HAS_LAPACK_TRUE@
+COIN_HAS_MUMPS_FALSE = @COIN_HAS_MUMPS_FALSE@
+COIN_HAS_MUMPS_TRUE = @COIN_HAS_MUMPS_TRUE@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -180,12 +186,12 @@ HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
 HAVE_MA27_FALSE = @HAVE_MA27_FALSE@
 HAVE_MA27_TRUE = @HAVE_MA27_TRUE@
+HAVE_MA28_FALSE = @HAVE_MA28_FALSE@
+HAVE_MA28_TRUE = @HAVE_MA28_TRUE@
 HAVE_MA57_FALSE = @HAVE_MA57_FALSE@
 HAVE_MA57_TRUE = @HAVE_MA57_TRUE@
 HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
 HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
-HAVE_MUMPS_FALSE = @HAVE_MUMPS_FALSE@
-HAVE_MUMPS_TRUE = @HAVE_MUMPS_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
@@ -289,8 +295,8 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = src/Common src/LinAlg src/Algorithm src/Interfaces src/Apps \
-	$(am__append_1)
+SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
+	src/Interfaces src/Apps $(am__append_1)
 EXTRA_DIST = examples/Cpp_example/cpp_example.cpp \
 	examples/Cpp_example/Makefile.in \
 	examples/Cpp_example/MyNLP.cpp examples/Cpp_example/MyNLP.hpp \
@@ -339,7 +345,6 @@ EXTRA_DIST = examples/Cpp_example/cpp_example.cpp \
 	Windows/VisualStudio_dotNET/hs071_f/hs071_f.vfproj \
 	Windows/VisualStudio_dotNET/hs071_f/hs071_f.f \
 	Windows/VisualStudio_dotNET/FortranLinAlg/FortranLinAlg.vfproj \
-	Windows/VisualStudio_dotNET/include/config.h \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj \
 	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj \
@@ -428,6 +433,8 @@ examples/hs071_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/example
 examples/hs071_c/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_c/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/ScalableProblems/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/ScalableProblems/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+contrib/MatlabInterface/src/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/MatlabInterface/src/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
@@ -575,7 +582,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/.. $(distdir)/../BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/Windows/VisualStudio_dotNET/include $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Interfaces $(distdir)/test
+	$(mkdir_p) $(distdir)/.. $(distdir)/../BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/MatlabInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Interfaces $(distdir)/test
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -829,6 +836,7 @@ astyle:
 	cd src/Common; $(MAKE) astyle
 	cd src/LinAlg; $(MAKE) astyle
 	cd src/LinAlg/TMatrices; $(MAKE) astyle
+	cd src/contrib/CGPenalty; $(MAKE) astyle
 	cd src/Interfaces; $(MAKE) astyle
 
 # Make sure acinclude is using most recent coin.m4

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,7 +11,7 @@
 
 #include "IpIpoptNLP.hpp"
 #include "IpAlgStrategy.hpp"
-#include "IpPDSystemSolver.hpp"
+#include "IpSearchDirCalculator.hpp"
 #include "IpLineSearch.hpp"
 #include "IpMuUpdate.hpp"
 #include "IpConvCheck.hpp"
@@ -52,7 +52,7 @@ namespace Ipopt
      *  passed-in pieces to make sure that a user of IpoptAlgoroithm
      *  cannot pass in an object created on the stack!)
      */
-    IpoptAlgorithm(const SmartPtr<PDSystemSolver>& pd_solver,
+    IpoptAlgorithm(const SmartPtr<SearchDirectionCalculator>& search_dir_calculator,
                    const SmartPtr<LineSearch>& line_search,
                    const SmartPtr<MuUpdate>& mu_update,
                    const SmartPtr<ConvergenceCheck>& conv_check,
@@ -99,7 +99,7 @@ namespace Ipopt
 
     /** @name Strategy objects */
     //@{
-    SmartPtr<PDSystemSolver> pd_solver_;
+    SmartPtr<SearchDirectionCalculator> search_dir_calculator_;
     SmartPtr<LineSearch> line_search_;
     SmartPtr<MuUpdate> mu_update_;
     SmartPtr<ConvergenceCheck> conv_check_;
@@ -150,6 +150,9 @@ namespace Ipopt
 
     /** Print the problem size statistics */
     void PrintProblemStatistics();
+
+    /** Compute the Lagrangian multipliers for a feasibility problem*/
+    void ComputeFeasibilityMultipliers();
     //@}
 
     /** @name internal flags */
@@ -171,6 +174,10 @@ namespace Ipopt
     bool recalc_y_;
     /** Feasibility threshold for recalc_y */
     Number recalc_y_feas_tol_;
+    /** Flag indicating if we want to do Mehrotras's algorithm.  This
+     *  means that a number of options are ignored, or have to be set
+     *  (or are automatically set) to certain values. */
+    bool mehrotra_algorithm_;
     //@}
 
     /** @name auxilliary functions */

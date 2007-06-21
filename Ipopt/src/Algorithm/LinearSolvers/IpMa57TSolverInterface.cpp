@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -124,7 +124,7 @@ extern "C"
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -329,10 +329,15 @@ namespace Ipopt
       dim_=0;
       nonzeros_=0;
       delete [] a_;
+      a_ = NULL;
       delete [] wd_fact_;
+      wd_fact_ = NULL;
       delete [] wd_ifact_;
+      wd_ifact_ = NULL;
       delete [] wd_iwork_;
+      wd_iwork_ = NULL;
       delete [] wd_keep_;
+      wd_keep_ = NULL;
     }
     else {
       ASSERT_EXCEPTION(dim_>0 && nonzeros_>0, INVALID_WARMSTART,
@@ -414,6 +419,7 @@ namespace Ipopt
       // for MA57, a_ only has to be as long as the number of nonzero
       // elements
       delete [] a_;
+      a_ = NULL;
       a_ = new double [nonzeros_];
 
       // Do the symbolic facotrization
@@ -438,7 +444,10 @@ namespace Ipopt
       const Index*  ajcn)
   {
     DBG_START_METH("Ma57TSolverInterface::SymbolicFactorization",dbg_verbosity);
-    IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+    }
 
     ipfint n  = dim_;
     ipfint ne = nonzeros_;
@@ -471,7 +480,9 @@ namespace Ipopt
     // amount of memory here.  I don't think there is any need to
     // reallocate it later for every factorization
     delete [] wd_fact_;
+    wd_fact_ = NULL;
     delete [] wd_ifact_;
+    wd_ifact_ = NULL;
 
     wd_fact_  = new double[wd_lfact_];
     wd_ifact_ = new int[wd_lifact_];
@@ -481,7 +492,9 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "Suggested lifact (*%e):  %d\n", ma57_pre_alloc_, wd_lifact_);
 
-    IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+    }
     return SYMSOLVER_SUCCESS;
   }
 
@@ -492,7 +505,9 @@ namespace Ipopt
                                       Index         numberOfNegEVals)
   {
     DBG_START_METH("Ma57TSolverInterface::Factorization",dbg_verbosity);
-    IpData().TimingStats().LinearSystemFactorization().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemFactorization().Start();
+    }
 
     int fact_error = 1;
 
@@ -575,7 +590,9 @@ namespace Ipopt
       }
       // Check if the system is singular.
       else if (wd_info_[0] == 4) {
-        IpData().TimingStats().LinearSystemFactorization().End();
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemFactorization().End();
+        }
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "System singular, rank = %d\n", wd_info_[25-1]);
         return SYMSOLVER_SINGULAR;
@@ -596,7 +613,9 @@ namespace Ipopt
 
     // Check whether the number of negative eigenvalues matches the
     // requested count.
-    IpData().TimingStats().LinearSystemFactorization().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemFactorization().End();
+    }
     if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "In Ma57TSolverInterface::Factorization: "
@@ -613,7 +632,9 @@ namespace Ipopt
     double    *rhs_vals)
   {
     DBG_START_METH("Ma27TSolverInterface::Backsolve",dbg_verbosity);
-    IpData().TimingStats().LinearSystemBackSolve().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().Start();
+    }
 
     ipfint  n      = dim_;
     ipfint  job    = 1;
@@ -658,7 +679,9 @@ namespace Ipopt
 
     delete [] work;
 
-    IpData().TimingStats().LinearSystemBackSolve().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().End();
+    }
     return SYMSOLVER_SUCCESS;
   }
 

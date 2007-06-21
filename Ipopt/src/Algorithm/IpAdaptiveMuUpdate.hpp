@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -89,7 +89,6 @@ namespace Ipopt
     {
       KKT_ERROR=0,
       FILTER_OBJ_CONSTR,
-      FILTER_KKT_ERROR,
       NEVER_MONOTONE_MODE
     };
     /** Flag indicating which globalization strategy should be used. */

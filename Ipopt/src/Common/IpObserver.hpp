@@ -10,9 +10,16 @@
 #define __IPOBSERVER_HPP__
 
 #include "IpUtils.hpp"
-#include "IpDebug.hpp"
 #include <vector>
 #include <algorithm>
+
+//#define IP_DEBUG_OBSERVER
+#if COIN_IPOPT_CHECKLEVEL > 2
+# define IP_DEBUG_OBSERVER
+#endif
+#ifdef IP_DEBUG_OBSERVER
+# include "IpDebug.hpp"
+#endif
 
 namespace Ipopt
 {
@@ -127,7 +134,6 @@ namespace Ipopt
     /** Default Constructor */
     Subject()
     {}
-    ;
 
     /** Default destructor */
     virtual ~Subject();
@@ -205,16 +211,13 @@ namespace Ipopt
   {
 #ifdef IP_DEBUG_OBSERVER
     DBG_START_METH("Observer::RequestAttach", dbg_verbosity);
-#endif
 
-#ifdef IP_DEBUG
     // Add the subject to the list if it does not already exist
     std::vector<const Subject*>::iterator attached_subject;
     attached_subject = std::find(subjects_.begin(), subjects_.end(), subject);
     DBG_ASSERT(attached_subject == subjects_.end());
-#endif
-
     DBG_ASSERT(subject);
+#endif
 
     // add the subject to the list
     subjects_.push_back(subject);
@@ -302,17 +305,14 @@ namespace Ipopt
     // they must filter the notifications that they are not interested
     // in (i.e. a hub, not a router)
     DBG_ASSERT(observer);
-#endif
-
-
-#ifdef IP_DEBUG
 
     std::vector<Observer*>::iterator attached_observer;
     attached_observer = std::find(observers_.begin(), observers_.end(), observer);
     DBG_ASSERT(attached_observer == observers_.end());
-#endif
 
     DBG_ASSERT(observer);
+#endif
+
     observers_.push_back(observer);
   }
 

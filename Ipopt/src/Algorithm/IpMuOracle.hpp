@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -26,11 +26,9 @@ namespace Ipopt
     /** Default Constructor */
     MuOracle()
     {}
-    ;
     /** Default destructor */
     virtual ~MuOracle()
     {}
-    ;
     //@}
 
     /** Initialize method - overloaded from AlgorithmStrategyObject */

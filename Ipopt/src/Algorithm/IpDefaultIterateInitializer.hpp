@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,6 +11,7 @@
 
 #include "IpIterateInitializer.hpp"
 #include "IpEqMultCalculator.hpp"
+#include "IpAugSystemSolver.hpp"
 
 namespace Ipopt
 {
@@ -32,7 +33,8 @@ namespace Ipopt
      *  warm_start_init_point is chosen. */
     DefaultIterateInitializer
     (const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
-     const SmartPtr<IterateInitializer>& warm_start_initializer);
+     const SmartPtr<IterateInitializer>& warm_start_initializer,
+     const SmartPtr<AugSystemSolver> aug_system_solver = NULL);
 
     /** Default destructor */
     virtual ~DefaultIterateInitializer()
@@ -102,10 +104,14 @@ namespace Ipopt
 
     /**@name Algorithmic Parameters */
     //@{
-    /** Parameters for bumping x0 */
+    /** Absolute parameter for bumping x0 */
     Number bound_push_;
-    /** Parameters for bumping x0 */
+    /** Relative parameter for bumping x0 */
     Number bound_frac_;
+    /** Absolute parameter for bumping s0 */
+    Number slack_bound_push_;
+    /** Relative parameter for bumping s0 */
+    Number slack_bound_frac_;
 
     /** If max-norm of the initial equality constraint multiplier
      *  estimate is larger than this, the initial y_* variables are
@@ -116,6 +122,14 @@ namespace Ipopt
     /** Flag indicating whether warm_start_initializer should be used
      *  instead of the default initialization */
     bool warm_start_init_point_;
+    /** Flag indicating whether the primal variables should be
+     *  initialized as least square fit for the linearized
+     *  constraints */
+    bool least_square_init_primal_;
+    /** Flag indicating whether all dual variables should be
+     *  initialized as least square fit for the linearized
+     *  dual infeasibility */
+    bool least_square_init_duals_;
     //@}
 
     /** object to be used for the initialization of the equality
@@ -124,6 +138,22 @@ namespace Ipopt
 
     /** object to be used for a warm start initialization */
     SmartPtr<IterateInitializer> warm_start_initializer_;
+
+    /** Object for solving the augmented system.  This is only
+     *  required if we use the least square initialization of primal
+     *  and all dual varibles. */
+    SmartPtr<AugSystemSolver> aug_system_solver_;
+
+    /** Auxilliary method for computing least square primal
+     *  variables */
+    bool CalculateLeastSquarePrimals(Vector& x_ls, Vector& s_ls);
+
+    /** Auxilliary method for computing least square dual
+     *  variables */
+    bool CalculateLeastSquareDuals(Vector& zL_new, Vector& zU_new,
+                                   Vector& vL_new, Vector& vU_new,
+                                   Vector& yc_new, Vector& yd_new);
+
   };
 
 } // namespace Ipopt

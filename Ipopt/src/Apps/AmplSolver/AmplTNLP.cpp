@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -7,7 +7,12 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpoptConfig.h"
-#include "config_ipopt.h"
+#ifdef HAVE_CONFIG_H
+# include "config_ipopt.h"
+#else
+# define PACKAGE_STRING "Ipopt 3.3.1"
+#endif
+
 #include "AmplTNLP.hpp"
 #include "IpDenseVector.hpp"
 #include "IpGenTMatrix.hpp"
@@ -21,7 +26,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -41,7 +46,6 @@ namespace Ipopt
       asl_(NULL),
       obj_sign_(1),
       nz_h_full_(-1),
-      non_const_x_(NULL),
       x_sol_(NULL),
       z_L_sol_(NULL),
       z_U_sol_(NULL),
@@ -50,6 +54,8 @@ namespace Ipopt
       obj_sol_(0.0),
       objval_called_with_current_x_(false),
       conval_called_with_current_x_(false),
+      hesset_called_(false),
+      set_active_objective_called_(false),
       Oinfo_ptr_(NULL),
       suffix_handler_(suffix_handler)
   {
@@ -84,7 +90,7 @@ namespace Ipopt
     else {
       if (!stub) {
         jnlst_->Printf(J_ERROR, J_MAIN, "No .nl file given!\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "No .nl file given!\n");
       }
       nl = jac0dim(stub, (fint)strlen(stub));
       DBG_ASSERT(nl);
@@ -103,8 +109,7 @@ namespace Ipopt
                      "Discrete variables not allowed when the allow_discrete flag is false, "
                      "Either remove the integer variables, or change the flag in the constructor of AmplTNLP"
                     );
-    // n_con can be >= 0
-    DBG_ASSERT(n_obj <= 1); // Currently can handle only 0 or 1 objective
+
     DBG_ASSERT(nlo == 0 || nlo == 1); // Can handle nonlinear obj.
     DBG_ASSERT(nwv == 0); // Don't know what "linear arc" variables are
     DBG_ASSERT(nlnc == 0); // Don't know what "nonlinear network"constraints are
@@ -112,8 +117,8 @@ namespace Ipopt
 
     // Set options in the asl structure
     want_xpi0 = 1 | 2;  // allocate initial values for primal and dual if available
+    obj_no = 0;
     DBG_ASSERT((want_xpi0 & 1) == 1 && (want_xpi0 & 2) == 2);
-    obj_no = 0; // always want to work with the first (and only?) objective
 
     // allocate space for initial values
     X0 = new real[n_var];
@@ -134,61 +139,94 @@ namespace Ipopt
       break;
       case ASL_readerr_nofile : {
         jnlst_->Printf(J_ERROR, J_MAIN, "Cannot open .nl file\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "Cannot open .nl file");
       }
       break;
       case ASL_readerr_nonlin : {
         DBG_ASSERT(false); // this better not be an error!
         jnlst_->Printf(J_ERROR, J_MAIN, "model involves nonlinearities (ed0read)\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "model involves nonlinearities (ed0read)");
       }
       break;
       case  ASL_readerr_argerr : {
         jnlst_->Printf(J_ERROR, J_MAIN, "user-defined function with bad args\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "user-defined function with bad args");
       }
       break;
       case ASL_readerr_unavail : {
         jnlst_->Printf(J_ERROR, J_MAIN, "user-defined function not available\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "user-defined function not available");
       }
       break;
       case ASL_readerr_corrupt : {
         jnlst_->Printf(J_ERROR, J_MAIN, "corrupt .nl file\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "corrupt .nl file");
       }
       break;
       case ASL_readerr_bug : {
         jnlst_->Printf(J_ERROR, J_MAIN, "bug in .nl reader\n");
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "bug in .nl reader");
       }
       break;
       case ASL_readerr_CLP : {
-        jnlst_->Printf(J_ERROR, J_MAIN, "ASL error message: \"solver cannot handle CLP extensions\"\n");
-        exit(-1);
+        jnlst_->Printf(J_ERROR, J_MAIN, "Ampl model contains a constraint without \"=\", \">=\", or \"<=\".\n");
+        THROW_EXCEPTION(INVALID_TNLP, "Ampl model contains a constraint without \"=\", \">=\", or \"<=\".");
       }
       break;
       default: {
         jnlst_->Printf(J_ERROR, J_MAIN, "Unknown error in stub file read. retcode = %d\n", retcode);
-        exit(-1);
+        THROW_EXCEPTION(INVALID_TNLP, "Unknown error in stub file read");
       }
       break;
     }
+  }
 
-    // see "changes" in solvers directory of ampl code...
-    hesset(1,0,1,0,nlc);
+  void AmplTNLP::set_active_objective(Index in_obj_no)
+  {
+    if (hesset_called_) {
+      jnlst_->Printf(J_ERROR, J_MAIN, "Internal error: AmplTNLP::set_active_objective called after AmplTNLP::call_hesset.\n");
+      THROW_EXCEPTION(INVALID_TNLP, "Internal error: AmplTNLP::set_active_objective called after AmplTNLP::call_hesset.");
+    }
+    ASL_pfgh* asl = asl_;
+    obj_no = in_obj_no;
+    set_active_objective_called_ = true;
+  }
+
+  void AmplTNLP::call_hesset()
+  {
+    if (hesset_called_) {
+      jnlst_->Printf(J_ERROR, J_MAIN, "Internal error: AmplTNLP::call_hesset is called twice.\n");
+      THROW_EXCEPTION(INVALID_TNLP, "Internal error: AmplTNLP::call_hesset is called twice.");
+    }
+
+    ASL_pfgh* asl = asl_;
+
+    if (n_obj == 0) {
+      hesset(1,0,0,0,nlc);
+    }
+    else {
+      if (n_obj>1 && !set_active_objective_called_) {
+        jnlst_->Printf(J_ERROR, J_MAIN,
+                       "There is more than one objective function in the AMPL model, but AmplTNLP::set_active_objective has not been called.\n");
+        THROW_EXCEPTION(INVALID_TNLP, "There is more than one objective function in the AMPL model, but AmplTNLP::set_active_objective has not been called");
+      }
+      // see "changes" in solvers directory of ampl code...
+      hesset(1,obj_no,1,0,nlc);
+    }
 
     obj_sign_ = 1; // minimization
     if (objtype[obj_no] != 0) {
       obj_sign_ = -1;
     }
 
-    // find the nonzero structure for the hessian
-    // parameters to sphsetup:
-    int coeff_obj = 1; // coefficient of the objective fn ???
+    // find the nonzero structure for the hessian parameters to
+    // sphsetup:
+    int coeff_obj = 1;
     int mult_supplied = 1; // multipliers will be supplied
     int uptri = 1; // only need the upper triangular part
     nz_h_full_ = sphsetup(-1, coeff_obj, mult_supplied, uptri);
+
+    hesset_called_ = true;
   }
 
   AmplTNLP::~AmplTNLP()
@@ -217,8 +255,6 @@ namespace Ipopt
       asl_ = NULL;
     }
 
-    delete [] non_const_x_;
-    non_const_x_ = NULL;
     delete [] x_sol_;
     x_sol_ = NULL;
     delete [] z_L_sol_;
@@ -246,6 +282,10 @@ namespace Ipopt
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
+
+    if (!hesset_called_) {
+      call_hesset();
+    }
 
     n = n_var; // # of variables (variable types have been asserted in the constructor
     m = n_con; // # of constraints
@@ -275,6 +315,25 @@ namespace Ipopt
       g_u[i] = LUrhs[2*i+1];
     }
 
+    return true;
+  }
+
+
+  bool AmplTNLP::get_constraints_linearity(Index n,
+      LinearityType* const_types)
+  {
+    ASL_pfgh* asl = AmplSolverObject();
+    //check that n is good
+    DBG_ASSERT(n == n_con);
+    // check that there are no network constraints
+    DBG_ASSERT(nlnc == 0 && lnc == 0);
+    //the first nlc constraints are non linear the rest is linear
+    for (Index i=0; i<nlc; i++) {
+      const_types[i]=NON_LINEAR;
+    }
+    // the rest is linear
+    for (Index i=nlc; i<n_con; i++)
+      const_types[i]=LINEAR;
     return true;
   }
 
@@ -324,7 +383,7 @@ namespace Ipopt
       return false;
     }
 
-    return internal_objval(obj_value);
+    return internal_objval(x, obj_value);
   }
 
   bool AmplTNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
@@ -344,7 +403,7 @@ namespace Ipopt
       }
     }
     else {
-      objgrd(0, non_const_x_, grad_f, (fint*)nerror_);
+      objgrd(obj_no, const_cast<Number*>(x), grad_f, (fint*)nerror_);
       if (!nerror_ok(nerror_)) {
         return false;
       }
@@ -361,18 +420,16 @@ namespace Ipopt
   bool AmplTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
   {
     DBG_START_METH("AmplTNLP::eval_g", dbg_verbosity);
-#ifdef IP_DEBUG
 
-    ASL_pfgh* asl = asl_;
+    DBG_DO(ASL_pfgh* asl = asl_);
     DBG_ASSERT(n == n_var);
     DBG_ASSERT(m == n_con);
-#endif
 
     if (!apply_new_x(new_x, n, x)) {
       return false;
     }
 
-    return internal_conval(m, g);
+    return internal_conval(x, m, g);
   }
 
   bool AmplTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
@@ -406,7 +463,7 @@ namespace Ipopt
         return false;
       }
 
-      jacval(non_const_x_, values, (fint*)nerror_);
+      jacval(const_cast<Number*>(x), values, (fint*)nerror_);
       if (nerror_ok(nerror_)) {
         return true;
       }
@@ -449,23 +506,22 @@ namespace Ipopt
       }
       if (!objval_called_with_current_x_) {
         Number dummy;
-        internal_objval(dummy);
-        internal_conval(m);
+        internal_objval(x, dummy);
+        internal_conval(x, m);
       }
       if (!conval_called_with_current_x_) {
-        internal_conval(m);
-      }
-      // copy lambda to non_const_lambda - note, we do not store a copy like
-      // we do with x since lambda is only used here and not in other calls
-      Number* non_const_lambda = new Number[m];
-      for (Index i=0; i<m; i++) {
-        non_const_lambda[i] = lambda[i];
+        internal_conval(x, m);
       }
 
-      real ow=obj_sign_*obj_factor;
-      sphes(values, -1, &ow, non_const_lambda);
-
-      delete [] non_const_lambda;
+      real* OW = new real[Max(1,n_obj)];
+      if (n_obj>0) {
+        for(Index i=0; i<n_obj; i++) {
+          OW[i] = 0.;
+        }
+        OW[obj_no] = obj_sign_*obj_factor;
+      }
+      sphes(values, -1, OW, const_cast<Number*>(lambda));
+      delete [] OW;
       return true;
     }
     else {
@@ -478,7 +534,9 @@ namespace Ipopt
   void AmplTNLP::finalize_solution(SolverReturn status,
                                    Index n, const Number* x, const Number* z_L, const Number* z_U,
                                    Index m, const Number* g, const Number* lambda,
-                                   Number obj_value)
+                                   Number obj_value,
+                                   const IpoptData* ip_data,
+                                   IpoptCalculatedQuantities* ip_cq)
   {
     ASL_pfgh* asl = asl_;
 
@@ -544,7 +602,7 @@ namespace Ipopt
     write_solution_file(message.c_str());
   }
 
-  bool AmplTNLP::internal_objval(Number& obj_val)
+  bool AmplTNLP::internal_objval(const Number* x, Number& obj_val)
   {
     DBG_START_METH("AmplTNLP::internal_objval",
                    dbg_verbosity);
@@ -558,7 +616,7 @@ namespace Ipopt
       return true;
     }
     else {
-      Number retval = objval(0, non_const_x_, (fint*)nerror_);
+      Number retval = objval(obj_no, const_cast<Number*>(x), (fint*)nerror_);
       if (nerror_ok(nerror_)) {
         obj_val = obj_sign_*retval;
         objval_called_with_current_x_ = true;
@@ -569,7 +627,7 @@ namespace Ipopt
     return false;
   }
 
-  bool AmplTNLP::internal_conval(Index m, Number* g)
+  bool AmplTNLP::internal_conval(const Number* x, Index m, Number* g)
   {
     DBG_START_METH("AmplTNLP::internal_conval",
                    dbg_verbosity);
@@ -584,7 +642,7 @@ namespace Ipopt
       allocated = true;
     }
 
-    conval(non_const_x_, g, (fint*)nerror_);
+    conval(const_cast<Number*>(x), g, (fint*)nerror_);
 
     if (allocated) {
       delete [] g;
@@ -608,23 +666,18 @@ namespace Ipopt
     DBG_ASSERT(asl_);
 
     if (new_x) {
+      if (!hesset_called_) {
+        call_hesset();
+      }
+
       DBG_PRINT((1, "Set new x.\n"));
       // update the flags so these methods are called
       // before evaluating the hessian
       conval_called_with_current_x_ = false;
       objval_called_with_current_x_ = false;
 
-      //copy the data to the non_const_x_
-      if (!non_const_x_) {
-        non_const_x_ = new Number[n];
-      }
-
-      for (Index i=0; i<n; i++) {
-        non_const_x_[i] = x[i];
-      }
-
       // tell ampl that we have a new x
-      xknowne(non_const_x_, (fint*)nerror_);
+      xknowne(const_cast<Number*>(x), (fint*)nerror_);
       return nerror_ok(nerror_);
     }
 
@@ -748,7 +801,7 @@ namespace Ipopt
       if (!pinfo->Options()->SetNumericValue(pinfo->IpoptName().c_str(), real_val)) {
         pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
                                "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
-        exit(-1);
+        THROW_EXCEPTION(OPTION_INVALID, "Invalid numeric option");
       }
 
       return retval;
@@ -766,7 +819,7 @@ namespace Ipopt
       if (!pinfo->Options()->SetIntegerValue(pinfo->IpoptName().c_str(), int_val)) {
         pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
                                "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
-        exit(-1);
+        THROW_EXCEPTION(OPTION_INVALID, "Invalid integer option");
       }
 
       return retval;
@@ -784,7 +837,7 @@ namespace Ipopt
       if (!pinfo->Options()->SetStringValue(pinfo->IpoptName().c_str(), str_val)) {
         pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
                                "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
-        exit(-1);
+        THROW_EXCEPTION(OPTION_INVALID, "Invalid string option");
       }
 
       return retval;
@@ -813,7 +866,7 @@ namespace Ipopt
       else {
         pinfo->Jnlst()->Printf(J_ERROR, J_MAIN,
                                "\nInvalid value \"%s\" for option %s.\n", value, kw->name);
-        exit(-1);
+        THROW_EXCEPTION(OPTION_INVALID, "Invalid option");
       }
 
       return retval;
@@ -1031,6 +1084,14 @@ namespace Ipopt
                                      "bound_push",
                                      AmplOptionsList::Number_Option,
                                      "Desired minimal absolute distance of initial point to bound");
+    ampl_options_list->AddAmplOption("slack_bound_frac",
+                                     "slack_bound_frac",
+                                     AmplOptionsList::Number_Option,
+                                     "Desired minimal relative distance of initial slack to bound");
+    ampl_options_list->AddAmplOption("slack_bound_push",
+                                     "slack_bound_push",
+                                     AmplOptionsList::Number_Option,
+                                     "Desired minimal absolute distance of initial slack to bound");
     ampl_options_list->AddAmplOption("bound_mult_init_val",
                                      "bound_mult_init_val",
                                      AmplOptionsList::Number_Option,

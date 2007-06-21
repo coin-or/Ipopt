@@ -48,16 +48,21 @@ namespace Ipopt
   class TNLP : public ReferencedObject
   {
   public:
+    /** Type of the constraints*/
+    enum LinearityType
+    {
+      LINEAR/** Constraint/Variable is linear.*/,
+      NON_LINEAR/**Constraint/Varaible is non-linear.*/
+    };
+
     /**@name Constructors/Destructors */
     //@{
     TNLP()
     {}
-    ;
 
     /** Default destructor */
     virtual ~TNLP()
     {}
-    ;
     //@}
 
     DECLARE_STD_EXCEPTION(INVALID_TNLP);
@@ -95,6 +100,23 @@ namespace Ipopt
                                         Number* x_scaling,
                                         bool& use_g_scaling, Index m,
                                         Number* g_scaling)
+    {
+      return false;
+    }
+
+    /** overload this method to return the variables linearity
+     * (TNLP::Linear or TNLP::NonLinear). The var_types
+     *  array should be allocated with length at least n. (default implementation
+     *  just return false and does not fill the array).*/
+    virtual bool get_variables_linearity(Index n, LinearityType* var_types)
+    {
+      return false;
+    }
+
+    /** overload this method to return the constraint linearity.
+     * array should be alocated with length at least n. (default implementation
+     *  just return false and does not fill the array).*/
+    virtual bool get_constraints_linearity(Index m, LinearityType* const_types)
     {
       return false;
     }
@@ -157,6 +179,17 @@ namespace Ipopt
     {
       return false;
     }
+
+    /** this method is called if option ??? is set.  In that case, the
+    algorithm calls this method with the values of variables and
+    multipliers that will be used for the next calls of any
+    evaluation method.  */
+    virtual bool set_variable_values(Index n, const Number* x, bool new_x,
+                                     Index m, const Number* lambda,
+                                     bool new_lambda)
+    {
+      return false;
+    }
     //@}
 
     /** @name Solution Methods */
@@ -165,7 +198,9 @@ namespace Ipopt
     virtual void finalize_solution(SolverReturn status,
                                    Index n, const Number* x, const Number* z_L, const Number* z_U,
                                    Index m, const Number* g, const Number* lambda,
-                                   Number obj_value)=0;
+                                   Number obj_value,
+                                   const IpoptData* ip_data,
+                                   IpoptCalculatedQuantities* ip_cq)=0;
 
     /** Intermediate Callback method for the user.  Providing dummy
      *  default implementation.  For details see IntermediateCallBack

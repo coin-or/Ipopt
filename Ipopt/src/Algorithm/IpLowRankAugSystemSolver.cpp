@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,7 +11,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -230,14 +230,14 @@ namespace Ipopt
     Index numberOfNegEVals)
   {
     DBG_START_METH("LowRankAugSystemSolver::UpdateFactorization",
-                   dbg_verbosity);
+                   2);
 
     DBG_ASSERT(W_factor == 0.0 || W_factor == 1.0);
     ESymSolverStatus retval = SYMSOLVER_SUCCESS;
 
     // Get the low update information out of W
     const LowRankUpdateSymMatrix* LR_W =
-      dynamic_cast<const LowRankUpdateSymMatrix*> (W);
+      static_cast<const LowRankUpdateSymMatrix*> (W);
     DBG_ASSERT(LR_W);
     DBG_PRINT_MATRIX(2, "LR_W", *LR_W);
 
@@ -268,6 +268,7 @@ namespace Ipopt
     }
     else {
       Wdiag_->SetDiag(*B0);
+      DBG_PRINT_VECTOR(2, "B0", *B0);
     }
 
     SmartPtr<MultiVectorMatrix> Vtilde1_x;
@@ -346,7 +347,7 @@ namespace Ipopt
         Utilde2_x = Utilde1_x->MakeNewMultiVectorMatrix();
         for (Index i=0; i<Utilde1_x->NCols(); i++) {
           const CompoundVector* cvec =
-            dynamic_cast<const CompoundVector*> (GetRawPtr(Utilde2_->GetVector(i)));
+            static_cast<const CompoundVector*> (GetRawPtr(Utilde2_->GetVector(i)));
           DBG_ASSERT(cvec);
           Utilde2_x->SetVector(i, *cvec->GetComp(0));
         }
@@ -518,7 +519,7 @@ namespace Ipopt
     DBG_START_METH("LowRankAugSystemSolver::AugmentedSystemRequiresChange",
                    dbg_verbosity);
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
 
     bool Wtest = (W && W->GetTag() != w_tag_);
     bool iWtest = (!W && w_tag_ != 0);

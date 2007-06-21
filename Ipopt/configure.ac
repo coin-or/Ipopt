@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -12,10 +12,10 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.2.4s],[http://projects.coin-or.org/Ipopt/newticket])
+AC_INIT([Ipopt],[3.3.1v],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT(
-[Copyright 2004, 2006 International Business Machines and others.
+[Copyright 2004, 2007 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
@@ -165,6 +165,7 @@ AC_COIN_CHECK_CXX_CHEADER(assert)
 AC_COIN_CHECK_CXX_CHEADER(stdio)
 AC_COIN_CHECK_CXX_CHEADER(stdlib)
 AC_COIN_CHECK_CXX_CHEADER(stdarg)
+AC_COIN_CHECK_CXX_CHEADER(string)
 AC_COIN_CHECK_CXX_CHEADER(float)
 AC_COIN_CHECK_CXX_CHEADER(time)
 
@@ -273,6 +274,44 @@ AC_CHECK_DECL([va_copy],[AC_DEFINE([HAVE_VA_COPY],[1],
 # endif
 #endif])
 
+###########################
+# Random number generator #
+###########################
+
+AC_CHECK_DECL([drand48],[AC_DEFINE([HAVE_DRAND48],[1],
+                                   [Define to 1 if function drand48 is available])],,[
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+])
+
+AC_CHECK_DECL([rand],[AC_DEFINE([HAVE_RAND],[1],
+                                [Define to 1 if function rand is available])],,[
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+])
+
+AC_CHECK_DECL([srand],[AC_DEFINE([HAVE_STD__RAND],[1],
+                                 [Define to 1 if function std::rand is available])],,[
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+using namespace std;])
+
+
 ##########################################################################
 
 # Additional libraries and packages
@@ -327,38 +366,52 @@ AC_ARG_WITH([hsl],
                            [specify Harwell library (or BUILD for compilation)]),
             [use_hsl=$withval], [use_hsl=BUILD])
 
+# First check if there is a working HSL ThirdParty project
 if test "$use_hsl" = BUILD; then
-# Check which files are available
-  MY_CHECK_HSLFILE(ma27ad,MA27)
-## This test is already done in ThirdParty configure
-#  if test "$use_MA27" = BUILD; then
-#    AC_MSG_CHECKING([whether MA27 is threadsafe])
-#    if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
-#      AC_MSG_RESULT(yes)
-#    else
-#      AC_MSG_RESULT(no)
-#      AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])
-#    fi
-#  fi
-  MY_CHECK_HSLFILE(mc19ad,MC19)
-  MY_CHECK_HSLFILE(ma57ad,MA57)
-  coin_need_flibs=yes
-else
-  SAVE_LIBS="$LIBS"
-  LIBS="$use_hsl $LIBS $FLIBS"
-  ADDLIBS="$use_hsl $ADDLIBS"
-  MY_CHECK_HSL([ma27ad],[MA27])
-  if test "$use_MA27" = "yes"; then
-    AC_MSG_CHECKING([whether MA27 is threadsafe])
-    AC_F77_FUNC(ma27ud, cfunc)
-    AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc],
-                [AC_MSG_RESULT(yes)],
-                [AC_MSG_RESULT(no)
-		 AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
+  AC_CHECK_FILE([$hslobjdir/Makefile],[],[use_hsl=])
+fi
+
+if test "$use_hsl" = BUILD; then
+  # First check if there is a working HSL ThirdParty project
+  AC_CHECK_FILE([$hslobjdir/Makefile],[],[use_hsl=unavailable])
+
+  if test "$use_hsl" = BUILD; then
+    # Check which files are available
+    MY_CHECK_HSLFILE(ma27ad,MA27)
+    ## This test is already done in ThirdParty configure
+    #  if test "$use_MA27" = BUILD; then
+    #    AC_MSG_CHECKING([whether MA27 is threadsafe])
+    #    if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
+    #      AC_MSG_RESULT(yes)
+    #    else
+    #      AC_MSG_RESULT(no)
+    #      AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])
+    #    fi
+    #  fi
+    MY_CHECK_HSLFILE(mc19ad,MC19)
+    MY_CHECK_HSLFILE(ma57ad,MA57)
+    MY_CHECK_HSLFILE(ma28ad,MA28)
+    coin_need_flibs=yes
   fi
-  MY_CHECK_HSL([mc19ad],[MC19])
-  MY_CHECK_HSL([ma57ad],[MA57])
-  LIBS="$use_hsl $SAVE_LIBS"
+else
+  if test "$use_hsl" != no; then
+    SAVE_LIBS="$LIBS"
+    LIBS="$use_hsl $LIBS $FLIBS"
+    ADDLIBS="$use_hsl $ADDLIBS"
+    MY_CHECK_HSL([ma27ad],[MA27])
+    if test "$use_MA27" = "yes"; then
+      AC_MSG_CHECKING([whether MA27 is threadsafe])
+      AC_F77_FUNC(ma27ud, cfunc)
+      AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc],
+                  [AC_MSG_RESULT(yes)],
+                  [AC_MSG_RESULT(no)
+  		 AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
+    fi
+    MY_CHECK_HSL([mc19ad],[MC19])
+    MY_CHECK_HSL([ma57ad],[MA57])
+    MY_CHECK_HSL([ma28ad],[MA28])
+    LIBS="$use_hsl $SAVE_LIBS"
+  fi
 fi
 
 ###########
@@ -368,10 +421,10 @@ fi
 AC_LANG_PUSH([Fortran 77])
 AC_ARG_WITH([pardiso],
             AC_HELP_STRING([--with-pardiso],
-                           [specify Pardiso library (unsupported)]),
+                           [specify Pardiso library]),
             [use_pardiso=$withval], [use_pardiso=no])
 
-if test ! "$use_pardiso" = "no"; then
+if test "$use_pardiso" != "no"; then
   LIBS="$use_pardiso $LIBS"
   ADDLIBS="$use_pardiso $ADDLIBS"
 
@@ -402,7 +455,7 @@ AC_ARG_WITH([taucs],
                            [specify TAUCS library and dependencies]),
             [use_taucs=$withval], [use_taucs=no])
 
-if test ! "$use_taucs" = "no"; then
+if test "$use_taucs" != "no"; then
   LIBS="$use_taucs $LIBS"
   ADDLIBS="$use_taucs $ADDLIBS"
 
@@ -417,24 +470,7 @@ fi
 # MUMPS #
 #########
 
-AC_ARG_WITH([mumps],
-            AC_HELP_STRING([--with-mumps],
-                           [specify MUMPS library and dependencies]),
-            [use_mumps="$withval"], [use_mumps=no])
-
-if test ! "$use_mumps" = "no"; then
-  LIBS="$use_mumps $LIBS"
-  ADDLIBS="$use_mumps $ADDLIBS"
-
-  AC_DEFINE(HAVE_MUMPS,1,
-            [Define to 1 if MUMPS is available])
-
-  AC_ARG_VAR(MUMPS_INCFLAGS,[Flags for including mumps and (psydo) mpi header files.])
-  if test -z "$MUMPS_INCFLAGS"; then
-    AC_MSG_ERROR([You need to specify MUMPS_INCFLAGS if you want to use MUMPS.])
-  fi
-  CXXFLAGS="$CXXFLAGS $MUMPS_INCFLAGS"
-fi
+AC_COIN_HAS_MUMPS
 
 ########
 # WSMP #
@@ -445,7 +481,7 @@ AC_ARG_WITH([wsmp],
                            [specify WSMP library]),
             [use_wsmp=$withval], [use_wsmp=no])
 
-if test ! "$use_wsmp" = "no"; then
+if test "$use_wsmp" != "no"; then
   LIBS="$use_wsmp $LIBS"
   ADDLIBS="$use_wsmp $ADDLIBS"
 
@@ -469,9 +505,9 @@ AC_ARG_ENABLE([distconf],,
     *) AC_MSG_ERROR(bad value ${enableval} for --enable-distconf) ;;
   esac],[distconf=false])
 
-if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$use_mumps" = no; then
+if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" = no; then
   if test "$distconf" = false; then
-    AC_MSG_ERROR("No linear solver (such as MA27) available.  You need to provide at least one.")
+    AC_MSG_ERROR("No linear solver (such as MUMPS) available.  You need to provide at least one.")
   fi
 fi
 
@@ -542,7 +578,7 @@ AC_SUBST(ipoptlib)
 # is made)
 
 AC_SUBST(IPALLLIBS)
-IPALLLIBS="../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
+IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
 if test "$use_blas" = BUILD; then
   IPALLLIBS="../../../ThirdParty/Blas/libcoinblas.la $IPALLLIBS"
@@ -556,12 +592,16 @@ if test "$use_hsl" = BUILD ; then
   IPALLLIBS="../../../ThirdParty/HSL/libcoinhsl.la $IPALLLIBS"
 fi
 
+if test "$use_mumps" = BUILD ; then
+  IPALLLIBS="../../../ThirdParty/Mumps/libcoinmumps.la $IPALLLIBS"
+fi
+
 AM_CONDITIONAL([HAVE_MA27],[test ! "$use_MA27" = no])
 AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
+AM_CONDITIONAL([HAVE_MA28],[test ! "$use_MA28" = no])
 AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])
-AM_CONDITIONAL([HAVE_MUMPS],[test ! "$use_mumps" = no])
 AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
 ########################################################################
@@ -573,6 +613,12 @@ AC_CONFIG_LINKS([test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp
                  test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp
                  test/hs071_c.c:examples/hs071_c/hs071_c.c])
 
+########################################################################
+##          Create links for VPATH config of certain files            ##
+########################################################################
+
+AC_COIN_VPATH_LINK(contrib/MatlabInterface/ipopt.m)
+
 AC_CONFIG_FILES([Makefile
 		 src/Common/Makefile
                  src/LinAlg/Makefile
@@ -582,6 +628,7 @@ AC_CONFIG_FILES([Makefile
 		 src/Interfaces/ipopt_addlibs_cpp.txt
 		 src/Algorithm/Makefile
 		 src/Algorithm/LinearSolvers/Makefile
+		 src/contrib/CGPenalty/Makefile
 		 src/Apps/Makefile
 		 src/Apps/AmplSolver/Makefile
 		 src/Apps/CUTErInterface/Makefile
@@ -592,7 +639,8 @@ AC_CONFIG_FILES([Makefile
 		 examples/hs071_c/Makefile
 		 examples/ScalableProblems/Makefile
 		 test/Makefile
-		 test/run_unitTests])
+		 test/run_unitTests
+		 contrib/MatlabInterface/src/Makefile])
 
 AC_CONFIG_HEADER([inc/config_ipopt.h])
 

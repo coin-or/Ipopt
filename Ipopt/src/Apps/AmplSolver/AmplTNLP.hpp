@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -13,6 +13,17 @@
 #include "IpTNLP.hpp"
 #include "IpJournalist.hpp"
 #include "IpOptionsList.hpp"
+
+#include "IpoptConfig.h"
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
+#endif
 
 #include <map>
 #include <string>
@@ -236,6 +247,12 @@ namespace Ipopt
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
                                  Index m, Number* g_l, Number* g_u);
 
+    /** Returns the constraint linearity.
+     * array will be alocated with length n. (default implementation
+     *  just return false and does not fill the array). */
+    virtual bool get_constraints_linearity(Index m,
+                                           LinearityType* const_types);
+
     /** provides a starting point for the nlp variables. Overloaded
     from TNLP */
     virtual bool get_starting_point(Index n, bool init_x, Number* x,
@@ -284,7 +301,9 @@ namespace Ipopt
     virtual void finalize_solution(SolverReturn status,
                                    Index n, const Number* x, const Number* z_L, const Number* z_U,
                                    Index m, const Number* g, const Number* lambda,
-                                   Number obj_value);
+                                   Number obj_value,
+                                   const IpoptData* ip_data,
+                                   IpoptCalculatedQuantities* ip_cq);
     //@}
 
     /** @name Method for quasi-Newton approximation information. */
@@ -323,6 +342,13 @@ namespace Ipopt
                            Index& niv_) const;
     //@}
 
+    /** A method for setting the index of the objective function to be
+     *  considered.  This method must be called after the constructor,
+     *  and before anything else is called.  It can only be called
+     *  once, and if there is more than one objective function in the
+     *  AMPL model, it MUST be called. */
+    void set_active_objective(Index obj_no);
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -359,9 +385,6 @@ namespace Ipopt
 
     /**@name Internal copies of data */
     //@{
-    /** A non-const copy of x - this is kept up-to-date in apply_new_x */
-    Number* non_const_x_;
-
     /** Solution Vectors */
     Number* x_sol_;
     Number* z_L_sol_;
@@ -381,6 +404,10 @@ namespace Ipopt
      *  current x, set to false in apply_new_x, and set to true in
      *  internal_conval */
     bool conval_called_with_current_x_;
+    /** true when we have called hesset */
+    bool hesset_called_;
+    /** true when set_active_objective has been called */
+    bool set_active_objective_called_;
     //@}
 
     /** Pointer to the Oinfo structure */
@@ -393,10 +420,10 @@ namespace Ipopt
     SmartPtr<AmplSuffixHandler> suffix_handler_;
 
     /** Make the objective call to ampl */
-    bool internal_objval(Number& obj_val);
+    bool internal_objval(const Number* x, Number& obj_val);
 
     /** Make the constraint call to ampl*/
-    bool internal_conval(Index m, Number* g=NULL);
+    bool internal_conval(const Number* x, Index m, Number* g=NULL);
 
     /** Internal function to update the internal and ampl state if the
      *  x value changes */
@@ -413,6 +440,9 @@ namespace Ipopt
 
     /** returns true if the ampl nerror code is ok */
     bool nerror_ok(void* nerror);
+
+    /** calls hesset ASL function */
+    void call_hesset();
   };
 
 

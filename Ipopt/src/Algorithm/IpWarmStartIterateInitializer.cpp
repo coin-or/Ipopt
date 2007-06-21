@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -24,7 +24,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -44,6 +44,14 @@ namespace Ipopt
       "same as bound_frac for the regular initializer.",
       0.0, true, 0.5, false, 1e-3);
     roptions->AddLowerBoundedNumberOption(
+      "warm_start_slack_bound_push",
+      "same as slack_bound_push for the regular initializer.",
+      0.0, true, 1e-3);
+    roptions->AddBoundedNumberOption(
+      "warm_start_slack_bound_frac",
+      "same as slack_bound_frac for the regular initializer.",
+      0.0, true, 0.5, false, 1e-3);
+    roptions->AddLowerBoundedNumberOption(
       "warm_start_mult_bound_push",
       "same as mult_bound_push for the regular initializer.",
       0.0, true, 1e-3);
@@ -51,10 +59,6 @@ namespace Ipopt
       "warm_start_mult_init_max",
       "Maximum initial value for the equality multipliers.",
       1e6);
-    roptions->AddNumberOption(
-      "warm_start_target_mu",
-      "Unsupported!",
-      0e-3);
     roptions->AddStringOption2(
       "warm_start_entire_iterate",
       "Tells algorithm whether to use the GetWarmStartIterate method in the NLP.",
@@ -62,6 +66,11 @@ namespace Ipopt
       "no", "call GetStartingPoint in the NLP",
       "yes", "call GetWarmStartIterate in the NLP",
       "");
+    roptions->SetRegisteringCategory("Uncategorized");
+    roptions->AddNumberOption(
+      "warm_start_target_mu",
+      "Unsupported!",
+      0e-3);
   }
 
   bool WarmStartIterateInitializer::InitializeImpl(const OptionsList& options,
@@ -71,6 +80,10 @@ namespace Ipopt
                             warm_start_bound_push_, prefix);
     options.GetNumericValue("warm_start_bound_frac",
                             warm_start_bound_frac_, prefix);
+    options.GetNumericValue("warm_start_slack_bound_push",
+                            warm_start_slack_bound_push_, prefix);
+    options.GetNumericValue("warm_start_slack_bound_frac",
+                            warm_start_slack_bound_frac_, prefix);
     options.GetNumericValue("warm_start_mult_bound_push",
                             warm_start_mult_bound_push_, prefix);
     options.GetNumericValue("warm_start_mult_init_max",
@@ -95,8 +108,10 @@ namespace Ipopt
     bool have_iterate = false;
 
     if (warm_start_entire_iterate_) {
-      IpData().InitializeDataStructures(IpNLP(), false, false, false,
-                                        false, false);
+      if (!IpData().InitializeDataStructures(IpNLP(), false, false, false,
+                                             false, false)) {
+        return false;
+      }
 
       init_vec = IpData().curr()->MakeNewIteratesVector(true);
 
@@ -153,7 +168,9 @@ namespace Ipopt
       /////////////////////////////////////////////////////////////////////
 
       // Get the intial values for x, y_c, y_d, z_L, z_U,
-      IpData().InitializeDataStructures(IpNLP(), true, true, true, true, true);
+      if (!IpData().InitializeDataStructures(IpNLP(), true, true, true, true, true)) {
+        return false;
+      }
 
       IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
                                   "user-provided x");
@@ -288,8 +305,8 @@ namespace Ipopt
 
     // Push the primal s variables
     DefaultIterateInitializer::push_variables(Jnlst(),
-        warm_start_bound_push_,
-        warm_start_bound_frac_,
+        warm_start_slack_bound_push_,
+        warm_start_slack_bound_frac_,
         "s",
         *IpData().curr()->s(),
         new_s,

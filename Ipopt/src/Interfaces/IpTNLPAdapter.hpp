@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,6 +12,7 @@
 #include "IpNLP.hpp"
 #include "IpTNLP.hpp"
 #include "IpOrigIpoptNLP.hpp"
+#include <list>
 
 namespace Ipopt
 {
@@ -20,6 +21,7 @@ namespace Ipopt
   class ExpansionMatrix;
   class ExpansionMatrixSpace;
   class IteratesVector;
+  class TDependencyDetector;
 
   /** This class Adapts the TNLP interface so it looks like an NLP interface.
    *  This is an Adapter class (Design Patterns) that converts  a TNLP to an
@@ -129,10 +131,14 @@ namespace Ipopt
     /** @name Solution Reporting Methods */
     //@{
     virtual void FinalizeSolution(SolverReturn status,
-                                  const Vector& x, const Vector& z_L, const Vector& z_U,
+                                  const Vector& x,
+                                  const Vector& z_L, const Vector& z_U,
                                   const Vector& c, const Vector& d,
                                   const Vector& y_c, const Vector& y_d,
-                                  Number obj_value);
+                                  Number obj_value,
+                                  const IpoptData* ip_data,
+                                  IpoptCalculatedQuantities* ip_cq);
+
     virtual bool IntermediateCallBack(AlgorithmMode mode,
                                       Index iter, Number obj_value,
                                       Number inf_pr, Number inf_du,
@@ -152,7 +158,8 @@ namespace Ipopt
     /** Enum for treatment of fixed variables option */
     enum FixedVariableTreatmentEnum {
       MAKE_PARAMETER=0,
-      MAKE_CONSTRAINT
+      MAKE_CONSTRAINT,
+      RELAX_BOUNDS
     };
 
     /** Enum for specifying which derivative test is to be performed. */
@@ -204,12 +211,25 @@ namespace Ipopt
                     const Vector& x_U, Number* x_U_orig);
     //@}
 
+    /** @name Method implementing the detection of linearly dependent
+    equality constraints */
+    bool DetermineDependentConstraints(Index n_x_var,
+                                       const Index* x_not_fixed_map,
+                                       const Number* x_l, const Number* x_u,
+                                       const Number* g_l, const Number* g_u,
+                                       Index n_c, const Index* c_map,
+                                       std::list<Index>& c_deps);
+
     /** Pointer to the TNLP class (class specific to Number* vectors and
      *  harwell triplet matrices) */
     SmartPtr<TNLP> tnlp_;
 
     /** Journalist */
     SmartPtr<const Journalist> jnlst_;
+
+    /** Object that can be used to detect linearly dependent rows in
+     *  the equality constraint Jacobian */
+    SmartPtr<TDependencyDetector> dependency_detector_;
 
     /**@name Algorithmic parameters */
     //@{
@@ -219,6 +239,8 @@ namespace Ipopt
     Number nlp_upper_bound_inf_;
     /** Flag indicating how fixed variables should be handled */
     FixedVariableTreatmentEnum fixed_variable_treatment_;
+    /* Determines relaxation of fixing bound for RELAX_BOUNDS. */
+    Number bound_relax_factor_;
     /* Maximal slack for one-sidedly bounded variables.  If a
      *  variable has only one bound, say a lower bound xL, then an
      *  upper bound xL + max_onesided_bound_slack_.  If this value is
@@ -240,6 +262,14 @@ namespace Ipopt
     bool warm_start_same_structure_;
     /** Flag indicating what Hessian information is to be used. */
     HessianApproximationType hessian_approximation_;
+    /** Maximal perturbation of the initial point */
+    Number point_perturbation_radius_;
+    /** Flag indicating if rhs should be considered during dependency
+     *  detection */
+    bool dependency_detection_with_rhs_;
+
+    /** Overall convergence tolerance */
+    Number tol_;
     //@}
 
     /**@name Problem Size Data */
@@ -252,7 +282,7 @@ namespace Ipopt
     Index nz_jac_c_;
     /** non-zeros of the jacobian of c without added constraints for
      *  fixed variables. */
-    Index nz_jac_c_no_fixed_;
+    Index nz_jac_c_no_extra_;
     /** non-zeros of the jacobian of d */
     Index nz_jac_d_;
     /** number of non-zeros in full-size Jacobian of g */

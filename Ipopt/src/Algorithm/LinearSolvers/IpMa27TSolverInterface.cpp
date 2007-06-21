@@ -40,7 +40,7 @@ extern "C"
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -112,6 +112,27 @@ namespace Ipopt
       "If the integer or real workspace is not large enough, "
       "Ipopt will increase its size by this factor.  This option is only "
       "available if Ipopt has been compiled with MA27.");
+    roptions->AddStringOption2(
+      "ma27_skip_inertia_check",
+      "Always present inertia is correct.",
+      "no",
+      "no", "check interia",
+      "yes", "skip inertia check",
+      "Setting this option to \"yes\" essentially disables inertia check. "
+      "This option makes the algorithm non-robust and easily fail, but it "
+      "might give some insight into the necessity of interia control.");
+    roptions->AddStringOption2(
+      "ma27_ignore_singularity",
+      "Enables MA27's ability to solve a linear system even if the matrix is singular.",
+      "no",
+      "no", "Don't have MA27 solve singular systems",
+      "yes", "Have MA27 solve singular systems",
+      "Setting this option to \"yes\" means that Ipopt will call MA27 to "
+      "compute solutions for right hand sides, even if MA27 has detected that "
+      "the matrix is singular (but is still able to solve the linear system). "
+      "In some cases this might be better than using Ipopt's heuristic of "
+      "small perturbation of the lower diagonal of the KKT matrix.");
+
   }
 
   bool Ma27TSolverInterface::InitializeImpl(const OptionsList& options,
@@ -130,13 +151,17 @@ namespace Ipopt
     options.GetNumericValue("ma27_liw_init_factor", liw_init_factor_, prefix);
     options.GetNumericValue("ma27_la_init_factor", la_init_factor_, prefix);
     options.GetNumericValue("ma27_meminc_factor", meminc_factor_, prefix);
+    options.GetBoolValue("ma27_skip_inertia_check",
+                         skip_inertia_check_, prefix);
+    options.GetBoolValue("ma27_ignore_singularity",
+                         ignore_singularity_, prefix);
     // The following option is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
 
     /* Set the default options for MA27 */
     F77_FUNC(ma27id,MA27ID)(icntl_, cntl_);
-#ifndef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY == 0
 
     icntl_[0] = 0;       // Suppress error messages
     icntl_[1] = 0;       // Suppress diagnostic messages
@@ -216,6 +241,7 @@ namespace Ipopt
 
     if (la_increase_) {
       delete [] a_;
+      a_ = NULL;
       a_ = new double [nonzeros_];
     }
 
@@ -256,10 +282,13 @@ namespace Ipopt
   {
     DBG_START_METH("Ma27TSolverInterface::SymbolicFactorization",dbg_verbosity);
 
-    IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+    }
 
     // Get memory for the IW workspace
     delete [] iw_;
+    iw_ = NULL;
 
     // Overstimation factor for LIW (20% recommended in MA27 documentation)
     const double LiwFact = 2.0;   // This is 100% overestimation
@@ -271,7 +300,17 @@ namespace Ipopt
 
     // Get memory for IKEEP
     delete [] ikeep_;
+    ikeep_ = NULL;
     ikeep_ = new ipfint[3*dim_];
+
+    if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
+      Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                     "\nMatrix structure given to MA27 with dimension %d and %d nonzero entries:\n", dim_, nonzeros_);
+      for (Index i=0; i<nonzeros_; i++) {
+        Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "A[%5d,%5d]\n",
+                       airn[i], ajcn[i]);
+      }
+    }
 
     // Call MA27AD (cast to ipfint for Index types)
     ipfint N = dim_;
@@ -286,10 +325,14 @@ namespace Ipopt
     delete [] IW1;  // No longer required
 
     // Receive several information
-    ipfint iflag = INFO[0];   // Information flag
-    ipfint ierror = INFO[1];  // Error flag
-    ipfint nrlnec = INFO[4];  // recommended value for la
-    ipfint nirnec = INFO[5];  // recommended value for liw
+    const ipfint &iflag = INFO[0];   // Information flag
+    const ipfint &ierror = INFO[1];  // Error flag
+    const ipfint &nrlnec = INFO[4];  // recommended value for la
+    const ipfint &nirnec = INFO[5];  // recommended value for liw
+
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "Return values from MA27AD: IFLAG = %d, IERROR = %d\n",
+                   iflag, ierror);
 
     // Check if error occurred
     if (iflag!=0) {
@@ -297,15 +340,18 @@ namespace Ipopt
                      "*** Error from MA27AD *** IFLAG = %d IERROR = %d\n", iflag, ierror);
       if (iflag==1) {
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                       "The index a matrix is out of range.\nPlease check your implementation of the Jabobian and Hessian matrices.");
+                       "The index of a matrix is out of range.\nPlease check your implementation of the Jabobian and Hessian matrices.");
       }
-      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+      }
       return SYMSOLVER_FATAL_ERROR;
     }
 
     // ToDo: try and catch
     // Reserve memory for iw_ for later calls, based on suggested size
     delete [] iw_;
+    iw_ = NULL;
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "Size of integer work space recommended by MA27 is %d\n",
                    nirnec);
@@ -316,6 +362,7 @@ namespace Ipopt
 
     // Reserve memory for a_
     delete [] a_;
+    a_ = NULL;
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "Size of doublespace recommended by MA27 is %d\n",
                    nrlnec);
@@ -324,7 +371,9 @@ namespace Ipopt
                    "Setting double work space size to %d\n", la_);
     a_ = new double[la_];
 
-    IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+    }
 
     return SYMSOLVER_SUCCESS;
   }
@@ -337,7 +386,9 @@ namespace Ipopt
   {
     DBG_START_METH("Ma27TSolverInterface::Factorization",dbg_verbosity);
     // Check if la should be increased
-    IpData().TimingStats().LinearSystemFactorization().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemFactorization().Start();
+    }
     if (la_increase_) {
       double* a_old = a_;
       ipfint la_old = la_;
@@ -356,6 +407,7 @@ namespace Ipopt
     // Check if liw should be increased
     if (liw_increase_) {
       delete [] iw_;
+      iw_ = NULL;
       ipfint liw_old = liw_;
       liw_ = (ipfint)(meminc_factor_ * (double)(liw_));
       iw_ = new ipfint[liw_];
@@ -383,12 +435,16 @@ namespace Ipopt
 
     // Receive information about the factorization
     iflag = INFO[0];        // Information flag
-    ipfint ierror = INFO[1];  // Error flag
+    const ipfint &ierror = INFO[1];  // Error flag
     ncmpbr = INFO[11];      // Number of double compressions
     ncmpbi = INFO[12];      // Number of integer compressions
     negevals_ = INFO[14];   // Number of negative eigenvalues
 
-    DBG_PRINT((1,"Return from MA27 iflag = %d and ierror = %d\n",
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "Return values from MA27BD: IFLAG = %d, IERROR = %d\n",
+                   iflag, ierror);
+
+    DBG_PRINT((1,"Return from MA27BD iflag = %d and ierror = %d\n",
                iflag, ierror));
 
     // Check if factorization failed due to insufficient memory space
@@ -397,7 +453,9 @@ namespace Ipopt
     if (iflag==-3 || iflag==-4) {
       // Increase size of both LIW and LA
       delete [] iw_;
+      iw_ = NULL;
       delete [] a_;
+      a_ = NULL;
       ipfint liw_old = liw_;
       ipfint la_old = la_;
       if(iflag==-3) {
@@ -413,18 +471,34 @@ namespace Ipopt
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                      "MA27BD returned iflag=%d and requires more memory.\n Increase liw from %d to %d and la from %d to %d and factorize again.\n",
                      iflag, liw_old, liw_, la_old, la_);
-      IpData().TimingStats().LinearSystemFactorization().End();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemFactorization().End();
+      }
       return SYMSOLVER_CALL_AGAIN;
     }
 
     // Check if the system is singular, and if some other error occurred
-    if (iflag==-5 || iflag==3) {
-      IpData().TimingStats().LinearSystemFactorization().End();
+    if (iflag==-5 || (!ignore_singularity_ && iflag==3)) {
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemFactorization().End();
+      }
       return SYMSOLVER_SINGULAR;
+    }
+    else if (iflag==3) {
+      Index missing_rank = dim_-INFO[1];
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                     "MA27BD returned iflag=%d and detected rank deficiency of degree %d.\n",
+                     iflag, missing_rank);
+      // We correct the number of negative eigenvalues here to include
+      // the zero eigenvalues, since otherwise we indicate the wrong
+      // inertia.
+      negevals_ += missing_rank;
     }
     else if (iflag != 0) {
       // There is some error
-      IpData().TimingStats().LinearSystemFactorization().End();
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemFactorization().End();
+      }
       return SYMSOLVER_FATAL_ERROR;
     }
 
@@ -445,8 +519,10 @@ namespace Ipopt
 
     // Check whether the number of negative eigenvalues matches the requested
     // count
-    IpData().TimingStats().LinearSystemFactorization().End();
-    if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemFactorization().End();
+    }
+    if (!skip_inertia_check_ && check_NegEVals && (numberOfNegEVals!=negevals_)) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "In Ma27TSolverInterface::Factorization: negevals_ = %d, but numberOfNegEVals = %d\n",
                      negevals_, numberOfNegEVals);
@@ -460,7 +536,9 @@ namespace Ipopt
       double *rhs_vals)
   {
     DBG_START_METH("Ma27TSolverInterface::Backsolve",dbg_verbosity);
-    IpData().TimingStats().LinearSystemBackSolve().Start();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().Start();
+    }
 
     ipfint N=dim_;
     double* W = new double[maxfrt_];
@@ -487,7 +565,9 @@ namespace Ipopt
     delete [] W;
     delete [] IW1;
 
-    IpData().TimingStats().LinearSystemBackSolve().End();
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemBackSolve().End();
+    }
     return SYMSOLVER_SUCCESS;
   }
 

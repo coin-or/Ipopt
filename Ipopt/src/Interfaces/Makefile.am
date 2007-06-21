@@ -51,9 +51,14 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/LinearSolvers` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
-	-I`$(CYGPATH_W) $(srcdir)/../Algorithm`
+	-I`$(CYGPATH_W) $(srcdir)/../Algorithm` \
+	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty`
 
-CFLAGS += -I$(srcdir)/../Common
+CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common`
+
+# This line is necessary to allow VPATH compilation with MS compilers
+# on Cygwin
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Make sure the addlibs files are installed in lib
 install-exec-local:
@@ -82,7 +87,7 @@ ASTYLE_FILES = \
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 
-CLEANFILES = $(ASTYLE_FILES)
+DISTCLEANFILES = $(ASTYLE_FILES)
 
 SUFFIXES = .cppbak .hppbak
 

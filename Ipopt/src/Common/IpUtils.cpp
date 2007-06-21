@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -35,6 +35,14 @@
 # endif
 #endif
 
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+
 namespace Ipopt
 {
 
@@ -47,6 +55,40 @@ namespace Ipopt
     return true;
 #endif
 
+  }
+
+  Number IpRandom01()
+  {
+#ifdef HAVE_DRAND48
+    return Number(drand48())/Number(RAND_MAX);
+#else
+# ifdef HAVE_RAND
+    return Number(rand())/Number(RAND_MAX);
+# else
+#  ifdef HAVE_STD__RAND
+    return Number(std::rand())/Number(RAND_MAX);
+#  else
+#   error "don't have function for random number generator"
+#  endif
+# endif
+#endif
+  }
+
+  void IpResetRandom01()
+  {
+#ifdef HAVE_DRAND48
+    srand48(1);
+#else
+# ifdef HAVE_RAND
+    srand(1);
+# else
+#  ifdef HAVE_STD__RAND
+    std::srand(1);
+#  else
+#   error "don't have function for random number generator"
+#  endif
+# endif
+#endif
   }
 
 } //namespace Ipopt

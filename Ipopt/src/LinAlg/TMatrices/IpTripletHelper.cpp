@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -359,10 +359,6 @@ namespace Ipopt
     DBG_ASSERT(n_entries == matrix.Dim());
     SmartPtr<const Vector> v = matrix.GetDiag();
     FillValuesFromVector(n_entries, *v, values);
-    //    const DenseVector* vec = dynamic_cast<const DenseVector*>(GetRawPtr(v));
-    //    ASSERT_EXCEPTION(vec, UNKNOWN_VECTOR_TYPE, "Unkown Vector type found in FillValues for DiagMatrix");
-    //    const Number* vals = vec->Values();
-    //    IpBlasDcopy(n_entries, vals, 1, values, 1);
   }
 
   void TripletHelper::FillRowCol_(Index n_entries, const IdentityMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
@@ -493,8 +489,8 @@ namespace Ipopt
   {
     Index total_n_entries = 0;
 
-    const CompoundMatrixSpace* owner_space = dynamic_cast<const CompoundMatrixSpace*>(GetRawPtr(matrix.OwnerSpace()));
-    DBG_ASSERT(owner_space);
+    const CompoundMatrixSpace* owner_space = static_cast<const CompoundMatrixSpace*>(GetRawPtr(matrix.OwnerSpace()));
+    DBG_ASSERT(dynamic_cast<const CompoundMatrixSpace*>(GetRawPtr(matrix.OwnerSpace())));
 
     Index c_row_offset = row_offset;
     for (Index i=0; i<matrix.NComps_Rows(); i++) {
@@ -543,8 +539,8 @@ namespace Ipopt
   {
     Index total_n_entries = 0;
 
-    const CompoundSymMatrixSpace* owner_space = dynamic_cast<const CompoundSymMatrixSpace*>(GetRawPtr(matrix.OwnerSpace()));
-    DBG_ASSERT(owner_space);
+    const CompoundSymMatrixSpace* owner_space = static_cast<const CompoundSymMatrixSpace*>(GetRawPtr(matrix.OwnerSpace()));
+    DBG_ASSERT(dynamic_cast<const CompoundSymMatrixSpace*>(GetRawPtr(matrix.OwnerSpace())));
 
     Index c_row_offset = row_offset;
     for (Index i=0; i<matrix.NComps_Dim(); i++) {

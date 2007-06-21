@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,7 +12,7 @@
 
 namespace Ipopt
 {
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -49,17 +49,13 @@ namespace Ipopt
     // Get a grip on the restoration phase NLP and obtain the pointers
     // to the original NLP data
     SmartPtr<RestoIpoptNLP> resto_ip_nlp =
-      dynamic_cast<RestoIpoptNLP*> (&IpNLP());
-    DBG_ASSERT(IsValid(resto_ip_nlp));
+      static_cast<RestoIpoptNLP*> (&IpNLP());
     SmartPtr<IpoptNLP> orig_ip_nlp =
-      dynamic_cast<IpoptNLP*> (&resto_ip_nlp->OrigIpNLP());
-    DBG_ASSERT(IsValid(orig_ip_nlp));
+      static_cast<IpoptNLP*> (&resto_ip_nlp->OrigIpNLP());
     SmartPtr<IpoptData> orig_ip_data =
-      dynamic_cast<IpoptData*> (&resto_ip_nlp->OrigIpData());
-    DBG_ASSERT(IsValid(orig_ip_data));
+      static_cast<IpoptData*> (&resto_ip_nlp->OrigIpData());
     SmartPtr<IpoptCalculatedQuantities> orig_ip_cq =
-      dynamic_cast<IpoptCalculatedQuantities*> (&resto_ip_nlp->OrigIpCq());
-    DBG_ASSERT(IsValid(orig_ip_cq));
+      static_cast<IpoptCalculatedQuantities*> (&resto_ip_nlp->OrigIpCq());
 
     // Set the value of the barrier parameter
     Number resto_mu;
@@ -80,7 +76,7 @@ namespace Ipopt
 
     SmartPtr<Vector> new_x = IpData().curr()->x()->MakeNew();
     SmartPtr<CompoundVector> Cnew_x =
-      dynamic_cast<CompoundVector*> (GetRawPtr(new_x));
+      static_cast<CompoundVector*> (GetRawPtr(new_x));
 
     // Set the trial x variables from the original NLP
     Cnew_x->GetCompNonConst(0)->Copy(*orig_ip_data->curr()->x());
@@ -143,7 +139,7 @@ namespace Ipopt
 
     SmartPtr<Vector> new_z_L = IpData().curr()->z_L()->MakeNew();
     SmartPtr<CompoundVector> Cnew_z_L =
-      dynamic_cast<CompoundVector*> (GetRawPtr(new_z_L));
+      static_cast<CompoundVector*> (GetRawPtr(new_z_L));
     DBG_ASSERT(IsValid(Cnew_z_L));
     SmartPtr<Vector> new_z_U = IpData().curr()->z_U()->MakeNew();
     SmartPtr<Vector> new_v_L = IpData().curr()->v_L()->MakeNew();

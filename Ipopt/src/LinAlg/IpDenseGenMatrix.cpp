@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -13,7 +13,7 @@
 namespace Ipopt
 {
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -229,10 +229,10 @@ namespace Ipopt
     DBG_ASSERT(initialized_);
 
     // See if we can understand the data
-    const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dense_x); /* ToDo: Implement others */
-    DenseVector* dense_y = dynamic_cast<DenseVector*>(&y);
-    DBG_ASSERT(dense_y); /* ToDo: Implement others */
+    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
+    DenseVector* dense_y = static_cast<DenseVector*>(&y);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
     bool trans = false;
     IpBlasDgemv(trans, NRows(), NCols(), alpha, values_, NRows(),
@@ -248,10 +248,10 @@ namespace Ipopt
     DBG_ASSERT(initialized_);
 
     // See if we can understand the data
-    const DenseVector* dense_x = dynamic_cast<const DenseVector*>(&x);
-    DBG_ASSERT(dense_x); /* ToDo: Implement others */
-    DenseVector* dense_y = dynamic_cast<DenseVector*>(&y);
-    DBG_ASSERT(dense_y); /* ToDo: Implement others */
+    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
+    DenseVector* dense_y = static_cast<DenseVector*>(&y);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
     bool trans = true;
     IpBlasDgemv(trans, NRows(), NCols(), alpha, values_, NRows(),

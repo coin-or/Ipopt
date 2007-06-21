@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -15,6 +15,7 @@
 #include "IpSymMatrix.hpp"
 #include "IpTripletToCSRConverter.hpp"
 #include <vector>
+#include <list>
 
 namespace Ipopt
 {
@@ -80,6 +81,24 @@ namespace Ipopt
      * Returns true, if linear solver provides inertia.
      */
     virtual bool ProvidesInertia() const;
+    //@}
+
+    /** @name Methods related to the detection of linearly dependent
+     *  rows in a matrix */
+    //@{
+    /** Returns true if the underlying linear solver can detect the
+     *  linearly dependent rows in a matrix */
+    bool ProvidesDegeneracyDetection() const;
+    /** Given the entries of a matrix in Triplet format, this method
+     *  determines the list of row indices of the linearly dependent
+     *  rows.  This is a specific implementation for Triplet
+     *  matrices. */
+    ESymSolverStatus DetermineDependentRows(Index n_rows, Index n_cols,
+                                            Index n_jac_nz,
+                                            Number* jac_c_vals,
+                                            Index* jac_c_iRow,
+                                            Index* jac_c_jCol,
+                                            std::list<Index>& c_deps);
     //@}
 
     /** Methods for OptionsList */

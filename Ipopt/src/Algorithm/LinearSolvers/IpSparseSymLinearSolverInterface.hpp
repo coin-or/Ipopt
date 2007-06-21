@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -211,8 +211,25 @@ namespace Ipopt
      */
     virtual EMatrixFormat MatrixFormat() const =0;
     //@}
-  };
 
+    /** @name Methods related to the detection of linearly dependent
+     *  rows in a matrix */
+    //@{
+    /** Query whether the indices of linearly dependent rows/columns
+     *  can be determined by this linear solver. */
+    virtual bool ProvidesDegeneracyDetection() const
+    {
+      return false;
+    }
+    /** This method determines the list of row indices of the linearly
+     *  dependent rows. */
+    virtual ESymSolverStatus DetermineDependentRows(const Index* ia,
+        const Index* ja,
+        std::list<Index>& c_deps)
+    {
+      return SYMSOLVER_FATAL_ERROR;
+    }
+  };
 
 } // namespace Ipopt
 
