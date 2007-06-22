@@ -110,6 +110,13 @@ namespace Ipopt
      *  stopped. */
     virtual void StopWatchDog()=0;
 
+    /** Method for telling the BacktrackingLineSearch object that
+     *  a previous iterate has been restored. */
+    virtual bool RestoredIterate()
+    {
+      return false;
+    }
+
     /** Methods for OptionsList */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);

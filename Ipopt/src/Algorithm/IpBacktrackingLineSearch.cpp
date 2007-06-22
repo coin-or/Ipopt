@@ -546,31 +546,39 @@ namespace Ipopt
       }
     }
     else if (!in_soft_resto_phase_ || tiny_step) {
-      // we didn't do the restoration phase and are now updating the
-      // dual variables of the trial point
-      Number alpha_dual_max =
-        IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
-                                      *actual_delta->z_L(), *actual_delta->z_U(),
-                                      *actual_delta->v_L(), *actual_delta->v_U());
-
-      PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
-
-      if (n_steps==0) {
-        // accepted this if a full step was
-        // taken
-        count_successive_shortened_steps_ = 0;
+      // Some line search might have restored a previous iterate.  In that
+      // case we skip the usual ending stuff
+      if (acceptor_->RestoredIterate()) {
+	count_successive_shortened_steps_ = 0;
         watchdog_shortened_iter_ = 0;
       }
       else {
-        count_successive_shortened_steps_++;
-        watchdog_shortened_iter_++;
-      }
+	// we didn't do the restoration phase and are now updating the
+	// dual variables of the trial point
+	Number alpha_dual_max =
+	  IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
+					*actual_delta->z_L(), *actual_delta->z_U(),
+					*actual_delta->v_L(), *actual_delta->v_U());
 
-      if (expect_infeasible_problem_ &&
-          IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
-        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                       "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n", IpCq().curr_constraint_violation());
-        expect_infeasible_problem_ = false;
+	PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
+
+	if (n_steps==0) {
+	  // accepted this if a full step was
+	  // taken
+	  count_successive_shortened_steps_ = 0;
+	  watchdog_shortened_iter_ = 0;
+	}
+	else {
+	  count_successive_shortened_steps_++;
+	  watchdog_shortened_iter_++;
+	}
+
+	if (expect_infeasible_problem_ &&
+	    IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
+	  Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+			 "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n", IpCq().curr_constraint_violation());
+	  expect_infeasible_problem_ = false;
+	}
       }
     }
   }
