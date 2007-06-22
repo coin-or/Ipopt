@@ -9,8 +9,12 @@ history management of subversion.
         - --print-options flag for ipopt ASL solver executable to see all
           Ipopt options (available through ipopt.opt file)
         - added Matlab interface (contributed by Peter Carbonetto)
+        - added support for f2c compiler to compiler Fortran code with
+          MSVC++ compiler
+        - new MSVisualStudio support (now within MSVisualStudio project
+          and also with f2c)
         - a number of small changes/bug fixes/improvements
-        - change in interface (e.g., FinalizeSolution method)
+        - small change in interface (e.g., FinalizeSolution method)
 
 2007-04-24 releases/3.2.4
         - updated download script for Blas to fit netlib's
