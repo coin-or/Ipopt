@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -251,8 +251,9 @@ namespace Ipopt
 
     // If the problem is square, we want to enable the
     // expect_infeasible_problem option automatically so that the
-    // restoration phase is entered soon
-    if (IpCq().IsSquareProblem()) {
+    // restoration phase is entered soon.  This can be over-written
+    // by the Acceptor.
+    if (!acceptor_->NeverRestorationPhase() && IpCq().IsSquareProblem()) {
       expect_infeasible_problem_ = true;
       expect_infeasible_problem_ctol_ = 0.;
     }
