@@ -557,7 +557,7 @@ fi
 ##########
 ASTYLE=astyle
 AC_SUBST(ASTYLE)
-ASTYLEFLAGS="--mode=c --indent=spaces=2 --indent-cases --indent-namespaces --min-conditional-indent=1 --brackets=linux --brackets=break-closing-headers --max-instatement-indent=2"
+ASTYLEFLAGS="--mode=c --indent=spaces=2 --indent-cases --indent-namespaces --min-conditional-indent=1 --brackets=linux --brackets=break-closing --convert-tabs"
 AC_SUBST(ASTYLEFLAGS)
 
 # The following one is for the example makefiles

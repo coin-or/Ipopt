@@ -425,7 +425,7 @@ namespace Ipopt
     string::const_iterator i1 = s1.begin();
     string::const_iterator i2 = s2.begin();
 
-    while(i1!=s1.end()) {
+    while (i1!=s1.end()) {
       if (toupper(*i1)!=toupper(*i2))
         return false;
       i1++;
@@ -939,16 +939,16 @@ namespace Ipopt
       for (coption = options_to_print.begin();
            coption != options_to_print.end();
            coption++) {
-        //	std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
-	if (coption->c_str()[0] == '#') {
-	  jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n",
-		       &coption->c_str()[1]);
-	}
-	else {
-	  SmartPtr<RegisteredOption> option = registered_options_[*coption];
-	  DBG_ASSERT(IsValid(option));
-	  option->OutputLatexDescription(jnlst);
-	}
+        // std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
+        if (coption->c_str()[0] == '#') {
+          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n",
+                       &coption->c_str()[1]);
+        }
+        else {
+          SmartPtr<RegisteredOption> option = registered_options_[*coption];
+          DBG_ASSERT(IsValid(option));
+          option->OutputLatexDescription(jnlst);
+        }
       }
     }
     else {

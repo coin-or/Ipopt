@@ -128,106 +128,108 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  std::string ma57_err_msg[] = {
-                                 "Operation successful.\n",
+  std::string ma57_err_msg[] =
+    {
+      "Operation successful.\n",
 
-                                 "Value of N is out of range on a call to MA57A/AD, MA57B/BD, MA57C/CD, or\n"
-                                 "MA57D/DD. Value given is held in INFO(2).\n",
+      "Value of N is out of range on a call to MA57A/AD, MA57B/BD, MA57C/CD, or\n"
+      "MA57D/DD. Value given is held in INFO(2).\n",
 
-                                 "Value of NE is out of range on a call to MA57A/AD, MA57B/BD, or\n"
-                                 "MA57D/DD. Value given is held in INFO(2).\n",
+      "Value of NE is out of range on a call to MA57A/AD, MA57B/BD, or\n"
+      "MA57D/DD. Value given is held in INFO(2).\n",
 
-                                 "Failure due to insufficient REAL space on a call to MA57B/BD. INFO(17)\n"
-                                 "is set to a value that may suffice. INFO(2) is set to value of\n"
-                                 "LFACT. The user can allocate a larger array and copy the contents of\n"
-                                 "FACT into it using MA57E/ED, and recall MA57B/BD.\n",
+      "Failure due to insufficient REAL space on a call to MA57B/BD. INFO(17)\n"
+      "is set to a value that may suffice. INFO(2) is set to value of\n"
+      "LFACT. The user can allocate a larger array and copy the contents of\n"
+      "FACT into it using MA57E/ED, and recall MA57B/BD.\n",
 
-                                 "Failure due to insufficient INTEGER space on a call to\n"
-                                 "MA57B/BD. INFO(18) is set to a value that may suffice. INFO(2) is set to\n"
-                                 "value of LIFACT. The user can allocate a larger array and copy the\n"
-                                 "contents of IFACT into it using MA57E/ED, and recall MA57B/BD.\n",
+      "Failure due to insufficient INTEGER space on a call to\n"
+      "MA57B/BD. INFO(18) is set to a value that may suffice. INFO(2) is set to\n"
+      "value of LIFACT. The user can allocate a larger array and copy the\n"
+      "contents of IFACT into it using MA57E/ED, and recall MA57B/BD.\n",
 
-                                 "A pivot with magnitude less than or equal to CNTL(2) was found at pivot\n"
-                                 "step INFO(2) when calling MA57B/BD with ICNTL(7) = 2 or 3, or the\n"
-                                 "correction obtained when using matrix modification does not give a pivot\n"
-                                 "greater than CNTL(2) when ICNTL(7) = 4.\n",
+      "A pivot with magnitude less than or equal to CNTL(2) was found at pivot\n"
+      "step INFO(2) when calling MA57B/BD with ICNTL(7) = 2 or 3, or the\n"
+      "correction obtained when using matrix modification does not give a pivot\n"
+      "greater than CNTL(2) when ICNTL(7) = 4.\n",
 
-                                 "A change of sign of pivots has been detected when ICNTL(7) = 2. INFO(2)\n"
-                                 "is set to the pivot step at which the change was detected on a call to\n"
-                                 "MA57B/BD.\n",
+      "A change of sign of pivots has been detected when ICNTL(7) = 2. INFO(2)\n"
+      "is set to the pivot step at which the change was detected on a call to\n"
+      "MA57B/BD.\n",
 
-                                 "Either LNEW < LFACT or LINEW < LIFACT on a call to MA57E/ED. INFO(2) is\n"
-                                 "set to LNEW or LINEW as appropriate.\n",
+      "Either LNEW < LFACT or LINEW < LIFACT on a call to MA57E/ED. INFO(2) is\n"
+      "set to LNEW or LINEW as appropriate.\n",
 
-                                 "Iterative refinement fails to converge in specified number of iterations\n"
-                                 "on a call to MA57D/DD.\n",
+      "Iterative refinement fails to converge in specified number of iterations\n"
+      "on a call to MA57D/DD.\n",
 
-                                 "Error in permutation array when ICNTL(6)=1 on a call to\n"
-                                 "MA57A/AD. INFO(2) holds first component at which error was detected.\n",
+      "Error in permutation array when ICNTL(6)=1 on a call to\n"
+      "MA57A/AD. INFO(2) holds first component at which error was detected.\n",
 
-                                 "Value of ICNTL(7) out of range on a call to MA57B/BD. Value given held\n"
-                                 "in INFO(2).\n",
+      "Value of ICNTL(7) out of range on a call to MA57B/BD. Value given held\n"
+      "in INFO(2).\n",
 
-                                 "LRHS < N on a call to MA57C/CD. INFO(2) holds value of LRHS.\n",
+      "LRHS < N on a call to MA57C/CD. INFO(2) holds value of LRHS.\n",
 
-                                 "Invalid value for JOB on a call to MA57D/DD. Value given held in\n"
-                                 "INFO(2).\n",
+      "Invalid value for JOB on a call to MA57D/DD. Value given held in\n"
+      "INFO(2).\n",
 
-                                 "Invalid value of ICNTL(9) on a call to MA57D/DD. Value given held in\n"
-                                 "INFO(2).\n",
+      "Invalid value of ICNTL(9) on a call to MA57D/DD. Value given held in\n"
+      "INFO(2).\n",
 
-                                 "Failure of MC71A/AD on a call to MA57D/DD with ICNTL(10)> 0.\n",
+      "Failure of MC71A/AD on a call to MA57D/DD with ICNTL(10)> 0.\n",
 
-                                 "LKEEP less than 5*N+NE+MAX(N,NE) +42 on a call to MA57A/AD or\n"
-                                 "MA57B/BD. INFO(2) holds value of LKEEP.\n",
+      "LKEEP less than 5*N+NE+MAX(N,NE) +42 on a call to MA57A/AD or\n"
+      "MA57B/BD. INFO(2) holds value of LKEEP.\n",
 
-                                 "NRHS less than 1 on call to MA57C/CD. INFO(2) holds value of NRHS.\n",
+      "NRHS less than 1 on call to MA57C/CD. INFO(2) holds value of NRHS.\n",
 
-                                 "LWORK too small on entry to MA57C/CD. INFO(2) holds minimum length\n"
-                                 "required. A positive value of INFO(1) is associated with a warning\n"
-                                 "message that will be output on unit ICNTL(2).\n"
-                               };
+      "LWORK too small on entry to MA57C/CD. INFO(2) holds minimum length\n"
+      "required. A positive value of INFO(1) is associated with a warning\n"
+      "message that will be output on unit ICNTL(2).\n"
+    };
 
-  std::string ma57_wrn_msg[] = {
-                                 "Operation successful.\n",
+  std::string ma57_wrn_msg[] =
+    {
+      "Operation successful.\n",
 
-                                 "Index (in IRN or JCN) out of range on call to MA57A/AD or\n"
-                                 "MA57D/DD. Action taken by subroutine is to ignore any such entries and\n"
-                                 "continue. INFO(3) is set to the number of faulty entries. Details of the\n"
-                                 "first ten are printed on unit ICNTL(2).\n",
+      "Index (in IRN or JCN) out of range on call to MA57A/AD or\n"
+      "MA57D/DD. Action taken by subroutine is to ignore any such entries and\n"
+      "continue. INFO(3) is set to the number of faulty entries. Details of the\n"
+      "first ten are printed on unit ICNTL(2).\n",
 
-                                 "Duplicate indices on call to MA57A/AD or MA57D/DD. Action taken by\n"
-                                 "subroutine is to keep the duplicates and then to sum corresponding reals\n"
-                                 "when MA57B/BD is called. INFO(4) is set to the number of faulty\n"
-                                 "entries. Details of the first ten are printed on unit ICNTL(2).\n",
+      "Duplicate indices on call to MA57A/AD or MA57D/DD. Action taken by\n"
+      "subroutine is to keep the duplicates and then to sum corresponding reals\n"
+      "when MA57B/BD is called. INFO(4) is set to the number of faulty\n"
+      "entries. Details of the first ten are printed on unit ICNTL(2).\n",
 
-                                 "Both out-of-range indices and duplicates exist.\n",
+      "Both out-of-range indices and duplicates exist.\n",
 
-                                 "Matrix is rank deficient on exit from MA57B/BD. In this case, a\n"
-                                 "decomposition will still have been produced that will enable the\n"
-                                 "subsequent solution of consistent equations. INFO(25) will be set to the\n"
-                                 "rank of the factorized matrix.\n",
+      "Matrix is rank deficient on exit from MA57B/BD. In this case, a\n"
+      "decomposition will still have been produced that will enable the\n"
+      "subsequent solution of consistent equations. INFO(25) will be set to the\n"
+      "rank of the factorized matrix.\n",
 
-                                 "Pivots have different signs when factorizing a supposedly definite\n"
-                                 "matrix (ICNTL(7) = 3) on call to MA57B/BD. INFO(26) is set to the number\n"
-                                 "of sign changes.\n",
+      "Pivots have different signs when factorizing a supposedly definite\n"
+      "matrix (ICNTL(7) = 3) on call to MA57B/BD. INFO(26) is set to the number\n"
+      "of sign changes.\n",
 
-                                 "-",
-                                 "-",
+      "-",
+      "-",
 
-                                 "During error analysis the infinity norm of the computed solution was\n"
-                                 "found to be zero.\n",
+      "During error analysis the infinity norm of the computed solution was\n"
+      "found to be zero.\n",
 
-                                 "Insufficient real space to complete factorization when MA57B/BD called\n"
-                                 "with ICNTL(8) != 0. User can copy real values to a longer array using\n"
-                                 "MA57E/ED and recall MA57B/BD using this longer array to continue the\n"
-                                 "factorization.\n",
+      "Insufficient real space to complete factorization when MA57B/BD called\n"
+      "with ICNTL(8) != 0. User can copy real values to a longer array using\n"
+      "MA57E/ED and recall MA57B/BD using this longer array to continue the\n"
+      "factorization.\n",
 
-                                 "Insufficient integer space to complete factorization when MA57B/BD\n"
-                                 "called with ICNTL(8) != 0. User can copy integer values to a longer\n"
-                                 "array using MA57E/ED and recall MA57B/BD using this longer array to\n"
-                                 "continue the factorization.\n"
-                               };
+      "Insufficient integer space to complete factorization when MA57B/BD\n"
+      "called with ICNTL(8) != 0. User can copy integer values to a longer\n"
+      "array using MA57E/ED and recall MA57B/BD using this longer array to\n"
+      "continue the factorization.\n"
+    };
 
   Ma57TSolverInterface::Ma57TSolverInterface()
       :
@@ -291,7 +293,7 @@ namespace Ipopt
   {
     // Obtain the options settings
     options.GetNumericValue("ma57_pivtol", pivtol_, prefix);
-    if(options.GetNumericValue("ma57_pivtolmax", pivtolmax_, prefix)) {
+    if (options.GetNumericValue("ma57_pivtolmax", pivtolmax_, prefix)) {
       ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OPTION_INVALID,
                        "Option \"pivtolmax\": This value must be between "
                        "pivtol and 1.");
@@ -652,7 +654,7 @@ namespace Ipopt
     // XXX MH: MA57 can do several RHSs; just do one solve...
     // AW: Ok is the following correct?
     if (DBG_VERBOSITY()>=2) {
-      for(Index irhs=0; irhs<nrhs; irhs++) {
+      for (Index irhs=0; irhs<nrhs; irhs++) {
         for (Index i=0; i<dim_; i++) {
           DBG_PRINT((2, "rhs[%2d,%5d] = %23.15e\n", irhs, i, rhs_vals[irhs*dim_+i]));
         }
@@ -670,7 +672,7 @@ namespace Ipopt
                      "Error in MA57CD:  %d.\n", wd_info_[0]);
 
     if (DBG_VERBOSITY()>=2) {
-      for(Index irhs=0; irhs<nrhs; irhs++) {
+      for (Index irhs=0; irhs<nrhs; irhs++) {
         for (Index i=0; i<dim_; i++) {
           DBG_PRINT((2, "sol[%2d,%5d] = %23.15e\n", irhs, i, rhs_vals[irhs*dim_+i]));
         }

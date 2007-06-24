@@ -426,7 +426,7 @@ namespace Ipopt
     bool retval = true;
 
     switch (adaptive_mu_globalization_) {
-      case KKT_ERROR : {
+    case KKT_ERROR : {
         Index num_refs = (Index)refs_vals_.size();
         if (num_refs >= num_refs_max_) {
           retval = false;
@@ -441,7 +441,7 @@ namespace Ipopt
         }
       }
       break;
-      case FILTER_OBJ_CONSTR : {
+    case FILTER_OBJ_CONSTR : {
         /*
                retval = filter_.Acceptable(IpCq().curr_f(),
                                            IpCq().curr_constraint_violation());
@@ -453,10 +453,10 @@ namespace Ipopt
                                     IpCq().curr_constraint_violation() + margin);
       }
       break;
-      case NEVER_MONOTONE_MODE :
+    case NEVER_MONOTONE_MODE :
       retval = true;
       break;
-      default:
+    default:
       DBG_ASSERT(false && "Unknown adaptive_mu_globalization value.");
     }
 
@@ -467,7 +467,7 @@ namespace Ipopt
   AdaptiveMuUpdate::RememberCurrentPointAsAccepted()
   {
     switch (adaptive_mu_globalization_) {
-      case KKT_ERROR : {
+    case KKT_ERROR : {
         Number curr_error = quality_function_pd_system();
         Index num_refs = (Index)refs_vals_.size();
         if (num_refs >= num_refs_max_) {
@@ -487,7 +487,7 @@ namespace Ipopt
         }
       }
       break;
-      case FILTER_OBJ_CONSTR : {
+    case FILTER_OBJ_CONSTR : {
         /*
                Number theta = IpCq().curr_constraint_violation();
                filter_.AddEntry(IpCq().curr_f() - filter_margin_fact_*theta,
@@ -501,11 +501,11 @@ namespace Ipopt
         filter_.Print(Jnlst());
       }
       break;
-      case NEVER_MONOTONE_MODE : {
+    case NEVER_MONOTONE_MODE : {
         // Nothing to be done
       }
       break;
-      default:
+    default:
       DBG_ASSERT(false && "Unknown corrector_type value.");
     }
 
@@ -609,7 +609,7 @@ namespace Ipopt
     Number primal_inf=0.;
     Number complty=0.;
     switch (adaptive_mu_kkt_norm_) {
-      case QualityFunctionMuOracle::NM_NORM_1:
+    case QualityFunctionMuOracle::NM_NORM_1:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_1);
       primal_inf =
@@ -626,7 +626,7 @@ namespace Ipopt
         complty /= (Number)n_comp;
       }
       break;
-      case QualityFunctionMuOracle::NM_NORM_2_SQUARED:
+    case QualityFunctionMuOracle::NM_NORM_2_SQUARED:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_2);
       dual_inf *= dual_inf;
@@ -646,7 +646,7 @@ namespace Ipopt
         complty /= (Number)n_comp;
       }
       break;
-      case QualityFunctionMuOracle::NM_NORM_MAX:
+    case QualityFunctionMuOracle::NM_NORM_MAX:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_MAX);
       primal_inf =
@@ -654,7 +654,7 @@ namespace Ipopt
       complty =
         IpCq().curr_complementarity(0., NORM_MAX);
       break;
-      case QualityFunctionMuOracle::NM_NORM_2:
+    case QualityFunctionMuOracle::NM_NORM_2:
       dual_inf =
         IpCq().curr_dual_infeasibility(NORM_2);
       primal_inf =
@@ -677,28 +677,28 @@ namespace Ipopt
     if (adaptive_mu_kkt_centrality_!=0) {
       Number xi = IpCq().curr_centrality_measure();
       switch (adaptive_mu_kkt_centrality_) {
-        case 1:
+      case 1:
         centrality = -complty*log(xi);
         break;
-        case 2:
+      case 2:
         centrality = complty/xi;
-        case 3:
+      case 3:
         centrality = complty/pow(xi,3);
         break;
-        default:
+      default:
         DBG_ASSERT(false && "Unknown value for adaptive_mu_kkt_centrality_");
       }
     }
 
     Number balancing_term=0.;
     switch (adaptive_mu_kkt_balancing_term_) {
-      case 0:
+    case 0:
       //Nothing
       break;
-      case 1:
+    case 1:
       balancing_term = pow(Max(0., Max(dual_inf,primal_inf)-complty),3);
       break;
-      default:
+    default:
       DBG_ASSERT(false && "Unknown value for adaptive_mu_kkt_balancing_term");
     }
 

@@ -293,26 +293,26 @@ namespace Ipopt
 
     IpData().TimingStats().Task5().Start();
     switch (quality_function_norm_) {
-      case NM_NORM_1:
+    case NM_NORM_1:
       curr_grad_lag_x_asum_ = IpCq().curr_grad_lag_x()->Asum();
       curr_grad_lag_s_asum_ = IpCq().curr_grad_lag_s()->Asum();
       curr_c_asum_ = IpCq().curr_c()->Asum();
       curr_d_minus_s_asum_ = IpCq().curr_d_minus_s()->Asum();
       break;
-      case NM_NORM_2_SQUARED:
-      case NM_NORM_2:
+    case NM_NORM_2_SQUARED:
+    case NM_NORM_2:
       curr_grad_lag_x_nrm2_ = IpCq().curr_grad_lag_x()->Nrm2();
       curr_grad_lag_s_nrm2_ = IpCq().curr_grad_lag_s()->Nrm2();
       curr_c_nrm2_ = IpCq().curr_c()->Nrm2();
       curr_d_minus_s_nrm2_ = IpCq().curr_d_minus_s()->Nrm2();
       break;
-      case NM_NORM_MAX:
+    case NM_NORM_MAX:
       curr_grad_lag_x_amax_ = IpCq().curr_grad_lag_x()->Amax();
       curr_grad_lag_s_amax_ = IpCq().curr_grad_lag_s()->Amax();
       curr_c_amax_ = IpCq().curr_c()->Amax();
       curr_d_minus_s_amax_ = IpCq().curr_d_minus_s()->Amax();
       break;
-      default:
+    default:
       DBG_ASSERT(false && "Unknown value for quality_function_norm_");
     }
     IpData().TimingStats().Task5().End();
@@ -343,26 +343,26 @@ namespace Ipopt
 
     IpData().TimingStats().Task5().Start();
     switch (quality_function_norm_) {
-      case NM_NORM_1:
+    case NM_NORM_1:
       curr_grad_lag_x_asum_ = IpCq().curr_grad_lag_x()->Asum();
       curr_grad_lag_s_asum_ = IpCq().curr_grad_lag_s()->Asum();
       curr_c_asum_ = IpCq().curr_c()->Asum();
       curr_d_minus_s_asum_ = IpCq().curr_d_minus_s()->Asum();
       break;
-      case NM_NORM_2_SQUARED:
-      case NM_NORM_2:
+    case NM_NORM_2_SQUARED:
+    case NM_NORM_2:
       curr_grad_lag_x_nrm2_ = IpCq().curr_grad_lag_x()->Nrm2();
       curr_grad_lag_s_nrm2_ = IpCq().curr_grad_lag_s()->Nrm2();
       curr_c_nrm2_ = IpCq().curr_c()->Nrm2();
       curr_d_minus_s_nrm2_ = IpCq().curr_d_minus_s()->Nrm2();
       break;
-      case NM_NORM_MAX:
+    case NM_NORM_MAX:
       curr_grad_lag_x_amax_ = IpCq().curr_grad_lag_x()->Amax();
       curr_grad_lag_s_amax_ = IpCq().curr_grad_lag_s()->Amax();
       curr_c_amax_ = IpCq().curr_c()->Amax();
       curr_d_minus_s_amax_ = IpCq().curr_d_minus_s()->Amax();
       break;
-      default:
+    default:
       DBG_ASSERT(false && "Unknown value for quality_function_norm_");
     }
     IpData().TimingStats().Task5().End();
@@ -518,7 +518,7 @@ namespace Ipopt
     Number sigma_1 = sigma_max_;
     Number sigma_2 = 1e-9/avrg_compl;
     Number sigma_trace = sigma_1;
-    while(sigma_trace > sigma_2) {
+    while (sigma_trace > sigma_2) {
       Number qf = CalculateQualityFunction(sigma_trace,
                                            *step_aff_x_L,
                                            *step_aff_x_U,
@@ -706,7 +706,7 @@ namespace Ipopt
 
     IpData().TimingStats().Task5().Start();
     switch (quality_function_norm_) {
-      case NM_NORM_1:
+    case NM_NORM_1:
       dual_inf = (1.-alpha_dual)*(curr_grad_lag_x_asum_ +
                                   curr_grad_lag_s_asum_);
 
@@ -723,7 +723,7 @@ namespace Ipopt
       DBG_ASSERT(n_comp_>0);
       compl_inf /= n_comp_;
       break;
-      case NM_NORM_2_SQUARED:
+    case NM_NORM_2_SQUARED:
       dual_inf =
         pow(1.-alpha_dual, 2)*(pow(curr_grad_lag_x_nrm2_, 2) +
                                pow(curr_grad_lag_s_nrm2_, 2));
@@ -741,7 +741,7 @@ namespace Ipopt
       DBG_ASSERT(n_comp_>0);
       compl_inf /= n_comp_;
       break;
-      case NM_NORM_MAX:
+    case NM_NORM_MAX:
       dual_inf =
         (1.-alpha_dual)*Max(curr_grad_lag_x_amax_,
                             curr_grad_lag_s_amax_);
@@ -752,7 +752,7 @@ namespace Ipopt
         Max(tmp_slack_x_L_->Amax(), tmp_slack_x_U_->Amax(),
             tmp_slack_s_L_->Amax(), tmp_slack_s_U_->Amax());
       break;
-      case NM_NORM_2:
+    case NM_NORM_2:
       dual_inf =
         (1.-alpha_dual)*sqrt(pow(curr_grad_lag_x_nrm2_, 2) +
                              pow(curr_grad_lag_s_nrm2_, 2));
@@ -770,7 +770,7 @@ namespace Ipopt
       DBG_ASSERT(n_comp_>0);
       compl_inf /= sqrt((Number)n_comp_);
       break;
-      default:
+    default:
       DBG_ASSERT(false && "Unknown value for quality_function_norm_");
     }
     IpData().TimingStats().Task5().End();
@@ -784,29 +784,29 @@ namespace Ipopt
       IpData().TimingStats().Task4().End();
     }
     switch (quality_function_centrality_) {
-      case CEN_NONE:
+    case CEN_NONE:
       //Nothing
       break;
-      case CEN_LOG:
+    case CEN_LOG:
       quality_function -= compl_inf*log(xi);
       break;
-      case CEN_RECIPROCAL:
+    case CEN_RECIPROCAL:
       quality_function += compl_inf/xi;
-      case CEN_CUBED_RECIPROCAL:
+    case CEN_CUBED_RECIPROCAL:
       quality_function += compl_inf/pow(xi,3);
       break;
-      default:
+    default:
       DBG_ASSERT(false && "Unknown value for quality_function_centrality_");
     }
 
     switch (quality_function_balancing_term_) {
-      case BT_NONE:
+    case BT_NONE:
       //Nothing
       break;
-      case BT_CUBIC:
+    case BT_CUBIC:
       quality_function += pow(Max(0., Max(dual_inf,primal_inf)-compl_inf),3);
       break;
-      default:
+    default:
       DBG_ASSERT(false && "Unknown value for quality_function_balancing term_");
     }
 

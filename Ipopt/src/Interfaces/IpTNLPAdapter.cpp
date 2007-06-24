@@ -382,27 +382,27 @@ namespace Ipopt
           Number upper_bound = x_u[i];
           if (lower_bound == upper_bound) {
             switch (fixed_variable_treatment_) {
-              case MAKE_PARAMETER:
+            case MAKE_PARAMETER:
               // Variable is fixed, remove it from the problem
               full_x_[i] = lower_bound;
               x_fixed_map_tmp[n_x_fixed_] = i;
               n_x_fixed_++;
               break;
-              case MAKE_CONSTRAINT:
+            case MAKE_CONSTRAINT:
               x_fixed_map_tmp[n_x_fixed_] = i; // don't really need this
               // array then
               n_x_fixed_++;
               x_not_fixed_map[n_x_var] = i;
               n_x_var++;
               break;
-              case RELAX_BOUNDS:
+            case RELAX_BOUNDS:
               x_l_map[n_x_l] = n_x_var;
               n_x_l++;
               x_u_map[n_x_u] = n_x_var;
               n_x_u++;
               n_x_var++;
               break;
-              default:
+            default:
               DBG_ASSERT(false && "invalid fixed_variable_treatment_");
             }
           }
@@ -2281,7 +2281,7 @@ namespace Ipopt
       for (Index i=0; i<n_full_x_; i++) {
         c_col_pos[i] = -1;
       }
-      for(Index i=0; i<n_x_var; i++) {
+      for (Index i=0; i<n_x_var; i++) {
         c_col_pos[x_not_fixed_map[i]] = i;
       }
       for (Index i=0; i<nz_full_jac_g_; i++) {

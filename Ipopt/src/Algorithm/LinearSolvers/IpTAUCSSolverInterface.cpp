@@ -64,7 +64,7 @@ namespace Ipopt
   {
     if (F) {
       //printf("MEM: freeing factor and colptr and rowptr\n");
-      if(F->L) {
+      if (F->L) {
         taucs_factor_delete_L(F);
       }
       taucs_free(F->rowperm);

@@ -122,7 +122,7 @@ namespace Ipopt
     // Decide if we want to use the original option or want to make
     // some changes
     SmartPtr<OptionsList> actual_resto_options = resto_options_;
-    if(square_problem) {
+    if (square_problem) {
       actual_resto_options = new OptionsList(*resto_options_);
       // If this is a square problem, the want the restoration phase
       // never to be left until the problem is converged
@@ -152,7 +152,7 @@ namespace Ipopt
 
     // Call the optimization algorithm to solve the restoration phase
     // problem
-    SolverReturn resto_status	= resto_alg_->Optimize();
+    SolverReturn resto_status = resto_alg_->Optimize();
 
     int retval=-1;
 

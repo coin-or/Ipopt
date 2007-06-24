@@ -156,14 +156,16 @@ namespace Ipopt
                                       SmartPtr<Matrix>& P_approx);
 
     /** Enum for treatment of fixed variables option */
-    enum FixedVariableTreatmentEnum {
+    enum FixedVariableTreatmentEnum
+    {
       MAKE_PARAMETER=0,
       MAKE_CONSTRAINT,
       RELAX_BOUNDS
     };
 
     /** Enum for specifying which derivative test is to be performed. */
-    enum DerivativeTestEnum {
+    enum DerivativeTestEnum
+    {
       NO_TEST=0,
       FIRST_ORDER_TEST,
       SECOND_ORDER_TEST

@@ -55,7 +55,8 @@ namespace Ipopt
     //@}
 
     /** Enumeration specifying the type of notification */
-    enum NotifyType {
+    enum NotifyType
+    {
       NT_All,
       NT_BeingDestroyed,
       NT_Changed

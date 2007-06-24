@@ -542,7 +542,7 @@ namespace Ipopt
         // in acceptance tests, use original step size!
         accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
       }
-      catch(IpoptNLP::Eval_Error& e) {
+      catch (IpoptNLP::Eval_Error& e) {
         e.ReportException(Jnlst(), J_DETAILED);
         Jnlst().Printf(J_WARNING, J_MAIN, "Warning: SOC step rejected due to evaluation error\n");
         IpData().Append_info_string("e");
@@ -596,7 +596,7 @@ namespace Ipopt
     SmartPtr<IteratesVector> delta_corr = actual_delta->MakeNewIteratesVector(true);
 
     switch (corrector_type_) {
-      case AFFINE_CORRECTOR : {
+    case AFFINE_CORRECTOR : {
         // 1: Standard MPC corrector
 
         if (!IpData().HaveAffineDeltas()) {
@@ -654,7 +654,7 @@ namespace Ipopt
         DBG_PRINT_VECTOR(2, "delta_corr", *delta_corr);
       }
       break;
-      case PRIMAL_DUAL_CORRECTOR : {
+    case PRIMAL_DUAL_CORRECTOR : {
         // 2: Second order correction for primal-dual step to
         // primal-dual mu
 
@@ -710,7 +710,7 @@ namespace Ipopt
         DBG_PRINT_VECTOR(2, "delta_corr", *delta_corr);
       }
       break;
-      default:
+    default:
       DBG_ASSERT(false && "Unknown corrector_type value.");
     }
 
@@ -748,7 +748,7 @@ namespace Ipopt
       // in acceptance tests, use original step size!
       accept = CheckAcceptabilityOfTrialPoint(alpha_primal_test);
     }
-    catch(IpoptNLP::Eval_Error& e) {
+    catch (IpoptNLP::Eval_Error& e) {
       e.ReportException(Jnlst(), J_DETAILED);
       Jnlst().Printf(J_WARNING, J_MAIN,
                      "Warning: Corrector step rejected due to evaluation error\n");

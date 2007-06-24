@@ -139,7 +139,7 @@ namespace Ipopt
       const std::string& prefix)
   {
     options.GetNumericValue("ma27_pivtol", pivtol_, prefix);
-    if(options.GetNumericValue("ma27_pivtolmax", pivtolmax_, prefix)) {
+    if (options.GetNumericValue("ma27_pivtolmax", pivtolmax_, prefix)) {
       ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OPTION_INVALID,
                        "Option \"ma27_pivtolmax\": This value must be between "
                        "ma27_pivtol and 1.");
@@ -458,7 +458,7 @@ namespace Ipopt
       a_ = NULL;
       ipfint liw_old = liw_;
       ipfint la_old = la_;
-      if(iflag==-3) {
+      if (iflag==-3) {
         liw_ = (ipfint)(meminc_factor_ * (double)(ierror));
         la_ = (ipfint)(meminc_factor_ * (double)(la_));
       }
@@ -545,7 +545,7 @@ namespace Ipopt
     ipfint* IW1 = new ipfint[nsteps_];
 
     // For each right hand side, call MA27CD
-    for(Index irhs=0; irhs<nrhs; irhs++) {
+    for (Index irhs=0; irhs<nrhs; irhs++) {
       if (DBG_VERBOSITY()>=2) {
         for (Index i=0; i<dim_; i++) {
           DBG_PRINT((2, "rhs[%5d] = %23.15e\n", i, rhs_vals[irhs*dim_+i]));
