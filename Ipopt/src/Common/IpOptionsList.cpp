@@ -533,7 +533,7 @@ namespace Ipopt
   const std::string& OptionsList::lowercase(const std::string tag) const
   {
     lowercase_buffer_ = tag;
-    for(Index i=0; i<(Index)tag.length(); i++) {
+    for (Index i=0; i<(Index)tag.length(); i++) {
       lowercase_buffer_[i] = tolower(tag[i]);
     }
     return lowercase_buffer_;
@@ -545,9 +545,9 @@ namespace Ipopt
     char buffer[256];
     sprintf(buffer, "%40s   %-20s %s\n", "Name", "Value", "# times used");
     list += buffer;
-    for(std::map< std::string, OptionValue >::const_iterator p = options_.begin();
-        p != options_.end();
-        p++ ) {
+    for (std::map< std::string, OptionValue >::const_iterator p = options_.begin();
+         p != options_.end();
+         p++ ) {
       sprintf(buffer, "%40s = %-20s %6d\n", p->first.c_str(),
               p->second.Value().c_str(), p->second.Counter());
       list += buffer;
@@ -560,9 +560,9 @@ namespace Ipopt
     char buffer[256];
     sprintf(buffer, "%40s   %-20s %s\n", "Name", "Value", "used");
     list += buffer;
-    for(std::map< std::string, OptionValue >::const_iterator p = options_.begin();
-        p != options_.end();
-        p++ ) {
+    for (std::map< std::string, OptionValue >::const_iterator p = options_.begin();
+         p != options_.end();
+         p++ ) {
       if (!p->second.DontPrint()) {
         const char yes[] = "yes";
         const char no[] = "no";

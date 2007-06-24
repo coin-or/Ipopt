@@ -32,9 +32,9 @@ namespace Ipopt
    * this:
    * 
    *  Initialize your own Tag to zero in constructor.
-   *      
-   *     
-   *     
+   *  
+   *  
+   *  
    *  Before an expensive calculation,
    *      check if the TaggedObject has changed, passing in
    *      your own Tag, indicating the last time you used

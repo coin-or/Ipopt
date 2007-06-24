@@ -13,7 +13,7 @@
 #include "IpJournalist.hpp"
 
 /*  This file contains a base class for all exceptions
- *  and a set of macros to help with exceptions 
+ *  and a set of macros to help with exceptions
  */
 
 namespace Ipopt
@@ -134,9 +134,9 @@ namespace Ipopt
     { \
     public: \
       __except_type(std::string msg, std::string fname, Index line) \
-	: IpoptException(msg,fname,line, #__except_type) {} \
+ : IpoptException(msg,fname,line, #__except_type) {} \
       __except_type(const __except_type& copy) \
-	: IpoptException(copy) {} \
+ : IpoptException(copy) {} \
     private: \
        __except_type(); \
        void operator=(const __except_type&); \

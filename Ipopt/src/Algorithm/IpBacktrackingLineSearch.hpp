@@ -232,7 +232,8 @@ namespace Ipopt
     Number alpha_red_factor_;
 
     /** enumeration for the different alpha_for_y_ settings */
-    enum AlphaForYEnum {
+    enum AlphaForYEnum
+    {
       PRIMAL_ALPHA_FOR_Y=0,
       DUAL_ALPHA_FOR_Y,
       MIN_ALPHA_FOR_Y,

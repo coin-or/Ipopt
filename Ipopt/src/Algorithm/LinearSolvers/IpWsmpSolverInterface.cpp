@@ -133,7 +133,7 @@ namespace Ipopt
     options.GetIntegerValue("wsmp_ordering_option", wsmp_ordering_option_,
                             prefix);
     options.GetNumericValue("wsmp_pivtol", wsmp_pivtol_, prefix);
-    if(options.GetNumericValue("wsmp_pivtolmax", wsmp_pivtolmax_, prefix)) {
+    if (options.GetNumericValue("wsmp_pivtolmax", wsmp_pivtolmax_, prefix)) {
       ASSERT_EXCEPTION(wsmp_pivtolmax_>=wsmp_pivtol_, OPTION_INVALID,
                        "Option \"wsmp_pivtolmax\": This value must be between "
                        "wsmp_pivtol and 1.");

@@ -126,7 +126,8 @@ namespace Ipopt
     /** @name Solver specific options */
     //@{
     /** Type for mathcing strategies */
-    enum PardisoMatchingStrategy {
+    enum PardisoMatchingStrategy
+    {
       COMPLETE,
       COMPLETE2x2,
       CONSTRAINT

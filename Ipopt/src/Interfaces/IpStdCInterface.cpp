@@ -231,7 +231,7 @@ enum ApplicationReturnStatus IpoptSolve(
                                 ipopt_problem->x_scaling,
                                 ipopt_problem->g_scaling);
   }
-  catch(INVALID_STDINTERFACE_NLP& exc) {
+  catch (INVALID_STDINTERFACE_NLP& exc) {
     exc.ReportException(*ipopt_problem->app->Jnlst(), J_ERROR);
     skip_optimize = true;
   }

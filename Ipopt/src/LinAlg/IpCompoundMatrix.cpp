@@ -99,14 +99,14 @@ namespace Ipopt
     }
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
       y.Set(0.0);  // In case y hasn't been initialized yet
     }
 
-    for( Index irow = 0; irow < NComps_Rows(); irow++ ) {
+    for ( Index irow = 0; irow < NComps_Rows(); irow++ ) {
       SmartPtr<Vector> y_i;
       if (comp_y) {
         y_i = comp_y->GetCompNonConst(irow);
@@ -116,7 +116,7 @@ namespace Ipopt
       }
       DBG_ASSERT(IsValid(y_i));
 
-      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ ) {
+      for ( Index jcol = 0; jcol < NComps_Cols(); jcol++ ) {
         if ( (owner_space_->Diagonal() && irow == jcol)
              || (!owner_space_->Diagonal() && ConstComp(irow,jcol)) ) {
           SmartPtr<const Vector> x_j;
@@ -163,14 +163,14 @@ namespace Ipopt
     }
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
       y.Set(0.0);  // In case y hasn't been initialized yet
     }
 
-    for( Index irow = 0; irow < NComps_Cols(); irow++ ) {
+    for ( Index irow = 0; irow < NComps_Cols(); irow++ ) {
       SmartPtr<Vector> y_i;
       if (comp_y) {
         y_i = comp_y->GetCompNonConst(irow);
@@ -180,7 +180,7 @@ namespace Ipopt
       }
       DBG_ASSERT(IsValid(y_i));
 
-      for( Index jcol = 0; jcol < NComps_Rows(); jcol++ ) {
+      for ( Index jcol = 0; jcol < NComps_Rows(); jcol++ ) {
         if ( (owner_space_->Diagonal() && irow == jcol)
              || (!owner_space_->Diagonal() && ConstComp(jcol, irow)) ) {
           SmartPtr<const Vector> x_j;
@@ -229,7 +229,7 @@ namespace Ipopt
       DBG_ASSERT(NComps_Rows() == 1);
     }
 
-    for( Index irow = 0; irow < NComps_Cols(); irow++ ) {
+    for ( Index irow = 0; irow < NComps_Cols(); irow++ ) {
       SmartPtr<Vector> X_i;
       if (comp_X) {
         X_i = comp_X->GetCompNonConst(irow);
@@ -239,7 +239,7 @@ namespace Ipopt
       }
       DBG_ASSERT(IsValid(X_i));
 
-      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ ) {
+      for ( Index jcol = 0; jcol < NComps_Cols(); jcol++ ) {
         if ( (owner_space_->Diagonal() && irow == jcol)
              || (!owner_space_->Diagonal() && ConstComp(jcol, irow)) ) {
           SmartPtr<const Vector> S_j;
@@ -378,8 +378,8 @@ namespace Ipopt
     }
     DBG_ASSERT(matrices_valid_);
 
-    for( Index irow = 0; irow < NComps_Rows(); irow++ ) {
-      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ ) {
+    for ( Index irow = 0; irow < NComps_Rows(); irow++ ) {
+      for ( Index jcol = 0; jcol < NComps_Cols(); jcol++ ) {
         if ( (owner_space_->Diagonal() && irow == jcol)
              || (!owner_space_->Diagonal() && ConstComp(irow,jcol)) ) {
           if (!ConstComp(irow, jcol)->HasValidNumbers()) {
@@ -531,7 +531,7 @@ namespace Ipopt
     DBG_ASSERT(dimensions_set_);
 
     CompoundMatrix* mat = new CompoundMatrix(this);
-    for(Index i=0; i<ncomps_rows_; i++) {
+    for (Index i=0; i<ncomps_rows_; i++) {
       for (Index j=0; j<ncomps_cols_; j++) {
         if (allocate_block_[i][j]) {
           mat->SetCompNonConst(i, j, *GetCompSpace(i, j)->MakeNew());

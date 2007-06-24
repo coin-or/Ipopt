@@ -27,7 +27,7 @@ namespace Ipopt
     DBG_ASSERT(NRows()==y.Dim());
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
@@ -43,7 +43,7 @@ namespace Ipopt
     DBG_ASSERT(NRows()==x.Dim());
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {

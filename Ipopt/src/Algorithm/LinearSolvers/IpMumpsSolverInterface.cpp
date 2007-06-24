@@ -135,7 +135,7 @@ namespace Ipopt
       const std::string& prefix)
   {
     options.GetNumericValue("mumps_pivtol", pivtol_, prefix);
-    if(options.GetNumericValue("mumps_pivtolmax", pivtolmax_, prefix)) {
+    if (options.GetNumericValue("mumps_pivtolmax", pivtolmax_, prefix)) {
       ASSERT_EXCEPTION(pivtolmax_>=pivtol_, OPTION_INVALID,
                        "Option \"mumps_pivtolmax\": This value must be between "
                        "mumps_pivtol and 1.");
@@ -374,7 +374,7 @@ namespace Ipopt
     //Check for errors
     if (error == -8 || error == -9) {//not enough memory
       const Index trycount_max = 20;
-      for(int trycount=0; trycount<trycount_max; trycount++) {
+      for (int trycount=0; trycount<trycount_max; trycount++) {
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                        "MUMPS returned INFO(1) = %d and requires more memory, reallocating.  Attempt %d\n",
                        error,trycount+1);
@@ -522,7 +522,7 @@ namespace Ipopt
     //Check for errors
     if (error == -8 || error == -9) {//not enough memory
       const Index trycount_max = 20;
-      for(int trycount=0; trycount<trycount_max; trycount++) {
+      for (int trycount=0; trycount<trycount_max; trycount++) {
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                        "MUMPS returned INFO(1) = %d and requires more memory, reallocating.  Attempt %d\n",
                        error,trycount+1);

@@ -204,7 +204,8 @@ namespace Ipopt
     Number obj_max_inc_;
 
     /** enumeration for the corrector type */
-    enum CorrectorTypeEnum {
+    enum CorrectorTypeEnum
+    {
       NO_CORRECTOR=0,
       AFFINE_CORRECTOR,
       PRIMAL_DUAL_CORRECTOR

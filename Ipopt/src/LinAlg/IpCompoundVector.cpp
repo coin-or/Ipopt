@@ -97,7 +97,7 @@ namespace Ipopt
     DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
 
     DBG_ASSERT(NComps() == comp_x->NComps());
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->Copy(*comp_x->GetComp(i));
     }
   }
@@ -106,7 +106,7 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::ScalImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       DBG_ASSERT(Comp(i));
       Comp(i)->Scal(alpha);
     }
@@ -120,7 +120,7 @@ namespace Ipopt
     DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
 
     DBG_ASSERT(NComps() == comp_x->NComps());
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       DBG_ASSERT(Comp(i));
       Comp(i)->Axpy(alpha, *comp_x->GetComp(i));
     }
@@ -134,7 +134,7 @@ namespace Ipopt
     DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
     DBG_ASSERT(NComps() == comp_x->NComps());
     Number dot = 0.;
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       DBG_ASSERT(ConstComp(i));
       dot += ConstComp(i)->Dot(*comp_x->GetComp(i));
     }
@@ -146,7 +146,7 @@ namespace Ipopt
     DBG_START_METH("CompoundVector::Nrm2Impl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
     Number sum=0.;
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Number nrm2 = ConstComp(i)->Nrm2();
       sum += nrm2*nrm2;
     }
@@ -158,7 +158,7 @@ namespace Ipopt
     DBG_START_METH("CompoundVector::AsumImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
     Number sum=0.;
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       sum += ConstComp(i)->Asum();
     }
     return sum;
@@ -169,7 +169,7 @@ namespace Ipopt
     DBG_START_METH("CompoundVector::AmaxImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
     Number max=0.;
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       max = Ipopt::Max(max, ConstComp(i)->Amax());
     }
     return max;
@@ -179,7 +179,7 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::SetImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->Set(value);
     }
   }
@@ -191,7 +191,7 @@ namespace Ipopt
     const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
     DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
     DBG_ASSERT(NComps() == comp_x->NComps());
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseDivide(*comp_x->GetComp(i));
     }
   }
@@ -203,7 +203,7 @@ namespace Ipopt
     const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
     DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
     DBG_ASSERT(NComps() == comp_x->NComps());
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseMultiply(*comp_x->GetComp(i));
     }
   }
@@ -215,7 +215,7 @@ namespace Ipopt
     const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
     DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
     DBG_ASSERT(NComps() == comp_x->NComps());
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseMax(*comp_x->GetComp(i));
     }
   }
@@ -227,7 +227,7 @@ namespace Ipopt
     const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
     DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
     DBG_ASSERT(NComps() == comp_x->NComps());
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseMin(*comp_x->GetComp(i));
     }
   }
@@ -236,7 +236,7 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::ElementWiseReciprocalImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseReciprocal();
     }
   }
@@ -245,7 +245,7 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::ElementWiseAbsImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseAbs();
     }
   }
@@ -254,7 +254,7 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::ElementWiseSqrtImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseSqrt();
     }
   }
@@ -263,7 +263,7 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::AddScalarImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->AddScalar(scalar);
     }
   }
@@ -274,7 +274,7 @@ namespace Ipopt
     DBG_ASSERT(vectors_valid_);
     DBG_ASSERT(NComps() > 0 && Dim() > 0 && "There is no Max of a zero length vector (no reasonable default can be returned)");
     Number max = -std::numeric_limits<Number>::max();
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       if (ConstComp(i)->Dim() != 0) {
         max = Ipopt::Max(max, ConstComp(i)->Max());
       }
@@ -301,7 +301,7 @@ namespace Ipopt
     DBG_START_METH("CompoundVector::SumImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
     Number sum=0.;
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       sum += ConstComp(i)->Sum();
     }
     return sum;
@@ -312,7 +312,7 @@ namespace Ipopt
     DBG_START_METH("CompoundVector::SumLogsImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
     Number sum=0.;
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       sum += ConstComp(i)->SumLogs();
     }
     return sum;
@@ -322,7 +322,7 @@ namespace Ipopt
   {
     DBG_START_METH("CompoundVector::ElementWiseSgnImpl", dbg_verbosity);
     DBG_ASSERT(vectors_valid_);
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->ElementWiseSgn();
     }
   }
@@ -339,7 +339,7 @@ namespace Ipopt
     DBG_ASSERT(dynamic_cast<const CompoundVector*>(&v2));
     DBG_ASSERT(NComps() == comp_v2->NComps());
 
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->AddTwoVectors(a, *comp_v1->GetComp(i), b, *comp_v2->GetComp(i), c);
     }
   }
@@ -354,7 +354,7 @@ namespace Ipopt
     DBG_ASSERT(NComps() == comp_delta->NComps());
 
     Number alpha = 1.;
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       alpha = Ipopt::Min(alpha,
                          ConstComp(i)->FracToBound(*comp_delta->GetComp(i), tau));
     }
@@ -372,7 +372,7 @@ namespace Ipopt
     DBG_ASSERT(dynamic_cast<const CompoundVector*>(&s));
     DBG_ASSERT(NComps() == comp_s->NComps());
 
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       Comp(i)->AddVectorQuotient(a, *comp_z->GetComp(i),
                                  *comp_s->GetComp(i), c);
     }
@@ -381,7 +381,7 @@ namespace Ipopt
   bool CompoundVector::HasValidNumbersImpl() const
   {
     DBG_ASSERT(vectors_valid_);
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       if (!ConstComp(i)->HasValidNumbers()) {
         return false;
       }
@@ -401,7 +401,7 @@ namespace Ipopt
     jnlst.PrintfIndented(level, category, indent,
                          "%sCompoundVector \"%s\" with %d components:\n",
                          prefix.c_str(), name.c_str(), NComps());
-    for(Index i=0; i<NComps(); i++) {
+    for (Index i=0; i<NComps(); i++) {
       jnlst.Printf(level, category, "\n");
       jnlst.PrintfIndented(level, category, indent,
                            "%sComponent %d:\n", prefix.c_str(), i+1);

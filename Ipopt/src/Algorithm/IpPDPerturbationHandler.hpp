@@ -44,26 +44,26 @@ namespace Ipopt
      *  positive.  If the return value is false, no suitable
      *  perturbation could be found. */
     virtual bool ConsiderNewSystem(Number& delta_x, Number& delta_s,
-				   Number& delta_c, Number& delta_d);
+                                   Number& delta_c, Number& delta_d);
 
     /** This method returns pertubation factors for the case when the
      *  most recent factorization resulted in a singular matrix. If
      *  the return value is false, no suitable perturbation could be
      *  found. */
     virtual bool PerturbForSingularity(Number& delta_x, Number& delta_s,
-				       Number& delta_c, Number& delta_d);
+                                       Number& delta_c, Number& delta_d);
 
     /** This method returns pertubation factors for the case when the
      *  most recent factorization resulted in a matrix with an
      *  incorrect number of negative eigenvalues. If the return value
      *  is false, no suitable perturbation could be found. */
     virtual bool PerturbForWrongInertia(Number& delta_x, Number& delta_s,
-					Number& delta_c, Number& delta_d);
+                                        Number& delta_c, Number& delta_d);
 
     /** Just return the perturbation values that have been determined
      *  most recently */
     virtual void CurrentPerturbation(Number& delta_x, Number& delta_s,
-				     Number& delta_c, Number& delta_d);
+                                     Number& delta_c, Number& delta_d);
 
     /** Methods for IpoptType */
     //@{
@@ -118,7 +118,8 @@ namespace Ipopt
     /** @name Handling structural degeneracy */
     //@{
     /** Type for degeneracy flags */
-    enum DegenType {
+    enum DegenType
+    {
       NOT_YET_DETERMINED,
       NOT_DEGENERATE,
       DEGENERATE
@@ -138,7 +139,8 @@ namespace Ipopt
     Index degen_iters_;
 
     /** Status of current trial configuration */
-    enum TrialStatus {
+    enum TrialStatus
+    {
       NO_TEST,
       TEST_DELTA_C_EQ_0_DELTA_X_EQ_0,
       TEST_DELTA_C_GT_0_DELTA_X_EQ_0,

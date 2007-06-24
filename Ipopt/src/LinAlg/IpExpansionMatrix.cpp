@@ -33,7 +33,7 @@ namespace Ipopt
     DBG_ASSERT(NRows()==y.Dim());
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
@@ -53,7 +53,7 @@ namespace Ipopt
       if (dense_x->IsHomogeneous()) {
         Number val = alpha * dense_x->Scalar();
         if (val != 0.) {
-          for(Index i=0; i<NCols(); i++) {
+          for (Index i=0; i<NCols(); i++) {
             yvals[exp_pos[i]] += val;
           }
         }
@@ -61,17 +61,17 @@ namespace Ipopt
       else {
         const Number* xvals=dense_x->Values();
         if (alpha == 1.) {
-          for(Index i=0; i<NCols(); i++) {
+          for (Index i=0; i<NCols(); i++) {
             yvals[exp_pos[i]] += xvals[i];
           }
         }
         else if (alpha == -1.) {
-          for(Index i=0; i<NCols(); i++) {
+          for (Index i=0; i<NCols(); i++) {
             yvals[exp_pos[i]] -= xvals[i];
           }
         }
         else {
-          for(Index i=0; i<NCols(); i++) {
+          for (Index i=0; i<NCols(); i++) {
             yvals[exp_pos[i]] += alpha * xvals[i];
           }
         }
@@ -87,7 +87,7 @@ namespace Ipopt
     DBG_ASSERT(NRows()==x.Dim());
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
@@ -107,7 +107,7 @@ namespace Ipopt
       if (dense_x->IsHomogeneous()) {
         Number val = alpha * dense_x->Scalar();
         if (val != 0.) {
-          for(Index i=0; i<NCols(); i++) {
+          for (Index i=0; i<NCols(); i++) {
             yvals[i] += val;
           }
         }
@@ -115,17 +115,17 @@ namespace Ipopt
       else {
         const Number* xvals=dense_x->Values();
         if (alpha == 1.) {
-          for(Index i=0; i<NCols(); i++) {
+          for (Index i=0; i<NCols(); i++) {
             yvals[i] += xvals[exp_pos[i]];
           }
         }
         else if (alpha == -1.) {
-          for(Index i=0; i<NCols(); i++) {
+          for (Index i=0; i<NCols(); i++) {
             yvals[i] -= xvals[exp_pos[i]];
           }
         }
         else {
-          for(Index i=0; i<NCols(); i++) {
+          for (Index i=0; i<NCols(); i++) {
             yvals[i] += alpha * xvals[exp_pos[i]];
           }
         }
@@ -165,7 +165,7 @@ namespace Ipopt
     if (dense_Z->IsHomogeneous()) {
       Number val = alpha*dense_Z->Scalar();
       if (val != 0.) {
-        for(Index i=0; i<NCols(); i++) {
+        for (Index i=0; i<NCols(); i++) {
           vals_X[exp_pos[i]] += val/vals_S[i];
         }
       }
@@ -173,17 +173,17 @@ namespace Ipopt
     else {
       const Number* vals_Z = dense_Z->Values();
       if (alpha==1.) {
-        for(Index i=0; i<NCols(); i++) {
+        for (Index i=0; i<NCols(); i++) {
           vals_X[exp_pos[i]] += vals_Z[i]/vals_S[i];
         }
       }
       else if (alpha==-1.) {
-        for(Index i=0; i<NCols(); i++) {
+        for (Index i=0; i<NCols(); i++) {
           vals_X[exp_pos[i]] -= vals_Z[i]/vals_S[i];
         }
       }
       else {
-        for(Index i=0; i<NCols(); i++) {
+        for (Index i=0; i<NCols(); i++) {
           vals_X[exp_pos[i]] += alpha*vals_Z[i]/vals_S[i];
         }
       }
@@ -328,16 +328,16 @@ namespace Ipopt
       expanded_pos_(NULL),
       compressed_pos_(NULL)
   {
-    if(NCols()>0) {
+    if (NCols()>0) {
       expanded_pos_  = new Index[NCols()];
     }
-    if(NRows()>0) {
+    if (NRows()>0) {
       compressed_pos_ = new Index[NRows()];
     }
     for (Index j=0; j<NRows(); j++) {
       compressed_pos_[j] = -1;
     }
-    for(Index i=0; i<NCols(); i++) {
+    for (Index i=0; i<NCols(); i++) {
       //ToDo decide for offset
       DBG_ASSERT(ExpPos[i]-offset<NRows() && ExpPos[i]-offset>=0);
       expanded_pos_[i]=ExpPos[i]-offset;

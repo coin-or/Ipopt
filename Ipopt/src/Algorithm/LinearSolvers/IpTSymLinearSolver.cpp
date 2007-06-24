@@ -99,16 +99,16 @@ namespace Ipopt
 
       matrix_format_ = solver_interface_->MatrixFormat();
       switch (matrix_format_) {
-        case SparseSymLinearSolverInterface::CSR_Format_0_Offset:
+      case SparseSymLinearSolverInterface::CSR_Format_0_Offset:
         triplet_to_csr_converter_ = new TripletToCSRConverter(0);
         break;
-        case SparseSymLinearSolverInterface::CSR_Format_1_Offset:
+      case SparseSymLinearSolverInterface::CSR_Format_1_Offset:
         triplet_to_csr_converter_ = new TripletToCSRConverter(1);
         break;
-        case SparseSymLinearSolverInterface::Triplet_Format:
+      case SparseSymLinearSolverInterface::Triplet_Format:
         triplet_to_csr_converter_ = NULL;
         break;
-        default:
+      default:
         DBG_ASSERT(false && "Invalid MatrixFormat returned from solver interface.");
         return false;
       }

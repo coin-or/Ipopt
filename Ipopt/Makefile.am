@@ -125,7 +125,6 @@ astyle:
 	cd src/Common; $(MAKE) astyle
 	cd src/LinAlg; $(MAKE) astyle
 	cd src/LinAlg/TMatrices; $(MAKE) astyle
-	cd src/contrib/CGPenalty; $(MAKE) astyle
 	cd src/Interfaces; $(MAKE) astyle
 
 include ../BuildTools/Makemain.inc

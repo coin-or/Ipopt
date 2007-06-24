@@ -49,7 +49,7 @@ namespace Ipopt
     DBG_ASSERT(NRows()==y.Dim());
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
@@ -89,7 +89,7 @@ namespace Ipopt
     // Use the individual dot products to get the matrix (transpose)
     // vector product
     Number *yvals=dense_y->Values();
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       for (Index i=0; i<NCols(); i++) {
         yvals[i] = alpha*ConstVec(i)->Dot(x) + beta*yvals[i];
       }
@@ -113,7 +113,7 @@ namespace Ipopt
     DBG_PRINT((1, "alpha = %e beta = %e\n", alpha, beta));
     DBG_PRINT_VECTOR(2, "x", x);
 
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
