@@ -182,7 +182,7 @@ namespace Ipopt
     // Obtain the numbers of processors from the value of OMP_NUM_THREADS
     char    *var = getenv("OMP_NUM_THREADS");
     int      num_procs;
-    if(var != NULL) {
+    if (var != NULL) {
       sscanf( var, "%d", &num_procs );
       if (num_procs < 1) {
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
@@ -320,13 +320,13 @@ namespace Ipopt
   }
 
   static void
-  write_iajaa_matrix (int	    N,
+  write_iajaa_matrix (int     N,
                       const Index*  ia,
                       const Index*  ja,
-                      double* 	    a_,
-                      double* 	    rhs_vals,
-                      int   	    iter_cnt,
-                      int   	    sol_cnt)
+                      double*      a_,
+                      double*      rhs_vals,
+                      int        iter_cnt,
+                      int        sol_cnt)
   {
     if (getenv ("IPOPT_WRITE_MAT")) {
       /* Write header */

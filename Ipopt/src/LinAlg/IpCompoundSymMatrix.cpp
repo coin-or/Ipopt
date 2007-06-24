@@ -104,7 +104,7 @@ namespace Ipopt
     }
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
@@ -274,7 +274,7 @@ namespace Ipopt
     DBG_ASSERT(dimensions_set_);
 
     CompoundSymMatrix* mat = new CompoundSymMatrix(this);
-    for(Index i=0; i<NComps_Dim(); i++) {
+    for (Index i=0; i<NComps_Dim(); i++) {
       for (Index j=0; j<=i; j++) {
         if (allocate_block_[i][j]) {
           mat->SetCompNonConst(i, j, *GetCompSpace(i, j)->MakeNew());

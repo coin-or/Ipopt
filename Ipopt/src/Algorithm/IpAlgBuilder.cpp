@@ -469,11 +469,11 @@ namespace Ipopt
 
     // Get the Hessian updater for the restoration phase
     SmartPtr<HessianUpdater> resto_HessUpdater;
-    switch(hessian_approximation) {
-      case EXACT:
+    switch (hessian_approximation) {
+    case EXACT:
       resto_HessUpdater = new ExactHessianUpdater();
       break;
-      case LIMITED_MEMORY:
+    case LIMITED_MEMORY:
       // ToDo This needs to be replaced!
       resto_HessUpdater  = new LimMemQuasiNewtonUpdater(true);
       break;
@@ -593,11 +593,11 @@ namespace Ipopt
 
     // Get the Hessian updater for the main algorithm
     SmartPtr<HessianUpdater> HessUpdater;
-    switch(hessian_approximation) {
-      case EXACT:
+    switch (hessian_approximation) {
+    case EXACT:
       HessUpdater = new ExactHessianUpdater();
       break;
-      case LIMITED_MEMORY:
+    case LIMITED_MEMORY:
       // ToDo This needs to be replaced!
       HessUpdater  = new LimMemQuasiNewtonUpdater(false);
       break;

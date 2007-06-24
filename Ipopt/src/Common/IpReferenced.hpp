@@ -68,7 +68,7 @@ namespace Ipopt
    *    SmartPtr<MyClass> ptr_to_myclass = new MyClass(...);
    *    // ptr_to_myclass now points to a new MyClass,
    *    // and the reference count is 1
-   *    
+   *  
    *    ...
    * 
    *    obj.SetMyClass(ptr_to_myclass);
@@ -84,7 +84,7 @@ namespace Ipopt
    *    // will be done automatically when the
    *    // reference count drops to zero.
    * 
-   *  }   
+   *  }  
    *  
    * \endverbatim
    * 
@@ -108,7 +108,7 @@ namespace Ipopt
    *    will not be deleted. This can be detected by memory leak tools like
    *    valgrind. If the circular reference is necessary, the problem can be
    *    overcome by a number of techniques:
-   *    
+   *  
    *    1) A and B can have a method that "releases" each other, that is
    *        they set their internal SmartPtrs to NULL.
    *        \verbatim

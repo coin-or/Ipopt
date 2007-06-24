@@ -27,7 +27,7 @@ namespace Ipopt
     DBG_ASSERT(IsValid(matrix_));
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
@@ -57,7 +57,7 @@ namespace Ipopt
     DBG_ASSERT(IsValid(matrix_));
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {

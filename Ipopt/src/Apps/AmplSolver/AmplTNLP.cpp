@@ -135,45 +135,45 @@ namespace Ipopt
     int retcode = pfgh_read(nl, ASL_return_read_err | ASL_findgroups);
 
     switch (retcode) {
-      case ASL_readerr_none : {}
+    case ASL_readerr_none : {}
       break;
-      case ASL_readerr_nofile : {
+    case ASL_readerr_nofile : {
         jnlst_->Printf(J_ERROR, J_MAIN, "Cannot open .nl file\n");
         THROW_EXCEPTION(INVALID_TNLP, "Cannot open .nl file");
       }
       break;
-      case ASL_readerr_nonlin : {
+    case ASL_readerr_nonlin : {
         DBG_ASSERT(false); // this better not be an error!
         jnlst_->Printf(J_ERROR, J_MAIN, "model involves nonlinearities (ed0read)\n");
         THROW_EXCEPTION(INVALID_TNLP, "model involves nonlinearities (ed0read)");
       }
       break;
-      case  ASL_readerr_argerr : {
+    case  ASL_readerr_argerr : {
         jnlst_->Printf(J_ERROR, J_MAIN, "user-defined function with bad args\n");
         THROW_EXCEPTION(INVALID_TNLP, "user-defined function with bad args");
       }
       break;
-      case ASL_readerr_unavail : {
+    case ASL_readerr_unavail : {
         jnlst_->Printf(J_ERROR, J_MAIN, "user-defined function not available\n");
         THROW_EXCEPTION(INVALID_TNLP, "user-defined function not available");
       }
       break;
-      case ASL_readerr_corrupt : {
+    case ASL_readerr_corrupt : {
         jnlst_->Printf(J_ERROR, J_MAIN, "corrupt .nl file\n");
         THROW_EXCEPTION(INVALID_TNLP, "corrupt .nl file");
       }
       break;
-      case ASL_readerr_bug : {
+    case ASL_readerr_bug : {
         jnlst_->Printf(J_ERROR, J_MAIN, "bug in .nl reader\n");
         THROW_EXCEPTION(INVALID_TNLP, "bug in .nl reader");
       }
       break;
-      case ASL_readerr_CLP : {
+    case ASL_readerr_CLP : {
         jnlst_->Printf(J_ERROR, J_MAIN, "Ampl model contains a constraint without \"=\", \">=\", or \"<=\".\n");
         THROW_EXCEPTION(INVALID_TNLP, "Ampl model contains a constraint without \"=\", \">=\", or \"<=\".");
       }
       break;
-      default: {
+    default: {
         jnlst_->Printf(J_ERROR, J_MAIN, "Unknown error in stub file read. retcode = %d\n", retcode);
         THROW_EXCEPTION(INVALID_TNLP, "Unknown error in stub file read");
       }
@@ -450,8 +450,8 @@ namespace Ipopt
         for (cgrad* cg=Cgrad[i]; cg; cg = cg->next) {
           iRow[cg->goff] = i + 1;
           jCol[cg->goff] = cg->varno + 1;
-          //				iRow[current_nz] = i + 1;
-          //				jCol[current_nz] = cg->varno+1;
+          //    iRow[current_nz] = i + 1;
+          //    jCol[current_nz] = cg->varno+1;
           current_nz++;
         }
       }
@@ -515,7 +515,7 @@ namespace Ipopt
 
       real* OW = new real[Max(1,n_obj)];
       if (n_obj>0) {
-        for(Index i=0; i<n_obj; i++) {
+        for (Index i=0; i<n_obj; i++) {
           OW[i] = 0.;
         }
         OW[obj_no] = obj_sign_*obj_factor;
@@ -914,29 +914,29 @@ namespace Ipopt
       strcpy(keywords[ioption].name, iter->first.c_str());
       keywords[ioption].desc = iter->second->Description();
       switch (iter->second->Type()) {
-        case String_Option: {
+      case String_Option: {
           PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst);
           keywords[ioption].info = (void*) pinfo;
           keywords[ioption].kf = get_str_opt;
         }
         break;
-        case Number_Option: {
+      case Number_Option: {
           PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst);
           keywords[ioption].info = (void*) pinfo;
           keywords[ioption].kf = get_num_opt;
         }
         break;
-        case Integer_Option: {
+      case Integer_Option: {
           PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst);
           keywords[ioption].info = (void*) pinfo;
           keywords[ioption].kf = get_int_opt;
         }
         break;
-        case WS_Option:
+      case WS_Option:
         keywords[ioption].info = NULL;
         keywords[ioption].kf = WS_val;
         break;
-        case HaltOnError_Option:
+      case HaltOnError_Option:
         PrivatInfo* pinfo = new PrivatInfo(iter->second->IpoptOptionName(), options, jnlst, nerror);
         keywords[ioption].info = (void*) pinfo;
         keywords[ioption].kf = get_haltonerror_opt;

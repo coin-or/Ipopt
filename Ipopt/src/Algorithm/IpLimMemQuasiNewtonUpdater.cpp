@@ -327,7 +327,7 @@ namespace Ipopt
 
     if (!skipping) {
       switch (limited_memory_update_type_) {
-        case BFGS: {
+      case BFGS: {
           skipping = CheckSkippingBFGS(*s_new, *y_new);
           DBG_PRINT_VECTOR(2, "y_new", *y_new);
           if (skipping) {
@@ -365,13 +365,13 @@ namespace Ipopt
           if (!update_for_resto_) {
             // Compute the initial matrix B_0
             switch (limited_memory_initialization_) {
-              case SCALAR1:
+            case SCALAR1:
               sigma_ = sTy_new/pow(s_new->Nrm2(),2);
               break;
-              case SCALAR2:
+            case SCALAR2:
               sigma_ = pow(y_new->Nrm2(),2)/sTy_new;
               break;
-              case CONSTANT:
+            case CONSTANT:
               sigma_ = limited_memory_init_val_;
               break;
             }
@@ -467,7 +467,7 @@ namespace Ipopt
           U_->AddRightMultMatrix(1., *V_, *Lbar, 1.);
           break;
         }
-        case SR1:
+      case SR1:
         // TODO IMPLEMENT WELL!
         if (IpData().info_regu_x()>0.) {
           RestoreInternalDataBackup();
@@ -501,13 +501,13 @@ namespace Ipopt
             Number sTy_new = Max(1e-8, fabs(s_new->Dot(*y_new)));
             DBG_ASSERT(sTy_new!=0.);
             switch (limited_memory_initialization_) {
-              case SCALAR1:
+            case SCALAR1:
               sigma_ = sTy_new/pow(s_new->Nrm2(),2);
               break;
-              case SCALAR2:
+            case SCALAR2:
               sigma_ = pow(y_new->Nrm2(),2)/sTy_new;
               break;
-              case CONSTANT:
+            case CONSTANT:
               sigma_ = limited_memory_init_val_;
               break;
             }

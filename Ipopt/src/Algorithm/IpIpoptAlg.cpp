@@ -376,13 +376,13 @@ namespace Ipopt
         return USER_REQUESTED_STOP;
       }
     }
-    catch(TINY_STEP_DETECTED& exc) {
+    catch (TINY_STEP_DETECTED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().UpdateBarrierParameter().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return STOP_AT_TINY_STEP;
     }
-    catch(ACCEPTABLE_POINT_REACHED& exc) {
+    catch (ACCEPTABLE_POINT_REACHED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       if (IpCq().IsSquareProblem()) {
@@ -392,50 +392,50 @@ namespace Ipopt
       IpData().TimingStats().OverallAlgorithm().End();
       return STOP_AT_ACCEPTABLE_POINT;
     }
-    catch(LOCALLY_INFEASIBLE& exc) {
+    catch (LOCALLY_INFEASIBLE& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().CheckConvergence().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return LOCAL_INFEASIBILITY;
     }
-    catch(RESTORATION_CONVERGED_TO_FEASIBLE_POINT& exc) {
+    catch (RESTORATION_CONVERGED_TO_FEASIBLE_POINT& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return RESTORATION_FAILURE;
     }
-    catch(RESTORATION_FAILED& exc) {
+    catch (RESTORATION_FAILED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return RESTORATION_FAILURE;
     }
-    catch(RESTORATION_MAXITER_EXCEEDED& exc) {
+    catch (RESTORATION_MAXITER_EXCEEDED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return MAXITER_EXCEEDED;
     }
-    catch(RESTORATION_USER_STOP& exc) {
+    catch (RESTORATION_USER_STOP& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return USER_REQUESTED_STOP;
     }
-    catch(STEP_COMPUTATION_FAILED& exc) {
+    catch (STEP_COMPUTATION_FAILED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return ERROR_IN_STEP_COMPUTATION;
     }
-    catch(IpoptNLP::Eval_Error& exc) {
+    catch (IpoptNLP::Eval_Error& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return INVALID_NUMBER_DETECTED;
     }
-    catch(FEASIBILITY_PROBLEM_SOLVED& exc) {
+    catch (FEASIBILITY_PROBLEM_SOLVED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       if (IpCq().IsSquareProblem()) {
@@ -445,13 +445,13 @@ namespace Ipopt
       IpData().TimingStats().OverallAlgorithm().End();
       return SUCCESS;
     }
-    catch(TOO_FEW_DOF& exc) {
+    catch (TOO_FEW_DOF& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return TOO_FEW_DEGREES_OF_FREEDOM;
     }
-    catch(INTERNAL_ABORT& exc) {
+    catch (INTERNAL_ABORT& exc) {
       exc.ReportException(Jnlst());
       IpData().TimingStats().OverallAlgorithm().End();
       return INTERNAL_ERROR;

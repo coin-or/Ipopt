@@ -38,7 +38,7 @@ namespace Ipopt
     if (IsNull(P_LR)) {
 
       // Diagonal part
-      if( beta!=0.0 ) {
+      if ( beta!=0.0 ) {
         SmartPtr<Vector> tmp_vec = x.MakeNewCopy();
         tmp_vec->ElementWiseMultiply(*D_);
         y.AddOneVector(alpha, *tmp_vec, beta);
