@@ -138,7 +138,7 @@ namespace Ipopt
 
     DBG_START_METH("IpoptCalculatedQuantities::IpoptCalculatedQuantities",
                    dbg_verbosity);
-    DBG_ASSERT(IsValid(ip_nlp_) && IsValid(ip_data_));    
+    DBG_ASSERT(IsValid(ip_nlp_) && IsValid(ip_data_));
   }
 
   IpoptCalculatedQuantities::~IpoptCalculatedQuantities()
@@ -2056,13 +2056,13 @@ namespace Ipopt
    const Vector& vec1, const Vector& vec2)
   {
     switch (NormType) {
-      case NORM_1 :
+    case NORM_1 :
       return vec1.Asum() + vec2.Asum();
-      case NORM_2 :
+    case NORM_2 :
       return sqrt(pow(vec1.Nrm2(),2) + pow(vec2.Nrm2(),2));
-      case NORM_MAX :
+    case NORM_MAX :
       return Max(vec1.Amax(), vec2.Amax());
-      default:
+    default:
       DBG_ASSERT(false && "Unknown NormType.");
       return 0.0;
     }
@@ -2076,24 +2076,24 @@ namespace Ipopt
     Number result=0.;
 
     switch (NormType) {
-      case NORM_1 :
+    case NORM_1 :
       for (Index i=0; i<(Index)vecs.size(); i++) {
         result += vecs[i]->Asum();
       }
       break;
-      case NORM_2 :
+    case NORM_2 :
       for (Index i=0; i<(Index)vecs.size(); i++) {
         Number nrm = vecs[i]->Nrm2();
         result += nrm*nrm;
       }
       result = sqrt(result);
       break;
-      case NORM_MAX :
+    case NORM_MAX :
       for (Index i=0; i<(Index)vecs.size(); i++) {
         result = Max(result, vecs[i]->Amax());
       }
       break;
-      default:
+    default:
       DBG_ASSERT(false && "Unknown NormType.");
     }
 
@@ -2483,8 +2483,8 @@ namespace Ipopt
     Index n_compl_s_U = compl_s_U.Dim();
 
     // Compute the Minimum of all complementarities
-    if( n_compl_x_L>0 ) {
-      if( have_bounds ) {
+    if ( n_compl_x_L>0 ) {
+      if ( have_bounds ) {
         MinCompl = Min(MinCompl, compl_x_L.Min());
       }
       else {
@@ -2492,8 +2492,8 @@ namespace Ipopt
       }
       have_bounds = true;
     }
-    if( n_compl_x_U>0 ) {
-      if( have_bounds ) {
+    if ( n_compl_x_U>0 ) {
+      if ( have_bounds ) {
         MinCompl = Min(MinCompl, compl_x_U.Min());
       }
       else {
@@ -2501,8 +2501,8 @@ namespace Ipopt
       }
       have_bounds = true;
     }
-    if( n_compl_s_L>0 ) {
-      if( have_bounds ) {
+    if ( n_compl_s_L>0 ) {
+      if ( have_bounds ) {
         MinCompl = Min(MinCompl, compl_s_L.Min());
       }
       else {
@@ -2510,8 +2510,8 @@ namespace Ipopt
       }
       have_bounds = true;
     }
-    if( n_compl_s_U>0 ) {
-      if( have_bounds ) {
+    if ( n_compl_s_U>0 ) {
+      if ( have_bounds ) {
         MinCompl = Min(MinCompl, compl_s_U.Min());
       }
       else {

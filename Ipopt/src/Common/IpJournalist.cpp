@@ -106,7 +106,7 @@ namespace Ipopt
 
       Printf(level, category, "%s\n", buffer);
       if (first_line) {
-        for(Index i=0; i<indent_spaces; i++) {
+        for (Index i=0; i<indent_spaces; i++) {
           buffer[i] = ' ';
         }
         first_line = false;

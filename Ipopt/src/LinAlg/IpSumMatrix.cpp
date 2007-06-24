@@ -61,7 +61,7 @@ namespace Ipopt
     DBG_ASSERT(NRows()==y.Dim());
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
@@ -83,7 +83,7 @@ namespace Ipopt
     DBG_ASSERT(NCols()==y.Dim());
 
     // Take care of the y part of the addition
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
@@ -132,7 +132,7 @@ namespace Ipopt
 
   void SumMatrixSpace::SetTermSpace(Index term_idx, const MatrixSpace& mat_space)
   {
-    while(term_idx >= (Index)term_spaces_.size()) {
+    while (term_idx >= (Index)term_spaces_.size()) {
       term_spaces_.push_back(NULL);
     }
     term_spaces_[term_idx] = &mat_space;

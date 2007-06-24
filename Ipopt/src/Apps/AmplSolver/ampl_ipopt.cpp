@@ -41,7 +41,7 @@ int main(int argv, char**argc)
       SmartPtr<OptionsList> options = app->Options();
       options->SetStringValue("print_options_documentation", "yes");
       if (print_latex_options) {
-	options->SetStringValue("print_options_latex_mode", "yes");
+        options->SetStringValue("print_options_latex_mode", "yes");
       }
       app->Initialize("");
       return 0;

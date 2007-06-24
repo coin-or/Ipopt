@@ -69,17 +69,17 @@ namespace Ipopt
       options_->SetJournalist(jnlst_);
       options_->SetRegisteredOptions(reg_options_);
     }
-    catch(IpoptException& exc) {
+    catch (IpoptException& exc) {
       exc.ReportException(*jnlst_);
       THROW_EXCEPTION(IPOPT_APPLICATION_ERROR,
                       "Caught unknown Ipopt exception");
     }
-    catch(std::bad_alloc) {
+    catch (std::bad_alloc) {
       jnlst_->Printf(J_ERROR, J_MAIN, "\nEXIT: Not enough memory.\n");
       THROW_EXCEPTION(IPOPT_APPLICATION_ERROR,
                       "Not enough memory");
     }
-    catch(...) {
+    catch (...) {
       IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
       exc.ReportException(*jnlst_);
       THROW_EXCEPTION(IPOPT_APPLICATION_ERROR,
@@ -114,11 +114,11 @@ namespace Ipopt
       try {
         is.open(params_file.c_str());
       }
-      catch(std::bad_alloc) {
+      catch (std::bad_alloc) {
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
         return Insufficient_Memory;
       }
-      catch(...) {
+      catch (...) {
         IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
         exc.ReportException(*jnlst_);
         return NonIpopt_Exception_Thrown;
@@ -237,8 +237,8 @@ namespace Ipopt
           options_to_print.push_back("constr_mult_init_max");
           options_to_print.push_back("bound_mult_init_val");
 
-	  options_to_print.push_back("#Barrier Parameter");
-	  options_to_print.push_back("mehrotra_algorithm");
+          options_to_print.push_back("#Barrier Parameter");
+          options_to_print.push_back("mehrotra_algorithm");
           options_to_print.push_back("mu_strategy");
           options_to_print.push_back("mu_oracle");
           options_to_print.push_back("quality_function_max_section_steps");
@@ -405,19 +405,19 @@ namespace Ipopt
       }
 
     }
-    catch(OPTION_INVALID& exc) {
+    catch (OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
       return Invalid_Option;
     }
-    catch(IpoptException& exc) {
+    catch (IpoptException& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
       return Unrecoverable_Exception;
     }
-    catch(std::bad_alloc) {
+    catch (std::bad_alloc) {
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
       return Insufficient_Memory;
     }
-    catch(...) {
+    catch (...) {
       IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
       exc.ReportException(*jnlst_);
       return NonIpopt_Exception_Thrown;
@@ -552,21 +552,21 @@ namespace Ipopt
       // finally call the optimization
       retValue = call_optimize();
     }
-    catch(OPTION_INVALID& exc) {
+    catch (OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Invalid option encountered.\n");
       retValue = Invalid_Option;
     }
-    catch(IpoptException& exc) {
+    catch (IpoptException& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Some uncaught Ipopt exception encountered.\n");
       retValue = Unrecoverable_Exception;
     }
-    catch(std::bad_alloc) {
+    catch (std::bad_alloc) {
       retValue = Insufficient_Memory;
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
     }
-    catch(...) {
+    catch (...) {
       IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
       exc.ReportException(*jnlst_, J_ERROR);
       retValue = NonIpopt_Exception_Thrown;
@@ -642,7 +642,7 @@ namespace Ipopt
         jnlst_->Printf(J_ERROR, J_MAIN, "\nList of user-set options:\n\n%s", liststr.c_str());
       }
 
-      if( jnlst_->ProduceOutput(J_DETAILED, J_MAIN) ) {
+      if ( jnlst_->ProduceOutput(J_DETAILED, J_MAIN) ) {
         // Print out the options (including the number of times they were used
         std::string liststr;
         options_->PrintList(liststr);
@@ -802,31 +802,31 @@ namespace Ipopt
         statistics_ = new SolveStatistics(p2ip_nlp, p2ip_data, p2ip_cq);
       }
     }
-    catch(TOO_FEW_DOF& exc) {
+    catch (TOO_FEW_DOF& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has too few degrees of freedom.\n");
       retValue = Not_Enough_Degrees_Of_Freedom;
     }
-    catch(OPTION_INVALID& exc) {
+    catch (OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Invalid option encountered.\n");
       retValue = Invalid_Option;
     }
-    catch(NO_FREE_VARIABLES_BUT_FEASIBLE& exc) {
+    catch (NO_FREE_VARIABLES_BUT_FEASIBLE& exc) {
       exc.ReportException(*jnlst_, J_MOREDETAILED);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Optimal Solution Found\n");
       retValue = Solve_Succeeded;
     }
-    catch(IpoptException& exc) {
+    catch (IpoptException& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Some uncaught Ipopt exception encountered.\n");
       retValue = Unrecoverable_Exception;
     }
-    catch(std::bad_alloc) {
+    catch (std::bad_alloc) {
       retValue = Insufficient_Memory;
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
     }
-    catch(...) {
+    catch (...) {
       IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
       exc.ReportException(*jnlst_, J_ERROR);
       retValue = NonIpopt_Exception_Thrown;

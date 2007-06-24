@@ -72,14 +72,16 @@ namespace Ipopt
     /** Size of memory for limited memory update. */
     Index limited_memory_max_history_;
     /** enumeration for the Hessian update type. */
-    enum LMUpdateType {
+    enum LMUpdateType
+    {
       BFGS=0,
       SR1
     };
     /** Type of Hessian update. */
     LMUpdateType limited_memory_update_type_;
     /** enumeration for the Hessian initialization. */
-    enum LMInitialization {
+    enum LMInitialization
+    {
       SCALAR1=0,
       SCALAR2,
       CONSTANT

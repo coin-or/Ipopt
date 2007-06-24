@@ -836,7 +836,6 @@ astyle:
 	cd src/Common; $(MAKE) astyle
 	cd src/LinAlg; $(MAKE) astyle
 	cd src/LinAlg/TMatrices; $(MAKE) astyle
-	cd src/contrib/CGPenalty; $(MAKE) astyle
 	cd src/Interfaces; $(MAKE) astyle
 
 # Make sure acinclude is using most recent coin.m4

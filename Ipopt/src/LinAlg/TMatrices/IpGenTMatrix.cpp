@@ -48,7 +48,7 @@ namespace Ipopt
 
     // Take care of the y part of the addition
     DBG_ASSERT(initialized_);
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
@@ -68,7 +68,7 @@ namespace Ipopt
       Number* yvals=dense_y->Values();
       if (dense_x->IsHomogeneous()) {
         Number as = alpha * dense_x->Scalar();
-        for(Index i=0; i<Nonzeros(); i++) {
+        for (Index i=0; i<Nonzeros(); i++) {
           yvals[*irows-1] += as * (*val);
           val++;
           irows++;
@@ -76,7 +76,7 @@ namespace Ipopt
       }
       else {
         const Number* xvals=dense_x->Values();
-        for(Index i=0; i<Nonzeros(); i++) {
+        for (Index i=0; i<Nonzeros(); i++) {
           yvals[*irows-1] += alpha* (*val) * xvals[*jcols-1];
           val++;
           irows++;
@@ -95,7 +95,7 @@ namespace Ipopt
 
     // Take care of the y part of the addition
     DBG_ASSERT(initialized_);
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
@@ -116,7 +116,7 @@ namespace Ipopt
 
       if (dense_x->IsHomogeneous()) {
         Number as = alpha * dense_x->Scalar();
-        for(Index i=0; i<Nonzeros(); i++) {
+        for (Index i=0; i<Nonzeros(); i++) {
           yvals[*jcols-1] += as * (*val);
           val++;
           jcols++;
@@ -124,7 +124,7 @@ namespace Ipopt
       }
       else {
         const Number* xvals=dense_x->Values();
-        for(Index i=0; i<Nonzeros(); i++) {
+        for (Index i=0; i<Nonzeros(); i++) {
           yvals[*jcols-1] += alpha* (*val) * xvals[*irows-1];
           val++;
           irows++;

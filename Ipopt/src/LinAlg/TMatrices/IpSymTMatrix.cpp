@@ -49,7 +49,7 @@ namespace Ipopt
 
     // Take care of the y part of the addition
     DBG_ASSERT(initialized_);
-    if( beta!=0.0 ) {
+    if ( beta!=0.0 ) {
       y.Scal(beta);
     }
     else {
@@ -70,7 +70,7 @@ namespace Ipopt
 
       if (dense_x->IsHomogeneous()) {
         Number as = alpha *  dense_x->Scalar();
-        for(Index i=0; i<Nonzeros(); i++) {
+        for (Index i=0; i<Nonzeros(); i++) {
           yvals[*irn-1] += as * (*val);
           if (*irn!=*jcn) {
             // this is not a diagonal element
@@ -83,7 +83,7 @@ namespace Ipopt
       }
       else {
         const Number* xvals=dense_x->Values();
-        for(Index i=0; i<Nonzeros(); i++) {
+        for (Index i=0; i<Nonzeros(); i++) {
           yvals[*irn-1] += alpha* (*val) * xvals[*jcn-1];
           if (*irn!=*jcn) {
             // this is not a diagonal element
@@ -120,7 +120,7 @@ namespace Ipopt
   void SymTMatrix::FillStruct(ipfint* Irn, ipfint* Jcn) const
   {
     DBG_ASSERT(initialized_);
-    for(Index i=0; i<Nonzeros(); i++) {
+    for (Index i=0; i<Nonzeros(); i++) {
       Irn[i] = Irows()[i];
       Jcn[i] = Jcols()[i];
     }

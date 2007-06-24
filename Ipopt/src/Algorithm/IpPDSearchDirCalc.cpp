@@ -51,7 +51,7 @@ namespace Ipopt
       const std::string& prefix)
   {
     options.GetBoolValue("fast_step_computation", fast_step_computation_,
-                             prefix);
+                         prefix);
     options.GetBoolValue("mehrotra_algorithm", mehrotra_algorithm_, prefix);
     return pd_solver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                   options, prefix);

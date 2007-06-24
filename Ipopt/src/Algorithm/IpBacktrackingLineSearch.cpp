@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -251,8 +251,9 @@ namespace Ipopt
 
     // If the problem is square, we want to enable the
     // expect_infeasible_problem option automatically so that the
-    // restoration phase is entered soon
-    if (IpCq().IsSquareProblem()) {
+    // restoration phase is entered soon.  This can be over-written
+    // by the Acceptor.
+    if (!acceptor_->NeverRestorationPhase() && IpCq().IsSquareProblem()) {
       expect_infeasible_problem_ = true;
       expect_infeasible_problem_ctol_ = 0.;
     }
@@ -340,7 +341,7 @@ namespace Ipopt
         IpCq().trial_barrier_obj();
         IpCq().trial_constraint_violation();
       }
-      catch(IpoptNLP::Eval_Error& e) {
+      catch (IpoptNLP::Eval_Error& e) {
         e.ReportException(Jnlst(), J_DETAILED);
         tiny_step = false;
       }
@@ -546,31 +547,39 @@ namespace Ipopt
       }
     }
     else if (!in_soft_resto_phase_ || tiny_step) {
-      // we didn't do the restoration phase and are now updating the
-      // dual variables of the trial point
-      Number alpha_dual_max =
-        IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
-                                      *actual_delta->z_L(), *actual_delta->z_U(),
-                                      *actual_delta->v_L(), *actual_delta->v_U());
-
-      PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
-
-      if (n_steps==0) {
-        // accepted this if a full step was
-        // taken
+      // Some line search might have restored a previous iterate.  In that
+      // case we skip the usual ending stuff
+      if (acceptor_->RestoredIterate()) {
         count_successive_shortened_steps_ = 0;
         watchdog_shortened_iter_ = 0;
       }
       else {
-        count_successive_shortened_steps_++;
-        watchdog_shortened_iter_++;
-      }
+        // we didn't do the restoration phase and are now updating the
+        // dual variables of the trial point
+        Number alpha_dual_max =
+          IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
+                                        *actual_delta->z_L(), *actual_delta->z_U(),
+                                        *actual_delta->v_L(), *actual_delta->v_U());
 
-      if (expect_infeasible_problem_ &&
-          IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
-        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                       "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n", IpCq().curr_constraint_violation());
-        expect_infeasible_problem_ = false;
+        PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
+
+        if (n_steps==0) {
+          // accepted this if a full step was
+          // taken
+          count_successive_shortened_steps_ = 0;
+          watchdog_shortened_iter_ = 0;
+        }
+        else {
+          count_successive_shortened_steps_++;
+          watchdog_shortened_iter_++;
+        }
+
+        if (expect_infeasible_problem_ &&
+            IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
+          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                         "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n", IpCq().curr_constraint_violation());
+          expect_infeasible_problem_ = false;
+        }
       }
     }
   }
@@ -662,7 +671,7 @@ namespace Ipopt
             accept = acceptor_->CheckAcceptabilityOfTrialPoint(alpha_primal_test);
           }
         }
-        catch(IpoptNLP::Eval_Error& e) {
+        catch (IpoptNLP::Eval_Error& e) {
           e.ReportException(Jnlst(), J_DETAILED);
           Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
                          "Warning: Cutting back alpha due to evaluation error\n");
@@ -796,23 +805,23 @@ namespace Ipopt
 
     Number alpha_y=-1.;
     switch (alpha_for_y_) {
-      case PRIMAL_ALPHA_FOR_Y:
+    case PRIMAL_ALPHA_FOR_Y:
       alpha_y = alpha_primal;
       break;
-      case DUAL_ALPHA_FOR_Y:
+    case DUAL_ALPHA_FOR_Y:
       alpha_y = alpha_dual;
       break;
-      case MIN_ALPHA_FOR_Y:
+    case MIN_ALPHA_FOR_Y:
       alpha_y = Min(alpha_dual, alpha_primal);
       break;
-      case MAX_ALPHA_FOR_Y:
+    case MAX_ALPHA_FOR_Y:
       alpha_y = Max(alpha_dual, alpha_primal);
       break;
-      case FULL_STEP_FOR_Y:
+    case FULL_STEP_FOR_Y:
       alpha_y = 1;
       break;
-      case MIN_DUAL_INFEAS_ALPHA_FOR_Y:
-      case SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y:
+    case MIN_DUAL_INFEAS_ALPHA_FOR_Y:
+    case SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y:
       // Here we compute the step size for y so that the dual
       // infeasibility is minimized along delta_y
 
@@ -1006,7 +1015,7 @@ namespace Ipopt
         IpCq().trial_constraint_violation();
         done=true;
       }
-      catch(IpoptNLP::Eval_Error& e) {
+      catch (IpoptNLP::Eval_Error& e) {
         e.ReportException(Jnlst(), J_DETAILED);
         Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
                        "Warning: Evaluation error during soft restoration phase step.\n");
@@ -1036,7 +1045,7 @@ namespace Ipopt
       trial_pderror = IpCq().trial_primal_dual_system_error(mu);
       curr_pderror = IpCq().curr_primal_dual_system_error(mu);
     }
-    catch(IpoptNLP::Eval_Error& e) {
+    catch (IpoptNLP::Eval_Error& e) {
       e.ReportException(Jnlst(), J_DETAILED);
       Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
                      "Warning: Evaluation error during soft restoration phase step.\n");
