@@ -1,4 +1,3 @@
-MSVisualStudio     https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/ExternalsDirs/Ipopt
 BuildTools         https://projects.coin-or.org/svn/BuildTools/stable/0.5
 ThirdParty/ASL     https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/stable/1.0
 ThirdParty/HSL     https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/stable/1.0
