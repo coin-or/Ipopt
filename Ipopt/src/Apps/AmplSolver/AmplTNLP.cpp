@@ -10,7 +10,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config_ipopt.h"
 #else
-# define PACKAGE_STRING "Ipopt 3.3.1"
+# define PACKAGE_STRING "Ipopt 3.3.2"
 #endif
 
 #include "AmplTNLP.hpp"
