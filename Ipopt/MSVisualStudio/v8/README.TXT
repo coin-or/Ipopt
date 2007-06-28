@@ -17,15 +17,17 @@ Here are the steps:
 
    and extract it in
 
-   BASDIR\MSVisualStudio\v8\Ipopt
+   BASDIR\Ipopt\MSVisualStudio\v8
+
+   (don't specify a "libf2c" subdirectory in the path)
 
    so that you will see the file
 
-   BASDIR\MSVisualStudio\v8\Ipopt\libf2c\makefile.vc
+   BASDIR\Ipopt\MSVisualStudio\v8\libf2c\makefile.vc
 
 2. Open a Visual Studio DOS prompt and go into the directory
 
-   cd BASDIR\MSVisualStudio\v8\Ipopt\libf2c\
+   cd BASDIR\Ipopt\MSVisualStudio\v8\libf2c\
 
    Here, type
 
@@ -49,7 +51,7 @@ Here are the steps:
 
 5. In a DOS window, go to the directory
 
-   BASDIR\MSVisualStudio\v8\ThirdParty\libCoinBlas
+   BASDIR\Ipopt\MSVisualStudio\v8\libCoinBlas
 
    and run the batch file
 
@@ -59,9 +61,9 @@ Here are the steps:
 
 6. Repeat step 5 in the directories
 
-   BASDIR\MSVisualStudio\v8\ThirdParty\libCoinLapack
+   BASDIR\Ipopt\MSVisualStudio\v8\libCoinLapack
 
-   BASDIR\MSVisualStudio\v8\ThirdParty\libCoinHSL
+   BASDIR\Ipopt\MSVisualStudio\v8\libCoinHSL
 
    using the convert_*.bat files you find there.
 
@@ -85,7 +87,7 @@ Here are the steps:
 
 8. Done.  Now you can open the solution file
 
-   BASDIR\MSVisualStudio\v8\Ipopt\Ipopt.sln
+   BASDIR\Ipopt\MSVisualStudio\v8\Ipopt.sln
 
    This will compile the Ipopt library, and has a C++ example.  If you
    got the ASL source code, you can also compile the ipopt.exe AMPL

@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\Algorithm;..\..\..\..\Ipopt\src\Algorithm\LinearSolvers;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\Ipopt\src\LinAlg\TMatrices;..\..\..\..\Ipopt\src\contrib\CGPenalty;..\..\..\..\BuildTools\headers"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;COIN_USE_F2C"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;COIN_USE_F2C;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -108,7 +108,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\Algorithm;..\..\..\..\Ipopt\src\Algorithm\LinearSolvers;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\Ipopt\src\LinAlg\TMatrices;..\..\..\..\Ipopt\src\contrib\CGPenalty;..\..\..\..\BuildTools\headers"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;COIN_USE_F2C"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;COIN_USE_F2C;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="0"
 				DisableLanguageExtensions="true"
 				RuntimeTypeInfo="true"
