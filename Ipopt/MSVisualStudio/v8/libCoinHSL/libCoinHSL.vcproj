@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\andreasw\COIN-svn\Ipopt\trunk\MSVisualStudio\v8\Ipopt\libf2c&quot;"
+				AdditionalIncludeDirectories="&quot;..\libf2c&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;COIN_USE_F2C"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -107,7 +107,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;C:\andreasw\COIN-svn\Ipopt\trunk\MSVisualStudio\v8\Ipopt\libf2c&quot;"
+				AdditionalIncludeDirectories="&quot;..\libf2c&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;COIN_USE_F2C"
 				RuntimeLibrary="0"
 				DisableLanguageExtensions="true"
