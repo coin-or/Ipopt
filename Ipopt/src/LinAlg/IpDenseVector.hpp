@@ -11,6 +11,7 @@
 
 #include "IpUtils.hpp"
 #include "IpVector.hpp"
+#include <map>
 
 namespace Ipopt
 {
@@ -253,6 +254,7 @@ namespace Ipopt
     void set_values_from_scalar();
   };
 
+  typedef std::map<std::string, std::vector<std::string> > MetaDataMap;
   /** This vectors space is the vector space for DenseVector.
    */
   class DenseVectorSpace : public VectorSpace
@@ -267,7 +269,7 @@ namespace Ipopt
         :
         VectorSpace(dim)
     {}
-
+ 
     /** Destructor */
     ~DenseVectorSpace()
     {}
@@ -298,7 +300,37 @@ namespace Ipopt
     /** Deallocate internal storage for the DenseVector */
     void FreeInternalStorage(Number* values) const;
     //@}
-  };
+
+    /**@name Methods for meta data */
+    //@{
+    /** Get the meta data values for a particular key - overloaded from VectorSpace */
+    virtual bool RetrieveMetaData(std::string key, std::vector<std::string>& element_values) const;
+   
+    /** set the meta data values for a particular key */
+    virtual void AddMetaData(std::string key, std::vector<std::string>& element_values);
+    //@}
+
+    private:
+    /**@name Default Compiler Generated Methods
+         * (Hidden to avoid implicit creation/calling).
+         * These methods are not implemented and 
+         * we do not want the compiler to implement
+         * them for us, so we declare them private
+         * and do not define them. This ensures that
+         * they will not be implicitly created/called. */
+    //@{
+    /** default constructor */
+    DenseVectorSpace();
+
+    /** Copy constructor */
+    DenseVectorSpace(const VectorSpace&);
+
+    /** Overloaded Equals Operator */
+    DenseVectorSpace& operator=(const DenseVectorSpace&);
+    //@}
+      MetaDataMap metadata_map_;
+      
+    };
 
   // inline functions
   inline Number* DenseVector::Values()

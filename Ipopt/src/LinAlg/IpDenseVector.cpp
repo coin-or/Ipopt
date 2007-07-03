@@ -1132,10 +1132,19 @@ namespace Ipopt
                              prefix.c_str(), scalar_);
       }
       else {
+        std::vector<std::string> names;
+        bool have_names = owner_space_->RetrieveMetaData("names", names);
         for (Index i=0; i<Dim(); i++) {
-          jnlst.PrintfIndented(level, category, indent,
+          if (have_names) {
+             jnlst.PrintfIndented(level, category, indent,
+                               "%s%s[%5d](%s)=%23.16e\n",
+                               prefix.c_str(), name.c_str(), i+1, names[i].c_str(), values_[i]);             
+          }
+          else {
+             jnlst.PrintfIndented(level, category, indent,
                                "%s%s[%5d]=%23.16e\n",
                                prefix.c_str(), name.c_str(), i+1, values_[i]);
+          }
         }
       }
     }
@@ -1145,4 +1154,29 @@ namespace Ipopt
                            prefix.c_str());
     }
   }
-} // namespace Ipopt
+
+ bool DenseVectorSpace::RetrieveMetaData(std::string key, std::vector<std::string>& element_values) const
+  {
+    if (metadata_map_.empty()) {
+       return false;
+    }
+   
+    MetaDataMap::const_iterator values = metadata_map_.find(key);
+   
+    if (values == metadata_map_.end()) {
+       return false;
+    }
+
+    // copy the results (stored in the second entry of the std::pair)
+    element_values = values->second;;
+    return true;
+  }
+   
+ void DenseVectorSpace::AddMetaData(std::string key, std::vector<std::string>& element_values)
+  {
+    DBG_ASSERT(element_values.size() == Dim());
+    metadata_map_.insert(MetaDataMap::value_type(key, element_values));
+  }
+
+  
+  } // namespace Ipopt

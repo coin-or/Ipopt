@@ -378,6 +378,12 @@ namespace Ipopt
       return dim_;
     }
 
+    /** Accessor function for a meta data if the derived type implements it */
+    virtual bool RetrieveMetaData(std::string key, std::vector<std::string>& element_values) const
+    {
+      return false;
+    }
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).

@@ -296,6 +296,38 @@ namespace Ipopt
 
     return true;
   }
+  
+  bool AmplTNLP::get_names(std::vector<std::string>& x_names, 
+                           std::vector<std::string>& g_names)
+  {
+     ASL_pfgh* asl = asl_;
+     DBG_ASSERT(asl_);
+
+     if (maxcolnamelen == 0 || maxrownamelen == 0) {
+        jnlst_->Printf(J_WARNING, J_MAIN, "*** No variable and constraint names were found.\n");
+        jnlst_->Printf(J_WARNING, J_MAIN, "To get row and column names, include:\n");
+        jnlst_->Printf(J_WARNING, J_MAIN, "   option ipopt_auxfiles rc;\n");
+        jnlst_->Printf(J_WARNING, J_MAIN, "before the solve statement in your AMPL file.\n\n");
+        return false;
+     }
+     x_names.clear();
+     g_names.clear();
+     
+     x_names.resize(n_var);
+     g_names.resize(n_con);
+     
+     for (int i=0; i<n_var; i++) {
+        x_names[i] = var_name(i);
+     }
+     
+     for (int i=0; i<n_con; i++) {
+        g_names[i] = con_name(i);
+     }
+
+     std::cout << "Returning TRUE\n\n";
+     return true;
+  }
+
 
   bool AmplTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u, Index m, Number* g_l, Number* g_u)
   {

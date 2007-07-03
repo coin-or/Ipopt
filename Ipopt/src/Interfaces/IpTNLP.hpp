@@ -79,6 +79,14 @@ namespace Ipopt
     virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                               Index& nnz_h_lag, IndexStyleEnum& index_style)=0;
 
+    /** overload this method if you want to provide names for the
+     * variables and constraints. Ipopt will use these names when displaying
+     * output instead of just indexes
+     */
+  virtual bool get_names(std::vector<std::string>& x_names, 
+                         std::vector<std::string>& g_names)
+  { return false; }
+                              
     /** overload this method to return the information about the bound
      *  on the variables and constraints. The value that indicates
      *  that a bound does not exist is specified in the parameters

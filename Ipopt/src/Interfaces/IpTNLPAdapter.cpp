@@ -652,7 +652,8 @@ namespace Ipopt
       x_u = NULL;
 
       // create x spaces
-      x_space_ = new DenseVectorSpace(n_x_var);
+      SmartPtr<DenseVectorSpace> dense_x_space = new DenseVectorSpace(n_x_var);
+      x_space_ = GetRawPtr(dense_x_space);
       x_l_space_ = new DenseVectorSpace(n_x_l);
       x_u_space_ = new DenseVectorSpace(n_x_u);
 
@@ -666,7 +667,7 @@ namespace Ipopt
         P_x_full_x_space_ = NULL;
         P_x_full_x_ = NULL;
       }
-
+      
       P_x_x_L_space_ = new ExpansionMatrixSpace(n_x_var, n_x_l, x_l_map);
       px_l_space_ = GetRawPtr(P_x_x_L_space_);
       P_x_x_L_ = P_x_x_L_space_->MakeNewExpansionMatrix();
@@ -683,17 +684,16 @@ namespace Ipopt
 
       // create the required c_space
 
+      SmartPtr<DenseVectorSpace> dense_c_space;
       if (n_x_fixed_==0 || fixed_variable_treatment_==MAKE_PARAMETER) {
-        SmartPtr<DenseVectorSpace> dc_space = new DenseVectorSpace(n_c);
-        c_space_ = GetRawPtr(dc_space);
+        dense_c_space = new DenseVectorSpace(n_c);
         c_rhs_ = new Number[n_c];
       }
       else {
-        SmartPtr<DenseVectorSpace> dc_space =
-          new DenseVectorSpace(n_c+n_x_fixed_);
-        c_space_ = GetRawPtr(dc_space);
+        dense_c_space = new DenseVectorSpace(n_c+n_x_fixed_);
         c_rhs_ = new Number[n_c+n_x_fixed_];
       }
+      c_space_ = GetRawPtr(dense_c_space);
       // create the internal expansion matrix for c to g
       P_c_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_c, c_map);
       P_c_g_ = P_c_g_space_->MakeNewExpansionMatrix();
@@ -701,7 +701,8 @@ namespace Ipopt
       c_map = NULL;
 
       // create the required d_space
-      d_space_ = new DenseVectorSpace(n_d);
+      SmartPtr<DenseVectorSpace> dense_d_space = new DenseVectorSpace(n_d);
+      d_space_ = GetRawPtr(dense_d_space);
       // create the internal expansion matrix for d to g
       P_d_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_d, d_map);
       P_d_g_ = P_d_g_space_->MakeNewExpansionMatrix();
@@ -727,8 +728,64 @@ namespace Ipopt
       delete [] g_u;
       g_u = NULL;
 
+      // get the names of the variables and constraints if provided
+      std::vector<std::string> full_x_names;
+      std::vector<std::string> full_g_names;
+      if (tnlp_->get_names(full_x_names, full_g_names)) {
+         DBG_ASSERT(full_x_names.size() == n_full_x_);
+         DBG_ASSERT(full_g_names.size() == n_full_g_);
+
+         // re-organize the variable names
+         std::vector<std::string> x_names;
+         if (IsValid(P_x_full_x_)) {
+            x_names.resize(P_x_full_x_->NCols());
+            
+            // permutation is required
+            const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
+            for (Index i=0; i<n_x_var; i++) {
+               x_names[i] = full_x_names[x_pos[i]];
+            }
+         }
+         else {
+            // permutation is not required
+            x_names = full_x_names;
+         }
+         
+         // reorganize the equality constraint names
+         std::vector<std::string> c_names;
+         const Index* c_pos = P_c_g_->ExpandedPosIndices();
+         Index n_c_no_fixed = P_c_g_->NCols();
+         c_names.resize(n_c_no_fixed);
+         for (Index i=0; i<n_c_no_fixed; i++) {
+            c_names[i] = full_g_names[c_pos[i]];
+         }
+         if (fixed_variable_treatment_ == MAKE_CONSTRAINT) {
+            c_names.resize(n_c_no_fixed + n_x_fixed_);
+            for (Index i=0; i<n_x_fixed_; i++) {
+               c_names[i] = std::string("fix_") + full_x_names[x_fixed_map_[i]];
+               c_names[i] = c_names[i] + "_con";
+            }
+         }
+         
+         // reorganize the inequality constraint names 
+         std::vector<std::string> d_names;
+         const Index* d_pos = P_d_g_->ExpandedPosIndices();
+         d_names.resize(P_d_g_->NCols());
+         for (Index i=0; i<P_d_g_->NCols(); i++) {
+            d_names[i] = full_g_names[d_pos[i]];
+         }
+      
+         DBG_ASSERT(x_names.size() == x_space_->Dim());
+         DBG_ASSERT(c_names.size() == c_space_->Dim());
+         DBG_ASSERT(d_names.size() == d_space_->Dim());
+         dense_x_space->AddMetaData("names", x_names);
+         dense_c_space->AddMetaData("names", c_names);
+         dense_d_space->AddMetaData("names", d_names);
+      }
+
+         
       /** Create the matrix space for the jacobians
-       */
+            */
       // Get the non zero structure
       Index* g_iRow = new Index[nz_full_jac_g_];
       Index* g_jCol = new Index[nz_full_jac_g_];

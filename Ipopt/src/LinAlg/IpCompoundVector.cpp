@@ -455,4 +455,35 @@ namespace Ipopt
     return comp_spaces_[icomp];
   }
 
+  bool CompoundVectorSpace::RetrieveMetaData(std::string key, std::vector<std::string>& element_values) const
+  {
+    element_values.clear();
+     
+    bool at_least_one = false;
+    for (Index i=0; i<ncomp_spaces_; i++) {
+       SmartPtr<const VectorSpace> space = comp_spaces_[i];
+       DBG_ASSERT(IsValid(space));
+       std::vector<std::string> element_values_i;
+       if (space->RetrieveMetaData(key, element_values_i)) {
+          at_least_one = true;
+          std::vector<std::string>::iterator end = element_values.end();
+          std::vector<std::string>::iterator front = element_values_i.begin();
+          std::vector<std::string>::iterator back = element_values_i.end()-1;
+          
+//          element_values.insert(element_values.end(), element_values_i.front(), element_values_i.back());
+          element_values.insert(end, front, back);
+       }
+       else {
+          element_values_i.insert(element_values.end(), space->Dim(), "");
+       }
+    }
+    
+    if (at_least_one == false) {
+      element_values.clear();
+      return false;
+    }
+    
+    return true;
+  }
+  
 }

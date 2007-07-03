@@ -277,6 +277,12 @@ namespace Ipopt
       return MakeNewCompoundVector();
     }
 
+    /**@name Methods for element meta data */
+    //@{
+    /** method to retrieve element meta data - overloaded from Vector base class */
+    virtual bool RetrieveMetaData(std::string key, std::vector<std::string>& element_values) const;
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
