@@ -240,13 +240,19 @@ namespace Ipopt
       MAX_ALPHA_FOR_Y,
       FULL_STEP_FOR_Y,
       MIN_DUAL_INFEAS_ALPHA_FOR_Y,
-      SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y
+      SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y,
+      PRIMAL_AND_FULL_ALPHA_FOR_Y,
+      DUAL_AND_FULL_ALPHA_FOR_Y
     };
     /** Flag indicating whether the dual step size is to be used for
      *  the equality constraint multipliers. If 0, the primal step
      *  size is used, if 1 the dual step size, and if 2, the minimum
      *  of both. */
     AlphaForYEnum alpha_for_y_;
+
+    /** Tolerance for primal step to switch to full equality
+     *  constraint multiplier steps. */
+    Number alpha_for_y_tol_;
 
     /** Reduction factor for the restoration phase that accepts steps
      *  reducing the optimality error ("soft restoration phase"). If
