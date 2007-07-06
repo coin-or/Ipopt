@@ -81,10 +81,10 @@ namespace Ipopt
       "and makes the algorithm take aggressive steps, without global "
       "convergence guarantees.");
 
-    roptions->AddStringOption7(
+    roptions->AddStringOption9(
       "alpha_for_y",
       "Method to determine the step size for constraint multipliers.",
-      "primal",
+      "primal-and-full",
       "primal", "use primal step size",
       "bound_mult", "use step size for the bound multipliers (good for LPs)",
       "min", "use the min of primal and bound multipliers",
@@ -92,8 +92,18 @@ namespace Ipopt
       "full", "take a full step of size one",
       "min_dual_infeas", "choose step size minimizing new dual infeasibility",
       "safe_min_dual_infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
+      "primal-and-full", "use the primal step size, and full step if delta_x <= alpga_for_y_tol",
+      "dual-and-full", "use the dual step size, and full step if delta_x <= alpga_for_y_tol",
       "This option determines how the step size (alpha_y) will be calculated when updating the "
       "constraint multipliers.");
+    roptions->AddLowerBoundedNumberOption(
+      "alpha_for_y_tol",
+      "Tolerance for switching to full equality multiplier steps.",
+      0.0, false, 10.,
+      "This is only relevant if \"alpha_for_y\" is chosen \"primal-and-full\""
+      "or \"dual-and-full\".  The step size for the equality constraint"
+      "multipliers is taken to be one if the max-norm of the primal step is"
+      "less than this tolerance.");
 
     roptions->AddLowerBoundedNumberOption(
       "tiny_step_tol",
@@ -186,6 +196,7 @@ namespace Ipopt
     Index enum_int;
     options.GetEnumValue("alpha_for_y", enum_int, prefix);
     alpha_for_y_ = AlphaForYEnum(enum_int);
+    options.GetNumericValue("alpha_for_y_tol", alpha_for_y_tol_, prefix);
     options.GetNumericValue("expect_infeasible_problem_ctol", expect_infeasible_problem_ctol_, prefix);
     options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
 
@@ -806,10 +817,24 @@ namespace Ipopt
     Number alpha_y=-1.;
     switch (alpha_for_y_) {
     case PRIMAL_ALPHA_FOR_Y:
+    case PRIMAL_AND_FULL_ALPHA_FOR_Y:
       alpha_y = alpha_primal;
+      if (alpha_for_y_ == PRIMAL_AND_FULL_ALPHA_FOR_Y) {
+        Number dxnorm = Max(delta->x()->Amax(), delta->s()->Amax());
+        if (dxnorm <= alpha_for_y_tol_) {
+          alpha_y = 1.;
+        }
+      }
       break;
     case DUAL_ALPHA_FOR_Y:
+    case DUAL_AND_FULL_ALPHA_FOR_Y:
       alpha_y = alpha_dual;
+      if (alpha_for_y_ == DUAL_AND_FULL_ALPHA_FOR_Y) {
+        Number dxnorm = Max(delta->x()->Amax(), delta->s()->Amax());
+        if (dxnorm <= alpha_for_y_tol_) {
+          alpha_y = 1.;
+        }
+      }
       break;
     case MIN_ALPHA_FOR_Y:
       alpha_y = Min(alpha_dual, alpha_primal);
