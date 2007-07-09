@@ -260,9 +260,8 @@ namespace Ipopt
     // here in every iteration, since the tolerance might be changed
     // (e.g. in the restoration phase)
     if (mu_min_default_) {
-      mu_min_ = Min(mu_min_, Min(IpData().tol(),
-                                 IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_))/
-                    (barrier_tol_factor_+1.));
+      mu_min_ = Min(mu_min_, 0.5*Min(IpData().tol(),
+				     IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_)));
     }
 
     // if mu_max has not yet been computed, do so now, based on the
