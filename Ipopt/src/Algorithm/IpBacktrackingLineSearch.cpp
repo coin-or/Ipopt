@@ -84,7 +84,7 @@ namespace Ipopt
     roptions->AddStringOption9(
       "alpha_for_y",
       "Method to determine the step size for constraint multipliers.",
-      "primal-and-full",
+      "primal",
       "primal", "use primal step size",
       "bound_mult", "use step size for the bound multipliers (good for LPs)",
       "min", "use the min of primal and bound multipliers",
