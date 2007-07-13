@@ -124,6 +124,15 @@ namespace Ipopt
       return false;
     }
 
+    /** Method for doing a fallback approach in case no search
+     *  direction could be computed.  If no such fall back option is
+     *  available, return false.  If possible, the new point is
+     *  assumed to be in the trial fields of IpData now. */
+    virtual bool DoFallback()
+    {
+      return false;
+    }
+
     /** Methods for OptionsList */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);

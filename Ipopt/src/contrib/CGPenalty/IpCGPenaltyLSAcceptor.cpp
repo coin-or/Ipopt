@@ -202,8 +202,6 @@ namespace Ipopt
     DBG_START_METH("CGPenaltyLSAcceptor::InitThisLineSearch",
                    dbg_verbosity);
 
-    just_restored_iterate_ = false;
-
     if (reset_piecewise_penalty_) {
       Number curr_barr = IpCq().curr_barrier_obj();
       Number curr_infeasi =  IpCq().curr_constraint_violation();
@@ -517,28 +515,6 @@ namespace Ipopt
     if (CurrentIsBest()) {
       StoreBestPoint();
     }
-    // See if we want to restor a previous iterate.
-    // This is the case when the multipliers are blowing up.
-    //if (!IpData().CGPenData().NeverTryPureNewton()){
-    if (IpData().CGPenData().restor_iter()<4) {
-      if (MultipliersDiverged()) {
-        if (RestoreBestPoint()) {
-          // so far the restoration method is wrong. Although it restores
-          // both the primal and dual iterates here, the dual iterates
-          // may be overwritten later when performing dual steps
-          // in the line search method
-          Index restor_iter = IpData().iter_count() + 1;
-          Index restor_counter = IpData().CGPenData().restor_counter();
-          IpData().CGPenData().SetRestorCounter(restor_counter+1);
-          IpData().CGPenData().SetNeverTryPureNewton(true);
-          IpData().CGPenData().SetRestorIter(restor_iter);
-          info_alpha_primal_char='r';
-          just_restored_iterate_ = true;
-          return info_alpha_primal_char;
-        }
-      }
-    }
-    //}
     // update piecewise penalty parameters
     PiecewisePenalty_.Print( Jnlst() );
     PiecewisePenalty_.UpdateEntry(IpCq().trial_barrier_obj(),
@@ -554,7 +530,28 @@ namespace Ipopt
 
   bool CGPenaltyLSAcceptor::RestoredIterate()
   {
-    return just_restored_iterate_;
+    bool restored_iterate = false;
+    // See if we want to restor a previous iterate.
+    // This is the case when the multipliers are blowing up.
+    //if (!IpData().CGPenData().NeverTryPureNewton()){
+    if (IpData().CGPenData().restor_iter()<4) {
+      if (MultipliersDiverged()) {
+        if (RestoreBestPoint()) {
+          // so far the restoration method is wrong. Although it restores
+          // both the primal and dual iterates here, the dual iterates
+          // may be overwritten later when performing dual steps
+          // in the line search method
+          Index restor_iter = IpData().iter_count() + 1;
+          Index restor_counter = IpData().CGPenData().restor_counter();
+          IpData().CGPenData().SetRestorCounter(restor_counter+1);
+          IpData().CGPenData().SetNeverTryPureNewton(true);
+          IpData().CGPenData().SetRestorIter(restor_iter);
+          restored_iterate = true;
+        }
+      }
+    }
+    //}
+    return restored_iterate;
   }
 
   bool CGPenaltyLSAcceptor::NeverRestorationPhase()
@@ -791,27 +788,16 @@ namespace Ipopt
     return info_alpha_primal_char;
   }
 
-
+  bool CGPenaltyLSAcceptor::DoFallback()
+  {
+    // LIFENG: REPLACE ME!
+    return false;
+  }
 
   void CGPenaltyLSAcceptor::PrepareRestoPhaseStart()
   {
     DBG_ASSERT(false && "PrepareRestoPhaseStart not yet implemented");
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 } // namespace Ipopt

@@ -114,6 +114,11 @@ namespace Ipopt
     * is not needed */
     virtual bool NeverRestorationPhase();
 
+    /** Method for doing a fallback approach in case no search
+     *  direction could be computed.  If no such fall back option is
+     *  available, return false. */
+    virtual bool DoFallback();
+
     /** Methods for OptionsList */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
@@ -242,9 +247,6 @@ namespace Ipopt
     PiecewisePenalty PiecewisePenalty_;
     /** Flag indicating whether PiecewisePenalty has to be initiailized */
     bool reset_piecewise_penalty_;
-
-    /** Flag indicating if previous iterate has just been restored */
-    bool just_restored_iterate_;
 
     /** @name Strategy objective that are used */
     //@{
