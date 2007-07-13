@@ -17,6 +17,7 @@
 #include "IpAugRestoSystemSolver.hpp"
 #include "IpPDFullSpaceSolver.hpp"
 #include "IpPDPerturbationHandler.hpp"
+#include "IpCGPerturbationHandler.hpp"
 #include "IpOptErrorConvCheck.hpp"
 #include "IpBacktrackingLineSearch.hpp"
 #include "IpFilterLSAcceptor.hpp"
@@ -353,8 +354,15 @@ namespace Ipopt
       AugSolver = tmp;
     }
 
-    SmartPtr<PDPerturbationHandler> pertHandler =
-      new PDPerturbationHandler();
+    SmartPtr<PDPerturbationHandler> pertHandler;
+    std::string lsmethod;
+    options.GetStringValue("line_search_method", lsmethod, prefix);
+    if (lsmethod=="penalty") {
+      pertHandler = new CGPerturbationHandler();
+    }
+    else {
+      pertHandler = new PDPerturbationHandler();
+    }
     SmartPtr<PDSystemSolver> PDSolver =
       new PDFullSpaceSolver(*AugSolver, *pertHandler);
 
@@ -506,8 +514,6 @@ namespace Ipopt
     SmartPtr<BacktrackingLSAcceptor> LSacceptor;
     SmartPtr<FilterLSAcceptor> FilterLSacceptor =
       new FilterLSAcceptor(GetRawPtr(PDSolver));
-    std::string lsmethod;
-    options.GetStringValue("line_search_method", lsmethod, prefix);
     if (lsmethod=="filter") {
       LSacceptor = GetRawPtr(FilterLSacceptor);
     }
