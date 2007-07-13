@@ -5,6 +5,8 @@
 // $Id: IpCGSearchDirCalc.hpp 551 2005-10-27 00:31:28Z andreasw $
 //
 // Authors:  Andreas Waechter            IBM    2005-10-13
+//
+//           Lifeng Chen/Zaiwen Wen      Columbia Univ
 
 #ifndef __IPCGSEARCHDIRCALC_HPP__
 #define __IPCGSEARCHDIRCALC_HPP__
@@ -71,11 +73,34 @@ namespace Ipopt
      *  by more than the factors kappa_sigma and 1./kappa_sigma.
      */
     Number penalty_init_min_;
-    /** Maximal value for initial penalty parameter. */
+    /** Maximal value for initial penalty parameter */
     Number penalty_init_max_;
+    /** Maximal value for penalty parameters */
+    Number penalty_max_;
+
+    	
+    
+    /**  parameters used in computation of line search penalty parameter and 
+     *    KKT perturbation parameters  **/
+    Number pen_des_fact_;
+
+    /** Algorithm type */
+    bool penalty_backward_;
+
+    /** parameters used to check if the fast direction can be
+     *  used as the line search direction **/
+    Number kappa_x_dis_;
+    Number kappa_y_dis_;
+    Number vartheta_;
+    Number delta_y_max_;
+    Number fast_des_fact_;
+   
     /** Flag indicating whether the fast Chen-Goldfarb direction
      *  should never be used */
     bool never_use_fact_cgpen_direction_;
+
+    /** Counter for how many times the pen para is updated nonmonotonically*/
+    Index nonmonotone_pen_update_counter_;
     //@}
 
     /** @name Strategy objects */

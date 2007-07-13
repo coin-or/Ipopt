@@ -6,6 +6,8 @@
 //
 // Authors:  Andreas Waechter                 IBM    2005-10-13
 //               derived from IpIpoptAlg.cpp
+//
+//           Lifeng Chen/Zaiwen Wen      Columbia Univ
 
 #include "IpCGSearchDirCalc.hpp"
 
@@ -44,14 +46,54 @@ namespace Ipopt
   void CGSearchDirCalculator::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->AddLowerBoundedNumberOption(
-      "penalty_init_min",
-      "Minimal value for the intial penalty parameter (for Chen-Goldfarb line search).",
-      0, true, 1.,
-      "");
-    roptions->AddLowerBoundedNumberOption(
       "penalty_init_max",
       "Maximal value for the intial penalty parameter (for Chen-Goldfarb line search).",
-      0, true, 10.,
+      0, true, 1e5,
+      "");
+    roptions->AddLowerBoundedNumberOption(
+      "penalty_init_min",
+      "Minimal value for the intial penalty parameter for line search(for Chen-Goldfarb line search).",
+      0., true, 1.,
+      "");	
+    roptions->AddLowerBoundedNumberOption(
+      "penalty_max",
+      "Maximal value for the penalty parameter (for Chen-Goldfarb line search).",
+      0, true, 1e30,
+      "");
+    roptions->AddLowerBoundedNumberOption(
+      "pen_des_fact",
+      "a parameter used in penalty parameter computation (for Chen-Goldfarb line search).",
+      0.0, true, 2e-1,
+      "");
+    roptions->AddLowerBoundedNumberOption(
+      "kappa_x_dis",
+      "a parameter used to check if the fast direction can be used as"  
+      "the line search direction (for Chen-Goldfarb line search).",
+      0.0, true, 1e2,
+      "");
+    roptions->AddLowerBoundedNumberOption(
+      "kappa_y_dis",
+      "a parameter used to check if the fast direction can be used as"  
+      "the line search direction (for Chen-Goldfarb line search).",
+      0.0, true, 1e4,
+      "");
+    roptions->AddLowerBoundedNumberOption(
+      "vartheta",
+      "a parameter used to check if the fast direction can be used as"  
+      "the line search direction (for Chen-Goldfarb line search).",
+      0.0, true, 0.5,
+      "");
+    roptions->AddLowerBoundedNumberOption(
+      "delta_y_max",
+      "a parameter used to check if the fast direction can be used as"  
+      "the line search direction (for Chen-Goldfarb line search).",
+      0.0, true, 1e12,
+      "");
+    roptions->AddLowerBoundedNumberOption(
+      "fast_des_fact",
+      "a parameter used to check if the fast direction can be used as"  
+      "the line search direction (for Chen-Goldfarb line search).",
+      0.0, true, 1e-1,
       "");
     roptions->AddStringOption2(
       "never_use_fact_cgpen_direction",
@@ -65,10 +107,19 @@ namespace Ipopt
   bool CGSearchDirCalculator::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    options.GetNumericValue("penalty_init_min", penalty_init_min_, prefix);
     options.GetNumericValue("penalty_init_max", penalty_init_max_, prefix);
+    options.GetNumericValue("penalty_init_min", penalty_init_min_, prefix);
+    options.GetNumericValue("penalty_max", penalty_max_, prefix);
+    options.GetNumericValue("kappa_x_dis", kappa_x_dis_, prefix);
+    options.GetNumericValue("kappa_y_dis", kappa_y_dis_, prefix);
+    options.GetNumericValue("vartheta", vartheta_, prefix);
+    options.GetNumericValue("delta_y_max", delta_y_max_, prefix);
+    options.GetNumericValue("fast_des_fact", fast_des_fact_, prefix);
+    options.GetNumericValue("pen_des_fact", pen_des_fact_, prefix);
     options.GetBoolValue("never_use_fact_cgpen_direction",
                          never_use_fact_cgpen_direction_, prefix);
+    options.GetNumericValue("penalty_init_min", penalty_init_min_, prefix);
+    nonmonotone_pen_update_counter_ = 0;
 
     return pd_solver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                   options, prefix);
@@ -93,138 +144,209 @@ namespace Ipopt
     rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
     rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
 
-    if (!IpData().CGPenData().PenaltyInitialized()) {
-      Number y_max = Max(IpData().curr()->y_c()->Amax(),
-                         IpData().curr()->y_d()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                     "Initializing penalty parameter...\n");
-      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                     "Max(||y_c||_inf,||y_d||_inf = %8.2e\n",
-                     y_max);
-      Number penalty_init = Max(penalty_init_min_,
-                                Min(y_max, penalty_init_max_));
+    /** Initialize the penalty parameter */
+    if (!IpData().CGPenData().PenaltyInitialized() ||
+	 !IpData().CGPenData().KKTPenaltyInitialized()) {
+      Number penalty_init = penalty_init_min_;
+      Number kkt_penalty_init = penalty_init_min_;
+      if (!IpData().CGPenData().NeverTryPureNewton()){
+        Number y_max = Max(IpData().curr()->y_c()->Amax(),
+                       IpData().curr()->y_d()->Amax());
+        Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                       "Initializing penalty parameter for KKT matrix...\n");
+        Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                       "Max(||y_c||_inf,||y_d||_inf = %8.2e\n",
+                       y_max);
+        penalty_init =  Max(penalty_init_min_, Min(y_max, penalty_init_max_));
+      }
+      else{
+        penalty_init = IpCq().CGPenCq().compute_curr_cg_penalty_scale();
+        penalty_init = Max(penalty_init_min_, Min(penalty_init, penalty_init_max_));
+	 kkt_penalty_init = penalty_init;
+      }
       IpData().CGPenData().Set_penalty(penalty_init);
-      char spen[40];
-      sprintf(spen, " penaltyinit=%8.2e", penalty_init);
-      IpData().Append_info_string(spen);
+      IpData().CGPenData().Set_kkt_penalty(kkt_penalty_init);
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                     "Initial value of the penalty parameter = %8.2e\n",
+                     "Initial value of the penalty parameter for line search = %8.2e\n",
                      penalty_init);
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "Initial value of the kkt penalty parameter for scaling the linear system = %8.2e\n",
+                     kkt_penalty_init);
+    }
+    else{ 
+      if (IpData().CGPenData().NeverTryPureNewton()){
+	    // If pure Newton method is not used, adjust the penalty para for 
+        // purposes of well scaling the KKT system.
+        if (IpData().CGPenData().restor_iter() == IpData().iter_count()){
+          Number restor_penalty_init = IpCq().CGPenCq().compute_curr_cg_penalty_scale();
+	   restor_penalty_init = Max(penalty_init_min_, 
+	      	       Min(restor_penalty_init, penalty_init_max_));
+	   IpData().CGPenData().Set_penalty(restor_penalty_init);
+	   IpData().CGPenData().Set_kkt_penalty(restor_penalty_init);
+        }
+        else{ 
+      	   Number penalty_new = IpCq().CGPenCq().compute_curr_cg_penalty_scale();
+	   penalty_new = Max(IpData().CGPenData().curr_penalty(), 
+		           Min(penalty_new, penalty_max_));
+	   IpData().CGPenData().Set_penalty(penalty_new);
+	   IpData().CGPenData().Set_kkt_penalty(penalty_new);
+	
+        }
+      }
     }
 
-    Number c_over_r = IpCq().CGPenCq().curr_cg_pert_fact();
-    SmartPtr<Vector> rhs_c = IpData().curr()->y_c()->MakeNew();
-    rhs_c->AddTwoVectors(1., *IpCq().curr_c(),
-                         -c_over_r, *IpData().curr()->y_c(), 0.);
-    rhs->Set_y_c(*rhs_c);
-    SmartPtr<Vector> rhs_d = IpData().curr()->y_d()->MakeNew();
-    rhs_d->AddTwoVectors(1., *IpCq().curr_d_minus_s(),
-                         -c_over_r, *IpData().curr()->y_d(), 0.);
-    rhs->Set_y_d(*rhs_d);
-
-    DBG_PRINT_VECTOR(2, "rhs_cgpen", *rhs);
-
+    
+    // Initialize iteration data
+    IpData().CGPenData().SetCurrPenaltyPert(0.);
+    IpData().CGPenData().SetPrimalStepSize(1.);
+	
+    // Compute the fast direction
+    rhs->Set_y_c(*IpCq().curr_c());
+    rhs->Set_y_d(*IpCq().curr_d_minus_s());
     // Get space for the search direction
-    SmartPtr<IteratesVector> delta_cgpen =
-      IpData().curr()->MakeNewIteratesVector(true);
-
+    SmartPtr<IteratesVector> delta_fast =
+                   IpData().curr()->MakeNewIteratesVector(true);
     bool allow_inexact = false;
-    if (!pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_cgpen, allow_inexact,
-			   improve_solution)) {
+    bool retval = pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_fast,
+				    allow_inexact, improve_solution);
+    if (!retval) {
       return false;
     }
-
-    // Store the original search direction in the IpData object
-    IpData().CGPenData().set_delta_cgpen(delta_cgpen);
-    IpData().CGPenData().SetHaveCgPenDeltas(true);
-
+    // Store the fast search direction in the IpData->CGPenData object
+    IpData().CGPenData().set_delta_cgfast(delta_fast);
+    IpData().CGPenData().SetHaveCgFastDeltas(true);
+    
     bool keep_fast_delta = true;
-    if (never_use_fact_cgpen_direction_) {
-      IpData().CGPenData().SetHaveCgFastDeltas(false);
-      keep_fast_delta = false;
+   
+    // Get space for the cg_pen search direction
+    SmartPtr<IteratesVector> delta_cgpen =
+                         IpData().curr()->MakeNewIteratesVector(true);
+    
+    if (IpData().CGPenData().CurrPenaltyPert() == 0.){
+      // if there is no perturbation on the Jacob, delta_fast = delta_cgpen.
+      delta_cgpen->AddOneVector(1., *IpData().CGPenData().delta_cgfast(), 0.);
+      IpData().CGPenData().set_delta_cgpen(delta_cgpen);
+      IpData().CGPenData().SetHaveCgPenDeltas(true);
     }
-    else {
-      // Now solve it again but for the "fast" search direction
-      rhs->Set_y_c(*IpCq().curr_c());
-      rhs->Set_y_d(*IpCq().curr_d_minus_s());
-
-      // Get space for the search direction
-      SmartPtr<IteratesVector> delta_fast =
-        IpData().curr()->MakeNewIteratesVector(true);
-
+    else{
+      SmartPtr<Vector> rhs_c = IpData().curr()->y_c()->MakeNew();
+      Number curr_pen_pert = IpData().CGPenData().CurrPenaltyPert();
+      rhs_c->AddTwoVectors(1., *IpCq().curr_c(),
+                         -curr_pen_pert, *IpData().curr()->y_c(), 0.);
+      rhs->Set_y_c(*rhs_c);
+      SmartPtr<Vector> rhs_d = IpData().curr()->y_d()->MakeNew();
+      rhs_d->AddTwoVectors(1., *IpCq().curr_d_minus_s(),
+                         -curr_pen_pert, *IpData().curr()->y_d(), 0.);
+      rhs->Set_y_d(*rhs_d);
+      DBG_PRINT_VECTOR(2, "rhs_cgpen", *rhs);
       allow_inexact = false;
-      if (!pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_fast, allow_inexact,
-			     improve_solution)) {
-	return false;
+      retval = pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_cgpen, allow_inexact,
+      			    improve_solution);
+      if (!retval) {
+	 return false;
       }
-
-      // Store the fast search direction in the IpData object
-      IpData().CGPenData().set_delta_cgfast(delta_fast);
-      IpData().CGPenData().SetHaveCgFastDeltas(true);
-
+      // Store the original search direction in the IpData object
+      IpData().CGPenData().set_delta_cgpen(delta_cgpen);
+      IpData().CGPenData().SetHaveCgPenDeltas(true);
       // Now we check whether the fast direction is good compatible with
       // the merit function
-
-      // do the || tilde y - hat y ||_2 <= k_dis ||hat y||_2 test
-      SmartPtr<const Vector> y_c = IpData().curr()->y_c();
-      SmartPtr<const Vector> y_d = IpData().curr()->y_d();
-      SmartPtr<const Vector> delta_fast_y_c = IpData().CGPenData().delta_cgfast()->y_c();
-      SmartPtr<const Vector> delta_fast_y_d = IpData().CGPenData().delta_cgfast()->y_d();
-      SmartPtr<const Vector> delta_y_c = IpData().CGPenData().delta_cgpen()->y_c();
-      SmartPtr<const Vector> delta_y_d = IpData().CGPenData().delta_cgpen()->y_d();
-
-      Number hat_y_nrm = sqrt(pow(y_c->Nrm2(), 2.)
+      // do the || tilde d_x - bar d_x ||_2 <= k_x_dis ||tilde d_x||_2^{vartheta} test
+      SmartPtr<const Vector> delta_fast_x = IpData().CGPenData().delta_cgfast()->x();
+      SmartPtr<const Vector> delta_fast_s = IpData().CGPenData().delta_cgfast()->s();
+      SmartPtr<const Vector> delta_x = IpData().CGPenData().delta_cgpen()->x();
+      SmartPtr<const Vector> delta_s = IpData().CGPenData().delta_cgpen()->s();
+      Number tilde_dx_nrm = sqrt(pow(delta_fast_x->Nrm2(), 2.)
+	  	                + pow(delta_fast_s->Nrm2(), 2.));
+      Number diff_dx_nrm = sqrt(pow(delta_fast_x->Nrm2(), 2.)
+	  	                + pow(delta_fast_s->Nrm2(), 2.)
+	  	                - 2.*delta_x->Dot(*delta_fast_x)
+	  	                - 2.*delta_s->Dot(*delta_fast_s)
+	  	                + pow(delta_x->Nrm2(), 2.)
+	  	                + pow(delta_s->Nrm2(), 2.));
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "Testing if fast direction can be used.\n"
+                     "  diff_dx_nrm = %8.2e tilde_dx_norm = %8.2e\n",
+                     diff_dx_nrm, tilde_dx_nrm);
+      tilde_dx_nrm = Max(tilde_dx_nrm, pow(tilde_dx_nrm, vartheta_));
+      if (diff_dx_nrm > kappa_x_dis_*tilde_dx_nrm){
+        keep_fast_delta = false;
+      }
+      if (keep_fast_delta){
+        // do the || tilde d_y  ||_2 <= Max(d_y_max, k_y_dis ||  y + bar d_y  ||_2)
+        SmartPtr<const Vector> y_c = IpData().curr()->y_c();
+        SmartPtr<const Vector> y_d = IpData().curr()->y_d();
+	 SmartPtr<const Vector> delta_fast_y_c = IpData().CGPenData().delta_cgfast()->y_c();
+        SmartPtr<const Vector> delta_fast_y_d = IpData().CGPenData().delta_cgfast()->y_d();
+	 SmartPtr<const Vector> delta_y_c = IpData().CGPenData().delta_cgpen()->y_c();
+        SmartPtr<const Vector> delta_y_d = IpData().CGPenData().delta_cgpen()->y_d();
+	 Number tilde_dy_nrm = sqrt(pow(delta_fast_y_c->Nrm2(), 2.)
+	 	                + pow(delta_fast_y_d->Nrm2(), 2.));
+	 Number bar_y_nrm = sqrt(pow(y_c->Nrm2(), 2.)
                               + pow(y_d->Nrm2(), 2.)
                               + 2.*y_c->Dot(*delta_y_c)
                               + 2.*y_d->Dot(*delta_y_d)
                               + pow(delta_y_c->Nrm2(), 2.)
                               + pow(delta_y_d->Nrm2(), 2.));
-      Number diff_y_nrm = sqrt(pow(delta_fast_y_c->Nrm2(), 2.)
-                               + pow(delta_fast_y_d->Nrm2(), 2.)
-                               - 2.*delta_y_c->Dot(*delta_fast_y_c)
-                               - 2.*delta_y_d->Dot(*delta_fast_y_d)
-                               + pow(delta_y_c->Nrm2(), 2.)
-                               + pow(delta_y_d->Nrm2(), 2.));
-
-      Number kappa_dis_ = 1e1;
-      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+	 Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                      "Testing if fast direction can be used.\n"
-                     "  diff_y_nrm = %8.2e hat_y_norm = %8.2e\n",
-                     diff_y_nrm, hat_y_nrm);
-      if (diff_y_nrm > kappa_dis_*hat_y_nrm) {
-        keep_fast_delta = false;
-        IpData().Append_info_string("G");
+                     "  tilde_dy_nrm = %8.2e bar_y_nrm = %8.2e\n",
+                     tilde_dy_nrm, bar_y_nrm);
+	 if (tilde_dy_nrm > Max(delta_y_max_, kappa_y_dis_*bar_y_nrm)){
+	   keep_fast_delta = false;
+	 }
       }
-
       if (keep_fast_delta) {
         // For now, I just check if the directional derivative for the
         // penalty functions are not too much off
-        Number direct_deriv = IpCq().CGPenCq().curr_direct_deriv_penalty_function();
+        Number dT_times_BarH_times_d = IpCq().CGPenCq().dT_times_barH_times_d();
         Number fast_direct_deriv = IpCq().CGPenCq().curr_fast_direct_deriv_penalty_function();
         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                       "direct_deriv = %23.15e  fast_direct_deriv = %23.15e\n",
-                       direct_deriv, fast_direct_deriv);
-        Number need_name_ = 1e-1;
-        if (fast_direct_deriv > need_name_*direct_deriv) {
-          // Discard the fast direction
-          //delta_fast = NULL;
-          //IpData().CGPenData().set_delta_cgpen(delta_fast);
+                       "dT_times_BarH_times_d = %23.15e  fast_direct_deriv = %23.15e\n",
+                       dT_times_BarH_times_d, fast_direct_deriv);
+        if (fast_direct_deriv > fast_des_fact_*dT_times_BarH_times_d) {
           keep_fast_delta = false;
           IpData().Append_info_string("g");
         }
-      }
+      }  
     }
-
-    SmartPtr<const IteratesVector> delta;
+	
+    // Set search direction
+    SmartPtr<IteratesVector> delta =
+                   IpData().curr()->MakeNewIteratesVector(true);
     if (!keep_fast_delta) {
       IpData().CGPenData().SetHaveCgFastDeltas(false);
-      delta = IpData().CGPenData().delta_cgpen();
+      delta->AddOneVector(1., *IpData().CGPenData().delta_cgpen(), 0.);
     }
     else {
-      delta = IpData().CGPenData().delta_cgfast();
+      IpData().CGPenData().SetHaveCgFastDeltas(true);
+      delta->AddOneVector(1., *IpData().CGPenData().delta_cgfast(), 0.);
     }
     IpData().set_delta(delta);
-
+    // If the pure Newton method is used, update the penalty parameter for line search
+    if (!IpData().CGPenData().NeverTryPureNewton()){
+      Number penalty = IpCq().CGPenCq().compute_curr_cg_penalty(pen_des_fact_);
+      Number curr_penalty = IpData().CGPenData().curr_penalty();
+      Number curr_kkt_penalty = IpData().CGPenData().curr_kkt_penalty();
+      if (penalty>curr_penalty){
+        penalty = Max(penalty, curr_penalty+1.);
+      }
+      else {
+	 if (curr_penalty <= curr_kkt_penalty ||
+	     IpData().CGPenData().CurrPenaltyPert() == 0.){
+	   penalty = curr_penalty;
+	 }
+	 else{
+	   penalty = curr_kkt_penalty;
+	   nonmonotone_pen_update_counter_++;
+	 }
+      }
+      IpData().CGPenData().Set_penalty(penalty);
+      if (penalty > curr_kkt_penalty &&
+	   nonmonotone_pen_update_counter_ > 50){
+        IpData().CGPenData().Set_kkt_penalty(penalty);
+      }
+    }
+    
     return true;
   }
 

@@ -42,6 +42,14 @@ namespace Ipopt
 
     /**@name Methods for the Chen-Goldfarb line search */
     //@{
+
+    /** Compute ||delta_c, delta_d||_infty */
+    Number curr_jac_cd_norm(Index nrm_type);
+    /** Compute gradient scaling based y->Amax */
+    Number curr_scaled_y_Amax();
+    /** Compute the 2-norm of y plus delta y */
+    Number curr_added_y_nrm2();
+
     /** Method for the penalty function at current point */
     Number curr_penalty_function();
     /** Method for the penalty function at trial point */
@@ -52,10 +60,21 @@ namespace Ipopt
     /** Method for the directional derivative of the penalty function
      *  at current point with current "fast" step in delta_cgpen */
     Number curr_fast_direct_deriv_penalty_function();
+
+    /** Quality of d^T Aug(H) d */
+    Number dT_times_barH_times_d();
+
+    
     /** Method for the current value for the perturbation factor for
      *  the Chen-Goldfarb method.  The factor is computed as 2-norm of
      *  the constraints devided by the current penbalty parameter */
     Number curr_cg_pert_fact();
+
+    /** Method for choose line search penalty parameter */
+    Number compute_curr_cg_penalty(const Number );
+
+    /** Method for choose penalty parameters for scaling the KKT system  */
+    Number compute_curr_cg_penalty_scale();
     //@}
 
     /** Methods for IpoptType */
@@ -93,6 +112,10 @@ namespace Ipopt
 
     /**@name Caches for the Chen-Goldfarb line search */
     //@{
+    CachedResults<Number> curr_fast_direct_deriv_penalty_function_cache_;
+    CachedResults<Number> curr_jac_cd_norm_cache_;
+    CachedResults<Number> curr_scaled_y_Amax_cache_;
+    CachedResults<Number> curr_added_y_nrm2_cache_;
     /** Cache for the penalty function at current point */
     CachedResults<Number> curr_penalty_function_cache_;
     /** Cache for the penalty function at trial point */
@@ -100,11 +123,13 @@ namespace Ipopt
     /** Cache for the directional derivative of the penalty function
      *  at current point with step in delta */
     CachedResults<Number> curr_direct_deriv_penalty_function_cache_;
-    /** Cache for the directional derivative of the penalty function
-     *  at current point with fast step in delta_cgpen */
-    CachedResults<Number> curr_fast_direct_deriv_penalty_function_cache_;
     /** Cache for Chen-Goldfarb perturbation factor. */
     CachedResults<Number> curr_cg_pert_fact_cache_;
+    //@}
+
+    /** Parameters for penalty method */
+    //@{
+    Number reference_infeasibility_;
     //@}
 
     /** flag indicating if Initialize method has been called (for

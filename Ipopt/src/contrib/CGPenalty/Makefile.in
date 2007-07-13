@@ -56,7 +56,8 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libcgpenalty_la_LIBADD =
 am_libcgpenalty_la_OBJECTS = IpCGPenaltyCq.lo IpCGPenaltyData.lo \
 	IpCGPenaltyLSAcceptor.lo IpCGPenaltyRegOp.lo \
-	IpCGSearchDirCalc.lo
+	IpCGPerturbationHandler.lo IpCGSearchDirCalc.lo \
+	IpPiecewisePenalty.lo
 libcgpenalty_la_OBJECTS = $(am_libcgpenalty_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -272,7 +273,9 @@ libcgpenalty_la_SOURCES = \
 	IpCGPenaltyData.cpp IpCGPenaltyData.hpp \
 	IpCGPenaltyLSAcceptor.cpp IpCGPenaltyLSAcceptor.hpp \
 	IpCGPenaltyRegOp.cpp IpCGPenaltyRegOp.hpp \
-	IpCGSearchDirCalc.cpp IpCGSearchDirCalc.hpp
+	IpCGPerturbationHandler.cpp IpCGPerturbationHandler.hpp \
+	IpCGSearchDirCalc.cpp IpCGSearchDirCalc.hpp \
+	IpPiecewisePenalty.cpp IpPiecewisePenalty.hpp
 
 libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
@@ -292,7 +295,8 @@ ASTYLE_FILES = \
 	IpCGPenaltyData.cppbak IpCGPenaltyData.hppbak \
 	IpCGPenaltyLSAcceptor.cppbak IpCGPenaltyLSAcceptor.hppbak \
 	IpCGPenaltyRegOp.cppbak IpCGPenaltyRegOp.hppbak \
-	IpCGSearchDirCalc.cppbak IpCGSearchDirCalc.hppbak
+	IpCGSearchDirCalc.cppbak IpCGSearchDirCalc.hppbak \
+	IpPiecewisePenalty.cppbak IpPiecewisePenalty.hppbak
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
@@ -351,7 +355,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpCGPenaltyData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpCGPenaltyLSAcceptor.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpCGPenaltyRegOp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpCGPerturbationHandler.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpCGSearchDirCalc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPiecewisePenalty.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
