@@ -1,10 +1,10 @@
-// Copyright (C) 2004,2005 International Business Machines and others.
+// Copyright (C) 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id: IpPiecewisePenalty.cpp 510 2006-03-10 21:45:32Z zaiwen wen $
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Lifeng Chen/Zaiwen Wen      Columbia Univ
 
 #include "IpPiecewisePenalty.hpp"
 #include "IpJournalist.hpp"
@@ -15,7 +15,7 @@
 namespace Ipopt
 {
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -40,54 +40,54 @@ namespace Ipopt
       Number trial_barrier = Fzconst;
       // First check the starting entry of the list.
       iter = PiecewisePenalty_list_.begin();
-      Number value = iter->barrier_obj + iter->pen_r * iter->infeasi 
-		                  - trial_barrier - iter->pen_r * trial_inf;
+      Number value = iter->barrier_obj + iter->pen_r * iter->infeasi
+                     - trial_barrier - iter->pen_r * trial_inf;
       if (value >= 0.) {
         iter++;
-	 value = iter->barrier_obj + iter->pen_r * iter->infeasi 
-		        - trial_barrier - iter->pen_r * trial_inf;
-	 if (value <= 0.) {
-	   return false;
-	 }
+        value = iter->barrier_obj + iter->pen_r * iter->infeasi
+                - trial_barrier - iter->pen_r * trial_inf;
+        if (value <= 0.) {
+          return false;
+        }
       }
       // Then check the ending entry of the list.
       iter = PiecewisePenalty_list_.end();
-      value = iter->barrier_obj + iter->pen_r * iter->infeasi 
-		     - trial_barrier - iter->pen_r * trial_inf;
+      value = iter->barrier_obj + iter->pen_r * iter->infeasi
+              - trial_barrier - iter->pen_r * trial_inf;
       if (value <= 0. && trial_inf <= iter->infeasi) {
-	 return false;
+        return false;
       }
       // Check the next to the ending entry.
       if (value >= 0. && trial_inf >= iter->infeasi) {
-	 iter-=1;
-	 value = iter->barrier_obj + iter->pen_r * iter->infeasi 
-		        - trial_barrier - iter->pen_r * trial_inf;
-	 if (value <= 0.) {
-	   return false;
-	 }
+        iter-=1;
+        value = iter->barrier_obj + iter->pen_r * iter->infeasi
+                - trial_barrier - iter->pen_r * trial_inf;
+        if (value <= 0.) {
+          return false;
+        }
       }
       // Finally, check the middle entries of the list.
       Number value_left, value_mid, value_right;
       for (iter = PiecewisePenalty_list_.begin() +1; iter != PiecewisePenalty_list_.end();
-	     iter++) {
-        value_mid = iter->barrier_obj + iter->pen_r * iter->infeasi 
-		               - trial_barrier - iter->pen_r * trial_inf;
-	 iter++;
-	 value_right = iter->barrier_obj + iter->pen_r * iter->infeasi 
-		                - trial_barrier - iter->pen_r * trial_inf;
-	 iter-=2;
-	 value_left = iter->barrier_obj + iter->pen_r * iter->infeasi 
-		               - trial_barrier - iter->pen_r * trial_inf;
-	 iter++;
-	 if (value_left <= 0. && value_mid >= 0. && value_right <= 0.) {
+           iter++) {
+        value_mid = iter->barrier_obj + iter->pen_r * iter->infeasi
+                    - trial_barrier - iter->pen_r * trial_inf;
+        iter++;
+        value_right = iter->barrier_obj + iter->pen_r * iter->infeasi
+                      - trial_barrier - iter->pen_r * trial_inf;
+        iter-=2;
+        value_left = iter->barrier_obj + iter->pen_r * iter->infeasi
+                     - trial_barrier - iter->pen_r * trial_inf;
+        iter++;
+        if (value_left <= 0. && value_mid >= 0. && value_right <= 0.) {
           return false;
-	 }
+        }
       }
     }
     // Check if the trial point is acceptable to the piecewise list
     Number Fz;
-    for (iter = PiecewisePenalty_list_.begin();	iter != PiecewisePenalty_list_.end();
-          iter++) {
+    for (iter = PiecewisePenalty_list_.begin(); iter != PiecewisePenalty_list_.end();
+         iter++) {
       Fz = Fzconst + iter->pen_r * (Fzlin - iter->infeasi) - iter->barrier_obj ;
       if (Fz < 0.) {
         acceptable = true;
@@ -95,7 +95,7 @@ namespace Ipopt
       }
     }
     iter = PiecewisePenalty_list_.end() -1;
-    if (acceptable == false && Fzlin < iter->infeasi){
+    if (acceptable == false && Fzlin < iter->infeasi) {
       acceptable = true;
     }
     return acceptable;
@@ -122,45 +122,45 @@ namespace Ipopt
     Number TmpPen = 0.0;
     // construt a temp list, copy current list to the temp list
     std::vector<PiecewisePenEntry> TmpList(PiecewisePenalty_list_);
-    // Erases the elements of current list 
+    // Erases the elements of current list
     PiecewisePenalty_list_.clear();
     std::vector<PiecewisePenEntry>::iterator iter = TmpList.begin(), iter2;
     Gzi1 = barrier_obj + iter->pen_r * ( infeasi - iter->infeasi) - iter->barrier_obj;
     for (; iter <= TmpList.end()-1; iter++) {
       // Be careful about this
-      if( iter <= TmpList.end()-2 ) {
-	 iter2 = iter+1;
-	 Gzi2 = barrier_obj + iter2->pen_r * ( infeasi - iter2->infeasi) - iter2->barrier_obj; 
+      if ( iter <= TmpList.end()-2 ) {
+        iter2 = iter+1;
+        Gzi2 = barrier_obj + iter2->pen_r * ( infeasi - iter2->infeasi) - iter2->barrier_obj;
       }
-      else{
-	 Gzi2 = infeasi - iter->infeasi;
+      else {
+        Gzi2 = infeasi - iter->infeasi;
       }
-      if ( Gzi1 < -epsM && Gzi2 >= epsM ){
-	 if( IsPiecewisePenaltyListEmpty() ){
-	   AddEntry(TmpPen, barrier_obj, infeasi);
-	 }	
-	 if (Gzi2 > epsM){
-	   TmpPen = (iter->barrier_obj - barrier_obj)/( infeasi - iter->infeasi );
-	   AddEntry(TmpPen, iter->barrier_obj, iter->infeasi);
-	 }
+      if ( Gzi1 < -epsM && Gzi2 >= epsM ) {
+        if ( IsPiecewisePenaltyListEmpty() ) {
+          AddEntry(TmpPen, barrier_obj, infeasi);
+        }
+        if (Gzi2 > epsM) {
+          TmpPen = (iter->barrier_obj - barrier_obj)/( infeasi - iter->infeasi );
+          AddEntry(TmpPen, iter->barrier_obj, iter->infeasi);
+        }
       }
-      if (Gzi1 >= epsM && Gzi2 < -epsM){
-        if (Gzi1 > epsM){
-	   AddEntry(iter->pen_r, iter->barrier_obj, iter->infeasi);
-	 }
- 	 TmpPen = (iter->barrier_obj - barrier_obj)/(infeasi - iter->infeasi);
-	 AddEntry(TmpPen, barrier_obj, infeasi);
+      if (Gzi1 >= epsM && Gzi2 < -epsM) {
+        if (Gzi1 > epsM) {
+          AddEntry(iter->pen_r, iter->barrier_obj, iter->infeasi);
+        }
+        TmpPen = (iter->barrier_obj - barrier_obj)/(infeasi - iter->infeasi);
+        AddEntry(TmpPen, barrier_obj, infeasi);
       }
-      if (Gzi1 >= epsM && Gzi2 >= epsM){
-	 AddEntry(iter->pen_r, iter->barrier_obj, iter->infeasi);
+      if (Gzi1 >= epsM && Gzi2 >= epsM) {
+        AddEntry(iter->pen_r, iter->barrier_obj, iter->infeasi);
       }
       // handle the last point
-      if( iter == TmpList.end()-1 ) {
-	 if ( Gzi1 < - epsM && Gzi2 < - epsM ){
- 	   if( IsPiecewisePenaltyListEmpty() ){
-	     AddEntry(0.0, barrier_obj, infeasi);
-	   }
-	 }
+      if ( iter == TmpList.end()-1 ) {
+        if ( Gzi1 < - epsM && Gzi2 < - epsM ) {
+          if ( IsPiecewisePenaltyListEmpty() ) {
+            AddEntry(0.0, barrier_obj, infeasi);
+          }
+        }
       }
       Gzi1 = Gzi2;
     }
@@ -196,7 +196,7 @@ namespace Ipopt
     std::vector<PiecewisePenEntry>::iterator iter;
     Index count = 0;
     for (iter = PiecewisePenalty_list_.begin(); iter != PiecewisePenalty_list_.end();
-          iter++) {
+         iter++) {
       if (count % 10 == 0) {
         jnlst.Printf(J_DETAILED, J_LINE_SEARCH,
                      "                pen_r                    barrier_obj            infeasi\n");
@@ -204,11 +204,8 @@ namespace Ipopt
       count++;
       jnlst.Printf(J_DETAILED, J_LINE_SEARCH, "%5d ", count);
       jnlst.Printf(J_DETAILED, J_LINE_SEARCH, "%23.16e %23.16e  %23.16e \n", iter->pen_r,
-		   iter->barrier_obj, iter->infeasi);
+                   iter->barrier_obj, iter->infeasi);
     }
   }
-
-
-
 
 } // namespace Ipopt

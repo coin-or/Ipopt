@@ -1,10 +1,10 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id: IpPiecewisePenalty.hpp 510 2006-03-10 21:45:32Z zaiwen wen $
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Lifeng Chen/Zaiwen Wen      Columbia Univ
 
 #ifndef __IPPIECEWISEPENALTY_HPP__
 #define __IPPIECEWISEPENALTY_HPP__
@@ -21,16 +21,18 @@
 namespace Ipopt
 {
 
- /** struct for one Piecewise Penalty entry. */
-typedef struct
-PiecewisePenEntry{
-	Number pen_r;
-	Number barrier_obj;
-	Number infeasi;
-	} PiecewisePenEntry;
+  /** struct for one Piecewise Penalty entry. */
+  typedef struct
+        PiecewisePenEntry
+  {
+    Number pen_r;
+    Number barrier_obj;
+    Number infeasi;
+  }
+  PiecewisePenEntry;
 
- 
-  /** Class for the Piecewise Penalty.  This class contains all 
+
+  /** Class for the Piecewise Penalty.  This class contains all
    *  Piecewise Penalty entries.
    *  The entries are stored as the corner point, including the
    *  margin. */
@@ -48,18 +50,20 @@ PiecewisePenEntry{
       //    Clear();
     }
     //@}
-  
-     
+
+
     //@{
     // Initialize Piecewise Penalty list
-    bool IsPiecewisePenaltyListEmpty(){
+    bool IsPiecewisePenaltyListEmpty()
+    {
       return PiecewisePenalty_list_.empty();
     }
-	
-    void InitPiecewisePenaltyList(Number pen_r, Number barrier_obj, Number infeasi){
+
+    void InitPiecewisePenaltyList(Number pen_r, Number barrier_obj, Number infeasi)
+    {
       AddEntry( pen_r, barrier_obj,  infeasi);
     }
-	
+
     /** Check acceptability of given coordinates with respect
      *  to the Piecewise Penalty.  Returns true, if pair is acceptable
      */
@@ -68,7 +72,7 @@ PiecewisePenEntry{
     /** Get the value of the biggest barrier function so far*/
     Number BiggestBarr();
 
-    /** Update Piecewise Penalty entry for given coordinates. 
+    /** Update Piecewise Penalty entry for given coordinates.
      */
     void UpdateEntry(Number barrier_obj, Number infeasi);
 
@@ -81,16 +85,17 @@ PiecewisePenEntry{
         TmpEntry.pen_r = 0.0;
       }
       else {
-	 TmpEntry.pen_r = pen_r;
+        TmpEntry.pen_r = pen_r;
       }
       TmpEntry.barrier_obj = barrier_obj;
       TmpEntry.infeasi = infeasi;
-      PiecewisePenalty_list_.push_back(TmpEntry);		
+      PiecewisePenalty_list_.push_back(TmpEntry);
     }
 
-    /** Clear and reset the piecewise penalty list 
+    /** Clear and reset the piecewise penalty list
      */
-    void ResetList(Number pen_r, Number barrier_obj, Number infeasi){
+    void ResetList(Number pen_r, Number barrier_obj, Number infeasi)
+    {
       PiecewisePenalty_list_.clear();
       AddEntry( pen_r, barrier_obj,  infeasi);
     }
@@ -106,7 +111,7 @@ PiecewisePenEntry{
     /** Print current Piecewise Penalty entries */
     void Print(const Journalist& jnlst);
 
-private:
+  private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
      * These methods are not implemented and 

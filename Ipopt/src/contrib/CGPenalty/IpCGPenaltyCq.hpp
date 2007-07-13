@@ -26,8 +26,8 @@ namespace Ipopt
     //@{
     /** Constructor */
     CGPenaltyCq(IpoptNLP* ip_nlp,
-		IpoptData* ip_data,
-		IpoptCalculatedQuantities* ip_cg);
+                IpoptData* ip_data,
+                IpoptCalculatedQuantities* ip_cg);
 
     /** Default destructor */
     virtual ~CGPenaltyCq();
@@ -64,7 +64,7 @@ namespace Ipopt
     /** Quality of d^T Aug(H) d */
     Number dT_times_barH_times_d();
 
-    
+
     /** Method for the current value for the perturbation factor for
      *  the Chen-Goldfarb method.  The factor is computed as 2-norm of
      *  the constraints devided by the current penbalty parameter */

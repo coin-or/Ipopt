@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -33,8 +33,7 @@ namespace Ipopt
 
   void
   CGPerturbationHandler::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
-  {
-  }
+  {}
 
   bool CGPerturbationHandler::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
@@ -48,9 +47,9 @@ namespace Ipopt
     options.GetNumericValue("jacobian_regularization_value", delta_cd_val_, prefix);
     options.GetNumericValue("jacobian_regularization_exponent", delta_cd_exp_, prefix);
     options.GetBoolValue("perturb_always_cd", perturb_always_cd_, prefix);
-	// The following option has been registered from CGSearchDirCalc
+    // The following option has been registered from CGSearchDirCalc
     options.GetNumericValue("penalty_max", penalty_max_, prefix);
-	// The following option has been registered from CGPenaltyLSAccepter
+    // The following option has been registered from CGPenaltyLSAccepter
     options.GetNumericValue("mult_diverg_feasibility_tol", mult_diverg_feasibility_tol_, prefix);
     hess_degenerate_ = NOT_YET_DETERMINED;
     if (!perturb_always_cd_) {
@@ -86,7 +85,7 @@ namespace Ipopt
     finalize_test();
     // If the current iterate is restored from a previous iteration,
     // initialize perturbationhandler data
-	if (IpData().CGPenData().restor_iter() == IpData().iter_count()) {
+    if (IpData().CGPenData().restor_iter() == IpData().iter_count()) {
       hess_degenerate_ = NOT_YET_DETERMINED;
       jac_degenerate_ = NOT_YET_DETERMINED;
       degen_iters_ = 0;
@@ -132,9 +131,9 @@ namespace Ipopt
 
     if (hess_degenerate_ == NOT_YET_DETERMINED ||
         jac_degenerate_ == NOT_YET_DETERMINED) {
-      if (!perturb_always_cd_ 
-	  	 || IpCq().CGPenCq().curr_cg_pert_fact() < delta_cd()
-	  	 || !IpData().CGPenData().NeverTryPureNewton()) {
+      if (!perturb_always_cd_
+          || IpCq().CGPenCq().curr_cg_pert_fact() < delta_cd()
+          || !IpData().CGPenData().NeverTryPureNewton()) {
         test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_EQ_0;
       }
       else {
@@ -145,24 +144,24 @@ namespace Ipopt
       test_status_ = NO_TEST;
     }
 
-	Number pert_fact = IpCq().CGPenCq().curr_cg_pert_fact();
-    if (jac_degenerate_ == DEGENERATE 
-	   || IpData().CGPenData().NeverTryPureNewton()
-	   || perturb_always_cd_) {
-	  Number mach_eps = std::numeric_limits<Number>::epsilon(); 
-	  if (pert_fact < 10.*mach_eps
-	  	 && jac_degenerate_ == DEGENERATE){
+    Number pert_fact = IpCq().CGPenCq().curr_cg_pert_fact();
+    if (jac_degenerate_ == DEGENERATE
+        || IpData().CGPenData().NeverTryPureNewton()
+        || perturb_always_cd_) {
+      Number mach_eps = std::numeric_limits<Number>::epsilon();
+      if (pert_fact < 10.*mach_eps
+          && jac_degenerate_ == DEGENERATE) {
         delta_c = delta_c_curr_ = 10.*mach_eps;
-	  }
-	  else{
+      }
+      else {
         delta_c = delta_c_curr_ = pert_fact;
-	  }    
+      }
     }
     else {
-	  delta_c = delta_c_curr_ = 0.;
+      delta_c = delta_c_curr_ = 0.;
     }
     IpData().CGPenData().SetCurrPenaltyPert(delta_c);
-    
+
     delta_d = delta_d_curr_ = delta_c;
 
     if (hess_degenerate_ == DEGENERATE) {
@@ -208,7 +207,7 @@ namespace Ipopt
                      "Degeneracy test for hess_degenerate_ = %d and jac_degenerate_ = %d\n       test_status_ = %d\n",
                      hess_degenerate_, jac_degenerate_, test_status_);
       switch (test_status_) {
-        case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
+      case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
         DBG_ASSERT(delta_x_curr_ == 0. && delta_c_curr_ == 0.);
         // in this case we haven't tried anything for this matrix yet
         if (jac_degenerate_ == NOT_YET_DETERMINED) {
@@ -226,26 +225,26 @@ namespace Ipopt
           test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         }
         break;
-        case TEST_DELTA_C_GT_0_DELTA_X_EQ_0:
+      case TEST_DELTA_C_GT_0_DELTA_X_EQ_0:
         DBG_ASSERT(delta_x_curr_ == 0. && delta_c_curr_ > 0.);
         DBG_ASSERT(jac_degenerate_ == NOT_YET_DETERMINED);
         //if (!perturb_always_cd_) {
-          delta_d_curr_ = delta_c_curr_ = 
-		  	   IpCq().CGPenCq().curr_cg_pert_fact();
-		  if (delta_d_curr_ < delta_cd()) {
-            test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
-          }
-          else {
-            test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
-          }
-          retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-                                                delta_c, delta_d);
-          if (!retval) {
-            return false;
-          }
-          DBG_ASSERT(true || delta_c == 0. && delta_d == 0.);
+        delta_d_curr_ = delta_c_curr_ =
+                          IpCq().CGPenCq().curr_cg_pert_fact();
+        if (delta_d_curr_ < delta_cd()) {
           test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
-        //} 
+        }
+        else {
+          test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
+        }
+        retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
+                                              delta_c, delta_d);
+        if (!retval) {
+          return false;
+        }
+        DBG_ASSERT(true || delta_c == 0. && delta_d == 0.);
+        test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
+        //}
         /*
         else {
           retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
@@ -257,7 +256,7 @@ namespace Ipopt
           test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
         }*/
         break;
-        case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
+      case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
         DBG_ASSERT(delta_x_curr_ > 0. && delta_c_curr_ == 0.);
         delta_d_curr_ = delta_c_curr_ = delta_cd();
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
@@ -267,14 +266,14 @@ namespace Ipopt
         }
         test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
         break;
-        case TEST_DELTA_C_GT_0_DELTA_X_GT_0:
+      case TEST_DELTA_C_GT_0_DELTA_X_GT_0:
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
         if (!retval) {
           return false;
         }
         break;
-        case NO_TEST:
+      case NO_TEST:
         DBG_ASSERT(false && "we should not get here.");
       }
     }
@@ -298,16 +297,16 @@ namespace Ipopt
         // ToDo - also perturb Hessian?
         IpData().Append_info_string("L");
         Number curr_inf = IpCq().curr_primal_infeasibility(NORM_2);
-		if (!IpData().CGPenData().NeverTryPureNewton()
-		   && curr_inf > mult_diverg_feasibility_tol_){
-		  Number penalty = IpCq().CGPenCq().compute_curr_cg_penalty_scale();
-		  penalty = Min(penalty_max_, Max(penalty,
-		  	        IpData().CGPenData().curr_kkt_penalty()));
-		  IpData().CGPenData().Set_kkt_penalty(penalty);
-		  delta_d_curr_ = delta_c_curr_ = 
-		  	        Max(IpCq().CGPenCq().curr_cg_pert_fact(),delta_cd());	
-		  IpData().Append_info_string("u");
-		}
+        if (!IpData().CGPenData().NeverTryPureNewton()
+            && curr_inf > mult_diverg_feasibility_tol_) {
+          Number penalty = IpCq().CGPenCq().compute_curr_cg_penalty_scale();
+          penalty = Min(penalty_max_, Max(penalty,
+                                          IpData().CGPenData().curr_kkt_penalty()));
+          IpData().CGPenData().Set_kkt_penalty(penalty);
+          delta_d_curr_ = delta_c_curr_ =
+                            Max(IpCq().CGPenCq().curr_cg_pert_fact(),delta_cd());
+          IpData().Append_info_string("u");
+        }
       }
     }
 
@@ -417,9 +416,9 @@ namespace Ipopt
   CGPerturbationHandler::finalize_test()
   {
     switch (test_status_) {
-      case NO_TEST:
+    case NO_TEST:
       return;
-      case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
+    case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
       if (hess_degenerate_ == NOT_YET_DETERMINED &&
           jac_degenerate_ == NOT_YET_DETERMINED) {
         hess_degenerate_ = NOT_DEGENERATE;
@@ -435,7 +434,7 @@ namespace Ipopt
         IpData().Append_info_string("Nj ");
       }
       break;
-      case TEST_DELTA_C_GT_0_DELTA_X_EQ_0:
+    case TEST_DELTA_C_GT_0_DELTA_X_EQ_0:
       if (hess_degenerate_ == NOT_YET_DETERMINED) {
         hess_degenerate_ = NOT_DEGENERATE;
         IpData().Append_info_string("Nh ");
@@ -449,7 +448,7 @@ namespace Ipopt
         IpData().Append_info_string("L");
       }
       break;
-      case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
+    case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
       if (jac_degenerate_ == NOT_YET_DETERMINED) {
         jac_degenerate_ = NOT_DEGENERATE;
         IpData().Append_info_string("Nj ");
@@ -462,7 +461,7 @@ namespace Ipopt
         }
       }
       break;
-      case TEST_DELTA_C_GT_0_DELTA_X_GT_0:
+    case TEST_DELTA_C_GT_0_DELTA_X_GT_0:
       degen_iters_++;
       if (degen_iters_ >= degen_iters_max_) {
         hess_degenerate_ = DEGENERATE;

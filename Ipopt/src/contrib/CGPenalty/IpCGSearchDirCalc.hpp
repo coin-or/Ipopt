@@ -78,9 +78,9 @@ namespace Ipopt
     /** Maximal value for penalty parameters */
     Number penalty_max_;
 
-    	
-    
-    /**  parameters used in computation of line search penalty parameter and 
+
+
+    /**  parameters used in computation of line search penalty parameter and
      *    KKT perturbation parameters  **/
     Number pen_des_fact_;
 
@@ -94,7 +94,7 @@ namespace Ipopt
     Number vartheta_;
     Number delta_y_max_;
     Number fast_des_fact_;
-   
+
     /** Flag indicating whether the fast Chen-Goldfarb direction
      *  should never be used */
     bool never_use_fact_cgpen_direction_;
