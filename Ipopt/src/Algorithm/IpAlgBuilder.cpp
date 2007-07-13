@@ -378,137 +378,143 @@ namespace Ipopt
       new DefaultIterateInitializer(EqMultCalculator, WarmStartInitializer,
                                     AugSolver);
 
-    // Solver for the restoration phase
-    SmartPtr<AugSystemSolver> resto_AugSolver =
-      new AugRestoSystemSolver(*AugSolver);
-    SmartPtr<PDPerturbationHandler> resto_pertHandler =
-      new PDPerturbationHandler();
-    SmartPtr<PDSystemSolver> resto_PDSolver =
-      new PDFullSpaceSolver(*resto_AugSolver, *resto_pertHandler);
+    SmartPtr<RestorationPhase> resto_phase;
+    SmartPtr<RestoFilterConvergenceCheck> resto_convCheck;
 
-    // Convergence check in the restoration phase
-    SmartPtr<RestoFilterConvergenceCheck> resto_convCheck =
-      new RestoFilterConvergenceCheck();
+    // We only need a restoration phase object if we use the filter
+    // line search
+    if (true || lsmethod=="filter") {
+      // Solver for the restoration phase
+      SmartPtr<AugSystemSolver> resto_AugSolver =
+        new AugRestoSystemSolver(*AugSolver);
+      SmartPtr<PDPerturbationHandler> resto_pertHandler =
+        new PDPerturbationHandler();
+      SmartPtr<PDSystemSolver> resto_PDSolver =
+        new PDFullSpaceSolver(*resto_AugSolver, *resto_pertHandler);
 
-    // Line search method for the restoration phase
-    SmartPtr<RestoRestorationPhase> resto_resto =
-      new RestoRestorationPhase();
+      // Convergence check in the restoration phase
+      resto_convCheck = new RestoFilterConvergenceCheck();
 
-    SmartPtr<BacktrackingLSAcceptor> resto_LSacceptor;
-    std::string resto_lsacceptor;
-    options.GetStringValue("line_search_method", resto_lsacceptor,
-                           "resto."+prefix);
-    if (resto_lsacceptor=="filter") {
-      resto_LSacceptor = new FilterLSAcceptor(GetRawPtr(resto_PDSolver));
-    }
-    else if (resto_lsacceptor=="penalty") {
-      resto_LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(resto_PDSolver));
-    }
-    SmartPtr<LineSearch> resto_LineSearch =
-      new BacktrackingLineSearch(resto_LSacceptor, GetRawPtr(resto_resto),
-                                 GetRawPtr(resto_convCheck));
+      // Line search method for the restoration phase
+      SmartPtr<RestoRestorationPhase> resto_resto =
+        new RestoRestorationPhase();
 
-    // Create the mu update that will be used by the restoration phase
-    // algorithm
-    SmartPtr<MuUpdate> resto_MuUpdate;
-    std::string resto_smuupdate;
-    if (!options.GetStringValue("mu_strategy", resto_smuupdate, "resto."+prefix)) {
-      // Change default for quasi-Newton option (then we use adaptive)
-      Index enum_int;
-      if (options.GetEnumValue("hessian_approximation", enum_int, prefix)) {
-        HessianApproximationType hessian_approximation =
-          HessianApproximationType(enum_int);
-        if (hessian_approximation==LIMITED_MEMORY) {
-          resto_smuupdate = "adaptive";
+      SmartPtr<BacktrackingLSAcceptor> resto_LSacceptor;
+      std::string resto_lsacceptor;
+      options.GetStringValue("line_search_method", resto_lsacceptor,
+                             "resto."+prefix);
+      if (resto_lsacceptor=="filter") {
+        resto_LSacceptor = new FilterLSAcceptor(GetRawPtr(resto_PDSolver));
+      }
+      else if (resto_lsacceptor=="penalty") {
+        resto_LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(resto_PDSolver));
+      }
+      SmartPtr<LineSearch> resto_LineSearch =
+        new BacktrackingLineSearch(resto_LSacceptor, GetRawPtr(resto_resto),
+                                   GetRawPtr(resto_convCheck));
+
+      // Create the mu update that will be used by the restoration phase
+      // algorithm
+      SmartPtr<MuUpdate> resto_MuUpdate;
+      std::string resto_smuupdate;
+      if (!options.GetStringValue("mu_strategy", resto_smuupdate, "resto."+prefix)) {
+        // Change default for quasi-Newton option (then we use adaptive)
+        Index enum_int;
+        if (options.GetEnumValue("hessian_approximation", enum_int, prefix)) {
+          HessianApproximationType hessian_approximation =
+            HessianApproximationType(enum_int);
+          if (hessian_approximation==LIMITED_MEMORY) {
+            resto_smuupdate = "adaptive";
+          }
         }
       }
-    }
 
-    std::string resto_smuoracle;
-    std::string resto_sfixmuoracle;
-    if (resto_smuupdate=="adaptive" ) {
-      options.GetStringValue("mu_oracle", resto_smuoracle, "resto."+prefix);
-      options.GetStringValue("fixed_mu_oracle", resto_sfixmuoracle, "resto."+prefix);
-    }
-
-    if (resto_smuupdate=="monotone" ) {
-      resto_MuUpdate = new MonotoneMuUpdate(GetRawPtr(resto_LineSearch));
-    }
-    else if (resto_smuupdate=="adaptive") {
-      SmartPtr<MuOracle> resto_MuOracle;
-      if (resto_smuoracle=="loqo") {
-        resto_MuOracle = new LoqoMuOracle();
+      std::string resto_smuoracle;
+      std::string resto_sfixmuoracle;
+      if (resto_smuupdate=="adaptive" ) {
+        options.GetStringValue("mu_oracle", resto_smuoracle, "resto."+prefix);
+        options.GetStringValue("fixed_mu_oracle", resto_sfixmuoracle, "resto."+prefix);
       }
-      else if (resto_smuoracle=="probing") {
-        resto_MuOracle = new ProbingMuOracle(resto_PDSolver);
+
+      if (resto_smuupdate=="monotone" ) {
+        resto_MuUpdate = new MonotoneMuUpdate(GetRawPtr(resto_LineSearch));
       }
-      else if (resto_smuoracle=="quality-function") {
-        resto_MuOracle = new QualityFunctionMuOracle(resto_PDSolver);
+      else if (resto_smuupdate=="adaptive") {
+        SmartPtr<MuOracle> resto_MuOracle;
+        if (resto_smuoracle=="loqo") {
+          resto_MuOracle = new LoqoMuOracle();
+        }
+        else if (resto_smuoracle=="probing") {
+          resto_MuOracle = new ProbingMuOracle(resto_PDSolver);
+        }
+        else if (resto_smuoracle=="quality-function") {
+          resto_MuOracle = new QualityFunctionMuOracle(resto_PDSolver);
+        }
+        SmartPtr<MuOracle> resto_FixMuOracle;
+        if (resto_sfixmuoracle=="loqo") {
+          resto_FixMuOracle = new LoqoMuOracle();
+        }
+        else if (resto_sfixmuoracle=="probing") {
+          resto_FixMuOracle = new ProbingMuOracle(resto_PDSolver);
+        }
+        else if (resto_sfixmuoracle=="quality-function") {
+          resto_FixMuOracle = new QualityFunctionMuOracle(resto_PDSolver);
+        }
+        else {
+          resto_FixMuOracle = NULL;
+        }
+        resto_MuUpdate =
+          new AdaptiveMuUpdate(GetRawPtr(resto_LineSearch),
+                               resto_MuOracle, resto_FixMuOracle);
       }
-      SmartPtr<MuOracle> resto_FixMuOracle;
-      if (resto_sfixmuoracle=="loqo") {
-        resto_FixMuOracle = new LoqoMuOracle();
+
+      // Initialization of the iterates for the restoration phase
+      SmartPtr<EqMultiplierCalculator> resto_EqMultCalculator =
+        new LeastSquareMultipliers(*resto_AugSolver);
+      SmartPtr<IterateInitializer> resto_IterInitializer =
+        new RestoIterateInitializer(resto_EqMultCalculator);
+
+      // Create the object for the iteration output during restoration
+      SmartPtr<OrigIterationOutput> resto_OrigIterOutput = NULL;
+      //   new OrigIterationOutput();
+      SmartPtr<IterationOutput> resto_IterOutput =
+        new RestoIterationOutput(resto_OrigIterOutput);
+
+      // Get the Hessian updater for the restoration phase
+      SmartPtr<HessianUpdater> resto_HessUpdater;
+      switch (hessian_approximation) {
+      case EXACT:
+        resto_HessUpdater = new ExactHessianUpdater();
+        break;
+      case LIMITED_MEMORY:
+        // ToDo This needs to be replaced!
+        resto_HessUpdater  = new LimMemQuasiNewtonUpdater(true);
+        break;
       }
-      else if (resto_sfixmuoracle=="probing") {
-        resto_FixMuOracle = new ProbingMuOracle(resto_PDSolver);
+
+      // Put together the overall restoration phase IP algorithm
+      SmartPtr<SearchDirectionCalculator> resto_SearchDirCalc;
+      if (resto_lsacceptor=="filter") {
+        resto_SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(resto_PDSolver));
       }
-      else if (resto_sfixmuoracle=="quality-function") {
-        resto_FixMuOracle = new QualityFunctionMuOracle(resto_PDSolver);
+      else if (resto_lsacceptor=="penalty") {
+        resto_SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(resto_PDSolver));
       }
-      else {
-        resto_FixMuOracle = NULL;
-      }
-      resto_MuUpdate =
-        new AdaptiveMuUpdate(GetRawPtr(resto_LineSearch),
-                             resto_MuOracle, resto_FixMuOracle);
+
+      SmartPtr<IpoptAlgorithm> resto_alg =
+        new IpoptAlgorithm(resto_SearchDirCalc,
+                           GetRawPtr(resto_LineSearch),
+                           GetRawPtr(resto_MuUpdate),
+                           GetRawPtr(resto_convCheck),
+                           resto_IterInitializer,
+                           resto_IterOutput,
+                           resto_HessUpdater,
+                           resto_EqMultCalculator);
+
+      // Set the restoration phase
+      resto_phase =
+        new MinC_1NrmRestorationPhase(*resto_alg, EqMultCalculator);
     }
-
-    // Initialization of the iterates for the restoration phase
-    SmartPtr<EqMultiplierCalculator> resto_EqMultCalculator =
-      new LeastSquareMultipliers(*resto_AugSolver);
-    SmartPtr<IterateInitializer> resto_IterInitializer =
-      new RestoIterateInitializer(resto_EqMultCalculator);
-
-    // Create the object for the iteration output during restoration
-    SmartPtr<OrigIterationOutput> resto_OrigIterOutput = NULL;
-    //   new OrigIterationOutput();
-    SmartPtr<IterationOutput> resto_IterOutput =
-      new RestoIterationOutput(resto_OrigIterOutput);
-
-    // Get the Hessian updater for the restoration phase
-    SmartPtr<HessianUpdater> resto_HessUpdater;
-    switch (hessian_approximation) {
-    case EXACT:
-      resto_HessUpdater = new ExactHessianUpdater();
-      break;
-    case LIMITED_MEMORY:
-      // ToDo This needs to be replaced!
-      resto_HessUpdater  = new LimMemQuasiNewtonUpdater(true);
-      break;
-    }
-
-    // Put together the overall restoration phase IP algorithm
-    SmartPtr<SearchDirectionCalculator> resto_SearchDirCalc;
-    if (resto_lsacceptor=="filter") {
-      resto_SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(resto_PDSolver));
-    }
-    else if (resto_lsacceptor=="penalty") {
-      resto_SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(resto_PDSolver));
-    }
-
-    SmartPtr<IpoptAlgorithm> resto_alg =
-      new IpoptAlgorithm(resto_SearchDirCalc,
-                         GetRawPtr(resto_LineSearch),
-                         GetRawPtr(resto_MuUpdate),
-                         GetRawPtr(resto_convCheck),
-                         resto_IterInitializer,
-                         resto_IterOutput,
-                         resto_HessUpdater,
-                         resto_EqMultCalculator);
-
-    // Set the restoration phase
-    SmartPtr<RestorationPhase> resto_phase =
-      new MinC_1NrmRestorationPhase(*resto_alg, EqMultCalculator);
 
     // Create the line search to be used by the main algorithm
     SmartPtr<BacktrackingLSAcceptor> LSacceptor;
@@ -524,11 +530,13 @@ namespace Ipopt
       new BacktrackingLineSearch(LSacceptor,
                                  GetRawPtr(resto_phase), convCheck);
 
-    // The following cross reference is not good: We have to store a
-    // pointer to the lineSearch object in resto_convCheck as a
-    // non-SmartPtr to make sure that things are properly deleted when
-    // the IpoptAlgorithm return by the Builder is destructed.
-    resto_convCheck->SetOrigFilterLSAcceptor(*FilterLSacceptor);
+    if (IsValid(resto_convCheck)) {
+      // The following cross reference is not good: We have to store a
+      // pointer to the lineSearch object in resto_convCheck as a
+      // non-SmartPtr to make sure that things are properly deleted when
+      // the IpoptAlgorithm return by the Builder is destructed.
+      resto_convCheck->SetOrigFilterLSAcceptor(*FilterLSacceptor);
+    }
 
     // Create the mu update that will be used by the main algorithm
     SmartPtr<MuUpdate> MuUpdate;

@@ -265,7 +265,7 @@ namespace Ipopt
     // restoration phase is entered soon.  This can be over-written
     // by the Acceptor.
     if (!acceptor_->NeverRestorationPhase() && IpCq().IsSquareProblem()) {
-      expect_infeasible_problem_ = true;
+      //expect_infeasible_problem_ = true;
       expect_infeasible_problem_ctol_ = 0.;
     }
 
@@ -287,8 +287,24 @@ namespace Ipopt
     bool goto_resto = false;
     if (fallback_activated_) {
       // In this case, the algorithm had trouble to continue and wants
-      // to call the restoration phase immediately
-      goto_resto = true;
+      // to call the restoration phase immediately if available
+      if (IsValid(resto_phase_)) {
+        goto_resto = true;
+      }
+      else {
+        if (acceptor_->DoFallback()) {
+          in_watchdog_ = false;
+          watchdog_iterate_ = NULL;
+          watchdog_delta_ = NULL;
+          count_successive_shortened_steps_ = 0;
+          watchdog_shortened_iter_ = 0;
+          IpData().Set_info_alpha_primal_char('X');
+        }
+        else {
+          THROW_EXCEPTION(RESTORATION_FAILED,
+                          "We are in an emergency mode, but not restoration phase or other fall back is available.");
+        }
+      }
       fallback_activated_ = false; // reset the flag
     }
     else {
@@ -558,39 +574,42 @@ namespace Ipopt
       }
     }
     else if (!in_soft_resto_phase_ || tiny_step) {
-      // Some line search might have restored a previous iterate.  In that
-      // case we skip the usual ending stuff
-      if (acceptor_->RestoredIterate()) {
+      // we didn't do the restoration phase and are now updating the
+      // dual variables of the trial point
+      Number alpha_dual_max =
+        IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
+                                      *actual_delta->z_L(), *actual_delta->z_U(),
+                                      *actual_delta->v_L(), *actual_delta->v_U());
+
+      PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
+
+      if (n_steps==0) {
+        // accepted this if a full step was
+        // taken
         count_successive_shortened_steps_ = 0;
         watchdog_shortened_iter_ = 0;
       }
       else {
-        // we didn't do the restoration phase and are now updating the
-        // dual variables of the trial point
-        Number alpha_dual_max =
-          IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
-                                        *actual_delta->z_L(), *actual_delta->z_U(),
-                                        *actual_delta->v_L(), *actual_delta->v_U());
+        count_successive_shortened_steps_++;
+        watchdog_shortened_iter_++;
+      }
 
-        PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
+      if (expect_infeasible_problem_ &&
+          IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n", IpCq().curr_constraint_violation());
+        expect_infeasible_problem_ = false;
+      }
 
-        if (n_steps==0) {
-          // accepted this if a full step was
-          // taken
-          count_successive_shortened_steps_ = 0;
-          watchdog_shortened_iter_ = 0;
-        }
-        else {
-          count_successive_shortened_steps_++;
-          watchdog_shortened_iter_++;
-        }
-
-        if (expect_infeasible_problem_ &&
-            IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
-          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                         "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n", IpCq().curr_constraint_violation());
-          expect_infeasible_problem_ = false;
-        }
+      // Some line search might have restored a previous iterate.  In that
+      // case we skip the usual ending stuff
+      if (acceptor_->RestoredIterate()) {
+        in_watchdog_ = false;
+        watchdog_iterate_ = NULL;
+        watchdog_delta_ = NULL;
+        count_successive_shortened_steps_ = 0;
+        watchdog_shortened_iter_ = 0;
+        IpData().Set_info_alpha_primal_char('r');
       }
     }
   }
@@ -1185,11 +1204,6 @@ namespace Ipopt
 
   bool BacktrackingLineSearch::ActivateFallbackMechanism()
   {
-    // If we don't have a restoration phase, we don't know what to do
-    if (IsNull(resto_phase_)) {
-      return false;
-    }
-
     // Reverting to the restoration phase only makes sense if there
     // are constraints
     if (IpData().curr()->y_c()->Dim()+IpData().curr()->y_d()->Dim()==0) {
