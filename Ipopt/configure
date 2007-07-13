@@ -29996,6 +29996,8 @@ fi
 # HARWELL SUBROUTINES #
 #######################
 
+
+
 hslobjdir=../ThirdParty/HSL
 hslsrcdir=$srcdir/$hslobjdir
 
@@ -30017,87 +30019,42 @@ fi;
 
 # First check if there is a working HSL ThirdParty project
 if test "$use_hsl" = BUILD; then
-  as_ac_File=`echo "ac_cv_file_$hslobjdir/Makefile" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $hslobjdir/Makefile" >&5
-echo $ECHO_N "checking for $hslobjdir/Makefile... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$hslobjdir/Makefile"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
+
+if test -r $hslobjdir/Makefile; then
+
   :
 else
   use_hsl=
+  :
 fi
 
 fi
 
 if test "$use_hsl" = BUILD; then
   # First check if there is a working HSL ThirdParty project
-  as_ac_File=`echo "ac_cv_file_$hslobjdir/Makefile" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $hslobjdir/Makefile" >&5
-echo $ECHO_N "checking for $hslobjdir/Makefile... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$hslobjdir/Makefile"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
+
+if test -r $hslobjdir/Makefile; then
+
   :
 else
   use_hsl=unavailable
+  :
 fi
 
 
   if test "$use_hsl" = BUILD; then
     # Check which files are available
-    as_ac_File=`echo "ac_cv_file_$hslsrcdir/ma27ad.f" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $hslsrcdir/ma27ad.f" >&5
-echo $ECHO_N "checking for $hslsrcdir/ma27ad.f... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$hslsrcdir/ma27ad.f"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
+
+if test -r $hslsrcdir/ma27ad.f; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MA27 1
 _ACEOF
  use_MA27=BUILD
+  :
 else
   use_MA27=no
+  :
 fi
 
     ## This test is already done in ThirdParty configure
@@ -30110,88 +30067,43 @@ fi
     #      AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])
     #    fi
     #  fi
-    as_ac_File=`echo "ac_cv_file_$hslsrcdir/mc19ad.f" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $hslsrcdir/mc19ad.f" >&5
-echo $ECHO_N "checking for $hslsrcdir/mc19ad.f... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$hslsrcdir/mc19ad.f"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
+
+if test -r $hslsrcdir/mc19ad.f; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MC19 1
 _ACEOF
  use_MC19=BUILD
+  :
 else
   use_MC19=no
+  :
 fi
 
-    as_ac_File=`echo "ac_cv_file_$hslsrcdir/ma57ad.f" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $hslsrcdir/ma57ad.f" >&5
-echo $ECHO_N "checking for $hslsrcdir/ma57ad.f... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$hslsrcdir/ma57ad.f"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
+
+if test -r $hslsrcdir/ma57ad.f; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MA57 1
 _ACEOF
  use_MA57=BUILD
+  :
 else
   use_MA57=no
+  :
 fi
 
-    as_ac_File=`echo "ac_cv_file_$hslsrcdir/ma28ad.f" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $hslsrcdir/ma28ad.f" >&5
-echo $ECHO_N "checking for $hslsrcdir/ma28ad.f... $ECHO_C" >&6
-if eval "test \"\${$as_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$hslsrcdir/ma28ad.f"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
-if test `eval echo '${'$as_ac_File'}'` = yes; then
+
+if test -r $hslsrcdir/ma28ad.f; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MA28 1
 _ACEOF
  use_MA28=BUILD
+  :
 else
   use_MA28=no
+  :
 fi
 
     coin_need_flibs=yes

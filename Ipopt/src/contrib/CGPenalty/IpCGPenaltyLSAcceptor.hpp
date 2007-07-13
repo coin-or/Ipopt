@@ -1,4 +1,4 @@
-// Copyright (C) 2005 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -106,13 +106,13 @@ namespace Ipopt
     /** Method for setting internal data if the watchdog procedure is
      *  stopped. */
     virtual void StopWatchDog();
-	
+
     /** Method for telling the BacktrackingLineSearch object that
      *  a previous iterate has been restored. */
     virtual bool RestoredIterate();
-	/** Method for telling the BacktrackingLineSearch object that the restoration 
-	* is not needed */
-	virtual bool NeverRestorationPhase();
+    /** Method for telling the BacktrackingLineSearch object that the restoration
+    * is not needed */
+    virtual bool NeverRestorationPhase();
 
     /** Methods for OptionsList */
     //@{
@@ -138,7 +138,7 @@ namespace Ipopt
 
     /** Check if the trial point is acceptable to the piecewise penalty list */
     bool IsAcceptableToPiecewisePenalty(Number alpha_primal_test);
-	
+
     /** Check if the trial point is acceptable by the Armijo condition */
     bool ArmijoHolds(Number alpha_primal_test);
 
@@ -183,13 +183,13 @@ namespace Ipopt
     //@}
     // Number used to indicate that mu has been decreased
     Number pen_curr_mu_;
-    
+
     /** Parameters deciding when the piecewise penalty acceptor shall be closed */
     Number theta_min_;
-    
+
     /** Min step size that triggers nonmonotone method */
     Number min_alpha_primal_;
-    
+
     //@{
     /*Initial constraint violation*/
     Number reference_theta_;
@@ -216,7 +216,7 @@ namespace Ipopt
     /** Check if the multpliers are diverging*/
     Number mult_diverg_feasibility_tol_;
     Number mult_diverg_y_tol_;
-    
+
     /** @name Information related to watchdog procedure */
     //@{
     /** Penalty function at the point with respect to which

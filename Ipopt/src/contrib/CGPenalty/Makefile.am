@@ -38,6 +38,7 @@ ASTYLE_FILES = \
 	IpCGPenaltyData.cppbak IpCGPenaltyData.hppbak \
 	IpCGPenaltyLSAcceptor.cppbak IpCGPenaltyLSAcceptor.hppbak \
 	IpCGPenaltyRegOp.cppbak IpCGPenaltyRegOp.hppbak \
+	IpCGPerturbationHandler.cppbak IpCGPerturbationHandler.hppbak \
 	IpCGSearchDirCalc.cppbak IpCGSearchDirCalc.hppbak \
 	IpPiecewisePenalty.cppbak IpPiecewisePenalty.hppbak
 

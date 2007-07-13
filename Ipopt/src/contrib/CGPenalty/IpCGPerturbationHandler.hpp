@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -118,7 +118,8 @@ namespace Ipopt
     /** @name Handling structural degeneracy */
     //@{
     /** Type for degeneracy flags */
-    enum DegenType {
+    enum DegenType
+    {
       NOT_YET_DETERMINED,
       NOT_DEGENERATE,
       DEGENERATE
@@ -138,7 +139,8 @@ namespace Ipopt
     Index degen_iters_;
 
     /** Status of current trial configuration */
-    enum TrialStatus {
+    enum TrialStatus
+    {
       NO_TEST,
       TEST_DELTA_C_EQ_0_DELTA_X_EQ_0,
       TEST_DELTA_C_GT_0_DELTA_X_EQ_0,
@@ -179,10 +181,10 @@ namespace Ipopt
     bool perturb_always_cd_;
     //@}
 
-	/** The max reference value for scaling the penalty parameter */
-	Number penalty_max_;
-	/** Feasibility for perturbation in pure Newton method*/
-	Number mult_diverg_feasibility_tol_;
+    /** The max reference value for scaling the penalty parameter */
+    Number penalty_max_;
+    /** Feasibility for perturbation in pure Newton method*/
+    Number mult_diverg_feasibility_tol_;
 
     /** @name Auxilliary methods */
     //@{

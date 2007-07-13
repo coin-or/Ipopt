@@ -32,10 +32,10 @@ namespace Ipopt
 
     /** This method must be called to initialize the global
      *  algorithmic parameters.  The parameters are taken from the
-     *  OptionsList object. */    
+     *  OptionsList object. */
     bool Initialize(const Journalist& jnlst,
-		    const OptionsList& options,
-		    const std::string& prefix);
+                    const OptionsList& options,
+                    const std::string& prefix);
 
     /** Initialize Data Structures */
     bool InitializeDataStructures();
@@ -103,7 +103,7 @@ namespace Ipopt
     {
       curr_penalty_pert_ = curr_penalty_pert;
     }
-    
+
     void SetNeverTryPureNewton(Index never_try_pure_Newton)
     {
       never_try_pure_Newton_ = never_try_pure_Newton;
@@ -117,20 +117,20 @@ namespace Ipopt
     {
       return restor_iter_;
     }
-	
+
     void SetRestorIter(Index restor_iter)
     {
       restor_iter_ = restor_iter;
     }
-	Index restor_counter()
-	{
-	  return restor_counter_;
-	}
-	void SetRestorCounter(Index restor_counter)
-	{
-	  restor_counter_ = restor_counter;
-	}
-    
+    Index restor_counter()
+    {
+      return restor_counter_;
+    }
+    void SetRestorCounter(Index restor_counter)
+    {
+      restor_counter_ = restor_counter;
+    }
+
     void SetPrimalStepSize(Number max_alpha_x)
     {
       max_alpha_x_ = max_alpha_x;
@@ -176,7 +176,7 @@ namespace Ipopt
     {
       return kkt_penalty_initialized_;
     }
-    
+
 
   private:
 
@@ -215,8 +215,8 @@ namespace Ipopt
 
     /** The iteration at which pure Newton method is given up*/
     Index restor_iter_;
-	Index restor_counter_;
-    
+    Index restor_counter_;
+
     /**@name  penalty parameters */
     Number curr_penalty_;
     bool penalty_initialized_;
