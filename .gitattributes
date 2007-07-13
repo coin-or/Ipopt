@@ -90,8 +90,12 @@ Ipopt/src/contrib/CGPenalty/IpCGPenaltyLSAcceptor.cpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyLSAcceptor.hpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyRegOp.cpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyRegOp.hpp -text
+Ipopt/src/contrib/CGPenalty/IpCGPerturbationHandler.cpp -text
+Ipopt/src/contrib/CGPenalty/IpCGPerturbationHandler.hpp -text
 Ipopt/src/contrib/CGPenalty/IpCGSearchDirCalc.cpp -text
 Ipopt/src/contrib/CGPenalty/IpCGSearchDirCalc.hpp -text
+Ipopt/src/contrib/CGPenalty/IpPiecewisePenalty.cpp -text
+Ipopt/src/contrib/CGPenalty/IpPiecewisePenalty.hpp -text
 Ipopt/src/contrib/CGPenalty/Makefile.am -text
 Ipopt/src/contrib/CGPenalty/Makefile.in -text
 Ipopt/test/Makefile.am -text

@@ -22,11 +22,23 @@ namespace Ipopt
                                  const OptionsList& options,
                                  const std::string& prefix)
   {
-    penalty_initialized_ = false;
+       
     have_cgpen_deltas_ = false;
     have_cgfast_deltas_ = false;
 
     initialize_called_ = true;
+
+    penalty_initialized_ = false;
+    kkt_penalty_initialized_ = false;
+    have_cgpen_deltas_ = false;
+    have_cgfast_deltas_ = false;
+    curr_penalty_pert_ = 0.;
+    max_alpha_x_ = 1.;
+    never_try_pure_Newton_ = false;
+    restor_iter_ = -1;
+	restor_counter_ = 0;
+	
+    
 
     return true;
   }

@@ -95,6 +95,51 @@ namespace Ipopt
     void AcceptTrialPoint();
     //@}
 
+    Number CurrPenaltyPert()
+    {
+      return curr_penalty_pert_;
+    }
+    void SetCurrPenaltyPert(Number curr_penalty_pert)
+    {
+      curr_penalty_pert_ = curr_penalty_pert;
+    }
+    
+    void SetNeverTryPureNewton(Index never_try_pure_Newton)
+    {
+      never_try_pure_Newton_ = never_try_pure_Newton;
+    }
+    Index NeverTryPureNewton()
+    {
+      return never_try_pure_Newton_;
+    }
+
+    Index restor_iter()
+    {
+      return restor_iter_;
+    }
+	
+    void SetRestorIter(Index restor_iter)
+    {
+      restor_iter_ = restor_iter;
+    }
+	Index restor_counter()
+	{
+	  return restor_counter_;
+	}
+	void SetRestorCounter(Index restor_counter)
+	{
+	  restor_counter_ = restor_counter;
+	}
+    
+    void SetPrimalStepSize(Number max_alpha_x)
+    {
+      max_alpha_x_ = max_alpha_x;
+    }
+    Number PrimalStepSize()
+    {
+      return max_alpha_x_;
+    }
+
     Number curr_penalty() const
     {
       DBG_ASSERT(penalty_initialized_);
@@ -113,6 +158,25 @@ namespace Ipopt
     {
       return penalty_initialized_;
     }
+    Number curr_kkt_penalty() const
+    {
+      DBG_ASSERT(kkt_penalty_initialized_);
+      return curr_kkt_penalty_;
+    }
+    void Set_kkt_penalty(Number kkt_penalty)
+    {
+      curr_kkt_penalty_ = kkt_penalty;
+      kkt_penalty_initialized_ = true;
+    }
+    void SetKKTPenaltyUninitialized()
+    {
+      kkt_penalty_initialized_ = false;
+    }
+    bool KKTPenaltyInitialized() const
+    {
+      return kkt_penalty_initialized_;
+    }
+    
 
   private:
 
@@ -144,10 +208,22 @@ namespace Ipopt
     bool have_cgfast_deltas_;
     //@}
 
-    /**@name current penalty parameter */
+    /** @name penalty method **/
     //@{
+    /** Flag indicating whether the pure Newton method is used */
+    bool never_try_pure_Newton_;
+
+    /** The iteration at which pure Newton method is given up*/
+    Index restor_iter_;
+	Index restor_counter_;
+    
+    /**@name  penalty parameters */
     Number curr_penalty_;
     bool penalty_initialized_;
+    Number curr_kkt_penalty_;
+    bool kkt_penalty_initialized_;
+    Number curr_penalty_pert_;
+    Number max_alpha_x_;
     //@}
 
     /** flag indicating if Initialize method has been called (for

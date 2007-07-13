@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,9 +9,10 @@
 #ifndef __IPCGPENALTYLSACCEPTOR_HPP__
 #define __IPCGPENALTYLSACCEPTOR_HPP__
 
+#include "IpPiecewisePenalty.hpp"
 #include "IpBacktrackingLSAcceptor.hpp"
 #include "IpPDSystemSolver.hpp"
-
+#include "IpIpoptAlg.hpp"
 namespace Ipopt
 {
 
@@ -105,6 +106,13 @@ namespace Ipopt
     /** Method for setting internal data if the watchdog procedure is
      *  stopped. */
     virtual void StopWatchDog();
+	
+    /** Method for telling the BacktrackingLineSearch object that
+     *  a previous iterate has been restored. */
+    virtual bool RestoredIterate();
+	/** Method for telling the BacktrackingLineSearch object that the restoration 
+	* is not needed */
+	virtual bool NeverRestorationPhase();
 
     /** Methods for OptionsList */
     //@{
@@ -127,10 +135,23 @@ namespace Ipopt
     void operator=(const CGPenaltyLSAcceptor&);
     //@}
 
+
+    /** Check if the trial point is acceptable to the piecewise penalty list */
+    bool IsAcceptableToPiecewisePenalty(Number alpha_primal_test);
+	
+    /** Check if the trial point is acceptable by the Armijo condition */
+    bool ArmijoHolds(Number alpha_primal_test);
+
     /** Check comparison "lhs <= rhs", using machine precision based on BasVal */
     //ToDo This should probably not be a static member function if we want to
     //     allow for different relaxation parameters values
     static bool Compare_le(Number lhs, Number rhs, Number BasVal);
+
+    bool CurrentIsBest();
+    void StoreBestPoint();
+    bool RestoreBestPoint();
+    bool MultipliersDiverged();
+    char UpdatePenaltyParameter();
 
     /** @name Parameters for the penalty function algorithm. */
     //@{
@@ -142,7 +163,7 @@ namespace Ipopt
     /** Minimal tolerance for step part in penalty parameter update
      *  rule. */
     Number eta_min_;
-    /** Tolerance for cimplementarity part in penalty parameter update
+    /** Tolerance for complementarity part in penalty parameter update
      *  rule. */
     Number penalty_update_compl_tol_;
     Number chi_hat_;
@@ -152,6 +173,27 @@ namespace Ipopt
     Number gamma_tilde_;
     Number penalty_max_;
     Number epsilon_c_;
+    /** Parameters for piecewise penalty acceptor */
+    Number piecewisepenalty_gamma_obj_;
+    Number piecewisepenalty_gamma_infeasi_;
+    //@{
+    /** Upper bound on infeasibility */
+    Number pen_theta_max_;
+    Number pen_theta_max_fact_;
+    //@}
+    // Number used to indicate that mu has been decreased
+    Number pen_curr_mu_;
+    
+    /** Parameters deciding when the piecewise penalty acceptor shall be closed */
+    Number theta_min_;
+    
+    /** Min step size that triggers nonmonotone method */
+    Number min_alpha_primal_;
+    
+    //@{
+    /*Initial constraint violation*/
+    Number reference_theta_;
+    //@}
     /** Maximal number of second order correction steps */
     Index max_soc_;
     /** Required reduction in constraint violation before trying
@@ -159,13 +201,22 @@ namespace Ipopt
      */
     Number kappa_soc_;
     //@}
-
     /** Counter for increases of penalty parameter. */
-    Index counter_penalty_updates_;
-
+    Index counter_first_type_penalty_updates_;
+    Index counter_second_type_penalty_updates_;
     /** eta parameter */
     Number curr_eta_;
 
+    /** counter for cut backs in the line search*/
+    Index ls_counter_;
+    /** Record the lease KKT error found so far */
+    Number best_KKT_error_;
+    /** Store the iterate with best KKT error found so far */
+    SmartPtr<const IteratesVector> best_iterate_;
+    /** Check if the multpliers are diverging*/
+    Number mult_diverg_feasibility_tol_;
+    Number mult_diverg_y_tol_;
+    
     /** @name Information related to watchdog procedure */
     //@{
     /** Penalty function at the point with respect to which
@@ -174,6 +225,7 @@ namespace Ipopt
     /** Directional derivative of penalty function at the point with
      *  respect to which progress is to be made */
     Number reference_direct_deriv_penalty_function_;
+    Number reference_curr_direct_f_nrm_;
     /** Penalty function at the point with respect to which
      *  progress is to be made (at watchdog point) */
     Number watchdog_penalty_function_;
@@ -184,12 +236,25 @@ namespace Ipopt
      *  update rule for the penalty parameter */
     SmartPtr<const IteratesVector> watchdog_delta_cgpen_;
     //@}
+    /** Flag for whether or not use piecewise penalty line search */
+    bool never_use_piecewise_penalty_ls_;
+    // piecewise penalty list
+    PiecewisePenalty PiecewisePenalty_;
+    /** Flag indicating whether PiecewisePenalty has to be initiailized */
+    bool reset_piecewise_penalty_;
+
+    /** Flag indicating if previous iterate has just been restored */
+    bool just_restored_iterate_;
 
     /** @name Strategy objective that are used */
     //@{
     SmartPtr<PDSystemSolver> pd_solver_;
     //@}
   };
+
+
+
+
 
 } // namespace Ipopt
 
