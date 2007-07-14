@@ -217,10 +217,10 @@ namespace Ipopt
                                     options, prefix)) {
         return false;
       }
-      if (!acceptor_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                 options, prefix)) {
-        return false;
-      }
+    }
+    if (!acceptor_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
+                               options, prefix)) {
+      return false;
     }
 
     rigorous_ = true;
