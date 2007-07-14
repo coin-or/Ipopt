@@ -383,7 +383,7 @@ namespace Ipopt
 
     // We only need a restoration phase object if we use the filter
     // line search
-    if (true || lsmethod=="filter") {
+    if (lsmethod=="filter") {
       // Solver for the restoration phase
       SmartPtr<AugSystemSolver> resto_AugSolver =
         new AugRestoSystemSolver(*AugSolver);
