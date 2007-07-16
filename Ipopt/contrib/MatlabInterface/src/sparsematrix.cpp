@@ -16,7 +16,7 @@ int getSparseMatrixSize (const mxArray* ptr) {
     throw MatlabException("Matlab array must be a sparse matrix");
   
   // Get the width (the number of columns) of the matrix.
-  mwIndex w = mxGetN(ptr);
+  int w = (int) mxGetN(ptr);
   
   // The precise number of non-zero elements is contained in the
   // last entry of the jc array. (There is one jc entry for each
@@ -29,8 +29,8 @@ int isSparseLowerTriangular (const mxArray* ptr) {
   bool islt = true;  // The return value.
 
   // Get the dimensions of the matrix.
-  mwIndex height = mxGetM(ptr);
-  mwIndex width  = mxGetN(ptr);
+  int height = (int) mxGetM(ptr);
+  int width  = (int) mxGetN(ptr);
   
   // Check whether the Matlab array is a proper sparse, N x N
   // matrix.
@@ -44,9 +44,9 @@ int isSparseLowerTriangular (const mxArray* ptr) {
   // indices.
   mwIndex* jc = mxGetJc(ptr);
   mwIndex* ir = mxGetIr(ptr);
-  for (mwIndex c = 0, i = 0; c < width; c++)
-    for ( ; i < jc[c+1]; i++)
-      islt = islt && (c <= ir[i]);
+  for (int c = 0, i = 0; c < width; c++)
+    for ( ; i < (int) jc[c+1]; i++)
+      islt = islt && (c <= (int) ir[i]);
   
   return islt;
 }
@@ -71,8 +71,8 @@ SparseMatrixStructure::SparseMatrixStructure (const mxArray* ptr,
   mwIndex* irMatlab = mxGetIr(ptr);
 
   // Get the height and width of the matrix.
-  h = mxGetM(ptr);
-  w = mxGetN(ptr);
+  h = (int) mxGetM(ptr);
+  w = (int) mxGetN(ptr);
 
   // Get the number of non-zero entries.
   nnz = getSparseMatrixSize(ptr);
@@ -81,7 +81,7 @@ SparseMatrixStructure::SparseMatrixStructure (const mxArray* ptr,
     owner = true;
     
     // Copy the row and column indices.
-    jc = new mwIndex[w + 1];
+    jc = new mwIndex[w+1];
     ir = new mwIndex[nnz];
     copymemory(jcMatlab,jc,w+1);
     copymemory(irMatlab,ir,nnz);
@@ -95,10 +95,10 @@ SparseMatrixStructure::SparseMatrixStructure (const mxArray* ptr,
   // For the proper functioning of a sparse matrix object, it is
   // necessary that the row indices be in increasing order.
   bool inIncOrder = true;
-  for (mwIndex c = 0, i = 0; c < w; c++)
+  for (int c = 0, i = 0; c < w; c++)
     if (size(c)) {
       i++;
-      for ( ; i < jc[c+1]; i++)
+      for ( ; i < (int) jc[c+1]; i++)
 	inIncOrder = inIncOrder & (ir[i] > ir[i-1]);
     }    
   if (!inIncOrder)
@@ -125,7 +125,7 @@ SparseMatrixStructure::~SparseMatrixStructure() {
   }
 }
 
-mwIndex SparseMatrixStructure::size (mwIndex c) const {
+int SparseMatrixStructure::size (int c) const {
   return jc[c+1] - jc[c];
 }
 
@@ -134,8 +134,8 @@ const {
        
   // Repeat for each column in the matrix, then repeat for each
   // non-zero entry in the current column.
-  for (mwIndex c = 0, i = 0; c < w; c++)
-    for ( ; i < jc[c+1]; i++) {
+  for (int c = 0, i = 0; c < w; c++)
+    for ( ; i < (int) jc[c+1]; i++) {
       cols[i] = (int) c;
       rows[i] = (int) ir[i];
     }
@@ -158,7 +158,7 @@ a different width than destination");
 more non-zero elements than destination");
 
   // Initialize the destination values to zero.
-  for (mwIndex i = 0; i < destStructure.size(); i++)
+  for (int i = 0; i < destStructure.size(); i++)
     destValues[i] = 0;
 
   // In order to properly copy the elements from one sparse matrix to
@@ -169,11 +169,11 @@ more non-zero elements than destination");
   // Repeat for each column. The index of the current element from
   // the source matrix is represented by i, and the index of the
   // current element in the destination is represented by j.
-  mwIndex i = 0, j = 0;
-  for (mwIndex c = 0; c < destStructure.w; c++) {
+  int i = 0, j = 0;
+  for (int c = 0; c < destStructure.w; c++) {
 
     // Repeat for each non-zero element in the destination column.
-    for ( ; j < destStructure.jc[c+1]; j++) {
+    for ( ; j < (int) destStructure.jc[c+1]; j++) {
 
       // Let's check to see if the source column matches the
       // destination column, and the source row matches the
@@ -186,8 +186,8 @@ more non-zero elements than destination");
       // assumption we move faster through the source matrix than we
       // do through the destination matrix.)
       matchrow = (sourceStructure.ir[i] == destStructure.ir[j]);
-      matchcol = (i >= sourceStructure.jc[c]) && 
-	         (i <  sourceStructure.jc[c+1]);
+      matchcol = (i >= (int) sourceStructure.jc[c]) && 
+	         (i <  (int) sourceStructure.jc[c+1]);
       match    = matchrow && matchcol;
 
       // If the row & column indices match, then we copy the source
