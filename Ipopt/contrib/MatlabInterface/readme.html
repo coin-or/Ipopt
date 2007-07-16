@@ -29,9 +29,9 @@ cellpadding=0>
 <tr><td valign=top>
 
 <center><h2>How to install and use the MATLAB interface for IPOPT</h2>
-Peter Carbonetto<br>
+<p>Peter Carbonetto<br>
 Department of Computer Science<br>
-University of British Columbia
+University of British Columbia</p>
 </center>
 
 <p><a href="https://projects.coin-or.org/Ipopt">IPOPT</a> is a
@@ -114,7 +114,7 @@ call should look something like</p>
 computer running Mac OS X 10.3.9 and MATLAB 7.2. For this machine, we
 ran the fconfigure script with the following command:</p>
 
-<p><code><pre>  ./configure --prefix=/Users/pcarbo/Desktop/ipopt/install        \
+<p><code><pre>  ./configure --prefix=$HOME/ipopt/install          \
     ADD_CFLAGS="-fno-common -fexceptions -no-cpp-precomp -fPIC"   \
     ADD_CXXFLAGS="-fno-common -fexceptions -no-cpp-precomp -fPIC" \
     ADD_FFLAGS="-x f77-cpp-input -fPIC -fno-common"               \
@@ -176,6 +176,14 @@ can also achieve the same thing by modifying the
 <code>MATLABPATH</code> environment variable in the UNIX command line,
 using either the <code>export</code> command (in Bash shell), or the
 <code>setenv</code> command (in C-shell).</p>
+
+<p><b>A note on 64-bit platforms.</b> Starting with version 7.3, 
+MATLAB can handle 64-bit addressing, and the authors of MATLAB have 
+modified the implementation of sparse matrices to reflect this change. 
+However, the row and column indices in the sparse matrix are converted to
+signed integers, and this could potentially cause problems when dealing 
+with large, sparse matrices on 64-bit platforms with MATLAB version 
+7.3 or greater.</p>
 
 <a name="tutorial"><h3>Tutorial by example</h3>
 
@@ -405,12 +413,28 @@ that you didn't link the MEX file properly. In this case, executing
 IPOPT in MATLAB will cause MATLAB to crash. This is a common problem,
 and usually arises because you did not choose the proper compiler or
 set the proper compilation flags (e.g. <code>-fPIC</code>) when you
-ran the <code>configure</code> script at the very beginning.</p>
+ran the <code>configure</code> script at the very beginning.
+
+<li><b>MATLAB fails to link to IPOPT shared library.</b> You might 
+encounter this problem if you try to execute one of the examples in 
+MATLAB, and MATLAB complains that it cannot find the IPOPT shared 
+library. The installation script has been set up so that the MEX file 
+you are calling knows where to look for the IPOPT shared library.
+However, if you moved the library then you will run into a problem.
+One way to fix this problem is to modify the <code>LDFLAGS</code> 
+variable in the MATLAB interface Makefile (see above) so that the 
+correct path of the IPOPT library is specified. Alternatively, you 
+could modify the <code>LD_LIBRARY_PATH</code>
+environment variable so that the location of the IPOPT library is
+included in the path. If none of this is familiar to you, you might 
+want to do a web search to find out more.
 
 <li><b>&quot;mwIndex&quot; is not defined.</b> You may get a
 compilation error that says something to the effect that mwIndex is
-not defined. This error will surface on version of MATLAB prior to
-7.3.
+not defined. This error will surface on a version of MATLAB prior to
+7.3. The solution is to add the flag <code>-DMWINDEXISINT</code> to 
+the <code>CXXFLAGS</code> variable in the MATLAB interface Makefile 
+(see above).
 
 </ul>
 
