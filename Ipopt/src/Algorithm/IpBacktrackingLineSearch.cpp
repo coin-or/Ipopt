@@ -299,6 +299,8 @@ namespace Ipopt
           count_successive_shortened_steps_ = 0;
           watchdog_shortened_iter_ = 0;
           IpData().Set_info_alpha_primal_char('X');
+          fallback_activated_ = false;
+          return;
         }
         else {
           THROW_EXCEPTION(RESTORATION_FAILED,
