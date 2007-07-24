@@ -533,7 +533,14 @@ namespace Ipopt
   }
 
   ApplicationReturnStatus
-  IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp, SmartPtr<AlgorithmBuilder> alg_builder)
+  IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp)
+  {
+    SmartPtr<AlgorithmBuilder> alg_builder = NULL;
+    return OptimizeNLP(nlp, alg_builder);
+  }
+
+  ApplicationReturnStatus
+  IpoptApplication::OptimizeNLP(const SmartPtr<NLP>& nlp, SmartPtr<AlgorithmBuilder>& alg_builder)
   {
     ApplicationReturnStatus retValue = Internal_Error;
 
