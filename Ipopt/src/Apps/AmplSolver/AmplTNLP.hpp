@@ -35,8 +35,74 @@ struct SufDesc;
 
 namespace Ipopt
 {
-  /* forward declarations */
-  class AmplSuffixHandler;
+  class AmplSuffixHandler : public ReferencedObject
+  {
+  public:
+    AmplSuffixHandler();
+
+    ~AmplSuffixHandler();
+
+    enum Suffix_Type
+    {
+      Index_Type,
+      Number_Type
+    };
+
+    enum Suffix_Source
+    {
+      Variable_Source,
+      Constraint_Source,
+      Objective_Source,
+      Problem_Source
+    };
+
+    void AddAvailableSuffix(std::string suffix_string, Suffix_Source source, Suffix_Type type)
+    {
+      suffix_ids_.push_back(suffix_string);
+      suffix_types_.push_back(type);
+      suffix_sources_.push_back(source);
+      //      suffix_values_.push_back();
+    }
+
+    const Index* GetIntegerSuffixValues(std::string suffix_string, Suffix_Source source) const;
+
+    const Number* GetNumberSuffixValues(std::string suffix_string, Suffix_Source source) const;
+
+  private:
+    /**@name Default Compiler Generated Methods
+     * (Hidden to avoid implicit creation/calling).
+     * These methods are not implemented and 
+     * we do not want the compiler to implement
+     * them for us, so we declare them private
+     * and do not define them. This ensures that
+     * they will not be implicitly created/called. */
+    //@{
+    /** Default Constructor */
+    //AmplSuffixHandler();
+
+    /** Copy Constructor */
+    AmplSuffixHandler(const AmplSuffixHandler&);
+
+    /** Overloaded Equals Operator */
+    void operator=(const AmplSuffixHandler&);
+    //@}
+
+    mutable ASL_pfgh* asl_;
+
+    SufDecl* suftab_;
+
+    std::vector<std::string> suffix_ids_;
+    std::vector<Suffix_Type> suffix_types_;
+    std::vector<Suffix_Source> suffix_sources_;
+
+    /** Method called by AmplTNLP to prepare the asl for the suffixes */
+    void PrepareAmplForSuffixes(ASL_pfgh* asl);
+
+    /** Method called by AmplTNLP to retrieve the suffixes from asl */
+    //    void RetrieveSuffixesFromAmpl(ASL_pfgh* asl);
+
+    friend class AmplTNLP;
+  };
 
   /** Class for storing a number of AMPL options that should be
    *  registered to the AMPL Solver library interface */
@@ -445,75 +511,6 @@ namespace Ipopt
     void call_hesset();
   };
 
-
-  class AmplSuffixHandler : public ReferencedObject
-  {
-  public:
-    AmplSuffixHandler();
-
-    ~AmplSuffixHandler();
-
-    enum Suffix_Type
-    {
-      Index_Type,
-      Number_Type
-    };
-
-    enum Suffix_Source
-    {
-      Variable_Source,
-      Constraint_Source,
-      Objective_Source,
-      Problem_Source
-    };
-
-    void AddAvailableSuffix(std::string suffix_string, Suffix_Source source, Suffix_Type type)
-    {
-      suffix_ids_.push_back(suffix_string);
-      suffix_types_.push_back(type);
-      suffix_sources_.push_back(source);
-      //      suffix_values_.push_back();
-    }
-
-    const Index* GetIntegerSuffixValues(std::string suffix_string, Suffix_Source source) const;
-
-    const Number* GetNumberSuffixValues(std::string suffix_string, Suffix_Source source) const;
-
-  private:
-    /**@name Default Compiler Generated Methods
-     * (Hidden to avoid implicit creation/calling).
-     * These methods are not implemented and 
-     * we do not want the compiler to implement
-     * them for us, so we declare them private
-     * and do not define them. This ensures that
-     * they will not be implicitly created/called. */
-    //@{
-    /** Default Constructor */
-    //AmplSuffixHandler();
-
-    /** Copy Constructor */
-    AmplSuffixHandler(const AmplSuffixHandler&);
-
-    /** Overloaded Equals Operator */
-    void operator=(const AmplSuffixHandler&);
-    //@}
-
-    mutable ASL_pfgh* asl_;
-
-    SufDecl* suftab_;
-
-    std::vector<std::string> suffix_ids_;
-    std::vector<Suffix_Type> suffix_types_;
-    std::vector<Suffix_Source> suffix_sources_;
-
-    /** Method called by AmplTNLP to prepare the asl for the suffixes */
-    void PrepareAmplForSuffixes(ASL_pfgh* asl);
-
-    /** Method called by AmplTNLP to retrieve the suffixes from asl */
-    //    void RetrieveSuffixesFromAmpl(ASL_pfgh* asl);
-
-    friend class AmplTNLP;
-  };
 
 
 } // namespace Ipopt
