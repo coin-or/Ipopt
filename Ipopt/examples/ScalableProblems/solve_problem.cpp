@@ -91,6 +91,9 @@ REGISTER_TNLP(MittelmannBndryCntrlDiri2, MBndryCntrl2)
 REGISTER_TNLP(MittelmannBndryCntrlDiri3, MBndryCntrl3)
 REGISTER_TNLP(MittelmannBndryCntrlDiri4, MBndryCntrl4)
 
+#include "MittelmannBndryCntrlDiri3D.hpp"
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D, MBndryCntrl_3D)
+
 #include "MittelmannBndryCntrlNeum.hpp"
 REGISTER_TNLP(MittelmannBndryCntrlNeum1, MBndryCntrl5)
 REGISTER_TNLP(MittelmannBndryCntrlNeum2, MBndryCntrl6)

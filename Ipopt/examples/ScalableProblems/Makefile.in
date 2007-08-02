@@ -46,6 +46,7 @@ LIBOBJS =  \
         MittelmannDistCntrlNeumB.@OBJEXT@ \
         MittelmannDistCntrlDiri.@OBJEXT@ \
         MittelmannBndryCntrlDiri.@OBJEXT@ \
+        MittelmannBndryCntrlDiri3D.@OBJEXT@ \
         MittelmannBndryCntrlNeum.@OBJEXT@ \
         LuksanVlcek1.@OBJEXT@ \
         LuksanVlcek2.@OBJEXT@ \
@@ -75,6 +76,7 @@ MittelmannDistCntrlNeumA.@OBJEXT@: MittelmannDistCntrlNeumA.hpp
 MittelmannDistCntrlNeumB.@OBJEXT@: MittelmannDistCntrlNeumB.hpp
 MittelmannDistCntrlDiri.@OBJEXT@: MittelmannDistCntrlDiri.hpp
 MittelmannBndryCntrlDiri.@OBJEXT@: MittelmannBndryCntrlDiri.hpp
+MittelmannBndryCntrlDiri3D.@OBJEXT@: MittelmannBndryCntrlDiri3D.hpp
 MittelmannBndryCntrlNeum.@OBJEXT@: MittelmannBndryCntrlNeum.hpp
 
 solve_problem.@OBJEXT@: \
@@ -89,6 +91,7 @@ solve_problem.@OBJEXT@: \
 	MittelmannDistCntrlNeumB.hpp \
 	MittelmannDistCntrlDiri.hpp \
 	MittelmannBndryCntrlDiri.hpp \
+	MittelmannBndryCntrlDiri3D.hpp \
 	MittelmannBndryCntrlNeum.hpp \
 	MittelmannParaCntrl.hpp
 
