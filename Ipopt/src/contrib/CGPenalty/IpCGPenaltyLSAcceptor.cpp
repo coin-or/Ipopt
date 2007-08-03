@@ -12,6 +12,7 @@
 #include "IpJournalist.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpAlgTypes.hpp"
+#include "IpCGPenaltyData.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>

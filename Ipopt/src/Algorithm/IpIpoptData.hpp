@@ -14,13 +14,13 @@
 #include "IpIteratesVector.hpp"
 #include "IpRegOptions.hpp"
 #include "IpTimingStatistics.hpp"
-#include "IpCGPenaltyData.hpp"
 
 namespace Ipopt
 {
 
   /* Forward declaration */
   class IpoptNLP;
+  class CGPenaltyData;
 
   /** Class to organize all the data required by the algorithm.
    *  Internally, once this Data object has been initialized, all
@@ -391,7 +391,7 @@ namespace Ipopt
     /** Get access to the Chen-Goldbarb penalty method specific data */
     CGPenaltyData& CGPenData()
     {
-      return cgpen_data_;
+      return *cgpen_data_;
     }
 
     /** Methods for IpoptType */
@@ -505,7 +505,7 @@ namespace Ipopt
 
     /** Object for the data specific for the Chen-Goldfarb penalty
      *  method algorithm */
-    CGPenaltyData cgpen_data_;
+    CGPenaltyData* const cgpen_data_;
 
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
