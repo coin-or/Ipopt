@@ -11,7 +11,6 @@
 
 #include "IpIpoptNLP.hpp"
 #include "IpIpoptData.hpp"
-#include "IpCGPenaltyCq.hpp"
 
 namespace Ipopt
 {
