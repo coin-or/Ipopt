@@ -165,6 +165,9 @@ namespace Ipopt
         debug_print_level = print_level;
       }
       SmartPtr<Journal> debug_jrnl = jnlst_->GetJournal("Debug");
+      if (IsNull(debug_jrnl)) {
+        debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_ITERSUMMARY);
+      }
       debug_jrnl->SetAllPrintLevels(debug_print_level);
       debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
 #endif
