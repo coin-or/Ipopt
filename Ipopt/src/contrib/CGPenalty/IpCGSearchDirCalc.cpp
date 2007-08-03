@@ -7,6 +7,7 @@
 // Authors:  Andreas Waechter                 IBM    2005-10-13
 //               derived from IpIpoptAlg.cpp
 
+#include "IpCGPenaltyData.hpp"
 #include "IpCGSearchDirCalc.hpp"
 
 #ifdef HAVE_CMATH
