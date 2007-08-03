@@ -8,6 +8,7 @@
 //               derived from IpIpoptAlg.cpp
 
 #include "IpCGPenaltyData.hpp"
+#include "IpCGPenaltyCq.hpp"
 #include "IpCGSearchDirCalc.hpp"
 
 #ifdef HAVE_CMATH
