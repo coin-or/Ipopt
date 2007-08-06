@@ -36,7 +36,7 @@ namespace Ipopt
     max_alpha_x_ = 1.;
     never_try_pure_Newton_ = false;
     restor_iter_ = -1;
-    restor_counter_ = 0;
+    restor_counter_ = 0.;
 
 
 

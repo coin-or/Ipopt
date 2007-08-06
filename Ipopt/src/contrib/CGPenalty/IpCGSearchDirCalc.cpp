@@ -97,6 +97,12 @@ namespace Ipopt
       "the line search direction (for Chen-Goldfarb line search).",
       0.0, true, 1e-1,
       "");
+    roptions->AddLowerBoundedNumberOption(
+      "pen_init_fac",
+      "a parameter used to choose initial penalty parameters"
+      "when the regularized Newton method is used.",
+      0.0, true, 5e1,
+      "");
     roptions->AddStringOption2(
       "never_use_fact_cgpen_direction",
       "Toggle to switch off the fast Chen-Goldfarb direction",
@@ -118,6 +124,7 @@ namespace Ipopt
     options.GetNumericValue("delta_y_max", delta_y_max_, prefix);
     options.GetNumericValue("fast_des_fact", fast_des_fact_, prefix);
     options.GetNumericValue("pen_des_fact", pen_des_fact_, prefix);
+    options.GetNumericValue("pen_init_fac", pen_init_fac_, prefix);
     options.GetBoolValue("never_use_fact_cgpen_direction",
                          never_use_fact_cgpen_direction_, prefix);
     options.GetNumericValue("penalty_init_min", penalty_init_min_, prefix);
@@ -162,8 +169,11 @@ namespace Ipopt
         penalty_init =  Max(penalty_init_min_, Min(y_max, penalty_init_max_));
       }
       else {
-        penalty_init = IpCq().CGPenCq().compute_curr_cg_penalty_scale();
-        penalty_init = Max(penalty_init_min_, Min(penalty_init, penalty_init_max_));
+	// penalty_init = IpCq().CGPenCq().compute_curr_cg_penalty_scale();
+	// penalty_init = Max(penalty_init_min_, Min(penalty_init, penalty_init_max_));
+	// For the moment,let's just not do scale
+        penalty_init = 1e2*IpCq().curr_primal_infeasibility(NORM_2);
+        penalty_init = Min(1e5, Max(1e1,penalty_init));
         kkt_penalty_init = penalty_init;
       }
       IpData().CGPenData().Set_penalty(penalty_init);
@@ -176,6 +186,7 @@ namespace Ipopt
                      kkt_penalty_init);
     }
     else {
+      /*
       if (IpData().CGPenData().NeverTryPureNewton()) {
         // If pure Newton method is not used, adjust the penalty para for
         // purposes of well scaling the KKT system.
@@ -194,6 +205,16 @@ namespace Ipopt
           IpData().CGPenData().Set_kkt_penalty(penalty_new);
 
         }
+	}*/
+      
+      if (IpData().CGPenData().restor_iter() == IpData().iter_count()) {
+	Number i = IpData().CGPenData().restor_counter();
+	Number fac = pen_init_fac_*pow(1e-1, i);
+	//Number restor_penalty_init = fac*IpCq().curr_primal_infeasibility(NORM_2);
+	Number restor_penalty_init = fac;
+	restor_penalty_init = Min(1e6, Max(1e1,restor_penalty_init));
+	IpData().CGPenData().Set_penalty(restor_penalty_init);
+        IpData().CGPenData().Set_kkt_penalty(restor_penalty_init);
       }
     }
 
