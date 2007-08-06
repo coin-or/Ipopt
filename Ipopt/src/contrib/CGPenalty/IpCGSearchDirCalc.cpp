@@ -169,9 +169,9 @@ namespace Ipopt
         penalty_init =  Max(penalty_init_min_, Min(y_max, penalty_init_max_));
       }
       else {
-	// penalty_init = IpCq().CGPenCq().compute_curr_cg_penalty_scale();
-	// penalty_init = Max(penalty_init_min_, Min(penalty_init, penalty_init_max_));
-	// For the moment,let's just not do scale
+        // penalty_init = IpCq().CGPenCq().compute_curr_cg_penalty_scale();
+        // penalty_init = Max(penalty_init_min_, Min(penalty_init, penalty_init_max_));
+        // For the moment,let's just not do scale
         penalty_init = 1e2*IpCq().curr_primal_infeasibility(NORM_2);
         penalty_init = Min(1e5, Max(1e1,penalty_init));
         kkt_penalty_init = penalty_init;
@@ -205,15 +205,15 @@ namespace Ipopt
           IpData().CGPenData().Set_kkt_penalty(penalty_new);
 
         }
-	}*/
-      
+      }*/
+
       if (IpData().CGPenData().restor_iter() == IpData().iter_count()) {
-	Number i = IpData().CGPenData().restor_counter();
-	Number fac = pen_init_fac_*pow(1e-1, i);
-	//Number restor_penalty_init = fac*IpCq().curr_primal_infeasibility(NORM_2);
-	Number restor_penalty_init = fac;
-	restor_penalty_init = Min(1e6, Max(1e1,restor_penalty_init));
-	IpData().CGPenData().Set_penalty(restor_penalty_init);
+        Number i = IpData().CGPenData().restor_counter();
+        Number fac = pen_init_fac_*pow(1e-1, i);
+        //Number restor_penalty_init = fac*IpCq().curr_primal_infeasibility(NORM_2);
+        Number restor_penalty_init = fac;
+        restor_penalty_init = Min(1e6, Max(1e1,restor_penalty_init));
+        IpData().CGPenData().Set_penalty(restor_penalty_init);
         IpData().CGPenData().Set_kkt_penalty(restor_penalty_init);
       }
     }
