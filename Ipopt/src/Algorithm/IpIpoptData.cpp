@@ -8,15 +8,20 @@
 
 #include "IpIpoptData.hpp"
 #include "IpIpoptNLP.hpp"
+#include "IpCGPenaltyData.hpp"
 
 namespace Ipopt
 {
 
   IpoptData::IpoptData()
+      :
+      cgpen_data_(new CGPenaltyData())
   {}
 
   IpoptData::~IpoptData()
-  {}
+  {
+    delete cgpen_data_;
+  }
 
   void IpoptData::RegisterOptions(const SmartPtr<RegisteredOptions>& roptions)
   {
@@ -67,7 +72,7 @@ namespace Ipopt
 
     initialize_called_ = true;
 
-    return cgpen_data_.Initialize(jnlst, options, prefix);
+    return cgpen_data_->Initialize(jnlst, options, prefix);
   }
 
   bool IpoptData::InitializeDataStructures(IpoptNLP& ip_nlp,
@@ -142,7 +147,7 @@ namespace Ipopt
     have_deltas_ = false;
     have_affine_deltas_ = false;
 
-    return cgpen_data_.InitializeDataStructures();
+    return cgpen_data_->InitializeDataStructures();
   }
 
   void IpoptData::SetTrialPrimalVariablesFromStep(Number alpha,
@@ -230,7 +235,7 @@ namespace Ipopt
     have_deltas_ = false;
     have_affine_deltas_ = false;
 
-    cgpen_data_.AcceptTrialPoint();
+    cgpen_data_->AcceptTrialPoint();
   }
 
 } // namespace Ipopt

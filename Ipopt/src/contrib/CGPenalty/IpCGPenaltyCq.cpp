@@ -8,6 +8,7 @@
 //               derived from IpIpoptCalculatedQuantities.cpp
 
 #include "IpCGPenaltyCq.hpp"
+#include "IpCGPenaltyData.hpp"
 #include "IpTripletHelper.hpp"
 
 #ifdef HAVE_CMATH
