@@ -242,7 +242,8 @@ namespace Ipopt
       MIN_DUAL_INFEAS_ALPHA_FOR_Y,
       SAFE_MIN_DUAL_INFEAS_ALPHA_FOR_Y,
       PRIMAL_AND_FULL_ALPHA_FOR_Y,
-      DUAL_AND_FULL_ALPHA_FOR_Y
+      DUAL_AND_FULL_ALPHA_FOR_Y,
+      LSACCEPTOR_ALPHA_FOR_Y
     };
     /** Flag indicating whether the dual step size is to be used for
      *  the equality constraint multipliers. If 0, the primal step

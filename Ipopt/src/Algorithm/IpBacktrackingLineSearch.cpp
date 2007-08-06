@@ -81,7 +81,7 @@ namespace Ipopt
       "and makes the algorithm take aggressive steps, without global "
       "convergence guarantees.");
 
-    roptions->AddStringOption9(
+    roptions->AddStringOption10(
       "alpha_for_y",
       "Method to determine the step size for constraint multipliers.",
       "primal",
@@ -94,6 +94,7 @@ namespace Ipopt
       "safe_min_dual_infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
       "primal-and-full", "use the primal step size, and full step if delta_x <= alpga_for_y_tol",
       "dual-and-full", "use the dual step size, and full step if delta_x <= alpga_for_y_tol",
+      "acceptor", "Call LSAcceptor to get step size for y",
       "This option determines how the step size (alpha_y) will be calculated when updating the "
       "constraint multipliers.");
     roptions->AddLowerBoundedNumberOption(
@@ -837,6 +838,9 @@ namespace Ipopt
 
     Number alpha_y=-1.;
     switch (alpha_for_y_) {
+    case LSACCEPTOR_ALPHA_FOR_Y:
+      alpha_y = acceptor_->ComputeAlphaForY(alpha_primal, alpha_dual, delta);
+      break;
     case PRIMAL_ALPHA_FOR_Y:
     case PRIMAL_AND_FULL_ALPHA_FOR_Y:
       alpha_y = alpha_primal;
@@ -900,7 +904,7 @@ namespace Ipopt
         alpha_y = Min(1., Max(0., alpha));
       }
       break;
-    }
+    } //switch (alpha_for_y)
 
     // Set the eq multipliers from the step now that alpha_y
     // has been calculated.

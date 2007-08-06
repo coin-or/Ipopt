@@ -232,8 +232,8 @@ namespace Ipopt
         DBG_ASSERT(jac_degenerate_ == NOT_YET_DETERMINED);
         //if (!perturb_always_cd_) {
         delta_d_curr_ = delta_c_curr_ =
-                         Max(delta_cd(), IpCq().CGPenCq().curr_cg_pert_fact());
-	//delta_d_curr_ = delta_c_curr_ =
+                          Max(delta_cd(), IpCq().CGPenCq().curr_cg_pert_fact());
+        //delta_d_curr_ = delta_c_curr_ =
         //                 Max(delta_cd(), IpCq().CGPenCq().curr_cg_pert_fact());
         if (delta_d_curr_ < delta_cd()) {
           test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
@@ -263,7 +263,7 @@ namespace Ipopt
       case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
         DBG_ASSERT(delta_x_curr_ > 0. && delta_c_curr_ == 0.);
         delta_d_curr_ = delta_c_curr_ = Max(delta_cd(), IpCq().CGPenCq().curr_cg_pert_fact());
-	//delta_d_curr_ = delta_c_curr_ = IpCq().CGPenCq().curr_cg_pert_fact();
+        //delta_d_curr_ = delta_c_curr_ = IpCq().CGPenCq().curr_cg_pert_fact();
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
         if (!retval) {
@@ -308,7 +308,7 @@ namespace Ipopt
           penalty = Min(penalty_max_, Max(penalty,
                                           IpData().CGPenData().curr_kkt_penalty()));
           IpData().CGPenData().Set_kkt_penalty(penalty);
-	  Number mach_pro = std::numeric_limits<Number>::epsilon();
+          Number mach_pro = std::numeric_limits<Number>::epsilon();
           delta_d_curr_ = delta_c_curr_ =
                             Max(1e3*mach_pro,Max(IpCq().CGPenCq().curr_cg_pert_fact(),delta_cd()));
           IpData().Append_info_string("u");
