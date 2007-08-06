@@ -151,9 +151,9 @@ namespace Ipopt
         || IpData().CGPenData().NeverTryPureNewton()
         || perturb_always_cd_) {
       Number mach_eps = std::numeric_limits<Number>::epsilon();
-      if (pert_fact < 10.*mach_eps
+      if (pert_fact < 100.*mach_eps
           && jac_degenerate_ == DEGENERATE) {
-        delta_c = delta_c_curr_ = 10.*mach_eps;
+        delta_c = delta_c_curr_ = 100.*mach_eps;
       }
       else {
         delta_c = delta_c_curr_ = pert_fact;
@@ -232,7 +232,9 @@ namespace Ipopt
         DBG_ASSERT(jac_degenerate_ == NOT_YET_DETERMINED);
         //if (!perturb_always_cd_) {
         delta_d_curr_ = delta_c_curr_ =
-                          IpCq().CGPenCq().curr_cg_pert_fact();
+                         Max(delta_cd(), IpCq().CGPenCq().curr_cg_pert_fact());
+	//delta_d_curr_ = delta_c_curr_ =
+        //                 Max(delta_cd(), IpCq().CGPenCq().curr_cg_pert_fact());
         if (delta_d_curr_ < delta_cd()) {
           test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         }
@@ -260,7 +262,8 @@ namespace Ipopt
         break;
       case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
         DBG_ASSERT(delta_x_curr_ > 0. && delta_c_curr_ == 0.);
-        delta_d_curr_ = delta_c_curr_ = delta_cd();
+        delta_d_curr_ = delta_c_curr_ = Max(delta_cd(), IpCq().CGPenCq().curr_cg_pert_fact());
+	//delta_d_curr_ = delta_c_curr_ = IpCq().CGPenCq().curr_cg_pert_fact();
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
         if (!retval) {
@@ -305,8 +308,9 @@ namespace Ipopt
           penalty = Min(penalty_max_, Max(penalty,
                                           IpData().CGPenData().curr_kkt_penalty()));
           IpData().CGPenData().Set_kkt_penalty(penalty);
+	  Number mach_pro = std::numeric_limits<Number>::epsilon();
           delta_d_curr_ = delta_c_curr_ =
-                            Max(IpCq().CGPenCq().curr_cg_pert_fact(),delta_cd());
+                            Max(1e3*mach_pro,Max(IpCq().CGPenCq().curr_cg_pert_fact(),delta_cd()));
           IpData().Append_info_string("u");
         }
       }

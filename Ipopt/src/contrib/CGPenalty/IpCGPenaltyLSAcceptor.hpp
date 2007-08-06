@@ -192,6 +192,11 @@ namespace Ipopt
     /** Parameters deciding when the piecewise penalty acceptor shall be closed */
     Number theta_min_;
 
+    /** Flag indicating whether the trial point is accepted by the Armijo
+     *  condition or the PLPF condition 
+     */
+    bool accepted_by_Armijo_;
+
     /** Min step size that triggers nonmonotone method */
     Number min_alpha_primal_;
 
@@ -247,6 +252,8 @@ namespace Ipopt
     PiecewisePenalty PiecewisePenalty_;
     /** Flag indicating whether PiecewisePenalty has to be initiailized */
     bool reset_piecewise_penalty_;
+
+    Index jump_for_tiny_step_;
 
     /** @name Strategy objective that are used */
     //@{

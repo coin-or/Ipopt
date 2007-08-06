@@ -122,11 +122,11 @@ namespace Ipopt
     {
       restor_iter_ = restor_iter;
     }
-    Index restor_counter()
+    Number restor_counter()
     {
       return restor_counter_;
     }
-    void SetRestorCounter(Index restor_counter)
+    void SetRestorCounter(Number restor_counter)
     {
       restor_counter_ = restor_counter;
     }
@@ -215,7 +215,7 @@ namespace Ipopt
 
     /** The iteration at which pure Newton method is given up*/
     Index restor_iter_;
-    Index restor_counter_;
+    Number restor_counter_;
 
     /**@name  penalty parameters */
     Number curr_penalty_;

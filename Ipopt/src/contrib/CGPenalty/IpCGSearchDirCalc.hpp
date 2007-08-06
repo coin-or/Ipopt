@@ -94,6 +94,7 @@ namespace Ipopt
     Number vartheta_;
     Number delta_y_max_;
     Number fast_des_fact_;
+    Number pen_init_fac_;
 
     /** Flag indicating whether the fast Chen-Goldfarb direction
      *  should never be used */
