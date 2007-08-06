@@ -9,6 +9,8 @@
 //               derived file from IpFilterLineSearch.cpp
 
 #include "IpCGPenaltyLSAcceptor.hpp"
+#include "IpCGPenaltyData.hpp"
+#include "IpCGPenaltyCq.hpp"
 #include "IpJournalist.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpAlgTypes.hpp"

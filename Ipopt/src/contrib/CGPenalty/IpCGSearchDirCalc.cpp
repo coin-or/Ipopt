@@ -9,6 +9,8 @@
 //
 //           Lifeng Chen/Zaiwen Wen      Columbia Univ
 
+#include "IpCGPenaltyData.hpp"
+#include "IpCGPenaltyCq.hpp"
 #include "IpCGSearchDirCalc.hpp"
 
 #ifdef HAVE_CMATH

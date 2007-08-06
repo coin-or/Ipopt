@@ -7,6 +7,8 @@
 // Authors:  Carl Laird, Andreas Waechter              IBM    2005-08-04
 
 #include "IpCGPerturbationHandler.hpp"
+#include "IpCGPenaltyData.hpp"
+#include "IpCGPenaltyCq.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
