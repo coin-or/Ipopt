@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2005 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -29,7 +29,7 @@
 namespace Ipopt
 {
 
-#ifdef IP_DEBUG
+#if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
 
@@ -262,8 +262,8 @@ namespace Ipopt
       IpData().CGPenData().SetPrimalStepSize(alpha_primal_test);
     }
     if (jump_for_tiny_step_ == 1 /* &&
-         (IpData().iter_count() <= 1 ||
-         IpData().iter_count() == IpData().CGPenData().restor_iter()+1)*/) {
+                 (IpData().iter_count() <= 1 ||
+                 IpData().iter_count() == IpData().CGPenData().restor_iter()+1)*/) {
       jump_for_tiny_step_ = 0;
       Reset();
       IpData().Append_info_string("jump");
