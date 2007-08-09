@@ -15,6 +15,9 @@
 extern "C"
 {
 #include "dmumps_c.h"
+  // The following line is a fix for otherwise twice-defined global variable
+  // (This would have to be taken out for a parallel MUMPS version!)
+#define MPI_COMM_WORLD IPOPT_MPI_COMM_WORLD
 #include "mpi.h"
 }
 
