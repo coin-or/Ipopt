@@ -390,7 +390,7 @@ namespace Ipopt
         dump_matrix(mumps_data);
         dmumps_c(mumps_data);
         error = mumps_data->info[0];
-        if (error != -8 & error != -9)
+        if (error != -8 && error != -9)
           break;
       }
       if (error == -8 || error == -9) {
@@ -538,7 +538,7 @@ namespace Ipopt
         dump_matrix(mumps_data);
         dmumps_c(mumps_data);
         error = mumps_data->info[0];
-        if (error != -8 & error != -9)
+        if (error != -8 && error != -9)
           break;
       }
       if (error == -8 || error == -9) {
