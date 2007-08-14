@@ -61,6 +61,8 @@ Ipopt/doc/documentation.pdf -text
 Ipopt/doc/options.tex -text
 Ipopt/examples/ScalableProblems/MittelmannBndryCntrlDiri3D.cpp -text
 Ipopt/examples/ScalableProblems/MittelmannBndryCntrlDiri3D.hpp -text
+Ipopt/examples/ScalableProblems/MittelmannBndryCntrlDiri3Dsin.cpp -text
+Ipopt/examples/ScalableProblems/MittelmannBndryCntrlDiri3Dsin.hpp -text
 Ipopt/examples/ScalableProblems/README -text
 Ipopt/examples/hs071_c/Makefile.in -text
 Ipopt/examples/hs071_c/hs071_c.c -text
