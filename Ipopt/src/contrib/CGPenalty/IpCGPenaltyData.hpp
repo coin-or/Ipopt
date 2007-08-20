@@ -104,7 +104,7 @@ namespace Ipopt
       curr_penalty_pert_ = curr_penalty_pert;
     }
 
-    void SetNeverTryPureNewton(Index never_try_pure_Newton)
+    void SetNeverTryPureNewton(bool never_try_pure_Newton)
     {
       never_try_pure_Newton_ = never_try_pure_Newton;
     }
