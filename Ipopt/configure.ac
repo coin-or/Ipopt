@@ -342,17 +342,6 @@ fi
 # HARWELL SUBROUTINES #
 #######################
 
-AC_DEFUN([MY_AC_CHECK_FILE],
-[
-if test -r $1; then
-  $2
-  :
-else 
-  $3
-  :
-fi
-])
-
 hslobjdir=../ThirdParty/HSL
 hslsrcdir=$srcdir/$hslobjdir
 
@@ -366,7 +355,7 @@ AC_DEFUN([MY_CHECK_HSL],
                       [AC_MSG_RESULT([no]); use_$2=no])])
 
 AC_DEFUN([MY_CHECK_HSLFILE],
-         [MY_AC_CHECK_FILE([$hslsrcdir/$1.f],
+         [AC_COIN_CHECK_FILE([$hslsrcdir/$1.f],
                         [AC_DEFINE(HAVE_$2,1,[Define to 1 if $2 is available]) use_$2=BUILD],
                         [use_$2=no])])
 
@@ -379,12 +368,12 @@ AC_ARG_WITH([hsl],
 
 # First check if there is a working HSL ThirdParty project
 if test "$use_hsl" = BUILD; then
-  MY_AC_CHECK_FILE([$hslobjdir/Makefile],[],[use_hsl=])
+  AC_COIN_CHECK_FILE([$hslobjdir/Makefile],[],[use_hsl=])
 fi
 
 if test "$use_hsl" = BUILD; then
   # First check if there is a working HSL ThirdParty project
-  MY_AC_CHECK_FILE([$hslobjdir/Makefile],[],[use_hsl=unavailable])
+  AC_COIN_CHECK_FILE([$hslobjdir/Makefile],[],[use_hsl=unavailable])
 
   if test "$use_hsl" = BUILD; then
     # Check which files are available

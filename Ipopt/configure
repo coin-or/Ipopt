@@ -29971,8 +29971,6 @@ fi
 # HARWELL SUBROUTINES #
 #######################
 
-
-
 hslobjdir=../ThirdParty/HSL
 hslsrcdir=$srcdir/$hslobjdir
 
@@ -29994,8 +29992,7 @@ fi;
 
 # First check if there is a working HSL ThirdParty project
 if test "$use_hsl" = BUILD; then
-
-if test -r $hslobjdir/Makefile; then
+  if test -r $hslobjdir/Makefile; then
 
   :
 else
@@ -30007,8 +30004,7 @@ fi
 
 if test "$use_hsl" = BUILD; then
   # First check if there is a working HSL ThirdParty project
-
-if test -r $hslobjdir/Makefile; then
+  if test -r $hslobjdir/Makefile; then
 
   :
 else
@@ -30019,8 +30015,7 @@ fi
 
   if test "$use_hsl" = BUILD; then
     # Check which files are available
-
-if test -r $hslsrcdir/ma27ad.f; then
+    if test -r $hslsrcdir/ma27ad.f; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MA27 1
@@ -30042,8 +30037,7 @@ fi
     #      AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])
     #    fi
     #  fi
-
-if test -r $hslsrcdir/mc19ad.f; then
+    if test -r $hslsrcdir/mc19ad.f; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MC19 1
@@ -30055,8 +30049,7 @@ else
   :
 fi
 
-
-if test -r $hslsrcdir/ma57ad.f; then
+    if test -r $hslsrcdir/ma57ad.f; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MA57 1
@@ -30068,8 +30061,7 @@ else
   :
 fi
 
-
-if test -r $hslsrcdir/ma28ad.f; then
+    if test -r $hslsrcdir/ma28ad.f; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MA28 1
