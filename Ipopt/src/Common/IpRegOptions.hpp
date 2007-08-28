@@ -633,6 +633,15 @@ namespace Ipopt
     void OutputLatexOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories);
     //@}
 
+    typedef std::map<std::string, SmartPtr<RegisteredOption> > RegOptionsList;
+
+    /** Giving access to iteratable representation of the registered
+     *  options */
+    const RegOptionsList RegisteredOptionsList () const
+    {
+      return registered_options_;
+    }
+
   private:
     std::string current_registering_category_;
     std::map<std::string, SmartPtr<RegisteredOption> > registered_options_;
