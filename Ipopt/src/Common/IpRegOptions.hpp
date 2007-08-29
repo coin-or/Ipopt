@@ -202,7 +202,7 @@ namespace Ipopt
     }
     /** get the Number version of the upper bound - can be called for
      *  OT_Number */
-    Number UpperNumber()
+    Number UpperNumber() const
     {
       DBG_ASSERT(has_upper_ == true && type_ == OT_Number);
       return upper_;
@@ -637,7 +637,7 @@ namespace Ipopt
 
     /** Giving access to iteratable representation of the registered
      *  options */
-    const RegOptionsList RegisteredOptionsList () const
+    const RegOptionsList& RegisteredOptionsList () const
     {
       return registered_options_;
     }
