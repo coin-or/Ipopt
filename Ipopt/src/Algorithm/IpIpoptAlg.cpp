@@ -27,6 +27,19 @@ namespace Ipopt
                  " Ipopt is released as open source code under the Common Public License (CPL).\n"
                  "         For more information visit http://projects.coin-or.org/Ipopt\n"
                  "******************************************************************************\n\n");
+#ifdef COIN_HAS_MUMPS
+# ifndef HAVE_MA27
+#  ifndef HAVE_MA57
+#   ifndef HAVE_PARDISO
+#    ifndef HAVE_WSMP
+    jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
+                 "NOTE: You are using Ipopt only with the MUMPS linear solver.\n"
+		 "      Other linear solvers might be more efficient (see Ipopt documentation).\n");
+#    endif
+#   endif
+#  endif
+# endif
+#endif
     message_printed = true;
   }
 
