@@ -1,0 +1,12 @@
+Peter Carbonetto
+September 23, 2007
+
+KNOWN BUGS
+
+Here is a list of bugs that have been observed by myself or by others,
+but to date have not been corrected.
+
+* This isn't really so much of a bug, but a feature I should add to
+  the interface. The iterative callback function (ITERFUNC) does not
+  accept as input the current value of the optimization variables. 
+  This would probably be very useful to pass back.
