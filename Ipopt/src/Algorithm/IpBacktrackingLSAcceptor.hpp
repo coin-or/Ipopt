@@ -124,6 +124,27 @@ namespace Ipopt
       return false;
     }
 
+    /** Method for doing a fallback approach in case no search
+     *  direction could be computed.  If no such fall back option is
+     *  available, return false.  If possible, the new point is
+     *  assumed to be in the trial fields of IpData now. */
+    virtual bool DoFallback()
+    {
+      return false;
+    }
+
+    /** Method for computing the step for the constraint multipliers
+     *  in the line search acceptor method.  This is activated with
+     *  choosing the option alpha_for_y=acceptor */
+    virtual Number ComputeAlphaForY(Number alpha_primal,
+                                    Number alpha_dual,
+                                    SmartPtr<IteratesVector>& delta)
+    {
+      THROW_EXCEPTION(OPTION_INVALID,
+                      "Value \"acceptor\" for option \"alpha_for_y\" not valid for this line search.");
+      return -1.;
+    }
+
     /** Methods for OptionsList */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);

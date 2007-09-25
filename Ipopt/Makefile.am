@@ -121,6 +121,7 @@ unitTest: all
 astyle:
 	cd src/Algorithm; $(MAKE) astyle
 	cd src/Algorithm/LinearSolvers; $(MAKE) astyle
+	cd src/contrib/CGPenalty; $(MAKE) astyle
 	cd src/Apps/AmplSolver; $(MAKE) astyle
 	cd src/Common; $(MAKE) astyle
 	cd src/LinAlg; $(MAKE) astyle

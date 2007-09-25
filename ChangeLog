@@ -2,6 +2,9 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2007-09-25 releases/3.3.3
+        - minor changes, bug fixes
+
 2007-06-20 releases/3.3.1
         synchronized with all changes in trunk; probably more than to be
         remembered.  In the following a few:

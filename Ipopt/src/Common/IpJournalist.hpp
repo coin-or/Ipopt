@@ -26,6 +26,7 @@
 
 #include <string>
 #include <vector>
+#include <ostream>
 
 namespace Ipopt
 {
@@ -401,6 +402,65 @@ namespace Ipopt
 
     /** FILE pointer for the output destination */
     FILE* file_;
+  };
+
+  /** StreamJournal class. This is a particular Journal implementation that
+   *  writes to a stream for output.
+   */
+  class StreamJournal : public Journal
+  {
+  public:
+    /** Constructor. */
+    StreamJournal(const std::string& name, EJournalLevel default_level);
+
+    /** Destructor. */
+    virtual ~StreamJournal()
+    {}
+
+    /** Setting the output stream pointer */
+    void SetOutputStream(std::ostream* os);
+
+  protected:
+    /**@name Implementation version of Print methods - Overloaded from
+     * Journal base class.
+     */
+    //@{
+    /** Print to the designated output location */
+    virtual void PrintImpl(EJournalCategory category, EJournalLevel level,
+                           const char* str);
+
+    /** Printf to the designated output location */
+    virtual void PrintfImpl(EJournalCategory category, EJournalLevel level,
+                            const char* pformat, va_list ap);
+
+    /** Flush output buffer.*/
+    virtual void FlushBufferImpl();
+    //@}
+
+  private:
+    /**@name Default Compiler Generated Methods
+     * (Hidden to avoid implicit creation/calling).
+     * These methods are not implemented and 
+     * we do not want the compiler to implement
+     * them for us, so we declare them private
+     * and do not define them. This ensures that
+     * they will not be implicitly created/called. */
+    //@{
+    /** Default Constructor */
+    StreamJournal();
+
+    /** Copy Constructor */
+    StreamJournal(const StreamJournal&);
+
+    /** Overloaded Equals Operator */
+    void operator=(const StreamJournal&);
+    //@}
+
+    /** pointer to output stream for the output destination */
+    std::ostream* os_;
+
+    /** buffer for sprintf.  Being generous in size here... */
+    char buffer_[32768];
   };
 }
 

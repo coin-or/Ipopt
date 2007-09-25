@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -67,7 +67,10 @@ namespace Ipopt
     ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& tnlp);
 
     /** Solve a problem that inherits from NLP */
-    ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp, SmartPtr<AlgorithmBuilder> alg_builder=NULL);
+    ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp);
+
+    /** Solve a problem that inherits from NLP */
+    ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp, SmartPtr<AlgorithmBuilder>& alg_builder);
 
     /** Solve a problem (that inherits from TNLP) for a repeated time.
      *  The OptimizeTNLP method must have been called before.  The

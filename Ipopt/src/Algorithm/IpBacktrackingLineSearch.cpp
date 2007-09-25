@@ -81,7 +81,7 @@ namespace Ipopt
       "and makes the algorithm take aggressive steps, without global "
       "convergence guarantees.");
 
-    roptions->AddStringOption7(
+    roptions->AddStringOption10(
       "alpha_for_y",
       "Method to determine the step size for constraint multipliers.",
       "primal",
@@ -92,8 +92,19 @@ namespace Ipopt
       "full", "take a full step of size one",
       "min_dual_infeas", "choose step size minimizing new dual infeasibility",
       "safe_min_dual_infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
+      "primal-and-full", "use the primal step size, and full step if delta_x <= alpga_for_y_tol",
+      "dual-and-full", "use the dual step size, and full step if delta_x <= alpga_for_y_tol",
+      "acceptor", "Call LSAcceptor to get step size for y",
       "This option determines how the step size (alpha_y) will be calculated when updating the "
       "constraint multipliers.");
+    roptions->AddLowerBoundedNumberOption(
+      "alpha_for_y_tol",
+      "Tolerance for switching to full equality multiplier steps.",
+      0.0, false, 10.,
+      "This is only relevant if \"alpha_for_y\" is chosen \"primal-and-full\""
+      "or \"dual-and-full\".  The step size for the equality constraint"
+      "multipliers is taken to be one if the max-norm of the primal step is"
+      "less than this tolerance.");
 
     roptions->AddLowerBoundedNumberOption(
       "tiny_step_tol",
@@ -186,6 +197,7 @@ namespace Ipopt
     Index enum_int;
     options.GetEnumValue("alpha_for_y", enum_int, prefix);
     alpha_for_y_ = AlphaForYEnum(enum_int);
+    options.GetNumericValue("alpha_for_y_tol", alpha_for_y_tol_, prefix);
     options.GetNumericValue("expect_infeasible_problem_ctol", expect_infeasible_problem_ctol_, prefix);
     options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
 
@@ -206,10 +218,10 @@ namespace Ipopt
                                     options, prefix)) {
         return false;
       }
-      if (!acceptor_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                 options, prefix)) {
-        return false;
-      }
+    }
+    if (!acceptor_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
+                               options, prefix)) {
+      return false;
     }
 
     rigorous_ = true;
@@ -254,7 +266,7 @@ namespace Ipopt
     // restoration phase is entered soon.  This can be over-written
     // by the Acceptor.
     if (!acceptor_->NeverRestorationPhase() && IpCq().IsSquareProblem()) {
-      expect_infeasible_problem_ = true;
+      //expect_infeasible_problem_ = true;
       expect_infeasible_problem_ctol_ = 0.;
     }
 
@@ -276,8 +288,26 @@ namespace Ipopt
     bool goto_resto = false;
     if (fallback_activated_) {
       // In this case, the algorithm had trouble to continue and wants
-      // to call the restoration phase immediately
-      goto_resto = true;
+      // to call the restoration phase immediately if available
+      if (IsValid(resto_phase_)) {
+        goto_resto = true;
+      }
+      else {
+        if (acceptor_->DoFallback()) {
+          in_watchdog_ = false;
+          watchdog_iterate_ = NULL;
+          watchdog_delta_ = NULL;
+          count_successive_shortened_steps_ = 0;
+          watchdog_shortened_iter_ = 0;
+          IpData().Set_info_alpha_primal_char('X');
+          fallback_activated_ = false;
+          return;
+        }
+        else {
+          THROW_EXCEPTION(RESTORATION_FAILED,
+                          "We are in an emergency mode, but not restoration phase or other fall back is available.");
+        }
+      }
       fallback_activated_ = false; // reset the flag
     }
     else {
@@ -547,39 +577,42 @@ namespace Ipopt
       }
     }
     else if (!in_soft_resto_phase_ || tiny_step) {
-      // Some line search might have restored a previous iterate.  In that
-      // case we skip the usual ending stuff
-      if (acceptor_->RestoredIterate()) {
+      // we didn't do the restoration phase and are now updating the
+      // dual variables of the trial point
+      Number alpha_dual_max =
+        IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
+                                      *actual_delta->z_L(), *actual_delta->z_U(),
+                                      *actual_delta->v_L(), *actual_delta->v_U());
+
+      PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
+
+      if (n_steps==0) {
+        // accepted this if a full step was
+        // taken
         count_successive_shortened_steps_ = 0;
         watchdog_shortened_iter_ = 0;
       }
       else {
-        // we didn't do the restoration phase and are now updating the
-        // dual variables of the trial point
-        Number alpha_dual_max =
-          IpCq().dual_frac_to_the_bound(IpData().curr_tau(),
-                                        *actual_delta->z_L(), *actual_delta->z_U(),
-                                        *actual_delta->v_L(), *actual_delta->v_U());
+        count_successive_shortened_steps_++;
+        watchdog_shortened_iter_++;
+      }
 
-        PerformDualStep(alpha_primal, alpha_dual_max, actual_delta);
+      if (expect_infeasible_problem_ &&
+          IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n", IpCq().curr_constraint_violation());
+        expect_infeasible_problem_ = false;
+      }
 
-        if (n_steps==0) {
-          // accepted this if a full step was
-          // taken
-          count_successive_shortened_steps_ = 0;
-          watchdog_shortened_iter_ = 0;
-        }
-        else {
-          count_successive_shortened_steps_++;
-          watchdog_shortened_iter_++;
-        }
-
-        if (expect_infeasible_problem_ &&
-            IpCq().curr_constraint_violation() <= expect_infeasible_problem_ctol_) {
-          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                         "Constraint violation is with %e less than expect_infeasible_problem_ctol.\nDisable expect_infeasible_problem_heuristic.\n", IpCq().curr_constraint_violation());
-          expect_infeasible_problem_ = false;
-        }
+      // Some line search might have restored a previous iterate.  In that
+      // case we skip the usual ending stuff
+      if (acceptor_->RestoredIterate()) {
+        in_watchdog_ = false;
+        watchdog_iterate_ = NULL;
+        watchdog_delta_ = NULL;
+        count_successive_shortened_steps_ = 0;
+        watchdog_shortened_iter_ = 0;
+        IpData().Set_info_alpha_primal_char('r');
       }
     }
   }
@@ -805,11 +838,28 @@ namespace Ipopt
 
     Number alpha_y=-1.;
     switch (alpha_for_y_) {
+    case LSACCEPTOR_ALPHA_FOR_Y:
+      alpha_y = acceptor_->ComputeAlphaForY(alpha_primal, alpha_dual, delta);
+      break;
     case PRIMAL_ALPHA_FOR_Y:
+    case PRIMAL_AND_FULL_ALPHA_FOR_Y:
       alpha_y = alpha_primal;
+      if (alpha_for_y_ == PRIMAL_AND_FULL_ALPHA_FOR_Y) {
+        Number dxnorm = Max(delta->x()->Amax(), delta->s()->Amax());
+        if (dxnorm <= alpha_for_y_tol_) {
+          alpha_y = 1.;
+        }
+      }
       break;
     case DUAL_ALPHA_FOR_Y:
+    case DUAL_AND_FULL_ALPHA_FOR_Y:
       alpha_y = alpha_dual;
+      if (alpha_for_y_ == DUAL_AND_FULL_ALPHA_FOR_Y) {
+        Number dxnorm = Max(delta->x()->Amax(), delta->s()->Amax());
+        if (dxnorm <= alpha_for_y_tol_) {
+          alpha_y = 1.;
+        }
+      }
       break;
     case MIN_ALPHA_FOR_Y:
       alpha_y = Min(alpha_dual, alpha_primal);
@@ -854,7 +904,7 @@ namespace Ipopt
         alpha_y = Min(1., Max(0., alpha));
       }
       break;
-    }
+    } //switch (alpha_for_y)
 
     // Set the eq multipliers from the step now that alpha_y
     // has been calculated.
@@ -1160,11 +1210,6 @@ namespace Ipopt
 
   bool BacktrackingLineSearch::ActivateFallbackMechanism()
   {
-    // If we don't have a restoration phase, we don't know what to do
-    if (IsNull(resto_phase_)) {
-      return false;
-    }
-
     // Reverting to the restoration phase only makes sense if there
     // are constraints
     if (IpData().curr()->y_c()->Dim()+IpData().curr()->y_d()->Dim()==0) {

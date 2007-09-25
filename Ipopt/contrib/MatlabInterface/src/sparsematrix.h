@@ -29,6 +29,14 @@ int isSparseLowerTriangular (const mxArray* ptr);
 // An object of class SparseMatrixStructure stores information about
 // the structure of a sparse matrix. It does not store the actual
 // values of the matrix entries.
+//
+// WARNING: Starting with version 7.3, MATLAB can handle 64-bit
+// addressing, and the authors of MATLAB have modified the
+// implementation of sparse matrices to reflect this change. However,
+// I convert all the row and column indices in the sparse matrix to
+// signed integers, and this could potentially cause problems when
+// dealing with large, sparse matrices on 64-bit platforms with MATLAB
+// version 7.3 or greater.
 class SparseMatrixStructure {
 public:
 
@@ -48,14 +56,14 @@ public:
   ~SparseMatrixStructure();
     
   // Get the height and width of the matrix.
-  mwIndex height() const { return h; };
-  mwIndex width () const { return w; };
+  int height() const { return h; };
+  int width () const { return w; };
 
   // Return the number of non-zero entries.
-  mwIndex size() const { return nnz; };
+  int size() const { return nnz; };
 
   // Return the number of non-zero entries in the cth column.
-  mwIndex size (mwIndex c) const;
+  int size (int c) const;
 
   // Upon completion of this function, cols[i] contains the column
   // index for the ith element, and rows[i] contains the row index for
@@ -75,11 +83,11 @@ public:
 			 const double* sourceValues, double* destValues);
 
 protected:
-  mwIndex  nnz;     // The number of non-zero elements.
-  mwIndex  h;       // The height of the matrix. 
-  mwIndex  w;       // The width of the matrix.
   mwIndex* jc;      // See mxSetJc in the MATLAB documentation.
   mwIndex* ir;      // See mxSetIr in the MATLAB documentation.
+  int      nnz;     // The number of non-zero elements.
+  int      h;       // The height of the matrix. 
+  int      w;       // The width of the matrix.
   bool     owner;   // Whether or not the object has ownership of the
                     // "jc" and "ir" matrices.
 

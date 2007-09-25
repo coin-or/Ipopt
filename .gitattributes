@@ -59,6 +59,10 @@ Ipopt/contrib/MatlabInterface/ipopt.m -text
 Ipopt/contrib/MatlabInterface/readme.html -text
 Ipopt/doc/documentation.pdf -text
 Ipopt/doc/options.tex -text
+Ipopt/examples/ScalableProblems/MittelmannBndryCntrlDiri3D.cpp -text
+Ipopt/examples/ScalableProblems/MittelmannBndryCntrlDiri3D.hpp -text
+Ipopt/examples/ScalableProblems/MittelmannBndryCntrlDiri3Dsin.cpp -text
+Ipopt/examples/ScalableProblems/MittelmannBndryCntrlDiri3Dsin.hpp -text
 Ipopt/examples/ScalableProblems/README -text
 Ipopt/examples/hs071_c/Makefile.in -text
 Ipopt/examples/hs071_c/hs071_c.c -text
@@ -90,8 +94,12 @@ Ipopt/src/contrib/CGPenalty/IpCGPenaltyLSAcceptor.cpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyLSAcceptor.hpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyRegOp.cpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyRegOp.hpp -text
+Ipopt/src/contrib/CGPenalty/IpCGPerturbationHandler.cpp -text
+Ipopt/src/contrib/CGPenalty/IpCGPerturbationHandler.hpp -text
 Ipopt/src/contrib/CGPenalty/IpCGSearchDirCalc.cpp -text
 Ipopt/src/contrib/CGPenalty/IpCGSearchDirCalc.hpp -text
+Ipopt/src/contrib/CGPenalty/IpPiecewisePenalty.cpp -text
+Ipopt/src/contrib/CGPenalty/IpPiecewisePenalty.hpp -text
 Ipopt/src/contrib/CGPenalty/Makefile.am -text
 Ipopt/src/contrib/CGPenalty/Makefile.in -text
 Ipopt/test/Makefile.am -text

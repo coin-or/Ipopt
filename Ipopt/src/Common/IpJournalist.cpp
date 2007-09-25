@@ -339,7 +339,7 @@ namespace Ipopt
 
 
   ///////////////////////////////////////////////////////////////////////////
-  //                 Implementation of the FileJournal class                   //
+  //                 Implementation of the FileJournal class               //
   ///////////////////////////////////////////////////////////////////////////
 
   FileJournal::FileJournal(
@@ -415,4 +415,52 @@ namespace Ipopt
       fflush(file_);
     }
   }
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  //                 Implementation of the StreamJournal class               //
+  ///////////////////////////////////////////////////////////////////////////
+
+  StreamJournal::StreamJournal(
+    const std::string& name,
+    EJournalLevel default_level
+  )
+      :
+      Journal(name, default_level),
+      os_(NULL)
+  {}
+
+  void StreamJournal::SetOutputStream(std::ostream* os)
+  {
+    os_ = os;
+  }
+
+  void StreamJournal::PrintImpl(EJournalCategory category, EJournalLevel level,
+                                const char* str)
+  {
+    DBG_START_METH("StreamJournal::PrintImpl", 0);
+    if (os_) {
+      *os_ << str;
+      DBG_EXEC(0, *os_ << std::flush);
+    }
+  }
+
+  void StreamJournal::PrintfImpl(EJournalCategory category, EJournalLevel level,
+                                 const char* pformat, va_list ap)
+  {
+    DBG_START_METH("StreamJournal::PrintfImpl", 0);
+    if (os_) {
+      vsprintf(buffer_, pformat, ap);
+      *os_ << buffer_;
+      DBG_EXEC(0, *os_ << std::flush);
+    }
+  }
+
+  void StreamJournal::FlushBufferImpl()
+  {
+    if (os_) {
+      *os_ << std::flush;
+    }
+  }
+
 } // namespace Ipopt

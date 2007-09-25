@@ -1948,6 +1948,26 @@ namespace Ipopt
     Number* xref = new Number[nx];
     tnlp_->get_starting_point(nx, true, xref, false, NULL, NULL, ng, false, NULL);
 
+    // Perform a random perturbation.  We need the bounds to make sure
+    // they are not violated
+    Number* x_l = new Number[nx];
+    Number* x_u = new Number[nx];
+    Number* g_l = new Number[ng];
+    Number* g_u = new Number[ng];
+    tnlp_->get_bounds_info(nx, x_l, x_u, ng, g_l, g_u);
+    IpResetRandom01();
+    for (Index i=0; i<nx; i++) {
+      const Number lower = Max(x_l[i], xref[i]-point_perturbation_radius_);
+      const Number upper = Min(x_u[i], xref[i]+point_perturbation_radius_);
+      const Number interval = upper - lower;
+      const Number random_number = IpRandom01();
+      xref[i] = lower + random_number*interval;
+    }
+    delete [] x_l;
+    delete [] x_u;
+    delete [] g_l;
+    delete [] g_u;
+
     // Obtain value of objective and constraints at reference point
     bool new_x = true;
     Number fref;
