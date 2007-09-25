@@ -15,7 +15,9 @@ libcgpenalty_la_SOURCES = \
 	IpCGPenaltyData.cpp IpCGPenaltyData.hpp \
 	IpCGPenaltyLSAcceptor.cpp IpCGPenaltyLSAcceptor.hpp \
 	IpCGPenaltyRegOp.cpp IpCGPenaltyRegOp.hpp \
-	IpCGSearchDirCalc.cpp IpCGSearchDirCalc.hpp
+	IpCGPerturbationHandler.cpp IpCGPerturbationHandler.hpp \
+	IpCGSearchDirCalc.cpp IpCGSearchDirCalc.hpp \
+	IpPiecewisePenalty.cpp IpPiecewisePenalty.hpp
 
 libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
 
@@ -36,7 +38,9 @@ ASTYLE_FILES = \
 	IpCGPenaltyData.cppbak IpCGPenaltyData.hppbak \
 	IpCGPenaltyLSAcceptor.cppbak IpCGPenaltyLSAcceptor.hppbak \
 	IpCGPenaltyRegOp.cppbak IpCGPenaltyRegOp.hppbak \
-	IpCGSearchDirCalc.cppbak IpCGSearchDirCalc.hppbak
+	IpCGPerturbationHandler.cppbak IpCGPerturbationHandler.hppbak \
+	IpCGSearchDirCalc.cppbak IpCGSearchDirCalc.hppbak \
+	IpPiecewisePenalty.cppbak IpPiecewisePenalty.hppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@

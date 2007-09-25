@@ -183,11 +183,11 @@ namespace Ipopt
 
     // Now call MC19 to compute the scaling factors
     const ipfint N = Max(nc+nd+1,nx);
-    const ipfint NZ = nnz_jac_c+nnz_jac_d+nnz_grad_f;
     float* R = new float[N];
     float* C = new float[N];
     float* W = new float[5*N];
 #ifdef HAVE_MC19
+    const ipfint NZ = nnz_jac_c+nnz_jac_d+nnz_grad_f;
     //F77_FUNC(mc19ad,MC19AD)(&N, &NZ, avrg_values, AIRN, AJCN, R, C, W);
     F77_FUNC(mc19ad,MC19AD)(&N, &NZ, avrg_values, AJCN, AIRN, C, R, W);
 #else

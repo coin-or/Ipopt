@@ -9,6 +9,14 @@
 #include "IpoptConfig.h"
 #include "IpUtils.hpp"
 
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+
 #ifdef HAVE_CMATH
 # include <cmath>
 #else
@@ -32,14 +40,6 @@
 #else
 # ifdef HAVE_IEEEFP_H
 #  include <ieeefp.h>
-# endif
-#endif
-
-#ifdef HAVE_CSTDLIB
-# include <cstdlib>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
 # endif
 #endif
 

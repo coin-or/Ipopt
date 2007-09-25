@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -202,7 +202,7 @@ namespace Ipopt
     }
     /** get the Number version of the upper bound - can be called for
      *  OT_Number */
-    Number UpperNumber()
+    Number UpperNumber() const
     {
       DBG_ASSERT(has_upper_ == true && type_ == OT_Number);
       return upper_;
@@ -596,6 +596,30 @@ namespace Ipopt
                           const std::string& setting9,
                           const std::string& description9,
                           const std::string& long_description="");
+    void AddStringOption10(const std::string& name,
+                           const std::string& short_description,
+                           const std::string& default_value,
+                           const std::string& setting1,
+                           const std::string& description1,
+                           const std::string& setting2,
+                           const std::string& description2,
+                           const std::string& setting3,
+                           const std::string& description3,
+                           const std::string& setting4,
+                           const std::string& description4,
+                           const std::string& setting5,
+                           const std::string& description5,
+                           const std::string& setting6,
+                           const std::string& description6,
+                           const std::string& setting7,
+                           const std::string& description7,
+                           const std::string& setting8,
+                           const std::string& description8,
+                           const std::string& setting9,
+                           const std::string& description9,
+                           const std::string& setting10,
+                           const std::string& description10,
+                           const std::string& long_description="");
 
     /** Get a registered option - this will return NULL if the option
      *  does not exist */
@@ -608,6 +632,15 @@ namespace Ipopt
     /** Output documentation in Latex format to include in a latex file */
     void OutputLatexOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories);
     //@}
+
+    typedef std::map<std::string, SmartPtr<RegisteredOption> > RegOptionsList;
+
+    /** Giving access to iteratable representation of the registered
+     *  options */
+    const RegOptionsList& RegisteredOptionsList () const
+    {
+      return registered_options_;
+    }
 
   private:
     std::string current_registering_category_;

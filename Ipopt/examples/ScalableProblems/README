@@ -20,4 +20,4 @@ printed.
 The implementation in MittelmannDist* examples are using virtual
 methods to overload the specific problem functions for the individual
 examples.  A more efficient implementation using templates is done in
-ittelmannParaCntrl.hpp, which is a better example for coding.
+MittelmannParaCntrl.hpp, which is a better example for coding.

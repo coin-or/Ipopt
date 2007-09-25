@@ -356,8 +356,23 @@ namespace Ipopt
     }
 
     if (init_z) {
+      // Modified for warm-start from AMPL
+      DBG_ASSERT(IsValid(suffix_handler_));
+      const double* zL_init = suffix_handler_->GetNumberSuffixValues("ipopt_zL_in", AmplSuffixHandler::Variable_Source);
+      const double* zU_init = suffix_handler_->GetNumberSuffixValues("ipopt_zU_in", AmplSuffixHandler::Variable_Source);
       for (Index i=0; i<n; i++) {
-        z_L[i] = z_U[i] = 1.0;
+        if (zL_init) {
+          z_L[i]=zL_init[i];
+        }
+        else {
+          z_L[i] =1.0;
+        }
+        if (zU_init) {
+          z_U[i]=zU_init[i];
+        }
+        else {
+          z_U[i] =1.0;
+        }
       }
     }
 
@@ -595,6 +610,12 @@ namespace Ipopt
     else {
       message = "Unknown Error";
       solve_result_num = 502;
+    }
+
+    if (IsValid(suffix_handler_)) {
+      // Modified for warm-start from AMPL. Assign Bound Multipliers as Suffixes
+      suf_rput("ipopt_zL_out", ASL_Sufkind_var,  z_L_sol_);
+      suf_rput("ipopt_zU_out", ASL_Sufkind_var,  z_U_sol_);
     }
 
     // Write the .sol file
@@ -1127,7 +1148,25 @@ namespace Ipopt
                                      AmplOptionsList::Number_Option,
                                      "Required infeasibility reduction in restoration phase");
 
+    // Added for Warm-Start
+    ampl_options_list->AddAmplOption("warm_start_init_point",
+                                     "warm_start_init_point",
+                                     AmplOptionsList::String_Option,
+                                     "Enables to specify bound multiplier values");
+    ampl_options_list->AddAmplOption("warm_start_bound_push",
+                                     "warm_start_bound_push",
+                                     AmplOptionsList::Number_Option,
+                                     "Enables to specify how much should variables should be pushed inside the feasible region");
+    ampl_options_list->AddAmplOption("warm_start_mult_bound_push",
+                                     "warm_start_mult_bound_push",
+                                     AmplOptionsList::Number_Option,
+                                     "Enables to specify how much should bound multipliers should be pushed inside the feasible region");
 
+    // Quasi-Newton
+    ampl_options_list->AddAmplOption("hessian_approximation",
+                                     "hessian_approximation",
+                                     AmplOptionsList::String_Option,
+                                     "Can enable Quasi-Newton approximation of hessian");
     // Linear solver
     ampl_options_list->AddAmplOption("linear_solver",
                                      "linear_solver",

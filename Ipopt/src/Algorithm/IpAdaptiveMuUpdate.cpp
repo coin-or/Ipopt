@@ -65,9 +65,9 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "mu_min",
       "Minimum value for barrier parameter.",
-      0.0, true, 1e-12,
+      0.0, true, 1e-11,
       "This option specifies the lower bound on the barrier parameter in the "
-      "adaptive mu selection mode. By default, it is set to the minimum of 1e-12 and "
+      "adaptive mu selection mode. By default, it is set to the minimum of 1e-11 and "
       "min(\"tol\",\"compl_inf_tol\")/(\"barrier_tol_factor\"+1), which "
       "should be a reasonable value. (Only used if option "
       "\"mu_strategy\" is chosen as \"adaptive\".)");
@@ -208,12 +208,25 @@ namespace Ipopt
     options.GetEnumValue("quality_function_balancing_term", enum_int, prefix);
     adaptive_mu_kkt_balancing_term_ = QualityFunctionMuOracle::BalancingTermEnum(enum_int);
     options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
-    if (!options.GetNumericValue("mu_min", mu_min_, prefix)) {
-      // Compute mu_min based on tolerance (once the NLP scaling is known)
-      mu_min_default_ = true;
+    if (prefix == "resto.") {
+      if (!options.GetNumericValue("mu_min", mu_min_, prefix)) {
+        // For restoration phase, we choose a more conservateive mu_min
+        mu_min_ = 1e2*mu_min_;
+        // Compute mu_min based on tolerance (once the NLP scaling is known)
+        mu_min_default_ = true;
+      }
+      else {
+        mu_min_default_ = false;
+      }
     }
     else {
-      mu_min_default_ = false;
+      if (!options.GetNumericValue("mu_min", mu_min_, prefix)) {
+        // Compute mu_min based on tolerance (once the NLP scaling is known)
+        mu_min_default_ = true;
+      }
+      else {
+        mu_min_default_ = false;
+      }
     }
 
     init_dual_inf_ = -1.;
@@ -247,9 +260,8 @@ namespace Ipopt
     // here in every iteration, since the tolerance might be changed
     // (e.g. in the restoration phase)
     if (mu_min_default_) {
-      mu_min_ = Min(1e-12, Min(IpData().tol(),
-                               IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_))/
-                    (barrier_tol_factor_+1.));
+      mu_min_ = Min(mu_min_, 0.5*Min(IpData().tol(),
+                                     IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_)));
     }
 
     // if mu_max has not yet been computed, do so now, based on the
