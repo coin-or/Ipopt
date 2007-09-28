@@ -25,18 +25,25 @@ MittelmannBndryCntrlDiriBase3D::~MittelmannBndryCntrlDiriBase3D()
 
 void
 MittelmannBndryCntrlDiriBase3D::SetBaseParameters(Index N, Number alpha, Number lb_y,
-    Number ub_y, Number lb_u, Number ub_u,
-    Number d_const)
+						  Number ub_y, Number lb_u, Number ub_u,
+						  Number d_const, Number B, Number C)
 {
   N_ = N;
   h_ = 1./(N+1);
   hh_ = h_*h_;
+  hhh_ = hh_*h_;
   lb_y_ = lb_y;
   ub_y_ = ub_y;
   lb_u_ = lb_u;
   ub_u_ = ub_u;
   d_const_ = d_const;
   alpha_ = alpha;
+  B_ = B;
+  C_ = C;
+
+  PenA_ = 1.5 - 1.125*C_/B_;
+  PenB_ = 1.75*C_/pow(B_,3) - 1.5/(B_*B_);
+  PenC_ = 0.5/pow(B_,4) - 0.625*C_/pow(B_,5);
 
   // Initialize the target profile variables
   delete [] y_d_;
@@ -241,7 +248,7 @@ MittelmannBndryCntrlDiriBase3D::get_scaling_parameters(Number& obj_scaling,
     bool& use_x_scaling, Index n, Number* x_scaling,
     bool& use_g_scaling, Index m, Number* g_scaling)
 {
-  obj_scaling = 1./hh_;
+  obj_scaling = 1./hhh_;
   use_x_scaling = false;
   use_g_scaling = false;
   return true;
@@ -260,11 +267,12 @@ MittelmannBndryCntrlDiriBase3D::eval_f(Index n, const Number* x,
       for (Index k=1; k<= N_; k++) {
         Index iy = y_index(i,j,k);
         Number tmp = x[iy] - y_d_[iy];
-        obj_value += tmp*tmp;
+        obj_value += PenObj(tmp);
+        //obj_value += tmp*tmp;
       }
     }
   }
-  obj_value *= hh_/2.;
+  obj_value *= hhh_;
 
   // Now the integration of u over the boundary
   if (alpha_>0.) {
@@ -307,27 +315,8 @@ MittelmannBndryCntrlDiriBase3D::eval_f(Index n, const Number* x,
         usum += x[iu]*x[iu];
       }
     }
-#if 0
-    // Corner points
-    Index iu = y_index(0,0,0);
-    usum += x[iu]*x[iu];
-    iu = y_index(N_+1,0,0);
-    usum += x[iu]*x[iu];
-    iu = y_index(0,N_+1,0);
-    usum += x[iu]*x[iu];
-    iu = y_index(N_+1,N_+1,0);
-    usum += x[iu]*x[iu];
-    iu = y_index(0,0,N_+1);
-    usum += x[iu]*x[iu];
-    iu = y_index(N_+1,0,N_+1);
-    usum += x[iu]*x[iu];
-    iu = y_index(0,N_+1,N_+1);
-    usum += x[iu]*x[iu];
-    iu = y_index(N_+1,N_+1,N_+1);
-    usum += x[iu]*x[iu];
-#endif
 
-    obj_value += alpha_*h_/2.*usum;
+    obj_value += alpha_*hh_*0.5*usum;
   }
 
   return true;
@@ -344,7 +333,7 @@ MittelmannBndryCntrlDiriBase3D::eval_grad_f(Index n, const Number* x, bool new_x
     for (Index j=1; j<= N_; j++) {
       for (Index k=1; k<= N_; k++) {
         Index iy = y_index(i,j,k);
-        grad_f[iy] = hh_*(x[iy] - y_d_[iy]);
+        grad_f[iy] = hhh_*PenObj_1(x[iy] - y_d_[iy]);
       }
     }
   }
@@ -354,37 +343,37 @@ MittelmannBndryCntrlDiriBase3D::eval_grad_f(Index n, const Number* x, bool new_x
     for (Index i=1; i<= N_; i++) {
       for (Index j=1; j<= N_; j++) {
         Index iu = y_index(i,j,0);
-        grad_f[iu] = alpha_*h_*x[iu];
+        grad_f[iu] = alpha_*hh_*x[iu];
       }
     }
     for (Index i=1; i<= N_; i++) {
       for (Index j=1; j<= N_; j++) {
         Index iu = y_index(i,j,N_+1);
-        grad_f[iu] = alpha_*h_*x[iu];
+        grad_f[iu] = alpha_*hh_*x[iu];
       }
     }
     for (Index k=1; k<= N_; k++) {
       for (Index j=1; j<= N_; j++) {
         Index iu = y_index(0,j,k);
-        grad_f[iu] = alpha_*h_*x[iu];
+        grad_f[iu] = alpha_*hh_*x[iu];
       }
     }
     for (Index k=1; k<= N_; k++) {
       for (Index j=1; j<= N_; j++) {
         Index iu = y_index(N_+1,j,k);
-        grad_f[iu] = alpha_*h_*x[iu];
+        grad_f[iu] = alpha_*hh_*x[iu];
       }
     }
     for (Index i=1; i<= N_; i++) {
       for (Index k=1; k<= N_; k++) {
         Index iu = y_index(i,0,k);
-        grad_f[iu] = alpha_*h_*x[iu];
+        grad_f[iu] = alpha_*hh_*x[iu];
       }
     }
     for (Index i=1; i<= N_; i++) {
       for (Index k=1; k<= N_; k++) {
         Index iu = y_index(i,N_+1,k);
-        grad_f[iu] = alpha_*h_*x[iu];
+        grad_f[iu] = alpha_*hh_*x[iu];
       }
     }
 
@@ -660,7 +649,8 @@ MittelmannBndryCntrlDiriBase3D::eval_h(Index n, const Number* x, bool new_x,
       for (Index j=1; j<= N_; j++) {
         for (Index k=1; k<= N_; k++) {
           // Contribution from the objective function
-          values[ihes] = obj_factor*hh_;
+	  Index iy = y_index(i,j,k);
+          values[ihes] = obj_factor*hhh_*PenObj_2(x[iy] - y_d_[iy]);
 
           ihes++;
         }
@@ -672,38 +662,38 @@ MittelmannBndryCntrlDiriBase3D::eval_h(Index n, const Number* x, bool new_x,
       // Now the diagonal entries for u at the boundary
       for (Index i=1; i<=N_; i++) {
         for (Index j=1; j<=N_; j++) {
-          values[ihes] = obj_factor*h_*alpha_;
+          values[ihes] = obj_factor*hh_*alpha_;
           ihes++;
         }
       }
       for (Index i=1; i<=N_; i++) {
         for (Index j=1; j<=N_; j++) {
-          values[ihes] = obj_factor*h_*alpha_;
+          values[ihes] = obj_factor*hh_*alpha_;
           ihes++;
         }
       }
       for (Index i=1; i<=N_; i++) {
         for (Index j=1; j<=N_; j++) {
-          values[ihes] = obj_factor*h_*alpha_;
+          values[ihes] = obj_factor*hh_*alpha_;
           ihes++;
         }
       }
       for (Index i=1; i<=N_; i++) {
         for (Index j=1; j<=N_; j++) {
-          values[ihes] = obj_factor*h_*alpha_;
+          values[ihes] = obj_factor*hh_*alpha_;
           ihes++;
         }
       }
 
       for (Index i=1; i<=N_; i++) {
         for (Index j=1; j<=N_; j++) {
-          values[ihes] = obj_factor*h_*alpha_;
+          values[ihes] = obj_factor*hh_*alpha_;
           ihes++;
         }
       }
       for (Index i=1; i<=N_; i++) {
         for (Index j=1; j<=N_; j++) {
-          values[ihes] = obj_factor*h_*alpha_;
+          values[ihes] = obj_factor*hh_*alpha_;
           ihes++;
         }
       }

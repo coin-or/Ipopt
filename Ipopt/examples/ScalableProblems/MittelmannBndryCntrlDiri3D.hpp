@@ -112,7 +112,7 @@ protected:
    *  implementation of InitializeParameters. */
   void SetBaseParameters(Index N, Number alpha, Number lb_y,
                          Number ub_y, Number lb_u, Number ub_u,
-                         Number d_const);
+                         Number d_const, Number B, Number C);
 
   /**@name Functions that defines a particular instance. */
   //@{
@@ -142,8 +142,10 @@ private:
   Index N_;
   /** Step size */
   Number h_;
-  /** h_ squaredd */
+  /** h_ squared */
   Number hh_;
+  /** h_ to the third power */
+  Number hhh_;
   /** overall lower bound on y */
   Number lb_y_;
   /** overall upper bound on y */
@@ -190,6 +192,65 @@ private:
   {
     return h_*(Number)i;
   }
+  /** value of penalty function term */
+  inline Number PenObj(Number t) const
+  {
+    //return 0.5*t*t;
+    if (t > B_) {
+      return B_*B_/2. + C_*(t - B_);
+    }
+    else if (t < -B_) {
+      return B_*B_/2. + C_*(-t - B_);
+    }
+    else {
+      const Number t2 = t*t;
+      const Number t4 = t2*t2;
+      const Number t6 = t4*t2;
+      return PenA_*t2 + PenB_*t4 + PenC_*t6;
+    }
+  }
+  /** first derivative of penalty function term */
+  inline Number PenObj_1(Number t) const
+  {
+    //return t;
+    if (t > B_) {
+      return C_;
+    }
+    else if (t < -B_) {
+      return -C_;
+    }
+    else {
+      const Number t2 = t*t;
+      const Number t3 = t*t2;
+      const Number t5 = t3*t2;
+      return 2.*PenA_*t + 4.*PenB_*t3 + 6.*PenC_*t5;
+    } 
+  }
+  /** second derivative of penalty function term */
+  inline Number PenObj_2(Number t) const
+  {
+    //return 1.;
+    if (t > B_) {
+      return 0.;
+    }
+    else if (t < -B_) {
+      return 0.;
+    }
+    else {
+      const Number t2 = t*t;
+      const Number t4 = t2*t2;
+      return 2.*PenA_ + 12.*PenB_*t2 + 30.*PenC_*t4;
+    } 
+  }
+  //@}
+
+  /** @name Data for penalty function term */
+  //@{
+  Number B_;
+  Number C_;
+  Number PenA_;
+  Number PenB_;
+  Number PenC_;
   //@}
 };
 
@@ -209,14 +270,15 @@ public:
       printf("N has to be at least 1.");
       return false;
     }
-    printf("olaf N %d has to be at least 1.", N);
     Number alpha = 0.01;
     Number lb_y = -1e20;
     Number ub_y = 3.5;
     Number lb_u = 0.;
     Number ub_u = 10.;
     Number d_const = -20.;
-    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const);
+    Number B = 1.;
+    Number C = 0.01;
+    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
     return true;
   }
 protected:
@@ -225,6 +287,7 @@ protected:
   {
     return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.));
   }
+
 private:
   /**@name hide implicitly defined contructors copy operators */
   //@{

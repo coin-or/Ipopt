@@ -211,6 +211,8 @@ int main(int argv, char* argc[])
     printf("\n\n*** Error during initialization!\n");
     return (int) status;
   }
+  // Set option to use internal scaling
+  app->Options()->SetStringValueIfUnset("nlp_scaling_method", "user-scaling");
 
   status = app->OptimizeTNLP(GetRawPtr(tnlp));
 
