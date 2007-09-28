@@ -276,7 +276,7 @@ public:
     Number lb_u = 0.;
     Number ub_u = 10.;
     Number d_const = -20.;
-    Number B = 1.;
+    Number B = .5;
     Number C = 0.01;
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
     return true;
