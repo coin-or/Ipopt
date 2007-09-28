@@ -1,4 +1,4 @@
-# Copyright (C) 2005, 2006 International Business Machines and others.
+# Copyright (C) 2005, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -47,6 +47,7 @@ LIBOBJS =  \
         MittelmannDistCntrlDiri.@OBJEXT@ \
         MittelmannBndryCntrlDiri.@OBJEXT@ \
         MittelmannBndryCntrlDiri3D.@OBJEXT@ \
+        MittelmannBndryCntrlDiri3D_27.@OBJEXT@ \
         MittelmannBndryCntrlDiri3Dsin.@OBJEXT@ \
         MittelmannBndryCntrlNeum.@OBJEXT@ \
         LuksanVlcek1.@OBJEXT@ \
@@ -78,6 +79,7 @@ MittelmannDistCntrlNeumB.@OBJEXT@: MittelmannDistCntrlNeumB.hpp
 MittelmannDistCntrlDiri.@OBJEXT@: MittelmannDistCntrlDiri.hpp
 MittelmannBndryCntrlDiri.@OBJEXT@: MittelmannBndryCntrlDiri.hpp
 MittelmannBndryCntrlDiri3D.@OBJEXT@: MittelmannBndryCntrlDiri3D.hpp
+MittelmannBndryCntrlDiri3D_27.@OBJEXT@: MittelmannBndryCntrlDiri3D_27.hpp
 MittelmannBndryCntrlDiri3Dsin.@OBJEXT@: MittelmannBndryCntrlDiri3Dsin.hpp
 MittelmannBndryCntrlNeum.@OBJEXT@: MittelmannBndryCntrlNeum.hpp
 
@@ -94,6 +96,7 @@ solve_problem.@OBJEXT@: \
 	MittelmannDistCntrlDiri.hpp \
 	MittelmannBndryCntrlDiri.hpp \
 	MittelmannBndryCntrlDiri3D.hpp \
+	MittelmannBndryCntrlDiri3D_27.hpp \
 	MittelmannBndryCntrlDiri3Dsin.hpp \
 	MittelmannBndryCntrlNeum.hpp \
 	MittelmannParaCntrl.hpp

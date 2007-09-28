@@ -4,12 +4,12 @@
 //
 // $Id: MittelmannBndryCntrlDiri.hpp 1010 2007-06-21 15:54:36Z andreasw $
 //
-// Authors:  Andreas Waechter             IBM    2005-10-18
-//           Olaf Schenk   (Univ. of Basel)      2007-08-01
+// Authors:  Olaf Schenk   (Univ. of Basel)      2007-08-01
 //              modified MittelmannBndryCntrlDiri.hpp for 3-dim problem
+//                  based on MyNLP.hpp
 
-#ifndef __MITTELMANNBNDRYCNTRLDIRI3D_HPP__
-#define __MITTELMANNBNDRYCNTRLDIRI3D_HPP__
+#ifndef __MITTELMANNBNDRYCNTRLDIRI3D_27_HPP__
+#define __MITTELMANNBNDRYCNTRLDIRI3D_27_HPP__
 
 #include "RegisteredTNLP.hpp"
 
@@ -34,14 +34,14 @@ using namespace Ipopt;
  *  the boundary, and therefore we don't need any explicit
  *  optimization variables for u.
  */
-class MittelmannBndryCntrlDiriBase3D : public RegisteredTNLP
+class MittelmannBndryCntrlDiriBase3D_27 : public RegisteredTNLP
 {
 public:
   /** Constructor. */
-  MittelmannBndryCntrlDiriBase3D();
+  MittelmannBndryCntrlDiriBase3D_27();
 
   /** Default destructor */
-  virtual ~MittelmannBndryCntrlDiriBase3D();
+  virtual ~MittelmannBndryCntrlDiriBase3D_27();
 
   /**@name Overloaded from TNLP */
   //@{
@@ -132,8 +132,8 @@ private:
    *  
    */
   //@{
-  MittelmannBndryCntrlDiriBase3D(const MittelmannBndryCntrlDiriBase3D&);
-  MittelmannBndryCntrlDiriBase3D& operator=(const MittelmannBndryCntrlDiriBase3D&);
+  MittelmannBndryCntrlDiriBase3D_27(const MittelmannBndryCntrlDiriBase3D_27&);
+  MittelmannBndryCntrlDiriBase3D_27& operator=(const MittelmannBndryCntrlDiriBase3D_27&);
   //@}
 
   /**@name Problem specification */
@@ -255,13 +255,13 @@ private:
 };
 
 /** Class implementating Example 1 */
-class MittelmannBndryCntrlDiri3D : public MittelmannBndryCntrlDiriBase3D
+class MittelmannBndryCntrlDiri3D_27 : public MittelmannBndryCntrlDiriBase3D_27
 {
 public:
-  MittelmannBndryCntrlDiri3D()
+  MittelmannBndryCntrlDiri3D_27()
   {}
 
-  virtual ~MittelmannBndryCntrlDiri3D()
+  virtual ~MittelmannBndryCntrlDiri3D_27()
   {}
 
   virtual bool InitializeProblem(Index N)
@@ -290,8 +290,8 @@ protected:
 private:
   /**@name hide implicitly defined contructors copy operators */
   //@{
-  MittelmannBndryCntrlDiri3D(const MittelmannBndryCntrlDiri3D&);
-  MittelmannBndryCntrlDiri3D& operator=(const MittelmannBndryCntrlDiri3D&);
+  MittelmannBndryCntrlDiri3D_27(const MittelmannBndryCntrlDiri3D_27&);
+  MittelmannBndryCntrlDiri3D_27& operator=(const MittelmannBndryCntrlDiri3D_27&);
   //@}
 
 };

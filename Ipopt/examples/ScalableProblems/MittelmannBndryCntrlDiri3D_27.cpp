@@ -2,29 +2,29 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: MittelmannBndryCntrlDiri3D.cpp 1010 2007-06-21 15:54:36Z andreasw $
+// $Id: MittelmannBndryCntrlDiri3DA.cpp 1010 2007-06-21 15:54:36Z andreasw $
 //
 // Authors:  Andreas Waechter             IBM    2005-10-18
 //           Olaf Schenk   (Univ. of Basel)      2007-08-01
 //              modified MittelmannBndryCntrlDiri.cpp for 3-dim problem
 
-#include "MittelmannBndryCntrlDiri3D.hpp"
+#include "MittelmannBndryCntrlDiri3D_27.hpp"
 
 using namespace Ipopt;
 
 /* Constructor. */
-MittelmannBndryCntrlDiriBase3D::MittelmannBndryCntrlDiriBase3D()
+MittelmannBndryCntrlDiriBase3D_27::MittelmannBndryCntrlDiriBase3D_27()
     :
     y_d_(NULL)
 {}
 
-MittelmannBndryCntrlDiriBase3D::~MittelmannBndryCntrlDiriBase3D()
+MittelmannBndryCntrlDiriBase3D_27::~MittelmannBndryCntrlDiriBase3D_27()
 {
   delete [] y_d_;
 }
 
 void
-MittelmannBndryCntrlDiriBase3D::SetBaseParameters(Index N, Number alpha, Number lb_y,
+MittelmannBndryCntrlDiriBase3D_27::SetBaseParameters(Index N, Number alpha, Number lb_y,
     Number ub_y, Number lb_u, Number ub_u,
     Number d_const, Number B, Number C)
 {
@@ -57,7 +57,7 @@ MittelmannBndryCntrlDiriBase3D::SetBaseParameters(Index N, Number alpha, Number 
   }
 }
 
-bool MittelmannBndryCntrlDiriBase3D::get_nlp_info(
+bool MittelmannBndryCntrlDiriBase3D_27::get_nlp_info(
   Index& n, Index& m, Index& nnz_jac_g,
   Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
@@ -70,10 +70,20 @@ bool MittelmannBndryCntrlDiriBase3D::get_nlp_info(
   // discretized PDE.
   m = N_*N_*N_;
 
-  // y(i,j,k), y(i-1,j,k), y(i+1,j,k), y(i,j-1,k), y(i,j+1,k),
-  // y(i-1,j,k-1), y(i,j,k+1)
+  // y(i-1,j-1,k-1), y(i,j-1,k-1), y(i+1,j-1,k-1)
+  // y(i-1,j  ,k-1), y(i,j  ,k-1), y(i+1,j,  k-1)
+  // y(i-1,j+1,k-1), y(i,j+1,k-1), y(i+1,j+1,k-1),
+
+  // y(i-1,j-1,k), y(i,j-1,k), y(i+1,j-1,k)
+  // y(i-1,j  ,k), y(i,j  ,k), y(i+1,j,  k)
+  // y(i-1,j+1,k), y(i,j+1,k), y(i+1,j+1,k),
+
+  // y(i-1,j-1,k+1), y(i,j-1,k+1), y(i+1,j-1,k+1)
+  // y(i-1,j  ,k+1), y(i,j  ,k+1), y(i+1,j,  k+1)
+  // y(i-1,j+1,k+1), y(i,j+1,k+1), y(i+1,j+1,k+1),
+
   // of the N_*N_*N_ discretized PDEs
-  nnz_jac_g = 7*N_*N_*N_;
+  nnz_jac_g = 27*N_*N_*N_;
 
   // diagonal entry for each y(i,j) in the interior
   nnz_h_lag = N_*N_*N_;
@@ -90,7 +100,7 @@ bool MittelmannBndryCntrlDiriBase3D::get_nlp_info(
 }
 
 bool
-MittelmannBndryCntrlDiriBase3D::get_bounds_info(Index n, Number* x_l, Number* x_u,
+MittelmannBndryCntrlDiriBase3D_27::get_bounds_info(Index n, Number* x_l, Number* x_u,
     Index m, Number* g_l, Number* g_u)
 {
   // Set overall bounds on the y variables
@@ -180,7 +190,7 @@ MittelmannBndryCntrlDiriBase3D::get_bounds_info(Index n, Number* x_l, Number* x_
 }
 
 bool
-MittelmannBndryCntrlDiriBase3D::get_starting_point(Index n, bool init_x, Number* x,
+MittelmannBndryCntrlDiriBase3D_27::get_starting_point(Index n, bool init_x, Number* x,
     bool init_z, Number* z_L, Number* z_U,
     Index m, bool init_lambda,
     Number* lambda)
@@ -244,7 +254,7 @@ MittelmannBndryCntrlDiriBase3D::get_starting_point(Index n, bool init_x, Number*
 }
 
 bool
-MittelmannBndryCntrlDiriBase3D::get_scaling_parameters(Number& obj_scaling,
+MittelmannBndryCntrlDiriBase3D_27::get_scaling_parameters(Number& obj_scaling,
     bool& use_x_scaling, Index n, Number* x_scaling,
     bool& use_g_scaling, Index m, Number* g_scaling)
 {
@@ -255,8 +265,8 @@ MittelmannBndryCntrlDiriBase3D::get_scaling_parameters(Number& obj_scaling,
 }
 
 bool
-MittelmannBndryCntrlDiriBase3D::eval_f(Index n, const Number* x,
-                                       bool new_x, Number& obj_value)
+MittelmannBndryCntrlDiriBase3D_27::eval_f(Index n, const Number* x,
+    bool new_x, Number& obj_value)
 {
   // return the value of the objective function
   obj_value = 0.;
@@ -323,7 +333,7 @@ MittelmannBndryCntrlDiriBase3D::eval_f(Index n, const Number* x,
 }
 
 bool
-MittelmannBndryCntrlDiriBase3D::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
+MittelmannBndryCntrlDiriBase3D_27::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
 {
   // return the gradient of the objective function grad_{x} f(x)
 
@@ -437,7 +447,7 @@ MittelmannBndryCntrlDiriBase3D::eval_grad_f(Index n, const Number* x, bool new_x
   return true;
 }
 
-bool MittelmannBndryCntrlDiriBase3D::eval_g(Index n, const Number* x, bool new_x,
+bool MittelmannBndryCntrlDiriBase3D_27::eval_g(Index n, const Number* x, bool new_x,
     Index m, Number* g)
 {
   // return the value of the constraints: g(x)
@@ -450,10 +460,40 @@ bool MittelmannBndryCntrlDiriBase3D::eval_g(Index n, const Number* x, bool new_x
         Number val;
 
         // Start with the discretized Laplacian operator
-        val = 6.* x[y_index(i,j,k)]
-              - x[y_index(i-1,j,k)] - x[y_index(i+1,j,k)]
-              - x[y_index(i,j-1,k)] - x[y_index(i,j+1,k)]
-              - x[y_index(i,j,k-1)] - x[y_index(i,j,k+1)];
+        val =   200.* x[y_index(i,j,k)]
+                - 16.* (
+                  x[y_index(i+1,j  ,k  )] +
+                  x[y_index(i-1,j  ,k  )] +
+                  x[y_index(i  ,j+1,k  )] +
+                  x[y_index(i  ,j-1,k  )] +
+                  x[y_index(i  ,j  ,k+1)] +
+                  x[y_index(i  ,j  ,k-1)]
+                )
+                -  8. * (
+                  x[y_index(i+1,j+1,k  )] +
+                  x[y_index(i+1,j-1,k  )] +
+                  x[y_index(i-1,j+1,k  )] +
+                  x[y_index(i-1,j-1,k  )] +
+                  x[y_index(i  ,j+1,k+1)] +
+                  x[y_index(i  ,j+1,k-1)] +
+                  x[y_index(i  ,j-1,k+1)] +
+                  x[y_index(i  ,j-1,k-1)] +
+                  x[y_index(i+1,j  ,k+1)] +
+                  x[y_index(i+1,j  ,k-1)] +
+                  x[y_index(i-1,j  ,k+1)] +
+                  x[y_index(i-1,j  ,k-1)]
+                )
+                -  1. * (
+                  x[y_index(i+1,j+1,k+1)] +
+                  x[y_index(i+1,j-1,k+1)] +
+                  x[y_index(i+1,j+1,k-1)] +
+                  x[y_index(i+1,j-1,k-1)] +
+                  x[y_index(i-1,j+1,k+1)] +
+                  x[y_index(i-1,j-1,k+1)] +
+                  x[y_index(i-1,j+1,k-1)] +
+                  x[y_index(i-1,j-1,k-1)]
+                );
+
 
         g[ig] = val;
         ig++;
@@ -466,7 +506,7 @@ bool MittelmannBndryCntrlDiriBase3D::eval_g(Index n, const Number* x, bool new_x
   return true;
 }
 
-bool MittelmannBndryCntrlDiriBase3D::eval_jac_g(Index n, const Number* x, bool new_x,
+bool MittelmannBndryCntrlDiriBase3D_27::eval_jac_g(Index n, const Number* x, bool new_x,
     Index m, Index nele_jac, Index* iRow, Index *jCol,
     Number* values)
 {
@@ -479,39 +519,121 @@ bool MittelmannBndryCntrlDiriBase3D::eval_jac_g(Index n, const Number* x, bool n
       for (Index j=1; j<= N_; j++) {
         for (Index k=1; k<= N_; k++) {
 
-          // y(i,j,k)
-          iRow[ijac] = ig;
-          jCol[ijac] = y_index(i,j,k);
-          ijac++;
-
           // y(i-1,j,k)
           iRow[ijac] = ig;
           jCol[ijac] = y_index(i-1,j,k);
           ijac++;
-
+          // y(i,j,k)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i,j,k);
+          ijac++;
           // y(i+1,j,k)
           iRow[ijac] = ig;
           jCol[ijac] = y_index(i+1,j,k);
           ijac++;
 
+          // y(i-1,j-1,k)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i-1,j-1,k);
+          ijac++;
           // y(i,j-1,k)
           iRow[ijac] = ig;
           jCol[ijac] = y_index(i,j-1,k);
           ijac++;
+          // y(i+1,j-1,k)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i+1,j-1,k);
+          ijac++;
 
+          // y(i-1,j+1,k)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i-1,j+1,k);
+          ijac++;
           // y(i,j+1,k)
           iRow[ijac] = ig;
           jCol[ijac] = y_index(i,j+1,k);
           ijac++;
+          // y(i+1,j+1,k)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i+1,j+1,k);
+          ijac++;
 
+          // y(i-1,j,k-1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i-1,j,k-1);
+          ijac++;
           // y(i,j,k-1)
           iRow[ijac] = ig;
           jCol[ijac] = y_index(i,j,k-1);
           ijac++;
+          // y(i+1,j,k-1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i+1,j,k-1);
+          ijac++;
 
+          // y(i-1,j-1,k-1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i-1,j-1,k-1);
+          ijac++;
+          // y(i,j-1,k-1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i,j-1,k-1);
+          ijac++;
+          // y(i+1,j-1,k-1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i+1,j-1,k-1);
+          ijac++;
+
+          // y(i-1,j+1,k-1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i-1,j+1,k-1);
+          ijac++;
+          // y(i,j+1,k-1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i,j+1,k-1);
+          ijac++;
+          // y(i+1,j+1,k-1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i+1,j+1,k-1);
+          ijac++;
+
+          // y(i-1,j,k+1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i-1,j,k+1);
+          ijac++;
           // y(i,j,k+1)
           iRow[ijac] = ig;
           jCol[ijac] = y_index(i,j,k+1);
+          ijac++;
+          // y(i+1,j,k+1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i+1,j,k+1);
+          ijac++;
+
+          // y(i-1,j-1,k+1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i-1,j-1,k+1);
+          ijac++;
+          // y(i,j-1,k+1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i,j-1,k+1);
+          ijac++;
+          // y(i+1,j-1,k+1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i+1,j-1,k+1);
+          ijac++;
+
+          // y(i-1,j+1,k+1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i-1,j+1,k+1);
+          ijac++;
+          // y(i,j+1,k+1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i,j+1,k+1);
+          ijac++;
+          // y(i+1,j+1,k+1)
+          iRow[ijac] = ig;
+          jCol[ijac] = y_index(i+1,j+1,k+1);
           ijac++;
 
           ig++;
@@ -527,33 +649,97 @@ bool MittelmannBndryCntrlDiriBase3D::eval_jac_g(Index n, const Number* x, bool n
     for (Index i=1; i<= N_; i++) {
       for (Index j=1; j<= N_; j++) {
         for (Index k=1; k<= N_; k++) {
-          // y(i,j,k)
-          values[ijac] = 6.;
-          ijac++;
 
           // y(i-1,j,k)
-          values[ijac] = -1.;
+          values[ijac] = -16.;
           ijac++;
-
+          // y(i,j,k)
+          values[ijac] = 200.;
+          ijac++;
           // y(i+1,j,k)
+          values[ijac] = -16.;
+          ijac++;
+
+          // y(i-1,j-1,k)
+          values[ijac] = -8.;
+          ijac++;
+          // y(i,j-1,k)
+          values[ijac] = -16.;
+          ijac++;
+          // y(i+1,j-1,k)
+          values[ijac] = -8.;
+          ijac++;
+
+          // y(i-1,j+1,k)
+          values[ijac] = -8.;
+          ijac++;
+          // y(i,j+1,k)
+          values[ijac] = -16.;
+          ijac++;
+          // y(i+1,j+1,k)
+          values[ijac] = -8.;
+          ijac++;
+
+          // y(i-1,j,k-1)
+          values[ijac] = -8.;
+          ijac++;
+          // y(i,j,k-1)
+          values[ijac] = -16.;
+          ijac++;
+          // y(i+1,j,k-1)
+          values[ijac] = -8.;
+          ijac++;
+
+          // y(i-1,j-1,k-1)
+          values[ijac] = -1.;
+          ijac++;
+          // y(i,j-1,k-1)
+          values[ijac] = -8.;
+          ijac++;
+          // y(i+1,j-1,k-1)
           values[ijac] = -1.;
           ijac++;
 
-          // y(1,j-1,k)
+          // y(i-1,j+1,k-1)
+          values[ijac] = -1.;
+          ijac++;
+          // y(i,j+1,k-1)
+          values[ijac] = -8.;
+          ijac++;
+          // y(i+1,j+1,k-1)
           values[ijac] = -1.;
           ijac++;
 
-          // y(1,j+1,k)
+          // y(i-1,j,k+1)
+          values[ijac] = -8.;
+          ijac++;
+          // y(i,j,k+1)
+          values[ijac] = -16.;
+          ijac++;
+          // y(i+1,j,k+1)
+          values[ijac] = -8.;
+          ijac++;
+
+          // y(i-1,j-1,k+1)
+          values[ijac] = -1.;
+          ijac++;
+          // y(i,j-1,k+1)
+          values[ijac] = -8.;
+          ijac++;
+          // y(i+1,j-1,k+1)
           values[ijac] = -1.;
           ijac++;
 
-          // y(1,j,k-1)
+          // y(i-1,j+1,k+1)
+          values[ijac] = -1.;
+          ijac++;
+          // y(i,j+1,k+1)
+          values[ijac] = -8.;
+          ijac++;
+          // y(i+1,j+1,k+1)
           values[ijac] = -1.;
           ijac++;
 
-          // y(1,j,k+1)
-          values[ijac] = -1.;
-          ijac++;
         }
       }
     }
@@ -565,11 +751,11 @@ bool MittelmannBndryCntrlDiriBase3D::eval_jac_g(Index n, const Number* x, bool n
 }
 
 bool
-MittelmannBndryCntrlDiriBase3D::eval_h(Index n, const Number* x, bool new_x,
-                                       Number obj_factor, Index m,
-                                       const Number* lambda,
-                                       bool new_lambda, Index nele_hess, Index* iRow,
-                                       Index* jCol, Number* values)
+MittelmannBndryCntrlDiriBase3D_27::eval_h(Index n, const Number* x, bool new_x,
+    Number obj_factor, Index m,
+    const Number* lambda,
+    bool new_lambda, Index nele_hess, Index* iRow,
+    Index* jCol, Number* values)
 {
   if (values == NULL) {
     // return the structure. This is a symmetric matrix, fill the lower left
@@ -704,7 +890,7 @@ MittelmannBndryCntrlDiriBase3D::eval_h(Index n, const Number* x, bool new_x,
 }
 
 void
-MittelmannBndryCntrlDiriBase3D::finalize_solution(SolverReturn status,
+MittelmannBndryCntrlDiriBase3D_27::finalize_solution(SolverReturn status,
     Index n, const Number* x, const Number* z_L, const Number* z_U,
     Index m, const Number* g, const Number* lambda, Number obj_value,
     const IpoptData* ip_data,
