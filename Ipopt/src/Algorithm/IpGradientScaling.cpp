@@ -8,6 +8,7 @@
 
 #include "IpGradientScaling.hpp"
 #include "IpTripletHelper.hpp"
+#include "IpBlas.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -39,9 +40,17 @@ namespace Ipopt
       "Target value for objective function gradient size.",
       0, false, 0.,
       "If a positive number is chosen, the scaling factor the objective "
-      "function is computed so that the gradient as the max norm of the given "
+      "function is computed so that the gradient has the max norm of the given "
       "size at the starting point.  This overrides nlp_scaling_max_gradient "
       "for the objective function.");
+    roptions->AddLowerBoundedNumberOption(
+      "nlp_scaling_constr_target_gradient",
+      "Target value for constraint function gradient size.",
+      0, false, 0.,
+      "If a positive number is chosen, the scaling factor the constraint "
+      "functions is computed so that the gradient has the max norm of the given "
+      "size at the starting point.  This overrides nlp_scaling_max_gradient "
+      "for the constraint functions.");
   }
 
   bool GradientScaling::InitializeImpl(const OptionsList& options,
@@ -51,6 +60,8 @@ namespace Ipopt
                             scaling_max_gradient_, prefix);
     options.GetNumericValue("nlp_scaling_obj_target_gradient",
                             scaling_obj_target_gradient_, prefix);
+    options.GetNumericValue("nlp_scaling_constr_target_gradient",
+                            scaling_constr_target_gradient_, prefix);
     return StandardScalingBase::InitializeImpl(options, prefix);
   }
 
@@ -115,133 +126,163 @@ namespace Ipopt
     //
     dx = NULL;
 
-    //
-    // Calculate c scaling
-    //
-    SmartPtr<Matrix> jac_c = jac_c_space->MakeNew();
-    if (nlp_->Eval_jac_c(*x, *jac_c)) {
-      // ToDo: Don't use TripletHelper, have special methods on matrices instead
-      Index nnz = TripletHelper::GetNumberEntries(*jac_c);
-      Index* irow = new Index[nnz];
-      Index* jcol = new Index[nnz];
-      Number* values = new Number[nnz];
-      TripletHelper::FillRowCol(nnz, *jac_c, irow, jcol);
-      TripletHelper::FillValues(nnz, *jac_c, values);
-      Number* c_scaling = new Number[jac_c->NRows()];
+    dc = NULL;
+    if (c_space->Dim()>0) {
+      //
+      // Calculate c scaling
+      //
+      SmartPtr<Matrix> jac_c = jac_c_space->MakeNew();
+      if (nlp_->Eval_jac_c(*x, *jac_c)) {
+        // ToDo: Don't use TripletHelper, have special methods on matrices instead
+        Index nnz = TripletHelper::GetNumberEntries(*jac_c);
+        Index* irow = new Index[nnz];
+        Index* jcol = new Index[nnz];
+        Number* values = new Number[nnz];
+        TripletHelper::FillRowCol(nnz, *jac_c, irow, jcol);
+        TripletHelper::FillValues(nnz, *jac_c, values);
 
-      for (Index r=0; r<jac_c->NRows(); r++) {
-        c_scaling[r] = 0;
-      }
+        if (scaling_constr_target_gradient_<=0.) {
+          Number* c_scaling = new Number[jac_c->NRows()];
 
-      // put the max of each row into c_scaling...
-      bool need_c_scale = false;
-      for (Index i=0; i<nnz; i++) {
-        if (fabs(values[i]) > scaling_max_gradient_) {
-          c_scaling[irow[i]-1] = Max(c_scaling[irow[i]-1], fabs(values[i]));
-          need_c_scale = true;
-        }
-      }
-
-      if (need_c_scale) {
-        // now compute the scaling factors for each row
-        for (Index r=0; r<jac_c->NRows(); r++) {
-          Number scaling = 1.0;
-          if (c_scaling[r] > scaling_max_gradient_) {
-            scaling = scaling_max_gradient_/c_scaling[r];
+          for (Index r=0; r<jac_c->NRows(); r++) {
+            c_scaling[r] = 0;
           }
-          c_scaling[r] = scaling;
+
+          // put the max of each row into c_scaling...
+          bool need_c_scale = false;
+          for (Index i=0; i<nnz; i++) {
+            if (fabs(values[i]) > scaling_max_gradient_) {
+              c_scaling[irow[i]-1] = Max(c_scaling[irow[i]-1], fabs(values[i]));
+              need_c_scale = true;
+            }
+          }
+
+          if (need_c_scale) {
+            // now compute the scaling factors for each row
+            for (Index r=0; r<jac_c->NRows(); r++) {
+              Number scaling = 1.0;
+              if (c_scaling[r] > scaling_max_gradient_) {
+                scaling = scaling_max_gradient_/c_scaling[r];
+              }
+              c_scaling[r] = scaling;
+            }
+
+            dc = c_space->MakeNew();
+            TripletHelper::PutValuesInVector(jac_c->NRows(), c_scaling, *dc);
+            if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
+              Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                             "Equality constraints are scaled with smallest scaling parameter is %e\n", dc->Min());
+            }
+          }
+          else {
+            Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                           "Equality constraints are not scaled.\n");
+            dc = NULL;
+          }
+          delete [] c_scaling;
+        }
+        else {
+          // Compute the largest element in the Jacobian
+          Index i = IpBlasIdamax(nnz, values, 1);
+          Number c_scaling = fabs(values[i])/scaling_constr_target_gradient_;
+          dc = c_space->MakeNew();
+          dc->Set(c_scaling);
+          if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
+            Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                           "Equality constraints are scaled uniformly by %e\n", c_scaling);
+          }
         }
 
-        dc = c_space->MakeNew();
-        TripletHelper::PutValuesInVector(jac_c->NRows(), c_scaling, *dc);
-        if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
-          Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
-                         "Equality constraints are scaled with smallest scaling parameter is %e\n", dc->Min());
-        }
+        delete [] irow;
+        irow = NULL;
+        delete [] jcol;
+        jcol = NULL;
+        delete [] values;
+        values = NULL;
       }
       else {
-        Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
-                       "Equality constraints are not scaled.\n");
-        dc = NULL;
+        Jnlst().Printf(J_WARNING, J_INITIALIZATION,
+                       "Error evaluating Jacobian of equality constraints at user provided starting point.\n  No scaling factors for equality constraints computed!\n");
       }
-
-      delete [] irow;
-      irow = NULL;
-      delete [] jcol;
-      jcol = NULL;
-      delete [] values;
-      values = NULL;
-      delete [] c_scaling;
-      c_scaling = NULL;
-    }
-    else {
-      Jnlst().Printf(J_WARNING, J_INITIALIZATION,
-                     "Error evaluating Jacobian of equality constraints at user provided starting point.\n  No scaling factors for equality constraints computed!\n");
-      dc = NULL;
     }
 
-    //
-    // Calculate d scaling
-    //
-    SmartPtr<Matrix> jac_d = jac_d_space->MakeNew();
-    if (nlp_->Eval_jac_d(*x, *jac_d)) {
-      Index nnz = TripletHelper::GetNumberEntries(*jac_d);
-      Index* irow = new Index[nnz];
-      Index* jcol = new Index[nnz];
-      Number* values = new Number[nnz];
-      TripletHelper::FillRowCol(nnz, *jac_d, irow, jcol);
-      TripletHelper::FillValues(nnz, *jac_d, values);
-      Number* d_scaling = new Number[jac_d->NRows()];
+    dd = NULL;
+    if (d_space->Dim()>0) {
+      //
+      // Calculate d scaling
+      //
+      SmartPtr<Matrix> jac_d = jac_d_space->MakeNew();
+      if (nlp_->Eval_jac_d(*x, *jac_d)) {
+        Index nnz = TripletHelper::GetNumberEntries(*jac_d);
+        Index* irow = new Index[nnz];
+        Index* jcol = new Index[nnz];
+        Number* values = new Number[nnz];
+        TripletHelper::FillRowCol(nnz, *jac_d, irow, jcol);
+        TripletHelper::FillValues(nnz, *jac_d, values);
 
-      for (Index r=0; r<jac_d->NRows(); r++) {
-        d_scaling[r] = 0;
-      }
+        if (scaling_constr_target_gradient_<=0.) {
+          Number* d_scaling = new Number[jac_d->NRows()];
 
-      // put the max of each row into c_scaling...
-      bool need_d_scale = false;
-      for (Index i=0; i<nnz; i++) {
-        if (fabs(values[i]) > scaling_max_gradient_) {
-          d_scaling[irow[i]-1] = Max(d_scaling[irow[i]-1], fabs(values[i]));
-          need_d_scale = true;
-        }
-      }
-
-      if (need_d_scale) {
-        // now compute the scaling factors for each row
-        for (Index r=0; r<jac_d->NRows(); r++) {
-          Number scaling = 1.0;
-          if (d_scaling[r] > scaling_max_gradient_) {
-            scaling = scaling_max_gradient_/d_scaling[r];
+          for (Index r=0; r<jac_d->NRows(); r++) {
+            d_scaling[r] = 0;
           }
-          d_scaling[r] = scaling;
+
+          // put the max of each row into c_scaling...
+          bool need_d_scale = false;
+          for (Index i=0; i<nnz; i++) {
+            if (fabs(values[i]) > scaling_max_gradient_) {
+              d_scaling[irow[i]-1] = Max(d_scaling[irow[i]-1], fabs(values[i]));
+              need_d_scale = true;
+            }
+          }
+
+          if (need_d_scale) {
+            // now compute the scaling factors for each row
+            for (Index r=0; r<jac_d->NRows(); r++) {
+              Number scaling = 1.0;
+              if (d_scaling[r] > scaling_max_gradient_) {
+                scaling = scaling_max_gradient_/d_scaling[r];
+              }
+              d_scaling[r] = scaling;
+            }
+
+            dd = d_space->MakeNew();
+            TripletHelper::PutValuesInVector(jac_d->NRows(), d_scaling, *dd);
+            if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
+              Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                             "Inequality constraints are scaled with smallest scaling parameter is %e\n", dd->Min());
+            }
+          }
+          else {
+            dd = NULL;
+            Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                           "Inequality constraints are not scaled.\n");
+          }
+          delete [] d_scaling;
+        }
+        else {
+          // Compute the largest element in the Jacobian
+          Index i = IpBlasIdamax(nnz, values, 1);
+          Number d_scaling = fabs(values[i])/scaling_constr_target_gradient_;
+          dd = d_space->MakeNew();
+          dd->Set(d_scaling);
+          if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
+            Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                           "Inequality constraints are scaled uniformly by %e\n", d_scaling);
+          }
         }
 
-        dd = d_space->MakeNew();
-        TripletHelper::PutValuesInVector(jac_d->NRows(), d_scaling, *dd);
-        if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
-          Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
-                         "Inequality constraints are scaled with smallest scaling parameter is %e\n", dd->Min());
-        }
+        delete [] irow;
+        irow = NULL;
+        delete [] jcol;
+        jcol = NULL;
+        delete [] values;
+        values = NULL;
       }
       else {
-        dd = NULL;
-        Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
-                       "Inequality constraints are not scaled.\n");
+        Jnlst().Printf(J_WARNING, J_INITIALIZATION,
+                       "Error evaluating Jacobian of inequality constraints at user provided starting point.\n  No scaling factors for inequality constraints computed!\n");
       }
-
-      delete [] irow;
-      irow = NULL;
-      delete [] jcol;
-      jcol = NULL;
-      delete [] values;
-      values = NULL;
-      delete [] d_scaling;
-      d_scaling = NULL;
-    }
-    else {
-      Jnlst().Printf(J_WARNING, J_INITIALIZATION,
-                     "Error evaluating Jacobian of inequality constraints at user provided starting point.\n  No scaling factors for inequality constraints computed!\n");
-      dd = NULL;
     }
   }
 

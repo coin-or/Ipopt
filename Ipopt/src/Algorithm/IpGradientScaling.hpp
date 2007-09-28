@@ -85,6 +85,9 @@ namespace Ipopt
 
     /** target size of norm for objective gradient */
     Number scaling_obj_target_gradient_;
+
+    /** target size of norm for constraint gradients */
+    Number scaling_constr_target_gradient_;
   };
 } // namespace Ipopt
 #endif
