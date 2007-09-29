@@ -183,8 +183,8 @@ namespace Ipopt
         }
         else {
           // Compute the largest element in the Jacobian
-          Index i = IpBlasIdamax(nnz, values, 1);
-          Number c_scaling = fabs(values[i])/scaling_constr_target_gradient_;
+          Index i = IpBlasIdamax(nnz, values, 1)-1;
+          Number c_scaling = scaling_constr_target_gradient_/fabs(values[i]);
           dc = c_space->MakeNew();
           dc->Set(c_scaling);
           if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
@@ -262,8 +262,8 @@ namespace Ipopt
         }
         else {
           // Compute the largest element in the Jacobian
-          Index i = IpBlasIdamax(nnz, values, 1);
-          Number d_scaling = fabs(values[i])/scaling_constr_target_gradient_;
+          Index i = IpBlasIdamax(nnz, values, 1)-1;
+          Number d_scaling = scaling_constr_target_gradient_/fabs(values[i]);
           dd = d_space->MakeNew();
           dd->Set(d_scaling);
           if (Jnlst().ProduceOutput(J_DETAILED, J_INITIALIZATION)) {
