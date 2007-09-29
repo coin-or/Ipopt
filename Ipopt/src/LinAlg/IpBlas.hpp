@@ -27,7 +27,7 @@ namespace Ipopt
   /** Wrapper for BLAS function DASUM.  Compute 1-norm of vector x*/
   Number IpBlasDasum(Index size, const Number *x, Index incX);
 
-  /** Wrapper for BLAS function DASUM.  Compute index for largest
+  /** Wrapper for BLAS function IDAMAX.  Compute index for largest
       absolute element of vector x */
   Index IpBlasIdamax(Index size, const Number *x, Index incX);
 

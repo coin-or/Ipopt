@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -8,6 +8,16 @@
 
 #include "IpPDFullSpaceSolver.hpp"
 #include "IpDebug.hpp"
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -71,6 +81,14 @@ namespace Ipopt
       "If the improvement of the residual test ratio made by one iterative "
       "refinement step is not better than this factor, iterative refinement "
       "is aborted.");
+    roptions->AddLowerBoundedNumberOption(
+      "neg_curv_test_tol",
+      "Tolerance for heurstic to ignore wrong inertia.",
+      0.0, true, 0.0,
+      "If positive, incorrect inertia in the augmented system is ignored, and "
+      "we test if the direction is a direction of positive curvature.  This "
+      "tolerance determines when the direction is considered to be "
+      "sufficiently positive.");
   }
 
 
@@ -88,6 +106,7 @@ namespace Ipopt
     ASSERT_EXCEPTION(residual_ratio_singular_ >= residual_ratio_max_, OPTION_INVALID,
                      "Option \"residual_ratio_singular\": This value must be not smaller than residual_ratio_max.");
     options.GetNumericValue("residual_improvement_factor", residual_improvement_factor_, prefix);
+    options.GetNumericValue("neg_curv_test_tol", neg_curv_test_tol_, prefix);
 
     // Reset internal flags and data
     augsys_improved_ = false;
@@ -443,7 +462,7 @@ namespace Ipopt
       }
     }
     else {
-      Index numberOfEVals=rhs.y_c()->Dim()+rhs.y_d()->Dim();
+      const Index numberOfEVals=rhs.y_c()->Dim()+rhs.y_d()->Dim();
       // counter for the number of trial evaluations
       // (ToDo is not at the correct place)
       Index count = 0;
@@ -470,13 +489,16 @@ namespace Ipopt
           Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                          "Solving system with delta_x=%e delta_s=%e\n                    delta_c=%e delta_d=%e\n",
                          delta_x, delta_s, delta_c, delta_d);
+          bool check_inertia = true;
+          if (neg_curv_test_tol_ > 0.) {
+            check_inertia = false;
+          }
           retval = augSysSolver_->Solve(&W, 1.0, &sigma_x, delta_x,
                                         &sigma_s, delta_s, &J_c, NULL,
                                         delta_c, &J_d, NULL, delta_d,
                                         *augRhs_x, *augRhs_s, *rhs.y_c(), *rhs.y_d(),
                                         *sol->x_NonConst(), *sol->s_NonConst(),
-                                        *sol->y_c_NonConst(), *sol->y_d_NonConst(),
-                                        true, numberOfEVals);
+                                        *sol->y_c_NonConst(), *sol->y_d_NonConst(),                                     check_inertia, numberOfEVals);
         }
         assert(retval!=SYMSOLVER_FATAL_ERROR); //TODO make return code
         if (retval==SYMSOLVER_SINGULAR &&
@@ -484,9 +506,8 @@ namespace Ipopt
 
           // Get new perturbation factors from the perturbation
           // handlers for the singular case
-          bool pert_return =
-                             perturbHandler_->PerturbForSingularity(delta_x, delta_s,
-                                                                    delta_c, delta_d);
+          bool pert_return = perturbHandler_->PerturbForSingularity(delta_x, delta_s,
+                             delta_c, delta_d);
           if (!pert_return) {
             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                            "PerturbForSingularity can't be done\n");
@@ -498,8 +519,7 @@ namespace Ipopt
                  augSysSolver_->NumberOfNegEVals() < numberOfEVals) {
           Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                          "Number of negative eigenvalues too small!\n");
-          // If the number of negative eigenvalues is too small, then
-          // we first try to remedy this by asking for better quality
+          // If the number of negative eigenvalues is too small, then          // we first try to remedy this by asking for better quality
           // solution (e.g. increasing pivot tolerance), and if that
           // doesn't help, we assume that the system is singular
           bool assume_singular = true;
@@ -534,14 +554,47 @@ namespace Ipopt
                  retval==SYMSOLVER_SINGULAR) {
           // Get new perturbation factors from the perturbation
           // handlers for the case of wrong inertia
-          bool pert_return =
-                             perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
-                                                                     delta_c, delta_d);
+          bool pert_return = perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
+                             delta_c, delta_d);
           if (!pert_return) {
             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                            "PerturbForWrongInertia can't be done for wrong interia or singular.\n");
             IpData().TimingStats().PDSystemSolverSolveOnce().End();
             return false;
+          }
+        }
+        else if (neg_curv_test_tol_ > 0.) {
+          DBG_ASSERT(augSysSolver_->ProvidesInertia());
+          // we now check if the inertia is possible wrong
+          Index neg_values = augSysSolver_->NumberOfNegEVals();
+          if (neg_values != numberOfEVals) {
+            // check if we have a direction of sufficient positive curvature
+            SmartPtr<Vector> x_tmp = sol->x()->MakeNew();
+            W.MultVector(1., *sol->x(), 0., *x_tmp);
+            Number xWx = x_tmp->Dot(*sol->x());
+            x_tmp->Copy(*sol->x());
+            x_tmp->ElementWiseMultiply(sigma_x);
+            xWx += x_tmp->Dot(*sol->x());
+            SmartPtr<Vector> s_tmp = sol->s()->MakeNewCopy();
+            s_tmp->ElementWiseMultiply(sigma_s);
+            xWx += s_tmp->Dot(*sol->s());
+            Number xs_nrmsq = pow(sol->x()->Nrm2(),2) + pow(sol->s()->Nrm2(),2);
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "In inertia heuristic: xWx = %e xx = %e\n",
+                           xWx, xs_nrmsq);
+            if (xWx < neg_curv_test_tol_*xs_nrmsq) {
+              Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                             "    -> Redo with modified matrix.\n");
+              bool pert_return = perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
+                                 delta_c, delta_d);
+              if (!pert_return) {
+                Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                               "PerturbForWrongInertia can't be done for inertia heuristic.\n");
+                IpData().TimingStats().PDSystemSolverSolveOnce().End();
+                return false;
+              }
+              retval = SYMSOLVER_WRONG_INERTIA;
+            }
           }
         }
       } // while (retval!=SYMSOLVER_SUCCESS && !fail) {
