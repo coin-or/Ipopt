@@ -219,6 +219,13 @@ namespace Ipopt
 
       if (allow_inexact) {
         // no safety checks required
+        if (Jnlst().ProduceOutput(J_MOREDETAILED, J_LINEAR_ALGEBRA)) {
+          SmartPtr<IteratesVector> resid = res.MakeNewIteratesVector(true);
+          ComputeResiduals(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U,
+                           *z_L, *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U,
+                           *slack_s_L, *slack_s_U, *sigma_x, *sigma_s,
+                           alpha, beta, rhs, res, *resid);
+        }
         break;
       }
 
