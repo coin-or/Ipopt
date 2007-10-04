@@ -195,8 +195,10 @@ private:
   /** value of penalty function term */
   inline Number PenObj(Number t) const
   {
-    //return 0.5*t*t;
-    if (t > B_) {
+    if (B_ == 0.) {
+      return 0.5*t*t;
+    }
+    else if (t > B_) {
       return B_*B_/2. + C_*(t - B_);
     }
     else if (t < -B_) {
@@ -212,8 +214,10 @@ private:
   /** first derivative of penalty function term */
   inline Number PenObj_1(Number t) const
   {
-    //return t;
-    if (t > B_) {
+    if (B_ == 0.) {
+      return t;
+    }
+    else if (t > B_) {
       return C_;
     }
     else if (t < -B_) {
@@ -229,8 +233,10 @@ private:
   /** second derivative of penalty function term */
   inline Number PenObj_2(Number t) const
   {
-    //return 1.;
-    if (t > B_) {
+    if (B_ == 0.) {
+      return 1.;
+    }
+    else if (t > B_) {
       return 0.;
     }
     else if (t < -B_) {
@@ -254,7 +260,7 @@ private:
   //@}
 };
 
-/** Class implementating Example 1 */
+/** Class implementating case with convex quadratic penalty function */
 class MittelmannBndryCntrlDiri3D_27 : public MittelmannBndryCntrlDiriBase3D_27
 {
 public:
@@ -270,14 +276,14 @@ public:
       printf("N has to be at least 1.");
       return false;
     }
-    Number alpha = 0.01;
+    Number alpha = 1e-4;
     Number lb_y = -1e20;
     Number ub_y = 3.5;
     Number lb_u = 0.;
     Number ub_u = 10.;
     Number d_const = -20.;
-    Number B = .5;
-    Number C = 0.01;
+    Number B = 0.; // convex case (quadratic penalty)
+    Number C = 0.;
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
     return true;
   }
@@ -296,5 +302,47 @@ private:
 
 };
 
+/** Class implementating case with nonconvex Beaton-Tukey like penalty
+    function */
+class MittelmannBndryCntrlDiri3D_27BT : public MittelmannBndryCntrlDiriBase3D_27
+{
+public:
+  MittelmannBndryCntrlDiri3D_27BT()
+  {}
+
+  virtual ~MittelmannBndryCntrlDiri3D_27BT()
+  {}
+
+  virtual bool InitializeProblem(Index N)
+  {
+    if (N<1) {
+      printf("N has to be at least 1.");
+      return false;
+    }
+    Number alpha = 1e-4;
+    Number lb_y = -1e20;
+    Number ub_y = 3.5;
+    Number lb_u = 0.;
+    Number ub_u = 10.;
+    Number d_const = -20.;
+    Number B = .25; // nonconves case with beaton-tukey-type penalty function
+    Number C = 0.01;
+    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
+    return true;
+  }
+protected:
+  /** Target profile function for y */
+  virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
+  {
+    return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.));
+  }
+private:
+  /**@name hide implicitly defined contructors copy operators */
+  //@{
+  MittelmannBndryCntrlDiri3D_27BT(const MittelmannBndryCntrlDiri3D_27BT&);
+  MittelmannBndryCntrlDiri3D_27BT& operator=(const MittelmannBndryCntrlDiri3D_27BT&);
+  //@}
+
+};
 
 #endif
