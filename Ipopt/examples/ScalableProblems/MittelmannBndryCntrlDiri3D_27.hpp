@@ -276,7 +276,7 @@ public:
       printf("N has to be at least 1.");
       return false;
     }
-    Number alpha = 1e-4;
+    Number alpha = 1e-2;
     Number lb_y = -1e20;
     Number ub_y = 3.5;
     Number lb_u = 0.;
@@ -319,7 +319,7 @@ public:
       printf("N has to be at least 1.");
       return false;
     }
-    Number alpha = 1e-4;
+    Number alpha = 1e-2;
     Number lb_y = -1e20;
     Number ub_y = 3.5;
     Number lb_u = 0.;
