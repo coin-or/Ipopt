@@ -1,0 +1,40 @@
+This directory and its subdirectories contain a Java interface for
+Ipopt.  It was written and contributed by
+
+Rafael de Pelegrini Soares
+  VRTech Industrial Technologies   (http://www.vrtech.com.br)
+
+The code is published under the Common Public License.
+
+You can find more information to this at the wiki page:
+
+  https://projects.coin-or.org/Ipopt/wiki/JavaInterface
+
+-----------
+
+Installation:
+
+1. Before you run Ipopt's configure, you need to set the JAVA_HOME
+   environment variable to the directory that contains your JDK, e.g.,
+
+   /usr/lib/jvm/java-1.5.0
+
+2. Follow the regular Ipopt installation instructions.  After the
+   final 'make install' go into the subdirectory
+
+   Ipopt/contrib/JavaInterface
+
+   of the directory where you can configure and make install
+
+3. Type 'make' to compile the JNI interface code and the JIpopt class.
+   This will generate the shared object
+
+   lib/libjipopt.so
+
+   and the class
+
+   org/coinor/Ipopt.class
+
+4. With 'make test' you can run two example problems.
+
+(So far, this has only been tested on Linux...)
