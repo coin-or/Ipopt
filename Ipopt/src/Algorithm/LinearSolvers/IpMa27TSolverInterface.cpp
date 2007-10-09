@@ -114,7 +114,7 @@ namespace Ipopt
       "available if Ipopt has been compiled with MA27.");
     roptions->AddStringOption2(
       "ma27_skip_inertia_check",
-      "Always present inertia is correct.",
+      "Always pretent inertia is correct.",
       "no",
       "no", "check interia",
       "yes", "skip inertia check",
