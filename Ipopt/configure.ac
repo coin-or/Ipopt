@@ -558,6 +558,17 @@ if test "${JAVA_HOME+set}" = set; then
   AC_MSG_NOTICE([JAVA_HOME = $JAVA_HOME])
 fi
 AC_SUBST(JAVA_HOME)
+case $build in
+  *-cygwin* | *-mingw*)
+    JIPOPTDLL=jipopt.dll
+    ;;
+  *)
+    JIPOPTDLL=libjipopt.so
+    ;;
+esac
+AC_SUBST(JIPOPTDLL)
+
+# Compiler flag for linking DLLs/shared objects (not yet portable!)
 SHARED_FLAGS=-shared
 AC_SUBST(SHARED_FLAGS)
 
