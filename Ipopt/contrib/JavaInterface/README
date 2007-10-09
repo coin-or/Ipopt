@@ -37,4 +37,13 @@ Installation:
 
 4. With 'make test' you can run two example problems.
 
+-----------
+
+Usage:
+
+If you want to use Ipopt from Java, all you need to include is the
+org/coinor/Ipopt.class file.  At runtime, there must be the
+lib/libjipopt.so file.
+
+
 (So far, this has only been tested on Linux...)
