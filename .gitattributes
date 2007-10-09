@@ -25,6 +25,16 @@ Ipopt/NoLongerMaintainedWindows/VisualStudio_dotNET/hs071_c/hs071_c.vcproj -text
 Ipopt/NoLongerMaintainedWindows/VisualStudio_dotNET/hs071_cpp/hs071_cpp.vcproj -text
 Ipopt/NoLongerMaintainedWindows/VisualStudio_dotNET/hs071_f/hs071_f.f -text
 Ipopt/configure -text
+Ipopt/contrib/JavaInterface/Makefile.in -text
+Ipopt/contrib/JavaInterface/README -text
+Ipopt/contrib/JavaInterface/javafiles.lst -text
+Ipopt/contrib/JavaInterface/jipopt.cpp -text
+Ipopt/contrib/JavaInterface/manifest.txt -text
+Ipopt/contrib/JavaInterface/org/coinor/Ipopt.java -text
+Ipopt/contrib/JavaInterface/org/coinor/examples/HS071.java -text
+Ipopt/contrib/JavaInterface/org/coinor/examples/scalable/LuksanVlcek1.java -text
+Ipopt/contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java -text
+Ipopt/contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java -text
 Ipopt/contrib/MatlabInterface/examples/bayesnet/bopt.m -text
 Ipopt/contrib/MatlabInterface/examples/bayesnet/computeJGConstraints.m -text
 Ipopt/contrib/MatlabInterface/examples/bayesnet/computeJGGradient.m -text

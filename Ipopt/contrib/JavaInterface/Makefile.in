@@ -1,0 +1,106 @@
+# Copyright (C) 2007 International Business Machines and others.
+# All Rights Reserved.
+# This file is distributed under the Common Public License.
+#
+# Author: Andreas Waechter     2007-10-08     IBM
+
+# $Id: Makefile.in 749 2006-06-23 23:02:27Z andreasw $
+
+# Installation of JDK
+JAVA_HOME = @JAVA_HOME@
+
+# Java compiler
+JAVAC = $(JAVA_HOME)/bin/javac
+
+# JNI haeder file generator
+JAVAH = $(JAVA_HOME)/bin/javah -jni
+
+# Jar utility
+JAR = $(JAVA_HOME)/bin/jar
+
+# Java runtime
+JAVA = $(JAVA_HOME)/bin/java
+
+# C++ Compiler command
+CXX = @CXX@
+
+# C++ Compiler options
+CXXFLAGS = `echo @CXXFLAGS@ | sed -e s'|-pedantic-errors||'`
+
+# additional C++ Compiler options for linking
+LINKFLAGS = $(CXXFLAGS) @RPATH_FLAGS@ @SHARED_FLAGS@
+
+# Directory with header files
+IPOPTINCDIR = @includedir@/ipopt
+
+# Directory with libipopt.a
+IPOPTLIBDIR = @libdir@
+exec_prefix = @exec_prefix@
+prefix = @prefix@
+
+# Libraries necessary to link with IPOPT
+#LIBS = -L$(IPOPTLIBDIR) -lipopt @IPADDLIBS@
+LIBS = @ipoptlib@ @ADDLIBS@
+
+# Necessary Include dirs (we use the CYGPATH_W variables to allow
+# compilation with Windows compilers)
+INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)/../` -I`$(CYGPATH_W) $(JAVA_HOME)/include` $(ADDINCFLAGS) -I.
+
+# The following is necessary under cygwin, if native compilers are used
+CYGPATH_W = @CYGPATH_W@
+
+SRCDIR = @srcdir@
+VPATH = @srcdir@
+
+##########################################################################
+
+ORGDIR = org/coinor
+JNIHEADER = org_coinor_Ipopt.h
+
+JIPOPTOBJ = jipopt.@OBJEXT@
+LIBJIPOPT = lib/libjipopt.so
+
+IPOPTCLASS = $(ORGDIR)/Ipopt.class
+HS071 = $(ORGDIR)/examples/HS071
+SCALABLE = $(ORGDIR)/examples/scalable/SolveProblem
+
+HS071CLASSES = $(ORGDIR)/examples/HS071.class
+
+SCALCLASSES = \
+	$(ORGDIR)/examples/scalable/LuksanVlcek1.class \
+	$(ORGDIR)/examples/scalable/Scalable.class \
+	$(ORGDIR)/examples/scalable/SolveProblem.class
+
+SCALJAR = ScalableProblems.jar
+
+$(LIBJIPOPT): $(JIPOPTOBJ) lib
+	$(CXX) $(LINKFLAGS) -o $(LIBJIPOPT) $(JIPOPTOBJ) $(LIBS)
+
+$(JNIHEADER): $(IPOPTCLASS)
+	$(JAVAH) `echo $(IPOPTCLASS) | sed -e 's|/|.|g' -e 's|.class||'`
+
+$(JIPOPTOBJ): $(JNIHEADER) 
+
+lib:
+	mkdir lib
+
+.java.class:
+	$(JAVAC) $<
+
+.SUFFIXES: .cpp .o .obj .java .class
+
+$(SCALJAR): $(SCALCLASSES)
+	$(JAR) cfm $(SCALJAR) $(SRCDIR)/manifest.txt $(IPOPTCLASS) $(SCALCLASSES)
+
+test: $(LIBJIPOPT) $(HS071CLASSES) $(SCALJAR)
+	$(JAVA) $(HS071)
+	$(JAVA) $(SCALJAR) LukVlI1 100
+
+clean:
+	rm -rf $(LIBJIPOPT) $(JIPOPTOBJ) $(JNIHEADER) $(IPOPTCLASS) $(HS071CLASSES) $(SCALCLASSES) $(SCALJAR)
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
+
+.cpp.obj:
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`

@@ -1,0 +1,1 @@
+Main-Class: org/coinor/examples/scalable/SolveProblem
