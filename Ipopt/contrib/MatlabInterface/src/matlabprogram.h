@@ -14,6 +14,7 @@
 #include "matlabmatrix.h"
 #include "sparsematrix.h"
 #include "arrayofmatrices.h"
+#include "multipliers.h"
 #include "ipopt/IpTNLP.hpp"
 #include "mex.h"
 
@@ -36,7 +37,8 @@ public:
 		 const char* gradFunc, const char* constraintFunc, 
 		 const char* jacobianFunc, const char* hessianFunc,
 		 const char* iterFunc, const mxArray* auxData, 
-		 ArrayOfMatrices& xsol, bool useQuasiNewton);
+		 ArrayOfMatrices& xsol, bool useQuasiNewton,
+		 Multipliers* multipliers = 0);
     
   // The destructor.
   virtual ~MatlabProgram();
@@ -124,6 +126,9 @@ protected:
   ArrayOfMatrices*       x;            // Current value of the variables 
                                        // that's passed to the Matlab 
                                        // callback routines.
+  Multipliers*           multipliers;  // This is used to store the
+				       // value of the Lagrangne
+				       // multipliers at the solution.
   Array<double>*         lambda;       // Current value of the Lagrange 
                                        // multipliers that's passed to the
                                        // Matlab callback routine for

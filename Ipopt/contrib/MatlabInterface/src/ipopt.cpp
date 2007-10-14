@@ -15,6 +15,7 @@
 #include "matlabjournal.h"
 #include "matlabprogram.h"
 #include "matlaboption.h"
+#include "multipliers.h"
 #include "mex.h"
 #include "matrix.h"
 #include "ipopt/IpRegOptions.hpp"
@@ -48,8 +49,7 @@ void mexFunction (int nlhs, mxArray *plhs[],
 		  int nrhs, const mxArray *prhs[]) 
   try {
 
-    // Check to see if we have the correct number of input and output
-    // arguments.
+    // Check to see if we have the correct number of input arguments.
     if (nrhs < minNumInputArgs)
       throw MatlabException("Incorrect number of input arguments");
 
@@ -57,14 +57,18 @@ void mexFunction (int nlhs, mxArray *plhs[],
     // the first input argument. The variables must be either a single
     // matrix or a cell array of matrices.
     int k = 0;  // The index of the current input argument.
+    int l = 0;  // The index of the current output argument.
     ArrayOfMatrices x0(prhs[k++]);
 
-    // Create the output, which stores the solution obtained from
-    // running IPOPT. There should be as many output arguments as cell
-    // entries in X.
-    if (nlhs != x0.length())
+    // Check to see if we have the correct number of output arguments.
+    if ((nlhs < x0.length()) || nlhs > x0.length() + 2)
       throw MatlabException("Incorrect number of output arguments");
+
+    // Create the first outputs, which will store the solution
+    // obtained from running IPOPT. There should be at least as many
+    // output arguments as cell entries in X.
     ArrayOfMatrices x(plhs,x0);
+    l += x0.length();
 
     // Load the lower and upper bounds on the variables as
     // ArrayOfMatrices objects. They should have the same structure as
@@ -84,6 +88,16 @@ structure as X");
     if (constraintlb.length() != constraintub.length())
       throw MatlabException("Input arguments CONSTRAINTLB and CONSTRAINTUB \
 should have the same number of elements");
+
+    // If requested, create the output that will store the values of
+    // the multipliers obtained when IPOPT converges to a stationary
+    // point. This output is a MATLAB structure with three fields, two
+    // for the final values of the upper and lower bound multipliers,
+    // and one for the constraint multipliers.
+    Multipliers* multipliers = 0;
+    if (nlhs > l)
+      multipliers = new Multipliers(plhs[l++],x.numelems(),
+				    constraintlb.length());
 
     // Get the Matlab callback functions.
     MatlabString objFunc(prhs[k++]);
@@ -166,6 +180,9 @@ should have the same number of elements");
 	    delete iterFunc;
 	    throw MatlabException("Invalid IPOPT option value");
 	  }
+
+	  // Special treatment is needed for the limited-memory
+	  // quasi-Newton approximation to the Hessian.
 	  if ((strcmp(optionLabel,"hessian_approximation") == 0) && 
 	      (strcmp(optionValue,"limited-memory")) == 0)
 	    useQuasiNewton = true;
@@ -176,6 +193,13 @@ should have the same number of elements");
 	    if (!app.Options()->SetIntegerValue(optionLabel,optionValue)) {
 	      delete iterFunc;
 	      throw MatlabException("Invalid IPOPT option value");
+	    }
+
+	    // Special treatment is needed if the print level is set
+	    // by the user.
+	    if (strcmp(optionLabel,"print_level") == 0) {
+	      int printLevel = optionValue;
+	      console->SetAllPrintLevels((EJournalLevel) printLevel);
 	    }
 	  }
 	  else if (!app.Options()->SetNumericValue(optionLabel,optionValue)) {
@@ -196,12 +220,13 @@ should have the same number of elements");
     SmartPtr<TNLP> program 
       = new MatlabProgram(x0,lb,ub,constraintlb,constraintub,objFunc,
 			  gradFunc,constraintFunc,jacobianFunc,hessianFunc,
-			  *iterFunc,auxData,x,useQuasiNewton);
+			  *iterFunc,auxData,x,useQuasiNewton,multipliers);
 
     // Ask Ipopt to solve the problem.
     exitstatus = app.OptimizeTNLP(program);
 
     // Get rid of the dynamically allocated memory.
+    delete multipliers;
     delete iterFunc;
 
     // Throw an exception if the solver terminates before finding a

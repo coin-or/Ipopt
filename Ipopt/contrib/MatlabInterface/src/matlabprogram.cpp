@@ -31,11 +31,12 @@ MatlabProgram::MatlabProgram (const ArrayOfMatrices& x0,
 			      const char* iterFunc, 
 			      const mxArray* auxData, 
 			      ArrayOfMatrices& xsol,
-			      bool useQuasiNewton)
+			      bool useQuasiNewton,
+			      Multipliers* multipliers)
   : lb(lb), ub(ub), constraintlb(constraintlb), 
-    constraintub(constraintub), auxData(auxData), xsol(xsol), 
-    useQuasiNewton(useQuasiNewton), objFunc(objFunc), 
-    gradFunc(gradFunc), constraintFunc(constraintFunc), 
+    constraintub(constraintub), auxData(auxData), xsol(xsol),
+    multipliers(multipliers), useQuasiNewton(useQuasiNewton), 
+    objFunc(objFunc), gradFunc(gradFunc), constraintFunc(constraintFunc), 
     jacobianFunc(jacobianFunc), hessianFunc(hessianFunc),
     iterFunc(iterFunc) { 
    x                 = 0;
@@ -306,6 +307,14 @@ void MatlabProgram::finalize_solution (SolverReturn status, int numVariables,
 
   // Get the current solution.
   xsol.inject(variables);
+
+  // If requested, store the value of the Lagrange multipliers at the
+  // solution.
+  if (multipliers) {
+    multipliers->lowerbounds().inject(zl);
+    multipliers->upperbounds().inject(zu);
+    multipliers->constraints().inject(lambda);
+  }  
 
   switch (status) {
   case Ipopt::INTERNAL_ERROR:
