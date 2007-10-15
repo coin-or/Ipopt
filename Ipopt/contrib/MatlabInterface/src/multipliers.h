@@ -29,6 +29,11 @@
 class Multipliers {
 public:
 
+  // Read the values of the multipliers from the specified MATLAB
+  // structure. See the comments above for more information as to the
+  // form the MATLAB structure is expected to take.
+  explicit Multipliers (const mxArray*& ptr);
+
   // Create a set of multipliers for n variables and m constraints. It
   // creates a MATLAB struct array as a side effect.
   Multipliers (mxArray*& ptr, int n, int m);

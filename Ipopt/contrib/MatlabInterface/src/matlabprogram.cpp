@@ -32,15 +32,17 @@ MatlabProgram::MatlabProgram (const ArrayOfMatrices& x0,
 			      const mxArray* auxData, 
 			      ArrayOfMatrices& xsol,
 			      bool useQuasiNewton,
+			      Multipliers* initialMultipliers, 
 			      Multipliers* multipliers)
   : lb(lb), ub(ub), constraintlb(constraintlb), 
     constraintub(constraintub), auxData(auxData), xsol(xsol),
-    multipliers(multipliers), useQuasiNewton(useQuasiNewton), 
-    objFunc(objFunc), gradFunc(gradFunc), constraintFunc(constraintFunc), 
-    jacobianFunc(jacobianFunc), hessianFunc(hessianFunc),
-    iterFunc(iterFunc) { 
+    initialMultipliers(initialMultipliers), multipliers(multipliers), 
+    useQuasiNewton(useQuasiNewton), objFunc(objFunc), gradFunc(gradFunc), 
+    constraintFunc(constraintFunc), jacobianFunc(jacobianFunc), 
+    hessianFunc(hessianFunc), iterFunc(iterFunc) { 
    x                 = 0;
    lambda            = 0;
+   numiter           = 0;
    prhs              = 0;
    JacobianStructure = 0;
    HessianStructure  = 0;
@@ -157,12 +159,37 @@ bool MatlabProgram::get_starting_point (int numVariables,
 					bool initializeLambda, 
 					double* lambda) 
   try {
-    if (initializez || initializeLambda)
-      throw MatlabException("Initialization of Lagrange multipliers \
-requested");
-    
+
+    // Initialize the number of iterations.
+    numiter = 0;
+
+    // Check to see whether IPOPT is requesting the initial point for
+    // the Lagrange multipliers associated with the bounds on the
+    // optimization variables.
+    if (initializez) {
+      if (initialMultipliers == 0)
+	throw MatlabException("Initialization of Lagrange multipliers \
+requested but initial values are not provided");
+      initialMultipliers->lowerbounds().copyto(zl);
+      initialMultipliers->upperbounds().copyto(zu);
+    }
+
+    // Check to see whether IPOPT is requesting the initial point for
+    // the Lagrange multipliers corresponding to the equality and
+    // inequality constraints.
+    if (initializeLambda) {
+      
+      if (initialMultipliers == 0)
+	throw MatlabException("Initialization of Lagrange multipliers \
+requested but initial values are not provided");
+      initialMultipliers->constraints().copyto(lambda);
+    }
+
+    // Check to see whether IPOPT is requesting the iniial point for
+    // the primal variables.
     if (initializeVars)
       x->copyto(variables);
+
     return true;
   } catch (std::exception& error) {
     mexPrintf(error.what());
@@ -344,6 +371,10 @@ bool MatlabProgram::intermediate_callback (AlgorithmMode mode,
 					   int ls_trials,
 					   const IpoptData* ip_data,
 					   IpoptCalculatedQuantities* ip_cq) {
+  
+  // Update the number of iterations of IPOPT.
+  numiter++;
+
   if (strlen(iterFunc) > 0) {
     int      nrhs = 2 + (bool) auxData;  
     mxArray* prhs[3];

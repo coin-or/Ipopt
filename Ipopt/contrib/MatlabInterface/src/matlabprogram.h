@@ -38,6 +38,7 @@ public:
 		 const char* jacobianFunc, const char* hessianFunc,
 		 const char* iterFunc, const mxArray* auxData, 
 		 ArrayOfMatrices& xsol, bool useQuasiNewton,
+		 Multipliers* initialMultipliers = 0, 
 		 Multipliers* multipliers = 0);
     
   // The destructor.
@@ -46,6 +47,10 @@ public:
   // Returns the error generated. If no error was generated, returns a
   // null pointer.
   char* geterrormsg() const;
+
+  // Get the number of number of iterations of IPOPT. Should only be
+  // called after IPOPT has converged to a stationary point.
+  int getnumiterations() const { return numiter; };
   
   // Method to return some info about the nonlinear program.
   virtual bool get_nlp_info (int& numVariables, int& numConstraints, 
@@ -126,6 +131,8 @@ protected:
   ArrayOfMatrices*       x;            // Current value of the variables 
                                        // that's passed to the Matlab 
                                        // callback routines.
+  Multipliers*           initialMultipliers; // The initial point of the
+                                       // Lagrange multipliers.
   Multipliers*           multipliers;  // This is used to store the
 				       // value of the Lagrangne
 				       // multipliers at the solution.
@@ -133,7 +140,9 @@ protected:
                                        // multipliers that's passed to the
                                        // Matlab callback routine for
 				       // computing the Hessian.
-  
+  int                    numiter;      // Keeps track of the number of
+				       // IPOPT iterations.
+
   // Array of inputs to a Matlab callback function.
   mxArray** prhs;
   mxArray*  lambdarhs;

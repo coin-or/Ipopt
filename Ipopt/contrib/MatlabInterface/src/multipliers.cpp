@@ -8,6 +8,39 @@ const char* constraintMultipliersLabel = "lambda";
 
 // Function definitions for clas Multipliers.
 // -----------------------------------------------------------------
+Multipliers::Multipliers (const mxArray*& ptr) {
+  mxArray* p;
+
+  // First check to see whether the MATLAB array is a structure
+  // array. If not, throw an exception.
+  if (!mxIsStruct(ptr))
+    throw MatlabException("Matlab array must be a structure array");
+    
+  // Get the multipliers corresponding to the lower bounds on the
+  // optimization variables.
+  p = mxGetField(ptr,0,lowerBoundMultipliersLabel);
+  if (p == 0)
+    throw MatlabException("MATLAB multipliers input does not have the \
+correct fields");
+  zl = new Matrix(p);
+
+  // Get the multipliers corresponding to the upper bounds on the
+  // optimization variables.
+  p = mxGetField(ptr,0,upperBoundMultipliersLabel);
+  if (p == 0)
+    throw MatlabException("MATLAB multipliers input does not have the \
+correct fields");
+  zu = new Matrix(p);  
+
+  // Get the multipliers corresponding to the upper bounds on the
+  // optimization variables.
+  p = mxGetField(ptr,0,constraintMultipliersLabel);
+  if (p == 0)
+    throw MatlabException("MATLAB multipliers input does not have the \
+correct fields");
+  lambda = new Matrix(p);    
+}
+
 Multipliers::Multipliers (mxArray*& ptr, int n, int m) {
   const char* fieldnames[3];
   mxArray*    p;
