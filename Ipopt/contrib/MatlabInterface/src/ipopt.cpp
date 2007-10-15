@@ -99,6 +99,12 @@ should have the same number of elements");
       multipliers = new Multipliers(plhs[l++],x.numelems(),
 				    constraintlb.length());
 
+    // If requested, create the output that will store the number if
+    // iterations needed to attain convergence to a stationary point.
+    MatlabScalar* numiter = 0;
+    if (nlhs > l)
+      numiter = new MatlabScalar(plhs[l++],0);
+
     // Get the Matlab callback functions.
     MatlabString objFunc(prhs[k++]);
     MatlabString gradFunc(prhs[k++]);
@@ -107,28 +113,20 @@ should have the same number of elements");
     MatlabString hessianFunc(prhs[k++]);
 
     // Get the auxiliary data.
-    const mxArray* auxData;
-    const mxArray* ptr = prhs[k++];
-    if (nrhs > 10) {
-      if (mxIsEmpty(ptr))
-	auxData = 0;
-      else
+    const mxArray* auxData = 0;
+    const mxArray* ptr     = prhs[k++];
+    if (nrhs > 10) 
+      if (!mxIsEmpty(ptr))
 	auxData = ptr;
-    }
-    else
-      auxData = 0;
 
     // Get the iterative callback function.
-    MatlabString* iterFunc;
+    MatlabString* iterFunc = new MatlabString("");
     ptr = prhs[k++];
-    if (nrhs > 11) {
-      if (mxIsEmpty(ptr))
-	iterFunc = new MatlabString("");
-      else
+    if (nrhs > 11)
+      if (!mxIsEmpty(ptr)) {
+	delete iterFunc;
 	iterFunc = new MatlabString(ptr);
-    }
-    else
-      iterFunc = new MatlabString("");
+      }
 
     // Create a new instance of IpoptApplication.
     EJournalLevel printLevel = defaultPrintLevel;
@@ -151,6 +149,19 @@ should have the same number of elements");
       convertMatlabConstraints(*ub[i],upper_infty);
     convertMatlabConstraints(constraintlb,lower_infty);
     convertMatlabConstraints(constraintub,upper_infty);
+
+    // Get the initial Lagrange multipliers, if provided.
+    Multipliers* initialMultipliers = 0;
+    ptr = prhs[k++];
+    if (nrhs > 12) 
+      if (!mxIsEmpty(ptr)) {
+	initialMultipliers = new Multipliers(ptr);
+
+	// Notify the IPOPT algorithm that we will provide our own
+	// values for the initial Lagrange multipliers.
+	app.Options()->SetStringValue("warm_start_init_point","yes");
+      }
+
 
     // Process the remaining input arguments, which set options for
     // the IPOPT algorithm.
@@ -217,17 +228,25 @@ should have the same number of elements");
     }
 
     // Create a new instance of the constrained, nonlinear program.
-    SmartPtr<TNLP> program 
+    MatlabProgram* matlabprogram
       = new MatlabProgram(x0,lb,ub,constraintlb,constraintub,objFunc,
 			  gradFunc,constraintFunc,jacobianFunc,hessianFunc,
-			  *iterFunc,auxData,x,useQuasiNewton,multipliers);
+			  *iterFunc,auxData,x,useQuasiNewton,
+			  initialMultipliers,multipliers);
+    SmartPtr<TNLP> program = matlabprogram;
 
     // Ask Ipopt to solve the problem.
     exitstatus = app.OptimizeTNLP(program);
 
+    // Return the number of IPOPT iterations, if requested.
+    if (numiter)
+      *numiter = matlabprogram->getnumiterations();
+
     // Get rid of the dynamically allocated memory.
     delete multipliers;
+    delete numiter;
     delete iterFunc;
+    delete initialMultipliers;
 
     // Throw an exception if the solver terminates before finding a
     // local solution.
