@@ -153,6 +153,7 @@ should have the same number of elements");
     // Get the initial Lagrange multipliers, if provided.
     Multipliers* initialMultipliers = 0;
     ptr = prhs[k++];
+    app.Options()->SetStringValue("warm_start_init_point","no");
     if (nrhs > 12) 
       if (!mxIsEmpty(ptr)) {
 	initialMultipliers = new Multipliers(ptr);
@@ -243,10 +244,10 @@ should have the same number of elements");
       *numiter = matlabprogram->getnumiterations();
 
     // Get rid of the dynamically allocated memory.
-    delete multipliers;
-    delete numiter;
-    delete iterFunc;
-    delete initialMultipliers;
+    if (multipliers)        delete multipliers;
+    if (numiter)            delete numiter;
+    if (iterFunc)           delete iterFunc;
+    if (initialMultipliers) delete initialMultipliers;
 
     // Throw an exception if the solver terminates before finding a
     // local solution.
