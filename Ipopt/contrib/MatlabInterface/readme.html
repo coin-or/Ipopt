@@ -7,16 +7,18 @@ code { font:        12px monospace;
 pre { font:        10px monospace;
       color:       #000066 }
 
-p, ul { font:  12px Geneva, Arial, Helvetica, sans-serif;
-    color: #000000 ;}
+p, ul, h2, h3, h4 { 
+  font: 12px Geneva, Arial, Helvetica, sans-serif;
+  color:#000000;
+}
 
-h2 { font:  20px Geneva, Arial, Helvetica, sans-serif;
-     font-weight: bold;
-     color: #000000; }
+h2, h3, h4 { font-weight:bold; }
 
-h3 { font:  16px Geneva, Arial, Helvetica, sans-serif;
-     font-weight: bold;
-     color: #000000; }
+h2 { font-size:20px; }
+h3 { font-size:16px; }
+h4 { font-size:14px; 
+     margin-bottom:0px; }
+
 </STYLE> 
 
 <title>MATLAB interface for IPOPT: installation and usage</title>
@@ -196,6 +198,8 @@ you can always type <code>help ipopt</code> in the MATLAB prompt. The
 tutorial exampels are all located in the directory
 <code>Ipopt/contrib/MatlabInterface/examples</code>.</p>
 
+<h4>Example 1</h4>
+
 <p>First, let's look at the Hock & Schittkowski test problem #51.<a
 href="#footnote1"><sup>1</sup></a> It is an optimization problem with
 5 variables, no inequality constraints and 3 equality constraints. In
@@ -236,7 +240,9 @@ variables. It is important to always return a sparse matrix, even if
 there is no computational advantage in doing so. Otherwise, MATLAB
 will report an error.</p>
 
-<p>Next, let's move to the second example, <code>examplehs038.m</code>
+<h4>Example 2</h4>
+
+<p>Let's move to the second example, <code>examplehs038.m</code>
 in the subdirectory <code>hs038</code>. It demonstrates the use of
 IPOPT on an optimization problem with 4 variables and no constraints
 other than simple bound constraints. This time, we've implemented a
@@ -259,6 +265,8 @@ solver. This is specified by the twelfth input. The M-file
 <code>t</code>, the current value of the objective <code>f</code>, and
 the current point <code>x</code>.</p>
 
+<h4>Example 3</h4>
+
 <p>The third slightly more complicated example script is
 <code>examplehs071.m</code>, which is the same as the problem explored
 in the IPOPT documentation (Hock and Schittkowski test problem
@@ -276,6 +284,33 @@ dense, so we can return its structure in a single line:</p>
 <p><code><pre>   J = sparse(ones(m,n))</pre></code></p>
 
 <p>where <code>m</code> is the number of constraint functions.</p>
+
+<p>This example also differs from previous ones because the initial values for
+the Lagrange multipliers are specified in MATLAB. We need to input three sets
+of multipliers to IPOPT: the Lagrange multipliers corresponding to the lower
+bounds on the optimization variables, the multipliers corresponding to the
+uppwer bounds on the variables, and the multipliers associated with the
+constraint functions. To specify these three sets of Lagrange multipliers, we
+fill in three fields in the <code>multipliers</code> struct as follows:</p>
+
+<p><code><pre>  multipliers.zl     = [1 1 1 1];
+  multipliers.zu     = [1 1 1 1];
+  multipliers.lambda = [1 1];</pre></code></p>
+
+<p>Note that this optimization problem has 4 variables and 2 constraints.</p>
+
+<p>In this example script, we have also chosen to output the the values of the
+Lagrange multipliers that compose the dual portion of the final primal-dual 
+solution. When I ran this script, I obtained final values of approximately</p>
+
+<p><code><pre>  multipliers.zl     = [1 0 0 0];
+  multipliers.zu     = [0 0 0 0];
+  multipliers.lambda = [-0.55 0.16];</pre></code></p>
+
+<p>The third output in the call to IPOPT is the number of iterations IPOPT
+takes to converge to the stationary point within the specified tolerance.</p>
+
+<h4>Example 4</h4>
 
 <p>The last example is the script <code>examplelauritzen.m</code> in
 the subdirectory <code>bayesnet</code>. It is vastly more complicated
