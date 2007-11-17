@@ -73,7 +73,7 @@ namespace Ipopt
 
     roptions->AddStringOption2(
       "accept_every_trial_step",
-      "Always accept the frist trial step.",
+      "Always accept the first trial step.",
       "no",
       "no", "don't arbitrarily accept the full step",
       "yes", "always accept the full step",
@@ -101,9 +101,9 @@ namespace Ipopt
       "alpha_for_y_tol",
       "Tolerance for switching to full equality multiplier steps.",
       0.0, false, 10.,
-      "This is only relevant if \"alpha_for_y\" is chosen \"primal-and-full\""
-      "or \"dual-and-full\".  The step size for the equality constraint"
-      "multipliers is taken to be one if the max-norm of the primal step is"
+      "This is only relevant if \"alpha_for_y\" is chosen \"primal-and-full\" "
+      "or \"dual-and-full\".  The step size for the equality constraint "
+      "multipliers is taken to be one if the max-norm of the primal step is "
       "less than this tolerance.");
 
     roptions->AddLowerBoundedNumberOption(
@@ -185,7 +185,7 @@ namespace Ipopt
       "Maximum number of iterations performed successively in soft restoration phase.",
       0, 10,
       "If the soft restoration phase is performed for more than so many "
-      "iteratins in a row, the regular restoration phase is called.");
+      "iterations in a row, the regular restoration phase is called.");
   }
 
   bool BacktrackingLineSearch::InitializeImpl(const OptionsList& options,

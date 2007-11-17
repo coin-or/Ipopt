@@ -127,7 +127,7 @@ namespace Ipopt
       "This is ICTL(8) in MUMPS.");
     roptions->AddNumberOption(
       "mumps_dep_tol",
-      "Pivot threshold for detecion of linearly dependent constraints in MUMPS.",
+      "Pivot threshold for detection of linearly dependent constraints in MUMPS.",
       -1.,
       "When MUMPS is used to determine linearly dependent constraints, this "
       "is determines the threshold for a pivot to be considered zero.  This "
