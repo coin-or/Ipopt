@@ -4,21 +4,44 @@
  * This code is published under the Common Public License.
  * 
  * $Id$
- * Authors: Rafael de Pelegrini Soares
+ * Authors: Rafael de Pelegrini Soares 
+ *
+ *
+ * Copyright (C) 2007 Tong Kewei, Beihang University, - www.buaa.edu.cn.
+ * All Rights Reserved.
+ * This code is published under the Common Public License.
+ * 
+ * $Id$
+ *
+ * I changed from Rafael de Pelegrini Soares's original code.
+ * His codes are originally derived form C version of IPOPT,which has limited functions. 
+ * I derived my codes from C++ version of IPOPT, which is much more powerful.  
+ * I also fix a bug in Rafael de Pelegrini Soares's code on function setProblemScaling,
+ * In his original code the function setProblemScaling has no use to change problem.
+ * I added some useful functions in JIpopt, such as get_scaling_parameters or get_number_of_nonlinear_variables
+ * or get_list_of_nonlinear_variables. You can add any more functions as you like. Follow my structure it is 
+ * very easy.
+ *
+ * If you have problem or you need me to add another functions, please contact me.
+ *
+ * Authors: Tong Kewei, E-mail:tongkewei@126.com
+ * Beihang University, website: www.buaa.edu.cn
+ * Beijing,China.
+ * 2007-11-11
  */
+
 
 package org.coinor.examples.scalable;
 
 
-/** 
+/**
  * Implementation of Example 5.1 from "Sparse and Parially Separable
  * Test Problems for Unconstrained and Equality Constrained
  * Optimization" by L. Luksan and J. Vlcek.
  * <p>
  * This code was based on Ipopt file with same name.
  * 
- * @author Rafael de Pelegrini Soares
- *
+ * @author Rafael de Pelegrini Soares, Tong Kewei
  */
 public class LuksanVlcek1 extends Scalable {
 
@@ -81,7 +104,46 @@ public class LuksanVlcek1 extends Scalable {
 
 		return true;
 	}
+      
+     // Callback function for the objective function.  
+     protected boolean get_bounds_info(int n, double[] x_l, double[] x_u,
+                            int m, double[] g_l, double[] g_u){
+         // none of the variables have bounds
+		//x_l = new double[n];
+		//x_u = new double[n];
+		for (int i=0; i<n; i++) {
+			x_l[i] = -1e20;
+			x_u[i] =  1e20;
+		}
 
+		// Set the bounds for the constraints
+		//g_l = new double[m];
+		//g_u = new double[m];
+		for (int i=0; i<m; i++) {
+			g_l[i] = gl;
+			g_u[i] = gu;
+		}
+                
+                return true;
+     }
+    
+     /** Callback function for the objective function. */
+     protected boolean get_starting_point(int n, boolean init_x, double[] x,
+                               boolean init_z, double[] z_L, double[] z_U,
+                               int m, boolean init_lambda,double[] lambda){
+         for (int i=0; i<n/2; i++) {
+			x[2*i] = -1.2;
+			x[2*i+1] = 1.;
+		}
+		if (n != 2*(n/2)) {
+			x[n-1] = -1.2;
+		}
+         
+         return true;
+
+     }
+        
+        
 	@Override
 	protected boolean eval_f(int n, double[] x, boolean new_x,
 			double[] obj_value) {
@@ -136,7 +198,7 @@ public class LuksanVlcek1 extends Scalable {
 			}
 			assert ihes == nele_hess;
 		}
-		else {
+		else {                    
 			int ihes=0;
 			for (int i=0; i<n; i++) {
 				// x[i],x[i]
