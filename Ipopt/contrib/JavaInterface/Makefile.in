@@ -44,7 +44,7 @@ LIBS = @ipoptlib@ @ADDLIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)
-INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)/../` -I`$(CYGPATH_W) $(JAVA_HOME)/include` $(ADDINCFLAGS) -I.
+INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)` -I`$(CYGPATH_W) $(JAVA_HOME)/include` $(ADDINCFLAGS) -I.
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@
