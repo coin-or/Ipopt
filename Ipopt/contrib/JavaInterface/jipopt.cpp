@@ -19,10 +19,9 @@
  */
 
 #include <jni.h>
-#include <ipopt/IpTNLP.hpp>
+#include "IpTNLP.hpp"
 #include "IpIpoptApplication.hpp"
 #include "org_coinor_Ipopt.h"
-#include "ipsmartptr.hpp"
 
 
 //#include"string_igno_case.h"
