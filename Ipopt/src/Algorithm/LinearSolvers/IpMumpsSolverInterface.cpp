@@ -416,6 +416,12 @@ namespace Ipopt
       return SYMSOLVER_WRONG_INERTIA;
     }
 
+    if (error == -13) {
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "MUMPS returned INFO(1) =%d - out or memory.\n",
+                     error);
+      return SYMSOLVER_FATAL_ERROR;
+    }
     if (error < 0) {//some other error
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "MUMPS returned INFO(1) =%d MUMPS failure.\n",
