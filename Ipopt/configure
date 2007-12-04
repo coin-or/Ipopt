@@ -21674,28 +21674,34 @@ echo "$as_me: Applying patches to libtool for 32bit compilation" >&6;}
         chmod 755 libtool
       fi
       ;;
-    # The opposite problem: if we want to do a 64-bit build, the system search
-    # libraries need to point to the sparcv9 subdirectories. If they do not
-    # already do that, fix them.
-    sparc-sun-solaris*)
-      if test "$GCC" = yes && \
-	 (echo $CXXFLAGS $CFLAGS $FFLAGS | $EGREP 'm64' >/dev/null 2>&1) ; then
-	fixlibtmp=`$CC -print-search-dirs | $EGREP '^libraries:'`
-	if `echo "$fixlibtmp" | $EGREP -v sparcv9  >/dev/null 2>&1` ; then
-	  { echo "$as_me:$LINENO: Applying patches to libtool for 64-bit compilation" >&5
-echo "$as_me: Applying patches to libtool for 64-bit compilation" >&6;}
-	  fixlibtmp=`echo $fixlibtmp | sed -e 's/libraries: =//' -e 's/:/ /g'`
-	  v9syslibpath=
-	  for lib in $fixlibtmp ; do
-	    if test -d "${lib}sparcv9" ; then
-	      v9syslibpath="$v9syslibpath ${lib}sparcv9/"
-	    fi
-	  done
-	  sed -e 's|sys_lib_search_path_spec=".*"|sys_lib_search_path_spec="'"$v9syslibpath"'"|' libtool > conftest.bla
-	  mv conftest.bla libtool
-	  chmod 755 libtool
-	fi
+
+    *-solaris*)
+       if test "$GCC" = yes && \
+     (echo $CXXFLAGS $CFLAGS $FFLAGS | $EGREP 'm64' >/dev/null 2>&1) ; then
+    hdwisa=`isainfo | sed -e 's/\([^ ]*\) .*$/\1/'`
+    if `$EGREP 'sys_lib_search_path_spec=' libtool | $EGREP -v $hdwisa >/dev/null 2>&1` ; then
+      { echo "$as_me:$LINENO: Applying patches to libtool for 64-bit GCC compilation" >&5
+echo "$as_me: Applying patches to libtool for 64-bit GCC compilation" >&6;}
+      fixlibtmp=`$CC -m64 -print-search-dirs | $EGREP '^libraries:'`
+      fixlibtmp=`echo $fixlibtmp | sed -e 's/libraries: =//' -e 's/:/ /g'`
+      if `echo "$fixlibtmp" | $EGREP -v $hdwisa  >/dev/null 2>&1` ; then
+	# AC_MSG_NOTICE(Compensating for broken gcc)
+	for lib in $fixlibtmp ; do
+	  if test -d "${lib}${hdwisa}" ; then
+	    syslibpath64="$syslibpath64 ${lib}${hdwisa}/"
+	  fi
+	done
+	syslibpath64="${syslibpath64} ${fixlibtmp}"
+      else
+	syslibpath64="$fixlibtmp"
       fi
+      sed -e 's|sys_lib_search_path_spec=".*"|sys_lib_search_path_spec="'"$syslibpath64"'"|' libtool > conftest.bla
+      mv conftest.bla libtool
+      chmod 755 libtool
+    fi
+    # AC_MSG_NOTICE(Result is )
+    # $EGREP 'sys_lib_search_path_spec=' libtool
+  fi
       ;;
     # Cygwin. Ah, cygwin. Too big and ugly to inline; see the macro.
     *-cygwin* | *-mingw*)
