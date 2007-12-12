@@ -202,66 +202,65 @@ tutorial exampels are all located in the directory
 
 <p>First, let's look at the Hock & Schittkowski test problem #51.<a
 href="#footnote1"><sup>1</sup></a> It is an optimization problem with
-5 variables, no inequality constraints and 3 equality constraints. In
-MATLAB, go to the subdirectory <code>hs051</code>. In this
-subdirectory, there is a MATLAB script <code>examplehs051.m</code>
+5 variables, no inequality constraints and 3 equality
+constraints. There is a MATLAB script <code>examplehs051.m</code>
 which runs the limited-memory BFGS (Broyden-Fletcher-Goldfarb-Shanno)
 algorithm with the starting point <code>[2.5 0.5 2 -1 0.5]</code> and
 obtains the solution <code>[1 1 1 1 1]</code>. The line in the script
 which executes the IPOPT solver is</p>
 
-<p><code><pre>   x = ipopt(x0,lb,ub,lbc,ubc,'computeObjectiveHS051',
-             'computeGradientHS051','computeConstraintsHS051',...
- 	     'computeJacobianHS051','',[],'',...
- 	     'hessian_approximation','limited-memory',...
- 	     'mu_strategy','adaptive','tol',1e-7);</pre></code></p>
+<p><code><pre>  x = ipopt(x0,lb,ub,lbc,ubc,@computeObjective,@computeGradient,...
+	    @computeConstraints,@computeJacobian,'',[],'',[],...
+	    'jac_c_constant','yes','hessian_approximation',...
+            'limited-memory','mu_strategy','adaptive','tol',1e-7);
+</pre></code></p>
 
 <p>The first input is the initial point. The second and third inputs
 specify the lower and upper bounds on the variables. Since there are
 no such bounds, we set the entries of these two vectors to
 <code>-Inf</code> and <code>+Inf</code>. The fourth and fifth inputs
 specify the lower and upper bounds on the 3 constraint functions. The
-next five inputs specify the required callback routines. Since we are
-using a limited-memory approximation to the Hessian, we don't need to
-know the values of the second-order partial derivatives, so we set the
-Hessian callback routine to the empty string. The rest of the input
-arguments set some options for the solver, as detailed in the IPOPT
-documentation.</p>
+next five inputs specify the function handles to the required callback
+routines. We've written the callback routines as subfunctions in the
+same M-file. Since we are using a limited-memory approximation to the
+Hessian, we don't need to know the values of the second-order partial
+derivatives, so we set the Hessian callback routine to the empty
+string. The rest of the input arguments set some options for the
+solver, as detailed in the IPOPT documentation.</p>
 
-<p>If you examine the files <code>computeObjectiveHS051.m</code> and
-<code>computeGradientHS051.m</code> in the same directory, you will
-see that computing the objective function and gradient vector is
-relatively straightforward. The M-file
-<code>computeConstraintsHS051.m</code> returns a vector of length
-equal to the number of constraint functions. The callback function
-<code>computeJacobianHS051.m</code> returns an M x N sparse matrix,
-where M is the number of constraint functions and N is the number of
-variables. It is important to always return a sparse matrix, even if
-there is no computational advantage in doing so. Otherwise, MATLAB
-will report an error.</p>
+<p>If you examine the functions <code>computeObjective</code> and
+<code>computeGradient</code>, you will see that computing the
+objective function and gradient vector is relatively
+straightforward. The function <code>computeConstraints</code> returns
+a vector of length equal to the number of constraint functions. The
+callback function <code>computeJacobian</code> returns an M x N sparse
+matrix, where M is the number of constraint functions and N is the
+number of variables. It is important to always return a sparse matrix,
+even if there is no computational advantage in doing so. Otherwise,
+MATLAB will report an error.</p>
 
 <h4>Example 2</h4>
 
-<p>Let's move to the second example, <code>examplehs038.m</code>
-in the subdirectory <code>hs038</code>. It demonstrates the use of
-IPOPT on an optimization problem with 4 variables and no constraints
-other than simple bound constraints. This time, we've implemented a
-callback routine for evaluating the Hessian. The Hessian callback
-function takes as input the current value of the variables
-<code>x</code>, the factor in front of the objective term
-<code>sigma</code>, an the values of the constraint multipliers
-<code>lambda</code> (which in this case is empty). If the last input
-is true, then the callback routine must return a sparse matrix that
-has zeros in locations where the second-order derivative at that
-location will ALWAYS be zero. The return value H must always be a
-lower triangular matrix (type <code>help tril</code>). As explained in
-the IPOPT documentation, the Hessian matrix is symmetric so the
-information contained in the upper triangular part is redundant.</p>
+<p>Let's move to the second example, <code>examplehs038.m</code>. It
+demonstrates the use of IPOPT on an optimization problem with 4
+variables and no constraints other than simple bound constraints. This
+time, we've implemented a callback routine for evaluating the
+Hessian. The Hessian callback function takes as input the current
+value of the variables <code>x</code>, the factor in front of the
+objective term <code>sigma</code>, an the values of the constraint
+multipliers <code>lambda</code> (which in this case is empty). If the
+last input is true, then the callback routine must return a sparse
+matrix that has zeros in locations where the second-order derivative
+at that location will ALWAYS be zero. The return value H must always
+be a lower triangular matrix (type <code>help tril</code>). As
+explained in the IPOPT documentation, the Hessian matrix is symmetric
+so the information contained in the upper triangular part is
+redundant.</p>
 
 <p>This example also demonstrates the use an iterative callback
 function, which can be useful for displaying the status of the
-solver. This is specified by the twelfth input. The M-file
-<code>genericcallback.m</code> takes as input the current iteration
+solver. This is specified by the twelfth input. The function
+<code>callback</code> takes as input the current iteration
 <code>t</code>, the current value of the objective <code>f</code>, and
 the current point <code>x</code>.</p>
 
@@ -270,11 +269,10 @@ the current point <code>x</code>.</p>
 <p>The third slightly more complicated example script is
 <code>examplehs071.m</code>, which is the same as the problem explored
 in the IPOPT documentation (Hock and Schittkowski test problem
-#71). It is worth taking a peek at the files
-<code>computeHessianHS071.m</code> and
-<code>computeJacobianHS071.m</code>. In the Hessian callback function,
-we make use of the input lambda. Since the Hessian is dense, its
-structure is returned with the line</p>
+#71). It is worth taking a peek at the functions
+<code>computeHessian</code> and <code>computeJacobian</code>. In the
+Hessian callback function, we make use of the input lambda. Since the
+Hessian is dense, its structure is returned with the line</p>
 
 <p><code><pre>   H = sparse(tril(ones(n)))</pre></code></p>
 
@@ -334,11 +332,10 @@ particularly efficient.</p>
             { repmat(inf,nqr,1) repmat(inf,nqs,1) },...
             [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
             [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
-            'computeJGObjective','computeJGGradient',...
-            'computeJGConstraints','computeJGJacobian',...
-            'computeJGHessian',{ K C f Rv Rf Sv Sf NS d },'',...
-            'mu_strategy','adaptive','max_iter',maxiter,...
-            'tol',tolerance,'print_level',verbose*4);</pre></code></p>
+            @computeJGObjective',@computeJGGradient',...
+            @computeJGConstraints',@computeJGJacobian',...
+            @computeJGHessian',{ K C f Rv Rf Sv Sf NS d },'',...
+            ...</pre></code></p>
 
 <p>As you can see, it is rather complicated! The first input, as
 usual, is the starting point. (The variables actually represent
@@ -355,11 +352,11 @@ logarithm of a variable never evaluates to zero.)</p>
 different types of variables. These sets of variables are then passed
 as separate input arguments to the MATLAB callback functions. For
 instance, <code>qR</code> and <code>qS</code> are passed as separate
-arguments to the objective callback function
+arguments to the objective callback function in the M-file
 <code>computeJGObjective.m</code>.  The entries of the cell array are
 also treated as separate outputs from the gradient callback function
-(see <code>computeJGGradient.m</code>), and from the main call to
-ipopt.</p>
+(see the M-file <code>computeJGGradient.m</code>), and from the main
+call to ipopt.</p>
 
 <p>In this example, the constraint functions are all linear, so they have
 no impact on the value of the Hessian. In fact, the Hessian is a
