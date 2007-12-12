@@ -421,7 +421,7 @@ double MatlabProgram::computeObjective (const ArrayOfMatrices& x) {
 
   // Pass the auxiliary data, if necessary.
   if (auxData)
-    prhs[1+x.length()] = const_cast<mxArray*>(auxData);
+    prhs[1 + x.length()] = const_cast<mxArray*>(auxData);
 
   // Call the designated Matlab routine for evaluating the objective
   // function. It takes as input the values of the variables, and
