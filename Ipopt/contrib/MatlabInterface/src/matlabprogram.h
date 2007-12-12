@@ -11,6 +11,7 @@
 
 #include "array.h"
 #include "matlabexception.h"
+#include "matlabfunctionhandle.h"
 #include "matlabmatrix.h"
 #include "sparsematrix.h"
 #include "arrayofmatrices.h"
@@ -33,10 +34,13 @@ public:
   // exception object if the IPOPT solver terminates abnormally.
   MatlabProgram (const ArrayOfMatrices& x0, const ArrayOfMatrices& lb,
 		 const ArrayOfMatrices& ub, const Matrix& constraintlb,
-		 const Matrix& constraintub, const char* objFunc, 
-		 const char* gradFunc, const char* constraintFunc, 
-		 const char* jacobianFunc, const char* hessianFunc,
-		 const char* iterFunc, const mxArray* auxData, 
+		 const Matrix& constraintub, 
+		 const MatlabFunctionHandle& objFunc, 
+		 const MatlabFunctionHandle& gradFunc, 
+		 const MatlabFunctionHandle& constraintFunc, 
+		 const MatlabFunctionHandle& jacobianFunc, 
+		 const MatlabFunctionHandle& hessianFunc,
+		 const MatlabFunctionHandle& iterFunc, const mxArray* auxData, 
 		 ArrayOfMatrices& xsol, bool useQuasiNewton,
 		 Multipliers* initialMultipliers = 0, 
 		 Multipliers* multipliers = 0);
@@ -157,12 +161,12 @@ protected:
   SparseMatrixStructure* HessianStructure;
   
   // The following members specify the Matlab callback routines.
-  const char* objFunc;        // Computes the objective function.
-  const char* gradFunc;       // Computes the gradient of the objective.
-  const char* constraintFunc; // Computes the constraints.
-  const char* jacobianFunc;   // Computes the Jacobian of the constraints.
-  const char* hessianFunc;    // Computes the Hessian of the Lagrangian.
-  const char* iterFunc;       // The iterative callback function.
+  const MatlabFunctionHandle& objFunc;
+  const MatlabFunctionHandle& gradFunc;
+  const MatlabFunctionHandle& constraintFunc;
+  const MatlabFunctionHandle& jacobianFunc;
+  const MatlabFunctionHandle& hessianFunc;
+  const MatlabFunctionHandle& iterFunc;
 
   // The copy constructor and copy assignment operator are kept
   // private so that they are not used.
