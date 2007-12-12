@@ -44,7 +44,7 @@ OBJS   = matlabexception.@OBJEXT@ matlabscalar.@OBJEXT@ \
          matlabmatrix.@OBJEXT@ arrayofmatrices.@OBJEXT@ \
          sparsematrix.@OBJEXT@ matlabprogram.@OBJEXT@   \
          matlaboption.@OBJEXT@ multipliers.@OBJTEXT@    \
-         ipopt.@OBJEXT@
+         matlabfunctionhandle.@OBJEXT@ ipopt.@OBJEXT@
 
 MATLAB_INCLUDE = -I$(MATLAB_HOME)/extern/include
 LDFLAGS        = $(CXXFLAGS) @RPATH_FLAGS@
