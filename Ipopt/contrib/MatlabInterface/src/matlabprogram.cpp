@@ -23,12 +23,12 @@ MatlabProgram::MatlabProgram (const ArrayOfMatrices& x0,
 			      const ArrayOfMatrices& ub, 
 			      const Matrix& constraintlb,
 			      const Matrix& constraintub, 
-			      const char* objFunc, 
-			      const char* gradFunc, 
-			      const char* constraintFunc, 
-			      const char* jacobianFunc,
-			      const char* hessianFunc,
-			      const char* iterFunc, 
+			      const MatlabFunctionHandle& objFunc, 
+			      const MatlabFunctionHandle& gradFunc, 
+			      const MatlabFunctionHandle& constraintFunc, 
+			      const MatlabFunctionHandle& jacobianFunc,
+			      const MatlabFunctionHandle& hessianFunc,
+			      const MatlabFunctionHandle& iterFunc, 
 			      const mxArray* auxData, 
 			      ArrayOfMatrices& xsol,
 			      bool useQuasiNewton,
@@ -51,11 +51,12 @@ MatlabProgram::MatlabProgram (const ArrayOfMatrices& x0,
   // routine. There could be as many as n + 4 input arguments to a
   // Matlab callback routine, where n is the numer of entries of the
   // cell array.
-  int n = x0.length();
-  prhs  = new mxArray*[n + 4];
+  int n   = x0.length();
+  prhs    = new mxArray*[n + 5];
+  prhs[0] = 0;
 
   // Allocate memory for the variables container.
-  x = new ArrayOfMatrices(prhs,x0);
+  x = new ArrayOfMatrices(&prhs[1],x0);
   
   // Allocate memory for the Lagrange multipliers container. We assume
   // that lambda is a row vector.
@@ -74,7 +75,10 @@ MatlabProgram::MatlabProgram (const ArrayOfMatrices& x0,
 
 MatlabProgram::MatlabProgram (const MatlabProgram& source)  
   : lb(source.lb), ub(source.ub), constraintlb(source.constraintlb), 
-    constraintub(source.constraintub), xsol(source.xsol) { }
+    constraintub(source.constraintub), xsol(source.xsol), 
+    objFunc(source.objFunc), gradFunc(source.gradFunc),
+    constraintFunc(source.constraintFunc), jacobianFunc(source.jacobianFunc), 
+    hessianFunc(source.hessianFunc), iterFunc(source.iterFunc) { }
 
 MatlabProgram::~MatlabProgram() { 
   if (prhs)              delete[] prhs;
@@ -375,28 +379,30 @@ bool MatlabProgram::intermediate_callback (AlgorithmMode mode,
   // Update the number of iterations of IPOPT.
   numiter++;
 
-  if (strlen(iterFunc) > 0) {
-    int      nrhs = 2 + (bool) auxData;  
-    mxArray* prhs[3];
-    mxArray* plhs[1];     // The outputs from the Matlab routine.
+  if (iterFunc) {
+    int      nrhs = 3 + (bool) auxData;  
+    mxArray* prhs[4];  // The inputs to the Matlab routine.
+    mxArray* plhs[1];  // The outputs from the Matlab routine.
     
-    // The first argument is the current iteration, t. The argument
-    // after that is the current value of the objective function, f.
-    MatlabScalar t(prhs[0],iteration);
-    MatlabScalar f(prhs[1],objective);
+    // The first argument is the function to call. The second argument
+    // is the current iteration, t. The argument after that is the
+    // current value of the objective function, f.
+    prhs[0] = iterFunc;
+    MatlabScalar t(prhs[1],iteration);
+    MatlabScalar f(prhs[2],objective);
     
     // Pass the auxiliary data, if necessary.
     if (auxData)
-      prhs[2] = const_cast<mxArray*>(auxData);
+      prhs[3] = const_cast<mxArray*>(auxData);
     
     // Call the designated Matlab iterative callback routine. It
     // takes as input the values of the variables, the current
     // iteration, and the current value of the objective function.
-    int exitstatus = mexCallMATLAB(0,plhs,nrhs,prhs,iterFunc);
+    int exitstatus = mexCallMATLAB(0,plhs,nrhs,prhs,"feval");
 
     // Deallocate the dynamically allocated memory.
-    mxDestroyArray(prhs[0]);
     mxDestroyArray(prhs[1]);
+    mxDestroyArray(prhs[2]);
 
     if (exitstatus)
       throw MatlabException("Call to MATLAB iterative callback routine");
@@ -406,18 +412,21 @@ bool MatlabProgram::intermediate_callback (AlgorithmMode mode,
 }
 
 double MatlabProgram::computeObjective (const ArrayOfMatrices& x) {
-  int      nrhs = x.length() + (bool) auxData;  
+  int      nrhs = 1 + x.length() + (bool) auxData;  
   int      nlhs = 1;    // The number of outputs from Matlab.
   mxArray* plhs[1];     // The outputs from the Matlab routine.
 
+  // The first argument is the function to call.
+  prhs[0] = objFunc;
+
   // Pass the auxiliary data, if necessary.
   if (auxData)
-    prhs[x.length()] = const_cast<mxArray*>(auxData);
+    prhs[1+x.length()] = const_cast<mxArray*>(auxData);
 
   // Call the designated Matlab routine for evaluating the objective
   // function. It takes as input the values of the variables, and
   // returns a single output, the value of the objective function.
-  int exitstatus = mexCallMATLAB(nlhs,plhs,nrhs,prhs,objFunc);
+  int exitstatus = mexCallMATLAB(nlhs,plhs,nrhs,prhs,"feval");
   if (exitstatus)
     throw MatlabException("Evaluation of objective function failed in \
 call to MATLAB routine");
@@ -434,20 +443,23 @@ call to MATLAB routine");
 
 void MatlabProgram::computeGradient (const ArrayOfMatrices& x,
 				     ArrayOfMatrices& grad) {
-  int       nrhs = x.length() + (bool) auxData;  
+  int       nrhs = 1 + x.length() + (bool) auxData;  
   int       nlhs = x.length();          // The number of outputs from Matlab.
   mxArray** plhs = new mxArray*[nlhs];  // The outputs to the Matlab routine.
 
+  // The first input argument is the function to call.
+  prhs[0] = gradFunc;
+
   // Pass the auxiliary data, if necessary.
   if (auxData)
-    prhs[x.length()] = const_cast<mxArray*>(auxData);
+    prhs[1+x.length()] = const_cast<mxArray*>(auxData);
 
   // Call the designated Matlab routine for computing the gradient
   // of the objective function. It takes as input the values of the
   // variables, and returns as many outputs corresponding to the
   // partial derivatives of the objective function with respect to
   // the variables at their curent values.
-  int exitstatus = mexCallMATLAB(nlhs,plhs,nrhs,prhs,gradFunc);
+  int exitstatus = mexCallMATLAB(nlhs,plhs,nrhs,prhs,"feval");
   if (exitstatus) {
     delete [] plhs;
     throw MatlabException("Evaluation of objective gradient failed in \
@@ -474,19 +486,22 @@ routine");
 
 void MatlabProgram::computeConstraints (const ArrayOfMatrices& x,
 					Array<double>& g) {
-  int      nrhs = x.length() + (bool) auxData;  
+  int      nrhs = 1 + x.length() + (bool) auxData;  
   int      nlhs = 1;  // The number of outputs from Matlab.
   mxArray* plhs[1];   // The outputs to the Matlab routine.
 
+  // The first argument is the function to call.
+  prhs[0] = constraintFunc;
+
   // Pass the auxiliary data, if necessary.
   if (auxData)
-    prhs[x.length()] = const_cast<mxArray*>(auxData);
+    prhs[1 + x.length()] = const_cast<mxArray*>(auxData);
 
   // Call the designated Matlab routine for evaluating the
   // constraints at the current point. It takes as input the values
   // of the variables, and returns the set of constraints evaluated
   // at the current point.
-  if (mexCallMATLAB(nlhs,plhs,nrhs,prhs,constraintFunc))
+  if (mexCallMATLAB(nlhs,plhs,nrhs,prhs,"feval"))
     throw MatlabException("Evaluation of constraint equations failed in \
 call to MATLAB routine");
 
@@ -532,23 +547,26 @@ void MatlabProgram::computeHessian (const ArrayOfMatrices& x,
 
 mxArray* MatlabProgram::callMatlabJacobianRoutine (const ArrayOfMatrices& x, 
 						   bool returnStructureOnly) {
-  int      nrhs = x.length() + 1 + (bool) auxData;
+  int      nrhs = x.length() + 2 + (bool) auxData;
   int      nlhs = 1;  // The number of outputs from Matlab.
   mxArray* plhs[1];   // The outputs to the Matlab routine.
 
-  // Pass the "returnStructureOnly" boolean variable.
-  MatlabScalar RSOMatlabInput(prhs[x.length()],returnStructureOnly);
+  // The first input argument is the function to call.
+  prhs[0] = jacobianFunc;
+
+  // Pass the input, "returnStructureOnly" boolean variable.
+  MatlabScalar RSOMatlabInput(prhs[1 + x.length()],returnStructureOnly);
 
   // Pass the auxiliary data, if necessary.
   if (auxData)
-    prhs[x.length() + 1] = const_cast<mxArray*>(auxData);
+    prhs[2 + x.length()] = const_cast<mxArray*>(auxData);
 
   // Call the designated Matlab routine for evaluating the
   // Jacobian of the constraints at the current point. It takes as
   // input the values of the variables, and returns a single
   // matrix containing the value of the Jacobian evaluated at the
   // current point.
-  if (mexCallMATLAB(nlhs,plhs,nrhs,prhs,jacobianFunc))
+  if (mexCallMATLAB(nlhs,plhs,nrhs,prhs,"feval"))
     throw MatlabException("Evaluation of constraint Jacobian failed in \
 call to MATLAB routine");
 
@@ -563,7 +581,7 @@ Matlab routine");
 
   // Clear the dynamically allocated memory, except for the
   // information that is returned from this function.
-  mxDestroyArray(prhs[x.length()]);
+  mxDestroyArray(prhs[1 + x.length()]);
 
   return plhs[0];
 }
@@ -572,22 +590,25 @@ mxArray* MatlabProgram::callMatlabHessianRoutine (const ArrayOfMatrices& x,
 						  const Array<double>& lambda, 
 						  bool returnStructureOnly, 
 						  double sigma) {
-  int      nrhs = x.length() + 3 + (bool) auxData;  
+  int      nrhs = x.length() + 4 + (bool) auxData;  
   int      nlhs = 1;  // The number of outputs from Matlab.
   mxArray* plhs[1];   // The outputs to the Matlab routine.
 
+  // The first argument is the function to call.
+  prhs[0] = hessianFunc;
+
   // The argument after the variables is "sigma".
-  MatlabScalar sigmaMatlabInput(prhs[x.length()],sigma);
+  MatlabScalar sigmaMatlabInput(prhs[1 + x.length()],sigma);
 
   // The next argument is "lambda".
-  prhs[x.length() + 1] = lambdarhs;
+  prhs[2 + x.length()] = lambdarhs;
 
   // The next argument is "returnStructureOnly".
-  MatlabScalar RSOMatlabInput(prhs[x.length() + 2],returnStructureOnly);
+  MatlabScalar RSOMatlabInput(prhs[3 + x.length()],returnStructureOnly);
 
   // Pass the auxiliary data, if necessary.
   if (auxData)
-    prhs[3 + x.length()] = const_cast<mxArray*>(auxData);
+    prhs[4 + x.length()] = const_cast<mxArray*>(auxData);
 
   // Call the designated Matlab routine for evaluating the Hessian
   // of the Lagrangian function at the current point. It takes as
@@ -595,7 +616,7 @@ mxArray* MatlabProgram::callMatlabHessianRoutine (const ArrayOfMatrices& x,
   // multipliers "lambda" and the current values of the variables,
   // and returns a single matrix containing the value of the
   // Hessian evaluated at the current point.
-  if (mexCallMATLAB(nlhs,plhs,nrhs,prhs,hessianFunc))
+  if (mexCallMATLAB(nlhs,plhs,nrhs,prhs,"feval"))
     throw MatlabException("Evaluation of Hessian of the Lagrangian \
 failed in call to MATLAB routine");
 
@@ -610,8 +631,8 @@ back from Matlab routine");
 matrix; type HELP TRIL");
 
   // Free some of the dynamically allocated memory.
-  mxDestroyArray(prhs[x.length()]);
-  mxDestroyArray(prhs[x.length()+2]);
+  mxDestroyArray(prhs[1+x.length()]);
+  mxDestroyArray(prhs[3+x.length()]);
 
   return plhs[0];
 }

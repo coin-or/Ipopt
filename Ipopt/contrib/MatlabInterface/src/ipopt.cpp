@@ -10,6 +10,7 @@
 #include "array.h"
 #include "matlabscalar.h"
 #include "matlabstring.h"
+#include "matlabfunctionhandle.h"
 #include "matlabmatrix.h"
 #include "arrayofmatrices.h"
 #include "matlabjournal.h"
@@ -106,11 +107,11 @@ should have the same number of elements");
       numiter = new MatlabScalar(plhs[l++],0);
 
     // Get the Matlab callback functions.
-    MatlabString objFunc(prhs[k++]);
-    MatlabString gradFunc(prhs[k++]);
-    MatlabString constraintFunc(prhs[k++]);
-    MatlabString jacobianFunc(prhs[k++]);
-    MatlabString hessianFunc(prhs[k++]);
+    MatlabFunctionHandle objFunc(prhs[k++]);
+    MatlabFunctionHandle gradFunc(prhs[k++]);
+    MatlabFunctionHandle constraintFunc(prhs[k++]);
+    MatlabFunctionHandle jacobianFunc(prhs[k++]);
+    MatlabFunctionHandle hessianFunc(prhs[k++]);
 
     // Get the auxiliary data.
     const mxArray* auxData = 0;
@@ -120,17 +121,17 @@ should have the same number of elements");
 	auxData = ptr;
 
     // Get the iterative callback function.
-    MatlabString* iterFunc = new MatlabString("");
+    MatlabFunctionHandle* iterFunc = new MatlabFunctionHandle();
     ptr = prhs[k++];
     if (nrhs > 11)
       if (!mxIsEmpty(ptr)) {
 	delete iterFunc;
-	iterFunc = new MatlabString(ptr);
+	iterFunc = new MatlabFunctionHandle(ptr);
       }
 
     // Create a new instance of IpoptApplication.
     EJournalLevel printLevel = defaultPrintLevel;
-    if (!iterFunc->isempty())
+    if (*iterFunc)
       printLevel = Ipopt::J_NONE;
     SmartPtr<Journal> console = new MatlabJournal(printLevel);
     IpoptApplication  app(false);
