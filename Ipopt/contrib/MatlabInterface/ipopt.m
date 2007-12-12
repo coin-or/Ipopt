@@ -29,10 +29,9 @@
 %   array of length m:
 %
 %   [r s] = ipopt({r s},{ zeros(n,1) zeros(m,1) },...
-%                 { repmat(inf,n,1) repmat(inf,m,1) },lb,ub,
-%                 'computeobjective','computegradient',...
-%                 'computeconstraints','computejacobian',...
-%                 'computeJGHessian',auxdata);
+%                 { repmat(inf,n,1) repmat(inf,m,1) },lb,ub,...
+%                 @computeobjective,@computegradient,@computeconstraints',...
+%                 @computejacobian,@computeJGHessian,auxdata);
 %
 %   The optimization variables are bounded below by 0. The bounds on the
 %   equality and inequality constraints are specified by the MATLAB
@@ -41,8 +40,8 @@
 %   s. Also, auxiliary data ('auxdata') is passed to all the callback
 %   routines. For more information, continue reading below.
 %
-%   The remaining input arguments must be the names of various MATLAB
-%   routines (M-files):
+%   The remaining input arguments must be function handles for various 
+%   MATLAB routines (M-files or subfunctions):
 %
 %     objfunc         Calculates the objective function at the current
 %                     point. The routine must accept as many inputs as cell
@@ -103,6 +102,9 @@
 %                     number of variables. In other words, if X is the
 %                     output value, then X must be the same as TRIL(X).
 %
+%   For more information on using functions and function handles in MATLAB,
+%   type HELP FUNCTION and HELP FUNCTION_HANDLE in the MATLAB prompt.
+%
 %   Optionally, one may choose to pass additional auxiliary data to the
 %   MATLAB callback routines listed above through the function call
 %   IPOPT(...,auxdata). If auxdata is the empty matrix, no extra information
@@ -122,14 +124,14 @@
 %     function H        = computehessian     (r,s,sigma,lambda,...
 %                                             returnStructOnly,auxdata)
 %
-%   IPOPT(...,auxdata,iterfunc) specifies an additional callback routine
-%   which is called once per algorithm iteration. The callback routine must
-%   take the form ITERFUNC(T,F,AUXDATA). T is the current iteration of the
-%   algorithm. F is the current value of the objective. Finally, extra
-%   information may be passed through the input AUXDATA. No outputs are
-%   expected from iterfunc. Also note that the value of the optimization
-%   variables is not passed to this callback routine. If iterfunc is the
-%   empty string, no routine is called.
+%   IPOPT(...,auxdata,iterfunc) specifies a a function handle to an
+%   additional callback routine which is called once per algorithm
+%   iteration. The callback routine must take the form ITERFUNC(T,F,AUXDATA). 
+%   T is the current iteration of the algorithm. F is the current value of
+%   the objective. Finally, extra information may be passed through the
+%   input AUXDATA. No outputs are expected from iterfunc. Also note that the
+%   value of the optimization variables is not passed to this callback
+%   routine. If iterfunc is the empty string, no routine is called.
 %
 %   By default, the print level is set so that IPOPT displays the
 %   progress of the algorithm. However, if the user implements an
