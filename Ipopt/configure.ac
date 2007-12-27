@@ -572,7 +572,7 @@ AC_SUBST(JIPOPTDLL)
 SHARED_FLAGS=-shared
 AC_SUBST(SHARED_FLAGS)
 
-AC_COIN_LINK_FROM_FILELIST(contrib/JavaInterface,contrib/JavaInterface/javafiles.lst)
+#AC_COIN_LINK_FROM_FILELIST(contrib/JavaInterface,contrib/JavaInterface/javafiles.lst)
 
 ##########
 # ASTYLE #
@@ -662,8 +662,7 @@ AC_CONFIG_FILES([Makefile
 		 examples/ScalableProblems/Makefile
 		 test/Makefile
 		 test/run_unitTests
-		 contrib/MatlabInterface/src/Makefile
-		 contrib/JavaInterface/Makefile])
+		 contrib/MatlabInterface/src/Makefile])
 
 AC_CONFIG_HEADER([inc/config_ipopt.h])
 
