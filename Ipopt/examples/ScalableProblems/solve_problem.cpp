@@ -94,6 +94,10 @@ REGISTER_TNLP(MittelmannBndryCntrlDiri4, MBndryCntrl4)
 #include "MittelmannBndryCntrlDiri3D.hpp"
 REGISTER_TNLP(MittelmannBndryCntrlDiri3D, MBndryCntrl_3D)
 
+#include "MittelmannBndryCntrlDiri3D_27.hpp"
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_27, MBndryCntrl_3D_27)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_27BT, MBndryCntrl_3D_27BT)
+
 #include "MittelmannBndryCntrlDiri3Dsin.hpp"
 REGISTER_TNLP(MittelmannBndryCntrlDiri3Dsin, MBndryCntrl_3Dsin)
 
@@ -211,6 +215,8 @@ int main(int argv, char* argc[])
     printf("\n\n*** Error during initialization!\n");
     return (int) status;
   }
+  // Set option to use internal scaling
+  app->Options()->SetStringValueIfUnset("nlp_scaling_method", "user-scaling");
 
   status = app->OptimizeTNLP(GetRawPtr(tnlp));
 

@@ -2,6 +2,13 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2007-12-27 releases/3.3.4
+        - headers are now installed in include/coin
+            (no longer in include/ipopt)
+        - default for dual_inf_tol is now 1 (instead of 1e-4)
+        - In matlab interface, here the text from Peter Carbonetto:
+          There have been several significant changes made to the MATLAB interface since the last release. The most important two changes are: 1) Following the "warm start" feature of IPOPT, you may pass in initial estimates for the Lagrange multipliers. 2) Callback routines for computing the objective, gradient (etc.) are now specified using function handles instead of strings. (Thanks to Marcus Brubaker at the University of Toronto for the initial suggestion.) 
+
 2007-09-25 releases/3.3.3
         - minor changes, bug fixes
 

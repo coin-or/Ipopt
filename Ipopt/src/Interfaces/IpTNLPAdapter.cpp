@@ -95,12 +95,12 @@ namespace Ipopt
       "make_parameter",
       "make_parameter", "Remove fixed variable from optimization variables",
       "make_constraint", "Add equality constraints fixing variables",
-      "relax_bounds", "Relax fixing bound constraints"
+      "relax_bounds", "Relax fixing bound constraints",
       "The main difference between those options is that the starting "
       "point in the \"make_constraint\" case still has the fixed variables at "
       "their given values, whereas in the case \"make_parameter\" the "
       "functions are always evaluated with the fixed values for those "
-      "variables.  For Also, for \"relax_bounds\", the fixing bound "
+      "variables.  Also, for \"relax_bounds\", the fixing bound "
       "constraints are relaxed (according to\" bound_relax_factor\"). For "
       "both \"make_constraints\" and \"relax_bounds\", bound multipliers are "
       "computed for the fixed variables.");

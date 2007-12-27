@@ -38,7 +38,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.3.2.  It includes
+  This document is a guide to using \Ipopt\ 3.3.4.  It includes
   instructions on how to obtain and compile \Ipopt, a description of
   the interface, user options, etc., as well as a tutorial on how to
   solve a nonlinear optimization problem with \Ipopt.
@@ -649,7 +649,7 @@ ticket or sending a message to the mailing list.
     to find out what additional flags are required, for example, to
     include the Fortran runtime libraries with a C++ compiler.)
   \item the necessary header files in
-    \texttt{\$IPOPTDIR/build/include/ipopt}.
+    \texttt{\$IPOPTDIR/build/include/coin}.
   \end{itemize}
   You can change the default installation directory (here
   \texttt{\$IPOPTDIR}) to something else (such as \texttt{/usr/local})
@@ -1267,8 +1267,8 @@ counting pointer that takes care of memory management (object
 deletion) for you (for details, see Appendix~\ref{app.smart_ptr}).
 
 After ``\texttt{make install}'' (see Section~\ref{sec.comp_and_inst}),
-the header files are installed in \texttt{\$IPOPTDIR/include/ipopt}
-(or in \texttt{\$PREFIX/include/ipopt} if the switch
+the header files are installed in \texttt{\$IPOPTDIR/include/coin}
+(or in \texttt{\$PREFIX/include/coin} if the switch
 \verb|--prefix=$PREFIX| was used for {\tt configure}).
 
 \subsubsection{Coding the Problem Representation}\label{sec.cpp_problem}
@@ -2249,8 +2249,8 @@ depending on the numbering style determined in {\tt get\_nlp\_info}.
 \subsection{The C Interface}\label{sec.cinterface}
 The C interface for \Ipopt\ is declared in the header file {\tt
   IpStdCInterface.h}, which is found in\\
-\texttt{\$IPOPTDIR/include/ipopt} (or in
-\texttt{\$PREFIX/include/ipopt} if the switch
+\texttt{\$IPOPTDIR/include/coin} (or in
+\texttt{\$PREFIX/include/coin} if the switch
 \verb|--prefix=$PREFIX| was used for {\tt configure}); while
 reading this section, it will be helpful to have a look at this file.
 

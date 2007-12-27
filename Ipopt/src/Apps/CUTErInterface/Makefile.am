@@ -28,6 +28,14 @@ ipoma.f: CUTErInterface.f
 	  sed "/#{sizing}/r $$MYCUTER/double/config/tools.siz" $< | sed -f $$MYCUTER/double/config/cast.sed | sed "s/C$(BITS_PER_POINTER)BIT//" > ipoma.f; \
 	fi
 
+ipo.pro:
+	sed -e 's/gen/ipo/g' $$CUTER/build/prototypes/gen.pro \
+	-e 's/"ipo.o"/""/' \
+	-e 's!SYSLIBS ""!SYSLIBS "\`cat $${MYCUTER}/double/lib/ipo.liblist\`"!'> ipo.pro
+
+sdipo.pro:
+	sed -e 's/gen/ipo/g' $$CUTER/build/prototypes/sdgen.pro > sdipo.pro
+
 ipo: ipo.pro
 	sed -f $$MYCUTER/double/config/script.sed $< > $@
 	chmod a+x $@
@@ -38,13 +46,13 @@ sdipo: sdipo.pro
 
 IPADDLIBS = @IPADDLIBS@
 
-CLEANFILES = ipoma.f ipo sdipo
+CLEANFILES = ipoma.f ipo sdipo ipo.pro sdipo.pro
 
 cuter:	ipoma.$(OBJEXT) ipo sdipo
 	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
 	  echo CUTEr environment variables not set - cannot install ipoma.f; \
 	else \
-	  echo "-L$(libdir) -lipopt $(ADDLIBS) $(CXXLIBS)" >$$MYCUTER/double/lib/ipo.liblist ;\
+	  echo "-L$(libdir) -lipopt $(ADDLIBS) $(CXXLIBS) $(RPATH_FLAGS)" >$$MYCUTER/double/lib/ipo.liblist ;\
 	  cp ipoma.o $(MYCUTER)/double/bin/ipoma.$(OBJEXT); \
 	  cp ipo $(MYCUTER)/bin/ipo ;\
 	  cp sdipo $(MYCUTER)/bin/sdipo ;\

@@ -1,0 +1,5 @@
+org/coinor/Ipopt.java
+org/coinor/examples/HS071.java
+org/coinor/examples/scalable/SolveProblem.java
+org/coinor/examples/scalable/Scalable.java
+org/coinor/examples/scalable/LuksanVlcek1.java

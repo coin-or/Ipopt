@@ -42,7 +42,7 @@ CFLAGS = @CFLAGS@
 CLINKFLAGS = @RPATH_FLAGS@
 
 # Directory with include file
-IPOPTINCDIR = @includedir@/ipopt
+IPOPTINCDIR = @includedir@/coin
 
 # Directory with libipopt.a
 IPOPTLIBDIR = @libdir@

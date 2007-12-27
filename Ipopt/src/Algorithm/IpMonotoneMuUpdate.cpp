@@ -96,7 +96,7 @@ namespace Ipopt
       "Lower bound on fraction-to-the-boundary parameter tau.",
       0.0, true, 1.0, true,
       0.99,
-      "(This is tau_min in implementation paper.)  This option is also used "
+      "(This is tau_min in the implementation paper.)  This option is also used "
       "in the adaptive mu strategy during the monotone mode.");
   }
 

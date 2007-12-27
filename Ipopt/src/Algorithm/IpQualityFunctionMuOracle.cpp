@@ -117,7 +117,7 @@ namespace Ipopt
       0.0, false, 1.0, true,
       1e-2,
       "The golden section search is performed for the quality function based "
-      "mu oractle. (Only used if option "
+      "mu oracle. (Only used if option "
       "\"mu_oracle\" is set to \"quality-function\".)");
     roptions->AddBoundedNumberOption(
       "quality_function_section_qf_tol",
@@ -126,7 +126,7 @@ namespace Ipopt
       0.0, false, 1.0, true,
       0e-2,
       "The golden section search is performed for the quality function based mu "
-      "oractle. (Only used if option "
+      "oracle. (Only used if option "
       "\"mu_oracle\" is set to \"quality-function\".)");
   }
 

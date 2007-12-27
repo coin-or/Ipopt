@@ -85,7 +85,7 @@ namespace Ipopt
     return F77_FUNC(dasum,DASUM)(&n, x, &INCX);
   }
 
-  /* Interface to FORTRAN routine DASUM. */
+  /* Interface to FORTRAN routine IDAMAX. */
   Index IpBlasIdamax(Index size, const Number *x, Index incX)
   {
     ipfint n=size, INCX=incX;

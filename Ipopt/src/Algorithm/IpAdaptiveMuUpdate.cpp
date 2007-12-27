@@ -117,8 +117,8 @@ namespace Ipopt
       "When using the adaptive globalization strategy, \"obj-constr-filter\", "
       "sufficient progress for a filter entry is defined as "
       "follows: (new obj) < (filter obj) - filter_margin_fact*(new "
-      "constr-voil) OR (new constr-viol) < (filter constr-viol) - "
-      "filter_margin_fact*(new constr-voil).  For the description of "
+      "constr-viol) OR (new constr-viol) < (filter constr-viol) - "
+      "filter_margin_fact*(new constr-viol).  For the description of "
       "the \"kkt-error-filter\" option see \"filter_max_margin\".");
     roptions->AddLowerBoundedNumberOption(
       "filter_max_margin",

@@ -331,7 +331,7 @@ namespace Ipopt
     EJournalLevel level)
   {
     for (Index category=(Index)J_DBG;
-         category<(Index)J_LAST_CATEGORY;
+         category<(Index)J_USER_APPLICATION;
          category++) {
       print_levels_[category] = (Index) level;
     }
