@@ -8,7 +8,7 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-includeipoptdir = $(includedir)/ipopt
+includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
 	IpAlgTypes.hpp \
 	IpIpoptApplication.hpp \

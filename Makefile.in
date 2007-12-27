@@ -27,7 +27,7 @@
 # Author:  Andreas Waechter           IBM    2006-04-13
 
 ########################################################################
-#                         Maintainer Stuff                             #
+#                    Documentation installation                        #
 ########################################################################
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -241,6 +241,8 @@ SUBDIRS = $(subdirs)
 
 # Files that are generated and should be cleaned with make distclean
 DISTCLEANFILES = $(am__append_2) $(VPATH_DISTCLEANFILES)
+DocFiles = README AUTHORS LICENSE
+DocInstallDir = $(prefix)/share/doc/$(PACKAGE)
 all: all-recursive
 
 .SUFFIXES:
@@ -614,8 +616,6 @@ info-am:
 
 install-data-am:
 
-install-exec-am:
-
 install-info: install-info-recursive
 
 install-man:
@@ -639,8 +639,6 @@ pdf-am:
 ps: ps-recursive
 
 ps-am:
-
-uninstall-am: uninstall-info-am
 
 uninstall-info: uninstall-info-recursive
 
@@ -685,6 +683,22 @@ cuter:
 	cd Ipopt; $(MAKE) cuter
 
 .PHONY: test unitTest tests unitTests doxydoc cuter
+
+install-exec-am:
+	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
+	for file in $(DocFiles); do \
+	  if test -f "$$file"; then dir=; else dir="$(srcdir)/"; fi; \
+	  if test -f "$$dir$$file"; then $(INSTALL_DATA) "$$dir$$file" "$(DESTDIR)$(DocInstallDir)/$$file"; fi; \
+	done
+
+uninstall-am:
+	for file in $(DocFiles); do \
+	  rm -f "$(DESTDIR)$(DocInstallDir)/$$file"; \
+	done
+
+########################################################################
+#                         Maintainer Stuff                             #
+########################################################################
 
 # Make sure acinclude is using most recent coin.m4
 @MAINTAINER_MODE_TRUE@$(srcdir)/acinclude.m4: $(BUILDTOOLSDIR)/coin.m4
