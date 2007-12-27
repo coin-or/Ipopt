@@ -1091,6 +1091,11 @@ namespace Ipopt
                                      "mu_oracle",
                                      AmplOptionsList::String_Option,
                                      "Oracle for a new barrier parameter in the adaptive strategy");
+    // Barrier parameter
+    ampl_options_list->AddAmplOption("mu_max",
+                                     "mu_max",
+                                     AmplOptionsList::Number_Option,
+                                     "Maximal value for barrier parameter for adaptive strategy");
     ampl_options_list->AddAmplOption("mu_init",
                                      "mu_init",
                                      AmplOptionsList::Number_Option,
