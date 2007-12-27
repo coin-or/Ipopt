@@ -10,7 +10,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = TMatrices
 
-includeipoptdir = $(includedir)/ipopt
+includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
 	IpMatrix.hpp \
 	IpSymMatrix.hpp \

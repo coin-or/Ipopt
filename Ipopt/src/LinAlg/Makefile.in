@@ -294,7 +294,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 SUBDIRS = TMatrices
-includeipoptdir = $(includedir)/ipopt
+includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
 	IpMatrix.hpp \
 	IpSymMatrix.hpp \
