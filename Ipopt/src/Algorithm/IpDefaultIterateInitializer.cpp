@@ -89,11 +89,11 @@ namespace Ipopt
       "least_square_init_duals",
       "Least square initialization of all dual variables", "no",
       "no", "use bound_mult_init_val and least-square equality constraint multipliers",
-      "yes", "overwrite user-provided point wiht least-square estimates",
+      "yes", "overwrite user-provided point with least-square estimates",
       "If set to yes, Ipopt tries to compute least-square multipliers "
       "(considering ALL dual variables).  If successful, the bound "
       "multipliers are possibly corrected to be at least bound_mult_init_val. "
-      "This might be useful"
+      "This might be useful "
       "if the user doesn't know anything about the starting point, or for "
       "solving an LP or QP.");
     reg_options->SetRegisteringCategory("Warm Start");

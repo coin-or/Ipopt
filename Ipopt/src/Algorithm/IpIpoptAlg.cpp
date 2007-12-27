@@ -34,7 +34,7 @@ namespace Ipopt
 #    ifndef HAVE_WSMP
     jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
                  "NOTE: You are using Ipopt only with the MUMPS linear solver.\n"
-		 "      Other linear solvers might be more efficient (see Ipopt documentation).\n\n\n");
+                 "      Other linear solvers might be more efficient (see Ipopt documentation).\n\n\n");
 #    endif
 #   endif
 #  endif

@@ -552,6 +552,28 @@ else
   AC_DEFINE([FORTRAN_INTEGER_TYPE],[int])
 fi
 
+############# JAVA
+
+if test "${JAVA_HOME+set}" = set; then
+  AC_MSG_NOTICE([JAVA_HOME = $JAVA_HOME])
+fi
+AC_SUBST(JAVA_HOME)
+case $build in
+  *-cygwin* | *-mingw*)
+    JIPOPTDLL=jipopt.dll
+    ;;
+  *)
+    JIPOPTDLL=libjipopt.so
+    ;;
+esac
+AC_SUBST(JIPOPTDLL)
+
+# Compiler flag for linking DLLs/shared objects (not yet portable!)
+SHARED_FLAGS=-shared
+AC_SUBST(SHARED_FLAGS)
+
+AC_COIN_LINK_FROM_FILELIST(contrib/JavaInterface,contrib/JavaInterface/javafiles.lst)
+
 ##########
 # ASTYLE #
 ##########
@@ -640,7 +662,8 @@ AC_CONFIG_FILES([Makefile
 		 examples/ScalableProblems/Makefile
 		 test/Makefile
 		 test/run_unitTests
-		 contrib/MatlabInterface/src/Makefile])
+		 contrib/MatlabInterface/src/Makefile
+		 contrib/JavaInterface/Makefile])
 
 AC_CONFIG_HEADER([inc/config_ipopt.h])
 

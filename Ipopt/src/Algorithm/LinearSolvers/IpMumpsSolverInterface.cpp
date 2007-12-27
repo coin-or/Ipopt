@@ -127,7 +127,7 @@ namespace Ipopt
       "This is ICTL(8) in MUMPS.");
     roptions->AddNumberOption(
       "mumps_dep_tol",
-      "Pivot threshold for detecion of linearly dependent constraints in MUMPS.",
+      "Pivot threshold for detection of linearly dependent constraints in MUMPS.",
       -1.,
       "When MUMPS is used to determine linearly dependent constraints, this "
       "is determines the threshold for a pivot to be considered zero.  This "
@@ -416,6 +416,12 @@ namespace Ipopt
       return SYMSOLVER_WRONG_INERTIA;
     }
 
+    if (error == -13) {
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "MUMPS returned INFO(1) =%d - out or memory.\n",
+                     error);
+      return SYMSOLVER_FATAL_ERROR;
+    }
     if (error < 0) {//some other error
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "MUMPS returned INFO(1) =%d MUMPS failure.\n",

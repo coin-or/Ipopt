@@ -73,6 +73,23 @@ namespace Ipopt
     J_NLP,
     J_TIMING_STATISTICS,
     J_USER_APPLICATION /** This can be used by the user's application*/ ,
+    J_USER1 /** This can be used by the user's application*/ ,
+    J_USER2 /** This can be used by the user's application*/ ,
+    J_USER3 /** This can be used by the user's application*/ ,
+    J_USER4 /** This can be used by the user's application*/ ,
+    J_USER5 /** This can be used by the user's application*/ ,
+    J_USER6 /** This can be used by the user's application*/ ,
+    J_USER7 /** This can be used by the user's application*/ ,
+    J_USER8 /** This can be used by the user's application*/ ,
+    J_USER9 /** This can be used by the user's application*/ ,
+    J_USER10 /** This can be used by the user's application*/ ,
+    J_USER11 /** This can be used by the user's application*/ ,
+    J_USER12 /** This can be used by the user's application*/ ,
+    J_USER13 /** This can be used by the user's application*/ ,
+    J_USER14 /** This can be used by the user's application*/ ,
+    J_USER15 /** This can be used by the user's application*/ ,
+    J_USER16 /** This can be used by the user's application*/ ,
+    J_USER17 /** This can be used by the user's application*/ ,
     J_LAST_CATEGORY
   };
   //@}

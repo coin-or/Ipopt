@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -110,6 +110,8 @@ namespace Ipopt
     /** Factor defining require improvement to consider iterative
      *  refinement successful. */
     Number residual_improvement_factor_;
+    /** Tolernace for heuristic to ignore wrong inertia */
+    Number neg_curv_test_tol_;
     //@}
 
     /** Internal function for a single backsolve (which will be used

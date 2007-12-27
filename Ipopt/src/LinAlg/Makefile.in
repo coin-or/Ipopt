@@ -199,6 +199,8 @@ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 IPALLLIBS = @IPALLLIBS@
 IPOPTOBJDIR = @IPOPTOBJDIR@
 IPOPTSRCDIR = @IPOPTSRCDIR@
+JAVA_HOME = @JAVA_HOME@
+JIPOPTDLL = @JIPOPTDLL@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
@@ -230,6 +232,7 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
 RPATH_FLAGS = @RPATH_FLAGS@
 SET_MAKE = @SET_MAKE@
+SHARED_FLAGS = @SHARED_FLAGS@
 SHELL = @SHELL@
 STRIP = @STRIP@
 TAUCS_INCFLAGS = @TAUCS_INCFLAGS@
@@ -291,7 +294,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 SUBDIRS = TMatrices
-includeipoptdir = $(includedir)/ipopt
+includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
 	IpMatrix.hpp \
 	IpSymMatrix.hpp \

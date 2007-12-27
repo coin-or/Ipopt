@@ -144,6 +144,9 @@ namespace Ipopt
      *  a new symbolic factorization should be interpreted as a
      *  singular matrix */
     bool pardiso_repeated_perturbation_means_singular_;
+    /** Flag indicating if the interia is always assumed to be
+      *  correct. */
+    bool skip_inertia_check_;
     //@}
 
     /** @name Initialization flags */

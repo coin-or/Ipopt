@@ -11,9 +11,11 @@
 
 #include "array.h"
 #include "matlabexception.h"
+#include "matlabfunctionhandle.h"
 #include "matlabmatrix.h"
 #include "sparsematrix.h"
 #include "arrayofmatrices.h"
+#include "multipliers.h"
 #include "ipopt/IpTNLP.hpp"
 #include "mex.h"
 
@@ -32,11 +34,16 @@ public:
   // exception object if the IPOPT solver terminates abnormally.
   MatlabProgram (const ArrayOfMatrices& x0, const ArrayOfMatrices& lb,
 		 const ArrayOfMatrices& ub, const Matrix& constraintlb,
-		 const Matrix& constraintub, const char* objFunc, 
-		 const char* gradFunc, const char* constraintFunc, 
-		 const char* jacobianFunc, const char* hessianFunc,
-		 const char* iterFunc, const mxArray* auxData, 
-		 ArrayOfMatrices& xsol, bool useQuasiNewton);
+		 const Matrix& constraintub, 
+		 const MatlabFunctionHandle& objFunc, 
+		 const MatlabFunctionHandle& gradFunc, 
+		 const MatlabFunctionHandle& constraintFunc, 
+		 const MatlabFunctionHandle& jacobianFunc, 
+		 const MatlabFunctionHandle& hessianFunc,
+		 const MatlabFunctionHandle& iterFunc, const mxArray* auxData, 
+		 ArrayOfMatrices& xsol, bool useQuasiNewton,
+		 Multipliers* initialMultipliers = 0, 
+		 Multipliers* multipliers = 0);
     
   // The destructor.
   virtual ~MatlabProgram();
@@ -44,6 +51,10 @@ public:
   // Returns the error generated. If no error was generated, returns a
   // null pointer.
   char* geterrormsg() const;
+
+  // Get the number of number of iterations of IPOPT. Should only be
+  // called after IPOPT has converged to a stationary point.
+  int getnumiterations() const { return numiter; };
   
   // Method to return some info about the nonlinear program.
   virtual bool get_nlp_info (int& numVariables, int& numConstraints, 
@@ -124,11 +135,18 @@ protected:
   ArrayOfMatrices*       x;            // Current value of the variables 
                                        // that's passed to the Matlab 
                                        // callback routines.
+  Multipliers*           initialMultipliers; // The initial point of the
+                                       // Lagrange multipliers.
+  Multipliers*           multipliers;  // This is used to store the
+				       // value of the Lagrangne
+				       // multipliers at the solution.
   Array<double>*         lambda;       // Current value of the Lagrange 
                                        // multipliers that's passed to the
                                        // Matlab callback routine for
 				       // computing the Hessian.
-  
+  int                    numiter;      // Keeps track of the number of
+				       // IPOPT iterations.
+
   // Array of inputs to a Matlab callback function.
   mxArray** prhs;
   mxArray*  lambdarhs;
@@ -143,12 +161,12 @@ protected:
   SparseMatrixStructure* HessianStructure;
   
   // The following members specify the Matlab callback routines.
-  const char* objFunc;        // Computes the objective function.
-  const char* gradFunc;       // Computes the gradient of the objective.
-  const char* constraintFunc; // Computes the constraints.
-  const char* jacobianFunc;   // Computes the Jacobian of the constraints.
-  const char* hessianFunc;    // Computes the Hessian of the Lagrangian.
-  const char* iterFunc;       // The iterative callback function.
+  const MatlabFunctionHandle& objFunc;
+  const MatlabFunctionHandle& gradFunc;
+  const MatlabFunctionHandle& constraintFunc;
+  const MatlabFunctionHandle& jacobianFunc;
+  const MatlabFunctionHandle& hessianFunc;
+  const MatlabFunctionHandle& iterFunc;
 
   // The copy constructor and copy assignment operator are kept
   // private so that they are not used.

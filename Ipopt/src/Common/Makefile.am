@@ -8,7 +8,7 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-includeipoptdir = $(includedir)/ipopt
+includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
 	../../inc/config_ipopt.h \
 	IpCachedResults.hpp \

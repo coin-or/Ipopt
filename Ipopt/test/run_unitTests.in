@@ -9,6 +9,8 @@
 
 srcdir="@srcdir@"
 
+retval=0
+
 echo " "
 echo Running unitTests...
 echo " "
@@ -27,6 +29,7 @@ if test -x ../src/Apps/AmplSolver/ipopt ; then
   if test $? = 0; then
     echo "    Test passed!"
   else
+    retval=-1
     echo " "
     echo " ---- 8< ---- Start of test program output ---- 8< ----"
     cat tmpfile
@@ -50,6 +53,7 @@ grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
 if test $? = 0; then
   echo "    Test passed!"
 else
+  retval=-1
   echo " "
   echo " ---- 8< ---- Start of test program output ---- 8< ----"
   cat tmpfile
@@ -67,6 +71,7 @@ grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
 if test $? = 0; then
   echo "    Test passed!"
 else
+  retval=-1
   echo " "
   echo " ---- 8< ---- Start of test program output ---- 8< ----"
   cat tmpfile
@@ -84,6 +89,7 @@ grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
 if test $? = 0; then
   echo "    Test passed!"
 else
+  retval=-1
   echo " "
   echo " ---- 8< ---- Start of test program output ---- 8< ----"
   cat tmpfile
@@ -99,3 +105,5 @@ rm -rf tmpfile
 
 # clean up
 rm -rf tmpfile debug.out ipopt.out IPOPT.OUT
+
+exit $retval

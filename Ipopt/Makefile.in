@@ -27,7 +27,7 @@
 # Author:  Andreas Waechter           IBM    2006-04-13
 
 ########################################################################
-#                         Maintainer Stuff                             #
+#                    Documentation installation                        #
 ########################################################################
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -58,6 +58,7 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/../ltmain.sh $(srcdir)/../missing \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/configure \
+	$(top_srcdir)/contrib/JavaInterface/Makefile.in \
 	$(top_srcdir)/contrib/MatlabInterface/src/Makefile.in \
 	$(top_srcdir)/examples/Cpp_example/Makefile.in \
 	$(top_srcdir)/examples/ScalableProblems/Makefile.in \
@@ -86,7 +87,8 @@ CONFIG_CLEAN_FILES = examples/hs071_f/Makefile \
 	examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile \
 	examples/hs071_cpp/Makefile examples/hs071_c/Makefile \
 	examples/ScalableProblems/Makefile \
-	contrib/MatlabInterface/src/Makefile
+	contrib/MatlabInterface/src/Makefile \
+	contrib/JavaInterface/Makefile
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -205,6 +207,8 @@ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 IPALLLIBS = @IPALLLIBS@
 IPOPTOBJDIR = @IPOPTOBJDIR@
 IPOPTSRCDIR = @IPOPTSRCDIR@
+JAVA_HOME = @JAVA_HOME@
+JIPOPTDLL = @JIPOPTDLL@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
@@ -236,6 +240,7 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
 RPATH_FLAGS = @RPATH_FLAGS@
 SET_MAKE = @SET_MAKE@
+SHARED_FLAGS = @SHARED_FLAGS@
 SHELL = @SHELL@
 STRIP = @STRIP@
 TAUCS_INCFLAGS = @TAUCS_INCFLAGS@
@@ -370,6 +375,8 @@ DISTCLEANFILES = examples/hs071_cpp/hs071_cpp \
 	$(VPATH_DISTCLEANFILES)
 tmpdir = tmpdir
 libipopt = libipopt.a
+DocFiles = README AUTHORS LICENSE
+DocInstallDir = $(prefix)/share/doc/$(PACKAGE)
 all: all-recursive
 
 .SUFFIXES:
@@ -436,6 +443,8 @@ examples/hs071_c/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/
 examples/ScalableProblems/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/ScalableProblems/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/MatlabInterface/src/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/MatlabInterface/src/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+contrib/JavaInterface/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/JavaInterface/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
@@ -583,7 +592,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/.. $(distdir)/../BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/MatlabInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Interfaces $(distdir)/test
+	$(mkdir_p) $(distdir)/.. $(distdir)/../BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Interfaces $(distdir)/test
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -774,8 +783,6 @@ info-am:
 
 install-data-am:
 
-install-exec-am:
-
 install-info: install-info-recursive
 
 install-man:
@@ -799,8 +806,6 @@ pdf-am:
 ps: ps-recursive
 
 ps-am:
-
-uninstall-am: uninstall-info-am
 
 uninstall-info: uninstall-info-recursive
 
@@ -839,6 +844,22 @@ astyle:
 	cd src/LinAlg; $(MAKE) astyle
 	cd src/LinAlg/TMatrices; $(MAKE) astyle
 	cd src/Interfaces; $(MAKE) astyle
+
+install-exec-am:
+	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
+	for file in $(DocFiles); do \
+	  if test -f "$$file"; then dir=; else dir="$(srcdir)/"; fi; \
+	  if test -f "$$dir$$file"; then $(INSTALL_DATA) "$$dir$$file" "$(DESTDIR)$(DocInstallDir)/$$file"; fi; \
+	done
+
+uninstall-am:
+	for file in $(DocFiles); do \
+	  rm -f "$(DESTDIR)$(DocInstallDir)/$$file"; \
+	done
+
+########################################################################
+#                         Maintainer Stuff                             #
+########################################################################
 
 # Make sure acinclude is using most recent coin.m4
 @MAINTAINER_MODE_TRUE@$(srcdir)/acinclude.m4: $(BUILDTOOLSDIR)/coin.m4

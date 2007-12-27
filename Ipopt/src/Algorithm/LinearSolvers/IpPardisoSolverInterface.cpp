@@ -129,6 +129,27 @@ namespace Ipopt
       "out-of-core variant where the factor is split in 2^k subdomains.  This "
       "is IPARM(50) in the Pardiso manual.  This option is only available if "
       "Ipopt has been compiled with Pardiso.");
+    roptions->AddStringOption2(
+      "pardiso_skip_inertia_check",
+      "Always pretent inertia is correct.",
+      "no",
+      "no", "check interia",
+      "yes", "skip inertia check",
+      "Setting this option to \"yes\" essentially disables inertia check. "
+      "This option makes the algorithm non-robust and easily fail, but it "
+      "might give some insight into the necessity of interia control.");
+    roptions->AddIntegerOption(
+      "pardiso_iter_tol_exponent",
+      "",
+      -14,
+      "");
+    roptions->AddStringOption2(
+      "pardiso_iterative",
+      "",
+      "no",
+      "no", "",
+      "yes", "",
+      "");
   }
 
   bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
@@ -146,6 +167,14 @@ namespace Ipopt
     Index pardiso_out_of_core_power;
     options.GetIntegerValue("pardiso_out_of_core_power",
                             pardiso_out_of_core_power, prefix);
+    options.GetBoolValue("pardiso_skip_inertia_check",
+                         skip_inertia_check_, prefix);
+    bool pardiso_iterative;
+    options.GetBoolValue("pardiso_iterative", pardiso_iterative,
+                         prefix);
+    int pardiso_iter_tol_exponent;
+    options.GetIntegerValue("pardiso_iter_tol_exponent",
+                            pardiso_iter_tol_exponent, prefix);
 
     // Number value = 0.0;
 
@@ -224,15 +253,16 @@ namespace Ipopt
     IPARM_[24] = 1; // parallel solve
     IPARM_[29] = 1; // we need this for IPOPT interface
 
-    IPARM_[39] = 4 ;  // max fill for factor
+    IPARM_[39] = 4 ;  // it was 4 max fill for factor
     IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
-    IPARM_[41] =-2 ;  // exponent dropping value for schur complement
-    IPARM_[42] = 300; // max number of iterations
-    IPARM_[43] = 50 ; // norm of the inverse for algebraic solver
-    IPARM_[44] =-2 ;  // exponent dropping value for incomplete factor
+    IPARM_[41] =-3 ;  // it  exponent dropping value for schur complement
+    IPARM_[42] = 200; // max number of iterations
+    IPARM_[43] = 500 ; // norm of the inverse for algebraic solver
+    IPARM_[44] =-3 ;  // exponent dropping value for incomplete factor
     IPARM_[46] = 1 ;  // mantisse dropping value for incomplete factor
-    IPARM_[45] =-9 ;  // residual tolerance
-    IPARM_[48] = 0 ;  // active direct solver
+    IPARM_[45] = pardiso_iter_tol_exponent ;  // residual tolerance
+    IPARM_[48] = pardiso_iterative ? 1 : 0 ;  // active direct solver
+    if (pardiso_iterative) MSGLVL_ = 2;
 
     // Option for the out of core variant
     IPARM_[49] = pardiso_out_of_core_power;
@@ -467,7 +497,7 @@ namespace Ipopt
         return SYMSOLVER_FATAL_ERROR;
       }
 
-      negevals_ = IPARM_[22];
+      negevals_ = Max(IPARM_[22], numberOfNegEVals);
       if (IPARM_[13] != 0) {
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
@@ -512,6 +542,8 @@ namespace Ipopt
 
     // Check whether the number of negative eigenvalues matches the requested
     // count
+    if (skip_inertia_check_) numberOfNegEVals=negevals_;
+
     if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Wrong inertia: required are %d, but we got %d.\n",
