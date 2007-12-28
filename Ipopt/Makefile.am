@@ -118,6 +118,10 @@ test: unitTest
 unitTest: all
 	cd test; $(MAKE) test
 
+install-exec-local: install-doc
+
+uninstall-local: uninstall-doc
+
 astyle:
 	cd src/Algorithm; $(MAKE) astyle
 	cd src/Algorithm/LinearSolvers; $(MAKE) astyle

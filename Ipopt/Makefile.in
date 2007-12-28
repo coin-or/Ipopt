@@ -376,7 +376,7 @@ DISTCLEANFILES = examples/hs071_cpp/hs071_cpp \
 tmpdir = tmpdir
 libipopt = libipopt.a
 DocFiles = README AUTHORS LICENSE
-DocInstallDir = $(prefix)/share/doc/$(PACKAGE)
+DocInstallDir = $(prefix)/share/doc/$(PACKAGE_NAME)
 all: all-recursive
 
 .SUFFIXES:
@@ -783,6 +783,8 @@ info-am:
 
 install-data-am:
 
+install-exec-am: install-exec-local
+
 install-info: install-info-recursive
 
 install-man:
@@ -807,6 +809,8 @@ ps: ps-recursive
 
 ps-am:
 
+uninstall-am: uninstall-info-am uninstall-local
+
 uninstall-info: uninstall-info-recursive
 
 .PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am am--refresh check \
@@ -817,12 +821,13 @@ uninstall-info: uninstall-info-recursive
 	distclean-recursive distclean-tags distcleancheck distdir \
 	distuninstallcheck dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-exec \
-	install-exec-am install-info install-info-am install-man \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	maintainer-clean-recursive mostlyclean mostlyclean-generic \
-	mostlyclean-libtool mostlyclean-recursive pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-am uninstall-info-am
+	install-exec-am install-exec-local install-info \
+	install-info-am install-man install-strip installcheck \
+	installcheck-am installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic maintainer-clean-recursive \
+	mostlyclean mostlyclean-generic mostlyclean-libtool \
+	mostlyclean-recursive pdf pdf-am ps ps-am tags tags-recursive \
+	uninstall uninstall-am uninstall-info-am uninstall-local
 
 
 .PHONY: cuter test unitTest astyle
@@ -835,6 +840,10 @@ test: unitTest
 unitTest: all
 	cd test; $(MAKE) test
 
+install-exec-local: install-doc
+
+uninstall-local: uninstall-doc
+
 astyle:
 	cd src/Algorithm; $(MAKE) astyle
 	cd src/Algorithm/LinearSolvers; $(MAKE) astyle
@@ -845,14 +854,14 @@ astyle:
 	cd src/LinAlg/TMatrices; $(MAKE) astyle
 	cd src/Interfaces; $(MAKE) astyle
 
-install-exec-am:
+install-doc:
 	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
 	for file in $(DocFiles); do \
 	  if test -f "$$file"; then dir=; else dir="$(srcdir)/"; fi; \
 	  if test -f "$$dir$$file"; then $(INSTALL_DATA) "$$dir$$file" "$(DESTDIR)$(DocInstallDir)/$$file"; fi; \
 	done
 
-uninstall-am:
+uninstall-doc:
 	for file in $(DocFiles); do \
 	  rm -f "$(DESTDIR)$(DocInstallDir)/$$file"; \
 	done
@@ -893,6 +902,8 @@ uninstall-am:
 
 @HAVE_EXTERNALS_TRUE@@MAINTAINER_MODE_TRUE@update-externals: .Externals-stamp
 @HAVE_EXTERNALS_TRUE@@MAINTAINER_MODE_TRUE@	cd $(srcdir); svn update
+
+.PHONY: install-doc uninstall-doc update-externals
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
