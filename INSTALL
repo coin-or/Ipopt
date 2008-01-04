@@ -2,7 +2,7 @@ These instructions are for UNIX-like systems (including Linux, Cygwin
 and MSys) only.  If Microsoft Developer Studio projects are
 maintained for this package, you can find instructions at
 
-  https://projects.coin-or.org/MSDevStudio
+  https://projects.coin-or.org/MSVisualStudio
 
 This is just a short version of the installation instructions. You can
 find a more detailed Ipopt documentation at
