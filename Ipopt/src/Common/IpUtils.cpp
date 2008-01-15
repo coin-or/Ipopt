@@ -60,7 +60,7 @@ namespace Ipopt
   Number IpRandom01()
   {
 #ifdef HAVE_DRAND48
-    return Number(drand48())/Number(RAND_MAX);
+    return Number(drand48());
 #else
 # ifdef HAVE_RAND
     return Number(rand())/Number(RAND_MAX);
