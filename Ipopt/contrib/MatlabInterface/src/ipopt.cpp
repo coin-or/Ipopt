@@ -19,9 +19,9 @@
 #include "multipliers.h"
 #include "mex.h"
 #include "matrix.h"
-#include "ipopt/IpRegOptions.hpp"
-#include "ipopt/IpJournalist.hpp"
-#include "ipopt/IpIpoptApplication.hpp"
+#include "coin/IpRegOptions.hpp"
+#include "coin/IpJournalist.hpp"
+#include "coin/IpIpoptApplication.hpp"
 
 using Ipopt::IsValid;
 using Ipopt::RegisteredOption;
