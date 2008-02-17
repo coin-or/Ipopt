@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -43,6 +43,8 @@ libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
+addlibsdir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)/
+
 ADDLIBS_FILES = \
 	ipopt_addlibs_cpp.txt \
 	ipopt_addlibs_f.txt
@@ -63,12 +65,12 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # Make sure the addlibs files are installed in lib
 install-exec-local:
 	for i in $(ADDLIBS_FILES); do \
-	  $(install_sh_DATA) $$i $(DESTDIR)$(libdir)/$$i; \
+	  $(install_sh_DATA) $$i $(DESTDIR)$(addlibsdir)/$$i; \
 	done
 
 uninstall-local:
 	for i in $(ADDLIBS_FILES); do \
-	  rm -f $(DESTDIR)$(libdir)/$$i; \
+	  rm -f $(DESTDIR)$(addlibsdir)/$$i; \
 	done
 
 # Astyle stuff
