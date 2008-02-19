@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -312,23 +312,17 @@ namespace Ipopt
           options_to_print.push_back("derivative_test_print_all");
 
           // Special linear solver
-#ifdef HAVE_MA27
-
           options_to_print.push_back("#MA27 Linear Solver");
           options_to_print.push_back("ma27_pivtol");
           options_to_print.push_back("ma27_pivtolmax");
           options_to_print.push_back("ma27_liw_init_factor");
           options_to_print.push_back("ma27_la_init_factor");
           options_to_print.push_back("ma27_meminc_factor");
-#endif
-
-#ifdef HAVE_MA57
 
           options_to_print.push_back("#MA57 Linear Solver");
           options_to_print.push_back("ma57_pivtol");
           options_to_print.push_back("ma57_pivtolmax");
           options_to_print.push_back("ma57_pre_alloc");
-#endif
 
 #ifdef COIN_HAS_MUMPS
 
@@ -341,12 +335,9 @@ namespace Ipopt
           options_to_print.push_back("mumps_scaling");
 #endif
 
-#ifdef HAVE_PARDISO
-
           options_to_print.push_back("#Pardiso Linear Solver");
           options_to_print.push_back("pardiso_matching_strategy");
           options_to_print.push_back("pardiso_out_of_core_power");
-#endif
 
 #ifdef HAVE_WSMP
 
@@ -376,18 +367,9 @@ namespace Ipopt
           categories.push_back("Restoration Phase");
           categories.push_back("Derivative Checker");
           categories.push_back("Hessian Approximation");
-#ifdef HAVE_MA27
-
           categories.push_back("MA27 Linear Solver");
-#endif
-#ifdef HAVE_MA57
-
           categories.push_back("MA57 Linear Solver");
-#endif
-#ifdef HAVE_PARDISO
-
           categories.push_back("Pardiso Linear Solver");
-#endif
 #ifdef HAVE_WSMP
 
           categories.push_back("WSMP Linear Solver");
@@ -396,10 +378,7 @@ namespace Ipopt
 
           categories.push_back("Mumps Linear Solver");
 #endif
-#ifdef HAVE_MA28
-
           categories.push_back("MA28 Linear Solver");
-#endif
 
           categories.push_back("Uncategorized");
           //categories.push_back("Undocumented Options");

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -33,7 +33,7 @@ namespace Ipopt
 #   ifndef HAVE_PARDISO
 #    ifndef HAVE_WSMP
     jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
-                 "NOTE: You are using Ipopt only with the MUMPS linear solver.\n"
+                 "NOTE: You are using Ipopt by default with the MUMPS linear solver.\n"
                  "      Other linear solvers might be more efficient (see Ipopt documentation).\n\n\n");
 #    endif
 #   endif

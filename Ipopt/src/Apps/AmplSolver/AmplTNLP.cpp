@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -1202,8 +1202,6 @@ namespace Ipopt
                                      "Can enable Quasi-Newton approximation of hessian");
 
     // Special linear solver options
-#ifdef HAVE_MA27
-
     ampl_options_list->AddAmplOption("ma27_pivtol",
                                      "ma27_pivtol",
                                      AmplOptionsList::Number_Option,
@@ -1212,9 +1210,6 @@ namespace Ipopt
                                      "ma27_pivtolmax",
                                      AmplOptionsList::Number_Option,
                                      "Maximal pivot tolerance for the linear solver MA27");
-#endif
-
-#ifdef HAVE_MA57
 
     ampl_options_list->AddAmplOption("ma57_pivtol",
                                      "ma57_pivtol",
@@ -1224,9 +1219,6 @@ namespace Ipopt
                                      "ma57_pivtolmax",
                                      AmplOptionsList::Number_Option,
                                      "Maximal pivot tolerance for the linear solver MA57");
-#endif
-
-#ifdef HAVE_PARDISO
 
     ampl_options_list->AddAmplOption("pardiso_matching_strategy",
                                      "pardiso_matching_strategy",
@@ -1236,7 +1228,6 @@ namespace Ipopt
                                      "pardiso_out_of_core_power",
                                      AmplOptionsList::Integer_Option,
                                      "Enables out-of-core version of linear solver Pardiso");
-#endif
 
 #ifdef HAVE_WSMP
 

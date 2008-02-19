@@ -9,7 +9,7 @@
 AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
-	src/Interfaces src/Apps
+	src/contrib/LinearSolverLoader src/Interfaces src/Apps
 
 if ALWAYS_FALSE
   SUBDIRS += test

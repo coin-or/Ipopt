@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -47,18 +47,11 @@
 #include "IpEquilibrationScaling.hpp"
 #include "IpExactHessianUpdater.hpp"
 
-#ifdef HAVE_MA27
-# include "IpMa27TSolverInterface.hpp"
-#endif
-#ifdef HAVE_MA57
-# include "IpMa57TSolverInterface.hpp"
-#endif
-#ifdef HAVE_MC19
-# include "IpMc19TSymScalingMethod.hpp"
-#endif
-#ifdef HAVE_PARDISO
-# include "IpPardisoSolverInterface.hpp"
-#endif
+#include "IpMa27TSolverInterface.hpp"
+#include "IpMa57TSolverInterface.hpp"
+#include "IpMc19TSymScalingMethod.hpp"
+#include "IpPardisoSolverInterface.hpp"
+
 #ifdef HAVE_TAUCS
 # include "IpTAUCSSolverInterface.hpp"
 #endif
@@ -68,6 +61,9 @@
 #ifdef COIN_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
+
+#include "HSLLoader.h"
+#include "PardisoLoader.h"
 
 namespace Ipopt
 {
@@ -248,32 +244,44 @@ namespace Ipopt
     options.GetStringValue("linear_solver", linear_solver, prefix);
     bool use_custom_solver = false;
     if (linear_solver=="ma27") {
-#ifdef HAVE_MA27
       SolverInterface = new Ma27TSolverInterface();
-#else
-
-      THROW_EXCEPTION(OPTION_INVALID,
-                      "Selected linear solver MA27 not available.");
+#ifndef HAVE_MA27
+      char buf[256];
+      int rc = LSL_loadHSL(NULL, buf, 255);
+      if (rc) {
+        std::string errmsg;
+        errmsg = "Selected linear solver MA27 not available.\n";
+        errmsg += buf;
+        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+      }
 #endif
 
     }
     else if (linear_solver=="ma57") {
-#ifdef HAVE_MA57
       SolverInterface = new Ma57TSolverInterface();
-#else
-
-      THROW_EXCEPTION(OPTION_INVALID,
-                      "Selected linear solver MA57 not available.");
+#ifndef HAVE_MA57
+      char buf[256];
+      int rc = LSL_loadHSL(NULL, buf, 255);
+      if (rc) {
+        std::string errmsg;
+        errmsg = "Selected linear solver MA57 not available.\n";
+        errmsg += buf;
+        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+      }
 #endif
 
     }
     else if (linear_solver=="pardiso") {
-#ifdef HAVE_PARDISO
       SolverInterface = new PardisoSolverInterface();
-#else
-
-      THROW_EXCEPTION(OPTION_INVALID,
-                      "Selected linear solver Pardiso not available.");
+#ifndef HAVE_PARDISO
+      char buf[256];
+      int rc = LSL_loadPardisoLib(NULL, buf, 255);
+      if (rc) {
+        std::string errmsg;
+        errmsg = "Selected linear solver Pardiso not available.\n";
+        errmsg += buf;
+        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+      }
 #endif
 
     }
@@ -328,12 +336,16 @@ namespace Ipopt
         }
       }
       if (linear_system_scaling=="mc19") {
-#ifdef HAVE_MC19
         ScalingMethod = new Mc19TSymScalingMethod();
-#else
-
-        THROW_EXCEPTION(OPTION_INVALID,
-                        "Selected linear system scaling method MC19 not available.");
+#ifndef HAVE_MC19
+        char buf[256];
+        int rc = LSL_loadHSL(NULL, buf, 255);
+        if (rc) {
+          std::string errmsg;
+          errmsg = "Selected linear system scaling method MC19 not available.\n";
+          errmsg += buf;
+          THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+        }
 #endif
 
       }

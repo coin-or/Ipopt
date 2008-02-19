@@ -100,7 +100,8 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm \
-	src/contrib/CGPenalty src/Interfaces src/Apps test
+	src/contrib/CGPenalty src/contrib/LinearSolverLoader \
+	src/Interfaces src/Apps test
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -139,6 +140,10 @@ BIT64FCOMMENT = @BIT64FCOMMENT@
 BITS_PER_POINTER = @BITS_PER_POINTER@
 BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
+BUILD_HSLLOADER_FALSE = @BUILD_HSLLOADER_FALSE@
+BUILD_HSLLOADER_TRUE = @BUILD_HSLLOADER_TRUE@
+BUILD_PARDISOLOADER_FALSE = @BUILD_PARDISOLOADER_FALSE@
+BUILD_PARDISOLOADER_TRUE = @BUILD_PARDISOLOADER_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
@@ -303,7 +308,8 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
-	src/Interfaces src/Apps $(am__append_1)
+	src/contrib/LinearSolverLoader src/Interfaces src/Apps \
+	$(am__append_1)
 EXTRA_DIST = examples/Cpp_example/cpp_example.cpp \
 	examples/Cpp_example/Makefile.in \
 	examples/Cpp_example/MyNLP.cpp examples/Cpp_example/MyNLP.hpp \

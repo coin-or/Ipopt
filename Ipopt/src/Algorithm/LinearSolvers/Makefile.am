@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2007 International Business Machines and others.
+# Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -19,27 +19,13 @@ liblinsolvers_la_SOURCES = \
 	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
 	IpTSymDependencyDetector.cpp IpTSymDependencyDetector.hpp \
 	IpTSymLinearSolver.cpp IpTSymLinearSolver.hpp \
-	IpTSymScalingMethod.hpp
-
-if HAVE_MA27
-  liblinsolvers_la_SOURCES += \
-	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp
-endif
-
-if HAVE_MA57
-  liblinsolvers_la_SOURCES += \
-	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp
-endif
-
-if HAVE_MC19
-  liblinsolvers_la_SOURCES += \
-	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp
-endif
-
-if HAVE_PARDISO
-  liblinsolvers_la_SOURCES += \
-	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
-endif
+	IpTSymScalingMethod.hpp \
+	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
+	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
+	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
+	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp\
+	IpMa28Partition.f \
+	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
 
 if HAVE_TAUCS
   liblinsolvers_la_SOURCES += \
@@ -49,12 +35,6 @@ endif
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
 	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
-endif
-
-if HAVE_MA28
-  liblinsolvers_la_SOURCES += \
-	IpMa28Partition.f \
-	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
 endif
 
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)

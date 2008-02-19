@@ -132,6 +132,10 @@ BIT64FCOMMENT = @BIT64FCOMMENT@
 BITS_PER_POINTER = @BITS_PER_POINTER@
 BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
+BUILD_HSLLOADER_FALSE = @BUILD_HSLLOADER_FALSE@
+BUILD_HSLLOADER_TRUE = @BUILD_HSLLOADER_TRUE@
+BUILD_PARDISOLOADER_FALSE = @BUILD_PARDISOLOADER_FALSE@
+BUILD_PARDISOLOADER_TRUE = @BUILD_PARDISOLOADER_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
@@ -360,7 +364,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../Common` -I`$(CYGPATH_W) \
 	$(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/../Interfaces` -I`$(CYGPATH_W) \
 	$(srcdir)/LinearSolvers` -I`$(CYGPATH_W) \
-	$(srcdir)/../contrib/CGPenalty` $(am__append_1)
+	$(srcdir)/../contrib/CGPenalty` -I`$(CYGPATH_W) \
+	$(srcdir)/../contrib/LinearSolverLoader` $(am__append_1)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

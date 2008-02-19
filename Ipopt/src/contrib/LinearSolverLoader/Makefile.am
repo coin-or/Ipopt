@@ -22,7 +22,7 @@ if BUILD_PARDISOLOADER
   libLinearSolverLoader_la_SOURCES += PardisoLoader.c PardisoLoader.h
 endif
 
-AM_CPPFLAGS = 
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common`
 
 libLinearSolverLoader_la_LIBADD = 
 libLinearSolverLoader_la_DEPENDENCIES =  

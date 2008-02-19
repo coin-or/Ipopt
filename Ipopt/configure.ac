@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2007 International Business Machines and others.
+# Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -600,7 +600,7 @@ AC_SUBST(ipoptlib)
 # is made)
 
 AC_SUBST(IPALLLIBS)
-IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
+IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../contrib/LinearSolverLoader/libLinearSolverLoader.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
 if test "$use_blas" = BUILD; then
   IPALLLIBS="../../../ThirdParty/Blas/libcoinblas.la $IPALLLIBS"
@@ -625,6 +625,18 @@ AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])
 AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
+
+AM_CONDITIONAL([BUILD_HSLLOADER],[test "$use_MA27" = no -o "$use_MA28" = no -o "$use_MA57" = no -o "$use_MC19" = no])
+AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$use_pardiso" = no])
+
+########################################################################
+##                 Linear solver loader stuff                         ##
+########################################################################
+
+AC_COIN_CHECK_HEADER([windows.h])
+AC_COIN_CHECK_HEADER([dlfcn.h])
+
+AC_DEFINE([SHAREDLIBEXT], ["so"], [Set to extension for shared libraries in quotes.])
 
 ########################################################################
 ##             Create links for the test source files                 ##
@@ -651,6 +663,7 @@ AC_CONFIG_FILES([Makefile
 		 src/Algorithm/Makefile
 		 src/Algorithm/LinearSolvers/Makefile
 		 src/contrib/CGPenalty/Makefile
+		 src/contrib/LinearSolverLoader/Makefile
 		 src/Apps/Makefile
 		 src/Apps/AmplSolver/Makefile
 		 src/Apps/CUTErInterface/Makefile
