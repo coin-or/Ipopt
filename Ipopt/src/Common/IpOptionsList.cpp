@@ -108,8 +108,7 @@ namespace Ipopt
     }
     else {
       //    if (will_allow_clobber(tag)) {
-      OptionsList::OptionValue optval(lowercase(value), allow_clobber,
-                                      dont_print);
+      OptionsList::OptionValue optval(value, allow_clobber, dont_print);
       options_[lowercase(tag)] = optval;
     }
     return true;
@@ -541,7 +540,7 @@ namespace Ipopt
 
   void OptionsList::PrintList(std::string& list) const
   {
-    list.clear();
+    list.erase();
     char buffer[256];
     sprintf(buffer, "%40s   %-20s %s\n", "Name", "Value", "# times used");
     list += buffer;
@@ -556,7 +555,7 @@ namespace Ipopt
 
   void OptionsList::PrintUserOptions(std::string& list) const
   {
-    list.clear();
+    list.erase();
     char buffer[256];
     sprintf(buffer, "%40s   %-20s %s\n", "Name", "Value", "used");
     list += buffer;
@@ -707,7 +706,7 @@ namespace Ipopt
 
   bool OptionsList::readnexttoken(std::istream& is, std::string& token)
   {
-    token.clear();
+    token.erase();
     int c = is.get();
 
     // First get rid of all comments and white spaces

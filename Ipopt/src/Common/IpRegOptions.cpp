@@ -241,7 +241,7 @@ namespace Ipopt
         dest.append("\\^");
       }
       else {
-        dest.push_back(*c);
+        dest += *c;
       }
     }
   }
