@@ -1,4 +1,4 @@
-/* Copyright (C) 2008   GAMS Development
+/* Copyright (C) 2008   GAMS Development and others
  All Rights Reserved.
  This code is published under the Common Public License.
 
@@ -12,26 +12,17 @@
 #ifndef LIBRARYHANDLER_H_
 #define LIBRARYHANDLER_H_
 
-#include "LinearSolverLoaderConfig.h"
+#include "IpoptConfig.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <ctype.h>
-#include <errno.h>
-
-#if defined(_WIN32) || defined(BUILD_TYPE_WINDOWS)
+#ifdef HAVE_WINDOWS_H
+# include <windows.h>
   typedef HINSTANCE soHandle_t;
-/* no HP support yet
-#elif defined(CIA_HP7)
-# include <unistd.h>
-# include <dl.h>
-  typedef shl_t soHandle_t;
-*/
-#else
+#elif defined(HAVE_DLFCN_H)
 # include <unistd.h>
 # include <dlfcn.h>
+  typedef void *soHandle_t;
+#else
+# define ERROR_LOADLIB
   typedef void *soHandle_t;
 #endif
 
@@ -44,7 +35,5 @@ soHandle_t LSL_loadLib(const char* libname, char* msgbuf, int msglen);
  * @return Zero on success, nonzero on failure.
  */
 int LSL_unloadLib(soHandle_t libhandle);
-
-void* LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen);
 
 #endif /*LIBRARYHANDLER_H_*/

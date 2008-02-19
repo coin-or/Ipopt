@@ -76,7 +76,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/../Interfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/LinearSolvers` \
-	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty`
+	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty` \
+	-I`$(CYGPATH_W) $(srcdir)/../contrib/LinearSolverLoader`
 
 if COIN_HAS_MUMPS
   AM_CPPFLAGS += $(MUMPS_INCFLAGS)
