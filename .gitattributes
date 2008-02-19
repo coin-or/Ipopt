@@ -101,6 +101,13 @@ Ipopt/src/contrib/CGPenalty/IpPiecewisePenalty.cpp -text
 Ipopt/src/contrib/CGPenalty/IpPiecewisePenalty.hpp -text
 Ipopt/src/contrib/CGPenalty/Makefile.am -text
 Ipopt/src/contrib/CGPenalty/Makefile.in -text
+Ipopt/src/contrib/LinearSolverLoader/HSLLoader.c -text
+Ipopt/src/contrib/LinearSolverLoader/HSLLoader.h -text
+Ipopt/src/contrib/LinearSolverLoader/LibraryHandler.c -text
+Ipopt/src/contrib/LinearSolverLoader/LibraryHandler.h -text
+Ipopt/src/contrib/LinearSolverLoader/Makefile.am -text
+Ipopt/src/contrib/LinearSolverLoader/PardisoLoader.c -text
+Ipopt/src/contrib/LinearSolverLoader/PardisoLoader.h -text
 Ipopt/test/Makefile.am -text
 Ipopt/test/mytoy.nl -text
 Ipopt/test/run_unitTests.in -text
