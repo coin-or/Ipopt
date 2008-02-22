@@ -32512,22 +32512,11 @@ fi
 
 case $build in
   *-cygwin* |  *-mingw*)
-    case $CC in
-      cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
 
 cat >>confdefs.h <<\_ACEOF
 #define SHAREDLIBEXT "dll"
 _ACEOF
 
-        ;;
-      *)
-
-cat >>confdefs.h <<\_ACEOF
-#define SHAREDLIBEXT "so"
-_ACEOF
-
-        ;;
-     esac
      ;;
   *-darwin*)
 

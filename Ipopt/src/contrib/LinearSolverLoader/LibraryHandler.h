@@ -17,12 +17,14 @@
 #ifdef HAVE_WINDOWS_H
 # include <windows.h>
   typedef HINSTANCE soHandle_t;
-#elif defined(HAVE_DLFCN_H)
-# include <unistd.h>
-# include <dlfcn.h>
-  typedef void *soHandle_t;
 #else
-# define ERROR_LOADLIB
+# ifdef HAVE_DLFCN_H
+#  include <unistd.h>
+#  include <dlfcn.h>
+  typedef void *soHandle_t;
+# else
+#  define ERROR_LOADLIB
+# endif
   typedef void *soHandle_t;
 #endif
 

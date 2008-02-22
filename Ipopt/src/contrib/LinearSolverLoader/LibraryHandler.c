@@ -25,8 +25,8 @@ soHandle_t LSL_loadLib(const char *libName, char *msgBuf, int msgLen)
 
 #ifdef ERROR_LOADLIB
   snprintf(msgBuf, msgLen, "loadLib error: Do not know how to handle shared libraries on this operating system");
-  return 1;
-#endif
+  return h;
+#else
 
   if (libName==NULL) {
     snprintf(msgBuf, msgLen, "loadLib error: no library name given (libName is NULL)");
@@ -47,17 +47,20 @@ soHandle_t LSL_loadLib(const char *libName, char *msgBuf, int msgLen)
 #endif
 
   return h;
+#endif
 } /* LSL_loadLib */
 
 int LSL_unloadLib (soHandle_t h)
 {
-  int rc;
+  int rc=1;
 
 #ifdef HAVE_WINDOWS_H
   rc = FreeLibrary (h);
   rc = ! rc;
 #else
+# ifdef HAVE_DLFCN_H
   rc = dlclose (h);
+# endif
 #endif
   return rc;
 } /* LSL_unLoadLib */
@@ -130,6 +133,7 @@ void* LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen)
       return s;
     }
 #else
+# ifdef HAVE_DLFCN_H
     s = dlsym (h, tripSym);
     err = dlerror();  /* we have only one chance; a successive call to dlerror() returns NULL */ 
     if (err) {
@@ -138,6 +142,10 @@ void* LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen)
     } else {
       return s;
     }
+# else
+    s = NULL;
+    err = NULL;
+# endif
 #endif
   } /* end loop over symbol name variations */
 
