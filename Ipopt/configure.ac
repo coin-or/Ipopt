@@ -639,14 +639,7 @@ AC_CHECK_LIB(dl,[dlopen],[ADDLIBS="$ADDLIBS -ldl"; LIBS="$LIBS -ldl"],[])
 
 case $build in
   *-cygwin* |  *-mingw*)
-    case $CC in
-      cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-        AC_DEFINE([SHAREDLIBEXT], ["dll"], [Set to extension for shared libraries in quotes.])
-        ;;
-      *)
-        AC_DEFINE([SHAREDLIBEXT], ["so"], [Set to extension for shared libraries in quotes.])
-        ;;
-     esac
+     AC_DEFINE([SHAREDLIBEXT], ["dll"], [Set to extension for shared libraries in quotes.])
      ;;
   *-darwin*)
      AC_DEFINE([SHAREDLIBEXT], ["dylib"], [Set to extension for shared libraries in quotes.])
