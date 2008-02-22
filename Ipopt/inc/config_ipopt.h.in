@@ -155,6 +155,9 @@
 /* Define to 1 if va_copy is avaliable */
 #undef HAVE_VA_COPY
 
+/* Define to 1 if you have the <windows.h> header file. */
+#undef HAVE_WINDOWS_H
+
 /* Define to 1 if WSMP is available */
 #undef HAVE_WSMP
 
