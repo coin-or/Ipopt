@@ -635,8 +635,26 @@ AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$use_pardiso" = no])
 
 AC_COIN_CHECK_HEADER([windows.h])
 AC_COIN_CHECK_HEADER([dlfcn.h])
+AC_CHECK_LIB(dl,[dlopen],[ADDLIBS="$ADDLIBS -ldl"; LIBS="$LIBS -ldl"],[])
 
-AC_DEFINE([SHAREDLIBEXT], ["so"], [Set to extension for shared libraries in quotes.])
+case $build in
+  *-cygwin* |  *-mingw*)
+    case $CC in
+      cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+        AC_DEFINE([SHAREDLIBEXT], ["dll"], [Set to extension for shared libraries in quotes.])
+        ;;
+      *)
+        AC_DEFINE([SHAREDLIBEXT], ["so"], [Set to extension for shared libraries in quotes.])
+        ;;
+     esac
+     ;;
+  *-darwin*)
+     AC_DEFINE([SHAREDLIBEXT], ["dylib"], [Set to extension for shared libraries in quotes.])
+     ;;
+  *)
+     AC_DEFINE([SHAREDLIBEXT], ["so"], [Set to extension for shared libraries in quotes.])
+esac
+
 
 ########################################################################
 ##             Create links for the test source files                 ##
