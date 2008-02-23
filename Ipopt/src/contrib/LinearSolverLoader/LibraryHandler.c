@@ -65,9 +65,14 @@ int LSL_unloadLib (soHandle_t h)
   return rc;
 } /* LSL_unLoadLib */
 
-void* LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen)
+#ifdef HAVE_WINDOWS_H
+typedef void (*symtype)(void);
+#else
+typedef void* symtype; 
+#endif
+symtype LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen)
 {
-  void *s;
+  symtype s;
   const char *from;
   char *to;
   const char *tripSym;
@@ -151,6 +156,7 @@ void* LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen)
 
 #ifdef HAVE_WINDOWS_H
   snprintf(msgBuf, msgLen, "Cannot find symbol %s in dynamic library.", symName);
+  err = NULL; /* to avoid compiler warning */
 #endif
 
   return NULL;
