@@ -15,8 +15,16 @@
 #include <string.h>
 #include <ctype.h>
 
-#if defined(_WIN32)
-#define snprintf _snprintf
+#ifdef HAVE_SNPRINTF
+#define mysnprintf snprintf
+#else
+# ifdef HAVE__SNPRINTF
+# define mysnprintf _snprintf
+# else
+   /* check for snprintf variants not in configure yet */ 
+#  define mysnprintf snprintf
+/*#  error "Do not have function for save printing into a C-string (snprintf or _snprintf)"*/  
+# endif
 #endif
 
 soHandle_t LSL_loadLib(const char *libName, char *msgBuf, int msgLen)
@@ -24,19 +32,19 @@ soHandle_t LSL_loadLib(const char *libName, char *msgBuf, int msgLen)
   soHandle_t h=NULL;
 
 #ifdef ERROR_LOADLIB
-  snprintf(msgBuf, msgLen, "loadLib error: Do not know how to handle shared libraries on this operating system");
+  mysnprintf(msgBuf, msgLen, "loadLib error: Do not know how to handle shared libraries on this operating system");
   return h;
 #else
 
   if (libName==NULL) {
-    snprintf(msgBuf, msgLen, "loadLib error: no library name given (libName is NULL)");
+    mysnprintf(msgBuf, msgLen, "loadLib error: no library name given (libName is NULL)");
     return NULL;
   }
 
 #ifdef HAVE_WINDOWS_H
   h = LoadLibrary (libName);
   if (NULL == h) {
-    snprintf(msgBuf, msgLen, "Windows error while loading dynamic library %s", libName);
+    mysnprintf(msgBuf, msgLen, "Windows error while loading dynamic library %s", libName);
   }
 #else
   h = dlopen (libName, RTLD_NOW);
@@ -155,7 +163,7 @@ symtype LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen
   } /* end loop over symbol name variations */
 
 #ifdef HAVE_WINDOWS_H
-  snprintf(msgBuf, msgLen, "Cannot find symbol %s in dynamic library.", symName);
+  mysnprintf(msgBuf, msgLen, "Cannot find symbol %s in dynamic library.", symName);
   err = NULL; /* to avoid compiler warning */
 #endif
 
