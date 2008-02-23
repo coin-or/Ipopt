@@ -24,8 +24,8 @@
   typedef void *soHandle_t;
 # else
 #  define ERROR_LOADLIB
-# endif
   typedef void *soHandle_t;
+# endif
 #endif
 
 /** Loads shared library.
