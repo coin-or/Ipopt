@@ -1,10 +1,10 @@
-/* Copyright (C) 2008   GAMS Development and others
+/* Copyright (C) 2008 GAMS Development and others
  All Rights Reserved.
  This code is published under the Common Public License.
 
  $Id: LibraryHandler.c 341 2008-02-14 18:51:25Z stefan $
 
- Authors:  Stefan Vigerske
+ Author: Stefan Vigerske
 
  copied from optcc.(h|c) in gams i/o libs
 */
@@ -74,7 +74,7 @@ int LSL_unloadLib (soHandle_t h)
 } /* LSL_unLoadLib */
 
 #ifdef HAVE_WINDOWS_H
-typedef void (*symtype)(void);
+typedef FARPROC symtype;
 #else
 typedef void* symtype; 
 #endif
