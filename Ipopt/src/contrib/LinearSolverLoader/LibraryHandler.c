@@ -6,7 +6,7 @@
 
  Author: Stefan Vigerske
 
- copied from optcc.(h|c) in gams i/o libs
+ inspired by optcc.c in gams i/o libs
 */
 
 #include "LibraryHandler.h"
@@ -78,6 +78,17 @@ typedef FARPROC symtype;
 #else
 typedef void* symtype; 
 #endif
+/** Loads a symbol from a dynamically linked library.
+ * This function is not defined in the header to allow a workaround for the problem that dlsym returns an object instead of a function pointer.
+ * However, Windows also needs special care.
+ * 
+ * The method does six attempts to load the symbol. Next to its given name, it also tries variations of lower case and upper case form and with an extra underscore.  
+ * @param h Handle of dynamicall linkes library.
+ * @param symName Name of the symbol to load.
+ * @param msgBuf Buffer for error messages, assumed to be NOT NULL!
+ * @param msgLen Length of message buffer.
+ * @return A pointer to the symbol, or NULL if not found.  
+ */
 symtype LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen)
 {
   symtype s;
@@ -90,6 +101,9 @@ symtype LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen
   char ocbuf[257];
   size_t symLen;
   int trip;
+  
+  s = NULL;
+  err = NULL;
 
   /* search in this order:
    *  1. original
@@ -155,16 +169,12 @@ symtype LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen
     } else {
       return s;
     }
-# else
-    s = NULL;
-    err = NULL;
 # endif
 #endif
   } /* end loop over symbol name variations */
 
 #ifdef HAVE_WINDOWS_H
   mysnprintf(msgBuf, msgLen, "Cannot find symbol %s in dynamic library.", symName);
-  err = NULL; /* to avoid compiler warning */
 #endif
 
   return NULL;

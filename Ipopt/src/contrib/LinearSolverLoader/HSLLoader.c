@@ -1,10 +1,10 @@
-/* Copyright (C) 2008   GAMS Development and others
+/* Copyright (C) 2008 GAMS Development and others
  All Rights Reserved.
  This code is published under the Common Public License.
 
  $Id: HSLLoader.c 341 2008-02-14 18:51:25Z stefan $
 
- Authors:  Stefan Vigerske
+ Author: Stefan Vigerske
 */
 
 #include "IpoptConfig.h"
@@ -116,6 +116,10 @@ ma27cd_t func_ma27cd=NULL;
 void F77_FUNC(ma27id,MA27ID)(ipfint* ICNTL, double* CNTL)
 {
   if (func_ma27id==NULL) LSL_lateHSLLoad();
+  if (func_ma27id==NULL) {
+    fprintf(stderr, "HSL routine MA27AD not found in " HSLLIBNAME ".\nAbort...");
+    exit(EXIT_FAILURE);
+  }
   func_ma27id(ICNTL, CNTL);
 }
 
@@ -366,6 +370,38 @@ int LSL_unloadHSL() {
 
 int LSL_isHSLLoaded() {
   return HSL_handle!=NULL;
+}
+
+int LSL_isMA27available() {
+#ifndef HAVE_MA27
+	return HSL_handle!=NULL && func_ma27id!=NULL && func_ma27ad!=NULL && func_ma27bd!=NULL && func_ma27cd!=NULL;
+#else
+	return 0;
+#endif
+}
+
+int LSL_isMA28available() {
+#ifndef HAVE_MA28
+	return HSL_handle!=NULL && func_ma28ad!=NULL;
+#else
+	return 0;
+#endif
+}
+
+int LSL_isMA57available() {
+#ifndef HAVE_MA57
+	return HSL_handle!=NULL && func_ma57id!=NULL && func_ma57ad!=NULL && func_ma57bd!=NULL && func_ma57cd!=NULL && func_ma57ed!=NULL;
+#else
+	return 0;
+#endif
+}
+
+int LSL_isMC19available() {
+#ifndef HAVE_MC19
+	return HSL_handle!=NULL && func_mc19ad!=NULL;
+#else
+	return 0;
+#endif
 }
 
 void LSL_lateHSLLoad() {

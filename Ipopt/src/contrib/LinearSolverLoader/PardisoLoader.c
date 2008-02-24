@@ -1,10 +1,10 @@
-/* Copyright (C) 2008   GAMS Development and others
+/* Copyright (C) 2008 GAMS Development and others
  All Rights Reserved.
  This code is published under the Common Public License.
 
  $Id: PardisoLoader.c 341 2008-02-14 18:51:25Z stefan $
 
- Authors:  Stefan Vigerske
+ Author: Stefan Vigerske
 */
 
 #include "IpoptConfig.h"
