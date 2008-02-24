@@ -1,12 +1,12 @@
-/* Copyright (C) 2008   GAMS Development and others
+/* Copyright (C) 2008 GAMS Development and others
  All Rights Reserved.
  This code is published under the Common Public License.
 
  $Id: LibraryHandler.h 341 2008-02-14 18:51:25Z stefan $
 
- Authors:  Stefan Vigerske
+ Author: Stefan Vigerske
 
- copied from optcc.(h|c) in gams i/o libs
+ inspired by optcc.h in gams i/o libs
 */
 
 #ifndef LIBRARYHANDLER_H_
@@ -28,12 +28,16 @@
 # endif
 #endif
 
-/** Loads shared library.
+/** Loads a dynamically linked library.
+ * @param libname The name of the library to load.
+ * @param msgbuf A buffer to store an error message.
+ * @param msglen Length of the message buffer.
  * @return Shared library handle, or NULL if failure.
  */
 soHandle_t LSL_loadLib(const char* libname, char* msgbuf, int msglen);
 
-/** Unloads shared library.
+/** Unloads a shared library.
+ * @param libhandle Handle of shared library to unload.
  * @return Zero on success, nonzero on failure.
  */
 int LSL_unloadLib(soHandle_t libhandle);
