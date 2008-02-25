@@ -100,7 +100,12 @@ void LSL_lateParadisoLibLoad() {
   sprintf(buffer, "Error unknown.");
   rc = LSL_loadPardisoLib(NULL, buffer, 512);
   if (rc!=0) {
-    fprintf(stderr, "Error loading Pardiso dynamic library " PARDISOLIBNAME ": %s\nAborting...\n", buffer);
+    fprintf(stderr, "Error loading Pardiso dynamic library " PARDISOLIBNAME ": %s\nAbort...\n", buffer);
     exit(EXIT_FAILURE);
   }
+}
+
+char* LSL_PardisoLibraryName() {
+  static char name[] = PARDISOLIBNAME;
+  return name;
 }

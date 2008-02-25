@@ -56,6 +56,9 @@ extern "C" {
    * @return Zero if not available, nonzero if MA57 is available in the loaded library.
    */
   int LSL_isMC19available();
+
+  /** Returns name of the shared library that should contain HSL */
+  char* LSL_HSLLibraryName();
   
 #ifdef __cplusplus
 }

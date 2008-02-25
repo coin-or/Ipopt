@@ -31,6 +31,9 @@ extern "C" {
    * @return Zero if not loaded, nonzero if handle is loaded
    */
   int LSL_isPardisoLoaded();
+
+  /** Returns name of the shared library that should contain Pardiso */
+  char* LSL_PardisoLibraryName();
 #ifdef __cplusplus
 }
 #endif

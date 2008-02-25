@@ -117,7 +117,7 @@ void F77_FUNC(ma27id,MA27ID)(ipfint* ICNTL, double* CNTL)
 {
   if (func_ma27id==NULL) LSL_lateHSLLoad();
   if (func_ma27id==NULL) {
-    fprintf(stderr, "HSL routine MA27AD not found in " HSLLIBNAME ".\nAbort...");
+    fprintf(stderr, "HSL routine MA27AD not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_ma27id(ICNTL, CNTL);
@@ -129,7 +129,7 @@ void F77_FUNC(ma27ad,MA27AD)(ipfint *N, ipfint *NZ, const ipfint *IRN, const ipf
                              double* CNTL, ipfint *INFO, double* OPS) {
   if (func_ma27ad==NULL) LSL_lateHSLLoad();
   if (func_ma27ad==NULL) {
-    fprintf(stderr, "HSL routine MA27AD not found in " HSLLIBNAME ".\nAbort...");
+    fprintf(stderr, "HSL routine MA27AD not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_ma27ad(N, NZ, IRN, ICN, IW, LIW, IKEEP, IW1, NSTEPS, IFLAG, ICNTL, CNTL, INFO, OPS);	
@@ -142,7 +142,7 @@ void F77_FUNC(ma27bd,MA27BD)(ipfint *N, ipfint *NZ, const ipfint *IRN, const ipf
                              ipfint* INFO) {
   if (func_ma27bd==NULL) LSL_lateHSLLoad();
   if (func_ma27bd==NULL) {
-    fprintf(stderr, "HSL routine MA27BD not found in " HSLLIBNAME ".\nAbort...");
+    fprintf(stderr, "HSL routine MA27BD not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_ma27bd(N, NZ, IRN, ICN, A, LA, IW, LIW, IKEEP, NSTEPS, MAXFRT, IW1, ICNTL, CNTL, INFO);
@@ -154,7 +154,7 @@ void F77_FUNC(ma27cd,MA27CD)(ipfint *N, double* A, ipfint* LA, ipfint* IW,
                              ipfint* ICNTL, double* CNTL) {
   if (func_ma27cd==NULL) LSL_lateHSLLoad();
   if (func_ma27cd==NULL) {
-    fprintf(stderr, "HSL routine MA27CD not found in " HSLLIBNAME ".\nAbort...");
+    fprintf(stderr, "HSL routine MA27CD not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_ma27cd(N, A, LA, IW, LIW, W, MAXFRT, RHS, IW1, NSTEPS, ICNTL, CNTL);
@@ -170,7 +170,7 @@ void F77_FUNC(ma28ad,MA28AD)(void* nsize, void* nz, void* rw, void* licn, void* 
 		                         void* lirn, void* iw2, void* pivtol, void* iw3, void* iw4, void* rw2, void* iflag) {
   if (func_ma28ad==NULL) LSL_lateHSLLoad();
   if (func_ma28ad==NULL) {
-    fprintf(stderr, "HSL routine MA28AD not found in " HSLLIBNAME ".\nAbort...");
+    fprintf(stderr, "HSL routine MA28AD not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_ma28ad(nsize, nz, rw, licn, iw, lirn, iw2, pivtol, iw3, iw4, rw2, iflag);
@@ -188,7 +188,7 @@ ma57ed_t func_ma57ed=NULL;
 void  F77_FUNC (ma57id, MA57ID) (double    *cntl,  ipfint    *icntl) {
   if (func_ma57id==NULL) LSL_lateHSLLoad();
   if (func_ma57id==NULL) {
-    fprintf(stderr, "HSL routine MA57ID not found in " HSLLIBNAME ".\nAbort...");
+    fprintf(stderr, "HSL routine MA57ID not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_ma57id(cntl, icntl);
@@ -207,7 +207,7 @@ void  F77_FUNC (ma57ad, MA57AD) (
     double    *rinfo)    /* Double Control parameter of length 5 */ {
   if (func_ma57ad==NULL) LSL_lateHSLLoad();
   if (func_ma57ad==NULL) {
-    fprintf(stderr, "HSL routine MA57AD not found in " HSLLIBNAME ".\nAbort...");
+    fprintf(stderr, "HSL routine MA57AD not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_ma57ad(n, ne, irn, jcn, lkeep, keep, iwork, icntl, info, rinfo);
@@ -230,7 +230,7 @@ void  F77_FUNC (ma57bd, MA57BD) (
     double    *rinfo)    /* Statistical Information; Real array of length 20. */ {
   if (func_ma57bd==NULL) LSL_lateHSLLoad();
   if (func_ma57bd==NULL) {
-    fprintf(stderr, "HSL routine MA57BD not found in " HSLLIBNAME ".\nAbort...");
+    fprintf(stderr, "HSL routine MA57BD not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_ma57bd(n, ne, a, fact, lfact, ifact, lifact, lkeep, keep, iwork, icntl, cntl, info, rinfo);	
@@ -253,7 +253,7 @@ void  F77_FUNC (ma57cd, MA57CD) (
     ipfint    *info)     /* Statistical Information; Integer array of length 40. */ {
   if (func_ma57cd==NULL) LSL_lateHSLLoad();
   if (func_ma57cd==NULL) {
-    fprintf(stderr, "HSL routine MA57CD not found in " HSLLIBNAME ".\nAbort...");
+    fprintf(stderr, "HSL routine MA57CD not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_ma57cd(job, n, fact, lfact, ifact, lifact, nrhs, rhs, lrhs, work, lwork, iwork, icntl, info);    
@@ -274,7 +274,7 @@ void  F77_FUNC (ma57ed, MA57ED) (
     ipfint    *info) {
   if (func_ma57ed==NULL) LSL_lateHSLLoad();
   if (func_ma57ed==NULL) {
-    fprintf(stderr, "HSL routine MA57ED not found in " HSLLIBNAME ".\nAbort...");
+    fprintf(stderr, "HSL routine MA57ED not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_ma57ed(n, ic, keep, fact, lfact, newfac, lnew, ifact, lifact, newifc, linew, info);
@@ -289,7 +289,7 @@ void F77_FUNC(mc19ad,MC19AD)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN,
                              ipfint* ICN, float* R, float* C, float* W) {
   if (func_mc19ad==NULL) LSL_lateHSLLoad();
   if (func_mc19ad==NULL) {
-    fprintf(stderr, "HSL routine MC19AD not found in " HSLLIBNAME ".\nAbort...");
+    fprintf(stderr, "HSL routine MC19AD not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_mc19ad(N, NZ, A, IRN, ICN, R, C, W);
@@ -414,4 +414,9 @@ void LSL_lateHSLLoad() {
     fprintf(stderr, "Error loading HSL dynamic library " HSLLIBNAME ": %s\nThis executable was not compiled with the HSL routine you specified.\nYou need to compile the HSL dynamic library to use deferred loading of the linear solver.\nAbort...\n", buffer);
     exit(EXIT_FAILURE);
   }
+}
+
+char* LSL_HSLLibraryName() {
+  static char name[] = HSLLIBNAME;
+  return name;
 }
