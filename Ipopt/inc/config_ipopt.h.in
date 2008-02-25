@@ -116,6 +116,9 @@
 /* Define to 1 if function rand is available */
 #undef HAVE_RAND
 
+/* Define to 1 if you have the `snprintf' function. */
+#undef HAVE_SNPRINTF
+
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H
 
@@ -160,6 +163,9 @@
 
 /* Define to 1 if WSMP is available */
 #undef HAVE_WSMP
+
+/* Define to 1 if you have the `_snprintf' function. */
+#undef HAVE__SNPRINTF
 
 /* Define to be the name of C-function for NaNInf check */
 #undef MY_C_FINITE

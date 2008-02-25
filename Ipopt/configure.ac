@@ -633,6 +633,7 @@ AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$use_pardiso" = no])
 ##                 Linear solver loader stuff                         ##
 ########################################################################
 
+AC_LANG_PUSH(C)
 AC_COIN_CHECK_HEADER([windows.h])
 AC_COIN_CHECK_HEADER([dlfcn.h])
 AC_CHECK_LIB(dl,[dlopen],[ADDLIBS="$ADDLIBS -ldl"; LIBS="$LIBS -ldl"],[])
@@ -640,6 +641,9 @@ AC_CHECK_LIB(dl,[dlopen],[ADDLIBS="$ADDLIBS -ldl"; LIBS="$LIBS -ldl"],[])
 case $build in
   *-cygwin* |  *-mingw*)
      AC_DEFINE([SHAREDLIBEXT], ["dll"], [Set to extension for shared libraries in quotes.])
+     # Take -pedantic-errors out of CFLAGS
+     AC_MSG_NOTICE([Removing flag -pedantic-errors from CFLAGS])
+     CFLAGS=`echo $CFLAGS | sed -e s/-pedantic-errors//`
      ;;
   *-darwin*)
      AC_DEFINE([SHAREDLIBEXT], ["dylib"], [Set to extension for shared libraries in quotes.])
@@ -647,7 +651,8 @@ case $build in
   *)
      AC_DEFINE([SHAREDLIBEXT], ["so"], [Set to extension for shared libraries in quotes.])
 esac
-
+AC_CHECK_FUNCS([snprintf _snprintf],[break])
+AC_LANG_POP(C)
 
 ########################################################################
 ##             Create links for the test source files                 ##

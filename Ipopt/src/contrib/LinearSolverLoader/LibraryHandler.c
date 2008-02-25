@@ -23,7 +23,7 @@
 # else
    /* check for snprintf variants not in configure yet */ 
 #  define mysnprintf snprintf
-/*#  error "Do not have function for save printing into a C-string (snprintf or _snprintf)"*/  
+#  error "Do not have function for save printing into a C-string (snprintf or _snprintf)"
 # endif
 #endif
 
@@ -41,18 +41,18 @@ soHandle_t LSL_loadLib(const char *libName, char *msgBuf, int msgLen)
     return NULL;
   }
 
-#ifdef HAVE_WINDOWS_H
+# ifdef HAVE_WINDOWS_H
   h = LoadLibrary (libName);
   if (NULL == h) {
     mysnprintf(msgBuf, msgLen, "Windows error while loading dynamic library %s", libName);
   }
-#else
+# else
   h = dlopen (libName, RTLD_NOW);
   if (NULL == h) {
     strncpy(msgBuf, dlerror(), msgLen);
     msgBuf[msgLen-1]=0;
   }
-#endif
+# endif
 
   return h;
 #endif
