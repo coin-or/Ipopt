@@ -20,7 +20,7 @@
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
-# Copyright (C) 2006 International Business Machines and others.
+# Copyright (C) 2006, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -242,7 +242,7 @@ SUBDIRS = $(subdirs)
 # Files that are generated and should be cleaned with make distclean
 DISTCLEANFILES = $(am__append_2) $(VPATH_DISTCLEANFILES)
 DocFiles = README AUTHORS LICENSE
-DocInstallDir = $(prefix)/share/doc/$(PACKAGE)
+DocInstallDir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)
 all: all-recursive
 
 .SUFFIXES:
@@ -616,6 +616,8 @@ info-am:
 
 install-data-am:
 
+install-exec-am:
+
 install-info: install-info-recursive
 
 install-man:
@@ -639,6 +641,8 @@ pdf-am:
 ps: ps-recursive
 
 ps-am:
+
+uninstall-am: uninstall-info-am
 
 uninstall-info: uninstall-info-recursive
 
@@ -684,14 +688,14 @@ cuter:
 
 .PHONY: test unitTest tests unitTests doxydoc cuter
 
-install-exec-am:
+install-doc: $(DocFiles)
 	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
 	for file in $(DocFiles); do \
 	  if test -f "$$file"; then dir=; else dir="$(srcdir)/"; fi; \
 	  if test -f "$$dir$$file"; then $(INSTALL_DATA) "$$dir$$file" "$(DESTDIR)$(DocInstallDir)/$$file"; fi; \
 	done
 
-uninstall-am:
+uninstall-doc:
 	for file in $(DocFiles); do \
 	  rm -f "$(DESTDIR)$(DocInstallDir)/$$file"; \
 	done
@@ -732,6 +736,8 @@ uninstall-am:
 
 @HAVE_EXTERNALS_TRUE@@MAINTAINER_MODE_TRUE@update-externals: .Externals-stamp
 @HAVE_EXTERNALS_TRUE@@MAINTAINER_MODE_TRUE@	cd $(srcdir); svn update
+
+.PHONY: install-doc uninstall-doc update-externals
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

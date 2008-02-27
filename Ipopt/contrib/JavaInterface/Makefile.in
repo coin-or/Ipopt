@@ -31,7 +31,7 @@ CXXFLAGS = `echo @CXXFLAGS@ | sed -e s'|-pedantic-errors||'`
 LINKFLAGS = $(CXXFLAGS) @RPATH_FLAGS@ @SHARED_FLAGS@
 
 # Directory with header files
-IPOPTINCDIR = @includedir@/ipopt
+IPOPTINCDIR = @includedir@/coin
 
 # Directory with libipopt.a
 IPOPTLIBDIR = @libdir@
