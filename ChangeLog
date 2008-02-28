@@ -2,6 +2,13 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2008-02-28 releases/3.3.5
+        - corrected links for Ipopt mailing list
+        - added missing Makefile.in for Matlab interface
+        - the addlibs* files are now installed in share/doc/coin/Ipopt
+          instead of lib
+	- updates in Matlab interface
+
 2007-12-27 releases/3.3.4
         - headers are now installed in include/coin
             (no longer in include/ipopt)
