@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -324,6 +324,9 @@ namespace Ipopt
      *  (current iteration) */
     CachedResults<SmartPtr<const SymMatrix> > h_cache_;
 
+    /** Unscaled version of x vector */
+    CachedResults<SmartPtr<const Vector> > unscaled_x_cache_;
+
     /** Lower bounds on x */
     SmartPtr<const Vector> x_L_;
 
@@ -380,6 +383,8 @@ namespace Ipopt
      *  lower bounds, and positive (or zero) for upper bounds.
      */
     void relax_bounds(Number bound_relax_factor, Vector& bounds);
+    /** Method for getting the unscaled version of the x vector */
+    SmartPtr<const Vector> get_unscaled_x(const Vector& x);
     //@}
 
     /** @name Algorithmic parameters */

@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -20,6 +20,7 @@ namespace Ipopt
     const SmartPtr<const Vector>& lu,
     const VectorSpace& x_space)
   {
+    DBG_START_METH("NLPScalingObject::apply_vector_scaling_x_LU_NonConst", dbg_verbosity);
     SmartPtr<Vector> scaled_x_LU = lu->MakeNew();
     if (have_x_scaling()) {
       SmartPtr<Vector> tmp_x = x_space.MakeNew();
@@ -45,6 +46,7 @@ namespace Ipopt
     const SmartPtr<const Vector>& lu,
     const VectorSpace& x_space)
   {
+    DBG_START_METH("NLPScalingObject::apply_vector_scaling_x_LU", dbg_verbosity);
     if (have_x_scaling()) {
       return ConstPtr(apply_vector_scaling_x_LU_NonConst(Px_LU, lu, x_space));
     }
@@ -58,6 +60,7 @@ namespace Ipopt
     const SmartPtr<const Vector>& lu,
     const VectorSpace& d_space)
   {
+    DBG_START_METH("NLPScalingObject::apply_vector_scaling_d_LU_NonConst", dbg_verbosity);
     SmartPtr<Vector> scaled_d_LU = lu->MakeNew();
     if (have_d_scaling()) {
       SmartPtr<Vector> tmp_d = d_space.MakeNew();
@@ -83,6 +86,7 @@ namespace Ipopt
     const SmartPtr<const Vector>& lu,
     const VectorSpace& d_space)
   {
+    DBG_START_METH("NLPScalingObject::apply_vector_scaling_d_LU", dbg_verbosity);
     if (have_d_scaling()) {
       return ConstPtr(apply_vector_scaling_d_LU_NonConst(Pd_LU, lu, d_space));
     }
@@ -96,6 +100,7 @@ namespace Ipopt
     const SmartPtr<const Vector>& lu,
     const VectorSpace& d_space)
   {
+    DBG_START_METH("NLPScalingObject::unapply_vector_scaling_d_LU_NonConst", dbg_verbosity);
     SmartPtr<Vector> unscaled_d_LU = lu->MakeNew();
     if (have_d_scaling()) {
       SmartPtr<Vector> tmp_d = d_space.MakeNew();
@@ -121,6 +126,7 @@ namespace Ipopt
     const SmartPtr<const Vector>& lu,
     const VectorSpace& d_space)
   {
+    DBG_START_METH("NLPScalingObject::unapply_vector_scaling_d_LU", dbg_verbosity);
     if (have_d_scaling()) {
       return ConstPtr(unapply_vector_scaling_d_LU_NonConst(Pd_LU, lu, d_space));
     }
@@ -132,6 +138,7 @@ namespace Ipopt
   SmartPtr<Vector> NLPScalingObject::apply_grad_obj_scaling_NonConst(
     const SmartPtr<const Vector>& v)
   {
+    DBG_START_METH("NLPScalingObject::apply_grad_obj_scaling_NonConst", dbg_verbosity);
     SmartPtr<Vector> scaled_v = unapply_vector_scaling_x_NonConst(v);
     Number df = apply_obj_scaling(1.0);
     if (df != 1.) {
@@ -143,6 +150,7 @@ namespace Ipopt
   SmartPtr<const Vector> NLPScalingObject::apply_grad_obj_scaling(
     const SmartPtr<const Vector>& v)
   {
+    DBG_START_METH("NLPScalingObject::apply_grad_obj_scaling", dbg_verbosity);
     Number df = apply_obj_scaling(1.);
     if (df != 1.) {
       SmartPtr<Vector> scaled_v = apply_grad_obj_scaling_NonConst(v);
@@ -157,6 +165,7 @@ namespace Ipopt
   SmartPtr<Vector> NLPScalingObject::unapply_grad_obj_scaling_NonConst(
     const SmartPtr<const Vector>& v)
   {
+    DBG_START_METH("NLPScalingObject::unapply_grad_obj_scaling_NonConst", dbg_verbosity);
     SmartPtr<Vector> unscaled_v = apply_vector_scaling_x_NonConst(v);
     Number df = unapply_obj_scaling(1.);
     if (df != 1.) {
@@ -168,6 +177,7 @@ namespace Ipopt
   SmartPtr<const Vector> NLPScalingObject::unapply_grad_obj_scaling(
     const SmartPtr<const Vector>& v)
   {
+    DBG_START_METH("NLPScalingObject::unapply_grad_obj_scaling", dbg_verbosity);
     Number df = unapply_obj_scaling(1.);
     if (df != 1.) {
       SmartPtr<Vector> unscaled_v = unapply_grad_obj_scaling_NonConst(v);
@@ -286,11 +296,13 @@ namespace Ipopt
 
   Number StandardScalingBase::apply_obj_scaling(const Number& f)
   {
+    DBG_START_METH("NLPScalingObject::apply_obj_scaling", dbg_verbosity);
     return df_*f;
   }
 
   Number StandardScalingBase::unapply_obj_scaling(const Number& f)
   {
+    DBG_START_METH("NLPScalingObject::unapply_obj_scaling", dbg_verbosity);
     return f/df_;
   }
 
@@ -312,6 +324,7 @@ namespace Ipopt
   SmartPtr<const Vector> StandardScalingBase::apply_vector_scaling_x(
     const SmartPtr<const Vector>& v)
   {
+    DBG_START_METH("NLPScalingObject::apply_vector_scaling_x", dbg_verbosity);
     if (IsValid(dx_)) {
       return ConstPtr(apply_vector_scaling_x_NonConst(v));
     }
@@ -338,6 +351,7 @@ namespace Ipopt
   SmartPtr<const Vector> StandardScalingBase::unapply_vector_scaling_x(
     const SmartPtr<const Vector>& v)
   {
+    DBG_START_METH("NLPScalingObject::unapply_vector_scaling_x", dbg_verbosity);
     if (IsValid(dx_)) {
       return ConstPtr(unapply_vector_scaling_x_NonConst(v));
     }
@@ -365,6 +379,7 @@ namespace Ipopt
   SmartPtr<const Vector> StandardScalingBase::apply_vector_scaling_c(
     const SmartPtr<const Vector>& v)
   {
+    DBG_START_METH("NLPScalingObject::apply_vector_scaling_c", dbg_verbosity);
     if (IsValid(scaled_jac_c_space_) &&
         IsValid(scaled_jac_c_space_->RowScaling())) {
       return ConstPtr(apply_vector_scaling_c_NonConst(v));
@@ -393,6 +408,7 @@ namespace Ipopt
   SmartPtr<const Vector> StandardScalingBase::unapply_vector_scaling_c(
     const SmartPtr<const Vector>& v)
   {
+    DBG_START_METH("NLPScalingObject::unapply_vector_scaling_c", dbg_verbosity);
     if (IsValid(scaled_jac_c_space_) &&
         IsValid(scaled_jac_c_space_->RowScaling())) {
       return ConstPtr(unapply_vector_scaling_c_NonConst(v));
@@ -421,6 +437,7 @@ namespace Ipopt
   SmartPtr<const Vector> StandardScalingBase::apply_vector_scaling_d(
     const SmartPtr<const Vector>& v)
   {
+    DBG_START_METH("NLPScalingObject::apply_vector_scaling_d", dbg_verbosity);
     if (IsValid(scaled_jac_d_space_) &&
         IsValid(scaled_jac_d_space_->RowScaling())) {
       return ConstPtr(apply_vector_scaling_d_NonConst(v));
@@ -449,6 +466,7 @@ namespace Ipopt
   SmartPtr<const Vector> StandardScalingBase::unapply_vector_scaling_d(
     const SmartPtr<const Vector>& v)
   {
+    DBG_START_METH("NLPScalingObject::unapply_vector_scaling_d", dbg_verbosity);
     if (IsValid(scaled_jac_d_space_) &&
         IsValid(scaled_jac_d_space_->RowScaling())) {
       return ConstPtr(unapply_vector_scaling_d_NonConst(v));
@@ -462,6 +480,7 @@ namespace Ipopt
   SmartPtr<const Matrix> StandardScalingBase::apply_jac_c_scaling(
     SmartPtr<const Matrix> matrix)
   {
+    DBG_START_METH("NLPScalingObject::apply_jac_c_scaling", dbg_verbosity);
     if (IsValid(scaled_jac_c_space_)) {
       SmartPtr<ScaledMatrix> ret = scaled_jac_c_space_->MakeNewScaledMatrix(false);
       ret->SetUnscaledMatrix(matrix);
@@ -477,6 +496,7 @@ namespace Ipopt
   SmartPtr<const Matrix> StandardScalingBase::apply_jac_d_scaling(
     SmartPtr<const Matrix> matrix)
   {
+    DBG_START_METH("NLPScalingObject::apply_jac_d_scaling", dbg_verbosity);
     if (IsValid(scaled_jac_d_space_)) {
       SmartPtr<ScaledMatrix> ret = scaled_jac_d_space_->MakeNewScaledMatrix(false);
       ret->SetUnscaledMatrix(matrix);
@@ -492,6 +512,7 @@ namespace Ipopt
   SmartPtr<const SymMatrix> StandardScalingBase::apply_hessian_scaling(
     SmartPtr<const SymMatrix> matrix)
   {
+    DBG_START_METH("NLPScalingObject::apply_hessian_scaling", dbg_verbosity);
     if (IsValid(scaled_h_space_)) {
       SmartPtr<SymScaledMatrix> ret = scaled_h_space_->MakeNewSymScaledMatrix(false);
       ret->SetUnscaledMatrix(matrix);
