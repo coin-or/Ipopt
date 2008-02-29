@@ -7,7 +7,8 @@ history management of subversion.
         - added missing Makefile.in for Matlab interface
         - the addlibs* files are now installed in share/doc/coin/Ipopt
           instead of lib
-	- updates in Matlab interface
+        - updates in Matlab interface
+        - bugfix for ticket #56
 
 2007-12-27 releases/3.3.4
         - headers are now installed in include/coin
