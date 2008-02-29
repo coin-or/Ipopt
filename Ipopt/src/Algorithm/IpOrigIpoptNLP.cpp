@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -32,6 +32,7 @@ namespace Ipopt
       d_cache_(1),
       jac_d_cache_(1),
       h_cache_(1),
+      unscaled_x_cache_(1),
       initialized_(false)
   {}
 
@@ -476,7 +477,7 @@ namespace Ipopt
     DBG_PRINT((2, "x.Tag = %d\n", x.GetTag()));
     if (!f_cache_.GetCachedResult1Dep(ret, &x)) {
       f_evals_++;
-      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
       f_eval_time_.Start();
       bool success = nlp_->Eval_f(*unscaled_x, ret);
       f_eval_time_.End();
@@ -504,7 +505,7 @@ namespace Ipopt
       grad_f_evals_++;
       unscaled_grad_f = x_space_->MakeNew();
 
-      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
       grad_f_eval_time_.Start();
       bool success = nlp_->Eval_grad_f(*unscaled_x, *unscaled_grad_f);
       grad_f_eval_time_.End();
@@ -542,7 +543,7 @@ namespace Ipopt
       if (!c_cache_.GetCachedResult1Dep(retValue, x)) {
         SmartPtr<Vector> unscaled_c = c_space_->MakeNew();
         c_evals_++;
-        SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
         c_eval_time_.Start();
         bool success = nlp_->Eval_c(*unscaled_x, *unscaled_c);
         c_eval_time_.End();
@@ -576,7 +577,7 @@ namespace Ipopt
         SmartPtr<Vector> unscaled_d = d_space_->MakeNew();
 
         DBG_PRINT_VECTOR(2, "scaled_x", x);
-        SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
         d_eval_time_.Start();
         bool success = nlp_->Eval_d(*unscaled_x, *unscaled_d);
         d_eval_time_.End();
@@ -613,7 +614,7 @@ namespace Ipopt
         jac_c_evals_++;
         SmartPtr<Matrix> unscaled_jac_c = jac_c_space_->MakeNew();
 
-        SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
         jac_c_eval_time_.Start();
         bool success = nlp_->Eval_jac_c(*unscaled_x, *unscaled_jac_c);
         jac_c_eval_time_.End();
@@ -656,7 +657,7 @@ namespace Ipopt
         jac_d_evals_++;
         SmartPtr<Matrix> unscaled_jac_d = jac_d_space_->MakeNew();
 
-        SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+        SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
         jac_d_eval_time_.Start();
         bool success = nlp_->Eval_jac_d(*unscaled_x, *unscaled_jac_d);
         jac_d_eval_time_.End();
@@ -700,7 +701,7 @@ namespace Ipopt
       h_evals_++;
       unscaled_h = h_space_->MakeNewSymMatrix();
 
-      SmartPtr<const Vector> unscaled_x = NLP_scaling()->unapply_vector_scaling_x(&x);
+      SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
       SmartPtr<const Vector> unscaled_yc = NLP_scaling()->apply_vector_scaling_c(&yc);
       SmartPtr<const Vector> unscaled_yd = NLP_scaling()->apply_vector_scaling_d(&yd);
       Number scaled_obj_factor = NLP_scaling()->apply_obj_scaling(obj_factor);
@@ -786,8 +787,7 @@ namespace Ipopt
   {
     DBG_START_METH("OrigIpoptNLP::FinalizeSolution", dbg_verbosity);
     // need to submit the unscaled solution back to the nlp
-    SmartPtr<const Vector> unscaled_x =
-      NLP_scaling()->unapply_vector_scaling_x(&x);
+    SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
     SmartPtr<const Vector> unscaled_c =
       NLP_scaling()->unapply_vector_scaling_c(&c);
     SmartPtr<const Vector> unscaled_d =
@@ -925,6 +925,17 @@ namespace Ipopt
            jac_c_eval_time_.TotalTime()+
            jac_d_eval_time_.TotalTime()+
            h_eval_time_.TotalTime();
+  }
+
+  SmartPtr<const Vector>
+  OrigIpoptNLP::get_unscaled_x(const Vector& x)
+  {
+    SmartPtr<const Vector> ret;
+    if (!unscaled_x_cache_.GetCachedResult1Dep(ret, &x)) {
+      ret = NLP_scaling()->unapply_vector_scaling_x(&x);
+      unscaled_x_cache_.AddCachedResult1Dep(ret, &x);
+    }
+    return ret;
   }
 
 } // namespace Ipopt
