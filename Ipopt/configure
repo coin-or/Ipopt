@@ -31617,11 +31617,8 @@ else
 fi;
 
 if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" = no; then
-  if test "$distconf" = false; then
-    { { echo "$as_me:$LINENO: error: \"No linear solver (such as MUMPS) available.  You need to provide at least one.\"" >&5
-echo "$as_me: error: \"No linear solver (such as MUMPS) available.  You need to provide at least one.\"" >&2;}
-   { (exit 1); exit 1; }; }
-  fi
+  { echo "$as_me:$LINENO: WARNING: \"You are compiling Ipopt without any linear solver (such as MUMPS).  You will only be able to run Ipopt if you compile a shared library with a linear solver.\"" >&5
+echo "$as_me: WARNING: \"You are compiling Ipopt without any linear solver (such as MUMPS).  You will only be able to run Ipopt if you compile a shared library with a linear solver.\"" >&2;}
 fi
 
 # For the remaining tests we need to include FLIBS into LIBS, so that

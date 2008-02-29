@@ -506,9 +506,7 @@ AC_ARG_ENABLE([distconf],,
   esac],[distconf=false])
 
 if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" = no; then
-  if test "$distconf" = false; then
-    AC_MSG_ERROR("No linear solver (such as MUMPS) available.  You need to provide at least one.")
-  fi
+  AC_MSG_WARN("You are compiling Ipopt without any linear solver (such as MUMPS).  You will only be able to run Ipopt if you compile a shared library with a linear solver.")
 fi
 
 # For the remaining tests we need to include FLIBS into LIBS, so that
