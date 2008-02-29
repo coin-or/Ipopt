@@ -251,8 +251,8 @@ namespace Ipopt
       if (rc) {
         std::string errmsg;
         errmsg = "Selected linear solver MA27 not available.\nTried to obtain MA27 from shared library \"";
-	errmsg += LSL_HSLLibraryName();
-	errmsg += "\", but the following error occured:\n";
+        errmsg += LSL_HSLLibraryName();
+        errmsg += "\", but the following error occured:\n";
         errmsg += buf;
         THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
       }
@@ -267,8 +267,8 @@ namespace Ipopt
       if (rc) {
         std::string errmsg;
         errmsg = "Selected linear solver MA57 not available.\nTried to obtain MA57 from shared library \"";
-	errmsg += LSL_HSLLibraryName();
-	errmsg += "\", but the following error occured:\n";
+        errmsg += LSL_HSLLibraryName();
+        errmsg += "\", but the following error occured:\n";
         errmsg += buf;
         THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
       }
@@ -283,8 +283,8 @@ namespace Ipopt
       if (rc) {
         std::string errmsg;
         errmsg = "Selected linear solver Pardiso not available.\nTried to obtain Pardiso from shared library \"";
-	errmsg += LSL_PardisoLibraryName();
-	errmsg += "\", but the following error occured:\n";
+        errmsg += LSL_PardisoLibraryName();
+        errmsg += "\", but the following error occured:\n";
         errmsg += buf;
         THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
       }
