@@ -261,7 +261,7 @@ namespace Ipopt
         dest.append(" \\cdot 10^{");
       }
       else {
-        dest.push_back(*c);
+	dest += *c;
       }
     }
     if (found_e) {
