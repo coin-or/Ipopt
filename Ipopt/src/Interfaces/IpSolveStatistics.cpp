@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -22,7 +22,7 @@ namespace Ipopt
       num_obj_evals_(ip_nlp->f_evals()),
       num_constr_evals_(Max(ip_nlp->c_evals(), ip_nlp->d_evals())),
       num_obj_grad_evals_(ip_nlp->grad_f_evals()),
-      num_constr_jac_evals_(Max(ip_nlp->jac_c_evals(),ip_nlp->jac_c_evals())),
+      num_constr_jac_evals_(Max(ip_nlp->jac_c_evals(),ip_nlp->jac_d_evals())),
       num_hess_evals_(ip_nlp->h_evals()),
 
       scaled_obj_val_(ip_cq->curr_f()),
