@@ -572,6 +572,17 @@ AC_SUBST(SHARED_FLAGS)
 
 AC_COIN_LINK_FROM_FILELIST(contrib/JavaInterface,contrib/JavaInterface/javafiles.lst)
 
+############ Matlab
+
+# Try to detect if there is matlab installed on the system and set the
+# MATLAB_HOME variable
+
+mexpath=`which mex 2>/dev/null`
+if test ! "$mexpath" = ""; then
+  MATLAB_HOME=`echo $mexpath | sed -e 's=/bin/mex=='`
+fi
+AC_SUBST(MATLAB_HOME)
+
 ##########
 # ASTYLE #
 ##########

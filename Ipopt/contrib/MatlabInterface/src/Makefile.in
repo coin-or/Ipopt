@@ -1,4 +1,4 @@
-# Copyright (C) 2007 Peter Carbonetto. All Rights Reserved.
+# Copyright (C) 2007, 2008 Peter Carbonetto. All Rights Reserved.
 # This code is published under the Common Public License.
 #
 # Author: Peter Carbonetto
@@ -13,7 +13,7 @@
 # installation. This is the directory so that in its 'bin/'
 # subdirectory you see all the matlab executables (such as 'matlab',
 # 'mex', etc.)
-MATLAB_HOME = /usr/local/R2006b
+MATLAB_HOME = @MATLAB_HOME@
 
 # Set the suffix for matlab mex files. The contents of the
 # $(MATLAB_HOME)/extern/examples/mex directory might be able to help
