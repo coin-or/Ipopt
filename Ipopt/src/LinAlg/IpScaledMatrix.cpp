@@ -48,7 +48,7 @@ namespace Ipopt
       tmp_y->ElementWiseMultiply(*owner_space_->RowScaling());
     }
 
-    y.Axpy(1.0, *tmp_y);
+    y.Axpy(alpha, *tmp_y);
   }
 
   void ScaledMatrix::TransMultVectorImpl(Number alpha, const Vector &x,
@@ -78,7 +78,7 @@ namespace Ipopt
       tmp_y->ElementWiseMultiply(*owner_space_->ColumnScaling());
     }
 
-    y.Axpy(1.0, *tmp_y);
+    y.Axpy(alpha, *tmp_y);
   }
 
   bool ScaledMatrix::HasValidNumbersImpl() const
