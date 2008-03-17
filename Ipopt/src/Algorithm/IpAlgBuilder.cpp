@@ -120,21 +120,19 @@ namespace Ipopt
 #ifdef HAVE_MA27
       "ma27",
 #else
-#ifdef HAVE_MA57
+# ifdef HAVE_MA57
       "ma57",
-#else
-#ifdef HAVE_PARDISO
+# else
+#  ifdef HAVE_PARDISO
       "pardiso",
-#else
-#ifdef HAVE_WSMP
+#  else
+#   ifdef HAVE_WSMP
       "wsmp",
-#else
-#ifdef COIN_HAS_MUMPS
+#   else
       "mumps",
-#endif
-#endif
-#endif
-#endif
+#   endif
+#  endif
+# endif
 #endif
       "ma27", "use the Harwell routine MA27",
       "ma57", "use the Harwell routine MA57",
