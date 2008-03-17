@@ -583,7 +583,7 @@ namespace Ipopt
         else {
           jnlst_->Printf(J_WARNING, J_INITIALIZATION,
                          "All variables are fixed and constraint violation %e\n  is above tolerance %e. Declaring that problem is infeasible.\n", max_viol, tol_);
-          THROW_EXCEPTION(LOCALLY_INFEASIBLE, string);
+          THROW_EXCEPTION(NO_FREE_VARIABLES_AND_INFEASIBLE, string);
         }
       }
 
