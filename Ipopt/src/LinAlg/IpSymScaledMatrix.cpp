@@ -48,7 +48,7 @@ namespace Ipopt
       tmp_y->ElementWiseMultiply(*owner_space_->RowColScaling());
     }
 
-    y.Axpy(1.0, *tmp_y);
+    y.Axpy(alpha, *tmp_y);
   }
 
   bool SymScaledMatrix::HasValidNumbersImpl() const
