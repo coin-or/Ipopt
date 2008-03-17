@@ -129,7 +129,11 @@ namespace Ipopt
 #   ifdef HAVE_WSMP
       "wsmp",
 #   else
+#    ifdef COIN_HAS_MUMPS
       "mumps",
+#    else
+      "ma27",
+#    endif
 #   endif
 #  endif
 # endif
