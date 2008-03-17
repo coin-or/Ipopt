@@ -808,7 +808,7 @@ namespace Ipopt
     }
     catch (NO_FREE_VARIABLES_AND_INFEASIBLE& exc) {
       exc.ReportException(*jnlst_, J_MOREDETAILED);
-      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem as only fixed variables and constraints are infeasible.\n");
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has only fixed variables and constraints are infeasible.\n");
       retValue = Infeasible_Problem_Detected;
     }
     catch (IpoptException& exc) {
