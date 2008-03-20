@@ -10,7 +10,7 @@
 %         Dept. of Computer Science
 %         University of British Columbia
 %         May 19, 2007
-function [x, multipliers] = examplehs071
+function [status, x, multipliers] = examplehs071
   
 % The starting point.
 x0  = [1 5 5 1];  % The starting point.
@@ -24,10 +24,11 @@ multipliers.zl     = [1 1 1 1];
 multipliers.zu     = [1 1 1 1];
 multipliers.lambda = [1 1];
   
-[x multipliers] = ipopt(x0,lb,ub,lbc,ubc,@computeObjective,...
-			@computeGradient,@computeConstraints,...
-			@computeJacobian,@computeHessian,[],'',...
-			multipliers,'mu_strategy','adaptive','tol',1e-7);
+[status x multipliers] = ipopt(x0,lb,ub,lbc,ubc,@computeObjective,...
+			       @computeGradient,@computeConstraints,...
+			       @computeJacobian,@computeHessian,[],'',...
+			       multipliers,'mu_strategy','adaptive',...
+			       'tol',1e-7,'max_iter',5);
 
 % ----------------------------------------------------------------------
 function f = computeObjective (x)
