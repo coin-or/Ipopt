@@ -10,16 +10,16 @@
 %         Dept. of Computer Science
 %         University of British Columbia
 %         May 19, 2007
-function x = examplehs038
+function [status, x] = examplehs038
 
 % The starting point.
 x0 = [-3  -1  -3  -1];   % The starting point.
 lb = [-10 -10 -10 -10];  % Lower bound on the variables.
 ub = [+10 +10 +10 +10];  % Upper bound on the variables.
 
-x = ipopt(x0,lb,ub,[],[],@computeObjective,@computeGradient,'','',...
-	  @computeHessian,[],@callback,[],'mu_strategy','adaptive',...
-	  'tol',1e-7,'max_iter',100);
+[status x] = ipopt(x0,lb,ub,[],[],@computeObjective,@computeGradient,'','',...
+		   @computeHessian,[],@callback,[],'mu_strategy','adaptive',...
+		   'tol',1e-7,'max_iter',100);
 
 % ----------------------------------------------------------------------
 function f = computeObjective (x)
