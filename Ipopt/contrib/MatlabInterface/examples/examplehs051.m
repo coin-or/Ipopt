@@ -10,7 +10,7 @@
 %         Dept. of Computer Science
 %         University of British Columbia
 %         May 19, 2007
-function x = examplehs051
+function [status, x] = examplehs051
 
 x0  = [ +2.5 +0.5 +2.0 -1.0 +0.5 ];
 lb  = [-inf -inf -inf -inf -inf];
@@ -18,10 +18,10 @@ ub  = [+inf +inf +inf +inf +inf];
 lbc = [4 0 0]; 
 ubc = [4 0 0];
 
-x = ipopt(x0,lb,ub,lbc,ubc,@computeObjective,@computeGradient,...
-	  @computeConstraints,@computeJacobian,'',[],'',[],...
-	  'jac_c_constant','yes','hessian_approximation','limited-memory',...
-	  'mu_strategy','adaptive','tol',1e-7);
+[status x] = ipopt(x0,lb,ub,lbc,ubc,@computeObjective,@computeGradient,...
+		   @computeConstraints,@computeJacobian,'',[],'',[],...
+		   'jac_c_constant','yes','hessian_approximation',...
+		   'limited-memory','mu_strategy','adaptive','tol',1e-7);
 
 % ----------------------------------------------------------------------
 function f = computeObjective (x)

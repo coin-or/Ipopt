@@ -29,11 +29,11 @@ function qR = bopt (K, C, f, Rv, Rf, Sv, Sf, NS, verbose)
   nc = numconsistencyconstraints(qS,d);
   
   % Run the IPOPT solver.
-  qR      = vectorize(qR);
-  qS      = vectorize(qS);
-  nqr     = length(qR);
-  nqs     = length(qS);
-  [qR qS] = ipopt({qR qS},{ repmat(eps,nqr,1) repmat(eps,nqs,1) },...
+  qR             = vectorize(qR);
+  qS             = vectorize(qS);
+  nqr            = length(qR);
+  nqs            = length(qS);
+  [status qR qS] = ipopt({qR qS},{ repmat(eps,nqr,1) repmat(eps,nqs,1) },...
                   { repmat(inf,nqr,1) repmat(inf,nqs,1) },...
                   [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
                   [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
