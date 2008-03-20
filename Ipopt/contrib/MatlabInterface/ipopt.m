@@ -1,8 +1,8 @@
 % IPOPT Call the IPOPT constrained, nonlinear solver. 
 %   The basic function call is
 %   
-%     x = IPOPT(x0,lb,ub,constraintlb,constraintub,objfunc,gradfunc,...
-%               constraintfunc,jacobianfunc,hessianfunc)
+%     [status x] = IPOPT(x0,lb,ub,constraintlb,constraintub,objfunc,...
+%                        gradfunc,constraintfunc,jacobianfunc,hessianfunc)
 %
 %   The first input argument x0 is either a matrix or a cell array of
 %   matrices. It declares the starting point for the solver.
@@ -20,18 +20,20 @@
 %
 %   If the solver successfully converges to a stationary point or terminated
 %   without an unrecoverable error, the function IPOPT outputs the candidate
-%   solution. In all other cases, an error is thrown. The number of outputs
-%   is equal to the number of cell entries in x0. If x0 is a matrix, IPOPT
-%   produces a single output.
+%   solution x, and the termination status of the algorithm is provided in
+%   the output "status". In all other cases, an error is thrown. The number
+%   of outputs is equal to the number of cell entries in x0. If x0 is a
+%   matrix, IPOPT produces a single output.
 %
 %   EXAMPLE. Here is an example of a basic call to IPOPT, in which the
 %   optimization variables are specified by an array of length n and another
 %   array of length m:
 %
-%   [r s] = ipopt({r s},{ zeros(n,1) zeros(m,1) },...
-%                 { repmat(inf,n,1) repmat(inf,m,1) },lb,ub,...
-%                 @computeobjective,@computegradient,@computeconstraints',...
-%                 @computejacobian,@computeJGHessian,auxdata);
+%   [status r s] = ipopt({r s},{ zeros(n,1) zeros(m,1) },...
+%                        { repmat(inf,n,1) repmat(inf,m,1) },lb,ub,...
+%                        @computeobjective,@computegradient,...
+%                        @computeconstraints',@computejacobian,...
+%                        @computeJGHessian,auxdata);
 %
 %   The optimization variables are bounded below by 0. The bounds on the
 %   equality and inequality constraints are specified by the MATLAB
@@ -162,6 +164,30 @@
 %   inequality constraints), and the number of iterations needed to converge
 %   to the stationary point (provided it has converged at all).
 %
+%   Upon termination, the return value "status" will take on one of these
+%   following values (for a more up-to-date listing, see the IpReturnCodes.h
+%   header file in the IPOPT C++ source directory):
+%
+%       0  solved
+%       1  solved to acceptable level
+%       2  infeasible problem detected
+%       3  search direction becomes too small
+%       4  diverging iterates
+%       5  user requested stop
+%     
+%      -1  maximum number of iterations exceeded
+%      -2  restoration phase failed
+%      -3  error in step computation
+%     -10  not enough degrees of freedom
+%     -11  invalid problem definition
+%     -12  invalid option
+%     -13  invalid number detected
+%
+%    -100  unrecoverable exception
+%    -101  non-IPOPT exception thrown
+%    -102  insufficient memory
+%    -199  internal error
+%
 %   For more information, please consult: A. Wachter and L. T. Biegler. "On
 %   the Implementation of a Primal-Dual Interior Point Filter Line Search
 %   Algorithm for Large-Scale Nonlinear Programming." Mathematical
@@ -173,4 +199,4 @@
 %   Author: Peter Carbonetto
 %           Dept. of Computer Science
 %           University of British Columbia
-%           October 13, 2007
+%           March 20, 2008
