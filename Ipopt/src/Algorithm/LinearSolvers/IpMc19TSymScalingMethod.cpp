@@ -136,11 +136,13 @@ namespace Ipopt
     // are NaN.  Here, we check for this and return no scaling factors
     // if that is the case
     Number sum=0.;
+    Number smax=0.;
     for (Index i=0; i<n; i++) {
       scaling_factors[i] = exp((double)((R[i]+C[i])/2.));
       sum += scaling_factors[i];
+      smax = Max(smax, scaling_factors[i]);
     }
-    if (!IsFiniteNumber(sum)) {
+    if (!IsFiniteNumber(sum) || smax > 1e40) {
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                      "Scaling factors are invalid - setting them all to 1.\n");
       for (Index i=0; i<n; i++) {
