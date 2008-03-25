@@ -346,24 +346,6 @@ void MatlabProgram::finalize_solution (SolverReturn status, int numVariables,
     multipliers->upperbounds().inject(zu);
     multipliers->constraints().inject(lambda);
   }  
-
-  switch (status) {
-  case Ipopt::INTERNAL_ERROR:
-  case Ipopt::INVALID_NUMBER_DETECTED:
-  case Ipopt::USER_REQUESTED_STOP:
-  case Ipopt::RESTORATION_FAILURE:
-  case Ipopt::LOCAL_INFEASIBILITY:
-  case Ipopt::DIVERGING_ITERATES:
-  case Ipopt::SUCCESS:
-  case Ipopt::MAXITER_EXCEEDED:
-  case Ipopt::STOP_AT_TINY_STEP:
-  case Ipopt::STOP_AT_ACCEPTABLE_POINT:
-  case Ipopt::ERROR_IN_STEP_COMPUTATION:
-  case Ipopt::TOO_FEW_DEGREES_OF_FREEDOM:
-
-    // Do nothing.
-    break;
-  }
 }
   
 bool MatlabProgram::intermediate_callback (AlgorithmMode mode,

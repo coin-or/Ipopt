@@ -62,13 +62,17 @@ void mexFunction (int nlhs, mxArray *plhs[],
     ArrayOfMatrices x0(prhs[k++]);
 
     // Check to see if we have the correct number of output arguments.
-    if ((nlhs < x0.length()) || nlhs > x0.length() + 2)
+    if ((nlhs < x0.length() + 1) || nlhs > x0.length() + 3)
       throw MatlabException("Incorrect number of output arguments");
 
-    // Create the first outputs, which will store the solution
+    // Create the first output, which will store the termination
+    // status of the optimization algorithm.
+    MatlabScalar status(plhs[l++],0);
+
+    // Create the second set of outputs, which will store the solution
     // obtained from running IPOPT. There should be at least as many
     // output arguments as cell entries in X.
-    ArrayOfMatrices x(plhs,x0);
+    ArrayOfMatrices x(&plhs[l],x0);
     l += x0.length();
 
     // Load the lower and upper bounds on the variables as
@@ -239,6 +243,7 @@ should have the same number of elements");
 
     // Ask Ipopt to solve the problem.
     exitstatus = app.OptimizeTNLP(program);
+    status     = (double) exitstatus;
 
     // Return the number of IPOPT iterations, if requested.
     if (numiter)
@@ -250,17 +255,6 @@ should have the same number of elements");
     if (iterFunc)           delete iterFunc;
     if (initialMultipliers) delete initialMultipliers;
 
-    // Throw an exception if the solver terminates before finding a
-    // local solution.
-    switch (exitstatus) {
-    case Ipopt::Solve_Succeeded:
-    case Ipopt::Solved_To_Acceptable_Level:
-    case Ipopt::User_Requested_Stop:
-    case Ipopt::Maximum_Iterations_Exceeded:
-      break;
-    default:
-      throw MatlabException("IPOPT solver terminated unexpectedly");
-    }
   } catch (std::exception& error) {
     mexErrMsgTxt(error.what());
   }
