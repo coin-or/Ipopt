@@ -185,6 +185,18 @@ namespace Ipopt
       return tnlp_;
     }
 
+    /** @name Methods for translating data for IpoptNLP into the TNLP
+     *  data.  These methods are used to obtain the current (or
+     *  final) data for the TNLP formulation from the IpoptNLP
+     *  structure. */
+    //@{
+    /** Sort the primal variables, and add the fixed values in x */
+    void ResortX(const Vector& x, Number* x_orig);
+    void ResortG(const Vector& c, const Vector& d, Number *g_orig);
+    void ResortBnds(const Vector& x_L, Number* x_L_orig,
+                    const Vector& x_U, Number* x_U_orig);
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -199,18 +211,6 @@ namespace Ipopt
 
     /** Overloaded Equals Operator */
     void operator=(const TNLPAdapter&);
-    //@}
-
-    /** @name Methods for translating data for IpoptNLP into the TNLP
-     *  data.  These methods are used to obtain the current (or
-     *  final) data for the TNLP formulation from the IpoptNLP
-     *  structure. */
-    //@{
-    /** Sort the primal variables, and add the fixed values in x */
-    void ResortX(const Vector& x, Number* x_orig);
-    void ResortG(const Vector& c, const Vector& d, Number *g_orig);
-    void ResortBnds(const Vector& x_L, Number* x_L_orig,
-                    const Vector& x_U, Number* x_U_orig);
     //@}
 
     /** @name Method implementing the detection of linearly dependent
