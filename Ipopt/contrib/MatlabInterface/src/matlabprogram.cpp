@@ -34,7 +34,7 @@ MatlabProgram::MatlabProgram (const ArrayOfMatrices& x0,
 			      bool useQuasiNewton,
 			      Multipliers* initialMultipliers, 
 			      Multipliers* multipliers)
-  : lb(lb), ub(ub), constraintlb(constraintlb), 
+  : x0(x0), lb(lb), ub(ub), constraintlb(constraintlb), 
     constraintub(constraintub), auxData(auxData), xsol(xsol),
     initialMultipliers(initialMultipliers), multipliers(multipliers), 
     useQuasiNewton(useQuasiNewton), objFunc(objFunc), gradFunc(gradFunc), 
@@ -74,9 +74,9 @@ MatlabProgram::MatlabProgram (const ArrayOfMatrices& x0,
 }
 
 MatlabProgram::MatlabProgram (const MatlabProgram& source)  
-  : lb(source.lb), ub(source.ub), constraintlb(source.constraintlb), 
-    constraintub(source.constraintub), xsol(source.xsol), 
-    objFunc(source.objFunc), gradFunc(source.gradFunc),
+  : x0(source.x0), lb(source.lb), ub(source.ub), 
+    constraintlb(source.constraintlb), constraintub(source.constraintub), 
+    xsol(source.xsol), objFunc(source.objFunc), gradFunc(source.gradFunc),
     constraintFunc(source.constraintFunc), jacobianFunc(source.jacobianFunc), 
     hessianFunc(source.hessianFunc), iterFunc(source.iterFunc) { }
 
@@ -189,10 +189,10 @@ requested but initial values are not provided");
       initialMultipliers->constraints().copyto(lambda);
     }
 
-    // Check to see whether IPOPT is requesting the iniial point for
+    // Check to see whether IPOPT is requesting the initial point for
     // the primal variables.
     if (initializeVars)
-      x->copyto(variables);
+      x0.copyto(variables);
 
     return true;
   } catch (std::exception& error) {

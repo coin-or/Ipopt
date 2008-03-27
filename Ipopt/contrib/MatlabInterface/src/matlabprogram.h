@@ -125,6 +125,7 @@ public:
 				      IpoptCalculatedQuantities* ip_cq);
 
 protected:
+  const ArrayOfMatrices& x0;           // The initial point.
   const ArrayOfMatrices& lb;           // Lower bounds on the variables.
   const ArrayOfMatrices& ub;           // Upper bounds on the variables.
   const Matrix&          constraintlb; // Lower bounds on the constraints.
