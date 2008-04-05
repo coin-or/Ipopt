@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -7,6 +7,16 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpOptErrorConvCheck.hpp"
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -92,6 +102,15 @@ namespace Ipopt
       "requires that the max-norm of the (unscaled) complementarity is less than this "
       "threshold; see also acceptable_tol.");
     roptions->AddLowerBoundedNumberOption(
+      "acceptable_obj_change_tol",
+      "\"Acceptance\" stopping criterion based on objective function change.",
+      0.0, false, 0.,
+      "If the relative change of the objective function (scaled by "
+      "Max(1,|f(x)|)) is less than this value, this part of the acceptable "
+      "tolerance termination is satisfied; see also acceptable_tol.  This is "
+      "useful for the quasi-Newton option, which has trouble to bring down "
+      "the dual infeasibility.");
+    roptions->AddLowerBoundedNumberOption(
       "diverging_iterates_tol",
       "Threshold for maximal value of primal iterates.",
       0.0, true, 1e20,
@@ -113,8 +132,10 @@ namespace Ipopt
     options.GetNumericValue("acceptable_dual_inf_tol", acceptable_dual_inf_tol_, prefix);
     options.GetNumericValue("acceptable_constr_viol_tol", acceptable_constr_viol_tol_, prefix);
     options.GetNumericValue("acceptable_compl_inf_tol", acceptable_compl_inf_tol_, prefix);
+    options.GetNumericValue("acceptable_obj_change_tol", acceptable_obj_change_tol_, prefix);
     options.GetNumericValue("diverging_iterates_tol", diverging_iterates_tol_, prefix);
     acceptable_counter_ = 0;
+    last_obj_val_ = -1e50;
 
     return true;
   }
@@ -166,6 +187,7 @@ namespace Ipopt
     Number dual_inf = IpCq().unscaled_curr_dual_infeasibility(NORM_MAX);
     Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
     Number compl_inf = IpCq().unscaled_curr_complementarity(0., NORM_MAX);
+    Number obj_val = IpCq().curr_f();
 
     if (IpData().curr()->x()->Dim()==IpData().curr()->y_c()->Dim()) {
       // the problem is square, there is no point in looking at dual
@@ -196,6 +218,7 @@ namespace Ipopt
       return ConvergenceCheck::DIVERGING;
     }
 
+    last_obj_val_ = obj_val;
     return ConvergenceCheck::CONTINUE;
   }
 
@@ -208,6 +231,7 @@ namespace Ipopt
     Number dual_inf = IpCq().unscaled_curr_dual_infeasibility(NORM_MAX);
     Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
     Number compl_inf = IpCq().unscaled_curr_complementarity(0., NORM_MAX);
+    Number obj_val = IpCq().curr_f();
 
     DBG_PRINT((1, "overall_error = %e\n", overall_error));
     DBG_PRINT((1, "dual_inf = %e\n", dual_inf));
@@ -229,7 +253,8 @@ namespace Ipopt
     return (overall_error <= acceptable_tol_ &&
             dual_inf <= acceptable_dual_inf_tol_ &&
             constr_viol <= acceptable_constr_viol_tol_ &&
-            compl_inf <= acceptable_compl_inf_tol_);
+            compl_inf <= acceptable_compl_inf_tol_ &&
+            (obj_val-last_obj_val_)/Max(1., fabs(obj_val)) <= acceptable_obj_change_tol_);
   }
 
 

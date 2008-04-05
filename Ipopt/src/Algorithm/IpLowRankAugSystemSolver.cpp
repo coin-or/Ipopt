@@ -230,7 +230,7 @@ namespace Ipopt
     Index numberOfNegEVals)
   {
     DBG_START_METH("LowRankAugSystemSolver::UpdateFactorization",
-                   2);
+                   dbg_verbosity);
 
     DBG_ASSERT(W_factor == 0.0 || W_factor == 1.0);
     ESymSolverStatus retval = SYMSOLVER_SUCCESS;

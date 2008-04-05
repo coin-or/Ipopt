@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -171,6 +171,13 @@ namespace Ipopt
       SECOND_ORDER_TEST
     };
 
+    /** Enum for specifying technique for computing Jacobian */
+    enum JacobianApproxEnum
+    {
+      JAC_EXACT=0,
+      JAC_FINDIFF_VALUES
+    };
+
     /** Method for performing the derivative test */
     bool CheckDerivatives(DerivativeTestEnum deriv_test);
 
@@ -264,6 +271,12 @@ namespace Ipopt
     bool warm_start_same_structure_;
     /** Flag indicating what Hessian information is to be used. */
     HessianApproximationType hessian_approximation_;
+    /** Number of linear variables. */
+    Index num_linear_variables_;
+    /** Flag indicating how Jacobian is computed. */
+    JacobianApproxEnum jacobian_approximation_;
+    /** Size of the perturbation for the derivative approximation */
+    Number findiff_perturbation_;
     /** Maximal perturbation of the initial point */
     Number point_perturbation_radius_;
     /** Flag indicating if rhs should be considered during dependency
@@ -343,10 +356,17 @@ namespace Ipopt
     //@}
 
     /**@name Internal routines for evaluating g and jac_g (values stored since
-     * they are used in both c and d routins */
+     * they are used in both c and d routines */
     //@{
     bool internal_eval_g(bool new_x);
     bool internal_eval_jac_g(bool new_x);
+    //@}
+
+    /** @name Internal methods for dealing with finite difference
+    approxation */
+    //@{
+    /** Initialize sparsity structure for finite difference Jacobian */
+    void initialize_findiff_jac(const Index* iRow, const Index* jCol);
     //@}
 
     /**@name Internal Permutation Spaces and matrices
@@ -377,6 +397,24 @@ namespace Ipopt
 
     /** Position of fixed variables. This is required for a warm start */
     Index* x_fixed_map_;
+    //@}
+
+    /** @name Data for finite difference approximations of derivatives */
+    //@{
+    /** Number of unique nonzeros in constraint Jacobian */
+    Index findiff_jac_nnz_;
+    /** Start position for nonzero indices in ja for each column of
+    Jacobian */
+    Index* findiff_jac_ia_;
+    /** Ordered by columns, for each column the row indices in
+    Jacobian */
+    Index* findiff_jac_ja_;
+    /** Position of entry in original triplet matrix */
+    Index* findiff_jac_postriplet_;
+    /** Copy of the lower bounds */
+    Number* findiff_x_l_;
+    /** Copy of the upper bounds */
+    Number* findiff_x_u_;
     //@}
   };
 

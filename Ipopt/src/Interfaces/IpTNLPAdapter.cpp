@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -16,6 +16,7 @@
 #include "IpSymTMatrix.hpp"
 #include "IpTDependencyDetector.hpp"
 #include "IpTSymDependencyDetector.hpp"
+#include "IpTripletToCSRConverter.hpp"
 
 #ifdef COIN_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
@@ -60,7 +61,12 @@ namespace Ipopt
       x_tag_for_jac_g_(0),
       jac_idx_map_(NULL),
       h_idx_map_(NULL),
-      x_fixed_map_(NULL)
+      x_fixed_map_(NULL),
+      findiff_jac_ia_(NULL),
+      findiff_jac_ja_(NULL),
+      findiff_jac_postriplet_(NULL),
+      findiff_x_l_(NULL),
+      findiff_x_u_(NULL)
   {
     ASSERT_EXCEPTION(IsValid(tnlp_), INVALID_TNLP,
                      "The TNLP passed to TNLPAdapter is NULL. This MUST be a valid TNLP!");
@@ -76,6 +82,11 @@ namespace Ipopt
     delete [] jac_idx_map_;
     delete [] h_idx_map_;
     delete [] x_fixed_map_;
+    delete [] findiff_jac_ia_;
+    delete [] findiff_jac_ja_;
+    delete [] findiff_jac_postriplet_;
+    delete [] findiff_x_l_;
+    delete [] findiff_x_u_;
   }
 
   void TNLPAdapter::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
@@ -129,6 +140,14 @@ namespace Ipopt
       "indicates the maximal perturbation.  Currently, this is only used when "
       "we perturb the initial point in order to get a random Jacobian for the "
       "linear dependency detection of equality constraints.");
+    roptions->AddLowerBoundedIntegerOption(
+      "num_linear_variables",
+      "Number of linear variables",
+      0, 0,
+      "When the Hessian is approximated, it is assumed that the first "
+      "num_linear_variables variables are linear.  The Hessian is then not "
+      "approximated in this space.  If the get_number_of_nonlinear_variables "
+      "method in the TNLP is implemented, this option is ignored.");
 
     roptions->SetRegisteringCategory("Derivative Checker");
     roptions->AddStringOption3(
@@ -162,6 +181,19 @@ namespace Ipopt
       "no", "Print only suspect derivatives",
       "yes", "Print all derivatives",
       "Determines verbosity of derivative checker.");
+    roptions->AddStringOption2(
+      "jacobian_approximation",
+      "Specifies technique to compute constraint Jacobian",
+      "exact",
+      "exact", "user-provided derivatives",
+      "finite-difference-values", "user-provided structure, values by finite differences"
+    );
+    roptions->AddLowerBoundedNumberOption(
+      "findiff_perturbation",
+      "Size of the finite difference perturbation for derivative approximation.",
+      0., true,
+      1e-7,
+      "This determines the relative perturbation of the variable entries.");
   }
 
   bool TNLPAdapter::ProcessOptions(const OptionsList& options,
@@ -196,6 +228,13 @@ namespace Ipopt
     // The following is registered in OrigIpoptNLP
     options.GetEnumValue("hessian_approximation", enum_int, prefix);
     hessian_approximation_ = HessianApproximationType(enum_int);
+    options.GetIntegerValue("num_linear_variables", num_linear_variables_,
+                            prefix);
+
+    options.GetEnumValue("jacobian_approximation", enum_int, prefix);
+    jacobian_approximation_ = JacobianApproxEnum(enum_int);
+    options.GetNumericValue("findiff_perturbation",
+                            findiff_perturbation_, prefix);
 
     options.GetNumericValue("point_perturbation_radius",
                             point_perturbation_radius_, prefix);
@@ -742,6 +781,11 @@ namespace Ipopt
         }
       }
 
+      if (nz_full_jac_g_ > 0 &&
+          jacobian_approximation_ == JAC_FINDIFF_VALUES) {
+        initialize_findiff_jac(g_iRow, g_jCol);
+      }
+
       // ... build the non-zero structure for jac_c
       // ... (the permutation from rows in jac_g to jac_c is
       // ...  the same as P_c_g_)
@@ -1071,6 +1115,16 @@ namespace Ipopt
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
       Number upper_bound = g_u[full_idx];
       values[i] = upper_bound;
+    }
+
+    // In case we are doing finite differences, keep a copy of the bounds
+    if (jacobian_approximation_ != JAC_EXACT) {
+      delete [] findiff_x_l_;
+      delete [] findiff_x_u_;
+      findiff_x_l_ = x_l;
+      findiff_x_u_ = x_u;
+      x_l = NULL;
+      x_u = NULL;
     }
 
     delete [] x_l;
@@ -1609,22 +1663,31 @@ namespace Ipopt
     Index num_nonlin_vars =
       tnlp_->get_number_of_nonlinear_variables();
 
-    if (num_nonlin_vars<0) {
+    if (num_nonlin_vars<0 && num_linear_variables_==0) {
       approx_space = NULL;
       P_approx = NULL;
+      return;
     }
-    else {
-      Index* pos_nonlin_vars = new Index[num_nonlin_vars];
-      if (num_nonlin_vars>0) {
-        bool retval = tnlp_->get_list_of_nonlinear_variables(num_nonlin_vars,
-                      pos_nonlin_vars);
-        if (!retval) {
-          jnlst_->Printf(J_ERROR, J_INITIALIZATION,
-                         "TNLP's get_number_of_nonlinear_variables returns non-negative number, but get_list_of_nonlinear_variables returns false.\n");
-          THROW_EXCEPTION(INVALID_TNLP, "get_list_of_nonlinear_variables has not been overwritten");
-        }
-      }
 
+    Index* pos_nonlin_vars;
+    if (num_nonlin_vars<0) {
+      num_nonlin_vars = n_full_x_ - num_linear_variables_;
+      pos_nonlin_vars = new Index[num_nonlin_vars];
+      Index ii=0;
+      for (Index i=num_linear_variables_; i<n_full_x_; i++) {
+        pos_nonlin_vars[ii++] = i;
+      }
+    }
+    else if (num_nonlin_vars>0) {
+      pos_nonlin_vars = new Index[num_nonlin_vars];
+      bool retval = tnlp_->get_list_of_nonlinear_variables(num_nonlin_vars,
+                    pos_nonlin_vars);
+      if (!retval) {
+        delete [] pos_nonlin_vars;
+        jnlst_->Printf(J_ERROR, J_INITIALIZATION,
+                       "TNLP's get_number_of_nonlinear_variables returns non-negative number, but get_list_of_nonlinear_variables returns false.\n");
+        THROW_EXCEPTION(INVALID_TNLP, "get_list_of_nonlinear_variables has not been overwritten");
+      }
       // Correct indices in case user starts counting variables at 1
       // and not 0
       if (index_style_ == TNLP::FORTRAN_STYLE) {
@@ -1632,51 +1695,51 @@ namespace Ipopt
           pos_nonlin_vars[i]--;
         }
       }
+    }
 
-      if (IsNull(P_x_full_x_)) {
-        if (num_nonlin_vars == n_full_x_) {
-          approx_space = NULL;
-          P_approx = NULL;
-        }
-        else {
-          SmartPtr<ExpansionMatrixSpace> ex_sp =
-            new ExpansionMatrixSpace(n_full_x_, num_nonlin_vars,
-                                     pos_nonlin_vars);
-          P_approx = ex_sp->MakeNew();
-          approx_space = new DenseVectorSpace(num_nonlin_vars);
-        }
+    if (IsNull(P_x_full_x_)) {
+      if (num_nonlin_vars == n_full_x_) {
+        approx_space = NULL;
+        P_approx = NULL;
       }
       else {
-        const Index* compr_pos = P_x_full_x_->CompressedPosIndices();
-        Index* nonfixed_pos_nonlin_vars = new Index[num_nonlin_vars];
-
-        Index nonfixed_nonlin_vars = 0;
-        for (Index i=0; i<num_nonlin_vars; i++) {
-          Index full_pos = pos_nonlin_vars[i];
-          Index nonfixed_pos = compr_pos[full_pos];
-          if (nonfixed_pos>=0) {
-            nonfixed_pos_nonlin_vars[nonfixed_nonlin_vars] = nonfixed_pos;
-            nonfixed_nonlin_vars++;
-          }
-        }
-
-        const Index n_x_free = n_full_x_ - n_x_fixed_;
-        if (nonfixed_nonlin_vars == n_x_free) {
-          approx_space = NULL;
-          P_approx = NULL;
-        }
-        else {
-          SmartPtr<ExpansionMatrixSpace> ex_sp =
-            new ExpansionMatrixSpace(n_x_free, nonfixed_nonlin_vars,
-                                     nonfixed_pos_nonlin_vars);
-          P_approx = ex_sp->MakeNew();
-          approx_space = new DenseVectorSpace(nonfixed_nonlin_vars);
-        }
-
-        delete [] nonfixed_pos_nonlin_vars;
+        SmartPtr<ExpansionMatrixSpace> ex_sp =
+          new ExpansionMatrixSpace(n_full_x_, num_nonlin_vars,
+                                   pos_nonlin_vars);
+        P_approx = ex_sp->MakeNew();
+        approx_space = new DenseVectorSpace(num_nonlin_vars);
       }
-      delete [] pos_nonlin_vars;
     }
+    else {
+      const Index* compr_pos = P_x_full_x_->CompressedPosIndices();
+      Index* nonfixed_pos_nonlin_vars = new Index[num_nonlin_vars];
+
+      Index nonfixed_nonlin_vars = 0;
+      for (Index i=0; i<num_nonlin_vars; i++) {
+        Index full_pos = pos_nonlin_vars[i];
+        Index nonfixed_pos = compr_pos[full_pos];
+        if (nonfixed_pos>=0) {
+          nonfixed_pos_nonlin_vars[nonfixed_nonlin_vars] = nonfixed_pos;
+          nonfixed_nonlin_vars++;
+        }
+      }
+
+      const Index n_x_free = n_full_x_ - n_x_fixed_;
+      if (nonfixed_nonlin_vars == n_x_free) {
+        approx_space = NULL;
+        P_approx = NULL;
+      }
+      else {
+        SmartPtr<ExpansionMatrixSpace> ex_sp =
+          new ExpansionMatrixSpace(n_x_free, nonfixed_nonlin_vars,
+                                   nonfixed_pos_nonlin_vars);
+        P_approx = ex_sp->MakeNew();
+        approx_space = new DenseVectorSpace(nonfixed_nonlin_vars);
+      }
+
+      delete [] nonfixed_pos_nonlin_vars;
+    }
+    delete [] pos_nonlin_vars;
   }
 
   void TNLPAdapter::ResortX(const Vector& x, Number* x_orig)
@@ -1906,14 +1969,101 @@ namespace Ipopt
 
     x_tag_for_jac_g_ = x_tag_for_iterates_;
 
-    bool retval = tnlp_->eval_jac_g(n_full_x_, full_x_, new_x, n_full_g_,
-                                    nz_full_jac_g_, NULL, NULL, jac_g_);
+    bool retval;
+    if (jacobian_approximation_ == JAC_EXACT) {
+      retval = tnlp_->eval_jac_g(n_full_x_, full_x_, new_x, n_full_g_,
+                                 nz_full_jac_g_, NULL, NULL, jac_g_);
+    }
+    else {
+      // make sure we have the value of the constraints at the point
+      retval = internal_eval_g(new_x);
+      if (retval) {
+        Number* full_g_pert = new Number[n_full_g_];
+        Number* full_x_pert = new Number[n_full_x_];
+        IpBlasDcopy(n_full_x_, full_x_, 1, full_x_pert, 1);
+        // Compute the finite difference Jacobian
+        for (Index ivar = 0; ivar<n_full_x_; ivar++) {
+          if (findiff_x_l_[ivar] < findiff_x_u_[ivar]) {
+            const Number xorig = full_x_pert[ivar];
+            Number this_perturbation =
+              findiff_perturbation_*Max(1., fabs(full_x_[ivar]));
+            full_x_pert[ivar] += this_perturbation;
+            if (full_x_pert[ivar] > findiff_x_u_[ivar]) {
+              full_x_pert[ivar] = xorig - this_perturbation;
+            }
+            retval = tnlp_->eval_g(n_full_x_, full_x_pert, true, n_full_g_,
+                                   full_g_pert);
+            if (!retval) break;
+            for (Index i=findiff_jac_ia_[ivar]; i<findiff_jac_ia_[ivar+1]; i++) {
+              const Index& icon = findiff_jac_ja_[i];
+              const Index& ipos = findiff_jac_postriplet_[i];
+              jac_g_[ipos] =
+                (full_g_pert[icon]-full_g_[icon])/this_perturbation;
+            }
+            full_x_pert[ivar] = xorig;
+          }
+        }
+        delete [] full_g_pert;
+        delete [] full_x_pert;
+      }
+    }
 
     if (!retval) {
       x_tag_for_jac_g_ = 0;
     }
 
     return retval;
+  }
+
+  void
+  TNLPAdapter::initialize_findiff_jac(const Index* iRow, const Index* jCol)
+  {
+
+    SmartPtr<TripletToCSRConverter> findiff_jac_converter =
+      new TripletToCSRConverter(0);
+    // construct structure of a sparse matrix with only Jacobian in it
+    // TODO: This could be done more efficiently without detour via
+    // symmetric matrix
+    Index* airn = new Index[nz_full_jac_g_];
+    Index* ajcn = new Index[nz_full_jac_g_];
+    for (Index i=0; i<nz_full_jac_g_; i++) {
+      airn[i] = jCol[i];
+      ajcn[i] = iRow[i]+n_full_x_;
+    }
+    // Get the column ordered sparse representation
+    findiff_jac_nnz_ =
+      findiff_jac_converter->InitializeConverter(n_full_g_+n_full_x_,
+          nz_full_jac_g_, airn, ajcn);
+    delete [] airn;
+    delete [] ajcn;
+    if (findiff_jac_nnz_ != nz_full_jac_g_) {
+      THROW_EXCEPTION(INVALID_TNLP,
+                      "Sparsity structure of Jacobian has multiple occurances of the same position.  This is not allowed for finite differences.");
+    }
+
+    // Finally, get the right numbers out of the converter object
+    delete [] findiff_jac_ia_;
+    delete [] findiff_jac_ja_;
+    delete [] findiff_jac_postriplet_;
+    findiff_jac_ia_ = NULL;
+    findiff_jac_ja_ = NULL;
+    findiff_jac_postriplet_ = NULL;
+    findiff_jac_ia_ = new Index[n_full_x_+1];
+    findiff_jac_ja_ = new Index[findiff_jac_nnz_];
+    findiff_jac_postriplet_ = new Index[findiff_jac_nnz_];
+    const Index* ia = findiff_jac_converter->IA();
+    for (Index i=0; i<n_full_x_+1; i++) {
+      findiff_jac_ia_[i] = ia[i];
+    }
+    const Index* ja = findiff_jac_converter->JA();
+    for (Index i=0; i<findiff_jac_nnz_; i++) {
+      findiff_jac_ja_[i] = ja[i] - n_full_x_;
+    }
+    const Index* postrip = findiff_jac_converter->iPosFirst();
+    for (Index i=0; i<findiff_jac_nnz_; i++) {
+      findiff_jac_postriplet_[i] = postrip[i];
+    }
+
   }
 
   bool TNLPAdapter::CheckDerivatives(TNLPAdapter::DerivativeTestEnum deriv_test)
