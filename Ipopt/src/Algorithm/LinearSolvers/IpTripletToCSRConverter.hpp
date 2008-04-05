@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -134,12 +134,14 @@ namespace Ipopt
      *  matrix.  (Since nonzero elements can be listed several times
      *  in the triplet format, it is possible that this value is
      *  different from the input value nonzeros.)  This method must be
-     *  called before the GetIA, GetJA, GetValues methods are called.
+     *  called before the GetIA, GetJA, Convert Values methods are called.
      */
     Index InitializeConverter(Index dim, Index nonzeros,
                               const Index* airn,
                               const Index* ajcn);
 
+    /** @name Accessor methods */
+    //@{
     /** Return the IA array for the condensed format. */
     const Index* IA() const
     {
@@ -153,6 +155,12 @@ namespace Ipopt
       DBG_ASSERT(initialized_);
       return ja_;
     }
+    const Index* iPosFirst() const
+    {
+      DBG_ASSERT(initialized_);
+      return ipos_first_;
+    }
+    //@}
 
     /** Convert the values of the nonzero elements.  Given the values
      *  a_triplet for the triplet format, return the array of values

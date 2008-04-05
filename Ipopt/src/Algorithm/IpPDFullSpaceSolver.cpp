@@ -507,7 +507,7 @@ namespace Ipopt
                                         *sol->x_NonConst(), *sol->s_NonConst(),
                                         *sol->y_c_NonConst(), *sol->y_d_NonConst(),                                     check_inertia, numberOfEVals);
         }
-        assert(retval!=SYMSOLVER_FATAL_ERROR); //TODO make return code
+        if (retval==SYMSOLVER_FATAL_ERROR) return false;
         if (retval==SYMSOLVER_SINGULAR &&
             (rhs.y_c()->Dim()+rhs.y_d()->Dim() > 0) ) {
 
@@ -613,6 +613,8 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n",
                      delta_x, delta_s, delta_c, delta_d);
+      // Set the perturbation values in the Data object
+      IpData().setPDPert(delta_x, delta_s, delta_c, delta_d);
     }
 
     // Compute the remaining sol Vectors

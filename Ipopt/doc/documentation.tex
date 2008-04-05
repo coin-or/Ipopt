@@ -920,6 +920,19 @@ After that, you can open the solution file
 
 \texttt{\$IPOPTDIR$\backslash$Ipopt$\backslash$MSVisualStudio$\backslash$v8$\backslash$Ipopt.sln}
 
+If you are compiling \Ipopt\ with different linear solvers, you need
+to edit the configuration header file
+\texttt{Ipopt$\backslash$src$\backslash$Common$\backslash$IpoptConfig.h},
+in the section after
+\begin{verbatim}
+/***************************************************************************/
+/*             HERE DEFINE THE CONFIGURATION SPECIFIC MACROS               */
+/***************************************************************************/
+\end{verbatim}
+and include the corresponding source files in
+\texttt{Ipopt$\backslash$src$\backslash$Algorithm$\backslash$LinearSolvers}
+and add the corresponding libraries to your project.
+
 \section{Interfacing your NLP to \Ipopt: A tutorial example.}
 \label{sec:tutorial-example}
 

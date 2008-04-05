@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -394,6 +394,26 @@ namespace Ipopt
       return *cgpen_data_;
     }
 
+    /** Set the perturbation of the primal-dual system */
+    void setPDPert(Number pd_pert_x, Number pd_pert_s,
+                   Number pd_pert_c, Number pd_pert_d)
+    {
+      pd_pert_x_ = pd_pert_x;
+      pd_pert_s_ = pd_pert_s;
+      pd_pert_c_ = pd_pert_c;
+      pd_pert_d_ = pd_pert_d;
+    }
+
+    /** Get the current perturbation of the primal-dual system */
+    void getPDPert(Number& pd_pert_x, Number& pd_pert_s,
+                   Number& pd_pert_c, Number& pd_pert_d)
+    {
+      pd_pert_x = pd_pert_x_;
+      pd_pert_s = pd_pert_s_;
+      pd_pert_c = pd_pert_c_;
+      pd_pert_d = pd_pert_d_;
+    }
+
     /** Methods for IpoptType */
     //@{
     static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
@@ -506,6 +526,15 @@ namespace Ipopt
     /** Object for the data specific for the Chen-Goldfarb penalty
      *  method algorithm */
     CGPenaltyData* const cgpen_data_;
+
+    /** @name Information about the perturbation of the primal-dual
+     *  system */
+    //@{
+    Number pd_pert_x_;
+    Number pd_pert_s_;
+    Number pd_pert_c_;
+    Number pd_pert_d_;
+    //@}
 
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).

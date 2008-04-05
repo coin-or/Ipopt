@@ -215,12 +215,13 @@ namespace Ipopt
       "\"mu_strategy\".)");
 
     roptions->SetRegisteringCategory("Undocumented");
-    roptions->AddStringOption2(
+    roptions->AddStringOption3(
       "line_search_method",
       "Globalization method used in backtracking line search",
       "filter",
       "filter", "Filter method",
-      "penalty", "Chen-Goldfarb penalty function",
+      "cg-penalty", "Chen-Goldfarb penalty function",
+      "penalty", "Standard penalty function",
       "");
   }
 
@@ -426,7 +427,7 @@ namespace Ipopt
       if (resto_lsacceptor=="filter") {
         resto_LSacceptor = new FilterLSAcceptor(GetRawPtr(resto_PDSolver));
       }
-      else if (resto_lsacceptor=="penalty") {
+      else if (resto_lsacceptor=="cg-penalty") {
         resto_LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(resto_PDSolver));
       }
       SmartPtr<LineSearch> resto_LineSearch =
@@ -517,7 +518,7 @@ namespace Ipopt
       if (resto_lsacceptor=="filter") {
         resto_SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(resto_PDSolver));
       }
-      else if (resto_lsacceptor=="penalty") {
+      else if (resto_lsacceptor=="cg-penalty") {
         resto_SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(resto_PDSolver));
       }
 
@@ -543,7 +544,7 @@ namespace Ipopt
     if (lsmethod=="filter") {
       LSacceptor = GetRawPtr(FilterLSacceptor);
     }
-    else if (lsmethod=="penalty") {
+    else if (lsmethod=="cg-penalty") {
       LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(PDSolver));
     }
     SmartPtr<LineSearch> lineSearch =
@@ -642,7 +643,7 @@ namespace Ipopt
     if (lsmethod=="filter") {
       SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(PDSolver));
     }
-    else if (lsmethod=="penalty") {
+    else if (lsmethod=="cg-penalty") {
       SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(PDSolver));
     }
     SmartPtr<IpoptAlgorithm> alg =

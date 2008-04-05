@@ -70,6 +70,9 @@ namespace Ipopt
     Number acceptable_constr_viol_tol_;
     /** Acceptable tolerance on unscaled complementarity */
     Number acceptable_compl_inf_tol_;
+    /** Acceptable tolerance for relative objective function change
+     *  from iteratoin to iteration. */
+    Number acceptable_obj_change_tol_;
     /** Threshold for primal iterates for divergence test */
     Number diverging_iterates_tol_;
     //@}
@@ -91,6 +94,10 @@ namespace Ipopt
     /** Counter for successive iterations in which acceptability
      *  criteria are met. */
     Index acceptable_counter_;
+
+    /** Value of the objective function from last iteration.  This is
+    for accpetable_obj_change_tol. */
+    Number last_obj_val_;
   };
 
 } // namespace Ipopt

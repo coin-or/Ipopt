@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -88,12 +88,14 @@ namespace Ipopt
     nonzeros_compressed_ = 0;
     Index cur_row = 1;
 
-    // The first element must be the first diagonal element
+    // Take care of possible emply rows
     list_iterator = entry_list.begin();
-    DBG_ASSERT(list_iterator->IRow()==1);
-    DBG_ASSERT(list_iterator->JCol()==1);
-    ia_[0] = 0;
-    ja_tmp[0] = 1;
+    while (cur_row < list_iterator->IRow()) {
+      ia_[cur_row-1] = 0;
+      cur_row++;
+    }
+    ia_[cur_row-1] = 0;
+    ja_tmp[0] = list_iterator->JCol();
     ipos_first_tmp[0] = list_iterator->PosTriplet();
 
     list_iterator++;
@@ -115,10 +117,6 @@ namespace Ipopt
         if (cur_row != irow) {
           // this is in a new row
 
-          // make sure that the diagonal element is given and that no
-          // row is omitted
-          DBG_ASSERT(irow==jcol);
-          DBG_ASSERT(cur_row+1==irow);
           ia_[cur_row] = nonzeros_compressed_;
           cur_row++;
         }
@@ -127,9 +125,9 @@ namespace Ipopt
       list_iterator++;
     }
     nonzeros_compressed_++;
-    ia_[dim_] = nonzeros_compressed_;
-
-    DBG_ASSERT(cur_row == dim_);
+    for (Index i=cur_row; i<=dim_; i++) {
+      ia_[i] = nonzeros_compressed_;
+    }
     DBG_ASSERT(idouble == nonzeros_triplet_-nonzeros_compressed_);
 
     // Now copy the ja_tmp array to the (shorter) final one and make
