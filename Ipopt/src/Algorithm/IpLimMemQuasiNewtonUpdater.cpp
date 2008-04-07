@@ -31,8 +31,6 @@ namespace Ipopt
   LimMemQuasiNewtonUpdater::LimMemQuasiNewtonUpdater(
     bool update_for_resto)
       :
-      sigma_safe_min_(1e-8),
-      sigma_safe_max_(1e+8),
       update_for_resto_(update_for_resto)
   {}
 
@@ -72,6 +70,22 @@ namespace Ipopt
       "multiple of the identity in the first iteration (when no updates have "
       "been performed yet), and is constantly chosen as this value, if "
       "\"limited_memory_initialization\" is \"constant\".");
+    roptions->AddLowerBoundedNumberOption(
+      "limited_memory_init_val_max",
+      "Upper bound on value for B0 in low-rank update.",
+      0, true, 1e8,
+      "The starting matrix in the low rank update, B0, is chosen to be this "
+      "multiple of the identity in the first iteration (when no updates have "
+      "been performed yet), and is constantly chosen as this value, if "
+      "\"limited_memory_initialization\" is \"constant\".");
+    roptions->AddLowerBoundedNumberOption(
+      "limited_memory_init_val_min",
+      "Lower bound on value for B0 in low-rank update.",
+      0, true, 1e-8,
+      "The starting matrix in the low rank update, B0, is chosen to be this "
+      "multiple of the identity in the first iteration (when no updates have "
+      "been performed yet), and is constantly chosen as this value, if "
+      "\"limited_memory_initialization\" is \"constant\".");
 
     roptions->AddLowerBoundedIntegerOption(
       "limited_memory_max_skipping",
@@ -96,6 +110,10 @@ namespace Ipopt
                             limited_memory_init_val_, prefix);
     options.GetIntegerValue("limited_memory_max_skipping",
                             limited_memory_max_skipping_, prefix);
+    options.GetNumericValue("limited_memory_init_val_max",
+                            sigma_safe_max_, prefix);
+    options.GetNumericValue("limited_memory_init_val_min",
+                            sigma_safe_min_, prefix);
 
     h_space_ = NULL;
     curr_lm_memory_ = 0;

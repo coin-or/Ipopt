@@ -74,6 +74,8 @@ Ipopt/src/Algorithm/IpAlgorithmRegOp.hpp -text
 Ipopt/src/Algorithm/IpBacktrackingLSAcceptor.hpp -text
 Ipopt/src/Algorithm/IpPDSearchDirCalc.cpp -text
 Ipopt/src/Algorithm/IpPDSearchDirCalc.hpp -text
+Ipopt/src/Algorithm/IpPenaltyLSAcceptor.cpp -text
+Ipopt/src/Algorithm/IpPenaltyLSAcceptor.hpp -text
 Ipopt/src/Algorithm/IpSearchDirCalculator.hpp -text
 Ipopt/src/Algorithm/IpTimingStatistics.cpp -text
 Ipopt/src/Algorithm/IpTimingStatistics.hpp -text
