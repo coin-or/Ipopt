@@ -1064,6 +1064,49 @@ interfacing with code, but should read Section \ref{sec:options}
 concerning \Ipopt\ options, and Section \ref{sec:output} which
 explains the output displayed by \Ipopt.
 
+\subsubsection{Using Ipopt from the command line}
+
+It is possible to solve AMPL problems with {\tt Ipopt} directly from
+the command line. However, this requires a file in format {\tt .nl}
+produced by {\tt ampl}.  If you have a model and data loaded in {\tt
+  Ampl}, you can create the corresponding {\tt .nl} file with name,
+say, {\tt myprob.nl} by using the {\tt Ampl} command:
+
+{\tt write gmyprob}
+
+There is a small {\tt .nl} file available in the {\tt Ipopt} distribution. It is
+located at {\tt Ipopt/test/mytoy.nl}. 
+We use this file in the remainder of this section. We assume that the file
+{\tt mytoy.nl} is in the current directory and that the command 
+{\tt ipopt} is a shortcut for running the {\tt ipopt} binary available
+in the {\tt bin} directory of the installation of {\tt Ipopt}. 
+
+We list below commands to perform basic tasks from the Linux prompt.
+
+\begin{itemize}
+\item To solve {\tt mytoy.nl} from the Linux prompt, use:
+
+{\tt ipopt mytoy}
+
+\item To see all command line options for {\tt Ipopt}, use:
+
+{\tt ipopt -=}
+
+\item To see more detailed information on all options for {\tt Ipopt}:
+
+{\tt ipopt mytoy 'print\_options\_documentation yes'}
+
+\item To run {\tt ipopt}, setting the maximum number of iterations to 2 and 
+print level to 4:
+
+{\tt ipopt mytoy 'max\_iter 2 print\_level 4'}
+\end{itemize}
+
+If many options are to be set, they can be collected in a file {\tt
+  ipopt.opt} that is automatically read by {\tt Ipopt} if present in
+the current directory, see Section \ref{sec:options}.
+
+
 \subsection{Interfacing with \Ipopt\ through code}
 In order to solve a problem, \Ipopt\ needs more information than just
 the problem definition (for example, the derivative information). If
