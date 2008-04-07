@@ -67,12 +67,12 @@ am_libipoptalg_la_OBJECTS = IpAdaptiveMuUpdate.lo IpAlgBuilder.lo \
 	IpNLPScaling.lo IpOptErrorConvCheck.lo IpOrigIpoptNLP.lo \
 	IpOrigIterationOutput.lo IpLimMemQuasiNewtonUpdater.lo \
 	IpPDFullSpaceSolver.lo IpPDPerturbationHandler.lo \
-	IpPDSearchDirCalc.lo IpProbingMuOracle.lo \
-	IpQualityFunctionMuOracle.lo IpRestoFilterConvCheck.lo \
-	IpRestoIpoptNLP.lo IpRestoIterateInitializer.lo \
-	IpRestoIterationOutput.lo IpRestoMinC_1Nrm.lo \
-	IpRestoRestoPhase.lo IpStdAugSystemSolver.lo \
-	IpTimingStatistics.lo IpUserScaling.lo \
+	IpPDSearchDirCalc.lo IpPenaltyLSAcceptor.lo \
+	IpProbingMuOracle.lo IpQualityFunctionMuOracle.lo \
+	IpRestoFilterConvCheck.lo IpRestoIpoptNLP.lo \
+	IpRestoIterateInitializer.lo IpRestoIterationOutput.lo \
+	IpRestoMinC_1Nrm.lo IpRestoRestoPhase.lo \
+	IpStdAugSystemSolver.lo IpTimingStatistics.lo IpUserScaling.lo \
 	IpWarmStartIterateInitializer.lo
 libipoptalg_la_OBJECTS = $(am_libipoptalg_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -344,6 +344,7 @@ libipoptalg_la_SOURCES = \
 	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
 	IpPDSearchDirCalc.cpp IpPDSearchDirCalc.hpp \
 	IpPDSystemSolver.hpp \
+	IpPenaltyLSAcceptor.cpp IpPenaltyLSAcceptor.hpp \
 	IpProbingMuOracle.cpp IpProbingMuOracle.hpp \
 	IpQualityFunctionMuOracle.cpp IpQualityFunctionMuOracle.hpp \
 	IpRestoFilterConvCheck.cpp IpRestoFilterConvCheck.hpp \
@@ -511,6 +512,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDFullSpaceSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDPerturbationHandler.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPDSearchDirCalc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPenaltyLSAcceptor.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpProbingMuOracle.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpQualityFunctionMuOracle.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRestoFilterConvCheck.Plo@am__quote@

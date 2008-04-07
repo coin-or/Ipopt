@@ -254,7 +254,7 @@ namespace Ipopt
             dual_inf <= acceptable_dual_inf_tol_ &&
             constr_viol <= acceptable_constr_viol_tol_ &&
             compl_inf <= acceptable_compl_inf_tol_ &&
-            (obj_val-last_obj_val_)/Max(1., fabs(obj_val)) <= acceptable_obj_change_tol_);
+            fabs(obj_val-last_obj_val_)/Max(1., fabs(obj_val)) <= acceptable_obj_change_tol_);
   }
 
 

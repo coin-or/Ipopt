@@ -28,6 +28,7 @@
 #include "IpPDFullSpaceSolver.hpp"
 #include "IpPDPerturbationHandler.hpp"
 #include "IpPDSearchDirCalc.hpp"
+#include "IpPenaltyLSAcceptor.hpp"
 #include "IpProbingMuOracle.hpp"
 #include "IpQualityFunctionMuOracle.hpp"
 #include "IpRestoFilterConvCheck.hpp"
@@ -51,6 +52,8 @@ namespace Ipopt
     BacktrackingLineSearch::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Line Search");
     FilterLSAcceptor::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Line Search");
+    PenaltyLSAcceptor::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP Scaling");
     StandardScalingBase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("NLP Scaling");

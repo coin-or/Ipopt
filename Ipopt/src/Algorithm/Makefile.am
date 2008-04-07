@@ -54,6 +54,7 @@ libipoptalg_la_SOURCES = \
 	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
 	IpPDSearchDirCalc.cpp IpPDSearchDirCalc.hpp \
 	IpPDSystemSolver.hpp \
+	IpPenaltyLSAcceptor.cpp IpPenaltyLSAcceptor.hpp \
 	IpProbingMuOracle.cpp IpProbingMuOracle.hpp \
 	IpQualityFunctionMuOracle.cpp IpQualityFunctionMuOracle.hpp \
 	IpRestoFilterConvCheck.cpp IpRestoFilterConvCheck.hpp \

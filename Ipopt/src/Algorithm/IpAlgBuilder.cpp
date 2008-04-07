@@ -22,6 +22,7 @@
 #include "IpBacktrackingLineSearch.hpp"
 #include "IpFilterLSAcceptor.hpp"
 #include "IpCGPenaltyLSAcceptor.hpp"
+#include "IpPenaltyLSAcceptor.hpp"
 #include "IpPDSearchDirCalc.hpp"
 #include "IpCGSearchDirCalc.hpp"
 #include "IpMonotoneMuUpdate.hpp"
@@ -378,7 +379,7 @@ namespace Ipopt
     SmartPtr<PDPerturbationHandler> pertHandler;
     std::string lsmethod;
     options.GetStringValue("line_search_method", lsmethod, prefix);
-    if (lsmethod=="penalty") {
+    if (lsmethod=="cg-penalty") {
       pertHandler = new CGPerturbationHandler();
     }
     else {
@@ -429,6 +430,9 @@ namespace Ipopt
       }
       else if (resto_lsacceptor=="cg-penalty") {
         resto_LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(resto_PDSolver));
+      }
+      else if (resto_lsacceptor=="penalty") {
+        resto_LSacceptor = new PenaltyLSAcceptor(GetRawPtr(resto_PDSolver));
       }
       SmartPtr<LineSearch> resto_LineSearch =
         new BacktrackingLineSearch(resto_LSacceptor, GetRawPtr(resto_resto),
@@ -515,11 +519,11 @@ namespace Ipopt
 
       // Put together the overall restoration phase IP algorithm
       SmartPtr<SearchDirectionCalculator> resto_SearchDirCalc;
-      if (resto_lsacceptor=="filter") {
-        resto_SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(resto_PDSolver));
-      }
-      else if (resto_lsacceptor=="cg-penalty") {
+      if (resto_lsacceptor=="cg-penalty") {
         resto_SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(resto_PDSolver));
+      }
+      else {
+        resto_SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(resto_PDSolver));
       }
 
       SmartPtr<IpoptAlgorithm> resto_alg =
@@ -546,6 +550,9 @@ namespace Ipopt
     }
     else if (lsmethod=="cg-penalty") {
       LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(PDSolver));
+    }
+    else if (lsmethod=="penalty") {
+      LSacceptor = new PenaltyLSAcceptor(GetRawPtr(PDSolver));
     }
     SmartPtr<LineSearch> lineSearch =
       new BacktrackingLineSearch(LSacceptor,
@@ -640,11 +647,11 @@ namespace Ipopt
 
     // Create the main algorithm
     SmartPtr<SearchDirectionCalculator> SearchDirCalc;
-    if (lsmethod=="filter") {
-      SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(PDSolver));
-    }
-    else if (lsmethod=="cg-penalty") {
+    if (lsmethod=="cg-penalty") {
       SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(PDSolver));
+    }
+    else {
+      SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(PDSolver));
     }
     SmartPtr<IpoptAlgorithm> alg =
       new IpoptAlgorithm(SearchDirCalc,
