@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -83,6 +83,14 @@ namespace Ipopt
     static void RegisterOptions(SmartPtr<RegisteredOptions> reg_options);
     //@}
 
+    /** @name Enums of option values */
+    //@{
+    enum BoundMultInitMethod
+    {
+      B_CONSTANT=0,
+      B_MU_BASED
+    };
+    //@}
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -130,6 +138,10 @@ namespace Ipopt
      *  initialized as least square fit for the linearized
      *  dual infeasibility */
     bool least_square_init_duals_;
+    /** Flag indicating how bound multipliers are initialized */
+    BoundMultInitMethod bound_mult_init_method_;
+    /** Initial value of barrier parameter */
+    Number mu_init_;
     //@}
 
     /** object to be used for the initialization of the equality
