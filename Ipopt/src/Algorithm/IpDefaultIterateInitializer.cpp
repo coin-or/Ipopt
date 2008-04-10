@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -76,6 +76,19 @@ namespace Ipopt
       "All dual variables corresponding to bound constraints are "
       "initialized to this value.");
     reg_options->AddStringOption2(
+      "bound_mult_init_method",
+      "Initialization method for bound multipliers",
+      "constant",
+      "constant", "set all bound multipliers to the value of bound_mult_init_val",
+      "mu-based", "initialize to mu_init/x_slack",
+      "This option defines how the iterates for the bound multipliers are "
+      "initialized.  If \"constant\" is chosen, then all bound multipliers "
+      "are initialized to the value of \"bound_mult_init_val\".  If "
+      "\"mu-based\" is chosen, the each value is initialized to the the value "
+      "of \"mu_init\" devided by the corresponding slack variable.  This "
+      "latter option might be useful if the starting point is close to the "
+      "optimal solution.");
+    reg_options->AddStringOption2(
       "least_square_init_primal",
       "Least square initialization of the primal variables", "no",
       "no", "take user-provided point",
@@ -95,7 +108,8 @@ namespace Ipopt
       "multipliers are possibly corrected to be at least bound_mult_init_val. "
       "This might be useful "
       "if the user doesn't know anything about the starting point, or for "
-      "solving an LP or QP.");
+      "solving an LP or QP.  This overwrites option "
+      "\"bound_mult_init_method\".");
     reg_options->SetRegisteringCategory("Warm Start");
     reg_options->AddStringOption2(
       "warm_start_init_point",
@@ -135,6 +149,12 @@ namespace Ipopt
     ASSERT_EXCEPTION(!least_square_init_duals_ || IsValid(aug_system_solver_),
                      OPTION_INVALID,
                      "The least_square_init_duals can only be chosen if the DefaultInitializer object has an AugSystemSolver.\n");
+    int enum_int;
+    options.GetEnumValue("bound_mult_init_method", enum_int, prefix);
+    bound_mult_init_method_ = BoundMultInitMethod(enum_int);
+    if (bound_mult_init_method_ == B_MU_BASED) {
+      options.GetNumericValue("mu_init",  mu_init_, prefix);
+    }
 
     bool retvalue = true;
     if (IsValid(eq_mult_calculator_)) {
@@ -232,16 +252,39 @@ namespace Ipopt
     /////////////////////////////////////////////////////////////////////
 
     // Initialize the bound multipliers to bound_mult_init_val.
-    iterates->create_new_z_L();
-    iterates->create_new_z_U();
-    iterates->create_new_v_L();
-    iterates->create_new_v_U();
-    iterates->z_L_NonConst()->Set(bound_mult_init_val_);
-    iterates->z_U_NonConst()->Set(bound_mult_init_val_);
-    iterates->v_L_NonConst()->Set(bound_mult_init_val_);
-    iterates->v_U_NonConst()->Set(bound_mult_init_val_);
-
-    IpData().set_trial(iterates);
+    switch (bound_mult_init_method_) {
+    case B_CONSTANT:
+      iterates->create_new_z_L();
+      iterates->create_new_z_U();
+      iterates->create_new_v_L();
+      iterates->create_new_v_U();
+      iterates->z_L_NonConst()->Set(bound_mult_init_val_);
+      iterates->z_U_NonConst()->Set(bound_mult_init_val_);
+      iterates->v_L_NonConst()->Set(bound_mult_init_val_);
+      iterates->v_U_NonConst()->Set(bound_mult_init_val_);
+      IpData().set_trial(iterates);
+      break;
+    case B_MU_BASED:
+      IpData().set_trial(iterates);
+      iterates = IpData().trial()->MakeNewContainer();
+      iterates->create_new_z_L();
+      iterates->create_new_z_U();
+      iterates->create_new_v_L();
+      iterates->create_new_v_U();
+      iterates->z_L_NonConst()->Set(mu_init_);
+      iterates->z_U_NonConst()->Set(mu_init_);
+      iterates->v_L_NonConst()->Set(mu_init_);
+      iterates->v_U_NonConst()->Set(mu_init_);
+      iterates->z_L_NonConst()->ElementWiseDivide(*IpCq().trial_slack_x_L());
+      iterates->z_U_NonConst()->ElementWiseDivide(*IpCq().trial_slack_x_U());
+      iterates->v_L_NonConst()->ElementWiseDivide(*IpCq().trial_slack_s_L());
+      iterates->v_U_NonConst()->ElementWiseDivide(*IpCq().trial_slack_s_U());
+      IpData().set_trial(iterates);
+      break;
+    default:
+      THROW_EXCEPTION(OPTION_INVALID, "Invalid value of option bound_mult_init_method");
+      break;
+    }
 
     bool call_least_square_mults = true;
     if (least_square_init_duals_) {
