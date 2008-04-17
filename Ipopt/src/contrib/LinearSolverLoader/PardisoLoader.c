@@ -52,7 +52,7 @@ void F77_FUNC(pardiso,PARDISO)(void** PT, const ipfint* MAXFCT,
   func_pardiso(PT, MAXFCT, MNUM, MTYPE, PHASE, N, A, IA, JA, PERM, NRHS, IPARM, MSGLVL, B, X, E);
 }
 
-#define PARDISOLIBNAME "libpardiso" SHAREDLIBEXT
+#define PARDISOLIBNAME "libpardiso." SHAREDLIBEXT
 
 int LSL_loadPardisoLib(const char* libname, char* msgbuf, int msglen) {
   /* load Pardiso library */
