@@ -38,22 +38,24 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.3.4.  It includes
+  This document is a guide to using \Ipopt\ 3.4.1.  It includes
   instructions on how to obtain and compile \Ipopt, a description of
   the interface, user options, etc., as well as a tutorial on how to
   solve a nonlinear optimization problem with \Ipopt.
-
-  The initial version of this document was created by Yoshiaki
-  Kawajir\footnote{Department of Chemical Engineering, Carnegie Mellon
-    University, Pittsburgh PA} as a course project for \textit{47852
-    Open Source Software for Optimization}, taught by Prof. Fran\c
-  cois Margot at Tepper School of Business, Carnegie Mellon
-  University.  After this, Carl Laird\footnote{then at Department of
-    Chemical Engineering, Carnegie Mellon University, Pittsburgh PA}
-  has added significant portions.  The current version is maintained
-  by Andreas W\"achter\footnote{Department of Mathematical Sciences,
-    IBM T.J.\ Watson Research Center, Yorktown Heights, NY}.
 \end{abstract}
+
+\section*{History of this document}
+The initial version of this document was created by Yoshiaki
+Kawajir\footnote{then Department of Chemical Engineering, Carnegie Mellon
+  University, Pittsburgh PA} as a course project for \textit{47852
+  Open Source Software for Optimization}, taught by Prof. Fran\c cois
+Margot at Tepper School of Business, Carnegie Mellon University.
+After this, Carl Laird\footnote{then Department of Chemical
+  Engineering, Carnegie Mellon University, Pittsburgh PA} has added
+significant portions, including the very nice tutorials.  The current
+version is maintained by Andreas W\"achter\footnote{Department of
+  Mathematical Sciences, IBM T.J.\ Watson Research Center, Yorktown
+  Heights, NY}.
 
 \tableofcontents
 
@@ -156,19 +158,21 @@ In order to build \Ipopt, some third party components are required:
   \item The Watson Sparse Matrix Package (WSMP)\\ (see {\tt
        http://www-users.cs.umn.edu/\verb|~|agupta/wsmp.html})
   \end{itemize}
-  You need to include at least one of the linear solvers above in
+  We recommend to include at least one of the linear solvers above in
   order to run \Ipopt, and if you want to be able to switch easily
   between different alternatives, you can compile \Ipopt\ with all of
   them.
+
+  The \Ipopt\ library also has mechanisms to load the MA27, MA57, and
+  Pardiso linear solvers from a shared library at runtime, if the
+  library has not been compiled with them (see
+  Section~\ref{sec:linear_solver_loader}).
 
   \textbf{NOTE: The solution of the linear systems is a central
     ingredient in \Ipopt\ and the optimizer's performance and
     robustness depends on your choice.  Please keep this in mind,
     particularly when you are comparing \Ipopt\ with other
     optimization codes.}
-
-  %Currently, there is development by contributors on integrating also
-  %MUMPS and TAUCS, but this work has not yet been completed.
 
   Interfaces to other linear solvers might be added in the future; if
   you are interested in contributing such an interface please contact
@@ -340,7 +344,7 @@ directory in which you want to create a subdirectory {\tt Ipopt} with
 the \Ipopt\ source code.  Then follow the steps below:
 \begin{enumerate}
 \item{Download the code from the repository}\\
-{\tt \$ svn co https://projects.coin-or.org/svn/Ipopt/stable/3.3 CoinIpopt} \\
+{\tt \$ svn co https://projects.coin-or.org/svn/Ipopt/stable/3.4 CoinIpopt} \\
 Note: The {\tt \$} indicates the command line
 prompt, do not type {\tt \$}, only the text following it.
 \item Change into the root directory of the \Ipopt\ distribution\\
@@ -357,7 +361,7 @@ To use the tarball, follow the steps below:
 \item Download the desired tarball from
   \texttt{http://www.coin-or.org/download/source/Ipopt}, it has the form {\tt
     Ipopt-{\em x.y.z}.tgz}, where {\tt\em x.y.z} is the version
-  number, such as {\tt 3.3.2}.  There might also be daily snapshot
+  number, such as {\tt 3.4.1}.  There might also be daily snapshot
   from the stable branch.  The number of the latest official release
   can be found on the \Ipopt\ Trac page.
 \item Issue the following commands to unpack the archive file: \\
@@ -512,7 +516,7 @@ If you would like to compile \Ipopt\ with the Parallel Sparse Direct
 Linear Solver (Pardiso), you need to obtain the Pardiso library for
 your operating system.  Information about Pardiso can be found at
 
-\texttt{http://www.computational.unibas.ch/cs/scicomp/software/pardiso}
+\texttt{http://www.pardiso-project.org/}
 
 You can obtain a free download for Pardiso if you want to use it for
 ``non-commercial and non-profit internal research purposes'' and are
@@ -522,8 +526,8 @@ website; make sure you read the license agreement before filling out
 the download form.
 
 Note: Pardiso is included in Intel's MKL library.  However, that
-version does not yet include the changes done by the Pardiso
-developers to make the linear solver work smoothly with \Ipopt.
+version does not include the changes done by the Pardiso developers to
+make the linear solver work smoothly with \Ipopt.
 
 Please consult Appendix~\ref{ExpertInstall} to find out how to
 configure your \Ipopt\ installation to work with Pardiso.
@@ -557,6 +561,28 @@ currently supported.
 
 Please consult Appendix~\ref{ExpertInstall} to find out how to
 configure your \Ipopt\ installation to work with WSMP.
+
+\subsubsection{Using the Linear Solver  Loader}\label{sec:linear_solver_loader}
+By default, \Ipopt\ will be compiled with a mechanism, the Linear
+Solver Loader, which can dynamically load shared libraries with MA27,
+MA57, or the Pardiso linear solver at runtime\footnote{This is not
+  enabled if you compile Ipopt with the Developer Studio project files
+  provided in the Ipopt distribution.  Further, if you have problems
+  compiling this new feature, you can disable this by specifying
+  \texttt{--disable-linear-solver-loader} for the \texttt{configure}
+  script}. This means, if you obtain one of those solvers after you
+already had compiled \Ipopt, you don't need to recompile \Ipopt\ to
+now use them.  Instead, you can just put a shared library called
+\texttt{libhsl.so} or \texttt{libpardiso.so} into the shared library
+search path, \texttt{LD\_LIBRARY\_PATH}.  These are the names on most
+UNIX platforms, including Linux.  On Darwin, the names are
+\texttt{libhsl.dylib}, \texttt{libpardiso.dylib}, and
+\texttt{DYLD\_LIBRARY\_PATH}.  On Windows (where \Ipopt\ cannot be
+used with Pardiso), the names are \texttt{libhsl.dll} and \texttt{PATH}.
+
+The Pardiso shared library can be downloaded from the Pardiso website.
+To create a shared library containing the HSL linear solvers, read the
+instructions in \texttt{\$IPOPTDIR/ThirdParty/HSL/INSTALL.HSL}.
 
 \subsection{Compiling and Installing \Ipopt} \label{sec.comp_and_inst}
 

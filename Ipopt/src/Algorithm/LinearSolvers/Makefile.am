@@ -19,23 +19,50 @@ liblinsolvers_la_SOURCES = \
 	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
 	IpTSymDependencyDetector.cpp IpTSymDependencyDetector.hpp \
 	IpTSymLinearSolver.cpp IpTSymLinearSolver.hpp \
-	IpTSymScalingMethod.hpp \
+	IpTSymScalingMethod.hpp
+
+if BUILD_LINEARSOLVERLOADER
+  liblinsolvers_la_SOURCES += \
 	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp\
+	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
 	IpMa28Partition.f \
 	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
+else
 
-if HAVE_TAUCS
+if HAVE_MA27
   liblinsolvers_la_SOURCES += \
-	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp
+	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp
+endif
+
+if HAVE_MA57
+  liblinsolvers_la_SOURCES += \
+	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp
+endif
+
+if HAVE_MC19
+  liblinsolvers_la_SOURCES += \
+	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp
+endif
+
+if HAVE_PARDISO
+  liblinsolvers_la_SOURCES += \
+	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+endif
+
+if HAVE_MA28
+  liblinsolvers_la_SOURCES += \
+	IpMa28Partition.f \
+	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
 endif
 
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
 	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
 endif
+
+endif # BUILD_LINEARSOLVERLOADER
 
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 
@@ -84,7 +111,6 @@ ASTYLE_FILES = \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
 	IpTSymScalingMethod.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
-	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak \
 	IpWsmpSolverInterface.cppbak IpWsmpSolverInterface.hppbak
 
 

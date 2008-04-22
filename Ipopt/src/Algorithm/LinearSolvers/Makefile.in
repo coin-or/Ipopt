@@ -42,16 +42,37 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@HAVE_TAUCS_TRUE@am__append_1 = \
-@HAVE_TAUCS_TRUE@	IpTAUCSSolverInterface.cpp IpTAUCSSolverInterface.hpp
+@BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28Partition.f \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
 
-@HAVE_WSMP_TRUE@am__append_2 = \
-@HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA27_TRUE@am__append_2 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA27_TRUE@	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp
 
-@COIN_HAS_MUMPS_TRUE@am__append_3 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA57_TRUE@am__append_3 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA57_TRUE@	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp
+
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MC19_TRUE@am__append_4 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MC19_TRUE@	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp
+
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_5 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__append_6 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28Partition.f \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
+
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_WSMP_TRUE@am__append_7 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
+
+@COIN_HAS_MUMPS_TRUE@am__append_8 = \
 @COIN_HAS_MUMPS_TRUE@	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 
-@COIN_HAS_MUMPS_TRUE@am__append_4 = $(MUMPS_INCFLAGS)
+@COIN_HAS_MUMPS_TRUE@am__append_9 = $(MUMPS_INCFLAGS)
 subdir = src/Algorithm/LinearSolvers
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -76,20 +97,29 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
 	IpMa28Partition.f IpMa28TDependencyDetector.cpp \
-	IpMa28TDependencyDetector.hpp IpTAUCSSolverInterface.cpp \
-	IpTAUCSSolverInterface.hpp IpWsmpSolverInterface.cpp \
+	IpMa28TDependencyDetector.hpp IpWsmpSolverInterface.cpp \
 	IpWsmpSolverInterface.hpp IpMumpsSolverInterface.cpp \
 	IpMumpsSolverInterface.hpp
-@HAVE_TAUCS_TRUE@am__objects_1 = IpTAUCSSolverInterface.lo
-@HAVE_WSMP_TRUE@am__objects_2 = IpWsmpSolverInterface.lo
-@COIN_HAS_MUMPS_TRUE@am__objects_3 = IpMumpsSolverInterface.lo
+@BUILD_LINEARSOLVERLOADER_TRUE@am__objects_1 =  \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa27TSolverInterface.lo \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa57TSolverInterface.lo \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMc19TSymScalingMethod.lo \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.lo \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28Partition.lo \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28TDependencyDetector.lo
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA27_TRUE@am__objects_2 = IpMa27TSolverInterface.lo
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA57_TRUE@am__objects_3 = IpMa57TSolverInterface.lo
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MC19_TRUE@am__objects_4 = IpMc19TSymScalingMethod.lo
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_5 = IpPardisoSolverInterface.lo
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__objects_6 = IpMa28Partition.lo \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.lo
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_WSMP_TRUE@am__objects_7 = IpWsmpSolverInterface.lo
+@COIN_HAS_MUMPS_TRUE@am__objects_8 = IpMumpsSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpTripletToCSRConverter.lo IpTSymDependencyDetector.lo \
-	IpTSymLinearSolver.lo IpMa27TSolverInterface.lo \
-	IpMa57TSolverInterface.lo IpMc19TSymScalingMethod.lo \
-	IpPardisoSolverInterface.lo IpMa28Partition.lo \
-	IpMa28TDependencyDetector.lo $(am__objects_1) $(am__objects_2) \
-	$(am__objects_3)
+	IpTSymLinearSolver.lo $(am__objects_1) $(am__objects_2) \
+	$(am__objects_3) $(am__objects_4) $(am__objects_5) \
+	$(am__objects_6) $(am__objects_7) $(am__objects_8)
 liblinsolvers_la_OBJECTS = $(am_liblinsolvers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -149,6 +179,8 @@ BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
 BUILD_HSLLOADER_FALSE = @BUILD_HSLLOADER_FALSE@
 BUILD_HSLLOADER_TRUE = @BUILD_HSLLOADER_TRUE@
+BUILD_LINEARSOLVERLOADER_FALSE = @BUILD_LINEARSOLVERLOADER_FALSE@
+BUILD_LINEARSOLVERLOADER_TRUE = @BUILD_LINEARSOLVERLOADER_TRUE@
 BUILD_PARDISOLOADER_FALSE = @BUILD_PARDISOLOADER_FALSE@
 BUILD_PARDISOLOADER_TRUE = @BUILD_PARDISOLOADER_TRUE@
 CC = @CC@
@@ -208,8 +240,6 @@ HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
 HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
-HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
-HAVE_TAUCS_TRUE = @HAVE_TAUCS_TRUE@
 HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
 HAVE_WSMP_TRUE = @HAVE_WSMP_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
@@ -257,7 +287,6 @@ SET_MAKE = @SET_MAKE@
 SHARED_FLAGS = @SHARED_FLAGS@
 SHELL = @SHELL@
 STRIP = @STRIP@
-TAUCS_INCFLAGS = @TAUCS_INCFLAGS@
 VERSION = @VERSION@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
 abs_bin_dir = @abs_bin_dir@
@@ -322,21 +351,17 @@ liblinsolvers_la_SOURCES = IpGenKKTSolverInterface.hpp \
 	IpTDependencyDetector.hpp IpTripletToCSRConverter.cpp \
 	IpTripletToCSRConverter.hpp IpTSymDependencyDetector.cpp \
 	IpTSymDependencyDetector.hpp IpTSymLinearSolver.cpp \
-	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp \
-	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
-	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
-	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
-	IpMa28Partition.f IpMa28TDependencyDetector.cpp \
-	IpMa28TDependencyDetector.hpp $(am__append_1) $(am__append_2) \
-	$(am__append_3)
+	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp $(am__append_1) \
+	$(am__append_2) $(am__append_3) $(am__append_4) \
+	$(am__append_5) $(am__append_6) $(am__append_7) \
+	$(am__append_8)
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/..` -I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty` \
-	$(am__append_4)
+	$(am__append_9)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -359,7 +384,6 @@ ASTYLE_FILES = \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
 	IpTSymScalingMethod.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
-	IpTAUCSSolverInterface.cppbak IpTAUCSSolverInterface.hppbak \
 	IpWsmpSolverInterface.cppbak IpWsmpSolverInterface.hppbak
 
 DISTCLEANFILES = $(ASTYLE_FILES)
@@ -422,7 +446,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19TSymScalingMethod.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMumpsSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPardisoSolverInterface.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTAUCSSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTSymDependencyDetector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTSymLinearSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTripletToCSRConverter.Plo@am__quote@

@@ -89,6 +89,10 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if the linear solver loader should be compiled to allow dynamic
+   loading of shared libaries with linear solvers */
+#undef HAVE_LINEARSOLVERLOADER
+
 /* Define to 1 if MA27 is available */
 #undef HAVE_MA27
 
@@ -145,9 +149,6 @@
 
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
-
-/* Define to 1 if TAUCS is available */
-#undef HAVE_TAUCS
 
 /* Define to 1 if you have the <time.h> header file. */
 #undef HAVE_TIME_H

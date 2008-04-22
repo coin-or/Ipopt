@@ -53,9 +53,6 @@
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpPardisoSolverInterface.hpp"
 
-#ifdef HAVE_TAUCS
-# include "IpTAUCSSolverInterface.hpp"
-#endif
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
 #endif
@@ -115,7 +112,7 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption7(
+    roptions->AddStringOption6(
       "linear_solver",
       "Linear solver used for step computations.",
 #ifdef HAVE_MA27
@@ -143,7 +140,6 @@ namespace Ipopt
       "ma57", "use the Harwell routine MA57",
       "pardiso", "use the Pardiso package",
       "wsmp", "use WSMP package",
-      "taucs", "use TAUCS package (not yet working)",
       "mumps", "use MUMPS package",
       "custom", "use custom linear solver",
       "Determines which linear algebra package is to be used for the "
@@ -248,8 +244,9 @@ namespace Ipopt
     options.GetStringValue("linear_solver", linear_solver, prefix);
     bool use_custom_solver = false;
     if (linear_solver=="ma27") {
-      SolverInterface = new Ma27TSolverInterface();
 #ifndef HAVE_MA27
+# ifdef HAVE_LINEARSOLVERLOADER
+      SolverInterface = new Ma27TSolverInterface();
       char buf[256];
       int rc = LSL_loadHSL(NULL, buf, 255);
       if (rc) {
@@ -260,12 +257,18 @@ namespace Ipopt
         errmsg += buf;
         THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
       }
+# else
+      THROW_EXCEPTION(OPTION_INVALID, "Support for MA27 has not been compiled into Ipopt.");
+# endif
+#else
+      SolverInterface = new Ma27TSolverInterface();
 #endif
 
     }
     else if (linear_solver=="ma57") {
-      SolverInterface = new Ma57TSolverInterface();
 #ifndef HAVE_MA57
+# ifdef HAVE_LINEARSOLVERLOADER
+      SolverInterface = new Ma57TSolverInterface();
       char buf[256];
       int rc = LSL_loadHSL(NULL, buf, 255);
       if (rc) {
@@ -276,12 +279,18 @@ namespace Ipopt
         errmsg += buf;
         THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
       }
+# else
+      THROW_EXCEPTION(OPTION_INVALID, "Support for MA57 has not been compiled into Ipopt.");
+# endif
+#else
+      SolverInterface = new Ma57TSolverInterface();
 #endif
 
     }
     else if (linear_solver=="pardiso") {
-      SolverInterface = new PardisoSolverInterface();
 #ifndef HAVE_PARDISO
+# ifdef HAVE_LINEARSOLVERLOADER
+      SolverInterface = new PardisoSolverInterface();
       char buf[256];
       int rc = LSL_loadPardisoLib(NULL, buf, 255);
       if (rc) {
@@ -292,16 +301,11 @@ namespace Ipopt
         errmsg += buf;
         THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
       }
-#endif
-
-    }
-    else if (linear_solver=="taucs") {
-#ifdef HAVE_TAUCS
-      SolverInterface = new TAUCSSolverInterface();
+# else
+      THROW_EXCEPTION(OPTION_INVALID, "Support for Pardiso has not been compiled into Ipopt.");
+# endif
 #else
-
-      THROW_EXCEPTION(OPTION_INVALID,
-                      "Selected linear solver TAUCS not available.");
+      SolverInterface = new PardisoSolverInterface();
 #endif
 
     }
@@ -346,8 +350,9 @@ namespace Ipopt
         }
       }
       if (linear_system_scaling=="mc19") {
-        ScalingMethod = new Mc19TSymScalingMethod();
 #ifndef HAVE_MC19
+# ifdef HAVE_LINEARSOLVERLOADER
+        ScalingMethod = new Mc19TSymScalingMethod();
         char buf[256];
         int rc = LSL_loadHSL(NULL, buf, 255);
         if (rc) {
@@ -356,6 +361,11 @@ namespace Ipopt
           errmsg += buf;
           THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
         }
+# else
+        THROW_EXCEPTION(OPTION_INVALID, "Support for MC19 has not been compiled into Ipopt.");
+# endif
+#else
+        ScalingMethod = new Mc19TSymScalingMethod();
 #endif
 
       }

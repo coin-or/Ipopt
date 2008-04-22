@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2007 International Business Machines and others.
+# Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -8,8 +8,13 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
-	src/contrib/LinearSolverLoader src/Interfaces src/Apps
+SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty
+
+if BUILD_LINEARSOLVERLOADER
+  SUBDIRS += src/contrib/LinearSolverLoader
+endif
+
+SUBDIRS += src/Interfaces src/Apps
 
 if ALWAYS_FALSE
   SUBDIRS += test
