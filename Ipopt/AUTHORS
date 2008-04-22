@@ -6,11 +6,6 @@ Carl Laird (IBM, Carnegie Mellon University)
 
 Contributors:
 
-- Yifan Hu (Wolfram): Contributed TAUCS interface, implemented in the files
-
-  PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.hpp
-  PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.cpp
-
 - Yoshiaki Kawajiri (Carnegie Mellon Univeristy):
   First version of Latex documentation file
 
@@ -63,7 +58,7 @@ Contributors:
   src/contrib/CGPenalty/IpPiecewisePenalty.cpp
   src/contrib/CGPenalty/IpPiecewisePenalty.hpp
 
-- Stefan Vigernske (Humboldt University Berlin)
+- Stefan Vigerske (Humboldt University Berlin)
   Dynamic loading of linear solver shared libraries
 
   src/contrib/LinearSolverLoader/HSLLoader.c
@@ -72,4 +67,15 @@ Contributors:
   src/contrib/LinearSolverLoader/LibraryHandler.h
   src/contrib/LinearSolverLoader/PardisoLoader.c
   src/contrib/LinearSolverLoader/PardisoLoader.h
+
+
+
+Contributors of code that is no longer included in Ipopt distribution:
+
+- Yifan Hu (Wolfram): Contributed TAUCS interface, implemented in the files
+
+  PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.hpp
+  PDSystemImpl/PDFullSpace/IpTAUCSSolverInterface.cpp
+
+  [These files have been removed, since TAUCS is not supported]
 

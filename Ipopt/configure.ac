@@ -447,26 +447,6 @@ fi
 AC_LANG_POP([Fortran 77])
 
 #########
-# TAUCS #
-#########
-
-AC_ARG_WITH([taucs],
-            AC_HELP_STRING([--with-taucs],
-                           [specify TAUCS library and dependencies]),
-            [use_taucs=$withval], [use_taucs=no])
-
-if test "$use_taucs" != "no"; then
-  LIBS="$use_taucs $LIBS"
-  ADDLIBS="$use_taucs $ADDLIBS"
-
-  AC_DEFINE(HAVE_TAUCS,1,
-            [Define to 1 if TAUCS is available])
-
-  AC_ARG_VAR(TAUCS_INCFLAGS,[Flags for including taucs header files])
-  CXXFLAGS="$CXXFLAGS $TAUCS_INCFLAGS"
-fi
-
-#########
 # MUMPS #
 #########
 
@@ -497,13 +477,6 @@ if test "$use_wsmp" != "no"; then
 fi
 
 # Check if at least one linear solver was found
-
-AC_ARG_ENABLE([distconf],,
-  [case "${enableval}" in
-    yes) distconf=true ;;
-    no)  distconf=false ;;
-    *) AC_MSG_ERROR(bad value ${enableval} for --enable-distconf) ;;
-  esac],[distconf=false])
 
 if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" = no; then
   AC_MSG_WARN("You are compiling Ipopt without any linear solver (such as MUMPS).  You will only be able to run Ipopt if you compile a shared library with a linear solver.")
@@ -609,7 +582,7 @@ AC_SUBST(ipoptlib)
 # is made)
 
 AC_SUBST(IPALLLIBS)
-IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../contrib/LinearSolverLoader/libLinearSolverLoader.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
+IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
 if test "$use_blas" = BUILD; then
   IPALLLIBS="../../../ThirdParty/Blas/libcoinblas.la $IPALLLIBS"
@@ -632,9 +605,29 @@ AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
 AM_CONDITIONAL([HAVE_MA28],[test ! "$use_MA28" = no])
 AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
-AM_CONDITIONAL([HAVE_TAUCS],[test ! "$use_taucs" = no])
 AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
+AC_ARG_ENABLE([linear-solver-loader],
+  [AC_HELP_STRING([--enable-linear-solver-loader],
+     [compile linear solver loader (default: yes)])],
+  [case "$enableval" in
+     no | yes) ;;
+     *)
+       AC_MSG_ERROR([invalid argument for --enable-linear-solver-loader: $enableval]);;
+   esac
+   use_linearsolverloader=$enableval],
+  [use_linearsolverloader=yes])
+
+AC_MSG_CHECKING([whether the linear solver loader should be compiled])
+AC_MSG_RESULT([$use_linearsolverloader])
+
+if test $use_linearsolverloader = yes; then
+  AC_DEFINE([HAVE_LINEARSOLVERLOADER],[1],
+            [Define to 1 if the linear solver loader should be compiled to allow dynamic loading of shared libaries with linear solvers])
+  IPALLLIBS="../contrib/LinearSolverLoader/libLinearSolverLoader.la $IPALLLIBS"
+fi
+
+AM_CONDITIONAL([BUILD_LINEARSOLVERLOADER],[test $use_linearsolverloader = yes])
 AM_CONDITIONAL([BUILD_HSLLOADER],[test "$use_MA27" = no -o "$use_MA28" = no -o "$use_MA57" = no -o "$use_MC19" = no])
 AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$use_pardiso" = no])
 

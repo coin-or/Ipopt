@@ -29,10 +29,14 @@ namespace Ipopt
   {
     roptions->SetRegisteringCategory("Linear Solver");
     TSymLinearSolver::RegisterOptions(roptions);
+#if defined(HAVE_MA27) || defined(HAVE_LINEARSOLVERLOADER)
     roptions->SetRegisteringCategory("MA27 Linear Solver");
     Ma27TSolverInterface::RegisterOptions(roptions);
+#endif
+#if defined(HAVE_MA57) || defined(HAVE_LINEARSOLVERLOADER)
     roptions->SetRegisteringCategory("MA57 Linear Solver");
     Ma57TSolverInterface::RegisterOptions(roptions);
+#endif
 
 #ifdef COIN_HAS_MUMPS
 
@@ -40,8 +44,10 @@ namespace Ipopt
     MumpsSolverInterface::RegisterOptions(roptions);
 #endif
 
+#if defined(HAVE_PARDISO) || defined(HAVE_LINEARSOLVERLOADER)
     roptions->SetRegisteringCategory("Pardiso Linear Solver");
     PardisoSolverInterface::RegisterOptions(roptions);
+#endif
 
 #ifdef HAVE_WSMP
 
@@ -49,8 +55,10 @@ namespace Ipopt
     WsmpSolverInterface::RegisterOptions(roptions);
 #endif
 
+#if defined(HAVE_MA28) || defined(HAVE_LINEARSOLVERLOADER)
     roptions->SetRegisteringCategory("MA28 Linear Solver");
     Ma28TDependencyDetector::RegisterOptions(roptions);
+#endif
 
     roptions->SetRegisteringCategory("Uncategorized");
   }

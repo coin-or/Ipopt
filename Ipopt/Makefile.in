@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, 2007 International Business Machines and others.
+# Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -51,7 +51,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@ALWAYS_FALSE@am__append_1 = test
+@BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = src/contrib/LinearSolverLoader
+@ALWAYS_FALSE@am__append_2 = test
 DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/../BuildTools/Makemain.inc $(srcdir)/../config.guess \
 	$(srcdir)/../config.sub $(srcdir)/../install-sh \
@@ -71,8 +72,8 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/examples/hs071_f/Makefile.in \
 	$(top_srcdir)/examples/hs071_f/hs071_f.f.in \
 	$(top_srcdir)/inc/config_ipopt.h.in AUTHORS INSTALL
-@HAVE_EXTERNALS_TRUE@am__append_2 = Externals
-@HAVE_EXTERNALS_TRUE@am__append_3 = .Externals-stamp
+@HAVE_EXTERNALS_TRUE@am__append_3 = Externals
+@HAVE_EXTERNALS_TRUE@am__append_4 = .Externals-stamp
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -142,6 +143,8 @@ BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
 BUILD_HSLLOADER_FALSE = @BUILD_HSLLOADER_FALSE@
 BUILD_HSLLOADER_TRUE = @BUILD_HSLLOADER_TRUE@
+BUILD_LINEARSOLVERLOADER_FALSE = @BUILD_LINEARSOLVERLOADER_FALSE@
+BUILD_LINEARSOLVERLOADER_TRUE = @BUILD_LINEARSOLVERLOADER_TRUE@
 BUILD_PARDISOLOADER_FALSE = @BUILD_PARDISOLOADER_FALSE@
 BUILD_PARDISOLOADER_TRUE = @BUILD_PARDISOLOADER_TRUE@
 CC = @CC@
@@ -201,8 +204,6 @@ HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
 HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
-HAVE_TAUCS_FALSE = @HAVE_TAUCS_FALSE@
-HAVE_TAUCS_TRUE = @HAVE_TAUCS_TRUE@
 HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
 HAVE_WSMP_TRUE = @HAVE_WSMP_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
@@ -250,7 +251,6 @@ SET_MAKE = @SET_MAKE@
 SHARED_FLAGS = @SHARED_FLAGS@
 SHELL = @SHELL@
 STRIP = @STRIP@
-TAUCS_INCFLAGS = @TAUCS_INCFLAGS@
 VERSION = @VERSION@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
 abs_bin_dir = @abs_bin_dir@
@@ -309,8 +309,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
-	src/contrib/LinearSolverLoader src/Interfaces src/Apps \
-	$(am__append_1)
+	$(am__append_1) src/Interfaces src/Apps $(am__append_2)
 EXTRA_DIST = examples/Cpp_example/cpp_example.cpp \
 	examples/Cpp_example/Makefile.in \
 	examples/Cpp_example/MyNLP.cpp examples/Cpp_example/MyNLP.hpp \
@@ -362,7 +361,7 @@ EXTRA_DIST = examples/Cpp_example/cpp_example.cpp \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj \
 	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj \
-	$(am__append_2)
+	$(am__append_3)
 
 # Stuff to clean up from "make test"
 DISTCLEANFILES = examples/hs071_cpp/hs071_cpp \
@@ -379,7 +378,7 @@ DISTCLEANFILES = examples/hs071_cpp/hs071_cpp \
 	examples/ScalableProblems/*.obj \
 	examples/ScalableProblems/solve_problem \
 	examples/ScalableProblems/solve_problem.exe \
-	examples/ScalableProblems/solution.txt $(am__append_3) \
+	examples/ScalableProblems/solution.txt $(am__append_4) \
 	$(VPATH_DISTCLEANFILES)
 tmpdir = tmpdir
 libipopt = libipopt.a
