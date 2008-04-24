@@ -400,6 +400,12 @@ namespace Ipopt
       }
     }
 
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Number of doubles for MUMPS to hold factorization (INFO(9)) = %d\n",
+                   mumps_data->info[8]);
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Number of integers for MUMPS to hold factorization (INFO(10)) = %d\n",
+                   mumps_data->info[9]);
 
     if (error == -10) {//system is singular
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,

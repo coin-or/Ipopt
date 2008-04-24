@@ -517,6 +517,13 @@ namespace Ipopt
                      ncmpbr);
     }
 
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Number of doubles for MA27 to hold factorization (INFO(9)) = %d\n",
+                   INFO[8]);
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Number of integers for MA27 to hold factorization (INFO(10)) = %d\n",
+                   INFO[9]);
+
     // Check whether the number of negative eigenvalues matches the requested
     // count
     if (HaveIpData()) {
