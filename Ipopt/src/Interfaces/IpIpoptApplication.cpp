@@ -312,17 +312,23 @@ namespace Ipopt
           options_to_print.push_back("derivative_test_print_all");
 
           // Special linear solver
+#if defined(HAVE_MA27) || defined(HAVE_LINEARSOLVERLOADER)
+
           options_to_print.push_back("#MA27 Linear Solver");
           options_to_print.push_back("ma27_pivtol");
           options_to_print.push_back("ma27_pivtolmax");
           options_to_print.push_back("ma27_liw_init_factor");
           options_to_print.push_back("ma27_la_init_factor");
           options_to_print.push_back("ma27_meminc_factor");
+#endif
+
+#if defined(HAVE_MA57) || defined(HAVE_LINEARSOLVERLOADER)
 
           options_to_print.push_back("#MA57 Linear Solver");
           options_to_print.push_back("ma57_pivtol");
           options_to_print.push_back("ma57_pivtolmax");
           options_to_print.push_back("ma57_pre_alloc");
+#endif
 
 #ifdef COIN_HAS_MUMPS
 
@@ -335,9 +341,12 @@ namespace Ipopt
           options_to_print.push_back("mumps_scaling");
 #endif
 
+#if defined(HAVE_PARDISO) || defined(HAVE_LINEARSOLVERLOADER)
+
           options_to_print.push_back("#Pardiso Linear Solver");
           options_to_print.push_back("pardiso_matching_strategy");
           options_to_print.push_back("pardiso_out_of_core_power");
+#endif
 
 #ifdef HAVE_WSMP
 

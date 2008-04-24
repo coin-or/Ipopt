@@ -66,8 +66,8 @@ host_triplet = @host@
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28Partition.f \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
 
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_WSMP_TRUE@am__append_7 = \
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
+@HAVE_WSMP_TRUE@am__append_7 = \
+@HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
 
 @COIN_HAS_MUMPS_TRUE@am__append_8 = \
 @COIN_HAS_MUMPS_TRUE@	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
@@ -113,7 +113,7 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_5 = IpPardisoSolverInterface.lo
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__objects_6 = IpMa28Partition.lo \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_WSMP_TRUE@am__objects_7 = IpWsmpSolverInterface.lo
+@HAVE_WSMP_TRUE@am__objects_7 = IpWsmpSolverInterface.lo
 @COIN_HAS_MUMPS_TRUE@am__objects_8 = IpMumpsSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpTripletToCSRConverter.lo IpTSymDependencyDetector.lo \

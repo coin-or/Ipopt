@@ -57,12 +57,12 @@ if HAVE_MA28
 	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
 endif
 
+endif # BUILD_LINEARSOLVERLOADER
+
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
 	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
 endif
-
-endif # BUILD_LINEARSOLVERLOADER
 
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 
