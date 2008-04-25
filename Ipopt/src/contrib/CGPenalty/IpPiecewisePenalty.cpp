@@ -34,7 +34,7 @@ namespace Ipopt
     // unless the entries are accepted by the regular Armijo conditions.
     max_piece_number_ = 100; // make it regular option here or elsewhere?
     min_piece_penalty_ = 0.; // make it regular option here or elsewhere?
-    Index size = PiecewisePenalty_list_.size();
+    Index size = (Index)PiecewisePenalty_list_.size();
     if (size >= max_piece_number_) {
       Number trial_inf = Fzlin;
       Number trial_barrier = Fzconst;
@@ -164,7 +164,7 @@ namespace Ipopt
       }
       Gzi1 = Gzi2;
     }
-    dim_ = PiecewisePenalty_list_.size();
+    dim_ = (Index)PiecewisePenalty_list_.size();
   }
 
   /*

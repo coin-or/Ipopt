@@ -235,7 +235,7 @@ namespace Ipopt
     /** Number of AMPL Options */
     Index NumberOfAmplOptions()
     {
-      return ampl_options_map_.size();
+      return (Index)ampl_options_map_.size();
     }
 
     /** ASL keywords list for the stored options. */

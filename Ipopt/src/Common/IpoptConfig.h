@@ -60,6 +60,10 @@
 /* If defined, the LAPACK Library is available. */
 #define COIN_HAS_LAPACK 1
 
+/* Define to 1 if the linear solver loader should be compiled to allow dynamic
+   loading of shared libraries with linear solvers */
+/* #undef HAVE_LINEARSOLVERLOADER */
+
 /* Define to 1 if MA27 is available */
 #define HAVE_MA27 1
 
