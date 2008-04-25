@@ -161,7 +161,7 @@ namespace Ipopt
       "mc19", "use the Harwell routine MC19",
       "Determines the method used to compute symmetric scaling "
       "factors for the augmented system (see also the "
-      "\"linear_scaling_on_demand\" option).  This scaling is independent"
+      "\"linear_scaling_on_demand\" option).  This scaling is independent "
       "of the NLP problem scaling.  By default, MC19 is only used if MA27 or "
       "MA57 are selected as linear solvers. This option is only available if "
       "Ipopt has been compiled with MC19.");

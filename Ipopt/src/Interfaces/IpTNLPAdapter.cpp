@@ -123,7 +123,8 @@ namespace Ipopt
       "mumps", "use MUMPS",
       "wsmp", "use WSMP",
       "ma28", "use MA28",
-      "The default and available choices depend on how Ipopt has been compiled.");
+      "The default and available choices depend on how Ipopt has been "
+      "compiled.  This is experimental and does not work well.");
     roptions->AddStringOption2(
       "dependency_detection_with_rhs",
       "Indicates if the right hand sides of the constraints should be considered during dependency detection",
@@ -131,15 +132,6 @@ namespace Ipopt
       "no", "only look at gradients",
       "yes", "also consider right hand side",
       "");
-    roptions->AddLowerBoundedNumberOption(
-      "point_perturbation_radius",
-      "Maximal perturbation of an evaluation point.",
-      0., false,
-      10.,
-      "If a random perturbation of a points is required, this number "
-      "indicates the maximal perturbation.  Currently, this is only used when "
-      "we perturb the initial point in order to get a random Jacobian for the "
-      "linear dependency detection of equality constraints.");
     roptions->AddLowerBoundedIntegerOption(
       "num_linear_variables",
       "Number of linear variables",
@@ -194,6 +186,15 @@ namespace Ipopt
       0., true,
       1e-7,
       "This determines the relative perturbation of the variable entries.");
+    roptions->AddLowerBoundedNumberOption(
+      "point_perturbation_radius",
+      "Maximal perturbation of an evaluation point.",
+      0., false,
+      10.,
+      "If a random perturbation of a points is required, this number "
+      "indicates the maximal perturbation.  This is for example used when "
+      "determining the center point at which the finite difference derivative "
+      "test is executed.");
   }
 
   bool TNLPAdapter::ProcessOptions(const OptionsList& options,

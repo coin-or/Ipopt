@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -119,7 +119,7 @@ namespace Ipopt
       "Ipopt has been compiled with Pardiso.");
     roptions->AddStringOption2(
       "pardiso_redo_symbolic_fact_only_if_inertia_wrong",
-      "Toggel for handling case when elements were pertured by Pardiso.",
+      "Toggle for handling case when elements were perturbed by Pardiso.",
       "no",
       "no", "Always redo symbolic factorization when elements were perturbed",
       "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong",
@@ -143,11 +143,11 @@ namespace Ipopt
       "pardiso_skip_inertia_check",
       "Always pretent inertia is correct.",
       "no",
-      "no", "check interia",
+      "no", "check inertia",
       "yes", "skip inertia check",
       "Setting this option to \"yes\" essentially disables inertia check. "
       "This option makes the algorithm non-robust and easily fail, but it "
-      "might give some insight into the necessity of interia control.");
+      "might give some insight into the necessity of inertia control.");
     roptions->AddIntegerOption(
       "pardiso_iter_tol_exponent",
       "",

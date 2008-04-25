@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -114,13 +114,13 @@ namespace Ipopt
       "available if Ipopt has been compiled with MA27.");
     roptions->AddStringOption2(
       "ma27_skip_inertia_check",
-      "Always pretent inertia is correct.",
+      "Always pretend inertia is correct.",
       "no",
-      "no", "check interia",
+      "no", "check inertia",
       "yes", "skip inertia check",
       "Setting this option to \"yes\" essentially disables inertia check. "
       "This option makes the algorithm non-robust and easily fail, but it "
-      "might give some insight into the necessity of interia control.");
+      "might give some insight into the necessity of inertia control.");
     roptions->AddStringOption2(
       "ma27_ignore_singularity",
       "Enables MA27's ability to solve a linear system even if the matrix is singular.",

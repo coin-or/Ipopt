@@ -118,7 +118,7 @@ namespace Ipopt
       "automatically disables the line search, and chooses the (unglobalized) "
       "adaptive mu strategy with the \"probing\" oracle, and uses "
       "\"corrector_type=affine\" without any safeguards; you should not set "
-      "any of those options explicitly in addition.  Also, unless"
+      "any of those options explicitly in addition.  Also, unless "
       "otherwise specified, the values of \"bound_push\", \"bound_frac\", and "
       "\"bound_mult_init_val\" are set more aggressive, and sets "
       "\"alpha_for_y=bound_mult\".");
@@ -456,7 +456,7 @@ namespace Ipopt
         ComputeFeasibilityMultipliers();
       }
       IpData().TimingStats().OverallAlgorithm().End();
-      return SUCCESS;
+      return FEASIBLE_POINT_FOUND;
     }
     catch (TOO_FEW_DOF& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
