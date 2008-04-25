@@ -758,8 +758,8 @@ namespace Ipopt
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Solved To Acceptable Level.\n");
       }
       else if (status == FEASIBLE_POINT_FOUND) {
-	retValue = Feasible_Point_Found;
-	jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Feasible point for square problem found.\n");
+        retValue = Feasible_Point_Found;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Feasible point for square problem found.\n");
       }
       else if (status == DIVERGING_ITERATES) {
         retValue = Diverging_Iterates;
