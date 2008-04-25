@@ -252,14 +252,14 @@ namespace Ipopt
       // If this is a square problem, we are done because a
       // sufficiently feasible point has been found
       if (square_problem) {
-	Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
-	
-	if (constr_viol <= constr_viol_tol_) {
-	  Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-			 "Recursive restoration phase algorithm termined successfully for square problem.\n");
-	  IpData().AcceptTrialPoint();
-	  THROW_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED, "Restoration phase converged to sufficiently feasible point of original square problem.");
-	}
+        Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
+
+        if (constr_viol <= constr_viol_tol_) {
+          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                         "Recursive restoration phase algorithm termined successfully for square problem.\n");
+          IpData().AcceptTrialPoint();
+          THROW_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED, "Restoration phase converged to sufficiently feasible point of original square problem.");
+        }
       }
 
       // Update the bound multiplers, pretending that the entire

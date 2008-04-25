@@ -272,8 +272,8 @@ namespace Ipopt
 
         num_iter_ref++;
         // Check if we have to give up on iterative refinement
-        if (residual_ratio > residual_ratio_max_ && 
-	    num_iter_ref>min_refinement_steps_ &&
+        if (residual_ratio > residual_ratio_max_ &&
+            num_iter_ref>min_refinement_steps_ &&
             (num_iter_ref>max_refinement_steps_ ||
              residual_ratio>residual_improvement_factor_*residual_ratio_old)) {
 
