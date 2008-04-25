@@ -85,7 +85,7 @@ namespace Ipopt
       "initialized.  If \"constant\" is chosen, then all bound multipliers "
       "are initialized to the value of \"bound_mult_init_val\".  If "
       "\"mu-based\" is chosen, the each value is initialized to the the value "
-      "of \"mu_init\" devided by the corresponding slack variable.  This "
+      "of \"mu_init\" divided by the corresponding slack variable.  This "
       "latter option might be useful if the starting point is close to the "
       "optimal solution.");
     reg_options->AddStringOption2(
@@ -95,7 +95,7 @@ namespace Ipopt
       "yes", "overwrite user-provided point with least-square estimates",
       "If set to yes, Ipopt ignores the user provided point and solves a "
       "least square problem for the primal variables (x and s), to fit the "
-      "linearize equality and inequality constraints.  This might be useful "
+      "linearized equality and inequality constraints.  This might be useful "
       "if the user doesn't know anything about the starting point, or for "
       "solving an LP or QP.");
     reg_options->AddStringOption2(

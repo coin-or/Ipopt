@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -121,7 +121,7 @@ namespace Ipopt
       "wsmp_write_matrix_iteration",
       "Iteration in which the matrices are written to files.",
       -1, -1,
-      "If non-negative, this option determins the iteration in which all "
+      "If non-negative, this option determines the iteration in which all "
       "matrices given to WSMP are written to files.  This option is only "
       "available if Ipopt has been compiled with WSMP.");
   }

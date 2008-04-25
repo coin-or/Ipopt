@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -92,8 +92,8 @@ namespace Ipopt
       "full", "take a full step of size one",
       "min_dual_infeas", "choose step size minimizing new dual infeasibility",
       "safe_min_dual_infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
-      "primal-and-full", "use the primal step size, and full step if delta_x <= alpga_for_y_tol",
-      "dual-and-full", "use the dual step size, and full step if delta_x <= alpga_for_y_tol",
+      "primal-and-full", "use the primal step size, and full step if delta_x <= alpha_for_y_tol",
+      "dual-and-full", "use the dual step size, and full step if delta_x <= alpha_for_y_tol",
       "acceptor", "Call LSAcceptor to get step size for y",
       "This option determines how the step size (alpha_y) will be calculated when updating the "
       "constraint multipliers.");

@@ -68,7 +68,7 @@ namespace Ipopt
       "no", "Assume this is a new problem.",
       "yes", "Assume this is problem has known structure",
       "If \"yes\" is chosen, then the algorithm assumes that an NLP is now to "
-      "be solved, whose strcture is identical to one that already was "
+      "be solved, whose structure is identical to one that already was "
       "considered (with the same NLP object).");
     roptions->SetRegisteringCategory("NLP");
     roptions->AddStringOption2(

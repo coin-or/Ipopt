@@ -49,7 +49,7 @@ namespace Ipopt
       "");
     roptions->AddLowerBoundedNumberOption(
       "nu_inc",
-      "Incrememt of the penalty parameter.",
+      "Increment of the penalty parameter.",
       0.0, true, 1e-4,
       "");
     roptions->AddBoundedNumberOption(

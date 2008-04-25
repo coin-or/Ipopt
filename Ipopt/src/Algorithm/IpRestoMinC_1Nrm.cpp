@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -71,6 +71,9 @@ namespace Ipopt
     options.GetBoolValue("expect_infeasible_problem",
                          expect_infeasible_problem_,
                          prefix);
+
+    // This is registered in OptimalityErrorConvergenceCheck
+    options.GetNumericValue("constr_viol_tol", constr_viol_tol_, prefix);
 
     // Avoid that the restoration phase is trigged by user option in
     // first iteration of the restoration phase
@@ -249,10 +252,14 @@ namespace Ipopt
       // If this is a square problem, we are done because a
       // sufficiently feasible point has been found
       if (square_problem) {
-        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                       "Recursive restoration phase algorithm termined successfully for square problem.\n");
-        IpData().AcceptTrialPoint();
-        THROW_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED, "Restoration phase converged to sufficiently feasible point of original square problem.");
+	Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
+	
+	if (constr_viol <= constr_viol_tol_) {
+	  Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+			 "Recursive restoration phase algorithm termined successfully for square problem.\n");
+	  IpData().AcceptTrialPoint();
+	  THROW_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED, "Restoration phase converged to sufficiently feasible point of original square problem.");
+	}
       }
 
       // Update the bound multiplers, pretending that the entire

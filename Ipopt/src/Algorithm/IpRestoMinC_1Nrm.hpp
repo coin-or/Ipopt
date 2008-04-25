@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -89,6 +89,8 @@ namespace Ipopt
      *  This will request the to set kappa_resto to a small value for
      *  the first time the restoration phase is called.  (ToDo) */
     bool expect_infeasible_problem_;
+    /** Constraint violation tolerance */
+    Number constr_viol_tol_;
     //@}
 
     /** Counter for the number of time that PerformRestoration is

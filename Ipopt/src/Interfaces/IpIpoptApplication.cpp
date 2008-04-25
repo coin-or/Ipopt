@@ -238,6 +238,7 @@ namespace Ipopt
           options_to_print.push_back("slack_bound_push");
           options_to_print.push_back("bound_mult_init_val");
           options_to_print.push_back("constr_mult_init_max");
+          options_to_print.push_back("bound_mult_init_method");
           options_to_print.push_back("bound_mult_init_val");
 
           options_to_print.push_back("#Barrier Parameter");
@@ -310,6 +311,7 @@ namespace Ipopt
           options_to_print.push_back("derivative_test_perturbation");
           options_to_print.push_back("derivative_test_tol");
           options_to_print.push_back("derivative_test_print_all");
+          options_to_print.push_back("point_perturbation_radius");
 
           // Special linear solver
 #if defined(HAVE_MA27) || defined(HAVE_LINEARSOLVERLOADER)
@@ -754,6 +756,10 @@ namespace Ipopt
       else if (status == STOP_AT_ACCEPTABLE_POINT) {
         retValue = Solved_To_Acceptable_Level;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Solved To Acceptable Level.\n");
+      }
+      else if (status == FEASIBLE_POINT_FOUND) {
+	retValue = Feasible_Point_Found;
+	jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Feasible point for square problem found.\n");
       }
       else if (status == DIVERGING_ITERATES) {
         retValue = Diverging_Iterates;

@@ -595,6 +595,10 @@ namespace Ipopt
       message = "Solved To Acceptable Level.";
       solve_result_num = 1;
     }
+    else if (status == FEASIBLE_POINT_FOUND) {
+      message = "Found feasible point for square problem.";
+      solve_result_num = 2;
+    }
     else if (status == LOCAL_INFEASIBILITY) {
       message = "Converged to a locally infeasible point. Problem may be infeasible.";
       solve_result_num = 200;

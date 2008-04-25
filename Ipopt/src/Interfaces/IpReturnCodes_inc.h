@@ -1,5 +1,5 @@
 /***********************************************************************
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -21,6 +21,7 @@ enum ApplicationReturnStatus
     Search_Direction_Becomes_Too_Small=3,
     Diverging_Iterates=4,
     User_Requested_Stop=5,
+    Feasible_Point_Found=6,
 
     Maximum_Iterations_Exceeded=-1,
     Restoration_Failed=-2,
