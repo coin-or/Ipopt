@@ -2,6 +2,51 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2008-02-28 releases/3.3.5
+        - corrected links for Ipopt mailing list
+        - added missing Makefile.in for Matlab interface
+        - the addlibs* files are now installed in share/doc/coin/Ipopt
+          instead of lib
+        - updates in Matlab interface
+        - bugfix for ticket #56
+
+2007-12-27 releases/3.3.4
+        - headers are now installed in include/coin
+            (no longer in include/ipopt)
+        - default for dual_inf_tol is now 1 (instead of 1e-4)
+        - In matlab interface, here the text from Peter Carbonetto:
+          There have been several significant changes made to the MATLAB interface since the last release. The most important two changes are: 1) Following the "warm start" feature of IPOPT, you may pass in initial estimates for the Lagrange multipliers. 2) Callback routines for computing the objective, gradient (etc.) are now specified using function handles instead of strings. (Thanks to Marcus Brubaker at the University of Toronto for the initial suggestion.) 
+
+2007-09-25 releases/3.3.3
+        - minor changes, bug fixes
+
+2007-06-20 releases/3.3.1
+        synchronized with all changes in trunk; probably more than to be
+        remembered.  In the following a few:
+        - support for Mumps linear solver (contributed by Damian Hocking)
+        - --print-options flag for ipopt ASL solver executable to see all
+          Ipopt options (available through ipopt.opt file)
+        - added Matlab interface (contributed by Peter Carbonetto)
+        - added support for f2c compiler to compiler Fortran code with
+          MSVC++ compiler
+        - new MSVisualStudio support (now within MSVisualStudio project
+          and also with f2c)
+        - a number of small changes/bug fixes/improvements
+        - small change in interface (e.g., FinalizeSolution method)
+
+2007-04-24 releases/3.2.4
+        - updated download script for Blas to fit netlib's
+          recent changes
+        - using a more recent version of BuildTools
+
+2006-11-29 release/3.2.3
+        - updated download script for Lapack to fit to netlib's
+          recent changes
+
+2006-10-11 stable/3.2 r795
+        - Bugfix in L-BFGS update
+        - fix in configure with detection of sizeof(int *) on Cygwin
+
 2006-07-14 - version 3.2.1 - dev release number 764
         - Bugfix in least square multiplier estimate.
           It mainly showed up in LBFGS with restoration phase as seg fault
