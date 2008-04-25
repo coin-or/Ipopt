@@ -2,6 +2,24 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2008-04-25 releases/3.4.0
+        - added support to dynamically load HSL or Pardiso:
+          If Ipopt has been compiled without some HSL or Pardiso solver,
+          it can now load those solvers from a shared library at runtime
+          without recompilation.  This will make ditribution of binaries
+          easier.  Does not work on all platforms yet.
+        - several bugfixes
+        - ensured compilation of MSVS project files (v8 and v9)
+        - new special return code for square problems
+          (Feasible_Point_Found returned if dual inf not small)
+        - new initialization option for bound multipliers
+          (see option bound_mult_init_method)
+        - added simple penalty function line search option
+          (line_search_method=penalty) - not guaranteed to converge, see
+          Ipopt implementation paper (in MathProg)
+        - some very basic method to approximate constraint Jacobian by
+          finite differences (not efficient, but will hopefully be extended)
+
 2008-02-28 releases/3.3.5
         - corrected links for Ipopt mailing list
         - added missing Makefile.in for Matlab interface
