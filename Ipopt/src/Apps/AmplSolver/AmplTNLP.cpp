@@ -85,7 +85,7 @@ namespace Ipopt
     FILE*nl = NULL;
     if (nl_file_content) {
       nl = jac0dim(const_cast<char*>(nl_file_content->c_str()),
-                   -nl_file_content->length());
+                   -(ftnlen)nl_file_content->length());
     }
     else {
       if (!stub) {
@@ -1353,7 +1353,7 @@ namespace Ipopt
   AmplSuffixHandler::~AmplSuffixHandler()
   {
     if (suftab_) {
-      Index n = suffix_ids_.size();
+      Index n = (Index)suffix_ids_.size();
       for (Index i=0; i<n; i++) {
         delete [] suftab_[i].name;
         suftab_[i].name = NULL;
@@ -1368,10 +1368,10 @@ namespace Ipopt
     DBG_ASSERT(asl);
     asl_ = asl;
 
-    Index n = suffix_ids_.size();
+    Index n = (Index)suffix_ids_.size();
     suftab_ = new SufDecl[n];
     for (Index i=0; i<n; i++) {
-      Index id_len = strlen(suffix_ids_[i].c_str());
+      Index id_len = (Index)strlen(suffix_ids_[i].c_str());
       suftab_[i].name = new char[id_len + 1];
       strcpy(suftab_[i].name, suffix_ids_[i].c_str());
 

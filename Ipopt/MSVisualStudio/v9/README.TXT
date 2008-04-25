@@ -17,25 +17,28 @@ Here are the steps:
 
    and extract it in
 
-   BASDIR\Ipopt\MSVisualStudio\v8
+   BASDIR\Ipopt\MSVisualStudio\v9
 
    (don't specify a "libf2c" subdirectory in the path)
 
    so that you will see the file
 
-   BASDIR\Ipopt\MSVisualStudio\v8\libf2c\makefile.vc
+   BASDIR\Ipopt\MSVisualStudio\v9\libf2c\makefile.vc
 
 2. Open a Visual Studio DOS prompt and go into the directory
 
-   cd BASDIR\Ipopt\MSVisualStudio\v8\libf2c\
+   cd BASDIR\Ipopt\MSVisualStudio\v9\libf2c\
 
    Here, type
 
    nmake -f makefile.vc all
 
-   (If you see a problem related to the comptry.bat file, edit the
+   If you see a problem related to the comptry.bat file, edit the
    file makefile.vc and just delete the one occurange of
-   'comptry.bat')
+   'comptry.bat'
+
+   If you obtain an error that unistd.h is not found, edit the file
+   'makefile.vc' and add "-DNO_ISATTY" to CFLAGS.
 
 3. Download the f2c.exe executable and put it somewhere into your path
    (e.g., C:\Windows)
@@ -51,7 +54,7 @@ Here are the steps:
 
 5. In a DOS window, go to the directory
 
-   BASDIR\Ipopt\MSVisualStudio\v8\libCoinBlas
+   BASDIR\Ipopt\MSVisualStudio\v9\libCoinBlas
 
    and run the batch file
 
@@ -61,9 +64,9 @@ Here are the steps:
 
 6. Repeat step 5 in the directories
 
-   BASDIR\Ipopt\MSVisualStudio\v8\libCoinLapack
+   BASDIR\Ipopt\MSVisualStudio\v9\libCoinLapack
 
-   BASDIR\Ipopt\MSVisualStudio\v8\libCoinHSL
+   BASDIR\Ipopt\MSVisualStudio\v9\libCoinHSL
 
    using the convert_*.bat files you find there.
 
@@ -87,7 +90,7 @@ Here are the steps:
 
 8. Done.  Now you can open the solution file
 
-   BASDIR\Ipopt\MSVisualStudio\v8\Ipopt.sln
+   BASDIR\Ipopt\MSVisualStudio\v9\Ipopt.sln
 
    This will compile the Ipopt library, and has a C++ example.  If you
    got the ASL source code, you can also compile the ipopt.exe AMPL
