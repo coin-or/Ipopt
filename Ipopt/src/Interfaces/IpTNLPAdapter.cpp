@@ -1670,7 +1670,7 @@ namespace Ipopt
       return;
     }
 
-    Index* pos_nonlin_vars;
+    Index* pos_nonlin_vars = NULL;
     if (num_nonlin_vars<0) {
       num_nonlin_vars = n_full_x_ - num_linear_variables_;
       pos_nonlin_vars = new Index[num_nonlin_vars];
