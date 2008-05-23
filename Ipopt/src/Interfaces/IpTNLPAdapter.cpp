@@ -351,8 +351,9 @@ namespace Ipopt
 
     // Get the full dimensions of the problem
     Index n_full_x, n_full_g, nz_full_jac_g, nz_full_h;
-    tnlp_->get_nlp_info(n_full_x, n_full_g, nz_full_jac_g,
-                        nz_full_h, index_style_);
+    bool retval = tnlp_->get_nlp_info(n_full_x, n_full_g, nz_full_jac_g,
+                                      nz_full_h, index_style_);
+    ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_nlp_info returned false");
     ASSERT_EXCEPTION(!warm_start_same_structure_ ||
                      (n_full_x == n_full_x_ &&
                       n_full_g == n_full_g_ &&
@@ -384,7 +385,8 @@ namespace Ipopt
       Number* x_u = new Number[n_full_x_];
       Number* g_l = new Number[n_full_g_];
       Number* g_u = new Number[n_full_g_];
-      tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+      bool retval = tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+      ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_bounds_info returned false in GetSpaces");
 
       //*********************************************************
       // Create the spaces and permutation spaces
@@ -1009,7 +1011,8 @@ namespace Ipopt
     Number* x_u = new Number[n_full_x_];
     Number* g_l = new Number[n_full_g_];
     Number* g_u = new Number[n_full_g_];
-    tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+    bool retval = tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+    ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_bounds_info returned false in GetBoundsInformation");
 
     if (fixed_variable_treatment_==MAKE_PARAMETER) {
       // Set the values of fixed variables
@@ -1626,7 +1629,8 @@ namespace Ipopt
       Number* x_u = new Number[n_full_x_];
       Number* g_l = new Number[n_full_g_];
       Number* g_u = new Number[n_full_g_];
-      tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+      bool retval = tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+      ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_bounds_info returned false in FinalizeSolution");
       for (Index i=0; i<n_full_g_; i++) {
         max_viol = Max(max_viol, full_g_[i]-g_u[i], g_l[i]-full_g_[i]);
       }
@@ -2092,7 +2096,8 @@ namespace Ipopt
     Index nz_jac_g; // number of nonzeros in constraint Jacobian
     Index nz_hess_lag; // number of nonzeros in Lagrangian Hessian
     TNLP::IndexStyleEnum index_style;
-    tnlp_->get_nlp_info(nx, ng, nz_jac_g, nz_hess_lag, index_style);
+    retval = tnlp_->get_nlp_info(nx, ng, nz_jac_g, nz_hess_lag, index_style);
+    ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_nlp_info returned false for derivative checker");
 
     // Obtain starting point as reference point at which derivative
     // test should be performed
@@ -2105,7 +2110,8 @@ namespace Ipopt
     Number* x_u = new Number[nx];
     Number* g_l = new Number[ng];
     Number* g_u = new Number[ng];
-    tnlp_->get_bounds_info(nx, x_l, x_u, ng, g_l, g_u);
+    retval = tnlp_->get_bounds_info(nx, x_l, x_u, ng, g_l, g_u);
+    ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_bounds_info returned false in derivative checker");
     IpResetRandom01();
     for (Index i=0; i<nx; i++) {
       const Number lower = Max(x_l[i], xref[i]-point_perturbation_radius_);
