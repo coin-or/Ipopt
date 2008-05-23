@@ -104,7 +104,7 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "acceptable_obj_change_tol",
       "\"Acceptance\" stopping criterion based on objective function change.",
-      0.0, false, 0.,
+      0.0, false, 1e20,
       "If the relative change of the objective function (scaled by "
       "Max(1,|f(x)|)) is less than this value, this part of the acceptable "
       "tolerance termination is satisfied; see also acceptable_tol.  This is "
