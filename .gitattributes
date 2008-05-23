@@ -21,7 +21,6 @@ Ipopt/MSVisualStudio/v9/Ipopt.suo -text
 Ipopt/MSVisualStudio/v9/IpoptAmplSolver/IpoptAmplSolver.vcproj -text
 Ipopt/MSVisualStudio/v9/README.TXT -text
 Ipopt/MSVisualStudio/v9/hs071_cpp/hs071_cpp.vcproj -text
-Ipopt/MSVisualStudio/v9/hs071_cpp/ipopt.out -text
 Ipopt/MSVisualStudio/v9/libCoinBlas/convert_blas.bat -text
 Ipopt/MSVisualStudio/v9/libCoinBlas/libCoinBlas.vcproj -text
 Ipopt/MSVisualStudio/v9/libCoinHSL/convert_hsl.bat -text
