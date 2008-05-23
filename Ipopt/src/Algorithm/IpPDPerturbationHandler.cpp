@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -313,7 +313,7 @@ namespace Ipopt
       }
     }
     else {
-      if (delta_c_curr_ > 0. || get_deltas_for_wrong_inertia_called_) {
+      if (delta_c_curr_ > 0.) { // || get_deltas_for_wrong_inertia_called_) {
         // If we already used a perturbation for the constraints, we do
         // the same thing as if we were encountering negative curvature
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,

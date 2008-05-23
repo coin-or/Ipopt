@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -121,12 +121,12 @@ namespace Ipopt
       return false;
     }
 
-    /** overload this method to return the starting point. The bools
-     *  init_x and init_lambda are both inputs and outputs. As inputs,
-     *  they indicate whether or not the algorithm wants you to
-     *  initialize x and lambda respectively. If, for some reason, the
-     *  algorithm wants you to initialize these and you cannot, set
-     *  the respective bool to false.
+    /** overload this method to return the starting point. The bool
+     *  variables indicate whether the algorithm wants you to
+     *  initialize x, z_L/z_u, and lambda, respectively.  If, for some
+     *  reason, the algorithm wants you to initialize these and you
+     *  cannot, return false, which will cause Ipopt to stop.  You
+     *  will have to run Ipopt with different options then.
      */
     virtual bool get_starting_point(Index n, bool init_x, Number* x,
                                     bool init_z, Number* z_L, Number* z_U,

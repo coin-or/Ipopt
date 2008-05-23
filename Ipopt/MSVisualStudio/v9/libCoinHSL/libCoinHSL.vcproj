@@ -65,7 +65,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/Ipopt.lib"
+				OutputFile="$(OutDir)/libCoinHSL.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -129,7 +129,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/Ipopt.lib"
+				OutputFile="$(OutDir)/libCoinHSL.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"

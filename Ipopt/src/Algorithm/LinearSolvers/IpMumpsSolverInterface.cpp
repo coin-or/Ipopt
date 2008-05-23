@@ -415,16 +415,9 @@ namespace Ipopt
 
     negevals_ = mumps_data->infog[11];
 
-    if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "In MumpsSolverInterface::Factorization: negevals_ = %d, but numberOfNegEVals = %d\n",
-                     negevals_, numberOfNegEVals);
-      return SYMSOLVER_WRONG_INERTIA;
-    }
-
     if (error == -13) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "MUMPS returned INFO(1) =%d - out or memory.\n",
+                     "MUMPS returned INFO(1) =%d - out or memory.\nIn some cases it helps to decrease the value of the option \"mumps_mem_percent\".\n",
                      error);
       return SYMSOLVER_FATAL_ERROR;
     }
@@ -433,6 +426,13 @@ namespace Ipopt
                      "MUMPS returned INFO(1) =%d MUMPS failure.\n",
                      error);
       return SYMSOLVER_FATAL_ERROR;
+    }
+
+    if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "In MumpsSolverInterface::Factorization: negevals_ = %d, but numberOfNegEVals = %d\n",
+                     negevals_, numberOfNegEVals);
+      return SYMSOLVER_WRONG_INERTIA;
     }
 
     return SYMSOLVER_SUCCESS;
