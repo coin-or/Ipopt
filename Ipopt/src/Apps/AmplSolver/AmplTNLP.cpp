@@ -1014,6 +1014,10 @@ namespace Ipopt
                                      "file_print_level",
                                      AmplOptionsList::Integer_Option,
                                      "Verbosity level for output file");
+    ampl_options_list->AddAmplOption("option_file_name",
+                                     "option_file_name",
+                                     AmplOptionsList::String_Option,
+                                     "File name of options file (default: ipopt.opt)");
 
     // Termination
     ampl_options_list->AddAmplOption("tol",
