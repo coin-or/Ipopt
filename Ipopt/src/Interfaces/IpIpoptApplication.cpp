@@ -109,6 +109,16 @@ namespace Ipopt
   ApplicationReturnStatus
   IpoptApplication::Initialize(std::string params_file /*= "ipopt.opt"*/)
   {
+    std::string option_file_name;
+    options_->GetStringValue("option_file_name", option_file_name, "");
+    if (option_file_name != "") {
+      if (params_file !="") {
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "Using option file \"%s\".\n\n",
+                       option_file_name.c_str());
+      }
+      params_file = option_file_name;
+    }
+
     std::ifstream is;
     if (params_file != "") {
       try {
@@ -202,6 +212,7 @@ namespace Ipopt
           options_to_print.push_back("print_options_documentation");
           options_to_print.push_back("output_file");
           options_to_print.push_back("file_print_level");
+          options_to_print.push_back("option_file_name");
 
           options_to_print.push_back("#Termination");
           options_to_print.push_back("tol");
@@ -492,6 +503,17 @@ namespace Ipopt
       "yes", "print all timing statistics",
       "If selected, the program will print the CPU usage (user time) for "
       "selected tasks.");
+
+    roptions->AddStringOption1(
+      "option_file_name",
+      "File name of options file (to overwrite default).",
+      "",
+      "*", "Any acceptable standard file name",
+      "By default, the name of the Ipopt options file is \"ipopt.opt\" - or "
+      "something else if specified in the IpoptApplication::Initialize call. "
+      "If this option is set by SetStringValue BEFORE the options file is "
+      "read, it specifies the name of the options file.  It does not make any "
+      "sense to specify this option within the options file.");
 
     roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption2(
