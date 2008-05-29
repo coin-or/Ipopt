@@ -173,7 +173,7 @@ bool MyNLP::eval_h(Index n, const Number* x, bool new_x,
     values[0] = -2.0 * lambda[0];
 
     // element at 2,2: grad^2_{x2,x2} L(x,lambda)
-    values[1] = -2.0;
+    values[1] = -2.0 * obj_factor;
 
     // Note: off-diagonal elements are zero for this problem
   }
