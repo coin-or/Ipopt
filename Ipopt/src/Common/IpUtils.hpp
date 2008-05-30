@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -103,6 +103,9 @@ namespace Ipopt
 
   /** Function resetting the random number generator */
   void IpResetRandom01();
+
+  /** Function for getting a string with the current wallclock time */
+  double WallclockTime();
 
 } //namespace Ipopt
 
