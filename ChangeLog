@@ -2,6 +2,13 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2008-05-30 releases/3.4.1
+        - some bug fixes
+        - deleted v9 MSVC files again (since v8 works fine for v9)
+        - print Ipopt version in default print level
+        - added option that allows to change name of options file
+          (option_file_name)
+
 2008-04-25 releases/3.4.0
         - added support to dynamically load HSL or Pardiso:
           If Ipopt has been compiled without some HSL or Pardiso solver,
