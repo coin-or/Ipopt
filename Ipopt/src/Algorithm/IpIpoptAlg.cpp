@@ -11,6 +11,12 @@
 #include "IpRestoPhase.hpp"
 #include "IpOrigIpoptNLP.hpp"
 
+#ifdef HAVE_CONFIG_H
+# include "config_ipopt.h"
+#else
+# define PACKAGE_VERSION IPOPT_VERSION
+#endif
+
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
@@ -189,6 +195,9 @@ namespace Ipopt
       message_printed = true;
     }
 
+    // Store which linear solver is chosen for later output
+    options.GetStringValue("linear_solver", linear_solver_, prefix);
+
     // Read the IpoptAlgorithm options
     // Initialize the Data object
     bool retvalue = IpData().Initialize(Jnlst(), *my_options, prefix);
@@ -276,6 +285,9 @@ namespace Ipopt
     if (!message_printed) {
       print_message(Jnlst());
     }
+
+    char vernum[] = PACKAGE_VERSION;
+    Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version %s, running with linear solver %s.\n\n", vernum, linear_solver_.c_str());
 
     try {
       IpData().TimingStats().InitializeIterates().Start();
