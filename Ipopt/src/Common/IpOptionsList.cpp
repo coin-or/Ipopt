@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -83,8 +83,8 @@ namespace Ipopt
 
       if (!option->IsValidStringSetting(value)) {
         if (IsValid(jnlst_)) {
-          std::string msg = "Setting: " + value;
-          msg += " is not a valid setting for Option: ";
+          std::string msg = "Setting: \"" + value;
+          msg += "\" is not a valid setting for Option: ";
           msg += tag;
           msg += ". Check the option documentation.\n";
           jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
@@ -166,9 +166,9 @@ namespace Ipopt
 
       if (!option->IsValidNumberSetting(value)) {
         if (IsValid(jnlst_)) {
-          std::string msg = "Setting: ";
+          std::string msg = "Setting: \"";
           msg += buffer;
-          msg += " is not a valid setting for Option: ";
+          msg += "\" is not a valid setting for Option: ";
           msg += tag;
           msg += ". Check the option documentation.\n";
           jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
@@ -241,9 +241,9 @@ namespace Ipopt
 
       if (!option->IsValidIntegerSetting(value)) {
         if (IsValid(jnlst_)) {
-          std::string msg = "Setting: ";
+          std::string msg = "Setting: \"";
           msg += buffer;
-          msg += " is not a valid setting for Option: ";
+          msg += "\" is not a valid setting for Option: ";
           msg += tag;
           msg += ". Check the option documentation.\n";
           jnlst_->Printf(J_ERROR, J_MAIN, msg.c_str());
@@ -611,9 +611,9 @@ namespace Ipopt
       if (IsValid(reg_options_)) {
         SmartPtr<const RegisteredOption> option = reg_options_->GetOption(tag);
         if (IsNull(option)) {
-          std::string msg = "Read Option: ";
+          std::string msg = "Read Option: \"";
           msg += tag;
-          msg += ". It is not a valid option. Check the list of available options.";
+          msg += "\". It is not a valid option. Check the list of available options.";
           THROW_EXCEPTION(OPTION_INVALID, msg);
         }
 
@@ -717,10 +717,21 @@ namespace Ipopt
       c=is.get();
     }
 
+    bool inside_quotes = (c=='"');
+    if (inside_quotes) {
+      if (is.eof()) return false; // eof after quotation symbol
+      c=is.get();
+    }
+
     // Now read the token
-    while (!is.eof() && !isspace(c)) {
+    while (!is.eof() && (inside_quotes || !isspace(c))) {
       token += c;
       c = is.get();
+      if (inside_quotes && (c=='"')) {
+        inside_quotes = false;
+        if (!is.eof())
+          c = is.get();
+      }
     }
 
     return (!is.eof());

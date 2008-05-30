@@ -60,6 +60,22 @@ $0 \le {\tt file\_print\_level } \le 12$
 and its default value is $5$.
 
 
+\paragraph{option\_file\_name:}\label{sec:option_file_name} File name of options file (to overwrite default). $\;$ \\
+ By default, the name of the Ipopt options file is
+"ipopt.opt" - or something else if specified in
+the IpoptApplication::Initialize call. If this
+option is set by SetStringValue BEFORE the
+options file is read, it specifies the name of
+the options file.  It does not make any sense to
+specify this option within the options file.
+The default value for this string option is "".
+\\ 
+Possible values:
+\begin{itemize}
+   \item *: Any acceptable standard file name
+\end{itemize}
+
+
 \subsection{Termination}
 
 \paragraph{tol:}\label{sec:tol} Desired convergence tolerance (relative). $\;$ \\
