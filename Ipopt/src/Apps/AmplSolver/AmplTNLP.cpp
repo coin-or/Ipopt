@@ -10,7 +10,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config_ipopt.h"
 #else
-# define PACKAGE_STRING "Ipopt 3.4stable"
+# define PACKAGE_VERSION IPOPT_VERSION
 #endif
 
 #include "AmplTNLP.hpp"
@@ -623,7 +623,7 @@ namespace Ipopt
     }
 
     // Write the .sol file
-    message = " \n" PACKAGE_STRING ": " + message;
+    message = " \nIpopt " PACKAGE_VERSION ": " + message;
     write_solution_file(message.c_str());
   }
 
@@ -1275,7 +1275,7 @@ namespace Ipopt
                                              (void**)&nerror_);
 
     static const char sname_default[] = "ipopt";
-    static const char bsname_default[] = PACKAGE_STRING;
+    static const char bsname_default[] = "Ipopt " PACKAGE_VERSION;
     static const char opname_default[] = "ipopt_options";
     const char* sname;
     const char* bsname;

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -178,6 +178,8 @@ namespace Ipopt
      *  means that a number of options are ignored, or have to be set
      *  (or are automatically set) to certain values. */
     bool mehrotra_algorithm_;
+    /** String speficying linear solver */
+    std::string linear_solver_;
     //@}
 
     /** @name auxilliary functions */

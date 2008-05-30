@@ -33,9 +33,12 @@ Here are the steps:
 
    nmake -f makefile.vc all
 
-   (If you see a problem related to the comptry.bat file, edit the
-   file makefile.vc and just delete the one occurange of
-   'comptry.bat')
+   If you see a problem related to the comptry.bat file, edit the
+   file makefile.vc and just delete the one occurange of the word
+   'comptry.bat'
+
+   If you obtain an error that unistd.h is not found, edit the file
+   'makefile.vc' and add "-DNO_ISATTY" to CFLAGS.
 
 3. Download the f2c.exe executable and put it somewhere into your path
    (e.g., C:\Windows)
