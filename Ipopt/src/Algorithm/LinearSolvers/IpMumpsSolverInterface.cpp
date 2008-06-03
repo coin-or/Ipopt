@@ -331,7 +331,11 @@ namespace Ipopt
 
     dump_matrix(mumps_data);
 
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "Calling MUMPS-1 for symbolic factorization at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
     dmumps_c(mumps_data);
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "Done with MUMPS-1 for symbolic factorization at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
     int error = mumps_data->info[0];
     const int& mumps_permuting_scaling_used = mumps_data->infog[22];
     const int& mumps_pivot_order_used = mumps_data->infog[6];
@@ -371,7 +375,11 @@ namespace Ipopt
     mumps_data->job = 2;//numerical factorization
 
     dump_matrix(mumps_data);
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "Calling MUMPS-2 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
     dmumps_c(mumps_data);
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "Done with MUMPS-2 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
     int error = mumps_data->info[0];
 
     //Check for errors
@@ -388,7 +396,11 @@ namespace Ipopt
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "%d.\n", mumps_data->icntl[13]);
 
         dump_matrix(mumps_data);
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "Calling MUMPS-2 (repeated) for numerical factorization at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
         dmumps_c(mumps_data);
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "Done with MUMPS-2 (repeated) for numerical factorization at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
         error = mumps_data->info[0];
         if (error != -8 && error != -9)
           break;
@@ -450,7 +462,11 @@ namespace Ipopt
       Index offset = i * mumps_data->n;
       mumps_data->rhs = &(rhs_vals[offset]);
       mumps_data->job = 3;//solve
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Calling MUMPS-3 for solve at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
       dmumps_c(mumps_data);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Done with MUMPS-3 for solve at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
       int error = mumps_data->info[0];
       if (error < 0) {
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
