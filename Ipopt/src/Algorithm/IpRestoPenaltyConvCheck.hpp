@@ -1,18 +1,17 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
-//
-//           A Waechter: moved most code to IpRestoConvCheck.cpp 2008-06-24
+// Authors:  Andreas Waechter            IBM    2008-06-24
+//             based on IpRestoFilterConvCheck.hpp
 
-#ifndef __IPRESTOFILTERCONVCHECK_HPP__
-#define __IPRESTOFILTERCONVCHECK_HPP__
+#ifndef __IPRESTOPENALTYCONVCHECK_HPP__
+#define __IPRESTOPENALTYCONVCHECK_HPP__
 
 #include "IpRestoConvCheck.hpp"
-#include "IpFilterLSAcceptor.hpp"
+#include "IpPenaltyLSAcceptor.hpp"
 
 namespace Ipopt
 {
@@ -21,21 +20,21 @@ namespace Ipopt
    *  is the original algorithm used the filter globalization
    *  mechanism.
    */
-  class RestoFilterConvergenceCheck :
+  class RestoPenaltyConvergenceCheck :
         public RestoConvergenceCheck
   {
   public:
     /**@name Constructors/Destructors */
     //@{
     /** Default Constructor */
-    RestoFilterConvergenceCheck();
+    RestoPenaltyConvergenceCheck();
 
     /** Default destructor */
-    virtual ~RestoFilterConvergenceCheck();
+    virtual ~RestoPenaltyConvergenceCheck();
     //@}
 
-    /** Set the object for the original filter line search. Here,
-     *  orig_filter_ls_acceptor must be the same strategy object to
+    /** Set the object for the original penalty line search. Here,
+     *  orig_penalty_ls_acceptor must be the same strategy object to
      *  which the restoration phase object with this object is given.
      *  This method must be called to finish the definition of the
      *  algorithm, before Initialize is called. */
@@ -57,10 +56,10 @@ namespace Ipopt
      * they will not be implicitly created/called. */
     //@{
     /** Copy Constructor */
-    RestoFilterConvergenceCheck(const RestoFilterConvergenceCheck&);
+    RestoPenaltyConvergenceCheck(const RestoPenaltyConvergenceCheck&);
 
     /** Overloaded Equals Operator */
-    void operator=(const RestoFilterConvergenceCheck&);
+    void operator=(const RestoPenaltyConvergenceCheck&);
     //@}
 
     /** Method for checking progress with original filter
@@ -74,7 +73,7 @@ namespace Ipopt
      *  with a SmartPtr, because have otherwise circular references
      *  that prevent the destructor of the line search object to be
      *  called! */
-    const FilterLSAcceptor* orig_filter_ls_acceptor_;
+    const PenaltyLSAcceptor* orig_penalty_ls_acceptor_;
   };
 
 } // namespace Ipopt

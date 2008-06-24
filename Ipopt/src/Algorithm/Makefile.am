@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2007 International Business Machines and others.
+# Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -63,6 +63,7 @@ libipoptalg_la_SOURCES = \
 	IpRestoIterateInitializer.cpp IpRestoIterateInitializer.hpp \
 	IpRestoIterationOutput.cpp IpRestoIterationOutput.hpp \
 	IpRestoMinC_1Nrm.cpp IpRestoMinC_1Nrm.hpp \
+	IpRestoPenaltyConvCheck.cpp IpRestoPenaltyConvCheck.hpp \
 	IpRestoPhase.hpp \
 	IpRestoRestoPhase.cpp IpRestoRestoPhase.hpp \
 	IpSearchDirCalculator.hpp \
@@ -135,11 +136,13 @@ ASTYLE_FILES = \
 	IpPDSystemSolver.hppbak \
 	IpProbingMuOracle.cppbak IpProbingMuOracle.hppbak \
 	IpQualityFunctionMuOracle.cppbak IpQualityFunctionMuOracle.hppbak \
+	IpRestoConvCheck.cppbak IpRestoConvCheck.hppbak \
 	IpRestoFilterConvCheck.cppbak IpRestoFilterConvCheck.hppbak \
 	IpRestoIpoptNLP.cppbak IpRestoIpoptNLP.hppbak \
 	IpRestoIterateInitializer.cppbak IpRestoIterateInitializer.hppbak \
 	IpRestoIterationOutput.cppbak IpRestoIterationOutput.hppbak \
 	IpRestoMinC_1Nrm.cppbak IpRestoMinC_1Nrm.hppbak \
+	IpRestoPenaltyConvCheck.cppbak IpRestoPenaltyConvCheck.hppbak \
 	IpRestoPhase.hppbak \
 	IpRestoRestoPhase.cppbak IpRestoRestoPhase.hppbak \
 	IpSearchDirCalculator.hppbak \

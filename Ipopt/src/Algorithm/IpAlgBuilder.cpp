@@ -41,6 +41,7 @@
 #include "IpRestoIterationOutput.hpp"
 #include "IpRestoFilterConvCheck.hpp"
 #include "IpRestoIterateInitializer.hpp"
+#include "IpRestoPenaltyConvCheck.hpp"
 #include "IpRestoRestoPhase.hpp"
 #include "IpTSymLinearSolver.hpp"
 #include "IpUserScaling.hpp"
@@ -411,11 +412,11 @@ namespace Ipopt
                                     AugSolver);
 
     SmartPtr<RestorationPhase> resto_phase;
-    SmartPtr<RestoFilterConvergenceCheck> resto_convCheck;
+    SmartPtr<RestoConvergenceCheck> resto_convCheck;
 
     // We only need a restoration phase object if we use the filter
     // line search
-    if (lsmethod=="filter") {
+    if (lsmethod=="filter" || lsmethod=="penalty") {
       // Solver for the restoration phase
       SmartPtr<AugSystemSolver> resto_AugSolver =
         new AugRestoSystemSolver(*AugSolver);
@@ -425,7 +426,12 @@ namespace Ipopt
         new PDFullSpaceSolver(*resto_AugSolver, *resto_pertHandler);
 
       // Convergence check in the restoration phase
-      resto_convCheck = new RestoFilterConvergenceCheck();
+      if (lsmethod=="filter") {
+        resto_convCheck = new RestoFilterConvergenceCheck();
+      }
+      else if (lsmethod=="penalty") {
+        resto_convCheck = new RestoPenaltyConvergenceCheck();
+      }
 
       // Line search method for the restoration phase
       SmartPtr<RestoRestorationPhase> resto_resto =
@@ -553,10 +559,8 @@ namespace Ipopt
 
     // Create the line search to be used by the main algorithm
     SmartPtr<BacktrackingLSAcceptor> LSacceptor;
-    SmartPtr<FilterLSAcceptor> FilterLSacceptor =
-      new FilterLSAcceptor(GetRawPtr(PDSolver));
     if (lsmethod=="filter") {
-      LSacceptor = GetRawPtr(FilterLSacceptor);
+      LSacceptor = new FilterLSAcceptor(GetRawPtr(PDSolver));
     }
     else if (lsmethod=="cg-penalty") {
       LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(PDSolver));
@@ -568,12 +572,12 @@ namespace Ipopt
       new BacktrackingLineSearch(LSacceptor,
                                  GetRawPtr(resto_phase), convCheck);
 
+    // The following cross reference is not good: We have to store a
+    // pointer to the lineSearch object in resto_convCheck as a
+    // non-SmartPtr to make sure that things are properly deleted when
+    // the IpoptAlgorithm return by the Builder is destructed.
     if (IsValid(resto_convCheck)) {
-      // The following cross reference is not good: We have to store a
-      // pointer to the lineSearch object in resto_convCheck as a
-      // non-SmartPtr to make sure that things are properly deleted when
-      // the IpoptAlgorithm return by the Builder is destructed.
-      resto_convCheck->SetOrigFilterLSAcceptor(*FilterLSacceptor);
+      resto_convCheck->SetOrigLSAcceptor(*LSacceptor);
     }
 
     // Create the mu update that will be used by the main algorithm
