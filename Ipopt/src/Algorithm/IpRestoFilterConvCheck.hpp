@@ -9,27 +9,18 @@
 #ifndef __IPRESTOFILTERCONVCHECK_HPP__
 #define __IPRESTOFILTERCONVCHECK_HPP__
 
-#include "IpOptErrorConvCheck.hpp"
+#include "IpRestoConvCheck.hpp"
 #include "IpFilterLSAcceptor.hpp"
 
 namespace Ipopt
 {
 
-  /** Convergence check for the restoration phase as called by the
-   *  filter.  This inherits from the OptimalityErrorConvergenceCheck
-   *  so that the method for the regular optimality error convergence
-   *  criterion can be checked as well.  In addition, this convergence
-   *  check returns the CONVERGED message, if the current iteration is
-   *  acceptable to the original filter.
-   *
-   *  Since this object needs to know about the original NLP, it also
-   *  inherits from RestoProblemCoupler, so that the restoration phase
-   *  object can call the SetObjs method to set the corresponding
-   *  pointers before the Initilize for the restoration phase
-   *  algorithm is called.
+  /** This is the implementation of the restoration convergence check
+   *  is the original algorithm used the filter globalization
+   *  mechanism.
    */
   class RestoFilterConvergenceCheck :
-        public OptimalityErrorConvergenceCheck
+        public RestoConvergenceCheck
   {
   public:
     /**@name Constructors/Destructors */
@@ -52,9 +43,6 @@ namespace Ipopt
     virtual bool InitializeImpl(const OptionsList& options,
                                 const std::string& prefix);
 
-    /** overloaded from ConvergenceCheck */
-    virtual ConvergenceStatus CheckConvergence(bool call_intermediate_callback = true);
-
     /** Methods used by IpoptType */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
@@ -73,24 +61,11 @@ namespace Ipopt
     void operator=(const RestoFilterConvergenceCheck&);
     //@}
 
-    /** @name Algorithmic parameters */
-    //@{
-    /** Fraction of required reduction in infeasibility before problem
-     *  is considered to be solved. */
-    Number kappa_resto_;
-    /** Maximum number of iterations in restoration phase */
-    Index maximum_iters_;
-    /** Maximum number of succesive iterations in restoration phase */
-    Index maximum_resto_iters_;
-    //@}
-
-    /** Flag indicating that this is the first call.  We don't want to
-     *  leave the restoration phase without taking at least one step,
-     *  so this flag is used to ensure this. */
-    bool first_resto_iter_;
-
-    /** Counter for successive iterations in restoration phase */
-    Index successive_resto_iter_;
+    /** Method for checking progress with original filter
+     *  globalization mechanism.  Overloaded from
+     *  RestoConvergenceCheck. */
+    virtual ConvergenceStatus
+    TestOrigProgress(Number orig_trial_barr, Number orig_trial_theta);
 
     /** Strategy object for the filter line search method for the
      *  original NLP.  CAREFUL: We must not hold on to this object

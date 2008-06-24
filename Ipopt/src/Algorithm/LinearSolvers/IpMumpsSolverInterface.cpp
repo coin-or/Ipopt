@@ -1,4 +1,4 @@
-// Copyright (C) 2006, 2007 Damien Hocking, KBC Advanced Technologies
+// Copyright (C) 2006, 2008 Damien Hocking, KBC Advanced Technologies
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //

@@ -57,6 +57,7 @@ libipoptalg_la_SOURCES = \
 	IpPenaltyLSAcceptor.cpp IpPenaltyLSAcceptor.hpp \
 	IpProbingMuOracle.cpp IpProbingMuOracle.hpp \
 	IpQualityFunctionMuOracle.cpp IpQualityFunctionMuOracle.hpp \
+	IpRestoConvCheck.cpp IpRestoConvCheck.hpp \
 	IpRestoFilterConvCheck.cpp IpRestoFilterConvCheck.hpp \
 	IpRestoIpoptNLP.cpp IpRestoIpoptNLP.hpp \
 	IpRestoIterateInitializer.cpp IpRestoIterateInitializer.hpp \
