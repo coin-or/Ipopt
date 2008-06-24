@@ -71,7 +71,7 @@ namespace Ipopt
                                 const std::string& prefix);
 
     /** Main solve method. */
-    SolverReturn Optimize();
+    SolverReturn Optimize(bool isResto = false);
 
     /** Methods for IpoptType */
     //@{

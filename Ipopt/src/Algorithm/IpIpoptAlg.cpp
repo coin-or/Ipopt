@@ -275,7 +275,7 @@ namespace Ipopt
     return true;
   }
 
-  SolverReturn IpoptAlgorithm::Optimize()
+  SolverReturn IpoptAlgorithm::Optimize(bool isResto /*= false */)
   {
     DBG_START_METH("IpoptAlgorithm::Optimize", dbg_verbosity);
 
@@ -286,8 +286,10 @@ namespace Ipopt
       print_message(Jnlst());
     }
 
-    char vernum[] = PACKAGE_VERSION;
-    Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version %s, running with linear solver %s.\n\n", vernum, linear_solver_.c_str());
+    if (!isResto) {
+      char vernum[] = PACKAGE_VERSION;
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version %s, running with linear solver %s.\n\n", vernum, linear_solver_.c_str());
+    }
 
     try {
       IpData().TimingStats().InitializeIterates().Start();

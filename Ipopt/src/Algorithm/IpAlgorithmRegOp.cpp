@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -31,6 +31,7 @@
 #include "IpPenaltyLSAcceptor.hpp"
 #include "IpProbingMuOracle.hpp"
 #include "IpQualityFunctionMuOracle.hpp"
+#include "IpRestoConvCheck.hpp"
 #include "IpRestoFilterConvCheck.hpp"
 #include "IpRestoIpoptNLP.hpp"
 #include "IpRestoMinC_1Nrm.hpp"
@@ -86,6 +87,8 @@ namespace Ipopt
     ProbingMuOracle::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Barrier Parameter Update");
     QualityFunctionMuOracle::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Restoration Phase");
+    RestoConvergenceCheck::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Restoration Phase");
     RestoFilterConvergenceCheck::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Restoration Phase");

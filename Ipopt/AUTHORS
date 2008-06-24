@@ -58,7 +58,7 @@ Contributors:
   src/contrib/CGPenalty/IpPiecewisePenalty.cpp
   src/contrib/CGPenalty/IpPiecewisePenalty.hpp
 
-- Stefan Vigerske (Humboldt University Berlin)
+- Stefan Vigerske (Humboldt University Berlini, GAMS)
   Dynamic loading of linear solver shared libraries
 
   src/contrib/LinearSolverLoader/HSLLoader.c
