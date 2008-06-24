@@ -13,6 +13,7 @@
 #define __IPRESTOCONVCHECK_HPP__
 
 #include "IpOptErrorConvCheck.hpp"
+#include "IpBacktrackingLSAcceptor.hpp"
 
 namespace Ipopt
 {
@@ -44,6 +45,9 @@ namespace Ipopt
 
     /** overloaded from ConvergenceCheck */
     virtual ConvergenceStatus CheckConvergence(bool call_intermediate_callback = true);
+
+    /** Method for setting the LS acceptor from the main algorithm */
+    virtual void SetOrigLSAcceptor(const BacktrackingLSAcceptor& orig_ls_acceptor) = 0;
 
     /** Methods used by IpoptType */
     //@{

@@ -31,10 +31,11 @@ namespace Ipopt
   }
 
   void
-  RestoFilterConvergenceCheck::SetOrigFilterLSAcceptor
-  (const FilterLSAcceptor& orig_filter_ls_acceptor)
+  RestoFilterConvergenceCheck::SetOrigLSAcceptor
+  (const BacktrackingLSAcceptor& orig_ls_acceptor)
   {
-    orig_filter_ls_acceptor_ = &orig_filter_ls_acceptor;
+    orig_filter_ls_acceptor_ = dynamic_cast<const FilterLSAcceptor*>(&orig_ls_acceptor);
+    DBG_ASSERT(orig_filter_ls_acceptor_);
   }
 
   void RestoFilterConvergenceCheck::RegisterOptions(SmartPtr<RegisteredOptions> roptions)

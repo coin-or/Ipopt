@@ -35,6 +35,7 @@
 #include "IpRestoFilterConvCheck.hpp"
 #include "IpRestoIpoptNLP.hpp"
 #include "IpRestoMinC_1Nrm.hpp"
+#include "IpRestoPenaltyConvCheck.hpp"
 #include "IpWarmStartIterateInitializer.hpp"
 
 
@@ -93,6 +94,8 @@ namespace Ipopt
     RestoFilterConvergenceCheck::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Restoration Phase");
     RestoIpoptNLP::RegisterOptions(roptions);
+    roptions->SetRegisteringCategory("Restoration Phase");
+    RestoPenaltyConvergenceCheck::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Restoration Phase");
     MinC_1NrmRestorationPhase::RegisterOptions(roptions);
     roptions->SetRegisteringCategory("Warm Start");
