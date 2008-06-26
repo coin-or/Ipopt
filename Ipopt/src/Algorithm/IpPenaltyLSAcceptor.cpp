@@ -135,6 +135,7 @@ namespace Ipopt
       reference_JacD_delta_ = ConstPtr(tmp);
 
       reference_pred_ = -1.;
+      resto_pred_ = -1;
 
       // update the penalty parameter
       last_nu_ = nu_;
@@ -173,6 +174,11 @@ namespace Ipopt
     Number pred = -alpha*reference_gradBarrTDelta_ - alpha*alpha/2.*reference_dWd_ +
       nu_*(reference_theta_ - theta2);
 
+    if (pred < 0.) {
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "  pred = %23.16e is negative.  Setting to zero.\n", pred);
+      pred = 0.;
+    }
+
     return pred;
   }
 
@@ -203,6 +209,7 @@ namespace Ipopt
     else {
       pred = reference_pred_;
     }
+    resto_pred_ = pred;
     Number ared = reference_barr_ + nu_*(reference_theta_) -
       (trial_barr + nu_*trial_theta);
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
@@ -378,8 +385,34 @@ namespace Ipopt
 
   void PenaltyLSAcceptor::PrepareRestoPhaseStart()
   {
-    throw;
   }
 
+  bool
+  PenaltyLSAcceptor::IsAcceptableToCurrentIterate(Number trial_barr,
+						  Number trial_theta,
+						  bool called_from_restoration /*=false*/) const
+  {
+    DBG_START_METH("PenaltyLSAcceptor::IsAcceptableToCurrentIterate",
+                   dbg_verbosity);
+    ASSERT_EXCEPTION(resto_pred_ >= 0., INTERNAL_ABORT,
+		     "resto_pred_ not set for check from restoration phase.");
+
+    Number ared = reference_barr_ + nu_*(reference_theta_) -
+      (trial_barr + nu_*trial_theta);
+    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+		   "  Checking Armijo Condition (for resto) with pred = %23.16e and ared = %23.16e\n",
+		   resto_pred_, ared);
+
+    bool accept;
+    if (Compare_le(eta_*resto_pred_, ared, reference_barr_ + nu_*(reference_theta_))) {
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Success...\n");
+      accept = true;
+    }
+    else {
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Failed...\n");
+      accept = false;
+    }
+    return accept;
+  }
 
 } // namespace Ipopt

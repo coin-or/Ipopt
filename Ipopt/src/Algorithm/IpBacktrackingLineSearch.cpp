@@ -675,7 +675,8 @@ namespace Ipopt
       // found or until step size becomes too small
 
       while (alpha_primal>alpha_min ||
-             n_steps == 0) { // always allow the "full" step if it is
+             n_steps == 0 ) {
+        // always allow the "full" step if it is
         // acceptable (even if alpha_primal<=alpha_min)
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "Starting checks for alpha (primal) = %8.2e\n",

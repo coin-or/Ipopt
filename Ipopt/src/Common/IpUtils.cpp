@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -42,6 +42,74 @@
 #  include <ieeefp.h>
 # endif
 #endif
+
+// The following code has been copied from CoinUtils' CoinTime
+
+/** 8< (BEGIN) ******************************** */
+
+#include <ctime>
+#if defined(_MSC_VER)
+// Turn off compiler warning about long names
+#  pragma warning(disable:4786)
+#else
+// MacOS-X and FreeBSD needs sys/time.h
+#if defined(__MACH__) || defined (__FreeBSD__)
+#include <sys/time.h>
+#endif
+#if !defined(__MSVCRT__)
+#include <sys/resource.h>
+#endif
+#endif
+
+//#############################################################################
+
+#if defined(_MSC_VER)
+
+#if 0 // change this to 1 if want to use the win32 API
+#include <windows.h>
+#ifdef small
+/* for some unfathomable reason (to me) rpcndr.h (pulled in by windows.h) does a
+   '#define small char' */
+#undef small
+#endif
+#define TWO_TO_THE_THIRTYTWO 4294967296.0
+#define DELTA_EPOCH_IN_SECS  11644473600.0
+inline double IpCoinGetTimeOfDay()
+{
+  FILETIME ft;
+
+  GetSystemTimeAsFileTime(&ft);
+  double t = ft.dwHighDateTime * TWO_TO_THE_THIRTYTWO + ft.dwLowDateTime;
+  t = t/10000000.0 - DELTA_EPOCH_IN_SECS;
+  return t;
+}
+#else
+#include <sys/types.h>
+#include <sys/timeb.h>
+inline double IpCoinGetTimeOfDay()
+{
+  struct _timeb timebuffer;
+#pragma warning(disable:4996)
+  _ftime( &timebuffer ); // C4996
+#pragma warning(default:4996)
+  return timebuffer.time + timebuffer.millitm/1000.0;
+}
+#endif
+
+#else
+
+#include <sys/time.h>
+
+inline double IpCoinGetTimeOfDay()
+{
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  return tv.tv_sec + tv.tv_usec/1000000.0;
+}
+
+#endif // _MSC_VER
+
+/** 8< (END) ******************************** */
 
 namespace Ipopt
 {
@@ -89,6 +157,18 @@ namespace Ipopt
 #  endif
 # endif
 #endif
+  }
+
+
+  static double Wallclock_firstCall_ = -1.;
+
+  double WallclockTime()
+  {
+    double callTime = IpCoinGetTimeOfDay();
+    if (Wallclock_firstCall_ == -1.) {
+      Wallclock_firstCall_ = callTime;
+    }
+    return callTime - Wallclock_firstCall_;
   }
 
 } //namespace Ipopt
