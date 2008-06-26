@@ -56,10 +56,7 @@ namespace Ipopt
      *  a filter. */
     virtual void PrepareRestoPhaseStart();
 
-    /** Method returning the lower bound on the trial step sizes.  If
-     *  the backtracking procedure encounters a trial step size below
-     *  this value after the first trial set, it swtiches to the
-     *  (soft) restoration phase. */
+    /** Method returning the lower bound on the trial step sizes. */
     virtual Number CalculateAlphaMin();
 
     /** Method for checking if current trial point is acceptable.
@@ -116,9 +113,6 @@ namespace Ipopt
     /** Checks if a trial point is acceptable to the current iterate */
     bool IsAcceptableToCurrentIterate(Number trial_barr, Number trial_theta,
                                       bool called_from_restoration=false) const;
-
-    /** Checks if a trial point is acceptable to the current filter */
-    bool IsAcceptableToCurrentFilter(Number trial_barr, Number trial_theta) const;
     //@}
 
     /** Methods for OptionsList */
@@ -203,6 +197,10 @@ namespace Ipopt
     /** Value of penalty parameter at beginning of the iteration. */
     Number last_nu_;
     //@}
+
+    /** When called from the restoration phase, this is the required
+     *  predicted reduction */
+    Number resto_pred_;
 
     /** @name Strategy objective that are used */
     //@{

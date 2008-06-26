@@ -261,9 +261,7 @@ namespace Ipopt
     if (ls_counter_ == 1) {
       IpData().CGPenData().SetPrimalStepSize(alpha_primal_test);
     }
-    if (jump_for_tiny_step_ == 1 /* &&
-                         (IpData().iter_count() <= 1 ||
-                         IpData().iter_count() == IpData().CGPenData().restor_iter()+1)*/) {
+    if (jump_for_tiny_step_ == 1) {
       jump_for_tiny_step_ = 0;
       Reset();
       IpData().Append_info_string("jump");

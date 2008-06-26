@@ -57,10 +57,7 @@ namespace Ipopt
      *  a filter. */
     virtual void PrepareRestoPhaseStart();
 
-    /** Method returning the lower bound on the trial step sizes.  If
-     *  the backtracking procedure encounters a trial step size below
-     *  this value after the first trial set, it swtiches to the
-     *  (soft) restoration phase. */
+    /** Method returning the lower bound on the trial step sizes. */
     virtual Number CalculateAlphaMin();
 
     /** Method for checking if current trial point is acceptable.
