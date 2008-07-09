@@ -179,7 +179,7 @@ namespace Ipopt
     IPARM_[14] = 0; // no restrictions on pivoting (ignored for
     // Bunch-Kaufman)
     IPARM_[15] = wsmp_ordering_option_; // ordering option
-    IPARM_[17] = 1; // use local minimum fill-in ordering
+    IPARM_[17] = 0; // use local minimum fill-in ordering
     IPARM_[19] = 1; // for ordering in IP methods?
     IPARM_[30] = 2; // want L D L^T factorization with diagonal
     // pivoting (Bunch/Kaufman)
