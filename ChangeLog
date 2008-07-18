@@ -2,6 +2,13 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2008-07-18 releases/3.4.2
+        - some bug fixes
+        - added wallclock time routine
+        - penalty function version does not longer crash if it
+          wants to go to restoration phase (not that this really helps
+          converence though)
+
 2008-05-30 releases/3.4.1
         - some bug fixes
         - deleted v9 MSVC files again (since v8 works fine for v9)
