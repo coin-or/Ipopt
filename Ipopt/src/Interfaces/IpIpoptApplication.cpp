@@ -250,7 +250,6 @@ namespace Ipopt
           options_to_print.push_back("bound_mult_init_val");
           options_to_print.push_back("constr_mult_init_max");
           options_to_print.push_back("bound_mult_init_method");
-          options_to_print.push_back("bound_mult_init_val");
 
           options_to_print.push_back("#Barrier Parameter");
           options_to_print.push_back("mehrotra_algorithm");
