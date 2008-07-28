@@ -2847,7 +2847,7 @@ rm -f conftest.err conftest.$ac_objext \
       *-linux-*)
         case "$CC" in
           icc* | */icc*)
-            coin_opt_cflags="-O3 -ip"
+            coin_opt_cflags="-O3 -ip -mp1"
             coin_add_cflags=""
             coin_dbg_cflags="-g"
             # Check if -i_dynamic is necessary (for new glibc library)
@@ -3696,7 +3696,7 @@ rm -f conftest.err conftest.$ac_objext \
       *-linux-*)
         case "$CXX" in
           icpc* | */icpc*)
-            coin_opt_cxxflags="-O3 -ip"
+            coin_opt_cxxflags="-O3 -ip -mp1"
             coin_add_cxxflags=""
             coin_dbg_cxxflags="-g"
             # Check if -i_dynamic is necessary (for new glibc library)
