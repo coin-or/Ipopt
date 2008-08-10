@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -45,6 +45,20 @@ namespace Ipopt
   {
     DBG_ASSERT(IsValid(diag_));
     return diag_->HasValidNumbers();
+  }
+
+  void DiagMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+  {
+    DBG_ASSERT(IsValid(diag_));
+    if (init) {
+      rows_norms.Copy(*diag_);
+      rows_norms.ElementWiseAbs();
+    }
+    else {
+      SmartPtr<Vector> v = diag_->MakeNewCopy();
+      v->ElementWiseAbs();
+      rows_norms.ElementWiseMax(*v);
+    }
   }
 
   void DiagMatrix::PrintImpl(const Journalist& jnlst,

@@ -26450,7 +26450,7 @@ LIBS_without_ADDLIBS="$LIBS"
 #        BLAS         #
 #######################
 
-if test "$PACKAGE_NAME" = ThirdPartyBlas || test "$PACKAGE_NAME" = ThirdPartyLapack; then
+if test "$PACKAGE_NAME" = ThirdPartyBlas || test "$PACKAGE_NAME" = ThirdPartyLapack || test "$PACKAGE_NAME" = ThirdPartyMumps; then
   coin_blasobjdir=../Blas
 else
   coin_blasobjdir=../ThirdParty/Blas

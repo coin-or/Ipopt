@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -294,6 +294,31 @@ namespace Ipopt
           }
         }
       }
+    }
+  }
+
+  void ExpansionMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+  {
+    DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));
+    Number* vec_vals=dense_vec->Values();
+
+    const Index* exp_pos = ExpandedPosIndices();
+
+    for (Index i=0; i<NCols(); i++) {
+      vec_vals[exp_pos[i]] = Max(vec_vals[exp_pos[i]], 1.);
+    }
+  }
+
+  void ExpansionMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
+  {
+    if (init) {
+      cols_norms.Set(1.);
+    }
+    else {
+      SmartPtr<Vector> v = cols_norms.MakeNew();
+      v->Set(1.);
+      cols_norms.ElementWiseMax(*v);
     }
   }
 

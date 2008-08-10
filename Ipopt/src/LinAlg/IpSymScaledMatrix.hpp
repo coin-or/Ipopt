@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -63,6 +63,8 @@ namespace Ipopt
      *  no Inf or Nan).  It is assumed here that the scaling factors
      *  are always valid numbers. */
     virtual bool HasValidNumbersImpl() const;
+
+    virtual void ComputeRowAMaxImpl(Vector& rows_norms, bool init) const;
 
     virtual void PrintImpl(const Journalist& jnlst,
                            EJournalLevel level,

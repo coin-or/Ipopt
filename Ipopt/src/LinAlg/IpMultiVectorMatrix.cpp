@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -233,6 +233,20 @@ namespace Ipopt
       }
     }
     return true;
+  }
+
+  void
+  MultiVectorMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+  {
+    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
+                    "MultiVectorMatrix::ComputeRowAMaxImpl not implemented");
+  }
+
+  void
+  MultiVectorMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
+  {
+    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
+                    "MultiVectorMatrix::ComputeColAMaxImpl not implemented");
   }
 
   void MultiVectorMatrix::PrintImpl(const Journalist& jnlst,
