@@ -112,6 +112,8 @@ namespace Ipopt
      *  no Inf or Nan). */
     virtual bool HasValidNumbersImpl() const;
 
+    virtual void ComputeRowAMaxImpl(Vector& rows_norms, bool init) const;
+
     virtual void PrintImpl(const Journalist& jnlst,
                            EJournalLevel level,
                            EJournalCategory category,

@@ -62,8 +62,7 @@ am_liblinalg_la_OBJECTS = IpBlas.lo IpCompoundMatrix.lo \
 	IpExpansionMatrix.lo IpIdentityMatrix.lo IpLapack.lo \
 	IpLowRankUpdateSymMatrix.lo IpMatrix.lo IpMultiVectorMatrix.lo \
 	IpScaledMatrix.lo IpSumMatrix.lo IpSumSymMatrix.lo \
-	IpSymMatrix.lo IpSymScaledMatrix.lo IpVector.lo \
-	IpZeroMatrix.lo
+	IpSymScaledMatrix.lo IpVector.lo IpZeroMatrix.lo
 liblinalg_la_OBJECTS = $(am_liblinalg_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -324,7 +323,7 @@ liblinalg_la_SOURCES = \
 	IpScaledMatrix.cpp IpScaledMatrix.hpp \
 	IpSumMatrix.cpp IpSumMatrix.hpp \
 	IpSumSymMatrix.cpp IpSumSymMatrix.hpp \
-	IpSymMatrix.cpp IpSymMatrix.hpp \
+	IpSymMatrix.hpp \
 	IpSymScaledMatrix.cpp IpSymScaledMatrix.hpp \
 	IpVector.cpp IpVector.hpp \
 	IpZeroMatrix.cpp IpZeroMatrix.hpp
@@ -354,7 +353,7 @@ ASTYLE_FILES = IpBlas.cppbak IpBlas.hppbak \
 	IpScaledMatrix.cppbak IpScaledMatrix.hppbak \
 	IpSumMatrix.cppbak IpSumMatrix.hppbak \
 	IpSumSymMatrix.cppbak IpSumSymMatrix.hppbak \
-	IpSymMatrix.cppbak IpSymMatrix.hppbak \
+	IpSymMatrix.hppbak \
 	IpSymScaledMatrix.cppbak IpSymScaledMatrix.hppbak \
 	IpVector.cppbak IpVector.hppbak \
 	IpZeroMatrix.cppbak IpZeroMatrix.hppbak
@@ -429,7 +428,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpScaledMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSumMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSumSymMatrix.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSymMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSymScaledMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpVector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpZeroMatrix.Plo@am__quote@

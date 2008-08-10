@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,6 +9,16 @@
 #include "IpDenseGenMatrix.hpp"
 #include "IpBlas.hpp"
 #include "IpLapack.hpp"
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -256,6 +266,41 @@ namespace Ipopt
     bool trans = true;
     IpBlasDgemv(trans, NRows(), NCols(), alpha, values_, NRows(),
                 dense_x->Values(), 1, beta, dense_y->Values(), 1);
+  }
+
+  void DenseGenMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+  {
+    //  A few sanity checks
+    DBG_ASSERT(initialized_);
+
+    DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));
+    Number* vec_vals=dense_vec->Values();
+
+    const double* vals = values_;
+    for (Index irow=0; irow<NRows(); irow++) {
+      for (Index jcol=0; jcol<NCols(); jcol++) {
+        vec_vals[irow] = Max(vec_vals[irow], fabs(*vals));
+        vals++;
+      }
+    }
+  }
+
+  void DenseGenMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
+  {
+    //  A few sanity checks
+    DBG_ASSERT(initialized_);
+
+    DenseVector* dense_vec = static_cast<DenseVector*>(&cols_norms);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&cols_norms));
+    Number* vec_vals=dense_vec->Values();
+
+    const double* vals = values_;
+    for (Index jcol=0; jcol<NCols(); jcol++) {
+      Index i = IpBlasIdamax(NRows(), vals, 1);
+      vec_vals[jcol] = Max(vec_vals[jcol], fabs(vals[i]));
+      vals += NRows();
+    }
   }
 
   bool DenseGenMatrix::HasValidNumbersImpl() const

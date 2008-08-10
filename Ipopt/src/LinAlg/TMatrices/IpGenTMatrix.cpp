@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,6 +9,16 @@
 #include "IpGenTMatrix.hpp"
 #include "IpDenseVector.hpp"
 #include "IpBlas.hpp"
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -66,18 +76,20 @@ namespace Ipopt
       const Index*  jcols=Jcols();
       const Number* val=values_;
       Number* yvals=dense_y->Values();
+      yvals--;
       if (dense_x->IsHomogeneous()) {
         Number as = alpha * dense_x->Scalar();
         for (Index i=0; i<Nonzeros(); i++) {
-          yvals[*irows-1] += as * (*val);
+          yvals[*irows] += as * (*val);
           val++;
           irows++;
         }
       }
       else {
         const Number* xvals=dense_x->Values();
+        xvals--;
         for (Index i=0; i<Nonzeros(); i++) {
-          yvals[*irows-1] += alpha* (*val) * xvals[*jcols-1];
+          yvals[*irows] += alpha* (*val) * xvals[*jcols];
           val++;
           irows++;
           jcols++;
@@ -113,19 +125,21 @@ namespace Ipopt
       const Index*  jcols=Jcols();
       const Number* val=values_;
       Number* yvals=dense_y->Values();
+      yvals--;
 
       if (dense_x->IsHomogeneous()) {
         Number as = alpha * dense_x->Scalar();
         for (Index i=0; i<Nonzeros(); i++) {
-          yvals[*jcols-1] += as * (*val);
+          yvals[*jcols] += as * (*val);
           val++;
           jcols++;
         }
       }
       else {
         const Number* xvals=dense_x->Values();
+        xvals--;
         for (Index i=0; i<Nonzeros(); i++) {
-          yvals[*jcols-1] += alpha* (*val) * xvals[*irows-1];
+          yvals[*jcols] += alpha* (*val) * xvals[*irows];
           val++;
           irows++;
           jcols++;
@@ -139,6 +153,40 @@ namespace Ipopt
     DBG_ASSERT(initialized_);
     Number sum = IpBlasDasum(Nonzeros(), values_, 1);
     return IsFiniteNumber(sum);
+  }
+
+  void GenTMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+  {
+    DBG_ASSERT(initialized_);
+
+    DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));
+
+    const Index* irows=Irows();
+    const Number* val=values_;
+    Number* vec_vals=dense_vec->Values();
+    vec_vals--;
+
+    for (Index i=0; i<Nonzeros(); i++) {
+      vec_vals[irows[i]] = Max(vec_vals[irows[i]], fabs(val[i]));
+    }
+  }
+
+  void GenTMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
+  {
+    DBG_ASSERT(initialized_);
+
+    DenseVector* dense_vec = static_cast<DenseVector*>(&cols_norms);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&cols_norms));
+
+    const Index* jcols=Jcols();
+    const Number* val=values_;
+    Number* vec_vals=dense_vec->Values();
+    vec_vals--;
+
+    for (Index i=0; i<Nonzeros(); i++) {
+      vec_vals[jcols[i]] = Max(vec_vals[jcols[i]], fabs(val[i]));
+    }
   }
 
   void GenTMatrix::PrintImpl(const Journalist& jnlst,

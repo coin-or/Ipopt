@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -14,11 +14,16 @@
 #include "IpCachedResults.hpp"
 #include "IpSmartPtr.hpp"
 #include "IpJournalist.hpp"
+#include "IpException.hpp"
 
 #include <vector>
 
 namespace Ipopt
 {
+  /** Exception that can be used to flag unimplemented linear algebra
+   *  methods */
+  DECLARE_STD_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED);
+
   /* forward declarations */
   class VectorSpace;
 

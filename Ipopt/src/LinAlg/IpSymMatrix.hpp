@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -43,15 +43,26 @@ namespace Ipopt
     SmartPtr<const SymMatrixSpace> OwnerSymMatrixSpace() const;
 
   protected:
-    /** @name Overloaded methods from Matrix.  Since the matrix is
+    /** @name Overloaded methods from Matrix. */
+    //@{
+    /** Since the matrix is
      *  symmetric, it is only necessary to implement the
      *  MultVectorImpl method in a class that inherits from this base
      *  class.  If the TransMultVectorImpl is called, this base class
-     *  automatically calls MultVectorImpl instead.
-     */
-    //@{
+     *  automatically calls MultVectorImpl instead. */
     virtual void TransMultVectorImpl(Number alpha, const Vector& x, Number beta,
-                                     Vector& y) const;
+                                     Vector& y) const
+    {
+      // Since this matrix is symetric, this is the same operation as
+      // MultVector
+      MultVector(alpha, x, beta, y);
+    }
+    /** Since the matrix is symmetric, the row and column max norms
+     *  are identical */
+    virtual void ComputeColAMaxImpl(Vector& cols_norms, bool init) const
+    {
+      ComputeRowAMaxImpl(cols_norms, init);
+    }
     //@}
 
   private:

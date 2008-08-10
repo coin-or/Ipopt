@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -132,6 +132,20 @@ namespace Ipopt
       }
     }
     return true;
+  }
+
+  void
+  LowRankUpdateSymMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+  {
+    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
+                    "LowRankUpdateSymMatrix::ComputeRowAMaxImpl not implemented");
+  }
+
+  void
+  LowRankUpdateSymMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
+  {
+    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
+                    "LowRankUpdateSymMatrix::ComputeColAMaxImpl not implemented");
   }
 
   void LowRankUpdateSymMatrix::PrintImpl(const Journalist& jnlst,
