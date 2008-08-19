@@ -862,6 +862,10 @@ namespace Ipopt
     if (IsValid(p2ip_data->curr()) && IsValid(p2ip_data->curr()->x())) {
       SmartPtr<const Vector> c;
       SmartPtr<const Vector> d;
+      SmartPtr<const Vector> zL;
+      SmartPtr<const Vector> zU;
+      SmartPtr<const Vector> yc;
+      SmartPtr<const Vector> yd;
       Number obj = 0.;
 
       switch (status) {
@@ -878,27 +882,33 @@ namespace Ipopt
         c = p2ip_cq->curr_c();
         d = p2ip_cq->curr_d();
         obj = p2ip_cq->curr_f();
+        zL = p2ip_data->curr()->z_L();
+        zU = p2ip_data->curr()->z_U();
+        yc = p2ip_data->curr()->y_c();
+        yd = p2ip_data->curr()->y_d();
         break;
       default: {
           SmartPtr<Vector> tmp = p2ip_data->curr()->y_c()->MakeNew();
           tmp->Set(0.);
           c = ConstPtr(tmp);
+          yc = ConstPtr(tmp);
           tmp = p2ip_data->curr()->y_d()->MakeNew();
           tmp->Set(0.);
           d = ConstPtr(tmp);
+          yd = ConstPtr(tmp);
+          tmp = p2ip_data->curr()->z_L()->MakeNew();
+          tmp->Set(0.);
+          zL = ConstPtr(tmp);
+          tmp = p2ip_data->curr()->z_U()->MakeNew();
+          tmp->Set(0.);
+          zU = ConstPtr(tmp);
         }
       }
 
       p2ip_nlp->FinalizeSolution(status,
                                  *p2ip_data->curr()->x(),
-                                 *p2ip_data->curr()->z_L(),
-                                 *p2ip_data->curr()->z_U(),
-                                 *c, *d,
-                                 *p2ip_data->curr()->y_c(),
-                                 *p2ip_data->curr()->y_d(),
-                                 obj,
-                                 p2ip_data,
-                                 p2ip_cq);
+                                 *zL, *zU, *c, *d, *yc, *yd,
+                                 obj, p2ip_data, p2ip_cq);
     }
 
     jnlst_->FlushBuffer();
