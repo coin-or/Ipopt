@@ -630,20 +630,22 @@ namespace Ipopt
     // Reset Timing statistics
     ip_data_->TimingStats().ResetTimes();
 
+    // Get the pointers to the real objects (need to do it that
+    // awkwardly since otherwise we would have to include so many
+    // things in IpoptApplication, which a user would have to
+    // include, too (SmartPtr doesn't work otherwise on AIX)
+    IpoptAlgorithm* p2alg = static_cast<IpoptAlgorithm*> (GetRawPtr(alg_));
+    DBG_ASSERT(dynamic_cast<IpoptAlgorithm*> (GetRawPtr(alg_)));
+    IpoptData* p2ip_data = static_cast<IpoptData*> (GetRawPtr(ip_data_));
+    DBG_ASSERT(dynamic_cast<IpoptData*> (GetRawPtr(ip_data_)));
+    OrigIpoptNLP* p2ip_nlp = static_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_));
+    DBG_ASSERT(dynamic_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_)));
+    IpoptCalculatedQuantities* p2ip_cq = static_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_));
+    DBG_ASSERT(dynamic_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_)));
+
     ApplicationReturnStatus retValue = Internal_Error;
+    SolverReturn status = INTERNAL_ERROR;
     try {
-      // Get the pointers to the real objects (need to do it that
-      // awkwardly since otherwise we would have to include so many
-      // things in IpoptApplication, which a user would have to
-      // include, too (SmartPtr doesn't work otherwise on AIX)
-      IpoptAlgorithm* p2alg = static_cast<IpoptAlgorithm*> (GetRawPtr(alg_));
-      DBG_ASSERT(dynamic_cast<IpoptAlgorithm*> (GetRawPtr(alg_)));
-      IpoptData* p2ip_data = static_cast<IpoptData*> (GetRawPtr(ip_data_));
-      DBG_ASSERT(dynamic_cast<IpoptData*> (GetRawPtr(ip_data_)));
-      OrigIpoptNLP* p2ip_nlp = static_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_));
-      DBG_ASSERT(dynamic_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_)));
-      IpoptCalculatedQuantities* p2ip_cq = static_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_));
-      DBG_ASSERT(dynamic_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_)));
 
       // Set up the algorithm
       p2alg->Initialize(*jnlst_, *p2ip_nlp, *p2ip_data, *p2ip_cq,
@@ -671,7 +673,7 @@ namespace Ipopt
       }
 
       // Run the algorithm
-      SolverReturn status = p2alg->Optimize();
+      status = p2alg->Optimize();
 
       // Since all the output below doesn't make any sense in this
       // case, we rethrow the TOO_FEW_DOF exception here
@@ -811,16 +813,6 @@ namespace Ipopt
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
         return retValue;
       }
-      p2ip_nlp->FinalizeSolution(status,
-                                 *p2ip_data->curr()->x(),
-                                 *p2ip_data->curr()->z_L(),
-                                 *p2ip_data->curr()->z_U(),
-                                 *p2ip_cq->curr_c(), *p2ip_cq->curr_d(),
-                                 *p2ip_data->curr()->y_c(),
-                                 *p2ip_data->curr()->y_d(),
-                                 p2ip_cq->curr_f(),
-                                 p2ip_data,
-                                 p2ip_cq);
 
       if (status!=INVALID_NUMBER_DETECTED) {
         // Create a SolveStatistics object
@@ -831,21 +823,25 @@ namespace Ipopt
       exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has too few degrees of freedom.\n");
       retValue = Not_Enough_Degrees_Of_Freedom;
+      status = TOO_FEW_DEGREES_OF_FREEDOM;
     }
     catch (OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Invalid option encountered.\n");
       retValue = Invalid_Option;
+      status = INVALID_OPTION;
     }
     catch (NO_FREE_VARIABLES_BUT_FEASIBLE& exc) {
       exc.ReportException(*jnlst_, J_MOREDETAILED);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Optimal Solution Found.\n");
       retValue = Solve_Succeeded;
+      status = SUCCESS;
     }
     catch (NO_FREE_VARIABLES_AND_INFEASIBLE& exc) {
       exc.ReportException(*jnlst_, J_MOREDETAILED);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has only fixed variables and constraints are infeasible.\n");
       retValue = Infeasible_Problem_Detected;
+      status = LOCAL_INFEASIBILITY;
     }
     catch (IpoptException& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
@@ -855,11 +851,54 @@ namespace Ipopt
     catch (std::bad_alloc) {
       retValue = Insufficient_Memory;
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
+      status = OUT_OF_MEMORY;
     }
     catch (...) {
       IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
       exc.ReportException(*jnlst_, J_ERROR);
       retValue = NonIpopt_Exception_Thrown;
+    }
+
+    if (IsValid(p2ip_data->curr()) && IsValid(p2ip_data->curr()->x())) {
+      SmartPtr<const Vector> c;
+      SmartPtr<const Vector> d;
+      Number obj = 0.;
+
+      switch (status) {
+      case SUCCESS:
+      case MAXITER_EXCEEDED:
+      case STOP_AT_TINY_STEP:
+      case STOP_AT_ACCEPTABLE_POINT:
+      case LOCAL_INFEASIBILITY:
+      case USER_REQUESTED_STOP:
+      case FEASIBLE_POINT_FOUND:
+      case DIVERGING_ITERATES:
+      case RESTORATION_FAILURE:
+      case ERROR_IN_STEP_COMPUTATION:
+        c = p2ip_cq->curr_c();
+        d = p2ip_cq->curr_d();
+        obj = p2ip_cq->curr_f();
+        break;
+      default: {
+          SmartPtr<Vector> tmp = p2ip_data->curr()->y_c()->MakeNew();
+          tmp->Set(0.);
+          c = ConstPtr(tmp);
+          tmp = p2ip_data->curr()->y_d()->MakeNew();
+          tmp->Set(0.);
+          d = ConstPtr(tmp);
+        }
+      }
+
+      p2ip_nlp->FinalizeSolution(status,
+                                 *p2ip_data->curr()->x(),
+                                 *p2ip_data->curr()->z_L(),
+                                 *p2ip_data->curr()->z_U(),
+                                 *c, *d,
+                                 *p2ip_data->curr()->y_c(),
+                                 *p2ip_data->curr()->y_d(),
+                                 obj,
+                                 p2ip_data,
+                                 p2ip_cq);
     }
 
     jnlst_->FlushBuffer();

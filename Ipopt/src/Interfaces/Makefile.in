@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, 2007 International Business Machines and others.
+# Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -67,7 +67,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
 	IpSolveStatistics.lo IpStdCInterface.lo IpStdFInterface.lo \
-	IpStdInterfaceTNLP.lo IpTNLPAdapter.lo
+	IpStdInterfaceTNLP.lo IpTNLPAdapter.lo IpTNLPReducer.lo
 libipopt_la_OBJECTS = $(am_libipopt_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -304,7 +304,8 @@ includeipopt_HEADERS = \
 	IpReturnCodes.inc \
 	IpSolveStatistics.hpp \
 	IpStdCInterface.h \
-	IpTNLP.hpp
+	IpTNLP.hpp \
+	IpTNLPReducer.hpp
 
 lib_LTLIBRARIES = libipopt.la
 libipopt_la_SOURCES = \
@@ -319,7 +320,8 @@ libipopt_la_SOURCES = \
 	IpStdFInterface.c \
 	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \
 	IpTNLP.hpp \
-	IpTNLPAdapter.cpp IpTNLPAdapter.hpp
+	IpTNLPAdapter.cpp IpTNLPAdapter.hpp \
+	IpTNLPReducer.cpp IpTNLPReducer.hpp
 
 libipopt_la_LIBADD = $(IPALLLIBS)
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
@@ -344,7 +346,8 @@ ASTYLE_FILES = \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
 	IpTNLP.hppbak \
-	IpTNLPAdapter.cppbak IpTNLPAdapter.hppbak
+	IpTNLPAdapter.cppbak IpTNLPAdapter.hppbak \
+	IpTNLPReducer.cppbak IpTNLPReducer.hppbak
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
@@ -428,6 +431,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdFInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdInterfaceTNLP.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTNLPAdapter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTNLPReducer.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

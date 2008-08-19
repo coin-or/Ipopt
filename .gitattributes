@@ -85,6 +85,8 @@ Ipopt/src/Interfaces/IpInterfacesRegOp.cpp -text
 Ipopt/src/Interfaces/IpInterfacesRegOp.hpp -text
 Ipopt/src/Interfaces/IpSolveStatistics.cpp -text
 Ipopt/src/Interfaces/IpSolveStatistics.hpp -text
+Ipopt/src/Interfaces/IpTNLPReducer.cpp -text
+Ipopt/src/Interfaces/IpTNLPReducer.hpp -text
 Ipopt/src/Interfaces/ipopt_addlibs_cpp.txt.in -text
 Ipopt/src/Interfaces/ipopt_addlibs_f.txt.in -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyCq.cpp -text
