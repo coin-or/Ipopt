@@ -100,7 +100,7 @@ namespace Ipopt
       m_reduced_ = 0;
       Index count = 0;
       for (Index i=0; i<m_orig_; i++) {
-        if (count < n_g_skip_ && index_g_skip_[count] == i) {
+        if (index_g_skip_[count] == i) {
           g_keep_map_[i] = -1;
           count++;
         }
