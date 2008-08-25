@@ -2,6 +2,13 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2008-08-25 releases/3.5.0
+        - added ComputeRowAMax and ComputeColAMax methods to Matrix base class
+        - changed externals for MUMPS to stable/1.1
+        - call finalize solution in more failure cases
+          (this means that AMPL writes .sol file in more situations)
+        - several fixes, also from COIN Bug Squashing Party 2008
+
 2008-07-18 releases/3.4.2
         - some bug fixes
         - added wallclock time routine
