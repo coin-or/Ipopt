@@ -543,7 +543,12 @@ AC_SUBST(JIPOPTDLL)
 SHARED_FLAGS=-shared
 AC_SUBST(SHARED_FLAGS)
 
-AC_COIN_LINK_FROM_FILELIST(contrib/JavaInterface,contrib/JavaInterface/javafiles.lst)
+#doing this check here avoids its repetition for each file in the following loop
+AC_COIN_CHECK_VPATH
+for file in `cat $srcdir/contrib/JavaInterface/javafiles.lst`
+do
+  AC_COIN_VPATH_LINK(contrib/JavaInterface/$file)
+done
 
 ############ Matlab
 
@@ -673,7 +678,7 @@ AC_COIN_VPATH_LINK(contrib/MatlabInterface/ipopt.m)
 
 AC_CONFIG_FILES([Makefile
 		 src/Common/Makefile
-                 src/LinAlg/Makefile
+		 src/LinAlg/Makefile
 		 src/LinAlg/TMatrices/Makefile 
 		 src/Interfaces/Makefile
 		 src/Interfaces/ipopt_addlibs_f.txt
