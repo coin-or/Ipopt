@@ -39,6 +39,11 @@ Contributors:
 
   contrib/MatlabInterface
 
+- Rafael de Pelegrini Soares (VRTech Industrial Technologies)
+  Java interface files in directory (and subdirectories of)
+
+  contrib/JavaInterface
+
 - Lifeng Chen/Zaiwen Wen (Columbia University)
   Changes and additions to the implementation of the Chen-Goldfarb
     penalty function algorithm
