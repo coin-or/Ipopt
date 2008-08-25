@@ -31886,96 +31886,25 @@ esac
 SHARED_FLAGS=-shared
 
 
-
-
-
-
-echo "$as_me:$LINENO: checking which command should be used to link input files" >&5
-echo $ECHO_N "checking which command should be used to link input files... $ECHO_C" >&6
-coin_link_input_cmd="$LN_S"
-if test "$enable_doscompile" = mingw; then
-  coin_link_input_cmd=cp
-fi
-case "$CC" in
-  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-    coin_link_input_cmd=cp ;;
-esac
-echo "$as_me:$LINENO: result: $coin_link_input_cmd" >&5
-echo "${ECHO_T}$coin_link_input_cmd" >&6
-
-
-
-echo Creating links in contrib/JavaInterface ...
-cmd="$coin_link_input_cmd"
-if test -e $srcdir/contrib/JavaInterface/javafiles.lst ; then
-  my_target_dir="contrib/JavaInterface"
-  my_link_files=`cat $srcdir/contrib/JavaInterface/javafiles.lst`
-  my_dirname=`(dirname contrib/JavaInterface/javafiles.lst) 2>/dev/null ||
-$as_expr Xcontrib/JavaInterface/javafiles.lst : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 Xcontrib/JavaInterface/javafiles.lst : 'X\(//\)[^/]' \| \
-	 Xcontrib/JavaInterface/javafiles.lst : 'X\(//\)$' \| \
-	 Xcontrib/JavaInterface/javafiles.lst : 'X\(/\)' \| \
-	 .     : '\(.\)' 2>/dev/null ||
-echo Xcontrib/JavaInterface/javafiles.lst |
-    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
-  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
-  	  /^X\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q'`
-#  if test -e $my_target_dir; then : ; else
-#    AS_MKDIR_P($my_target_dir)
-#  fi
-  for i in $my_link_files; do
-    #rm -rf $my_target_dir/$i
-    if test -e $my_target_dir/$i; then : ; else
-      dirn2=`(dirname $my_target_dir/$i) 2>/dev/null ||
-$as_expr X$my_target_dir/$i : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X$my_target_dir/$i : 'X\(//\)[^/]' \| \
-	 X$my_target_dir/$i : 'X\(//\)$' \| \
-	 X$my_target_dir/$i : 'X\(/\)' \| \
-	 .     : '\(.\)' 2>/dev/null ||
-echo X$my_target_dir/$i |
-    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
-  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
-  	  /^X\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q'`
-      if test -e $dirn2; then : ; else
-        { if $as_mkdir_p; then
-    mkdir -p $dirn2
-  else
-    as_dir=$dirn2
-    as_dirs=
-    while test ! -d "$as_dir"; do
-      as_dirs="$as_dir $as_dirs"
-      as_dir=`(dirname "$as_dir") 2>/dev/null ||
-$as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X"$as_dir" : 'X\(//\)[^/]' \| \
-	 X"$as_dir" : 'X\(//\)$' \| \
-	 X"$as_dir" : 'X\(/\)' \| \
-	 .     : '\(.\)' 2>/dev/null ||
-echo X"$as_dir" |
-    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
-  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
-  	  /^X\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q'`
-    done
-    test ! -n "$as_dirs" || mkdir $as_dirs
-  fi || { { echo "$as_me:$LINENO: error: cannot create directory $dirn2" >&5
-echo "$as_me: error: cannot create directory $dirn2" >&2;}
-   { (exit 1); exit 1; }; }; }
-
-      fi
-      $cmd $abs_source_dir/$my_dirname/$i $my_target_dir/$i
-    fi
-  done
+#doing this check here avoids its repetition for each file in the following loop
+echo "$as_me:$LINENO: checking whether this is a VPATH configuration" >&5
+echo $ECHO_N "checking whether this is a VPATH configuration... $ECHO_C" >&6
+if test `cd $srcdir; pwd` != `pwd`; then
+  coin_vpath_config=yes;
 else
-  { echo "$as_me:$LINENO: WARNING: File list file contrib/JavaInterface/javafiles.lst missing!" >&5
-echo "$as_me: WARNING: File list file contrib/JavaInterface/javafiles.lst missing!" >&2;}
+  coin_vpath_config=no;
+fi
+echo "$as_me:$LINENO: result: $coin_vpath_config" >&5
+echo "${ECHO_T}$coin_vpath_config" >&6
+
+for file in `cat $srcdir/contrib/JavaInterface/javafiles.lst`
+do
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files contrib/JavaInterface/$file"
 fi
 
-
+done
 
 ############ Matlab
 
@@ -32709,16 +32638,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 ##          Create links for VPATH config of certain files            ##
 ########################################################################
 
-echo "$as_me:$LINENO: checking whether this is a VPATH configuration" >&5
-echo $ECHO_N "checking whether this is a VPATH configuration... $ECHO_C" >&6
-if test `cd $srcdir; pwd` != `pwd`; then
-  coin_vpath_config=yes;
-else
-  coin_vpath_config=no;
-fi
-echo "$as_me:$LINENO: result: $coin_vpath_config" >&5
-echo "${ECHO_T}$coin_vpath_config" >&6
-
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files contrib/MatlabInterface/ipopt.m"
@@ -32730,6 +32649,23 @@ fi
 
           ac_config_headers="$ac_config_headers inc/config_ipopt.h"
 
+
+
+
+
+
+echo "$as_me:$LINENO: checking which command should be used to link input files" >&5
+echo $ECHO_N "checking which command should be used to link input files... $ECHO_C" >&6
+coin_link_input_cmd="$LN_S"
+if test "$enable_doscompile" = mingw; then
+  coin_link_input_cmd=cp
+fi
+case "$CC" in
+  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+    coin_link_input_cmd=cp ;;
+esac
+echo "$as_me:$LINENO: result: $coin_link_input_cmd" >&5
+echo "${ECHO_T}$coin_link_input_cmd" >&6
 
 
 

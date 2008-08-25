@@ -121,7 +121,7 @@ namespace Ipopt
 
       struct rusage usage;
       getrusage(RUSAGE_SELF,&usage);
-      cpu_temp = usage.ru_utime.tv_sec;
+      cpu_temp = (double)usage.ru_utime.tv_sec;
       cpu_temp += 1.0e-6*((double) usage.ru_utime.tv_usec);
 #endif
 
