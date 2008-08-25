@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE IPOPTSRCDIR IPOPTOBJDIR IPOPTDOCDIR COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE COIN_BUILD_BLAS_TRUE COIN_BUILD_BLAS_FALSE COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE COIN_BUILD_LAPACK_TRUE COIN_BUILD_LAPACK_FALSE MUMPS_INCFLAGS COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE COIN_BUILD_MUMPS_TRUE COIN_BUILD_MUMPS_FALSE ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE IPOPTSRCDIR IPOPTOBJDIR IPOPTDOCDIR COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE COIN_BUILD_BLAS_TRUE COIN_BUILD_BLAS_FALSE COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE COIN_BUILD_LAPACK_TRUE COIN_BUILD_LAPACK_FALSE MUMPSINCDIR MUMPSLIB COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE MUMPS_INCFLAGS COIN_BUILD_MUMPS_TRUE COIN_BUILD_MUMPS_FALSE ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1116,6 +1116,8 @@ Optional Features:
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
 
+  --enable-mumps-libcheck use disable-mumps-libcheck to skip the
+                          link check at configuration time
   --enable-linear-solver-loader
                           compile linear solver loader (default: yes)
 
@@ -1133,7 +1135,8 @@ Optional Packages:
   --with-lapack           specify LAPACK library (or BUILD for compilation)
   --with-hsl              specify Harwell library (or BUILD for compilation)
   --with-pardiso          specify Pardiso library
-  --with-mumps-dir        specify directory where MUMPS is installed
+  --with-mumps-incdir specify the header file directory for library mumps
+  --with-mumps-lib specify the flags used to link with the library mumps
   --with-wsmp             specify WSMP library
   --with-asldir           specify path to AMPL solver directory (or BUILD for
                           compilation, or "no" for disabling AMPL)
@@ -2771,7 +2774,14 @@ if test x"$CFLAGS" = x; then
         coin_opt_cflags="-O3 -fomit-frame-pointer"
         coin_add_cflags="-pipe"
         coin_dbg_cflags="-g"
-        coin_warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall"
+        coin_warn_cflags="-Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wno-unknown-pragmas"
+        case $build in
+          *-darwin*)
+            ;;
+          *)
+            coin_warn_cflags="-pedantic-errors $coin_warn_cflags"
+            ;;
+        esac
 	case $enable_doscompile in
 	  mingw)
 	    CFLAGS="-mno-cygwin"
@@ -2844,7 +2854,7 @@ rm -f conftest.err conftest.$ac_objext \
       *-linux-*)
         case "$CC" in
           icc* | */icc*)
-            coin_opt_cflags="-O3 -ip"
+            coin_opt_cflags="-O3 -ip -mp1"
             coin_add_cflags=""
             coin_dbg_cflags="-g"
             # Check if -i_dynamic is necessary (for new glibc library)
@@ -3201,9 +3211,9 @@ case $build in
 	       comps="g++ cl"
 	     fi ;;
   *-*-solaris*)
-  	     comps="CC xlC aCC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
+  	     comps="CC xlC_r aCC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
   *-darwin*) comps="g++ c++ CC" ;;
-          *) comps="xlC aCC CC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
+          *) comps="xlC_r aCC CC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
 esac
 
 # We delete the cached value, since the test might not have been
@@ -3615,11 +3625,19 @@ if test x"$CXXFLAGS" = x; then
         coin_opt_cxxflags="-O3 -fomit-frame-pointer"
         coin_add_cxxflags="-pipe"
         coin_dbg_cxxflags="-g"
-        coin_warn_cxxflags="-pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion"
-	case $enable_doscompile in
-	  mingw)
-	    CXXFLAGS="-mno-cygwin"
-	    cat >conftest.$ac_ext <<_ACEOF
+        coin_warn_cxxflags="-Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas"
+        case $build in
+          *-darwin*)
+            ;;
+          *)
+            coin_warn_cxxflags="-pedantic-errors $coin_warn_cxxflags"
+            ;;
+        esac
+
+        case $enable_doscompile in
+          mingw)
+            CXXFLAGS="-mno-cygwin"
+            cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -3664,9 +3682,9 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-	    CXXFLAGS=
-	    ;;
-	esac
+            CXXFLAGS=
+          ;;
+        esac
     esac
   fi
 
@@ -3693,7 +3711,7 @@ rm -f conftest.err conftest.$ac_objext \
       *-linux-*)
         case "$CXX" in
           icpc* | */icpc*)
-            coin_opt_cxxflags="-O3 -ip"
+            coin_opt_cxxflags="-O3 -ip -mp1"
             coin_add_cxxflags=""
             coin_dbg_cxxflags="-g"
             # Check if -i_dynamic is necessary (for new glibc library)
@@ -3756,7 +3774,7 @@ rm -f conftest.err conftest.$ac_objext \
         case "$CXX" in
           xlC* | */xlC* | mpxlC* | */mpxlC*)
             coin_opt_cxxflags="-O -qarch=auto -qcache=auto -qtune=auto -qmaxmem=-1"
-            coin_add_cxxflags="-bmaxdata:0x80000000 -qrtti=dyna -qsuppress=1500-036 -qsuppress=1500-029"
+            coin_add_cxxflags="-bmaxdata:0x80000000 -qrtti=dyna -qsuppress=1500-036 -qsuppress=1500-029 -qsourcetype=c++"
             coin_dbg_cxxflags="-g"
             ;;
         esac
@@ -4046,7 +4064,7 @@ if test -z "$CXXLIBS"; then
   if test "$GXX" = "yes"; then
     case "$CXX" in
       icpc* | */icpc*)
-        CXXLIBS=""
+        CXXLIBS="-lstdc++"
         ;;
       *)
         CXXLIBS="-lstdc++ -lm" # -lgcc"
@@ -4062,7 +4080,7 @@ if test -z "$CXXLIBS"; then
      *-linux-*)
       case "$CXX" in
       icpc* | */icpc*)
-        CXXLIBS=""
+        CXXLIBS="-lstdc++"
              ;;
       pgCC* | */pgCC*)
         CXXLIBS="-lstd -lC -lc"
@@ -4106,8 +4124,8 @@ case $build in
        coin_f77_comps="gfortran g77 ifort fl32 compile_f2c"
      fi ;;
   *-*-solaris*)
-     coin_f77_comps="f95 f90 f77 xlf fort77 gfortran g77 pgf90 pgf77 ifort ifc frt af77" ;;
-  *) coin_f77_comps="xlf fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc frt af77" ;;
+     coin_f77_comps="f95 f90 f77 xlf_r fort77 gfortran g77 pgf90 pgf77 ifort ifc frt af77" ;;
+  *) coin_f77_comps="xlf_r fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc frt af77" ;;
  esac
 
 
@@ -4278,7 +4296,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4281:" \
+echo "$as_me:4299:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -4493,9 +4511,9 @@ rm -f conftest.err conftest.$ac_objext \
       *-cygwin* | *-mingw*)
         case $F77 in
           ifort* | */ifort* | IFORT* | */IFORT* )
-            coin_opt_fflags='-O3'
-            coin_add_fflags='-fpp -nologo -MT'
-            coin_dbg_fflags='-debug'
+            coin_opt_fflags='-MT -O3'
+            coin_add_fflags='-fpp -nologo'
+            coin_dbg_fflags='-MTd -debug'
           ;;
           compile_f2c*)
             coin_opt_fflags='-MT -O2'
@@ -4846,7 +4864,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:4849: \"$ac_link\") >&5
+(eval echo $as_me:4867: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -4924,7 +4942,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:4927: \"$ac_link\") >&5
+(eval echo $as_me:4945: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5633,10 +5651,19 @@ else
 
   case $build in
   # The following is a fix to define FLIBS for ifort on Windows
+  # In its original version, it linked in libifcorert.lib or libifcorertd.lib on Windows/ifort explicitly.
+  # However, this seem to create a dependency on libifcorert.dll (or libifcorertd.dll) in the executables.
+  # This is seem to be unnecessary, libifcorert(d).lib has been removed from the link line.
      *-cygwin* | *-mingw*)
        case "$F77" in
          ifort* | */ifort* | IFORT* | */IFORT*)
-           FLIBS="-link libifcorert.lib $LIBS /NODEFAULTLIB:libc.lib";;
+           FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib"
+#           if "$coin_debug_compile" = true ; then
+#             FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmt.lib"
+#           else
+#             FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmtd.lib"
+#           fi
+           ;;
          compile_f2c*)
            FLIBS=`$F77 -FLIBS` ;;
        esac;;
@@ -7380,7 +7407,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7383 "configure"' > conftest.$ac_ext
+  echo '#line 7410 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9360,11 +9387,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9363: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9390: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9367: \$? = $ac_status" >&5
+   echo "$as_me:9394: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9628,11 +9655,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9631: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9658: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9635: \$? = $ac_status" >&5
+   echo "$as_me:9662: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9732,11 +9759,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9735: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9762: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9739: \$? = $ac_status" >&5
+   echo "$as_me:9766: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12149,7 +12176,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12152 "configure"
+#line 12179 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12249,7 +12276,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12252 "configure"
+#line 12279 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -14609,11 +14636,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14612: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14639: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14616: \$? = $ac_status" >&5
+   echo "$as_me:14643: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14713,11 +14740,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14716: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14743: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14720: \$? = $ac_status" >&5
+   echo "$as_me:14747: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16283,11 +16310,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16286: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16313: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16290: \$? = $ac_status" >&5
+   echo "$as_me:16317: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16387,11 +16414,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16390: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16417: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16394: \$? = $ac_status" >&5
+   echo "$as_me:16421: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18594,11 +18621,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18597: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18624: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18601: \$? = $ac_status" >&5
+   echo "$as_me:18628: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18862,11 +18889,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18865: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18892: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18869: \$? = $ac_status" >&5
+   echo "$as_me:18896: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18966,11 +18993,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18969: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18996: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18973: \$? = $ac_status" >&5
+   echo "$as_me:19000: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -31134,53 +31161,108 @@ coin_mumpssrcdir=$abs_source_dir/$coin_mumpsobjdir/MUMPS
 
 MAKEOKFILE=.MakeOk
 
+#check if user provides a MUMPS library (that works)
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-# Check whether --with-mumps-dir or --without-mumps-dir was given.
-if test "${with_mumps_dir+set}" = set; then
-  withval="$with_mumps_dir"
-  use_mumps="$withval"
-else
-  use_mumps=no
+
+  echo "$as_me:$LINENO: checking if user provides library for mumps" >&5
+echo $ECHO_N "checking if user provides library for mumps... $ECHO_C" >&6
+
+# Check for header file directory
+
+
+# Check whether --with-mumps-incdir or --without-mumps-incdir was given.
+if test "${with_mumps_incdir+set}" = set; then
+  withval="$with_mumps_incdir"
+  MUMPSINCDIR=`cd $withval; pwd`
 fi;
 
-if test "$use_mumps" != "no"; then
-  if test -d $use_mumps; then :; else
-    { { echo "$as_me:$LINENO: error: User provided MUMPS directory $use_mumps does not exist." >&5
-echo "$as_me: error: User provided MUMPS directory $use_mumps does not exist." >&2;}
+# Check for library directory
+
+
+# Check whether --with-mumps-lib or --without-mumps-lib was given.
+if test "${with_mumps_lib+set}" = set; then
+  withval="$with_mumps_lib"
+  MUMPSLIB=$withval
+fi;
+
+# Switch to disable library check if requested
+
+  # Check whether --enable-mumps-libcheck or --disable-mumps-libcheck was given.
+if test "${enable_mumps_libcheck+set}" = set; then
+  enableval="$enable_mumps_libcheck"
+  mumps_libcheck=$enableval
+else
+  mumps_libcheck=yes
+fi;
+
+# At this point, if we're going to use the library, both LBRYINCDIR and
+# LBRYLIB must be defined and not empty.
+
+  if test x"$MUMPSINCDIR" != x || test x"$MUMPSLIB" != x; then
+    if test x"$MUMPSINCDIR" = x || test x"$MUMPSLIB" = x; then
+      { { echo "$as_me:$LINENO: error: You need to specify both an include directory and link flags to use library mumps. Use --with-mumps-incdir of environment variable $MUMPSINCDIR to specify the include directory. Use --with-mumps-lib or environment variable $MUMPSLIB to specify link flags." >&5
+echo "$as_me: error: You need to specify both an include directory and link flags to use library mumps. Use --with-mumps-incdir of environment variable $MUMPSINCDIR to specify the include directory. Use --with-mumps-lib or environment variable $MUMPSLIB to specify link flags." >&2;}
    { (exit 1); exit 1; }; }
+    fi
+    coin_has_mumps=true
+    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+  else
+    coin_has_mumps=false
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
   fi
-  mumps_dir=`cd $use_mumps; pwd`
 
-  # library extension
-  ac_ext=c
+# If we have instructions for use, consider header and link checks.
+
+  if test $coin_has_mumps = true; then
+
+# If argument 3 (file) is given, check for the file. Typically this will be a
+# header file, but that's not assumed.
+
+    if test -r $MUMPSINCDIR/dmumps_c.h; then
+
+  :
+else
+  { { echo "$as_me:$LINENO: error: Cannot find file dmumps_c.h in $MUMPSINCDIR" >&5
+echo "$as_me: error: Cannot find file dmumps_c.h in $MUMPSINCDIR" >&2;}
+   { (exit 1); exit 1; }; }
+  :
+fi
+
+
+# Now see if we can link the function. There are arguments for and against
+# assuming argument 3 is a header file declaring the function. A correct
+# function declaration is the main argument in favour. Having to cope with
+# possible dependencies or other oddities are the main arguments against.
+# Force the use of C as the best single choice amongst C++, C, and Fortran.
+# Obviously, this has limits.
+
+    if test x"$mumps_libcheck" != xno; then
+	   coin_save_LIBS="$LIBS"
+	   LIBS="$MUMPSLIB $ADDLIBS"
+	   coin_MUMPS_link=no
+	   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-  save_LIBS="$LIBS"
-  LIBS="$LIBS $FLIBS"
-  echo "$as_me:$LINENO: checking for pthread_create in -lpthread" >&5
-echo $ECHO_N "checking for pthread_create in -lpthread... $ECHO_C" >&6
-if test "${ac_cv_lib_pthread_pthread_create+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpthread  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
+	   for fnm in dmumps_c ; do
+	     echo "$as_me:$LINENO: checking whether symbol $fnm is available with MUMPS" >&5
+echo $ECHO_N "checking whether symbol $fnm is available with MUMPS... $ECHO_C" >&6
+	     cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char pthread_create ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -31192,7 +31274,7 @@ char pthread_create ();
 int
 main ()
 {
-pthread_create ();
+$fnm()
   ;
   return 0;
 }
@@ -31219,126 +31301,79 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_pthread_pthread_create=yes
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+		  coin_MUMPS_link=yes
+		  break
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-ac_cv_lib_pthread_pthread_create=no
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_pthread_pthread_create" >&5
-echo "${ECHO_T}$ac_cv_lib_pthread_pthread_create" >&6
-if test $ac_cv_lib_pthread_pthread_create = yes; then
-  LIBS="-lpthread $save_LIBS"; ADDLIBS="-lpthread $ADDLIBS"
-else
-  LIBS="$save_LIBS"
-fi
-
-  ac_ext=cc
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-  case "$CC" in
-    cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-         libe=lib ;;
-      *) libe=a ;;
-  esac
-
-  # Check if hearders are there
-  if test -r $mumps_dir/include/dmumps_c.h; then
-
-  :
-else
-  { { echo "$as_me:$LINENO: error: I cannot find headers for MUMPS" >&5
-echo "$as_me: error: I cannot find headers for MUMPS" >&2;}
-   { (exit 1); exit 1; }; }
-  :
-fi
-
-  LIBS="$mumps_dir/lib/libdmumps.$libe $mumps_dir/lib/libpord.$libe $mumps_dir/libseq/libmpiseq.$libe $LIBS"
-  ADDLIBS="$mumps_dir/lib/libdmumps.$libe $mumps_dir/lib/libpord.$libe $mumps_dir/libseq/libmpiseq.$libe $ADDLIBS"
-  # Check if MUMPS actually works
-  ac_ext=c
+	   done
+	   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-  save_LIBS="$LIBS"
-  LIBS="$LIBS $FLIBS"
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void dmumps_c();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-dmumps_c()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  :
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-{ { echo "$as_me:$LINENO: error: User provided MUMPS library doesn't work" >&5
-echo "$as_me: error: User provided MUMPS library doesn't work" >&2;}
+	   if test x"$coin_MUMPS_link" = xyes ; then
+	     LIBS="$coin_save_LIBS"
+	   else
+	     { { echo "$as_me:$LINENO: error: Cannot find symbol(s) dmumps_c with MUMPS" >&5
+echo "$as_me: error: Cannot find symbol(s) dmumps_c with MUMPS" >&2;}
    { (exit 1); exit 1; }; }
+	   fi
+	 fi
+
+
+# If we make it this far, we've verified the file and linked the function. Add
+# the necessary link flags to ADDLIBS and define the preprocessor symbol
+# COIN_HAS_LBRY.
+
+    ADDLIBS="$MUMPSLIB $ADDLIBS"
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_MUMPS 1
+_ACEOF
+
+  fi
+
+# Arrange for configure to substitute LBRYINCDIR and LBRYLIB and create the
+# automake conditional. These actions must occur unconditionally.
+
+
+
+
+
+if test $coin_has_mumps = true; then
+  COIN_HAS_MUMPS_TRUE=
+  COIN_HAS_MUMPS_FALSE='#'
+else
+  COIN_HAS_MUMPS_TRUE='#'
+  COIN_HAS_MUMPS_FALSE=
 fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-  LIBS="$save_LIBS"
-  ac_ext=cc
+
+
+ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-  coin_mumpssrcdir="$mumps_dir"
 
-else
+if test "$coin_has_mumps" = "true"; then  # user provided mumps library
+  use_mumps=yes
+  coin_has_mumps=yes
+
+  MUMPS_INCFLAGS="-I\`\$(CYGPATH_W) $MUMPSINCDIR\`"
+  ADDLIBS="$MUMPSLIB $ADDLIBS"
+
+else # no user provided library, so we try to build our own
   use_mumps=BUILD
 
   # Check if the MUMPS' ThirdParty project has been configured
@@ -31438,21 +31473,14 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
+
+      MUMPS_INCFLAGS="-I\`\$(CYGPATH_W) $coin_mumpssrcdir/libseq\` -I\`\$(CYGPATH_W) $coin_mumpssrcdir/include\`"
     else
       use_mumps=
     fi
   fi
-fi
 
-if test x"$use_mumps" != x; then
-
-  # and we need the Fortran runtime libraries if we want to link with C/C++
-  coin_need_flibs=yes
-
-  MUMPS_INCFLAGS="-I\`\$(CYGPATH_W) $coin_mumpssrcdir/libseq\` -I\`\$(CYGPATH_W) $coin_mumpssrcdir/include\`"
-
-fi
-
+  # if a user provided library is used, then COIN_HAS_USER_LIBRARY takes care of the COIN_HAS_MUMPS conditional and preprocessor symbol
 
 
 if test x"$use_mumps" != x; then
@@ -31461,6 +31489,29 @@ if test x"$use_mumps" != x; then
 else
   COIN_HAS_MUMPS_TRUE='#'
   COIN_HAS_MUMPS_FALSE=
+fi
+
+  if test x"$use_mumps" != x; then
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_MUMPS 1
+_ACEOF
+
+    coin_has_mumps=yes
+  else
+    coin_has_mumps=no
+  fi
+  echo "$as_me:$LINENO: checking whether MUMPS is available" >&5
+echo $ECHO_N "checking whether MUMPS is available... $ECHO_C" >&6
+  echo "$as_me:$LINENO: result: $coin_has_mumps" >&5
+echo "${ECHO_T}$coin_has_mumps" >&6
+fi
+
+if test x"$use_mumps" != x; then
+  # we need the Fortran runtime libraries if we want to link with C/C++
+  coin_need_flibs=yes
+
+
 fi
 
 
@@ -31474,21 +31525,6 @@ else
 fi
 
 
-echo "$as_me:$LINENO: checking whether MUMPS is available" >&5
-echo $ECHO_N "checking whether MUMPS is available... $ECHO_C" >&6
-
-if test x"$use_mumps" = x || test "$use_mumps" = no; then
-  coin_has_mumps=no
-else
-  coin_has_mumps=yes
-
-cat >>confdefs.h <<\_ACEOF
-#define COIN_HAS_MUMPS 1
-_ACEOF
-
-fi
-echo "$as_me:$LINENO: result: $coin_has_mumps" >&5
-echo "${ECHO_T}$coin_has_mumps" >&6
 
 
 ########
@@ -32917,6 +32953,13 @@ echo "$as_me: error: conditional \"COIN_HAS_MUMPS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
+if test -z "${COIN_HAS_MUMPS_TRUE}" && test -z "${COIN_HAS_MUMPS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_MUMPS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_MUMPS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 if test -z "${COIN_BUILD_MUMPS_TRUE}" && test -z "${COIN_BUILD_MUMPS_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"COIN_BUILD_MUMPS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
@@ -33682,9 +33725,11 @@ s,@COIN_HAS_LAPACK_TRUE@,$COIN_HAS_LAPACK_TRUE,;t t
 s,@COIN_HAS_LAPACK_FALSE@,$COIN_HAS_LAPACK_FALSE,;t t
 s,@COIN_BUILD_LAPACK_TRUE@,$COIN_BUILD_LAPACK_TRUE,;t t
 s,@COIN_BUILD_LAPACK_FALSE@,$COIN_BUILD_LAPACK_FALSE,;t t
-s,@MUMPS_INCFLAGS@,$MUMPS_INCFLAGS,;t t
+s,@MUMPSINCDIR@,$MUMPSINCDIR,;t t
+s,@MUMPSLIB@,$MUMPSLIB,;t t
 s,@COIN_HAS_MUMPS_TRUE@,$COIN_HAS_MUMPS_TRUE,;t t
 s,@COIN_HAS_MUMPS_FALSE@,$COIN_HAS_MUMPS_FALSE,;t t
+s,@MUMPS_INCFLAGS@,$MUMPS_INCFLAGS,;t t
 s,@COIN_BUILD_MUMPS_TRUE@,$COIN_BUILD_MUMPS_TRUE,;t t
 s,@COIN_BUILD_MUMPS_FALSE@,$COIN_BUILD_MUMPS_FALSE,;t t
 s,@ASLLIB@,$ASLLIB,;t t
