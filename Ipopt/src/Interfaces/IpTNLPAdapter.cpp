@@ -38,6 +38,17 @@
 # endif
 #endif
 
+// for sprintf
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
+
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
