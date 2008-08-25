@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2007 International Business Machines and others.
+# Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -19,7 +19,8 @@ includeipopt_HEADERS = \
 	IpReturnCodes.inc \
 	IpSolveStatistics.hpp \
 	IpStdCInterface.h \
-	IpTNLP.hpp
+	IpTNLP.hpp \
+	IpTNLPReducer.hpp
 
 lib_LTLIBRARIES = libipopt.la
 
@@ -35,7 +36,8 @@ libipopt_la_SOURCES = \
 	IpStdFInterface.c \
 	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \
 	IpTNLP.hpp \
-	IpTNLPAdapter.cpp IpTNLPAdapter.hpp
+	IpTNLPAdapter.cpp IpTNLPAdapter.hpp \
+	IpTNLPReducer.cpp IpTNLPReducer.hpp
 
 libipopt_la_LIBADD = $(IPALLLIBS)
 
@@ -84,7 +86,8 @@ ASTYLE_FILES = \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
 	IpTNLP.hppbak \
-	IpTNLPAdapter.cppbak IpTNLPAdapter.hppbak
+	IpTNLPAdapter.cppbak IpTNLPAdapter.hppbak \
+	IpTNLPReducer.cppbak IpTNLPReducer.hppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@

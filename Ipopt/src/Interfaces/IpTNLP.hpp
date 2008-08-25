@@ -179,17 +179,6 @@ namespace Ipopt
     {
       return false;
     }
-
-    /** this method is called if option ??? is set.  In that case, the
-    algorithm calls this method with the values of variables and
-    multipliers that will be used for the next calls of any
-    evaluation method.  */
-    virtual bool set_variable_values(Index n, const Number* x, bool new_x,
-                                     Index m, const Number* lambda,
-                                     bool new_lambda)
-    {
-      return false;
-    }
     //@}
 
     /** @name Solution Methods */

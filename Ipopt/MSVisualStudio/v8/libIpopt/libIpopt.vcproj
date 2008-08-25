@@ -303,6 +303,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\Algorithm\IpRestoConvCheck.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\Ipopt\src\Algorithm\IpRestoFilterConvCheck.cpp"
 					>
 				</File>
@@ -320,6 +324,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\Ipopt\src\Algorithm\IpRestoMinC_1Nrm.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Algorithm\IpRestoPenaltyConvCheck.cpp"
 					>
 				</File>
 				<File

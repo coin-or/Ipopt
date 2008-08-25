@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -85,6 +85,20 @@ namespace Ipopt
   {
     DBG_ASSERT(IsValid(matrix_));
     return matrix_->HasValidNumbers();
+  }
+
+  void
+  ScaledMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+  {
+    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
+                    "ScaledMatrix::ComputeRowAMaxImpl not implemented");
+  }
+
+  void
+  ScaledMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
+  {
+    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
+                    "ScaledMatrix::ComputeColAMaxImpl not implemented");
   }
 
   void ScaledMatrix::PrintImpl(const Journalist& jnlst,

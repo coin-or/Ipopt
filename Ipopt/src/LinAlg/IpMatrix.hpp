@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -89,13 +89,35 @@ namespace Ipopt
      *  no Inf or Nan). */
     bool HasValidNumbers() const;
 
-    //* @name Information about the size of the matrix */
+    /** @name Information about the size of the matrix */
     //@{
     /** Number of rows */
     Index  NRows() const;
 
     /** Number of columns */
     Index  NCols() const;
+    //@}
+
+    /** @name Norms of the individual rows and columns */
+    //@{
+    /** Compute the max-norm of the rows in the matrix.  The result is
+     *  stored in rows_norms.  The vector is assumed to be initialized
+     *  of init is false. */
+    void ComputeRowAMax(Vector& rows_norms, bool init=true) const
+    {
+      DBG_ASSERT(NRows() == rows_norms.Dim());
+      if (init) rows_norms.Set(0.);
+      ComputeRowAMaxImpl(rows_norms, init);
+    }
+    /** Compute the max-norm of the columns in the matrix.  The result
+     *  is stored in cols_norms  The vector is assumed to be initialized
+     *  of init is false. */
+    void ComputeColAMax(Vector& cols_norms, bool init=true) const
+    {
+      DBG_ASSERT(NCols() == cols_norms.Dim());
+      if (init) cols_norms.Set(0.);
+      ComputeColAMaxImpl(cols_norms, init);
+    }
     //@}
 
     /** Print detailed information about the matrix. Do not overload.
@@ -155,6 +177,15 @@ namespace Ipopt
     {
       return true;
     }
+
+    /** Compute the max-norm of the rows in the matrix.  The result is
+     *  stored in rows_norms.  The vector is assumed to be
+     *  initialized. */
+    virtual void ComputeRowAMaxImpl(Vector& rows_norms, bool init) const = 0;
+    /** Compute the max-norm of the columns in the matrix.  The result
+     *  is stored in cols_norms.  The vector is assumed to be
+     *  initialized. */
+    virtual void ComputeColAMaxImpl(Vector& cols_norms, bool init) const = 0;
 
     /** Print detailed information about the matrix. */
     virtual void PrintImpl(const Journalist& jnlst,

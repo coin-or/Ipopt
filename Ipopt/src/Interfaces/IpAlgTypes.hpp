@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -32,6 +32,8 @@ namespace Ipopt
     ERROR_IN_STEP_COMPUTATION,
     INVALID_NUMBER_DETECTED,
     TOO_FEW_DEGREES_OF_FREEDOM,
+    INVALID_OPTION,
+    OUT_OF_MEMORY,
     INTERNAL_ERROR
   };
   //@}

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -61,6 +61,8 @@ namespace Ipopt
     /** Method for determining if all stored numbers are valid (i.e.,
      *  no Inf or Nan). */
     virtual bool HasValidNumbersImpl() const;
+
+    virtual void ComputeRowAMaxImpl(Vector& rows_norms, bool init) const;
 
     virtual void PrintImpl(const Journalist& jnlst,
                            EJournalLevel level,
