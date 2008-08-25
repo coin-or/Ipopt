@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -9,6 +9,16 @@
 #include "IpSymTMatrix.hpp"
 #include "IpDenseVector.hpp"
 #include "IpBlas.hpp"
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -63,8 +73,8 @@ namespace Ipopt
     DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
     if (dense_x && dense_y) {
-      const Index*  irn=Irows();
-      const Index*  jcn=Jcols();
+      const Index* irn=Irows();
+      const Index* jcn=Jcols();
       const Number* val=values_;
       Number* yvals=dense_y->Values();
 
@@ -137,6 +147,32 @@ namespace Ipopt
     DBG_ASSERT(initialized_);
     Number sum = IpBlasDasum(Nonzeros(), values_, 1);
     return IsFiniteNumber(sum);
+  }
+
+  void SymTMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+  {
+    DBG_ASSERT(initialized_);
+
+    DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);
+    DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));
+
+    const Index* irn=Irows();
+    const Index* jcn=Jcols();
+    const Number* val=values_;
+    Number* vec_vals=dense_vec->Values();
+    vec_vals--;
+
+    const Number zero = 0.;
+    IpBlasDcopy(NRows(), &zero, 0, vec_vals, 1);
+
+    for (Index i=0; i<Nonzeros(); i++) {
+      const double f = fabs(*val);
+      vec_vals[*irn] = Max(vec_vals[*irn], f);
+      vec_vals[*jcn] = Max(vec_vals[*jcn], f);
+      val++;
+      irn++;
+      jcn++;
+    }
   }
 
   void SymTMatrix::PrintImpl(const Journalist& jnlst,

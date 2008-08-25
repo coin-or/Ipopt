@@ -7,6 +7,7 @@ history management of subversion.
         - changed externals for MUMPS to stable/1.1
         - call finalize solution in more failure cases
           (this means that AMPL writes .sol file in more situations)
+        - added IpTNLPReducer as simple way to exclude constraints from problem
         - several fixes, also from COIN Bug Squashing Party 2008
 
 2008-07-18 releases/3.4.2

@@ -18,8 +18,6 @@
 # endif
 #endif
 
-#include <limits>
-
 namespace Ipopt
 {
 
