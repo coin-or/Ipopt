@@ -2,6 +2,9 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2008-08-26 releases/3.5.1
+        - changed to latest version of MUMPS (4.8.1)
+
 2008-08-25 releases/3.5.0
         - added ComputeRowAMax and ComputeColAMax methods to Matrix base class
         - changed externals for MUMPS to stable/1.1
