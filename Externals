@@ -1,6 +1,6 @@
-BuildTools  https://projects.coin-or.org/svn/BuildTools/releases/0.5.25
-ThirdParty/ASL  https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/releases/1.0.15
-ThirdParty/HSL  https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/releases/1.1.2
-ThirdParty/Blas  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/releases/1.0.13
-ThirdParty/Lapack  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/releases/1.0.15
-ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/releases/1.1.1
+BuildTools         https://projects.coin-or.org/svn/BuildTools/stable/0.5
+ThirdParty/ASL     https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/stable/1.0
+ThirdParty/HSL     https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/stable/1.1
+ThirdParty/Blas    https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/stable/1.0
+ThirdParty/Lapack  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/stable/1.0
+ThirdParty/Mumps   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/stable/1.1
