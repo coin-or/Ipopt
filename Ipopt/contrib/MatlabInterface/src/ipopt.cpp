@@ -4,9 +4,12 @@
 // Author: Peter Carbonetto
 //         Dept. of Computer Science
 //         University of British Columbia
-//         May 19, 2007
+//         August 25, 2008
 
+#include "iterate.h"
 #include "matlabexception.h"
+#include "callbackfunctions.h"
+
 #include "array.h"
 #include "matlabscalar.h"
 #include "matlabstring.h"
@@ -50,10 +53,25 @@ void mexFunction (int nlhs, mxArray *plhs[],
 		  int nrhs, const mxArray *prhs[]) 
   try {
 
-    // Check to see if we have the correct number of input arguments.
-    if (nrhs < minNumInputArgs)
+    // Check to see if we have the correct number of input and output
+    // arguments.
+    if (nrhs < 2 || nrhs > 3)
       throw MatlabException("Incorrect number of input arguments");
+    if (nlhs > 3)
+      throw MatlabException("Incorrect number of output arguments");
 
+    // Get the first input which specifies the initial iterate.
+    Iterate iterate(prhs[0]);
+
+    // Get the second input which specifies the callback functions.
+    CallbackFunctions callbackFunctions(prhs[1]);
+
+    
+
+    return;
+
+    // OLD STUFF
+    // ---------
     // Get the starting point for the variables. This is specified in
     // the first input argument. The variables must be either a single
     // matrix or a cell array of matrices.
