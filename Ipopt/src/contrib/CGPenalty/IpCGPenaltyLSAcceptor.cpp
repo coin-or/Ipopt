@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -191,7 +191,7 @@ namespace Ipopt
     counter_first_type_penalty_updates_ = 0;
     counter_second_type_penalty_updates_ = 0;
     curr_eta_ = -1.;
-    IpData().CGPenData().SetPenaltyUninitialized();
+    CGPenData().SetPenaltyUninitialized();
     ls_counter_ = 0;
     best_KKT_error_ = -1.;
     accepted_by_Armijo_ = true;
@@ -210,7 +210,7 @@ namespace Ipopt
     ls_counter_ = 0;
 
     // If the algorithm restarts from a previous iteration, reset line search parameters.
-    if (IpData().CGPenData().restor_iter() == IpData().iter_count()) {
+    if (CGPenData().restor_iter() == IpData().iter_count()) {
       Reset();
     }
     // Every time mu is decreased, reset line search parameters.
@@ -225,16 +225,16 @@ namespace Ipopt
     }
     // Set the values for the reference point
     if (!in_watchdog) {
-      reference_penalty_function_ = IpCq().CGPenCq().curr_penalty_function();
+      reference_penalty_function_ = CGPenCq().curr_penalty_function();
       reference_theta_ = IpCq().curr_constraint_violation();
-      if (IpData().CGPenData().HaveCgFastDeltas()) {
+      if (CGPenData().HaveCgFastDeltas()) {
         // use the fast step
         reference_direct_deriv_penalty_function_ =
-          IpCq().CGPenCq().curr_fast_direct_deriv_penalty_function();
+          CGPenCq().curr_fast_direct_deriv_penalty_function();
       }
       else {
         reference_direct_deriv_penalty_function_ =
-          IpCq().CGPenCq().curr_direct_deriv_penalty_function();
+          CGPenCq().curr_direct_deriv_penalty_function();
       }
     }
     else {
@@ -259,7 +259,7 @@ namespace Ipopt
     bool accept = false;
     ls_counter_++;
     if (ls_counter_ == 1) {
-      IpData().CGPenData().SetPrimalStepSize(alpha_primal_test);
+      CGPenData().SetPrimalStepSize(alpha_primal_test);
     }
     if (jump_for_tiny_step_ == 1) {
       jump_for_tiny_step_ = 0;
@@ -362,7 +362,7 @@ namespace Ipopt
     DBG_START_METH("CGPenaltyLSAcceptor::ArmijoHolds",
                    dbg_verbosity);
     bool accept = false;
-    Number trial_penalty_function = IpCq().CGPenCq().trial_penalty_function();
+    Number trial_penalty_function = CGPenCq().trial_penalty_function();
     DBG_ASSERT(IsFiniteNumber(trial_penalty_function));
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "Checking acceptability for trial step size alpha_primal_test=%13.6e:\n", alpha_primal_test);
@@ -397,10 +397,10 @@ namespace Ipopt
   void CGPenaltyLSAcceptor::StartWatchDog()
   {
     DBG_START_FUN("CGPenaltyLSAcceptor::StartWatchDog", dbg_verbosity);
-    watchdog_penalty_function_ = IpCq().CGPenCq().curr_penalty_function();
+    watchdog_penalty_function_ = CGPenCq().curr_penalty_function();
     watchdog_direct_deriv_penalty_function_ =
-      IpCq().CGPenCq().curr_direct_deriv_penalty_function();
-    watchdog_delta_cgpen_ = IpData().CGPenData().delta_cgpen();
+      CGPenCq().curr_direct_deriv_penalty_function();
+    watchdog_delta_cgpen_ = CGPenData().delta_cgpen();
   }
 
   void CGPenaltyLSAcceptor::StopWatchDog()
@@ -409,7 +409,7 @@ namespace Ipopt
     reference_penalty_function_ = watchdog_penalty_function_;
     reference_direct_deriv_penalty_function_ =
       watchdog_direct_deriv_penalty_function_;
-    IpData().CGPenData().set_delta_cgpen(watchdog_delta_cgpen_);
+    CGPenData().set_delta_cgpen(watchdog_delta_cgpen_);
     watchdog_delta_cgpen_ = NULL;
   }
 
@@ -461,10 +461,10 @@ namespace Ipopt
       c_over_r = IpCq().curr_cg_pert_fact();
       }*/
       c_soc->AddTwoVectors(1.0, *IpCq().trial_c(),
-                           -IpData().CGPenData().CurrPenaltyPert(), *delta_y_c,
+                           -CGPenData().CurrPenaltyPert(), *delta_y_c,
                            alpha_primal_soc);
       dms_soc->AddTwoVectors(1.0, *IpCq().trial_d_minus_s(),
-                             -IpData().CGPenData().CurrPenaltyPert(), *delta_y_d,
+                             -CGPenData().CurrPenaltyPert(), *delta_y_d,
                              alpha_primal_soc);
       // Compute the SOC search direction
       SmartPtr<IteratesVector> delta_soc =
@@ -554,7 +554,7 @@ namespace Ipopt
     PiecewisePenalty_.Print( Jnlst() );
 
     // update regular penalty parameter
-    if (IpData().CGPenData().CurrPenaltyPert() != 0) {
+    if (CGPenData().CurrPenaltyPert() != 0) {
       info_alpha_primal_char = UpdatePenaltyParameter();
     }
     return info_alpha_primal_char;
@@ -565,8 +565,8 @@ namespace Ipopt
     bool restored_iterate = false;
     // See if we want to restor a previous iterate.
     // This is the case when the multipliers are blowing up.
-    //if (!IpData().CGPenData().NeverTryPureNewton()){
-    if (IpData().CGPenData().restor_counter()<3.) {
+    //if (!CGPenData().NeverTryPureNewton()){
+    if (CGPenData().restor_counter()<3.) {
       if (MultipliersDiverged()) {
         if (RestoreBestPoint()) {
           // so far the restoration method is wrong. Although it restores
@@ -574,10 +574,10 @@ namespace Ipopt
           // may be overwritten later when performing dual steps
           // in the line search method
           Index restor_iter = IpData().iter_count() + 1;
-          Number restor_counter = IpData().CGPenData().restor_counter();
-          IpData().CGPenData().SetRestorCounter(restor_counter+1);
-          IpData().CGPenData().SetNeverTryPureNewton(true);
-          IpData().CGPenData().SetRestorIter(restor_iter);
+          Number restor_counter = CGPenData().restor_counter();
+          CGPenData().SetRestorCounter(restor_counter+1);
+          CGPenData().SetNeverTryPureNewton(true);
+          CGPenData().SetRestorIter(restor_iter);
           restored_iterate = true;
         }
       }
@@ -654,13 +654,13 @@ namespace Ipopt
       y_ref_tiny_step *= 1e4;
       }
       */
-      Number y_Amax = IpCq().CGPenCq().curr_scaled_y_Amax();
+      Number y_Amax = CGPenCq().curr_scaled_y_Amax();
       if ((y_Amax > y_ref_big_step &&
            (IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() +
             IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim() +
             IpData().curr()->y_d()->Dim() == 0 ||
-            IpData().CGPenData().PrimalStepSize() < 1e-2)) ||
-          (IpData().CGPenData().PrimalStepSize() < alpha_ref &&
+            CGPenData().PrimalStepSize() < 1e-2)) ||
+          (CGPenData().PrimalStepSize() < alpha_ref &&
            y_Amax > y_ref_tiny_step)) {
         diverged = true;
       }
@@ -690,8 +690,8 @@ namespace Ipopt
       info_alpha_primal_char='i';
     }
     if (increase) {
-      Number max_step = Max(IpData().CGPenData().delta_cgpen()->x()->Amax(),
-                            IpData().CGPenData().delta_cgpen()->s()->Amax());
+      Number max_step = Max(CGPenData().delta_cgpen()->x()->Amax(),
+                            CGPenData().delta_cgpen()->s()->Amax());
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                      "Max norm of step = %8.2\n", max_step);
       increase = (max_step <= curr_eta_);
@@ -739,8 +739,8 @@ namespace Ipopt
     // and the current infeasibility
     if (increase) {
       SmartPtr<Vector> vec = IpData().curr()->y_c()->MakeNewCopy();
-      vec->AddTwoVectors(1., *IpData().CGPenData().delta_cgpen()->y_c(),
-                         -1./IpCq().CGPenCq().curr_cg_pert_fact(), *IpCq().curr_c(),
+      vec->AddTwoVectors(1., *CGPenData().delta_cgpen()->y_c(),
+                         -1./CGPenCq().curr_cg_pert_fact(), *IpCq().curr_c(),
                          1.);
       Number omega_test = vec->Amax();
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
@@ -749,7 +749,7 @@ namespace Ipopt
       if (increase) {
         SmartPtr<Vector> vec = IpData().curr()->y_d()->MakeNewCopy();
         vec->AddTwoVectors(1., *IpData().delta()->y_d(),
-                           -1./IpCq().CGPenCq().curr_cg_pert_fact(), *IpCq().curr_d_minus_s(),
+                           -1./CGPenCq().curr_cg_pert_fact(), *IpCq().curr_d_minus_s(),
                            1.);
         omega_test = vec->Amax();
         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
@@ -767,15 +767,15 @@ namespace Ipopt
       curr_eta_ = Max(eta_min_, curr_eta_/2.);
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                      "Updating eta to = %8.2\n", curr_eta_);
-      Number penalty = IpData().CGPenData().curr_kkt_penalty();
+      Number penalty = CGPenData().curr_kkt_penalty();
       Number y_full_step_max;
       SmartPtr<Vector> vec = IpData().curr()->y_c()->MakeNew();
       vec->AddTwoVectors(1., *IpData().curr()->y_c(),
-                         1., *IpData().CGPenData().delta_cgpen()->y_c(), 0.);
+                         1., *CGPenData().delta_cgpen()->y_c(), 0.);
       y_full_step_max = vec->Amax();
       vec = IpData().curr()->y_d()->MakeNew();
       vec->AddTwoVectors(1., *IpData().curr()->y_d(),
-                         1., *IpData().CGPenData().delta_cgpen()->y_d(), 0.);
+                         1., *CGPenData().delta_cgpen()->y_d(), 0.);
       y_full_step_max = Max(y_full_step_max, vec->Amax());
       if (IpCq().curr_primal_infeasibility(NORM_2) >= epsilon_c_) {
         penalty = Max(chi_hat_*penalty, y_full_step_max + 1.);
@@ -788,16 +788,16 @@ namespace Ipopt
       if (penalty > penalty_max_) {
         THROW_EXCEPTION(IpoptException, "Penalty parameter becomes too large.");
       }
-      IpData().CGPenData().Set_kkt_penalty(penalty);
-      if (IpData().CGPenData().NeverTryPureNewton()) {
-        IpData().CGPenData().Set_penalty(penalty);
+      CGPenData().Set_kkt_penalty(penalty);
+      if (CGPenData().NeverTryPureNewton()) {
+        CGPenData().Set_penalty(penalty);
       }
     }
 
     // Second heuristic update for penalty parameters
     if (IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim() > 0 &&
         !never_use_piecewise_penalty_ls_) {
-      Number scaled_y_Amax = IpCq().CGPenCq().curr_scaled_y_Amax();
+      Number scaled_y_Amax = CGPenCq().curr_scaled_y_Amax();
       if (scaled_y_Amax <= 1e4 ||
           counter_second_type_penalty_updates_ < 5) {
         Number result;
@@ -807,16 +807,16 @@ namespace Ipopt
         SmartPtr<const Vector> dy_d = IpData().delta()->y_d();
         Number curr_inf = IpCq().curr_primal_infeasibility(NORM_2);
         result = dy_c->Dot(*IpCq().curr_c()) + dy_d->Dot(*IpCq().curr_d_minus_s());
-        if (!IpData().CGPenData().HaveCgFastDeltas()) {
+        if (!CGPenData().HaveCgFastDeltas()) {
           result += ty_c->Dot(*IpCq().curr_c()) + ty_d->Dot(*IpCq().curr_d_minus_s());
         }
-        Number k_pen = IpData().CGPenData().curr_kkt_penalty();
+        Number k_pen = CGPenData().curr_kkt_penalty();
         if (result > 0.5*k_pen*curr_inf || result < -0.5*k_pen*curr_inf) {
-          Number nrm2_y = IpCq().CGPenCq().curr_added_y_nrm2();
+          Number nrm2_y = CGPenCq().curr_added_y_nrm2();
           result = 5.*nrm2_y;
-          IpData().CGPenData().Set_kkt_penalty(result);
-          if (IpData().CGPenData().NeverTryPureNewton()) {
-            IpData().CGPenData().Set_penalty(result);
+          CGPenData().Set_kkt_penalty(result);
+          if (CGPenData().NeverTryPureNewton()) {
+            CGPenData().Set_penalty(result);
           }
           if (scaled_y_Amax > 1e4) {
             counter_second_type_penalty_updates_++;
@@ -832,8 +832,8 @@ namespace Ipopt
     // LIFENG: REPLACE ME!
     if (RestoreBestPoint()) {
       Index restor_iter = IpData().iter_count() + 1;
-      IpData().CGPenData().SetRestorIter(restor_iter);
-      IpData().CGPenData().SetNeverTryPureNewton(true);
+      CGPenData().SetRestorIter(restor_iter);
+      CGPenData().SetNeverTryPureNewton(true);
       IpData().Append_info_string("help");
       return true;
     }

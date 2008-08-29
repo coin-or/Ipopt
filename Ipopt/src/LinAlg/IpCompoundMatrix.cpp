@@ -103,12 +103,12 @@ namespace Ipopt
 #endif
     if (comp_x) {
       if (NComps_Cols()!=comp_x->NComps()) {
-	comp_x = NULL;
+        comp_x = NULL;
       }
     }
     if (comp_y) {
       if (NComps_Rows()!=comp_y->NComps()) {
-	comp_y = NULL;
+        comp_y = NULL;
       }
     }
 
@@ -179,12 +179,12 @@ namespace Ipopt
 #endif
     if (comp_y) {
       if (NComps_Cols()!=comp_y->NComps()) {
-	comp_y = NULL;
+        comp_y = NULL;
       }
     }
     if (comp_x) {
       if (NComps_Rows()!=comp_x->NComps()) {
-	comp_x = NULL;
+        comp_x = NULL;
       }
     }
 
@@ -258,17 +258,17 @@ namespace Ipopt
 #endif
     if (comp_S) {
       if (NComps_Cols()!=comp_S->NComps()) {
-	comp_S = NULL;
+        comp_S = NULL;
       }
     }
     if (comp_Z) {
       if (NComps_Cols()!=comp_Z->NComps()) {
-	comp_Z = NULL;
+        comp_Z = NULL;
       }
     }
     if (comp_X) {
       if (NComps_Rows()!=comp_X->NComps()) {
-	comp_X = NULL;
+        comp_X = NULL;
       }
     }
 
@@ -322,19 +322,19 @@ namespace Ipopt
     if (!owner_space_->Diagonal()) {
       fast_SinvBlrmZMTdBr = true;
       for (Index jcol=0; jcol < NComps_Cols(); jcol++ ) {
-	Index nblocks = 0;
-	for (Index irow=0; irow < NComps_Rows(); irow++ ) {
-	  if (ConstComp(irow, jcol)) {
-	    nblocks++;
-	    if (nblocks>1) {
-	      break;
-	    }
-	  }
-	}
-	if (nblocks!=1) {
-	  fast_SinvBlrmZMTdBr = false;
-	  break;
-	}
+        Index nblocks = 0;
+        for (Index irow=0; irow < NComps_Rows(); irow++ ) {
+          if (ConstComp(irow, jcol)) {
+            nblocks++;
+            if (nblocks>1) {
+              break;
+            }
+          }
+        }
+        if (nblocks!=1) {
+          fast_SinvBlrmZMTdBr = false;
+          break;
+        }
       }
     }
 
@@ -387,40 +387,40 @@ namespace Ipopt
 #endif
       if (comp_S) {
         if (NComps_Cols()!=comp_S->NComps()) {
-	  comp_S = NULL;
-	}
+          comp_S = NULL;
+        }
       }
       if (comp_Z) {
         if (NComps_Cols()!=comp_Z->NComps()) {
-	  comp_Z = NULL;
-	}
+          comp_Z = NULL;
+        }
       }
       if (comp_R) {
         if (NComps_Cols()!=comp_R->NComps()) {
-	  comp_R = NULL;
-	}
+          comp_R = NULL;
+        }
       }
       if (comp_D) {
         if (NComps_Rows()!=comp_D->NComps()) {
-	  comp_D = NULL;
-	}
+          comp_D = NULL;
+        }
       }
       if (comp_X) {
         if (NComps_Cols()!=comp_X->NComps()) {
-	  comp_X = NULL;
-	}
+          comp_X = NULL;
+        }
       }
 
       for (Index irow=0; irow<NComps_Cols(); irow++) {
         Index jcol = irow;
-	if (!owner_space_->Diagonal()) {
-	  for (Index j=0; j<NComps_Rows(); j++) {
-	    if (ConstComp(j, irow)) {
-	      jcol = j;
-	      break;
-	    }
-	  }
-	}
+        if (!owner_space_->Diagonal()) {
+          for (Index j=0; j<NComps_Rows(); j++) {
+            if (ConstComp(j, irow)) {
+              jcol = j;
+              break;
+            }
+          }
+        }
         SmartPtr<const Vector> S_i;
         if (comp_S) {
           S_i = comp_S->GetComp(irow);
@@ -510,7 +510,7 @@ namespace Ipopt
 #endif
     if (comp_vec) {
       if (NComps_Rows()!=comp_vec->NComps()) {
-	comp_vec = NULL;
+        comp_vec = NULL;
       }
     }
 
@@ -551,7 +551,7 @@ namespace Ipopt
 #endif
     if (comp_vec) {
       if (NComps_Cols()!=comp_vec->NComps()) {
-	comp_vec = NULL;
+        comp_vec = NULL;
       }
     }
 

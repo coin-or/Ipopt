@@ -52,7 +52,7 @@ namespace Ipopt
     }
 
     virtual void TransMultVectorImpl(Number alpha, const Vector& x,
-				     Number beta, Vector& y) const
+                                     Number beta, Vector& y) const
     {
       DBG_ASSERT(IsValid(orig_matrix_));
       orig_matrix_->MultVector(alpha, x, beta, y);
@@ -118,8 +118,8 @@ namespace Ipopt
     /** Constructor, given the dimension of the matrix. */
     TransposeMatrixSpace(const MatrixSpace* orig_matrix_space)
         :
-      MatrixSpace(orig_matrix_space->NCols(), orig_matrix_space->NRows()),
-      orig_matrix_space_(orig_matrix_space)
+        MatrixSpace(orig_matrix_space->NCols(), orig_matrix_space->NRows()),
+        orig_matrix_space_(orig_matrix_space)
     {}
 
     /** Destructor */

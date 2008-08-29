@@ -1,4 +1,4 @@
-// Copyright (C) 2007 International Business Machines and others.
+// Copyright (C) 2007, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,6 +11,7 @@
 #define __IPCGPENALTYCQ_HPP__
 
 #include "IpIpoptCalculatedQuantities.hpp"
+#include "IpCGPenaltyData.hpp"
 
 namespace Ipopt
 {
@@ -18,7 +19,7 @@ namespace Ipopt
   /** Class for all Chen-Goldfarb penalty method specific calculated
    *  quantities.
    */
-  class CGPenaltyCq : public ReferencedObject
+  class CGPenaltyCq : public IpoptAdditionalCq
   {
   public:
 
@@ -109,6 +110,15 @@ namespace Ipopt
     IpoptData* ip_data_;
     IpoptCalculatedQuantities* ip_cq_;
     //@}
+
+    /** Method to easily access CGPenalty data */
+    CGPenaltyData& CGPenData()
+    {
+      CGPenaltyData& cg_pen_data =
+        static_cast<CGPenaltyData&>(ip_data_->AdditionalData());
+      DBG_ASSERT(dynamic_cast<CGPenaltyData*>(&ip_data_->AdditionalData()));
+      return cg_pen_data;
+    }
 
     /**@name Caches for the Chen-Goldfarb line search */
     //@{
