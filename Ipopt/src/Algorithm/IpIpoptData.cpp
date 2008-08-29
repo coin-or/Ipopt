@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -8,20 +8,17 @@
 
 #include "IpIpoptData.hpp"
 #include "IpIpoptNLP.hpp"
-#include "IpCGPenaltyData.hpp"
 
 namespace Ipopt
 {
 
-  IpoptData::IpoptData()
+  IpoptData::IpoptData(SmartPtr<IpoptAdditionalData> add_data /*= NULL*/)
       :
-      cgpen_data_(new CGPenaltyData())
+      add_data_(add_data)
   {}
 
   IpoptData::~IpoptData()
-  {
-    delete cgpen_data_;
-  }
+  {}
 
   void IpoptData::RegisterOptions(const SmartPtr<RegisteredOptions>& roptions)
   {
@@ -72,7 +69,13 @@ namespace Ipopt
 
     initialize_called_ = true;
 
-    return cgpen_data_->Initialize(jnlst, options, prefix);
+    bool retval = true;
+
+    if (IsValid(add_data_)) {
+      retval = add_data_->Initialize(jnlst, options, prefix);
+    }
+
+    return retval;
   }
 
   bool IpoptData::InitializeDataStructures(IpoptNLP& ip_nlp,
@@ -147,7 +150,12 @@ namespace Ipopt
     have_deltas_ = false;
     have_affine_deltas_ = false;
 
-    return cgpen_data_->InitializeDataStructures();
+    bool retval = true;
+    if (IsValid(add_data_)) {
+      retval = add_data_->InitializeDataStructures();
+    }
+
+    return retval;
   }
 
   void IpoptData::SetTrialPrimalVariablesFromStep(Number alpha,
@@ -235,7 +243,9 @@ namespace Ipopt
     have_deltas_ = false;
     have_affine_deltas_ = false;
 
-    cgpen_data_->AcceptTrialPoint();
+    if (IsValid(add_data_)) {
+      add_data_->AcceptTrialPoint();
+    }
   }
 
 } // namespace Ipopt

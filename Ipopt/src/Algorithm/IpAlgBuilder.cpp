@@ -12,6 +12,8 @@
 #include "IpOrigIpoptNLP.hpp"
 #include "IpIpoptData.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
+#include "IpCGPenaltyData.hpp"
+#include "IpCGPenaltyCq.hpp"
 
 #include "IpStdAugSystemSolver.hpp"
 #include "IpAugRestoSystemSolver.hpp"
@@ -103,11 +105,25 @@ namespace Ipopt
 
     ip_nlp = new OrigIpoptNLP(&jnlst, GetRawPtr(nlp), nlp_scaling);
 
-    // Create the IpoptData
-    ip_data = new IpoptData();
+    // Create the IpoptData.  Check if there is additional data that
+    // is needed
+    std::string lsmethod;
+    SmartPtr<IpoptAdditionalData> add_data;
+    options.GetStringValue("line_search_method", lsmethod, prefix);
+    if (lsmethod=="cg-penalty") {
+      add_data = new CGPenaltyData();
+    }
+    ip_data = new IpoptData(add_data);
 
-    // Create the IpoptCalculators
+    // Create the IpoptCalculators.  Check if there are additional
+    // calcluated quantities that are needed
     ip_cq = new IpoptCalculatedQuantities(ip_nlp, ip_data);
+    if (lsmethod=="cg-penalty") {
+      SmartPtr<IpoptAdditionalCq> add_cq =
+        new CGPenaltyCq(GetRawPtr(ip_nlp), GetRawPtr(ip_data),
+                        GetRawPtr(ip_cq));
+      ip_cq->SetAddCq(add_cq);
+    }
   }
 
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)

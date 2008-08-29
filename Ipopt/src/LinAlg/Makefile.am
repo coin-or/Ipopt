@@ -38,6 +38,7 @@ liblinalg_la_SOURCES = \
 	IpSumSymMatrix.cpp IpSumSymMatrix.hpp \
 	IpSymMatrix.hpp \
 	IpSymScaledMatrix.cpp IpSymScaledMatrix.hpp \
+	IpTransposeMatrix.cpp IpTransposeMatrix.hpp \
 	IpVector.cpp IpVector.hpp \
 	IpZeroMatrix.cpp IpZeroMatrix.hpp
 
@@ -70,6 +71,7 @@ ASTYLE_FILES = IpBlas.cppbak IpBlas.hppbak \
 	IpSumSymMatrix.cppbak IpSumSymMatrix.hppbak \
 	IpSymMatrix.hppbak \
 	IpSymScaledMatrix.cppbak IpSymScaledMatrix.hppbak \
+	IpTransposeMatrix.cppbak IpTransposeMatrix.hppbak \
 	IpVector.cppbak IpVector.hppbak \
 	IpZeroMatrix.cppbak IpZeroMatrix.hppbak
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -10,6 +10,7 @@
 #define __IPCGPERTURBATIONHANDLER_HPP__
 
 #include "IpPDPerturbationHandler.hpp"
+#include "IpCGPenaltyCq.hpp"
 
 namespace Ipopt
 {
@@ -85,6 +86,24 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const CGPerturbationHandler&);
     //@}
+
+    /** Method to easily access CGPenalty data */
+    CGPenaltyData& CGPenData()
+    {
+      CGPenaltyData& cg_pen_data =
+        static_cast<CGPenaltyData&>(IpData().AdditionalData());
+      DBG_ASSERT(dynamic_cast<CGPenaltyData*>(&IpData().AdditionalData()));
+      return cg_pen_data;
+    }
+
+    /** Method to easily access CGPenalty calculated quantities */
+    CGPenaltyCq& CGPenCq()
+    {
+      CGPenaltyCq& cg_pen_cq =
+        static_cast<CGPenaltyCq&>(IpCq().AdditionalCq());
+      DBG_ASSERT(dynamic_cast<CGPenaltyCq*>(&IpCq().AdditionalCq()));
+      return cg_pen_cq;
+    }
 
     /** @name Size of the most recent non-zero perturbation. */
     //@{

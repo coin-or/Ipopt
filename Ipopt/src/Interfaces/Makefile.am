@@ -29,6 +29,7 @@ libipopt_la_SOURCES = \
 	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
+	IpNLPBoundsRemover.cpp IpNLPBoundsRemover.hpp \
 	IpReturnCodes.h \
 	IpReturnCodes.hpp \
 	IpSolveStatistics.cpp IpSolveStatistics.hpp \
@@ -82,6 +83,7 @@ ASTYLE_FILES = \
 	IpInterfacesRegOp.cppbak IpInterfacesRegOp.hppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
+	IpNLPBoundsRemover.cppbak IpNLPBoundsRemover.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
