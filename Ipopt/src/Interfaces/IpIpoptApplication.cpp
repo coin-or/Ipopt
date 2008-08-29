@@ -20,6 +20,8 @@
 #include "IpAlgorithmRegOp.hpp"
 #include "IpCGPenaltyRegOp.hpp"
 
+#include "IpNLPBoundsRemover.hpp"
+
 #ifdef HAVE_CMATH
 # include <cmath>
 #else
@@ -528,7 +530,9 @@ namespace Ipopt
   IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& tnlp)
   {
     nlp_adapter_ = new TNLPAdapter(GetRawPtr(tnlp), ConstPtr(jnlst_));
-
+#if 1
+    nlp_adapter_ = new NLPBoundsRemover(*nlp_adapter_);
+#endif
     return OptimizeNLP(nlp_adapter_);
   }
 

@@ -83,12 +83,16 @@ Ipopt/src/Algorithm/LinearSolvers/IpLinearSolversRegOp.cpp -text
 Ipopt/src/Algorithm/LinearSolvers/IpLinearSolversRegOp.hpp -text
 Ipopt/src/Interfaces/IpInterfacesRegOp.cpp -text
 Ipopt/src/Interfaces/IpInterfacesRegOp.hpp -text
+Ipopt/src/Interfaces/IpNLPBoundsRemover.cpp -text
+Ipopt/src/Interfaces/IpNLPBoundsRemover.hpp -text
 Ipopt/src/Interfaces/IpSolveStatistics.cpp -text
 Ipopt/src/Interfaces/IpSolveStatistics.hpp -text
 Ipopt/src/Interfaces/IpTNLPReducer.cpp -text
 Ipopt/src/Interfaces/IpTNLPReducer.hpp -text
 Ipopt/src/Interfaces/ipopt_addlibs_cpp.txt.in -text
 Ipopt/src/Interfaces/ipopt_addlibs_f.txt.in -text
+Ipopt/src/LinAlg/IpTransposeMatrix.cpp -text
+Ipopt/src/LinAlg/IpTransposeMatrix.hpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyCq.cpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyCq.hpp -text
 Ipopt/src/contrib/CGPenalty/IpCGPenaltyData.cpp -text
