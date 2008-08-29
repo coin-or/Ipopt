@@ -1,4 +1,4 @@
-// Copyright (C) 2007 International Business Machines and others.
+// Copyright (C) 2007, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -20,6 +20,7 @@ namespace Ipopt
     roptions->SetRegisteringCategory("Undocumented");
     CGSearchDirCalculator::RegisterOptions(roptions);
     CGPenaltyLSAcceptor::RegisterOptions(roptions);
+    CGPenaltyCq::RegisterOptions(roptions);
   }
 
 } // namespace Ipopt

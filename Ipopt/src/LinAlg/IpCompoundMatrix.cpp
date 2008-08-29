@@ -20,6 +20,8 @@
 # endif
 #endif
 
+#define ALLOW_NESTED
+
 namespace Ipopt
 {
 
@@ -83,6 +85,7 @@ namespace Ipopt
     const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
     CompoundVector* comp_y = dynamic_cast<CompoundVector*>(&y);
 
+#ifndef ALLOW_NESTED
     //  A few sanity checks
     if (comp_x) {
       DBG_ASSERT(NComps_Cols()==comp_x->NComps());
@@ -96,6 +99,17 @@ namespace Ipopt
     }
     else {
       DBG_ASSERT(NComps_Rows() == 1);
+    }
+#endif
+    if (comp_x) {
+      if (NComps_Cols()!=comp_x->NComps()) {
+        comp_x = NULL;
+      }
+    }
+    if (comp_y) {
+      if (NComps_Rows()!=comp_y->NComps()) {
+        comp_y = NULL;
+      }
     }
 
     // Take care of the y part of the addition
@@ -147,6 +161,7 @@ namespace Ipopt
     const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
     CompoundVector* comp_y = dynamic_cast<CompoundVector*>(&y);
 
+#ifndef ALLOW_NESTED
     //  A few sanity checks
     if (comp_y) {
       DBG_ASSERT(NComps_Cols()==comp_y->NComps());
@@ -160,6 +175,17 @@ namespace Ipopt
     }
     else {
       DBG_ASSERT(NComps_Rows() == 1);
+    }
+#endif
+    if (comp_y) {
+      if (NComps_Cols()!=comp_y->NComps()) {
+        comp_y = NULL;
+      }
+    }
+    if (comp_x) {
+      if (NComps_Rows()!=comp_x->NComps()) {
+        comp_x = NULL;
+      }
     }
 
     // Take care of the y part of the addition
@@ -209,6 +235,7 @@ namespace Ipopt
     const CompoundVector* comp_Z = dynamic_cast<const CompoundVector*>(&Z);
     CompoundVector* comp_X = dynamic_cast<CompoundVector*>(&X);
 
+#ifndef ALLOW_NESTED
     //  A few sanity checks for sizes
     if (comp_S) {
       DBG_ASSERT(NComps_Cols()==comp_S->NComps());
@@ -228,8 +255,24 @@ namespace Ipopt
     else {
       DBG_ASSERT(NComps_Rows() == 1);
     }
+#endif
+    if (comp_S) {
+      if (NComps_Cols()!=comp_S->NComps()) {
+        comp_S = NULL;
+      }
+    }
+    if (comp_Z) {
+      if (NComps_Cols()!=comp_Z->NComps()) {
+        comp_Z = NULL;
+      }
+    }
+    if (comp_X) {
+      if (NComps_Rows()!=comp_X->NComps()) {
+        comp_X = NULL;
+      }
+    }
 
-    for ( Index irow = 0; irow < NComps_Cols(); irow++ ) {
+    for ( Index irow = 0; irow < NComps_Rows(); irow++ ) {
       SmartPtr<Vector> X_i;
       if (comp_X) {
         X_i = comp_X->GetCompNonConst(irow);
@@ -241,7 +284,7 @@ namespace Ipopt
 
       for ( Index jcol = 0; jcol < NComps_Cols(); jcol++ ) {
         if ( (owner_space_->Diagonal() && irow == jcol)
-             || (!owner_space_->Diagonal() && ConstComp(jcol, irow)) ) {
+             || (!owner_space_->Diagonal() && ConstComp(irow, jcol)) ) {
           SmartPtr<const Vector> S_j;
           if (comp_S) {
             S_j = comp_S->GetComp(jcol);
@@ -259,7 +302,7 @@ namespace Ipopt
           }
           DBG_ASSERT(IsValid(Z_j));
 
-          ConstComp(jcol, irow)->AddMSinvZ(alpha, *S_j, *Z_j, *X_i);
+          ConstComp(irow, jcol)->AddMSinvZ(alpha, *S_j, *Z_j, *X_i);
         }
       }
     }
@@ -273,10 +316,29 @@ namespace Ipopt
     // First check if the matrix is indeed such that we can use the
     // special methods from the component spaces (this only works if
     // we have exactly one submatrix per column)
-    // CDL: in every case this was true, the matrix blocks were on the
-    // diagonal so I made this more efficient.
+
+    bool fast_SinvBlrmZMTdBr = false;
 
     if (!owner_space_->Diagonal()) {
+      fast_SinvBlrmZMTdBr = true;
+      for (Index jcol=0; jcol < NComps_Cols(); jcol++ ) {
+        Index nblocks = 0;
+        for (Index irow=0; irow < NComps_Rows(); irow++ ) {
+          if (ConstComp(irow, jcol)) {
+            nblocks++;
+            if (nblocks>1) {
+              break;
+            }
+          }
+        }
+        if (nblocks!=1) {
+          fast_SinvBlrmZMTdBr = false;
+          break;
+        }
+      }
+    }
+
+    if (!owner_space_->Diagonal() && !fast_SinvBlrmZMTdBr) {
       // Use the standard replacement implementation
       Matrix::SinvBlrmZMTdBrImpl(alpha, S, R, Z, D, X);
       DBG_ASSERT(false && "Found a matrix where we can't use the fast SinvBlrmZMTdBr implementation in CompoundMatrix");
@@ -290,6 +352,7 @@ namespace Ipopt
       const CompoundVector* comp_D = dynamic_cast<const CompoundVector*>(&D);
       CompoundVector* comp_X = dynamic_cast<CompoundVector*>(&X);
 
+#ifndef ALLOW_NESTED
       //  A few sanity checks for sizes
       if (comp_S) {
         DBG_ASSERT(NComps_Cols()==comp_S->NComps());
@@ -321,9 +384,43 @@ namespace Ipopt
       else {
         DBG_ASSERT(NComps_Cols() == 1);
       }
+#endif
+      if (comp_S) {
+        if (NComps_Cols()!=comp_S->NComps()) {
+          comp_S = NULL;
+        }
+      }
+      if (comp_Z) {
+        if (NComps_Cols()!=comp_Z->NComps()) {
+          comp_Z = NULL;
+        }
+      }
+      if (comp_R) {
+        if (NComps_Cols()!=comp_R->NComps()) {
+          comp_R = NULL;
+        }
+      }
+      if (comp_D) {
+        if (NComps_Rows()!=comp_D->NComps()) {
+          comp_D = NULL;
+        }
+      }
+      if (comp_X) {
+        if (NComps_Cols()!=comp_X->NComps()) {
+          comp_X = NULL;
+        }
+      }
 
-      for (Index irow=0; irow<NComps_Cols(); irow++ ) {
-        Index jcol = irow; // diagonal, remember
+      for (Index irow=0; irow<NComps_Cols(); irow++) {
+        Index jcol = irow;
+        if (!owner_space_->Diagonal()) {
+          for (Index j=0; j<NComps_Rows(); j++) {
+            if (ConstComp(j, irow)) {
+              jcol = j;
+              break;
+            }
+          }
+        }
         SmartPtr<const Vector> S_i;
         if (comp_S) {
           S_i = comp_S->GetComp(irow);
@@ -402,12 +499,19 @@ namespace Ipopt
     // there is only one component
     CompoundVector* comp_vec = dynamic_cast<CompoundVector*>(&rows_norms);
 
+#ifndef ALLOW_NESTED
     //  A few sanity checks
     if (comp_vec) {
       DBG_ASSERT(NComps_Rows()==comp_vec->NComps());
     }
     else {
       DBG_ASSERT(NComps_Rows() == 1);
+    }
+#endif
+    if (comp_vec) {
+      if (NComps_Rows()!=comp_vec->NComps()) {
+        comp_vec = NULL;
+      }
     }
 
     for (Index jcol = 0; jcol < NComps_Cols(); jcol++) {
@@ -436,12 +540,19 @@ namespace Ipopt
     // there is only one component
     CompoundVector* comp_vec = dynamic_cast<CompoundVector*>(&cols_norms);
 
+#ifndef ALLOW_NESTED
     //  A few sanity checks
     if (comp_vec) {
       DBG_ASSERT(NComps_Cols()==comp_vec->NComps());
     }
     else {
       DBG_ASSERT(NComps_Cols() == 1);
+    }
+#endif
+    if (comp_vec) {
+      if (NComps_Cols()!=comp_vec->NComps()) {
+        comp_vec = NULL;
+      }
     }
 
     for (Index irow = 0; irow < NComps_Rows(); irow++) {

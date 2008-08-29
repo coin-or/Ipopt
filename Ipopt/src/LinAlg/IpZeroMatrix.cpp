@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -60,7 +60,7 @@ namespace Ipopt
   {
     jnlst.Printf(level, category, "\n");
     jnlst.PrintfIndented(level, category, indent,
-                         "%sZeroMatrix \"%s\" with %d row and %d columns components:\n",
+                         "%sZeroMatrix \"%s\" with %d row and %d column components:\n",
                          prefix.c_str(), name.c_str(), NRows(), NCols());
   }
 } // namespace Ipopt

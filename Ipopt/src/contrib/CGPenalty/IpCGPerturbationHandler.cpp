@@ -87,7 +87,7 @@ namespace Ipopt
     finalize_test();
     // If the current iterate is restored from a previous iteration,
     // initialize perturbationhandler data
-    if (IpData().CGPenData().restor_iter() == IpData().iter_count()) {
+    if (CGPenData().restor_iter() == IpData().iter_count()) {
       hess_degenerate_ = NOT_YET_DETERMINED;
       jac_degenerate_ = NOT_YET_DETERMINED;
       degen_iters_ = 0;
@@ -134,8 +134,8 @@ namespace Ipopt
     if (hess_degenerate_ == NOT_YET_DETERMINED ||
         jac_degenerate_ == NOT_YET_DETERMINED) {
       if (!perturb_always_cd_
-          || IpCq().CGPenCq().curr_cg_pert_fact() < delta_cd()
-          || !IpData().CGPenData().NeverTryPureNewton()) {
+          || CGPenCq().curr_cg_pert_fact() < delta_cd()
+          || !CGPenData().NeverTryPureNewton()) {
         test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_EQ_0;
       }
       else {
@@ -146,9 +146,9 @@ namespace Ipopt
       test_status_ = NO_TEST;
     }
 
-    Number pert_fact = IpCq().CGPenCq().curr_cg_pert_fact();
+    Number pert_fact = CGPenCq().curr_cg_pert_fact();
     if (jac_degenerate_ == DEGENERATE
-        || IpData().CGPenData().NeverTryPureNewton()
+        || CGPenData().NeverTryPureNewton()
         || perturb_always_cd_) {
       Number mach_eps = std::numeric_limits<Number>::epsilon();
       if (pert_fact < 100.*mach_eps
@@ -162,7 +162,7 @@ namespace Ipopt
     else {
       delta_c = delta_c_curr_ = 0.;
     }
-    IpData().CGPenData().SetCurrPenaltyPert(delta_c);
+    CGPenData().SetCurrPenaltyPert(delta_c);
 
     delta_d = delta_d_curr_ = delta_c;
 
@@ -232,9 +232,9 @@ namespace Ipopt
         DBG_ASSERT(jac_degenerate_ == NOT_YET_DETERMINED);
         //if (!perturb_always_cd_) {
         delta_d_curr_ = delta_c_curr_ =
-                          Max(delta_cd(), IpCq().CGPenCq().curr_cg_pert_fact());
+                          Max(delta_cd(), CGPenCq().curr_cg_pert_fact());
         //delta_d_curr_ = delta_c_curr_ =
-        //                 Max(delta_cd(), IpCq().CGPenCq().curr_cg_pert_fact());
+        //                 Max(delta_cd(), CGPenCq().curr_cg_pert_fact());
         if (delta_d_curr_ < delta_cd()) {
           test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         }
@@ -262,8 +262,8 @@ namespace Ipopt
         break;
       case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
         DBG_ASSERT(delta_x_curr_ > 0. && delta_c_curr_ == 0.);
-        delta_d_curr_ = delta_c_curr_ = Max(delta_cd(), IpCq().CGPenCq().curr_cg_pert_fact());
-        //delta_d_curr_ = delta_c_curr_ = IpCq().CGPenCq().curr_cg_pert_fact();
+        delta_d_curr_ = delta_c_curr_ = Max(delta_cd(), CGPenCq().curr_cg_pert_fact());
+        //delta_d_curr_ = delta_c_curr_ = CGPenCq().curr_cg_pert_fact();
         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
                                               delta_c, delta_d);
         if (!retval) {
@@ -302,15 +302,15 @@ namespace Ipopt
         // ToDo - also perturb Hessian?
         IpData().Append_info_string("L");
         Number curr_inf = IpCq().curr_primal_infeasibility(NORM_2);
-        if (!IpData().CGPenData().NeverTryPureNewton()
+        if (!CGPenData().NeverTryPureNewton()
             && curr_inf > mult_diverg_feasibility_tol_) {
-          Number penalty = IpCq().CGPenCq().compute_curr_cg_penalty_scale();
+          Number penalty = CGPenCq().compute_curr_cg_penalty_scale();
           penalty = Min(penalty_max_, Max(penalty,
-                                          IpData().CGPenData().curr_kkt_penalty()));
-          IpData().CGPenData().Set_kkt_penalty(penalty);
+                                          CGPenData().curr_kkt_penalty()));
+          CGPenData().Set_kkt_penalty(penalty);
           Number mach_pro = std::numeric_limits<Number>::epsilon();
           delta_d_curr_ = delta_c_curr_ =
-                            Max(1e3*mach_pro,Max(IpCq().CGPenCq().curr_cg_pert_fact(),delta_cd()));
+                            Max(1e3*mach_pro,Max(CGPenCq().curr_cg_pert_fact(),delta_cd()));
           IpData().Append_info_string("u");
         }
       }

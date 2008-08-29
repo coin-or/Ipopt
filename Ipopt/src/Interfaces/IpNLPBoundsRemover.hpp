@@ -1,51 +1,38 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id$
+// $Id: IpNLP.hpp 949 2007-03-27 00:41:26Z andreasw $
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Andreas Waechter           IBM    2008-08-25
 
-#ifndef __IPNLP_HPP__
-#define __IPNLP_HPP__
+#ifndef __IPNLPBOUNDSREMOVER_HPP__
+#define __IPNLPBOUNDSREMOVER_HPP__
 
-#include "IpUtils.hpp"
-#include "IpVector.hpp"
-#include "IpSmartPtr.hpp"
-#include "IpMatrix.hpp"
-#include "IpSymMatrix.hpp"
-#include "IpOptionsList.hpp"
-#include "IpAlgTypes.hpp"
-#include "IpReturnCodes.hpp"
+#include "IpNLP.hpp"
 
 namespace Ipopt
 {
-  // forward declarations
-  class IpoptData;
-  class IpoptCalculatedQuantities;
-  class IteratesVector;
-
-  /** Brief Class Description.
-   *  Detailed Class Description.
+  /** This is an adaper for an NLP that converts variable bound
+   *  constraints to inequality constraints.  This is necessary for
+   *  the version of Ipopt that uses iterative linear solvers.  At
+   *  this point, none of the original inequality constraints is
+   *  allowed to have both lower and upper bounds.  The NLP visible to
+   *  Ipopt via this adapter will not have any bounds on variables,
+   *  but have equivalent inequality constraints.
    */
-  class NLP : public ReferencedObject
+  class NLPBoundsRemover : public NLP
   {
   public:
     /**@name Constructors/Destructors */
     //@{
-    /** Default constructor */
-    NLP()
-    {}
+    /** The constructor is given the NLP of which the bounds are to be
+     *  replaced by inequality constriants.  */
+    NLPBoundsRemover(NLP& nlp);
 
     /** Default destructor */
-    virtual ~NLP()
+    virtual ~NLPBoundsRemover()
     {}
-    //@}
-
-    /** Exceptions */
-    //@{
-    DECLARE_STD_EXCEPTION(USER_SCALING_NOT_IMPLEMENTED);
-    DECLARE_STD_EXCEPTION(INVALID_NLP);
     //@}
 
     /** @name NLP Initialization (overload in
@@ -56,7 +43,7 @@ namespace Ipopt
     virtual bool ProcessOptions(const OptionsList& options,
                                 const std::string& prefix)
     {
-      return true;
+      return nlp_->ProcessOptions(options, prefix);
     }
 
     /** Method for creating the derived vector / matrix types.  The
@@ -75,7 +62,7 @@ namespace Ipopt
                            SmartPtr<const MatrixSpace>& pd_u_space,
                            SmartPtr<const MatrixSpace>& Jac_c_space,
                            SmartPtr<const MatrixSpace>& Jac_d_space,
-                           SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space)=0;
+                           SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space);
 
     /** Method for obtaining the bounds information */
     virtual bool GetBoundsInformation(const Matrix& Px_L,
@@ -85,53 +72,63 @@ namespace Ipopt
                                       const Matrix& Pd_L,
                                       Vector& d_L,
                                       const Matrix& Pd_U,
-                                      Vector& d_U)=0;
+                                      Vector& d_U);
 
     /** Method for obtaining the starting point for all the
      *  iterates. ToDo it might not make sense to ask for initial
      *  values for v_L and v_U? */
-    virtual bool GetStartingPoint(
-      SmartPtr<Vector> x,
-      bool need_x,
-      SmartPtr<Vector> y_c,
-      bool need_y_c,
-      SmartPtr<Vector> y_d,
-      bool need_y_d,
-      SmartPtr<Vector> z_L,
-      bool need_z_L,
-      SmartPtr<Vector> z_U,
-      bool need_z_U
-    )=0;
+    virtual bool GetStartingPoint(SmartPtr<Vector> x,
+                                  bool need_x,
+                                  SmartPtr<Vector> y_c,
+                                  bool need_y_c,
+                                  SmartPtr<Vector> y_d,
+                                  bool need_y_d,
+                                  SmartPtr<Vector> z_L,
+                                  bool need_z_L,
+                                  SmartPtr<Vector> z_U,
+                                  bool need_z_U);
 
     /** Method for obtaining an entire iterate as a warmstart point.
-     *  The incoming IteratesVector has to be filled.  The default
-     *  dummy implementation returns false. */
+     *  The incoming IteratesVector has to be filled.  This has not
+     *  yet been implemented for this adapter. */
     virtual bool GetWarmStartIterate(IteratesVector& warm_start_iterate)
     {
-      return false;
+      return nlp_->GetWarmStartIterate(warm_start_iterate);
     }
     //@}
 
     /** @name NLP evaluation routines (overload
      *  in derived classes. */
     //@{
-    virtual bool Eval_f(const Vector& x, Number& f) = 0;
+    virtual bool Eval_f(const Vector& x, Number& f)
+    {
+      return nlp_->Eval_f(x, f);
+    }
 
-    virtual bool Eval_grad_f(const Vector& x, Vector& g_f) = 0;
+    virtual bool Eval_grad_f(const Vector& x, Vector& g_f)
+    {
+      return nlp_->Eval_grad_f(x, g_f);
+    }
 
-    virtual bool Eval_c(const Vector& x, Vector& c) = 0;
+    virtual bool Eval_c(const Vector& x, Vector& c)
+    {
+      return nlp_->Eval_c(x, c);
+    }
 
-    virtual bool Eval_jac_c(const Vector& x, Matrix& jac_c) = 0;
+    virtual bool Eval_jac_c(const Vector& x, Matrix& jac_c)
+    {
+      return nlp_->Eval_jac_c(x, jac_c);
+    }
 
-    virtual bool Eval_d(const Vector& x, Vector& d) = 0;
+    virtual bool Eval_d(const Vector& x, Vector& d);
 
-    virtual bool Eval_jac_d(const Vector& x, Matrix& jac_d) = 0;
+    virtual bool Eval_jac_d(const Vector& x, Matrix& jac_d);
 
     virtual bool Eval_h(const Vector& x,
                         Number obj_factor,
                         const Vector& yc,
                         const Vector& yd,
-                        SymMatrix& h) = 0;
+                        SymMatrix& h);
     //@}
 
     /** @name NLP solution routines. Have default dummy
@@ -149,8 +146,7 @@ namespace Ipopt
                                   const Vector& y_c, const Vector& y_d,
                                   Number obj_value,
                                   const IpoptData* ip_data,
-                                  IpoptCalculatedQuantities* ip_cq)
-    {}
+                                  IpoptCalculatedQuantities* ip_cq);
 
     /** This method is called once per iteration, after the iteration
      *  summary output has been printed.  It provides the current
@@ -177,7 +173,10 @@ namespace Ipopt
                                       const IpoptData* ip_data,
                                       IpoptCalculatedQuantities* ip_cq)
     {
-      return true;
+      return nlp_->IntermediateCallBack(mode,iter, obj_value, inf_pr, inf_du,
+                                        mu, d_norm, regularization_size,
+                                        alpha_du, alpha_pr, ls_trials,
+                                        ip_data, ip_cq);
     }
     //@}
 
@@ -192,12 +191,7 @@ namespace Ipopt
       Number& obj_scaling,
       SmartPtr<Vector>& x_scaling,
       SmartPtr<Vector>& c_scaling,
-      SmartPtr<Vector>& d_scaling) const
-    {
-      THROW_EXCEPTION(USER_SCALING_NOT_IMPLEMENTED,
-                      "You have set options for user provided scaling, but have"
-                      " not implemented GetScalingParameters in the NLP interface");
-    }
+      SmartPtr<Vector>& d_scaling) const;
     //@}
 
     /** Method for obtaining the subspace in which the limited-memory
@@ -217,8 +211,7 @@ namespace Ipopt
     GetQuasiNewtonApproximationSpaces(SmartPtr<VectorSpace>& approx_space,
                                       SmartPtr<Matrix>& P_approx)
     {
-      approx_space = NULL;
-      P_approx = NULL;
+      nlp_->GetQuasiNewtonApproximationSpaces(approx_space, P_approx);
     }
 
   private:
@@ -230,12 +223,26 @@ namespace Ipopt
      * and do not define them. This ensures that
      * they will not be implicitly created/called. */
     //@{
+    /** Default Constructor */
+    NLPBoundsRemover();
     /** Copy Constructor */
-    NLP(const NLP&);
+    NLPBoundsRemover(const NLPBoundsRemover&);
 
     /** Overloaded Equals Operator */
-    void operator=(const NLP&);
+    void operator=(const NLPBoundsRemover&);
     //@}
+
+    /** Pointer to the original NLP */
+    SmartPtr<NLP> nlp_;
+
+    /** Pointer to the expansion matrix for the lower x bounds */
+    SmartPtr<const Matrix> Px_l_orig_;
+
+    /** Pointer to the expansion matrix for the upper x bounds */
+    SmartPtr<const Matrix> Px_u_orig_;
+
+    /** Pointer to the original d space */
+    SmartPtr<const VectorSpace> d_space_orig_;
   };
 
 } // namespace Ipopt
