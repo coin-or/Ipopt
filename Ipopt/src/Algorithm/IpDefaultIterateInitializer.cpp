@@ -607,6 +607,7 @@ namespace Ipopt
     else {
       DBG_ASSERT(bound_push == 0.);
       tmp_l = x_L.MakeNewCopy();
+      DBG_PRINT_VECTOR(1, "tmp_l33", *tmp_l);
       Px_L.TransMultVector(-1.0, *my_orig_x, 1.0, *tmp_l);
       tmp_l->ElementWiseMax(*zero_l);
       DBG_PRINT_VECTOR(1, "tmp_l3", *tmp_l);

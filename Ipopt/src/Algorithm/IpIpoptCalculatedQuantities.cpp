@@ -1363,6 +1363,9 @@ namespace Ipopt
     if (!curr_jac_dT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
       if (!trial_jac_dT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
         SmartPtr<Vector> tmp = x->MakeNew();
+	DBG_PRINT_VECTOR(2, "vec", vec);
+	DBG_PRINT_VECTOR(2, "tmp", *tmp);
+	DBG_PRINT_MATRIX(2, "curr_jac_d()", *curr_jac_d());
         curr_jac_d()->TransMultVector(1.0, vec, 0., *tmp);
         result = ConstPtr(tmp);
       }
@@ -3074,7 +3077,9 @@ namespace Ipopt
 
       sigma->Set(0.);
       ip_nlp_->Pd_L()->AddMSinvZ(1., *curr_slack_s_L(), *v_L, *sigma);
+      DBG_PRINT_VECTOR(2,"sigma1", *sigma);
       ip_nlp_->Pd_U()->AddMSinvZ(1., *curr_slack_s_U(), *v_U, *sigma);
+      DBG_PRINT_VECTOR(2,"sigma2", *sigma);
 
       result = ConstPtr(sigma);
       curr_sigma_s_cache_.AddCachedResult3Dep(result, *s, *v_L, *v_U);
