@@ -19,11 +19,11 @@ namespace Ipopt
   }
 
   void TransposeMatrix::PrintImpl(const Journalist& jnlst,
-				  EJournalLevel level,
-				  EJournalCategory category,
-				  const std::string& name,
-				  Index indent,
-				  const std::string& prefix) const
+                                  EJournalLevel level,
+                                  EJournalCategory category,
+                                  const std::string& name,
+                                  Index indent,
+                                  const std::string& prefix) const
   {
     jnlst.Printf(level, category, "\n");
     jnlst.PrintfIndented(level, category, indent,
@@ -31,7 +31,7 @@ namespace Ipopt
                          prefix.c_str(), name.c_str());
     std::string new_name = name+"^T";
     orig_matrix_->Print(&jnlst, level, category, new_name,
-			indent+1, prefix);
+                        indent+1, prefix);
   }
 
 } // namespace Ipopt

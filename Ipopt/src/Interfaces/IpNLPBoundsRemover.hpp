@@ -78,15 +78,15 @@ namespace Ipopt
      *  iterates. ToDo it might not make sense to ask for initial
      *  values for v_L and v_U? */
     virtual bool GetStartingPoint(SmartPtr<Vector> x,
-				  bool need_x,
-				  SmartPtr<Vector> y_c,
-				  bool need_y_c,
-				  SmartPtr<Vector> y_d,
-				  bool need_y_d,
-				  SmartPtr<Vector> z_L,
-				  bool need_z_L,
-				  SmartPtr<Vector> z_U,
-				  bool need_z_U);
+                                  bool need_x,
+                                  SmartPtr<Vector> y_c,
+                                  bool need_y_c,
+                                  SmartPtr<Vector> y_d,
+                                  bool need_y_d,
+                                  SmartPtr<Vector> z_L,
+                                  bool need_z_L,
+                                  SmartPtr<Vector> z_U,
+                                  bool need_z_U);
 
     /** Method for obtaining an entire iterate as a warmstart point.
      *  The incoming IteratesVector has to be filled.  This has not
@@ -174,9 +174,9 @@ namespace Ipopt
                                       IpoptCalculatedQuantities* ip_cq)
     {
       return nlp_->IntermediateCallBack(mode,iter, obj_value, inf_pr, inf_du,
-					mu, d_norm, regularization_size,
-					alpha_du, alpha_pr, ls_trials,
-					ip_data, ip_cq);
+                                        mu, d_norm, regularization_size,
+                                        alpha_du, alpha_pr, ls_trials,
+                                        ip_data, ip_cq);
     }
     //@}
 

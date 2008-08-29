@@ -1,4 +1,4 @@
-// Copyright (C) 2007 International Business Machines and others.
+// Copyright (C) 2007, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -125,7 +125,7 @@ namespace Ipopt
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(s);
     Number mu = ip_data_->curr_mu();
-    Number penalty = ip_data_->CGPenData().curr_penalty();
+    Number penalty = CGPenData().curr_penalty();
     std::vector<Number> sdeps(2);
     sdeps[0] = mu;
     sdeps[1] = penalty;
@@ -152,7 +152,7 @@ namespace Ipopt
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(s);
     Number mu = ip_data_->curr_mu();
-    Number penalty = ip_data_->CGPenData().curr_penalty();
+    Number penalty = CGPenData().curr_penalty();
     std::vector<Number> sdeps(2);
     sdeps[0] = mu;
     sdeps[1] = penalty;
@@ -179,10 +179,10 @@ namespace Ipopt
     SmartPtr<const Vector> s = ip_data_->curr()->s();
     SmartPtr<const Vector> y_c = ip_data_->curr()->y_c();
     SmartPtr<const Vector> y_d = ip_data_->curr()->y_d();
-    SmartPtr<const Vector> dy_c = ip_data_->CGPenData().delta_cgpen()->y_c();
-    SmartPtr<const Vector> dy_d = ip_data_->CGPenData().delta_cgpen()->y_d();
-    SmartPtr<const Vector> dx = ip_data_->CGPenData().delta_cgpen()->x();
-    SmartPtr<const Vector> ds = ip_data_->CGPenData().delta_cgpen()->s();
+    SmartPtr<const Vector> dy_c = CGPenData().delta_cgpen()->y_c();
+    SmartPtr<const Vector> dy_d = CGPenData().delta_cgpen()->y_d();
+    SmartPtr<const Vector> dx = CGPenData().delta_cgpen()->x();
+    SmartPtr<const Vector> ds = CGPenData().delta_cgpen()->s();
     std::vector<const TaggedObject*> tdeps(8);
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(s);
@@ -193,7 +193,7 @@ namespace Ipopt
     tdeps[6] = GetRawPtr(dx);
     tdeps[7] = GetRawPtr(ds);
     Number mu = ip_data_->curr_mu();
-    Number penalty = ip_data_->CGPenData().curr_penalty();
+    Number penalty = CGPenData().curr_penalty();
     std::vector<Number> sdeps(2);
     sdeps[0] = mu;
     sdeps[1] = penalty;
@@ -203,7 +203,7 @@ namespace Ipopt
       Number curr_inf = ip_cq_->curr_primal_infeasibility(NORM_2);
       result -= penalty*curr_inf;
       if (curr_inf != 0.) {
-        Number fac = penalty*ip_data_->CGPenData().CurrPenaltyPert()/curr_inf;
+        Number fac = penalty*CGPenData().CurrPenaltyPert()/curr_inf;
         SmartPtr<const Vector> c = ip_cq_->curr_c();
         SmartPtr<const Vector> d_minus_s = ip_cq_->curr_d_minus_s();
         Number result1 = c->Dot(*y_c);
@@ -226,11 +226,11 @@ namespace Ipopt
     Number result;
     SmartPtr<const Vector> x = ip_data_->curr()->x();
     SmartPtr<const Vector> s = ip_data_->curr()->s();
-    DBG_ASSERT(ip_data_->CGPenData().HaveCgPenDeltas());
-    SmartPtr<const Vector> dy_c = ip_data_->CGPenData().delta_cgfast()->y_c();
-    SmartPtr<const Vector> dy_d = ip_data_->CGPenData().delta_cgfast()->y_d();
-    SmartPtr<const Vector> dx = ip_data_->CGPenData().delta_cgfast()->x();
-    SmartPtr<const Vector> ds = ip_data_->CGPenData().delta_cgfast()->s();
+    DBG_ASSERT(CGPenData().HaveCgPenDeltas());
+    SmartPtr<const Vector> dy_c = CGPenData().delta_cgfast()->y_c();
+    SmartPtr<const Vector> dy_d = CGPenData().delta_cgfast()->y_d();
+    SmartPtr<const Vector> dx = CGPenData().delta_cgfast()->x();
+    SmartPtr<const Vector> ds = CGPenData().delta_cgfast()->s();
     std::vector<const TaggedObject*> tdeps(6);
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(s);
@@ -239,7 +239,7 @@ namespace Ipopt
     tdeps[4] = GetRawPtr(dx);
     tdeps[5] = GetRawPtr(ds);
     Number mu = ip_data_->curr_mu();
-    Number penalty = ip_data_->CGPenData().curr_penalty();
+    Number penalty = CGPenData().curr_penalty();
     std::vector<Number> sdeps(2);
     sdeps[0] = mu;
     sdeps[1] = penalty;
@@ -249,7 +249,7 @@ namespace Ipopt
       Number curr_inf = ip_cq_->curr_primal_infeasibility(NORM_2);
       result -= penalty*curr_inf;
       if (curr_inf != 0.) {
-        Number fac = penalty*ip_data_->CGPenData().CurrPenaltyPert()/curr_inf;
+        Number fac = penalty*CGPenData().CurrPenaltyPert()/curr_inf;
         SmartPtr<const Vector> c = ip_cq_->curr_c();
         SmartPtr<const Vector> d_minus_s = ip_cq_->curr_d_minus_s();
         Number result1 = c->Dot(*dy_c);
@@ -273,7 +273,7 @@ namespace Ipopt
     std::vector<const TaggedObject*> tdeps(2);
     tdeps[0] = GetRawPtr(x);
     tdeps[1] = GetRawPtr(s);
-    Number penalty = ip_data_->CGPenData().curr_kkt_penalty();
+    Number penalty = CGPenData().curr_kkt_penalty();
     std::vector<Number> sdeps(1);
     sdeps[0] = penalty;
     DBG_ASSERT(penalty>0.);
@@ -290,17 +290,17 @@ namespace Ipopt
     DBG_START_METH("IpoptCalculatedQuantities::dT_times_barH_times_d()",
                    dbg_verbosity);
     Number result;
-    SmartPtr<const Vector> d_x = ip_data_->CGPenData().delta_cgfast()->x();
-    SmartPtr<const Vector> d_s = ip_data_->CGPenData().delta_cgfast()->s();
+    SmartPtr<const Vector> d_x = CGPenData().delta_cgfast()->x();
+    SmartPtr<const Vector> d_s = CGPenData().delta_cgfast()->s();
     SmartPtr<const Vector> y_c = ip_data_->curr()->y_c();
     SmartPtr<const Vector> y_d = ip_data_->curr()->y_d();
-    SmartPtr<const Vector> dy_c = ip_data_->CGPenData().delta_cgfast()->y_c();
-    SmartPtr<const Vector> dy_d = ip_data_->CGPenData().delta_cgfast()->y_d();
+    SmartPtr<const Vector> dy_c = CGPenData().delta_cgfast()->y_c();
+    SmartPtr<const Vector> dy_d = CGPenData().delta_cgfast()->y_d();
     SmartPtr<const Vector> c = ip_cq_->curr_c();
     SmartPtr<const Vector> d_minus_s = ip_cq_->curr_d_minus_s();
     Number deriv_barrier_dx = ip_cq_->curr_grad_barrier_obj_x()->Dot(*d_x);
     Number deriv_barrier_dx_ds = deriv_barrier_dx + ip_cq_->curr_grad_barrier_obj_s()->Dot(*d_s);
-    Number penalty = ip_data_->CGPenData().curr_penalty();
+    Number penalty = CGPenData().curr_penalty();
     result = -y_c->Dot(*dy_c);
     result -= y_d->Dot(*dy_d);
     result *= curr_cg_pert_fact();
@@ -360,20 +360,20 @@ namespace Ipopt
     Number penalty = 0.;
     if (infeasibility > 0.) {
       Number deriv_inf = 0.;
-      Number fac = ip_data_->CGPenData().CurrPenaltyPert()/infeasibility;
+      Number fac = CGPenData().CurrPenaltyPert()/infeasibility;
       SmartPtr<const Vector> c = ip_cq_->curr_c();
       SmartPtr<const Vector> d_minus_s = ip_cq_->curr_d_minus_s();
-      if (ip_data_->CGPenData().HaveCgFastDeltas()) {
-        SmartPtr<const Vector> fast_dy_c = ip_data_->CGPenData().delta_cgfast()->y_c();
-        SmartPtr<const Vector> fast_dy_d = ip_data_->CGPenData().delta_cgfast()->y_d();
+      if (CGPenData().HaveCgFastDeltas()) {
+        SmartPtr<const Vector> fast_dy_c = CGPenData().delta_cgfast()->y_c();
+        SmartPtr<const Vector> fast_dy_d = CGPenData().delta_cgfast()->y_d();
         deriv_inf += c->Dot(*fast_dy_c);
         deriv_inf += d_minus_s->Dot(*fast_dy_d);
         deriv_inf *= fac;
         deriv_inf -= infeasibility;
       }
       else {
-        SmartPtr<const Vector> cgpen_dy_c = ip_data_->CGPenData().delta_cgpen()->y_c();
-        SmartPtr<const Vector> cgpen_dy_d = ip_data_->CGPenData().delta_cgpen()->y_d();
+        SmartPtr<const Vector> cgpen_dy_c = CGPenData().delta_cgpen()->y_c();
+        SmartPtr<const Vector> cgpen_dy_d = CGPenData().delta_cgpen()->y_d();
         deriv_inf += c->Dot(*cgpen_dy_c);
         deriv_inf += c->Dot(*y_c);
         deriv_inf += d_minus_s->Dot(*cgpen_dy_d);
@@ -396,7 +396,7 @@ namespace Ipopt
                    dbg_verbosity);
     Number penalty;
     Number infeasibility = ip_cq_->curr_primal_infeasibility(NORM_2);
-    if (!ip_data_->CGPenData().NeverTryPureNewton()) {
+    if (!CGPenData().NeverTryPureNewton()) {
       penalty = Min(1e13, infeasibility*1e9);
     }
     else {
@@ -404,11 +404,11 @@ namespace Ipopt
                           ip_cq_->curr_primal_infeasibility(NORM_1)/
                           (ip_data_->curr()->y_c()->Dim()+
                            ip_data_->curr()->y_d()->Dim()))/2.;
-      if (ip_data_->CGPenData().restor_iter() == ip_data_->iter_count() ||
+      if (CGPenData().restor_iter() == ip_data_->iter_count() ||
           ip_data_->iter_count() == 0) {
         reference_infeasibility_ = Min(1., infeasibility);
       }
-      Number i = ip_data_->CGPenData().restor_counter();
+      Number i = CGPenData().restor_counter();
       Number fac = 4*1e-2*pow(1e1, i);
       //Number fac = 1e-2;
       penalty = Min(1e4,infeasibility) / (reference*fac*

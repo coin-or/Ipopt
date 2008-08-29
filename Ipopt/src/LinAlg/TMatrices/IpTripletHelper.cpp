@@ -725,7 +725,7 @@ namespace Ipopt
   void TripletHelper::FillRowCol_(Index n_entries, const TransposeMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     FillRowCol(n_entries, *matrix.OrigMatrix(), jCol, iRow,
-	       col_offset, row_offset);
+               col_offset, row_offset);
   }
 
   void TripletHelper::FillValues_(Index n_entries, const TransposeMatrix& matrix, Number* values)
