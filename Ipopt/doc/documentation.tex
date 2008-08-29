@@ -38,7 +38,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.5.0.  It includes
+  This document is a guide to using \Ipopt\ 3.5.1.  It includes
   instructions on how to obtain and compile \Ipopt, a description of
   the interface, user options, etc., as well as a tutorial on how to
   solve a nonlinear optimization problem with \Ipopt.
@@ -361,7 +361,7 @@ To use the tarball, follow the steps below:
 \item Download the desired tarball from
   \texttt{http://www.coin-or.org/download/source/Ipopt}, it has the form {\tt
     Ipopt-{\em x.y.z}.tgz}, where {\tt\em x.y.z} is the version
-  number, such as {\tt 3.5.0}.  There might also be daily snapshot
+  number, such as {\tt 3.5.1}.  There might also be daily snapshot
   from the stable branch.  The number of the latest official release
   can be found on the \Ipopt\ Trac page.
 \item Issue the following commands to unpack the archive file: \\
@@ -3260,11 +3260,14 @@ Below a few particular options are discussed:
   \verb|--with-wsmp="$HOME/lib/wsmp/wsmp-Linux/lib/IA32/libwsmp.a -lpthread"|
 
 \item If you want to compile \Ipopt\ with a precompiled MUMPS library
-  (see Section~\ref{sec:MUMPS}), you need to specify the directory in
-  which MUMPS has been compiled with the \verb|--with-mumps-dir| flag,
+  (see Section~\ref{sec:MUMPS}), you need to specify the directory containing
+  the MUMPS header files with the \verb|--with-mumps-incdir| flag,
   e.g.,
 
-  \verb|--with-mumps-dir="$HOME/MUMPS"|
+  \verb|--with-mumps-incdir="$HOME/MUMPS/include"|
+
+  and you also need to provide the link flags for MUMPS with the
+  \verb|--with-mumps-lib| flag.
 
 \item If you want to specify that you want to use particular
   compilers, you can do so by adding the variables definitions for
