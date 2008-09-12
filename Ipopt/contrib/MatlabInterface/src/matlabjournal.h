@@ -26,12 +26,8 @@ namespace Ipopt {
     virtual ~MatlabJournal() { };
 
   protected:
-
-    // These functions override the functions in the Journal class.
-    virtual void PrintImpl  (EJournalCategory category, EJournalLevel level, 
-			     const char* str);
-    virtual void PrintfImpl (EJournalCategory category, EJournalLevel level, 
-			     const char* pformat, va_list ap);
+    virtual void PrintImpl      (EJournalCategory category, EJournalLevel level, const char* str);
+    virtual void PrintfImpl     (EJournalCategory category, EJournalLevel level, const char* pformat, va_list ap);
     virtual void FlushBufferImpl();
   };
 }
