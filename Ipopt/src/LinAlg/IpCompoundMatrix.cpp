@@ -612,7 +612,9 @@ namespace Ipopt
     bool retValue = true;
     for (Index i=0; i<NComps_Rows(); i++) {
       for (Index j=0; j<NComps_Cols(); j++) {
-        if ( (!ConstComp(i,j) && IsValid(owner_space_->GetCompSpace(i,j)))
+        if ( (!ConstComp(i,j) && IsValid(owner_space_->GetCompSpace(i,j)) &&
+              owner_space_->GetCompSpace(i,j)->NRows()>0 &&
+              owner_space_->GetCompSpace(i,j)->NCols()>0)
              || (ConstComp(i,j) && IsNull(owner_space_->GetCompSpace(i,j))) ) {
           retValue = false;
           break;
