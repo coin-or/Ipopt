@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpCGSearchDirCalc.hpp 551 2005-10-27 00:31:28Z andreasw $
+// $Id$
 //
 // Authors:  Andreas Waechter            IBM    2005-10-13
 //
