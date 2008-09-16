@@ -43,6 +43,8 @@
 # endif
 #endif
 
+#include <limits>
+
 // The following code has been copied from CoinUtils' CoinTime
 
 /** 8< (BEGIN) ******************************** */
