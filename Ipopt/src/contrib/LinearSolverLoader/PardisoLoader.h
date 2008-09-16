@@ -2,7 +2,7 @@
  All Rights Reserved.
  This code is published under the Common Public License.
 
- $Id: PardisoLoader.h 330 2008-02-09 16:50:07Z stefan $
+ $Id$
 
  Author: Stefan Vigerske
 */

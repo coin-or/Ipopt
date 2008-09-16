@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpCGPenaltyLSAcceptor.cpp 552 2005-10-27 00:58:58Z andreasw $
+// $Id$
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 //           Andreas Waechter                 IBM    2005-10-13

@@ -244,6 +244,29 @@ namespace Ipopt
                    "s", *s, new_s, *IpNLP().d_L(),
                    *IpNLP().d_U(), *IpNLP().Pd_L(), *IpNLP().Pd_U());
 
+#define ENABLE_INEXACT
+#ifdef ENABLE_INEXACT
+    {
+      printf("SETTING ALL S to ONE off the bounds\n");
+      SmartPtr<Vector> tmp = new_s->MakeNew();
+      SmartPtr<Vector> tmp_L = IpNLP().d_L()->MakeNewCopy();
+      SmartPtr<Vector> tmp2 = tmp_L->MakeNew();
+      //tmp2->Set(1.);
+      tmp2->Set(1e-1);
+      tmp_L->Axpy(1., *tmp2);
+      IpNLP().Pd_L()->MultVector(1., *tmp_L, 0., *tmp);
+
+      SmartPtr<Vector> tmp_U = IpNLP().d_U()->MakeNewCopy();
+      tmp2 = tmp_U->MakeNew();
+      //tmp2->Set(1.);
+      tmp2->Set(1e-1);
+      tmp_U->Axpy(-1., *tmp2);
+      IpNLP().Pd_U()->MultVector(1., *tmp_U, 1., *tmp);
+      // DELETEME
+      new_s= ConstPtr(tmp);
+    }
+#endif
+
     iterates = IpData().trial()->MakeNewContainer();
     iterates->Set_s(*new_s);
 
@@ -710,6 +733,18 @@ namespace Ipopt
     else {
       iterates->y_c_NonConst()->Set(0.0);
       iterates->y_d_NonConst()->Set(0.0);
+#ifdef ENABLE_INEXACT
+      {
+        SmartPtr<Vector> y_d = iterates->y_d_NonConst();
+        printf("Setting y_d to -1 and 1!!!!!\n");
+        SmartPtr<Vector> tmp = ip_data.curr()->v_L()->MakeNew();
+        tmp->Set(1.);
+        ip_nlp.Pd_L()->MultVector(-1., *tmp, 0., *y_d);
+        tmp = ip_data.curr()->v_U()->MakeNew();
+        tmp->Set(1.);
+        ip_nlp.Pd_U()->MultVector(1., *tmp, 1., *y_d);
+      }
+#endif
     }
     ip_data.set_trial(iterates);
 

@@ -331,8 +331,8 @@ namespace Ipopt
   {
     jnlst.Printf(level, category, "\n");
     jnlst.PrintfIndented(level, category, indent,
-                         "%sExpansionMatrix \"%s\" with %d nonzero elements:\n",
-                         prefix.c_str(), name.c_str(), NCols());
+                         "%sExpansionMatrix \"%s\" with %d rows and %d columns:\n",
+                         prefix.c_str(), name.c_str(), NRows(), NCols());
 
     const Index* exp_pos = ExpandedPosIndices();
 

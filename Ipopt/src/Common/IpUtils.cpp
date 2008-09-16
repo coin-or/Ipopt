@@ -171,4 +171,10 @@ namespace Ipopt
     return callTime - Wallclock_firstCall_;
   }
 
+  bool Compare_le(Number lhs, Number rhs, Number BasVal)
+  {
+    Number mach_eps = std::numeric_limits<Number>::epsilon();
+    return (lhs - rhs <= 10.*mach_eps*fabs(BasVal));
+  }
+
 } //namespace Ipopt

@@ -19,8 +19,8 @@
 #include "IpInterfacesRegOp.hpp"
 #include "IpAlgorithmRegOp.hpp"
 #include "IpCGPenaltyRegOp.hpp"
-
-#include "IpNLPBoundsRemover.hpp"
+#include "IpInexactRegOp.hpp"
+#include "IpInexactAlgBuilder.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -409,6 +409,12 @@ namespace Ipopt
         }
       }
 
+      // Check if we are to use the inexact linear solver option
+      options_->GetBoolValue("inexact_algorithm", inexact_algorithm_, "");
+      // Change the default flags for the inexact algorithm
+      if (inexact_algorithm_) {
+        AddInexactDefaultOptions(*options_);
+      }
     }
     catch (OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
@@ -522,17 +528,20 @@ namespace Ipopt
       "Undocumented", "no",
       "no", "Undocumented",
       "yes", "Undocumented",
-      "Undocumented"
-    );
+      "Undocumented");
+    roptions->AddStringOption2(
+      "inexact_algorithm",
+      "Activate the version of Ipopt that allows iterative linear solvers.",
+      "no",
+      "no", "use default algorithm with direct linear solvers",
+      "yes", "use the EXPERIMENTAL iterative linear solver option",
+      "");
   }
 
   ApplicationReturnStatus
   IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& tnlp)
   {
     nlp_adapter_ = new TNLPAdapter(GetRawPtr(tnlp), ConstPtr(jnlst_));
-#if 1
-    nlp_adapter_ = new NLPBoundsRemover(*nlp_adapter_);
-#endif
     return OptimizeNLP(nlp_adapter_);
   }
 
@@ -566,7 +575,12 @@ namespace Ipopt
     try {
 
       if (IsNull(alg_builder)) {
-        alg_builder = new AlgorithmBuilder();
+        if (inexact_algorithm_) {
+          alg_builder = new InexactAlgorithmBuilder();
+        }
+        else {
+          alg_builder = new AlgorithmBuilder();
+        }
       }
 
       alg_builder->BuildIpoptObjects(*jnlst_, *options_, "", nlp,
@@ -942,6 +956,7 @@ namespace Ipopt
     RegisterOptions_Algorithm(roptions);
     RegisterOptions_CGPenalty(roptions);
     RegisterOptions_LinearSolvers(roptions);
+    RegisterOptions_Inexact(roptions);
   }
 
   SmartPtr<SolveStatistics> IpoptApplication::Statistics()

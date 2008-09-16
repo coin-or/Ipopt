@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpPiecewisePenalty.cpp 510 2006-03-10 21:45:32Z zaiwen wen $
+// $Id$
 //
 // Authors:  Lifeng Chen/Zaiwen Wen      Columbia Univ
 
