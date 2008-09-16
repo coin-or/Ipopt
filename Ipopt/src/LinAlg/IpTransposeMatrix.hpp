@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpIdentityMatrix.hpp 1280 2008-08-10 21:19:31Z andreasw $
+// $Id$
 //
 // Authors:  Andreas Waechter              IBM    2008-08-25
 

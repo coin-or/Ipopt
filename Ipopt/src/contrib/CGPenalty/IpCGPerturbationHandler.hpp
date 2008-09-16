@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpPDPerturbationHandler.hpp 778 2006-08-16 18:11:13Z andreasw $
+// $Id$
 //
 // Authors:  Carl Laird, Andreas Waechter              IBM    2005-08-04
 

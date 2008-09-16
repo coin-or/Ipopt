@@ -66,9 +66,8 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
-	IpNLPBoundsRemover.lo IpSolveStatistics.lo IpStdCInterface.lo \
-	IpStdFInterface.lo IpStdInterfaceTNLP.lo IpTNLPAdapter.lo \
-	IpTNLPReducer.lo
+	IpSolveStatistics.lo IpStdCInterface.lo IpStdFInterface.lo \
+	IpStdInterfaceTNLP.lo IpTNLPAdapter.lo IpTNLPReducer.lo
 libipopt_la_OBJECTS = $(am_libipopt_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -160,6 +159,7 @@ CXXFLAGS = @CXXFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	$(srcdir)/../Algorithm/LinearSolvers` -I`$(CYGPATH_W) \
 	$(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/../Algorithm` -I`$(CYGPATH_W) \
+	$(srcdir)/../Algorithm/Inexact` -I`$(CYGPATH_W) \
 	$(srcdir)/../contrib/CGPenalty`
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
@@ -316,7 +316,6 @@ libipopt_la_SOURCES = \
 	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
-	IpNLPBoundsRemover.cpp IpNLPBoundsRemover.hpp \
 	IpReturnCodes.h \
 	IpReturnCodes.hpp \
 	IpSolveStatistics.cpp IpSolveStatistics.hpp \
@@ -346,7 +345,6 @@ ASTYLE_FILES = \
 	IpInterfacesRegOp.cppbak IpInterfacesRegOp.hppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
-	IpNLPBoundsRemover.cppbak IpNLPBoundsRemover.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
@@ -431,7 +429,6 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInterfacesRegOp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptApplication.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNLPBoundsRemover.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSolveStatistics.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdCInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdFInterface.Plo@am__quote@

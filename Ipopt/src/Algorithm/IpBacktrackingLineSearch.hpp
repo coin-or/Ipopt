@@ -148,11 +148,6 @@ namespace Ipopt
      */
     bool CheckAcceptabilityOfTrialPoint(Number alpha_primal);
 
-    /** Check comparison "lhs <= rhs", using machine precision based on BasVal */
-    //ToDo This should probably not be a static member function if we want to
-    //     allow for different relaxation parameters values
-    static bool Compare_le(Number lhs, Number rhs, Number BasVal);
-
     /** Method for setting the dual variables in the trial fields in
      *  IpData, given the search direction.  The step size for the
      *  bound multipliers is alpha_dual (the fraction-to-the-boundary

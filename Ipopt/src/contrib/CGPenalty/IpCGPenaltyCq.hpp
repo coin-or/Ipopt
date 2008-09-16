@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpIpoptCalculatedQuantities.hpp 988 2007-06-01 21:57:27Z andreasw $
+// $Id$
 //
 // Authors:  Andreas Waechter           IBM    2007-06-04
 //               derived from IpIpoptCalculatedQuantities.hpp

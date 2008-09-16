@@ -107,6 +107,12 @@ namespace Ipopt
   /** Function for getting a string with the current wallclock time */
   double WallclockTime();
 
+  /** Method for comparing two numbers within machine precision.  The
+   *  return value is true if lhs is less or equal the rhs, relaxing
+   *  this inequality by something a little larger than machine
+   *  precision relative to the absolute value of BasVal. */
+  bool Compare_le(Number lhs, Number rhs, Number BasVal);
+
 } //namespace Ipopt
 
 #endif

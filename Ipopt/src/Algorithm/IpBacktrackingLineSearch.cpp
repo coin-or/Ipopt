@@ -86,11 +86,11 @@ namespace Ipopt
       "Method to determine the step size for constraint multipliers.",
       "primal",
       "primal", "use primal step size",
-      "bound_mult", "use step size for the bound multipliers (good for LPs)",
+      "bound-mult", "use step size for the bound multipliers (good for LPs)",
       "min", "use the min of primal and bound multipliers",
       "max", "use the max of primal and bound multipliers",
       "full", "take a full step of size one",
-      "min_dual_infeas", "choose step size minimizing new dual infeasibility",
+      "min-dual-infeas", "choose step size minimizing new dual infeasibility",
       "safe_min_dual_infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
       "primal-and-full", "use the primal step size, and full step if delta_x <= alpha_for_y_tol",
       "dual-and-full", "use the dual step size, and full step if delta_x <= alpha_for_y_tol",
@@ -923,7 +923,7 @@ namespace Ipopt
   BacktrackingLineSearch::PerformMagicStep()
   {
     DBG_START_METH("BacktrackingLineSearch::PerformMagicStep",
-                   2);//dbg_verbosity);
+                   dbg_verbosity);
 
     DBG_PRINT((1,"Incoming barr = %e and constrviol %e\n",
                IpCq().trial_barrier_obj(),

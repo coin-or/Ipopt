@@ -29,7 +29,6 @@ libipopt_la_SOURCES = \
 	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
-	IpNLPBoundsRemover.cpp IpNLPBoundsRemover.hpp \
 	IpReturnCodes.h \
 	IpReturnCodes.hpp \
 	IpSolveStatistics.cpp IpSolveStatistics.hpp \
@@ -57,6 +56,7 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/LinearSolvers` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm` \
+	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/Inexact` \
 	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty`
 
 CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common`
@@ -83,7 +83,6 @@ ASTYLE_FILES = \
 	IpInterfacesRegOp.cppbak IpInterfacesRegOp.hppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
-	IpNLPBoundsRemover.cppbak IpNLPBoundsRemover.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
