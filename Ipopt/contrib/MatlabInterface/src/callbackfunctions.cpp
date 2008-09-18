@@ -132,6 +132,238 @@ CallbackFunctions::~CallbackFunctions() {
   if (gradfunc)       delete gradfunc;
   if (constraintfunc) delete constraintfunc;
   if (jacobianfunc)   delete jacobianfunc;
+  if (jacstrucfunc)   delete jacstrucfunc;
   if (hessianfunc)    delete hessianfunc;
+  if (hesstrucfunc)   delete hesstrucfunc;
   if (iterfunc)       delete iterfunc;
+}
+
+double CallbackFunctions::computeObjective (const Iterate& x, 
+					    const mxArray* auxdata) const {
+  double         f;  // The return value.
+  bool           success;
+  const mxArray* inputs[2];
+  mxArray*       outputs[1];
+
+  // Call the MATLAB call function, with or without the auxiliary data.
+  inputs[0] = x;
+  inputs[1] = auxdata;
+  if (auxdata)
+    success = objfunc->evaluate(2,1,inputs,outputs);
+  else
+    success = objfunc->evaluate(1,1,inputs,outputs);
+  if (!success)
+    throw MatlabException("There was an error when executing the objective \
+callback function");
+
+  // Get the first output from the MATLAB callback function, which
+  // is the value of the objective function at x.
+  mxArray* ptr = outputs[0];
+  if (!mxIsDouble(ptr) || mxGetNumberOfElements(ptr) != 1)
+    throw MatlabException("The first return value of the objective \
+callback function must be a double scalar");
+  f = *mxGetPr(ptr);
+
+  // Free the dynamically allocated memory.
+  mxDestroyArray(ptr);  
+
+  return f;
+}
+
+void CallbackFunctions::computeGradient (const Iterate& x, double* g, 
+					 const mxArray* auxdata) const {
+  bool           success;
+  const mxArray* inputs[2];
+  mxArray*       outputs[1];
+
+  // Call the MATLAB call function, with or without the auxiliary data.
+  inputs[0] = x;
+  inputs[1] = auxdata;
+  if (auxdata)
+    success = gradfunc->evaluate(2,1,inputs,outputs);
+  else
+    success = gradfunc->evaluate(1,1,inputs,outputs);
+  if (!success)
+    throw MatlabException("There was an error when executing the \
+gradient callback function");
+
+  // Get the first output from the MATLAB callback function, which
+  // is the value of the gradient of the objective function at x.
+  mxArray* ptr = outputs[0];
+  Iterate grad(ptr);
+  if (numvars(x) != numvars(grad))
+    throw MatlabException("Invalid gradient passed back from MATLAB \
+routine");
+  grad.copyto(g);
+
+  // Free the dynamically allocated memory.
+  mxDestroyArray(ptr);
+}
+
+void CallbackFunctions::computeConstraints(const Iterate& x, int m, double* c, 
+					   const mxArray* auxdata) const {
+  bool           success;
+  const mxArray* inputs[2];
+  mxArray*       outputs[1];
+
+  // Call the MATLAB call function, with or without the auxiliary data.
+  inputs[0] = x;
+  inputs[1] = auxdata;
+  if (auxdata)
+    success = constraintfunc->evaluate(2,1,inputs,outputs);
+  else
+    success = constraintfunc->evaluate(1,1,inputs,outputs);
+  if (!success)
+    throw MatlabException("There was an error when executing the \
+constraints callback function");
+
+  // Get the first output from the MATLAB callback function, which
+  // is the value of vector-valued constraint function at x.
+  mxArray* ptr = outputs[0];
+  if ((unsigned) m != mxGetNumberOfElements(ptr))
+    throw MatlabException("Invalid constraint values passed back from \
+Matlab routine");
+  copymemory(mxGetPr(ptr),c,m);
+
+  // Free the dynamically allocated memory.
+  mxDestroyArray(ptr);
+}
+
+SparseMatrix* CallbackFunctions::getJacobianStructure (int n, int m, 
+					      const mxArray* auxdata) const {
+  const mxArray* inputs[1];
+  mxArray*       outputs[1];
+  bool           success;
+
+  // Call the MATLAB call function, with or without the auxiliary data.
+  inputs[0] = auxdata;
+  if (auxdata)
+    success = jacstrucfunc->evaluate(1,1,inputs,outputs);
+  else
+    success = jacstrucfunc->evaluate(0,1,inputs,outputs);
+  if (!success)
+    throw MatlabException("There was an error when getting the structure \
+of the Jacobian matrix from MATLAB");
+
+  // Get the first output from the MATLAB callback function, which is
+  // the sparse matrix specifying the structure of the Jacobian.
+  mxArray* ptr = outputs[0];
+  if ((int) mxGetM(ptr) != m || (int) mxGetN(ptr) != n || 
+      !SparseMatrix::inIncOrder(ptr))
+    throw MatlabException("Jacobian must be an m x n sparse matrix with \
+row indices in increasing order, where m is the number of constraints and \
+n is the number of variables");
+  SparseMatrix* J = new SparseMatrix(ptr);  // The return value.
+
+  // Free the dynamically allocated memory.
+  mxDestroyArray(outputs[0]);
+
+  return J;
+}
+
+SparseMatrix* CallbackFunctions::getHessianStructure (int n, const mxArray* 
+						      auxdata) const {
+  const mxArray* inputs[1];
+  mxArray*       outputs[1];
+  bool           success;
+
+  // Call the MATLAB call function, with or without the auxiliary data.
+  inputs[0] = auxdata;
+  if (auxdata)
+    success = hesstrucfunc->evaluate(1,1,inputs,outputs);
+  else
+    success = hesstrucfunc->evaluate(0,1,inputs,outputs);
+  if (!success)
+    throw MatlabException("There was an error when getting the structure \
+of the Hessian matrix from MATLAB");
+
+  // Get the first output from the MATLAB callback function, which is
+  // the sparse matrix specifying the structure of the Jacobian.
+  mxArray* ptr = outputs[0];
+  if ((int) mxGetM(ptr) != n || (int) mxGetN(ptr) != n || 
+      !SparseMatrix::isLowerTri(ptr) || !SparseMatrix::inIncOrder(ptr))
+    throw MatlabException("Hessian must be an n x n sparse, symmetric and \
+lower triangular matrix with row indices in increasing order, where n is \
+the number of variables");
+  SparseMatrix* H = new SparseMatrix(ptr);  // The return value.
+
+  // Free the dynamically allocated memory.
+  mxDestroyArray(outputs[0]);
+
+  return H;
+}
+
+void CallbackFunctions::computeJacobian (int m, const Iterate& x, 
+					 SparseMatrix& J, 
+					 const mxArray* auxdata) const {
+  bool           success;
+  const mxArray* inputs[2];
+  mxArray*       outputs[1];
+
+  // Call the MATLAB call function, with or without the auxiliary data.
+  inputs[0] = x;
+  inputs[1] = auxdata;
+  if (auxdata)
+    success = jacobianfunc->evaluate(2,1,inputs,outputs);
+  else
+    success = jacobianfunc->evaluate(1,1,inputs,outputs);
+  if (!success)
+    throw MatlabException("There was an error when executing the \
+Jacobian callback function");
+
+  // Get the first output from the MATLAB callback function, which is
+  // the sparse matrix specifying the value the Jacobian.
+  mxArray* ptr = outputs[0];
+  if ((int) mxGetM(ptr) != m || (int) mxGetN(ptr) != numvars(x) || 
+      !SparseMatrix::inIncOrder(ptr))
+    throw MatlabException("Jacobian must be an m x n sparse matrix with \
+row indices in increasing order, where m is the number of constraints and \
+n is the number of variables");
+  SparseMatrix Jnew(ptr);
+  Jnew.copyto(J);
+
+  // Free the dynamically allocated memory.
+  mxDestroyArray(outputs[0]);
+}
+
+void CallbackFunctions::computeHessian (const Iterate& x, double sigma, int m, 
+					const double* lambda, SparseMatrix& H, 
+					const mxArray* auxdata) const {
+  bool           success;
+  const mxArray* inputs[4];
+  mxArray*       outputs[1];
+
+  // Create the input arguments to the MATLAB routine, sigma and lambda.
+  mxArray* psigma  = mxCreateDoubleScalar(sigma);
+  mxArray* plambda = mxCreateDoubleMatrix(m,1,mxREAL);
+  copymemory(lambda,mxGetPr(plambda),m);
+
+  // Call the MATLAB call function, with or without the auxiliary data.
+  inputs[0] = x;
+  inputs[1] = psigma;
+  inputs[2] = plambda;
+  inputs[3] = auxdata;
+  if (auxdata)
+    success = hessianfunc->evaluate(4,1,inputs,outputs);
+  else
+    success = hessianfunc->evaluate(3,1,inputs,outputs);
+  if (!success)
+    throw MatlabException("There was an error when executing the Hessian \
+callback function");
+
+  // Get the first output from the MATLAB callback function, which is
+  // the sparse matrix specifying the value the Hessian.
+  mxArray* ptr = outputs[0];
+  if ((int) mxGetM(ptr) != numvars(x) || (int) mxGetN(ptr) != numvars(x) || 
+      !SparseMatrix::isLowerTri(ptr) || !SparseMatrix::inIncOrder(ptr))
+    throw MatlabException("Hessian must be an n x n sparse, symmetric and \
+lower triangular matrix with row indices in increasing order, where n is \
+the number of variables");
+  SparseMatrix Hnew(ptr);
+  Hnew.copyto(H);
+
+  // Free the dynamically allocated memory.
+  mxDestroyArray(outputs[0]);
+  mxDestroyArray(psigma);
+  mxDestroyArray(plambda);
 }

@@ -5,17 +5,13 @@
 //         Dept. of Computer Science
 //         University of British Columbia
 //         May 19, 2007
+#error "The MatlabString class should no longer be used."
 
 #ifndef INCLUDE_MATLABSTRING
 #define INCLUDE_MATLABSTRING
 
 #include "mex.h"
 #include <string>
-
-// Function declarations.
-// -----------------------------------------------------------------
-// Copy a C-style string (i.e. a null-terminated character array).
-char* copystring (const char* source);
 
 // Class MatlabString.
 // -----------------------------------------------------------------
@@ -38,20 +34,16 @@ public:
   ~MatlabString();
 
   // Return true if the string is empty.
-  bool isempty () const { return strlen(s) == 0; };
+  bool isempty() const { return strlen(s) == 0; };
   
   // Conversion operator for null-terminated string.
   operator const char* () const { return s; };
   
   // Conversion operator for string object.
-  operator std::string () const { return std::string(s); };
+  operator std::string() const { return std::string(s); };
 
 protected:
   char* s;  // The null-terminated string.
-  
-  // The copy assignment operator is not proper, thus remains
-  // protected.
-  MatlabString& operator= (const MatlabString& source) { return *this; };
 };
 
 #endif

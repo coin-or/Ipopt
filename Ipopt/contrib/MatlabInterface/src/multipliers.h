@@ -5,13 +5,12 @@
 //         Dept. of Computer Science
 //         University of British Columbia
 //         May 22, 2007
+#error "The Multipliers class should no longer be used."
 
 #ifndef INCLUDE_MULTIPLIERS
 #define INCLUDE_MULTIPLIERS
 
 #include "mex.h"
-#include "matlabmatrix.h"
-#include "arrayofmatrices.h"
 
 // Class Multipliers.
 // -----------------------------------------------------------------
@@ -19,13 +18,12 @@
 // with a constrained, nonlinear program. There are three types of
 // Lagrange multipliers: those associated with the upper bounds on the
 // primal variables, those associated with the lower bounds, and those
-// associated with the equality and inequality constraints. Of
-// particular interest is the fact that one of the constructors
-// accesses the information from a MATLAB structure. The structure
-// must be created with the following fields: zl, zu, lambda. There is
-// another constructor that creates a new MATLAB structure with those
-// fields. See the descriptions of the constructors below for more
-// information.
+// associated with the constraints. Of particular interest is the fact
+// that one of the constructors accesses the information from a MATLAB
+// structure. The structure must be created with the following fields:
+// zl, zu, lambda. There is another constructor that creates a new
+// MATLAB structure with those fields. See the descriptions of the
+// constructors below for more information.
 class Multipliers {
 public:
 

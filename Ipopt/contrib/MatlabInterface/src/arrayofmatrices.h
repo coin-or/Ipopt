@@ -5,6 +5,7 @@
 //         Dept. of Computer Science
 //         University of British Columbia
 //         May 19, 2007
+#error "The ArrayOfMatrices class should no longer be used."
 
 #ifndef INCLUDE_ARRAYOFMATRICES
 #define INCLUDE_ARRAYOFMATRICES

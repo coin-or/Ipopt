@@ -1,20 +1,11 @@
 #include "iterate.h"
 #include "matlabexception.h"
 
-// Function definitions.
-// -----------------------------------------------------------------
-void copymemory (const double* source, double* dest, int n) {
-  memcpy(dest,source,sizeof(double)*n);
-}
-
 // Function definitions for class Iterate.
 // -----------------------------------------------------------------
-Iterate::Iterate (const mxArray* source) 
-  : nv(0), ptr(0) {
-  const mxArray* p;  // Pointer to a MATLAB array.
-
-  // Duplicate the MATLAB array.
-  ptr = mxDuplicateArray(source);
+Iterate::Iterate (mxArray* ptr) 
+  : nv(0), ptr(ptr) {
+  const mxArray* p = 0;  // Pointer to a MATLAB array.
 
   // Compute the number of optimization variables.
   if (mxIsCell(ptr)) {
@@ -38,13 +29,6 @@ in DOUBLE precision, or a cell array in which each cell is an array in \
 DOUBLE precision");
     nv = mxGetNumberOfElements(ptr);
   }
-}
-
-Iterate::Iterate (const Iterate& source) 
-  : nv(source.nv), ptr(mxDuplicateArray(source.ptr) { }
-
-Iterate::~Iterate() {
-  if (ptr) mxDestroyArray(ptr);
 }
 
 void Iterate::inject (const double* x) {
@@ -85,3 +69,13 @@ void Iterate::copyto (double* x) const {
     copymemory(mxGetPr(ptr),x,nv);
 }
 
+// Function definitions for static members of class Iterate.
+// -----------------------------------------------------------------
+int Iterate::getMatlabData (const mxArray* ptr, double*& data) {
+  Iterate x(mxDuplicateArray(ptr)); // Create the iterate object.
+  int     n = numvars(x);           // The return value.
+  data = new double[n];
+  x.copyto(data);
+  mxDestroyArray(x.ptr);
+  return n;
+}

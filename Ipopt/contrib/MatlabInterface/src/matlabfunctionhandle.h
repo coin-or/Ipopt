@@ -35,9 +35,6 @@ public:
   // is up to the user to ensure that the MATLAB array is a valid
   // function handle.
   explicit MatlabFunctionHandle (const mxArray* ptr);
-
-  // The copy constructor makes a full copy of the source object.
-  MatlabFunctionHandle (const MatlabFunctionHandle& source);
   
   // The destructor.
   ~MatlabFunctionHandle();
@@ -49,18 +46,11 @@ public:
   // properly deallocate the outputs.
   bool evaluate (int nin, int nout, const mxArray** inputs, mxArray** outputs);
 
-  // Conversion operator for pointer to MATLAB array.
-  operator mxArray* () const { return f; };  
-
   // Returns true if and only if the function handle is not null.
   operator bool() const { return f != 0; };
 
 protected:
   mxArray* f;  // The MATLAB function handle.
-
-  // The copy assignment operator is not proper, thus remains protected.
-  MatlabFunctionHandle& operator= (const MatlabFunctionHandle& source) 
-  { return *this; };
 };
 
 #endif

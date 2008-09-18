@@ -23,13 +23,6 @@ MatlabFunctionHandle::MatlabFunctionHandle (const mxArray* ptr) {
   else
     f = mxDuplicateArray(ptr);
 }
-
-MatlabFunctionHandle::MatlabFunctionHandle(const MatlabFunctionHandle& source){
-  if (f) 
-    f = mxDuplicateArray(f);
-  else
-    f = 0;
-}
   
 MatlabFunctionHandle::~MatlabFunctionHandle() {
   if (f) mxDestroyArray(f);
@@ -38,15 +31,15 @@ MatlabFunctionHandle::~MatlabFunctionHandle() {
 bool MatlabFunctionHandle::evaluate (int nin, int nout, const mxArray** inputs,
 				     mxArray** outputs) {
   // Construct the inputs to "feval".
-  mxArray** fevalinputs = new mxArray*[nin+1]; 
-  fevalinputs[0] = f;
+  mxArray** finputs = new mxArray*[nin+1]; 
+  finputs[0] = f;
   for (int i = 0; i < nin; i++)
-    fevalinputs[i+1] = mxDuplicateArray(inputs[i]);
+    finputs[i+1] = mxDuplicateArray(inputs[i]);
 
   // Call "feval".
-  int exitstatus = mexCallMATLAB(nout,outputs,nin+1,fevalinputs,"feval");
+  int exitstatus = mexCallMATLAB(nout,outputs,nin+1,finputs,"feval");
 
   // Free the dynamically allocated memory.
-  delete[] fevalinputs;
+  delete[] finputs;
   return exitstatus == 0;
 }
