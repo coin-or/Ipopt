@@ -33,7 +33,6 @@ history management of subversion.
         - added option that allows to change name of options file
           (option_file_name)
 
->>>>>>> .merge-right.r1326
 2008-04-25 releases/3.4.0
         - added support to dynamically load HSL or Pardiso:
           If Ipopt has been compiled without some HSL or Pardiso solver,
