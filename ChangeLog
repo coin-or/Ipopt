@@ -2,6 +2,37 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2008-09-18 releases/3.5.2
+        - changed to latest version of MUMPS (4.8.2)
+        - some bugfixes (linear algebra objects, automatic problem scaling)
+        - made sure the subversion revision number is correct in all files
+        - allowed general additional data and cq in IpData and IpCq
+
+2008-08-26 releases/3.5.1
+        - changed to latest version of MUMPS (4.8.1)
+
+2008-08-25 releases/3.5.0
+        - added ComputeRowAMax and ComputeColAMax methods to Matrix base class
+        - changed externals for MUMPS to stable/1.1
+        - call finalize solution in more failure cases
+          (this means that AMPL writes .sol file in more situations)
+        - added IpTNLPReducer as simple way to exclude constraints from problem
+        - several fixes, also from COIN Bug Squashing Party 2008
+
+2008-07-18 releases/3.4.2
+        - some bug fixes
+        - added wallclock time routine
+        - penalty function version does not longer crash if it
+          wants to go to restoration phase (not that this really helps
+          converence though)
+
+2008-05-30 releases/3.4.1
+        - some bug fixes
+        - deleted v9 MSVC files again (since v8 works fine for v9)
+        - print Ipopt version in default print level
+        - added option that allows to change name of options file
+          (option_file_name)
+
 2008-04-25 releases/3.4.0
         - added support to dynamically load HSL or Pardiso:
           If Ipopt has been compiled without some HSL or Pardiso solver,
