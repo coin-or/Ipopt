@@ -5,6 +5,7 @@
 //         Dept. of Computer Science
 //         University of British Columbia
 //         May 19, 2007
+#error "The Array class should no longer be used."
 
 #ifndef INCLUDE_ARRAY
 #define INCLUDE_ARRAY

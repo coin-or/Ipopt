@@ -10,6 +10,8 @@
 #define INCLUDE_CALLBACKFUNCTIONS
 
 #include "mex.h"
+#include "iterate.h"
+#include "sparsematrix.h"
 #include "matlabfunctionhandle.h"
 
 // Class CallbackFunctions.
@@ -26,7 +28,7 @@ public:
   // The constructor must be provided with a single MATLAB array, and
   // this MATLAB array must be a structure array in which each field
   // is a function handle.
-  CallbackFunctions (const mxArray* ptr);
+  explicit CallbackFunctions (const mxArray* ptr);
 
   // The destructor.
   ~CallbackFunctions();
@@ -41,15 +43,40 @@ public:
   // These functions execute the various callback functions with the
   // appropriate inputs and outputs. The auxiliary data may be altered
   // over the course of executing the callback function. If there is
-  // no auxiliary data, then simply pass in a null pointer.
-  double computeObjective(const Iterate& x, mxArray*& auxdata) const;
-  void   computeGradient (const Iterate& x, double* g, mxArray*& auxdata)const;
-  void   computeConstrs  (const Iterate& x, double* c, mxArray*& auxdata)const;
-  void   computeJacobian (const Iterate& x, double* J, mxArray*& auxdata)const;
-  void   computeHessian  (const Iterate& x, double* H, mxArray*& auxdata)const;
-  void   getJacobianStruc(mxArray*& auxdata)            const;
-  void   getHessianStruc (mxArray*& auxdata)            const;
+  // no auxiliary data, then simply pass in a null pointer. Here, m is
+  // the number of constraints. The first function returns the value
+  // of the objective at x.
+  double computeObjective (const Iterate& x, const mxArray* auxdata) const;
 
+  // This function computes the value of the gradient at x, and
+  // returns the gradient entries in the array g, which must be of
+  // length equal to the number of optimization variables.
+  void computeGradient (const Iterate& x, double* g, 
+			const mxArray* auxdata) const;
+
+  // This function computes the response of the vector-valued
+  // constraint function at x, and stores the result in the array c
+  // which must be of length m.
+  void computeConstraints (const Iterate& x, int m, double* c, 
+			   const mxArray* auxdata) const;
+
+  // This function gets the structure of the sparse m x n Jacobian matrix.
+  SparseMatrix* getJacobianStructure (int n, int m, 
+				      const mxArray* auxdata) const;
+
+  // This function gets the structure of the sparse n x n Hessian matrix.
+  SparseMatrix* getHessianStructure (int n, const mxArray* auxdata) const;
+
+  // This function computes the Jacobian of the constraints at x.
+  void computeJacobian (int m, const Iterate& x, SparseMatrix& J, 
+			const mxArray* auxdata) const;
+
+  // This function computes the Hessian of the Lagrangian at x.
+  void computeHessian (const Iterate& x, double sigma, int m, 
+		       const double* lambda, SparseMatrix& H, 
+		       const mxArray* auxdata) const;
+
+  // double iterCallback    (mxArray*& auxdata) const;
 
 protected:
   MatlabFunctionHandle* objfunc;        // Objective callback function.

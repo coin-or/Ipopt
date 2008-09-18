@@ -5,6 +5,7 @@
 //         Dept. of Computer Science
 //         University of British Columbia
 //         May 19, 2007
+#error "The MatlabScalar class should no longer be used."
 
 #ifndef INCLUDE_MATLABSCALAR
 #define INCLUDE_MATLABSCALAR
@@ -15,9 +16,6 @@
 // -----------------------------------------------------------------
 // The main appeal of this class is that one can create a scalar
 // object that accesses a MATLAB array.
-//
-// Note that the copy assignment operator is not valid for this class
-// because we cannot reassign a reference.
 class MatlabScalar {
 public:
 
@@ -43,10 +41,6 @@ public:
     
 protected:
   double& x;
-
-  // The copy assignment operator is kept protected because it is
-  // invalid.
-  MatlabScalar& operator= (const MatlabScalar& source) { return *this; };
 };
 
 #endif

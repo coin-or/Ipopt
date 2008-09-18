@@ -9,22 +9,16 @@
 #ifndef INCLUDE_SPARSEMATRIX
 #define INCLUDE_SPARSEMATRIX
 
-#include "array.h"
 #include "mex.h"
 
 // Type definitions.
 // -----------------------------------------------------------------
-#ifdef MWINDEXISINT
 // This line is needed for versions of MATLAB prior to 7.3.
+#ifdef MWINDEXISINT
 typedef int mwIndex;
 #endif
 
-// Function declarations.
-// ---------------------------------------------------------------
-int getSparseMatrixSize     (const mxArray* ptr);
-int isSparseLowerTriangular (const mxArray* ptr);
-
-// class SparseMatrixStructure
+// class SparseMatrix
 // ---------------------------------------------------------------
 // An object of class SparseMatrixStructure stores information about
 // the structure of a sparse matrix. It does not store the actual
@@ -37,33 +31,32 @@ int isSparseLowerTriangular (const mxArray* ptr);
 // signed integers, and this could potentially cause problems when
 // dealing with large, sparse matrices on 64-bit platforms with MATLAB
 // version 7.3 or greater.
-class SparseMatrixStructure {
+class SparseMatrix {
 public:
 
   // This constructor takes as input a Matlab array. It it points to a
-  // valid sparse matrix, it will store all the information pertaining
-  // to the sparse matrix structure. If "makeCopy" is true, then the
-  // object will obtain an independent copy of the sparse matrix
-  // structure. If not, the object will be dependent on the data in
-  // memory.
-  explicit SparseMatrixStructure (const mxArray* ptr, 
-				  bool makeCopy = false);
-    
-  // The copy constructor makes a shallow copy of the source object.
-  SparseMatrixStructure (const SparseMatrixStructure& source);
-    
+  // valid sparse matrix in double precision, it will store all the
+  // information pertaining to the sparse matrix structure. It is up
+  // to the user to ensure that the MATLAB array is a sparse,
+  // symmetric matrix with row indices in increasing order as the
+  // nonzero elements appear in the matrix. Note that a SparseMatrix
+  // object retains a completely independent copy of the sparse matrix
+  // information by duplicating the data from the specified MATLAB
+  // array.
+  explicit SparseMatrix (const mxArray* ptr);
+
   // The destructor.
-  ~SparseMatrixStructure();
+  ~SparseMatrix();
     
   // Get the height and width of the matrix.
-  int height() const { return h; };
-  int width () const { return w; };
+  friend int height (const SparseMatrix& A) { return A.h; };
+  friend int width  (const SparseMatrix& A) { return A.w; };
 
-  // Return the number of non-zero entries.
-  int size() const { return nnz; };
-
-  // Return the number of non-zero entries in the cth column.
-  int size (int c) const;
+  // The first function returns the total number of non-zero entries.
+  // The second function returns the number of non-zero entries in the
+  // cth column.
+  int numelems ()      const { return nnz; };
+  int numelems (int c) const;
 
   // Upon completion of this function, cols[i] contains the column
   // index for the ith element, and rows[i] contains the row index for
@@ -75,26 +68,33 @@ public:
 
   // Copy the matrix entries in a sensible manner while preserving the
   // structure of the destination. In order to preserve the structure
-  // of the destination, it is required that its set of non-zero
-  // entries be a (non-strict) superset of the non-zero entries of the
-  // source.
-  friend void copyElems (const SparseMatrixStructure& sourceStructure,
-			 const SparseMatrixStructure& destStructure,
-			 const double* sourceValues, double* destValues);
+  // of the destination, it is required that the source set of
+  // non-zero entries be a subset of the destination non-zero
+  // entries. On success, the value true is returned.
+  bool copyto (SparseMatrix& dest) const;
+
+  // Copy the values of the nonzero elements to the destination array
+  // which of course must be of the proper length.
+  void copyto (double* dest) const;
+
+  // Returns the number of nonzeros in the sparse matrix.
+  static int getSizeOfSparseMatrix (const mxArray* ptr);
+
+  // Returns true if and only if the sparse matrix is symmetric and
+  // lower triangular.
+  static bool isLowerTri (const mxArray* ptr);
+
+  // For the proper functioning of a sparse matrix object, it is
+  // necessary that the row indices be in increasing order.
+  static bool inIncOrder (const mxArray* ptr);
 
 protected:
-  mwIndex* jc;      // See mxSetJc in the MATLAB documentation.
-  mwIndex* ir;      // See mxSetIr in the MATLAB documentation.
-  int      nnz;     // The number of non-zero elements.
-  int      h;       // The height of the matrix. 
-  int      w;       // The width of the matrix.
-  bool     owner;   // Whether or not the object has ownership of the
-                    // "jc" and "ir" matrices.
-
-  // The copy assignment operator is kept hidden because we don't
-  // want it to be used.
-  SparseMatrixStructure& operator= (const SparseMatrixStructure& source)
-  { return *this; };
+  int      h;    // The height of the matrix. 
+  int      w;    // The width of the matrix.
+  int      nnz;  // The number of non-zero elements.
+  mwIndex* jc;   // See mxSetJc in the MATLAB documentation.
+  mwIndex* ir;   // See mxSetIr in the MATLAB documentation.
+  double*  x;    // The values of the non-zero entries.
 };
 
 #endif
