@@ -1,8 +1,8 @@
-// Copyright (C) 2007 International Business Machines and others.
+// Copyright (C) 2007, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpAlgorithmRegOp.cpp 984 2007-05-30 23:03:22Z andreasw $
+// $Id$
 //
 // Authors:  Andreas Waechter         IBM        2007-06-01
 
@@ -20,6 +20,7 @@ namespace Ipopt
     roptions->SetRegisteringCategory("Undocumented");
     CGSearchDirCalculator::RegisterOptions(roptions);
     CGPenaltyLSAcceptor::RegisterOptions(roptions);
+    CGPenaltyCq::RegisterOptions(roptions);
   }
 
 } // namespace Ipopt

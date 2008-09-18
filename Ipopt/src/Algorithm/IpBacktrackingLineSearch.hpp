@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -39,9 +39,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor.  The acceptor implements the acceptance test for
-     *  the line search. The PDSystemSolver object only needs to be
-     *  provided (i.e. not NULL) if second order correction is to be
-     *  used.  The ConvergenceCheck object is used to determine
+     *  the line search. The ConvergenceCheck object is used to determine
      *  whether the current iterate is acceptable (for example, the
      *  restoration phase is not started if the acceptability level
      *  has been reached).  If conv_check is NULL, we assume that the

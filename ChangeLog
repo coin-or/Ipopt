@@ -2,6 +2,12 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2008-09-18 releases/3.5.2
+        - changed to latest version of MUMPS (4.8.2)
+        - some bugfixes (linear algebra objects, automatic problem scaling)
+        - made sure the subversion revision number is correct in all files
+        - allowed general additional data and cq in IpData and IpCq
+
 2008-08-26 releases/3.5.1
         - changed to latest version of MUMPS (4.8.1)
 
@@ -27,6 +33,7 @@ history management of subversion.
         - added option that allows to change name of options file
           (option_file_name)
 
+>>>>>>> .merge-right.r1326
 2008-04-25 releases/3.4.0
         - added support to dynamically load HSL or Pardiso:
           If Ipopt has been compiled without some HSL or Pardiso solver,

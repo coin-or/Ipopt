@@ -268,7 +268,7 @@ namespace Ipopt
       new_jac_c_space = jac_c_space;
     }
 
-    if (IsValid(dx_) || IsValid(dc)) {
+    if (IsValid(dx_) || IsValid(dd)) {
       scaled_jac_d_space_ =
         new ScaledMatrixSpace(ConstPtr(dd), false, jac_d_space,
                               ConstPtr(dx_), true);

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -10,7 +10,6 @@
 #include "IpSumSymMatrix.hpp"
 #include "IpLowRankUpdateSymMatrix.hpp"
 #include "IpRestoIpoptNLP.hpp"
-#include "IpCGPenaltyCq.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -134,17 +133,13 @@ namespace Ipopt
 
       initialize_called_(false)
   {
-    cgpen_cq_ = new CGPenaltyCq(GetRawPtr(ip_nlp), GetRawPtr(ip_data), this);
-
     DBG_START_METH("IpoptCalculatedQuantities::IpoptCalculatedQuantities",
                    dbg_verbosity);
     DBG_ASSERT(IsValid(ip_nlp_) && IsValid(ip_data_));
   }
 
   IpoptCalculatedQuantities::~IpoptCalculatedQuantities()
-  {
-    delete cgpen_cq_;
-  }
+  {}
 
   void IpoptCalculatedQuantities::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
@@ -184,8 +179,6 @@ namespace Ipopt
       "max-norm", "use the infinity norm",
       "Determines which norm should be used when the algorithm computes the "
       "constraint violation in the line search.");
-
-    CGPenaltyCq::RegisterOptions(roptions);
   }
 
   bool IpoptCalculatedQuantities::Initialize(const Journalist& jnlst,
@@ -226,7 +219,12 @@ namespace Ipopt
     num_adjusted_slack_s_U_ = 0;
 
     initialize_called_ = true;
-    return cgpen_cq_->Initialize(jnlst, options, prefix);
+
+    bool retval = true;
+    if (IsValid(add_cq_)) {
+      retval = add_cq_->Initialize(jnlst, options, prefix);
+    }
+    return retval;
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1363,6 +1361,9 @@ namespace Ipopt
     if (!curr_jac_dT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
       if (!trial_jac_dT_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
         SmartPtr<Vector> tmp = x->MakeNew();
+        DBG_PRINT_VECTOR(2, "vec", vec);
+        DBG_PRINT_VECTOR(2, "tmp", *tmp);
+        DBG_PRINT_MATRIX(2, "curr_jac_d()", *curr_jac_d());
         curr_jac_d()->TransMultVector(1.0, vec, 0., *tmp);
         result = ConstPtr(tmp);
       }
@@ -3074,7 +3075,9 @@ namespace Ipopt
 
       sigma->Set(0.);
       ip_nlp_->Pd_L()->AddMSinvZ(1., *curr_slack_s_L(), *v_L, *sigma);
+      DBG_PRINT_VECTOR(2,"sigma1", *sigma);
       ip_nlp_->Pd_U()->AddMSinvZ(1., *curr_slack_s_U(), *v_U, *sigma);
+      DBG_PRINT_VECTOR(2,"sigma2", *sigma);
 
       result = ConstPtr(sigma);
       curr_sigma_s_cache_.AddCachedResult3Dep(result, *s, *v_L, *v_U);
