@@ -656,7 +656,7 @@ namespace Ipopt
   inline
   void Vector::AddOneVector(Number a, const Vector& v1, Number c)
   {
-    AddTwoVectorsImpl(a, v1, 0., v1, c);
+    AddTwoVectors(a, v1, 0., v1, c);
   }
 
   inline

@@ -70,7 +70,7 @@ namespace Ipopt
     // Get pointers to the Original NLP objects
     const RestoIpoptNLP* resto_ipopt_nlp =
       static_cast<const RestoIpoptNLP*>(&IpNLP());
-    DBG_ASSERT(resto_ipopt_nlp);
+    DBG_ASSERT(dynamic_cast<const RestoIpoptNLP*>(&IpNLP()));
 
     SmartPtr<IpoptData> orig_ip_data = &resto_ipopt_nlp->OrigIpData();
     SmartPtr<IpoptCalculatedQuantities> orig_ip_cq =
@@ -80,7 +80,7 @@ namespace Ipopt
     SmartPtr<const Vector> x = IpData().curr()->x();
     const CompoundVector* cx =
       static_cast<const CompoundVector*>(GetRawPtr(x));
-    DBG_ASSERT(cx);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(x)));
 
     SmartPtr<IteratesVector> trial = orig_ip_data->curr()->MakeNewContainer();
     trial->Set_x(*cx->GetComp(0));

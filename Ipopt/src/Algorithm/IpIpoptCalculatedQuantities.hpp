@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -22,8 +22,48 @@ namespace Ipopt
     NORM_MAX
   };
 
-  // forward definition
-  class CGPenaltyCq;
+  /** Base class for additional calculated quantities that is special
+   *  to a particular type of algorithm, such as the CG penalty
+   *  function, or using iterative linear solvers.  The regular
+   *  IpoptCalculatedQuantities object should be given a derivation of
+   *  this base class when it is created. */
+  class IpoptAdditionalCq : public ReferencedObject
+  {
+  public:
+    /**@name Constructors/Destructors */
+    //@{
+    /** Default Constructor */
+    IpoptAdditionalCq()
+    {}
+
+    /** Default destructor */
+    virtual ~IpoptAdditionalCq()
+    {}
+    //@}
+
+    /** This method is called to initialize the global algorithmic
+     *  parameters.  The parameters are taken from the OptionsList
+     *  object. */
+    virtual bool Initialize(const Journalist& jnlst,
+                            const OptionsList& options,
+                            const std::string& prefix) = 0;
+
+  private:
+    /**@name Default Compiler Generated Methods
+     * (Hidden to avoid implicit creation/calling).
+     * These methods are not implemented and 
+     * we do not want the compiler to implement
+     * them for us, so we declare them private
+     * and do not define them. This ensures that
+     * they will not be implicitly created/called. */
+    //@{
+    /** Copy Constructor */
+    IpoptAdditionalCq(const IpoptAdditionalCq&);
+
+    /** Overloaded Equals Operator */
+    void operator=(const IpoptAdditionalCq&);
+    //@}
+  };
 
   /** Class for all IPOPT specific calculated quantities.
    *  
@@ -40,6 +80,13 @@ namespace Ipopt
     /** Default destructor */
     virtual ~IpoptCalculatedQuantities();
     //@}
+
+    /** Method for setting pointer for additional calculated
+     *  quantities. This needs to be called before Initialized. */
+    void SetAddCq(SmartPtr<IpoptAdditionalCq> add_cq)
+    {
+      add_cq_ = add_cq;
+    }
 
     /** This method must be called to initialize the global
      *  algorithmic parameters.  The parameters are taken from the
@@ -378,9 +425,10 @@ namespace Ipopt
       return ip_nlp_;
     }
 
-    CGPenaltyCq& CGPenCq()
+    IpoptAdditionalCq& AdditionalCq()
     {
-      return *cgpen_cq_;
+      DBG_ASSERT(IsValid(add_cq_));
+      return *add_cq_;
     }
 
     /** Methods for IpoptType */
@@ -415,7 +463,7 @@ namespace Ipopt
     /** Ipopt Data object */
     SmartPtr<IpoptData> ip_data_;
     /** Chen-Goldfarb specific calculated quantities */
-    CGPenaltyCq* cgpen_cq_;
+    SmartPtr<IpoptAdditionalCq> add_cq_;
     //@}
 
     /** @name Algorithmic Parameters that can be set throught the

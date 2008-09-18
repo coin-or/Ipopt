@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -39,7 +39,6 @@ namespace Ipopt
       orig_ip_nlp_(&orig_ip_nlp),
       orig_ip_data_(&orig_ip_data),
       orig_ip_cq_(&orig_ip_cq),
-      rho_(1000.),
       eta_factor_(1.0),
       eta_mu_exponent_(0.5)
   {}
@@ -65,6 +64,12 @@ namespace Ipopt
       "phase problem, but not the original problem.  On the other hand, if "
       "the evaluation of the original objective is expensive, this might be "
       "costly.");
+    roptions->AddLowerBoundedNumberOption(
+      "resto_penalty_parameter",
+      "Penalty parameter in the restoration phase objective function.",
+      0.0, true, 1e3,
+      "This is the parameter rho in equation (31a) in the Ipopt "
+      "implementation paper.");
   }
 
   bool RestoIpoptNLP::Initialize(const Journalist& jnlst,
@@ -73,6 +78,7 @@ namespace Ipopt
   {
     options.GetBoolValue("evaluate_orig_obj_at_resto_trial",
                          evaluate_orig_obj_at_resto_trial_, prefix);
+    options.GetNumericValue("resto_penalty_parameter", rho_, prefix);
     Index enum_int;
     options.GetEnumValue("hessian_approximation", enum_int, prefix);
     hessian_approximation_ = HessianApproximationType(enum_int);

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -20,6 +20,7 @@
 #include "IpZeroMatrix.hpp"
 #include "IpCompoundMatrix.hpp"
 #include "IpCompoundSymMatrix.hpp"
+#include "IpTransposeMatrix.hpp"
 
 #include "IpDenseVector.hpp"
 #include "IpCompoundVector.hpp"
@@ -90,6 +91,11 @@ namespace Ipopt
     const CompoundSymMatrix* cmpd_sym = dynamic_cast<const CompoundSymMatrix*>(mptr);
     if (cmpd_sym) {
       return GetNumberEntries_(*cmpd_sym);
+    }
+
+    const TransposeMatrix* trans = dynamic_cast<const TransposeMatrix*>(mptr);
+    if (trans) {
+      return GetNumberEntries_(*trans);
     }
 
     THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::GetNumberEntries");
@@ -167,6 +173,12 @@ namespace Ipopt
     const CompoundSymMatrix* cmpd_sym = dynamic_cast<const CompoundSymMatrix*>(mptr);
     if (cmpd_sym) {
       FillRowCol_(n_entries, *cmpd_sym, row_offset, col_offset, iRow, jCol);
+      return;
+    }
+
+    const TransposeMatrix* trans = dynamic_cast<const TransposeMatrix*>(mptr);
+    if (trans) {
+      FillRowCol_(n_entries, *trans, row_offset, col_offset, iRow, jCol);
       return;
     }
 
@@ -248,6 +260,12 @@ namespace Ipopt
       return;
     }
 
+    const TransposeMatrix* trans = dynamic_cast<const TransposeMatrix*>(mptr);
+    if (trans) {
+      FillValues_(n_entries, *trans, values);
+      return;
+    }
+
     THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::FillValues");
   }
 
@@ -306,6 +324,12 @@ namespace Ipopt
       }
     }
     return n_entries;
+  }
+
+
+  Index TripletHelper::GetNumberEntries_(const TransposeMatrix& matrix)
+  {
+    return GetNumberEntries(*matrix.OrigMatrix());
   }
 
   void TripletHelper::FillRowCol_(Index n_entries, const GenTMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
@@ -696,6 +720,17 @@ namespace Ipopt
 
     delete [] iRow;
     delete [] jCol;
+  }
+
+  void TripletHelper::FillRowCol_(Index n_entries, const TransposeMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  {
+    FillRowCol(n_entries, *matrix.OrigMatrix(), jCol, iRow,
+               col_offset, row_offset);
+  }
+
+  void TripletHelper::FillValues_(Index n_entries, const TransposeMatrix& matrix, Number* values)
+  {
+    FillValues(n_entries, *matrix.OrigMatrix(), values);
   }
 
   void TripletHelper::PutValuesInVector(Index dim, const double* values, Vector& vector)

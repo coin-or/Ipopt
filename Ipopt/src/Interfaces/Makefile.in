@@ -66,8 +66,9 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
-	IpSolveStatistics.lo IpStdCInterface.lo IpStdFInterface.lo \
-	IpStdInterfaceTNLP.lo IpTNLPAdapter.lo IpTNLPReducer.lo
+	IpNLPBoundsRemover.lo IpSolveStatistics.lo IpStdCInterface.lo \
+	IpStdFInterface.lo IpStdInterfaceTNLP.lo IpTNLPAdapter.lo \
+	IpTNLPReducer.lo
 libipopt_la_OBJECTS = $(am_libipopt_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -315,6 +316,7 @@ libipopt_la_SOURCES = \
 	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
+	IpNLPBoundsRemover.cpp IpNLPBoundsRemover.hpp \
 	IpReturnCodes.h \
 	IpReturnCodes.hpp \
 	IpSolveStatistics.cpp IpSolveStatistics.hpp \
@@ -344,6 +346,7 @@ ASTYLE_FILES = \
 	IpInterfacesRegOp.cppbak IpInterfacesRegOp.hppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
+	IpNLPBoundsRemover.cppbak IpNLPBoundsRemover.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
@@ -428,6 +431,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInterfacesRegOp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptApplication.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNLPBoundsRemover.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSolveStatistics.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdCInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdFInterface.Plo@am__quote@

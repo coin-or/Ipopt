@@ -20,7 +20,56 @@ namespace Ipopt
 
   /* Forward declaration */
   class IpoptNLP;
-  class CGPenaltyData;
+
+  /** Base class for additional data that is special to a particular
+   *  type of algorithm, such as the CG penalty function, or using
+   *  iterative linear solvers.  The regular IpoptData object should
+   *  be given a derivation of this base class when it is created. */
+  class IpoptAdditionalData : public ReferencedObject
+  {
+  public:
+    /**@name Constructors/Destructors */
+    //@{
+    /** Default Constructor */
+    IpoptAdditionalData()
+    {}
+
+    /** Default destructor */
+    virtual ~IpoptAdditionalData()
+    {}
+    //@}
+
+    /** This method is called to initialize the global algorithmic
+     *  parameters.  The parameters are taken from the OptionsList
+     *  object. */
+    virtual bool Initialize(const Journalist& jnlst,
+                            const OptionsList& options,
+                            const std::string& prefix) = 0;
+
+    /** Initialize Data Structures at the beginning. */
+    virtual bool InitializeDataStructures() = 0;
+
+    /** Do whatever is necessary to accept a trial point as current
+     *  iterate.  This is also used to finish an iteration, i.e., to
+     *  release memory, and to reset any flags for a new iteration. */
+    virtual void AcceptTrialPoint() = 0;
+
+  private:
+    /**@name Default Compiler Generated Methods
+     * (Hidden to avoid implicit creation/calling).
+     * These methods are not implemented and 
+     * we do not want the compiler to implement
+     * them for us, so we declare them private
+     * and do not define them. This ensures that
+     * they will not be implicitly created/called. */
+    //@{
+    /** Copy Constructor */
+    IpoptAdditionalData(const IpoptAdditionalData&);
+
+    /** Overloaded Equals Operator */
+    void operator=(const IpoptAdditionalData&);
+    //@}
+  };
 
   /** Class to organize all the data required by the algorithm.
    *  Internally, once this Data object has been initialized, all
@@ -37,10 +86,10 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
-    IpoptData();
+    IpoptData(SmartPtr<IpoptAdditionalData> add_data = NULL);
 
     /** Default destructor */
-    ~IpoptData();
+    virtual ~IpoptData();
     //@}
 
     /** Initialize Data Structures */
@@ -388,10 +437,10 @@ namespace Ipopt
       return timing_statistics_;
     }
 
-    /** Get access to the Chen-Goldbarb penalty method specific data */
-    CGPenaltyData& CGPenData()
+    /** Get access to additional data object */
+    IpoptAdditionalData& AdditionalData()
     {
-      return *cgpen_data_;
+      return *add_data_;
     }
 
     /** Set the perturbation of the primal-dual system */
@@ -525,7 +574,7 @@ namespace Ipopt
 
     /** Object for the data specific for the Chen-Goldfarb penalty
      *  method algorithm */
-    CGPenaltyData* const cgpen_data_;
+    SmartPtr<IpoptAdditionalData> add_data_;
 
     /** @name Information about the perturbation of the primal-dual
      *  system */
