@@ -1,3 +1,11 @@
+// Copyright (C) 2008 Peter Carbonetto. All Rights Reserved.
+// This code is published under the Common Public License.
+//
+// Author: Peter Carbonetto
+//         Dept. of Computer Science
+//         University of British Columbia
+//         September 15, 2008
+
 #include "iterate.h"
 #include "matlabexception.h"
 

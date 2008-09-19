@@ -1,10 +1,10 @@
-// Copyright (C) 2007 Peter Carbonetto. All Rights Reserved.
+// Copyright (C) 2008 Peter Carbonetto. All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // Author: Peter Carbonetto
 //         Dept. of Computer Science
 //         University of British Columbia
-//         August 25, 2008
+//         September 18, 2008
 
 #include "mex.h"
 #include "iterate.h"
