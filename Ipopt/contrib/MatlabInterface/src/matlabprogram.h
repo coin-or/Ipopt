@@ -1,10 +1,10 @@
-// Copyright (C) 2007 Peter Carbonetto. All Rights Reserved.
+// Copyright (C) 2008 Peter Carbonetto. All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // Author: Peter Carbonetto
 //         Dept. of Computer Science
 //         University of British Columbia
-//         May 19, 2007
+//         September 25, 2008
 
 #ifndef INCLUDE_MATLABPROGRAM
 #define INCLUDE_MATLABPROGRAM
@@ -33,14 +33,6 @@ public:
     
   // The destructor.
   virtual ~MatlabProgram();
-
-  // Returns the error generated. If no error was generated, returns a
-  // null pointer.
-  // char* geterrormsg() const;
-
-  // Get the number of number of iterations of IPOPT. Should only be
-  // called after IPOPT has converged to a stationary point.
-  // int getnumiterations() const { return numiter; };
   
   // Method to return some info about the nonlinear program.
   virtual bool get_nlp_info (int& n, int& m, int& sizeOfJ, int& sizeOfH, 
