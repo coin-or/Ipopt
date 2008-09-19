@@ -248,6 +248,8 @@ of the Jacobian matrix from MATLAB");
   // Get the output from the MATLAB callback function, which is the
   // sparse matrix specifying the structure of the Jacobian.
   mxArray* ptr = outputs[0];
+  if (!mxIsSparse(ptr))
+    throw MatlabException("Jacobian must be a sparse matrix");
   if ((int) mxGetM(ptr) != m || (int) mxGetN(ptr) != n || 
       !SparseMatrix::inIncOrder(ptr))
     throw MatlabException("Jacobian must be an m x n sparse matrix with \
@@ -280,6 +282,8 @@ of the Hessian matrix from MATLAB");
   // Get the output from the MATLAB callback function, which is the
   // sparse matrix specifying the structure of the Hessian.
   mxArray* ptr = outputs[0];
+  if (!mxIsSparse(ptr))
+    throw MatlabException("Hessian must be a sparse matrix");
   if ((int) mxGetM(ptr) != n || (int) mxGetN(ptr) != n || 
       !SparseMatrix::isLowerTri(ptr) || !SparseMatrix::inIncOrder(ptr))
     throw MatlabException("Hessian must be an n x n sparse, symmetric and \
@@ -314,6 +318,8 @@ Jacobian callback function");
   // Get the output from the MATLAB callback function, which is the
   // sparse matrix specifying the value the Jacobian.
   mxArray* ptr = outputs[0];
+  if (!mxIsSparse(ptr))
+    throw MatlabException("Jacobian must be a sparse matrix");
   if ((int) mxGetM(ptr) != m || (int) mxGetN(ptr) != numvars(x) || 
       !SparseMatrix::inIncOrder(ptr))
     throw MatlabException("Jacobian must be an m x n sparse matrix with \
@@ -354,6 +360,8 @@ callback function");
   // Get the output from the MATLAB callback function, which is the
   // sparse matrix specifying the value the Hessian.
   mxArray* ptr = outputs[0];
+  if (!mxIsSparse(ptr))
+    throw MatlabException("Hessian must be a sparse matrix");
   if ((int) mxGetM(ptr) != numvars(x) || (int) mxGetN(ptr) != numvars(x) || 
       !SparseMatrix::isLowerTri(ptr) || !SparseMatrix::inIncOrder(ptr))
     throw MatlabException("Hessian must be an n x n sparse, symmetric and \

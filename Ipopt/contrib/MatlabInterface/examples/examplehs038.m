@@ -17,10 +17,10 @@ function [x, info] = examplehs038
   options.ub = [+10 +10 +10 +10];  % Upper bound on the variables.
 
   % The callback functions.
-  funcs.objective        = @computeObjective;
-  funcs.gradient         = @computeGradient;
-  funcs.hessian          = @computeHessian;
-  funcs.hessianstructure = @getHessianStructure;
+  funcs.objective        = @objective;
+  funcs.gradient         = @gradient;
+  funcs.hessian          = @hessian;
+  funcs.hessianstructure = @hessianstructure;
   funcs.iterfunc         = @callback;
 
   % Set the IPOPT options.
@@ -33,49 +33,31 @@ function [x, info] = examplehs038
   [x info] = ipopt(x0,funcs,options);
 
 % ----------------------------------------------------------------------
-function f = computeObjective (x)
-
-  x1 = x(1);
-  x2 = x(2);
-  x3 = x(3);
-  x4 = x(4);
-  
-  f = 100*(x2-x1^2)^2 + (1-x1)^2 + 90*(x4-x3^2)^2 + (1-x3)^2 + ...
-      10.1*(x2-1)^2 + 10.1*(x4-1)^2 + 19.8*(x2-1)*(x4-1);
+function f = objective (x)
+  f = 100*(x(2)-x(1)^2)^2 + (1-x(1))^2 + 90*(x(4)-x(3)^2)^2 + (1-x(3))^2 + ...
+      10.1*(x(2)-1)^2 + 10.1*(x(4)-1)^2 + 19.8*(x(2)-1)*(x(4)-1);
 
 % ----------------------------------------------------------------------
-function g = computeGradient (x)
-
-  x1 = x(1);
-  x2 = x(2);
-  x3 = x(3);
-  x4 = x(4);
-
-  g(1) = -400*x1*(x2-x1^2) - 2*(1-x1);
-  g(2) = 200*(x2-x1^2) + 20.2*(x2-1) + 19.8*(x4-1);
-  g(3) = -360*x3*(x4-x3^2) -2*(1-x3);
-  g(4) = 180*(x4-x3^2) + 20.2*(x4-1) + 19.8*(x2-1);
+function g = gradient (x)
+  g(1) = -400*x(1)*(x(2)-x(1)^2) - 2*(1-x(1));
+  g(2) = 200*(x(2)-x(1)^2) + 20.2*(x(2)-1) + 19.8*(x(4)-1);
+  g(3) = -360*x(3)*(x(4)-x(3)^2) -2*(1-x(3));
+  g(4) = 180*(x(4)-x(3)^2) + 20.2*(x(4)-1) + 19.8*(x(2)-1);
   
 % ----------------------------------------------------------------------
-function H = getHessianStructure()
+function H = hessianstructure()
   H = sparse([ 1  0  0  0 
                1  1  0  0
                0  0  1  0
                0  1  1  1 ]);
 
 % ----------------------------------------------------------------------
-function H = computeHessian (x, sigma, lambda)
-    
-  x1 = x(1);
-  x2 = x(2);
-  x3 = x(3);
-  x4 = x(4);
-  
-  H = sigma*[ 1200*x1^2 - 400*x2 + 2  0      0                       0
-              -400*x1                 220.2  0                       0
-              0                       0      1080*x3^2 - 360*x4 + 2  0
-              0                       19.8   -360*x3                 200.2];
-  H = sparse(H);
+function H = hessian (x, sigma, lambda)
+  H = [ 1200*x(1)^2-400*x(2)+2  0       0                          0
+        -400*x(1)               220.2   0                          0
+         0                      0       1080*x(3)^2- 360*x(4) + 2  0
+         0                      19.8   -360*x(3)                   200.2 ];
+  H = sparse(sigma*H);
   
 % ----------------------------------------------------------------------
 function b = callback (t, f, x)

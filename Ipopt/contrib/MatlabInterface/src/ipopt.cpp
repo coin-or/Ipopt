@@ -100,7 +100,6 @@ work in the MATLAB interface for IPOPT");
     SmartPtr<TNLP> program = matlabProgram;
 
     // Ask Ipopt to solve the problem.
-    mexSetTrapFlag(1);
     exitstatus = app.OptimizeTNLP(program);
     info.setExitStatus(exitstatus);
 
