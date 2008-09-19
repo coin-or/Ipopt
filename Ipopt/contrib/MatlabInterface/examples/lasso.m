@@ -1,3 +1,17 @@
+% This function executes IPOPT to find the maximum likelihood solution to
+% least squares regression with L1 regularization or the "Lasso". The inputs
+% are the data matrix A (in which each row is an example vector), the vector
+% of regression outputs y, and the penalty parameter lambda, a number
+% greater than zero. The output is the estimated vector of regression
+% coefficients.
+%
+% Copyright (C) 2008 Peter Carbonetto. All Rights Reserved.
+% This code is published under the Common Public License.
+%
+% Author: Peter Carbonetto
+%         Dept. of Computer Science
+%         University of British Columbia
+%         September 18, 2008
 function w = lasso (A, y, lambda)
   
   % Get the number of examples (n) and the number of regression
