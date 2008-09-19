@@ -56,6 +56,7 @@ Ipopt/contrib/MatlabInterface/examples/examplelasso.m -text
 Ipopt/contrib/MatlabInterface/examples/lasso.m -text
 Ipopt/contrib/MatlabInterface/ipopt.m -text
 Ipopt/contrib/MatlabInterface/readme.html -text
+Ipopt/contrib/MatlabInterface/src/Makefile.linux -text
 Ipopt/doc/documentation.pdf -text
 Ipopt/doc/options.tex -text
 Ipopt/examples/ScalableProblems/MittelmannBndryCntrlDiri3D.cpp -text

@@ -1,0 +1,31 @@
+# This is the Makefile I used to compile the IPOPT MEX-file on a Linux
+# machine.
+
+MATLABHOME = /cs/local/generic/lib/pkg/matlab-7.6
+IPOPTHOME  = /var/tmp/pcarbo/ipopt/install
+MEXSUFFIX  = mexglx
+MEX        = $(MATLABHOME)/bin/mex
+
+CXX      = /cs/public/generic/lib/gcc-4.1.1/bin/g++
+CXXFLAGS = -g -fomit-frame-pointer -Wall -DMATLAB_MEXFILE
+LIBS     = -L$(IPOPTHOME)/lib -lipopt -lpthread -lm -ldl -lgfortran
+
+TARGET = ipopt.$(MEXSUFFIX)
+OBJS   = matlabexception.o matlabfunctionhandle.o matlabjournal.o \
+         iterate.o ipoptoptions.o options.o sparsematrix.o        \
+         callbackfunctions.o matlabinfo.o matlabprogram.o ipopt.o
+
+MEXFLAGS = -g -v -cxx -O CC="$(CXX)" CXX="$(CXX)" LD="$(CXX)"    \
+           COPTIMFLAGS="$(CXXFLAGS)" CXXOPTIMFLAGS="$(CXXFLAGS)" \
+           LDOPTIMFLAGS="$(LDFLAGS)" 
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -I$(IPOPTHOME)/include \
+        -I$(MATLABHOME)/extern/include -o $@ -c $^
+
+$(TARGET): $(OBJS)
+	$(MEX) $(MEXFLAGS) $(LIBS) -output $@ $^
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+
