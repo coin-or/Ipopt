@@ -1,3 +1,6 @@
+% NOTE: This help file needs to be update to reflect the recently revamped
+% interface.
+%
 % IPOPT Call the IPOPT constrained, nonlinear solver. 
 %   The basic function call is
 %   

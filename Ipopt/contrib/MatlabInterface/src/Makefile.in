@@ -39,12 +39,14 @@ LIBS          = @ipoptlib@ @ADDLIBS@
 
 TARGET = ipopt.$(MEXSUFFIX)
 
-OBJS   = matlabexception.@OBJEXT@ matlabscalar.@OBJEXT@ \
-         matlabstring.@OBJEXT@ matlabjournal.@OBJEXT@   \
-         matlabmatrix.@OBJEXT@ arrayofmatrices.@OBJEXT@ \
-         sparsematrix.@OBJEXT@ matlabprogram.@OBJEXT@   \
+OBJS   = 
          matlaboption.@OBJEXT@ multipliers.@OBJEXT@     \
          matlabfunctionhandle.@OBJEXT@ ipopt.@OBJEXT@
+
+OBJS   = matlabexception@OBJEXT@ matlabfunctionhandle@OBJEXT@           \
+         matlabjournal@OBJEXT@ iterate@OBJEXT@ ipoptoptions@OBJEXT@     \
+         options@OBJEXT@ sparsematrix@OBJEXT@ callbackfunctions@OBJEXT@ \
+         matlabinfo@OBJEXT@ matlabprogram@OBJEXT@ ipopt@OBJEXT@
 
 MATLAB_INCLUDE = -I$(MATLAB_HOME)/extern/include
 LDFLAGS        = $(CXXFLAGS) @RPATH_FLAGS@
