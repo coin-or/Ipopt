@@ -33,21 +33,33 @@ bool MatlabProgram::get_nlp_info (int& n, int& m, int& sizeOfJ, int& sizeOfH,
     m = numconstraints(options);
 
     // Get the size of the Jacobian.
-    SparseMatrix* J = funcs.getJacobianStructure(n,m,auxdata);
-    sizeOfJ         = J->numelems();
+    if (m) {
+      if (!funcs.jacobianFuncIsAvailable())
+	throw MatlabException("You need to specify the callback functions \
+for computing the Jacobian and the sparsity structure of the Jacobian");
+      SparseMatrix* J = funcs.getJacobianStructure(n,m,auxdata);
+      sizeOfJ = J->numelems();
+      delete J;
+    }
+    else
+      sizeOfJ = 0;
 
     // Get the size of the symmetric Hessian matrix. We don't need to
     // store the actual result, we just need to look at the number of
     // non-zero entries in the lower triangular part of the matrix.
-    SparseMatrix* H = funcs.getHessianStructure(n,auxdata);
-    sizeOfH         = H->numelems();
+    if (!options.ipoptOptions().useQuasiNewton()) {
+      if (!funcs.hessianFuncIsAvailable())
+	throw MatlabException("You need to specify the callback functions \
+for computing the Hessian and the sparsity structure of the Hessian");
+      SparseMatrix* H = funcs.getHessianStructure(n,auxdata);
+      sizeOfH = H->numelems();
+      delete H;
+    }
+    else
+      sizeOfH = 0;
 
     // Use C-style indexing.
     indexStyle = C_STYLE;
-
-    // Free the dynamically allocated memory.
-    delete J;
-    delete H;
 
     return true;
   } catch (std::exception& error) {
