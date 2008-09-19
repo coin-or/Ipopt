@@ -380,7 +380,7 @@ bool CallbackFunctions::iterCallback (int t, double f,
 
   // Call the MATLAB call function, with or without the auxiliary data.
   inputs[0] = pt;
-  inputs[1] = pt;
+  inputs[1] = pf;
   inputs[2] = auxdata;
   if (auxdata)
     success = iterfunc->evaluate(3,1,inputs,outputs);
