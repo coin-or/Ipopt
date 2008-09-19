@@ -76,7 +76,9 @@ public:
 		       const double* lambda, SparseMatrix& H, 
 		       const mxArray* auxdata) const;
 
-  // double iterCallback    (mxArray*& auxdata) const;
+  // Call the intermediate callback function. A return value of false
+  // tells IPOPT to terminate.
+  bool iterCallback (int t, double f, const mxArray*& auxdata) const;
 
 protected:
   MatlabFunctionHandle* objfunc;        // Objective callback function.

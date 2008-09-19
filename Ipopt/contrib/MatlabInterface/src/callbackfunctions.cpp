@@ -156,8 +156,8 @@ double CallbackFunctions::computeObjective (const Iterate& x,
     throw MatlabException("There was an error when executing the objective \
 callback function");
 
-  // Get the first output from the MATLAB callback function, which
-  // is the value of the objective function at x.
+  // Get the output from the MATLAB callback function, which is the
+  // value of the objective function at x.
   mxArray* ptr = outputs[0];
   if (!mxIsDouble(ptr) || mxGetNumberOfElements(ptr) != 1)
     throw MatlabException("The first return value of the objective \
@@ -187,8 +187,8 @@ void CallbackFunctions::computeGradient (const Iterate& x, double* g,
     throw MatlabException("There was an error when executing the \
 gradient callback function");
 
-  // Get the first output from the MATLAB callback function, which
-  // is the value of the gradient of the objective function at x.
+  // Get the output from the MATLAB callback function, which is the
+  // value of the gradient of the objective function at x.
   mxArray* ptr = outputs[0];
   Iterate grad(ptr);
   if (numvars(x) != numvars(grad))
@@ -217,8 +217,8 @@ void CallbackFunctions::computeConstraints(const Iterate& x, int m, double* c,
     throw MatlabException("There was an error when executing the \
 constraints callback function");
 
-  // Get the first output from the MATLAB callback function, which
-  // is the value of vector-valued constraint function at x.
+  // Get the output from the MATLAB callback function, which is the
+  // value of vector-valued constraint function at x.
   mxArray* ptr = outputs[0];
   if ((unsigned) m != mxGetNumberOfElements(ptr))
     throw MatlabException("Invalid constraint values passed back from \
@@ -245,8 +245,8 @@ SparseMatrix* CallbackFunctions::getJacobianStructure (int n, int m,
     throw MatlabException("There was an error when getting the structure \
 of the Jacobian matrix from MATLAB");
 
-  // Get the first output from the MATLAB callback function, which is
-  // the sparse matrix specifying the structure of the Jacobian.
+  // Get the output from the MATLAB callback function, which is the
+  // sparse matrix specifying the structure of the Jacobian.
   mxArray* ptr = outputs[0];
   if ((int) mxGetM(ptr) != m || (int) mxGetN(ptr) != n || 
       !SparseMatrix::inIncOrder(ptr))
@@ -256,7 +256,7 @@ n is the number of variables");
   SparseMatrix* J = new SparseMatrix(ptr);  // The return value.
 
   // Free the dynamically allocated memory.
-  mxDestroyArray(outputs[0]);
+  mxDestroyArray(ptr);
 
   return J;
 }
@@ -277,8 +277,8 @@ SparseMatrix* CallbackFunctions::getHessianStructure (int n, const mxArray*
     throw MatlabException("There was an error when getting the structure \
 of the Hessian matrix from MATLAB");
 
-  // Get the first output from the MATLAB callback function, which is
-  // the sparse matrix specifying the structure of the Jacobian.
+  // Get the output from the MATLAB callback function, which is the
+  // sparse matrix specifying the structure of the Hessian.
   mxArray* ptr = outputs[0];
   if ((int) mxGetM(ptr) != n || (int) mxGetN(ptr) != n || 
       !SparseMatrix::isLowerTri(ptr) || !SparseMatrix::inIncOrder(ptr))
@@ -288,7 +288,7 @@ the number of variables");
   SparseMatrix* H = new SparseMatrix(ptr);  // The return value.
 
   // Free the dynamically allocated memory.
-  mxDestroyArray(outputs[0]);
+  mxDestroyArray(ptr);
 
   return H;
 }
@@ -311,8 +311,8 @@ void CallbackFunctions::computeJacobian (int m, const Iterate& x,
     throw MatlabException("There was an error when executing the \
 Jacobian callback function");
 
-  // Get the first output from the MATLAB callback function, which is
-  // the sparse matrix specifying the value the Jacobian.
+  // Get the output from the MATLAB callback function, which is the
+  // sparse matrix specifying the value the Jacobian.
   mxArray* ptr = outputs[0];
   if ((int) mxGetM(ptr) != m || (int) mxGetN(ptr) != numvars(x) || 
       !SparseMatrix::inIncOrder(ptr))
@@ -323,7 +323,7 @@ n is the number of variables");
   Jnew.copyto(J);
 
   // Free the dynamically allocated memory.
-  mxDestroyArray(outputs[0]);
+  mxDestroyArray(ptr);
 }
 
 void CallbackFunctions::computeHessian (const Iterate& x, double sigma, int m, 
@@ -351,8 +351,8 @@ void CallbackFunctions::computeHessian (const Iterate& x, double sigma, int m,
     throw MatlabException("There was an error when executing the Hessian \
 callback function");
 
-  // Get the first output from the MATLAB callback function, which is
-  // the sparse matrix specifying the value the Hessian.
+  // Get the output from the MATLAB callback function, which is the
+  // sparse matrix specifying the value the Hessian.
   mxArray* ptr = outputs[0];
   if ((int) mxGetM(ptr) != numvars(x) || (int) mxGetN(ptr) != numvars(x) || 
       !SparseMatrix::isLowerTri(ptr) || !SparseMatrix::inIncOrder(ptr))
@@ -363,7 +363,45 @@ the number of variables");
   Hnew.copyto(H);
 
   // Free the dynamically allocated memory.
-  mxDestroyArray(outputs[0]);
+  mxDestroyArray(ptr);
   mxDestroyArray(psigma);
   mxDestroyArray(plambda);
+}
+
+bool CallbackFunctions::iterCallback (int t, double f, 
+				      const mxArray*& auxdata) const {
+  bool           success;
+  const mxArray* inputs[3];
+  mxArray*       outputs[1];
+
+  // Create the input arguments to the MATLAB routine, sigma and lambda.
+  mxArray* pt = mxCreateDoubleScalar(t);
+  mxArray* pf = mxCreateDoubleScalar(f);
+
+  // Call the MATLAB call function, with or without the auxiliary data.
+  inputs[0] = pt;
+  inputs[1] = pt;
+  inputs[2] = auxdata;
+  if (auxdata)
+    success = iterfunc->evaluate(3,1,inputs,outputs);
+  else
+    success = iterfunc->evaluate(2,1,inputs,outputs);
+  if (!success)
+    throw MatlabException("There was an error when executing the iterative \
+callback function");
+
+  // Get the output from the MATLAB callback function, which is a
+  // boolean value telling whether or not IPOPT should continue.
+  mxArray* ptr = outputs[0];
+  if (!mxIsLogicalScalar(ptr))
+    throw MatlabException("The return value for the iterative callback must \
+either be TRUE or FALSE");
+  bool b = mxIsLogicalScalarTrue(ptr);
+
+  // Free the dynamically allocated memory.
+  mxDestroyArray(ptr);
+  mxDestroyArray(pt);
+  mxDestroyArray(pf);
+
+  return b;
 }

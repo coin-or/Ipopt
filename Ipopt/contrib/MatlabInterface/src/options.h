@@ -13,17 +13,13 @@ public:
 
   // The constructor expects as input a point to a MATLAB array, in
   // particular a structure array with the appropriate fields. Note
-  // that the Options object does not possess an independent copy of
+  // that the Options object does *not* possess an independent copy of
   // some of the MATLAB data (such as the auxiliary data).
   Options (const Iterate& x, Ipopt::IpoptApplication& app, 
 	   const mxArray* ptr);
   
   // The destructor.
   ~Options();
-
-  // This function returns true if and only if both the lower and
-  // upper bounds on the contraints have been specified.
-  bool isConstrained() const { return cl && cu; };
 
   // Get the number of variables and the number of constraints.
   friend int numvars        (const Options& options) { return options.n; };
@@ -41,6 +37,11 @@ public:
   // Access the IPOPT options object.
   const IpoptOptions ipoptOptions() const { return ipopt; };
 
+  // Access the Lagrange multpliers.
+  const double* multlb    () const { return zl;     };
+  const double* multub    () const { return zu;     };
+  const double* multconstr() const { return lambda; };
+
 protected:
   int            n;       // The number of optimization variables.
   int            m;       // The number of constraints.
@@ -48,6 +49,9 @@ protected:
   double*        ub;      // Upper bounds on the variables.
   double*        cl;      // Lower bounds on constraints.
   double*        cu;      // Upper bounds on constraints.
+  double*        zl;      // Lagrange multipliers for lower bounds.
+  double*        zu;      // Lagrange multipliers for upper bounds.
+  double*        lambda;  // Lagrange multipliers for constraints.
   const mxArray* auxdata; // MATLAB array containing the auxiliary data.
   IpoptOptions   ipopt;   // The IPOPT options.
 
@@ -59,6 +63,9 @@ protected:
   static int     loadConstraintBounds (const mxArray* ptr, double*& cl, 
 				       double*& cu, double neginfty,
 				       double posinfty);
+  static void    loadMultipliers      (int n, int m, const mxArray* ptr, 
+				       double*& zl, double*& zu, 
+				       double*& lambda);
 };
 
 #endif
