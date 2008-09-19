@@ -10,29 +10,36 @@
 %         Dept. of Computer Science
 %         University of British Columbia
 %         May 19, 2007
-function [status, x] = examplehs051
+function [x, info] = examplehs051
 
-x0  = [ +2.5 +0.5 +2.0 -1.0 +0.5 ];
-lb  = [-inf -inf -inf -inf -inf];
-ub  = [+inf +inf +inf +inf +inf];
-lbc = [4 0 0]; 
-ubc = [4 0 0];
+  x0         = [ 2.5 0.5 2 -1 0.5 ]; % The starting point.
+  options.cl = [ 4 0 0 ];            % Lower bounds on constraints.
+  options.cu = [ 4 0 0 ];            % Upper bounds on constraints.
 
-[status x] = ipopt(x0,lb,ub,lbc,ubc,@computeObjective,@computeGradient,...
-		   @computeConstraints,@computeJacobian,'',[],'',[],...
-		   'jac_c_constant','yes','hessian_approximation',...
-		   'limited-memory','mu_strategy','adaptive','tol',1e-7);
+  % Set the IPOPT options.
+  options.ipopt.jac_c_constant        = 'yes';
+  options.ipopt.hessian_approximation = 'limited-memory';
+  options.ipopt.mu_strategy           = 'adaptive';
+  options.ipopt.tol                   = 1e-7;
 
+  % The callback functions.
+  funcs.objective         = @computeObjective;
+  funcs.constraints       = @computeConstraints;
+  funcs.gradient          = @computeGradient;
+  funcs.jacobian          = @computeJacobian;
+  funcs.jacobianstructure = @computeJacobian;
+  
+  % Run IPOPT.
+  [x info] = ipopt(x0,funcs,options);
+  
 % ----------------------------------------------------------------------
 function f = computeObjective (x)
-
   f = (x(1) - x(2))^2 + ...
       (x(2) + x(3) - 2)^2 + ...
       (x(4) - 1)^2 + (x(5) - 1)^2;
-  
+
 % ----------------------------------------------------------------------
 function g = computeGradient (x)
-  
   g = 2*[ x(1) - x(2);
 	  x(2) + x(3) - 2 - x(1) + x(2);
 	  x(2) + x(3) - 2;
@@ -41,14 +48,12 @@ function g = computeGradient (x)
 
 % ----------------------------------------------------------------------
 function c = computeConstraints (x)
-
   c = [ x(1) + 3*x(2);
         x(3) + x(4) - 2*x(5);
         x(2) - x(5) ];
 
 % ----------------------------------------------------------------------
-function J = computeJacobian (x, returnStructureOnly)
-  
+function J = computeJacobian (x)  
   J = sparse([ 1  3  0  0  0;
 	       0  0  1  1 -2;
 	       0  1  0  0 -1 ]);

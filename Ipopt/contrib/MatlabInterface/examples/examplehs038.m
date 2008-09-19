@@ -10,16 +10,27 @@
 %         Dept. of Computer Science
 %         University of British Columbia
 %         May 19, 2007
-function [status, x] = examplehs038
+function [x, info] = examplehs038
 
-% The starting point.
-x0 = [-3  -1  -3  -1];   % The starting point.
-lb = [-10 -10 -10 -10];  % Lower bound on the variables.
-ub = [+10 +10 +10 +10];  % Upper bound on the variables.
+  x0         = [-3  -1  -3  -1];   % The starting point.
+  options.lb = [-10 -10 -10 -10];  % Lower bound on the variables.
+  options.ub = [+10 +10 +10 +10];  % Upper bound on the variables.
 
-[status x] = ipopt(x0,lb,ub,[],[],@computeObjective,@computeGradient,'','',...
-		   @computeHessian,[],@callback,[],'mu_strategy','adaptive',...
-		   'tol',1e-7,'max_iter',100);
+  % The callback functions.
+  funcs.objective        = @computeObjective;
+  funcs.gradient         = @computeGradient;
+  funcs.hessian          = @computeHessian;
+  funcs.hessianstructure = @getHessianStructure;
+  funcs.iterfunc         = @callback;
+
+  % Set the IPOPT options.
+  options.ipopt.mu_strategy = 'adaptive';
+  options.ipopt.print_level = 0;
+  options.ipopt.tol         = 1e-7;
+  options.ipopt.max_iter    = 100;
+
+  % Run IPOPT.
+  [x info] = ipopt(x0,funcs,options);
 
 % ----------------------------------------------------------------------
 function f = computeObjective (x)
@@ -46,28 +57,27 @@ function g = computeGradient (x)
   g(4) = 180*(x4-x3^2) + 20.2*(x4-1) + 19.8*(x2-1);
   
 % ----------------------------------------------------------------------
-function H = computeHessian (x, sigma, lambda, returnStructureOnly)
+function H = getHessianStructure()
+  H = sparse([ 1  0  0  0 
+               1  1  0  0
+               0  0  1  0
+               0  1  1  1 ]);
 
-  if returnStructureOnly
-    H = sparse([1  0  0  0;
-                1  1  0  0;
-                0  0  1  0;
-                0  1  1  1]);
-  else
+% ----------------------------------------------------------------------
+function H = computeHessian (x, sigma, lambda)
     
-    x1 = x(1);
-    x2 = x(2);
-    x3 = x(3);
-    x4 = x(4);
-
-    H = sigma*[ 1200*x1^2 - 400*x2 + 2  0      0                       0;
-                -400*x1                 220.2  0                       0;
-                0                       0      1080*x3^2 - 360*x4 + 2  0;
-                0                       19.8   -360*x3                 200.2];
-    H = sparse(H);
-  end
+  x1 = x(1);
+  x2 = x(2);
+  x3 = x(3);
+  x4 = x(4);
+  
+  H = sigma*[ 1200*x1^2 - 400*x2 + 2  0      0                       0
+              -400*x1                 220.2  0                       0
+              0                       0      1080*x3^2 - 360*x4 + 2  0
+              0                       19.8   -360*x3                 200.2];
+  H = sparse(H);
   
 % ----------------------------------------------------------------------
-function callback (t, f, x)
-  fprintf('%3d  %0.3g \n', t, f);
-  
+function b = callback (t, f, x)
+  fprintf('%3d  %0.3g \n',t,f);
+  b = true;
