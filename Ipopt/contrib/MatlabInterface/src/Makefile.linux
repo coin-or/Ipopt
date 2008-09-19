@@ -1,5 +1,13 @@
 # This is the Makefile I used to compile the IPOPT MEX-file on a Linux
 # machine.
+#
+# configure --prefix=/var/tmp/pcarbo/ipopt/install \
+#    CC=/cs/public/generic/lib/gcc-4.1.1/bin/gcc \
+#    CXX=/cs/public/generic/lib/gcc-4.1.1/bin/g++ \
+#    F77=/cs/public/generic/lib/gcc-4.1.1/bin/gfortran \
+#    ADD_CXXFLAGS="-fPIC -fexceptions" ADD_CFLAGS="-fPIC -fexceptions" \
+#    ADD_FFLAGS="-fPIC -fexceptions" -disable-shared
+#
 
 MATLABHOME = /cs/local/generic/lib/pkg/matlab-7.6
 IPOPTHOME  = /var/tmp/pcarbo/ipopt/install
@@ -7,7 +15,7 @@ MEXSUFFIX  = mexglx
 MEX        = $(MATLABHOME)/bin/mex
 
 CXX      = /cs/public/generic/lib/gcc-4.1.1/bin/g++
-CXXFLAGS = -g -fomit-frame-pointer -Wall -DMATLAB_MEXFILE
+CXXFLAGS = -O2 -fomit-frame-pointer -Wall -DMATLAB_MEXFILE
 LIBS     = -L$(IPOPTHOME)/lib -lipopt -lpthread -lm -ldl -lgfortran
 
 TARGET = ipopt.$(MEXSUFFIX)
@@ -15,7 +23,7 @@ OBJS   = matlabexception.o matlabfunctionhandle.o matlabjournal.o \
          iterate.o ipoptoptions.o options.o sparsematrix.o        \
          callbackfunctions.o matlabinfo.o matlabprogram.o ipopt.o
 
-MEXFLAGS = -g -v -cxx -O CC="$(CXX)" CXX="$(CXX)" LD="$(CXX)"    \
+MEXFLAGS = -v -cxx -O CC="$(CXX)" CXX="$(CXX)" LD="$(CXX)"    \
            COPTIMFLAGS="$(CXXFLAGS)" CXXOPTIMFLAGS="$(CXXFLAGS)" \
            LDOPTIMFLAGS="$(LDFLAGS)" 
 
