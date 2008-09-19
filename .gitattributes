@@ -52,6 +52,8 @@ Ipopt/contrib/MatlabInterface/examples/bayesnet/vectorize.m -text
 Ipopt/contrib/MatlabInterface/examples/examplehs038.m -text
 Ipopt/contrib/MatlabInterface/examples/examplehs051.m -text
 Ipopt/contrib/MatlabInterface/examples/examplehs071.m -text
+Ipopt/contrib/MatlabInterface/examples/examplelasso.m -text
+Ipopt/contrib/MatlabInterface/examples/lasso.m -text
 Ipopt/contrib/MatlabInterface/ipopt.m -text
 Ipopt/contrib/MatlabInterface/readme.html -text
 Ipopt/doc/documentation.pdf -text

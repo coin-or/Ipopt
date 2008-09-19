@@ -30,24 +30,24 @@ function [x, info] = examplehs071
   % The callback functions.
   funcs.objective         = @(x) x(1)*x(4)*sum(x(1:3)) + x(3);
   funcs.constraints       = @(x) [ prod(x); sum(x.^2) ];
-  funcs.gradient          = @computeGradient;
+  funcs.gradient          = @gradient;
   funcs.jacobian          = @(x) sparse([ prod(x)./x; 2*x ]);
   funcs.jacobianstructure = @() sparse(ones(2,4));
-  funcs.hessian           = @computeHessian;
+  funcs.hessian           = @hessian;
   funcs.hessianstructure  = @() sparse(tril(ones(4)));
   
   % Run IPOPT.
   [x info] = ipopt(x0,funcs,options);
 
 % ----------------------------------------------------------------------
-function g = computeGradient (x)
+function g = gradient (x)
   g = [ x(1)*x(4) + x(4)*sum(x(1:3))
         x(1)*x(4)
         x(1)*x(4) + 1
         x(1)*sum(x(1:3)) ]; 
   
 % ----------------------------------------------------------------------
-function H = computeHessian (x, sigma, lambda)
+function H = hessian (x, sigma, lambda)
   
   H = sigma*[ 2*x(4)             0      0   0;
               x(4)               0      0   0;

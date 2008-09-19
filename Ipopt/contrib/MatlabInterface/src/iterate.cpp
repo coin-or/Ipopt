@@ -11,7 +11,7 @@ Iterate::Iterate (mxArray* ptr)
   if (mxIsCell(ptr)) {
 
     // The MATLAB array is a cell array. Repeat for each cell.
-    int n = mxGetNumberOfElements(p);
+    int n = mxGetNumberOfElements(ptr);
     for (int i = 0; i < n; i++) {
       p = mxGetCell(ptr,i);  // Get the ith cell.
       if (!mxIsDouble(p))
