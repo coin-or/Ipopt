@@ -2,6 +2,14 @@
 % regression problem subject to L1 regularization, which rewards "sparse"
 % models that have regression coefficients of zero. See, for instance,
 % the work in the "Lasso" by the statistician Robert Tibshirani.
+%
+% Copyright (C) 2008 Peter Carbonetto. All Rights Reserved.
+% This code is published under the Common Public License.
+%
+% Author: Peter Carbonetto
+%         Dept. of Computer Science
+%         University of British Columbia
+%         September 18, 2008
 
 % Experiment parameters.
 lambda = 1;                      % Level of L1 regularization.

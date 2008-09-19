@@ -1,9 +1,0 @@
-Peter Carbonetto
-December 11, 2007
-
-KNOWN BUGS
-
-Here is a list of bugs that have been observed by myself or by others,
-but to date have not been corrected.
-
-* At this point, there are no known bugs that haven't been fixed.
