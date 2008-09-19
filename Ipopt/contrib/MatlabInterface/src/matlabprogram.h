@@ -92,8 +92,7 @@ public:
 
   // Intermediate callback method. It is called once per iteration
   // of the IPOPT algorithm.
-  virtual bool intermediate_callback (AlgorithmMode mode,
-				      int iteration, double objective,
+  virtual bool intermediate_callback (AlgorithmMode mode, int t, double f,
 				      double inf_pr, double inf_du,
 				      double mu, double d_norm,
 				      double regularization_ize,
@@ -109,17 +108,6 @@ protected:
   Iterate&                 x;        // Current point.
   const mxArray*           auxdata;  // The auxiliary data.
   MatlabInfo&              info;     // Info passed back to MATLAB.
-
-  //  Multipliers*           initialMultipliers; // The initial point of the
-                                       // Lagrange multipliers.
-  // Multipliers*           multipliers;  // This is used to store the
-				       // value of the Lagrangne
-				       // multipliers at the solution.
-  // int                    numiter;   // Keeps track of the number of
-  //				       // IPOPT iterations.
-
-  // If true, we don't need to compute the Hessian of the Lagrangian.
-  // bool useQuasiNewton; 
 
   // These next two members store information about the structure of
   // the sparse Matlab matrix for the Jacobian of the constraints

@@ -77,6 +77,11 @@ approximation to the Hessian");
       throw MatlabException("The user-defined scaling option does not \
 work in the MATLAB interface for IPOPT");
 
+    // If the user supplied initial values for the Lagrange
+    // multipliers, activate the "warm start" option in IPOPT.
+    if (options.multlb() && options.multub() && options.multconstr())
+      app.Options()->SetStringValue("warm_start_init_point","yes");
+
     // Set up the IPOPT console.
     EJournalLevel printLevel = (EJournalLevel) 
       options.ipoptOptions().printLevel();

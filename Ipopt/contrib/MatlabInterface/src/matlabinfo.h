@@ -29,7 +29,12 @@ public:
   void                    setExitStatus (ApplicationReturnStatus status);
 
   // Access and modify the Lagrange multipliers.
-  // TO DO.
+  const double* getmultlb     () const;
+  const double* getmultub     () const;
+  const double* getmultconstr () const;
+  void          setmultlb     (int n, const double* zl);
+  void          setmultub     (int n, const double* zu);
+  void          setmultconstr (int m, const double* lambda);
 
 protected:
   mxArray* ptr;  // All the information is stored in a MATLAB array.

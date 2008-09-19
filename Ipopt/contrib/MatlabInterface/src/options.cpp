@@ -5,7 +5,8 @@
 // -----------------------------------------------------------------
 Options::Options (const Iterate& x, Ipopt::IpoptApplication& app, 
 		  const mxArray* ptr) 
-  : n(numvars(x)), m(0), lb(0), ub(0), cl(0), cu(0), auxdata(0),
+  : n(numvars(x)), m(0), lb(0), ub(0), cl(0), cu(0), zl(0), zu(0),
+    lambda(0), auxdata(0),
 
     // Process the IPOPT options.
     ipopt(app,mxGetField(ptr,0,"ipopt")) { 
@@ -21,7 +22,7 @@ Options::Options (const Iterate& x, Ipopt::IpoptApplication& app,
   m = loadConstraintBounds(ptr,cl,cu,neginfty,posinfty);
 
   // Load the Lagrange multipliers.
-  // To do.
+  loadMultipliers(n,m,ptr,zl,zu,lambda);
 
   // Load the auxiliary data.
   auxdata = mxGetField(ptr,0,"auxdata");
@@ -135,4 +136,43 @@ double-precision arrays with the same number of elements");
   }
 
   return m;
+}
+
+void Options::loadMultipliers (int n, int m, const mxArray* ptr, 
+			       double*& zl, double*& zu, double*& lambda) {
+  const mxArray* p;
+  
+  // Load the Lagrange multipliers associated with the lower bounds.
+  p = mxGetField(ptr,0,"zl");
+  if (p) {
+    if (!mxIsDouble(p) || (int) mxGetNumberOfElements(p) != n)
+      throw MatlabException("The initial point for the Lagrange multipliers \
+associated with the lower bounds must be a double-precision array with one \
+element for each optimization variable");
+    zl = mxGetPr(p);
+  } else
+    zl = 0;
+
+  // Load the Lagrange multipliers associated with the upper bounds.
+  p = mxGetField(ptr,0,"zu");
+  if (p) {
+    if (!mxIsDouble(p) || (int) mxGetNumberOfElements(p) != n)
+      throw MatlabException("The initial point for the Lagrange multipliers \
+associated with the upper bounds must be a double-precision array with one \
+element for each optimization variable");
+    zu = mxGetPr(p);
+  } else
+    zu = 0;
+
+  // Load the Lagrange multipliers associated with the equality and
+  // inequality constraints.
+  p = mxGetField(ptr,0,"lambda");
+  if (p) {
+    if (!mxIsDouble(p) || (int) mxGetNumberOfElements(p) != m)
+      throw MatlabException("The initial point for the Lagrange multipliers \
+associated with the constraints must be a double-precision array with one \
+element for each constraint");
+    lambda = mxGetPr(p);
+  } else
+    lambda = 0;
 }
