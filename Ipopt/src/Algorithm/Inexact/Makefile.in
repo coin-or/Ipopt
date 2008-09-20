@@ -58,7 +58,8 @@ am_libinexact_la_OBJECTS = IpInexactAlgBuilder.lo IpInexactCq.lo \
 	IpInexactData.lo IpInexactDoglegNormal.lo \
 	IpInexactLSAcceptor.lo IpInexactNewtonNormal.lo \
 	IpInexactPDSolver.lo IpInexactRegOp.lo \
-	IpInexactSearchDirCalc.lo
+	IpInexactSearchDirCalc.lo IpIterativePardisoSolverInterface.lo \
+	IpIterativeSolverTerminationTester.lo
 libinexact_la_OBJECTS = $(am_libinexact_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -290,7 +291,9 @@ libinexact_la_SOURCES = \
 	IpInexactNormalStepCalc.hpp \
 	IpInexactPDSolver.cpp IpInexactPDSolver.hpp \
 	IpInexactRegOp.cpp IpInexactRegOp.hpp \
-	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp
+	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp \
+	IpIterativePardisoSolverInterface.cpp IpIterativePardisoSolverInterface.hpp \
+	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
 
 libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
@@ -317,7 +320,9 @@ ASTYLE_FILES = \
 	IpInexactNormalStepCalc.hppbak \
 	IpInexactPDSolver.cppbak IpInexactPDSolver.hppbak \
 	IpInexactRegOp.cppbak IpInexactRegOp.hppbak \
-	IpInexactSearchDirCalc.cppbak IpInexactSearchDirCalc.hppbak
+	IpInexactSearchDirCalc.cppbak IpInexactSearchDirCalc.hppbak \
+	IpIterativePardisoSolverInterface.cppbak IpIterativePardisoSolverInterface.hppbak \
+	IpIterativeSolverTerminationTester.cppbak IpIterativeSolverTerminationTester.hppbak
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
@@ -381,6 +386,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInexactPDSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInexactRegOp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInexactSearchDirCalc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIterativePardisoSolverInterface.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIterativeSolverTerminationTester.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

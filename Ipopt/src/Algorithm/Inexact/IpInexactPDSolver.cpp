@@ -40,21 +40,7 @@ namespace Ipopt
   }
 
   void InexactPDSolver::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
-  {
-    roptions->AddLowerBoundedNumberOption(
-      "tcc_psi",
-      "Psi factor in Tangential Component Condition.",
-      0.0, true,
-      1e-1,
-      "");
-
-    roptions->AddLowerBoundedNumberOption(
-      "tcc_theta",
-      "theta factor in Tangential Component Condition.",
-      0.0, true,
-      1e-8,
-      "");
-  }
+  {}
 
 
   bool InexactPDSolver::InitializeImpl(const OptionsList& options,
@@ -134,6 +120,10 @@ namespace Ipopt
 
     while (notDone) {
       count++;
+
+      // Set the perturbation values in the Data object
+      IpData().setPDPert(delta_x, delta_s, delta_c, delta_d);
+
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "Doing solve with perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n",
                      delta_x, delta_s, delta_c, delta_d);
@@ -144,44 +134,55 @@ namespace Ipopt
                                     *sol.x_NonConst(), *sol.s_NonConst(),
                                     *sol.y_c_NonConst(), *sol.y_d_NonConst(),
                                     false, 0);
-      if (retval!=SYMSOLVER_SUCCESS) {
-        IpData().TimingStats().PDSystemSolverTotal().End();
-        return false;
-      }
-
-      // Compute the tangetial part of the step from the overall step
-      tangential_x = normal_x->MakeNew();
-      tangential_x->AddTwoVectors(1., *sol.x(), -1., *normal_x, 0.);
-      tangential_s = normal_s->MakeNew();
-      tangential_s->AddTwoVectors(1., *sol.s(), -1., *normal_s, 0.);
-      // output
-      if (Jnlst().ProduceOutput(J_MOREVECTOR, J_SOLVE_PD_SYSTEM)) {
-        Jnlst().Printf(J_MOREVECTOR, J_SOLVE_PD_SYSTEM,
-                       "Trial tangential step (without slack scaling):\n");
-        tangential_x->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "tangential_x");
-        tangential_s->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "tangential_s");
-      }
-      InexData().set_tangential_x(tangential_x);
-      InexData().set_tangential_s(tangential_s);
-
-
-      // Set the perturbation values in the Data object
-      IpData().setPDPert(delta_x, delta_s, delta_c, delta_d);
-
-      // check if we need to modify the system
-      bool modify_hessian = HessianRequiresChange();
-      if (modify_hessian) {
-        bool pert_return = perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
+      if (retval==SYMSOLVER_SINGULAR) {
+        bool pert_return = perturbHandler_->PerturbForSingularity(delta_x, delta_s,
                            delta_c, delta_d);
         if (!pert_return) {
           Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                         "PerturbForWrongInertia can't be done for wrong interia or singular.\n");
+                         "PerturbForWrongInertia can't be done for singular.\n");
           IpData().TimingStats().PDSystemSolverTotal().End();
           return false;
         }
       }
+      else if (retval==SYMSOLVER_SUCCESS) {
+
+        // Compute the tangetial part of the step from the overall step
+        tangential_x = normal_x->MakeNew();
+        tangential_x->AddTwoVectors(1., *sol.x(), -1., *normal_x, 0.);
+        tangential_s = normal_s->MakeNew();
+        tangential_s->AddTwoVectors(1., *sol.s(), -1., *normal_s, 0.);
+        // output
+        if (Jnlst().ProduceOutput(J_MOREVECTOR, J_SOLVE_PD_SYSTEM)) {
+          Jnlst().Printf(J_MOREVECTOR, J_SOLVE_PD_SYSTEM,
+                         "Trial tangential step (without slack scaling):\n");
+          tangential_x->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "tangential_x");
+          tangential_s->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "tangential_s");
+        }
+        InexData().set_tangential_x(tangential_x);
+        InexData().set_tangential_s(tangential_s);
+
+        // check if we need to modify the system
+        bool modify_hessian = HessianRequiresChange();
+        if (modify_hessian) {
+          bool pert_return = perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
+                             delta_c, delta_d);
+          if (!pert_return) {
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "PerturbForWrongInertia can't be done for Hessian modification.\n");
+            IpData().TimingStats().PDSystemSolverTotal().End();
+            return false;
+          }
+        }
+        else {
+          notDone = false;
+        }
+      }
       else {
-        notDone = false;
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Bad return code from augmented system solver = %d.\n",
+                       retval);
+        IpData().TimingStats().PDSystemSolverTotal().End();
+        return false;
       }
 
     } // while (notDone)
@@ -194,9 +195,18 @@ namespace Ipopt
                    "Final perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n",
                    delta_x, delta_s, delta_c, delta_d);
 
+    // TODO: FRANK, how should we handle the multiplier updates for the slack duals??
+#if 1
     // Compute the remaining sol Vectors
     Pd_L->SinvBlrmZMTdBr(-1., *slack_s_L, *rhs.v_L(), *v_L, *sol.s(), *sol.v_L_NonConst());
     Pd_U->SinvBlrmZMTdBr(1., *slack_s_U, *rhs.v_U(), *v_U, *sol.s(), *sol.v_U_NonConst());
+#else
+    // Compute the step for v_l and v_u simply from the y_d step.
+    // This means that we are not really solving the linear system,
+    // but those steps are consistent even if delta_s is positive
+    Pd_L->TransMultVector(-1., *sol.y_d(), 0., *sol.v_L_NonConst());
+    Pd_U->TransMultVector(1., *sol.y_d(), 0., *sol.v_U_NonConst());
+#endif
 
     // Get space for the residual
     SmartPtr<IteratesVector> resid = sol.MakeNewIteratesVector(true);
@@ -337,8 +347,9 @@ namespace Ipopt
 
     rhs = tcc_theta_*tangential_norm*tangential_norm;
     lhs = 0.5*uWu;
+    //const Number mach_eps_sqrt = pow(std::numeric_limits<Number>::epsilon(),0.5);
     const Number mach_eps_sqrt = pow(std::numeric_limits<Number>::epsilon(),0.25);
-    BasVal = Max(IpData().curr()->x()->Amax(), IpData().curr()->s()->Amax())/mach_eps_sqrt;
+    //BasVal = Max(IpData().curr()->x()->Amax(), IpData().curr()->s()->Amax())/mach_eps_sqrt;
     // check the second inequality of the tangential component condition
     if (Compare_le(rhs, lhs, BasVal)) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Hessian does not require change because 0.5*uWu(=%23.16e) >= tcc_theta_*tangential_norm(=%23.16e)^2 \n", lhs, rhs);

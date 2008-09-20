@@ -50,7 +50,14 @@ namespace Ipopt
   }
 
   void InexactLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
-  {}
+  {
+    roptions->AddLowerBoundedNumberOption(
+      "nu_update_inf_skip_tol",
+      "Lower bound on infeasibility to perform penalty parameter update.",
+      0.0, true, 1e-9,
+      "If the current infeasibility is less than this value, the penalty "
+      "parameter update is skipped");
+  }
 
   bool InexactLSAcceptor::InitializeImpl(const OptionsList& options,
                                          const std::string& prefix)
@@ -60,6 +67,8 @@ namespace Ipopt
     options.GetNumericValue("eta_phi", eta_, prefix);
     options.GetNumericValue("rho", rho_, prefix);
     options.GetNumericValue("tcc_theta", tcc_theta_, prefix);
+    options.GetNumericValue("nu_update_inf_skip_tol", nu_update_inf_skip_tol_,
+                            prefix);
 
     // The following options have been declared in FilterLSAcceptor
     Index max_soc;
@@ -113,14 +122,19 @@ namespace Ipopt
       // update the penalty parameter
       last_nu_ = nu_;
       // TODO: We need to find a proper cut-off value
-      if (reference_theta_ > 1e-12) {
+      if (reference_theta_ > nu_update_inf_skip_tol_) {
         DBG_PRINT((1,"uWu=%e scaled_tangential_norm=%e\n",uWu ,scaled_tangential_norm ));
-        const Number nu_trial = (gradBarrTDelta + Max(0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2)))/((1-rho_)*(reference_theta_-norm_cplusAd));
+        Number numerator = (gradBarrTDelta + Max(0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2)));
+        Number denominator = (1-rho_)*(reference_theta_-norm_cplusAd);
+        const Number nu_trial = numerator/denominator;
+        Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                       "In penalty parameter update formula:\n  gradBarrTDelta = %e 0.5*uWu = %e tcc_theta_*pow(scaled_tangential_norm,2) = %e numerator = %e\n  reference_theta_ = %e norm_cplusAd + %e denominator = %e nu_trial = %e\n", gradBarrTDelta, 0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2), numerator, reference_theta_, norm_cplusAd, denominator, nu_trial);
 
         if (nu_ < nu_trial) {
           nu_ = nu_trial + nu_inc_;
         }
       }
+      InexData().set_curr_nu(nu_);
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  using nu = %23.16e\n", nu_);
 
       // Compute the linear model reduction prediction
@@ -143,6 +157,11 @@ namespace Ipopt
                    dbg_verbosity);
 
     Number pred = alpha*reference_pred_;
+
+    if (pred > 0.) {
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "  pred = %23.16e is positive.  Setting to zero.\n", pred);
+      pred = 0.;
+    }
 
     return pred;
   }
@@ -167,13 +186,7 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "  New values of constraint violation = %23.16e  (reference %23.16e):\n", trial_theta, reference_theta_);
 
-    Number pred;
-    if (reference_pred_ < 0.) {
-      pred = CalcPred(alpha_primal_test);
-    }
-    else {
-      THROW_EXCEPTION(INTERNAL_ABORT, "reference_pred_ is positive!");
-    }
+    Number pred = CalcPred(alpha_primal_test);
     resto_pred_ = pred;
     DBG_PRINT((1, "nu_ = %e reference_barr_ + nu_*(reference_theta_)=%e trial_barr + nu_*trial_theta=%e\n",nu_,reference_barr_ + nu_*(reference_theta_),trial_barr + nu_*trial_theta));
     Number ared = reference_barr_ + nu_*(reference_theta_) -
@@ -253,6 +266,7 @@ namespace Ipopt
     DBG_START_FUN("InexactLSAcceptor::Reset", dbg_verbosity);
 
     nu_ = nu_init_;
+    InexData().set_curr_nu(nu_);
   }
 
   bool

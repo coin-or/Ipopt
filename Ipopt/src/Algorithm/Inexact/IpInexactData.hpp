@@ -104,6 +104,18 @@ namespace Ipopt
     }
     //@}
 
+    /** @name Current value of penalty parameter */
+    //@{
+    void set_curr_nu(Number nu)
+    {
+      curr_nu_ = nu;
+    }
+    Number curr_nu()
+    {
+      return curr_nu_;
+    }
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -134,6 +146,9 @@ namespace Ipopt
 
     /** Flag indicating if most recent step has been fully accepted */
     bool full_step_accepted_;
+
+    /** current value of penalty parameter */
+    Number curr_nu_;
   };
 
 } // namespace Ipopt
