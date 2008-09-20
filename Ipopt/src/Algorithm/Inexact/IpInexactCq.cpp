@@ -27,9 +27,13 @@ namespace Ipopt
       curr_scaling_slacks_cache_(1),
       curr_slack_scaled_d_minus_s_cache_(1),
       slack_scaled_norm_cache_(6),
+      curr_W_times_vec_x_cache_(0), // ToDo: decide if we want this cached
+      curr_W_times_vec_s_cache_(0),
       curr_Wu_x_cache_(1),
       curr_Wu_s_cache_(1),
-      curr_uWu_cache_(1)
+      curr_uWu_cache_(1),
+      curr_jac_times_normal_c_cache_(1),
+      curr_jac_times_normal_d_cache_(1)
   {
     DBG_START_METH("InexactCq::InexactCq", dbg_verbosity);
     DBG_ASSERT(ip_nlp_);
@@ -40,11 +44,22 @@ namespace Ipopt
   InexactCq::~InexactCq()
   {}
 
+  void
+  InexactCq::RegisterOptions(const SmartPtr<RegisteredOptions>& roptions)
+  {
+    roptions->AddLowerBoundedNumberOption(
+      "slack_scale_max",
+      "Upper bound on slack-based scaling parameters.",
+      0.0, true, 100.0,
+      "");
+  }
+
   bool
   InexactCq::Initialize(const Journalist& jnlst,
                         const OptionsList& options,
                         const std::string& prefix)
   {
+    options.GetNumericValue("slack_scale_max", slack_scale_max_, prefix);
     return true;
   }
 
@@ -102,6 +117,10 @@ namespace Ipopt
       DBG_PRINT_VECTOR(1, "curr_slack_s_U", *curr_slack_s_U);
       Pd_U->MultVector(1., *curr_slack_s_U, 1., *tmp);
 
+      SmartPtr<Vector> tmp2 = tmp->MakeNew();
+      tmp2->Set(slack_scale_max_);
+      tmp->ElementWiseMin(*tmp2);
+
       result = ConstPtr(tmp);
       curr_scaling_slacks_cache_.AddCachedResult1Dep(result, *s);
     }
@@ -146,6 +165,65 @@ namespace Ipopt
   }
 
   SmartPtr<const Vector>
+  InexactCq::curr_W_times_vec_x(const Vector& vec_x)
+  {
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const SymMatrix> W = ip_data_->W();
+    Number pd_pert_x;
+    Number pd_pert_s;
+    Number pd_pert_c;
+    Number pd_pert_d;
+    ip_data_->getPDPert(pd_pert_x, pd_pert_s, pd_pert_c, pd_pert_d);
+
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = &vec_x;
+    tdeps[1] = GetRawPtr(W);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = pd_pert_x;
+
+    if (!curr_W_times_vec_x_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      SmartPtr<Vector> tmp = vec_x.MakeNewCopy();
+      W->MultVector(1., vec_x, pd_pert_x, *tmp);
+      result = ConstPtr(tmp);
+      curr_W_times_vec_x_cache_.AddCachedResult(result, tdeps, sdeps);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  InexactCq::curr_W_times_vec_s(const Vector& vec_s)
+  {
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const Vector> sigma_s = ip_cq_->curr_sigma_s();
+    Number pd_pert_x;
+    Number pd_pert_s;
+    Number pd_pert_c;
+    Number pd_pert_d;
+    ip_data_->getPDPert(pd_pert_x, pd_pert_s, pd_pert_c, pd_pert_d);
+
+    std::vector<const TaggedObject*> tdeps(2);
+    tdeps[0] = &vec_s;
+    tdeps[1] = GetRawPtr(sigma_s);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = pd_pert_s;
+
+    if (!curr_W_times_vec_s_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      SmartPtr<Vector> tmp = vec_s.MakeNewCopy();
+      tmp->ElementWiseMultiply(*sigma_s);
+      if (pd_pert_s>0.) {
+        tmp->AddOneVector(pd_pert_s, vec_s, 1.);
+      }
+      result = ConstPtr(tmp);
+      curr_W_times_vec_s_cache_.AddCachedResult(result, tdeps, sdeps);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
   InexactCq::curr_Wu_x()
   {
     SmartPtr<const Vector> result;
@@ -165,15 +243,12 @@ namespace Ipopt
     sdeps[0] = pd_pert_x;
 
     if (!curr_Wu_x_cache_.GetCachedResult(result, tdeps, sdeps)) {
-      SmartPtr<Vector> tmp = tangential_x->MakeNewCopy();
-      W->MultVector(1., *tangential_x, pd_pert_x, *tmp);
-      result = ConstPtr(tmp);
+      result = curr_W_times_vec_x(*tangential_x);
       curr_Wu_x_cache_.AddCachedResult(result, tdeps, sdeps);
     }
 
     return result;
   }
-
 
   SmartPtr<const Vector>
   InexactCq::curr_Wu_s()
@@ -195,12 +270,7 @@ namespace Ipopt
     sdeps[0] = pd_pert_s;
 
     if (!curr_Wu_s_cache_.GetCachedResult(result, tdeps, sdeps)) {
-      SmartPtr<Vector> tmp = tangential_s->MakeNewCopy();
-      tmp->ElementWiseMultiply(*sigma_s);
-      if (pd_pert_s>0.) {
-        tmp->AddOneVector(pd_pert_s, *tangential_s, 1.);
-      }
-      result = ConstPtr(tmp);
+      result = curr_W_times_vec_s(*tangential_s);
       curr_Wu_s_cache_.AddCachedResult(result, tdeps, sdeps);
     }
 
@@ -226,6 +296,43 @@ namespace Ipopt
     if (!curr_uWu_cache_.GetCachedResult(result, tdeps)) {
       result = Wu_x->Dot(*tangential_x) + Wu_s->Dot(*tangential_s);
       curr_uWu_cache_.AddCachedResult(result, tdeps);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  InexactCq::curr_jac_times_normal_c()
+  {
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const Vector> x = ip_data_->curr()->x();
+    SmartPtr<const Vector> normal_x = InexData().normal_x();
+
+    if (!curr_jac_times_normal_c_cache_.GetCachedResult2Dep(result, *x, *normal_x)) {
+      result = ip_cq_->curr_jac_c_times_vec(*normal_x);
+      curr_jac_times_normal_c_cache_.AddCachedResult2Dep(result, *x, *normal_x);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  InexactCq::curr_jac_times_normal_d()
+  {
+    SmartPtr<const Vector> result;
+
+    SmartPtr<const Vector> x = ip_data_->curr()->x();
+    SmartPtr<const Vector> normal_x = InexData().normal_x();
+    SmartPtr<const Vector> normal_s = InexData().normal_s();
+
+    if (!curr_jac_times_normal_d_cache_.GetCachedResult3Dep(result, *x, *normal_x, *normal_s)) {
+      SmartPtr<const Vector> Ax = ip_cq_->curr_jac_d_times_vec(*normal_x);
+      SmartPtr<Vector> tmp = Ax->MakeNew();
+      tmp->AddTwoVectors(1., *Ax, -1., *normal_s, 0.);
+
+      result = ConstPtr(tmp);
+      curr_jac_times_normal_d_cache_.AddCachedResult3Dep(result, *x, *normal_x, *normal_s);
     }
 
     return result;

@@ -72,6 +72,15 @@ namespace Ipopt
                          *rhs_x, *rhs_s, *curr_c, *curr_d_minus_s,
                          newton_x, newton_s, *sol_c, *sol_d, false, 0);
 
+    if (retval==SYMSOLVER_SINGULAR) {
+      Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                     "Resolving Newton step system with c-d perturbation.\n");
+      retval = aug_solver_->Solve(GetRawPtr(zeroW), 0., NULL, 1., GetRawPtr(D_s), 0.,
+                                  GetRawPtr(J_c), NULL, 1e-8, GetRawPtr(J_d), NULL, 1e-8,
+                                  *rhs_x, *rhs_s, *curr_c, *curr_d_minus_s,
+                                  newton_x, newton_s, *sol_c, *sol_d, false, 0);
+    }
+
     if (retval!=SYMSOLVER_SUCCESS) return false;
 
     newton_s.ElementWiseDivide(*curr_scaling_slacks);

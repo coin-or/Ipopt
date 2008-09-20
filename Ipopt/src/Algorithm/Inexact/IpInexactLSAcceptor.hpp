@@ -166,6 +166,8 @@ namespace Ipopt
     Number rho_;
     /** theta factor in Tangential Component Condition */
     Number tcc_theta_;
+    /** Lower feasiblity bound to skip penalty parameter update */
+    Number nu_update_inf_skip_tol_;
     //@}
 
     /** @name Information related to watchdog procedure */

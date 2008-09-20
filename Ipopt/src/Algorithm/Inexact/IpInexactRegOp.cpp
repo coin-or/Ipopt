@@ -14,6 +14,9 @@
 #include "IpInexactNewtonNormal.hpp"
 #include "IpInexactPDSolver.hpp"
 #include "IpInexactLSAcceptor.hpp"
+#include "IpInexactCq.hpp"
+#include "IpIterativePardisoSolverInterface.hpp"
+#include "IpIterativeSolverTerminationTester.hpp"
 
 namespace Ipopt
 {
@@ -26,6 +29,9 @@ namespace Ipopt
     InexactNewtonNormalStep::RegisterOptions(roptions);
     InexactPDSolver::RegisterOptions(roptions);
     InexactLSAcceptor::RegisterOptions(roptions);
+    InexactCq::RegisterOptions(roptions);
+    IterativePardisoSolverInterface::RegisterOptions(roptions);
+    IterativeSolverTerminationTester::RegisterOptions(roptions);
   }
 
 } // namespace Ipopt

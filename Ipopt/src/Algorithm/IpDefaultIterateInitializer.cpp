@@ -252,14 +252,14 @@ namespace Ipopt
       SmartPtr<Vector> tmp_L = IpNLP().d_L()->MakeNewCopy();
       SmartPtr<Vector> tmp2 = tmp_L->MakeNew();
       //tmp2->Set(1.);
-      tmp2->Set(1e-1);
+      tmp2->Set(1);
       tmp_L->Axpy(1., *tmp2);
       IpNLP().Pd_L()->MultVector(1., *tmp_L, 0., *tmp);
 
       SmartPtr<Vector> tmp_U = IpNLP().d_U()->MakeNewCopy();
       tmp2 = tmp_U->MakeNew();
       //tmp2->Set(1.);
-      tmp2->Set(1e-1);
+      tmp2->Set(1);
       tmp_U->Axpy(-1., *tmp2);
       IpNLP().Pd_U()->MultVector(1., *tmp_U, 1., *tmp);
       // DELETEME

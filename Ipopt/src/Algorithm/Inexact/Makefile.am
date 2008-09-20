@@ -20,7 +20,9 @@ libinexact_la_SOURCES = \
 	IpInexactNormalStepCalc.hpp \
 	IpInexactPDSolver.cpp IpInexactPDSolver.hpp \
 	IpInexactRegOp.cpp IpInexactRegOp.hpp \
-	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp
+	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp \
+	IpIterativePardisoSolverInterface.cpp IpIterativePardisoSolverInterface.hpp \
+	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
 
 libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 
@@ -48,7 +50,9 @@ ASTYLE_FILES = \
 	IpInexactNormalStepCalc.hppbak \
 	IpInexactPDSolver.cppbak IpInexactPDSolver.hppbak \
 	IpInexactRegOp.cppbak IpInexactRegOp.hppbak \
-	IpInexactSearchDirCalc.cppbak IpInexactSearchDirCalc.hppbak
+	IpInexactSearchDirCalc.cppbak IpInexactSearchDirCalc.hppbak \
+	IpIterativePardisoSolverInterface.cppbak IpIterativePardisoSolverInterface.hppbak \
+	IpIterativeSolverTerminationTester.cppbak IpIterativeSolverTerminationTester.hppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@

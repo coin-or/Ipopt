@@ -59,20 +59,36 @@ namespace Ipopt
     SmartPtr<const Vector> curr_slack_scaled_d_minus_s();
 
     /** Compute the 2-norm of a slack-scaled vector with x and s
-    component */
+     *  component */
     Number slack_scaled_norm(const Vector& x, const Vector &s);
 
+    /** Compute x component of the W*vec product for the current
+     *  Hessian and a vector */
+    SmartPtr<const Vector> curr_W_times_vec_x(const Vector& vec_x);
+
+    /** Compute s component of the W*vec product for the current
+     *  Hessian and a vector */
+    SmartPtr<const Vector> curr_W_times_vec_s(const Vector& vec_s);
+
     /** Compute x component of the W*u product for the current values.
-    u here is the tangential step. */
+     *  u here is the tangential step. */
     SmartPtr<const Vector> curr_Wu_x();
 
     /** Compute s component of the W*u product for the current values.
-    u here is the tangential step. */
+     *  u here is the tangential step. */
     SmartPtr<const Vector> curr_Wu_s();
 
     /** Compute the u^T*W*u product for the current values.  u here is the
     tangential step. */
     Number curr_uWu();
+
+    /** Compute the c-component of the product of the current
+     *  constraint Jacobian with the current normal step */
+    SmartPtr<const Vector> curr_jac_times_normal_c();
+
+    /** Compute the d-component of the product of the current
+     *  constraint Jacobian with the current normal step */
+    SmartPtr<const Vector> curr_jac_times_normal_d();
 
   private:
     /**@name Default Compiler Generated Methods
@@ -117,11 +133,17 @@ namespace Ipopt
     CachedResults<SmartPtr<const Vector> > curr_scaling_slacks_cache_;
     CachedResults<SmartPtr<const Vector> > curr_slack_scaled_d_minus_s_cache_;
     CachedResults<Number> slack_scaled_norm_cache_;
+    CachedResults<SmartPtr<const Vector> > curr_W_times_vec_x_cache_;
+    CachedResults<SmartPtr<const Vector> > curr_W_times_vec_s_cache_;
     CachedResults<SmartPtr<const Vector> > curr_Wu_x_cache_;
     CachedResults<SmartPtr<const Vector> > curr_Wu_s_cache_;
     CachedResults<Number> curr_uWu_cache_;
+    CachedResults<SmartPtr<const Vector> > curr_jac_times_normal_c_cache_;
+    CachedResults<SmartPtr<const Vector> > curr_jac_times_normal_d_cache_;
     //@}
 
+    /** Upper bound on slack-based scaling factors */
+    Number slack_scale_max_;
   };
 
 } // namespace Ipopt
