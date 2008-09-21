@@ -496,7 +496,7 @@ namespace Ipopt
       }
     }
 
-    DBG_ASSERT(IPARM_[21]+IPARM_[22] == dim_);
+    //  DBG_ASSERT(IPARM_[21]+IPARM_[22] == dim_);
 
     // Check whether the number of negative eigenvalues matches the requested
     // count

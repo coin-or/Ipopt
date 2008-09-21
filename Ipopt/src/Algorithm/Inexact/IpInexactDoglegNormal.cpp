@@ -86,7 +86,7 @@ namespace Ipopt
     }
     last_tr_inactive_ = false;
 
-    if (IpCq().curr_primal_infeasibility(NORM_MAX) == 0.) {
+    if (IpCq().curr_primal_infeasibility(NORM_2) == 0.) {
       Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "Dogleg step:  We are at a feasible point, the normal step is set to zero.\n");
       normal_x = IpData().curr()->x()->MakeNew();
       normal_s = IpData().curr()->s()->MakeNew();
@@ -109,9 +109,7 @@ namespace Ipopt
 
     // Compute the norm of the (scaled) gradient of the objective
     // function (A^T c)
-    Number v_ATc_norm =
-      IpCq().CalcNormOfType(NORM_2, *curr_jac_cdT_times_curr_cdminuss,
-                            *curr_slack_scaled_d_minus_s);
+    Number v_ATc_norm = InexCq().curr_scaled_Ac_norm();
 
     // Compute A * A^T * c
     SmartPtr<const Vector> vec_AATc_c =
@@ -168,6 +166,9 @@ namespace Ipopt
       IpData().Append_info_string("Nc ");
       return true;
     }
+    // ToDo: We don't need this if we do a proper check for Newton step below
+    SmartPtr<Vector> v_cauchy_x_bak = v_cauchy_x->MakeNewCopy();
+    SmartPtr<Vector> v_cauchy_s_bak = v_cauchy_s->MakeNewCopy();
 
     ///////////////////// Newton Step
 
@@ -241,8 +242,17 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
                    "Dogleg: Reduction of normal problem objective function by dogleg step = %23.16e\n", objred_normal_dogleg);
     Number mach_eps = std::numeric_limits<Number>::epsilon();
+    bool ok = objred_normal_dogleg>=objred_normal_cs-100.*mach_eps*(curr_c->Nrm2()+curr_d_minus_s->Nrm2());
+    if (!ok) {
+      Jnlst().Printf(J_WARNING, J_SOLVE_PD_SYSTEM, "Dogleg step: Dogleg step makes less progress than Cauchy step, resetting to Cauchy step FIXME\n");
+      normal_x = v_cauchy_x_bak;
+      normal_s = v_cauchy_s_bak;
+    }
+
+    /*
     ASSERT_EXCEPTION(objred_normal_dogleg>=objred_normal_cs-100.*mach_eps*(curr_c->Nrm2()+curr_d_minus_s->Nrm2()),
                      INTERNAL_ABORT, "Normal step reduction of dogleg step less than that of Cachy step");
+    */
 
     // Scale into the normal space (no slack-based scaling)
     normal_s->ElementWiseMultiply(*InexCq().curr_scaling_slacks());

@@ -91,7 +91,7 @@ namespace Ipopt
       "max", "use the max of primal and bound multipliers",
       "full", "take a full step of size one",
       "min-dual-infeas", "choose step size minimizing new dual infeasibility",
-      "safe_min_dual_infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
+      "safer-min-dual-infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
       "primal-and-full", "use the primal step size, and full step if delta_x <= alpha_for_y_tol",
       "dual-and-full", "use the dual step size, and full step if delta_x <= alpha_for_y_tol",
       "acceptor", "Call LSAcceptor to get step size for y",

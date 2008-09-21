@@ -26,12 +26,21 @@ namespace Ipopt
   InexactSearchDirCalculator::~InexactSearchDirCalculator()
   {}
 
-  void InexactSearchDirCalculator::RegisterOptions(SmartPtr<RegisteredOptions> reg_options)
-  {}
+  void InexactSearchDirCalculator::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  {
+    roptions->AddLowerBoundedNumberOption(
+      "local_inf_Ac_tol",
+      "Termination tolerance for local infeasibility (scaled ||Ac||).",
+      0.0, true,
+      1e-8,
+      "");
+  }
 
   bool InexactSearchDirCalculator::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
+    options.GetNumericValue("local_inf_Ac_tol", local_inf_Ac_tol_, prefix);
+
     bool retval = inexact_pd_solver_->Initialize(Jnlst(), IpNLP(), IpData(),
                   IpCq(), options, prefix);
     if (!retval) return false;
@@ -44,6 +53,18 @@ namespace Ipopt
   {
     DBG_START_METH("InexactSearchDirCalculator::ComputeSearchDirection",
                    dbg_verbosity);
+
+    // First check if the iterates have converged to a locally
+    // infeasible point
+    Number curr_scaled_Ac_norm = InexCq().curr_scaled_Ac_norm();
+    Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                   "curr_scaled_Ac_norm = %e\n", curr_scaled_Ac_norm);
+    Number curr_inf = IpCq().curr_primal_infeasibility(NORM_2);
+    // ToDo work on termination criteria
+    if (curr_scaled_Ac_norm <= local_inf_Ac_tol_ && curr_inf > 1e-4) {
+      THROW_EXCEPTION(LOCALLY_INFEASIBLE,
+                      "The scaled norm of Ac is satisfying tolerance");
+    }
 
     SmartPtr<Vector> normal_x;
     SmartPtr<Vector> normal_s;
