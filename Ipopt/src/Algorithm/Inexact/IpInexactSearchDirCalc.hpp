@@ -86,6 +86,12 @@ namespace Ipopt
       return inexact_cq;
     }
 
+    /** @name Algorithmic options */
+    //@{
+    /** termination tolerance for local infeasibility */
+    Number local_inf_Ac_tol_;
+    //@}
+
     /** @name Strategy objects */
     //@{
     SmartPtr<InexactNormalStepCalculator> normal_step_calculator_;

@@ -58,6 +58,9 @@ namespace Ipopt
     /** Vector with the slack-scaled d minus s inequalities */
     SmartPtr<const Vector> curr_slack_scaled_d_minus_s();
 
+    /** Scaled norm of Ac */
+    Number curr_scaled_Ac_norm();
+
     /** Compute the 2-norm of a slack-scaled vector with x and s
      *  component */
     Number slack_scaled_norm(const Vector& x, const Vector &s);
@@ -132,6 +135,7 @@ namespace Ipopt
     CachedResults<SmartPtr<const Vector> > curr_jac_cdT_times_curr_cdminuss_cache_;
     CachedResults<SmartPtr<const Vector> > curr_scaling_slacks_cache_;
     CachedResults<SmartPtr<const Vector> > curr_slack_scaled_d_minus_s_cache_;
+    CachedResults<Number> curr_scaled_Ac_norm_cache_;
     CachedResults<Number> slack_scaled_norm_cache_;
     CachedResults<SmartPtr<const Vector> > curr_W_times_vec_x_cache_;
     CachedResults<SmartPtr<const Vector> > curr_W_times_vec_s_cache_;

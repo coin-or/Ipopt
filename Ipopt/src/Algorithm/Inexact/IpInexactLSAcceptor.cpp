@@ -312,7 +312,7 @@ namespace Ipopt
 
   void InexactLSAcceptor::PrepareRestoPhaseStart()
   {
-    assert(false);
+    THROW_EXCEPTION(INTERNAL_ABORT, "Restoration phase called");
   }
 
   bool

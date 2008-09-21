@@ -26,6 +26,7 @@ namespace Ipopt
       curr_jac_cdT_times_curr_cdminuss_cache_(1),
       curr_scaling_slacks_cache_(1),
       curr_slack_scaled_d_minus_s_cache_(1),
+      curr_scaled_Ac_norm_cache_(1),
       slack_scaled_norm_cache_(6),
       curr_W_times_vec_x_cache_(0), // ToDo: decide if we want this cached
       curr_W_times_vec_s_cache_(0),
@@ -143,6 +144,34 @@ namespace Ipopt
       tmp->ElementWiseMultiply(*scaling_slacks);
       result = ConstPtr(tmp);
       curr_slack_scaled_d_minus_s_cache_.AddCachedResult2Dep(result, *x, *s);
+    }
+
+    return result;
+  }
+
+  Number
+  InexactCq::curr_scaled_Ac_norm()
+  {
+    DBG_START_METH("InexactCq::curr_scaled_Ac_norm",
+                   dbg_verbosity);
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->curr()->x();
+    SmartPtr<const Vector> s = ip_data_->curr()->s();
+
+    if (!curr_scaled_Ac_norm_cache_.GetCachedResult2Dep(result, *x, *s)) {
+      SmartPtr<const Vector> jac_cdT_times_curr_cdminuss =
+        curr_jac_cdT_times_curr_cdminuss();
+      DBG_PRINT_VECTOR(2, "jac_cdT_times_curr_cdminuss",
+                       *jac_cdT_times_curr_cdminuss);
+      SmartPtr<const Vector> slack_scaled_d_minus_s =
+        curr_slack_scaled_d_minus_s();
+      DBG_PRINT_VECTOR(2, "slack_scaled_d_minus_s",
+                       *slack_scaled_d_minus_s);
+      result = ip_cq_->CalcNormOfType(NORM_2, *jac_cdT_times_curr_cdminuss,
+                                      *slack_scaled_d_minus_s);
+
+      curr_scaled_Ac_norm_cache_.AddCachedResult2Dep(result, *x, *s);
     }
 
     return result;
