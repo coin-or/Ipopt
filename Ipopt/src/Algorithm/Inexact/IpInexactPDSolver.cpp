@@ -40,7 +40,15 @@ namespace Ipopt
   }
 
   void InexactPDSolver::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
-  {}
+  {
+    roptions->AddStringOption2(
+      "modify_hessian_with_slacks",
+      "Hessian modification strategy for slack part",
+      "no",
+      "no", "add multiple of identity",
+      "yes", "add multiple of slacks squared inverse",
+      "");
+  }
 
 
   bool InexactPDSolver::InitializeImpl(const OptionsList& options,
@@ -48,6 +56,8 @@ namespace Ipopt
   {
     options.GetNumericValue("tcc_psi", tcc_psi_, prefix);
     options.GetNumericValue("tcc_theta", tcc_theta_, prefix);
+    options.GetBoolValue("modify_hessian_with_slacks",
+                         modify_hessian_with_slacks_, prefix);
 
     if (!augSysSolver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                    options, prefix)) {
@@ -127,13 +137,31 @@ namespace Ipopt
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "Doing solve with perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n",
                      delta_x, delta_s, delta_c, delta_d);
-      retval = augSysSolver_->Solve(GetRawPtr(W), 1.0, NULL, delta_x,
-                                    GetRawPtr(sigma_s), delta_s, GetRawPtr(J_c), NULL,
-                                    delta_c, GetRawPtr(J_d), NULL, delta_d,
-                                    *rhs.x(), *augRhs_s, *rhs.y_c(), *rhs.y_d(),
-                                    *sol.x_NonConst(), *sol.s_NonConst(),
-                                    *sol.y_c_NonConst(), *sol.y_d_NonConst(),
-                                    false, 0);
+      if (delta_s>0. && modify_hessian_with_slacks_) {
+        SmartPtr<const Vector> curr_scaling_slacks =
+          InexCq().curr_scaling_slacks();
+        SmartPtr<Vector> shifted_slacks = curr_scaling_slacks->MakeNewCopy();
+        shifted_slacks->ElementWiseMultiply(*curr_scaling_slacks);
+        shifted_slacks->ElementWiseReciprocal();
+        const Number curr_mu = IpData().curr_mu();
+        shifted_slacks->AddOneVector(1., *sigma_s, curr_mu*delta_s);
+        retval = augSysSolver_->Solve(GetRawPtr(W), 1.0, NULL, delta_x,
+                                      GetRawPtr(shifted_slacks), 0., GetRawPtr(J_c), NULL,
+                                      delta_c, GetRawPtr(J_d), NULL, delta_d,
+                                      *rhs.x(), *augRhs_s, *rhs.y_c(), *rhs.y_d(),
+                                      *sol.x_NonConst(), *sol.s_NonConst(),
+                                      *sol.y_c_NonConst(), *sol.y_d_NonConst(),
+                                      false, 0);
+      }
+      else {
+        retval = augSysSolver_->Solve(GetRawPtr(W), 1.0, NULL, delta_x,
+                                      GetRawPtr(sigma_s), delta_s, GetRawPtr(J_c), NULL,
+                                      delta_c, GetRawPtr(J_d), NULL, delta_d,
+                                      *rhs.x(), *augRhs_s, *rhs.y_c(), *rhs.y_d(),
+                                      *sol.x_NonConst(), *sol.s_NonConst(),
+                                      *sol.y_c_NonConst(), *sol.y_d_NonConst(),
+                                      false, 0);
+      }
       if (retval==SYMSOLVER_SINGULAR) {
         bool pert_return = perturbHandler_->PerturbForSingularity(delta_x, delta_s,
                            delta_c, delta_d);

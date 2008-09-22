@@ -169,7 +169,6 @@ protected:
   const MatlabFunctionHandle& hessianFunc;
   const MatlabFunctionHandle& iterFunc;
 
-
   // The copy constructor and copy assignment operator are kept
   // private so that they are not used.
   MatlabProgram            (const MatlabProgram& source);

@@ -119,6 +119,9 @@ namespace Ipopt
     Number tcc_psi_;
     /** theta factor in the tangential component condition */
     Number tcc_theta_;
+    /** flag indicating if the Hessian for the (s,s) part should be
+     *  modified with the slacks instead of the identity matrix */
+    bool modify_hessian_with_slacks_;
     //@}
   };
 
