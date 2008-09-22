@@ -10,6 +10,7 @@
 
 #include "IpoptConfig.h"
 #include "IpIterativePardisoSolverInterface.hpp"
+#include "IpBlas.hpp"
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>
@@ -46,8 +47,19 @@ Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
 Ipopt::IterativeSolverTerminationTester::ETerminationTest test_result_;
 extern "C"
 {
-  bool IpoptTerminationTest(int n, double* sol, double* resid) {
-    test_result_ = global_tester_ptr_->TestTerminaion(n, sol, resid);
+  bool IpoptTerminationTest(int n, double* sol, double* resid, int iter, double norm2_rhs) {
+    fflush(stdout);
+    // only do the termination test for PD system
+    if (!global_tester_ptr_) {
+      double norm2_resid = Ipopt::IpBlasDnrm2(n, resid, 1);
+      if (Ipopt::Min(norm2_resid/norm2_rhs,norm2_resid) < 1e-6) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+    test_result_ = global_tester_ptr_->TestTerminaion(n, sol, resid, iter, norm2_rhs);
     global_tester_ptr_->GetJnlst().Printf(Ipopt::J_DETAILED, Ipopt::J_LINEAR_ALGEBRA,
                                           "Termination Tester Result = %d.\n",
                                           test_result_);
@@ -566,10 +578,8 @@ namespace Ipopt
       rhs_copy[i] = rhs_vals[i];
     }
 
-    if (IsValid(InexData().normal_x())) {
-      bool retval = tester_->InitializeSolve();
-      DBG_ASSERT(retval);
-    }
+    bool retval = tester_->InitializeSolve();
+    DBG_ASSERT(retval);
 
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                               &PHASE, &N, a_, ia, ja, &PERM,
@@ -598,9 +608,11 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Termination Tester Result = %d.\n", test_result);
 #else
+#if 0
       bool cretval = IpoptTerminationTest(dim_, rhs_vals, rhs_copy);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "retval from IpoptTerminationTest = %d\n", cretval);
+#endif
 #endif
     }
 
