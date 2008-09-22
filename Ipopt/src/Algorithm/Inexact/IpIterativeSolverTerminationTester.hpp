@@ -71,6 +71,12 @@ namespace Ipopt
      *  delete anything that has been allocated to free memory. */
     void Clear();
 
+    /** An easy way to get the journalist if accessed from the outside */
+    const Journalist& GetJnlst() const
+    {
+      return Jnlst();
+    }
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).

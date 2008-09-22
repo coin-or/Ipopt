@@ -41,6 +41,27 @@
 # endif
 #endif
 
+
+Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
+Ipopt::IterativeSolverTerminationTester::ETerminationTest test_result_;
+extern "C"
+{
+  bool IpoptTerminationTest(int n, double* sol, double* resid) {
+    test_result_ = global_tester_ptr_->TestTerminaion(n, sol, resid);
+    global_tester_ptr_->GetJnlst().Printf(Ipopt::J_DETAILED, Ipopt::J_LINEAR_ALGEBRA,
+                                          "Termination Tester Result = %d.\n",
+                                          test_result_);
+    switch (test_result_) {
+    case Ipopt::IterativeSolverTerminationTester::CONTINUE:
+      return false;
+      break;
+    default:
+      return true;
+      break;
+    }
+  }
+}
+
 /** Prototypes for Pardiso's subroutines */
 extern "C"
 {
@@ -545,6 +566,11 @@ namespace Ipopt
       rhs_copy[i] = rhs_vals[i];
     }
 
+    if (IsValid(InexData().normal_x())) {
+      bool retval = tester_->InitializeSolve();
+      DBG_ASSERT(retval);
+    }
+
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                               &PHASE, &N, a_, ia, ja, &PERM,
                               &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
@@ -566,15 +592,16 @@ namespace Ipopt
           }
         }
       }
-
-      // For now, just call termination tester here at end, at least we
-      // can run it once that way
-      bool retval = tester_->InitializeSolve();
-      DBG_ASSERT(retval);
+#if 0
       IterativeSolverTerminationTester::ETerminationTest test_result =
         tester_->TestTerminaion(dim_, rhs_vals, rhs_copy);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Termination Tester Result = %d.\n", test_result);
+#else
+      bool cretval = IpoptTerminationTest(dim_, rhs_vals, rhs_copy);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "retval from IpoptTerminationTest = %d\n", cretval);
+#endif
     }
 
     delete [] rhs_copy;
@@ -596,6 +623,11 @@ namespace Ipopt
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
       return SYMSOLVER_FATAL_ERROR;
+    }
+    if (test_result_ == IterativeSolverTerminationTester::MODIFY_HESSIAN) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Termination tester requests modification of Hessian\n");
+      return SYMSOLVER_WRONG_INERTIA;
     }
     return SYMSOLVER_SUCCESS;
   }

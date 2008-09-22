@@ -172,6 +172,16 @@ namespace Ipopt
           return false;
         }
       }
+      else if (retval==SYMSOLVER_WRONG_INERTIA) {
+        bool pert_return = perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
+                           delta_c, delta_d);
+        if (!pert_return) {
+          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                         "PerturbForWrongInertia can't be done for Hessian modification.\n");
+          IpData().TimingStats().PDSystemSolverTotal().End();
+          return false;
+        }
+      }
       else if (retval==SYMSOLVER_SUCCESS) {
 
         // Compute the tangetial part of the step from the overall step
