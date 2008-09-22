@@ -298,7 +298,7 @@ namespace Ipopt
     options_list.SetNumericValueIfUnset("constr_mult_init_max", 0.);
 
     // TODO: Find out about the following:
-    options_list.SetNumericValueIfUnset("bound_relax_factor", 0.);
+    //options_list.SetNumericValueIfUnset("bound_relax_factor", 0.);
     options_list.SetNumericValueIfUnset("kappa_d", 0.);
   }
 } // namespace
