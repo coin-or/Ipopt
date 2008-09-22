@@ -19,8 +19,11 @@
 # endif
 #endif
 
+extern Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
+
 namespace Ipopt
 {
+
 
 #if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
@@ -109,6 +112,9 @@ namespace Ipopt
   {
     DBG_START_METH("IterativeSolverTerminationTester::InitializeSolve",
                    dbg_verbosity);
+
+    // Set the global pointer
+    global_tester_ptr_ = this;
 
     // calculate scaled Jacobian times normal step
     curr_Av_c_ = InexCq().curr_jac_times_normal_c();
