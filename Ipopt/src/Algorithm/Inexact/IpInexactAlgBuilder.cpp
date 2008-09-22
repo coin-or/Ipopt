@@ -155,9 +155,9 @@ namespace Ipopt
 
     }
     else if (linear_solver=="pardiso") {
+      SmartPtr<IterativeSolverTerminationTester> tester = new IterativeSolverTerminationTester();
 #ifndef HAVE_PARDISO
 # ifdef HAVE_LINEARSOLVERLOADER
-      SmartPtr<IterativeSolverTerminationTester> tester = new IterativeSolverTerminationTester();
       SolverInterface = new IterativePardisoSolverInterface(*tester);
       char buf[256];
       int rc = LSL_loadPardisoLib(NULL, buf, 255);
@@ -173,7 +173,7 @@ namespace Ipopt
       THROW_EXCEPTION(OPTION_INVALID, "Support for Pardiso has not been compiled into Ipopt.");
 # endif
 #else
-      SolverInterface = new IterativePardisoSolverInterface();
+      SolverInterface = new IterativePardisoSolverInterface(*tester);
 #endif
 
     }
