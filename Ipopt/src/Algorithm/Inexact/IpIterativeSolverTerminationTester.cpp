@@ -8,6 +8,7 @@
 
 #include "IpIterativeSolverTerminationTester.hpp"
 #include "IpTripletHelper.hpp"
+#include "IpBlas.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -114,8 +115,13 @@ namespace Ipopt
                    dbg_verbosity);
 
     // Set the global pointer
-    global_tester_ptr_ = this;
-
+    if (IsValid(InexData().normal_x())) {
+      global_tester_ptr_ = this;
+    }
+    else {
+      global_tester_ptr_ = NULL;
+      return true;
+    }
     // calculate scaled Jacobian times normal step
     curr_Av_c_ = InexCq().curr_jac_times_normal_c();
     curr_Av_d_ = InexCq().curr_jac_times_normal_d();
@@ -258,12 +264,21 @@ namespace Ipopt
 
   IterativeSolverTerminationTester::ETerminationTest
   IterativeSolverTerminationTester::
-  TestTerminaion(Index ndim, const Number* sol, const Number* resid)
+  TestTerminaion(Index ndim, const Number* sol, const Number* resid,
+                 Index iter, Number norm2_rhs)
   {
     DBG_START_METH("IterativeSolverTerminationTester::TestTerminaion",
                    dbg_verbosity);
 
     ETerminationTest retval = CONTINUE;
+
+    if (iter%5 != 1) {
+      return retval;
+    }
+    Number norm2_resid = IpBlasDnrm2(ndim, resid, 1);
+    if (Min(norm2_resid/norm2_rhs, norm2_resid) > 1e-3) {
+      return retval;
+    }
 
     SmartPtr<const Vector> sol_x;
     SmartPtr<const Vector> sol_s;
