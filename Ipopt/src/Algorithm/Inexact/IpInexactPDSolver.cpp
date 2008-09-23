@@ -59,6 +59,10 @@ namespace Ipopt
     options.GetBoolValue("modify_hessian_with_slacks",
                          modify_hessian_with_slacks_, prefix);
 
+    std::string linear_solver;
+    options.GetStringValue("linear_solver", linear_solver, prefix);
+    is_pardiso_ = (linear_solver=="pardiso");
+
     if (!augSysSolver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                    options, prefix)) {
       return false;
@@ -199,19 +203,22 @@ namespace Ipopt
         InexData().set_tangential_x(tangential_x);
         InexData().set_tangential_s(tangential_s);
 
-        // check if we need to modify the system
-        bool modify_hessian = HessianRequiresChange();
-        if (modify_hessian) {
-          bool pert_return = perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
-                             delta_c, delta_d);
-          if (!pert_return) {
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                           "PerturbForWrongInertia can't be done for Hessian modification.\n");
-            IpData().TimingStats().PDSystemSolverTotal().End();
-            return false;
+        if (!is_pardiso_) {
+          // check if we need to modify the system
+          bool modify_hessian = HessianRequiresChange();
+          if (modify_hessian) {
+            bool pert_return = perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
+                               delta_c, delta_d);
+            if (!pert_return) {
+              Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                             "PerturbForWrongInertia can't be done for Hessian modification.\n");
+              IpData().TimingStats().PDSystemSolverTotal().End();
+              return false;
+            }
+            retval = SYMSOLVER_WRONG_INERTIA;
           }
         }
-        else {
+        if (retval==SYMSOLVER_SUCCESS) {
           notDone = false;
         }
       }

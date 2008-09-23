@@ -16,7 +16,8 @@
 #include "IpInexactLSAcceptor.hpp"
 #include "IpInexactCq.hpp"
 #include "IpIterativePardisoSolverInterface.hpp"
-#include "IpIterativeSolverTerminationTester.hpp"
+#include "IpInexactNormalTerminationTester.hpp"
+#include "IpInexactPDTerminationTester.hpp"
 
 namespace Ipopt
 {
@@ -31,7 +32,8 @@ namespace Ipopt
     InexactLSAcceptor::RegisterOptions(roptions);
     InexactCq::RegisterOptions(roptions);
     IterativePardisoSolverInterface::RegisterOptions(roptions);
-    IterativeSolverTerminationTester::RegisterOptions(roptions);
+    InexactNormalTerminationTester::RegisterOptions(roptions);
+    InexactPDTerminationTester::RegisterOptions(roptions);
   }
 
 } // namespace Ipopt

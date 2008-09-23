@@ -51,7 +51,7 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "slack_scale_max",
       "Upper bound on slack-based scaling parameters.",
-      0.0, true, 100.0,
+      0.0, true, 1.,
       "");
   }
 
