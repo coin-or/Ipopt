@@ -28,7 +28,8 @@ namespace Ipopt
     /** @name Constructor/Destructor */
     //@{
     /** Constructor */
-    IterativePardisoSolverInterface(IterativeSolverTerminationTester& tester);
+    IterativePardisoSolverInterface(IterativeSolverTerminationTester& normal_tester,
+                                    IterativeSolverTerminationTester& pd_tester);
 
     /** Destructor */
     virtual ~IterativePardisoSolverInterface();
@@ -225,8 +226,11 @@ namespace Ipopt
       return inexact_cq;
     }
 
-    /** Termination tester */
-    SmartPtr<IterativeSolverTerminationTester> tester_;
+    /** Termination tester for normal step computation */
+    SmartPtr<IterativeSolverTerminationTester> normal_tester_;
+
+    /** Termination tester for primal-dual step computation */
+    SmartPtr<IterativeSolverTerminationTester> pd_tester_;
 
   };
 

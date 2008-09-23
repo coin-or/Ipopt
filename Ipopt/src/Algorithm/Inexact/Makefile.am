@@ -18,7 +18,9 @@ libinexact_la_SOURCES = \
 	IpInexactLSAcceptor.cpp IpInexactLSAcceptor.hpp \
 	IpInexactNewtonNormal.cpp IpInexactNewtonNormal.hpp \
 	IpInexactNormalStepCalc.hpp \
+	IpInexactNormalTerminationTester.cpp IpInexactNormalTerminationTester.hpp \
 	IpInexactPDSolver.cpp IpInexactPDSolver.hpp \
+	IpInexactPDTerminationTester.cpp IpInexactPDTerminationTester.hpp \
 	IpInexactRegOp.cpp IpInexactRegOp.hpp \
 	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp \
 	IpIterativePardisoSolverInterface.cpp IpIterativePardisoSolverInterface.hpp \
@@ -48,7 +50,9 @@ ASTYLE_FILES = \
 	IpInexactLSAcceptor.cppbak IpInexactLSAcceptor.hppbak \
 	IpInexactNewtonNormal.cppbak IpInexactNewtonNormal.hppbak \
 	IpInexactNormalStepCalc.hppbak \
+	IpInexactNormalTerminationTester.cppbak IpInexactNormalTerminationTester.hppbak \
 	IpInexactPDSolver.cppbak IpInexactPDSolver.hppbak \
+	IpInexactPDTerminationTester.cppbak IpInexactPDTerminationTester.hppbak \
 	IpInexactRegOp.cppbak IpInexactRegOp.hppbak \
 	IpInexactSearchDirCalc.cppbak IpInexactSearchDirCalc.hppbak \
 	IpIterativePardisoSolverInterface.cppbak IpIterativePardisoSolverInterface.hppbak \

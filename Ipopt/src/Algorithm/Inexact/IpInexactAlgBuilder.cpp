@@ -39,7 +39,8 @@
 #include "IpMa57TSolverInterface.hpp"
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpIterativePardisoSolverInterface.hpp"
-#include "IpIterativeSolverTerminationTester.hpp"
+#include "IpInexactNormalTerminationTester.hpp"
+#include "IpInexactPDTerminationTester.hpp"
 
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
@@ -155,10 +156,13 @@ namespace Ipopt
 
     }
     else if (linear_solver=="pardiso") {
-      SmartPtr<IterativeSolverTerminationTester> tester = new IterativeSolverTerminationTester();
+      SmartPtr<IterativeSolverTerminationTester> normal_tester =
+        new InexactNormalTerminationTester();
+      SmartPtr<IterativeSolverTerminationTester> pd_tester =
+        new InexactPDTerminationTester();
 #ifndef HAVE_PARDISO
 # ifdef HAVE_LINEARSOLVERLOADER
-      SolverInterface = new IterativePardisoSolverInterface(*tester);
+      SolverInterface = new IterativePardisoSolverInterface(*normal_tester, *pd_tester);
       char buf[256];
       int rc = LSL_loadPardisoLib(NULL, buf, 255);
       if (rc) {
@@ -173,7 +177,7 @@ namespace Ipopt
       THROW_EXCEPTION(OPTION_INVALID, "Support for Pardiso has not been compiled into Ipopt.");
 # endif
 #else
-      SolverInterface = new IterativePardisoSolverInterface(*tester);
+      SolverInterface = new IterativePardisoSolverInterface(*normal_tester, *pd_tester);
 #endif
 
     }

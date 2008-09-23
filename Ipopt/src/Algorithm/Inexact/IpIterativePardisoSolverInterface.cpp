@@ -50,15 +50,6 @@ extern "C"
   bool IpoptTerminationTest(int n, double* sol, double* resid, int iter, double norm2_rhs) {
     fflush(stdout);
     // only do the termination test for PD system
-    if (!global_tester_ptr_) {
-      double norm2_resid = Ipopt::IpBlasDnrm2(n, resid, 1);
-      if (Ipopt::Min(norm2_resid/norm2_rhs,norm2_resid) < 1e-6) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
     test_result_ = global_tester_ptr_->TestTerminaion(n, sol, resid, iter, norm2_rhs);
     global_tester_ptr_->GetJnlst().Printf(Ipopt::J_DETAILED, Ipopt::J_LINEAR_ALGEBRA,
                                           "Termination Tester Result = %d.\n",
@@ -96,7 +87,8 @@ namespace Ipopt
 #endif
 
   IterativePardisoSolverInterface::
-  IterativePardisoSolverInterface(IterativeSolverTerminationTester& tester)
+  IterativePardisoSolverInterface(IterativeSolverTerminationTester& normal_tester,
+                                  IterativeSolverTerminationTester& pd_tester)
       :
       a_(NULL),
       negevals_(-1),
@@ -107,7 +99,8 @@ namespace Ipopt
       MTYPE_(-2),
       MSGLVL_(0),
       debug_last_iter_(-1),
-      tester_(&tester)
+      normal_tester_(&normal_tester),
+      pd_tester_(&pd_tester)
   {
     DBG_START_METH("IterativePardisoSolverInterface::IterativePardisoSolverInterface()",dbg_verbosity);
 
@@ -257,8 +250,14 @@ namespace Ipopt
     // Option for the out of core variant
     IPARM_[49] = pardiso_out_of_core_power;
 
-    return tester_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                               options, prefix);
+    bool retval = normal_tester_->Initialize(Jnlst(), IpNLP(), IpData(),
+                  IpCq(), options, prefix);
+    if (retval) {
+      retval = pd_tester_->Initialize(Jnlst(), IpNLP(), IpData(),
+                                      IpCq(), options, prefix);
+    }
+
+    return retval;
   }
 
   ESymSolverStatus IterativePardisoSolverInterface::MultiSolve(bool new_matrix,
@@ -572,13 +571,26 @@ namespace Ipopt
     }
     write_iajaa_matrix (N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
 
+#define FAKE_ITERATIVE_PARDISO
+#ifdef FAKE_ITERATIVE_PARDISO
     // MIPS
     Number* rhs_copy = new Number[dim_];
     for (int i=0; i<dim_; i++) {
       rhs_copy[i] = rhs_vals[i];
     }
+    Number norm2_rhs = IpBlasDnrm2(dim_, rhs_vals, 1);
+#endif
 
-    bool retval = tester_->InitializeSolve();
+    IterativeSolverTerminationTester* tester;
+    if (!IsValid(InexData().normal_x())) {
+      tester = GetRawPtr(normal_tester_);
+    }
+    else {
+      tester = GetRawPtr(pd_tester_);
+    }
+    global_tester_ptr_ = tester;
+
+    bool retval = tester->InitializeSolve();
     DBG_ASSERT(retval);
 
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
@@ -588,37 +600,25 @@ namespace Ipopt
 
     delete [] X; /* OLAF/MICHAEL: do we really need X? */
 
-    // IF normal_x has not been set yet, then we are getting the
-    // Newton step at this point
-    if (IsValid(InexData().normal_x())) {
-      // MIPS
-      // Compute the residual (overwrite the RHS)
-      for (int irow = 0; irow<dim_; irow++) {
-        for (int j=ia[irow]; j<ia[irow+1]; j++) {
-          int jcol = ja[j-1]-1;
-          rhs_copy[irow] -= a_[j-1]*rhs_vals[jcol];
-          if (jcol!=irow) {
-            rhs_copy[jcol] -= a_[j-1]*rhs_vals[irow];
-          }
+#ifdef FAKE_ITERATIVE_PARDISO
+    // MIPS
+    // Compute the residual (overwrite the RHS)
+    for (int irow = 0; irow<dim_; irow++) {
+      for (int j=ia[irow]; j<ia[irow+1]; j++) {
+        int jcol = ja[j-1]-1;
+        rhs_copy[irow] -= a_[j-1]*rhs_vals[jcol];
+        if (jcol!=irow) {
+          rhs_copy[jcol] -= a_[j-1]*rhs_vals[irow];
         }
       }
-#if 0
-      IterativeSolverTerminationTester::ETerminationTest test_result =
-        tester_->TestTerminaion(dim_, rhs_vals, rhs_copy);
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Termination Tester Result = %d.\n", test_result);
-#else
-#if 0
-      bool cretval = IpoptTerminationTest(dim_, rhs_vals, rhs_copy);
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "retval from IpoptTerminationTest = %d\n", cretval);
-#endif
-#endif
     }
-
+    bool cretval = IpoptTerminationTest(dim_, rhs_vals, rhs_copy, 4, norm2_rhs);
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "retval from IpoptTerminationTest = %d\n", cretval);
     delete [] rhs_copy;
+#endif
 
-    tester_->Clear();
+    tester->Clear();
 
     if (IPARM_[6] != 0) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,

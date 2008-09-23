@@ -123,6 +123,10 @@ namespace Ipopt
      *  modified with the slacks instead of the identity matrix */
     bool modify_hessian_with_slacks_;
     //@}
+
+    /** flag indicating if we are dealing with the Pardiso solver
+     *  (temporary) */
+    bool is_pardiso_;
   };
 
 
