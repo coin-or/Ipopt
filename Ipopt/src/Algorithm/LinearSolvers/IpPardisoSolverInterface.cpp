@@ -153,6 +153,26 @@ namespace Ipopt
       "",
       -14,
       "");
+    roptions->AddIntegerOption(
+      "pardiso_dropping_schur_exponent",
+      "",
+      -3,
+      "");
+    roptions->AddIntegerOption(
+      "pardiso_dropping_factor_exponent",
+      "",
+      -3,
+      "");
+    roptions->AddIntegerOption(
+      "pardiso_inverse_norm_factor",
+      "",
+      500,
+      "");
+    roptions->AddIntegerOption(
+      "pardiso_max_iter",
+      "",
+      200,
+      "");
     roptions->AddStringOption2(
       "pardiso_iterative",
       "",
@@ -185,6 +205,18 @@ namespace Ipopt
     int pardiso_iter_tol_exponent;
     options.GetIntegerValue("pardiso_iter_tol_exponent",
                             pardiso_iter_tol_exponent, prefix);
+    int pardiso_dropping_schur_exponent;
+    options.GetIntegerValue("pardiso_dropping_schur_exponent",
+                            pardiso_dropping_schur_exponent, prefix);
+    int pardiso_dropping_factor_exponent;
+    options.GetIntegerValue("pardiso_dropping_factor_exponent",
+                            pardiso_dropping_factor_exponent, prefix);
+    int pardiso_inverse_norm_factor;
+    options.GetIntegerValue("pardiso_inverse_norm_factor",
+                            pardiso_inverse_norm_factor, prefix);
+    int pardiso_max_iter;
+    options.GetIntegerValue("pardiso_max_iter",
+                            pardiso_max_iter, prefix);
 
     // Number value = 0.0;
 
@@ -265,10 +297,11 @@ namespace Ipopt
 
     IPARM_[39] = 4 ;  // it was 4 max fill for factor
     IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
-    IPARM_[41] =-3 ;  // it  exponent dropping value for schur complement
-    IPARM_[42] = 200; // max number of iterations
-    IPARM_[43] = 500 ; // norm of the inverse for algebraic solver
-    IPARM_[44] =-3 ;  // exponent dropping value for incomplete factor
+    IPARM_[41] = pardiso_dropping_schur_exponent;
+                      // it  exponent dropping value for schur complement
+    IPARM_[42] = pardiso_max_iter; // max number of iterations
+    IPARM_[43] = pardiso_inverse_norm_factor; // norm of the inverse for algebraic solver
+    IPARM_[44] = pardiso_dropping_factor_exponent ;  // exponent dropping value for incomplete factor
     IPARM_[46] = 1 ;  // mantisse dropping value for incomplete factor
     IPARM_[45] = pardiso_iter_tol_exponent ;  // residual tolerance
     IPARM_[48] = pardiso_iterative ? 1 : 0 ;  // active direct solver
