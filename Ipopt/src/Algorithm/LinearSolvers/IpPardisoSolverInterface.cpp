@@ -72,7 +72,7 @@ namespace Ipopt
       MAXFCT_(1),
       MNUM_(1),
       MTYPE_(-2),
-      MSGLVL_(0),
+      MSGLVL_(2),
       debug_last_iter_(-1)
   {
     DBG_START_METH("PardisoSolverInterface::PardisoSolverInterface()",dbg_verbosity);

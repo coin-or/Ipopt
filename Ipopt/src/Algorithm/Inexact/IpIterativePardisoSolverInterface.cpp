@@ -49,6 +49,7 @@ extern "C"
 {
   bool IpoptTerminationTest(int n, double* sol, double* resid, int iter, double norm2_rhs) {
     fflush(stdout);
+    fflush(stderr);
     // only do the termination test for PD system
     test_result_ = global_tester_ptr_->TestTerminaion(n, sol, resid, iter, norm2_rhs);
     global_tester_ptr_->GetJnlst().Printf(Ipopt::J_DETAILED, Ipopt::J_LINEAR_ALGEBRA,
@@ -152,8 +153,7 @@ namespace Ipopt
                             pardiso_out_of_core_power, prefix);
     options.GetBoolValue("pardiso_skip_inertia_check",
                          skip_inertia_check_, prefix);
-    bool pardiso_iterative;
-    options.GetBoolValue("pardiso_iterative", pardiso_iterative,
+    options.GetBoolValue("pardiso_iterative", pardiso_iterative_,
                          prefix);
     int pardiso_iter_tol_exponent;
     options.GetIntegerValue("pardiso_iter_tol_exponent",
@@ -238,14 +238,16 @@ namespace Ipopt
 
     IPARM_[39] = 4 ;  // it was 4 max fill for factor
     IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
-    IPARM_[41] =-3 ;  // it  exponent dropping value for schur complement
-    IPARM_[42] = 200; // max number of iterations
+    //ORIG IPARM_[41] =-3 ;  // it  exponent dropping value for schur complement
+    IPARM_[41] =-5 ;  // it  exponent dropping value for schur complement
+    IPARM_[42] = pardiso_iterative_ ? 10000 : 200; // max number of iterations
     IPARM_[43] = 500 ; // norm of the inverse for algebraic solver
-    IPARM_[44] =-3 ;  // exponent dropping value for incomplete factor
+    IPARM_[44] =-5 ;  // exponent dropping value for incomplete factor
+    //ORIG IPARM_[44] =-3 ;  // exponent dropping value for incomplete factor
     IPARM_[46] = 1 ;  // mantisse dropping value for incomplete factor
     IPARM_[45] = pardiso_iter_tol_exponent ;  // residual tolerance
-    IPARM_[48] = pardiso_iterative ? 1 : 0 ;  // active direct solver
-    if (pardiso_iterative) MSGLVL_ = 2;
+    IPARM_[48] = pardiso_iterative_ ? 1 : 0 ;  // active direct solver
+    if (pardiso_iterative_) MSGLVL_ = 2;
 
     // Option for the out of core variant
     IPARM_[49] = pardiso_out_of_core_power;
@@ -571,15 +573,16 @@ namespace Ipopt
     }
     write_iajaa_matrix (N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
 
-#define FAKE_ITERATIVE_PARDISO
-#ifdef FAKE_ITERATIVE_PARDISO
     // MIPS
-    Number* rhs_copy = new Number[dim_];
-    for (int i=0; i<dim_; i++) {
-      rhs_copy[i] = rhs_vals[i];
+    Number* rhs_copy;
+    Number norm2_rhs;
+    if (!pardiso_iterative_) {
+      rhs_copy = new Number[dim_];
+      for (int i=0; i<dim_; i++) {
+        rhs_copy[i] = rhs_vals[i];
+      }
+      norm2_rhs = IpBlasDnrm2(dim_, rhs_vals, 1);
     }
-    Number norm2_rhs = IpBlasDnrm2(dim_, rhs_vals, 1);
-#endif
 
     IterativeSolverTerminationTester* tester;
     if (!IsValid(InexData().normal_x())) {
@@ -600,23 +603,23 @@ namespace Ipopt
 
     delete [] X; /* OLAF/MICHAEL: do we really need X? */
 
-#ifdef FAKE_ITERATIVE_PARDISO
-    // MIPS
-    // Compute the residual (overwrite the RHS)
-    for (int irow = 0; irow<dim_; irow++) {
-      for (int j=ia[irow]; j<ia[irow+1]; j++) {
-        int jcol = ja[j-1]-1;
-        rhs_copy[irow] -= a_[j-1]*rhs_vals[jcol];
-        if (jcol!=irow) {
-          rhs_copy[jcol] -= a_[j-1]*rhs_vals[irow];
+    if (!pardiso_iterative_) {
+      // MIPS
+      // Compute the residual (overwrite the RHS)
+      for (int irow = 0; irow<dim_; irow++) {
+        for (int j=ia[irow]; j<ia[irow+1]; j++) {
+          int jcol = ja[j-1]-1;
+          rhs_copy[irow] -= a_[j-1]*rhs_vals[jcol];
+          if (jcol!=irow) {
+            rhs_copy[jcol] -= a_[j-1]*rhs_vals[irow];
+          }
         }
       }
-    }
-    bool cretval = IpoptTerminationTest(dim_, rhs_vals, rhs_copy, 4, norm2_rhs);
-    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+      bool cretval = IpoptTerminationTest(dim_, rhs_vals, rhs_copy, 4, norm2_rhs);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "retval from IpoptTerminationTest = %d\n", cretval);
-    delete [] rhs_copy;
-#endif
+      delete [] rhs_copy;
+    }
 
     tester->Clear();
 

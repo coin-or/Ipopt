@@ -154,6 +154,8 @@ namespace Ipopt
     /** Flag indicating if the interia is always assumed to be
       *  correct. */
     bool skip_inertia_check_;
+    /** Flag indicating if we are using the iterative solver */
+    bool pardiso_iterative_;
     //@}
 
     /** @name Initialization flags */
