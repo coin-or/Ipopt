@@ -11,6 +11,7 @@
 
 #include "IpInexactNormalStepCalc.hpp"
 #include "IpInexactNewtonNormal.hpp"
+#include "IpInexactNormalTerminationTester.hpp"
 
 namespace Ipopt
 {
@@ -22,7 +23,8 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Default onstructor */
-    InexactDoglegNormalStep(SmartPtr<InexactNewtonNormalStep> newton_step);
+    InexactDoglegNormalStep(SmartPtr<InexactNewtonNormalStep> newton_step,
+                            SmartPtr<InexactNormalTerminationTester> normal_tester = NULL);
 
     /** Default destructor */
     virtual ~InexactDoglegNormalStep();
@@ -63,9 +65,16 @@ namespace Ipopt
     void operator=(const InexactDoglegNormalStep&);
     //@}
 
-    /** Point to object for computing the "Newton" step in the dogleg
+    /** Pointer to object for computing the "Newton" step in the dogleg
      *  method */
     SmartPtr<InexactNewtonNormalStep> newton_step_;
+
+    /** Pointer to object that is used by the newton_step computation
+     *  object to determine if iterative solver is done.  This is
+     *  needed here because this dogleg object is setting the value of
+     *  the linearlized constraint violation at the cauchy point if
+     *  normal_tester is not NULL. */
+    SmartPtr<InexactNormalTerminationTester> normal_tester_;
 
     /** @name Algorithmic options */
     //@{

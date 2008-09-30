@@ -248,7 +248,7 @@ namespace Ipopt
     IPARM_[39] = 4 ;  // it was 4 max fill for factor
     IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
     IPARM_[41] = pardiso_dropping_schur_exponent;
-                      // it  exponent dropping value for schur complement
+    // it  exponent dropping value for schur complement
     IPARM_[42] = 10000000; // max number of iterations (ignored!)
     IPARM_[43] = pardiso_inverse_norm_factor; // norm of the inverse for algebraic solver
     IPARM_[44] = pardiso_dropping_factor_exponent ;  // exponent dropping value for incomplete factor
@@ -625,7 +625,7 @@ namespace Ipopt
       }
       bool cretval = IpoptTerminationTest(dim_, rhs_vals, rhs_copy, 4, norm2_rhs);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "retval from IpoptTerminationTest = %d\n", cretval);
+                     "retval from IpoptTerminationTest = %d\n", cretval);
       delete [] rhs_copy;
     }
 

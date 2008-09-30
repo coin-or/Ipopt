@@ -57,6 +57,14 @@ namespace Ipopt
      *  delete anything that has been allocated to free memory. */
     virtual void Clear();
 
+    /** Method for setting the normal problem objective function value
+     *  at the Cauchy step.  This must be called by the Dogleg
+     *  object. */
+    void Set_c_Avc_norm_cauchy(Number c_Avc_norm_cauchy)
+    {
+      c_Avc_norm_cauchy_ = c_Avc_norm_cauchy;
+    }
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -70,6 +78,17 @@ namespace Ipopt
     InexactNormalTerminationTester& operator=(const InexactNormalTerminationTester&);
     //@}
 
+    /** @name Algorithmic options */
+    //@{
+    /** Desired reduction of residual */
+    Number inexact_normal_tol_;
+    /** Maximal number of iterative solve iterations */
+    Index inexact_normal_max_iter_;
+    //@}
+
+    /** Value of normal problem objective function achived by the
+     *  Cauchy step.  This must be set by the Dogleg step object. */
+    Number c_Avc_norm_cauchy_;
   };
 
 } // namespace Ipopt

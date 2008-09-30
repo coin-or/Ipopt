@@ -91,6 +91,8 @@ namespace Ipopt
     /** rho constant from penalty parameter update.  This is called
      *  \tau_{\pi} in MIPS paper */
     Number rho_;
+    /** Desired reduction of residual */
+    Number inexact_pd_tol_;
     //@}
 
     /** @name Quantities that are identical for all tests and can be
