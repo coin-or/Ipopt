@@ -36,12 +36,28 @@ namespace Ipopt
   }
 
   void InexactNormalTerminationTester::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
-  {}
+  {
+    roptions->AddLowerBoundedNumberOption(
+      "inexact_normal_tol",
+      "Desired relative residual tolerance for iterative solver during normal step computation.",
+      0.0, true, 1e-6,
+      "");
+    roptions->AddLowerBoundedIntegerOption(
+      "inexact_normal_max_iter",
+      "Maximal number of iterative solver iterations during normal step computation",
+      0, 200,
+      "");
+  }
 
 
   bool InexactNormalTerminationTester::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
+    options.GetNumericValue("inexact_normal_tol", inexact_normal_tol_, prefix);
+    options.GetIntegerValue("inexact_normal_max_iter",
+                            inexact_normal_max_iter_, prefix);
+
+    c_Avc_norm_cauchy_ = -1;
     return true;
   }
 
@@ -49,6 +65,7 @@ namespace Ipopt
   {
     DBG_START_METH("InexactNormalTerminationTester::InitializeSolve",
                    dbg_verbosity);
+
 
     return true;
   }
@@ -61,13 +78,46 @@ namespace Ipopt
     DBG_START_METH("InexactNormalTerminationTester::TestTerminaion",
                    dbg_verbosity);
 
+    DBG_ASSERT(c_Avc_norm_cauchy_ >= 0.);
+
     ETerminationTest retval = CONTINUE;
 
     double norm2_resid = IpBlasDnrm2(ndim, resid, 1);
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "TTNormal: ||resid|| = %23.16e ||rhs|| = %23.16e\n",
-                   norm2_resid, norm2_rhs);
-    if (Min(norm2_resid/norm2_rhs,norm2_resid) < 1e-6) {
+                   "TTNormal: iter = %d ||resid|| = %23.16e ||rhs|| = %23.16e\n",
+                   iter, norm2_resid, norm2_rhs);
+
+    if (iter > inexact_normal_max_iter_) {
+      retval = OTHER_SATISFIED;
+      return retval;
+    }
+
+    if (Min(norm2_resid/norm2_rhs,norm2_resid) > inexact_normal_tol_) {
+      return retval;
+    }
+
+    // compute ||c+Av|| for current iterative solution v
+    // note that the sol_x and sol_s have the wrong sign
+    SmartPtr<const Vector> sol_x;
+    SmartPtr<const Vector> sol_s;
+    SmartPtr<const Vector> sol_c;
+    SmartPtr<const Vector> sol_d;
+    GetVectors(ndim, sol, sol_x, sol_s, sol_c, sol_d);
+
+    SmartPtr<Vector> inf_c = IpCq().curr_c()->MakeNewCopy();
+    IpCq().curr_jac_c()->MultVector(-1., *sol_x, 1., *inf_c);
+    SmartPtr<const Vector> curr_d_minus_s = IpCq().curr_d_minus_s();
+    SmartPtr<Vector> inf_d = curr_d_minus_s->MakeNew();
+    inf_d->AddTwoVectors(1., *curr_d_minus_s, 1., *sol_s, 0.);
+    IpCq().curr_jac_d()->MultVector(-1., *sol_x, 1., *inf_d);
+
+    Number trial_c_Av_norm = IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d);
+
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "TTNormal: c_Avc_norm_cauchy = %23.16e trial_c_Av_norm = %23.16e\n", c_Avc_norm_cauchy_, trial_c_Av_norm);
+    Number BasVal = Max(1., IpCq().curr_primal_infeasibility(NORM_2));
+
+    if (Compare_le(trial_c_Av_norm, c_Avc_norm_cauchy_, BasVal)) {
       retval = OTHER_SATISFIED;
     }
 

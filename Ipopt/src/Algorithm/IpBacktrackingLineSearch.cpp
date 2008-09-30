@@ -246,7 +246,7 @@ namespace Ipopt
     DBG_START_METH("BacktrackingLineSearch::FindAcceptableTrialPoint",
                    dbg_verbosity);
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                   "--> Starting filter line search in iteration %d <--\n",
+                   "--> Starting line search in iteration %d <--\n",
                    IpData().iter_count());
 
     Number curr_mu = IpData().curr_mu();
@@ -525,7 +525,7 @@ namespace Ipopt
           }
 
           if (!IsValid(resto_phase_)) {
-            THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Filter Line Search Object!");
+            THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Backtracking Line Search Object!");
           }
           // ToDo make the 1e-2 below a parameter?
           if (IpCq().curr_constraint_violation()<=
@@ -1022,7 +1022,7 @@ namespace Ipopt
   bool BacktrackingLineSearch::TrySoftRestoStep(SmartPtr<IteratesVector>& actual_delta,
       bool &satisfies_original_criterion)
   {
-    DBG_START_FUN("FilterLSAcceptor::TrySoftRestoStep", dbg_verbosity);
+    DBG_START_FUN("BacktrackingLineSearch::TrySoftRestoStep", dbg_verbosity);
 
     if (soft_resto_pderror_reduction_factor_==0.) {
       return false;

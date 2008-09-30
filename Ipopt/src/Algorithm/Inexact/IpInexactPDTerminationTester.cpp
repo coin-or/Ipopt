@@ -85,6 +85,11 @@ namespace Ipopt
       0.0, true,
       1.-1e-4,
       "");
+    roptions->AddLowerBoundedNumberOption(
+      "inexact_pd_tol",
+      "Desired relative residual tolerance for iterative solver during primal-dual step computation.",
+      0.0, true, 1e-3,
+      "");
   }
 
 
@@ -100,6 +105,7 @@ namespace Ipopt
     options.GetNumericValue("tt_eps2", tt_eps2_, prefix);
     options.GetNumericValue("tt_eps3", tt_eps3_, prefix);
     options.GetNumericValue("rho", rho_, prefix);
+    options.GetNumericValue("inexact_pd_tol", inexact_pd_tol_, prefix);
 
     return true;
   }
@@ -230,7 +236,7 @@ namespace Ipopt
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "TT: test ratio %e (norm2_rhs = %e norm2_resid = %e).\n",
                    test_ratio, norm2_rhs, norm2_resid);
-    if (iter < 50 && test_ratio > 1e-3) {
+    if (iter < 50 && test_ratio > inexact_pd_tol_) {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TT: immediately leaving tester with test ratio %e (norm2_rhs = %e norm2_resid = %e).\n",
                      test_ratio, norm2_rhs, norm2_resid);

@@ -298,7 +298,7 @@ namespace Ipopt
     IPARM_[39] = 4 ;  // it was 4 max fill for factor
     IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
     IPARM_[41] = pardiso_dropping_schur_exponent;
-                      // it  exponent dropping value for schur complement
+    // it  exponent dropping value for schur complement
     IPARM_[42] = pardiso_max_iter; // max number of iterations
     IPARM_[43] = pardiso_inverse_norm_factor; // norm of the inverse for algebraic solver
     IPARM_[44] = pardiso_dropping_factor_exponent ;  // exponent dropping value for incomplete factor

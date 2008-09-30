@@ -108,6 +108,7 @@ namespace Ipopt
     SmartPtr<ConvergenceCheck> convCheck =
       new OptimalityErrorConvergenceCheck();
 
+    SmartPtr<InexactNormalTerminationTester> NormalTester;
     SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
     std::string linear_solver;
     options.GetStringValue("linear_solver", linear_solver, prefix);
@@ -156,13 +157,12 @@ namespace Ipopt
 
     }
     else if (linear_solver=="pardiso") {
-      SmartPtr<IterativeSolverTerminationTester> normal_tester =
-        new InexactNormalTerminationTester();
+      NormalTester = new InexactNormalTerminationTester();
       SmartPtr<IterativeSolverTerminationTester> pd_tester =
         new InexactPDTerminationTester();
 #ifndef HAVE_PARDISO
 # ifdef HAVE_LINEARSOLVERLOADER
-      SolverInterface = new IterativePardisoSolverInterface(*normal_tester, *pd_tester);
+      SolverInterface = new IterativePardisoSolverInterface(*NormalTester, *pd_tester);
       char buf[256];
       int rc = LSL_loadPardisoLib(NULL, buf, 255);
       if (rc) {
@@ -177,7 +177,7 @@ namespace Ipopt
       THROW_EXCEPTION(OPTION_INVALID, "Support for Pardiso has not been compiled into Ipopt.");
 # endif
 #else
-      SolverInterface = new IterativePardisoSolverInterface(*normal_tester, *pd_tester);
+      SolverInterface = new IterativePardisoSolverInterface(*NormalTester, *pd_tester);
 #endif
 
     }
@@ -271,7 +271,7 @@ namespace Ipopt
       new InexactNewtonNormalStep(AugSolver);
 
     SmartPtr<InexactNormalStepCalculator> normal_step_calculator =
-      new InexactDoglegNormalStep(NewtonNormalStep);
+      new InexactDoglegNormalStep(NewtonNormalStep, NormalTester);
 
     SmartPtr<PDPerturbationHandler> perturbHandler =
       new PDPerturbationHandler();

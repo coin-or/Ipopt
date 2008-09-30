@@ -25,10 +25,12 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  InexactDoglegNormalStep::InexactDoglegNormalStep(SmartPtr<InexactNewtonNormalStep> newton_step)
+  InexactDoglegNormalStep::InexactDoglegNormalStep(SmartPtr<InexactNewtonNormalStep> newton_step,
+      SmartPtr<InexactNormalTerminationTester> normal_tester /* = NULL */)
       :
       InexactNormalStepCalculator(),
-      newton_step_(newton_step)
+      newton_step_(newton_step),
+      normal_tester_(normal_tester)
   {}
 
   InexactDoglegNormalStep::~InexactDoglegNormalStep()
@@ -152,7 +154,11 @@ namespace Ipopt
     SmartPtr<Vector> inf_d = curr_d_minus_s->MakeNew();
     inf_c->AddTwoVectors(1., *curr_c, -alpha_cs, *vec_AATc_c, 0.);
     inf_d->AddTwoVectors(1., *curr_d_minus_s, -alpha_cs, *vec_AATc_d, 0.);
-    Number objred_normal_cs = 0.5*(IpCq().CalcNormOfType(NORM_2, *curr_c, *curr_d_minus_s)-IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d));
+    Number c_Avc_norm_cauchy = IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d);
+    if (IsValid(normal_tester_)) {
+      normal_tester_->Set_c_Avc_norm_cauchy(c_Avc_norm_cauchy);
+    }
+    Number objred_normal_cs = 0.5*(IpCq().CalcNormOfType(NORM_2, *curr_c, *curr_d_minus_s)-c_Avc_norm_cauchy);
     Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
                    "Dogleg: Reduction of normal problem objective function by Cauchy step = %23.16e\n", objred_normal_cs);
 
