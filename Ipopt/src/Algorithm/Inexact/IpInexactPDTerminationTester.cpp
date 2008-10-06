@@ -226,11 +226,13 @@ namespace Ipopt
 
     ETerminationTest retval = CONTINUE;
 
+    /*
     if (iter%5 != 4) {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TT: immediately leaving tester for iteration %d.\n", iter);
       return retval;
     }
+    */
     Number norm2_resid = IpBlasDnrm2(ndim, resid, 1);
     Number test_ratio = Min(norm2_resid/norm2_rhs, norm2_resid);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
