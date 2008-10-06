@@ -110,11 +110,14 @@ namespace Ipopt
     SmartPtr<const Matrix> curr_jac_c_;
     SmartPtr<const Matrix> curr_jac_d_;
     SmartPtr<const Vector> curr_scaling_slacks_;
+    SmartPtr<Vector> curr_nabla_phi_plus_ATy_x_;
+    SmartPtr<Vector> curr_nabla_phi_plus_ATy_s_;
     Number curr_Av_norm_;
     Number curr_tt1_norm_;
     Number curr_tt2_norm_;
     SmartPtr<const Vector> curr_Wv_x_;
     SmartPtr<const Vector> curr_Wv_s_;
+    bool try_tt2_;
     //@}
 
     /** @name Quantities from previous iteration required in the

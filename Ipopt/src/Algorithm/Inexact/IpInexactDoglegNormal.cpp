@@ -128,6 +128,8 @@ namespace Ipopt
 
     // Compute the step size for the Cauchy step
     Number alpha_cs = Min(curr_omega_, v_ATc_norm*v_ATc_norm/(AATc_norm*AATc_norm));
+    Jnlst().Printf(J_MOREDETAILED, J_SOLVE_PD_SYSTEM,
+                   "Dogleg step: Cauchy step size alpha_cs = %e\n", alpha_cs);
     DBG_PRINT((1, "alpha_cs = %e v_ATc_norm = %e AATc_norm = %e\n", alpha_cs, v_ATc_norm,AATc_norm));
 
     // Finally get the Cauchy step
