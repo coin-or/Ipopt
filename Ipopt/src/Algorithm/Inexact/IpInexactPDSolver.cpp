@@ -18,6 +18,10 @@
 # endif
 #endif
 
+#include "IpIterativeSolverTerminationTester.hpp"
+
+extern Ipopt::IterativeSolverTerminationTester::ETerminationTest test_result_;
+
 namespace Ipopt
 {
 
@@ -217,6 +221,11 @@ namespace Ipopt
             }
             retval = SYMSOLVER_WRONG_INERTIA;
           }
+        }
+        else {
+          char buf[32];
+          sprintf(buf, " TT=%d ", test_result_);
+          IpData().Append_info_string(buf);
         }
         if (retval==SYMSOLVER_SUCCESS) {
           notDone = false;

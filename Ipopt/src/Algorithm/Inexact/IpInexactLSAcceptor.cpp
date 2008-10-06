@@ -120,9 +120,16 @@ namespace Ipopt
       DBG_PRINT((1,"gradBarrTDelta = %e norm_cplusAd = %e reference_theta_ = %e\n", gradBarrTDelta, norm_cplusAd, reference_theta_));
 
       // update the penalty parameter
+      Number norm_delta_xs = Max(delta_x->Amax(), delta_s->Amax());
       last_nu_ = nu_;
+      in_tt2_ = false;
+      if (norm_delta_xs == 0.) {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "  Zero step, skipping line search\n");
+        in_tt2_ = true;
+      }
       // TODO: We need to find a proper cut-off value
-      if (reference_theta_ > nu_update_inf_skip_tol_) {
+      else if (reference_theta_ > nu_update_inf_skip_tol_) {
         DBG_PRINT((1,"uWu=%e scaled_tangential_norm=%e\n",uWu ,scaled_tangential_norm ));
         Number numerator = (gradBarrTDelta + Max(0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2)));
         Number denominator = (1-rho_)*(reference_theta_-norm_cplusAd);
@@ -171,6 +178,11 @@ namespace Ipopt
   {
     DBG_START_METH("InexactLSAcceptor::CheckAcceptabilityOfTrialPoint",
                    dbg_verbosity);
+
+    // If we are in termiation test 2 iteration, we skip the line search
+    if (in_tt2_) {
+      return true;
+    }
 
     // First compute the barrier function and constraint violation at the
     // current iterate and the trial point

@@ -652,6 +652,13 @@ namespace Ipopt
                      "Termination tester requests modification of Hessian\n");
       return SYMSOLVER_WRONG_INERTIA;
     }
+    if (test_result_ == IterativeSolverTerminationTester::TEST_2_SATISFIED) {
+      // Termination Test 2 is satisfied, set the step for the primal
+      // iterates to zero
+      Index nvars = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
+      const Number zero = 0.;
+      IpBlasDcopy(nvars, &zero, 0, rhs_vals, 1);
+    }
     return SYMSOLVER_SUCCESS;
   }
 

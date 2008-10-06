@@ -164,18 +164,16 @@ namespace Ipopt
       IpCq().curr_jac_cT_times_curr_y_c();
     SmartPtr<const Vector> curr_jac_cT_times_curr_y_d =
       IpCq().curr_jac_dT_times_curr_y_d();
-    SmartPtr<Vector> nabla_phi_plus_ATy_x =
-      curr_grad_barrier_obj_x_->MakeNewCopy();
-    nabla_phi_plus_ATy_x->AddTwoVectors(1., *curr_jac_cT_times_curr_y_c,
-                                        1., *curr_jac_cT_times_curr_y_d, 1.);
-    SmartPtr<Vector> nabla_phi_plus_ATy_s =
-      curr_grad_barrier_obj_s_->MakeNew();
-    nabla_phi_plus_ATy_s->AddTwoVectors(1., *curr_grad_barrier_obj_s_,
-                                        -1., *IpData().curr()->y_d(), 0.);
+    curr_nabla_phi_plus_ATy_x_ = curr_grad_barrier_obj_x_->MakeNewCopy();
+    curr_nabla_phi_plus_ATy_x_->AddTwoVectors(1., *curr_jac_cT_times_curr_y_c,
+        1., *curr_jac_cT_times_curr_y_d, 1.);
+    curr_nabla_phi_plus_ATy_s_ = curr_grad_barrier_obj_s_->MakeNew();
+    curr_nabla_phi_plus_ATy_s_->AddTwoVectors(1., *curr_grad_barrier_obj_s_,
+        -1., *IpData().curr()->y_d(), 0.);
     // calculate norms appearing in termination tests
-    nabla_phi_plus_ATy_s->ElementWiseMultiply(*curr_scaling_slacks_);
-    curr_tt2_norm_ = IpCq().CalcNormOfType(NORM_2, *nabla_phi_plus_ATy_x,
-                                           *nabla_phi_plus_ATy_s);
+    curr_nabla_phi_plus_ATy_s_->ElementWiseMultiply(*curr_scaling_slacks_);
+    curr_tt2_norm_ = IpCq().CalcNormOfType(NORM_2, *curr_nabla_phi_plus_ATy_x_,
+                                           *curr_nabla_phi_plus_ATy_s_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "TT: curr_tt2_norm_ = %23.16e\n", curr_tt2_norm_);
     curr_Av_norm_ = IpCq().CalcNormOfType(NORM_2, *curr_Av_c_, *curr_Av_d_);
@@ -212,6 +210,14 @@ namespace Ipopt
     // compute Wv (Hessian times normal step)
     curr_Wv_x_ = InexCq().curr_W_times_vec_x(*normal_x);
     curr_Wv_s_ = InexCq().curr_W_times_vec_s(*normal_s);
+
+    // check if we need to test termination test 2
+    Number ATc_norm = InexCq().curr_scaled_Ac_norm();
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "TT: current ATc norm = %23.16e\n", ATc_norm);
+    try_tt2_ = (ATc_norm <= tt_eps2_*curr_tt2_norm_);
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "TT: will %s try termination test 2.\n", try_tt2_ ? " not " : "");
 
     return true;
   }
@@ -443,6 +449,44 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 3 not satisfied.\n");
     }
 
+    //////////////// Termination Test 2
+    if (try_tt2_) {
+      DBG_PRINT_VECTOR(2, "curr_nabla_phi_plus_ATy_x_", *curr_nabla_phi_plus_ATy_x_);
+      DBG_PRINT_VECTOR(2, "curr_nabla_phi_plus_ATy_s_", *curr_nabla_phi_plus_ATy_s_);
+      DBG_PRINT_VECTOR(2, "sol_c", *sol_c);
+      DBG_PRINT_VECTOR(2, "sol_d", *sol_d);
+      SmartPtr<Vector> sol_d_scaled = sol_d->MakeNewCopy();
+      sol_d_scaled->ElementWiseMultiply(*curr_scaling_slacks_);
+      DBG_PRINT_VECTOR(2, "sol_d_scaled", *sol_d_scaled);
+      SmartPtr<Vector> nabla_phi_plus_ATydelta_x =
+        curr_nabla_phi_plus_ATy_x_->MakeNewCopy();
+      curr_jac_c_->TransMultVector(1., *sol_c,
+                                   1., *curr_nabla_phi_plus_ATy_x_);
+      curr_jac_d_->TransMultVector(1., *sol_d,
+                                   1., *curr_nabla_phi_plus_ATy_x_);
+      SmartPtr<Vector> nabla_phi_plus_ATydelta_s =
+        curr_nabla_phi_plus_ATy_s_->MakeNew();
+      nabla_phi_plus_ATydelta_s->AddTwoVectors(1., *curr_nabla_phi_plus_ATy_s_,
+          -1., *sol_d_scaled, 0.);
+      Number nabla_phi_plus_ATydelta_norm =
+        IpCq().CalcNormOfType(NORM_2, *nabla_phi_plus_ATydelta_x,
+                              *nabla_phi_plus_ATydelta_s);
+      /////// Check residual condition for TT1
+      lhs = nabla_phi_plus_ATydelta_norm;
+      rhs = tt_kappa2_*Min(curr_tt2_norm_, last_tt1_norm_);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT2 testing ||gamma+A^T(y+delta)||(=%23.16e) <= kappa2*min(curr_tt2_norm_, last_tt1_norm_)(=%23.16e) -->", lhs, rhs);
+      bool tt2 = Compare_le(lhs, rhs, BasVal);
+      if (tt2) {
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+      }
+      else {
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+      }
+      if (tt2) {
+        return TEST_2_SATISFIED;
+      }
+    }
+
     // Check if the Hessian should be modified
     if (tcc1 || tcc2a) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Hessian Modification not requested.\n");
@@ -473,6 +517,8 @@ namespace Ipopt
     curr_c_plus_Av_d_ = NULL;
     curr_Wv_x_ = NULL;
     curr_Wv_s_ = NULL;
+    curr_nabla_phi_plus_ATy_x_ = NULL;
+    curr_nabla_phi_plus_ATy_s_ = NULL;
   }
 
 } // namespace Ipopt

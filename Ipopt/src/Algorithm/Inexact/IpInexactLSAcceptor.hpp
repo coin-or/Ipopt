@@ -197,6 +197,11 @@ namespace Ipopt
     Number last_nu_;
     //@}
 
+    /** Flag indicating if this is a termination test 2 iteration in
+     *  which we just update the multipliers and skip the line
+     *  search */
+    bool in_tt2_;
+
     /** When called from the restoration phase, this is the required
      *  predicted reduction */
     Number resto_pred_;
