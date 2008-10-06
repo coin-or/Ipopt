@@ -237,6 +237,56 @@ namespace Ipopt
     DBG_PRINT_VECTOR(1, "normal_x scaled", *normal_x);
     DBG_PRINT_VECTOR(1, "normal_s scaled", *normal_s);
 
+    // Compute the unscaled steps
+    normal_s->ElementWiseMultiply(*InexCq().curr_scaling_slacks());
+    v_cauchy_s_bak->ElementWiseMultiply(*InexCq().curr_scaling_slacks());
+
+    // We now check if the Dogleg step, shorted by the
+    // fraction-to-the-boundary rule, gives at least as much progress
+    // as the Cauchy step, also shortened by the
+    // fraction-to-the-boundary rule.  If not, we throw away the
+    // Newton step component.
+
+    // TODO: Implement efficiently
+    const Number tau = IpData().curr_tau();
+    Number ftb_cauchy =
+      IpCq().primal_frac_to_the_bound(tau, *v_cauchy_x_bak, *v_cauchy_s_bak);
+    Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                   "Dogleg: Fraction-to-the-bounary step size for Cauchy step = %23.16e\n", ftb_cauchy);
+    inf_c = IpCq().curr_jac_c_times_vec(*v_cauchy_x_bak)->MakeNewCopy();
+    inf_c->AddOneVector(1., *curr_c, ftb_cauchy);
+    inf_d = curr_d_minus_s->MakeNewCopy();
+    inf_d->AddTwoVectors(-ftb_cauchy, *v_cauchy_s_bak,
+                         ftb_cauchy, *IpCq().curr_jac_d_times_vec(*v_cauchy_x_bak) , 1.);
+    Number objred_ftb_cauchy = 0.5*(IpCq().CalcNormOfType(NORM_2, *curr_c, *curr_d_minus_s)-IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d));
+    Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                   "Dogleg: Reduction of normal problem objective function by ftb cauchy step = %23.16e\n", objred_ftb_cauchy);
+
+    Number ftb_dogleg =
+      IpCq().primal_frac_to_the_bound(tau, *normal_x, *normal_s);
+    Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                   "Dogleg: Fraction-to-the-bounary step size for Dogleg step = %23.16e\n", ftb_dogleg);
+    inf_c = IpCq().curr_jac_c_times_vec(*normal_x)->MakeNewCopy();
+    inf_c->AddOneVector(1., *curr_c, ftb_dogleg);
+    inf_d = curr_d_minus_s->MakeNewCopy();
+    inf_d->AddTwoVectors(-ftb_dogleg, *normal_s,
+                         ftb_dogleg, *IpCq().curr_jac_d_times_vec(*normal_x) , 1.);
+    Number objred_ftb_dogleg = 0.5*(IpCq().CalcNormOfType(NORM_2, *curr_c, *curr_d_minus_s)-IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d));
+    Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                   "Dogleg: Reduction of normal problem objective function by ftb dogleg step = %23.16e\n", objred_ftb_dogleg);
+
+    Number rhs = 10.*objred_ftb_dogleg;
+    Number lhs = objred_ftb_cauchy;
+    Number BasVal = curr_c->Nrm2()+curr_d_minus_s->Nrm2();
+    bool ok = Compare_le(lhs, rhs, BasVal);
+    if (!ok) {
+      Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "Dogleg step: Dogleg step makes less progress than Cauchy step, resetting to Cauchy step.\n");
+      normal_x = v_cauchy_x_bak;
+      normal_s = v_cauchy_s_bak;
+      IpData().Append_info_string("NR ");
+    }
+
+#if 0
     // for now we don't backtrack along dogleg path in case of inexact
     // Newton steps, but we check if the dogleg step did at least as
     // good as the Cauchy step
@@ -256,14 +306,8 @@ namespace Ipopt
       normal_x = v_cauchy_x_bak;
       normal_s = v_cauchy_s_bak;
     }
+#endif
 
-    /*
-    ASSERT_EXCEPTION(objred_normal_dogleg>=objred_normal_cs-100.*mach_eps*(curr_c->Nrm2()+curr_d_minus_s->Nrm2()),
-                     INTERNAL_ABORT, "Normal step reduction of dogleg step less than that of Cachy step");
-    */
-
-    // Scale into the normal space (no slack-based scaling)
-    normal_s->ElementWiseMultiply(*InexCq().curr_scaling_slacks());
 
     return true;
   }
