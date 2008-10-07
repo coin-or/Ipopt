@@ -36,12 +36,24 @@ namespace Ipopt
       ~TripletEntry()
       {}
 
-      /** Dummy copy constructor.  Note that nothing is really copied!
-       *  This is just implemented to that the std::list can be
-       *  created with uninitialized entries.  The values are
-       *  afterwards set with the Set method. */
-      TripletEntry(const TripletEntry&)
-      {}
+      /** Copy constructor, required for std::list */
+      TripletEntry(const TripletEntry& rhs)
+      {
+        i_row_ = rhs.i_row_;
+        j_col_ = rhs.j_col_;
+        i_pos_triplet_ = rhs.i_pos_triplet_;
+      }
+
+      /** Equals Operator, required for std::list */
+      TripletEntry& operator=(const TripletEntry& rhs)
+      {
+        if (this!=&rhs) {
+          i_row_ = rhs.i_row_;
+          j_col_ = rhs.j_col_;
+          i_pos_triplet_ = rhs.i_pos_triplet_;
+        }
+        return *this;
+      }
       //@}
 
       /** Set the values of an entry */
@@ -100,9 +112,6 @@ namespace Ipopt
       /*
       TripletEntry(const TripletEntry&);
       */
-
-      /** Overloaded Equals Operator */
-      void operator=(const TripletEntry&);
       //@}
 
       /** @name Entry content. */
