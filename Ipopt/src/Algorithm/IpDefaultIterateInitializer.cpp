@@ -156,6 +156,8 @@ namespace Ipopt
       options.GetNumericValue("mu_init",  mu_init_, prefix);
     }
 
+    options.GetBoolValue("inexact_algorithm", inexact_algorithm_, "");
+
     bool retvalue = true;
     if (IsValid(eq_mult_calculator_)) {
       retvalue = eq_mult_calculator_->Initialize(Jnlst(), IpNLP(), IpData(),
@@ -244,9 +246,7 @@ namespace Ipopt
                    "s", *s, new_s, *IpNLP().d_L(),
                    *IpNLP().d_U(), *IpNLP().Pd_L(), *IpNLP().Pd_U());
 
-#define ENABLE_INEXACT
-#ifdef ENABLE_INEXACT
-    {
+    if (inexact_algorithm_) {
       printf("SETTING ALL S to ONE off the bounds\n");
       SmartPtr<Vector> tmp = new_s->MakeNew();
       SmartPtr<Vector> tmp_L = IpNLP().d_L()->MakeNewCopy();
@@ -265,7 +265,6 @@ namespace Ipopt
       // DELETEME
       new_s= ConstPtr(tmp);
     }
-#endif
 
     iterates = IpData().trial()->MakeNewContainer();
     iterates->Set_s(*new_s);
@@ -357,7 +356,8 @@ namespace Ipopt
       /////////////////////////////////////////////////////////////////////
 
       least_square_mults(Jnlst(), IpNLP(), IpData(), IpCq(),
-                         eq_mult_calculator_, constr_mult_init_max_);
+                         eq_mult_calculator_, constr_mult_init_max_,
+                         inexact_algorithm_);
     }
 
     // upgrade the trial to the current point
@@ -677,7 +677,8 @@ namespace Ipopt
     IpoptData& ip_data,
     IpoptCalculatedQuantities& ip_cq,
     const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
-    Number constr_mult_init_max)
+    Number constr_mult_init_max,
+    bool inexact_algorithm /*= false*/)
   {
     DBG_START_FUN("DefaultIterateInitializer::least_square_mults",
                   dbg_verbosity);
@@ -733,8 +734,7 @@ namespace Ipopt
     else {
       iterates->y_c_NonConst()->Set(0.0);
       iterates->y_d_NonConst()->Set(0.0);
-#ifdef ENABLE_INEXACT
-      {
+      if (inexact_algorithm) {
         SmartPtr<Vector> y_d = iterates->y_d_NonConst();
         printf("Setting y_d to -1 and 1!!!!!\n");
         SmartPtr<Vector> tmp = ip_data.curr()->v_L()->MakeNew();
@@ -744,7 +744,6 @@ namespace Ipopt
         tmp->Set(1.);
         ip_nlp.Pd_U()->MultVector(1., *tmp, 1., *y_d);
       }
-#endif
     }
     ip_data.set_trial(iterates);
 
