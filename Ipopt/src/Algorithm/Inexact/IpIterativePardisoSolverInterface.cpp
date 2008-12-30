@@ -47,7 +47,7 @@ Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
 Ipopt::IterativeSolverTerminationTester::ETerminationTest test_result_;
 extern "C"
 {
-  bool IpoptTerminationTest(int n, double* sol, double* resid, int iter, double norm2_rhs) {
+  int IpoptTerminationTest(int n, double* sol, double* resid, int iter, double norm2_rhs) {
     fflush(stdout);
     fflush(stderr);
     // only do the termination test for PD system
@@ -64,6 +64,9 @@ extern "C"
       break;
     }
   }
+
+  // The following global function pointer is defined in the Pardiso library
+  extern int (*IpoptFunction)(int n, double* x,  double* r, int k, double b);
 }
 
 /** Prototypes for Pardiso's subroutines */
@@ -259,6 +262,8 @@ namespace Ipopt
 
     // Option for the out of core variant
     IPARM_[49] = pardiso_out_of_core_power;
+
+    IpoptFunction=&IpoptTerminationTest;
 
     bool retval = normal_tester_->Initialize(Jnlst(), IpNLP(), IpData(),
                   IpCq(), options, prefix);
@@ -501,6 +506,7 @@ namespace Ipopt
       if (IPARM_[13] != 0) {
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
+#if 0
         if ( !pardiso_redo_symbolic_fact_only_if_inertia_wrong_ ||
              (negevals_ != numberOfNegEVals) ) {
           if (HaveIpData()) {
@@ -527,11 +533,14 @@ namespace Ipopt
           }
         }
         else {
+#endif
           if (HaveIpData()) {
             IpData().Append_info_string("Pp");
           }
           done = true;
+#if 0
         }
+#endif
       }
       else {
         done = true;
@@ -582,8 +591,8 @@ namespace Ipopt
     write_iajaa_matrix (N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
 
     // MIPS
-    Number* rhs_copy;
-    Number norm2_rhs;
+    Number* rhs_copy=NULL;
+    Number norm2_rhs=0.;
     if (!pardiso_iterative_) {
       rhs_copy = new Number[dim_];
       for (int i=0; i<dim_; i++) {
@@ -602,7 +611,7 @@ namespace Ipopt
     global_tester_ptr_ = tester;
 
     bool retval = tester->InitializeSolve();
-    DBG_ASSERT(retval);
+    ASSERT_EXCEPTION(retval, INTERNAL_ABORT, "tester->InitializeSolve(); returned false");
 
     F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                               &PHASE, &N, a_, ia, ja, &PERM,

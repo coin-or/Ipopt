@@ -157,6 +157,8 @@ namespace Ipopt
     }
 
     options.GetBoolValue("inexact_algorithm", inexact_algorithm_, "");
+printf("DISABLING inexact_algorithm initialization!\n");
+inexact_algorithm_ = false;
 
     bool retvalue = true;
     if (IsValid(eq_mult_calculator_)) {
