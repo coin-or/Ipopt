@@ -75,8 +75,7 @@ namespace Ipopt
                                    IpoptData& ip_data,
                                    IpoptCalculatedQuantities& ip_cq,
                                    const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
-                                   Number constr_mult_init_max,
-                                   bool inexact_algorithm = false);
+                                   Number constr_mult_init_max);
 
 
     /** Methods for IpoptType */
@@ -143,9 +142,6 @@ namespace Ipopt
     BoundMultInitMethod bound_mult_init_method_;
     /** Initial value of barrier parameter */
     Number mu_init_;
-    /** Flag indicating if we are working with the inexact
-     *  algorithm */
-    bool inexact_algorithm_;
     //@}
 
     /** object to be used for the initialization of the equality

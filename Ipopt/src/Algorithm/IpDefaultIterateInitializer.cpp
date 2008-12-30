@@ -156,10 +156,6 @@ namespace Ipopt
       options.GetNumericValue("mu_init",  mu_init_, prefix);
     }
 
-    options.GetBoolValue("inexact_algorithm", inexact_algorithm_, "");
-printf("DISABLING inexact_algorithm initialization!\n");
-inexact_algorithm_ = false;
-
     bool retvalue = true;
     if (IsValid(eq_mult_calculator_)) {
       retvalue = eq_mult_calculator_->Initialize(Jnlst(), IpNLP(), IpData(),
@@ -247,26 +243,6 @@ inexact_algorithm_ = false;
     push_variables(Jnlst(), slack_bound_push_, slack_bound_frac_,
                    "s", *s, new_s, *IpNLP().d_L(),
                    *IpNLP().d_U(), *IpNLP().Pd_L(), *IpNLP().Pd_U());
-
-    if (inexact_algorithm_) {
-      printf("SETTING ALL S to ONE off the bounds\n");
-      SmartPtr<Vector> tmp = new_s->MakeNew();
-      SmartPtr<Vector> tmp_L = IpNLP().d_L()->MakeNewCopy();
-      SmartPtr<Vector> tmp2 = tmp_L->MakeNew();
-      //tmp2->Set(1.);
-      tmp2->Set(1);
-      tmp_L->Axpy(1., *tmp2);
-      IpNLP().Pd_L()->MultVector(1., *tmp_L, 0., *tmp);
-
-      SmartPtr<Vector> tmp_U = IpNLP().d_U()->MakeNewCopy();
-      tmp2 = tmp_U->MakeNew();
-      //tmp2->Set(1.);
-      tmp2->Set(1);
-      tmp_U->Axpy(-1., *tmp2);
-      IpNLP().Pd_U()->MultVector(1., *tmp_U, 1., *tmp);
-      // DELETEME
-      new_s= ConstPtr(tmp);
-    }
 
     iterates = IpData().trial()->MakeNewContainer();
     iterates->Set_s(*new_s);
@@ -358,8 +334,7 @@ inexact_algorithm_ = false;
       /////////////////////////////////////////////////////////////////////
 
       least_square_mults(Jnlst(), IpNLP(), IpData(), IpCq(),
-                         eq_mult_calculator_, constr_mult_init_max_,
-                         inexact_algorithm_);
+                         eq_mult_calculator_, constr_mult_init_max_);
     }
 
     // upgrade the trial to the current point
@@ -679,8 +654,7 @@ inexact_algorithm_ = false;
     IpoptData& ip_data,
     IpoptCalculatedQuantities& ip_cq,
     const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
-    Number constr_mult_init_max,
-    bool inexact_algorithm /*= false*/)
+    Number constr_mult_init_max)
   {
     DBG_START_FUN("DefaultIterateInitializer::least_square_mults",
                   dbg_verbosity);
@@ -736,16 +710,6 @@ inexact_algorithm_ = false;
     else {
       iterates->y_c_NonConst()->Set(0.0);
       iterates->y_d_NonConst()->Set(0.0);
-      if (inexact_algorithm) {
-        SmartPtr<Vector> y_d = iterates->y_d_NonConst();
-        printf("Setting y_d to -1 and 1!!!!!\n");
-        SmartPtr<Vector> tmp = ip_data.curr()->v_L()->MakeNew();
-        tmp->Set(1.);
-        ip_nlp.Pd_L()->MultVector(-1., *tmp, 0., *y_d);
-        tmp = ip_data.curr()->v_U()->MakeNew();
-        tmp->Set(1.);
-        ip_nlp.Pd_U()->MultVector(1., *tmp, 1., *y_d);
-      }
     }
     ip_data.set_trial(iterates);
 
