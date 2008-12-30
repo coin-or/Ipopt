@@ -72,7 +72,7 @@ namespace Ipopt
       MAXFCT_(1),
       MNUM_(1),
       MTYPE_(-2),
-      MSGLVL_(2),
+      MSGLVL_(1),
       debug_last_iter_(-1)
   {
     DBG_START_METH("PardisoSolverInterface::PardisoSolverInterface()",dbg_verbosity);
@@ -293,9 +293,12 @@ namespace Ipopt
     IPARM_[20] = 3; // Results in better accuracy
     IPARM_[23] = 1; // parallel fac
     IPARM_[24] = 1; // parallel solve
+    IPARM_[28] = 0; // 32-bit factorization
+    IPARM_[29] = 1; // we need this for IPOPT interface
     IPARM_[29] = 1; // we need this for IPOPT interface
 
     IPARM_[39] = 4 ;  // it was 4 max fill for factor
+    IPARM_[39] = 10 ;  // it was 4 max fill for factor
     IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
     IPARM_[41] = pardiso_dropping_schur_exponent;
     // it  exponent dropping value for schur complement
