@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -119,6 +119,10 @@ namespace Ipopt
     {
       return ComputeResiduals_;
     }
+    TimedTask& StdAugSystemSolverMultiSolve()
+    {
+      return StdAugSystemSolverMultiSolve_;
+    }
     TimedTask& LinearSystemScaling()
     {
       return LinearSystemScaling_;
@@ -210,6 +214,7 @@ namespace Ipopt
     TimedTask PDSystemSolverTotal_;
     TimedTask PDSystemSolverSolveOnce_;
     TimedTask ComputeResiduals_;
+    TimedTask StdAugSystemSolverMultiSolve_;
     TimedTask LinearSystemScaling_;
     TimedTask LinearSystemSymbolicFactorization_;
     TimedTask LinearSystemFactorization_;

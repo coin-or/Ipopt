@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpFilterLSAcceptor.cpp 1121 2007-11-17 01:40:31Z andreasw $
+// $Id$
 //
 // Authors:  Andreas Waechter                 IBM    2008-04-04
 //               derived file from IpFilterLSAcceptor.cpp

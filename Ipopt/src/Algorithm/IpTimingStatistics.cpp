@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -26,6 +26,7 @@ namespace Ipopt
     PDSystemSolverTotal_.Reset();
     PDSystemSolverSolveOnce_.Reset();
     ComputeResiduals_.Reset();
+    StdAugSystemSolverMultiSolve_.Reset();
     LinearSystemScaling_.Reset();
     LinearSystemSymbolicFactorization_.Reset();
     LinearSystemFactorization_.Reset();
@@ -91,6 +92,9 @@ namespace Ipopt
     jnlst.Printf(level, category,
                  " ComputeResiduals...................: %10.3f\n",
                  ComputeResiduals_.TotalTime());
+    jnlst.Printf(level, category,
+                 " StdAugSystemSolverMultiSolve.......: %10.3f\n",
+                 StdAugSystemSolverMultiSolve_.TotalTime());
     jnlst.Printf(level, category,
                  " LinearSystemScaling................: %10.3f\n",
                  LinearSystemScaling_.TotalTime());
