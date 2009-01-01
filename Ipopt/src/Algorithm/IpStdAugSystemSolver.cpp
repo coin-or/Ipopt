@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2008 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -116,6 +116,8 @@ namespace Ipopt
     DBG_START_METH("StdAugSystemSolver::MultiSolve",dbg_verbosity);
     DBG_ASSERT(J_c && J_d && "Currently, you MUST specify J_c and J_d in the augmented system");
 
+    IpData().TimingStats().StdAugSystemSolverMultiSolve().Start();
+
     DBG_ASSERT(W_factor == 0.0 || W_factor == 1.0);
 
     Index nrhs = (Index)rhs_xV.size();
@@ -230,6 +232,7 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Factorization failed with retval = %d\n", retval);
     }
 
+    IpData().TimingStats().StdAugSystemSolverMultiSolve().End();
     return retval;
   }
 

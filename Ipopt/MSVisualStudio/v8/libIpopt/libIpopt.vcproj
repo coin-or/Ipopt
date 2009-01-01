@@ -455,10 +455,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\Ipopt\src\LinAlg\IpSymMatrix.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\Ipopt\src\LinAlg\IpSymScaledMatrix.cpp"
 					>
 				</File>

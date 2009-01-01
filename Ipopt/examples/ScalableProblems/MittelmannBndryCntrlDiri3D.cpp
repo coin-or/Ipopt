@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: MittelmannBndryCntrlDiri3D.cpp 1010 2007-06-21 15:54:36Z andreasw $
+// $Id$
 //
 // Authors:  Andreas Waechter             IBM    2005-10-18
 //           Olaf Schenk   (Univ. of Basel)      2007-08-01
