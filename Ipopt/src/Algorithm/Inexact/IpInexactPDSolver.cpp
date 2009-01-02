@@ -402,7 +402,7 @@ namespace Ipopt
     rhs = tcc_theta_*tangential_norm*tangential_norm;
     lhs = 0.5*uWu;
     //const Number mach_eps_sqrt = pow(std::numeric_limits<Number>::epsilon(),0.5);
-    const Number mach_eps_sqrt = pow(std::numeric_limits<Number>::epsilon(),0.25);
+    //const Number mach_eps_sqrt = pow(std::numeric_limits<Number>::epsilon(),0.25);
     //BasVal = Max(IpData().curr()->x()->Amax(), IpData().curr()->s()->Amax())/mach_eps_sqrt;
     // check the second inequality of the tangential component condition
     if (Compare_le(rhs, lhs, BasVal)) {
