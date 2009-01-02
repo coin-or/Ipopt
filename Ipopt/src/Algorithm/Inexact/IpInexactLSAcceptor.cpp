@@ -57,6 +57,22 @@ namespace Ipopt
       0.0, true, 1e-9,
       "If the current infeasibility is less than this value, the penalty "
       "parameter update is skipped");
+    roptions->AddStringOption2(
+      "flexible_penalty_function",
+      "yes",
+      "no", "do not use the flexible penalty function procedure",
+      "yes", "use the flexible penalty function procedure",
+      "This determines if the flexible penalty function procedure by "
+      "Curtis/Nocedal should be used in the line search.  For now, this only "
+      "is implemented for the inexact algorithm.");
+    roptions->AddLowerBoundedNumberOption(
+      "nu_low_init",
+      "Initial value for the lower penalty parameter.",
+      0.0, true, 1e-6,
+      "This is the initial value for the lower penalty parameter in the "
+      "Curtis/Nocedal flexible penalty function line search procedure.  This "
+      "must be smaller or equal to the intial value of the upper penalty "
+      "parameter, see option \"nu_init\".");
   }
 
   bool InexactLSAcceptor::InitializeImpl(const OptionsList& options,
@@ -69,6 +85,13 @@ namespace Ipopt
     options.GetNumericValue("tcc_theta", tcc_theta_, prefix);
     options.GetNumericValue("nu_update_inf_skip_tol", nu_update_inf_skip_tol_,
                             prefix);
+    options.GetBoolValue("flexible_penalty_function",
+                         flexible_penalty_function_, prefix);
+    if (flexible_penalty_function_) {
+      options.GetNumericValue("nu_low_init", nu_low_init_, prefix);
+      ASSERT_EXCEPTION(nu_low_init_<=nu_init_, OPTION_INVALID,
+                       "Option \"nu_low_init\" must be smaller or equal to \"nu_init\"");
+    }
 
     // The following options have been declared in FilterLSAcceptor
     Index max_soc;
@@ -119,7 +142,8 @@ namespace Ipopt
 
       DBG_PRINT((1,"gradBarrTDelta = %e norm_cplusAd = %e reference_theta_ = %e\n", gradBarrTDelta, norm_cplusAd, reference_theta_));
 
-      // update the penalty parameter
+      // update the upper penalty parameter
+      Number nu_mid = nu_;
       Number norm_delta_xs = Max(delta_x->Amax(), delta_s->Amax());
       last_nu_ = nu_;
       in_tt2_ = false;
@@ -135,28 +159,39 @@ namespace Ipopt
         Number denominator = (1-rho_)*(reference_theta_-norm_cplusAd);
         const Number nu_trial = numerator/denominator;
 //DELETEME
-      char snu[64];
-      sprintf(snu, " nt=%8.2e", nu_trial);
-      IpData().Append_info_string(snu);
+        char snu[64];
+        sprintf(snu, " nt=%8.2e", nu_trial);
+        IpData().Append_info_string(snu);
         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                        "In penalty parameter update formula:\n  gradBarrTDelta = %e 0.5*uWu = %e tcc_theta_*pow(scaled_tangential_norm,2) = %e numerator = %e\n  reference_theta_ = %e norm_cplusAd + %e denominator = %e nu_trial = %e\n", gradBarrTDelta, 0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2), numerator, reference_theta_, norm_cplusAd, denominator, nu_trial);
 
         if (nu_ < nu_trial) {
           nu_ = nu_trial + nu_inc_;
         }
+        if (flexible_penalty_function_) {
+          last_nu_low_ = nu_low_;
+          nu_mid = Max(nu_low_, nu_trial);
+          Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                         "nu_low = %8.2e\n", nu_low_);
+        }
 #if 0
 // DELETEME
-       if (nu_trial < 0.) {
-         nu_ = 1e-6;
-       }
+        if (nu_trial < 0.) {
+          nu_ = 1e-6;
+        }
 #endif
       }
+      else {
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                       "Warning: Skipping nu update because current constraint violation (%e) less than nu_update_inf_skip_tol.\n", reference_theta_);
+        IpData().Append_info_string("nS");
+      }
       InexData().set_curr_nu(nu_);
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  using nu = %23.16e\n", nu_);
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  using nu = %23.16e (nu_mid = %23.16e)\n", nu_, nu_mid);
 
       // Compute the linear model reduction prediction
       DBG_PRINT((1,"gradBarrTDelta=%e reference_theta_=%e norm_cplusAd=%e\n", gradBarrTDelta, reference_theta_, norm_cplusAd));
-      reference_pred_ = gradBarrTDelta - nu_*(reference_theta_ - norm_cplusAd);
+      reference_pred_ = gradBarrTDelta - nu_mid*(reference_theta_ - norm_cplusAd);
 
       watchdog_pred_ = -1e300;
     }
@@ -216,25 +251,38 @@ namespace Ipopt
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                    "  Checking Armijo Condition with pred = %23.16e and ared = %23.16e\n", pred, ared);
 
-    bool accept;
-    if (Compare_le(eta_*pred, ared, reference_barr_ + nu_*(reference_theta_))) {
+    bool accept =
+      Compare_le(eta_*pred, ared, reference_barr_ + nu_*(reference_theta_));
+    bool accept_low = false;
+    if (flexible_penalty_function_) {
+      accept_low = Compare_le(eta_*pred, ared, reference_barr_ + nu_low_*(reference_theta_));
+    }
+
+    if (accept) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Success...\n");
-
-      // HERE WE RESET THE SLACKS.  MAYBE THIS SHOULD BE BEFORE THE
-      // FUNCTION EVALUATIONS?
-      ResetSlacks();
-
-#if 1
-      Number nu_low = -(trial_barr - reference_barr_)/(trial_theta - reference_theta_);
-      char buf[64];
-      sprintf(buf, " nl=%8.2e", nu_low);
-      IpData().Append_info_string(buf);
-#endif
+    }
+    else if (flexible_penalty_function_ && accept_low) {
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Success with nu_low...\n");
       accept = true;
     }
     else {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Failed...\n");
-      accept = false;
+    }
+    if (accept) {
+      // HERE WE RESET THE SLACKS.  MAYBE THIS SHOULD BE BEFORE THE
+      // FUNCTION EVALUATIONS?
+      ResetSlacks();
+
+      if (flexible_penalty_function_) {
+        // update the lower penalty parameter if necessary
+        if (!accept_low) {
+          Number nu_real = -(trial_barr - reference_barr_)/(trial_theta - reference_theta_);
+          nu_low_ = Min(nu_, nu_low_ + Max(0.1*(nu_real-nu_low_), nu_inc_));
+
+          Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                         "Updating nu_low to %8.2e with nu_real = %8.2e\n", nu_low_, nu_real);
+        }
+      }
     }
     return accept;
   }
@@ -294,6 +342,9 @@ namespace Ipopt
     DBG_START_FUN("InexactLSAcceptor::Reset", dbg_verbosity);
 
     nu_ = nu_init_;
+    if (flexible_penalty_function_) {
+      nu_low_ = nu_low_init_;
+    }
     InexData().set_curr_nu(nu_);
   }
 
@@ -319,7 +370,7 @@ namespace Ipopt
 
   char InexactLSAcceptor::UpdateForNextIteration(Number alpha_primal_test)
   {
-    char info_alpha_primal_char = ' ';
+    char info_alpha_primal_char = 'k';
     // Augment the filter if required
     if (last_nu_ != nu_) {
       info_alpha_primal_char = 'n';
@@ -327,8 +378,16 @@ namespace Ipopt
       sprintf(snu, " nu=%8.2e", nu_);
       IpData().Append_info_string(snu);
     }
-    else {
-      info_alpha_primal_char = 'k';
+    if (last_nu_low_ != nu_low_) {
+      char snu[40];
+      sprintf(snu, " nl=%8.2e", nu_low_);
+      IpData().Append_info_string(snu);
+      if (info_alpha_primal_char == 'k' ) {
+        info_alpha_primal_char = 'l';
+      }
+      else {
+        info_alpha_primal_char = 'b';
+      }
     }
 
     if (alpha_primal_test==1. && watchdog_pred_==-1e300) {
@@ -350,6 +409,7 @@ namespace Ipopt
   {
     DBG_START_METH("InexactLSAcceptor::IsAcceptableToCurrentIterate",
                    dbg_verbosity);
+    THROW_EXCEPTION(INTERNAL_ABORT, "InexactLSAcceptor::IsAcceptableToCurrentIterate called");
     ASSERT_EXCEPTION(resto_pred_ >= 0., INTERNAL_ABORT,
                      "resto_pred_ not set for check from restoration phase.");
 

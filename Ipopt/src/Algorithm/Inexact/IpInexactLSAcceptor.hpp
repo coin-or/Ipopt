@@ -158,6 +158,8 @@ namespace Ipopt
     //@{
     /** Initial value of penalty parameter */
     Number nu_init_;
+    /** Initial value of lower penalty parameter */
+    Number nu_low_init_;
     /** Incrememt for penalty parameter */
     Number nu_inc_;
     /** \f$ \eta_{\varphi} \f$ */
@@ -168,6 +170,9 @@ namespace Ipopt
     Number tcc_theta_;
     /** Lower feasiblity bound to skip penalty parameter update */
     Number nu_update_inf_skip_tol_;
+    /** Flag indicating whether the Curtis/Nocedal flexible penalty
+     *  function should be used */
+    bool flexible_penalty_function_;
     //@}
 
     /** @name Information related to watchdog procedure */
@@ -195,6 +200,10 @@ namespace Ipopt
     Number nu_;
     /** Value of penalty parameter at beginning of the iteration. */
     Number last_nu_;
+    /** Current lower value of the penalty parameter */
+    Number nu_low_;
+    /** Value of lower penalty parameter at beginning of the iteration */
+    Number last_nu_low_;
     //@}
 
     /** Flag indicating if this is a termination test 2 iteration in
