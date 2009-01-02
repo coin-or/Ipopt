@@ -45,7 +45,7 @@ namespace Ipopt
     roptions->AddLowerBoundedIntegerOption(
       "inexact_normal_max_iter",
       "Maximal number of iterative solver iterations during normal step computation",
-      0, 200,
+      0, 50,
       "");
   }
 
@@ -77,6 +77,8 @@ namespace Ipopt
   {
     DBG_START_METH("InexactNormalTerminationTester::TestTerminaion",
                    dbg_verbosity);
+
+    last_iter_ = iter;
 
     DBG_ASSERT(c_Avc_norm_cauchy_ >= 0.);
 

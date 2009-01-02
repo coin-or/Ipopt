@@ -59,36 +59,41 @@ namespace Ipopt
       "tt_kappa1",
       "kappa1 factor in Termination Test 1.",
       0.0, true,
-      1e-5,
+      1e-1,
       "");
     roptions->AddLowerBoundedNumberOption(
       "tt_kappa2",
       "kappa2 factor in Termination Test 2.",
       0.0, true,
-      1e-5,
+      1e-1,
       "");
     roptions->AddLowerBoundedNumberOption(
       "tt_kappa3",
       "kappa3 factor in Termination Test 3.",
       0.0, true,
-      1e-5,
+      1e-1,
       "");
     roptions->AddLowerBoundedNumberOption(
       "tt_eps2",
       "eps2 factor in Termination Test 2.",
       0.0, true,
-      1.-1e-4,
+      1.,
       "");
     roptions->AddLowerBoundedNumberOption(
       "tt_eps3",
       "eps3 factor in Termination Test 3.",
       0.0, true,
-      1.-1e-4,
+      1.-1e-1,
       "");
     roptions->AddLowerBoundedNumberOption(
-      "inexact_pd_tol",
+      "inexact_desired_pd_residual",
       "Desired relative residual tolerance for iterative solver during primal-dual step computation.",
       0.0, true, 1e-3,
+      "");
+    roptions->AddLowerBoundedIntegerOption(
+      "inexact_desired_pd_residual_iter",
+      "Number of iterations willing to be spent in obtaining desired primal-dual ration.",
+      0, 50,
       "");
   }
 
@@ -105,7 +110,10 @@ namespace Ipopt
     options.GetNumericValue("tt_eps2", tt_eps2_, prefix);
     options.GetNumericValue("tt_eps3", tt_eps3_, prefix);
     options.GetNumericValue("rho", rho_, prefix);
-    options.GetNumericValue("inexact_pd_tol", inexact_pd_tol_, prefix);
+    options.GetNumericValue("inexact_desired_pd_residual",
+                            inexact_desired_pd_residual_, prefix);
+    options.GetIntegerValue("inexact_desired_pd_residual_iter",
+                            inexact_desired_pd_residual_iter_, prefix);
 
     return true;
   }
@@ -230,6 +238,8 @@ namespace Ipopt
     DBG_START_METH("InexactPDTerminationTester::TestTerminaion",
                    dbg_verbosity);
 
+    last_iter_ = iter;
+
     ETerminationTest retval = CONTINUE;
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -246,7 +256,8 @@ namespace Ipopt
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "TT: test ratio %e (norm2_rhs = %e norm2_resid = %e).\n",
                    test_ratio, norm2_rhs, norm2_resid);
-    if (iter < 50 && test_ratio > inexact_pd_tol_) {
+    if (iter < inexact_desired_pd_residual_iter_ &&
+        test_ratio > inexact_desired_pd_residual_) {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TT: immediately leaving tester with test ratio %e (norm2_rhs = %e norm2_resid = %e).\n",
                      test_ratio, norm2_rhs, norm2_resid);

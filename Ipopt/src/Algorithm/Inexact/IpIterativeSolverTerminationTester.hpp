@@ -78,6 +78,10 @@ namespace Ipopt
       return Jnlst();
     }
 
+    /** Return the number of iterative solver iteration from the most
+     *  recent solve */
+    virtual Index GetSolverIterations() const = 0;
+
   protected:
     /** Method for copying a long augmented system array into Vectors
      *  in Ipopt notation */
