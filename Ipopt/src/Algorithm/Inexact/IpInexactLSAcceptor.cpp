@@ -168,7 +168,7 @@ namespace Ipopt
 
         if (nu_ < nu_trial) {
           nu_ = nu_trial + nu_inc_;
-	  nu_mid = nu_;
+          nu_mid = nu_;
         }
         if (flexible_penalty_function_) {
           last_nu_low_ = nu_low_;
@@ -258,9 +258,9 @@ namespace Ipopt
     if (flexible_penalty_function_) {
       DBG_PRINT((1, "nu_low = %e reference_barr_ + nu_low*(reference_theta_)=%e trial_barr + nu_low*trial_theta=%e\n",nu_low_,reference_barr_ + nu_low_*(reference_theta_),trial_barr + nu_low_*trial_theta));
       ared = reference_barr_ + nu_low_*(reference_theta_) -
-	(trial_barr + nu_low_*trial_theta);
+             (trial_barr + nu_low_*trial_theta);
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-		     "  Checking nu_low Armijo Condition with pred = %23.16e and ared = %23.16e\n", pred, ared);
+                     "  Checking nu_low Armijo Condition with pred = %23.16e and ared = %23.16e\n", pred, ared);
       accept_low = Compare_le(eta_*pred, ared, reference_barr_ + nu_low_*(reference_theta_));
     }
 
@@ -435,6 +435,67 @@ namespace Ipopt
       accept = false;
     }
     return accept;
+  }
+
+  Number
+  InexactLSAcceptor::ComputeAlphaForY(Number alpha_primal,
+                                      Number alpha_dual,
+                                      SmartPtr<IteratesVector>& delta)
+  {
+    DBG_START_METH("InexactLSAcceptor::ComputeAlphaForY",
+                   dbg_verbosity);
+
+    // Here, we choose as stepsize for y either alpha_primal, if the
+    // conditions from the ineqaxt paper is satisfied for it, or we
+    // compute the step size closest to alpha_primal but great than
+    // it, that does give the same progress as the full step would
+    // give.
+
+    Number alpha_y = alpha_primal;
+
+    SmartPtr<Vector> gx = IpCq().curr_grad_barrier_obj_x()->MakeNewCopy();
+    gx->AddTwoVectors(1., *IpCq().curr_jac_cT_times_curr_y_c(),
+                      1., *IpCq().curr_jac_dT_times_curr_y_d(), 1.);
+    SmartPtr<Vector> Jxy = gx->MakeNew();
+    IpCq().curr_jac_c()->TransMultVector(1., *delta->y_c(), 0., *Jxy);
+    IpCq().curr_jac_d()->TransMultVector(1., *delta->y_d(), 1., *Jxy);
+
+    SmartPtr<const Vector> curr_scaling_slacks =
+      InexCq().curr_scaling_slacks();
+    SmartPtr<Vector> gs = curr_scaling_slacks->MakeNew();
+    gs->AddTwoVectors(1., *IpCq().curr_grad_barrier_obj_s(),
+                      -1., *IpData().curr()->y_d(), 0.);
+    gs->ElementWiseMultiply(*curr_scaling_slacks);
+
+    SmartPtr<Vector> Sdy = delta->y_d()->MakeNewCopy();
+    Sdy->ElementWiseMultiply(*curr_scaling_slacks);
+
+    // using the magic formula in my notebook
+    Number a = pow(Jxy->Nrm2(), 2) + pow(Sdy->Nrm2(), 2);
+    Number b = 2*(gx->Dot(*Jxy) - gs->Dot(*Sdy));
+    Number c = pow(gx->Nrm2(), 2) + pow(gs->Nrm2(), 2);
+
+    // First we check if the primal step size is good enough:
+    Number val_ap = alpha_primal*alpha_primal*a + alpha_primal*b + c;
+    Number val_1 = a + b + c;
+
+    if (val_ap <= val_1) {
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "  Step size for y: using alpha_primal\n.");
+    }
+    else {
+      Number alpha_2 = - b/a - 1.;
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "  Step size for y candidate: %8.2 - ", alpha_2);
+      if (alpha_2 > alpha_primal && alpha_2 < 1.) {
+        alpha_y = alpha_2;
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "using that one\n.");
+      }
+      else {
+        alpha_y = 1.;
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "using 1 instead\n");
+      }
+    }
   }
 
 } // namespace Ipopt
