@@ -59,6 +59,7 @@ namespace Ipopt
       "parameter update is skipped");
     roptions->AddStringOption2(
       "flexible_penalty_function",
+      "Switch to use Curtis/Nocedal flexible penalty function",
       "yes",
       "no", "do not use the flexible penalty function procedure",
       "yes", "use the flexible penalty function procedure",
@@ -167,12 +168,13 @@ namespace Ipopt
 
         if (nu_ < nu_trial) {
           nu_ = nu_trial + nu_inc_;
+	  nu_mid = nu_;
         }
         if (flexible_penalty_function_) {
           last_nu_low_ = nu_low_;
           nu_mid = Max(nu_low_, nu_trial);
           Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                         "nu_low = %8.2e\n", nu_low_);
+                         "   nu_low = %8.2e\n", nu_low_);
         }
 #if 0
 // DELETEME
@@ -182,8 +184,7 @@ namespace Ipopt
 #endif
       }
       else {
-        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                       "Warning: Skipping nu update because current constraint violation (%e) less than nu_update_inf_skip_tol.\n", reference_theta_);
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,                       "Warning: Skipping nu update because current constraint violation (%e) less than nu_update_inf_skip_tol.\n", reference_theta_);
         IpData().Append_info_string("nS");
       }
       InexData().set_curr_nu(nu_);
@@ -255,6 +256,11 @@ namespace Ipopt
       Compare_le(eta_*pred, ared, reference_barr_ + nu_*(reference_theta_));
     bool accept_low = false;
     if (flexible_penalty_function_) {
+      DBG_PRINT((1, "nu_low = %e reference_barr_ + nu_low*(reference_theta_)=%e trial_barr + nu_low*trial_theta=%e\n",nu_low_,reference_barr_ + nu_low_*(reference_theta_),trial_barr + nu_low_*trial_theta));
+      ared = reference_barr_ + nu_low_*(reference_theta_) -
+	(trial_barr + nu_low_*trial_theta);
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+		     "  Checking nu_low Armijo Condition with pred = %23.16e and ared = %23.16e\n", pred, ared);
       accept_low = Compare_le(eta_*pred, ared, reference_barr_ + nu_low_*(reference_theta_));
     }
 
@@ -378,7 +384,7 @@ namespace Ipopt
       sprintf(snu, " nu=%8.2e", nu_);
       IpData().Append_info_string(snu);
     }
-    if (last_nu_low_ != nu_low_) {
+    if (flexible_penalty_function_ && last_nu_low_ != nu_low_) {
       char snu[40];
       sprintf(snu, " nl=%8.2e", nu_low_);
       IpData().Append_info_string(snu);
