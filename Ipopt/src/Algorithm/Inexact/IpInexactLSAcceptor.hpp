@@ -106,6 +106,11 @@ namespace Ipopt
                                       bool called_from_restoration=false) const;
     //@}
 
+    /** Method for updating the equality constraint multipliers */
+    virtual Number ComputeAlphaForY(Number alpha_primal,
+                                    Number alpha_dual,
+                                    SmartPtr<IteratesVector>& delta);
+
     /** Methods for OptionsList */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
