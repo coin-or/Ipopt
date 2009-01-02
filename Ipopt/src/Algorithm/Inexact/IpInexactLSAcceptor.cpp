@@ -134,12 +134,22 @@ namespace Ipopt
         Number numerator = (gradBarrTDelta + Max(0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2)));
         Number denominator = (1-rho_)*(reference_theta_-norm_cplusAd);
         const Number nu_trial = numerator/denominator;
+//DELETEME
+      char snu[64];
+      sprintf(snu, " nt=%8.2e", nu_trial);
+      IpData().Append_info_string(snu);
         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                        "In penalty parameter update formula:\n  gradBarrTDelta = %e 0.5*uWu = %e tcc_theta_*pow(scaled_tangential_norm,2) = %e numerator = %e\n  reference_theta_ = %e norm_cplusAd + %e denominator = %e nu_trial = %e\n", gradBarrTDelta, 0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2), numerator, reference_theta_, norm_cplusAd, denominator, nu_trial);
 
         if (nu_ < nu_trial) {
           nu_ = nu_trial + nu_inc_;
         }
+#if 0
+// DELETEME
+       if (nu_trial < 0.) {
+         nu_ = 1e-6;
+       }
+#endif
       }
       InexData().set_curr_nu(nu_);
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  using nu = %23.16e\n", nu_);
@@ -214,6 +224,12 @@ namespace Ipopt
       // FUNCTION EVALUATIONS?
       ResetSlacks();
 
+#if 1
+      Number nu_low = -(trial_barr - reference_barr_)/(trial_theta - reference_theta_);
+      char buf[64];
+      sprintf(buf, " nl=%8.2e", nu_low);
+      IpData().Append_info_string(buf);
+#endif
       accept = true;
     }
     else {

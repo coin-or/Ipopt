@@ -232,6 +232,8 @@ namespace Ipopt
 
     ETerminationTest retval = CONTINUE;
 
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "Starting PD Termination Tester for iteration %d.\n", iter);
     /*
     if (iter%5 != 4) {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
