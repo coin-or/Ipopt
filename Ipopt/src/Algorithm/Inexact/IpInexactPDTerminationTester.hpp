@@ -57,6 +57,13 @@ namespace Ipopt
      *  delete anything that has been allocated to free memory. */
     virtual void Clear();
 
+    /** Return the number of iterative solver iteration from the most
+     *  recent solve */
+    virtual Index GetSolverIterations() const
+    {
+      return last_iter_;
+    }
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -92,7 +99,9 @@ namespace Ipopt
      *  \tau_{\pi} in MIPS paper */
     Number rho_;
     /** Desired reduction of residual */
-    Number inexact_pd_tol_;
+    Number inexact_desired_pd_residual_;
+    /** Number of iterations allowed for desired pd residual */
+    Index inexact_desired_pd_residual_iter_;
     //@}
 
     /** @name Quantities that are identical for all tests and can be
@@ -131,6 +140,9 @@ namespace Ipopt
     Number last_Av_norm_;
     Number last_tt1_norm_;
     //@}
+
+    /** Last iterative solver iteration counter */
+    Index last_iter_;
   };
 
 } // namespace Ipopt

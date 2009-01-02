@@ -57,6 +57,14 @@ namespace Ipopt
      *  delete anything that has been allocated to free memory. */
     virtual void Clear();
 
+
+    /** Return the number of iterative solver iteration from the most
+     *  recent solve */
+    virtual Index GetSolverIterations() const
+    {
+      return last_iter_;
+    }
+
     /** Method for setting the normal problem objective function value
      *  at the Cauchy step.  This must be called by the Dogleg
      *  object. */
@@ -89,6 +97,9 @@ namespace Ipopt
     /** Value of normal problem objective function achived by the
      *  Cauchy step.  This must be set by the Dogleg step object. */
     Number c_Avc_norm_cauchy_;
+
+    /** Last iterative solver iteration counter */
+    Index last_iter_;
   };
 
 } // namespace Ipopt

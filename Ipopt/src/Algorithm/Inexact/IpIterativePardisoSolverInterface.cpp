@@ -602,8 +602,10 @@ namespace Ipopt
     }
 
     IterativeSolverTerminationTester* tester;
+    bool is_normal = false;
     if (!IsValid(InexData().normal_x())) {
       tester = GetRawPtr(normal_tester_);
+      is_normal = true;
     }
     else {
       tester = GetRawPtr(pd_tester_);
@@ -636,6 +638,16 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "retval from IpoptTerminationTest = %d\n", cretval);
       delete [] rhs_copy;
+    }
+
+    Index iterations_used = tester->GetSolverIterations();
+    if (is_normal) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Number of iterations in Pardiso iterative solver for normal step = %d.\n", iterations_used);
+    }
+    else {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Number of iterations in Pardiso iterative solver for PD step = %d.\n", iterations_used);
     }
 
     tester->Clear();
