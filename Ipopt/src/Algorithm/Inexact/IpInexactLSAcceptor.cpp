@@ -79,15 +79,18 @@ namespace Ipopt
   bool InexactLSAcceptor::InitializeImpl(const OptionsList& options,
                                          const std::string& prefix)
   {
-    options.GetNumericValue("nu_init", nu_init_, prefix);
+    options.GetBoolValue("flexible_penalty_function",
+                         flexible_penalty_function_, prefix);
+    if (!options.GetNumericValue("nu_init", nu_init_, prefix) &&
+	flexible_penalty_function_) {
+      nu_init_ = 1.;
+    }
     options.GetNumericValue("nu_inc", nu_inc_, prefix);
     options.GetNumericValue("eta_phi", eta_, prefix);
     options.GetNumericValue("rho", rho_, prefix);
     options.GetNumericValue("tcc_theta", tcc_theta_, prefix);
     options.GetNumericValue("nu_update_inf_skip_tol", nu_update_inf_skip_tol_,
                             prefix);
-    options.GetBoolValue("flexible_penalty_function",
-                         flexible_penalty_function_, prefix);
     if (flexible_penalty_function_) {
       options.GetNumericValue("nu_low_init", nu_low_init_, prefix);
       ASSERT_EXCEPTION(nu_low_init_<=nu_init_, OPTION_INVALID,
@@ -159,10 +162,6 @@ namespace Ipopt
         Number numerator = (gradBarrTDelta + Max(0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2)));
         Number denominator = (1-rho_)*(reference_theta_-norm_cplusAd);
         const Number nu_trial = numerator/denominator;
-//DELETEME
-        char snu[64];
-        sprintf(snu, " nt=%8.2e", nu_trial);
-        IpData().Append_info_string(snu);
         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                        "In penalty parameter update formula:\n  gradBarrTDelta = %e 0.5*uWu = %e tcc_theta_*pow(scaled_tangential_norm,2) = %e numerator = %e\n  reference_theta_ = %e norm_cplusAd + %e denominator = %e nu_trial = %e\n", gradBarrTDelta, 0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2), numerator, reference_theta_, norm_cplusAd, denominator, nu_trial);
 
@@ -176,12 +175,6 @@ namespace Ipopt
           Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                          "   nu_low = %8.2e\n", nu_low_);
         }
-#if 0
-// DELETEME
-        if (nu_trial < 0.) {
-          nu_ = 1e-6;
-        }
-#endif
       }
       else {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,                       "Warning: Skipping nu update because current constraint violation (%e) less than nu_update_inf_skip_tol.\n", reference_theta_);
@@ -264,12 +257,14 @@ namespace Ipopt
       accept_low = Compare_le(eta_*pred, ared, reference_barr_ + nu_low_*(reference_theta_));
     }
 
+    accepted_by_low_only_ = false;
     if (accept) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Success...\n");
     }
     else if (flexible_penalty_function_ && accept_low) {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Success with nu_low...\n");
       accept = true;
+      accepted_by_low_only_ = true;
     }
     else {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Failed...\n");
@@ -396,6 +391,10 @@ namespace Ipopt
       }
     }
 
+    if (accepted_by_low_only_) {
+      info_alpha_primal_char = (char)toupper(info_alpha_primal_char);
+    }
+
     if (alpha_primal_test==1. && watchdog_pred_==-1e300) {
       InexData().set_full_step_accepted(true);
 
@@ -486,7 +485,7 @@ namespace Ipopt
     else {
       Number alpha_2 = - b/a - 1.;
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                     "  Step size for y candidate: %8.2 - ", alpha_2);
+                     "  Step size for y candidate: %8.2e - ", alpha_2);
       if (alpha_2 > alpha_primal && alpha_2 < 1.) {
         alpha_y = alpha_2;
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "using that one\n.");
@@ -496,6 +495,8 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "using 1 instead\n");
       }
     }
+
+    return alpha_y;
   }
 
 } // namespace Ipopt

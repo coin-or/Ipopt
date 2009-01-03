@@ -195,8 +195,11 @@ namespace Ipopt
     options.GetBoolValue("magic_steps", magic_steps_, prefix);
     options.GetBoolValue("accept_every_trial_step", accept_every_trial_step_, prefix);
     Index enum_int;
-    options.GetEnumValue("alpha_for_y", enum_int, prefix);
+    bool is_default = !options.GetEnumValue("alpha_for_y", enum_int, prefix);
     alpha_for_y_ = AlphaForYEnum(enum_int);
+    if (is_default && acceptor_->HasComputeAlphaForY()) {
+      alpha_for_y_ = LSACCEPTOR_ALPHA_FOR_Y;
+    }
     options.GetNumericValue("alpha_for_y_tol", alpha_for_y_tol_, prefix);
     options.GetNumericValue("expect_infeasible_problem_ctol", expect_infeasible_problem_ctol_, prefix);
     options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
@@ -764,7 +767,7 @@ namespace Ipopt
         acceptor_->UpdateForNextIteration(alpha_primal_test);
     }
     if (soc_taken) {
-      info_alpha_primal_char = toupper(info_alpha_primal_char);
+      info_alpha_primal_char = (char)toupper(info_alpha_primal_char);
     }
     IpData().Set_info_alpha_primal_char(info_alpha_primal_char);
     IpData().Set_info_ls_count(n_steps+1);
