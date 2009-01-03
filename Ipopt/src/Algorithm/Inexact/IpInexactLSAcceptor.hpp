@@ -111,6 +111,13 @@ namespace Ipopt
                                     Number alpha_dual,
                                     SmartPtr<IteratesVector>& delta);
 
+    /** Method returning true of ComputeAlphaForY is implemented for
+      *  this acceptor */
+    virtual bool HasComputeAlphaForY() const
+    {
+      return true;
+    }
+
     /** Methods for OptionsList */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
@@ -219,6 +226,10 @@ namespace Ipopt
     /** When called from the restoration phase, this is the required
      *  predicted reduction */
     Number resto_pred_;
+
+    /** Flag indicating if the step was accepted only because of the lower
+     *  penalty parameter.  This is for output only. */
+    bool accepted_by_low_only_;
   };
 
 } // namespace Ipopt

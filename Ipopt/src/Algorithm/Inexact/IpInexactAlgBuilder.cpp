@@ -298,11 +298,12 @@ namespace Ipopt
     options_list.SetIntegerValueIfUnset("max_soc", 0);
     options_list.SetStringValueIfUnset("constraint_violation_norm_type",
                                        "2-norm");
-    options_list.SetStringValueIfUnset("alpha_for_y", "bound-mult");
     options_list.SetNumericValueIfUnset("constr_mult_init_max", 0.);
 
     // TODO: Find out about the following:
     //options_list.SetNumericValueIfUnset("bound_relax_factor", 0.);
     options_list.SetNumericValueIfUnset("kappa_d", 0.);
+    options_list.SetStringValueIfUnset("linear_solver", "pardiso");
+    options_list.SetStringValueIfUnset("pardiso_iterative", "yes");
   }
 } // namespace
