@@ -8,7 +8,9 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libinexact.la
+if BUILD_INEXACT
+  noinst_LTLIBRARIES = libinexact.la
+endif
 
 libinexact_la_SOURCES = \
 	IpInexactAlgBuilder.cpp IpInexactAlgBuilder.hpp \
