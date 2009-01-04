@@ -19,8 +19,11 @@
 #include "IpInterfacesRegOp.hpp"
 #include "IpAlgorithmRegOp.hpp"
 #include "IpCGPenaltyRegOp.hpp"
-#include "IpInexactRegOp.hpp"
-#include "IpInexactAlgBuilder.hpp"
+
+#ifdef BUILD_INEXACT
+# include "IpInexactRegOp.hpp"
+# include "IpInexactAlgBuilder.hpp"
+#endif
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -409,12 +412,14 @@ namespace Ipopt
         }
       }
 
+#ifdef BUILD_INEXACT
       // Check if we are to use the inexact linear solver option
       options_->GetBoolValue("inexact_algorithm", inexact_algorithm_, "");
       // Change the default flags for the inexact algorithm
       if (inexact_algorithm_) {
         AddInexactDefaultOptions(*options_);
       }
+#endif
     }
     catch (OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
@@ -529,6 +534,7 @@ namespace Ipopt
       "no", "Undocumented",
       "yes", "Undocumented",
       "Undocumented");
+#ifdef BUILD_INEXACT
     roptions->AddStringOption2(
       "inexact_algorithm",
       "Activate the version of Ipopt that allows iterative linear solvers.",
@@ -536,6 +542,7 @@ namespace Ipopt
       "no", "use default algorithm with direct linear solvers",
       "yes", "use the EXPERIMENTAL iterative linear solver option",
       "");
+#endif
   }
 
   ApplicationReturnStatus
@@ -575,12 +582,16 @@ namespace Ipopt
     try {
 
       if (IsNull(alg_builder)) {
+#ifdef BUILD_INEXACT
         if (inexact_algorithm_) {
           alg_builder = new InexactAlgorithmBuilder();
         }
         else {
+#endif
           alg_builder = new AlgorithmBuilder();
+#ifdef BUILD_INEXACT
         }
+#endif
       }
 
       alg_builder->BuildIpoptObjects(*jnlst_, *options_, "", nlp,
@@ -956,7 +967,9 @@ namespace Ipopt
     RegisterOptions_Algorithm(roptions);
     RegisterOptions_CGPenalty(roptions);
     RegisterOptions_LinearSolvers(roptions);
+#ifdef BUILD_INEXACT
     RegisterOptions_Inexact(roptions);
+#endif
   }
 
   SmartPtr<SolveStatistics> IpoptApplication::Statistics()
