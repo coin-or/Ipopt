@@ -156,8 +156,6 @@ namespace Ipopt
                             pardiso_out_of_core_power, prefix);
     options.GetBoolValue("pardiso_skip_inertia_check",
                          skip_inertia_check_, prefix);
-    options.GetBoolValue("pardiso_iterative", pardiso_iterative_,
-                         prefix);
     int pardiso_iter_tol_exponent;
     options.GetIntegerValue("pardiso_iter_tol_exponent",
                             pardiso_iter_tol_exponent, prefix);
@@ -256,7 +254,7 @@ namespace Ipopt
     IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
     IPARM_[41] = pardiso_dropping_schur_exponent;
     // it  exponent dropping value for schur complement
-    IPARM_[42] = pardiso_max_iter; // max number of iterations (ignored!)
+    IPARM_[42] = pardiso_max_iter; // max number of iterations
     IPARM_[43] = pardiso_inverse_norm_factor; // norm of the inverse for algebraic solver
     IPARM_[44] = pardiso_dropping_factor_exponent ;  // exponent dropping value for incomplete factor
     IPARM_[46] = 1 ;  // mantisse dropping value for incomplete factor
@@ -597,6 +595,8 @@ namespace Ipopt
     // MIPS
     Number* rhs_copy=NULL;
     Number norm2_rhs=0.;
+#if 0
+    // for debugging with the direct solver
     if (!pardiso_iterative_) {
       rhs_copy = new Number[dim_];
       for (int i=0; i<dim_; i++) {
@@ -604,6 +604,7 @@ namespace Ipopt
       }
       norm2_rhs = IpBlasDnrm2(dim_, rhs_vals, 1);
     }
+#endif
 
     IterativeSolverTerminationTester* tester;
     bool is_normal = false;
@@ -626,6 +627,8 @@ namespace Ipopt
 
     delete [] X; /* OLAF/MICHAEL: do we really need X? */
 
+#if 0
+    // for debugging
     if (!pardiso_iterative_) {
       // MIPS
       // Compute the residual (overwrite the RHS)
@@ -643,6 +646,7 @@ namespace Ipopt
                      "retval from IpoptTerminationTest = %d\n", cretval);
       delete [] rhs_copy;
     }
+#endif
 
     Index iterations_used = tester->GetSolverIterations();
     if (is_normal) {
