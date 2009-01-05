@@ -89,8 +89,6 @@ namespace Ipopt
     Number tt_kappa1_;
     /** kappa_2 factor in termination test 2 */
     Number tt_kappa2_;
-    /** kappa_3 factor in termination test 3 */
-    Number tt_kappa3_;
     /** eps_2 constant in termination test 2 */
     Number tt_eps2_;
     /** eps_3 constant in termination test 3 */
