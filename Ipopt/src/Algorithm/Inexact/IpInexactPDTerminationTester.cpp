@@ -57,19 +57,13 @@ namespace Ipopt
       "");
     roptions->AddLowerBoundedNumberOption(
       "tt_kappa1",
-      "kappa1 factor in Termination Test 1.",
+      "kappa1 factor in Termination Test 1 and 3.",
       0.0, true,
       1e-1,
       "");
     roptions->AddLowerBoundedNumberOption(
       "tt_kappa2",
       "kappa2 factor in Termination Test 2.",
-      0.0, true,
-      1e-1,
-      "");
-    roptions->AddLowerBoundedNumberOption(
-      "tt_kappa3",
-      "kappa3 factor in Termination Test 3.",
       0.0, true,
       1e-1,
       "");
@@ -106,7 +100,6 @@ namespace Ipopt
     options.GetNumericValue("tcc_zeta", tcc_zeta_, prefix);
     options.GetNumericValue("tt_kappa1", tt_kappa1_, prefix);
     options.GetNumericValue("tt_kappa2", tt_kappa2_, prefix);
-    options.GetNumericValue("tt_kappa3", tt_kappa3_, prefix);
     options.GetNumericValue("tt_eps2", tt_eps2_, prefix);
     options.GetNumericValue("tt_eps3", tt_eps3_, prefix);
     options.GetNumericValue("rho", rho_, prefix);
@@ -375,13 +368,15 @@ namespace Ipopt
 
     ////////////  Termination Test 1
     bool tt1 = tcc;
+    bool tt1_kappa1;
     if (tt1) {
       /////// Check residual condition for TT1
       rhs = rho_norm;
       lhs = tt_kappa1_*Min(curr_tt1_norm_, last_tt1_norm_);
 
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT1 testing rho_norm(=%23.16e) <= kappa1*min(curr_tt1_norm_, last_tt1_norm_)(=%23.16e) -->", rhs, lhs);
-      tt1 = Compare_le(rhs, lhs, BasVal);
+      tt1_kappa1 = Compare_le(rhs, lhs, BasVal);
+      tt1 = tt1_kappa1;
       if (tt1) {
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
       }
@@ -429,10 +424,8 @@ namespace Ipopt
     bool tt3 = tcc;
     if (tt3) {
       //////// Check residual condition for TT3
-      rhs = rho_norm;
-      lhs = tt_kappa3_*(c_norm_-c_plus_Av_norm_);
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT3 testing rho_norm(=%23.16e) <= kappa3(c_norm_-c_plus_Av_norm_)(=%23.16e) -->", rhs, lhs);
-      tt3 = Compare_le(rhs, lhs, BasVal);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT3 with residual condition from TT1 -->");
+      tt3 = tt1_kappa1;
       if (tt3) {
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
       }
