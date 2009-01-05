@@ -304,6 +304,5 @@ namespace Ipopt
     //options_list.SetNumericValueIfUnset("bound_relax_factor", 0.);
     options_list.SetNumericValueIfUnset("kappa_d", 0.);
     options_list.SetStringValueIfUnset("linear_solver", "pardiso");
-    options_list.SetStringValueIfUnset("pardiso_iterative", "yes");
   }
 } // namespace
