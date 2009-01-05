@@ -502,6 +502,8 @@ if test $use_inexact = yes; then
     AC_MSG_ERROR([The inexact solver option is currently only available with Pardiso])
   fi
   # Check if the global function pointer variable is defined in the Pardiso library
+  SAVE_LIBS="$LIBS"
+  LIBS="$LIBS $FLIBS"
   AC_LANG_PUSH(C)
   AC_MSG_CHECKING([if Pardiso library has global variable IpoptFunction])
   AC_LINK_IFELSE(
@@ -515,6 +517,7 @@ int main() {
     [AC_MSG_RESULT(no)
      AC_MSG_ERROR([Pardiso library not recent enough for the inexact solver option])])
   AC_LANG_POP(C)
+  LIBS="$SAVE_LIBS"
 fi
 
 
