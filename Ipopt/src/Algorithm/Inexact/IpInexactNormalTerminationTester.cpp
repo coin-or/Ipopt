@@ -90,6 +90,7 @@ namespace Ipopt
                    iter, norm2_resid, norm2_rhs);
 
     if (iter > inexact_normal_max_iter_) {
+      IpData().Append_info_string("N+");
       retval = OTHER_SATISFIED;
       return retval;
     }
