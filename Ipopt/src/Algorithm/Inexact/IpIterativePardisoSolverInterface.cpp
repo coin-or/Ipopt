@@ -170,6 +170,10 @@ namespace Ipopt
     int pardiso_inverse_norm_factor;
     options.GetIntegerValue("pardiso_inverse_norm_factor",
                             pardiso_inverse_norm_factor, prefix);
+    int pardiso_max_iter;
+    options.GetIntegerValue("pardiso_max_iter", pardiso_max_iter, prefix);
+    int pardiso_msglvl;
+    options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
 
     // Number value = 0.0;
 
@@ -248,17 +252,17 @@ namespace Ipopt
     IPARM_[24] = 1; // parallel solve
     IPARM_[29] = 1; // we need this for IPOPT interface
 
-    IPARM_[39] = 4 ;  // it was 4 max fill for factor
+    IPARM_[39] = 10 ;  // it was 4 max fill for factor
     IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
     IPARM_[41] = pardiso_dropping_schur_exponent;
     // it  exponent dropping value for schur complement
-    IPARM_[42] = 10000000; // max number of iterations (ignored!)
+    IPARM_[42] = pardiso_max_iter; // max number of iterations (ignored!)
     IPARM_[43] = pardiso_inverse_norm_factor; // norm of the inverse for algebraic solver
     IPARM_[44] = pardiso_dropping_factor_exponent ;  // exponent dropping value for incomplete factor
     IPARM_[46] = 1 ;  // mantisse dropping value for incomplete factor
     IPARM_[45] = pardiso_iter_tol_exponent ;  // residual tolerance
-    IPARM_[48] = pardiso_iterative_ ? 1 : 0 ;  // active direct solver
-    if (pardiso_iterative_) MSGLVL_ = 2;
+    IPARM_[48] = 1 ;  // iterative solver
+    MSGLVL_ = pardiso_msglvl;
 
     // Option for the out of core variant
     IPARM_[49] = pardiso_out_of_core_power;

@@ -82,7 +82,7 @@ namespace Ipopt
     options.GetBoolValue("flexible_penalty_function",
                          flexible_penalty_function_, prefix);
     if (!options.GetNumericValue("nu_init", nu_init_, prefix) &&
-	flexible_penalty_function_) {
+        flexible_penalty_function_) {
       nu_init_ = 1.;
     }
     options.GetNumericValue("nu_inc", nu_inc_, prefix);
