@@ -87,7 +87,7 @@ namespace Ipopt
     roptions->AddLowerBoundedIntegerOption(
       "inexact_desired_pd_residual_iter",
       "Number of iterations willing to be spent in obtaining desired primal-dual ration.",
-      0, 50,
+      0, 100,
       "");
   }
 
