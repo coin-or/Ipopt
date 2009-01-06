@@ -437,10 +437,23 @@ namespace Ipopt
       return timing_statistics_;
     }
 
+    /** Check if additional data has been set */
+    bool HaveAddData()
+    {
+      return IsValid(add_data_);
+    }
+
     /** Get access to additional data object */
     IpoptAdditionalData& AdditionalData()
     {
       return *add_data_;
+    }
+
+    /** Set a new pointer for additional Ipopt data */
+    void SetAddData(SmartPtr<IpoptAdditionalData> add_data)
+    {
+      DBG_ASSERT(!HaveAddData());
+      add_data_ = add_data;
     }
 
     /** Set the perturbation of the primal-dual system */

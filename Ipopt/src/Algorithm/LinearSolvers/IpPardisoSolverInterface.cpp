@@ -139,6 +139,12 @@ namespace Ipopt
       "out-of-core variant where the factor is split in 2^k subdomains.  This "
       "is IPARM(50) in the Pardiso manual.  This option is only available if "
       "Ipopt has been compiled with Pardiso.");
+    roptions->AddLowerBoundedIntegerOption(
+      "pardiso_msglvl",
+      "Pardiso message level",
+      0, 0,
+      "This determines the amount of analysis output from the Pardiso solver. "
+      "This is MSGLVL in the Pardiso manual.");
     roptions->AddStringOption2(
       "pardiso_skip_inertia_check",
       "Always pretent inertia is correct.",
@@ -152,6 +158,26 @@ namespace Ipopt
       "pardiso_iter_tol_exponent",
       "",
       -14,
+      "");
+    roptions->AddIntegerOption(
+      "pardiso_dropping_schur_exponent",
+      "",
+      -3,
+      "");
+    roptions->AddIntegerOption(
+      "pardiso_dropping_factor_exponent",
+      "",
+      -3,
+      "");
+    roptions->AddIntegerOption(
+      "pardiso_inverse_norm_factor",
+      "",
+      500,
+      "");
+    roptions->AddIntegerOption(
+      "pardiso_max_iter",
+      "",
+      500,
       "");
     roptions->AddStringOption2(
       "pardiso_iterative",
@@ -180,11 +206,23 @@ namespace Ipopt
     options.GetBoolValue("pardiso_skip_inertia_check",
                          skip_inertia_check_, prefix);
     bool pardiso_iterative;
-    options.GetBoolValue("pardiso_iterative", pardiso_iterative,
-                         prefix);
+    options.GetBoolValue("pardiso_iterative", pardiso_iterative, prefix);
     int pardiso_iter_tol_exponent;
     options.GetIntegerValue("pardiso_iter_tol_exponent",
                             pardiso_iter_tol_exponent, prefix);
+    int pardiso_dropping_schur_exponent;
+    options.GetIntegerValue("pardiso_dropping_schur_exponent",
+                            pardiso_dropping_schur_exponent, prefix);
+    int pardiso_dropping_factor_exponent;
+    options.GetIntegerValue("pardiso_dropping_factor_exponent",
+                            pardiso_dropping_factor_exponent, prefix);
+    int pardiso_inverse_norm_factor;
+    options.GetIntegerValue("pardiso_inverse_norm_factor",
+                            pardiso_inverse_norm_factor, prefix);
+    int pardiso_max_iter;
+    options.GetIntegerValue("pardiso_max_iter", pardiso_max_iter, prefix);
+    int pardiso_msglvl;
+    options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
 
     // Number value = 0.0;
 
@@ -261,18 +299,22 @@ namespace Ipopt
     IPARM_[20] = 3; // Results in better accuracy
     IPARM_[23] = 1; // parallel fac
     IPARM_[24] = 1; // parallel solve
+    IPARM_[28] = 0; // 32-bit factorization
+    IPARM_[29] = 1; // we need this for IPOPT interface
     IPARM_[29] = 1; // we need this for IPOPT interface
 
     IPARM_[39] = 4 ;  // it was 4 max fill for factor
+    IPARM_[39] = 10 ;  // it was 4 max fill for factor
     IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
-    IPARM_[41] =-3 ;  // it  exponent dropping value for schur complement
-    IPARM_[42] = 200; // max number of iterations
-    IPARM_[43] = 500 ; // norm of the inverse for algebraic solver
-    IPARM_[44] =-3 ;  // exponent dropping value for incomplete factor
+    IPARM_[41] = pardiso_dropping_schur_exponent;
+    // it  exponent dropping value for schur complement
+    IPARM_[42] = pardiso_max_iter; // max number of iterations
+    IPARM_[43] = pardiso_inverse_norm_factor; // norm of the inverse for algebraic solver
+    IPARM_[44] = pardiso_dropping_factor_exponent ;  // exponent dropping value for incomplete factor
     IPARM_[46] = 1 ;  // mantisse dropping value for incomplete factor
     IPARM_[45] = pardiso_iter_tol_exponent ;  // residual tolerance
     IPARM_[48] = pardiso_iterative ? 1 : 0 ;  // active direct solver
-    if (pardiso_iterative) MSGLVL_ = 2;
+    MSGLVL_ = pardiso_msglvl;
 
     // Option for the out of core variant
     IPARM_[49] = pardiso_out_of_core_power;

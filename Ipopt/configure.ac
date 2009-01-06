@@ -482,6 +482,45 @@ if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$u
   AC_MSG_WARN("You are compiling Ipopt without any linear solver (such as MUMPS).  You will only be able to run Ipopt if you compile a shared library with a linear solver.")
 fi
 
+###################################################
+# Check if user wants inexact algorithm available #
+###################################################
+
+AC_ARG_ENABLE([inexact-solver],
+  [AC_HELP_STRING([--enable-inexact-solver],
+     [enable inexact linear solver version EXPERIMENTAL! (default: no)])],
+  [case "$enableval" in
+     no | yes) ;;
+     *)
+       AC_MSG_ERROR([invalid argument for --enable-inexact-solver: $enableval]);;
+   esac
+   use_inexact=$enableval],
+  [use_inexact=no])
+
+if test $use_inexact = yes; then
+  if test "$use_pardiso" = "no"; then
+    AC_MSG_ERROR([The inexact solver option is currently only available with Pardiso])
+  fi
+  # Check if the global function pointer variable is defined in the Pardiso library
+  SAVE_LIBS="$LIBS"
+  LIBS="$LIBS $FLIBS"
+  AC_LANG_PUSH(C)
+  AC_MSG_CHECKING([if Pardiso library has global variable IpoptFunction])
+  AC_LINK_IFELSE(
+[extern int (*IpoptFunction)(int n, double* x,  double* r, int k, double b);
+
+int main() {
+  IpoptFunction = 0;
+  return 0;
+}],
+    [AC_MSG_RESULT(yes)],
+    [AC_MSG_RESULT(no)
+     AC_MSG_ERROR([Pardiso library not recent enough for the inexact solver option])])
+  AC_LANG_POP(C)
+  LIBS="$SAVE_LIBS"
+fi
+
+
 # For the remaining tests we need to include FLIBS into LIBS, so that
 # the C compiler can link programs
 #LIBS="$LIBS $FLIBS"
@@ -636,6 +675,13 @@ AM_CONDITIONAL([BUILD_LINEARSOLVERLOADER],[test $use_linearsolverloader = yes])
 AM_CONDITIONAL([BUILD_HSLLOADER],[test "$use_MA27" = no -o "$use_MA28" = no -o "$use_MA57" = no -o "$use_MC19" = no])
 AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$use_pardiso" = no])
 
+AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])
+if test $use_inexact = yes; then
+  IPALLLIBS="../Algorithm/Inexact/libinexact.la $IPALLLIBS"
+  AC_DEFINE([BUILD_INEXACT],[1],
+            [Define to 1 if the inexact linear solver option is included])
+fi
+
 ########################################################################
 ##                 Linear solver loader stuff                         ##
 ########################################################################
@@ -685,6 +731,7 @@ AC_CONFIG_FILES([Makefile
 		 src/Interfaces/ipopt_addlibs_cpp.txt
 		 src/Algorithm/Makefile
 		 src/Algorithm/LinearSolvers/Makefile
+		 src/Algorithm/Inexact/Makefile
 		 src/contrib/CGPenalty/Makefile
 		 src/contrib/LinearSolverLoader/Makefile
 		 src/Apps/Makefile

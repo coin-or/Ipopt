@@ -130,6 +130,7 @@ uninstall-local: uninstall-doc
 astyle:
 	cd src/Algorithm; $(MAKE) astyle
 	cd src/Algorithm/LinearSolvers; $(MAKE) astyle
+	cd src/Algorithm/Inexact; $(MAKE) astyle
 	cd src/contrib/CGPenalty; $(MAKE) astyle
 	cd src/Apps/AmplSolver; $(MAKE) astyle
 	cd src/Common; $(MAKE) astyle
