@@ -592,10 +592,10 @@ namespace Ipopt
     }
     write_iajaa_matrix (N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
 
+#if 0
     // MIPS
     Number* rhs_copy=NULL;
     Number norm2_rhs=0.;
-#if 0
     // for debugging with the direct solver
     if (!pardiso_iterative_) {
       rhs_copy = new Number[dim_];
