@@ -145,6 +145,13 @@ namespace Ipopt
       return -1.;
     }
 
+    /** Method returning true of ComputeAlphaForY is implemented for
+     *  this acceptor */
+    virtual bool HasComputeAlphaForY() const
+    {
+      return false;
+    }
+
     /** Methods for OptionsList */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);

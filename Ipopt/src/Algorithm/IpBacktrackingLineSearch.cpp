@@ -86,12 +86,12 @@ namespace Ipopt
       "Method to determine the step size for constraint multipliers.",
       "primal",
       "primal", "use primal step size",
-      "bound_mult", "use step size for the bound multipliers (good for LPs)",
+      "bound-mult", "use step size for the bound multipliers (good for LPs)",
       "min", "use the min of primal and bound multipliers",
       "max", "use the max of primal and bound multipliers",
       "full", "take a full step of size one",
-      "min_dual_infeas", "choose step size minimizing new dual infeasibility",
-      "safe_min_dual_infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
+      "min-dual-infeas", "choose step size minimizing new dual infeasibility",
+      "safer-min-dual-infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
       "primal-and-full", "use the primal step size, and full step if delta_x <= alpha_for_y_tol",
       "dual-and-full", "use the dual step size, and full step if delta_x <= alpha_for_y_tol",
       "acceptor", "Call LSAcceptor to get step size for y",
@@ -195,8 +195,11 @@ namespace Ipopt
     options.GetBoolValue("magic_steps", magic_steps_, prefix);
     options.GetBoolValue("accept_every_trial_step", accept_every_trial_step_, prefix);
     Index enum_int;
-    options.GetEnumValue("alpha_for_y", enum_int, prefix);
+    bool is_default = !options.GetEnumValue("alpha_for_y", enum_int, prefix);
     alpha_for_y_ = AlphaForYEnum(enum_int);
+    if (is_default && acceptor_->HasComputeAlphaForY()) {
+      alpha_for_y_ = LSACCEPTOR_ALPHA_FOR_Y;
+    }
     options.GetNumericValue("alpha_for_y_tol", alpha_for_y_tol_, prefix);
     options.GetNumericValue("expect_infeasible_problem_ctol", expect_infeasible_problem_ctol_, prefix);
     options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
@@ -246,7 +249,7 @@ namespace Ipopt
     DBG_START_METH("BacktrackingLineSearch::FindAcceptableTrialPoint",
                    dbg_verbosity);
     Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                   "--> Starting filter line search in iteration %d <--\n",
+                   "--> Starting line search in iteration %d <--\n",
                    IpData().iter_count());
 
     Number curr_mu = IpData().curr_mu();
@@ -525,7 +528,7 @@ namespace Ipopt
           }
 
           if (!IsValid(resto_phase_)) {
-            THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Filter Line Search Object!");
+            THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Backtracking Line Search Object!");
           }
           // ToDo make the 1e-2 below a parameter?
           if (IpCq().curr_constraint_violation()<=
@@ -764,7 +767,7 @@ namespace Ipopt
         acceptor_->UpdateForNextIteration(alpha_primal_test);
     }
     if (soc_taken) {
-      info_alpha_primal_char = toupper(info_alpha_primal_char);
+      info_alpha_primal_char = (char)toupper(info_alpha_primal_char);
     }
     IpData().Set_info_alpha_primal_char(info_alpha_primal_char);
     IpData().Set_info_ls_count(n_steps+1);
@@ -923,7 +926,7 @@ namespace Ipopt
   BacktrackingLineSearch::PerformMagicStep()
   {
     DBG_START_METH("BacktrackingLineSearch::PerformMagicStep",
-                   2);//dbg_verbosity);
+                   dbg_verbosity);
 
     DBG_PRINT((1,"Incoming barr = %e and constrviol %e\n",
                IpCq().trial_barrier_obj(),
@@ -1022,7 +1025,7 @@ namespace Ipopt
   bool BacktrackingLineSearch::TrySoftRestoStep(SmartPtr<IteratesVector>& actual_delta,
       bool &satisfies_original_criterion)
   {
-    DBG_START_FUN("FilterLSAcceptor::TrySoftRestoStep", dbg_verbosity);
+    DBG_START_FUN("BacktrackingLineSearch::TrySoftRestoStep", dbg_verbosity);
 
     if (soft_resto_pderror_reduction_factor_==0.) {
       return false;

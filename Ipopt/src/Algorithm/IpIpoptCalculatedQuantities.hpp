@@ -85,7 +85,15 @@ namespace Ipopt
      *  quantities. This needs to be called before Initialized. */
     void SetAddCq(SmartPtr<IpoptAdditionalCq> add_cq)
     {
+      DBG_ASSERT(!HaveAddCq());
       add_cq_ = add_cq;
+    }
+
+    /** Method detecting if additional object for calculated
+     *  quantities has already been set */
+    bool HaveAddCq()
+    {
+      return IsValid(add_cq_);
     }
 
     /** This method must be called to initialize the global

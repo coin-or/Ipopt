@@ -244,16 +244,6 @@ namespace Ipopt
     return 1e-16;
   }
 
-  bool PenaltyLSAcceptor::Compare_le(Number lhs, Number rhs, Number BasVal)
-  {
-    DBG_START_FUN("PenaltyLSAcceptor::Compare_le",
-                  dbg_verbosity);
-    DBG_PRINT((1,"lhs = %27.16e rhs = %27.16e  BasVal = %27.16e\n",lhs,rhs,BasVal));
-
-    Number mach_eps = std::numeric_limits<Number>::epsilon();
-    return (lhs - rhs <= 10.*mach_eps*fabs(BasVal));
-  }
-
   void PenaltyLSAcceptor::StartWatchDog()
   {
     DBG_START_FUN("PenaltyLSAcceptor::StartWatchDog", dbg_verbosity);
