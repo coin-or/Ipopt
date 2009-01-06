@@ -167,11 +167,6 @@ namespace Ipopt
      *  objective function and the contraint violation */
     void AugmentFilter();
 
-    /** Check comparison "lhs <= rhs", using machine precision based on BasVal */
-    //ToDo This should probably not be a static member function if we want to
-    //     allow for different relaxation parameters values
-    static bool Compare_le(Number lhs, Number rhs, Number BasVal);
-
     /** @name Parameters for the filter algorithm.  Names as in the paper */
     //@{
     /** \f$ \eta_{\varphi} \f$ */

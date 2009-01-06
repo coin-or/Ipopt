@@ -62,10 +62,11 @@ am_libipoptalg_la_OBJECTS = IpAdaptiveMuUpdate.lo IpAlgBuilder.lo \
 	IpFilterLSAcceptor.lo IpGenAugSystemSolver.lo \
 	IpGradientScaling.lo IpIpoptAlg.lo \
 	IpIpoptCalculatedQuantities.lo IpIpoptData.lo \
-	IpIteratesVector.lo IpLeastSquareMults.lo IpLoqoMuOracle.lo \
+	IpIteratesVector.lo IpLeastSquareMults.lo \
+	IpLimMemQuasiNewtonUpdater.lo IpLoqoMuOracle.lo \
 	IpLowRankAugSystemSolver.lo IpMonotoneMuUpdate.lo \
-	IpNLPScaling.lo IpOptErrorConvCheck.lo IpOrigIpoptNLP.lo \
-	IpOrigIterationOutput.lo IpLimMemQuasiNewtonUpdater.lo \
+	IpNLPBoundsRemover.lo IpNLPScaling.lo IpOptErrorConvCheck.lo \
+	IpOrigIpoptNLP.lo IpOrigIterationOutput.lo \
 	IpPDFullSpaceSolver.lo IpPDPerturbationHandler.lo \
 	IpPDSearchDirCalc.lo IpPenaltyLSAcceptor.lo \
 	IpProbingMuOracle.lo IpQualityFunctionMuOracle.lo \
@@ -135,6 +136,8 @@ BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
 BUILD_HSLLOADER_FALSE = @BUILD_HSLLOADER_FALSE@
 BUILD_HSLLOADER_TRUE = @BUILD_HSLLOADER_TRUE@
+BUILD_INEXACT_FALSE = @BUILD_INEXACT_FALSE@
+BUILD_INEXACT_TRUE = @BUILD_INEXACT_TRUE@
 BUILD_LINEARSOLVERLOADER_FALSE = @BUILD_LINEARSOLVERLOADER_FALSE@
 BUILD_LINEARSOLVERLOADER_TRUE = @BUILD_LINEARSOLVERLOADER_TRUE@
 BUILD_PARDISOLOADER_FALSE = @BUILD_PARDISOLOADER_FALSE@
@@ -302,7 +305,11 @@ sol_cc_compiler = @sol_cc_compiler@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = LinearSolvers
+SUBDIRS = LinearSolvers Inexact
+
+#if BUILD_INEXACT
+#  SUBDIRS += Inexact
+#endif
 noinst_LTLIBRARIES = libipoptalg.la
 libipoptalg_la_SOURCES = \
 	IpAdaptiveMuUpdate.cpp IpAdaptiveMuUpdate.hpp \
@@ -331,17 +338,18 @@ libipoptalg_la_SOURCES = \
 	IpIteratesVector.cpp IpIteratesVector.hpp \
 	IpIterationOutput.hpp \
 	IpLeastSquareMults.cpp IpLeastSquareMults.hpp \
+	IpLimMemQuasiNewtonUpdater.cpp IpLimMemQuasiNewtonUpdater.hpp \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.cpp IpLoqoMuOracle.hpp \
 	IpLowRankAugSystemSolver.cpp IpLowRankAugSystemSolver.hpp \
 	IpMonotoneMuUpdate.cpp IpMonotoneMuUpdate.hpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp \
+	IpNLPBoundsRemover.cpp IpNLPBoundsRemover.hpp \
 	IpNLPScaling.cpp IpNLPScaling.hpp \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \
 	IpOrigIpoptNLP.cpp IpOrigIpoptNLP.hpp \
 	IpOrigIterationOutput.cpp IpOrigIterationOutput.hpp \
-	IpLimMemQuasiNewtonUpdater.cpp IpLimMemQuasiNewtonUpdater.hpp \
 	IpPDFullSpaceSolver.cpp IpPDFullSpaceSolver.hpp \
 	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
 	IpPDSearchDirCalc.cpp IpPDSearchDirCalc.hpp \
@@ -405,17 +413,18 @@ ASTYLE_FILES = \
 	IpIteratesVector.cppbak IpIteratesVector.hppbak \
 	IpIterationOutput.hppbak \
 	IpLeastSquareMults.cppbak IpLeastSquareMults.hppbak \
+	IpLimMemQuasiNewtonUpdater.cppbak IpLimMemQuasiNewtonUpdater.hppbak \
 	IpLineSearch.hppbak \
 	IpLoqoMuOracle.cppbak IpLoqoMuOracle.hppbak \
 	IpLowRankAugSystemSolver.cppbak IpLowRankAugSystemSolver.cppbak \
 	IpMonotoneMuUpdate.cppbak IpMonotoneMuUpdate.hppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
+	IpNLPBoundsRemover.cppbak IpNLPBoundsRemover.hppbak \
 	IpNLPScaling.cppbak IpNLPScaling.hppbak \
 	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
 	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \
 	IpOrigIterationOutput.cppbak IpOrigIterationOutput.hppbak \
-	IpLimMemQuasiNewtonUpdater.cppbak IpLimMemQuasiNewtonUpdater.hppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
 	IpPDSearchDirCalc.cppbak IpPDSearchDirCalc.hppbak \
@@ -511,6 +520,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLoqoMuOracle.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLowRankAugSystemSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMonotoneMuUpdate.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNLPBoundsRemover.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNLPScaling.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptErrorConvCheck.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOrigIpoptNLP.Plo@am__quote@

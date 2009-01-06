@@ -8,7 +8,11 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = LinearSolvers
+SUBDIRS = LinearSolvers Inexact
+
+#if BUILD_INEXACT
+#  SUBDIRS += Inexact
+#endif
 
 noinst_LTLIBRARIES = libipoptalg.la
 
@@ -39,17 +43,18 @@ libipoptalg_la_SOURCES = \
 	IpIteratesVector.cpp IpIteratesVector.hpp \
 	IpIterationOutput.hpp \
 	IpLeastSquareMults.cpp IpLeastSquareMults.hpp \
+	IpLimMemQuasiNewtonUpdater.cpp IpLimMemQuasiNewtonUpdater.hpp \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.cpp IpLoqoMuOracle.hpp \
 	IpLowRankAugSystemSolver.cpp IpLowRankAugSystemSolver.hpp \
 	IpMonotoneMuUpdate.cpp IpMonotoneMuUpdate.hpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp \
+	IpNLPBoundsRemover.cpp IpNLPBoundsRemover.hpp \
 	IpNLPScaling.cpp IpNLPScaling.hpp \
 	IpOptErrorConvCheck.cpp IpOptErrorConvCheck.hpp \
 	IpOrigIpoptNLP.cpp IpOrigIpoptNLP.hpp \
 	IpOrigIterationOutput.cpp IpOrigIterationOutput.hpp \
-	IpLimMemQuasiNewtonUpdater.cpp IpLimMemQuasiNewtonUpdater.hpp \
 	IpPDFullSpaceSolver.cpp IpPDFullSpaceSolver.hpp \
 	IpPDPerturbationHandler.cpp IpPDPerturbationHandler.hpp \
 	IpPDSearchDirCalc.cpp IpPDSearchDirCalc.hpp \
@@ -119,17 +124,18 @@ ASTYLE_FILES = \
 	IpIteratesVector.cppbak IpIteratesVector.hppbak \
 	IpIterationOutput.hppbak \
 	IpLeastSquareMults.cppbak IpLeastSquareMults.hppbak \
+	IpLimMemQuasiNewtonUpdater.cppbak IpLimMemQuasiNewtonUpdater.hppbak \
 	IpLineSearch.hppbak \
 	IpLoqoMuOracle.cppbak IpLoqoMuOracle.hppbak \
 	IpLowRankAugSystemSolver.cppbak IpLowRankAugSystemSolver.cppbak \
 	IpMonotoneMuUpdate.cppbak IpMonotoneMuUpdate.hppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
+	IpNLPBoundsRemover.cppbak IpNLPBoundsRemover.hppbak \
 	IpNLPScaling.cppbak IpNLPScaling.hppbak \
 	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
 	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \
 	IpOrigIterationOutput.cppbak IpOrigIterationOutput.hppbak \
-	IpLimMemQuasiNewtonUpdater.cppbak IpLimMemQuasiNewtonUpdater.hppbak \
 	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
 	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
 	IpPDSearchDirCalc.cppbak IpPDSearchDirCalc.hppbak \

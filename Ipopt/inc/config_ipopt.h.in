@@ -1,5 +1,8 @@
 /* inc/config_ipopt.h.in.  Generated from configure.ac by autoheader.  */
 
+/* Define to 1 if the inexact linear solver option is included */
+#undef BUILD_INEXACT
+
 /* If defined, the Ampl Solver Library is available. */
 #undef COIN_HAS_ASL
 
