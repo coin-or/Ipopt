@@ -16,8 +16,9 @@
 namespace Ipopt
 {
 
-  /** Filter line search.  This class implements the filter line
-   *  search procedure. 
+  /** Penalty function line search.  This class implements the penalty
+   *  function line search procedure as proposed by Waltz, Morales,
+   *  Nocedal, Orban.
    */
   class PenaltyLSAcceptor : public BacktrackingLSAcceptor
   {
@@ -52,8 +53,7 @@ namespace Ipopt
 
     /** Method that is called before the restoration phase is called.
      *  Here, we can set up things that are required in the
-     *  termination test for the restoration phase, such as augmenting
-     *  a filter. */
+     *  termination test for the restoration phase. */
     virtual void PrepareRestoPhaseStart();
 
     /** Method returning the lower bound on the trial step sizes. */
@@ -70,12 +70,13 @@ namespace Ipopt
      *  first trial step (with incoming alpha_primal) has been reject,
      *  this tries up to max_soc_ second order corrections for the
      *  constraints.  Here, alpha_primal_test is the step size that
-     *  has to be used in the filter acceptance tests.  On output
-     *  actual_delta_ has been set to the step including the
+     *  has to be used in the penalty function acceptance tests.  On
+     *  output actual_delta_ has been set to the step including the
      *  second order correction if it has been accepted, otherwise it
      *  is unchanged.  If the SOC step has been accepted, alpha_primal
-     *  has the fraction-to-the-boundary value for the SOC step on output.
-     *  The return value is true, if a SOC step has been accepted.
+     *  has the fraction-to-the-boundary value for the SOC step on
+     *  output.  The return value is true, if a SOC step has been
+     *  accepted.
      */
     virtual bool TrySecondOrderCorrection(Number alpha_primal_test,
                                           Number& alpha_primal,
@@ -92,9 +93,9 @@ namespace Ipopt
                               SmartPtr<IteratesVector>& actual_delta);
 
     /** Method for ending the current line search.  When it is called,
-     *  the internal data should be updates, e.g., the filter might be
-     *  augmented.  alpha_primal_test is the value of alpha that has
-     *  been used for in the acceptence test ealier. */
+     *  the internal data should be updates.  alpha_primal_test is the
+     *  value of alpha that has been used for in the acceptence test
+     *  ealier. */
     virtual char UpdateForNextIteration(Number alpha_primal_test);
 
     /** Method for setting internal data if the watchdog procedure is
@@ -139,12 +140,8 @@ namespace Ipopt
     /** Compute predicted reduction for given step size */
     Number CalcPred(Number alpha);
 
-    /** Check comparison "lhs <= rhs", using machine precision based on BasVal */
-    //ToDo This should probably not be a static member function if we want to
-    //     allow for different relaxation parameters values
-    static bool Compare_le(Number lhs, Number rhs, Number BasVal);
-
-    /** @name Parameters for the filter algorithm.  Names as in the paper */
+    /** @name Parameters for the penalty function line search
+     *  algorithm.  Names as in the filter paper */
     //@{
     /** Initial value of penalty parameter */
     Number nu_init_;

@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id$
+// $Id: IpNLP.hpp 949 2007-03-27 00:41:26Z andreasw $
 //
 // Authors:  Andreas Waechter           IBM    2008-08-25
 

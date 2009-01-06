@@ -423,7 +423,10 @@ namespace Ipopt
     if (!trial_slack_s_U_cache_.GetCachedResult1Dep(result, *s)) {
       if (!curr_slack_s_U_cache_.GetCachedResult1Dep(result, *s)) {
         SmartPtr<const Matrix> P = ip_nlp_->Pd_U();
+        DBG_PRINT_VECTOR(2, "d_U", *s_bound);
+        DBG_PRINT_VECTOR(2, "s", *s);
         result = CalcSlack_U(*P, *s, *s_bound);
+        DBG_PRINT_VECTOR(2, "result", *result);
         DBG_ASSERT(num_adjusted_slack_s_U_==0);
         num_adjusted_slack_s_U_ =
           CalculateSafeSlack(result, s_bound, s, ip_data_->curr()->v_U());
@@ -1270,6 +1273,8 @@ namespace Ipopt
 
     if (!curr_jac_d_times_vec_cache_.GetCachedResult2Dep(result, *x, vec)) {
       SmartPtr<Vector> tmp = ip_data_->curr()->s()->MakeNew();
+      DBG_PRINT_VECTOR(1, "vec", vec);
+      DBG_PRINT_MATRIX(2, "curr_jac_d()", *curr_jac_d());
       curr_jac_d()->MultVector(1.0, vec, 0., *tmp);
       result = ConstPtr(tmp);
       curr_jac_d_times_vec_cache_.AddCachedResult2Dep(result, *x, vec);

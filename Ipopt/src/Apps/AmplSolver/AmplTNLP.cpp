@@ -666,7 +666,6 @@ namespace Ipopt
       g = new double[m];
       allocated = true;
     }
-
     conval(const_cast<Number*>(x), g, (fint*)nerror_);
 
     if (allocated) {

@@ -11,6 +11,7 @@
 
 #include "mex.h"
 #include <string>
+#include <cstring>
 
 // Function declarations.
 // -----------------------------------------------------------------
