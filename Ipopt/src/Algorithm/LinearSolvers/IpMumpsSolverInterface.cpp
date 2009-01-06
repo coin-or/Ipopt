@@ -346,6 +346,10 @@ namespace Ipopt
                    "           scaling will be %d.\n",
                    mumps_data->icntl[7]);
 
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+    }
+
     //return appropriat value
     if (error == -6) {//system is singular
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -357,10 +361,6 @@ namespace Ipopt
                      "Error=%d returned from MUMPS in Factorization.\n",
                      error);
       return SYMSOLVER_FATAL_ERROR;
-    }
-
-    if (HaveIpData()) {
-      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
     }
 
     return SYMSOLVER_SUCCESS;
