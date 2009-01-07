@@ -95,7 +95,8 @@ namespace Ipopt
       return retval;
     }
 
-    if (Min(norm2_resid/norm2_rhs,norm2_resid) > inexact_normal_tol_) {
+    //if (Min(norm2_resid/norm2_rhs,norm2_resid) > inexact_normal_tol_) {
+    if (norm2_resid/norm2_rhs > inexact_normal_tol_ && norm2_resid > 1e-10) {
       return retval;
     }
 
