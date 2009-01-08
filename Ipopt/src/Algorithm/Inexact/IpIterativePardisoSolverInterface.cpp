@@ -66,7 +66,7 @@ extern "C"
   }
 
   // The following global function pointer is defined in the Pardiso library
-  extern int (*IpoptFunction)(int n, double* x,  double* r, int k, double b);
+  void SetIpoptCallbackFunction(int (*IpoptFunction)(int n, double* x,  double* r, int k, double b));
 }
 
 /** Prototypes for Pardiso's subroutines */
@@ -265,7 +265,7 @@ namespace Ipopt
     // Option for the out of core variant
     IPARM_[49] = pardiso_out_of_core_power;
 
-    IpoptFunction=&IpoptTerminationTest;
+    SetIpoptCallbackFunction(&IpoptTerminationTest);
 
     bool retval = normal_tester_->Initialize(Jnlst(), IpNLP(), IpData(),
                   IpCq(), options, prefix);
