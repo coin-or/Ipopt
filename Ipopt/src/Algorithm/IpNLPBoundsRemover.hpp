@@ -214,6 +214,11 @@ namespace Ipopt
       nlp_->GetQuasiNewtonApproximationSpaces(approx_space, P_approx);
     }
 
+    /** Accessor method to the original NLP */
+    SmartPtr<NLP> nlp() {
+      return nlp_;
+    }
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
