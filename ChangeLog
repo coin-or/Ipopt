@@ -2,8 +2,12 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2009-01-13 releases/3.5.5
+        - minor fixes regarding compilation
+        - undocumented version of inexact method
+
 2008-09-29 releases/3.5.4
-        - changed to MUMPS version 4.8.3 in externals (Mumps developersi
+        - changed to MUMPS version 4.8.3 in externals (Mumps developers
           seem to have removed 4.8.1).
 
 2008-09-19 releases/3.5.3
