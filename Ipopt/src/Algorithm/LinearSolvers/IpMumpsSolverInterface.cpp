@@ -10,16 +10,15 @@
 //           (major revision)
 //           (incorporated by AW on 2006-11-11 into Ipopt package)
 
+// The first header to include is the one for MPI.  We need to make sure
+// that we are using C calling mangling
+extern "C" {
+# include "mpi.h"
+}
+
 #include "IpMumpsSolverInterface.hpp"
 
-extern "C"
-{
 #include "dmumps_c.h"
-  // The following line is a fix for otherwise twice-defined global variable
-  // (This would have to be taken out for a parallel MUMPS version!)
-#define MPI_COMM_WORLD IPOPT_MPI_COMM_WORLD
-#include "mpi.h"
-}
 
 #ifdef HAVE_CMATH
 # include <cmath>
