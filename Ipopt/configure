@@ -31233,6 +31233,8 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+SAVE_ADDLIBS="$ADDLIBS"
+ADDLIBS="$ADDLIBS $FLIBS"
 
   echo "$as_me:$LINENO: checking if user provides library for mumps" >&5
 echo $ECHO_N "checking if user provides library for mumps... $ECHO_C" >&6
@@ -31424,6 +31426,7 @@ else
 fi
 
 
+ADDLIBS="$SAVE_ADDLIBS"
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
