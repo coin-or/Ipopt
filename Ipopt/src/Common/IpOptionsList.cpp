@@ -457,14 +457,25 @@ namespace Ipopt
 
     std::string strvalue;
     if (find_tag(tag, prefix, strvalue)) {
+      // Some people like to use 'd' instead of 'e' in floating point
+      // numbers.  Therefore, we change a 'd' to an 'e'
+      char* buffer = new char[strvalue.length()+1];
+      strcpy(buffer, strvalue.c_str());
+      for (int i=0; i<strvalue.length(); ++i) {
+        if (buffer[i]=='d' || buffer[i]=='D') {
+          buffer[i] = 'e';
+        }
+      }
       char* p_end;
-      Number retval = strtod(strvalue.c_str(), &p_end);
+      Number retval = strtod(buffer, &p_end);
       if (*p_end!='\0' && !isspace(*p_end)) {
+        delete [] buffer;
         std::string msg = "Option \"" + tag +
                           "\": Double value expected, but non-numeric value \"" +
                           strvalue+"\" found.\n";
         THROW_EXCEPTION(OPTION_INVALID, msg);
       }
+      delete [] buffer;
       value = retval;
       return true;
     }
@@ -623,14 +634,25 @@ namespace Ipopt
                            "Error setting string value read from option file.");
         }
         else if (option->Type() == OT_Number) {
+          // Some people like to use 'd' instead of 'e' in floating
+          // point numbers.  Therefore, we change a 'd' to an 'e'
+          char* buffer = new char[value.length()+1];
+          strcpy(buffer, value.c_str());
+          for (int i=0; i<value.length(); ++i) {
+            if (buffer[i]=='d' || buffer[i]=='D') {
+              buffer[i] = 'e';
+            }
+          }
           char* p_end;
-          Number retval = strtod(value.c_str(), &p_end);
+          Number retval = strtod(buffer, &p_end);
           if (*p_end!='\0' && !isspace(*p_end)) {
+            delete [] buffer;
             std::string msg = "Option \"" + tag +
                               "\": Double value expected, but non-numeric option value \"" +
                               value + "\" found.\n";
             THROW_EXCEPTION(OPTION_INVALID, msg);
           }
+          delete [] buffer;
           bool result = SetNumericValue(tag, retval, false);
           ASSERT_EXCEPTION(result, OPTION_INVALID,
                            "Error setting numeric value read from file.");

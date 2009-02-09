@@ -215,7 +215,8 @@ namespace Ipopt
     }
 
     /** Accessor method to the original NLP */
-    SmartPtr<NLP> nlp() {
+    SmartPtr<NLP> nlp()
+    {
       return nlp_;
     }
 
