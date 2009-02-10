@@ -172,6 +172,8 @@ namespace Ipopt
     Number nu_init_;
     /** Initial value of lower penalty parameter */
     Number nu_low_init_;
+    /** Factor in update rule for lower penalty parameter */
+    Number nu_low_fact_;
     /** Incrememt for penalty parameter */
     Number nu_inc_;
     /** \f$ \eta_{\varphi} \f$ */

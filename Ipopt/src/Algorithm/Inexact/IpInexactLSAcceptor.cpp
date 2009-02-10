@@ -74,6 +74,11 @@ namespace Ipopt
       "Curtis/Nocedal flexible penalty function line search procedure.  This "
       "must be smaller or equal to the intial value of the upper penalty "
       "parameter, see option \"nu_init\".");
+    roptions->AddLowerBoundedNumberOption(
+      "nu_low_fact",
+      "Factor in update rule for nu_low in flexible penalty function.",
+      0.0, true, 1e-4,
+      "");
   }
 
   bool InexactLSAcceptor::InitializeImpl(const OptionsList& options,
@@ -95,6 +100,7 @@ namespace Ipopt
       options.GetNumericValue("nu_low_init", nu_low_init_, prefix);
       ASSERT_EXCEPTION(nu_low_init_<=nu_init_, OPTION_INVALID,
                        "Option \"nu_low_init\" must be smaller or equal to \"nu_init\"");
+      options.GetNumericValue("nu_low_fact", nu_low_fact_, prefix);
     }
 
     // The following options have been declared in FilterLSAcceptor
@@ -278,7 +284,7 @@ namespace Ipopt
         // update the lower penalty parameter if necessary
         if (!accept_low) {
           Number nu_real = -(trial_barr - reference_barr_)/(trial_theta - reference_theta_);
-          nu_low_ = Min(nu_, nu_low_ + Max(0.1*(nu_real-nu_low_), nu_inc_));
+          nu_low_ = Min(nu_, nu_low_ + Max(nu_low_fact_*(nu_real-nu_low_), nu_inc_));
 
           Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                          "Updating nu_low to %8.2e with nu_real = %8.2e\n", nu_low_, nu_real);
