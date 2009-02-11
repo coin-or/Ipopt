@@ -156,6 +156,9 @@ namespace Ipopt
       Number nu_mid = nu_;
       Number norm_delta_xs = Max(delta_x->Amax(), delta_s->Amax());
       last_nu_ = nu_;
+      if (flexible_penalty_function_) {
+        last_nu_low_ = nu_low_;
+      }
       in_tt2_ = false;
       if (norm_delta_xs == 0.) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
@@ -176,7 +179,6 @@ namespace Ipopt
           nu_mid = nu_;
         }
         if (flexible_penalty_function_) {
-          last_nu_low_ = nu_low_;
           nu_mid = Max(nu_low_, nu_trial);
           Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                          "   nu_low = %8.2e\n", nu_low_);
