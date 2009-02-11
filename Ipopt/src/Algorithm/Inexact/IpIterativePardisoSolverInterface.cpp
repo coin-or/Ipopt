@@ -156,20 +156,24 @@ namespace Ipopt
                             pardiso_out_of_core_power, prefix);
     options.GetBoolValue("pardiso_skip_inertia_check",
                          skip_inertia_check_, prefix);
-    int pardiso_iter_tol_exponent;
-    options.GetIntegerValue("pardiso_iter_tol_exponent",
-                            pardiso_iter_tol_exponent, prefix);
-    int pardiso_dropping_schur_exponent;
     options.GetIntegerValue("pardiso_dropping_schur_exponent",
-                            pardiso_dropping_schur_exponent, prefix);
-    int pardiso_dropping_factor_exponent;
+                            pardiso_dropping_schur_exponent_, prefix);
     options.GetIntegerValue("pardiso_dropping_factor_exponent",
-                            pardiso_dropping_factor_exponent, prefix);
-    int pardiso_inverse_norm_factor;
+                            pardiso_dropping_factor_exponent_, prefix);
     options.GetIntegerValue("pardiso_inverse_norm_factor",
-                            pardiso_inverse_norm_factor, prefix);
-    int pardiso_max_iter;
-    options.GetIntegerValue("pardiso_max_iter", pardiso_max_iter, prefix);
+                            pardiso_inverse_norm_factor_, prefix);
+    options.GetIntegerValue("pardiso_max_iter", pardiso_max_iter_, prefix);
+    options.GetIntegerValue("pardiso_dropping_schur_exponent",
+                            normal_pardiso_dropping_schur_exponent_,
+                            prefix+"normal.");
+    options.GetIntegerValue("pardiso_dropping_factor_exponent",
+                            normal_pardiso_dropping_factor_exponent_,
+                            prefix+"normal.");
+    options.GetIntegerValue("pardiso_inverse_norm_factor",
+                            normal_pardiso_inverse_norm_factor_,
+                            prefix+"normal.");
+    options.GetIntegerValue("pardiso_max_iter", normal_pardiso_max_iter_,
+                            prefix+"normal.");
     int pardiso_msglvl;
     options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
 
@@ -252,13 +256,7 @@ namespace Ipopt
 
     IPARM_[39] = 10 ;  // it was 4 max fill for factor
     IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
-    IPARM_[41] = pardiso_dropping_schur_exponent;
-    // it  exponent dropping value for schur complement
-    IPARM_[42] = pardiso_max_iter; // max number of iterations
-    IPARM_[43] = pardiso_inverse_norm_factor; // norm of the inverse for algebraic solver
-    IPARM_[44] = pardiso_dropping_factor_exponent ;  // exponent dropping value for incomplete factor
     IPARM_[46] = 1 ;  // mantisse dropping value for incomplete factor
-    IPARM_[45] = pardiso_iter_tol_exponent ;  // residual tolerance
     IPARM_[48] = 1 ;  // iterative solver
     MSGLVL_ = pardiso_msglvl;
 
@@ -480,6 +478,25 @@ namespace Ipopt
         debug_last_iter_ = 0;
       }
 
+      bool is_normal = false;
+      if (!IsValid(InexData().normal_x())) {
+        is_normal = true;
+      }
+      if (is_normal) {
+        IPARM_[41] = normal_pardiso_dropping_schur_exponent_;
+        // it  exponent dropping value for schur complement
+        IPARM_[42] = normal_pardiso_max_iter_; // max number of iterations
+        IPARM_[43] = normal_pardiso_inverse_norm_factor_; // norm of the inverse for algebraic solver
+        IPARM_[44] = normal_pardiso_dropping_factor_exponent_;  // exponent dropping value for incomplete factor
+      }
+      else {
+        IPARM_[41] = pardiso_dropping_schur_exponent_;
+        // it  exponent dropping value for schur complement
+        IPARM_[42] = pardiso_max_iter_; // max number of iterations
+        IPARM_[43] = pardiso_inverse_norm_factor_; // norm of the inverse for algebraic solver
+        IPARM_[44] = pardiso_dropping_factor_exponent_;  // exponent dropping value for incomplete factor
+      }
+
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                                 &PHASE, &N, a_, ia, ja, &PERM,
                                 &NRHS, IPARM_, &MSGLVL_, &B, &X,
@@ -508,41 +525,10 @@ namespace Ipopt
       if (IPARM_[13] != 0) {
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
-#if 0
-        if ( !pardiso_redo_symbolic_fact_only_if_inertia_wrong_ ||
-             (negevals_ != numberOfNegEVals) ) {
-          if (HaveIpData()) {
-            IpData().Append_info_string("Pn");
-          }
-          have_symbolic_factorization_ = false;
-          // We assume now that if there was just a symbolic
-          // factorization and we still have perturbed pivots, that
-          // the system is actually singular, if
-          // pardiso_repeated_perturbation_means_singular_ is true
-          if (just_performed_symbolic_factorization) {
-            if (pardiso_repeated_perturbation_means_singular_) {
-              if (HaveIpData()) {
-                IpData().Append_info_string("Ps");
-              }
-              return SYMSOLVER_SINGULAR;
-            }
-            else {
-              done = true;
-            }
-          }
-          else {
-            done = false;
-          }
+        if (HaveIpData()) {
+          IpData().Append_info_string("Pp");
         }
-        else {
-#endif
-          if (HaveIpData()) {
-            IpData().Append_info_string("Pp");
-          }
-          done = true;
-#if 0
-        }
-#endif
+        done = true;
       }
       else {
         done = true;
@@ -592,20 +578,6 @@ namespace Ipopt
     }
     write_iajaa_matrix (N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
 
-#if 0
-    // MIPS
-    Number* rhs_copy=NULL;
-    Number norm2_rhs=0.;
-    // for debugging with the direct solver
-    if (!pardiso_iterative_) {
-      rhs_copy = new Number[dim_];
-      for (int i=0; i<dim_; i++) {
-        rhs_copy[i] = rhs_vals[i];
-      }
-      norm2_rhs = IpBlasDnrm2(dim_, rhs_vals, 1);
-    }
-#endif
-
     IterativeSolverTerminationTester* tester;
     bool is_normal = false;
     if (!IsValid(InexData().normal_x())) {
@@ -626,27 +598,6 @@ namespace Ipopt
                               &ERROR);
 
     delete [] X; /* OLAF/MICHAEL: do we really need X? */
-
-#if 0
-    // for debugging
-    if (!pardiso_iterative_) {
-      // MIPS
-      // Compute the residual (overwrite the RHS)
-      for (int irow = 0; irow<dim_; irow++) {
-        for (int j=ia[irow]; j<ia[irow+1]; j++) {
-          int jcol = ja[j-1]-1;
-          rhs_copy[irow] -= a_[j-1]*rhs_vals[jcol];
-          if (jcol!=irow) {
-            rhs_copy[jcol] -= a_[j-1]*rhs_vals[irow];
-          }
-        }
-      }
-      bool cretval = IpoptTerminationTest(dim_, rhs_vals, rhs_copy, 4, norm2_rhs);
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "retval from IpoptTerminationTest = %d\n", cretval);
-      delete [] rhs_copy;
-    }
-#endif
 
     Index iterations_used = tester->GetSolverIterations();
     if (is_normal) {
