@@ -156,6 +156,19 @@ namespace Ipopt
     bool skip_inertia_check_;
     //@}
 
+    /** Options for the preconditioner */
+    //@{
+    Index pardiso_max_iter_;
+    Index pardiso_dropping_schur_exponent_;
+    Index pardiso_dropping_factor_exponent_;
+    Index pardiso_inverse_norm_factor_;
+
+    Index normal_pardiso_max_iter_;
+    Index normal_pardiso_dropping_schur_exponent_;
+    Index normal_pardiso_dropping_factor_exponent_;
+    Index normal_pardiso_inverse_norm_factor_;
+    //@}
+
     /** @name Initialization flags */
     //@{
     /** Flag indicating if internal data is initialized.
