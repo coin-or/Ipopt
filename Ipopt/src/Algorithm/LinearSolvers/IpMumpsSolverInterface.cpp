@@ -12,7 +12,8 @@
 
 // The first header to include is the one for MPI.  We need to make sure
 // that we are using C calling mangling
-extern "C" {
+extern "C"
+{
 # include "mpi.h"
 }
 

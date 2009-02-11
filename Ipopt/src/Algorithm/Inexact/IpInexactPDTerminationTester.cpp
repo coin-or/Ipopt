@@ -50,6 +50,12 @@ namespace Ipopt
       1e-12,
       "");
     roptions->AddLowerBoundedNumberOption(
+      "tcc_theta_mu_exponent",
+      "exponent for mu when multiplied with tcc_theta in Tangential Component Condition.",
+      0., false,
+      0.,
+      "");
+    roptions->AddLowerBoundedNumberOption(
       "tcc_zeta",
       "zeta factor in Tangential Component Condition.",
       0.0, true,
@@ -97,6 +103,7 @@ namespace Ipopt
   {
     options.GetNumericValue("tcc_psi", tcc_psi_, prefix);
     options.GetNumericValue("tcc_theta", tcc_theta_, prefix);
+    options.GetNumericValue("tcc_theta_mu_exponent", tcc_theta_mu_exponent_, prefix);
     options.GetNumericValue("tcc_zeta", tcc_zeta_, prefix);
     options.GetNumericValue("tt_kappa1", tt_kappa1_, prefix);
     options.GetNumericValue("tt_kappa2", tt_kappa2_, prefix);
@@ -327,13 +334,14 @@ namespace Ipopt
 
     // check the first of the second pair of TCC (also needed in
     // Hessian update check)
-    rhs = tcc_theta_*pow(u_norm_scaled, 2);
+    const Number mu = IpData().curr_mu();
+    rhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*pow(u_norm_scaled, 2);
     lhs = 0.5*uWu;
     //const Number mach_eps_sqrt = pow(std::numeric_limits<Number>::epsilon(),0.5);
     //const Number mach_eps_sqrt = pow(std::numeric_limits<Number>::epsilon(),0.25);
     //BasVal = Max(IpData().curr()->x()->Amax(), IpData().curr()->s()->Amax())/mach_eps_sqrt;
     // check the second inequality of the tangential component condition
-    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*tangential_norm^2(=%23.16e) -->", lhs, rhs);
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*tangential_norm^2(=%23.16e) -->", lhs, rhs);
     bool tcc2a = Compare_le(rhs, lhs, BasVal);
     if (tcc2a) {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");

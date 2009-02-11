@@ -83,6 +83,9 @@ namespace Ipopt
     Number tcc_psi_;
     /** theta factor in the tangential component condition */
     Number tcc_theta_;
+    /** mu exponent when multiplied to theta in the tangential
+     *  component condition */
+    Number tcc_theta_mu_exponent_;
     /** zeta factor in the tangential component condition */
     Number tcc_zeta_;
     /** kappa_1 factor in termination test 1 */
