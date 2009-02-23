@@ -28588,7 +28588,7 @@ echo "$as_me: error: option \"BUILD\" specified for LAPACK, but $coin_lapackobjd
    { (exit 1); exit 1; }; }
       fi
     fi
-  else
+  elif test "$use_lapack" != no; then
     echo "$as_me:$LINENO: checking whether user supplied LAPACKLIB=\"$use_lapack\" works" >&5
 echo $ECHO_N "checking whether user supplied LAPACKLIB=\"$use_lapack\" works... $ECHO_C" >&6
     LIBS="$use_lapack $LIBS"
@@ -30540,7 +30540,7 @@ else
 fi
 
 
-if test x"$use_lapack" = x; then
+if test x"$use_lapack" = x || test "$use_lapack" = no; then
   coin_has_lapack=no
 else
   coin_has_lapack=yes
