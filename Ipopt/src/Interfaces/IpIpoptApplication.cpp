@@ -199,7 +199,13 @@ namespace Ipopt
         else {
           file_print_level = print_level;
         }
-        OpenOutputFile(output_filename, file_print_level);
+        bool openend = OpenOutputFile(output_filename, file_print_level);
+        if (!openend) {
+          jnlst_->Printf(J_ERROR, J_INITIALIZATION,
+                         "Error opening output file \"%s\"\n",
+                         output_filename.c_str());
+          return Invalid_Option;
+        }
       }
 
       // output a description of all the options
@@ -954,6 +960,11 @@ namespace Ipopt
       file_jrnl = jnlst_->AddFileJournal("OutputFile:"+file_name,
                                          file_name.c_str(),
                                          print_level);
+    }
+
+    // Check, if the output file could be created properly
+    if (IsNull(file_jrnl)) {
+      return false;
     }
 
     file_jrnl->SetPrintLevel(J_DBG, J_NONE);
