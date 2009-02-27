@@ -53,6 +53,9 @@ OBJS   = matlabexception.@OBJEXT@      \
          matlabprogram.@OBJEXT@        \
          ipopt.@OBJEXT@
 
+SRCDIR = @srcdir@
+VPATH = $(SRCDIR)
+
 all: install
 
 install: $(TARGET)
