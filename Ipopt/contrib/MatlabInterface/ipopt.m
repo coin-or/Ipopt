@@ -47,12 +47,16 @@
 %     matrix whereby an entry is nonzero if and only if the Jacobian of
 %     the constraints is nonzero at ANY point.
 %
-%     funcs.hessian (required)
+%     funcs.hessian (optional)
 %
-%     Evaluates the Hessian of the Lagrangian at the current point. It has
-%     three inputs: the current point (x), a scalar factor on the objective
-%     (sigma), and the Lagrange multipliers (lambda), a vector of length
-%     equal to the number of constraints. The function should compute
+%     Evaluates the Hessian of the Lagrangian at the current point. It
+%     must be specified unless you choose to use the limited-memory
+%     quasi-Newton approximation to the Hessian (see below).
+% 
+%     The callback function has three inputs: the current point (x), a
+%     scalar factor on the objective (sigma), and the Lagrange multipliers
+%     (lambda), a vector of length equal to the number of constraints. The
+%     function should compute
 %                  
 %        sigma*H + lambda(1)*G1 + ... + lambda(M)*GM
 %
@@ -62,11 +66,12 @@
 %     matrix, where N is the number of variables. In other words, if X is
 %     the output value, then X must be the same as TRIL(X).
 %
-%     funcs.hessianstructure (required)
+%     funcs.hessianstructure (optional)
 % 
 %     This function serves the same purpose as funcs.jacobianstructure, but
-%     for the Hessian matrix. It takes no inputs, and must return a sparse,
-%     lower triangular matrix.
+%     for the Hessian matrix. Again, it is not needed if you are using the
+%     limited-memory quasi-Newton approximation to the Hessian. It takes no
+%     inputs, and must return a sparse, lower triangular matrix.
 %
 %     funcs.iterfunc (optional)
 %

@@ -106,40 +106,6 @@ work in the MATLAB interface for IPOPT");
     // Free the dynamically allocated memory.
     mxDestroyArray(x0);
 
-//     // OLD STUFF
-//     // ---------
-//     // If requested, create the output that will store the values of
-//     // the multipliers obtained when IPOPT converges to a stationary
-//     // point. This output is a MATLAB structure with three fields, two
-//     // for the final values of the upper and lower bound multipliers,
-//     // and one for the constraint multipliers.
-//     Multipliers* multipliers = 0;
-//     if (nlhs > l)
-//       multipliers = new Multipliers(plhs[l++],x.numelems(),
-// 				    constraintlb.length());
-
-//     // Get the iterative callback function.
-//     MatlabFunctionHandle* iterFunc = new MatlabFunctionHandle();
-//     ptr = prhs[k++];
-//     if (nrhs > 11)
-//       if (!mxIsEmpty(ptr)) {
-// 	delete iterFunc;
-// 	iterFunc = new MatlabFunctionHandle(ptr);
-//       }
-
-//     // Get the initial Lagrange multipliers, if provided.
-//     Multipliers* initialMultipliers = 0;
-//     ptr = prhs[k++];
-//     app.Options()->SetStringValue("warm_start_init_point","no");
-//     if (nrhs > 12) 
-//       if (!mxIsEmpty(ptr)) {
-// 	initialMultipliers = new Multipliers(ptr);
-
-// 	// Notify the IPOPT algorithm that we will provide our own
-// 	// values for the initial Lagrange multipliers.
-// 	app.Options()->SetStringValue("warm_start_init_point","yes");
-//       }
-
   } catch (std::exception& error) {
     mexErrMsgTxt(error.what());
   }
