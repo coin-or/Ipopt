@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE IPOPTSRCDIR IPOPTOBJDIR IPOPTDOCDIR COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE COIN_BUILD_BLAS_TRUE COIN_BUILD_BLAS_FALSE COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE COIN_BUILD_LAPACK_TRUE COIN_BUILD_LAPACK_FALSE MUMPSINCDIR MUMPSLIB COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE MUMPS_INCFLAGS COIN_BUILD_MUMPS_TRUE COIN_BUILD_MUMPS_FALSE ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE IPOPTSRCDIR IPOPTOBJDIR IPOPTDOCDIR COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE COIN_BUILD_BLAS_TRUE COIN_BUILD_BLAS_FALSE COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE COIN_BUILD_LAPACK_TRUE COIN_BUILD_LAPACK_FALSE MUMPSINCDIR MUMPSLIB COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE MUMPS_INCFLAGS COIN_BUILD_MUMPS_TRUE COIN_BUILD_MUMPS_FALSE ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1140,6 +1140,9 @@ Optional Packages:
   --with-wsmp             specify WSMP library
   --with-asldir           specify path to AMPL solver directory (or BUILD for
                           compilation, or "no" for disabling AMPL)
+  --with-matlab-home      specify location of matlab installation for the
+                          matlab Ipopt interface. The "mex" compiler should be
+                          in MATLAB_HOME/bin
 
 Some influential environment variables:
   CDEFS       Additional -D flags to be used when compiling C code.
@@ -4359,7 +4362,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4362:" \
+echo "$as_me:4365:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -4927,7 +4930,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:4930: \"$ac_link\") >&5
+(eval echo $as_me:4933: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5005,7 +5008,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:5008: \"$ac_link\") >&5
+(eval echo $as_me:5011: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -7470,7 +7473,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7473 "configure"' > conftest.$ac_ext
+  echo '#line 7476 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9450,11 +9453,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9453: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9456: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9457: \$? = $ac_status" >&5
+   echo "$as_me:9460: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9718,11 +9721,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9721: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9724: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9725: \$? = $ac_status" >&5
+   echo "$as_me:9728: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9822,11 +9825,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9825: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9828: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9829: \$? = $ac_status" >&5
+   echo "$as_me:9832: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12239,7 +12242,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12242 "configure"
+#line 12245 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12339,7 +12342,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12342 "configure"
+#line 12345 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -14699,11 +14702,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14702: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14705: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14706: \$? = $ac_status" >&5
+   echo "$as_me:14709: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14803,11 +14806,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14806: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14809: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14810: \$? = $ac_status" >&5
+   echo "$as_me:14813: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16373,11 +16376,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16376: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16379: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16380: \$? = $ac_status" >&5
+   echo "$as_me:16383: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16477,11 +16480,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16480: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16483: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16484: \$? = $ac_status" >&5
+   echo "$as_me:16487: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18684,11 +18687,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18687: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18690: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18691: \$? = $ac_status" >&5
+   echo "$as_me:18694: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18952,11 +18955,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18955: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18958: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18959: \$? = $ac_status" >&5
+   echo "$as_me:18962: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19056,11 +19059,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19059: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19062: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:19063: \$? = $ac_status" >&5
+   echo "$as_me:19066: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -28586,7 +28589,7 @@ echo "$as_me: error: option \"BUILD\" specified for LAPACK, but $coin_lapackobjd
    { (exit 1); exit 1; }; }
       fi
     fi
-  else
+  elif test "$use_lapack" != no; then
     echo "$as_me:$LINENO: checking whether user supplied LAPACKLIB=\"$use_lapack\" works" >&5
 echo $ECHO_N "checking whether user supplied LAPACKLIB=\"$use_lapack\" works... $ECHO_C" >&6
     LIBS="$use_lapack $LIBS"
@@ -30538,7 +30541,7 @@ else
 fi
 
 
-if test x"$use_lapack" = x; then
+if test x"$use_lapack" = x || test "$use_lapack" = no; then
   coin_has_lapack=no
 else
   coin_has_lapack=yes
@@ -31231,6 +31234,8 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+SAVE_ADDLIBS="$ADDLIBS"
+ADDLIBS="$ADDLIBS $FLIBS"
 
   echo "$as_me:$LINENO: checking if user provides library for mumps" >&5
 echo $ECHO_N "checking if user provides library for mumps... $ECHO_C" >&6
@@ -31422,6 +31427,7 @@ else
 fi
 
 
+ADDLIBS="$SAVE_ADDLIBS"
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -31974,10 +31980,63 @@ done
 # Try to detect if there is matlab installed on the system and set the
 # MATLAB_HOME variable
 
-mexpath=`which mex 2>/dev/null`
-if test ! "$mexpath" = ""; then
-  MATLAB_HOME=`echo $mexpath | sed -e 's=/bin/mex=='`
+echo "$as_me:$LINENO: checking for matlab installation" >&5
+echo $ECHO_N "checking for matlab installation... $ECHO_C" >&6
+
+
+# Check whether --with-matlab-home or --without-matlab-home was given.
+if test "${with_matlab_home+set}" = set; then
+  withval="$with_matlab_home"
+  use_matlab_home=$withval
+else
+  use_matlab_home=
+fi;
+
+
+if test x"$use_matlab_home" = x; then
+  # Try to detect matlab home automatically
+  mexpath=`which mex 2>/dev/null`
+  if test ! "$mexpath" = ""; then
+    MATLAB_HOME=`echo $mexpath | sed -e 's=/bin/mex=='`
+    echo "$as_me:$LINENO: result: $MATLAB_HOME" >&5
+echo "${ECHO_T}$MATLAB_HOME" >&6
+  else
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+  fi
+else
+  MATLAB_HOME="$use_matlab_home"
+  echo "$as_me:$LINENO: result: $MATLAB_HOME" >&5
+echo "${ECHO_T}$MATLAB_HOME" >&6
+  if test ! -x $MATLAB_HOME/bin/mex; then
+    { { echo "$as_me:$LINENO: error: Matlab compiler $MATLAB_HOME/bin/mex not found or executable" >&5
+echo "$as_me: error: Matlab compiler $MATLAB_HOME/bin/mex not found or executable" >&2;}
+   { (exit 1); exit 1; }; }
+  fi
 fi
+
+MEXSUFFIX=
+if test x"$MATLAB_HOME" != x; then
+  echo "$as_me:$LINENO: checking for Matlab executable extension (MEXSUFFIX)" >&5
+echo $ECHO_N "checking for Matlab executable extension (MEXSUFFIX)... $ECHO_C" >&6
+  cat >conftest.c <<_ACEOF
+#include "mex.h"
+void mexFunction(int nlhs, mxArray *plhs[],
+  int nrhs, const mxArray *prhs[]) {
+  int i=0;
+}
+_ACEOF
+  if $MATLAB_HOME/bin/mex conftest.c >5 2>&5; then
+    MEXSUFFIX=`ls conftest.mex* 5>/dev/null | sed -e 's=conftest.=='`
+    echo "$as_me:$LINENO: result: $MEXSUFFIX" >&5
+echo "${ECHO_T}$MEXSUFFIX" >&6
+  else
+    echo "$as_me:$LINENO: result: error running MEX compiler" >&5
+echo "${ECHO_T}error running MEX compiler" >&6
+  fi
+fi
+
+
 
 
 ##########
@@ -33739,6 +33798,7 @@ s,@JAVA_HOME@,$JAVA_HOME,;t t
 s,@JIPOPTDLL@,$JIPOPTDLL,;t t
 s,@SHARED_FLAGS@,$SHARED_FLAGS,;t t
 s,@MATLAB_HOME@,$MATLAB_HOME,;t t
+s,@MEXSUFFIX@,$MEXSUFFIX,;t t
 s,@ASTYLE@,$ASTYLE,;t t
 s,@ASTYLEFLAGS@,$ASTYLEFLAGS,;t t
 s,@ipoptlib@,$ipoptlib,;t t

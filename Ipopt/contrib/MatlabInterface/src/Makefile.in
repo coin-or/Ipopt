@@ -18,13 +18,12 @@ MATLAB_HOME = @MATLAB_HOME@
 # Set the suffix for matlab mex files. The contents of the
 # $(MATLAB_HOME)/extern/examples/mex directory might be able to help
 # you in your choice.
-MEXSUFFIX   = mexglx    # Linux 32-bit
-# MEXSUFFIX = mexmac    # Mac OS X
+MEXSUFFIX   = @MEXSUFFIX@
 
 # This is the command used to call the mex program. Usually, it is
 # just "mex". But it also may be something like
 # /user/local/R2006b/bin/mex if "mex" doesn't work.
-MEX = mex
+MEX = $(MATLAB_HOME)/bin/mex
 
 #############################################################################
 # Do not modify anything below unless you know what you're doing.
