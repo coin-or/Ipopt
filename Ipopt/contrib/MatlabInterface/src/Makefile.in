@@ -63,7 +63,7 @@ $(TARGET): $(OBJS)
 	$(MEX) $(MEXFLAGS) $(LIBS) -output $@ $^
 
 %.@OBJEXT@: %.cpp
-	$(CXX) $(CXXFLAGS) -I@includedir@ -I$(MATLAB_HOME)/extern/include \
+	$(CXX) $(CXXFLAGS) -I@includedir@/coin -I$(MATLAB_HOME)/extern/include \
         -o $@ -c $^
 
 clean:

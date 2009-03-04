@@ -14,9 +14,9 @@
 #include "matlabinfo.h"
 #include "matlabjournal.h"
 #include "matlabprogram.h"
-#include "coin/IpRegOptions.hpp"
-#include "coin/IpJournalist.hpp"
-#include "coin/IpIpoptApplication.hpp"
+#include "IpRegOptions.hpp"
+#include "IpJournalist.hpp"
+#include "IpIpoptApplication.hpp"
 
 using Ipopt::IsValid;
 using Ipopt::RegisteredOption;
@@ -69,7 +69,7 @@ void mexFunction (int nlhs, mxArray *plhs[],
     if (!options.ipoptOptions().useQuasiNewton() && 
 	!funcs.hessianFuncIsAvailable())
       throw MatlabException("You must supply a callback function for \
-computing the Hessian unless you decide to um knse a quasi-Newton \
+computing the Hessian unless you decide to use a quasi-Newton \
 approximation to the Hessian");
 
     // If the user tried to use her own scaling, report an error.

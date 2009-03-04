@@ -9,7 +9,7 @@
 #ifndef INCLUDE_MATLABJOURNAL
 #define INCLUDE_MATLABJOURNAL
 
-#include "coin/IpJournalist.hpp"
+#include "IpJournalist.hpp"
 
 namespace Ipopt {
 
