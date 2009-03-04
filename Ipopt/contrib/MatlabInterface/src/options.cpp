@@ -6,8 +6,8 @@
 //         University of British Columbia
 //         September 25, 2008
 
-#include "options.h"
-#include "matlabexception.h"
+#include "options.hpp"
+#include "matlabexception.hpp"
 
 // Function definitions for class Options.
 // -----------------------------------------------------------------

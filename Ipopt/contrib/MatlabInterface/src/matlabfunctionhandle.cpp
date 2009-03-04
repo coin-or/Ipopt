@@ -6,8 +6,8 @@
 //         University of British Columbia
 //         August 25, 2008
 
-#include "matlabfunctionhandle.h"
-#include "matlabexception.h"
+#include "matlabfunctionhandle.hpp"
+#include "matlabexception.hpp"
 
 // Function definitions.
 // -----------------------------------------------------------------

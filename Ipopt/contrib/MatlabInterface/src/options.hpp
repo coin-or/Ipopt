@@ -10,8 +10,8 @@
 #define INCLUDE_OPTIONS
 
 #include "mex.h"
-#include "iterate.h"
-#include "ipoptoptions.h"
+#include "iterate.hpp"
+#include "ipoptoptions.hpp"
 
 // Class Options.
 // -----------------------------------------------------------------

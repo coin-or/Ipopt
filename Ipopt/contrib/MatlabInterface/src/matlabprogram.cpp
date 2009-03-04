@@ -6,9 +6,9 @@
 //         University of British Columbia
 //         September 25, 2008
 
-#include "matlabprogram.h"
-#include "sparsematrix.h"
-#include "matlabexception.h"
+#include "matlabprogram.hpp"
+#include "sparsematrix.hpp"
+#include "matlabexception.hpp"
 
 // Function definitions for class MatlabProgram.
 // ---------------------------------------------------------------

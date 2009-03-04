@@ -6,8 +6,8 @@
 //         University of British Columbia
 //         May 19, 2007
 
-#include "matlabjournal.h"
-#include "matlabexception.h"
+#include "matlabjournal.hpp"
+#include "matlabexception.hpp"
 #include "mex.h"
 
 namespace Ipopt {

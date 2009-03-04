@@ -6,7 +6,7 @@
 //         University of British Columbia
 //         May 19, 2007
 
-#include "matlabexception.h"
+#include "matlabexception.hpp"
 #include <cstdio>
 
 // Function definitions for class MatlabException

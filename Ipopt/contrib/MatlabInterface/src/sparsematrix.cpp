@@ -6,9 +6,9 @@
 //         University of British Columbia
 //         May 19, 2007
 
-#include "sparsematrix.h"
-#include "matlabexception.h"
-#include "iterate.h"
+#include "sparsematrix.hpp"
+#include "matlabexception.hpp"
+#include "iterate.hpp"
 
 // Function definitions for class SparseMatrix.
 // ---------------------------------------------------------------

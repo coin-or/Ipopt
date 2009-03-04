@@ -10,9 +10,9 @@
 #define INCLUDE_CALLBACKFUNCTIONS
 
 #include "mex.h"
-#include "iterate.h"
-#include "sparsematrix.h"
-#include "matlabfunctionhandle.h"
+#include "iterate.hpp"
+#include "sparsematrix.hpp"
+#include "matlabfunctionhandle.hpp"
 
 // Class CallbackFunctions.
 // -----------------------------------------------------------------

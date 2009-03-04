@@ -6,8 +6,8 @@
 //         University of British Columbia
 //         September 15, 2008
 
-#include "iterate.h"
-#include "matlabexception.h"
+#include "iterate.hpp"
+#include "matlabexception.hpp"
 
 // Function definitions for class Iterate.
 // -----------------------------------------------------------------
