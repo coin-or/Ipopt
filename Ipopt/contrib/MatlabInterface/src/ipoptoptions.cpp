@@ -6,8 +6,8 @@
 //         University of British Columbia
 //         September 15, 2008
 
-#include "ipoptoptions.h"
-#include "matlabexception.h"
+#include "ipoptoptions.hpp"
+#include "matlabexception.hpp"
 
 using Ipopt::IpoptApplication;
 using Ipopt::SmartPtr;

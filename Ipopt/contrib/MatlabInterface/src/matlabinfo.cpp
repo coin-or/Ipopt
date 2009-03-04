@@ -6,8 +6,8 @@
 //         University of British Columbia
 //         September 25, 2008
 
-#include "matlabinfo.h"
-#include "iterate.h"
+#include "matlabinfo.hpp"
+#include "iterate.hpp"
 
 // Function definitions for class MatlabInfo.
 // ------------------------------------------------------------------

@@ -6,8 +6,8 @@
 //         University of British Columbia
 //         September 18, 2008
 
-#include "callbackfunctions.h"
-#include "matlabexception.h"
+#include "callbackfunctions.hpp"
+#include "matlabexception.hpp"
 
 // Functions for class CallbackFunctions.
 // -----------------------------------------------------------------

@@ -9,10 +9,10 @@
 #ifndef INCLUDE_MATLABPROGRAM
 #define INCLUDE_MATLABPROGRAM
 
-#include "iterate.h"
-#include "options.h"
-#include "matlabinfo.h"
-#include "callbackfunctions.h"
+#include "iterate.hpp"
+#include "options.hpp"
+#include "matlabinfo.hpp"
+#include "callbackfunctions.hpp"
 #include "IpTNLP.hpp"
 
 using Ipopt::TNLP;
