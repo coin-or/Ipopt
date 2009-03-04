@@ -13,7 +13,7 @@
 #include "options.h"
 #include "matlabinfo.h"
 #include "callbackfunctions.h"
-#include "coin/IpTNLP.hpp"
+#include "IpTNLP.hpp"
 
 using Ipopt::TNLP;
 using Ipopt::SolverReturn;

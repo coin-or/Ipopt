@@ -10,7 +10,7 @@
 #define INCLUDE_IPOPTOPTIONS
 
 #include "mex.h"
-#include "coin/IpIpoptApplication.hpp"
+#include "IpIpoptApplication.hpp"
 
 // Class IpoptOptions.
 // -----------------------------------------------------------------

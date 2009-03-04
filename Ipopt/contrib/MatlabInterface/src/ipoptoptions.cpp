@@ -15,6 +15,8 @@ using Ipopt::IsValid;
 using Ipopt::RegisteredOption;
 using Ipopt::RegisteredOptionType;
 
+// need 
+
 // Function definitions for class IpoptOptions.
 // -----------------------------------------------------------------
 IpoptOptions::IpoptOptions (IpoptApplication& app, const mxArray* ptr) 
@@ -84,8 +86,11 @@ void IpoptOptions::setOption (const char* label, const mxArray* ptr) {
 
   // Check to make sure we have a valid option.
   SmartPtr<const RegisteredOption> option = app.RegOptions()->GetOption(label);
-  if (!IsValid(option))
-    throw MatlabException("You have specified a nonexistent IPOPT option");
+  if (!IsValid(option)) {
+    char buf[256];
+    snprintf(buf, 255, "You have specified a nonexistent IPOPT option (\"%s\")", label);
+    throw MatlabException(buf);
+  }
 
   RegisteredOptionType type = option->Type();
   if (type == Ipopt::OT_String)
@@ -99,16 +104,22 @@ void IpoptOptions::setOption (const char* label, const mxArray* ptr) {
 void IpoptOptions::setStringOption (const char* label, const mxArray* ptr) {
 
   // Check whether the option value is a string.
-  if (!mxIsChar(ptr))
-    throw MatlabException("IPOPT option value should be a string");
+  if (!mxIsChar(ptr)) {
+    char buf[256];
+    snprintf(buf, 255, "IPOPT option value for option \"%s\" should be a string", label);
+    throw MatlabException(buf);
+  }
 
   // Get the option value.
   char* value = mxArrayToString(ptr);
 
   // Set the option.
   bool success = app.Options()->SetStringValue(label,value);
-  if (!success)
-    throw MatlabException("Invalid value for IPOPT option");
+  if (!success) {
+    char buf[256];
+    snprintf(buf, 255, "Invalid value for IPOPT option \"%s\"", label);
+    throw MatlabException(buf);
+  }
 
   // Free the dynamically allocated memory.
   mxFree(value);
@@ -117,25 +128,37 @@ void IpoptOptions::setStringOption (const char* label, const mxArray* ptr) {
 void IpoptOptions::setIntegerOption (const char* label, const mxArray* ptr) {
   
   // Check whether the option value is a number.
-  if (!mxIsDouble(ptr))
-    throw MatlabException("IPOPT option value should be a number");
+  if (!mxIsDouble(ptr)) {
+    char buf[256];
+    snprintf(buf, 255, "IPOPT option value for option \"%s\" should be an integer", label);
+    throw MatlabException(buf);
+  }
   
   // Set either the integer option.
   double value   = mxGetScalar(ptr);
   bool   success = app.Options()->SetIntegerValue(label,(int) value);
-  if (!success)
-    throw MatlabException("Invalid value for integer IPOPT option");
+  if (!success) {
+    char buf[256];
+    snprintf(buf, 255, "Invalid value for integer IPOPT option \"%s\"", label);
+    throw MatlabException(buf);
+  }
 }
 
 void IpoptOptions::setNumberOption (const char* label, const mxArray* ptr) {
   
   // Check whether the option value is a number.
-  if (!mxIsDouble(ptr))
-    throw MatlabException("IPOPT option value should be a number");
+  if (!mxIsDouble(ptr)) {
+    char buf[256];
+    snprintf(buf, 255, "IPOPT option value for option \"%s\" should be a number", label);
+    throw MatlabException(buf);
+  }
   
   // Set either the numeric option.
   double value   = mxGetScalar(ptr);
   bool   success = app.Options()->SetNumericValue(label,value);
-  if (!success)
-    throw MatlabException("Invalid value for numeric IPOPT option");
+  if (!success) {
+    char buf[256];
+    snprintf(buf, 255, "Invalid value for numeric IPOPT option \"%s\"", label);
+    throw MatlabException(buf);
+  }
 }

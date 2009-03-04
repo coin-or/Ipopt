@@ -1,4 +1,4 @@
-// Copyright (C) 2007 Peter Carbonetto. All Rights Reserved.
+// Copyright (C) 2007, 2009 Peter Carbonetto. All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // Author: Peter Carbonetto
@@ -17,22 +17,26 @@
 // as long as the MatlabException object is in scope. Usually, this
 // means that it should persist for the duration of the entire
 // program. This is always the case if the input "message" is a literal.
+//
+// AW: Since I would like to include more detailed information (e.g.,
+// which option is the one that is unknown), I changed this so that
+// this object keeps a copy of the exception
 class MatlabException : public std::exception {
 public:
   MatlabException (const char* message) throw();
   ~MatlabException()                    throw() { };
 
-  // The copy constructor makes a shallow copy.
+  // The copy constructor makes a copy.
   MatlabException (const MatlabException& source) throw();
 
-  // The copy assignment operator makes a shallow copy as well.
+  // The copy assignment operator makes a copy as well.
   MatlabException& operator= (const MatlabException& source);
     
   // Return the message string.
   virtual const char* what () const throw() { return message; };
     
-  private:
-    const char* message;  // The error message.
+private:
+  char message[256];  // The error message.
 };
 
 #endif

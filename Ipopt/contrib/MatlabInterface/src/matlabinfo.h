@@ -10,7 +10,7 @@
 #define INCLUDE_MATLABINFO
 
 #include "mex.h"
-#include "coin/IpIpoptApplication.hpp"
+#include "IpIpoptApplication.hpp"
 
 using Ipopt::ApplicationReturnStatus;
 
