@@ -1,0 +1,6 @@
+IMPORTANT:
+
+This old version of the Matlab interface will be included in the Ipopt
+distribution only for a limited amount of time, and it will not be
+updated.  You should switch to the new version (earier to use anyway)
+in ../MatlabInterface.

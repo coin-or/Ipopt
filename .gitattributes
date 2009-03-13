@@ -34,6 +34,7 @@ Ipopt/contrib/JavaInterface/org/coinor/examples/HS071.java -text
 Ipopt/contrib/JavaInterface/org/coinor/examples/scalable/LuksanVlcek1.java -text
 Ipopt/contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java -text
 Ipopt/contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java -text
+Ipopt/contrib/MatlabInterface-Old/IMPORTANT -text
 Ipopt/contrib/MatlabInterface-Old/examples/bayesnet/bopt.m -text
 Ipopt/contrib/MatlabInterface-Old/examples/bayesnet/computeJGConstraints.m -text
 Ipopt/contrib/MatlabInterface-Old/examples/bayesnet/computeJGGradient.m -text
