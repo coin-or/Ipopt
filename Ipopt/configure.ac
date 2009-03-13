@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2008 International Business Machines and others.
+# Copyright (C) 2004, 2009 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -594,11 +594,51 @@ done
 # Try to detect if there is matlab installed on the system and set the
 # MATLAB_HOME variable
 
-mexpath=`which mex 2>/dev/null`
-if test ! "$mexpath" = ""; then
-  MATLAB_HOME=`echo $mexpath | sed -e 's=/bin/mex=='`
+AC_MSG_CHECKING([for matlab installation])
+
+AC_ARG_WITH([matlab-home],
+            AC_HELP_STRING([--with-matlab-home],
+                           [specify location of matlab installation for the matlab Ipopt interface.  The "mex" compiler should be in MATLAB_HOME/bin]),
+            [use_matlab_home=$withval], [use_matlab_home=])
+
+
+if test x"$use_matlab_home" = x; then
+  # Try to detect matlab home automatically
+  mexpath=`which mex 2>/dev/null`
+  if test ! "$mexpath" = ""; then
+    MATLAB_HOME=`echo $mexpath | sed -e 's=/bin/mex=='`
+    AC_MSG_RESULT([$MATLAB_HOME])
+  else
+    AC_MSG_RESULT([no])
+  fi
+else
+  MATLAB_HOME="$use_matlab_home"
+  AC_MSG_RESULT([$MATLAB_HOME])
+  if test ! -x $MATLAB_HOME/bin/mex; then
+    AC_MSG_ERROR([Matlab compiler $MATLAB_HOME/bin/mex not found or not executable])
+  fi
 fi
+
+MEXSUFFIX=
+if test x"$MATLAB_HOME" != x; then
+  AC_MSG_CHECKING([for Matlab executable extension (MEXSUFFIX)])
+  cat >conftest.c <<_ACEOF
+#include "mex.h"
+void mexFunction(int nlhs, mxArray *plhs@<:@@:>@,
+  int nrhs, const mxArray *prhs@<:@@:>@) {
+  int i=0;
+}
+_ACEOF
+  if $MATLAB_HOME/bin/mex conftest.c >5 2>&5; then
+    MEXSUFFIX=`ls conftest.mex* 5>/dev/null | sed -e 's=conftest.=='`
+    AC_MSG_RESULT([$MEXSUFFIX])
+  else
+    AC_MSG_RESULT([error running MEX compiler])
+  fi
+fi
+
 AC_SUBST(MATLAB_HOME)
+AC_SUBST(MEXSUFFIX)
 
 ##########
 # ASTYLE #
@@ -721,6 +761,7 @@ AC_CONFIG_LINKS([test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp
 ########################################################################
 
 AC_COIN_VPATH_LINK(contrib/MatlabInterface/ipopt.m)
+AC_COIN_VPATH_LINK(contrib/MatlabInterface-Old/ipopt.m)
 
 AC_CONFIG_FILES([Makefile
 		 src/Common/Makefile
@@ -746,6 +787,7 @@ AC_CONFIG_FILES([Makefile
 		 test/Makefile
 		 test/run_unitTests
 		 contrib/MatlabInterface/src/Makefile
+		 contrib/MatlabInterface-Old/src/Makefile
 		 contrib/JavaInterface/Makefile])
 
 AC_CONFIG_HEADER([inc/config_ipopt.h])

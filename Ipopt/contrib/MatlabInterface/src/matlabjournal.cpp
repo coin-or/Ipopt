@@ -6,8 +6,8 @@
 //         University of British Columbia
 //         May 19, 2007
 
-#include "matlabjournal.h"
-#include "matlabexception.h"
+#include "matlabjournal.hpp"
+#include "matlabexception.hpp"
 #include "mex.h"
 
 namespace Ipopt {
@@ -17,11 +17,14 @@ namespace Ipopt {
   MatlabJournal::MatlabJournal (EJournalLevel default_level)
     : Journal("matlab", default_level) { }
 
-  void MatlabJournal::PrintImpl (EJournalCategory category, EJournalLevel level, const char* str) {
+  void MatlabJournal::PrintImpl (EJournalCategory category, 
+				 EJournalLevel level, const char* str) {
     mexPrintf(str);
   }
 
-  void MatlabJournal::PrintfImpl (EJournalCategory category, EJournalLevel level, const char* pformat, va_list ap) {
+  void MatlabJournal::PrintfImpl (EJournalCategory category, 
+				  EJournalLevel level, const char* pformat, 
+				  va_list ap) {
     const int maxStrLen = 1024;
     char      s[maxStrLen];
     if (vsnprintf(s,maxStrLen,pformat,ap) >= maxStrLen)

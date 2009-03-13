@@ -1,0 +1,69 @@
+# Copyright (C) 2007, 2008 Peter Carbonetto. All Rights Reserved.
+# This code is published under the Common Public License.
+#
+# Author: Peter Carbonetto
+#         Dept. of Computer Science
+#         University of British Columbia
+#         May 19, 2007
+
+# INSTRUCTIONS: Please modify the following few variables. See the
+# readme.html file for more information.
+
+# This variable corresponds to the base directory of your MATLAB
+# installation. This is the directory so that in its 'bin/'
+# subdirectory you see all the matlab executables (such as 'matlab',
+# 'mex', etc.)
+MATLAB_HOME = @MATLAB_HOME@
+
+# Set the suffix for matlab mex files. The contents of the
+# $(MATLAB_HOME)/extern/examples/mex directory might be able to help
+# you in your choice.
+MEXSUFFIX   = @MEXSUFFIX@
+
+# This is the command used to call the mex program. Usually, it is
+# just "mex". But it also may be something like
+# /user/local/R2006b/bin/mex if "mex" doesn't work.
+MEX = $(MATLAB_HOME)/bin/mex
+
+#############################################################################
+# Do not modify anything below unless you know what you're doing.
+
+CXX           = @CXX@
+CXXFLAGS      = @CXXFLAGS@ -DMATLAB_MEXFILE # -DMWINDEXISINT
+IPOPT_INCLUDE = -I@includedir@
+IPOPTLIBDIR   = @libdir@
+exec_prefix   = @exec_prefix@
+prefix        = @prefix@
+LIBS          = @ipoptlib@ @ADDLIBS@
+
+TARGET = ../ipopt.$(MEXSUFFIX)
+
+OBJS   = matlabexception.@OBJEXT@ matlabscalar.@OBJEXT@ \
+         matlabstring.@OBJEXT@ matlabjournal.@OBJEXT@   \
+         matlabmatrix.@OBJEXT@ arrayofmatrices.@OBJEXT@ \
+         sparsematrix.@OBJEXT@ matlabprogram.@OBJEXT@   \
+         matlaboption.@OBJEXT@ multipliers.@OBJEXT@     \
+         matlabfunctionhandle.@OBJEXT@ ipopt.@OBJEXT@
+
+MATLAB_INCLUDE = -I$(MATLAB_HOME)/extern/include
+LDFLAGS        = $(CXXFLAGS) @RPATH_FLAGS@
+MEXFLAGS       = -v -cxx -O CC="$(CXX)" CXX="$(CXX)" LD="$(CXX)"       \
+                 COPTIMFLAGS="$(CXXFLAGS)" CXXOPTIMFLAGS="$(CXXFLAGS)" \
+                 LDOPTIMFLAGS="$(LDFLAGS)" 
+
+SRCDIR = @srcdir@
+VPATH = $(SRCDIR)
+
+all: install
+
+%.@OBJEXT@: %.cpp
+	$(CXX) $(CXXFLAGS) $(IPOPT_INCLUDE) $(MATLAB_INCLUDE) -o $@ -c $^
+
+$(TARGET): $(OBJS)
+	$(MEX) $(MEXFLAGS) $(LIBS) -output $@ $^
+
+install: $(TARGET)
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+

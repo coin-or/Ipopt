@@ -6,22 +6,23 @@
 //         University of British Columbia
 //         May 19, 2007
 
-#include "matlabexception.h"
+#include "matlabexception.hpp"
+#include <cstdio>
 
 // Function definitions for class MatlabException
 // ---------------------------------------------------------------
 MatlabException::MatlabException (const char* message) throw()
   : exception() { 
-  this->message = message;
+  snprintf(this->message, 255, "%s", message);
 }
 
 MatlabException::MatlabException (const MatlabException& source) throw() 
   : exception() {
-  message = source.message;
+  snprintf(message, 255, "%s", source.message);
 }
 
 MatlabException& MatlabException::operator= (const MatlabException& source) 
 { 
-  message = source.message; 
+  snprintf(message, 255, "%s", source.message);
   return *this;
 }
