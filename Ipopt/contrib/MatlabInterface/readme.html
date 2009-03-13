@@ -30,21 +30,11 @@ h4 { font-size:14px;
 cellpadding=0>
 <tr><td valign=top>
 
-<center><h2>How to install and use the MATLAB interface for IPOPT</h2>
+<center><h2>How to install the MATLAB interface for IPOPT</h2>
 <p>Peter Carbonetto<br>
 Department of Computer Science<br>
 University of British Columbia</p>
 </center>
-
-<p><a href="https://projects.coin-or.org/Ipopt">IPOPT</a> is a
-software package for solving nonlinear objectives subject to nonlinear
-constraints. It uses primal-dual interior point
-methodology. Importantly, it is open source. What is described here is an
-interface to the IPOPT optimization engine, specially designed so it can be 
-easily used in the <a href="www.mathworks.com/products/matlab/">MATLAB</a> 
-programming environment.</p> 
-
-<p>Let's start this tutorial by installing the MATLAB interface.</p>
 
 <a name="install"><h3>Installation</h3>
 
@@ -74,7 +64,7 @@ MATLAB version 7.3, so the people at MathWorks tell me that I need to
 have the <a href="href=http://www.gnu.org/software/gcc">GNU Compiler
 Collection</a> (GCC) version 3.4.5. If you use the incorrect version
 of GCC, you will likely encounter linking errors (and the "mex"
-command will tell you which compiler versions are Ok). In order to
+command will tell you which compiler versions are legal). In order to
 find out which compiler is supported by your version of MATLAB, run
 the <code>mex</code> program provided in your MATLAB installation or
 consult <a
@@ -190,245 +180,6 @@ signed integers, and this could potentially cause problems when dealing
 with large, sparse matrices on 64-bit platforms with MATLAB version 
 7.3 or greater.</p>
 
-<a name="tutorial"><h3>Tutorial by example</h3>
-
-<p>Let's go through four examples which demonstrate the principal
-features of the MATLAB interface to IPOPT. For additional information,
-you can always type <code>help ipopt</code> in the MATLAB prompt. The
-tutorial exampels are all located in the directory
-<code>Ipopt/contrib/MatlabInterface/examples</code>.</p>
-
-<h4>Example 1</h4>
-
-<p>First, let's look at the Hock & Schittkowski test problem #51.<a
-href="#footnote1"><sup>1</sup></a> It is an optimization problem with
-5 variables, no inequality constraints and 3 equality
-constraints. There is a MATLAB script <code>examplehs051.m</code>
-which runs the limited-memory BFGS (Broyden-Fletcher-Goldfarb-Shanno)
-algorithm with the starting point <code>[2.5 0.5 2 -1 0.5]</code> and
-obtains the solution <code>[1 1 1 1 1]</code>. The line in the script
-which executes the IPOPT solver is</p>
-
-<p><code><pre>  x = ipopt(x0,lb,ub,lbc,ubc,@computeObjective,@computeGradient,...
-	    @computeConstraints,@computeJacobian,'',[],'',[],...
-	    'jac_c_constant','yes','hessian_approximation',...
-            'limited-memory','mu_strategy','adaptive','tol',1e-7);
-</pre></code></p>
-
-<p>The first input is the initial point. The second and third inputs
-specify the lower and upper bounds on the variables. Since there are
-no such bounds, we set the entries of these two vectors to
-<code>-Inf</code> and <code>+Inf</code>. The fourth and fifth inputs
-specify the lower and upper bounds on the 3 constraint functions. The
-next five inputs specify the function handles to the required callback
-routines. We've written the callback routines as subfunctions in the
-same M-file. Since we are using a limited-memory approximation to the
-Hessian, we don't need to know the values of the second-order partial
-derivatives, so we set the Hessian callback routine to the empty
-string. The rest of the input arguments set some options for the
-solver, as detailed in the IPOPT documentation.</p>
-
-<p>If you examine the functions <code>computeObjective</code> and
-<code>computeGradient</code>, you will see that computing the
-objective function and gradient vector is relatively
-straightforward. The function <code>computeConstraints</code> returns
-a vector of length equal to the number of constraint functions. The
-callback function <code>computeJacobian</code> returns an M x N sparse
-matrix, where M is the number of constraint functions and N is the
-number of variables. It is important to always return a sparse matrix,
-even if there is no computational advantage in doing so. Otherwise,
-MATLAB will report an error.</p>
-
-<h4>Example 2</h4>
-
-<p>Let's move to the second example, <code>examplehs038.m</code>. It
-demonstrates the use of IPOPT on an optimization problem with 4
-variables and no constraints other than simple bound constraints. This
-time, we've implemented a callback routine for evaluating the
-Hessian. The Hessian callback function takes as input the current
-value of the variables <code>x</code>, the factor in front of the
-objective term <code>sigma</code>, an the values of the constraint
-multipliers <code>lambda</code> (which in this case is empty). If the
-last input is true, then the callback routine must return a sparse
-matrix that has zeros in locations where the second-order derivative
-at that location will ALWAYS be zero. The return value H must always
-be a lower triangular matrix (type <code>help tril</code>). As
-explained in the IPOPT documentation, the Hessian matrix is symmetric
-so the information contained in the upper triangular part is
-redundant.</p>
-
-<p>This example also demonstrates the use an iterative callback
-function, which can be useful for displaying the status of the
-solver. This is specified by the twelfth input. The function
-<code>callback</code> takes as input the current iteration
-<code>t</code>, the current value of the objective <code>f</code>, and
-the current point <code>x</code>.</p>
-
-<h4>Example 3</h4>
-
-<p>The third slightly more complicated example script is
-<code>examplehs071.m</code>, which is the same as the problem explored
-in the IPOPT documentation (Hock and Schittkowski test problem
-#71). It is worth taking a peek at the functions
-<code>computeHessian</code> and <code>computeJacobian</code>. In the
-Hessian callback function, we make use of the input lambda. Since the
-Hessian is dense, its structure is returned with the line</p>
-
-<p><code><pre>   H = sparse(tril(ones(n)))</pre></code></p>
-
-<p>where <code>n</code> is the number of variables. The Jacobian is
-dense, so we can return its structure in a single line:</p>
-
-<p><code><pre>   J = sparse(ones(m,n))</pre></code></p>
-
-<p>where <code>m</code> is the number of constraint functions.</p>
-
-<p>This example also differs from previous ones because the initial values for
-the Lagrange multipliers are specified in MATLAB. We need to input three sets
-of multipliers to IPOPT: the Lagrange multipliers corresponding to the lower
-bounds on the optimization variables, the multipliers corresponding to the
-uppwer bounds on the variables, and the multipliers associated with the
-constraint functions. To specify these three sets of Lagrange multipliers, we
-fill in three fields in the <code>multipliers</code> struct as follows:</p>
-
-<p><code><pre>  multipliers.zl     = [1 1 1 1];
-  multipliers.zu     = [1 1 1 1];
-  multipliers.lambda = [1 1];</pre></code></p>
-
-<p>Note that this optimization problem has 4 variables and 2 constraints.</p>
-
-<p>In this example script, we have also chosen to output the the values of the
-Lagrange multipliers that compose the dual portion of the final primal-dual 
-solution. When I ran this script, I obtained final values of approximately</p>
-
-<p><code><pre>  multipliers.zl     = [1 0 0 0];
-  multipliers.zu     = [0 0 0 0];
-  multipliers.lambda = [-0.55 0.16];</pre></code></p>
-
-<p>The third output in the call to IPOPT is the number of iterations IPOPT
-takes to converge to the stationary point within the specified tolerance.</p>
-
-<h4>Example 4</h4>
-
-<p>The last example is the script <code>examplelauritzen.m</code> in
-the subdirectory <code>bayesnet</code>. It is vastly more complicated
-than the other three. It pertains to research in inference in
-probabilistic models in artificial intelligence. This script
-demonstrates the problem of inferring the most probable states of
-random variables given a Bayesian network.<a
-href="#footnote2"><sup>2</sup></a> In this case, the model represents
-the interaction between causes (e.g. smoking) and diseases (e.g. lung
-cancer). We are given a patient that is a smoker, has tested positive
-for some X-ray, and has recently visited Asia. In many ways this is a
-silly and highly overused example, but it suits our needs here because
-it demonstrates how to treat inference as an optimization problem, and
-how to solve this optimization problem using IPOPT. This code should
-NOT be used to solve large inference problems because it is not
-particularly efficient.</p>
-
-<p>The call to IPOPT is buried in the file <code>bopt.m</code>. It is</p>
-
-<p><code><pre>[qR qS] = ipopt({qR qS},{repmat(eps,nqr,1) repmat(eps,nqs,1)},...
-            { repmat(inf,nqr,1) repmat(inf,nqs,1) },...
-            [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
-            [ ones(1,nr) ones(1,ns) zeros(1,nc) ],...
-            @computeJGObjective',@computeJGGradient',...
-            @computeJGConstraints',@computeJGJacobian',...
-            @computeJGHessian',{ K C f Rv Rf Sv Sf NS d },'',...
-            ...</pre></code></p>
-
-<p>As you can see, it is rather complicated! The first input, as
-usual, is the starting point. (The variables actually represent
-probability estimates.) Notice that we are passing a cell array, and
-each entry of the cell array is a matrix. Likewise, the bound
-constraints are specified as cell arrays. This is permitted as long as
-the starting point and the bound constraints have the same
-structure. If not, the MATLAB will report an error. (Note that the
-lower bounds on the variables are set to floating-point
-precision. Type <code>help eps</code>. In this way, we ensure that the
-logarithm of a variable never evaluates to zero.)</p>
-
-<p>This cell array syntax is useful when your program has several
-different types of variables. These sets of variables are then passed
-as separate input arguments to the MATLAB callback functions. For
-instance, <code>qR</code> and <code>qS</code> are passed as separate
-arguments to the objective callback function in the M-file
-<code>computeJGObjective.m</code>.  The entries of the cell array are
-also treated as separate outputs from the gradient callback function
-(see the M-file <code>computeJGGradient.m</code>), and from the main
-call to ipopt.</p>
-
-<p>In this example, the constraint functions are all linear, so they have
-no impact on the value of the Hessian. In fact, the Hessian is a
-diagonal matrix (but not positive definite). The Jacobian can be
-extremely large, but it is also very sparse; the number of entries is
-a multiple of the number of variables.</p>
-
-<p>This example also demonstrates the use of auxiliary data. In
-<code>bopt.m</code>, notice that the input after
-<code>computeJGHessian</code> is a cell array. This cell array is
-passed as input to every MATLAB callback routine.</p>
-
-<p>The tutorial is over!</p>
-
-<a name="notes"><h3>Notes on implementation of the MATLAB interface</h3>
-
-<p>We won't bore you with all the details of the implementation. We
-would, however, like to briefly point out a few of them. Most of the
-issues of interest surround the representation of sparse matrices.</p>
-
-<p>The MATLAB interface will necessarily be slower than the standard
-C++ interface to IPOPT. That's because MATLAB dynamically allocates
-new memory for all the outputs passed back from a function. Thus, for
-large problems each iteration of IPOPT will involve the dynamic
-allocation and deallocation of large amounts of memory.</p>
-
-<p><b>Sparse matrices.</b> The greatest challenge was most definitely
-the conversion of sparse matrices from MATLAB to IPOPT. Sparse
-matrices are used to represent the Jacobian of the constraint
-functions and the Hessian of the Lagrangian function. There is a very
-nice <a href="http://link.aip.org/link/?SML/13/333">document</a> by
-Gilbert, Moler and Schreiber that discusses the design and
-implementation of sparse matrices in the MATLAB environment. The
-problem is that IPOPT assumes a static sparse matrix structure, but in
-MATLAB there is no way to ensure that the size of the matrix (the
-number of non-zero elements) does not change over time; if an entry of
-a sparse matrix is set to zero, then the arrays are automatically
-adjusted so that no storage is expended for that entry. This may seem
-like a highly inefficient way to implement sparse matrices, and indeed
-it is. However, Gilbert, Moler and Schreiber emphasize efficient
-matrix-level operations over efficient element-level operations.</p>
-
-<p>We can legitimately make the following assumption: the non-zero
-entries of a sparse matrix passed back from MATLAB are a
-<emph>subset</emph> of the non-zero entries in IPOPT's respective
-sparse matrix.</p>
-
-<p>The class <code>SparseMatrixStructure</code> keeps track of the
-structure of a sparse MATLAB matrix. It does not store the values of
-the non-zero entries. We use it for the Jacobian of the constraints
-and the Hessian of the Lagrangian. Even though these two matrices are
-fundamentally different (one is square and lower triangular, the other
-is rectangular), we can treat their structures in the same way.</p>
-
-<p>The principal functions of interest in class
-<code>SparseMatrixStructure</code> are <code>getColsAndRows</code> and
-<code>copyElems</code>. The function <code>getColsAndRows</code>
-converts the MATLAB sparse matrix format into the equivalent IPOPT
-format. The function <code>copyElems</code> copies the entries from
-one sparse matrix to another when one sparse matrix has a different
-structure than the other. Obviously, for the copy operation to be
-plausible, the set of non-zero entries of the destination matrix must
-be a superset of the non-zero entries of the source matrix. Due to
-efficiency concerns, no checks are made to ensure that this is
-satisfied; it is up to the user to ensure that a sparse matrix passed
-back to IPOPT never has a non-zero entry that was not declared
-initially when <code>returnStructureOnly = true</code>. In my
-implementation, I have gone through great pains to ensure: 1. that the
-copy function only makes one pass through the entries of the sparse
-matrix, and 2. that there are no if statements inside the for loops,
-which can severely impinge on the speed of the copy operation.</p>
-
 <a name="trouble"><h3>Troubleshooting and known issues</h3>
 
 <p>The installation procedure we have described does involve a certain
@@ -472,22 +223,5 @@ the <code>CXXFLAGS</code> variable in the MATLAB interface Makefile
 (see above).
 
 </ul>
-
-<h3>Footnotes</h3>
-
-<p><a name="footnote1"><sup>1</sup></a> For
-further information, see: Willi Hock and Klaus Schittkowski. (1981)
-Test Examples for Nonlinear Programming Codes. Lecture Notes in
-Economics and Mathematical Systems Vol. 187, Springer-Verlag.</p>
-
-<p><a name="footnote2"><sup>2</sup></a> If you want to learn more
-     about junction graphs for approximate inference, and a special
-     case of this is called the <emph>junction tree
-     algorithm</emph>. Recommended reading includes: <ul><li>Aji and
-     McEliece (2001). The generalized distributive law and free energy
-     minimization. <i>Proceedings of the 39th Allerton Conference.</i>
-     <li> Yedidia, Freeman and Weiss (2005). Constructing free-energy
-     approximations and generalized belief propagation algorithms.
-     <i>IEEE Transactions on Information Theory</i> 51(7).</ul></p>
 
 </html>

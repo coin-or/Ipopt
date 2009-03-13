@@ -1,135 +1,66 @@
-// Copyright (C) 2007 Peter Carbonetto. All Rights Reserved.
+// Copyright (C) 2008 Peter Carbonetto. All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // Author: Peter Carbonetto
 //         Dept. of Computer Science
 //         University of British Columbia
-//         May 19, 2007
+//         September 25, 2008
 
-#include "matlabprogram.h"
-#include "matlabscalar.h"
-#include "matlabstring.h"
-#include "sparsematrix.h"
-
-// Function declarations.
-// ---------------------------------------------------------------
-// Destroy an array of Matlab arrays.
-void destroyMatlabArrays (mxArray* ptrs[], int n);
+#include "matlabprogram.hpp"
+#include "sparsematrix.hpp"
+#include "matlabexception.hpp"
 
 // Function definitions for class MatlabProgram.
 // ---------------------------------------------------------------
-MatlabProgram::MatlabProgram (const ArrayOfMatrices& x0, 
-			      const ArrayOfMatrices& lb,
-			      const ArrayOfMatrices& ub, 
-			      const Matrix& constraintlb,
-			      const Matrix& constraintub, 
-			      const MatlabFunctionHandle& objFunc, 
-			      const MatlabFunctionHandle& gradFunc, 
-			      const MatlabFunctionHandle& constraintFunc, 
-			      const MatlabFunctionHandle& jacobianFunc,
-			      const MatlabFunctionHandle& hessianFunc,
-			      const MatlabFunctionHandle& iterFunc, 
-			      const mxArray* auxData, 
-			      ArrayOfMatrices& xsol,
-			      bool useQuasiNewton,
-			      Multipliers* initialMultipliers, 
-			      Multipliers* multipliers)
-  : x0(x0), lb(lb), ub(ub), constraintlb(constraintlb), 
-    constraintub(constraintub), auxData(auxData), xsol(xsol),
-    initialMultipliers(initialMultipliers), multipliers(multipliers), 
-    useQuasiNewton(useQuasiNewton), objFunc(objFunc), gradFunc(gradFunc), 
-    constraintFunc(constraintFunc), jacobianFunc(jacobianFunc), 
-    hessianFunc(hessianFunc), iterFunc(iterFunc) { 
-   x                 = 0;
-   lambda            = 0;
-   numiter           = 0;
-   prhs              = 0;
-   JacobianStructure = 0;
-   HessianStructure  = 0;
-
-  // Allocate memory for the input array to a Matlab callback
-  // routine. There could be as many as n + 4 input arguments to a
-  // Matlab callback routine, where n is the numer of entries of the
-  // cell array.
-  int n   = x0.length();
-  prhs    = new mxArray*[n + 5];
-  prhs[0] = 0;
-
-  // Allocate memory for the variables container.
-  x = new ArrayOfMatrices(&prhs[1],x0);
-  
-  // Allocate memory for the Lagrange multipliers container. We assume
-  // that lambda is a row vector.
-  int m  = constraintlb.length();
-  lambda = new Matrix(lambdarhs,1,m);
-  lambda->setvalue(0);
-  
-  // Copy the initial point to x.
-  *x = x0;
-
-  // Set the MATLAB trap flag so that MATLAB returns control to the
-  // MEX file when an error is thrown by one of the MATLAB callback
-  // routines.
-  mexSetTrapFlag(1);
-}
-
-MatlabProgram::MatlabProgram (const MatlabProgram& source)  
-  : x0(source.x0), lb(source.lb), ub(source.ub), 
-    constraintlb(source.constraintlb), constraintub(source.constraintub), 
-    xsol(source.xsol), objFunc(source.objFunc), gradFunc(source.gradFunc),
-    constraintFunc(source.constraintFunc), jacobianFunc(source.jacobianFunc), 
-    hessianFunc(source.hessianFunc), iterFunc(source.iterFunc) { }
+MatlabProgram::MatlabProgram (const Iterate& x0, 
+			      const CallbackFunctions& funcs,
+			      const Options& options, Iterate& x, 
+			      const mxArray* auxdata, MatlabInfo& info)
+  : x0(x0), funcs(funcs), options(options), x(x), auxdata(auxdata), 
+    info(info), J(0), H(0) { }
 
 MatlabProgram::~MatlabProgram() { 
-  if (prhs)              delete[] prhs;
-  if (x)                 delete x;
-  if (lambda)            delete lambda;
-  if (JacobianStructure) delete JacobianStructure;
-  if (HessianStructure)  delete HessianStructure;
+  if (J) delete J;
+  if (H) delete H;
 }
 
-bool MatlabProgram::get_nlp_info (int& numVariables, int& numConstraints, 
-				  int& sizeOfJ, int& sizeOfH, 
+bool MatlabProgram::get_nlp_info (int& n, int& m, int& sizeOfJ, int& sizeOfH, 
 				  IndexStyleEnum& indexStyle) 
   try {
 
-    // Get the number of variables.
-    numVariables = x->numelems();
-  
-    // Get the number of constraints.
-    numConstraints = constraintlb.length();
-    
-    // To get the size of the Jacobian, we call the Matlab routine
-    // that computes the Jacobian. We don't need to store the actual
-    // result, we just need to look at the number of non-zero
-    // entries. Note that we only need to call the Matlab routine if
-    // there is at least one constraint.
-    if (numConstraints == 0)
-      sizeOfJ = 0;
-    else {
-      mxArray* ptr = callMatlabJacobianRoutine(*x);
-      sizeOfJ      = getSparseMatrixSize(ptr);
-      mxDestroyArray(ptr);
+    // Get the number of variables and constraints.
+    n = numvars(options);
+    m = numconstraints(options);
+
+    // Get the size of the Jacobian.
+    if (m) {
+      if (!funcs.jacobianFuncIsAvailable())
+	throw MatlabException("You need to specify the callback functions \
+for computing the Jacobian and the sparsity structure of the Jacobian");
+      SparseMatrix* J = funcs.getJacobianStructure(n,m,auxdata);
+      sizeOfJ = J->numelems();
+      delete J;
     }
-      
-    // To get the size of the symmetric Hessian matrix, we call the
-    // Matlab routine that computes the Hessian. We don't need to
+    else
+      sizeOfJ = 0;
+
+    // Get the size of the symmetric Hessian matrix. We don't need to
     // store the actual result, we just need to look at the number of
     // non-zero entries in the lower triangular part of the matrix.
-    if (useQuasiNewton)
+    if (!options.ipoptOptions().useQuasiNewton()) {
+      if (!funcs.hessianFuncIsAvailable())
+	throw MatlabException("You need to specify the callback functions \
+for computing the Hessian and the sparsity structure of the Hessian");
+      SparseMatrix* H = funcs.getHessianStructure(n,auxdata);
+      sizeOfH = H->numelems();
+      delete H;
+    }
+    else
       sizeOfH = 0;
-    else { 
-      mxArray* ptr = callMatlabHessianRoutine(*x,*lambda);
-      if (!isSparseLowerTriangular(ptr))
-	throw MatlabException("Matlab array must be a lower triangular \
-matrix; type HELP TRIL");
-      sizeOfH = getSparseMatrixSize(ptr);
-      mxDestroyArray(ptr);
-    } 
-      
+
     // Use C-style indexing.
     indexStyle = C_STYLE;
-    
+
     return true;
   } catch (std::exception& error) {
     mexPrintf(error.what());
@@ -137,17 +68,15 @@ matrix; type HELP TRIL");
     throw;
   }
 
-bool MatlabProgram::get_bounds_info (int numVariables, double* lbptr, 
-				     double* ubptr, int numConstraints, 
-				     double* lbcptr, double* ubcptr) 
+bool MatlabProgram::get_bounds_info (int n, double* lb, double* ub, 
+				     int m, double* cl, double* cu) 
   try {
 
-    // Fill in the structures "lb", "ub", "constraintlb" and
-    // "constraintub" with the bounds information.
-    lb.copyto(lbptr);
-    ub.copyto(ubptr);
-    constraintlb.copyto(lbcptr);
-    constraintub.copyto(ubcptr);
+    // Fill in the structures with the bounds information.
+    copymemory(options.lowerbounds(),lb,n);
+    copymemory(options.upperbounds(),ub,n);
+    copymemory(options.constraintlb(),cl,m);
+    copymemory(options.constraintub(),cu,m);
     return true;
   } catch (std::exception& error) {
     mexPrintf(error.what());
@@ -155,45 +84,38 @@ bool MatlabProgram::get_bounds_info (int numVariables, double* lbptr,
     throw;
   }
 
-bool MatlabProgram::get_starting_point (int numVariables, 
-					bool initializeVars, 
-					double* variables, 
-					bool initializez, double* zl, 
-					double* zu, int numConstraints, 
-					bool initializeLambda, 
-					double* lambda) 
+bool MatlabProgram::get_starting_point (int n, bool initializeVars, 
+					double* vars, bool initializez, 
+					double* zl, double* zu, int m, 
+					bool initializeLambda, double* lambda) 
   try {
-
-    // Initialize the number of iterations.
-    numiter = 0;
-
-    // Check to see whether IPOPT is requesting the initial point for
-    // the Lagrange multipliers associated with the bounds on the
-    // optimization variables.
-    if (initializez) {
-      if (initialMultipliers == 0)
-	throw MatlabException("Initialization of Lagrange multipliers \
-requested but initial values are not provided");
-      initialMultipliers->lowerbounds().copyto(zl);
-      initialMultipliers->upperbounds().copyto(zu);
-    }
-
-    // Check to see whether IPOPT is requesting the initial point for
-    // the Lagrange multipliers corresponding to the equality and
-    // inequality constraints.
-    if (initializeLambda) {
-      
-      if (initialMultipliers == 0)
-	throw MatlabException("Initialization of Lagrange multipliers \
-requested but initial values are not provided");
-      initialMultipliers->constraints().copyto(lambda);
-    }
 
     // Check to see whether IPOPT is requesting the initial point for
     // the primal variables.
     if (initializeVars)
-      x0.copyto(variables);
-
+      x0.copyto(vars);
+    
+    // Check to see whether IPOPT is requesting the initial point for
+    // the Lagrange multipliers associated with the bounds on the
+    // optimization variables.
+    if (initializez) {
+      if (!options.multlb() || !options.multub())
+	throw MatlabException("Initialization of Lagrange multipliers \
+for lower and upper bounds requested but initial values are not supplied");
+      copymemory(options.multlb(),zl,n);
+      copymemory(options.multub(),zu,n);
+    }
+    
+    // Check to see whether IPOPT is requesting the initial point for
+    // the Lagrange multipliers corresponding to the equality and
+    // inequality constraints.
+    if (initializeLambda) {
+      if (!options.multconstr())
+	throw MatlabException("Initialization of Lagrange multipliers \
+for constraints are requested but initial values are not provided");
+      copymemory(options.multconstr(),lambda,m);
+    }
+    
     return true;
   } catch (std::exception& error) {
     mexPrintf(error.what());
@@ -201,11 +123,10 @@ requested but initial values are not provided");
     throw;
   }
 
-bool MatlabProgram::eval_f (int numVariables, const double* variables, 
-			    bool ignoreThis, double& objective) 
+bool MatlabProgram::eval_f (int n, const double* vars, bool ignore, double& f) 
   try {
-    x->inject(variables);
-    objective = computeObjective(*x);
+    x.inject(vars);
+    f = funcs.computeObjective(x,auxdata);
     return true;
   } catch (std::exception& error) {
     mexPrintf(error.what());
@@ -213,27 +134,27 @@ bool MatlabProgram::eval_f (int numVariables, const double* variables,
     throw;
   }
 
-bool MatlabProgram::eval_grad_f (int numVariables, const double* variables, 
-				 bool ignoreThis, double* gradient) 
+bool MatlabProgram::eval_grad_f (int n, const double* vars, bool ignore, 
+				 double* grad) 
   try {
-    x->inject(variables);
-    ArrayOfMatrices grad(gradient,*x);
-    computeGradient(*x,grad);
-  return true;
+    x.inject(vars);
+    funcs.computeGradient(x,grad,auxdata);
+    return true;
   } catch (std::exception& error) {
     mexPrintf(error.what());
     mexPrintf("\n");
     throw;
   }
 
-bool MatlabProgram::eval_g (int numVariables, const double* variables, 
-			    bool ignoreThis, int numConstraints, 
-			    double* constraints) 
+bool MatlabProgram::eval_g (int n, const double* vars, bool ignore, int m, 
+			    double* g) 
   try {
-    if (numConstraints > 0) {
-      x->inject(variables);
-      Array<double> g(constraints,numConstraints);
-      computeConstraints(*x,g);
+    if (m > 0) {
+      if (!funcs.constraintFuncIsAvailable())
+	throw MatlabException("You need to specify the callback function \
+for computing the constraints");
+      x.inject(vars);
+      funcs.computeConstraints(x,m,g,auxdata);
     }
     return true;
   } catch (std::exception& error) {
@@ -242,39 +163,41 @@ bool MatlabProgram::eval_g (int numVariables, const double* variables,
     throw;
   }
 
-bool MatlabProgram::eval_jac_g (int numVariables, const double* variables, 
-				bool ignoreThis, int numConstraints, 
-				int sizeOfJ, int* rows, int *cols, 
-				double* Jacobian) 
+bool MatlabProgram::eval_jac_g (int n, const double* vars, bool ignore, int m, 
+				int sizeOfJ, int* rows, int *cols, double* Jx) 
   try {
-    if (numConstraints > 0) {
-      if (Jacobian == 0) {
+    if (m > 0) {
+      if (!funcs.jacobianFuncIsAvailable())
+	throw MatlabException("You need to specify the callback functions \
+for computing the Jacobian and the sparsity structure of the Jacobian");
+
+      // If the input Jx is 0, then return the sparsity structure of
+      // the Jacobian. Otherwise, return the values of the nonzero
+      // entries.
+      if (Jx == 0) {
 	
-	// Delete any previous structure information concerning the
-	// Jacobian matrix.
-	if (JacobianStructure) {
-	  delete JacobianStructure;
-	  JacobianStructure = 0;
-	}
+ 	// Delete any previous structure information concerning the
+ 	// Jacobian matrix.
+ 	if (J) {
+ 	  delete J;
+ 	  J = 0;
+ 	}
 	  
-	// Return the sparse matrix structure of the Jacobian.
-	mxArray* ptr = callMatlabJacobianRoutine(*x);
-	JacobianStructure = new SparseMatrixStructure(ptr,true);
-	if ((int)JacobianStructure->size() != sizeOfJ)
-	  throw MatlabException("Invalid constraint Jacobian passed back \
-from Matlab routine");
+ 	// Get the sparse matrix structure of the Jacobian.
+	J = funcs.getJacobianStructure(n,m,auxdata);
+ 	if (J->numelems() != sizeOfJ)
+ 	  throw MatlabException("The constraint Jacobian passed back from \
+the MATLAB routine has an incorrect number of nonzero entries");
 	
-	// Copy the sparse matrix structure to the IPOPT sparse matrix
-	// format.
-	JacobianStructure->getColsAndRows(cols,rows);
-	  
-	// Free the dynamically allocated memory.
-	mxDestroyArray(ptr);
-      } else {
+ 	// Copy the sparse matrix structure to the IPOPT sparse matrix
+ 	// format.
+ 	J->getColsAndRows(cols,rows);
+       } else {
 	
-	// Return the value of the Jacobian.
-	x->inject(variables);
-	computeJacobian(*x,Jacobian);
+ 	// Return the value of the Jacobian.
+ 	x.inject(vars);
+	funcs.computeJacobian(m,x,*J,auxdata);
+	J->copyto(Jx);
       }
     }
     return true;
@@ -284,40 +207,41 @@ from Matlab routine");
     throw;
   }
 
-bool MatlabProgram::eval_h (int numVariables, const double* variables, 
-			    bool ignoreThis, double sigma, 
-			    int numConstraints, const double* multipliers, 
-			    bool ignoreThisToo, int sizeOfH, int* rows, 
-			    int* cols, double* Hessian)
+bool MatlabProgram::eval_h (int n, const double* vars, bool ignore, 
+			    double sigma, int m, const double* lambda, 
+			    bool ignoretoo, int sizeOfH, int* rows, 
+			    int* cols, double* Hx)
   try {
-    if (Hessian == 0) {
+
+    // If the input Hx is 0, then return the sparsity structure of the
+    // Hessian. Otherwise, return the values of the nonzero entries.
+    if (Hx == 0) {
+      if (!funcs.hessianFuncIsAvailable())
+	throw MatlabException("You need to specify the callback functions \
+for computing the Hessian and the sparsity structure of the Hessian");
 
       // Delete any previous structure information concerning the
-      // Jacobian matrix.
-      if (HessianStructure) {
-	delete HessianStructure;
-	HessianStructure = 0;
+      // Hessian matrix.
+      if (H) {
+	delete H;
+	H = 0;
       }
       
       // Return the sparse matrix structure of the symmetric Hessian.
-      mxArray* ptr = callMatlabHessianRoutine(*x,*lambda);
-      HessianStructure = new SparseMatrixStructure(ptr,true);
-      if ((int)HessianStructure->size() != sizeOfH)
-	throw MatlabException("Invalid Hessian of the Lagrangian passed \
-back from Matlab routine");
+      H = funcs.getHessianStructure(n,auxdata);
+      if (H->numelems() != sizeOfH)
+	throw MatlabException("The Hessian passed back from the MATLAB \
+routine has an incorrect number of nonzero entries");
 
       // Copy the sparse matrix structure to the IPOPT sparse matrix
       // format.
-      HessianStructure->getColsAndRows(cols,rows);
-
-      // Free the dynamically allocated memory.
-      mxDestroyArray(ptr);
+      H->getColsAndRows(cols,rows);
     } else {
 	
-      // Return the value of the lower triangular part of the Hessian.
-      x->inject(variables);
-      lambda->inject(multipliers);
-      computeHessian(*x,*lambda,sigma,Hessian);
+      // Return the value of the lower triangular portion of the Hessian.
+      x.inject(vars);
+      funcs.computeHessian(x,sigma,m,lambda,*H,auxdata);
+      H->copyto(Hx);
     }
     return true;
   } catch (std::exception& error) {
@@ -326,302 +250,38 @@ back from Matlab routine");
     throw;
   }
 
-void MatlabProgram::finalize_solution (SolverReturn status, int numVariables, 
-				       const double* variables, 
-				       const double* zl, const double* zu, 
-				       int numConstraints,
-				       const double* constraints, 
-				       const double* lambda, 
-				       double objective,
-				       const IpoptData* ip_data,
+void MatlabProgram::finalize_solution (SolverReturn status, int n, 
+				       const double* vars, const double* zl, 
+				       const double* zu, int m,
+				       const double* g, const double* lambda, 
+				       double f, const IpoptData* ip_data,
 				       IpoptCalculatedQuantities* ip_cq) {
 
   // Get the current solution.
-  xsol.inject(variables);
+  x.inject(vars);
 
-  // If requested, store the value of the Lagrange multipliers at the
-  // solution.
-  if (multipliers) {
-    multipliers->lowerbounds().inject(zl);
-    multipliers->upperbounds().inject(zu);
-    multipliers->constraints().inject(lambda);
-  }  
+  // Store the value of the Lagrange multipliers at the solution.
+  info.setmultlb(n,zl);
+  info.setmultub(n,zu);
+  info.setmultconstr(m,lambda);
 }
   
 bool MatlabProgram::intermediate_callback (AlgorithmMode mode,
-					   int iteration, double objective,
-					   double inf_pr, double inf_du,
-					   double mu, double d_norm,
+					   int t, double f, double inf_pr, 
+					   double inf_du, double mu, 
+					   double d_norm,
 					   double regularization_ize,
 					   double alpha_du, double alpha_pr,
 					   int ls_trials,
 					   const IpoptData* ip_data,
-					   IpoptCalculatedQuantities* ip_cq) {
-  
-  // Update the number of iterations of IPOPT.
-  numiter++;
-
-  if (iterFunc) {
-    int      nrhs = 3 + (bool) auxData;  
-    mxArray* prhs[4];  // The inputs to the Matlab routine.
-    mxArray* plhs[1];  // The outputs from the Matlab routine.
-    
-    // The first argument is the function to call. The second argument
-    // is the current iteration, t. The argument after that is the
-    // current value of the objective function, f.
-    prhs[0] = iterFunc;
-    MatlabScalar t(prhs[1],iteration);
-    MatlabScalar f(prhs[2],objective);
-    
-    // Pass the auxiliary data, if necessary.
-    if (auxData)
-      prhs[3] = const_cast<mxArray*>(auxData);
-    
-    // Call the designated Matlab iterative callback routine. It
-    // takes as input the values of the variables, the current
-    // iteration, and the current value of the objective function.
-    int exitstatus = mexCallMATLAB(0,plhs,nrhs,prhs,"feval");
-
-    // Deallocate the dynamically allocated memory.
-    mxDestroyArray(prhs[1]);
-    mxDestroyArray(prhs[2]);
-
-    if (exitstatus)
-      throw MatlabException("Call to MATLAB iterative callback routine");
-  }    
-  
-  return true;
-}
-
-double MatlabProgram::computeObjective (const ArrayOfMatrices& x) {
-  int      nrhs = 1 + x.length() + (bool) auxData;  
-  int      nlhs = 1;    // The number of outputs from Matlab.
-  mxArray* plhs[1];     // The outputs from the Matlab routine.
-
-  // The first argument is the function to call.
-  prhs[0] = objFunc;
-
-  // Pass the auxiliary data, if necessary.
-  if (auxData)
-    prhs[1 + x.length()] = const_cast<mxArray*>(auxData);
-
-  // Call the designated Matlab routine for evaluating the objective
-  // function. It takes as input the values of the variables, and
-  // returns a single output, the value of the objective function.
-  int exitstatus = mexCallMATLAB(nlhs,plhs,nrhs,prhs,"feval");
-  if (exitstatus)
-    throw MatlabException("Evaluation of objective function failed in \
-call to MATLAB routine");
-
-  // Get the result passed back from the Matlab routine.
-  MatlabScalar matlabOutput(plhs[0]);
-  double       f = matlabOutput;
-
-  // Free the dynamically allocated memory.
-  mxDestroyArray(plhs[0]);
-
-  return f;
-}
-
-void MatlabProgram::computeGradient (const ArrayOfMatrices& x,
-				     ArrayOfMatrices& grad) {
-  int       nrhs = 1 + x.length() + (bool) auxData;  
-  int       nlhs = x.length();          // The number of outputs from Matlab.
-  mxArray** plhs = new mxArray*[nlhs];  // The outputs to the Matlab routine.
-
-  // The first input argument is the function to call.
-  prhs[0] = gradFunc;
-
-  // Pass the auxiliary data, if necessary.
-  if (auxData)
-    prhs[1+x.length()] = const_cast<mxArray*>(auxData);
-
-  // Call the designated Matlab routine for computing the gradient
-  // of the objective function. It takes as input the values of the
-  // variables, and returns as many outputs corresponding to the
-  // partial derivatives of the objective function with respect to
-  // the variables at their curent values.
-  int exitstatus = mexCallMATLAB(nlhs,plhs,nrhs,prhs,"feval");
-  if (exitstatus) {
-    delete [] plhs;
-    throw MatlabException("Evaluation of objective gradient failed in \
-call to MATLAB routine");
+					   IpoptCalculatedQuantities* ip_cq)
+  try {  
+    if (funcs.iterFuncIsAvailable())
+      return funcs.iterCallback(t,f,auxdata);
+    else
+      return true;
+  } catch (std::exception& error) {
+    mexPrintf(error.what());
+    mexPrintf("\n");
+    throw;
   }
-
-  // Get the result passed back from the Matlab routine.
-  ArrayOfMatrices matlabOutput((const mxArray**) plhs,nlhs);
-  if (matlabOutput.length() != grad.length())
-    throw MatlabException("Invalid gradient passed back from MATLAB \
-routine");
-  for (int i = 0; i < grad.length(); i++)
-    if (matlabOutput[i]->length() != grad[i]->length()) {
-      delete [] plhs;
-      throw MatlabException("Invalid gradient passed back from MATLAB \
-routine");
-    }
-  grad = matlabOutput;
-
-  // Free the dynamically allocated memory.
-  destroyMatlabArrays(plhs,nlhs);
-  delete [] plhs;
-}
-
-void MatlabProgram::computeConstraints (const ArrayOfMatrices& x,
-					Array<double>& g) {
-  int      nrhs = 1 + x.length() + (bool) auxData;  
-  int      nlhs = 1;  // The number of outputs from Matlab.
-  mxArray* plhs[1];   // The outputs to the Matlab routine.
-
-  // The first argument is the function to call.
-  prhs[0] = constraintFunc;
-
-  // Pass the auxiliary data, if necessary.
-  if (auxData)
-    prhs[1 + x.length()] = const_cast<mxArray*>(auxData);
-
-  // Call the designated Matlab routine for evaluating the
-  // constraints at the current point. It takes as input the values
-  // of the variables, and returns the set of constraints evaluated
-  // at the current point.
-  if (mexCallMATLAB(nlhs,plhs,nrhs,prhs,"feval"))
-    throw MatlabException("Evaluation of constraint equations failed in \
-call to MATLAB routine");
-
-  // Get the result passed back from the Matlab routine.
-  Array<double>* matlabOutput = new Matrix(plhs[0]);
-  if (matlabOutput->length() != g.length())
-    throw MatlabException("Invalid constraint values passed back from \
-Matlab routine");
-  g.inject(*matlabOutput);
-    
-  // Free the dynamically allocated memory.
-  mxDestroyArray(plhs[0]);
-}
-
-void MatlabProgram::computeJacobian (const ArrayOfMatrices& x, 
-				     double* Jacobian) {
-
-  // Get the result passed back from the Matlab routine.
-  mxArray* ptr = callMatlabJacobianRoutine(x,false);
-
-  // Copy the Matlab output into the IPOPT result.
-  SparseMatrixStructure newJacobianStructure(ptr);
-  copyElems(newJacobianStructure,*JacobianStructure,mxGetPr(ptr),Jacobian);
-
-  // Get rid of the dynamically allocated memory.
-  mxDestroyArray(ptr);
-}
-
-void MatlabProgram::computeHessian (const ArrayOfMatrices& x, 
-				    const Array<double>& lambda, 
-				    double sigma, double* Hessian) {
-
-  // Get the result passed back from the Matlab routine.
-  mxArray* ptr = callMatlabHessianRoutine(x,lambda,false,sigma);
-
-  // Copy the Matlab output into the IPOPT result.
-  SparseMatrixStructure newHessianStructure(ptr);
-  copyElems(newHessianStructure,*HessianStructure,mxGetPr(ptr),Hessian);
-
-  // Free the dynamically allocated memory.
-  mxDestroyArray(ptr);
-}
-
-mxArray* MatlabProgram::callMatlabJacobianRoutine (const ArrayOfMatrices& x, 
-						   bool returnStructureOnly) {
-  int      nrhs = x.length() + 2 + (bool) auxData;
-  int      nlhs = 1;  // The number of outputs from Matlab.
-  mxArray* plhs[1];   // The outputs to the Matlab routine.
-
-  // The first input argument is the function to call.
-  prhs[0] = jacobianFunc;
-
-  // Pass the input, "returnStructureOnly" boolean variable.
-  MatlabScalar RSOMatlabInput(prhs[1 + x.length()],returnStructureOnly);
-
-  // Pass the auxiliary data, if necessary.
-  if (auxData)
-    prhs[2 + x.length()] = const_cast<mxArray*>(auxData);
-
-  // Call the designated Matlab routine for evaluating the
-  // Jacobian of the constraints at the current point. It takes as
-  // input the values of the variables, and returns a single
-  // matrix containing the value of the Jacobian evaluated at the
-  // current point.
-  if (mexCallMATLAB(nlhs,plhs,nrhs,prhs,"feval"))
-    throw MatlabException("Evaluation of constraint Jacobian failed in \
-call to MATLAB routine");
-
-  // Check whether the output from the Matlab routine makes sense.
-  int      numConstraints = constraintlb.length();
-  int      numVariables   = x.numelems();
-  mxArray* ptr            = plhs[0];
-  if ((int) mxGetM(ptr) != numConstraints || 
-      (int) mxGetN(ptr) != numVariables)
-    throw MatlabException("Invalid constraint Jacobian passed back from \
-Matlab routine");
-
-  // Clear the dynamically allocated memory, except for the
-  // information that is returned from this function.
-  mxDestroyArray(prhs[1 + x.length()]);
-
-  return plhs[0];
-}
-
-mxArray* MatlabProgram::callMatlabHessianRoutine (const ArrayOfMatrices& x, 
-						  const Array<double>& lambda, 
-						  bool returnStructureOnly, 
-						  double sigma) {
-  int      nrhs = x.length() + 4 + (bool) auxData;  
-  int      nlhs = 1;  // The number of outputs from Matlab.
-  mxArray* plhs[1];   // The outputs to the Matlab routine.
-
-  // The first argument is the function to call.
-  prhs[0] = hessianFunc;
-
-  // The argument after the variables is "sigma".
-  MatlabScalar sigmaMatlabInput(prhs[1 + x.length()],sigma);
-
-  // The next argument is "lambda".
-  prhs[2 + x.length()] = lambdarhs;
-
-  // The next argument is "returnStructureOnly".
-  MatlabScalar RSOMatlabInput(prhs[3 + x.length()],returnStructureOnly);
-
-  // Pass the auxiliary data, if necessary.
-  if (auxData)
-    prhs[4 + x.length()] = const_cast<mxArray*>(auxData);
-
-  // Call the designated Matlab routine for evaluating the Hessian
-  // of the Lagrangian function at the current point. It takes as
-  // input the factor "sigma", the current values of the Lagrange
-  // multipliers "lambda" and the current values of the variables,
-  // and returns a single matrix containing the value of the
-  // Hessian evaluated at the current point.
-  if (mexCallMATLAB(nlhs,plhs,nrhs,prhs,"feval"))
-    throw MatlabException("Evaluation of Hessian of the Lagrangian \
-failed in call to MATLAB routine");
-
-  // Check whether the output from the Matlab routine makes sense.
-  int numVariables = x.numelems();
-  mxArray* ptr     = plhs[0];
-  if ((int) mxGetM(ptr) != numVariables || (int) mxGetN(ptr) != numVariables)
-    throw MatlabException("Invalid Hessian of the Lagrangian passed \
-back from Matlab routine");
-  if (!isSparseLowerTriangular(ptr))
-    throw MatlabException("Matlab array must be a lower triangular \
-matrix; type HELP TRIL");
-
-  // Free some of the dynamically allocated memory.
-  mxDestroyArray(prhs[1+x.length()]);
-  mxDestroyArray(prhs[3+x.length()]);
-
-  return plhs[0];
-}
-
-// Function definitions.
-// ---------------------------------------------------------------
-void destroyMatlabArrays (mxArray* ptrs[], int n) {
-  for (int i = 0; i < n; i++)
-    mxDestroyArray(ptrs[i]);
-}

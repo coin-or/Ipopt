@@ -18,53 +18,53 @@ MATLAB_HOME = @MATLAB_HOME@
 # Set the suffix for matlab mex files. The contents of the
 # $(MATLAB_HOME)/extern/examples/mex directory might be able to help
 # you in your choice.
-MEXSUFFIX   = mexglx    # Linux 32-bit
-# MEXSUFFIX = mexmac    # Mac OS X
+MEXSUFFIX   = @MEXSUFFIX@
 
 # This is the command used to call the mex program. Usually, it is
 # just "mex". But it also may be something like
 # /user/local/R2006b/bin/mex if "mex" doesn't work.
-MEX = mex
+MEX = $(MATLAB_HOME)/bin/mex
 
 #############################################################################
 # Do not modify anything below unless you know what you're doing.
+exec_prefix = @exec_prefix@
+prefix      = @prefix@
 
-CXX           = @CXX@
-CXXFLAGS      = @CXXFLAGS@ -DMATLAB_MEXFILE # -DMWINDEXISINT
-IPOPT_INCLUDE = -I@includedir@
-IPOPTLIBDIR   = @libdir@
-exec_prefix   = @exec_prefix@
-prefix        = @prefix@
-LIBS          = @ipoptlib@ @ADDLIBS@
+CXX         = @CXX@
+CXXFLAGS    = @CXXFLAGS@ -DMATLAB_MEXFILE # -DMWINDEXISINT
+LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
+IPOPTLIBDIR = @libdir@
+LIBS        = @ipoptlib@ @ADDLIBS@
+MEXFLAGS    = -v -cxx -O CC="$(CXX)" CXX="$(CXX)" LD="$(CXX)"       \
+              COPTIMFLAGS="$(CXXFLAGS)" CXXOPTIMFLAGS="$(CXXFLAGS)" \
+              LDOPTIMFLAGS="$(LDFLAGS)" 
 
-TARGET = ipopt.$(MEXSUFFIX)
-
-OBJS   = matlabexception.@OBJEXT@ matlabscalar.@OBJEXT@ \
-         matlabstring.@OBJEXT@ matlabjournal.@OBJEXT@   \
-         matlabmatrix.@OBJEXT@ arrayofmatrices.@OBJEXT@ \
-         sparsematrix.@OBJEXT@ matlabprogram.@OBJEXT@   \
-         matlaboption.@OBJEXT@ multipliers.@OBJEXT@     \
-         matlabfunctionhandle.@OBJEXT@ ipopt.@OBJEXT@
-
-MATLAB_INCLUDE = -I$(MATLAB_HOME)/extern/include
-LDFLAGS        = $(CXXFLAGS) @RPATH_FLAGS@
-MEXFLAGS       = -v -cxx -O CC="$(CXX)" CXX="$(CXX)" LD="$(CXX)"       \
-                 COPTIMFLAGS="$(CXXFLAGS)" CXXOPTIMFLAGS="$(CXXFLAGS)" \
-                 LDOPTIMFLAGS="$(LDFLAGS)" 
+TARGET = ../ipopt.$(MEXSUFFIX)
+OBJS   = matlabexception.@OBJEXT@      \
+         matlabfunctionhandle.@OBJEXT@ \
+         matlabjournal.@OBJEXT@        \
+         iterate.@OBJEXT@              \
+         ipoptoptions.@OBJEXT@         \
+         options.@OBJEXT@              \
+         sparsematrix.@OBJEXT@         \
+         callbackfunctions.@OBJEXT@    \
+         matlabinfo.@OBJEXT@           \
+         matlabprogram.@OBJEXT@        \
+         ipopt.@OBJEXT@
 
 SRCDIR = @srcdir@
 VPATH = $(SRCDIR)
 
 all: install
 
-%.@OBJEXT@: %.cpp
-	$(CXX) $(CXXFLAGS) $(IPOPT_INCLUDE) $(MATLAB_INCLUDE) -o $@ -c $^
+install: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(MEX) $(MEXFLAGS) $(LIBS) -output $@ $^
 
-install: $(TARGET)
-	cp $(TARGET) ..
+%.@OBJEXT@: %.cpp
+	$(CXX) $(CXXFLAGS) -I@includedir@/coin -I$(MATLAB_HOME)/extern/include \
+        -o $@ -c $^
 
 clean:
 	rm -f $(OBJS) $(TARGET)
