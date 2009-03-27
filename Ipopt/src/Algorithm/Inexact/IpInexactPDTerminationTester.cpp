@@ -409,8 +409,8 @@ namespace Ipopt
 
       Number sigma = rho_*tt_eps3_; // this is sigma in Model Reduction Cond.
       rhs = Max(0.5*uWu, tcc_theta_*pow(u_norm_scaled, 2)) +
-            sigma*(c_norm_ - c_plus_Av_norm_);
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*u_norm^2) + sigma*(c_norm_ - c_plus_Av_norm_)(=%23.16e) -->", lhs, rhs);
+            curr_nu*sigma*(c_norm_ - c_plus_Av_norm_);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*u_norm^2) + curr_nu*sigma*(c_norm_ - c_plus_Av_norm_)(=%23.16e) -->", lhs, rhs);
       tt1 = Compare_le(rhs, lhs, BasVal);
       if (tt1) {
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
