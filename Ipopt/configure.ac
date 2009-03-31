@@ -604,9 +604,9 @@ AC_ARG_WITH([matlab-home],
 
 if test x"$use_matlab_home" = x; then
   # Try to detect matlab home automatically
-  mexpath=`which mex 2>/dev/null`
+  mexpath=`which mexext 2>/dev/null`
   if test ! "$mexpath" = ""; then
-    MATLAB_HOME=`echo $mexpath | sed -e 's=/bin/mex=='`
+    MATLAB_HOME=`echo $mexpath | sed -e 's=/bin/mexext=='`
     AC_MSG_RESULT([$MATLAB_HOME])
   else
     AC_MSG_RESULT([no])
@@ -622,18 +622,26 @@ fi
 MEXSUFFIX=
 if test x"$MATLAB_HOME" != x; then
   AC_MSG_CHECKING([for Matlab executable extension (MEXSUFFIX)])
-  cat >conftest.c <<_ACEOF
-#include "mex.h"
-void mexFunction(int nlhs, mxArray *plhs@<:@@:>@,
-  int nrhs, const mxArray *prhs@<:@@:>@) {
-  int i=0;
-}
-_ACEOF
-  if $MATLAB_HOME/bin/mex conftest.c >5 2>&5; then
-    MEXSUFFIX=`ls conftest.mex* 5>/dev/null | sed -e 's=conftest.=='`
-    AC_MSG_RESULT([$MEXSUFFIX])
+
+##   cat >conftest.c <<_ACEOF
+## #include "mex.h"
+## void mexFunction(int nlhs, mxArray *plhs@<:@@:>@,
+##   int nrhs, const mxArray *prhs@<:@@:>@) {
+##   int i=0;
+## }
+## _ACEOF
+##   if $MATLAB_HOME/bin/mex conftest.c >5 2>&5; then
+##    MEXSUFFIX=`ls conftest.mex* 5>/dev/null | sed -e 's=conftest.=='`
+##    AC_MSG_RESULT([$MEXSUFFIX])
+##  else
+##    AC_MSG_RESULT([error running MEX compiler])
+##  fi
+
+  if ! test -x $MATLAB_HOME/bin/mexext; then
+    AC_MSG_WARN([Cannot find $MATLAB_HOME/bin/mexext executable to determine MEXSUFFIX])
   else
-    AC_MSG_RESULT([error running MEX compiler])
+    MEXSUFFIX=`$MATLAB_HOME/bin/mexext`
+    AC_MSG_RESULT([$MEXSUFFIX])
   fi
 fi
 
