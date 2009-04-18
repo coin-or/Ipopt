@@ -11,6 +11,8 @@
 
 #include <exception>
 
+#define ME_BUFLEN 512
+
 // Class MatlabException
 // -----------------------------------------------------------------
 // It is assumed that the argument passed to the constructor persists
@@ -36,7 +38,7 @@ public:
   virtual const char* what () const throw() { return message; };
     
 private:
-  char message[256];  // The error message.
+  char message[ME_BUFLEN];  // The error message.
 };
 
 #endif
