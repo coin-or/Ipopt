@@ -12,10 +12,10 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.5trunk],[http://projects.coin-or.org/Ipopt/newticket])
+AC_INIT([Ipopt],[3.6trunk],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT(
-[Copyright 2004, 2008 International Business Machines and others.
+[Copyright 2004, 2009 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
@@ -768,8 +768,49 @@ AC_CONFIG_LINKS([test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp
 ##          Create links for VPATH config of certain files            ##
 ########################################################################
 
-AC_COIN_VPATH_LINK(contrib/MatlabInterface/ipopt.m)
-AC_COIN_VPATH_LINK(contrib/MatlabInterface-Old/ipopt.m)
+AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs038.m)
+AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs051.m)
+AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs071.m)
+AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplelasso.m)
+AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/lasso.m)
+
+AC_COIN_VPATH_LINK(examples/Cpp_example/cpp_example.cpp)
+AC_COIN_VPATH_LINK(examples/Cpp_example/MyNLP.cpp)
+AC_COIN_VPATH_LINK(examples/Cpp_example/MyNLP.hpp)
+AC_COIN_VPATH_LINK(examples/hs071_cpp/hs071_main.cpp)
+AC_COIN_VPATH_LINK(examples/hs071_cpp/hs071_nlp.cpp)
+AC_COIN_VPATH_LINK(examples/hs071_cpp/hs071_nlp.hpp)
+AC_COIN_VPATH_LINK(examples/hs071_c/hs071_c.c)
+
+AC_COIN_VPATH_LINK(tutorial/AmplExperiments/hs71.mod)
+AC_COIN_VPATH_LINK(tutorial/AmplExperiments/infeasible.mod)
+AC_COIN_VPATH_LINK(tutorial/AmplExperiments/MoreAmplModels.txt)
+
+AC_COIN_VPATH_LINK(tutorial/Modeling/bad1.mod)
+AC_COIN_VPATH_LINK(tutorial/Modeling/bad1-fix1.mod)
+AC_COIN_VPATH_LINK(tutorial/Modeling/bad1-fix2.mod)
+
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/exercise_example.mod)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/C/1-skeleton/TutorialC.c)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/C/2-mistake/TutorialC.c)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/C/3-solution/TutorialC.c)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/1-skeleton/TutorialCpp_main.cpp)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/1-skeleton/TutorialCpp_nlp.hpp)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/1-skeleton/TutorialCpp_nlp.cpp)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/2-mistake/TutorialCpp_main.cpp)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/2-mistake/TutorialCpp_nlp.hpp)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/2-mistake/TutorialCpp_nlp.cpp)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_main.cpp)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.hpp)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.cpp)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m)
+AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m)
+
+
+########################################################################
+##          Create Makefiles and other stuff                          ##
+########################################################################
 
 AC_CONFIG_FILES([Makefile
 		 src/Common/Makefile
@@ -792,10 +833,27 @@ AC_CONFIG_FILES([Makefile
 		 examples/hs071_cpp/Makefile
 		 examples/hs071_c/Makefile
 		 examples/ScalableProblems/Makefile
+		 tutorial/CodingExercise/C/1-skeleton/Makefile
+		 tutorial/CodingExercise/C/2-mistake/Makefile
+		 tutorial/CodingExercise/C/3-solution/Makefile
+		 tutorial/CodingExercise/Cpp/1-skeleton/Makefile
+		 tutorial/CodingExercise/Cpp/2-mistake/Makefile
+		 tutorial/CodingExercise/Cpp/3-solution/Makefile
+		 tutorial/CodingExercise/Matlab/1-skeleton/startup.m
+		 tutorial/CodingExercise/Matlab/2-mistake/startup.m
+		 tutorial/CodingExercise/Matlab/3-solution/startup.m
+		 tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f
+		 tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f
+		 tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f
+		 tutorial/CodingExercise/Fortran/1-skeleton/Makefile
+		 tutorial/CodingExercise/Fortran/2-mistake/Makefile
+		 tutorial/CodingExercise/Fortran/3-solution/Makefile
 		 test/Makefile
 		 test/run_unitTests
 		 contrib/MatlabInterface/src/Makefile
+		 contrib/MatlabInterface/examples/startup.m
 		 contrib/MatlabInterface-Old/src/Makefile
+		 contrib/MatlabInterface-Old/examples/startup.m
 		 contrib/JavaInterface/Makefile])
 
 AC_CONFIG_HEADER([inc/config_ipopt.h])

@@ -459,7 +459,7 @@ namespace Ipopt
     roptions->AddBoundedIntegerOption(
       "print_level",
       "Output verbosity level.",
-      -2, J_LAST_LEVEL-1, J_ITERSUMMARY,
+      0, J_LAST_LEVEL-1, J_ITERSUMMARY,
       "Sets the default verbosity level for console output. The "
       "larger this value the more detailed is the output.");
 

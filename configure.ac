@@ -12,10 +12,10 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.5trunk],[http://projects.coin-or.org/Ipopt/newticket])
+AC_INIT([Ipopt],[3.6trunk],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT([
-Copyright 2007, 2008 International Business Machines and others.
+Copyright 2007, 2009 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package Coin which is distributed
 under the Common Public License.])

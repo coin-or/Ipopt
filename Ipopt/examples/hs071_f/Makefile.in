@@ -1,4 +1,4 @@
-# Copyright (C) 2003, 2006 International Business Machines and others.
+# Copyright (C) 2003, 2009 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -21,10 +21,6 @@ ADDLIBS =
 
 # CHANGEME: Additional flags for compilation (e.g., include flags)
 ADDINCFLAGS =
-
-# Directory to the sources for the (example) problem definition files
-SRCDIR = @srcdir@
-VPATH = @srcdir@
 
 ##########################################################################
 #  Usually, you don't have to change anything below.  Note that if you   #
@@ -49,7 +45,6 @@ exec_prefix = @exec_prefix@
 prefix = @prefix@
 
 # Libraries necessary to link with IPOPT
-#LIBS = -L$(IPOPTLIBDIR) -lipopt @IPADDLIBS@
 LIBS = @ipoptlib@ @FADDLIBS@ @CXXLIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
@@ -72,8 +67,8 @@ clean:
 	rm -f $(EXE) $(OBJS) IPOPT.OUT
 
 .f.o:
-	$(F77) $(FFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
+	$(F77) $(FFLAGS) $(INCL) -c -o $@ $<
 
 
 .f.obj:
-	$(F77) $(FFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`
+	$(F77) $(FFLAGS) $(INCL) -c -o $@ `$(CYGPATH_W) '$<'`
