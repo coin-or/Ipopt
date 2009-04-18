@@ -1,4 +1,4 @@
-# Copyright (C) 2005, 2006 International Business Machines and others.
+# Copyright (C) 2005, 2009 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -23,11 +23,6 @@ ADDLIBS =
 # CHANGEME: Additional flags for compilation (e.g., include flags)
 ADDINCFLAGS =
 
-# CHANGEME: Directory to the sources for the (example) problem definition
-# files
-SRCDIR = @srcdir@
-VPATH = @srcdir@
-
 ##########################################################################
 #  Usually, you don't have to change anything below.  Note that if you   #
 #  change certain compiler options, you might have to recompile Ipopt.   #
@@ -51,7 +46,6 @@ exec_prefix = @exec_prefix@
 prefix = @prefix@
 
 # Libraries necessary to link with IPOPT
-#LIBS = -L$(IPOPTLIBDIR) -lipopt @IPADDLIBS@
 LIBS = @ipoptlib@ @ADDLIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
@@ -71,11 +65,11 @@ $(EXE): $(OBJS)
 	$(CXX) $(CXXLINKFLAGS) $(CXXFLAGS) -o $@ $$bla $(ADDLIBS) $(LIBS)
 
 clean:
-	rm -rf $(EXE) $(OBJS)
+	rm -rf $(EXE) $(OBJS) ipopt.out
 
 .cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ $<
 
 
 .cpp.obj:
-	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `$(CYGPATH_W) '$<'`

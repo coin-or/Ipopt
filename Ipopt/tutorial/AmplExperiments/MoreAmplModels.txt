@@ -1,0 +1,24 @@
+This file lists a few website where more AMPL models can be
+downloaded.  Not all of those problems are small enough to be used
+with the AMPL student version.
+
+Bob Vanderbei's collection:
+
+     http://www.orfe.princeton.edu/~rvdb/ampl/nlmodels/index.html
+
+  This incluhes the complete Hock-Schittkowski suite:
+
+     http://www.orfe.princeton.edu/~rvdb/ampl/nlmodels/hs/index.html
+
+
+The COPS test problems:
+
+     http://www.mcs.anl.gov/~more/cops/
+
+  The default sizes are too large for the AMPL Student Solver version.
+  However, in many cases you can reduce the problem size by editing
+  the *.par1 parameter data files.
+
+
+If you know of more interesting example models, please send a message
+to the Ipopt mailing list and an entry will be added here.

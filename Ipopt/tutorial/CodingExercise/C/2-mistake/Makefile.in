@@ -1,8 +1,8 @@
-# Copyright (C) 2003, 2009 International Business Machines and others.
+# Copyright (C) 2009 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
-# $Id$
+# $Id: Makefile.in 1135 2007-12-27 19:23:06Z andreasw $
 
 ##########################################################################
 #    You can modify this example makefile to fit for your own program.   #
@@ -10,12 +10,11 @@
 ##########################################################################
 
 # CHANGEME: This should be the name of your executable
-EXE = cpp_example@EXEEXT@
+EXE = TutorialC@EXEEXT@
 
 # CHANGEME: Here is the name of all object files corresponding to the source
 #           code that you wrote in order to define the problem statement
-OBJS =  cpp_example.@OBJEXT@ \
-	MyNLP.@OBJEXT@
+OBJS = TutorialC.@OBJEXT@
 
 # CHANGEME: Additional libraries
 ADDLIBS =
@@ -28,16 +27,16 @@ ADDINCFLAGS =
 #  change certain compiler options, you might have to recompile Ipopt.   #
 ##########################################################################
 
-# C++ Compiler command
-CXX = @CXX@
+# C Compiler command
+CC = @CC@
 
-# C++ Compiler options
-CXXFLAGS = @CXXFLAGS@
+# C Compiler options
+CFLAGS = @CFLAGS@
 
-# additional C++ Compiler options for linking
-CXXLINKFLAGS = @RPATH_FLAGS@
+# additional C Compiler options for linking
+CLINKFLAGS = @RPATH_FLAGS@
 
-# Directory with header files
+# Directory with include file
 IPOPTINCDIR = @includedir@/coin
 
 # Directory with libipopt.a
@@ -46,7 +45,7 @@ exec_prefix = @exec_prefix@
 prefix = @prefix@
 
 # Libraries necessary to link with IPOPT
-LIBS = @ipoptlib@ @ADDLIBS@
+LIBS = @ipoptlib@ @ADDLIBS@ @CXXLIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)
@@ -57,19 +56,19 @@ CYGPATH_W = @CYGPATH_W@
 
 all: $(EXE)
 
-.SUFFIXES: .cpp .c .o .obj
+.SUFFIXES: .c .o .obj
 
 $(EXE): $(OBJS)
 	bla=;\
 	for file in $(OBJS); do bla="$$bla `$(CYGPATH_W) $$file`"; done; \
-	$(CXX) $(CXXLINKFLAGS) $(CXXFLAGS) -o $@ $$bla $(ADDLIBS) $(LIBS)
+	$(CC) $(CFLAGS) $(CLINKFLAGS) -o $@ $$bla $(ADDLIBS) $(LIBS)
 
 clean:
-	rm -rf $(EXE) $(OBJS)
+	rm -f $(EXE) $(OBJS) ipopt.out
 
-.cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ $<
+.c.o:
+	$(CC) $(CFLAGS) $(INCL) -c -o $@ $<
 
 
-.cpp.obj:
-	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `$(CYGPATH_W) '$<'`
+.c.obj:
+	$(CC) $(CFLAGS) $(INCL) -c -o $@ `$(CYGPATH_W) '$<'`

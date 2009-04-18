@@ -60,7 +60,9 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/configure \
 	$(top_srcdir)/contrib/JavaInterface/Makefile.in \
+	$(top_srcdir)/contrib/MatlabInterface-Old/examples/startup.m.in \
 	$(top_srcdir)/contrib/MatlabInterface-Old/src/Makefile.in \
+	$(top_srcdir)/contrib/MatlabInterface/examples/startup.m.in \
 	$(top_srcdir)/contrib/MatlabInterface/src/Makefile.in \
 	$(top_srcdir)/examples/Cpp_example/Makefile.in \
 	$(top_srcdir)/examples/ScalableProblems/Makefile.in \
@@ -72,7 +74,23 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/examples/hs071_cpp/hs071_nlp.hpp \
 	$(top_srcdir)/examples/hs071_f/Makefile.in \
 	$(top_srcdir)/examples/hs071_f/hs071_f.f.in \
-	$(top_srcdir)/inc/config_ipopt.h.in AUTHORS INSTALL
+	$(top_srcdir)/inc/config_ipopt.h.in \
+	$(top_srcdir)/tutorial/CodingExercise/C/1-skeleton/Makefile.in \
+	$(top_srcdir)/tutorial/CodingExercise/C/2-mistake/Makefile.in \
+	$(top_srcdir)/tutorial/CodingExercise/C/3-solution/Makefile.in \
+	$(top_srcdir)/tutorial/CodingExercise/Cpp/1-skeleton/Makefile.in \
+	$(top_srcdir)/tutorial/CodingExercise/Cpp/2-mistake/Makefile.in \
+	$(top_srcdir)/tutorial/CodingExercise/Cpp/3-solution/Makefile.in \
+	$(top_srcdir)/tutorial/CodingExercise/Fortran/1-skeleton/Makefile.in \
+	$(top_srcdir)/tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f.in \
+	$(top_srcdir)/tutorial/CodingExercise/Fortran/2-mistake/Makefile.in \
+	$(top_srcdir)/tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f.in \
+	$(top_srcdir)/tutorial/CodingExercise/Fortran/3-solution/Makefile.in \
+	$(top_srcdir)/tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f.in \
+	$(top_srcdir)/tutorial/CodingExercise/Matlab/1-skeleton/startup.m.in \
+	$(top_srcdir)/tutorial/CodingExercise/Matlab/2-mistake/startup.m.in \
+	$(top_srcdir)/tutorial/CodingExercise/Matlab/3-solution/startup.m.in \
+	AUTHORS INSTALL
 @HAVE_EXTERNALS_TRUE@am__append_3 = Externals
 @HAVE_EXTERNALS_TRUE@am__append_4 = .Externals-stamp
 subdir = .
@@ -89,8 +107,25 @@ CONFIG_CLEAN_FILES = examples/hs071_f/Makefile \
 	examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile \
 	examples/hs071_cpp/Makefile examples/hs071_c/Makefile \
 	examples/ScalableProblems/Makefile \
+	tutorial/CodingExercise/C/1-skeleton/Makefile \
+	tutorial/CodingExercise/C/2-mistake/Makefile \
+	tutorial/CodingExercise/C/3-solution/Makefile \
+	tutorial/CodingExercise/Cpp/1-skeleton/Makefile \
+	tutorial/CodingExercise/Cpp/2-mistake/Makefile \
+	tutorial/CodingExercise/Cpp/3-solution/Makefile \
+	tutorial/CodingExercise/Matlab/1-skeleton/startup.m \
+	tutorial/CodingExercise/Matlab/2-mistake/startup.m \
+	tutorial/CodingExercise/Matlab/3-solution/startup.m \
+	tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f \
+	tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f \
+	tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f \
+	tutorial/CodingExercise/Fortran/1-skeleton/Makefile \
+	tutorial/CodingExercise/Fortran/2-mistake/Makefile \
+	tutorial/CodingExercise/Fortran/3-solution/Makefile \
 	contrib/MatlabInterface/src/Makefile \
+	contrib/MatlabInterface/examples/startup.m \
 	contrib/MatlabInterface-Old/src/Makefile \
+	contrib/MatlabInterface-Old/examples/startup.m \
 	contrib/JavaInterface/Makefile
 SOURCES =
 DIST_SOURCES =
@@ -371,22 +406,24 @@ EXTRA_DIST = examples/Cpp_example/cpp_example.cpp \
 	$(am__append_3)
 
 # Stuff to clean up from "make test"
-DISTCLEANFILES = examples/hs071_cpp/hs071_cpp \
-	examples/hs071_cpp/hs071_cpp.exe \
-	examples/hs071_cpp/hs071_main.o \
-	examples/hs071_cpp/hs071_main.obj \
-	examples/hs071_cpp/hs071_nlp.o \
-	examples/hs071_cpp/hs071_nlp.obj examples/hs071_cpp/ipopt.out \
-	examples/hs071_c/hs071_c examples/hs071_c/hs071_c.exe \
-	examples/hs071_c/hs071_c.o examples/hs071_c/hs071_c.obj \
-	examples/hs071_c/ipopt.out examples/hs071_f/hs071_f \
-	examples/hs071_f/hs071_f.exe examples/hs071_f/hs071_f.o \
-	examples/hs071_f/hs071_f.obj examples/ScalableProblems/*.o \
-	examples/ScalableProblems/*.obj \
-	examples/ScalableProblems/solve_problem \
-	examples/ScalableProblems/solve_problem.exe \
-	examples/ScalableProblems/solution.txt $(am__append_4) \
-	$(VPATH_DISTCLEANFILES)
+DISTCLEANFILES = examples/Cpp_example/cpp_example@EXEEXT@ \
+	examples/Cpp_example/cpp_example.@OBJEXT@ \
+	examples/Cpp_example/MyNLP.@OBJEXT@ \
+	examples/hs071_cpp/hs071_cpp@EXEEXT@ \
+	examples/hs071_cpp/hs071_main.@OBJEXT@ \
+	examples/hs071_cpp/hs071_nlp.@OBJEXT@ \
+	examples/hs071_cpp/ipopt.out examples/hs071_c/hs071_c@EXEEXT@ \
+	examples/hs071_c/hs071_c.@OBJEXT@ examples/hs071_c/ipopt.out \
+	examples/hs071_f/hs071_f@EXEEXT@ \
+	examples/hs071_f/hs071_f.@OBJEXT@ examples/hs071_f/IPOPT.OUT \
+	examples/ScalableProblems/*.@OBJEXT@ \
+	examples/ScalableProblems/solve_problem@EXEEXT@ \
+	examples/ScalableProblems/solution.txt \
+	tutorial/CodingExercise/*/*/*.@OBJEXT@ \
+	tutorial/CodingExercise/C/*/TutorialC@EXEEXT@ \
+	tutorial/CodingExercise/Cpp/*/TutorialCpp@EXEEXT@ \
+	tutorial/CodingExercise/Fortran/*/TutorialFortran@EXEEXT@ \
+	$(am__append_4) $(VPATH_DISTCLEANFILES)
 tmpdir = tmpdir
 libipopt = libipopt.a
 DocFiles = README AUTHORS LICENSE
@@ -456,9 +493,43 @@ examples/hs071_c/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/ScalableProblems/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/ScalableProblems/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/C/1-skeleton/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/C/1-skeleton/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/C/2-mistake/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/C/2-mistake/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/C/3-solution/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/C/3-solution/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Cpp/1-skeleton/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Cpp/1-skeleton/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Cpp/2-mistake/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Cpp/2-mistake/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Cpp/3-solution/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Cpp/3-solution/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Matlab/1-skeleton/startup.m: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Matlab/1-skeleton/startup.m.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Matlab/2-mistake/startup.m: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Matlab/2-mistake/startup.m.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Matlab/3-solution/startup.m: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Matlab/3-solution/startup.m.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/1-skeleton/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/1-skeleton/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/2-mistake/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/2-mistake/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/3-solution/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/3-solution/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/MatlabInterface/src/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/MatlabInterface/src/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+contrib/MatlabInterface/examples/startup.m: $(top_builddir)/config.status $(top_srcdir)/contrib/MatlabInterface/examples/startup.m.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/MatlabInterface-Old/src/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/MatlabInterface-Old/src/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+contrib/MatlabInterface-Old/examples/startup.m: $(top_builddir)/config.status $(top_srcdir)/contrib/MatlabInterface-Old/examples/startup.m.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/JavaInterface/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/JavaInterface/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -608,7 +679,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/.. $(distdir)/../BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface-Old/src $(distdir)/contrib/MatlabInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Interfaces $(distdir)/test
+	$(mkdir_p) $(distdir)/.. $(distdir)/../BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface-Old/examples $(distdir)/contrib/MatlabInterface-Old/src $(distdir)/contrib/MatlabInterface/examples $(distdir)/contrib/MatlabInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Interfaces $(distdir)/test $(distdir)/tutorial/CodingExercise/C/1-skeleton $(distdir)/tutorial/CodingExercise/C/2-mistake $(distdir)/tutorial/CodingExercise/C/3-solution $(distdir)/tutorial/CodingExercise/Cpp/1-skeleton $(distdir)/tutorial/CodingExercise/Cpp/2-mistake $(distdir)/tutorial/CodingExercise/Cpp/3-solution $(distdir)/tutorial/CodingExercise/Fortran/1-skeleton $(distdir)/tutorial/CodingExercise/Fortran/2-mistake $(distdir)/tutorial/CodingExercise/Fortran/3-solution $(distdir)/tutorial/CodingExercise/Matlab/1-skeleton $(distdir)/tutorial/CodingExercise/Matlab/2-mistake $(distdir)/tutorial/CodingExercise/Matlab/3-solution
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
