@@ -1,4 +1,4 @@
-# Copyright (C) 2007, 2008 Peter Carbonetto. All Rights Reserved.
+# Copyright (C) 2007, 2009 Peter Carbonetto. All Rights Reserved.
 # This code is published under the Common Public License.
 #
 # Author: Peter Carbonetto
@@ -32,11 +32,12 @@ CXX           = @CXX@
 CXXFLAGS      = @CXXFLAGS@ -DMATLAB_MEXFILE # -DMWINDEXISINT
 IPOPT_INCLUDE = -I@includedir@
 IPOPTLIBDIR   = @libdir@
+libdir        = @libdir@
 exec_prefix   = @exec_prefix@
 prefix        = @prefix@
 LIBS          = @ipoptlib@ @ADDLIBS@
 
-TARGET = ../ipopt.$(MEXSUFFIX)
+TARGET = ipopt.$(MEXSUFFIX)
 
 OBJS   = matlabexception.@OBJEXT@ matlabscalar.@OBJEXT@ \
          matlabstring.@OBJEXT@ matlabjournal.@OBJEXT@   \
@@ -54,7 +55,7 @@ MEXFLAGS       = -v -cxx -O CC="$(CXX)" CXX="$(CXX)" LD="$(CXX)"       \
 SRCDIR = @srcdir@
 VPATH = $(SRCDIR)
 
-all: install
+all: $(TARGET)
 
 %.@OBJEXT@: %.cpp
 	$(CXX) $(CXXFLAGS) $(IPOPT_INCLUDE) $(MATLAB_INCLUDE) -o $@ -c $^
@@ -63,7 +64,13 @@ $(TARGET): $(OBJS)
 	$(MEX) $(MEXFLAGS) $(LIBS) -output $@ $^
 
 install: $(TARGET)
+	if test -d $(libdir); then : ; else mkdir $(libdir); fi
+	cp $(SRCDIR)/../ipopt.m $(TARGET) $(libdir)
+
+uninstall:
+	rm -f $(libdir)/ipopt.m $(libdir)/ipopt.$(MEXSUFFIX)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
 
+distclean: clean
