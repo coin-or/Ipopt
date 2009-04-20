@@ -9,30 +9,7 @@
 #ifndef __IPTIMEDTASK_HPP__
 #define __IPTIMEDTASK_HPP__
 
-#ifdef HAVE_CTIME
-# include <ctime>
-#else
-# ifdef HAVE_TIME_H
-#  include <time.h>
-# else
-#  error "don't have header file for time"
-# endif
-#endif
-
-// The following lines are copied from CoinTime.hpp
-// We should probably make some more tests here
-#if defined(_MSC_VER)
-// Turn off compiler warning about long names
-#  pragma warning(disable:4786)
-#else
-// MacOS-X and FreeBSD needs sys/time.h
-# if defined(__MACH__) || defined (__FreeBSD__)
-#  include <sys/time.h>
-# endif
-# if !defined(__MSVCRT__)
-#  include <sys/resource.h>
-# endif
-#endif
+#include "IpUtils.hpp"
 
 namespace Ipopt
 {
@@ -103,29 +80,6 @@ namespace Ipopt
     {
       DBG_ASSERT(end_called_);
       return total_time_;
-    }
-
-    // The following lines were taken from CoinTime.hpp in COIN/Coin
-    /** method determining CPU executed since start of program */
-    static inline Number CpuTime()
-    {
-      double cpu_temp;
-#if defined(_MSC_VER) || defined(__MSVCRT__)
-
-      unsigned int ticksnow;        /* clock_t is same as int */
-
-      ticksnow = (unsigned int)clock();
-
-      cpu_temp = (double)((double)ticksnow/CLOCKS_PER_SEC);
-#else
-
-      struct rusage usage;
-      getrusage(RUSAGE_SELF,&usage);
-      cpu_temp = (double)usage.ru_utime.tv_sec;
-      cpu_temp += 1.0e-6*((double) usage.ru_utime.tv_usec);
-#endif
-
-      return cpu_temp;
     }
 
   private:
