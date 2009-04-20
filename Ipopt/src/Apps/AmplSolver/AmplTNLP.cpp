@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -587,6 +587,10 @@ namespace Ipopt
       message = "Maximum Number of Iterations Exceeded.";
       solve_result_num = 400;
     }
+    else if (status == CPUTIME_EXCEEDED) {
+      message = "Maximum CPU Time Exceeded.";
+      solve_result_num = 401;
+    }
     else if (status == STOP_AT_TINY_STEP) {
       message = "Search Direction becomes Too Small.";
       solve_result_num = 500;
@@ -1031,6 +1035,10 @@ namespace Ipopt
                                      "max_iter",
                                      AmplOptionsList::Integer_Option,
                                      "Maximum number of iterations (same as max_iter)");
+    ampl_options_list->AddAmplOption("max_cpu_time",
+                                     "max_cpu_time",
+                                     AmplOptionsList::Number_Option,
+                                     "CPU time limit");
     ampl_options_list->AddAmplOption("compl_inf_tol",
                                      "compl_inf_tol",
                                      AmplOptionsList::Number_Option,

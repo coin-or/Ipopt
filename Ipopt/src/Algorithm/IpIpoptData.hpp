@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -86,7 +86,8 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
-    IpoptData(SmartPtr<IpoptAdditionalData> add_data = NULL);
+    IpoptData(SmartPtr<IpoptAdditionalData> add_data = NULL,
+              Number cpu_time_start = -1.);
 
     /** Default destructor */
     virtual ~IpoptData();
@@ -357,6 +358,14 @@ namespace Ipopt
     }
     //@}
 
+    /** Cpu time counter at the beginning of the optimization.  This
+     *  is useful to see how much CPU time has been spent in this
+     *  optimization run. */
+    Number cpu_time_start() const
+    {
+      return cpu_time_start_;
+    }
+
     /** @name Information gathered for iteration output */
     //@{
     Number info_regu_x() const
@@ -584,6 +593,9 @@ namespace Ipopt
     /** TimingStatistics object collecting all Ipopt timing
      *  statistics */
     TimingStatistics timing_statistics_;
+
+    /** CPU time counter at initialization. */
+    Number cpu_time_start_;
 
     /** Object for the data specific for the Chen-Goldfarb penalty
      *  method algorithm */

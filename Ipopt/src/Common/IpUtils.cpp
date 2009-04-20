@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2008 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -43,13 +43,22 @@
 # endif
 #endif
 
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif
+
 #include <limits>
 
 // The following code has been copied from CoinUtils' CoinTime
 
 /** 8< (BEGIN) ******************************** */
 
-#include <ctime>
 #if defined(_MSC_VER)
 // Turn off compiler warning about long names
 #  pragma warning(disable:4786)
@@ -163,6 +172,28 @@ namespace Ipopt
 
 
   static double Wallclock_firstCall_ = -1.;
+
+  // The following function were taken from CoinTime.hpp in COIN/Coin
+  Number CpuTime()
+  {
+    double cpu_temp;
+#if defined(_MSC_VER) || defined(__MSVCRT__)
+
+    unsigned int ticksnow;        /* clock_t is same as int */
+
+    ticksnow = (unsigned int)clock();
+
+    cpu_temp = (double)((double)ticksnow/CLOCKS_PER_SEC);
+#else
+
+    struct rusage usage;
+    getrusage(RUSAGE_SELF,&usage);
+    cpu_temp = (double)usage.ru_utime.tv_sec;
+    cpu_temp += 1.0e-6*((double) usage.ru_utime.tv_usec);
+#endif
+
+    return cpu_temp;
+  }
 
   double WallclockTime()
   {

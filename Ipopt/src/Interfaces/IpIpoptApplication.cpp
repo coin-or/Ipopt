@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -806,6 +806,10 @@ namespace Ipopt
       else if (status == MAXITER_EXCEEDED) {
         retValue = Maximum_Iterations_Exceeded;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Maximum Number of Iterations Exceeded.\n");
+      }
+      else if (status == CPUTIME_EXCEEDED) {
+        retValue = Maximum_CpuTime_Exceeded;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Maximum CPU time exceeded.\n");
       }
       else if (status == STOP_AT_TINY_STEP) {
         retValue = Search_Direction_Becomes_Too_Small;

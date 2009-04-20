@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -38,6 +38,13 @@ namespace Ipopt
       0, 3000,
       "The algorithm terminates with an error message if the number of "
       "iterations exceeded this number.");
+    roptions->AddLowerBoundedNumberOption(
+      "max_cpu_time",
+      "Maximum number of CPU seconds.",
+      0.0, true, 1e6,
+      "A limit on CPU seconds that Ipopt can use to solve one problem.  If "
+      "during the convergence check this limit is exceeded, Ipopt will "
+      "terminate with a coreesponding error message.");
     roptions->AddLowerBoundedNumberOption(
       "dual_inf_tol",
       "Desired threshold for the dual infeasibility.",
@@ -124,6 +131,7 @@ namespace Ipopt
       const std::string& prefix)
   {
     options.GetIntegerValue("max_iter", max_iterations_, prefix);
+    options.GetNumericValue("max_cpu_time", max_cpu_time_, prefix);
     options.GetNumericValue("dual_inf_tol", dual_inf_tol_, prefix);
     options.GetNumericValue("constr_viol_tol", constr_viol_tol_, prefix);
     options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
@@ -179,10 +187,6 @@ namespace Ipopt
       }
     }
 
-    if (IpData().iter_count() >= max_iterations_) {
-      return ConvergenceCheck::MAXITER_EXCEEDED;
-    }
-
     Number overall_error = IpCq().curr_nlp_error();
     Number dual_inf = IpCq().unscaled_curr_dual_infeasibility(NORM_MAX);
     Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
@@ -216,6 +220,15 @@ namespace Ipopt
 
     if (IpData().curr()->x()->Amax() > diverging_iterates_tol_) {
       return ConvergenceCheck::DIVERGING;
+    }
+
+    if (IpData().iter_count() >= max_iterations_) {
+      return ConvergenceCheck::MAXITER_EXCEEDED;
+    }
+
+    Number curr_cpu_time = CpuTime();
+    if (max_cpu_time_ < 999999. && curr_cpu_time - IpData().cpu_time_start() > max_cpu_time_) {
+      return ConvergenceCheck::CPUTIME_EXCEEDED;
     }
 
     last_obj_val_ = obj_val;

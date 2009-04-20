@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -25,6 +25,7 @@ namespace Ipopt
   DECLARE_STD_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT);
   DECLARE_STD_EXCEPTION(RESTORATION_FAILED);
   DECLARE_STD_EXCEPTION(RESTORATION_MAXITER_EXCEEDED);
+  DECLARE_STD_EXCEPTION(RESTORATION_CPUTIME_EXCEEDED);
   DECLARE_STD_EXCEPTION(RESTORATION_USER_STOP);
   //@}
 
