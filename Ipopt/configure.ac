@@ -338,6 +338,12 @@ if test $coin_has_lapack = no; then
   AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
 fi
 
+#########
+# METIS #
+#########
+
+AC_COIN_HAS_METIS
+
 #######################
 # HARWELL SUBROUTINES #
 #######################
@@ -682,6 +688,10 @@ fi
 
 if test "$use_lapack" = BUILD; then
   IPALLLIBS="../../../ThirdParty/Lapack/libcoinlapack.la $IPALLLIBS"
+fi
+
+if test "$use_metis" = BUILD ; then
+  IPALLLIBS="../../../ThirdParty/Metis/libcoinmetis.la $IPALLLIBS"
 fi
 
 if test "$use_hsl" = BUILD ; then

@@ -286,6 +286,11 @@ namespace Ipopt
       "choosing a larger number might avoid reallocation if the suggest values "
       "do not suffice.  This option is only available if Ipopt has been "
       "compiled with MA57.");
+    roptions->AddBoundedIntegerOption(
+      "ma57_pivot_order",
+      "Controls pivot order in MA57",
+      0, 5, 5,
+      "This is INCTL(6) in MA57.");
   }
 
   bool Ma57TSolverInterface::InitializeImpl(const OptionsList&  options,
@@ -303,6 +308,8 @@ namespace Ipopt
     }
 
     options.GetNumericValue("ma57_pre_alloc", ma57_pre_alloc_, prefix);
+    Index ma57_pivot_order;
+    options.GetIntegerValue("ma57_pivot_order", ma57_pivot_order, prefix);
 
     // The following option is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
@@ -320,7 +327,7 @@ namespace Ipopt
     wd_icntl_[4-1] = 1;      /* Print statistics.  NOT Used. */
     wd_icntl_[5-1] = 0;      /* Print error. */
 
-    // wd_icntl[6-1] = 0;       /* Pivoting order. */
+    wd_icntl_[6-1] = ma57_pivot_order;       /* Pivoting order. */
 
     wd_cntl_[1-1]  = pivtol_;    /* Pivot threshold. */
     wd_icntl_[7-1] = 1;      /* Pivoting strategy. */

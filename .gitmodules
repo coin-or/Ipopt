@@ -6,6 +6,10 @@
 	path = ThirdParty/ASL
 	url = git://github.com/coin-or-tools/ThirdParty-ASL.git
 	branch = master
+[submodule "ThirdParty/Metis"]
+	path = ThirdParty/Metis
+	url = git://github.com/coin-or-tools/ThirdParty-Metis.git
+	branch = master
 [submodule "ThirdParty/HSL"]
 	path = ThirdParty/HSL
 	url = git://github.com/coin-or-tools/ThirdParty-HSL.git
