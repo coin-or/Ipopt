@@ -529,7 +529,7 @@ ipo:
 	  sed -e 's/gen/ipo/g' $$CUTER/build/prototypes/gen.pro \
 	    -e 's/"ipo.o"/""/' \
 	    -e 's!SYSLIBS ""!SYSLIBS "\`cat $${MYCUTER}/double/lib/ipo.liblist\`"!'> ipo.pro; \
-	  sed -f $$MYCUTER/double/config/script.sed $< > $@; \
+	  sed -f $$MYCUTER/double/config/script.sed ipo.pro > $@; \
 	  chmod a+x $@; \
 	else \
 	  touch ipo; \
@@ -538,7 +538,7 @@ ipo:
 sdipo:
 	if test -r $$CUTER/build/prototypes/gen.pro ; then \
 	  sed -e 's/gen/ipo/g' $$CUTER/build/prototypes/sdgen.pro > sdipo.pro; \
-	  sed -f $$MYCUTER/double/config/script.sed $< > $@; \
+	  sed -f $$MYCUTER/double/config/script.sed sdipo.pro > $@ ; \
 	  chmod a+x $@; \
 	else \
 	  touch sdipo; \
