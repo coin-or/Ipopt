@@ -20,5 +20,13 @@ The COPS test problems:
   the *.par1 parameter data files.
 
 
+Some nice engineering examples implemented by Dieter Kraft
+
+     http://www.lrz-muenchen.de/~dkraft/
+
+  Look the the "Research" section, there are links to four AMPL models
+  (some with separate data files).
+
+
 If you know of more interesting example models, please send a message
 to the Ipopt mailing list and an entry will be added here.
