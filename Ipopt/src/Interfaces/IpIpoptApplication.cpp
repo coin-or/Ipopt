@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -228,6 +228,7 @@ namespace Ipopt
           options_to_print.push_back("#Termination");
           options_to_print.push_back("tol");
           options_to_print.push_back("max_iter");
+          options_to_print.push_back("max_cpu_time");
           options_to_print.push_back("dual_inf_tol");
           options_to_print.push_back("constr_viol_tol");
           options_to_print.push_back("compl_inf_tol");
@@ -235,6 +236,7 @@ namespace Ipopt
           options_to_print.push_back("acceptable_constr_viol_tol");
           options_to_print.push_back("acceptable_dual_inf_tol");
           options_to_print.push_back("acceptable_compl_inf_tol");
+          options_to_print.push_back("acceptable_obj_change_tol");
           options_to_print.push_back("diverging_iterates_tol");
 
           options_to_print.push_back("#NLP Scaling");
@@ -285,6 +287,9 @@ namespace Ipopt
           options_to_print.push_back("max_soc");
           options_to_print.push_back("watchdog_shortened_iter_trigger");
           options_to_print.push_back("watchdog_trial_iter_max");
+          options_to_print.push_back("alpha_for_y");
+          options_to_print.push_back("alpha_for_y_tol");
+	  options_to_print.push_back("accept_every_trial_step");
           options_to_print.push_back("corrector_type");
 
           options_to_print.push_back("#Warm Start");
@@ -351,6 +356,7 @@ namespace Ipopt
           options_to_print.push_back("ma57_pivtol");
           options_to_print.push_back("ma57_pivtolmax");
           options_to_print.push_back("ma57_pre_alloc");
+          options_to_print.push_back("ma57_pivot_order");
 #endif
 
 #ifdef COIN_HAS_MUMPS
@@ -367,6 +373,7 @@ namespace Ipopt
 #if defined(HAVE_PARDISO) || defined(HAVE_LINEARSOLVERLOADER)
 
           options_to_print.push_back("#Pardiso Linear Solver");
+          options_to_print.push_back("pardiso_msglvl");
           options_to_print.push_back("pardiso_matching_strategy");
           options_to_print.push_back("pardiso_out_of_core_power");
 #endif
@@ -379,6 +386,7 @@ namespace Ipopt
           options_to_print.push_back("wsmp_pivtol");
           options_to_print.push_back("wsmp_pivtolmax");
           options_to_print.push_back("wsmp_scaling");
+          options_to_print.push_back("wsmp_singularity_threshold");
 #endif
 
           reg_options_->OutputLatexOptionDocumentation(*jnlst_, options_to_print);
@@ -459,7 +467,7 @@ namespace Ipopt
     roptions->AddBoundedIntegerOption(
       "print_level",
       "Output verbosity level.",
-      -2, J_LAST_LEVEL-1, J_ITERSUMMARY,
+      0, J_LAST_LEVEL-1, J_ITERSUMMARY,
       "Sets the default verbosity level for console output. The "
       "larger this value the more detailed is the output.");
 
@@ -806,6 +814,10 @@ namespace Ipopt
       else if (status == MAXITER_EXCEEDED) {
         retValue = Maximum_Iterations_Exceeded;
         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Maximum Number of Iterations Exceeded.\n");
+      }
+      else if (status == CPUTIME_EXCEEDED) {
+        retValue = Maximum_CpuTime_Exceeded;
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Maximum CPU time exceeded.\n");
       }
       else if (status == STOP_AT_TINY_STEP) {
         retValue = Search_Direction_Becomes_Too_Small;

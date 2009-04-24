@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -113,7 +113,8 @@ namespace Ipopt
 
     // ToDo set those up during initialize?
     // Create the restoration phase NLP etc objects
-    SmartPtr<IpoptData> resto_ip_data = new IpoptData();
+    SmartPtr<IpoptData> resto_ip_data =
+      new IpoptData(NULL, IpData().cpu_time_start());
     SmartPtr<IpoptNLP> resto_ip_nlp =
       new RestoIpoptNLP(IpNLP(), IpData(), IpCq());
     SmartPtr<IpoptCalculatedQuantities> resto_ip_cq =
@@ -220,6 +221,10 @@ namespace Ipopt
     else if (resto_status == MAXITER_EXCEEDED) {
       THROW_EXCEPTION(RESTORATION_MAXITER_EXCEEDED,
                       "Maximal number of iterations exceeded in restoration phase.");
+    }
+    else if (resto_status == CPUTIME_EXCEEDED) {
+      THROW_EXCEPTION(RESTORATION_CPUTIME_EXCEEDED,
+                      "Maximal CPU time exceeded in restoration phase.");
     }
     else if (resto_status == LOCAL_INFEASIBILITY) {
       // converged to locally infeasible point - pass this on to the outer algorithm...

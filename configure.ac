@@ -15,7 +15,7 @@ AC_PREREQ(2.59)
 AC_INIT([Ipopt],[3.6stable],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT([
-Copyright 2007, 2008 International Business Machines and others.
+Copyright 2007, 2009 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package Coin which is distributed
 under the Common Public License.])
@@ -44,6 +44,8 @@ AC_COIN_CREATE_LIBTOOL
 
 AC_COIN_THIRDPARTY_SUBDIRS([Blas],[ThirdParty/Blas],[daxpy.f])
 AC_COIN_THIRDPARTY_SUBDIRS([Lapack],[ThirdParty/Lapack],[LAPACK/SRC/dlarf.f])
+AC_COIN_THIRDPARTY_SUBDIRS([Metis],[ThirdParty/Metis],
+                           [metis-4.0/Lib/balance.c])
 AC_COIN_THIRDPARTY_SUBDIRS([HSL],[ThirdParty/HSL],[*.f])
 AC_COIN_THIRDPARTY_SUBDIRS([ASL],[ThirdParty/ASL],[solvers/asl.h])
 AC_COIN_THIRDPARTY_SUBDIRS([Mumps],[ThirdParty/Mumps],[MUMPS/src/dmumps_part1.F])

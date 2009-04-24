@@ -37,8 +37,23 @@ bool MatlabFunctionHandle::evaluate (int nin, int nout, const mxArray** inputs,
     finputs[i+1] = mxDuplicateArray(inputs[i]);
 
   // Call "feval".
-  int exitstatus = mexCallMATLAB(nout,outputs,nin+1,finputs,"feval");
-
+  int exitstatus;
+  try {
+    exitstatus = mexCallMATLAB(nout,outputs,nin+1,finputs,"feval");
+  }
+  catch (std::exception ME) {
+    const char* what = ME.what();
+    if (what) {
+      mexPrintf("Matlab exception:\n%s", what);
+    }
+    else {
+      mexPrintf("Matlab exception without message");
+    }
+    exitstatus = -2;
+  }
+  catch (...) {
+    exitstatus = -1;
+  }
   // Free the dynamically allocated memory.
   delete[] finputs;
   return exitstatus == 0;

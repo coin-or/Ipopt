@@ -5,7 +5,7 @@
  Sets the default verbosity level for console
 output. The larger this value the more detailed
 is the output. The valid range for this integer option is
-$-2 \le {\tt print\_level } \le 12$
+$0 \le {\tt print\_level } \le 12$
 and its default value is $5$.
 
 
@@ -75,7 +75,6 @@ Possible values:
    \item *: Any acceptable standard file name
 \end{itemize}
 
-
 \subsection{Termination}
 
 \paragraph{tol:}\label{sec:tol} Desired convergence tolerance (relative). $\;$ \\
@@ -100,6 +99,15 @@ and its default value is $1 \cdot 10^{-08}$.
 the number of iterations exceeded this number. The valid range for this integer option is
 $0 \le {\tt max\_iter } <  {\tt +inf}$
 and its default value is $3000$.
+
+
+\paragraph{max\_cpu\_time:}\label{sec:max_cpu_time} Maximum number of CPU seconds. $\;$ \\
+ A limit on CPU seconds that Ipopt can use to
+solve one problem.  If during the convergence
+check this limit is exceeded, Ipopt will
+terminate with a corresponding error message. The valid range for this real option is 
+$0 <  {\tt max\_cpu\_time } <  {\tt +inf}$
+and its default value is $1 \cdot 10^{+06}$.
 
 
 \paragraph{dual\_inf\_tol:}\label{sec:dual_inf_tol} Desired threshold for the dual infeasibility. $\;$ \\
@@ -175,6 +183,18 @@ less than this threshold; see also
 acceptable\_tol. The valid range for this real option is 
 $0 <  {\tt acceptable\_compl\_inf\_tol } <  {\tt +inf}$
 and its default value is $0.01$.
+
+
+\paragraph{acceptable\_obj\_change\_tol:}\label{sec:acceptable_obj_change_tol} "Acceptance" stopping criterion based on objective function change. $\;$ \\
+ If the relative change of the objective function
+(scaled by Max(1,|f(x)|)) is less than this
+value, this part of the acceptable tolerance
+termination is satisfied; see also
+acceptable\_tol.  This is useful for the
+quasi-Newton option, which has trouble to bring
+down the dual infeasibility. The valid range for this real option is 
+$0 \le {\tt acceptable\_obj\_change\_tol } <  {\tt +inf}$
+and its default value is $1 \cdot 10^{+20}$.
 
 
 \paragraph{diverging\_iterates\_tol:}\label{sec:diverging_iterates_tol} Threshold for maximal value of primal iterates. $\;$ \\
@@ -437,7 +457,6 @@ bound\_mult\_init\_val
    \item mu-based: initialize to mu\_init/x\_slack
 \end{itemize}
 
-
 \subsection{Barrier Parameter}
 
 \paragraph{mehrotra\_algorithm:}\label{sec:mehrotra_algorithm} Indicates if we want to do Mehrotra's algorithm. $\;$ \\
@@ -601,14 +620,14 @@ The default value for this string option is "primal".
 Possible values:
 \begin{itemize}
    \item primal: use primal step size
-   \item bound\_mult: use step size for the bound multipliers (good
+   \item bound-mult: use step size for the bound multipliers (good
 for LPs)
    \item min: use the min of primal and bound multipliers
    \item max: use the max of primal and bound multipliers
    \item full: take a full step of size one
-   \item min\_dual\_infeas: choose step size minimizing new dual
+   \item min-dual-infeas: choose step size minimizing new dual
 infeasibility
-   \item safe\_min\_dual\_infeas: like "min\_dual\_infeas", but safeguarded by
+   \item safer-min-dual-infeas: like "min\_dual\_infeas", but safeguarded by
 "min" and "max"
    \item primal-and-full: use the primal step size, and full step if
 delta\_x <= alpha\_for\_y\_tol
@@ -670,6 +689,54 @@ stored point. The valid range for this integer option is
 $1 \le {\tt watchdog\_trial\_iter\_max } <  {\tt +inf}$
 and its default value is $3$.
 
+
+\paragraph{alpha\_for\_y:}\label{sec:alpha_for_y} Method to determine the step size for constraint multipliers. $\;$ \\
+ This option determines how the step size
+(alpha\_y) will be calculated when updating the
+constraint multipliers.
+The default value for this string option is "primal".
+\\ 
+Possible values:
+\begin{itemize}
+   \item primal: use primal step size
+   \item bound-mult: use step size for the bound multipliers (good
+for LPs)
+   \item min: use the min of primal and bound multipliers
+   \item max: use the max of primal and bound multipliers
+   \item full: take a full step of size one
+   \item min-dual-infeas: choose step size minimizing new dual
+infeasibility
+   \item safer-min-dual-infeas: like "min\_dual\_infeas", but safeguarded by
+"min" and "max"
+   \item primal-and-full: use the primal step size, and full step if
+delta\_x <= alpha\_for\_y\_tol
+   \item dual-and-full: use the dual step size, and full step if
+delta\_x <= alpha\_for\_y\_tol
+   \item acceptor: Call LSAcceptor to get step size for y
+\end{itemize}
+
+\paragraph{alpha\_for\_y\_tol:}\label{sec:alpha_for_y_tol} Tolerance for switching to full equality multiplier steps. $\;$ \\
+ This is only relevant if "alpha\_for\_y" is
+chosen "primal-and-full" or "dual-and-full".  The
+step size for the equality constraint multipliers
+is taken to be one if the max-norm of the primal
+step is less than this tolerance. The valid range for this real option is 
+$0 \le {\tt alpha\_for\_y\_tol } <  {\tt +inf}$
+and its default value is $10$.
+
+
+\paragraph{accept\_every\_trial\_step:}\label{sec:accept_every_trial_step} Always accept the first trial step. $\;$ \\
+ Setting this option to "yes" essentially disables
+the line search and makes the algorithm take
+aggressive steps, without global convergence
+guarantees.
+The default value for this string option is "no".
+\\ 
+Possible values:
+\begin{itemize}
+   \item no: don't arbitrarily accept the full step
+   \item yes: always accept the full step
+\end{itemize}
 
 \paragraph{corrector\_type:}\label{sec:corrector_type} The type of corrector steps that should be taken (unsupported!). $\;$ \\
  If "mu\_strategy" is "adaptive", this option
@@ -1165,6 +1232,12 @@ $1 \le {\tt ma57\_pre\_alloc } <  {\tt +inf}$
 and its default value is $3$.
 
 
+\paragraph{ma57\_pivot\_order:}\label{sec:ma57_pivot_order} Controls pivot order in MA57 $\;$ \\
+ This is INCTL(6) in MA57. The valid range for this integer option is
+$0 \le {\tt ma57\_pivot\_order } \le 5$
+and its default value is $5$.
+
+
 \subsection{MUMPS Linear Solver}
 
 \paragraph{mumps\_pivtol:}\label{sec:mumps_pivtol} Pivot tolerance for the linear solver MUMPS. $\;$ \\
@@ -1212,6 +1285,14 @@ and its default value is $7$.
 
 
 \subsection{Pardiso Linear Solver}
+
+\paragraph{pardiso\_msglvl:}\label{sec:pardiso_msglvl} Pardiso message level $\;$ \\
+ This determines the amount of analysis output
+from the Pardiso solver. This is MSGLVL in the
+Pardiso manual. The valid range for this integer option is
+$0 \le {\tt pardiso\_msglvl } <  {\tt +inf}$
+and its default value is $0$.
+
 
 \paragraph{pardiso\_matching\_strategy:}\label{sec:pardiso_matching_strategy} Matching strategy to be used by Pardiso $\;$ \\
  This is IPAR(13) in Pardiso manual.  This option
@@ -1279,3 +1360,11 @@ has been compiled with WSMP. The valid range for this integer option is
 $0 \le {\tt wsmp\_scaling } \le 3$
 and its default value is $0$.
 
+
+\paragraph{wsmp\_singularity\_threshold:}\label{sec:wsmp_singularity_threshold} WSMP's singularity threshold. $\;$ \\
+ WSMP's DPARM(10) parameter.  The smaller this
+value the less likely a matrix is declared
+singular.  This option is only available if Ipopt
+has been compiled with WSMP. The valid range for this real option is 
+$0 <  {\tt wsmp\_singularity\_threshold } <  1$
+and its default value is $1 \cdot 10^{-18}$.

@@ -396,6 +396,9 @@ namespace Ipopt
       else if (conv_status == ConvergenceCheck::MAXITER_EXCEEDED) {
         return MAXITER_EXCEEDED;
       }
+      else if (conv_status == ConvergenceCheck::CPUTIME_EXCEEDED) {
+        return CPUTIME_EXCEEDED;
+      }
       else if (conv_status == ConvergenceCheck::DIVERGING) {
         return DIVERGING_ITERATES;
       }
@@ -443,6 +446,12 @@ namespace Ipopt
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().OverallAlgorithm().End();
       return MAXITER_EXCEEDED;
+    }
+    catch (RESTORATION_CPUTIME_EXCEEDED& exc) {
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
+      IpData().TimingStats().OverallAlgorithm().End();
+      return CPUTIME_EXCEEDED;
     }
     catch (RESTORATION_USER_STOP& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);

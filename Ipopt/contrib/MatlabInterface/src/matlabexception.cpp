@@ -13,16 +13,16 @@
 // ---------------------------------------------------------------
 MatlabException::MatlabException (const char* message) throw()
   : exception() { 
-  snprintf(this->message, 255, "%s", message);
+  snprintf(this->message, ME_BUFLEN, "\n*** Error using Ipopt Matlab interface: ***\n%s.\n", message);
 }
 
 MatlabException::MatlabException (const MatlabException& source) throw() 
   : exception() {
-  snprintf(message, 255, "%s", source.message);
+  snprintf(message, ME_BUFLEN, "%s.", source.message);
 }
 
 MatlabException& MatlabException::operator= (const MatlabException& source) 
 { 
-  snprintf(message, 255, "%s", source.message);
+  snprintf(message, ME_BUFLEN, "%s", source.message);
   return *this;
 }

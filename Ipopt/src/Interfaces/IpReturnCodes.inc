@@ -1,4 +1,4 @@
-C Copyright (C) 2005, 2006 International Business Machines and others.
+C Copyright (C) 2005, 2009 International Business Machines and others.
 C All Rights Reserved.
 C This code is published under the Common Public License.
 C
@@ -35,6 +35,9 @@ C
 
       INTEGER IP_ERROR_IN_STEP_COMPUTATION
       PARAMETER( IP_ERROR_IN_STEP_COMPUTATION = -3 )
+
+      INTEGER IP_CPUTIME_EXCEEDED
+      PARAMETER( IP_CPUTIME_EXCEEDED = -4 )
 
       INTEGER IP_NOT_ENOUGH_DEGREES_OF_FRE
       PARAMETER( IP_NOT_ENOUGH_DEGREES_OF_FRE = -10 )

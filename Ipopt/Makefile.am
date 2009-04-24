@@ -89,27 +89,26 @@ EXTRA_DIST = \
 # Stuff to clean up from "make test"
 
 DISTCLEANFILES = \
-	examples/hs071_cpp/hs071_cpp \
-	examples/hs071_cpp/hs071_cpp.exe \
-	examples/hs071_cpp/hs071_main.o \
-	examples/hs071_cpp/hs071_main.obj \
-	examples/hs071_cpp/hs071_nlp.o \
-	examples/hs071_cpp/hs071_nlp.obj \
+	examples/Cpp_example/cpp_example@EXEEXT@ \
+	examples/Cpp_example/cpp_example.@OBJEXT@ \
+	examples/Cpp_example/MyNLP.@OBJEXT@ \
+	examples/hs071_cpp/hs071_cpp@EXEEXT@ \
+	examples/hs071_cpp/hs071_main.@OBJEXT@ \
+	examples/hs071_cpp/hs071_nlp.@OBJEXT@ \
 	examples/hs071_cpp/ipopt.out \
-	examples/hs071_c/hs071_c \
-	examples/hs071_c/hs071_c.exe \
-	examples/hs071_c/hs071_c.o \
-	examples/hs071_c/hs071_c.obj \
+	examples/hs071_c/hs071_c@EXEEXT@ \
+	examples/hs071_c/hs071_c.@OBJEXT@ \
 	examples/hs071_c/ipopt.out \
-	examples/hs071_f/hs071_f \
-	examples/hs071_f/hs071_f.exe \
-	examples/hs071_f/hs071_f.o \
-	examples/hs071_f/hs071_f.obj \
-	examples/ScalableProblems/*.o \
-	examples/ScalableProblems/*.obj \
-	examples/ScalableProblems/solve_problem \
-	examples/ScalableProblems/solve_problem.exe \
-	examples/ScalableProblems/solution.txt
+	examples/hs071_f/hs071_f@EXEEXT@ \
+	examples/hs071_f/hs071_f.@OBJEXT@ \
+	examples/hs071_f/IPOPT.OUT \
+	examples/ScalableProblems/*.@OBJEXT@ \
+	examples/ScalableProblems/solve_problem@EXEEXT@ \
+	examples/ScalableProblems/solution.txt \
+	tutorial/CodingExercise/*/*/*.@OBJEXT@ \
+	tutorial/CodingExercise/C/*/TutorialC@EXEEXT@ \
+	tutorial/CodingExercise/Cpp/*/TutorialCpp@EXEEXT@ \
+	tutorial/CodingExercise/Fortran/*/TutorialFortran@EXEEXT@
 
 tmpdir = tmpdir
 
