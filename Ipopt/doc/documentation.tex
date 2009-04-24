@@ -1,4 +1,4 @@
-%% Copyright (C) 2005, 2008 Carnegie Mellon University and others.
+%% Copyright (C) 2005, 2009 Carnegie Mellon University and others.
 %%
 %% The first version of this file was contributed to the Ipopt project
 %% on Aug 1, 2005, by Yoshiaki Kawajiri
@@ -25,7 +25,7 @@
 %\usepackage{showlabels}
 
 \newcommand{\RR}{{\mathbb{R}}}
-\newcommand{\Ipopt}{{\sc Ipopt }}
+\newcommand{\Ipopt}{{\sc Ipopt}}
 
 
 \begin{document}
@@ -38,7 +38,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.6.1.  It includes
+  This document is a guide to using \Ipopt\ 3.6.0.  It includes
   instructions on how to obtain and compile \Ipopt, a description of
   the interface, user options, etc., as well as a tutorial on how to
   solve a nonlinear optimization problem with \Ipopt.
@@ -120,14 +120,36 @@ believe this request is only fair :).  We also have space at the
 in which \Ipopt\ has been used.  We would be very happy to hear about
 your experiences
 
-\subsection{Prerequisites}
+\subsection{Prerequisites}\label{sec:prerequisites}
 In order to build \Ipopt, some third party components are required:
 \begin{itemize}
 \item BLAS (Basic Linear Algebra Subroutines).  Many vendors of
   compilers and operating systems provide precompiled and optimized
-  libraries for these dense linear algebra subroutines.  But you can
-  also get the source code from {\tt www.netlib.org} and have the
-  \Ipopt\ distribution compile it automatically.
+  libraries for these dense linear algebra subroutines.  You can also
+  get the source code for a simple reference implementation from {\tt
+    www.netlib.org} and have the \Ipopt\ distribution compile it
+  automatically.  However, it is strongly recommended to use some
+  optimized BLAS implemetion, for large problems this can make a
+  runtime difference of an order of magnitude!
+
+  Examples for efficient BLAS implementations are:
+  \begin{itemize}
+  \item From hardware vendors:
+    \begin{itemize}
+    \item ACML (AMD Core Math Library) by AMD
+    \item ESSL (Engineering Scientific Subroutine Library) by IBM
+    \item MKL (Math Kernel Library) by Intel
+    \item Sun Performance Library by Sun
+    \end{itemize}
+  \item Generic:
+    \begin{itemize}
+    \item Atlas (Automatically Tuned Linear Algebra Software)
+    \item GotoBLAS
+    \end{itemize}
+  \end{itemize}
+  You find more information on the web by googling them.
+
+  Note: BLAS libraries distributed with Linux are not optimized.
 \item LAPACK (Linear Algebra PACKage).  Also for LAPACK, some vendors
   offer precompiled and optimized libraries.  But like with BLAS, you
   can get the source code from {\tt www.netlib.org} and have the
@@ -139,7 +161,9 @@ In order to build \Ipopt, some third party components are required:
   code with an option that requires LAPACK.  Currently, the LAPACK
   routines that are used by \Ipopt\ are only {\tt DPOTRF}, {\tt
     DPOTRS}, and {\tt DSYEV}.
-\item A sparse symmetric indefinite linear solver. The \Ipopt\ needs
+
+  Note: LAPACK libraries distributed with Linux are not optimized.
+\item A sparse symmetric indefinite linear solver. \Ipopt\ needs
   to obtain the solution of sparse, symmetric, indefinite linear
   systems, and for this it relies on third-party code.  
 
@@ -158,10 +182,9 @@ In order to build \Ipopt, some third party components are required:
   \item The Watson Sparse Matrix Package (WSMP)\\ (see {\tt
        http://www-users.cs.umn.edu/\verb|~|agupta/wsmp.html})
   \end{itemize}
-  We recommend to include at least one of the linear solvers above in
-  order to run \Ipopt, and if you want to be able to switch easily
-  between different alternatives, you can compile \Ipopt\ with all of
-  them.
+  You should include at least one of the linear solvers above in order
+  to run \Ipopt, and if you want to be able to switch easily between
+  different alternatives, you can compile \Ipopt\ with all of them.
 
   The \Ipopt\ library also has mechanisms to load the MA27, MA57, and
   Pardiso linear solvers from a shared library at runtime, if the
@@ -170,9 +193,15 @@ In order to build \Ipopt, some third party components are required:
 
   \textbf{NOTE: The solution of the linear systems is a central
     ingredient in \Ipopt\ and the optimizer's performance and
-    robustness depends on your choice.  Please keep this in mind,
-    particularly when you are comparing \Ipopt\ with other
-    optimization codes.}
+    robustness depends on your choice.  The best choice depends on
+    your application, and it makes sense to try different options.
+    Most of the solvers also rely on efficient BLAS code (see above),
+    so you should use a good BLAS library tailored to your system.
+    Please keep this in mind, particularly when you are comparing
+    \Ipopt\ with other optimization codes.}
+
+  If you are compiling MA57 or MUMPS within the \Ipopt\ build system,
+  you should also include the METIS linear system ordering package.
 
   Interfaces to other linear solvers might be added in the future; if
   you are interested in contributing such an interface please contact
@@ -361,7 +390,7 @@ To use the tarball, follow the steps below:
 \item Download the desired tarball from
   \texttt{http://www.coin-or.org/download/source/Ipopt}, it has the form {\tt
     Ipopt-{\em x.y.z}.tgz}, where {\tt\em x.y.z} is the version
-  number, such as {\tt 3.6.1}.  There might also be daily snapshot
+  number, such as {\tt 3.6.0}.  There might also be daily snapshot
   from the stable branch.  The number of the latest official release
   can be found on the \Ipopt\ Trac page.
 \item Issue the following commands to unpack the archive file: \\
@@ -400,10 +429,21 @@ Also, currently, Lapack is only required if you intend to use the
 quasi-Newton options implemented in \Ipopt.
 
 \subsubsection{Download BLAS, LAPACK and ASL}
+Note: It is \textbf{highly recommended that you obtain an efficient
+  implementation of the BLAS library}, tailored to your hardware;
+Section~\ref{sec:prerequisites} lists a few options.  Assuming that
+your precompiled efficient BLAS library is \texttt{libmyblas.a} in
+\texttt{\$HOME/lib}, you need to add the flag
+\texttt{--with-blas="-L\$HOME/lib -lmyblas"} when you run
+\texttt{configure} (see Section~\ref{sec.comp_and_inst}).  Some of
+those libraries also include LAPACK.
+
 If you have the download utility \texttt{wget} installed on your
-system, retrieving BLAS, LAPACK, and ASL is straightforward using
-scripts included with the ipopt distribution. These scripts download
-the required files from the Netlib Repository
+system, retrieving source code for BLAS (the inefficient reference
+implementation, not required if you have a precompiled library), as
+well as LAPACK and ASL is straightforward using scripts included with
+the ipopt distribution.  These scripts download the required files
+from the Netlib Repository
 (\texttt{www.netlib.org}).\\
 
 \noindent
@@ -432,9 +472,12 @@ different linear solver to experiment with what is best for your
 application.}
 
 In this section we describe how to obtain the source code for MA27
-(and MC19) from the Harwell Subroutine Library (HSL).  Those routines
-are freely available for non-commercial, academic use, but it is your
-responsibility to investigate the licensing of all third party code.
+(and MC19) from the Harwell Subroutine Library (HSL) Archive.  Those
+routines are freely available for non-commercial, academic use, but it
+is your responsibility to investigate the licensing of all third party
+code.  (Since recently, also MA57 (the successor of MA27) is available
+for free for academic institutions, via the ``HSL 2007 for
+Researchers'' library, see below.)
 
 The use of alternative linear solvers is described in
 Sections~\ref{sec:MUMPS}-\ref{sec:WSMP}.  You do not necessarily
@@ -470,12 +513,17 @@ system when using one of the Harwell solvers, but it can also be
 switched on for other linear solvers (which usually have internal
 scaling mechanisms).
 
-Note: If you have the source code for the linear solver MA57
-(successor of MA27; it is not available for free) in a \emph{single}
-file called ma57ad.f (\emph{including all dependencies}), you can
-simply put it into the {\tt \$IPOPTDIR/ThirdParty/HSL/} directory.
-The \Ipopt\ configuration script will then find this file and compile
-it into the \Ipopt\ library (just as is would compile MA27).
+Note: If you satisfy the conditions to use the HSL 2007 for
+Researchers library\\ (see
+\texttt{http://hsl.rl.ac.uk/hsl2007/hsl20074researchers.html}), you
+can download the MA57 in a way very similar to the procedure outlined
+above.  To have Ipopt compile it for you, you need to put the source
+code into a \emph{single} file called ma57ad.f (\emph{including all
+  dependencies!}) that is in the {\tt \$IPOPTDIR/ThirdParty/HSL/}
+directory. The \Ipopt\ configuration script will then find this file
+and compile it into the \Ipopt\ library (just as is would compile
+MA27).  MA57 will perform better with METIS, see
+Section~\ref{sec:METIS}.
 
 Yet another note: If you have a precompiled library containing the
 Harwell codes, you can specify the location of this library with the
@@ -509,6 +557,19 @@ configuration scripts will automatically detect it and compile MUMPS
 together with \Ipopt, \emph{if your Fortran compiler is able to compile
 Fortran 90 code}.
 
+Note: MUMPS will perform better with METIS, see
+Section~\ref{sec:METIS}.
+
+\subsubsection{Obtaining METIS}\label{sec:METIS}
+
+The linear solvers MA57 and MUMPS can make use of the matrix ordering
+algorithms implemented in METIS (see
+\texttt{http://glaros.dtc.umn.edu/gkhome/metis/metis/overview}).  If
+you are using one of those linear solvers, you should obtain the METIS
+source code and put it into \texttt{\$IPOPTDIR/ThirdParty/Metis}.
+Read the \texttt{INSTALL.Metis} file in that directory, and if you
+have the \texttt{wget} utility installed on your system, you can
+download the code by running the \texttt{./get.Metis} script.
 
 \subsubsection{Obtaining the Linear Solver Pardiso}\label{sec:Pardiso}
 

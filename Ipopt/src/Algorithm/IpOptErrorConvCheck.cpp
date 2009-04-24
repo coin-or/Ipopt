@@ -44,7 +44,7 @@ namespace Ipopt
       0.0, true, 1e6,
       "A limit on CPU seconds that Ipopt can use to solve one problem.  If "
       "during the convergence check this limit is exceeded, Ipopt will "
-      "terminate with a coreesponding error message.");
+      "terminate with a corresponding error message.");
     roptions->AddLowerBoundedNumberOption(
       "dual_inf_tol",
       "Desired threshold for the dual infeasibility.",
