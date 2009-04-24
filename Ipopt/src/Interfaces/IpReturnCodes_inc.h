@@ -1,5 +1,5 @@
 /***********************************************************************
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -26,6 +26,7 @@ enum ApplicationReturnStatus
     Maximum_Iterations_Exceeded=-1,
     Restoration_Failed=-2,
     Error_In_Step_Computation=-3,
+    Maximum_CpuTime_Exceeded=-4,
     Not_Enough_Degrees_Of_Freedom=-10,
     Invalid_Problem_Definition=-11,
     Invalid_Option=-12,

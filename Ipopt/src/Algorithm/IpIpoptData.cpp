@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -12,8 +12,10 @@
 namespace Ipopt
 {
 
-  IpoptData::IpoptData(SmartPtr<IpoptAdditionalData> add_data /*= NULL*/)
+  IpoptData::IpoptData(SmartPtr<IpoptAdditionalData> add_data /*= NULL*/,
+                       Number cpu_time_start /*= -1.*/)
       :
+      cpu_time_start_(cpu_time_start),
       add_data_(add_data)
   {}
 
@@ -68,6 +70,10 @@ namespace Ipopt
     ResetInfo();
 
     initialize_called_ = true;
+
+    if (cpu_time_start_==-1.) {
+      cpu_time_start_ = CpuTime();
+    }
 
     bool retval = true;
 

@@ -15,6 +15,9 @@
 /* If defined, the LAPACK Library is available. */
 #undef COIN_HAS_LAPACK
 
+/* If defined, the METIS library is available. */
+#undef COIN_HAS_METIS
+
 /* If defined, the MUMPS Library is available. */
 #undef COIN_HAS_MUMPS
 

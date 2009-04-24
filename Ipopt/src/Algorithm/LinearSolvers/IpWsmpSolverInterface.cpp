@@ -303,12 +303,12 @@ namespace Ipopt
     ipfint idmy;
     double ddmy;
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Calling WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
+                   "Calling WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
                           &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_,
                           IPARM_, DPARM_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Done with WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
+                   "Done with WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
 
     Index ierror = IPARM_[63];
     if (ierror!=0) {
@@ -406,11 +406,11 @@ namespace Ipopt
     double ddmy;
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Calling WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
+                   "Calling WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
                           &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Done with WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
+                   "Done with WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
 
     const Index ierror = IPARM_[63];
     if (ierror > 0) {
@@ -490,12 +490,12 @@ namespace Ipopt
     ipfint idmy;
     double ddmy;
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Calling WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
+                   "Calling WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
                           rhs_vals, &LDB, &NRHS, &ddmy, &NAUX,
                           MRP_, IPARM_, DPARM_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Done with WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", TimedTask::CpuTime(), WallclockTime());
+                   "Done with WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemBackSolve().End();
     }

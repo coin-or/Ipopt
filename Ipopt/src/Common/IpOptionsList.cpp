@@ -471,7 +471,7 @@ namespace Ipopt
       // numbers.  Therefore, we change a 'd' to an 'e'
       char* buffer = new char[strvalue.length()+1];
       strcpy(buffer, strvalue.c_str());
-      for (int i=0; i<strvalue.length(); ++i) {
+      for (int i=0; i<(int)strvalue.length(); ++i) {
         if (buffer[i]=='d' || buffer[i]=='D') {
           buffer[i] = 'e';
         }
@@ -648,7 +648,7 @@ namespace Ipopt
           // point numbers.  Therefore, we change a 'd' to an 'e'
           char* buffer = new char[value.length()+1];
           strcpy(buffer, value.c_str());
-          for (int i=0; i<value.length(); ++i) {
+          for (int i=0; i<(int)value.length(); ++i) {
             if (buffer[i]=='d' || buffer[i]=='D') {
               buffer[i] = 'e';
             }

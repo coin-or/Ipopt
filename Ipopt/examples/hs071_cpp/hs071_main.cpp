@@ -40,7 +40,7 @@ int main(int argv, char* argc[])
   app->Options()->SetStringValue("output_file", "ipopt.out");
   // The following overwrites the default name (ipopt.opt) of the
   // options file
-  app->Options()->SetStringValue("option_file_name", "hs071.opt");
+  // app->Options()->SetStringValue("option_file_name", "hs071.opt");
 
   // Intialize the IpoptApplication and process the options
   ApplicationReturnStatus status;

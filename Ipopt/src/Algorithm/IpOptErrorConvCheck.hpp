@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -75,6 +75,8 @@ namespace Ipopt
     Number acceptable_obj_change_tol_;
     /** Threshold for primal iterates for divergence test */
     Number diverging_iterates_tol_;
+    /** Upper bound on CPU time */
+    Number max_cpu_time_;
     //@}
 
   private:

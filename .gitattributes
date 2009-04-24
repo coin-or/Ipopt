@@ -52,6 +52,7 @@ Ipopt/contrib/MatlabInterface-Old/examples/bayesnet/vectorize.m -text
 Ipopt/contrib/MatlabInterface-Old/examples/examplehs038.m -text
 Ipopt/contrib/MatlabInterface-Old/examples/examplehs051.m -text
 Ipopt/contrib/MatlabInterface-Old/examples/examplehs071.m -text
+Ipopt/contrib/MatlabInterface-Old/examples/startup.m.in -text
 Ipopt/contrib/MatlabInterface-Old/ipopt.m -text
 Ipopt/contrib/MatlabInterface-Old/readme.html -text
 Ipopt/contrib/MatlabInterface/examples/bayesnet/bopt.m -text
@@ -73,6 +74,7 @@ Ipopt/contrib/MatlabInterface/examples/examplehs051.m -text
 Ipopt/contrib/MatlabInterface/examples/examplehs071.m -text
 Ipopt/contrib/MatlabInterface/examples/examplelasso.m -text
 Ipopt/contrib/MatlabInterface/examples/lasso.m -text
+Ipopt/contrib/MatlabInterface/examples/startup.m.in -text
 Ipopt/contrib/MatlabInterface/ipopt.m -text
 Ipopt/contrib/MatlabInterface/readme.html -text
 Ipopt/doc/documentation.pdf -text
@@ -91,6 +93,21 @@ Ipopt/src/contrib/LinearSolverLoader/Makefile.in -text
 Ipopt/test/Makefile.am -text
 Ipopt/test/mytoy.nl -text
 Ipopt/test/run_unitTests.in -text
+Ipopt/tutorial/AmplExperiments/hs71.mod -text
+Ipopt/tutorial/AmplExperiments/infeasible.mod -text
+Ipopt/tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f.in -text
+Ipopt/tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f.in -text
+Ipopt/tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f.in -text
+Ipopt/tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m -text
+Ipopt/tutorial/CodingExercise/Matlab/1-skeleton/startup.m.in -text
+Ipopt/tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m -text
+Ipopt/tutorial/CodingExercise/Matlab/2-mistake/startup.m.in -text
+Ipopt/tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m -text
+Ipopt/tutorial/CodingExercise/Matlab/3-solution/startup.m.in -text
+Ipopt/tutorial/CodingExercise/exercise_example.mod -text
+Ipopt/tutorial/Modeling/bad1-fix1.mod -text
+Ipopt/tutorial/Modeling/bad1-fix2.mod -text
+Ipopt/tutorial/Modeling/bad1.mod -text
 /LICENSE -text
 /Makefile.am -text
 /README -text
