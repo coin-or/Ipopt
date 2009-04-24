@@ -93,6 +93,8 @@ Ipopt/src/contrib/LinearSolverLoader/Makefile.in -text
 Ipopt/test/Makefile.am -text
 Ipopt/test/mytoy.nl -text
 Ipopt/test/run_unitTests.in -text
+Ipopt/tutorial/AmplExperiments/car1.gp -text
+Ipopt/tutorial/AmplExperiments/car1.mod -text
 Ipopt/tutorial/AmplExperiments/hs71.mod -text
 Ipopt/tutorial/AmplExperiments/infeasible.mod -text
 Ipopt/tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f.in -text
