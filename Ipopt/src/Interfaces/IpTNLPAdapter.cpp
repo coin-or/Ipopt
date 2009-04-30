@@ -923,7 +923,7 @@ namespace Ipopt
           delete [] h_iRow;
           delete [] h_jCol;
           jnlst_->Printf(J_ERROR, J_INITIALIZATION,
-                         "Option hessian_information is not chosen as limited_memory, but eval_h returns false.\n");
+                         "Option \"hessian_approximation\" is not chosen as \"limited-memory\", but eval_h returns false.\n");
           THROW_EXCEPTION(OPTION_INVALID, "eval_h is called but has not been implemented");
         }
 

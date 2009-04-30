@@ -1,0 +1,132 @@
+# Copyright (C) 2009, International Business Machines
+#
+# This file is part of the Ipopt open source package, published under
+# the Common Public License
+#
+# Author:  Andreas Waechter         IBM       2009-04-24
+
+# This AMPL script includes a model, the "solve" command, and a call
+# to gnuplot.  You can "run" all this by just typing
+#
+# $ ampl car1.mod
+#
+# in your shell.
+
+# This is an example of an optimal control problem.  We have a car
+# that is at position x=0 at time t=0, and we can control the
+# acceleration, a, (which includes breaking as well).  The
+# relationship between the position, x, and the velocity, v, of the
+# car, is defined by the differential equation
+#
+#   dx/dt(t) = v(t)
+#
+# and the relationship between the velocity and the controllable
+# acceleration is defined by
+#
+#   dv/dt(t) = a(t) - R*v^2(t)
+#
+# Here, we included a second term, involving a constant R, which is
+# meant to zinc the deceleration due to friction, and we assume that
+# the friction gets stronger as the square of the velocity.
+#
+# At the start of the considered time horizon (t=0) the car is at
+# position x=0, and at the final time (t=tf) it should be at x=L.  In
+# both cases, the car should be at rest.  There are bounds (lower
+# bound aL and upper bound aU) on the possible values for the
+# acceleration, and we want to minimize the final time, tf.
+#
+# The overall optimal control problem is therefore:
+#
+# min  tf
+# s.t. dx/dt(t) = v(t)               for t in [0,tf]
+#      dv/dt(t) = a(t) - R*v^2(t)    for t in [0,tf]
+#      aL  <=  a(t)  <=  aU          for t in [0,tf]
+#      x(0)  = 0
+#      x(tf) = L
+#
+# To obtain a finite-dimensional approximation of the problem, we need
+# to discretize the differential equations.  Let N be the number of
+# discretization intervals for [0,tf], then the length of one interval
+# is h = tf/N.  The discretized values are x[i] ~ x(i*h), etc.  Then,
+# applying finite difference approximation of the differentiation
+# operator, we have dx/dt ~ (x[i+1]-x[i])/h etc.
+#
+# With this, we can state the overall optimization problem.
+#
+
+# Number of discretization intervals
+param N := 100;
+
+# Final position
+param L := 5;
+
+# Upper bound on acceleration
+param aU := 1;
+
+# Lower bound on acceleration (we can break better than speed up :-) )
+param aL := -3;
+
+# Friction factor (try different values!)
+param R := 0.;
+#param R := 0.2;
+#param R := 1;
+
+# Initial value for final time
+param tf_init := 10;
+
+# Final time (with initial value)
+var tf := tf_init;
+
+# Size of discretization intervals
+var h = tf/N;
+
+# Position
+var x{i in 0..N} := L*(i/N);
+
+# Velocity
+var v{i in 0..N} := L/tf_init;
+
+# Acceleration
+var a{i in 0..N} >= aL, <= aU, := 0;
+
+# Objective function
+minimize final_time:
+    tf;
+
+# Differential equation for position
+subject to dx {i in 1..N}:
+    (x[i]-x[i-1])/h = v[i];
+
+# Differential equation for velocity
+subject to dv {i in 1..N}:
+    (v[i]-v[i-1])/h = a[i] - R*v[i]^2;
+
+# Boundary conditions for positions
+subject to x0:
+    x[0] = 0;
+subject to xtf:
+    x[N] = L;
+
+# Boundary conditions for velocity
+subject to v0:
+    v[0] = 0;
+subject to vtf:
+    v[N] = 0;
+
+# Optionally, we can see what happens if there is a speed limit
+# (uncomment the following two lines)
+
+#subject to police {i in 0..N}:
+#    v[i] <= 1.5;
+
+# Solve the optimization problem
+solve;
+
+# write the data into a file for gnuplot
+for {i in 0..N}
+  printf : "%16.4e %16.4e %16.4e %16.4e \n", i*h, x[i], v[i], a[i] > gnuplot.dat;
+
+# run gnuplot to draw some picture for the result
+#
+# The following command will fail if you don't have gnuplot installed
+shell "gnuplot car1.gp";
