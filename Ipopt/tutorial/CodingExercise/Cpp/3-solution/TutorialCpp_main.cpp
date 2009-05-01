@@ -33,7 +33,7 @@ int main(int argv, char* argc[])
   // Set the data:
 
   // Number of variables
-  Index N = 4;
+  Index N = 100;
 
   // constant terms in the constraints
   Number* a = new double[N-2];

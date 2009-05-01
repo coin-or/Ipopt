@@ -7,13 +7,14 @@ code { font:        12px monospace;
 pre { font:        10px monospace;
       color:       #000066 }
 
-p, ul, h2, h3, h4 { 
-  font: 12px Geneva, Arial, Helvetica, sans-serif;
+p, ul, h1, h2, h3, h4 { 
+  font: 12px sans-serif;
   color:#000000;
 }
 
-h2, h3, h4 { font-weight:bold; }
+h1, h2, h3, h4 { font-weight:bold; }
 
+h1 { font-size:28px; }
 h2 { font-size:20px; }
 h3 { font-size:16px; }
 h4 { font-size:14px; 
@@ -30,64 +31,61 @@ h4 { font-size:14px;
 cellpadding=0>
 <tr><td valign=top>
 
-<center><h2>How to install the MATLAB interface for IPOPT</h2>
+<center><h1>How to install and use the MATLAB interface for IPOPT</h1>
 <p>Peter Carbonetto<br>
 Department of Computer Science<br>
 University of British Columbia</p>
 </center>
 
-<a name="install"><h3>Installation</h3>
+<a name="install"><h2>Installation</h2>
 
-<p>Throughout this tutorial, we'll be assuming you have some sort of
-UNIX-based operating system, such as Mac OS X, Solaris or Linux. We
-can't help you if you have a Windows operating system, but we'll
-presume you have enough experience with Windows to figure out how to
-modify these steps for your setup, if necessary. (If you are using 
-Windows, we highly recommend that you check out the 
+<p>Throughout this tutorial, I'll be assuming you have some sort of
+UNIX-based operating system such as Mac OS X, Solaris or Linux. I'm afraid 
+these instructions do not directly apply to the Windows operating system.
+Hopefully you have enough experience with Windows to figure out how to
+modify these steps for your setup. (If you are using 
+Windows, I highly recommend that you check out the 
 <a href="http://gnumex.sourceforge.net">gnumex</a> project website before
-continuing.) Of course, you'll need to have a version of MATLAB installed o
-n your computer (hopefully
-a more recent version), and that you are relatively familiar with the
-MATLAB programming language (if not, it is a very simple language and
-you could learn it in a few hours). This software package has been
-tested on MATLAB versions 7.2 and 7.3. It might very well work on
+continuing.)</p>
+
+<p>Naturally, you'll need to have a version of MATLAB installed on 
+your computer. This software package has been
+tested on MATLAB versions 7.2 through 7.7. It might very well work on
 earlier versions of MATLAB, but there is also a good chance that it
 will not. It is unlikely that the software will run with versions
 prior to MATLAB 6.5.</p>
 
-<p><b>Install compilers.</b> The first thing you need to do is install
-a C++ compiler and a Fortran 77 compiler. Now, you might already have
-these installed. However, you may not be able to use these installed
-compilers because you must use the precise compilers supported by
-MATLAB (yes, it's a pain). For instance, on my Linux machine I have
+<h3>1. Install supported compilers</h3>
+
+<p>The first thing you need to do is install
+a C++ compiler and a Fortran 77 compiler. It is crucial that you use the 
+precise compilers <a
+href="http://www.mathworks.com/support/tech-notes/1600/1601.html">supported 
+by MATLAB</a>. For instance, on my Linux machine I have
 MATLAB version 7.3, so the people at MathWorks tell me that I need to
 have the <a href="href=http://www.gnu.org/software/gcc">GNU Compiler
 Collection</a> (GCC) version 3.4.5. If you use the incorrect version
-of GCC, you will likely encounter linking errors (and the "mex"
-command will tell you which compiler versions are legal). In order to
-find out which compiler is supported by your version of MATLAB, run
-the <code>mex</code> program provided in your MATLAB installation or
-consult <a
-href="http://www.mathworks.com/support/tech-notes/1600/1601.html">this
-webpage</a>.</p>
+of GCC, you will likely encounter linking errors. The <b>mex</b>
+command will tell you which compiler versions are legal.</p>
 
-<p><b>Configure MATLAB.</b> Once you've installed the appropriate
+<h3>2. Configure MATLAB</h3> 
+
+<p>Once you've installed the appropriate
 compilers, set up and configure MATLAB to build MEX files. This is
 explained quite nicely <a
 href="http://www.mathworks.com/support/tech-notes/1600/1605.html">here</a>.</p>
-<p><b>Install IPOPT.</b> The MATLAB interface adds several
-complicating matters to the <a
-href="http://www.coin-or.org/Ipopt/documentation">standard IPOPT
-installation procedure</a>. Before you continue, please familiarize
-yourself with the standard procedure. What follows are the steps
-followed on a typical Linux machine. First, download the IPOPT source
-files and the third-party source code (BLAS, LAPACK, HSL, etc.).</p>
 
-<p>MATLAB demands that you compile the code with certain flags, such
-as <code>-fPIC</code> and <code>-fexceptions</code> (on Linux). The
+<h3>3. Install IPOPT</h3>
+
+<p>To install IPOPT, follow the <a
+href="http://www.coin-or.org/Ipopt/documentation">standard IPOPT
+installation procedure</a> with a few small changes.</p>
+
+<p>Usually, MATLAB demands that you compile the code with certain flags, 
+such as <code>-fPIC</code> and <code>-fexceptions</code> on Linux. The
 first flag tells the compiler to generate position-independent code,
 and the second flag enables exception handling. Usually these flags
-coincide with your MEX options file. You figure out which flags are
+coincide with your MEX options file. You can figure out which flags are
 used on your system by running the mex compiler with the
 <code>-v</code> flag on a simple example source file (<a href="http://www.mathworks.com/support/tech-notes/1600/1605.html#example1">Hello
 World</a> is your friend). See <a
@@ -95,9 +93,18 @@ href="http://www.mathworks.com/support/tech-notes/1600/1605.html">this</a>
 MathWorks technical support webpage for more information on the
 MEX options file.</p>
 
-<p>Once you have all the necessary source code, call the IPOPT
-configure script. On a Linux machine with MATLAB 7.3 installed, the
-call should look something like</p>
+<p>IPOPT attempts to automatically locate the directory where MATLAB is
+  installed by querying the location of the <b>mex</b> executable. You can
+  also manually specify the MATLAB home directory when calling the configure
+  script with the flag <code>--with-matlab-home</code>.</p>
+
+<p>In practice, you might find that it is easier to install and use the 
+MATLAB interface by disabling compilation of the shared libraries, and use
+only static libraries instead. This is achieved with the configure script
+flag <code>-disable-shared</code>.</p>
+
+<p>On a Linux machine with MATLAB 7.3 installed, the
+call to the IPOPT configure script will look something like</p>
 
 <p><code><pre>  ./configure --prefix=$HOME/ipopt/install      \
        CXX=g++-3.4.5 CC=gcc-3.4.5 F77=g77-3.4.5 \
@@ -105,11 +112,11 @@ call should look something like</p>
        ADD_CFLAGS="-fPIC -fexceptions"          \
        ADD_FFLAGS="-fPIC -fexceptions"</pre></code></p>
 
-<p>We also installed the MATLAB interface to IPOPT on an Apple
-computer running Mac OS X 10.3.9 and MATLAB 7.2. For this machine, we
-ran the fconfigure script with the following command:</p>
+<p>I also installed the MATLAB interface to IPOPT on an Apple
+computer running Mac OS X 10.3.9 and MATLAB 7.2. For this machine, I
+ran the configure script with the following command:</p>
 
-<p><code><pre>  ./configure --prefix=$HOME/ipopt/install          \
+<p><code><pre>  ./configure --prefix=$HOME/ipopt/install                        \
     ADD_CFLAGS="-fno-common -fexceptions -no-cpp-precomp -fPIC"   \
     ADD_CXXFLAGS="-fno-common -fexceptions -no-cpp-precomp -fPIC" \
     ADD_FFLAGS="-x f77-cpp-input -fPIC -fno-common"               \
@@ -125,16 +132,21 @@ the <code>prefix</code> variable above.</p>
 <p>What we haven't yet done is compile the code for the MATLAB
 interface. We'll do this next.</p>
 
-<p><b>Modify the Makefile and build the MEX file.</b> Go to into the
+<h3>4. Modify the Makefile and build the MEX file</h3> 
+
+<p>Go to into the
 subdirectory <code>Ipopt/contrib/MatlabInterface/src</code> and open
 the file called <code>Makefile</code> with your favourite text
-editor. We need to change this file a little bit so that it coincides
-with your MATLAB setup. You will find that most of the variables, such
-as <code>CXX</code> and <code>CXXFLAGS</code>, have been automatically
+editor. You need to edit this file a little bit to suit for your system 
+setup. You will find that most of the variables such
+as <code>CXX</code> and <code>CXXFLAGS</code> have been automatically
 (and hopefully, correctly) set according to the flags specified during
-your initial call to <code>configure</code> script. However, you may
-need to modify <code>MATLAB_HOME</code> and <code>MEXSUFFIX</code>, as
-explained in the comments of the Makefile. On one of our Linux
+your initial call to <code>configure</code> script.</p>
+
+<p>However, you may
+need to modify <code>MATLAB_HOME</code>, <code>MEXSUFFIX</code> and 
+<code>MEX</code> as explained in the comments of the Makefile. 
+On one of our Linux
 machines, we had set these Makefile variables to</p>
 
 <p><code><pre>  MATLAB_HOME = /cs/local/generic/lib/pkg/matlab-7.3/bin/matlab
@@ -142,7 +154,7 @@ machines, we had set these Makefile variables to</p>
 </pre></code></p>
 
 <p>Once you think you've set up the Makefile properly, type <code>make
-all</code> in the same directory as the Makefile. If you didn't get
+install</code> in the same directory as the Makefile. If you didn't get
 any errors, then you're pretty much all set to go!</p>
 
 <p>There's a great possibility you will encounter problems with the
@@ -156,7 +168,9 @@ these locations, try sending an email to the <a
 href="http://list.coin-or.org/mailman/listinfo/coin-ipopt">IPOPT
 mailing list</a>.</p>
 
-<p><b>Finally.</b> If the installation procedure was successful, you
+<h3>5. Final steps</h3>
+
+<p>If the installation procedure was successful, you
 will end up with a MEX file. On a Linux machine, the MEX file will be
 called <code>ipopt.mexglx</code>. In order to use it in MATLAB, you
 need to tell MATLAB where to find it. The best way to do this is to
@@ -165,14 +179,26 @@ type</p>
 <p><code><pre>  addpath sourcedir</pre></code></p>
 
 <p>in the MATLAB command prompt, where <code>sourcedir</code> is the
-location of the MEX file you created. It is basically the full
-pathname that ends in <code>Ipopt/contrib/MatlabInterface</code>. You
+location of the MEX file you created. (For more information, type <code>help
+    addpath</code> in MATLAB. You
 can also achieve the same thing by modifying the
 <code>MATLABPATH</code> environment variable in the UNIX command line,
 using either the <code>export</code> command (in Bash shell), or the
 <code>setenv</code> command (in C-shell).</p>
 
-<p><b>A note on 64-bit platforms.</b> Starting with version 7.3, 
+<h2>Using the MATLAB interface</h2>
+
+<p>There are several illustrative examples provided in the 
+<code>Ipopt/contrib/MatlabInterface/examples</code> directory. The best way 
+to understand how to use the interface is to carefully go over these 
+examples.<p>
+
+<p>For more information, type <code>help ipopt</code> in the MATLAB 
+prompt.</p>
+
+<h2>A note on 64-bit platforms</h2> 
+
+<p>Starting with version 7.3, 
 MATLAB can handle 64-bit addressing, and the authors of MATLAB have 
 modified the implementation of sparse matrices to reflect this change. 
 However, the row and column indices in the sparse matrix are converted to
@@ -180,28 +206,30 @@ signed integers, and this could potentially cause problems when dealing
 with large, sparse matrices on 64-bit platforms with MATLAB version 
 7.3 or greater.</p>
 
-<a name="trouble"><h3>Troubleshooting and known issues</h3>
+<a name="trouble"><h2>Troubleshooting and known issues</h2>
 
-<p>The installation procedure we have described does involve a certain
+<p>The installation procedure I've described does involve a certain
 amount of expertise on the part of the user. If you are encountering
 problems, it is highly recommended that you follow the standard
 installation of IPOPT first, and then test the installation by running
 some examples, either in C++ or in AMPL.</p>
 
 <p>What follows are a list of common errors encountered, along
-with a suggested remedy:</p>
+with a suggested remedy.</p>
 
-<ul>
+<h3>PROBLEM: compilation is successful, but MATLAB crashes</h3>
 
-<li><b>Compilation is successful, but MATLAB crashes.</b> Even if you
+<p>Even if you
 didn't get any errors during compilation, there's still a possibility
 that you didn't link the MEX file properly. In this case, executing
 IPOPT in MATLAB will cause MATLAB to crash. This is a common problem,
 and usually arises because you did not choose the proper compiler or
 set the proper compilation flags (e.g. <code>-fPIC</code>) when you
-ran the <code>configure</code> script at the very beginning.
+ran the <code>configure</code> script at the very beginning.</p>
 
-<li><b>MATLAB fails to link to IPOPT shared library.</b> You might 
+<h3>PROBLEM: MATLAB fails to link to IPOPT shared library</h3>
+
+<p>You might 
 encounter this problem if you try to execute one of the examples in 
 MATLAB, and MATLAB complains that it cannot find the IPOPT shared 
 library. The installation script has been set up so that the MEX file 
@@ -213,14 +241,16 @@ correct path of the IPOPT library is specified. Alternatively, you
 could modify the <code>LD_LIBRARY_PATH</code>
 environment variable so that the location of the IPOPT library is
 included in the path. If none of this is familiar to you, you might 
-want to do a web search to find out more.
+want to do a web search to find out more.</p>
 
-<li><b>&quot;mwIndex&quot; is not defined.</b> You may get a
+<h3>PROBLEM: &quot;mwIndex&quot; is not defined</h3>
+
+<p> You may get a
 compilation error that says something to the effect that mwIndex is
 not defined. This error will surface on a version of MATLAB prior to
 7.3. The solution is to add the flag <code>-DMWINDEXISINT</code> to 
 the <code>CXXFLAGS</code> variable in the MATLAB interface Makefile 
-(see above).
+(see above).</p>
 
 </ul>
 

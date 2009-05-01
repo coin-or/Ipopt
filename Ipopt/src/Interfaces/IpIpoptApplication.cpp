@@ -233,6 +233,7 @@ namespace Ipopt
           options_to_print.push_back("constr_viol_tol");
           options_to_print.push_back("compl_inf_tol");
           options_to_print.push_back("acceptable_tol");
+          options_to_print.push_back("acceptable_iter");
           options_to_print.push_back("acceptable_constr_viol_tol");
           options_to_print.push_back("acceptable_dual_inf_tol");
           options_to_print.push_back("acceptable_compl_inf_tol");
