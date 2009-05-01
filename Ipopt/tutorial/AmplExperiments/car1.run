@@ -8,10 +8,13 @@
 # This AMPL script includes a model, the "solve" command, and a call
 # to gnuplot.  You can "run" all this by just typing
 #
-# $ ampl car1.mod
+# $ ampl car1.run
 #
-# in your shell.
-
+# in your shell.  Or, in an ongoing AMPL session, you can do
+#
+# ampl: reset;
+# ampl: include car1.run;
+#
 # This is an example of an optimal control problem.  We have a car
 # that is at position x=0 at time t=0, and we can control the
 # acceleration, a, (which includes breaking as well).  The
@@ -51,8 +54,10 @@
 # applying finite difference approximation of the differentiation
 # operator, we have dx/dt ~ (x[i+1]-x[i])/h etc.
 #
-# With this, we can state the overall optimization problem.
+# With this, we can state the overall optimization problem below.
 #
+# Feel free to play with some of the model parameters, such as the
+# Friction factor R, or to add the police constraint below.
 
 # Number of discretization intervals
 param N := 100;
@@ -130,3 +135,4 @@ for {i in 0..N}
 #
 # The following command will fail if you don't have gnuplot installed
 shell "gnuplot car1.gp";
+
