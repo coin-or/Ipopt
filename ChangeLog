@@ -2,6 +2,9 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2009-05-01 releases/3.6.1
+        - minor corrections in tutorial files
+
 2009-04-29 releases/3.6.0
         - new Matlab interface
         - added new option to limit cpu time (max_cpu_time)
