@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -2094,7 +2094,7 @@ namespace Ipopt
                      "No Journalist given to TNLPAdapter.  Need Journalist, otherwise can't produce any output in DerivativeChecker!");
 
     jnlst_->Printf(J_SUMMARY, J_NLP,
-                   "\nStarting derivative checker.\n\n");
+                   "Starting derivative checker for first derivatives.\n\n");
 
     bool retval = true;
     // Since this method should be independent of all other internal
@@ -2268,6 +2268,9 @@ namespace Ipopt
 
     const Number zero = 0.;
     if (deriv_test == SECOND_ORDER_TEST) {
+      jnlst_->Printf(J_SUMMARY, J_NLP,
+                     "Starting derivative checker for second derivatives.\n\n");
+
       // Get sparsity structure of Hessian
       Index* h_iRow = new Index[nz_hess_lag];
       Index* h_jCol = new Index[nz_hess_lag];

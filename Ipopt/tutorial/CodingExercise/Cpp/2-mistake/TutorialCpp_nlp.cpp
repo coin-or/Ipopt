@@ -285,23 +285,27 @@ void TutorialCpp_NLP::finalize_solution(SolverReturn status,
 					const IpoptData* ip_data,
 					IpoptCalculatedQuantities* ip_cq)
 {
-  // here is where we would store the solution to variables, or write to a file, etc
-  // so we could use the solution.
+  // here is where we would store the solution to variables, or write
+  // to a file, etc so we could use the solution.
+
+  printf("\nWriting solution file solution.txt\n");
+  FILE* fp = fopen("solution.txt", "w");
 
   // For this example, we write the solution to the console
-  printf("\n\nSolution of the primal variables, x\n");
+  fprintf(fp, "\n\nSolution of the primal variables, x\n");
   for (Index i=0; i<n; i++) {
-    printf("x[%d] = %e\n", i, x[i]);
+    fprintf(fp, "x[%d] = %e\n", i, x[i]);
   }
 
-  printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
+  fprintf(fp, "\n\nSolution of the bound multipliers, z_L and z_U\n");
   for (Index i=0; i<n; i++) {
-    printf("z_L[%d] = %e\n", i, z_L[i]);
+    fprintf(fp, "z_L[%d] = %e\n", i, z_L[i]);
   }
   for (Index i=0; i<n; i++) {
-    printf("z_U[%d] = %e\n", i, z_U[i]);
+    fprintf(fp, "z_U[%d] = %e\n", i, z_U[i]);
   }
 
-  printf("\n\nObjective value\n");
-  printf("f(x*) = %e\n", obj_value);
+  fprintf(fp, "\n\nObjective value\n");
+  fprintf(fp, "f(x*) = %e\n", obj_value);
+  fclose(fp);
 }

@@ -61,7 +61,7 @@ bool TutorialCpp_NLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
   m = N_-2;
 
   // each constraint has three nonzeros
-  nnz_jac_g = n*m;  // DENSE FOR THIS FIRST TEST!!!
+  nnz_jac_g = 3*m;
 
   // We have the full diagonal, and the first off-diagonal except for
   // the first and last variable
@@ -79,8 +79,8 @@ bool TutorialCpp_NLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
 {
   // here, the n and m we gave IPOPT in get_nlp_info are passed back to us.
   // If desired, we could assert to make sure they are what we think they are.
-  //assert(n == );
-  //assert(m == );
+  assert(n == N_);
+  assert(m == N_-2);
 
   // the variables have lower bounds of -1.5
   for (Index i=0; i<n; i++) {
@@ -163,17 +163,37 @@ bool TutorialCpp_NLP::eval_jac_g(Index n, const Number* x, bool new_x,
 				 Index *jCol, Number* values)
 {
   if (values == NULL) {
+    // return the structure of the jacobian
+
     Index inz = 0;
-    for (Index i = 0; i < m; i++) {
-      for (Index j = 0; j < n; j++) {
-	iRow[inz] = i;
-	jCol[inz] = j;
-	inz++;
-      }
+    for (Index j=0; j<m; j++) {
+      iRow[inz] = j;
+      jCol[inz] = j;
+      inz++;
+      iRow[inz] = j;
+      jCol[inz] = j+1;
+      inz++;
+      iRow[inz] = j;
+      jCol[inz] = j+2;
+      inz++;
     }
+    // sanity check
+    assert(inz==nele_jac);
   }
   else {
-    return false;
+    // return the values of the jacobian of the constraints
+
+    Index inz = 0;
+    for (Index j=0; j<m; j++) {
+      values[inz] = -1.;
+      inz++;
+      values[inz] = (2.*x[j+1]+1.5)*cos(x[j+2]);
+      inz++;
+      values[inz] = -(x[j+1]*x[j+1] + 1.5*x[j+1] -a_[j])*sin(x[j+2]);
+      inz++;
+    }
+    // sanity check
+    assert(inz==nele_jac);
   }
 
   return true;
@@ -185,18 +205,57 @@ bool TutorialCpp_NLP::eval_h(Index n, const Number* x, bool new_x,
 			     bool new_lambda, Index nele_hess, Index* iRow,
 			     Index* jCol, Number* values)
 {
-  return false;
   if (values == NULL) {
-    // return the structure (lower or upper triangular part) of the
-    // Hessian of hte Lagrangian function
 
-    // HERE FILL iRow and jCol
+    Index inz = 0;
 
+    // First variable has only a diagonal entry
+    iRow[inz] = 0;
+    jCol[inz] = 0;
+    inz++;
+
+    // Next ones have first off-diagonal and diagonal
+    for (Index i=1; i<n-1; i++) {
+      iRow[inz] = i;
+      jCol[inz] = i;
+      inz++;
+      iRow[inz] = i;
+      jCol[inz] = i+1;
+      inz++;
+    }
+
+    // Last variable has only a diagonal entry
+    iRow[inz] = n-1;
+    jCol[inz] = n-1;
+    inz++;
+
+    assert(inz == nele_hess);
   }
   else {
-    // return the values of the Hessian of hte Lagrangian function
+    // return the values. This is a symmetric matrix, fill the upper right
+    // triangle only
 
-    // HERE FILL values
+    Index inz = 0;
+
+    // Diagonal entry for first variable
+    values[inz] = obj_factor*2.;
+    inz++;
+
+    for (Index i=1; i<n-1; i++) {
+      values[inz] = obj_factor*2. + lambda[i-1]*2.*cos(x[i+1]);
+      if (i>1) {
+	values[inz] -= lambda[i-2]*(x[i-1]*x[i-1] + 1.5*x[i-1] -a_[i-2])*cos(x[i]);
+      }
+      inz++;
+      values[inz] = -lambda[i-1]*(2.*x[i]+1.5)*sin(x[i+1]);
+      inz++;
+    }
+
+    values[inz] = obj_factor*2.;
+    values[inz] -= lambda[n-3]*(x[n-2]*x[n-2] + 1.5*x[n-2] -a_[n-3])*cos(x[n-1]);
+    inz++;
+
+    assert(inz == nele_hess);
   }
 
   return true;
@@ -214,20 +273,24 @@ void TutorialCpp_NLP::finalize_solution(SolverReturn status,
   // here is where we would store the solution to variables, or write
   // to a file, etc so we could use the solution.
 
+  printf("\nWriting solution file solution.txt\n");
+  FILE* fp = fopen("solution.txt", "w");
+
   // For this example, we write the solution to the console
-  printf("\n\nSolution of the primal variables, x\n");
+  fprintf(fp, "\n\nSolution of the primal variables, x\n");
   for (Index i=0; i<n; i++) {
-    printf("x[%d] = %e\n", i, x[i]);
+    fprintf(fp, "x[%d] = %e\n", i, x[i]);
   }
 
-  printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
+  fprintf(fp, "\n\nSolution of the bound multipliers, z_L and z_U\n");
   for (Index i=0; i<n; i++) {
-    printf("z_L[%d] = %e\n", i, z_L[i]);
+    fprintf(fp, "z_L[%d] = %e\n", i, z_L[i]);
   }
   for (Index i=0; i<n; i++) {
-    printf("z_U[%d] = %e\n", i, z_U[i]);
+    fprintf(fp, "z_U[%d] = %e\n", i, z_U[i]);
   }
 
-  printf("\n\nObjective value\n");
-  printf("f(x*) = %e\n", obj_value);
+  fprintf(fp, "\n\nObjective value\n");
+  fprintf(fp, "f(x*) = %e\n", obj_value);
+  fclose(fp);
 }
