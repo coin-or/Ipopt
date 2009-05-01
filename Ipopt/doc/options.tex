@@ -155,6 +155,16 @@ $0 <  {\tt acceptable\_tol } <  {\tt +inf}$
 and its default value is $1 \cdot 10^{-06}$.
 
 
+\paragraph{acceptable\_iter:}\label{sec:acceptable_iter} Number of "acceptable" iterates before triggering termination. $\;$ \\
+ If the algorithm encounters this many successive
+"acceptable" iterates (see "acceptable\_tol"), it
+terminates, assuming that the problem has been
+solved to best possible accuracy given round-off.
+ If it is set to zero, this heuristic is disabled. The valid range for this integer option is
+$0 \le {\tt acceptable\_iter } <  {\tt +inf}$
+and its default value is $15$.
+
+
 \paragraph{acceptable\_constr\_viol\_tol:}\label{sec:acceptable_constr_viol_tol} "Acceptance" threshold for the constraint violation. $\;$ \\
  Absolute tolerance on the constraint violation.
 "Acceptable" termination requires that the

@@ -33116,6 +33116,16 @@ if test $coin_vpath_config = yes; then
 fi
 
 
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files tutorial/AmplExperiments/car1.run"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files tutorial/AmplExperiments/car1.gp"
+fi
+
+
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files tutorial/Modeling/bad1.mod"

@@ -795,6 +795,8 @@ AC_COIN_VPATH_LINK(examples/hs071_c/hs071_c.c)
 AC_COIN_VPATH_LINK(tutorial/AmplExperiments/hs71.mod)
 AC_COIN_VPATH_LINK(tutorial/AmplExperiments/infeasible.mod)
 AC_COIN_VPATH_LINK(tutorial/AmplExperiments/MoreAmplModels.txt)
+AC_COIN_VPATH_LINK(tutorial/AmplExperiments/car1.run)
+AC_COIN_VPATH_LINK(tutorial/AmplExperiments/car1.gp)
 
 AC_COIN_VPATH_LINK(tutorial/Modeling/bad1.mod)
 AC_COIN_VPATH_LINK(tutorial/Modeling/bad1-fix1.mod)
