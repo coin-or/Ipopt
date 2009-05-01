@@ -80,7 +80,7 @@ param R := 0.;
 param tf_init := 10;
 
 # Final time (with initial value)
-var tf := tf_init;
+var tf := tf_init, >= 0;
 
 # Size of discretization intervals
 var h = tf/N;
