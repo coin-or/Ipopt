@@ -60,7 +60,7 @@ namespace Ipopt
 
     /** Scaled norm of Ac */
     Number curr_scaled_Ac_norm();
-    
+
     /** Scaled, squared norm of A */
     Number curr_scaled_A_norm2();
 

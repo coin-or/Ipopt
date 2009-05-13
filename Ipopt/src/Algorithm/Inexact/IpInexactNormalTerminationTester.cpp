@@ -73,7 +73,7 @@ namespace Ipopt
   InexactNormalTerminationTester::ETerminationTest
   InexactNormalTerminationTester::
   TestTermination(Index ndim, const Number* sol, const Number* resid,
-                 Index iter, Number norm2_rhs)
+                  Index iter, Number norm2_rhs)
   {
     DBG_START_METH("InexactNormalTerminationTester::TestTermination",
                    dbg_verbosity);

@@ -146,12 +146,12 @@ namespace Ipopt
       tmp2->AddTwoVectors(1, *curr_d_minus_s, 1., *curr_Av_d_, 0.);
       c_plus_Av_norm_ = IpCq().CalcNormOfType(NORM_2, *tmp1, *tmp2);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-		     "TT: c_plus_Av_norm_ = %23.16e\n", c_plus_Av_norm_);
+                     "TT: c_plus_Av_norm_ = %23.16e\n", c_plus_Av_norm_);
 
       // compute scaled norm of the normal step
       v_norm_scaled_ = InexCq().slack_scaled_norm(*normal_x, *normal_s);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-		     "TT: v_norm_scaled_ = %23.16e\n", v_norm_scaled_);
+                     "TT: v_norm_scaled_ = %23.16e\n", v_norm_scaled_);
 
       // compute Wv (Hessian times normal step)
       curr_Wv_x_ = InexCq().curr_W_times_vec_x(*normal_x);
@@ -202,10 +202,10 @@ namespace Ipopt
     if (compute_normal) {
       curr_Av_norm_ = IpCq().CalcNormOfType(NORM_2, *curr_Av_c_, *curr_Av_d_);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-		     "TT: curr_Av_norm_ = %23.16e\n", curr_Av_norm_);
+                     "TT: curr_Av_norm_ = %23.16e\n", curr_Av_norm_);
       curr_tt1_norm_ = sqrt(pow(curr_tt2_norm_, 2) + pow(curr_Av_norm_, 2));
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-		     "TT: curr_tt1_norm_ = %23.16e\n", curr_tt1_norm_);
+                     "TT: curr_tt1_norm_ = %23.16e\n", curr_tt1_norm_);
     }
     else {
       curr_Av_norm_ = -1.;
@@ -227,7 +227,8 @@ namespace Ipopt
       last_nabla_phi_plus_ATy_s->ElementWiseMultiply(*last_scaling_slacks);
       last_tt1_norm_ =
         IpCq().CalcNormOfType(NORM_2, *last_nabla_phi_plus_ATy_x,
-                              *last_nabla_phi_plus_ATy_s);      last_tt1_norm_ = sqrt(pow(last_tt1_norm_, 2) + pow(last_Av_norm_, 2));
+                              *last_nabla_phi_plus_ATy_s);
+      last_tt1_norm_ = sqrt(pow(last_tt1_norm_, 2) + pow(last_Av_norm_, 2));
     }
     else {
       last_tt1_norm_= 1e100;
@@ -249,7 +250,7 @@ namespace Ipopt
   InexactPDTerminationTester::ETerminationTest
   InexactPDTerminationTester::
   TestTermination(Index ndim, const Number* sol, const Number* resid,
-                 Index iter, Number norm2_rhs)
+                  Index iter, Number norm2_rhs)
   {
     DBG_START_METH("InexactPDTerminationTester::TestTermination",
                    dbg_verbosity);
@@ -301,7 +302,7 @@ namespace Ipopt
     else {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "RUNNING TERMINATION TESTS FOR INEXACT NEWTON - TRUST REGION\n");
     }
-    
+
     // Get the tangential step and its scaled norm
     SmartPtr<const Vector> tangential_x;
     SmartPtr<const Vector> tangential_s;
@@ -322,7 +323,7 @@ namespace Ipopt
     Number u_norm_scaled =
       InexCq().slack_scaled_norm(*tangential_x, *tangential_s);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-		   "TT: u_norm_scaled = %23.16e\n", u_norm_scaled);
+                   "TT: u_norm_scaled = %23.16e\n", u_norm_scaled);
 
     // Compute u^TWu
     SmartPtr<const Vector> Wu_x = InexCq().curr_W_times_vec_x(*tangential_x);
@@ -370,15 +371,15 @@ namespace Ipopt
 #endif
       Nu = 0;//Nu/A_norm2;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Nu = ||A*u||^2/||A||^2 = %23.16e\n", Nu);
-    
+
       // Compute Upsilon = ||u||^2 - Nu
       Upsilon = u_norm_scaled - Nu;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Upsilon = ||u||^2 - ||A*u||^2/||A||^2 = %23.16e\n", Upsilon);
     }
-    
+
     // Base value, something on the order of square root of machine epsilon; TODO: find a better base value
     Number BasVal = Max(IpData().curr()->x()->Amax(), IpData().curr()->s()->Amax());
-    
+
     // Check tangential component condition, part 1
     Number lhs;
     Number rhs;
@@ -401,7 +402,7 @@ namespace Ipopt
     else {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
     }
-    
+
     // Check tangential component condition, part 2a
     const Number mu = IpData().curr_mu();
     rhs = 0.5*uWu;
@@ -443,7 +444,7 @@ namespace Ipopt
         }
       }
     }
-    
+
     // Check tangential component condition
     if (tcc) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Tangential Component Condition satisfied\n");
@@ -451,7 +452,7 @@ namespace Ipopt
     else {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Tangential Component Condition violated\n");
     }
-    
+
     // Check termination test 1, residual condition
     bool tt1 = tcc;
     bool tt1_kappa1 = tcc;
@@ -476,7 +477,7 @@ namespace Ipopt
     else {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
     }
-            
+
     // Check termination test 1, model reduction condition
     bool model_reduction = false;
     if (!compute_normal || tt1) {
@@ -501,7 +502,7 @@ namespace Ipopt
         lhs = Max(0.5*uWu, tcc_theta_*pow(u_norm_scaled, 2)) + sigma*curr_nu*(c_norm_ - c_plus_Av_norm_);
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                        "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*u_norm^2) + sigma*nu*(c_norm_ - c_plus_Av_norm_)(=%23.16e) -->", rhs, lhs);
-        tt1 = Compare_le(lhs, rhs, BasVal);      
+        tt1 = Compare_le(lhs, rhs, BasVal);
       }
       if (tt1) {
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
@@ -596,7 +597,7 @@ namespace Ipopt
       if (!compute_normal) {
         rhs = tt_kappa2_*curr_tt2_norm_;
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                       "TT2 testing ||gamma+A^T(y+delta)||(=%23.16e) <= kappa2*curr_tt2_norm_(=%23.16e) -->", lhs, rhs);      
+                       "TT2 testing ||gamma+A^T(y+delta)||(=%23.16e) <= kappa2*curr_tt2_norm_(=%23.16e) -->", lhs, rhs);
       }
       else {
         rhs = tt_kappa2_*Min(curr_tt2_norm_, last_tt1_norm_);

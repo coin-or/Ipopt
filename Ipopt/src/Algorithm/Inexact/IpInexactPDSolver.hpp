@@ -123,7 +123,7 @@ namespace Ipopt
      *  modified with the slacks instead of the identity matrix */
     bool modify_hessian_with_slacks_;
     /** Threshold on line search evaluation count to trigger Hessia
-     *	modification */
+     * modification */
     Index inexact_regularization_ls_count_trigger_;
     //@}
 

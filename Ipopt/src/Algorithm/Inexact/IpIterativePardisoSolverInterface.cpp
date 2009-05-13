@@ -635,16 +635,16 @@ namespace Ipopt
     // FRANK: look at this:
     if (test_result_ == IterativeSolverTerminationTester::CONTINUE) {
       if (InexData().compute_normal()) {
-	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		       "Termination tester not satisfied!!! Pretend singular\n");
-	return SYMSOLVER_SINGULAR;
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Termination tester not satisfied!!! Pretend singular\n");
+        return SYMSOLVER_SINGULAR;
       }/*
-      else {
-	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		       "Termination tester not satisfied!!! Compute normal step\n");
-        InexData().set_next_compute_normal(true);
-	return SYMSOLVER_SUCCESS; // Will setting success work out in the end?
-	}*/
+            else {
+       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+               "Termination tester not satisfied!!! Compute normal step\n");
+              InexData().set_next_compute_normal(true);
+       return SYMSOLVER_SUCCESS; // Will setting success work out in the end?
+       }*/
     }
     if (test_result_ == IterativeSolverTerminationTester::TEST_2_SATISFIED) {
       // Termination Test 2 is satisfied, set the step for the primal

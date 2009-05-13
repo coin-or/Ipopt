@@ -162,6 +162,18 @@ namespace Ipopt
                         "Problem solved to best possible numerical accuracy");
       }
 
+#if 0
+      //DELETEME
+      if (mu_changed) {
+        SmartPtr<IteratesVector> iterates = IpData().curr()->MakeNewContainer();
+        SmartPtr<Vector> z_L = iterates->z_L()->MakeNewCopy();
+        z_L->Scal(sqrt(new_mu/mu));
+        iterates->Set_z_L(*z_L);
+        IpData().set_trial(iterates);
+        IpData().AcceptTrialPoint();
+      }
+#endif
+
       // Set the new values for mu and tau
       IpData().Set_mu(new_mu);
       IpData().Set_tau(new_tau);

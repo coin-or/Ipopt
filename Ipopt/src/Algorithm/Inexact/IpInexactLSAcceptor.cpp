@@ -113,9 +113,9 @@ namespace Ipopt
       options.GetNumericValue("nu_low_fact", nu_low_fact_, prefix);
     }
     options.GetNumericValue("inexact_decomposition_activate_tol",
-			    inexact_decomposition_activate_tol_, prefix);
+                            inexact_decomposition_activate_tol_, prefix);
     options.GetNumericValue("inexact_decomposition_inactivate_tol",
-			    inexact_decomposition_inactivate_tol_, prefix);
+                            inexact_decomposition_inactivate_tol_, prefix);
 
     // The following options have been declared in FilterLSAcceptor
     Index max_soc;
@@ -163,29 +163,29 @@ namespace Ipopt
         IpCq().CalcNormOfType(NORM_2, *cplusAd_c, *cplusAd_d);
 
       const Number gradBarrTDelta = IpCq().curr_gradBarrTDelta();
-      
+
       bool compute_normal = InexData().compute_normal();
-      
+
       Number Upsilon = -1.;
       Number Nu = -1.;
       if (!compute_normal) {
 #if 0
-	// Compute Nu = ||A*u||^2/||A||^2
-	SmartPtr<const Vector> curr_Au_c = IpCq().curr_jac_c_times_vec(*tangential_x);
-	SmartPtr<Vector> curr_Au_d = delta_s->MakeNew();
-	curr_Au_d->AddTwoVectors(1., *IpCq().curr_jac_d_times_vec(*tangential_x), -1., *tangential_s, 0.);
-	Number Nu = IpCq().CalcNormOfType(NORM_2, *curr_Au_c, *curr_Au_d);
-	Nu = pow(Nu,2);
-	Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nu update: ||A*u||^2 = %23.16e\n", Nu);
-	Number A_norm2 = InexCq().curr_scaled_A_norm2();
-	Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nu update: ||A||^2 = %23.16e\n", A_norm2);
+        // Compute Nu = ||A*u||^2/||A||^2
+        SmartPtr<const Vector> curr_Au_c = IpCq().curr_jac_c_times_vec(*tangential_x);
+        SmartPtr<Vector> curr_Au_d = delta_s->MakeNew();
+        curr_Au_d->AddTwoVectors(1., *IpCq().curr_jac_d_times_vec(*tangential_x), -1., *tangential_s, 0.);
+        Number Nu = IpCq().CalcNormOfType(NORM_2, *curr_Au_c, *curr_Au_d);
+        Nu = pow(Nu,2);
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nu update: ||A*u||^2 = %23.16e\n", Nu);
+        Number A_norm2 = InexCq().curr_scaled_A_norm2();
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nu update: ||A||^2 = %23.16e\n", A_norm2);
 #endif
-	Nu = 0;//Nu/A_norm2;
-	Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nu update: Nu = ||A*u||^2/||A||^2 = %23.16e\n", Nu);
-	
-	// Compute Upsilon = ||u||^2 - Nu
-	Upsilon = scaled_tangential_norm - Nu;
-	Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nu update: Upsilon = ||u||^2 - ||A*u||^2/||A||^2 = %23.16e\n", Upsilon);
+        Nu = 0;//Nu/A_norm2;
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nu update: Nu = ||A*u||^2/||A||^2 = %23.16e\n", Nu);
+
+        // Compute Upsilon = ||u||^2 - Nu
+        Upsilon = scaled_tangential_norm - Nu;
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nu update: Upsilon = ||u||^2 - ||A*u||^2/||A||^2 = %23.16e\n", Upsilon);
       }
 
       DBG_PRINT((1,"gradBarrTDelta = %e norm_cplusAd = %e reference_theta_ = %e\n", gradBarrTDelta, norm_cplusAd, reference_theta_));
@@ -440,14 +440,14 @@ namespace Ipopt
     bool compute_normal = InexData().compute_normal();
     if (!compute_normal && alpha_primal_test < inexact_decomposition_activate_tol_) {
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                         "Setting next_compute_normal to 1 since %8.2e < inexact_decomposition_activate_tol\n", alpha_primal_test);
+                     "Setting next_compute_normal to 1 since %8.2e < inexact_decomposition_activate_tol\n", alpha_primal_test);
       InexData().set_next_compute_normal(true);
     }
     // If normal step has been computed and acceptable alpha is large,
     // set next_compute_normal to false
     if (compute_normal && alpha_primal_test > inexact_decomposition_inactivate_tol_) {
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                         "Setting next_compute_normal to 0 since %8.2e > inexact_decomposition_inactivate_tol\n", alpha_primal_test);
+                     "Setting next_compute_normal to 0 since %8.2e > inexact_decomposition_inactivate_tol\n", alpha_primal_test);
       InexData().set_next_compute_normal(false);
     }
 

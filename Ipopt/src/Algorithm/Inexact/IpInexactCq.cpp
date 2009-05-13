@@ -186,8 +186,8 @@ namespace Ipopt
     Number result;
 
     //if (!curr_scaled_A_norm_cache_.GetCachedResult(...)) {
-      result = 2;
-      //curr_scaled_A_norm_cache_.AddCachedResult(...);
+    result = 2;
+    //curr_scaled_A_norm_cache_.AddCachedResult(...);
     //}
 
     return result;
