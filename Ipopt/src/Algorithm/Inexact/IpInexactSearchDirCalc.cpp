@@ -103,7 +103,7 @@ namespace Ipopt
       compute_normal = InexData().next_compute_normal() || InexData().compute_normal();
       break;
     }
-    
+
     SmartPtr<Vector> normal_x;
     SmartPtr<Vector> normal_s;
     bool retval;
@@ -111,7 +111,7 @@ namespace Ipopt
     SmartPtr<const IteratesVector> curr = IpData().curr();
     SmartPtr<IteratesVector> rhs;
     SmartPtr<Vector> tmp;
-    
+
     // Now we set up the primal-dual system for computing the
     // tangential step and the search direction for the multipliers.
     // This is taken from IpPDSearchDirCal.cpp (rev 549).
@@ -133,9 +133,9 @@ namespace Ipopt
     rhs->Set_v_U(*tmp);
 
     // Loop through algorithms
-    bool done = false;    
+    bool done = false;
     while (!done) {
-    
+
       InexData().set_compute_normal(compute_normal);
       InexData().set_next_compute_normal(compute_normal);
 
@@ -146,11 +146,11 @@ namespace Ipopt
       else {
         retval =
           normal_step_calculator_->ComputeNormalStep(normal_x, normal_s);
-        if (!retval) return false;        
+        if (!retval) return false;
         // output
         if (Jnlst().ProduceOutput(J_VECTOR, J_SOLVE_PD_SYSTEM)) {
           Jnlst().Printf(J_VECTOR, J_SOLVE_PD_SYSTEM,
-          "Normal step (without slack scaling):\n");
+                         "Normal step (without slack scaling):\n");
           normal_x->Print(Jnlst(), J_VECTOR, J_SOLVE_PD_SYSTEM, "normal_x");
           normal_s->Print(Jnlst(), J_VECTOR, J_SOLVE_PD_SYSTEM, "normal_s");
         }
@@ -171,7 +171,7 @@ namespace Ipopt
         tmp->AddTwoVectors(1., *IpCq().curr_jac_d_times_vec(*normal_x),
                            -1., *normal_s, 0.);
         rhs->Set_y_d(*tmp);
-        
+
       }
 
       InexData().set_normal_x(normal_x);
@@ -179,7 +179,7 @@ namespace Ipopt
 
       delta = rhs->MakeNewIteratesVector();
       retval = inexact_pd_solver_->Solve(*rhs, *delta);
-      
+
       // Determine if acceptable step has been computed
       if (!compute_normal && (!retval || InexData().next_compute_normal())) {
         // If normal step has not been computed and step is not satisfactory, try computing normal step
@@ -196,10 +196,10 @@ namespace Ipopt
       // Store the search directions in the IpData object
       IpData().set_delta(delta);
       if (InexData().compute_normal()) {
-	IpData().Append_info_string("NT ");
+        IpData().Append_info_string("NT ");
       }
       else {
-	IpData().Append_info_string("PD ");
+        IpData().Append_info_string("PD ");
       }
     }
 
