@@ -52,6 +52,13 @@ namespace Ipopt
       "no", "add multiple of identity",
       "yes", "add multiple of slacks squared inverse",
       "");
+    roptions->AddLowerBoundedIntegerOption(
+      "inexact_regularization_ls_count_trigger",
+      "Threshold on line search count in previous iteration to trigger "
+      "Hessian regularization.",
+      1, 1,
+      "If the ls count in the previous iteration is larger than this value, "
+      "the Hessian will be regularized.");
   }
 
 
@@ -62,6 +69,8 @@ namespace Ipopt
     options.GetNumericValue("tcc_theta", tcc_theta_, prefix);
     options.GetBoolValue("modify_hessian_with_slacks",
                          modify_hessian_with_slacks_, prefix);
+    options.GetIntegerValue("inexact_regularization_ls_count_trigger",
+			    inexact_regularization_ls_count_trigger_, prefix);
 
     std::string linear_solver;
     options.GetStringValue("linear_solver", linear_solver, prefix);
@@ -71,6 +80,8 @@ namespace Ipopt
                                    options, prefix)) {
       return false;
     }
+
+    last_info_ls_count_ = 0;
 
     return perturbHandler_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
                                        options, prefix);
@@ -127,11 +138,18 @@ namespace Ipopt
     Number delta_d;
     perturbHandler_->ConsiderNewSystem(delta_x, delta_s, delta_c, delta_d);
 
+    if (IpData().info_ls_count() > inexact_regularization_ls_count_trigger_) {
+      perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
+					      delta_c, delta_d);
+      if (last_info_ls_count_ > inexact_regularization_ls_count_trigger_) {
+	perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
+						delta_c, delta_d);
+      }
+    }
+    last_info_ls_count_ = IpData().info_ls_count();
+
     ESymSolverStatus retval;
     Index count = 0;
-
-    SmartPtr<Vector> tangential_x;
-    SmartPtr<Vector> tangential_s;
 
     SmartPtr<const Vector> normal_x = InexData().normal_x();
     SmartPtr<const Vector> normal_s = InexData().normal_s();
@@ -192,20 +210,31 @@ namespace Ipopt
       }
       else if (retval==SYMSOLVER_SUCCESS) {
 
-        // Compute the tangetial part of the step from the overall step
-        tangential_x = normal_x->MakeNew();
-        tangential_x->AddTwoVectors(1., *sol.x(), -1., *normal_x, 0.);
-        tangential_s = normal_s->MakeNew();
-        tangential_s->AddTwoVectors(1., *sol.s(), -1., *normal_s, 0.);
-        // output
-        if (Jnlst().ProduceOutput(J_MOREVECTOR, J_SOLVE_PD_SYSTEM)) {
-          Jnlst().Printf(J_MOREVECTOR, J_SOLVE_PD_SYSTEM,
-                         "Trial tangential step (without slack scaling):\n");
-          tangential_x->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "tangential_x");
-          tangential_s->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "tangential_s");
-        }
-        InexData().set_tangential_x(tangential_x);
-        InexData().set_tangential_s(tangential_s);
+	SmartPtr<const Vector> tangential_x;
+	SmartPtr<const Vector> tangential_s;
+
+	if (InexData().compute_normal()) {
+	  // Compute the tangetial part of the step from the overall step
+	  SmartPtr<Vector> tmp = normal_x->MakeNew();
+	  tmp->AddTwoVectors(1., *sol.x(), -1., *normal_x, 0.);
+	  tangential_x = ConstPtr(tmp);
+	  tmp = normal_s->MakeNew();
+	  tmp->AddTwoVectors(1., *sol.s(), -1., *normal_s, 0.);
+	  tangential_s = ConstPtr(tmp);
+	  // output
+	  if (Jnlst().ProduceOutput(J_MOREVECTOR, J_SOLVE_PD_SYSTEM)) {
+	    Jnlst().Printf(J_MOREVECTOR, J_SOLVE_PD_SYSTEM,
+			   "Trial tangential step (without slack scaling):\n");
+	    tangential_x->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "tangential_x");
+	    tangential_s->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "tangential_s");
+	  }
+	}
+	else {
+	  tangential_x = sol.x();
+	  tangential_s = sol.s();
+	}
+	InexData().set_tangential_x(tangential_x);
+	InexData().set_tangential_s(tangential_s);
 
         if (!is_pardiso_) {
           // check if we need to modify the system
@@ -226,6 +255,11 @@ namespace Ipopt
           char buf[32];
           sprintf(buf, " TT=%d ", test_result_);
           IpData().Append_info_string(buf);
+	  if (test_result_ == IterativeSolverTerminationTester::CONTINUE &&
+	      !InexData().compute_normal()) {
+	    InexData().set_next_compute_normal(true);
+	    IpData().Append_info_string("@");
+	  }
         }
         if (retval==SYMSOLVER_SUCCESS) {
           notDone = false;

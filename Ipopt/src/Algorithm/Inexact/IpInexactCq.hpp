@@ -60,6 +60,9 @@ namespace Ipopt
 
     /** Scaled norm of Ac */
     Number curr_scaled_Ac_norm();
+    
+    /** Scaled, squared norm of A */
+    Number curr_scaled_A_norm2();
 
     /** Compute the 2-norm of a slack-scaled vector with x and s
      *  component */

@@ -122,11 +122,16 @@ namespace Ipopt
     /** flag indicating if the Hessian for the (s,s) part should be
      *  modified with the slacks instead of the identity matrix */
     bool modify_hessian_with_slacks_;
+    /** Threshold on line search evaluation count to trigger Hessia
+     *	modification */
+    Index inexact_regularization_ls_count_trigger_;
     //@}
 
     /** flag indicating if we are dealing with the Pardiso solver
      *  (temporary) */
     bool is_pardiso_;
+
+    Index last_info_ls_count_;
   };
 
 

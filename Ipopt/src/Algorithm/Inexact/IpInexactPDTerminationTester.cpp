@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -123,41 +123,55 @@ namespace Ipopt
     DBG_START_METH("InexactPDTerminationTester::InitializeSolve",
                    dbg_verbosity);
 
-    // calculate scaled Jacobian times normal step
-    curr_Av_c_ = InexCq().curr_jac_times_normal_c();
-    curr_Av_d_ = InexCq().curr_jac_times_normal_d();
+    bool compute_normal = InexData().compute_normal();
 
     // compute the current infeasibility
     c_norm_ = IpCq().curr_primal_infeasibility(NORM_2);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "TT: c_norm = %23.16e\n", c_norm_);
 
-    // compute the linearized infeasibility at the normal step
-    SmartPtr<const Vector> curr_c = IpCq().curr_c();
-    SmartPtr<Vector> tmp1 = curr_c->MakeNew();
-    tmp1->AddTwoVectors(1, *curr_c, 1., *curr_Av_c_, 0.);
-    SmartPtr<const Vector> curr_d_minus_s = IpCq().curr_d_minus_s();
-    SmartPtr<Vector> tmp2 = curr_d_minus_s->MakeNew();
-    tmp2->AddTwoVectors(1, *curr_d_minus_s, 1., *curr_Av_d_, 0.);
-    c_plus_Av_norm_ = IpCq().CalcNormOfType(NORM_2, *tmp1, *tmp2);
-    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "TT: c_plus_Av_norm_ = %23.16e\n", c_plus_Av_norm_);
-    curr_c_plus_Av_c_ = ConstPtr(tmp1);
-    curr_c_plus_Av_d_ = ConstPtr(tmp2);
-
-    // compute scaled norm of the normal step
     SmartPtr<const Vector> normal_x = InexData().normal_x();
     SmartPtr<const Vector> normal_s = InexData().normal_s();
-    v_norm_scaled_ = InexCq().slack_scaled_norm(*normal_x, *normal_s);
-    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "TT: v_norm_scaled_ = %23.16e\n", v_norm_scaled_);
+    if (compute_normal) {
+      // calculate scaled Jacobian times normal step
+      curr_Av_c_ = InexCq().curr_jac_times_normal_c();
+      curr_Av_d_ = InexCq().curr_jac_times_normal_d();
+
+      // compute the linearized infeasibility at the normal step
+      SmartPtr<const Vector> curr_c = IpCq().curr_c();
+      SmartPtr<Vector> tmp1 = curr_c->MakeNew();
+      tmp1->AddTwoVectors(1, *curr_c, 1., *curr_Av_c_, 0.);
+      SmartPtr<const Vector> curr_d_minus_s = IpCq().curr_d_minus_s();
+      SmartPtr<Vector> tmp2 = curr_d_minus_s->MakeNew();
+      tmp2->AddTwoVectors(1, *curr_d_minus_s, 1., *curr_Av_d_, 0.);
+      c_plus_Av_norm_ = IpCq().CalcNormOfType(NORM_2, *tmp1, *tmp2);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+		     "TT: c_plus_Av_norm_ = %23.16e\n", c_plus_Av_norm_);
+
+      // compute scaled norm of the normal step
+      v_norm_scaled_ = InexCq().slack_scaled_norm(*normal_x, *normal_s);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+		     "TT: v_norm_scaled_ = %23.16e\n", v_norm_scaled_);
+
+      // compute Wv (Hessian times normal step)
+      curr_Wv_x_ = InexCq().curr_W_times_vec_x(*normal_x);
+      curr_Wv_s_ = InexCq().curr_W_times_vec_s(*normal_s);
+    }
+    else {
+      curr_Av_c_ = NULL;
+      curr_Av_d_ = NULL;
+      c_plus_Av_norm_ = -1.;
+      v_norm_scaled_ = -1.;
+      curr_Wv_x_ = NULL;
+      curr_Wv_s_ = NULL;
+    }
 
     // store the previous gradient and Jacobian information
-    last_grad_barrier_obj_x_ = curr_grad_barrier_obj_x_;
-    last_grad_barrier_obj_s_ = curr_grad_barrier_obj_s_;
-    last_jac_c_ = curr_jac_c_;
-    last_jac_d_ = curr_jac_d_;
-    last_scaling_slacks_ = curr_scaling_slacks_;
+    SmartPtr<const Vector> last_grad_barrier_obj_x = curr_grad_barrier_obj_x_;
+    SmartPtr<const Vector> last_grad_barrier_obj_s = curr_grad_barrier_obj_s_;
+    SmartPtr<const Matrix> last_jac_c = curr_jac_c_;
+    SmartPtr<const Matrix> last_jac_d = curr_jac_d_;
+    SmartPtr<const Vector> last_scaling_slacks = curr_scaling_slacks_;
     last_Av_norm_ = curr_Av_norm_;
 
     // get the current gradient and Jacobian information
@@ -178,36 +192,42 @@ namespace Ipopt
     curr_nabla_phi_plus_ATy_s_ = curr_grad_barrier_obj_s_->MakeNew();
     curr_nabla_phi_plus_ATy_s_->AddTwoVectors(1., *curr_grad_barrier_obj_s_,
         -1., *IpData().curr()->y_d(), 0.);
+
     // calculate norms appearing in termination tests
     curr_nabla_phi_plus_ATy_s_->ElementWiseMultiply(*curr_scaling_slacks_);
     curr_tt2_norm_ = IpCq().CalcNormOfType(NORM_2, *curr_nabla_phi_plus_ATy_x_,
                                            *curr_nabla_phi_plus_ATy_s_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "TT: curr_tt2_norm_ = %23.16e\n", curr_tt2_norm_);
-    curr_Av_norm_ = IpCq().CalcNormOfType(NORM_2, *curr_Av_c_, *curr_Av_d_);
-    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "TT: curr_Av_norm_ = %23.16e\n", curr_Av_norm_);
-    curr_tt1_norm_ = sqrt(pow(curr_tt2_norm_, 2) + pow(curr_Av_norm_, 2));
-    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "TT: curr_tt1_norm_ = %23.16e\n", curr_tt1_norm_);
+    if (compute_normal) {
+      curr_Av_norm_ = IpCq().CalcNormOfType(NORM_2, *curr_Av_c_, *curr_Av_d_);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+		     "TT: curr_Av_norm_ = %23.16e\n", curr_Av_norm_);
+      curr_tt1_norm_ = sqrt(pow(curr_tt2_norm_, 2) + pow(curr_Av_norm_, 2));
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+		     "TT: curr_tt1_norm_ = %23.16e\n", curr_tt1_norm_);
+    }
+    else {
+      curr_Av_norm_ = -1.;
+      curr_tt1_norm_ = sqrt(pow(curr_tt2_norm_, 2) + pow(c_norm_, 2));
+    }
 
-    if (IsValid(last_grad_barrier_obj_x_)) {
+    if (compute_normal && IsValid(last_grad_barrier_obj_x)) {
       // calculate \nabla phi(x_{k-1}) + A_{k-1}^Ty_k
       SmartPtr<Vector> last_nabla_phi_plus_ATy_x =
-        last_grad_barrier_obj_x_->MakeNewCopy();
-      last_jac_c_->TransMultVector(1., *IpData().curr()->y_c(),
-                                   1., *last_nabla_phi_plus_ATy_x);
-      last_jac_d_->TransMultVector(1., *IpData().curr()->y_d(),
-                                   1., *last_nabla_phi_plus_ATy_x);
+        last_grad_barrier_obj_x->MakeNewCopy();
+      last_jac_c->TransMultVector(1., *IpData().curr()->y_c(),
+                                  1., *last_nabla_phi_plus_ATy_x);
+      last_jac_d->TransMultVector(1., *IpData().curr()->y_d(),
+                                  1., *last_nabla_phi_plus_ATy_x);
       SmartPtr<Vector> last_nabla_phi_plus_ATy_s =
-        last_grad_barrier_obj_s_->MakeNew();
-      last_nabla_phi_plus_ATy_s->AddTwoVectors(1., *last_grad_barrier_obj_s_,
+        last_grad_barrier_obj_s->MakeNew();
+      last_nabla_phi_plus_ATy_s->AddTwoVectors(1., *last_grad_barrier_obj_s,
           -1., *IpData().curr()->y_d(), 0.);
-      last_nabla_phi_plus_ATy_s->ElementWiseMultiply(*last_scaling_slacks_);
+      last_nabla_phi_plus_ATy_s->ElementWiseMultiply(*last_scaling_slacks);
       last_tt1_norm_ =
         IpCq().CalcNormOfType(NORM_2, *last_nabla_phi_plus_ATy_x,
-                              *last_nabla_phi_plus_ATy_s);
-      last_tt1_norm_ = sqrt(pow(last_tt1_norm_, 2) + pow(last_Av_norm_, 2));
+                              *last_nabla_phi_plus_ATy_s);      last_tt1_norm_ = sqrt(pow(last_tt1_norm_, 2) + pow(last_Av_norm_, 2));
     }
     else {
       last_tt1_norm_= 1e100;
@@ -215,28 +235,26 @@ namespace Ipopt
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "TT: last_tt1_norm_ = %23.16e\n", last_tt1_norm_);
 
-    // compute Wv (Hessian times normal step)
-    curr_Wv_x_ = InexCq().curr_W_times_vec_x(*normal_x);
-    curr_Wv_s_ = InexCq().curr_W_times_vec_s(*normal_s);
-
     // check if we need to test termination test 2
     Number ATc_norm = InexCq().curr_scaled_Ac_norm();
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "TT: current ATc norm = %23.16e\n", ATc_norm);
     try_tt2_ = (ATc_norm <= tt_eps2_*curr_tt2_norm_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "TT: will %s try termination test 2.\n", try_tt2_ ? " not " : "");
+                   "TT: will%s try termination test 2.\n", try_tt2_ ? "" : " not");
 
     return true;
   }
 
   InexactPDTerminationTester::ETerminationTest
   InexactPDTerminationTester::
-  TestTerminaion(Index ndim, const Number* sol, const Number* resid,
+  TestTermination(Index ndim, const Number* sol, const Number* resid,
                  Index iter, Number norm2_rhs)
   {
-    DBG_START_METH("InexactPDTerminationTester::TestTerminaion",
+    DBG_START_METH("InexactPDTerminationTester::TestTermination",
                    dbg_verbosity);
+
+    bool compute_normal = InexData().compute_normal();
 
     last_iter_ = iter;
 
@@ -276,17 +294,35 @@ namespace Ipopt
     SmartPtr<const Vector> resid_d;
     GetVectors(ndim, resid, resid_x, resid_s, resid_c, resid_d);
 
+    //// Set algorithm
+    if (!compute_normal) {
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "RUNNING TERMINATION TESTS FOR INEXACT NEWTON (which means u=d)\n");
+    }
+    else {
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "RUNNING TERMINATION TESTS FOR INEXACT NEWTON - TRUST REGION\n");
+    }
+    
     // Get the tangential step and its scaled norm
-    SmartPtr<const Vector> normal_x = InexData().normal_x();
-    SmartPtr<Vector> tangential_x = sol_x->MakeNew();
-    tangential_x->AddTwoVectors(1., *sol_x, -1, *normal_x, 0.);
-    SmartPtr<const Vector> normal_s = InexData().normal_s();
-    SmartPtr<Vector> tangential_s = sol_s->MakeNew();
-    tangential_s->AddTwoVectors(1., *sol_s, -1, *normal_s, 0.);
+    SmartPtr<const Vector> tangential_x;
+    SmartPtr<const Vector> tangential_s;
+    if (compute_normal) {
+      SmartPtr<const Vector> normal_x = InexData().normal_x();
+      SmartPtr<Vector> tmp = sol_x->MakeNew();
+      tmp->AddTwoVectors(1., *sol_x, -1, *normal_x, 0.);
+      tangential_x = ConstPtr(tmp);
+      SmartPtr<const Vector> normal_s = InexData().normal_s();
+      tmp = sol_s->MakeNew();
+      tmp->AddTwoVectors(1., *sol_s, -1, *normal_s, 0.);
+      tangential_s = ConstPtr(tmp);
+    }
+    else {
+      tangential_x = sol_x;
+      tangential_s = sol_s;
+    }
     Number u_norm_scaled =
       InexCq().slack_scaled_norm(*tangential_x, *tangential_s);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "TT: u_norm_scaled = %23.16e\n", u_norm_scaled);
+		   "TT: u_norm_scaled = %23.16e\n", u_norm_scaled);
 
     // Compute u^TWu
     SmartPtr<const Vector> Wu_x = InexCq().curr_W_times_vec_x(*tangential_x);
@@ -296,11 +332,12 @@ namespace Ipopt
                    "TT: uWu = %23.16e\n", uWu);
 
     // Compute norm of c + Ad
-    SmartPtr<Vector> c_plus_Ad_c = curr_c_plus_Av_c_->MakeNewCopy();
-    curr_jac_c_->MultVector(1., *tangential_x, 1., *c_plus_Ad_c);
-    SmartPtr<Vector> c_plus_Ad_d = curr_c_plus_Av_d_->MakeNew();
-    c_plus_Ad_d->AddTwoVectors(1., *curr_c_plus_Av_d_, -1., *tangential_s, 0.);
-    curr_jac_d_->MultVector(1., *tangential_x, 1., *c_plus_Ad_d);
+    SmartPtr<Vector> c_plus_Ad_c = IpCq().curr_c()->MakeNewCopy();
+    curr_jac_c_->MultVector(1., *sol_x, 1., *c_plus_Ad_c);
+    SmartPtr<const Vector> curr_d_minus_s = IpCq().curr_d_minus_s();
+    SmartPtr<Vector> c_plus_Ad_d = curr_d_minus_s->MakeNew();
+    c_plus_Ad_d->AddTwoVectors(1., *curr_d_minus_s, -1., *sol_s, 0.);
+    curr_jac_d_->MultVector(1., *sol_x, 1., *c_plus_Ad_d);
     Number c_plus_Ad_norm =
       IpCq().CalcNormOfType(NORM_2, *c_plus_Ad_c, *c_plus_Ad_d);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -314,35 +351,71 @@ namespace Ipopt
                    "TT: rho_norm  = %23.16e\n", rho_norm);
     tmp = NULL;
 
-    ////////// Check if the Tangential Component Condition is satisfied
+    // Compute scaled norm of entire residual
+    Number resid_norm = sqrt(pow(rho_norm, 2) + pow(c_plus_Ad_norm, 2));
 
-    Number rhs = u_norm_scaled;
-    Number lhs = tcc_psi_*v_norm_scaled_;
-    // TODO: Find a good base value.  For now, we set this so that we
-    // allow something on the order of the square root of the machine
-    // precision...
+    Number Upsilon = -1.;
+    Number Nu = -1.;
+    if (!compute_normal) {
+#if 0
+      // Compute Nu = ||A*u||^2/||A||^2
+      SmartPtr<const Vector> curr_Au_c = IpCq().curr_jac_c_times_vec(*tangential_x);
+      SmartPtr<Vector> curr_Au_d = sol_s->MakeNew();
+      curr_Au_d->AddTwoVectors(1., *IpCq().curr_jac_d_times_vec(*tangential_x), -1., *tangential_s, 0.);
+      Number Nu = IpCq().CalcNormOfType(NORM_2, *curr_Au_c, *curr_Au_d);
+      Nu = pow(Nu,2);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: ||A*u||^2 = %23.16e\n", Nu);
+      Number A_norm2 = InexCq().curr_scaled_A_norm2();
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: ||A||^2 = %23.16e\n", A_norm2);
+#endif
+      Nu = 0;//Nu/A_norm2;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Nu = ||A*u||^2/||A||^2 = %23.16e\n", Nu);
+    
+      // Compute Upsilon = ||u||^2 - Nu
+      Upsilon = u_norm_scaled - Nu;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Upsilon = ||u||^2 - ||A*u||^2/||A||^2 = %23.16e\n", Upsilon);
+    }
+    
+    // Base value, something on the order of square root of machine epsilon; TODO: find a better base value
     Number BasVal = Max(IpData().curr()->x()->Amax(), IpData().curr()->s()->Amax());
-    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TCC1 testing u_norm_scaled(=%23.16e) <= tcc_psi_*v_norm_scaled(=%23.16e) --> ", rhs, lhs);
-    bool tcc1 = Compare_le(rhs, lhs, BasVal);
-
+    
+    // Check tangential component condition, part 1
+    Number lhs;
+    Number rhs;
+    if (!compute_normal) {
+      lhs = Upsilon;
+      rhs = pow(tcc_psi_,2)*Nu;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TCC1 testing Upsilon(=%23.16e) <= (tcc_psi_^2)*Nu(=%23.16e) --> ", lhs, rhs);
+    }
+    else {
+      lhs = u_norm_scaled;
+      rhs = tcc_psi_*v_norm_scaled_;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TCC1 testing u_norm_scaled(=%23.16e) <= tcc_psi_*v_norm_scaled(=%23.16e) --> ", lhs, rhs);
+    }
+    bool tcc1 = Compare_le(lhs, rhs, BasVal);
     if (tcc1) {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
     }
     else {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
     }
-
-    // check the first of the second pair of TCC (also needed in
-    // Hessian update check)
+    
+    // Check tangential component condition, part 2a
     const Number mu = IpData().curr_mu();
-    rhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*pow(u_norm_scaled, 2);
-    lhs = 0.5*uWu;
-    //const Number mach_eps_sqrt = pow(std::numeric_limits<Number>::epsilon(),0.5);
-    //const Number mach_eps_sqrt = pow(std::numeric_limits<Number>::epsilon(),0.25);
-    //BasVal = Max(IpData().curr()->x()->Amax(), IpData().curr()->s()->Amax())/mach_eps_sqrt;
-    // check the second inequality of the tangential component condition
-    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*tangential_norm^2(=%23.16e) -->", lhs, rhs);
-    bool tcc2a = Compare_le(rhs, lhs, BasVal);
+    rhs = 0.5*uWu;
+    if (!compute_normal) {
+      lhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon(=%23.16e) -->", rhs, lhs);
+    }
+    else {
+      lhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*pow(u_norm_scaled, 2);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*u_norm^2(=%23.16e) -->", rhs, lhs);
+    }
+    bool tcc2a = Compare_le(lhs, rhs, BasVal);
     if (tcc2a) {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
     }
@@ -350,68 +423,86 @@ namespace Ipopt
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
     }
 
+    // Check tangential component condition, part 2b (only in MIPS)
     bool tcc = tcc1;
     if (!tcc && tcc2a) {
-      // check the last condition
-      rhs = 0.5*uWu + curr_grad_barrier_obj_x_->Dot(*tangential_x) +
-            curr_grad_barrier_obj_s_->Dot(*tangential_s) +
-            curr_Wv_x_->Dot(*tangential_x) + curr_Wv_s_->Dot(*tangential_s);
-      lhs = tcc_zeta_*v_norm_scaled_;
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TCC2b testing (grad_barr^Tu + v^TWu + 0.5*uWu)(=%23.16e) <= tcc_zeta_*v_norm(=%23.16e) -->", rhs, lhs);
-      bool tcc2b = Compare_le(rhs, lhs, BasVal);
-      if (tcc2b) {
-        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+      if (!compute_normal) {
+        tcc = tcc2a;
       }
       else {
-        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+        lhs = 0.5*uWu + curr_grad_barrier_obj_x_->Dot(*tangential_x) + curr_grad_barrier_obj_s_->Dot(*tangential_s) + curr_Wv_x_->Dot(*tangential_x) + curr_Wv_s_->Dot(*tangential_s);
+        rhs = tcc_zeta_*v_norm_scaled_;
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "TCC2b testing (grad_barr^Tu + v^TWu + 0.5*uWu)(=%23.16e) <= tcc_zeta_*v_norm(=%23.16e) -->", lhs, rhs);
+        tcc = Compare_le(lhs, rhs, BasVal);
+        if (tcc) {
+          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+        }
+        else {
+          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+        }
       }
-      tcc = tcc2b;
     }
+    
+    // Check tangential component condition
     if (tcc) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Tangential Component Condition satisfied\n");
     }
     else {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Tangential Component Condition violated\n");
     }
-
-    ////////////  Termination Test 1
+    
+    // Check termination test 1, residual condition
     bool tt1 = tcc;
-    bool tt1_kappa1;
-    if (tt1) {
-      /////// Check residual condition for TT1
-      rhs = rho_norm;
-      lhs = tt_kappa1_*Min(curr_tt1_norm_, last_tt1_norm_);
-
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT1 testing rho_norm(=%23.16e) <= kappa1*min(curr_tt1_norm_, last_tt1_norm_)(=%23.16e) -->", rhs, lhs);
-      tt1_kappa1 = Compare_le(rhs, lhs, BasVal);
+    bool tt1_kappa1 = tcc;
+    if (!compute_normal) {
+      lhs = resid_norm;
+      rhs = tt_kappa1_*curr_tt1_norm_;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TT1 testing resid_norm(=%23.16e) <= tt_kappa1_*curr_tt1_norm_(=%23.16e) --> ", lhs, rhs);
+      tt1 = Compare_le(lhs, rhs, BasVal);
+    }
+    else if (tt1) {
+      lhs = rho_norm;
+      rhs = tt_kappa1_*Min(curr_tt1_norm_, last_tt1_norm_);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TT1 testing rho_norm(=%23.16e) <= kappa1*min(curr_tt1_norm_, last_tt1_norm_)(=%23.16e) -->", lhs, rhs);
+      tt1_kappa1 = Compare_le(lhs, rhs, BasVal);
       tt1 = tt1_kappa1;
-      if (tt1) {
-        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
-      }
-      else {
-        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
-      }
     }
-
     if (tt1) {
-      ///////  Check the model reduction condition
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+    }
+    else {
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+    }
+            
+    // Check termination test 1, model reduction condition
+    bool model_reduction = false;
+    if (!compute_normal || tt1) {
       Number curr_nu = InexData().curr_nu();
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                     "TT: curr_nu = %23.16e\n", curr_nu);
-      Number delta_m = -(curr_grad_barrier_obj_x_->Dot(*sol_x) +
-                         curr_grad_barrier_obj_s_->Dot(*sol_s));
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                     "TT: -grad_barr^Td = %23.16e\n", delta_m);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: curr_nu = %23.16e\n", curr_nu);
+      Number delta_m = -(curr_grad_barrier_obj_x_->Dot(*sol_x) + curr_grad_barrier_obj_s_->Dot(*sol_s));
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: -grad_barr^Td = %23.16e\n", delta_m);
       delta_m += curr_nu*(c_norm_ - c_plus_Ad_norm);
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                     "TT: delta_m = %23.16e\n", delta_m);
-      lhs = delta_m;
-
-      Number sigma = rho_*tt_eps3_; // this is sigma in Model Reduction Cond.
-      rhs = Max(0.5*uWu, tcc_theta_*pow(u_norm_scaled, 2)) +
-            curr_nu*sigma*(c_norm_ - c_plus_Av_norm_);
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*u_norm^2) + curr_nu*sigma*(c_norm_ - c_plus_Av_norm_)(=%23.16e) -->", lhs, rhs);
-      tt1 = Compare_le(rhs, lhs, BasVal);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: delta_m = %23.16e\n", delta_m);
+      rhs = delta_m;
+      Number sigma = rho_*tt_eps3_;
+      if (!compute_normal) {
+        lhs = Max(0.5*uWu, tcc_theta_*Upsilon) + sigma*curr_nu*Max(c_norm_, c_plus_Ad_norm - c_norm_);
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*Upsilon) + sigma*nu*max(c_norm_, c_plus_Ad_norm - c_norm_)(=%23.16e) -->", rhs, lhs);
+        model_reduction = Compare_le(lhs, rhs, BasVal);
+        if (tt1) {
+          tt1 = model_reduction;
+        }
+      }
+      else {
+        lhs = Max(0.5*uWu, tcc_theta_*pow(u_norm_scaled, 2)) + sigma*curr_nu*(c_norm_ - c_plus_Av_norm_);
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*u_norm^2) + sigma*nu*(c_norm_ - c_plus_Av_norm_)(=%23.16e) -->", rhs, lhs);
+        tt1 = Compare_le(lhs, rhs, BasVal);      
+      }
       if (tt1) {
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
       }
@@ -420,6 +511,7 @@ namespace Ipopt
       }
     }
 
+    // Check termination test 1
     if (tt1) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 1 satisfied.\n");
       return TEST_1_SATISFIED;
@@ -428,25 +520,21 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 1 not satisfied.\n");
     }
 
-    //////////////// Termination Test 3
+    // Check termination test 3, residual condition
     bool tt3 = tcc;
     if (tt3) {
-      //////// Check residual condition for TT3
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT3 with residual condition from TT1 -->");
-      tt3 = tt1_kappa1;
-      if (tt3) {
-        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+      if (!compute_normal) {
+        lhs = rho_norm;
+        rhs = tt_kappa1_*c_norm_;
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "TT3 testing rho_norm(=%23.16e) <= tt_kappa1_*c_norm_(=%23.16e) -->", lhs, rhs);
+        tt3 = Compare_le(lhs, rhs, BasVal);
       }
       else {
-        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "TT3 with residual condition from TT1 -->");
+        tt3 = tt1_kappa1;
       }
-    }
-    if (tt3) {
-      //////// Check linearized feasibility condition for TT3
-      rhs = c_norm_-c_plus_Ad_norm;
-      lhs = tt_eps3_*(c_norm_-c_plus_Av_norm_);
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT3 testing (c_norm_-c_plus_Ad_norm)(=%23.16e) >= eps3(c_norm_-c_plus_Av_norm_)(=%23.16e) -->", rhs, lhs);
-      tt3 = Compare_le(lhs, rhs, BasVal);
       if (tt3) {
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
       }
@@ -455,6 +543,31 @@ namespace Ipopt
       }
     }
 
+    // Check termination test 3, linearized feasibility condition
+    if (tt3) {
+      if (!compute_normal) {
+        lhs = c_plus_Ad_norm;
+        rhs = tt_kappa1_*c_norm_;
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "TT3 testing c_plus_Ad_norm(=%23.16e) <= tt_kappa1_*c_norm(=%23.16e) -->", lhs, rhs);
+        tt3 = Compare_le(lhs, rhs, BasVal);
+      }
+      else {
+        lhs = tt_eps3_*(c_norm_ - c_plus_Av_norm_);
+        rhs = c_norm_ - c_plus_Ad_norm;
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "TT3 testing (c_norm_-c_plus_Ad_norm)(=%23.16e) >= eps3*(c_norm_-c_plus_Av_norm_)(=%23.16e) -->", rhs, lhs);
+        tt3 = Compare_le(lhs, rhs, BasVal);
+      }
+      if (tt3) {
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+      }
+      else {
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+      }
+    }
+
+    // Check termination test 3
     if (tt3) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 3 satisfied.\n");
       return TEST_3_SATISFIED;
@@ -463,8 +576,9 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 3 not satisfied.\n");
     }
 
-    //////////////// Termination Test 2
-    if (try_tt2_) {
+    // Check termination test 2
+    bool tt2 = try_tt2_;
+    if (tt2) {
       DBG_PRINT_VECTOR(2, "curr_nabla_phi_plus_ATy_x_", *curr_nabla_phi_plus_ATy_x_);
       DBG_PRINT_VECTOR(2, "curr_nabla_phi_plus_ATy_s_", *curr_nabla_phi_plus_ATy_s_);
       DBG_PRINT_VECTOR(2, "sol_c", *sol_c);
@@ -472,37 +586,43 @@ namespace Ipopt
       SmartPtr<Vector> sol_d_scaled = sol_d->MakeNewCopy();
       sol_d_scaled->ElementWiseMultiply(*curr_scaling_slacks_);
       DBG_PRINT_VECTOR(2, "sol_d_scaled", *sol_d_scaled);
-      SmartPtr<Vector> nabla_phi_plus_ATydelta_x =
-        curr_nabla_phi_plus_ATy_x_->MakeNewCopy();
-      curr_jac_c_->TransMultVector(1., *sol_c,
-                                   1., *curr_nabla_phi_plus_ATy_x_);
-      curr_jac_d_->TransMultVector(1., *sol_d,
-                                   1., *curr_nabla_phi_plus_ATy_x_);
-      SmartPtr<Vector> nabla_phi_plus_ATydelta_s =
-        curr_nabla_phi_plus_ATy_s_->MakeNew();
-      nabla_phi_plus_ATydelta_s->AddTwoVectors(1., *curr_nabla_phi_plus_ATy_s_,
-          -1., *sol_d_scaled, 0.);
-      Number nabla_phi_plus_ATydelta_norm =
-        IpCq().CalcNormOfType(NORM_2, *nabla_phi_plus_ATydelta_x,
-                              *nabla_phi_plus_ATydelta_s);
-      /////// Check residual condition for TT1
+      SmartPtr<Vector> nabla_phi_plus_ATydelta_x = curr_nabla_phi_plus_ATy_x_->MakeNewCopy();
+      curr_jac_c_->TransMultVector(1., *sol_c, 1., *curr_nabla_phi_plus_ATy_x_);
+      curr_jac_d_->TransMultVector(1., *sol_d, 1., *curr_nabla_phi_plus_ATy_x_);
+      SmartPtr<Vector> nabla_phi_plus_ATydelta_s = curr_nabla_phi_plus_ATy_s_->MakeNew();
+      nabla_phi_plus_ATydelta_s->AddTwoVectors(1., *curr_nabla_phi_plus_ATy_s_, -1., *sol_d_scaled, 0.);
+      Number nabla_phi_plus_ATydelta_norm = IpCq().CalcNormOfType(NORM_2, *nabla_phi_plus_ATydelta_x, *nabla_phi_plus_ATydelta_s);
       lhs = nabla_phi_plus_ATydelta_norm;
-      rhs = tt_kappa2_*Min(curr_tt2_norm_, last_tt1_norm_);
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT2 testing ||gamma+A^T(y+delta)||(=%23.16e) <= kappa2*min(curr_tt2_norm_, last_tt1_norm_)(=%23.16e) -->", lhs, rhs);
-      bool tt2 = Compare_le(lhs, rhs, BasVal);
+      if (!compute_normal) {
+        rhs = tt_kappa2_*curr_tt2_norm_;
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "TT2 testing ||gamma+A^T(y+delta)||(=%23.16e) <= kappa2*curr_tt2_norm_(=%23.16e) -->", lhs, rhs);      
+      }
+      else {
+        rhs = tt_kappa2_*Min(curr_tt2_norm_, last_tt1_norm_);
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       "TT2 testing ||gamma+A^T(y+delta)||(=%23.16e) <= kappa2*min(curr_tt2_norm_, last_tt1_norm_)(=%23.16e) -->", lhs, rhs);
+      }
+      tt2 = Compare_le(lhs, rhs, BasVal);
       if (tt2) {
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
       }
       else {
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
       }
-      if (tt2) {
-        return TEST_2_SATISFIED;
-      }
+    }
+
+    // Check termination test 2
+    if (tt2) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 2 satisfied.\n");
+      return TEST_2_SATISFIED;
+    }
+    else if (try_tt2_) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 2 not satisfied.\n");
     }
 
     // Check if the Hessian should be modified
-    if (tcc1 || tcc2a) {
+    if (tcc1 || tcc2a) {// || (!compute_normal && model_reduction)) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Hessian Modification not requested.\n");
     }
     else {
@@ -519,16 +639,8 @@ namespace Ipopt
     DBG_START_METH("InexactPDTerminationTester::Clear",
                    dbg_verbosity);
 
-    last_grad_barrier_obj_x_ = NULL;
-    last_grad_barrier_obj_s_ = NULL;
-    last_jac_c_ = NULL;
-    last_jac_d_ = NULL;
-    last_scaling_slacks_ = NULL;
-
     curr_Av_c_ = NULL;
     curr_Av_d_ = NULL;
-    curr_c_plus_Av_c_ = NULL;
-    curr_c_plus_Av_d_ = NULL;
     curr_Wv_x_ = NULL;
     curr_Wv_s_ = NULL;
     curr_nabla_phi_plus_ATy_x_ = NULL;
