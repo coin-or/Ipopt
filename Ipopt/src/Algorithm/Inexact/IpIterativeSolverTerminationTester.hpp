@@ -64,7 +64,7 @@ namespace Ipopt
      *  modified.  The input is the dimension of the augmented system,
      *  the current solution vector of the augmented system, the
      *  current residual vector. */
-    virtual ETerminationTest TestTerminaion(Index ndim, const Number* sol,
+    virtual ETerminationTest TestTermination(Index ndim, const Number* sol,
                                             const Number* resid, Index iter,
                                             Number norm2_rhs) = 0;
 

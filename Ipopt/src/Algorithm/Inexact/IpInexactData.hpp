@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -70,14 +70,14 @@ namespace Ipopt
 
     /** @name Tangential step set and accessor methods */
     //@{
-    void set_tangential_x(SmartPtr<Vector>& tangential_x)
+    void set_tangential_x(SmartPtr<const Vector>& tangential_x)
     {
-      tangential_x_ = ConstPtr(tangential_x);
+      tangential_x_ = tangential_x;
       tangential_x = NULL;
     }
-    void set_tangential_s(SmartPtr<Vector>& tangential_s)
+    void set_tangential_s(SmartPtr<const Vector>& tangential_s)
     {
-      tangential_s_ = ConstPtr(tangential_s);
+      tangential_s_ = tangential_s;
       tangential_s = NULL;
     }
     SmartPtr<const Vector> tangential_x()
@@ -116,6 +116,30 @@ namespace Ipopt
     }
     //@}
 
+    /** @name Current normal step computation flag */
+    //@{
+    void set_compute_normal(bool compute_normal)
+    {
+      compute_normal_ = compute_normal;
+    }
+    bool compute_normal()
+    {
+      return compute_normal_;
+    }
+    //@}
+
+    /** @name Next iteration normal step computation flag */
+    //@{
+    void set_next_compute_normal(bool next_compute_normal)
+    {
+      next_compute_normal_ = next_compute_normal;
+    }
+    bool next_compute_normal()
+    {
+      return next_compute_normal_;
+    }
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -149,6 +173,12 @@ namespace Ipopt
 
     /** current value of penalty parameter */
     Number curr_nu_;
+
+    /** current normal step computation flag */
+    bool compute_normal_;
+
+    /** next iteration normal step computation flag */
+    bool next_compute_normal_;
   };
 
 } // namespace Ipopt

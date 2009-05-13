@@ -72,10 +72,10 @@ namespace Ipopt
 
   InexactNormalTerminationTester::ETerminationTest
   InexactNormalTerminationTester::
-  TestTerminaion(Index ndim, const Number* sol, const Number* resid,
+  TestTermination(Index ndim, const Number* sol, const Number* resid,
                  Index iter, Number norm2_rhs)
   {
-    DBG_START_METH("InexactNormalTerminationTester::TestTerminaion",
+    DBG_START_METH("InexactNormalTerminationTester::TestTermination",
                    dbg_verbosity);
 
     last_iter_ = iter;

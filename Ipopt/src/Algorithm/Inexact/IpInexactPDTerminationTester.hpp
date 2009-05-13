@@ -49,7 +49,7 @@ namespace Ipopt
      *  modified.  The input is the dimension of the augmented system,
      *  the current solution vector of the augmented system, the
      *  current residual vector. */
-    virtual ETerminationTest TestTerminaion(Index ndim, const Number* sol,
+    virtual ETerminationTest TestTermination(Index ndim, const Number* sol,
                                             const Number* resid, Index iter,
                                             Number norm2_rhs);
 
@@ -111,8 +111,6 @@ namespace Ipopt
     SmartPtr<const Vector> curr_Av_c_;
     SmartPtr<const Vector> curr_Av_d_;
     Number c_norm_;
-    SmartPtr<const Vector> curr_c_plus_Av_c_;
-    SmartPtr<const Vector> curr_c_plus_Av_d_;
     Number c_plus_Av_norm_;
     Number v_norm_scaled_;
     SmartPtr<const Vector> curr_grad_barrier_obj_x_;
@@ -133,11 +131,6 @@ namespace Ipopt
     /** @name Quantities from previous iteration required in the
     tests */
     //@{
-    SmartPtr<const Vector> last_grad_barrier_obj_x_;
-    SmartPtr<const Vector> last_grad_barrier_obj_s_;
-    SmartPtr<const Matrix> last_jac_c_;
-    SmartPtr<const Matrix> last_jac_d_;
-    SmartPtr<const Vector> last_scaling_slacks_;
     Number last_Av_norm_;
     Number last_tt1_norm_;
     //@}

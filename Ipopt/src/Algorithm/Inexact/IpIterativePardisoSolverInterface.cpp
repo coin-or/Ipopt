@@ -51,7 +51,7 @@ extern "C"
     fflush(stdout);
     fflush(stderr);
     // only do the termination test for PD system
-    test_result_ = global_tester_ptr_->TestTerminaion(n, sol, resid, iter, norm2_rhs);
+    test_result_ = global_tester_ptr_->TestTermination(n, sol, resid, iter, norm2_rhs);
     global_tester_ptr_->GetJnlst().Printf(Ipopt::J_DETAILED, Ipopt::J_LINEAR_ALGEBRA,
                                           "Termination Tester Result = %d.\n",
                                           test_result_);
@@ -580,7 +580,7 @@ namespace Ipopt
 
     IterativeSolverTerminationTester* tester;
     bool is_normal = false;
-    if (!IsValid(InexData().normal_x())) {
+    if (IsNull(InexData().normal_x()) && InexData().compute_normal()) {
       tester = GetRawPtr(normal_tester_);
       is_normal = true;
     }
@@ -631,6 +631,20 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Termination tester requests modification of Hessian\n");
       return SYMSOLVER_WRONG_INERTIA;
+    }
+    // FRANK: look at this:
+    if (test_result_ == IterativeSolverTerminationTester::CONTINUE) {
+      if (InexData().compute_normal()) {
+	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		       "Termination tester not satisfied!!! Pretend singular\n");
+	return SYMSOLVER_SINGULAR;
+      }/*
+      else {
+	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		       "Termination tester not satisfied!!! Compute normal step\n");
+        InexData().set_next_compute_normal(true);
+	return SYMSOLVER_SUCCESS; // Will setting success work out in the end?
+	}*/
     }
     if (test_result_ == IterativeSolverTerminationTester::TEST_2_SATISFIED) {
       // Termination Test 2 is satisfied, set the step for the primal

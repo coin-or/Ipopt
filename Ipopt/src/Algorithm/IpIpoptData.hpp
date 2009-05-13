@@ -434,8 +434,6 @@ namespace Ipopt
       info_alpha_primal_ = 0;
       info_alpha_dual_ = 0.;
       info_alpha_primal_char_ = ' ';
-      info_ls_count_ = 0;
-      info_skip_output_ = false;
       info_string_.erase();
     }
     //@}

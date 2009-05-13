@@ -67,6 +67,7 @@ namespace Ipopt
     free_mu_mode_ = false;
     tiny_step_flag_ = false;
 
+    info_ls_count_ = 0;
     ResetInfo();
 
     initialize_called_ = true;

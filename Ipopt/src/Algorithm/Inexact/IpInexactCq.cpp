@@ -177,6 +177,22 @@ namespace Ipopt
     return result;
   }
 
+  /** ||A||^2 */
+  Number
+  InexactCq::curr_scaled_A_norm2()
+  {
+    DBG_START_METH("InexactCq::curr_scaled_A_norm",
+                   dbg_verbosity);
+    Number result;
+
+    //if (!curr_scaled_A_norm_cache_.GetCachedResult(...)) {
+      result = 2;
+      //curr_scaled_A_norm_cache_.AddCachedResult(...);
+    //}
+
+    return result;
+  }
+
   Number
   InexactCq::slack_scaled_norm(const Vector& x, const Vector &s)
   {
