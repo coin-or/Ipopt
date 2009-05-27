@@ -168,7 +168,8 @@ namespace Ipopt
     {
       NO_TEST=0,
       FIRST_ORDER_TEST,
-      SECOND_ORDER_TEST
+      SECOND_ORDER_TEST,
+      ONLY_SECOND_ORDER_TEST
     };
 
     /** Enum for specifying technique for computing Jacobian */
@@ -179,7 +180,8 @@ namespace Ipopt
     };
 
     /** Method for performing the derivative test */
-    bool CheckDerivatives(DerivativeTestEnum deriv_test);
+    bool CheckDerivatives(DerivativeTestEnum deriv_test,
+			  Index deriv_test_start_index);
 
     /** @name Methods for IpoptType */
     //@{
@@ -266,6 +268,8 @@ namespace Ipopt
     /** Flag indicating if all test values should be printed, or only
      *  those violating the threshold. */
     bool derivative_test_print_all_;
+    /** Index of first quantity to be checked. */
+    Index derivative_test_first_index_;
     /** Flag indicating whether the TNLP with identical structure has
      *  already been solved before. */
     bool warm_start_same_structure_;
