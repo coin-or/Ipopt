@@ -153,16 +153,27 @@ namespace Ipopt
       "method in the TNLP is implemented, this option is ignored.");
 
     roptions->SetRegisteringCategory("Derivative Checker");
-    roptions->AddStringOption3(
+    roptions->AddStringOption4(
       "derivative_test",
       "Enable derivative checker",
       "none",
       "none", "do not perform derivative test",
       "first-order", "perform test of first derivatives at starting point",
       "second-order", "perform test of first and second derivatives at starting point",
-      "If this option is enabled, a (slow) derivative test will be performed "
+      "only-second-order", "perform test of second derivatives at starting point",
+      "If this option is enabled, a (slow!) derivative test will be performed "
       "before the optimization.  The test is performed at the user provided "
       "starting point and marks derivative values that seem suspicious");
+    roptions->AddLowerBoundedIntegerOption(
+      "derivative_test_first_index",
+      "Index of first quantity to be checked by derivative checker",
+      -2, -2,
+      "If this is set to -2, then all derivatives are checked.  Otherwise, "
+      "for the first derivative test it specifies the first variable for "
+      "which the test is done (counting starts at 0).  For second "
+      "derivatives, it specifies the first constraint for which the test is "
+      "done; counting of constraint indices starts at 0, and -1 refers to the "
+      "objective function Hessian.");
     roptions->AddLowerBoundedNumberOption(
       "derivative_test_perturbation",
       "Size of the finite difference perturbation in derivative test.",
@@ -233,6 +244,8 @@ namespace Ipopt
                             derivative_test_tol_, prefix);
     options.GetBoolValue("derivative_test_print_all",
                          derivative_test_print_all_, prefix);
+    options.GetIntegerValue("derivative_test_first_index",
+			    derivative_test_first_index_, prefix);
 
     // The option warm_start_same_structure is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
@@ -324,7 +337,8 @@ namespace Ipopt
 
     // First, if required, perform derivative test
     if (derivative_test_ != NO_TEST) {
-      bool retval = CheckDerivatives(derivative_test_);
+      bool retval = CheckDerivatives(derivative_test_,
+				     derivative_test_first_index_);
       if (!retval) {
         return retval;
       }
@@ -2082,7 +2096,8 @@ namespace Ipopt
 
   }
 
-  bool TNLPAdapter::CheckDerivatives(TNLPAdapter::DerivativeTestEnum deriv_test)
+  bool TNLPAdapter::CheckDerivatives(TNLPAdapter::DerivativeTestEnum deriv_test,
+				     Index deriv_test_start_index)
   {
     if (deriv_test == NO_TEST) {
       return true;
@@ -2092,9 +2107,6 @@ namespace Ipopt
 
     ASSERT_EXCEPTION(IsValid(jnlst_), ERROR_IN_TNLP_DERIVATIVE_TEST,
                      "No Journalist given to TNLPAdapter.  Need Journalist, otherwise can't produce any output in DerivativeChecker!");
-
-    jnlst_->Printf(J_SUMMARY, J_NLP,
-                   "Starting derivative checker for first derivatives.\n\n");
 
     bool retval = true;
     // Since this method should be independent of all other internal
@@ -2200,74 +2212,80 @@ namespace Ipopt
       index_correction = 1;
     }
 
-    // Now go through all variables and check the partial derivatives
-    for (Index ivar=0; ivar<nx; ivar++) {
-      Number this_perturbation =
-        derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
-      xpert[ivar] = xref[ivar] + this_perturbation;
+    if (deriv_test == FIRST_ORDER_TEST || deriv_test == SECOND_ORDER_TEST) {
+      jnlst_->Printf(J_SUMMARY, J_NLP,
+		     "Starting derivative checker for first derivatives.\n\n");
 
-      Number fpert;
-      new_x = true;
-      retval = tnlp_->eval_f(nx, xpert, new_x, fpert);
-      ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-                       "In TNLP derivative test: f could not be evaluated at perturbed point.");
-      new_x = false;
+      // Now go through all variables and check the partial derivatives
+      const Index ivar_first = Max(0, deriv_test_start_index);
+      for (Index ivar=ivar_first; ivar<nx; ivar++) {
+	Number this_perturbation =
+	  derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
+	xpert[ivar] = xref[ivar] + this_perturbation;
 
-      Number deriv_approx = (fpert - fref)/this_perturbation;
-      Number deriv_exact = grad_f[ivar];
-      Number rel_error =
-        fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
-      char cflag=' ';
-      if (rel_error >= derivative_test_tol_) {
-        cflag='*';
-        nerrors++;
+	Number fpert;
+	new_x = true;
+	retval = tnlp_->eval_f(nx, xpert, new_x, fpert);
+	ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+			 "In TNLP derivative test: f could not be evaluated at perturbed point.");
+	new_x = false;
+
+	Number deriv_approx = (fpert - fref)/this_perturbation;
+	Number deriv_exact = grad_f[ivar];
+	Number rel_error =
+	  fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+	char cflag=' ';
+	if (rel_error >= derivative_test_tol_) {
+	  cflag='*';
+	  nerrors++;
+	}
+	if (cflag != ' ' || derivative_test_print_all_) {
+	  jnlst_->Printf(J_WARNING, J_NLP,
+			 "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n",
+			 cflag, ivar+index_correction,
+			 deriv_exact, deriv_approx, rel_error);
+	}
+
+	if (ng>0) {
+	  retval = tnlp_->eval_g(nx, xpert, new_x, ng, gpert);
+	  ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+			   "In TNLP derivative test: g could not be evaluated at reference point.");
+	  for (Index icon=0; icon<ng; icon++) {
+	    deriv_approx = (gpert[icon] - gref[icon])/this_perturbation;
+	    deriv_exact = 0.;
+	    bool found = false;
+	    for (Index i=0; i<nz_jac_g; i++) {
+	      if (g_iRow[i]==icon && g_jCol[i]==ivar) {
+		found = true;
+		deriv_exact += jac_g[i];
+	      }
+	    }
+
+	    rel_error = fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+	    cflag=' ';
+	    if (rel_error >= derivative_test_tol_) {
+	      cflag='*';
+	      nerrors++;
+	    }
+	    char sflag=' ';
+	    if (found) {
+	      sflag = 'v';
+	    }
+	    if (cflag != ' ' || derivative_test_print_all_) {
+	      jnlst_->Printf(J_WARNING, J_NLP,
+			     "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
+			     cflag, icon+index_correction, ivar+index_correction,
+			     deriv_exact, sflag, deriv_approx, rel_error);
+	    }
+	  }
+	}
+
+	xpert[ivar] = xref[ivar];
       }
-      if (cflag != ' ' || derivative_test_print_all_) {
-        jnlst_->Printf(J_WARNING, J_NLP,
-                       "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n",
-                       cflag, ivar+index_correction,
-                       deriv_exact, deriv_approx, rel_error);
-      }
 
-      if (ng>0) {
-        retval = tnlp_->eval_g(nx, xpert, new_x, ng, gpert);
-        ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-                         "In TNLP derivative test: g could not be evaluated at reference point.");
-        for (Index icon=0; icon<ng; icon++) {
-          deriv_approx = (gpert[icon] - gref[icon])/this_perturbation;
-          deriv_exact = 0.;
-          bool found = false;
-          for (Index i=0; i<nz_jac_g; i++) {
-            if (g_iRow[i]==icon && g_jCol[i]==ivar) {
-              found = true;
-              deriv_exact += jac_g[i];
-            }
-          }
-
-          rel_error = fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
-          cflag=' ';
-          if (rel_error >= derivative_test_tol_) {
-            cflag='*';
-            nerrors++;
-          }
-          char sflag=' ';
-          if (found) {
-            sflag = 'v';
-          }
-          if (cflag != ' ' || derivative_test_print_all_) {
-            jnlst_->Printf(J_WARNING, J_NLP,
-                           "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
-                           cflag, icon+index_correction, ivar+index_correction,
-                           deriv_exact, sflag, deriv_approx, rel_error);
-          }
-        }
-      }
-
-      xpert[ivar] = xref[ivar];
     }
-
     const Number zero = 0.;
-    if (deriv_test == SECOND_ORDER_TEST) {
+    if (deriv_test == SECOND_ORDER_TEST || deriv_test == ONLY_SECOND_ORDER_TEST) {
       jnlst_->Printf(J_SUMMARY, J_NLP,
                      "Starting derivative checker for second derivatives.\n\n");
 
@@ -2297,7 +2315,8 @@ namespace Ipopt
       Number* jacpert = new Number[nz_jac_g];
 
       // Check all Hessians
-      for (Index icon=-1; icon<ng; icon++) {
+      const Index icon_first = Max(-1, deriv_test_start_index);
+      for (Index icon=icon_first; icon<ng; icon++) {
         Number objfact = 0.;
         if (icon == -1) {
           objfact = 1.;

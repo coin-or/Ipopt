@@ -487,7 +487,6 @@ namespace Ipopt
     IPARM_[5] = 1;
     DPARM_[5] = 1e-12;
 
-    ipfint idmy;
     double ddmy;
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
@@ -581,7 +580,6 @@ namespace Ipopt
                           &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
     const Index ierror = IPARM_[63];
     if (ierror == 0) {
-      Index ndegen = IPARM_[20];
       int ii = 0;
       for (int i=0; i<N; i++) {
         if (MRP_[i] == -1) {
@@ -589,7 +587,7 @@ namespace Ipopt
           ii++;
         }
       }
-      DBG_ASSERT(ii == ndegen);
+      DBG_ASSERT(ii == IPARM_[20]);
     }
     if (ierror > 0) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
