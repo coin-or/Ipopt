@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -377,7 +377,8 @@ namespace Ipopt
       else
         strcpy (mat_pref, "mat-ipopt");
 
-      sprintf (mat_name, "%s_%03d-%02d.iajaa", mat_pref, iter_cnt, sol_cnt);
+      snprintf (mat_name, 127, "%s_%03d-%02d.iajaa",
+                mat_pref, iter_cnt, sol_cnt);
 
       // Open and write matrix file.
       mat_file = fopen (mat_name, "w");
@@ -639,12 +640,12 @@ namespace Ipopt
                        "Termination tester not satisfied!!! Pretend singular\n");
         return SYMSOLVER_SINGULAR;
       }/*
-            else {
-       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-               "Termination tester not satisfied!!! Compute normal step\n");
-              InexData().set_next_compute_normal(true);
-       return SYMSOLVER_SUCCESS; // Will setting success work out in the end?
-       }*/
+                  else {
+             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Termination tester not satisfied!!! Compute normal step\n");
+                    InexData().set_next_compute_normal(true);
+             return SYMSOLVER_SUCCESS; // Will setting success work out in the end?
+             }*/
     }
     if (test_result_ == IterativeSolverTerminationTester::TEST_2_SATISFIED) {
       // Termination Test 2 is satisfied, set the step for the primal

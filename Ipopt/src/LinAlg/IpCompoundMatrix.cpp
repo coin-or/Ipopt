@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -590,7 +590,7 @@ namespace Ipopt
         if (ConstComp(irow, jcol)) {
           DBG_ASSERT(name.size()<200);
           char buffer[256];
-          sprintf(buffer, "%s[%2d][%2d]", name.c_str(), irow, jcol);
+          snprintf(buffer, 255, "%s[%2d][%2d]", name.c_str(), irow, jcol);
           std::string term_name = buffer;
           ConstComp(irow, jcol)->Print(&jnlst, level, category, term_name,
                                        indent+1, prefix);

@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2008 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -365,8 +365,8 @@ namespace Ipopt
     if (iter_count == wsmp_write_matrix_iteration_) {
       matrix_file_number_++;
       char buf[256];
-      sprintf(buf, "wsmp_matrix_%d_%d.dat", iter_count,
-              matrix_file_number_);
+      snprintf(buf, 255, "wsmp_matrix_%d_%d.dat", iter_count,
+               matrix_file_number_);
       Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
                      "Writing WSMP matrix into file %s.\n", buf);
       FILE* fp = fopen(buf, "w");

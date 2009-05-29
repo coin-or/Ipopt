@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -18,7 +18,6 @@
 # endif
 #endif
 
-// for sprintf
 #ifdef HAVE_CSTDIO
 # include <cstdio>
 #else
@@ -523,7 +522,7 @@ namespace Ipopt
     //#define tracequalityfunction
 #ifdef tracequalityfunction
     char fname[100];
-    sprintf(fname, "qf_values_%d.dat", IpData().iter_count());
+    snprintf(fname, 100, "qf_values_%d.dat", IpData().iter_count());
     FILE* fid = fopen(fname, "w");
 
     Number sigma_1 = sigma_max_;
@@ -606,12 +605,12 @@ namespace Ipopt
 
     // DELETEME
     char ssigma[40];
-    sprintf(ssigma, " sigma=%8.2e", sigma);
+    snprintf(ssigma, 39, " sigma=%8.2e", sigma);
     IpData().Append_info_string(ssigma);
-    sprintf(ssigma, " qf=%d", count_qf_evals_);
+    snprintf(ssigma, 39, " qf=%d", count_qf_evals_);
     IpData().Append_info_string(ssigma);
     /*
-    sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
+    snprintf(ssigma, 39, " xi=%8.2e ", IpCq().curr_centrality_measure());
     IpData().Append_info_string(ssigma);
     if (sigma>1.) {
       IpData().Append_info_string("LARGESIGMA");
