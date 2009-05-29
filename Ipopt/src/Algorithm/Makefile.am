@@ -10,10 +10,6 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = LinearSolvers Inexact
 
-#if BUILD_INEXACT
-#  SUBDIRS += Inexact
-#endif
-
 noinst_LTLIBRARIES = libipoptalg.la
 
 libipoptalg_la_SOURCES = \

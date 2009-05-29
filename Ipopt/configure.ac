@@ -740,6 +740,18 @@ if test $use_inexact = yes; then
             [Define to 1 if the inexact linear solver option is included])
 fi
 
+#######################################################################
+##                            MPI stuff                              ##
+#######################################################################
+
+if test "$MPICXX" != ""; then
+  have_mpi=yes
+  IPALLLIBS="../LinAlg/Parallel/liblinalgpar.la $IPALLLIBS"
+  AC_DEFINE([HAVE_MPI],[1],
+            [Define to 1 if Ipopt is compiled with MPI])
+fi
+AM_CONDITIONAL([HAVE_MPI], [test $have_mpi = yes])
+
 ########################################################################
 ##                 Linear solver loader stuff                         ##
 ########################################################################
@@ -828,6 +840,7 @@ AC_CONFIG_FILES([Makefile
 		 src/Common/Makefile
 		 src/LinAlg/Makefile
 		 src/LinAlg/TMatrices/Makefile 
+		 src/LinAlg/Parallel/Makefile 
 		 src/Interfaces/Makefile
 		 src/Interfaces/ipopt_addlibs_f.txt
 		 src/Interfaces/ipopt_addlibs_cpp.txt

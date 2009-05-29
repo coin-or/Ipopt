@@ -138,7 +138,7 @@ namespace Ipopt
                                     bool dont_print /* = false */)
   {
     char buffer[256];
-    sprintf(buffer, "%g", value);
+    snprintf(buffer, 255, "%g", value);
 
     if (IsValid(reg_options_)) {
       SmartPtr<const RegisteredOption> option = reg_options_->GetOption(tag);
@@ -213,7 +213,7 @@ namespace Ipopt
                                     bool dont_print /* = false */)
   {
     char buffer[256];
-    sprintf(buffer, "%d", value);
+    snprintf(buffer, 255, "%d", value);
 
     if (IsValid(reg_options_)) {
       SmartPtr<const RegisteredOption> option = reg_options_->GetOption(tag);
@@ -563,13 +563,13 @@ namespace Ipopt
   {
     list.erase();
     char buffer[256];
-    sprintf(buffer, "%40s   %-20s %s\n", "Name", "Value", "# times used");
+    snprintf(buffer, 255, "%40s   %-20s %s\n", "Name", "Value", "# times used");
     list += buffer;
     for (std::map< std::string, OptionValue >::const_iterator p = options_.begin();
          p != options_.end();
          p++ ) {
-      sprintf(buffer, "%40s = %-20s %6d\n", p->first.c_str(),
-              p->second.Value().c_str(), p->second.Counter());
+      snprintf(buffer, 255, "%40s = %-20s %6d\n", p->first.c_str(),
+               p->second.Value().c_str(), p->second.Counter());
       list += buffer;
     }
   }
@@ -578,7 +578,7 @@ namespace Ipopt
   {
     list.erase();
     char buffer[256];
-    sprintf(buffer, "%40s   %-20s %s\n", "Name", "Value", "used");
+    snprintf(buffer, 255, "%40s   %-20s %s\n", "Name", "Value", "used");
     list += buffer;
     for (std::map< std::string, OptionValue >::const_iterator p = options_.begin();
          p != options_.end();
@@ -593,8 +593,8 @@ namespace Ipopt
         else {
           used = no;
         }
-        sprintf(buffer, "%40s = %-20s %4s\n", p->first.c_str(),
-                p->second.Value().c_str(), used);
+        snprintf(buffer, 255, "%40s = %-20s %4s\n", p->first.c_str(),
+                 p->second.Value().c_str(), used);
         list += buffer;
       }
     }

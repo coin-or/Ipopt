@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,7 +11,6 @@
 #include "IpIpoptData.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
 
-// for sprintf
 #ifdef HAVE_CSTDIO
 # include <cstdio>
 #else
@@ -305,7 +304,7 @@ namespace Ipopt
 
       if (x_space_->Dim() < c_space_->Dim()) {
         char msg[128];
-        sprintf(msg,"Too few degrees of freedom: %d equality constriants but only %d variables", c_space_->Dim(), x_space_->Dim());
+        snprintf(msg, 127, "Too few degrees of freedom: %d equality constriants but only %d variables", c_space_->Dim(), x_space_->Dim());
         THROW_EXCEPTION(TOO_FEW_DOF, msg);
       }
       ASSERT_EXCEPTION(x_space_->Dim() > 0, TOO_FEW_DOF,

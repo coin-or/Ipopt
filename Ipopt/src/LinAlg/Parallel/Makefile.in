@@ -14,11 +14,11 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2009 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
-# Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+# Authors:  Andreas Waechter               IBM    2009-05-28
 
 
 srcdir = @srcdir@
@@ -27,7 +27,7 @@ VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-top_builddir = ../..
+top_builddir = ../../..
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = @INSTALL@
 install_sh_DATA = $(install_sh) -c -m 644
@@ -43,7 +43,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = src/Common
+subdir = src/LinAlg/Parallel
 DIST_COMMON = $(includeipopt_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -55,10 +55,9 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libcommon_la_LIBADD =
-am_libcommon_la_OBJECTS = IpDebug.lo IpJournalist.lo IpObserver.lo \
-	IpOptionsList.lo IpRegOptions.lo IpTaggedObject.lo IpUtils.lo
-libcommon_la_OBJECTS = $(am_libcommon_la_OBJECTS)
+liblinalgpar_la_LIBADD =
+am_liblinalgpar_la_OBJECTS = IpParVector.lo
+liblinalgpar_la_OBJECTS = $(am_liblinalgpar_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -77,8 +76,8 @@ LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libcommon_la_SOURCES)
-DIST_SOURCES = $(libcommon_la_SOURCES)
+SOURCES = $(liblinalgpar_la_SOURCES)
+DIST_SOURCES = $(liblinalgpar_la_SOURCES)
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -296,67 +295,23 @@ target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
-	../../inc/config_ipopt.h \
-	IpCachedResults.hpp \
-	IpDebug.hpp \
-	IpException.hpp \
-	IpJournalist.hpp \
-	IpObserver.hpp \
-	IpOptionsList.hpp \
-	IpReferenced.hpp \
-	IpRegOptions.hpp \
-	IpSmartPtr.hpp \
-	IpTaggedObject.hpp \
-	IpTimedTask.hpp \
-	IpTypes.hpp \
-	IpUtils.hpp
+	IpParVector.hpp
 
-noinst_LTLIBRARIES = libcommon.la
-libcommon_la_SOURCES = \
-	IpoptConfig.h \
-	IpCachedResults.hpp \
-	IpDebug.cpp IpDebug.hpp \
-	IpException.hpp \
-	IpJournalist.cpp IpJournalist.hpp \
-	IpObserver.cpp IpObserver.hpp \
-	IpOptionsList.cpp IpOptionsList.hpp \
-	IpRegOptions.cpp IpRegOptions.hpp \
-	IpReferenced.hpp \
-	IpSmartPtr.hpp \
-	IpTaggedObject.cpp IpTaggedObject.hpp \
-	IpTimedTask.hpp \
-	IpTypes.hpp \
-	IpUtils.cpp IpUtils.hpp
+noinst_LTLIBRARIES = liblinalgpar.la
+liblinalgpar_la_SOURCES = \
+	IpParVector.cpp IpParVector.hpp
 
-libcommon_la_LDFLAGS = $(LT_LDFLAGS)
+liblinalgpar_la_LDFLAGS = $(LT_LDFLAGS)
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` \
+	-I`$(CYGPATH_W) $(srcdir)/../../Common`
 
-#############################################################################
-# Create the Config.h file that always defines HAVE_CONFIG_H and install it #
-#############################################################################
-
-# You only need to adapt the following line
-ConfigHeader = IpoptConfig.h
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Astyle stuff
-ASTYLE_FILES = \
-	IpCachedResults.hppbak \
-	IpDebug.cppbak IpDebug.hppbak \
-	IpException.hppbak \
-	IpJournalist.cppbak IpJournalist.hppbak \
-	IpObserver.cppbak IpObserver.hppbak \
-	IpOptionsList.cppbak IpOptionsList.hppbak \
-	IpRegOptions.cppbak IpRegOptions.hppbak \
-	IpReferenced.hppbak \
-	IpSmartPtr.hppbak \
-	IpTaggedObject.cppbak IpTaggedObject.hppbak \
-	IpTimedTask.hppbak \
-	IpTypes.hppbak \
-	IpUtils.cppbak IpUtils.hppbak
-
+ASTYLE_FILES = IpParVector.cppbak IpParVector.hppbak
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
 all: all-am
@@ -372,9 +327,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/Common/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/LinAlg/Parallel/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/Common/Makefile
+	  $(AUTOMAKE) --foreign  src/LinAlg/Parallel/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -401,8 +356,8 @@ clean-noinstLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libcommon.la: $(libcommon_la_OBJECTS) $(libcommon_la_DEPENDENCIES) 
-	$(CXXLINK)  $(libcommon_la_LDFLAGS) $(libcommon_la_OBJECTS) $(libcommon_la_LIBADD) $(LIBS)
+liblinalgpar.la: $(liblinalgpar_la_OBJECTS) $(liblinalgpar_la_DEPENDENCIES) 
+	$(CXXLINK)  $(liblinalgpar_la_LDFLAGS) $(liblinalgpar_la_OBJECTS) $(liblinalgpar_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -410,13 +365,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDebug.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpJournalist.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpObserver.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptionsList.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRegOptions.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTaggedObject.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpUtils.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParVector.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -515,7 +464,6 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/../../inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -597,7 +545,7 @@ info-am:
 
 install-data-am: install-includeipoptHEADERS
 
-install-exec-am: install-exec-local
+install-exec-am:
 
 install-info: install-info-am
 
@@ -623,33 +571,21 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-includeipoptHEADERS uninstall-info-am \
-	uninstall-local
+uninstall-am: uninstall-includeipoptHEADERS uninstall-info-am
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-libtool clean-noinstLTLIBRARIES ctags distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-exec \
-	install-exec-am install-exec-local install-includeipoptHEADERS \
-	install-info install-info-am install-man install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	install-exec-am install-includeipoptHEADERS install-info \
+	install-info-am install-man install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-includeipoptHEADERS \
-	uninstall-info-am uninstall-local
+	uninstall-info-am
 
-
-install-exec-local:
-	echo "#ifndef HAVE_CONFIG_H" >bla
-	echo "#define HAVE_CONFIG_H" >>bla
-	echo "#endif" >> bla
-	cat $(srcdir)/$(ConfigHeader) >> bla
-	$(install_sh_DATA) bla $(DESTDIR)$(includeipoptdir)/$(ConfigHeader)
-	rm -f bla
-
-uninstall-local:
-	rm -f $(DESTDIR)$(includeipoptdir)/$(ConfigHeader)
 
 astyle: $(ASTYLE_FILES)
 

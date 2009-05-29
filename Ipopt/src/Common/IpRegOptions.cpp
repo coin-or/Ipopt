@@ -250,7 +250,7 @@ namespace Ipopt
   std::string RegisteredOption::MakeValidLatexNumber(Number value) const
   {
     char buffer[256];
-    sprintf(buffer, "%g", value);
+    snprintf(buffer, 255, "%g", value);
     std::string source = buffer;
     std::string dest;
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2008 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -424,7 +424,8 @@ namespace Ipopt
       else
         strcpy (mat_pref, "mat-ipopt");
 
-      sprintf (mat_name, "%s_%03d-%02d.iajaa", mat_pref, iter_cnt, sol_cnt);
+      snprintf (mat_name, 127, "%s_%03d-%02d.iajaa",
+                mat_pref, iter_cnt, sol_cnt);
 
       // Open and write matrix file.
       mat_file = fopen (mat_name, "w");

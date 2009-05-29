@@ -181,7 +181,7 @@ namespace Ipopt
 
     /** Method for performing the derivative test */
     bool CheckDerivatives(DerivativeTestEnum deriv_test,
-			  Index deriv_test_start_index);
+                          Index deriv_test_start_index);
 
     /** @name Methods for IpoptType */
     //@{

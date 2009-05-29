@@ -450,7 +450,7 @@ namespace Ipopt
   {
     DBG_START_METH("StreamJournal::PrintfImpl", 0);
     if (os_) {
-      vsprintf(buffer_, pformat, ap);
+      vsnprintf(buffer_, 32767, pformat, ap);
       *os_ << buffer_;
       DBG_EXEC(0, *os_ << std::flush);
     }

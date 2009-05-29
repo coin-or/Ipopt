@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -104,10 +104,10 @@ namespace Ipopt
      *  at position Pos in this vector.  Position count starts at 0.
      */
     void CopyToPos(Index Pos, const Vector& x);
-    /** Copy the data in this vector's subrange starting
-     *  at position Pos to Vector x.  Position count starts at 0.
+    /** Copy a subrange of x, starting at Pos, into the full data of
+     *  this vector.  Position count starts at 0.
      */
-    void CopyFromPos(Index Pos, Vector& x) const;
+    void CopyFromPos(Index Pos, const Vector& x);
     //@}
 
   protected:

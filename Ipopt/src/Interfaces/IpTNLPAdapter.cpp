@@ -38,7 +38,6 @@
 # endif
 #endif
 
-// for sprintf
 #ifdef HAVE_CSTDIO
 # include <cstdio>
 #else
@@ -245,7 +244,7 @@ namespace Ipopt
     options.GetBoolValue("derivative_test_print_all",
                          derivative_test_print_all_, prefix);
     options.GetIntegerValue("derivative_test_first_index",
-			    derivative_test_first_index_, prefix);
+                            derivative_test_first_index_, prefix);
 
     // The option warm_start_same_structure is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
@@ -338,7 +337,7 @@ namespace Ipopt
     // First, if required, perform derivative test
     if (derivative_test_ != NO_TEST) {
       bool retval = CheckDerivatives(derivative_test_,
-				     derivative_test_first_index_);
+                                     derivative_test_first_index_);
       if (!retval) {
         return retval;
       }
@@ -475,7 +474,7 @@ namespace Ipopt
           }
           else if (lower_bound > upper_bound) {
             char string[128];
-            sprintf(string, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+            snprintf(string, 127, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
             delete [] x_l;
             delete [] x_u;
             delete [] g_l;
@@ -552,7 +551,7 @@ namespace Ipopt
             delete [] d_l_map;
             delete [] d_u_map;
             char string[128];
-            sprintf(string, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+            snprintf(string, 127, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
             THROW_EXCEPTION(INVALID_TNLP, string);
           }
           else {
@@ -641,7 +640,7 @@ namespace Ipopt
         delete [] g_u;
 
         char string[128];
-        sprintf(string, "All variables are fixed, and constraint violation is %e", max_viol);
+        snprintf(string, 127, "All variables are fixed, and constraint violation is %e", max_viol);
         if (status == SUCCESS) {
           jnlst_->Printf(J_WARNING, J_INITIALIZATION,
                          "All variables are fixed and constraint violation %e\n   is below tolerance %e. Declaring success.\n", max_viol, tol_);
@@ -2097,7 +2096,7 @@ namespace Ipopt
   }
 
   bool TNLPAdapter::CheckDerivatives(TNLPAdapter::DerivativeTestEnum deriv_test,
-				     Index deriv_test_start_index)
+                                     Index deriv_test_start_index)
   {
     if (deriv_test == NO_TEST) {
       return true;
@@ -2214,73 +2213,73 @@ namespace Ipopt
 
     if (deriv_test == FIRST_ORDER_TEST || deriv_test == SECOND_ORDER_TEST) {
       jnlst_->Printf(J_SUMMARY, J_NLP,
-		     "Starting derivative checker for first derivatives.\n\n");
+                     "Starting derivative checker for first derivatives.\n\n");
 
       // Now go through all variables and check the partial derivatives
       const Index ivar_first = Max(0, deriv_test_start_index);
       for (Index ivar=ivar_first; ivar<nx; ivar++) {
-	Number this_perturbation =
-	  derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
-	xpert[ivar] = xref[ivar] + this_perturbation;
+        Number this_perturbation =
+          derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
+        xpert[ivar] = xref[ivar] + this_perturbation;
 
-	Number fpert;
-	new_x = true;
-	retval = tnlp_->eval_f(nx, xpert, new_x, fpert);
-	ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-			 "In TNLP derivative test: f could not be evaluated at perturbed point.");
-	new_x = false;
+        Number fpert;
+        new_x = true;
+        retval = tnlp_->eval_f(nx, xpert, new_x, fpert);
+        ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                         "In TNLP derivative test: f could not be evaluated at perturbed point.");
+        new_x = false;
 
-	Number deriv_approx = (fpert - fref)/this_perturbation;
-	Number deriv_exact = grad_f[ivar];
-	Number rel_error =
-	  fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
-	char cflag=' ';
-	if (rel_error >= derivative_test_tol_) {
-	  cflag='*';
-	  nerrors++;
-	}
-	if (cflag != ' ' || derivative_test_print_all_) {
-	  jnlst_->Printf(J_WARNING, J_NLP,
-			 "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n",
-			 cflag, ivar+index_correction,
-			 deriv_exact, deriv_approx, rel_error);
-	}
+        Number deriv_approx = (fpert - fref)/this_perturbation;
+        Number deriv_exact = grad_f[ivar];
+        Number rel_error =
+          fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+        char cflag=' ';
+        if (rel_error >= derivative_test_tol_) {
+          cflag='*';
+          nerrors++;
+        }
+        if (cflag != ' ' || derivative_test_print_all_) {
+          jnlst_->Printf(J_WARNING, J_NLP,
+                         "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n",
+                         cflag, ivar+index_correction,
+                         deriv_exact, deriv_approx, rel_error);
+        }
 
-	if (ng>0) {
-	  retval = tnlp_->eval_g(nx, xpert, new_x, ng, gpert);
-	  ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-			   "In TNLP derivative test: g could not be evaluated at reference point.");
-	  for (Index icon=0; icon<ng; icon++) {
-	    deriv_approx = (gpert[icon] - gref[icon])/this_perturbation;
-	    deriv_exact = 0.;
-	    bool found = false;
-	    for (Index i=0; i<nz_jac_g; i++) {
-	      if (g_iRow[i]==icon && g_jCol[i]==ivar) {
-		found = true;
-		deriv_exact += jac_g[i];
-	      }
-	    }
+        if (ng>0) {
+          retval = tnlp_->eval_g(nx, xpert, new_x, ng, gpert);
+          ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                           "In TNLP derivative test: g could not be evaluated at reference point.");
+          for (Index icon=0; icon<ng; icon++) {
+            deriv_approx = (gpert[icon] - gref[icon])/this_perturbation;
+            deriv_exact = 0.;
+            bool found = false;
+            for (Index i=0; i<nz_jac_g; i++) {
+              if (g_iRow[i]==icon && g_jCol[i]==ivar) {
+                found = true;
+                deriv_exact += jac_g[i];
+              }
+            }
 
-	    rel_error = fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
-	    cflag=' ';
-	    if (rel_error >= derivative_test_tol_) {
-	      cflag='*';
-	      nerrors++;
-	    }
-	    char sflag=' ';
-	    if (found) {
-	      sflag = 'v';
-	    }
-	    if (cflag != ' ' || derivative_test_print_all_) {
-	      jnlst_->Printf(J_WARNING, J_NLP,
-			     "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
-			     cflag, icon+index_correction, ivar+index_correction,
-			     deriv_exact, sflag, deriv_approx, rel_error);
-	    }
-	  }
-	}
+            rel_error = fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+            cflag=' ';
+            if (rel_error >= derivative_test_tol_) {
+              cflag='*';
+              nerrors++;
+            }
+            char sflag=' ';
+            if (found) {
+              sflag = 'v';
+            }
+            if (cflag != ' ' || derivative_test_print_all_) {
+              jnlst_->Printf(J_WARNING, J_NLP,
+                             "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
+                             cflag, icon+index_correction, ivar+index_correction,
+                             deriv_exact, sflag, deriv_approx, rel_error);
+            }
+          }
+        }
 
-	xpert[ivar] = xref[ivar];
+        xpert[ivar] = xref[ivar];
       }
 
     }
