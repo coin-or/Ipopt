@@ -316,13 +316,13 @@ namespace Ipopt
     /** returns names and other meta data for the variables and constraints
      *  Overloaded from TNLP */
     virtual bool get_var_con_metadata(Index n,
-				      StringMetaDataMapType& var_string_md,
-				      IntegerMetaDataMapType& var_integer_md,
-				      NumericMetaDataMapType& var_numeric_md,
-				      Index m,
-				      StringMetaDataMapType& con_string_md,
-				      IntegerMetaDataMapType& con_integer_md,
-				      NumericMetaDataMapType& con_numeric_md);
+                                      StringMetaDataMapType& var_string_md,
+                                      IntegerMetaDataMapType& var_integer_md,
+                                      NumericMetaDataMapType& var_numeric_md,
+                                      Index m,
+                                      StringMetaDataMapType& con_string_md,
+                                      IntegerMetaDataMapType& con_integer_md,
+                                      NumericMetaDataMapType& con_numeric_md);
 
     /** returns bounds of the nlp. Overloaded from TNLP */
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
@@ -437,32 +437,32 @@ namespace Ipopt
     //@{
     void set_string_metadata_for_var(std::string tag, std::vector<std::string> meta_data)
     {
-      var_string_md_[tag] = meta_data; 
+      var_string_md_[tag] = meta_data;
     }
 
     void set_integer_metadata_for_var(std::string tag, std::vector<Index> meta_data)
     {
-      var_integer_md_[tag] = meta_data; 
+      var_integer_md_[tag] = meta_data;
     }
 
     void set_numeric_metadata_for_var(std::string tag, std::vector<Number> meta_data)
     {
-      var_numeric_md_[tag] = meta_data; 
+      var_numeric_md_[tag] = meta_data;
     }
 
     void set_string_metadata_for_con(std::string tag, std::vector<std::string> meta_data)
     {
-      con_string_md_[tag] = meta_data; 
+      con_string_md_[tag] = meta_data;
     }
 
     void set_integer_metadata_for_con(std::string tag, std::vector<Index> meta_data)
     {
-      con_integer_md_[tag] = meta_data; 
+      con_integer_md_[tag] = meta_data;
     }
 
     void set_numeric_metadata_for_con(std::string tag, std::vector<Number> meta_data)
     {
-      con_numeric_md_[tag] = meta_data; 
+      con_numeric_md_[tag] = meta_data;
     }
     //@}
 

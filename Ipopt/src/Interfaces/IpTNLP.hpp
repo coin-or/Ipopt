@@ -85,17 +85,17 @@ namespace Ipopt
     typedef std::map<std::string, std::vector<Index> > IntegerMetaDataMapType;
     typedef std::map<std::string, std::vector<Number> > NumericMetaDataMapType;
 
-    /** overload this method to return any meta data for 
+    /** overload this method to return any meta data for
      *  the variables and the constraints */
     virtual bool get_var_con_metadata(Index n,
-				      StringMetaDataMapType& var_string_md,
-				      IntegerMetaDataMapType& var_integer_md,
-				      NumericMetaDataMapType& var_numeric_md,
-				      Index m,
-				      StringMetaDataMapType& con_string_md,
-				      IntegerMetaDataMapType& con_integer_md,
-				      NumericMetaDataMapType& con_numeric_md)
-				      
+                                      StringMetaDataMapType& var_string_md,
+                                      IntegerMetaDataMapType& var_integer_md,
+                                      NumericMetaDataMapType& var_numeric_md,
+                                      Index m,
+                                      StringMetaDataMapType& con_string_md,
+                                      IntegerMetaDataMapType& con_integer_md,
+                                      NumericMetaDataMapType& con_numeric_md)
+
     {
       return false;
     }

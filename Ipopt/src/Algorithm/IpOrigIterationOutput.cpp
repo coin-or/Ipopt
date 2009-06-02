@@ -238,7 +238,7 @@ namespace Ipopt
       IpCq().curr_jac_c()->Print(Jnlst(), J_MATRIX, J_MAIN, "jac_c");
       IpCq().curr_jac_d()->Print(Jnlst(), J_MATRIX, J_MAIN, "jac_d");
       if (IsValid(IpData().W())) {
-	IpData().W()->Print(Jnlst(), J_MATRIX, J_MAIN, "W");
+        IpData().W()->Print(Jnlst(), J_MATRIX, J_MAIN, "W");
       }
     }
 

@@ -298,25 +298,25 @@ namespace Ipopt
   }
 
   bool AmplTNLP::get_var_con_metadata(Index n,
-				      StringMetaDataMapType& var_string_md,
-				      IntegerMetaDataMapType& var_integer_md,
-				      NumericMetaDataMapType& var_numeric_md,
-				      Index m,
-				      StringMetaDataMapType& con_string_md,
-				      IntegerMetaDataMapType& con_integer_md,
-				      NumericMetaDataMapType& con_numeric_md)
+                                      StringMetaDataMapType& var_string_md,
+                                      IntegerMetaDataMapType& var_integer_md,
+                                      NumericMetaDataMapType& var_numeric_md,
+                                      Index m,
+                                      StringMetaDataMapType& con_string_md,
+                                      IntegerMetaDataMapType& con_integer_md,
+                                      NumericMetaDataMapType& con_numeric_md)
   {
     ASL_pfgh* asl = asl_;
     DBG_ASSERT(asl_);
-    
+
     // pick up the variable and constraints names if available
     Index rlen = maxrownamelen;
     Index clen = maxcolnamelen;
-    
+
     if (rlen > 0) {
       std::vector<std::string> var_names(n);
       for (Index i=0; i<n; i++) {
-	var_names[i] = var_name(i);
+        var_names[i] = var_name(i);
       }
       var_string_md_["idx_names"] = var_names;
     }
@@ -324,22 +324,21 @@ namespace Ipopt
     if (clen > 0) {
       std::vector<std::string> con_names(m);
       for (Index i=0; i<m; i++) {
-	con_names[i] = con_name(i);
+        con_names[i] = con_name(i);
       }
       con_string_md_["idx_names"] = con_names;
     }
 
     if (var_string_md_.size() > 0 || var_integer_md_.size() > 0 || var_numeric_md_.size() > 0
-	|| con_string_md_.size() > 0 || con_integer_md_.size() > 0 || con_numeric_md_.size() > 0)
-      {
-	var_string_md = var_string_md_;
-	var_integer_md = var_integer_md_;
-	var_numeric_md = var_numeric_md_;
-	con_string_md = con_string_md_;
-	con_integer_md = con_integer_md_;
-	con_numeric_md = con_numeric_md_;
-	return true;
-      }
+        || con_string_md_.size() > 0 || con_integer_md_.size() > 0 || con_numeric_md_.size() > 0) {
+      var_string_md = var_string_md_;
+      var_integer_md = var_integer_md_;
+      var_numeric_md = var_numeric_md_;
+      con_string_md = con_string_md_;
+      con_integer_md = con_integer_md_;
+      con_numeric_md = con_numeric_md_;
+      return true;
+    }
 
     return false;
   }
@@ -1489,15 +1488,15 @@ namespace Ipopt
     return dp->u.i;
   }
 
-  std::vector<Index> 
+  std::vector<Index>
   AmplSuffixHandler::GetIntegerSuffixValues(Index n, std::string suffix_string,
-     Suffix_Source source) const
+      Suffix_Source source) const
   {
     std::vector<Index> ret;
     const Index* ptr = GetIntegerSuffixValues(suffix_string, source);
     if (ptr) {
       for (Index i=0; i<n; i++) {
-	ret[i] = ptr[i];
+        ret[i] = ptr[i];
       }
     }
     return ret;
@@ -1531,15 +1530,15 @@ namespace Ipopt
     return dp->u.r;
   }
 
-  std::vector<Number> 
+  std::vector<Number>
   AmplSuffixHandler::GetNumberSuffixValues(Index n, std::string suffix_string,
-     Suffix_Source source) const
+      Suffix_Source source) const
   {
     std::vector<Number> ret;
     const Number* ptr = GetNumberSuffixValues(suffix_string, source);
     if (ptr) {
       for (Index i=0; i<n; i++) {
-	ret[i] = ptr[i];
+        ret[i] = ptr[i];
       }
     }
     return ret;
