@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -14,6 +14,8 @@
 #include "IpException.hpp"
 #include "IpAlgTypes.hpp"
 #include "IpReturnCodes.hpp"
+
+#include <map>
 
 namespace Ipopt
 {
@@ -78,6 +80,25 @@ namespace Ipopt
     enum IndexStyleEnum { C_STYLE=0, FORTRAN_STYLE=1 };
     virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                               Index& nnz_h_lag, IndexStyleEnum& index_style)=0;
+
+    typedef std::map<std::string, std::vector<std::string> > StringMetaDataMapType;
+    typedef std::map<std::string, std::vector<Index> > IntegerMetaDataMapType;
+    typedef std::map<std::string, std::vector<Number> > NumericMetaDataMapType;
+
+    /** overload this method to return any meta data for 
+     *  the variables and the constraints */
+    virtual bool get_var_con_metadata(Index n,
+				      StringMetaDataMapType& var_string_md,
+				      IntegerMetaDataMapType& var_integer_md,
+				      NumericMetaDataMapType& var_numeric_md,
+				      Index m,
+				      StringMetaDataMapType& con_string_md,
+				      IntegerMetaDataMapType& con_integer_md,
+				      NumericMetaDataMapType& con_numeric_md)
+				      
+    {
+      return false;
+    }
 
     /** overload this method to return the information about the bound
      *  on the variables and constraints. The value that indicates
