@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -76,6 +76,12 @@ namespace Ipopt
     /** Methods for IpoptType */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+    //@}
+
+    /**@name Access to internal strategy objects */
+    //@{
+    SmartPtr<SearchDirectionCalculator> SearchDirCalc()
+    { return search_dir_calculator_; }
     //@}
 
   private:

@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -42,6 +42,10 @@ namespace Ipopt
     //@{
     static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
     //@}
+
+    /** Method to return the pd_solver for additional processing */
+    SmartPtr<PDSystemSolver> PDSolver()
+    { return pd_solver_; }
 
   private:
     /**@name Default Compiler Generated Methods

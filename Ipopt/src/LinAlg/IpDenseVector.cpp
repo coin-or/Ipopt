@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -1132,11 +1132,22 @@ namespace Ipopt
                              prefix.c_str(), scalar_);
       }
       else {
-        for (Index i=0; i<Dim(); i++) {
-          jnlst.PrintfIndented(level, category, indent,
-                               "%s%s[%5d]=%23.16e\n",
-                               prefix.c_str(), name.c_str(), i+1, values_[i]);
-        }
+	if (owner_space_->HasStringMetaData("idx_names")) {
+	  const std::vector<std::string>& idx_names
+	    = owner_space_->GetStringMetaData("idx_names");
+	  for (Index i=0; i<Dim(); i++) {
+	    jnlst.PrintfIndented(level, category, indent,
+				 "%s%s[%5d]{%s}=%23.16e\n",
+				 prefix.c_str(), name.c_str(), i+1, idx_names[i].c_str(), values_[i]);
+	  }
+	}
+	else {
+	  for (Index i=0; i<Dim(); i++) {
+	    jnlst.PrintfIndented(level, category, indent,
+				 "%s%s[%5d]=%23.16e\n",
+				 prefix.c_str(), name.c_str(), i+1, values_[i]);
+	  }
+	}
       }
     }
     else {

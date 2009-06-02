@@ -400,6 +400,22 @@ namespace Ipopt
 
       // create space to store vectors that are the full length of g
       full_g_ = new Number[n_full_g_];
+      // check if there is any meta data for the variables and constraints     
+      StringMetaDataMapType var_string_md;
+      IntegerMetaDataMapType var_integer_md;
+      NumericMetaDataMapType var_numeric_md;
+      StringMetaDataMapType con_string_md;
+      IntegerMetaDataMapType con_integer_md;
+      NumericMetaDataMapType con_numeric_md;
+      if (!tnlp_->get_var_con_metadata(n_full_x, var_string_md, var_integer_md, var_numeric_md,
+				    n_full_g_, con_string_md, con_integer_md, con_numeric_md)) {
+	var_string_md.clear();
+	var_integer_md.clear();
+	var_numeric_md.clear();
+	con_string_md.clear();
+	con_integer_md.clear();
+	con_numeric_md.clear();
+      }
 
       // allocate internal space to store the full jacobian
       jac_g_ = new Number[nz_full_jac_g_];
@@ -719,9 +735,15 @@ namespace Ipopt
       x_u = NULL;
 
       // create x spaces
-      x_space_ = new DenseVectorSpace(n_x_var);
-      x_l_space_ = new DenseVectorSpace(n_x_l);
-      x_u_space_ = new DenseVectorSpace(n_x_u);
+      SmartPtr<DenseVectorSpace> dv_x_space 
+	= new DenseVectorSpace(n_x_var);
+      x_space_ = GetRawPtr(dv_x_space);
+      SmartPtr<DenseVectorSpace> dv_x_l_space
+	= new DenseVectorSpace(n_x_l);
+      x_l_space_ = GetRawPtr(dv_x_l_space);
+      SmartPtr<DenseVectorSpace> dv_x_u_space
+	= new DenseVectorSpace(n_x_u);
+      x_u_space_ = GetRawPtr(dv_x_u_space);
 
       if (n_x_fixed_>0 && fixed_variable_treatment_==MAKE_PARAMETER) {
         P_x_full_x_space_ =
@@ -741,6 +763,115 @@ namespace Ipopt
       px_u_space_ = GetRawPtr(P_x_x_U_space_);
       P_x_x_U_ = P_x_x_U_space_->MakeNewExpansionMatrix();
 
+      // setup the variable meta data if present
+      if (var_string_md.size() > 0) {
+	StringMetaDataMapType::iterator iter;
+	for (iter=var_string_md.begin(); iter != var_string_md.end(); iter++) {
+	  std::vector<std::string> string_md(n_x_var);
+	  const Index* pos_idx = NULL;
+	  if (IsValid(P_x_full_x_space_)) {
+	    pos_idx = P_x_full_x_->ExpandedPosIndices();
+	    for (Index i=0; i<n_x_var; i++) {
+	      string_md[i] = iter->second[pos_idx[i]];
+	    }
+	  }
+	  else {
+	    for (Index i=0; i<n_x_var; i++) {
+	      string_md[i] = iter->second[i];
+	    }
+	  }
+	  dv_x_space->SetStringMetaData(iter->first, string_md);
+
+	  string_md.clear();
+	  string_md.resize(n_x_l);
+	  pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_x_l; i++) {
+	    string_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_x_l_space->SetStringMetaData(iter->first, string_md);
+	  
+	  string_md.clear();
+	  string_md.resize(n_x_u);
+	  pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_x_u; i++) {
+	    string_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_x_u_space->SetStringMetaData(iter->first, string_md);
+	}
+      }
+
+      if (var_integer_md.size() > 0) {
+	IntegerMetaDataMapType::iterator iter;
+	for (iter=var_integer_md.begin(); iter != var_integer_md.end(); iter++) {
+	  std::vector<Index> integer_md(n_x_var);
+	  const Index* pos_idx = NULL;
+	  if (IsValid(P_x_full_x_space_)) {
+	    pos_idx = P_x_full_x_->ExpandedPosIndices();
+	    for (Index i=0; i<n_x_var; i++) {
+	      integer_md[i] = iter->second[pos_idx[i]];
+	    }
+	  }
+	  else {
+	    for (Index i=0; i<n_x_var; i++) {
+	      integer_md[i] = iter->second[i];
+	    }
+	  }
+	  dv_x_space->SetIntegerMetaData(iter->first, integer_md);
+
+	  integer_md.clear();
+	  integer_md.resize(n_x_l);
+	  pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_x_l; i++) {
+	    integer_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_x_l_space->SetIntegerMetaData(iter->first, integer_md);
+	  
+	  integer_md.clear();
+	  integer_md.resize(n_x_u);
+	  pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_x_u; i++) {
+	    integer_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_x_u_space->SetIntegerMetaData(iter->first, integer_md);
+	}
+      }
+
+      if (var_numeric_md.size() > 0) {
+	NumericMetaDataMapType::iterator iter;
+	for (iter=var_numeric_md.begin(); iter != var_numeric_md.end(); iter++) {
+	  std::vector<Number> numeric_md(n_x_var);
+	  const Index* pos_idx = NULL;
+	  if (IsValid(P_x_full_x_space_)) {
+	    pos_idx = P_x_full_x_->ExpandedPosIndices();
+	    for (Index i=0; i<n_x_var; i++) {
+	      numeric_md[i] = iter->second[pos_idx[i]];
+	    }
+	  }
+	  else {
+	    for (Index i=0; i<n_x_var; i++) {
+	      numeric_md[i] = iter->second[i];
+	    }
+	  }
+	  dv_x_space->SetNumericMetaData(iter->first, numeric_md);
+
+	  numeric_md.clear();
+	  numeric_md.resize(n_x_l);
+	  pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_x_l; i++) {
+	    numeric_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_x_l_space->SetNumericMetaData(iter->first, numeric_md);
+	  
+	  numeric_md.clear();
+	  numeric_md.resize(n_x_u);
+	  pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_x_u; i++) {
+	    numeric_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_x_u_space->SetNumericMetaData(iter->first, numeric_md);
+	}
+      }
+
       delete [] x_not_fixed_map;
       x_not_fixed_map = NULL;
       delete [] x_l_map;
@@ -749,18 +880,17 @@ namespace Ipopt
       x_u_map = NULL;
 
       // create the required c_space
-
+      
+      SmartPtr<DenseVectorSpace> dc_space;
       if (n_x_fixed_==0 || fixed_variable_treatment_==MAKE_PARAMETER) {
-        SmartPtr<DenseVectorSpace> dc_space = new DenseVectorSpace(n_c);
-        c_space_ = GetRawPtr(dc_space);
-        c_rhs_ = new Number[n_c];
+        dc_space = new DenseVectorSpace(n_c);
       }
       else {
-        SmartPtr<DenseVectorSpace> dc_space =
-          new DenseVectorSpace(n_c+n_x_fixed_);
-        c_space_ = GetRawPtr(dc_space);
-        c_rhs_ = new Number[n_c+n_x_fixed_];
+        dc_space = new DenseVectorSpace(n_c+n_x_fixed_);
       }
+      c_space_ = GetRawPtr(dc_space);
+      c_rhs_ = new Number[dc_space->Dim()];
+
       // create the internal expansion matrix for c to g
       P_c_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_c, c_map);
       P_c_g_ = P_c_g_space_->MakeNewExpansionMatrix();
@@ -768,7 +898,9 @@ namespace Ipopt
       c_map = NULL;
 
       // create the required d_space
-      d_space_ = new DenseVectorSpace(n_d);
+      SmartPtr<DenseVectorSpace> dv_d_space
+	= new DenseVectorSpace(n_d);
+      d_space_ = GetRawPtr(dv_d_space);
       // create the internal expansion matrix for d to g
       P_d_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_d, d_map);
       P_d_g_ = P_d_g_space_->MakeNewExpansionMatrix();
@@ -776,16 +908,24 @@ namespace Ipopt
       d_map = NULL;
 
       // create the required d_l space
-      d_l_space_ = new DenseVectorSpace(n_d_l);
+      SmartPtr<DenseVectorSpace> dv_d_l_space
+	= new DenseVectorSpace(n_d_l);
+      d_l_space_ = GetRawPtr(dv_d_l_space);
       // create the required expansion matrix for d_L to d_L_exp
-      pd_l_space_ = new ExpansionMatrixSpace(n_d, n_d_l, d_l_map);
+      SmartPtr<ExpansionMatrixSpace> P_d_l_space
+	= new ExpansionMatrixSpace(n_d, n_d_l, d_l_map);
+      pd_l_space_ = GetRawPtr(P_d_l_space);
       delete [] d_l_map;
       d_l_map = NULL;
 
       // create the required d_u space
-      d_u_space_ = new DenseVectorSpace(n_d_u);
+      SmartPtr<DenseVectorSpace> dv_d_u_space
+	= new DenseVectorSpace(n_d_u);
+      d_u_space_ = GetRawPtr(dv_d_u_space);
       // create the required expansion matrix for d_U to d_U_exp
-      pd_u_space_ = new ExpansionMatrixSpace(n_d, n_d_u, d_u_map);
+      SmartPtr<ExpansionMatrixSpace> P_d_u_space
+	= new ExpansionMatrixSpace(n_d, n_d_u, d_u_map);
+      pd_u_space_ = GetRawPtr(P_d_u_space);
       delete [] d_u_map;
       d_u_map = NULL;
 
@@ -793,6 +933,115 @@ namespace Ipopt
       g_l = NULL;
       delete [] g_u;
       g_u = NULL;
+
+      // set the constraint meta data if present
+      if (con_string_md.size() > 0) {
+	StringMetaDataMapType::iterator iter;
+	for (iter=con_string_md.begin(); iter != con_string_md.end(); iter++) {
+	  std::vector<std::string> string_md(n_c);
+	  const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_c; i++) {
+	    string_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dc_space->SetStringMetaData(iter->first, string_md);
+	  
+	  string_md.clear();
+	  string_md.resize(n_d);
+	  pos_idx = P_d_g_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_d; i++) {
+	    string_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_d_space->SetStringMetaData(iter->first, string_md);
+
+	  string_md.clear();
+	  string_md.resize(n_d_l);
+	  pos_idx = P_d_l_space->ExpandedPosIndices();
+	  for (Index i=0; i<n_d_l; i++) {
+	    string_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_d_l_space->SetStringMetaData(iter->first, string_md);
+	  
+	  string_md.clear();
+	  string_md.resize(n_d_u);
+	  pos_idx = P_d_u_space->ExpandedPosIndices();
+	  for (Index i=0; i<n_d_u; i++) {
+	    string_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_d_u_space->SetStringMetaData(iter->first, string_md);
+	}
+      }
+      
+      if (con_integer_md.size() > 0) {
+	IntegerMetaDataMapType::iterator iter;
+	for (iter=con_integer_md.begin(); iter != con_integer_md.end(); iter++) {
+	  std::vector<Index> integer_md(n_c);
+	  const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_c; i++) {
+	    integer_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dc_space->SetIntegerMetaData(iter->first, integer_md);
+	  
+	  integer_md.clear();
+	  integer_md.resize(n_d);
+	  pos_idx = P_d_g_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_d; i++) {
+	    integer_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_d_space->SetIntegerMetaData(iter->first, integer_md);
+
+	  integer_md.clear();
+	  integer_md.resize(n_d_l);
+	  pos_idx = P_d_l_space->ExpandedPosIndices();
+	  for (Index i=0; i<n_d_l; i++) {
+	    integer_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_d_l_space->SetIntegerMetaData(iter->first, integer_md);
+	  
+	  integer_md.clear();
+	  integer_md.resize(n_d_u);
+	  pos_idx = P_d_u_space->ExpandedPosIndices();
+	  for (Index i=0; i<n_d_u; i++) {
+	    integer_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_d_u_space->SetIntegerMetaData(iter->first, integer_md);
+	}
+      }
+
+      if (con_numeric_md.size() > 0) {
+	NumericMetaDataMapType::iterator iter;
+	for (iter=con_numeric_md.begin(); iter != con_numeric_md.end(); iter++) {
+	  std::vector<Number> numeric_md(n_c);
+	  const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_c; i++) {
+	    numeric_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dc_space->SetNumericMetaData(iter->first, numeric_md);
+
+	  numeric_md.clear();
+	  numeric_md.resize(n_d);
+	  pos_idx = P_d_g_space_->ExpandedPosIndices();
+	  for (Index i=0; i<n_d; i++) {
+	    numeric_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_d_space->SetNumericMetaData(iter->first, numeric_md);
+
+	  numeric_md.clear();
+	  numeric_md.resize(n_d_l);
+	  pos_idx = P_d_l_space->ExpandedPosIndices();
+	  for (Index i=0; i<n_d_l; i++) {
+	    numeric_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_d_l_space->SetNumericMetaData(iter->first, numeric_md);
+	  
+	  numeric_md.clear();
+	  numeric_md.resize(n_d_u);
+	  pos_idx = P_d_u_space->ExpandedPosIndices();
+	  for (Index i=0; i<n_d_u; i++) {
+	    numeric_md[i] = iter->second[pos_idx[i]];
+	  }
+	  dv_d_u_space->SetNumericMetaData(iter->first, numeric_md);
+	}
+      }
 
       /** Create the matrix space for the jacobians
        */

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,12 +11,18 @@
 
 #include "IpUtils.hpp"
 #include "IpVector.hpp"
+#include <map>
 
 namespace Ipopt
 {
 
   /* forward declarations */
   class DenseVectorSpace;
+
+  /** @name Exceptions */
+  //@{
+  DECLARE_STD_EXCEPTION(METADATA_ERROR);
+  //@}
 
   /** Dense Vector Implementation.  This is the default Vector class
    *  in Ipopt.  It stores vectors in contiguous Number arrays, unless
@@ -253,6 +259,13 @@ namespace Ipopt
     void set_values_from_scalar();
   };
 
+  /** typedefs for the map variables that define meta data for the
+   *  DenseVectorSpace
+   */
+  typedef std::map<std::string, std::vector<std::string> > StringMetaDataMapType;
+  typedef std::map<std::string, std::vector<Index> > IntegerMetaDataMapType;
+  typedef std::map<std::string, std::vector<Number> > NumericMetaDataMapType;
+
   /** This vectors space is the vector space for DenseVector.
    */
   class DenseVectorSpace : public VectorSpace
@@ -298,6 +311,44 @@ namespace Ipopt
     /** Deallocate internal storage for the DenseVector */
     void FreeInternalStorage(Number* values) const;
     //@}
+
+    /**@name Methods for dealing with meta data on the vector
+     */
+    //@{
+    /** Check if string meta exists for tag */
+    bool HasStringMetaData(const std::string tag) const;
+
+    /** Check if Integer meta exists for tag */
+    bool HasIntegerMetaData(const std::string tag) const;
+
+    /** Check if Numeric meta exists for tag */
+    bool HasNumericMetaData(const std::string tag) const;
+
+    /** Get meta data of type std::string by tag */
+    const std::vector<std::string>& GetStringMetaData(const std::string& tag) const;
+
+    /** Get meta data of type Index by tag */
+    const std::vector<Index>& GetIntegerMetaData(const std::string& tag) const;
+
+    /** Get meta data of type Number by tag */
+    const std::vector<Number>& GetNumericMetaData(const std::string& tag) const;
+
+    /** Set meta data of type std::string by tag */
+    void SetStringMetaData(std::string tag, std::vector<std::string> meta_data);
+
+    /** Set meta data of type Index by tag */
+    void SetIntegerMetaData(std::string tag, std::vector<Index> meta_data);
+
+    /** Set meta data of type Number by tag */
+    void SetNumericMetaData(std::string tag, std::vector<Number> meta_data);
+    //@}
+
+  private:
+    // variables to store vector meta data
+    StringMetaDataMapType string_meta_data_;
+    IntegerMetaDataMapType integer_meta_data_;
+    NumericMetaDataMapType numeric_meta_data_;
+
   };
 
   // inline functions
@@ -355,5 +406,88 @@ namespace Ipopt
     return owner_space_->MakeNewDenseVector();
   }
 
+  inline
+  bool DenseVectorSpace::HasStringMetaData(const std::string tag) const
+  {
+    StringMetaDataMapType::const_iterator iter;
+    iter = string_meta_data_.find(tag);
+    
+    if (iter != string_meta_data_.end()) {
+      return true;
+    }
+    
+    return false;
+  }
+
+  inline
+  bool DenseVectorSpace::HasIntegerMetaData(const std::string tag) const
+  {
+    IntegerMetaDataMapType::const_iterator iter;
+    iter = integer_meta_data_.find(tag);
+    
+    if (iter != integer_meta_data_.end()) {
+      return true;
+    }
+    
+    return false;
+  }
+
+  inline
+  bool DenseVectorSpace::HasNumericMetaData(const std::string tag) const
+  {
+    NumericMetaDataMapType::const_iterator iter;
+    iter = numeric_meta_data_.find(tag);
+    
+    if (iter != numeric_meta_data_.end()) {
+      return true;
+    }
+    
+    return false;
+  }
+
+  inline
+  const std::vector<std::string>& DenseVectorSpace::GetStringMetaData(const std::string& tag) const
+  {
+    DBG_ASSERT(HasStringMetaData(tag));
+    StringMetaDataMapType::const_iterator iter;
+    iter = string_meta_data_.find(tag);
+    return iter->second;
+  }
+
+  inline
+  const std::vector<Index>& DenseVectorSpace::GetIntegerMetaData(const std::string& tag) const
+  {
+    DBG_ASSERT(HasIntegerMetaData(tag));
+    IntegerMetaDataMapType::const_iterator iter;
+    iter = integer_meta_data_.find(tag);
+    return iter->second;
+  }
+  
+  inline
+  const std::vector<Number>& DenseVectorSpace::GetNumericMetaData(const std::string& tag) const
+  {
+    DBG_ASSERT(HasNumericMetaData(tag));
+    NumericMetaDataMapType::const_iterator iter;
+    iter = numeric_meta_data_.find(tag);
+    return iter->second;
+  }
+
+  inline
+  void DenseVectorSpace::SetStringMetaData(std::string tag, std::vector<std::string> meta_data)
+  {
+    string_meta_data_[tag] = meta_data;
+  }
+  
+  inline
+  void DenseVectorSpace::SetIntegerMetaData(std::string tag, std::vector<Index> meta_data)
+  {
+    integer_meta_data_[tag] = meta_data;
+  }
+
+  inline
+  void DenseVectorSpace::SetNumericMetaData(std::string tag, std::vector<Number> meta_data)
+  {
+    numeric_meta_data_[tag] = meta_data;
+  }
 } // namespace Ipopt
 #endif

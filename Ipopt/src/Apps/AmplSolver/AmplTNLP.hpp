@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -67,6 +67,10 @@ namespace Ipopt
     const Index* GetIntegerSuffixValues(std::string suffix_string, Suffix_Source source) const;
 
     const Number* GetNumberSuffixValues(std::string suffix_string, Suffix_Source source) const;
+
+    std::vector<Index> GetIntegerSuffixValues(Index n, std::string suffix_string, Suffix_Source source) const;
+
+    std::vector<Number> GetNumberSuffixValues(Index n, std::string suffix_string, Suffix_Source source) const;
 
   private:
     /**@name Default Compiler Generated Methods
@@ -309,6 +313,17 @@ namespace Ipopt
     virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                               Index& nnz_h_lag, IndexStyleEnum& index_style);
 
+    /** returns names and other meta data for the variables and constraints
+     *  Overloaded from TNLP */
+    virtual bool get_var_con_metadata(Index n,
+				      StringMetaDataMapType& var_string_md,
+				      IntegerMetaDataMapType& var_integer_md,
+				      NumericMetaDataMapType& var_numeric_md,
+				      Index m,
+				      StringMetaDataMapType& con_string_md,
+				      IntegerMetaDataMapType& con_integer_md,
+				      NumericMetaDataMapType& con_numeric_md);
+
     /** returns bounds of the nlp. Overloaded from TNLP */
     virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
                                  Index m, Number* g_l, Number* g_u);
@@ -415,6 +430,42 @@ namespace Ipopt
      *  AMPL model, it MUST be called. */
     void set_active_objective(Index obj_no);
 
+    /**@name Methods to set meta data for the variables
+     * and constraints. These values will be passed on
+     * to the TNLP in get_var_con_meta_data
+     */
+    //@{
+    void set_string_metadata_for_var(std::string tag, std::vector<std::string> meta_data)
+    {
+      var_string_md_[tag] = meta_data; 
+    }
+
+    void set_integer_metadata_for_var(std::string tag, std::vector<Index> meta_data)
+    {
+      var_integer_md_[tag] = meta_data; 
+    }
+
+    void set_numeric_metadata_for_var(std::string tag, std::vector<Number> meta_data)
+    {
+      var_numeric_md_[tag] = meta_data; 
+    }
+
+    void set_string_metadata_for_con(std::string tag, std::vector<std::string> meta_data)
+    {
+      con_string_md_[tag] = meta_data; 
+    }
+
+    void set_integer_metadata_for_con(std::string tag, std::vector<Index> meta_data)
+    {
+      con_integer_md_[tag] = meta_data; 
+    }
+
+    void set_numeric_metadata_for_con(std::string tag, std::vector<Number> meta_data)
+    {
+      con_numeric_md_[tag] = meta_data; 
+    }
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -509,6 +560,14 @@ namespace Ipopt
 
     /** calls hesset ASL function */
     void call_hesset();
+
+    /** meta data to pass on to TNLP */
+    StringMetaDataMapType var_string_md_;
+    IntegerMetaDataMapType var_integer_md_;
+    NumericMetaDataMapType var_numeric_md_;
+    StringMetaDataMapType con_string_md_;
+    IntegerMetaDataMapType con_integer_md_;
+    NumericMetaDataMapType con_numeric_md_;
   };
 
 
