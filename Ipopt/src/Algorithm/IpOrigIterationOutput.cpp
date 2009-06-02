@@ -236,7 +236,9 @@ namespace Ipopt
     if (Jnlst().ProduceOutput(J_MATRIX, J_MAIN)) {
       IpCq().curr_jac_c()->Print(Jnlst(), J_MATRIX, J_MAIN, "jac_c");
       IpCq().curr_jac_d()->Print(Jnlst(), J_MATRIX, J_MAIN, "jac_d");
-      IpData().W()->Print(Jnlst(), J_MATRIX, J_MAIN, "W");
+      if (IsValid(IpData().W())) {
+        IpData().W()->Print(Jnlst(), J_MATRIX, J_MAIN, "W");
+      }
     }
 
     Jnlst().Printf(J_DETAILED, J_MAIN, "\n\n");

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -121,6 +121,18 @@ namespace Ipopt
     /** Get the object with the statistics about the most recent
      *  optimization run. */
     SmartPtr<SolveStatistics> Statistics();
+
+    /** Get the IpoptNLP Object */
+    SmartPtr<IpoptNLP> IpoptNLPObject();
+
+    /** Get the IpoptData Object */
+    SmartPtr<IpoptData> IpoptDataObject();
+
+    /** Get the IpoptCQ Object */
+    SmartPtr<IpoptCalculatedQuantities> IpoptCQObject();
+
+    /** Get the Algorithm Object */
+    SmartPtr<IpoptAlgorithm> AlgorithmObject();
     //@}
 
     /** @name Methods for IpoptTypeInfo */
