@@ -81,7 +81,9 @@ namespace Ipopt
     /**@name Access to internal strategy objects */
     //@{
     SmartPtr<SearchDirectionCalculator> SearchDirCalc()
-    { return search_dir_calculator_; }
+    {
+      return search_dir_calculator_;
+    }
     //@}
 
   private:

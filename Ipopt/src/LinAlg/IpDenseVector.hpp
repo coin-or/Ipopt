@@ -411,11 +411,11 @@ namespace Ipopt
   {
     StringMetaDataMapType::const_iterator iter;
     iter = string_meta_data_.find(tag);
-    
+
     if (iter != string_meta_data_.end()) {
       return true;
     }
-    
+
     return false;
   }
 
@@ -424,11 +424,11 @@ namespace Ipopt
   {
     IntegerMetaDataMapType::const_iterator iter;
     iter = integer_meta_data_.find(tag);
-    
+
     if (iter != integer_meta_data_.end()) {
       return true;
     }
-    
+
     return false;
   }
 
@@ -437,11 +437,11 @@ namespace Ipopt
   {
     NumericMetaDataMapType::const_iterator iter;
     iter = numeric_meta_data_.find(tag);
-    
+
     if (iter != numeric_meta_data_.end()) {
       return true;
     }
-    
+
     return false;
   }
 
@@ -462,7 +462,7 @@ namespace Ipopt
     iter = integer_meta_data_.find(tag);
     return iter->second;
   }
-  
+
   inline
   const std::vector<Number>& DenseVectorSpace::GetNumericMetaData(const std::string& tag) const
   {
@@ -477,7 +477,7 @@ namespace Ipopt
   {
     string_meta_data_[tag] = meta_data;
   }
-  
+
   inline
   void DenseVectorSpace::SetIntegerMetaData(std::string tag, std::vector<Index> meta_data)
   {

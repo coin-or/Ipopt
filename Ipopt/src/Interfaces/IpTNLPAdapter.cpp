@@ -245,7 +245,7 @@ namespace Ipopt
     options.GetBoolValue("derivative_test_print_all",
                          derivative_test_print_all_, prefix);
     options.GetIntegerValue("derivative_test_first_index",
-			    derivative_test_first_index_, prefix);
+                            derivative_test_first_index_, prefix);
 
     // The option warm_start_same_structure is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
@@ -338,7 +338,7 @@ namespace Ipopt
     // First, if required, perform derivative test
     if (derivative_test_ != NO_TEST) {
       bool retval = CheckDerivatives(derivative_test_,
-				     derivative_test_first_index_);
+                                     derivative_test_first_index_);
       if (!retval) {
         return retval;
       }
@@ -400,7 +400,7 @@ namespace Ipopt
 
       // create space to store vectors that are the full length of g
       full_g_ = new Number[n_full_g_];
-      // check if there is any meta data for the variables and constraints     
+      // check if there is any meta data for the variables and constraints
       StringMetaDataMapType var_string_md;
       IntegerMetaDataMapType var_integer_md;
       NumericMetaDataMapType var_numeric_md;
@@ -408,13 +408,13 @@ namespace Ipopt
       IntegerMetaDataMapType con_integer_md;
       NumericMetaDataMapType con_numeric_md;
       if (!tnlp_->get_var_con_metadata(n_full_x, var_string_md, var_integer_md, var_numeric_md,
-				    n_full_g_, con_string_md, con_integer_md, con_numeric_md)) {
-	var_string_md.clear();
-	var_integer_md.clear();
-	var_numeric_md.clear();
-	con_string_md.clear();
-	con_integer_md.clear();
-	con_numeric_md.clear();
+                                       n_full_g_, con_string_md, con_integer_md, con_numeric_md)) {
+        var_string_md.clear();
+        var_integer_md.clear();
+        var_numeric_md.clear();
+        con_string_md.clear();
+        con_integer_md.clear();
+        con_numeric_md.clear();
       }
 
       // allocate internal space to store the full jacobian
@@ -735,14 +735,14 @@ namespace Ipopt
       x_u = NULL;
 
       // create x spaces
-      SmartPtr<DenseVectorSpace> dv_x_space 
-	= new DenseVectorSpace(n_x_var);
+      SmartPtr<DenseVectorSpace> dv_x_space
+      = new DenseVectorSpace(n_x_var);
       x_space_ = GetRawPtr(dv_x_space);
       SmartPtr<DenseVectorSpace> dv_x_l_space
-	= new DenseVectorSpace(n_x_l);
+      = new DenseVectorSpace(n_x_l);
       x_l_space_ = GetRawPtr(dv_x_l_space);
       SmartPtr<DenseVectorSpace> dv_x_u_space
-	= new DenseVectorSpace(n_x_u);
+      = new DenseVectorSpace(n_x_u);
       x_u_space_ = GetRawPtr(dv_x_u_space);
 
       if (n_x_fixed_>0 && fixed_variable_treatment_==MAKE_PARAMETER) {
@@ -765,111 +765,111 @@ namespace Ipopt
 
       // setup the variable meta data if present
       if (var_string_md.size() > 0) {
-	StringMetaDataMapType::iterator iter;
-	for (iter=var_string_md.begin(); iter != var_string_md.end(); iter++) {
-	  std::vector<std::string> string_md(n_x_var);
-	  const Index* pos_idx = NULL;
-	  if (IsValid(P_x_full_x_space_)) {
-	    pos_idx = P_x_full_x_->ExpandedPosIndices();
-	    for (Index i=0; i<n_x_var; i++) {
-	      string_md[i] = iter->second[pos_idx[i]];
-	    }
-	  }
-	  else {
-	    for (Index i=0; i<n_x_var; i++) {
-	      string_md[i] = iter->second[i];
-	    }
-	  }
-	  dv_x_space->SetStringMetaData(iter->first, string_md);
+        StringMetaDataMapType::iterator iter;
+        for (iter=var_string_md.begin(); iter != var_string_md.end(); iter++) {
+          std::vector<std::string> string_md(n_x_var);
+          const Index* pos_idx = NULL;
+          if (IsValid(P_x_full_x_space_)) {
+            pos_idx = P_x_full_x_->ExpandedPosIndices();
+            for (Index i=0; i<n_x_var; i++) {
+              string_md[i] = iter->second[pos_idx[i]];
+            }
+          }
+          else {
+            for (Index i=0; i<n_x_var; i++) {
+              string_md[i] = iter->second[i];
+            }
+          }
+          dv_x_space->SetStringMetaData(iter->first, string_md);
 
-	  string_md.clear();
-	  string_md.resize(n_x_l);
-	  pos_idx = P_x_x_L_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_x_l; i++) {
-	    string_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_x_l_space->SetStringMetaData(iter->first, string_md);
-	  
-	  string_md.clear();
-	  string_md.resize(n_x_u);
-	  pos_idx = P_x_x_U_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_x_u; i++) {
-	    string_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_x_u_space->SetStringMetaData(iter->first, string_md);
-	}
+          string_md.clear();
+          string_md.resize(n_x_l);
+          pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_l; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_l_space->SetStringMetaData(iter->first, string_md);
+
+          string_md.clear();
+          string_md.resize(n_x_u);
+          pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_u; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_u_space->SetStringMetaData(iter->first, string_md);
+        }
       }
 
       if (var_integer_md.size() > 0) {
-	IntegerMetaDataMapType::iterator iter;
-	for (iter=var_integer_md.begin(); iter != var_integer_md.end(); iter++) {
-	  std::vector<Index> integer_md(n_x_var);
-	  const Index* pos_idx = NULL;
-	  if (IsValid(P_x_full_x_space_)) {
-	    pos_idx = P_x_full_x_->ExpandedPosIndices();
-	    for (Index i=0; i<n_x_var; i++) {
-	      integer_md[i] = iter->second[pos_idx[i]];
-	    }
-	  }
-	  else {
-	    for (Index i=0; i<n_x_var; i++) {
-	      integer_md[i] = iter->second[i];
-	    }
-	  }
-	  dv_x_space->SetIntegerMetaData(iter->first, integer_md);
+        IntegerMetaDataMapType::iterator iter;
+        for (iter=var_integer_md.begin(); iter != var_integer_md.end(); iter++) {
+          std::vector<Index> integer_md(n_x_var);
+          const Index* pos_idx = NULL;
+          if (IsValid(P_x_full_x_space_)) {
+            pos_idx = P_x_full_x_->ExpandedPosIndices();
+            for (Index i=0; i<n_x_var; i++) {
+              integer_md[i] = iter->second[pos_idx[i]];
+            }
+          }
+          else {
+            for (Index i=0; i<n_x_var; i++) {
+              integer_md[i] = iter->second[i];
+            }
+          }
+          dv_x_space->SetIntegerMetaData(iter->first, integer_md);
 
-	  integer_md.clear();
-	  integer_md.resize(n_x_l);
-	  pos_idx = P_x_x_L_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_x_l; i++) {
-	    integer_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_x_l_space->SetIntegerMetaData(iter->first, integer_md);
-	  
-	  integer_md.clear();
-	  integer_md.resize(n_x_u);
-	  pos_idx = P_x_x_U_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_x_u; i++) {
-	    integer_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_x_u_space->SetIntegerMetaData(iter->first, integer_md);
-	}
+          integer_md.clear();
+          integer_md.resize(n_x_l);
+          pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_l; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_l_space->SetIntegerMetaData(iter->first, integer_md);
+
+          integer_md.clear();
+          integer_md.resize(n_x_u);
+          pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_u; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_u_space->SetIntegerMetaData(iter->first, integer_md);
+        }
       }
 
       if (var_numeric_md.size() > 0) {
-	NumericMetaDataMapType::iterator iter;
-	for (iter=var_numeric_md.begin(); iter != var_numeric_md.end(); iter++) {
-	  std::vector<Number> numeric_md(n_x_var);
-	  const Index* pos_idx = NULL;
-	  if (IsValid(P_x_full_x_space_)) {
-	    pos_idx = P_x_full_x_->ExpandedPosIndices();
-	    for (Index i=0; i<n_x_var; i++) {
-	      numeric_md[i] = iter->second[pos_idx[i]];
-	    }
-	  }
-	  else {
-	    for (Index i=0; i<n_x_var; i++) {
-	      numeric_md[i] = iter->second[i];
-	    }
-	  }
-	  dv_x_space->SetNumericMetaData(iter->first, numeric_md);
+        NumericMetaDataMapType::iterator iter;
+        for (iter=var_numeric_md.begin(); iter != var_numeric_md.end(); iter++) {
+          std::vector<Number> numeric_md(n_x_var);
+          const Index* pos_idx = NULL;
+          if (IsValid(P_x_full_x_space_)) {
+            pos_idx = P_x_full_x_->ExpandedPosIndices();
+            for (Index i=0; i<n_x_var; i++) {
+              numeric_md[i] = iter->second[pos_idx[i]];
+            }
+          }
+          else {
+            for (Index i=0; i<n_x_var; i++) {
+              numeric_md[i] = iter->second[i];
+            }
+          }
+          dv_x_space->SetNumericMetaData(iter->first, numeric_md);
 
-	  numeric_md.clear();
-	  numeric_md.resize(n_x_l);
-	  pos_idx = P_x_x_L_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_x_l; i++) {
-	    numeric_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_x_l_space->SetNumericMetaData(iter->first, numeric_md);
-	  
-	  numeric_md.clear();
-	  numeric_md.resize(n_x_u);
-	  pos_idx = P_x_x_U_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_x_u; i++) {
-	    numeric_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_x_u_space->SetNumericMetaData(iter->first, numeric_md);
-	}
+          numeric_md.clear();
+          numeric_md.resize(n_x_l);
+          pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_l; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_l_space->SetNumericMetaData(iter->first, numeric_md);
+
+          numeric_md.clear();
+          numeric_md.resize(n_x_u);
+          pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_u; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_u_space->SetNumericMetaData(iter->first, numeric_md);
+        }
       }
 
       delete [] x_not_fixed_map;
@@ -880,7 +880,7 @@ namespace Ipopt
       x_u_map = NULL;
 
       // create the required c_space
-      
+
       SmartPtr<DenseVectorSpace> dc_space;
       if (n_x_fixed_==0 || fixed_variable_treatment_==MAKE_PARAMETER) {
         dc_space = new DenseVectorSpace(n_c);
@@ -899,7 +899,7 @@ namespace Ipopt
 
       // create the required d_space
       SmartPtr<DenseVectorSpace> dv_d_space
-	= new DenseVectorSpace(n_d);
+      = new DenseVectorSpace(n_d);
       d_space_ = GetRawPtr(dv_d_space);
       // create the internal expansion matrix for d to g
       P_d_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_d, d_map);
@@ -909,22 +909,22 @@ namespace Ipopt
 
       // create the required d_l space
       SmartPtr<DenseVectorSpace> dv_d_l_space
-	= new DenseVectorSpace(n_d_l);
+      = new DenseVectorSpace(n_d_l);
       d_l_space_ = GetRawPtr(dv_d_l_space);
       // create the required expansion matrix for d_L to d_L_exp
       SmartPtr<ExpansionMatrixSpace> P_d_l_space
-	= new ExpansionMatrixSpace(n_d, n_d_l, d_l_map);
+      = new ExpansionMatrixSpace(n_d, n_d_l, d_l_map);
       pd_l_space_ = GetRawPtr(P_d_l_space);
       delete [] d_l_map;
       d_l_map = NULL;
 
       // create the required d_u space
       SmartPtr<DenseVectorSpace> dv_d_u_space
-	= new DenseVectorSpace(n_d_u);
+      = new DenseVectorSpace(n_d_u);
       d_u_space_ = GetRawPtr(dv_d_u_space);
       // create the required expansion matrix for d_U to d_U_exp
       SmartPtr<ExpansionMatrixSpace> P_d_u_space
-	= new ExpansionMatrixSpace(n_d, n_d_u, d_u_map);
+      = new ExpansionMatrixSpace(n_d, n_d_u, d_u_map);
       pd_u_space_ = GetRawPtr(P_d_u_space);
       delete [] d_u_map;
       d_u_map = NULL;
@@ -936,111 +936,111 @@ namespace Ipopt
 
       // set the constraint meta data if present
       if (con_string_md.size() > 0) {
-	StringMetaDataMapType::iterator iter;
-	for (iter=con_string_md.begin(); iter != con_string_md.end(); iter++) {
-	  std::vector<std::string> string_md(n_c);
-	  const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_c; i++) {
-	    string_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dc_space->SetStringMetaData(iter->first, string_md);
-	  
-	  string_md.clear();
-	  string_md.resize(n_d);
-	  pos_idx = P_d_g_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_d; i++) {
-	    string_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_d_space->SetStringMetaData(iter->first, string_md);
+        StringMetaDataMapType::iterator iter;
+        for (iter=con_string_md.begin(); iter != con_string_md.end(); iter++) {
+          std::vector<std::string> string_md(n_c);
+          const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_c; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dc_space->SetStringMetaData(iter->first, string_md);
 
-	  string_md.clear();
-	  string_md.resize(n_d_l);
-	  pos_idx = P_d_l_space->ExpandedPosIndices();
-	  for (Index i=0; i<n_d_l; i++) {
-	    string_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_d_l_space->SetStringMetaData(iter->first, string_md);
-	  
-	  string_md.clear();
-	  string_md.resize(n_d_u);
-	  pos_idx = P_d_u_space->ExpandedPosIndices();
-	  for (Index i=0; i<n_d_u; i++) {
-	    string_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_d_u_space->SetStringMetaData(iter->first, string_md);
-	}
+          string_md.clear();
+          string_md.resize(n_d);
+          pos_idx = P_d_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_d; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_space->SetStringMetaData(iter->first, string_md);
+
+          string_md.clear();
+          string_md.resize(n_d_l);
+          pos_idx = P_d_l_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_l; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_l_space->SetStringMetaData(iter->first, string_md);
+
+          string_md.clear();
+          string_md.resize(n_d_u);
+          pos_idx = P_d_u_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_u; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_u_space->SetStringMetaData(iter->first, string_md);
+        }
       }
-      
-      if (con_integer_md.size() > 0) {
-	IntegerMetaDataMapType::iterator iter;
-	for (iter=con_integer_md.begin(); iter != con_integer_md.end(); iter++) {
-	  std::vector<Index> integer_md(n_c);
-	  const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_c; i++) {
-	    integer_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dc_space->SetIntegerMetaData(iter->first, integer_md);
-	  
-	  integer_md.clear();
-	  integer_md.resize(n_d);
-	  pos_idx = P_d_g_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_d; i++) {
-	    integer_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_d_space->SetIntegerMetaData(iter->first, integer_md);
 
-	  integer_md.clear();
-	  integer_md.resize(n_d_l);
-	  pos_idx = P_d_l_space->ExpandedPosIndices();
-	  for (Index i=0; i<n_d_l; i++) {
-	    integer_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_d_l_space->SetIntegerMetaData(iter->first, integer_md);
-	  
-	  integer_md.clear();
-	  integer_md.resize(n_d_u);
-	  pos_idx = P_d_u_space->ExpandedPosIndices();
-	  for (Index i=0; i<n_d_u; i++) {
-	    integer_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_d_u_space->SetIntegerMetaData(iter->first, integer_md);
-	}
+      if (con_integer_md.size() > 0) {
+        IntegerMetaDataMapType::iterator iter;
+        for (iter=con_integer_md.begin(); iter != con_integer_md.end(); iter++) {
+          std::vector<Index> integer_md(n_c);
+          const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_c; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dc_space->SetIntegerMetaData(iter->first, integer_md);
+
+          integer_md.clear();
+          integer_md.resize(n_d);
+          pos_idx = P_d_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_d; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_space->SetIntegerMetaData(iter->first, integer_md);
+
+          integer_md.clear();
+          integer_md.resize(n_d_l);
+          pos_idx = P_d_l_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_l; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_l_space->SetIntegerMetaData(iter->first, integer_md);
+
+          integer_md.clear();
+          integer_md.resize(n_d_u);
+          pos_idx = P_d_u_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_u; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_u_space->SetIntegerMetaData(iter->first, integer_md);
+        }
       }
 
       if (con_numeric_md.size() > 0) {
-	NumericMetaDataMapType::iterator iter;
-	for (iter=con_numeric_md.begin(); iter != con_numeric_md.end(); iter++) {
-	  std::vector<Number> numeric_md(n_c);
-	  const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_c; i++) {
-	    numeric_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dc_space->SetNumericMetaData(iter->first, numeric_md);
+        NumericMetaDataMapType::iterator iter;
+        for (iter=con_numeric_md.begin(); iter != con_numeric_md.end(); iter++) {
+          std::vector<Number> numeric_md(n_c);
+          const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_c; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dc_space->SetNumericMetaData(iter->first, numeric_md);
 
-	  numeric_md.clear();
-	  numeric_md.resize(n_d);
-	  pos_idx = P_d_g_space_->ExpandedPosIndices();
-	  for (Index i=0; i<n_d; i++) {
-	    numeric_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_d_space->SetNumericMetaData(iter->first, numeric_md);
+          numeric_md.clear();
+          numeric_md.resize(n_d);
+          pos_idx = P_d_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_d; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_space->SetNumericMetaData(iter->first, numeric_md);
 
-	  numeric_md.clear();
-	  numeric_md.resize(n_d_l);
-	  pos_idx = P_d_l_space->ExpandedPosIndices();
-	  for (Index i=0; i<n_d_l; i++) {
-	    numeric_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_d_l_space->SetNumericMetaData(iter->first, numeric_md);
-	  
-	  numeric_md.clear();
-	  numeric_md.resize(n_d_u);
-	  pos_idx = P_d_u_space->ExpandedPosIndices();
-	  for (Index i=0; i<n_d_u; i++) {
-	    numeric_md[i] = iter->second[pos_idx[i]];
-	  }
-	  dv_d_u_space->SetNumericMetaData(iter->first, numeric_md);
-	}
+          numeric_md.clear();
+          numeric_md.resize(n_d_l);
+          pos_idx = P_d_l_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_l; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_l_space->SetNumericMetaData(iter->first, numeric_md);
+
+          numeric_md.clear();
+          numeric_md.resize(n_d_u);
+          pos_idx = P_d_u_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_u; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_u_space->SetNumericMetaData(iter->first, numeric_md);
+        }
       }
 
       /** Create the matrix space for the jacobians
@@ -2346,7 +2346,7 @@ namespace Ipopt
   }
 
   bool TNLPAdapter::CheckDerivatives(TNLPAdapter::DerivativeTestEnum deriv_test,
-				     Index deriv_test_start_index)
+                                     Index deriv_test_start_index)
   {
     if (deriv_test == NO_TEST) {
       return true;
@@ -2463,73 +2463,73 @@ namespace Ipopt
 
     if (deriv_test == FIRST_ORDER_TEST || deriv_test == SECOND_ORDER_TEST) {
       jnlst_->Printf(J_SUMMARY, J_NLP,
-		     "Starting derivative checker for first derivatives.\n\n");
+                     "Starting derivative checker for first derivatives.\n\n");
 
       // Now go through all variables and check the partial derivatives
       const Index ivar_first = Max(0, deriv_test_start_index);
       for (Index ivar=ivar_first; ivar<nx; ivar++) {
-	Number this_perturbation =
-	  derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
-	xpert[ivar] = xref[ivar] + this_perturbation;
+        Number this_perturbation =
+          derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
+        xpert[ivar] = xref[ivar] + this_perturbation;
 
-	Number fpert;
-	new_x = true;
-	retval = tnlp_->eval_f(nx, xpert, new_x, fpert);
-	ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-			 "In TNLP derivative test: f could not be evaluated at perturbed point.");
-	new_x = false;
+        Number fpert;
+        new_x = true;
+        retval = tnlp_->eval_f(nx, xpert, new_x, fpert);
+        ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                         "In TNLP derivative test: f could not be evaluated at perturbed point.");
+        new_x = false;
 
-	Number deriv_approx = (fpert - fref)/this_perturbation;
-	Number deriv_exact = grad_f[ivar];
-	Number rel_error =
-	  fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
-	char cflag=' ';
-	if (rel_error >= derivative_test_tol_) {
-	  cflag='*';
-	  nerrors++;
-	}
-	if (cflag != ' ' || derivative_test_print_all_) {
-	  jnlst_->Printf(J_WARNING, J_NLP,
-			 "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n",
-			 cflag, ivar+index_correction,
-			 deriv_exact, deriv_approx, rel_error);
-	}
+        Number deriv_approx = (fpert - fref)/this_perturbation;
+        Number deriv_exact = grad_f[ivar];
+        Number rel_error =
+          fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+        char cflag=' ';
+        if (rel_error >= derivative_test_tol_) {
+          cflag='*';
+          nerrors++;
+        }
+        if (cflag != ' ' || derivative_test_print_all_) {
+          jnlst_->Printf(J_WARNING, J_NLP,
+                         "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n",
+                         cflag, ivar+index_correction,
+                         deriv_exact, deriv_approx, rel_error);
+        }
 
-	if (ng>0) {
-	  retval = tnlp_->eval_g(nx, xpert, new_x, ng, gpert);
-	  ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-			   "In TNLP derivative test: g could not be evaluated at reference point.");
-	  for (Index icon=0; icon<ng; icon++) {
-	    deriv_approx = (gpert[icon] - gref[icon])/this_perturbation;
-	    deriv_exact = 0.;
-	    bool found = false;
-	    for (Index i=0; i<nz_jac_g; i++) {
-	      if (g_iRow[i]==icon && g_jCol[i]==ivar) {
-		found = true;
-		deriv_exact += jac_g[i];
-	      }
-	    }
+        if (ng>0) {
+          retval = tnlp_->eval_g(nx, xpert, new_x, ng, gpert);
+          ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                           "In TNLP derivative test: g could not be evaluated at reference point.");
+          for (Index icon=0; icon<ng; icon++) {
+            deriv_approx = (gpert[icon] - gref[icon])/this_perturbation;
+            deriv_exact = 0.;
+            bool found = false;
+            for (Index i=0; i<nz_jac_g; i++) {
+              if (g_iRow[i]==icon && g_jCol[i]==ivar) {
+                found = true;
+                deriv_exact += jac_g[i];
+              }
+            }
 
-	    rel_error = fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
-	    cflag=' ';
-	    if (rel_error >= derivative_test_tol_) {
-	      cflag='*';
-	      nerrors++;
-	    }
-	    char sflag=' ';
-	    if (found) {
-	      sflag = 'v';
-	    }
-	    if (cflag != ' ' || derivative_test_print_all_) {
-	      jnlst_->Printf(J_WARNING, J_NLP,
-			     "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
-			     cflag, icon+index_correction, ivar+index_correction,
-			     deriv_exact, sflag, deriv_approx, rel_error);
-	    }
-	  }
-	}
+            rel_error = fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+            cflag=' ';
+            if (rel_error >= derivative_test_tol_) {
+              cflag='*';
+              nerrors++;
+            }
+            char sflag=' ';
+            if (found) {
+              sflag = 'v';
+            }
+            if (cflag != ' ' || derivative_test_print_all_) {
+              jnlst_->Printf(J_WARNING, J_NLP,
+                             "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
+                             cflag, icon+index_correction, ivar+index_correction,
+                             deriv_exact, sflag, deriv_approx, rel_error);
+            }
+          }
+        }
 
-	xpert[ivar] = xref[ivar];
+        xpert[ivar] = xref[ivar];
       }
 
     }

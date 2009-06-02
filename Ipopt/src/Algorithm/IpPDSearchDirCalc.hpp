@@ -45,7 +45,9 @@ namespace Ipopt
 
     /** Method to return the pd_solver for additional processing */
     SmartPtr<PDSystemSolver> PDSolver()
-    { return pd_solver_; }
+    {
+      return pd_solver_;
+    }
 
   private:
     /**@name Default Compiler Generated Methods
