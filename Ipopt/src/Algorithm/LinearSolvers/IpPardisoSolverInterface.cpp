@@ -43,8 +43,6 @@
 # endif
 #endif
 
-#define HAVE_PARDISO_NEWINTERFACE
-// extern"C" void pardiso_IPOPT_newiterface(void)
 /** Prototypes for Pardiso's subroutines */
 extern "C"
 {
@@ -54,9 +52,9 @@ extern "C"
 #else
   void F77_FUNC(pardisoinit,PARDISOINIT)(void* PT, const ipfint* MTYPE,
                                          const ipfint* SOLVER,
-                                               ipfint* IPARM,
-                                               double* DPARM,
-                                               ipfint* ERROR);
+                                         ipfint* IPARM,
+                                         double* DPARM,
+                                         ipfint* ERROR);
 #endif
   void F77_FUNC(pardiso,PARDISO)(void** PT, const ipfint* MAXFCT,
                                  const ipfint* MNUM, const ipfint* MTYPE,
@@ -246,10 +244,10 @@ namespace Ipopt
                             pardiso_iter_relative_tol, prefix);
     Index pardiso_iter_coarse_size;
     options.GetIntegerValue("pardiso_iter_coarse_size",
-			    pardiso_iter_coarse_size, prefix);
+                            pardiso_iter_coarse_size, prefix);
     Index pardiso_iter_max_levels;
     options.GetIntegerValue("pardiso_iter_max_levels",
-			    pardiso_iter_max_levels, prefix);
+                            pardiso_iter_max_levels, prefix);
     Number pardiso_iter_dropping_factor;
     options.GetNumericValue("pardiso_iter_dropping_factor",
                             pardiso_iter_dropping_factor, prefix);
@@ -357,41 +355,41 @@ namespace Ipopt
     if (pardiso_iterative_) {
 #ifndef HAVE_PARDISO_NEWINTERFACE
       THROW_EXCEPTION(OPTION_INVALID,
-		      "You chose to use the iterative version of Pardiso, but you need to use a Pardiso version of at least 4.0.");
+                      "You chose to use the iterative version of Pardiso, but you need to use a Pardiso version of at least 4.0.");
 #endif
       IPARM_[31] = 1 ;  // active direct solver
 
       DPARM_[ 0] = pardiso_max_iter; // maximum number of Krylov-Subspace Iteration
-                       // Default is 300
-                       // 1 <= value <= e.g. 1000
+      // Default is 300
+      // 1 <= value <= e.g. 1000
       DPARM_[ 1] = pardiso_iter_relative_tol; // Relative Residual Convergence
-                       // e.g.  pardiso_iter_tol
-                       // Default is 1e-6
-                       // 1e-16 <= value < 1
+      // e.g.  pardiso_iter_tol
+      // Default is 1e-6
+      // 1e-16 <= value < 1
       DPARM_[ 2] = pardiso_iter_coarse_size; // Maximum Size of Coarse Grid Matrix
-                       // e.g.  pardiso_coarse_grid
-                       // Default is 5000
-                       // 1 <= value < number of equations
+      // e.g.  pardiso_coarse_grid
+      // Default is 5000
+      // 1 <= value < number of equations
       DPARM_[ 3] = pardiso_iter_max_levels; // Maximum Number of Grid Levels
-                       // e.g.  pardiso_max_grid
-                       // Default is 10000
-                       // 1 <= value < number of equations
+      // e.g.  pardiso_max_grid
+      // Default is 10000
+      // 1 <= value < number of equations
       DPARM_[ 4] = pardiso_iter_dropping_factor;  // dropping value for incomplete factor
-                       // e.g.  pardiso_dropping_factor
-                       // Default is 0.5
-                       // 1e-16 <= value < 1
+      // e.g.  pardiso_dropping_factor
+      // Default is 0.5
+      // 1e-16 <= value < 1
       DPARM_[ 5] = pardiso_iter_dropping_schur;  // dropping value for sparsify schur complementfactor
-                       // e.g.  pardiso_dropping_schur
-                       // Default is 0.1
-                       // 1e-16 <= value < 1
+      // e.g.  pardiso_dropping_schur
+      // Default is 0.1
+      // 1e-16 <= value < 1
       DPARM_[ 6] = pardiso_iter_max_row_fill;  // max fill for each row
-                       // e.g.  pardiso_max_fill
-                       // Default is 1000
-                       // 1 <= value < 100000
+      // e.g.  pardiso_max_fill
+      // Default is 1000
+      // 1 <= value < 100000
       DPARM_[ 7] = pardiso_iter_inverse_norm_factor;  // dropping value for sparsify schur complementfactor
-                       // e.g.  pardiso_inverse_norm_factor 
-                       // Default is 500
-                       // 2 <= value < 50000
+      // e.g.  pardiso_inverse_norm_factor
+      // Default is 500
+      // 2 <= value < 50000
     }
 
     MSGLVL_ = pardiso_msglvl;
@@ -727,30 +725,30 @@ namespace Ipopt
         rhs_vals[i] = ORIG_RHS[i];
       }
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-				&PHASE, &N, a_, ia, ja, &PERM,
-				&NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-				&ERROR, DPARM_);
+                                &PHASE, &N, a_, ia, ja, &PERM,
+                                &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+                                &ERROR, DPARM_);
 
       if (ERROR <= -100 && ERROR >= -102) {
-	Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-		       "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
-	Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-		       "  Decreasing drop tolerances from DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
-	PHASE = 23;
-	DPARM_[4] /= 2.0 ;
-	DPARM_[5] /= 2.0 ;
-	Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-		       "                               to DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
-	attempts++;
-	ERROR = 0;
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                       "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                       "  Decreasing drop tolerances from DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
+        PHASE = 23;
+        DPARM_[4] /= 2.0 ;
+        DPARM_[5] /= 2.0 ;
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                       "                               to DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
+        attempts++;
+        ERROR = 0;
       }
       else {
-	attempts = max_attempts;
+        attempts = max_attempts;
       }
     }
 
     delete [] X;
-    delete [] ORIG_RHS; 
+    delete [] ORIG_RHS;
 
     if (IPARM_[6] != 0) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,

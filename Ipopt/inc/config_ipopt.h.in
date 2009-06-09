@@ -120,6 +120,9 @@
 /* Define to 1 if Pardiso is available */
 #undef HAVE_PARDISO
 
+/* Define to 1 if you are using the new iterative solver version of Pardiso */
+#undef HAVE_PARDISO_NEWINTERFACE
+
 /* Define to 1 if you are using the parallel version of Pardiso */
 #undef HAVE_PARDISO_PARALLEL
 

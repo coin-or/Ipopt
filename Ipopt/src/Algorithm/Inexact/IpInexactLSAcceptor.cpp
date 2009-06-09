@@ -209,7 +209,6 @@ namespace Ipopt
         Number numerator;
         Number denominator;
         if (!compute_normal) {
-          DBG_PRINT((1,"uWu=%e scaled_primal_norm=%e\n",uWu ,d_norm ));
           numerator = (gradBarrTDelta + Max(0.5*uWu, tcc_theta_*Upsilon));
           denominator = (1-rho_)*(reference_theta_-norm_cplusAd);
         }
