@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2008 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,6 +11,7 @@
 
 #include "IpoptConfig.h"
 #include "IpPardisoSolverInterface.hpp"
+# include <math.h>
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>
@@ -42,11 +43,21 @@
 # endif
 #endif
 
+#define HAVE_PARDISO_NEWINTERFACE
+// extern"C" void pardiso_IPOPT_newiterface(void)
 /** Prototypes for Pardiso's subroutines */
 extern "C"
 {
+#ifndef HAVE_PARDISO_NEWINTERFACE
   void F77_FUNC(pardisoinit,PARDISOINIT)(void* PT, const ipfint* MTYPE,
                                          ipfint* IPARM);
+#else
+  void F77_FUNC(pardisoinit,PARDISOINIT)(void* PT, const ipfint* MTYPE,
+                                         const ipfint* SOLVER,
+                                               ipfint* IPARM,
+                                               double* DPARM,
+                                               ipfint* ERROR);
+#endif
   void F77_FUNC(pardiso,PARDISO)(void** PT, const ipfint* MAXFCT,
                                  const ipfint* MNUM, const ipfint* MTYPE,
                                  const ipfint* PHASE, const ipfint* N,
@@ -54,7 +65,7 @@ extern "C"
                                  const ipfint* JA, const ipfint* PERM,
                                  const ipfint* NRHS, ipfint* IPARM,
                                  const ipfint* MSGLVL, double* B, double* X,
-                                 ipfint* ERROR);
+                                 ipfint* ERROR, double* DPARM);
 }
 
 namespace Ipopt
@@ -79,6 +90,7 @@ namespace Ipopt
 
     PT_ = new void*[64];
     IPARM_ = new ipfint[64];
+    DPARM_ = new double[64];
   }
 
   PardisoSolverInterface::~PardisoSolverInterface()
@@ -96,12 +108,13 @@ namespace Ipopt
       double ddmy;
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
                                 &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
-                                &MSGLVL_, &ddmy, &ddmy, &ERROR);
+                                &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR==0);
     }
 
     delete[] PT_;
     delete[] IPARM_;
+    delete[] DPARM_;
     delete[] a_;
   }
 
@@ -154,38 +167,58 @@ namespace Ipopt
       "Setting this option to \"yes\" essentially disables inertia check. "
       "This option makes the algorithm non-robust and easily fail, but it "
       "might give some insight into the necessity of inertia control.");
-    roptions->AddIntegerOption(
-      "pardiso_iter_tol_exponent",
-      "",
-      -14,
-      "");
-    roptions->AddIntegerOption(
-      "pardiso_dropping_schur_exponent",
-      "",
-      -3,
-      "");
-    roptions->AddIntegerOption(
-      "pardiso_dropping_factor_exponent",
-      "",
-      -3,
-      "");
-    roptions->AddIntegerOption(
-      "pardiso_inverse_norm_factor",
-      "",
-      500,
-      "");
-    roptions->AddIntegerOption(
+    roptions->AddLowerBoundedIntegerOption(
       "pardiso_max_iter",
+      "Maximum number of Krylov-Subspace Iteration",
+      1, 500,
+      "DPARM(1)");
+    roptions->AddBoundedNumberOption(
+      "pardiso_iter_relative_tol",
+      "Relative Residual Convergence",
+      0.0, true, 1.0, true, 1e-6,
+      "DPARM(2)");
+    roptions->AddLowerBoundedIntegerOption(
+      "pardiso_iter_coarse_size",
+      "Maximum Size of Coarse Grid Matrix",
+      1, 5000,
+      "DPARM(3)");
+    roptions->AddLowerBoundedIntegerOption(
+      "pardiso_iter_max_levels",
+      "Maximum Size of Grid Levels",
+      1, 10000,
+      "DPARM(4)");
+    roptions->AddBoundedNumberOption(
+      "pardiso_iter_dropping_factor",
+      "dropping value for incomplete factor",
+      0.0, true, 1.0, true, 0.5,
+      "DPARM(5)");
+    roptions->AddBoundedNumberOption(
+      "pardiso_iter_dropping_schur",
+      "dropping value for sparsify schur complement factor",
+      0.0, true, 1.0, true, 1e-1,
+      "DPARM(6)");
+    roptions->AddLowerBoundedIntegerOption(
+      "pardiso_iter_max_row_fill",
+      "max fill for each row",
+      1,10000000,
+      "DPARM(7)");
+    roptions->AddLowerBoundedNumberOption(
+      "pardiso_iter_inverse_norm_factor",
       "",
-      500,
-      "");
+      1, true, 500,
+      "DPARM(8)");
     roptions->AddStringOption2(
       "pardiso_iterative",
-      "",
+      "Switch on iterative solver in Pardiso library",
       "no",
       "no", "",
       "yes", "",
       "");
+    roptions->AddLowerBoundedIntegerOption(
+      "pardiso_max_droptol_corrections",
+      "Maximal number of decreases of drop tolerance during one solve.",
+      1, 4,
+      "This is relevant only for iterative Pardiso options.");
   }
 
   bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
@@ -205,24 +238,34 @@ namespace Ipopt
                             pardiso_out_of_core_power, prefix);
     options.GetBoolValue("pardiso_skip_inertia_check",
                          skip_inertia_check_, prefix);
-    bool pardiso_iterative;
-    options.GetBoolValue("pardiso_iterative", pardiso_iterative, prefix);
-    int pardiso_iter_tol_exponent;
-    options.GetIntegerValue("pardiso_iter_tol_exponent",
-                            pardiso_iter_tol_exponent, prefix);
-    int pardiso_dropping_schur_exponent;
-    options.GetIntegerValue("pardiso_dropping_schur_exponent",
-                            pardiso_dropping_schur_exponent, prefix);
-    int pardiso_dropping_factor_exponent;
-    options.GetIntegerValue("pardiso_dropping_factor_exponent",
-                            pardiso_dropping_factor_exponent, prefix);
-    int pardiso_inverse_norm_factor;
-    options.GetIntegerValue("pardiso_inverse_norm_factor",
-                            pardiso_inverse_norm_factor, prefix);
+    options.GetBoolValue("pardiso_iterative", pardiso_iterative_, prefix);
     int pardiso_max_iter;
     options.GetIntegerValue("pardiso_max_iter", pardiso_max_iter, prefix);
+    Number pardiso_iter_relative_tol;
+    options.GetNumericValue("pardiso_iter_relative_tol",
+                            pardiso_iter_relative_tol, prefix);
+    Index pardiso_iter_coarse_size;
+    options.GetIntegerValue("pardiso_iter_coarse_size",
+			    pardiso_iter_coarse_size, prefix);
+    Index pardiso_iter_max_levels;
+    options.GetIntegerValue("pardiso_iter_max_levels",
+			    pardiso_iter_max_levels, prefix);
+    Number pardiso_iter_dropping_factor;
+    options.GetNumericValue("pardiso_iter_dropping_factor",
+                            pardiso_iter_dropping_factor, prefix);
+    Number pardiso_iter_dropping_schur;
+    options.GetNumericValue("pardiso_iter_dropping_schur",
+                            pardiso_iter_dropping_schur, prefix);
+    Index pardiso_iter_max_row_fill;
+    options.GetIntegerValue("pardiso_iter_max_row_fill",
+                            pardiso_iter_max_row_fill, prefix);
+    Number pardiso_iter_inverse_norm_factor;
+    options.GetNumericValue("pardiso_iter_inverse_norm_factor",
+                            pardiso_iter_inverse_norm_factor, prefix);
     int pardiso_msglvl;
     options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
+    options.GetIntegerValue("pardiso_max_droptol_corrections",
+                            pardiso_max_droptol_corrections_, prefix);
 
     // Number value = 0.0;
 
@@ -236,7 +279,7 @@ namespace Ipopt
       double ddmy;
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
                                 &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
-                                &MSGLVL_, &ddmy, &ddmy, &ERROR);
+                                &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR==0);
     }
 
@@ -250,7 +293,15 @@ namespace Ipopt
 
     // Call Pardiso's initialization routine
     IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
+
+#ifdef HAVE_PARDISO_NEWINTERFACE
+    ipfint ERROR = 0;
+    ipfint SOLVER = 0; // initialze only direct solver
+
+    F77_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
+#else
     F77_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, IPARM_);
+#endif
 
     // Set some parameters for Pardiso
     IPARM_[0] = 1;  // Don't use the default values
@@ -303,21 +354,50 @@ namespace Ipopt
     IPARM_[29] = 1; // we need this for IPOPT interface
     IPARM_[29] = 1; // we need this for IPOPT interface
 
-    IPARM_[39] = 4 ;  // it was 4 max fill for factor
-    IPARM_[39] = 10 ;  // it was 4 max fill for factor
-    IPARM_[40] = 1 ;  // mantisse dropping value for schur complement
-    IPARM_[41] = pardiso_dropping_schur_exponent;
-    // it  exponent dropping value for schur complement
-    IPARM_[42] = pardiso_max_iter; // max number of iterations
-    IPARM_[43] = pardiso_inverse_norm_factor; // norm of the inverse for algebraic solver
-    IPARM_[44] = pardiso_dropping_factor_exponent ;  // exponent dropping value for incomplete factor
-    IPARM_[46] = 1 ;  // mantisse dropping value for incomplete factor
-    IPARM_[45] = pardiso_iter_tol_exponent ;  // residual tolerance
-    IPARM_[48] = pardiso_iterative ? 1 : 0 ;  // active direct solver
+    if (pardiso_iterative_) {
+#ifndef HAVE_PARDISO_NEWINTERFACE
+      THROW_EXCEPTION(OPTION_INVALID,
+		      "You chose to use the iterative version of Pardiso, but you need to use a Pardiso version of at least 4.0.");
+#endif
+      IPARM_[31] = 1 ;  // active direct solver
+
+      DPARM_[ 0] = pardiso_max_iter; // maximum number of Krylov-Subspace Iteration
+                       // Default is 300
+                       // 1 <= value <= e.g. 1000
+      DPARM_[ 1] = pardiso_iter_relative_tol; // Relative Residual Convergence
+                       // e.g.  pardiso_iter_tol
+                       // Default is 1e-6
+                       // 1e-16 <= value < 1
+      DPARM_[ 2] = pardiso_iter_coarse_size; // Maximum Size of Coarse Grid Matrix
+                       // e.g.  pardiso_coarse_grid
+                       // Default is 5000
+                       // 1 <= value < number of equations
+      DPARM_[ 3] = pardiso_iter_max_levels; // Maximum Number of Grid Levels
+                       // e.g.  pardiso_max_grid
+                       // Default is 10000
+                       // 1 <= value < number of equations
+      DPARM_[ 4] = pardiso_iter_dropping_factor;  // dropping value for incomplete factor
+                       // e.g.  pardiso_dropping_factor
+                       // Default is 0.5
+                       // 1e-16 <= value < 1
+      DPARM_[ 5] = pardiso_iter_dropping_schur;  // dropping value for sparsify schur complementfactor
+                       // e.g.  pardiso_dropping_schur
+                       // Default is 0.1
+                       // 1e-16 <= value < 1
+      DPARM_[ 6] = pardiso_iter_max_row_fill;  // max fill for each row
+                       // e.g.  pardiso_max_fill
+                       // Default is 1000
+                       // 1 <= value < 100000
+      DPARM_[ 7] = pardiso_iter_inverse_norm_factor;  // dropping value for sparsify schur complementfactor
+                       // e.g.  pardiso_inverse_norm_factor 
+                       // Default is 500
+                       // 2 <= value < 50000
+    }
+
     MSGLVL_ = pardiso_msglvl;
 
     // Option for the out of core variant
-    IPARM_[49] = pardiso_out_of_core_power;
+    //IPARM_[49] = pardiso_out_of_core_power;
 
     return true;
   }
@@ -481,7 +561,7 @@ namespace Ipopt
         F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                                   &PHASE, &N, a_, ia, ja, &PERM,
                                   &NRHS, IPARM_, &MSGLVL_, &B, &X,
-                                  &ERROR);
+                                  &ERROR, DPARM_);
         if (HaveIpData()) {
           IpData().TimingStats().LinearSystemSymbolicFactorization().End();
         }
@@ -528,7 +608,7 @@ namespace Ipopt
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                                 &PHASE, &N, a_, ia, ja, &PERM,
                                 &NRHS, IPARM_, &MSGLVL_, &B, &X,
-                                &ERROR);
+                                &ERROR, DPARM_);
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().End();
       }
@@ -622,7 +702,13 @@ namespace Ipopt
     ipfint PERM;   // This should not be accessed by Pardiso
     ipfint NRHS = nrhs;
     double* X = new double[nrhs*dim_];
+    double* ORIG_RHS = new double[nrhs*dim_];
     ipfint ERROR;
+    // Initialize solution with zero and save right hand side
+    for (int i = 0; i < N; i++) {
+      X[i] = 0.;
+      ORIG_RHS[i] = rhs_vals[i];
+    }
 
     // Dump matrix to file if requested
     Index iter_count = 0;
@@ -631,12 +717,40 @@ namespace Ipopt
     }
     write_iajaa_matrix (N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
 
-    F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                              &PHASE, &N, a_, ia, ja, &PERM,
-                              &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                              &ERROR);
+    int attempts = 0;
+    const int max_attempts =
+      pardiso_iterative_ ? pardiso_max_droptol_corrections_+1: 1;
 
-    delete [] X; /* OLAF/MICHAEL: do we really need X? */
+    while (attempts < max_attempts) {
+
+      for (int i = 0; i < N; i++) {
+        rhs_vals[i] = ORIG_RHS[i];
+      }
+      F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+				&PHASE, &N, a_, ia, ja, &PERM,
+				&NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+				&ERROR, DPARM_);
+
+      if (ERROR <= -100 && ERROR >= -102) {
+	Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+		       "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
+	Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+		       "  Decreasing drop tolerances from DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
+	PHASE = 23;
+	DPARM_[4] /= 2.0 ;
+	DPARM_[5] /= 2.0 ;
+	Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+		       "                               to DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
+	attempts++;
+	ERROR = 0;
+      }
+      else {
+	attempts = max_attempts;
+      }
+    }
+
+    delete [] X;
+    delete [] ORIG_RHS; 
 
     if (IPARM_[6] != 0) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
