@@ -88,7 +88,8 @@ namespace Ipopt
     }
     last_tr_inactive_ = false;
 
-    if (IpCq().curr_primal_infeasibility(NORM_2) == 0.) {
+    // TODO if (IpCq().curr_primal_infeasibility(NORM_2) == 0.) {
+    if (IpCq().curr_primal_infeasibility(NORM_2) <= 1e-12 ) {
       Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "Dogleg step:  We are at a feasible point, the normal step is set to zero.\n");
       normal_x = IpData().curr()->x()->MakeNew();
       normal_s = IpData().curr()->s()->MakeNew();
@@ -184,7 +185,15 @@ namespace Ipopt
     SmartPtr<Vector> v_newton_s = v_cauchy_s->MakeNew();
     bool retval =
       newton_step_->ComputeNewtonNormalStep(*v_newton_x, *v_newton_s);
-    if (!retval) return false;
+    if (!retval) {
+      Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "Dogleg step: Newton step could not be calculated, return Cauchy step.\n");
+      normal_x = v_cauchy_x_bak;
+      normal_s = v_cauchy_s_bak;
+      // unscale the slack-based scaling
+      normal_s->ElementWiseMultiply(*InexCq().curr_scaling_slacks());
+      IpData().Append_info_string("NF ");
+      return true;
+    }
     // output
     if (Jnlst().ProduceOutput(J_MOREVECTOR, J_SOLVE_PD_SYSTEM)) {
       Jnlst().Printf(J_MOREVECTOR, J_SOLVE_PD_SYSTEM,
@@ -285,29 +294,6 @@ namespace Ipopt
       normal_s = v_cauchy_s_bak;
       IpData().Append_info_string("NR ");
     }
-
-#if 0
-    // for now we don't backtrack along dogleg path in case of inexact
-    // Newton steps, but we check if the dogleg step did at least as
-    // good as the Cauchy step
-    inf_c = IpCq().curr_jac_c_times_vec(*normal_x)->MakeNewCopy();
-    inf_d = normal_s->MakeNewCopy();
-    inf_d->ElementWiseMultiply(*InexCq().curr_scaling_slacks());
-    inf_d->AddOneVector(1., *IpCq().curr_jac_d_times_vec(*normal_x) , -1.);
-    inf_c->AddOneVector(1., *curr_c, 1.);
-    inf_d->AddOneVector(1., *curr_d_minus_s, 1.);
-    Number objred_normal_dogleg = 0.5*(IpCq().CalcNormOfType(NORM_2, *curr_c, *curr_d_minus_s)-IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d));
-    Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-                   "Dogleg: Reduction of normal problem objective function by dogleg step = %23.16e\n", objred_normal_dogleg);
-    Number mach_eps = std::numeric_limits<Number>::epsilon();
-    bool ok = objred_normal_dogleg>=objred_normal_cs-100.*mach_eps*(curr_c->Nrm2()+curr_d_minus_s->Nrm2());
-    if (!ok) {
-      Jnlst().Printf(J_WARNING, J_SOLVE_PD_SYSTEM, "Dogleg step: Dogleg step makes less progress than Cauchy step, resetting to Cauchy step FIXME\n");
-      normal_x = v_cauchy_x_bak;
-      normal_s = v_cauchy_s_bak;
-    }
-#endif
-
 
     return true;
   }

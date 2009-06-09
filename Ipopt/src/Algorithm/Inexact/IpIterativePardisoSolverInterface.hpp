@@ -154,19 +154,29 @@ namespace Ipopt
     /** Flag indicating if the interia is always assumed to be
       *  correct. */
     bool skip_inertia_check_;
+    /** Maximal number of decreases of drop tolerance during one solve. */
+    Index pardiso_max_droptol_corrections_;
     //@}
 
     /** Options for the preconditioner */
     //@{
     Index pardiso_max_iter_;
-    Index pardiso_dropping_schur_exponent_;
-    Index pardiso_dropping_factor_exponent_;
-    Index pardiso_inverse_norm_factor_;
+    Number pardiso_iter_relative_tol_;
+    Index pardiso_iter_coarse_size_;
+    Index pardiso_iter_max_levels_;
+    Number pardiso_iter_dropping_factor_;
+    Number pardiso_iter_dropping_schur_;
+    Index pardiso_iter_max_row_fill_;
+    Number pardiso_iter_inverse_norm_factor_;
 
     Index normal_pardiso_max_iter_;
-    Index normal_pardiso_dropping_schur_exponent_;
-    Index normal_pardiso_dropping_factor_exponent_;
-    Index normal_pardiso_inverse_norm_factor_;
+    Number normal_pardiso_iter_relative_tol_;
+    Index normal_pardiso_iter_coarse_size_;
+    Index normal_pardiso_iter_max_levels_;
+    Number normal_pardiso_iter_dropping_factor_;
+    Number normal_pardiso_iter_dropping_schur_;
+    Index normal_pardiso_iter_max_row_fill_;
+    Number normal_pardiso_iter_inverse_norm_factor_;
     //@}
 
     /** @name Initialization flags */
@@ -189,6 +199,8 @@ namespace Ipopt
     ipfint MTYPE_;
     /** Parameter and info array for Pardiso. */
     ipfint* IPARM_;
+    /** Parameter and info array for Pardiso. */
+    double* DPARM_;
     /** Message level. */
     ipfint MSGLVL_;
     //@}
