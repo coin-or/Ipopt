@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2008 International Business Machines and others.
+# Copyright (C) 2004, 2009 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -22,6 +22,10 @@ includeipopt_HEADERS = \
 	IpTNLP.hpp \
 	IpTNLPReducer.hpp
 
+if HAVE_MPI
+  includeipopt_HEADERS += IpParTNLP.hpp
+endif
+
 lib_LTLIBRARIES = libipopt.la
 
 libipopt_la_SOURCES = \
@@ -29,6 +33,7 @@ libipopt_la_SOURCES = \
 	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
+	IpParTNLP.hpp \
 	IpReturnCodes.h \
 	IpReturnCodes.hpp \
 	IpSolveStatistics.cpp IpSolveStatistics.hpp \
@@ -83,6 +88,7 @@ ASTYLE_FILES = \
 	IpInterfacesRegOp.cppbak IpInterfacesRegOp.hppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
+	IpParTNLP.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
