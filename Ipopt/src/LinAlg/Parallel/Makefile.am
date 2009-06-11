@@ -10,11 +10,13 @@ AUTOMAKE_OPTIONS = foreign
 
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
+	IpParGenMatrix.hpp \
 	IpParVector.hpp
 
 noinst_LTLIBRARIES = liblinalgpar.la
 
 liblinalgpar_la_SOURCES = \
+	IpParGenMatrix.cpp IpParGenMatrix.hpp \
 	IpParVector.cpp IpParVector.hpp
 
 liblinalgpar_la_LDFLAGS = $(LT_LDFLAGS)
@@ -28,7 +30,9 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Astyle stuff
 
-ASTYLE_FILES = IpParVector.cppbak IpParVector.hppbak
+ASTYLE_FILES = \
+	IpParGenMatrix.cppbak IpParGenMatrix.hppbak \
+	IpParVector.cppbak IpParVector.hppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@

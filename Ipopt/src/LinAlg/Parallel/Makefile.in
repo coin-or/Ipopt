@@ -56,7 +56,7 @@ CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 liblinalgpar_la_LIBADD =
-am_liblinalgpar_la_OBJECTS = IpParVector.lo
+am_liblinalgpar_la_OBJECTS = IpParGenMatrix.lo IpParVector.lo
 liblinalgpar_la_OBJECTS = $(am_liblinalgpar_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -295,10 +295,12 @@ target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
+	IpParGenMatrix.hpp \
 	IpParVector.hpp
 
 noinst_LTLIBRARIES = liblinalgpar.la
 liblinalgpar_la_SOURCES = \
+	IpParGenMatrix.cpp IpParGenMatrix.hpp \
 	IpParVector.cpp IpParVector.hpp
 
 liblinalgpar_la_LDFLAGS = $(LT_LDFLAGS)
@@ -311,7 +313,10 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` \
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Astyle stuff
-ASTYLE_FILES = IpParVector.cppbak IpParVector.hppbak
+ASTYLE_FILES = \
+	IpParGenMatrix.cppbak IpParGenMatrix.hppbak \
+	IpParVector.cppbak IpParVector.hppbak
+
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
 all: all-am
@@ -365,6 +370,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParGenMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParVector.Plo@am__quote@
 
 .cpp.o:
