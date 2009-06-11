@@ -65,10 +65,14 @@ namespace Ipopt
     /** Create a new ParVector from same VectorSpace */
     SmartPtr<ParVector> MakeNewParVector() const;
 
+    /** Create a new DenseVector from GlobalVectorSpace */
+    SmartPtr<DenseVector> MakeNewGlobalVector() const;
+
     /** Obtain pointer to local vector. 
      */
     inline DenseVector* LocalVector()
     {
+      ObjectChanged();
       return GetRawPtr(local_vector_);
     }
 
@@ -244,6 +248,12 @@ namespace Ipopt
       return new ParVector(this);
     }
 
+    /** Method for creating a new dense vector of global dimensions. */
+    virtual DenseVector* MakeNewGlobalVector() const
+    {
+      return global_space_->MakeNewDenseVector();
+    }
+
     /** Overloaded MakeNew method for the VectorSpace base class.
      */
     virtual Vector* MakeNew() const
@@ -306,6 +316,12 @@ namespace Ipopt
   SmartPtr<ParVector> ParVector::MakeNewParVector() const
   {
     return owner_space_->MakeNewParVector();
+  }
+
+  inline
+  SmartPtr<DenseVector> ParVector::MakeNewGlobalVector() const
+  {
+    return owner_space_->MakeNewGlobalVector();
   }
 
   inline
