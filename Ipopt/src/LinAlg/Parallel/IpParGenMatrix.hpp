@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpParGenMatrix.hpp 1460 2009-05-29 02:34:47Z andreasw $
+// $Id$
 //
 // Authors:  Sanjeeb Dash, Andreas Waechter     IBM    2009-05-29
 
@@ -11,7 +11,7 @@
 
 #include "IpUtils.hpp"
 #include "IpParVector.hpp"
-#include "TMatrices/IpGenTMatrix.hpp"
+#include "IpGenTMatrix.hpp"
 #include <vector>
 
 namespace Ipopt

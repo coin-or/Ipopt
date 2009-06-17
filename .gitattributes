@@ -86,12 +86,6 @@ Ipopt/src/Algorithm/Inexact/Makefile.am -text
 Ipopt/src/Algorithm/Inexact/Makefile.in -text
 Ipopt/src/Interfaces/ipopt_addlibs_cpp.txt.in -text
 Ipopt/src/Interfaces/ipopt_addlibs_f.txt.in -text
-Ipopt/src/LinAlg/Parallel/IpParExpansionMatrix.cpp -text
-Ipopt/src/LinAlg/Parallel/IpParExpansionMatrix.hpp -text
-Ipopt/src/LinAlg/Parallel/IpParGenMatrix.cpp -text
-Ipopt/src/LinAlg/Parallel/IpParGenMatrix.hpp -text
-Ipopt/src/LinAlg/Parallel/IpParSymMatrix.cpp -text
-Ipopt/src/LinAlg/Parallel/IpParSymMatrix.hpp -text
 Ipopt/src/contrib/CGPenalty/Makefile.am -text
 Ipopt/src/contrib/CGPenalty/Makefile.in -text
 Ipopt/src/contrib/LinearSolverLoader/Makefile.am -text

@@ -1,8 +1,8 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpParGenMatrix.hpp 1460 2009-06-11 02:34:47Z andreasw $
+// $Id$
 //
 // Authors:  Sanjeeb Dash, Andreas Waechter     IBM    2009-06-11
 
@@ -10,7 +10,7 @@
 #define __IPPARSYMTMATRIX_HPP__
 
 #include "IpUtils.hpp"
-#include "TMatrices/IpSymTMatrix.hpp"
+#include "IpSymTMatrix.hpp"
 
 namespace Ipopt
 {
@@ -33,7 +33,7 @@ namespace Ipopt
    *  It stores the local piece of the matrix as a SymTMatrix, and therefore
    *  the rows and columns of the non-zero values start from 1.
    */
-  class ParSymMatrix : public Matrix
+  class ParSymMatrix : public SymMatrix
   {
   public:
     /**@name Constructors / Destructors */
@@ -143,7 +143,7 @@ namespace Ipopt
    *  structure per processor. The sparsity structure is stored here in
    *  the matrix space.
    */
-  class ParSymMatrixSpace : public MatrixSpace
+  class ParSymMatrixSpace : public SymMatrixSpace
   {
   public:
     /** @name Constructors / Destructors */
@@ -161,7 +161,7 @@ namespace Ipopt
 
     /** Overloaded MakeNew method for the SymMatrixSpace base class.
      */
-    virtual Matrix* MakeNew() const
+    virtual SymMatrix* MakeNewSymMatrix() const
     {
       return MakeNewParSymMatrix();
     }

@@ -20,7 +20,6 @@
 
 # Authors:  Andreas Waechter               IBM    2009-05-28
 
-
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -44,8 +43,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 subdir = src/LinAlg/Parallel
-DIST_COMMON = $(includeipopt_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.ac
@@ -56,7 +54,8 @@ CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 liblinalgpar_la_LIBADD =
-am_liblinalgpar_la_OBJECTS = IpParGenMatrix.lo IpParVector.lo
+am_liblinalgpar_la_OBJECTS = IpParExpansionMatrix.lo IpParGenMatrix.lo \
+	IpParSymMatrix.lo IpParVector.lo
 liblinalgpar_la_OBJECTS = $(am_liblinalgpar_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -78,15 +77,6 @@ LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(liblinalgpar_la_SOURCES)
 DIST_SOURCES = $(liblinalgpar_la_SOURCES)
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(includeipoptdir)"
-includeipoptHEADERS_INSTALL = $(INSTALL_HEADER)
-HEADERS = $(includeipopt_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -293,18 +283,19 @@ sol_cc_compiler = @sol_cc_compiler@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-includeipoptdir = $(includedir)/coin
-includeipopt_HEADERS = \
-	IpParGenMatrix.hpp \
-	IpParVector.hpp
 
+#includeipoptdir = $(includedir)/coin
+#includeipopt_HEADERS = 
 noinst_LTLIBRARIES = liblinalgpar.la
 liblinalgpar_la_SOURCES = \
+	IpParExpansionMatrix.cpp IpParExpansionMatrix.hpp \
 	IpParGenMatrix.cpp IpParGenMatrix.hpp \
+	IpParSymMatrix.cpp IpSymGenMatrix.hpp \
 	IpParVector.cpp IpParVector.hpp
 
 liblinalgpar_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` \
+	-I`$(CYGPATH_W) $(srcdir)/../TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Common`
 
 
@@ -314,7 +305,9 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Astyle stuff
 ASTYLE_FILES = \
+	IpParExpansionMatrix.cppbak IpParExpansionMatrix.hppbak \
 	IpParGenMatrix.cppbak IpParGenMatrix.hppbak \
+	IpParSymMatrix.cppbak IpSymGenMatrix.hppbak \
 	IpParVector.cppbak IpParVector.hppbak
 
 DISTCLEANFILES = $(ASTYLE_FILES)
@@ -370,7 +363,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParExpansionMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParGenMatrix.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParSymMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParVector.Plo@am__quote@
 
 .cpp.o:
@@ -403,23 +398,6 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-install-includeipoptHEADERS: $(includeipopt_HEADERS)
-	@$(NORMAL_INSTALL)
-	test -z "$(includeipoptdir)" || $(mkdir_p) "$(DESTDIR)$(includeipoptdir)"
-	@list='$(includeipopt_HEADERS)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(includeipoptHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(includeipoptdir)/$$f'"; \
-	  $(includeipoptHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(includeipoptdir)/$$f"; \
-	done
-
-uninstall-includeipoptHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(includeipopt_HEADERS)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(includeipoptdir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(includeipoptdir)/$$f"; \
-	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -498,11 +476,8 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES)
 installdirs:
-	for dir in "$(DESTDIR)$(includeipoptdir)"; do \
-	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
-	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -549,7 +524,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-includeipoptHEADERS
+install-data-am:
 
 install-exec-am:
 
@@ -577,19 +552,18 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-includeipoptHEADERS uninstall-info-am
+uninstall-am: uninstall-info-am
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-libtool clean-noinstLTLIBRARIES ctags distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-exec \
-	install-exec-am install-includeipoptHEADERS install-info \
-	install-info-am install-man install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-includeipoptHEADERS \
+	install-exec-am install-info install-info-am install-man \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am \
 	uninstall-info-am
 
 

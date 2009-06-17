@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpParDenseGenMatrix.cpp 1324 2008-09-16 14:19:26Z andreasw $
+// $Id$
 //
 // Authors:  Sanjeeb Dash, Andreas Waechter     IBM    2009-05-29
 
