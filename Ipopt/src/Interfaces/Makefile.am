@@ -22,10 +22,6 @@ includeipopt_HEADERS = \
 	IpTNLP.hpp \
 	IpTNLPReducer.hpp
 
-if HAVE_MPI
-  includeipopt_HEADERS += IpParTNLP.hpp
-endif
-
 lib_LTLIBRARIES = libipopt.la
 
 libipopt_la_SOURCES = \
@@ -33,7 +29,6 @@ libipopt_la_SOURCES = \
 	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
 	IpNLP.hpp \
-	IpParTNLP.hpp \
 	IpReturnCodes.h \
 	IpReturnCodes.hpp \
 	IpSolveStatistics.cpp IpSolveStatistics.hpp \
@@ -43,6 +38,13 @@ libipopt_la_SOURCES = \
 	IpTNLP.hpp \
 	IpTNLPAdapter.cpp IpTNLPAdapter.hpp \
 	IpTNLPReducer.cpp IpTNLPReducer.hpp
+
+if HAVE_MPI
+  includeipopt_HEADERS += IpParTNLP.hpp
+  libipopt_la_SOURCES += \
+	IpParTNLP.hpp \
+	IpParTNLPAdapter.cpp IpParTNLPAdapter.hpp
+endif
 
 libipopt_la_LIBADD = $(IPALLLIBS)
 
@@ -58,6 +60,7 @@ ADDLIBS_FILES = \
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
+	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/Parallel` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/LinearSolvers` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm` \
@@ -89,6 +92,7 @@ ASTYLE_FILES = \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
 	IpParTNLP.hppbak \
+	IpParTNLPAdapter.cppbak IpParTNLPAdapter.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \

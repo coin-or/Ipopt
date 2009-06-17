@@ -44,6 +44,10 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @HAVE_MPI_TRUE@am__append_1 = IpParTNLP.hpp
+@HAVE_MPI_TRUE@am__append_2 = \
+@HAVE_MPI_TRUE@	IpParTNLP.hpp \
+@HAVE_MPI_TRUE@	IpParTNLPAdapter.cpp IpParTNLPAdapter.hpp
+
 subdir = src/Interfaces
 DIST_COMMON = $(am__includeipopt_HEADERS_DIST) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/ipopt_addlibs_cpp.txt.in \
@@ -66,9 +70,20 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
+am__libipopt_la_SOURCES_DIST = IpAlgTypes.hpp IpInterfacesRegOp.cpp \
+	IpInterfacesRegOp.hpp IpIpoptApplication.cpp \
+	IpIpoptApplication.hpp IpNLP.hpp IpReturnCodes.h \
+	IpReturnCodes.hpp IpSolveStatistics.cpp IpSolveStatistics.hpp \
+	IpStdCInterface.cpp IpStdCInterface.h IpStdFInterface.c \
+	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp IpTNLP.hpp \
+	IpTNLPAdapter.cpp IpTNLPAdapter.hpp IpTNLPReducer.cpp \
+	IpTNLPReducer.hpp IpParTNLP.hpp IpParTNLPAdapter.cpp \
+	IpParTNLPAdapter.hpp
+@HAVE_MPI_TRUE@am__objects_1 = IpParTNLPAdapter.lo
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
 	IpSolveStatistics.lo IpStdCInterface.lo IpStdFInterface.lo \
-	IpStdInterfaceTNLP.lo IpTNLPAdapter.lo IpTNLPReducer.lo
+	IpStdInterfaceTNLP.lo IpTNLPAdapter.lo IpTNLPReducer.lo \
+	$(am__objects_1)
 libipopt_la_OBJECTS = $(am_libipopt_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -89,7 +104,7 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libipopt_la_SOURCES)
-DIST_SOURCES = $(libipopt_la_SOURCES)
+DIST_SOURCES = $(am__libipopt_la_SOURCES_DIST)
 am__includeipopt_HEADERS_DIST = IpAlgTypes.hpp IpIpoptApplication.hpp \
 	IpNLP.hpp IpReturnCodes.h IpReturnCodes.hpp \
 	IpReturnCodes_inc.h IpReturnCodes.inc IpSolveStatistics.hpp \
@@ -165,6 +180,7 @@ CXXDEFS = @CXXDEFS@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` -I`$(CYGPATH_W) \
+	$(srcdir)/../LinAlg/Parallel` -I`$(CYGPATH_W) \
 	$(srcdir)/../Algorithm/LinearSolvers` -I`$(CYGPATH_W) \
 	$(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/../Algorithm` -I`$(CYGPATH_W) \
@@ -314,22 +330,14 @@ includeipopt_HEADERS = IpAlgTypes.hpp IpIpoptApplication.hpp IpNLP.hpp \
 	IpReturnCodes.inc IpSolveStatistics.hpp IpStdCInterface.h \
 	IpTNLP.hpp IpTNLPReducer.hpp $(am__append_1)
 lib_LTLIBRARIES = libipopt.la
-libipopt_la_SOURCES = \
-	IpAlgTypes.hpp \
-	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
-	IpIpoptApplication.cpp IpIpoptApplication.hpp \
-	IpNLP.hpp \
-	IpParTNLP.hpp \
-	IpReturnCodes.h \
-	IpReturnCodes.hpp \
-	IpSolveStatistics.cpp IpSolveStatistics.hpp \
-	IpStdCInterface.cpp IpStdCInterface.h \
-	IpStdFInterface.c \
-	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \
-	IpTNLP.hpp \
-	IpTNLPAdapter.cpp IpTNLPAdapter.hpp \
-	IpTNLPReducer.cpp IpTNLPReducer.hpp
-
+libipopt_la_SOURCES = IpAlgTypes.hpp IpInterfacesRegOp.cpp \
+	IpInterfacesRegOp.hpp IpIpoptApplication.cpp \
+	IpIpoptApplication.hpp IpNLP.hpp IpReturnCodes.h \
+	IpReturnCodes.hpp IpSolveStatistics.cpp IpSolveStatistics.hpp \
+	IpStdCInterface.cpp IpStdCInterface.h IpStdFInterface.c \
+	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp IpTNLP.hpp \
+	IpTNLPAdapter.cpp IpTNLPAdapter.hpp IpTNLPReducer.cpp \
+	IpTNLPReducer.hpp $(am__append_2)
 libipopt_la_LIBADD = $(IPALLLIBS)
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
@@ -350,6 +358,7 @@ ASTYLE_FILES = \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
 	IpParTNLP.hppbak \
+	IpParTNLPAdapter.cppbak IpParTNLPAdapter.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
@@ -434,6 +443,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInterfacesRegOp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptApplication.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParTNLPAdapter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSolveStatistics.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdCInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdFInterface.Plo@am__quote@

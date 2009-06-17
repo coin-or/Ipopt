@@ -49,7 +49,7 @@ namespace Ipopt
    *
    *  The constraints are partitioned across the processors, and the
    *  partition is specified as a collection of disjoint num_proc
-   *  sub-intervals of [0..m-1] (ir [1..m], depending on index_style,
+   *  sub-intervals of [0..m-1] (or [1..m], depending on index_style,
    *  see get_nlp_info) where m is the total number of constraints.
    *  The user determines the partition of constraints and returns it
    *  to Ipopt. Each processor sets m_first to the first constraint
@@ -97,7 +97,7 @@ namespace Ipopt
     {}
     //@}
 
-    DECLARE_STD_EXCEPTION(INVALID_PARParTNLP);
+    DECLARE_STD_EXCEPTION(INVALID_PARTNLP);
 
     /**@name methods to gather information about the NLP */
     //@{
@@ -121,10 +121,30 @@ namespace Ipopt
      */
     enum IndexStyleEnum { C_STYLE=0, FORTRAN_STYLE=1 };
     virtual bool get_nlp_info(Index num_proc, Index proc_id,
-			      Index& n, Index& n_first, Index& n_last,
-			      Index& m, Index& m_first, Index& m_last,
-			      Index& nnz_jac_g_part, Index& nnz_h_lag_part,
-			      IndexStyleEnum& index_style)=0;
+                              Index& n, Index& n_first, Index& n_last,
+                              Index& m, Index& m_first, Index& m_last,
+                              Index& nnz_jac_g_part, Index& nnz_h_lag_part,
+                              IndexStyleEnum& index_style)=0;
+
+    typedef std::map<std::string, std::vector<std::string> > StringMetaDataMapType;
+    typedef std::map<std::string, std::vector<Index> > IntegerMetaDataMapType;
+    typedef std::map<std::string, std::vector<Number> > NumericMetaDataMapType;
+
+    /** overload this method to return any meta data for
+     *  the variables and the constraints */
+    virtual bool get_var_con_metadata(Index num_proc, Index proc_id,
+                                      Index n, Index n_first, Index n_last,
+                                      StringMetaDataMapType& var_string_md,
+                                      IntegerMetaDataMapType& var_integer_md,
+                                      NumericMetaDataMapType& var_numeric_md,
+                                      Index m, Index m_first, Index m_last,
+                                      StringMetaDataMapType& con_string_md,
+                                      IntegerMetaDataMapType& con_integer_md,
+                                      NumericMetaDataMapType& con_numeric_md)
+
+    {
+      return false;
+    }
 
     /** Return bounds information.  Overload this method to return the
      *  information about the bound on the variables and
@@ -137,9 +157,9 @@ namespace Ipopt
      *  for the variables and constraints that it is responsible for,
      *  e.g., x_l and x_u have the size 'n_last-n_first+1'. */
     virtual bool get_bounds_info(Index num_proc, Index proc_id,
-				 Index n, Index n_first, Index n_last,
-				 Number* x_l_part, Number* x_u_part,
-				 Index m, Index m_first, Index m_last,
+                                 Index n, Index n_first, Index n_last,
+                                 Number* x_l_part, Number* x_u_part,
+                                 Index m, Index m_first, Index m_last,
                                  Number* g_l_part, Number* g_u_part)=0;
 
     /** LATER????  overload this method to return scaling
@@ -172,11 +192,11 @@ namespace Ipopt
      */
     virtual bool
     get_starting_point(Index num_proc, Index proc_id,
-		       Index n, Index n_first, Index n_last,
-		       bool init_x, Number* x_part,
-		       bool init_z, Number* z_L_part, Number* z_U_part,
-		       Index m, Index m_first, Index m_last,
-		       bool init_lambda, Number* lambda_part)=0;
+                       Index n, Index n_first, Index n_last,
+                       bool init_x, Number* x_part,
+                       bool init_z, Number* z_L_part, Number* z_U_part,
+                       Index m, Index m_first, Index m_last,
+                       bool init_lambda, Number* lambda_part)=0;
 
     /** Compute the objective function. Overload this method to return
      *  a "component" of the value of the objective function; the
@@ -184,8 +204,8 @@ namespace Ipopt
      *  returned in obj_value across all processors
      */
     virtual bool eval_f(Index num_proc, Index proc_id,
-			Index n, Index n_first, Index n_last,
-			const Number* x, bool new_x, Number& obj_value)=0;
+                        Index n, Index n_first, Index n_last,
+                        const Number* x, bool new_x, Number& obj_value)=0;
 
     /** Compute the gradient of the objective function.  Overload this
      *  method to return the vector of the gradient of the objective
@@ -195,9 +215,9 @@ namespace Ipopt
      *  x_{n_first}.
      */
     virtual bool eval_grad_f(Index num_proc, Index proc_id,
-			     Index n,  Index n_first, Index n_last,
-			     const Number* x, bool new_x,
-			     Number* grad_f_part)=0;
+                             Index n,  Index n_first, Index n_last,
+                             const Number* x, bool new_x,
+                             Number* grad_f_part)=0;
 
     /** Compute constraint values.  Overload this method to return the
      *  vector of constraint values with indices in [m_first
@@ -206,9 +226,9 @@ namespace Ipopt
      *  x = (x_0, .. x_{n-1}).
      */
     virtual bool eval_g(Index num_proc, Index proc_id,
-			Index n, const Number* x, bool new_x,
+                        Index n, const Number* x, bool new_x,
                         Index m, Index m_first, Index m_last,
-			Number* g_part)=0;
+                        Number* g_part)=0;
 
     /** Compute structure and values of the constraint Jacobian.
      *  Overload this method to return the jacobian of the constraints
@@ -216,16 +236,18 @@ namespace Ipopt
      *  jCol only need to be set once. The first call is used to set
      *  the structure only (iRow and jCol will be non-NULL, and values
      *  will be NULL) For subsequent calls, iRow and jCol will be
-     *  NULL.  iRow must only contain values in [m_first .. m_last],
+     *  NULL.  iRow must only contain values in [0..(m_last-m_first)],
      *  the sub-interval of constraints the processor proc_num is
      *  responsible for, while jCol will contain values from 0 to n-1
-     *  (assuming C_STYLE indexing).
+     *  (assuming C_STYLE indexing).  This means, the row counting
+     *  starts at 0 (or 1) for the constraints for each individual
+     *  processor.
      */
     virtual bool eval_jac_g(Index num_proc, Index proc_id,
-			    Index n, const Number* x, bool new_x,
+                            Index n, const Number* x, bool new_x,
                             Index m, Index m_first, Index m_last,
-			    Index nele_jac_part, Index* iRow_part,
-			    Index *jCol_part, Number* values_part)=0;
+                            Index nele_jac_part, Index* iRow_part,
+                            Index *jCol_part, Number* values_part)=0;
 
     /** Compute structure and values of the Hessian of the Lagrangian
      *  function.  Overload this method to return the part of the
@@ -250,13 +272,13 @@ namespace Ipopt
      *  processors.
      */
     virtual bool eval_h(Index num_proc, Index proc_id,
-			Index n, Index n_first, Index n_last,
-			const Number* x, bool new_x, Number obj_factor,
-			Index m, Index m_first, Index m_last,
-			const Number* lambda,
+                        Index n, Index n_first, Index n_last,
+                        const Number* x, bool new_x, Number obj_factor,
+                        Index m, Index m_first, Index m_last,
+                        const Number* lambda,
                         bool new_lambda, Index nele_hess_part,
                         Index* iRow_part, Index* jCol_part,
-			Number* values_part)
+                        Number* values_part)
     {
       return false;
     }

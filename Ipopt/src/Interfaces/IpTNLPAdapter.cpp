@@ -406,7 +406,7 @@ namespace Ipopt
       StringMetaDataMapType con_string_md;
       IntegerMetaDataMapType con_integer_md;
       NumericMetaDataMapType con_numeric_md;
-      if (!tnlp_->get_var_con_metadata(n_full_x, var_string_md, var_integer_md, var_numeric_md,
+      if (!tnlp_->get_var_con_metadata(n_full_x_, var_string_md, var_integer_md, var_numeric_md,
                                        n_full_g_, con_string_md, con_integer_md, con_numeric_md)) {
         var_string_md.clear();
         var_integer_md.clear();
@@ -419,7 +419,7 @@ namespace Ipopt
       // allocate internal space to store the full jacobian
       jac_g_ = new Number[nz_full_jac_g_];
 
-      /* Spaces for x, x_L, and x_U. We need to remove the fixed variables
+      /* Spaces for bounds. We need to remove the fixed variables
        * and find out which bounds do not exist. */
       Number* x_l = new Number[n_full_x_];
       Number* x_u = new Number[n_full_x_];
@@ -499,6 +499,10 @@ namespace Ipopt
             delete [] x_fixed_map_tmp;
             delete [] x_l_map;
             delete [] x_u_map;
+            delete [] c_map;
+            delete [] d_map;
+            delete [] d_l_map;
+            delete [] d_u_map;
             THROW_EXCEPTION(INVALID_TNLP, string);
           }
           else {
@@ -1433,8 +1437,8 @@ namespace Ipopt
     Number* full_z_u = new Number[n_full_x_];
     Number* full_lambda = new Number[n_full_g_];
     bool init_x = need_x;
-    bool init_z = need_z_L && need_z_U;
-    bool init_lambda = need_y_c && need_y_d;
+    bool init_z = need_z_L || need_z_U;
+    bool init_lambda = need_y_c || need_y_d;
 
     bool retvalue =
       tnlp_->get_starting_point(n_full_x_, init_x, full_x, init_z, full_z_l, full_z_u, n_full_g_, init_lambda, full_lambda);
