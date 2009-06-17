@@ -1,8 +1,8 @@
-// Copyright (C) 2005, 2008 International Business Machines and others.
+// Copyright (C) 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpParSymMatrix.cpp 1324 2008-09-16 14:19:26Z andreasw $
+// $Id$
 //
 // Authors:  Sanjeeb Dash, Andreas Waechter     IBM    2009-05-29
 
@@ -36,7 +36,7 @@ namespace Ipopt
 
   ParSymMatrix::ParSymMatrix(const ParSymMatrixSpace* owner_space)
       :
-      Matrix(owner_space),
+      SymMatrix(owner_space),
       owner_space_(owner_space)
   {
     DBG_START_METH("ParSymMatrix::ParSymMatrix()", dbg_verbosity);
@@ -100,7 +100,7 @@ namespace Ipopt
   ParSymMatrixSpace::ParSymMatrixSpace(Index dim, Index nonZeros, const Index* iRows,
 				       const Index* jCols)
     :
-    MatrixSpace(dim, dim)
+    SymMatrixSpace(dim)
   {
     local_space_ = new SymTMatrixSpace(dim, nonZeros, iRows, jCols);
 

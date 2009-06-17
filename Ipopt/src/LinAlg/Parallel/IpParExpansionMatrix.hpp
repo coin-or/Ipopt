@@ -1,8 +1,8 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpParGenMatrix.hpp 1460 2009-06-17 02:34:47Z andreasw $
+// $Id$
 //
 // Authors:  Sanjeeb Dash, Andreas Waechter     IBM    2009-06-17
 
@@ -54,6 +54,7 @@ namespace Ipopt
      */
     inline ExpansionMatrix* LocalMatrix()
     {
+      ObjectChanged();
       return GetRawPtr(local_matrix_);
     }
 
