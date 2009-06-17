@@ -33,7 +33,12 @@ namespace Ipopt
    *  is to be computed, each processor finds the maximum element of its piece of
    *  the column, and then uses MPI calls to find the global maximum.
    *
-   *  It stores the local piece of the matrix as a GenTMatrix.
+   *  The rows of a ParGenMatrix have the same numbering convention as a GenTMatrix,
+   *  i.e., the rows are numbered from 1. A ParGenMatrix stores the piece of the matrix
+   *  on a processor as a GenTMatrix. Therefore the collection of row numbers on a 
+   *  processor need to be passed relative to the starting row number. For example,
+   *  if the part of the matrix in a processor consists of rows 15-20, then the row
+   *  numbers 15 - 20 should be specified as row 1, 2, .., 5.
    */
   class ParGenMatrix : public Matrix
   {
@@ -57,6 +62,7 @@ namespace Ipopt
      */
     inline GenTMatrix* LocalMatrix()
     {
+      ObjectChanged();
       return GetRawPtr(local_matrix_);
     }
 

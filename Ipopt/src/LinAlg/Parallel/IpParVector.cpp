@@ -302,6 +302,14 @@ namespace Ipopt
 
     MPI_Allgather(&start_pos_, 1, MPI_INT, &(displs_[0]), 1, MPI_INT, MPI_COMM_WORLD); 
     MPI_Allgather(&size_, 1, MPI_INT, &(recvcounts_[0]), 1, MPI_INT, MPI_COMM_WORLD); 
+
+    // Test for consistency
+    for (int i=0; i<num_proc_; i++){
+      int nx = (i < num_proc_-1)? displs_[i+1] : total_dim;
+
+      DBG_ASSERT(displs_[i] + recvcounts_[i] == nx);
+    }
+
   }
 
 } // namespace Ipopt
