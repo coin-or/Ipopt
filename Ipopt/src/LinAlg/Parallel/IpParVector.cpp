@@ -118,7 +118,7 @@ namespace Ipopt
     const ParVector* p_x = static_cast<const ParVector*>(&x);
     DBG_ASSERT(dynamic_cast<const ParVector*>(&x));
 
-    local_vector_->ElementWiseDivide(*p_x);
+    local_vector_->ElementWiseDivide(*p_x->LocalVector());
   }
 
   void ParVector::ElementWiseMultiplyImpl(const Vector& x)
@@ -126,7 +126,7 @@ namespace Ipopt
     const ParVector* p_x = static_cast<const ParVector*>(&x);
     DBG_ASSERT(dynamic_cast<const ParVector*>(&x));
 
-    local_vector_->ElementWiseMultiply(*p_x);
+    local_vector_->ElementWiseMultiply(*p_x->LocalVector());
   }
 
   void ParVector::ElementWiseMaxImpl(const Vector& x)
@@ -134,7 +134,7 @@ namespace Ipopt
     const ParVector* p_x = static_cast<const ParVector*>(&x);
     DBG_ASSERT(dynamic_cast<const ParVector*>(&x));
 
-    local_vector_->ElementWiseMax(*p_x);
+    local_vector_->ElementWiseMax(*p_x->LocalVector());
   }
 
   void ParVector::ElementWiseMinImpl(const Vector& x)
@@ -142,7 +142,7 @@ namespace Ipopt
     const ParVector* p_x = static_cast<const ParVector*>(&x);
     DBG_ASSERT(dynamic_cast<const ParVector*>(&x));
 
-    local_vector_->ElementWiseMin(*p_x);
+    local_vector_->ElementWiseMin(*p_x->LocalVector());
   }
 
   void ParVector::ElementWiseReciprocalImpl()

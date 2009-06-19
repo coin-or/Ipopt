@@ -1,0 +1,123 @@
+# Copyright (C) 2005, 2009 International Business Machines and others.
+# All Rights Reserved.
+# This file is distributed under the Common Public License.
+
+# $Id$
+
+# Directory to the sources for the (example) problem definition files
+SRCDIR = @srcdir@
+VPATH = @srcdir@
+
+# Compiler and options
+CXX = @CXX@
+CXXFLAGS = @CXXFLAGS@
+
+# Archiver for C++ object files (e.g., needed to build a library on AIX to
+# avoid multiply defined symbols for templates)
+CXXAR = @CXXAR@
+
+# additional C++ Compiler options for linking
+CXXLINKFLAGS = @RPATH_FLAGS@
+
+# Directory with header files
+IPOPTINCDIR = @includedir@/coin
+
+# Directory with libipopt.a
+IPOPTLIBDIR = @libdir@
+exec_prefix = @exec_prefix@
+prefix = @prefix@
+
+# Libraries necessary to link with IPOPT
+IPOPTLIBS = @ipoptlib@ @ADDLIBS@
+
+# Necessary Include dirs (we use the CYGPATH_W variables to allow
+# compilation with Windows compilers)
+INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)`
+
+# Name of the executable
+EXE = par_solve_problem@EXEEXT@
+
+# List of all object files
+MAINOBJ =  par_solve_problem.@OBJEXT@
+
+# List of all object files
+LIBOBJS =  \
+	MittelmannDistCntrlNeumA.@OBJEXT@ \
+        MittelmannDistCntrlNeumB.@OBJEXT@ \
+        MittelmannDistCntrlDiri.@OBJEXT@ \
+        MittelmannBndryCntrlDiri.@OBJEXT@ \
+        MittelmannBndryCntrlDiri3D.@OBJEXT@ \
+        MittelmannBndryCntrlDiri3D_27.@OBJEXT@ \
+        MittelmannBndryCntrlDiri3Dsin.@OBJEXT@ \
+        MittelmannBndryCntrlNeum.@OBJEXT@ \
+        LuksanVlcek1.@OBJEXT@ \
+        LuksanVlcek2.@OBJEXT@ \
+        LuksanVlcek3.@OBJEXT@ \
+        LuksanVlcek4.@OBJEXT@ \
+        LuksanVlcek5.@OBJEXT@ \
+        LuksanVlcek6.@OBJEXT@ \
+        LuksanVlcek7.@OBJEXT@ \
+        RegisteredTNLP.@OBJEXT@
+
+
+LIB = libparscalexamples.@LIBEXT@
+
+LIBS = $(LIB) $(IPOPTLIBS)
+
+all: $(EXE)
+
+# Dependencies
+LuksanVlcek1.@OBJEXT@ : LuksanVlcek1.hpp
+LuksanVlcek2.@OBJEXT@ : LuksanVlcek2.hpp
+LuksanVlcek3.@OBJEXT@ : LuksanVlcek3.hpp
+LuksanVlcek4.@OBJEXT@ : LuksanVlcek4.hpp
+LuksanVlcek5.@OBJEXT@ : LuksanVlcek5.hpp
+LuksanVlcek6.@OBJEXT@ : LuksanVlcek6.hpp
+LuksanVlcek7.@OBJEXT@ : LuksanVlcek7.hpp
+MittelmannDistCntrlNeumA.@OBJEXT@: MittelmannDistCntrlNeumA.hpp
+MittelmannDistCntrlNeumB.@OBJEXT@: MittelmannDistCntrlNeumB.hpp
+MittelmannDistCntrlDiri.@OBJEXT@: MittelmannDistCntrlDiri.hpp
+MittelmannBndryCntrlDiri.@OBJEXT@: MittelmannBndryCntrlDiri.hpp
+MittelmannBndryCntrlDiri3D.@OBJEXT@: MittelmannBndryCntrlDiri3D.hpp
+MittelmannBndryCntrlDiri3D_27.@OBJEXT@: MittelmannBndryCntrlDiri3D_27.hpp
+MittelmannBndryCntrlDiri3Dsin.@OBJEXT@: MittelmannBndryCntrlDiri3Dsin.hpp
+MittelmannBndryCntrlNeum.@OBJEXT@: MittelmannBndryCntrlNeum.hpp
+
+par_solve_problem.@OBJEXT@: \
+	LuksanVlcek1.hpp \
+	LuksanVlcek2.hpp \
+	LuksanVlcek3.hpp \
+	LuksanVlcek4.hpp \
+	LuksanVlcek5.hpp \
+	LuksanVlcek6.hpp \
+	LuksanVlcek7.hpp \
+	MittelmannDistCntrlNeumA.hpp \
+	MittelmannDistCntrlNeumB.hpp \
+	MittelmannDistCntrlDiri.hpp \
+	MittelmannBndryCntrlDiri.hpp \
+	MittelmannBndryCntrlDiri3D.hpp \
+	MittelmannBndryCntrlDiri3D_27.hpp \
+	MittelmannBndryCntrlDiri3Dsin.hpp \
+	MittelmannBndryCntrlNeum.hpp \
+	MittelmannParaCntrl.hpp
+
+# The following is necessary under cygwin, if native compilers are used
+CYGPATH_W = @CYGPATH_W@
+
+.SUFFIXES: .cpp .c .o .obj
+
+$(EXE): $(MAINOBJ) $(LIB)
+	$(CXX) $(CXXFLAGS) $(CXXLINKFLAGS) -o $@ $(MAINOBJ) $(LIBS)
+
+$(LIB): $(LIBOBJS)
+	$(CXXAR) $(LIB) $(LIBOBJS)
+
+clean:
+	rm -rf $(EXE) $(MAINOBJ) $(LIBOBJS) $(LIB)
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
+
+
+.cpp.obj:
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`

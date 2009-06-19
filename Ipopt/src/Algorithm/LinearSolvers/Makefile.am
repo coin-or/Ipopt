@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2008 International Business Machines and others.
+# Copyright (C) 2004, 2009 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -64,11 +64,17 @@ if HAVE_WSMP
 	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
 endif
 
+if HAVE_MPI
+  liblinsolvers_la_SOURCES += \
+	IpParTSymLinearSolver.cpp IpParTSymLinearSolver.hpp
+endif
+
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/Parallel` \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty`
@@ -110,6 +116,7 @@ ASTYLE_FILES = \
 	IpTSymDependencyDetector.cppbak IpTSymDependencyDetector.hppbak \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
 	IpTSymScalingMethod.hppbak \
+	IpParTSymLinearSolver.cppbak IpParTSymLinearSolver.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
 	IpWsmpSolverInterface.cppbak IpWsmpSolverInterface.hppbak
 

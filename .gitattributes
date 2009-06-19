@@ -79,6 +79,7 @@ Ipopt/contrib/MatlabInterface/ipopt.m -text
 Ipopt/contrib/MatlabInterface/readme.html -text
 Ipopt/doc/documentation.pdf -text
 Ipopt/doc/options.tex -text
+Ipopt/examples/ParScalableProblems/README -text
 Ipopt/examples/ScalableProblems/README -text
 Ipopt/examples/hs071_c/Makefile.in -text
 Ipopt/examples/hs071_cpp/Makefile.in -text

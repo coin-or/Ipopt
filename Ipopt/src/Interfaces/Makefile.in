@@ -43,7 +43,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@HAVE_MPI_TRUE@am__append_1 = IpParTNLP.hpp
+@HAVE_MPI_TRUE@am__append_1 = IpParTNLP.hpp \
+@HAVE_MPI_TRUE@	IpParTNLPWrapper.hpp IpParTNLPAdapter.hpp # Those not install later
+
 @HAVE_MPI_TRUE@am__append_2 = \
 @HAVE_MPI_TRUE@	IpParTNLP.hpp \
 @HAVE_MPI_TRUE@	IpParTNLPAdapter.cpp IpParTNLPAdapter.hpp \
@@ -109,7 +111,8 @@ DIST_SOURCES = $(am__libipopt_la_SOURCES_DIST)
 am__includeipopt_HEADERS_DIST = IpAlgTypes.hpp IpIpoptApplication.hpp \
 	IpNLP.hpp IpReturnCodes.h IpReturnCodes.hpp \
 	IpReturnCodes_inc.h IpReturnCodes.inc IpSolveStatistics.hpp \
-	IpStdCInterface.h IpTNLP.hpp IpTNLPReducer.hpp IpParTNLP.hpp
+	IpStdCInterface.h IpTNLP.hpp IpTNLPReducer.hpp IpParTNLP.hpp \
+	IpParTNLPWrapper.hpp IpParTNLPAdapter.hpp
 includeipoptHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(includeipopt_HEADERS)
 ETAGS = etags
