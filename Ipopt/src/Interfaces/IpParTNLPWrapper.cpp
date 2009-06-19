@@ -35,15 +35,15 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
                              Index& n, Index& n_first, Index& n_last,
                              Index& m, Index& m_first, Index& m_last,
                              Index& nnz_jac_g_part, Index& nnz_h_lag_part,
-                             TNLP::IndexStyleEnum& index_style)
+                             IndexStyleEnum& index_style)
 {
   Index nnz_jac_g, nnz_h_lag;
   bool rval = true;
 
-  rval = tnlpobj_->get_nlp_info(n, m, nnz_jac_g, nnz_h_lag, index_style);
+  rval = tnlpobj_->get_nlp_info(n, m, nnz_jac_g, nnz_h_lag, (TNLP::IndexStyleEnum&)index_style);
   if (rval == false) return rval;
 
-  if (index_style != TNLP::C_STYLE) {
+  if (index_style != C_STYLE) {
     n --;
     m --;
   }
@@ -51,7 +51,7 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
   calculate_offsets (num_proc, proc_id, n, n_first, n_last);
   calculate_offsets (num_proc, proc_id, m, m_first, m_last);
 
-  if (index_style != TNLP::C_STYLE) {
+  if (index_style != C_STYLE) {
     n_first ++;
     n_last ++;
     m_first ++;
@@ -254,8 +254,8 @@ ParTNLPWrapper::eval_jac_g(Index num_proc, Index proc_id,
     int nz = 0;
     for (i=0; i<nnz_jac_g; i++)
       if (iRow[i] >= m_first && iRow[i] <= m_last) {
-        iRow_part[nz] = iRow[i];
-        jCol_part[nz] = jCol[i];
+        iRow_part[nz] = iRow[i] - m_first;
+        jCol_part[nz] = jCol[i] - m_first;
         nz ++;
       }
     assert (nz == nele_jac_part);

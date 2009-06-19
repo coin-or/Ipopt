@@ -858,6 +858,7 @@ AC_CONFIG_FILES([Makefile
 		 examples/hs071_cpp/Makefile
 		 examples/hs071_c/Makefile
 		 examples/ScalableProblems/Makefile
+		 examples/ParScalableProblems/Makefile
 		 tutorial/CodingExercise/C/1-skeleton/Makefile
 		 tutorial/CodingExercise/C/2-mistake/Makefile
 		 tutorial/CodingExercise/C/3-solution/Makefile

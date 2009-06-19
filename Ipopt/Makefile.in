@@ -65,6 +65,7 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/contrib/MatlabInterface/examples/startup.m.in \
 	$(top_srcdir)/contrib/MatlabInterface/src/Makefile.in \
 	$(top_srcdir)/examples/Cpp_example/Makefile.in \
+	$(top_srcdir)/examples/ParScalableProblems/Makefile.in \
 	$(top_srcdir)/examples/ScalableProblems/Makefile.in \
 	$(top_srcdir)/examples/hs071_c/Makefile.in \
 	$(top_srcdir)/examples/hs071_c/hs071_c.c \
@@ -107,6 +108,7 @@ CONFIG_CLEAN_FILES = examples/hs071_f/Makefile \
 	examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile \
 	examples/hs071_cpp/Makefile examples/hs071_c/Makefile \
 	examples/ScalableProblems/Makefile \
+	examples/ParScalableProblems/Makefile \
 	tutorial/CodingExercise/C/1-skeleton/Makefile \
 	tutorial/CodingExercise/C/2-mistake/Makefile \
 	tutorial/CodingExercise/C/3-solution/Makefile \
@@ -497,6 +499,8 @@ examples/hs071_c/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/ScalableProblems/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/ScalableProblems/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+examples/ParScalableProblems/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/ParScalableProblems/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 tutorial/CodingExercise/C/1-skeleton/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/C/1-skeleton/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tutorial/CodingExercise/C/2-mistake/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/C/2-mistake/Makefile.in
@@ -683,7 +687,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/.. $(distdir)/../BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface-Old/examples $(distdir)/contrib/MatlabInterface-Old/src $(distdir)/contrib/MatlabInterface/examples $(distdir)/contrib/MatlabInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Interfaces $(distdir)/test $(distdir)/tutorial/CodingExercise/C/1-skeleton $(distdir)/tutorial/CodingExercise/C/2-mistake $(distdir)/tutorial/CodingExercise/C/3-solution $(distdir)/tutorial/CodingExercise/Cpp/1-skeleton $(distdir)/tutorial/CodingExercise/Cpp/2-mistake $(distdir)/tutorial/CodingExercise/Cpp/3-solution $(distdir)/tutorial/CodingExercise/Fortran/1-skeleton $(distdir)/tutorial/CodingExercise/Fortran/2-mistake $(distdir)/tutorial/CodingExercise/Fortran/3-solution $(distdir)/tutorial/CodingExercise/Matlab/1-skeleton $(distdir)/tutorial/CodingExercise/Matlab/2-mistake $(distdir)/tutorial/CodingExercise/Matlab/3-solution
+	$(mkdir_p) $(distdir)/.. $(distdir)/../BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface-Old/examples $(distdir)/contrib/MatlabInterface-Old/src $(distdir)/contrib/MatlabInterface/examples $(distdir)/contrib/MatlabInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ParScalableProblems $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Interfaces $(distdir)/test $(distdir)/tutorial/CodingExercise/C/1-skeleton $(distdir)/tutorial/CodingExercise/C/2-mistake $(distdir)/tutorial/CodingExercise/C/3-solution $(distdir)/tutorial/CodingExercise/Cpp/1-skeleton $(distdir)/tutorial/CodingExercise/Cpp/2-mistake $(distdir)/tutorial/CodingExercise/Cpp/3-solution $(distdir)/tutorial/CodingExercise/Fortran/1-skeleton $(distdir)/tutorial/CodingExercise/Fortran/2-mistake $(distdir)/tutorial/CodingExercise/Fortran/3-solution $(distdir)/tutorial/CodingExercise/Matlab/1-skeleton $(distdir)/tutorial/CodingExercise/Matlab/2-mistake $(distdir)/tutorial/CodingExercise/Matlab/3-solution
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

@@ -40,7 +40,8 @@ libipopt_la_SOURCES = \
 	IpTNLPReducer.cpp IpTNLPReducer.hpp
 
 if HAVE_MPI
-  includeipopt_HEADERS += IpParTNLP.hpp
+  includeipopt_HEADERS += IpParTNLP.hpp \
+	IpParTNLPWrapper.hpp IpParTNLPAdapter.hpp # Those not install later
   libipopt_la_SOURCES += \
 	IpParTNLP.hpp \
 	IpParTNLPAdapter.cpp IpParTNLPAdapter.hpp \

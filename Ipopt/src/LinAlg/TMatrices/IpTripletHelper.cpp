@@ -372,7 +372,9 @@ namespace Ipopt
   void TripletHelper::FillRowCol_(Index n_entries, const DiagMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     DBG_ASSERT(n_entries == matrix.Dim());
-    for (Index i=1; i<=n_entries; i++) {
+    row_offset++;
+    col_offset++;
+    for (Index i=0; i<n_entries; i++) {
       iRow[i] = i + row_offset;
       jCol[i] = i + col_offset;
     }
@@ -388,7 +390,9 @@ namespace Ipopt
   void TripletHelper::FillRowCol_(Index n_entries, const IdentityMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     DBG_ASSERT(n_entries == matrix.Dim());
-    for (Index i=1; i<=n_entries; i++) {
+    row_offset++;
+    col_offset++;
+    for (Index i=0; i<n_entries; i++) {
       iRow[i] = i + row_offset;
       jCol[i] = i + col_offset;
     }

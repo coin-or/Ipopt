@@ -430,10 +430,10 @@ namespace Ipopt
     const ParVector* p_vec = dynamic_cast<const ParVector*>(vptr);
     if (p_vec) {
       const Index size = p_vec->LocalSize();
-      const Index roffset = row_offset + p_vec->StartPos();
-      const Index coffset = col_offset + p_vec->StartPos();
+      const Index roffset = row_offset + p_vec->StartPos() + 1;
+      const Index coffset = col_offset + p_vec->StartPos() + 1;
       DBG_ASSERT(n_entries == size);
-      for (Index i=1; i<=size; i++) {
+      for (Index i=0; i<size; i++) {
 	iRow[i] = i + roffset;
 	jCol[i] = i + coffset;
       }
@@ -497,9 +497,9 @@ namespace Ipopt
     IdentityRange(matrix.Dim(), start, end);
 
     DBG_ASSERT(n_entries == end-start);
-    row_offset += start;
-    col_offset += start;
-    for (Index i=1; i<=n_entries; i++) {
+    row_offset += start + 1;
+    col_offset += start + 1;
+    for (Index i=0; i<n_entries; i++) {
       iRow[i] = i + row_offset;
       jCol[i] = i + col_offset;
     }

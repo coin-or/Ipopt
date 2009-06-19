@@ -12,7 +12,6 @@
 
 #include "IpNLP.hpp"
 #include "IpParTNLP.hpp"
-#include "IpOrigIpoptNLP.hpp"
 
 namespace Ipopt
 {
@@ -201,7 +200,7 @@ namespace Ipopt
      *  already been solved before. */
     bool warm_start_same_structure_;
     /** Flag indicating what Hessian information is to be used. */
-    HessianApproximationType hessian_approximation_;
+    int hessian_approximation_;
     //@}
 
     /**@name Problem Size Data */

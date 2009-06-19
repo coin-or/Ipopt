@@ -25,7 +25,7 @@ namespace Ipopt
   class IteratesVector;
 
   /** wrapper which allows creation of an ParTNLP object from a NLP object*/
-  class ParTNLPWrapper : ParTNLP
+  class ParTNLPWrapper : public ParTNLP
   {
   public:
 
@@ -41,14 +41,12 @@ namespace Ipopt
     {}
     //@}
 
-    DECLARE_STD_EXCEPTION(INVALID_PARParTNLP);
-
     /**@name methods to gather information about the NLP */
     virtual bool get_nlp_info(Index num_proc, Index proc_id,
                               Index& n, Index& n_first, Index& n_last,
                               Index& m, Index& m_first, Index& m_last,
                               Index& nnz_jac_g_part, Index& nnz_h_lag_part,
-                              TNLP::IndexStyleEnum& index_style);
+                              IndexStyleEnum& index_style);
 
     virtual bool get_bounds_info(Index num_proc, Index proc_id,
                                  Index n, Index n_first, Index n_last,

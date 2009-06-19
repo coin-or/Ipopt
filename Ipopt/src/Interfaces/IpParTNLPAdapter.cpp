@@ -15,6 +15,7 @@
 #include "IpParExpansionMatrix.hpp"
 #include "IpParGenMatrix.hpp"
 #include "IpParSymMatrix.hpp"
+#include "IpOrigIpoptNLP.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -199,10 +200,10 @@ namespace Ipopt
                       index_style == index_style_),
                      INVALID_WARMSTART,
                      "warm_start_same_structure chosen, but problem dimensions are different.");
-    ASSERT_EXCEPTION(n_first<=n_last, INVALID_PARTNLP,
-                     "Condition n_first<=n_last not satisfied in get_nlp_info");
-    ASSERT_EXCEPTION(m_first<=m_last, INVALID_PARTNLP,
-                     "Condition m_first<=m_last not satisfied in get_nlp_info");
+    ASSERT_EXCEPTION(n_first<=n_last+1, INVALID_PARTNLP,
+                     "Condition n_first<=n_last+1 not satisfied in get_nlp_info");
+    ASSERT_EXCEPTION(m_first<=m_last+1, INVALID_PARTNLP,
+                     "Condition m_first<=m_last+1 not satisfied in get_nlp_info");
     if (index_style == ParTNLP::FORTRAN_STYLE) {
       n_first--;
       n_last--;
@@ -213,11 +214,11 @@ namespace Ipopt
     n_full_x_ = n_full_x;
     n_first_ = n_first;
     n_last_ = n_last;
-    n_part_x_ = n_last_ - n_first_;
+    n_part_x_ = n_last_ - n_first_ + 1;
     n_full_g_ = n_full_g;
     m_first_ = m_first;
     m_last_ = m_last;
-    n_part_g_ = m_last_ - m_first_;
+    n_part_g_ = m_last_ - m_first_ + 1;
     nz_part_jac_g_ = nz_part_jac_g;
     nz_part_h_ = nz_part_h;
     index_style_ = index_style;
@@ -857,6 +858,7 @@ namespace Ipopt
           g_jCol[i] += 1;
         }
       }
+      DBG_DO(for (Index i=0; i<nz_part_jac_g_; i++) assert(g_iRow[i]>0 && g_iRow[i]<=n_part_g_ && g_jCol[i]>0 && g_jCol[i]<=n_full_x);)
 
       // ... build the non-zero structure for jac_c
       // ... (the permutation from rows in jac_g to jac_c is

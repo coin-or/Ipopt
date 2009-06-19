@@ -66,6 +66,11 @@
 #include "HSLLoader.h"
 #include "PardisoLoader.h"
 
+// TODO not sure if to keep
+#ifdef HAVE_MPI
+# include "IpParTSymLinearSolver.hpp"
+#endif
+
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
@@ -388,7 +393,11 @@ namespace Ipopt
       }
 
       SmartPtr<SymLinearSolver> ScaledSolver =
+#ifdef HAVE_MPI
+        new ParTSymLinearSolver(SolverInterface, ScalingMethod);
+#else
         new TSymLinearSolver(SolverInterface, ScalingMethod);
+#endif
 
       AugSolver = new StdAugSystemSolver(*ScaledSolver);
     }
