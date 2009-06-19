@@ -1,11 +1,13 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Andreas Waechter, Sanjeeb Dash     IBM    2009-06-17
+//             (based on IpTripletHelper.cpp rev 1312)
 
+#include "IpParTripletHelper.hpp"
 #include "IpTripletHelper.hpp"
 
 #include "IpGenTMatrix.hpp"
@@ -25,22 +27,43 @@
 #include "IpDenseVector.hpp"
 #include "IpCompoundVector.hpp"
 
+#include "IpParVector.hpp"
+#include "IpParGenMatrix.hpp"
+#include "IpParSymMatrix.hpp"
+#include "IpParExpansionMatrix.hpp"
+
 #include "IpBlas.hpp"
+
+// FIXME - proper header files
+//extern "C" {
+#define MPICH_SKIP_MPICXX
+#include "mpi.h"
+//}
 
 namespace Ipopt
 {
 
-  Index TripletHelper::GetNumberEntries(const Matrix& matrix)
+  static void IdentityRange(Index Dim, Index& start, Index& end)
+  {
+    int rank, size;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    start = (int)(Dim * ((double)(rank)/(double)(size)));
+    end = (int)(Dim * ((double)(rank+1)/(double)(size))) - 1;
+  }
+
+  Index ParTripletHelper::GetNumberEntries(const Matrix& matrix)
   {
     const Matrix* mptr = &matrix;
-    const GenTMatrix* gent = dynamic_cast<const GenTMatrix*>(mptr);
-    if (gent) {
-      return gent->Nonzeros();
+    const ParGenMatrix* pgen = dynamic_cast<const ParGenMatrix*>(mptr);
+    if (pgen) {
+      return pgen->LocalMatrix()->Nonzeros();
     }
 
-    const SymTMatrix* symt = dynamic_cast<const SymTMatrix*>(mptr);
-    if (symt) {
-      return symt->Nonzeros();
+    const ParSymMatrix* psym = dynamic_cast<const ParSymMatrix*>(mptr);
+    if (psym) {
+      return psym->LocalMatrix()->Nonzeros();
     }
 
     const ScaledMatrix* scaled = dynamic_cast<const ScaledMatrix*>(mptr);
@@ -55,12 +78,20 @@ namespace Ipopt
 
     const DiagMatrix* diag = dynamic_cast<const DiagMatrix*>(mptr);
     if (diag) {
-      return diag->Dim();
+      return GetNumberEntries_(*diag->GetDiag());
     }
 
     const IdentityMatrix* ident = dynamic_cast<const IdentityMatrix*>(mptr);
     if (ident) {
-      return ident->Dim();
+      // TODO: Is this how we want to do this?
+      Index start, end;
+      IdentityRange(ident->Dim(), start, end);
+      return end-start;
+    }
+
+    const ParExpansionMatrix* pexp = dynamic_cast<const ParExpansionMatrix*>(mptr);
+    if (pexp) {
+      return pexp->LocalMatrix()->NCols();
     }
 
     const ExpansionMatrix* exp = dynamic_cast<const ExpansionMatrix*>(mptr);
@@ -95,24 +126,24 @@ namespace Ipopt
 
     const TransposeMatrix* trans = dynamic_cast<const TransposeMatrix*>(mptr);
     if (trans) {
-      return GetNumberEntries_(*trans);
+      return GetNumberEntries(*trans->OrigMatrix());
     }
 
-    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::GetNumberEntries");
+    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to ParTripletHelper::GetNumberEntries");
   }
 
-  void TripletHelper::FillRowCol(Index n_entries, const Matrix& matrix, Index* iRow, Index* jCol, Index row_offset/*=0*/, Index col_offset/*=0*/)
+  void ParTripletHelper::FillRowCol(Index n_entries, const Matrix& matrix, Index* iRow, Index* jCol, Index row_offset/*=0*/, Index col_offset/*=0*/)
   {
     const Matrix* mptr = &matrix;
-    const GenTMatrix* gent = dynamic_cast<const GenTMatrix*>(mptr);
-    if (gent) {
-      FillRowCol_(n_entries, *gent, row_offset, col_offset, iRow, jCol);
+    const ParGenMatrix* pgen = dynamic_cast<const ParGenMatrix*>(mptr);
+    if (pgen) {
+      FillRowCol_(n_entries, *pgen, row_offset, col_offset, iRow, jCol);
       return;
     }
 
-    const SymTMatrix* symt = dynamic_cast<const SymTMatrix*>(mptr);
-    if (symt) {
-      FillRowCol_(n_entries, *symt, row_offset, col_offset, iRow, jCol);
+    const ParSymMatrix* psym = dynamic_cast<const ParSymMatrix*>(mptr);
+    if (psym) {
+      FillRowCol_(n_entries, *psym, row_offset, col_offset, iRow, jCol);
       return;
     }
 
@@ -137,6 +168,12 @@ namespace Ipopt
     const IdentityMatrix* ident = dynamic_cast<const IdentityMatrix*>(mptr);
     if (ident) {
       FillRowCol_(n_entries, *ident, row_offset, col_offset, iRow, jCol);
+      return;
+    }
+
+    const ParExpansionMatrix* pexp = dynamic_cast<const ParExpansionMatrix*>(mptr);
+    if (pexp) {
+      FillRowCol_(n_entries, *pexp, row_offset, col_offset, iRow, jCol);
       return;
     }
 
@@ -182,21 +219,21 @@ namespace Ipopt
       return;
     }
 
-    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::FillRowCol");
+    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to ParTripletHelper::FillRowCol");
   }
 
-  void TripletHelper::FillValues(Index n_entries, const Matrix& matrix, Number* values)
+  void ParTripletHelper::FillValues(Index n_entries, const Matrix& matrix, Number* values)
   {
     const Matrix* mptr = &matrix;
-    const GenTMatrix* gent = dynamic_cast<const GenTMatrix*>(mptr);
-    if (gent) {
-      FillValues_(n_entries, *gent, values);
+    const ParGenMatrix* pgen = dynamic_cast<const ParGenMatrix*>(mptr);
+    if (pgen) {
+      FillValues_(n_entries, *pgen, values);
       return;
     }
 
-    const SymTMatrix* symt = dynamic_cast<const SymTMatrix*>(mptr);
-    if (symt) {
-      FillValues_(n_entries, *symt, values);
+    const ParSymMatrix* psym = dynamic_cast<const ParSymMatrix*>(mptr);
+    if (psym) {
+      FillValues_(n_entries, *psym, values);
       return;
     }
 
@@ -221,6 +258,12 @@ namespace Ipopt
     const IdentityMatrix* ident = dynamic_cast<const IdentityMatrix*>(mptr);
     if (ident) {
       FillValues_(n_entries, *ident, values);
+      return;
+    }
+
+    const ParExpansionMatrix* pexp = dynamic_cast<const ParExpansionMatrix*>(mptr);
+    if (pexp) {
+      FillValues_(n_entries, *pexp, values);
       return;
     }
 
@@ -266,10 +309,10 @@ namespace Ipopt
       return;
     }
 
-    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::FillValues");
+    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to ParTripletHelper::FillValues");
   }
 
-  Index TripletHelper::GetNumberEntries_(const SumMatrix& matrix)
+  Index ParTripletHelper::GetNumberEntries_(const SumMatrix& matrix)
   {
     Index n_entries = 0;
     Index nterms = matrix.NTerms();
@@ -282,7 +325,7 @@ namespace Ipopt
     return n_entries;
   }
 
-  Index TripletHelper::GetNumberEntries_(const SumSymMatrix& matrix)
+  Index ParTripletHelper::GetNumberEntries_(const SumSymMatrix& matrix)
   {
     Index n_entries = 0;
     Index nterms = matrix.NTerms();
@@ -295,7 +338,7 @@ namespace Ipopt
     return n_entries;
   }
 
-  Index TripletHelper::GetNumberEntries_(const CompoundMatrix& matrix)
+  Index ParTripletHelper::GetNumberEntries_(const CompoundMatrix& matrix)
   {
     Index n_entries = 0;
     Index nrows = matrix.NComps_Rows();
@@ -311,7 +354,7 @@ namespace Ipopt
     return n_entries;
   }
 
-  Index TripletHelper::GetNumberEntries_(const CompoundSymMatrix& matrix)
+  Index ParTripletHelper::GetNumberEntries_(const CompoundSymMatrix& matrix)
   {
     Index n_entries = 0;
     Index dim = matrix.NComps_Dim();
@@ -326,84 +369,175 @@ namespace Ipopt
     return n_entries;
   }
 
-
-  Index TripletHelper::GetNumberEntries_(const TransposeMatrix& matrix)
+  Index ParTripletHelper::GetNumberEntries_(const Vector& vector)
   {
-    return GetNumberEntries(*matrix.OrigMatrix());
-  }
-
-  void TripletHelper::FillRowCol_(Index n_entries, const GenTMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
-  {
-    DBG_ASSERT(n_entries == matrix.Nonzeros());
-    const Index* irow = matrix.Irows();
-    const Index* jcol = matrix.Jcols();
-    for (Index i=0; i<n_entries; i++) {
-      iRow[i] = irow[i] + row_offset;
-      jCol[i] = jcol[i] + col_offset;
+    const Vector* vptr = &vector;
+    const ParVector* p_vec = dynamic_cast<const ParVector*>(vptr);
+    if (p_vec) {
+      return p_vec->LocalSize();
     }
-  }
 
-  void TripletHelper::FillValues_(Index n_entries, const GenTMatrix& matrix, Number* values)
-  {
-    DBG_ASSERT(n_entries == matrix.Nonzeros());
-    const Number* vals = matrix.Values();
-    for (Index i=0; i<n_entries; i++) {
-      values[i] = vals[i];
+    const CompoundVector* cmpd_vec = dynamic_cast<const CompoundVector*>(vptr);
+    if (cmpd_vec) {
+      Index n_entires = 0;
+      Index n_comps = cmpd_vec->NComps();
+      for (int i=0; i<n_comps; i++) {
+	n_entires += GetNumberEntries_(*cmpd_vec->GetComp(i));
+      }
+      return n_entires;
     }
+
+    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"Unknown vector type passed to ParTripletHelper::GetNumberEntries_(const Vector)");
   }
 
-  void TripletHelper::FillRowCol_(Index n_entries, const SymTMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+
+  void ParTripletHelper::FillRowCol_(Index n_entries, const ParGenMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
-    DBG_ASSERT(n_entries == matrix.Nonzeros());
-    const Index* irow = matrix.Irows();
-    const Index* jcol = matrix.Jcols();
-    for (Index i=0; i<n_entries; i++) {
-      iRow[i] = irow[i] + row_offset;
-      jCol[i] = jcol[i] + col_offset;
+    TripletHelper::FillRowCol(n_entries, *matrix.LocalMatrix(),
+			      iRow, jCol, row_offset+matrix.RowStartPos(),
+			      col_offset);
+  }
+
+  void ParTripletHelper::FillValues_(Index n_entries, const ParGenMatrix& matrix, Number* values)
+  {
+    TripletHelper::FillValues(n_entries, *matrix.LocalMatrix(), values);
+  }
+
+  void ParTripletHelper::FillRowCol_(Index n_entries, const ParSymMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  {
+    TripletHelper::FillRowCol(n_entries, *matrix.LocalMatrix(),
+			      iRow, jCol,  row_offset, col_offset);
+  }
+
+  void ParTripletHelper::FillValues_(Index n_entries, const ParSymMatrix& matrix, Number* values)
+  {
+    TripletHelper::FillValues(n_entries, *matrix.LocalMatrix(), values);
+  }
+
+  void ParTripletHelper::FillRowCol_(Index n_entries, const DiagMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  {
+    FillRowCol_(n_entries, *matrix.GetDiag(), row_offset, col_offset, iRow, jCol);
+  }
+
+  void ParTripletHelper::FillValues_(Index n_entries, const DiagMatrix& matrix, Number* values)
+  {
+    FillValues_(n_entries, *matrix.GetDiag(), values);
+  }
+
+  void ParTripletHelper::FillRowCol_(Index n_entries, const Vector& vector, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  {
+    const Vector* vptr = &vector;
+    const ParVector* p_vec = dynamic_cast<const ParVector*>(vptr);
+    if (p_vec) {
+      const Index size = p_vec->LocalSize();
+      const Index roffset = row_offset + p_vec->StartPos();
+      const Index coffset = col_offset + p_vec->StartPos();
+      DBG_ASSERT(n_entries == size);
+      for (Index i=1; i<=size; i++) {
+	iRow[i] = i + roffset;
+	jCol[i] = i + coffset;
+      }
+      return;
     }
+
+    const CompoundVector* cmpd_vec = dynamic_cast<const CompoundVector*>(vptr);
+    if (cmpd_vec) {
+      Index n_total_entries = 0;
+      Index n_comps = cmpd_vec->NComps();
+      Index roffset = row_offset;
+      Index coffset = col_offset;
+      for (int i=0; i<n_comps; i++) {
+	SmartPtr<const Vector> blk_vec = cmpd_vec->GetComp(i);
+	Index blk_n_entries = GetNumberEntries_(*blk_vec);
+	FillRowCol_(blk_n_entries, *blk_vec, roffset, coffset, iRow, jCol);
+	roffset += blk_vec->Dim();
+	coffset += blk_vec->Dim();
+	iRow += blk_n_entries;
+	jCol += blk_n_entries;
+	n_total_entries += blk_n_entries;
+      }
+      DBG_ASSERT(n_total_entries == n_entries);
+      return;
+    }
+
+    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"Unknown vector type passed to ParTripletHelper::FillRowCol_(const Vector)");
   }
 
-  void TripletHelper::FillValues_(Index n_entries, const SymTMatrix& matrix, Number* values)
+  void ParTripletHelper::FillValues_(Index n_entries, const Vector& vector, Number* values)
   {
-    DBG_ASSERT(n_entries == matrix.Nonzeros());
-    matrix.FillValues(values);
+    const Vector* vptr = &vector;
+    const ParVector* p_vec = dynamic_cast<const ParVector*>(vptr);
+    if (p_vec) {
+      DBG_ASSERT(n_entries == p_vec->LocalSize());
+      TripletHelper::FillValuesFromVector(n_entries, *p_vec->LocalVector(), values);
+      return;
+    }
+
+    const CompoundVector* cmpd_vec = dynamic_cast<const CompoundVector*>(vptr);
+    if (cmpd_vec) {
+      Index n_total_entries = 0;
+      Index n_comps = cmpd_vec->NComps();
+      for (int i=0; i<n_comps; i++) {
+	SmartPtr<const Vector> blk_vec = cmpd_vec->GetComp(i);
+	Index blk_n_entries = GetNumberEntries_(*blk_vec);
+	FillValues_(blk_n_entries, *blk_vec, values);
+	values += blk_n_entries;
+	n_total_entries += blk_n_entries;
+      }
+      DBG_ASSERT(n_total_entries == n_entries);
+      return;
+    }
+
+    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"Unknown vector type passed to ParTripletHelper::FillRowCol_(const Vector)");
   }
 
-  void TripletHelper::FillRowCol_(Index n_entries, const DiagMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  void ParTripletHelper::FillRowCol_(Index n_entries, const IdentityMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
-    DBG_ASSERT(n_entries == matrix.Dim());
+    Index start, end;
+    IdentityRange(matrix.Dim(), start, end);
+
+    DBG_ASSERT(n_entries == end-start);
+    row_offset += start;
+    col_offset += start;
     for (Index i=1; i<=n_entries; i++) {
       iRow[i] = i + row_offset;
       jCol[i] = i + col_offset;
     }
   }
 
-  void TripletHelper::FillValues_(Index n_entries, const DiagMatrix& matrix, Number* values)
+  void ParTripletHelper::FillValues_(Index n_entries, const IdentityMatrix& matrix, Number* values)
   {
-    DBG_ASSERT(n_entries == matrix.Dim());
-    SmartPtr<const Vector> v = matrix.GetDiag();
-    FillValuesFromVector(n_entries, *v, values);
-  }
+    Index start, end;
+    IdentityRange(matrix.Dim(), start, end);
 
-  void TripletHelper::FillRowCol_(Index n_entries, const IdentityMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
-  {
-    DBG_ASSERT(n_entries == matrix.Dim());
-    for (Index i=1; i<=n_entries; i++) {
-      iRow[i] = i + row_offset;
-      jCol[i] = i + col_offset;
-    }
-  }
-
-  void TripletHelper::FillValues_(Index n_entries, const IdentityMatrix& matrix, Number* values)
-  {
-    DBG_ASSERT(n_entries == matrix.Dim());
+    DBG_ASSERT(n_entries == end-start);
     Number factor = matrix.GetFactor();
     for (Index i=0; i<n_entries; i++) {
       values[i] = factor;
     }
   }
 
-  void TripletHelper::FillRowCol_(Index n_entries, const ExpansionMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  void ParTripletHelper::FillRowCol_(Index n_entries, const ParExpansionMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  {
+    DBG_ASSERT(n_entries == matrix.LocalMatrix()->NCols());
+    const Index* exp_pos = matrix.LocalMatrix()->ExpandedPosIndices();
+    row_offset += matrix.RowStartPos() + 1;
+    col_offset += matrix.ColStartPos() + 1;
+    for (Index i=0; i<n_entries; i++) {
+      iRow[i] = exp_pos[i] + row_offset;
+      jCol[i] = i + col_offset;
+    }
+  }
+
+  void ParTripletHelper::FillValues_(Index n_entries, const ParExpansionMatrix& matrix, Number* values)
+  {
+    DBG_ASSERT(n_entries == matrix.LocalMatrix()->NCols());
+    for (Index i=0; i<n_entries; i++) {
+      values[i] = 1.0;
+    }
+  }
+
+  void ParTripletHelper::FillRowCol_(Index n_entries, const ExpansionMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     DBG_ASSERT(n_entries == matrix.NCols());
     const Index* exp_pos = matrix.ExpandedPosIndices();
@@ -415,7 +549,7 @@ namespace Ipopt
     }
   }
 
-  void TripletHelper::FillValues_(Index n_entries, const ExpansionMatrix& matrix, Number* values)
+  void ParTripletHelper::FillValues_(Index n_entries, const ExpansionMatrix& matrix, Number* values)
   {
     DBG_ASSERT(n_entries == matrix.NCols());
     for (Index i=0; i<n_entries; i++) {
@@ -423,7 +557,7 @@ namespace Ipopt
     }
   }
 
-  void TripletHelper::FillRowCol_(Index n_entries, const SumMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  void ParTripletHelper::FillRowCol_(Index n_entries, const SumMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     Index total_n_entries = 0;
     for (Index i=0; i<matrix.NTerms(); i++) {
@@ -442,7 +576,7 @@ namespace Ipopt
     DBG_ASSERT(total_n_entries == n_entries);
   }
 
-  void TripletHelper::FillValues_(Index n_entries, const SumMatrix& matrix, Number* values)
+  void ParTripletHelper::FillValues_(Index n_entries, const SumMatrix& matrix, Number* values)
   {
     Index total_n_entries = 0;
     for (Index i=0; i<matrix.NTerms(); i++) {
@@ -463,7 +597,7 @@ namespace Ipopt
     DBG_ASSERT(total_n_entries == n_entries);
   }
 
-  void TripletHelper::FillRowCol_(Index n_entries, const SumSymMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  void ParTripletHelper::FillRowCol_(Index n_entries, const SumSymMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     Index total_n_entries = 0;
     for (Index i=0; i<matrix.NTerms(); i++) {
@@ -482,7 +616,7 @@ namespace Ipopt
     DBG_ASSERT(total_n_entries == n_entries);
   }
 
-  void TripletHelper::FillValues_(Index n_entries, const SumSymMatrix& matrix, Number* values)
+  void ParTripletHelper::FillValues_(Index n_entries, const SumSymMatrix& matrix, Number* values)
   {
     Index total_n_entries = 0;
     for (Index i=0; i<matrix.NTerms(); i++) {
@@ -511,7 +645,7 @@ namespace Ipopt
     DBG_ASSERT(total_n_entries == n_entries);
   }
 
-  void TripletHelper::FillRowCol_(Index n_entries, const CompoundMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  void ParTripletHelper::FillRowCol_(Index n_entries, const CompoundMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     Index total_n_entries = 0;
 
@@ -540,7 +674,7 @@ namespace Ipopt
     DBG_ASSERT(total_n_entries == n_entries);
   }
 
-  void TripletHelper::FillValues_(Index n_entries, const CompoundMatrix& matrix, Number* values)
+  void ParTripletHelper::FillValues_(Index n_entries, const CompoundMatrix& matrix, Number* values)
   {
     Index total_n_entries = 0;
 
@@ -561,7 +695,7 @@ namespace Ipopt
     DBG_ASSERT(total_n_entries == n_entries);
   }
 
-  void TripletHelper::FillRowCol_(Index n_entries, const CompoundSymMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  void ParTripletHelper::FillRowCol_(Index n_entries, const CompoundSymMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     Index total_n_entries = 0;
 
@@ -590,7 +724,7 @@ namespace Ipopt
     DBG_ASSERT(total_n_entries == n_entries);
   }
 
-  void TripletHelper::FillValues_(Index n_entries, const CompoundSymMatrix& matrix, Number* values)
+  void ParTripletHelper::FillValues_(Index n_entries, const CompoundSymMatrix& matrix, Number* values)
   {
     Index total_n_entries = 0;
 
@@ -611,156 +745,35 @@ namespace Ipopt
     DBG_ASSERT(total_n_entries == n_entries);
   }
 
-  void TripletHelper::FillValuesFromVector(Index dim, const Vector& vector, Number* values)
-  {
-    DBG_ASSERT(dim == vector.Dim());
-    const DenseVector* dv = dynamic_cast<const DenseVector*>(&vector);
-    if (dv) {
-      if (dv->IsHomogeneous()) {
-        Number scalar = dv->Scalar();
-        IpBlasDcopy(dim, &scalar, 0, values, 1);
-      }
-      else {
-        const Number* dv_vals = dv->Values();
-        IpBlasDcopy(dim, dv_vals, 1, values, 1);
-      }
-      return;
-    }
-
-    const CompoundVector* cv = dynamic_cast<const CompoundVector*>(&vector);
-    if (cv) {
-      Index ncomps = cv->NComps();
-      Index total_dim = 0;
-      for (Index i=0; i<ncomps; i++) {
-        SmartPtr<const Vector> comp = cv->GetComp(i);
-        Index comp_dim = comp->Dim();
-        FillValuesFromVector(comp_dim, *comp, values);
-        values += comp_dim;
-        total_dim += comp_dim;
-      }
-      DBG_ASSERT(total_dim == dim);
-      return;
-    }
-
-    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"Unknown vector type passed to TripletHelper::FillValues");
-  }
-
-  void TripletHelper::FillRowCol_(Index n_entries, const ScaledMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  void ParTripletHelper::FillRowCol_(Index n_entries, const ScaledMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, row_offset, col_offset);
   }
 
-  void TripletHelper::FillValues_(Index n_entries, const ScaledMatrix& matrix, Number* values)
+  void ParTripletHelper::FillValues_(Index n_entries, const ScaledMatrix& matrix, Number* values)
   {
-    // ToDo:
-    // This method can be made much more efficient for ScaledMatrix with GenTMatrix
-    // contained
-
-    // Get the matrix values
-    FillValues(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), values);
-
-    // Scale the values
-    // To Do : This assumes 1-base values (like the TMatrices)
-    Index* iRow = new Index[n_entries];
-    Index* jCol = new Index[n_entries];
-    FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, 0, 0);
-
-    if (IsValid(matrix.RowScaling())) {
-      Index n_rows = matrix.NRows();
-      Number* row_scaling = new Number[n_rows];
-      FillValuesFromVector(n_rows, *matrix.RowScaling(), row_scaling);
-      for (Index i=0; i<n_entries; i++) {
-        values[i] *= row_scaling[iRow[i]-1];
-      }
-      delete [] row_scaling;
-    }
-
-    if (IsValid(matrix.ColumnScaling())) {
-      Index n_cols = matrix.NCols();
-      Number* col_scaling = new Number[n_cols];
-      FillValuesFromVector(n_cols, *matrix.ColumnScaling(), col_scaling);
-      for (Index i=0; i<n_entries; i++) {
-        values[i] *= col_scaling[jCol[i]-1];
-      }
-      delete [] col_scaling;
-    }
-
-    delete [] iRow;
-    delete [] jCol;
+    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"ParTripletHelper::FillValues_ has not been implemented for ScaledMatrix");
   }
 
-  void TripletHelper::FillRowCol_(Index n_entries, const SymScaledMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  void ParTripletHelper::FillRowCol_(Index n_entries, const SymScaledMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, row_offset, col_offset);
   }
 
-  void TripletHelper::FillValues_(Index n_entries, const SymScaledMatrix& matrix, Number* values)
+  void ParTripletHelper::FillValues_(Index n_entries, const SymScaledMatrix& matrix, Number* values)
   {
-    // ToDo:
-    // This method can be made much more efficient for ScaledMatrix with SymTMatrix
-    // contained
-
-    // Get the matrix values
-    FillValues(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), values);
-
-    // Scale the values
-    // To Do : This assumes 1-base values (like the TMatrices)
-    Index* iRow = new Index[n_entries];
-    Index* jCol = new Index[n_entries];
-    FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, 0, 0);
-
-    if (IsValid(matrix.RowColScaling())) {
-      Index n_dim = matrix.NRows();
-      Number* scaling = new Number[n_dim];
-      FillValuesFromVector(n_dim, *matrix.RowColScaling(), scaling);
-      for (Index i=0; i<n_entries; i++) {
-        values[i] *= scaling[iRow[i]-1];
-        values[i] *= scaling[jCol[i]-1];
-      }
-      delete [] scaling;
-    }
-
-    delete [] iRow;
-    delete [] jCol;
+    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"ParTripletHelper::FillValues_ has not been implemented for SymScaledMatrix");
   }
 
-  void TripletHelper::FillRowCol_(Index n_entries, const TransposeMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  void ParTripletHelper::FillRowCol_(Index n_entries, const TransposeMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     FillRowCol(n_entries, *matrix.OrigMatrix(), jCol, iRow,
                col_offset, row_offset);
   }
 
-  void TripletHelper::FillValues_(Index n_entries, const TransposeMatrix& matrix, Number* values)
+  void ParTripletHelper::FillValues_(Index n_entries, const TransposeMatrix& matrix, Number* values)
   {
     FillValues(n_entries, *matrix.OrigMatrix(), values);
-  }
-
-  void TripletHelper::PutValuesInVector(Index dim, const double* values, Vector& vector)
-  {
-    DBG_ASSERT(dim == vector.Dim());
-    DenseVector* dv = dynamic_cast<DenseVector*>(&vector);
-    if (dv) {
-      Number* dv_vals = dv->Values();
-      IpBlasDcopy(dim, values, 1, dv_vals, 1);
-      return;
-    }
-
-    CompoundVector* cv = dynamic_cast<CompoundVector*>(&vector);
-    if (cv) {
-      Index ncomps = cv->NComps();
-      Index total_dim = 0;
-      for (Index i=0; i<ncomps; i++) {
-        SmartPtr<Vector> comp = cv->GetCompNonConst(i);
-        Index comp_dim = comp->Dim();
-        PutValuesInVector(comp_dim, values, *comp);
-        values += comp_dim;
-        total_dim += comp_dim;
-      }
-      DBG_ASSERT(total_dim == dim);
-      return;
-    }
-
-    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"Unknown vector type passed to TripletHelper::PutValuesInVector");
   }
 
 } // namespace Ipopt

@@ -39,7 +39,7 @@ namespace Ipopt
   {
     DBG_START_METH("ParVector::ParVector()", dbg_verbosity);
 
-    local_vector_ = owner_space_->getLocalSpace()->MakeNewDenseVector();
+    local_vector_ = owner_space_->LocalSpace()->MakeNewDenseVector();
   }
 
   ParVector::~ParVector()
@@ -265,7 +265,7 @@ namespace Ipopt
 
   SmartPtr<const DenseVector> ParVector::GlobalVector() const
   {
-    SmartPtr<DenseVector> globalv = owner_space_->getGlobalSpace()->MakeNewDenseVector();
+    SmartPtr<DenseVector> globalv = owner_space_->GlobalSpace()->MakeNewDenseVector();
 
     Number* global_vals = globalv->Values();
     const Number* local_vals = local_vector_->Values();
@@ -281,7 +281,7 @@ namespace Ipopt
 
   void ParVector::ExtractLocalVector(const DenseVector& global_vector)
   {
-    local_vector_->CopyFromPos(owner_space_->getStartPos(), global_vector);
+    local_vector_->CopyFromPos(owner_space_->StartPos(), global_vector);
     ObjectChanged();
   }
 

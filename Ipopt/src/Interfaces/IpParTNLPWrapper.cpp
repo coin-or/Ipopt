@@ -10,21 +10,21 @@
 
 using namespace Ipopt;
 
-void calculate_offsets (Index p, Index p_id, Index n, Index &n_first, Index &n_last)
+static void calculate_offsets (Index p, Index p_id, Index n, Index &n_first, Index &n_last)
 {
-  if (p > 1){
+  if (p > 1) {
     int np = n/p, np_rem = n - np*p;
 
-    if (p_id < np_rem){
+    if (p_id < np_rem) {
       np ++;
       n_first = p_id * np;
     }
     else
-      n_first = p_id * np + np_rem; 
+      n_first = p_id * np + np_rem;
 
     n_last = n_first + np-1;
   }
-  else{
+  else {
     n_first = 0;
     n_last = n-1;
   }
@@ -32,10 +32,10 @@ void calculate_offsets (Index p, Index p_id, Index n, Index &n_first, Index &n_l
 
 bool
 ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
-			     Index& n, Index& n_first, Index& n_last,
-			     Index& m, Index& m_first, Index& m_last,
-			     Index& nnz_jac_g_part, Index& nnz_h_lag_part,
-			     TNLP::IndexStyleEnum& index_style)
+                             Index& n, Index& n_first, Index& n_last,
+                             Index& m, Index& m_first, Index& m_last,
+                             Index& nnz_jac_g_part, Index& nnz_h_lag_part,
+                             TNLP::IndexStyleEnum& index_style)
 {
   Index nnz_jac_g, nnz_h_lag;
   bool rval = true;
@@ -43,7 +43,7 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
   rval = tnlpobj_->get_nlp_info(n, m, nnz_jac_g, nnz_h_lag, index_style);
   if (rval == false) return rval;
 
-  if (index_style != TNLP::C_STYLE){
+  if (index_style != TNLP::C_STYLE) {
     n --;
     m --;
   }
@@ -51,7 +51,7 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
   calculate_offsets (num_proc, proc_id, n, n_first, n_last);
   calculate_offsets (num_proc, proc_id, m, m_first, m_last);
 
-  if (index_style != TNLP::C_STYLE){
+  if (index_style != TNLP::C_STYLE) {
     n_first ++;
     n_last ++;
     m_first ++;
@@ -63,7 +63,7 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
   Index *iRow = new Index[nnz_jac_g];
   Index *jCol = new Index[nnz_jac_g];
 
-  if (num_proc > 1){
+  if (num_proc > 1) {
     int i, nz=0;
 
     tnlpobj_->eval_jac_g(n, NULL, true, m, nnz_jac_g, iRow, jCol, NULL);
@@ -80,7 +80,7 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
     nnz_h_lag_part = nz;
 
   }
-  else{
+  else {
     nnz_jac_g_part = nnz_jac_g;
     nnz_h_lag_part = nnz_h_lag;
   }
@@ -93,10 +93,10 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
 
 bool
 ParTNLPWrapper::get_bounds_info(Index num_proc, Index proc_id,
-				Index n, Index n_first, Index n_last,
-				Number* x_l_part, Number* x_u_part,
-				Index m, Index m_first, Index m_last,
-				Number* g_l_part, Number* g_u_part)
+                                Index n, Index n_first, Index n_last,
+                                Number* x_l_part, Number* x_u_part,
+                                Index m, Index m_first, Index m_last,
+                                Number* g_l_part, Number* g_u_part)
 {
   int i;
   Number *x_l=NULL, *x_u=NULL, *g_l=NULL, *g_u=NULL;
@@ -110,12 +110,12 @@ ParTNLPWrapper::get_bounds_info(Index num_proc, Index proc_id,
   rval = tnlpobj_->get_bounds_info(n, x_l, x_u, m, g_l, g_u);
   if (rval == false) return rval;
 
-  for (i=n_first; i<=n_last; i++){
+  for (i=n_first; i<=n_last; i++) {
     x_l_part[i-n_first] = x_l[i];
     x_u_part[i-n_first] = x_u[i];
   }
 
-  for (i=m_first; i<=m_last; i++){
+  for (i=m_first; i<=m_last; i++) {
     g_l_part[i-m_first] = g_l[i];
     g_u_part[i-m_first] = g_u[i];
   }
@@ -130,11 +130,11 @@ ParTNLPWrapper::get_bounds_info(Index num_proc, Index proc_id,
 
 bool
 ParTNLPWrapper::get_starting_point(Index num_proc, Index proc_id,
-				   Index n, Index n_first, Index n_last,
-				   bool init_x, Number* x_part,
-				   bool init_z, Number* z_L_part, Number* z_U_part,
-				   Index m, Index m_first, Index m_last,
-				   bool init_lambda, Number* lambda_part)
+                                   Index n, Index n_first, Index n_last,
+                                   bool init_x, Number* x_part,
+                                   bool init_z, Number* z_L_part, Number* z_U_part,
+                                   Index m, Index m_first, Index m_last,
+                                   bool init_lambda, Number* lambda_part)
 {
   int i;
   Number *x=NULL, *z_L=NULL, *z_U=NULL, *lam=NULL;
@@ -153,7 +153,7 @@ ParTNLPWrapper::get_starting_point(Index num_proc, Index proc_id,
       x_part[i-n_first] = x[i];
 
   if (init_z)
-    for (i=n_first; i<=n_last; i++){
+    for (i=n_first; i<=n_last; i++) {
       z_L_part[i-n_first] = z_L[i];
       z_U_part[i-n_first] = z_U[i];
     }
@@ -172,8 +172,8 @@ ParTNLPWrapper::get_starting_point(Index num_proc, Index proc_id,
 
 bool
 ParTNLPWrapper::eval_f(Index num_proc, Index proc_id,
-		       Index n, Index n_first, Index n_last,
-		       const Number* x, bool new_x, Number& obj_value)
+                       Index n, Index n_first, Index n_last,
+                       const Number* x, bool new_x, Number& obj_value)
 {
   if (proc_id == 0)
     return tnlpobj_->eval_f(n, x, new_x, obj_value);
@@ -185,9 +185,9 @@ ParTNLPWrapper::eval_f(Index num_proc, Index proc_id,
 
 bool
 ParTNLPWrapper::eval_grad_f(Index num_proc, Index proc_id,
-			    Index n,  Index n_first, Index n_last,
-			    const Number* x, bool new_x,
-			    Number* grad_f_part)
+                            Index n,  Index n_first, Index n_last,
+                            const Number* x, bool new_x,
+                            Number* grad_f_part)
 {
   int i;
   Number *gf=NULL;
@@ -208,9 +208,9 @@ ParTNLPWrapper::eval_grad_f(Index num_proc, Index proc_id,
 
 bool
 ParTNLPWrapper::eval_g(Index num_proc, Index proc_id,
-		       Index n, const Number* x, bool new_x,
-		       Index m, Index m_first, Index m_last,
-		       Number* g_part)
+                       Index n, const Number* x, bool new_x,
+                       Index m, Index m_first, Index m_last,
+                       Number* g_part)
 {
   int i;
   Number *g=NULL;
@@ -231,10 +231,10 @@ ParTNLPWrapper::eval_g(Index num_proc, Index proc_id,
 
 bool
 ParTNLPWrapper::eval_jac_g(Index num_proc, Index proc_id,
-			   Index n, const Number* x, bool new_x,
-			   Index m, Index m_first, Index m_last,
-			   Index nele_jac_part, Index* iRow_part,
-			   Index *jCol_part, Number* values_part)
+                           Index n, const Number* x, bool new_x,
+                           Index m, Index m_first, Index m_last,
+                           Index nele_jac_part, Index* iRow_part,
+                           Index *jCol_part, Number* values_part)
 {
   int i;
   TNLP::IndexStyleEnum index_style;
@@ -250,17 +250,17 @@ ParTNLPWrapper::eval_jac_g(Index num_proc, Index proc_id,
   rval = tnlpobj_->eval_jac_g(n, x, new_x, m, nnz_jac_g, iRow, jCol, NULL);
   if (rval == false) return rval;
 
-  if (values_part == NULL){
+  if (values_part == NULL) {
     int nz = 0;
     for (i=0; i<nnz_jac_g; i++)
-      if (iRow[i] >= m_first && iRow[i] <= m_last){
-	iRow_part[nz] = iRow[i];
-	jCol_part[nz] = jCol[i];
-	nz ++;
+      if (iRow[i] >= m_first && iRow[i] <= m_last) {
+        iRow_part[nz] = iRow[i];
+        jCol_part[nz] = jCol[i];
+        nz ++;
       }
     assert (nz == nele_jac_part);
   }
-  else{
+  else {
     Number *values = new Number[nnz_jac_g];
 
     rval = tnlpobj_->eval_jac_g(n, x, new_x, m, nnz_jac_g, iRow, jCol, values);
@@ -268,12 +268,12 @@ ParTNLPWrapper::eval_jac_g(Index num_proc, Index proc_id,
 
     int nz = 0;
     for (i=0; i<nnz_jac_g; i++)
-      if (iRow[i] >= m_first && iRow[i] <= m_last){
-	values_part[nz] = values[i];
-	nz ++;
+      if (iRow[i] >= m_first && iRow[i] <= m_last) {
+        values_part[nz] = values[i];
+        nz ++;
       }
     assert (nz == nele_jac_part);
-    
+
     delete [] values;
   }
 
@@ -285,13 +285,13 @@ ParTNLPWrapper::eval_jac_g(Index num_proc, Index proc_id,
 
 
 bool ParTNLPWrapper::eval_h(Index num_proc, Index proc_id,
-			    Index n, Index n_first, Index n_last,
-			    const Number* x, bool new_x, Number obj_factor,
-			    Index m, Index m_first, Index m_last,
-			    const Number* lambda,
-			    bool new_lambda, Index nele_hess_part,
-			    Index* iRow_part, Index* jCol_part,
-			    Number* values_part)
+                            Index n, Index n_first, Index n_last,
+                            const Number* x, bool new_x, Number obj_factor,
+                            Index m, Index m_first, Index m_last,
+                            const Number* lambda,
+                            bool new_lambda, Index nele_hess_part,
+                            Index* iRow_part, Index* jCol_part,
+                            Number* values_part)
 {
   int i;
   TNLP::IndexStyleEnum index_style;
@@ -307,17 +307,17 @@ bool ParTNLPWrapper::eval_h(Index num_proc, Index proc_id,
   rval = tnlpobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag, iRow, jCol, NULL);
   if (rval == false) return rval;
 
-  if (values_part == NULL){
+  if (values_part == NULL) {
     int nz = 0;
     for (i=0; i<nnz_h_lag; i++)
-      if (jCol[i] >= n_first && jCol[i] <= n_last){
-	iRow_part[nz] = iRow[i];
-	jCol_part[nz] = jCol[i];
-	nz ++;
+      if (jCol[i] >= n_first && jCol[i] <= n_last) {
+        iRow_part[nz] = iRow[i];
+        jCol_part[nz] = jCol[i];
+        nz ++;
       }
     assert (nz == nele_hess_part);
   }
-  else{
+  else {
     Number *values = new Number[nnz_h_lag];
 
     rval = tnlpobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag, iRow, jCol, values);
@@ -325,12 +325,12 @@ bool ParTNLPWrapper::eval_h(Index num_proc, Index proc_id,
 
     int nz = 0;
     for (i=0; i<nnz_h_lag; i++)
-      if (jCol[i] >= n_first && jCol[i] <= n_last){
-	values_part[nz] = values[i];
-	nz ++;
+      if (jCol[i] >= n_first && jCol[i] <= n_last) {
+        values_part[nz] = values[i];
+        nz ++;
       }
     assert (nz == nele_hess_part);
-    
+
     delete [] values;
   }
 
@@ -342,11 +342,11 @@ bool ParTNLPWrapper::eval_h(Index num_proc, Index proc_id,
 }
 
 void ParTNLPWrapper::finalize_solution(SolverReturn status,
-			 Index n, const Number* x, const Number* z_L, const Number* z_U,
-			 Index m, const Number* g, const Number* lambda,
-			 Number obj_value,
-			 const IpoptData* ip_data,
-			 IpoptCalculatedQuantities* ip_cq)
+                                       Index n, const Number* x, const Number* z_L, const Number* z_U,
+                                       Index m, const Number* g, const Number* lambda,
+                                       Number obj_value,
+                                       const IpoptData* ip_data,
+                                       IpoptCalculatedQuantities* ip_cq)
 {
   tnlpobj_->finalize_solution (status, n, x, z_L, z_U, m, g, lambda, obj_value, ip_data, ip_cq);
 }

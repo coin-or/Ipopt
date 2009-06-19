@@ -65,7 +65,8 @@ namespace Ipopt
     local_matrix_->MultVector(alpha, *dense_x, beta, *dense_y);
 
     Number *yvalues = dense_y->Values();
-    MPI_Allreduce(MPI_IN_PLACE, yvalues, NCols(), MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    MPI_Allreduce(MPI_IN_PLACE, yvalues, NCols(),
+		  MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
     par_y->ExtractLocalVector(*dense_y);
   }
@@ -73,9 +74,10 @@ namespace Ipopt
   bool ParSymMatrix::HasValidNumbersImpl() const
   {
     int valid = local_matrix_->HasValidNumbers();
-    MPI_Allreduce(MPI_IN_PLACE, &valid, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+    MPI_Allreduce(MPI_IN_PLACE, &valid, 1,
+		  MPI_INT, MPI_MIN, MPI_COMM_WORLD);
 
-    return valid;
+    return (bool)valid;
   }
 
   void ParSymMatrix::PrintImpl(const Journalist& jnlst,
@@ -94,7 +96,7 @@ namespace Ipopt
     snprintf (buffer, 255, "%s[%d]", name.c_str(), Rank());
     std::string myname = buffer;
     
-    local_matrix_->Print( jnlst, level, category, myname, indent+1, prefix);
+    local_matrix_->Print(jnlst, level, category, myname, indent+1, prefix);
   }
 
   ParSymMatrixSpace::ParSymMatrixSpace(Index dim, Index nonZeros, const Index* iRows,

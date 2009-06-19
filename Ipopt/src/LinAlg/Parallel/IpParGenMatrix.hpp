@@ -20,25 +20,30 @@ namespace Ipopt
   /* forward declarations */
   class ParGenMatrixSpace;
 
-  /** Class of parallel general matrices. A ParGenMatrix consists of a matrix whose
-   *  rows are partitioned across the universe of processors (assume n in number).
-   *  Each processor is responsible for its piece of the entire matrix,
-   *  and for manipulating this piece. All ParGenMatrix functions are assumed
-   *  to be executed simultaneously at each of the n processors. This class
-   *  does not support the functionality of a matrix being partitioned across
-   *  a subset of processors. Thus if the number of rows of the ParGenMatrix is less
-   *  than n, some processor (say k) will not have any rows of the matrix.
-   *  Yet a function to be executed on a ParGenMatrix must also be executed in
-   *  processor k. As an example, if the maximum element of a column of a ParGenMatrix
-   *  is to be computed, each processor finds the maximum element of its piece of
-   *  the column, and then uses MPI calls to find the global maximum.
+  /** Class of parallel general matrices. A ParGenMatrix consists of a
+   *  matrix whose rows are partitioned across the universe of
+   *  processors (assume n in number).  Each processor is responsible
+   *  for its piece of the entire matrix, and for manipulating this
+   *  piece. All ParGenMatrix functions are assumed to be executed
+   *  simultaneously at each of the n processors. This class does not
+   *  support the functionality of a matrix being partitioned across a
+   *  subset of processors. Thus if the number of rows of the
+   *  ParGenMatrix is less than n, some processor (say k) will not
+   *  have any rows of the matrix.  Yet a function to be executed on a
+   *  ParGenMatrix must also be executed in processor k. As an
+   *  example, if the maximum element of a column of a ParGenMatrix is
+   *  to be computed, each processor finds the maximum element of its
+   *  piece of the column, and then uses MPI calls to find the global
+   *  maximum.
    *
-   *  The rows of a ParGenMatrix have the same numbering convention as a GenTMatrix,
-   *  i.e., the rows are numbered from 1. A ParGenMatrix stores the piece of the matrix
-   *  on a processor as a GenTMatrix. Therefore the collection of row numbers on a 
-   *  processor need to be passed relative to the starting row number. For example,
-   *  if the part of the matrix in a processor consists of rows 15-20, then the row
-   *  numbers 15 - 20 should be specified as row 1, 2, .., 5.
+   *  The rows of a ParGenMatrix have the same numbering convention as
+   *  a GenTMatrix, i.e., the rows are numbered from 1. A ParGenMatrix
+   *  stores the piece of the matrix on a processor as a
+   *  GenTMatrix. Therefore the collection of row numbers on a
+   *  processor need to be passed relative to the starting row
+   *  number. For example, if the part of the matrix in a processor
+   *  consists of rows 15-20, then the row numbers 15 - 20 should be
+   *  specified as row 1, 2, .., 5.
    */
   class ParGenMatrix : public Matrix
   {
@@ -73,10 +78,17 @@ namespace Ipopt
       return GetRawPtr(local_matrix_);
     }
 
-    /* Extract the local part from a global matrix into the data of
-       this matrix. */
-    void ExtractLocalMatrix(const GenTMatrix& global_matrix);
+    /** Rank of the processor handling this vector */
+    int Rank() const;
 
+    /** Total number of processors. */
+    int NumProc() const;
+
+    /** number of rows of local matrix */
+    int LocalNRows() const;
+
+    /** get offset of rows in local matrix */
+    int RowStartPos() const;
     //@}
 
   protected:
@@ -124,15 +136,6 @@ namespace Ipopt
     void operator=(const ParGenMatrix&);
     //@}
 
-    /** Rank of the processor handling this vector */
-    int Rank() const;
-
-    /** Total number of processors. */
-    int NumProc() const;
-
-    /** number of rows of local matrix */
-    int LocalRows() const;
-
     /** Copy of the owner_space ptr as a ParGenMatrixSpace instead
      *  of a MatrixSpace
      */
@@ -158,7 +161,6 @@ namespace Ipopt
 		      Index nonZeros,
 		      const Index* iRows, const Index* jCols);
 
-
     /** Destructor */
     ~ParGenMatrixSpace()
     {}
@@ -177,19 +179,19 @@ namespace Ipopt
       return MakeNewParGenMatrix();
     }
 
-    SmartPtr<const ParVectorSpace> getRowVectorSpace() const
+    SmartPtr<const ParVectorSpace> RowVectorSpace() const
     {
       return rowVectorSpace_;
     }
 
-    SmartPtr<GenTMatrixSpace> getLocalSpace() const
+    SmartPtr<GenTMatrixSpace> LocalSpace() const
     {
       return local_space_;
     }
 
-    int getStartPos() const
+    int RowStartPos() const
     {
-      return rowVectorSpace_->getStartPos();
+      return rowVectorSpace_->StartPos();
     }
 
     const std::vector<int> & RecvCounts() const
@@ -202,7 +204,7 @@ namespace Ipopt
       return rowVectorSpace_->Displs();
     }
 
-    int LocalRows() const
+    int LocalNRows() const
     {
       return rowVectorSpace_->LocalSize();
     }
@@ -241,9 +243,15 @@ namespace Ipopt
   }
 
   inline
-  int ParGenMatrix::LocalRows() const
+  int ParGenMatrix::LocalNRows() const
   {
-    return owner_space_->LocalRows();
+    return owner_space_->LocalNRows();
+  }
+
+  inline
+  int ParGenMatrix::RowStartPos() const
+  {
+    return owner_space_->RowStartPos();
   }
 
 } // namespace Ipopt

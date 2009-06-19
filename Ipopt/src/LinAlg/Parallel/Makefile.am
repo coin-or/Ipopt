@@ -17,6 +17,7 @@ liblinalgpar_la_SOURCES = \
 	IpParExpansionMatrix.cpp IpParExpansionMatrix.hpp \
 	IpParGenMatrix.cpp IpParGenMatrix.hpp \
 	IpParSymMatrix.cpp IpSymGenMatrix.hpp \
+	IpParTripletHelper.cpp IpParTripletHelper.hpp \
 	IpParVector.cpp IpParVector.hpp
 
 liblinalgpar_la_LDFLAGS = $(LT_LDFLAGS)
@@ -35,6 +36,7 @@ ASTYLE_FILES = \
 	IpParExpansionMatrix.cppbak IpParExpansionMatrix.hppbak \
 	IpParGenMatrix.cppbak IpParGenMatrix.hppbak \
 	IpParSymMatrix.cppbak IpSymGenMatrix.hppbak \
+	IpParTripletHelper.cppbak IpParTripletHelper.hppbak \
 	IpParVector.cppbak IpParVector.hppbak
 
 ASTYLE = @ASTYLE@

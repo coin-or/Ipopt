@@ -515,17 +515,17 @@ namespace Ipopt
         new ParVectorSpace(n_x_var, sp_x_var, n_part_x_var);
       x_space_ = GetRawPtr(pv_x_space);
       SmartPtr<DenseVectorSpace> dv_x_space =
-        pv_x_space->getLocalSpace();
+        pv_x_space->LocalSpace();
       SmartPtr<ParVectorSpace> pv_x_l_space =
         new ParVectorSpace(n_x_l, sp_x_l, n_part_x_l);
       x_l_space_ = GetRawPtr(pv_x_l_space);
       SmartPtr<DenseVectorSpace> dv_x_l_space =
-        pv_x_l_space->getLocalSpace();
+        pv_x_l_space->LocalSpace();
       SmartPtr<ParVectorSpace> pv_x_u_space =
         new ParVectorSpace(n_x_u, sp_x_u, n_part_x_u);
       x_u_space_ = GetRawPtr(pv_x_u_space);
       SmartPtr<DenseVectorSpace> dv_x_u_space =
-        pv_x_u_space->getLocalSpace();
+        pv_x_u_space->LocalSpace();
 
       // This one is only for convenience for MPI communication
       pv_full_x_space_ =
@@ -574,7 +574,7 @@ namespace Ipopt
 
           string_md.clear();
           string_md.resize(n_part_x_l);
-          pos_idx = P_x_x_L_space_->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_x_x_L_space_->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_x_l; i++) {
             string_md[i] = iter->second[pos_idx[i]];
           }
@@ -582,7 +582,7 @@ namespace Ipopt
 
           string_md.clear();
           string_md.resize(n_part_x_u);
-          pos_idx = P_x_x_U_space_->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_x_x_U_space_->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_x_u; i++) {
             string_md[i] = iter->second[pos_idx[i]];
           }
@@ -610,7 +610,7 @@ namespace Ipopt
 
           integer_md.clear();
           integer_md.resize(n_part_x_l);
-          pos_idx = P_x_x_L_space_->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_x_x_L_space_->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_x_l; i++) {
             integer_md[i] = iter->second[pos_idx[i]];
           }
@@ -618,7 +618,7 @@ namespace Ipopt
 
           integer_md.clear();
           integer_md.resize(n_part_x_u);
-          pos_idx = P_x_x_U_space_->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_x_x_U_space_->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_x_u; i++) {
             integer_md[i] = iter->second[pos_idx[i]];
           }
@@ -646,7 +646,7 @@ namespace Ipopt
 
           numeric_md.clear();
           numeric_md.resize(n_part_x_l);
-          pos_idx = P_x_x_L_space_->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_x_x_L_space_->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_x_l; i++) {
             numeric_md[i] = iter->second[pos_idx[i]];
           }
@@ -654,7 +654,7 @@ namespace Ipopt
 
           numeric_md.clear();
           numeric_md.resize(n_part_x_u);
-          pos_idx = P_x_x_U_space_->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_x_x_U_space_->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_x_u; i++) {
             numeric_md[i] = iter->second[pos_idx[i]];
           }
@@ -680,7 +680,7 @@ namespace Ipopt
       c_space_ = GetRawPtr(pv_c_space);
       c_rhs_part_ = new Number[n_part_c];
       SmartPtr<DenseVectorSpace> dv_c_space =
-        pv_c_space->getLocalSpace();
+        pv_c_space->LocalSpace();
       // create the internal expansion matrix for c to g
       P_c_g_space_ =
         new ExpansionMatrixSpace(n_part_g_, n_part_c_no_fixed, c_part_map);
@@ -693,7 +693,7 @@ namespace Ipopt
         new ParVectorSpace(n_d, sp_d, n_part_d);
       d_space_ = GetRawPtr(pv_d_space);
       SmartPtr<DenseVectorSpace> dv_d_space =
-        pv_d_space->getLocalSpace();
+        pv_d_space->LocalSpace();
       // create the internal expansion matrix for d to g
       P_d_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_part_d, d_part_map);
       P_d_g_ = P_d_g_space_->MakeNewExpansionMatrix();
@@ -705,7 +705,7 @@ namespace Ipopt
         new ParVectorSpace(n_d_l, sp_d_l, n_part_d_l);
       d_l_space_ = GetRawPtr(pv_d_l_space);
       SmartPtr<DenseVectorSpace> dv_d_l_space =
-        pv_d_l_space->getLocalSpace();
+        pv_d_l_space->LocalSpace();
       // create the required expansion matrix for d_L to d_L_exp
       SmartPtr<ParExpansionMatrixSpace> P_d_l_space =
         new ParExpansionMatrixSpace(ConstPtr(pv_d_space),
@@ -719,7 +719,7 @@ namespace Ipopt
         new ParVectorSpace(n_d_u, sp_d_u, n_part_d_u);
       d_u_space_ = GetRawPtr(pv_d_u_space);
       SmartPtr<DenseVectorSpace> dv_d_u_space =
-        pv_d_u_space->getLocalSpace();
+        pv_d_u_space->LocalSpace();
       // create the required expansion matrix for d_u to d_U_exp
       SmartPtr<ParExpansionMatrixSpace> P_d_u_space =
         new ParExpansionMatrixSpace(ConstPtr(pv_d_space),
@@ -749,7 +749,7 @@ namespace Ipopt
 
           string_md.clear();
           string_md.resize(n_part_d_l);
-          pos_idx = P_d_l_space->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_d_l_space->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_d_l; i++) {
             string_md[i] = iter->second[pos_idx[i]];
           }
@@ -757,7 +757,7 @@ namespace Ipopt
 
           string_md.clear();
           string_md.resize(n_part_d_u);
-          pos_idx = P_d_u_space->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_d_u_space->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_d_u; i++) {
             string_md[i] = iter->second[pos_idx[i]];
           }
@@ -785,7 +785,7 @@ namespace Ipopt
 
           integer_md.clear();
           integer_md.resize(n_part_d_l);
-          pos_idx = P_d_l_space->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_d_l_space->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_d_l; i++) {
             integer_md[i] = iter->second[pos_idx[i]];
           }
@@ -793,7 +793,7 @@ namespace Ipopt
 
           integer_md.clear();
           integer_md.resize(n_part_d_u);
-          pos_idx = P_d_u_space->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_d_u_space->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_d_u; i++) {
             integer_md[i] = iter->second[pos_idx[i]];
           }
@@ -821,7 +821,7 @@ namespace Ipopt
 
           numeric_md.clear();
           numeric_md.resize(n_part_d_l);
-          pos_idx = P_d_l_space->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_d_l_space->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_d_l; i++) {
             numeric_md[i] = iter->second[pos_idx[i]];
           }
@@ -829,7 +829,7 @@ namespace Ipopt
 
           numeric_md.clear();
           numeric_md.resize(n_part_d_u);
-          pos_idx = P_d_u_space->getLocalSpace()->ExpandedPosIndices();
+          pos_idx = P_d_u_space->LocalSpace()->ExpandedPosIndices();
           for (Index i=0; i<n_part_d_u; i++) {
             numeric_md[i] = iter->second[pos_idx[i]];
           }

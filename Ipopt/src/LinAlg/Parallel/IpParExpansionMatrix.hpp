@@ -65,6 +65,13 @@ namespace Ipopt
       return GetRawPtr(local_matrix_);
     }
 
+    /** Offset of row indices for local part */
+    Index RowStartPos() const;
+
+    /** Offset of column indices for local part */
+    Index ColStartPos() const;
+    //@}
+
   protected:
     /**@name Overloaded methods from Matrix base class*/
     //@{
@@ -124,7 +131,6 @@ namespace Ipopt
      *  of a MatrixSpace
      */
     const ParExpansionMatrixSpace* owner_space_;
-
   };
 
   /** This is the matrix space for ParExpansionMatrix.
@@ -161,14 +167,36 @@ namespace Ipopt
       return MakeNewParExpansionMatrix();
     }
 
-    SmartPtr<ExpansionMatrixSpace> getLocalSpace() const
+    SmartPtr<ExpansionMatrixSpace> LocalSpace() const
     {
       return local_space_;
     }
 
+    SmartPtr<const ParVectorSpace> LargeVectorSpace() const
+    {
+      return large_vector_space_;
+    }
+
+    SmartPtr<const ParVectorSpace> SmallVectorSpace() const
+    {
+      return small_vector_space_;
+    }
+
   private:
     SmartPtr<ExpansionMatrixSpace> local_space_;
+    SmartPtr<const ParVectorSpace> large_vector_space_;
+    SmartPtr<const ParVectorSpace> small_vector_space_;
   };
+
+  inline Index ParExpansionMatrix::RowStartPos() const
+  {
+    return owner_space_->LargeVectorSpace()->StartPos();
+  }
+
+  inline Index ParExpansionMatrix::ColStartPos() const
+  {
+    return owner_space_->SmallVectorSpace()->StartPos();
+  }
 
 } // namespace Ipopt
 #endif

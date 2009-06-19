@@ -65,6 +65,12 @@ namespace Ipopt
     {
       return GetRawPtr(local_matrix_);
     }
+
+    /** Rank of the processor handling this vector */
+    int Rank() const;
+
+    /** Total number of processors. */
+    int NumProc() const;
     //@}
 
   protected:
@@ -122,12 +128,6 @@ namespace Ipopt
      *  of a MatrixSpace
      */
     const ParSymMatrixSpace* owner_space_;
-
-    /** Rank of the processor handling this vector */
-    int Rank() const;
-
-    /** Total number of processors. */
-    int NumProc() const;
 
     Index Nonzeros() const;
 

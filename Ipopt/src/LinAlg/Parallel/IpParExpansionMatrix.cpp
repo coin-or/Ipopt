@@ -23,7 +23,7 @@ namespace Ipopt
   {
     DBG_START_METH("ParGenMatrix::ParGenMatrix()", dbg_verbosity);
 
-    local_matrix_ = owner_space_->getLocalSpace()->MakeNewExpansionMatrix();
+    local_matrix_ = owner_space_->LocalSpace()->MakeNewExpansionMatrix();
   }
 
   ParExpansionMatrix::~ParExpansionMatrix()
@@ -39,6 +39,8 @@ namespace Ipopt
     ParVector* par_y = static_cast<ParVector*>(&y);
     DBG_ASSERT(dynamic_cast<ParVector*>(&y));
 
+    local_matrix_->MultVector(alpha, *par_x->LocalVector(),
+			      beta, *par_y->LocalVector());
   }
 
   void ParExpansionMatrix::TransMultVectorImpl(Number alpha, const Vector &x,
@@ -49,6 +51,8 @@ namespace Ipopt
     ParVector* par_y = static_cast<ParVector*>(&y);
     DBG_ASSERT(dynamic_cast<ParVector*>(&y));
 
+    local_matrix_->TransMultVector(alpha, *par_x->LocalVector(),
+				   beta, *par_y->LocalVector());
   }
 
   // Specialized method (overloaded from IpMatrix)
@@ -61,11 +65,14 @@ namespace Ipopt
     DBG_ASSERT(dynamic_cast<const ParVector*>(&Z));
     ParVector* par_X = static_cast<ParVector*>(&X);
     DBG_ASSERT(dynamic_cast<ParVector*>(&X));
+
+    local_matrix_->AddMSinvZ(alpha, *par_S->LocalVector(),
+			     *par_Z->LocalVector(), *par_X->LocalVector());
   }
 
   void ParExpansionMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
-      const Vector& R, const Vector& Z,
-      const Vector& D, Vector& X) const
+					      const Vector& R, const Vector& Z,
+					      const Vector& D, Vector& X) const
   {
     DBG_START_METH("ParExpansionMatrix::SinvBlrmZMTdBrImpl", dbg_verbosity);
 
@@ -80,18 +87,25 @@ namespace Ipopt
     ParVector* par_X = static_cast<ParVector*>(&X);
     DBG_ASSERT(dynamic_cast<ParVector*>(&X));
 
+    local_matrix_->SinvBlrmZMTdBr(alpha, *par_S->LocalVector(),
+				  *par_R->LocalVector(), *par_Z->LocalVector(),
+				  *par_D->LocalVector(), *par_X->LocalVector());
   }
 
   void ParExpansionMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
   {
     ParVector* par_vec = static_cast<ParVector*>(&rows_norms);
     DBG_ASSERT(dynamic_cast<ParVector*>(&rows_norms));
-    Number* vec_vals=par_vec->LocalVector()->Values();
 
+    local_matrix_->ComputeRowAMax(*par_vec->LocalVector(), init);
   }
 
   void ParExpansionMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
   {
+    ParVector* par_vec = static_cast<ParVector*>(&cols_norms);
+    DBG_ASSERT(dynamic_cast<ParVector*>(&cols_norms));
+
+    local_matrix_->ComputeColAMax(*par_vec->LocalVector(), init);
   }
 
   void ParExpansionMatrix::PrintImpl(const Journalist& jnlst,
@@ -101,30 +115,33 @@ namespace Ipopt
                                   Index indent,
                                   const std::string& prefix) const
   {
-    jnlst.Printf(level, category, "\n");
-    jnlst.PrintfIndented(level, category, indent,
-                         "%sParExpansionMatrix \"%s\" with %d rows and %d columns:\n",
-                         prefix.c_str(), name.c_str(), NRows(), NCols());
-
-    for (Index i=0; i<NCols(); i++) {
+    const int rank = owner_space_->SmallVectorSpace()->Rank();
+    if (rank == 0){
       jnlst.PrintfIndented(level, category, indent,
-                           "%s%s[%5d,%5d]=%23.16e  (%d)\n",
-                           prefix.c_str(), name.c_str(), /*exp_pos[i]+*/1,
-                           i+1, 1., i);
+			   "%sParExpansionMatrix \"%s\"\n",
+			   prefix.c_str(), name.c_str());
     }
+
+    char buffer[256];
+    snprintf (buffer, 255, "%s[%d]", name.c_str(), rank);
+    std::string myname = buffer;
+
+    local_matrix_->Print(jnlst, level, category, myname, indent+1, prefix);
   }
 
-  ParExpansionMatrixSpace::ParExpansionMatrixSpace(SmartPtr<const ParVectorSpace> LargeVectorSpace, 
-						   SmartPtr<const ParVectorSpace> SmallVectorSpace, 
-						   const Index *ExpPos,
+  ParExpansionMatrixSpace::
+  ParExpansionMatrixSpace(SmartPtr<const ParVectorSpace> LargeVectorSpace, 
+			  SmartPtr<const ParVectorSpace> SmallVectorSpace, 
+			  const Index *ExpPos,
 			  const int offset)
     :
-    MatrixSpace(LargeVectorSpace->LocalSize(), SmallVectorSpace->LocalSize())
+    MatrixSpace(LargeVectorSpace->LocalSize(), SmallVectorSpace->LocalSize()),
+    large_vector_space_(LargeVectorSpace),
+    small_vector_space_(SmallVectorSpace)
   {
     local_space_ = new ExpansionMatrixSpace(LargeVectorSpace->LocalSize(),
 					    SmallVectorSpace->LocalSize(),
 					    ExpPos, offset);
-
   }
 
 } // namespace Ipopt

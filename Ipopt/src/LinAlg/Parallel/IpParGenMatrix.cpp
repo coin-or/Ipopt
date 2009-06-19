@@ -41,7 +41,7 @@ namespace Ipopt
   {
     DBG_START_METH("ParGenMatrix::ParGenMatrix()", dbg_verbosity);
 
-    local_matrix_ = owner_space_->getLocalSpace()->MakeNewGenTMatrix();
+    local_matrix_ = owner_space_->LocalSpace()->MakeNewGenTMatrix();
   }
 
   ParGenMatrix::~ParGenMatrix()
@@ -67,7 +67,7 @@ namespace Ipopt
 
   // assume x is parallel, and y is parallel
   void ParGenMatrix::TransMultVectorImpl(Number alpha, const Vector &x,
-      Number beta, Vector &y) const
+					 Number beta, Vector &y) const
   {
     const ParVector* par_x = static_cast<const ParVector*>(&x);
     DBG_ASSERT(dynamic_cast<const ParVector*>(&x));
@@ -82,7 +82,8 @@ namespace Ipopt
 
     // CAN THIS be more efficient?
     Number *yvalues = dense_y->Values();
-    MPI_Allreduce(MPI_IN_PLACE, yvalues, NCols(), MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    MPI_Allreduce(MPI_IN_PLACE, yvalues, NCols(),
+		  MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
     par_y->ExtractLocalVector(*dense_y);    
   }
@@ -100,12 +101,16 @@ namespace Ipopt
   {
     DBG_ASSERT(dynamic_cast<DenseVector*>(&cols_norms));
 
+    throw("ParGenMatrix::ComputeColAMaxImpl not properly implemented");
+    // This will crash in the GenTMatrix, because cols_norms is not a
+    // DenseVector
     local_matrix_->ComputeColAMax(cols_norms, init);
 
     DenseVector* dense_vec = static_cast<DenseVector*>(&cols_norms);
     Number* vec_vals=dense_vec->Values();
 
-    MPI_Allreduce(MPI_IN_PLACE, vec_vals, NCols(), MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+    MPI_Allreduce(MPI_IN_PLACE, vec_vals, NCols(),
+		  MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
   }
 
   bool ParGenMatrix::HasValidNumbersImpl() const
@@ -113,7 +118,7 @@ namespace Ipopt
     int valid = local_matrix_->HasValidNumbers();
     MPI_Allreduce(MPI_IN_PLACE, &valid, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
 
-    return valid;
+    return (bool)valid;
   }
 
   void ParGenMatrix::PrintImpl(const Journalist& jnlst,
@@ -132,7 +137,7 @@ namespace Ipopt
     snprintf (buffer, 255, "%s[%d]", name.c_str(), Rank());
     std::string myname = buffer;
     
-    local_matrix_->Print( jnlst, level, category, myname, indent+1, prefix);
+    local_matrix_->Print(jnlst, level, category, myname, indent+1, prefix);
   }
 
   ParGenMatrixSpace::ParGenMatrixSpace(SmartPtr<const ParVectorSpace> RowVectorSpace, Index nCols,
@@ -142,7 +147,8 @@ namespace Ipopt
     MatrixSpace(RowVectorSpace->Dim(), nCols),
     rowVectorSpace_(RowVectorSpace)
   {
-    local_space_ = new GenTMatrixSpace(rowVectorSpace_->LocalSize(), nCols, nonZeros, iRows, jCols);
+    local_space_ = new GenTMatrixSpace(rowVectorSpace_->LocalSize(),
+				       nCols, nonZeros, iRows, jCols);
   }
 
 } // namespace Ipopt

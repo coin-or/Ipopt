@@ -82,6 +82,17 @@ namespace Ipopt
        this vector. */
     void ExtractLocalVector(const DenseVector& global_vector);
 
+    /** Rank of the processor handling this vector */
+    int Rank() const;
+
+    /** Total number of processors. */
+    int NumProc() const;
+
+    /** Offset of local vector */
+    int StartPos() const;
+
+    /** Size of local vector */
+    int LocalSize() const;
     //@}
 
   protected:
@@ -196,15 +207,6 @@ namespace Ipopt
     void operator=(const ParVector&);
     //@}
 
-    /** Rank of the processor handling this vector */
-    int Rank() const;
-
-    /** Total number of processors. */
-    int NumProc() const;
-
-    /** Size of local vector */
-    int LocalSize() const;
-
     /** Copy of the owner_space ptr as a ParVectorSpace instead
      *  of a VectorSpace
      */
@@ -252,17 +254,17 @@ namespace Ipopt
       return MakeNewParVector();
     }
 
-    SmartPtr<DenseVectorSpace> getLocalSpace() const
+    SmartPtr<DenseVectorSpace> LocalSpace() const
     {
       return local_space_;
     }
 
-    SmartPtr<DenseVectorSpace> getGlobalSpace() const
+    SmartPtr<DenseVectorSpace> GlobalSpace() const
     {
       return global_space_;
     }
 
-    int getStartPos() const
+    int StartPos() const
     {
       return start_pos_;
     }
@@ -325,6 +327,12 @@ namespace Ipopt
   int ParVector::NumProc() const
   {
     return owner_space_->NumProc();
+  }
+
+  inline
+  int ParVector::StartPos() const
+  {
+    return owner_space_->StartPos();
   }
 
   inline
