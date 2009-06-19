@@ -43,7 +43,8 @@ if HAVE_MPI
   includeipopt_HEADERS += IpParTNLP.hpp
   libipopt_la_SOURCES += \
 	IpParTNLP.hpp \
-	IpParTNLPAdapter.cpp IpParTNLPAdapter.hpp
+	IpParTNLPAdapter.cpp IpParTNLPAdapter.hpp \
+	IpParTNLPWrapper.cpp IpParTNLPWrapper.hpp
 endif
 
 libipopt_la_LIBADD = $(IPALLLIBS)
@@ -93,6 +94,7 @@ ASTYLE_FILES = \
 	IpNLP.hppbak \
 	IpParTNLP.hppbak \
 	IpParTNLPAdapter.cppbak IpParTNLPAdapter.hppbak \
+	IpParTNLPWrapper.cppbak IpParTNLPWrapper.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \

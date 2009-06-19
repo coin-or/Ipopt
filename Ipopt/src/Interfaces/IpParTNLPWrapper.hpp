@@ -32,7 +32,9 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     ParTNLPWrapper(SmartPtr<TNLP> tnlpobj)
-    { tnlpobj_ = tnlpobj; }
+    {
+      tnlpobj_ = tnlpobj;
+    }
 
     /** Default destructor */
     ~ParTNLPWrapper()
@@ -43,54 +45,54 @@ namespace Ipopt
 
     /**@name methods to gather information about the NLP */
     virtual bool get_nlp_info(Index num_proc, Index proc_id,
-			      Index& n, Index& n_first, Index& n_last,
-			      Index& m, Index& m_first, Index& m_last,
-			      Index& nnz_jac_g_part, Index& nnz_h_lag_part,
-			      TNLP::IndexStyleEnum& index_style);
+                              Index& n, Index& n_first, Index& n_last,
+                              Index& m, Index& m_first, Index& m_last,
+                              Index& nnz_jac_g_part, Index& nnz_h_lag_part,
+                              TNLP::IndexStyleEnum& index_style);
 
     virtual bool get_bounds_info(Index num_proc, Index proc_id,
-				 Index n, Index n_first, Index n_last,
-				 Number* x_l_part, Number* x_u_part,
-				 Index m, Index m_first, Index m_last,
+                                 Index n, Index n_first, Index n_last,
+                                 Number* x_l_part, Number* x_u_part,
+                                 Index m, Index m_first, Index m_last,
                                  Number* g_l_part, Number* g_u_part);
 
     virtual bool
     get_starting_point(Index num_proc, Index proc_id,
-		       Index n, Index n_first, Index n_last,
-		       bool init_x, Number* x_part,
-		       bool init_z, Number* z_L_part, Number* z_U_part,
-		       Index m, Index m_first, Index m_last,
-		       bool init_lambda, Number* lambda_part);
+                       Index n, Index n_first, Index n_last,
+                       bool init_x, Number* x_part,
+                       bool init_z, Number* z_L_part, Number* z_U_part,
+                       Index m, Index m_first, Index m_last,
+                       bool init_lambda, Number* lambda_part);
 
     virtual bool eval_f(Index num_proc, Index proc_id,
-			Index n, Index n_first, Index n_last,
-			const Number* x, bool new_x, Number& obj_value);
+                        Index n, Index n_first, Index n_last,
+                        const Number* x, bool new_x, Number& obj_value);
 
     virtual bool eval_grad_f(Index num_proc, Index proc_id,
-			     Index n,  Index n_first, Index n_last,
-			     const Number* x, bool new_x,
-			     Number* grad_f_part);
+                             Index n,  Index n_first, Index n_last,
+                             const Number* x, bool new_x,
+                             Number* grad_f_part);
 
     virtual bool eval_g(Index num_proc, Index proc_id,
-			Index n, const Number* x, bool new_x,
+                        Index n, const Number* x, bool new_x,
                         Index m, Index m_first, Index m_last,
-			Number* g_part);
+                        Number* g_part);
 
     virtual bool eval_jac_g(Index num_proc, Index proc_id,
-			    Index n, const Number* x, bool new_x,
+                            Index n, const Number* x, bool new_x,
                             Index m, Index m_first, Index m_last,
-			    Index nele_jac_part, Index* iRow_part,
-			    Index *jCol_part, Number* values_part);
+                            Index nele_jac_part, Index* iRow_part,
+                            Index *jCol_part, Number* values_part);
 
 
     virtual bool eval_h(Index num_proc, Index proc_id,
-			Index n, Index n_first, Index n_last,
-			const Number* x, bool new_x, Number obj_factor,
-			Index m, Index m_first, Index m_last,
-			const Number* lambda,
+                        Index n, Index n_first, Index n_last,
+                        const Number* x, bool new_x, Number obj_factor,
+                        Index m, Index m_first, Index m_last,
+                        const Number* lambda,
                         bool new_lambda, Index nele_hess_part,
                         Index* iRow_part, Index* jCol_part,
-			Number* values_part);
+                        Number* values_part);
 
     //@}
 

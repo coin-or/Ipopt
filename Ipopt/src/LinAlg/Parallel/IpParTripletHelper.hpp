@@ -1,13 +1,14 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
+// Authors:  Andreas Waechter, Sanjeeb Dash     IBM    2009-06-17
+//             (based on IpTripletHelper.hpp rev 1312)
 
-#ifndef __IPTRIPLETHELPER_HPP__
-#define __IPTRIPLETHELPER_HPP__
+#ifndef __IPPARTRIPLETHELPER_HPP__
+#define __IPPARTRIPLETHELPER_HPP__
 
 #include "IpTypes.hpp"
 #include "IpException.hpp"
@@ -15,16 +16,14 @@
 namespace Ipopt
 {
 
-  DECLARE_STD_EXCEPTION(UNKNOWN_MATRIX_TYPE);
-  DECLARE_STD_EXCEPTION(UNKNOWN_VECTOR_TYPE);
-
   /** forward declarations */
   class Matrix;
-  class GenTMatrix;
-  class SymTMatrix;
+  class ParGenMatrix;
+  class ParSymMatrix;
   class DiagMatrix;
   class IdentityMatrix;
   class ExpansionMatrix;
+  class ParExpansionMatrix;
   class ScaledMatrix;
   class SymScaledMatrix;
   class SumMatrix;
@@ -35,7 +34,7 @@ namespace Ipopt
   class TransposeMatrix;
   class Vector;
 
-  class TripletHelper
+  class ParTripletHelper
   {
   public:
     /**@name A set of recursive routines that help with the Triplet format. */
@@ -48,12 +47,6 @@ namespace Ipopt
 
     /** fill the values for the triplet format from the matrix */
     static void FillValues(Index n_entries, const Matrix& matrix, Number* values);
-
-    /** fill the values from the vector into a dense double* structure */
-    static void FillValuesFromVector(Index dim, const Vector& vector, Number* values);
-
-    /** put the values from the double* back into the vector */
-    static void PutValuesInVector(Index dim, const double* values, Vector& vector);
     //@}
 
   private:
@@ -69,16 +62,16 @@ namespace Ipopt
     /** find the total number of triplet entries for the CompoundSymMatrix */
     static Index GetNumberEntries_(const CompoundSymMatrix& matrix);
 
-    /** find the total number of triplet entries for the TransposeMatrix */
-    static Index GetNumberEntries_(const TransposeMatrix& matrix);
+    /** find the totel number of triplet entires induced by Vector */
+    static Index GetNumberEntries_(const Vector& vector);
 
-    static void FillRowCol_(Index n_entries, const GenTMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
+    static void FillRowCol_(Index n_entries, const ParGenMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
 
-    static void FillValues_(Index n_entries, const GenTMatrix& matrix, Number* values);
+    static void FillValues_(Index n_entries, const ParGenMatrix& matrix, Number* values);
 
-    static void FillRowCol_(Index n_entries, const SymTMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
+    static void FillRowCol_(Index n_entries, const ParSymMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
 
-    static void FillValues_(Index n_entries, const SymTMatrix& matrix, Number* values);
+    static void FillValues_(Index n_entries, const ParSymMatrix& matrix, Number* values);
 
     static void FillRowCol_(Index n_entries, const DiagMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
 
@@ -88,9 +81,17 @@ namespace Ipopt
 
     static void FillValues_(Index n_entries, const IdentityMatrix& matrix, Number* values);
 
+    static void FillRowCol_(Index n_entries, const ParExpansionMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
+
+    static void FillValues_(Index n_entries, const ParExpansionMatrix& matrix, Number* values);
+
     static void FillRowCol_(Index n_entries, const ExpansionMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
 
     static void FillValues_(Index n_entries, const ExpansionMatrix& matrix, Number* values);
+
+    static void FillRowCol_(Index n_entries, const Vector& vector, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
+
+    static void FillValues_(Index n_entries, const Vector& vector, Number* values);
 
     static void FillRowCol_(Index n_entries, const SumMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
 

@@ -46,7 +46,8 @@ host_triplet = @host@
 @HAVE_MPI_TRUE@am__append_1 = IpParTNLP.hpp
 @HAVE_MPI_TRUE@am__append_2 = \
 @HAVE_MPI_TRUE@	IpParTNLP.hpp \
-@HAVE_MPI_TRUE@	IpParTNLPAdapter.cpp IpParTNLPAdapter.hpp
+@HAVE_MPI_TRUE@	IpParTNLPAdapter.cpp IpParTNLPAdapter.hpp \
+@HAVE_MPI_TRUE@	IpParTNLPWrapper.cpp IpParTNLPWrapper.hpp
 
 subdir = src/Interfaces
 DIST_COMMON = $(am__includeipopt_HEADERS_DIST) $(srcdir)/Makefile.am \
@@ -78,8 +79,8 @@ am__libipopt_la_SOURCES_DIST = IpAlgTypes.hpp IpInterfacesRegOp.cpp \
 	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp IpTNLP.hpp \
 	IpTNLPAdapter.cpp IpTNLPAdapter.hpp IpTNLPReducer.cpp \
 	IpTNLPReducer.hpp IpParTNLP.hpp IpParTNLPAdapter.cpp \
-	IpParTNLPAdapter.hpp
-@HAVE_MPI_TRUE@am__objects_1 = IpParTNLPAdapter.lo
+	IpParTNLPAdapter.hpp IpParTNLPWrapper.cpp IpParTNLPWrapper.hpp
+@HAVE_MPI_TRUE@am__objects_1 = IpParTNLPAdapter.lo IpParTNLPWrapper.lo
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
 	IpSolveStatistics.lo IpStdCInterface.lo IpStdFInterface.lo \
 	IpStdInterfaceTNLP.lo IpTNLPAdapter.lo IpTNLPReducer.lo \
@@ -359,6 +360,7 @@ ASTYLE_FILES = \
 	IpNLP.hppbak \
 	IpParTNLP.hppbak \
 	IpParTNLPAdapter.cppbak IpParTNLPAdapter.hppbak \
+	IpParTNLPWrapper.cppbak IpParTNLPWrapper.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
 	IpStdCInterface.cppbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
@@ -444,6 +446,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInterfacesRegOp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIpoptApplication.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParTNLPAdapter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParTNLPWrapper.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSolveStatistics.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdCInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdFInterface.Plo@am__quote@
