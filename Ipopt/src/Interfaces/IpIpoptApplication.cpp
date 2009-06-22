@@ -156,55 +156,63 @@ namespace Ipopt
         options_->ReadFromStream(*jnlst_, is);
       }
 
-      Index ivalue;
-      options_->GetIntegerValue("print_level", ivalue, "");
-      EJournalLevel print_level = (EJournalLevel)ivalue;
-      SmartPtr<Journal> stdout_jrnl = jnlst_->GetJournal("console");
-      if (IsValid(stdout_jrnl)) {
-        // Set printlevel for stdout
-        stdout_jrnl->SetAllPrintLevels(print_level);
-        stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
-      }
+      bool no_output;
+      options_->GetBoolValue("suppress_all_output", no_output, "");
 
-      bool option_set;
-
-#if COIN_IPOPT_VERBOSITY > 0
-      // Set printlevel for debug
-      option_set = options_->GetIntegerValue("debug_print_level",
-                                             ivalue, "");
-      EJournalLevel debug_print_level;
-      if (option_set) {
-        debug_print_level = (EJournalLevel)ivalue;
+      if (no_output) {
+        jnlst_->DeleteAllJournals();
       }
       else {
-        debug_print_level = print_level;
-      }
-      SmartPtr<Journal> debug_jrnl = jnlst_->GetJournal("Debug");
-      if (IsNull(debug_jrnl)) {
-        debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_ITERSUMMARY);
-      }
-      debug_jrnl->SetAllPrintLevels(debug_print_level);
-      debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
-#endif
+        Index ivalue;
+        options_->GetIntegerValue("print_level", ivalue, "");
+        EJournalLevel print_level = (EJournalLevel)ivalue;
+        SmartPtr<Journal> stdout_jrnl = jnlst_->GetJournal("console");
+        if (IsValid(stdout_jrnl)) {
+          // Set printlevel for stdout
+          stdout_jrnl->SetAllPrintLevels(print_level);
+          stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
+        }
 
-      // Open an output file if required
-      std::string output_filename;
-      options_->GetStringValue("output_file", output_filename, "");
-      if (output_filename != "") {
-        EJournalLevel file_print_level;
-        option_set = options_->GetIntegerValue("file_print_level", ivalue, "");
+        bool option_set;
+
+#if COIN_IPOPT_VERBOSITY > 0
+        // Set printlevel for debug
+        option_set = options_->GetIntegerValue("debug_print_level",
+                                               ivalue, "");
+        EJournalLevel debug_print_level;
         if (option_set) {
-          file_print_level = (EJournalLevel)ivalue;
+          debug_print_level = (EJournalLevel)ivalue;
         }
         else {
-          file_print_level = print_level;
+          debug_print_level = print_level;
         }
-        bool openend = OpenOutputFile(output_filename, file_print_level);
-        if (!openend) {
-          jnlst_->Printf(J_ERROR, J_INITIALIZATION,
-                         "Error opening output file \"%s\"\n",
-                         output_filename.c_str());
-          return Invalid_Option;
+        SmartPtr<Journal> debug_jrnl = jnlst_->GetJournal("Debug");
+        if (IsNull(debug_jrnl)) {
+          debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_ITERSUMMARY);
+        }
+        debug_jrnl->SetAllPrintLevels(debug_print_level);
+        debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
+#endif
+
+        // Open an output file if required
+        std::string output_filename;
+        options_->GetStringValue("output_file", output_filename, "");
+        if (output_filename != "") {
+          EJournalLevel file_print_level;
+          option_set = options_->GetIntegerValue("file_print_level", ivalue, "");
+          if (option_set) {
+            file_print_level = (EJournalLevel)ivalue;
+          }
+          else {
+            file_print_level = print_level;
+          }
+          bool openend = OpenOutputFile(output_filename, file_print_level);
+          if (!openend) {
+            jnlst_->Printf(J_ERROR, J_INITIALIZATION,
+                           "Error opening output file \"%s\"\n",
+                           output_filename.c_str());
+            return Invalid_Option;
+          }
         }
       }
 
@@ -545,6 +553,12 @@ namespace Ipopt
     roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption2(
       "print_options_latex_mode",
+      "Undocumented", "no",
+      "no", "Undocumented",
+      "yes", "Undocumented",
+      "Undocumented");
+    roptions->AddStringOption2(
+      "suppress_all_output",
       "Undocumented", "no",
       "no", "Undocumented",
       "yes", "Undocumented",
