@@ -22,6 +22,8 @@
 #include "IpInexactLSAcceptor.hpp"
 
 #include "IpMonotoneMuUpdate.hpp"
+#include "IpAdaptiveMuUpdate.hpp"
+#include "IpLoqoMuOracle.hpp"
 #include "IpDefaultIterateInitializer.hpp"
 #include "IpWarmStartIterateInitializer.hpp"
 #include "IpOrigIterationOutput.hpp"
@@ -257,8 +259,22 @@ namespace Ipopt
     SmartPtr<LineSearch> lineSearch =
       new BacktrackingLineSearch(LSacceptor, NULL, convCheck);
 
+
     // Create the mu update that will be used by the main algorithm
-    SmartPtr<MuUpdate> MuUpdate = new MonotoneMuUpdate(GetRawPtr(lineSearch));
+    SmartPtr<MuUpdate> MuUpdate;
+    std::string smuupdate;
+    options.GetStringValue("mu_strategy", smuupdate, prefix);
+    if (smuupdate=="monotone" ) {
+      MuUpdate = new MonotoneMuUpdate(GetRawPtr(lineSearch));
+    }
+    else if (smuupdate=="adaptive") {
+      // for now, we only allow Loqo oracle since it does not require
+      // linear system solve
+      SmartPtr<MuOracle> muOracle = new LoqoMuOracle();
+      SmartPtr<MuOracle> FixMuOracle= new LoqoMuOracle();
+      MuUpdate = new AdaptiveMuUpdate(GetRawPtr(lineSearch),
+                                      muOracle, FixMuOracle);
+    }
 
     // Create the object for the iteration output
     SmartPtr<IterationOutput> IterOutput =
