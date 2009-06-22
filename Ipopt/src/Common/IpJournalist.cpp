@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -282,6 +282,14 @@ namespace Ipopt
     }
 
     return retValue;
+  }
+
+  void Journalist::DeleteAllJournals()
+  {
+    for (Index i=0; i<(Index)journals_.size(); i++) {
+      journals_[i]=NULL;
+    }
+    journals_.resize(0);
   }
 
   ///////////////////////////////////////////////////////////////////////////
