@@ -316,8 +316,8 @@ namespace Ipopt
     //@{
     /** Expansion from fixed x (ipopt) to part x (separate for each
     processor) */
-    SmartPtr<ExpansionMatrix> P_x_part_x_;
-    SmartPtr<ExpansionMatrixSpace> P_x_part_x_space_;
+    SmartPtr<ParExpansionMatrix> P_x_part_x_;
+    SmartPtr<ParExpansionMatrixSpace> P_x_part_x_space_;
 
     /** Expansion from fixed x_L (ipopt) to full x */
     SmartPtr<ParExpansionMatrix> P_x_x_L_;

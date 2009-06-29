@@ -182,6 +182,7 @@ namespace Ipopt
     }
 
     augmented_system_->Print(Jnlst(), J_MATRIX, J_LINEAR_ALGEBRA, "KKT");
+#ifndef HAVE_MPI
     if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
       // ToDo: remove below here - for debug only
       Index dbg_nz = TripletHelper::GetNumberEntries(*augmented_system_);
@@ -202,6 +203,7 @@ namespace Ipopt
       dbg_values = NULL;
       // ToDo: remove above here
     }
+#endif
 
     // Call the linear solver
     std::vector<SmartPtr<Vector> > augmented_solV(nrhs);

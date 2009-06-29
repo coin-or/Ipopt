@@ -453,7 +453,7 @@ namespace Ipopt
       } // while (!done)
 
       Index n_part_c_no_fixed = n_part_c;
-      if (n_part_x_fixed_>=0 && fixed_variable_treatment_==MAKE_PARAMETER) {
+      if (n_part_x_fixed_>=0 && fixed_variable_treatment_==MAKE_CONSTRAINT) {
         n_part_c += n_part_x_fixed_;
       }
 
@@ -534,9 +534,10 @@ namespace Ipopt
 
       if (n_part_x_fixed_>0 && fixed_variable_treatment_==MAKE_PARAMETER) {
         P_x_part_x_space_ =
-          new ExpansionMatrixSpace(n_part_x_, n_part_x_var,
-                                   x_not_fixed_part_map);
-        P_x_part_x_ = P_x_part_x_space_->MakeNewExpansionMatrix();
+          new ParExpansionMatrixSpace(ConstPtr(pv_full_x_space_),
+                                      ConstPtr(pv_x_space),
+                                      x_not_fixed_part_map);
+        P_x_part_x_ = P_x_part_x_space_->MakeNewParExpansionMatrix();
       }
       else {
         P_x_part_x_space_ = NULL;
@@ -561,7 +562,7 @@ namespace Ipopt
           std::vector<std::string> string_md(n_part_x_var);
           const Index* pos_idx = NULL;
           if (IsValid(P_x_part_x_space_)) {
-            pos_idx = P_x_part_x_->ExpandedPosIndices();
+            pos_idx = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
             for (Index i=0; i<n_part_x_var; i++) {
               string_md[i] = iter->second[pos_idx[i]];
             }
@@ -597,7 +598,7 @@ namespace Ipopt
           std::vector<Index> integer_md(n_part_x_var);
           const Index* pos_idx = NULL;
           if (IsValid(P_x_part_x_space_)) {
-            pos_idx = P_x_part_x_->ExpandedPosIndices();
+            pos_idx = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
             for (Index i=0; i<n_part_x_var; i++) {
               integer_md[i] = iter->second[pos_idx[i]];
             }
@@ -633,7 +634,7 @@ namespace Ipopt
           std::vector<Number> numeric_md(n_part_x_var);
           const Index* pos_idx = NULL;
           if (IsValid(P_x_part_x_space_)) {
-            pos_idx = P_x_part_x_->ExpandedPosIndices();
+            pos_idx = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
             for (Index i=0; i<n_part_x_var; i++) {
               numeric_md[i] = iter->second[pos_idx[i]];
             }
@@ -877,7 +878,7 @@ namespace Ipopt
       const Index* c_row_pos = P_c_g_->CompressedPosIndices();
       if (IsValid(P_x_part_x_)) {
         // there are missing variables x
-        const Index* c_col_pos = P_x_part_x_->CompressedPosIndices();
+        const Index* c_col_pos = P_x_part_x_->GlobalCompressedPosIndices();
         for (Index i=0; i<nz_part_jac_g_; i++) {
           const Index& c_row = c_row_pos[g_iRow[i]-1];
           const Index& c_col = c_col_pos[g_jCol[i]-1];
@@ -930,7 +931,7 @@ namespace Ipopt
       current_nz = 0;
       const Index* d_row_pos = P_d_g_->CompressedPosIndices();
       if (IsValid(P_x_part_x_)) {
-        const Index* d_col_pos = P_x_part_x_->CompressedPosIndices();
+        const Index* d_col_pos = P_x_part_x_->GlobalCompressedPosIndices();
         for (Index i=0; i<nz_part_jac_g_; i++) {
           const Index& d_row = d_row_pos[g_iRow[i]-1];
           const Index& d_col = d_col_pos[g_jCol[i]-1];
@@ -1000,7 +1001,7 @@ namespace Ipopt
         current_nz = 0;
         if (IsValid(P_x_part_x_)) {
           h_idx_part_map_ = new Index[nz_part_h_];
-          const Index* h_pos = P_x_part_x_->CompressedPosIndices();
+          const Index* h_pos = P_x_part_x_->GlobalCompressedPosIndices();
           for (Index i=0; i<nz_part_h_; i++) {
             const Index& h_row = h_pos[full_h_iRow[i]-1];
             const Index& h_col = h_pos[full_h_jCol[i]-1];
@@ -1025,7 +1026,7 @@ namespace Ipopt
         }
         nz_h_ = current_nz;
         Hess_lagrangian_space_ =
-          new ParSymMatrixSpace(n_full_x_, nz_h_, h_iRow, h_jCol);
+          new ParSymMatrixSpace(n_x_var, nz_h_, h_iRow, h_jCol);
         delete [] full_h_iRow;
         full_h_iRow = NULL;
         delete [] full_h_jCol;
@@ -1126,7 +1127,7 @@ namespace Ipopt
     if (IsValid(P_x_part_x_)) {
       for (Index i=0; i<dx_L->Dim(); i++) {
         const Index& ipopt_idx = em_Px_L->ExpandedPosIndices()[i];
-        const Index& full_idx = P_x_part_x_->ExpandedPosIndices()[ipopt_idx];
+        const Index& full_idx = P_x_part_x_->LocalMatrix()->ExpandedPosIndices()[ipopt_idx];
         const Number& lower_bound = x_l_part[full_idx];
         values[i] = lower_bound;
       }
@@ -1152,7 +1153,7 @@ namespace Ipopt
     if (IsValid(P_x_part_x_)) {
       for (Index i=0; i<dx_U->Dim(); i++) {
         const Index& ipopt_idx = em_Px_U->ExpandedPosIndices()[i];
-        const Index& full_idx = P_x_part_x_->ExpandedPosIndices()[ipopt_idx];
+        const Index& full_idx = P_x_part_x_->LocalMatrix()->ExpandedPosIndices()[ipopt_idx];
         const Number& upper_bound = x_u_part[full_idx];
         values[i] = upper_bound;
       }
@@ -1269,7 +1270,7 @@ namespace Ipopt
       Number* values = dx->Values();
       const Index& n_x_var = dx->Dim();
       if (IsValid(P_x_part_x_)) {
-        const Index* x_pos = P_x_part_x_->ExpandedPosIndices();
+        const Index* x_pos = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
         for (Index i=0; i<n_x_var; i++) {
           values[i] = x_part[x_pos[i]];
         }
@@ -1314,7 +1315,7 @@ namespace Ipopt
       const Index& n_part_z_l = dz_L->Dim();
       const Index* z_l_pos = P_x_x_L_->LocalMatrix()->ExpandedPosIndices();
       if (IsValid(P_x_part_x_)) {
-        const Index* x_pos = P_x_part_x_->ExpandedPosIndices();
+        const Index* x_pos = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
         for (Index i=0; i<n_part_z_l; i++) {
           Index idx = z_l_pos[i]; // convert from x_L to x (ipopt)
           idx = x_pos[idx]; // convert from x (ipopt) to x_full
@@ -1337,7 +1338,7 @@ namespace Ipopt
       const Index& n_part_z_u = dz_U->Dim();
       const Index* z_u_pos = P_x_x_U_->LocalMatrix()->ExpandedPosIndices();
       if (IsValid(P_x_part_x_)) {
-        const Index* x_pos = P_x_part_x_->ExpandedPosIndices();
+        const Index* x_pos = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
         for (Index i=0; i<n_part_z_u; i++) {
           Index idx = z_u_pos[i]; // convert from x_u to x (ipopt)
           idx = x_pos[idx]; // convert from x (ipopt) to x_full
@@ -1401,7 +1402,7 @@ namespace Ipopt
       if (partnlp_->eval_grad_f(num_proc_, proc_id_,
                                 n_full_x_, n_first_, n_last_,
                                 full_x_, new_x, grad_f_part)) {
-        const Index* x_pos = P_x_part_x_->ExpandedPosIndices();
+        const Index* x_pos = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
         for (Index i=0; i<dg_f->Dim(); i++) {
           values[i] = grad_f_part[x_pos[i]];
         }
@@ -1673,7 +1674,7 @@ namespace Ipopt
     Number* x_orig_part = new Number[n_part_x_];
 
     if (IsValid(P_x_part_x_)) {
-      const Index* x_pos = P_x_part_x_->CompressedPosIndices();
+      const Index* x_pos = P_x_part_x_->LocalMatrix()->CompressedPosIndices();
 
       if (dx->IsHomogeneous()) {
         const Number& scalar = dx->Scalar();
@@ -1783,7 +1784,7 @@ namespace Ipopt
       const Index& n_xL = dx_L->Dim();
 
       if (IsValid(P_x_part_x_)) {
-        const Index* bnds_pos_full = P_x_part_x_->ExpandedPosIndices();
+        const Index* bnds_pos_full = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
         if (dx_L->IsHomogeneous()) {
           Number scalar = dx_L->Scalar();
           for (Index i=0; i<n_xL; i++) {
@@ -1840,7 +1841,7 @@ namespace Ipopt
       const Index& n_xU = dx_U->Dim();
 
       if (IsValid(P_x_part_x_)) {
-        const Index* bnds_pos_full = P_x_part_x_->ExpandedPosIndices();
+        const Index* bnds_pos_full = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
         if (dx_U->IsHomogeneous()) {
           Number scalar = dx_U->Scalar();
           for (Index i=0; i<n_xU; i++) {

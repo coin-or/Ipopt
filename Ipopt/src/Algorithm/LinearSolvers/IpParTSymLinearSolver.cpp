@@ -182,12 +182,15 @@ namespace Ipopt
       new_matrix = true;
     }
 
+    // To make parallel vectors work, all processors (for now) need to
+    // get all values
+
     // Retrieve the right hand sides and scale if required
     Index nrhs = (Index)rhsV.size();
     double* rhs_vals = new double[dim_*nrhs];
     for (Index irhs=0; irhs<nrhs; irhs++) {
-      TripletHelper::FillValuesFromVector(dim_, *rhsV[irhs],
-                                          &rhs_vals[irhs*(dim_)]);
+      ParTripletHelper::FillAllValuesFromVector(dim_, *rhsV[irhs],
+          &rhs_vals[irhs*(dim_)]);
       if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
         Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
                        "Right hand side %d in ParTSymLinearSolver:\n", irhs);
@@ -197,7 +200,7 @@ namespace Ipopt
                          rhs_vals[irhs*(dim_)+i]);
         }
       }
-      if (use_scaling_) {
+      if (my_rank_==0 && use_scaling_) {
         if (HaveIpData()) {
           IpData().TimingStats().LinearSystemScaling().Start();
         }
@@ -218,26 +221,31 @@ namespace Ipopt
     // enough).
     ESymSolverStatus retval;
     while (!done) {
-      const Index* ia;
-      const Index* ja;
-      if (matrix_format_==SparseSymLinearSolverInterface::Triplet_Format) {
-        ia = airn_;
-        ja = ajcn_;
-      }
-      else {
-        if (HaveIpData()) {
-          IpData().TimingStats().LinearSystemStructureConverter().Start();
+      if (my_rank_==0) {
+        const Index* ia;
+        const Index* ja;
+        if (matrix_format_==SparseSymLinearSolverInterface::Triplet_Format) {
+          ia = airn_;
+          ja = ajcn_;
         }
-        ia = triplet_to_csr_converter_->IA();
-        ja = triplet_to_csr_converter_->JA();
-        if (HaveIpData()) {
-          IpData().TimingStats().LinearSystemStructureConverter().End();
+        else {
+          if (HaveIpData()) {
+            IpData().TimingStats().LinearSystemStructureConverter().Start();
+          }
+          ia = triplet_to_csr_converter_->IA();
+          ja = triplet_to_csr_converter_->JA();
+          if (HaveIpData()) {
+            IpData().TimingStats().LinearSystemStructureConverter().End();
+          }
         }
-      }
 
-      retval = solver_interface_->MultiSolve(new_matrix, ia, ja,
-                                             nrhs, rhs_vals, check_NegEVals,
-                                             numberOfNegEVals);
+        retval = solver_interface_->MultiSolve(new_matrix, ia, ja,
+                                               nrhs, rhs_vals, check_NegEVals,
+                                               numberOfNegEVals);
+      }
+      MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      MPI_Bcast(&numberOfNegEVals, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
       if (retval==SYMSOLVER_CALL_AGAIN) {
         DBG_PRINT((1, "Solver interface asks to be called again.\n"));
         GiveMatrixToSolver(false, sym_A);
@@ -251,15 +259,17 @@ namespace Ipopt
     // and transfer the result into the Vectors
     if (retval==SYMSOLVER_SUCCESS) {
       for (Index irhs=0; irhs<nrhs; irhs++) {
-        if (use_scaling_) {
-          if (HaveIpData()) {
-            IpData().TimingStats().LinearSystemScaling().Start();
-          }
-          for (Index i=0; i<dim_; i++) {
-            rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
-          }
-          if (HaveIpData()) {
-            IpData().TimingStats().LinearSystemScaling().End();
+        if (my_rank_==0) {
+          if (use_scaling_) {
+            if (HaveIpData()) {
+              IpData().TimingStats().LinearSystemScaling().Start();
+            }
+            for (Index i=0; i<dim_; i++) {
+              rhs_vals[irhs*(dim_)+i] *= scaling_factors_[i];
+            }
+            if (HaveIpData()) {
+              IpData().TimingStats().LinearSystemScaling().End();
+            }
           }
         }
         if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
@@ -271,8 +281,9 @@ namespace Ipopt
                            rhs_vals[irhs*(dim_)+i]);
           }
         }
-        TripletHelper::PutValuesInVector(dim_, &rhs_vals[irhs*(dim_)],
-                                         *solV[irhs]);
+        MPI_Bcast(&rhs_vals[irhs*dim_], dim_, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        ParTripletHelper::PutAllValuesInVector(dim_, &rhs_vals[irhs*(dim_)],
+                                               *solV[irhs]);
       }
     }
 
@@ -385,7 +396,7 @@ namespace Ipopt
           }
         }
       }
-      MPI_Scatter(&retval, 1, MPI_INT, MPI_IN_PLACE, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
       have_structure_ = true;
     }
@@ -412,7 +423,7 @@ namespace Ipopt
         }
         retval = solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
       }
-      MPI_Scatter(&retval, 1, MPI_INT, MPI_IN_PLACE, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
     }
     initialized_=true;
     return retval;
@@ -426,7 +437,7 @@ namespace Ipopt
     if (my_rank_==0) {
       retval = solver_interface_->NumberOfNegEVals();
     }
-    MPI_Scatter(&retval, 1, MPI_INT, MPI_IN_PLACE, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
     return retval;
   }
 
@@ -452,9 +463,9 @@ namespace Ipopt
       }
     }
 
-    MPI_Scatter(&retval, 1, MPI_INT, MPI_IN_PLACE, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
     int itmp = just_switched_on_scaling_;
-    MPI_Scatter(&itmp, 1, MPI_INT, MPI_IN_PLACE, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&itmp, 1, MPI_INT, 0, MPI_COMM_WORLD);
     just_switched_on_scaling_ = itmp;
 
     return retval;
@@ -468,7 +479,7 @@ namespace Ipopt
     if (my_rank_==0) {
       retval = solver_interface_->ProvidesInertia();
     }
-    MPI_Scatter(&retval, 1, MPI_INT, MPI_IN_PLACE, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
     return retval;
   }
 
@@ -494,7 +505,7 @@ namespace Ipopt
     Number* local_atriplet = new Number[local_nonzeros_triplet_];
     ParTripletHelper::FillValues(local_nonzeros_triplet_, sym_A, local_atriplet);
     MPI_Gatherv(local_atriplet, local_nonzeros_triplet_, MPI_DOUBLE,
-                atriplet, recvcounts_, displs_, MPI_INT, 0, MPI_COMM_WORLD);
+                atriplet, recvcounts_, displs_, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     delete [] local_atriplet;
 
@@ -541,7 +552,7 @@ namespace Ipopt
     }
 
     int itmp = just_switched_on_scaling_;
-    MPI_Scatter(&itmp, 1, MPI_INT, MPI_IN_PLACE, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&itmp, 1, MPI_INT, 0, MPI_COMM_WORLD);
     just_switched_on_scaling_ = itmp;
 
   }

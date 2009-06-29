@@ -78,14 +78,21 @@ namespace Ipopt
     SmartPtr<const DenseVector> local_x = par_x->LocalVector();
     SmartPtr<DenseVector> dense_y = par_y->MakeNewGlobalVector();
 
-    local_matrix_->TransMultVector(alpha, *local_x, beta, *dense_y);
+    local_matrix_->TransMultVector(alpha, *local_x, 0., *dense_y);
 
     // CAN THIS be more efficient?
     Number *yvalues = dense_y->Values();
     MPI_Allreduce(MPI_IN_PLACE, yvalues, NCols(),
 		  MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
-    par_y->ExtractLocalVector(*dense_y);    
+    if (beta==0.) {
+      par_y->ExtractLocalVector(*dense_y);
+    }
+    else {
+      SmartPtr<ParVector> par_v = par_y->MakeNewParVector();
+      par_v->ExtractLocalVector(*dense_y);
+      par_y->Axpy(beta, *par_v);
+    }
   }
 
   void ParGenMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const

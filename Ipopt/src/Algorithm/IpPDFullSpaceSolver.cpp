@@ -672,11 +672,17 @@ namespace Ipopt
 
     // x
     W.MultVector(1., *res.x(), 0., *resid.x_NonConst());
+    resid.x()->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, "resid_x 1");
     J_c.TransMultVector(1., *res.y_c(), 1., *resid.x_NonConst());
+    resid.x()->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, "resid_x 2");
     J_d.TransMultVector(1., *res.y_d(), 1., *resid.x_NonConst());
+    resid.x()->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, "resid_x 3");
     Px_L.MultVector(-1., *res.z_L(), 1., *resid.x_NonConst());
+    resid.x()->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, "resid_x 4");
     Px_U.MultVector(1., *res.z_U(), 1., *resid.x_NonConst());
+    resid.x()->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, "resid_x 5");
     resid.x_NonConst()->AddTwoVectors(delta_x, *res.x(), -1., *rhs.x(), 1.);
+    resid.x()->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, "resid_x 6");
 
     // s
     Pd_U.MultVector(1., *res.v_U(), 0., *resid.s_NonConst());

@@ -31,14 +31,10 @@ namespace Ipopt
 
     /**@name Constructors/Destructors */
     //@{
-    ParTNLPWrapper(SmartPtr<TNLP> tnlpobj)
-    {
-      tnlpobj_ = tnlpobj;
-    }
+    ParTNLPWrapper(SmartPtr<TNLP> tnlpobj);
 
     /** Default destructor */
-    ~ParTNLPWrapper()
-    {}
+    ~ParTNLPWrapper();
     //@}
 
     /**@name methods to gather information about the NLP */
@@ -122,6 +118,18 @@ namespace Ipopt
     //@}
 
     SmartPtr<TNLP> tnlpobj_;
+
+    /** @name Dimension of the original problem */
+    //@{
+    Index nnz_jac_g_;
+    Index nnz_h_lag_;
+    //@}
+
+    /** Mapping for Jacobian values from global to local part */
+    Index* jac_map_;
+
+    /** Mapping for Hessian values from global to local part */
+    Index* hess_map_;
   };
 
 } // namespace Ipopt
