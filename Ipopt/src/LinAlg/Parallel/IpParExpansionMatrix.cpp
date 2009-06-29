@@ -9,6 +9,12 @@
 #include "IpParExpansionMatrix.hpp"
 #include "IpParVector.hpp"
 
+// FIXME - proper header files
+//extern "C" {
+#define MPICH_SKIP_MPICXX
+#include "mpi.h"
+//}
+
 namespace Ipopt
 {
 
@@ -137,11 +143,46 @@ namespace Ipopt
     :
     MatrixSpace(LargeVectorSpace->LocalSize(), SmallVectorSpace->LocalSize()),
     large_vector_space_(LargeVectorSpace),
-    small_vector_space_(SmallVectorSpace)
+    small_vector_space_(SmallVectorSpace),
+    global_compressed_pos_(NULL)
   {
     local_space_ = new ExpansionMatrixSpace(LargeVectorSpace->LocalSize(),
 					    SmallVectorSpace->LocalSize(),
 					    ExpPos, offset);
+  }
+
+  ParExpansionMatrixSpace::~ParExpansionMatrixSpace()
+  {
+    delete [] global_compressed_pos_;
+  }
+
+  const Index* ParExpansionMatrixSpace::
+  GlobalCompressedPosIndices() const
+  {
+    if (!global_compressed_pos_) {
+      global_compressed_pos_ = new Index[large_vector_space_->Dim()];
+
+      const Index local_nrows = large_vector_space_->LocalSpace()->Dim();
+      Index* local_compressed_pos = new Index[local_nrows];
+      const Index* orig_pos = LocalSpace()->CompressedPosIndices();
+      const Index offset = small_vector_space_->StartPos();
+      for (Index i=0; i<local_nrows; i++) {
+	if (orig_pos[i] == -1) {
+	  local_compressed_pos[i] = -1;
+	}
+	else {
+	  local_compressed_pos[i] = orig_pos[i] + offset;
+	}
+      }
+      MPI_Allgatherv(local_compressed_pos, local_nrows,
+		     MPI_INT, global_compressed_pos_,
+		     const_cast<int*>(&(large_vector_space_->RecvCounts()[0])),
+		     const_cast<int*>(&(large_vector_space_->Displs()[0])),
+		     MPI_INT, MPI_COMM_WORLD);
+
+      delete [] local_compressed_pos;
+    }
+    return global_compressed_pos_;
   }
 
 } // namespace Ipopt

@@ -70,6 +70,9 @@ namespace Ipopt
 
     /** Offset of column indices for local part */
     Index ColStartPos() const;
+
+    /** Global mapping of the compressed indices. */
+    const Index* GlobalCompressedPosIndices() const;
     //@}
 
   protected:
@@ -150,8 +153,7 @@ namespace Ipopt
 			    const int offset = 0);
 
     /** Destructor */
-    ~ParExpansionMatrixSpace()
-    {}
+    ~ParExpansionMatrixSpace();
     //@}
 
     /** Method for creating a new matrix of this specific type. */
@@ -182,10 +184,14 @@ namespace Ipopt
       return small_vector_space_;
     }
 
+    const Index* GlobalCompressedPosIndices() const;
+
   private:
     SmartPtr<ExpansionMatrixSpace> local_space_;
     SmartPtr<const ParVectorSpace> large_vector_space_;
     SmartPtr<const ParVectorSpace> small_vector_space_;
+
+    mutable Index* global_compressed_pos_;
   };
 
   inline Index ParExpansionMatrix::RowStartPos() const
@@ -196,6 +202,11 @@ namespace Ipopt
   inline Index ParExpansionMatrix::ColStartPos() const
   {
     return owner_space_->SmallVectorSpace()->StartPos();
+  }
+
+  inline const Index* ParExpansionMatrix::GlobalCompressedPosIndices() const
+  {
+    return owner_space_->GlobalCompressedPosIndices();
   }
 
 } // namespace Ipopt

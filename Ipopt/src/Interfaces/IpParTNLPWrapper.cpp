@@ -30,6 +30,19 @@ static void calculate_offsets (Index p, Index p_id, Index n, Index &n_first, Ind
   }
 }
 
+ParTNLPWrapper::ParTNLPWrapper(SmartPtr<TNLP> tnlpobj)
+    :
+    tnlpobj_(tnlpobj),
+    jac_map_(NULL),
+    hess_map_(NULL)
+{}
+
+ParTNLPWrapper::~ParTNLPWrapper()
+{
+  delete [] jac_map_;
+  delete [] hess_map_;
+}
+
 bool
 ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
                              Index& n, Index& n_first, Index& n_last,
@@ -37,56 +50,102 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
                              Index& nnz_jac_g_part, Index& nnz_h_lag_part,
                              IndexStyleEnum& index_style)
 {
-  Index nnz_jac_g, nnz_h_lag;
   bool rval = true;
 
-  rval = tnlpobj_->get_nlp_info(n, m, nnz_jac_g, nnz_h_lag, (TNLP::IndexStyleEnum&)index_style);
+  rval = tnlpobj_->get_nlp_info(n, m, nnz_jac_g_, nnz_h_lag_,
+                                (TNLP::IndexStyleEnum&)index_style);
   if (rval == false) return rval;
 
   if (index_style != C_STYLE) {
-    n --;
-    m --;
+    printf("index_style = FORTRAN not yet cproperly implemented.\n");
+    abort();
   }
 
   calculate_offsets (num_proc, proc_id, n, n_first, n_last);
   calculate_offsets (num_proc, proc_id, m, m_first, m_last);
 
-  if (index_style != C_STYLE) {
-    n_first ++;
-    n_last ++;
-    m_first ++;
-    m_last ++;
-    n ++;
-    m ++;
-  }
-
-  Index *iRow = new Index[nnz_jac_g];
-  Index *jCol = new Index[nnz_jac_g];
+  //printf("n = %d m = %d num_proc = %d proc_id = %d\n", n, m, num_proc, proc_id);
+  //printf("n_first = %d n_last = %d\n", n_first, n_last);
+  //printf("m_first = %d m_last = %d\n", m_first, m_last);
 
   if (num_proc > 1) {
-    int i, nz=0;
+    delete [] jac_map_;
+    jac_map_ = NULL;
+    delete [] hess_map_;
+    hess_map_ = NULL;
 
-    tnlpobj_->eval_jac_g(n, NULL, true, m, nnz_jac_g, iRow, jCol, NULL);
+    Index* iRow = new Index[nnz_jac_g_];
+    Index* jCol = new Index[nnz_jac_g_];
 
-    nz = 0;
-    for (i=0; i<nnz_jac_g; i++)
-      if (iRow[i] >= m_first && iRow[i] <= m_last) nz ++;
+    rval = tnlpobj_->eval_jac_g(n, NULL, true, m, nnz_jac_g_, iRow, jCol, NULL);
+    if (!rval) {
+      delete [] iRow;
+      delete [] jCol;
+      return rval;
+    }
+
+    Index nz = 0;
+    // count the nonzeros
+    for (Index i=0; i<nnz_jac_g_; i++) {
+      if (iRow[i] >= m_first && iRow[i] <= m_last) {
+        nz++;
+      }
+    }
     nnz_jac_g_part = nz;
-
-    tnlpobj_->eval_h(n, NULL, true, 0, m, NULL, true, nnz_h_lag, iRow, jCol, NULL);
+    // get the map
+    jac_map_ = new Index[nnz_jac_g_part];
     nz = 0;
-    for (i=0; i<nnz_h_lag; i++)
-      if (jCol[i] >= n_first && jCol[i] <= n_last) nz ++;
-    nnz_h_lag_part = nz;
+    for (Index i=0; i<nnz_jac_g_; i++) {
+      if (iRow[i] >= m_first && iRow[i] <= m_last) {
+        jac_map_[nz++] = i;
+      }
+    }
 
+    delete [] iRow;
+    iRow = NULL;
+    delete [] jCol;
+    jCol = NULL;
+
+    iRow = new Index[nnz_h_lag_];
+    jCol = new Index[nnz_h_lag_];
+
+    rval = tnlpobj_->eval_h(n, NULL, true, 0, m, NULL, true, nnz_h_lag_, iRow, jCol, NULL);
+    if (!rval) {
+      delete [] iRow;
+      delete [] jCol;
+      return rval;
+    }
+
+    // count nonzeros
+    nz = 0;
+    for (Index i=0; i<nnz_h_lag_; i++) {
+      if (jCol[i] >= n_first && jCol[i] <= n_last) {
+        nz ++;
+      }
+    }
+    nnz_h_lag_part = nz;
+    // get the map
+    hess_map_ = new Index[nnz_h_lag_part];
+    nz = 0;
+    for (Index i=0; i<nnz_h_lag_; i++) {
+      if (jCol[i] >= n_first && jCol[i] <= n_last) {
+        hess_map_[nz] = i;
+        nz ++;
+      }
+    }
+
+    delete [] iRow;
+    delete [] jCol;
   }
   else {
-    nnz_jac_g_part = nnz_jac_g;
-    nnz_h_lag_part = nnz_h_lag;
-  }
+    delete [] jac_map_;
+    jac_map_ = NULL;
+    delete [] hess_map_;
+    hess_map_ = NULL;
 
-  delete [] iRow;
-  delete [] jCol;
+    nnz_jac_g_part = nnz_jac_g_;
+    nnz_h_lag_part = nnz_h_lag_;
+  }
 
   return rval;
 }
@@ -108,16 +167,16 @@ ParTNLPWrapper::get_bounds_info(Index num_proc, Index proc_id,
   g_u = new Number[m];
 
   rval = tnlpobj_->get_bounds_info(n, x_l, x_u, m, g_l, g_u);
-  if (rval == false) return rval;
+  if (rval) {
+    for (i=n_first; i<=n_last; i++) {
+      x_l_part[i-n_first] = x_l[i];
+      x_u_part[i-n_first] = x_u[i];
+    }
 
-  for (i=n_first; i<=n_last; i++) {
-    x_l_part[i-n_first] = x_l[i];
-    x_u_part[i-n_first] = x_u[i];
-  }
-
-  for (i=m_first; i<=m_last; i++) {
-    g_l_part[i-m_first] = g_l[i];
-    g_u_part[i-m_first] = g_u[i];
+    for (i=m_first; i<=m_last; i++) {
+      g_l_part[i-m_first] = g_l[i];
+      g_u_part[i-m_first] = g_u[i];
+    }
   }
 
   delete [] x_l;
@@ -136,7 +195,6 @@ ParTNLPWrapper::get_starting_point(Index num_proc, Index proc_id,
                                    Index m, Index m_first, Index m_last,
                                    bool init_lambda, Number* lambda_part)
 {
-  int i;
   Number *x=NULL, *z_L=NULL, *z_U=NULL, *lam=NULL;
   bool rval = true;
 
@@ -145,22 +203,29 @@ ParTNLPWrapper::get_starting_point(Index num_proc, Index proc_id,
   z_U = new Number[n];
   lam = new Number[m];
 
+  // TODO: Could use BLAS at many places
+
   rval = tnlpobj_->get_starting_point(n, init_x, x, init_z, z_L, z_U, m, init_lambda, lam);
-  if (rval == false) return rval;
 
-  if (init_x)
-    for (i=n_first; i<=n_last; i++)
-      x_part[i-n_first] = x[i];
-
-  if (init_z)
-    for (i=n_first; i<=n_last; i++) {
-      z_L_part[i-n_first] = z_L[i];
-      z_U_part[i-n_first] = z_U[i];
+  if (rval) {
+    if (init_x) {
+      for (Index i=n_first; i<=n_last; i++) {
+        x_part[i-n_first] = x[i];
+      }
+    }
+    if (init_z) {
+      for (Index i=n_first; i<=n_last; i++) {
+        z_L_part[i-n_first] = z_L[i];
+        z_U_part[i-n_first] = z_U[i];
+      }
     }
 
-  if (init_lambda)
-    for (i=m_first; i<=m_last; i++)
-      lambda_part[i-m_first] = lam[i];
+    if (init_lambda) {
+      for (Index i=m_first; i<=m_last; i++) {
+        lambda_part[i-m_first] = lam[i];
+      }
+    }
+  }
 
   delete [] x;
   delete [] z_L;
@@ -189,17 +254,14 @@ ParTNLPWrapper::eval_grad_f(Index num_proc, Index proc_id,
                             const Number* x, bool new_x,
                             Number* grad_f_part)
 {
-  int i;
-  Number *gf=NULL;
-  bool rval = true;
+  Number* gf = new Number[n];
 
-  gf = new Number[n];
-
-  rval = tnlpobj_->eval_grad_f(n, x, new_x, gf);
-  if (rval == false) return rval;
-
-  for (i=n_first; i<=n_last; i++)
-    grad_f_part[i-n_first] = gf[i];
+  bool rval = tnlpobj_->eval_grad_f(n, x, new_x, gf);
+  if (rval) {
+    for (Index i=n_first; i<=n_last; i++) {
+      grad_f_part[i-n_first] = gf[i];
+    }
+  }
 
   delete [] gf;
 
@@ -212,17 +274,15 @@ ParTNLPWrapper::eval_g(Index num_proc, Index proc_id,
                        Index m, Index m_first, Index m_last,
                        Number* g_part)
 {
-  int i;
-  Number *g=NULL;
-  bool rval = true;
+  Number* g = new Number[m];
 
-  g = new Number[m];
+  bool rval = tnlpobj_->eval_g(n, x, new_x, m, g);
+  if (rval) {
 
-  rval = tnlpobj_->eval_g(n, x, new_x, m, g);
-  if (rval == false) return rval;
-
-  for (i=m_first; i<=m_last; i++)
-    g_part[i-m_first] = g[i];
+    for (Index i=m_first; i<=m_last; i++) {
+      g_part[i-m_first] = g[i];
+    }
+  }
 
   delete [] g;
 
@@ -236,49 +296,56 @@ ParTNLPWrapper::eval_jac_g(Index num_proc, Index proc_id,
                            Index nele_jac_part, Index* iRow_part,
                            Index *jCol_part, Number* values_part)
 {
-  int i;
-  TNLP::IndexStyleEnum index_style;
-  Index nnz_jac_g, nnz_h_lag, tn, tm;
   bool rval = true;
 
-  rval = tnlpobj_->get_nlp_info(tn, tm, nnz_jac_g, nnz_h_lag, index_style);
-  if (rval == false) return rval;
-
-  Index *iRow = new Index[nnz_jac_g];
-  Index *jCol = new Index[nnz_jac_g];
-
-  rval = tnlpobj_->eval_jac_g(n, x, new_x, m, nnz_jac_g, iRow, jCol, NULL);
-  if (rval == false) return rval;
-
   if (values_part == NULL) {
-    int nz = 0;
-    for (i=0; i<nnz_jac_g; i++)
-      if (iRow[i] >= m_first && iRow[i] <= m_last) {
-        iRow_part[nz] = iRow[i] - m_first;
-        jCol_part[nz] = jCol[i] - m_first;
-        nz ++;
+    if (!jac_map_) {
+      assert(nnz_jac_g_ == nele_jac_part);
+      rval = tnlpobj_->eval_jac_g(n, x, new_x, m, nnz_jac_g_, iRow_part, jCol_part, NULL);
+    }
+    else {
+      Index *iRow = new Index[nnz_jac_g_];
+      Index *jCol = new Index[nnz_jac_g_];
+
+      rval = tnlpobj_->eval_jac_g(n, x, new_x, m, nnz_jac_g_, iRow, jCol, NULL);
+      if (!rval) {
+        delete [] iRow;
+        delete [] jCol;
+        return rval;
       }
-    assert (nz == nele_jac_part);
+
+      int nz = 0;
+      for (Index i=0; i<nele_jac_part; i++) {
+        iRow_part[i] = iRow[jac_map_[i]] - m_first;
+        jCol_part[i] = jCol[jac_map_[i]];
+      }
+
+      delete [] iRow;
+      delete [] jCol;
+    }
   }
   else {
-    Number *values = new Number[nnz_jac_g];
+    if (!jac_map_) {
+      assert(nnz_jac_g_ == nele_jac_part);
+      rval = tnlpobj_->eval_jac_g(n, x, new_x, m, nnz_jac_g_, NULL, NULL, values_part);
+    }
+    else {
+      Number* values = new Number[nnz_jac_g_];
 
-    rval = tnlpobj_->eval_jac_g(n, x, new_x, m, nnz_jac_g, iRow, jCol, values);
-    if (rval == false) return rval;
-
-    int nz = 0;
-    for (i=0; i<nnz_jac_g; i++)
-      if (iRow[i] >= m_first && iRow[i] <= m_last) {
-        values_part[nz] = values[i];
-        nz ++;
+      rval = tnlpobj_->eval_jac_g(n, x, new_x, m, nnz_jac_g_, NULL, NULL, values);
+      if (!rval) {
+        delete [] values;
+        return rval;
       }
-    assert (nz == nele_jac_part);
 
-    delete [] values;
+      int nz = 0;
+      for (Index i=0; i<nele_jac_part; i++) {
+        values_part[i] = values[jac_map_[i]];
+      }
+
+      delete [] values;
+    }
   }
-
-  delete [] iRow;
-  delete [] jCol;
 
   return rval;
 }
@@ -293,52 +360,56 @@ bool ParTNLPWrapper::eval_h(Index num_proc, Index proc_id,
                             Index* iRow_part, Index* jCol_part,
                             Number* values_part)
 {
-  int i;
-  TNLP::IndexStyleEnum index_style;
-  Index nnz_jac_g, nnz_h_lag, tn, tm;
   bool rval = true;
 
-  rval = tnlpobj_->get_nlp_info(tn, tm, nnz_jac_g, nnz_h_lag, index_style);
-  if (rval == false) return rval;
-
-  Index *iRow = new Index[nnz_h_lag];
-  Index *jCol = new Index[nnz_h_lag];
-
-  rval = tnlpobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag, iRow, jCol, NULL);
-  if (rval == false) return rval;
-
   if (values_part == NULL) {
-    int nz = 0;
-    for (i=0; i<nnz_h_lag; i++)
-      if (jCol[i] >= n_first && jCol[i] <= n_last) {
-        iRow_part[nz] = iRow[i];
-        jCol_part[nz] = jCol[i];
-        nz ++;
+    if (!hess_map_) {
+      assert(nnz_h_lag_ == nele_hess_part);
+      rval = tnlpobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag_, iRow_part, jCol_part, NULL);
+    }
+    else {
+      Index *iRow = new Index[nnz_h_lag_];
+      Index *jCol = new Index[nnz_h_lag_];
+
+      rval = tnlpobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag_, iRow, jCol, NULL);
+      if (!rval) {
+        delete [] iRow;
+        delete [] jCol;
+        return rval;
       }
-    assert (nz == nele_hess_part);
+
+      for (Index i=0; i<nele_hess_part; i++) {
+        iRow_part[i] = iRow[hess_map_[i]];
+        jCol_part[i] = jCol[hess_map_[i]];
+      }
+
+      delete [] iRow;
+      delete [] jCol;
+    }
   }
   else {
-    Number *values = new Number[nnz_h_lag];
+    if (!hess_map_) {
+      assert(nnz_h_lag_ == nele_hess_part);
+      rval = tnlpobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag_, NULL, NULL, values_part);
+    }
+    else {
+      Number *values = new Number[nnz_h_lag_];
 
-    rval = tnlpobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag, iRow, jCol, values);
-    if (rval == false) return rval;
-
-    int nz = 0;
-    for (i=0; i<nnz_h_lag; i++)
-      if (jCol[i] >= n_first && jCol[i] <= n_last) {
-        values_part[nz] = values[i];
-        nz ++;
+      rval = tnlpobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag_, NULL, NULL, values);
+      if (!rval) {
+        delete [] values;
+        return rval;
       }
-    assert (nz == nele_hess_part);
 
-    delete [] values;
+      for (Index i=0; i<nele_hess_part; i++) {
+        values_part[i] = values[hess_map_[i]];
+      }
+
+      delete [] values;
+    }
   }
 
-  delete [] iRow;
-  delete [] jCol;
-
   return rval;
-
 }
 
 void ParTNLPWrapper::finalize_solution(SolverReturn status,

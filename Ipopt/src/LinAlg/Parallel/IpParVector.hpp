@@ -76,11 +76,21 @@ namespace Ipopt
 
     /** Obtain pointer to const global vector. 
      */
+    // TODO: Maybe we want to cache this?
     SmartPtr<const DenseVector> GlobalVector() const;
+
+    /** Obtain pointer to global vector.  This is a copy of all data,
+	changing it will not change data in the vector.
+     */
+    SmartPtr<DenseVector> GlobalVectorNonConst() const;
 
     /* Extract the local part from a global vector into the data of
        this vector. */
     void ExtractLocalVector(const DenseVector& global_vector);
+
+    /* Extract the local part from a global values array into the data of
+       this vector. */
+    void ExtractLocalValues(const Number* vals);
 
     /** Rank of the processor handling this vector */
     int Rank() const;

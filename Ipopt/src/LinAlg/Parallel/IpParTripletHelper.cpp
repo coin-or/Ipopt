@@ -84,9 +84,10 @@ namespace Ipopt
     const IdentityMatrix* ident = dynamic_cast<const IdentityMatrix*>(mptr);
     if (ident) {
       // TODO: Is this how we want to do this?
+      // No, we need the vector space and maintain same parition as there
       Index start, end;
       IdentityRange(ident->Dim(), start, end);
-      return end-start;
+      return end-start+1;
     }
 
     const ParExpansionMatrix* pexp = dynamic_cast<const ParExpansionMatrix*>(mptr);
@@ -312,6 +313,49 @@ namespace Ipopt
     THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to ParTripletHelper::FillValues");
   }
 
+  void ParTripletHelper::
+  FillAllValuesFromVector(Index n_entries, const Vector& vector,
+			  Number* values)
+  {
+    const Vector* vptr = &vector;
+    DBG_ASSERT(n_entries == vector.Dim());
+
+    const CompoundVector* cvec = dynamic_cast<const CompoundVector*>(vptr);
+    if (cvec) {
+      FillAllValuesFromVector_(n_entries, *cvec, values);
+      return;
+    }
+
+    const ParVector* pvec = dynamic_cast<const ParVector*>(vptr);
+    if (pvec) {
+      FillAllValuesFromVector_(n_entries, *pvec, values);
+      return;
+    }
+
+    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown vector type passed to ParTripletHelper::FillAllValuesFromVector");
+  }
+
+  void ParTripletHelper::
+  PutAllValuesInVector(Index n_entries, const Number* values, Vector& vector)
+  {
+    Vector* vptr = &vector;
+    DBG_ASSERT(n_entries == vector.Dim());
+
+    CompoundVector* cvec = dynamic_cast<CompoundVector*>(vptr);
+    if (cvec) {
+      PutAllValuesInVector_(n_entries, values, *cvec);
+      return;
+    }
+
+    ParVector* pvec = dynamic_cast<ParVector*>(vptr);
+    if (pvec) {
+      PutAllValuesInVector_(n_entries, values, *pvec);
+      return;
+    }
+
+    THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown vector type passed to ParTripletHelper::PutAllValuesInVector");
+  }
+
   Index ParTripletHelper::GetNumberEntries_(const SumMatrix& matrix)
   {
     Index n_entries = 0;
@@ -379,12 +423,12 @@ namespace Ipopt
 
     const CompoundVector* cmpd_vec = dynamic_cast<const CompoundVector*>(vptr);
     if (cmpd_vec) {
-      Index n_entires = 0;
+      Index n_entries = 0;
       Index n_comps = cmpd_vec->NComps();
       for (int i=0; i<n_comps; i++) {
-	n_entires += GetNumberEntries_(*cmpd_vec->GetComp(i));
+	n_entries += GetNumberEntries_(*cmpd_vec->GetComp(i));
       }
-      return n_entires;
+      return n_entries;
     }
 
     THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"Unknown vector type passed to ParTripletHelper::GetNumberEntries_(const Vector)");
@@ -496,7 +540,7 @@ namespace Ipopt
     Index start, end;
     IdentityRange(matrix.Dim(), start, end);
 
-    DBG_ASSERT(n_entries == end-start);
+    DBG_ASSERT(n_entries == end-start+1);
     row_offset += start + 1;
     col_offset += start + 1;
     for (Index i=0; i<n_entries; i++) {
@@ -510,7 +554,7 @@ namespace Ipopt
     Index start, end;
     IdentityRange(matrix.Dim(), start, end);
 
-    DBG_ASSERT(n_entries == end-start);
+    DBG_ASSERT(n_entries == end-start+1);
     Number factor = matrix.GetFactor();
     for (Index i=0; i<n_entries; i++) {
       values[i] = factor;
@@ -774,6 +818,53 @@ namespace Ipopt
   void ParTripletHelper::FillValues_(Index n_entries, const TransposeMatrix& matrix, Number* values)
   {
     FillValues(n_entries, *matrix.OrigMatrix(), values);
+  }
+
+  void ParTripletHelper::FillAllValuesFromVector_(Index n_entries, const CompoundVector& vector, Number* values)
+  {
+    Index ncomps = vector.NComps();
+    Index total_dim = 0;
+    for (Index i=0; i<ncomps; i++) {
+      SmartPtr<const Vector> comp = vector.GetComp(i);
+      Index comp_dim = comp->Dim();
+      FillAllValuesFromVector(comp_dim, *comp, values);
+      values += comp_dim;
+      total_dim += comp_dim;
+    }
+    DBG_ASSERT(total_dim == n_entries);
+    return;
+  }
+
+  void ParTripletHelper::FillAllValuesFromVector_(Index n_entries, const ParVector& vector, Number* values)
+  {
+    DBG_ASSERT(n_entries == vector.Dim());
+
+    SmartPtr<const DenseVector> global_vector = vector.GlobalVector();
+    const Number* all_vals = global_vector->ExpandedValues();
+    IpBlasDcopy(n_entries, all_vals, 1, values, 1);
+    return;
+  }
+
+  void ParTripletHelper::PutAllValuesInVector_(Index n_entries, const Number* values, CompoundVector& vector)
+  {
+    Index ncomps = vector.NComps();
+    Index total_dim = 0;
+    for (Index i=0; i<ncomps; i++) {
+      SmartPtr<Vector> comp = vector.GetCompNonConst(i);
+      Index comp_dim = comp->Dim();
+      PutAllValuesInVector(comp_dim, values, *comp);
+      values += comp_dim;
+      total_dim += comp_dim;
+    }
+    DBG_ASSERT(total_dim == n_entries);
+    return;
+  }
+
+  void ParTripletHelper::PutAllValuesInVector_(Index n_entries, const Number* values, ParVector& vector)
+  {
+    DBG_ASSERT(n_entries == vector.Dim());
+    vector.ExtractLocalValues(values);
+    return;
   }
 
 } // namespace Ipopt

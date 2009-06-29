@@ -33,6 +33,8 @@ namespace Ipopt
   class CompoundSymMatrix;
   class TransposeMatrix;
   class Vector;
+  class CompoundVector;
+  class ParVector;
 
   class ParTripletHelper
   {
@@ -47,6 +49,14 @@ namespace Ipopt
 
     /** fill the values for the triplet format from the matrix */
     static void FillValues(Index n_entries, const Matrix& matrix, Number* values);
+
+    /** fill the values from a possibly distributed vector into one
+     *  single array */
+    static void FillAllValuesFromVector(Index n_entries, const Vector& vector, Number* values);
+
+    /** fill the values into a possibly distributed vector from one
+     *  single array */
+    static void PutAllValuesInVector(Index n_entries, const Number* values, Vector& vector);
     //@}
 
   private:
@@ -62,7 +72,7 @@ namespace Ipopt
     /** find the total number of triplet entries for the CompoundSymMatrix */
     static Index GetNumberEntries_(const CompoundSymMatrix& matrix);
 
-    /** find the totel number of triplet entires induced by Vector */
+    /** find the totel number of triplet entries induced by Vector */
     static Index GetNumberEntries_(const Vector& vector);
 
     static void FillRowCol_(Index n_entries, const ParGenMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
@@ -120,6 +130,14 @@ namespace Ipopt
     static void FillRowCol_(Index n_entries, const TransposeMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
 
     static void FillValues_(Index n_entries, const TransposeMatrix& matrix, Number* values);
+
+    static void FillAllValuesFromVector_(Index n_entries, const CompoundVector& vector, Number* values);
+
+    static void FillAllValuesFromVector_(Index n_entries, const ParVector& vector, Number* values);
+
+    static void PutAllValuesInVector_(Index n_entries, const Number* values, CompoundVector& vector);
+
+    static void PutAllValuesInVector_(Index n_entries, const Number* values, ParVector& vector);
 
   };
 } // namespace Ipopt

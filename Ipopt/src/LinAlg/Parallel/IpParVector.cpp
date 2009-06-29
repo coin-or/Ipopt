@@ -245,11 +245,11 @@ namespace Ipopt
   }
 
   void ParVector::PrintImpl(const Journalist& jnlst,
-                              EJournalLevel level,
-                              EJournalCategory category,
-                              const std::string& name,
-                              Index indent,
-                              const std::string& prefix) const
+			    EJournalLevel level,
+			    EJournalCategory category,
+			    const std::string& name,
+			    Index indent,
+			    const std::string& prefix) const
   {
     if (Rank() == 0){
       jnlst.PrintfIndented(level, category, indent,
@@ -263,7 +263,7 @@ namespace Ipopt
     local_vector_->Print( jnlst, level, category, myname, indent+1, prefix);
   }
 
-  SmartPtr<const DenseVector> ParVector::GlobalVector() const
+  SmartPtr<DenseVector> ParVector::GlobalVectorNonConst() const
   {
     SmartPtr<DenseVector> globalv = owner_space_->GlobalSpace()->MakeNewDenseVector();
 
@@ -276,12 +276,24 @@ namespace Ipopt
 		   const_cast<int*>(&(owner_space_->Displs()[0])),
 		   MPI_DOUBLE, MPI_COMM_WORLD);
 
-    return ConstPtr(globalv);
+    return globalv;
   }
+
+  SmartPtr<const DenseVector> ParVector::GlobalVector() const
+  {
+    SmartPtr<DenseVector> retval = GlobalVectorNonConst();
+    return ConstPtr(retval);
+  }  
 
   void ParVector::ExtractLocalVector(const DenseVector& global_vector)
   {
     local_vector_->CopyFromPos(owner_space_->StartPos(), global_vector);
+    ObjectChanged();
+  }
+
+  void ParVector::ExtractLocalValues(const Number* vals)
+  {
+    local_vector_->SetValues(vals+owner_space_->StartPos());
     ObjectChanged();
   }
 
