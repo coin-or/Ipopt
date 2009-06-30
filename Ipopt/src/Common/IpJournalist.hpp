@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -58,6 +58,7 @@ namespace Ipopt
 
   /** Category Selection Enum. */
   enum EJournalCategory {
+    J_ANY=-1 /** Choosing this fits and categroy. */,
     J_DBG=0,
     J_STATISTICS,
     J_MAIN,
@@ -230,6 +231,26 @@ namespace Ipopt
     SmartPtr<Journal> GetJournal(const std::string& location_name);
     //@}
 
+    /** @name Methods for collecting output from distributed
+    processors.  This only matters for MPI runs.  The idea is
+     *  that only the root processor does output.  The other
+     *  processors are silent, unless the StartDistributedOutput
+     *  method has been called.  After such a call, each process
+     *  locally collects output, until the FinishDistributedOutput
+     *  method has been called.  At that point, all output is
+     *  collected at the root process, and sent through the
+     *  journalists there.  For serial execution, all those methods do
+     *  nothing, and the output is going directly to the journals. */
+    //@{
+    /** This method is called to start collecting output from all
+     *  processors. */
+    void StartDistributedOutput() const;
+    /** This method is called to finalized the output from distributed
+     *  processors.  It is at this point, that the local output is
+     *  sent to the root processor and sent to the journals there. */
+    void FinishDistributedOutput() const;
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -249,6 +270,17 @@ namespace Ipopt
     //** Private Data Members. */
     //@{
     std::vector< SmartPtr<Journal> > journals_;
+    //@}
+
+    /** @name Stuff related to output for parallel runs. */
+    //@{
+    /** MPI rank.  Output is only generated on processor with rank 0.
+     *  If non-parallel programs, this variable is always set to 0. */
+    int my_rank_;
+    /** Flag indicating if we are current collecting distributed output. */
+    mutable bool collecting_output_;
+    /** buffer for sprintf.  Being generous in size here... */
+    mutable char buffer_[32768];
     //@}
   };
 
@@ -315,6 +347,13 @@ namespace Ipopt
     }
     //@}
 
+    /** Accessor method for the buffer for distribured data
+     * collection */
+    std::string& CollectionBuffer()
+    {
+      return collection_buffer_;
+    }
+
   protected:
     /**@name Implementation version of Print methods. Derived classes
      * should overload the Impl methods.
@@ -356,6 +395,10 @@ namespace Ipopt
 
     /** vector of integers indicating the level for each category */
     Index print_levels_[J_LAST_CATEGORY];
+
+    /** string to collect output in parallel implementation on each
+     *  processor. */
+    std::string collection_buffer_;
   };
 
 

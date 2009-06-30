@@ -300,7 +300,7 @@ ParTNLPWrapper::eval_jac_g(Index num_proc, Index proc_id,
 
   if (values_part == NULL) {
     if (!jac_map_) {
-      assert(nnz_jac_g_ == nele_jac_part);
+      DBG_ASSERT(nnz_jac_g_ == nele_jac_part);
       rval = tnlpobj_->eval_jac_g(n, x, new_x, m, nnz_jac_g_, iRow_part, jCol_part, NULL);
     }
     else {
@@ -326,7 +326,7 @@ ParTNLPWrapper::eval_jac_g(Index num_proc, Index proc_id,
   }
   else {
     if (!jac_map_) {
-      assert(nnz_jac_g_ == nele_jac_part);
+      DBG_ASSERT(nnz_jac_g_ == nele_jac_part);
       rval = tnlpobj_->eval_jac_g(n, x, new_x, m, nnz_jac_g_, NULL, NULL, values_part);
     }
     else {
@@ -364,7 +364,7 @@ bool ParTNLPWrapper::eval_h(Index num_proc, Index proc_id,
 
   if (values_part == NULL) {
     if (!hess_map_) {
-      assert(nnz_h_lag_ == nele_hess_part);
+      DBG_ASSERT(nnz_h_lag_ == nele_hess_part);
       rval = tnlpobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag_, iRow_part, jCol_part, NULL);
     }
     else {
@@ -389,7 +389,7 @@ bool ParTNLPWrapper::eval_h(Index num_proc, Index proc_id,
   }
   else {
     if (!hess_map_) {
-      assert(nnz_h_lag_ == nele_hess_part);
+      DBG_ASSERT(nnz_h_lag_ == nele_hess_part);
       rval = tnlpobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag_, NULL, NULL, values_part);
     }
     else {

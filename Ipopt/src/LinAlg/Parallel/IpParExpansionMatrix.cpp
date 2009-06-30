@@ -115,24 +115,27 @@ namespace Ipopt
   }
 
   void ParExpansionMatrix::PrintImpl(const Journalist& jnlst,
-                                  EJournalLevel level,
-                                  EJournalCategory category,
-                                  const std::string& name,
-                                  Index indent,
-                                  const std::string& prefix) const
+				     EJournalLevel level,
+				     EJournalCategory category,
+				     const std::string& name,
+				     Index indent,
+				     const std::string& prefix) const
   {
     const int rank = owner_space_->SmallVectorSpace()->Rank();
-    if (rank == 0){
-      jnlst.PrintfIndented(level, category, indent,
-			   "%sParExpansionMatrix \"%s\"\n",
-			   prefix.c_str(), name.c_str());
-    }
+    jnlst.PrintfIndented(level, category, indent,
+			 "%sParExpansionMatrix \"%s\"\n",
+			 prefix.c_str(), name.c_str());
 
     char buffer[256];
-    snprintf (buffer, 255, "%s[%d]", name.c_str(), rank);
+    snprintf (buffer, 255, "%s[%2d]", name.c_str(), rank);
     std::string myname = buffer;
 
-    local_matrix_->Print(jnlst, level, category, myname, indent+1, prefix);
+    jnlst.StartDistributedOutput();
+    local_matrix_->PrintImplOffset(jnlst, level, category, myname, indent+1,
+				   prefix,
+				   owner_space_->SmallVectorSpace()->StartPos()+1,
+				   owner_space_->LargeVectorSpace()->StartPos()+1);
+    jnlst.FinishDistributedOutput();
   }
 
   ParExpansionMatrixSpace::
@@ -141,7 +144,7 @@ namespace Ipopt
 			  const Index *ExpPos,
 			  const int offset)
     :
-    MatrixSpace(LargeVectorSpace->LocalSize(), SmallVectorSpace->LocalSize()),
+    MatrixSpace(LargeVectorSpace->Dim(), SmallVectorSpace->Dim()),
     large_vector_space_(LargeVectorSpace),
     small_vector_space_(SmallVectorSpace),
     global_compressed_pos_(NULL)

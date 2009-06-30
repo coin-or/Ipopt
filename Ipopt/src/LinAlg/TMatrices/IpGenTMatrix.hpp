@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -109,9 +109,21 @@ namespace Ipopt
                            EJournalCategory category,
                            const std::string& name,
                            Index indent,
-                           const std::string& prefix) const;
+                           const std::string& prefix) const
+    {
+      PrintImplOffset(jnlst, level, category, name, indent, prefix, 0);
+    }
     //@}
 
+    void PrintImplOffset(const Journalist& jnlst,
+                         EJournalLevel level,
+                         EJournalCategory category,
+                         const std::string& name,
+                         Index indent,
+                         const std::string& prefix,
+                         Index offset) const;
+
+    friend class ParGenMatrix;
 
   private:
     /**@name Default Compiler Generated Methods

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -30,14 +30,30 @@
 # endif
 #endif
 
+#ifdef HAVE_MPI
+// FIXME - proper header files
+//extern "C" {
+# define MPICH_SKIP_MPICXX
+# include "mpi.h"
+//}
+#endif
+
 namespace Ipopt
 {
 
   Journalist::Journalist()
-  {}
+      :
+      my_rank_(0),
+      collecting_output_(false)
+  {
+#ifdef HAVE_MPI
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank_);
+#endif
+  }
 
   Journalist::~Journalist()
   {
+    DBG_ASSERT(!collecting_output_);
     journals_.clear();
   }
 
@@ -171,17 +187,32 @@ namespace Ipopt
     // the category and output level
     for (Index i=0; i<(Index)journals_.size(); i++) {
       if (journals_[i]->IsAccepted(category, level)) {
-        // print the message
+        if (collecting_output_) {
 #ifdef HAVE_VA_COPY
-        va_list apcopy;
-        va_copy(apcopy, ap);
-        journals_[i]->Printf(category, level, pformat, apcopy);
-        va_end(apcopy);
+          va_list apcopy;
+          va_copy(apcopy, ap);
+          vsnprintf(buffer_, 32767, pformat, apcopy);
+          va_end(apcopy);
 #else
 
-        journals_[i]->Printf(category, level, pformat, ap);
+          vsnprintf(buffer_, 32767, pformat, ap);
 #endif
 
+          journals_[i]->CollectionBuffer() += buffer_;
+        }
+        else {
+          if (my_rank_ != 0) return;
+          // print the message
+#ifdef HAVE_VA_COPY
+          va_list apcopy;
+          va_copy(apcopy, ap);
+          journals_[i]->Printf(category, level, pformat, apcopy);
+          va_end(apcopy);
+#else
+
+          journals_[i]->Printf(category, level, pformat, ap);
+#endif
+        }
       }
     }
   }
@@ -197,22 +228,41 @@ namespace Ipopt
     for (Index i=0; i<(Index)journals_.size(); i++) {
       if (journals_[i]->IsAccepted(category, level)) {
 
-        // indent the appropriate amount
-        for (Index s=0; s<indent_level; s++) {
-          journals_[i]->Print(category, level, "  ");
-        }
-
-        // print the message
+        if (collecting_output_) {
+          for (Index s=0; s<indent_level; s++) {
+            journals_[i]->CollectionBuffer() += "  ";
+          }
 #ifdef HAVE_VA_COPY
-        va_list apcopy;
-        va_copy(apcopy, ap);
-        journals_[i]->Printf(category, level, pformat, apcopy);
-        va_end(apcopy);
+          va_list apcopy;
+          va_copy(apcopy, ap);
+          vsnprintf(buffer_, 32767, pformat, apcopy);
+          va_end(apcopy);
 #else
 
-        journals_[i]->Printf(category, level, pformat, ap);
+          vsnprintf(buffer_, 32767, pformat, ap);
 #endif
 
+          journals_[i]->CollectionBuffer() += buffer_;
+        }
+        else {
+          if (my_rank_ != 0) return;
+          // indent the appropriate amount
+          for (Index s=0; s<indent_level; s++) {
+            journals_[i]->Print(category, level, "  ");
+          }
+
+          // print the message
+#ifdef HAVE_VA_COPY
+          va_list apcopy;
+          va_copy(apcopy, ap);
+          journals_[i]->Printf(category, level, pformat, apcopy);
+          va_end(apcopy);
+#else
+
+          journals_[i]->Printf(category, level, pformat, ap);
+#endif
+
+        }
       }
     }
   }
@@ -230,6 +280,7 @@ namespace Ipopt
 
   bool Journalist::AddJournal(const SmartPtr<Journal> jrnl)
   {
+    DBG_ASSERT(!collecting_output_);
     DBG_ASSERT(IsValid(jrnl));
     std::string name = jrnl->Name();
 
@@ -253,7 +304,9 @@ namespace Ipopt
 
     // Open the file (Note:, a fname of "stdout" is handled by the
     // Journal class to mean stdout, etc.
-    if (temp->Open(fname.c_str()) && AddJournal(GetRawPtr(temp))) {
+    // We don't want to open the journal if we are not the root node
+    if ( (my_rank_!=0 || temp->Open(fname.c_str())) &&
+         AddJournal(GetRawPtr(temp))) {
       return GetRawPtr(temp);
     }
     return NULL;
@@ -261,6 +314,8 @@ namespace Ipopt
 
   void Journalist::FlushBuffer() const
   {
+    DBG_ASSERT(!collecting_output_);
+    if (my_rank_ != 0) return;
     for (Index i=0; i<(Index)journals_.size(); i++) {
       journals_[i]->FlushBuffer();
     }
@@ -282,6 +337,65 @@ namespace Ipopt
     }
 
     return retValue;
+  }
+
+  void Journalist::StartDistributedOutput() const
+  {
+    DBG_ASSERT(!collecting_output_);
+#ifdef HAVE_MPI
+    collecting_output_ = true;
+#endif
+  }
+
+  void Journalist::FinishDistributedOutput() const
+  {
+#ifdef HAVE_MPI
+    DBG_ASSERT(collecting_output_);
+    collecting_output_ = false;
+
+    int num_procs;
+    MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
+
+    int* recvcounts = NULL;
+    int* displs = NULL;
+    char* total_buffer = NULL;
+    if (my_rank_==0) {
+      recvcounts = new int[num_procs];
+      displs = new int[num_procs];
+    }
+
+    for (Index i=0; i<(Index)journals_.size(); i++) {
+      int local_buflen = journals_[i]->CollectionBuffer().length()+1;
+
+      // Send buffer sizes to root process for memory allocation
+      MPI_Gather(&local_buflen, 1, MPI_INT, recvcounts, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      if (my_rank_==0) {
+        displs[0] = 0;
+        for (int p=1; p<num_procs; p++) {
+          displs[p] = displs[p-1] + recvcounts[p-1];
+        }
+        const int total_buflen = displs[num_procs-1] + recvcounts[num_procs-1];
+        total_buffer = new char[total_buflen];
+      }
+
+      // Send all buffer to the root process
+      const char* local_buffer = journals_[i]->CollectionBuffer().c_str();
+      MPI_Gatherv(const_cast<char*>(local_buffer), local_buflen, MPI_CHAR, total_buffer, recvcounts, displs, MPI_CHAR, 0, MPI_COMM_WORLD);
+
+      // On root process, do the output
+      if (my_rank_==0) {
+        for (int p=0; p<num_procs; p++) {
+          journals_[i]->Print(J_ANY, J_NONE, &total_buffer[displs[p]]);
+        }
+        delete [] total_buffer;
+      }
+
+      journals_[i]->CollectionBuffer().clear();
+    }
+
+    delete [] recvcounts;
+    delete [] displs;
+#endif
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -313,6 +427,7 @@ namespace Ipopt
     EJournalLevel level
   ) const
   {
+    if (category == J_ANY) return true;
     if (print_levels_[(Index)category] >= (Index) level) {
       return true;
     }
@@ -324,6 +439,7 @@ namespace Ipopt
     EJournalCategory category,
     EJournalLevel level)
   {
+    DBG_ASSERT((Index)category >= 0);
     print_levels_[(Index)category] = (Index) level;
   }
 

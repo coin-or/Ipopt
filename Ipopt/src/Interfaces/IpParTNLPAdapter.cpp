@@ -181,11 +181,11 @@ namespace Ipopt
     Index nz_part_jac_g, nz_part_h;
     ParTNLP::IndexStyleEnum index_style;
 
-    bool retval =
+    int retval =
       partnlp_->get_nlp_info(num_proc_, proc_id_, n_full_x, n_first, n_last,
                              n_full_g, m_first, m_last, nz_part_jac_g,
                              nz_part_h, index_style);
-
+    MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
 
     ASSERT_EXCEPTION(retval, INVALID_PARTNLP, "get_nlp_info returned false");
     ASSERT_EXCEPTION(!warm_start_same_structure_ ||
@@ -275,6 +275,7 @@ namespace Ipopt
                                          x_l_part, x_u_part,
                                          n_full_g_, m_first_, m_last_,
                                          g_l_part, g_u_part);
+      MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
       ASSERT_EXCEPTION(retval, INVALID_PARTNLP,
                        "get_bounds_info returned false in GetSpaces");
 
@@ -847,6 +848,7 @@ namespace Ipopt
       retval = partnlp_->eval_jac_g(num_proc_, proc_id_, n_full_x, NULL, false,
                                     n_full_g, m_first, m_last, nz_part_jac_g_,
                                     g_iRow, g_jCol, NULL);
+      MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
       if (!retval) {
         delete [] g_iRow;
         delete [] g_jCol;
@@ -981,6 +983,7 @@ namespace Ipopt
                                   NULL, false,
                                   nz_part_h_, full_h_iRow, full_h_jCol, NULL);
 
+        MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
         if (!retval) {
           delete [] full_h_iRow;
           delete [] full_h_jCol;
@@ -1087,11 +1090,12 @@ namespace Ipopt
     Number* x_u_part = new Number[n_part_x_];
     Number* g_l_part = new Number[n_part_g_];
     Number* g_u_part = new Number[n_part_g_];
-    bool retval = partnlp_->get_bounds_info(num_proc_, proc_id_,
-                                            n_full_x_, n_first_, n_last_,
-                                            x_l_part, x_u_part,
-                                            n_full_g_, m_first_, m_last_,
-                                            g_l_part, g_u_part);
+    int retval = partnlp_->get_bounds_info(num_proc_, proc_id_,
+                                           n_full_x_, n_first_, n_last_,
+                                           x_l_part, x_u_part,
+                                           n_full_g_, m_first_, m_last_,
+                                           g_l_part, g_u_part);
+    MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
     ASSERT_EXCEPTION(retval, INVALID_PARTNLP,
                      "get_bounds_info returned false in GetBoundsInformation");
 
@@ -1193,7 +1197,7 @@ namespace Ipopt
       static_cast<const ParExpansionMatrix*>(&Pd_L);
     DBG_ASSERT(dynamic_cast<const ParExpansionMatrix*>(&Pd_L));
     const ExpansionMatrix* em_Pd_L = pem_Pd_L->LocalMatrix();
-    for (Index i=0; i<Pd_L.NCols(); i++) {
+    for (Index i=0; i<em_Pd_L->NCols(); i++) {
       Index d_exp_idx = em_Pd_L->ExpandedPosIndices()[i];
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
       Number lower_bound = g_l_part[full_idx];
@@ -1209,7 +1213,7 @@ namespace Ipopt
       static_cast<const ParExpansionMatrix*>(&Pd_U);
     DBG_ASSERT(dynamic_cast<const ParExpansionMatrix*>(&Pd_U));
     const ExpansionMatrix* em_Pd_U = pem_Pd_U->LocalMatrix();
-    for (Index i=0; i<Pd_U.NCols(); i++) {
+    for (Index i=0; i<em_Pd_U->NCols(); i++) {
       Index d_exp_idx = em_Pd_U->ExpandedPosIndices()[i];
       Index full_idx = P_d_g_->ExpandedPosIndices()[d_exp_idx];
       Number upper_bound = g_u_part[full_idx];
@@ -1247,15 +1251,16 @@ namespace Ipopt
     bool init_z = need_z_L || need_z_U;
     bool init_lambda = need_y_c || need_y_d;
 
-    bool retvalue =
+    int retval =
       partnlp_->get_starting_point(num_proc_, proc_id_,
                                    n_full_x_, n_first_, n_last_,
                                    init_x, x_part,
                                    init_z, z_l_part, z_u_part,
                                    n_full_g_, m_first_, m_last_,
                                    init_lambda, lambda_part);
+    MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
 
-    if (!retvalue) {
+    if (!retval) {
       delete [] x_part;
       delete [] z_l_part;
       delete [] z_u_part;
@@ -1376,7 +1381,7 @@ namespace Ipopt
                                   full_x_, new_x, f);
 
     // synchonize return values (TODO: What operation?)
-    MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+    MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
     if (retval==0) return false;
 
     // sum up all returned objective function values
@@ -1417,7 +1422,7 @@ namespace Ipopt
     }
 
     // synchonize return values (TODO: What operation?)
-    MPI_Allreduce(MPI_IN_PLACE, &retvalue, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+    MPI_Allreduce(MPI_IN_PLACE, &retvalue, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
     return retvalue;
   }
 
@@ -1575,7 +1580,7 @@ namespace Ipopt
                          nz_part_h_, NULL, NULL, values);
     }
 
-    MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+    MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
 
     return (bool)retval;
   }
@@ -1928,7 +1933,7 @@ namespace Ipopt
                                   n_full_g_, m_first_, m_last_, part_g_);
 
     // synchonize return values (TODO: What operation?)
-    MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+    MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
 
     if (!retval) {
       x_tag_for_jac_g_ = 0;
@@ -1952,7 +1957,7 @@ namespace Ipopt
                                       nz_part_jac_g_, NULL, NULL, jac_g_part_);
 
     // synchonize return values (TODO: What operation?)
-    MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+    MPI_Allreduce(MPI_IN_PLACE, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
 
     if (!retval) {
       x_tag_for_jac_g_ = 0;

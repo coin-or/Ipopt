@@ -62,13 +62,20 @@ namespace Ipopt
     SmartPtr<const DenseVector> dense_x = par_x->GlobalVector();
     SmartPtr<DenseVector> dense_y = par_y->MakeNewGlobalVector();
 
-    local_matrix_->MultVector(alpha, *dense_x, beta, *dense_y);
+    local_matrix_->MultVector(alpha, *dense_x, 0., *dense_y);
 
     Number *yvalues = dense_y->Values();
     MPI_Allreduce(MPI_IN_PLACE, yvalues, NCols(),
 		  MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
-    par_y->ExtractLocalVector(*dense_y);
+    if (beta==.0) {
+      par_y->ExtractLocalVector(*dense_y);
+    }
+    else {
+      SmartPtr<ParVector> par_v = par_y->MakeNewParVector();
+      par_v->ExtractLocalVector(*dense_y);
+      par_y->Axpy(beta, *par_v);
+    }
   }
 
   bool ParSymMatrix::HasValidNumbersImpl() const
@@ -87,16 +94,16 @@ namespace Ipopt
                                  Index indent,
                                  const std::string& prefix) const
   {
-    if (Rank() == 0){
-      jnlst.PrintfIndented(level, category, indent,
-			   "%sParMatrix \"%s\" with %d pieces, nrows %d, ncols:\n",
-			   prefix.c_str(), name.c_str(), NumProc(), NRows(), NCols());
-    }
+    jnlst.PrintfIndented(level, category, indent,
+			 "%sParMatrix \"%s\" with %d pieces, nrows %d, ncols:\n",
+			 prefix.c_str(), name.c_str(), NumProc(), NRows(), NCols());
     char buffer[256];
-    snprintf (buffer, 255, "%s[%d]", name.c_str(), Rank());
+    snprintf (buffer, 255, "%s[%2d]", name.c_str(), Rank());
     std::string myname = buffer;
     
+    jnlst.StartDistributedOutput();
     local_matrix_->Print(jnlst, level, category, myname, indent+1, prefix);
+    jnlst.FinishDistributedOutput();
   }
 
   ParSymMatrixSpace::ParSymMatrixSpace(Index dim, Index nonZeros, const Index* iRows,
