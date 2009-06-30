@@ -251,16 +251,17 @@ namespace Ipopt
 			    Index indent,
 			    const std::string& prefix) const
   {
-    if (Rank() == 0){
-      jnlst.PrintfIndented(level, category, indent,
-			   "%sParVector \"%s\" with %d pieces, dim %d:\n",
-			   prefix.c_str(), name.c_str(), NumProc(), Dim());
-    }
+    jnlst.PrintfIndented(level, category, indent,
+			 "%sParVector \"%s\" with %d pieces, dim %d:\n",
+			 prefix.c_str(), name.c_str(), NumProc(), Dim());
     char buffer[256];
-    snprintf (buffer, 255, "%s[%d]", name.c_str(), Rank());
+    snprintf (buffer, 255, "%s[%2d]", name.c_str(), Rank());
     std::string myname = buffer;
     
-    local_vector_->Print( jnlst, level, category, myname, indent+1, prefix);
+    jnlst.StartDistributedOutput();
+    local_vector_->PrintImplOffset(jnlst, level, category, myname, indent+1,
+				   prefix, 1+StartPos());
+    jnlst.FinishDistributedOutput();
   }
 
   SmartPtr<DenseVector> ParVector::GlobalVectorNonConst() const

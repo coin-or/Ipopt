@@ -1117,16 +1117,18 @@ namespace Ipopt
     }
   }
 
-  void DenseVector::PrintImpl(const Journalist& jnlst,
-                              EJournalLevel level,
-                              EJournalCategory category,
-                              const std::string& name,
-                              Index indent,
-                              const std::string& prefix) const
+  void DenseVector::PrintImplOffset(const Journalist& jnlst,
+                                    EJournalLevel level,
+                                    EJournalCategory category,
+                                    const std::string& name,
+                                    Index indent,
+                                    const std::string& prefix,
+                                    Index offset /* = 1 */) const
   {
     jnlst.PrintfIndented(level, category, indent,
                          "%sDenseVector \"%s\" with %d elements:\n",
                          prefix.c_str(), name.c_str(), Dim());
+
     if (initialized_) {
       if (homogeneous_) {
         jnlst.PrintfIndented(level, category, indent,
@@ -1140,14 +1142,14 @@ namespace Ipopt
           for (Index i=0; i<Dim(); i++) {
             jnlst.PrintfIndented(level, category, indent,
                                  "%s%s[%5d]{%s}=%23.16e\n",
-                                 prefix.c_str(), name.c_str(), i+1, idx_names[i].c_str(), values_[i]);
+                                 prefix.c_str(), name.c_str(), i+offset, idx_names[i].c_str(), values_[i]);
           }
         }
         else {
           for (Index i=0; i<Dim(); i++) {
             jnlst.PrintfIndented(level, category, indent,
                                  "%s%s[%5d]=%23.16e\n",
-                                 prefix.c_str(), name.c_str(), i+1, values_[i]);
+                                 prefix.c_str(), name.c_str(), i+offset, values_[i]);
           }
         }
       }

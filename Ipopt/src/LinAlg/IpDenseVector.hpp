@@ -203,8 +203,21 @@ namespace Ipopt
                            EJournalCategory category,
                            const std::string& name,
                            Index indent,
-                           const std::string& prefix) const;
+                           const std::string& prefix) const
+    {
+      PrintImplOffset(jnlst, level, category, name, indent, prefix, 1);
+    }
+    /* Print the entire vector with padding, and start counting with
+       an offset. */
+    void PrintImplOffset(const Journalist& jnlst,
+                         EJournalLevel level,
+                         EJournalCategory category,
+                         const std::string& name,
+                         Index indent,
+                         const std::string& prefix,
+                         Index offset) const;
     //@}
+    friend class ParVector;
 
   private:
     /**@name Default Compiler Generated Methods

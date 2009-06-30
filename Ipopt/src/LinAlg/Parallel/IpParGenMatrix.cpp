@@ -129,22 +129,23 @@ namespace Ipopt
   }
 
   void ParGenMatrix::PrintImpl(const Journalist& jnlst,
-                                 EJournalLevel level,
-                                 EJournalCategory category,
-                                 const std::string& name,
-                                 Index indent,
-                                 const std::string& prefix) const
+			       EJournalLevel level,
+			       EJournalCategory category,
+			       const std::string& name,
+			       Index indent,
+			       const std::string& prefix) const
   {
-    if (Rank() == 0){
-      jnlst.PrintfIndented(level, category, indent,
-			   "%sParVector \"%s\" with %d pieces, nrows %d, ncols:\n",
-			   prefix.c_str(), name.c_str(), NumProc(), NRows(), NCols());
-    }
+    jnlst.PrintfIndented(level, category, indent,
+			 "%sParVector \"%s\" with %d pieces, nrows %d, ncols:\n",
+			 prefix.c_str(), name.c_str(), NumProc(), NRows(), NCols());
     char buffer[256];
-    snprintf (buffer, 255, "%s[%d]", name.c_str(), Rank());
+    snprintf (buffer, 255, "%s[%2d]", name.c_str(), Rank());
     std::string myname = buffer;
     
-    local_matrix_->Print(jnlst, level, category, myname, indent+1, prefix);
+    jnlst.StartDistributedOutput();
+    local_matrix_->PrintImplOffset(jnlst, level, category, myname, indent+1,
+				   prefix, RowStartPos());
+    jnlst.FinishDistributedOutput();
   }
 
   ParGenMatrixSpace::ParGenMatrixSpace(SmartPtr<const ParVectorSpace> RowVectorSpace, Index nCols,
