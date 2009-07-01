@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -128,8 +128,6 @@ namespace Ipopt
     //@{
     /** Option that controls the matching strategy. */
     Index wsmp_num_threads_;
-    /** Ordering option for WSSMP (is IPARM(16)) */
-    Index wsmp_ordering_option_;
     /** Pivol tolerance */
     Number wsmp_pivtol_;
     /** Maximal pivot tolerance */
