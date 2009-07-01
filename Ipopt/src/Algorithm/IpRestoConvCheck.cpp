@@ -149,6 +149,9 @@ namespace Ipopt
     Number orig_theta_max = Max(kappa_resto_*orig_curr_theta,
                                 1.e2*Min(orig_ip_data->tol(),
                                          constr_viol_tol_));
+    if (kappa_resto_ == 0.) {
+      orig_theta_max = 0.;
+    }
 
     if (first_resto_iter_) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
