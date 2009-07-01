@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2008 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -84,9 +84,15 @@ namespace Ipopt
       "is only available if Ipopt has been compiled with WSMP.");
     roptions->AddBoundedIntegerOption(
       "wsmp_ordering_option",
-      "Determines how ordering is done in WSMP",
+      "Determines how ordering is done in WSMP (IPARM(16)",
       -2, 3, 1,
       "This corresponds to the value of WSSMP's IPARM(16).  This option is "
+      "only available if Ipopt has been compiled with WSMP.");
+    roptions->AddBoundedIntegerOption(
+      "wsmp_ordering_option2",
+      "Determines how ordering is done in WSMP (IPARM(20)",
+      0, 3, 1,
+      "This corresponds to the value of WSSMP's IPARM(20).  This option is "
       "only available if Ipopt has been compiled with WSMP.");
     roptions->AddBoundedNumberOption(
       "wsmp_pivtol",
@@ -130,7 +136,11 @@ namespace Ipopt
       const std::string& prefix)
   {
     options.GetIntegerValue("wsmp_num_threads", wsmp_num_threads_, prefix);
-    options.GetIntegerValue("wsmp_ordering_option", wsmp_ordering_option_,
+    Index wsmp_ordering_option;
+    options.GetIntegerValue("wsmp_ordering_option", wsmp_ordering_option,
+                            prefix);
+    Index wsmp_ordering_option2;
+    options.GetIntegerValue("wsmp_ordering_option2", wsmp_ordering_option2,
                             prefix);
     options.GetNumericValue("wsmp_pivtol", wsmp_pivtol_, prefix);
     if (options.GetNumericValue("wsmp_pivtolmax", wsmp_pivtolmax_, prefix)) {
@@ -178,9 +188,9 @@ namespace Ipopt
                           &idmy, IPARM_, DPARM_);
     IPARM_[14] = 0; // no restrictions on pivoting (ignored for
     // Bunch-Kaufman)
-    IPARM_[15] = wsmp_ordering_option_; // ordering option
+    IPARM_[15] = wsmp_ordering_option; // ordering option
     IPARM_[17] = 0; // use local minimum fill-in ordering
-    IPARM_[19] = 1; // for ordering in IP methods?
+    IPARM_[19] = wsmp_ordering_option2; // for ordering in IP methods?
     IPARM_[30] = 2; // want L D L^T factorization with diagonal
     // pivoting (Bunch/Kaufman)
     //IPARM_[31] = 1; // need D to see where first negative eigenvalue occurs
