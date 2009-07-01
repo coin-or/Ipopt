@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -160,6 +160,13 @@ namespace Ipopt
       "the \"expect_infeasible_problem\" heuristics in the filter line "
       "search are disabled. If the problem is square, this options is set to "
       "0.");
+    roptions->AddLowerBoundedNumberOption(
+      "expect_infeasible_problem_ytol",
+      "Multiplier threshold for activating \"expect_infeasible_problem\" option.",
+      0.0, true, 1e8,
+      "If the max norm of the constraint multipliers becomes larger than this "
+      "value and \"expect_infeasible_problem\" is chosen, then the "
+      "restoration phase is entered.");
     roptions->AddStringOption2(
       "start_with_resto",
       "Tells algorithm to switch to restoration phase in first iteration.",
@@ -202,6 +209,7 @@ namespace Ipopt
     }
     options.GetNumericValue("alpha_for_y_tol", alpha_for_y_tol_, prefix);
     options.GetNumericValue("expect_infeasible_problem_ctol", expect_infeasible_problem_ctol_, prefix);
+    options.GetNumericValue("expect_infeasible_problem_ytol", expect_infeasible_problem_ytol_, prefix);
     options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
 
     options.GetBoolValue("start_with_resto", start_with_resto_, prefix);
@@ -329,7 +337,7 @@ namespace Ipopt
 
     if (expect_infeasible_problem_ &&
         Max(IpData().curr()->y_c()->Amax(),
-            IpData().curr()->y_d()->Amax()) > 1e8) {
+            IpData().curr()->y_d()->Amax()) > expect_infeasible_problem_ytol_) {
       goto_resto = true;
     }
 

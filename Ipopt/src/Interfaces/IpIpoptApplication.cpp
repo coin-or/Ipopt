@@ -313,6 +313,7 @@ namespace Ipopt
           options_to_print.push_back("#Restoration Phase");
           options_to_print.push_back("expect_infeasible_problem");
           options_to_print.push_back("expect_infeasible_problem_ctol");
+          options_to_print.push_back("expect_infeasible_problem_ytol");
           options_to_print.push_back("start_with_resto");
           options_to_print.push_back("soft_resto_pderror_reduction_factor");
           options_to_print.push_back("required_infeasibility_reduction");
