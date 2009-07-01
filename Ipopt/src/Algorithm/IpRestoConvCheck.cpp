@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -57,6 +57,9 @@ namespace Ipopt
     options.GetNumericValue("required_infeasibility_reduction", kappa_resto_, prefix);
     options.GetIntegerValue("max_iter", maximum_iters_, prefix);
     options.GetIntegerValue("max_resto_iter", maximum_resto_iters_, prefix);
+
+    // The original constraint violation tolerance
+    options.GetNumericValue("constr_viol_tol", orig_constr_viol_tol_, "");
 
     first_resto_iter_ = true;
     successive_resto_iter_ = 0;
@@ -146,11 +149,19 @@ namespace Ipopt
                    orig_curr_theta, orig_trial_theta);
 
     // ToDo: In the following we might want to be more careful with the lower bound
-    Number orig_theta_max = Max(kappa_resto_*orig_curr_theta,
-                                1.e2*Min(orig_ip_data->tol(),
-                                         constr_viol_tol_));
+
+    Number orig_curr_inf_pr = orig_ip_cq->curr_primal_infeasibility(NORM_MAX);
+    Number orig_trial_inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
+    Jnlst().Printf(J_DETAILED, J_MAIN,
+                   "orig_curr_inf_pr = %8.2e, orig_trial_inf_pr = %8.2e\n",
+                   orig_curr_inf_pr, orig_trial_inf_pr);
+
+
+    Number orig_inf_pr_max = Max(kappa_resto_*orig_curr_inf_pr,
+                                 Min(orig_ip_data->tol(),
+                                     orig_constr_viol_tol_));
     if (kappa_resto_ == 0.) {
-      orig_theta_max = 0.;
+      orig_inf_pr_max = 0.;
     }
 
     if (first_resto_iter_) {
@@ -158,13 +169,14 @@ namespace Ipopt
                      "This is the first iteration - continue to take at least one step.\n");
       status = CONTINUE;
     }
-    else if (orig_trial_theta > orig_theta_max) {
+    else if (orig_trial_inf_pr > orig_inf_pr_max) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "Point does not provide sufficient reduction w.r.t the original theta (orig_theta_max=%e).\n", orig_theta_max);
+                     "Point does not provide sufficient reduction w.r.t the original constraint violation (orig_inf_pr_max=%e).\n", orig_inf_pr_max);
       status = CONTINUE;
     }
     else if (orig_ip_cq->IsSquareProblem() &&
-             orig_trial_theta <= orig_ip_data->tol()) {
+             orig_trial_inf_pr <=
+             Min(orig_ip_data->tol(), orig_constr_viol_tol_)) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "Restoration phase found points satisfying feasibility tolerance in square problem.\n");
       status = CONVERGED;
