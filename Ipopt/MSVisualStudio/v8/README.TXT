@@ -1,7 +1,7 @@
 This file describes how you use the Microsoft Visual Studio files
 included in the subdirectories in order to compile Ipopt.
 
-The curtial thing is that you need to get third party code (see the
+The crucial thing is that you need to get third party code (see the
 documentation for Ipopt).  Since some of that is written in Fortran,
 you also need to obtain the f2c Fortran to C compiler.
 
