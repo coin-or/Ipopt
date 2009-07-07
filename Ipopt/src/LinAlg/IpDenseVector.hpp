@@ -110,10 +110,10 @@ namespace Ipopt
      *  at position Pos in this vector.  Position count starts at 0.
      */
     void CopyToPos(Index Pos, const Vector& x);
-    /** Copy the data in this vector's subrange starting
-     *  at position Pos to Vector x.  Position count starts at 0.
+    /** Copy a subrange of x, starting at Pos, into the full data of
+     *  this vector.  Position count starts at 0.
      */
-    void CopyFromPos(Index Pos, Vector& x) const;
+    void CopyFromPos(Index Pos, const Vector& x);
     //@}
 
   protected:
@@ -203,8 +203,21 @@ namespace Ipopt
                            EJournalCategory category,
                            const std::string& name,
                            Index indent,
-                           const std::string& prefix) const;
+                           const std::string& prefix) const
+    {
+      PrintImplOffset(jnlst, level, category, name, indent, prefix, 1);
+    }
+    /* Print the entire vector with padding, and start counting with
+       an offset. */
+    void PrintImplOffset(const Journalist& jnlst,
+                         EJournalLevel level,
+                         EJournalCategory category,
+                         const std::string& name,
+                         Index indent,
+                         const std::string& prefix,
+                         Index offset) const;
     //@}
+    friend class ParVector;
 
   private:
     /**@name Default Compiler Generated Methods

@@ -372,9 +372,11 @@ namespace Ipopt
   void TripletHelper::FillRowCol_(Index n_entries, const DiagMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     DBG_ASSERT(n_entries == matrix.Dim());
+    row_offset++;
+    col_offset++;
     for (Index i=0; i<n_entries; i++) {
-      iRow[i] = i + row_offset + 1;
-      jCol[i] = i + col_offset + 1;
+      iRow[i] = i + row_offset;
+      jCol[i] = i + col_offset;
     }
   }
 
@@ -388,9 +390,11 @@ namespace Ipopt
   void TripletHelper::FillRowCol_(Index n_entries, const IdentityMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
     DBG_ASSERT(n_entries == matrix.Dim());
+    row_offset++;
+    col_offset++;
     for (Index i=0; i<n_entries; i++) {
-      iRow[i] = i + row_offset + 1;
-      jCol[i] = i + col_offset + 1;
+      iRow[i] = i + row_offset;
+      jCol[i] = i + col_offset;
     }
   }
 
@@ -407,9 +411,11 @@ namespace Ipopt
   {
     DBG_ASSERT(n_entries == matrix.NCols());
     const Index* exp_pos = matrix.ExpandedPosIndices();
+    row_offset++;
+    col_offset++;
     for (Index i=0; i<n_entries; i++) {
-      iRow[i] = exp_pos[i] + row_offset + 1;
-      jCol[i] = i + col_offset + 1;
+      iRow[i] = exp_pos[i] + row_offset;
+      jCol[i] = i + col_offset;
     }
   }
 

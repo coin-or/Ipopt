@@ -18,7 +18,6 @@
 # endif
 #endif
 
-// for sprintf
 #ifdef HAVE_CSTDIO
 # include <cstdio>
 #else
@@ -109,7 +108,7 @@ namespace Ipopt
       regu_x_ptr = dashes;
     }
     else {
-      sprintf(regu_x_buf, "%5.1f", log10(regu_x));
+      snprintf(regu_x_buf, 7, "%5.1f", log10(regu_x));
       regu_x_ptr = regu_x_buf;
     }
     Index ls_count = IpData().info_ls_count();

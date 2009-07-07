@@ -21,6 +21,8 @@
 # endif
 #endif
 
+#include <limits>
+
 namespace Ipopt
 {
 
@@ -422,7 +424,10 @@ namespace Ipopt
   Number DenseVector::MaxImpl() const
   {
     DBG_ASSERT(initialized_);
-    DBG_ASSERT(Dim() > 0 && "There is no Max of a zero length vector (no reasonable default can be returned)");
+    if (Dim()==0) {
+      return -std::numeric_limits<Number>::max();
+    }
+
     Number max;
     if (homogeneous_) {
       max = scalar_;
@@ -439,9 +444,10 @@ namespace Ipopt
   Number DenseVector::MinImpl() const
   {
     DBG_ASSERT(initialized_);
-    DBG_ASSERT(Dim() > 0 && "There is no Min of a zero length vector"
-               "(no reasonable default can be returned) - "
-               "Check for zero length vector before calling");
+    if (Dim()==0) {
+      return std::numeric_limits<Number>::max();
+    }
+
     Number min;
     if (homogeneous_) {
       min = scalar_;
@@ -1086,7 +1092,7 @@ namespace Ipopt
     homogeneous_ = false;
 
     if (dense_x->homogeneous_) {
-      IpBlasDcopy(dim_x, &scalar_, 1, vals+Pos, 1);
+      IpBlasDcopy(dim_x, &scalar_, 0, vals+Pos, 1);
     }
     else {
       IpBlasDcopy(dim_x, dense_x->values_, 1, vals+Pos, 1);
@@ -1095,36 +1101,34 @@ namespace Ipopt
     ObjectChanged();
   }
 
-  void DenseVector::CopyFromPos(Index Pos, Vector& x) const
+  void DenseVector::CopyFromPos(Index Pos, const Vector& x)
   {
-    Index dim_x = x.Dim();
-    DBG_ASSERT(dim_x+Pos<=Dim());
-    DenseVector* dense_x = static_cast<DenseVector*>(&x);
-    DBG_ASSERT(dynamic_cast<DenseVector*>(&x));
+    DBG_ASSERT(Dim()+Pos<=x.Dim());
+    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
 
-    DBG_ASSERT(dense_x->homogeneous_); // This might have to be made more general
-
-    if (homogeneous_) {
-      IpBlasDcopy(dim_x, &scalar_, 1, dense_x->values_, 1);
+    if (dense_x->IsHomogeneous()) {
+      Set(dense_x->Scalar());
     }
     else {
-      IpBlasDcopy(dim_x, values_+Pos, 1, dense_x->values_, 1);
+      IpBlasDcopy(Dim(), dense_x->Values()+Pos, 1, Values(), 1);
+      initialized_ = true;
+      ObjectChanged();
     }
-    // We need to tell X that it has changed!
-    dense_x->ObjectChanged();
-    dense_x->initialized_=true;
   }
 
-  void DenseVector::PrintImpl(const Journalist& jnlst,
-                              EJournalLevel level,
-                              EJournalCategory category,
-                              const std::string& name,
-                              Index indent,
-                              const std::string& prefix) const
+  void DenseVector::PrintImplOffset(const Journalist& jnlst,
+                                    EJournalLevel level,
+                                    EJournalCategory category,
+                                    const std::string& name,
+                                    Index indent,
+                                    const std::string& prefix,
+                                    Index offset /* = 1 */) const
   {
     jnlst.PrintfIndented(level, category, indent,
                          "%sDenseVector \"%s\" with %d elements:\n",
                          prefix.c_str(), name.c_str(), Dim());
+
     if (initialized_) {
       if (homogeneous_) {
         jnlst.PrintfIndented(level, category, indent,
@@ -1138,14 +1142,14 @@ namespace Ipopt
           for (Index i=0; i<Dim(); i++) {
             jnlst.PrintfIndented(level, category, indent,
                                  "%s%s[%5d]{%s}=%23.16e\n",
-                                 prefix.c_str(), name.c_str(), i+1, idx_names[i].c_str(), values_[i]);
+                                 prefix.c_str(), name.c_str(), i+offset, idx_names[i].c_str(), values_[i]);
           }
         }
         else {
           for (Index i=0; i<Dim(); i++) {
             jnlst.PrintfIndented(level, category, indent,
                                  "%s%s[%5d]=%23.16e\n",
-                                 prefix.c_str(), name.c_str(), i+1, values_[i]);
+                                 prefix.c_str(), name.c_str(), i+offset, values_[i]);
           }
         }
       }
