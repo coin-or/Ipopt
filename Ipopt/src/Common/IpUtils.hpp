@@ -115,6 +115,10 @@ namespace Ipopt
    *  this inequality by something a little larger than machine
    *  precision relative to the absolute value of BasVal. */
   bool Compare_le(Number lhs, Number rhs, Number BasVal);
+  
+  /** Method for printing a formatted output to a string with given size.
+  */
+  int Snprintf(char* str, size_t size, const char* format, ...);
 
 } //namespace Ipopt
 

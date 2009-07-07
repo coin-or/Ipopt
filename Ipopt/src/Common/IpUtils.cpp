@@ -53,6 +53,26 @@
 # endif
 #endif
 
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
+
+#ifdef HAVE_CSTDARG
+# include <cstdarg>
+#else
+# ifdef HAVE_STDARG_H
+#  include <stdarg.h>
+# else
+#  error "don't have header file for stdarg"
+# endif
+#endif
+
 #include <limits>
 
 // The following code has been copied from CoinUtils' CoinTime
@@ -208,6 +228,24 @@ namespace Ipopt
   {
     Number mach_eps = std::numeric_limits<Number>::epsilon();
     return (lhs - rhs <= 10.*mach_eps*fabs(BasVal));
+  }
+
+  int Snprintf(char* str, size_t size, const char* format, ...)
+  {
+    va_list ap;
+    va_start(ap, format);
+    int ret;
+#ifdef HAVE_VSNPRINTF
+    ret = vsnprintf(str, size, format, ap);
+#else
+#ifdef HAVE__VSNPRINTF
+    ret = _vsnprintf(str, size, format, ap);
+#else
+    ret = vsprintf(str, format, ap);
+#endif
+#endif
+    va_end(ap);
+    return ret;
   }
 
 } //namespace Ipopt

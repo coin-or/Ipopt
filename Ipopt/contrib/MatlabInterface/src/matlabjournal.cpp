@@ -27,9 +27,18 @@ namespace Ipopt {
 				  va_list ap) {
     const int maxStrLen = 1024;
     char      s[maxStrLen];
+#ifdef HAVE_VSNPRINTF
     if (vsnprintf(s,maxStrLen,pformat,ap) >= maxStrLen)
       throw MatlabException("String buffer it too short for all the \
 characters to be printed to MATLAB console");
+#else
+#ifdef HAVE__VSNPRINTF
+    if (_vsnprintf(s,maxStrLen,pformat,ap) >= maxStrLen)
+      throw MatlabException("String buffer it too short for all the \
+characters to be printed to MATLAB console");
+#else
+    vsprintf(s,pformat,ap);
+#endif
     mexPrintf(s);
   }
 
