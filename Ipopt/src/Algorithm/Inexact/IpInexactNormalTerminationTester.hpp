@@ -49,9 +49,9 @@ namespace Ipopt
      *  modified.  The input is the dimension of the augmented system,
      *  the current solution vector of the augmented system, the
      *  current residual vector. */
-    virtual ETerminationTest TestTerminaion(Index ndim, const Number* sol,
-                                            const Number* resid, Index iter,
-                                            Number norm2_rhs);
+    virtual ETerminationTest TestTermination(Index ndim, const Number* sol,
+        const Number* resid, Index iter,
+        Number norm2_rhs);
 
     /** This method can be called after the Solve is over and we can
      *  delete anything that has been allocated to free memory. */
@@ -92,6 +92,8 @@ namespace Ipopt
     Number inexact_normal_tol_;
     /** Maximal number of iterative solve iterations */
     Index inexact_normal_max_iter_;
+    /** Is set to true if the linear system is scaled via slacks. */
+    bool requires_scaling_;
     //@}
 
     /** Value of normal problem objective function achived by the

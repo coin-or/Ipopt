@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -117,7 +117,7 @@ namespace Ipopt
                            "%sTerm %d with factor %23.16e and the following matrix:\n",
                            prefix.c_str(), iterm, factors_[iterm]);
       char buffer[256];
-      sprintf(buffer, "Term: %d", iterm);
+      snprintf(buffer, 255, "Term: %d", iterm);
       std::string name = buffer;
       matrices_[iterm]->Print(&jnlst, level, category, name, indent+1, prefix);
     }

@@ -97,6 +97,16 @@ namespace Ipopt
     SmartPtr<InexactNormalStepCalculator> normal_step_calculator_;
     SmartPtr<InexactPDSolver> inexact_pd_solver_;
     //@}
+
+    /** enumeration for decomposition options */
+    enum DecompositionTypeEnum
+    {
+      ALWAYS=0,
+      ADAPTIVE,
+      SWITCH_ONCE
+    };
+    /** Type of decomposition */
+    DecompositionTypeEnum decomposition_type_;
   };
 
 } // namespace Ipopt

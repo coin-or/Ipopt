@@ -82,6 +82,8 @@ Ipopt/doc/options.tex -text
 Ipopt/examples/ScalableProblems/README -text
 Ipopt/examples/hs071_c/Makefile.in -text
 Ipopt/examples/hs071_cpp/Makefile.in -text
+Ipopt/src/Algorithm/Inexact/IpInexactTSymScalingMethod.cpp -text
+Ipopt/src/Algorithm/Inexact/IpInexactTSymScalingMethod.hpp -text
 Ipopt/src/Algorithm/Inexact/Makefile.am -text
 Ipopt/src/Algorithm/Inexact/Makefile.in -text
 Ipopt/src/Interfaces/ipopt_addlibs_cpp.txt.in -text

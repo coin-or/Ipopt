@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -322,12 +322,14 @@ namespace Ipopt
     }
   }
 
-  void ExpansionMatrix::PrintImpl(const Journalist& jnlst,
-                                  EJournalLevel level,
-                                  EJournalCategory category,
-                                  const std::string& name,
-                                  Index indent,
-                                  const std::string& prefix) const
+  void ExpansionMatrix::PrintImplOffset(const Journalist& jnlst,
+                                        EJournalLevel level,
+                                        EJournalCategory category,
+                                        const std::string& name,
+                                        Index indent,
+                                        const std::string& prefix,
+                                        Index row_offset,
+                                        Index col_offset) const
   {
     jnlst.Printf(level, category, "\n");
     jnlst.PrintfIndented(level, category, indent,
@@ -339,8 +341,8 @@ namespace Ipopt
     for (Index i=0; i<NCols(); i++) {
       jnlst.PrintfIndented(level, category, indent,
                            "%s%s[%5d,%5d]=%23.16e  (%d)\n",
-                           prefix.c_str(), name.c_str(), exp_pos[i]+1,
-                           i+1, 1., i);
+                           prefix.c_str(), name.c_str(), exp_pos[i]+row_offset,
+                           i+col_offset, 1., i);
     }
   }
 

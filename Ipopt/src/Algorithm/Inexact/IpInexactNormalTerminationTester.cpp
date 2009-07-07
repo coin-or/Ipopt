@@ -57,6 +57,16 @@ namespace Ipopt
     options.GetIntegerValue("inexact_normal_max_iter",
                             inexact_normal_max_iter_, prefix);
 
+    std::string inexact_linear_system_scaling;
+    options.GetStringValue("inexact_linear_system_scaling",
+                           inexact_linear_system_scaling, prefix);
+    if (inexact_linear_system_scaling=="slack-based") {
+      requires_scaling_ = true;
+    }
+    else {
+      requires_scaling_ = false;
+    }
+
     c_Avc_norm_cauchy_ = -1;
     return true;
   }
@@ -72,10 +82,10 @@ namespace Ipopt
 
   InexactNormalTerminationTester::ETerminationTest
   InexactNormalTerminationTester::
-  TestTerminaion(Index ndim, const Number* sol, const Number* resid,
-                 Index iter, Number norm2_rhs)
+  TestTermination(Index ndim, const Number* sol, const Number* resid,
+                  Index iter, Number norm2_rhs)
   {
-    DBG_START_METH("InexactNormalTerminationTester::TestTerminaion",
+    DBG_START_METH("InexactNormalTerminationTester::TestTermination",
                    dbg_verbosity);
 
     last_iter_ = iter;
@@ -107,6 +117,13 @@ namespace Ipopt
     SmartPtr<const Vector> sol_c;
     SmartPtr<const Vector> sol_d;
     GetVectors(ndim, sol, sol_x, sol_s, sol_c, sol_d);
+
+    if (requires_scaling_) {
+      SmartPtr<const Vector> scaling_vec = InexCq().curr_scaling_slacks();
+      SmartPtr<Vector> tmp = sol_s->MakeNewCopy();
+      tmp->ElementWiseMultiply(*scaling_vec);
+      sol_s = ConstPtr(tmp);
+    }
 
     SmartPtr<Vector> inf_c = IpCq().curr_c()->MakeNewCopy();
     IpCq().curr_jac_c()->MultVector(-1., *sol_x, 1., *inf_c);

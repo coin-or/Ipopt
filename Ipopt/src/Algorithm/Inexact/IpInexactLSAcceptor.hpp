@@ -218,6 +218,10 @@ namespace Ipopt
     Number nu_low_;
     /** Value of lower penalty parameter at beginning of the iteration */
     Number last_nu_low_;
+    /** Step size threshold for activating step decomposition */
+    Number inexact_decomposition_activate_tol_;
+    /** Step size threshold for inactivating step decomposition */
+    Number inexact_decomposition_inactivate_tol_;
     //@}
 
     /** Flag indicating if this is a termination test 2 iteration in

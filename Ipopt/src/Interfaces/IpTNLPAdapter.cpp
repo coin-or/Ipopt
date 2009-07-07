@@ -38,7 +38,6 @@
 # endif
 #endif
 
-// for sprintf
 #ifdef HAVE_CSTDIO
 # include <cstdio>
 #else
@@ -153,16 +152,27 @@ namespace Ipopt
       "method in the TNLP is implemented, this option is ignored.");
 
     roptions->SetRegisteringCategory("Derivative Checker");
-    roptions->AddStringOption3(
+    roptions->AddStringOption4(
       "derivative_test",
       "Enable derivative checker",
       "none",
       "none", "do not perform derivative test",
       "first-order", "perform test of first derivatives at starting point",
       "second-order", "perform test of first and second derivatives at starting point",
-      "If this option is enabled, a (slow) derivative test will be performed "
+      "only-second-order", "perform test of second derivatives at starting point",
+      "If this option is enabled, a (slow!) derivative test will be performed "
       "before the optimization.  The test is performed at the user provided "
       "starting point and marks derivative values that seem suspicious");
+    roptions->AddLowerBoundedIntegerOption(
+      "derivative_test_first_index",
+      "Index of first quantity to be checked by derivative checker",
+      -2, -2,
+      "If this is set to -2, then all derivatives are checked.  Otherwise, "
+      "for the first derivative test it specifies the first variable for "
+      "which the test is done (counting starts at 0).  For second "
+      "derivatives, it specifies the first constraint for which the test is "
+      "done; counting of constraint indices starts at 0, and -1 refers to the "
+      "objective function Hessian.");
     roptions->AddLowerBoundedNumberOption(
       "derivative_test_perturbation",
       "Size of the finite difference perturbation in derivative test.",
@@ -233,6 +243,8 @@ namespace Ipopt
                             derivative_test_tol_, prefix);
     options.GetBoolValue("derivative_test_print_all",
                          derivative_test_print_all_, prefix);
+    options.GetIntegerValue("derivative_test_first_index",
+                            derivative_test_first_index_, prefix);
 
     // The option warm_start_same_structure is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
@@ -324,7 +336,8 @@ namespace Ipopt
 
     // First, if required, perform derivative test
     if (derivative_test_ != NO_TEST) {
-      bool retval = CheckDerivatives(derivative_test_);
+      bool retval = CheckDerivatives(derivative_test_,
+                                     derivative_test_first_index_);
       if (!retval) {
         return retval;
       }
@@ -386,11 +399,27 @@ namespace Ipopt
 
       // create space to store vectors that are the full length of g
       full_g_ = new Number[n_full_g_];
+      // check if there is any meta data for the variables and constraints
+      StringMetaDataMapType var_string_md;
+      IntegerMetaDataMapType var_integer_md;
+      NumericMetaDataMapType var_numeric_md;
+      StringMetaDataMapType con_string_md;
+      IntegerMetaDataMapType con_integer_md;
+      NumericMetaDataMapType con_numeric_md;
+      if (!tnlp_->get_var_con_metadata(n_full_x_, var_string_md, var_integer_md, var_numeric_md,
+                                       n_full_g_, con_string_md, con_integer_md, con_numeric_md)) {
+        var_string_md.clear();
+        var_integer_md.clear();
+        var_numeric_md.clear();
+        con_string_md.clear();
+        con_integer_md.clear();
+        con_numeric_md.clear();
+      }
 
       // allocate internal space to store the full jacobian
       jac_g_ = new Number[nz_full_jac_g_];
 
-      /* Spaces for x, x_L, and x_U. We need to remove the fixed variables
+      /* Spaces for bounds. We need to remove the fixed variables
        * and find out which bounds do not exist. */
       Number* x_l = new Number[n_full_x_];
       Number* x_u = new Number[n_full_x_];
@@ -461,7 +490,7 @@ namespace Ipopt
           }
           else if (lower_bound > upper_bound) {
             char string[128];
-            sprintf(string, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+            snprintf(string, 127, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
             delete [] x_l;
             delete [] x_u;
             delete [] g_l;
@@ -470,6 +499,10 @@ namespace Ipopt
             delete [] x_fixed_map_tmp;
             delete [] x_l_map;
             delete [] x_u_map;
+            delete [] c_map;
+            delete [] d_map;
+            delete [] d_l_map;
+            delete [] d_u_map;
             THROW_EXCEPTION(INVALID_TNLP, string);
           }
           else {
@@ -538,7 +571,7 @@ namespace Ipopt
             delete [] d_l_map;
             delete [] d_u_map;
             char string[128];
-            sprintf(string, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+            snprintf(string, 127, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
             THROW_EXCEPTION(INVALID_TNLP, string);
           }
           else {
@@ -627,7 +660,7 @@ namespace Ipopt
         delete [] g_u;
 
         char string[128];
-        sprintf(string, "All variables are fixed, and constraint violation is %e", max_viol);
+        snprintf(string, 127, "All variables are fixed, and constraint violation is %e", max_viol);
         if (status == SUCCESS) {
           jnlst_->Printf(J_WARNING, J_INITIALIZATION,
                          "All variables are fixed and constraint violation %e\n   is below tolerance %e. Declaring success.\n", max_viol, tol_);
@@ -705,9 +738,15 @@ namespace Ipopt
       x_u = NULL;
 
       // create x spaces
-      x_space_ = new DenseVectorSpace(n_x_var);
-      x_l_space_ = new DenseVectorSpace(n_x_l);
-      x_u_space_ = new DenseVectorSpace(n_x_u);
+      SmartPtr<DenseVectorSpace> dv_x_space
+      = new DenseVectorSpace(n_x_var);
+      x_space_ = GetRawPtr(dv_x_space);
+      SmartPtr<DenseVectorSpace> dv_x_l_space
+      = new DenseVectorSpace(n_x_l);
+      x_l_space_ = GetRawPtr(dv_x_l_space);
+      SmartPtr<DenseVectorSpace> dv_x_u_space
+      = new DenseVectorSpace(n_x_u);
+      x_u_space_ = GetRawPtr(dv_x_u_space);
 
       if (n_x_fixed_>0 && fixed_variable_treatment_==MAKE_PARAMETER) {
         P_x_full_x_space_ =
@@ -727,6 +766,115 @@ namespace Ipopt
       px_u_space_ = GetRawPtr(P_x_x_U_space_);
       P_x_x_U_ = P_x_x_U_space_->MakeNewExpansionMatrix();
 
+      // setup the variable meta data if present
+      if (var_string_md.size() > 0) {
+        StringMetaDataMapType::iterator iter;
+        for (iter=var_string_md.begin(); iter != var_string_md.end(); iter++) {
+          std::vector<std::string> string_md(n_x_var);
+          const Index* pos_idx = NULL;
+          if (IsValid(P_x_full_x_space_)) {
+            pos_idx = P_x_full_x_->ExpandedPosIndices();
+            for (Index i=0; i<n_x_var; i++) {
+              string_md[i] = iter->second[pos_idx[i]];
+            }
+          }
+          else {
+            for (Index i=0; i<n_x_var; i++) {
+              string_md[i] = iter->second[i];
+            }
+          }
+          dv_x_space->SetStringMetaData(iter->first, string_md);
+
+          string_md.clear();
+          string_md.resize(n_x_l);
+          pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_l; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_l_space->SetStringMetaData(iter->first, string_md);
+
+          string_md.clear();
+          string_md.resize(n_x_u);
+          pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_u; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_u_space->SetStringMetaData(iter->first, string_md);
+        }
+      }
+
+      if (var_integer_md.size() > 0) {
+        IntegerMetaDataMapType::iterator iter;
+        for (iter=var_integer_md.begin(); iter != var_integer_md.end(); iter++) {
+          std::vector<Index> integer_md(n_x_var);
+          const Index* pos_idx = NULL;
+          if (IsValid(P_x_full_x_space_)) {
+            pos_idx = P_x_full_x_->ExpandedPosIndices();
+            for (Index i=0; i<n_x_var; i++) {
+              integer_md[i] = iter->second[pos_idx[i]];
+            }
+          }
+          else {
+            for (Index i=0; i<n_x_var; i++) {
+              integer_md[i] = iter->second[i];
+            }
+          }
+          dv_x_space->SetIntegerMetaData(iter->first, integer_md);
+
+          integer_md.clear();
+          integer_md.resize(n_x_l);
+          pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_l; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_l_space->SetIntegerMetaData(iter->first, integer_md);
+
+          integer_md.clear();
+          integer_md.resize(n_x_u);
+          pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_u; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_u_space->SetIntegerMetaData(iter->first, integer_md);
+        }
+      }
+
+      if (var_numeric_md.size() > 0) {
+        NumericMetaDataMapType::iterator iter;
+        for (iter=var_numeric_md.begin(); iter != var_numeric_md.end(); iter++) {
+          std::vector<Number> numeric_md(n_x_var);
+          const Index* pos_idx = NULL;
+          if (IsValid(P_x_full_x_space_)) {
+            pos_idx = P_x_full_x_->ExpandedPosIndices();
+            for (Index i=0; i<n_x_var; i++) {
+              numeric_md[i] = iter->second[pos_idx[i]];
+            }
+          }
+          else {
+            for (Index i=0; i<n_x_var; i++) {
+              numeric_md[i] = iter->second[i];
+            }
+          }
+          dv_x_space->SetNumericMetaData(iter->first, numeric_md);
+
+          numeric_md.clear();
+          numeric_md.resize(n_x_l);
+          pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_l; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_l_space->SetNumericMetaData(iter->first, numeric_md);
+
+          numeric_md.clear();
+          numeric_md.resize(n_x_u);
+          pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_x_u; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_x_u_space->SetNumericMetaData(iter->first, numeric_md);
+        }
+      }
+
       delete [] x_not_fixed_map;
       x_not_fixed_map = NULL;
       delete [] x_l_map;
@@ -736,17 +884,16 @@ namespace Ipopt
 
       // create the required c_space
 
+      SmartPtr<DenseVectorSpace> dc_space;
       if (n_x_fixed_==0 || fixed_variable_treatment_==MAKE_PARAMETER) {
-        SmartPtr<DenseVectorSpace> dc_space = new DenseVectorSpace(n_c);
-        c_space_ = GetRawPtr(dc_space);
-        c_rhs_ = new Number[n_c];
+        dc_space = new DenseVectorSpace(n_c);
       }
       else {
-        SmartPtr<DenseVectorSpace> dc_space =
-          new DenseVectorSpace(n_c+n_x_fixed_);
-        c_space_ = GetRawPtr(dc_space);
-        c_rhs_ = new Number[n_c+n_x_fixed_];
+        dc_space = new DenseVectorSpace(n_c+n_x_fixed_);
       }
+      c_space_ = GetRawPtr(dc_space);
+      c_rhs_ = new Number[dc_space->Dim()];
+
       // create the internal expansion matrix for c to g
       P_c_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_c, c_map);
       P_c_g_ = P_c_g_space_->MakeNewExpansionMatrix();
@@ -754,7 +901,9 @@ namespace Ipopt
       c_map = NULL;
 
       // create the required d_space
-      d_space_ = new DenseVectorSpace(n_d);
+      SmartPtr<DenseVectorSpace> dv_d_space
+      = new DenseVectorSpace(n_d);
+      d_space_ = GetRawPtr(dv_d_space);
       // create the internal expansion matrix for d to g
       P_d_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_d, d_map);
       P_d_g_ = P_d_g_space_->MakeNewExpansionMatrix();
@@ -762,16 +911,24 @@ namespace Ipopt
       d_map = NULL;
 
       // create the required d_l space
-      d_l_space_ = new DenseVectorSpace(n_d_l);
+      SmartPtr<DenseVectorSpace> dv_d_l_space
+      = new DenseVectorSpace(n_d_l);
+      d_l_space_ = GetRawPtr(dv_d_l_space);
       // create the required expansion matrix for d_L to d_L_exp
-      pd_l_space_ = new ExpansionMatrixSpace(n_d, n_d_l, d_l_map);
+      SmartPtr<ExpansionMatrixSpace> P_d_l_space
+      = new ExpansionMatrixSpace(n_d, n_d_l, d_l_map);
+      pd_l_space_ = GetRawPtr(P_d_l_space);
       delete [] d_l_map;
       d_l_map = NULL;
 
       // create the required d_u space
-      d_u_space_ = new DenseVectorSpace(n_d_u);
+      SmartPtr<DenseVectorSpace> dv_d_u_space
+      = new DenseVectorSpace(n_d_u);
+      d_u_space_ = GetRawPtr(dv_d_u_space);
       // create the required expansion matrix for d_U to d_U_exp
-      pd_u_space_ = new ExpansionMatrixSpace(n_d, n_d_u, d_u_map);
+      SmartPtr<ExpansionMatrixSpace> P_d_u_space
+      = new ExpansionMatrixSpace(n_d, n_d_u, d_u_map);
+      pd_u_space_ = GetRawPtr(P_d_u_space);
       delete [] d_u_map;
       d_u_map = NULL;
 
@@ -779,6 +936,115 @@ namespace Ipopt
       g_l = NULL;
       delete [] g_u;
       g_u = NULL;
+
+      // set the constraint meta data if present
+      if (con_string_md.size() > 0) {
+        StringMetaDataMapType::iterator iter;
+        for (iter=con_string_md.begin(); iter != con_string_md.end(); iter++) {
+          std::vector<std::string> string_md(n_c);
+          const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_c; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dc_space->SetStringMetaData(iter->first, string_md);
+
+          string_md.clear();
+          string_md.resize(n_d);
+          pos_idx = P_d_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_d; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_space->SetStringMetaData(iter->first, string_md);
+
+          string_md.clear();
+          string_md.resize(n_d_l);
+          pos_idx = P_d_l_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_l; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_l_space->SetStringMetaData(iter->first, string_md);
+
+          string_md.clear();
+          string_md.resize(n_d_u);
+          pos_idx = P_d_u_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_u; i++) {
+            string_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_u_space->SetStringMetaData(iter->first, string_md);
+        }
+      }
+
+      if (con_integer_md.size() > 0) {
+        IntegerMetaDataMapType::iterator iter;
+        for (iter=con_integer_md.begin(); iter != con_integer_md.end(); iter++) {
+          std::vector<Index> integer_md(n_c);
+          const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_c; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dc_space->SetIntegerMetaData(iter->first, integer_md);
+
+          integer_md.clear();
+          integer_md.resize(n_d);
+          pos_idx = P_d_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_d; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_space->SetIntegerMetaData(iter->first, integer_md);
+
+          integer_md.clear();
+          integer_md.resize(n_d_l);
+          pos_idx = P_d_l_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_l; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_l_space->SetIntegerMetaData(iter->first, integer_md);
+
+          integer_md.clear();
+          integer_md.resize(n_d_u);
+          pos_idx = P_d_u_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_u; i++) {
+            integer_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_u_space->SetIntegerMetaData(iter->first, integer_md);
+        }
+      }
+
+      if (con_numeric_md.size() > 0) {
+        NumericMetaDataMapType::iterator iter;
+        for (iter=con_numeric_md.begin(); iter != con_numeric_md.end(); iter++) {
+          std::vector<Number> numeric_md(n_c);
+          const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_c; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dc_space->SetNumericMetaData(iter->first, numeric_md);
+
+          numeric_md.clear();
+          numeric_md.resize(n_d);
+          pos_idx = P_d_g_space_->ExpandedPosIndices();
+          for (Index i=0; i<n_d; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_space->SetNumericMetaData(iter->first, numeric_md);
+
+          numeric_md.clear();
+          numeric_md.resize(n_d_l);
+          pos_idx = P_d_l_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_l; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_l_space->SetNumericMetaData(iter->first, numeric_md);
+
+          numeric_md.clear();
+          numeric_md.resize(n_d_u);
+          pos_idx = P_d_u_space->ExpandedPosIndices();
+          for (Index i=0; i<n_d_u; i++) {
+            numeric_md[i] = iter->second[pos_idx[i]];
+          }
+          dv_d_u_space->SetNumericMetaData(iter->first, numeric_md);
+        }
+      }
 
       /** Create the matrix space for the jacobians
        */
@@ -1171,8 +1437,8 @@ namespace Ipopt
     Number* full_z_u = new Number[n_full_x_];
     Number* full_lambda = new Number[n_full_g_];
     bool init_x = need_x;
-    bool init_z = need_z_L && need_z_U;
-    bool init_lambda = need_y_c && need_y_d;
+    bool init_z = need_z_L || need_z_U;
+    bool init_lambda = need_y_c || need_y_d;
 
     bool retvalue =
       tnlp_->get_starting_point(n_full_x_, init_x, full_x, init_z, full_z_l, full_z_u, n_full_g_, init_lambda, full_lambda);
@@ -2082,7 +2348,8 @@ namespace Ipopt
 
   }
 
-  bool TNLPAdapter::CheckDerivatives(TNLPAdapter::DerivativeTestEnum deriv_test)
+  bool TNLPAdapter::CheckDerivatives(TNLPAdapter::DerivativeTestEnum deriv_test,
+                                     Index deriv_test_start_index)
   {
     if (deriv_test == NO_TEST) {
       return true;
@@ -2092,9 +2359,6 @@ namespace Ipopt
 
     ASSERT_EXCEPTION(IsValid(jnlst_), ERROR_IN_TNLP_DERIVATIVE_TEST,
                      "No Journalist given to TNLPAdapter.  Need Journalist, otherwise can't produce any output in DerivativeChecker!");
-
-    jnlst_->Printf(J_SUMMARY, J_NLP,
-                   "Starting derivative checker for first derivatives.\n\n");
 
     bool retval = true;
     // Since this method should be independent of all other internal
@@ -2200,74 +2464,80 @@ namespace Ipopt
       index_correction = 1;
     }
 
-    // Now go through all variables and check the partial derivatives
-    for (Index ivar=0; ivar<nx; ivar++) {
-      Number this_perturbation =
-        derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
-      xpert[ivar] = xref[ivar] + this_perturbation;
+    if (deriv_test == FIRST_ORDER_TEST || deriv_test == SECOND_ORDER_TEST) {
+      jnlst_->Printf(J_SUMMARY, J_NLP,
+                     "Starting derivative checker for first derivatives.\n\n");
 
-      Number fpert;
-      new_x = true;
-      retval = tnlp_->eval_f(nx, xpert, new_x, fpert);
-      ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-                       "In TNLP derivative test: f could not be evaluated at perturbed point.");
-      new_x = false;
+      // Now go through all variables and check the partial derivatives
+      const Index ivar_first = Max(0, deriv_test_start_index);
+      for (Index ivar=ivar_first; ivar<nx; ivar++) {
+        Number this_perturbation =
+          derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
+        xpert[ivar] = xref[ivar] + this_perturbation;
 
-      Number deriv_approx = (fpert - fref)/this_perturbation;
-      Number deriv_exact = grad_f[ivar];
-      Number rel_error =
-        fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
-      char cflag=' ';
-      if (rel_error >= derivative_test_tol_) {
-        cflag='*';
-        nerrors++;
-      }
-      if (cflag != ' ' || derivative_test_print_all_) {
-        jnlst_->Printf(J_WARNING, J_NLP,
-                       "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n",
-                       cflag, ivar+index_correction,
-                       deriv_exact, deriv_approx, rel_error);
-      }
-
-      if (ng>0) {
-        retval = tnlp_->eval_g(nx, xpert, new_x, ng, gpert);
+        Number fpert;
+        new_x = true;
+        retval = tnlp_->eval_f(nx, xpert, new_x, fpert);
         ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-                         "In TNLP derivative test: g could not be evaluated at reference point.");
-        for (Index icon=0; icon<ng; icon++) {
-          deriv_approx = (gpert[icon] - gref[icon])/this_perturbation;
-          deriv_exact = 0.;
-          bool found = false;
-          for (Index i=0; i<nz_jac_g; i++) {
-            if (g_iRow[i]==icon && g_jCol[i]==ivar) {
-              found = true;
-              deriv_exact += jac_g[i];
+                         "In TNLP derivative test: f could not be evaluated at perturbed point.");
+        new_x = false;
+
+        Number deriv_approx = (fpert - fref)/this_perturbation;
+        Number deriv_exact = grad_f[ivar];
+        Number rel_error =
+          fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+        char cflag=' ';
+        if (rel_error >= derivative_test_tol_) {
+          cflag='*';
+          nerrors++;
+        }
+        if (cflag != ' ' || derivative_test_print_all_) {
+          jnlst_->Printf(J_WARNING, J_NLP,
+                         "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n",
+                         cflag, ivar+index_correction,
+                         deriv_exact, deriv_approx, rel_error);
+        }
+
+        if (ng>0) {
+          retval = tnlp_->eval_g(nx, xpert, new_x, ng, gpert);
+          ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
+                           "In TNLP derivative test: g could not be evaluated at reference point.");
+          for (Index icon=0; icon<ng; icon++) {
+            deriv_approx = (gpert[icon] - gref[icon])/this_perturbation;
+            deriv_exact = 0.;
+            bool found = false;
+            for (Index i=0; i<nz_jac_g; i++) {
+              if (g_iRow[i]==icon && g_jCol[i]==ivar) {
+                found = true;
+                deriv_exact += jac_g[i];
+              }
+            }
+
+            rel_error = fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+            cflag=' ';
+            if (rel_error >= derivative_test_tol_) {
+              cflag='*';
+              nerrors++;
+            }
+            char sflag=' ';
+            if (found) {
+              sflag = 'v';
+            }
+            if (cflag != ' ' || derivative_test_print_all_) {
+              jnlst_->Printf(J_WARNING, J_NLP,
+                             "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
+                             cflag, icon+index_correction, ivar+index_correction,
+                             deriv_exact, sflag, deriv_approx, rel_error);
             }
           }
-
-          rel_error = fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
-          cflag=' ';
-          if (rel_error >= derivative_test_tol_) {
-            cflag='*';
-            nerrors++;
-          }
-          char sflag=' ';
-          if (found) {
-            sflag = 'v';
-          }
-          if (cflag != ' ' || derivative_test_print_all_) {
-            jnlst_->Printf(J_WARNING, J_NLP,
-                           "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
-                           cflag, icon+index_correction, ivar+index_correction,
-                           deriv_exact, sflag, deriv_approx, rel_error);
-          }
         }
+
+        xpert[ivar] = xref[ivar];
       }
 
-      xpert[ivar] = xref[ivar];
     }
-
     const Number zero = 0.;
-    if (deriv_test == SECOND_ORDER_TEST) {
+    if (deriv_test == SECOND_ORDER_TEST || deriv_test == ONLY_SECOND_ORDER_TEST) {
       jnlst_->Printf(J_SUMMARY, J_NLP,
                      "Starting derivative checker for second derivatives.\n\n");
 
@@ -2297,7 +2567,8 @@ namespace Ipopt
       Number* jacpert = new Number[nz_jac_g];
 
       // Check all Hessians
-      for (Index icon=-1; icon<ng; icon++) {
+      const Index icon_first = Max(-1, deriv_test_start_index);
+      for (Index icon=icon_first; icon<ng; icon++) {
         Number objfact = 0.;
         if (icon == -1) {
           objfact = 1.;

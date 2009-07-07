@@ -15,6 +15,9 @@
 namespace Ipopt
 {
 
+  DECLARE_STD_EXCEPTION(UNKNOWN_MATRIX_TYPE);
+  DECLARE_STD_EXCEPTION(UNKNOWN_VECTOR_TYPE);
+
   /** forward declarations */
   class Matrix;
   class GenTMatrix;
@@ -52,9 +55,6 @@ namespace Ipopt
     /** put the values from the double* back into the vector */
     static void PutValuesInVector(Index dim, const double* values, Vector& vector);
     //@}
-
-    DECLARE_STD_EXCEPTION(UNKNOWN_MATRIX_TYPE);
-    DECLARE_STD_EXCEPTION(UNKNOWN_VECTOR_TYPE);
 
   private:
     /** find the total number of triplet entries for the SumMatrix */

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -18,7 +18,6 @@
 #include "IpTripletHelper.hpp"
 // ToDo: Remove above here
 
-// for sprintf
 #ifdef HAVE_CSTDIO
 # include <cstdio>
 #else
@@ -177,12 +176,13 @@ namespace Ipopt
       augrhs->SetComp(2, *rhs_cV[i]);
       augrhs->SetComp(3, *rhs_dV[i]);
       char buffer[16];
-      sprintf(buffer, "RHS[%2d]", i);
+      snprintf(buffer, 15, "RHS[%2d]", i);
       augrhs->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, buffer);
       augmented_rhsV[i] = GetRawPtr(augrhs);
     }
 
     augmented_system_->Print(Jnlst(), J_MATRIX, J_LINEAR_ALGEBRA, "KKT");
+#ifndef HAVE_MPI
     if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
       // ToDo: remove below here - for debug only
       Index dbg_nz = TripletHelper::GetNumberEntries(*augmented_system_);
@@ -203,6 +203,7 @@ namespace Ipopt
       dbg_values = NULL;
       // ToDo: remove above here
     }
+#endif
 
     // Call the linear solver
     std::vector<SmartPtr<Vector> > augmented_solV(nrhs);
@@ -223,7 +224,7 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Factorization successful.\n");
       for (Index i=0; i<nrhs; i++) {
         char buffer[16];
-        sprintf(buffer, "SOL[%2d]", i);
+        snprintf(buffer, 15, "SOL[%2d]", i);
         augmented_solV[i]->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA,
                                  buffer);
       }

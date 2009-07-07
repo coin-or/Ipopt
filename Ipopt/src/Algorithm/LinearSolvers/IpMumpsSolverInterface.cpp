@@ -112,7 +112,10 @@ namespace Ipopt
       0, 1000,
       "In MUMPS when significant extra fill-in is caused by numerical "
       "pivoting, larger values of mumps_mem_percent may help use the "
-      "workspace more efficiently.");
+      "workspace more efficiently.  On the other hand, if memory requirement "
+      "are too large at the very beginning of the optimization, choosing a "
+      "much smaller value for this option, such as 5, might reduce memory "
+      "requirements.");
     roptions->AddBoundedIntegerOption(
       "mumps_permuting_scaling",
       "Controls permuting and scaling in MUMPS",
