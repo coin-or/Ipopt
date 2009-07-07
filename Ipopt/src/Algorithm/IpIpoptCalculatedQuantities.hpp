@@ -9,11 +9,11 @@
 #ifndef __IPIPOPTCALCULATEDQUANTITIES_HPP__
 #define __IPIPOPTCALCULATEDQUANTITIES_HPP__
 
-#include "IpIpoptNLP.hpp"
 #include "IpIpoptData.hpp"
 
 namespace Ipopt
 {
+  class IpoptNLP;
 
   /** Norm types */
   enum ENormType {

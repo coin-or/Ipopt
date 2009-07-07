@@ -12,6 +12,7 @@
 #include "IpOptionsList.hpp"
 #include "IpJournalist.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
+#include "IpIpoptNLP.hpp"
 
 namespace Ipopt
 {

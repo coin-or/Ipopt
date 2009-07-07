@@ -8,6 +8,7 @@
 
 #include "IpSolveStatistics.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
+#include "IpIpoptNLP.hpp"
 
 namespace Ipopt
 {
