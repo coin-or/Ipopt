@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE IPOPTSRCDIR IPOPTOBJDIR IPOPTDOCDIR COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE COIN_BUILD_BLAS_TRUE COIN_BUILD_BLAS_FALSE COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE COIN_BUILD_LAPACK_TRUE COIN_BUILD_LAPACK_FALSE COIN_HAS_METIS_TRUE COIN_HAS_METIS_FALSE MUMPSINCDIR MUMPSLIB COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE MUMPS_INCFLAGS COIN_BUILD_MUMPS_TRUE COIN_BUILD_MUMPS_FALSE ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE IPOPTSRCDIR IPOPTOBJDIR IPOPTDOCDIR IPOPTINSTDIR COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE COIN_HAS_IPOPT_INSTALLED_TRUE COIN_HAS_IPOPT_INSTALLED_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE COIN_BUILD_BLAS_TRUE COIN_BUILD_BLAS_FALSE COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE COIN_BUILD_LAPACK_TRUE COIN_BUILD_LAPACK_FALSE COIN_HAS_METIS_TRUE COIN_HAS_METIS_FALSE MUMPSINCDIR MUMPSLIB COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE MUMPS_INCFLAGS COIN_BUILD_MUMPS_TRUE COIN_BUILD_MUMPS_FALSE ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1133,6 +1133,13 @@ Optional Packages:
                           both]
   --with-tags[=TAGS]
                           include additional configurations [automatic]
+  --with-ipopt-instdir prefix of installation directory for precompiled Ipopt
+                          package
+  --with-ipopt-srcdir source directory for Ipopt package
+  --with-ipopt-objdir object directory for Ipopt package (if different from
+                          source directory in VPATH compilation)
+  --with-coin-instdir     prefix of installation directory for precompiled
+                          COIN packages
   --with-blas             specify BLAS library (or BUILD for compilation)
   --with-lapack           specify LAPACK library (or BUILD for compilation)
   --with-metis            specify flags to link with METIS library
@@ -4365,7 +4372,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4368:" \
+echo "$as_me:4375:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -4933,7 +4940,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:4936: \"$ac_link\") >&5
+(eval echo $as_me:4943: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5011,7 +5018,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:5014: \"$ac_link\") >&5
+(eval echo $as_me:5021: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -7476,7 +7483,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7479 "configure"' > conftest.$ac_ext
+  echo '#line 7486 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9456,11 +9463,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9459: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9466: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9463: \$? = $ac_status" >&5
+   echo "$as_me:9470: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9724,11 +9731,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9727: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9734: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9731: \$? = $ac_status" >&5
+   echo "$as_me:9738: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9828,11 +9835,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9831: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9838: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9835: \$? = $ac_status" >&5
+   echo "$as_me:9842: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12245,7 +12252,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12248 "configure"
+#line 12255 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12345,7 +12352,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12348 "configure"
+#line 12355 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -14705,11 +14712,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14708: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14715: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14712: \$? = $ac_status" >&5
+   echo "$as_me:14719: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14809,11 +14816,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14812: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14819: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14816: \$? = $ac_status" >&5
+   echo "$as_me:14823: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16379,11 +16386,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16382: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16389: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16386: \$? = $ac_status" >&5
+   echo "$as_me:16393: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16483,11 +16490,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16486: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16493: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16490: \$? = $ac_status" >&5
+   echo "$as_me:16497: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18690,11 +18697,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18693: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18700: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18697: \$? = $ac_status" >&5
+   echo "$as_me:18704: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18958,11 +18965,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18961: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18968: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18965: \$? = $ac_status" >&5
+   echo "$as_me:18972: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19062,11 +19069,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19065: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19072: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:19069: \$? = $ac_status" >&5
+   echo "$as_me:19076: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -22004,7 +22011,7 @@ echo $ECHO_N "checking for COIN project Ipopt... $ECHO_C" >&6
 # First check, if the sub-project is actually available (ToDo: allow
 # other locations)
 
-coin_has_ipopt=unavailable
+coin_has_ipopt=notGiven
 if test x"$COIN_SKIP_PROJECTS" != x; then
   for dir in $COIN_SKIP_PROJECTS; do
     if test $dir = Ipopt; then
@@ -22013,17 +22020,99 @@ if test x"$COIN_SKIP_PROJECTS" != x; then
   done
 fi
 
+
+
+
+
+IPOPTSRCDIR=This_Variable_Is_Not_Set
+IPOPTOBJDIR=This_Variable_Is_Not_Set
+IPOPTDOCDIR=This_Variable_Is_Not_Set
+IPOPTINSTDIR=This_Variable_Is_Not_Set
+
 if test $coin_has_ipopt != skipping; then
   if test $PACKAGE_TARNAME = ipopt; then
     coin_has_ipopt=.
   else
-    if test -d $srcdir/../Ipopt; then
-      coin_has_ipopt=../Ipopt
+
+# Check whether --with-m4_tolower(Ipopt)-instdir or --without-m4_tolower(Ipopt)-instdir was given.
+if test "${with_ipopt_instdir+set}" = set; then
+  withval="$with_ipopt_instdir"
+  coin_has_ipopt=installed
+		 if test -d "$withval"; then : ; else
+		   { { echo "$as_me:$LINENO: error: argument for --with-ipopt-instdir not a directory" >&5
+echo "$as_me: error: argument for --with-ipopt-instdir not a directory" >&2;}
+   { (exit 1); exit 1; }; }
+		 fi
+                 IPOPTINSTDIR=`cd $withval; pwd`
+fi;
+
+
+# Check whether --with-m4_tolower(Ipopt)-srcdir or --without-m4_tolower(Ipopt)-srcdir was given.
+if test "${with_ipopt_srcdir+set}" = set; then
+  withval="$with_ipopt_srcdir"
+  if test "$coin_has_ipopt" = installed; then
+		   { { echo "$as_me:$LINENO: error: --with-$ipopt-srcdir cannot be given together with --with-ipopt-instdir" >&5
+echo "$as_me: error: --with-$ipopt-srcdir cannot be given together with --with-ipopt-instdir" >&2;}
+   { (exit 1); exit 1; }; }
+		 fi
+		 if test -d "$withval"; then : ; else
+		   { { echo "$as_me:$LINENO: error: argument for --with-ipopt-srcdir not a directory" >&5
+echo "$as_me: error: argument for --with-ipopt-srcdir not a directory" >&2;}
+   { (exit 1); exit 1; }; }
+		 fi
+		 coin_has_ipopt=$withval
+                 IPOPTSRCDIR=`cd $withval; pwd`
+fi;
+
+
+# Check whether --with-m4_tolower(Ipopt)-objdir or --without-m4_tolower(Ipopt)-objdir was given.
+if test "${with_ipopt_objdir+set}" = set; then
+  withval="$with_ipopt_objdir"
+  if test "$coin_has_ipopt" = installed; then
+		   { { echo "$as_me:$LINENO: error: --with-ipopt-objdir cannot be given together with --with-ipopt-instdir" >&5
+echo "$as_me: error: --with-ipopt-objdir cannot be given together with --with-ipopt-instdir" >&2;}
+   { (exit 1); exit 1; }; }
+		 fi
+		 if test "$coin_has_ipopt" = notGiven; then
+		   { { echo "$as_me:$LINENO: error: --with-ipopt-objdir must be accompanied by --with-ipopt-srcdir" >&5
+echo "$as_me: error: --with-ipopt-objdir must be accompanied by --with-ipopt-srcdir" >&2;}
+   { (exit 1); exit 1; }; }
+		 fi
+		 if test -d "$withval"; then : ; else
+		   { { echo "$as_me:$LINENO: error: argument for --with-ipopt-objdir not a directory" >&5
+echo "$as_me: error: argument for --with-ipopt-objdir not a directory" >&2;}
+   { (exit 1); exit 1; }; }
+		 fi
+                 IPOPTOBJDIR=`cd $withval; pwd`
+else
+  IPOPTOBJDIR="$IPOPTSRCDIR"
+fi;
+
+    # if we still don't have a location, check for generic flag
+    if test "$coin_has_ipopt" = notGiven; then
+
+# Check whether --with-coin-instdir or --without-coin-instdir was given.
+if test "${with_coin_instdir+set}" = set; then
+  withval="$with_coin_instdir"
+  coin_has_ipopt=installed
+		   if test -d "$withval"; then : ; else
+		     { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
+echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
+   { (exit 1); exit 1; }; }
+		   fi
+                   IPOPTINSTDIR=`cd $withval; pwd`
+fi;
+    fi
+
+    if test "$coin_has_ipopt" = notGiven; then
+      if test -d $srcdir/../Ipopt; then
+        coin_has_ipopt=../Ipopt
+      fi
     fi
   fi
 fi
 
-if test $coin_has_ipopt != unavailable &&
+if test $coin_has_ipopt != notGiven &&
    test $coin_has_ipopt != skipping; then
   # Set the #define if the component is available
 
@@ -22032,19 +22121,25 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
-  # Set the variables for source and object code location
-
-  IPOPTSRCDIR=`cd $srcdir/$coin_has_ipopt; pwd`
-
-  IPOPTOBJDIR=`pwd`/$coin_has_ipopt
-
-  IPOPTDOCDIR=$abs_lib_dir/../share/doc/coin/Ipopt
+  if test $coin_has_ipopt = installed; then
+    IPOPTDOCDIR=$IPOPTINSTDIR/share/doc/coin/Ipopt
+  else
+    if test "$IPOPTOBJDIR" = This_Variable_Is_Not_Set; then
+      # Set the variables for source and object code location
+      IPOPTSRCDIR=`cd $srcdir/$coin_has_ipopt; pwd`
+      IPOPTOBJDIR=`pwd`/$coin_has_ipopt
+      IPOPTDOCDIR=$abs_lib_dir/../share/doc/coin/Ipopt
+    else
+      # This is just a guess:
+      IPOPTDOCDIR=$IPOPTOBJDIR/../share/doc/coin/Ipopt
+    fi
+  fi
 fi
 
   # Define the Makefile conditional
 
 
-if test $coin_has_ipopt != unavailable &&
+if test $coin_has_ipopt != notGiven &&
                 test $coin_has_ipopt != skipping; then
   COIN_HAS_IPOPT_TRUE=
   COIN_HAS_IPOPT_FALSE='#'
@@ -22053,8 +22148,28 @@ else
   COIN_HAS_IPOPT_FALSE=
 fi
 
-echo "$as_me:$LINENO: result: $coin_has_ipopt" >&5
+
+
+if test $coin_has_ipopt = installed; then
+  COIN_HAS_IPOPT_INSTALLED_TRUE=
+  COIN_HAS_IPOPT_INSTALLED_FALSE='#'
+else
+  COIN_HAS_IPOPT_INSTALLED_TRUE='#'
+  COIN_HAS_IPOPT_INSTALLED_FALSE=
+fi
+
+
+if test $coin_has_ipopt = installed; then
+  echo "$as_me:$LINENO: result: installed in $IPOPTINSTDIR" >&5
+echo "${ECHO_T}installed in $IPOPTINSTDIR" >&6
+  # Check for header
+
+  # Check for library (this is not qo reliable)
+
+else
+  echo "$as_me:$LINENO: result: $coin_has_ipopt" >&5
 echo "${ECHO_T}$coin_has_ipopt" >&6
+fi
 
 
 #############################################################################
@@ -33438,6 +33553,13 @@ echo "$as_me: error: conditional \"COIN_HAS_IPOPT\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
+if test -z "${COIN_HAS_IPOPT_INSTALLED_TRUE}" && test -z "${COIN_HAS_IPOPT_INSTALLED_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_IPOPT_INSTALLED\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_IPOPT_INSTALLED\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
@@ -34264,8 +34386,11 @@ s,@AIX_FIX_COMPILER_BUG_FALSE@,$AIX_FIX_COMPILER_BUG_FALSE,;t t
 s,@IPOPTSRCDIR@,$IPOPTSRCDIR,;t t
 s,@IPOPTOBJDIR@,$IPOPTOBJDIR,;t t
 s,@IPOPTDOCDIR@,$IPOPTDOCDIR,;t t
+s,@IPOPTINSTDIR@,$IPOPTINSTDIR,;t t
 s,@COIN_HAS_IPOPT_TRUE@,$COIN_HAS_IPOPT_TRUE,;t t
 s,@COIN_HAS_IPOPT_FALSE@,$COIN_HAS_IPOPT_FALSE,;t t
+s,@COIN_HAS_IPOPT_INSTALLED_TRUE@,$COIN_HAS_IPOPT_INSTALLED_TRUE,;t t
+s,@COIN_HAS_IPOPT_INSTALLED_FALSE@,$COIN_HAS_IPOPT_INSTALLED_FALSE,;t t
 s,@BITS_PER_POINTER@,$BITS_PER_POINTER,;t t
 s,@BIT32FCOMMENT@,$BIT32FCOMMENT,;t t
 s,@BIT64FCOMMENT@,$BIT64FCOMMENT,;t t
