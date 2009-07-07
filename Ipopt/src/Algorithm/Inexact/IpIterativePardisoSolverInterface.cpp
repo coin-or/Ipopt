@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -240,7 +240,7 @@ namespace Ipopt
     // Call Pardiso's initialization routine
     IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
     ipfint ERROR = 0;
-    ipfint SOLVER = 0; // initialze only direct solver
+    ipfint SOLVER = 1; // initialze only direct solver
     F77_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, &SOLVER,
                                       IPARM_, DPARM_, &ERROR);
 
@@ -296,6 +296,14 @@ namespace Ipopt
 
     IPARM_[31] = 1 ;  // iterative solver
     MSGLVL_ = pardiso_msglvl;
+
+    pardiso_iter_dropping_factor_used_ = pardiso_iter_dropping_factor_;
+    pardiso_iter_dropping_schur_used_ = pardiso_iter_dropping_schur_;
+    normal_pardiso_iter_dropping_factor_used_ = normal_pardiso_iter_dropping_factor_;
+    normal_pardiso_iter_dropping_schur_used_ = normal_pardiso_iter_dropping_schur_;
+
+    // TODO Make option
+    decr_factor_ = 1./3.;
 
     // Option for the out of core variant
     // IPARM_[49] = pardiso_out_of_core_power;
@@ -525,8 +533,8 @@ namespace Ipopt
         DPARM_[ 1] = normal_pardiso_iter_relative_tol_;
         DPARM_[ 2] = normal_pardiso_iter_coarse_size_;
         DPARM_[ 3] = normal_pardiso_iter_max_levels_;
-        DPARM_[ 4] = normal_pardiso_iter_dropping_factor_;
-        DPARM_[ 5] = normal_pardiso_iter_dropping_schur_;
+        DPARM_[ 4] = normal_pardiso_iter_dropping_factor_used_;
+        DPARM_[ 5] = normal_pardiso_iter_dropping_schur_used_;
         DPARM_[ 6] = normal_pardiso_iter_max_row_fill_;
         DPARM_[ 7] = normal_pardiso_iter_inverse_norm_factor_;
       }
@@ -535,8 +543,8 @@ namespace Ipopt
         DPARM_[ 1] = pardiso_iter_relative_tol_;
         DPARM_[ 2] = pardiso_iter_coarse_size_;
         DPARM_[ 3] = pardiso_iter_max_levels_;
-        DPARM_[ 4] = pardiso_iter_dropping_factor_;
-        DPARM_[ 5] = pardiso_iter_dropping_schur_;
+        DPARM_[ 4] = pardiso_iter_dropping_factor_used_;
+        DPARM_[ 5] = pardiso_iter_dropping_schur_used_;
         DPARM_[ 6] = pardiso_iter_max_row_fill_;
         DPARM_[ 7] = pardiso_iter_inverse_norm_factor_;
       }
@@ -651,12 +659,14 @@ namespace Ipopt
       for (int i = 0; i < N; i++) {
         rhs_vals[i] = ORIG_RHS[i];
       }
+
+      DPARM_[ 8] = 25; // non_improvement in SQMR iteration
       F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                                 &PHASE, &N, a_, ia, ja, &PERM,
                                 &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
                                 &ERROR, DPARM_);
 
-      if (ERROR <= -100 && ERROR >= -102) {
+      if (ERROR <= -100 && ERROR >= -110) {
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                        "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
@@ -670,8 +680,8 @@ namespace Ipopt
                          "(PD step)\n");
         }
         PHASE = 23;
-        DPARM_[ 4] /= 2.0 ;
-        DPARM_[ 5] /= 2.0 ;
+        DPARM_[ 4] *= decr_factor_;
+        DPARM_[ 5] *= decr_factor_;
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                        "                               to DPARM_[ 4] = %e and DPARM_[ 5] = %e\n", DPARM_[ 4], DPARM_[ 5]);
         // Copy solution back to y to get intial values for the next iteration
@@ -694,12 +704,32 @@ namespace Ipopt
     }
 
     if (is_normal) {
-      normal_pardiso_iter_dropping_factor_ = DPARM_[4];
-      normal_pardiso_iter_dropping_schur_ = DPARM_[5];
+      if (DPARM_[4] < normal_pardiso_iter_dropping_factor_) {
+	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Increasing drop tolerances from DPARM_[ 4] = %e and DPARM_[ 5] = %e (normal step\n", DPARM_[ 4], DPARM_[ 5]);
+      }
+      normal_pardiso_iter_dropping_factor_used_ =
+	Min(DPARM_[4]/decr_factor_, normal_pardiso_iter_dropping_factor_);
+      normal_pardiso_iter_dropping_schur_used_ =
+	Min(DPARM_[5]/decr_factor_, normal_pardiso_iter_dropping_schur_);
+      if (DPARM_[4] < normal_pardiso_iter_dropping_factor_) {
+	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "                             to DPARM_[ 4] = %e and DPARM_[ 5] = %e for next iteration.\n", normal_pardiso_iter_dropping_factor_used_, normal_pardiso_iter_dropping_schur_used_);
+      }
     }
     else {
-      pardiso_iter_dropping_factor_ = DPARM_[4];
-      pardiso_iter_dropping_schur_ = DPARM_[5];
+      if (DPARM_[4] < pardiso_iter_dropping_factor_) {
+	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Increasing drop tolerances from DPARM_[ 4] = %e and DPARM_[ 5] = %e (PD step\n", DPARM_[ 4], DPARM_[ 5]);
+      }
+      pardiso_iter_dropping_factor_used_ =
+	Min(DPARM_[4]/decr_factor_, pardiso_iter_dropping_factor_);
+      pardiso_iter_dropping_schur_used_ =
+	Min(DPARM_[5]/decr_factor_, pardiso_iter_dropping_schur_);
+      if (DPARM_[4] < pardiso_iter_dropping_factor_) {
+	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "                             to DPARM_[ 4] = %e and DPARM_[ 5] = %e for next iteration.\n", pardiso_iter_dropping_factor_used_, pardiso_iter_dropping_schur_used_);
+      }
     }
 
     delete [] X;

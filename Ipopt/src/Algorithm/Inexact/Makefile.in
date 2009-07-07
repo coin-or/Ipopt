@@ -60,7 +60,8 @@ am_libinexact_la_OBJECTS = IpInexactAlgBuilder.lo IpInexactCq.lo \
 	IpInexactNormalTerminationTester.lo IpInexactPDSolver.lo \
 	IpInexactPDTerminationTester.lo IpInexactRegOp.lo \
 	IpInexactSearchDirCalc.lo IpIterativePardisoSolverInterface.lo \
-	IpIterativeSolverTerminationTester.lo
+	IpIterativeSolverTerminationTester.lo \
+	IpInexactTSymScalingMethod.lo
 libinexact_la_OBJECTS = $(am_libinexact_la_OBJECTS)
 @BUILD_INEXACT_TRUE@am_libinexact_la_rpath =
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
