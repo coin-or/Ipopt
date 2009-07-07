@@ -449,6 +449,13 @@ if test "$use_pardiso" != "no"; then
                AC_DEFINE(HAVE_PARDISO_PARALLEL,1,
                 [Define to 1 if you are using the parallel version of Pardiso])],
               [AC_MSG_RESULT(no)])
+  
+  AC_MSG_CHECKING([whether Pardiso library is at least version 4.0])
+  AC_TRY_LINK([],[      call pardiso_ipopt_newinterface()],
+              [AC_MSG_RESULT(yes)
+               AC_DEFINE(HAVE_PARDISO_NEWINTERFACE,1,
+                [Define to 1 if you are using at least a 4.0 version of Pardiso])],
+              [AC_MSG_RESULT(no)])
 fi
 AC_LANG_POP([Fortran 77])
 

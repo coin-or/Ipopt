@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -272,6 +272,11 @@ namespace Ipopt
      *  violation becomes that than this value, the heuristic is
      *  disabled for the rest of the optimization run. */
     Number expect_infeasible_problem_ctol_;
+    /** Trigger tolerance on constraint multipliers.  If
+     *  expect_infeasible_problem is chosen, and the multipliers
+     *  become larger in max-norm than this value, the restoration
+     *  phase is triggered. */
+    Number expect_infeasible_problem_ytol_;
 
     /** Tolerance for detecting tiny steps. */
     Number tiny_step_tol_;
