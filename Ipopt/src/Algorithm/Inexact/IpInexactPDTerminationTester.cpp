@@ -514,12 +514,12 @@ namespace Ipopt
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                        "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*Upsilon) + sigma*nu*max(c_norm_, c_plus_Ad_norm - c_norm_)(=%23.16e) -->", rhs, lhs);
         model_reduction = Compare_le(lhs, rhs, BasVal);
-	if (model_reduction) {
-	  Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
-	}
-	else {
-	  Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
-	}
+        if (model_reduction) {
+          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+        }
+        else {
+          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+        }
         if (tt1) {
           tt1 = model_reduction;
         }
@@ -529,12 +529,12 @@ namespace Ipopt
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                        "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*u_norm^2) + sigma*nu*(c_norm_ - c_plus_Av_norm_)(=%23.16e) -->", rhs, lhs);
         tt1 = Compare_le(lhs, rhs, BasVal);
-	if (tt1) {
-	  Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
-	}
-	else {
-	  Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
-	}
+        if (tt1) {
+          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+        }
+        else {
+          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+        }
       }
     }
 

@@ -705,29 +705,29 @@ namespace Ipopt
 
     if (is_normal) {
       if (DPARM_[4] < normal_pardiso_iter_dropping_factor_) {
-	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Increasing drop tolerances from DPARM_[ 4] = %e and DPARM_[ 5] = %e (normal step\n", DPARM_[ 4], DPARM_[ 5]);
       }
       normal_pardiso_iter_dropping_factor_used_ =
-	Min(DPARM_[4]/decr_factor_, normal_pardiso_iter_dropping_factor_);
+        Min(DPARM_[4]/decr_factor_, normal_pardiso_iter_dropping_factor_);
       normal_pardiso_iter_dropping_schur_used_ =
-	Min(DPARM_[5]/decr_factor_, normal_pardiso_iter_dropping_schur_);
+        Min(DPARM_[5]/decr_factor_, normal_pardiso_iter_dropping_schur_);
       if (DPARM_[4] < normal_pardiso_iter_dropping_factor_) {
-	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "                             to DPARM_[ 4] = %e and DPARM_[ 5] = %e for next iteration.\n", normal_pardiso_iter_dropping_factor_used_, normal_pardiso_iter_dropping_schur_used_);
       }
     }
     else {
       if (DPARM_[4] < pardiso_iter_dropping_factor_) {
-	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Increasing drop tolerances from DPARM_[ 4] = %e and DPARM_[ 5] = %e (PD step\n", DPARM_[ 4], DPARM_[ 5]);
       }
       pardiso_iter_dropping_factor_used_ =
-	Min(DPARM_[4]/decr_factor_, pardiso_iter_dropping_factor_);
+        Min(DPARM_[4]/decr_factor_, pardiso_iter_dropping_factor_);
       pardiso_iter_dropping_schur_used_ =
-	Min(DPARM_[5]/decr_factor_, pardiso_iter_dropping_schur_);
+        Min(DPARM_[5]/decr_factor_, pardiso_iter_dropping_schur_);
       if (DPARM_[4] < pardiso_iter_dropping_factor_) {
-	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "                             to DPARM_[ 4] = %e and DPARM_[ 5] = %e for next iteration.\n", pardiso_iter_dropping_factor_used_, pardiso_iter_dropping_schur_used_);
       }
     }
