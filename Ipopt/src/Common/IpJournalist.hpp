@@ -229,6 +229,9 @@ namespace Ipopt
      *  the acceptance criteria at runtime.
      */
     SmartPtr<Journal> GetJournal(const std::string& location_name);
+
+    /** Delete all journals curently known by the journalist. */
+    void DeleteAllJournals();
     //@}
 
     /** @name Methods for collecting output from distributed

@@ -92,6 +92,8 @@ namespace Ipopt
     Number inexact_normal_tol_;
     /** Maximal number of iterative solve iterations */
     Index inexact_normal_max_iter_;
+    /** Is set to true if the linear system is scaled via slacks. */
+    bool requires_scaling_;
     //@}
 
     /** Value of normal problem objective function achived by the

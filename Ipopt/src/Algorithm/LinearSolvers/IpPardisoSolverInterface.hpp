@@ -147,6 +147,11 @@ namespace Ipopt
     /** Flag indicating if the interia is always assumed to be
       *  correct. */
     bool skip_inertia_check_;
+    /** Flag indicating whether we are using the iterative solver in
+      * Pardiso. */
+    bool pardiso_iterative_;
+    /** Maximal number of decreases of drop tolerance during one solve. */
+    Index pardiso_max_droptol_corrections_;
     //@}
 
     /** @name Initialization flags */
@@ -169,6 +174,8 @@ namespace Ipopt
     ipfint MTYPE_;
     /** Parameter and info array for Pardiso. */
     ipfint* IPARM_;
+    /** Parameter and info array for Pardiso. */
+    double* DPARM_;
     /** Message level. */
     ipfint MSGLVL_;
     //@}

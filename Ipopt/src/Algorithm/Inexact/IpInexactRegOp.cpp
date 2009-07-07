@@ -9,6 +9,7 @@
 #include "IpInexactRegOp.hpp"
 #include "IpRegOptions.hpp"
 
+#include "IpInexactAlgBuilder.hpp"
 #include "IpInexactSearchDirCalc.hpp"
 #include "IpInexactDoglegNormal.hpp"
 #include "IpInexactNewtonNormal.hpp"
@@ -25,6 +26,7 @@ namespace Ipopt
   void RegisterOptions_Inexact(const SmartPtr<RegisteredOptions>& roptions)
   {
     roptions->SetRegisteringCategory("Inexact Step Computation");
+    InexactAlgorithmBuilder::RegisterOptions(roptions);
     InexactSearchDirCalculator::RegisterOptions(roptions);
     InexactDoglegNormalStep::RegisterOptions(roptions);
     InexactNewtonNormalStep::RegisterOptions(roptions);

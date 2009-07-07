@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -81,6 +81,8 @@ namespace Ipopt
     Index maximum_iters_;
     /** Maximum number of succesive iterations in restoration phase */
     Index maximum_resto_iters_;
+    /** Constraint violation tolerance for original algorithm */
+    Number orig_constr_viol_tol_;
     //@}
 
     /** Flag indicating that this is the first call.  We don't want to
