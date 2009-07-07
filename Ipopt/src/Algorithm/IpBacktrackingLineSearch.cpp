@@ -402,8 +402,8 @@ namespace Ipopt
       // If the step in the dual variables is also small, we remember
       // that we just did a tiny step so that next time we might
       // decide to quit
-      Number delta_y_norm = Max(IpData().curr()->y_c()->Amax(),
-                                IpData().curr()->y_d()->Amax());
+      Number delta_y_norm = Max(IpData().delta()->y_c()->Amax(),
+                                IpData().delta()->y_d()->Amax());
       if (delta_y_norm < tiny_step_y_tol_) {
         tiny_step_last_iteration_ = true;
       }
