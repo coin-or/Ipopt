@@ -118,7 +118,7 @@ namespace Ipopt
   
   /** Method for printing a formatted output to a string with given size.
   */
-  int Snprintf(char* str, size_t size, const char* format, ...);
+  int Snprintf(char* str, long size, const char* format, ...);
 
 } //namespace Ipopt
 

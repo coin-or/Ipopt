@@ -230,7 +230,7 @@ namespace Ipopt
     return (lhs - rhs <= 10.*mach_eps*fabs(BasVal));
   }
 
-  int Snprintf(char* str, size_t size, const char* format, ...)
+  int Snprintf(char* str, long size, const char* format, ...)
   {
     va_list ap;
     va_start(ap, format);
