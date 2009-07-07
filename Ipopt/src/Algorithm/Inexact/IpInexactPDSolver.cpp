@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -253,7 +253,7 @@ namespace Ipopt
         }
         else {
           char buf[32];
-          sprintf(buf, " TT=%d ", test_result_);
+          snprintf(buf, 31, " TT=%d ", test_result_);
           IpData().Append_info_string(buf);
           if (test_result_ == IterativeSolverTerminationTester::CONTINUE &&
               !InexData().compute_normal()) {
