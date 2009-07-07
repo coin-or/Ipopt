@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -19,7 +19,7 @@
 # endif
 #endif
 
-/** Prototypes for MA27's Fortran subroutines */
+/** Prototypes for MC19's Fortran subroutines */
 extern "C"
 {
   // here we assume that float corresponds to Fortran's single
