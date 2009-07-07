@@ -25,6 +25,7 @@ libinexact_la_SOURCES = \
 	IpInexactPDTerminationTester.cpp IpInexactPDTerminationTester.hpp \
 	IpInexactRegOp.cpp IpInexactRegOp.hpp \
 	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp \
+	IpInexactTSymScalingMethod.cpp IpInexactTSymScalingMethod.hpp \
 	IpIterativePardisoSolverInterface.cpp IpIterativePardisoSolverInterface.hpp \
 	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
 
@@ -57,6 +58,7 @@ ASTYLE_FILES = \
 	IpInexactPDTerminationTester.cppbak IpInexactPDTerminationTester.hppbak \
 	IpInexactRegOp.cppbak IpInexactRegOp.hppbak \
 	IpInexactSearchDirCalc.cppbak IpInexactSearchDirCalc.hppbak \
+	IpInexactTSymScalingMethod.cppbak IpInexactTSymScalingMethod.hppbak \
 	IpIterativePardisoSolverInterface.cppbak IpIterativePardisoSolverInterface.hppbak \
 	IpIterativeSolverTerminationTester.cppbak IpIterativeSolverTerminationTester.hppbak
 

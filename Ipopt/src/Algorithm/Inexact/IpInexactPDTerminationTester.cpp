@@ -115,6 +115,16 @@ namespace Ipopt
     options.GetIntegerValue("inexact_desired_pd_residual_iter",
                             inexact_desired_pd_residual_iter_, prefix);
 
+    std::string inexact_linear_system_scaling;
+    options.GetStringValue("inexact_linear_system_scaling",
+                           inexact_linear_system_scaling, prefix);
+    if (inexact_linear_system_scaling=="slack-based") {
+      requires_scaling_ = true;
+    }
+    else {
+      requires_scaling_ = false;
+    }
+
     return true;
   }
 
@@ -294,6 +304,16 @@ namespace Ipopt
     SmartPtr<const Vector> resid_c;
     SmartPtr<const Vector> resid_d;
     GetVectors(ndim, resid, resid_x, resid_s, resid_c, resid_d);
+
+    if (requires_scaling_) {
+      SmartPtr<const Vector> scaling_vec = curr_scaling_slacks_;
+      SmartPtr<Vector> tmp = sol_s->MakeNewCopy();
+      tmp->ElementWiseMultiply(*scaling_vec);
+      sol_s = ConstPtr(tmp);
+      tmp = resid_s->MakeNewCopy();
+      tmp->ElementWiseDivide(*scaling_vec);
+      resid_s = ConstPtr(tmp);
+    }
 
     //// Set algorithm
     if (!compute_normal) {
@@ -494,6 +514,12 @@ namespace Ipopt
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                        "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*Upsilon) + sigma*nu*max(c_norm_, c_plus_Ad_norm - c_norm_)(=%23.16e) -->", rhs, lhs);
         model_reduction = Compare_le(lhs, rhs, BasVal);
+	if (model_reduction) {
+	  Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+	}
+	else {
+	  Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+	}
         if (tt1) {
           tt1 = model_reduction;
         }
@@ -503,12 +529,12 @@ namespace Ipopt
         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                        "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*u_norm^2) + sigma*nu*(c_norm_ - c_plus_Av_norm_)(=%23.16e) -->", rhs, lhs);
         tt1 = Compare_le(lhs, rhs, BasVal);
-      }
-      if (tt1) {
-        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
-      }
-      else {
-        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+	if (tt1) {
+	  Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+	}
+	else {
+	  Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+	}
       }
     }
 

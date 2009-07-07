@@ -103,6 +103,8 @@ namespace Ipopt
     Number inexact_desired_pd_residual_;
     /** Number of iterations allowed for desired pd residual */
     Index inexact_desired_pd_residual_iter_;
+    /** Is set to true if the linear system is scaled via slacks. */
+    bool requires_scaling_;
     //@}
 
     /** @name Quantities that are identical for all tests and can be

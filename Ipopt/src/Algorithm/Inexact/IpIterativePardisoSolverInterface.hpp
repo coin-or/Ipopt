@@ -179,6 +179,17 @@ namespace Ipopt
     Number normal_pardiso_iter_inverse_norm_factor_;
     //@}
 
+    /** Decrease factor for dropping tolerances */
+    Number decr_factor_;
+
+    /** Actualy used dropping tolerances */
+    //@{
+    Number pardiso_iter_dropping_factor_used_;
+    Number pardiso_iter_dropping_schur_used_;
+    Number normal_pardiso_iter_dropping_factor_used_;
+    Number normal_pardiso_iter_dropping_schur_used_;
+    //@}
+
     /** @name Initialization flags */
     //@{
     /** Flag indicating if internal data is initialized.

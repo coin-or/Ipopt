@@ -40,6 +40,7 @@
 #include "IpMa27TSolverInterface.hpp"
 #include "IpMa57TSolverInterface.hpp"
 #include "IpMc19TSymScalingMethod.hpp"
+#include "IpInexactTSymScalingMethod.hpp"
 #include "IpIterativePardisoSolverInterface.hpp"
 #include "IpInexactNormalTerminationTester.hpp"
 #include "IpInexactPDTerminationTester.hpp"
@@ -96,7 +97,16 @@ namespace Ipopt
   }
 
   void InexactAlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
-  {}
+  {
+    roptions->SetRegisteringCategory("Linear Solver");
+    roptions->AddStringOption2(
+      "inexact_linear_system_scaling",
+      "Method for scaling the linear system for the inexact approach",
+      "none",
+      "none", "no scaling will be performed",
+      "slack-based", "scale the linear system as in paper",
+      "");
+  }
 
   SmartPtr<IpoptAlgorithm>
   InexactAlgorithmBuilder::BuildBasicAlgorithm(const Journalist& jnlst,
@@ -209,33 +219,12 @@ namespace Ipopt
     }
 
     SmartPtr<TSymScalingMethod> ScalingMethod;
-    std::string linear_system_scaling;
-    if (!options.GetStringValue("linear_system_scaling",
-                                linear_system_scaling, prefix)) {
-      // By default, don't use mc19 for non-HSL solvers
-      if (linear_solver!="ma27" && linear_solver!="ma57") {
-        linear_system_scaling="none";
-      }
-    }
-    if (linear_system_scaling=="mc19") {
-#ifndef HAVE_MC19
-# ifdef HAVE_LINEARSOLVERLOADER
-      ScalingMethod = new Mc19TSymScalingMethod();
-      char buf[256];
-      int rc = LSL_loadHSL(NULL, buf, 255);
-      if (rc) {
-        std::string errmsg;
-        errmsg = "Selected linear system scaling method MC19 not available.\n";
-        errmsg += buf;
-        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-      }
-# else
-      THROW_EXCEPTION(OPTION_INVALID, "Support for MC19 has not been compiled into Ipopt.");
-# endif
-#else
-      ScalingMethod = new Mc19TSymScalingMethod();
-#endif
 
+    std::string inexact_linear_system_scaling;
+    options.GetStringValue("inexact_linear_system_scaling",
+                           inexact_linear_system_scaling, prefix);
+    if (inexact_linear_system_scaling=="slack-based") {
+      ScalingMethod = new InexactTSymScalingMethod();
     }
 
     SmartPtr<SymLinearSolver> ScaledSolver =
@@ -320,5 +309,6 @@ namespace Ipopt
     //options_list.SetNumericValueIfUnset("bound_relax_factor", 0.);
     options_list.SetNumericValueIfUnset("kappa_d", 0.);
     options_list.SetStringValueIfUnset("linear_solver", "pardiso");
+    options_list.SetStringValue("linear_scaling_on_demand", "no");
   }
 } // namespace
