@@ -22098,9 +22098,10 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-		   { echo "$as_me:$LINENO: WARNING: Cannot verify availability of Ipopt with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&5
-echo "$as_me: WARNING: Cannot verify availability of Ipopt with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&2;}
-
+		   if test -r $withval/share/doc/coin/Ipopt/README; then
+		     coin_has_ipopt=installed
+		     IPOPTINSTDIR=`cd $withval; pwd`
+		   fi
 fi;
     fi
 
@@ -22162,13 +22163,30 @@ fi
 if test $coin_has_ipopt = installed; then
   echo "$as_me:$LINENO: result: installed in $IPOPTINSTDIR" >&5
 echo "${ECHO_T}installed in $IPOPTINSTDIR" >&6
-  # Check for header
+  if test -r $IPOPTINSTDIR/share/doc/coin/Ipopt/README; then
 
-  # Check for library (this is not qo reliable)
+  :
+else
+  { { echo "$as_me:$LINENO: error: $IPOPTINSTDIR/share/doc/coin/Ipopt/README should be available if Ipopt is installed" >&5
+echo "$as_me: error: $IPOPTINSTDIR/share/doc/coin/Ipopt/README should be available if Ipopt is installed" >&2;}
+   { (exit 1); exit 1; }; }
+  :
+fi
 
 else
   echo "$as_me:$LINENO: result: $coin_has_ipopt" >&5
 echo "${ECHO_T}$coin_has_ipopt" >&6
+  if test $coin_has_ipopt != notGiven &&
+     test $coin_has_ipopt != skipping; then
+    echo "$as_me:$LINENO: checking for source code location of Ipopt" >&5
+echo $ECHO_N "checking for source code location of Ipopt... $ECHO_C" >&6
+    echo "$as_me:$LINENO: result: $IPOPTSRCDIR" >&5
+echo "${ECHO_T}$IPOPTSRCDIR" >&6
+    echo "$as_me:$LINENO: checking for object code location of Ipopt" >&5
+echo $ECHO_N "checking for object code location of Ipopt... $ECHO_C" >&6
+    echo "$as_me:$LINENO: result: $IPOPTOBJDIR" >&5
+echo "${ECHO_T}$IPOPTOBJDIR" >&6
+  fi
 fi
 
 
