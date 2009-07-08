@@ -235,14 +235,29 @@ namespace Ipopt
     va_list ap;
     va_start(ap, format);
     int ret;
-#ifdef HAVE_VSNPRINTF
+#ifdef HAVE_VA_COPY
+    va_list apcopy;
+    va_copy(apcopy, ap);
+# ifdef HAVE_VSNPRINTF
+    ret = vsnprintf(str, size, format, apcopy);
+# else
+#  ifdef HAVE__VSNPRINTF
+    ret = _vsnprintf(str, size, format, apcopy);
+#  else
+    ret = vsprintf(str, format, apcopy);
+#  endif
+    va_end(apcopy);
+# endif
+#else
+# ifdef HAVE_VSNPRINTF
     ret = vsnprintf(str, size, format, ap);
-#else
-#ifdef HAVE__VSNPRINTF
+# else
+#  ifdef HAVE__VSNPRINTF
     ret = _vsnprintf(str, size, format, ap);
-#else
+#  else
     ret = vsprintf(str, format, ap);
-#endif
+#  endif
+# endif
 #endif
     va_end(ap);
     return ret;
