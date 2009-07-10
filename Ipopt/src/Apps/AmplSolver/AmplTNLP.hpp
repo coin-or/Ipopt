@@ -410,7 +410,10 @@ namespace Ipopt
     }
 
     /** Set flag for use of objective in hessian of lagrangian */
-    void set_obj_in_hessian (int v){ obj_in_hessian_ = v;}
+    void set_obj_in_hessian (int v)
+    {
+      obj_in_hessian_ = v;
+    }
 
     /** Write the solution file.  This is a wrapper for AMPL's
      *  write_sol.  TODO Maybe this should be at a different place, or

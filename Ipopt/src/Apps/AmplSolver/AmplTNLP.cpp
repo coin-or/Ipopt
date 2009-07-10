@@ -576,19 +576,19 @@ namespace Ipopt
       }
 
       real* OW = NULL;
-      if (obj_in_hessian_){ // needed for AmplParTNLP
-	OW = new real[Max(1,n_obj)];
-	if (n_obj>0) {
-	  for (Index i=0; i<n_obj; i++) {
-	    OW[i] = 0.;
-	  }
-	  OW[obj_no] = obj_sign_*obj_factor;
-	}
+      if (obj_in_hessian_) { // needed for AmplParTNLP
+        OW = new real[Max(1,n_obj)];
+        if (n_obj>0) {
+          for (Index i=0; i<n_obj; i++) {
+            OW[i] = 0.;
+          }
+          OW[obj_no] = obj_sign_*obj_factor;
+        }
       }
       sphes(values, -1, OW, const_cast<Number*>(lambda));
 
       if (obj_in_hessian_)
-	delete [] OW;
+        delete [] OW;
       return true;
     }
     else {
