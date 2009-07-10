@@ -43,7 +43,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = ipopt$(EXEEXT)
+bin_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2)
+@HAVE_MPI_TRUE@am__append_1 = par_ipopt
+@HAVE_MPI_FALSE@am__append_2 = ipopt
+@HAVE_MPI_TRUE@am__append_3 = AmplParTNLP.cpp AmplParTNLP.hpp
 subdir = src/Apps/AmplSolver
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -56,8 +59,13 @@ CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libamplinterface_la_LIBADD =
-am_libamplinterface_la_OBJECTS = AmplTNLP.lo
+am__libamplinterface_la_SOURCES_DIST = AmplTNLP.cpp AmplTNLP.hpp \
+	AmplParTNLP.cpp AmplParTNLP.hpp
+@HAVE_MPI_TRUE@am__objects_1 = AmplParTNLP.lo
+am_libamplinterface_la_OBJECTS = AmplTNLP.lo $(am__objects_1)
 libamplinterface_la_OBJECTS = $(am_libamplinterface_la_OBJECTS)
+@HAVE_MPI_TRUE@am__EXEEXT_1 = par_ipopt$(EXEEXT)
+@HAVE_MPI_FALSE@am__EXEEXT_2 = ipopt$(EXEEXT)
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
@@ -66,6 +74,11 @@ ipopt_OBJECTS = $(am_ipopt_OBJECTS)
 am__DEPENDENCIES_1 =
 ipopt_DEPENDENCIES = libamplinterface.la ../../Interfaces/libipopt.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+am_par_ipopt_OBJECTS = ampl_par_ipopt.$(OBJEXT)
+par_ipopt_OBJECTS = $(am_par_ipopt_OBJECTS)
+par_ipopt_DEPENDENCIES = libamplinterface.la \
+	../../Interfaces/libipopt.la $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -84,8 +97,10 @@ LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libamplinterface_la_SOURCES) $(ipopt_SOURCES)
-DIST_SOURCES = $(libamplinterface_la_SOURCES) $(ipopt_SOURCES)
+SOURCES = $(libamplinterface_la_SOURCES) $(ipopt_SOURCES) \
+	$(par_ipopt_SOURCES)
+DIST_SOURCES = $(am__libamplinterface_la_SOURCES_DIST) \
+	$(ipopt_SOURCES) $(par_ipopt_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -293,13 +308,14 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 noinst_LTLIBRARIES = libamplinterface.la
-libamplinterface_la_SOURCES = \
-	AmplTNLP.cpp AmplTNLP.hpp
-
-ipopt_SOURCES = \
-	ampl_ipopt.cpp
-
+libamplinterface_la_SOURCES = AmplTNLP.cpp AmplTNLP.hpp \
+	$(am__append_3)
+ipopt_SOURCES = ampl_ipopt.cpp
+par_ipopt_SOURCES = ampl_par_ipopt.cpp
 ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
+	$(ASLLIB) $(ADDLIBS)
+
+par_ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
 	$(ASLLIB) $(ADDLIBS)
 
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
@@ -314,8 +330,10 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Astyle stuff
 ASTYLE_FILES = \
+	AmplParTNLP.cppbak AmplParTNLP.hppbak \
 	AmplTNLP.cppbak AmplTNLP.hppbak \
-	ampl_ipopt.cppbak
+	ampl_ipopt.cppbak \
+	ampl_par_ipopt.cppbak
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
@@ -394,6 +412,9 @@ clean-binPROGRAMS:
 ipopt$(EXEEXT): $(ipopt_OBJECTS) $(ipopt_DEPENDENCIES) 
 	@rm -f ipopt$(EXEEXT)
 	$(CXXLINK) $(ipopt_LDFLAGS) $(ipopt_OBJECTS) $(ipopt_LDADD) $(LIBS)
+par_ipopt$(EXEEXT): $(par_ipopt_OBJECTS) $(par_ipopt_DEPENDENCIES) 
+	@rm -f par_ipopt$(EXEEXT)
+	$(CXXLINK) $(par_ipopt_LDFLAGS) $(par_ipopt_OBJECTS) $(par_ipopt_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -401,8 +422,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AmplParTNLP.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AmplTNLP.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ampl_ipopt.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ampl_par_ipopt.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

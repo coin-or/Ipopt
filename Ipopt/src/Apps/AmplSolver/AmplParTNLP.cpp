@@ -48,8 +48,8 @@ static void calculate_offsets (Index p, Index p_id, Index n, Index &n_first, Ind
 }
 
 static void
-partition_constraints(ASL_pfgh* asl, Index num_proc, Index proc_id, 
-		      Index &m_first, Index &m_last)
+partition_constraints(ASL_pfgh* asl, Index num_proc, Index proc_id,
+                      Index &m_first, Index &m_last)
 {
   Index i, tweight;
   Index *weight = new Index[n_con];
@@ -58,7 +58,7 @@ partition_constraints(ASL_pfgh* asl, Index num_proc, Index proc_id,
 
   DBG_ASSERT(asl);
 
-  if (num_proc == 1){
+  if (num_proc == 1) {
     m_first = 0;
     m_last = n_con-1;
     delete [] weight;
@@ -71,7 +71,7 @@ partition_constraints(ASL_pfgh* asl, Index num_proc, Index proc_id,
   // calculate number of non-zeros in jacobian per constraint
   // set this number to 1 for linear constraints
   tweight = 0;
-  for (i=0; i<nlc; i++){
+  for (i=0; i<nlc; i++) {
     cgrad *cg;
     Index nz = 0;
 
@@ -91,9 +91,9 @@ partition_constraints(ASL_pfgh* asl, Index num_proc, Index proc_id,
   Index cur_start = 0;
 
   tweight = 0;
-  for (i=0; i<n_con && cur_p < num_proc; i++){
+  for (i=0; i<n_con && cur_p < num_proc; i++) {
     tweight += weight[i];
-    if (tweight >= avgw || i == n_con-1){
+    if (tweight >= avgw || i == n_con-1) {
       p_first[cur_p] = cur_start;
       p_last[cur_p] = i;
       cur_start = i+1;
@@ -101,7 +101,7 @@ partition_constraints(ASL_pfgh* asl, Index num_proc, Index proc_id,
       tweight = 0;
     }
   }
-  for (i=cur_p; i<num_proc; i++){
+  for (i=cur_p; i<num_proc; i++) {
     p_first[i] = n_con;
     p_last[i] = n_con-1;
   }
@@ -122,8 +122,7 @@ AmplParTNLP::AmplParTNLP(SmartPtr<AmplTNLP> amplobj)
     nnz_jac_g_(0),
     nnz_h_lag_(0),
     jac_map_(NULL)
-{
-}
+{}
 
 AmplParTNLP::~AmplParTNLP()
 {
@@ -132,10 +131,10 @@ AmplParTNLP::~AmplParTNLP()
 
 bool
 AmplParTNLP::get_nlp_info(Index num_proc, Index proc_id,
-			  Index& n, Index& n_first, Index& n_last,
-			  Index& m, Index& m_first, Index& m_last,
-			  Index& nnz_jac_g_part, Index& nnz_h_lag_part,
-			  IndexStyleEnum& index_style)
+                          Index& n, Index& n_first, Index& n_last,
+                          Index& m, Index& m_first, Index& m_last,
+                          Index& nnz_jac_g_part, Index& nnz_h_lag_part,
+                          IndexStyleEnum& index_style)
 {
   Index i;
   bool rval = true;
@@ -152,20 +151,20 @@ AmplParTNLP::get_nlp_info(Index num_proc, Index proc_id,
   calculate_offsets (num_proc, proc_id, n, n_first, n_last);
   if (m > 0)
     partition_constraints (asl, num_proc, proc_id, m_first, m_last);
-  else{
+  else {
     m_first = 0;
     m_last = -1;
   }
 
-  if (num_proc == 1){
+  if (num_proc == 1) {
     nnz_jac_g_part = nnz_jac_g_;
     nnz_h_lag_part = nnz_h_lag_;
   }
-  else{
+  else {
     // nonzeros in jacobian of constraints from m_first to m_last
     // TODO: use nonzeros in jacobian to figure out nonzeros in hessian
     Index nz = 0;
-    for (i=m_first; i<=m_last; i++){
+    for (i=m_first; i<=m_last; i++) {
       cgrad *cg;
 
       for (cg=Cgrad[i]; cg; cg = cg->next) nz ++;
@@ -187,11 +186,11 @@ AmplParTNLP::get_nlp_info(Index num_proc, Index proc_id,
 
 bool
 AmplParTNLP::get_bounds_info(Index num_proc, Index proc_id,
-			     Index n, Index n_first, Index n_last,
-			     Number* x_l_part, Number* x_u_part,
-			     Index m, Index m_first, Index m_last,
-			     Number* g_l_part, Number* g_u_part)
-{ 
+                             Index n, Index n_first, Index n_last,
+                             Number* x_l_part, Number* x_u_part,
+                             Index m, Index m_first, Index m_last,
+                             Number* g_l_part, Number* g_u_part)
+{
   Index i;
   ASL_pfgh* asl = amplobj_->AmplSolverObject();
 
@@ -212,23 +211,23 @@ AmplParTNLP::get_bounds_info(Index num_proc, Index proc_id,
 
 bool
 AmplParTNLP::get_starting_point(Index num_proc, Index proc_id,
-				Index n, Index n_first, Index n_last,
-				bool init_x, Number* x_part,
-				bool init_z, Number* z_L_part, Number* z_U_part,
-				Index m, Index m_first, Index m_last,
-				bool init_lambda, Number* lambda_part)
+                                Index n, Index n_first, Index n_last,
+                                bool init_x, Number* x_part,
+                                bool init_z, Number* z_L_part, Number* z_U_part,
+                                Index m, Index m_first, Index m_last,
+                                bool init_lambda, Number* lambda_part)
 {
   Index i;
   ASL_pfgh* asl = amplobj_->AmplSolverObject();
 
   DBG_ASSERT(asl);
 
-  if (init_x){
-    for (i=n_first; i<=n_last; i++){
+  if (init_x) {
+    for (i=n_first; i<=n_last; i++) {
       if (havex0[i])
-	x_part[i-n_first] = X0[i];
+        x_part[i-n_first] = X0[i];
       else
-	x_part[i-n_first] = 0.0;
+        x_part[i-n_first] = 0.0;
     }
   }
 
@@ -240,31 +239,31 @@ AmplParTNLP::get_starting_point(Index num_proc, Index proc_id,
     const double* zL_init = amplobj_->SuffixHandler()->GetNumberSuffixValues("ipopt_zL_in", AmplSuffixHandler::Variable_Source);
     const double* zU_init = amplobj_->SuffixHandler()->GetNumberSuffixValues("ipopt_zU_in", AmplSuffixHandler::Variable_Source);
 
-    if (zL_init){
+    if (zL_init) {
       for (i=n_first; i<=n_last; i++)
-	z_L_part[i-n_first]=zL_init[i];
+        z_L_part[i-n_first]=zL_init[i];
     }
-    else{
+    else {
       for (i=n_first; i<=n_last; i++)
-	z_L_part[i-n_first]=1.0;
+        z_L_part[i-n_first]=1.0;
     }
 
-    if (zU_init){
+    if (zU_init) {
       for (i=n_first; i<=n_last; i++)
-	z_U_part[i-n_first]=zU_init[i];
+        z_U_part[i-n_first]=zU_init[i];
     }
-    else{
+    else {
       for (i=n_first; i<=n_last; i++)
-	z_U_part[i-n_first]=1.0;
+        z_U_part[i-n_first]=1.0;
     }
   }
 
   if (init_lambda) {
     for (i=m_first; i<=m_last; i++) {
       if (havepi0[i])
-	lambda_part[i-m_first] = pi0[i];
+        lambda_part[i-m_first] = pi0[i];
       else
-	lambda_part[i-m_first] = 0.0;
+        lambda_part[i-m_first] = 0.0;
     }
   }
 
@@ -273,8 +272,8 @@ AmplParTNLP::get_starting_point(Index num_proc, Index proc_id,
 
 bool
 AmplParTNLP::eval_f(Index num_proc, Index proc_id,
-		    Index n, Index n_first, Index n_last,
-		    const Number* x, bool new_x, Number& obj_value)
+                    Index n, Index n_first, Index n_last,
+                    const Number* x, bool new_x, Number& obj_value)
 {
   bool rval = amplobj_->eval_f(n, x, new_x, obj_value);
   if (proc_id != 0)
@@ -285,9 +284,9 @@ AmplParTNLP::eval_f(Index num_proc, Index proc_id,
 
 bool
 AmplParTNLP::eval_grad_f(Index num_proc, Index proc_id,
-			 Index n,  Index n_first, Index n_last,
-			 const Number* x, bool new_x,
-			 Number* grad_f_part)
+                         Index n,  Index n_first, Index n_last,
+                         const Number* x, bool new_x,
+                         Number* grad_f_part)
 {
   Number* gf = new Number[n];
   bool rval = true;
@@ -306,9 +305,9 @@ AmplParTNLP::eval_grad_f(Index num_proc, Index proc_id,
 
 bool
 AmplParTNLP::eval_g(Index num_proc, Index proc_id,
-		    Index n, const Number* x, bool new_x,
-		    Index m, Index m_first, Index m_last,
-		    Number* g_part)
+                    Index n, const Number* x, bool new_x,
+                    Index m, Index m_first, Index m_last,
+                    Number* g_part)
 {
   ASL_pfgh* asl = amplobj_->AmplSolverObject();
 
@@ -327,10 +326,10 @@ AmplParTNLP::eval_g(Index num_proc, Index proc_id,
 
 bool
 AmplParTNLP::eval_jac_g(Index num_proc, Index proc_id,
-			Index n, const Number* x, bool new_x,
-			Index m, Index m_first, Index m_last,
-			Index nele_jac_part, Index* iRow_part,
-			Index *jCol_part, Number* values_part)
+                        Index n, const Number* x, bool new_x,
+                        Index m, Index m_first, Index m_last,
+                        Index nele_jac_part, Index* iRow_part,
+                        Index *jCol_part, Number* values_part)
 {
   bool rval = true;
   Index i;
@@ -339,24 +338,24 @@ AmplParTNLP::eval_jac_g(Index num_proc, Index proc_id,
   if (m == 0 || m_last < m_first || nele_jac_part == 0) return true;
 
   if (values_part == NULL) {
-    if (num_proc == 1){
+    if (num_proc == 1) {
       DBG_ASSERT(nnz_jac_g_ == nele_jac_part);
       rval = amplobj_->eval_jac_g(n, x, new_x, m, nnz_jac_g_, iRow_part, jCol_part, NULL);
     }
-    else{ // num_proc > 1
+    else { // num_proc > 1
       cgrad *cg;
       Index nz = 0;
 
       if (jac_map_) delete jac_map_;
       jac_map_ = new Index[nele_jac_part];
 
-      for (i=m_first; i<=m_last; i++){
-	for (cg=Cgrad[i]; cg; cg = cg->next){
-	  iRow_part[nz] = i+1-m_first;
-	  jCol_part[nz] = cg->varno + 1;
-	  jac_map_[nz] = cg->goff;
-	  nz ++;
-	}
+      for (i=m_first; i<=m_last; i++) {
+        for (cg=Cgrad[i]; cg; cg = cg->next) {
+          iRow_part[nz] = i+1-m_first;
+          jCol_part[nz] = cg->varno + 1;
+          jac_map_[nz] = cg->goff;
+          nz ++;
+        }
       }
       DBG_ASSERT (nz == nele_jac_part);
     }
@@ -393,13 +392,13 @@ AmplParTNLP::eval_jac_g(Index num_proc, Index proc_id,
 
 
 bool AmplParTNLP::eval_h(Index num_proc, Index proc_id,
-			 Index n, Index n_first, Index n_last,
-			 const Number* x, bool new_x, Number obj_factor,
-			 Index m, Index m_first, Index m_last,
-			 const Number* lambda,
-			 bool new_lambda, Index nele_hess_part,
-			 Index* iRow_part, Index* jCol_part,
-			 Number* values_part)
+                         Index n, Index n_first, Index n_last,
+                         const Number* x, bool new_x, Number obj_factor,
+                         Index m, Index m_first, Index m_last,
+                         const Number* lambda,
+                         bool new_lambda, Index nele_hess_part,
+                         Index* iRow_part, Index* jCol_part,
+                         Number* values_part)
 {
   bool rval = true;
   Index i;
@@ -418,7 +417,7 @@ bool AmplParTNLP::eval_h(Index num_proc, Index proc_id,
   else if (!iRow_part & !jCol_part && values_part) {
     // separate calls needed for one & multi processor case
 
-    if (num_proc == 1){
+    if (num_proc == 1) {
       DBG_ASSERT(nnz_h_lag_ == nele_hess_part);
       rval = amplobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag_, NULL, NULL, values_part);
     }
@@ -443,11 +442,11 @@ bool AmplParTNLP::eval_h(Index num_proc, Index proc_id,
 
 void
 AmplParTNLP::finalize_solution(SolverReturn status,
-			       Index n, const Number* x, const Number* z_L, const Number* z_U,
-			       Index m, const Number* g, const Number* lambda,
-			       Number obj_value,
-			       const IpoptData* ip_data,
-			       IpoptCalculatedQuantities* ip_cq)
+                               Index n, const Number* x, const Number* z_L, const Number* z_U,
+                               Index m, const Number* g, const Number* lambda,
+                               Number obj_value,
+                               const IpoptData* ip_data,
+                               IpoptCalculatedQuantities* ip_cq)
 {
   int proc_id;
   MPI_Comm_rank(MPI_COMM_WORLD, &proc_id);

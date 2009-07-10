@@ -9,15 +9,29 @@
 AUTOMAKE_OPTIONS = foreign
 
 noinst_LTLIBRARIES = libamplinterface.la
-bin_PROGRAMS = ipopt
+bin_PROGRAMS =
+
+if HAVE_MPI
+  bin_PROGRAMS += par_ipopt
+else
+  bin_PROGRAMS += ipopt
+endif
 
 libamplinterface_la_SOURCES = \
 	AmplTNLP.cpp AmplTNLP.hpp
 
-ipopt_SOURCES = \
-	ampl_ipopt.cpp
+if HAVE_MPI
+  libamplinterface_la_SOURCES += AmplParTNLP.cpp AmplParTNLP.hpp
+endif
+
+ipopt_SOURCES = ampl_ipopt.cpp
+
+par_ipopt_SOURCES = ampl_par_ipopt.cpp
 
 ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
+	$(ASLLIB) $(ADDLIBS)
+
+par_ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
 	$(ASLLIB) $(ADDLIBS)
 
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
@@ -35,8 +49,10 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # Astyle stuff
 
 ASTYLE_FILES = \
+	AmplParTNLP.cppbak AmplParTNLP.hppbak \
 	AmplTNLP.cppbak AmplTNLP.hppbak \
-	ampl_ipopt.cppbak
+	ampl_ipopt.cppbak \
+	ampl_par_ipopt.cppbak
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
