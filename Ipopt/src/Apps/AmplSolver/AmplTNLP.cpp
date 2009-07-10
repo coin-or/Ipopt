@@ -56,6 +56,7 @@ namespace Ipopt
       conval_called_with_current_x_(false),
       hesset_called_(false),
       set_active_objective_called_(false),
+      obj_in_hessian_(1),
       Oinfo_ptr_(NULL),
       suffix_handler_(suffix_handler)
   {
@@ -221,7 +222,7 @@ namespace Ipopt
 
     // find the nonzero structure for the hessian parameters to
     // sphsetup:
-    int coeff_obj = 1;
+    int coeff_obj = obj_in_hessian_; // needed for AmplParTNLP
     int mult_supplied = 1; // multipliers will be supplied
     int uptri = 1; // only need the upper triangular part
     nz_h_full_ = sphsetup(-1, coeff_obj, mult_supplied, uptri);
@@ -574,15 +575,20 @@ namespace Ipopt
         internal_conval(x, m);
       }
 
-      real* OW = new real[Max(1,n_obj)];
-      if (n_obj>0) {
-        for (Index i=0; i<n_obj; i++) {
-          OW[i] = 0.;
-        }
-        OW[obj_no] = obj_sign_*obj_factor;
+      real* OW = NULL;
+      if (obj_in_hessian_){ // needed for AmplParTNLP
+	OW = new real[Max(1,n_obj)];
+	if (n_obj>0) {
+	  for (Index i=0; i<n_obj; i++) {
+	    OW[i] = 0.;
+	  }
+	  OW[obj_no] = obj_sign_*obj_factor;
+	}
       }
       sphes(values, -1, OW, const_cast<Number*>(lambda));
-      delete [] OW;
+
+      if (obj_in_hessian_)
+	delete [] OW;
       return true;
     }
     else {

@@ -403,6 +403,15 @@ namespace Ipopt
       return asl_;
     }
 
+    /** Return the ampl suffix_handler */
+    SmartPtr<AmplSuffixHandler> SuffixHandler()
+    {
+      return suffix_handler_;
+    }
+
+    /** Set flag for use of objective in hessian of lagrangian */
+    void set_obj_in_hessian (int v){ obj_in_hessian_ = v;}
+
     /** Write the solution file.  This is a wrapper for AMPL's
      *  write_sol.  TODO Maybe this should be at a different place, or
      *  collect the numbers itself? */
@@ -525,6 +534,8 @@ namespace Ipopt
     bool hesset_called_;
     /** true when set_active_objective has been called */
     bool set_active_objective_called_;
+    /** 1 if and only if objective is to be included in hessian of lagrangian */
+    int obj_in_hessian_;
     //@}
 
     /** Pointer to the Oinfo structure */
