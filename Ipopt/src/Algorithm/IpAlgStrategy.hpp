@@ -13,6 +13,7 @@
 #include "IpJournalist.hpp"
 #include "IpIpoptCalculatedQuantities.hpp"
 #include "IpIpoptNLP.hpp"
+#include "IpIpoptData.hpp"
 
 namespace Ipopt
 {
