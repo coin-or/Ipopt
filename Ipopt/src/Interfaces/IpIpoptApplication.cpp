@@ -1016,4 +1016,24 @@ namespace Ipopt
     return statistics_;
   }
 
+  SmartPtr<IpoptNLP> IpoptApplication::IpoptNLPObject()
+  {
+    return ip_nlp_;
+  }
+
+  SmartPtr<IpoptData> IpoptApplication::IpoptDataObject()
+  {
+    return ip_data_;
+  }
+
+  SmartPtr<IpoptCalculatedQuantities> IpoptApplication::IpoptCQObject()
+  {
+    return ip_cq_;
+  }
+
+  SmartPtr<IpoptAlgorithm> IpoptApplication::AlgorithmObject()
+  {
+    return alg_;
+  }
+
 } // namespace Ipopt
