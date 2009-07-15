@@ -208,8 +208,15 @@ namespace Ipopt
      *  We keep this around for the ReOptimizerTNLP call. */
     SmartPtr<NLP> nlp_adapter_;
 
+    /** @name Algorithmic parameters */
+    //@{
     /** Flag indicating if we are to use the inexact linear solver option */
     bool inexact_algorithm_;
+
+    /** Flag indicating if all bounds should be replaced by inequality
+     *  constraints.  This is necessary for the inexact algorithm. */
+    bool replace_bounds_;
+    //@}
   };
 
 } // namespace Ipopt

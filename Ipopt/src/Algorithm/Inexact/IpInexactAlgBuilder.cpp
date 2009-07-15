@@ -9,9 +9,9 @@
 
 #include "IpoptConfig.h"
 #include "IpInexactAlgBuilder.hpp"
-#include "IpNLPBoundsRemover.hpp"
 #include "IpInexactData.hpp"
 #include "IpInexactCq.hpp"
+#include "IpNLPBoundsRemover.hpp"
 
 #include "IpOptErrorConvCheck.hpp"
 #include "IpStdAugSystemSolver.hpp"
@@ -76,12 +76,10 @@ namespace Ipopt
   {
     DBG_ASSERT(prefix == "");
 
-    // First we wrap the incoming NLP into a reformulation that gets
-    // rid of the variable bounds
-    SmartPtr<NLP> nlp_nobounds = new NLPBoundsRemover(*nlp);
+    DBG_ASSERT(dynamic_cast<NLPBoundsRemover*>(GetRawPtr(nlp)));
 
     // use the original method to get the basic quantites
-    AlgorithmBuilder::BuildIpoptObjects(jnlst, options, prefix, nlp_nobounds,
+    AlgorithmBuilder::BuildIpoptObjects(jnlst, options, prefix, nlp,
                                         ip_nlp, ip_data, ip_cq);
 
     // Now add the objects specific for the inexact step version
@@ -310,5 +308,6 @@ namespace Ipopt
     options_list.SetNumericValueIfUnset("kappa_d", 0.);
     options_list.SetStringValueIfUnset("linear_solver", "pardiso");
     options_list.SetStringValue("linear_scaling_on_demand", "no");
+    options_list.SetStringValue("replace_bounds", "yes");
   }
 } // namespace

@@ -59,9 +59,9 @@ am_libinexact_la_OBJECTS = IpInexactAlgBuilder.lo IpInexactCq.lo \
 	IpInexactLSAcceptor.lo IpInexactNewtonNormal.lo \
 	IpInexactNormalTerminationTester.lo IpInexactPDSolver.lo \
 	IpInexactPDTerminationTester.lo IpInexactRegOp.lo \
-	IpInexactSearchDirCalc.lo IpIterativePardisoSolverInterface.lo \
-	IpIterativeSolverTerminationTester.lo \
-	IpInexactTSymScalingMethod.lo
+	IpInexactSearchDirCalc.lo IpInexactTSymScalingMethod.lo \
+	IpIterativePardisoSolverInterface.lo \
+	IpIterativeSolverTerminationTester.lo
 libinexact_la_OBJECTS = $(am_libinexact_la_OBJECTS)
 @BUILD_INEXACT_TRUE@am_libinexact_la_rpath =
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -302,6 +302,7 @@ libinexact_la_SOURCES = \
 	IpInexactPDTerminationTester.cpp IpInexactPDTerminationTester.hpp \
 	IpInexactRegOp.cpp IpInexactRegOp.hpp \
 	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp \
+	IpInexactTSymScalingMethod.cpp IpInexactTSymScalingMethod.hpp \
 	IpIterativePardisoSolverInterface.cpp IpIterativePardisoSolverInterface.hpp \
 	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
 
@@ -333,6 +334,7 @@ ASTYLE_FILES = \
 	IpInexactPDTerminationTester.cppbak IpInexactPDTerminationTester.hppbak \
 	IpInexactRegOp.cppbak IpInexactRegOp.hppbak \
 	IpInexactSearchDirCalc.cppbak IpInexactSearchDirCalc.hppbak \
+	IpInexactTSymScalingMethod.cppbak IpInexactTSymScalingMethod.hppbak \
 	IpIterativePardisoSolverInterface.cppbak IpIterativePardisoSolverInterface.hppbak \
 	IpIterativeSolverTerminationTester.cppbak IpIterativeSolverTerminationTester.hppbak
 
@@ -400,6 +402,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInexactPDTerminationTester.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInexactRegOp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInexactSearchDirCalc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInexactTSymScalingMethod.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIterativePardisoSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIterativeSolverTerminationTester.Plo@am__quote@
 
