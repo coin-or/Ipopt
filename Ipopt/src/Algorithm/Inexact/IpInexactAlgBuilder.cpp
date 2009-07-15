@@ -102,7 +102,7 @@ namespace Ipopt
     roptions->AddStringOption2(
       "inexact_linear_system_scaling",
       "Method for scaling the linear system for the inexact approach",
-      "none",
+      "slack-based",
       "none", "no scaling will be performed",
       "slack-based", "scale the linear system as in paper",
       "");
