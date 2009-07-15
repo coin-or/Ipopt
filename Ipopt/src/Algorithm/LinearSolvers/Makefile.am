@@ -66,7 +66,8 @@ endif
 
 if HAVE_MPI
   liblinsolvers_la_SOURCES += \
-	IpParTSymLinearSolver.cpp IpParTSymLinearSolver.hpp
+	IpParTSymLinearSolver.cpp IpParTSymLinearSolver.hpp \
+	IpParDistTSymLinearSolver.cpp IpParDistTSymLinearSolver.hpp
 endif
 
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
@@ -82,6 +83,10 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 if COIN_HAS_MUMPS
 liblinsolvers_la_SOURCES += \
 	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+if HAVE_MPI
+liblinsolvers_la_SOURCES += \
+	IpParMumpsSolverInterface.cpp IpParMumpsSolverInterface.hpp
+endif
 AM_CPPFLAGS += $(MUMPS_INCFLAGS)
 endif
 
@@ -116,6 +121,8 @@ ASTYLE_FILES = \
 	IpTSymDependencyDetector.cppbak IpTSymDependencyDetector.hppbak \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
 	IpTSymScalingMethod.hppbak \
+	IpParDistTSymLinearSolver.cppbak IpParDistTSymLinearSolver.hppbak \
+	IpParMumpsSolverInterface.cppbak IpParMumpsSolverInterface.hppbak \
 	IpParTSymLinearSolver.cppbak IpParTSymLinearSolver.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
 	IpWsmpSolverInterface.cppbak IpWsmpSolverInterface.hppbak
