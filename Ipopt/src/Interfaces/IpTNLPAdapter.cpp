@@ -490,7 +490,7 @@ namespace Ipopt
           }
           else if (lower_bound > upper_bound) {
             char string[128];
-            snprintf(string, 127, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+            Snprintf(string, 127, "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
             delete [] x_l;
             delete [] x_u;
             delete [] g_l;
@@ -571,7 +571,7 @@ namespace Ipopt
             delete [] d_l_map;
             delete [] d_u_map;
             char string[128];
-            snprintf(string, 127, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+            Snprintf(string, 127, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
             THROW_EXCEPTION(INVALID_TNLP, string);
           }
           else {
@@ -660,7 +660,7 @@ namespace Ipopt
         delete [] g_u;
 
         char string[128];
-        snprintf(string, 127, "All variables are fixed, and constraint violation is %e", max_viol);
+        Snprintf(string, 127, "All variables are fixed, and constraint violation is %e", max_viol);
         if (status == SUCCESS) {
           jnlst_->Printf(J_WARNING, J_INITIALIZATION,
                          "All variables are fixed and constraint violation %e\n   is below tolerance %e. Declaring success.\n", max_viol, tol_);

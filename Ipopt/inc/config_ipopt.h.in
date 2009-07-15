@@ -168,6 +168,9 @@
 /* Define to 1 if va_copy is avaliable */
 #undef HAVE_VA_COPY
 
+/* Define to 1 if you have the `vsnprintf' function. */
+#undef HAVE_VSNPRINTF
+
 /* Define to 1 if you have the <windows.h> header file. */
 #undef HAVE_WINDOWS_H
 
@@ -176,6 +179,9 @@
 
 /* Define to 1 if you have the `_snprintf' function. */
 #undef HAVE__SNPRINTF
+
+/* Define to 1 if you have the `_vsnprintf' function. */
+#undef HAVE__VSNPRINTF
 
 /* Define to be the name of C-function for NaNInf check */
 #undef MY_C_FINITE

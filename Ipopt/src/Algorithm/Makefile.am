@@ -13,6 +13,8 @@ SUBDIRS = LinearSolvers Inexact
 #if BUILD_INEXACT
 #  SUBDIRS += Inexact
 #endif
+includeipoptdir = $(includedir)/coin
+includeipopt_HEADERS = IpIpoptCalculatedQuantities.hpp
 
 noinst_LTLIBRARIES = libipoptalg.la
 

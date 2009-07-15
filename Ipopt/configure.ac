@@ -770,6 +770,7 @@ case $build in
      AC_DEFINE([SHAREDLIBEXT], ["so"], [Set to extension for shared libraries in quotes.])
 esac
 AC_CHECK_FUNCS([snprintf _snprintf],[break])
+AC_CHECK_FUNCS([vsnprintf _vsnprintf],[break])
 AC_LANG_POP(C)
 
 ########################################################################

@@ -253,7 +253,7 @@ namespace Ipopt
         }
         else {
           char buf[32];
-          snprintf(buf, 31, " TT=%d ", test_result_);
+          Snprintf(buf, 31, " TT=%d ", test_result_);
           IpData().Append_info_string(buf);
           if (test_result_ == IterativeSolverTerminationTester::CONTINUE &&
               !InexData().compute_normal()) {

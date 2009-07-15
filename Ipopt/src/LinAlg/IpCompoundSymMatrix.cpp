@@ -225,7 +225,7 @@ namespace Ipopt
         if (ConstComp(irow,jcol)) {
           DBG_ASSERT(name.size()<200);
           char buffer[256];
-          snprintf(buffer, 255, "%s[%d][%d]", name.c_str(), irow, jcol);
+          Snprintf(buffer, 255, "%s[%d][%d]", name.c_str(), irow, jcol);
           std::string term_name = buffer;
           ConstComp(irow,jcol)->Print(&jnlst, level, category, term_name,
                                       indent+1, prefix);
