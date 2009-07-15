@@ -19,6 +19,7 @@
 #include "IpInterfacesRegOp.hpp"
 #include "IpAlgorithmRegOp.hpp"
 #include "IpCGPenaltyRegOp.hpp"
+#include "IpNLPBoundsRemover.hpp"
 
 #ifdef BUILD_INEXACT
 # include "IpInexactRegOp.hpp"
@@ -444,6 +445,8 @@ namespace Ipopt
         AddInexactDefaultOptions(*options_);
       }
 #endif
+
+      options_->GetBoolValue("replace_bounds", replace_bounds_, "");
     }
     catch (OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
@@ -551,6 +554,13 @@ namespace Ipopt
       "read, it specifies the name of the options file.  It does not make any "
       "sense to specify this option within the options file.");
 
+    roptions->AddStringOption2(
+      "replace_bounds",
+      "Indicates if all variable bounds should be replaced by inequality constraints", "no",
+      "no", "leave bounds on variables",
+      "yes", "replace variable bounds by inequality constraints",
+      "This option must be set for the inexact algorithm");
+
     roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption2(
       "print_options_latex_mode",
@@ -624,7 +634,14 @@ namespace Ipopt
 #endif
       }
 
-      alg_builder->BuildIpoptObjects(*jnlst_, *options_, "", nlp,
+      SmartPtr<NLP> use_nlp;
+      if (replace_bounds_) {
+        use_nlp = new NLPBoundsRemover(*nlp);
+      }
+      else {
+        use_nlp = nlp;
+      }
+      alg_builder->BuildIpoptObjects(*jnlst_, *options_, "", use_nlp,
                                      ip_nlp_, ip_data_, ip_cq_);
 
       alg_ = GetRawPtr(alg_builder->BuildBasicAlgorithm(*jnlst_, *options_, ""));
