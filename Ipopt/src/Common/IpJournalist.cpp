@@ -30,13 +30,7 @@
 # endif
 #endif
 
-#ifdef HAVE_MPI
-// FIXME - proper header files
-//extern "C" {
-# define MPICH_SKIP_MPICXX
-# include "mpi.h"
-//}
-#endif
+#include "IpMpi.hpp"
 
 namespace Ipopt
 {

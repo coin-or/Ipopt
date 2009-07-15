@@ -246,6 +246,9 @@ int main(int argv, char* argc[])
 
   status = app->OptimizeNLP(nlp);
 
+  // clean up memory
+  app = NULL;
+
   MPI_Finalize();
 
   return (int) status;

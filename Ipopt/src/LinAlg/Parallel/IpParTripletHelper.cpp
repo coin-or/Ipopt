@@ -34,11 +34,7 @@
 
 #include "IpBlas.hpp"
 
-// FIXME - proper header files
-//extern "C" {
-#define MPICH_SKIP_MPICXX
-#include "mpi.h"
-//}
+#include "IpMpi.hpp"
 
 namespace Ipopt
 {

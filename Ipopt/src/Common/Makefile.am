@@ -33,6 +33,7 @@ libcommon_la_SOURCES = \
 	IpDebug.cpp IpDebug.hpp \
 	IpException.hpp \
 	IpJournalist.cpp IpJournalist.hpp \
+	IpMpi.hpp \
 	IpObserver.cpp IpObserver.hpp \
 	IpOptionsList.cpp IpOptionsList.hpp \
 	IpRegOptions.cpp IpRegOptions.hpp \
@@ -74,6 +75,7 @@ ASTYLE_FILES = \
 	IpDebug.cppbak IpDebug.hppbak \
 	IpException.hppbak \
 	IpJournalist.cppbak IpJournalist.hppbak \
+	IpMpi.hppbak \
 	IpObserver.cppbak IpObserver.hppbak \
 	IpOptionsList.cppbak IpOptionsList.hppbak \
 	IpRegOptions.cppbak IpRegOptions.hppbak \

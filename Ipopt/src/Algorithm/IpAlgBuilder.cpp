@@ -69,6 +69,8 @@
 // TODO not sure if to keep
 #ifdef HAVE_MPI
 # include "IpParTSymLinearSolver.hpp"
+# include "IpParDistTSymLinearSolver.hpp"
+# include "IpParMumpsSolverInterface.hpp"
 #endif
 
 namespace Ipopt
@@ -343,7 +345,11 @@ namespace Ipopt
     }
     else if (linear_solver=="mumps") {
 #ifdef COIN_HAS_MUMPS
+# ifdef HAVE_MPI
+      SolverInterface = new ParMumpsSolverInterface();
+# else
       SolverInterface = new MumpsSolverInterface();
+# endif
 #else
 
       THROW_EXCEPTION(OPTION_INVALID,
@@ -392,11 +398,16 @@ namespace Ipopt
 
       }
 
-      SmartPtr<SymLinearSolver> ScaledSolver =
+      SmartPtr<SymLinearSolver> ScaledSolver;
 #ifdef HAVE_MPI
-        new ParTSymLinearSolver(SolverInterface, ScalingMethod);
+      if (linear_solver=="mumps") {
+        ScaledSolver = new ParDistTSymLinearSolver(SolverInterface);
+      }
+      else {
+        ScaledSolver = new ParTSymLinearSolver(SolverInterface, ScalingMethod);
+      }
 #else
-        new TSymLinearSolver(SolverInterface, ScalingMethod);
+      ScaledSolver = new TSymLinearSolver(SolverInterface, ScalingMethod);
 #endif
 
       AugSolver = new StdAugSystemSolver(*ScaledSolver);

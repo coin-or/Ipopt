@@ -1,40 +1,35 @@
-// Copyright (C) 2006, 2007 Damien Hocking, KBC Advanced Technologies
+// Copyright (C) 2006, 2009 Damien Hocking, KBC Advanced Technologies and others
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors: Damien Hocking                 KBC    2006-03-20
-//        (included his original contribution into Ipopt package on 2006-03-25)
-//          Andreas Waechter               IBM    2006-03-25
-//           (minor changes and corrections)
-//          Scott Turnberg                 CMU    2006-05-12
-//           (major revision)
-//           (incorporated by AW on 2006-11-11 into Ipopt package)
+// Authors:  Andreas Waechter, Sanjeeb Dash     IBM    2009-07-10
+//                  (based on IpMumpsSolverInterface.hpp rev 1324)
 
-
-#ifndef __IPMUMPSSOLVERINTERFACE_HPP__
-#define __IPMUMPSSOLVERINTERFACE_HPP__
+#ifndef __IPPARMUMPSSOLVERINTERFACE_HPP__
+#define __IPPARMUMPSSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
 
 namespace Ipopt
 {
 
-  /** Interface to the linear solver Mumps, derived from
-  *  SparseSymLinearSolverInterface.  For details, see description of
-  *  SparseSymLinearSolverInterface base class.
+  /** Interface to the parallel linear solver Mumps, derived from
+  *  SparseSymLinearSolverInterface.  This is for the MPI parallel
+  *  version of MUMPS, where it is assumed that the matrix data is
+  *  provided distributedly from each process.
   */
-  class MumpsSolverInterface: public SparseSymLinearSolverInterface
+  class ParMumpsSolverInterface: public SparseSymLinearSolverInterface
   {
   public:
     /** @name Constructor/Destructor */
     //@{
     /** Constructor */
-    MumpsSolverInterface();
+    ParMumpsSolverInterface();
 
     /** Destructor */
-    virtual ~MumpsSolverInterface();
+    virtual ~ParMumpsSolverInterface();
     //@}
 
     /** overloaded from AlgorithmStrategyObject */
@@ -109,16 +104,6 @@ namespace Ipopt
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
-    /** Query whether the indices of linearly dependent rows/columns
-     *  can be determined by this linear solver. */
-    virtual bool ProvidesDegeneracyDetection() const;
-
-    /** This method determines the list of row indices of the linearly
-     *  dependent rows. */
-    virtual ESymSolverStatus DetermineDependentRows(const Index* ia,
-        const Index* ja,
-        std::list<Index>& c_deps);
-
   private:
     /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
@@ -129,10 +114,10 @@ namespace Ipopt
     * they will not be implicitly created/called. */
     //@{
     /** Copy Constructor */
-    MumpsSolverInterface(const MumpsSolverInterface&);
+    ParMumpsSolverInterface(const ParMumpsSolverInterface&);
 
     /** Overloaded Equals Operator */
-    void operator=(const MumpsSolverInterface&);
+    void operator=(const ParMumpsSolverInterface&);
     //@}
 
     /** @name Information about the matrix */
