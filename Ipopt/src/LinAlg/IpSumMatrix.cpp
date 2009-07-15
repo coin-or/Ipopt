@@ -138,7 +138,7 @@ namespace Ipopt
                            "%sTerm %d with factor %23.16e and the following matrix:\n",
                            prefix.c_str(), iterm, factors_[iterm]);
       char buffer[256];
-      snprintf(buffer, 255, "Term: %d", iterm);
+      Snprintf(buffer, 255, "Term: %d", iterm);
       std::string name = buffer;
       matrices_[iterm]->Print(&jnlst, level, category, name, indent+1, prefix);
     }

@@ -120,17 +120,17 @@ namespace Ipopt
       "mumps_permuting_scaling",
       "Controls permuting and scaling in MUMPS",
       0, 7, 7,
-      "This is ICTL(6) in MUMPS.");
+      "This is ICNTL(6) in MUMPS.");
     roptions->AddBoundedIntegerOption(
       "mumps_pivot_order",
       "Controls pivot order in MUMPS",
       0, 7, 7,
-      "This is ICTL(7) in MUMPS.");
+      "This is ICNTL(7) in MUMPS.");
     roptions->AddBoundedIntegerOption(
       "mumps_scaling",
       "Controls scaling in MUMPS",
-      -2, 7, 7,
-      "This is ICTL(8) in MUMPS.");
+      -2, 77, 77,
+      "This is ICNTL(8) in MUMPS.");
     roptions->AddNumberOption(
       "mumps_dep_tol",
       "Pivot threshold for detection of linearly dependent constraints in MUMPS.",

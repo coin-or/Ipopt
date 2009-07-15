@@ -522,7 +522,7 @@ namespace Ipopt
     //#define tracequalityfunction
 #ifdef tracequalityfunction
     char fname[100];
-    snprintf(fname, 100, "qf_values_%d.dat", IpData().iter_count());
+    Snprintf(fname, 100, "qf_values_%d.dat", IpData().iter_count());
     FILE* fid = fopen(fname, "w");
 
     Number sigma_1 = sigma_max_;
@@ -605,12 +605,12 @@ namespace Ipopt
 
     // DELETEME
     char ssigma[40];
-    snprintf(ssigma, 39, " sigma=%8.2e", sigma);
+    Snprintf(ssigma, 39, " sigma=%8.2e", sigma);
     IpData().Append_info_string(ssigma);
-    snprintf(ssigma, 39, " qf=%d", count_qf_evals_);
+    Snprintf(ssigma, 39, " qf=%d", count_qf_evals_);
     IpData().Append_info_string(ssigma);
     /*
-    snprintf(ssigma, 39, " xi=%8.2e ", IpCq().curr_centrality_measure());
+    Snprintf(ssigma, 39, " xi=%8.2e ", IpCq().curr_centrality_measure());
     IpData().Append_info_string(ssigma);
     if (sigma>1.) {
       IpData().Append_info_string("LARGESIGMA");

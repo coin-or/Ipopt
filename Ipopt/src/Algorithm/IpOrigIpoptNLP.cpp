@@ -304,7 +304,7 @@ namespace Ipopt
 
       if (x_space_->Dim() < c_space_->Dim()) {
         char msg[128];
-        snprintf(msg, 127, "Too few degrees of freedom: %d equality constriants but only %d variables", c_space_->Dim(), x_space_->Dim());
+        Snprintf(msg, 127, "Too few degrees of freedom: %d equality constriants but only %d variables", c_space_->Dim(), x_space_->Dim());
         THROW_EXCEPTION(TOO_FEW_DOF, msg);
       }
       ASSERT_EXCEPTION(x_space_->Dim() > 0, TOO_FEW_DOF,

@@ -1,4 +1,4 @@
-// Copyright (C) 2007 International Business Machines and others.
+// Copyright (C) 2007, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -20,20 +20,21 @@ namespace Ipopt
 #endif
 
   PiecewisePenalty::PiecewisePenalty(Index dim)
-      : dim_(dim)
+      :
+      dim_(dim),
+      max_piece_number_(100), // make it regular option here or elsewhere?
+      min_piece_penalty_(0)   // make it regular option here or elsewhere?
   {}
 
   bool PiecewisePenalty::Acceptable(Number Fzconst, Number Fzlin)
   {
-    DBG_START_METH("PiecewisePenalty::Acceptable", dbg_verbosity);
+    DBG_START_METH("PiebcewisePenalty::Acceptable", dbg_verbosity);
     DBG_ASSERT(!IsPiecewisePenaltyListEmpty());
     bool acceptable = false;
     std::vector<PiecewisePenEntry>::iterator iter;
     // Avoid the entries of the piecewise penalty list becoming too many.
     // Here, we require the entry number is less than or equal to max_piece_number,
     // unless the entries are accepted by the regular Armijo conditions.
-    max_piece_number_ = 100; // make it regular option here or elsewhere?
-    min_piece_penalty_ = 0.; // make it regular option here or elsewhere?
     Index size = (Index)PiecewisePenalty_list_.size();
     if (size >= max_piece_number_) {
       Number trial_inf = Fzlin;
@@ -52,6 +53,7 @@ namespace Ipopt
       }
       // Then check the ending entry of the list.
       iter = PiecewisePenalty_list_.end();
+      iter--;
       value = iter->barrier_obj + iter->pen_r * iter->infeasi
               - trial_barrier - iter->pen_r * trial_inf;
       if (value <= 0. && trial_inf <= iter->infeasi) {
@@ -105,9 +107,13 @@ namespace Ipopt
   {
     DBG_START_METH("PiecewisePenalty::BiggestBarr", dbg_verbosity);
     DBG_ASSERT(!IsPiecewisePenaltyListEmpty());
-    std::vector<PiecewisePenEntry>::iterator iter;
-    iter = PiecewisePenalty_list_.end();
-    Number value = iter->barrier_obj;
+    Number value = -1e20;
+    if (PiecewisePenalty_list_.size() > 0) {
+      std::vector<PiecewisePenEntry>::iterator iter;
+      iter = PiecewisePenalty_list_.end();
+      iter--;
+      value = iter->barrier_obj;
+    }
     return value;
   }
 
@@ -128,7 +134,7 @@ namespace Ipopt
     Gzi1 = barrier_obj + iter->pen_r * ( infeasi - iter->infeasi) - iter->barrier_obj;
     for (; iter <= TmpList.end()-1; iter++) {
       // Be careful about this
-      if ( iter <= TmpList.end()-2 ) {
+      if ( TmpList.size() > 1 &&  iter <= TmpList.end()-2 ) {
         iter2 = iter+1;
         Gzi2 = barrier_obj + iter2->pen_r * ( infeasi - iter2->infeasi) - iter2->barrier_obj;
       }

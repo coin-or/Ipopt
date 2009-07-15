@@ -375,7 +375,7 @@ namespace Ipopt
     if (iter_count == wsmp_write_matrix_iteration_) {
       matrix_file_number_++;
       char buf[256];
-      snprintf(buf, 255, "wsmp_matrix_%d_%d.dat", iter_count,
+      Snprintf(buf, 255, "wsmp_matrix_%d_%d.dat", iter_count,
                matrix_file_number_);
       Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
                      "Writing WSMP matrix into file %s.\n", buf);
