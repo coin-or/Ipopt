@@ -466,6 +466,12 @@ namespace Ipopt
     }
     //@}
 
+    /** Method for returning the suffix handler */
+    SmartPtr<AmplSuffixHandler> get_suffix_handler()
+    {
+      return suffix_handler_;
+    }
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).

@@ -32,12 +32,16 @@ namespace Ipopt
       Matrix(owner_space),
       owner_space_(owner_space),
       values_(new Number[NCols()*NRows()]),
-      initialized_(false)
+      initialized_(false),
+      factorization_(NONE),
+      pivot_(NULL)
   {}
 
   DenseGenMatrix::~DenseGenMatrix()
   {
+    DBG_START_METH("DenseGenMatrix::~DenseGenMatrix()",dbg_verbosity);
     delete [] values_;
+    delete [] pivot_;
   }
 
   void DenseGenMatrix::ScaleColumns(const DenseVector& scal_vec)
@@ -164,6 +168,8 @@ namespace Ipopt
         values_[i+j*dim] = 0.;
       }
     }
+
+    factorization_ = CHOL;
     initialized_ = true;
     return true;
   }
@@ -213,6 +219,7 @@ namespace Ipopt
     DBG_ASSERT(NRows()==NCols());
     DBG_ASSERT(b.Dim()==NRows());
     DBG_ASSERT(initialized_);
+    DBG_ASSERT(factorization_==CHOL);
 
     Number* bvalues = b.Values();
 
@@ -224,10 +231,71 @@ namespace Ipopt
     DBG_ASSERT(NRows()==NCols());
     DBG_ASSERT(B.NRows()==NRows());
     DBG_ASSERT(initialized_);
+    DBG_ASSERT(factorization_==CHOL);
 
     Number* Bvalues = B.Values();
 
     IpLapackDpotrs(NRows(), B.NCols(), values_, NRows(), Bvalues, B.NRows());
+  }
+
+
+  bool DenseGenMatrix::ComputeLUFactorInPlace()
+  {
+    Index dim = NRows();
+    DBG_ASSERT(dim==NCols());
+
+    DBG_ASSERT(factorization_==NONE);
+
+    ObjectChanged();
+
+    // create pivot space
+    delete [] pivot_;
+    pivot_ = NULL; // set to NULL so that destructor will not try to
+    // delete again if the new in following line fails
+    pivot_ = new Index[dim];
+
+    // call the lapack subroutine for the factorization (dgetrf )
+    Index info;
+    IpLapackDgetrf(dim, values_, pivot_, dim, info);
+
+    DBG_ASSERT(info>=0);
+    if (info!=0) {
+      delete [] pivot_;
+      pivot_ = NULL;
+      initialized_ = false;
+      return false;
+    }
+    else {
+      initialized_ = true;
+    }
+
+    factorization_ = LU;
+    return true;
+  }
+
+  void DenseGenMatrix::LUSolveMatrix(DenseGenMatrix& B) const
+  {
+    DBG_ASSERT(NRows()==NCols());
+    DBG_ASSERT(B.NRows()==NRows());
+    DBG_ASSERT(initialized_);
+    DBG_ASSERT(factorization_==LU);
+
+    Number* Bvalues = B.Values();
+
+    IpLapackDgetrs(NRows(), B.NCols(), values_, NRows(), pivot_, Bvalues,
+                   B.NRows());
+  }
+
+  void DenseGenMatrix::LUSolveVector(DenseVector& b) const
+  {
+    DBG_ASSERT(NRows()==NCols());
+    DBG_ASSERT(b.Dim()==NRows());
+    DBG_ASSERT(initialized_);
+    DBG_ASSERT(factorization_==LU);
+
+    Number* bvalues = b.Values();
+
+    IpLapackDgetrs(NRows(), 1, values_, NRows(), pivot_, bvalues, b.Dim());
   }
 
   void DenseGenMatrix::MultVectorImpl(Number alpha, const Vector &x,
