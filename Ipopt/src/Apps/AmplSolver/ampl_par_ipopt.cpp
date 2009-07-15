@@ -115,6 +115,12 @@ int main(int argv, char**argc)
 
   // finalize_solution method in AmplTNLP writes the solution file
 
+  // clean up memory
+  app = NULL;
+  nlp = NULL;
+  ampl_tnlp = NULL;
+  parampl = NULL;
+
   MPI_Finalize();
 
   return 0;
