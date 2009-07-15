@@ -447,6 +447,8 @@ namespace Ipopt
 #endif
 
       options_->GetBoolValue("replace_bounds", replace_bounds_, "");
+      options_->GetBoolValue("skip_finalize_solution_call",
+                             skip_finalize_solution_call_, "");
     }
     catch (OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
@@ -560,6 +562,15 @@ namespace Ipopt
       "no", "leave bounds on variables",
       "yes", "replace variable bounds by inequality constraints",
       "This option must be set for the inexact algorithm");
+    roptions->AddStringOption2(
+      "skip_finalize_solution_call",
+      "Indicates if call to NLP::FinalizeSolution after optimization should be suppressed", "no",
+      "no", "call FinalizeSolution",
+      "yes", "do not call FinalizeSolution",
+      "In some Ipopt applications, the user might want to call the "
+      "FinalizeSolution method separately.  Setting this option to \"yes\" "
+      "will cause the IpoptApplication object to suppress the default call to "
+      "that method.");
 
     roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption2(
@@ -985,10 +996,12 @@ namespace Ipopt
         }
       }
 
-      p2ip_nlp->FinalizeSolution(status,
-                                 *p2ip_data->curr()->x(),
-                                 *zL, *zU, *c, *d, *yc, *yd,
-                                 obj, p2ip_data, p2ip_cq);
+      if (!skip_finalize_solution_call_) {
+        p2ip_nlp->FinalizeSolution(status,
+                                   *p2ip_data->curr()->x(),
+                                   *zL, *zU, *c, *d, *yc, *yd,
+                                   obj, p2ip_data, p2ip_cq);
+      }
     }
 
     jnlst_->FlushBuffer();

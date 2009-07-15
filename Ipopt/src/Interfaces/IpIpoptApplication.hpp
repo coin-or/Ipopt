@@ -212,10 +212,12 @@ namespace Ipopt
     //@{
     /** Flag indicating if we are to use the inexact linear solver option */
     bool inexact_algorithm_;
-
     /** Flag indicating if all bounds should be replaced by inequality
      *  constraints.  This is necessary for the inexact algorithm. */
     bool replace_bounds_;
+    /** Flag indicating if the NLP:FinalizeSolution method should not
+     *  be called after optimization. */
+    bool skip_finalize_solution_call_;
     //@}
   };
 
