@@ -7,6 +7,7 @@
 // Authors:  Andreas Waechter             IBM    2008-08-31
 
 #include "IpInexactCq.hpp"
+#include "IpIpoptNLP.hpp"
 
 namespace Ipopt
 {
