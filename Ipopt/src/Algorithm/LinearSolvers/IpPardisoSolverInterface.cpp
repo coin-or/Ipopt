@@ -203,7 +203,7 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "pardiso_iter_inverse_norm_factor",
       "",
-      1, true, 500,
+      1, true, 5000000,
       "DPARM(8)");
     roptions->AddStringOption2(
       "pardiso_iterative",

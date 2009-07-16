@@ -2,6 +2,12 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2009-07-16 releases/3.7.0
+        - a number of fixes (including those from 2009 COIN Bug Squashing
+          Party)
+        - changes in some exposed header files to provide access to internal
+          data structures for specific applications
+	
 2009-05-01 releases/3.6.1
         - minor corrections in tutorial files
 
