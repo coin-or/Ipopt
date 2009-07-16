@@ -1,4 +1,4 @@
-# Copyright (C) 2007, 2008 International Business Machines.
+# Copyright (C) 2007, 2009 International Business Machines.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.6trunk],[http://projects.coin-or.org/Ipopt/newticket])
+AC_INIT([Ipopt],[3.7trunk],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT([
 Copyright 2007, 2009 International Business Machines and others.
