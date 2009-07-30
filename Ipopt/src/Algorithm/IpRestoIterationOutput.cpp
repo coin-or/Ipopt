@@ -136,7 +136,7 @@ namespace Ipopt
       regu_x_ptr = dashes;
     }
     else {
-      snprintf(regu_x_buf, 7, "%5.1f", log10(regu_x));
+      Snprintf(regu_x_buf, 7, "%5.1f", log10(regu_x));
       regu_x_ptr = regu_x_buf;
     }
     Index ls_count = IpData().info_ls_count();

@@ -9,11 +9,21 @@
 #ifndef __IPIPOPTCALCULATEDQUANTITIES_HPP__
 #define __IPIPOPTCALCULATEDQUANTITIES_HPP__
 
-#include "IpIpoptNLP.hpp"
-#include "IpIpoptData.hpp"
+#include "IpSmartPtr.hpp"
+#include "IpCachedResults.hpp"
+
+#include <string>
 
 namespace Ipopt
 {
+  class IpoptNLP;
+  class IpoptData;
+  class Vector;
+  class Matrix;
+  class SymMatrix;
+  class Journalist;
+  class OptionsList;
+  class RegisteredOptions;
 
   /** Norm types */
   enum ENormType {

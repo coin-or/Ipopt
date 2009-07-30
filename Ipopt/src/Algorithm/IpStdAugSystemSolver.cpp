@@ -176,7 +176,7 @@ namespace Ipopt
       augrhs->SetComp(2, *rhs_cV[i]);
       augrhs->SetComp(3, *rhs_dV[i]);
       char buffer[16];
-      snprintf(buffer, 15, "RHS[%2d]", i);
+      Snprintf(buffer, 15, "RHS[%2d]", i);
       augrhs->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, buffer);
       augmented_rhsV[i] = GetRawPtr(augrhs);
     }
@@ -224,7 +224,7 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Factorization successful.\n");
       for (Index i=0; i<nrhs; i++) {
         char buffer[16];
-        snprintf(buffer, 15, "SOL[%2d]", i);
+        Snprintf(buffer, 15, "SOL[%2d]", i);
         augmented_solV[i]->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA,
                                  buffer);
       }

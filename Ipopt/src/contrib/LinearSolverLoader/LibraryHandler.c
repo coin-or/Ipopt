@@ -21,7 +21,6 @@
 # ifdef HAVE__SNPRINTF
 # define mysnprintf _snprintf
 # else
-   /* check for snprintf variants not in configure yet */ 
 #  define mysnprintf snprintf
 #  error "Do not have function for save printing into a C-string (snprintf or _snprintf)"
 # endif

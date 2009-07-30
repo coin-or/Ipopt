@@ -77,16 +77,18 @@ namespace Ipopt
     local_matrix_->TransMultVector(alpha, *local_x, 0., *dense_y);
 
     // CAN THIS be more efficient?
-    Number *yvalues = dense_y->Values();
-    MPI_Allreduce(MPI_IN_PLACE, yvalues, NCols(),
+    const Number *yvalues = dense_y->Values();
+    SmartPtr<DenseVector> reduced_y = dense_y->MakeNewDenseVector();
+    Number* redvalues = reduced_y->Values();
+    MPI_Allreduce(const_cast<Number*>(yvalues), redvalues, NCols(),
 		  MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
     if (beta==0.) {
-      par_y->ExtractLocalVector(*dense_y);
+      par_y->ExtractLocalVector(*reduced_y);
     }
     else {
       SmartPtr<ParVector> par_v = par_y->MakeNewParVector();
-      par_v->ExtractLocalVector(*dense_y);
+      par_v->ExtractLocalVector(*reduced_y);
       par_y->Axpy(beta, *par_v);
     }
   }
@@ -105,6 +107,7 @@ namespace Ipopt
     DBG_ASSERT(dynamic_cast<DenseVector*>(&cols_norms));
 
     throw("ParGenMatrix::ComputeColAMaxImpl not properly implemented");
+#if 0
     // This will crash in the GenTMatrix, because cols_norms is not a
     // DenseVector
     local_matrix_->ComputeColAMax(cols_norms, init);
@@ -112,16 +115,18 @@ namespace Ipopt
     DenseVector* dense_vec = static_cast<DenseVector*>(&cols_norms);
     Number* vec_vals=dense_vec->Values();
 
-    MPI_Allreduce(MPI_IN_PLACE, vec_vals, NCols(),
+    MPI_Allreduce(MPI_IN_PLACE-doesnotwork, vec_vals, NCols(),
 		  MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+#endif
   }
 
   bool ParGenMatrix::HasValidNumbersImpl() const
   {
     int valid = local_matrix_->HasValidNumbers();
-    MPI_Allreduce(MPI_IN_PLACE, &valid, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
+    int retval;
+    MPI_Allreduce(&valid, &retval, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
 
-    return (bool)valid;
+    return (bool)retval;
   }
 
   void ParGenMatrix::PrintImpl(const Journalist& jnlst,

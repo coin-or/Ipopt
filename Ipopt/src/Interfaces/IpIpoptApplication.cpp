@@ -19,6 +19,7 @@
 #include "IpInterfacesRegOp.hpp"
 #include "IpAlgorithmRegOp.hpp"
 #include "IpCGPenaltyRegOp.hpp"
+#include "IpNLPBoundsRemover.hpp"
 
 #ifdef BUILD_INEXACT
 # include "IpInexactRegOp.hpp"
@@ -444,6 +445,10 @@ namespace Ipopt
         AddInexactDefaultOptions(*options_);
       }
 #endif
+
+      options_->GetBoolValue("replace_bounds", replace_bounds_, "");
+      options_->GetBoolValue("skip_finalize_solution_call",
+                             skip_finalize_solution_call_, "");
     }
     catch (OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
@@ -551,6 +556,22 @@ namespace Ipopt
       "read, it specifies the name of the options file.  It does not make any "
       "sense to specify this option within the options file.");
 
+    roptions->AddStringOption2(
+      "replace_bounds",
+      "Indicates if all variable bounds should be replaced by inequality constraints", "no",
+      "no", "leave bounds on variables",
+      "yes", "replace variable bounds by inequality constraints",
+      "This option must be set for the inexact algorithm");
+    roptions->AddStringOption2(
+      "skip_finalize_solution_call",
+      "Indicates if call to NLP::FinalizeSolution after optimization should be suppressed", "no",
+      "no", "call FinalizeSolution",
+      "yes", "do not call FinalizeSolution",
+      "In some Ipopt applications, the user might want to call the "
+      "FinalizeSolution method separately.  Setting this option to \"yes\" "
+      "will cause the IpoptApplication object to suppress the default call to "
+      "that method.");
+
     roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption2(
       "print_options_latex_mode",
@@ -624,7 +645,14 @@ namespace Ipopt
 #endif
       }
 
-      alg_builder->BuildIpoptObjects(*jnlst_, *options_, "", nlp,
+      SmartPtr<NLP> use_nlp;
+      if (replace_bounds_) {
+        use_nlp = new NLPBoundsRemover(*nlp);
+      }
+      else {
+        use_nlp = nlp;
+      }
+      alg_builder->BuildIpoptObjects(*jnlst_, *options_, "", use_nlp,
                                      ip_nlp_, ip_data_, ip_cq_);
 
       alg_ = GetRawPtr(alg_builder->BuildBasicAlgorithm(*jnlst_, *options_, ""));
@@ -968,10 +996,12 @@ namespace Ipopt
         }
       }
 
-      p2ip_nlp->FinalizeSolution(status,
-                                 *p2ip_data->curr()->x(),
-                                 *zL, *zU, *c, *d, *yc, *yd,
-                                 obj, p2ip_data, p2ip_cq);
+      if (!skip_finalize_solution_call_) {
+        p2ip_nlp->FinalizeSolution(status,
+                                   *p2ip_data->curr()->x(),
+                                   *zL, *zU, *c, *d, *yc, *yd,
+                                   obj, p2ip_data, p2ip_cq);
+      }
     }
 
     jnlst_->FlushBuffer();
@@ -1014,6 +1044,26 @@ namespace Ipopt
   SmartPtr<SolveStatistics> IpoptApplication::Statistics()
   {
     return statistics_;
+  }
+
+  SmartPtr<IpoptNLP> IpoptApplication::IpoptNLPObject()
+  {
+    return ip_nlp_;
+  }
+
+  SmartPtr<IpoptData> IpoptApplication::IpoptDataObject()
+  {
+    return ip_data_;
+  }
+
+  SmartPtr<IpoptCalculatedQuantities> IpoptApplication::IpoptCQObject()
+  {
+    return ip_cq_;
+  }
+
+  SmartPtr<IpoptAlgorithm> IpoptApplication::AlgorithmObject()
+  {
+    return alg_;
   }
 
 } // namespace Ipopt
