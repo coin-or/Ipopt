@@ -20789,6 +20789,19 @@ fi
 # to comile DLLs under Windows.
 LT_LDFLAGS=
 
+# Check if we want to set the library version
+echo "$as_me:$LINENO: checking if library version is set" >&5
+echo $ECHO_N "checking if library version is set... $ECHO_C" >&6
+if test x"$coin_libversion" != x; then
+  LT_LDFLAGS="$LT_LDFLAGS -version-info $coin_libversion"
+  echo "$as_me:$LINENO: result: $coin_libversion" >&5
+echo "${ECHO_T}$coin_libversion" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+
 
 #END
 }
