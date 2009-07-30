@@ -422,7 +422,7 @@ namespace Ipopt
       else
         strcpy (mat_pref, "mat-ipopt");
 
-      snprintf (mat_name, 127, "%s_%03d-%02d.iajaa",
+      Snprintf (mat_name, 127, "%s_%03d-%02d.iajaa",
                 mat_pref, iter_cnt, sol_cnt);
 
       // Open and write matrix file.

@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2008 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -122,6 +122,18 @@ namespace Ipopt
      *  output. */
     void CholeskySolveMatrix(DenseGenMatrix& B) const;
 
+    /** Method for computing the LU factorization of an unsymmetric matrix.
+     *  The factorization is done in place. */
+    bool ComputeLUFactorInPlace();
+
+    /** Method for using a previously computed LU factorization for a
+     *  backsolve with a matrix on the rhs. */
+    void LUSolveMatrix(DenseGenMatrix& B) const;
+
+    /** Method for using a previously computed LU fatorization for a
+     *  backsolve with a single vector. */
+    void LUSolveVector(DenseVector& b) const;
+
   protected:
     /**@name Overloaded methods from Matrix base class*/
     //@{
@@ -175,6 +187,20 @@ namespace Ipopt
 
     /** Flag indicating whether the values_ array has been initialized */
     bool initialized_;
+
+    /** Enum for factorization type */
+    enum Factorization
+    {
+      NONE,
+      LU,
+      CHOL
+    };
+
+    /** Flag indicating if and which factorization has been applied */
+    Factorization factorization_;
+
+    /** Array for storing the pivot sequences if the matrix has been LU-factorized */
+    int* pivot_;
   };
 
   /** This is the matrix space for DenseGenMatrix.

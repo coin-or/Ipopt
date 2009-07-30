@@ -226,7 +226,8 @@ int main(int argv, char* argc[])
     return (int) status;
   }
   // Set option to use internal scaling
-  app->Options()->SetStringValueIfUnset("nlp_scaling_method", "user-scaling");
+  // DOES NOT WORK FOR VLUKL* PROBLEMS:
+  // app->Options()->SetStringValueIfUnset("nlp_scaling_method", "user-scaling");
 
   status = app->OptimizeTNLP(GetRawPtr(tnlp));
 

@@ -7,22 +7,23 @@
 //         May 19, 2007
 
 #include "matlabexception.hpp"
+#include "IpUtils.hpp"
 #include <cstdio>
 
 // Function definitions for class MatlabException
 // ---------------------------------------------------------------
 MatlabException::MatlabException (const char* message) throw()
   : exception() { 
-  snprintf(this->message, ME_BUFLEN, "\n*** Error using Ipopt Matlab interface: ***\n%s.\n", message);
+  Ipopt::Snprintf(this->message, ME_BUFLEN, "\n*** Error using Ipopt Matlab interface: ***\n%s.\n", message);
 }
 
 MatlabException::MatlabException (const MatlabException& source) throw() 
   : exception() {
-  snprintf(message, ME_BUFLEN, "%s.", source.message);
+  Ipopt::Snprintf(message, ME_BUFLEN, "%s.", source.message);
 }
 
 MatlabException& MatlabException::operator= (const MatlabException& source) 
 { 
-  snprintf(message, ME_BUFLEN, "%s", source.message);
+  Ipopt::Snprintf(message, ME_BUFLEN, "%s", source.message);
   return *this;
 }

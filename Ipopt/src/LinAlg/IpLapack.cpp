@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -27,6 +27,16 @@ extern "C"
                              double *A, ipfint *ldA, double *W,
                              double *WORK, ipfint *LWORK, ipfint *info,
                              int jobz_len, int uplo_len);
+
+  /** LAPACK Fortran subroutine DGETRF. */
+  void F77_FUNC(dgetrf,DGETRF)(ipfint *m, ipfint *n,
+                               double *A, ipfint *ldA, ipfint *IPIV,
+                               ipfint *info);
+  /** LAPACK Fortran subroutine DGETRS. */
+  void F77_FUNC(dgetrs,DGETRS)(char *trans, ipfint *n,
+                               ipfint *nrhs, const double *A, ipfint *ldA,
+                               ipfint *IPIV, double *B, ipfint *ldB,
+                               ipfint *info, int trans_len);
 }
 
 namespace Ipopt
@@ -106,6 +116,41 @@ namespace Ipopt
 #else
 
     std::string msg = "Ipopt has been compiled without LAPACK routine DSYEV, but options are chosen that require this dependency.  Abort.";
+    THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
+#endif
+
+  }
+
+  void IpLapackDgetrf(Index ndim, Number *a, Index *ipiv, Index lda, Index& info)
+  {
+#ifdef COIN_HAS_LAPACK
+    ipfint M=ndim, N=ndim, LDA=lda, INFO;
+
+    F77_FUNC(dgetrf,DGETRF)(&M, &N, a, &LDA, ipiv, &INFO);
+
+    info = INFO;
+#else
+
+    std::string msg = "Ipopt has been compiled without LAPACK routine DPOTRF, but options are chosen that require this dependency.  Abort.";
+    THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
+#endif
+
+  }
+
+  /* Interface to FORTRAN routine DGETRS. */
+  void IpLapackDgetrs(Index ndim, Index nrhs, const Number *a, Index lda,
+                      Index* ipiv, Number *b, Index ldb)
+  {
+#ifdef COIN_HAS_LAPACK
+    ipfint N=ndim, NRHS=nrhs, LDA=lda, LDB=ldb, INFO;
+    char trans = 'N';
+
+    F77_FUNC(dgetrs,DGETRS)(&trans, &N, &NRHS, a, &LDA, ipiv, b, &LDB,
+                            &INFO, 1);
+    DBG_ASSERT(INFO==0);
+#else
+
+    std::string msg = "Ipopt has been compiled without LAPACK routine DPOTRS, but options are chosen that require this dependency.  Abort.";
     THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
 #endif
 

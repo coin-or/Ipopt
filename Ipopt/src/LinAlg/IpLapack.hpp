@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -33,6 +33,16 @@ namespace Ipopt
    *  return.  */
   void IpLapackDsyev(bool compute_eigenvectors, Index ndim, Number *a,
                      Index lda, Number *w, Index& info);
+
+  /** Wrapper for LAPACK subroutine DGETRF.  Compute LU factorization.
+   *  info is the return value from the LAPACK routine. */
+  void IpLapackDgetrf(Index ndim, Number *a, Index* pivot, Index lda,
+                      Index& info);
+
+  /** Wrapper for LAPACK subroutine DGETRS.  Solving a linear system
+   *  given a LU factorization. */
+  void IpLapackDgetrs(Index ndim, Index nrhs, const Number *a, Index lda,
+                      Index* ipiv, Number *b, Index ldb);
 
 } // namespace Ipopt
 
