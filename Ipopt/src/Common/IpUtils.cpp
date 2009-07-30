@@ -215,6 +215,24 @@ namespace Ipopt
     return cpu_temp;
   }
 
+  Number SysTime()
+  {
+    double sys_temp;
+#if defined(_MSC_VER) || defined(__MSVCRT__)
+
+    // not yet implemented for Windows
+    sys_temp = 0.;
+#else
+
+    struct rusage usage;
+    getrusage(RUSAGE_SELF,&usage);
+    sys_temp = (double)usage.ru_stime.tv_sec;
+    sys_temp += 1.0e-6*((double) usage.ru_stime.tv_usec);
+#endif
+
+    return sys_temp;
+  }
+
   double WallclockTime()
   {
     double callTime = IpCoinGetTimeOfDay();

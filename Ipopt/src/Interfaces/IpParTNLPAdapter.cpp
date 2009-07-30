@@ -478,23 +478,14 @@ namespace Ipopt
       Index n_d_u = outcounts[7];
 
       // Compute the start positions
-      MPI_Exscan(counts, outcounts, 8, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
-      Index sp_x_var = 0;
-      Index sp_x_l = 0;
-      Index sp_x_u = 0;
-      Index sp_c = 0;
-      Index sp_d = 0;
-      Index sp_d_l = 0;
-      Index sp_d_u = 0;
-      if (proc_id_ != 0) {
-        sp_x_var = outcounts[0];
-        sp_x_l = outcounts[1];
-        sp_x_u = outcounts[2];
-        sp_c = outcounts[4];
-        sp_d = outcounts[5];
-        sp_d_l = outcounts[6];
-        sp_d_u = outcounts[7];
-      }
+      MPI_Scan(counts, outcounts, 8, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+      Index sp_x_var = outcounts[0] - counts[0];
+      Index sp_x_l = outcounts[1] - counts[1];
+      Index sp_x_u = outcounts[2] - counts[2];
+      Index sp_c = outcounts[4] - counts[4];
+      Index sp_d = outcounts[5] - counts[5];
+      Index sp_d_l = outcounts[6] - counts[6];
+      Index sp_d_u = outcounts[7] - counts[7];
 
       if (n_x_var == 0) {
         THROW_EXCEPTION(INVALID_PARTNLP, "All variables are fixed.  Special handling of this case not yet implemented for parallel version.");

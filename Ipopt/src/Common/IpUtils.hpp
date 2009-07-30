@@ -104,8 +104,11 @@ namespace Ipopt
   /** Function resetting the random number generator */
   void IpResetRandom01();
 
-  /** method determining CPU executed since start of program */
+  /** method determining CPU time executed since start of program */
   Number CpuTime();
+
+  /** method determining system time executed since start of program */
+  Number SysTime();
 
   /** Function for getting a string with the current wallclock time */
   double WallclockTime();
