@@ -300,6 +300,7 @@ namespace Ipopt
       // We might have to do the following twice: If we detect that we
       // don't have enought degrees of freedom, we simply redo
       // everything with fixed_variable_treatment to set RELAX_BOUNDS
+      Index n_part_x_fixed_max;
       while (!done) {
         n_part_x_var = 0;
         n_part_x_l = 0;
@@ -371,19 +372,21 @@ namespace Ipopt
         // If there are fixed variables, we keep their position around
         // for a possible warm start later or if fixed variables are
         // treated by added equality constraints
-        if (n_part_x_fixed_>0) {
+        // We need to do this for each process, even if that particular one
+        // does not have a fixed variable but some other does
+        MPI_Allreduce(&n_part_x_fixed_, &n_part_x_fixed_max, 1, MPI_INT, MPI_MAX, MPI_COMM_WORLD);
+        if (n_part_x_fixed_max>0) {
           delete [] x_fixed_part_map_;
           x_fixed_part_map_ = NULL;
           x_fixed_part_map_ = new Index[n_part_x_fixed_];
           for (Index i=0; i<n_part_x_fixed_; i++) {
             x_fixed_part_map_[i] = x_fixed_part_map_tmp[i];
           }
+          delete [] x_fixed_part_map_tmp;
         }
         else {
-          delete [] x_fixed_part_map_;
-          x_fixed_part_map_ = NULL;
+          x_fixed_part_map_ = x_fixed_part_map_tmp;
         }
-        delete [] x_fixed_part_map_tmp;
 
         // Create the spaces for c and d
         // - includes the internal permutation matrices for
@@ -521,7 +524,7 @@ namespace Ipopt
       pv_full_x_space_ =
         new ParVectorSpace(n_full_x_, n_first_, n_part_x_);
 
-      if (n_part_x_fixed_>0 && fixed_variable_treatment_==MAKE_PARAMETER) {
+      if (n_part_x_fixed_max>0 && fixed_variable_treatment_==MAKE_PARAMETER) {
         P_x_part_x_space_ =
           new ParExpansionMatrixSpace(ConstPtr(pv_full_x_space_),
                                       ConstPtr(pv_x_space),
