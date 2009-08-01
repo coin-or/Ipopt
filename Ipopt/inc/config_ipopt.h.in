@@ -3,22 +3,25 @@
 /* Define to 1 if the inexact linear solver option is included */
 #undef BUILD_INEXACT
 
-/* If defined, the Ampl Solver Library is available. */
+/* Define to 1 if the ASL package is used */
 #undef COIN_HAS_ASL
 
-/* If defined, the BLAS Library is available. */
+/* Define to 1 if the Blas package is used */
 #undef COIN_HAS_BLAS
+
+/* Define to 1 if the HSL package is used */
+#undef COIN_HAS_HSL
 
 /* Define to 1 if the Ipopt package is used */
 #undef COIN_HAS_IPOPT
 
-/* If defined, the LAPACK Library is available. */
+/* Define to 1 if the Lapack package is used */
 #undef COIN_HAS_LAPACK
 
-/* If defined, the METIS library is available. */
+/* Define to 1 if the Metis package is used */
 #undef COIN_HAS_METIS
 
-/* If defined, the MUMPS Library is available. */
+/* Define to 1 if the Mumps package is used */
 #undef COIN_HAS_MUMPS
 
 /* Define to the debug sanity check level (0 is no test) */

@@ -95,6 +95,13 @@ AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
 
 AC_COIN_HAS_PROJECT(Ipopt)
 
+AC_COIN_HAS_PROJECT(Blas,../ThirdParty,[daxpy.f])
+AC_COIN_HAS_PROJECT(Lapack,../ThirdParty,[LAPACK/SRC/dlarf.f])
+AC_COIN_HAS_PROJECT(Metis,../ThirdParty,[metis-4.0/Lib/balance.c])
+AC_COIN_HAS_PROJECT(HSL,../ThirdParty,[*.f])
+AC_COIN_HAS_PROJECT(ASL,../ThirdParty,[solvers/asl.h])
+AC_COIN_HAS_PROJECT(Mumps,../ThirdParty,[MUMPS/src/dmumps_part1.F])
+
 #############################################################################
 #                             Stuff for examples                            #
 #############################################################################
@@ -324,8 +331,8 @@ LIBS_without_ADDLIBS="$LIBS"
 #        BLAS         #
 #######################
 
-AC_COIN_HAS_BLAS
-if test $coin_has_blas = no; then
+#AC_COIN_HAS_BLAS
+if test $coin_has_blas = notGiven; then
   AC_MSG_ERROR([cannot find BLAS])
 fi
 
@@ -333,8 +340,8 @@ fi
 #       LAPACK        #
 #######################
 
-AC_COIN_HAS_LAPACK
-if test $coin_has_lapack = no; then
+#AC_COIN_HAS_LAPACK
+if test $coin_has_lapack = notGiven; then
   AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
 fi
 
@@ -342,7 +349,7 @@ fi
 # METIS #
 #########
 
-AC_COIN_HAS_METIS
+#AC_COIN_HAS_METIS
 
 #######################
 # HARWELL SUBROUTINES #
@@ -456,7 +463,7 @@ AC_LANG_POP([Fortran 77])
 # MUMPS #
 #########
 
-AC_COIN_HAS_MUMPS
+#AC_COIN_HAS_MUMPS
 
 ########
 # WSMP #
@@ -538,7 +545,18 @@ fi
 
 LIBS="$LIBS_without_ADDLIBS"
 
-AC_COIN_HAS_ASL
+#AC_COIN_HAS_ASL
+if test "$coin_has_asl" != notGiven ;
+then
+  # Determine the name of the ASL library
+  case "$CC" in
+    cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+      ASLLIB=amplsolv.lib ;;
+    *)
+      ASLLIB=amplsolver.a ;;
+  esac
+  AC_SUBST(ASLLIB)
+fi
 
 AC_LANG_POP(C++)
 
@@ -682,15 +700,15 @@ AC_SUBST(ipoptlib)
 AC_SUBST(IPALLLIBS)
 IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
-if test "$use_blas" = BUILD; then
+if test "$coin_has_blas" != notGiven ; then
   IPALLLIBS="../../../ThirdParty/Blas/libcoinblas.la $IPALLLIBS"
 fi
 
-if test "$use_lapack" = BUILD; then
+if test "$coin_has_lapack" != notGiven ; then
   IPALLLIBS="../../../ThirdParty/Lapack/libcoinlapack.la $IPALLLIBS"
 fi
 
-if test "$use_metis" = BUILD ; then
+if test "$coin_has_metis" != notGiven ; then
   IPALLLIBS="../../../ThirdParty/Metis/libcoinmetis.la $IPALLLIBS"
 fi
 
@@ -698,7 +716,7 @@ if test "$use_hsl" = BUILD ; then
   IPALLLIBS="../../../ThirdParty/HSL/libcoinhsl.la $IPALLLIBS"
 fi
 
-if test "$use_mumps" = BUILD ; then
+if test "$coin_has_mumps" != notGiven ; then
   IPALLLIBS="../../../ThirdParty/Mumps/libcoinmumps.la $IPALLLIBS"
 fi
 

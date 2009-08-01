@@ -42,13 +42,20 @@ AC_COIN_CREATE_LIBTOOL
 #             Check which ThirdParty sources are available                  #
 #############################################################################
 
-AC_COIN_THIRDPARTY_SUBDIRS([Blas],[ThirdParty/Blas],[daxpy.f])
-AC_COIN_THIRDPARTY_SUBDIRS([Lapack],[ThirdParty/Lapack],[LAPACK/SRC/dlarf.f])
-AC_COIN_THIRDPARTY_SUBDIRS([Metis],[ThirdParty/Metis],
-                           [metis-4.0/Lib/balance.c])
-AC_COIN_THIRDPARTY_SUBDIRS([HSL],[ThirdParty/HSL],[*.f])
-AC_COIN_THIRDPARTY_SUBDIRS([ASL],[ThirdParty/ASL],[solvers/asl.h])
-AC_COIN_THIRDPARTY_SUBDIRS([Mumps],[ThirdParty/Mumps],[MUMPS/src/dmumps_part1.F])
+#AC_COIN_THIRDPARTY_SUBDIRS([Blas],[ThirdParty/Blas],[daxpy.f])
+#AC_COIN_THIRDPARTY_SUBDIRS([Lapack],[ThirdParty/Lapack],[LAPACK/SRC/dlarf.f])
+#AC_COIN_THIRDPARTY_SUBDIRS([Metis],[ThirdParty/Metis],
+#                           [metis-4.0/Lib/balance.c])
+#AC_COIN_THIRDPARTY_SUBDIRS([HSL],[ThirdParty/HSL],[*.f])
+#AC_COIN_THIRDPARTY_SUBDIRS([ASL],[ThirdParty/ASL],[solvers/asl.h])
+#AC_COIN_THIRDPARTY_SUBDIRS([Mumps],[ThirdParty/Mumps],[MUMPS/src/dmumps_part1.F])
+
+AC_COIN_MAIN_SUBDIR(Blas,ThirdParty,[daxpy.f])
+AC_COIN_MAIN_SUBDIR(Lapack,ThirdParty,[LAPACK/SRC/dlarf.f])
+AC_COIN_MAIN_SUBDIR(Metis,ThirdParty,[metis-4.0/Lib/balance.c])
+AC_COIN_MAIN_SUBDIR(HSL,ThirdParty,[*.f])
+AC_COIN_MAIN_SUBDIR(ASL,ThirdParty,[solvers/asl.h])
+AC_COIN_MAIN_SUBDIR(Mumps,ThirdParty,[MUMPS/src/dmumps_part1.F])
 
 #############################################################################
 #                  Check which subprojects are there                        #
