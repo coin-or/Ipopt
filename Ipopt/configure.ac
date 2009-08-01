@@ -95,12 +95,12 @@ AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
 
 AC_COIN_HAS_PROJECT(Ipopt)
 
-AC_COIN_HAS_PROJECT(Blas,../ThirdParty,[daxpy.f])
-AC_COIN_HAS_PROJECT(Lapack,../ThirdParty,[LAPACK/SRC/dlarf.f])
-AC_COIN_HAS_PROJECT(Metis,../ThirdParty,[metis-4.0/Lib/balance.c])
-AC_COIN_HAS_PROJECT(HSL,../ThirdParty,[*.f])
-AC_COIN_HAS_PROJECT(ASL,../ThirdParty,[solvers/asl.h])
-AC_COIN_HAS_PROJECT(Mumps,../ThirdParty,[MUMPS/src/dmumps_part1.F])
+AC_COIN_HAS_PROJECT(Blas,ThirdParty,[daxpy.f])
+AC_COIN_HAS_PROJECT(Lapack,ThirdParty,[LAPACK/SRC/dlarf.f])
+AC_COIN_HAS_PROJECT(Metis,ThirdParty,[metis-4.0/Lib/balance.c])
+AC_COIN_HAS_PROJECT(HSL,ThirdParty,[*.f])
+AC_COIN_HAS_PROJECT(ASL,ThirdParty,[solvers/asl.h])
+AC_COIN_HAS_PROJECT(Mumps,ThirdParty,[MUMPS/src/dmumps_part1.F])
 
 #############################################################################
 #                             Stuff for examples                            #

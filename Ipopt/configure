@@ -22140,7 +22140,9 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-		   if test -r $withval/share/doc/coin/Ipopt/README; then
+		   if test -r $withval/share/doc/coin/Ipopt/README;
+
+                   then
 		     coin_has_ipopt=installed
 		     IPOPTINSTDIR=`cd $withval; pwd`
 		   fi
@@ -22148,7 +22150,20 @@ fi;
     fi
 
     # check if project can be found in /Ipopt
+    # this is for the classic setup when this macro is called from AC_COIN_MAIN_SUBDIR
     fulldir=Ipopt
+
+    if test "$coin_has_ipopt" = notGiven; then
+      if test -d $srcdir/$fulldir; then
+         coin_has_ipopt=$fulldir
+
+
+      fi
+    fi
+
+    # check if project can be found in ..//Ipopt
+    # this is for the classic setup when this macro is called from the project main directory
+    fulldir=../Ipopt
 
     if test "$coin_has_ipopt" = notGiven; then
       if test -d $srcdir/$fulldir; then
@@ -22171,18 +22186,21 @@ _ACEOF
 
   if test $coin_has_ipopt = installed; then
     IPOPTDOCDIR=$IPOPTINSTDIR/share/doc/coin/Ipopt
-    IPOPTDATADIR=$IPOPTINSTDIR/share/coin/Ipopt
+       IPOPTDATADIR=$IPOPTINSTDIR/share/coin/Ipopt
+
   else
     if test "$IPOPTOBJDIR" = This_Variable_Is_Not_Set; then
       # Set the variables for source and object code location
       IPOPTSRCDIR=`cd $srcdir/$coin_has_ipopt; pwd`
       IPOPTOBJDIR=`pwd`/$coin_has_ipopt
       IPOPTDOCDIR=$abs_lib_dir/../share/doc/coin/Ipopt
+
       IPOPTDATADIR=$IPOPTOBJDIR
     else
       # This is just a guess:
       IPOPTDOCDIR=$IPOPTOBJDIR/../share/doc/coin/Ipopt
-      IPOPTDATADIR=$IPOPTOBJDIR/../share/coin/Ipopt
+         IPOPTDATADIR=$IPOPTOBJDIR/../share/coin/Ipopt
+
     fi
   fi
 fi
@@ -22223,6 +22241,8 @@ echo "$as_me: error: $IPOPTINSTDIR/share/doc/coin/Ipopt/README should be availab
   :
 fi
 
+
+
 else
   echo "$as_me:$LINENO: result: $coin_has_ipopt" >&5
 echo "${ECHO_T}$coin_has_ipopt" >&6
@@ -22240,8 +22260,8 @@ echo "${ECHO_T}$IPOPTOBJDIR" >&6
 fi
 
 
-echo "$as_me:$LINENO: checking for COIN project Blas in ../ThirdParty" >&5
-echo $ECHO_N "checking for COIN project Blas in ../ThirdParty... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for COIN project Blas in ThirdParty" >&5
+echo $ECHO_N "checking for COIN project Blas in ThirdParty... $ECHO_C" >&6
 # First check, if the sub-project is actually available (ToDo: allow
 # other locations)
 
@@ -22338,21 +22358,41 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-		   if test -r $withval/share/doc/coin/Blas/README; then
+		   if test -r $withval/share/doc/coin/ThirdParty/Blas/README;
+
+                   then
 		     coin_has_blas=installed
 		     BLASINSTDIR=`cd $withval; pwd`
 		   fi
 fi;
     fi
 
+    # check if project can be found in ThirdParty/Blas
+    # this is for the classic setup when this macro is called from AC_COIN_MAIN_SUBDIR
+    fulldir=ThirdParty/Blas
+
+    if test "$coin_has_blas" = notGiven; then
+      if test -d $srcdir/$fulldir; then
+        for i in $srcdir/$fulldir/daxpy.f; do
+             if test -r $i; then
+               coin_has_blas=$fulldir
+             fi
+           done
+
+      fi
+    fi
+
     # check if project can be found in ../ThirdParty/Blas
+    # this is for the classic setup when this macro is called from the project main directory
     fulldir=../ThirdParty/Blas
 
     if test "$coin_has_blas" = notGiven; then
       if test -d $srcdir/$fulldir; then
-        if test -r $srcdir/$fulldir/daxpy.f; then
-            coin_has_blas=$fulldir
-          fi
+        for i in $srcdir/$fulldir/daxpy.f; do
+             if test -r $i; then
+               coin_has_blas=$fulldir
+             fi
+           done
 
       fi
     fi
@@ -22369,19 +22409,22 @@ _ACEOF
 
 
   if test $coin_has_blas = installed; then
-    BLASDOCDIR=$BLASINSTDIR/share/doc/coin/Blas
-    BLASDATADIR=$BLASINSTDIR/share/coin/Blas
+    BLASDOCDIR=$BLASINSTDIR/share/doc/coin/ThirdParty/Blas
+       BLASDATADIR=$BLASINSTDIR/share/coin/ThirdParty/Blas
+
   else
     if test "$BLASOBJDIR" = This_Variable_Is_Not_Set; then
       # Set the variables for source and object code location
       BLASSRCDIR=`cd $srcdir/$coin_has_blas; pwd`
       BLASOBJDIR=`pwd`/$coin_has_blas
-      BLASDOCDIR=$abs_lib_dir/../share/doc/coin/Blas
+      BLASDOCDIR=$abs_lib_dir/../share/doc/coin/ThirdParty/Blas
+
       BLASDATADIR=$BLASOBJDIR
     else
       # This is just a guess:
-      BLASDOCDIR=$BLASOBJDIR/../share/doc/coin/Blas
-      BLASDATADIR=$BLASOBJDIR/../share/coin/Blas
+      BLASDOCDIR=$BLASOBJDIR/../share/doc/coin/ThirdParty/Blas
+         BLASDATADIR=$BLASOBJDIR/../share/coin/ThirdParty/Blas
+
     fi
   fi
 fi
@@ -22412,15 +22455,16 @@ fi
 if test $coin_has_blas = installed; then
   echo "$as_me:$LINENO: result: installed in $BLASINSTDIR" >&5
 echo "${ECHO_T}installed in $BLASINSTDIR" >&6
-  if test -r $BLASINSTDIR/share/doc/coin/Blas/README; then
+  if test -r $BLASINSTDIR/share/doc/coin/ThirdParty/Blas/README; then
 
   :
 else
-  { { echo "$as_me:$LINENO: error: $BLASINSTDIR/share/doc/coin/Blas/README should be available if Blas is installed" >&5
-echo "$as_me: error: $BLASINSTDIR/share/doc/coin/Blas/README should be available if Blas is installed" >&2;}
+  { { echo "$as_me:$LINENO: error: $BLASINSTDIR/share/doc/coin/ThirdParty/Blas/README should be available if Blas is installed" >&5
+echo "$as_me: error: $BLASINSTDIR/share/doc/coin/ThirdParty/Blas/README should be available if Blas is installed" >&2;}
    { (exit 1); exit 1; }; }
   :
 fi
+
 
 else
   echo "$as_me:$LINENO: result: $coin_has_blas" >&5
@@ -22438,8 +22482,8 @@ echo "${ECHO_T}$BLASOBJDIR" >&6
   fi
 fi
 
-echo "$as_me:$LINENO: checking for COIN project Lapack in ../ThirdParty" >&5
-echo $ECHO_N "checking for COIN project Lapack in ../ThirdParty... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for COIN project Lapack in ThirdParty" >&5
+echo $ECHO_N "checking for COIN project Lapack in ThirdParty... $ECHO_C" >&6
 # First check, if the sub-project is actually available (ToDo: allow
 # other locations)
 
@@ -22536,21 +22580,41 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-		   if test -r $withval/share/doc/coin/Lapack/README; then
+		   if test -r $withval/share/doc/coin/ThirdParty/Lapack/README;
+
+                   then
 		     coin_has_lapack=installed
 		     LAPACKINSTDIR=`cd $withval; pwd`
 		   fi
 fi;
     fi
 
+    # check if project can be found in ThirdParty/Lapack
+    # this is for the classic setup when this macro is called from AC_COIN_MAIN_SUBDIR
+    fulldir=ThirdParty/Lapack
+
+    if test "$coin_has_lapack" = notGiven; then
+      if test -d $srcdir/$fulldir; then
+        for i in $srcdir/$fulldir/LAPACK/SRC/dlarf.f; do
+             if test -r $i; then
+               coin_has_lapack=$fulldir
+             fi
+           done
+
+      fi
+    fi
+
     # check if project can be found in ../ThirdParty/Lapack
+    # this is for the classic setup when this macro is called from the project main directory
     fulldir=../ThirdParty/Lapack
 
     if test "$coin_has_lapack" = notGiven; then
       if test -d $srcdir/$fulldir; then
-        if test -r $srcdir/$fulldir/LAPACK/SRC/dlarf.f; then
-            coin_has_lapack=$fulldir
-          fi
+        for i in $srcdir/$fulldir/LAPACK/SRC/dlarf.f; do
+             if test -r $i; then
+               coin_has_lapack=$fulldir
+             fi
+           done
 
       fi
     fi
@@ -22567,19 +22631,22 @@ _ACEOF
 
 
   if test $coin_has_lapack = installed; then
-    LAPACKDOCDIR=$LAPACKINSTDIR/share/doc/coin/Lapack
-    LAPACKDATADIR=$LAPACKINSTDIR/share/coin/Lapack
+    LAPACKDOCDIR=$LAPACKINSTDIR/share/doc/coin/ThirdParty/Lapack
+       LAPACKDATADIR=$LAPACKINSTDIR/share/coin/ThirdParty/Lapack
+
   else
     if test "$LAPACKOBJDIR" = This_Variable_Is_Not_Set; then
       # Set the variables for source and object code location
       LAPACKSRCDIR=`cd $srcdir/$coin_has_lapack; pwd`
       LAPACKOBJDIR=`pwd`/$coin_has_lapack
-      LAPACKDOCDIR=$abs_lib_dir/../share/doc/coin/Lapack
+      LAPACKDOCDIR=$abs_lib_dir/../share/doc/coin/ThirdParty/Lapack
+
       LAPACKDATADIR=$LAPACKOBJDIR
     else
       # This is just a guess:
-      LAPACKDOCDIR=$LAPACKOBJDIR/../share/doc/coin/Lapack
-      LAPACKDATADIR=$LAPACKOBJDIR/../share/coin/Lapack
+      LAPACKDOCDIR=$LAPACKOBJDIR/../share/doc/coin/ThirdParty/Lapack
+         LAPACKDATADIR=$LAPACKOBJDIR/../share/coin/ThirdParty/Lapack
+
     fi
   fi
 fi
@@ -22610,15 +22677,16 @@ fi
 if test $coin_has_lapack = installed; then
   echo "$as_me:$LINENO: result: installed in $LAPACKINSTDIR" >&5
 echo "${ECHO_T}installed in $LAPACKINSTDIR" >&6
-  if test -r $LAPACKINSTDIR/share/doc/coin/Lapack/README; then
+  if test -r $LAPACKINSTDIR/share/doc/coin/ThirdParty/Lapack/README; then
 
   :
 else
-  { { echo "$as_me:$LINENO: error: $LAPACKINSTDIR/share/doc/coin/Lapack/README should be available if Lapack is installed" >&5
-echo "$as_me: error: $LAPACKINSTDIR/share/doc/coin/Lapack/README should be available if Lapack is installed" >&2;}
+  { { echo "$as_me:$LINENO: error: $LAPACKINSTDIR/share/doc/coin/ThirdParty/Lapack/README should be available if Lapack is installed" >&5
+echo "$as_me: error: $LAPACKINSTDIR/share/doc/coin/ThirdParty/Lapack/README should be available if Lapack is installed" >&2;}
    { (exit 1); exit 1; }; }
   :
 fi
+
 
 else
   echo "$as_me:$LINENO: result: $coin_has_lapack" >&5
@@ -22636,8 +22704,8 @@ echo "${ECHO_T}$LAPACKOBJDIR" >&6
   fi
 fi
 
-echo "$as_me:$LINENO: checking for COIN project Metis in ../ThirdParty" >&5
-echo $ECHO_N "checking for COIN project Metis in ../ThirdParty... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for COIN project Metis in ThirdParty" >&5
+echo $ECHO_N "checking for COIN project Metis in ThirdParty... $ECHO_C" >&6
 # First check, if the sub-project is actually available (ToDo: allow
 # other locations)
 
@@ -22734,21 +22802,41 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-		   if test -r $withval/share/doc/coin/Metis/README; then
+		   if test -r $withval/share/doc/coin/ThirdParty/Metis/README;
+
+                   then
 		     coin_has_metis=installed
 		     METISINSTDIR=`cd $withval; pwd`
 		   fi
 fi;
     fi
 
+    # check if project can be found in ThirdParty/Metis
+    # this is for the classic setup when this macro is called from AC_COIN_MAIN_SUBDIR
+    fulldir=ThirdParty/Metis
+
+    if test "$coin_has_metis" = notGiven; then
+      if test -d $srcdir/$fulldir; then
+        for i in $srcdir/$fulldir/metis-4.0/Lib/balance.c; do
+             if test -r $i; then
+               coin_has_metis=$fulldir
+             fi
+           done
+
+      fi
+    fi
+
     # check if project can be found in ../ThirdParty/Metis
+    # this is for the classic setup when this macro is called from the project main directory
     fulldir=../ThirdParty/Metis
 
     if test "$coin_has_metis" = notGiven; then
       if test -d $srcdir/$fulldir; then
-        if test -r $srcdir/$fulldir/metis-4.0/Lib/balance.c; then
-            coin_has_metis=$fulldir
-          fi
+        for i in $srcdir/$fulldir/metis-4.0/Lib/balance.c; do
+             if test -r $i; then
+               coin_has_metis=$fulldir
+             fi
+           done
 
       fi
     fi
@@ -22765,19 +22853,22 @@ _ACEOF
 
 
   if test $coin_has_metis = installed; then
-    METISDOCDIR=$METISINSTDIR/share/doc/coin/Metis
-    METISDATADIR=$METISINSTDIR/share/coin/Metis
+    METISDOCDIR=$METISINSTDIR/share/doc/coin/ThirdParty/Metis
+       METISDATADIR=$METISINSTDIR/share/coin/ThirdParty/Metis
+
   else
     if test "$METISOBJDIR" = This_Variable_Is_Not_Set; then
       # Set the variables for source and object code location
       METISSRCDIR=`cd $srcdir/$coin_has_metis; pwd`
       METISOBJDIR=`pwd`/$coin_has_metis
-      METISDOCDIR=$abs_lib_dir/../share/doc/coin/Metis
+      METISDOCDIR=$abs_lib_dir/../share/doc/coin/ThirdParty/Metis
+
       METISDATADIR=$METISOBJDIR
     else
       # This is just a guess:
-      METISDOCDIR=$METISOBJDIR/../share/doc/coin/Metis
-      METISDATADIR=$METISOBJDIR/../share/coin/Metis
+      METISDOCDIR=$METISOBJDIR/../share/doc/coin/ThirdParty/Metis
+         METISDATADIR=$METISOBJDIR/../share/coin/ThirdParty/Metis
+
     fi
   fi
 fi
@@ -22808,15 +22899,16 @@ fi
 if test $coin_has_metis = installed; then
   echo "$as_me:$LINENO: result: installed in $METISINSTDIR" >&5
 echo "${ECHO_T}installed in $METISINSTDIR" >&6
-  if test -r $METISINSTDIR/share/doc/coin/Metis/README; then
+  if test -r $METISINSTDIR/share/doc/coin/ThirdParty/Metis/README; then
 
   :
 else
-  { { echo "$as_me:$LINENO: error: $METISINSTDIR/share/doc/coin/Metis/README should be available if Metis is installed" >&5
-echo "$as_me: error: $METISINSTDIR/share/doc/coin/Metis/README should be available if Metis is installed" >&2;}
+  { { echo "$as_me:$LINENO: error: $METISINSTDIR/share/doc/coin/ThirdParty/Metis/README should be available if Metis is installed" >&5
+echo "$as_me: error: $METISINSTDIR/share/doc/coin/ThirdParty/Metis/README should be available if Metis is installed" >&2;}
    { (exit 1); exit 1; }; }
   :
 fi
+
 
 else
   echo "$as_me:$LINENO: result: $coin_has_metis" >&5
@@ -22834,8 +22926,8 @@ echo "${ECHO_T}$METISOBJDIR" >&6
   fi
 fi
 
-echo "$as_me:$LINENO: checking for COIN project HSL in ../ThirdParty" >&5
-echo $ECHO_N "checking for COIN project HSL in ../ThirdParty... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for COIN project HSL in ThirdParty" >&5
+echo $ECHO_N "checking for COIN project HSL in ThirdParty... $ECHO_C" >&6
 # First check, if the sub-project is actually available (ToDo: allow
 # other locations)
 
@@ -22932,21 +23024,41 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-		   if test -r $withval/share/doc/coin/HSL/README; then
+		   if test -r $withval/share/doc/coin/ThirdParty/HSL/README;
+
+                   then
 		     coin_has_hsl=installed
 		     HSLINSTDIR=`cd $withval; pwd`
 		   fi
 fi;
     fi
 
+    # check if project can be found in ThirdParty/HSL
+    # this is for the classic setup when this macro is called from AC_COIN_MAIN_SUBDIR
+    fulldir=ThirdParty/HSL
+
+    if test "$coin_has_hsl" = notGiven; then
+      if test -d $srcdir/$fulldir; then
+        for i in $srcdir/$fulldir/*.f; do
+             if test -r $i; then
+               coin_has_hsl=$fulldir
+             fi
+           done
+
+      fi
+    fi
+
     # check if project can be found in ../ThirdParty/HSL
+    # this is for the classic setup when this macro is called from the project main directory
     fulldir=../ThirdParty/HSL
 
     if test "$coin_has_hsl" = notGiven; then
       if test -d $srcdir/$fulldir; then
-        if test -r $srcdir/$fulldir/*.f; then
-            coin_has_hsl=$fulldir
-          fi
+        for i in $srcdir/$fulldir/*.f; do
+             if test -r $i; then
+               coin_has_hsl=$fulldir
+             fi
+           done
 
       fi
     fi
@@ -22963,19 +23075,22 @@ _ACEOF
 
 
   if test $coin_has_hsl = installed; then
-    HSLDOCDIR=$HSLINSTDIR/share/doc/coin/HSL
-    HSLDATADIR=$HSLINSTDIR/share/coin/HSL
+    HSLDOCDIR=$HSLINSTDIR/share/doc/coin/ThirdParty/HSL
+       HSLDATADIR=$HSLINSTDIR/share/coin/ThirdParty/HSL
+
   else
     if test "$HSLOBJDIR" = This_Variable_Is_Not_Set; then
       # Set the variables for source and object code location
       HSLSRCDIR=`cd $srcdir/$coin_has_hsl; pwd`
       HSLOBJDIR=`pwd`/$coin_has_hsl
-      HSLDOCDIR=$abs_lib_dir/../share/doc/coin/HSL
+      HSLDOCDIR=$abs_lib_dir/../share/doc/coin/ThirdParty/HSL
+
       HSLDATADIR=$HSLOBJDIR
     else
       # This is just a guess:
-      HSLDOCDIR=$HSLOBJDIR/../share/doc/coin/HSL
-      HSLDATADIR=$HSLOBJDIR/../share/coin/HSL
+      HSLDOCDIR=$HSLOBJDIR/../share/doc/coin/ThirdParty/HSL
+         HSLDATADIR=$HSLOBJDIR/../share/coin/ThirdParty/HSL
+
     fi
   fi
 fi
@@ -23006,15 +23121,16 @@ fi
 if test $coin_has_hsl = installed; then
   echo "$as_me:$LINENO: result: installed in $HSLINSTDIR" >&5
 echo "${ECHO_T}installed in $HSLINSTDIR" >&6
-  if test -r $HSLINSTDIR/share/doc/coin/HSL/README; then
+  if test -r $HSLINSTDIR/share/doc/coin/ThirdParty/HSL/README; then
 
   :
 else
-  { { echo "$as_me:$LINENO: error: $HSLINSTDIR/share/doc/coin/HSL/README should be available if HSL is installed" >&5
-echo "$as_me: error: $HSLINSTDIR/share/doc/coin/HSL/README should be available if HSL is installed" >&2;}
+  { { echo "$as_me:$LINENO: error: $HSLINSTDIR/share/doc/coin/ThirdParty/HSL/README should be available if HSL is installed" >&5
+echo "$as_me: error: $HSLINSTDIR/share/doc/coin/ThirdParty/HSL/README should be available if HSL is installed" >&2;}
    { (exit 1); exit 1; }; }
   :
 fi
+
 
 else
   echo "$as_me:$LINENO: result: $coin_has_hsl" >&5
@@ -23032,8 +23148,8 @@ echo "${ECHO_T}$HSLOBJDIR" >&6
   fi
 fi
 
-echo "$as_me:$LINENO: checking for COIN project ASL in ../ThirdParty" >&5
-echo $ECHO_N "checking for COIN project ASL in ../ThirdParty... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for COIN project ASL in ThirdParty" >&5
+echo $ECHO_N "checking for COIN project ASL in ThirdParty... $ECHO_C" >&6
 # First check, if the sub-project is actually available (ToDo: allow
 # other locations)
 
@@ -23130,21 +23246,41 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-		   if test -r $withval/share/doc/coin/ASL/README; then
+		   if test -r $withval/share/doc/coin/ThirdParty/ASL/README;
+
+                   then
 		     coin_has_asl=installed
 		     ASLINSTDIR=`cd $withval; pwd`
 		   fi
 fi;
     fi
 
+    # check if project can be found in ThirdParty/ASL
+    # this is for the classic setup when this macro is called from AC_COIN_MAIN_SUBDIR
+    fulldir=ThirdParty/ASL
+
+    if test "$coin_has_asl" = notGiven; then
+      if test -d $srcdir/$fulldir; then
+        for i in $srcdir/$fulldir/solvers/asl.h; do
+             if test -r $i; then
+               coin_has_asl=$fulldir
+             fi
+           done
+
+      fi
+    fi
+
     # check if project can be found in ../ThirdParty/ASL
+    # this is for the classic setup when this macro is called from the project main directory
     fulldir=../ThirdParty/ASL
 
     if test "$coin_has_asl" = notGiven; then
       if test -d $srcdir/$fulldir; then
-        if test -r $srcdir/$fulldir/solvers/asl.h; then
-            coin_has_asl=$fulldir
-          fi
+        for i in $srcdir/$fulldir/solvers/asl.h; do
+             if test -r $i; then
+               coin_has_asl=$fulldir
+             fi
+           done
 
       fi
     fi
@@ -23161,19 +23297,22 @@ _ACEOF
 
 
   if test $coin_has_asl = installed; then
-    ASLDOCDIR=$ASLINSTDIR/share/doc/coin/ASL
-    ASLDATADIR=$ASLINSTDIR/share/coin/ASL
+    ASLDOCDIR=$ASLINSTDIR/share/doc/coin/ThirdParty/ASL
+       ASLDATADIR=$ASLINSTDIR/share/coin/ThirdParty/ASL
+
   else
     if test "$ASLOBJDIR" = This_Variable_Is_Not_Set; then
       # Set the variables for source and object code location
       ASLSRCDIR=`cd $srcdir/$coin_has_asl; pwd`
       ASLOBJDIR=`pwd`/$coin_has_asl
-      ASLDOCDIR=$abs_lib_dir/../share/doc/coin/ASL
+      ASLDOCDIR=$abs_lib_dir/../share/doc/coin/ThirdParty/ASL
+
       ASLDATADIR=$ASLOBJDIR
     else
       # This is just a guess:
-      ASLDOCDIR=$ASLOBJDIR/../share/doc/coin/ASL
-      ASLDATADIR=$ASLOBJDIR/../share/coin/ASL
+      ASLDOCDIR=$ASLOBJDIR/../share/doc/coin/ThirdParty/ASL
+         ASLDATADIR=$ASLOBJDIR/../share/coin/ThirdParty/ASL
+
     fi
   fi
 fi
@@ -23204,15 +23343,16 @@ fi
 if test $coin_has_asl = installed; then
   echo "$as_me:$LINENO: result: installed in $ASLINSTDIR" >&5
 echo "${ECHO_T}installed in $ASLINSTDIR" >&6
-  if test -r $ASLINSTDIR/share/doc/coin/ASL/README; then
+  if test -r $ASLINSTDIR/share/doc/coin/ThirdParty/ASL/README; then
 
   :
 else
-  { { echo "$as_me:$LINENO: error: $ASLINSTDIR/share/doc/coin/ASL/README should be available if ASL is installed" >&5
-echo "$as_me: error: $ASLINSTDIR/share/doc/coin/ASL/README should be available if ASL is installed" >&2;}
+  { { echo "$as_me:$LINENO: error: $ASLINSTDIR/share/doc/coin/ThirdParty/ASL/README should be available if ASL is installed" >&5
+echo "$as_me: error: $ASLINSTDIR/share/doc/coin/ThirdParty/ASL/README should be available if ASL is installed" >&2;}
    { (exit 1); exit 1; }; }
   :
 fi
+
 
 else
   echo "$as_me:$LINENO: result: $coin_has_asl" >&5
@@ -23230,8 +23370,8 @@ echo "${ECHO_T}$ASLOBJDIR" >&6
   fi
 fi
 
-echo "$as_me:$LINENO: checking for COIN project Mumps in ../ThirdParty" >&5
-echo $ECHO_N "checking for COIN project Mumps in ../ThirdParty... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for COIN project Mumps in ThirdParty" >&5
+echo $ECHO_N "checking for COIN project Mumps in ThirdParty... $ECHO_C" >&6
 # First check, if the sub-project is actually available (ToDo: allow
 # other locations)
 
@@ -23328,21 +23468,41 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-		   if test -r $withval/share/doc/coin/Mumps/README; then
+		   if test -r $withval/share/doc/coin/ThirdParty/Mumps/README;
+
+                   then
 		     coin_has_mumps=installed
 		     MUMPSINSTDIR=`cd $withval; pwd`
 		   fi
 fi;
     fi
 
+    # check if project can be found in ThirdParty/Mumps
+    # this is for the classic setup when this macro is called from AC_COIN_MAIN_SUBDIR
+    fulldir=ThirdParty/Mumps
+
+    if test "$coin_has_mumps" = notGiven; then
+      if test -d $srcdir/$fulldir; then
+        for i in $srcdir/$fulldir/MUMPS/src/dmumps_part1.F; do
+             if test -r $i; then
+               coin_has_mumps=$fulldir
+             fi
+           done
+
+      fi
+    fi
+
     # check if project can be found in ../ThirdParty/Mumps
+    # this is for the classic setup when this macro is called from the project main directory
     fulldir=../ThirdParty/Mumps
 
     if test "$coin_has_mumps" = notGiven; then
       if test -d $srcdir/$fulldir; then
-        if test -r $srcdir/$fulldir/MUMPS/src/dmumps_part1.F; then
-            coin_has_mumps=$fulldir
-          fi
+        for i in $srcdir/$fulldir/MUMPS/src/dmumps_part1.F; do
+             if test -r $i; then
+               coin_has_mumps=$fulldir
+             fi
+           done
 
       fi
     fi
@@ -23359,19 +23519,22 @@ _ACEOF
 
 
   if test $coin_has_mumps = installed; then
-    MUMPSDOCDIR=$MUMPSINSTDIR/share/doc/coin/Mumps
-    MUMPSDATADIR=$MUMPSINSTDIR/share/coin/Mumps
+    MUMPSDOCDIR=$MUMPSINSTDIR/share/doc/coin/ThirdParty/Mumps
+       MUMPSDATADIR=$MUMPSINSTDIR/share/coin/ThirdParty/Mumps
+
   else
     if test "$MUMPSOBJDIR" = This_Variable_Is_Not_Set; then
       # Set the variables for source and object code location
       MUMPSSRCDIR=`cd $srcdir/$coin_has_mumps; pwd`
       MUMPSOBJDIR=`pwd`/$coin_has_mumps
-      MUMPSDOCDIR=$abs_lib_dir/../share/doc/coin/Mumps
+      MUMPSDOCDIR=$abs_lib_dir/../share/doc/coin/ThirdParty/Mumps
+
       MUMPSDATADIR=$MUMPSOBJDIR
     else
       # This is just a guess:
-      MUMPSDOCDIR=$MUMPSOBJDIR/../share/doc/coin/Mumps
-      MUMPSDATADIR=$MUMPSOBJDIR/../share/coin/Mumps
+      MUMPSDOCDIR=$MUMPSOBJDIR/../share/doc/coin/ThirdParty/Mumps
+         MUMPSDATADIR=$MUMPSOBJDIR/../share/coin/ThirdParty/Mumps
+
     fi
   fi
 fi
@@ -23402,15 +23565,16 @@ fi
 if test $coin_has_mumps = installed; then
   echo "$as_me:$LINENO: result: installed in $MUMPSINSTDIR" >&5
 echo "${ECHO_T}installed in $MUMPSINSTDIR" >&6
-  if test -r $MUMPSINSTDIR/share/doc/coin/Mumps/README; then
+  if test -r $MUMPSINSTDIR/share/doc/coin/ThirdParty/Mumps/README; then
 
   :
 else
-  { { echo "$as_me:$LINENO: error: $MUMPSINSTDIR/share/doc/coin/Mumps/README should be available if Mumps is installed" >&5
-echo "$as_me: error: $MUMPSINSTDIR/share/doc/coin/Mumps/README should be available if Mumps is installed" >&2;}
+  { { echo "$as_me:$LINENO: error: $MUMPSINSTDIR/share/doc/coin/ThirdParty/Mumps/README should be available if Mumps is installed" >&5
+echo "$as_me: error: $MUMPSINSTDIR/share/doc/coin/ThirdParty/Mumps/README should be available if Mumps is installed" >&2;}
    { (exit 1); exit 1; }; }
   :
 fi
+
 
 else
   echo "$as_me:$LINENO: result: $coin_has_mumps" >&5
