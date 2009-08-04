@@ -68,6 +68,10 @@ if HAVE_MPI
   liblinsolvers_la_SOURCES += \
 	IpParTSymLinearSolver.cpp IpParTSymLinearSolver.hpp \
 	IpParDistTSymLinearSolver.cpp IpParDistTSymLinearSolver.hpp
+if HAVE_WSMP
+  liblinsolvers_la_SOURCES += \
+	IpParWsmpSolverInterface.cpp IpParWsmpSolverInterface.hpp
+endif
 endif
 
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
@@ -124,6 +128,7 @@ ASTYLE_FILES = \
 	IpParDistTSymLinearSolver.cppbak IpParDistTSymLinearSolver.hppbak \
 	IpParMumpsSolverInterface.cppbak IpParMumpsSolverInterface.hppbak \
 	IpParTSymLinearSolver.cppbak IpParTSymLinearSolver.hppbak \
+	IpParWsmpSolverInterface.cppbak IpParWsmpSolverInterface.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
 	IpWsmpSolverInterface.cppbak IpWsmpSolverInterface.hppbak
 

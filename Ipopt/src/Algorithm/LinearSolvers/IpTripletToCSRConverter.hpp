@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2008 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -70,6 +70,21 @@ namespace Ipopt
         i_pos_triplet_ = i_pos_triplet;
       }
 
+      /** Set the values of an entry.  Using this Set method will
+       *  create the transpose version CSC. */
+      void SetCSC(Index i_row, Index j_col, Index i_pos_triplet)
+      {
+        if (i_row<j_col) {
+          i_row_ = j_col;
+          j_col_ = i_row;
+        }
+        else {
+          i_row_ = i_row;
+          j_col_ = j_col;
+        }
+        i_pos_triplet_ = i_pos_triplet;
+      }
+
       /** @name Accessor methods. */
       //@{
       /** Row position. */
@@ -128,8 +143,9 @@ namespace Ipopt
     /* Constructor.  If offset is 0, then the counting of indices in
        the compressed format starts a 0 (C-style numbering); if offset
        is 1, then the counting starts at 1 (Fortran-type
-       numbering). */
-    TripletToCSRConverter(Index offset);
+       numbering). If use_CSC is set to true, the CSC structure
+       (transpose of CSR) will be created. */
+    TripletToCSRConverter(Index offset, bool use_CSC = false);
 
     /** Destructor */
     virtual ~TripletToCSRConverter();
@@ -171,6 +187,11 @@ namespace Ipopt
     }
     //@}
 
+    /** Delete zero rows.  This is useful in the parallel setting
+    where the matrix is provided distributedly.  The return value
+    is the number of rows that are not zero. */
+    Index DeleteZeroRows();
+
     /** Convert the values of the nonzero elements.  Given the values
      *  a_triplet for the triplet format, return the array of values
      *  for the condensed format in a_condensed. nonzeros_condensed is
@@ -210,6 +231,9 @@ namespace Ipopt
     /** Dimension of the matrix. */
     Index dim_;
 
+    /** Number of nonzero rows.  Computed in DeleteZeroRows(). */
+    Index local_dim_;
+
     /** Number of nonzeros in the triplet format. */
     Index nonzeros_triplet_;
 
@@ -218,6 +242,9 @@ namespace Ipopt
 
     /** Flag indicating if initialize method had been called. */
     bool initialized_;
+
+    /** Flag indicating if CSC structure should be used */
+    bool use_CSC_;
 
     /** @name Arrays for cross-positions for the conversion of values. */
     //@{

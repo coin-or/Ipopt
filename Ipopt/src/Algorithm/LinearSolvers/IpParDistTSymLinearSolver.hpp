@@ -13,7 +13,7 @@
 #include "IpSymLinearSolver.hpp"
 #include "IpSparseSymLinearSolverInterface.hpp"
 #include "IpSymMatrix.hpp"
-#include "IpTripletToCSRConverter.hpp" // Need parallel version for this
+#include "IpTripletToCSRConverter.hpp"
 #include <vector>
 #include <list>
 
@@ -115,6 +115,9 @@ namespace Ipopt
     /** Number of rows and columns of the matrix */
     Index dim_;
 
+    /** Number of local rows of the matrix */
+    Index local_dim_;
+
     /** Number of nonzeros of the matrix in triplet format. Note that
      *  some elements might appear multiple times in which case the
      *  values are added. */
@@ -171,7 +174,8 @@ namespace Ipopt
      *  Set dim_ and nonzeros_, and copy the nonzero structure of symT_A
      *  into airn_ and ajcn_
      */
-    ESymSolverStatus InitializeStructure(const SymMatrix& symT_A);
+    ESymSolverStatus InitializeStructure(const SymMatrix& symT_A,
+                                         const Vector& sample_rhs);
 
     /** Copy the elements of the matrix in the required format into
      *  the array that is provided by the solver interface. */

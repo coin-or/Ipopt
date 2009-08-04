@@ -863,5 +863,175 @@ namespace Ipopt
     return;
   }
 
+  Index ParTripletHelper::GetLocalNumberEntries(const Vector& vector)
+  {
+    const Vector* vptr = &vector;
+
+    const CompoundVector* cvec = dynamic_cast<const CompoundVector*>(vptr);
+    if (cvec) {
+      return GetLocalNumberEntries_(*cvec);
+    }
+
+    const ParVector* pvec = dynamic_cast<const ParVector*>(vptr);
+    if (pvec) {
+      return GetLocalNumberEntries_(*pvec);
+    }
+
+    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"Unknown vector type passed to ParTripletHelper::GetLocalNumberEntries");
+    return 0;
+  }
+
+  Index ParTripletHelper::GetLocalNumberEntries_(const CompoundVector& vector)
+  {
+    Index ncomps = vector.NComps();
+    Index local_dim = 0;
+    for (Index i=0; i<ncomps; i++) {
+      SmartPtr<const Vector> comp = vector.GetComp(i);
+      local_dim += GetLocalNumberEntries(*comp);
+    }
+    return local_dim;
+  }
+
+  Index ParTripletHelper::GetLocalNumberEntries_(const ParVector& vector)
+  {
+    return vector.LocalSize();
+  }
+
+  void ParTripletHelper::GetGlobalPos(Index n_local_entries, const Vector& vector, Index* global_pos, Index offset)
+  {
+    const Vector* vptr = &vector;
+
+    const CompoundVector* cvec = dynamic_cast<const CompoundVector*>(vptr);
+    if (cvec) {
+      GetGlobalPos_(n_local_entries, *cvec, global_pos, offset);
+      return;
+    }
+
+    const ParVector* pvec = dynamic_cast<const ParVector*>(vptr);
+    if (pvec) {
+      GetGlobalPos_(n_local_entries, *pvec, global_pos, offset);
+      return;
+    }
+
+    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"Unknown vector type passed to ParTripletHelper::GetGlobalPosIndex");
+  }
+
+  void ParTripletHelper::GetGlobalPos_(Index n_local_entries, const CompoundVector& vector, Index* global_pos, Index offset)
+  {
+    Index ncomps = vector.NComps();
+    Index tot_dim = 0;
+    for (Index i=0; i<ncomps; i++) {
+      SmartPtr<const Vector> comp = vector.GetComp(i);
+      Index local_dim = GetLocalNumberEntries(*comp);
+      GetGlobalPos(local_dim, *comp, global_pos, offset);
+      tot_dim += local_dim;
+      global_pos += local_dim;
+      offset += comp->Dim();
+    }
+    DBG_ASSERT(tot_dim==n_local_entries);
+  }
+
+  void ParTripletHelper::GetGlobalPos_(Index n_local_entries, const ParVector& vector, Index* global_pos, Index offset)
+  {
+    DBG_ASSERT(n_local_entries==vector.LocalSize());
+
+    offset += vector.StartPos();
+    for (int i=0; i<n_local_entries; ++i) {
+      global_pos[i] = offset + i;
+    }
+  }
+
+  void ParTripletHelper::FillLocalValuesFromVector(Index n_local_entries,
+						   const Vector& vector,
+						   Number* local_values)
+  {
+    const Vector* vptr = &vector;
+
+    const CompoundVector* cvec = dynamic_cast<const CompoundVector*>(vptr);
+    if (cvec) {
+      FillLocalValuesFromVector_(n_local_entries, *cvec, local_values);
+      return;
+    }
+
+    const ParVector* pvec = dynamic_cast<const ParVector*>(vptr);
+    if (pvec) {
+      FillLocalValuesFromVector_(n_local_entries, *pvec, local_values);
+      return;
+    }
+
+    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"Unknown vector type passed to ParTripletHelper::FillLocalValuesFromVector");
+  }
+
+  void ParTripletHelper::FillLocalValuesFromVector_(Index n_local_entries,
+						    const CompoundVector& vector,
+						    Number* local_values)
+  {
+    Index ncomps = vector.NComps();
+    Index tot_dim = 0;
+    for (Index i=0; i<ncomps; i++) {
+      SmartPtr<const Vector> comp = vector.GetComp(i);
+      Index local_dim = GetLocalNumberEntries(*comp);
+      FillLocalValuesFromVector(local_dim, *comp, local_values);
+      tot_dim += local_dim;
+      local_values += local_dim;
+    }
+    DBG_ASSERT(tot_dim==n_local_entries);
+  }
+
+  void ParTripletHelper::FillLocalValuesFromVector_(Index n_local_entries,
+						    const ParVector& vector,
+						    Number* local_values)
+  {
+    DBG_ASSERT(n_local_entries==vector.LocalSize());
+    TripletHelper::FillValuesFromVector(n_local_entries, *vector.LocalVector(),
+					local_values);
+  }
+
+  void ParTripletHelper::PutLocalValuesInVector(Index n_local_entries,
+						const Number* local_values,
+						Vector& vector)
+  {
+    Vector* vptr = &vector;
+
+    CompoundVector* cvec = dynamic_cast<CompoundVector*>(vptr);
+    if (cvec) {
+      PutLocalValuesInVector_(n_local_entries, local_values, *cvec);
+      return;
+    }
+
+    ParVector* pvec = dynamic_cast<ParVector*>(vptr);
+    if (pvec) {
+      PutLocalValuesInVector_(n_local_entries, local_values, *pvec);
+      return;
+    }
+
+    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"Unknown vector type passed to ParTripletHelper::PutLocalValuesInVector");
+  }
+
+  void ParTripletHelper::PutLocalValuesInVector_(Index n_local_entries,
+						 const Number* local_values,
+						 CompoundVector& vector)
+  {
+    Index ncomps = vector.NComps();
+    Index tot_dim = 0;
+    for (Index i=0; i<ncomps; i++) {
+      SmartPtr<Vector> comp = vector.GetCompNonConst(i);
+      Index local_dim = GetLocalNumberEntries(*comp);
+      PutLocalValuesInVector(local_dim, local_values, *comp);
+      tot_dim += local_dim;
+      local_values += local_dim;
+    }
+    DBG_ASSERT(tot_dim==n_local_entries);
+  }
+
+  void ParTripletHelper::PutLocalValuesInVector_(Index n_local_entries,
+						 const Number* local_values,
+						 ParVector& vector)
+  {
+    DBG_ASSERT(n_local_entries==vector.LocalSize());
+    TripletHelper::PutValuesInVector(n_local_entries, local_values,
+				     *vector.LocalVector());
+  }
+
 } // namespace Ipopt
 
