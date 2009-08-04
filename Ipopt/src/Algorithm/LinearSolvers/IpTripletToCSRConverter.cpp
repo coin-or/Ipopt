@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2008 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -15,15 +15,18 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  TripletToCSRConverter::TripletToCSRConverter(Index offset)
+  TripletToCSRConverter::TripletToCSRConverter(Index offset,
+      bool use_CSC /* = false */)
       :
       offset_(offset),
       ia_(NULL),
       ja_(NULL),
       dim_(0),
+      local_dim_(-1),
       nonzeros_triplet_(0),
       nonzeros_compressed_(0),
       initialized_(false),
+      use_CSC_(use_CSC),
       ipos_first_(NULL),
       ipos_double_triplet_(NULL),
       ipos_double_compressed_(NULL)
@@ -62,9 +65,17 @@ namespace Ipopt
     // Create a list with all triplet entries
     std::list<TripletEntry> entry_list(nonzeros);
     std::list<TripletEntry>::iterator list_iterator = entry_list.begin();
-    for (Index i=0; i<nonzeros; i++) {
-      list_iterator->Set(airn[i], ajcn[i], i);
-      list_iterator++;
+    if (use_CSC_) {
+      for (Index i=0; i<nonzeros; i++) {
+        list_iterator->SetCSC(airn[i], ajcn[i], i);
+        list_iterator++;
+      }
+    }
+    else {
+      for (Index i=0; i<nonzeros; i++) {
+        list_iterator->Set(airn[i], ajcn[i], i);
+        list_iterator++;
+      }
     }
     DBG_ASSERT(list_iterator == entry_list.end());
 
@@ -114,9 +125,8 @@ namespace Ipopt
         nonzeros_compressed_++;
         ja_tmp[nonzeros_compressed_] = jcol;
         ipos_first_tmp[nonzeros_compressed_] = list_iterator->PosTriplet();
-        if (cur_row != irow) {
+        while (cur_row != irow) {
           // this is in a new row
-
           ia_[cur_row] = nonzeros_compressed_;
           cur_row++;
         }
@@ -180,6 +190,26 @@ namespace Ipopt
     }
 
     return nonzeros_compressed_;
+  }
+
+  Index TripletToCSRConverter::DeleteZeroRows()
+  {
+    DBG_ASSERT(local_dim_ == -1);
+    local_dim_ = 0;
+    for (Index i=0; i<dim_; ++i) {
+      if (ia_[i] != ia_[i+1]) {
+        local_dim_++;
+        ia_[local_dim_] = ia_[i+1];
+      }
+    }
+    // resize the array to save memory
+    Index* ia_local = new Index[local_dim_+1];
+    for (Index i=0; i<=local_dim_; ++i) {
+      ia_local[i] = ia_[i];
+    }
+    delete [] ia_;
+    ia_ = ia_local;
+    return local_dim_;
   }
 
   void TripletToCSRConverter::ConvertValues(Index nonzeros_triplet,

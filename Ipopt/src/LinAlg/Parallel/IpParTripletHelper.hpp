@@ -57,6 +57,26 @@ namespace Ipopt
     /** fill the values into a possibly distributed vector from one
      *  single array */
     static void PutAllValuesInVector(Index n_entries, const Number* values, Vector& vector);
+
+    /** find the number of local entries induced by Vector for the
+     *  elements residing in this process. */
+    static Index GetLocalNumberEntries(const Vector& vector);
+
+    /** Fill array with global positions of local entries.  global_pos
+     *  must have length as least GetLocalNumberEntries. */
+    static void GetGlobalPos(Index n_local_entries, const Vector& vector,
+			     Index* global_pos, Index offset = 0);
+
+    /** fill local_values with the local elements of vector */
+    static void FillLocalValuesFromVector(Index n_local_entries,
+					  const Vector& vector,
+					  Number* local_values);
+
+    /** fill the local elements of vector with the elements in local_values */
+    static void PutLocalValuesInVector(Index n_local_entries,
+				       const Number* local_values,
+				       Vector& vector);
+
     //@}
 
   private:
@@ -72,7 +92,7 @@ namespace Ipopt
     /** find the total number of triplet entries for the CompoundSymMatrix */
     static Index GetNumberEntries_(const CompoundSymMatrix& matrix);
 
-    /** find the totel number of triplet entries induced by Vector */
+    /** find the total number of triplet entries induced by Vector */
     static Index GetNumberEntries_(const Vector& vector);
 
     static void FillRowCol_(Index n_entries, const ParGenMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
@@ -139,6 +159,31 @@ namespace Ipopt
 
     static void PutAllValuesInVector_(Index n_entries, const Number* values, ParVector& vector);
 
+    static Index GetLocalNumberEntries_(const CompoundVector& vector);
+
+    static Index GetLocalNumberEntries_(const ParVector& vector);
+
+    static void GetGlobalPos_(Index n_local_entries, const CompoundVector& vector,
+			      Index* global_pos, Index offset);
+
+    static void GetGlobalPos_(Index n_local_entries, const ParVector& vector,
+			      Index* global_pos, Index offset);
+
+    static void FillLocalValuesFromVector_(Index n_local_entries,
+					  const CompoundVector& vector,
+					  Number* local_values);
+
+    static void FillLocalValuesFromVector_(Index n_local_entries,
+					  const ParVector& vector,
+					  Number* local_values);
+
+    static void PutLocalValuesInVector_(Index n_local_entries,
+					const Number* local_values,
+					CompoundVector& vector);
+
+    static void PutLocalValuesInVector_(Index n_local_entries,
+					const Number* local_values,
+					ParVector& vector);
   };
 } // namespace Ipopt
 

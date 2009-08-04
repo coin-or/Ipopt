@@ -71,6 +71,9 @@
 # include "IpParTSymLinearSolver.hpp"
 # include "IpParDistTSymLinearSolver.hpp"
 # include "IpParMumpsSolverInterface.hpp"
+# ifdef HAVE_WSMP
+#  include "IpParWsmpSolverInterface.hpp"
+# endif
 #endif
 
 namespace Ipopt
@@ -335,7 +338,11 @@ namespace Ipopt
     }
     else if (linear_solver=="wsmp") {
 #ifdef HAVE_WSMP
+# ifdef HAVE_MPI
+      SolverInterface = new ParWsmpSolverInterface();
+# else
       SolverInterface = new WsmpSolverInterface();
+# endif
 #else
 
       THROW_EXCEPTION(OPTION_INVALID,
@@ -400,7 +407,7 @@ namespace Ipopt
 
       SmartPtr<SymLinearSolver> ScaledSolver;
 #ifdef HAVE_MPI
-      if (linear_solver=="mumps") {
+      if (linear_solver=="mumps" || linear_solver=="wsmp") {
         ScaledSolver = new ParDistTSymLinearSolver(SolverInterface);
       }
       else {

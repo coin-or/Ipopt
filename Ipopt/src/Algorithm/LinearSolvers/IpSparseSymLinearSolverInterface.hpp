@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -102,12 +102,18 @@ namespace Ipopt
     enum EMatrixFormat {
       /** Triplet (MA27) format. */
       Triplet_Format,
-      /** Compressed sparse row format for lower triangular part, with
+      /** Compressed sparse row format for upper triangular part, with
        *  0 offset. */
       CSR_Format_0_Offset,
-      /** Compressed sparse row format for lower triangular part, with
+      /** Compressed sparse row format for upper triangular part, with
        *  1 offset. */
-      CSR_Format_1_Offset
+      CSR_Format_1_Offset,
+      /** Compressed sparse column format for upper triangular part, with
+       *  0 offset. */
+      CSC_Format_0_Offset,
+      /** Compressed sparse column format for upper triangular part, with
+       *  1 offset. */
+      CSC_Format_1_Offset
     };
     /** @name Constructor/Destructor */
     //@{
@@ -228,6 +234,17 @@ namespace Ipopt
         std::list<Index>& c_deps)
     {
       return SYMSOLVER_FATAL_ERROR;
+    }
+
+    /** This method is used in the parallel version when the matrix is
+     *  provide distributedly in CSC format.  The caller tells the
+     *  solver how many rows in the lower part of the symmetric it is
+     *  responsible for, and which their indices are in the global
+     *  numbering.  If the solver does not know what to do with that
+     *  information, false is returned. */
+    virtual bool SetGlobalPos(Index num_rows, const Index* global_pos)
+    {
+      return false;
     }
   };
 
