@@ -5,15 +5,15 @@
 [submodule "ThirdParty/ASL"]
 	path = ThirdParty/ASL
 	url = git://github.com/coin-or-tools/ThirdParty-ASL.git
-	branch = master
+	branch = stable/1.0
 [submodule "ThirdParty/Metis"]
 	path = ThirdParty/Metis
 	url = git://github.com/coin-or-tools/ThirdParty-Metis.git
-	branch = master
+	branch = stable/1.0
 [submodule "ThirdParty/HSL"]
 	path = ThirdParty/HSL
 	url = git://github.com/coin-or-tools/ThirdParty-HSL.git
-	branch = master
+	branch = stable/1.1
 [submodule "ThirdParty/Blas"]
 	path = ThirdParty/Blas
 	url = git://github.com/coin-or-tools/ThirdParty-Blas.git
@@ -25,4 +25,4 @@
 [submodule "ThirdParty/Mumps"]
 	path = ThirdParty/Mumps
 	url = git://github.com/coin-or-tools/ThirdParty-Mumps.git
-	branch = master
+	branch = stable/1.1
