@@ -58,7 +58,7 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
 
   if (index_style != C_STYLE) {
     printf("index_style = FORTRAN not yet cproperly implemented.\n");
-    abort();
+    throw;
   }
 
   calculate_offsets (num_proc, proc_id, n, n_first, n_last);

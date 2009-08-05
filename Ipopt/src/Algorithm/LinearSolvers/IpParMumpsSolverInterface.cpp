@@ -292,6 +292,9 @@ namespace Ipopt
   {
     DBG_START_METH("ParMumpsSolverInterface::Factorization", dbg_verbosity);
     DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*)mumps_ptr_;
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemFactorization().Start();
+    }
 
     mumps_data->job = 2;//numerical factorization
 
@@ -327,8 +330,14 @@ namespace Ipopt
       if (error == -8 || error == -9) {
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                        "MUMPS was not able to obtain enough memory.\n");
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemFactorization().End();
+        }
         return SYMSOLVER_FATAL_ERROR;
       }
+    }
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemFactorization().End();
     }
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
