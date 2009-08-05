@@ -22,6 +22,9 @@
 
 #include "IpMpi.hpp"
 
+//DELETEME
+#include <algorithm>
+
 /** Prototypes for WSMP's subroutines */
 extern "C"
 {
@@ -269,10 +272,20 @@ namespace Ipopt
                      "pws_xpose_ja returned IERR = %d\n", IERR);
       return SYMSOLVER_FATAL_ERROR;
     }
+    // For now, need to sort the output
+    for (Index i=0; i<num_local_rows_; i++) {
+      const Index ifirst = tia_local_[i]-1;
+      const Index ilast = tia_local_[i+1]-1;
+      if (ifirst<ilast) {
+	std::sort(tja_local_+ifirst,tja_local_+ilast);
+      }
+    }
+#if 0
     // CHECK: It seems that the indices are all off by one
     for (Index i=0; i<nnz_transpose_local_; i++) {
       tja_local_[i]++;
     }
+#endif
 
     if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
       const Index* ia_local = tia_local_;
@@ -290,7 +303,7 @@ namespace Ipopt
 	}
       }
       Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-		     "  ia_local[%5d] = %5d\n", num_local_rows_, ia_local[num_local_rows_]);
+		     "  tia_local[%5d] = %5d\n", num_local_rows_, ia_local[num_local_rows_]);
       Jnlst().FinishDistributedOutput();
     }
 
