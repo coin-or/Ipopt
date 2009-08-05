@@ -36,6 +36,10 @@
 # endif
 #endif
 
+#ifdef HAVE_MPI
+# include "IpMpi.hpp"
+#endif
+
 #include <fstream>
 
 namespace Ipopt
@@ -842,12 +846,23 @@ namespace Ipopt
 
       // Write timing statistics information
       if (print_timing_statistics) {
+#ifndef HAVE_MPI
         jnlst_->Printf(J_SUMMARY, J_TIMING_STATISTICS,
                        "\n\nTiming Statistics:\n\n");
+#else
+        jnlst_->StartDistributedOutput();
+        int rank;
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+        jnlst_->Printf(J_SUMMARY, J_TIMING_STATISTICS,
+                       "\n\nTiming Statistics for process %d:\n\n", rank);
+#endif
         p2ip_data->TimingStats().PrintAllTimingStatistics(*jnlst_, J_SUMMARY,
             J_TIMING_STATISTICS);
         p2ip_nlp->PrintTimingStatistics(*jnlst_, J_SUMMARY,
                                         J_TIMING_STATISTICS);
+#ifdef HAVE_MPI
+        jnlst_->FinishDistributedOutput();
+#endif
       }
 
       // Write EXIT message
