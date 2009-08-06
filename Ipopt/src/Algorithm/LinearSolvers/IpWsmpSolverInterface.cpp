@@ -76,10 +76,10 @@ namespace Ipopt
 
   void WsmpSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedIntegerOption(
+    roptions->AddIntegerOption(
       "wsmp_num_threads",
       "Number of threads to be used in WSMP",
-      1, 1,
+      1,
       "This determines on how many processors WSMP is running on.  This option "
       "is only available if Ipopt has been compiled with WSMP.");
     roptions->AddBoundedIntegerOption(
@@ -172,10 +172,16 @@ namespace Ipopt
     MRP_ = NULL;
 
     // Set the number of threads
-    ipfint NTHREADS = wsmp_num_threads_;
-    F77_FUNC(wsetmaxthrds,WSETMAXTHRDS)(&NTHREADS);
-    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "WSMP will use %d threads.\n", wsmp_num_threads_);
+    if (wsmp_num_threads_==0) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "WSMP uses its defaults number of threads.\n");
+    }
+    else {
+      ipfint NTHREADS = wsmp_num_threads_;
+      F77_FUNC(wsetmaxthrds,WSETMAXTHRDS)(&NTHREADS);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "WSMP will use %d threads.\n", wsmp_num_threads_);
+    }
 
     // Get WSMP's default parameters and set the ones we want differently
     IPARM_[0] = 0;
@@ -538,7 +544,7 @@ namespace Ipopt
 
   bool WsmpSolverInterface::IncreaseQuality()
   {
-// TODO: BEFORE INCREASING TOLERANCE, TRY TO REDO THE ORDERING.
+// TODO: BEFORE INCREASING TOLERANCE, TRY TO REDO THE ORDERING. - USE DPARM(15) !!!
 //       ALSO: DECREASE PIVTOL AGAIN LATER?
     DBG_START_METH("WsmpSolverInterface::IncreaseQuality",dbg_verbosity);
     if (wsmp_pivtol_ == wsmp_pivtolmax_) {

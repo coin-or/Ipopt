@@ -146,10 +146,16 @@ namespace Ipopt
     MRP_ = NULL;
 
     // Set the number of threads
-    ipfint NTHREADS = wsmp_num_threads_;
-    F77_FUNC(wsetmaxthrds,WSETMAXTHRDS)(&NTHREADS);
-    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "WSMP will use %d threads.\n", wsmp_num_threads_);
+    if (wsmp_num_threads_==0) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "WSMP uses its defaults number of threads.\n");
+    }
+    else {
+      ipfint NTHREADS = wsmp_num_threads_;
+      F77_FUNC(wsetmaxthrds,WSETMAXTHRDS)(&NTHREADS);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "WSMP will use %d threads.\n", wsmp_num_threads_);
+    }
 
     // Get WSMP's default parameters and set the ones we want differently
     IPARM_[0] = 0;
@@ -278,15 +284,15 @@ namespace Ipopt
       MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
       Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "On Process %d, WSMP's transpose structure:\n", my_rank);
       for (Index i=0; i<num_local_rows_; i++) {
-	Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-		       "  tia_local[%5d] = %5d\n", i, ia_local[i]);
-	for (Index j=ia_local[i]; j<ia_local[i+1]; j++) {
-	  Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-			 "    tja_local[%5d] = %5d\n", j, ja_local[j]);
-	}
+        Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                       "  tia_local[%5d] = %5d\n", i, ia_local[i]);
+        for (Index j=ia_local[i]; j<ia_local[i+1]; j++) {
+          Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                         "    tja_local[%5d] = %5d\n", j, ja_local[j]);
+        }
       }
       Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-		     "  tia_local[%5d] = %5d\n", num_local_rows_, ia_local[num_local_rows_]);
+                     "  tia_local[%5d] = %5d\n", num_local_rows_, ia_local[num_local_rows_]);
       Jnlst().FinishDistributedOutput();
     }
 
@@ -344,8 +350,70 @@ namespace Ipopt
     INVP_ = new ipfint[dim_];
     MRP_ = new ipfint[num_local_rows_];
 
-    IPARM_[14] = dim_ - numberOfNegEVals; // CHECK
+//#define TRY
+#ifdef TRY
 
+    {
+      IPARM_[14] = 0;
+
+
+      // Call PWSSMP for ordering and symbolic factorization
+      ipfint N = num_local_rows_;
+      ipfint NAUX = 0;
+      IPARM_[1] = 1; // ordering
+      IPARM_[2] = 2; // symbolic factorization
+      ipfint idmy;
+      double ddmy;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Calling PWSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+      F77_FUNC(pwssmp,PWSSMP)(&N, tia_local_, tja_local_, ta_local_, &ddmy, PERM_, INVP_,
+                              &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_,
+                              IPARM_, DPARM_);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Done with WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+
+      Index ierror = IPARM_[63];
+      if (ierror!=0) {
+        if (ierror==-102) {
+          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                         "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
+        }
+        else if (ierror>0) {
+          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                         "Matrix appears to be singular (with ierror = %d).\n",
+                         ierror);
+          if (HaveIpData()) {
+            IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+          }
+          return SYMSOLVER_SINGULAR;
+        }
+        else {
+          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                         "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
+        }
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+        }
+        return SYMSOLVER_FATAL_ERROR;
+      }
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+                     IPARM_[22]);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+                     IPARM_[23]);
+
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+                     IPARM_[23]);
+
+    }
+
+#endif
+
+    IPARM_[14] = dim_ - numberOfNegEVals; // CHECK
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "Restricting WSMP static pivot sequence with IPARM(15) = %d\n", IPARM_[14]);
 
     // Call PWSSMP for ordering and symbolic factorization
     ipfint N = num_local_rows_;
