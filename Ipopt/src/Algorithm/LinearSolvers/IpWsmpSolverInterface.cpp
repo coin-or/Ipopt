@@ -538,6 +538,8 @@ namespace Ipopt
 
   bool WsmpSolverInterface::IncreaseQuality()
   {
+// TODO: BEFORE INCREASING TOLERANCE, TRY TO REDO THE ORDERING.
+//       ALSO: DECREASE PIVTOL AGAIN LATER?
     DBG_START_METH("WsmpSolverInterface::IncreaseQuality",dbg_verbosity);
     if (wsmp_pivtol_ == wsmp_pivtolmax_) {
       return false;

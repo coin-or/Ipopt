@@ -22,9 +22,6 @@
 
 #include "IpMpi.hpp"
 
-//DELETEME
-#include <algorithm>
-
 /** Prototypes for WSMP's subroutines */
 extern "C"
 {
@@ -171,7 +168,7 @@ namespace Ipopt
     //IPARM_[31] = 1; // need D to see where first negative eigenvalue occurs
     //                   if we change this, we need DIAG arguments below!
 
-    IPARM_[10] = 2; // Mark bad pivots
+    IPARM_[10] = 2; // Mark bad pivots -- WE CAN USE THIS TO DETECT SINGULAR MAIRCES; see also DPARM(21)
 
     // Set WSMP's scaling option
     IPARM_[9] = wsmp_scaling_;
@@ -272,20 +269,6 @@ namespace Ipopt
                      "pws_xpose_ja returned IERR = %d\n", IERR);
       return SYMSOLVER_FATAL_ERROR;
     }
-    // For now, need to sort the output
-    for (Index i=0; i<num_local_rows_; i++) {
-      const Index ifirst = tia_local_[i]-1;
-      const Index ilast = tia_local_[i+1]-1;
-      if (ifirst<ilast) {
-	std::sort(tja_local_+ifirst,tja_local_+ilast);
-      }
-    }
-#if 0
-    // CHECK: It seems that the indices are all off by one
-    for (Index i=0; i<nnz_transpose_local_; i++) {
-      tja_local_[i]++;
-    }
-#endif
 
     if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
       const Index* ia_local = tia_local_;
@@ -365,7 +348,7 @@ namespace Ipopt
 
 
     // Call PWSSMP for ordering and symbolic factorization
-    ipfint N = dim_;
+    ipfint N = num_local_rows_;
     ipfint NAUX = 0;
     IPARM_[1] = 1; // ordering
     IPARM_[2] = 2; // symbolic factorization
@@ -483,7 +466,7 @@ namespace Ipopt
     }
 
     // Call WSSMP for numerical factorization
-    N = dim_;
+    N = num_local_rows_;
     ipfint NAUX = 0;
     IPARM_[1] = 3; // numerical factorization
     IPARM_[2] = 3; // numerical factorization
@@ -529,6 +512,7 @@ namespace Ipopt
                    "Number of nonzeros in WSSMP after factorization IPARM(24) = %d\n",
                    IPARM_[23]);
 
+// THE FOLLOWING SHOULD STILL BE CORRECT WITHOUT PIVOTING!
     negevals_ = IPARM_[21]; // Number of negative eigenvalues
     // determined during factorization
 
@@ -565,8 +549,8 @@ namespace Ipopt
     // Call WSMP to solve for some right hand sides (including
     // iterative refinement)
     // ToDo: Make iterative refinement an option?
-    ipfint N = dim_;
-    ipfint LDB = dim_;
+    ipfint N = num_local_rows_;
+    ipfint LDB = num_local_rows_;
     ipfint NRHS = nrhs;
     ipfint NAUX = 0;
     IPARM_[1] = 4; // Forward and Backward Elimintation

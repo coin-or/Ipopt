@@ -10,16 +10,12 @@
 #include "AmplParTNLP.hpp"
 #include "IpBlas.hpp"
 
+#include "IpMpi.hpp"
+
 /* AMPL includes */
 #include "asl.h"
 #include "asl_pfgh.h"
 #include "getstub.h"
-
-// FIXME - proper header files
-//extern "C" {
-#define MPICH_SKIP_MPICXX
-#include "mpi.h"
-//}
 
 #define C_TO_FORT_IX4(a,b,c,d) {a++; b++; c++; d++;}
 
