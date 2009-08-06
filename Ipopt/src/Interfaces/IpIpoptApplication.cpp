@@ -850,18 +850,26 @@ namespace Ipopt
         jnlst_->Printf(J_SUMMARY, J_TIMING_STATISTICS,
                        "\n\nTiming Statistics:\n\n");
 #else
-        jnlst_->StartDistributedOutput();
-        int rank;
-        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-        jnlst_->Printf(J_SUMMARY, J_TIMING_STATISTICS,
-                       "\n\nTiming Statistics for process %d:\n\n", rank);
+        if (jnlst_->ProduceOutput(J_DETAILED, J_TIMING_STATISTICS)) {
+          jnlst_->StartDistributedOutput();
+          int rank;
+          MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+          jnlst_->Printf(J_SUMMARY, J_TIMING_STATISTICS,
+                         "\n\nTiming Statistics for process %d:\n\n", rank);
+        }
+        else {
+          jnlst_->Printf(J_SUMMARY, J_TIMING_STATISTICS,
+                         "\n\nTiming Statistics on root node:\n\n");
+        }
 #endif
         p2ip_data->TimingStats().PrintAllTimingStatistics(*jnlst_, J_SUMMARY,
             J_TIMING_STATISTICS);
         p2ip_nlp->PrintTimingStatistics(*jnlst_, J_SUMMARY,
                                         J_TIMING_STATISTICS);
 #ifdef HAVE_MPI
-        jnlst_->FinishDistributedOutput();
+        if (jnlst_->ProduceOutput(J_DETAILED, J_TIMING_STATISTICS)) {
+          jnlst_->FinishDistributedOutput();
+        }
 #endif
       }
 
