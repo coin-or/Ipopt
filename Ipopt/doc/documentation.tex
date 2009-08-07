@@ -2788,8 +2788,7 @@ your code through some memory checker, such as {\tt valgrind} on Linux.
 
 \Ipopt\ has an option to approximate the Hessian of the Lagrangian by
 a limited-memory quasi-Newton method (L-BFGS).  You can use this
-feature using the {\tt hessian\_approximation} and {\tt
-  limited\_memory...} options.  In this case, it is not necessary to
+feature using the {\tt hessian\_approximation=limited-memory} option.  In this case, it is not necessary to
 implement the Hessian computation method {\tt eval\_h} in {\tt TNLP}.
 If you are using the C or Fortran interface, you still need to
 implement these functions, but they should return {\tt false} or {\tt

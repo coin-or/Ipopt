@@ -290,6 +290,7 @@ namespace Ipopt
 
           options_to_print.push_back("#Multiplier Updates");
           options_to_print.push_back("alpha_for_y");
+          options_to_print.push_back("alpha_for_y_tol");
           options_to_print.push_back("recalc_y");
           options_to_print.push_back("recalc_y_feas_tol");
 
@@ -297,8 +298,6 @@ namespace Ipopt
           options_to_print.push_back("max_soc");
           options_to_print.push_back("watchdog_shortened_iter_trigger");
           options_to_print.push_back("watchdog_trial_iter_max");
-          options_to_print.push_back("alpha_for_y");
-          options_to_print.push_back("alpha_for_y_tol");
           options_to_print.push_back("accept_every_trial_step");
           options_to_print.push_back("corrector_type");
 
