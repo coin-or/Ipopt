@@ -1778,6 +1778,7 @@ namespace Ipopt
                     full_g_scaling);
       if (!retval) {
         delete [] full_x_scaling;
+        delete [] full_g_scaling;
         jnlst_->Printf(J_ERROR, J_INITIALIZATION,
                        "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
         THROW_EXCEPTION(OPTION_INVALID,
@@ -1799,6 +1800,7 @@ namespace Ipopt
                     use_g_scaling, n_full_g_,
                     full_g_scaling);
       if (!retval) {
+        delete [] full_g_scaling;
         jnlst_->Printf(J_ERROR, J_INITIALIZATION,
                        "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
         THROW_EXCEPTION(OPTION_INVALID,

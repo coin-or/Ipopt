@@ -792,7 +792,46 @@ namespace Ipopt
 
   void ParTripletHelper::FillValues_(Index n_entries, const ScaledMatrix& matrix, Number* values)
   {
-    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"ParTripletHelper::FillValues_ has not been implemented for ScaledMatrix");
+    // ToDo:
+    // This method can be made much more efficient for ScaledMatrix with GenTMatrix
+    // contained
+
+    // Get the matrix values
+    FillValues(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), values);
+
+    // Scale the values
+    // To Do : This assumes 1-base values (like the TMatrices)
+    Index* iRow = new Index[n_entries];
+    Index* jCol = new Index[n_entries];
+    SmartPtr<const ParGenMatrix> pargenmat = dynamic_cast<const ParGenMatrix*>(GetRawPtr(matrix.GetUnscaledMatrix()));
+    ASSERT_EXCEPTION(IsValid(pargenmat), UNKNOWN_MATRIX_TYPE, "Unknown matrix type passed to ParTripletHelper::FillValues_ for ScaledMatrix");
+    Index roffset = -pargenmat->RowStartPos();
+    FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, roffset, 0);
+
+    SmartPtr<const Vector> rowScaling = matrix.RowScaling();
+    if (IsValid(rowScaling)) {
+      Index n_local_rows = GetLocalNumberEntries(*rowScaling);
+      Number* row_scaling = new Number[n_local_rows];
+      FillLocalValuesFromVector(n_local_rows, *rowScaling, row_scaling);
+      for (Index i=0; i<n_entries; i++) {
+        values[i] *= row_scaling[iRow[i]-1];
+      }
+      delete [] row_scaling;
+    }
+
+    SmartPtr<const Vector> colScaling = matrix.ColumnScaling();
+    if (IsValid(colScaling)) {
+      Index n_cols = matrix.NCols();
+      Number* col_scaling = new Number[n_cols];
+      FillAllValuesFromVector(n_cols, *colScaling, col_scaling);
+      for (Index i=0; i<n_entries; i++) {
+        values[i] *= col_scaling[jCol[i]-1];
+      }
+      delete [] col_scaling;
+    }
+
+    delete [] iRow;
+    delete [] jCol;
   }
 
   void ParTripletHelper::FillRowCol_(Index n_entries, const SymScaledMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
@@ -802,7 +841,32 @@ namespace Ipopt
 
   void ParTripletHelper::FillValues_(Index n_entries, const SymScaledMatrix& matrix, Number* values)
   {
-    THROW_EXCEPTION(UNKNOWN_VECTOR_TYPE,"ParTripletHelper::FillValues_ has not been implemented for SymScaledMatrix");
+    // ToDo:
+    // This method can be made much more efficient for ScaledMatrix with SymTMatrix
+    // contained
+
+    // Get the matrix values
+    FillValues(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), values);
+
+    // Scale the values
+    // To Do : This assumes 1-base values (like the TMatrices)
+    Index* iRow = new Index[n_entries];
+    Index* jCol = new Index[n_entries];
+    FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, 0, 0);
+
+    if (IsValid(matrix.RowColScaling())) {
+      Index n_dim = matrix.NRows();
+      Number* scaling = new Number[n_dim];
+      FillAllValuesFromVector(n_dim, *matrix.RowColScaling(), scaling);
+      for (Index i=0; i<n_entries; i++) {
+        values[i] *= scaling[iRow[i]-1];
+        values[i] *= scaling[jCol[i]-1];
+      }
+      delete [] scaling;
+    }
+
+    delete [] iRow;
+    delete [] jCol;
   }
 
   void ParTripletHelper::FillRowCol_(Index n_entries, const TransposeMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)

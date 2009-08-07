@@ -88,6 +88,14 @@ namespace Ipopt
                         Index* iRow_part, Index* jCol_part,
                         Number* values_part);
 
+    virtual bool get_scaling_parameters(Index num_proc, Index proc_id,
+                                        Number& obj_scaling,
+                                        bool& use_x_scaling,
+                                        Index n, Index n_first, Index n_last,
+                                        Number* x_scaling_part,
+                                        bool& use_g_scaling,
+                                        Index m, Index m_first, Index m_last,
+                                        Number* g_scaling_part);
     //@}
 
     /** @name Solution Methods */

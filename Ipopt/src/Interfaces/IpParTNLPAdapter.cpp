@@ -1266,7 +1266,7 @@ namespace Ipopt
       DBG_ASSERT(dynamic_cast<ParVector*>(GetRawPtr(x)));
       DenseVector* dx = px->LocalVector();
       Number* values = dx->Values();
-      const Index& n_x_var = dx->Dim();
+      const Index n_x_var = dx->Dim();
       if (IsValid(P_x_part_x_)) {
         const Index* x_pos = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
         for (Index i=0; i<n_x_var; i++) {
@@ -1583,6 +1583,110 @@ namespace Ipopt
     return (bool)retval_all;
   }
 
+  void ParTNLPAdapter::GetScalingParameters(
+    const SmartPtr<const VectorSpace> x_space,
+    const SmartPtr<const VectorSpace> c_space,
+    const SmartPtr<const VectorSpace> d_space,
+    Number& obj_scaling,
+    SmartPtr<Vector>& x_scaling,
+    SmartPtr<Vector>& c_scaling,
+    SmartPtr<Vector>& d_scaling) const
+  {
+    x_scaling = x_space->MakeNew();
+    c_scaling = c_space->MakeNew();
+    d_scaling = d_space->MakeNew();
+    DBG_ASSERT((c_scaling->Dim()+d_scaling->Dim()) == n_full_g_);
+
+    ParVector* px = static_cast<ParVector*>(GetRawPtr(x_scaling));
+    DBG_ASSERT(dynamic_cast<ParVector*>(GetRawPtr(x_scaling)));
+    ParVector* pc = static_cast<ParVector*>(GetRawPtr(c_scaling));
+    DBG_ASSERT(dynamic_cast<ParVector*>(GetRawPtr(c_scaling)));
+    ParVector* pd = static_cast<ParVector*>(GetRawPtr(d_scaling));
+    DBG_ASSERT(dynamic_cast<ParVector*>(GetRawPtr(d_scaling)));
+    Number* px_values = px->LocalVector()->Values();
+    Number* pc_values = pc->LocalVector()->Values();
+    Number* pd_values = pd->LocalVector()->Values();
+
+    Number* part_g_scaling = new Number[n_part_g_];
+    bool use_x_scaling=true;
+    bool use_g_scaling=true;
+
+    if (IsValid(P_x_part_x_)) {
+      Number* part_x_scaling = new Number[n_part_x_];
+      int retval1 =
+        partnlp_->get_scaling_parameters(num_proc_, proc_id_, obj_scaling,
+                                         use_x_scaling,
+                                         n_full_x_, n_first_, n_last_,
+                                         part_x_scaling,
+                                         use_g_scaling,
+                                         n_full_g_, m_first_, m_last_,
+                                         part_g_scaling);
+      int retval;
+      MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+      if (!retval) {
+        delete [] part_x_scaling;
+        delete [] part_g_scaling;
+        jnlst_->Printf(J_ERROR, J_INITIALIZATION,
+                       "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
+        THROW_EXCEPTION(OPTION_INVALID,
+                        "User scaling chosen, but get_scaling_parameters returned false.");
+      }
+
+      if (use_x_scaling) {
+        const Index* x_pos = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
+        const Index n_x_var = px->LocalVector()->Dim();
+        for (Index i=0; i<n_x_var; i++) {
+          px_values[i] = part_x_scaling[x_pos[i]];
+        }
+      }
+      delete [] part_x_scaling;
+    }
+    else {
+      int retval1 =
+        partnlp_->get_scaling_parameters(num_proc_, proc_id_, obj_scaling,
+                                         use_x_scaling,
+                                         n_full_x_, n_first_, n_last_,
+                                         px_values,
+                                         use_g_scaling,
+                                         n_full_g_, m_first_, m_last_,
+                                         part_g_scaling);
+      int retval;
+      MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+      if (!retval) {
+        delete [] part_g_scaling;
+        jnlst_->Printf(J_ERROR, J_INITIALIZATION,
+                       "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
+        THROW_EXCEPTION(OPTION_INVALID,
+                        "User scaling chosen, but get_scaling_parameters returned false.");
+      }
+    }
+
+    if (!use_x_scaling) {
+      x_scaling = NULL;
+    }
+
+    if (use_g_scaling) {
+      const Index* c_pos = P_c_g_->ExpandedPosIndices();
+      for (Index i=0; i<P_c_g_->NCols(); i++) {
+        pc_values[i] = part_g_scaling[c_pos[i]];
+      }
+      if (fixed_variable_treatment_==MAKE_CONSTRAINT) {
+        const Number one = 1.;
+        IpBlasDcopy(n_part_x_fixed_, &one, 0, &pc_values[P_c_g_->NCols()], 1);
+      }
+
+      const Index* d_pos = P_d_g_->ExpandedPosIndices();
+      for (Index i=0; i<P_d_g_->NCols(); i++) {
+        pd_values[i] = part_g_scaling[d_pos[i]];
+      }
+    }
+    else {
+      c_scaling = NULL;
+      d_scaling = NULL;
+    }
+
+    delete [] part_g_scaling;
+  }
 
   void ParTNLPAdapter::FinalizeSolution(SolverReturn status,
                                         const Vector& x, const Vector& z_L, const Vector& z_U,

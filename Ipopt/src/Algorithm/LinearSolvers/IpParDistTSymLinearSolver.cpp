@@ -468,6 +468,18 @@ namespace Ipopt
 
     ParTripletHelper::FillValues(nonzeros_triplet_local_, sym_A, atriplet_local);
 
+    // print matrix values...
+    if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
+      Jnlst().StartDistributedOutput();
+      Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                     "Matrix values on process %d (in trilpet order):\n", my_rank_);
+      for (Index i=0; i<nonzeros_triplet_local_; ++i) {
+        Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                       "atrp[%7d] = %23.16e\n", i, atriplet_local[i]);
+      }
+      Jnlst().FinishDistributedOutput();
+    }
+
     if (matrix_format_!=SparseSymLinearSolverInterface::Triplet_Format) {
       IpData().TimingStats().LinearSystemStructureConverter().Start();
       triplet_to_csr_converter_->ConvertValues(nonzeros_triplet_local_, atriplet_local,
@@ -475,6 +487,7 @@ namespace Ipopt
       IpData().TimingStats().LinearSystemStructureConverter().End();
       delete[] atriplet_local;
     }
+
   }
 
 } // namespace Ipopt

@@ -114,6 +114,15 @@ namespace Ipopt
                         const Vector& yc,
                         const Vector& yd,
                         SymMatrix& h);
+
+    virtual void GetScalingParameters(
+      const SmartPtr<const VectorSpace> x_space,
+      const SmartPtr<const VectorSpace> c_space,
+      const SmartPtr<const VectorSpace> d_space,
+      Number& obj_scaling,
+      SmartPtr<Vector>& x_scaling,
+      SmartPtr<Vector>& c_scaling,
+      SmartPtr<Vector>& d_scaling) const;
     //@}
 
     /** @name Solution Reporting Methods */
