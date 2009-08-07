@@ -162,18 +162,27 @@ namespace Ipopt
                                  Index m, Index m_first, Index m_last,
                                  Number* g_l_part, Number* g_u_part)=0;
 
-    /** LATER????  overload this method to return scaling
-     *  parameters. This is only called if the options are set to
-     *  retrieve user scaling.  There, use_x_scaling (or
-     *  use_g_scaling) should get set to true only if the variables
-     *  (or constraints) are to be scaled.  This method should return
-     *  true only if the scaling parameters could be provided.
+    /** overload this method to return scaling parameters. This is
+     *  only called if the options are set to retrieve user scaling.
+     *  There, use_x_scaling (or use_g_scaling) should get set to true
+     *  only if the variables (or constraints) are to be scaled.  This
+     *  method should return true only if the scaling parameters could
+     *  be provided.
+     *
+     *  Each processor receives only the section of the bound array
+     *  for the variables and constraints that it is responsible for.
+     *  The objective scaling factor is taken from the prociess with
+     *  proc_id 0.  use_x_scaling and use_g_scaling must be set to the
+     *  same on each process.
      */
-    virtual bool get_scaling_parameters(Number& obj_scaling,
-                                        bool& use_x_scaling, Index n,
-                                        Number* x_scaling,
-                                        bool& use_g_scaling, Index m,
-                                        Number* g_scaling)
+    virtual bool get_scaling_parameters(Index num_proc, Index proc_id,
+                                        Number& obj_scaling,
+                                        bool& use_x_scaling,
+                                        Index n, Index n_first, Index n_last,
+                                        Number* x_scaling_part,
+                                        bool& use_g_scaling,
+                                        Index m, Index m_first, Index m_last,
+                                        Number* g_scaling_part)
     {
       return false;
     }

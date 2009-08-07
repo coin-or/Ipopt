@@ -412,6 +412,47 @@ bool ParTNLPWrapper::eval_h(Index num_proc, Index proc_id,
   return rval;
 }
 
+bool
+ParTNLPWrapper::get_scaling_parameters(Index num_proc, Index proc_id,
+                                       Number& obj_scaling,
+                                       bool& use_x_scaling,
+                                       Index n, Index n_first, Index n_last,
+                                       Number* x_scaling_part,
+                                       bool& use_g_scaling,
+                                       Index m, Index m_first, Index m_last,
+                                       Number* g_scaling_part)
+{
+  Number* x_scaling;
+  Number* g_scaling;
+  bool rval = true;
+
+  x_scaling = new Number[n];
+  g_scaling = new Number[m];
+
+  rval =
+    tnlpobj_->get_scaling_parameters(obj_scaling, use_x_scaling, n,
+                                     x_scaling, use_g_scaling, m, g_scaling);
+
+  if (rval) {
+    if (use_x_scaling) {
+      for (Index i=n_first; i<=n_last; i++) {
+        x_scaling_part[i-n_first] = x_scaling[i];
+      }
+    }
+
+    if (use_g_scaling) {
+      for (Index i=m_first; i<=m_last; i++) {
+        g_scaling_part[i-m_first] = g_scaling[i];
+      }
+    }
+  }
+
+  delete [] x_scaling;
+  delete [] g_scaling;
+
+  return rval;
+}
+
 void ParTNLPWrapper::finalize_solution(SolverReturn status,
                                        Index n, const Number* x, const Number* z_L, const Number* z_U,
                                        Index m, const Number* g, const Number* lambda,

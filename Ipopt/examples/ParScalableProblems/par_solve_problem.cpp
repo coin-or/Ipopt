@@ -239,7 +239,7 @@ int main(int argv, char* argc[])
     printf("\n\n*** Error during initialization!\n");
     return (int) status;
   }
-  app->Options()->SetStringValue("nlp_scaling_method", "none");
+  //app->Options()->SetStringValue("nlp_scaling_method", "none");
 
   SmartPtr<ParTNLP> partnlp = new ParTNLPWrapper(GetRawPtr(tnlp));
   SmartPtr<NLP> nlp = new ParTNLPAdapter(partnlp, ConstPtr(app->Jnlst()));
