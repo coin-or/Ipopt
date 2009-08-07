@@ -400,11 +400,11 @@ namespace Ipopt
                      "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n",
                      IPARM_[22]);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+                     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(24)= %d.\n",
                      IPARM_[23]);
 
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+                     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(24)= %d.\n",
                      IPARM_[23]);
 
     }
@@ -458,7 +458,7 @@ namespace Ipopt
                    "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n",
                    IPARM_[22]);
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+                   "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(24)= %d.\n",
                    IPARM_[23]);
 
     if (HaveIpData()) {
@@ -477,13 +477,16 @@ namespace Ipopt
   {
     DBG_START_METH("ParWsmpSolverInterface::Factorization",dbg_verbosity);
 
-#if 0
     // If desired, write out the matrix
     Index iter_count = -1;
     if (HaveIpData()) {
       iter_count = IpData().iter_count();
     }
     if (iter_count == wsmp_write_matrix_iteration_) {
+      int mpi_size;
+      MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+      ASSERT_EXCEPTION(mpi_size == 1, OPTION_INVALID,
+                       "wsmp_write_matrix_iteration is set, but we have more than 1 MPI process. Ouptut of WSMP matrix only implemented for 1 process.\n");
       matrix_file_number_++;
       char buf[256];
       Snprintf(buf, 255, "wsmp_matrix_%d_%d.dat", iter_count,
@@ -493,16 +496,15 @@ namespace Ipopt
       FILE* fp = fopen(buf, "w");
       fprintf(fp, "%d\n", dim_); // N
       for (Index icol=0; icol<dim_; icol++) {
-        fprintf(fp, "%d", ia[icol+1]-ia[icol]); // number of elements for this column
+        fprintf(fp, "%d", ia_local[icol+1]-ia_local[icol]); // number of elements for this column
         // Now for each colum we write row indices and values
-        for (Index irow=ia[icol]; irow<ia[icol+1]; irow++) {
-          fprintf(fp, " %23.16e %d",a_[irow-1],ja[irow-1]);
+        for (Index irow=ia_local[icol]; irow<ia_local[icol+1]; irow++) {
+          fprintf(fp, " %23.16e %d",a_local_[irow-1],ja_local[irow-1]);
         }
         fprintf(fp, "\n");
       }
       fclose(fp);
     }
-#endif
 
     // Transpose the values
     DBG_ASSERT(num_local_rows_ != -1);
