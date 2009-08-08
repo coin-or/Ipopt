@@ -46,6 +46,11 @@ namespace Ipopt
 
   IpoptApplication::IpoptApplication(bool create_console_out /* = true */,
                                      bool create_empty /* = false */)
+      :
+      read_params_dat_(true),
+      inexact_algorithm_(false),
+      replace_bounds_(false),
+      skip_finalize_solution_call_(false)
   {
     options_ = new OptionsList();
     if (create_empty)
@@ -97,9 +102,13 @@ namespace Ipopt
                                      SmartPtr<OptionsList> options,
                                      SmartPtr<Journalist> jnlst)
       :
+      read_params_dat_(true),
       jnlst_(jnlst),
       reg_options_(reg_options),
-      options_(options)
+      options_(options),
+      inexact_algorithm_(false),
+      replace_bounds_(false),
+      skip_finalize_solution_call_(false)
   {}
 
   SmartPtr<IpoptApplication> IpoptApplication::clone()
@@ -108,6 +117,11 @@ namespace Ipopt
     retval->jnlst_ = Jnlst();
     retval->reg_options_ = RegOptions();
     *retval->options_ = *Options();
+    
+    retval->read_params_dat_ = read_params_dat_;
+    retval->inexact_algorithm_ = inexact_algorithm_;
+    retval->replace_bounds_ = replace_bounds_;
+    retval->skip_finalize_solution_call_ = skip_finalize_solution_call_;
 
     return retval;
   }
