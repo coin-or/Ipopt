@@ -167,11 +167,103 @@ AmplParTNLP::get_nlp_info(Index num_proc, Index proc_id,
     }
     nnz_jac_g_part = nz;
     nnz_h_lag_part = nnz_h_lag_;
+
+#if 0 // This stuff is for hessian computation based on cgrad 
+    if (nnz_h_lag_ > 0 && proc_id > 0){
+      Index nv = 0;
+      Index *var_exist = new Index[n];
+
+      for (i=0; i<n; i++) var_exist[i] = 0;
+      for (i=m_first; i<=m_last && i<nlc; i++) {
+	cgrad *cg;
+
+	for (cg=Cgrad[i]; cg; cg = cg->next) var_exist[cg->varno] = 1;
+      }
+
+      for (i=0; i<n; i++) if (var_exist[i]) nv ++;
+      
+      // if number of variables in all constraints < total 
+      if (nv < n){
+	Index *iRow = new Index[nnz_h_lag_];
+	Index *jCol = new Index[nnz_h_lag_];
+
+	rval = amplobj_->eval_h(n, NULL, false, 0.0, m, NULL, false, nnz_h_lag_, iRow, jCol, NULL);
+	if (!rval) goto CLEANUP;
+
+	for (i=0; i<nnz_h_lag_; i++)
+	  if (var_exist[iRow[i]-1] && var_exist[jCol[i]-1])
+	    hess_map_.push_back(i);
+
+	if (hess_map_.size() < nnz_h_lag_){
+	  nnz_h_lag_part = hess_map_.size();
+	  printf ("proc_id = %d, nv = %d, hess_part = %d, all = %d\n", proc_id, nv, nnz_h_lag_part, nnz_h_lag_);
+	}
+	else
+	  hess_map_.clear();
+
+      CLEANUP:
+	delete [] iRow;
+	delete [] jCol;
+      }
+    }
+#endif
   }
 
   // AMPL's conval gets values of constraints with: n_conjac[0] <= i < n_conjac[1]
   n_conjac[0] = m_first;
   n_conjac[1] = m_last+1;
+
+#if 1 // Hessian computation sparsity based on evaluating at random point or starting point
+  if (num_proc > 1 && nnz_h_lag_ > 0){
+    Index *iRow = new Index[nnz_h_lag_];
+    Index *jCol = new Index[nnz_h_lag_];
+    Number obj_value, *x = new Number[n];
+    Number *g = new Number[m], *lambda = new Number[m];
+    Number *val = new Number[nnz_h_lag_];
+
+    if (X0){
+      for (i=0; i<n; i++)
+	if (havex0[i])
+	  x[i] = X0[i];
+	else
+	  x[i] = 0.0;
+    }
+    else{
+      for (i=0; i<n; i++) x[i] = IpRandom01() * 1e-6;
+    }
+
+    rval = amplobj_->eval_h(n, NULL, false, 0.0, m, NULL, false, nnz_h_lag_, iRow, jCol, NULL);
+    if (!rval) goto CLEANUP2;
+
+    for (i=0; i<m; i++) lambda[i] = 1.0;
+    for (i=0; i<nnz_h_lag_; i++) val[i] = 0.0;
+
+    rval = eval_h(num_proc, proc_id, n, n_first, n_last, x, true, 1.0, 
+		  m, m_first, m_last, lambda, true, nnz_h_lag_,
+		  NULL, NULL, val);
+    if (!rval) goto CLEANUP2;
+
+    hess_map_.clear();
+    for (i=0; i<nnz_h_lag_; i++)
+      if (val[i] != 0.0)
+	hess_map_.push_back(i);
+
+    if (hess_map_.size() < nnz_h_lag_){
+      nnz_h_lag_part = hess_map_.size();
+      printf ("proc_id = %d, hess_part = %d, all = %d\n", proc_id, nnz_h_lag_part, nnz_h_lag_);
+    }
+    else
+      hess_map_.clear();
+
+  CLEANUP2:
+    delete [] iRow;
+    delete [] jCol;
+    delete [] x;
+    delete [] g;
+    delete [] lambda;
+    delete [] val;
+  }
+#endif
 
   // As AmplTNLP implements Fortran style, we need to too
   C_TO_FORT_IX4(n_first, n_last, m_first, m_last);
@@ -403,11 +495,23 @@ bool AmplParTNLP::eval_h(Index num_proc, Index proc_id,
   if (proc_id > 0 && (m == 0 || m_last < m_first)) return true;
 
   if (iRow_part && jCol_part && !values_part) {
-    // same function call whether num_proc = 1 or more
+    if (nele_hess_part == nnz_h_lag_)
+      rval = amplobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag_, iRow_part, jCol_part, NULL);
 
-    rval = amplobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag_, iRow_part, jCol_part, NULL);
+    else {
+      Index *iRow = new Index[nnz_h_lag_];
+      Index *jCol = new Index[nnz_h_lag_];
+      
+      rval = amplobj_->eval_h(n, x, new_x, obj_factor, m, lambda, new_lambda, nnz_h_lag_, iRow, jCol, NULL);
 
-    // TODO: compute additional sparsity based on jacobian
+      for (i=0; i<nele_hess_part; i++){
+	iRow_part[i] = iRow[hess_map_[i]];
+	jCol_part[i] = jCol[hess_map_[i]];
+      }
+
+      delete [] iRow;
+      delete [] jCol;
+    }
   }
 
   else if (!iRow_part & !jCol_part && values_part) {
@@ -424,7 +528,19 @@ bool AmplParTNLP::eval_h(Index num_proc, Index proc_id,
       for (i=0; i<m_first; i++) lambda_part[i] = 0.0;
       for (i=m_last+1; i<m; i++) lambda_part[i] = 0.0;
 
-      rval = amplobj_->eval_h(n, x, new_x, obj_factor, m, lambda_part, new_lambda, nnz_h_lag_, NULL, NULL, values_part);
+      if (nele_hess_part == nnz_h_lag_){
+	rval = amplobj_->eval_h(n, x, new_x, obj_factor, m, lambda_part, new_lambda, nnz_h_lag_, NULL, NULL, values_part);
+      }
+      else{
+	Number *values = new Number[nnz_h_lag_];
+
+	rval = amplobj_->eval_h(n, x, new_x, obj_factor, m, lambda_part, new_lambda, nnz_h_lag_, NULL, NULL, values);
+	
+	for (i=0; i<nele_hess_part; i++)
+	  values_part[i] = values[hess_map_[i]];
+
+	delete [] values;
+      }
 
       delete [] lambda_part;
     }

@@ -128,6 +128,7 @@ namespace Ipopt
 
     /** Mapping for Jacobian values from global to local part */
     Index* jac_map_;
+    std::vector<Index> hess_map_;
   };
 
 } // namespace Ipopt
