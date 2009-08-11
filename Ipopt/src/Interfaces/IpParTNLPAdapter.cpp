@@ -1053,12 +1053,36 @@ namespace Ipopt
     Hess_lagrangian_space = Hess_lagrangian_space_;
 
     if (IsValid(jnlst_)) {
-      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS,
-                     "Number of nonzeros in equality constraint Jacobian...:%9d\n", nz_part_jac_c_);
-      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS,
-                     "Number of nonzeros in inequality constraint Jacobian.:%9d\n", nz_part_jac_d_);
-      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS,
-                     "Number of nonzeros in Lagrangian Hessian.............:%9d\n\n", nz_h_);
+
+      Index part[3];
+      part[0] = nz_part_jac_c_;
+      part[1] = nz_part_jac_d_;
+      part[2] = nz_h_;
+      Index tot[3];
+      MPI_Reduce(part, tot, 3, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+      if (proc_id_==0) {
+        jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS,
+                       "Total number of nonzeros in equality constraint Jacobian...:%9d\n", tot[0]);
+        jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS,
+                       "Total number of nonzeros in inequality constraint Jacobian.:%9d\n", tot[1]);
+        jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS,
+                       "Total number of nonzeros in Lagrangian Hessian.............:%9d\n\n", tot[2]);
+      }
+      if (jnlst_->ProduceOutput(J_MOREDETAILED, J_STATISTICS)) {
+        jnlst_->StartDistributedOutput();
+        jnlst_->Printf(J_MOREDETAILED, J_STATISTICS,
+                       "Number of nonzeros in equality constraint Jacobian (proc %3d)...:%9d\n", proc_id_, nz_part_jac_c_);
+        jnlst_->FinishDistributedOutput();
+        jnlst_->StartDistributedOutput();
+        jnlst_->Printf(J_MOREDETAILED, J_STATISTICS,
+                       "Number of nonzeros in inequality constraint Jacobian (proc %3d).:%9d\n", proc_id_, nz_part_jac_d_);
+        jnlst_->FinishDistributedOutput();
+        jnlst_->StartDistributedOutput();
+        jnlst_->Printf(J_MOREDETAILED, J_STATISTICS,
+                       "Number of nonzeros in Lagrangian Hessian (proc %3d).............:%9d\n", proc_id_, nz_h_);
+        jnlst_->FinishDistributedOutput();
+        jnlst_->Printf(J_MOREDETAILED, J_STATISTICS, "\n");
+      }
     }
 
     return true;

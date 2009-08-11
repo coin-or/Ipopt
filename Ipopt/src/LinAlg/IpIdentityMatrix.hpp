@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -15,6 +15,9 @@
 namespace Ipopt
 {
 
+  /* forward declarations */
+  class IdentityMatrixSpace;
+
   /** Class for Matrices which are multiples of the identity matrix.
    *
    */
@@ -28,7 +31,7 @@ namespace Ipopt
     /** Constructor, initializing with dimensions of the matrix
      *  (true identity matrix).
      */
-    IdentityMatrix(const SymMatrixSpace* owner_space);
+    IdentityMatrix(const IdentityMatrixSpace* owner_space);
 
     /** Destructor */
     ~IdentityMatrix();
@@ -48,6 +51,9 @@ namespace Ipopt
 
     /** Method for obtaining the dimention of the matrix. */
     Index Dim() const;
+
+    /** Return the vector space */
+    SmartPtr<const VectorSpace> VecSpace() const;
 
   protected:
     /**@name Methods overloaded from matrix */
@@ -93,6 +99,9 @@ namespace Ipopt
 
     /** Scaling factor for this identity matrix */
     Number factor_;
+
+    /** pointer to indenity matrix owner space */
+    SmartPtr<const IdentityMatrixSpace> ident_owner_space_;
   };
 
   /** This is the matrix space for IdentityMatrix. */
@@ -101,10 +110,11 @@ namespace Ipopt
   public:
     /** @name Constructors / Destructors */
     //@{
-    /** Constructor, given the dimension of the matrix. */
-    IdentityMatrixSpace(Index dim)
+    /** Constructor, given the corresponding vector space. */
+    IdentityMatrixSpace(const VectorSpace* vec_space)
         :
-        SymMatrixSpace(dim)
+        SymMatrixSpace(vec_space->Dim()),
+        vec_space_(vec_space)
     {}
 
     /** Destructor */
@@ -125,6 +135,12 @@ namespace Ipopt
       return new IdentityMatrix(this);
     }
 
+    /** Return the vector space */
+    SmartPtr<const VectorSpace> VecSpace() const
+    {
+      return vec_space_;
+    }
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -143,7 +159,16 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const IdentityMatrixSpace&);
     //@}
+
+    SmartPtr<const VectorSpace> vec_space_;
   };
+
+  /** Return the vector space */
+  inline SmartPtr<const VectorSpace> IdentityMatrix::VecSpace() const
+  {
+    return ident_owner_space_->VecSpace();
+  }
+
 
 } // namespace Ipopt
 #endif

@@ -329,7 +329,7 @@ namespace Ipopt
 
         if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
           Jnlst().StartDistributedOutput();
-          Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "On Process %d, TripletConverter gets matrix:\n");
+          Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "On Process %d, TripletConverter gets matrix:\n", my_rank_);
           for (Index i=0; i<nonzeros_triplet_local_; i++) {
             Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
                            "  airn[%5d] = %5d acjn[%5d] = %5d\n",

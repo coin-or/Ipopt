@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,10 +11,11 @@
 namespace Ipopt
 {
 
-  IdentityMatrix::IdentityMatrix(const SymMatrixSpace* owner_space)
+  IdentityMatrix::IdentityMatrix(const IdentityMatrixSpace* owner_space)
       :
       SymMatrix(owner_space),
-      factor_(1.0)
+      factor_(1.0),
+      ident_owner_space_(owner_space)
   {}
 
   IdentityMatrix::~IdentityMatrix()

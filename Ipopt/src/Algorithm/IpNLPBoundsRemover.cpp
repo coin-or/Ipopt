@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -112,7 +112,7 @@ namespace Ipopt
     pd_l_space_new->SetBlockCols(1, x_l_space_orig->Dim());
     pd_l_space_new->SetCompSpace(0, 0, *pd_l_space_orig, true);
     SmartPtr<const MatrixSpace> identity_space =
-      new IdentityMatrixSpace(x_l_space_orig->Dim());
+      new IdentityMatrixSpace(GetRawPtr(x_l_space_orig));
     pd_l_space_new->SetCompSpace(1, 1, *identity_space, true);
     pd_l_space = GetRawPtr(pd_l_space_new);
 
@@ -125,7 +125,7 @@ namespace Ipopt
     pd_u_space_new->SetBlockCols(0, d_u_space_orig->Dim());
     pd_u_space_new->SetBlockCols(1, x_u_space_orig->Dim());
     pd_u_space_new->SetCompSpace(0, 0, *pd_u_space_orig, true);
-    identity_space = new IdentityMatrixSpace(x_u_space_orig->Dim());
+    identity_space = new IdentityMatrixSpace(GetRawPtr(x_u_space_orig));
     pd_u_space_new->SetCompSpace(2, 1, *identity_space, true);
     pd_u_space = GetRawPtr(pd_u_space_new);
 

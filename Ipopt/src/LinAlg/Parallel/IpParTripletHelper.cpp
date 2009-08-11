@@ -79,11 +79,10 @@ namespace Ipopt
 
     const IdentityMatrix* ident = dynamic_cast<const IdentityMatrix*>(mptr);
     if (ident) {
-      // TODO: Is this how we want to do this?
-      // No, we need the vector space and maintain same parition as there
-      Index start, end;
-      IdentityRange(ident->Dim(), start, end);
-      return end-start+1;
+      // TODO: Avoid creating dummy vector?
+      SmartPtr<Vector> dummy = ident->VecSpace()->MakeNew();
+      Index num = GetNumberEntries_(*dummy);
+      return num;
     }
 
     const ParExpansionMatrix* pexp = dynamic_cast<const ParExpansionMatrix*>(mptr);
@@ -533,28 +532,18 @@ namespace Ipopt
 
   void ParTripletHelper::FillRowCol_(Index n_entries, const IdentityMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
   {
-    Index start, end;
-    IdentityRange(matrix.Dim(), start, end);
-
-    DBG_ASSERT(n_entries == end-start+1);
-    row_offset += start + 1;
-    col_offset += start + 1;
-    for (Index i=0; i<n_entries; i++) {
-      iRow[i] = i + row_offset;
-      jCol[i] = i + col_offset;
-    }
+    // Todo: avoid creating dummy vector?
+    SmartPtr<Vector> dummy = matrix.VecSpace()->MakeNew();
+    FillRowCol_(n_entries, *dummy, row_offset, col_offset, iRow, jCol);
   }
 
   void ParTripletHelper::FillValues_(Index n_entries, const IdentityMatrix& matrix, Number* values)
   {
-    Index start, end;
-    IdentityRange(matrix.Dim(), start, end);
-
-    DBG_ASSERT(n_entries == end-start+1);
+    // Todo: avoid creating dummy vector?
+    SmartPtr<Vector> dummy = matrix.VecSpace()->MakeNew();
     Number factor = matrix.GetFactor();
-    for (Index i=0; i<n_entries; i++) {
-      values[i] = factor;
-    }
+    dummy->Set(factor);
+    FillValues_(n_entries, *dummy, values);
   }
 
   void ParTripletHelper::FillRowCol_(Index n_entries, const ParExpansionMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
