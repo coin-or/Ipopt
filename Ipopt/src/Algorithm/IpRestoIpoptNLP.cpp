@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -195,12 +195,12 @@ namespace Ipopt
     //
     // for now, we use the new feature and set the true flag for this block
     // to say that the matrices should be auto_allocated
-    SmartPtr<const MatrixSpace> identity_mat_space_nc
-    = new IdentityMatrixSpace(orig_c_space->Dim());
+    SmartPtr<const MatrixSpace> identity_mat_space_nc =
+      new IdentityMatrixSpace(GetRawPtr(orig_c_space));
     px_l_space_->SetCompSpace(1, 1, *identity_mat_space_nc, true);
     px_l_space_->SetCompSpace(2, 2, *identity_mat_space_nc, true);
-    SmartPtr<const MatrixSpace> identity_mat_space_nd
-    = new IdentityMatrixSpace(orig_d_space->Dim());
+    SmartPtr<const MatrixSpace> identity_mat_space_nd =
+      new IdentityMatrixSpace(GetRawPtr(orig_d_space));
     px_l_space_->SetCompSpace(3, 3, *identity_mat_space_nd, true);
     px_l_space_->SetCompSpace(4, 4, *identity_mat_space_nd, true);
 

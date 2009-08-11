@@ -296,7 +296,7 @@ namespace Ipopt
 
     // (4,2) block
     // create the identity matrix space and matrix for the 4,2 block
-    ident_space_ds_ = new IdentityMatrixSpace(n_s);
+    ident_space_ds_ = new IdentityMatrixSpace(GetRawPtr(proto_s.OwnerSpace()));
     augmented_system_space_->SetCompSpace(3,1, *ident_space_ds_);
 
     // (4,4) block

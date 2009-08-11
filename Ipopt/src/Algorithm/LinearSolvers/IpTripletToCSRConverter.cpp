@@ -23,6 +23,7 @@ namespace Ipopt
       ja_(NULL),
       dim_(0),
       local_dim_(-1),
+      no_rows_(false),
       nonzeros_triplet_(0),
       nonzeros_compressed_(0),
       initialized_(false),
@@ -49,6 +50,12 @@ namespace Ipopt
   {
     DBG_START_METH("TSymLinearSolver::InitializeStructure",
                    dbg_verbosity);
+
+    if (nonzeros==0) {
+      no_rows_ = true;
+      initialized_ = true;
+      return 0;
+    }
 
     DBG_ASSERT(dim>0);
     DBG_ASSERT(nonzeros>0);
@@ -196,6 +203,9 @@ namespace Ipopt
   {
     DBG_ASSERT(local_dim_ == -1);
     local_dim_ = 0;
+    if (no_rows_) {
+      return 0;
+    }
     for (Index i=0; i<dim_; ++i) {
       if (ia_[i] != ia_[i+1]) {
         local_dim_++;
@@ -224,6 +234,8 @@ namespace Ipopt
 
     DBG_ASSERT(nonzeros_triplet_==nonzeros_triplet);
     DBG_ASSERT(nonzeros_compressed_==nonzeros_compressed);
+
+    if (no_rows_) return;
 
     for (Index i=0; i<nonzeros_compressed_; i++) {
       a_compressed[i] = a_triplet[ipos_first_[i]];

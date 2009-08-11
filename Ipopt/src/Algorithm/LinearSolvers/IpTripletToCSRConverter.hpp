@@ -234,6 +234,9 @@ namespace Ipopt
     /** Number of nonzero rows.  Computed in DeleteZeroRows(). */
     Index local_dim_;
 
+    /** Flag indicating that there are no nonzeros for this process */
+    bool no_rows_;
+
     /** Number of nonzeros in the triplet format. */
     Index nonzeros_triplet_;
 
