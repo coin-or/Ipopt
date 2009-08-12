@@ -76,7 +76,7 @@ namespace Ipopt
      */
     virtual bool ProvidesInertia() const
     {
-      return false;
+      return true;
     }
     /** Query of requested matrix type that the linear solver
      *  understands.
