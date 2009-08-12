@@ -582,8 +582,11 @@ namespace Ipopt
                    "Number of nonzeros in WSSMP after factorization IPARM(24) = %d\n",
                    IPARM_[23]);
 
-// THE FOLLOWING SHOULD STILL BE CORRECT WITHOUT PIVOTING!
+    // THE FOLLOWING SHOULD STILL BE CORRECT WITHOUT PIVOTING!
     negevals_ = IPARM_[21]; // Number of negative eigenvalues
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Number of negative eigenvalues detected by WSMP = %d\n",
+                   negevals_);
     // determined during factorization
 
     // Check whether the number of negative eigenvalues matches the requested
@@ -664,7 +667,6 @@ namespace Ipopt
   Index ParWsmpSolverInterface::NumberOfNegEVals() const
   {
     DBG_START_METH("ParWsmpSolverInterface::NumberOfNegEVals",dbg_verbosity);
-    DBG_ASSERT(false);
     return negevals_;
   }
 
