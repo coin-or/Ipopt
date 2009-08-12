@@ -67,7 +67,8 @@ endif
 if HAVE_MPI
   liblinsolvers_la_SOURCES += \
 	IpParTSymLinearSolver.cpp IpParTSymLinearSolver.hpp \
-	IpParDistTSymLinearSolver.cpp IpParDistTSymLinearSolver.hpp
+	IpParDistTSymLinearSolver.cpp IpParDistTSymLinearSolver.hpp \
+	IpParDistTGenLinearSolver.cpp IpParDistTGenLinearSolver.hpp
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
 	IpParWsmpSolverInterface.cpp IpParWsmpSolverInterface.hpp
@@ -89,7 +90,8 @@ liblinsolvers_la_SOURCES += \
 	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 if HAVE_MPI
 liblinsolvers_la_SOURCES += \
-	IpParMumpsSolverInterface.cpp IpParMumpsSolverInterface.hpp
+	IpParMumpsSolverInterface.cpp IpParMumpsSolverInterface.hpp \
+	IpParGenMumpsSolverInterface.cpp IpParGenMumpsSolverInterface.hpp
 endif
 AM_CPPFLAGS += $(MUMPS_INCFLAGS)
 endif
@@ -125,7 +127,9 @@ ASTYLE_FILES = \
 	IpTSymDependencyDetector.cppbak IpTSymDependencyDetector.hppbak \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
 	IpTSymScalingMethod.hppbak \
+	IpParDistTGenLinearSolver.cppbak IpParDistTGenLinearSolver.hppbak \
 	IpParDistTSymLinearSolver.cppbak IpParDistTSymLinearSolver.hppbak \
+	IpParGenMumpsSolverInterface.cppbak IpParGenMumpsSolverInterface.hppbak \
 	IpParMumpsSolverInterface.cppbak IpParMumpsSolverInterface.hppbak \
 	IpParTSymLinearSolver.cppbak IpParTSymLinearSolver.hppbak \
 	IpParWsmpSolverInterface.cppbak IpParWsmpSolverInterface.hppbak \

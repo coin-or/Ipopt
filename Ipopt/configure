@@ -31922,6 +31922,7 @@ else
   use_inexact=no
 fi;
 
+if test x"$MPICXX" = x; then
 if test $use_inexact = yes; then
   if test "$use_pardiso" = "no"; then
     { { echo "$as_me:$LINENO: error: The inexact solver option is currently only available with Pardiso" >&5
@@ -31991,7 +31992,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
   LIBS="$SAVE_LIBS"
 fi
-
+fi
 
 # For the remaining tests we need to include FLIBS into LIBS, so that
 # the C compiler can link programs

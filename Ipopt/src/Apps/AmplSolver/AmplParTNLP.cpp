@@ -68,7 +68,7 @@ partition_constraints(ASL_pfgh* asl, Index num_proc, Index proc_id,
   // calculate number of non-zeros in jacobian per constraint
   // set this number to 1 for linear constraints
   //
-#if 0
+#if 1
   // AW: I'm not sure treating linear constraints extra is a good
   //     idea, we should rather go for load-balacing?
   tweight = 0.;
@@ -238,7 +238,7 @@ CLEANUP:
   n_conjac[0] = m_first;
   n_conjac[1] = m_last+1;
 
-#if 1 // Hessian computation sparsity based on evaluating at random point or starting point
+#if 1 // Hessian computation sparsity based on evaluating at random perturbation of starting point
   if (num_proc > 1 && nnz_h_lag_ > 0) {
     Index *iRow = new Index[nnz_h_lag_];
     Index *jCol = new Index[nnz_h_lag_];
@@ -246,22 +246,25 @@ CLEANUP:
     Number *g = new Number[m], *lambda = new Number[m];
     Number *val = new Number[nnz_h_lag_];
 
-    if (X0) {
-      for (i=0; i<n; i++)
-        if (havex0[i])
-          x[i] = X0[i];
-        else
-          x[i] = 0.0;
+    for (i=0; i<n; i++) {
+      if (havex0[i]) {
+        x[i] = X0[i];
+      }
+      else {
+        x[i] = 0.0;
+      }
     }
-    else {
-      for (i=0; i<n; i++) x[i] = IpRandom01() * 1e-6;
+    for (i=0; i<n; i++) {
+      // ToDo: We need to make sure perturbed point is within bounds
+      x[i] += 1e-3 * (IpRandom01() - 0.5) * Max(1., fabs(x[i]));
     }
 
     rval = amplobj_->eval_h(n, NULL, false, 0.0, m, NULL, false, nnz_h_lag_, iRow, jCol, NULL);
     if (!rval) goto CLEANUP2;
 
-    for (i=0; i<m; i++) lambda[i] = 1.0;
-    for (i=0; i<nnz_h_lag_; i++) val[i] = 0.0;
+    for (i=0; i<m; i++) lambda[i] = 1. + 10.*IpRandom01();
+    // should not be necessary:
+    //for (i=0; i<nnz_h_lag_; i++) val[i] = 0.0;
 
     rval = eval_h(num_proc, proc_id, n, n_first, n_last, x, true, 1.0,
                   m, m_first, m_last, lambda, true, nnz_h_lag_,

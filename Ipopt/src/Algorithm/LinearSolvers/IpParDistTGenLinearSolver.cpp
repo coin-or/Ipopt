@@ -4,10 +4,10 @@
 //
 // $Id$
 //
-// Authors:  Andreas Waechter, Sanjeeb Dash     IBM    2009-07-14
-//                  (based on IpTSymLinearSolver.cpp rev 1019)
+// Authors:  Andreas Waechter, Sanjeeb Dash     IBM    2009-08-11
+//                  (based on IpParDistTSymLinearSolver.cpp rev 1554)
 
-#include "IpParDistTSymLinearSolver.hpp"
+#include "IpParDistTGenLinearSolver.hpp"
 #include "IpParTripletHelper.hpp"
 #include "IpTripletHelper.hpp"
 #include "IpBlas.hpp"
@@ -20,7 +20,7 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  ParDistTSymLinearSolver::ParDistTSymLinearSolver
+  ParDistTGenLinearSolver::ParDistTGenLinearSolver
   (SmartPtr<SparseSymLinearSolverInterface> solver_interface)
       :
       SymLinearSolver(),
@@ -33,25 +33,25 @@ namespace Ipopt
       airn_local_(NULL),
       ajcn_local_(NULL)
   {
-    DBG_START_METH("ParDistTSymLinearSolver::ParDistTSymLinearSolver()",dbg_verbosity);
+    DBG_START_METH("ParDistTGenLinearSolver::ParDistTGenLinearSolver()",dbg_verbosity);
     DBG_ASSERT(IsValid(solver_interface));
 
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank_);
     MPI_Comm_size(MPI_COMM_WORLD, &num_proc_);
   }
 
-  ParDistTSymLinearSolver::~ParDistTSymLinearSolver()
+  ParDistTGenLinearSolver::~ParDistTGenLinearSolver()
   {
-    DBG_START_METH("ParDistTSymLinearSolver::~ParDistTSymLinearSolver()",
+    DBG_START_METH("ParDistTGenLinearSolver::~ParDistTGenLinearSolver()",
                    dbg_verbosity);
     delete [] airn_local_;
     delete [] ajcn_local_;
   }
 
-  void ParDistTSymLinearSolver::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  void ParDistTGenLinearSolver::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {}
 
-  bool ParDistTSymLinearSolver::InitializeImpl(const OptionsList& options,
+  bool ParDistTGenLinearSolver::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
     // This option is registered by OrigIpoptNLP
@@ -81,9 +81,11 @@ namespace Ipopt
       matrix_format_ = solver_interface_->MatrixFormat();
       switch (matrix_format_) {
       case SparseSymLinearSolverInterface::CSC_Format_0_Offset:
+        DBG_ASSERT(false && "This has not yet been implemented");
         triplet_to_csr_converter_ = new TripletToCSRConverter(0, true);
         break;
       case SparseSymLinearSolverInterface::CSC_Format_1_Offset:
+        DBG_ASSERT(false && "This has not yet been implemented");
         triplet_to_csr_converter_ = new TripletToCSRConverter(1, true);
         break;
       case SparseSymLinearSolverInterface::Triplet_Format:
@@ -96,7 +98,7 @@ namespace Ipopt
     }
     else {
       ASSERT_EXCEPTION(have_structure_, INVALID_WARMSTART,
-                       "ParDistTSymLinearSolver called with warm_start_same_structure, but the internal structures are not initialized.");
+                       "ParDistTGenLinearSolver called with warm_start_same_structure, but the internal structures are not initialized.");
     }
 
     // reset the initialize flag to make sure that InitializeStructure
@@ -107,13 +109,13 @@ namespace Ipopt
   }
 
   ESymSolverStatus
-  ParDistTSymLinearSolver::MultiSolve(const SymMatrix& sym_A,
+  ParDistTGenLinearSolver::MultiSolve(const SymMatrix& sym_A,
                                       std::vector<SmartPtr<const Vector> >& rhsV,
                                       std::vector<SmartPtr<Vector> >& solV,
                                       bool check_NegEVals,
                                       Index numberOfNegEVals)
   {
-    DBG_START_METH("ParDistTSymLinearSolver::MultiSolve",dbg_verbosity);
+    DBG_START_METH("ParDistTGenLinearSolver::MultiSolve",dbg_verbosity);
     DBG_ASSERT(!check_NegEVals || ProvidesInertia());
 
     // Check if this object has ever seen a matrix If not,
@@ -154,7 +156,7 @@ namespace Ipopt
             &rhs_vals[irhs*(dim_)]);
         if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
           Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                         "Right hand side %d in ParDistTSymLinearSolver:\n", irhs);
+                         "Right hand side %d in ParDistTGenLinearSolver:\n", irhs);
           for (Index i=0; i<dim_; i++) {
             Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
                            "Trhs[%5d,%5d] = %23.16e\n", irhs, i,
@@ -171,7 +173,7 @@ namespace Ipopt
         if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
           Jnlst().StartDistributedOutput();
           Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                         "Right hand side %d in ParDistTSymLinearSolver on process %d:\n", irhs, my_rank_);
+                         "Right hand side %d in ParDistTGenLinearSolver on process %d:\n", irhs, my_rank_);
           for (Index i=0; i<local_dim_; i++) {
             Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
                            "Trhs[%5d,%5d] = %23.16e\n", irhs, i,
@@ -197,6 +199,7 @@ namespace Ipopt
         ja = ajcn_local_;
       }
       else {
+        DBG_ASSERT(false && "Not yet implemented");
         if (HaveIpData()) {
           IpData().TimingStats().LinearSystemStructureConverter().Start();
         }
@@ -227,7 +230,7 @@ namespace Ipopt
         for (Index irhs=0; irhs<nrhs; irhs++) {
           if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
             Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                           "Solution %d in ParDistTSymLinearSolver:\n", irhs);
+                           "Solution %d in ParDistTGenLinearSolver:\n", irhs);
             for (Index i=0; i<dim_; i++) {
               Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
                              "Tsol[%5d,%5d] = %23.16e\n", irhs, i,
@@ -243,7 +246,7 @@ namespace Ipopt
           if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
             Jnlst().StartDistributedOutput();
             Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                           "Solution %d in ParDistTSymLinearSolver in process %d:\n", irhs, my_rank_);
+                           "Solution %d in ParDistTGenLinearSolver in process %d:\n", irhs, my_rank_);
             for (Index i=0; i<local_dim_; i++) {
               Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
                              "Tsol[%5d,%5d] = %23.16e\n", irhs, i,
@@ -265,10 +268,10 @@ namespace Ipopt
   // Initialize the local copy of the positions of the nonzero
   // elements
   ESymSolverStatus
-  ParDistTSymLinearSolver::InitializeStructure(const SymMatrix& sym_A,
+  ParDistTGenLinearSolver::InitializeStructure(const SymMatrix& sym_A,
       const Vector& sample_rhs)
   {
-    DBG_START_METH("ParDistTSymLinearSolver::InitializeStructure",
+    DBG_START_METH("ParDistTGenLinearSolver::InitializeStructure",
                    dbg_verbosity);
     DBG_ASSERT(!initialized_);
 
@@ -280,23 +283,49 @@ namespace Ipopt
 
       dim_ = sym_A.Dim();
 
-      nonzeros_triplet_local_ = ParTripletHelper::GetNumberEntries(sym_A);
+      nonzeros_triplet_local_sym_ = ParTripletHelper::GetNumberEntries(sym_A);
 
-      airn_local_ = new Index[nonzeros_triplet_local_];
-      ajcn_local_ = new Index[nonzeros_triplet_local_];
-      ParTripletHelper::FillRowCol(nonzeros_triplet_local_, sym_A, airn_local_, ajcn_local_);
+      Index* airn_local_sym = new Index[nonzeros_triplet_local_sym_];
+      Index* ajcn_local_sym = new Index[nonzeros_triplet_local_sym_];
+      ParTripletHelper::FillRowCol(nonzeros_triplet_local_sym_, sym_A,
+                                   airn_local_sym, ajcn_local_sym);
 
       // If the solver wants the compressed format, the converter has to
-      // be initialized
+      // be initialized.  We also need to make the structure non-symmetric
       const Index *ia_local;
       const Index *ja_local;
       Index nonzeros_local;
       if (matrix_format_ == SparseSymLinearSolverInterface::Triplet_Format) {
+        nonzeros_triplet_local_ = nonzeros_triplet_local_sym_;
+        // Add the off-diagonal elements from the other side of the matrix
+        for (Index i=0; i<nonzeros_triplet_local_sym_; i++) {
+          if (airn_local_sym[i]!=ajcn_local_sym[i]) {
+            nonzeros_triplet_local_++;
+          }
+        }
+        airn_local_ = new Index[nonzeros_triplet_local_];
+        ajcn_local_ = new Index[nonzeros_triplet_local_];
+        for (Index i=0; i<nonzeros_triplet_local_sym_; ++i) {
+          airn_local_[i] = airn_local_sym[i];
+        }
+        for (Index i=0; i<nonzeros_triplet_local_sym_; ++i) {
+          ajcn_local_[i] = ajcn_local_sym[i];
+        }
+        nonzeros_triplet_local_ = nonzeros_triplet_local_sym_;
+        for (Index i=0; i<nonzeros_triplet_local_sym_; ++i) {
+          if (airn_local_sym[i]!=ajcn_local_sym[i]) {
+            airn_local_[nonzeros_triplet_local_] = ajcn_local_sym[i];
+            ajcn_local_[nonzeros_triplet_local_] = airn_local_sym[i];
+            nonzeros_triplet_local_++;
+          }
+        }
+
         ia_local = airn_local_;
         ja_local = ajcn_local_;
         nonzeros_local = nonzeros_triplet_local_;
       }
       else {
+        DBG_ASSERT(false && "Not yet implemented");
         if (HaveIpData()) {
           IpData().TimingStats().LinearSystemStructureConverter().Start();
           IpData().TimingStats().LinearSystemStructureConverterInit().Start();
@@ -394,6 +423,8 @@ namespace Ipopt
         }
         nonzeros_local = nonzeros_compressed_local_;
       }
+      delete [] airn_local_sym;
+      delete [] ajcn_local_sym;
 
       retval = solver_interface_->InitializeStructure(dim_, nonzeros_local, ia_local, ja_local);
       if (retval != SYMSOLVER_SUCCESS) {
@@ -404,7 +435,7 @@ namespace Ipopt
     }
     else {
       ASSERT_EXCEPTION(dim_==sym_A.Dim(), INVALID_WARMSTART,
-                       "ParDistTSymLinearSolver called with warm_start_same_structure, but the problem is solved for the first time.");
+                       "ParDistTGenLinearSolver called with warm_start_same_structure, but the problem is solved for the first time.");
       // This is a warm start for identical structure, so we don't need to
       // recompute the nonzeros location arrays
       const Index *ia_local;
@@ -428,31 +459,25 @@ namespace Ipopt
     return retval;
   }
 
-  Index ParDistTSymLinearSolver::NumberOfNegEVals() const
+  Index ParDistTGenLinearSolver::NumberOfNegEVals() const
   {
-    DBG_START_METH("ParDistTSymLinearSolver::NumberOfNegEVals",dbg_verbosity);
-
-    return solver_interface_->NumberOfNegEVals();
+    DBG_START_METH("ParDistTGenLinearSolver::NumberOfNegEVals",dbg_verbosity);
+    // This should not be called
+    DBG_ASSERT(false);
+    return -1;
   }
 
-  bool ParDistTSymLinearSolver::IncreaseQuality()
+  bool ParDistTGenLinearSolver::IncreaseQuality()
   {
-    DBG_START_METH("ParDistTSymLinearSolver::IncreaseQuality",dbg_verbosity);
+    DBG_START_METH("ParDistTGenLinearSolver::IncreaseQuality",dbg_verbosity);
 
     return solver_interface_->IncreaseQuality();
   }
 
-  bool ParDistTSymLinearSolver::ProvidesInertia() const
-  {
-    DBG_START_METH("ParDistTSymLinearSolver::ProvidesInertia",dbg_verbosity);
-
-    return solver_interface_->ProvidesInertia();
-  }
-
-  void ParDistTSymLinearSolver::GiveMatrixToSolver(bool new_matrix,
+  void ParDistTGenLinearSolver::GiveMatrixToSolver(bool new_matrix,
       const SymMatrix& sym_A)
   {
-    DBG_START_METH("ParDistTSymLinearSolver::GiveMatrixToSolver",dbg_verbosity);
+    DBG_START_METH("ParDistTGenLinearSolver::GiveMatrixToSolver",dbg_verbosity);
     DBG_PRINT((1,"new_matrix = %d\n",new_matrix));
 
     double* pa;
@@ -466,7 +491,16 @@ namespace Ipopt
       atriplet_local = pa;
     }
 
-    ParTripletHelper::FillValues(nonzeros_triplet_local_, sym_A, atriplet_local);
+    ParTripletHelper::FillValues(nonzeros_triplet_local_sym_, sym_A, atriplet_local);
+
+    // Now copy the off-diagonal elements to the later positions
+    Index later_pos = nonzeros_triplet_local_sym_;
+    for (Index i=0; i<nonzeros_triplet_local_sym_; i++) {
+      if (airn_local_[i]!=ajcn_local_[i]) {
+        atriplet_local[later_pos++] = atriplet_local[i];
+      }
+    }
+    DBG_ASSERT(later_pos==nonzeros_triplet_local_);
 
     // print matrix values...
     if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
@@ -481,6 +515,7 @@ namespace Ipopt
     }
 
     if (matrix_format_!=SparseSymLinearSolverInterface::Triplet_Format) {
+      DBG_ASSERT(false && "Not yet implemented");
       IpData().TimingStats().LinearSystemStructureConverter().Start();
       triplet_to_csr_converter_->ConvertValues(nonzeros_triplet_local_, atriplet_local,
           nonzeros_compressed_local_, pa);

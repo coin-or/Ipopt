@@ -510,6 +510,7 @@ AC_ARG_ENABLE([inexact-solver],
    use_inexact=$enableval],
   [use_inexact=no])
 
+if test x"$MPICXX" = x; then
 if test $use_inexact = yes; then
   if test "$use_pardiso" = "no"; then
     AC_MSG_ERROR([The inexact solver option is currently only available with Pardiso])
@@ -532,7 +533,7 @@ int main() {
   AC_LANG_POP(C)
   LIBS="$SAVE_LIBS"
 fi
-
+fi
 
 # For the remaining tests we need to include FLIBS into LIBS, so that
 # the C compiler can link programs

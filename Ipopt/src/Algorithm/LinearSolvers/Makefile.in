@@ -71,7 +71,8 @@ host_triplet = @host@
 
 @HAVE_MPI_TRUE@am__append_8 = \
 @HAVE_MPI_TRUE@	IpParTSymLinearSolver.cpp IpParTSymLinearSolver.hpp \
-@HAVE_MPI_TRUE@	IpParDistTSymLinearSolver.cpp IpParDistTSymLinearSolver.hpp
+@HAVE_MPI_TRUE@	IpParDistTSymLinearSolver.cpp IpParDistTSymLinearSolver.hpp \
+@HAVE_MPI_TRUE@	IpParDistTGenLinearSolver.cpp IpParDistTGenLinearSolver.hpp
 
 @HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@am__append_9 = \
 @HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@	IpParWsmpSolverInterface.cpp IpParWsmpSolverInterface.hpp
@@ -80,7 +81,8 @@ host_triplet = @host@
 @COIN_HAS_MUMPS_TRUE@	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 
 @COIN_HAS_MUMPS_TRUE@@HAVE_MPI_TRUE@am__append_11 = \
-@COIN_HAS_MUMPS_TRUE@@HAVE_MPI_TRUE@	IpParMumpsSolverInterface.cpp IpParMumpsSolverInterface.hpp
+@COIN_HAS_MUMPS_TRUE@@HAVE_MPI_TRUE@	IpParMumpsSolverInterface.cpp IpParMumpsSolverInterface.hpp \
+@COIN_HAS_MUMPS_TRUE@@HAVE_MPI_TRUE@	IpParGenMumpsSolverInterface.cpp IpParGenMumpsSolverInterface.hpp
 
 @COIN_HAS_MUMPS_TRUE@am__append_12 = $(MUMPS_INCFLAGS)
 subdir = src/Algorithm/LinearSolvers
@@ -110,10 +112,12 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 	IpMa28TDependencyDetector.hpp IpWsmpSolverInterface.cpp \
 	IpWsmpSolverInterface.hpp IpParTSymLinearSolver.cpp \
 	IpParTSymLinearSolver.hpp IpParDistTSymLinearSolver.cpp \
-	IpParDistTSymLinearSolver.hpp IpParWsmpSolverInterface.cpp \
+	IpParDistTSymLinearSolver.hpp IpParDistTGenLinearSolver.cpp \
+	IpParDistTGenLinearSolver.hpp IpParWsmpSolverInterface.cpp \
 	IpParWsmpSolverInterface.hpp IpMumpsSolverInterface.cpp \
 	IpMumpsSolverInterface.hpp IpParMumpsSolverInterface.cpp \
-	IpParMumpsSolverInterface.hpp
+	IpParMumpsSolverInterface.hpp IpParGenMumpsSolverInterface.cpp \
+	IpParGenMumpsSolverInterface.hpp
 @BUILD_LINEARSOLVERLOADER_TRUE@am__objects_1 =  \
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpMa27TSolverInterface.lo \
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpMa57TSolverInterface.lo \
@@ -129,11 +133,13 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.lo
 @HAVE_WSMP_TRUE@am__objects_7 = IpWsmpSolverInterface.lo
 @HAVE_MPI_TRUE@am__objects_8 = IpParTSymLinearSolver.lo \
-@HAVE_MPI_TRUE@	IpParDistTSymLinearSolver.lo
+@HAVE_MPI_TRUE@	IpParDistTSymLinearSolver.lo \
+@HAVE_MPI_TRUE@	IpParDistTGenLinearSolver.lo
 @HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@am__objects_9 =  \
 @HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@	IpParWsmpSolverInterface.lo
 @COIN_HAS_MUMPS_TRUE@am__objects_10 = IpMumpsSolverInterface.lo
-@COIN_HAS_MUMPS_TRUE@@HAVE_MPI_TRUE@am__objects_11 = IpParMumpsSolverInterface.lo
+@COIN_HAS_MUMPS_TRUE@@HAVE_MPI_TRUE@am__objects_11 = IpParMumpsSolverInterface.lo \
+@COIN_HAS_MUMPS_TRUE@@HAVE_MPI_TRUE@	IpParGenMumpsSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpTripletToCSRConverter.lo IpTSymDependencyDetector.lo \
 	IpTSymLinearSolver.lo $(am__objects_1) $(am__objects_2) \
@@ -413,7 +419,9 @@ ASTYLE_FILES = \
 	IpTSymDependencyDetector.cppbak IpTSymDependencyDetector.hppbak \
 	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
 	IpTSymScalingMethod.hppbak \
+	IpParDistTGenLinearSolver.cppbak IpParDistTGenLinearSolver.hppbak \
 	IpParDistTSymLinearSolver.cppbak IpParDistTSymLinearSolver.hppbak \
+	IpParGenMumpsSolverInterface.cppbak IpParGenMumpsSolverInterface.hppbak \
 	IpParMumpsSolverInterface.cppbak IpParMumpsSolverInterface.hppbak \
 	IpParTSymLinearSolver.cppbak IpParTSymLinearSolver.hppbak \
 	IpParWsmpSolverInterface.cppbak IpParWsmpSolverInterface.hppbak \
@@ -479,7 +487,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa57TSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19TSymScalingMethod.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMumpsSolverInterface.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParDistTGenLinearSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParDistTSymLinearSolver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParGenMumpsSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParMumpsSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParTSymLinearSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParWsmpSolverInterface.Plo@am__quote@

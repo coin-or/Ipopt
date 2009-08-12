@@ -56,7 +56,7 @@ namespace Ipopt
       conval_called_with_current_x_(false),
       hesset_called_(false),
       set_active_objective_called_(false),
-      obj_in_hessian_(1),
+      obj_in_hessian_(1.),
       Oinfo_ptr_(NULL),
       suffix_handler_(suffix_handler)
   {
