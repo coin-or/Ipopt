@@ -67,6 +67,7 @@ namespace Ipopt
   {
     options.GetNumericValue("tcc_psi", tcc_psi_, prefix);
     options.GetNumericValue("tcc_theta", tcc_theta_, prefix);
+    options.GetNumericValue("tcc_theta_mu_exponent", tcc_theta_mu_exponent_, prefix);
     options.GetBoolValue("modify_hessian_with_slacks",
                          modify_hessian_with_slacks_, prefix);
     options.GetIntegerValue("inexact_regularization_ls_count_trigger",
@@ -404,47 +405,85 @@ namespace Ipopt
   bool
   InexactPDSolver::HessianRequiresChange()
   {
+    // This code should be in sync with InexactPDTerminationTester
+    bool compute_normal = InexData().compute_normal();
+
     SmartPtr<const Vector> normal_x = InexData().normal_x();
     SmartPtr<const Vector> normal_s = InexData().normal_s();
     SmartPtr<const Vector> tangential_x = InexData().tangential_x();
     SmartPtr<const Vector> tangential_s = InexData().tangential_s();
 
-    // Compute the norm of the normal and tangential steps in the
-    // slack-scaled space
-    Number normal_norm = InexCq().slack_scaled_norm(*normal_x, *normal_s);
-    Number tangential_norm =
+    Number u_norm_scaled =
       InexCq().slack_scaled_norm(*tangential_x, *tangential_s);
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "TT: u_norm_scaled = %23.16e\n", u_norm_scaled);
 
-    // check the first inequality of the tangential component condition
-    Number rhs = tangential_norm;
-    Number lhs = tcc_psi_*normal_norm;
-    // TODO: Find a good base value.  For now, we set this so that we
-    // allow something on the order of the square root of the machine
-    // precision...
+    Number Upsilon;
+    Number Nu;
+    Number v_norm_scaled = -1.;
+    if (compute_normal) {
+      v_norm_scaled = InexCq().slack_scaled_norm(*normal_x, *normal_s);
+    }
+    else {
+      Nu = 0;//Nu/A_norm2;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Nu = ||A*u||^2/||A||^2 = %23.16e\n", Nu);
+
+      // Compute Upsilon = ||u||^2 - Nu
+      Upsilon = u_norm_scaled - Nu;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Upsilon = ||u||^2 - ||A*u||^2/||A||^2 = %23.16e\n", Upsilon);
+    }
+
     Number BasVal = Max(IpData().curr()->x()->Amax(), IpData().curr()->s()->Amax());
-    if (Compare_le(rhs, lhs, BasVal)) {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Hessian does not require change because tangential_norm(=%23.16e) <= tcc_psi_*normal_norm(=%23.16e) \n", rhs, lhs);
+    // Check tangential component condition, part 1
+    Number lhs;
+    Number rhs;
+    if (!compute_normal) {
+      lhs = Upsilon;
+      rhs = pow(tcc_psi_,2)*Nu;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TCC1 testing Upsilon(=%23.16e) <= (tcc_psi_^2)*Nu(=%23.16e) --> ", lhs, rhs);
+    }
+    else {
+      lhs = u_norm_scaled;
+      rhs = tcc_psi_*v_norm_scaled;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TCC1 testing u_norm_scaled(=%23.16e) <= tcc_psi_*v_norm_scaled(=%23.16e) --> ", lhs, rhs);
+    }
+    bool tcc1 = Compare_le(lhs, rhs, BasVal);
+    if (tcc1) {
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
       return false;
     }
     else {
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "Hessian might require change because tangential_norm(=%23.16e) > tcc_psi_*normal_norm(=%23.16e) \n", rhs, lhs);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
     }
 
-    // Compute u^T W u
-    Number uWu = InexCq().curr_uWu();
-
-    rhs = tcc_theta_*tangential_norm*tangential_norm;
-    lhs = 0.5*uWu;
-    //const Number mach_eps_sqrt = pow(std::numeric_limits<Number>::epsilon(),0.5);
-    //const Number mach_eps_sqrt = pow(std::numeric_limits<Number>::epsilon(),0.25);
-    //BasVal = Max(IpData().curr()->x()->Amax(), IpData().curr()->s()->Amax())/mach_eps_sqrt;
-    // check the second inequality of the tangential component condition
-    if (Compare_le(rhs, lhs, BasVal)) {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Hessian does not require change because 0.5*uWu(=%23.16e) >= tcc_theta_*tangential_norm(=%23.16e)^2 \n", lhs, rhs);
+    // Compute u^TWu
+    SmartPtr<const Vector> Wu_x = InexCq().curr_W_times_vec_x(*tangential_x);
+    SmartPtr<const Vector> Wu_s = InexCq().curr_W_times_vec_s(*tangential_s);
+    Number uWu = Wu_x->Dot(*tangential_x) + Wu_s->Dot(*tangential_s);
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "TT: uWu = %23.16e\n", uWu);
+    // Check tangential component condition, part 2a
+    const Number mu = IpData().curr_mu();
+    rhs = 0.5*uWu;
+    if (!compute_normal) {
+      lhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon;
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon(=%23.16e) -->", rhs, lhs);
+    }
+    else {
+      lhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*pow(u_norm_scaled, 2);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*u_norm^2(=%23.16e) -->", rhs, lhs);
+    }
+    bool tcc2a = Compare_le(lhs, rhs, BasVal);
+    if (tcc2a) {
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
       return false;
     }
     else {
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "Hessian requires change because 0.5*uWu(=%23.16e) < tcc_theta_*tangential_norm(=%23.16e)^2 \n", lhs, rhs);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
     }
 
     return true;

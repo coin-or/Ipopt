@@ -55,6 +55,18 @@
 #include "HSLLoader.h"
 #include "PardisoLoader.h"
 
+// TODO not sure if to keep
+#ifdef HAVE_MPI
+# include "IpParTSymLinearSolver.hpp"
+# include "IpParDistTGenLinearSolver.hpp"
+# include "IpParDistTSymLinearSolver.hpp"
+# include "IpParMumpsSolverInterface.hpp"
+# include "IpParGenMumpsSolverInterface.hpp"
+# ifdef HAVE_WSMP
+#  include "IpParWsmpSolverInterface.hpp"
+# endif
+#endif
+
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
@@ -104,6 +116,13 @@ namespace Ipopt
       "none", "no scaling will be performed",
       "slack-based", "scale the linear system as in paper",
       "");
+    roptions->AddStringOption2(
+      "use_unsymmetric_solver",
+      "If selected, the unsymmetric version of a solver will be used.",
+      "no",
+      "no", "use symmetric solver",
+      "yes", "use unsymmetric solver",
+      "So far only for MUMPS and WSMP");
   }
 
   SmartPtr<IpoptAlgorithm>
@@ -120,6 +139,9 @@ namespace Ipopt
 
     SmartPtr<InexactNormalTerminationTester> NormalTester;
     SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
+    bool use_unsymmetric_solver;
+    options.GetBoolValue("use_unsymmetric_solver", use_unsymmetric_solver,
+                         prefix);
     std::string linear_solver;
     options.GetStringValue("linear_solver", linear_solver, prefix);
     if (linear_solver=="ma27") {
@@ -193,7 +215,16 @@ namespace Ipopt
     }
     else if (linear_solver=="wsmp") {
 #ifdef HAVE_WSMP
+# ifdef HAVE_MPI
+      if (use_unsymmetric_solver) {
+        THROW_EXCEPTION(OPTION_INVALID, "Unsymmetric WSMP solver not yet interfaced.");
+      }
+      else {
+        SolverInterface = new ParWsmpSolverInterface();
+      }
+# else
       SolverInterface = new WsmpSolverInterface();
+# endif
 #else
 
       THROW_EXCEPTION(OPTION_INVALID,
@@ -203,7 +234,16 @@ namespace Ipopt
     }
     else if (linear_solver=="mumps") {
 #ifdef COIN_HAS_MUMPS
+# ifdef HAVE_MPI
+      if (use_unsymmetric_solver) {
+        SolverInterface = new ParGenMumpsSolverInterface();
+      }
+      else {
+        SolverInterface = new ParMumpsSolverInterface();
+      }
+# else
       SolverInterface = new MumpsSolverInterface();
+# endif
 #else
 
       THROW_EXCEPTION(OPTION_INVALID,
@@ -225,8 +265,22 @@ namespace Ipopt
       ScalingMethod = new InexactTSymScalingMethod();
     }
 
-    SmartPtr<SymLinearSolver> ScaledSolver =
-      new TSymLinearSolver(SolverInterface, ScalingMethod);
+    SmartPtr<SymLinearSolver> ScaledSolver;
+#ifdef HAVE_MPI
+    if (linear_solver=="mumps" || linear_solver=="wsmp") {
+      if (use_unsymmetric_solver) {
+        ScaledSolver = new ParDistTGenLinearSolver(SolverInterface);
+      }
+      else {
+        ScaledSolver = new ParDistTSymLinearSolver(SolverInterface);
+      }
+    }
+    else {
+      ScaledSolver = new ParTSymLinearSolver(SolverInterface, ScalingMethod);
+    }
+#else
+    ScaledSolver = new TSymLinearSolver(SolverInterface, ScalingMethod);
+#endif
 
     SmartPtr<AugSystemSolver> AugSolver =
       new StdAugSystemSolver(*ScaledSolver);
