@@ -440,14 +440,21 @@ namespace Ipopt
           }
         }
 
+        int counts[2];
+        counts[0] = n_part_x_var;
+        counts[1] = n_part_c;
+        int outcounts[2];
+        MPI_Allreduce(counts, outcounts, 2, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+        int n_x_var = outcounts[0];
+        Index n_c = outcounts[1];
         if (fixed_variable_treatment_ == RELAX_BOUNDS ||
-            n_part_x_fixed_ == 0 || n_part_x_var >= n_part_c) {
+            n_part_x_fixed_max == 0 || n_x_var >= n_c) {
           done = true;
         }
         else {
           fixed_variable_treatment_ = RELAX_BOUNDS;
           jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-                         "Too few degrees of freedom (n_x = %d, n_c = %d).\n  Trying fixed_variable_treatment = RELAX_BOUNDS\n\n", n_part_x_var, n_part_c);
+                         "Too few degrees of freedom (n_x = %d, n_c = %d).\n  Trying fixed_variable_treatment = RELAX_BOUNDS\n\n", n_x_var, n_c);
           THROW_EXCEPTION(OPTION_INVALID,
                           "This is not implemented yet for parallel");
         }
