@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -261,13 +261,13 @@ private:
 };
 
 /** Class implementating case with convex quadratic penalty function */
-class MittelmannBndryCntrlDiri3D_27 : public MittelmannBndryCntrlDiriBase3D_27
+class MittelmannBndryCntrlDiri3D_27_3 : public MittelmannBndryCntrlDiriBase3D_27
 {
 public:
-  MittelmannBndryCntrlDiri3D_27()
+  MittelmannBndryCntrlDiri3D_27_3()
   {}
 
-  virtual ~MittelmannBndryCntrlDiri3D_27()
+  virtual ~MittelmannBndryCntrlDiri3D_27_3()
   {}
 
   virtual bool InitializeProblem(Index N)
@@ -276,13 +276,13 @@ public:
       printf("N has to be at least 1.");
       return false;
     }
-    Number alpha = 1e-2;
+    Number alpha = 0.01;
     Number lb_y = -1e20;
-    Number ub_y = 3.5;
-    Number lb_u = 0.;
-    Number ub_u = 10.;
+    Number ub_y = 3.2;
+    Number lb_u = 1.6;
+    Number ub_u = 2.3;
     Number d_const = -20.;
-    Number B = 0.; // convex case (quadratic penalty)
+    Number B = 0.;
     Number C = 0.;
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
     return true;
@@ -291,26 +291,27 @@ protected:
   /** Target profile function for y */
   virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
   {
-    return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.));
+    //    return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.)); // change?
+    return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
   }
 private:
   /**@name hide implicitly defined contructors copy operators */
   //@{
-  MittelmannBndryCntrlDiri3D_27(const MittelmannBndryCntrlDiri3D_27&);
-  MittelmannBndryCntrlDiri3D_27& operator=(const MittelmannBndryCntrlDiri3D_27&);
+  MittelmannBndryCntrlDiri3D_27_3(const MittelmannBndryCntrlDiri3D_27_3&);
+  MittelmannBndryCntrlDiri3D_27_3& operator=(const MittelmannBndryCntrlDiri3D_27_3&);
   //@}
 
 };
 
 /** Class implementating case with nonconvex Beaton-Tukey like penalty
     function */
-class MittelmannBndryCntrlDiri3D_27BT : public MittelmannBndryCntrlDiriBase3D_27
+class MittelmannBndryCntrlDiri3D_27_3BT : public MittelmannBndryCntrlDiriBase3D_27
 {
 public:
-  MittelmannBndryCntrlDiri3D_27BT()
+  MittelmannBndryCntrlDiri3D_27_3BT()
   {}
 
-  virtual ~MittelmannBndryCntrlDiri3D_27BT()
+  virtual ~MittelmannBndryCntrlDiri3D_27_3BT()
   {}
 
   virtual bool InitializeProblem(Index N)
@@ -319,13 +320,13 @@ public:
       printf("N has to be at least 1.");
       return false;
     }
-    Number alpha = 1e-2;
+    Number alpha = 0.01;
     Number lb_y = -1e20;
-    Number ub_y = 3.5;
-    Number lb_u = 0.;
-    Number ub_u = 10.;
+    Number ub_y = 3.2;
+    Number lb_u = 1.6;
+    Number ub_u = 2.3;
     Number d_const = -20.;
-    Number B = .25; // nonconves case with beaton-tukey-type penalty function
+    Number B = 0.75;
     Number C = 0.01;
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
     return true;
@@ -334,13 +335,14 @@ protected:
   /** Target profile function for y */
   virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
   {
-    return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.));
+    //return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.));
+    return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
   }
 private:
   /**@name hide implicitly defined contructors copy operators */
   //@{
-  MittelmannBndryCntrlDiri3D_27BT(const MittelmannBndryCntrlDiri3D_27BT&);
-  MittelmannBndryCntrlDiri3D_27BT& operator=(const MittelmannBndryCntrlDiri3D_27BT&);
+  MittelmannBndryCntrlDiri3D_27_3BT(const MittelmannBndryCntrlDiri3D_27_3BT&);
+  MittelmannBndryCntrlDiri3D_27_3BT& operator=(const MittelmannBndryCntrlDiri3D_27_3BT&);
   //@}
 
 };

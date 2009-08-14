@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -195,7 +195,9 @@ private:
   /** value of penalty function term */
   inline Number PenObj(Number t) const
   {
-    //return 0.5*t*t;
+    if (B_ == 0.) {
+      return 0.5*t*t;
+    }
     if (t > B_) {
       return B_*B_/2. + C_*(t - B_);
     }
@@ -212,7 +214,9 @@ private:
   /** first derivative of penalty function term */
   inline Number PenObj_1(Number t) const
   {
-    //return t;
+    if (B_ == 0.) {
+      return t;
+    }
     if (t > B_) {
       return C_;
     }
@@ -229,7 +233,9 @@ private:
   /** second derivative of penalty function term */
   inline Number PenObj_2(Number t) const
   {
-    //return 1.;
+    if (B_ == 0.) {
+      return 1.;
+    }
     if (t > B_) {
       return 0.;
     }
@@ -255,13 +261,13 @@ private:
 };
 
 /** Class implementating Example 1 */
-class MittelmannBndryCntrlDiri3D : public MittelmannBndryCntrlDiriBase3D
+class MittelmannBndryCntrlDiri3D_1 : public MittelmannBndryCntrlDiriBase3D
 {
 public:
-  MittelmannBndryCntrlDiri3D()
+  MittelmannBndryCntrlDiri3D_1()
   {}
 
-  virtual ~MittelmannBndryCntrlDiri3D()
+  virtual ~MittelmannBndryCntrlDiri3D_1()
   {}
 
   virtual bool InitializeProblem(Index N)
@@ -276,7 +282,52 @@ public:
     Number lb_u = 0.;
     Number ub_u = 10.;
     Number d_const = -20.;
-    Number B = .5;
+    Number B = 0.;
+    Number C = 0.;
+    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
+    return true;
+  }
+protected:
+  /** Target profile function for y */
+  virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
+  {
+    //return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.)); // change?
+    return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
+  }
+private:
+  /**@name hide implicitly defined contructors copy operators */
+  //@{
+  MittelmannBndryCntrlDiri3D_1(const MittelmannBndryCntrlDiri3D_1&);
+  MittelmannBndryCntrlDiri3D_1& operator=(const MittelmannBndryCntrlDiri3D_1&);
+  //@}
+
+};
+
+
+/** Class implementating Example 1 with nonconvex Beaton-Tukey like penalty
+    function */
+class MittelmannBndryCntrlDiri3D_1BT : public MittelmannBndryCntrlDiriBase3D
+{
+public:
+  MittelmannBndryCntrlDiri3D_1BT()
+  {}
+
+  virtual ~MittelmannBndryCntrlDiri3D_1BT()
+  {}
+
+  virtual bool InitializeProblem(Index N)
+  {
+    if (N<1) {
+      printf("N has to be at least 1.");
+      return false;
+    }
+    Number alpha = 0.01;
+    Number lb_y = -1e20;
+    Number ub_y = 3.5;
+    Number lb_u = 0.;
+    Number ub_u = 10.;
+    Number d_const = -20.;
+    Number B = .75;
     Number C = 0.01;
     SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
     return true;
@@ -285,13 +336,275 @@ protected:
   /** Target profile function for y */
   virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
   {
-    return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.));
+    //return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.));
+    return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
   }
 private:
   /**@name hide implicitly defined contructors copy operators */
   //@{
-  MittelmannBndryCntrlDiri3D(const MittelmannBndryCntrlDiri3D&);
-  MittelmannBndryCntrlDiri3D& operator=(const MittelmannBndryCntrlDiri3D&);
+  MittelmannBndryCntrlDiri3D_1BT(const MittelmannBndryCntrlDiri3D_1BT&);
+  MittelmannBndryCntrlDiri3D_1BT& operator=(const MittelmannBndryCntrlDiri3D_1BT&);
+  //@}
+};
+
+/** Class implementating Example 2 */
+class MittelmannBndryCntrlDiri3D_2 : public MittelmannBndryCntrlDiriBase3D
+{
+public:
+  MittelmannBndryCntrlDiri3D_2()
+  {}
+
+  virtual ~MittelmannBndryCntrlDiri3D_2()
+  {}
+
+  virtual bool InitializeProblem(Index N)
+  {
+    if (N<1) {
+      printf("N has to be at least 1.");
+      return false;
+    }
+    Number alpha = 0.;
+    Number lb_y = -1e20;
+    Number ub_y = 3.5;
+    Number lb_u = 0.;
+    Number ub_u = 10.;
+    Number d_const = -20.;
+    Number B = 0.;
+    Number C = 0.;
+    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
+    return true;
+  }
+protected:
+  /** Target profile function for y */
+  virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
+  {
+    //return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.)); // change?
+    return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
+  }
+private:
+  /**@name hide implicitly defined contructors copy operators */
+  //@{
+  MittelmannBndryCntrlDiri3D_2(const MittelmannBndryCntrlDiri3D_2&);
+  MittelmannBndryCntrlDiri3D_2& operator=(const MittelmannBndryCntrlDiri3D_2&);
+  //@}
+
+};
+
+
+/** Class implementating Example 1 with nonconvex Beaton-Tukey like penalty
+    function */
+class MittelmannBndryCntrlDiri3D_2BT : public MittelmannBndryCntrlDiriBase3D
+{
+public:
+  MittelmannBndryCntrlDiri3D_2BT()
+  {}
+
+  virtual ~MittelmannBndryCntrlDiri3D_2BT()
+  {}
+
+  virtual bool InitializeProblem(Index N)
+  {
+    if (N<1) {
+      printf("N has to be at least 1.");
+      return false;
+    }
+    Number alpha = 0.;
+    Number lb_y = -1e20;
+    Number ub_y = 3.5;
+    Number lb_u = 0.;
+    Number ub_u = 10.;
+    Number d_const = -20.;
+    Number B = .75;
+    Number C = 0.01;
+    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
+    return true;
+  }
+protected:
+  /** Target profile function for y */
+  virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
+  {
+    //return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.));
+    return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
+  }
+private:
+  /**@name hide implicitly defined contructors copy operators */
+  //@{
+  MittelmannBndryCntrlDiri3D_2BT(const MittelmannBndryCntrlDiri3D_2BT&);
+  MittelmannBndryCntrlDiri3D_2BT& operator=(const MittelmannBndryCntrlDiri3D_2BT&);
+  //@}
+};
+
+/** Class implementating Example 3 */
+class MittelmannBndryCntrlDiri3D_3 : public MittelmannBndryCntrlDiriBase3D
+{
+public:
+  MittelmannBndryCntrlDiri3D_3()
+  {}
+
+  virtual ~MittelmannBndryCntrlDiri3D_3()
+  {}
+
+  virtual bool InitializeProblem(Index N)
+  {
+    if (N<1) {
+      printf("N has to be at least 1.");
+      return false;
+    }
+    Number alpha = 0.01;
+    Number lb_y = -1e20;
+    Number ub_y = 3.2;
+    Number lb_u = 1.6;
+    Number ub_u = 2.3;
+    Number d_const = -20.;
+    Number B = 0.;
+    Number C = 0.;
+    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
+    return true;
+  }
+protected:
+  /** Target profile function for y */
+  virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
+  {
+    //    return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.)); // change?
+    return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
+  }
+private:
+  /**@name hide implicitly defined contructors copy operators */
+  //@{
+  MittelmannBndryCntrlDiri3D_3(const MittelmannBndryCntrlDiri3D_3&);
+  MittelmannBndryCntrlDiri3D_3& operator=(const MittelmannBndryCntrlDiri3D_3&);
+  //@}
+
+};
+
+
+/** Class implementating Example 1 with nonconvex Beaton-Tukey like penalty
+    function */
+class MittelmannBndryCntrlDiri3D_3BT : public MittelmannBndryCntrlDiriBase3D
+{
+public:
+  MittelmannBndryCntrlDiri3D_3BT()
+  {}
+
+  virtual ~MittelmannBndryCntrlDiri3D_3BT()
+  {}
+
+  virtual bool InitializeProblem(Index N)
+  {
+    if (N<1) {
+      printf("N has to be at least 1.");
+      return false;
+    }
+    Number alpha = 0.01;
+    Number lb_y = -1e20;
+    Number ub_y = 3.2;
+    Number lb_u = 1.6;
+    Number ub_u = 2.3;
+    Number d_const = -20.;
+    Number B = 0.75;
+    Number C = 0.01;
+    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
+    return true;
+  }
+protected:
+  /** Target profile function for y */
+  virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
+  {
+    //return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.));
+    return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
+  }
+private:
+  /**@name hide implicitly defined contructors copy operators */
+  //@{
+  MittelmannBndryCntrlDiri3D_3BT(const MittelmannBndryCntrlDiri3D_3BT&);
+  MittelmannBndryCntrlDiri3D_3BT& operator=(const MittelmannBndryCntrlDiri3D_3BT&);
+  //@}
+};
+
+/** Class implementating Example 4 */
+class MittelmannBndryCntrlDiri3D_4 : public MittelmannBndryCntrlDiriBase3D
+{
+public:
+  MittelmannBndryCntrlDiri3D_4()
+  {}
+
+  virtual ~MittelmannBndryCntrlDiri3D_4()
+  {}
+
+  virtual bool InitializeProblem(Index N)
+  {
+    if (N<1) {
+      printf("N has to be at least 1.");
+      return false;
+    }
+    Number alpha = 0.;
+    Number lb_y = -1e20;
+    Number ub_y = 3.2;
+    Number lb_u = 1.6;
+    Number ub_u = 2.3;
+    Number d_const = -20.;
+    Number B = 0.;
+    Number C = 0.;
+    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
+    return true;
+  }
+protected:
+  /** Target profile function for y */
+  virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
+  {
+    //return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.)); // change?
+    return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
+  }
+private:
+  /**@name hide implicitly defined contructors copy operators */
+  //@{
+  MittelmannBndryCntrlDiri3D_4(const MittelmannBndryCntrlDiri3D_4&);
+  MittelmannBndryCntrlDiri3D_4& operator=(const MittelmannBndryCntrlDiri3D_4&);
+  //@}
+
+};
+
+
+/** Class implementating Example 1 with nonconvex Beaton-Tukey like penalty
+    function */
+class MittelmannBndryCntrlDiri3D_4BT : public MittelmannBndryCntrlDiriBase3D
+{
+public:
+  MittelmannBndryCntrlDiri3D_4BT()
+  {}
+
+  virtual ~MittelmannBndryCntrlDiri3D_4BT()
+  {}
+
+  virtual bool InitializeProblem(Index N)
+  {
+    if (N<1) {
+      printf("N has to be at least 1.");
+      return false;
+    }
+    Number alpha = 0.;
+    Number lb_y = -1e20;
+    Number ub_y = 3.2;
+    Number lb_u = 1.6;
+    Number ub_u = 2.3;
+    Number d_const = -20.;
+    Number B = .75;
+    Number C = 0.01;
+    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
+    return true;
+  }
+protected:
+  /** Target profile function for y */
+  virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
+  {
+    //return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.));
+    return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
+  }
+private:
+  /**@name hide implicitly defined contructors copy operators */
+  //@{
+  MittelmannBndryCntrlDiri3D_4BT(const MittelmannBndryCntrlDiri3D_4BT&);
+  MittelmannBndryCntrlDiri3D_4BT& operator=(const MittelmannBndryCntrlDiri3D_4BT&);
   //@}
 
 };
