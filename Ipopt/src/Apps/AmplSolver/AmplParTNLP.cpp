@@ -106,23 +106,30 @@ partition_constraints(ASL_pfgh* asl, Index num_proc, Index proc_id,
   }
 #endif
 
-  avgw = (Number) tweight / num_proc;
+  avgw = tweight / num_proc;
 
   // Now let each processor have approximately the same weight
   Index cur_p = 0;
   Index cur_start = 0;
+  Number cur_weight = 0.0;
 
-  tweight = 0;
   for (i=0; i<n_con && cur_p < num_proc; i++) {
-    tweight += weight[i];
-    if (tweight >= avgw || i == n_con-1) {
+
+    tweight -= weight[i];
+    cur_weight += weight[i];
+
+    if (cur_weight >= avgw || num_proc-cur_p >= n_con-i || i == n_con-1) {
       p_first[cur_p] = cur_start;
       p_last[cur_p] = i;
       cur_start = i+1;
       cur_p ++;
-      tweight = 0;
+      cur_weight = 0.0;
+      if (cur_p < num_proc) avgw = tweight / (num_proc-cur_p);
     }
   }
+  // all constraints should have been allocated
+  assert(i == n_con);
+
   for (i=cur_p; i<num_proc; i++) {
     p_first[i] = n_con;
     p_last[i] = n_con-1;
