@@ -362,7 +362,19 @@ namespace Ipopt
           Jnlst().FinishDistributedOutput();
         }
         Index retval = triplet_to_csr_converter_->DeleteZeroRows();
-        DBG_ASSERT(retval == local_dim_);
+
+        // check if Hessian matrix was provided by row
+        int valid1 = (int)(retval == local_dim_);
+        int valid;
+        MPI_Allreduce(&valid1, &valid, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+        if (!valid) {
+          Jnlst().StartDistributedOutput();
+          if (!valid1) {
+            Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "On process %d, retval = %d but local_dim_ = %d:\n", my_rank_, retval, local_dim_);
+          }
+          Jnlst().FinishDistributedOutput();
+          THROW_EXCEPTION(INTERNAL_ABORT, "This probably means that the Hessian is not respecting row grouping. This still needs to be implemented. For now, we have to abort.");
+        }
         if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
           ia_local = triplet_to_csr_converter_->IA();
           ja_local = triplet_to_csr_converter_->JA();

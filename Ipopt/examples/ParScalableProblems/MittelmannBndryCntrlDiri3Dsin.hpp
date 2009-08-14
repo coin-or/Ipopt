@@ -209,7 +209,6 @@ public:
       printf("N has to be at least 1.");
       return false;
     }
-    printf("olaf N %d has to be at least 1.", N);
     Number alpha = 0.1;
     Number lb_y = -1e20;
     Number ub_y = 3.5;
