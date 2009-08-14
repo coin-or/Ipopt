@@ -111,11 +111,18 @@ REGISTER_TNLP(MittelmannBndryCntrlDiri3, MBndryCntrl3)
 REGISTER_TNLP(MittelmannBndryCntrlDiri4, MBndryCntrl4)
 
 #include "MittelmannBndryCntrlDiri3D.hpp"
-REGISTER_TNLP(MittelmannBndryCntrlDiri3D, MBndryCntrl_3D)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_1, MBndryCntrl3D_1)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_1BT, MBndryCntrl3D_1BT)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_2, MBndryCntrl3D_2)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_2BT, MBndryCntrl3D_2BT)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_3, MBndryCntrl3D_3)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_3BT, MBndryCntrl3D_3BT)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_4, MBndryCntrl3D_4)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_4BT, MBndryCntrl3D_4BT)
 
 #include "MittelmannBndryCntrlDiri3D_27.hpp"
-REGISTER_TNLP(MittelmannBndryCntrlDiri3D_27, MBndryCntrl_3D_27)
-REGISTER_TNLP(MittelmannBndryCntrlDiri3D_27BT, MBndryCntrl_3D_27BT)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_27_3, MBndryCntrl3D_27_3)
+REGISTER_TNLP(MittelmannBndryCntrlDiri3D_27_3BT, MBndryCntrl3D_27_3BT)
 
 #include "MittelmannBndryCntrlDiri3Dsin.hpp"
 REGISTER_TNLP(MittelmannBndryCntrlDiri3Dsin, MBndryCntrl_3Dsin)
