@@ -30,6 +30,69 @@ static void calculate_offsets (Index p, Index p_id, Index n, Index &n_first, Ind
   }
 }
 
+static void
+partition_constraints(Index m, Index jac_nz, Index *iRow,
+		      Index num_proc, Index proc_id, Index &m_first, Index &m_last)
+{
+  Index i;
+  Index tweight = jac_nz;
+  Index *weight = new Index[m];
+  Index *p_first, *p_last;
+  Number avgw;
+
+  if (num_proc == 1) {
+    m_first = 0;
+    m_last = m-1;
+    delete [] weight;
+    return;
+  }
+
+  p_first = new Index[num_proc];
+  p_last = new Index[num_proc];
+
+  // calculate number of non-zeros in jacobian per constraint
+  // assume C-STYLE indexing
+  for (i=0; i<m; i++) weight[i] = 0;
+  for (i=0; i<jac_nz; i++) weight[iRow[i]] ++;
+
+  avgw = (Number)tweight / num_proc;
+
+  // Now let each processor have approximately the same weight
+  Index cur_p = 0;
+  Index cur_start = 0;
+  Number cur_weight = 0.0;
+
+  for (i=0; i<m && cur_p < num_proc; i++) {
+
+    tweight -= weight[i];
+    cur_weight += weight[i];
+
+    if (cur_weight >= avgw || num_proc-cur_p >= m-i || i == m-1) {
+      p_first[cur_p] = cur_start;
+      p_last[cur_p] = i;
+      cur_start = i+1;
+      cur_p ++;
+      cur_weight = 0.0;
+      if (cur_p < num_proc) avgw = (Number)tweight / (num_proc-cur_p);
+    }
+  }
+  // all constraints should have been allocated
+  assert(i == m);
+
+  for (i=cur_p; i<num_proc; i++) {
+    p_first[i] = m;
+    p_last[i] = m-1;
+  }
+
+  m_first = p_first[proc_id];
+  m_last = p_last[proc_id];
+
+  delete [] weight;
+  delete [] p_first;
+  delete [] p_last;
+  return;
+}
+
 ParTNLPWrapper::ParTNLPWrapper(SmartPtr<TNLP> tnlpobj)
     :
     tnlpobj_(tnlpobj),
@@ -62,13 +125,18 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
   }
 
   calculate_offsets (num_proc, proc_id, n, n_first, n_last);
-  calculate_offsets (num_proc, proc_id, m, m_first, m_last);
+  // calculate_offsets (num_proc, proc_id, m, m_first, m_last);
+
+  if (m <= 0){
+    m_first = 0;
+    m_last = -1;
+  }
+  else if (num_proc > 1) {
 
   //printf("n = %d m = %d num_proc = %d proc_id = %d\n", n, m, num_proc, proc_id);
   //printf("n_first = %d n_last = %d\n", n_first, n_last);
   //printf("m_first = %d m_last = %d\n", m_first, m_last);
 
-  if (num_proc > 1) {
     delete [] jac_map_;
     jac_map_ = NULL;
     delete [] hess_map_;
@@ -84,8 +152,10 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
       return rval;
     }
 
+    partition_constraints (m, nnz_jac_g_, iRow, num_proc, proc_id, m_first, m_last);
+
     Index nz = 0;
-    // count the nonzeros
+    // count the nonzeros in the m_first to m_last rows
     for (Index i=0; i<nnz_jac_g_; i++) {
       if (iRow[i] >= m_first && iRow[i] <= m_last) {
         nz++;

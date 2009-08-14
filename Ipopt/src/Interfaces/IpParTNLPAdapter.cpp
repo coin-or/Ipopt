@@ -859,7 +859,7 @@ namespace Ipopt
           g_jCol[i] += 1;
         }
       }
-      DBG_DO(for (Index i=0; i<nz_part_jac_g_; i++) assert(g_iRow[i]>0 && g_iRow[i]<=n_part_g_ && g_jCol[i]>0 && g_jCol[i]<=n_full_x);)
+      DBG_DO(for (Index i=0; i<nz_part_jac_g_; i++)  assert(g_iRow[i]>0 && g_iRow[i]<=n_part_g_ && g_jCol[i]>0 && g_jCol[i]<=n_full_x);)
 
       // ... build the non-zero structure for jac_c
       // ... (the permutation from rows in jac_g to jac_c is
