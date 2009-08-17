@@ -12,84 +12,56 @@ using namespace Ipopt;
 
 static void calculate_offsets (Index p, Index p_id, Index n, Index &n_first, Index &n_last)
 {
-  if (p > 1) {
-    int np = n/p, np_rem = n - np*p;
-
-    if (p_id < np_rem) {
-      np ++;
-      n_first = p_id * np;
-    }
-    else
-      n_first = p_id * np + np_rem;
-
-    n_last = n_first + np-1;
-  }
-  else {
-    n_first = 0;
-    n_last = n-1;
-  }
+  Number frac = (Number)(n)/(Number)p;
+  n_first = (Index)(p_id*frac);
+  n_last = (Index)(frac*(p_id+1))-1;
 }
 
 static void
 partition_constraints(Index m, Index jac_nz, Index *iRow,
-		      Index num_proc, Index proc_id, Index &m_first, Index &m_last)
+                      Index num_proc, Index proc_id, Index &m_first, Index &m_last)
 {
-  Index i;
-  Index tweight = jac_nz;
-  Index *weight = new Index[m];
-  Index *p_first, *p_last;
-  Number avgw;
-
-  if (num_proc == 1) {
-    m_first = 0;
-    m_last = m-1;
-    delete [] weight;
-    return;
-  }
-
-  p_first = new Index[num_proc];
-  p_last = new Index[num_proc];
+  Index* weight = new Index[m];
 
   // calculate number of non-zeros in jacobian per constraint
   // assume C-STYLE indexing
-  for (i=0; i<m; i++) weight[i] = 0;
-  for (i=0; i<jac_nz; i++) weight[iRow[i]] ++;
+  for (Index i=0; i<m; i++) weight[i] = 0;
+  for (Index i=0; i<jac_nz; i++) weight[iRow[i]] ++;
 
-  avgw = (Number)tweight / num_proc;
+  Index tweight = jac_nz;
+  Number avgw = (Number)tweight / (Number)num_proc;
 
   // Now let each processor have approximately the same weight
   Index cur_p = 0;
   Index cur_start = 0;
   Number cur_weight = 0.0;
 
-  for (i=0; i<m && cur_p < num_proc; i++) {
-
-    tweight -= weight[i];
+  Number weight_first = proc_id*avgw;
+  Number weight_last = (proc_id+1)*avgw+1e-20;
+  m_first = 0;
+  m_last = -1;
+  for (Index i=0; i<m; i++) {
+    if (cur_weight < weight_first) {
+      m_first = i+1;
+    }
+    else if (cur_weight < weight_last) {
+      m_last = i;
+    }
+    else {
+      break;
+    }
     cur_weight += weight[i];
-
-    if (cur_weight >= avgw || num_proc-cur_p >= m-i || i == m-1) {
-      p_first[cur_p] = cur_start;
-      p_last[cur_p] = i;
-      cur_start = i+1;
-      cur_p ++;
-      cur_weight = 0.0;
-      if (cur_p < num_proc) avgw = (Number)tweight / (num_proc-cur_p);
+  }
+  if (m_last == -1) {
+    if (proc_id == num_proc-1) {
+      m_last = m-1;
+    }
+    else {
+      m_last = m_first - 1;
     }
   }
-  // all constraints should have been allocated
-  assert(i == m);
-
-  for (i=cur_p; i<num_proc; i++) {
-    p_first[i] = m;
-    p_last[i] = m-1;
-  }
-
-  m_first = p_first[proc_id];
-  m_last = p_last[proc_id];
 
   delete [] weight;
-  delete [] p_first;
-  delete [] p_last;
   return;
 }
 
@@ -120,102 +92,93 @@ ParTNLPWrapper::get_nlp_info(Index num_proc, Index proc_id,
   if (rval == false) return rval;
 
   if (index_style != C_STYLE) {
-    printf("index_style = FORTRAN not yet cproperly implemented.\n");
+    printf("index_style = FORTRAN not yet properly implemented.\n");
     throw;
   }
 
   calculate_offsets (num_proc, proc_id, n, n_first, n_last);
   // calculate_offsets (num_proc, proc_id, m, m_first, m_last);
 
-  if (m <= 0){
+  if (m <= 0) {
     m_first = 0;
     m_last = -1;
   }
-  else if (num_proc > 1) {
 
   //printf("n = %d m = %d num_proc = %d proc_id = %d\n", n, m, num_proc, proc_id);
   //printf("n_first = %d n_last = %d\n", n_first, n_last);
   //printf("m_first = %d m_last = %d\n", m_first, m_last);
 
-    delete [] jac_map_;
-    jac_map_ = NULL;
-    delete [] hess_map_;
-    hess_map_ = NULL;
+  delete [] jac_map_;
+  jac_map_ = NULL;
+  delete [] hess_map_;
+  hess_map_ = NULL;
 
-    Index* iRow = new Index[nnz_jac_g_];
-    Index* jCol = new Index[nnz_jac_g_];
+  Index* iRow = new Index[nnz_jac_g_];
+  Index* jCol = new Index[nnz_jac_g_];
 
-    rval = tnlpobj_->eval_jac_g(n, NULL, true, m, nnz_jac_g_, iRow, jCol, NULL);
-    if (!rval) {
-      delete [] iRow;
-      delete [] jCol;
-      return rval;
-    }
-
-    partition_constraints (m, nnz_jac_g_, iRow, num_proc, proc_id, m_first, m_last);
-
-    Index nz = 0;
-    // count the nonzeros in the m_first to m_last rows
-    for (Index i=0; i<nnz_jac_g_; i++) {
-      if (iRow[i] >= m_first && iRow[i] <= m_last) {
-        nz++;
-      }
-    }
-    nnz_jac_g_part = nz;
-    // get the map
-    jac_map_ = new Index[nnz_jac_g_part];
-    nz = 0;
-    for (Index i=0; i<nnz_jac_g_; i++) {
-      if (iRow[i] >= m_first && iRow[i] <= m_last) {
-        jac_map_[nz++] = i;
-      }
-    }
-
-    delete [] iRow;
-    iRow = NULL;
-    delete [] jCol;
-    jCol = NULL;
-
-    iRow = new Index[nnz_h_lag_];
-    jCol = new Index[nnz_h_lag_];
-
-    rval = tnlpobj_->eval_h(n, NULL, true, 0, m, NULL, true, nnz_h_lag_, iRow, jCol, NULL);
-    if (!rval) {
-      delete [] iRow;
-      delete [] jCol;
-      return rval;
-    }
-
-    // count nonzeros
-    nz = 0;
-    for (Index i=0; i<nnz_h_lag_; i++) {
-      if (jCol[i] >= n_first && jCol[i] <= n_last) {
-        nz ++;
-      }
-    }
-    nnz_h_lag_part = nz;
-    // get the map
-    hess_map_ = new Index[nnz_h_lag_part];
-    nz = 0;
-    for (Index i=0; i<nnz_h_lag_; i++) {
-      if (jCol[i] >= n_first && jCol[i] <= n_last) {
-        hess_map_[nz] = i;
-        nz ++;
-      }
-    }
-
+  rval = tnlpobj_->eval_jac_g(n, NULL, true, m, nnz_jac_g_, iRow, jCol, NULL);
+  if (!rval) {
     delete [] iRow;
     delete [] jCol;
+    return rval;
   }
-  else {
-    delete [] jac_map_;
-    jac_map_ = NULL;
-    delete [] hess_map_;
-    hess_map_ = NULL;
 
-    nnz_jac_g_part = nnz_jac_g_;
-    nnz_h_lag_part = nnz_h_lag_;
+  partition_constraints (m, nnz_jac_g_, iRow, num_proc, proc_id, m_first, m_last);
+
+  Index nz = 0;
+  // count the nonzeros in the m_first to m_last rows
+  for (Index i=0; i<nnz_jac_g_; i++) {
+    if (iRow[i] >= m_first && iRow[i] <= m_last) {
+      nz++;
+    }
   }
+  nnz_jac_g_part = nz;
+  // get the map
+  jac_map_ = new Index[nnz_jac_g_part];
+  nz = 0;
+  for (Index i=0; i<nnz_jac_g_; i++) {
+    if (iRow[i] >= m_first && iRow[i] <= m_last) {
+      jac_map_[nz++] = i;
+    }
+  }
+
+  delete [] iRow;
+  iRow = NULL;
+  delete [] jCol;
+  jCol = NULL;
+
+  iRow = new Index[nnz_h_lag_];
+  jCol = new Index[nnz_h_lag_];
+
+  rval = tnlpobj_->eval_h(n, NULL, true, 0, m, NULL, true, nnz_h_lag_, iRow, jCol, NULL);
+  if (!rval) {
+    delete [] iRow;
+    delete [] jCol;
+    return rval;
+  }
+
+  // count nonzeros
+  nz = 0;
+  for (Index i=0; i<nnz_h_lag_; i++) {
+    const Index row = jCol[i] < iRow[i] ? iRow[i] : jCol[i];
+    if (row >= n_first && row <= n_last) {
+      nz ++;
+    }
+  }
+  nnz_h_lag_part = nz;
+  // get the map
+  hess_map_ = new Index[nnz_h_lag_part];
+  nz = 0;
+  for (Index i=0; i<nnz_h_lag_; i++) {
+    const Index row = jCol[i] < iRow[i] ? iRow[i] : jCol[i];
+    if (row >= n_first && row <= n_last) {
+      hess_map_[nz] = i;
+      nz ++;
+    }
+  }
+
+  delete [] iRow;
+  delete [] jCol;
 
   return rval;
 }
@@ -449,8 +412,16 @@ bool ParTNLPWrapper::eval_h(Index num_proc, Index proc_id,
       }
 
       for (Index i=0; i<nele_hess_part; i++) {
-        iRow_part[i] = iRow[hess_map_[i]];
-        jCol_part[i] = jCol[hess_map_[i]];
+        const Index row = iRow[hess_map_[i]];
+        const Index col = jCol[hess_map_[i]];
+        if (row < col) {
+          iRow_part[i] = col;
+          jCol_part[i] = row;
+        }
+        else {
+          iRow_part[i] = row;
+          jCol_part[i] = col;
+        }
       }
 
       delete [] iRow;

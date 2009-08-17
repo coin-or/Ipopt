@@ -12,6 +12,7 @@
 
 #include "IpNLP.hpp"
 #include "IpParTNLP.hpp"
+#include "IpTimedTask.hpp"
 
 namespace Ipopt
 {
@@ -349,6 +350,19 @@ namespace Ipopt
 
     /** Position of fixed variables. This is required for a warm start */
     Index* x_fixed_part_map_;
+    //@}
+
+    /** @name Timing */
+    //@{
+    TimedTask get_nlp_info_time_;
+    TimedTask get_bounds_info_time_;
+    TimedTask get_starting_point_time_;
+    TimedTask eval_f_time_;
+    TimedTask eval_grad_f_time_;
+    TimedTask eval_g_time_;
+    TimedTask eval_jac_g_time_;
+    TimedTask eval_h_time_;
+    TimedTask finalize_solution_time_;
     //@}
   };
 

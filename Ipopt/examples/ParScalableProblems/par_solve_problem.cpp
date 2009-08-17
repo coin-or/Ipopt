@@ -163,9 +163,6 @@ static void print_problems()
 
 int main(int argv, char* argc[])
 {
-  int DebugWait = 0; // set this to 1 to attach debugger
-  while (DebugWait);
-
   if (argv==2 && !strcmp(argc[1],"list")) {
     print_problems();
     return 0;
@@ -237,6 +234,9 @@ int main(int argv, char* argc[])
   }
 
   MPI_Init(&argv, &argc);
+
+  int DebugWait = 0; // set this to 1 to attach debugger
+  while (DebugWait);
 
   // Create an instance of the IpoptApplication
   SmartPtr<IpoptApplication> app = new IpoptApplication();

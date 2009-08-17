@@ -177,10 +177,12 @@ namespace Ipopt
     Index nz_part_jac_g, nz_part_h;
     ParTNLP::IndexStyleEnum index_style;
 
+    get_nlp_info_time_.Start();
     int retval1 =
       partnlp_->get_nlp_info(num_proc_, proc_id_, n_full_x, n_first, n_last,
                              n_full_g, m_first, m_last, nz_part_jac_g,
                              nz_part_h, index_style);
+    get_nlp_info_time_.End();
     int retval;
     MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
 
@@ -267,11 +269,13 @@ namespace Ipopt
       Number* x_u_part = new Number[n_part_x_];
       Number* g_l_part = new Number[n_part_g_];
       Number* g_u_part = new Number[n_part_g_];
+      get_bounds_info_time_.Start();
       retval1 = partnlp_->get_bounds_info(num_proc_, proc_id_,
                                           n_full_x_, n_first_, n_last_,
                                           x_l_part, x_u_part,
                                           n_full_g_, m_first_, m_last_,
                                           g_l_part, g_u_part);
+      get_bounds_info_time_.End();
       MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
       ASSERT_EXCEPTION(retval, INVALID_PARTNLP,
                        "get_bounds_info returned false in GetSpaces");
@@ -843,9 +847,11 @@ namespace Ipopt
       // Get the non zero structure
       Index* g_iRow = new Index[nz_part_jac_g_];
       Index* g_jCol = new Index[nz_part_jac_g_];
+      eval_jac_g_time_.Start();
       retval1 = partnlp_->eval_jac_g(num_proc_, proc_id_, n_full_x, NULL, false,
                                      n_full_g, m_first, m_last, nz_part_jac_g_,
                                      g_iRow, g_jCol, NULL);
+      eval_jac_g_time_.End();
       MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
       if (!retval) {
         delete [] g_iRow;
@@ -975,11 +981,13 @@ namespace Ipopt
         Index* full_h_jCol = new Index[nz_part_h_];
         Index* h_iRow = new Index[nz_part_h_];
         Index* h_jCol = new Index[nz_part_h_];
+        eval_h_time_.Start();
         retval1 = partnlp_->eval_h(num_proc_, proc_id_,
                                    n_full_x_, n_first_, n_last_, NULL, false,
                                    0., n_full_g_, m_first_, m_last_,
                                    NULL, false,
                                    nz_part_h_, full_h_iRow, full_h_jCol, NULL);
+        eval_h_time_.End();
 
         MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
         if (!retval) {
@@ -1112,11 +1120,13 @@ namespace Ipopt
     Number* x_u_part = new Number[n_part_x_];
     Number* g_l_part = new Number[n_part_g_];
     Number* g_u_part = new Number[n_part_g_];
+    get_bounds_info_time_.Start();
     int retval1 = partnlp_->get_bounds_info(num_proc_, proc_id_,
                                             n_full_x_, n_first_, n_last_,
                                             x_l_part, x_u_part,
                                             n_full_g_, m_first_, m_last_,
                                             g_l_part, g_u_part);
+    get_bounds_info_time_.End();
     int retval;
     MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
     ASSERT_EXCEPTION(retval, INVALID_PARTNLP,
@@ -1274,6 +1284,7 @@ namespace Ipopt
     bool init_z = need_z_L || need_z_U;
     bool init_lambda = need_y_c || need_y_d;
 
+    get_starting_point_time_.Start();
     int retval1 =
       partnlp_->get_starting_point(num_proc_, proc_id_,
                                    n_full_x_, n_first_, n_last_,
@@ -1281,6 +1292,7 @@ namespace Ipopt
                                    init_z, z_l_part, z_u_part,
                                    n_full_g_, m_first_, m_last_,
                                    init_lambda, lambda_part);
+    get_starting_point_time_.End();
     int retval;
     MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
 
@@ -1401,9 +1413,11 @@ namespace Ipopt
       new_x = true;
     }
     Number f1;
+    eval_f_time_.Start();
     int retval1 = partnlp_->eval_f(num_proc_, proc_id_,
                                    n_full_x_, n_first_, n_last_,
                                    full_x_, new_x, f1);
+    eval_f_time_.End();
 
     // synchonize return values (TODO: What operation?)
     int retval;
@@ -1430,21 +1444,25 @@ namespace Ipopt
     Number* values = dg_f->Values();
     if (IsValid(P_x_part_x_)) {
       Number* grad_f_part = new Number[n_part_x_];
-      if (partnlp_->eval_grad_f(num_proc_, proc_id_,
-                                n_full_x_, n_first_, n_last_,
-                                full_x_, new_x, grad_f_part)) {
+      eval_grad_f_time_.Start();
+      retvalue = partnlp_->eval_grad_f(num_proc_, proc_id_,
+                                       n_full_x_, n_first_, n_last_,
+                                       full_x_, new_x, grad_f_part);
+      eval_grad_f_time_.End();
+      if (retvalue) {
         const Index* x_pos = P_x_part_x_->LocalMatrix()->ExpandedPosIndices();
         for (Index i=0; i<dg_f->Dim(); i++) {
           values[i] = grad_f_part[x_pos[i]];
         }
-        retvalue = 1;
       }
       delete [] grad_f_part;
     }
     else {
+      eval_grad_f_time_.Start();
       retvalue = partnlp_->eval_grad_f(num_proc_, proc_id_,
                                        n_full_x_, n_first_, n_last_,
                                        full_x_, new_x, values);
+      eval_grad_f_time_.End();
     }
 
     // synchonize return values (TODO: What operation?)
@@ -1589,23 +1607,27 @@ namespace Ipopt
     if (h_idx_part_map_) {
       Number* part_h = new Number[nz_part_h_];
 
-      if (partnlp_->eval_h(num_proc_, proc_id_, n_full_x_, n_first_, n_last_,
-                           full_x_, new_x, obj_factor,
-                           n_full_g_, m_first_, m_last_, full_lambda_, new_y,
-                           nz_part_h_, NULL, NULL, part_h)) {
+      eval_h_time_.Start();
+      retval = partnlp_->eval_h(num_proc_, proc_id_, n_full_x_, n_first_, n_last_,
+                                full_x_, new_x, obj_factor,
+                                n_full_g_, m_first_, m_last_, full_lambda_, new_y,
+                                nz_part_h_, NULL, NULL, part_h);
+      eval_h_time_.End();
+      if (retval) {
         for (Index i=0; i<nz_h_; i++) {
           values[i] = part_h[h_idx_part_map_[i]];
         }
-        retval = 1;
       }
       delete [] part_h;
     }
     else {
+      eval_h_time_.Start();
       retval =
         partnlp_->eval_h(num_proc_, proc_id_, n_full_x_, n_first_, n_last_,
                          full_x_, new_x, obj_factor,
                          n_full_g_, m_first_, m_last_, full_lambda_, new_y,
                          nz_part_h_, NULL, NULL, values);
+      eval_h_time_.End();
     }
 
     int retval_all;
@@ -1771,10 +1793,69 @@ namespace Ipopt
 #endif
     }
 
+    finalize_solution_time_.Start();
     partnlp_->finalize_solution(status,
                                 n_full_x_, full_x_, full_z_L, full_z_U,
                                 n_full_g_, full_g, full_lambda_,
                                 obj_value, ip_data, ip_cq);
+    finalize_solution_time_.End();
+
+    if (IsValid(jnlst_)) {
+      if (jnlst_->ProduceOutput(J_DETAILED, J_TIMING_STATISTICS)) {
+        int rank;
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+        jnlst_->StartDistributedOutput();
+        jnlst_->Printf(J_DETAILED, J_TIMING_STATISTICS,
+                       "ParTNLP times for process %d:\n", rank);
+        jnlst_->Printf(J_DETAILED, J_TIMING_STATISTICS,
+                       " get_nlp_info...................: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                       get_nlp_info_time_.TotalCpuTime(),
+                       get_nlp_info_time_.TotalSysTime(),
+                       get_nlp_info_time_.TotalWallclockTime());
+        jnlst_->Printf(J_DETAILED, J_TIMING_STATISTICS,
+                       " get_bounds_info................: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                       get_bounds_info_time_.TotalCpuTime(),
+                       get_bounds_info_time_.TotalSysTime(),
+                       get_bounds_info_time_.TotalWallclockTime());
+        jnlst_->Printf(J_DETAILED, J_TIMING_STATISTICS,
+                       " get_starting_point.............: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                       get_starting_point_time_.TotalCpuTime(),
+                       get_starting_point_time_.TotalSysTime(),
+                       get_starting_point_time_.TotalWallclockTime());
+        jnlst_->Printf(J_DETAILED, J_TIMING_STATISTICS,
+                       " eval_f.........................: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                       eval_f_time_.TotalCpuTime(),
+                       eval_f_time_.TotalSysTime(),
+                       eval_f_time_.TotalWallclockTime());
+        jnlst_->Printf(J_DETAILED, J_TIMING_STATISTICS,
+                       " eval_grad_f....................: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                       eval_grad_f_time_.TotalCpuTime(),
+                       eval_grad_f_time_.TotalSysTime(),
+                       eval_grad_f_time_.TotalWallclockTime());
+        jnlst_->Printf(J_DETAILED, J_TIMING_STATISTICS,
+                       " eval_g.........................: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                       eval_g_time_.TotalCpuTime(),
+                       eval_g_time_.TotalSysTime(),
+                       eval_g_time_.TotalWallclockTime());
+        jnlst_->Printf(J_DETAILED, J_TIMING_STATISTICS,
+                       " eval_jac_g.....................: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                       eval_jac_g_time_.TotalCpuTime(),
+                       eval_jac_g_time_.TotalSysTime(),
+                       eval_jac_g_time_.TotalWallclockTime());
+        jnlst_->Printf(J_DETAILED, J_TIMING_STATISTICS,
+                       " eval_h.........................: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                       eval_h_time_.TotalCpuTime(),
+                       eval_h_time_.TotalSysTime(),
+                       eval_h_time_.TotalWallclockTime());
+        jnlst_->Printf(J_DETAILED, J_TIMING_STATISTICS,
+                       " finalize_solution..............: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                       finalize_solution_time_.TotalCpuTime(),
+                       finalize_solution_time_.TotalSysTime(),
+                       finalize_solution_time_.TotalWallclockTime());
+
+        jnlst_->FinishDistributedOutput();
+      }
+    }
 
     delete [] full_z_L;
     full_z_L = NULL;
@@ -2061,9 +2142,11 @@ namespace Ipopt
 
     x_tag_for_g_ = x_tag_for_iterates_;
 
+    eval_g_time_.Start();
     int retval1 = partnlp_->eval_g(num_proc_, proc_id_,
                                    n_full_x_, full_x_, new_x,
                                    n_full_g_, m_first_, m_last_, part_g_);
+    eval_g_time_.End();
 
     // synchonize return values (TODO: What operation?)
     int retval;
@@ -2085,10 +2168,12 @@ namespace Ipopt
 
     x_tag_for_jac_g_ = x_tag_for_iterates_;
 
+    eval_jac_g_time_.Start();
     int retval1 = partnlp_->eval_jac_g(num_proc_, proc_id_,
                                        n_full_x_, full_x_, new_x,
                                        n_full_g_, m_first_, m_last_,
                                        nz_part_jac_g_, NULL, NULL, jac_g_part_);
+    eval_jac_g_time_.End();
 
     // synchonize return values (TODO: What operation?)
     int retval;
