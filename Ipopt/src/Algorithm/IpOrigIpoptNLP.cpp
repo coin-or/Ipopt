@@ -914,6 +914,11 @@ namespace Ipopt
                  f_eval_time_.TotalSysTime(),
                  f_eval_time_.TotalWallclockTime());
     jnlst.Printf(level, category,
+                 " Objective function gradient........: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                 grad_f_eval_time_.TotalCpuTime(),
+                 grad_f_eval_time_.TotalSysTime(),
+                 grad_f_eval_time_.TotalWallclockTime());
+    jnlst.Printf(level, category,
                  " Equality constraints...............: %10.3f (sys: %10.3f wall: %10.3f)\n",
                  c_eval_time_.TotalCpuTime(),
                  c_eval_time_.TotalSysTime(),
@@ -944,6 +949,7 @@ namespace Ipopt
   OrigIpoptNLP::TotalFunctionEvaluationCpuTime() const
   {
     return f_eval_time_.TotalCpuTime()+
+           grad_f_eval_time_.TotalCpuTime()+
            c_eval_time_.TotalCpuTime()+
            d_eval_time_.TotalCpuTime()+
            jac_c_eval_time_.TotalCpuTime()+
@@ -955,6 +961,7 @@ namespace Ipopt
   OrigIpoptNLP::TotalFunctionEvaluationSysTime() const
   {
     return f_eval_time_.TotalSysTime()+
+           grad_f_eval_time_.TotalSysTime()+
            c_eval_time_.TotalSysTime()+
            d_eval_time_.TotalSysTime()+
            jac_c_eval_time_.TotalSysTime()+
@@ -966,6 +973,7 @@ namespace Ipopt
   OrigIpoptNLP::TotalFunctionEvaluationWallclockTime() const
   {
     return f_eval_time_.TotalWallclockTime()+
+           grad_f_eval_time_.TotalWallclockTime()+
            c_eval_time_.TotalWallclockTime()+
            d_eval_time_.TotalWallclockTime()+
            jac_c_eval_time_.TotalWallclockTime()+
