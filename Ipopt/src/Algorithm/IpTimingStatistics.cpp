@@ -154,6 +154,16 @@ namespace Ipopt
                  LinearSystemStructureConverterInit_.TotalSysTime(),
                  LinearSystemStructureConverterInit_.TotalWallclockTime());
     jnlst.Printf(level, category,
+                 " IterativeTerminationTesterInit.....: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                 IterativeTerminationTesterInit_.TotalCpuTime(),
+                 IterativeTerminationTesterInit_.TotalSysTime(),
+                 IterativeTerminationTesterInit_.TotalWallclockTime());
+    jnlst.Printf(level, category,
+                 " IterativeTerminationTester.........: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                 IterativeTerminationTester_.TotalCpuTime(),
+                 IterativeTerminationTester_.TotalSysTime(),
+                 IterativeTerminationTester_.TotalWallclockTime());
+    jnlst.Printf(level, category,
                  "QualityFunctionSearch...............: %10.3f (sys: %10.3f wall: %10.3f)\n",
                  QualityFunctionSearch_.TotalCpuTime(),
                  QualityFunctionSearch_.TotalSysTime(),

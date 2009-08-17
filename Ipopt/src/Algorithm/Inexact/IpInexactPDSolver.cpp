@@ -297,11 +297,14 @@ namespace Ipopt
     Pd_U->TransMultVector(1., *sol.y_d(), 0., *sol.v_U_NonConst());
 #endif
 
-    // Get space for the residual
-    SmartPtr<IteratesVector> resid = sol.MakeNewIteratesVector(true);
+    // The residuals only need to be computed for output...
+    if (Jnlst().ProduceOutput(J_MOREDETAILED, J_LINEAR_ALGEBRA)) {
+      // Get space for the residual
+      SmartPtr<IteratesVector> resid = sol.MakeNewIteratesVector(true);
 
-    ComputeResiduals(*W, *J_c, *J_d, *Pd_L, *Pd_U, *v_L, *v_U,
-                     *slack_s_L, *slack_s_U, *sigma_s, rhs, sol, *resid);
+      ComputeResiduals(*W, *J_c, *J_d, *Pd_L, *Pd_U, *v_L, *v_U,
+                       *slack_s_L, *slack_s_U, *sigma_s, rhs, sol, *resid);
+    }
 
     DBG_PRINT_VECTOR(2, "sol", sol);
     IpData().TimingStats().PDSystemSolverTotal().End();

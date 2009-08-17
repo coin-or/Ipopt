@@ -8,6 +8,9 @@
 
 #include "IpInexactNormalTerminationTester.hpp"
 #include "IpBlas.hpp"
+#ifdef HAVE_MPI
+# include "IpMpi.hpp"
+#endif
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -76,7 +79,6 @@ namespace Ipopt
     DBG_START_METH("InexactNormalTerminationTester::InitializeSolve",
                    dbg_verbosity);
 
-
     return true;
   }
 
@@ -88,13 +90,27 @@ namespace Ipopt
     DBG_START_METH("InexactNormalTerminationTester::TestTermination",
                    dbg_verbosity);
 
+    IpData().TimingStats().IterativeTerminationTester().Start();
+
     last_iter_ = iter;
 
     DBG_ASSERT(c_Avc_norm_cauchy_ >= 0.);
 
     ETerminationTest retval = CONTINUE;
 
-    double norm2_resid = IpBlasDnrm2(ndim, resid, 1);
+    Number norm2_resid;
+#ifdef HAVE_MPI
+    int my_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    // TODO: We chould do this in parallel...?  But then we would first have to broadcast the values, so let's assume for now that it is cheaper to do the long vector only on the root process.
+    if (my_rank==0) {
+      norm2_resid = IpBlasDnrm2(ndim, resid, 1);
+    }
+    MPI_Bcast(&norm2_resid, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&norm2_rhs, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#else
+    norm2_resid = IpBlasDnrm2(ndim, resid, 1);
+#endif
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "TTNormal: iter = %d ||resid|| = %23.16e ||rhs|| = %23.16e\n",
                    iter, norm2_resid, norm2_rhs);
@@ -102,13 +118,26 @@ namespace Ipopt
     if (iter > inexact_normal_max_iter_) {
       IpData().Append_info_string("N+");
       retval = OTHER_SATISFIED;
+      IpData().TimingStats().IterativeTerminationTester().End();
       return retval;
     }
 
     //if (Min(norm2_resid/norm2_rhs,norm2_resid) > inexact_normal_tol_) {
     if (norm2_resid/norm2_rhs > inexact_normal_tol_ && norm2_resid > 1e-10) {
+      IpData().TimingStats().IterativeTerminationTester().End();
       return retval;
     }
+
+#ifdef HAVE_MPI
+    if (my_rank == 0) {
+      MPI_Bcast(const_cast<double*>(sol), ndim, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    }
+    else {
+      Number* soltmp = new Number[ndim];
+      MPI_Bcast(soltmp, ndim, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+      sol = soltmp;
+    }
+#endif
 
     // compute ||c+Av|| for current iterative solution v
     // note that the sol_x and sol_s have the wrong sign
@@ -117,6 +146,13 @@ namespace Ipopt
     SmartPtr<const Vector> sol_c;
     SmartPtr<const Vector> sol_d;
     GetVectors(ndim, sol, sol_x, sol_s, sol_c, sol_d);
+
+#ifdef HAVE_MIP
+    if (my_rank != 0) {
+      delete [] sol;
+      sol = NULL;
+    }
+#endif
 
     if (requires_scaling_) {
       SmartPtr<const Vector> scaling_vec = InexCq().curr_scaling_slacks();
@@ -142,6 +178,7 @@ namespace Ipopt
       retval = OTHER_SATISFIED;
     }
 
+    IpData().TimingStats().IterativeTerminationTester().End();
     return retval;
   }
 

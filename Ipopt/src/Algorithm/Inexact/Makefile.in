@@ -61,6 +61,7 @@ am_libinexact_la_OBJECTS = IpInexactAlgBuilder.lo IpInexactCq.lo \
 	IpInexactPDTerminationTester.lo IpInexactRegOp.lo \
 	IpInexactSearchDirCalc.lo IpInexactTSymScalingMethod.lo \
 	IpIterativePardisoSolverInterface.lo \
+	IpIterativePspikeSolverInterface.lo \
 	IpIterativeSolverTerminationTester.lo
 libinexact_la_OBJECTS = $(am_libinexact_la_OBJECTS)
 @BUILD_INEXACT_TRUE@am_libinexact_la_rpath =
@@ -306,12 +307,14 @@ libinexact_la_SOURCES = \
 	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp \
 	IpInexactTSymScalingMethod.cpp IpInexactTSymScalingMethod.hpp \
 	IpIterativePardisoSolverInterface.cpp IpIterativePardisoSolverInterface.hpp \
+	IpIterativePspikeSolverInterface.cpp IpIterativePspikeSolverInterface.hpp \
 	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
 
 libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/Parallel` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinearSolvers` \
@@ -406,6 +409,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInexactSearchDirCalc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpInexactTSymScalingMethod.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIterativePardisoSolverInterface.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIterativePspikeSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIterativeSolverTerminationTester.Plo@am__quote@
 
 .cpp.o:
