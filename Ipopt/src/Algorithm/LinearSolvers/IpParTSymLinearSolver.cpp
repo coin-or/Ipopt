@@ -22,7 +22,8 @@ namespace Ipopt
 
   ParTSymLinearSolver::ParTSymLinearSolver
   (SmartPtr<SparseSymLinearSolverInterface> solver_interface,
-   SmartPtr<TSymScalingMethod> scaling_method)
+   SmartPtr<TSymScalingMethod> scaling_method,
+   bool call_solverinterface_on_all_procs /* = false */)
       :
       SymLinearSolver(),
       atag_(0),
@@ -38,7 +39,8 @@ namespace Ipopt
       airn_(NULL),
       ajcn_(NULL),
       recvcounts_(NULL),
-      displs_(NULL)
+      displs_(NULL),
+      call_solverinterface_on_all_procs_(call_solverinterface_on_all_procs)
   {
     DBG_START_METH("ParTSymLinearSolver::ParTSymLinearSolver()",dbg_verbosity);
     DBG_ASSERT(IsValid(solver_interface));
@@ -77,10 +79,12 @@ namespace Ipopt
 
     bool retval;
     if (HaveIpData()) {
+      // TODO: consider call_solverinterface_on_all_procs here
       retval = solver_interface_->Initialize(Jnlst(), IpNLP(), IpData(),
                                              IpCq(), options, prefix);
     }
     else {
+      // TODO: consider call_solverinterface_on_all_procs here
       retval = solver_interface_->ReducedInitialize(Jnlst(), options, prefix);
     }
     if (!retval) {
@@ -95,6 +99,7 @@ namespace Ipopt
       nonzeros_compressed_=0;
       have_structure_=false;
 
+      // TODO: consider call_solverinterface_on_all_procs here
       matrix_format_ = solver_interface_->MatrixFormat();
       switch (matrix_format_) {
       case SparseSymLinearSolverInterface::CSR_Format_0_Offset:
@@ -217,9 +222,9 @@ namespace Ipopt
     // enough).
     ESymSolverStatus retval;
     while (!done) {
+      const Index* ia = NULL;
+      const Index* ja = NULL;
       if (my_rank_==0) {
-        const Index* ia;
-        const Index* ja;
         if (matrix_format_==SparseSymLinearSolverInterface::Triplet_Format) {
           ia = airn_;
           ja = ajcn_;
@@ -234,13 +239,21 @@ namespace Ipopt
             IpData().TimingStats().LinearSystemStructureConverter().End();
           }
         }
-
+      }
+      if (call_solverinterface_on_all_procs_) {
         retval = solver_interface_->MultiSolve(new_matrix, ia, ja,
                                                nrhs, rhs_vals, check_NegEVals,
                                                numberOfNegEVals);
       }
-      MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
-      MPI_Bcast(&numberOfNegEVals, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      else {
+        if (my_rank_==0) {
+          retval = solver_interface_->MultiSolve(new_matrix, ia, ja,
+                                                 nrhs, rhs_vals, check_NegEVals,
+                                                 numberOfNegEVals);
+        }
+        MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        MPI_Bcast(&numberOfNegEVals, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      }
 
       if (retval==SYMSOLVER_CALL_AGAIN) {
         DBG_PRINT((1, "Solver interface asks to be called again.\n"));
@@ -343,14 +356,14 @@ namespace Ipopt
       delete [] airn_local;
       delete [] ajcn_local;
 
+      const Index *ia = NULL;
+      const Index *ja = NULL;
+      Index nonzeros = -1;
       if (my_rank_==0) {
         // TODO: Catch return code for ALL processors
 
         // If the solver wants the compressed format, the converter has to
         // be initialized
-        const Index *ia;
-        const Index *ja;
-        Index nonzeros;
         if (matrix_format_ == SparseSymLinearSolverInterface::Triplet_Format) {
           ia = airn_;
           ja = ajcn_;
@@ -375,11 +388,22 @@ namespace Ipopt
           nonzeros = nonzeros_compressed_;
         }
 
-        retval = solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
-        if (retval != SYMSOLVER_SUCCESS) {
-          return retval;
-        }
+      }
 
+      if (call_solverinterface_on_all_procs_) {
+        retval = solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
+      }
+      else {
+        if (my_rank_==0) {
+          retval = solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
+        }
+        MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      }
+      if (retval != SYMSOLVER_SUCCESS) {
+        return retval;
+      }
+
+      if (my_rank_==0) {
         // Get space for the scaling factors
         delete [] scaling_factors_;
         if (IsValid(scaling_method_)) {
@@ -392,19 +416,18 @@ namespace Ipopt
           }
         }
       }
-      MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
       have_structure_ = true;
     }
     else {
       ASSERT_EXCEPTION(dim_==sym_A.Dim(), INVALID_WARMSTART,
                        "ParTSymLinearSolver called with warm_start_same_structure, but the problem is solved for the first time.");
+      const Index *ia = NULL;
+      const Index *ja = NULL;
+      Index nonzeros = -1;
       if (my_rank_==0) {
         // This is a warm start for identical structure, so we don't need to
         // recompute the nonzeros location arrays
-        const Index *ia;
-        const Index *ja;
-        Index nonzeros;
         if (matrix_format_ == SparseSymLinearSolverInterface::Triplet_Format) {
           ia = airn_;
           ja = ajcn_;
@@ -417,9 +440,16 @@ namespace Ipopt
           IpData().TimingStats().LinearSystemStructureConverter().End();
           nonzeros = nonzeros_compressed_;
         }
+      }
+      if (call_solverinterface_on_all_procs_) {
         retval = solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
       }
-      MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      else {
+        if (my_rank_==0) {
+          retval = solver_interface_->InitializeStructure(dim_, nonzeros, ia, ja);
+        }
+        MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      }
     }
     initialized_=true;
     return retval;
@@ -430,10 +460,15 @@ namespace Ipopt
     DBG_START_METH("ParTSymLinearSolver::NumberOfNegEVals",dbg_verbosity);
 
     int retval;
-    if (my_rank_==0) {
+    if (call_solverinterface_on_all_procs_) {
       retval = solver_interface_->NumberOfNegEVals();
     }
-    MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    else {
+      if (my_rank_==0) {
+        retval = solver_interface_->NumberOfNegEVals();
+      }
+      MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    }
     return retval;
   }
 
@@ -443,27 +478,30 @@ namespace Ipopt
 
     int retval;
 
-    if (my_rank_==0) {
-      if (IsValid(scaling_method_) && !use_scaling_ &&
-          linear_scaling_on_demand_) {
-        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                       "Switching on scaling of the linear system (on demand).\n");
-        IpData().Append_info_string("Mc");
-        use_scaling_ = true;
-        just_switched_on_scaling_ = true;
-        retval = 1;
-        ;
-      }
-      else {
+    if (IsValid(scaling_method_) && !use_scaling_ &&
+        linear_scaling_on_demand_) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Switching on scaling of the linear system (on demand).\n");
+      IpData().Append_info_string("Mc");
+      use_scaling_ = true;
+      just_switched_on_scaling_ = true;
+      retval = 1;
+//    TODO...
+//    int itmp = just_switched_on_scaling_;
+//    MPI_Bcast(&itmp, 1, MPI_INT, 0, MPI_COMM_WORLD);
+//    just_switched_on_scaling_ = itmp;
+    }
+    else {
+      if (call_solverinterface_on_all_procs_) {
         retval = solver_interface_->IncreaseQuality();
       }
+      else {
+        if (my_rank_==0) {
+          retval = solver_interface_->IncreaseQuality();
+        }
+        MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      }
     }
-
-    MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    int itmp = just_switched_on_scaling_;
-    MPI_Bcast(&itmp, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    just_switched_on_scaling_ = itmp;
-
     return retval;
   }
 
@@ -472,10 +510,15 @@ namespace Ipopt
     DBG_START_METH("ParTSymLinearSolver::ProvidesInertia",dbg_verbosity);
 
     int retval;
-    if (my_rank_==0) {
+    if (call_solverinterface_on_all_procs_) {
       retval = solver_interface_->ProvidesInertia();
     }
-    MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    else {
+      if (my_rank_==0) {
+        retval = solver_interface_->ProvidesInertia();
+      }
+      MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    }
     return retval;
   }
 
@@ -506,6 +549,7 @@ namespace Ipopt
     delete [] local_atriplet;
 
     if (my_rank_==0) {
+// todo SCATTERED scaling
       if (use_scaling_) {
         IpData().TimingStats().LinearSystemScaling().Start();
         DBG_ASSERT(scaling_factors_);

@@ -147,6 +147,14 @@ namespace Ipopt
     {
       return LinearSystemStructureConverterInit_;
     }
+    TimedTask& IterativeTerminationTesterInit()
+    {
+      return IterativeTerminationTesterInit_;
+    }
+    TimedTask& IterativeTerminationTester()
+    {
+      return IterativeTerminationTester_;
+    }
     TimedTask& QualityFunctionSearch()
     {
       return QualityFunctionSearch_;
@@ -221,6 +229,8 @@ namespace Ipopt
     TimedTask LinearSystemBackSolve_;
     TimedTask LinearSystemStructureConverter_;
     TimedTask LinearSystemStructureConverterInit_;
+    TimedTask IterativeTerminationTesterInit_;
+    TimedTask IterativeTerminationTester_;
     TimedTask QualityFunctionSearch_;
     TimedTask TryCorrector_;
 

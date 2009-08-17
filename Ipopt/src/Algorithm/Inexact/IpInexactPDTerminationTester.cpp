@@ -8,6 +8,9 @@
 
 #include "IpInexactPDTerminationTester.hpp"
 #include "IpBlas.hpp"
+#ifdef HAVE_MPI
+# include "IpMpi.hpp"
+#endif
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -133,6 +136,7 @@ namespace Ipopt
     DBG_START_METH("InexactPDTerminationTester::InitializeSolve",
                    dbg_verbosity);
 
+    IpData().TimingStats().IterativeTerminationTesterInit().Start();
     bool compute_normal = InexData().compute_normal();
 
     // compute the current infeasibility
@@ -254,6 +258,7 @@ namespace Ipopt
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "TT: will%s try termination test 2.\n", try_tt2_ ? "" : " not");
 
+    IpData().TimingStats().IterativeTerminationTesterInit().End();
     return true;
   }
 
@@ -264,6 +269,8 @@ namespace Ipopt
   {
     DBG_START_METH("InexactPDTerminationTester::TestTermination",
                    dbg_verbosity);
+
+    IpData().TimingStats().IterativeTerminationTester().Start();
 
     bool compute_normal = InexData().compute_normal();
 
@@ -280,7 +287,20 @@ namespace Ipopt
       return retval;
     }
     */
-    Number norm2_resid = IpBlasDnrm2(ndim, resid, 1);
+
+    Number norm2_resid;
+#ifdef HAVE_MPI
+    int my_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    // TODO: We chould do this in parallel...?  But then we would first have to broadcast the values, so let's assume for now that it is cheaper to do the long vector only on the root process.
+    if (my_rank==0) {
+      norm2_resid = IpBlasDnrm2(ndim, resid, 1);
+    }
+    MPI_Bcast(&norm2_resid, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&norm2_rhs, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+#else
+    norm2_resid = IpBlasDnrm2(ndim, resid, 1);
+#endif
     Number test_ratio = norm2_resid/norm2_rhs; // Min(norm2_resid/norm2_rhs, norm2_resid);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "TT: test ratio %e (norm2_rhs = %e norm2_resid = %e).\n",
@@ -290,8 +310,27 @@ namespace Ipopt
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TT: immediately leaving tester with test ratio %e (norm2_rhs = %e norm2_resid = %e).\n",
                      test_ratio, norm2_rhs, norm2_resid);
+      IpData().TimingStats().IterativeTerminationTester().End();
       return retval;
     }
+
+    // TODO: We could also braodcast the values earlier and have the residual norm be
+    // omputed in parallel...
+
+#ifdef HAVE_MPI
+    if (my_rank == 0) {
+      MPI_Bcast(const_cast<double*>(sol), ndim, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+      MPI_Bcast(const_cast<double*>(resid), ndim, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    }
+    else {
+      Number* soltmp = new Number[ndim];
+      Number* residtmp = new Number[ndim];
+      MPI_Bcast(soltmp, ndim, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+      MPI_Bcast(residtmp, ndim, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+      sol = soltmp;
+      resid = residtmp;
+    }
+#endif
 
     SmartPtr<const Vector> sol_x;
     SmartPtr<const Vector> sol_s;
@@ -304,6 +343,15 @@ namespace Ipopt
     SmartPtr<const Vector> resid_c;
     SmartPtr<const Vector> resid_d;
     GetVectors(ndim, resid, resid_x, resid_s, resid_c, resid_d);
+
+#ifdef HAVE_MIP
+    if (my_rank != 0) {
+      delete [] sol;
+      sol = NULL;
+      delete [] resid;
+      resid = NULL;
+    }
+#endif
 
     if (requires_scaling_) {
       SmartPtr<const Vector> scaling_vec = curr_scaling_slacks_;
@@ -541,6 +589,7 @@ namespace Ipopt
     // Check termination test 1
     if (tt1) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 1 satisfied.\n");
+      IpData().TimingStats().IterativeTerminationTester().End();
       return TEST_1_SATISFIED;
     }
     else {
@@ -597,6 +646,7 @@ namespace Ipopt
     // Check termination test 3
     if (tt3) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 3 satisfied.\n");
+      IpData().TimingStats().IterativeTerminationTester().End();
       return TEST_3_SATISFIED;
     }
     else {
@@ -642,6 +692,7 @@ namespace Ipopt
     // Check termination test 2
     if (tt2) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 2 satisfied.\n");
+      IpData().TimingStats().IterativeTerminationTester().End();
       return TEST_2_SATISFIED;
     }
     else if (try_tt2_) {
@@ -654,9 +705,11 @@ namespace Ipopt
     }
     else {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Hessian Modification requested.\n");
+      IpData().TimingStats().IterativeTerminationTester().End();
       return MODIFY_HESSIAN;
     }
 
+    IpData().TimingStats().IterativeTerminationTester().End();
     return retval;
   }
 

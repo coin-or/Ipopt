@@ -42,6 +42,7 @@
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpInexactTSymScalingMethod.hpp"
 #include "IpIterativePardisoSolverInterface.hpp"
+#include "IpIterativePspikeSolverInterface.hpp"
 #include "IpInexactNormalTerminationTester.hpp"
 #include "IpInexactPDTerminationTester.hpp"
 
@@ -123,6 +124,13 @@ namespace Ipopt
       "no", "use symmetric solver",
       "yes", "use unsymmetric solver",
       "So far only for MUMPS and WSMP");
+    roptions->AddStringOption2(
+      "use_pspike",
+      "If Pardiso is selected, use PSPIKE",
+      "no",
+      "no", "",
+      "yes", "",
+      "");
   }
 
   SmartPtr<IpoptAlgorithm>
@@ -142,8 +150,13 @@ namespace Ipopt
     bool use_unsymmetric_solver;
     options.GetBoolValue("use_unsymmetric_solver", use_unsymmetric_solver,
                          prefix);
+    bool use_pspike;
+    options.GetBoolValue("use_pspike", use_pspike, prefix);
     std::string linear_solver;
     options.GetStringValue("linear_solver", linear_solver, prefix);
+    if (linear_solver=="pardiso" && use_pspike) {
+      linear_solver = "pspike";
+    }
     if (linear_solver=="ma27") {
 #ifndef HAVE_MA27
 # ifdef HAVE_LINEARSOLVERLOADER
@@ -213,6 +226,12 @@ namespace Ipopt
 #endif
 
     }
+    else if (linear_solver=="pspike") {
+      NormalTester = new InexactNormalTerminationTester();
+      SmartPtr<IterativeSolverTerminationTester> pd_tester =
+        new InexactPDTerminationTester();
+      SolverInterface = new IterativePspikeSolverInterface(*NormalTester, *pd_tester);
+    }
     else if (linear_solver=="wsmp") {
 #ifdef HAVE_WSMP
 # ifdef HAVE_MPI
@@ -276,7 +295,13 @@ namespace Ipopt
       }
     }
     else {
-      ScaledSolver = new ParTSymLinearSolver(SolverInterface, ScalingMethod);
+      bool call_solverinterface_on_all_procs = false;
+      if (linear_solver=="pspike") {
+        call_solverinterface_on_all_procs = true;
+      }
+      ScaledSolver =
+        new ParTSymLinearSolver(SolverInterface, ScalingMethod,
+                                call_solverinterface_on_all_procs);
     }
 #else
     ScaledSolver = new TSymLinearSolver(SolverInterface, ScalingMethod);

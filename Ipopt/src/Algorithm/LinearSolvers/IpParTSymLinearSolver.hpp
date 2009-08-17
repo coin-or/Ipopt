@@ -44,9 +44,14 @@ namespace Ipopt
     /** Constructor.  The solver_interface is a pointer to a linear
      *  solver for symmetric matrices in triplet format.  If
      *  scaling_method not NULL, it must be a pointer to a class for
-     *  computing scaling factors for the matrix. */
+     *  computing scaling factors for the matrix.
+     *
+     *  If call_solverinterface_on_all_procs is set to true, then all
+     *  processes will call the same methods of the solver_interface.
+     *  Otherwise, those methods are called only on the root node. */
     ParTSymLinearSolver(SmartPtr<SparseSymLinearSolverInterface> solver_interface,
-                        SmartPtr<TSymScalingMethod> scaling_method);
+                        SmartPtr<TSymScalingMethod> scaling_method,
+                        bool call_solverinterface_on_all_procs = false);
 
     /** Destructor */
     virtual ~ParTSymLinearSolver();
@@ -205,6 +210,9 @@ namespace Ipopt
     int* recvcounts_;
     /** Only for root process. Information for Gatherv */
     int* displs_;
+    /** Flag indicating if solver_interface methods should be called by all
+     *  all processes or only by root process. */
+    bool call_solverinterface_on_all_procs_;
   };
 
 } // namespace Ipopt

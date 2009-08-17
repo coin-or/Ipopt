@@ -27,6 +27,7 @@ libinexact_la_SOURCES = \
 	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp \
 	IpInexactTSymScalingMethod.cpp IpInexactTSymScalingMethod.hpp \
 	IpIterativePardisoSolverInterface.cpp IpIterativePardisoSolverInterface.hpp \
+	IpIterativePspikeSolverInterface.cpp IpIterativePspikeSolverInterface.hpp \
 	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
 
 libinexact_la_LDFLAGS = $(LT_LDFLAGS)
@@ -34,6 +35,7 @@ libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/Parallel` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinearSolvers` \
@@ -60,6 +62,7 @@ ASTYLE_FILES = \
 	IpInexactSearchDirCalc.cppbak IpInexactSearchDirCalc.hppbak \
 	IpInexactTSymScalingMethod.cppbak IpInexactTSymScalingMethod.hppbak \
 	IpIterativePardisoSolverInterface.cppbak IpIterativePardisoSolverInterface.hppbak \
+	IpIterativePspikeSolverInterface.cppbak IpIterativePspikeSolverInterface.hppbak \
 	IpIterativeSolverTerminationTester.cppbak IpIterativeSolverTerminationTester.hppbak
 
 ASTYLE = @ASTYLE@
