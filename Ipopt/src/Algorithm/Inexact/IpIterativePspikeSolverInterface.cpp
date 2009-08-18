@@ -71,10 +71,9 @@ namespace Ipopt
 
   IterativePspikeSolverInterface::
   IterativePspikeSolverInterface(IterativeSolverTerminationTester& normal_tester,
-                                  IterativeSolverTerminationTester& pd_tester)
+                                 IterativeSolverTerminationTester& pd_tester)
       :
       a_(NULL),
-      negevals_(-1),
       initialized_(false),
 
       debug_last_iter_(-1),
@@ -84,7 +83,7 @@ namespace Ipopt
     DBG_START_METH("IterativePspikeSolverInterface::IterativePspikeSolverInterface()",dbg_verbosity);
 
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank_);
-    
+
     int neqns = 0;
     int nzmax = 0;
     const ipfint * ia = NULL;
@@ -123,7 +122,19 @@ namespace Ipopt
   }
 
   void IterativePspikeSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
-  {}
+  {
+    roptions->AddLowerBoundedNumberOption(
+      "pspike_tol",
+      "",
+      0.0, true,
+      1e-4,
+      "");
+    roptions->AddLowerBoundedIntegerOption(
+      "pspike_bandwidth",
+      "",
+      0, 100,
+      "");
+  }
 
   static void
   write_iajaa_matrix (int     N,
@@ -178,6 +189,9 @@ namespace Ipopt
   bool IterativePspikeSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
+    options.GetNumericValue("pspike_tol", pspike_tol_, prefix);
+    options.GetIntegerValue("pspike_bandwidth", pspike_bandwidth_, prefix);
+
     // DESTROY PSPIKE with job = 3 !!!!
     if (initialized_) {
       int neqns = 0;
@@ -236,7 +250,7 @@ namespace Ipopt
 
     // do the solve
     ESymSolverStatus status = Solve(ia, ja, nrhs, rhs_vals);
-    
+
     return status;
   }
 
@@ -302,14 +316,14 @@ namespace Ipopt
   {
     DBG_START_METH("IterativePspikeSolverInterface::Factorization",dbg_verbosity);
 
-    double tol = 1e-4; // TODO : make option
-    int bandwidth = 100; // TODO : make option
+    double tol = pspike_tol_;
+    int bandwidth = pspike_bandwidth_;
     int nzmax = 0;
 
     if (my_rank_==0) {
       nzmax = ia[dim_]-1;
     }
-        
+
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
     }
@@ -318,7 +332,7 @@ namespace Ipopt
     int job = 1;
 
     double * rhs_vals = NULL;
-    int nrhs = 1;	
+    int nrhs = 1;
     F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs);
 
     if (HaveIpData()) {
@@ -382,8 +396,8 @@ namespace Ipopt
       bool retval = tester->InitializeSolve();
       ASSERT_EXCEPTION(retval, INTERNAL_ABORT, "tester->InitializeSolve(); returned false");
 
-      double tol = 1e-4;
-      int bandwidth = 100;
+      double tol = pspike_tol_;
+      int bandwidth = pspike_bandwidth_;
       int nzmax = -1;
 
       if (my_rank_ == 0) {
@@ -401,7 +415,7 @@ namespace Ipopt
       Index iterations_used = tester->GetSolverIterations();
     }
     tester->Clear();
-    
+
     delete [] ORIG_RHS;
 
     if (HaveIpData()) {
@@ -440,8 +454,8 @@ namespace Ipopt
   Index IterativePspikeSolverInterface::NumberOfNegEVals() const
   {
     DBG_START_METH("IterativePspikeSolverInterface::NumberOfNegEVals",dbg_verbosity);
-    DBG_ASSERT(negevals_>=0);
-    return negevals_;
+    DBG_ASSERT(false && "We should not get here");
+    return;
   }
 
   bool IterativePspikeSolverInterface::IncreaseQuality()

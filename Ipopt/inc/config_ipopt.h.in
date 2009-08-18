@@ -129,6 +129,9 @@
 /* Define to 1 if you are using the parallel version of Pardiso */
 #undef HAVE_PARDISO_PARALLEL
 
+/* Define to 1 if PSPIKE is available */
+#undef HAVE_PSPIKE
+
 /* Define to 1 if function rand is available */
 #undef HAVE_RAND
 

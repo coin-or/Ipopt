@@ -459,6 +459,21 @@ if test "$use_pardiso" != "no"; then
 fi
 AC_LANG_POP([Fortran 77])
 
+##########
+# PSPIKE #
+##########
+
+AC_ARG_WITH([pspike],
+            AC_HELP_STRING([--with-pspike],
+                           [specify PSPIKE library]),
+            [use_pspike=$withval], [use_pspike=no])
+
+if test "$use_pspike" != "no"; then
+  LIBS="$use_pspike $LIBS"
+  ADDLIBS="$use_pspike $ADDLIBS"
+  AC_DEFINE(HAVE_PSPIKE,1,[Define to 1 if PSPIKE is available])
+fi
+
 #########
 # MUMPS #
 #########
@@ -715,6 +730,7 @@ AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
 AM_CONDITIONAL([HAVE_MA28],[test ! "$use_MA28" = no])
 AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
+AM_CONDITIONAL([HAVE_PSPIKE],[test ! "$use_pspike" = no])
 AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
 AC_ARG_ENABLE([linear-solver-loader],

@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -20,6 +20,10 @@
 #include "IpInexactNormalTerminationTester.hpp"
 #include "IpInexactPDTerminationTester.hpp"
 
+#ifdef HAVE_PSPIKE
+# include "IpIterativePspikeSolverInterface.hpp"
+#endif
+
 namespace Ipopt
 {
 
@@ -36,6 +40,9 @@ namespace Ipopt
     IterativePardisoSolverInterface::RegisterOptions(roptions);
     InexactNormalTerminationTester::RegisterOptions(roptions);
     InexactPDTerminationTester::RegisterOptions(roptions);
+#ifdef HAVE_PSPIKE
+    IterativePspikeSolverInterface::RegisterOptions(roptions);
+#endif
   }
 
 } // namespace Ipopt

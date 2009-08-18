@@ -1,4 +1,4 @@
-# Copyright (C) 2008 International Business Machines and others.
+# Copyright (C) 2008, 2009 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -27,8 +27,12 @@ libinexact_la_SOURCES = \
 	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp \
 	IpInexactTSymScalingMethod.cpp IpInexactTSymScalingMethod.hpp \
 	IpIterativePardisoSolverInterface.cpp IpIterativePardisoSolverInterface.hpp \
-	IpIterativePspikeSolverInterface.cpp IpIterativePspikeSolverInterface.hpp \
 	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
+
+if HAVE_PSPIKE
+  libinexact_la_SOURCES += \
+	IpIterativePspikeSolverInterface.cpp IpIterativePspikeSolverInterface.hpp
+endif
 
 libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 
