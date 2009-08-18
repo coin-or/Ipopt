@@ -33,6 +33,8 @@
 # endif
 #endif
 
+//#define DO_NOT_CALL_MUMPS
+
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
@@ -54,7 +56,9 @@ namespace Ipopt
     mumps_->par = 1;//working host for sequential version
     mumps_->sym = 2;//general symetric matrix
     mumps_->comm_fortran = -987654; // This prompts MUMPS to use MPI_COMM_WORLD
+#ifndef DO_NOT_CALL_MUMPS
     dmumps_c(mumps_);
+#endif
     mumps_ptr_ = (void*)mumps_;
   }
 
@@ -66,7 +70,9 @@ namespace Ipopt
 
     DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*)mumps_ptr_;
     mumps_->job = -2; //terminate mumps
+#ifndef DO_NOT_CALL_MUMPS
     dmumps_c(mumps_);
+#endif
     delete [] mumps_->a_loc;
     delete mumps_;
   }
@@ -254,7 +260,13 @@ namespace Ipopt
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling MUMPS-1 for symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+#ifndef DO_NOT_CALL_MUMPS
     dmumps_c(mumps_data);
+#else
+    mumps_data->infog[0] = 0;
+    mumps_data->infog[22] = -1;
+    mumps_data->infog[6] = -1;
+#endif
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Done with MUMPS-1 for symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
     int error = mumps_data->infog[0];
@@ -300,7 +312,14 @@ namespace Ipopt
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling MUMPS-2 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+#ifndef DO_NOT_CALL_MUMPS
     dmumps_c(mumps_data);
+#else
+    mumps_data->infog[0] = 0;
+    mumps_data->infog[8] = -1;
+    mumps_data->infog[9] = -1;
+    mumps_data->infog[11] = numberOfNegEVals;
+#endif
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Done with MUMPS-2 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
     int error = mumps_data->infog[0];
@@ -387,6 +406,7 @@ namespace Ipopt
       IpData().TimingStats().LinearSystemBackSolve().Start();
     }
     for (Index i = 0; i < nrhs; i++) {
+#ifndef DO_NOT_CALL_MUMPS
       Index offset = i * mumps_data->n;
       mumps_data->rhs = &(rhs_vals[offset]);
       mumps_data->job = 3;//solve
@@ -406,6 +426,11 @@ namespace Ipopt
         // distribute data to all processors
         MPI_Bcast(&rhs_vals[offset], mumps_data->n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
       }
+#else
+      for (Index j=0; j<mumps_data->n; ++j) {
+	rhs_vals[i * mumps_data->n + j] = 1e-14;
+      }
+#endif
     }
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemBackSolve().End();
