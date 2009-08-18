@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2008 International Business Machines and others.
+# Copyright (C) 2008, 2009 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -42,6 +42,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@HAVE_PSPIKE_TRUE@am__append_1 = \
+@HAVE_PSPIKE_TRUE@	IpIterativePspikeSolverInterface.cpp IpIterativePspikeSolverInterface.hpp
+
 subdir = src/Algorithm/Inexact
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -54,6 +57,26 @@ CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libinexact_la_LIBADD =
+am__libinexact_la_SOURCES_DIST = IpInexactAlgBuilder.cpp \
+	IpInexactAlgBuilder.hpp IpInexactCq.cpp IpInexactCq.hpp \
+	IpInexactData.cpp IpInexactData.hpp IpInexactDoglegNormal.cpp \
+	IpInexactDoglegNormal.hpp IpInexactLSAcceptor.cpp \
+	IpInexactLSAcceptor.hpp IpInexactNewtonNormal.cpp \
+	IpInexactNewtonNormal.hpp IpInexactNormalStepCalc.hpp \
+	IpInexactNormalTerminationTester.cpp \
+	IpInexactNormalTerminationTester.hpp IpInexactPDSolver.cpp \
+	IpInexactPDSolver.hpp IpInexactPDTerminationTester.cpp \
+	IpInexactPDTerminationTester.hpp IpInexactRegOp.cpp \
+	IpInexactRegOp.hpp IpInexactSearchDirCalc.cpp \
+	IpInexactSearchDirCalc.hpp IpInexactTSymScalingMethod.cpp \
+	IpInexactTSymScalingMethod.hpp \
+	IpIterativePardisoSolverInterface.cpp \
+	IpIterativePardisoSolverInterface.hpp \
+	IpIterativeSolverTerminationTester.cpp \
+	IpIterativeSolverTerminationTester.hpp \
+	IpIterativePspikeSolverInterface.cpp \
+	IpIterativePspikeSolverInterface.hpp
+@HAVE_PSPIKE_TRUE@am__objects_1 = IpIterativePspikeSolverInterface.lo
 am_libinexact_la_OBJECTS = IpInexactAlgBuilder.lo IpInexactCq.lo \
 	IpInexactData.lo IpInexactDoglegNormal.lo \
 	IpInexactLSAcceptor.lo IpInexactNewtonNormal.lo \
@@ -61,8 +84,7 @@ am_libinexact_la_OBJECTS = IpInexactAlgBuilder.lo IpInexactCq.lo \
 	IpInexactPDTerminationTester.lo IpInexactRegOp.lo \
 	IpInexactSearchDirCalc.lo IpInexactTSymScalingMethod.lo \
 	IpIterativePardisoSolverInterface.lo \
-	IpIterativePspikeSolverInterface.lo \
-	IpIterativeSolverTerminationTester.lo
+	IpIterativeSolverTerminationTester.lo $(am__objects_1)
 libinexact_la_OBJECTS = $(am_libinexact_la_OBJECTS)
 @BUILD_INEXACT_TRUE@am_libinexact_la_rpath =
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -84,7 +106,7 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libinexact_la_SOURCES)
-DIST_SOURCES = $(libinexact_la_SOURCES)
+DIST_SOURCES = $(am__libinexact_la_SOURCES_DIST)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -184,6 +206,8 @@ HAVE_MPI_FALSE = @HAVE_MPI_FALSE@
 HAVE_MPI_TRUE = @HAVE_MPI_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
+HAVE_PSPIKE_FALSE = @HAVE_PSPIKE_FALSE@
+HAVE_PSPIKE_TRUE = @HAVE_PSPIKE_TRUE@
 HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
 HAVE_WSMP_TRUE = @HAVE_WSMP_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
@@ -292,24 +316,23 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 @BUILD_INEXACT_TRUE@noinst_LTLIBRARIES = libinexact.la
-libinexact_la_SOURCES = \
-	IpInexactAlgBuilder.cpp IpInexactAlgBuilder.hpp \
-	IpInexactCq.cpp IpInexactCq.hpp \
-	IpInexactData.cpp IpInexactData.hpp \
-	IpInexactDoglegNormal.cpp IpInexactDoglegNormal.hpp \
-	IpInexactLSAcceptor.cpp IpInexactLSAcceptor.hpp \
-	IpInexactNewtonNormal.cpp IpInexactNewtonNormal.hpp \
-	IpInexactNormalStepCalc.hpp \
-	IpInexactNormalTerminationTester.cpp IpInexactNormalTerminationTester.hpp \
-	IpInexactPDSolver.cpp IpInexactPDSolver.hpp \
-	IpInexactPDTerminationTester.cpp IpInexactPDTerminationTester.hpp \
-	IpInexactRegOp.cpp IpInexactRegOp.hpp \
-	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp \
-	IpInexactTSymScalingMethod.cpp IpInexactTSymScalingMethod.hpp \
-	IpIterativePardisoSolverInterface.cpp IpIterativePardisoSolverInterface.hpp \
-	IpIterativePspikeSolverInterface.cpp IpIterativePspikeSolverInterface.hpp \
-	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
-
+libinexact_la_SOURCES = IpInexactAlgBuilder.cpp \
+	IpInexactAlgBuilder.hpp IpInexactCq.cpp IpInexactCq.hpp \
+	IpInexactData.cpp IpInexactData.hpp IpInexactDoglegNormal.cpp \
+	IpInexactDoglegNormal.hpp IpInexactLSAcceptor.cpp \
+	IpInexactLSAcceptor.hpp IpInexactNewtonNormal.cpp \
+	IpInexactNewtonNormal.hpp IpInexactNormalStepCalc.hpp \
+	IpInexactNormalTerminationTester.cpp \
+	IpInexactNormalTerminationTester.hpp IpInexactPDSolver.cpp \
+	IpInexactPDSolver.hpp IpInexactPDTerminationTester.cpp \
+	IpInexactPDTerminationTester.hpp IpInexactRegOp.cpp \
+	IpInexactRegOp.hpp IpInexactSearchDirCalc.cpp \
+	IpInexactSearchDirCalc.hpp IpInexactTSymScalingMethod.cpp \
+	IpInexactTSymScalingMethod.hpp \
+	IpIterativePardisoSolverInterface.cpp \
+	IpIterativePardisoSolverInterface.hpp \
+	IpIterativeSolverTerminationTester.cpp \
+	IpIterativeSolverTerminationTester.hpp $(am__append_1)
 libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
@@ -341,6 +364,7 @@ ASTYLE_FILES = \
 	IpInexactSearchDirCalc.cppbak IpInexactSearchDirCalc.hppbak \
 	IpInexactTSymScalingMethod.cppbak IpInexactTSymScalingMethod.hppbak \
 	IpIterativePardisoSolverInterface.cppbak IpIterativePardisoSolverInterface.hppbak \
+	IpIterativePspikeSolverInterface.cppbak IpIterativePspikeSolverInterface.hppbak \
 	IpIterativeSolverTerminationTester.cppbak IpIterativeSolverTerminationTester.hppbak
 
 DISTCLEANFILES = $(ASTYLE_FILES)

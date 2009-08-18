@@ -30,7 +30,7 @@ namespace Ipopt
     //@{
     /** Constructor */
     IterativePspikeSolverInterface(IterativeSolverTerminationTester& normal_tester,
-                                    IterativeSolverTerminationTester& pd_tester);
+                                   IterativeSolverTerminationTester& pd_tester);
 
     /** Destructor */
     virtual ~IterativePspikeSolverInterface();
@@ -124,15 +124,11 @@ namespace Ipopt
     /** Array for storing the values of the matrix. */
     double* a_;
     //@}
-    
-    /** @name Information about most recent factorization/solve */
-    //@{
-    /** Number of negative eigenvalues */
-    Index negevals_;
-    //@}
 
     /** @name Solver specific options */
     //@{
+    Index pspike_bandwidth_;
+    Number pspike_tol_;
     //@}
 
     /** @name Initialization flags */

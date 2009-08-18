@@ -42,9 +42,12 @@
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpInexactTSymScalingMethod.hpp"
 #include "IpIterativePardisoSolverInterface.hpp"
-#include "IpIterativePspikeSolverInterface.hpp"
 #include "IpInexactNormalTerminationTester.hpp"
 #include "IpInexactPDTerminationTester.hpp"
+
+#ifdef HAVE_PSPIKE
+# include "IpIterativePspikeSolverInterface.hpp"
+#endif
 
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
@@ -113,7 +116,11 @@ namespace Ipopt
     roptions->AddStringOption2(
       "inexact_linear_system_scaling",
       "Method for scaling the linear system for the inexact approach",
+#ifdef HAVE_MPI
+      "none",
+#else
       "slack-based",
+#endif
       "none", "no scaling will be performed",
       "slack-based", "scale the linear system as in paper",
       "");
@@ -124,6 +131,7 @@ namespace Ipopt
       "no", "use symmetric solver",
       "yes", "use unsymmetric solver",
       "So far only for MUMPS and WSMP");
+#ifdef HAVE_PSPIKE
     roptions->AddStringOption2(
       "use_pspike",
       "If Pardiso is selected, use PSPIKE",
@@ -131,6 +139,7 @@ namespace Ipopt
       "no", "",
       "yes", "",
       "");
+#endif
   }
 
   SmartPtr<IpoptAlgorithm>
@@ -150,8 +159,10 @@ namespace Ipopt
     bool use_unsymmetric_solver;
     options.GetBoolValue("use_unsymmetric_solver", use_unsymmetric_solver,
                          prefix);
-    bool use_pspike;
+    bool use_pspike = false;
+#ifdef HAVE_PSPIKE
     options.GetBoolValue("use_pspike", use_pspike, prefix);
+#endif
     std::string linear_solver;
     options.GetStringValue("linear_solver", linear_solver, prefix);
     if (linear_solver=="pardiso" && use_pspike) {
@@ -226,12 +237,14 @@ namespace Ipopt
 #endif
 
     }
+#ifdef HAVE_PSPIKE
     else if (linear_solver=="pspike") {
       NormalTester = new InexactNormalTerminationTester();
       SmartPtr<IterativeSolverTerminationTester> pd_tester =
         new InexactPDTerminationTester();
       SolverInterface = new IterativePspikeSolverInterface(*NormalTester, *pd_tester);
     }
+#endif
     else if (linear_solver=="wsmp") {
 #ifdef HAVE_WSMP
 # ifdef HAVE_MPI
