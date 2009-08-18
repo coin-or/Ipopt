@@ -325,7 +325,7 @@ namespace Ipopt
     }
 
     if (HaveIpData()) {
-      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+      IpData().TimingStats().LinearSystemFactorization().Start();
     }
 
     // FACTORIZE in PSPIKE with job = 1 !!!!
@@ -336,7 +336,7 @@ namespace Ipopt
     F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs);
 
     if (HaveIpData()) {
-      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+      IpData().TimingStats().LinearSystemFactorization().End();
     }
 
     return SYMSOLVER_SUCCESS;
