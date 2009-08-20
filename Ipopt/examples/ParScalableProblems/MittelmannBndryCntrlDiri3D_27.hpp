@@ -261,6 +261,92 @@ private:
 };
 
 /** Class implementating case with convex quadratic penalty function */
+class MittelmannBndryCntrlDiri3D_27_1a : public MittelmannBndryCntrlDiriBase3D_27
+{
+public:
+  MittelmannBndryCntrlDiri3D_27_1a()
+  {}
+
+  virtual ~MittelmannBndryCntrlDiri3D_27_1a()
+  {}
+
+  virtual bool InitializeProblem(Index N)
+  {
+    if (N<1) {
+      printf("N has to be at least 1.");
+      return false;
+    }
+    Number alpha = 0.01;
+    Number lb_y = -1e20;
+    Number ub_y = 3.5;
+    Number lb_u = 0.;
+    Number ub_u = 10.;
+    Number d_const = -20.;
+    Number B = 0.;
+    Number C = 0.;
+    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
+    return true;
+  }
+protected:
+  /** Target profile function for y */
+  virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
+  {
+    return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.)); // change?
+    //return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
+  }
+private:
+  /**@name hide implicitly defined contructors copy operators */
+  //@{
+  MittelmannBndryCntrlDiri3D_27_1a(const MittelmannBndryCntrlDiri3D_27_1a&);
+  MittelmannBndryCntrlDiri3D_27_1a& operator=(const MittelmannBndryCntrlDiri3D_27_1a&);
+  //@}
+
+};
+
+/** Class implementating case with convex quadratic penalty function */
+class MittelmannBndryCntrlDiri3D_27_1BTa : public MittelmannBndryCntrlDiriBase3D_27
+{
+public:
+  MittelmannBndryCntrlDiri3D_27_1BTa()
+  {}
+
+  virtual ~MittelmannBndryCntrlDiri3D_27_1BTa()
+  {}
+
+  virtual bool InitializeProblem(Index N)
+  {
+    if (N<1) {
+      printf("N has to be at least 1.");
+      return false;
+    }
+    Number alpha = 0.01;
+    Number lb_y = -1e20;
+    Number ub_y = 3.5;
+    Number lb_u = 0.;
+    Number ub_u = 10.;
+    Number d_const = -20.;
+    Number B = .25;
+    Number C = 0.01;
+    SetBaseParameters(N, alpha, lb_y, ub_y, lb_u, ub_u, d_const, B, C);
+    return true;
+  }
+protected:
+  /** Target profile function for y */
+  virtual Number y_d_cont(Number x1, Number x2, Number x3)  const
+  {
+    return 3. + 5.*(x1*(x1-1.)*x2*(x2-1.)); // change?
+    //return 2.8 + 40.*(x1*(x1-1.)*x2*(x2-1.)*x3*(x3-1.));
+  }
+private:
+  /**@name hide implicitly defined contructors copy operators */
+  //@{
+  MittelmannBndryCntrlDiri3D_27_1BTa(const MittelmannBndryCntrlDiri3D_27_1BTa&);
+  MittelmannBndryCntrlDiri3D_27_1BTa& operator=(const MittelmannBndryCntrlDiri3D_27_1BTa&);
+  //@}
+
+};
+
+/** Class implementating case with convex quadratic penalty function */
 class MittelmannBndryCntrlDiri3D_27_3 : public MittelmannBndryCntrlDiriBase3D_27
 {
 public:
