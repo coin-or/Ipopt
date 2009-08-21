@@ -8,11 +8,12 @@
 //
 //           based on IpIterativePardisoSolverInterface.cpp rev 1535
 
-#include "mpi.h"
 #include "IpoptConfig.h"
 #include "IpIterativePspikeSolverInterface.hpp"
 #include "IpBlas.hpp"
 # include <math.h>
+
+#include "IpMpi.hpp"
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>
@@ -115,7 +116,7 @@ namespace Ipopt
       double tol = 0.0;
       int nrhs = 0;
 
-      int job = 3;
+      int job = 4;
       F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs);
       // Madan: Do we need to initialize again afterwards?
     }
@@ -192,7 +193,7 @@ namespace Ipopt
     options.GetNumericValue("pspike_tol", pspike_tol_, prefix);
     options.GetIntegerValue("pspike_bandwidth", pspike_bandwidth_, prefix);
 
-    // DESTROY PSPIKE with job = 3 !!!!
+    // DESTROY PSPIKE with job = 4 !!!!
     if (initialized_) {
       int neqns = 0;
       int nzmax = 0;
@@ -204,10 +205,14 @@ namespace Ipopt
       double tol = 0.0;
       int nrhs = 0;
 
-      int job = 3;
+      int job = 4;
+      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs);
+      job = 0;
       F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs);
       // Madan: Do we need to initialize again afterwards?
     }
+
+    have_symbolic_factorization_ = false;
 
     SetIpoptCallbackFunction(&IpoptTerminationTest);
 
@@ -297,12 +302,6 @@ namespace Ipopt
     DBG_START_METH("IterativePspikeSolverInterface::SymbolicFactorization",
                    dbg_verbosity);
 
-    // Since Pardiso requires the values of the nonzeros of the matrix
-    // for an efficient symbolic factorization, we postpone that task
-    // until the first call of Factorize.  All we do here is to reset
-    // the flag (in case this interface is called for a matrix with a
-    // new structure).
-
     return SYMSOLVER_SUCCESS;
   }
 
@@ -324,12 +323,30 @@ namespace Ipopt
       nzmax = ia[dim_]-1;
     }
 
+    if (!have_symbolic_factorization_) {
+      if (HaveIpData()) {
+	IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+      }
+
+      // ORDERING in PSPIKE with job = 1 !!!!
+      int job = 1;
+
+      double * rhs_vals = NULL;
+      int nrhs = 1;
+      F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs);
+
+      if (HaveIpData()) {
+	IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+      }
+      have_symbolic_factorization_ = true;
+    }
+
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemFactorization().Start();
     }
 
-    // FACTORIZE in PSPIKE with job = 1 !!!!
-    int job = 1;
+    // FACTORIZE in PSPIKE with job = 2 !!!!
+    int job = 2;
 
     double * rhs_vals = NULL;
     int nrhs = 1;
@@ -407,8 +424,8 @@ namespace Ipopt
         nzmax = ia[dim_]-1;
       }
 
-      // SOLVE in PSPIKE with job = 2
-      int job = 2;
+      // SOLVE in PSPIKE with job = 3
+      int job = 3;
       F77_FUNC(pspike,PSPIKE)(&job, &N, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &NRHS);
       ERROR = 0;
       attempts = max_attempts;
@@ -455,7 +472,7 @@ namespace Ipopt
   {
     DBG_START_METH("IterativePspikeSolverInterface::NumberOfNegEVals",dbg_verbosity);
     DBG_ASSERT(false && "We should not get here");
-    return;
+    return -1;
   }
 
   bool IterativePspikeSolverInterface::IncreaseQuality()

@@ -403,7 +403,7 @@ namespace Ipopt
         return retval;
       }
 
-      if (my_rank_==0) {
+      if (my_rank_==0 || call_solverinterface_on_all_procs_) {
         // Get space for the scaling factors
         delete [] scaling_factors_;
         if (IsValid(scaling_method_)) {
@@ -548,9 +548,9 @@ namespace Ipopt
 
     delete [] local_atriplet;
 
-    if (my_rank_==0) {
 // todo SCATTERED scaling
-      if (use_scaling_) {
+    if (use_scaling_) {
+      if (my_rank_==0 || call_solverinterface_on_all_procs_) {
         IpData().TimingStats().LinearSystemScaling().Start();
         DBG_ASSERT(scaling_factors_);
         if (new_matrix || just_switched_on_scaling_) {
@@ -558,8 +558,7 @@ namespace Ipopt
           // changed since the last call to this method
           bool retval =
             scaling_method_->ComputeSymTScalingFactors(dim_, nonzeros_triplet_,
-                airn_, ajcn_,
-                atriplet, scaling_factors_);
+                airn_, ajcn_, atriplet, scaling_factors_);
           if (!retval) {
             Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                            "Error during computation of scaling factors.\n");
@@ -575,12 +574,17 @@ namespace Ipopt
           }
           just_switched_on_scaling_ = false;
         }
-        for (Index i=0; i<nonzeros_triplet_; i++) {
-          atriplet[i] *=
-            scaling_factors_[airn_[i]-1] * scaling_factors_[ajcn_[i]-1];
-        }
+	if (my_rank_==0) {
+	  for (Index i=0; i<nonzeros_triplet_; i++) {
+	    atriplet[i] *=
+	      scaling_factors_[airn_[i]-1] * scaling_factors_[ajcn_[i]-1];
+	  }
+	}
         IpData().TimingStats().LinearSystemScaling().End();
       }
+    }
+
+    if (my_rank_==0) {
 
       if (matrix_format_!=SparseSymLinearSolverInterface::Triplet_Format) {
         IpData().TimingStats().LinearSystemStructureConverter().Start();

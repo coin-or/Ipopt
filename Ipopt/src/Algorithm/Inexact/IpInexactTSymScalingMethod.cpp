@@ -11,6 +11,10 @@
 #include "IpInexactTSymScalingMethod.hpp"
 #include "IpTripletHelper.hpp"
 
+#ifdef HAVE_MPI
+# include "IpParTripletHelper.hpp"
+#endif
+
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
@@ -45,7 +49,12 @@ namespace Ipopt
     scaling_factors += nx;
 
     SmartPtr<const Vector> scaling_vec = InexCq().curr_scaling_slacks();
+#ifdef HAVE_MPI
+    ParTripletHelper::FillAllValuesFromVector(ns, *scaling_vec, scaling_factors);
+#else
     TripletHelper::FillValuesFromVector(ns, *scaling_vec, scaling_factors);
+#endif
+
     scaling_factors += ns;
 
     for (Index i=0; i<nc+nd; i++) {
