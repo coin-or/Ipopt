@@ -136,6 +136,8 @@ namespace Ipopt
     /** Flag indicating if internal data is initialized.
      *  For initialization, this object needs to have seen a matrix */
     bool initialized_;
+    /** Flag indicating ifsymbolic factoriziiton has been called. */
+    bool have_symbolic_factorization_;
     //@}
 
     /** @name Solver specific information */
