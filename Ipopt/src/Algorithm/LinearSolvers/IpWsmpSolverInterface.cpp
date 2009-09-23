@@ -130,6 +130,15 @@ namespace Ipopt
       "If non-negative, this option determines the iteration in which all "
       "matrices given to WSMP are written to files.  This option is only "
       "available if Ipopt has been compiled with WSMP.");
+    roptions->AddStringOption2(
+      "wsmp_skip_inertia_check",
+      "Always pretent inertia is correct.",
+      "no",
+      "no", "check inertia",
+      "yes", "skip inertia check",
+      "Setting this option to \"yes\" essentially disables inertia check. "
+      "This option makes the algorithm non-robust and easily fail, but it "
+      "might give some insight into the necessity of inertia control.");
   }
 
   bool WsmpSolverInterface::InitializeImpl(const OptionsList& options,
@@ -156,12 +165,15 @@ namespace Ipopt
     options.GetIntegerValue("wsmp_scaling", wsmp_scaling_, prefix);
     options.GetIntegerValue("wsmp_write_matrix_iteration",
                             wsmp_write_matrix_iteration_, prefix);
+    options.GetBoolValue("wsmp_skip_inertia_check",
+                         skip_inertia_check_, prefix);
 
     // Reset all private data
     dim_=0;
     initialized_=false;
     pivtol_changed_ = false;
     have_symbolic_factorization_ = false;
+    factorizations_since_recomputed_ordering_ = -1;
     delete[] a_;
     a_ = NULL;
     delete[] PERM_;
@@ -452,8 +464,11 @@ namespace Ipopt
                    "Number of nonzeros in WSSMP after factorization IPARM(24) = %d\n",
                    IPARM_[23]);
 
-    negevals_ = IPARM_[21]; // Number of negative eigenvalues
-    // determined during factorization
+    if (factorizations_since_recomputed_ordering_ != -1) {
+      factorizations_since_recomputed_ordering_++;
+    }
+
+    negevals_ = IPARM_[21]; // Number of negative eigenvalues determined during factorization
 
     // Check whether the number of negative eigenvalues matches the requested
     // count
@@ -461,10 +476,18 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Wrong inertia: required are %d, but we got %d.\n",
                      numberOfNegEVals, negevals_);
-      if (HaveIpData()) {
-        IpData().TimingStats().LinearSystemFactorization().End();
+      if (skip_inertia_check_) {
+	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		       "  But wsmp_skip_inertia_check is set.  Ignore inertia.\n");
+	IpData().Append_info_string("IC ");
+	negevals_ = numberOfNegEVals;
       }
-      return SYMSOLVER_WRONG_INERTIA;
+      else {
+	if (HaveIpData()) {
+	  IpData().TimingStats().LinearSystemFactorization().End();
+	}
+	return SYMSOLVER_WRONG_INERTIA;
+      }
     }
 
     if (HaveIpData()) {
@@ -539,6 +562,17 @@ namespace Ipopt
   bool WsmpSolverInterface::IncreaseQuality()
   {
     DBG_START_METH("WsmpSolverInterface::IncreaseQuality",dbg_verbosity);
+
+    if (factorizations_since_recomputed_ordering_ == -1 ||
+	factorizations_since_recomputed_ordering_ > 2) {
+      DPARM_[14] = 1.0;
+      pivtol_changed_ = true;
+      IpData().Append_info_string("RO ");
+      factorizations_since_recomputed_ordering_ = 0;
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		     "Triggering WSMP's recomputation of the ordering for next factorization.\n");
+      return true;
+    }
     if (wsmp_pivtol_ == wsmp_pivtolmax_) {
       return false;
     }

@@ -1,34 +1,35 @@
-// Copyright (C) 2005, 2009 International Business Machines and others.
+// Copyright (C) 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-17
+// Authors:  Andreas Waechter              IBM    2009-09-18
+//               based on IpWsmpSolverInterface.hpp (rev 1483)
 
 
-#ifndef __IPWSMPSOLVERINTERFACE_HPP__
-#define __IPWSMPSOLVERINTERFACE_HPP__
+#ifndef __IPITERATIVEWSMPSOLVERINTERFACE_HPP__
+#define __IPITERATIVEWSMPSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
 
 namespace Ipopt
 {
 
-  /** Interface to the linear solver Wsmp, derived from
+  /** Interface to the linear solver WISMP, derived from
    *  SparseSymLinearSolverInterface.  For details, see description of
    *  SparseSymLinearSolverInterface base class.
    */
-  class WsmpSolverInterface: public SparseSymLinearSolverInterface
+  class IterativeWsmpSolverInterface: public SparseSymLinearSolverInterface
   {
   public:
     /** @name Constructor/Destructor */
     //@{
     /** Constructor */
-    WsmpSolverInterface();
+    IterativeWsmpSolverInterface();
 
     /** Destructor */
-    virtual ~WsmpSolverInterface();
+    virtual ~IterativeWsmpSolverInterface();
     //@}
 
     /** overloaded from AlgorithmStrategyObject */
@@ -73,7 +74,7 @@ namespace Ipopt
      */
     virtual bool ProvidesInertia() const
     {
-      return true;
+      return false;
     }
     /** Query of requested matrix type that the linear solver
      *  understands.
@@ -89,16 +90,6 @@ namespace Ipopt
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
     //@}
 
-    /** Query whether the indices of linearly dependent rows/columns
-     *  can be determined by this linear solver. */
-    virtual bool ProvidesDegeneracyDetection() const;
-
-    /** This method determines the list of row indices of the linearly
-     *  dependent rows. */
-    virtual ESymSolverStatus DetermineDependentRows(const Index* ia,
-        const Index* ja,
-        std::list<Index>& c_deps);
-
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -109,10 +100,10 @@ namespace Ipopt
      * they will not be implicitly created/called. */
     //@{
     /** Copy Constructor */
-    WsmpSolverInterface(const WsmpSolverInterface&);
+    IterativeWsmpSolverInterface(const IterativeWsmpSolverInterface&);
 
     /** Overloaded Equals Operator */
-    void operator=(const WsmpSolverInterface&);
+    void operator=(const IterativeWsmpSolverInterface&);
     //@}
 
     /** @name Information about the matrix */
@@ -134,14 +125,8 @@ namespace Ipopt
     Number wsmp_pivtolmax_;
     /** Indicating which of WSMP's scaling methods should be used. */
     Index wsmp_scaling_;
-    /** WSMP's singularity threshold.  The smaller this value the less
-     *  likely a matrix is declared singular. */
-    Number wsmp_singularity_threshold_;
     /** iteration number in which matrices are to be written out */
     Index wsmp_write_matrix_iteration_;
-    /** Flag indicating if the interia is always assumed to be
-     *  correct. */
-    bool skip_inertia_check_;
     //@}
 
     /** Counter for matrix file numbers */
@@ -149,8 +134,10 @@ namespace Ipopt
 
     /** @name Information about most recent factorization/solve */
     //@{
+#if 0
     /** Number of negative eigenvalues */
     Index negevals_;
+#endif
     //@}
 
     /** @name Initialization flags */
@@ -159,29 +146,19 @@ namespace Ipopt
      *  For initialization, this object needs to have seen a matrix */
     bool initialized_;
     /** Flag indicating if the matrix has to be refactorized because
-     *  the pivot tolerance has been changed, or the computation of
-     *  the ordering has been triggered with DPARNM[14]. */
+     *  the pivot tolerance has been changed. */
     bool pivtol_changed_;
     /** Flag indicating whether symbolic factorization and order has
      *  already been performed. */
     bool have_symbolic_factorization_;
-    /** Counter indicating how many factorizations have been done sine
-     *  the last recomputation of the ordering. */
-    Index factorizations_since_recomputed_ordering_;
     //@}
 
     /** @name Solver specific information */
     //@{
-    /** Integer parameter array for WSSMP. */
+    /** Integer parameter array for WISMP. */
     ipfint* IPARM_;
-    /** Double precision parameter array for WSSMP. */
+    /** Double precision parameter array for WISMP. */
     double* DPARM_;
-    /** WSSMP's permutation vector */
-    ipfint* PERM_;
-    /** WSSMP's inverse permutation vector */
-    ipfint* INVP_;
-    /** WSSMP's internal MRP array */
-    ipfint* MRP_;
     //@}
 
     /** @name Internal functions */
