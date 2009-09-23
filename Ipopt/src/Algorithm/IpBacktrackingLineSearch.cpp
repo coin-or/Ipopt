@@ -80,6 +80,11 @@ namespace Ipopt
       "Setting this option to \"yes\" essentially disables the line search "
       "and makes the algorithm take aggressive steps, without global "
       "convergence guarantees.");
+    roptions->AddLowerBoundedIntegerOption(
+      "accept_after_max_steps",
+      "Accept a trial point after maximal this number of steps.",
+      -1, -1,
+      "Even if it does not satisfy line search conditions.");
 
     roptions->AddStringOption10(
       "alpha_for_y",
@@ -201,6 +206,7 @@ namespace Ipopt
     options.GetNumericValue("alpha_red_factor", alpha_red_factor_, prefix);
     options.GetBoolValue("magic_steps", magic_steps_, prefix);
     options.GetBoolValue("accept_every_trial_step", accept_every_trial_step_, prefix);
+    options.GetIntegerValue("accept_after_max_steps", accept_after_max_steps_, prefix);
     Index enum_int;
     bool is_default = !options.GetEnumValue("alpha_for_y", enum_int, prefix);
     alpha_for_y_ = AlphaForYEnum(enum_int);
@@ -703,13 +709,16 @@ namespace Ipopt
 
           // If it is acceptable, stop the search
           alpha_primal_test = alpha_primal;
-          if (accept_every_trial_step_) {
+          if (accept_every_trial_step_ ||
+	      (accept_after_max_steps_!=-1 &&
+	       n_steps >= accept_after_max_steps_)) {
             // We call the evaluation at the trial point here, so that an
             // exception will the thrown if there are problem during the
             // evaluation of the functions (in that case, we want to further
             // reduce the step size
             IpCq().trial_barrier_obj();
             IpCq().trial_constraint_violation();
+	    IpData().Append_info_string("MaxS");
             accept = true;
           }
           else {

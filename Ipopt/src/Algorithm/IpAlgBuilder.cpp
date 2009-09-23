@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -58,6 +58,7 @@
 
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
+# include "IpIterativeWsmpSolverInterface.hpp"
 #endif
 #ifdef COIN_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
@@ -237,6 +238,13 @@ namespace Ipopt
       "cg-penalty", "Chen-Goldfarb penalty function",
       "penalty", "Standard penalty function",
       "");
+    roptions->AddStringOption2(
+      "wsmp_iterative",
+      "Switches to iterative solver in WSMP.",
+      "no",
+      "no", "use direct solver",
+      "yes", "use iterative solver",
+      "EXPERIMENTAL!");
   }
 
   SmartPtr<IpoptAlgorithm>
@@ -328,7 +336,14 @@ namespace Ipopt
     }
     else if (linear_solver=="wsmp") {
 #ifdef HAVE_WSMP
-      SolverInterface = new WsmpSolverInterface();
+      bool wsmp_iterative;
+      options.GetBoolValue("wsmp_iterative", wsmp_iterative, prefix);
+      if (wsmp_iterative) {
+	SolverInterface = new IterativeWsmpSolverInterface();
+      }
+      else {
+	SolverInterface = new WsmpSolverInterface();
+      }
 #else
 
       THROW_EXCEPTION(OPTION_INVALID,
