@@ -719,6 +719,7 @@ namespace Ipopt
             IpCq().trial_barrier_obj();
             IpCq().trial_constraint_violation();
 	    IpData().Append_info_string("MaxS");
+            Reset();
             accept = true;
           }
           else {

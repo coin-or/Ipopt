@@ -24,7 +24,7 @@
 /** Prototypes for WISMP's subroutines */
 extern "C"
 {
-  //void F77_FUNC(wsetmaxthrds,WSETMAXTHRDS)(const ipfint* NTHREADS);
+  void F77_FUNC(wsetmaxthrds,WSETMAXTHRDS)(const ipfint* NTHREADS);
 
   void F77_FUNC(wismp,WISMP)(const ipfint* N, const ipfint* IA,
                              const ipfint* JA, const double* AVALS,
@@ -78,6 +78,11 @@ namespace Ipopt
       "Drop tolerance for inexact factorization preconditioner in WISMP.",
       0.0, false, 0.0,
       "DPARM(14) in WISMP");
+    roptions->AddLowerBoundedNumberOption(
+      "wsmp_inexact_fillin_limit",
+      "Fill-in limit for inexact factorization preconditioner in WISMP.",
+      0.0, false, 0.0,
+      "DPARM(15) in WISMP");
   }
 
   bool IterativeWsmpSolverInterface::InitializeImpl(const OptionsList& options,
@@ -115,6 +120,9 @@ namespace Ipopt
     Number wsmp_inexact_droptol;
     options.GetNumericValue("wsmp_inexact_droptol", wsmp_inexact_droptol,
 			    prefix);
+    Number wsmp_inexact_fillin_limit;
+    options.GetNumericValue("wsmp_inexact_fillin_limit", wsmp_inexact_fillin_limit,
+			    prefix);
 
     // Reset all private data
     dim_=0;
@@ -124,7 +132,7 @@ namespace Ipopt
     delete[] a_;
     a_ = NULL;
 
-#if 0
+#if 1
     // Set the number of threads
     ipfint NTHREADS = wsmp_num_threads_;
     F77_FUNC(wsetmaxthrds,WSETMAXTHRDS)(&NTHREADS);
@@ -149,12 +157,13 @@ namespace Ipopt
     IPARM_[6] = 3;
     IPARM_[29] = 0; // to make runs repeatable
 
-#if 0 // for now really just use default options
+#if 1
     IPARM_[5] = wsmp_max_iter; // maximal number of iterations
     IPARM_[15] = wsmp_ordering_option; // ordering option
     IPARM_[16] = wsmp_ordering_option2; // for ordering in IP methods?
 #endif
     DPARM_[13] = wsmp_inexact_droptol;
+    DPARM_[14] = wsmp_inexact_fillin_limit;
 
     matrix_file_number_ = 0;
 
