@@ -117,7 +117,7 @@ namespace Ipopt
     retval->jnlst_ = Jnlst();
     retval->reg_options_ = RegOptions();
     *retval->options_ = *Options();
-    
+
     retval->read_params_dat_ = read_params_dat_;
     retval->inexact_algorithm_ = inexact_algorithm_;
     retval->replace_bounds_ = replace_bounds_;

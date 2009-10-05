@@ -710,15 +710,15 @@ namespace Ipopt
           // If it is acceptable, stop the search
           alpha_primal_test = alpha_primal;
           if (accept_every_trial_step_ ||
-	      (accept_after_max_steps_!=-1 &&
-	       n_steps >= accept_after_max_steps_)) {
+              (accept_after_max_steps_!=-1 &&
+               n_steps >= accept_after_max_steps_)) {
             // We call the evaluation at the trial point here, so that an
             // exception will the thrown if there are problem during the
             // evaluation of the functions (in that case, we want to further
             // reduce the step size
             IpCq().trial_barrier_obj();
             IpCq().trial_constraint_violation();
-	    IpData().Append_info_string("MaxS");
+            IpData().Append_info_string("MaxS");
             Reset();
             accept = true;
           }

@@ -339,10 +339,10 @@ namespace Ipopt
       bool wsmp_iterative;
       options.GetBoolValue("wsmp_iterative", wsmp_iterative, prefix);
       if (wsmp_iterative) {
-	SolverInterface = new IterativeWsmpSolverInterface();
+        SolverInterface = new IterativeWsmpSolverInterface();
       }
       else {
-	SolverInterface = new WsmpSolverInterface();
+        SolverInterface = new WsmpSolverInterface();
       }
 #else
 
