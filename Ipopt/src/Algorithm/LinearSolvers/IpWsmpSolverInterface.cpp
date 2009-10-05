@@ -477,16 +477,16 @@ namespace Ipopt
                      "Wrong inertia: required are %d, but we got %d.\n",
                      numberOfNegEVals, negevals_);
       if (skip_inertia_check_) {
-	Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		       "  But wsmp_skip_inertia_check is set.  Ignore inertia.\n");
-	IpData().Append_info_string("IC ");
-	negevals_ = numberOfNegEVals;
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "  But wsmp_skip_inertia_check is set.  Ignore inertia.\n");
+        IpData().Append_info_string("IC ");
+        negevals_ = numberOfNegEVals;
       }
       else {
-	if (HaveIpData()) {
-	  IpData().TimingStats().LinearSystemFactorization().End();
-	}
-	return SYMSOLVER_WRONG_INERTIA;
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemFactorization().End();
+        }
+        return SYMSOLVER_WRONG_INERTIA;
       }
     }
 
@@ -564,13 +564,13 @@ namespace Ipopt
     DBG_START_METH("WsmpSolverInterface::IncreaseQuality",dbg_verbosity);
 
     if (factorizations_since_recomputed_ordering_ == -1 ||
-	factorizations_since_recomputed_ordering_ > 2) {
+        factorizations_since_recomputed_ordering_ > 2) {
       DPARM_[14] = 1.0;
       pivtol_changed_ = true;
       IpData().Append_info_string("RO ");
       factorizations_since_recomputed_ordering_ = 0;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		     "Triggering WSMP's recomputation of the ordering for next factorization.\n");
+                     "Triggering WSMP's recomputation of the ordering for next factorization.\n");
       return true;
     }
     if (wsmp_pivtol_ == wsmp_pivtolmax_) {

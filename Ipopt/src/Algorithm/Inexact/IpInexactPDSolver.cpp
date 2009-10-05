@@ -190,13 +190,25 @@ namespace Ipopt
                                       false, 0);
       }
       if (retval==SYMSOLVER_SINGULAR) {
-        bool pert_return = perturbHandler_->PerturbForSingularity(delta_x, delta_s,
-                           delta_c, delta_d);
-        if (!pert_return) {
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "System seems singular.\n");
+        if (InexData().compute_normal()) {
           Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                         "PerturbForWrongInertia can't be done for singular.\n");
-          IpData().TimingStats().PDSystemSolverTotal().End();
-          return false;
+                         "  We are already using the decomposition, now perturb the system.\n");
+          bool pert_return = perturbHandler_->PerturbForSingularity(delta_x, delta_s,
+                             delta_c, delta_d);
+          if (!pert_return) {
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "PerturbForWrongInertia can't be done for singular.\n");
+            IpData().TimingStats().PDSystemSolverTotal().End();
+            return false;
+          }
+        }
+        else {
+          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                         "  Switch to using the decomposition.\n");
+          InexData().set_next_compute_normal(true);
+          IpData().Append_info_string("@");
         }
       }
       else if (retval==SYMSOLVER_WRONG_INERTIA) {
@@ -256,10 +268,23 @@ namespace Ipopt
           char buf[32];
           Snprintf(buf, 31, " TT=%d ", test_result_);
           IpData().Append_info_string(buf);
-          if (test_result_ == IterativeSolverTerminationTester::CONTINUE &&
-              !InexData().compute_normal()) {
-            InexData().set_next_compute_normal(true);
-            IpData().Append_info_string("@");
+          if (test_result_ == IterativeSolverTerminationTester::CONTINUE) {
+            if (InexData().compute_normal()) {
+              Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                             "Termination tester not satisfied!!! Pretend singular\n");
+              bool pert_return = perturbHandler_->PerturbForSingularity(delta_x, delta_s,
+                                 delta_c, delta_d);
+              if (!pert_return) {
+                Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                               "PerturbForWrongInertia can't be done for singular.\n");
+                IpData().TimingStats().PDSystemSolverTotal().End();
+                return false;
+              }
+            }
+            else {
+              InexData().set_next_compute_normal(true);
+              IpData().Append_info_string("@");
+            }
           }
         }
         if (retval==SYMSOLVER_SUCCESS) {

@@ -28,10 +28,10 @@ extern "C"
 
   void F77_FUNC(wismp,WISMP)(const ipfint* N, const ipfint* IA,
                              const ipfint* JA, const double* AVALS,
-			     double* B, const ipfint* LDB,
-			     double* X, const ipfint* LDX,
-			     const ipfint* NRHS, double* RMISC,
-			     double* CVGH, ipfint* IPARM,
+                             double* B, const ipfint* LDB,
+                             double* X, const ipfint* LDX,
+                             const ipfint* NRHS, double* RMISC,
+                             double* CVGH, ipfint* IPARM,
                              double* DPARM);
   void F77_FUNC_(wsmp_clear,WSMP_CLEAR)(void);
 }
@@ -91,12 +91,12 @@ namespace Ipopt
     options.GetIntegerValue("wsmp_num_threads", wsmp_num_threads_, prefix);
     Index wsmp_ordering_option;
     if (!options.GetIntegerValue("wsmp_ordering_option", wsmp_ordering_option,
-				 prefix)) {
+                                 prefix)) {
       wsmp_ordering_option = 1;
     }
     Index wsmp_ordering_option2;
     if (!options.GetIntegerValue("wsmp_ordering_option2", wsmp_ordering_option2,
-				 prefix)) {
+                                 prefix)) {
       wsmp_ordering_option2 = 0;
     }
     if (!options.GetNumericValue("wsmp_pivtol", wsmp_pivtol_, prefix)) {
@@ -118,9 +118,9 @@ namespace Ipopt
     Index wsmp_max_iter;
     options.GetIntegerValue("wsmp_max_iter", wsmp_max_iter, prefix);
     options.GetNumericValue("wsmp_inexact_droptol", wsmp_inexact_droptol_,
-			    prefix);
+                            prefix);
     options.GetNumericValue("wsmp_inexact_fillin_limit", wsmp_inexact_fillin_limit_,
-			    prefix);
+                            prefix);
 
     // Reset all private data
     dim_=0;
@@ -151,7 +151,7 @@ namespace Ipopt
                           &ddmy, &idmy, &idmy, &ddmy, &ddmy,
                           IPARM_, DPARM_);
     IPARM_[3] = 3; // Upper trianguar portion of matrix in CSR format
-		   // (same as for WSSMP)
+    // (same as for WSSMP)
     IPARM_[6] = 3;
     IPARM_[29] = 0; // to make runs repeatable
 
@@ -483,10 +483,10 @@ namespace Ipopt
                    IPARM_[25]);
     if (Jnlst().ProduceOutput(J_MOREDETAILED, J_LINEAR_ALGEBRA)) {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-		     "WISMP congergence history:\n");
+                     "WISMP congergence history:\n");
       for (Index i=0; i<=IPARM_[25]; ++i) {
-	Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-		       " Resid[%3d] = %13.6e\n", i, CVGH[i]);
+        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                       " Resid[%3d] = %13.6e\n", i, CVGH[i]);
       }
       delete [] CVGH;
     }
