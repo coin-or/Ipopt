@@ -127,6 +127,8 @@ namespace Ipopt
     Index wsmp_scaling_;
     /** iteration number in which matrices are to be written out */
     Index wsmp_write_matrix_iteration_;
+    Number wsmp_inexact_droptol_;
+    Number wsmp_inexact_fillin_limit_;
     //@}
 
     /** Counter for matrix file numbers */

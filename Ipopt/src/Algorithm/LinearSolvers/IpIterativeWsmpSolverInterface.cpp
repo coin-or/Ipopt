@@ -117,11 +117,9 @@ namespace Ipopt
                             wsmp_write_matrix_iteration_, prefix);
     Index wsmp_max_iter;
     options.GetIntegerValue("wsmp_max_iter", wsmp_max_iter, prefix);
-    Number wsmp_inexact_droptol;
-    options.GetNumericValue("wsmp_inexact_droptol", wsmp_inexact_droptol,
+    options.GetNumericValue("wsmp_inexact_droptol", wsmp_inexact_droptol_,
 			    prefix);
-    Number wsmp_inexact_fillin_limit;
-    options.GetNumericValue("wsmp_inexact_fillin_limit", wsmp_inexact_fillin_limit,
+    options.GetNumericValue("wsmp_inexact_fillin_limit", wsmp_inexact_fillin_limit_,
 			    prefix);
 
     // Reset all private data
@@ -162,8 +160,8 @@ namespace Ipopt
     IPARM_[15] = wsmp_ordering_option; // ordering option
     IPARM_[16] = wsmp_ordering_option2; // for ordering in IP methods?
 #endif
-    DPARM_[13] = wsmp_inexact_droptol;
-    DPARM_[14] = wsmp_inexact_fillin_limit;
+    DPARM_[13] = wsmp_inexact_droptol_;
+    DPARM_[14] = wsmp_inexact_fillin_limit_;
 
     matrix_file_number_ = 0;
 
@@ -360,6 +358,10 @@ namespace Ipopt
     ipfint idmy;
     double ddmy;
 
+    // set drop tolerances for now....
+    DPARM_[13] = wsmp_inexact_droptol_;
+    DPARM_[14] = wsmp_inexact_fillin_limit_;
+
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling WISMP-2-3 with DPARM(14) = %8.2e and DPARM(15) = %8.2e.\n", DPARM_[13], DPARM_[14]);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -370,6 +372,8 @@ namespace Ipopt
                    "Done with WISMP-2-3 for value analysis and preconditioner computation at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Done with WISMP-2-3 with DPARM(14) = %8.2e and DPARM(15) = %8.2e.\n", DPARM_[13], DPARM_[14]);
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "                         DPARM(4) = %8.2e and DPARM(5) = %8.2e and ratio = %8.2e.\n", DPARM_[3], DPARM_[4], DPARM_[3]/DPARM_[4]);
 
     const Index ierror = IPARM_[63];
     if (ierror > 0) {
