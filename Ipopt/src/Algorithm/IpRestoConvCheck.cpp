@@ -169,17 +169,17 @@ namespace Ipopt
                      "This is the first iteration - continue to take at least one step.\n");
       status = CONTINUE;
     }
-    else if (orig_trial_inf_pr > orig_inf_pr_max) {
-      Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "Point does not provide sufficient reduction w.r.t the original constraint violation (orig_inf_pr_max=%e).\n", orig_inf_pr_max);
-      status = CONTINUE;
-    }
     else if (orig_ip_cq->IsSquareProblem() &&
              orig_trial_inf_pr <=
              Min(orig_ip_data->tol(), orig_constr_viol_tol_)) {
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "Restoration phase found points satisfying feasibility tolerance in square problem.\n");
       status = CONVERGED;
+    }
+    else if (orig_trial_inf_pr > orig_inf_pr_max) {
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Point does not provide sufficient reduction w.r.t the original constraint violation (orig_inf_pr_max=%e).\n", orig_inf_pr_max);
+      status = CONTINUE;
     }
     else {
       Number orig_trial_barr = orig_ip_cq->trial_barrier_obj();
