@@ -67,7 +67,8 @@ host_triplet = @host@
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
 
 @HAVE_WSMP_TRUE@am__append_7 = \
-@HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
+@HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
+@HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.hpp
 
 @COIN_HAS_MUMPS_TRUE@am__append_8 = \
 @COIN_HAS_MUMPS_TRUE@	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
@@ -98,7 +99,8 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
 	IpMa28Partition.f IpMa28TDependencyDetector.cpp \
 	IpMa28TDependencyDetector.hpp IpWsmpSolverInterface.cpp \
-	IpWsmpSolverInterface.hpp IpMumpsSolverInterface.cpp \
+	IpWsmpSolverInterface.hpp IpIterativeWsmpSolverInterface.cpp \
+	IpIterativeWsmpSolverInterface.hpp IpMumpsSolverInterface.cpp \
 	IpMumpsSolverInterface.hpp
 @BUILD_LINEARSOLVERLOADER_TRUE@am__objects_1 =  \
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpMa27TSolverInterface.lo \
@@ -113,7 +115,8 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_5 = IpPardisoSolverInterface.lo
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__objects_6 = IpMa28Partition.lo \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.lo
-@HAVE_WSMP_TRUE@am__objects_7 = IpWsmpSolverInterface.lo
+@HAVE_WSMP_TRUE@am__objects_7 = IpWsmpSolverInterface.lo \
+@HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.lo
 @COIN_HAS_MUMPS_TRUE@am__objects_8 = IpMumpsSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpTripletToCSRConverter.lo IpTSymDependencyDetector.lo \
@@ -377,6 +380,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # Astyle stuff
 ASTYLE_FILES = \
 	IpGenKKTSolverInterface.hppbak \
+	IpIterativeWsmpSolverInterface.cppbak \
+	IpIterativeWsmpSolverInterface.hppbak \
 	IpLinearSolversRegOp.cppbak IpLinearSolversRegOp.hppbak \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpMa28TDependencyDetector.cppbak IpMa28TDependencyDetector.hppbak \
@@ -446,6 +451,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIterativeWsmpSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLinearSolversRegOp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa27TSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa28TDependencyDetector.Plo@am__quote@

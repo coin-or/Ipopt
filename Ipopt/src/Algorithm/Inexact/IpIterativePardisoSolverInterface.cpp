@@ -757,6 +757,7 @@ namespace Ipopt
                      "Termination tester requests modification of Hessian\n");
       return SYMSOLVER_WRONG_INERTIA;
     }
+#if 0
     // FRANK: look at this:
     if (test_result_ == IterativeSolverTerminationTester::CONTINUE) {
       if (InexData().compute_normal()) {
@@ -765,6 +766,7 @@ namespace Ipopt
         return SYMSOLVER_SINGULAR;
       }
     }
+#endif
     if (test_result_ == IterativeSolverTerminationTester::TEST_2_SATISFIED) {
       // Termination Test 2 is satisfied, set the step for the primal
       // iterates to zero

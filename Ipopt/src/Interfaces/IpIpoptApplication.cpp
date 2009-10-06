@@ -123,6 +123,11 @@ namespace Ipopt
     retval->replace_bounds_ = replace_bounds_;
     retval->skip_finalize_solution_call_ = skip_finalize_solution_call_;
 
+    retval->read_params_dat_ = read_params_dat_;
+    retval->inexact_algorithm_ = inexact_algorithm_;
+    retval->replace_bounds_ = replace_bounds_;
+    retval->skip_finalize_solution_call_ = skip_finalize_solution_call_;
+
     return retval;
   }
 
@@ -304,6 +309,7 @@ namespace Ipopt
 
           options_to_print.push_back("#Multiplier Updates");
           options_to_print.push_back("alpha_for_y");
+          options_to_print.push_back("alpha_for_y_tol");
           options_to_print.push_back("recalc_y");
           options_to_print.push_back("recalc_y_feas_tol");
 
@@ -311,8 +317,6 @@ namespace Ipopt
           options_to_print.push_back("max_soc");
           options_to_print.push_back("watchdog_shortened_iter_trigger");
           options_to_print.push_back("watchdog_trial_iter_max");
-          options_to_print.push_back("alpha_for_y");
-          options_to_print.push_back("alpha_for_y_tol");
           options_to_print.push_back("accept_every_trial_step");
           options_to_print.push_back("corrector_type");
 

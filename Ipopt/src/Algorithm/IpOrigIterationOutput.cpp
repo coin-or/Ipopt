@@ -242,6 +242,7 @@ namespace Ipopt
     }
 
     Jnlst().Printf(J_DETAILED, J_MAIN, "\n\n");
+    Jnlst().FlushBuffer();
   }
 
 } // namespace Ipopt
