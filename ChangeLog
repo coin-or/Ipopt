@@ -2,6 +2,12 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2009-10-06 releases/3.7.1
+        - bugfix for square problems
+        - correct timinig information (obj gradient was forgotten)
+        - flush output buffer after each iteration
+        - first code for iterative WSMP version (experimental and undocumented)
+
 2009-07-16 releases/3.7.0
         - a number of fixes (including those from 2009 COIN Bug Squashing
           Party)
