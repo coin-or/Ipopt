@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -91,6 +91,13 @@ namespace Ipopt
       Index dimx = rhs_x.Dim();
       SmartPtr<DiagMatrixSpace> Wdiag_space = new DiagMatrixSpace(dimx);
       Wdiag_ = Wdiag_space->MakeNewDiagMatrix();
+    }
+
+    // This might be used with a linear solver that cannot detect the
+    // inertia.  In that case, we should not asked for checking the
+    // number of negative eigenvalues.
+    if (!aug_system_solver_->ProvidesInertia()) {
+      check_NegEVals = false;
     }
 
     if (first_call_ ||
