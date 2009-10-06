@@ -359,8 +359,12 @@ namespace Ipopt
     double ddmy;
 
     // set drop tolerances for now....
-    DPARM_[13] = wsmp_inexact_droptol_;
-    DPARM_[14] = wsmp_inexact_fillin_limit_;
+    if (wsmp_inexact_droptol_ != 0.) {
+      DPARM_[13] = wsmp_inexact_droptol_;
+    }
+    if (wsmp_inexact_fillin_limit_ != 0.) {
+      DPARM_[14] = wsmp_inexact_fillin_limit_;
+    }
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling WISMP-2-3 with DPARM(14) = %8.2e and DPARM(15) = %8.2e.\n", DPARM_[13], DPARM_[14]);
