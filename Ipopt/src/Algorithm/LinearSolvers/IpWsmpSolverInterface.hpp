@@ -142,6 +142,9 @@ namespace Ipopt
     /** Flag indicating if the interia is always assumed to be
      *  correct. */
     bool skip_inertia_check_;
+    /** Flag indicating whether the positive definite version of WSMP
+     *  should be used */
+    bool wsmp_no_pivoting_;
     //@}
 
     /** Counter for matrix file numbers */
@@ -191,7 +194,8 @@ namespace Ipopt
     ESymSolverStatus SymbolicFactorization(const Index* ia, const Index* ja);
 
     /** Call Wsmp to really do the analysis phase. */
-    ESymSolverStatus InternalSymFact(const Index* ia, const Index* ja);
+    ESymSolverStatus InternalSymFact(const Index* ia, const Index* ja,
+                                     Index numberOfNegEVals);
 
     /** Call Wsmp to factorize the Matrix.
      */
