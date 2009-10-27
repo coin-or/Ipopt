@@ -200,6 +200,21 @@ namespace Ipopt
       compl_inf_tol_ = 1e300;
     }
 
+    if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
+      Jnlst().Printf(J_DETAILED, J_MAIN, "Convergence Check:\n");
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "  overall_error = %23.16e   IpData().tol()   = %23.16e\n",
+                     overall_error, IpData().tol());
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "  dual_inf      = %23.16e   dual_inf_tol_    = %23.16e\n",
+                     dual_inf, dual_inf_tol_);
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "  constr_viol   = %23.16e   constr_viol_tol_ = %23.16e\n",
+                     constr_viol, constr_viol_tol_);
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "  compl_inf     = %23.16e   compl_inf_tol_   = %23.16e\n",
+                     compl_inf, compl_inf_tol_);
+    }
     if (overall_error <= IpData().tol() &&
         dual_inf <= dual_inf_tol_ &&
         constr_viol <= constr_viol_tol_ &&
