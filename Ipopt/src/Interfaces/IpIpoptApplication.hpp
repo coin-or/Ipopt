@@ -16,7 +16,7 @@
 #else
 #define IPOPT_EXPORT(type) type __cdecl
 #endif
-#else 
+#else
 #define IPOPT_EXPORT(type) type
 #endif
 #endif

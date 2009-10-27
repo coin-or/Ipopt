@@ -140,7 +140,7 @@ namespace Ipopt
     //@{
     /** Method to print a formatted string */
     virtual void Printf(EJournalLevel level, EJournalCategory category,
-                const char* format, ...) const;
+                        const char* format, ...) const;
 
     /** Method to print a long string including indentation.  The
      *  string is printed starting at the current position.  If the
@@ -150,29 +150,29 @@ namespace Ipopt
      *  for example used during the printing of the option
      *  documentation. */
     virtual void PrintStringOverLines(EJournalLevel level, EJournalCategory category,
-                              Index indent_spaces, Index max_length,
-                              const std::string& line) const;
+                                      Index indent_spaces, Index max_length,
+                                      const std::string& line) const;
 
     /** Method to print a formatted string with indentation */
     virtual void PrintfIndented(EJournalLevel level,
-                        EJournalCategory category,
-                        Index indent_level,
-                        const char* format, ...) const;
+                                EJournalCategory category,
+                                Index indent_level,
+                                const char* format, ...) const;
 
     /** Method to print a formatted string
      * using the va_list argument. */
     virtual void VPrintf(EJournalLevel level,
-                 EJournalCategory category,
-                 const char* pformat,
-                 va_list ap) const;
+                         EJournalCategory category,
+                         const char* pformat,
+                         va_list ap) const;
 
     /** Method to print a formatted string with indentation,
      * using the va_list argument. */
     virtual void VPrintfIndented(EJournalLevel level,
-                         EJournalCategory category,
-                         Index indent_level,
-                         const char* pformat,
-                         va_list ap) const;
+                                 EJournalCategory category,
+                                 Index indent_level,
+                                 const char* pformat,
+                                 va_list ap) const;
 
     /** Method that returns true if there is a Journal that would
      *  write output for the given JournalLevel and JournalCategory.
@@ -181,7 +181,7 @@ namespace Ipopt
      *  method if the computations are indeed required.
      */
     virtual bool ProduceOutput(EJournalLevel level,
-                       EJournalCategory category) const;
+                               EJournalCategory category) const;
 
 
     /** Method that flushes the current buffer for all Journalists.
@@ -299,14 +299,14 @@ namespace Ipopt
 
     /** Print to the designated output location */
     virtual void Print(EJournalCategory category, EJournalLevel level,
-               const char* str)
+                       const char* str)
     {
       PrintImpl(category, level, str);
     }
 
     /** Printf to the designated output location */
     virtual void Printf(EJournalCategory category, EJournalLevel level,
-                const char* pformat, va_list ap)
+                        const char* pformat, va_list ap)
     {
       PrintfImpl(category, level, pformat, ap);
     }

@@ -51,20 +51,20 @@ namespace Ipopt
     virtual Number TotalCPUTime() const;
     /** Number of NLP function evaluations. */
     virtual void NumberOfEvaluations(Index& num_obj_evals,
-                             Index& num_constr_evals,
-                             Index& num_obj_grad_evals,
-                             Index& num_constr_jac_evals,
-                             Index& num_hess_evals) const;
+                                     Index& num_constr_evals,
+                                     Index& num_obj_grad_evals,
+                                     Index& num_constr_jac_evals,
+                                     Index& num_hess_evals) const;
     /** Unscaled solution infeasibilities */
     virtual void Infeasibilities(Number& dual_inf,
-                         Number& constr_viol,
-                         Number& complementarity,
-                         Number& kkt_error) const;
+                                 Number& constr_viol,
+                                 Number& complementarity,
+                                 Number& kkt_error) const;
     /** Scaled solution infeasibilities */
     virtual void ScaledInfeasibilities(Number& scaled_dual_inf,
-                               Number& scaled_constr_viol,
-                               Number& scaled_complementarity,
-                               Number& scaled_kkt_error) const;
+                                       Number& scaled_constr_viol,
+                                       Number& scaled_complementarity,
+                                       Number& scaled_kkt_error) const;
     /** Final value of objective function */
     virtual Number FinalObjective() const;
     /** Final scaled value of objective function */
