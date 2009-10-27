@@ -140,13 +140,13 @@ namespace Ipopt
     /** @name Objective function */
     //@{
     /** Value of objective function (at current point) */
-    Number curr_f();
+    virtual Number curr_f();
     /** Unscaled value of the objective function (at the current point) */
-    Number unscaled_curr_f();
+    virtual Number unscaled_curr_f();
     /** Value of objective function (at trial point) */
-    Number trial_f();
+    virtual Number trial_f();
     /** Unscaled value of the objective function (at the trial point) */
-    Number unscaled_trial_f();
+    virtual Number unscaled_trial_f();
     /** Gradient of objective function (at current point) */
     SmartPtr<const Vector> curr_grad_f();
     /** Gradient of objective function (at trial point) */
@@ -158,11 +158,11 @@ namespace Ipopt
     /** Barrier Objective Function Value
      * (at current iterate with current mu)
      */
-    Number curr_barrier_obj();
+    virtual Number curr_barrier_obj();
     /** Barrier Objective Function Value
      * (at trial point with current mu)
      */
-    Number trial_barrier_obj();
+    virtual Number trial_barrier_obj();
 
     /** Gradient of barrier objective function with respect to x
      * (at current point with current mu) */
@@ -238,19 +238,19 @@ namespace Ipopt
     /** Constraint Violation (at current iterate). This value should
      *  be used in the line search, and not curr_primal_infeasibility().
      *  What type of norm is used depends on constr_viol_normtype */
-    Number curr_constraint_violation();
+    virtual Number curr_constraint_violation();
     /** Constraint Violation (at trial point). This value should
      *  be used in the line search, and not curr_primal_infeasibility().
      *  What type of norm is used depends on constr_viol_normtype */
-    Number trial_constraint_violation();
+    virtual Number trial_constraint_violation();
     /** Real constraint violation in a given norm (at current
      *  iterate).  This considers the inequality constraints without
      *  slacks. */
-    Number curr_nlp_constraint_violation(ENormType NormType);
+    virtual Number curr_nlp_constraint_violation(ENormType NormType);
     /** Unscaled real constraint violation in a given norm (at current
      *  iterate).  This considers the inequality constraints without
      *  slacks. */
-    Number unscaled_curr_nlp_constraint_violation(ENormType NormType);
+    virtual Number unscaled_curr_nlp_constraint_violation(ENormType NormType);
     //@}
 
     /** @name Hessian matrices */
@@ -301,26 +301,26 @@ namespace Ipopt
     SmartPtr<const Vector> curr_relaxed_compl_s_U();
 
     /** Primal infeasibility in a given norm (at current iterate). */
-    Number curr_primal_infeasibility(ENormType NormType);
+    virtual Number curr_primal_infeasibility(ENormType NormType);
     /** Primal infeasibility in a given norm (at trial point) */
-    Number trial_primal_infeasibility(ENormType NormType);
+    virtual Number trial_primal_infeasibility(ENormType NormType);
 
     /** Dual infeasibility in a given norm (at current iterate) */
-    Number curr_dual_infeasibility(ENormType NormType);
+    virtual Number curr_dual_infeasibility(ENormType NormType);
     /** Dual infeasibility in a given norm (at trial iterate) */
-    Number trial_dual_infeasibility(ENormType NormType);
+    virtual Number trial_dual_infeasibility(ENormType NormType);
     /** Unscaled dual infeasibility in a given norm (at current iterate) */
-    Number unscaled_curr_dual_infeasibility(ENormType NormType);
+    virtual Number unscaled_curr_dual_infeasibility(ENormType NormType);
 
     /** Complementarity (for all complementarity conditions together)
      *  in a given norm (at current iterate) */
-    Number curr_complementarity(Number mu, ENormType NormType);
+    virtual Number curr_complementarity(Number mu, ENormType NormType);
     /** Complementarity (for all complementarity conditions together)
      *  in a given norm (at trial iterate) */
-    Number trial_complementarity(Number mu, ENormType NormType);
+    virtual Number trial_complementarity(Number mu, ENormType NormType);
     /** Complementarity (for all complementarity conditions together)
      *  in a given norm (at current iterate) without NLP scaling. */
-    Number unscaled_curr_complementarity(Number mu, ENormType NormType);
+    virtual Number unscaled_curr_complementarity(Number mu, ENormType NormType);
 
     /** Centrality measure (in spirit of the -infinity-neighborhood. */
     Number CalcCentralityMeasure(const Vector& compl_x_L,
@@ -328,22 +328,22 @@ namespace Ipopt
                                  const Vector& compl_s_L,
                                  const Vector& compl_s_U);
     /** Centrality measure at current point */
-    Number curr_centrality_measure();
+    virtual Number curr_centrality_measure();
 
     /** Total optimality error for the original NLP at the current
      *  iterate, using scaling factors based on multipliers.  Note
      *  that here the constraint violation is measured without slacks
      *  (nlp_constraint_violation) */
-    Number curr_nlp_error();
+    virtual Number curr_nlp_error();
     /** Total optimality error for the original NLP at the current
      *  iterate, but using no scaling based on multipliers, and no
      *  scaling for the NLP.  Note that here the constraint violation
      *  is measured without slacks (nlp_constraint_violation) */
-    Number unscaled_curr_nlp_error();
+    virtual Number unscaled_curr_nlp_error();
 
     /** Total optimality error for the barrier problem at the
      *  current iterate, using scaling factors based on multipliers. */
-    Number curr_barrier_error();
+    virtual Number curr_barrier_error();
 
     /** Norm of the primal-dual system for a given mu (at current
      *  iterate).  The norm is defined as the sum of the 1-norms of
@@ -351,14 +351,14 @@ namespace Ipopt
      *  all divided by the number of elements of the vectors of which
      *  the norm is taken.
      */
-    Number curr_primal_dual_system_error(Number mu);
+    virtual Number curr_primal_dual_system_error(Number mu);
     /** Norm of the primal-dual system for a given mu (at trial
      *  iterate).  The norm is defined as the sum of the 1-norms of
      *  dual infeasibiliy, primal infeasibility, and complementarity,
      *  all divided by the number of elements of the vectors of which
      *  the norm is taken.
      */
-    Number trial_primal_dual_system_error(Number mu);
+    virtual Number trial_primal_dual_system_error(Number mu);
     //@}
 
     /** @name Computing fraction-to-the-boundary step sizes */

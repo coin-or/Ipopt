@@ -82,57 +82,57 @@ namespace Ipopt
     /** Standard Get / Set Methods */
     //@{
     /** Get the option's name (tag in the input file) */
-    const std::string& Name() const
+    virtual const std::string& Name() const
     {
       return name_;
     }
     /** Set the option's name (tag in the input file) */
-    void SetName(const std::string& name)
+    virtual void SetName(const std::string& name)
     {
       name_ = name;
     }
     /** Get the short description */
-    const std::string& ShortDescription() const
+    virtual const std::string& ShortDescription() const
     {
       return short_description_;
     }
     /** Get the long description */
-    const std::string& LongDescription() const
+    virtual const std::string& LongDescription() const
     {
       return long_description_;
     }
     /** Set the short description */
-    void SetShortDescription(const std::string& short_description)
+    virtual void SetShortDescription(const std::string& short_description)
     {
       short_description_ = short_description;
     }
     /** Set the long description */
-    void SetLongDescription(const std::string& long_description)
+    virtual void SetLongDescription(const std::string& long_description)
     {
       long_description_ = long_description;
     }
     /** Get the registering class */
-    const std::string& RegisteringCategory() const
+    virtual const std::string& RegisteringCategory() const
     {
       return registering_category_;
     }
     /** Set the registering class */
-    void SetRegisteringCategory(const std::string& registering_category)
+    virtual void SetRegisteringCategory(const std::string& registering_category)
     {
       registering_category_ = registering_category;
     }
     /** Get the Option's type */
-    const RegisteredOptionType& Type() const
+    virtual const RegisteredOptionType& Type() const
     {
       return type_;
     }
     /** Get the Option's type */
-    void SetType(const RegisteredOptionType& type)
+    virtual void SetType(const RegisteredOptionType& type)
     {
       type_ = type;
     }
     /** Counter */
-    Index Counter() const
+    virtual Index Counter() const
     {
       return counter_;
     }
@@ -144,28 +144,28 @@ namespace Ipopt
     //@{
     /** check if the option has a lower bound - can be called for
      *  OT_Number & OT_Integer*/
-    const bool& HasLower() const
+    virtual const bool& HasLower() const
     {
       DBG_ASSERT(type_ == OT_Number || type_ == OT_Integer);
       return has_lower_;
     }
     /** check if the lower bound is strict - can be called for
     OT_Number */
-    const bool& LowerStrict() const
+    virtual const bool& LowerStrict() const
     {
       DBG_ASSERT(type_ == OT_Number && has_lower_ == true);
       return lower_strict_;
     }
     /** get the Number version of the lower bound - can be called for
      *  OT_Number */
-    Number LowerNumber() const
+    virtual Number LowerNumber() const
     {
       DBG_ASSERT(has_lower_ == true && type_ == OT_Number);
       return lower_;
     }
     /** set the Number version of the lower bound - can be called for
      *  OT_Number */
-    void SetLowerNumber(const Number& lower, const bool& strict)
+    virtual void SetLowerNumber(const Number& lower, const bool& strict)
     {
       DBG_ASSERT(type_ == OT_Number);
       lower_ = lower;
@@ -173,14 +173,14 @@ namespace Ipopt
     }
     /** get the Integer version of the lower bound can be called for
      *  OT_Integer*/
-    Index LowerInteger() const
+    virtual Index LowerInteger() const
     {
       DBG_ASSERT(has_lower_ == true && type_ == OT_Integer);
       return (Index)lower_;
     }
     /** set the Integer version of the lower bound - can be called for
      *  OT_Integer */
-    void SetLowerInteger(const Index& lower)
+    virtual void SetLowerInteger(const Index& lower)
     {
       DBG_ASSERT(type_ == OT_Integer);
       lower_ = (Number)lower;
@@ -188,28 +188,28 @@ namespace Ipopt
     }
     /** check if the option has an upper bound - can be called for
      *  OT_Number & OT_Integer*/
-    const bool& HasUpper() const
+    virtual const bool& HasUpper() const
     {
       DBG_ASSERT(type_ == OT_Number || type_ == OT_Integer);
       return has_upper_;
     }
     /** check if the upper bound is strict - can be called for
      *  OT_Number */
-    const bool& UpperStrict() const
+    virtual const bool& UpperStrict() const
     {
       DBG_ASSERT(type_ == OT_Number && has_upper_ == true);
       return upper_strict_;
     }
     /** get the Number version of the upper bound - can be called for
      *  OT_Number */
-    Number UpperNumber() const
+    virtual Number UpperNumber() const
     {
       DBG_ASSERT(has_upper_ == true && type_ == OT_Number);
       return upper_;
     }
     /** set the Number version of the upper bound - can be called for
      *  OT_Number */
-    void SetUpperNumber(const Number& upper, const bool& strict)
+    virtual void SetUpperNumber(const Number& upper, const bool& strict)
     {
       DBG_ASSERT(type_ == OT_Number);
       upper_ = upper;
@@ -218,14 +218,14 @@ namespace Ipopt
     }
     /** get the Integer version of the upper bound - can be called for
      *  OT_Integer*/
-    Index UpperInteger() const
+    virtual Index UpperInteger() const
     {
       DBG_ASSERT(has_upper_ == true && type_ == OT_Integer);
       return (Index)upper_;
     }
     /** set the Integer version of the upper bound - can be called for
      *  OT_Integer */
-    void SetUpperInteger(const Index& upper)
+    virtual void SetUpperInteger(const Index& upper)
     {
       DBG_ASSERT(type_ == OT_Integer);
       upper_ = (Number)upper;
@@ -233,39 +233,39 @@ namespace Ipopt
     }
     /** method to add valid string entries - can be called for
      *  OT_String */
-    void AddValidStringSetting(const std::string value,
+    virtual void AddValidStringSetting(const std::string value,
                                const std::string description)
     {
       DBG_ASSERT(type_ == OT_String);
       valid_strings_.push_back(string_entry(value, description));
     }
     /** get the default as a Number - can be called for OT_Number */
-    Number DefaultNumber() const
+    virtual Number DefaultNumber() const
     {
       DBG_ASSERT(type_ == OT_Number);
       return default_number_;
     }
     /** Set the default as a Number - can be called for OT_Number */
-    void SetDefaultNumber(const Number& default_value)
+    virtual void SetDefaultNumber(const Number& default_value)
     {
       DBG_ASSERT(type_ == OT_Number);
       default_number_ = default_value;
     }
     /** get the default as an Integer - can be called for OT_Integer*/
-    Index DefaultInteger() const
+    virtual Index DefaultInteger() const
     {
       DBG_ASSERT(type_ == OT_Integer);
       return (Index)default_number_;
     }
     /** Set the default as an Integer - can be called for
     OT_Integer */
-    void SetDefaultInteger(const Index& default_value)
+    virtual void SetDefaultInteger(const Index& default_value)
     {
       DBG_ASSERT(type_ == OT_Integer);
       default_number_ = (Number)default_value;
     }
     /** get the default as a string - can be called for OT_String */
-    std::string DefaultString() const
+    virtual std::string DefaultString() const
     {
       DBG_ASSERT(type_ == OT_String);
       return default_string_;
@@ -273,20 +273,20 @@ namespace Ipopt
     /** get the default as a string, but as the index of the string in
      *  the list - helps map from a string to an enum- can be called
      *  for OT_String */
-    Index DefaultStringAsEnum() const
+    virtual Index DefaultStringAsEnum() const
     {
       DBG_ASSERT(type_ == OT_String);
       return MapStringSettingToEnum(default_string_);
     }
     /** Set the default as a string - can be called for OT_String */
-    void SetDefaultString(const std::string& default_value)
+    virtual void SetDefaultString(const std::string& default_value)
     {
       DBG_ASSERT(type_ == OT_String);
       default_string_ = default_value;
     }
     /** Check if the Number value is a valid setting - can be called
      *  for OT_Number */
-    bool IsValidNumberSetting(const Number& value) const
+    virtual bool IsValidNumberSetting(const Number& value) const
     {
       DBG_ASSERT(type_ == OT_Number);
       if (has_lower_ && ((lower_strict_ == true && value <= lower_) ||
@@ -301,7 +301,7 @@ namespace Ipopt
     }
     /** Check if the Integer value is a valid setting - can be called
      *  for OT_Integer */
-    bool IsValidIntegerSetting(const Index& value) const
+    virtual bool IsValidIntegerSetting(const Index& value) const
     {
       DBG_ASSERT(type_ == OT_Integer);
       if (has_lower_ && value < lower_) {
@@ -314,26 +314,26 @@ namespace Ipopt
     }
     /** Check if the String value is a valid setting - can be called
      *  for OT_String */
-    bool IsValidStringSetting(const std::string& value) const;
+    virtual bool IsValidStringSetting(const std::string& value) const;
 
     /** Map a user setting (allowing any case) to the case used when
      *  the setting was registered.
      */
-    std::string MapStringSetting(const std::string& value) const;
+    virtual std::string MapStringSetting(const std::string& value) const;
 
     /** Map a user setting (allowing any case) to the index of the
      *  matched setting in the list of string settings. Helps map a
      *  string setting to an enumeration.
      */
-    Index MapStringSettingToEnum(const std::string& value) const;
+    virtual Index MapStringSettingToEnum(const std::string& value) const;
     //@}
 
     /** output a description of the option */
-    void OutputDescription(const Journalist& jnlst) const;
+    virtual void OutputDescription(const Journalist& jnlst) const;
     /** output a more concise version */
-    void OutputShortDescription(const Journalist& jnlst) const;
+    virtual void OutputShortDescription(const Journalist& jnlst) const;
     /** output a latex version */
-    void OutputLatexDescription(const Journalist& jnlst) const;
+    virtual void OutputLatexDescription(const Journalist& jnlst) const;
 
   private:
     std::string name_;
@@ -394,7 +394,7 @@ namespace Ipopt
     {}
 
     /** Standard Destructor */
-    ~RegisteredOptions()
+    virtual ~RegisteredOptions()
     {}
     //@}
 
@@ -404,65 +404,65 @@ namespace Ipopt
     //@{
     /** set the registering class. All subsequent options will be
      *  added with the registered class */
-    void SetRegisteringCategory(const std::string& registering_category)
+    virtual void SetRegisteringCategory(const std::string& registering_category)
     {
       current_registering_category_ = registering_category;
     }
 
     /** retrieve the value of the current registering category */
-    std::string RegisteringCategory()
+    virtual std::string RegisteringCategory()
     {
       return current_registering_category_;
     }
 
     /** Add a Number option (with no restrictions) */
-    void AddNumberOption(const std::string& name,
+    virtual void AddNumberOption(const std::string& name,
                          const std::string& short_description,
                          Number default_value,
                          const std::string& long_description="");
     /** Add a Number option (with a lower bound) */
-    void AddLowerBoundedNumberOption(const std::string& name,
+    virtual void AddLowerBoundedNumberOption(const std::string& name,
                                      const std::string& short_description,
                                      Number lower, bool strict,
                                      Number default_value,
                                      const std::string& long_description="");
     /** Add a Number option (with a upper bound) */
-    void AddUpperBoundedNumberOption(const std::string& name,
+    virtual void AddUpperBoundedNumberOption(const std::string& name,
                                      const std::string& short_description,
                                      Number upper, bool strict,
                                      Number default_value,
                                      const std::string& long_description="");
     /** Add a Number option (with a both bounds) */
-    void AddBoundedNumberOption(const std::string& name,
+    virtual void AddBoundedNumberOption(const std::string& name,
                                 const std::string& short_description,
                                 Number lower, bool lower_strict,
                                 Number upper, bool upper_strict,
                                 Number default_value,
                                 const std::string& long_description="");
     /** Add a Integer option (with no restrictions) */
-    void AddIntegerOption(const std::string& name,
+    virtual void AddIntegerOption(const std::string& name,
                           const std::string& short_description,
                           Index default_value,
                           const std::string& long_description="");
     /** Add a Integer option (with a lower bound) */
-    void AddLowerBoundedIntegerOption(const std::string& name,
+    virtual void AddLowerBoundedIntegerOption(const std::string& name,
                                       const std::string& short_description,
                                       Index lower, Index default_value,
                                       const std::string& long_description="");
     /** Add a Integer option (with a upper bound) */
-    void AddUpperBoundedIntegerOption(const std::string& name,
+    virtual void AddUpperBoundedIntegerOption(const std::string& name,
                                       const std::string& short_description,
                                       Index upper, Index default_value,
                                       const std::string& long_description="");
     /** Add a Integer option (with a both bounds) */
-    void AddBoundedIntegerOption(const std::string& name,
+    virtual void AddBoundedIntegerOption(const std::string& name,
                                  const std::string& short_description,
                                  Index lower, Index upper,
                                  Index default_value,
                                  const std::string& long_description="");
 
     /** Add a String option (with no restrictions) */
-    void AddStringOption(const std::string& name,
+    virtual void AddStringOption(const std::string& name,
                          const std::string& short_description,
                          const std::string& default_value,
                          const std::vector<std::string>& settings,
@@ -470,13 +470,13 @@ namespace Ipopt
                          const std::string& long_description="");
     /** Methods that make adding string options with only a few
      *  entries easier */
-    void AddStringOption1(const std::string& name,
+    virtual void AddStringOption1(const std::string& name,
                           const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
                           const std::string& description1,
                           const std::string& long_description="");
-    void AddStringOption2(const std::string& name,
+    virtual void AddStringOption2(const std::string& name,
                           const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
@@ -484,7 +484,7 @@ namespace Ipopt
                           const std::string& setting2,
                           const std::string& description2,
                           const std::string& long_description="");
-    void AddStringOption3(const std::string& name,
+    virtual void AddStringOption3(const std::string& name,
                           const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
@@ -494,7 +494,7 @@ namespace Ipopt
                           const std::string& setting3,
                           const std::string& description3,
                           const std::string& long_description="");
-    void AddStringOption4(const std::string& name,
+    virtual void AddStringOption4(const std::string& name,
                           const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
@@ -506,7 +506,7 @@ namespace Ipopt
                           const std::string& setting4,
                           const std::string& description4,
                           const std::string& long_description="");
-    void AddStringOption5(const std::string& name,
+    virtual void AddStringOption5(const std::string& name,
                           const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
@@ -520,7 +520,7 @@ namespace Ipopt
                           const std::string& setting5,
                           const std::string& description5,
                           const std::string& long_description="");
-    void AddStringOption6(const std::string& name,
+    virtual void AddStringOption6(const std::string& name,
                           const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
@@ -536,7 +536,7 @@ namespace Ipopt
                           const std::string& setting6,
                           const std::string& description6,
                           const std::string& long_description="");
-    void AddStringOption7(const std::string& name,
+    virtual void AddStringOption7(const std::string& name,
                           const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
@@ -554,7 +554,7 @@ namespace Ipopt
                           const std::string& setting7,
                           const std::string& description7,
                           const std::string& long_description="");
-    void AddStringOption8(const std::string& name,
+    virtual void AddStringOption8(const std::string& name,
                           const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
@@ -574,7 +574,7 @@ namespace Ipopt
                           const std::string& setting8,
                           const std::string& description8,
                           const std::string& long_description="");
-    void AddStringOption9(const std::string& name,
+    virtual void AddStringOption9(const std::string& name,
                           const std::string& short_description,
                           const std::string& default_value,
                           const std::string& setting1,
@@ -596,7 +596,7 @@ namespace Ipopt
                           const std::string& setting9,
                           const std::string& description9,
                           const std::string& long_description="");
-    void AddStringOption10(const std::string& name,
+    virtual void AddStringOption10(const std::string& name,
                            const std::string& short_description,
                            const std::string& default_value,
                            const std::string& setting1,
@@ -623,21 +623,21 @@ namespace Ipopt
 
     /** Get a registered option - this will return NULL if the option
      *  does not exist */
-    SmartPtr<const RegisteredOption> GetOption(const std::string& name);
+    virtual SmartPtr<const RegisteredOption> GetOption(const std::string& name);
 
     /** Output documentation for the options - gives a description,
      *  etc. */
-    void OutputOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories);
+    virtual void OutputOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories);
 
     /** Output documentation in Latex format to include in a latex file */
-    void OutputLatexOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories);
+    virtual void OutputLatexOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories);
     //@}
 
     typedef std::map<std::string, SmartPtr<RegisteredOption> > RegOptionsList;
 
     /** Giving access to iteratable representation of the registered
      *  options */
-    const RegOptionsList& RegisteredOptionsList () const
+    virtual const RegOptionsList& RegisteredOptionsList () const
     {
       return registered_options_;
     }
