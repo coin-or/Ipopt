@@ -188,22 +188,22 @@ namespace Ipopt
     /** @name Methods for setting options */
     //@{
     virtual bool SetStringValue(const std::string& tag, const std::string& value,
-                        bool allow_clobber = true, bool dont_print = false);
+                                bool allow_clobber = true, bool dont_print = false);
     virtual bool SetNumericValue(const std::string& tag, Number value,
-                         bool allow_clobber = true, bool dont_print = false);
+                                 bool allow_clobber = true, bool dont_print = false);
     virtual bool SetIntegerValue(const std::string& tag, Index value,
-                         bool allow_clobber = true, bool dont_print = false);
+                                 bool allow_clobber = true, bool dont_print = false);
     //@}
 
     /** @name Methods for setting options only if they have not been
      *  set before*/
     //@{
     virtual bool SetStringValueIfUnset(const std::string& tag, const std::string& value,
-                               bool allow_clobber = true, bool dont_print = false);
+                                       bool allow_clobber = true, bool dont_print = false);
     virtual bool SetNumericValueIfUnset(const std::string& tag, Number value,
-                                bool allow_clobber = true, bool dont_print = false);
+                                        bool allow_clobber = true, bool dont_print = false);
     virtual bool SetIntegerValueIfUnset(const std::string& tag, Index value,
-                                bool allow_clobber = true, bool dont_print = false);
+                                        bool allow_clobber = true, bool dont_print = false);
     //@}
 
     /** @name Methods for retrieving values from the options list.  If
@@ -211,15 +211,15 @@ namespace Ipopt
      *  to the default value defined in the registered options. */
     //@{
     virtual bool GetStringValue(const std::string& tag, std::string& value,
-                        const std::string& prefix) const;
+                                const std::string& prefix) const;
     virtual bool GetEnumValue(const std::string& tag, Index& value,
-                      const std::string& prefix) const;
+                              const std::string& prefix) const;
     virtual bool GetBoolValue(const std::string& tag, bool& value,
-                      const std::string& prefix) const;
+                              const std::string& prefix) const;
     virtual bool GetNumericValue(const std::string& tag, Number& value,
-                         const std::string& prefix) const;
+                                 const std::string& prefix) const;
     virtual bool GetIntegerValue(const std::string& tag, Index& value,
-                         const std::string& prefix) const;
+                                 const std::string& prefix) const;
     //@}
 
     /** Get a string with the list of all options (tag, value, counter) */

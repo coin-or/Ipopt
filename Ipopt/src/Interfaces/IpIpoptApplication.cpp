@@ -42,7 +42,7 @@
 
 Ipopt::IpoptApplication * IpoptApplicationFactory()
 {
-	return new Ipopt::IpoptApplication;
+  return new Ipopt::IpoptApplication;
 }
 
 namespace Ipopt
