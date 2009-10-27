@@ -9,6 +9,18 @@
 #ifndef __IPIPOPTAPPLICATION_HPP__
 #define __IPIPOPTAPPLICATION_HPP__
 
+#ifndef IPOPT_EXPORT
+#ifdef _MSC_VER
+#ifdef IPOPT_DLL
+#define IPOPT_EXPORT(type) __declspec(dllexport) type __cdecl
+#else
+#define IPOPT_EXPORT(type) type __cdecl
+#endif
+#else 
+#define IPOPT_EXPORT(type) type
+#endif
+#endif
+
 #include <iostream>
 
 #include "IpJournalist.hpp"
@@ -49,7 +61,7 @@ namespace Ipopt
     /** Method for creating a new IpoptApplication that uses the same
      *  journalist and registered options, and a copy of the options
     list. */
-    SmartPtr<IpoptApplication> clone();
+    virtual SmartPtr<IpoptApplication> clone();
 
     /** Initialize method. This method reads the params file and
      *  initializes the journalists. You should call this method at
@@ -58,78 +70,78 @@ namespace Ipopt
      *  It returns something other than Solve_Succeeded if there was a
      *  problem in the initialization (such as an invalid option).
      */
-    ApplicationReturnStatus Initialize(std::string params_file = "ipopt.opt");
-    ApplicationReturnStatus Initialize(std::istream& is);
+    virtual ApplicationReturnStatus Initialize(std::string params_file = "ipopt.opt");
+    virtual ApplicationReturnStatus Initialize(std::istream& is);
 
     /**@name Solve methods */
     //@{
     /** Solve a problem that inherits from TNLP */
-    ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& tnlp);
+    virtual ApplicationReturnStatus OptimizeTNLP(const SmartPtr<TNLP>& tnlp);
 
     /** Solve a problem that inherits from NLP */
-    ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp);
+    virtual ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp);
 
     /** Solve a problem that inherits from NLP */
-    ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp, SmartPtr<AlgorithmBuilder>& alg_builder);
+    virtual ApplicationReturnStatus OptimizeNLP(const SmartPtr<NLP>& nlp, SmartPtr<AlgorithmBuilder>& alg_builder);
 
     /** Solve a problem (that inherits from TNLP) for a repeated time.
      *  The OptimizeTNLP method must have been called before.  The
      *  TNLP must be the same object, and the structure (number of
      *  variables and constraints and position of nonzeros in Jacobian
      *  and Hessian must be the same). */
-    ApplicationReturnStatus ReOptimizeTNLP(const SmartPtr<TNLP>& tnlp);
+    virtual ApplicationReturnStatus ReOptimizeTNLP(const SmartPtr<TNLP>& tnlp);
 
     /** Solve a problem (that inherits from NLP) for a repeated time.
      *  The OptimizeNLP method must have been called before.  The
      *  NLP must be the same object, and the structure (number of
      *  variables and constraints and position of nonzeros in Jacobian
      *  and Hessian must be the same). */
-    ApplicationReturnStatus ReOptimizeNLP(const SmartPtr<NLP>& nlp);
+    virtual ApplicationReturnStatus ReOptimizeNLP(const SmartPtr<NLP>& nlp);
     //@}
 
     /** Method for opening an output file with given print_level.
      *  Returns false if there was a problem. */
-    bool OpenOutputFile(std::string file_name, EJournalLevel print_level);
+    virtual bool OpenOutputFile(std::string file_name, EJournalLevel print_level);
 
     /**@name Accessor methods */
     //@{
     /** Get the Journalist for printing output */
-    SmartPtr<Journalist> Jnlst()
+    virtual SmartPtr<Journalist> Jnlst()
     {
       return jnlst_;
     }
 
     /** Get a pointer to RegisteredOptions object to
      *  add new options */
-    SmartPtr<RegisteredOptions> RegOptions()
+    virtual SmartPtr<RegisteredOptions> RegOptions()
     {
       return reg_options_;
     }
 
     /** Get the options list for setting options */
-    SmartPtr<OptionsList> Options()
+    virtual SmartPtr<OptionsList> Options()
     {
       return options_;
     }
 
     /** Get the options list for setting options (const version) */
-    SmartPtr<const OptionsList> Options() const
+    virtual SmartPtr<const OptionsList> Options() const
     {
       return ConstPtr(options_);
     }
 
     /** Get the object with the statistics about the most recent
      *  optimization run. */
-    SmartPtr<SolveStatistics> Statistics();
+    virtual SmartPtr<SolveStatistics> Statistics();
 
     /** Get the IpoptNLP Object */
-    SmartPtr<IpoptNLP> IpoptNLPObject();
+    virtual SmartPtr<IpoptNLP> IpoptNLPObject();
 
     /** Get the IpoptData Object */
     SmartPtr<IpoptData> IpoptDataObject();
 
     /** Get the IpoptCQ Object */
-    SmartPtr<IpoptCalculatedQuantities> IpoptCQObject();
+    virtual SmartPtr<IpoptCalculatedQuantities> IpoptCQObject();
 
     /** Get the Algorithm Object */
     SmartPtr<IpoptAlgorithm> AlgorithmObject();
@@ -222,5 +234,7 @@ namespace Ipopt
   };
 
 } // namespace Ipopt
+
+extern "C" IPOPT_EXPORT(class Ipopt::IpoptApplication *) IpoptApplicationFactory();
 
 #endif

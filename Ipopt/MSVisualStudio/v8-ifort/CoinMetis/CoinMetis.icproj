@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="CoinMetis"
+	ProjectGUID="{3602D4F7-FAA4-4ED6-981C-1B944FFDFCF9}"
+	VCNestedProjectGUID="{C491DA47-C32E-4D5C-983A-3FB4F349B361}"
+	VCNestedProjectFileName="CoinMetis.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

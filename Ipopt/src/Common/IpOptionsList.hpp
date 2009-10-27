@@ -160,7 +160,7 @@ namespace Ipopt
     {}
 
     /** Overloaded Equals Operator */
-    void operator=(const OptionsList& source)
+    virtual void operator=(const OptionsList& source)
     {
       options_ = source.options_;
       reg_options_ = source.reg_options_;
@@ -169,40 +169,40 @@ namespace Ipopt
     //@}
 
     /** Method for clearing all previously set options */
-    void clear()
+    virtual void clear()
     {
       options_.clear();
     }
 
     /** @name Get / Set Methods */
     //@{
-    void SetRegisteredOptions(const SmartPtr<RegisteredOptions> reg_options)
+    virtual void SetRegisteredOptions(const SmartPtr<RegisteredOptions> reg_options)
     {
       reg_options_ = reg_options;
     }
-    void SetJournalist(const SmartPtr<Journalist> jnlst)
+    virtual void SetJournalist(const SmartPtr<Journalist> jnlst)
     {
       jnlst_ = jnlst;
     }
     //@}
     /** @name Methods for setting options */
     //@{
-    bool SetStringValue(const std::string& tag, const std::string& value,
+    virtual bool SetStringValue(const std::string& tag, const std::string& value,
                         bool allow_clobber = true, bool dont_print = false);
-    bool SetNumericValue(const std::string& tag, Number value,
+    virtual bool SetNumericValue(const std::string& tag, Number value,
                          bool allow_clobber = true, bool dont_print = false);
-    bool SetIntegerValue(const std::string& tag, Index value,
+    virtual bool SetIntegerValue(const std::string& tag, Index value,
                          bool allow_clobber = true, bool dont_print = false);
     //@}
 
     /** @name Methods for setting options only if they have not been
      *  set before*/
     //@{
-    bool SetStringValueIfUnset(const std::string& tag, const std::string& value,
+    virtual bool SetStringValueIfUnset(const std::string& tag, const std::string& value,
                                bool allow_clobber = true, bool dont_print = false);
-    bool SetNumericValueIfUnset(const std::string& tag, Number value,
+    virtual bool SetNumericValueIfUnset(const std::string& tag, Number value,
                                 bool allow_clobber = true, bool dont_print = false);
-    bool SetIntegerValueIfUnset(const std::string& tag, Index value,
+    virtual bool SetIntegerValueIfUnset(const std::string& tag, Index value,
                                 bool allow_clobber = true, bool dont_print = false);
     //@}
 
@@ -210,29 +210,29 @@ namespace Ipopt
      *  a tag is not found, the methods return false, and value is set
      *  to the default value defined in the registered options. */
     //@{
-    bool GetStringValue(const std::string& tag, std::string& value,
+    virtual bool GetStringValue(const std::string& tag, std::string& value,
                         const std::string& prefix) const;
-    bool GetEnumValue(const std::string& tag, Index& value,
+    virtual bool GetEnumValue(const std::string& tag, Index& value,
                       const std::string& prefix) const;
-    bool GetBoolValue(const std::string& tag, bool& value,
+    virtual bool GetBoolValue(const std::string& tag, bool& value,
                       const std::string& prefix) const;
-    bool GetNumericValue(const std::string& tag, Number& value,
+    virtual bool GetNumericValue(const std::string& tag, Number& value,
                          const std::string& prefix) const;
-    bool GetIntegerValue(const std::string& tag, Index& value,
+    virtual bool GetIntegerValue(const std::string& tag, Index& value,
                          const std::string& prefix) const;
     //@}
 
     /** Get a string with the list of all options (tag, value, counter) */
-    void PrintList(std::string& list) const;
+    virtual void PrintList(std::string& list) const;
 
     /** Get a string with the list of all options set by the user
      *  (tag, value, use/notused).  Here, options with dont_print flag
      *  set to true are not printed. */
-    void PrintUserOptions(std::string& list) const;
+    virtual void PrintUserOptions(std::string& list) const;
 
     /** Read options from the stream is.  Returns false if
      *  an error was encountered. */
-    bool ReadFromStream(const Journalist& jnlst, std::istream& is);
+    virtual bool ReadFromStream(const Journalist& jnlst, std::istream& is);
 
   private:
     /**@name Default Compiler Generated Methods

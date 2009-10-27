@@ -38,6 +38,13 @@
 
 #include <fstream>
 
+// Factory to facilitate creating IpoptApplication objects from within a DLL
+
+Ipopt::IpoptApplication * IpoptApplicationFactory()
+{
+	return new Ipopt::IpoptApplication;
+}
+
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
