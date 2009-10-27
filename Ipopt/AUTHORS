@@ -73,6 +73,10 @@ Contributors:
   src/contrib/LinearSolverLoader/PardisoLoader.c
   src/contrib/LinearSolverLoader/PardisoLoader.h
 
+- Marcel Roelofs (AIMMS)
+  MSVC project files for Intel Fortran compiler, creating a DLL
+
+  MSVisualStudio/v8-ifort
 
 
 Contributors of code that is no longer included in Ipopt distribution:
