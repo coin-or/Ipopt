@@ -193,7 +193,8 @@ namespace Ipopt
     // is maybe locally infeasible
 
     if (status==CONTINUE) {
-
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Checking convergence for restoration phase problem...\n");
       status = OptimalityErrorConvergenceCheck::CheckConvergence(false);
       if (status == CONVERGED || status == CONVERGED_TO_ACCEPTABLE_POINT) {
         Number orig_trial_primal_inf =
