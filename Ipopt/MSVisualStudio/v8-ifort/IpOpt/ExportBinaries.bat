@@ -1,5 +1,7 @@
 @echo off
 
+mkdir ..\..\..\..\include
+rmdir ..\..\..\..\include /s /q
 mkdir ..\..\..\..\include\coin
 copy ..\..\..\src\LinAlg\IpVector.hpp				..\..\..\..\include\coin /Y
 copy ..\..\..\MSVisualStudio\v8-ifort\IpOpt\config_ipopt.h      ..\..\..\..\include\coin /Y
@@ -32,6 +34,8 @@ copy ..\..\..\src\Interfaces\IpTNLPReducer.hpp                  ..\..\..\..\incl
 copy ..\..\..\src\Common\IpTypes.hpp                            ..\..\..\..\include\coin /Y
 copy ..\..\..\src\Common\IpUtils.hpp                            ..\..\..\..\include\coin /Y
 
+mkdir ..\..\..\..\lib
+rmdir ..\..\..\..\lib /s /q
 mkdir ..\..\..\..\lib\win32
 copy ..\release\Ipopt*.dll ..\..\..\..\lib\win32 /y
 copy ..\release\Ipopt*.lib ..\..\..\..\lib\win32 /y
@@ -40,4 +44,4 @@ mkdir ..\..\..\..\lib\x64
 copy ..\x64\release\Ipopt*.dll ..\..\..\..\lib\x64 /y
 copy ..\x64\release\Ipopt*.lib ..\..\..\..\lib\x64 /y
 
-copy README.LIB ..\..\..\..\lib\README.TXT /y
+copy README-LIB.TXT ..\..\..\..\lib\README.TXT /y

@@ -64,7 +64,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)37.dll"
+				OutputFile="$(OutDir)\$(ProjectName)38.dll"
 				AdditionalLibraryDirectories="C:\Program Files\Intel\Compiler\11.1\046\lib\ia32"
 				IgnoreDefaultLibraryNames="libcmt.lib"
 			/>
@@ -140,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)37.dll"
+				OutputFile="$(OutDir)\$(ProjectName)38.dll"
 				AdditionalLibraryDirectories="C:\Program Files\Intel\Compiler\11.1\046\lib\intel64"
 				IgnoreDefaultLibraryNames="libcmt.lib"
 			/>
@@ -213,7 +213,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)37.dll"
+				ShowProgress="0"
+				OutputFile="$(OutDir)\$(ProjectName)38.dll"
 				AdditionalLibraryDirectories="C:\Program Files\Intel\Compiler\11.1\046\lib\ia32"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
@@ -240,7 +241,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="CreateInclude.bat"
+				CommandLine="ExportBinaries.bat"
 			/>
 		</Configuration>
 		<Configuration
@@ -289,7 +290,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName)37.dll"
+				OutputFile="$(OutDir)\$(ProjectName)38.dll"
 				AdditionalLibraryDirectories="C:\Program Files\Intel\Compiler\11.1\046\lib\intel64"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
@@ -316,7 +317,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="CreateInclude.bat"
+				CommandLine="ExportBinaries.bat"
 			/>
 		</Configuration>
 	</Configurations>
