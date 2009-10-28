@@ -4,6 +4,8 @@
 /INSTALL -text
 Ipopt/INSTALL -text
 Ipopt/LICENSE -text
+Ipopt/MSVisualStudio/BinaryDLL-Link-Example/BinaryDLL-Link-Example.sln -text
+Ipopt/MSVisualStudio/BinaryDLL-Link-Example/BinaryDLL-Link-Example.vcproj -text
 Ipopt/MSVisualStudio/v8-ifort/CoinBlas/CoinBlas.vfproj -text
 Ipopt/MSVisualStudio/v8-ifort/CoinLapack/CoinLapack.vfproj -text
 Ipopt/MSVisualStudio/v8-ifort/CoinMetis/CoinMetis.icproj -text
