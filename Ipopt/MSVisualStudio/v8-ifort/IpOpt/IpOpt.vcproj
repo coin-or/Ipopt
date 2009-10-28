@@ -67,6 +67,7 @@
 				OutputFile="$(OutDir)\$(ProjectName)38.dll"
 				AdditionalLibraryDirectories="C:\Program Files\Intel\Compiler\11.1\046\lib\ia32"
 				IgnoreDefaultLibraryNames="libcmt.lib"
+				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -91,6 +92,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="ExportBinaries.bat win32 debug"
 			/>
 		</Configuration>
 		<Configuration
@@ -143,6 +145,7 @@
 				OutputFile="$(OutDir)\$(ProjectName)38.dll"
 				AdditionalLibraryDirectories="C:\Program Files\Intel\Compiler\11.1\046\lib\intel64"
 				IgnoreDefaultLibraryNames="libcmt.lib"
+				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -167,6 +170,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="ExportBinaries.bat x64 debug"
 			/>
 		</Configuration>
 		<Configuration
@@ -241,7 +245,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="ExportBinaries.bat"
+				CommandLine="ExportBinaries.bat win32 release"
 			/>
 		</Configuration>
 		<Configuration
@@ -317,7 +321,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="ExportBinaries.bat"
+				CommandLine="ExportBinaries.bat x64 release"
 			/>
 		</Configuration>
 	</Configurations>
