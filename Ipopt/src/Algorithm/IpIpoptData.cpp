@@ -43,6 +43,12 @@ namespace Ipopt
                              const OptionsList& options,
                              const std::string& prefix)
   {
+#if 0
+    // I (AW) took the following heuristic out again, since it seemed
+    // that the restoration phase tolerance became too tight by
+    // default.  I originally probably put it in to avoid that a claim
+    // of infeasibility is made prematurely...  let's see if someone
+    // starts screaming...
     if (prefix=="resto.") {
       // The default for the restoration phase is 1e-2 time the value
       // for the regular algorithm
@@ -54,6 +60,9 @@ namespace Ipopt
     else {
       options.GetNumericValue("tol", tol_, prefix);
     }
+#else
+    options.GetNumericValue("tol", tol_, prefix);
+#endif
 
     iter_count_ = 0;
     curr_mu_ = -1.;
