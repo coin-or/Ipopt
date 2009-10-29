@@ -38,7 +38,7 @@
 /* include the COIN-wide system specific configure header */
 #include "configall_system.h"
 
-#define IPOPT_VERSION "3.8trunk"
+#define IPOPT_VERSION "3.8stable"
 
 /***************************************************************************/
 /*             HERE DEFINE THE CONFIGURATION SPECIFIC MACROS               */
