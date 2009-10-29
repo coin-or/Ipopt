@@ -38,7 +38,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.7.2.  It includes
+  This document is a guide to using \Ipopt\ 3.8.0.  It includes
   instructions on how to obtain and compile \Ipopt, a description of
   the interface, user options, etc., as well as a tutorial on how to
   solve a nonlinear optimization problem with \Ipopt.
@@ -390,7 +390,7 @@ To use the tarball, follow the steps below:
 \item Download the desired tarball from
   \texttt{http://www.coin-or.org/download/source/Ipopt}, it has the form {\tt
     Ipopt-{\em x.y.z}.tgz}, where {\tt\em x.y.z} is the version
-  number, such as {\tt 3.7.2}.  There might also be daily snapshot
+  number, such as {\tt 3.8.0}.  There might also be daily snapshot
   from the stable branch.  The number of the latest official release
   can be found on the \Ipopt\ Trac page.
 \item Issue the following commands to unpack the archive file: \\
@@ -780,6 +780,19 @@ notes in Section~\ref{MinGWInstall}.
 The \Ipopt\ distribution also includes projects files for the
 Microsoft Visual Studio (see Section~\ref{VisualStudioInstall}).
 
+\textbf{NEW:} Some binaries for \Ipopt\ are available on the COIN website at
+
+\texttt{http://www.coin-or.org/download/binary/Ipopt/}
+
+\noindent
+There are also precompiled versions of Ipopt as DLLs (generated from
+the MSVC solution in \Ipopt's subdirecotry
+\texttt{\$IPOPTDIR/Ipopt/MSVisualStudio/v8-ifort}.  Look at the
+\texttt{README} files for details.  An example how to use these DLLs
+from your own MSVC project is in\\
+\texttt{\$IPOPTDIR/Ipopt/MSVisualStudio/BinaryDLL-Link-Example}.
+
+
 \subsubsection{Installation with Cygwin using GNU compilers}\label{CygwinInstall}
 
 Cygwin is a Linux-like environment for Windows; if you don't know what
@@ -982,6 +995,18 @@ to make sure that the environment variables are set for the compilers
 immediately after you run the configuration script.
 
 \subsubsection{Using Microsoft Visual Studio}\label{VisualStudioInstall}
+
+\textbf{NEW:} Some binaries for \Ipopt\ are available on the COIN website at
+
+\texttt{http://www.coin-or.org/download/binary/Ipopt/}
+
+\noindent
+There are also precompiled versions of Ipopt as DLLs (generated from
+the MSVC solution in \Ipopt's subdirecotry
+\texttt{\$IPOPTDIR/Ipopt/MSVisualStudio/v8-ifort}.  Look at the
+\texttt{README} files for details.  An example how to use these DLLs
+from your own MSVC project is in\\
+\texttt{\$IPOPTDIR/Ipopt/MSVisualStudio/BinaryDLL-Link-Example}.
 
 The \Ipopt\ distribution includes project files that can be used to
 compile the \Ipopt\ library, the AMPL solver executable, and a C++
@@ -2132,7 +2157,9 @@ int main(int argv, char* argc[])
 
   // Create a new instance of IpoptApplication
   //  (use a SmartPtr, not raw)
-  SmartPtr<IpoptApplication> app = new IpoptApplication();
+  // We are using the factory, since this allows us to compile this
+  // example with an Ipopt Windows DLL
+  SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
 
   // Change some options
   // Note: The following choices are only examples, they might not be
@@ -2170,7 +2197,10 @@ int main(int argv, char* argc[])
 
 The first line of code in {\tt main} creates an instance of {\tt
   HS071\_NLP}. We then create an instance of the \Ipopt\ solver, {\tt
-  IpoptApplication}. The call to {\tt app->Initialize(...)} will
+  IpoptApplication}. You could use \texttt{new} to create a new
+application object, but if you want to make sure that your code would
+also work with a Windows DLL, you need to use the factory, as done in
+the example above. The call to {\tt app->Initialize(...)} will
 initialize that object, process this options (particularly the output
 related options), and the call to {\tt app->OptimizeTNLP(...)}  will
 run \Ipopt\ and try to solve the problem. By default, \Ipopt\ will

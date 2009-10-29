@@ -2,6 +2,13 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2009-10-29 releases/3.8.0
+        - Added MSVC solution with Intel Fortran compiler to generate DLLs
+          (contributed by Marcel Roelofs).  To make this work, a lot of methods
+          in exported headers have been made virtual
+        - changed default convergence tolerance in restoration phase (now same
+          as regular tolerance)
+        - output is flushed after each iteration
 2009-10-06 releases/3.7.1
         - bugfix for square problems
         - correct timinig information (obj gradient was forgotten)

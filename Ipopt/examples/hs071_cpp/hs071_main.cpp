@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -30,7 +30,9 @@ int main(int argv, char* argc[])
 
   // Create a new instance of IpoptApplication
   //  (use a SmartPtr, not raw)
-  SmartPtr<IpoptApplication> app = new IpoptApplication();
+  // We are using the factory, since this allows us to compile this
+  // example with an Ipopt Windows DLL
+  SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
 
   // Change some options
   // Note: The following choices are only examples, they might not be
