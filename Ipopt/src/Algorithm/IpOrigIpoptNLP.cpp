@@ -910,6 +910,9 @@ namespace Ipopt
                  " Objective function.................: %10.3f\n",
                  f_eval_time_.TotalTime());
     jnlst.Printf(level, category,
+                 " Objective function gradient........: %10.3f\n",
+                 grad_f_eval_time_.TotalTime());
+    jnlst.Printf(level, category,
                  " Equality constraints...............: %10.3f\n",
                  c_eval_time_.TotalTime());
     jnlst.Printf(level, category,
@@ -930,6 +933,7 @@ namespace Ipopt
   OrigIpoptNLP::TotalFunctionEvaluationCPUTime() const
   {
     return f_eval_time_.TotalTime()+
+           grad_f_eval_time_.TotalTime()+
            c_eval_time_.TotalTime()+
            d_eval_time_.TotalTime()+
            jac_c_eval_time_.TotalTime()+
