@@ -40,6 +40,7 @@
 #include "IpLimMemQuasiNewtonUpdater.hpp"
 #include "IpOrigIpoptNLP.hpp"
 #include "IpLowRankAugSystemSolver.hpp"
+#include "IpLowRankSSAugSystemSolver.hpp"
 #include "IpRestoIterationOutput.hpp"
 #include "IpRestoFilterConvCheck.hpp"
 #include "IpRestoIterateInitializer.hpp"
@@ -58,6 +59,7 @@
 
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
+# include "IpIterativeWsmpSolverInterface.hpp"
 #endif
 #ifdef COIN_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
@@ -238,6 +240,15 @@ namespace Ipopt
       "strategy. (Only considered if \"adaptive\" is selected for option "
       "\"mu_strategy\".)");
 
+    roptions->SetRegisteringCategory("Hessian Approximation");
+    roptions->AddStringOption2(
+      "limited_memory_aug_solver",
+      "Strategy for solving the augmented system for low-rank Hessian.",
+      "sherman-morrison",
+      "sherman-morrison", "use Sherman-Morrison formula",
+      "extended", "use an extended augmented system",
+      "");
+
     roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption3(
       "line_search_method",
@@ -247,6 +258,13 @@ namespace Ipopt
       "cg-penalty", "Chen-Goldfarb penalty function",
       "penalty", "Standard penalty function",
       "");
+    roptions->AddStringOption2(
+      "wsmp_iterative",
+      "Switches to iterative solver in WSMP.",
+      "no",
+      "no", "use direct solver",
+      "yes", "use iterative solver",
+      "EXPERIMENTAL!");
   }
 
   SmartPtr<IpoptAlgorithm>
@@ -341,7 +359,14 @@ namespace Ipopt
 # ifdef HAVE_MPI
       SolverInterface = new ParWsmpSolverInterface();
 # else
-      SolverInterface = new WsmpSolverInterface();
+      bool wsmp_iterative;
+      options.GetBoolValue("wsmp_iterative", wsmp_iterative, prefix);
+      if (wsmp_iterative) {
+        SolverInterface = new IterativeWsmpSolverInterface();
+      }
+      else {
+        SolverInterface = new WsmpSolverInterface();
+      }
 # endif
 #else
 
@@ -425,9 +450,33 @@ namespace Ipopt
     HessianApproximationType hessian_approximation =
       HessianApproximationType(enum_int);
     if (hessian_approximation==LIMITED_MEMORY) {
-      SmartPtr<AugSystemSolver> tmp =
-        new LowRankAugSystemSolver(*AugSolver);
-      AugSolver = tmp;
+      std::string lm_aug_solver;
+      options.GetStringValue("limited_memory_aug_solver", lm_aug_solver,
+                             prefix);
+      if (lm_aug_solver == "sherman-morrison") {
+        AugSolver = new LowRankAugSystemSolver(*AugSolver);
+      }
+      else if (lm_aug_solver == "extended") {
+        Index lm_history;
+        options.GetIntegerValue("limited_memory_max_history", lm_history,
+                                prefix);
+        Index max_rank;
+        std::string lm_type;
+        options.GetStringValue("limited_memory_update_type", lm_type, prefix);
+        if (lm_type == "bfgs") {
+          max_rank = 2*lm_history;
+        }
+        else if (lm_type == "sr1") {
+          max_rank = lm_history;
+        }
+        else {
+          THROW_EXCEPTION(OPTION_INVALID, "Unknown value for option \"limited_memory_update_type\".");
+        }
+        AugSolver = new LowRankSSAugSystemSolver(*AugSolver, max_rank);
+      }
+      else {
+        THROW_EXCEPTION(OPTION_INVALID, "Unknown value for option \"limited_memory_aug_solver\".");
+      }
     }
 
     SmartPtr<PDPerturbationHandler> pertHandler;

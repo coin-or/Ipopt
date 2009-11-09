@@ -42,6 +42,13 @@
 
 #include <fstream>
 
+// Factory to facilitate creating IpoptApplication objects from within a DLL
+
+Ipopt::IpoptApplication * IpoptApplicationFactory()
+{
+  return new Ipopt::IpoptApplication;
+}
+
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
@@ -50,6 +57,11 @@ namespace Ipopt
 
   IpoptApplication::IpoptApplication(bool create_console_out /* = true */,
                                      bool create_empty /* = false */)
+      :
+      read_params_dat_(true),
+      inexact_algorithm_(false),
+      replace_bounds_(false),
+      skip_finalize_solution_call_(false)
   {
     options_ = new OptionsList();
     if (create_empty)
@@ -101,9 +113,13 @@ namespace Ipopt
                                      SmartPtr<OptionsList> options,
                                      SmartPtr<Journalist> jnlst)
       :
+      read_params_dat_(true),
       jnlst_(jnlst),
       reg_options_(reg_options),
-      options_(options)
+      options_(options),
+      inexact_algorithm_(false),
+      replace_bounds_(false),
+      skip_finalize_solution_call_(false)
   {}
 
   SmartPtr<IpoptApplication> IpoptApplication::clone()
@@ -112,6 +128,11 @@ namespace Ipopt
     retval->jnlst_ = Jnlst();
     retval->reg_options_ = RegOptions();
     *retval->options_ = *Options();
+
+    retval->read_params_dat_ = read_params_dat_;
+    retval->inexact_algorithm_ = inexact_algorithm_;
+    retval->replace_bounds_ = replace_bounds_;
+    retval->skip_finalize_solution_call_ = skip_finalize_solution_call_;
 
     return retval;
   }
@@ -294,6 +315,7 @@ namespace Ipopt
 
           options_to_print.push_back("#Multiplier Updates");
           options_to_print.push_back("alpha_for_y");
+          options_to_print.push_back("alpha_for_y_tol");
           options_to_print.push_back("recalc_y");
           options_to_print.push_back("recalc_y_feas_tol");
 
@@ -301,8 +323,6 @@ namespace Ipopt
           options_to_print.push_back("max_soc");
           options_to_print.push_back("watchdog_shortened_iter_trigger");
           options_to_print.push_back("watchdog_trial_iter_max");
-          options_to_print.push_back("alpha_for_y");
-          options_to_print.push_back("alpha_for_y_tol");
           options_to_print.push_back("accept_every_trial_step");
           options_to_print.push_back("corrector_type");
 

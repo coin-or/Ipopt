@@ -11,6 +11,18 @@
 #ifndef __IPSTDCINTERFACE_H__
 #define __IPSTDCINTERFACE_H__
 
+#ifndef IPOPT_EXPORT
+#ifdef _MSC_VER
+#ifdef IPOPT_DLL
+#define IPOPT_EXPORT(type) __declspec(dllexport) type __cdecl
+#else
+#define IPOPT_EXPORT(type) type __cdecl
+#endif
+#else 
+#define IPOPT_EXPORT(type) type
+#endif
+#endif
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -97,7 +109,7 @@ extern "C"
    *
    *  If NULL is returned, there was a problem with one of the inputs
    *  or reading the options file. */
-  IpoptProblem CreateIpoptProblem(
+  IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
       Index n             /** Number of optimization variables */
     , Number* x_L         /** Lower bounds on variables. This array of
                               size n is copied internally, so that the
@@ -154,32 +166,32 @@ extern "C"
 
   /** Method for freeing a previously created IpoptProblem.  After
       freeing an IpoptProblem, it cannot be used anymore. */
-  void FreeIpoptProblem(IpoptProblem ipopt_problem);
+  IPOPT_EXPORT(void) FreeIpoptProblem(IpoptProblem ipopt_problem);
 
 
   /** Function for adding a string option.  Returns FALSE the option
    *  could not be set (e.g., if keyword is unknown) */
-  Bool AddIpoptStrOption(IpoptProblem ipopt_problem, char* keyword, char* val);
+  IPOPT_EXPORT(Bool) AddIpoptStrOption(IpoptProblem ipopt_problem, char* keyword, char* val);
 
   /** Function for adding a Number option.  Returns FALSE the option
    *  could not be set (e.g., if keyword is unknown) */
-  Bool AddIpoptNumOption(IpoptProblem ipopt_problem, char* keyword, Number val);
+  IPOPT_EXPORT(Bool) AddIpoptNumOption(IpoptProblem ipopt_problem, char* keyword, Number val);
 
   /** Function for adding an Int option.  Returns FALSE the option
    *  could not be set (e.g., if keyword is unknown) */
-  Bool AddIpoptIntOption(IpoptProblem ipopt_problem, char* keyword, Int val);
+  IPOPT_EXPORT(Bool) AddIpoptIntOption(IpoptProblem ipopt_problem, char* keyword, Int val);
 
   /** Function for opening an output file for a given name with given
    *  printlevel.  Returns false, if there was a problem opening the
    *  file. */
-  Bool OpenIpoptOutputFile(IpoptProblem ipopt_problem, char* file_name,
+  IPOPT_EXPORT(Bool) OpenIpoptOutputFile(IpoptProblem ipopt_problem, char* file_name,
                            Int print_level);
 
   /** Optional function for setting scaling parameter for the NLP.
    *  This corresponds to the get_scaling_parameters method in TNLP.
    *  If the pointers x_scaling or g_scaling are NULL, then no scaling
    *  for x resp. g is done. */
-  Bool SetIpoptProblemScaling(IpoptProblem ipopt_problem,
+  IPOPT_EXPORT(Bool) SetIpoptProblemScaling(IpoptProblem ipopt_problem,
 			      Number obj_scaling,
 			      Number* x_scaling,
 			      Number* g_scaling);
@@ -189,7 +201,7 @@ extern "C"
       specified outcome of the optimization procedure (e.g., success,
       failure etc).
    */
-  enum ApplicationReturnStatus IpoptSolve(
+  IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
       IpoptProblem ipopt_problem
                          /** Problem that is to be optimized.  Ipopt
                              will use the options previously specified with
@@ -216,7 +228,6 @@ extern "C"
   void IpoptStatisticsCounts;
 
   void IpoptStatisticsInfeasibilities; */
-
 #ifdef __cplusplus
 } /* extern "C" { */
 #endif

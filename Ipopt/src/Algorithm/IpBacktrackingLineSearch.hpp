@@ -262,6 +262,10 @@ namespace Ipopt
     /** Flag indicating whether the line search should always accept
      *  the full (fraction-to-the-boundary) step. */
     bool accept_every_trial_step_;
+    /** Maximal number of trial steps before we blindly accept trial
+     *  point.  If set to value other than -1, we accept a trial point
+     *  even if it is not satisfying acceptance criteria. */
+    Index accept_after_max_steps_;
     /** Indicates whether problem can be expected to be infeasible.
      *  This will trigger requesting a tighter reduction in
      *  infeasibility the first time the restoration phase is

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectType="typeStaticLibrary" ProjectCreator="Intel Fortran" Keyword="Static Library" Version="11.0" ProjectIdGuid="{97E4A8DA-C94F-459D-AD7B-58DC5A8810D1}">
+	<Platforms>
+		<Platform Name="Win32"/>
+		<Platform Name="x64"/></Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32" ConfigurationType="typeStaticLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Interfaces="true" WarnInterfaces="true" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
+				<Tool Name="VFLibrarianTool"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|Win32" ConfigurationType="typeStaticLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLibrarianTool"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Debug|x64" ConfigurationType="typeStaticLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Interfaces="true" WarnInterfaces="true" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
+				<Tool Name="VFLibrarianTool"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetAMD64"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|x64" ConfigurationType="typeStaticLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLibrarianTool"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetAMD64"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
+	<Files>
+		<Filter Name="Header Files" Filter="fi;fd"/>
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dgetf2.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dgetrf.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dgetrs.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlae2.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaev2.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\INSTALL\dlamch.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlanst.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlansy.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlapy2.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlarf.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlarfb.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlarfg.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlarft.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlartg.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlascl.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaset.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlasr.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlasrt.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlassq.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaswp.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlatrd.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dorg2l.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dorg2r.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dorgql.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dorgqr.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dorgtr.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dpotf2.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dpotrf.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dpotrs.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsteqr.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsterf.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsyev.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsytd2.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsytrd.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\ieeeck.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\ilaenv.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\iparmq.f"/></Filter></Files>
+	<Globals/></VisualStudioProject>

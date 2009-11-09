@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -35,7 +35,7 @@ int main(int argv, char**argc)
 {
   using namespace Ipopt;
 
-  SmartPtr<IpoptApplication> app = new IpoptApplication();
+  SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
 
   // Check if executable is run only to print out options documentation
   if (argv == 2) {

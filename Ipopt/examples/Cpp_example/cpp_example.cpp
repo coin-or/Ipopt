@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -18,7 +18,10 @@ int main(int argv, char* argc[])
   SmartPtr<TNLP> mynlp = new MyNLP();
 
   // Create an instance of the IpoptApplication
-  SmartPtr<IpoptApplication> app = new IpoptApplication();
+  //
+  // We are using the factory, since this allows us to compile this
+  // example with an Ipopt Windows DLL
+  SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
 
   // Initialize the IpoptApplication and process the options
   ApplicationReturnStatus status;

@@ -574,12 +574,12 @@ namespace Ipopt
           }
           just_switched_on_scaling_ = false;
         }
-	if (my_rank_==0) {
-	  for (Index i=0; i<nonzeros_triplet_; i++) {
-	    atriplet[i] *=
-	      scaling_factors_[airn_[i]-1] * scaling_factors_[ajcn_[i]-1];
-	  }
-	}
+        if (my_rank_==0) {
+          for (Index i=0; i<nonzeros_triplet_; i++) {
+            atriplet[i] *=
+              scaling_factors_[airn_[i]-1] * scaling_factors_[ajcn_[i]-1];
+          }
+        }
         IpData().TimingStats().LinearSystemScaling().End();
       }
     }

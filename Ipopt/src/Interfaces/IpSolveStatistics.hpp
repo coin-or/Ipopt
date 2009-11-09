@@ -46,33 +46,33 @@ namespace Ipopt
      *  statistics information */
     //@{
     /** Iteration counts. */
-    Index IterationCount() const;
+    virtual Index IterationCount() const;
     /** Total CPU time, including function evaluations. */
-    Number TotalCpuTime() const;
+    virtual Number TotalCpuTime() const;
     /** Total System time, including function evaluations. */
-    Number TotalSysTime() const;
+    virtual Number TotalSysTime() const;
     /** Total wall clock time, including function evaluations. */
-    Number TotalWallclockTime() const;
+    virtual Number TotalWallclockTime() const;
     /** Number of NLP function evaluations. */
-    void NumberOfEvaluations(Index& num_obj_evals,
-                             Index& num_constr_evals,
-                             Index& num_obj_grad_evals,
-                             Index& num_constr_jac_evals,
-                             Index& num_hess_evals) const;
+    virtual void NumberOfEvaluations(Index& num_obj_evals,
+                                     Index& num_constr_evals,
+                                     Index& num_obj_grad_evals,
+                                     Index& num_constr_jac_evals,
+                                     Index& num_hess_evals) const;
     /** Unscaled solution infeasibilities */
-    void Infeasibilities(Number& dual_inf,
-                         Number& constr_viol,
-                         Number& complementarity,
-                         Number& kkt_error) const;
+    virtual void Infeasibilities(Number& dual_inf,
+                                 Number& constr_viol,
+                                 Number& complementarity,
+                                 Number& kkt_error) const;
     /** Scaled solution infeasibilities */
-    void ScaledInfeasibilities(Number& scaled_dual_inf,
-                               Number& scaled_constr_viol,
-                               Number& scaled_complementarity,
-                               Number& scaled_kkt_error) const;
+    virtual void ScaledInfeasibilities(Number& scaled_dual_inf,
+                                       Number& scaled_constr_viol,
+                                       Number& scaled_complementarity,
+                                       Number& scaled_kkt_error) const;
     /** Final value of objective function */
-    Number FinalObjective() const;
+    virtual Number FinalObjective() const;
     /** Final scaled value of objective function */
-    Number FinalScaledObjective() const;
+    virtual Number FinalScaledObjective() const;
     //@}
 
   private:
