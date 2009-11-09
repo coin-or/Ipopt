@@ -1,7 +1,3 @@
-[submodule "BuildTools"]
-	path = BuildTools
-	url = git://github.com/coin-or-tools/BuildTools.git
-	branch = master
 [submodule "ThirdParty/ASL"]
 	path = ThirdParty/ASL
 	url = git://github.com/coin-or-tools/ThirdParty-ASL.git

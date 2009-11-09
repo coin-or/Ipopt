@@ -428,7 +428,7 @@ namespace Ipopt
       }
 #else
       for (Index j=0; j<mumps_data->n; ++j) {
-	rhs_vals[i * mumps_data->n + j] = 1e-14;
+        rhs_vals[i * mumps_data->n + j] = 1e-14;
       }
 #endif
     }

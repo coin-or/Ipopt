@@ -1501,8 +1501,9 @@ namespace Ipopt
     std::vector<Index> ret;
     const Index* ptr = GetIntegerSuffixValues(suffix_string, source);
     if (ptr) {
+      ret.reserve(n);
       for (Index i=0; i<n; i++) {
-        ret[i] = ptr[i];
+        ret.push_back(ptr[i]);
       }
     }
     return ret;
@@ -1543,8 +1544,9 @@ namespace Ipopt
     std::vector<Number> ret;
     const Number* ptr = GetNumberSuffixValues(suffix_string, source);
     if (ptr) {
+      ret.reserve(n);
       for (Index i=0; i<n; i++) {
-        ret[i] = ptr[i];
+        ret.push_back(ptr[i]);
       }
     }
     return ret;

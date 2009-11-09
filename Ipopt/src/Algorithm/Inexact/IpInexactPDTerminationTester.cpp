@@ -68,7 +68,7 @@ namespace Ipopt
       "tt_kappa1",
       "kappa1 factor in Termination Test 1 and 3.",
       0.0, true,
-      1e-1,
+      1e-3,
       "");
     roptions->AddLowerBoundedNumberOption(
       "tt_kappa2",
@@ -96,7 +96,7 @@ namespace Ipopt
     roptions->AddLowerBoundedIntegerOption(
       "inexact_desired_pd_residual_iter",
       "Number of iterations willing to be spent in obtaining desired primal-dual ration.",
-      0, 100,
+      0, 1,
       "");
   }
 

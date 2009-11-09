@@ -130,6 +130,25 @@ namespace Ipopt
       "If non-negative, this option determines the iteration in which all "
       "matrices given to WSMP are written to files.  This option is only "
       "available if Ipopt has been compiled with WSMP.");
+    roptions->AddStringOption2(
+      "wsmp_skip_inertia_check",
+      "Always pretent inertia is correct.",
+      "no",
+      "no", "check inertia",
+      "yes", "skip inertia check",
+      "Setting this option to \"yes\" essentially disables inertia check. "
+      "This option makes the algorithm non-robust and easily fail, but it "
+      "might give some insight into the necessity of inertia control.");
+    roptions->AddStringOption2(
+      "wsmp_no_pivoting",
+      "Use the static pivoting option of WSMP.",
+      "no",
+      "no", "use the regular version",
+      "yes", "use static pivoting",
+      "Setting this option to \"yes\" means that WSMP instructed not to do "
+      "pivoting.  This works only in certain situations (when the Hessian "
+      "block is known to be positive definite or when we are using L-BFGS). "
+      "It can also lead to a lot of fill-in.");
   }
 
   bool WsmpSolverInterface::InitializeImpl(const OptionsList& options,
@@ -156,12 +175,17 @@ namespace Ipopt
     options.GetIntegerValue("wsmp_scaling", wsmp_scaling_, prefix);
     options.GetIntegerValue("wsmp_write_matrix_iteration",
                             wsmp_write_matrix_iteration_, prefix);
+    options.GetBoolValue("wsmp_skip_inertia_check",
+                         skip_inertia_check_, prefix);
+    options.GetBoolValue("wsmp_no_pivoting",
+                         wsmp_no_pivoting_, prefix);
 
     // Reset all private data
     dim_=0;
     initialized_=false;
     pivtol_changed_ = false;
     have_symbolic_factorization_ = false;
+    factorizations_since_recomputed_ordering_ = -1;
     delete[] a_;
     a_ = NULL;
     delete[] PERM_;
@@ -192,12 +216,15 @@ namespace Ipopt
     F77_FUNC(wssmp,WSSMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy,
                           &idmy, &ddmy, &idmy, &idmy, &ddmy, &idmy,
                           &idmy, IPARM_, DPARM_);
-    IPARM_[14] = 0; // no restrictions on pivoting (ignored for
-    // Bunch-Kaufman)
     IPARM_[15] = wsmp_ordering_option; // ordering option
     IPARM_[17] = 0; // use local minimum fill-in ordering
     IPARM_[19] = wsmp_ordering_option2; // for ordering in IP methods?
-    IPARM_[30] = 2; // want L D L^T factorization with diagonal
+    if (wsmp_no_pivoting_) {
+      IPARM_[30] = 1; // want L D L^T factorization with diagonal no pivoting
+    }
+    else {
+      IPARM_[30] = 2; // want L D L^T factorization with diagonal with pivoting
+    }
     // pivoting (Bunch/Kaufman)
     //IPARM_[31] = 1; // need D to see where first negative eigenvalue occurs
     //                   if we change this, we need DIAG arguments below!
@@ -294,7 +321,8 @@ namespace Ipopt
   ESymSolverStatus
   WsmpSolverInterface::InternalSymFact(
     const Index* ia,
-    const Index* ja)
+    const Index* ja,
+    Index numberOfNegEVals)
   {
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
@@ -318,6 +346,13 @@ namespace Ipopt
     IPARM_[2] = 2; // symbolic factorization
     ipfint idmy;
     double ddmy;
+
+    if (wsmp_no_pivoting_) {
+      IPARM_[14] = dim_ - numberOfNegEVals; // CHECK
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Restricting WSMP static pivot sequence with IPARM(15) = %d\n", IPARM_[14]);
+    }
+
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
@@ -401,7 +436,7 @@ namespace Ipopt
     // Check if we have to do the symbolic factorization and ordering
     // phase yet
     if (!have_symbolic_factorization_) {
-      ESymSolverStatus retval = InternalSymFact(ia, ja);
+      ESymSolverStatus retval = InternalSymFact(ia, ja, numberOfNegEVals);
       if (retval != SYMSOLVER_SUCCESS) {
         return retval;
       }
@@ -458,8 +493,11 @@ namespace Ipopt
                    "Number of nonzeros in WSSMP after factorization IPARM(24) = %d\n",
                    IPARM_[23]);
 
-    negevals_ = IPARM_[21]; // Number of negative eigenvalues
-    // determined during factorization
+    if (factorizations_since_recomputed_ordering_ != -1) {
+      factorizations_since_recomputed_ordering_++;
+    }
+
+    negevals_ = IPARM_[21]; // Number of negative eigenvalues determined during factorization
 
     // Check whether the number of negative eigenvalues matches the requested
     // count
@@ -467,10 +505,18 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Wrong inertia: required are %d, but we got %d.\n",
                      numberOfNegEVals, negevals_);
-      if (HaveIpData()) {
-        IpData().TimingStats().LinearSystemFactorization().End();
+      if (skip_inertia_check_) {
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "  But wsmp_skip_inertia_check is set.  Ignore inertia.\n");
+        IpData().Append_info_string("IC ");
+        negevals_ = numberOfNegEVals;
       }
-      return SYMSOLVER_WRONG_INERTIA;
+      else {
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemFactorization().End();
+        }
+        return SYMSOLVER_WRONG_INERTIA;
+      }
     }
 
     if (HaveIpData()) {
@@ -547,6 +593,17 @@ namespace Ipopt
 // TODO: BEFORE INCREASING TOLERANCE, TRY TO REDO THE ORDERING. - USE DPARM(15) !!!
 //       ALSO: DECREASE PIVTOL AGAIN LATER?
     DBG_START_METH("WsmpSolverInterface::IncreaseQuality",dbg_verbosity);
+
+    if (factorizations_since_recomputed_ordering_ == -1 ||
+        factorizations_since_recomputed_ordering_ > 2) {
+      DPARM_[14] = 1.0;
+      pivtol_changed_ = true;
+      IpData().Append_info_string("RO ");
+      factorizations_since_recomputed_ordering_ = 0;
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Triggering WSMP's recomputation of the ordering for next factorization.\n");
+      return true;
+    }
     if (wsmp_pivtol_ == wsmp_pivtolmax_) {
       return false;
     }
@@ -576,8 +633,11 @@ namespace Ipopt
 
     c_deps.clear();
 
+    ASSERT_EXCEPTION(!wsmp_no_pivoting_, OPTION_INVALID,
+                     "WSMP dependency detection does not work without pivoting.");
+
     if (!have_symbolic_factorization_) {
-      ESymSolverStatus retval = InternalSymFact(ia, ja);
+      ESymSolverStatus retval = InternalSymFact(ia, ja, 0);
       if (retval != SYMSOLVER_SUCCESS) {
         return retval;
       }

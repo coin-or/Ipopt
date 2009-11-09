@@ -93,6 +93,13 @@ namespace Ipopt
       Wdiag_ = Wdiag_space->MakeNewDiagMatrix();
     }
 
+    // This might be used with a linear solver that cannot detect the
+    // inertia.  In that case, we should not asked for checking the
+    // number of negative eigenvalues.
+    if (!aug_system_solver_->ProvidesInertia()) {
+      check_NegEVals = false;
+    }
+
     if (first_call_ ||
         AugmentedSystemRequiresChange(W, W_factor, D_x, delta_x, D_s, delta_s,
                                       *J_c, D_c, delta_c, *J_d, D_d,

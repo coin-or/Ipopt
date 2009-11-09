@@ -263,6 +263,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\Algorithm\IpNLPBoundsRemover.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\Ipopt\src\Algorithm\IpNLPScaling.cpp"
 					>
 				</File>
@@ -460,6 +464,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\Ipopt\src\LinAlg\TMatrices\IpSymTMatrix.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\LinAlg\IpTransposeMatrix.cpp"
 					>
 				</File>
 				<File

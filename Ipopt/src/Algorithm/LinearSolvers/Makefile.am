@@ -61,7 +61,8 @@ endif # BUILD_LINEARSOLVERLOADER
 
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
-	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp
+	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
+	IpIterativeWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.hpp
 endif
 
 if HAVE_MPI
@@ -114,6 +115,8 @@ endif
 
 ASTYLE_FILES = \
 	IpGenKKTSolverInterface.hppbak \
+	IpIterativeWsmpSolverInterface.cppbak \
+	IpIterativeWsmpSolverInterface.hppbak \
 	IpLinearSolversRegOp.cppbak IpLinearSolversRegOp.hppbak \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpMa28TDependencyDetector.cppbak IpMa28TDependencyDetector.hppbak \

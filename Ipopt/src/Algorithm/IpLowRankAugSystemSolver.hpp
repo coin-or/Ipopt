@@ -18,7 +18,8 @@ namespace Ipopt
 {
 
   /** Solver for the augmented system with LowRankUpdateSymMatrix
-   *  Hessian matrices.
+   *  Hessian matrices.  This version works with the Sherman-Morrison
+   *  formula and multiple backsolves.
    */
   class LowRankAugSystemSolver : public AugSystemSolver
   {

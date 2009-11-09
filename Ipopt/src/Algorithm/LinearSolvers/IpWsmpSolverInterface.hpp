@@ -139,6 +139,12 @@ namespace Ipopt
     Number wsmp_singularity_threshold_;
     /** iteration number in which matrices are to be written out */
     Index wsmp_write_matrix_iteration_;
+    /** Flag indicating if the interia is always assumed to be
+     *  correct. */
+    bool skip_inertia_check_;
+    /** Flag indicating whether the positive definite version of WSMP
+     *  should be used */
+    bool wsmp_no_pivoting_;
     //@}
 
     /** Counter for matrix file numbers */
@@ -156,11 +162,15 @@ namespace Ipopt
      *  For initialization, this object needs to have seen a matrix */
     bool initialized_;
     /** Flag indicating if the matrix has to be refactorized because
-     *  the pivot tolerance has been changed. */
+     *  the pivot tolerance has been changed, or the computation of
+     *  the ordering has been triggered with DPARNM[14]. */
     bool pivtol_changed_;
     /** Flag indicating whether symbolic factorization and order has
      *  already been performed. */
     bool have_symbolic_factorization_;
+    /** Counter indicating how many factorizations have been done sine
+     *  the last recomputation of the ordering. */
+    Index factorizations_since_recomputed_ordering_;
     //@}
 
     /** @name Solver specific information */
@@ -184,7 +194,8 @@ namespace Ipopt
     ESymSolverStatus SymbolicFactorization(const Index* ia, const Index* ja);
 
     /** Call Wsmp to really do the analysis phase. */
-    ESymSolverStatus InternalSymFact(const Index* ia, const Index* ja);
+    ESymSolverStatus InternalSymFact(const Index* ia, const Index* ja,
+                                     Index numberOfNegEVals);
 
     /** Call Wsmp to factorize the Matrix.
      */

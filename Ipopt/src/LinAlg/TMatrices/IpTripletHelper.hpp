@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -33,6 +33,7 @@ namespace Ipopt
   class CompoundMatrix;
   class CompoundSymMatrix;
   class TransposeMatrix;
+  class ExpandedMultiVectorMatrix;
   class Vector;
 
   class TripletHelper
@@ -71,6 +72,9 @@ namespace Ipopt
 
     /** find the total number of triplet entries for the TransposeMatrix */
     static Index GetNumberEntries_(const TransposeMatrix& matrix);
+
+    /** find the total number of triplet entries for the TransposeMatrix */
+    static Index GetNumberEntries_(const ExpandedMultiVectorMatrix& matrix);
 
     static void FillRowCol_(Index n_entries, const GenTMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
 
@@ -119,6 +123,10 @@ namespace Ipopt
     static void FillRowCol_(Index n_entries, const TransposeMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
 
     static void FillValues_(Index n_entries, const TransposeMatrix& matrix, Number* values);
+
+    static void FillRowCol_(Index n_entries, const ExpandedMultiVectorMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol);
+
+    static void FillValues_(Index n_entries, const ExpandedMultiVectorMatrix& matrix, Number* values);
 
   };
 } // namespace Ipopt

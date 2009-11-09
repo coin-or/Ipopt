@@ -31,6 +31,7 @@ liblinalg_la_SOURCES = \
 	IpDenseSymMatrix.cpp IpDenseSymMatrix.hpp \
 	IpDenseVector.cpp IpDenseVector.hpp \
 	IpDiagMatrix.cpp IpDiagMatrix.hpp \
+	IpExpandedMultiVectorMatrix.cpp IpExpandedMultiVectorMatrix.hpp \
 	IpExpansionMatrix.cpp IpExpansionMatrix.hpp \
 	IpIdentityMatrix.cpp IpIdentityMatrix.hpp \
 	IpLapack.cpp IpLapack.hpp \
@@ -64,6 +65,7 @@ ASTYLE_FILES = IpBlas.cppbak IpBlas.hppbak \
 	IpDenseSymMatrix.cppbak IpDenseSymMatrix.hppbak \
 	IpDenseVector.cppbak IpDenseVector.hppbak \
 	IpDiagMatrix.cppbak IpDiagMatrix.hppbak \
+	IpExpandedMultiVectorMatrix.cppbak IpExpandedMultiVectorMatrix.hppbak \
 	IpExpansionMatrix.cppbak IpExpansionMatrix.hppbak \
 	IpIdentityMatrix.cppbak IpIdentityMatrix.hppbak \
 	IpLapack.cppbak IpLapack.hppbak \
