@@ -59,11 +59,11 @@ liblinalg_la_LIBADD =
 am_liblinalg_la_OBJECTS = IpBlas.lo IpCompoundMatrix.lo \
 	IpCompoundSymMatrix.lo IpCompoundVector.lo IpDenseGenMatrix.lo \
 	IpDenseSymMatrix.lo IpDenseVector.lo IpDiagMatrix.lo \
-	IpExpansionMatrix.lo IpIdentityMatrix.lo IpLapack.lo \
-	IpLowRankUpdateSymMatrix.lo IpMatrix.lo IpMultiVectorMatrix.lo \
-	IpScaledMatrix.lo IpSumMatrix.lo IpSumSymMatrix.lo \
-	IpSymScaledMatrix.lo IpTransposeMatrix.lo IpVector.lo \
-	IpZeroMatrix.lo
+	IpExpandedMultiVectorMatrix.lo IpExpansionMatrix.lo \
+	IpIdentityMatrix.lo IpLapack.lo IpLowRankUpdateSymMatrix.lo \
+	IpMatrix.lo IpMultiVectorMatrix.lo IpScaledMatrix.lo \
+	IpSumMatrix.lo IpSumSymMatrix.lo IpSymScaledMatrix.lo \
+	IpTransposeMatrix.lo IpVector.lo IpZeroMatrix.lo
 liblinalg_la_OBJECTS = $(am_liblinalg_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -322,6 +322,7 @@ liblinalg_la_SOURCES = \
 	IpDenseSymMatrix.cpp IpDenseSymMatrix.hpp \
 	IpDenseVector.cpp IpDenseVector.hpp \
 	IpDiagMatrix.cpp IpDiagMatrix.hpp \
+	IpExpandedMultiVectorMatrix.cpp IpExpandedMultiVectorMatrix.hpp \
 	IpExpansionMatrix.cpp IpExpansionMatrix.hpp \
 	IpIdentityMatrix.cpp IpIdentityMatrix.hpp \
 	IpLapack.cpp IpLapack.hpp \
@@ -353,6 +354,7 @@ ASTYLE_FILES = IpBlas.cppbak IpBlas.hppbak \
 	IpDenseSymMatrix.cppbak IpDenseSymMatrix.hppbak \
 	IpDenseVector.cppbak IpDenseVector.hppbak \
 	IpDiagMatrix.cppbak IpDiagMatrix.hppbak \
+	IpExpandedMultiVectorMatrix.cppbak IpExpandedMultiVectorMatrix.hppbak \
 	IpExpansionMatrix.cppbak IpExpansionMatrix.hppbak \
 	IpIdentityMatrix.cppbak IpIdentityMatrix.hppbak \
 	IpLapack.cppbak IpLapack.hppbak \
@@ -429,6 +431,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDenseSymMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDenseVector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDiagMatrix.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpExpandedMultiVectorMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpExpansionMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIdentityMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLapack.Plo@am__quote@

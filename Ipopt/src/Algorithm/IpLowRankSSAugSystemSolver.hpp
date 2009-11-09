@@ -1,36 +1,41 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Andreas Waechter                IBM    2005-12-27
+// Authors:  Andreas Waechter                IBM    2009-11-05
+//              (based on IpLowRankAugSystemSolver.hpp rev 1324)
 
-#ifndef __IP_LOWRANKAUGSYSTEMSOLVER_HPP__
-#define __IP_LOWRANKAUGSYSTEMSOLVER_HPP__
+#ifndef __IP_LOWRANKSSAUGSYSTEMSOLVER_HPP__
+#define __IP_LOWRANKSSAUGSYSTEMSOLVER_HPP__
 
 #include "IpAugSystemSolver.hpp"
-#include "IpDenseGenMatrix.hpp"
-#include "IpMultiVectorMatrix.hpp"
 #include "IpDiagMatrix.hpp"
+#include "IpCompoundMatrix.hpp"
+#include "IpCompoundVector.hpp"
+#include "IpExpandedMultiVectorMatrix.hpp"
 
 namespace Ipopt
 {
 
   /** Solver for the augmented system with LowRankUpdateSymMatrix
-   *  Hessian matrices.  This version works with the Sherman-Morrison
-   *  formula and multiple backsolves.
+   *  Hessian matrices.  This version works with only one backsolve
+   *  (so it is better for iterative linear solvers), by augmenting
+   *  the regular augmented system.
    */
-  class LowRankAugSystemSolver : public AugSystemSolver
+  class LowRankSSAugSystemSolver : public AugSystemSolver
   {
   public:
     /**@name Constructors/Destructors */
     //@{
-    /** Constructor using only a linear solver object */
-    LowRankAugSystemSolver(AugSystemSolver& aug_system_solver);
+    /** Constructor using an existing augmented system solver. the
+     *  max_rank argument is the maximal rank that can appear. */
+    LowRankSSAugSystemSolver(AugSystemSolver& aug_system_solver,
+			     Index max_rank);
 
     /** Default destructor */
-    virtual ~LowRankAugSystemSolver();
+    virtual ~LowRankSSAugSystemSolver();
     //@}
 
     /** overloaded from AlgorithmStrategyObject */
@@ -95,12 +100,12 @@ namespace Ipopt
      * they will not be implicitly created/called. */
     //@{
     /** Default constructor. */
-    LowRankAugSystemSolver();
+    LowRankSSAugSystemSolver();
     /** Copy Constructor */
-    LowRankAugSystemSolver(const LowRankAugSystemSolver&);
+    LowRankSSAugSystemSolver(const LowRankSSAugSystemSolver&);
 
     /** Overloaded Equals Operator */
-    void operator=(const LowRankAugSystemSolver&);
+    void operator=(const LowRankSSAugSystemSolver&);
     //@}
 
     /** The augmented system solver object that should be used for the
@@ -108,6 +113,9 @@ namespace Ipopt
      *  update.
      */
     SmartPtr<AugSystemSolver> aug_system_solver_;
+
+    /** Maximal rank of low rank Hessian update */
+    Index max_rank_;
 
     /**@name Tags and values to track in order to decide whether the
        matrix has to be updated compared to the most recent call of
@@ -154,20 +162,26 @@ namespace Ipopt
     double delta_d_;
     //@}
 
+    /** Flag indicating if this is the first call */
+    bool first_call_;
+
     /** @name Information to be stored in order to resolve for the
      *  same matrix with a different right hand side. */
     //@{
-    bool first_call_;
-    SmartPtr<DenseGenMatrix> J1_;
-    SmartPtr<DenseGenMatrix> J2_;
-    SmartPtr<MultiVectorMatrix> Vtilde1_;
-    SmartPtr<MultiVectorMatrix> Utilde2_;
     /** Hessian Matrix passed to the augmented system solver solving
      *  the matrix without the low-rank update. */
     SmartPtr<DiagMatrix> Wdiag_;
-    /** Vector space for Compound vectors that capture the entire
-     *  right hand side and solution vectors .*/
-    SmartPtr<const CompoundVectorSpace> compound_sol_vecspace_;
+    /** Artifical rows for Jac_c part for low rank data */
+    SmartPtr<ExpandedMultiVectorMatrix> expanded_vu_;
+    /** Extended Jac_c to include expanded_vu_ */
+    SmartPtr<CompoundMatrix> J_c_ext_;
+    /** Extended D_c diagonal */
+    SmartPtr<CompoundVector> D_c_ext_;
+    /** Extended vector space for y_c */
+    SmartPtr<CompoundVectorSpace> y_c_ext_space_;
+    /** Number of components in V, so that it can be used to correct
+     *  the inertia */
+    Index negEvalsCorrection_;
     //@}
 
     /** Stores the number of negative eigenvalues detected during most
@@ -183,7 +197,7 @@ namespace Ipopt
     //@{
     /** Method for updating the factorization, including J1_, J2_,
      *  Vtilde1_, Utilde2, Wdiag_, compound_sol_vecspace_ */
-    ESymSolverStatus UpdateFactorization(
+    ESymSolverStatus UpdateExtendedData(
       const SymMatrix* W,
       double W_factor,
       const Vector* D_x,
@@ -199,37 +213,7 @@ namespace Ipopt
       const Vector& proto_rhs_x,
       const Vector& proto_rhs_s,
       const Vector& proto_rhs_c,
-      const Vector& proto_rhs_d,
-      bool check_NegEVals,
-      Index numberOfNegEVals);
-
-    /** Method for solving the augmented system without low-rank
-     *  update for multiple right hand sides that are provided as
-     *  MultiVectorMatrix.  The result is returned as a
-     *  MultiVectorMatrix in Vtilde1.  V_x and Vtilde1_x are V and
-     *  Vtilde1 in the x-space. */
-    ESymSolverStatus SolveMultiVector(
-      const Vector* D_x,
-      double delta_x,
-      const Vector* D_s,
-      double delta_s,
-      const Matrix& J_c,
-      const Vector* D_c,
-      double delta_c,
-      const Matrix& J_d,
-      const Vector* D_d,
-      double delta_d,
-      const Vector& proto_rhs_x,
-      const Vector& proto_rhs_s,
-      const Vector& proto_rhs_c,
-      const Vector& proto_rhs_d,
-      const MultiVectorMatrix& V,
-      const SmartPtr<const Matrix>& P_LM,
-      SmartPtr<MultiVectorMatrix>& V_x,
-      SmartPtr<MultiVectorMatrix>& Vtilde1,
-      SmartPtr<MultiVectorMatrix>& Vtilde1_x,
-      bool check_NegEVals,
-      Index numberOfNegEVals);
+      const Vector& proto_rhs_d);
 
     /** Method that compares the tags of the data for the matrix with
      *  those from the previous call.  Returns true, if there was a

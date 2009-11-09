@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -21,6 +21,7 @@
 #include "IpCompoundMatrix.hpp"
 #include "IpCompoundSymMatrix.hpp"
 #include "IpTransposeMatrix.hpp"
+#include "IpExpandedMultiVectorMatrix.hpp"
 
 #include "IpDenseVector.hpp"
 #include "IpCompoundVector.hpp"
@@ -96,6 +97,11 @@ namespace Ipopt
     const TransposeMatrix* trans = dynamic_cast<const TransposeMatrix*>(mptr);
     if (trans) {
       return GetNumberEntries_(*trans);
+    }
+
+    const ExpandedMultiVectorMatrix* expmv = dynamic_cast<const ExpandedMultiVectorMatrix*>(mptr);
+    if (expmv) {
+      return GetNumberEntries_(*expmv);
     }
 
     THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::GetNumberEntries");
@@ -179,6 +185,12 @@ namespace Ipopt
     const TransposeMatrix* trans = dynamic_cast<const TransposeMatrix*>(mptr);
     if (trans) {
       FillRowCol_(n_entries, *trans, row_offset, col_offset, iRow, jCol);
+      return;
+    }
+
+    const ExpandedMultiVectorMatrix* expmv = dynamic_cast<const ExpandedMultiVectorMatrix*>(mptr);
+    if (expmv) {
+      FillRowCol_(n_entries, *expmv, row_offset, col_offset, iRow, jCol);
       return;
     }
 
@@ -266,6 +278,12 @@ namespace Ipopt
       return;
     }
 
+    const ExpandedMultiVectorMatrix* expmv = dynamic_cast<const ExpandedMultiVectorMatrix*>(mptr);
+    if (expmv) {
+      FillValues_(n_entries, *expmv, values);
+      return;
+    }
+
     THROW_EXCEPTION(UNKNOWN_MATRIX_TYPE,"Unknown matrix type passed to TripletHelper::FillValues");
   }
 
@@ -330,6 +348,13 @@ namespace Ipopt
   Index TripletHelper::GetNumberEntries_(const TransposeMatrix& matrix)
   {
     return GetNumberEntries(*matrix.OrigMatrix());
+  }
+
+  Index TripletHelper::GetNumberEntries_(const ExpandedMultiVectorMatrix& matrix)
+  {
+    Index nRows = matrix.NRows();
+    Index dimVec = matrix.ExpandedMultiVectorMatrixOwnerSpace()->RowVectorSpace()->Dim();
+    return nRows*dimVec;
   }
 
   void TripletHelper::FillRowCol_(Index n_entries, const GenTMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
@@ -737,6 +762,77 @@ namespace Ipopt
   void TripletHelper::FillValues_(Index n_entries, const TransposeMatrix& matrix, Number* values)
   {
     FillValues(n_entries, *matrix.OrigMatrix(), values);
+  }
+
+  void TripletHelper::FillRowCol_(Index n_entries, const ExpandedMultiVectorMatrix& matrix, Index row_offset, Index col_offset, Index* iRow, Index* jCol)
+  {
+    row_offset++;
+    col_offset++;
+    const Index nRows = matrix.NRows();
+    SmartPtr<const ExpansionMatrix> P = matrix.GetExpansionMatrix();
+    if (IsValid(P)) {
+      const Index* exppos = P->ExpandedPosIndices();
+      const Index nExp = P->NCols();
+      DBG_ASSERT(n_entries = nRows*nExp);
+      for (Index irow = row_offset; irow < row_offset+nRows; irow++) {
+        for (Index j=0; j<nExp; j++) {
+          *(iRow++) = irow;
+          *(jCol++) = col_offset + exppos[j];
+        }
+      }
+    }
+    else {
+      const Index nCols =  matrix.NCols();
+      DBG_ASSERT(n_entries = nRows*nCols);
+      for (Index irow = row_offset; irow < row_offset+nRows; irow++) {
+        for (Index jcol = col_offset; jcol < col_offset+nCols; jcol++) {
+          *(iRow++) = irow;
+          *(jCol++) = jcol;
+        }
+      }
+    }
+  }
+
+  void TripletHelper::FillValues_(Index n_entries, const ExpandedMultiVectorMatrix& matrix, Number* values)
+  {
+    const Index nRows = matrix.NRows();
+    SmartPtr<const ExpansionMatrix> P = matrix.GetExpansionMatrix();
+    if (IsValid(P)) {
+      const Index nExp = P->NCols();
+      double* vecvals = new double[nExp];
+      for (Index i=0; i<nRows; i++) {
+        SmartPtr<const Vector> vec = matrix.GetVector(i);
+        if (IsValid(vec)) {
+          DBG_ASSERT(vec->Dim() == nExp);
+          FillValuesFromVector(nExp, *vec, vecvals);
+          for (Index j=0; j<nExp; j++) {
+            *(values++) = vecvals[j];
+          }
+        }
+        else {
+          for (Index j=0; j<nExp; j++) {
+            *(values++) = 0.;
+          }
+        }
+      }
+      delete [] vecvals;
+    }
+    else {
+      const Index nCols =  matrix.NCols();
+      for (Index i=0; i<nRows; i++) {
+        SmartPtr<const Vector> vec = matrix.GetVector(i);
+        if (IsValid(vec)) {
+          DBG_ASSERT(vec->Dim() == nCols);
+          FillValuesFromVector(nCols, *vec, values);
+          values += nCols;
+        }
+        else {
+          for (Index j=0; j<nCols; j++) {
+            *(values++) = 0.;
+          }
+        }
+      }
+    }
   }
 
   void TripletHelper::PutValuesInVector(Index dim, const double* values, Vector& vector)

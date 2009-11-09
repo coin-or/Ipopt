@@ -66,17 +66,18 @@ am_libipoptalg_la_OBJECTS = IpAdaptiveMuUpdate.lo IpAlgBuilder.lo \
 	IpIpoptCalculatedQuantities.lo IpIpoptData.lo \
 	IpIteratesVector.lo IpLeastSquareMults.lo \
 	IpLimMemQuasiNewtonUpdater.lo IpLoqoMuOracle.lo \
-	IpLowRankAugSystemSolver.lo IpMonotoneMuUpdate.lo \
-	IpNLPBoundsRemover.lo IpNLPScaling.lo IpOptErrorConvCheck.lo \
-	IpOrigIpoptNLP.lo IpOrigIterationOutput.lo \
-	IpPDFullSpaceSolver.lo IpPDPerturbationHandler.lo \
-	IpPDSearchDirCalc.lo IpPenaltyLSAcceptor.lo \
-	IpProbingMuOracle.lo IpQualityFunctionMuOracle.lo \
-	IpRestoConvCheck.lo IpRestoFilterConvCheck.lo \
-	IpRestoIpoptNLP.lo IpRestoIterateInitializer.lo \
-	IpRestoIterationOutput.lo IpRestoMinC_1Nrm.lo \
-	IpRestoPenaltyConvCheck.lo IpRestoRestoPhase.lo \
-	IpStdAugSystemSolver.lo IpTimingStatistics.lo IpUserScaling.lo \
+	IpLowRankAugSystemSolver.lo IpLowRankSSAugSystemSolver.lo \
+	IpMonotoneMuUpdate.lo IpNLPBoundsRemover.lo IpNLPScaling.lo \
+	IpOptErrorConvCheck.lo IpOrigIpoptNLP.lo \
+	IpOrigIterationOutput.lo IpPDFullSpaceSolver.lo \
+	IpPDPerturbationHandler.lo IpPDSearchDirCalc.lo \
+	IpPenaltyLSAcceptor.lo IpProbingMuOracle.lo \
+	IpQualityFunctionMuOracle.lo IpRestoConvCheck.lo \
+	IpRestoFilterConvCheck.lo IpRestoIpoptNLP.lo \
+	IpRestoIterateInitializer.lo IpRestoIterationOutput.lo \
+	IpRestoMinC_1Nrm.lo IpRestoPenaltyConvCheck.lo \
+	IpRestoRestoPhase.lo IpStdAugSystemSolver.lo \
+	IpTimingStatistics.lo IpUserScaling.lo \
 	IpWarmStartIterateInitializer.lo
 libipoptalg_la_OBJECTS = $(am_libipoptalg_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -354,6 +355,7 @@ libipoptalg_la_SOURCES = \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.cpp IpLoqoMuOracle.hpp \
 	IpLowRankAugSystemSolver.cpp IpLowRankAugSystemSolver.hpp \
+	IpLowRankSSAugSystemSolver.cpp IpLowRankSSAugSystemSolver.hpp \
 	IpMonotoneMuUpdate.cpp IpMonotoneMuUpdate.hpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp \
@@ -429,6 +431,7 @@ ASTYLE_FILES = \
 	IpLineSearch.hppbak \
 	IpLoqoMuOracle.cppbak IpLoqoMuOracle.hppbak \
 	IpLowRankAugSystemSolver.cppbak IpLowRankAugSystemSolver.cppbak \
+	IpLowRankSSAugSystemSolver.cppbak IpLowRankSSAugSystemSolver.cppbak \
 	IpMonotoneMuUpdate.cppbak IpMonotoneMuUpdate.hppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
@@ -531,6 +534,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLimMemQuasiNewtonUpdater.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLoqoMuOracle.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLowRankAugSystemSolver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLowRankSSAugSystemSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMonotoneMuUpdate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNLPBoundsRemover.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpNLPScaling.Plo@am__quote@
