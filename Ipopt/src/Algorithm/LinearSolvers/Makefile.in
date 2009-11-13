@@ -88,6 +88,8 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 liblinsolvers_la_LIBADD =
 am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
+	IpSlackBasedTSymScalingMethod.cpp \
+	IpSlackBasedTSymScalingMethod.hpp \
 	IpSparseSymLinearSolverInterface.hpp IpSymLinearSolver.hpp \
 	IpTDependencyDetector.hpp IpTripletToCSRConverter.cpp \
 	IpTripletToCSRConverter.hpp IpTSymDependencyDetector.cpp \
@@ -119,10 +121,11 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 @HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.lo
 @COIN_HAS_MUMPS_TRUE@am__objects_8 = IpMumpsSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
-	IpTripletToCSRConverter.lo IpTSymDependencyDetector.lo \
-	IpTSymLinearSolver.lo $(am__objects_1) $(am__objects_2) \
-	$(am__objects_3) $(am__objects_4) $(am__objects_5) \
-	$(am__objects_6) $(am__objects_7) $(am__objects_8)
+	IpSlackBasedTSymScalingMethod.lo IpTripletToCSRConverter.lo \
+	IpTSymDependencyDetector.lo IpTSymLinearSolver.lo \
+	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
+	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
+	$(am__objects_7) $(am__objects_8)
 liblinsolvers_la_OBJECTS = $(am_liblinsolvers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -357,6 +360,8 @@ AUTOMAKE_OPTIONS = foreign
 noinst_LTLIBRARIES = liblinsolvers.la
 liblinsolvers_la_SOURCES = IpGenKKTSolverInterface.hpp \
 	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
+	IpSlackBasedTSymScalingMethod.cpp \
+	IpSlackBasedTSymScalingMethod.hpp \
 	IpSparseSymLinearSolverInterface.hpp IpSymLinearSolver.hpp \
 	IpTDependencyDetector.hpp IpTripletToCSRConverter.cpp \
 	IpTripletToCSRConverter.hpp IpTSymDependencyDetector.cpp \
@@ -388,6 +393,7 @@ ASTYLE_FILES = \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
 	IpMumpsSolverInterface.cppbak IpMumpsSolverInterface.hppbak \
+	IpSlackBasedTSymScalingMethod.cppbak IpSlackBasedTSymScalingMethod.hppbak \
 	IpSparseSymLinearSolverInterface.hppbak \
 	IpSymLinearSolver.hppbak \
 	IpTDependencyDetector.hppbak \
@@ -459,6 +465,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19TSymScalingMethod.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMumpsSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPardisoSolverInterface.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSlackBasedTSymScalingMethod.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTSymDependencyDetector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTSymLinearSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTripletToCSRConverter.Plo@am__quote@

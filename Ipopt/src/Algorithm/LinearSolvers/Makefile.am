@@ -13,6 +13,7 @@ noinst_LTLIBRARIES = liblinsolvers.la
 liblinsolvers_la_SOURCES = \
 	IpGenKKTSolverInterface.hpp \
 	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
+	IpSlackBasedTSymScalingMethod.cpp IpSlackBasedTSymScalingMethod.hpp \
 	IpSparseSymLinearSolverInterface.hpp \
 	IpSymLinearSolver.hpp \
 	IpTDependencyDetector.hpp \
@@ -106,6 +107,7 @@ ASTYLE_FILES = \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
 	IpMumpsSolverInterface.cppbak IpMumpsSolverInterface.hppbak \
+	IpSlackBasedTSymScalingMethod.cppbak IpSlackBasedTSymScalingMethod.hppbak \
 	IpSparseSymLinearSolverInterface.hppbak \
 	IpSymLinearSolver.hppbak \
 	IpTDependencyDetector.hppbak \
