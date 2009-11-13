@@ -4,15 +4,14 @@
 //
 // $Id$
 //
-// Authors:  Andreas Waechter, Frank E. Curtis         IBM    2009-06-12
-//               (based on IpMc19TSymScalingMethod.hpp rev 699)
+// Authors:  Andreas Waechter                   IBM    2009-11-13
+//               (based on IpInexactTSymScalingMethod.hpp)
 
-#ifndef __IPINEXACTTSYMSCALINGMETHOD_HPP__
-#define __IPINEXACTTSYMSCLAINGMETHOD_HPP__
+#ifndef __IPSLACKBASEDTSYMSCALINGMETHOD_HPP__
+#define __IPSLACKBASEDTSYMSCLAINGMETHOD_HPP__
 
 #include "IpUtils.hpp"
 #include "IpTSymScalingMethod.hpp"
-#include "IpInexactCq.hpp"
 
 namespace Ipopt
 {
@@ -21,15 +20,15 @@ namespace Ipopt
    *  matrices in triplet format, specifically for the inexaxct algorithm.
    *  The scaling is only considering the current slacks.
    */
-  class InexactTSymScalingMethod: public TSymScalingMethod
+  class SlackBasedTSymScalingMethod: public TSymScalingMethod
   {
   public:
     /** @name Constructor/Destructor */
     //@{
-    InexactTSymScalingMethod()
+    SlackBasedTSymScalingMethod()
     {}
 
-    virtual ~InexactTSymScalingMethod()
+    virtual ~SlackBasedTSymScalingMethod()
     {}
     //@}
 
@@ -53,20 +52,10 @@ namespace Ipopt
      * they will not be implicitly created/called. */
     //@{
     /** Copy Constructor */
-    InexactTSymScalingMethod(const InexactTSymScalingMethod&);
+    SlackBasedTSymScalingMethod(const SlackBasedTSymScalingMethod&);
 
     /** Overloaded Equals Operator */
-    void operator=(const InexactTSymScalingMethod&);
-
-    /** Method to easily access Inexact calculated quantities */
-    InexactCq& InexCq()
-    {
-      InexactCq& inexact_cq =
-        static_cast<InexactCq&>(IpCq().AdditionalCq());
-      DBG_ASSERT(dynamic_cast<InexactCq*>(&IpCq().AdditionalCq()));
-      return inexact_cq;
-    }
-
+    void operator=(const SlackBasedTSymScalingMethod&);
   };
 
 
