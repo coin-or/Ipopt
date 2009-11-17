@@ -200,18 +200,18 @@ namespace Ipopt
       compl_inf_tol_ = 1e300;
     }
 
-    if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "Convergence Check:\n");
-      Jnlst().Printf(J_DETAILED, J_MAIN,
+    if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "Convergence Check:\n");
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  overall_error = %23.16e   IpData().tol()   = %23.16e\n",
                      overall_error, IpData().tol());
-      Jnlst().Printf(J_DETAILED, J_MAIN,
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  dual_inf      = %23.16e   dual_inf_tol_    = %23.16e\n",
                      dual_inf, dual_inf_tol_);
-      Jnlst().Printf(J_DETAILED, J_MAIN,
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  constr_viol   = %23.16e   constr_viol_tol_ = %23.16e\n",
                      constr_viol, constr_viol_tol_);
-      Jnlst().Printf(J_DETAILED, J_MAIN,
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  compl_inf     = %23.16e   compl_inf_tol_   = %23.16e\n",
                      compl_inf, compl_inf_tol_);
     }
@@ -276,6 +276,28 @@ namespace Ipopt
       // infeasibility and complementarity as termination criterion
       acceptable_dual_inf_tol_ = 1e300;
       acceptable_compl_inf_tol_ = 1e300;
+    }
+
+    if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "Acceptable Check:\n");
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  overall_error = %23.16e   acceptable_tol_             = %23.16e\n",
+                     overall_error, acceptable_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  dual_inf      = %23.16e   acceptable_dual_inf_tol_    = %23.16e\n",
+                     dual_inf, acceptable_dual_inf_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  constr_viol   = %23.16e   acceptable_constr_viol_tol_ = %23.16e\n",
+                     constr_viol, acceptable_constr_viol_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  compl_inf     = %23.16e   acceptable_compl_inf_tol_   = %23.16e\n",
+                     compl_inf, acceptable_compl_inf_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  obj_val       = %23.16e   last_obj_val                = %23.16e\n",
+                     obj_val, last_obj_val_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  fabs(obj_val-last_obj_val_)/Max(1., fabs(obj_val)) = %23.16e acceptable_obj_change_tol_ = %23.16e\n",
+                     fabs(obj_val-last_obj_val_)/Max(1., fabs(obj_val)), acceptable_obj_change_tol_);
     }
 
     return (overall_error <= acceptable_tol_ &&
