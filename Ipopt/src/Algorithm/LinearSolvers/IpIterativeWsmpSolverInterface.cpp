@@ -153,7 +153,8 @@ namespace Ipopt
     IPARM_[3] = 3; // Upper trianguar portion of matrix in CSR format
     // (same as for WSSMP)
     IPARM_[6] = 3;
-    IPARM_[29] = 0; // to make runs repeatable
+    IPARM_[13] = 0; // do not overwrite avals
+    IPARM_[27] = 0; // to make runs repeatable
 
 #if 1
     IPARM_[5] = wsmp_max_iter; // maximal number of iterations
@@ -162,6 +163,9 @@ namespace Ipopt
 #endif
     DPARM_[13] = wsmp_inexact_droptol_;
     DPARM_[14] = wsmp_inexact_fillin_limit_;
+
+// DELETE
+    IPARM_[33] = 0;
 
     matrix_file_number_ = 0;
 
@@ -507,19 +511,41 @@ namespace Ipopt
 
   bool IterativeWsmpSolverInterface::IncreaseQuality()
   {
+    // TODO!!!!
+    return false;
     DBG_START_METH("IterativeWsmpSolverInterface::IncreaseQuality",dbg_verbosity);
     if (wsmp_pivtol_ == wsmp_pivtolmax_) {
       return false;
     }
     pivtol_changed_ = true;
 
-    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Indreasing pivot tolerance for WISMP from %7.2e ",
-                   wsmp_pivtol_);
-    wsmp_pivtol_ = Min(wsmp_pivtolmax_, pow(wsmp_pivtol_,0.75));
-    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "to %7.2e.\n",
-                   wsmp_pivtol_);
+    if (wsmp_inexact_droptol_ != 0.) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		     "Increasing dropotol for WISMP from %7.2e ",
+		     wsmp_inexact_droptol_);
+      wsmp_inexact_droptol_ = DPARM_[13];
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		     "to %7.2e (suggested value).\n",
+		     wsmp_inexact_droptol_);
+    }
+    else {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		     "Not increasing dropotol for WISMP, it is just reusing new value");
+    }
+    if (wsmp_inexact_fillin_limit_ != 0.) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		     "Increasing fillin limit for WISMP from %7.2e ",
+		     wsmp_inexact_fillin_limit_);
+      wsmp_inexact_fillin_limit_ = DPARM_[14];
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		     "to %7.2e (suggested value).\n",
+		     wsmp_inexact_fillin_limit_);
+    }
+    else {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+		     "Not increasing fillin limit for WISMP, it is just reusing new value");
+    }
+
     return true;
   }
 

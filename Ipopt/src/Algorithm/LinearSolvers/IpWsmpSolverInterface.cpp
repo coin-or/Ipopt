@@ -183,6 +183,7 @@ namespace Ipopt
     // Reset all private data
     dim_=0;
     initialized_=false;
+    printed_num_threads_ = false;
     pivtol_changed_ = false;
     have_symbolic_factorization_ = false;
     factorizations_since_recomputed_ordering_ = -1;
@@ -215,6 +216,7 @@ namespace Ipopt
     IPARM_[19] = wsmp_ordering_option2; // for ordering in IP methods?
     if (wsmp_no_pivoting_) {
       IPARM_[30] = 1; // want L D L^T factorization with diagonal no pivoting
+      IPARM_[26] = 1;
     }
     else {
       IPARM_[30] = 2; // want L D L^T factorization with diagonal with pivoting
@@ -250,6 +252,12 @@ namespace Ipopt
     DBG_ASSERT(!check_NegEVals || ProvidesInertia());
     DBG_ASSERT(initialized_);
 
+    if (!printed_num_threads_) {
+      Jnlst().Printf(J_ITERSUMMARY, J_LINEAR_ALGEBRA,
+		     "  -- WSMP is working with %d thread%s.\n", IPARM_[32],
+		     IPARM_[32]==1 ? "" : "s");
+      printed_num_threads_ = true;
+    }
     // check if a factorization has to be done
     if (new_matrix || pivtol_changed_) {
       pivtol_changed_ = false;
@@ -602,7 +610,7 @@ namespace Ipopt
     pivtol_changed_ = true;
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Indreasing pivot tolerance for WSMP from %7.2e ",
+                   "Increasing pivot tolerance for WSMP from %7.2e ",
                    wsmp_pivtol_);
     wsmp_pivtol_ = Min(wsmp_pivtolmax_, pow(wsmp_pivtol_,0.75));
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,

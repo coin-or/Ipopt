@@ -161,6 +161,9 @@ namespace Ipopt
     /** Flag indicating if internal data is initialized.
      *  For initialization, this object needs to have seen a matrix */
     bool initialized_;
+    /** Flag indicating if we already printed how many threads are
+     *  used by WSMP. */
+    bool printed_num_threads_;
     /** Flag indicating if the matrix has to be refactorized because
      *  the pivot tolerance has been changed, or the computation of
      *  the ordering has been triggered with DPARNM[14]. */
