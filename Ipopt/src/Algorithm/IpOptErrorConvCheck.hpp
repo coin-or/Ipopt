@@ -100,6 +100,13 @@ namespace Ipopt
     /** Value of the objective function from last iteration.  This is
     for accpetable_obj_change_tol. */
     Number last_obj_val_;
+
+    /** Value of the objective function from current iteration.  This is
+    for accpetable_obj_change_tol. */
+    Number curr_obj_val_;
+
+    /** Iteration counter for which last_obj_val most recently updated. */
+    Index last_obj_val_iter_;
   };
 
 } // namespace Ipopt
