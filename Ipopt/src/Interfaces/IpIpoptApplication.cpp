@@ -853,14 +853,14 @@ namespace Ipopt
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Number of Lagrangian Hessian evaluations             = %d\n",
                      p2ip_nlp->h_evals());
-      Number time_overall_alg = p2ip_data->TimingStats().OverallAlgorithm().TotalTime();
-      Number time_funcs = p2ip_nlp->TotalFunctionEvaluationCPUTime();
+      Number cpu_time_overall_alg = p2ip_data->TimingStats().OverallAlgorithm().TotalCpuTime();
+      Number cpu_time_funcs = p2ip_nlp->TotalFunctionEvaluationCpuTime();
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Total CPU secs in IPOPT (w/o function evaluations)   = %10.3f\n",
-                     time_overall_alg-time_funcs);
+                     cpu_time_overall_alg-cpu_time_funcs);
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Total CPU secs in NLP function evaluations           = %10.3f\n",
-                     time_funcs);
+                     cpu_time_funcs);
 
       // Write timing statistics information
       if (print_timing_statistics) {

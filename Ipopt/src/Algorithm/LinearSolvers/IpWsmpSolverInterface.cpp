@@ -254,8 +254,8 @@ namespace Ipopt
 
     if (!printed_num_threads_) {
       Jnlst().Printf(J_ITERSUMMARY, J_LINEAR_ALGEBRA,
-		     "  -- WSMP is working with %d thread%s.\n", IPARM_[32],
-		     IPARM_[32]==1 ? "" : "s");
+                     "  -- WSMP is working with %d thread%s.\n", IPARM_[32],
+                     IPARM_[32]==1 ? "" : "s");
       printed_num_threads_ = true;
     }
     // check if a factorization has to be done

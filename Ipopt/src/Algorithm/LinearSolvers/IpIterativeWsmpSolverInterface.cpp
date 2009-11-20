@@ -521,29 +521,29 @@ namespace Ipopt
 
     if (wsmp_inexact_droptol_ != 0.) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		     "Increasing dropotol for WISMP from %7.2e ",
-		     wsmp_inexact_droptol_);
+                     "Increasing dropotol for WISMP from %7.2e ",
+                     wsmp_inexact_droptol_);
       wsmp_inexact_droptol_ = DPARM_[13];
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		     "to %7.2e (suggested value).\n",
-		     wsmp_inexact_droptol_);
+                     "to %7.2e (suggested value).\n",
+                     wsmp_inexact_droptol_);
     }
     else {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		     "Not increasing dropotol for WISMP, it is just reusing new value");
+                     "Not increasing dropotol for WISMP, it is just reusing new value");
     }
     if (wsmp_inexact_fillin_limit_ != 0.) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		     "Increasing fillin limit for WISMP from %7.2e ",
-		     wsmp_inexact_fillin_limit_);
+                     "Increasing fillin limit for WISMP from %7.2e ",
+                     wsmp_inexact_fillin_limit_);
       wsmp_inexact_fillin_limit_ = DPARM_[14];
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		     "to %7.2e (suggested value).\n",
-		     wsmp_inexact_fillin_limit_);
+                     "to %7.2e (suggested value).\n",
+                     wsmp_inexact_fillin_limit_);
     }
     else {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-		     "Not increasing fillin limit for WISMP, it is just reusing new value");
+                     "Not increasing fillin limit for WISMP, it is just reusing new value");
     }
 
     return true;
