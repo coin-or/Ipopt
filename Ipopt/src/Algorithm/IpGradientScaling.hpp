@@ -88,6 +88,9 @@ namespace Ipopt
 
     /** target size of norm for constraint gradients */
     Number scaling_constr_target_gradient_;
+
+    /** minimum value of a scaling parameter */
+    Number scaling_min_value_;
   };
 } // namespace Ipopt
 #endif
