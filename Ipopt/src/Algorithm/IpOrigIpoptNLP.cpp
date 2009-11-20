@@ -904,41 +904,81 @@ namespace Ipopt
       return;
 
     jnlst.Printf(level, category,
-                 "Function Evaluations................: %10.3f\n",
-                 TotalFunctionEvaluationCPUTime());
+                 "Function Evaluations................: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                 TotalFunctionEvaluationCpuTime(),
+                 TotalFunctionEvaluationSysTime(),
+                 TotalFunctionEvaluationWallclockTime());
     jnlst.Printf(level, category,
-                 " Objective function.................: %10.3f\n",
-                 f_eval_time_.TotalTime());
+                 " Objective function.................: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                 f_eval_time_.TotalCpuTime(),
+                 f_eval_time_.TotalSysTime(),
+                 f_eval_time_.TotalWallclockTime());
     jnlst.Printf(level, category,
-                 " Objective function gradient........: %10.3f\n",
-                 grad_f_eval_time_.TotalTime());
+                 " Objective function gradient........: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                 grad_f_eval_time_.TotalCpuTime(),
+                 grad_f_eval_time_.TotalSysTime(),
+                 grad_f_eval_time_.TotalWallclockTime());
     jnlst.Printf(level, category,
-                 " Equality constraints...............: %10.3f\n",
-                 c_eval_time_.TotalTime());
+                 " Equality constraints...............: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                 c_eval_time_.TotalCpuTime(),
+                 c_eval_time_.TotalSysTime(),
+                 c_eval_time_.TotalWallclockTime());
     jnlst.Printf(level, category,
-                 " Inequality constraints.............: %10.3f\n",
-                 d_eval_time_.TotalTime());
+                 " Inequality constraints.............: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                 d_eval_time_.TotalCpuTime(),
+                 d_eval_time_.TotalSysTime(),
+                 d_eval_time_.TotalWallclockTime());
     jnlst.Printf(level, category,
-                 " Equality constraint Jacobian.......: %10.3f\n",
-                 jac_c_eval_time_.TotalTime());
+                 " Equality constraint Jacobian.......: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                 jac_c_eval_time_.TotalCpuTime(),
+                 jac_c_eval_time_.TotalSysTime(),
+                 jac_c_eval_time_.TotalWallclockTime());
     jnlst.Printf(level, category,
-                 " Inequality constraint Jacobian.....: %10.3f\n",
-                 jac_d_eval_time_.TotalTime());
+                 " Inequality constraint Jacobian.....: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                 jac_d_eval_time_.TotalCpuTime(),
+                 jac_d_eval_time_.TotalSysTime(),
+                 jac_d_eval_time_.TotalWallclockTime());
     jnlst.Printf(level, category,
-                 " Lagrangian Hessian.................: %10.3f\n",
-                 h_eval_time_.TotalTime());
+                 " Lagrangian Hessian.................: %10.3f (sys: %10.3f wall: %10.3f)\n",
+                 h_eval_time_.TotalCpuTime(),
+                 h_eval_time_.TotalSysTime(),
+                 h_eval_time_.TotalWallclockTime());
   }
 
   Number
-  OrigIpoptNLP::TotalFunctionEvaluationCPUTime() const
+  OrigIpoptNLP::TotalFunctionEvaluationCpuTime() const
   {
-    return f_eval_time_.TotalTime()+
-           grad_f_eval_time_.TotalTime()+
-           c_eval_time_.TotalTime()+
-           d_eval_time_.TotalTime()+
-           jac_c_eval_time_.TotalTime()+
-           jac_d_eval_time_.TotalTime()+
-           h_eval_time_.TotalTime();
+    return f_eval_time_.TotalCpuTime()+
+           grad_f_eval_time_.TotalCpuTime()+
+           c_eval_time_.TotalCpuTime()+
+           d_eval_time_.TotalCpuTime()+
+           jac_c_eval_time_.TotalCpuTime()+
+           jac_d_eval_time_.TotalCpuTime()+
+           h_eval_time_.TotalCpuTime();
+  }
+
+  Number
+  OrigIpoptNLP::TotalFunctionEvaluationSysTime() const
+  {
+    return f_eval_time_.TotalSysTime()+
+           grad_f_eval_time_.TotalSysTime()+
+           c_eval_time_.TotalSysTime()+
+           d_eval_time_.TotalSysTime()+
+           jac_c_eval_time_.TotalSysTime()+
+           jac_d_eval_time_.TotalSysTime()+
+           h_eval_time_.TotalSysTime();
+  }
+
+  Number
+  OrigIpoptNLP::TotalFunctionEvaluationWallclockTime() const
+  {
+    return f_eval_time_.TotalWallclockTime()+
+           grad_f_eval_time_.TotalWallclockTime()+
+           c_eval_time_.TotalWallclockTime()+
+           d_eval_time_.TotalWallclockTime()+
+           jac_c_eval_time_.TotalWallclockTime()+
+           jac_d_eval_time_.TotalWallclockTime()+
+           h_eval_time_.TotalWallclockTime();
   }
 
   SmartPtr<const Vector>

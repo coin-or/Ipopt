@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2008 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -20,7 +20,9 @@ namespace Ipopt
     const SmartPtr<IpoptCalculatedQuantities>& ip_cq)
       :
       num_iters_(ip_data->iter_count()),
-      total_cpu_time_(ip_data->TimingStats().OverallAlgorithm().TotalTime()),
+      total_cpu_time_(ip_data->TimingStats().OverallAlgorithm().TotalCpuTime()),
+      total_sys_time_(ip_data->TimingStats().OverallAlgorithm().TotalSysTime()),
+      total_wallclock_time_(ip_data->TimingStats().OverallAlgorithm().TotalWallclockTime()),
       num_obj_evals_(ip_nlp->f_evals()),
       num_constr_evals_(Max(ip_nlp->c_evals(), ip_nlp->d_evals())),
       num_obj_grad_evals_(ip_nlp->grad_f_evals()),
@@ -44,9 +46,19 @@ namespace Ipopt
     return num_iters_;
   }
 
-  Number SolveStatistics::TotalCPUTime() const
+  Number SolveStatistics::TotalCpuTime() const
   {
     return total_cpu_time_;
+  }
+
+  Number SolveStatistics::TotalSysTime() const
+  {
+    return total_sys_time_;
+  }
+
+  Number SolveStatistics::TotalWallclockTime() const
+  {
+    return total_wallclock_time_;
   }
 
   void SolveStatistics::NumberOfEvaluations(
