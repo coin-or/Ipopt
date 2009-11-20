@@ -274,6 +274,7 @@ namespace Ipopt
           options_to_print.push_back("obj_scaling_factor");
           options_to_print.push_back("nlp_scaling_method");
           options_to_print.push_back("nlp_scaling_max_gradient");
+          options_to_print.push_back("nlp_scaling_min_value");
 
           options_to_print.push_back("#NLP");
           options_to_print.push_back("bound_relax_factor");

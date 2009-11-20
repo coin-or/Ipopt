@@ -383,14 +383,14 @@ namespace Ipopt
     d_L_ = NLP_scaling()->apply_vector_scaling_d_LU(*Pd_L_, d_L_, *d_space_);
     d_U_ = NLP_scaling()->apply_vector_scaling_d_LU(*Pd_U_, d_U_, *d_space_);
 
-    x_L->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
-               "modified x_L scaled");
-    x_U->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
-               "modified x_U scaled");
-    d_L->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
-               "modified d_L scaled");
-    d_U->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
-               "modified d_U scaled");
+    x_L_->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
+                "modified x_L scaled");
+    x_U_->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
+                "modified x_U scaled");
+    d_L_->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
+                "modified d_L scaled");
+    d_U_->Print(*jnlst_, J_VECTOR, J_INITIALIZATION,
+                "modified d_U scaled");
 
     // Create the iterates structures
     x = x_space_->MakeNew();
