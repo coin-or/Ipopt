@@ -388,6 +388,7 @@ namespace Ipopt
           options_to_print.push_back("ma57_pivtolmax");
           options_to_print.push_back("ma57_pre_alloc");
           options_to_print.push_back("ma57_pivot_order");
+          options_to_print.push_back("ma57_automatic_scaling");
 #endif
 
 #ifdef COIN_HAS_MUMPS
