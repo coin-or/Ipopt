@@ -78,6 +78,12 @@ Contributors:
 
   MSVisualStudio/v8-ifort
 
+- Jonathan Hogg
+  MA77 interface
+
+  src/Algorithm/LinearSolvers/ma77_iface.f90
+  src/Algorithm/LinearSolvers/IpMa77SolverInterface.hpp
+  src/Algorithm/LinearSolvers/IpMa77SolverInterface.cpp
 
 Contributors of code that is no longer included in Ipopt distribution:
 
