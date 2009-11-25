@@ -75,7 +75,7 @@ namespace Ipopt
     if (!last_tr_inactive_ && InexData().full_step_accepted()) {
       if (curr_omega_ >= omega_max_) {
         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-                       "Trust region radius factor would be increased, but it is already at its upper limit %e\n.", curr_omega_);
+                       "Trust region radius factor would be increased, but it is already at its upper limit %e.\n", curr_omega_);
         IpData().Append_info_string("O");
       }
       else {
@@ -95,6 +95,7 @@ namespace Ipopt
       normal_s = IpData().curr()->s()->MakeNew();
       normal_x->Set(0.);
       normal_s->Set(0.);
+      last_tr_inactive_ = true;
       return true;
     }
 
