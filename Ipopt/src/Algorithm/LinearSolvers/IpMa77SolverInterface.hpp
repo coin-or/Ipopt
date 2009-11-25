@@ -1,17 +1,17 @@
+// Copyright (C) 2009, Jonathan Hogg <jdh41.at.cantab.net>
 // Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-03-17
+// Authors: Jonathan Hogg                           2009-07-29 
+//          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
-#ifndef __IPSPARSESYMLINEARSOLVERINTERFACE_HPP__
-#define __IPSPARSESYMLINEARSOLVERINTERFACE_HPP__
+#ifndef __IPMA77SOLVERINTERFACE_HPP__
+#define __IPMA77SOLVERINTERFACE_HPP__
 
-#include "IpUtils.hpp"
-#include "IpAlgStrategy.hpp"
-#include "IpSymLinearSolver.hpp"
+#include "IpSparseSymLinearSolverInterface.hpp"
 
 namespace Ipopt
 {
@@ -95,38 +95,35 @@ namespace Ipopt
    *  linear solver might reuse information from the previous
    *  optimization.  See Ma27TSolverInterface for an example.
   */
-  class SparseSymLinearSolverInterface: public AlgorithmStrategyObject
+  class Ma77SolverInterface: public SparseSymLinearSolverInterface
   {
+  private:
+    int ndim_; // Number of dimensions
+    double *val_; // Storage for variables
+    int numneg_; // Number of negative pivots in last factorization
+
+    /* Options */
+    int icntl_[8];
+    double rcntl_[3];
+    int ma77_print_level_;
+    int ma77_buffer_lpage_;
+    int ma77_buffer_npage_;
+    int ma77_file_size_;
+    int ma77_maxstore_;
+    int ma77_nemin_;
+    double ma77_small_;
+    double ma77_static_;
+    double ma77_u_;
+
   public:
-    /** Enum to specify sparse matrix format. */
-    enum EMatrixFormat {
-      /** Triplet (MA27) format. */
-      Triplet_Format,
-      /** Compressed sparse row format for lower triangular part, with
-       *  0 offset. */
-      CSR_Format_0_Offset,
-      /** Compressed sparse row format for lower triangular part, with
-       *  1 offset. */
-      CSR_Format_1_Offset,
-      /** Compressed sparse row format for both lwr and upr parts, with
-       *  0 offset. */
-      CSR_Full_Format_0_Offset,
-      /** Compressed sparse row format for both lwr and upr parts, with
-       *  1 offset. */
-      CSR_Full_Format_1_Offset
-    };
-    /** @name Constructor/Destructor */
-    //@{
-    SparseSymLinearSolverInterface()
-    {}
 
-    virtual ~SparseSymLinearSolverInterface()
-    {}
-    //@}
+    Ma77SolverInterface() : val_(NULL) {}
+    ~Ma77SolverInterface();
 
-    /** overloaded from AlgorithmStrategyObject */
-    virtual bool InitializeImpl(const OptionsList& options,
-                                const std::string& prefix) = 0;
+    static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+
+    bool InitializeImpl(const OptionsList& options,
+                        const std::string& prefix);
 
     /** @name Methods for requesting solution of the linear system. */
     //@{
@@ -136,9 +133,9 @@ namespace Ipopt
      *  positions of the nonzero elements, given in the matrix format
      *  determined by MatrixFormat.
      */
-    virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
+    ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
         const Index* ia,
-        const Index* ja) = 0;
+        const Index* ja);
 
     /** Method returing an internal array into which the nonzero
      *  elements (in the same order as ja) will be stored by the
@@ -146,7 +143,7 @@ namespace Ipopt
      *  new_matrix=true (or after a return of MultiSolve with
      *  SYMSOLV_CALL_AGAIN). The returned array must have space for at
      *  least nonzero elements. */
-    virtual double* GetValuesArrayPtr() = 0;
+    double* GetValuesArrayPtr() { return val_; }
 
     /** Solve operation for multiple right hand sides.  Solves the
      *  linear system A * x = b with multiple right hand sides, where
@@ -180,13 +177,13 @@ namespace Ipopt
      *  check_NegEVals will not be chosen true, if ProvidesInertia()
      *  returns false.
      */
-    virtual ESymSolverStatus MultiSolve(bool new_matrix,
-                                        const Index* ia,
-                                        const Index* ja,
-                                        Index nrhs,
-                                        double* rhs_vals,
-                                        bool check_NegEVals,
-                                        Index numberOfNegEVals)=0;
+    ESymSolverStatus MultiSolve(bool new_matrix,
+                                const Index* ia,
+                                const Index* ja,
+                                Index nrhs,
+                                double* rhs_vals,
+                                bool check_NegEVals,
+                                Index numberOfNegEVals);
 
     /** Number of negative eigenvalues detected during last
      *  factorization.  Returns the number of negative eigenvalues of
@@ -194,7 +191,7 @@ namespace Ipopt
      *  the linear solver does not compute this quantities (see
      *  ProvidesInertia).
      */
-    virtual Index NumberOfNegEVals() const =0;
+    Index NumberOfNegEVals() const { return numneg_; }
     //@}
 
     //* @name Options of Linear solver */
@@ -205,17 +202,17 @@ namespace Ipopt
      *  Returns false, if this is not possible (e.g. maximal pivot
      *  tolerance already used.)
      */
-    virtual bool IncreaseQuality() =0;
+    bool IncreaseQuality() { return false; }
 
     /** Query whether inertia is computed by linear solver.  Returns
      *  true, if linear solver provides inertia.
      */
-    virtual bool ProvidesInertia() const =0;
+    bool ProvidesInertia() const { return true; }
 
     /** Query of requested matrix type that the linear solver
      *  understands.
      */
-    virtual EMatrixFormat MatrixFormat() const =0;
+    EMatrixFormat MatrixFormat() const { return CSR_Full_Format_1_Offset; }
     //@}
 
     /** @name Methods related to the detection of linearly dependent
@@ -223,18 +220,15 @@ namespace Ipopt
     //@{
     /** Query whether the indices of linearly dependent rows/columns
      *  can be determined by this linear solver. */
-    virtual bool ProvidesDegeneracyDetection() const
-    {
-      return false;
-    }
+    bool ProvidesDegeneracyDetection() const { return false; }
     /** This method determines the list of row indices of the linearly
      *  dependent rows. */
-    virtual ESymSolverStatus DetermineDependentRows(const Index* ia,
+    ESymSolverStatus DetermineDependentRows(const Index* ia,
         const Index* ja,
-        std::list<Index>& c_deps)
-    {
-      return SYMSOLVER_FATAL_ERROR;
-    }
+        std::list<Index>& c_deps) { return SYMSOLVER_FATAL_ERROR; }
+
+    /** Calls METIS_NodeND to obtain an ordering */
+    static void MetisOrder(const int dim, const Index *ptr, const Index *row, Index *perm);
   };
 
 } // namespace Ipopt

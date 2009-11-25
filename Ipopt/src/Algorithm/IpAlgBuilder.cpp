@@ -54,6 +54,7 @@
 
 #include "IpMa27TSolverInterface.hpp"
 #include "IpMa57TSolverInterface.hpp"
+#include "IpMa77SolverInterface.hpp"
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpPardisoSolverInterface.hpp"
 #include "IpSlackBasedTSymScalingMethod.hpp"
@@ -132,7 +133,7 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption6(
+    roptions->AddStringOption7(
       "linear_solver",
       "Linear solver used for step computations.",
 #ifdef HAVE_MA27
@@ -158,6 +159,7 @@ namespace Ipopt
 #endif
       "ma27", "use the Harwell routine MA27",
       "ma57", "use the Harwell routine MA57",
+      "ma77", "use the Harwell routine MA77",
       "pardiso", "use the Pardiso package",
       "wsmp", "use WSMP package",
       "mumps", "use MUMPS package",
@@ -323,6 +325,27 @@ namespace Ipopt
       SolverInterface = new Ma57TSolverInterface();
 #endif
 
+    }
+    else if (linear_solver=="ma77") {
+#ifndef HAVE_MA77
+# ifdef HAVE_LINEARSOLVERLOADER
+      SolverInterface = new Ma77SolverInterface();
+      char buf[256];
+      int rc = LSL_loadHSL(NULL, buf, 255);
+      if (rc) {
+        std::string errmsg;
+        errmsg = "Selected linear solver MA77 not available.\nTried to obtain MA77 from shared library \"";
+        errmsg += LSL_HSLLibraryName();
+        errmsg += "\", but the following error occured:\n";
+        errmsg += buf;
+        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+      }
+# else
+      THROW_EXCEPTION(OPTION_INVALID, "Support for MA77 has not been compiled into Ipopt.");
+# endif
+#else
+      SolverInterface = new Ma77SolverInterface();
+#endif
     }
     else if (linear_solver=="pardiso") {
 #ifndef HAVE_PARDISO

@@ -392,6 +392,20 @@ namespace Ipopt
           options_to_print.push_back("ma57_automatic_scaling");
 #endif
 
+#if defined(HAVE_MA77) || defined(HAVE_LINEARSOLVERLOADER)
+
+          options_to_print.push_back("#MA77 Linear Solver");
+          options_to_print.push_back("ma77_print_level");
+          options_to_print.push_back("ma77_buffer_lpage");
+          options_to_print.push_back("ma77_buffer_npage");
+          options_to_print.push_back("ma77_file_size");
+          options_to_print.push_back("ma77_maxstore");
+          options_to_print.push_back("ma77_nemin");
+          options_to_print.push_back("ma77_small");
+          options_to_print.push_back("ma77_static");
+          options_to_print.push_back("ma77_u");
+#endif
+
 #ifdef COIN_HAS_MUMPS
 
           options_to_print.push_back("#MUMPS Linear Solver");
