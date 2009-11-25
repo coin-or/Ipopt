@@ -73,6 +73,17 @@ AC_COIN_PROG_F77
 # Find out how to call Fortran from C and determine Fortran runtime libraries
 AC_COIN_F77_WRAPPERS
 
+# Also set up the FC compiler variable, required to compile .f90
+# files.  We use the same compile and flags as F77 and FFLAGS, unless
+# the user has set FC and FCFLAGS explicitly.
+if test "$FC" = ""; then
+  FC="$F77"
+fi
+if test "$FCFLAGS" = ""; then
+  FCFLAGS="$FFLAGS"
+fi
+AC_PROG_FC
+
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS
 
@@ -351,6 +362,14 @@ AC_COIN_HAS_METIS
 hslobjdir=../ThirdParty/HSL
 hslsrcdir=$srcdir/$hslobjdir
 
+AC_MSG_CHECKING([whether we can compile Fortran 90 code])
+AC_LANG_PUSH(Fortran 77)
+AC_COMPILE_IFELSE([        MODULE BLA
+      DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: BLUBB
+      END MODULE BLA],[have_f90=yes],[have_f90=no])
+AC_MSG_RESULT([$have_f90])
+AC_LANG_POP(Fortran 77)
+
 AC_DEFUN([MY_CHECK_HSL],
          [AC_MSG_CHECKING([for $1 in $use_hsl])
           use_$2=
@@ -364,6 +383,14 @@ AC_DEFUN([MY_CHECK_HSLFILE],
          [AC_COIN_CHECK_FILE([$hslsrcdir/$1.f],
                         [AC_DEFINE(HAVE_$2,1,[Define to 1 if $2 is available]) use_$2=BUILD],
                         [use_$2=no])])
+AC_DEFUN([MY_CHECK_HSLFILE_F90],
+         [if test $have_f90 = yes; then
+	    AC_COIN_CHECK_FILE([$hslsrcdir/$1.f90],
+                               [AC_DEFINE(HAVE_$2,1,[Define to 1 if $2 is available]) use_$2=BUILD],
+                               [use_$2=no])
+          else
+            use_$2=no
+          fi])
 
 AC_MSG_NOTICE([Checking for Harwell subroutine library])
 
@@ -396,8 +423,10 @@ if test "$use_hsl" = BUILD; then
     #  fi
     MY_CHECK_HSLFILE(mc19ad,MC19)
     MY_CHECK_HSLFILE(ma57ad,MA57)
+    MY_CHECK_HSLFILE_F90(hsl_ma77d,MA77)
     MY_CHECK_HSLFILE(ma28ad,MA28)
     coin_need_flibs=yes
+    HSL_F90_INCFLAGS="-I`cd $hslobjdir; pwd`"
   fi
 else
   if test "$use_hsl" != no; then
@@ -416,9 +445,11 @@ else
     MY_CHECK_HSL([mc19ad],[MC19])
     MY_CHECK_HSL([ma57ad],[MA57])
     MY_CHECK_HSL([ma28ad],[MA28])
+#  TODO: We are missing the test for MA77 here
     LIBS="$use_hsl $SAVE_LIBS"
   fi
 fi
+AC_SUBST(HSL_F90_INCFLAGS)
 
 ###########
 # PARDISO #
@@ -491,7 +522,7 @@ fi
 
 # Check if at least one linear solver was found
 
-if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" = no; then
+if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_MA77" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" = no; then
   AC_MSG_WARN("You are compiling Ipopt without any linear solver (such as MUMPS).  You will only be able to run Ipopt if you compile a shared library with a linear solver.")
 fi
 
@@ -711,6 +742,7 @@ fi
 
 AM_CONDITIONAL([HAVE_MA27],[test ! "$use_MA27" = no])
 AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
+AM_CONDITIONAL([HAVE_MA77],[test ! "$use_MA77" = no])
 AM_CONDITIONAL([HAVE_MA28],[test ! "$use_MA28" = no])
 AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
@@ -737,7 +769,7 @@ if test $use_linearsolverloader = yes; then
 fi
 
 AM_CONDITIONAL([BUILD_LINEARSOLVERLOADER],[test $use_linearsolverloader = yes])
-AM_CONDITIONAL([BUILD_HSLLOADER],[test "$use_MA27" = no -o "$use_MA28" = no -o "$use_MA57" = no -o "$use_MC19" = no])
+AM_CONDITIONAL([BUILD_HSLLOADER],[test "$use_MA27" = no -o "$use_MA28" = no -o "$use_MA57" = no -o "$use_MA77" = no -o "$use_MC19" = no])
 AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$use_pardiso" = no])
 
 AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])
