@@ -1,0 +1,10 @@
+prefix=@prefix@
+libdir=@exec_prefix@/lib
+includedir=${prefix}/include/coin
+
+Name: IPOPT
+Description: Interior Point Optimizer
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lipopt @ADDLIBS@
+Cflags: -I${includedir}
+Requires: @REQUIREDPACKAGES@

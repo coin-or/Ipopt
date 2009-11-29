@@ -87,11 +87,9 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty` \
 	-I`$(CYGPATH_W) $(srcdir)/../contrib/LinearSolverLoader`
 
-if COIN_HAS_MUMPS
-  AM_CPPFLAGS += \
-    -I`$(CYGPATH_W) $(MUMPSSRCDIR)/MUMPS/libseq` \
-    -I`$(CYGPATH_W) $(MUMPSSRCDIR)/MUMPS/include`
-endif
+#if COIN_HAS_MUMPS
+#  AM_CPPFLAGS += $(MUMPS_CFLAGS)
+#endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

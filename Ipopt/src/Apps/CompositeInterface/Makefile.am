@@ -25,7 +25,7 @@ IPLIBS = \
 	../../LinAlg/liblinalg.a \
 	../../Common/libcommon.a \
 	../AmplSolver/libamplinterface.a \
-	$(ASLLIB)
+	$(ASL_LIBS) $(BLAS_LIBS) $(LAPACK_LIBS) $(MUMPS_LIBS) $(HSL_LIBS)
 
 composite_ampl_ipopt_LDADD = $(IPLIBS) \
 	libcompositenlp.a

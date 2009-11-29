@@ -74,11 +74,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty`
 
 if COIN_HAS_MUMPS
-liblinsolvers_la_SOURCES += \
-	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
-AM_CPPFLAGS += \
-  -I`$(CYGPATH_W) $(MUMPSSRCDIR)/MUMPS/libseq` \
-  -I`$(CYGPATH_W) $(MUMPSSRCDIR)/MUMPS/include`
+liblinsolvers_la_SOURCES += IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+AM_CPPFLAGS += $(MUMPS_CFLAGS)
 endif
 
 # This line is necessary to allow VPATH compilation with MS compilers

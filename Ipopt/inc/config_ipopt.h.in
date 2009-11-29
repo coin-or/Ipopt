@@ -3,25 +3,19 @@
 /* Define to 1 if the inexact linear solver option is included */
 #undef BUILD_INEXACT
 
-/* Define to 1 if the ASL package is used */
+/* Define to 1 if the ASL module is available */
 #undef COIN_HAS_ASL
 
-/* Define to 1 if the Blas package is used */
+/* If defined, the BLAS Library is available. */
 #undef COIN_HAS_BLAS
 
-/* Define to 1 if the HSL package is used */
+/* Define to 1 if the HSL module is available */
 #undef COIN_HAS_HSL
 
-/* Define to 1 if the Ipopt package is used */
-#undef COIN_HAS_IPOPT
-
-/* Define to 1 if the Lapack package is used */
+/* If defined, the LAPACK Library is available. */
 #undef COIN_HAS_LAPACK
 
-/* Define to 1 if the Metis package is used */
-#undef COIN_HAS_METIS
-
-/* Define to 1 if the Mumps package is used */
+/* If defined, the MUMPS Library is available. */
 #undef COIN_HAS_MUMPS
 
 /* Define to the debug sanity check level (0 is no test) */
@@ -102,20 +96,8 @@
    loading of shared libaries with linear solvers */
 #undef HAVE_LINEARSOLVERLOADER
 
-/* Define to 1 if MA27 is available */
-#undef HAVE_MA27
-
-/* Define to 1 if MA28 is available */
-#undef HAVE_MA28
-
-/* Define to 1 if MA57 is available */
-#undef HAVE_MA57
-
 /* Define to 1 if you have the <math.h> header file. */
 #undef HAVE_MATH_H
-
-/* Define to 1 if MC19 is available */
-#undef HAVE_MC19
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H

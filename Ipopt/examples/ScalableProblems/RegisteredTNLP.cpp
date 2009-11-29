@@ -8,6 +8,8 @@
 
 #include "RegisteredTNLP.hpp"
 
+#include <cstdio>
+
 std::map<std::string, SmartPtr<RegisteredTNLP> >& RegisteredTNLPListMap()
 {
   static std::map<std::string, SmartPtr<RegisteredTNLP> > tnlp_map_;
