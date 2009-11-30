@@ -29,8 +29,8 @@ if BUILD_LINEARSOLVERLOADER
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
 	IpMa28Partition.f \
-	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp \
-	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp ma77_iface.f90
+	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
+
 else
 
 if HAVE_MA27
@@ -41,11 +41,6 @@ endif
 if HAVE_MA57
   liblinsolvers_la_SOURCES += \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp
-endif
-
-if HAVE_MA77
-  liblinsolvers_la_SOURCES += \
-	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp ma77_iface.f90
 endif
 
 if HAVE_MC19
@@ -65,6 +60,11 @@ if HAVE_MA28
 endif
 
 endif # BUILD_LINEARSOLVERLOADER
+
+if HAVE_MA77
+  liblinsolvers_la_SOURCES += \
+	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp ma77_iface.f90
+endif
 
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
