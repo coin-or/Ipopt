@@ -328,21 +328,7 @@ namespace Ipopt
     }
     else if (linear_solver=="ma77") {
 #ifndef HAVE_MA77
-# ifdef HAVE_LINEARSOLVERLOADER
-      SolverInterface = new Ma77SolverInterface();
-      char buf[256];
-      int rc = LSL_loadHSL(NULL, buf, 255);
-      if (rc) {
-        std::string errmsg;
-        errmsg = "Selected linear solver MA77 not available.\nTried to obtain MA77 from shared library \"";
-        errmsg += LSL_HSLLibraryName();
-        errmsg += "\", but the following error occured:\n";
-        errmsg += buf;
-        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-      }
-# else
       THROW_EXCEPTION(OPTION_INVALID, "Support for MA77 has not been compiled into Ipopt.");
-# endif
 #else
       SolverInterface = new Ma77SolverInterface();
 #endif

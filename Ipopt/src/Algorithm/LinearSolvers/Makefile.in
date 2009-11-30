@@ -48,8 +48,7 @@ host_triplet = @host@
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28Partition.f \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp ma77_iface.f90
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
 
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA27_TRUE@am__append_2 = \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA27_TRUE@	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp
@@ -57,18 +56,18 @@ host_triplet = @host@
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA57_TRUE@am__append_3 = \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA57_TRUE@	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp
 
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA77_TRUE@am__append_4 = \
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA77_TRUE@	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp ma77_iface.f90
-
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MC19_TRUE@am__append_5 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MC19_TRUE@am__append_4 = \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MC19_TRUE@	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp
 
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_6 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_5 = \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__append_7 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__append_6 = \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28Partition.f \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
+
+@HAVE_MA77_TRUE@am__append_7 = \
+@HAVE_MA77_TRUE@	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp ma77_iface.f90
 
 @HAVE_WSMP_TRUE@am__append_8 = \
 @HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
@@ -116,17 +115,14 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpMc19TSymScalingMethod.lo \
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.lo \
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28Partition.lo \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28TDependencyDetector.lo \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa77SolverInterface.lo \
-@BUILD_LINEARSOLVERLOADER_TRUE@	ma77_iface.lo
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28TDependencyDetector.lo
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA27_TRUE@am__objects_2 = IpMa27TSolverInterface.lo
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA57_TRUE@am__objects_3 = IpMa57TSolverInterface.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA77_TRUE@am__objects_4 = IpMa77SolverInterface.lo \
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA77_TRUE@	ma77_iface.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MC19_TRUE@am__objects_5 = IpMc19TSymScalingMethod.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_6 = IpPardisoSolverInterface.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__objects_7 = IpMa28Partition.lo \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MC19_TRUE@am__objects_4 = IpMc19TSymScalingMethod.lo
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_5 = IpPardisoSolverInterface.lo
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__objects_6 = IpMa28Partition.lo \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.lo
+@HAVE_MA77_TRUE@am__objects_7 = IpMa77SolverInterface.lo ma77_iface.lo
 @HAVE_WSMP_TRUE@am__objects_8 = IpWsmpSolverInterface.lo \
 @HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.lo
 @COIN_HAS_MUMPS_TRUE@am__objects_9 = IpMumpsSolverInterface.lo
