@@ -446,6 +446,7 @@ else
     MY_CHECK_HSL([ma57ad],[MA57])
     MY_CHECK_HSL([ma28ad],[MA28])
 #  TODO: We are missing the test for MA77 here
+    use_MA77=no
     LIBS="$use_hsl $SAVE_LIBS"
   fi
 fi
