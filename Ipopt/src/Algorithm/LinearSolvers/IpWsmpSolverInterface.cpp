@@ -76,10 +76,10 @@ namespace Ipopt
 
   void WsmpSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    roptions->AddLowerBoundedIntegerOption(
+    roptions->AddIntegerOption(
       "wsmp_num_threads",
       "Number of threads to be used in WSMP",
-      1, 1,
+      1,
       "This determines on how many processors WSMP is running on.  This option "
       "is only available if Ipopt has been compiled with WSMP.");
     roptions->AddBoundedIntegerOption(
