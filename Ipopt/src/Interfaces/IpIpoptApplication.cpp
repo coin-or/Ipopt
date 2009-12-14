@@ -483,8 +483,6 @@ namespace Ipopt
 #endif
 
       options_->GetBoolValue("replace_bounds", replace_bounds_, "");
-      options_->GetBoolValue("skip_finalize_solution_call",
-                             skip_finalize_solution_call_, "");
     }
     catch (OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
@@ -748,6 +746,9 @@ namespace Ipopt
       stdout_jrnl->SetAllPrintLevels(print_level);
       stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
     }
+
+    options_->GetBoolValue("skip_finalize_solution_call",
+                           skip_finalize_solution_call_, "");
 
     statistics_ = NULL; /* delete old statistics */
     // Reset Timing statistics
