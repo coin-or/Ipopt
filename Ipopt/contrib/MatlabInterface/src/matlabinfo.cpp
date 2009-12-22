@@ -32,7 +32,7 @@ MatlabInfo::MatlabInfo (mxArray*& ptr)
 
 ApplicationReturnStatus MatlabInfo::getExitStatus() const {
   const mxArray* p = mxGetField(ptr,0,"status");
-  return (ApplicationReturnStatus) *mxGetPr(p);  
+  return (ApplicationReturnStatus) (int) *mxGetPr(p);  
 }
 
 void MatlabInfo::setExitStatus (ApplicationReturnStatus status) {
