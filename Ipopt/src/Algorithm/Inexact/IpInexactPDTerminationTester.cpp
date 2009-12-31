@@ -344,7 +344,7 @@ namespace Ipopt
     SmartPtr<const Vector> resid_d;
     GetVectors(ndim, resid, resid_x, resid_s, resid_c, resid_d);
 
-#ifdef HAVE_MIP
+#ifdef HAVE_MPI
     if (my_rank != 0) {
       delete [] sol;
       sol = NULL;
