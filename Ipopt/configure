@@ -22205,7 +22205,7 @@ fi;
 if test "${with_asl_incdir+set}" = set; then
   withval="$with_asl_incdir"
   coin_has_asl=yes
-     ASL_CFLAGS="-I$withval"
+     ASL_CFLAGS="-I`${CYGPATH_W} $withval`"
 fi;
 
 
@@ -22265,7 +22265,15 @@ fi;
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "asl"; then
     ASL_VERSIONS="`$PKG_CONFIG --modversion asl 2>/dev/null`"
-     ASL_CFLAGS=`$PKG_CONFIG --cflags "asl" 2>/dev/null`
+     cflags=`$PKG_CONFIG --cflags "asl" 2>/dev/null`
+    # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
+	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
+	# but only do this if is not trivial
+    if test "$CYGPATH_W" != "echo" ; then
+      # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
+	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+	fi
+    ASL_CFLAGS="$cflags"
     ASL_LIBS=`$PKG_CONFIG --libs "asl" 2>/dev/null`
     ASL_DATA=`$PKG_CONFIG --variable=datadir "asl" 2>/dev/null`
      coin_has_asl=yes
@@ -24362,7 +24370,7 @@ fi;
 if test "${with_blas_incdir+set}" = set; then
   withval="$with_blas_incdir"
   coin_has_blas=yes
-     BLAS_CFLAGS="-I$withval"
+     BLAS_CFLAGS="-I`${CYGPATH_W} $withval`"
 fi;
 
 
@@ -24422,7 +24430,15 @@ fi;
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "blas"; then
     BLAS_VERSIONS="`$PKG_CONFIG --modversion blas 2>/dev/null`"
-     BLAS_CFLAGS=`$PKG_CONFIG --cflags "blas" 2>/dev/null`
+     cflags=`$PKG_CONFIG --cflags "blas" 2>/dev/null`
+    # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
+	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
+	# but only do this if is not trivial
+    if test "$CYGPATH_W" != "echo" ; then
+      # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
+	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+	fi
+    BLAS_CFLAGS="$cflags"
     BLAS_LIBS=`$PKG_CONFIG --libs "blas" 2>/dev/null`
     BLAS_DATA=`$PKG_CONFIG --variable=datadir "blas" 2>/dev/null`
      coin_has_blas=yes
@@ -26548,7 +26564,7 @@ fi;
 if test "${with_lapack_incdir+set}" = set; then
   withval="$with_lapack_incdir"
   coin_has_lapack=yes
-     LAPACK_CFLAGS="-I$withval"
+     LAPACK_CFLAGS="-I`${CYGPATH_W} $withval`"
 fi;
 
 
@@ -26608,7 +26624,15 @@ fi;
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "lapack"; then
     LAPACK_VERSIONS="`$PKG_CONFIG --modversion lapack 2>/dev/null`"
-     LAPACK_CFLAGS=`$PKG_CONFIG --cflags "lapack" 2>/dev/null`
+     cflags=`$PKG_CONFIG --cflags "lapack" 2>/dev/null`
+    # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
+	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
+	# but only do this if is not trivial
+    if test "$CYGPATH_W" != "echo" ; then
+      # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
+	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+	fi
+    LAPACK_CFLAGS="$cflags"
     LAPACK_LIBS=`$PKG_CONFIG --libs "lapack" 2>/dev/null`
     LAPACK_DATA=`$PKG_CONFIG --variable=datadir "lapack" 2>/dev/null`
      coin_has_lapack=yes
@@ -26775,7 +26799,7 @@ fi;
 if test "${with_hsl_incdir+set}" = set; then
   withval="$with_hsl_incdir"
   coin_has_hsl=yes
-     HSL_CFLAGS="-I$withval"
+     HSL_CFLAGS="-I`${CYGPATH_W} $withval`"
 fi;
 
 
@@ -26835,7 +26859,15 @@ fi;
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "hsl"; then
     HSL_VERSIONS="`$PKG_CONFIG --modversion hsl 2>/dev/null`"
-     HSL_CFLAGS=`$PKG_CONFIG --cflags "hsl" 2>/dev/null`
+     cflags=`$PKG_CONFIG --cflags "hsl" 2>/dev/null`
+    # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
+	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
+	# but only do this if is not trivial
+    if test "$CYGPATH_W" != "echo" ; then
+      # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
+	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+	fi
+    HSL_CFLAGS="$cflags"
     HSL_LIBS=`$PKG_CONFIG --libs "hsl" 2>/dev/null`
     HSL_DATA=`$PKG_CONFIG --variable=datadir "hsl" 2>/dev/null`
      coin_has_hsl=yes
@@ -26956,7 +26988,7 @@ fi;
 if test "${with_mumps_incdir+set}" = set; then
   withval="$with_mumps_incdir"
   coin_has_mumps=yes
-     MUMPS_CFLAGS="-I$withval"
+     MUMPS_CFLAGS="-I`${CYGPATH_W} $withval`"
 fi;
 
 
@@ -27016,7 +27048,15 @@ fi;
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "mumps"; then
     MUMPS_VERSIONS="`$PKG_CONFIG --modversion mumps 2>/dev/null`"
-     MUMPS_CFLAGS=`$PKG_CONFIG --cflags "mumps" 2>/dev/null`
+     cflags=`$PKG_CONFIG --cflags "mumps" 2>/dev/null`
+    # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
+	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
+	# but only do this if is not trivial
+    if test "$CYGPATH_W" != "echo" ; then
+      # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
+	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+	fi
+    MUMPS_CFLAGS="$cflags"
     MUMPS_LIBS=`$PKG_CONFIG --libs "mumps" 2>/dev/null`
     MUMPS_DATA=`$PKG_CONFIG --variable=datadir "mumps" 2>/dev/null`
      coin_has_mumps=yes
@@ -31503,7 +31543,7 @@ fi
 
 
   # now Mumps linker flags are in ADDLIBS
-  MUMPS_CFLAGS="-I`$(CYGPATH_W) $(MUMPSSRCDIR)/MUMPS/libseq` -I`$(CYGPATH_W) $(MUMPSSRCDIR)/MUMPS/include`"
+  MUMPS_CFLAGS="-I`${CYGPATH_W} ${MUMPSSRCDIR}/MUMPS/libseq` -I`${CYGPATH_W} ${MUMPSSRCDIR}/MUMPS/include`"
 else
   #for configure
 

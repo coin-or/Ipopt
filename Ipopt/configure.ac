@@ -120,7 +120,7 @@ fi
 if test "$coin_has_mumps" != yes ; then
   AC_COIN_HAS_MUMPS
   # now Mumps linker flags are in ADDLIBS
-  MUMPS_CFLAGS="-I`$(CYGPATH_W) $(MUMPSSRCDIR)/MUMPS/libseq` -I`$(CYGPATH_W) $(MUMPSSRCDIR)/MUMPS/include`"
+  MUMPS_CFLAGS="-I`${CYGPATH_W} ${MUMPSSRCDIR}/MUMPS/libseq` -I`${CYGPATH_W} ${MUMPSSRCDIR}/MUMPS/include`"
 else
   #for configure
   AM_CONDITIONAL([COIN_BUILD_MUMPS], [test 0 = 1])
