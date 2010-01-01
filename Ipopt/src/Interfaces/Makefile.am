@@ -61,6 +61,11 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 
 CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common`
 
+if COIN_HAS_HSL
+CXXFLAGS += $(HSL_CFLAGS)
+CFLAGS   += $(HSL_CFLAGS)
+endif
+
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc

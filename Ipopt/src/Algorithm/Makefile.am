@@ -91,6 +91,10 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../Common` \
 #  AM_CPPFLAGS += $(MUMPS_CFLAGS)
 #endif
 
+if COIN_HAS_HSL
+AM_CPPFLAGS += $(HSL_CFLAGS)
+endif
+
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc

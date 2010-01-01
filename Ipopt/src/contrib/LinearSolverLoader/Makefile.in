@@ -44,7 +44,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @BUILD_HSLLOADER_TRUE@am__append_1 = HSLLoader.c HSLLoader.h
-@BUILD_PARDISOLOADER_TRUE@am__append_2 = PardisoLoader.c PardisoLoader.h
+@BUILD_HSLLOADER_TRUE@am__append_2 = $(HSL_CFLAGS)
+@BUILD_PARDISOLOADER_TRUE@am__append_3 = PardisoLoader.c PardisoLoader.h
 subdir = src/contrib/LinearSolverLoader
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -296,8 +297,8 @@ AUTOMAKE_OPTIONS = foreign
 EXTRA_DIST = 
 noinst_LTLIBRARIES = libLinearSolverLoader.la
 libLinearSolverLoader_la_SOURCES = LibraryHandler.c LibraryHandler.h \
-	$(am__append_1) $(am__append_2)
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common`
+	$(am__append_1) $(am__append_3)
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` $(am__append_2)
 libLinearSolverLoader_la_LIBADD = 
 libLinearSolverLoader_la_DEPENDENCIES = 
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc

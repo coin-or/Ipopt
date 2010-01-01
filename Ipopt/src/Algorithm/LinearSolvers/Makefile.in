@@ -71,6 +71,7 @@ host_triplet = @host@
 
 @COIN_HAS_MUMPS_TRUE@am__append_8 = IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 @COIN_HAS_MUMPS_TRUE@am__append_9 = $(MUMPS_CFLAGS)
+@COIN_HAS_HSL_TRUE@am__append_10 = $(HSL_CFLAGS)
 subdir = src/Algorithm/LinearSolvers
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -378,7 +379,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/..` -I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty` \
-	$(am__append_9)
+	$(am__append_9) $(am__append_10)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
