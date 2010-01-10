@@ -100,7 +100,7 @@ AC_COIN_HAS_MODULE(HSL,   [hsl])
 AC_COIN_HAS_MODULE(Mumps, [mumps])
 # no need to check for metis, because mumps takes care of this
 
-# fallbacks
+# fallback for Blas if no pkg-config available
 if test "$coin_has_blas" != yes ; then
   AC_COIN_HAS_BLAS
   # now Blas linker flags are in ADDLIBS
@@ -109,6 +109,7 @@ else
   AM_CONDITIONAL([COIN_BUILD_BLAS], [test 0 = 1])
 fi
 
+# fallback for Lapack if no pkg-config available
 if test "$coin_has_lapack" != yes ; then
   AC_COIN_HAS_LAPACK
   # now Lapack linker flags are in ADDLIBS
@@ -117,16 +118,77 @@ else
   AM_CONDITIONAL([COIN_BUILD_LAPACK], [test 0 = 1])
 fi
 
+# fallback for Mumps if no pkg-config available
 if test "$coin_has_mumps" != yes ; then
-  AC_COIN_HAS_MUMPS
-  # now Mumps linker flags are in ADDLIBS
-  MUMPS_CFLAGS="-I`${CYGPATH_W} ${MUMPSSRCDIR}/MUMPS/libseq` -I`${CYGPATH_W} ${MUMPSSRCDIR}/MUMPS/include`"
-else
-  #for configure
-  AM_CONDITIONAL([COIN_BUILD_MUMPS], [test 0 = 1])
+  coin_mumpsobjdir=../ThirdParty/Mumps
+  
+  # if ThirdParty/Mumps is available and configured, then a mumps-uninstalled.pc file should have been created
+  if test -r $coin_mumpsobjdir/mumps-uninstalled.pc ; then
+    # read Mumps CFLAGS and LIBS from mumps-uninstalled.pc file
+    # add CYGPATH_W cludge into include flags
+    # replace -L${libdir} by absolute path to Mumps build directory in linker flags
+    [MUMPS_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' $coin_mumpsobjdir/mumps-uninstalled.pc`]
+    MUMPS_LIBS=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' $coin_mumpsobjdir/mumps-uninstalled.pc`
+    MUMPS_LIBS="-L`cd $coin_mumpsobjdir; pwd` $MUMPS_LIBS"
+
+    ADDLIBS="$ADDLIBS $MUMPS_LIBS"
+    REQUIREDPACKAGES="$REQUIREDPACKAGES mumps"
+
+    coin_has_mumps=yes
+    AC_DEFINE([COIN_HAS_MUMPS],[1],[If defined, the MUMPS Library is available.])
+  fi
+
+  AM_CONDITIONAL([COIN_HAS_MUMPS],[test $coin_has_mumps = yes])
+  
+  AC_MSG_CHECKING([whether ThirdParty/Mumps is available and configured])
+  AC_MSG_RESULT([$coin_has_mumps])
 fi
 
-#TODO fallbacks for ASL and HSL
+# fallback for HSL if no pkg-config available
+if test "$coin_has_hsl" != yes ; then
+  coin_hslobjdir=../ThirdParty/HSL
+  
+  # if ThirdParty/HSL is available and configured, then a hsl-uninstalled.pc file should have been created
+  if test -r $coin_hslobjdir/hsl-uninstalled.pc ; then
+    # read HSL CFLAGS and LIBS from hsl-uninstalled.pc file
+    # replace -L${libdir} by absolute path to HSL build directory in linker flags
+    HSL_CFLAGS=`sed -n -e 's/Cflags://p' $coin_hslobjdir/hsl-uninstalled.pc`
+    HSL_LIBS=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' $coin_hslobjdir/hsl-uninstalled.pc`
+    HSL_LIBS="-L`cd $coin_hslobjdir; pwd` $HSL_LIBS"
+
+    ADDLIBS="$ADDLIBS $HSL_LIBS"
+    REQUIREDPACKAGES="$REQUIREDPACKAGES hsl"
+
+    coin_has_hsl=yes
+    AC_DEFINE([COIN_HAS_HSL],[1],[If defined, the HSL Library is available.])
+  fi
+
+  AM_CONDITIONAL([COIN_HAS_HSL],[test $coin_has_hsl = yes])
+  
+  AC_MSG_CHECKING([whether ThirdParty/HSL is available and configured])
+  AC_MSG_RESULT([$coin_has_hsl])
+fi
+
+# fallback for ASL if no pkg-config available
+if test "$coin_has_asl" != yes ; then
+  coin_aslobjdir=../ThirdParty/ASL
+  
+  # if ThirdParty/ASL is available and configured, then a asl-uninstalled.pc file should have been created
+  if test -r $coin_aslobjdir/asl-uninstalled.pc ; then
+    # read ASL CFLAGS and LIBS from asl-uninstalled.pc file
+    # add CYGPATH_W cludge into include flags
+    [ASL_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' $coin_aslobjdir/asl-uninstalled.pc`]
+    ASL_LIBS=`sed -n -e 's/Libs://p' $coin_aslobjdir/asl-uninstalled.pc`
+
+    coin_has_asl=yes
+    AC_DEFINE([COIN_HAS_ASL],[1],[If defined, the ASL Library is available.])
+  fi
+
+  AM_CONDITIONAL([COIN_HAS_ASL],[test $coin_has_asl = yes])
+  
+  AC_MSG_CHECKING([whether ThirdParty/ASL is available and configured])
+  AC_MSG_RESULT([$coin_has_asl])
+fi
 
 if test $coin_has_lapack != yes; then
   AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])

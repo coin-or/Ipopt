@@ -3,13 +3,13 @@
 /* Define to 1 if the inexact linear solver option is included */
 #undef BUILD_INEXACT
 
-/* Define to 1 if the ASL module is available */
+/* If defined, the ASL Library is available. */
 #undef COIN_HAS_ASL
 
 /* If defined, the BLAS Library is available. */
 #undef COIN_HAS_BLAS
 
-/* Define to 1 if the HSL module is available */
+/* If defined, the HSL Library is available. */
 #undef COIN_HAS_HSL
 
 /* If defined, the LAPACK Library is available. */
