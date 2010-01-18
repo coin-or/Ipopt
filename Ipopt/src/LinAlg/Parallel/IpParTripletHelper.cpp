@@ -792,8 +792,9 @@ namespace Ipopt
     // To Do : This assumes 1-base values (like the TMatrices)
     Index* iRow = new Index[n_entries];
     Index* jCol = new Index[n_entries];
+
     SmartPtr<const ParGenMatrix> pargenmat = dynamic_cast<const ParGenMatrix*>(GetRawPtr(matrix.GetUnscaledMatrix()));
-    ASSERT_EXCEPTION(IsValid(pargenmat), UNKNOWN_MATRIX_TYPE, "Unknown matrix type passed to ParTripletHelper::FillValues_ for ScaledMatrix");
+    ASSERT_EXCEPTION(IsValid(pargenmat), UNKNOWN_MATRIX_TYPE, "Unknown matrix type passed to ParTripletHelper::FillValues_ for ScaledMatrix.  One known reason for this: The scaling of inequality constraints in the parallel version has not yet been properly implemented.  It will require to handle CompoundMatrix here.");
     Index roffset = -pargenmat->RowStartPos();
     FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, roffset, 0);
 
