@@ -1719,18 +1719,43 @@ namespace Ipopt
     }
 
     if (use_g_scaling) {
+      bool have_c_scaling = false;
       const Index* c_pos = P_c_g_->ExpandedPosIndices();
       for (Index i=0; i<P_c_g_->NCols(); i++) {
-        pc_values[i] = part_g_scaling[c_pos[i]];
+	const Number val = part_g_scaling[c_pos[i]];
+	if (val != 1.) {
+	  have_c_scaling = true;
+	}
+        pc_values[i] = val;
       }
       if (fixed_variable_treatment_==MAKE_CONSTRAINT) {
         const Number one = 1.;
         IpBlasDcopy(n_part_x_fixed_, &one, 0, &pc_values[P_c_g_->NCols()], 1);
       }
 
+      bool have_d_scaling = false;
       const Index* d_pos = P_d_g_->ExpandedPosIndices();
       for (Index i=0; i<P_d_g_->NCols(); i++) {
-        pd_values[i] = part_g_scaling[d_pos[i]];
+	const Number val = part_g_scaling[d_pos[i]];
+	if (val != 1.) {
+	  have_d_scaling = true;
+	}
+        pd_values[i] = val;
+      }
+
+      int retval[2];
+      int retval_all[2];
+      retval[0] = have_c_scaling;
+      retval[1] = have_d_scaling;
+      MPI_Allreduce(&retval, &retval_all, 2, MPI_INT, MPI_LOR, MPI_COMM_WORLD);
+      have_c_scaling = retval_all[0];
+      have_d_scaling = retval_all[1];
+
+      if (!have_c_scaling) {
+	c_scaling = NULL;
+      }
+      if (!have_d_scaling) {
+	d_scaling = NULL;
       }
     }
     else {
