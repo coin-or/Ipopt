@@ -10,6 +10,8 @@
 #include "IpSolveStatistics.hpp"
 #include "MyNLP.hpp"
 
+#include <cstdio>
+
 using namespace Ipopt;
 
 int main(int argv, char* argc[])
