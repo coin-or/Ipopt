@@ -20969,6 +20969,7 @@ echo "$as_me:$LINENO: checking whether project ASL is available" >&5
 echo $ECHO_N "checking whether project ASL is available... $ECHO_C" >&6
 
 coin_has_asl=notGiven
+coin_have_project_dir=no
 
 # check if user wants to skip project in any case
 
@@ -20986,6 +20987,7 @@ fi
 if test $coin_has_asl != skipping; then
   if test $PACKAGE_TARNAME = asl; then
     coin_has_asl=.
+    coin_have_project_dir=yes
   fi
 
 
@@ -21018,7 +21020,7 @@ if test $coin_has_asl = notGiven; then
 
     # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
     if test -d "$prefix"; then
-      PKG_CONFIG_PATH="$prefix/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+      PKG_CONFIG_PATH="$prefix/lib/pkgconfig:$PKG_CONFIG_PATH"
     fi
 
 
@@ -21030,7 +21032,7 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
        fi
-       PKG_CONFIG_PATH="$withval/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 fi;
 
@@ -21039,16 +21041,16 @@ fi;
     export PKG_CONFIG_PATH
 
 if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "asl"; then
-    ASL_VERSION=`$PKG_CONFIG --modversion "asl" 2>/dev/null`
-    coin_has_asl="$ASL_VERSION"
+  if $PKG_CONFIG --exists "coinasl"; then
+    COINASL_VERSION=`$PKG_CONFIG --modversion "coinasl" 2>/dev/null`
+    coin_has_asl="$COINASL_VERSION"
   else
-    ASL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "asl"`
+    COINASL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinasl"`
 
   fi
 else
-  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module ASL without pkg-config\"" >&5
-echo "$as_me: error: \"Cannot check for existance of module ASL without pkg-config\"" >&2;}
+  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module coinasl without pkg-config\"" >&5
+echo "$as_me: error: \"Cannot check for existance of module coinasl without pkg-config\"" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -21060,14 +21062,13 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_asl" = notGiven; then
   if test -d $srcdir/ThirdParty/ASL; then
-    coin_pkg_is_here=no
     for i in $srcdir/ThirdParty/ASL/solvers/asl.h; do
          if test -r $i; then
-           coin_pkg_is_here=yes
+           coin_have_project_dir=yes
          fi
        done
 
-    if test $coin_pkg_is_here = yes; then
+    if test $coin_have_project_dir = yes; then
       coin_has_asl=ThirdParty/ASL
     fi
   fi
@@ -21078,9 +21079,7 @@ echo "${ECHO_T}$coin_has_asl" >&6
 
 echo "$as_me:$LINENO: checking whether project ASL need to be configured" >&5
 echo $ECHO_N "checking whether project ASL need to be configured... $ECHO_C" >&6
-if test "$coin_has_asl" != skipping &&
-   test "$coin_has_asl" != notGiven &&
-   test "$coin_has_asl" != installed; then
+if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/ASL/configure; then
     coin_subdirs="$coin_subdirs ThirdParty/ASL"
@@ -21104,6 +21103,7 @@ echo "$as_me:$LINENO: checking whether project Blas is available" >&5
 echo $ECHO_N "checking whether project Blas is available... $ECHO_C" >&6
 
 coin_has_blas=notGiven
+coin_have_project_dir=no
 
 # check if user wants to skip project in any case
 
@@ -21121,6 +21121,7 @@ fi
 if test $coin_has_blas != skipping; then
   if test $PACKAGE_TARNAME = blas; then
     coin_has_blas=.
+    coin_have_project_dir=yes
   fi
 
 
@@ -21153,7 +21154,7 @@ if test $coin_has_blas = notGiven; then
 
     # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
     if test -d "$prefix"; then
-      PKG_CONFIG_PATH="$prefix/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+      PKG_CONFIG_PATH="$prefix/lib/pkgconfig:$PKG_CONFIG_PATH"
     fi
 
 
@@ -21165,7 +21166,7 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
        fi
-       PKG_CONFIG_PATH="$withval/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 fi;
 
@@ -21174,16 +21175,16 @@ fi;
     export PKG_CONFIG_PATH
 
 if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "blas"; then
-    BLAS_VERSION=`$PKG_CONFIG --modversion "blas" 2>/dev/null`
-    coin_has_blas="$BLAS_VERSION"
+  if $PKG_CONFIG --exists "coinblas"; then
+    COINBLAS_VERSION=`$PKG_CONFIG --modversion "coinblas" 2>/dev/null`
+    coin_has_blas="$COINBLAS_VERSION"
   else
-    BLAS_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "blas"`
+    COINBLAS_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinblas"`
 
   fi
 else
-  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module Blas without pkg-config\"" >&5
-echo "$as_me: error: \"Cannot check for existance of module Blas without pkg-config\"" >&2;}
+  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module coinblas without pkg-config\"" >&5
+echo "$as_me: error: \"Cannot check for existance of module coinblas without pkg-config\"" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -21195,14 +21196,13 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_blas" = notGiven; then
   if test -d $srcdir/ThirdParty/Blas; then
-    coin_pkg_is_here=no
     for i in $srcdir/ThirdParty/Blas/daxpy.f; do
          if test -r $i; then
-           coin_pkg_is_here=yes
+           coin_have_project_dir=yes
          fi
        done
 
-    if test $coin_pkg_is_here = yes; then
+    if test $coin_have_project_dir = yes; then
       coin_has_blas=ThirdParty/Blas
     fi
   fi
@@ -21213,9 +21213,7 @@ echo "${ECHO_T}$coin_has_blas" >&6
 
 echo "$as_me:$LINENO: checking whether project Blas need to be configured" >&5
 echo $ECHO_N "checking whether project Blas need to be configured... $ECHO_C" >&6
-if test "$coin_has_blas" != skipping &&
-   test "$coin_has_blas" != notGiven &&
-   test "$coin_has_blas" != installed; then
+if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/Blas/configure; then
     coin_subdirs="$coin_subdirs ThirdParty/Blas"
@@ -21239,6 +21237,7 @@ echo "$as_me:$LINENO: checking whether project HSL is available" >&5
 echo $ECHO_N "checking whether project HSL is available... $ECHO_C" >&6
 
 coin_has_hsl=notGiven
+coin_have_project_dir=no
 
 # check if user wants to skip project in any case
 
@@ -21256,6 +21255,7 @@ fi
 if test $coin_has_hsl != skipping; then
   if test $PACKAGE_TARNAME = hsl; then
     coin_has_hsl=.
+    coin_have_project_dir=yes
   fi
 
 
@@ -21288,7 +21288,7 @@ if test $coin_has_hsl = notGiven; then
 
     # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
     if test -d "$prefix"; then
-      PKG_CONFIG_PATH="$prefix/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+      PKG_CONFIG_PATH="$prefix/lib/pkgconfig:$PKG_CONFIG_PATH"
     fi
 
 
@@ -21300,7 +21300,7 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
        fi
-       PKG_CONFIG_PATH="$withval/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 fi;
 
@@ -21309,16 +21309,16 @@ fi;
     export PKG_CONFIG_PATH
 
 if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "hsl"; then
-    HSL_VERSION=`$PKG_CONFIG --modversion "hsl" 2>/dev/null`
-    coin_has_hsl="$HSL_VERSION"
+  if $PKG_CONFIG --exists "coinhsl"; then
+    COINHSL_VERSION=`$PKG_CONFIG --modversion "coinhsl" 2>/dev/null`
+    coin_has_hsl="$COINHSL_VERSION"
   else
-    HSL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "hsl"`
+    COINHSL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinhsl"`
 
   fi
 else
-  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module HSL without pkg-config\"" >&5
-echo "$as_me: error: \"Cannot check for existance of module HSL without pkg-config\"" >&2;}
+  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module coinhsl without pkg-config\"" >&5
+echo "$as_me: error: \"Cannot check for existance of module coinhsl without pkg-config\"" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -21330,14 +21330,13 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_hsl" = notGiven; then
   if test -d $srcdir/ThirdParty/HSL; then
-    coin_pkg_is_here=no
     for i in $srcdir/ThirdParty/HSL/configure.ac; do
          if test -r $i; then
-           coin_pkg_is_here=yes
+           coin_have_project_dir=yes
          fi
        done
 
-    if test $coin_pkg_is_here = yes; then
+    if test $coin_have_project_dir = yes; then
       coin_has_hsl=ThirdParty/HSL
     fi
   fi
@@ -21348,9 +21347,7 @@ echo "${ECHO_T}$coin_has_hsl" >&6
 
 echo "$as_me:$LINENO: checking whether project HSL need to be configured" >&5
 echo $ECHO_N "checking whether project HSL need to be configured... $ECHO_C" >&6
-if test "$coin_has_hsl" != skipping &&
-   test "$coin_has_hsl" != notGiven &&
-   test "$coin_has_hsl" != installed; then
+if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/HSL/configure; then
     coin_subdirs="$coin_subdirs ThirdParty/HSL"
@@ -21374,6 +21371,7 @@ echo "$as_me:$LINENO: checking whether project Lapack is available" >&5
 echo $ECHO_N "checking whether project Lapack is available... $ECHO_C" >&6
 
 coin_has_lapack=notGiven
+coin_have_project_dir=no
 
 # check if user wants to skip project in any case
 
@@ -21391,6 +21389,7 @@ fi
 if test $coin_has_lapack != skipping; then
   if test $PACKAGE_TARNAME = lapack; then
     coin_has_lapack=.
+    coin_have_project_dir=yes
   fi
 
 
@@ -21423,7 +21422,7 @@ if test $coin_has_lapack = notGiven; then
 
     # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
     if test -d "$prefix"; then
-      PKG_CONFIG_PATH="$prefix/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+      PKG_CONFIG_PATH="$prefix/lib/pkgconfig:$PKG_CONFIG_PATH"
     fi
 
 
@@ -21435,7 +21434,7 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
        fi
-       PKG_CONFIG_PATH="$withval/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 fi;
 
@@ -21444,16 +21443,16 @@ fi;
     export PKG_CONFIG_PATH
 
 if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "lapack"; then
-    LAPACK_VERSION=`$PKG_CONFIG --modversion "lapack" 2>/dev/null`
-    coin_has_lapack="$LAPACK_VERSION"
+  if $PKG_CONFIG --exists "coinlapack"; then
+    COINLAPACK_VERSION=`$PKG_CONFIG --modversion "coinlapack" 2>/dev/null`
+    coin_has_lapack="$COINLAPACK_VERSION"
   else
-    LAPACK_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "lapack"`
+    COINLAPACK_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinlapack"`
 
   fi
 else
-  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module Lapack without pkg-config\"" >&5
-echo "$as_me: error: \"Cannot check for existance of module Lapack without pkg-config\"" >&2;}
+  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module coinlapack without pkg-config\"" >&5
+echo "$as_me: error: \"Cannot check for existance of module coinlapack without pkg-config\"" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -21465,14 +21464,13 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_lapack" = notGiven; then
   if test -d $srcdir/ThirdParty/Lapack; then
-    coin_pkg_is_here=no
     for i in $srcdir/ThirdParty/Lapack/LAPACK/SRC/dlarf.f; do
          if test -r $i; then
-           coin_pkg_is_here=yes
+           coin_have_project_dir=yes
          fi
        done
 
-    if test $coin_pkg_is_here = yes; then
+    if test $coin_have_project_dir = yes; then
       coin_has_lapack=ThirdParty/Lapack
     fi
   fi
@@ -21483,9 +21481,7 @@ echo "${ECHO_T}$coin_has_lapack" >&6
 
 echo "$as_me:$LINENO: checking whether project Lapack need to be configured" >&5
 echo $ECHO_N "checking whether project Lapack need to be configured... $ECHO_C" >&6
-if test "$coin_has_lapack" != skipping &&
-   test "$coin_has_lapack" != notGiven &&
-   test "$coin_has_lapack" != installed; then
+if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/Lapack/configure; then
     coin_subdirs="$coin_subdirs ThirdParty/Lapack"
@@ -21509,6 +21505,7 @@ echo "$as_me:$LINENO: checking whether project Metis is available" >&5
 echo $ECHO_N "checking whether project Metis is available... $ECHO_C" >&6
 
 coin_has_metis=notGiven
+coin_have_project_dir=no
 
 # check if user wants to skip project in any case
 
@@ -21526,6 +21523,7 @@ fi
 if test $coin_has_metis != skipping; then
   if test $PACKAGE_TARNAME = metis; then
     coin_has_metis=.
+    coin_have_project_dir=yes
   fi
 
 
@@ -21558,7 +21556,7 @@ if test $coin_has_metis = notGiven; then
 
     # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
     if test -d "$prefix"; then
-      PKG_CONFIG_PATH="$prefix/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+      PKG_CONFIG_PATH="$prefix/lib/pkgconfig:$PKG_CONFIG_PATH"
     fi
 
 
@@ -21570,7 +21568,7 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
        fi
-       PKG_CONFIG_PATH="$withval/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 fi;
 
@@ -21579,16 +21577,16 @@ fi;
     export PKG_CONFIG_PATH
 
 if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "metis"; then
-    METIS_VERSION=`$PKG_CONFIG --modversion "metis" 2>/dev/null`
-    coin_has_metis="$METIS_VERSION"
+  if $PKG_CONFIG --exists "coinmetis"; then
+    COINMETIS_VERSION=`$PKG_CONFIG --modversion "coinmetis" 2>/dev/null`
+    coin_has_metis="$COINMETIS_VERSION"
   else
-    METIS_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "metis"`
+    COINMETIS_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinmetis"`
 
   fi
 else
-  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module Metis without pkg-config\"" >&5
-echo "$as_me: error: \"Cannot check for existance of module Metis without pkg-config\"" >&2;}
+  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module coinmetis without pkg-config\"" >&5
+echo "$as_me: error: \"Cannot check for existance of module coinmetis without pkg-config\"" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -21600,14 +21598,13 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_metis" = notGiven; then
   if test -d $srcdir/ThirdParty/Metis; then
-    coin_pkg_is_here=no
     for i in $srcdir/ThirdParty/Metis/metis-4.0/Lib/balance.c; do
          if test -r $i; then
-           coin_pkg_is_here=yes
+           coin_have_project_dir=yes
          fi
        done
 
-    if test $coin_pkg_is_here = yes; then
+    if test $coin_have_project_dir = yes; then
       coin_has_metis=ThirdParty/Metis
     fi
   fi
@@ -21618,9 +21615,7 @@ echo "${ECHO_T}$coin_has_metis" >&6
 
 echo "$as_me:$LINENO: checking whether project Metis need to be configured" >&5
 echo $ECHO_N "checking whether project Metis need to be configured... $ECHO_C" >&6
-if test "$coin_has_metis" != skipping &&
-   test "$coin_has_metis" != notGiven &&
-   test "$coin_has_metis" != installed; then
+if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/Metis/configure; then
     coin_subdirs="$coin_subdirs ThirdParty/Metis"
@@ -21644,6 +21639,7 @@ echo "$as_me:$LINENO: checking whether project Mumps is available" >&5
 echo $ECHO_N "checking whether project Mumps is available... $ECHO_C" >&6
 
 coin_has_mumps=notGiven
+coin_have_project_dir=no
 
 # check if user wants to skip project in any case
 
@@ -21661,6 +21657,7 @@ fi
 if test $coin_has_mumps != skipping; then
   if test $PACKAGE_TARNAME = mumps; then
     coin_has_mumps=.
+    coin_have_project_dir=yes
   fi
 
 
@@ -21693,7 +21690,7 @@ if test $coin_has_mumps = notGiven; then
 
     # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
     if test -d "$prefix"; then
-      PKG_CONFIG_PATH="$prefix/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+      PKG_CONFIG_PATH="$prefix/lib/pkgconfig:$PKG_CONFIG_PATH"
     fi
 
 
@@ -21705,7 +21702,7 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
        fi
-       PKG_CONFIG_PATH="$withval/lib/ThirdParty/pkgconfig:$PKG_CONFIG_PATH"
+       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 fi;
 
@@ -21714,16 +21711,16 @@ fi;
     export PKG_CONFIG_PATH
 
 if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "mumps"; then
-    MUMPS_VERSION=`$PKG_CONFIG --modversion "mumps" 2>/dev/null`
-    coin_has_mumps="$MUMPS_VERSION"
+  if $PKG_CONFIG --exists "coinmumps"; then
+    COINMUMPS_VERSION=`$PKG_CONFIG --modversion "coinmumps" 2>/dev/null`
+    coin_has_mumps="$COINMUMPS_VERSION"
   else
-    MUMPS_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "mumps"`
+    COINMUMPS_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinmumps"`
 
   fi
 else
-  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module Mumps without pkg-config\"" >&5
-echo "$as_me: error: \"Cannot check for existance of module Mumps without pkg-config\"" >&2;}
+  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module coinmumps without pkg-config\"" >&5
+echo "$as_me: error: \"Cannot check for existance of module coinmumps without pkg-config\"" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -21735,14 +21732,13 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_mumps" = notGiven; then
   if test -d $srcdir/ThirdParty/Mumps; then
-    coin_pkg_is_here=no
     for i in $srcdir/ThirdParty/Mumps/MUMPS/src/dmumps_part1.F; do
          if test -r $i; then
-           coin_pkg_is_here=yes
+           coin_have_project_dir=yes
          fi
        done
 
-    if test $coin_pkg_is_here = yes; then
+    if test $coin_have_project_dir = yes; then
       coin_has_mumps=ThirdParty/Mumps
     fi
   fi
@@ -21753,9 +21749,7 @@ echo "${ECHO_T}$coin_has_mumps" >&6
 
 echo "$as_me:$LINENO: checking whether project Mumps need to be configured" >&5
 echo $ECHO_N "checking whether project Mumps need to be configured... $ECHO_C" >&6
-if test "$coin_has_mumps" != skipping &&
-   test "$coin_has_mumps" != notGiven &&
-   test "$coin_has_mumps" != installed; then
+if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/Mumps/configure; then
     coin_subdirs="$coin_subdirs ThirdParty/Mumps"
@@ -21784,6 +21778,7 @@ echo "$as_me:$LINENO: checking whether project Ipopt is available" >&5
 echo $ECHO_N "checking whether project Ipopt is available... $ECHO_C" >&6
 
 coin_has_ipopt=notGiven
+coin_have_project_dir=no
 
 # check if user wants to skip project in any case
 
@@ -21801,6 +21796,7 @@ fi
 if test $coin_has_ipopt != skipping; then
   if test $PACKAGE_TARNAME = ipopt; then
     coin_has_ipopt=.
+    coin_have_project_dir=yes
   fi
 
 
@@ -21833,7 +21829,7 @@ if test $coin_has_ipopt = notGiven; then
 
     # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
     if test -d "$prefix"; then
-      PKG_CONFIG_PATH="$prefix/lib//pkgconfig:$PKG_CONFIG_PATH"
+      PKG_CONFIG_PATH="$prefix/lib/pkgconfig:$PKG_CONFIG_PATH"
     fi
 
 
@@ -21845,7 +21841,7 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
        fi
-       PKG_CONFIG_PATH="$withval/lib//pkgconfig:$PKG_CONFIG_PATH"
+       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 fi;
 
@@ -21875,10 +21871,9 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_ipopt" = notGiven; then
   if test -d $srcdir//Ipopt; then
-    coin_pkg_is_here=no
-     coin_pkg_is_here=yes
+     coin_have_project_dir=yes
 
-    if test $coin_pkg_is_here = yes; then
+    if test $coin_have_project_dir = yes; then
       coin_has_ipopt=/Ipopt
     fi
   fi
@@ -21889,9 +21884,7 @@ echo "${ECHO_T}$coin_has_ipopt" >&6
 
 echo "$as_me:$LINENO: checking whether project Ipopt need to be configured" >&5
 echo $ECHO_N "checking whether project Ipopt need to be configured... $ECHO_C" >&6
-if test "$coin_has_ipopt" != skipping &&
-   test "$coin_has_ipopt" != notGiven &&
-   test "$coin_has_ipopt" != installed; then
+if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir//Ipopt/configure; then
     coin_subdirs="$coin_subdirs Ipopt"

@@ -21,6 +21,7 @@
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 
+
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -63,9 +64,10 @@ am__vpath_adj = case $$p in \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"
-libLTLIBRARIES_INSTALL = $(INSTALL)
-LTLIBRARIES = $(lib_LTLIBRARIES)
+am__installdirs = "$(DESTDIR)$(coinlibdir)" "$(DESTDIR)$(addlibsdir)" \
+	"$(DESTDIR)$(includeipoptdir)"
+coinlibLTLIBRARIES_INSTALL = $(INSTALL)
+LTLIBRARIES = $(coinlib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
 	IpSolveStatistics.lo IpStdCInterface.lo IpStdFInterface.lo \
@@ -91,6 +93,8 @@ CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libipopt_la_SOURCES)
 DIST_SOURCES = $(libipopt_la_SOURCES)
+addlibsDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(addlibs_DATA)
 includeipoptHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(includeipopt_HEADERS)
 ETAGS = etags
@@ -324,7 +328,8 @@ includeipopt_HEADERS = \
 	IpTNLP.hpp \
 	IpTNLPReducer.hpp
 
-lib_LTLIBRARIES = libipopt.la
+coinlibdir = $(libdir)/coin
+coinlib_LTLIBRARIES = libipopt.la
 libipopt_la_SOURCES = \
 	IpAlgTypes.hpp \
 	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
@@ -343,11 +348,8 @@ libipopt_la_SOURCES = \
 libipopt_la_LIBADD = $(IPALLLIBS)
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
-addlibsdir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)/
-ADDLIBS_FILES = \
-	ipopt_addlibs_cpp.txt \
-	ipopt_addlibs_f.txt
-
+addlibsdir = $(datadir)/coin/doc/Ipopt
+addlibs_DATA = ipopt_addlibs_cpp.txt ipopt_addlibs_f.txt
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -405,35 +407,35 @@ ipopt_addlibs_f.txt: $(top_builddir)/config.status $(srcdir)/ipopt_addlibs_f.txt
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 ipopt_addlibs_cpp.txt: $(top_builddir)/config.status $(srcdir)/ipopt_addlibs_cpp.txt.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+install-coinlibLTLIBRARIES: $(coinlib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
-	test -z "$(libdir)" || $(mkdir_p) "$(DESTDIR)$(libdir)"
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	test -z "$(coinlibdir)" || $(mkdir_p) "$(DESTDIR)$(coinlibdir)"
+	@list='$(coinlib_LTLIBRARIES)'; for p in $$list; do \
 	  if test -f $$p; then \
 	    f=$(am__strip_dir) \
-	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
-	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
+	    echo " $(LIBTOOL) --mode=install $(coinlibLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(coinlibdir)/$$f'"; \
+	    $(LIBTOOL) --mode=install $(coinlibLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(coinlibdir)/$$f"; \
 	  else :; fi; \
 	done
 
-uninstall-libLTLIBRARIES:
+uninstall-coinlibLTLIBRARIES:
 	@$(NORMAL_UNINSTALL)
-	@set -x; list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	@set -x; list='$(coinlib_LTLIBRARIES)'; for p in $$list; do \
 	  p=$(am__strip_dir) \
-	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$p'"; \
-	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$p"; \
+	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(coinlibdir)/$$p'"; \
+	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(coinlibdir)/$$p"; \
 	done
 
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+clean-coinlibLTLIBRARIES:
+	-test -z "$(coinlib_LTLIBRARIES)" || rm -f $(coinlib_LTLIBRARIES)
+	@list='$(coinlib_LTLIBRARIES)'; for p in $$list; do \
 	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
 	  test "$$dir" != "$$p" || dir=.; \
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
 libipopt.la: $(libipopt_la_OBJECTS) $(libipopt_la_DEPENDENCIES) 
-	$(CXXLINK) -rpath $(libdir) $(libipopt_la_LDFLAGS) $(libipopt_la_OBJECTS) $(libipopt_la_LIBADD) $(LIBS)
+	$(CXXLINK) -rpath $(coinlibdir) $(libipopt_la_LDFLAGS) $(libipopt_la_OBJECTS) $(libipopt_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -501,6 +503,23 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
+install-addlibsDATA: $(addlibs_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(addlibsdir)" || $(mkdir_p) "$(DESTDIR)$(addlibsdir)"
+	@list='$(addlibs_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(addlibsDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(addlibsdir)/$$f'"; \
+	  $(addlibsDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(addlibsdir)/$$f"; \
+	done
+
+uninstall-addlibsDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(addlibs_DATA)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(addlibsdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(addlibsdir)/$$f"; \
+	done
 install-includeipoptHEADERS: $(includeipopt_HEADERS)
 	@$(NORMAL_INSTALL)
 	test -z "$(includeipoptdir)" || $(mkdir_p) "$(DESTDIR)$(includeipoptdir)"
@@ -596,9 +615,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"; do \
+	for dir in "$(DESTDIR)$(coinlibdir)" "$(DESTDIR)$(addlibsdir)" "$(DESTDIR)$(includeipoptdir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -628,7 +647,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+clean-am: clean-coinlibLTLIBRARIES clean-generic clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
@@ -647,9 +666,10 @@ info: info-am
 
 info-am:
 
-install-data-am: install-includeipoptHEADERS
+install-data-am: install-addlibsDATA install-coinlibLTLIBRARIES \
+	install-includeipoptHEADERS
 
-install-exec-am: install-exec-local install-libLTLIBRARIES
+install-exec-am:
 
 install-info: install-info-am
 
@@ -675,34 +695,24 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-includeipoptHEADERS uninstall-info-am \
-	uninstall-libLTLIBRARIES uninstall-local
+uninstall-am: uninstall-addlibsDATA uninstall-coinlibLTLIBRARIES \
+	uninstall-includeipoptHEADERS uninstall-info-am
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libLTLIBRARIES clean-libtool ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-exec \
-	install-exec-am install-exec-local install-includeipoptHEADERS \
-	install-info install-info-am install-libLTLIBRARIES \
-	install-man install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-includeipoptHEADERS uninstall-info-am \
-	uninstall-libLTLIBRARIES uninstall-local
+.PHONY: CTAGS GTAGS all all-am check check-am clean \
+	clean-coinlibLTLIBRARIES clean-generic clean-libtool ctags \
+	distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-addlibsDATA install-am \
+	install-coinlibLTLIBRARIES install-data install-data-am \
+	install-exec install-exec-am install-includeipoptHEADERS \
+	install-info install-info-am install-man install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-addlibsDATA uninstall-am \
+	uninstall-coinlibLTLIBRARIES uninstall-includeipoptHEADERS \
+	uninstall-info-am
 
-
-# Make sure the addlibs files are installed in lib
-install-exec-local:
-	for i in $(ADDLIBS_FILES); do \
-	  $(install_sh_DATA) $$i $(DESTDIR)$(addlibsdir)/$$i; \
-	done
-
-uninstall-local:
-	for i in $(ADDLIBS_FILES); do \
-	  rm -f $(DESTDIR)$(addlibsdir)/$$i; \
-	done
 
 astyle: $(ASTYLE_FILES)
 
