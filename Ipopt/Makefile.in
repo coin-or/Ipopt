@@ -446,10 +446,10 @@ DISTCLEANFILES = examples/Cpp_example/cpp_example@EXEEXT@ \
 	$(am__append_4) $(VPATH_DISTCLEANFILES)
 tmpdir = tmpdir
 libipopt = libipopt.a
-pkgconfiglibdir = $(prefix)/lib/pkgconfig
+pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc
 DocFiles = README AUTHORS LICENSE
-DocInstallDir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)
+DocInstallDir = $(datadir)/coin/doc/$(PACKAGE_NAME)
 all: all-recursive
 
 .SUFFIXES:

@@ -137,7 +137,7 @@ astyle:
 	cd src/LinAlg/TMatrices; $(MAKE) astyle
 	cd src/Interfaces; $(MAKE) astyle
 
-pkgconfiglibdir = $(prefix)/lib/pkgconfig
+pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc
 
 include ../BuildTools/Makemain.inc
