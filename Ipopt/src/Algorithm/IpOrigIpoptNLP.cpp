@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -90,7 +90,10 @@ namespace Ipopt
       "Activating this option will cause an error if an invalid number is "
       "detected in the constraint Jacobians or the Lagrangian Hessian.  If "
       "this is not activated, the test is skipped, and the algorithm might "
-      "proceed with invalid numbers and fail.");
+      "proceed with invalid numbers and fail.  If test is activated and an "
+      "invalid number is detected, the matrix is written to output with "
+      "print_level corresponding to J_MORE_DETAILED; so beware of large "
+      "output!");
     roptions->AddStringOption2(
       "jac_c_constant",
       "Indicates whether all equality constraints are linear",
@@ -557,8 +560,15 @@ namespace Ipopt
         c_eval_time_.Start();
         bool success = nlp_->Eval_c(*unscaled_x, *unscaled_c);
         c_eval_time_.End();
-        ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_c->Nrm2()),
-                         Eval_Error, "Error evaluating the equality constraints");
+        if (!success || !IsFiniteNumber(unscaled_c->Nrm2())) {
+          if (check_derivatives_for_naninf_ && !IsFiniteNumber(unscaled_c->Nrm2())) {
+            jnlst_->Printf(J_WARNING, J_NLP,
+                           "The equality constraints contain an invalid number\n");
+            unscaled_c->Print(*jnlst_, J_MOREDETAILED, J_MAIN, "unscaled_c");
+            jnlst_->FlushBuffer();
+          }
+          THROW_EXCEPTION(Eval_Error, "Error evaluating the equality constraints");
+        }
         retValue = NLP_scaling()->apply_vector_scaling_c(ConstPtr(unscaled_c));
         c_cache_.AddCachedResult1Dep(retValue, x);
       }
@@ -592,8 +602,15 @@ namespace Ipopt
         bool success = nlp_->Eval_d(*unscaled_x, *unscaled_d);
         d_eval_time_.End();
         DBG_PRINT_VECTOR(2, "unscaled_d", *unscaled_d);
-        ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_d->Nrm2()),
-                         Eval_Error, "Error evaluating the inequality constraints");
+        if (!success || !IsFiniteNumber(unscaled_d->Nrm2())) {
+          if (check_derivatives_for_naninf_ && !IsFiniteNumber(unscaled_d->Nrm2())) {
+            jnlst_->Printf(J_WARNING, J_NLP,
+                           "The inequality constraints contain an invalid number\n");
+            unscaled_d->Print(*jnlst_, J_MOREDETAILED, J_MAIN, "unscaled_d");
+            jnlst_->FlushBuffer();
+          }
+          THROW_EXCEPTION(Eval_Error, "Error evaluating the inequality constraints");
+        }
         retValue = NLP_scaling()->apply_vector_scaling_d(ConstPtr(unscaled_d));
         d_cache_.AddCachedResult1Dep(retValue, x);
       }
@@ -633,6 +650,8 @@ namespace Ipopt
           if (!unscaled_jac_c->HasValidNumbers()) {
             jnlst_->Printf(J_WARNING, J_NLP,
                            "The Jacobian for the equality constraints contains an invalid number\n");
+            unscaled_jac_c->Print(*jnlst_, J_MOREDETAILED, J_MAIN, "unscaled_jac_c");
+            jnlst_->FlushBuffer();
             THROW_EXCEPTION(Eval_Error, "The Jacobian for the equality constraints contains an invalid number");
           }
         }
@@ -672,6 +691,16 @@ namespace Ipopt
         bool success = nlp_->Eval_jac_d(*unscaled_x, *unscaled_jac_d);
         jac_d_eval_time_.End();
         ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the inequality constraints");
+        if (check_derivatives_for_naninf_) {
+          if (!unscaled_jac_d->HasValidNumbers()) {
+            jnlst_->Printf(J_WARNING, J_NLP,
+                           "The Jacobian for the inequality constraints contains an invalid number\n");
+
+            unscaled_jac_d->Print(*jnlst_, J_MOREDETAILED, J_MAIN, "unscaled_jac_d");
+            jnlst_->FlushBuffer();
+            THROW_EXCEPTION(Eval_Error, "The Jacobian for the inequality constraints contains an invalid number");
+          }
+        }
         retValue = NLP_scaling()->apply_jac_d_scaling(ConstPtr(unscaled_jac_d));
         jac_d_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
       }
@@ -719,6 +748,16 @@ namespace Ipopt
       bool success = nlp_->Eval_h(*unscaled_x, scaled_obj_factor, *unscaled_yc, *unscaled_yd, *unscaled_h);
       h_eval_time_.End();
       ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the hessian of the lagrangian");
+      if (check_derivatives_for_naninf_) {
+        if (!unscaled_h->HasValidNumbers()) {
+          jnlst_->Printf(J_WARNING, J_NLP,
+                         "The Lagrangian Hessian contains an invalid number\n");
+
+          unscaled_h->Print(*jnlst_, J_MOREDETAILED, J_MAIN, "unscaled_h");
+          jnlst_->FlushBuffer();
+          THROW_EXCEPTION(Eval_Error, "The Lagrangian Hessian contains an invalid number");
+        }
+      }
       retValue = NLP_scaling()->apply_hessian_scaling(ConstPtr(unscaled_h));
       h_cache_.AddCachedResult(retValue, deps, scalar_deps);
     }
