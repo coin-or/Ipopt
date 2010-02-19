@@ -17,6 +17,7 @@
 #include "IpRegOptions.hpp"
 #include "IpJournalist.hpp"
 #include "IpIpoptApplication.hpp"
+#include "IpSolveStatistics.hpp"
 
 using Ipopt::IsValid;
 using Ipopt::RegisteredOption;
@@ -27,6 +28,7 @@ using Ipopt::IpoptApplication;
 using Ipopt::SmartPtr;
 using Ipopt::TNLP;
 using Ipopt::ApplicationReturnStatus;
+using Ipopt::SolveStatistics;
 
 extern void _main();
 
@@ -79,7 +81,8 @@ work in the MATLAB interface for IPOPT");
 
     // If the user supplied initial values for the Lagrange
     // multipliers, activate the "warm start" option in IPOPT.
-    if (options.multlb() && options.multub() && options.multconstr())
+    if (options.multlb() && options.multub() &&
+	(numconstraints(options)==0 || options.multconstr()) )
       app.Options()->SetStringValue("warm_start_init_point","yes");
 
     // Set up the IPOPT console.
@@ -102,6 +105,13 @@ work in the MATLAB interface for IPOPT");
     // Ask Ipopt to solve the problem.
     exitstatus = app.OptimizeTNLP(program);
     info.setExitStatus(exitstatus);
+
+    // Collect statistics about Ipopt run
+    if (IsValid(app.Statistics())) {
+      SmartPtr<SolveStatistics> stats = app.Statistics();
+      info.setIterationCount(stats->IterationCount());
+      info.setCpuTime(stats->TotalCpuTime());
+    }
 
     // Free the dynamically allocated memory.
     mxDestroyArray(x0);

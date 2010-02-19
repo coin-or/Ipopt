@@ -15,19 +15,25 @@ MatlabInfo::MatlabInfo (mxArray*& ptr)
   : ptr(0) {
 
   // Create the structure array.
-  const char* fieldnames[4];
+  const char* fieldnames[6];
   const char* exitstatusfield = "status";
   const char* multlbfield     = "zl";
   const char* multubfield     = "zu";
   const char* multconstrfield = "lambda";
+  const char* iterfield       = "iter";
+  const char* cpu             = "cpu";
   fieldnames[0] = exitstatusfield;
   fieldnames[1] = multlbfield;
   fieldnames[2] = multubfield;
   fieldnames[3] = multconstrfield;
-  this->ptr = ptr = mxCreateStructMatrix(1,1,4,fieldnames);
+  fieldnames[4] = iterfield;
+  fieldnames[5] = cpu;
+  this->ptr = ptr = mxCreateStructMatrix(1,1,6,fieldnames);
 
-  // Initialize the exit status field.
+  // Initialize some fields.
   mxSetField(ptr,0,"status",mxCreateDoubleScalar(0));
+  mxSetField(ptr,0,"iter",mxCreateDoubleScalar(0));
+  mxSetField(ptr,0,"cpu",mxCreateDoubleScalar(0));
 }
 
 ApplicationReturnStatus MatlabInfo::getExitStatus() const {
@@ -38,6 +44,16 @@ ApplicationReturnStatus MatlabInfo::getExitStatus() const {
 void MatlabInfo::setExitStatus (ApplicationReturnStatus status) {
   mxArray* p = mxGetField(ptr,0,"status");
   *mxGetPr(p) = (double) status;
+}
+
+void MatlabInfo::setIterationCount (int iter) {
+  mxArray* p = mxGetField(ptr,0,"iter");
+  *mxGetPr(p) = (double) iter;
+}
+
+void MatlabInfo::setCpuTime (double cpu) {
+  mxArray* p = mxGetField(ptr,0,"cpu");
+  *mxGetPr(p) = cpu;
 }
 
 const double* MatlabInfo::getmultlb() const {
