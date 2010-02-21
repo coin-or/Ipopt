@@ -99,6 +99,8 @@ Ipopt/doc/options.tex -text
 Ipopt/examples/ScalableProblems/README -text
 Ipopt/examples/hs071_c/Makefile.in -text
 Ipopt/examples/hs071_cpp/Makefile.in -text
+Ipopt/ipopt-uninstalled.pc.in -text
+Ipopt/ipopt.pc.in -text
 Ipopt/src/Algorithm/Inexact/IpInexactTSymScalingMethod.cpp -text
 Ipopt/src/Algorithm/Inexact/IpInexactTSymScalingMethod.hpp -text
 Ipopt/src/Algorithm/Inexact/Makefile.am -text

@@ -1,0 +1,10 @@
+prefix=@prefix@
+libdir=@ABSBUILDDIR@/src/Interfaces
+includedir=@abs_source_dir@/src
+
+Name: IPOPT
+Description: Interior Point Optimizer
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lipopt @ADDLIBS@
+Cflags: -I${includedir}/Interfaces -I${includedir}/Commin -I${includedir}/LinAlg -I${includedir}/Algorithm -I${includedir}/contrib/CGPenalty -I${includedir}/contrib/LinearSolverLoader -I@ABSBUILDDIR@/inc
+Requires: @REQUIREDPACKAGES@
