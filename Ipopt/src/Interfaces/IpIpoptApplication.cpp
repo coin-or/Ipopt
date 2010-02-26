@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -1101,6 +1101,11 @@ namespace Ipopt
   SmartPtr<IpoptAlgorithm> IpoptApplication::AlgorithmObject()
   {
     return alg_;
+  }
+
+  void IpoptApplication::PrintCopyrightMessage()
+  {
+    IpoptAlgorithm::print_copyright_message(*jnlst_);
   }
 
 } // namespace Ipopt
