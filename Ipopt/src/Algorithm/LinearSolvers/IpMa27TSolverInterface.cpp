@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -340,7 +340,7 @@ namespace Ipopt
                      "*** Error from MA27AD *** IFLAG = %d IERROR = %d\n", iflag, ierror);
       if (iflag==1) {
         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                       "The index of a matrix is out of range.\nPlease check your implementation of the Jabobian and Hessian matrices.");
+                       "The index of a matrix is out of range.\nPlease check your implementation of the Jacobian and Hessian matrices.\n");
       }
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemSymbolicFactorization().End();

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -22,32 +22,6 @@ namespace Ipopt
 #if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
-
-  static bool message_printed = false;
-
-  static void print_message(const Journalist& jnlst)
-  {
-    jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
-                 "\n******************************************************************************\n"
-                 "This program contains Ipopt, a library for large-scale nonlinear optimization.\n"
-                 " Ipopt is released as open source code under the Common Public License (CPL).\n"
-                 "         For more information visit http://projects.coin-or.org/Ipopt\n"
-                 "******************************************************************************\n\n");
-#ifdef COIN_HAS_MUMPS
-# ifndef HAVE_MA27
-#  ifndef HAVE_MA57
-#   ifndef HAVE_PARDISO
-#    ifndef HAVE_WSMP
-    jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
-                 "NOTE: You are using Ipopt by default with the MUMPS linear solver.\n"
-                 "      Other linear solvers might be more efficient (see Ipopt documentation).\n\n\n");
-#    endif
-#   endif
-#  endif
-# endif
-#endif
-    message_printed = true;
-  }
 
   IpoptAlgorithm::IpoptAlgorithm(const SmartPtr<SearchDirectionCalculator>& search_dir_calculator,
                                  const SmartPtr<LineSearch>& line_search,
@@ -137,6 +111,8 @@ namespace Ipopt
       "yes", "");
   }
 
+  static bool copyright_message_printed = false;
+
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,
                                       const std::string& prefix)
   {
@@ -192,7 +168,7 @@ namespace Ipopt
     bool bval;
     options.GetBoolValue("sb", bval, prefix);
     if (bval) {
-      message_printed = true;
+      copyright_message_printed = true;
     }
 
     // Store which linear solver is chosen for later output
@@ -282,8 +258,8 @@ namespace Ipopt
     // Start measuring CPU time
     IpData().TimingStats().OverallAlgorithm().Start();
 
-    if (!message_printed) {
-      print_message(Jnlst());
+    if (!copyright_message_printed) {
+      print_copyright_message(Jnlst());
     }
 
     if (!isResto) {
@@ -974,6 +950,30 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "new_trial_z", *new_trial_z);
 
     return Max(max_correction_up, max_correction_low);
+  }
+
+  void IpoptAlgorithm::print_copyright_message(const Journalist& jnlst)
+  {
+    jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
+                 "\n******************************************************************************\n"
+                 "This program contains Ipopt, a library for large-scale nonlinear optimization.\n"
+                 " Ipopt is released as open source code under the Common Public License (CPL).\n"
+                 "         For more information visit http://projects.coin-or.org/Ipopt\n"
+                 "******************************************************************************\n\n");
+#ifdef COIN_HAS_MUMPS
+# ifndef HAVE_MA27
+#  ifndef HAVE_MA57
+#   ifndef HAVE_PARDISO
+#    ifndef HAVE_WSMP
+    jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
+                 "NOTE: You are using Ipopt by default with the MUMPS linear solver.\n"
+                 "      Other linear solvers might be more efficient (see Ipopt documentation).\n\n\n");
+#    endif
+#   endif
+#  endif
+# endif
+#endif
+    copyright_message_printed = true;
   }
 
 } // namespace Ipopt

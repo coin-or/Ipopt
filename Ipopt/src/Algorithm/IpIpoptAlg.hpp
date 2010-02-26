@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -85,6 +85,8 @@ namespace Ipopt
       return search_dir_calculator_;
     }
     //@}
+
+    static void print_copyright_message(const Journalist& jnlst);
 
   private:
     /**@name Default Compiler Generated Methods
