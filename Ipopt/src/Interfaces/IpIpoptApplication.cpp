@@ -747,9 +747,6 @@ namespace Ipopt
       stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
     }
 
-    options_->GetBoolValue("skip_finalize_solution_call",
-                           skip_finalize_solution_call_, "");
-
     statistics_ = NULL; /* delete old statistics */
     // Reset Timing statistics
     ip_data_->TimingStats().ResetTimes();
@@ -1032,6 +1029,9 @@ namespace Ipopt
           zU = ConstPtr(tmp);
         }
       }
+
+      options_->GetBoolValue("skip_finalize_solution_call",
+			     skip_finalize_solution_call_, "");
 
       if (!skip_finalize_solution_call_) {
         p2ip_nlp->FinalizeSolution(status,
