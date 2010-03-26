@@ -1031,7 +1031,7 @@ namespace Ipopt
       }
 
       options_->GetBoolValue("skip_finalize_solution_call",
-			     skip_finalize_solution_call_, "");
+                             skip_finalize_solution_call_, "");
 
       if (!skip_finalize_solution_call_) {
         p2ip_nlp->FinalizeSolution(status,
