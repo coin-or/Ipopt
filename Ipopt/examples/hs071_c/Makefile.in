@@ -40,7 +40,7 @@ CLINKFLAGS = @RPATH_FLAGS@
 IPOPTINCDIR = @includedir@/coin
 
 # Directory with libipopt.a
-IPOPTLIBDIR = @libdir@
+IPOPTLIBDIR = @libdir@/coin
 exec_prefix = @exec_prefix@
 prefix = @prefix@
 
