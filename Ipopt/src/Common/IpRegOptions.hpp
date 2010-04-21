@@ -33,6 +33,17 @@ namespace Ipopt
   class RegisteredOption : public ReferencedObject
   {
   public:
+    /** class to hold the valid string settings for a string option */
+    class string_entry
+    {
+    public:
+      string_entry(const std::string& value, const std::string& description)
+          : value_(value), description_(description)
+      {}
+      std::string value_;
+      std::string description_;
+    };
+		
     /** Constructors / Destructors */
     //@{
     RegisteredOption()
@@ -284,6 +295,12 @@ namespace Ipopt
       DBG_ASSERT(type_ == OT_String);
       default_string_ = default_value;
     }
+    /** get the valid string settings - can be called for OT_String */
+    virtual std::vector<string_entry> GetValidStrings() const
+    {
+      DBG_ASSERT(type_ == OT_String);
+      return valid_strings_;
+    }
     /** Check if the Number value is a valid setting - can be called
      *  for OT_Number */
     virtual bool IsValidNumberSetting(const Number& value) const
@@ -357,17 +374,6 @@ namespace Ipopt
     insensitive comparison) */
     bool string_equal_insensitive(const std::string& s1,
                                   const std::string& s2) const;
-
-    /** class to hold the valid string settings for a string option */
-    class string_entry
-    {
-    public:
-      string_entry(const std::string& value, const std::string& description)
-          : value_(value), description_(description)
-      {}
-      std::string value_;
-      std::string description_;
-    };
 
     std::vector<string_entry> valid_strings_;
     std::string default_string_;
