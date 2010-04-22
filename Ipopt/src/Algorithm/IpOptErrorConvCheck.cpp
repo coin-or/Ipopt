@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -124,6 +124,18 @@ namespace Ipopt
       "If any component of the primal iterates exceeded this value (in "
       "absolute terms), the optimization is aborted with the exit message "
       "that the iterates seem to be diverging.");
+    roptions->AddLowerBoundedNumberOption(
+      "mu_target",
+      "Desired value of complementarity.",
+      0.0, false, 0.0,
+      "Usually, the barrier parameter is driven to zero and the termination "
+      "test for complementarity is measured with respect to zero "
+      "complementarity.  However, in some cases it might be desired to have "
+      "Ipopt solve barrier problem for strictly positive value of the barrier "
+      "parameter.  In this case, the value of \"mu_target\" specifies the "
+      "final value of the barrier parameter, and the termination tests are "
+      "then defined with respect to the barrier problem for this value of the "
+      "barrier parameter.");
   }
 
   bool
@@ -142,6 +154,7 @@ namespace Ipopt
     options.GetNumericValue("acceptable_compl_inf_tol", acceptable_compl_inf_tol_, prefix);
     options.GetNumericValue("acceptable_obj_change_tol", acceptable_obj_change_tol_, prefix);
     options.GetNumericValue("diverging_iterates_tol", diverging_iterates_tol_, prefix);
+    options.GetNumericValue("mu_target", mu_target_, prefix);
     acceptable_counter_ = 0;
     curr_obj_val_ = -1e50;
     last_obj_val_iter_ = -1;
@@ -191,7 +204,7 @@ namespace Ipopt
     Number overall_error = IpCq().curr_nlp_error();
     Number dual_inf = IpCq().unscaled_curr_dual_infeasibility(NORM_MAX);
     Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
-    Number compl_inf = IpCq().unscaled_curr_complementarity(0., NORM_MAX);
+    Number compl_inf = IpCq().unscaled_curr_complementarity(mu_target_, NORM_MAX);
 
     if (IpData().curr()->x()->Dim()==IpData().curr()->y_c()->Dim()) {
       // the problem is square, there is no point in looking at dual
@@ -257,7 +270,7 @@ namespace Ipopt
     Number overall_error = IpCq().curr_nlp_error();
     Number dual_inf = IpCq().unscaled_curr_dual_infeasibility(NORM_MAX);
     Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
-    Number compl_inf = IpCq().unscaled_curr_complementarity(0., NORM_MAX);
+    Number compl_inf = IpCq().unscaled_curr_complementarity(mu_target_, NORM_MAX);
 
     if (IpData().iter_count()!=last_obj_val_iter_) {
       // DELETEME

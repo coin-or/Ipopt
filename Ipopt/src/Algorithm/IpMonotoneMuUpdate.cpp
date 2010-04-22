@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -110,6 +110,7 @@ namespace Ipopt
     options.GetBoolValue("mu_allow_fast_monotone_decrease", mu_allow_fast_monotone_decrease_, prefix);
     options.GetNumericValue("tau_min", tau_min_, prefix);
     options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
+    options.GetNumericValue("mu_target", mu_target_, prefix);
 
     IpData().Set_mu(mu_init_);
     Number tau = Max(tau_min_, 1.0 - mu_init_);
@@ -223,7 +224,8 @@ namespace Ipopt
 
     new_mu = Min( mu_linear_decrease_factor_*mu,
                   pow(mu, mu_superlinear_decrease_power_) );
-    new_mu = Max(new_mu, Min(tol, compl_inf_tol)/(barrier_tol_factor_+1.));
+    new_mu = Max(new_mu, mu_target_,
+                 Min(tol, compl_inf_tol)/(barrier_tol_factor_+1.));
 
     // update the fraction to the boundary parameter
     new_tau = Max(tau_min_, 1.-new_mu);

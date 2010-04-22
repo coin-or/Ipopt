@@ -306,6 +306,7 @@ namespace Ipopt
           options_to_print.push_back("mu_max_fact");
           options_to_print.push_back("mu_max");
           options_to_print.push_back("mu_min");
+          options_to_print.push_back("mu_target");
           options_to_print.push_back("barrier_tol_factor");
           options_to_print.push_back("mu_linear_decrease_factor");
           options_to_print.push_back("mu_superlinear_decrease_power");
