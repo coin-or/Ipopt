@@ -43,7 +43,7 @@ namespace Ipopt
       std::string value_;
       std::string description_;
     };
-		
+
     /** Constructors / Destructors */
     //@{
     RegisteredOption()

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -74,6 +74,7 @@ namespace Ipopt
     Number mu_max_fact_;
     Number mu_max_;
     Number mu_min_;
+    Number mu_target_;
     bool mu_min_default_;
     Number tau_min_;
     Number adaptive_mu_safeguard_factor_; //ToDo don't need that?

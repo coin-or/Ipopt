@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -196,6 +196,7 @@ namespace Ipopt
     // The following option is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
+    options.GetNumericValue("mu_target", mu_target_, prefix);
 
     if (!warm_start_same_structure_) {
       dampind_x_L_ = NULL;
@@ -2642,9 +2643,9 @@ namespace Ipopt
         */
         result = Max(result, curr_nlp_constraint_violation(NORM_MAX));
         // Complementarity
-        DBG_PRINT((1, "curr_complementarity(0., NORM_MAX) = %8.2e\n",
-                   curr_complementarity(0., NORM_MAX)));
-        result = Max(result, curr_complementarity(0., NORM_MAX)/s_c);
+        DBG_PRINT((1, "curr_complementarity(mu_target_, NORM_MAX) = %8.2e\n",
+                   curr_complementarity(mu_target_, NORM_MAX)));
+        result = Max(result, curr_complementarity(mu_target_, NORM_MAX)/s_c);
       }
 
       curr_nlp_error_cache_.AddCachedResult(result, tdeps);
@@ -2687,9 +2688,9 @@ namespace Ipopt
       // Constraint violation
       result = Max(result, unscaled_curr_nlp_constraint_violation(NORM_MAX));
       // Complementarity (ToDo use unscaled?)
-      DBG_PRINT((1, "curr_complementarity(0., NORM_MAX) = %8.2e\n",
-                 curr_complementarity(0., NORM_MAX)));
-      result = Max(result, unscaled_curr_complementarity(0., NORM_MAX));
+      DBG_PRINT((1, "curr_complementarity(mu_target_, NORM_MAX) = %8.2e\n",
+                 curr_complementarity(mu_target_, NORM_MAX)));
+      result = Max(result, unscaled_curr_complementarity(mu_target_, NORM_MAX));
 
       unscaled_curr_nlp_error_cache_.AddCachedResult(result, tdeps);
     }
