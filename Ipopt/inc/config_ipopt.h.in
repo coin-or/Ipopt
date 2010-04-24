@@ -3,19 +3,19 @@
 /* Define to 1 if the inexact linear solver option is included */
 #undef BUILD_INEXACT
 
-/* If defined, the ASL Library is available. */
+/* Define to 1 if the ASL module is available */
 #undef COIN_HAS_ASL
 
-/* If defined, the BLAS Library is available. */
+/* Define to 1 if the Blas module is available */
 #undef COIN_HAS_BLAS
 
-/* If defined, the HSL Library is available. */
+/* Define to 1 if the HSL module is available */
 #undef COIN_HAS_HSL
 
-/* If defined, the LAPACK Library is available. */
+/* Define to 1 if the Lapack module is available */
 #undef COIN_HAS_LAPACK
 
-/* If defined, the MUMPS Library is available. */
+/* Define to 1 if the Mumps module is available */
 #undef COIN_HAS_MUMPS
 
 /* Define to the debug sanity check level (0 is no test) */

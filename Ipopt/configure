@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG ASL_LIBS ASL_CFLAGS ASL_DATA REQUIREDPACKAGES COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE BLAS_LIBS BLAS_CFLAGS BLAS_DATA COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE COIN_BUILD_BLAS_TRUE COIN_BUILD_BLAS_FALSE COIN_BUILD_LAPACK_TRUE COIN_BUILD_LAPACK_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MA77_TRUE HAVE_MA77_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG ASL_LIBS ASL_CFLAGS ASL_DATA REQUIREDPACKAGES COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE BLAS_LIBS BLAS_CFLAGS BLAS_DATA COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MA77_TRUE HAVE_MA77_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -22413,8 +22413,8 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-echo "$as_me:$LINENO: checking for COIN module ASL" >&5
-echo $ECHO_N "checking for COIN module ASL... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for COIN-OR module ASL" >&5
+echo $ECHO_N "checking for COIN-OR module ASL... $ECHO_C" >&6
 
 coin_has_asl=notGiven
 
@@ -22435,11 +22435,6 @@ ASL_DATA=
 
 
 
-required=1
-
-# execute third argument that can be used to overwrite flags like 'required'
-required=0
-
 #check if user provided LIBS, CFLAGS, and DATA for module
 if test $coin_has_asl != skipping; then
 
@@ -22449,9 +22444,7 @@ if test "${with_asl_lib+set}" = set; then
   withval="$with_asl_lib"
   coin_has_asl=yes
        ASL_LIBS="$withval"
-       if test $required = 1; then
-         ADDLIBS="$ADDLIBS $withval"
-       fi
+
 
 fi;
 
@@ -22536,9 +22529,7 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_asl=yes
         echo "$as_me:$LINENO: result: yes: $ASL_VERSIONS" >&5
 echo "${ECHO_T}yes: $ASL_VERSIONS" >&6
-        if test $required = 1; then
-          REQUIREDPACKAGES="$REQUIREDPACKAGES coinasl"
-	fi
+
 
 
   else
@@ -22570,6 +22561,7 @@ fi
 
 if test $coin_has_asl != skipping &&
    test $coin_has_asl != notGiven ; then
+  if test 0 = 1 ; then  #change this test to enable a bit of debugging output
   if test -n "$ASL_CFLAGS" ; then
     { echo "$as_me:$LINENO: ASL CFLAGS are $ASL_CFLAGS" >&5
 echo "$as_me: ASL CFLAGS are $ASL_CFLAGS" >&6;}
@@ -22581,6 +22573,7 @@ echo "$as_me: ASL LIBS   are $ASL_LIBS" >&6;}
   if test -n "$ASL_DATA" ; then
     { echo "$as_me:$LINENO: ASL DATA   is  $ASL_DATA" >&5
 echo "$as_me: ASL DATA   is  $ASL_DATA" >&6;}
+  fi
   fi
 
 cat >>confdefs.h <<\_ACEOF
@@ -22601,6 +22594,77 @@ else
   COIN_HAS_ASL_FALSE=
 fi
 
+
+
+
+if test x$coin_has_asl != "xyes" ; then
+echo "$as_me:$LINENO: checking for COIN-OR module ASL (fallback)" >&5
+echo $ECHO_N "checking for COIN-OR module ASL (fallback)... $ECHO_C" >&6
+
+coin_has_asl=notGiven
+
+# check if user wants to skip module in any case
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "ASL"; then
+      coin_has_asl=skipping
+    fi
+  done
+fi
+
+ASL_LIBS=
+ASL_CFLAGS=
+ASL_DATA=
+
+
+if test $coin_has_asl != "skipping" ; then
+  # if the project is available and configured, then a project-uninstalled.pc file should have been created
+  if test -r ../ThirdParty/ASL/coinasl-uninstalled.pc ; then
+    # read CFLAGS and LIBS from coinasl-uninstalled.pc file
+    # add CYGPATH_W cludge into include flags
+    # replace -L${libdir} by absolute path to build directory in linker flags
+    # we assume that the build directory is ../ThirdParty/ASL/src if this directory exists, otherwise we assume that it is ../ThirdParty/ASL
+    ASL_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/ASL/coinasl-uninstalled.pc`
+    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/ASL/coinasl-uninstalled.pc`
+    if test "x$projectlibs" != x ; then
+      if test -d ../ThirdParty/ASL/src ; then
+        ASL_LIBS="-L`cd ../ThirdParty/ASL/src; pwd` $projectlibs"
+      else
+        ASL_LIBS="-L`cd ../ThirdParty/ASL; pwd` $projectlibs"
+      fi
+    fi
+    ASL_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/ASL/coinasl-uninstalled.pc`
+
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_ASL 1
+_ACEOF
+
+
+
+    coin_has_asl=yes
+  fi
+fi
+
+#if user did not disable setting of makefile conditional, do it
+
+
+if test $coin_has_asl != notGiven &&
+                test $coin_has_asl != skipping; then
+  COIN_HAS_ASL_TRUE=
+  COIN_HAS_ASL_FALSE='#'
+else
+  COIN_HAS_ASL_TRUE='#'
+  COIN_HAS_ASL_FALSE=
+fi
+
+
+
+echo "$as_me:$LINENO: result: $coin_has_asl" >&5
+echo "${ECHO_T}$coin_has_asl" >&6
+fi
 
 
 
@@ -24580,8 +24644,8 @@ fi
 
 if test "x$use_blas" = xBUILD ; then
 
-echo "$as_me:$LINENO: checking for COIN module Blas" >&5
-echo $ECHO_N "checking for COIN module Blas... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for COIN-OR module Blas" >&5
+echo $ECHO_N "checking for COIN-OR module Blas... $ECHO_C" >&6
 
 coin_has_blas=notGiven
 
@@ -24602,11 +24666,6 @@ BLAS_DATA=
 
 
 
-required=1
-
-# execute third argument that can be used to overwrite flags like 'required'
-
-
 #check if user provided LIBS, CFLAGS, and DATA for module
 if test $coin_has_blas != skipping; then
 
@@ -24616,9 +24675,7 @@ if test "${with_blas_lib+set}" = set; then
   withval="$with_blas_lib"
   coin_has_blas=yes
        BLAS_LIBS="$withval"
-       if test $required = 1; then
-         ADDLIBS="$ADDLIBS $withval"
-       fi
+       ADDLIBS="$ADDLIBS $withval"
 
 fi;
 
@@ -24703,9 +24760,7 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_blas=yes
         echo "$as_me:$LINENO: result: yes: $BLAS_VERSIONS" >&5
 echo "${ECHO_T}yes: $BLAS_VERSIONS" >&6
-        if test $required = 1; then
-          REQUIREDPACKAGES="$REQUIREDPACKAGES coinblas"
-	fi
+        REQUIREDPACKAGES="$REQUIREDPACKAGES coinblas"
 
 
   else
@@ -24737,6 +24792,7 @@ fi
 
 if test $coin_has_blas != skipping &&
    test $coin_has_blas != notGiven ; then
+  if test 0 = 1 ; then  #change this test to enable a bit of debugging output
   if test -n "$BLAS_CFLAGS" ; then
     { echo "$as_me:$LINENO: Blas CFLAGS are $BLAS_CFLAGS" >&5
 echo "$as_me: Blas CFLAGS are $BLAS_CFLAGS" >&6;}
@@ -24748,6 +24804,7 @@ echo "$as_me: Blas LIBS   are $BLAS_LIBS" >&6;}
   if test -n "$BLAS_DATA" ; then
     { echo "$as_me:$LINENO: Blas DATA   is  $BLAS_DATA" >&5
 echo "$as_me: Blas DATA   is  $BLAS_DATA" >&6;}
+  fi
   fi
 
 cat >>confdefs.h <<\_ACEOF
@@ -24808,6 +24865,80 @@ else
 fi
 
 fi
+
+#call fallback in case the previous failed, maybe because pkg-config was not available
+
+if test x$coin_has_blas != "xyes" ; then
+echo "$as_me:$LINENO: checking for COIN-OR module Blas (fallback)" >&5
+echo $ECHO_N "checking for COIN-OR module Blas (fallback)... $ECHO_C" >&6
+
+coin_has_blas=notGiven
+
+# check if user wants to skip module in any case
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "Blas"; then
+      coin_has_blas=skipping
+    fi
+  done
+fi
+
+BLAS_LIBS=
+BLAS_CFLAGS=
+BLAS_DATA=
+
+
+if test $coin_has_blas != "skipping" ; then
+  # if the project is available and configured, then a project-uninstalled.pc file should have been created
+  if test -r ../ThirdParty/Blas/coinblas-uninstalled.pc ; then
+    # read CFLAGS and LIBS from coinblas-uninstalled.pc file
+    # add CYGPATH_W cludge into include flags
+    # replace -L${libdir} by absolute path to build directory in linker flags
+    # we assume that the build directory is ../ThirdParty/Blas/src if this directory exists, otherwise we assume that it is ../ThirdParty/Blas
+    BLAS_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/Blas/coinblas-uninstalled.pc`
+    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/Blas/coinblas-uninstalled.pc`
+    if test "x$projectlibs" != x ; then
+      if test -d ../ThirdParty/Blas/src ; then
+        BLAS_LIBS="-L`cd ../ThirdParty/Blas/src; pwd` $projectlibs"
+      else
+        BLAS_LIBS="-L`cd ../ThirdParty/Blas; pwd` $projectlibs"
+      fi
+    fi
+    BLAS_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Blas/coinblas-uninstalled.pc`
+
+    ADDLIBS="$ADDLIBS $BLAS_LIBS"
+       REQUIREDPACKAGES="$REQUIREDPACKAGES coinblas"
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_BLAS 1
+_ACEOF
+
+
+
+    coin_has_blas=yes
+  fi
+fi
+
+#if user did not disable setting of makefile conditional, do it
+
+
+if test $coin_has_blas != notGiven &&
+                test $coin_has_blas != skipping; then
+  COIN_HAS_BLAS_TRUE=
+  COIN_HAS_BLAS_FALSE='#'
+else
+  COIN_HAS_BLAS_TRUE='#'
+  COIN_HAS_BLAS_FALSE=
+fi
+
+
+
+echo "$as_me:$LINENO: result: $coin_has_blas" >&5
+echo "${ECHO_T}$coin_has_blas" >&6
+fi
+
 
 
 
@@ -26769,8 +26900,8 @@ fi
 
 if test "x$use_lapack" = xBUILD ; then
 
-echo "$as_me:$LINENO: checking for COIN module Lapack" >&5
-echo $ECHO_N "checking for COIN module Lapack... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for COIN-OR module Lapack" >&5
+echo $ECHO_N "checking for COIN-OR module Lapack... $ECHO_C" >&6
 
 coin_has_lapack=notGiven
 
@@ -26791,11 +26922,6 @@ LAPACK_DATA=
 
 
 
-required=1
-
-# execute third argument that can be used to overwrite flags like 'required'
-
-
 #check if user provided LIBS, CFLAGS, and DATA for module
 if test $coin_has_lapack != skipping; then
 
@@ -26805,9 +26931,7 @@ if test "${with_lapack_lib+set}" = set; then
   withval="$with_lapack_lib"
   coin_has_lapack=yes
        LAPACK_LIBS="$withval"
-       if test $required = 1; then
-         ADDLIBS="$ADDLIBS $withval"
-       fi
+       ADDLIBS="$ADDLIBS $withval"
 
 fi;
 
@@ -26892,9 +27016,7 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_lapack=yes
         echo "$as_me:$LINENO: result: yes: $LAPACK_VERSIONS" >&5
 echo "${ECHO_T}yes: $LAPACK_VERSIONS" >&6
-        if test $required = 1; then
-          REQUIREDPACKAGES="$REQUIREDPACKAGES coinlapack"
-	fi
+        REQUIREDPACKAGES="$REQUIREDPACKAGES coinlapack"
 
 
   else
@@ -26926,6 +27048,7 @@ fi
 
 if test $coin_has_lapack != skipping &&
    test $coin_has_lapack != notGiven ; then
+  if test 0 = 1 ; then  #change this test to enable a bit of debugging output
   if test -n "$LAPACK_CFLAGS" ; then
     { echo "$as_me:$LINENO: Lapack CFLAGS are $LAPACK_CFLAGS" >&5
 echo "$as_me: Lapack CFLAGS are $LAPACK_CFLAGS" >&6;}
@@ -26937,6 +27060,7 @@ echo "$as_me: Lapack LIBS   are $LAPACK_LIBS" >&6;}
   if test -n "$LAPACK_DATA" ; then
     { echo "$as_me:$LINENO: Lapack DATA   is  $LAPACK_DATA" >&5
 echo "$as_me: Lapack DATA   is  $LAPACK_DATA" >&6;}
+  fi
   fi
 
 cat >>confdefs.h <<\_ACEOF
@@ -26998,10 +27122,85 @@ fi
 
 fi
 
+#call fallback in case the previous failed, maybe because pkg-config was not available
+
+if test x$coin_has_lapack != "xyes" ; then
+echo "$as_me:$LINENO: checking for COIN-OR module Lapack (fallback)" >&5
+echo $ECHO_N "checking for COIN-OR module Lapack (fallback)... $ECHO_C" >&6
+
+coin_has_lapack=notGiven
+
+# check if user wants to skip module in any case
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "Lapack"; then
+      coin_has_lapack=skipping
+    fi
+  done
+fi
+
+LAPACK_LIBS=
+LAPACK_CFLAGS=
+LAPACK_DATA=
 
 
-echo "$as_me:$LINENO: checking for COIN module HSL" >&5
-echo $ECHO_N "checking for COIN module HSL... $ECHO_C" >&6
+if test $coin_has_lapack != "skipping" ; then
+  # if the project is available and configured, then a project-uninstalled.pc file should have been created
+  if test -r ../ThirdParty/Lapack/coinlapack-uninstalled.pc ; then
+    # read CFLAGS and LIBS from coinlapack-uninstalled.pc file
+    # add CYGPATH_W cludge into include flags
+    # replace -L${libdir} by absolute path to build directory in linker flags
+    # we assume that the build directory is ../ThirdParty/Lapack/src if this directory exists, otherwise we assume that it is ../ThirdParty/Lapack
+    LAPACK_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/Lapack/coinlapack-uninstalled.pc`
+    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/Lapack/coinlapack-uninstalled.pc`
+    if test "x$projectlibs" != x ; then
+      if test -d ../ThirdParty/Lapack/src ; then
+        LAPACK_LIBS="-L`cd ../ThirdParty/Lapack/src; pwd` $projectlibs"
+      else
+        LAPACK_LIBS="-L`cd ../ThirdParty/Lapack; pwd` $projectlibs"
+      fi
+    fi
+    LAPACK_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Lapack/coinlapack-uninstalled.pc`
+
+    ADDLIBS="$ADDLIBS $LAPACK_LIBS"
+       REQUIREDPACKAGES="$REQUIREDPACKAGES coinlapack"
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_LAPACK 1
+_ACEOF
+
+
+
+    coin_has_lapack=yes
+  fi
+fi
+
+#if user did not disable setting of makefile conditional, do it
+
+
+if test $coin_has_lapack != notGiven &&
+                test $coin_has_lapack != skipping; then
+  COIN_HAS_LAPACK_TRUE=
+  COIN_HAS_LAPACK_FALSE='#'
+else
+  COIN_HAS_LAPACK_TRUE='#'
+  COIN_HAS_LAPACK_FALSE=
+fi
+
+
+
+echo "$as_me:$LINENO: result: $coin_has_lapack" >&5
+echo "${ECHO_T}$coin_has_lapack" >&6
+fi
+
+
+
+
+
+echo "$as_me:$LINENO: checking for COIN-OR module HSL" >&5
+echo $ECHO_N "checking for COIN-OR module HSL... $ECHO_C" >&6
 
 coin_has_hsl=notGiven
 
@@ -27022,11 +27221,6 @@ HSL_DATA=
 
 
 
-required=1
-
-# execute third argument that can be used to overwrite flags like 'required'
-
-
 #check if user provided LIBS, CFLAGS, and DATA for module
 if test $coin_has_hsl != skipping; then
 
@@ -27036,9 +27230,7 @@ if test "${with_hsl_lib+set}" = set; then
   withval="$with_hsl_lib"
   coin_has_hsl=yes
        HSL_LIBS="$withval"
-       if test $required = 1; then
-         ADDLIBS="$ADDLIBS $withval"
-       fi
+       ADDLIBS="$ADDLIBS $withval"
 
 fi;
 
@@ -27123,9 +27315,7 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_hsl=yes
         echo "$as_me:$LINENO: result: yes: $HSL_VERSIONS" >&5
 echo "${ECHO_T}yes: $HSL_VERSIONS" >&6
-        if test $required = 1; then
-          REQUIREDPACKAGES="$REQUIREDPACKAGES coinhsl"
-	fi
+        REQUIREDPACKAGES="$REQUIREDPACKAGES coinhsl"
 
 
   else
@@ -27157,6 +27347,7 @@ fi
 
 if test $coin_has_hsl != skipping &&
    test $coin_has_hsl != notGiven ; then
+  if test 0 = 1 ; then  #change this test to enable a bit of debugging output
   if test -n "$HSL_CFLAGS" ; then
     { echo "$as_me:$LINENO: HSL CFLAGS are $HSL_CFLAGS" >&5
 echo "$as_me: HSL CFLAGS are $HSL_CFLAGS" >&6;}
@@ -27168,6 +27359,7 @@ echo "$as_me: HSL LIBS   are $HSL_LIBS" >&6;}
   if test -n "$HSL_DATA" ; then
     { echo "$as_me:$LINENO: HSL DATA   is  $HSL_DATA" >&5
 echo "$as_me: HSL DATA   is  $HSL_DATA" >&6;}
+  fi
   fi
 
 cat >>confdefs.h <<\_ACEOF
@@ -27191,8 +27383,81 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking for COIN module Mumps" >&5
-echo $ECHO_N "checking for COIN module Mumps... $ECHO_C" >&6
+if test x$coin_has_hsl != "xyes" ; then
+echo "$as_me:$LINENO: checking for COIN-OR module HSL (fallback)" >&5
+echo $ECHO_N "checking for COIN-OR module HSL (fallback)... $ECHO_C" >&6
+
+coin_has_hsl=notGiven
+
+# check if user wants to skip module in any case
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "HSL"; then
+      coin_has_hsl=skipping
+    fi
+  done
+fi
+
+HSL_LIBS=
+HSL_CFLAGS=
+HSL_DATA=
+
+
+if test $coin_has_hsl != "skipping" ; then
+  # if the project is available and configured, then a project-uninstalled.pc file should have been created
+  if test -r ../ThirdParty/HSL/coinhsl-uninstalled.pc ; then
+    # read CFLAGS and LIBS from coinhsl-uninstalled.pc file
+    # add CYGPATH_W cludge into include flags
+    # replace -L${libdir} by absolute path to build directory in linker flags
+    # we assume that the build directory is ../ThirdParty/HSL/src if this directory exists, otherwise we assume that it is ../ThirdParty/HSL
+    HSL_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
+    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
+    if test "x$projectlibs" != x ; then
+      if test -d ../ThirdParty/HSL/src ; then
+        HSL_LIBS="-L`cd ../ThirdParty/HSL/src; pwd` $projectlibs"
+      else
+        HSL_LIBS="-L`cd ../ThirdParty/HSL; pwd` $projectlibs"
+      fi
+    fi
+    HSL_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
+
+    ADDLIBS="$ADDLIBS $HSL_LIBS"
+       REQUIREDPACKAGES="$REQUIREDPACKAGES coinhsl"
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_HSL 1
+_ACEOF
+
+
+
+    coin_has_hsl=yes
+  fi
+fi
+
+#if user did not disable setting of makefile conditional, do it
+
+
+if test $coin_has_hsl != notGiven &&
+                test $coin_has_hsl != skipping; then
+  COIN_HAS_HSL_TRUE=
+  COIN_HAS_HSL_FALSE='#'
+else
+  COIN_HAS_HSL_TRUE='#'
+  COIN_HAS_HSL_FALSE=
+fi
+
+
+
+echo "$as_me:$LINENO: result: $coin_has_hsl" >&5
+echo "${ECHO_T}$coin_has_hsl" >&6
+fi
+
+
+
+echo "$as_me:$LINENO: checking for COIN-OR module Mumps" >&5
+echo $ECHO_N "checking for COIN-OR module Mumps... $ECHO_C" >&6
 
 coin_has_mumps=notGiven
 
@@ -27213,11 +27478,6 @@ MUMPS_DATA=
 
 
 
-required=1
-
-# execute third argument that can be used to overwrite flags like 'required'
-
-
 #check if user provided LIBS, CFLAGS, and DATA for module
 if test $coin_has_mumps != skipping; then
 
@@ -27227,9 +27487,7 @@ if test "${with_mumps_lib+set}" = set; then
   withval="$with_mumps_lib"
   coin_has_mumps=yes
        MUMPS_LIBS="$withval"
-       if test $required = 1; then
-         ADDLIBS="$ADDLIBS $withval"
-       fi
+       ADDLIBS="$ADDLIBS $withval"
 
 fi;
 
@@ -27314,9 +27572,7 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_mumps=yes
         echo "$as_me:$LINENO: result: yes: $MUMPS_VERSIONS" >&5
 echo "${ECHO_T}yes: $MUMPS_VERSIONS" >&6
-        if test $required = 1; then
-          REQUIREDPACKAGES="$REQUIREDPACKAGES coinmumps"
-	fi
+        REQUIREDPACKAGES="$REQUIREDPACKAGES coinmumps"
 
 
   else
@@ -27348,6 +27604,7 @@ fi
 
 if test $coin_has_mumps != skipping &&
    test $coin_has_mumps != notGiven ; then
+  if test 0 = 1 ; then  #change this test to enable a bit of debugging output
   if test -n "$MUMPS_CFLAGS" ; then
     { echo "$as_me:$LINENO: Mumps CFLAGS are $MUMPS_CFLAGS" >&5
 echo "$as_me: Mumps CFLAGS are $MUMPS_CFLAGS" >&6;}
@@ -27359,6 +27616,7 @@ echo "$as_me: Mumps LIBS   are $MUMPS_LIBS" >&6;}
   if test -n "$MUMPS_DATA" ; then
     { echo "$as_me:$LINENO: Mumps DATA   is  $MUMPS_DATA" >&5
 echo "$as_me: Mumps DATA   is  $MUMPS_DATA" >&6;}
+  fi
   fi
 
 cat >>confdefs.h <<\_ACEOF
@@ -27381,4068 +27639,66 @@ fi
 
 
 
-# no need to check for metis, because mumps takes care of this
+if test $coin_has_mumps != yes ; then
 
-# fallback for Blas if no pkg-config available
-if test "$coin_has_blas" != yes ; then
-  if test "$PACKAGE_NAME" = ThirdPartyBlas || test "$PACKAGE_NAME" = ThirdPartyLapack || test "$PACKAGE_NAME" = ThirdPartyMumps; then
-  coin_blasobjdir=../Blas
-else
-  coin_blasobjdir=../ThirdParty/Blas
-fi
-coin_blassrcdir=$srcdir/$coin_blasobjdir
+if test x$coin_has_mumps != "xyes" ; then
+echo "$as_me:$LINENO: checking for COIN-OR module Mumps (fallback)" >&5
+echo $ECHO_N "checking for COIN-OR module Mumps (fallback)... $ECHO_C" >&6
 
+coin_has_mumps=notGiven
 
-# Check whether --with-blas or --without-blas was given.
-if test "${with_blas+set}" = set; then
-  withval="$with_blas"
-  use_blas=$withval
-else
-  use_blas=
-fi;
-
-MAKEOKFILE=.MakeOk
-# Check if user supplied option makes sense
-if test x"$use_blas" != x; then
-  if test "$use_blas" = "BUILD"; then
-    # Don't check for course code if this is executed in ThirdParty/Blas
-    if test "$PACKAGE_NAME" != ThirdPartyBlas; then
-      if test -r $coin_blasobjdir/.MakeOk; then :; else
-        { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for Blas, but $coin_blasobjdir directory is not properly configured" >&5
-echo "$as_me: error: option \"BUILD\" specified for Blas, but $coin_blasobjdir directory is not properly configured" >&2;}
-   { (exit 1); exit 1; }; }
-      fi
+# check if user wants to skip module in any case
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "Mumps"; then
+      coin_has_mumps=skipping
     fi
-  elif test "$use_blas" != no ; then
-    echo "$as_me:$LINENO: checking whether user supplied BLASLIB=\"$use_blas\" works" >&5
-echo $ECHO_N "checking whether user supplied BLASLIB=\"$use_blas\" works... $ECHO_C" >&6
-    LIBS="$use_blas $LIBS"
-    ADDLIBS="$use_blas $ADDLIBS"
-    case $ac_ext in
-  f)
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-      call daxpy
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                       { { echo "$as_me:$LINENO: error: user supplied BLAS library \"$use_blas\" does not work" >&5
-echo "$as_me: error: user supplied BLAS library \"$use_blas\" does not work" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    ;;
-  c)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DAXPY" ;;
-  lower*) ac_val="daxpy" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdaxpy="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdaxpy();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdaxpy();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                       { { echo "$as_me:$LINENO: error: user supplied BLAS library \"$use_blas\" does not work" >&5
-echo "$as_me: error: user supplied BLAS library \"$use_blas\" does not work" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                       { { echo "$as_me:$LINENO: error: user supplied BLAS library \"$use_blas\" does not work" >&5
-echo "$as_me: error: user supplied BLAS library \"$use_blas\" does not work" >&2;}
-   { (exit 1); exit 1; }; }
-      fi
-    fi
-    ;;
-  cc|cpp)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DAXPY" ;;
-  lower*) ac_val="daxpy" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdaxpy="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdaxpy();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdaxpy();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                       { { echo "$as_me:$LINENO: error: user supplied BLAS library \"$use_blas\" does not work" >&5
-echo "$as_me: error: user supplied BLAS library \"$use_blas\" does not work" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                       { { echo "$as_me:$LINENO: error: user supplied BLAS library \"$use_blas\" does not work" >&5
-echo "$as_me: error: user supplied BLAS library \"$use_blas\" does not work" >&2;}
-   { (exit 1); exit 1; }; }
-      fi
-    fi
-    ;;
-esac
-
-  fi
-else
-# Try to autodetect the library for blas based on build system
-  #AC_MSG_CHECKING([default locations for BLAS])
-  skip_lblas_check=no
-  case $build in
-    *-sgi-*)
-      SAVE_LIBS="$LIBS"
-      echo "$as_me:$LINENO: checking whether -lcomplib.sgimath has BLAS" >&5
-echo $ECHO_N "checking whether -lcomplib.sgimath has BLAS... $ECHO_C" >&6
-      LIBS="-lcomplib.sgimath $LIBS"
-      case $ac_ext in
-  f)
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-      call daxpy
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas=-lcomplib.sgimath;
-                         ADDLIBS="-lcomplib.sgimath $ADDLIBS"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         SAVE_LIBS="$LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    ;;
-  c)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DAXPY" ;;
-  lower*) ac_val="daxpy" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdaxpy="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdaxpy();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas=-lcomplib.sgimath;
-                         ADDLIBS="-lcomplib.sgimath $ADDLIBS"
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdaxpy();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas=-lcomplib.sgimath;
-                         ADDLIBS="-lcomplib.sgimath $ADDLIBS"
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         SAVE_LIBS="$LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         SAVE_LIBS="$LIBS"
-      fi
-    fi
-    ;;
-  cc|cpp)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DAXPY" ;;
-  lower*) ac_val="daxpy" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdaxpy="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdaxpy();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas=-lcomplib.sgimath;
-                         ADDLIBS="-lcomplib.sgimath $ADDLIBS"
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdaxpy();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas=-lcomplib.sgimath;
-                         ADDLIBS="-lcomplib.sgimath $ADDLIBS"
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         SAVE_LIBS="$LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         SAVE_LIBS="$LIBS"
-      fi
-    fi
-    ;;
-esac
-
-      ;;
-
-# Ideally, we'd use -library=sunperf, but it's an imperfect world. Studio
-# cc doesn't recognise -library, it wants -xlic_lib. Studio 12 CC doesn't
-# recognise -xlic_lib. Libtool doesn't like -xlic_lib anyway. Sun claims
-# that CC and cc will understand -library in Studio 13. The main extra
-# function of -xlic_lib and -library is to arrange for the Fortran run-time
-# libraries to be linked for C++ and C. We can arrange that explicitly.
-    *-*-solaris*)
-      SAVE_LIBS="$LIBS"
-      echo "$as_me:$LINENO: checking for BLAS in libsunperf" >&5
-echo $ECHO_N "checking for BLAS in libsunperf... $ECHO_C" >&6
-      LIBS="-lsunperf $FLIBS $LIBS"
-      case $ac_ext in
-  f)
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-      call daxpy
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas='-lsunperf'
-                         ADDLIBS="-lsunperf $ADDLIBS"
-			 coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    ;;
-  c)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DAXPY" ;;
-  lower*) ac_val="daxpy" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdaxpy="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdaxpy();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas='-lsunperf'
-                         ADDLIBS="-lsunperf $ADDLIBS"
-			 coin_need_flibs=yes
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdaxpy();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas='-lsunperf'
-                         ADDLIBS="-lsunperf $ADDLIBS"
-			 coin_need_flibs=yes
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         LIBS="$SAVE_LIBS"
-      fi
-    fi
-    ;;
-  cc|cpp)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DAXPY" ;;
-  lower*) ac_val="daxpy" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdaxpy="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdaxpy();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas='-lsunperf'
-                         ADDLIBS="-lsunperf $ADDLIBS"
-			 coin_need_flibs=yes
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdaxpy();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas='-lsunperf'
-                         ADDLIBS="-lsunperf $ADDLIBS"
-			 coin_need_flibs=yes
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         LIBS="$SAVE_LIBS"
-      fi
-    fi
-    ;;
-esac
-
-      ;;
-    *-cygwin* | *-mingw*)
-# On cygwin, consider -lblas only if doscompile is disabled. The prebuilt
-# library will want to link with cygwin, hence won't run standalone in DOS.
-      if test "$enable_doscompile" = mingw; then
-	skip_lblas_check=yes
-      fi
-      case "$CC" in
-        cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-          SAVE_LIBS="$LIBS"
-          echo "$as_me:$LINENO: checking for BLAS in MKL" >&5
-echo $ECHO_N "checking for BLAS in MKL... $ECHO_C" >&6
-          LIBS="mkl_intel_c.lib mkl_sequential.lib mkl_core.lib $LIBS"
-          case $ac_ext in
-  f)
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-      call daxpy
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                             use_blas='mkl_intel_c.lib mkl_sequential.lib mkl_core.lib'
-                             ADDLIBS="mkl_intel_c.lib mkl_sequential.lib mkl_core.lib $ADDLIBS"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                             LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    ;;
-  c)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DAXPY" ;;
-  lower*) ac_val="daxpy" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdaxpy="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdaxpy();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                             use_blas='mkl_intel_c.lib mkl_sequential.lib mkl_core.lib'
-                             ADDLIBS="mkl_intel_c.lib mkl_sequential.lib mkl_core.lib $ADDLIBS"
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdaxpy();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                             use_blas='mkl_intel_c.lib mkl_sequential.lib mkl_core.lib'
-                             ADDLIBS="mkl_intel_c.lib mkl_sequential.lib mkl_core.lib $ADDLIBS"
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                             LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                             LIBS="$SAVE_LIBS"
-      fi
-    fi
-    ;;
-  cc|cpp)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DAXPY" ;;
-  lower*) ac_val="daxpy" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdaxpy="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdaxpy();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                             use_blas='mkl_intel_c.lib mkl_sequential.lib mkl_core.lib'
-                             ADDLIBS="mkl_intel_c.lib mkl_sequential.lib mkl_core.lib $ADDLIBS"
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdaxpy();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                             use_blas='mkl_intel_c.lib mkl_sequential.lib mkl_core.lib'
-                             ADDLIBS="mkl_intel_c.lib mkl_sequential.lib mkl_core.lib $ADDLIBS"
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                             LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                             LIBS="$SAVE_LIBS"
-      fi
-    fi
-    ;;
-esac
-
-          ;;
-      esac
-      ;;
-  esac
-
-  if test -z "$use_blas" && test $skip_lblas_check = no; then
-    SAVE_LIBS="$LIBS"
-    echo "$as_me:$LINENO: checking whether -lblas has BLAS" >&5
-echo $ECHO_N "checking whether -lblas has BLAS... $ECHO_C" >&6
-    LIBS="-lblas $LIBS"
-    case $ac_ext in
-  f)
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-      call daxpy
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-		       ADDLIBS="-lblas $ADDLIBS"
-		       use_blas='-lblas'
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-	               LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    ;;
-  c)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DAXPY" ;;
-  lower*) ac_val="daxpy" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdaxpy="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdaxpy();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-		       ADDLIBS="-lblas $ADDLIBS"
-		       use_blas='-lblas'
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdaxpy();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-		       ADDLIBS="-lblas $ADDLIBS"
-		       use_blas='-lblas'
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-	               LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-	               LIBS="$SAVE_LIBS"
-      fi
-    fi
-    ;;
-  cc|cpp)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DAXPY" ;;
-  lower*) ac_val="daxpy" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdaxpy="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdaxpy();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-		       ADDLIBS="-lblas $ADDLIBS"
-		       use_blas='-lblas'
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdaxpy();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdaxpy()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-		       ADDLIBS="-lblas $ADDLIBS"
-		       use_blas='-lblas'
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-	               LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-	               LIBS="$SAVE_LIBS"
-      fi
-    fi
-    ;;
-esac
-
-  fi
-
-# If we have no other ideas, consider building BLAS.
-  if test -z "$use_blas"; then
-    if test "$PACKAGE_NAME" != ThirdPartyBlas; then
-      if test -r $coin_blasobjdir/.MakeOk; then
-        use_blas=BUILD
-      fi
-    fi
-  fi
-fi
-
-if test "$use_blas" = BUILD; then
-  coin_need_flibs=yes
-fi
-
-
-
-if test x"$use_blas" != x; then
-  COIN_HAS_BLAS_TRUE=
-  COIN_HAS_BLAS_FALSE='#'
-else
-  COIN_HAS_BLAS_TRUE='#'
-  COIN_HAS_BLAS_FALSE=
-fi
-
-
-
-if test "$use_blas" = BUILD; then
-  COIN_BUILD_BLAS_TRUE=
-  COIN_BUILD_BLAS_FALSE='#'
-else
-  COIN_BUILD_BLAS_TRUE='#'
-  COIN_BUILD_BLAS_FALSE=
-fi
-
-
-if test x"$use_blas" = x || test "$use_blas" = no; then
-  coin_has_blas=no
-else
-  coin_has_blas=yes
-
-cat >>confdefs.h <<\_ACEOF
-#define COIN_HAS_BLAS 1
-_ACEOF
-
-fi
-
-  # now Blas linker flags are in ADDLIBS
-else
-  #for configure
-
-
-if test 0 = 1; then
-  COIN_BUILD_BLAS_TRUE=
-  COIN_BUILD_BLAS_FALSE='#'
-else
-  COIN_BUILD_BLAS_TRUE='#'
-  COIN_BUILD_BLAS_FALSE=
-fi
-
-fi
-
-# fallback for Lapack if no pkg-config available
-if test "$coin_has_lapack" != yes ; then
-  coin_lapackobjdir=../ThirdParty/Lapack
-coin_lapacksrcdir=$srcdir/$coin_lapackobjdir
-
-
-# Check whether --with-lapack or --without-lapack was given.
-if test "${with_lapack+set}" = set; then
-  withval="$with_lapack"
-  use_lapack=$withval
-else
-  use_lapack=
-fi;
-
-# Check if user supplied option makes sense
-if test x"$use_lapack" != x; then
-  if test "$use_lapack" = "BUILD"; then
-    # Don't check for course code if this is executed in ThirdParty/Lapack
-    if test "$PACKAGE_NAME" != ThirdPartyLapack; then
-      if test -r $coin_lapackobjdir/.MakeOk; then :; else
-        { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for LAPACK, but $coin_lapackobjdir directory is not configured" >&5
-echo "$as_me: error: option \"BUILD\" specified for LAPACK, but $coin_lapackobjdir directory is not configured" >&2;}
-   { (exit 1); exit 1; }; }
-      fi
-    fi
-  elif test "$use_lapack" != no; then
-    echo "$as_me:$LINENO: checking whether user supplied LAPACKLIB=\"$use_lapack\" works" >&5
-echo $ECHO_N "checking whether user supplied LAPACKLIB=\"$use_lapack\" works... $ECHO_C" >&6
-    LIBS="$use_lapack $LIBS"
-    ADDLIBS="$use_lapack $ADDLIBS"
-    case $ac_ext in
-  f)
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-      call dsyev
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                       { { echo "$as_me:$LINENO: error: user supplied LAPACK library \"$use_lapack\" does not work" >&5
-echo "$as_me: error: user supplied LAPACK library \"$use_lapack\" does not work" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    ;;
-  c)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DSYEV" ;;
-  lower*) ac_val="dsyev" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdsyev="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdsyev();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdsyev();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                       { { echo "$as_me:$LINENO: error: user supplied LAPACK library \"$use_lapack\" does not work" >&5
-echo "$as_me: error: user supplied LAPACK library \"$use_lapack\" does not work" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                       { { echo "$as_me:$LINENO: error: user supplied LAPACK library \"$use_lapack\" does not work" >&5
-echo "$as_me: error: user supplied LAPACK library \"$use_lapack\" does not work" >&2;}
-   { (exit 1); exit 1; }; }
-      fi
-    fi
-    ;;
-  cc|cpp)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DSYEV" ;;
-  lower*) ac_val="dsyev" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdsyev="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdsyev();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdsyev();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                       { { echo "$as_me:$LINENO: error: user supplied LAPACK library \"$use_lapack\" does not work" >&5
-echo "$as_me: error: user supplied LAPACK library \"$use_lapack\" does not work" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                       { { echo "$as_me:$LINENO: error: user supplied LAPACK library \"$use_lapack\" does not work" >&5
-echo "$as_me: error: user supplied LAPACK library \"$use_lapack\" does not work" >&2;}
-   { (exit 1); exit 1; }; }
-      fi
-    fi
-    ;;
-esac
-
-  fi
-else
-  if test x$coin_has_blas = xyes; then
-    # First try to see if LAPACK is already available with BLAS library
-    echo "$as_me:$LINENO: checking whether LAPACK is already available with BLAS library" >&5
-echo $ECHO_N "checking whether LAPACK is already available with BLAS library... $ECHO_C" >&6
-    case $ac_ext in
-  f)
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-      call dsyev
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; use_lapack=ok
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    ;;
-  c)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DSYEV" ;;
-  lower*) ac_val="dsyev" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdsyev="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdsyev();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; use_lapack=ok
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdsyev();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; use_lapack=ok
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-      fi
-    fi
-    ;;
-  cc|cpp)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DSYEV" ;;
-  lower*) ac_val="dsyev" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdsyev="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdsyev();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; use_lapack=ok
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdsyev();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; use_lapack=ok
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-      fi
-    fi
-    ;;
-esac
-
-  fi
-  skip_llapack_check=no
-  if test -z "$use_lapack"; then
-    # Try to autodetect the library for lapack based on build system
-    case $build in
-      *-sgi-*)
-        SAVE_LIBS="$LIBS"
-        echo "$as_me:$LINENO: checking whether -lcomplib.sgimath has LAPACK" >&5
-echo $ECHO_N "checking whether -lcomplib.sgimath has LAPACK... $ECHO_C" >&6
-        LIBS="-lcomplib.sgimath $LIBS"
-        case $ac_ext in
-  f)
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-      call dsyev
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                           use_lapack=-lcomplib.sgimath;
-                           ADDLIBS="-lcomplib.sgimath $ADDLIBS"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                           SAVE_LIBS="$LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    ;;
-  c)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DSYEV" ;;
-  lower*) ac_val="dsyev" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdsyev="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdsyev();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                           use_lapack=-lcomplib.sgimath;
-                           ADDLIBS="-lcomplib.sgimath $ADDLIBS"
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdsyev();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                           use_lapack=-lcomplib.sgimath;
-                           ADDLIBS="-lcomplib.sgimath $ADDLIBS"
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                           SAVE_LIBS="$LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                           SAVE_LIBS="$LIBS"
-      fi
-    fi
-    ;;
-  cc|cpp)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DSYEV" ;;
-  lower*) ac_val="dsyev" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdsyev="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdsyev();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                           use_lapack=-lcomplib.sgimath;
-                           ADDLIBS="-lcomplib.sgimath $ADDLIBS"
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdsyev();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                           use_lapack=-lcomplib.sgimath;
-                           ADDLIBS="-lcomplib.sgimath $ADDLIBS"
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                           SAVE_LIBS="$LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                           SAVE_LIBS="$LIBS"
-      fi
-    fi
-    ;;
-esac
-
-        ;;
-
-# See comments in COIN_HAS_BLAS.
-      *-*-solaris*)
-      SAVE_LIBS="$LIBS"
-      echo "$as_me:$LINENO: checking for LAPACK in libsunperf" >&5
-echo $ECHO_N "checking for LAPACK in libsunperf... $ECHO_C" >&6
-      LIBS="-lsunperf $FLIBS $LIBS"
-      case $ac_ext in
-  f)
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-      call dsyev
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas='-lsunperf'
-                         ADDLIBS="-lsunperf $ADDLIBS"
-			 coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    ;;
-  c)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DSYEV" ;;
-  lower*) ac_val="dsyev" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdsyev="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdsyev();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas='-lsunperf'
-                         ADDLIBS="-lsunperf $ADDLIBS"
-			 coin_need_flibs=yes
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdsyev();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas='-lsunperf'
-                         ADDLIBS="-lsunperf $ADDLIBS"
-			 coin_need_flibs=yes
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         LIBS="$SAVE_LIBS"
-      fi
-    fi
-    ;;
-  cc|cpp)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DSYEV" ;;
-  lower*) ac_val="dsyev" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdsyev="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdsyev();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas='-lsunperf'
-                         ADDLIBS="-lsunperf $ADDLIBS"
-			 coin_need_flibs=yes
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdsyev();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                         use_blas='-lsunperf'
-                         ADDLIBS="-lsunperf $ADDLIBS"
-			 coin_need_flibs=yes
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                         LIBS="$SAVE_LIBS"
-      fi
-    fi
-    ;;
-esac
-
-        ;;
-# On cygwin, do this check only if doscompile is disabled. The prebuilt library
-# will want to link with cygwin, hence won't run standalone in DOS.
-      *-cygwin*)
-	if test "$enable_doscompile" = mingw; then
-	  skip_llapack_check=yes
-	fi
-	;;
-    esac
-  fi
-
-  if test -z "$use_lapack" && test $skip_llapack_check = no; then
-    SAVE_LIBS="$LIBS"
-    echo "$as_me:$LINENO: checking whether -llapack has LAPACK" >&5
-echo $ECHO_N "checking whether -llapack has LAPACK... $ECHO_C" >&6
-    LIBS="-llapack $LIBS"
-    case $ac_ext in
-  f)
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-      call dsyev
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-		       ADDLIBS="-llapack $ADDLIBS"
-		       use_lapack='-llapack'
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-		       LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    ;;
-  c)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DSYEV" ;;
-  lower*) ac_val="dsyev" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdsyev="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdsyev();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-		       ADDLIBS="-llapack $ADDLIBS"
-		       use_lapack='-llapack'
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-void $cfuncdsyev();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-		       ADDLIBS="-llapack $ADDLIBS"
-		       use_lapack='-llapack'
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-		       LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-		       LIBS="$SAVE_LIBS"
-      fi
-    fi
-    ;;
-  cc|cpp)
-    ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-case $ac_cv_f77_mangling in
-  upper*) ac_val="DSYEV" ;;
-  lower*) ac_val="dsyev" ;;
-  *)      ac_val="unknown" ;;
-esac
-case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-
-cfuncdsyev="$ac_val"
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    if test x"$coin_need_flibs" = xyes; then
-      flink_try=no;
-    else
-      cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdsyev();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  flink_try=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-flink_try=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    fi
-    if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-		       ADDLIBS="-llapack $ADDLIBS"
-		       use_lapack='-llapack'
-    else
-      if test x"$FLIBS" != x; then
-        flink_save_libs="$LIBS"
-        LIBS="$LIBS $FLIBS"
-        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-extern "C" {void $cfuncdsyev();}
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$cfuncdsyev()
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-		       ADDLIBS="-llapack $ADDLIBS"
-		       use_lapack='-llapack'
-                     coin_need_flibs=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-LIBS="$flink_save_libs"
-                     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-		       LIBS="$SAVE_LIBS"
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-      else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-		       LIBS="$SAVE_LIBS"
-      fi
-    fi
-    ;;
-esac
-
-  fi
-
-# If we have no other ideas, consider building LAPACK.
-  if test -z "$use_lapack"; then
-    if test "$PACKAGE_NAME" != ThirdPartyLapack; then
-      if test -r $coin_lapackobjdir/.MakeOk; then
-        use_lapack=BUILD
-      fi
-    fi
-  fi
-fi
-
-if test "$use_lapack" = BUILD; then
-  coin_need_flibs=yes
-fi
-
-
-
-if test x"$use_lapack" != x; then
-  COIN_HAS_LAPACK_TRUE=
-  COIN_HAS_LAPACK_FALSE='#'
-else
-  COIN_HAS_LAPACK_TRUE='#'
-  COIN_HAS_LAPACK_FALSE=
-fi
-
-
-
-if test "$use_lapack" = BUILD; then
-  COIN_BUILD_LAPACK_TRUE=
-  COIN_BUILD_LAPACK_FALSE='#'
-else
-  COIN_BUILD_LAPACK_TRUE='#'
-  COIN_BUILD_LAPACK_FALSE=
-fi
-
-
-if test x"$use_lapack" = x || test "$use_lapack" = no; then
-  coin_has_lapack=no
-else
-  coin_has_lapack=yes
-
-cat >>confdefs.h <<\_ACEOF
-#define COIN_HAS_LAPACK 1
-_ACEOF
-
-fi
-
-  # now Lapack linker flags are in ADDLIBS
-else
-  #for configure
-
-
-if test 0 = 1; then
-  COIN_BUILD_LAPACK_TRUE=
-  COIN_BUILD_LAPACK_FALSE='#'
-else
-  COIN_BUILD_LAPACK_TRUE='#'
-  COIN_BUILD_LAPACK_FALSE=
+  done
 fi
 
-fi
+MUMPS_LIBS=
+MUMPS_CFLAGS=
+MUMPS_DATA=
 
-# fallback for Mumps if no pkg-config available
-if test "$coin_has_mumps" != yes ; then
-  coin_mumpsobjdir=../ThirdParty/Mumps
 
-  # if ThirdParty/Mumps is available and configured, then a coinmumps-uninstalled.pc file should have been created
-  if test -r $coin_mumpsobjdir/coinmumps-uninstalled.pc ; then
-    # read Mumps CFLAGS and LIBS from coinmumps-uninstalled.pc file
+if test $coin_has_mumps != "skipping" ; then
+  # if the project is available and configured, then a project-uninstalled.pc file should have been created
+  if test -r ../ThirdParty/Mumps/coinmumps-uninstalled.pc ; then
+    # read CFLAGS and LIBS from coinmumps-uninstalled.pc file
     # add CYGPATH_W cludge into include flags
-    # replace -L${libdir} by absolute path to Mumps build directory in linker flags
-    MUMPS_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' $coin_mumpsobjdir/coinmumps-uninstalled.pc`
-    MUMPS_LIBS=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' $coin_mumpsobjdir/coinmumps-uninstalled.pc`
-    MUMPS_LIBS="-L`cd $coin_mumpsobjdir; pwd` $MUMPS_LIBS"
+    # replace -L${libdir} by absolute path to build directory in linker flags
+    # we assume that the build directory is ../ThirdParty/Mumps/src if this directory exists, otherwise we assume that it is ../ThirdParty/Mumps
+    MUMPS_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/Mumps/coinmumps-uninstalled.pc`
+    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/Mumps/coinmumps-uninstalled.pc`
+    if test "x$projectlibs" != x ; then
+      if test -d ../ThirdParty/Mumps/src ; then
+        MUMPS_LIBS="-L`cd ../ThirdParty/Mumps/src; pwd` $projectlibs"
+      else
+        MUMPS_LIBS="-L`cd ../ThirdParty/Mumps; pwd` $projectlibs"
+      fi
+    fi
+    MUMPS_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Mumps/coinmumps-uninstalled.pc`
 
     ADDLIBS="$ADDLIBS $MUMPS_LIBS"
-    REQUIREDPACKAGES="$REQUIREDPACKAGES mumps"
+       REQUIREDPACKAGES="$REQUIREDPACKAGES coinmumps"
 
-    coin_has_mumps=yes
+
 
 cat >>confdefs.h <<\_ACEOF
 #define COIN_HAS_MUMPS 1
 _ACEOF
 
+
+
+    coin_has_mumps=yes
   fi
+fi
+
+#if user did not disable setting of makefile conditional, do it
 
 
-
-if test $coin_has_mumps = yes; then
+if test $coin_has_mumps != notGiven &&
+                test $coin_has_mumps != skipping; then
   COIN_HAS_MUMPS_TRUE=
   COIN_HAS_MUMPS_FALSE='#'
 else
@@ -31451,86 +27707,69 @@ else
 fi
 
 
-  echo "$as_me:$LINENO: checking whether ThirdParty/Mumps is available and configured" >&5
-echo $ECHO_N "checking whether ThirdParty/Mumps is available and configured... $ECHO_C" >&6
-  echo "$as_me:$LINENO: result: $coin_has_mumps" >&5
+
+echo "$as_me:$LINENO: result: $coin_has_mumps" >&5
 echo "${ECHO_T}$coin_has_mumps" >&6
 fi
 
-# fallback for HSL if no pkg-config available
-if test "$coin_has_hsl" != yes ; then
-  coin_hslobjdir=../ThirdParty/HSL
 
-  # if ThirdParty/HSL is available and configured, then a coinhsl-uninstalled.pc file should have been created
-  if test -r $coin_hslobjdir/coinhsl-uninstalled.pc ; then
-    # read HSL CFLAGS and LIBS from coinhsl-uninstalled.pc file
-    # replace -L${libdir} by absolute path to HSL build directory in linker flags
-    HSL_CFLAGS=`sed -n -e 's/Cflags://p' $coin_hslobjdir/coinhsl-uninstalled.pc`
-    HSL_LIBS=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' $coin_hslobjdir/coinhsl-uninstalled.pc`
-    HSL_LIBS="-L`cd $coin_hslobjdir; pwd` $HSL_LIBS"
+if test x$coin_has_metis != "xyes" ; then
+echo "$as_me:$LINENO: checking for COIN-OR module Metis (fallback)" >&5
+echo $ECHO_N "checking for COIN-OR module Metis (fallback)... $ECHO_C" >&6
 
-    ADDLIBS="$ADDLIBS $HSL_LIBS"
-    REQUIREDPACKAGES="$REQUIREDPACKAGES hsl"
+coin_has_metis=notGiven
 
-    coin_has_hsl=yes
-
-cat >>confdefs.h <<\_ACEOF
-#define COIN_HAS_HSL 1
-_ACEOF
-
-  fi
-
-
-
-if test $coin_has_hsl = yes; then
-  COIN_HAS_HSL_TRUE=
-  COIN_HAS_HSL_FALSE='#'
-else
-  COIN_HAS_HSL_TRUE='#'
-  COIN_HAS_HSL_FALSE=
+# check if user wants to skip module in any case
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "Metis"; then
+      coin_has_metis=skipping
+    fi
+  done
 fi
 
+METIS_LIBS=
+METIS_CFLAGS=
+METIS_DATA=
 
-  echo "$as_me:$LINENO: checking whether ThirdParty/HSL is available and configured" >&5
-echo $ECHO_N "checking whether ThirdParty/HSL is available and configured... $ECHO_C" >&6
-  echo "$as_me:$LINENO: result: $coin_has_hsl" >&5
-echo "${ECHO_T}$coin_has_hsl" >&6
-fi
 
-# fallback for ASL if no pkg-config available
-if test "$coin_has_asl" != yes ; then
-  coin_aslobjdir=../ThirdParty/ASL
-
-  # if ThirdParty/ASL is available and configured, then a coinasl-uninstalled.pc file should have been created
-  if test -r $coin_aslobjdir/coinasl-uninstalled.pc ; then
-    # read ASL CFLAGS and LIBS from coinasl-uninstalled.pc file
+if test $coin_has_metis != "skipping" ; then
+  # if the project is available and configured, then a project-uninstalled.pc file should have been created
+  if test -r ../ThirdParty/Metis/coinmetis-uninstalled.pc ; then
+    # read CFLAGS and LIBS from coinmetis-uninstalled.pc file
     # add CYGPATH_W cludge into include flags
-    ASL_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' $coin_aslobjdir/coinasl-uninstalled.pc`
-    ASL_LIBS=`sed -n -e 's/Libs://p' $coin_aslobjdir/coinasl-uninstalled.pc`
+    # replace -L${libdir} by absolute path to build directory in linker flags
+    # we assume that the build directory is ../ThirdParty/Metis/src if this directory exists, otherwise we assume that it is ../ThirdParty/Metis
+    METIS_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/Metis/coinmetis-uninstalled.pc`
+    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/Metis/coinmetis-uninstalled.pc`
+    if test "x$projectlibs" != x ; then
+      if test -d ../ThirdParty/Metis/src ; then
+        METIS_LIBS="-L`cd ../ThirdParty/Metis/src; pwd` $projectlibs"
+      else
+        METIS_LIBS="-L`cd ../ThirdParty/Metis; pwd` $projectlibs"
+      fi
+    fi
+    METIS_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Metis/coinmetis-uninstalled.pc`
 
-    coin_has_asl=yes
+    ADDLIBS="$ADDLIBS $METIS_LIBS"
+       REQUIREDPACKAGES="$REQUIREDPACKAGES coinmetis"
 
-cat >>confdefs.h <<\_ACEOF
-#define COIN_HAS_ASL 1
-_ACEOF
 
+
+
+    coin_has_metis=yes
   fi
-
-
-
-if test $coin_has_asl = yes; then
-  COIN_HAS_ASL_TRUE=
-  COIN_HAS_ASL_FALSE='#'
-else
-  COIN_HAS_ASL_TRUE='#'
-  COIN_HAS_ASL_FALSE=
 fi
 
+#if user did not disable setting of makefile conditional, do it
 
-  echo "$as_me:$LINENO: checking whether ThirdParty/ASL is available and configured" >&5
-echo $ECHO_N "checking whether ThirdParty/ASL is available and configured... $ECHO_C" >&6
-  echo "$as_me:$LINENO: result: $coin_has_asl" >&5
-echo "${ECHO_T}$coin_has_asl" >&6
+
+echo "$as_me:$LINENO: result: $coin_has_metis" >&5
+echo "${ECHO_T}$coin_has_metis" >&6
+fi
+
+  MUMPS_CFLAGS="$MUMPS_CFLAGS $METIS_CFLAGS"
+  MUMPS_LIBS="$MUMPS_LIBS $METIS_LIBS"
 fi
 
 if test $coin_has_lapack != yes; then
@@ -37831,122 +34070,94 @@ echo "$as_me: error: conditional \"COIN_HAS_ASL\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
-if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_HSL_TRUE}" && test -z "${COIN_HAS_HSL_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_HSL\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_HSL\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_MUMPS_TRUE}" && test -z "${COIN_HAS_MUMPS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_MUMPS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_MUMPS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_BUILD_BLAS_TRUE}" && test -z "${COIN_BUILD_BLAS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_BUILD_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_BUILD_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_BUILD_BLAS_TRUE}" && test -z "${COIN_BUILD_BLAS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_BUILD_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_BUILD_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_BUILD_LAPACK_TRUE}" && test -z "${COIN_BUILD_LAPACK_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_BUILD_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_BUILD_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_BUILD_LAPACK_TRUE}" && test -z "${COIN_BUILD_LAPACK_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_BUILD_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_BUILD_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_MUMPS_TRUE}" && test -z "${COIN_HAS_MUMPS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_MUMPS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_MUMPS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_HSL_TRUE}" && test -z "${COIN_HAS_HSL_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_HSL\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_HSL\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
 if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_ASL\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"COIN_HAS_ASL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_HSL_TRUE}" && test -z "${COIN_HAS_HSL_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_HSL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_HSL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_HSL_TRUE}" && test -z "${COIN_HAS_HSL_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_HSL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_HSL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_MUMPS_TRUE}" && test -z "${COIN_HAS_MUMPS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_MUMPS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_MUMPS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_MUMPS_TRUE}" && test -z "${COIN_HAS_MUMPS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_MUMPS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_MUMPS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -38750,10 +34961,6 @@ s,@MUMPS_CFLAGS@,$MUMPS_CFLAGS,;t t
 s,@MUMPS_DATA@,$MUMPS_DATA,;t t
 s,@COIN_HAS_MUMPS_TRUE@,$COIN_HAS_MUMPS_TRUE,;t t
 s,@COIN_HAS_MUMPS_FALSE@,$COIN_HAS_MUMPS_FALSE,;t t
-s,@COIN_BUILD_BLAS_TRUE@,$COIN_BUILD_BLAS_TRUE,;t t
-s,@COIN_BUILD_BLAS_FALSE@,$COIN_BUILD_BLAS_FALSE,;t t
-s,@COIN_BUILD_LAPACK_TRUE@,$COIN_BUILD_LAPACK_TRUE,;t t
-s,@COIN_BUILD_LAPACK_FALSE@,$COIN_BUILD_LAPACK_FALSE,;t t
 s,@BITS_PER_POINTER@,$BITS_PER_POINTER,;t t
 s,@BIT32FCOMMENT@,$BIT32FCOMMENT,;t t
 s,@BIT64FCOMMENT@,$BIT64FCOMMENT,;t t
