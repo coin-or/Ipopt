@@ -105,11 +105,7 @@ AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
 #############################################################################
 
 AC_COIN_HAS_MODULE(ASL,          [coinasl],                      [required=0])
-if test $coin_has_asl != yes ; then
-  AC_COIN_HAS_MODULE_FALLBACK(ASL, [coinasl], [../ThirdParty/ASL], [required=0])
-  if test $coin_has_asl = yes ; then
-  fi
-fi
+AC_COIN_HAS_MODULE_FALLBACK(ASL, [coinasl], [../ThirdParty/ASL], [required=0])
 
 AC_COIN_HAS_MODULE_BLAS
 AC_COIN_HAS_MODULE_LAPACK

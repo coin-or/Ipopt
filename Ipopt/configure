@@ -22632,6 +22632,8 @@ if test $coin_has_asl != "skipping" ; then
       else
         ASL_LIBS="-L`cd ../ThirdParty/ASL; pwd` $projectlibs"
       fi
+    else
+      ASL_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/ASL/coinasl-uninstalled.pc`
     fi
     ASL_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/ASL/coinasl-uninstalled.pc`
 
@@ -24903,6 +24905,8 @@ if test $coin_has_blas != "skipping" ; then
       else
         BLAS_LIBS="-L`cd ../ThirdParty/Blas; pwd` $projectlibs"
       fi
+    else
+      BLAS_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/Blas/coinblas-uninstalled.pc`
     fi
     BLAS_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Blas/coinblas-uninstalled.pc`
 
@@ -27159,6 +27163,8 @@ if test $coin_has_lapack != "skipping" ; then
       else
         LAPACK_LIBS="-L`cd ../ThirdParty/Lapack; pwd` $projectlibs"
       fi
+    else
+      LAPACK_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/Lapack/coinlapack-uninstalled.pc`
     fi
     LAPACK_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Lapack/coinlapack-uninstalled.pc`
 
@@ -27418,6 +27424,8 @@ if test $coin_has_hsl != "skipping" ; then
       else
         HSL_LIBS="-L`cd ../ThirdParty/HSL; pwd` $projectlibs"
       fi
+    else
+      HSL_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
     fi
     HSL_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
 
@@ -27676,6 +27684,8 @@ if test $coin_has_mumps != "skipping" ; then
       else
         MUMPS_LIBS="-L`cd ../ThirdParty/Mumps; pwd` $projectlibs"
       fi
+    else
+      MUMPS_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/Mumps/coinmumps-uninstalled.pc`
     fi
     MUMPS_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Mumps/coinmumps-uninstalled.pc`
 
@@ -27748,6 +27758,8 @@ if test $coin_has_metis != "skipping" ; then
       else
         METIS_LIBS="-L`cd ../ThirdParty/Metis; pwd` $projectlibs"
       fi
+    else
+      METIS_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/Metis/coinmetis-uninstalled.pc`
     fi
     METIS_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Metis/coinmetis-uninstalled.pc`
 
