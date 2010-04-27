@@ -62,6 +62,12 @@
 /* If defined, the LAPACK Library is available. */
 #define COIN_HAS_LAPACK 1
 
+/* If defined, the METIS library is available. */
+/* #undef COIN_HAS_METIS */
+
+/* If defined, the MUMPS library is available. */
+/* #undef COIN_HAS_MUMPS */
+
 /* Define to 1 if the linear solver loader should be compiled to allow dynamic
    loading of shared libraries with linear solvers */
 /* #undef HAVE_LINEARSOLVERLOADER */
@@ -69,23 +75,23 @@
 /* Define to 1 if MA27 is available */
 #define HAVE_MA27 1
 
+/* Define to 1 if MA28 is available */
+/* #undef HAVE_MA28 */
+
 /* Define to 1 if MA57 is available */
 /* #undef HAVE_MA57 */
 
 /* Define to 1 if MC19 is available */
 #define HAVE_MC19 1
 
-/* Define to 1 if MUMPS is available */
-/* #undef HAVE_MUMPS */
-
 /* Define to 1 if Pardiso is available */
 /* #undef HAVE_PARDISO */
 
+/* Define to 1 if you are using at least a 4.0 version of Pardiso */
+#define HAVE_PARDISO_NEWINTERFACE 1
+
 /* Define to 1 if you are using the parallel version of Pardiso */
 /* #undef HAVE_PARDISO_PARALLEL */
-
-/* Define to 1 if TAUCS is available */
-/* #undef HAVE_TAUCS */
 
 /* Define to 1 if WSMP is available */
 /* #undef HAVE_WSMP */
