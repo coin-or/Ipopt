@@ -50,13 +50,24 @@ extern "C"
   void F77_FUNC(pardisoinit,PARDISOINIT)(void* PT, const ipfint* MTYPE,
                                          ipfint* IPARM);
 #else
-  void F77_FUNC(pardisoinit,PARDISOINIT)(void* PT, const ipfint* MTYPE,
+  // The following is a fix to allow linking with Pardiso library under Windows
+# ifdef _MSC_VER
+  void PARDISOINIT
+# else
+  void F77_FUNC(pardisoinit,PARDISOINIT)
+# endif
+                                        (void* PT, const ipfint* MTYPE,
                                          const ipfint* SOLVER,
                                          ipfint* IPARM,
                                          double* DPARM,
                                          ipfint* ERROR);
 #endif
-  void F77_FUNC(pardiso,PARDISO)(void** PT, const ipfint* MAXFCT,
+# ifdef _MSC_VER
+  void PARDISO
+# else
+  void F77_FUNC(pardiso,PARDISO)
+# endif
+                                (void** PT, const ipfint* MAXFCT,
                                  const ipfint* MNUM, const ipfint* MTYPE,
                                  const ipfint* PHASE, const ipfint* N,
                                  const double* A, const ipfint* IA,
