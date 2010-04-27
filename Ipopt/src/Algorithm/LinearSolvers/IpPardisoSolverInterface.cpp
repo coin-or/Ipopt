@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2009 International Business Machines and others.
+// Copyright (C) 2005, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -43,38 +43,36 @@
 # endif
 #endif
 
-/** Prototypes for Pardiso's subroutines */
+// determine the correct name of the Pardiso function
+#ifdef _MSC_VER
+# define PARDISOINIT_FUNC PARDISOINIT
+# define PARDISO_FUNC PARDISO
+#else
+# define PARDISOINIT_FUNC F77_FUNC(pardisoinit,PARDISOINIT)
+# define PARDISO_FUNC F77_FUNC(pardiso,PARDISO)
+#endif
+
+/* Prototypes for Pardiso's subroutines */
 extern "C"
 {
 #ifndef HAVE_PARDISO_NEWINTERFACE
-  void F77_FUNC(pardisoinit,PARDISOINIT)(void* PT, const ipfint* MTYPE,
-                                         ipfint* IPARM);
+  void PARDISOINIT_FUNC(void* PT, const ipfint* MTYPE, ipfint* IPARM);
 #else
   // The following is a fix to allow linking with Pardiso library under Windows
-# ifdef _MSC_VER
-  void PARDISOINIT
-# else
-  void F77_FUNC(pardisoinit,PARDISOINIT)
-# endif
-                                        (void* PT, const ipfint* MTYPE,
-                                         const ipfint* SOLVER,
-                                         ipfint* IPARM,
-                                         double* DPARM,
-                                         ipfint* ERROR);
+  void PARDISOINIT_FUNC(void* PT, const ipfint* MTYPE,
+                        const ipfint* SOLVER,
+                        ipfint* IPARM,
+                        double* DPARM,
+                        ipfint* ERROR);
 #endif
-# ifdef _MSC_VER
-  void PARDISO
-# else
-  void F77_FUNC(pardiso,PARDISO)
-# endif
-                                (void** PT, const ipfint* MAXFCT,
-                                 const ipfint* MNUM, const ipfint* MTYPE,
-                                 const ipfint* PHASE, const ipfint* N,
-                                 const double* A, const ipfint* IA,
-                                 const ipfint* JA, const ipfint* PERM,
-                                 const ipfint* NRHS, ipfint* IPARM,
-                                 const ipfint* MSGLVL, double* B, double* X,
-                                 ipfint* ERROR, double* DPARM);
+  void PARDISO_FUNC(void** PT, const ipfint* MAXFCT,
+                    const ipfint* MNUM, const ipfint* MTYPE,
+                    const ipfint* PHASE, const ipfint* N,
+                    const double* A, const ipfint* IA,
+                    const ipfint* JA, const ipfint* PERM,
+                    const ipfint* NRHS, ipfint* IPARM,
+                    const ipfint* MSGLVL, double* B, double* X,
+                    ipfint* ERROR, double* DPARM);
 }
 
 namespace Ipopt
@@ -115,9 +113,9 @@ namespace Ipopt
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
-                                &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
-                                &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
+      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
+                   &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
+                   &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR==0);
     }
 
@@ -286,9 +284,9 @@ namespace Ipopt
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
-                                &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
-                                &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
+      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
+                   &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
+                   &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR==0);
     }
 
@@ -307,9 +305,9 @@ namespace Ipopt
     ipfint ERROR = 0;
     ipfint SOLVER = 0; // initialze only direct solver
 
-    F77_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
+    PARDISOINIT_FUNC(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
 #else
-    F77_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, IPARM_);
+    PARDISOINIT_FUNC(PT_, &MTYPE_, IPARM_);
 #endif
 
     // Set some parameters for Pardiso
@@ -568,10 +566,10 @@ namespace Ipopt
         PHASE = 11;
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Calling Pardiso for symbolic factorization.\n");
-        F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                                  &PHASE, &N, a_, ia, ja, &PERM,
-                                  &NRHS, IPARM_, &MSGLVL_, &B, &X,
-                                  &ERROR, DPARM_);
+        PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                     &PHASE, &N, a_, ia, ja, &PERM,
+                     &NRHS, IPARM_, &MSGLVL_, &B, &X,
+                     &ERROR, DPARM_);
         if (HaveIpData()) {
           IpData().TimingStats().LinearSystemSymbolicFactorization().End();
         }
@@ -615,10 +613,10 @@ namespace Ipopt
         debug_last_iter_ = 0;
       }
 
-      F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                                &PHASE, &N, a_, ia, ja, &PERM,
-                                &NRHS, IPARM_, &MSGLVL_, &B, &X,
-                                &ERROR, DPARM_);
+      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                   &PHASE, &N, a_, ia, ja, &PERM,
+                   &NRHS, IPARM_, &MSGLVL_, &B, &X,
+                   &ERROR, DPARM_);
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().End();
       }
@@ -736,10 +734,10 @@ namespace Ipopt
       for (int i = 0; i < N; i++) {
         rhs_vals[i] = ORIG_RHS[i];
       }
-      F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                                &PHASE, &N, a_, ia, ja, &PERM,
-                                &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                                &ERROR, DPARM_);
+      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                   &PHASE, &N, a_, ia, ja, &PERM,
+                   &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+                   &ERROR, DPARM_);
 
       if (ERROR <= -100 && ERROR >= -102) {
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
