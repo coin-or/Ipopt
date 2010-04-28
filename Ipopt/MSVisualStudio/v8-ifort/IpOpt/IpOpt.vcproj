@@ -23,6 +23,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets=".\IntelPaths.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -65,7 +66,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\$(ProjectName)38.dll"
-				AdditionalLibraryDirectories="C:\Program Files\Intel\Compiler\11.1\046\lib\ia32"
+				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
@@ -100,6 +101,7 @@
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets=".\IntelPaths.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -143,7 +145,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\$(ProjectName)38.dll"
-				AdditionalLibraryDirectories="C:\Program Files\Intel\Compiler\11.1\046\lib\intel64"
+				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\intel64&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
@@ -178,6 +180,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets=".\IntelPaths.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -219,7 +222,7 @@
 				Name="VCLinkerTool"
 				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName)38.dll"
-				AdditionalLibraryDirectories="C:\Program Files\Intel\Compiler\11.1\046\lib\ia32"
+				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32&quot;"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -253,6 +256,7 @@
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets=".\IntelPaths.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -295,7 +299,7 @@
 				Name="VCLinkerTool"
 				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName)38.dll"
-				AdditionalLibraryDirectories="C:\Program Files\Intel\Compiler\11.1\046\lib\intel64"
+				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\intel64&quot;"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -414,6 +418,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\Ipopt\src\Algorithm\IpLowRankAugSystemSolver.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\Algorithm\IpLowRankSSAugSystemSolver.cpp"
 					>
 				</File>
 				<File
@@ -1052,6 +1060,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\Algorithm\LinearSolvers\IpSlackBasedTSymScalingMethod.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\..\Ipopt\src\Algorithm\LinearSolvers\IpTripletToCSRConverter.cpp"
 						>
 					</File>
@@ -1182,6 +1194,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\Ipopt\src\LinAlg\IpDiagMatrix.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\LinAlg\IpExpandedMultiVectorMatrix.cpp"
 					>
 				</File>
 				<File

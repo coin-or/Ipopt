@@ -51,8 +51,10 @@
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dgetf2.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dgetrf.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dgetrs.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\disnan.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlae2.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaev2.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaisnan.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\INSTALL\dlamch.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlanst.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlansy.f"/>
@@ -83,6 +85,8 @@
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsytd2.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsytrd.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\ieeeck.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\iladlc.f"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\iladlr.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\ilaenv.f"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\iparmq.f"/></Filter></Files>
 	<Globals/></VisualStudioProject>

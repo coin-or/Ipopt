@@ -66,5 +66,6 @@
 		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\dmumps_struc_def.F"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\mumps_ooc_common.F"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\mumps_part9.F"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\mumps_static_mapping.F"/></Filter></Filter></Files>
+		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\mumps_static_mapping.F"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\tools_common_mod.F"/></Filter></Filter></Files>
 	<Globals/></VisualStudioProject>

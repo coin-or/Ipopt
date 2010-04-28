@@ -15,6 +15,7 @@ Ipopt/MSVisualStudio/v8-ifort/CoinMumpsC/CoinMumpsC.icproj -text
 Ipopt/MSVisualStudio/v8-ifort/CoinMumpsC/CoinMumpsC.vcproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt-ifort.sln -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/ExportBinaries.bat -text
+Ipopt/MSVisualStudio/v8-ifort/IpOpt/IntelPaths.vsprops -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.icproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.rc -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.vcproj -text
