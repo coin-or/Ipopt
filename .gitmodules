@@ -25,4 +25,4 @@
 [submodule "ThirdParty/Mumps"]
 	path = ThirdParty/Mumps
 	url = git://github.com/coin-or-tools/ThirdParty-Mumps.git
-	branch = stable/1.1
+	branch = master
