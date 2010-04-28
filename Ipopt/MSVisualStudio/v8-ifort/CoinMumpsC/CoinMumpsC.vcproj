@@ -308,6 +308,10 @@
 					RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\mumps_orderings.c"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\..\thirdparty\mumps\mumps\src\mumps_size.c"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="libseq"
