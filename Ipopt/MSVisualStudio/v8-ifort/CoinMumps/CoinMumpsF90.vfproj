@@ -5,7 +5,7 @@
 		<Platform Name="x64"/></Platforms>
 	<Configurations>
 		<Configuration Name="Debug|Win32" ConfigurationType="typeStaticLibrary">
-				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Preprocess="preprocessYes" AdditionalIncludeDirectories="../../../../../IpOpt/ThirdParty/Mumps/MUMPS/src;../../../../../IpOpt/ThirdParty/Mumps/MUMPS/libseq;../../../../../IpOpt/ThirdParty/Mumps/MUMPS/include;.;$(IntDir)" DefaultIncAndUsePath="defaultIncludeCurrent" PreprocessorDefinitions="metis" Interfaces="true" ModulePath="$(IntDir)" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Preprocess="preprocessYes" AdditionalIncludeDirectories="../../../../ThirdParty/Mumps/MUMPS/src;../../../../ThirdParty/Mumps/MUMPS/libseq;../../../../ThirdParty/Mumps/MUMPS/include;.;$(IntDir)" DefaultIncAndUsePath="defaultIncludeCurrent" PreprocessorDefinitions="metis" Interfaces="true" ModulePath="$(IntDir)" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
 				<Tool Name="VFLibrarianTool"/>
 				<Tool Name="VFResourceCompilerTool"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
