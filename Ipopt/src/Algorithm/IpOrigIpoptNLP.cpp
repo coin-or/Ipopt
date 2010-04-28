@@ -1020,6 +1020,18 @@ namespace Ipopt
            h_eval_time_.TotalWallclockTime();
   }
 
+  void
+  OrigIpoptNLP::ResetTimes()
+  {
+    f_eval_time_.Reset();
+    grad_f_eval_time_.Reset();
+    c_eval_time_.Reset();
+    d_eval_time_.Reset();
+    jac_c_eval_time_.Reset();
+    jac_d_eval_time_.Reset();
+    h_eval_time_.Reset();
+  }
+
   SmartPtr<const Vector>
   OrigIpoptNLP::get_unscaled_x(const Vector& x)
   {

@@ -749,9 +749,6 @@ namespace Ipopt
     }
 
     statistics_ = NULL; /* delete old statistics */
-    // Reset Timing statistics
-    ip_data_->TimingStats().ResetTimes();
-
     // Get the pointers to the real objects (need to do it that
     // awkwardly since otherwise we would have to include so many
     // things in IpoptApplication, which a user would have to
@@ -764,6 +761,10 @@ namespace Ipopt
     DBG_ASSERT(dynamic_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_)));
     IpoptCalculatedQuantities* p2ip_cq = static_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_));
     DBG_ASSERT(dynamic_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_)));
+
+    // Reset Timing statistics
+    ip_data_->TimingStats().ResetTimes();
+    p2ip_nlp->ResetTimes();
 
     ApplicationReturnStatus retValue = Internal_Error;
     SolverReturn status = INTERNAL_ERROR;
