@@ -299,6 +299,30 @@ namespace Ipopt
       "yes", "Scale the linear system matrix",
       "This option controls the internal scaling option of MA57."
       "This is ICNTL(15) in MA57.");
+
+    // CET: 04-29-2010
+    roptions->AddLowerBoundedIntegerOption(
+      "ma57_block_size",
+      "Controls block size used by Level 3 BLAS in MA57BD",
+      1, 16,
+      "This is ICNTL(11) in MA57.");
+
+    roptions->AddLowerBoundedIntegerOption(
+      "ma57_node_amalgamation",
+      "Node amalgamation parameter",
+      1, 16,
+      "This is ICNTL(12) in MA57.");
+
+    roptions->AddBoundedIntegerOption(
+      "ma57_small_pivot_flag",
+      "If set to 1, then when small entries defined by CNTL(2) are detected "
+      "they are removed and the corresponding pivots placed at the end of the "
+      "factorization.  This can be particularly efficient if the matrix is "
+      "highly rank deficient.",
+      0, 1, 0,
+      "This is ICNTL(16) in MA57.");
+    // CET 04-29-2010
+
   }
 
   bool Ma57TSolverInterface::InitializeImpl(const OptionsList&  options,
@@ -327,6 +351,18 @@ namespace Ipopt
     bool ma57_automatic_scaling;
     options.GetBoolValue("ma57_automatic_scaling", ma57_automatic_scaling, prefix);
 
+    // CET 04-29-2010
+    Index ma57_block_size;
+    options.GetIntegerValue("ma57_block_size", ma57_block_size, prefix);
+
+    Index ma57_node_amalgamation;
+    options.GetIntegerValue("ma57_node_amalgamation", ma57_node_amalgamation, prefix);
+
+    Index ma57_small_pivot_flag;
+    options.GetIntegerValue("ma57_small_pivot_flag", ma57_small_pivot_flag, prefix);
+    // CET 04-29-2010
+
+
     /* Initialize. */
     F77_FUNC (ma57id, MA57ID) (wd_cntl_, wd_icntl_);
 
@@ -342,12 +378,24 @@ namespace Ipopt
     wd_cntl_[1-1]  = pivtol_;    /* Pivot threshold. */
     wd_icntl_[7-1] = 1;      /* Pivoting strategy. */
 
+    // CET: Added 04-29-2010 at suggestion of Jonathan Hogg of HSL
+    wd_icntl_[11-1] = ma57_block_size;   /* Block size used by Level 3 BLAS in MA57BD - should be a multiple of 8.  Default is 16. */
+    wd_icntl_[12-1] = ma57_node_amalgamation; /* Two nodes of the assembly tree are merged only if both involve less than ICNTL(12) eliminations.  Default is 16. */
+    // CET: 04-29-2010
+
+
     if (ma57_automatic_scaling) {
       wd_icntl_[15-1] = 1;
     }
     else {
       wd_icntl_[15-1] = 0;
     }
+
+
+    // CET: Added 04-29-2010 at suggestion of Jonathan Hogg of HSL
+    wd_icntl_[16-1] = ma57_small_pivot_flag;    /* If set to 1, small entries are removed and corresponding pivots are placed at the end of factorization.  May be useful for highly rank deficient matrices.  Default is 0. */
+    // CET: 04-29-2010
+
 
     // wd_icntl[8-1] = 0;       /* Retry factorization. */
 
