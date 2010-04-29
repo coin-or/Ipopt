@@ -391,6 +391,9 @@ namespace Ipopt
           options_to_print.push_back("ma57_pre_alloc");
           options_to_print.push_back("ma57_pivot_order");
           options_to_print.push_back("ma57_automatic_scaling");
+          options_to_print.push_back("ma57_block_size");
+          options_to_print.push_back("ma57_node_amalgamation");
+          options_to_print.push_back("ma57_small_pivot_flag");
 #endif
 
 #if defined(HAVE_MA77) || defined(HAVE_LINEARSOLVERLOADER)
