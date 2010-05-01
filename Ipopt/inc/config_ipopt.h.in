@@ -6,13 +6,13 @@
 /* Define to 1 if the ASL module is available */
 #undef COIN_HAS_ASL
 
-/* Define to 1 if the Blas module is available */
+/* If defined, the BLAS Library is available. */
 #undef COIN_HAS_BLAS
 
 /* Define to 1 if the HSL module is available */
 #undef COIN_HAS_HSL
 
-/* Define to 1 if the Lapack module is available */
+/* If defined, the LAPACK Library is available. */
 #undef COIN_HAS_LAPACK
 
 /* Define to 1 if the Mumps module is available */

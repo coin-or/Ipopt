@@ -104,15 +104,10 @@ AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
 #                              COIN components                              #
 #############################################################################
 
-AC_COIN_HAS_MODULE(ASL,          [coinasl],                      [required=0])
-AC_COIN_HAS_MODULE_FALLBACK(ASL, [coinasl], [../ThirdParty/ASL], [required=0])
-
 AC_COIN_HAS_MODULE_BLAS
 AC_COIN_HAS_MODULE_LAPACK
-
-AC_COIN_HAS_MODULE(HSL,          [coinhsl])
-AC_COIN_HAS_MODULE_FALLBACK(HSL, [coinhsl], [../ThirdParty/HSL])
-
+AC_COIN_HAS_MODULE(ASL,   [coinasl], [required=0], [../ThirdParty/ASL])
+AC_COIN_HAS_MODULE(HSL,   [coinhsl], [],           [../ThirdParty/HSL])
 AC_COIN_HAS_MODULE(Mumps, [coinmumps])
 if test $coin_has_mumps != yes ; then
   AC_COIN_HAS_MODULE_FALLBACK(Mumps, [coinmumps], [../ThirdParty/Mumps])
@@ -774,7 +769,6 @@ AC_CONFIG_FILES([Makefile
 		 src/LinAlg/TMatrices/Makefile 
 		 src/Interfaces/Makefile
 		 src/Interfaces/ipopt_addlibs_f.txt
-		 src/Interfaces/ipopt_addlibs_cpp.txt
 		 src/Algorithm/Makefile
 		 src/Algorithm/LinearSolvers/Makefile
 		 src/Algorithm/Inexact/Makefile

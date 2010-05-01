@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG ASL_LIBS ASL_CFLAGS ASL_DATA REQUIREDPACKAGES COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE BLAS_LIBS BLAS_CFLAGS BLAS_DATA COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MA77_TRUE HAVE_MA77_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH BLAS_LIBS BLAS_CFLAGS BLAS_DATA REQUIREDPACKAGES COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS ipoptlib IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MA77_TRUE HAVE_MA77_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1144,13 +1144,10 @@ Optional Packages:
                           both]
   --with-tags[=TAGS]
                           include additional configurations [automatic]
-  --with-asl-lib linker flags for using module ASL
-  --with-asl-incdir directory with header files for using module ASL
-  --with-asl-datadir directory with data files for using module ASL
-  --with-coin-instdir     prefix of installation directory for precompiled
-                          COIN packages
   --with-blas             specify BLAS library (or BUILD for compilation)
 
+  --with-coin-instdir     prefix of installation directory for precompiled
+                          COIN packages
   --with-blas-lib linker flags for using module Blas
   --with-blas-incdir directory with header files for using module Blas
   --with-blas-datadir directory with data files for using module Blas
@@ -1158,6 +1155,9 @@ Optional Packages:
   --with-lapack-lib linker flags for using module Lapack
   --with-lapack-incdir directory with header files for using module Lapack
   --with-lapack-datadir directory with data files for using module Lapack
+  --with-asl-lib linker flags for using module ASL
+  --with-asl-incdir directory with header files for using module ASL
+  --with-asl-datadir directory with data files for using module ASL
   --with-hsl-lib linker flags for using module HSL
   --with-hsl-incdir directory with header files for using module HSL
   --with-hsl-datadir directory with data files for using module HSL
@@ -22413,259 +22413,58 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-echo "$as_me:$LINENO: checking for COIN-OR module ASL" >&5
-echo $ECHO_N "checking for COIN-OR module ASL... $ECHO_C" >&6
 
-coin_has_asl=notGiven
-
-# check if user wants to skip module in any case
-if test x"$COIN_SKIP_PROJECTS" != x; then
-  for dir in $COIN_SKIP_PROJECTS; do
-    if test $dir = "ASL"; then
-      coin_has_asl=skipping
-    fi
-  done
+if test -n "$PKG_CONFIG"; then
+  COIN_HAS_PKGCONFIG_TRUE=
+  COIN_HAS_PKGCONFIG_FALSE='#'
+else
+  COIN_HAS_PKGCONFIG_TRUE='#'
+  COIN_HAS_PKGCONFIG_FALSE=
 fi
 
-ASL_LIBS=
-ASL_CFLAGS=
-ASL_DATA=
 
 
+# assemble search path for pkg-config, if we are in a project setup
+if test x$coin_projectdir = xyes ; then
+  COIN_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
 
-
-
-#check if user provided LIBS, CFLAGS, and DATA for module
-if test $coin_has_asl != skipping; then
-
-
-# Check whether --with-m4_tolower(ASL)-lib or --without-m4_tolower(ASL)-lib was given.
-if test "${with_asl_lib+set}" = set; then
-  withval="$with_asl_lib"
-  coin_has_asl=yes
-       ASL_LIBS="$withval"
-
-
-fi;
-
-
-# Check whether --with-m4_tolower(ASL)-incdir or --without-m4_tolower(ASL)-incdir was given.
-if test "${with_asl_incdir+set}" = set; then
-  withval="$with_asl_incdir"
-  coin_has_asl=yes
-     ASL_CFLAGS="-I`${CYGPATH_W} $withval`"
-fi;
-
-
-# Check whether --with-m4_tolower(ASL)-datadir or --without-m4_tolower(ASL)-datadir was given.
-if test "${with_asl_datadir+set}" = set; then
-  withval="$with_asl_datadir"
-  coin_has_asl=yes
-     ASL_DATA="$withval"
-fi;
-fi
-
-if test $coin_has_asl = notGiven; then
-  if test -n "$PKG_CONFIG" ; then
-    # assemble search path for pkg-config
-    coin_save_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
-
-    # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
-    # best would actually to use ${libdir}, since .pc files get installed into ${libdir}/pkgconfig,
-    # unfortunately, ${libdir} expands to ${exec_prefix}/lib and ${exec_prefix} to ${prefix}...
-    if test -d "${prefix}"; then
-      PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:$PKG_CONFIG_PATH"
-    fi
+  # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
+  # best would actually to use ${libdir}, since .pc files get installed into ${libdir}/pkgconfig,
+  # unfortunately, ${libdir} expands to ${exec_prefix}/lib and ${exec_prefix} to ${prefix}...
+  if test -d "${prefix}"; then
+    COIN_PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
+  fi
 
 
 # Check whether --with-coin-instdir or --without-coin-instdir was given.
 if test "${with_coin_instdir+set}" = set; then
   withval="$with_coin_instdir"
   if test -d "$withval"; then : ; else
-         { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
+       { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
-       fi
-       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
+     fi
+     COIN_PKG_CONFIG_PATH="$withval/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
 
 fi;
 
-    # in a classic setup, we want to find uninstalled projects
-    # their (relative) location is written to coin_subdirs.txt by the configure in the project base directory
-    # unfortunately, if the user set prefix, then we do not know where the project base directory is located
-    # but it is likely to be either .. (if we are a usual coin project) or ../.. (if we are a unusual coin project like ThirdParty or Data)
-    if test -e ../coin_subdirs.txt ; then
-      for i in `cat ../coin_subdirs.txt` ; do
-        PKG_CONFIG_PATH="../$i:$PKG_CONFIG_PATH"
-      done
-    fi
-
-    if test -e ../../coin_subdirs.txt ; then
-      for i in `cat ../../coin_subdirs.txt` ; do
-        PKG_CONFIG_PATH="../../$i:$PKG_CONFIG_PATH"
-      done
-    fi
-
-    # let pkg-config do it's magic
-    # need to export variable to be sure that the following pkg-config gets these values
-    export PKG_CONFIG_PATH
-
-
-
-if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "coinasl"; then
-    ASL_VERSIONS="`$PKG_CONFIG --modversion coinasl 2>/dev/null`"
-     cflags=`$PKG_CONFIG --cflags "coinasl" 2>/dev/null`
-    # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
-	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
-	# but only do this if is not trivial
-    if test "$CYGPATH_W" != "echo" ; then
-      # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
-	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
-	fi
-    ASL_CFLAGS="$cflags"
-    ASL_LIBS=`$PKG_CONFIG --libs "coinasl" 2>/dev/null`
-    ASL_DATA=`$PKG_CONFIG --variable=datadir "coinasl" 2>/dev/null`
-     coin_has_asl=yes
-        echo "$as_me:$LINENO: result: yes: $ASL_VERSIONS" >&5
-echo "${ECHO_T}yes: $ASL_VERSIONS" >&6
-
-
-
-  else
-    ASL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors coinasl`
-      coin_has_asl=notGiven
-        echo "$as_me:$LINENO: result: not given: $ASL_PKG_ERRORS" >&5
-echo "${ECHO_T}not given: $ASL_PKG_ERRORS" >&6
-
-  fi
-else
-  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module ASL without pkg-config\"" >&5
-echo "$as_me: error: \"Cannot check for existance of module ASL without pkg-config\"" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-
-
-
-    PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
-  else
-    echo "$as_me:$LINENO: result: skipped check via pkg-config" >&5
-echo "${ECHO_T}skipped check via pkg-config" >&6
+  # in a classic setup, we want to find uninstalled projects
+  # their (relative) location is written to coin_subdirs.txt by the configure in the project base directory
+  # unfortunately, if the user set prefix, then we do not know where the project base directory is located
+  # but it is likely to be either .. (if we are a usual coin project) or ../.. (if we are a unusual coin project like ThirdParty or Data)
+  if test -e ../coin_subdirs.txt ; then
+    for i in `cat ../coin_subdirs.txt` ; do
+      COIN_PKG_CONFIG_PATH="`cd ../$i; pwd`:${COIN_PKG_CONFIG_PATH}"
+    done
   fi
 
-else
-  echo "$as_me:$LINENO: result: $coin_has_asl" >&5
-echo "${ECHO_T}$coin_has_asl" >&6
-fi
-
-if test $coin_has_asl != skipping &&
-   test $coin_has_asl != notGiven ; then
-  if test 0 = 1 ; then  #change this test to enable a bit of debugging output
-  if test -n "$ASL_CFLAGS" ; then
-    { echo "$as_me:$LINENO: ASL CFLAGS are $ASL_CFLAGS" >&5
-echo "$as_me: ASL CFLAGS are $ASL_CFLAGS" >&6;}
-  fi
-  if test -n "$ASL_LIBS" ; then
-    { echo "$as_me:$LINENO: ASL LIBS   are $ASL_LIBS" >&5
-echo "$as_me: ASL LIBS   are $ASL_LIBS" >&6;}
-  fi
-  if test -n "$ASL_DATA" ; then
-    { echo "$as_me:$LINENO: ASL DATA   is  $ASL_DATA" >&5
-echo "$as_me: ASL DATA   is  $ASL_DATA" >&6;}
-  fi
+  if test -e ../../coin_subdirs.txt ; then
+    for i in `cat ../../coin_subdirs.txt` ; do
+      COIN_PKG_CONFIG_PATH="`cd ../../$i; pwd`:${COIN_PKG_CONFIG_PATH}"
+    done
   fi
 
-cat >>confdefs.h <<\_ACEOF
-#define COIN_HAS_ASL 1
-_ACEOF
 
-fi
-
-# Define the Makefile conditional
-
-
-if test $coin_has_asl != notGiven &&
-                test $coin_has_asl != skipping; then
-  COIN_HAS_ASL_TRUE=
-  COIN_HAS_ASL_FALSE='#'
-else
-  COIN_HAS_ASL_TRUE='#'
-  COIN_HAS_ASL_FALSE=
-fi
-
-
-
-
-if test x$coin_has_asl != "xyes" ; then
-echo "$as_me:$LINENO: checking for COIN-OR module ASL (fallback)" >&5
-echo $ECHO_N "checking for COIN-OR module ASL (fallback)... $ECHO_C" >&6
-
-coin_has_asl=notGiven
-
-# check if user wants to skip module in any case
-if test x"$COIN_SKIP_PROJECTS" != x; then
-  for dir in $COIN_SKIP_PROJECTS; do
-    if test $dir = "ASL"; then
-      coin_has_asl=skipping
-    fi
-  done
-fi
-
-ASL_LIBS=
-ASL_CFLAGS=
-ASL_DATA=
-
-
-if test $coin_has_asl != "skipping" ; then
-  # if the project is available and configured, then a project-uninstalled.pc file should have been created
-  if test -r ../ThirdParty/ASL/coinasl-uninstalled.pc ; then
-    # read CFLAGS and LIBS from coinasl-uninstalled.pc file
-    # add CYGPATH_W cludge into include flags
-    # replace -L${libdir} by absolute path to build directory in linker flags
-    # we assume that the build directory is ../ThirdParty/ASL/src if this directory exists, otherwise we assume that it is ../ThirdParty/ASL
-    ASL_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/ASL/coinasl-uninstalled.pc`
-    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/ASL/coinasl-uninstalled.pc`
-    if test "x$projectlibs" != x ; then
-      if test -d ../ThirdParty/ASL/src ; then
-        ASL_LIBS="-L`cd ../ThirdParty/ASL/src; pwd` $projectlibs"
-      else
-        ASL_LIBS="-L`cd ../ThirdParty/ASL; pwd` $projectlibs"
-      fi
-    else
-      ASL_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/ASL/coinasl-uninstalled.pc`
-    fi
-    ASL_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/ASL/coinasl-uninstalled.pc`
-
-
-
-
-cat >>confdefs.h <<\_ACEOF
-#define COIN_HAS_ASL 1
-_ACEOF
-
-
-
-    coin_has_asl=yes
-  fi
-fi
-
-#if user did not disable setting of makefile conditional, do it
-
-
-if test $coin_has_asl != notGiven &&
-                test $coin_has_asl != skipping; then
-  COIN_HAS_ASL_TRUE=
-  COIN_HAS_ASL_FALSE='#'
-else
-  COIN_HAS_ASL_TRUE='#'
-  COIN_HAS_ASL_FALSE=
-fi
-
-
-
-echo "$as_me:$LINENO: result: $coin_has_asl" >&5
-echo "${ECHO_T}$coin_has_asl" >&6
 fi
 
 
@@ -24645,6 +24444,11 @@ esac
 fi
 
 if test "x$use_blas" = xBUILD ; then
+  if test -d ../ThirdParty/Blas ; then
+    blasdir=../ThirdParty/Blas
+  else
+    blasdir=../Blas
+  fi
 
 echo "$as_me:$LINENO: checking for COIN-OR module Blas" >&5
 echo $ECHO_N "checking for COIN-OR module Blas... $ECHO_C" >&6
@@ -24700,48 +24504,13 @@ fi
 
 if test $coin_has_blas = notGiven; then
   if test -n "$PKG_CONFIG" ; then
-    # assemble search path for pkg-config
+    # set search path for pkg-config
+    # need to export variable to be sure that the following pkg-config gets these values
     coin_save_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
-
-    # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
-    # best would actually to use ${libdir}, since .pc files get installed into ${libdir}/pkgconfig,
-    # unfortunately, ${libdir} expands to ${exec_prefix}/lib and ${exec_prefix} to ${prefix}...
-    if test -d "${prefix}"; then
-      PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:$PKG_CONFIG_PATH"
-    fi
-
-
-# Check whether --with-coin-instdir or --without-coin-instdir was given.
-if test "${with_coin_instdir+set}" = set; then
-  withval="$with_coin_instdir"
-  if test -d "$withval"; then : ; else
-         { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
-echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
-   { (exit 1); exit 1; }; }
-       fi
-       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
-
-fi;
-
-    # in a classic setup, we want to find uninstalled projects
-    # their (relative) location is written to coin_subdirs.txt by the configure in the project base directory
-    # unfortunately, if the user set prefix, then we do not know where the project base directory is located
-    # but it is likely to be either .. (if we are a usual coin project) or ../.. (if we are a unusual coin project like ThirdParty or Data)
-    if test -e ../coin_subdirs.txt ; then
-      for i in `cat ../coin_subdirs.txt` ; do
-        PKG_CONFIG_PATH="../$i:$PKG_CONFIG_PATH"
-      done
-    fi
-
-    if test -e ../../coin_subdirs.txt ; then
-      for i in `cat ../../coin_subdirs.txt` ; do
-        PKG_CONFIG_PATH="../../$i:$PKG_CONFIG_PATH"
-      done
-    fi
+    PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH"
+    export PKG_CONFIG_PATH
 
     # let pkg-config do it's magic
-    # need to export variable to be sure that the following pkg-config gets these values
-    export PKG_CONFIG_PATH
 
 
 
@@ -24781,10 +24550,90 @@ fi
 
 
 
+    # reset PKG_CONFIG_PATH variable
     PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
   else
-    echo "$as_me:$LINENO: result: skipped check via pkg-config" >&5
-echo "${ECHO_T}skipped check via pkg-config" >&6
+    #if 4th argument is given, try fallback - whereby we take the first word from coinblas as basename for the .pc file
+
+if test x$coin_has_blas != "xyes" ; then
+
+
+
+coin_has_blas=notGiven
+
+# check if user wants to skip module in any case
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "Blas"; then
+      coin_has_blas=skipping
+    fi
+  done
+fi
+
+BLAS_LIBS=
+BLAS_CFLAGS=
+BLAS_DATA=
+
+
+if test $coin_has_blas != "skipping" ; then
+  # if the project is available and configured, then a project-uninstalled.pc file should have been created
+  if test -r $blasdir/coinblas-uninstalled.pc ; then
+    # read CFLAGS and LIBS from m4_bpatsubst(coinblas, [ .*], [])-uninstalled.pc file
+    # add CYGPATH_W cludge into include flags
+    # replace -L${libdir} by absolute path to build directory in linker flags
+    # we assume that the build directory is $blasdir/src if this directory exists, otherwise we assume that it is $blasdir
+    BLAS_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' $blasdir/coinblas-uninstalled.pc`
+    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' $blasdir/coinblas-uninstalled.pc`
+    if test "x$projectlibs" != x ; then
+      if test -d $blasdir/src ; then
+        BLAS_LIBS="-L`cd $blasdir/src; pwd` $projectlibs"
+      else
+        BLAS_LIBS="-L`cd $blasdir; pwd` $projectlibs"
+      fi
+    else
+      BLAS_LIBS=`sed -n -e 's/Libs://p' $blasdir/coinblas-uninstalled.pc`
+    fi
+    BLAS_DATA=`sed -n -e 's/datadir=//gp' $blasdir/coinblas-uninstalled.pc`
+
+    ADDLIBS="$ADDLIBS $BLAS_LIBS"
+       REQUIREDPACKAGES="$REQUIREDPACKAGES coinblas"
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_BLAS 1
+_ACEOF
+
+
+
+    coin_has_blas=yes
+    echo "$as_me:$LINENO: result: $blasdir" >&5
+echo "${ECHO_T}$blasdir" >&6
+  else
+    echo "$as_me:$LINENO: result: $coin_has_blas" >&5
+echo "${ECHO_T}$coin_has_blas" >&6
+  fi
+else
+  echo "$as_me:$LINENO: result: skipping" >&5
+echo "${ECHO_T}skipping" >&6
+fi
+
+#if user did not disable setting of makefile conditional, do it
+
+
+if test $coin_has_blas != notGiven &&
+                test $coin_has_blas != skipping; then
+  COIN_HAS_BLAS_TRUE=
+  COIN_HAS_BLAS_FALSE='#'
+else
+  COIN_HAS_BLAS_TRUE='#'
+  COIN_HAS_BLAS_FALSE=
+fi
+
+
+fi
+
+
   fi
 
 else
@@ -24867,82 +24716,6 @@ else
 fi
 
 fi
-
-#call fallback in case the previous failed, maybe because pkg-config was not available
-
-if test x$coin_has_blas != "xyes" ; then
-echo "$as_me:$LINENO: checking for COIN-OR module Blas (fallback)" >&5
-echo $ECHO_N "checking for COIN-OR module Blas (fallback)... $ECHO_C" >&6
-
-coin_has_blas=notGiven
-
-# check if user wants to skip module in any case
-if test x"$COIN_SKIP_PROJECTS" != x; then
-  for dir in $COIN_SKIP_PROJECTS; do
-    if test $dir = "Blas"; then
-      coin_has_blas=skipping
-    fi
-  done
-fi
-
-BLAS_LIBS=
-BLAS_CFLAGS=
-BLAS_DATA=
-
-
-if test $coin_has_blas != "skipping" ; then
-  # if the project is available and configured, then a project-uninstalled.pc file should have been created
-  if test -r ../ThirdParty/Blas/coinblas-uninstalled.pc ; then
-    # read CFLAGS and LIBS from coinblas-uninstalled.pc file
-    # add CYGPATH_W cludge into include flags
-    # replace -L${libdir} by absolute path to build directory in linker flags
-    # we assume that the build directory is ../ThirdParty/Blas/src if this directory exists, otherwise we assume that it is ../ThirdParty/Blas
-    BLAS_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/Blas/coinblas-uninstalled.pc`
-    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/Blas/coinblas-uninstalled.pc`
-    if test "x$projectlibs" != x ; then
-      if test -d ../ThirdParty/Blas/src ; then
-        BLAS_LIBS="-L`cd ../ThirdParty/Blas/src; pwd` $projectlibs"
-      else
-        BLAS_LIBS="-L`cd ../ThirdParty/Blas; pwd` $projectlibs"
-      fi
-    else
-      BLAS_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/Blas/coinblas-uninstalled.pc`
-    fi
-    BLAS_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Blas/coinblas-uninstalled.pc`
-
-    ADDLIBS="$ADDLIBS $BLAS_LIBS"
-       REQUIREDPACKAGES="$REQUIREDPACKAGES coinblas"
-
-
-
-cat >>confdefs.h <<\_ACEOF
-#define COIN_HAS_BLAS 1
-_ACEOF
-
-
-
-    coin_has_blas=yes
-  fi
-fi
-
-#if user did not disable setting of makefile conditional, do it
-
-
-if test $coin_has_blas != notGiven &&
-                test $coin_has_blas != skipping; then
-  COIN_HAS_BLAS_TRUE=
-  COIN_HAS_BLAS_FALSE='#'
-else
-  COIN_HAS_BLAS_TRUE='#'
-  COIN_HAS_BLAS_FALSE=
-fi
-
-
-
-echo "$as_me:$LINENO: result: $coin_has_blas" >&5
-echo "${ECHO_T}$coin_has_blas" >&6
-fi
-
 
 
 
@@ -26903,6 +26676,11 @@ esac
 fi
 
 if test "x$use_lapack" = xBUILD ; then
+  if test -d ../ThirdParty/Lapack ; then
+    lapackdir=../ThirdParty/Lapack
+  else
+    lapackdir=../Lapack
+  fi
 
 echo "$as_me:$LINENO: checking for COIN-OR module Lapack" >&5
 echo $ECHO_N "checking for COIN-OR module Lapack... $ECHO_C" >&6
@@ -26958,48 +26736,13 @@ fi
 
 if test $coin_has_lapack = notGiven; then
   if test -n "$PKG_CONFIG" ; then
-    # assemble search path for pkg-config
+    # set search path for pkg-config
+    # need to export variable to be sure that the following pkg-config gets these values
     coin_save_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
-
-    # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
-    # best would actually to use ${libdir}, since .pc files get installed into ${libdir}/pkgconfig,
-    # unfortunately, ${libdir} expands to ${exec_prefix}/lib and ${exec_prefix} to ${prefix}...
-    if test -d "${prefix}"; then
-      PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:$PKG_CONFIG_PATH"
-    fi
-
-
-# Check whether --with-coin-instdir or --without-coin-instdir was given.
-if test "${with_coin_instdir+set}" = set; then
-  withval="$with_coin_instdir"
-  if test -d "$withval"; then : ; else
-         { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
-echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
-   { (exit 1); exit 1; }; }
-       fi
-       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
-
-fi;
-
-    # in a classic setup, we want to find uninstalled projects
-    # their (relative) location is written to coin_subdirs.txt by the configure in the project base directory
-    # unfortunately, if the user set prefix, then we do not know where the project base directory is located
-    # but it is likely to be either .. (if we are a usual coin project) or ../.. (if we are a unusual coin project like ThirdParty or Data)
-    if test -e ../coin_subdirs.txt ; then
-      for i in `cat ../coin_subdirs.txt` ; do
-        PKG_CONFIG_PATH="../$i:$PKG_CONFIG_PATH"
-      done
-    fi
-
-    if test -e ../../coin_subdirs.txt ; then
-      for i in `cat ../../coin_subdirs.txt` ; do
-        PKG_CONFIG_PATH="../../$i:$PKG_CONFIG_PATH"
-      done
-    fi
+    PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH"
+    export PKG_CONFIG_PATH
 
     # let pkg-config do it's magic
-    # need to export variable to be sure that the following pkg-config gets these values
-    export PKG_CONFIG_PATH
 
 
 
@@ -27039,10 +26782,90 @@ fi
 
 
 
+    # reset PKG_CONFIG_PATH variable
     PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
   else
-    echo "$as_me:$LINENO: result: skipped check via pkg-config" >&5
-echo "${ECHO_T}skipped check via pkg-config" >&6
+    #if 4th argument is given, try fallback - whereby we take the first word from coinlapack as basename for the .pc file
+
+if test x$coin_has_lapack != "xyes" ; then
+
+
+
+coin_has_lapack=notGiven
+
+# check if user wants to skip module in any case
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "Lapack"; then
+      coin_has_lapack=skipping
+    fi
+  done
+fi
+
+LAPACK_LIBS=
+LAPACK_CFLAGS=
+LAPACK_DATA=
+
+
+if test $coin_has_lapack != "skipping" ; then
+  # if the project is available and configured, then a project-uninstalled.pc file should have been created
+  if test -r $lapackdir/coinlapack-uninstalled.pc ; then
+    # read CFLAGS and LIBS from m4_bpatsubst(coinlapack, [ .*], [])-uninstalled.pc file
+    # add CYGPATH_W cludge into include flags
+    # replace -L${libdir} by absolute path to build directory in linker flags
+    # we assume that the build directory is $lapackdir/src if this directory exists, otherwise we assume that it is $lapackdir
+    LAPACK_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' $lapackdir/coinlapack-uninstalled.pc`
+    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' $lapackdir/coinlapack-uninstalled.pc`
+    if test "x$projectlibs" != x ; then
+      if test -d $lapackdir/src ; then
+        LAPACK_LIBS="-L`cd $lapackdir/src; pwd` $projectlibs"
+      else
+        LAPACK_LIBS="-L`cd $lapackdir; pwd` $projectlibs"
+      fi
+    else
+      LAPACK_LIBS=`sed -n -e 's/Libs://p' $lapackdir/coinlapack-uninstalled.pc`
+    fi
+    LAPACK_DATA=`sed -n -e 's/datadir=//gp' $lapackdir/coinlapack-uninstalled.pc`
+
+    ADDLIBS="$ADDLIBS $LAPACK_LIBS"
+       REQUIREDPACKAGES="$REQUIREDPACKAGES coinlapack"
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_LAPACK 1
+_ACEOF
+
+
+
+    coin_has_lapack=yes
+    echo "$as_me:$LINENO: result: $lapackdir" >&5
+echo "${ECHO_T}$lapackdir" >&6
+  else
+    echo "$as_me:$LINENO: result: $coin_has_lapack" >&5
+echo "${ECHO_T}$coin_has_lapack" >&6
+  fi
+else
+  echo "$as_me:$LINENO: result: skipping" >&5
+echo "${ECHO_T}skipping" >&6
+fi
+
+#if user did not disable setting of makefile conditional, do it
+
+
+if test $coin_has_lapack != notGiven &&
+                test $coin_has_lapack != skipping; then
+  COIN_HAS_LAPACK_TRUE=
+  COIN_HAS_LAPACK_FALSE='#'
+else
+  COIN_HAS_LAPACK_TRUE='#'
+  COIN_HAS_LAPACK_FALSE=
+fi
+
+
+fi
+
+
   fi
 
 else
@@ -27126,81 +26949,231 @@ fi
 
 fi
 
-#call fallback in case the previous failed, maybe because pkg-config was not available
 
-if test x$coin_has_lapack != "xyes" ; then
-echo "$as_me:$LINENO: checking for COIN-OR module Lapack (fallback)" >&5
-echo $ECHO_N "checking for COIN-OR module Lapack (fallback)... $ECHO_C" >&6
 
-coin_has_lapack=notGiven
+echo "$as_me:$LINENO: checking for COIN-OR module ASL" >&5
+echo $ECHO_N "checking for COIN-OR module ASL... $ECHO_C" >&6
+
+coin_has_asl=notGiven
 
 # check if user wants to skip module in any case
 if test x"$COIN_SKIP_PROJECTS" != x; then
   for dir in $COIN_SKIP_PROJECTS; do
-    if test $dir = "Lapack"; then
-      coin_has_lapack=skipping
+    if test $dir = "ASL"; then
+      coin_has_asl=skipping
     fi
   done
 fi
 
-LAPACK_LIBS=
-LAPACK_CFLAGS=
-LAPACK_DATA=
+ASL_LIBS=
+ASL_CFLAGS=
+ASL_DATA=
 
 
-if test $coin_has_lapack != "skipping" ; then
+
+
+
+#check if user provided LIBS, CFLAGS, and DATA for module
+if test $coin_has_asl != skipping; then
+
+
+# Check whether --with-m4_tolower(ASL)-lib or --without-m4_tolower(ASL)-lib was given.
+if test "${with_asl_lib+set}" = set; then
+  withval="$with_asl_lib"
+  coin_has_asl=yes
+       ASL_LIBS="$withval"
+
+
+fi;
+
+
+# Check whether --with-m4_tolower(ASL)-incdir or --without-m4_tolower(ASL)-incdir was given.
+if test "${with_asl_incdir+set}" = set; then
+  withval="$with_asl_incdir"
+  coin_has_asl=yes
+     ASL_CFLAGS="-I`${CYGPATH_W} $withval`"
+fi;
+
+
+# Check whether --with-m4_tolower(ASL)-datadir or --without-m4_tolower(ASL)-datadir was given.
+if test "${with_asl_datadir+set}" = set; then
+  withval="$with_asl_datadir"
+  coin_has_asl=yes
+     ASL_DATA="$withval"
+fi;
+fi
+
+if test $coin_has_asl = notGiven; then
+  if test -n "$PKG_CONFIG" ; then
+    # set search path for pkg-config
+    # need to export variable to be sure that the following pkg-config gets these values
+    coin_save_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
+    PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH"
+    export PKG_CONFIG_PATH
+
+    # let pkg-config do it's magic
+
+
+
+if test -n "$PKG_CONFIG" ; then
+  if $PKG_CONFIG --exists "coinasl"; then
+    ASL_VERSIONS="`$PKG_CONFIG --modversion coinasl 2>/dev/null`"
+     cflags=`$PKG_CONFIG --cflags "coinasl" 2>/dev/null`
+    # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
+	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
+	# but only do this if is not trivial
+    if test "$CYGPATH_W" != "echo" ; then
+      # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
+	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+	fi
+    ASL_CFLAGS="$cflags"
+    ASL_LIBS=`$PKG_CONFIG --libs "coinasl" 2>/dev/null`
+    ASL_DATA=`$PKG_CONFIG --variable=datadir "coinasl" 2>/dev/null`
+     coin_has_asl=yes
+        echo "$as_me:$LINENO: result: yes: $ASL_VERSIONS" >&5
+echo "${ECHO_T}yes: $ASL_VERSIONS" >&6
+
+
+
+  else
+    ASL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors coinasl`
+      coin_has_asl=notGiven
+        echo "$as_me:$LINENO: result: not given: $ASL_PKG_ERRORS" >&5
+echo "${ECHO_T}not given: $ASL_PKG_ERRORS" >&6
+
+  fi
+else
+  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module ASL without pkg-config\"" >&5
+echo "$as_me: error: \"Cannot check for existance of module ASL without pkg-config\"" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+
+
+    # reset PKG_CONFIG_PATH variable
+    PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
+  else
+    #if 4th argument is given, try fallback - whereby we take the first word from coinasl as basename for the .pc file
+
+if test x$coin_has_asl != "xyes" ; then
+
+
+
+coin_has_asl=notGiven
+
+# check if user wants to skip module in any case
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "ASL"; then
+      coin_has_asl=skipping
+    fi
+  done
+fi
+
+ASL_LIBS=
+ASL_CFLAGS=
+ASL_DATA=
+
+
+if test $coin_has_asl != "skipping" ; then
   # if the project is available and configured, then a project-uninstalled.pc file should have been created
-  if test -r ../ThirdParty/Lapack/coinlapack-uninstalled.pc ; then
-    # read CFLAGS and LIBS from coinlapack-uninstalled.pc file
+  if test -r ../ThirdParty/ASL/coinasl-uninstalled.pc ; then
+    # read CFLAGS and LIBS from m4_bpatsubst(coinasl, [ .*], [])-uninstalled.pc file
     # add CYGPATH_W cludge into include flags
     # replace -L${libdir} by absolute path to build directory in linker flags
-    # we assume that the build directory is ../ThirdParty/Lapack/src if this directory exists, otherwise we assume that it is ../ThirdParty/Lapack
-    LAPACK_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/Lapack/coinlapack-uninstalled.pc`
-    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/Lapack/coinlapack-uninstalled.pc`
+    # we assume that the build directory is ../ThirdParty/ASL/src if this directory exists, otherwise we assume that it is ../ThirdParty/ASL
+    ASL_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/ASL/coinasl-uninstalled.pc`
+    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/ASL/coinasl-uninstalled.pc`
     if test "x$projectlibs" != x ; then
-      if test -d ../ThirdParty/Lapack/src ; then
-        LAPACK_LIBS="-L`cd ../ThirdParty/Lapack/src; pwd` $projectlibs"
+      if test -d ../ThirdParty/ASL/src ; then
+        ASL_LIBS="-L`cd ../ThirdParty/ASL/src; pwd` $projectlibs"
       else
-        LAPACK_LIBS="-L`cd ../ThirdParty/Lapack; pwd` $projectlibs"
+        ASL_LIBS="-L`cd ../ThirdParty/ASL; pwd` $projectlibs"
       fi
     else
-      LAPACK_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/Lapack/coinlapack-uninstalled.pc`
+      ASL_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/ASL/coinasl-uninstalled.pc`
     fi
-    LAPACK_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Lapack/coinlapack-uninstalled.pc`
+    ASL_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/ASL/coinasl-uninstalled.pc`
 
-    ADDLIBS="$ADDLIBS $LAPACK_LIBS"
-       REQUIREDPACKAGES="$REQUIREDPACKAGES coinlapack"
 
 
 
 cat >>confdefs.h <<\_ACEOF
-#define COIN_HAS_LAPACK 1
+#define COIN_HAS_ASL 1
 _ACEOF
 
 
 
-    coin_has_lapack=yes
+    coin_has_asl=yes
+    echo "$as_me:$LINENO: result: ../ThirdParty/ASL" >&5
+echo "${ECHO_T}../ThirdParty/ASL" >&6
+  else
+    echo "$as_me:$LINENO: result: $coin_has_asl" >&5
+echo "${ECHO_T}$coin_has_asl" >&6
   fi
+else
+  echo "$as_me:$LINENO: result: skipping" >&5
+echo "${ECHO_T}skipping" >&6
 fi
 
 #if user did not disable setting of makefile conditional, do it
 
 
-if test $coin_has_lapack != notGiven &&
-                test $coin_has_lapack != skipping; then
-  COIN_HAS_LAPACK_TRUE=
-  COIN_HAS_LAPACK_FALSE='#'
+if test $coin_has_asl != notGiven &&
+                test $coin_has_asl != skipping; then
+  COIN_HAS_ASL_TRUE=
+  COIN_HAS_ASL_FALSE='#'
 else
-  COIN_HAS_LAPACK_TRUE='#'
-  COIN_HAS_LAPACK_FALSE=
+  COIN_HAS_ASL_TRUE='#'
+  COIN_HAS_ASL_FALSE=
 fi
 
 
-
-echo "$as_me:$LINENO: result: $coin_has_lapack" >&5
-echo "${ECHO_T}$coin_has_lapack" >&6
 fi
 
+
+  fi
+
+else
+  echo "$as_me:$LINENO: result: $coin_has_asl" >&5
+echo "${ECHO_T}$coin_has_asl" >&6
+fi
+
+if test $coin_has_asl != skipping &&
+   test $coin_has_asl != notGiven ; then
+  if test 0 = 1 ; then  #change this test to enable a bit of debugging output
+  if test -n "$ASL_CFLAGS" ; then
+    { echo "$as_me:$LINENO: ASL CFLAGS are $ASL_CFLAGS" >&5
+echo "$as_me: ASL CFLAGS are $ASL_CFLAGS" >&6;}
+  fi
+  if test -n "$ASL_LIBS" ; then
+    { echo "$as_me:$LINENO: ASL LIBS   are $ASL_LIBS" >&5
+echo "$as_me: ASL LIBS   are $ASL_LIBS" >&6;}
+  fi
+  if test -n "$ASL_DATA" ; then
+    { echo "$as_me:$LINENO: ASL DATA   is  $ASL_DATA" >&5
+echo "$as_me: ASL DATA   is  $ASL_DATA" >&6;}
+  fi
+  fi
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_ASL 1
+_ACEOF
+
+fi
+
+# Define the Makefile conditional
+
+
+if test $coin_has_asl != notGiven &&
+                test $coin_has_asl != skipping; then
+  COIN_HAS_ASL_TRUE=
+  COIN_HAS_ASL_FALSE='#'
+else
+  COIN_HAS_ASL_TRUE='#'
+  COIN_HAS_ASL_FALSE=
+fi
 
 
 
@@ -27259,48 +27232,13 @@ fi
 
 if test $coin_has_hsl = notGiven; then
   if test -n "$PKG_CONFIG" ; then
-    # assemble search path for pkg-config
+    # set search path for pkg-config
+    # need to export variable to be sure that the following pkg-config gets these values
     coin_save_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
-
-    # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
-    # best would actually to use ${libdir}, since .pc files get installed into ${libdir}/pkgconfig,
-    # unfortunately, ${libdir} expands to ${exec_prefix}/lib and ${exec_prefix} to ${prefix}...
-    if test -d "${prefix}"; then
-      PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:$PKG_CONFIG_PATH"
-    fi
-
-
-# Check whether --with-coin-instdir or --without-coin-instdir was given.
-if test "${with_coin_instdir+set}" = set; then
-  withval="$with_coin_instdir"
-  if test -d "$withval"; then : ; else
-         { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
-echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
-   { (exit 1); exit 1; }; }
-       fi
-       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
-
-fi;
-
-    # in a classic setup, we want to find uninstalled projects
-    # their (relative) location is written to coin_subdirs.txt by the configure in the project base directory
-    # unfortunately, if the user set prefix, then we do not know where the project base directory is located
-    # but it is likely to be either .. (if we are a usual coin project) or ../.. (if we are a unusual coin project like ThirdParty or Data)
-    if test -e ../coin_subdirs.txt ; then
-      for i in `cat ../coin_subdirs.txt` ; do
-        PKG_CONFIG_PATH="../$i:$PKG_CONFIG_PATH"
-      done
-    fi
-
-    if test -e ../../coin_subdirs.txt ; then
-      for i in `cat ../../coin_subdirs.txt` ; do
-        PKG_CONFIG_PATH="../../$i:$PKG_CONFIG_PATH"
-      done
-    fi
+    PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH"
+    export PKG_CONFIG_PATH
 
     # let pkg-config do it's magic
-    # need to export variable to be sure that the following pkg-config gets these values
-    export PKG_CONFIG_PATH
 
 
 
@@ -27340,10 +27278,90 @@ fi
 
 
 
+    # reset PKG_CONFIG_PATH variable
     PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
   else
-    echo "$as_me:$LINENO: result: skipped check via pkg-config" >&5
-echo "${ECHO_T}skipped check via pkg-config" >&6
+    #if 4th argument is given, try fallback - whereby we take the first word from coinhsl as basename for the .pc file
+
+if test x$coin_has_hsl != "xyes" ; then
+
+
+
+coin_has_hsl=notGiven
+
+# check if user wants to skip module in any case
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "HSL"; then
+      coin_has_hsl=skipping
+    fi
+  done
+fi
+
+HSL_LIBS=
+HSL_CFLAGS=
+HSL_DATA=
+
+
+if test $coin_has_hsl != "skipping" ; then
+  # if the project is available and configured, then a project-uninstalled.pc file should have been created
+  if test -r ../ThirdParty/HSL/coinhsl-uninstalled.pc ; then
+    # read CFLAGS and LIBS from m4_bpatsubst(coinhsl, [ .*], [])-uninstalled.pc file
+    # add CYGPATH_W cludge into include flags
+    # replace -L${libdir} by absolute path to build directory in linker flags
+    # we assume that the build directory is ../ThirdParty/HSL/src if this directory exists, otherwise we assume that it is ../ThirdParty/HSL
+    HSL_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
+    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
+    if test "x$projectlibs" != x ; then
+      if test -d ../ThirdParty/HSL/src ; then
+        HSL_LIBS="-L`cd ../ThirdParty/HSL/src; pwd` $projectlibs"
+      else
+        HSL_LIBS="-L`cd ../ThirdParty/HSL; pwd` $projectlibs"
+      fi
+    else
+      HSL_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
+    fi
+    HSL_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
+
+    ADDLIBS="$ADDLIBS $HSL_LIBS"
+       REQUIREDPACKAGES="$REQUIREDPACKAGES coinhsl"
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_HSL 1
+_ACEOF
+
+
+
+    coin_has_hsl=yes
+    echo "$as_me:$LINENO: result: ../ThirdParty/HSL" >&5
+echo "${ECHO_T}../ThirdParty/HSL" >&6
+  else
+    echo "$as_me:$LINENO: result: $coin_has_hsl" >&5
+echo "${ECHO_T}$coin_has_hsl" >&6
+  fi
+else
+  echo "$as_me:$LINENO: result: skipping" >&5
+echo "${ECHO_T}skipping" >&6
+fi
+
+#if user did not disable setting of makefile conditional, do it
+
+
+if test $coin_has_hsl != notGiven &&
+                test $coin_has_hsl != skipping; then
+  COIN_HAS_HSL_TRUE=
+  COIN_HAS_HSL_FALSE='#'
+else
+  COIN_HAS_HSL_TRUE='#'
+  COIN_HAS_HSL_FALSE=
+fi
+
+
+fi
+
+
   fi
 
 else
@@ -27386,81 +27404,6 @@ else
   COIN_HAS_HSL_FALSE=
 fi
 
-
-
-
-if test x$coin_has_hsl != "xyes" ; then
-echo "$as_me:$LINENO: checking for COIN-OR module HSL (fallback)" >&5
-echo $ECHO_N "checking for COIN-OR module HSL (fallback)... $ECHO_C" >&6
-
-coin_has_hsl=notGiven
-
-# check if user wants to skip module in any case
-if test x"$COIN_SKIP_PROJECTS" != x; then
-  for dir in $COIN_SKIP_PROJECTS; do
-    if test $dir = "HSL"; then
-      coin_has_hsl=skipping
-    fi
-  done
-fi
-
-HSL_LIBS=
-HSL_CFLAGS=
-HSL_DATA=
-
-
-if test $coin_has_hsl != "skipping" ; then
-  # if the project is available and configured, then a project-uninstalled.pc file should have been created
-  if test -r ../ThirdParty/HSL/coinhsl-uninstalled.pc ; then
-    # read CFLAGS and LIBS from coinhsl-uninstalled.pc file
-    # add CYGPATH_W cludge into include flags
-    # replace -L${libdir} by absolute path to build directory in linker flags
-    # we assume that the build directory is ../ThirdParty/HSL/src if this directory exists, otherwise we assume that it is ../ThirdParty/HSL
-    HSL_CFLAGS=`sed -n -e 's/Cflags://' -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/gp' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
-    projectlibs=`sed -n -e 's/Libs://' -e 's/-L\${libdir}//p' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
-    if test "x$projectlibs" != x ; then
-      if test -d ../ThirdParty/HSL/src ; then
-        HSL_LIBS="-L`cd ../ThirdParty/HSL/src; pwd` $projectlibs"
-      else
-        HSL_LIBS="-L`cd ../ThirdParty/HSL; pwd` $projectlibs"
-      fi
-    else
-      HSL_LIBS=`sed -n -e 's/Libs://p' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
-    fi
-    HSL_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
-
-    ADDLIBS="$ADDLIBS $HSL_LIBS"
-       REQUIREDPACKAGES="$REQUIREDPACKAGES coinhsl"
-
-
-
-cat >>confdefs.h <<\_ACEOF
-#define COIN_HAS_HSL 1
-_ACEOF
-
-
-
-    coin_has_hsl=yes
-  fi
-fi
-
-#if user did not disable setting of makefile conditional, do it
-
-
-if test $coin_has_hsl != notGiven &&
-                test $coin_has_hsl != skipping; then
-  COIN_HAS_HSL_TRUE=
-  COIN_HAS_HSL_FALSE='#'
-else
-  COIN_HAS_HSL_TRUE='#'
-  COIN_HAS_HSL_FALSE=
-fi
-
-
-
-echo "$as_me:$LINENO: result: $coin_has_hsl" >&5
-echo "${ECHO_T}$coin_has_hsl" >&6
-fi
 
 
 
@@ -27518,48 +27461,13 @@ fi
 
 if test $coin_has_mumps = notGiven; then
   if test -n "$PKG_CONFIG" ; then
-    # assemble search path for pkg-config
+    # set search path for pkg-config
+    # need to export variable to be sure that the following pkg-config gets these values
     coin_save_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
-
-    # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
-    # best would actually to use ${libdir}, since .pc files get installed into ${libdir}/pkgconfig,
-    # unfortunately, ${libdir} expands to ${exec_prefix}/lib and ${exec_prefix} to ${prefix}...
-    if test -d "${prefix}"; then
-      PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:$PKG_CONFIG_PATH"
-    fi
-
-
-# Check whether --with-coin-instdir or --without-coin-instdir was given.
-if test "${with_coin_instdir+set}" = set; then
-  withval="$with_coin_instdir"
-  if test -d "$withval"; then : ; else
-         { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
-echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
-   { (exit 1); exit 1; }; }
-       fi
-       PKG_CONFIG_PATH="$withval/lib/pkgconfig:$PKG_CONFIG_PATH"
-
-fi;
-
-    # in a classic setup, we want to find uninstalled projects
-    # their (relative) location is written to coin_subdirs.txt by the configure in the project base directory
-    # unfortunately, if the user set prefix, then we do not know where the project base directory is located
-    # but it is likely to be either .. (if we are a usual coin project) or ../.. (if we are a unusual coin project like ThirdParty or Data)
-    if test -e ../coin_subdirs.txt ; then
-      for i in `cat ../coin_subdirs.txt` ; do
-        PKG_CONFIG_PATH="../$i:$PKG_CONFIG_PATH"
-      done
-    fi
-
-    if test -e ../../coin_subdirs.txt ; then
-      for i in `cat ../../coin_subdirs.txt` ; do
-        PKG_CONFIG_PATH="../../$i:$PKG_CONFIG_PATH"
-      done
-    fi
+    PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH"
+    export PKG_CONFIG_PATH
 
     # let pkg-config do it's magic
-    # need to export variable to be sure that the following pkg-config gets these values
-    export PKG_CONFIG_PATH
 
 
 
@@ -27599,10 +27507,13 @@ fi
 
 
 
+    # reset PKG_CONFIG_PATH variable
     PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
   else
+    #if 4th argument is given, try fallback - whereby we take the first word from coinmumps as basename for the .pc file
     echo "$as_me:$LINENO: result: skipped check via pkg-config" >&5
 echo "${ECHO_T}skipped check via pkg-config" >&6
+
   fi
 
 else
@@ -27650,6 +27561,7 @@ fi
 if test $coin_has_mumps != yes ; then
 
 if test x$coin_has_mumps != "xyes" ; then
+
 echo "$as_me:$LINENO: checking for COIN-OR module Mumps (fallback)" >&5
 echo $ECHO_N "checking for COIN-OR module Mumps (fallback)... $ECHO_C" >&6
 
@@ -27701,7 +27613,15 @@ _ACEOF
 
 
     coin_has_mumps=yes
+    echo "$as_me:$LINENO: result: ../ThirdParty/Mumps" >&5
+echo "${ECHO_T}../ThirdParty/Mumps" >&6
+  else
+    echo "$as_me:$LINENO: result: $coin_has_mumps" >&5
+echo "${ECHO_T}$coin_has_mumps" >&6
   fi
+else
+  echo "$as_me:$LINENO: result: skipping" >&5
+echo "${ECHO_T}skipping" >&6
 fi
 
 #if user did not disable setting of makefile conditional, do it
@@ -27717,13 +27637,11 @@ else
 fi
 
 
-
-echo "$as_me:$LINENO: result: $coin_has_mumps" >&5
-echo "${ECHO_T}$coin_has_mumps" >&6
 fi
 
 
 if test x$coin_has_metis != "xyes" ; then
+
 echo "$as_me:$LINENO: checking for COIN-OR module Metis (fallback)" >&5
 echo $ECHO_N "checking for COIN-OR module Metis (fallback)... $ECHO_C" >&6
 
@@ -27770,14 +27688,19 @@ if test $coin_has_metis != "skipping" ; then
 
 
     coin_has_metis=yes
+    echo "$as_me:$LINENO: result: ../ThirdParty/Metis" >&5
+echo "${ECHO_T}../ThirdParty/Metis" >&6
+  else
+    echo "$as_me:$LINENO: result: $coin_has_metis" >&5
+echo "${ECHO_T}$coin_has_metis" >&6
   fi
+else
+  echo "$as_me:$LINENO: result: skipping" >&5
+echo "${ECHO_T}skipping" >&6
 fi
 
 #if user did not disable setting of makefile conditional, do it
 
-
-echo "$as_me:$LINENO: result: $coin_has_metis" >&5
-echo "${ECHO_T}$coin_has_metis" >&6
 fi
 
   MUMPS_CFLAGS="$MUMPS_CFLAGS $METIS_CFLAGS"
@@ -33862,7 +33785,7 @@ fi
 ##          Create Makefiles and other stuff                          ##
 ########################################################################
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Interfaces/ipopt_addlibs_f.txt src/Interfaces/ipopt_addlibs_cpp.txt src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile contrib/MatlabInterface/examples/startup.m contrib/MatlabInterface-Old/src/Makefile contrib/MatlabInterface-Old/examples/startup.m contrib/JavaInterface/Makefile ipopt.pc ipopt-uninstalled.pc"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Interfaces/ipopt_addlibs_f.txt src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile contrib/MatlabInterface/examples/startup.m contrib/MatlabInterface-Old/src/Makefile contrib/MatlabInterface-Old/examples/startup.m contrib/JavaInterface/Makefile ipopt.pc ipopt-uninstalled.pc"
 
 
           ac_config_headers="$ac_config_headers inc/config_ipopt.h"
@@ -34075,6 +33998,69 @@ echo "$as_me: error: conditional \"AIX_FIX_COMPILER_BUG\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
+if test -z "${COIN_HAS_PKGCONFIG_TRUE}" && test -z "${COIN_HAS_PKGCONFIG_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_PKGCONFIG\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_PKGCONFIG\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_ASL\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
@@ -34086,62 +34072,6 @@ if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_ASL\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"COIN_HAS_ASL\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_BLAS_TRUE}" && test -z "${COIN_HAS_BLAS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_BLAS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_LAPACK\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_LAPACK\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -34703,7 +34633,6 @@ do
   "src/LinAlg/TMatrices/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/LinAlg/TMatrices/Makefile" ;;
   "src/Interfaces/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Interfaces/Makefile" ;;
   "src/Interfaces/ipopt_addlibs_f.txt" ) CONFIG_FILES="$CONFIG_FILES src/Interfaces/ipopt_addlibs_f.txt" ;;
-  "src/Interfaces/ipopt_addlibs_cpp.txt" ) CONFIG_FILES="$CONFIG_FILES src/Interfaces/ipopt_addlibs_cpp.txt" ;;
   "src/Algorithm/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Algorithm/Makefile" ;;
   "src/Algorithm/LinearSolvers/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Algorithm/LinearSolvers/Makefile" ;;
   "src/Algorithm/Inexact/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Algorithm/Inexact/Makefile" ;;
@@ -34947,15 +34876,13 @@ s,@AIX_FIX_COMPILER_BUG_TRUE@,$AIX_FIX_COMPILER_BUG_TRUE,;t t
 s,@AIX_FIX_COMPILER_BUG_FALSE@,$AIX_FIX_COMPILER_BUG_FALSE,;t t
 s,@PKG_CONFIG@,$PKG_CONFIG,;t t
 s,@ac_pt_PKG_CONFIG@,$ac_pt_PKG_CONFIG,;t t
-s,@ASL_LIBS@,$ASL_LIBS,;t t
-s,@ASL_CFLAGS@,$ASL_CFLAGS,;t t
-s,@ASL_DATA@,$ASL_DATA,;t t
-s,@REQUIREDPACKAGES@,$REQUIREDPACKAGES,;t t
-s,@COIN_HAS_ASL_TRUE@,$COIN_HAS_ASL_TRUE,;t t
-s,@COIN_HAS_ASL_FALSE@,$COIN_HAS_ASL_FALSE,;t t
+s,@COIN_HAS_PKGCONFIG_TRUE@,$COIN_HAS_PKGCONFIG_TRUE,;t t
+s,@COIN_HAS_PKGCONFIG_FALSE@,$COIN_HAS_PKGCONFIG_FALSE,;t t
+s,@COIN_PKG_CONFIG_PATH@,$COIN_PKG_CONFIG_PATH,;t t
 s,@BLAS_LIBS@,$BLAS_LIBS,;t t
 s,@BLAS_CFLAGS@,$BLAS_CFLAGS,;t t
 s,@BLAS_DATA@,$BLAS_DATA,;t t
+s,@REQUIREDPACKAGES@,$REQUIREDPACKAGES,;t t
 s,@COIN_HAS_BLAS_TRUE@,$COIN_HAS_BLAS_TRUE,;t t
 s,@COIN_HAS_BLAS_FALSE@,$COIN_HAS_BLAS_FALSE,;t t
 s,@LAPACK_LIBS@,$LAPACK_LIBS,;t t
@@ -34963,6 +34890,11 @@ s,@LAPACK_CFLAGS@,$LAPACK_CFLAGS,;t t
 s,@LAPACK_DATA@,$LAPACK_DATA,;t t
 s,@COIN_HAS_LAPACK_TRUE@,$COIN_HAS_LAPACK_TRUE,;t t
 s,@COIN_HAS_LAPACK_FALSE@,$COIN_HAS_LAPACK_FALSE,;t t
+s,@ASL_LIBS@,$ASL_LIBS,;t t
+s,@ASL_CFLAGS@,$ASL_CFLAGS,;t t
+s,@ASL_DATA@,$ASL_DATA,;t t
+s,@COIN_HAS_ASL_TRUE@,$COIN_HAS_ASL_TRUE,;t t
+s,@COIN_HAS_ASL_FALSE@,$COIN_HAS_ASL_FALSE,;t t
 s,@HSL_LIBS@,$HSL_LIBS,;t t
 s,@HSL_CFLAGS@,$HSL_CFLAGS,;t t
 s,@HSL_DATA@,$HSL_DATA,;t t
