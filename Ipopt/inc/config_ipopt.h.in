@@ -168,6 +168,12 @@
 /* Define to 1 if you have the `_vsnprintf' function. */
 #undef HAVE__VSNPRINTF
 
+/* SVN revision number of project */
+#undef IPOPT_SVN_REV
+
+/* Version number of project */
+#undef IPOPT_VERSION
+
 /* Define to be the name of C-function for NaNInf check */
 #undef MY_C_FINITE
 
