@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -21,9 +21,11 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  NLPBoundsRemover::NLPBoundsRemover(NLP& nlp)
+  NLPBoundsRemover::NLPBoundsRemover(NLP& nlp,
+                                     bool allow_twosided_inequalities /* = false */)
       :
-      nlp_(&nlp)
+      nlp_(&nlp),
+      allow_twosided_inequalities_(allow_twosided_inequalities)
   {}
 
   bool
@@ -187,7 +189,7 @@ namespace Ipopt
 
     // Here we do a santiy check to make sure that no inequality
     // constraint has two non-infite bounds.
-    if (d_space_orig_->Dim()>0) {
+    if (d_space_orig_->Dim()>0 && !allow_twosided_inequalities_) {
       SmartPtr<Vector> d = d_space_orig_->MakeNew();
       SmartPtr<Vector> tmp = d_l_orig->MakeNew();
       tmp->Set(1.);
