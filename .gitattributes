@@ -20,6 +20,8 @@ Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.icproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.rc -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.vcproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFor/IpOptFor.vfproj -text
+Ipopt/MSVisualStudio/v8-ifort/libhsl-no-MA57/libhsl-no-MA57.vfproj -text
+Ipopt/MSVisualStudio/v8-ifort/libhsl-no-MA57/libhsl.def -text
 Ipopt/MSVisualStudio/v8-ifort/libhsl/libhsl.def -text
 Ipopt/MSVisualStudio/v8-ifort/libhsl/libhsl.vfproj -text
 Ipopt/MSVisualStudio/v8/Ipopt.sln -text
