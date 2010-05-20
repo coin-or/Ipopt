@@ -46,8 +46,9 @@ Here are the steps:
    between the F90 files are resolved properly.
 
 4. If you want to use the HSL solver, then you have to obtain the HSL source code as
-   usual, and build the libhsl project. This results in libhsl.dll, which you have to place
-   into your path to make it available to Ipopt. 
+   usual, and build either the libhsl project if you have both the sources for the MA27 and MA57
+   solvers, or libhsl-no-MA57 if you just have access to the MA27 solver. Both projects result in 
+   libhsl.dll, which you have to place into your path to make it available to Ipopt. 
 
 5. When linking against Ipopt.dll in your own project, use the IpoptApplicationFactory method
    exported by the DLL to obtain an IpoptApplication pointer rather than using the new operator.

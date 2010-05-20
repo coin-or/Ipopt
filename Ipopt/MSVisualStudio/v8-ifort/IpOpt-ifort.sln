@@ -25,6 +25,8 @@ Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "IpOptFor", "IpOptFor\IpOptF
 EndProject
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "libhsl", "libhsl\libhsl.vfproj", "{CBC96FE8-7E9C-414E-86C7-09D5EB5AE135}"
 EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "libhsl-no-MA57", "libhsl-no-MA57\libhsl-no-MA57.vfproj", "{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -125,6 +127,18 @@ Global
 		{CBC96FE8-7E9C-414E-86C7-09D5EB5AE135}.Release MKL|x64.ActiveCfg = Release MKL|x64
 		{CBC96FE8-7E9C-414E-86C7-09D5EB5AE135}.Release|Win32.ActiveCfg = Release|Win32
 		{CBC96FE8-7E9C-414E-86C7-09D5EB5AE135}.Release|x64.ActiveCfg = Release|x64
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Debug|Win32.ActiveCfg = Debug|Win32
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Debug|Win32.Build.0 = Debug|Win32
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Debug|x64.ActiveCfg = Debug|x64
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Debug|x64.Build.0 = Debug|x64
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Release MKL|Win32.ActiveCfg = Release MKL|Win32
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Release MKL|Win32.Build.0 = Release MKL|Win32
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Release MKL|x64.ActiveCfg = Release MKL|x64
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Release MKL|x64.Build.0 = Release MKL|x64
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Release|Win32.ActiveCfg = Release|Win32
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Release|Win32.Build.0 = Release|Win32
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Release|x64.ActiveCfg = Release|x64
+		{216BB389-6C3C-45E5-A6AF-41D6FBD7D171}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
