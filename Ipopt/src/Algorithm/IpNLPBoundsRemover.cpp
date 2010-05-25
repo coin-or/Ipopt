@@ -330,33 +330,29 @@ namespace Ipopt
     nlp_->GetScalingParameters(x_space, c_space, d_space_orig, obj_scaling,
                                x_scaling, c_scaling, d_scaling_orig);
 
-    SmartPtr<Vector> xL_scaling;
-    SmartPtr<Vector> xU_scaling;
-    if (IsValid(x_scaling)) {
-      Px_l_orig_->TransMultVector(1., *x_scaling, 0., *xL_scaling);
-      Px_u_orig_->TransMultVector(1., *x_scaling, 0., *xU_scaling);
-    }
+    if (IsValid(x_scaling) || IsValid(d_scaling_orig)) {
 
-    if (IsValid(d_scaling_orig)) {
       SmartPtr<CompoundVector> comp_d_scaling =
         comp_d_space->MakeNewCompoundVector();
-      comp_d_scaling->SetComp(0, *d_scaling_orig);
+
+      SmartPtr<Vector> xL_scaling = comp_d_scaling->GetCompNonConst(1);
+      SmartPtr<Vector> xU_scaling = comp_d_scaling->GetCompNonConst(2);
       if (IsValid(x_scaling)) {
-        comp_d_scaling->SetComp(1, *xL_scaling);
-        comp_d_scaling->SetComp(2, *xU_scaling);
+        Px_l_orig_->TransMultVector(1., *x_scaling, 0., *xL_scaling);
+        Px_u_orig_->TransMultVector(1., *x_scaling, 0., *xU_scaling);
       }
       else {
-        comp_d_scaling->GetCompNonConst(1)->Set(1.);
-        comp_d_scaling->GetCompNonConst(2)->Set(1.);
+        xL_scaling->Set(1.);
+        xU_scaling->Set(1.);
       }
-      d_scaling = GetRawPtr(comp_d_scaling);
-    }
-    else if (IsValid(x_scaling)) {
-      SmartPtr<CompoundVector> comp_d_scaling =
-        comp_d_space->MakeNewCompoundVector();
-      comp_d_scaling->GetCompNonConst(0)->Set(1.);
-      comp_d_scaling->SetComp(1, *xL_scaling);
-      comp_d_scaling->SetComp(2, *xU_scaling);
+
+      if (IsValid(d_scaling_orig)) {
+        comp_d_scaling->SetComp(0, *d_scaling_orig);
+      }
+      else {
+        comp_d_scaling->GetCompNonConst(0)->Set(1.);
+      }
+
       d_scaling = GetRawPtr(comp_d_scaling);
     }
     else {
