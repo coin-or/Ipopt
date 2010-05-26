@@ -46,7 +46,9 @@ Ipopt/NoLongerMaintainedWindows/VisualStudio_dotNET/hs071_cpp/hs071_cpp.vcproj -
 Ipopt/NoLongerMaintainedWindows/VisualStudio_dotNET/hs071_f/hs071_f.f -text
 Ipopt/configure -text
 Ipopt/contrib/AsNMPC/doc/asnmpc.bib -text
+Ipopt/contrib/AsNMPC/doc/overview.pdf -text
 Ipopt/contrib/AsNMPC/doc/overview.tex -text
+Ipopt/contrib/AsNMPC/doc/usage.pdf -text
 Ipopt/contrib/AsNMPC/doc/usage.tex -text
 Ipopt/contrib/AsNMPC/examples/hicks_ampl/hicks.dat -text
 Ipopt/contrib/AsNMPC/examples/hicks_ampl/hicks.mod -text

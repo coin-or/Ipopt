@@ -218,3 +218,9 @@
 
 /* Version number of package */
 #undef VERSION
+
+/* SVN revision number of project */
+#undef _SVN_REV
+
+/* Version number of project */
+#undef _VERSION
