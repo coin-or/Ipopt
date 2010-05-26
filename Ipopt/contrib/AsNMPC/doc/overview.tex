@@ -1,0 +1,88 @@
+\documentclass[a4paper]{article}
+
+\begin{document}
+\section{Introduction}
+This code was originally developed as an implementation of the advanced step for Model Predictive Control (hence the name asNMPC). The names of the suffixes also remind of this fact. On the inside, however, the code is nothing more than a very basic implementation of a Schur Complement computation of the Matrix
+\begin{equation}
+  \left[\begin{array}{c|c}A&B\\\hline C&0\end{array}\right]\left[\begin{array}{c}x\\\hline y\end{array}\right] = \left[\begin{array}{c}a\\\hline b\end{array}\right]
+\end{equation}
+where $A$ is the KKT matrix of the interior point formulation of the optimization problem solved by IPOPT. The point of the implementation as part of IPOPT is the fact that $A$ is available in factorized form for the optimal solution of the KKT problem, which means that if $B$ and $C$ are small compared to $A$, the computation can be completed much faster using the Schur Complement approach.
+
+This Schur Complement approach can be useful for different purposes. Three application were explored so far:
+\begin{itemize}
+\item advanced step NMPC
+\item Parametric problems
+\item Computation of the Reduced Hessian Matrix
+\end{itemize}
+
+Each of these applications will be described further down. There are also examples in the examples/ directory of this distribution. 
+
+\section{The Applications}
+\subsection{advanced step NMPC}
+This application is based on the structure of the optimal control problem using direct transcription methods (for example orthogonal collocation on finite elements). The general problem formulation is
+\begin{equation}
+  \begin{array}{ccc}
+    \min\limits_{z(t),y(t),u(t)}&& \int_0^T\psi(z(t),y(t),u(t))dt\\
+    &&\dot{z}(t) = f(z(t),y(t),u(t))\\
+    &&z(0) = w_0\\
+    &&g(z(t),y(t),u(t)) = 0\\
+    &&z(t),y(t),u(t)\geq 0
+  \end{array}
+\end{equation}
+Using direct transcription methods, this problem can be transformed into an NLP of the form
+\begin{equation}
+  \label{discretized_OCP}
+  \begin{array}{ccc}
+    \mathcal{P}_1 &\min\limits_z& \phi(z)\\
+    &s.t.& c(z) = 0\\
+    && z_0-w_0 = 0\\
+    && z\geq 0
+  \end{array}
+\end{equation}
+In this formulation, $phi(z)$ is the discretized objective functional. $c(z)$ represents the discretized system of differential algebraic equations including for example the collocation equations. $z_0-w_0=0$ finally is the initial value condition. 
+
+Consider now the situation where the problem is too large to be solved within a reasonable sampling time, or the system controlled by the algorithm is prone to stochastic disturbances that could destabilize the system. In these cases, additional actions in between the sampling times that can be realized by the solution of the full problem are necessary. This is where the advanced step algorithm comes into play. 
+
+The advanced step algorithm adapts the solution of the optimal control problem of the previous sampling time to new data as it comes in. To accomodate the new data into the model, the initial data has to be dropped - otherwise the problem would be over-determined. Therefore, the initial condition $z_0-w_0$ is dropped, and a new constraint $z_t-w_t$ is introduced, where $w_t$ is the new measurement at time $t$. This time has to coincide with a mesh point of the discretization scheme. 
+
+Using the solution to (\ref{discretized_OCP}), the advanced step algorithm then computes an approximation to the solution of 
+\begin{equation}
+  \label{discretized_OCP_asnmpc}
+  \begin{array}{ccc}
+    \mathcal{P}_1 &\min\limits_z& \phi(z)\\
+    &s.t.& c(z) = 0\\
+    && z_t-w_t = 0\\
+    && z\geq 0
+  \end{array}
+\end{equation}
+from this approximate solution, new controls adapted to the new measurement can be extracted and applied to the controlled process. This pass can be repeated until a new solution to the full scale problem is available.
+
+The advanced step NMPC algorithm provides greatly increased stability properties for complex problems. For a detailled analysis see \cite{Zavala2009, Zavala2008}
+\subsection{Parametric Sensitivity}
+Though it was not designed for this purpose, the methodology described above for the initial values can be applied to general parametric NLPs of the form
+\begin{equation}
+  \label{eq:parametric_NLP}
+  \begin{array}{rc}
+    \min\limits_x &f(x,\eta)\\
+    \mathrm{s.t.}&c(x,\eta)=0\\
+    &x\geq 0
+  \end{array}
+\end{equation}
+where $\eta$ is a parameter that is considered fixed for each instance of the optimization problem. If this problem is reformulated as
+\begin{equation}
+  \label{eq:parametric_NLP_reformulated}
+  \begin{array}{rc}
+    \min\limits_x &f(x,\eta)\\
+    \mathrm{s.t.}&c(x,\eta)=0\\
+    &\eta-\eta_0=0\\
+    &x\geq 0
+  \end{array}
+\end{equation}
+the sensitivity with respect to a perturbation $eta_p - \eta_0$ can be computed by applying the above advanced step algorithm with $t=0$, replacing the equation $\eta-\eta_0$ with $\eta-\eta_p$.
+\subsection{Reduced Hessian Information}
+The reduced hessian matrix is defined as the projection of the hessian of the Lagrangian onto the nullspace of the constraint jacobian. It holds information about the curvature and direction at the solution, which is of great importance in many problem areas.
+
+In Ipopt, the reduced hessian matrix is never formed. If the partition into free and dependent variables is known beforehand, and there are no active bounds at the solution, the inverse of the reduced hessian matrix can be extracted easily using the above Schur complement techniques. A detailed explanation of the mechanics of this can be found in \cite{ZavalaPhd}, section 3.2.1. 
+\bibliographystyle{plain}
+\bibliography{asnmpc}
+\end{document}
