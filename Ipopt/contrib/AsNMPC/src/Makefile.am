@@ -14,7 +14,7 @@ lib_LTLIBRARIES = libasnmpc.la
 libasnmpc_la_SOURCES = \
 	AsAsBacksolver.hpp \
 	AsAsNmpController.cpp \
-	AsAsNmpController.hpp \ 
+	AsAsNmpController.hpp \
 	AsAsNMPCRegOp.cpp \
 	AsAsNMPCRegOp.hpp \
 	AsDenseGenSchurDriver.cpp \

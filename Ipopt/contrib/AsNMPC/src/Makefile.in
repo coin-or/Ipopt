@@ -42,7 +42,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = contrib/git-asnmpc/src
+subdir = contrib/AsNMPC/src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -93,6 +93,7 @@ DIST_SOURCES = $(libasnmpc_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ABSBUILDDIR = @ABSBUILDDIR@
 ACLOCAL = @ACLOCAL@
 ADDLIBS = @ADDLIBS@
 ADD_CFLAGS = @ADD_CFLAGS@
@@ -255,6 +256,7 @@ SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
+_SVN_REV = @_SVN_REV@
 abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
 abs_lib_dir = @abs_lib_dir@
@@ -288,6 +290,7 @@ exec_prefix = @exec_prefix@
 have_autoconf = @have_autoconf@
 have_automake = @have_automake@
 have_svn = @have_svn@
+have_svnversion = @have_svnversion@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -418,9 +421,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  contrib/git-asnmpc/src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  contrib/AsNMPC/src/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  contrib/git-asnmpc/src/Makefile
+	  $(AUTOMAKE) --foreign  contrib/AsNMPC/src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

@@ -5798,16 +5798,18 @@ else
   # In its original version, it linked in libifcorert.lib or libifcorertd.lib on Windows/ifort explicitly.
   # However, this seem to create a dependency on libifcorert.dll (or libifcorertd.dll) in the executables.
   # This is seem to be unnecessary, libifcorert(d).lib has been removed from the link line.
+  # Further, excluding libc.lib from the default libs seemed to be necessary only for VS < 8.
+  # Since the corresponding flag seems to make more trouble that it avoid, it has been removed now.
      *-cygwin* | *-mingw*)
        case "$F77" in
-         ifort* | */ifort* | IFORT* | */IFORT*)
-           FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib"
+#         ifort* | */ifort* | IFORT* | */IFORT*)
+#           FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib"
 #           if "$coin_debug_compile" = true ; then
 #             FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmt.lib"
 #           else
 #             FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmtd.lib"
 #           fi
-           ;;
+#           ;;
          compile_f2c*)
            FLIBS=`$F77 -FLIBS` ;;
        esac;;
@@ -5819,7 +5821,7 @@ else
        case "$F77" in
          pgf77* | */pgf77* | pgf90* | */pgf90*)
 # ask linker to go through the archives multiple times
-# (the Fortran compiler seems to do that automatically...
+# (the Fortran compiler seems to do that automatically...)
            FLIBS="-Wl,--start-group $FLIBS -Wl,--end-group" ;;
        esac
   esac
@@ -5936,7 +5938,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5939:" \
+echo "$as_me:5941:" \
      "checking for Fortran compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -7796,7 +7798,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7799 "configure"' > conftest.$ac_ext
+  echo '#line 7801 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9776,11 +9778,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9779: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9781: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9783: \$? = $ac_status" >&5
+   echo "$as_me:9785: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -10044,11 +10046,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10047: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10049: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:10051: \$? = $ac_status" >&5
+   echo "$as_me:10053: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -10148,11 +10150,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10151: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10153: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:10155: \$? = $ac_status" >&5
+   echo "$as_me:10157: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12565,7 +12567,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12568 "configure"
+#line 12570 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12665,7 +12667,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12668 "configure"
+#line 12670 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -15025,11 +15027,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15028: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15030: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15032: \$? = $ac_status" >&5
+   echo "$as_me:15034: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15129,11 +15131,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15132: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15134: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15136: \$? = $ac_status" >&5
+   echo "$as_me:15138: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16699,11 +16701,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16702: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16704: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16706: \$? = $ac_status" >&5
+   echo "$as_me:16708: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16803,11 +16805,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16806: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16808: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16810: \$? = $ac_status" >&5
+   echo "$as_me:16812: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -19010,11 +19012,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19013: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19015: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:19017: \$? = $ac_status" >&5
+   echo "$as_me:19019: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19278,11 +19280,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19281: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19283: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:19285: \$? = $ac_status" >&5
+   echo "$as_me:19287: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19382,11 +19384,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19385: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19387: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:19389: \$? = $ac_status" >&5
+   echo "$as_me:19391: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -33796,11 +33798,41 @@ fi
 
 
 
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files contrib/AsNMPC/examples/parametric_cpp/parametric_driver.cpp"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files contrib/AsNMPC/examples/parametric_cpp/parametricTNLP.cpp"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files contrib/AsNMPC/examples/parametric_cpp/parametricTNLP.hpp"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files contrib/AsNMPC/examples/redhess_cpp/MyNmpcTNLP.cpp"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files contrib/AsNMPC/examples/redhess_cpp/MyNmpcTNLP.hpp"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files contrib/AsNMPC/examples/redhess_cpp/redhess_cpp.cpp"
+fi
+
+
 ########################################################################
 ##          Create Makefiles and other stuff                          ##
 ########################################################################
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Interfaces/ipopt_addlibs_f.txt src/Interfaces/ipopt_addlibs_cpp.txt src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile contrib/MatlabInterface/examples/startup.m contrib/MatlabInterface-Old/src/Makefile contrib/MatlabInterface-Old/examples/startup.m contrib/JavaInterface/Makefile"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Interfaces/ipopt_addlibs_f.txt src/Interfaces/ipopt_addlibs_cpp.txt src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile contrib/MatlabInterface/examples/startup.m contrib/MatlabInterface-Old/src/Makefile contrib/MatlabInterface-Old/examples/startup.m contrib/JavaInterface/Makefile contrib/AsNMPC/Makefile contrib/AsNMPC/AmplSolver/Makefile contrib/AsNMPC/examples/parametric_cpp/Makefile contrib/AsNMPC/examples/redhess_cpp/Makefile contrib/AsNMPC/src/Makefile"
 
 
           ac_config_headers="$ac_config_headers inc/config_ipopt.h"
@@ -34650,6 +34682,11 @@ do
   "contrib/MatlabInterface-Old/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/MatlabInterface-Old/src/Makefile" ;;
   "contrib/MatlabInterface-Old/examples/startup.m" ) CONFIG_FILES="$CONFIG_FILES contrib/MatlabInterface-Old/examples/startup.m" ;;
   "contrib/JavaInterface/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/JavaInterface/Makefile" ;;
+  "contrib/AsNMPC/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/AsNMPC/Makefile" ;;
+  "contrib/AsNMPC/AmplSolver/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/AsNMPC/AmplSolver/Makefile" ;;
+  "contrib/AsNMPC/examples/parametric_cpp/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/AsNMPC/examples/parametric_cpp/Makefile" ;;
+  "contrib/AsNMPC/examples/redhess_cpp/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/AsNMPC/examples/redhess_cpp/Makefile" ;;
+  "contrib/AsNMPC/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/AsNMPC/src/Makefile" ;;
   "test/hs071_main.cpp" ) CONFIG_LINKS="$CONFIG_LINKS test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp" ;;
   "test/hs071_nlp.cpp" ) CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.cpp:examples/hs071_cpp/hs071_nlp.cpp" ;;
   "test/hs071_nlp.hpp" ) CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp" ;;

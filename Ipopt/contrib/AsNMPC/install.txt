@@ -16,7 +16,7 @@ problem either. AsNMPC links to the IPOPT library, so you should
 compile that first. If you want to make use of the AMPL options that
 are specific to AsNMPC, you need to configure with the option 
 
-ADD_CPPFLAGS="DENABLE_RUN_MPC"
+ADD_CPPFLAGS="-DENABLE_RUN_MPC"
 
 After successful compilation of IPOPT, change into the directory
 IPOPT_BUILD_DIR/Ipopt/contrib/AsNMPC and run 

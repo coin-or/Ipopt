@@ -37,7 +37,7 @@ CXXFLAGS = @CXXFLAGS@
 CXXLINKFLAGS = @RPATH_FLAGS@
 
 # Directory with header files
-IPOPTINCDIR = @includedir@/coin -I
+IPOPTINCDIR = @includedir@/coin
 
 # Directory with libipopt.a
 IPOPTLIBDIR = @libdir@
