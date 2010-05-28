@@ -85,6 +85,11 @@ Contributors:
   src/Algorithm/LinearSolvers/IpMa77SolverInterface.hpp
   src/Algorithm/LinearSolvers/IpMa77SolverInterface.cpp
 
+- Hans Pirnay (RWTH Aachen)
+  Advanced Step Nonlinear Model Predictive Control Toolbox
+
+  contrib/AsNMPC
+
 Contributors of code that is no longer included in Ipopt distribution:
 
 - Yifan Hu (Wolfram): Contributed TAUCS interface, implemented in the files
