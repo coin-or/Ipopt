@@ -200,6 +200,8 @@ namespace Ipopt
 	u_val[i] += val_[i]*d_ptr->Scalar();
       }
     }
+
+    delete [] v_lens;
   }
 
   void IndexSchurData::TransMultiply(const Vector& u, IteratesVector& v) const
