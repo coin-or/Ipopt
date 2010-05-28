@@ -92,11 +92,18 @@ int main(int argv, char**argc)
     
   app_ipopt->Initialize();
 
+  // Create AmplOptionsList for AsNMPC AMPL options
+  SmartPtr<AmplOptionsList> ampl_options_list = new AmplOptionsList();
+
+  ampl_options_list->AddAmplOption("run_nmpc", "run_nmpc",
+				   AmplOptionsList::String_Option,
+				   "Set to yes if nmpc algorithm should be run.");
 
   // create AmplSensTNLP from argc. This is an nlp because we are using our own TNLP Adapter
   SmartPtr<TNLP> nmpc_tnlp = new AmplNmpcTNLP(ConstPtr(app_ipopt->Jnlst()),
 					      app_ipopt->Options(),
-					      argc, suffix_handler);
+					      argc, suffix_handler, false,
+					      ampl_options_list);
 
   app_nmpc->Initialize();
 
