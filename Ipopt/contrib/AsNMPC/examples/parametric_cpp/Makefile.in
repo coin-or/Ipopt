@@ -50,11 +50,11 @@ LIBS = @ipoptlib@ @ADDLIBS@ -lasnmpc
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)
 SRCDIR = @srcdir@
-ipoptsrcdir  = $(SRCDIR)/../../../src
-asnmpcsrcdir = $(SRCDIR)/../src
+ipoptsrcdir  = $(SRCDIR)/../../../../src
+asnmpcsrcdir = $(SRCDIR)/../../src
 INCLUDEDIR  = -I${prefix}/include/coin -I$(ipoptsrcdir)/Interfaces -I$(ipoptsrcdir)/Algorithm -I$(ipoptsrcdir)/LinAlg -I$(ipoptsrcdir)/LinAlg/TMatrices -I$(ipoptsrcdir)/Apps/AmplSolver -I$(asnmpcsrcdir)
 #INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)` $(ADDINCFLAGS) $(ASNMPCINCL)
-INCL =  $(ADDINCFLAGS) $(ASNMPCINCL)
+INCL =  $(ADDINCFLAGS) $(ASNMPCINCL) $(INCLUDEDIR)
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@
