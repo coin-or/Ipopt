@@ -40,6 +40,7 @@ int main(int argv, char**argc)
   SmartPtr<TNLP> nmpc_tnlp = new ParametricTNLP();
 
   app_ipopt->Options()->SetStringValueIfUnset("run_nmpc", "yes");
+  app_ipopt->Options()->SetIntegerValueIfUnset("n_nmpc_steps", 1);
 
   app_nmpc->Initialize();
 
