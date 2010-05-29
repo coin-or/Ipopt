@@ -6,7 +6,9 @@
 
 
 #include "parametricTNLP.hpp"
-
+#include "IpDenseVector.hpp"
+#include "IpIpoptData.hpp"
+#include <stdio.h>
 
 using namespace Ipopt;
 
@@ -35,7 +37,7 @@ bool ParametricTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 
   nnz_jac_g = 10;
 
-  nnz_h_lag = 3;
+  nnz_h_lag = 5;
 
   index_style = FORTRAN_STYLE;
 
@@ -74,7 +76,7 @@ bool ParametricTNLP::get_starting_point(Index n, bool init_x, Number* x,
 					Number* lambda)
 {
   for (Index k=0; k<n; ++k) {
-    x[k] = 0.0;
+    x[k] = 5.0;
   }
 
   return true;
@@ -84,7 +86,7 @@ bool ParametricTNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_va
 {
   obj_value = 0;
   for (Index k=0; k<3; ++k) {
-    obj_value += x[0]*x[0];
+    obj_value += x[k]*x[k];
   }
   return true;
 }
@@ -169,11 +171,19 @@ bool ParametricTNLP::eval_h(Index n, const Number* x, bool new_x,
 
     iRow[2] = 3;
     jCol[2] = 3;
+
+    iRow[3] = 1;
+    jCol[3] = 5;
+
+    iRow[4] = 5;
+    jCol[4] = 1;
   }
   else {
-    values[0] = 2.0;
-    values[1] = 2.0;
-    values[2] = 2.0;
+    values[0] = 2.0*obj_factor;
+    values[1] = 2.0*obj_factor;
+    values[2] = 2.0*obj_factor;
+    values[3] = 0.5*lambda[1];
+    values[4] = 0.5*lambda[1];
   }
   return true;
 }
@@ -231,5 +241,26 @@ void ParametricTNLP::finalize_solution(SolverReturn status,
 				       const IpoptData* ip_data,
 				       IpoptCalculatedQuantities* ip_cq)
 {
-  
+  // Check whether AsNMPC Algorithm aborted internally 
+  //  bool nmpc_internal_abort;
+  //options_->GetBoolValue("nmpc_internal_abort", nmpc_internal_abort, "");
+
+  // Get access to the metadata, where the solutions are stored. The metadata is part of the DenseVectorSpace.
+  SmartPtr<const DenseVectorSpace> x_owner_space = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(ip_data->curr()->x()->OwnerSpace()));
+
+  if (!IsValid(x_owner_space)) {
+    printf("Error IsValid(x_owner_space) failed\n");
+    return;
+  }
+  std::string state;
+  std::vector<Number> nmpc_sol_vec;
+  state = "nmpc_sol_state_1";
+  nmpc_sol_vec = x_owner_space->GetNumericMetaData(state.c_str());
+
+  // Print the solution vector
+  printf("\n"
+	 "                Nominal                    Perturbed\n");
+  for (Index k=0; k<(Index) nmpc_sol_vec.size(); ++k) {
+    printf("x[%3d]   % .23f   % .23f\n", k, x[k], nmpc_sol_vec[k]);
+  }
 }
