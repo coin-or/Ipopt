@@ -248,6 +248,8 @@ namespace Ipopt
 
       v_idx +=curr_dim;
     }
+
+    delete [] v_vals;
   }
 
   Index* IndexSchurData::GetVectorLengths(const IteratesVector& v) const 
