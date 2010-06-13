@@ -140,4 +140,4 @@ astyle:
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc
 
-include ../BuildTools/Makemain.inc
+include BuildTools/Makemain.inc

@@ -24595,7 +24595,7 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_blas=yes
         echo "$as_me:$LINENO: result: yes: $BLAS_VERSIONS" >&5
 echo "${ECHO_T}yes: $BLAS_VERSIONS" >&6
-        REQUIREDPACKAGES="$REQUIREDPACKAGES coinblas"
+        REQUIREDPACKAGES="coinblas $REQUIREDPACKAGES"
 
 
   else
@@ -24660,7 +24660,7 @@ if test $coin_has_blas != "skipping" ; then
     BLAS_DATA=`sed -n -e 's/datadir=//gp' $blasdir/coinblas-uninstalled.pc`
 
     ADDLIBS="$ADDLIBS $BLAS_LIBS"
-       REQUIREDPACKAGES="$REQUIREDPACKAGES coinblas"
+       REQUIREDPACKAGES="coinblas $REQUIREDPACKAGES"
 
 
 
@@ -25248,7 +25248,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; use_lapack=ok
+echo "${ECHO_T}yes" >&6; use_lapack="$BLAS_LIBS"
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
@@ -25339,7 +25339,7 @@ rm -f conftest.err conftest.$ac_objext \
     fi
     if test $flink_try = yes; then
       echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; use_lapack=ok
+echo "${ECHO_T}yes" >&6; use_lapack="$BLAS_LIBS"
     else
       if test x"$FLIBS" != x; then
         flink_save_libs="$LIBS"
@@ -25391,7 +25391,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
   LIBS="$flink_save_libs"
                      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; use_lapack=ok
+echo "${ECHO_T}yes" >&6; use_lapack="$BLAS_LIBS"
                      coin_need_flibs=yes
 else
   echo "$as_me: failed program was:" >&5
@@ -25489,7 +25489,7 @@ rm -f conftest.err conftest.$ac_objext \
     fi
     if test $flink_try = yes; then
       echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; use_lapack=ok
+echo "${ECHO_T}yes" >&6; use_lapack="$BLAS_LIBS"
     else
       if test x"$FLIBS" != x; then
         flink_save_libs="$LIBS"
@@ -25541,7 +25541,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
   LIBS="$flink_save_libs"
                      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; use_lapack=ok
+echo "${ECHO_T}yes" >&6; use_lapack="$BLAS_LIBS"
                      coin_need_flibs=yes
 else
   echo "$as_me: failed program was:" >&5
@@ -26827,7 +26827,7 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_lapack=yes
         echo "$as_me:$LINENO: result: yes: $LAPACK_VERSIONS" >&5
 echo "${ECHO_T}yes: $LAPACK_VERSIONS" >&6
-        REQUIREDPACKAGES="$REQUIREDPACKAGES coinlapack"
+        REQUIREDPACKAGES="coinlapack $REQUIREDPACKAGES"
 
 
   else
@@ -26892,7 +26892,7 @@ if test $coin_has_lapack != "skipping" ; then
     LAPACK_DATA=`sed -n -e 's/datadir=//gp' $lapackdir/coinlapack-uninstalled.pc`
 
     ADDLIBS="$ADDLIBS $LAPACK_LIBS"
-       REQUIREDPACKAGES="$REQUIREDPACKAGES coinlapack"
+       REQUIREDPACKAGES="coinlapack $REQUIREDPACKAGES"
 
 
 
@@ -26992,7 +26992,7 @@ cat >>confdefs.h <<\_ACEOF
 #define COIN_HAS_LAPACK 1
 _ACEOF
 
-  LAPACK_LIBS="$use_blas"
+  LAPACK_LIBS="$use_lapack"
   LAPACK_CFLAGS=
   LAPACK_DATA=
 
@@ -27323,7 +27323,7 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_hsl=yes
         echo "$as_me:$LINENO: result: yes: $HSL_VERSIONS" >&5
 echo "${ECHO_T}yes: $HSL_VERSIONS" >&6
-        REQUIREDPACKAGES="$REQUIREDPACKAGES coinhsl"
+        REQUIREDPACKAGES="coinhsl $REQUIREDPACKAGES"
 
 
   else
@@ -27388,7 +27388,7 @@ if test $coin_has_hsl != "skipping" ; then
     HSL_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
 
     ADDLIBS="$ADDLIBS $HSL_LIBS"
-       REQUIREDPACKAGES="$REQUIREDPACKAGES coinhsl"
+       REQUIREDPACKAGES="coinhsl $REQUIREDPACKAGES"
 
 
 
@@ -27552,7 +27552,7 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_mumps=yes
         echo "$as_me:$LINENO: result: yes: $MUMPS_VERSIONS" >&5
 echo "${ECHO_T}yes: $MUMPS_VERSIONS" >&6
-        REQUIREDPACKAGES="$REQUIREDPACKAGES coinmumps"
+        REQUIREDPACKAGES="coinmumps $REQUIREDPACKAGES"
 
 
   else
@@ -27666,7 +27666,7 @@ if test $coin_has_mumps != "skipping" ; then
     MUMPS_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Mumps/coinmumps-uninstalled.pc`
 
     ADDLIBS="$ADDLIBS $MUMPS_LIBS"
-       REQUIREDPACKAGES="$REQUIREDPACKAGES coinmumps"
+       REQUIREDPACKAGES="coinmumps $REQUIREDPACKAGES"
 
 
 
@@ -27746,7 +27746,7 @@ if test $coin_has_metis != "skipping" ; then
     METIS_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Metis/coinmetis-uninstalled.pc`
 
     ADDLIBS="$ADDLIBS $METIS_LIBS"
-       REQUIREDPACKAGES="$REQUIREDPACKAGES coinmetis"
+       REQUIREDPACKAGES="coinmetis $REQUIREDPACKAGES"
 
 
 

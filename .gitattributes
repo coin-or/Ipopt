@@ -41,6 +41,8 @@ Ipopt/NoLongerMaintainedWindows/VisualStudio_dotNET/ScalableProblems/ScalablePro
 Ipopt/NoLongerMaintainedWindows/VisualStudio_dotNET/hs071_c/hs071_c.vcproj -text
 Ipopt/NoLongerMaintainedWindows/VisualStudio_dotNET/hs071_cpp/hs071_cpp.vcproj -text
 Ipopt/NoLongerMaintainedWindows/VisualStudio_dotNET/hs071_f/hs071_f.f -text
+Ipopt/config.guess -text
+Ipopt/config.sub -text
 Ipopt/configure -text
 Ipopt/contrib/JavaInterface/Makefile.in -text
 Ipopt/contrib/JavaInterface/README -text
@@ -94,13 +96,17 @@ Ipopt/contrib/MatlabInterface/examples/lasso.m -text
 Ipopt/contrib/MatlabInterface/examples/startup.m.in -text
 Ipopt/contrib/MatlabInterface/ipopt.m -text
 Ipopt/contrib/MatlabInterface/readme.html -text
+Ipopt/depcomp -text
 Ipopt/doc/documentation.pdf -text
 Ipopt/doc/options.tex -text
 Ipopt/examples/ScalableProblems/README -text
 Ipopt/examples/hs071_c/Makefile.in -text
 Ipopt/examples/hs071_cpp/Makefile.in -text
+Ipopt/install-sh -text
 Ipopt/ipopt-uninstalled.pc.in -text
 Ipopt/ipopt.pc.in -text
+Ipopt/ltmain.sh -text
+Ipopt/missing -text
 Ipopt/src/Algorithm/Inexact/IpInexactTSymScalingMethod.cpp -text
 Ipopt/src/Algorithm/Inexact/IpInexactTSymScalingMethod.hpp -text
 Ipopt/src/Algorithm/Inexact/Makefile.am -text

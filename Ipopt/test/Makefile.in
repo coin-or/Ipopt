@@ -69,7 +69,7 @@ nodist_hs071_f_OBJECTS = hs071_f.$(OBJEXT)
 hs071_f_OBJECTS = $(nodist_hs071_f_OBJECTS)
 hs071_f_DEPENDENCIES = ../src/Interfaces/libipopt.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
-depcomp = $(SHELL) $(top_srcdir)/../depcomp
+depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)

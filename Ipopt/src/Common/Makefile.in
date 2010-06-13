@@ -59,7 +59,7 @@ libcommon_la_LIBADD =
 am_libcommon_la_OBJECTS = IpDebug.lo IpJournalist.lo IpObserver.lo \
 	IpOptionsList.lo IpRegOptions.lo IpTaggedObject.lo IpUtils.lo
 libcommon_la_OBJECTS = $(am_libcommon_la_OBJECTS)
-depcomp = $(SHELL) $(top_srcdir)/../depcomp
+depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
