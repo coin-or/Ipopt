@@ -1,0 +1,26 @@
+# Copyright 2009 Hans Pirnay
+# All Rights Reserved.
+# This code is published under the Common Public License.
+#
+# Date   : 2010-10-04
+
+reset                                    ;
+
+suffix nmpc_state_0, IN;
+suffix nmpc_state_1, IN;
+suffix nmpc_state_value_1, IN;
+suffix nmpc_sol_state_1, OUT;
+suffix nmpc_init_constr, IN;
+
+
+option solver ampl_asnmpc                ;
+
+option presolve 0;
+option ipopt_options 'run_nmpc no'; 
+
+model hicks.mod                          ; 
+data hicks.dat                           ; 
+
+option ipopt_options 'run_nmpc yes'; 
+solve;
+include nmpcresults.inc                  ; 

@@ -1,0 +1,60 @@
+# Copyright 2009 Hans Pirnay
+# All Rights Reserved.
+# This code is published under the Common Public License.
+#
+# Date   : 2010-10-04
+
+reset;    
+
+# ---------------------------------
+# Set parameter values here   
+# ---------------------------------
+#
+param nominal_eta1 := 4.5;
+param perturbed_eta1 := 4;
+
+param nominal_eta2 := 1;
+param perturbed_eta2 := 1;
+#
+# ---------------------------------
+#                          
+
+# declare AMPL suffixes for asNMPC code
+suffix nmpc_state_0, IN;
+suffix nmpc_state_1, IN;
+suffix nmpc_state_value_1, IN;
+suffix nmpc_sol_state_1, OUT;
+suffix nmpc_init_constr, IN;
+
+option presolve 0;
+
+# turn presolve off so no variables / equations are eliminated
+# by AMPL
+option solver ampl_asnmpc;
+
+# set run_nmpc to yes
+option ipopt_options 'run_nmpc yes'; 
+
+model parametric.mod;
+
+# nmpc data
+let eta1.nmpc_state_0 := 1;
+let eta1.nmpc_state_1 := 1;
+let eta1.nmpc_state_value_1 := perturbed_eta1;
+let eta2.nmpc_state_0 := 2;
+let eta2.nmpc_state_1 := 2;
+let eta2.nmpc_state_value_1 := perturbed_eta2;
+
+let consteta1.nmpc_init_constr := 1;
+let consteta2.nmpc_init_constr := 2;
+
+# select an initial value so that ipopt doesn't find the solution immediately (we need at least one evaluation of the jacobian!)
+let x1:=5;
+
+solve;
+
+print "";
+print "Nominal Solution:";
+display x1, x2, x3, eta1, eta2;
+print "Estimation of Perturbed Solution with asNMPC:";
+display x1.nmpc_sol_state_1, x2.nmpc_sol_state_1, x3.nmpc_sol_state_1, eta1.nmpc_sol_state_1, eta2.nmpc_sol_state_1;

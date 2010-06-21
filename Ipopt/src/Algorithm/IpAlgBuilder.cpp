@@ -40,6 +40,7 @@
 #include "IpLimMemQuasiNewtonUpdater.hpp"
 #include "IpOrigIpoptNLP.hpp"
 #include "IpLowRankAugSystemSolver.hpp"
+#include "IpLowRankSSAugSystemSolver.hpp"
 #include "IpRestoIterationOutput.hpp"
 #include "IpRestoFilterConvCheck.hpp"
 #include "IpRestoIterateInitializer.hpp"
@@ -53,8 +54,10 @@
 
 #include "IpMa27TSolverInterface.hpp"
 #include "IpMa57TSolverInterface.hpp"
+#include "IpMa77SolverInterface.hpp"
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpPardisoSolverInterface.hpp"
+#include "IpSlackBasedTSymScalingMethod.hpp"
 
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
@@ -130,7 +133,7 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption6(
+    roptions->AddStringOption7(
       "linear_solver",
       "Linear solver used for step computations.",
 #ifdef HAVE_MA27
@@ -156,6 +159,7 @@ namespace Ipopt
 #endif
       "ma27", "use the Harwell routine MA27",
       "ma57", "use the Harwell routine MA57",
+      "ma77", "use the Harwell routine MA77",
       "pardiso", "use the Pardiso package",
       "wsmp", "use WSMP package",
       "mumps", "use MUMPS package",
@@ -167,7 +171,7 @@ namespace Ipopt
       "to choose. Depending on your Ipopt installation, not all options are "
       "available.");
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption2(
+    roptions->AddStringOption3(
       "linear_system_scaling",
       "Method for scaling the linear system.",
 #ifdef HAVE_MC19
@@ -177,11 +181,12 @@ namespace Ipopt
 #endif
       "none", "no scaling will be performed",
       "mc19", "use the Harwell routine MC19",
+      "slack-based", "use the slack values",
       "Determines the method used to compute symmetric scaling "
       "factors for the augmented system (see also the "
       "\"linear_scaling_on_demand\" option).  This scaling is independent "
       "of the NLP problem scaling.  By default, MC19 is only used if MA27 or "
-      "MA57 are selected as linear solvers. This option is only available if "
+      "MA57 are selected as linear solvers. This value is only available if "
       "Ipopt has been compiled with MC19.");
 
     roptions->SetRegisteringCategory("NLP Scaling");
@@ -228,6 +233,15 @@ namespace Ipopt
       "computed when switching to the \"monotone mode\" in the adaptive "
       "strategy. (Only considered if \"adaptive\" is selected for option "
       "\"mu_strategy\".)");
+
+    roptions->SetRegisteringCategory("Hessian Approximation");
+    roptions->AddStringOption2(
+      "limited_memory_aug_solver",
+      "Strategy for solving the augmented system for low-rank Hessian.",
+      "sherman-morrison",
+      "sherman-morrison", "use Sherman-Morrison formula",
+      "extended", "use an extended augmented system",
+      "");
 
     roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption3(
@@ -311,6 +325,13 @@ namespace Ipopt
       SolverInterface = new Ma57TSolverInterface();
 #endif
 
+    }
+    else if (linear_solver=="ma77") {
+#ifndef HAVE_MA77
+      THROW_EXCEPTION(OPTION_INVALID, "Support for MA77 has not been compiled into Ipopt.");
+#else
+      SolverInterface = new Ma77SolverInterface();
+#endif
     }
     else if (linear_solver=="pardiso") {
 #ifndef HAVE_PARDISO
@@ -401,6 +422,9 @@ namespace Ipopt
 #endif
 
       }
+      else if (linear_system_scaling=="slack-based") {
+        ScalingMethod = new SlackBasedTSymScalingMethod();
+      }
 
       SmartPtr<SymLinearSolver> ScaledSolver =
         new TSymLinearSolver(SolverInterface, ScalingMethod);
@@ -413,9 +437,33 @@ namespace Ipopt
     HessianApproximationType hessian_approximation =
       HessianApproximationType(enum_int);
     if (hessian_approximation==LIMITED_MEMORY) {
-      SmartPtr<AugSystemSolver> tmp =
-        new LowRankAugSystemSolver(*AugSolver);
-      AugSolver = tmp;
+      std::string lm_aug_solver;
+      options.GetStringValue("limited_memory_aug_solver", lm_aug_solver,
+                             prefix);
+      if (lm_aug_solver == "sherman-morrison") {
+        AugSolver = new LowRankAugSystemSolver(*AugSolver);
+      }
+      else if (lm_aug_solver == "extended") {
+        Index lm_history;
+        options.GetIntegerValue("limited_memory_max_history", lm_history,
+                                prefix);
+        Index max_rank;
+        std::string lm_type;
+        options.GetStringValue("limited_memory_update_type", lm_type, prefix);
+        if (lm_type == "bfgs") {
+          max_rank = 2*lm_history;
+        }
+        else if (lm_type == "sr1") {
+          max_rank = lm_history;
+        }
+        else {
+          THROW_EXCEPTION(OPTION_INVALID, "Unknown value for option \"limited_memory_update_type\".");
+        }
+        AugSolver = new LowRankSSAugSystemSolver(*AugSolver, max_rank);
+      }
+      else {
+        THROW_EXCEPTION(OPTION_INVALID, "Unknown value for option \"limited_memory_aug_solver\".");
+      }
     }
 
     SmartPtr<PDPerturbationHandler> pertHandler;

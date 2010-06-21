@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -22,32 +22,6 @@ namespace Ipopt
 #if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
-
-  static bool message_printed = false;
-
-  static void print_message(const Journalist& jnlst)
-  {
-    jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
-                 "\n******************************************************************************\n"
-                 "This program contains Ipopt, a library for large-scale nonlinear optimization.\n"
-                 " Ipopt is released as open source code under the Common Public License (CPL).\n"
-                 "         For more information visit http://projects.coin-or.org/Ipopt\n"
-                 "******************************************************************************\n\n");
-#ifdef COIN_HAS_MUMPS
-# ifndef HAVE_MA27
-#  ifndef HAVE_MA57
-#   ifndef HAVE_PARDISO
-#    ifndef HAVE_WSMP
-    jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
-                 "NOTE: You are using Ipopt by default with the MUMPS linear solver.\n"
-                 "      Other linear solvers might be more efficient (see Ipopt documentation).\n\n\n");
-#    endif
-#   endif
-#  endif
-# endif
-#endif
-    message_printed = true;
-  }
 
   IpoptAlgorithm::IpoptAlgorithm(const SmartPtr<SearchDirectionCalculator>& search_dir_calculator,
                                  const SmartPtr<LineSearch>& line_search,
@@ -137,6 +111,8 @@ namespace Ipopt
       "yes", "");
   }
 
+  static bool copyright_message_printed = false;
+
   bool IpoptAlgorithm::InitializeImpl(const OptionsList& options,
                                       const std::string& prefix)
   {
@@ -192,7 +168,7 @@ namespace Ipopt
     bool bval;
     options.GetBoolValue("sb", bval, prefix);
     if (bval) {
-      message_printed = true;
+      copyright_message_printed = true;
     }
 
     // Store which linear solver is chosen for later output
@@ -282,14 +258,16 @@ namespace Ipopt
     // Start measuring CPU time
     IpData().TimingStats().OverallAlgorithm().Start();
 
-    if (!message_printed) {
-      print_message(Jnlst());
+    if (!copyright_message_printed) {
+      print_copyright_message(Jnlst());
     }
 
     if (!isResto) {
       char vernum[] = PACKAGE_VERSION;
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version %s, running with linear solver %s.\n\n", vernum, linear_solver_.c_str());
     }
+
+    SolverReturn retval = UNASSIGNED;
 
     try {
       IpData().TimingStats().InitializeIterates().Start();
@@ -304,8 +282,8 @@ namespace Ipopt
       }
 
       IpData().TimingStats().CheckConvergence().Start();
-      ConvergenceCheck::ConvergenceStatus conv_status
-      = conv_check_->CheckConvergence();
+      ConvergenceCheck::ConvergenceStatus conv_status =
+        conv_check_->CheckConvergence();
       IpData().TimingStats().CheckConvergence().End();
 
       // main loop
@@ -385,32 +363,34 @@ namespace Ipopt
         }
       }
 
-      IpData().TimingStats().OverallAlgorithm().End();
-
-      if (conv_status == ConvergenceCheck::CONVERGED) {
-        return SUCCESS;
-      }
-      else if (conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT) {
-        return STOP_AT_ACCEPTABLE_POINT;
-      }
-      else if (conv_status == ConvergenceCheck::MAXITER_EXCEEDED) {
-        return MAXITER_EXCEEDED;
-      }
-      else if (conv_status == ConvergenceCheck::CPUTIME_EXCEEDED) {
-        return CPUTIME_EXCEEDED;
-      }
-      else if (conv_status == ConvergenceCheck::DIVERGING) {
-        return DIVERGING_ITERATES;
-      }
-      else if (conv_status == ConvergenceCheck::USER_STOP) {
-        return USER_REQUESTED_STOP;
+      switch (conv_status) {
+      case ConvergenceCheck::CONVERGED:
+        retval = SUCCESS;
+        break;
+      case ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT:
+        retval = STOP_AT_ACCEPTABLE_POINT;
+        break;
+      case ConvergenceCheck::MAXITER_EXCEEDED:
+        retval = MAXITER_EXCEEDED;
+        break;
+      case ConvergenceCheck::CPUTIME_EXCEEDED:
+        retval = CPUTIME_EXCEEDED;
+        break;
+      case ConvergenceCheck::DIVERGING:
+        retval = DIVERGING_ITERATES;
+        break;
+      case  ConvergenceCheck::USER_STOP:
+        retval = USER_REQUESTED_STOP;
+        break;
+      default:
+        retval = INTERNAL_ERROR;
+        break;
       }
     }
     catch (TINY_STEP_DETECTED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().UpdateBarrierParameter().EndIfStarted();
-      IpData().TimingStats().OverallAlgorithm().End();
-      return STOP_AT_TINY_STEP;
+      retval = STOP_AT_TINY_STEP;
     }
     catch (ACCEPTABLE_POINT_REACHED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
@@ -419,57 +399,48 @@ namespace Ipopt
         // make the sure multipliers are computed properly
         ComputeFeasibilityMultipliers();
       }
-      IpData().TimingStats().OverallAlgorithm().End();
-      return STOP_AT_ACCEPTABLE_POINT;
+      retval = STOP_AT_ACCEPTABLE_POINT;
     }
     catch (LOCALLY_INFEASIBLE& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       IpData().TimingStats().CheckConvergence().EndIfStarted();
-      IpData().TimingStats().OverallAlgorithm().End();
-      return LOCAL_INFEASIBILITY;
+      retval = LOCAL_INFEASIBILITY;
     }
     catch (RESTORATION_CONVERGED_TO_FEASIBLE_POINT& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
-      IpData().TimingStats().OverallAlgorithm().End();
-      return RESTORATION_FAILURE;
+      retval = RESTORATION_FAILURE;
     }
     catch (RESTORATION_FAILED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
-      IpData().TimingStats().OverallAlgorithm().End();
-      return RESTORATION_FAILURE;
+      retval = RESTORATION_FAILURE;
     }
     catch (RESTORATION_MAXITER_EXCEEDED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
-      IpData().TimingStats().OverallAlgorithm().End();
-      return MAXITER_EXCEEDED;
+      retval = MAXITER_EXCEEDED;
     }
     catch (RESTORATION_CPUTIME_EXCEEDED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
-      IpData().TimingStats().OverallAlgorithm().End();
-      return CPUTIME_EXCEEDED;
+      retval = CPUTIME_EXCEEDED;
     }
     catch (RESTORATION_USER_STOP& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
-      IpData().TimingStats().OverallAlgorithm().End();
-      return USER_REQUESTED_STOP;
+      retval = USER_REQUESTED_STOP;
     }
     catch (STEP_COMPUTATION_FAILED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
-      IpData().TimingStats().OverallAlgorithm().End();
-      return ERROR_IN_STEP_COMPUTATION;
+      retval = ERROR_IN_STEP_COMPUTATION;
     }
     catch (IpoptNLP::Eval_Error& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
-      IpData().TimingStats().OverallAlgorithm().End();
-      return INVALID_NUMBER_DETECTED;
+      retval = INVALID_NUMBER_DETECTED;
     }
     catch (FEASIBILITY_PROBLEM_SOLVED& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
@@ -478,25 +449,21 @@ namespace Ipopt
         // make the sure multipliers are computed properly
         ComputeFeasibilityMultipliers();
       }
-      IpData().TimingStats().OverallAlgorithm().End();
-      return FEASIBLE_POINT_FOUND;
+      retval = FEASIBLE_POINT_FOUND;
     }
     catch (TOO_FEW_DOF& exc) {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
-      IpData().TimingStats().OverallAlgorithm().End();
-      return TOO_FEW_DEGREES_OF_FREEDOM;
+      retval = TOO_FEW_DEGREES_OF_FREEDOM;
     }
     catch (INTERNAL_ABORT& exc) {
       exc.ReportException(Jnlst());
-      IpData().TimingStats().OverallAlgorithm().End();
-      return INTERNAL_ERROR;
+      retval = INTERNAL_ERROR;
     }
 
-    DBG_ASSERT(false && "Unknown return code in the algorithm");
-
+    DBG_ASSERT(retval != UNASSIGNED && "Unknown return code in the algorithm");
     IpData().TimingStats().OverallAlgorithm().End();
-    return INTERNAL_ERROR;
+    return retval;
   }
 
   void IpoptAlgorithm::UpdateHessian()
@@ -974,6 +941,30 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "new_trial_z", *new_trial_z);
 
     return Max(max_correction_up, max_correction_low);
+  }
+
+  void IpoptAlgorithm::print_copyright_message(const Journalist& jnlst)
+  {
+    jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
+                 "\n******************************************************************************\n"
+                 "This program contains Ipopt, a library for large-scale nonlinear optimization.\n"
+                 " Ipopt is released as open source code under the Common Public License (CPL).\n"
+                 "         For more information visit http://projects.coin-or.org/Ipopt\n"
+                 "******************************************************************************\n\n");
+#ifdef COIN_HAS_MUMPS
+# ifndef HAVE_MA27
+#  ifndef HAVE_MA57
+#   ifndef HAVE_PARDISO
+#    ifndef HAVE_WSMP
+    jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
+                 "NOTE: You are using Ipopt by default with the MUMPS linear solver.\n"
+                 "      Other linear solvers might be more efficient (see Ipopt documentation).\n\n\n");
+#    endif
+#   endif
+#  endif
+# endif
+#endif
+    copyright_message_printed = true;
   }
 
 } // namespace Ipopt

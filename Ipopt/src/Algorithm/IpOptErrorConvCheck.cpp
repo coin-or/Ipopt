@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -124,6 +124,18 @@ namespace Ipopt
       "If any component of the primal iterates exceeded this value (in "
       "absolute terms), the optimization is aborted with the exit message "
       "that the iterates seem to be diverging.");
+    roptions->AddLowerBoundedNumberOption(
+      "mu_target",
+      "Desired value of complementarity.",
+      0.0, false, 0.0,
+      "Usually, the barrier parameter is driven to zero and the termination "
+      "test for complementarity is measured with respect to zero "
+      "complementarity.  However, in some cases it might be desired to have "
+      "Ipopt solve barrier problem for strictly positive value of the barrier "
+      "parameter.  In this case, the value of \"mu_target\" specifies the "
+      "final value of the barrier parameter, and the termination tests are "
+      "then defined with respect to the barrier problem for this value of the "
+      "barrier parameter.");
   }
 
   bool
@@ -142,8 +154,10 @@ namespace Ipopt
     options.GetNumericValue("acceptable_compl_inf_tol", acceptable_compl_inf_tol_, prefix);
     options.GetNumericValue("acceptable_obj_change_tol", acceptable_obj_change_tol_, prefix);
     options.GetNumericValue("diverging_iterates_tol", diverging_iterates_tol_, prefix);
+    options.GetNumericValue("mu_target", mu_target_, prefix);
     acceptable_counter_ = 0;
-    last_obj_val_ = -1e50;
+    curr_obj_val_ = -1e50;
+    last_obj_val_iter_ = -1;
 
     return true;
   }
@@ -190,8 +204,7 @@ namespace Ipopt
     Number overall_error = IpCq().curr_nlp_error();
     Number dual_inf = IpCq().unscaled_curr_dual_infeasibility(NORM_MAX);
     Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
-    Number compl_inf = IpCq().unscaled_curr_complementarity(0., NORM_MAX);
-    Number obj_val = IpCq().curr_f();
+    Number compl_inf = IpCq().unscaled_curr_complementarity(mu_target_, NORM_MAX);
 
     if (IpData().curr()->x()->Dim()==IpData().curr()->y_c()->Dim()) {
       // the problem is square, there is no point in looking at dual
@@ -200,18 +213,18 @@ namespace Ipopt
       compl_inf_tol_ = 1e300;
     }
 
-    if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "Convergence Check:\n");
-      Jnlst().Printf(J_DETAILED, J_MAIN,
+    if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "Convergence Check:\n");
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  overall_error = %23.16e   IpData().tol()   = %23.16e\n",
                      overall_error, IpData().tol());
-      Jnlst().Printf(J_DETAILED, J_MAIN,
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  dual_inf      = %23.16e   dual_inf_tol_    = %23.16e\n",
                      dual_inf, dual_inf_tol_);
-      Jnlst().Printf(J_DETAILED, J_MAIN,
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  constr_viol   = %23.16e   constr_viol_tol_ = %23.16e\n",
                      constr_viol, constr_viol_tol_);
-      Jnlst().Printf(J_DETAILED, J_MAIN,
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  compl_inf     = %23.16e   compl_inf_tol_   = %23.16e\n",
                      compl_inf, compl_inf_tol_);
     }
@@ -246,7 +259,6 @@ namespace Ipopt
       return ConvergenceCheck::CPUTIME_EXCEEDED;
     }
 
-    last_obj_val_ = obj_val;
     return ConvergenceCheck::CONTINUE;
   }
 
@@ -258,8 +270,15 @@ namespace Ipopt
     Number overall_error = IpCq().curr_nlp_error();
     Number dual_inf = IpCq().unscaled_curr_dual_infeasibility(NORM_MAX);
     Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
-    Number compl_inf = IpCq().unscaled_curr_complementarity(0., NORM_MAX);
-    Number obj_val = IpCq().curr_f();
+    Number compl_inf = IpCq().unscaled_curr_complementarity(mu_target_, NORM_MAX);
+
+    if (IpData().iter_count()!=last_obj_val_iter_) {
+      // DELETEME
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "obj val update iter = %d\n",IpData().iter_count());
+      last_obj_val_ = curr_obj_val_;
+      curr_obj_val_ = IpCq().curr_f();
+      last_obj_val_iter_ = IpData().iter_count();
+    }
 
     DBG_PRINT((1, "overall_error = %e\n", overall_error));
     DBG_PRINT((1, "dual_inf = %e\n", dual_inf));
@@ -278,11 +297,35 @@ namespace Ipopt
       acceptable_compl_inf_tol_ = 1e300;
     }
 
+    if (Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN)) {
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "Acceptable Check:\n");
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  overall_error = %23.16e   acceptable_tol_             = %23.16e\n",
+                     overall_error, acceptable_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  dual_inf      = %23.16e   acceptable_dual_inf_tol_    = %23.16e\n",
+                     dual_inf, acceptable_dual_inf_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  constr_viol   = %23.16e   acceptable_constr_viol_tol_ = %23.16e\n",
+                     constr_viol, acceptable_constr_viol_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  compl_inf     = %23.16e   acceptable_compl_inf_tol_   = %23.16e\n",
+                     compl_inf, acceptable_compl_inf_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  curr_obj_val_ = %23.16e   last_obj_val                = %23.16e\n",
+                     curr_obj_val_, last_obj_val_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  fabs(curr_obj_val_-last_obj_val_)/Max(1., fabs(curr_obj_val_)) = %23.16e acceptable_obj_change_tol_ = %23.16e\n",
+                     fabs(curr_obj_val_-last_obj_val_)/Max(1., fabs(curr_obj_val_)), acceptable_obj_change_tol_);
+      // DELETEME
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "test iter = %d\n",IpData().iter_count());
+    }
+
     return (overall_error <= acceptable_tol_ &&
             dual_inf <= acceptable_dual_inf_tol_ &&
             constr_viol <= acceptable_constr_viol_tol_ &&
             compl_inf <= acceptable_compl_inf_tol_ &&
-            fabs(obj_val-last_obj_val_)/Max(1., fabs(obj_val)) <= acceptable_obj_change_tol_);
+            fabs(curr_obj_val_-last_obj_val_)/Max(1., fabs(curr_obj_val_)) <= acceptable_obj_change_tol_);
   }
 
 

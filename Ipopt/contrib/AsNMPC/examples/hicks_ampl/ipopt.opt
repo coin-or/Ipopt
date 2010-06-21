@@ -1,0 +1,11 @@
+n_nmpc_steps 1
+nmpc_boundcheck yes
+nmpc_calc_style index
+#nmpc_bound_eps -1e-10
+#fixed_variable_treatment MAKE_PARAMETER
+
+# Turn off the NLP scaling
+#nlp_scaling_method none
+
+print_options_documentation no
+#run_nmpc yes

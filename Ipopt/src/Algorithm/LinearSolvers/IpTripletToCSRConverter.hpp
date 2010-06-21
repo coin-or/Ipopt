@@ -123,13 +123,21 @@ namespace Ipopt
     };
 
   public:
+    /** Enum to specifiy half or full matrix storage */
+    enum ETriFull {
+      /** Lower (or Upper) triangular stored only */
+      Triangular_Format,
+      /** Store both lower and upper parts */
+      Full_Format
+    };
+
     /** @name Constructor/Destructor */
     //@{
     /* Constructor.  If offset is 0, then the counting of indices in
        the compressed format starts a 0 (C-style numbering); if offset
        is 1, then the counting starts at 1 (Fortran-type
        numbering). */
-    TripletToCSRConverter(Index offset);
+    TripletToCSRConverter(Index offset, ETriFull hf = Triangular_Format);
 
     /** Destructor */
     virtual ~TripletToCSRConverter();
@@ -200,6 +208,9 @@ namespace Ipopt
 
     /** Offset for CSR numbering. */
     Index offset_;
+
+    /** Indicator of half (ie lower only) or full (both upr and lwr) matrix */
+    ETriFull hf_;
 
     /** Array storing the values for IA in the condensed format */
     Index* ia_;

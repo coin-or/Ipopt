@@ -59,11 +59,11 @@ liblinalg_la_LIBADD =
 am_liblinalg_la_OBJECTS = IpBlas.lo IpCompoundMatrix.lo \
 	IpCompoundSymMatrix.lo IpCompoundVector.lo IpDenseGenMatrix.lo \
 	IpDenseSymMatrix.lo IpDenseVector.lo IpDiagMatrix.lo \
-	IpExpansionMatrix.lo IpIdentityMatrix.lo IpLapack.lo \
-	IpLowRankUpdateSymMatrix.lo IpMatrix.lo IpMultiVectorMatrix.lo \
-	IpScaledMatrix.lo IpSumMatrix.lo IpSumSymMatrix.lo \
-	IpSymScaledMatrix.lo IpTransposeMatrix.lo IpVector.lo \
-	IpZeroMatrix.lo
+	IpExpandedMultiVectorMatrix.lo IpExpansionMatrix.lo \
+	IpIdentityMatrix.lo IpLapack.lo IpLowRankUpdateSymMatrix.lo \
+	IpMatrix.lo IpMultiVectorMatrix.lo IpScaledMatrix.lo \
+	IpSumMatrix.lo IpSumSymMatrix.lo IpSymScaledMatrix.lo \
+	IpTransposeMatrix.lo IpVector.lo IpZeroMatrix.lo
 liblinalg_la_OBJECTS = $(am_liblinalg_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -184,6 +184,8 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FADDLIBS = @FADDLIBS@
+FC = @FC@
+FCFLAGS = @FCFLAGS@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
@@ -194,12 +196,15 @@ HAVE_MA28_FALSE = @HAVE_MA28_FALSE@
 HAVE_MA28_TRUE = @HAVE_MA28_TRUE@
 HAVE_MA57_FALSE = @HAVE_MA57_FALSE@
 HAVE_MA57_TRUE = @HAVE_MA57_TRUE@
+HAVE_MA77_FALSE = @HAVE_MA77_FALSE@
+HAVE_MA77_TRUE = @HAVE_MA77_TRUE@
 HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
 HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
 HAVE_WSMP_TRUE = @HAVE_WSMP_TRUE@
+HSL_F90_INCFLAGS = @HSL_F90_INCFLAGS@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -259,6 +264,7 @@ ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_F77 = @ac_ct_F77@
+ac_ct_FC = @ac_ct_FC@
 ac_ct_RANLIB = @ac_ct_RANLIB@
 ac_ct_STRIP = @ac_ct_STRIP@
 ac_cxx_preproc_warn_flag = @ac_cxx_preproc_warn_flag@
@@ -322,6 +328,7 @@ liblinalg_la_SOURCES = \
 	IpDenseSymMatrix.cpp IpDenseSymMatrix.hpp \
 	IpDenseVector.cpp IpDenseVector.hpp \
 	IpDiagMatrix.cpp IpDiagMatrix.hpp \
+	IpExpandedMultiVectorMatrix.cpp IpExpandedMultiVectorMatrix.hpp \
 	IpExpansionMatrix.cpp IpExpansionMatrix.hpp \
 	IpIdentityMatrix.cpp IpIdentityMatrix.hpp \
 	IpLapack.cpp IpLapack.hpp \
@@ -353,6 +360,7 @@ ASTYLE_FILES = IpBlas.cppbak IpBlas.hppbak \
 	IpDenseSymMatrix.cppbak IpDenseSymMatrix.hppbak \
 	IpDenseVector.cppbak IpDenseVector.hppbak \
 	IpDiagMatrix.cppbak IpDiagMatrix.hppbak \
+	IpExpandedMultiVectorMatrix.cppbak IpExpandedMultiVectorMatrix.hppbak \
 	IpExpansionMatrix.cppbak IpExpansionMatrix.hppbak \
 	IpIdentityMatrix.cppbak IpIdentityMatrix.hppbak \
 	IpLapack.cppbak IpLapack.hppbak \
@@ -429,6 +437,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDenseSymMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDenseVector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDiagMatrix.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpExpandedMultiVectorMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpExpansionMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpIdentityMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLapack.Plo@am__quote@

@@ -53,8 +53,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,8,1,0
- PRODUCTVERSION 3,8,1,0
+ FILEVERSION 3,8,2,0
+ PRODUCTVERSION 3,8,2,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -72,13 +72,13 @@ BEGIN
             VALUE "Comments", "Source code of Ipopt can be found at http://www.coin-or.org/projects/Ipopt.xml"
             VALUE "CompanyName", "IBM"
             VALUE "FileDescription", "Ipopt Dynamic Link Library"
-            VALUE "FileVersion", "3, 8, 1, 0"
+            VALUE "FileVersion", "3, 8, 2, 0"
             VALUE "InternalName", "Ipopt"
             VALUE "LegalCopyright", "Copyright (C) 2008 International Business Machines and others."
             VALUE "LegalTrademarks", "All Rights Reserved. This code is published under the Common Public License."
             VALUE "OriginalFilename", " Ipopt38.dll"
             VALUE "ProductName", "Ipopt Dynamic Link Library"
-            VALUE "ProductVersion", "3, 8, 1, 0"
+            VALUE "ProductVersion", "3, 8, 2, 0"
         END
     END
     BLOCK "VarFileInfo"

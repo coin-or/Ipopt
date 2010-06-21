@@ -176,7 +176,7 @@ element for each optimization variable");
   // inequality constraints.
   p = mxGetField(ptr,0,"lambda");
   if (p) {
-    if (!mxIsDouble(p) || (int) mxGetNumberOfElements(p) != m)
+    if (m>0 && (!mxIsDouble(p) || (int) mxGetNumberOfElements(p) != m) )
       throw MatlabException("The initial point for the Lagrange multipliers \
 associated with the constraints must be a double-precision array with one \
 element for each constraint");

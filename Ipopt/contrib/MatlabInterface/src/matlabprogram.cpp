@@ -109,7 +109,7 @@ for lower and upper bounds requested but initial values are not supplied");
     // Check to see whether IPOPT is requesting the initial point for
     // the Lagrange multipliers corresponding to the equality and
     // inequality constraints.
-    if (initializeLambda) {
+    if (initializeLambda && m>0) {
       if (!options.multconstr())
 	throw MatlabException("Initialization of Lagrange multipliers \
 for constraints are requested but initial values are not provided");

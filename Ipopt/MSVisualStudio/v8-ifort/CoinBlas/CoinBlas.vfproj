@@ -43,158 +43,327 @@
 				<Tool Name="VFPreLinkEventTool"/>
 				<Tool Name="VFPreBuildEventTool"/>
 				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release MKL|Win32" ConfigurationType="typeStaticLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLibrarianTool" OutputFile=""/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release MKL|x64" ConfigurationType="typeStaticLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLibrarianTool"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetAMD64"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Header Files" Filter="fi;fd"/>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\caxpy.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ccopy.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cdotc.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cdotu.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cgbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cgemm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cgemv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cgerc.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cgeru.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\chbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\chemm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\chemv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cher.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cher2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cher2k.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cherk.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\chpmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\chpr.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\crotg.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cscal.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\csrot.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\csscal.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\cswap.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\csymm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\csyr2k.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\csyrk.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctbsv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctpmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctpsv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctrmm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctrmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctrsm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctrsv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dasum.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\daxpy.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dcabs1.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dcopy.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ddot.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dgbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dgemm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dgemv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dger.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dnrm2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\drot.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\drotg.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\drotm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\drotmg.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dscal.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsdot.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dspmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dspr.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dspr2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dswap.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsymm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsymv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsyr.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsyr2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsyr2k.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsyrk.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtbsv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtpmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtpsv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtrmm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtrmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtrsm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtrsv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dzasum.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\dznrm2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\icamax.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\idamax.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\isamax.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\izamax.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\lsame.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sasum.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\saxpy.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\scabs1.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\scasum.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\scnrm2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\scopy.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sdot.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sdsdot.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sgbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sgemm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sgemv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sger.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\snrm2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\srot.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\srotg.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\srotm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\srotmg.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sscal.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sspmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sspr.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sspr2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\sswap.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssymm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssymv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssyr.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssyr2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssyr2k.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssyrk.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\stbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\stbsv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\stpmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\stpsv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\strmm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\strmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\strsm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\strsv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\xerbla.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zaxpy.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zcopy.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zdotc.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zdotu.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zdrot.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zdscal.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zgbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zgemm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zgemv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zgerc.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zgeru.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhemm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhemv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zher.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zher2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zher2k.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zherk.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhpmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhpr.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhpr2.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zrotg.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zscal.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zswap.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zsymm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zsyr2k.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\zsyrk.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztbmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztbsv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztpmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztpsv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztrmm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztrmv.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztrsm.f"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztrsv.f"/></Filter></Files>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\caxpy.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ccopy.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cdotc.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cdotu.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cgbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cgemm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cgemv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cgerc.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cgeru.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\chbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\chemm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\chemv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cher.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cher2.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cher2k.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cherk.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\chpmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\chpr.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\crotg.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cscal.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\csrot.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\csscal.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\cswap.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\csymm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\csyr2k.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\csyrk.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctbsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctpmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctpsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctrmm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctrmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctrsm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ctrsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dasum.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\daxpy.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dcabs1.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dcopy.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ddot.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dgbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dgemm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dgemv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dger.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dnrm2.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\drot.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\drotg.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\drotm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\drotmg.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dscal.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsdot.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dspmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dspr.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dspr2.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dswap.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsymm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsymv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsyr.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsyr2.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsyr2k.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dsyrk.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtbsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtpmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtpsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtrmm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtrmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtrsm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dtrsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dzasum.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\dznrm2.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\icamax.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\idamax.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\isamax.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\izamax.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\lsame.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sasum.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\saxpy.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\scabs1.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\scasum.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\scnrm2.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\scopy.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sdot.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sdsdot.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sgbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sgemm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sgemv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sger.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\snrm2.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\srot.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\srotg.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\srotm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\srotmg.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sscal.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sspmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sspr.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sspr2.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\sswap.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssymm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssymv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssyr.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssyr2.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssyr2k.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ssyrk.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\stbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\stbsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\stpmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\stpsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\strmm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\strmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\strsm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\strsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\xerbla.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zaxpy.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zcopy.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zdotc.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zdotu.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zdrot.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zdscal.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zgbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zgemm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zgemv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zgerc.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zgeru.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhemm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhemv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zher.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zher2.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zher2k.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zherk.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhpmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhpr.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zhpr2.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zrotg.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zscal.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zswap.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zsymm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zsyr2k.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\zsyrk.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztbmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztbsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztpmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztpsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztrmm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztrmv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztrsm.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Blas\ztrsv.f">
+			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File></Filter></Files>
 	<Globals/></VisualStudioProject>

@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -263,11 +263,16 @@ namespace Ipopt
       return nlp_;
     }
 
+    /** Reset the timing statistics */
+    void ResetTimes();
+
     void PrintTimingStatistics(Journalist& jnlst,
                                EJournalLevel level,
                                EJournalCategory category) const;
 
-    Number TotalFunctionEvaluationCPUTime() const;
+    Number TotalFunctionEvaluationCpuTime() const;
+    Number TotalFunctionEvaluationSysTime() const;
+    Number TotalFunctionEvaluationWallclockTime() const;
 
   private:
     /** journalist */

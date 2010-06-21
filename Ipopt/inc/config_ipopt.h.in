@@ -108,6 +108,9 @@
 /* Define to 1 if MA57 is available */
 #undef HAVE_MA57
 
+/* Define to 1 if MA77 is available */
+#undef HAVE_MA77
+
 /* Define to 1 if you have the <math.h> header file. */
 #undef HAVE_MATH_H
 

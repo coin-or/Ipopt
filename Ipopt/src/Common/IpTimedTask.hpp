@@ -1,4 +1,4 @@
-// Copyright (C) 2006 International Business Machines and others.
+// Copyright (C) 2006, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -23,7 +23,9 @@ namespace Ipopt
     /** Default constructor. */
     TimedTask()
         :
-        total_time_(0.),
+        total_cputime_(0.),
+        total_systime_(0.),
+        total_walltime_(0.),
         start_called_(false),
         end_called_(true)
     {}
@@ -36,7 +38,9 @@ namespace Ipopt
     /** Method for resetting time to zero. */
     void Reset()
     {
-      total_time_ = 0.;
+      total_cputime_ = 0.;
+      total_systime_ = 0.;
+      total_walltime_ = 0.;
       start_called_ = false;
       end_called_ = true;
     }
@@ -48,7 +52,9 @@ namespace Ipopt
       DBG_ASSERT(!start_called_);
       end_called_ = false;
       start_called_ = true;
-      start_time_ = CpuTime();
+      start_cputime_ = CpuTime();
+      start_systime_ = SysTime();
+      start_walltime_ = WallclockTime();
     }
 
     /** Method that is called after execution of the task. */
@@ -58,7 +64,9 @@ namespace Ipopt
       DBG_ASSERT(start_called_);
       end_called_ = true;
       start_called_ = false;
-      total_time_ += CpuTime() - start_time_;
+      total_cputime_ += CpuTime() - start_cputime_;
+      total_systime_ += SysTime() - start_systime_;
+      total_walltime_ += WallclockTime() - start_walltime_;
     }
 
     /** Method that is called after execution of the task for which
@@ -70,16 +78,32 @@ namespace Ipopt
       if (start_called_) {
         end_called_ = true;
         start_called_ = false;
-        total_time_ += CpuTime() - start_time_;
+        total_cputime_ += CpuTime() - start_cputime_;
+        total_systime_ += SysTime() - start_systime_;
+        total_walltime_ += WallclockTime() - start_walltime_;
       }
       DBG_ASSERT(end_called_);
     }
 
-    /** Method returning total time spend for task so far. */
-    Number TotalTime() const
+    /** Method returning total CPU time spend for task so far. */
+    Number TotalCpuTime() const
     {
       DBG_ASSERT(end_called_);
-      return total_time_;
+      return total_cputime_;
+    }
+
+    /** Method returning total system time spend for task so far. */
+    Number TotalSysTime() const
+    {
+      DBG_ASSERT(end_called_);
+      return total_systime_;
+    }
+
+    /** Method returning total wall clock time spend for task so far. */
+    Number TotalWallclockTime() const
+    {
+      DBG_ASSERT(end_called_);
+      return total_walltime_;
     }
 
   private:
@@ -97,10 +121,18 @@ namespace Ipopt
     void operator=(const TimedTask&);
     //@}
 
-    /** Time at beginning of task. */
-    Number start_time_;
-    /** Total time for task measured so far. */
-    Number total_time_;
+    /** CPU time at beginning of task. */
+    Number start_cputime_;
+    /** Total CPU time for task measured so far. */
+    Number total_cputime_;
+    /** System time at beginning of task. */
+    Number start_systime_;
+    /** Total system time for task measured so far. */
+    Number total_systime_;
+    /** Wall clock time at beginning of task. */
+    Number start_walltime_;
+    /** Total wall clock time for task measured so far. */
+    Number total_walltime_;
 
     /** @name fields for debugging */
     //@{

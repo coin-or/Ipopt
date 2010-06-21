@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -128,7 +128,7 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  std::string ma57_err_msg[] =
+  const char* ma57_err_msg[] =
     {
       "Operation successful.\n",
 
@@ -189,7 +189,7 @@ namespace Ipopt
       "message that will be output on unit ICNTL(2).\n"
     };
 
-  std::string ma57_wrn_msg[] =
+  const char* ma57_wrn_msg[] =
     {
       "Operation successful.\n",
 
@@ -281,7 +281,7 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "ma57_pre_alloc",
       "Safety factor for work space memory allocation for the linear solver MA57.",
-      1., false, 3.,
+      1., false, 1.05,
       "If 1 is chosen, the suggested amount of work space is used.  However, "
       "choosing a larger number might avoid reallocation if the suggest values "
       "do not suffice.  This option is only available if Ipopt has been "
@@ -290,7 +290,39 @@ namespace Ipopt
       "ma57_pivot_order",
       "Controls pivot order in MA57",
       0, 5, 5,
-      "This is INCTL(6) in MA57.");
+      "This is ICNTL(6) in MA57.");
+    roptions->AddStringOption2(
+      "ma57_automatic_scaling",
+      "Controls MA57 automatic scaling",
+      "yes",
+      "no", "Do not scale the linear system matrix",
+      "yes", "Scale the linear system matrix",
+      "This option controls the internal scaling option of MA57."
+      "This is ICNTL(15) in MA57.");
+
+    // CET: 04-29-2010
+    roptions->AddLowerBoundedIntegerOption(
+      "ma57_block_size",
+      "Controls block size used by Level 3 BLAS in MA57BD",
+      1, 16,
+      "This is ICNTL(11) in MA57.");
+
+    roptions->AddLowerBoundedIntegerOption(
+      "ma57_node_amalgamation",
+      "Node amalgamation parameter",
+      1, 16,
+      "This is ICNTL(12) in MA57.");
+
+    roptions->AddBoundedIntegerOption(
+      "ma57_small_pivot_flag",
+      "If set to 1, then when small entries defined by CNTL(2) are detected "
+      "they are removed and the corresponding pivots placed at the end of the "
+      "factorization.  This can be particularly efficient if the matrix is "
+      "highly rank deficient.",
+      0, 1, 0,
+      "This is ICNTL(16) in MA57.");
+    // CET 04-29-2010
+
   }
 
   bool Ma57TSolverInterface::InitializeImpl(const OptionsList&  options,
@@ -316,6 +348,20 @@ namespace Ipopt
                          warm_start_same_structure_, prefix);
     DBG_ASSERT(!warm_start_same_structure_ && "warm_start_same_structure not yet implemented");
 
+    bool ma57_automatic_scaling;
+    options.GetBoolValue("ma57_automatic_scaling", ma57_automatic_scaling, prefix);
+
+    // CET 04-29-2010
+    Index ma57_block_size;
+    options.GetIntegerValue("ma57_block_size", ma57_block_size, prefix);
+
+    Index ma57_node_amalgamation;
+    options.GetIntegerValue("ma57_node_amalgamation", ma57_node_amalgamation, prefix);
+
+    Index ma57_small_pivot_flag;
+    options.GetIntegerValue("ma57_small_pivot_flag", ma57_small_pivot_flag, prefix);
+    // CET 04-29-2010
+
 
     /* Initialize. */
     F77_FUNC (ma57id, MA57ID) (wd_cntl_, wd_icntl_);
@@ -331,6 +377,25 @@ namespace Ipopt
 
     wd_cntl_[1-1]  = pivtol_;    /* Pivot threshold. */
     wd_icntl_[7-1] = 1;      /* Pivoting strategy. */
+
+    // CET: Added 04-29-2010 at suggestion of Jonathan Hogg of HSL
+    wd_icntl_[11-1] = ma57_block_size;   /* Block size used by Level 3 BLAS in MA57BD - should be a multiple of 8.  Default is 16. */
+    wd_icntl_[12-1] = ma57_node_amalgamation; /* Two nodes of the assembly tree are merged only if both involve less than ICNTL(12) eliminations.  Default is 16. */
+    // CET: 04-29-2010
+
+
+    if (ma57_automatic_scaling) {
+      wd_icntl_[15-1] = 1;
+    }
+    else {
+      wd_icntl_[15-1] = 0;
+    }
+
+
+    // CET: Added 04-29-2010 at suggestion of Jonathan Hogg of HSL
+    wd_icntl_[16-1] = ma57_small_pivot_flag;    /* If set to 1, small entries are removed and corresponding pivots are placed at the end of factorization.  May be useful for highly rank deficient matrices.  Default is 0. */
+    // CET: 04-29-2010
+
 
     // wd_icntl[8-1] = 0;       /* Retry factorization. */
 
@@ -467,6 +532,10 @@ namespace Ipopt
 
     wd_iwork_ = new ipfint[5*n];
     wd_keep_  = new ipfint[wd_lkeep_];
+    // Initialize to 0 as otherwise MA57ED can sometimes fail
+    for (int k=0; k<wd_lkeep_; k++) {
+      wd_keep_[k] = 0;
+    }
 
     F77_FUNC (ma57ad, MA57AD)
     (&n, &ne, airn, ajcn, &wd_lkeep_, wd_keep_, wd_iwork_,
@@ -546,11 +615,11 @@ namespace Ipopt
         double  *temp;
         ipfint  ic = 0;
 
-        wd_lfact_ = wd_info_[16];
+        wd_lfact_ = (ipfint)((Number)wd_info_[16] * ma57_pre_alloc_);
         temp = new double[wd_lfact_];
 
-        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                       "Reallocating lfact (%d)\n", wd_lfact_);
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                       "Reallocating memory for MA57: lfact (%d)\n", wd_lfact_);
 
         ipfint idmy;
         F77_FUNC (ma57ed, MA57ED)
@@ -573,7 +642,7 @@ namespace Ipopt
         ipfint  *temp;
         ipfint   ic = 1;
 
-        wd_lifact_ = wd_info_[17];
+        wd_lifact_ = (ipfint)((Number)wd_info_[17] * ma57_pre_alloc_);
         temp = new ipfint[wd_lifact_];
 
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -594,7 +663,7 @@ namespace Ipopt
                        "Error in MA57BD:  %d\n", wd_info_[0]);
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "MA57 Error message: %s\n",
-                       ma57_err_msg[-wd_info_[1-1]].c_str());
+                       ma57_err_msg[-wd_info_[1-1]]);
         return SYMSOLVER_FATAL_ERROR;
       }
       // Check if the system is singular.
@@ -611,13 +680,15 @@ namespace Ipopt
                        "Warning in MA57BD:  %d\n", wd_info_[0]);
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "MA57 Warning message: %s\n",
-                       ma57_wrn_msg[wd_info_[1-1]].c_str());
+                       ma57_wrn_msg[wd_info_[1-1]]);
         // For now, abort the process so that we don't miss any problems
         return SYMSOLVER_FATAL_ERROR;
       }
     }
 
-    // double peak_mem = 1.0e-3 * (wd_lfact*8.0 + wd_lifact*4.0 + wd_lkeep*4.0);
+    double peak_mem = 1.0e-3 * (wd_lfact_*8.0 + wd_lifact_*4.0 + wd_lkeep_*4.0);
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "MA57 peak memory use: %dKB\n", (ipfint)(peak_mem));
 
 
     // Check whether the number of negative eigenvalues matches the
