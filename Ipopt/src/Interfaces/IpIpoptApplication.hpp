@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -146,6 +146,12 @@ namespace Ipopt
     /** Get the Algorithm Object */
     SmartPtr<IpoptAlgorithm> AlgorithmObject();
     //@}
+
+    /** Method for printing Ipopt copyright message now instead of
+     *  just before the optimization.  If you want to have the copy
+     *  right message printed earlier than by default, call this
+     *  method at the convenient time.  */
+    void PrintCopyrightMessage();
 
     /** @name Methods for IpoptTypeInfo */
     //@{

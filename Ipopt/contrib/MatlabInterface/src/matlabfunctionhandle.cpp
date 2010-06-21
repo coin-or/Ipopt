@@ -55,6 +55,8 @@ bool MatlabFunctionHandle::evaluate (int nin, int nout, const mxArray** inputs,
     exitstatus = -1;
   }
   // Free the dynamically allocated memory.
+  for (int i = 1; i <= nin; i++)
+    mxDestroyArray(finputs[i]);
   delete[] finputs;
   return exitstatus == 0;
 }

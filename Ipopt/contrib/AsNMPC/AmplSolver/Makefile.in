@@ -1,0 +1,61 @@
+# Copyright (C) 2009, 2010 Hans Pirnay. 
+# All Rights Reserved.
+# This code is published under the Common Public License.
+#
+# Author: Hans Pirnay, 2009-12-15
+
+
+#############################################################################
+# Do not modify anything below unless you know what you're doing.
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
+libdir      = @libdir@
+bindir      = @bindir@
+ASLLIB      = @ASLLIB@
+ASL_CPPFLAGS = @ASL_CPPFLAGS@
+SRCDIR = @srcdir@
+ipoptsrcdir  = $(SRCDIR)/../../../src
+asnmpcsrcdir = $(SRCDIR)/../src
+
+CXX         = @CXX@
+CXXFLAGS    = @CXXFLAGS@
+LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
+IPOPTLIBDIR = @libdir@
+LIBS        = @ipoptlib@ @ADDLIBS@ $(ASLLIB) -L../src -Wl,-rpath=$(IPOPTLIBDIR) -lasnmpc 
+INCLUDEDIR  = -I${prefix}/include/coin -I$(ipoptsrcdir)/Interfaces -I$(ipoptsrcdir)/Algorithm -I$(ipoptsrcdir)/LinAlg -I$(ipoptsrcdir)/LinAlg/TMatrices -I$(ipoptsrcdir)/Apps/AmplSolver -I$(asnmpcsrcdir)
+
+LIBTOOL = @LIBTOOL@
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+
+ASNMPC_LIB =libasnmpc.so
+
+ASNMPC_LIBNAME =$(ASNMPC_LIB).0.0.0
+
+TARGET = ampl_asnmpc
+
+OBJS   = AmplTNLP.@OBJEXT@ AsAmplNmpcTNLP.@OBJEXT@ 
+
+VPATH = $(SRCDIR):$(ipoptsrcdir)/Apps/AmplSolver
+
+all: $(OBJS)
+
+install: $(TARGET)
+	if test -d $(bindir); then : ; else mkdir $(bindir); fi
+	cp $(TARGET) $(bindir)
+
+uninstall:
+	rm -f $(bindir)/$(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) $(SRCDIR)/ampl_nmpc.cpp -o $(TARGET) $(OBJS) $(LIBS) $(INCLUDEDIR) $(ASL_CPPFLAGS) 
+
+%.@OBJEXT@: %.cpp 
+	$(CXX) $(CXXFLAGS) $(INCLUDEDIR) $(ASL_CPPFLAGS) \
+        -o $@ -c $^
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+distclean: clean

@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -28,7 +28,7 @@ namespace Ipopt
     //@{
     /** The constructor is given the NLP of which the bounds are to be
      *  replaced by inequality constriants.  */
-    NLPBoundsRemover(NLP& nlp);
+    NLPBoundsRemover(NLP& nlp, bool allow_twosided_inequalities = false);
 
     /** Default destructor */
     virtual ~NLPBoundsRemover()
@@ -249,6 +249,10 @@ namespace Ipopt
 
     /** Pointer to the original d space */
     SmartPtr<const VectorSpace> d_space_orig_;
+
+    /** Flag indicating whether twosided inequality constraints are
+     *  allowed */
+    bool allow_twosided_inequalities_;
   };
 
 } // namespace Ipopt

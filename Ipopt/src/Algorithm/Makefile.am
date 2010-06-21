@@ -46,6 +46,7 @@ libipoptalg_la_SOURCES = \
 	IpLineSearch.hpp \
 	IpLoqoMuOracle.cpp IpLoqoMuOracle.hpp \
 	IpLowRankAugSystemSolver.cpp IpLowRankAugSystemSolver.hpp \
+	IpLowRankSSAugSystemSolver.cpp IpLowRankSSAugSystemSolver.hpp \
 	IpMonotoneMuUpdate.cpp IpMonotoneMuUpdate.hpp \
 	IpMuOracle.hpp \
 	IpMuUpdate.hpp \
@@ -127,6 +128,7 @@ ASTYLE_FILES = \
 	IpLineSearch.hppbak \
 	IpLoqoMuOracle.cppbak IpLoqoMuOracle.hppbak \
 	IpLowRankAugSystemSolver.cppbak IpLowRankAugSystemSolver.cppbak \
+	IpLowRankSSAugSystemSolver.cppbak IpLowRankSSAugSystemSolver.cppbak \
 	IpMonotoneMuUpdate.cppbak IpMonotoneMuUpdate.hppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \

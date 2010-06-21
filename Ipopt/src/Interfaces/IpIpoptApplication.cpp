@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -274,6 +274,7 @@ namespace Ipopt
           options_to_print.push_back("obj_scaling_factor");
           options_to_print.push_back("nlp_scaling_method");
           options_to_print.push_back("nlp_scaling_max_gradient");
+          options_to_print.push_back("nlp_scaling_min_value");
 
           options_to_print.push_back("#NLP");
           options_to_print.push_back("bound_relax_factor");
@@ -305,6 +306,7 @@ namespace Ipopt
           options_to_print.push_back("mu_max_fact");
           options_to_print.push_back("mu_max");
           options_to_print.push_back("mu_min");
+          options_to_print.push_back("mu_target");
           options_to_print.push_back("barrier_tol_factor");
           options_to_print.push_back("mu_linear_decrease_factor");
           options_to_print.push_back("mu_superlinear_decrease_power");
@@ -388,6 +390,24 @@ namespace Ipopt
           options_to_print.push_back("ma57_pivtolmax");
           options_to_print.push_back("ma57_pre_alloc");
           options_to_print.push_back("ma57_pivot_order");
+          options_to_print.push_back("ma57_automatic_scaling");
+          options_to_print.push_back("ma57_block_size");
+          options_to_print.push_back("ma57_node_amalgamation");
+          options_to_print.push_back("ma57_small_pivot_flag");
+#endif
+
+#if defined(HAVE_MA77)
+
+          options_to_print.push_back("#MA77 Linear Solver");
+          options_to_print.push_back("ma77_print_level");
+          options_to_print.push_back("ma77_buffer_lpage");
+          options_to_print.push_back("ma77_buffer_npage");
+          options_to_print.push_back("ma77_file_size");
+          options_to_print.push_back("ma77_maxstore");
+          options_to_print.push_back("ma77_nemin");
+          options_to_print.push_back("ma77_small");
+          options_to_print.push_back("ma77_static");
+          options_to_print.push_back("ma77_u");
 #endif
 
 #ifdef COIN_HAS_MUMPS
@@ -467,8 +487,6 @@ namespace Ipopt
 #endif
 
       options_->GetBoolValue("replace_bounds", replace_bounds_, "");
-      options_->GetBoolValue("skip_finalize_solution_call",
-                             skip_finalize_solution_call_, "");
     }
     catch (OPTION_INVALID& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
@@ -734,9 +752,6 @@ namespace Ipopt
     }
 
     statistics_ = NULL; /* delete old statistics */
-    // Reset Timing statistics
-    ip_data_->TimingStats().ResetTimes();
-
     // Get the pointers to the real objects (need to do it that
     // awkwardly since otherwise we would have to include so many
     // things in IpoptApplication, which a user would have to
@@ -749,6 +764,10 @@ namespace Ipopt
     DBG_ASSERT(dynamic_cast<OrigIpoptNLP*> (GetRawPtr(ip_nlp_)));
     IpoptCalculatedQuantities* p2ip_cq = static_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_));
     DBG_ASSERT(dynamic_cast<IpoptCalculatedQuantities*> (GetRawPtr(ip_cq_)));
+
+    // Reset Timing statistics
+    ip_data_->TimingStats().ResetTimes();
+    p2ip_nlp->ResetTimes();
 
     ApplicationReturnStatus retValue = Internal_Error;
     SolverReturn status = INTERNAL_ERROR;
@@ -851,14 +870,14 @@ namespace Ipopt
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Number of Lagrangian Hessian evaluations             = %d\n",
                      p2ip_nlp->h_evals());
-      Number time_overall_alg = p2ip_data->TimingStats().OverallAlgorithm().TotalTime();
-      Number time_funcs = p2ip_nlp->TotalFunctionEvaluationCPUTime();
+      Number cpu_time_overall_alg = p2ip_data->TimingStats().OverallAlgorithm().TotalCpuTime();
+      Number cpu_time_funcs = p2ip_nlp->TotalFunctionEvaluationCpuTime();
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Total CPU secs in IPOPT (w/o function evaluations)   = %10.3f\n",
-                     time_overall_alg-time_funcs);
+                     cpu_time_overall_alg-cpu_time_funcs);
       jnlst_->Printf(J_SUMMARY, J_STATISTICS,
                      "Total CPU secs in NLP function evaluations           = %10.3f\n",
-                     time_funcs);
+                     cpu_time_funcs);
 
       // Write timing statistics information
       if (print_timing_statistics) {
@@ -1016,6 +1035,9 @@ namespace Ipopt
         }
       }
 
+      options_->GetBoolValue("skip_finalize_solution_call",
+                             skip_finalize_solution_call_, "");
+
       if (!skip_finalize_solution_call_) {
         p2ip_nlp->FinalizeSolution(status,
                                    *p2ip_data->curr()->x(),
@@ -1084,6 +1106,11 @@ namespace Ipopt
   SmartPtr<IpoptAlgorithm> IpoptApplication::AlgorithmObject()
   {
     return alg_;
+  }
+
+  void IpoptApplication::PrintCopyrightMessage()
+  {
+    IpoptAlgorithm::print_copyright_message(*jnlst_);
   }
 
 } // namespace Ipopt

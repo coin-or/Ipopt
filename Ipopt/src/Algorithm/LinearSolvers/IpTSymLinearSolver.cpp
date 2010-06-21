@@ -105,6 +105,14 @@ namespace Ipopt
       case SparseSymLinearSolverInterface::CSR_Format_1_Offset:
         triplet_to_csr_converter_ = new TripletToCSRConverter(1);
         break;
+      case SparseSymLinearSolverInterface::CSR_Full_Format_0_Offset:
+        triplet_to_csr_converter_ = new TripletToCSRConverter(0,
+                                    TripletToCSRConverter::Full_Format);
+        break;
+      case SparseSymLinearSolverInterface::CSR_Full_Format_1_Offset:
+        triplet_to_csr_converter_ = new TripletToCSRConverter(1,
+                                    TripletToCSRConverter::Full_Format);
+        break;
       case SparseSymLinearSolverInterface::Triplet_Format:
         triplet_to_csr_converter_ = NULL;
         break;

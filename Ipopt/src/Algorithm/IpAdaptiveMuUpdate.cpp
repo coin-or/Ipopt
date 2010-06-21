@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -210,7 +210,7 @@ namespace Ipopt
     options.GetNumericValue("compl_inf_tol", compl_inf_tol_, prefix);
     if (prefix == "resto.") {
       if (!options.GetNumericValue("mu_min", mu_min_, prefix)) {
-        // For restoration phase, we choose a more conservateive mu_min
+        // For restoration phase, we choose a more conservative mu_min
         mu_min_ = 1e2*mu_min_;
         // Compute mu_min based on tolerance (once the NLP scaling is known)
         mu_min_default_ = true;
@@ -228,6 +228,7 @@ namespace Ipopt
         mu_min_default_ = false;
       }
     }
+    options.GetNumericValue("mu_target", mu_target_, prefix);
 
     init_dual_inf_ = -1.;
     init_primal_inf_ = -1.;
@@ -388,7 +389,8 @@ namespace Ipopt
 
       // Compute the new barrier parameter via the oracle
       Number mu;
-      bool retval = free_mu_oracle_->CalculateMu(mu_min_, mu_max_, mu);
+      bool retval = free_mu_oracle_->CalculateMu(Max(mu_min_, mu_target_),
+                    mu_max_, mu);
       if (!retval) {
         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                        "The mu oracle could not compute a new value of the barrier parameter.\n");
@@ -591,7 +593,8 @@ namespace Ipopt
     bool have_mu = false;
     ;
     if (IsValid(fix_mu_oracle_)) {
-      have_mu = fix_mu_oracle_->CalculateMu(mu_min_, mu_max_, new_mu);
+      have_mu = fix_mu_oracle_->CalculateMu(Max(mu_min_, mu_target_),
+                                            mu_max_, new_mu);
       if (!have_mu) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                        "New fixed value for mu could not be computed from the mu_oracle.\n");

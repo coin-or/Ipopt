@@ -5,7 +5,7 @@
 		<Platform Name="x64"/></Platforms>
 	<Configurations>
 		<Configuration Name="Debug|Win32" ConfigurationType="typeStaticLibrary">
-				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Preprocess="preprocessYes" AdditionalIncludeDirectories="../../../../../IpOpt/ThirdParty/Mumps/MUMPS/src;../../../../../IpOpt/ThirdParty/Mumps/MUMPS/libseq;../../../../../IpOpt/ThirdParty/Mumps/MUMPS/include;.;$(IntDir)" DefaultIncAndUsePath="defaultIncludeCurrent" PreprocessorDefinitions="metis" Interfaces="true" ModulePath="$(IntDir)" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Preprocess="preprocessYes" AdditionalIncludeDirectories="../../../../ThirdParty/Mumps/MUMPS/src;../../../../ThirdParty/Mumps/MUMPS/libseq;../../../../ThirdParty/Mumps/MUMPS/include;.;$(IntDir)" DefaultIncAndUsePath="defaultIncludeCurrent" PreprocessorDefinitions="metis" Interfaces="true" ModulePath="$(IntDir)" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
 				<Tool Name="VFLibrarianTool"/>
 				<Tool Name="VFResourceCompilerTool"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
@@ -43,6 +43,26 @@
 				<Tool Name="VFPreLinkEventTool"/>
 				<Tool Name="VFPreBuildEventTool"/>
 				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release MKL|Win32" ConfigurationType="typeStaticLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" Preprocess="preprocessYes" AdditionalIncludeDirectories="../../../../../IpOpt/ThirdParty/Mumps/MUMPS/src;../../../../../IpOpt/ThirdParty/Mumps/MUMPS/libseq;../../../../../IpOpt/ThirdParty/Mumps/MUMPS/include;.;$(IntDir)" PreprocessorDefinitions="metis"/>
+				<Tool Name="VFLibrarianTool"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release MKL|x64" ConfigurationType="typeStaticLibrary">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" Preprocess="preprocessYes" AdditionalIncludeDirectories="../../../../../IpOpt/ThirdParty/Mumps/MUMPS/src;../../../../../IpOpt/ThirdParty/Mumps/MUMPS/libseq;../../../../../IpOpt/ThirdParty/Mumps/MUMPS/include;.;$(IntDir)" PreprocessorDefinitions="metis"/>
+				<Tool Name="VFLibrarianTool"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetAMD64"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Header Files" Filter="fi;fd"/>
@@ -66,5 +86,6 @@
 		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\dmumps_struc_def.F"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\mumps_ooc_common.F"/>
 		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\mumps_part9.F"/>
-		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\mumps_static_mapping.F"/></Filter></Filter></Files>
+		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\mumps_static_mapping.F"/>
+		<File RelativePath="..\..\..\..\ThirdParty\Mumps\MUMPS\src\tools_common_mod.F"/></Filter></Filter></Files>
 	<Globals/></VisualStudioProject>

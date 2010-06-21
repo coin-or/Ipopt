@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2009 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -88,6 +88,9 @@ namespace Ipopt
 
     /** target size of norm for constraint gradients */
     Number scaling_constr_target_gradient_;
+
+    /** minimum value of a scaling parameter */
+    Number scaling_min_value_;
   };
 } // namespace Ipopt
 #endif

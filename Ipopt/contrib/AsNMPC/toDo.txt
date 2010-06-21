@@ -1,0 +1,63 @@
+AmplTNLP
+- rewrite get_suffixhandler as const
+
+AsAmplNmpcTNLP
+- errorcheck in get_number_suffix for NULL suffix
+- remove get_bounds_info ?
+
+AmplMeasurement
++ replace string operations by append_Index function
+
+SchurData
++ try easy implementations for Multiply/Transmultiply in SchurData (see e.g. TransMultiply)
++ write functions that set the schurdata from z.b. arrays
++ write MakeNewCopy() functions for all implementations
++ write new constructor to make this easier
+- Remove StdSchurData?
+- exchange GetMultiplyingVectors by a transmultiply implementation that accepts pointers.
+  (see StdPCalculator for the only use of this function) 
+
+AsSensStepCalc
++ move InitializeImpl to the implementation!
+
+AsIndexPCalculator
++ use std::map instead of std::vector for PColumn list so it is easier to sort/find them
+
+SchurDriver
++ write InitializeImpl
+
+AsNmpController
++ write InitializeImpl
+
+AsNMPCApplication
+- in function SetIpoptAlgorithmObjects: rewrite checking of consistency of inputs
+
+NmpcTNLPAdapter
++ write inverse of ResortX in TNLPAdapter
+
+MakeFile 
++ Remove AsAsNmpcSetup if decided so
+
+General
++ include print functions for all major classes. Allows deep testing
++ include #ifndefs in all new header files
++ make sure debug mode is switched on in every cpp file
+- think about using the same ownerspace for all u-vectors - makes use of meta-data possible
++ decide on AsAsNmpcSetup (decision made: get rid of it)
++ Add options to decide which Pcalc to use
++ Add options to decide which SchurData to use (this is in a lot of places...)
+- Add options to decide which SchurDriver to use
++ All classes that have at least one virtual function should have virtual destructors
+- Add assignment operator and copy constructor to all classes
+- All these warnings with vector.size() comparisons?
+- test with valgrind
+- where does the function go that resets the SchurData??
+- measure time for each action
+- decent output at beginning and end
++ is AmplNMPCTNLP necessary to be given to NMPCApplication??
+- the measurement class should go outside the library so everyone can/must write their own measurement class
+
+Milestones
++ write a makefile.am and get it to compile as an add-on to ipopt with the new nlp structure.
++ write print functions and test schur calculation
+

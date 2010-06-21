@@ -554,7 +554,7 @@ namespace Ipopt
   {
     lowercase_buffer_ = tag;
     for (Index i=0; i<(Index)tag.length(); i++) {
-      lowercase_buffer_[i] = tolower(tag[i]);
+      lowercase_buffer_[i] = (char)tolower(tag[i]);
     }
     return lowercase_buffer_;
   }
@@ -757,7 +757,7 @@ namespace Ipopt
 
     // Now read the token
     while (!is.eof() && (inside_quotes || !isspace(c))) {
-      token += c;
+      token += (char)c;
       c = is.get();
       if (inside_quotes && (c=='"')) {
         inside_quotes = false;

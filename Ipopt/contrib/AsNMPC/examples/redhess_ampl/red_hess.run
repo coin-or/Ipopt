@@ -1,0 +1,34 @@
+# Copyright 2009 Hans Pirnay
+# All Rights Reserved.
+# This code is published under the Common Public License.
+#
+# Date   : 2010-10-04
+
+# This AMPL script shows how to use the reduced hessian feature
+# of the asNMPC code. 
+
+reset;
+option solver ampl_asnmpc;
+
+# turn presolve off so no variables / equations are eliminated
+# by AMPL
+option presolve 0;  
+
+# Introduce the reduced hessian suffix
+suffix red_hessian, IN;
+
+# define the variables
+var x1:=25;
+var x2:=0;
+var x3:=0;
+
+# set the variables 2 and 3 free variables. The ordering of the 
+# variable suffixes will correspond to the ordering of the columns
+let x2.red_hessian := 1;
+let x3.red_hessian := 2;
+
+con1: x1+2*x2+3*x3=0;
+
+minimize obj: (x1-1)^2 +(x2-2)^2 + (x3-3)^2;
+
+solve;

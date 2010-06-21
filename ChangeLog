@@ -2,6 +2,12 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2010-06-16 releases/3.8.2
+        - uses MUMPS version 4.9 and Lapack version 3.2.1
+        - added AsNMPC contribution made by Hans Pirnay
+        - enhanced MA57 options
+        - several bug fixes and minor additions
+
 2009-10-30 releases/3.8.1
         - Bugfix in NLP function evaluation timing measurement.  The
           time for the objective function gradient had been forgotten.
