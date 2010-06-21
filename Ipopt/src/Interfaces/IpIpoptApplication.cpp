@@ -396,7 +396,7 @@ namespace Ipopt
           options_to_print.push_back("ma57_small_pivot_flag");
 #endif
 
-#if defined(HAVE_MA77) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(HAVE_MA77)
 
           options_to_print.push_back("#MA77 Linear Solver");
           options_to_print.push_back("ma77_print_level");
