@@ -38,7 +38,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.8.0.  It includes
+  This document is a guide to using \Ipopt\ 3.8.2.  It includes
   instructions on how to obtain and compile \Ipopt, a description of
   the interface, user options, etc., as well as a tutorial on how to
   solve a nonlinear optimization problem with \Ipopt.
@@ -390,7 +390,7 @@ To use the tarball, follow the steps below:
 \item Download the desired tarball from
   \texttt{http://www.coin-or.org/download/source/Ipopt}, it has the form {\tt
     Ipopt-{\em x.y.z}.tgz}, where {\tt\em x.y.z} is the version
-  number, such as {\tt 3.8.0}.  There might also be daily snapshot
+  number, such as {\tt 3.8.2}.  There might also be daily snapshot
   from the stable branch.  The number of the latest official release
   can be found on the \Ipopt\ Trac page.
 \item Issue the following commands to unpack the archive file: \\
@@ -3308,7 +3308,7 @@ Below a few particular options are discussed:
   explicitly, using the \verb/--with-blas/ flag for {\tt configure}.
   For example,
 
-  \verb|./configure --with-blas="-L$HOME/lib -latlas"|
+  \verb|./configure --with-blas="-L$HOME/lib -lf77blas -lcblas -latlas"|
 
   To tell the configure script to compile and use the downloaded BLAS
   source files even if a BLAS library is found on your system, specify
@@ -3417,6 +3417,8 @@ Below a few particular options are discussed:
     -bmaxdata:0x3f0000000'
     $\backslash$\\ \hspace*{14ex} FFLAGS='-O3 -bmaxdata:0x3f0000000' $\backslash$\\
     \hspace*{14ex} CXXFLAGS='-qrtti=dyna -O3 -bmaxdata:0x3f0000000'}
+
+  (Alternatively, a simpler solution for AIX is to set the environment variable {\tt OBJECT\_MODE} to 64.)
 
 % \item To build library/archive files (with the ending {\tt .a})
 %   including C++ code in some environments, it is necessary to use the
