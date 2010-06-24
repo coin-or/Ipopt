@@ -42,32 +42,45 @@ namespace Ipopt
     SmartPtr<DenseGenMatrixSpace> S_space = new DenseGenMatrixSpace(dim_S, dim_S);
     SmartPtr<DenseGenMatrix> S = new DenseGenMatrix(GetRawPtr(S_space));
     bool retval = pcalc_->GetSchurMatrix(*hess_data_, *S);
-    
-    S->Print(Jnlst(),J_VECTOR,J_USER1,"RedHessian");
 
-    // columns have to be unscaled. All elements are from x, so we only have to determine the x-scaling
-    SmartPtr<IteratesVector> scaling_factors;
-    scaling_factors = IpData().curr()->MakeNewIteratesVector();
-    scaling_factors->Set(1.0);
+    bool have_x_scaling, have_c_scaling, have_d_scaling;
+    have_x_scaling = IpNLP().NLP_scaling()->have_x_scaling();
+    have_c_scaling = IpNLP().NLP_scaling()->have_c_scaling();
+    have_d_scaling = IpNLP().NLP_scaling()->have_d_scaling();
 
-    if (IpNLP().NLP_scaling()->have_x_scaling()) {
-      SmartPtr<const Vector> x_scaling = IpNLP().NLP_scaling()->unapply_vector_scaling_x(scaling_factors->x());
-
-      scaling_factors->Set(0.0);
-      scaling_factors->Set_x(*x_scaling);
-
-      scaling_factors->Print(Jnlst(),J_VECTOR,J_USER1,"scal_fac");
+    if (have_x_scaling || have_c_scaling || have_d_scaling) {
+      Jnlst().Printf(J_WARNING, J_MAIN, 
+		     "\n"
+		     "-------------------------------------------------------------------------------\n"
+		     "                              *** WARNING ***\n"
+		     "-------------------------------------------------------------------------------\n"
+		     "You are using the reduced hessian feature with scaling of\n");
+      if (have_x_scaling) {
+	Jnlst().Printf(J_WARNING, J_MAIN, "*** variables\n");
+      }
+      if (have_c_scaling) {
+	Jnlst().Printf(J_WARNING, J_MAIN, "*** equality constraints\n");
+      }
+      if (have_d_scaling) {
+	Jnlst().Printf(J_WARNING, J_MAIN, "*** inequality constraints\n");
+      }
+      Jnlst().Printf(J_WARNING, J_MAIN, 
+		     "enabled.\n"
+		     "A correct unscaled solution of the reduced hessian cannot be guaranteed in this\n"
+		     "case. Please consider rerunning with scaling turned off.\n"
+		     "-------------------------------------------------------------------------------\n\n");
+      
     }
 
-    SmartPtr<DenseVectorSpace> red_hess_space = new DenseVectorSpace(hess_data_->GetNRowsAdded());
-    SmartPtr<DenseVector> matrix_scaling = new DenseVector(GetRawPtr(red_hess_space));
+    // Unscale by objective factor and multiply by (-1)
+    Number obj_scal = IpNLP().NLP_scaling()->apply_obj_scaling(1.0);
+    DBG_PRINT((dbg_verbosity, "Objective scaling = %f\n", obj_scal));
+    Number* s_val = S->Values();
+    for (Index k=0; k<(S->NRows())*(S->NCols()); ++k) {
+      s_val[k] *= -obj_scal;
+    }
 
-    hess_data_->Multiply(*scaling_factors, *matrix_scaling);
-    matrix_scaling->Scal(-1.0);
-
-    S->ScaleColumns(*matrix_scaling);
-    
-    S->Print(Jnlst(),J_INSUPPRESSIBLE,J_USER1,"RedHessian");
+    S->Print(Jnlst(),J_INSUPPRESSIBLE,J_USER1,"RedHessian unscaled");
     
     return retval;
   }
