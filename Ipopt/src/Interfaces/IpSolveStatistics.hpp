@@ -49,6 +49,12 @@ namespace Ipopt
     virtual Index IterationCount() const;
     /** Total CPU time, including function evaluations. */
     virtual Number TotalCpuTime() const;
+    /** Total CPU time, including function evaluations. Included for
+     *  backward compatibility. */
+    Number TotalCPUTime() const
+    {
+      return TotalCpuTime();
+    }
     /** Total System time, including function evaluations. */
     virtual Number TotalSysTime() const;
     /** Total wall clock time, including function evaluations. */
