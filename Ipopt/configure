@@ -1750,7 +1750,11 @@ else
 fi
 
 
-#Set the project's version number
+# We set the following variable so that we know later in AC_COIN_FINALIZE
+# that we are in a project main directory
+coin_projectdir=yes
+
+# Set the project's version number
 if test "x" != x; then
 
 cat >>confdefs.h <<_ACEOF
@@ -1759,7 +1763,7 @@ _ACEOF
 
 fi
 
-#Set the project's SVN revision number
+# Set the project's SVN revision number
 # Extract the first word of "svnversion", so it can be a program name with args.
 set dummy svnversion; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
@@ -1808,11 +1812,7 @@ _ACEOF
   fi
 fi
 
-# We set the following variable so that we know later in AC_COIN_FINALIZE
-# that we are in a project main directory
-coin_projectdir=yes
-
-# Check if a library version is set for libtool
+# Capture libtool library version, if given.
 
 
 
@@ -2852,7 +2852,7 @@ if test x"$CFLAGS" = x; then
       icc* | */icc*)
         ;;
       *)
-        coin_opt_cflags="-O3 -fomit-frame-pointer"
+        coin_opt_cflags="-O3"
         coin_add_cflags="-pipe"
         coin_dbg_cflags="-g"
         coin_warn_cflags="-Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wno-unknown-pragmas"
@@ -3766,7 +3766,7 @@ if test x"$CXXFLAGS" = x; then
         ;;
       *)
 # ToDo decide about unroll-loops
-        coin_opt_cxxflags="-O3 -fomit-frame-pointer"
+        coin_opt_cxxflags="-O3"
         coin_add_cxxflags="-pipe"
         coin_dbg_cxxflags="-g"
         coin_warn_cxxflags="-Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas"
@@ -4606,7 +4606,7 @@ if test "$F77" != "unavailable" && test x"$FFLAGS" = x ; then
   coin_warn_fflags=
 
   if test "$G77" = "yes"; then
-    coin_opt_fflags="-O3 -fomit-frame-pointer"
+    coin_opt_fflags="-O3"
     coin_add_fflags="-pipe"
     coin_dbg_fflags="-g"
     case $enable_doscompile in

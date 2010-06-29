@@ -2,6 +2,10 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2010-06-29 releases/3.8.3
+        - restated SolveStatistics::TotalCPUTime method for backward
+          compatibility
+
 2010-06-16 releases/3.8.2
         - uses MUMPS version 4.9 and Lapack version 3.2.1
         - added AsNMPC contribution made by Hans Pirnay
