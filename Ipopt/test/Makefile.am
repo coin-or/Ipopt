@@ -33,6 +33,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src/Common` \
 
 AM_FFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src/Interfaces`
 
+LIBS += $(BLAS_LIBS) $(LAPACK_LIBS) $(MUMPS_LIBS) $(HSL_LIBS)
+
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc

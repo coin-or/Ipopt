@@ -11,8 +11,8 @@ prefix      = @prefix@
 exec_prefix = @exec_prefix@
 libdir      = @libdir@
 bindir      = @bindir@
-ASLLIB      = @ASLLIB@
-ASL_CPPFLAGS = @ASL_CPPFLAGS@
+CYGPATH_W   = @CYGPATH_W@
+ASL_CPPFLAGS = @ASL_CFLAGS@
 SRCDIR = @srcdir@
 ipoptsrcdir  = $(SRCDIR)/../../../src
 asnmpcsrcdir = $(SRCDIR)/../src
@@ -20,8 +20,8 @@ asnmpcsrcdir = $(SRCDIR)/../src
 CXX         = @CXX@
 CXXFLAGS    = @CXXFLAGS@
 LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
-IPOPTLIBDIR = @libdir@
-LIBS        = @ipoptlib@ @ADDLIBS@ $(ASLLIB) -L../src -Wl,-rpath=$(IPOPTLIBDIR) -lasnmpc 
+IPOPTLIBDIR = @libdir@/coin
+LIBS        = -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty @ipoptlib@ @ASL_LIBS@ @BLAS_LIBS@ @LAPACK_LIBS@ @MUMPS_LIBS@ @HSL_LIBS@ -L../src -Wl,-rpath=$(IPOPTLIBDIR) -lasnmpc
 INCLUDEDIR  = -I${prefix}/include/coin -I$(ipoptsrcdir)/Interfaces -I$(ipoptsrcdir)/Algorithm -I$(ipoptsrcdir)/LinAlg -I$(ipoptsrcdir)/LinAlg/TMatrices -I$(ipoptsrcdir)/Apps/AmplSolver -I$(asnmpcsrcdir)
 
 LIBTOOL = @LIBTOOL@

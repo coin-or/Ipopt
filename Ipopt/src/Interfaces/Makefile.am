@@ -22,7 +22,8 @@ includeipopt_HEADERS = \
 	IpTNLP.hpp \
 	IpTNLPReducer.hpp
 
-lib_LTLIBRARIES = libipopt.la
+coinlibdir = $(libdir)/coin
+coinlib_LTLIBRARIES = libipopt.la
 
 libipopt_la_SOURCES = \
 	IpAlgTypes.hpp \
@@ -45,11 +46,15 @@ libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
-addlibsdir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)/
+addlibsdir = $(datadir)/coin/doc/Ipopt
+addlibs_DATA = ipopt_addlibs_f.txt
 
-ADDLIBS_FILES = \
-	ipopt_addlibs_cpp.txt \
-	ipopt_addlibs_f.txt
+if COIN_HAS_PKGCONFIG
+addlibs_DATA += ipopt_addlibs_cpp.txt
+
+ipopt_addlibs_cpp.txt : ../../ipopt.pc
+	PKG_CONFIG_PATH=../..:@COIN_PKG_CONFIG_PATH@ $(PKG_CONFIG) --libs ipopt > ipopt_addlibs_cpp.txt
+endif
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
@@ -61,20 +66,14 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 
 CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common`
 
+if COIN_HAS_HSL
+CXXFLAGS += $(HSL_CFLAGS)
+CFLAGS   += $(HSL_CFLAGS)
+endif
+
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
-
-# Make sure the addlibs files are installed in lib
-install-exec-local:
-	for i in $(ADDLIBS_FILES); do \
-	  $(install_sh_DATA) $$i $(DESTDIR)$(addlibsdir)/$$i; \
-	done
-
-uninstall-local:
-	for i in $(ADDLIBS_FILES); do \
-	  rm -f $(DESTDIR)$(addlibsdir)/$$i; \
-	done
 
 # Astyle stuff
 
@@ -92,6 +91,8 @@ ASTYLE_FILES = \
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
+
+CLEANFILES = ipopt_addlibs_cpp.txt
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 

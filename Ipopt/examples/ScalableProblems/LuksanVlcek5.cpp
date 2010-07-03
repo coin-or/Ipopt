@@ -18,6 +18,8 @@
 # endif
 #endif
 
+#include <cstdio>
+
 using namespace Ipopt;
 
 inline static Index Sgn(Number a)

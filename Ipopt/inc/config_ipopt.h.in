@@ -3,22 +3,19 @@
 /* Define to 1 if the inexact linear solver option is included */
 #undef BUILD_INEXACT
 
-/* If defined, the Ampl Solver Library is available. */
+/* Define to 1 if the ASL module is available */
 #undef COIN_HAS_ASL
 
 /* If defined, the BLAS Library is available. */
 #undef COIN_HAS_BLAS
 
-/* Define to 1 if the Ipopt package is used */
-#undef COIN_HAS_IPOPT
+/* Define to 1 if the HSL module is available */
+#undef COIN_HAS_HSL
 
 /* If defined, the LAPACK Library is available. */
 #undef COIN_HAS_LAPACK
 
-/* If defined, the METIS library is available. */
-#undef COIN_HAS_METIS
-
-/* If defined, the MUMPS Library is available. */
+/* Define to 1 if the Mumps module is available */
 #undef COIN_HAS_MUMPS
 
 /* Define to the debug sanity check level (0 is no test) */
@@ -99,23 +96,8 @@
    loading of shared libaries with linear solvers */
 #undef HAVE_LINEARSOLVERLOADER
 
-/* Define to 1 if MA27 is available */
-#undef HAVE_MA27
-
-/* Define to 1 if MA28 is available */
-#undef HAVE_MA28
-
-/* Define to 1 if MA57 is available */
-#undef HAVE_MA57
-
-/* Define to 1 if MA77 is available */
-#undef HAVE_MA77
-
 /* Define to 1 if you have the <math.h> header file. */
 #undef HAVE_MATH_H
-
-/* Define to 1 if MC19 is available */
-#undef HAVE_MC19
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
@@ -186,6 +168,12 @@
 /* Define to 1 if you have the `_vsnprintf' function. */
 #undef HAVE__VSNPRINTF
 
+/* SVN revision number of project */
+#undef IPOPT_SVN_REV
+
+/* Version number of project */
+#undef IPOPT_VERSION
+
 /* Define to be the name of C-function for NaNInf check */
 #undef MY_C_FINITE
 
@@ -218,9 +206,3 @@
 
 /* Version number of package */
 #undef VERSION
-
-/* SVN revision number of project */
-#undef _SVN_REV
-
-/* Version number of project */
-#undef _VERSION

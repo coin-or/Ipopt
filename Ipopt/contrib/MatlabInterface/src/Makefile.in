@@ -29,13 +29,13 @@ MEX = $(MATLAB_HOME)/bin/mex
 # Do not modify anything below unless you know what you're doing.
 exec_prefix = @exec_prefix@
 prefix      = @prefix@
-libdir      = @libdir@
+libdir      = @libdir@/coin
 
 CXX         = @CXX@
 CXXFLAGS    = @CXXFLAGS@ -DMATLAB_MEXFILE # -DMWINDEXISINT
 LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
-IPOPTLIBDIR = @libdir@
-LIBS        = @ipoptlib@ @ADDLIBS@
+IPOPTLIBDIR = @libdir@/coin
+LIBS        = -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty @ipoptlib@ @BLAS_LIBS@ @LAPACK_LIBS@ @MUMPS_LIBS@ @HSL_LIBS@
 MEXFLAGS    = -v -cxx -O CC="$(CXX)" CXX="$(CXX)" LD="$(CXX)"       \
               COPTIMFLAGS="$(CXXFLAGS)" CXXOPTIMFLAGS="$(CXXFLAGS)" \
               LDOPTIMFLAGS="$(LDFLAGS)" 

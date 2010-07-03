@@ -9,12 +9,13 @@
 
 asnmpc_lib = asnmpc_lib
 ampl_asnmpc_exe = ampl_asnmpc_exe
-ALL_TARGETS = $(asnmpc_lib) $(ampl_asnmpc_exe)
-ASLDIR = ../../../ThirdParty/ASL
-DIRS = $(ASLDIR) ./src ./AmplSolver
-TARGETDIRS = ./src ./AmplSolver
+ALL_TARGETS = $(asnmpc_lib)
+DIRS = ./src
+TARGETDIRS = ./src
 
-
+@COIN_HAS_ASL_TRUE@ALL_TARGETS += $(ampl_asnmpc_exe)
+@COIN_HAS_ASL_TRUE@DIRS += ./AmplSolver
+@COIN_HAS_ASL_TRUE@TARGETDIRS += ./AmplSolver
 
 all: $(ALL_TARGETS)
 
@@ -24,11 +25,8 @@ install: all
 clean: 
 	-for d in $(DIRS); do (cd $$d; $(MAKE) clean ); done
 
-$(ampl_asnmpc_exe): $(asnmpc_lib) ASL
+$(ampl_asnmpc_exe): $(asnmpc_lib)
 	$(MAKE) -C AmplSolver
 
 $(asnmpc_lib): 
 	$(MAKE) -C src
-
-ASL: 
-	$(MAKE) -C $(ASLDIR)
