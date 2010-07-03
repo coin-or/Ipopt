@@ -29,6 +29,7 @@
 ########################################################################
 #                    Documentation installation                        #
 ########################################################################
+
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -54,11 +55,9 @@ host_triplet = @host@
 @BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = src/contrib/LinearSolverLoader
 @ALWAYS_FALSE@am__append_2 = test
 DIST_COMMON = README $(am__configure_deps) \
-	$(srcdir)/../BuildTools/Makemain.inc $(srcdir)/../config.guess \
-	$(srcdir)/../config.sub $(srcdir)/../install-sh \
-	$(srcdir)/../ltmain.sh $(srcdir)/../missing \
-	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(top_srcdir)/configure \
+	$(srcdir)/BuildTools/Makemain.inc $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in $(srcdir)/ipopt-uninstalled.pc.in \
+	$(srcdir)/ipopt.pc.in $(top_srcdir)/configure \
 	$(top_srcdir)/contrib/AsNMPC/AmplSolver/Makefile.in \
 	$(top_srcdir)/contrib/AsNMPC/Makefile.in \
 	$(top_srcdir)/contrib/AsNMPC/examples/parametric_cpp/Makefile.in \
@@ -94,7 +93,8 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/tutorial/CodingExercise/Matlab/1-skeleton/startup.m.in \
 	$(top_srcdir)/tutorial/CodingExercise/Matlab/2-mistake/startup.m.in \
 	$(top_srcdir)/tutorial/CodingExercise/Matlab/3-solution/startup.m.in \
-	AUTHORS INSTALL
+	AUTHORS INSTALL config.guess config.sub depcomp install-sh \
+	ltmain.sh missing
 @HAVE_EXTERNALS_TRUE@am__append_3 = Externals
 @HAVE_EXTERNALS_TRUE@am__append_4 = .Externals-stamp
 subdir = .
@@ -133,7 +133,8 @@ CONFIG_CLEAN_FILES = examples/hs071_f/Makefile \
 	contrib/JavaInterface/Makefile contrib/AsNMPC/Makefile \
 	contrib/AsNMPC/AmplSolver/Makefile \
 	contrib/AsNMPC/examples/parametric_cpp/Makefile \
-	contrib/AsNMPC/examples/redhess_cpp/Makefile
+	contrib/AsNMPC/examples/redhess_cpp/Makefile ipopt.pc \
+	ipopt-uninstalled.pc
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -142,6 +143,15 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	install-recursive installcheck-recursive installdirs-recursive \
 	pdf-recursive ps-recursive uninstall-info-recursive \
 	uninstall-recursive
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
+am__installdirs = "$(DESTDIR)$(pkgconfiglibdir)"
+pkgconfiglibDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(pkgconfiglib_DATA)
 ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm \
@@ -172,8 +182,9 @@ AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
 AMTAR = @AMTAR@
 AR = @AR@
-ASLLIB = @ASLLIB@
-ASL_CPPFLAGS = @ASL_CPPFLAGS@
+ASL_CFLAGS = @ASL_CFLAGS@
+ASL_DATA = @ASL_DATA@
+ASL_LIBS = @ASL_LIBS@
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 AUTOCONF = @AUTOCONF@
@@ -184,6 +195,9 @@ AWK = @AWK@
 BIT32FCOMMENT = @BIT32FCOMMENT@
 BIT64FCOMMENT = @BIT64FCOMMENT@
 BITS_PER_POINTER = @BITS_PER_POINTER@
+BLAS_CFLAGS = @BLAS_CFLAGS@
+BLAS_DATA = @BLAS_DATA@
+BLAS_LIBS = @BLAS_LIBS@
 BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
 BUILD_HSLLOADER_FALSE = @BUILD_HSLLOADER_FALSE@
@@ -198,24 +212,19 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
 CFLAGS = @CFLAGS@
-COIN_BUILD_BLAS_FALSE = @COIN_BUILD_BLAS_FALSE@
-COIN_BUILD_BLAS_TRUE = @COIN_BUILD_BLAS_TRUE@
-COIN_BUILD_LAPACK_FALSE = @COIN_BUILD_LAPACK_FALSE@
-COIN_BUILD_LAPACK_TRUE = @COIN_BUILD_LAPACK_TRUE@
-COIN_BUILD_MUMPS_FALSE = @COIN_BUILD_MUMPS_FALSE@
-COIN_BUILD_MUMPS_TRUE = @COIN_BUILD_MUMPS_TRUE@
 COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
 COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
 COIN_HAS_BLAS_FALSE = @COIN_HAS_BLAS_FALSE@
 COIN_HAS_BLAS_TRUE = @COIN_HAS_BLAS_TRUE@
-COIN_HAS_IPOPT_FALSE = @COIN_HAS_IPOPT_FALSE@
-COIN_HAS_IPOPT_TRUE = @COIN_HAS_IPOPT_TRUE@
+COIN_HAS_HSL_FALSE = @COIN_HAS_HSL_FALSE@
+COIN_HAS_HSL_TRUE = @COIN_HAS_HSL_TRUE@
 COIN_HAS_LAPACK_FALSE = @COIN_HAS_LAPACK_FALSE@
 COIN_HAS_LAPACK_TRUE = @COIN_HAS_LAPACK_TRUE@
-COIN_HAS_METIS_FALSE = @COIN_HAS_METIS_FALSE@
-COIN_HAS_METIS_TRUE = @COIN_HAS_METIS_TRUE@
 COIN_HAS_MUMPS_FALSE = @COIN_HAS_MUMPS_FALSE@
 COIN_HAS_MUMPS_TRUE = @COIN_HAS_MUMPS_TRUE@
+COIN_HAS_PKGCONFIG_FALSE = @COIN_HAS_PKGCONFIG_FALSE@
+COIN_HAS_PKGCONFIG_TRUE = @COIN_HAS_PKGCONFIG_TRUE@
+COIN_PKG_CONFIG_PATH = @COIN_PKG_CONFIG_PATH@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -259,17 +268,20 @@ HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
 HAVE_WSMP_TRUE = @HAVE_WSMP_TRUE@
-HSL_F90_INCFLAGS = @HSL_F90_INCFLAGS@
+HSL_CFLAGS = @HSL_CFLAGS@
+HSL_DATA = @HSL_DATA@
+HSL_LIBS = @HSL_LIBS@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 IPALLLIBS = @IPALLLIBS@
-IPOPTDOCDIR = @IPOPTDOCDIR@
-IPOPTOBJDIR = @IPOPTOBJDIR@
-IPOPTSRCDIR = @IPOPTSRCDIR@
+IPOPT_SVN_REV = @IPOPT_SVN_REV@
 JAVA_HOME = @JAVA_HOME@
 JIPOPTDLL = @JIPOPTDLL@
+LAPACK_CFLAGS = @LAPACK_CFLAGS@
+LAPACK_DATA = @LAPACK_DATA@
+LAPACK_LIBS = @LAPACK_LIBS@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
@@ -288,9 +300,9 @@ MEXSUFFIX = @MEXSUFFIX@
 MPICC = @MPICC@
 MPICXX = @MPICXX@
 MPIF77 = @MPIF77@
-MUMPSINCDIR = @MUMPSINCDIR@
-MUMPSLIB = @MUMPSLIB@
-MUMPS_INCFLAGS = @MUMPS_INCFLAGS@
+MUMPS_CFLAGS = @MUMPS_CFLAGS@
+MUMPS_DATA = @MUMPS_DATA@
+MUMPS_LIBS = @MUMPS_LIBS@
 OBJEXT = @OBJEXT@
 OPT_CFLAGS = @OPT_CFLAGS@
 OPT_CXXFLAGS = @OPT_CXXFLAGS@
@@ -302,7 +314,9 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
+REQUIREDPACKAGES = @REQUIREDPACKAGES@
 RPATH_FLAGS = @RPATH_FLAGS@
 SET_MAKE = @SET_MAKE@
 SHARED_FLAGS = @SHARED_FLAGS@
@@ -310,7 +324,6 @@ SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
-_SVN_REV = @_SVN_REV@
 abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
 abs_lib_dir = @abs_lib_dir@
@@ -324,6 +337,7 @@ ac_ct_FC = @ac_ct_FC@
 ac_ct_RANLIB = @ac_ct_RANLIB@
 ac_ct_STRIP = @ac_ct_STRIP@
 ac_cxx_preproc_warn_flag = @ac_cxx_preproc_warn_flag@
+ac_pt_PKG_CONFIG = @ac_pt_PKG_CONFIG@
 am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
 am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
 am__fastdepCXX_FALSE = @am__fastdepCXX_FALSE@
@@ -444,6 +458,8 @@ DISTCLEANFILES = examples/Cpp_example/cpp_example@EXEEXT@ \
 	$(am__append_4) $(VPATH_DISTCLEANFILES)
 tmpdir = tmpdir
 libipopt = libipopt.a
+pkgconfiglibdir = $(libdir)/pkgconfig
+pkgconfiglib_DATA = ipopt.pc
 DocFiles = README AUTHORS LICENSE
 DocInstallDir = $(datadir)/coin/doc/$(PACKAGE_NAME)
 all: all-recursive
@@ -451,7 +467,7 @@ all: all-recursive
 .SUFFIXES:
 am--refresh:
 	@:
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(srcdir)/../BuildTools/Makemain.inc $(am__configure_deps)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(srcdir)/BuildTools/Makemain.inc $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -559,6 +575,10 @@ contrib/AsNMPC/examples/parametric_cpp/Makefile: $(top_builddir)/config.status $
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/AsNMPC/examples/redhess_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/AsNMPC/examples/redhess_cpp/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+ipopt.pc: $(top_builddir)/config.status $(srcdir)/ipopt.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+ipopt-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/ipopt-uninstalled.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -569,6 +589,23 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
+install-pkgconfiglibDATA: $(pkgconfiglib_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(pkgconfiglibdir)" || $(mkdir_p) "$(DESTDIR)$(pkgconfiglibdir)"
+	@list='$(pkgconfiglib_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(pkgconfiglibDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(pkgconfiglibdir)/$$f'"; \
+	  $(pkgconfiglibDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(pkgconfiglibdir)/$$f"; \
+	done
+
+uninstall-pkgconfiglibDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(pkgconfiglib_DATA)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(pkgconfiglibdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(pkgconfiglibdir)/$$f"; \
+	done
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -705,7 +742,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/.. $(distdir)/../BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/AsNMPC $(distdir)/contrib/AsNMPC/AmplSolver $(distdir)/contrib/AsNMPC/examples/parametric_cpp $(distdir)/contrib/AsNMPC/examples/redhess_cpp $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface-Old/examples $(distdir)/contrib/MatlabInterface-Old/src $(distdir)/contrib/MatlabInterface/examples $(distdir)/contrib/MatlabInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Interfaces $(distdir)/test $(distdir)/tutorial/CodingExercise/C/1-skeleton $(distdir)/tutorial/CodingExercise/C/2-mistake $(distdir)/tutorial/CodingExercise/C/3-solution $(distdir)/tutorial/CodingExercise/Cpp/1-skeleton $(distdir)/tutorial/CodingExercise/Cpp/2-mistake $(distdir)/tutorial/CodingExercise/Cpp/3-solution $(distdir)/tutorial/CodingExercise/Fortran/1-skeleton $(distdir)/tutorial/CodingExercise/Fortran/2-mistake $(distdir)/tutorial/CodingExercise/Fortran/3-solution $(distdir)/tutorial/CodingExercise/Matlab/1-skeleton $(distdir)/tutorial/CodingExercise/Matlab/2-mistake $(distdir)/tutorial/CodingExercise/Matlab/3-solution
+	$(mkdir_p) $(distdir)/. $(distdir)/BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/AsNMPC $(distdir)/contrib/AsNMPC/AmplSolver $(distdir)/contrib/AsNMPC/examples/parametric_cpp $(distdir)/contrib/AsNMPC/examples/redhess_cpp $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface-Old/examples $(distdir)/contrib/MatlabInterface-Old/src $(distdir)/contrib/MatlabInterface/examples $(distdir)/contrib/MatlabInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Interfaces $(distdir)/test $(distdir)/tutorial/CodingExercise/C/1-skeleton $(distdir)/tutorial/CodingExercise/C/2-mistake $(distdir)/tutorial/CodingExercise/C/3-solution $(distdir)/tutorial/CodingExercise/Cpp/1-skeleton $(distdir)/tutorial/CodingExercise/Cpp/2-mistake $(distdir)/tutorial/CodingExercise/Cpp/3-solution $(distdir)/tutorial/CodingExercise/Fortran/1-skeleton $(distdir)/tutorial/CodingExercise/Fortran/2-mistake $(distdir)/tutorial/CodingExercise/Fortran/3-solution $(distdir)/tutorial/CodingExercise/Matlab/1-skeleton $(distdir)/tutorial/CodingExercise/Matlab/2-mistake $(distdir)/tutorial/CodingExercise/Matlab/3-solution
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -846,9 +883,12 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 check: check-recursive
-all-am: Makefile
+all-am: Makefile $(DATA)
 installdirs: installdirs-recursive
 installdirs-am:
+	for dir in "$(DESTDIR)$(pkgconfiglibdir)"; do \
+	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
+	done
 install: install-recursive
 install-exec: install-exec-recursive
 install-data: install-data-recursive
@@ -894,7 +934,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am:
+install-data-am: install-pkgconfiglibDATA
 
 install-exec-am: install-exec-local
 
@@ -922,7 +962,8 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-info-am uninstall-local
+uninstall-am: uninstall-info-am uninstall-local \
+	uninstall-pkgconfiglibDATA
 
 uninstall-info: uninstall-info-recursive
 
@@ -935,12 +976,13 @@ uninstall-info: uninstall-info-recursive
 	distuninstallcheck dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-exec \
 	install-exec-am install-exec-local install-info \
-	install-info-am install-man install-strip installcheck \
-	installcheck-am installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic maintainer-clean-recursive \
-	mostlyclean mostlyclean-generic mostlyclean-libtool \
-	mostlyclean-recursive pdf pdf-am ps ps-am tags tags-recursive \
-	uninstall uninstall-am uninstall-info-am uninstall-local
+	install-info-am install-man install-pkgconfiglibDATA \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	maintainer-clean-recursive mostlyclean mostlyclean-generic \
+	mostlyclean-libtool mostlyclean-recursive pdf pdf-am ps ps-am \
+	tags tags-recursive uninstall uninstall-am uninstall-info-am \
+	uninstall-local uninstall-pkgconfiglibDATA
 
 
 .PHONY: cuter test unitTest astyle

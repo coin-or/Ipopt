@@ -41,7 +41,7 @@ AC_CANONICAL_BUILD
 # the source root directory contains definition of where to find those
 # externals.  The following macro ensures that those externals are
 # retrieved by svn if they are not there yet.
-AC_COIN_PROJECTDIR_INIT
+AC_COIN_PROJECTDIR_INIT(Ipopt)
 
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(Ipopt)
@@ -104,7 +104,21 @@ AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
 #                              COIN components                              #
 #############################################################################
 
-AC_COIN_HAS_PROJECT(Ipopt)
+AC_COIN_HAS_MODULE_BLAS
+AC_COIN_HAS_MODULE_LAPACK
+AC_COIN_HAS_MODULE(ASL,   [coinasl], [required=0], [../ThirdParty/ASL])
+AC_COIN_HAS_MODULE(HSL,   [coinhsl], [],           [../ThirdParty/HSL])
+AC_COIN_HAS_MODULE(Mumps, [coinmumps])
+if test $coin_has_mumps != yes ; then
+  AC_COIN_HAS_MODULE_FALLBACK(Mumps, [coinmumps], [../ThirdParty/Mumps])
+  AC_COIN_HAS_MODULE_FALLBACK(Metis, [coinmetis], [../ThirdParty/Metis], [dodefine=0 doconditional=0])
+  MUMPS_CFLAGS="$MUMPS_CFLAGS $METIS_CFLAGS"
+  MUMPS_LIBS="$MUMPS_LIBS $METIS_LIBS"
+fi
+
+if test $coin_has_lapack != yes; then
+  AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
+fi
 
 #############################################################################
 #                             Stuff for examples                            #
@@ -331,126 +345,44 @@ using namespace std;])
 # will hick-up
 LIBS_without_ADDLIBS="$LIBS"
 
-#######################
-#        BLAS         #
-#######################
+#######
+# HSL #
+#######
 
-AC_COIN_HAS_BLAS
-if test $coin_has_blas = no; then
-  AC_MSG_ERROR([cannot find BLAS])
+# check HSL_CFLAGS to see which HSL functions are available in the HSL lib
+
+have_ma27=no
+have_ma28=no
+have_ma57=no
+have_mc19=no
+have_ma77=no
+if test $coin_has_hsl = yes ; then
+  case $HSL_CFLAGS in 
+    *HAVE_MA27*)
+       have_ma27=yes
+       ;;
+  esac
+  case $HSL_CFLAGS in 
+    *HAVE_MA28*)
+       have_ma28=yes
+       ;;
+  esac
+  case $HSL_CFLAGS in 
+    *HAVE_MA57*)
+       have_ma57=yes
+       ;;
+  esac
+  case $HSL_CFLAGS in 
+    *HAVE_MC19*)
+       have_mc19=yes
+       ;;
+  esac
+  case $HSL_CFLAGS in 
+    *HAVE_MA77*)
+       have_ma77=yes
+       ;;
+  esac
 fi
-
-#######################
-#       LAPACK        #
-#######################
-
-AC_COIN_HAS_LAPACK
-if test $coin_has_lapack = no; then
-  AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
-fi
-
-#########
-# METIS #
-#########
-
-AC_COIN_HAS_METIS
-
-#######################
-# HARWELL SUBROUTINES #
-#######################
-
-hslobjdir=../ThirdParty/HSL
-hslsrcdir=$srcdir/$hslobjdir
-
-AC_MSG_CHECKING([whether we can compile Fortran 90 code])
-AC_LANG_PUSH(Fortran 77)
-AC_COMPILE_IFELSE([        MODULE BLA
-      DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE :: BLUBB
-      END MODULE BLA],[have_f90=yes],[have_f90=no])
-AC_MSG_RESULT([$have_f90])
-AC_LANG_POP(Fortran 77)
-
-AC_DEFUN([MY_CHECK_HSL],
-         [AC_MSG_CHECKING([for $1 in $use_hsl])
-          use_$2=
-          AC_F77_FUNC($1,cfunc)
-          AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc()],
-                      [AC_DEFINE(HAVE_$2,1,[Define to 1 if $2 is available])
-		       AC_MSG_RESULT([yes]); use_$2=yes],
-                      [AC_MSG_RESULT([no]); use_$2=no])])
-
-AC_DEFUN([MY_CHECK_HSLFILE],
-         [AC_COIN_CHECK_FILE([$hslsrcdir/$1.f],
-                        [AC_DEFINE(HAVE_$2,1,[Define to 1 if $2 is available]) use_$2=BUILD],
-                        [use_$2=no])])
-AC_DEFUN([MY_CHECK_HSLFILE_F90],
-         [if test $have_f90 = yes; then
-	    AC_COIN_CHECK_FILE([$hslsrcdir/$1.f90],
-                               [AC_DEFINE(HAVE_$2,1,[Define to 1 if $2 is available]) use_$2=BUILD],
-                               [use_$2=no])
-          else
-            use_$2=no
-          fi])
-
-AC_MSG_NOTICE([Checking for Harwell subroutine library])
-
-AC_ARG_WITH([hsl],
-            AC_HELP_STRING([--with-hsl],
-                           [specify Harwell library (or BUILD for compilation)]),
-            [use_hsl=$withval], [use_hsl=BUILD])
-
-# First check if there is a working HSL ThirdParty project
-if test "$use_hsl" = BUILD; then
-  AC_COIN_CHECK_FILE([$hslobjdir/Makefile],[],[use_hsl=])
-fi
-
-if test "$use_hsl" = BUILD; then
-  # First check if there is a working HSL ThirdParty project
-  AC_COIN_CHECK_FILE([$hslobjdir/Makefile],[],[use_hsl=unavailable])
-
-  if test "$use_hsl" = BUILD; then
-    # Check which files are available
-    MY_CHECK_HSLFILE(ma27ad,MA27)
-    ## This test is already done in ThirdParty configure
-    #  if test "$use_MA27" = BUILD; then
-    #    AC_MSG_CHECKING([whether MA27 is threadsafe])
-    #    if $EGREP MA27UD $hslsrcdir/ma27ad.f >/dev/null 2>&1; then
-    #      AC_MSG_RESULT(yes)
-    #    else
-    #      AC_MSG_RESULT(no)
-    #      AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])
-    #    fi
-    #  fi
-    MY_CHECK_HSLFILE(mc19ad,MC19)
-    MY_CHECK_HSLFILE(ma57ad,MA57)
-    MY_CHECK_HSLFILE_F90(hsl_ma77d,MA77)
-    MY_CHECK_HSLFILE(ma28ad,MA28)
-    coin_need_flibs=yes
-    HSL_F90_INCFLAGS="-I`cd $hslobjdir; pwd`"
-  fi
-else
-  if test "$use_hsl" != no; then
-    SAVE_LIBS="$LIBS"
-    LIBS="$use_hsl $LIBS $FLIBS"
-    ADDLIBS="$use_hsl $ADDLIBS"
-    MY_CHECK_HSL([ma27ad],[MA27])
-    if test "$use_MA27" = "yes"; then
-      AC_MSG_CHECKING([whether MA27 is threadsafe])
-      AC_F77_FUNC(ma27ud, cfunc)
-      AC_TRY_LINK([extern "C" {void $cfunc();}],[$cfunc],
-                  [AC_MSG_RESULT(yes)],
-                  [AC_MSG_RESULT(no)
-  		 AC_MSG_ERROR([Please obtain the threadsafe (newer) version of MA27])])
-    fi
-    MY_CHECK_HSL([mc19ad],[MC19])
-    MY_CHECK_HSL([ma57ad],[MA57])
-    MY_CHECK_HSL([ma28ad],[MA28])
-#  TODO: We are missing the test for MA77 here
-    use_MA77=no
-    LIBS="$use_hsl $SAVE_LIBS"
-  fi
-fi
-AC_SUBST(HSL_F90_INCFLAGS)
 
 ###########
 # PARDISO #
@@ -491,12 +423,6 @@ if test "$use_pardiso" != "no"; then
 fi
 AC_LANG_POP([Fortran 77])
 
-#########
-# MUMPS #
-#########
-
-AC_COIN_HAS_MUMPS
-
 ########
 # WSMP #
 ########
@@ -523,7 +449,7 @@ fi
 
 # Check if at least one linear solver was found
 
-if test "$use_MA27" = "no" -a "$use_MA57" = "no" -a "$use_MA77" = "no" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" = no; then
+if test "$have_ma27" != "yes" -a "$have_ma57" != "yes" -a "$have_ma77" != "yes" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" != yes; then
   AC_MSG_WARN("You are compiling Ipopt without any linear solver (such as MUMPS).  You will only be able to run Ipopt if you compile a shared library with a linear solver.")
 fi
 
@@ -570,14 +496,6 @@ fi
 # the C compiler can link programs
 #LIBS="$LIBS $FLIBS"
 # ToDo should this go into BLAS and LAPACK test????
-
-#######################
-# AMPL SOLVER LIBRARY #
-#######################
-
-LIBS="$LIBS_without_ADDLIBS"
-
-AC_COIN_HAS_ASL
 
 AC_LANG_POP(C++)
 
@@ -721,31 +639,11 @@ AC_SUBST(ipoptlib)
 AC_SUBST(IPALLLIBS)
 IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
-if test "$use_blas" = BUILD; then
-  IPALLLIBS="../../../ThirdParty/Blas/libcoinblas.la $IPALLLIBS"
-fi
-
-if test "$use_lapack" = BUILD; then
-  IPALLLIBS="../../../ThirdParty/Lapack/libcoinlapack.la $IPALLLIBS"
-fi
-
-if test "$use_metis" = BUILD ; then
-  IPALLLIBS="../../../ThirdParty/Metis/libcoinmetis.la $IPALLLIBS"
-fi
-
-if test "$use_hsl" = BUILD ; then
-  IPALLLIBS="../../../ThirdParty/HSL/libcoinhsl.la $IPALLLIBS"
-fi
-
-if test "$use_mumps" = BUILD ; then
-  IPALLLIBS="../../../ThirdParty/Mumps/libcoinmumps.la $IPALLLIBS"
-fi
-
-AM_CONDITIONAL([HAVE_MA27],[test ! "$use_MA27" = no])
-AM_CONDITIONAL([HAVE_MA57],[test ! "$use_MA57" = no])
-AM_CONDITIONAL([HAVE_MA77],[test ! "$use_MA77" = no])
-AM_CONDITIONAL([HAVE_MA28],[test ! "$use_MA28" = no])
-AM_CONDITIONAL([HAVE_MC19],[test ! "$use_MC19" = no])
+AM_CONDITIONAL([HAVE_MA27],[test "$have_ma27" = yes])
+AM_CONDITIONAL([HAVE_MA57],[test "$have_ma57" = yes])
+AM_CONDITIONAL([HAVE_MA28],[test "$have_ma28" = yes])
+AM_CONDITIONAL([HAVE_MA77],[test "$have_ma77" = yes])
+AM_CONDITIONAL([HAVE_MC19],[test "$have_mc19" = yes])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
@@ -770,7 +668,7 @@ if test $use_linearsolverloader = yes; then
 fi
 
 AM_CONDITIONAL([BUILD_LINEARSOLVERLOADER],[test $use_linearsolverloader = yes])
-AM_CONDITIONAL([BUILD_HSLLOADER],[test "$use_MA27" = no -o "$use_MA28" = no -o "$use_MA57" = no -o "$use_MA77" = no -o "$use_MC19" = no])
+AM_CONDITIONAL([BUILD_HSLLOADER],[test "$have_ma27" != yes -o "$have_ma28" != yes -o "$have_ma57" != yes -o "$have_ma77" != yes -o "$have_mc19" != yes])
 AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$use_pardiso" = no])
 
 AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])
@@ -877,7 +775,6 @@ AC_CONFIG_FILES([Makefile
 		 src/LinAlg/TMatrices/Makefile 
 		 src/Interfaces/Makefile
 		 src/Interfaces/ipopt_addlibs_f.txt
-		 src/Interfaces/ipopt_addlibs_cpp.txt
 		 src/Algorithm/Makefile
 		 src/Algorithm/LinearSolvers/Makefile
 		 src/Algorithm/Inexact/Makefile
@@ -918,7 +815,8 @@ AC_CONFIG_FILES([Makefile
 		 contrib/AsNMPC/AmplSolver/Makefile
 		 contrib/AsNMPC/examples/parametric_cpp/Makefile
 		 contrib/AsNMPC/examples/redhess_cpp/Makefile
-		 contrib/AsNMPC/src/Makefile])
+		 contrib/AsNMPC/src/Makefile
+		 ipopt.pc ipopt-uninstalled.pc])
 
 AC_CONFIG_HEADER([inc/config_ipopt.h])
 

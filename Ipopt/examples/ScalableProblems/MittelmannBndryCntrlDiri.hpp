@@ -22,6 +22,8 @@
 # endif
 #endif
 
+#include <cstdio>
+
 using namespace Ipopt;
 
 /** Base class for boundary control problems with Dirichlet boundary

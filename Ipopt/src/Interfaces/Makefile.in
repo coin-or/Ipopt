@@ -21,6 +21,7 @@
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 
+
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -43,10 +44,12 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@COIN_HAS_PKGCONFIG_TRUE@am__append_1 = ipopt_addlibs_cpp.txt
+@COIN_HAS_HSL_TRUE@am__append_2 = $(HSL_CFLAGS)
+@COIN_HAS_HSL_TRUE@am__append_3 = $(HSL_CFLAGS)
 subdir = src/Interfaces
 DIST_COMMON = $(includeipopt_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/ipopt_addlibs_cpp.txt.in \
-	$(srcdir)/ipopt_addlibs_f.txt.in
+	$(srcdir)/Makefile.in $(srcdir)/ipopt_addlibs_f.txt.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.ac
@@ -54,22 +57,23 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
-CONFIG_CLEAN_FILES = ipopt_addlibs_f.txt ipopt_addlibs_cpp.txt
+CONFIG_CLEAN_FILES = ipopt_addlibs_f.txt
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"
-libLTLIBRARIES_INSTALL = $(INSTALL)
-LTLIBRARIES = $(lib_LTLIBRARIES)
+am__installdirs = "$(DESTDIR)$(coinlibdir)" "$(DESTDIR)$(addlibsdir)" \
+	"$(DESTDIR)$(includeipoptdir)"
+coinlibLTLIBRARIES_INSTALL = $(INSTALL)
+LTLIBRARIES = $(coinlib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
 	IpSolveStatistics.lo IpStdCInterface.lo IpStdFInterface.lo \
 	IpStdInterfaceTNLP.lo IpTNLPAdapter.lo IpTNLPReducer.lo
 libipopt_la_OBJECTS = $(am_libipopt_la_OBJECTS)
-depcomp = $(SHELL) $(top_srcdir)/../depcomp
+depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -89,6 +93,8 @@ CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libipopt_la_SOURCES)
 DIST_SOURCES = $(libipopt_la_SOURCES)
+addlibsDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(addlibs_DATA)
 includeipoptHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(includeipopt_HEADERS)
 ETAGS = etags
@@ -108,8 +114,9 @@ AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
 AMTAR = @AMTAR@
 AR = @AR@
-ASLLIB = @ASLLIB@
-ASL_CPPFLAGS = @ASL_CPPFLAGS@
+ASL_CFLAGS = @ASL_CFLAGS@
+ASL_DATA = @ASL_DATA@
+ASL_LIBS = @ASL_LIBS@
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
 AUTOCONF = @AUTOCONF@
@@ -120,6 +127,9 @@ AWK = @AWK@
 BIT32FCOMMENT = @BIT32FCOMMENT@
 BIT64FCOMMENT = @BIT64FCOMMENT@
 BITS_PER_POINTER = @BITS_PER_POINTER@
+BLAS_CFLAGS = @BLAS_CFLAGS@
+BLAS_DATA = @BLAS_DATA@
+BLAS_LIBS = @BLAS_LIBS@
 BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
 BUILD_HSLLOADER_FALSE = @BUILD_HSLLOADER_FALSE@
@@ -133,25 +143,20 @@ BUILD_PARDISOLOADER_TRUE = @BUILD_PARDISOLOADER_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
-CFLAGS = @CFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common`
-COIN_BUILD_BLAS_FALSE = @COIN_BUILD_BLAS_FALSE@
-COIN_BUILD_BLAS_TRUE = @COIN_BUILD_BLAS_TRUE@
-COIN_BUILD_LAPACK_FALSE = @COIN_BUILD_LAPACK_FALSE@
-COIN_BUILD_LAPACK_TRUE = @COIN_BUILD_LAPACK_TRUE@
-COIN_BUILD_MUMPS_FALSE = @COIN_BUILD_MUMPS_FALSE@
-COIN_BUILD_MUMPS_TRUE = @COIN_BUILD_MUMPS_TRUE@
+CFLAGS = @CFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` $(am__append_3)
 COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
 COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
 COIN_HAS_BLAS_FALSE = @COIN_HAS_BLAS_FALSE@
 COIN_HAS_BLAS_TRUE = @COIN_HAS_BLAS_TRUE@
-COIN_HAS_IPOPT_FALSE = @COIN_HAS_IPOPT_FALSE@
-COIN_HAS_IPOPT_TRUE = @COIN_HAS_IPOPT_TRUE@
+COIN_HAS_HSL_FALSE = @COIN_HAS_HSL_FALSE@
+COIN_HAS_HSL_TRUE = @COIN_HAS_HSL_TRUE@
 COIN_HAS_LAPACK_FALSE = @COIN_HAS_LAPACK_FALSE@
 COIN_HAS_LAPACK_TRUE = @COIN_HAS_LAPACK_TRUE@
-COIN_HAS_METIS_FALSE = @COIN_HAS_METIS_FALSE@
-COIN_HAS_METIS_TRUE = @COIN_HAS_METIS_TRUE@
 COIN_HAS_MUMPS_FALSE = @COIN_HAS_MUMPS_FALSE@
 COIN_HAS_MUMPS_TRUE = @COIN_HAS_MUMPS_TRUE@
+COIN_HAS_PKGCONFIG_FALSE = @COIN_HAS_PKGCONFIG_FALSE@
+COIN_HAS_PKGCONFIG_TRUE = @COIN_HAS_PKGCONFIG_TRUE@
+COIN_PKG_CONFIG_PATH = @COIN_PKG_CONFIG_PATH@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -165,7 +170,7 @@ CXXFLAGS = @CXXFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	$(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/../Algorithm` -I`$(CYGPATH_W) \
 	$(srcdir)/../Algorithm/Inexact` -I`$(CYGPATH_W) \
-	$(srcdir)/../contrib/CGPenalty`
+	$(srcdir)/../contrib/CGPenalty` $(am__append_2)
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DBG_CFLAGS = @DBG_CFLAGS@
@@ -201,17 +206,20 @@ HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
 HAVE_WSMP_TRUE = @HAVE_WSMP_TRUE@
-HSL_F90_INCFLAGS = @HSL_F90_INCFLAGS@
+HSL_CFLAGS = @HSL_CFLAGS@
+HSL_DATA = @HSL_DATA@
+HSL_LIBS = @HSL_LIBS@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 IPALLLIBS = @IPALLLIBS@
-IPOPTDOCDIR = @IPOPTDOCDIR@
-IPOPTOBJDIR = @IPOPTOBJDIR@
-IPOPTSRCDIR = @IPOPTSRCDIR@
+IPOPT_SVN_REV = @IPOPT_SVN_REV@
 JAVA_HOME = @JAVA_HOME@
 JIPOPTDLL = @JIPOPTDLL@
+LAPACK_CFLAGS = @LAPACK_CFLAGS@
+LAPACK_DATA = @LAPACK_DATA@
+LAPACK_LIBS = @LAPACK_LIBS@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
@@ -230,9 +238,9 @@ MEXSUFFIX = @MEXSUFFIX@
 MPICC = @MPICC@
 MPICXX = @MPICXX@
 MPIF77 = @MPIF77@
-MUMPSINCDIR = @MUMPSINCDIR@
-MUMPSLIB = @MUMPSLIB@
-MUMPS_INCFLAGS = @MUMPS_INCFLAGS@
+MUMPS_CFLAGS = @MUMPS_CFLAGS@
+MUMPS_DATA = @MUMPS_DATA@
+MUMPS_LIBS = @MUMPS_LIBS@
 OBJEXT = @OBJEXT@
 OPT_CFLAGS = @OPT_CFLAGS@
 OPT_CXXFLAGS = @OPT_CXXFLAGS@
@@ -244,7 +252,9 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
+REQUIREDPACKAGES = @REQUIREDPACKAGES@
 RPATH_FLAGS = @RPATH_FLAGS@
 SET_MAKE = @SET_MAKE@
 SHARED_FLAGS = @SHARED_FLAGS@
@@ -252,7 +262,6 @@ SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
-_SVN_REV = @_SVN_REV@
 abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
 abs_lib_dir = @abs_lib_dir@
@@ -266,6 +275,7 @@ ac_ct_FC = @ac_ct_FC@
 ac_ct_RANLIB = @ac_ct_RANLIB@
 ac_ct_STRIP = @ac_ct_STRIP@
 ac_cxx_preproc_warn_flag = @ac_cxx_preproc_warn_flag@
+ac_pt_PKG_CONFIG = @ac_pt_PKG_CONFIG@
 am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
 am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
 am__fastdepCXX_FALSE = @am__fastdepCXX_FALSE@
@@ -324,7 +334,8 @@ includeipopt_HEADERS = \
 	IpTNLP.hpp \
 	IpTNLPReducer.hpp
 
-lib_LTLIBRARIES = libipopt.la
+coinlibdir = $(libdir)/coin
+coinlib_LTLIBRARIES = libipopt.la
 libipopt_la_SOURCES = \
 	IpAlgTypes.hpp \
 	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
@@ -343,11 +354,8 @@ libipopt_la_SOURCES = \
 libipopt_la_LIBADD = $(IPALLLIBS)
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
-addlibsdir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)/
-ADDLIBS_FILES = \
-	ipopt_addlibs_cpp.txt \
-	ipopt_addlibs_f.txt
-
+addlibsdir = $(datadir)/coin/doc/Ipopt
+addlibs_DATA = ipopt_addlibs_f.txt $(am__append_1)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -366,6 +374,7 @@ ASTYLE_FILES = \
 	IpTNLPAdapter.cppbak IpTNLPAdapter.hppbak \
 	IpTNLPReducer.cppbak IpTNLPReducer.hppbak
 
+CLEANFILES = ipopt_addlibs_cpp.txt
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
 all: all-am
@@ -403,37 +412,35 @@ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 ipopt_addlibs_f.txt: $(top_builddir)/config.status $(srcdir)/ipopt_addlibs_f.txt.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-ipopt_addlibs_cpp.txt: $(top_builddir)/config.status $(srcdir)/ipopt_addlibs_cpp.txt.in
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+install-coinlibLTLIBRARIES: $(coinlib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
-	test -z "$(libdir)" || $(mkdir_p) "$(DESTDIR)$(libdir)"
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	test -z "$(coinlibdir)" || $(mkdir_p) "$(DESTDIR)$(coinlibdir)"
+	@list='$(coinlib_LTLIBRARIES)'; for p in $$list; do \
 	  if test -f $$p; then \
 	    f=$(am__strip_dir) \
-	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
-	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
+	    echo " $(LIBTOOL) --mode=install $(coinlibLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(coinlibdir)/$$f'"; \
+	    $(LIBTOOL) --mode=install $(coinlibLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(coinlibdir)/$$f"; \
 	  else :; fi; \
 	done
 
-uninstall-libLTLIBRARIES:
+uninstall-coinlibLTLIBRARIES:
 	@$(NORMAL_UNINSTALL)
-	@set -x; list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	@set -x; list='$(coinlib_LTLIBRARIES)'; for p in $$list; do \
 	  p=$(am__strip_dir) \
-	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$p'"; \
-	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$p"; \
+	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(coinlibdir)/$$p'"; \
+	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(coinlibdir)/$$p"; \
 	done
 
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+clean-coinlibLTLIBRARIES:
+	-test -z "$(coinlib_LTLIBRARIES)" || rm -f $(coinlib_LTLIBRARIES)
+	@list='$(coinlib_LTLIBRARIES)'; for p in $$list; do \
 	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
 	  test "$$dir" != "$$p" || dir=.; \
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
 libipopt.la: $(libipopt_la_OBJECTS) $(libipopt_la_DEPENDENCIES) 
-	$(CXXLINK) -rpath $(libdir) $(libipopt_la_LDFLAGS) $(libipopt_la_OBJECTS) $(libipopt_la_LIBADD) $(LIBS)
+	$(CXXLINK) -rpath $(coinlibdir) $(libipopt_la_LDFLAGS) $(libipopt_la_OBJECTS) $(libipopt_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -501,6 +508,23 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
+install-addlibsDATA: $(addlibs_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(addlibsdir)" || $(mkdir_p) "$(DESTDIR)$(addlibsdir)"
+	@list='$(addlibs_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(addlibsDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(addlibsdir)/$$f'"; \
+	  $(addlibsDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(addlibsdir)/$$f"; \
+	done
+
+uninstall-addlibsDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(addlibs_DATA)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(addlibsdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(addlibsdir)/$$f"; \
+	done
 install-includeipoptHEADERS: $(includeipopt_HEADERS)
 	@$(NORMAL_INSTALL)
 	test -z "$(includeipoptdir)" || $(mkdir_p) "$(DESTDIR)$(includeipoptdir)"
@@ -596,9 +620,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"; do \
+	for dir in "$(DESTDIR)$(coinlibdir)" "$(DESTDIR)$(addlibsdir)" "$(DESTDIR)$(includeipoptdir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -618,6 +642,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -628,7 +653,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+clean-am: clean-coinlibLTLIBRARIES clean-generic clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
@@ -647,9 +672,10 @@ info: info-am
 
 info-am:
 
-install-data-am: install-includeipoptHEADERS
+install-data-am: install-addlibsDATA install-coinlibLTLIBRARIES \
+	install-includeipoptHEADERS
 
-install-exec-am: install-exec-local install-libLTLIBRARIES
+install-exec-am:
 
 install-info: install-info-am
 
@@ -675,34 +701,27 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-includeipoptHEADERS uninstall-info-am \
-	uninstall-libLTLIBRARIES uninstall-local
+uninstall-am: uninstall-addlibsDATA uninstall-coinlibLTLIBRARIES \
+	uninstall-includeipoptHEADERS uninstall-info-am
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libLTLIBRARIES clean-libtool ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-exec \
-	install-exec-am install-exec-local install-includeipoptHEADERS \
-	install-info install-info-am install-libLTLIBRARIES \
-	install-man install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-includeipoptHEADERS uninstall-info-am \
-	uninstall-libLTLIBRARIES uninstall-local
+.PHONY: CTAGS GTAGS all all-am check check-am clean \
+	clean-coinlibLTLIBRARIES clean-generic clean-libtool ctags \
+	distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-addlibsDATA install-am \
+	install-coinlibLTLIBRARIES install-data install-data-am \
+	install-exec install-exec-am install-includeipoptHEADERS \
+	install-info install-info-am install-man install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-addlibsDATA uninstall-am \
+	uninstall-coinlibLTLIBRARIES uninstall-includeipoptHEADERS \
+	uninstall-info-am
 
 
-# Make sure the addlibs files are installed in lib
-install-exec-local:
-	for i in $(ADDLIBS_FILES); do \
-	  $(install_sh_DATA) $$i $(DESTDIR)$(addlibsdir)/$$i; \
-	done
-
-uninstall-local:
-	for i in $(ADDLIBS_FILES); do \
-	  rm -f $(DESTDIR)$(addlibsdir)/$$i; \
-	done
+@COIN_HAS_PKGCONFIG_TRUE@ipopt_addlibs_cpp.txt : ../../ipopt.pc
+@COIN_HAS_PKGCONFIG_TRUE@	PKG_CONFIG_PATH=../..:@COIN_PKG_CONFIG_PATH@ $(PKG_CONFIG) --libs ipopt > ipopt_addlibs_cpp.txt
 
 astyle: $(ASTYLE_FILES)
 
