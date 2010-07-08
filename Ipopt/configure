@@ -32320,6 +32320,8 @@ fi;
 
 if test "$use_pardiso" != "no"; then
   LIBS="$use_pardiso $LIBS"
+  SAVE_LIBS="$LIBS"
+  LIBS="$LIBS $LAPACK_LIBS $BLAS_LIBS"
   ADDLIBS="$use_pardiso $ADDLIBS"
 
 # ToDo put this back in
@@ -32463,6 +32465,7 @@ echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
+  LIBS="$SAVE_LIBS"
 fi
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -32486,6 +32489,8 @@ fi;
 
 if test "$use_wsmp" != "no"; then
   LIBS="$use_wsmp $LIBS"
+  SAVE_LIBS="$LIBS"
+  LIBS="$LIBS $BLAS_LIBS"
   ADDLIBS="$use_wsmp $ADDLIBS"
 
   ac_ext=f
@@ -32546,6 +32551,7 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_WSMP 1
 _ACEOF
 
+  LIBS="$SAVE_LIBS"
 fi
 
 # Check if at least one linear solver was found

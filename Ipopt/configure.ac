@@ -395,7 +395,9 @@ AC_ARG_WITH([pardiso],
             [use_pardiso=$withval], [use_pardiso=no])
 
 if test "$use_pardiso" != "no"; then
+  SAVE_LIBS="$LIBS"
   LIBS="$use_pardiso $LIBS"
+  LIBS="$LIBS $LAPACK_LIBS $BLAS_LIBS"
   ADDLIBS="$use_pardiso $ADDLIBS"
 
 # ToDo put this back in
@@ -420,6 +422,7 @@ if test "$use_pardiso" != "no"; then
                AC_DEFINE(HAVE_PARDISO_NEWINTERFACE,1,
                 [Define to 1 if you are using at least a 4.0 version of Pardiso])],
               [AC_MSG_RESULT(no)])
+  LIBS="$SAVE_LIBS"
 fi
 AC_LANG_POP([Fortran 77])
 
@@ -433,7 +436,9 @@ AC_ARG_WITH([wsmp],
             [use_wsmp=$withval], [use_wsmp=no])
 
 if test "$use_wsmp" != "no"; then
+  SAVE_LIBS="$LIBS"
   LIBS="$use_wsmp $LIBS"
+  LIBS="$LIBS $BLAS_LIBS"
   ADDLIBS="$use_wsmp $ADDLIBS"
 
   AC_LANG_PUSH([Fortran 77])
@@ -445,6 +450,7 @@ if test "$use_wsmp" != "no"; then
 
   AC_DEFINE(HAVE_WSMP,1,
             [Define to 1 if WSMP is available])
+  LIBS="$SAVE_LIBS"
 fi
 
 # Check if at least one linear solver was found
