@@ -32319,8 +32319,8 @@ else
 fi;
 
 if test "$use_pardiso" != "no"; then
-  LIBS="$use_pardiso $LIBS"
   SAVE_LIBS="$LIBS"
+  LIBS="$use_pardiso $LIBS"
   LIBS="$LIBS $LAPACK_LIBS $BLAS_LIBS"
   ADDLIBS="$use_pardiso $ADDLIBS"
 
@@ -32488,8 +32488,8 @@ else
 fi;
 
 if test "$use_wsmp" != "no"; then
-  LIBS="$use_wsmp $LIBS"
   SAVE_LIBS="$LIBS"
+  LIBS="$use_wsmp $LIBS"
   LIBS="$LIBS $BLAS_LIBS"
   ADDLIBS="$use_wsmp $ADDLIBS"
 
