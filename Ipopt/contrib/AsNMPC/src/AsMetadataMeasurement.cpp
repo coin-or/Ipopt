@@ -111,7 +111,7 @@ namespace Ipopt
     if (select_step_=="advanced" || select_step_=="ift") {
       delta_u_space = new DenseVectorSpace(2*n_idx_);
     }
-    else if (select_step_=="sensitivity") {
+    else if (select_step_=="sensitivity" || select_step_=="iftsensitivity") {
       delta_u_space = new DenseVectorSpace(n_idx_);
     }
 

@@ -78,13 +78,14 @@ namespace Ipopt
 			       "yes", "compute reduced hessian",
 			       "no", "don't compute reduced hessian",
 			       "");
-    roptions->AddStringOption3(
+    roptions->AddStringOption4(
 			       "select_step",
 			       "Choose by which formula the step is computed",
 			       "advanced",
 			       "advanced","use advanced step based on KKT",
 			       "sensitivity","use sensitivity step",
-			       "ift","use one-parametric step",
+			       "ift","use one-parametric step with multiplier correction",
+			       "iftsensitivity","use one-parametric step without multiplier correction"
 			       "see paper for more information on each step computation");
     // This option must be in IpInterfacesRegOp.cpp
     roptions->AddStringOption2(
@@ -155,6 +156,14 @@ namespace Ipopt
 								      *pd_solver_);
 
       retval = controller->Run();
+    }
+    else if (run_nmpc_) {
+      if (n_nmpc_steps_<=0) {
+	jnlst_->Printf(J_WARNING, J_MAIN, "\n"
+		       "The run_nmpc option was set to true, but the specified\n"
+		       "number of advanced steps was set to zero.\n"
+		       "Computation is aborted.\n\n");
+      }
     }
 
     SolverReturn status = SUCCESS;

@@ -89,7 +89,7 @@ namespace Ipopt
     
       E_0->AddData_List(initial_c, delta_u_sort_empty,new_du_size_empty,1);
     }
-    else if (select_step=="sensitivity") {
+    else if (select_step=="sensitivity" || select_step=="iftsensitivity") {
       E_0->SetData_List(initial_c);
     }
     else if (select_step=="ift") {
@@ -156,7 +156,7 @@ namespace Ipopt
       if (select_step=="advanced") {
 	driver_vec[i] = new DenseGenSchurDriver(backsolver, pcalc, E_0);
       }
-      else if (select_step=="ift") {
+      else if (select_step=="ift" || "iftsensitivity") {
 	driver_vec[i] = new IFTSchurDriver(backsolver, E_0);
       } else if (select_step=="sensitivity") {
 	// Create SchurDriver from pcalc and suffix indices
