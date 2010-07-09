@@ -40,7 +40,7 @@ prefix = @prefix@
 
 # Libraries necessary to link with IPOPT
 #LIBS = -L$(IPOPTLIBDIR) -lipopt @IPADDLIBS@
-LIBS = @ipoptlib@ @BLAS_LIBS@ @LAPACK_LIBS@ @MUMPS_LIBS@ @HSL_LIBS@
+LIBS = @ipoptlib@ @BLAS_LIBS@ @LAPACK_LIBS@ @MUMPS_LIBS@ @HSL_LIBS@ @ADDLIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)

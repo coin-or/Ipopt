@@ -68,7 +68,8 @@ hs071_cpp_DEPENDENCIES = ../src/Interfaces/libipopt.la \
 nodist_hs071_f_OBJECTS = hs071_f.$(OBJEXT)
 hs071_f_OBJECTS = $(nodist_hs071_f_OBJECTS)
 hs071_f_DEPENDENCIES = ../src/Interfaces/libipopt.la \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -318,7 +319,7 @@ hs071_cpp_LDADD = ../src/Interfaces/libipopt.la $(ADDLIBS)
 nodist_hs071_c_SOURCES = hs071_c.c
 hs071_c_LDADD = ../src/Interfaces/libipopt.la $(ADDLIBS) $(CXXLIBS)
 nodist_hs071_f_SOURCES = hs071_f.f
-hs071_f_LDADD = ../src/Interfaces/libipopt.la $(FADDLIBS) $(CXXLIBS)
+hs071_f_LDADD = ../src/Interfaces/libipopt.la $(FADDLIBS) $(CXXLIBS) $(ADDLIBS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Cygwin

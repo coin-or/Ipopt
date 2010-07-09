@@ -21,7 +21,7 @@ CXX         = @CXX@
 CXXFLAGS    = @CXXFLAGS@
 LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
 IPOPTLIBDIR = @libdir@/coin
-LIBS        = -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty @ipoptlib@ @ASL_LIBS@ @BLAS_LIBS@ @LAPACK_LIBS@ @MUMPS_LIBS@ @HSL_LIBS@ -L../src -Wl,-rpath=$(IPOPTLIBDIR) -Wl,-rpath=$(IPOPTLIBDIR)/ThirdParty -lasnmpc
+LIBS        = -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty @ipoptlib@ @ASL_LIBS@ @BLAS_LIBS@ @LAPACK_LIBS@ @MUMPS_LIBS@ @HSL_LIBS@ @ADDLIBS@ -L../src -Wl,-rpath=$(IPOPTLIBDIR) -Wl,-rpath=$(IPOPTLIBDIR)/ThirdParty -lasnmpc
 INCLUDEDIR  = -I${prefix}/include/coin -I$(ipoptsrcdir)/Interfaces -I$(ipoptsrcdir)/Algorithm -I$(ipoptsrcdir)/LinAlg -I$(ipoptsrcdir)/LinAlg/TMatrices -I$(ipoptsrcdir)/Apps/AmplSolver -I$(asnmpcsrcdir)
 
 LIBTOOL = @LIBTOOL@

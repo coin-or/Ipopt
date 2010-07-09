@@ -21,7 +21,7 @@ nodist_hs071_c_SOURCES = hs071_c.c
 hs071_c_LDADD = ../src/Interfaces/libipopt.la $(ADDLIBS) $(CXXLIBS)
 
 nodist_hs071_f_SOURCES = hs071_f.f
-hs071_f_LDADD = ../src/Interfaces/libipopt.la $(FADDLIBS) $(CXXLIBS)
+hs071_f_LDADD = ../src/Interfaces/libipopt.la $(FADDLIBS) $(CXXLIBS) $(ADDLIBS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Cygwin
