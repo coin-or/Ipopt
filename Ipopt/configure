@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# Copyright 2004, 2009 International Business Machines and others.
+# Copyright 2004, 2010 International Business Machines and others.
 # All Rights Reserved.
 # This file is part of the open source package IPOPT which is distributed
 # under the Common Public License.
@@ -1313,7 +1313,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-Copyright 2004, 2009 International Business Machines and others.
+Copyright 2004, 2010 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.
@@ -32769,13 +32769,14 @@ fi;
 if test x"$use_matlab_home" = x; then
   # Try to detect matlab home automatically
   mexpath=`which mexext 2>/dev/null`
-  if test ! "$mexpath" = ""; then
+  if test -z "$mexpath" ||
+     expr "$mexpath" : '.*no mexext.*' >/dev/null 2>&1 ; then
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+  else
     MATLAB_HOME=`echo $mexpath | sed -e 's=/bin/mexext=='`
     echo "$as_me:$LINENO: result: $MATLAB_HOME" >&5
 echo "${ECHO_T}$MATLAB_HOME" >&6
-  else
-    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
   fi
 else
   MATLAB_HOME="$use_matlab_home"

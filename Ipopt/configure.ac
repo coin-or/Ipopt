@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2009 International Business Machines and others.
+# Copyright (C) 2004, 2010 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -15,7 +15,7 @@ AC_PREREQ(2.59)
 AC_INIT([Ipopt],[3.8trunk],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT(
-[Copyright 2004, 2009 International Business Machines and others.
+[Copyright 2004, 2010 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Common Public License.])
@@ -574,11 +574,12 @@ AC_ARG_WITH([matlab-home],
 if test x"$use_matlab_home" = x; then
   # Try to detect matlab home automatically
   mexpath=`which mexext 2>/dev/null`
-  if test ! "$mexpath" = ""; then
+  if test -z "$mexpath" ||
+     expr "$mexpath" : '.*no mexext.*' >/dev/null 2>&1 ; then
+    AC_MSG_RESULT([no])
+  else
     MATLAB_HOME=`echo $mexpath | sed -e 's=/bin/mexext=='`
     AC_MSG_RESULT([$MATLAB_HOME])
-  else
-    AC_MSG_RESULT([no])
   fi
 else
   MATLAB_HOME="$use_matlab_home"
