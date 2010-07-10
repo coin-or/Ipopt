@@ -1141,12 +1141,14 @@ Optional Packages:
   --with-blas-lib linker flags for using project Blas
   --with-blas-incdir directory with header files for using project Blas
   --with-blas-datadir directory with data files for using project Blas
+  --with-blas             specify BLAS library (or BUILD for compilation)
   --with-hsl-lib linker flags for using project HSL
   --with-hsl-incdir directory with header files for using project HSL
   --with-hsl-datadir directory with data files for using project HSL
   --with-lapack-lib linker flags for using project Lapack
   --with-lapack-incdir directory with header files for using project Lapack
   --with-lapack-datadir directory with data files for using project Lapack
+  --with-lapack           specify LAPACK library (or BUILD for compilation)
   --with-metis-lib linker flags for using project Metis
   --with-metis-incdir directory with header files for using project Metis
   --with-metis-datadir directory with data files for using project Metis
@@ -4192,7 +4194,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4195:" \
+echo "$as_me:4197:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6451,7 +6453,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6454 "configure"' > conftest.$ac_ext
+  echo '#line 6456 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8415,11 +8417,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8418: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8420: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8422: \$? = $ac_status" >&5
+   echo "$as_me:8424: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8683,11 +8685,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8686: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8688: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8690: \$? = $ac_status" >&5
+   echo "$as_me:8692: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8787,11 +8789,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8790: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8792: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8794: \$? = $ac_status" >&5
+   echo "$as_me:8796: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11132,7 +11134,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11135 "configure"
+#line 11137 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11232,7 +11234,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11235 "configure"
+#line 11237 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13576,11 +13578,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13579: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13581: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13583: \$? = $ac_status" >&5
+   echo "$as_me:13585: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13680,11 +13682,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13683: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13685: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13687: \$? = $ac_status" >&5
+   echo "$as_me:13689: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15250,11 +15252,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15253: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15255: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15257: \$? = $ac_status" >&5
+   echo "$as_me:15259: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15354,11 +15356,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15357: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15359: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15361: \$? = $ac_status" >&5
+   echo "$as_me:15363: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17561,11 +17563,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17564: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17566: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17568: \$? = $ac_status" >&5
+   echo "$as_me:17570: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17829,11 +17831,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17832: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17834: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17836: \$? = $ac_status" >&5
+   echo "$as_me:17838: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17933,11 +17935,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17936: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17938: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17940: \$? = $ac_status" >&5
+   echo "$as_me:17942: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20732,7 +20734,7 @@ if test $enable_shared = yes; then
     *-linux-*)
       if test "$GXX" = "yes"; then
         RPATH_FLAGS=
-        for dir in $abs_lib_dir $abs_lib_dir/ThirdParty; do
+        for dir in $abs_lib_dir/coin $abs_lib_dir/coin/ThirdParty; do
           RPATH_FLAGS="$RPATH_FLAGS -Wl,--rpath -Wl,$dir"
         done
       fi ;;
@@ -20749,7 +20751,7 @@ if test $enable_shared = yes; then
         RPATH_FLAGS=nothing ;;
     *-*-solaris*)
         RPATH_FLAGS=
-        for dir in $abs_lib_dir $abs_lib_dir/ThirdParty; do
+        for dir in $abs_lib_dir/coin $abs_lib_dir/coin/ThirdParty; do
           RPATH_FLAGS="$RPATH_FLAGS -R$dir"
         done
   esac
@@ -21070,6 +21072,11 @@ if test "${with_asl_datadir+set}" = set; then
   withval="$with_asl_datadir"
   coin_has_asl=installed
 fi;
+
+
+
+
+
 fi
 
 if test $coin_has_asl = notGiven; then
@@ -21204,6 +21211,22 @@ if test "${with_blas_datadir+set}" = set; then
   withval="$with_blas_datadir"
   coin_has_blas=installed
 fi;
+
+
+    #--with-blas can overwrite --with-blas-lib, and can be set to BUILD to enforce building blas
+
+# Check whether --with-blas or --without-blas was given.
+if test "${with_blas+set}" = set; then
+  withval="$with_blas"
+  if test x$withval = "xBUILD" ; then
+           coin_has_blas=notGiven
+         else
+           coin_has_blas=installed
+         fi
+fi;
+
+
+
 fi
 
 if test $coin_has_blas = notGiven; then
@@ -21338,6 +21361,11 @@ if test "${with_hsl_datadir+set}" = set; then
   withval="$with_hsl_datadir"
   coin_has_hsl=installed
 fi;
+
+
+
+
+
 fi
 
 if test $coin_has_hsl = notGiven; then
@@ -21472,6 +21500,22 @@ if test "${with_lapack_datadir+set}" = set; then
   withval="$with_lapack_datadir"
   coin_has_lapack=installed
 fi;
+
+
+
+
+    #--with-lapack can overwrite --with-lapack-lib, and can be set to BUILD to enforce building lapack
+
+# Check whether --with-lapack or --without-lapack was given.
+if test "${with_lapack+set}" = set; then
+  withval="$with_lapack"
+  if test x$withval = "xBUILD" ; then
+           coin_has_lapack=notGiven
+         else
+           coin_has_lapack=installed
+         fi
+fi;
+
 fi
 
 if test $coin_has_lapack = notGiven; then
@@ -21606,6 +21650,11 @@ if test "${with_metis_datadir+set}" = set; then
   withval="$with_metis_datadir"
   coin_has_metis=installed
 fi;
+
+
+
+
+
 fi
 
 if test $coin_has_metis = notGiven; then
@@ -21740,6 +21789,11 @@ if test "${with_mumps_datadir+set}" = set; then
   withval="$with_mumps_datadir"
   coin_has_mumps=installed
 fi;
+
+
+
+
+
 fi
 
 if test $coin_has_mumps = notGiven; then
@@ -21879,6 +21933,11 @@ if test "${with_ipopt_datadir+set}" = set; then
   withval="$with_ipopt_datadir"
   coin_has_ipopt=installed
 fi;
+
+
+
+
+
 fi
 
 if test $coin_has_ipopt = notGiven; then
