@@ -49,6 +49,6 @@ cuter:
 ########################################################################
 
 # Files that are generated and should be cleaned with make distclean
-DISTCLEANFILES =
+DISTCLEANFILES = coin_subdirs.txt
 
 include BuildTools/Makemain.inc
