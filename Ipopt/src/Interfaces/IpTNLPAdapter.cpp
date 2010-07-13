@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -1288,7 +1288,8 @@ namespace Ipopt
     Number* x_u = new Number[n_full_x_];
     Number* g_l = new Number[n_full_g_];
     Number* g_u = new Number[n_full_g_];
-    bool retval = tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+    bool retval = tnlp_->get_bounds_info(n_full_x_, x_l, x_u,
+                                         n_full_g_, g_l, g_u);
     ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_bounds_info returned false in GetBoundsInformation");
 
     if (fixed_variable_treatment_==MAKE_PARAMETER) {
@@ -1441,7 +1442,9 @@ namespace Ipopt
     bool init_lambda = need_y_c || need_y_d;
 
     bool retvalue =
-      tnlp_->get_starting_point(n_full_x_, init_x, full_x, init_z, full_z_l, full_z_u, n_full_g_, init_lambda, full_lambda);
+      tnlp_->get_starting_point(n_full_x_, init_x, full_x, init_z,
+                                full_z_l, full_z_u, n_full_g_, init_lambda,
+                                full_lambda);
 
     if (!retvalue) {
       delete [] full_x;
@@ -1848,7 +1851,56 @@ namespace Ipopt
     update_local_lambda(y_c, y_d);
 
     ResortX(x, full_x_);
+
+    StringMetaDataMapType var_string_md;
+    IntegerMetaDataMapType var_integer_md;
+    NumericMetaDataMapType var_numeric_md;
+    StringMetaDataMapType con_string_md;
+    IntegerMetaDataMapType con_integer_md;
+    NumericMetaDataMapType con_numeric_md;
+
+    SmartPtr<const DenseVectorSpace> x_space =
+      dynamic_cast<const DenseVectorSpace*>(GetRawPtr(x.OwnerSpace()));
+    const NumericMetaDataMapType x_meta = x_space->GetNumericMetaData();
+    NumericMetaDataMapType::const_iterator x_meta_iter;
+    for (x_meta_iter=x_meta.begin(); x_meta_iter!=x_meta.end(); ++x_meta_iter) {
+      if ((Index)x_meta_iter->second.size()==x.Dim()) {
+        std::vector<Number> new_meta_data;
+        new_meta_data.resize(n_full_x_);
+        SmartPtr<DenseVector> x_meta_vector = x_space->MakeNewDenseVector();
+        x_meta_vector->SetValues(&(x_meta_iter->second)[0]);
+        ResortX(*x_meta_vector, &new_meta_data[0]);
+        var_numeric_md[x_meta_iter->first] = new_meta_data;
+      }
+    }
+
     ResortG(y_c, y_d, full_lambda_);
+
+    SmartPtr<const DenseVectorSpace> y_c_space =
+      dynamic_cast<const DenseVectorSpace*>(GetRawPtr(y_c.OwnerSpace()));
+    SmartPtr<const DenseVectorSpace> y_d_space =
+      dynamic_cast<const DenseVectorSpace*>(GetRawPtr(y_d.OwnerSpace()));
+    const NumericMetaDataMapType y_c_meta = y_c_space->GetNumericMetaData();
+    const NumericMetaDataMapType y_d_meta = y_d_space->GetNumericMetaData();
+    NumericMetaDataMapType::const_iterator y_c_meta_iter;
+    for (y_c_meta_iter=y_c_meta.begin(); y_c_meta_iter!=y_c_meta.end(); ++y_c_meta_iter) {
+      if ((Index)y_c_meta_iter->second.size()==y_c.Dim()) {
+        if (y_d_space->HasNumericMetaData(y_c_meta_iter->first.c_str())) {// && y_d_meta[y_c_meta_iter->first.c_str()].size()==y_d.Dim()) {
+          std::vector<Number> y_d_second =
+            y_d_space->GetNumericMetaData(y_c_meta_iter->first);
+          std::vector<Number> new_g_meta_data;
+          new_g_meta_data.resize(n_full_g_);
+          SmartPtr<DenseVector> y_c_meta_vector =
+            y_c_space->MakeNewDenseVector();
+          SmartPtr<DenseVector> y_d_meta_vector =
+            y_d_space->MakeNewDenseVector();
+          y_c_meta_vector->SetValues(&(y_c_meta_iter->second)[0]);
+          y_d_meta_vector->SetValues(&y_d_second[0]);
+          ResortG(*y_c_meta_vector, *y_d_meta_vector, &new_g_meta_data[0]);
+          con_numeric_md[y_c_meta_iter->first] = new_g_meta_data;
+        }
+      }
+    }
 
     Number* full_g = new Number[n_full_g_];
     // TODO:
@@ -1873,6 +1925,38 @@ namespace Ipopt
     }
     ResortBnds(z_L, full_z_L, z_U, full_z_U);
 
+    SmartPtr<const DenseVectorSpace> z_L_space =
+      dynamic_cast<const DenseVectorSpace*>(GetRawPtr(z_L.OwnerSpace()));
+    SmartPtr<const DenseVectorSpace> z_U_space =
+      dynamic_cast<const DenseVectorSpace*>(GetRawPtr(z_U.OwnerSpace()));
+    const NumericMetaDataMapType z_L_meta = z_L_space->GetNumericMetaData();
+    const NumericMetaDataMapType z_U_meta = z_U_space->GetNumericMetaData();
+    NumericMetaDataMapType::const_iterator z_L_meta_iter;
+    for (z_L_meta_iter=z_L_meta.begin();
+         z_L_meta_iter!=z_L_meta.end(); ++z_L_meta_iter) {
+      if ((Index)z_L_meta_iter->second.size()==z_L.Dim()) {
+        if (z_U_space->HasNumericMetaData(z_L_meta_iter->first.c_str())) {// && z_U_meta[z_L_meta_iter->first.c_str()].size()==z_U.Dim()) {
+          std::vector<Number> z_U_second = z_U_space->GetNumericMetaData(z_L_meta_iter->first);
+          SmartPtr<DenseVector> z_L_meta_vector =
+            z_L_space->MakeNewDenseVector();
+          SmartPtr<DenseVector> z_U_meta_vector =
+            z_U_space->MakeNewDenseVector();
+          z_L_meta_vector->SetValues(&(z_L_meta_iter->second)[0]);
+          z_U_meta_vector->SetValues(&z_U_second[0]);
+          std::vector<Number> new_z_L_meta_data(n_full_x_, 0.0);
+          std::vector<Number> new_z_U_meta_data(n_full_x_, 0.0);
+          ResortBnds(*z_L_meta_vector, &new_z_L_meta_data[0],
+                     *z_U_meta_vector, &new_z_U_meta_data[0]);
+          std::string z_L_meta_data_tag = z_L_meta_iter->first;
+          std::string z_U_meta_data_tag = z_L_meta_iter->first;
+          z_L_meta_data_tag += "_z_L";
+          z_U_meta_data_tag += "_z_U";
+          var_numeric_md[z_L_meta_data_tag] = new_z_L_meta_data;
+          var_numeric_md[z_U_meta_data_tag] = new_z_U_meta_data;
+        }
+      }
+    }
+
     // Hopefully the following is correct to recover the bound
     // multipliers for fixed variables (sign ok?)
     if (fixed_variable_treatment_==MAKE_CONSTRAINT && n_x_fixed_>0) {
@@ -1886,6 +1970,11 @@ namespace Ipopt
         full_z_U[x_fixed_map_[i]] = Max(0., values[n_c_no_fixed+i]);
       }
     }
+
+    tnlp_->finalize_metadata(n_full_x_, var_string_md, var_integer_md,
+                             var_numeric_md, n_full_g_, con_string_md,
+                             con_integer_md, con_numeric_md);
+
 
     tnlp_->finalize_solution(status,
                              n_full_x_, full_x_, full_z_L, full_z_U,

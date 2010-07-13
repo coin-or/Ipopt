@@ -212,6 +212,18 @@ namespace Ipopt
                                    const IpoptData* ip_data,
                                    IpoptCalculatedQuantities* ip_cq)=0;
 
+    /** This method is called just before finalize_solution. */
+    virtual void finalize_metadata(Index n,
+                                   const StringMetaDataMapType& var_string_md,
+                                   const IntegerMetaDataMapType& var_integer_md,
+                                   const NumericMetaDataMapType& var_numeric_md,
+                                   Index m,
+                                   const StringMetaDataMapType& con_string_md,
+                                   const IntegerMetaDataMapType& con_integer_md,
+                                   const NumericMetaDataMapType& con_numeric_md)
+    {}
+
+
     /** Intermediate Callback method for the user.  Providing dummy
      *  default implementation.  For details see IntermediateCallBack
      *  in IpNLP.hpp. */
