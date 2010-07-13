@@ -72,6 +72,28 @@ int main(int argv, char**argc)
   suffix_handler->
     AddAvailableSuffix("nmpc_sol_state_6", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
 
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_1", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_2", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_3", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_4", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_5", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_6", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
+
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_1_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_1_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_1_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_1_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+
   // for reduced hessian computation
   suffix_handler->AddAvailableSuffix("red_hessian", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Index_Type);
 
@@ -99,7 +121,7 @@ int main(int argv, char**argc)
 				   AmplOptionsList::String_Option,
 				   "Set to yes if nmpc algorithm should be run.");
 
-  // create AmplSensTNLP from argc. This is an nlp because we are using our own TNLP Adapter
+  // create AmplSensTNLP from argc.
   SmartPtr<TNLP> nmpc_tnlp = new AmplNmpcTNLP(ConstPtr(app_ipopt->Jnlst()),
 					      app_ipopt->Options(),
 					      argc, suffix_handler, false,

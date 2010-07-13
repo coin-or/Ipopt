@@ -48,7 +48,7 @@ install: $(TARGET)
 uninstall:
 	rm -f $(bindir)/$(TARGET)
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) ampl_nmpc.cpp
 	$(CXX) $(CXXFLAGS) $(SRCDIR)/ampl_nmpc.cpp -o $(TARGET) $(OBJS) $(LIBS) $(INCLUDEDIR) $(ASL_CPPFLAGS) 
 
 %.@OBJEXT@: %.cpp 
