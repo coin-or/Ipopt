@@ -40,6 +40,15 @@ namespace Ipopt
 
     void set_nmpc_solution(Index idx, SmartPtr<IteratesVector> nmpc_sol);
 
+    virtual void finalize_metadata(Index n,
+				   const StringMetaDataMapType& var_string_md,
+				   const IntegerMetaDataMapType& var_integer_md,
+				   const NumericMetaDataMapType& var_numeric_md,
+				   Index m,
+				   const StringMetaDataMapType& con_string_md,
+				   const IntegerMetaDataMapType& con_integer_md,
+				   const NumericMetaDataMapType& con_numeric_md);
+
     virtual void finalize_solution(SolverReturn status,
                                    Index n, const Number* x, const Number* z_L, const Number* z_U,
                                    Index m, const Number* g, const Number* lambda,

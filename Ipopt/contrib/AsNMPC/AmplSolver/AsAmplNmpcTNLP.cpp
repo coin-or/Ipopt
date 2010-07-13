@@ -135,10 +135,42 @@ namespace Ipopt
 
     DBG_PRINT((dbg_verbosity, "n_nmpc_steps=%d\n", nmpc_sol_.size()));
     DBG_ASSERT(idx>0);
-    DBG_ASSERT(idx<=nmpc_sol_.size());
+    DBG_ASSERT(idx<=(Index)nmpc_sol_.size());
 
     nmpc_sol_[idx-1] = nmpc_sol;
   }
+
+  void AmplNmpcTNLP::finalize_metadata(Index n,
+				       const StringMetaDataMapType& var_string_md,
+				       const IntegerMetaDataMapType& var_integer_md,
+				       const NumericMetaDataMapType& var_numeric_md,
+				       Index m,
+				       const StringMetaDataMapType& con_string_md,
+				       const IntegerMetaDataMapType& con_integer_md,
+				       const NumericMetaDataMapType& con_numeric_md)
+  {
+    DBG_START_METH("AmplNmpcTNLP::finalize_metadata", dbg_verbosity);
+    ASL_pfgh* asl = AmplSolverObject();
+
+    NumericMetaDataMapType::const_iterator num_it;
+    num_it = var_numeric_md.find("nmpc_sol_state_1");
+    if (num_it!=var_numeric_md.end()) {
+      suf_rput("nmpc_sol_state_1", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
+    }
+    num_it = var_numeric_md.find("nmpc_sol_state_1_z_L");
+    if (num_it!=var_numeric_md.end()) {
+      suf_rput("nmpc_sol_state_1_z_L", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
+    }
+    num_it = var_numeric_md.find("nmpc_sol_state_1_z_U");
+    if (num_it!=var_numeric_md.end()) {
+      suf_rput("nmpc_sol_state_1_z_U", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
+    }
+    num_it = con_numeric_md.find("nmpc_sol_state_1");
+    if (num_it!=var_numeric_md.end()) {
+      suf_rput("nmpc_sol_state_1", ASL_Sufkind_con, const_cast<Number*>(&num_it->second[0]));
+    }
+  }
+
 
   void AmplNmpcTNLP::finalize_solution(SolverReturn status,
 				       Index n, const Number* x, const Number* z_L, const Number* z_U,
@@ -149,30 +181,6 @@ namespace Ipopt
   {
     DBG_START_METH("AmplNmpcTNLP::finalize_solution", dbg_verbosity);
     
-    ASL_pfgh* asl = AmplSolverObject();
-    SmartPtr<AmplSuffixHandler> suffix_handler = get_suffix_handler();
-
-    bool nmpc_internal_abort;
-    options_->GetBoolValue("nmpc_internal_abort", nmpc_internal_abort, "");
-
-    if (IsValid(suffix_handler) && run_nmpc_ && !nmpc_internal_abort) {
-      std::string state;
-
-      SmartPtr<const DenseVectorSpace> x_owner_space = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(ip_data->trial()->x()->OwnerSpace()));
-      std::vector<Number> nmpc_sol_vec;
-      for (Index i=1; i<=n_nmpc_steps_; ++i) {
-	state = "nmpc_sol_state_";
-	append_Index(state, i);
-	Number* nmpc_sol_copy;
-	nmpc_sol_copy = new Number[n_var];
-	nmpc_sol_vec = x_owner_space->GetNumericMetaData(state.c_str());
-	IpBlasDcopy(n,&nmpc_sol_vec[0] ,1, nmpc_sol_copy, 1);
-	suf_rput(state.c_str(), ASL_Sufkind_var, nmpc_sol_copy);
-	/* there should be a way to put the final objective values here
-	   using suf_rput(...,ASL_Sufkind_obj,...) 
-	   but I don't know how to tell AmplNmpc those values!*/
-      }
-    }
 
     AmplTNLP::finalize_solution(status,
 				n, x, z_L,  z_U,

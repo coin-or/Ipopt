@@ -35,20 +35,29 @@ namespace Ipopt
 
     virtual void SetSolution(Index measurement_number, SmartPtr<IteratesVector> sol);    
 
-    /* suffix handler methods */
+    /** suffix handler methods */
     
     virtual std::vector<Index> GetIntegerSuffix(std::string suffix_string);
 
   private:
 
-    /* Number of nmpc_indices */
+    /** Number of nmpc_indices */
     Index n_idx_;
     
     std::string select_step_;
-    /* owner space of x */
+    /** owner space of x */
     SmartPtr<const DenseVectorSpace> x_owner_space_;
-    /* owner space of y_c */
-    SmartPtr<const DenseVectorSpace> c_owner_space_; 
+    /** owner space of s */
+    SmartPtr<const DenseVectorSpace> s_owner_space_;
+    /** owner space of y_c */
+    SmartPtr<const DenseVectorSpace> y_c_owner_space_; 
+    /** owner space of y_d */
+    SmartPtr<const DenseVectorSpace> y_d_owner_space_; 
+    /** owner space of z_L */
+    SmartPtr<const DenseVectorSpace> z_L_owner_space_; 
+    /** owner space of z_U */
+    SmartPtr<const DenseVectorSpace> z_U_owner_space_; 
+
   };
 
 }
