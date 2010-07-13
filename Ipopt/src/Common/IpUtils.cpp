@@ -58,9 +58,10 @@
 //  The special treatment of vsnprintf on SUN has been suggsted by Lou
 //  Hafer 2010/07/04
 # if defined(HAVE_VSNPRINTF) && defined(__SUNPRO_CC)
-  namespace std {
+namespace std
+{
 #  include <iso/stdio_c99.h>
-  }
+}
 # endif
 #else
 # ifdef HAVE_STDIO_H

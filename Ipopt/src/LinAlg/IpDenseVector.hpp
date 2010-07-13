@@ -354,6 +354,15 @@ namespace Ipopt
 
     /** Set meta data of type Number by tag */
     void SetNumericMetaData(std::string tag, std::vector<Number> meta_data);
+
+    /** Get map of meta data of type Number */
+    const StringMetaDataMapType& GetStringMetaData() const;
+
+    /** Get map of meta data of type Number */
+    const IntegerMetaDataMapType& GetIntegerMetaData() const;
+
+    /** Get map of meta data of type Number */
+    const NumericMetaDataMapType& GetNumericMetaData() const;
     //@}
 
   private:
@@ -502,5 +511,24 @@ namespace Ipopt
   {
     numeric_meta_data_[tag] = meta_data;
   }
+
+  inline
+  const StringMetaDataMapType& DenseVectorSpace::GetStringMetaData() const
+  {
+    return string_meta_data_;
+  }
+
+  inline
+  const IntegerMetaDataMapType& DenseVectorSpace::GetIntegerMetaData() const
+  {
+    return integer_meta_data_;
+  }
+
+  inline
+  const NumericMetaDataMapType& DenseVectorSpace::GetNumericMetaData() const
+  {
+    return numeric_meta_data_;
+  }
+
 } // namespace Ipopt
 #endif
