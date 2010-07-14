@@ -10,6 +10,9 @@
 reset;
 option solver ampl_asnmpc;
 
+# set option to compute reduced hessian
+option ipopt_options 'compute_red_hessian yes'; 
+
 # turn presolve off so no variables / equations are eliminated
 # by AMPL
 option presolve 0;  
@@ -18,7 +21,7 @@ option presolve 0;
 suffix red_hessian, IN;
 
 # define the variables
-var x1:=25;
+var x1:=25e7;
 var x2:=0;
 var x3:=0;
 
