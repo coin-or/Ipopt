@@ -120,6 +120,9 @@ int main(int argv, char**argc)
   ampl_options_list->AddAmplOption("run_nmpc", "run_nmpc",
 				   AmplOptionsList::String_Option,
 				   "Set to yes if nmpc algorithm should be run.");
+  ampl_options_list->AddAmplOption("compute_red_hessian", "compute_red_hessian", 
+				   AmplOptionsList::String_Option,
+				   "Set to yes if reduced hessian should be computed.");
 
   // create AmplSensTNLP from argc.
   SmartPtr<TNLP> nmpc_tnlp = new AmplNmpcTNLP(ConstPtr(app_ipopt->Jnlst()),
