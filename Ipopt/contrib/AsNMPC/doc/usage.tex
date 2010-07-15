@@ -36,6 +36,13 @@ To make sure that the initial value constraints are not eliminated by AMPL, the 
 option presolve 0;
 \end{verbatim}
 
+After the algorithm has completed successfully, the solution is stored in the following AMPL suffixes:
+\begin{description}
+\item[nmpc\_sol\_state\_1] This suffix is set for the variables and the constraints. It holds the variable and constraint multiplier values computed in the advanced step algorithm
+\item[nmpc\_sol\_state\_1\_z\_L] This suffix holds the advanced step bound multipliers for the lower bounds on the variables.
+\item[nmpc\_sol\_state\_1\_z\_U] ... the same for the upper bounds.
+\end{description}
+
 An example implementation of the above is provided in the directory 
 \begin{verbatim}
 examples/hicks_ampl
@@ -55,7 +62,10 @@ The reduced hessian feature is even easier to use. The critical problem is to de
 \begin{verbatim}
 red_hessian
 \end{verbatim}
-to $1..n$, where $n$ is the number of free variables. The columns of the inverse reduced hessian, which will be printed, is determined by the ordering of these indices.
+to $1..n$, where $n$ is the number of free variables. The columns of the inverse reduced hessian, which will be printed, is determined by the ordering of these indices. The algorithm is enabled by setting the solver option
+\begin{verbatim}
+option ipopt_options 'compute_red_hessian yes';
+\end{verbatim}
 
 An example of the reduced hessian calculation can be found in 
 \begin{verbatim}
@@ -78,10 +88,11 @@ for the reduced hessian computation.
 
 Further options for the advanced step code are
 \begin{description}
-\item[select\_step] This option determines which formula is used to compute the advanced step. The options are \texttt{advanced} for the full advanced step with Schur complement and multiplier correction, \texttt{sensitivity} for the Schur step without multiplier correction, and \texttt{ift} for the fast backsolve without Schur complement computation.
+\item[select\_step] This option determines which formula is used to compute the advanced step. The options are \texttt{advanced} for the full advanced step with Schur complement and multiplier correction, \texttt{sensitivity} for the Schur step without multiplier correction, \texttt{ift} for the fast backsolve without Schur complement computation, but with multiplier correction, and finally \texttt{iftsensitivity} the same as \texttt{ift}, but without multiplier correction. For parametric problems, the options \texttt{sensitivity} and \texttt{iftsensitivity} should be used, whereas for advanced step problems, the options \texttt{advanced} and \texttt{ift} are more suitable.
 \item[n\_nmpc\_steps] In general, the advanced step is designed to accomodate an arbitrary number of advanced steps. Right now, however, this value has to be set to either 0 or 1.
 \item[nmpc\_boundcheck] If set to \texttt{yes}, this option turns on the bound correction algorithm within the advanced step. 
 \item[nmpc\_bound\_eps] This option sets the value by which the bounds are to be relaxed in the boundcheck mode. 
+\item[nmpc\_max\_pdpert] For certain problems, IPOPT uses inertia correction of the primal dual matrix to achieve better convergence properties. This inertia correction changes the matrix and renders it useless for the use with AsNMPC. This option sets an upper bound, which the inertia correction may have. If any of the inertia correction values is above this bound, the AsNMPC algorithm is aborted.
 \end{description}
 \bibliographystyle{plain}
 \bibliography{asnmpc}
