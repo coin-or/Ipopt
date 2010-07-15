@@ -1885,7 +1885,8 @@ namespace Ipopt
     NumericMetaDataMapType::const_iterator y_c_meta_iter;
     for (y_c_meta_iter=y_c_meta.begin(); y_c_meta_iter!=y_c_meta.end(); ++y_c_meta_iter) {
       if ((Index)y_c_meta_iter->second.size()==y_c.Dim()) {
-        if (y_d_space->HasNumericMetaData(y_c_meta_iter->first.c_str())) {// && y_d_meta[y_c_meta_iter->first.c_str()].size()==y_d.Dim()) {
+        if (y_d_space->HasNumericMetaData(y_c_meta_iter->first.c_str())           // There exists a corresponding y_d metadata
+            && ((Index)(y_d_meta.find(y_c_meta_iter->first)->second).size())==y_d.Dim()) { // and y_d metadata vector has size y_d.Dim()
           std::vector<Number> y_d_second =
             y_d_space->GetNumericMetaData(y_c_meta_iter->first);
           std::vector<Number> new_g_meta_data;
