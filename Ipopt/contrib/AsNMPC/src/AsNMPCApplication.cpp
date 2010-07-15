@@ -116,6 +116,15 @@ namespace Ipopt
 			       "yes", "don't abort on suffix error",
 			       "no", "abort on suffix error",
 			       "");
+    roptions->AddLowerBoundedNumberOption(
+					  "nmpc_max_pdpert",
+					  "Maximum perturbation of primal dual system, for that the AsNMPC algorithm will not abort",
+					  0.0, true, 1e-3, 
+					  "For certain problems, IPOPT uses inertia correction of the primal dual matrix to achieve"
+					  "better convergence properties. This inertia correction changes the matrix and renders it"
+					  "useless for the use with AsNMPC. This option sets an upper bound, which the inertia correction"
+					  "may have. If any of the inertia correction values is above this bound, the AsNMPC algorithm"
+					  "is aborted.");
   }
 
   NmpControllerExitStatus NmpcApplication::Run()
@@ -127,6 +136,19 @@ namespace Ipopt
     bool nmpc_internal_abort, redhess_internal_abort;
     Options()->GetBoolValue("nmpc_internal_abort", nmpc_internal_abort, "");
     Options()->GetBoolValue("redhess_internal_abort", redhess_internal_abort, "");
+    
+    Number max_pdpert;
+    Options()->GetNumericValue("nmpc_max_pdpert", max_pdpert, "");
+    Number pdpert_x, pdpert_s, pdpert_c, pdpert_d;
+    ip_data_->getPDPert(pdpert_x, pdpert_s, pdpert_c, pdpert_d);
+    if (Max(pdpert_x, pdpert_s, pdpert_c, pdpert_d)>max_pdpert) {
+      jnlst_->Printf(J_WARNING, J_MAIN, "\n\t--------------= Warning =--------------\nInertia correction of primal dual system is too large for meaningful AsNMPC results.\n"
+		    "\t... aborting computation.\n"
+		     "Set option asnmpc_max_pdpert to a higher value (current: %f) to run AsNMPC algorithm anyway\n", max_pdpert);
+      nmpc_internal_abort = true;
+      redhess_internal_abort = true;
+    }
+
 
     if (compute_red_hessian_ && !redhess_internal_abort) {
       SmartPtr<SchurBuilder> schur_builder = new SchurBuilder();
@@ -137,7 +159,6 @@ namespace Ipopt
 											 *ip_nlp_,
 											 *ip_data_,
 											 *ip_cq_,
-											 //*tnlp_adapter_,
 											 *pd_solver_);
       
       red_hess_calc->ComputeReducedHessian();
@@ -152,7 +173,6 @@ namespace Ipopt
 								      *ip_nlp_,
 								      *ip_data_,
 								      *ip_cq_,
-								      //*tnlp_adapter_,
 								      *pd_solver_);
 
       retval = controller->Run();
@@ -167,68 +187,76 @@ namespace Ipopt
     }
 
     SolverReturn status = SUCCESS;
-    
-    SmartPtr<const Vector> c;
-    SmartPtr<const Vector> d;
-    SmartPtr<const Vector> zL;
-    SmartPtr<const Vector> zU;
-    SmartPtr<const Vector> yc;
-    SmartPtr<const Vector> yd;
-    Number obj = 0.;
 
-    switch (status) {
-    case SUCCESS:
-    case MAXITER_EXCEEDED:
-    case STOP_AT_TINY_STEP:
-    case STOP_AT_ACCEPTABLE_POINT:
-    case LOCAL_INFEASIBILITY:
-    case USER_REQUESTED_STOP:
-    case FEASIBLE_POINT_FOUND:
-    case DIVERGING_ITERATES:
-    case RESTORATION_FAILURE:
-    case ERROR_IN_STEP_COMPUTATION:
-      c = ip_cq_->curr_c();
-      d = ip_cq_->curr_d();
-      obj = ip_cq_->curr_f();
-      zL = ip_data_->curr()->z_L();
-      zU = ip_data_->curr()->z_U();
-      yc = ip_data_->curr()->y_c();
-      yd = ip_data_->curr()->y_d();
-      break;
-    default: {
-      SmartPtr<Vector> tmp = ip_data_->curr()->y_c()->MakeNew();
-      tmp->Set(0.);
-      c = ConstPtr(tmp);
-      yc = ConstPtr(tmp);
-      tmp = ip_data_->curr()->y_d()->MakeNew();
-      tmp->Set(0.);
-      d = ConstPtr(tmp);
-      yd = ConstPtr(tmp);
-      tmp = ip_data_->curr()->z_L()->MakeNew();
-      tmp->Set(0.);
-      zL = ConstPtr(tmp);
-      tmp = ip_data_->curr()->z_U()->MakeNew();
-      tmp->Set(0.);
-      zU = ConstPtr(tmp);
-    }
-    }
+    if (IsValid(ip_data_->curr()) && IsValid(ip_data_->curr()->x())) {
+      SmartPtr<const Vector> c;
+      SmartPtr<const Vector> d;
+      SmartPtr<const Vector> zL;
+      SmartPtr<const Vector> zU;
+      SmartPtr<const Vector> yc;
+      SmartPtr<const Vector> yd;
+      Number obj = 0.;
 
-    if (redhess_internal_abort) {
-      jnlst_->Printf(J_WARNING, J_MAIN, "\nReduced hessian was not computed "
-		     "because an error occured.\n"
-		     "See exception message above for details.\n\n");
-    }
-    if (nmpc_internal_abort) {
-      jnlst_->Printf(J_WARNING, J_MAIN, "\nNMPC controller was not called "
-		     "because an error occured.\n"
-		     "See exception message above for details.\n\n");
-    }
+      switch (status) {
+      case SUCCESS:
+	c = ip_cq_->curr_c();
+	d = ip_cq_->curr_d();
+	obj = ip_cq_->curr_f();
+	zL = ip_data_->curr()->z_L();
+	zU = ip_data_->curr()->z_U();
+	yc = ip_data_->curr()->y_c();
+	yd = ip_data_->curr()->y_d();
+      case MAXITER_EXCEEDED:
+      case STOP_AT_TINY_STEP:
+      case STOP_AT_ACCEPTABLE_POINT:
+      case LOCAL_INFEASIBILITY:
+      case USER_REQUESTED_STOP:
+      case FEASIBLE_POINT_FOUND:
+      case DIVERGING_ITERATES:
+      case RESTORATION_FAILURE:
+      case ERROR_IN_STEP_COMPUTATION:
+	c = ip_cq_->curr_c();
+	d = ip_cq_->curr_d();
+	obj = ip_cq_->curr_f();
+	zL = ip_data_->curr()->z_L();
+	zU = ip_data_->curr()->z_U();
+	yc = ip_data_->curr()->y_c();
+	yd = ip_data_->curr()->y_d();
+	break;
+      default: {
+	SmartPtr<Vector> tmp = ip_data_->curr()->y_c()->MakeNew();
+	tmp->Set(0.);
+	c = ConstPtr(tmp);
+	yc = ConstPtr(tmp);
+	tmp = ip_data_->curr()->y_d()->MakeNew();
+	tmp->Set(0.);
+	d = ConstPtr(tmp);
+	yd = ConstPtr(tmp);
+	tmp = ip_data_->curr()->z_L()->MakeNew();
+	tmp->Set(0.);
+	zL = ConstPtr(tmp);
+	tmp = ip_data_->curr()->z_U()->MakeNew();
+	tmp->Set(0.);
+	zU = ConstPtr(tmp);
+      }
+      }
 
-    ip_nlp_->FinalizeSolution(status,
-			      *ip_data_->curr()->x(),
-			      *zL, *zU, *c, *d, *yc, *yd,
-			      obj, GetRawPtr(ip_data_), GetRawPtr(ip_cq_));
-    
+      if (redhess_internal_abort) {
+	jnlst_->Printf(J_WARNING, J_MAIN, "\nReduced hessian was not computed "
+		       "because an error occured.\n"
+		       "See exception message above for details.\n\n");
+      }
+      if (nmpc_internal_abort) {
+	jnlst_->Printf(J_WARNING, J_MAIN, "\nNMPC controller was not called "
+		       "because an error occured.\n"
+		       "See exception message above for details.\n\n");
+      }
+
+      ip_nlp_->FinalizeSolution(status,
+				*ip_data_->curr()->x(),
+				*zL, *zU, *c, *d, *yc, *yd,
+				obj, GetRawPtr(ip_data_), GetRawPtr(ip_cq_));
+    }
     return retval;
   }
 
