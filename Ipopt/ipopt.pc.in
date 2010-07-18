@@ -6,6 +6,6 @@ includedir=@includedir@/coin
 Name: IPOPT
 Description: Interior Point Optimizer
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lipopt @ADDLIBS@
+Libs: -L${libdir} -lipopt @PCADDLIBS@
 Cflags: -I${includedir}
 Requires: @REQUIREDPACKAGES@
