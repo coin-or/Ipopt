@@ -24545,7 +24545,7 @@ if test "${with_blas_lib+set}" = set; then
   withval="$with_blas_lib"
   coin_has_blas=yes
        BLAS_LIBS="$withval"
-       ADDLIBS="$ADDLIBS $withval"
+       ADDLIBS="$withval $ADDLIBS"
 
 fi;
 
@@ -24659,7 +24659,7 @@ if test $coin_has_blas != "skipping" ; then
     fi
     BLAS_DATA=`sed -n -e 's/datadir=//gp' $blasdir/coinblas-uninstalled.pc`
 
-    ADDLIBS="$ADDLIBS $BLAS_LIBS"
+    ADDLIBS="$BLAS_LIBS $ADDLIBS"
        REQUIREDPACKAGES="coinblas $REQUIREDPACKAGES"
 
 
@@ -26777,7 +26777,7 @@ if test "${with_lapack_lib+set}" = set; then
   withval="$with_lapack_lib"
   coin_has_lapack=yes
        LAPACK_LIBS="$withval"
-       ADDLIBS="$ADDLIBS $withval"
+       ADDLIBS="$withval $ADDLIBS"
 
 fi;
 
@@ -26891,7 +26891,7 @@ if test $coin_has_lapack != "skipping" ; then
     fi
     LAPACK_DATA=`sed -n -e 's/datadir=//gp' $lapackdir/coinlapack-uninstalled.pc`
 
-    ADDLIBS="$ADDLIBS $LAPACK_LIBS"
+    ADDLIBS="$LAPACK_LIBS $ADDLIBS"
        REQUIREDPACKAGES="coinlapack $REQUIREDPACKAGES"
 
 
@@ -27273,7 +27273,7 @@ if test "${with_hsl_lib+set}" = set; then
   withval="$with_hsl_lib"
   coin_has_hsl=yes
        HSL_LIBS="$withval"
-       ADDLIBS="$ADDLIBS $withval"
+       ADDLIBS="$withval $ADDLIBS"
 
 fi;
 
@@ -27387,7 +27387,7 @@ if test $coin_has_hsl != "skipping" ; then
     fi
     HSL_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/HSL/coinhsl-uninstalled.pc`
 
-    ADDLIBS="$ADDLIBS $HSL_LIBS"
+    ADDLIBS="$HSL_LIBS $ADDLIBS"
        REQUIREDPACKAGES="coinhsl $REQUIREDPACKAGES"
 
 
@@ -27502,7 +27502,7 @@ if test "${with_mumps_lib+set}" = set; then
   withval="$with_mumps_lib"
   coin_has_mumps=yes
        MUMPS_LIBS="$withval"
-       ADDLIBS="$ADDLIBS $withval"
+       ADDLIBS="$withval $ADDLIBS"
 
 fi;
 
@@ -27665,7 +27665,7 @@ if test $coin_has_mumps != "skipping" ; then
     fi
     MUMPS_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Mumps/coinmumps-uninstalled.pc`
 
-    ADDLIBS="$ADDLIBS $MUMPS_LIBS"
+    ADDLIBS="$MUMPS_LIBS $ADDLIBS"
        REQUIREDPACKAGES="coinmumps $REQUIREDPACKAGES"
 
 
@@ -27745,7 +27745,7 @@ if test $coin_has_metis != "skipping" ; then
     fi
     METIS_DATA=`sed -n -e 's/datadir=//gp' ../ThirdParty/Metis/coinmetis-uninstalled.pc`
 
-    ADDLIBS="$ADDLIBS $METIS_LIBS"
+    ADDLIBS="$METIS_LIBS $ADDLIBS"
        REQUIREDPACKAGES="coinmetis $REQUIREDPACKAGES"
 
 

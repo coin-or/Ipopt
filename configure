@@ -21129,6 +21129,9 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_asl" = notGiven; then
   if test -d $srcdir/ThirdParty/ASL; then
+    # If a third argument is given, then we have to check if one one the files given in that third argument is present.
+    # If none of the files in the third argument is available, then we consider the project directory as non-existing.
+    # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
     for i in $srcdir/ThirdParty/ASL/solvers/asl.h; do
          if test -r $i; then
            coin_have_project_dir=yes
@@ -21279,6 +21282,9 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_blas" = notGiven; then
   if test -d $srcdir/ThirdParty/Blas; then
+    # If a third argument is given, then we have to check if one one the files given in that third argument is present.
+    # If none of the files in the third argument is available, then we consider the project directory as non-existing.
+    # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
     for i in $srcdir/ThirdParty/Blas/daxpy.f; do
          if test -r $i; then
            coin_have_project_dir=yes
@@ -21418,6 +21424,9 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_hsl" = notGiven; then
   if test -d $srcdir/ThirdParty/HSL; then
+    # If a third argument is given, then we have to check if one one the files given in that third argument is present.
+    # If none of the files in the third argument is available, then we consider the project directory as non-existing.
+    # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
     for i in $srcdir/ThirdParty/HSL/configure.ac; do
          if test -r $i; then
            coin_have_project_dir=yes
@@ -21568,6 +21577,9 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_lapack" = notGiven; then
   if test -d $srcdir/ThirdParty/Lapack; then
+    # If a third argument is given, then we have to check if one one the files given in that third argument is present.
+    # If none of the files in the third argument is available, then we consider the project directory as non-existing.
+    # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
     for i in $srcdir/ThirdParty/Lapack/LAPACK/SRC/dlarf.f; do
          if test -r $i; then
            coin_have_project_dir=yes
@@ -21707,6 +21719,9 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_metis" = notGiven; then
   if test -d $srcdir/ThirdParty/Metis; then
+    # If a third argument is given, then we have to check if one one the files given in that third argument is present.
+    # If none of the files in the third argument is available, then we consider the project directory as non-existing.
+    # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
     for i in $srcdir/ThirdParty/Metis/metis-4.0/Lib/balance.c; do
          if test -r $i; then
            coin_have_project_dir=yes
@@ -21846,6 +21861,9 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_mumps" = notGiven; then
   if test -d $srcdir/ThirdParty/Mumps; then
+    # If a third argument is given, then we have to check if one one the files given in that third argument is present.
+    # If none of the files in the third argument is available, then we consider the project directory as non-existing.
+    # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
     for i in $srcdir/ThirdParty/Mumps/MUMPS/src/dmumps_part1.F; do
          if test -r $i; then
            coin_have_project_dir=yes
@@ -21990,10 +22008,13 @@ fi
 # if not found yet, check if project is available in present directory
 if test "$coin_has_ipopt" = notGiven; then
   if test -d $srcdir//Ipopt; then
+    # If a third argument is given, then we have to check if one one the files given in that third argument is present.
+    # If none of the files in the third argument is available, then we consider the project directory as non-existing.
+    # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
      coin_have_project_dir=yes
 
     if test $coin_have_project_dir = yes; then
-      coin_has_ipopt=/Ipopt
+      coin_has_ipopt=Ipopt
     fi
   fi
 fi
@@ -22005,7 +22026,7 @@ echo "$as_me:$LINENO: checking whether project Ipopt need to be configured" >&5
 echo $ECHO_N "checking whether project Ipopt need to be configured... $ECHO_C" >&6
 if test "$coin_have_project_dir" = yes ; then
 
-  if test -r $srcdir//Ipopt/configure; then
+  if test -r $srcdir/Ipopt/configure; then
     coin_subdirs="$coin_subdirs Ipopt"
     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
