@@ -375,7 +375,7 @@ ASTYLE_FILES = \
 	IpTNLPAdapter.cppbak IpTNLPAdapter.hppbak \
 	IpTNLPReducer.cppbak IpTNLPReducer.hppbak
 
-CLEANFILES = ipopt_addlibs_cpp.txt
+CLEANFILES = 
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
 all: all-am
