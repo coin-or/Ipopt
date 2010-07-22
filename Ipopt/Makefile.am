@@ -147,6 +147,9 @@ install-data-hook:
 	@$(mkdir_p) "$(addlibsdir)"
 	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 	$(PKG_CONFIG) --libs ipopt > $(addlibsdir)/ipopt_addlibs_cpp.txt
+
+uninstall-hook:
+	rm -f $(addlibsdir)/ipopt_addlibs_cpp.txt
 endif
 
 include BuildTools/Makemain.inc
