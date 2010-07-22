@@ -49,13 +49,6 @@ libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 addlibsdir = $(datadir)/coin/doc/Ipopt
 addlibs_DATA = ipopt_addlibs_f.txt
 
-if COIN_HAS_PKGCONFIG
-addlibs_DATA += ipopt_addlibs_cpp.txt
-
-ipopt_addlibs_cpp.txt : ../../ipopt.pc
-	PKG_CONFIG_PATH=../..:@COIN_PKG_CONFIG_PATH@ $(PKG_CONFIG) --libs ipopt > ipopt_addlibs_cpp.txt
-endif
-
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/LinearSolvers` \

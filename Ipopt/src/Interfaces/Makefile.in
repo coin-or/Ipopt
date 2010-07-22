@@ -44,9 +44,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@COIN_HAS_PKGCONFIG_TRUE@am__append_1 = ipopt_addlibs_cpp.txt
+@COIN_HAS_HSL_TRUE@am__append_1 = $(HSL_CFLAGS)
 @COIN_HAS_HSL_TRUE@am__append_2 = $(HSL_CFLAGS)
-@COIN_HAS_HSL_TRUE@am__append_3 = $(HSL_CFLAGS)
 subdir = src/Interfaces
 DIST_COMMON = $(includeipopt_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/ipopt_addlibs_f.txt.in
@@ -143,7 +142,7 @@ BUILD_PARDISOLOADER_TRUE = @BUILD_PARDISOLOADER_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
-CFLAGS = @CFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` $(am__append_3)
+CFLAGS = @CFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` $(am__append_2)
 COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
 COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
 COIN_HAS_BLAS_FALSE = @COIN_HAS_BLAS_FALSE@
@@ -157,6 +156,7 @@ COIN_HAS_MUMPS_TRUE = @COIN_HAS_MUMPS_TRUE@
 COIN_HAS_PKGCONFIG_FALSE = @COIN_HAS_PKGCONFIG_FALSE@
 COIN_HAS_PKGCONFIG_TRUE = @COIN_HAS_PKGCONFIG_TRUE@
 COIN_PKG_CONFIG_PATH = @COIN_PKG_CONFIG_PATH@
+COIN_PKG_CONFIG_PATH_UNINSTALLED = @COIN_PKG_CONFIG_PATH_UNINSTALLED@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -170,7 +170,7 @@ CXXFLAGS = @CXXFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	$(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/../Algorithm` -I`$(CYGPATH_W) \
 	$(srcdir)/../Algorithm/Inexact` -I`$(CYGPATH_W) \
-	$(srcdir)/../contrib/CGPenalty` $(am__append_2)
+	$(srcdir)/../contrib/CGPenalty` $(am__append_1)
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DBG_CFLAGS = @DBG_CFLAGS@
@@ -356,7 +356,7 @@ libipopt_la_LIBADD = $(IPALLLIBS)
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 addlibsdir = $(datadir)/coin/doc/Ipopt
-addlibs_DATA = ipopt_addlibs_f.txt $(am__append_1)
+addlibs_DATA = ipopt_addlibs_f.txt
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -720,9 +720,6 @@ uninstall-am: uninstall-addlibsDATA uninstall-coinlibLTLIBRARIES \
 	uninstall-coinlibLTLIBRARIES uninstall-includeipoptHEADERS \
 	uninstall-info-am
 
-
-@COIN_HAS_PKGCONFIG_TRUE@ipopt_addlibs_cpp.txt : ../../ipopt.pc
-@COIN_HAS_PKGCONFIG_TRUE@	PKG_CONFIG_PATH=../..:@COIN_PKG_CONFIG_PATH@ $(PKG_CONFIG) --libs ipopt > ipopt_addlibs_cpp.txt
 
 astyle: $(ASTYLE_FILES)
 
