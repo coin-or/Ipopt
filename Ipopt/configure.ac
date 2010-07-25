@@ -105,20 +105,18 @@ AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
 #############################################################################
 
 AC_COIN_HAS_MODULE_BLAS
-AC_COIN_HAS_MODULE_LAPACK
-AC_COIN_HAS_MODULE(ASL,   [coinasl], [required=0], [../ThirdParty/ASL])
-AC_COIN_HAS_MODULE(HSL,   [coinhsl], [],           [../ThirdParty/HSL])
-AC_COIN_HAS_MODULE(Mumps, [coinmumps])
-if test $coin_has_mumps != yes ; then
-  AC_COIN_HAS_MODULE_FALLBACK(Mumps, [coinmumps], [../ThirdParty/Mumps])
-  AC_COIN_HAS_MODULE_FALLBACK(Metis, [coinmetis], [../ThirdParty/Metis], [dodefine=0 doconditional=0])
-  MUMPS_CFLAGS="$MUMPS_CFLAGS $METIS_CFLAGS"
-  MUMPS_LIBS="$MUMPS_LIBS $METIS_LIBS"
+if test $coin_has_blas != yes; then
+  AC_MSG_ERROR([Required package BLAS not found.])
 fi
 
+AC_COIN_HAS_MODULE_LAPACK
 if test $coin_has_lapack != yes; then
   AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
 fi
+
+AC_COIN_HAS_MODULE(ASL,   [coinasl], [required=0])
+AC_COIN_HAS_MODULE(HSL,   [coinhsl])
+AC_COIN_HAS_MODULE(Mumps, [coinmumps])
 
 #############################################################################
 #                             Stuff for examples                            #
