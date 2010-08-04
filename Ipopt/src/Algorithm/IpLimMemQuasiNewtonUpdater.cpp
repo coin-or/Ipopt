@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -52,12 +52,14 @@ namespace Ipopt
       "Determines which update formula is to be used for the limited-memory "
       "quasi-Newton approximation.");
 
-    roptions->AddStringOption3(
+    roptions->AddStringOption5(
       "limited_memory_initialization",
       "Initialization strategy for the limited memory quasi-Newton approximation.",
       "scalar1",
       "scalar1", "sigma = s^Ty/s^Ts",
       "scalar2", "sigma = y^Ty/s^Ty",
+      "scalar3", "arithmetic average of scalar1 and scalar2",
+      "scalar4", "geometric average of scalar1 and scalar2",
       "constant", "sigma = limited_memory_init_val",
       "Determines how the diagonal Matrix B_0 as the first term in the "
       "limited memory approximation should be computed.");
@@ -389,6 +391,14 @@ namespace Ipopt
             case SCALAR2:
               sigma_ = pow(y_new->Nrm2(),2)/sTy_new;
               break;
+            case SCALAR3:
+              sigma_ = (sTy_new/pow(s_new->Nrm2(),2) +
+                        pow(y_new->Nrm2(),2)/sTy_new)/2.;
+              break;
+            case SCALAR4:
+              sigma_ = sqrt(sTy_new/pow(s_new->Nrm2(),2) *
+                            pow(y_new->Nrm2(),2)/sTy_new);
+              break;
             case CONSTANT:
               sigma_ = limited_memory_init_val_;
               break;
@@ -524,6 +534,14 @@ namespace Ipopt
               break;
             case SCALAR2:
               sigma_ = pow(y_new->Nrm2(),2)/sTy_new;
+              break;
+            case SCALAR3:
+              sigma_ = (sTy_new/pow(s_new->Nrm2(),2) +
+                        pow(y_new->Nrm2(),2)/sTy_new)/2.;
+              break;
+            case SCALAR4:
+              sigma_ = sqrt(sTy_new/pow(s_new->Nrm2(),2) *
+                            pow(y_new->Nrm2(),2)/sTy_new);
               break;
             case CONSTANT:
               sigma_ = limited_memory_init_val_;

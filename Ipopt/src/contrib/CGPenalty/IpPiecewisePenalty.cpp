@@ -22,8 +22,8 @@ namespace Ipopt
   PiecewisePenalty::PiecewisePenalty(Index dim)
       :
       dim_(dim),
-      max_piece_number_(100), // make it regular option here or elsewhere?
-      min_piece_penalty_(0)   // make it regular option here or elsewhere?
+      min_piece_penalty_(0),  // make it regular option here or elsewhere?
+      max_piece_number_(100)  // make it regular option here or elsewhere?
   {}
 
   bool PiecewisePenalty::Acceptable(Number Fzconst, Number Fzlin)

@@ -1,4 +1,4 @@
-// Copyright (C) 2008, 2009 International Business Machines and others.
+// Copyright (C) 2008, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -21,9 +21,11 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  NLPBoundsRemover::NLPBoundsRemover(NLP& nlp)
+  NLPBoundsRemover::NLPBoundsRemover(NLP& nlp,
+                                     bool allow_twosided_inequalities /* = false */)
       :
-      nlp_(&nlp)
+      nlp_(&nlp),
+      allow_twosided_inequalities_(allow_twosided_inequalities)
   {}
 
   bool
@@ -187,7 +189,7 @@ namespace Ipopt
 
     // Here we do a santiy check to make sure that no inequality
     // constraint has two non-infite bounds.
-    if (d_space_orig_->Dim()>0) {
+    if (d_space_orig_->Dim()>0 && !allow_twosided_inequalities_) {
       SmartPtr<Vector> d = d_space_orig_->MakeNew();
       SmartPtr<Vector> tmp = d_l_orig->MakeNew();
       tmp->Set(1.);
@@ -328,33 +330,29 @@ namespace Ipopt
     nlp_->GetScalingParameters(x_space, c_space, d_space_orig, obj_scaling,
                                x_scaling, c_scaling, d_scaling_orig);
 
-    SmartPtr<Vector> xL_scaling;
-    SmartPtr<Vector> xU_scaling;
-    if (IsValid(x_scaling)) {
-      Px_l_orig_->TransMultVector(1., *x_scaling, 0., *xL_scaling);
-      Px_u_orig_->TransMultVector(1., *x_scaling, 0., *xU_scaling);
-    }
+    if (IsValid(x_scaling) || IsValid(d_scaling_orig)) {
 
-    if (IsValid(d_scaling_orig)) {
       SmartPtr<CompoundVector> comp_d_scaling =
         comp_d_space->MakeNewCompoundVector();
-      comp_d_scaling->SetComp(0, *d_scaling_orig);
+
+      SmartPtr<Vector> xL_scaling = comp_d_scaling->GetCompNonConst(1);
+      SmartPtr<Vector> xU_scaling = comp_d_scaling->GetCompNonConst(2);
       if (IsValid(x_scaling)) {
-        comp_d_scaling->SetComp(1, *xL_scaling);
-        comp_d_scaling->SetComp(2, *xU_scaling);
+        Px_l_orig_->TransMultVector(1., *x_scaling, 0., *xL_scaling);
+        Px_u_orig_->TransMultVector(1., *x_scaling, 0., *xU_scaling);
       }
       else {
-        comp_d_scaling->GetCompNonConst(1)->Set(1.);
-        comp_d_scaling->GetCompNonConst(2)->Set(1.);
+        xL_scaling->Set(1.);
+        xU_scaling->Set(1.);
       }
-      d_scaling = GetRawPtr(comp_d_scaling);
-    }
-    else if (IsValid(x_scaling)) {
-      SmartPtr<CompoundVector> comp_d_scaling =
-        comp_d_space->MakeNewCompoundVector();
-      comp_d_scaling->GetCompNonConst(0)->Set(1.);
-      comp_d_scaling->SetComp(1, *xL_scaling);
-      comp_d_scaling->SetComp(2, *xU_scaling);
+
+      if (IsValid(d_scaling_orig)) {
+        comp_d_scaling->SetComp(0, *d_scaling_orig);
+      }
+      else {
+        comp_d_scaling->GetCompNonConst(0)->Set(1.);
+      }
+
       d_scaling = GetRawPtr(comp_d_scaling);
     }
     else {

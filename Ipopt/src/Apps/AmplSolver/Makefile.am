@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2010 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -28,11 +28,11 @@ ipopt_SOURCES = ampl_ipopt.cpp
 
 par_ipopt_SOURCES = ampl_par_ipopt.cpp
 
-ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
-	$(ASLLIB) $(ADDLIBS)
+ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la
 
-par_ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la \
-	$(ASLLIB) $(ADDLIBS)
+par_ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la
+
+LIBS = $(ASL_LIBS) $(BLAS_LIBS) $(LAPACK_LIBS) $(MUMPS_LIBS) $(HSL_LIBS) $(ADDLIBS)
 
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
@@ -40,7 +40,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Algorithm` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
 
-AM_CPPFLAGS += $(ASL_CPPFLAGS)
+AM_CPPFLAGS += $(ASL_CFLAGS)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

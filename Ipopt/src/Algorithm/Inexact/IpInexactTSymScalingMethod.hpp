@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
-// $Id: IpMc19TSymScalingMethod.hpp 699 2006-04-05 21:05:18Z andreasw $
+// $Id$
 //
 // Authors:  Andreas Waechter, Frank E. Curtis         IBM    2009-06-12
 //               (based on IpMc19TSymScalingMethod.hpp rev 699)

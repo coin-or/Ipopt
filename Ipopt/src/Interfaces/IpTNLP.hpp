@@ -211,6 +211,28 @@ namespace Ipopt
                                    Number obj_value,
                                    const IpoptData* ip_data,
                                    IpoptCalculatedQuantities* ip_cq)=0;
+    /** This method is called just before finalize_solution.  With
+     *  this method, the algorithm returns any metadata collected
+     *  during its run, including the metadata provided by the user
+     *  with the above get_var_con_metada.  Each metadata can be of
+     *  type string, integer, and numeric. It can be associated to
+     *  either the variables or the constraints.  The metadata that
+     *  was associated with the primal variable vector is stored in
+     *  var_..._md.  The metadata associated with the constraint
+     *  multipliers is stored in con_..._md.  The metadata associated
+     *  with the bound multipliers is stored in var_..._md, with the
+     *  suffixes "_z_L", and "_z_U", denoting lower and upper
+     *  bounds. */
+    virtual void finalize_metadata(Index n,
+                                   const StringMetaDataMapType& var_string_md,
+                                   const IntegerMetaDataMapType& var_integer_md,
+                                   const NumericMetaDataMapType& var_numeric_md,
+                                   Index m,
+                                   const StringMetaDataMapType& con_string_md,
+                                   const IntegerMetaDataMapType& con_integer_md,
+                                   const NumericMetaDataMapType& con_numeric_md)
+    {}
+
 
     /** Intermediate Callback method for the user.  Providing dummy
      *  default implementation.  For details see IntermediateCallBack

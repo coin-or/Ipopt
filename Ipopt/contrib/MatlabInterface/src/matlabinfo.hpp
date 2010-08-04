@@ -32,9 +32,11 @@ public:
   // The destructor.
   ~MatlabInfo() { };
 
-  // Access and modify the exit status.
+  // Access and modify the exit status and solution statistics.
   ApplicationReturnStatus getExitStatus () const;
   void                    setExitStatus (ApplicationReturnStatus status);
+  void                    setIterationCount (int iter);
+  void                    setCpuTime (double cpu);
 
   // Access and modify the Lagrange multipliers.
   const double* getmultlb     () const;

@@ -39,6 +39,16 @@ namespace Ipopt
       "functions is computed so that the gradient has the max norm of the given "
       "size at the starting point.  This overrides nlp_scaling_max_gradient "
       "for the constraint functions.");
+    roptions->AddLowerBoundedNumberOption(
+      "nlp_scaling_min_value",
+      "Minimum value of gradient-based scaling values.",
+      0, false, 1e-8,
+      "This is the lower bound for the scaling factors computed by "
+      "gradient-based scaling method.  If some derivatives of some functions "
+      "are huge, the scaling factors will otherwise become very small, and "
+      "the (unscaled) final constraint violation, for example, might then be "
+      "significant.  Note: This option is only used if \"nlp_scaling_method\" "
+      "is chosen as \"gradient-based\".");
   }
 
   bool GradientScaling::InitializeImpl(const OptionsList& options,
@@ -50,6 +60,8 @@ namespace Ipopt
                             scaling_obj_target_gradient_, prefix);
     options.GetNumericValue("nlp_scaling_constr_target_gradient",
                             scaling_constr_target_gradient_, prefix);
+    options.GetNumericValue("nlp_scaling_min_value",
+                            scaling_min_value_, prefix);
     return StandardScalingBase::InitializeImpl(options, prefix);
   }
 
@@ -101,6 +113,7 @@ namespace Ipopt
           df = scaling_obj_target_gradient_ / max_grad_f;
         }
       }
+      df = Max(df, scaling_min_value_);
       Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
                      "Scaling parameter for objective function = %e\n", df);
     }
@@ -141,6 +154,11 @@ namespace Ipopt
         else {
           dc->Set(scaling_constr_target_gradient_/arow_max);
         }
+        if (IsValid(dc) && scaling_min_value_ > 0.) {
+          SmartPtr<Vector> tmp = dc->MakeNew();
+          tmp->Set(scaling_min_value_);
+          dc->ElementWiseMax(*tmp);
+        }
       }
       else {
         Jnlst().Printf(J_WARNING, J_INITIALIZATION,
@@ -174,6 +192,11 @@ namespace Ipopt
         }
         else {
           dd->Set(scaling_constr_target_gradient_/arow_max);
+        }
+        if (IsValid(dd) && scaling_min_value_ > 0.) {
+          SmartPtr<Vector> tmp = dd->MakeNew();
+          tmp->Set(scaling_min_value_);
+          dd->ElementWiseMax(*tmp);
         }
       }
       else {

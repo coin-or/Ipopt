@@ -54,8 +54,10 @@
 
 #include "IpMa27TSolverInterface.hpp"
 #include "IpMa57TSolverInterface.hpp"
+#include "IpMa77SolverInterface.hpp"
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpPardisoSolverInterface.hpp"
+#include "IpSlackBasedTSymScalingMethod.hpp"
 
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
@@ -141,7 +143,7 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption6(
+    roptions->AddStringOption7(
       "linear_solver",
       "Linear solver used for step computations.",
 #ifdef HAVE_MA27
@@ -167,6 +169,7 @@ namespace Ipopt
 #endif
       "ma27", "use the Harwell routine MA27",
       "ma57", "use the Harwell routine MA57",
+      "ma77", "use the Harwell routine MA77",
       "pardiso", "use the Pardiso package",
       "wsmp", "use WSMP package",
       "mumps", "use MUMPS package",
@@ -178,7 +181,7 @@ namespace Ipopt
       "to choose. Depending on your Ipopt installation, not all options are "
       "available.");
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption2(
+    roptions->AddStringOption3(
       "linear_system_scaling",
       "Method for scaling the linear system.",
 #ifdef HAVE_MC19
@@ -188,11 +191,12 @@ namespace Ipopt
 #endif
       "none", "no scaling will be performed",
       "mc19", "use the Harwell routine MC19",
+      "slack-based", "use the slack values",
       "Determines the method used to compute symmetric scaling "
       "factors for the augmented system (see also the "
       "\"linear_scaling_on_demand\" option).  This scaling is independent "
       "of the NLP problem scaling.  By default, MC19 is only used if MA27 or "
-      "MA57 are selected as linear solvers. This option is only available if "
+      "MA57 are selected as linear solvers. This value is only available if "
       "Ipopt has been compiled with MC19.");
 
     roptions->SetRegisteringCategory("NLP Scaling");
@@ -332,6 +336,13 @@ namespace Ipopt
 #endif
 
     }
+    else if (linear_solver=="ma77") {
+#ifndef HAVE_MA77
+      THROW_EXCEPTION(OPTION_INVALID, "Support for MA77 has not been compiled into Ipopt.");
+#else
+      SolverInterface = new Ma77SolverInterface();
+#endif
+    }
     else if (linear_solver=="pardiso") {
 #ifndef HAVE_PARDISO
 # ifdef HAVE_LINEARSOLVERLOADER
@@ -428,6 +439,9 @@ namespace Ipopt
         ScalingMethod = new Mc19TSymScalingMethod();
 #endif
 
+      }
+      else if (linear_system_scaling=="slack-based") {
+        ScalingMethod = new SlackBasedTSymScalingMethod();
       }
 
       SmartPtr<SymLinearSolver> ScaledSolver;

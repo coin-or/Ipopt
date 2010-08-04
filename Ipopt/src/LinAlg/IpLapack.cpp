@@ -9,6 +9,13 @@
 #include "IpoptConfig.h"
 #include "IpLapack.hpp"
 
+#ifdef FUNNY_LAPACK_FINT
+# define ipfint long
+# define ipfintarray int
+#else
+# define ipfintarray ipfint
+#endif
+
 // Prototypes for the LAPACK routines
 extern "C"
 {
@@ -30,12 +37,12 @@ extern "C"
 
   /** LAPACK Fortran subroutine DGETRF. */
   void F77_FUNC(dgetrf,DGETRF)(ipfint *m, ipfint *n,
-                               double *A, ipfint *ldA, ipfint *IPIV,
+                               double *A, ipfint *ldA, ipfintarray *IPIV,
                                ipfint *info);
   /** LAPACK Fortran subroutine DGETRS. */
   void F77_FUNC(dgetrs,DGETRS)(char *trans, ipfint *n,
                                ipfint *nrhs, const double *A, ipfint *ldA,
-                               ipfint *IPIV, double *B, ipfint *ldB,
+                               ipfintarray *IPIV, double *B, ipfint *ldB,
                                ipfint *info, int trans_len);
 }
 

@@ -247,9 +247,9 @@ namespace Ipopt
 
       // Compute the linear model reduction prediction
       DBG_PRINT((1,"gradBarrTDelta=%e reference_theta_=%e norm_cplusAd=%e\n", gradBarrTDelta, reference_theta_, norm_cplusAd));
-      reference_pred_ = gradBarrTDelta - nu_mid*(reference_theta_ - norm_cplusAd);
+      reference_pred_ = - gradBarrTDelta + nu_mid*(reference_theta_ - norm_cplusAd);
 
-      watchdog_pred_ = -1e300;
+      watchdog_pred_ = 1e300;
     }
     else {
       reference_theta_ = watchdog_theta_;
@@ -266,8 +266,8 @@ namespace Ipopt
 
     Number pred = alpha*reference_pred_;
 
-    if (pred > 0.) {
-      Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "  pred = %23.16e is positive.  Setting to zero.\n", pred);
+    if (pred < 0.) {
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "  pred = %23.16e is negative.  Setting to zero.\n", pred);
       pred = 0.;
     }
 
@@ -474,7 +474,7 @@ namespace Ipopt
       info_alpha_primal_char = (char)toupper(info_alpha_primal_char);
     }
 
-    if (alpha_primal_test==1. && watchdog_pred_==-1e300) {
+    if (alpha_primal_test==1. && watchdog_pred_==1e300) {
       InexData().set_full_step_accepted(true);
 
     }
@@ -483,7 +483,9 @@ namespace Ipopt
 
   void InexactLSAcceptor::PrepareRestoPhaseStart()
   {
-    THROW_EXCEPTION(INTERNAL_ABORT, "Restoration phase called");
+    //THROW_EXCEPTION(INTERNAL_ABORT, "Restoration phase called");
+    Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                   "  Restoration Phase Preparation method called for InexactLSAcceptor!\n");
   }
 
   bool
@@ -494,7 +496,7 @@ namespace Ipopt
     DBG_START_METH("InexactLSAcceptor::IsAcceptableToCurrentIterate",
                    dbg_verbosity);
     THROW_EXCEPTION(INTERNAL_ABORT, "InexactLSAcceptor::IsAcceptableToCurrentIterate called");
-    ASSERT_EXCEPTION(resto_pred_ >= 0., INTERNAL_ABORT,
+    ASSERT_EXCEPTION(resto_pred_ <= 0., INTERNAL_ABORT,
                      "resto_pred_ not set for check from restoration phase.");
 
     Number ared = reference_barr_ + nu_*(reference_theta_) -

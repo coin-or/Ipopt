@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2009 International Business Machines and others.
+// Copyright (C) 2005, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -49,6 +49,12 @@ namespace Ipopt
     virtual Index IterationCount() const;
     /** Total CPU time, including function evaluations. */
     virtual Number TotalCpuTime() const;
+    /** Total CPU time, including function evaluations. Included for
+     *  backward compatibility. */
+    Number TotalCPUTime() const
+    {
+      return TotalCpuTime();
+    }
     /** Total System time, including function evaluations. */
     virtual Number TotalSysTime() const;
     /** Total wall clock time, including function evaluations. */
