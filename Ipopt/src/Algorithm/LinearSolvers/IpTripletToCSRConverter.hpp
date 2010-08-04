@@ -154,7 +154,7 @@ namespace Ipopt
        numbering). If use_CSC is set to true, the CSC structure
        (transpose of CSR) will be created. */
     TripletToCSRConverter(Index offset, bool use_CSC = false,
-			  ETriFull hf = Triangular_Format);
+                          ETriFull hf = Triangular_Format);
 
     /** Destructor */
     virtual ~TripletToCSRConverter();

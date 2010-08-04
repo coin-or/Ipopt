@@ -1722,10 +1722,10 @@ namespace Ipopt
       bool have_c_scaling = false;
       const Index* c_pos = P_c_g_->ExpandedPosIndices();
       for (Index i=0; i<P_c_g_->NCols(); i++) {
-	const Number val = part_g_scaling[c_pos[i]];
-	if (val != 1.) {
-	  have_c_scaling = true;
-	}
+        const Number val = part_g_scaling[c_pos[i]];
+        if (val != 1.) {
+          have_c_scaling = true;
+        }
         pc_values[i] = val;
       }
       if (fixed_variable_treatment_==MAKE_CONSTRAINT) {
@@ -1736,10 +1736,10 @@ namespace Ipopt
       bool have_d_scaling = false;
       const Index* d_pos = P_d_g_->ExpandedPosIndices();
       for (Index i=0; i<P_d_g_->NCols(); i++) {
-	const Number val = part_g_scaling[d_pos[i]];
-	if (val != 1.) {
-	  have_d_scaling = true;
-	}
+        const Number val = part_g_scaling[d_pos[i]];
+        if (val != 1.) {
+          have_d_scaling = true;
+        }
         pd_values[i] = val;
       }
 
@@ -1752,10 +1752,10 @@ namespace Ipopt
       have_d_scaling = retval_all[1];
 
       if (!have_c_scaling) {
-	c_scaling = NULL;
+        c_scaling = NULL;
       }
       if (!have_d_scaling) {
-	d_scaling = NULL;
+        d_scaling = NULL;
       }
     }
     else {

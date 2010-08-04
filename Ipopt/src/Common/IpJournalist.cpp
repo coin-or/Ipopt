@@ -30,7 +30,9 @@
 # endif
 #endif
 
-#include "IpMpi.hpp"
+#ifdef HAVE_MPI
+# include "IpMpi.hpp"
+#endif
 
 namespace Ipopt
 {
