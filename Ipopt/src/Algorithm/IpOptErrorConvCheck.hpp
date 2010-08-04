@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -75,6 +75,8 @@ namespace Ipopt
     Number acceptable_obj_change_tol_;
     /** Threshold for primal iterates for divergence test */
     Number diverging_iterates_tol_;
+    /** Desired value of the barrier parameter */
+    Number mu_target_;
     /** Upper bound on CPU time */
     Number max_cpu_time_;
     //@}
@@ -100,6 +102,13 @@ namespace Ipopt
     /** Value of the objective function from last iteration.  This is
     for accpetable_obj_change_tol. */
     Number last_obj_val_;
+
+    /** Value of the objective function from current iteration.  This is
+    for accpetable_obj_change_tol. */
+    Number curr_obj_val_;
+
+    /** Iteration counter for which last_obj_val most recently updated. */
+    Index last_obj_val_iter_;
   };
 
 } // namespace Ipopt

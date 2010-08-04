@@ -23,6 +23,8 @@
 # endif
 #endif
 
+#include <cstdio>
+
 using namespace Ipopt;
 
 /** Base class for distributed control problems with homogeneous

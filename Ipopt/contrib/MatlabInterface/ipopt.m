@@ -221,6 +221,10 @@
 %      -102  insufficient memory
 %      -199  internal error
 %
+%     info.iter, info.cpu
+%
+%     Number of iterations and CPU time (in seconds) taken by the Ipopt run
+%
 %   Finally, for more information, please consult the following webpages:
 %
 %      http://www.cs.ubc.ca/~pcarbo/ipopt-for-matlab

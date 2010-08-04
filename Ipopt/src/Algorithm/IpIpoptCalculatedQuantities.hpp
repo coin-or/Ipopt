@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -501,6 +501,8 @@ namespace Ipopt
     /** Flag indicating whether the TNLP with identical structure has
      *  already been solved before. */
     bool warm_start_same_structure_;
+    /** Desired value of the barrier parameter */
+    Number mu_target_;
     //@}
 
     /** @name Caches for slacks */

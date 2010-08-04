@@ -10,6 +10,17 @@
 #include "IpSolveStatistics.hpp"
 #include "MyNLP.hpp"
 
+// for printf
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
+
 using namespace Ipopt;
 
 int main(int argv, char* argc[])

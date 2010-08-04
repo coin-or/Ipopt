@@ -1,0 +1,85 @@
+# ===================================================================
+# dynamic optimization formulation of the hicks-ray reactor
+# data declaration
+# victor m zavala  march 2006
+# adapted for asNMPC by Hans Pirnay 2009
+# ===================================================================
+
+param  a:        1                  2                  3 :=         #
+      1  0.19681547722366   0.39442431473909   0.37640306270047
+      2 -0.06553542585020   0.29207341166523   0.51248582618842
+      3  0.02377097434822  -0.04154875212600   0.11111111111111;
+
+# mathematical model parameters
+
+let jj        := 100          ;
+let cf        := 7.6          ;
+let alpha     := 1.95e-04     ;
+let tf        := 300          ;
+let k10       := 300          ;
+let tc        := 290          ;
+let n         := 5            ;
+let alpha1    := 1e6          ;
+let alpha2    := 2e3          ;
+let alpha3    := 1e-03        ;
+
+let nfe       := 40           ;
+let ncp       := 3            ;
+let r1 := 0.15505102572168    ;
+let r2 := 0.64494897427832    ;
+let r3 := 1                   ;
+
+# initial and end transition points
+
+let c_des    := 0.0944 ;
+let t_des    := 0.7766 ;
+let u_des    := 340    ;
+let c_init   := 0.1367 ;
+let t_init   := 0.7293 ;
+let u_init   := 390    ;
+let time     := 9      ;
+let theta    := 20     ;
+
+# initial guesses of the decision variables
+
+let point   := 0                          ;
+let slopec  := (c_des-c_init)/(nfe*ncp)   ;
+let slopet  := (t_des-t_init)/(nfe*ncp)   ;
+let slopeu  := (u_des-u_init)/(nfe*ncp)   ;
+
+for {i in fe}
+{
+    for {j in cp}
+    {
+         let point    := point+1              ;
+         let c[i,j]  := slopec*point+c_init   ;
+         let t[i,j]  := slopet*point+t_init   ;
+         let u[i,j]  := slopeu*point+u_init   ;
+     }
+let h[i] := 1/nfe ;
+}
+
+
+#-----------------------------------------
+# AsNMPC specific part:
+# Here, the suffixes are set for the advanced step computations:
+#
+# 1. Define the order of the initial variables
+let c_init_var.nmpc_state_0 := 1;
+let t_init_var.nmpc_state_0 := 2;
+#
+# 2. Identify the variables at first sampling time
+let c[5,1].nmpc_state_1 := 1;
+let t[5,1].nmpc_state_1 := 2;
+#
+# 3. Set the measurement of the variables at first sampling time
+let c[5,1].nmpc_state_value_1 := 0.135;
+let t[5,1].nmpc_state_value_1 := 0.745;
+#
+# 4. Identify the initial constraints, that will be relaxed 
+#    in favor of the new measurements
+let c_init_constr.nmpc_init_constr :=1;
+let t_init_constr.nmpc_init_constr :=1;
+
+#-- end of the hicks.dat file -
+

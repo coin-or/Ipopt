@@ -264,6 +264,20 @@ $0 <  {\tt nlp\_scaling\_max\_gradient } <  {\tt +inf}$
 and its default value is $100$.
 
 
+\paragraph{nlp\_scaling\_min\_value:}\label{sec:nlp_scaling_min_value} Minimum value of gradient-based scaling values. $\;$ \\
+ This is the lower bound for the scaling factors
+computed by gradient-based scaling method.  If
+some derivatives of some functions are huge, the
+scaling factors will otherwise become very small,
+and the (unscaled) final constraint violation,
+for example, might then be significant.  Note:
+This option is only used if
+"nlp\_scaling\_method" is chosen as
+"gradient-based". The valid range for this real option is 
+$0 \le {\tt nlp\_scaling\_min\_value } <  {\tt +inf}$
+and its default value is $1 \cdot 10^{-08}$.
+
+
 \subsection{NLP}
 
 \paragraph{bound\_relax\_factor:}\label{sec:bound_relax_factor} Factor for initial relaxation of the bounds. $\;$ \\
@@ -297,7 +311,10 @@ invalid number is detected in the constraint
 Jacobians or the Lagrangian Hessian.  If this is
 not activated, the test is skipped, and the
 algorithm might proceed with invalid numbers and
-fail.
+fail.  If test is activated and an invalid number
+is detected, the matrix is written to output with
+print\_level corresponding to J\_MORE\_DETAILED;
+so beware of large output!
 The default value for this string option is "no".
 \\ 
 Possible values:
@@ -581,6 +598,22 @@ used if option "mu\_strategy" is chosen as
 "adaptive".) The valid range for this real option is 
 $0 <  {\tt mu\_min } <  {\tt +inf}$
 and its default value is $1 \cdot 10^{-11}$.
+
+
+\paragraph{mu\_target:}\label{sec:mu_target} Desired value of complementarity. $\;$ \\
+ Usually, the barrier parameter is driven to zero
+and the termination test for complementarity is
+measured with respect to zero complementarity. 
+However, in some cases it might be desired to
+have Ipopt solve barrier problem for strictly
+positive value of the barrier parameter.  In this
+case, the value of "mu\_target" specifies the
+final value of the barrier parameter, and the
+termination tests are then defined with respect
+to the barrier problem for this value of the
+barrier parameter. The valid range for this real option is 
+$0 \le {\tt mu\_target } <  {\tt +inf}$
+and its default value is $0$.
 
 
 \paragraph{barrier\_tol\_factor:}\label{sec:barrier_tol_factor} Factor for mu in barrier stop test. $\;$ \\
@@ -922,6 +955,7 @@ Possible values:
 \begin{itemize}
    \item ma27: use the Harwell routine MA27
    \item ma57: use the Harwell routine MA57
+   \item ma77: use the Harwell routine MA77
    \item pardiso: use the Pardiso package
    \item wsmp: use WSMP package
    \item mumps: use MUMPS package
@@ -935,7 +969,7 @@ also the "linear\_scaling\_on\_demand" option).
 This scaling is independent of the NLP problem
 scaling.  By default, MC19 is only used if MA27
 or MA57 are selected as linear solvers. This
-option is only available if Ipopt has been
+value is only available if Ipopt has been
 compiled with MC19.
 The default value for this string option is "mc19".
 \\ 
@@ -943,6 +977,7 @@ Possible values:
 \begin{itemize}
    \item none: no scaling will be performed
    \item mc19: use the Harwell routine MC19
+   \item slack-based: use the slack values
 \end{itemize}
 
 \paragraph{linear\_scaling\_on\_demand:}\label{sec:linear_scaling_on_demand} Flag indicating that linear scaling is only done if it seems required. $\;$ \\
@@ -1224,13 +1259,42 @@ might avoid reallocation if the suggest values do
 not suffice.  This option is only available if
 Ipopt has been compiled with MA57. The valid range for this real option is 
 $1 \le {\tt ma57\_pre\_alloc } <  {\tt +inf}$
-and its default value is $3$.
+and its default value is $1.05$.
 
 
 \paragraph{ma57\_pivot\_order:}\label{sec:ma57_pivot_order} Controls pivot order in MA57 $\;$ \\
- This is INCTL(6) in MA57. The valid range for this integer option is
+ This is ICNTL(6) in MA57. The valid range for this integer option is
 $0 \le {\tt ma57\_pivot\_order } \le 5$
 and its default value is $5$.
+
+
+\paragraph{ma57\_automatic\_scaling:}\label{sec:ma57_automatic_scaling} Controls MA57 automatic scaling $\;$ \\
+ This option controls the internal scaling option
+of MA57.This is ICNTL(15) in MA57.
+The default value for this string option is "yes".
+\\ 
+Possible values:
+\begin{itemize}
+   \item no: Do not scale the linear system matrix
+   \item yes: Scale the linear system matrix
+\end{itemize}
+
+\paragraph{ma57\_block\_size:}\label{sec:ma57_block_size} Controls block size used by Level 3 BLAS in MA57BD $\;$ \\
+ This is ICNTL(11) in MA57. The valid range for this integer option is
+$1 \le {\tt ma57\_block\_size } <  {\tt +inf}$
+and its default value is $16$.
+
+
+\paragraph{ma57\_node\_amalgamation:}\label{sec:ma57_node_amalgamation} Node amalgamation parameter $\;$ \\
+ This is ICNTL(12) in MA57. The valid range for this integer option is
+$1 \le {\tt ma57\_node\_amalgamation } <  {\tt +inf}$
+and its default value is $16$.
+
+
+\paragraph{ma57\_small\_pivot\_flag:}\label{sec:ma57_small_pivot_flag} If set to 1, then when small entries defined by CNTL(2) are detected they are removed and the corresponding pivots placed at the end of the factorization.  This can be particularly efficient if the matrix is highly rank deficient. $\;$ \\
+ This is ICNTL(16) in MA57. The valid range for this integer option is
+$0 \le {\tt ma57\_small\_pivot\_flag } \le 1$
+and its default value is $0$.
 
 
 \subsection{MUMPS Linear Solver}
@@ -1323,7 +1387,7 @@ and its default value is $0$.
  This determines on how many processors WSMP is
 running on.  This option is only available if
 Ipopt has been compiled with WSMP. The valid range for this integer option is
-$1 \le {\tt wsmp\_num\_threads } <  {\tt +inf}$
+${\tt -inf} <  {\tt wsmp\_num\_threads } <  {\tt +inf}$
 and its default value is $1$.
 
 

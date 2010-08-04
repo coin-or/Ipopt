@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -80,6 +80,7 @@ namespace Ipopt
     /** Tau_min for fraction to boundary rule */
     Number tau_min_;
     Number compl_inf_tol_;
+    Number mu_target_;
     //@}
 
     SmartPtr<LineSearch> linesearch_;

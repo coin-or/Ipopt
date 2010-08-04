@@ -1,0 +1,32 @@
+# Copyright (C) 2009 Hans Pirnay. All Rights Reserved.
+# This code is published under the Common Public License.
+#
+# Author: Hans Pirnay, 2009-12-18
+
+
+#############################################################################
+# Do not modify anything below unless you know what you're doing.
+
+asnmpc_lib = asnmpc_lib
+ampl_asnmpc_exe = ampl_asnmpc_exe
+ALL_TARGETS = $(asnmpc_lib)
+DIRS = ./src
+TARGETDIRS = ./src
+
+@COIN_HAS_ASL_TRUE@ALL_TARGETS += $(ampl_asnmpc_exe)
+@COIN_HAS_ASL_TRUE@DIRS += ./AmplSolver
+@COIN_HAS_ASL_TRUE@TARGETDIRS += ./AmplSolver
+
+all: $(ALL_TARGETS)
+
+install: all
+	for d in $(TARGETDIRS); do (cd $$d; $(MAKE) install ); done
+
+clean: 
+	-for d in $(DIRS); do (cd $$d; $(MAKE) clean ); done
+
+$(ampl_asnmpc_exe): $(asnmpc_lib)
+	$(MAKE) -C AmplSolver
+
+$(asnmpc_lib): 
+	$(MAKE) -C src

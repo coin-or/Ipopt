@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2007 International Business Machines and others.
+// Copyright (C) 2005, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -76,14 +76,38 @@ namespace Ipopt
   bool WarmStartIterateInitializer::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
-    options.GetNumericValue("warm_start_bound_push",
-                            warm_start_bound_push_, prefix);
-    options.GetNumericValue("warm_start_bound_frac",
-                            warm_start_bound_frac_, prefix);
-    options.GetNumericValue("warm_start_slack_bound_push",
-                            warm_start_slack_bound_push_, prefix);
-    options.GetNumericValue("warm_start_slack_bound_frac",
-                            warm_start_slack_bound_frac_, prefix);
+    if (!options.GetNumericValue("warm_start_bound_push",
+                                 warm_start_bound_push_, prefix)) {
+      options.GetNumericValue("bound_push",
+                              warm_start_bound_push_, prefix);
+    }
+    if (!options.GetNumericValue("warm_start_bound_frac",
+                                 warm_start_bound_frac_, prefix)) {
+      options.GetNumericValue("bound_frac",
+                              warm_start_bound_frac_, prefix);
+    }
+    if (!options.GetNumericValue("warm_start_slack_bound_push",
+                                 warm_start_slack_bound_push_, prefix)) {
+      if (!options.GetNumericValue("bound_push",
+                                   warm_start_slack_bound_push_, prefix)) {
+        if (!options.GetNumericValue("warm_start_slack_bound_push",
+                                     warm_start_slack_bound_push_, prefix)) {
+          options.GetNumericValue("bound_push",
+                                  warm_start_slack_bound_push_, prefix);
+        }
+      }
+    }
+    if (!options.GetNumericValue("warm_start_slack_bound_frac",
+                                 warm_start_slack_bound_frac_, prefix)) {
+      if (!options.GetNumericValue("bound_frac",
+                                   warm_start_slack_bound_frac_, prefix)) {
+        if (!options.GetNumericValue("warm_start_slack_bound_frac",
+                                     warm_start_slack_bound_frac_, prefix)) {
+          options.GetNumericValue("bound_frac",
+                                  warm_start_slack_bound_frac_, prefix);
+        }
+      }
+    }
     options.GetNumericValue("warm_start_mult_bound_push",
                             warm_start_mult_bound_push_, prefix);
     options.GetNumericValue("warm_start_mult_init_max",

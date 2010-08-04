@@ -113,7 +113,13 @@ namespace Ipopt
       CSC_Format_0_Offset,
       /** Compressed sparse column format for upper triangular part, with
        *  1 offset. */
-      CSC_Format_1_Offset
+      CSC_Format_1_Offset,
+      /** Compressed sparse row format for both lwr and upr parts, with
+       *  0 offset. */
+      CSR_Full_Format_0_Offset,
+      /** Compressed sparse row format for both lwr and upr parts, with
+       *  1 offset. */
+      CSR_Full_Format_1_Offset
     };
     /** @name Constructor/Destructor */
     //@{

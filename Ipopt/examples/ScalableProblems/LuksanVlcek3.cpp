@@ -18,6 +18,8 @@
 # endif
 #endif
 
+#include <cstdio>
+
 using namespace Ipopt;
 
 LuksanVlcek3::LuksanVlcek3(Number g_l, Number g_u)

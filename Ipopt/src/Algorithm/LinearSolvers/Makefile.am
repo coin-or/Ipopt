@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2009 International Business Machines and others.
+# Copyright (C) 2004, 2010 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -13,6 +13,7 @@ noinst_LTLIBRARIES = liblinsolvers.la
 liblinsolvers_la_SOURCES = \
 	IpGenKKTSolverInterface.hpp \
 	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
+	IpSlackBasedTSymScalingMethod.cpp IpSlackBasedTSymScalingMethod.hpp \
 	IpSparseSymLinearSolverInterface.hpp \
 	IpSymLinearSolver.hpp \
 	IpTDependencyDetector.hpp \
@@ -29,6 +30,7 @@ if BUILD_LINEARSOLVERLOADER
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
 	IpMa28Partition.f \
 	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
+
 else
 
 if HAVE_MA27
@@ -58,6 +60,11 @@ if HAVE_MA28
 endif
 
 endif # BUILD_LINEARSOLVERLOADER
+
+if HAVE_MA77
+  liblinsolvers_la_SOURCES += \
+	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp ma77_iface.f90
+endif
 
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
@@ -94,7 +101,11 @@ liblinsolvers_la_SOURCES += \
 	IpParMumpsSolverInterface.cpp IpParMumpsSolverInterface.hpp \
 	IpParGenMumpsSolverInterface.cpp IpParGenMumpsSolverInterface.hpp
 endif
-AM_CPPFLAGS += $(MUMPS_INCFLAGS)
+AM_CPPFLAGS += $(MUMPS_CFLAGS)
+endif
+
+if COIN_HAS_HSL
+AM_CPPFLAGS += $(HSL_CFLAGS)
 endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
@@ -111,6 +122,11 @@ IpTSymLinearSolver.lo: IpTSymLinearSolver.cpp
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -qnooptimize -c -o $@ $<
 endif
 
+# Need to overwrite automake definition since otherwise libtool does not
+# understand the fortran file (need to add --tag=F77)
+AM_FCFLAGS = $(HSL_F90_INCFLAGS)
+LTFCCOMPILE = $(LIBTOOL) --tag=F77 --mode=compile $(FC) $(AM_FCFLAGS) $(FCFLAGS)
+
 # Astyle stuff
 
 ASTYLE_FILES = \
@@ -123,6 +139,7 @@ ASTYLE_FILES = \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
 	IpMumpsSolverInterface.cppbak IpMumpsSolverInterface.hppbak \
+	IpSlackBasedTSymScalingMethod.cppbak IpSlackBasedTSymScalingMethod.hppbak \
 	IpSparseSymLinearSolverInterface.hppbak \
 	IpSymLinearSolver.hppbak \
 	IpTDependencyDetector.hppbak \

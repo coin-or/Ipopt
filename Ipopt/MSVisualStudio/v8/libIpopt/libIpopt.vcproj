@@ -251,6 +251,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\Ipopt\src\Algorithm\IpLowRankSSAugSystemSolver.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\Ipopt\src\Algorithm\LinearSolvers\IpMa27TSolverInterface.cpp"
 					>
 				</File>
@@ -263,7 +267,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Algorithm\IpNLPBoundsRemover.cpp"
+					RelativePath="..\..\..\..\Ipopt\src\Algorithm\IpNLPBoundsRemover.cpp"
 					>
 				</File>
 				<File
@@ -295,7 +299,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Algorithm\IpPenaltyLSAcceptor.cpp"
+					RelativePath="..\..\..\..\Ipopt\src\Algorithm\IpPenaltyLSAcceptor.cpp"
 					>
 				</File>
 				<File
@@ -307,7 +311,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Algorithm\IpRestoConvCheck.cpp"
+					RelativePath="..\..\..\..\Ipopt\src\Algorithm\IpRestoConvCheck.cpp"
 					>
 				</File>
 				<File
@@ -331,11 +335,15 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\Algorithm\IpRestoPenaltyConvCheck.cpp"
+					RelativePath="..\..\..\..\Ipopt\src\Algorithm\IpRestoPenaltyConvCheck.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\Ipopt\src\Algorithm\IpRestoRestoPhase.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\Ipopt\src\Algorithm\LinearSolvers\IpSlackBasedTSymScalingMethod.cpp"
 					>
 				</File>
 				<File
@@ -407,6 +415,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\Ipopt\src\LinAlg\IpExpandedMultiVectorMatrix.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\Ipopt\src\LinAlg\IpExpansionMatrix.cpp"
 					>
 				</File>
@@ -467,7 +479,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\LinAlg\IpTransposeMatrix.cpp"
+					RelativePath="..\..\..\..\Ipopt\src\LinAlg\IpTransposeMatrix.cpp"
 					>
 				</File>
 				<File
@@ -567,7 +579,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\contrib\CGPenalty\IpCGPerturbationHandler.cpp"
+					RelativePath="..\..\..\..\Ipopt\src\contrib\CGPenalty\IpCGPerturbationHandler.cpp"
 					>
 				</File>
 				<File
@@ -575,7 +587,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\contrib\CGPenalty\IpPiecewisePenalty.cpp"
+					RelativePath="..\..\..\..\Ipopt\src\contrib\CGPenalty\IpPiecewisePenalty.cpp"
 					>
 				</File>
 			</Filter>

@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2006 International Business Machines and others.
+// Copyright (C) 2005, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -84,6 +84,8 @@ namespace Ipopt
     {
       SCALAR1=0,
       SCALAR2,
+      SCALAR3,
+      SCALAR4,
       CONSTANT
     };
     /** How to choose B0 in the low-rank update. */
