@@ -123,7 +123,7 @@ namespace Ipopt
 			 prefix.c_str(), name.c_str());
 
     char buffer[256];
-    snprintf (buffer, 255, "%s[%2d]", name.c_str(), rank);
+    Snprintf (buffer, 255, "%s[%2d]", name.c_str(), rank);
     std::string myname = buffer;
 
     jnlst.StartDistributedOutput();
