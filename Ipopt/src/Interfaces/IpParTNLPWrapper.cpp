@@ -8,6 +8,16 @@
 
 #include "IpParTNLPWrapper.hpp"
 
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
+
 using namespace Ipopt;
 
 static void calculate_offsets (Index p, Index p_id, Index n, Index &n_first, Index &n_last)
@@ -32,8 +42,6 @@ partition_constraints(Index m, Index jac_nz, Index *iRow,
   Number avgw = (Number)tweight / (Number)num_proc;
 
   // Now let each processor have approximately the same weight
-  Index cur_p = 0;
-  Index cur_start = 0;
   Number cur_weight = 0.0;
 
   Number weight_first = proc_id*avgw;
@@ -347,7 +355,6 @@ ParTNLPWrapper::eval_jac_g(Index num_proc, Index proc_id,
         return rval;
       }
 
-      int nz = 0;
       for (Index i=0; i<nele_jac_part; i++) {
         iRow_part[i] = iRow[jac_map_[i]] - m_first;
         jCol_part[i] = jCol[jac_map_[i]];
@@ -371,7 +378,6 @@ ParTNLPWrapper::eval_jac_g(Index num_proc, Index proc_id,
         return rval;
       }
 
-      int nz = 0;
       for (Index i=0; i<nele_jac_part; i++) {
         values_part[i] = values[jac_map_[i]];
       }

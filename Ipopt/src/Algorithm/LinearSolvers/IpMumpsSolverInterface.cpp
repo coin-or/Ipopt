@@ -68,10 +68,10 @@ namespace Ipopt
 
     //initialize mumps
     DMUMPS_STRUC_C* mumps_ = new DMUMPS_STRUC_C;
+#ifndef HAVE_MPI
     int argc=1;
     char ** argv = 0;
     int myid, ierr;
-#ifndef HAVE_MPI
     ierr = MPI_Init(&argc, &argv);
     ierr = MPI_Comm_rank(MPI_COMM_WORLD, &myid);
 #endif

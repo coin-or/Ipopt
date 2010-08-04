@@ -537,8 +537,8 @@ namespace Ipopt
     DBG_START_METH("ParTSymLinearSolver::GiveMatrixToSolver",dbg_verbosity);
     DBG_PRINT((1,"new_matrix = %d\n",new_matrix));
 
-    double* pa;
-    double* atriplet;
+    double* pa = NULL;
+    double* atriplet = NULL;
 
     if (my_rank_==0) {
       pa = solver_interface_->GetValuesArrayPtr();

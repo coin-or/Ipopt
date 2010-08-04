@@ -251,7 +251,7 @@ namespace Ipopt
 			 "%sParVector \"%s\" with %d pieces, dim %d:\n",
 			 prefix.c_str(), name.c_str(), NumProc(), Dim());
     char buffer[256];
-    snprintf (buffer, 255, "%s[%2d]", name.c_str(), Rank());
+    Snprintf (buffer, 255, "%s[%2d]", name.c_str(), Rank());
     std::string myname = buffer;
     
     jnlst.StartDistributedOutput();
