@@ -106,18 +106,19 @@ namespace Ipopt
         triplet_to_csr_converter_ = new TripletToCSRConverter(1);
         break;
       case SparseSymLinearSolverInterface::CSR_Full_Format_0_Offset:
-        triplet_to_csr_converter_ = new TripletToCSRConverter(0,
+        triplet_to_csr_converter_ = new TripletToCSRConverter(0, false,
                                     TripletToCSRConverter::Full_Format);
         break;
       case SparseSymLinearSolverInterface::CSR_Full_Format_1_Offset:
-        triplet_to_csr_converter_ = new TripletToCSRConverter(1,
+        triplet_to_csr_converter_ = new TripletToCSRConverter(1, false,
                                     TripletToCSRConverter::Full_Format);
         break;
       case SparseSymLinearSolverInterface::Triplet_Format:
         triplet_to_csr_converter_ = NULL;
         break;
       default:
-        DBG_ASSERT(false && "Invalid MatrixFormat returned from solver interface.");
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Unhandled matrix format %d in TSymLinearSolver::InitializeImpl\n", matrix_format_);
         return false;
       }
     }

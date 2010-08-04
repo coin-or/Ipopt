@@ -24822,7 +24822,7 @@ fi
 # Check whether --with-lapack or --without-lapack was given.
 if test "${with_lapack+set}" = set; then
   withval="$with_lapack"
-  use_lapack="$withval"
+  use_lapack=$withval
 else
   use_lapack=
 fi;
@@ -32455,6 +32455,7 @@ if test "$use_pardiso" != "no"; then
   LIBS="$use_pardiso $LIBS"
   LIBS="$LIBS $LAPACK_LIBS $BLAS_LIBS"
   ADDLIBS="$use_pardiso $ADDLIBS"
+  PARDISO_LIB="$use_pardiso"
 
 # ToDo put this back in
   echo "$as_me:$LINENO: checking whether user-supplied Pardiso library \"$use_pardiso\" works" >&5
@@ -32744,7 +32745,7 @@ echo "$as_me: error: The inexact solver option is currently only available with 
   fi
   # Check if the global function pointer variable is defined in the Pardiso library
   SAVE_LIBS="$LIBS"
-  LIBS="$LIBS $FLIBS"
+  LIBS="$LIBS $PARDISO_LIB $LAPACK_LIBS $BLAS_LIBS $FLIBS"
   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -33187,7 +33188,7 @@ _ACEOF
 fi
 
 
-if test $have_mpi = yes; then
+if test "$have_mpi" = yes; then
   HAVE_MPI_TRUE=
   HAVE_MPI_FALSE='#'
 else

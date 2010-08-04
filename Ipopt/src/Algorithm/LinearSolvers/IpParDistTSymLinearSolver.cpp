@@ -90,7 +90,8 @@ namespace Ipopt
         triplet_to_csr_converter_ = NULL;
         break;
       default:
-        DBG_ASSERT(false && "Invalid MatrixFormat returned from solver interface.");
+        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Unhandled matrix format %d in ParDistTSymLinearSolver::InitializeImpl\n", matrix_format_);
         return false;
       }
     }
