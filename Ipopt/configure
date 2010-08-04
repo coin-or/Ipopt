@@ -32454,6 +32454,7 @@ if test "$use_pardiso" != "no"; then
   LIBS="$use_pardiso $LIBS"
   LIBS="$LIBS $LAPACK_LIBS $BLAS_LIBS"
   ADDLIBS="$use_pardiso $ADDLIBS"
+  PARDISO_LIB="$use_pardiso"
 
 # ToDo put this back in
   echo "$as_me:$LINENO: checking whether user-supplied Pardiso library \"$use_pardiso\" works" >&5
@@ -32719,7 +32720,7 @@ echo "$as_me: error: The inexact solver option is currently only available with 
   fi
   # Check if the global function pointer variable is defined in the Pardiso library
   SAVE_LIBS="$LIBS"
-  LIBS="$LIBS $FLIBS"
+  LIBS="$LIBS $PARDISO_LIB $LAPACK_LIBS $BLAS_LIBS $FLIBS"
   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -32860,6 +32861,7 @@ SHARED_FLAGS=-shared
 
 
 #doing this check here avoids its repetition for each file in the following loop
+
 echo "$as_me:$LINENO: checking whether this is a VPATH configuration" >&5
 echo $ECHO_N "checking whether this is a VPATH configuration... $ECHO_C" >&6
 if test `cd $srcdir; pwd` != `pwd`; then
@@ -32873,9 +32875,14 @@ echo "${ECHO_T}$coin_vpath_config" >&6
 for file in `cat $srcdir/contrib/JavaInterface/javafiles.lst`
 do
 
+
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/JavaInterface/$file`"
+  cvl_tmp="contrib/JavaInterface/$file"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 done
@@ -33799,260 +33806,470 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 ########################################################################
 
 
+
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/MatlabInterface/examples/examplehs038.m`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/MatlabInterface/examples/examplehs051.m`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/MatlabInterface/examples/examplehs071.m`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/MatlabInterface/examples/examplelasso.m`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/MatlabInterface/examples/lasso.m`"
+  cvl_tmp="contrib/MatlabInterface/examples/examplehs038.m"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 
 
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo examples/Cpp_example/cpp_example.cpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo examples/Cpp_example/MyNLP.cpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo examples/Cpp_example/MyNLP.hpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo examples/hs071_cpp/hs071_main.cpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo examples/hs071_cpp/hs071_nlp.cpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo examples/hs071_cpp/hs071_nlp.hpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo examples/hs071_c/hs071_c.c`"
+  cvl_tmp="contrib/MatlabInterface/examples/examplehs051.m"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 
 
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/AmplExperiments/hs71.mod`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/AmplExperiments/infeasible.mod`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/AmplExperiments/MoreAmplModels.txt`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/AmplExperiments/car1.run`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/AmplExperiments/car1.gp`"
+  cvl_tmp="contrib/MatlabInterface/examples/examplehs071.m"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 
 
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/Modeling/bad1.mod`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/Modeling/bad1-fix1.mod`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/Modeling/bad1-fix2.mod`"
+  cvl_tmp="contrib/MatlabInterface/examples/examplelasso.m"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 
 
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/exercise_example.mod`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/C/1-skeleton/TutorialC.c`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/C/2-mistake/TutorialC.c`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/C/3-solution/TutorialC.c`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Cpp/1-skeleton/TutorialCpp_main.cpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Cpp/1-skeleton/TutorialCpp_nlp.hpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Cpp/1-skeleton/TutorialCpp_nlp.cpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Cpp/2-mistake/TutorialCpp_main.cpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Cpp/2-mistake/TutorialCpp_nlp.hpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Cpp/2-mistake/TutorialCpp_nlp.cpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_main.cpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.hpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.cpp`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m`"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m`"
+  cvl_tmp="contrib/MatlabInterface/examples/lasso.m"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 
 
+
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/AsNMPC/examples/parametric_cpp/parametric_driver.cpp`"
+  cvl_tmp="examples/Cpp_example/cpp_example.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 
+
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/AsNMPC/examples/parametric_cpp/parametricTNLP.cpp`"
+  cvl_tmp="examples/Cpp_example/MyNLP.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 
+
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/AsNMPC/examples/parametric_cpp/parametricTNLP.hpp`"
+  cvl_tmp="examples/Cpp_example/MyNLP.hpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 
+
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/AsNMPC/examples/redhess_cpp/MyNmpcTNLP.cpp`"
+  cvl_tmp="examples/hs071_cpp/hs071_main.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 
+
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/AsNMPC/examples/redhess_cpp/MyNmpcTNLP.hpp`"
+  cvl_tmp="examples/hs071_cpp/hs071_nlp.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 
+
+# Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  # echo converts newlines in parameter to spaces
-  coin_vpath_link_files="$coin_vpath_link_files `echo contrib/AsNMPC/examples/redhess_cpp/redhess_cpp.cpp`"
+  cvl_tmp="examples/hs071_cpp/hs071_nlp.hpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="examples/hs071_c/hs071_c.c"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/AmplExperiments/hs71.mod"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/AmplExperiments/infeasible.mod"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/AmplExperiments/MoreAmplModels.txt"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/AmplExperiments/car1.run"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/AmplExperiments/car1.gp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/Modeling/bad1.mod"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/Modeling/bad1-fix1.mod"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/Modeling/bad1-fix2.mod"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/exercise_example.mod"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/C/1-skeleton/TutorialC.c"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/C/2-mistake/TutorialC.c"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/C/3-solution/TutorialC.c"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Cpp/1-skeleton/TutorialCpp_main.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Cpp/1-skeleton/TutorialCpp_nlp.hpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Cpp/1-skeleton/TutorialCpp_nlp.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Cpp/2-mistake/TutorialCpp_main.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Cpp/2-mistake/TutorialCpp_nlp.hpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Cpp/2-mistake/TutorialCpp_nlp.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_main.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.hpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="contrib/AsNMPC/examples/parametric_cpp/parametric_driver.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="contrib/AsNMPC/examples/parametric_cpp/parametricTNLP.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="contrib/AsNMPC/examples/parametric_cpp/parametricTNLP.hpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="contrib/AsNMPC/examples/redhess_cpp/MyNmpcTNLP.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="contrib/AsNMPC/examples/redhess_cpp/MyNmpcTNLP.hpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="contrib/AsNMPC/examples/redhess_cpp/redhess_cpp.cpp"
+  coin_vpath_link_files=
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
 fi
 
 

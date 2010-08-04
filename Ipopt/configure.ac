@@ -397,6 +397,7 @@ if test "$use_pardiso" != "no"; then
   LIBS="$use_pardiso $LIBS"
   LIBS="$LIBS $LAPACK_LIBS $BLAS_LIBS"
   ADDLIBS="$use_pardiso $ADDLIBS"
+  PARDISO_LIB="$use_pardiso"
 
 # ToDo put this back in
   AC_MSG_CHECKING([whether user-supplied Pardiso library \"$use_pardiso\" works])
@@ -478,7 +479,7 @@ if test $use_inexact = yes; then
   fi
   # Check if the global function pointer variable is defined in the Pardiso library
   SAVE_LIBS="$LIBS"
-  LIBS="$LIBS $FLIBS"
+  LIBS="$LIBS $PARDISO_LIB $LAPACK_LIBS $BLAS_LIBS $FLIBS"
   AC_LANG_PUSH(C)
   AC_MSG_CHECKING([if Pardiso library has global variable IpoptFunction])
   AC_LINK_IFELSE(
