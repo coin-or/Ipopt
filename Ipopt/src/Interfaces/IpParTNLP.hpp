@@ -15,6 +15,9 @@
 #include "IpAlgTypes.hpp"
 #include "IpReturnCodes.hpp"
 
+#include <string>
+#include <map>
+
 namespace Ipopt
 {
   // forward declarations
