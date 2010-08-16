@@ -1,4 +1,4 @@
-// Copyright (C) 2009 International Business Machines and others.
+// Copyright (C) 2009, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -105,6 +105,19 @@ namespace Ipopt
     options.GetEnumValue("fixed_variable_treatment", enum_int, prefix);
     fixed_variable_treatment_ = FixedVariableTreatmentEnum(enum_int);
 
+    options.GetEnumValue("derivative_test", enum_int, prefix);
+    derivative_test_ = DerivativeTestEnum(enum_int);
+    options.GetNumericValue("derivative_test_perturbation",
+                            derivative_test_perturbation_, prefix);
+    options.GetNumericValue("derivative_test_tol",
+                            derivative_test_tol_, prefix);
+    options.GetBoolValue("derivative_test_print_all",
+                         derivative_test_print_all_, prefix);
+    options.GetIntegerValue("derivative_test_first_index",
+                            derivative_test_first_index_, prefix);
+    options.GetNumericValue("point_perturbation_radius",
+                            point_perturbation_radius_, prefix);
+
     // The option warm_start_same_structure is registered by OrigIpoptNLP
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
@@ -137,6 +150,15 @@ namespace Ipopt
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     num_proc_ = size;
     proc_id_ = rank;
+
+    // First, if required, perform derivative test
+    if (derivative_test_ != NO_TEST) {
+      bool retval = CheckDerivatives(derivative_test_,
+                                     derivative_test_first_index_);
+      if (!retval) {
+        return retval;
+      }
+    }
 
     if (warm_start_same_structure_) {
       ASSERT_EXCEPTION(full_x_, INVALID_WARMSTART,
@@ -2210,5 +2232,437 @@ namespace Ipopt
 
     return (bool)retval;
   }
+
+  bool
+  ParTNLPAdapter::CheckDerivatives(ParTNLPAdapter::DerivativeTestEnum deriv_test,
+                                   Index deriv_test_start_index)
+  {
+    if (deriv_test == NO_TEST) {
+      return true;
+    }
+
+    int nerrors = 0;
+
+    ASSERT_EXCEPTION(IsValid(jnlst_), ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                     "No Journalist given to TNLPAdapter.  Need Journalist, otherwise can't produce any output in DerivativeChecker!");
+
+    int retval;
+    int retval1;
+    // Since this method should be independent of all other internal
+    // data (so that it can be called indpenendent of GetSpace etc),
+    // we are not using any internal fields
+
+    // Obtain the problem size
+    Index nx; // number of variables
+    Index nx_first;
+    Index nx_last;
+    Index ng; // number of constraints
+    Index ng_first;
+    Index ng_last;
+    Index nz_jac_g_part; // number of nonzeros in constraint Jacobian
+    Index nz_hess_lag_part; // number of nonzeros in Lagrangian Hessian
+    ParTNLP::IndexStyleEnum index_style;
+    retval1 = partnlp_->get_nlp_info(num_proc_, proc_id_, nx, nx_first, nx_last,
+                                     ng, ng_first, ng_last, nz_jac_g_part,
+                                     nz_hess_lag_part, index_style);
+    MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+    ASSERT_EXCEPTION(retval, INVALID_PARTNLP, "get_nlp_info returned false for derivative checker");
+
+    Index index_correction = 0;
+    if (index_style == ParTNLP::FORTRAN_STYLE) {
+      index_correction = 1;
+    }
+
+    // Obtain starting point as reference point at which derivative
+    // test should be performed
+    int start_pos = nx_first - index_correction;
+    int nx_part = nx_last - nx_first + 1;
+    int ng_part = ng_last - ng_first + 1;
+    Number* xref_part = new Number[nx_part];
+    retval1 =
+      partnlp_->get_starting_point(num_proc_, proc_id_, nx, nx_first, nx_last,
+                                   true, xref_part, false, NULL, NULL,
+                                   ng, ng_first, ng_last, false, NULL);
+    MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+    ASSERT_EXCEPTION(retval, INVALID_PARTNLP, "get_starting_point returned false for derivative checker");
+
+    // Perform a random perturbation.  We need the bounds to make sure
+    // they are not violated
+    Number* x_l_part = new Number[nx_part];
+    Number* x_u_part = new Number[nx_part];
+    Number* g_l_part = new Number[ng_part];
+    Number* g_u_part = new Number[ng_part];
+
+    retval1 =
+      partnlp_->get_bounds_info(num_proc_, proc_id_, nx, nx_first, nx_last,
+                                x_l_part, x_u_part, ng, ng_first, ng_last,
+                                g_l_part, g_u_part);
+    MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+    ASSERT_EXCEPTION(retval, INVALID_PARTNLP, "get_bounds_info returned false in derivative checker");
+    IpResetRandom01();
+    for (Index i=0; i<nx; i++) {
+      const Number random_number = IpRandom01();
+      if (i >= nx_first-index_correction && i <= nx_last-index_correction) {
+        const Index i_part = i - (nx_first-index_correction);
+        const Number lower = Max(x_l_part[i_part],
+                                 xref_part[i_part]-point_perturbation_radius_);
+        const Number upper = Min(x_u_part[i_part],
+                                 xref_part[i_part]+point_perturbation_radius_);
+        const Number interval = upper - lower;
+        xref_part[i_part] = lower + random_number*interval;
+      }
+    }
+    delete [] x_l_part;
+    delete [] x_u_part;
+    delete [] g_l_part;
+    delete [] g_u_part;
+
+    // Distribute local variables to all processors
+    Number* xref = new Number[nx];
+    int* displs = new int[num_proc_];
+    int* recvcounts = new int[num_proc_];
+    MPI_Allgather(&start_pos, 1, MPI_INT, displs, 1, MPI_INT, MPI_COMM_WORLD);
+    MPI_Allgather(&nx_part, 1, MPI_INT, recvcounts, 1, MPI_INT, MPI_COMM_WORLD);
+    MPI_Allgatherv(xref_part, nx_part, MPI_DOUBLE, xref, recvcounts,
+                   displs, MPI_DOUBLE, MPI_COMM_WORLD);
+    delete [] displs;
+    delete [] recvcounts;
+
+    // Obtain value of objective and constraints at reference point
+    bool new_x = true;
+    Number f1;
+    Number fref;
+    Number* gref_part = NULL;
+    if (ng_part>0) {
+      gref_part = new Number[ng_part];
+    }
+    retval1 = partnlp_->eval_f(num_proc_, proc_id_, nx, nx_first, nx_last,
+                               xref, new_x, f1);
+    MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+    ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                     "In TNLP derivative test: f could not be evaluated at reference point.");
+    // sum up all returned objective function values
+    MPI_Allreduce(&f1, &fref, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+
+    new_x = false;
+    if (ng>0) {
+      retval1 = partnlp_->eval_g(num_proc_, proc_id_, nx, xref, new_x,
+                                 ng, ng_first, ng_last, gref_part);
+      MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+      ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                       "In TNLP derivative test: g could not be evaluated at reference point.");
+    }
+
+    // Obtain gradient of objective function at reference pont
+    Number* grad_f_part = new Number[nx_part];
+    retval1 = partnlp_->eval_grad_f(num_proc_, proc_id_, nx, nx_first, nx_last,
+                                    xref, new_x, grad_f_part);
+    MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+    ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                     "In TNLP derivative test: grad_f could not be evaluated at reference point.");
+
+    Index* g_iRow_part = NULL;
+    Index* g_jCol_part = NULL;
+    Number* jac_g_part = NULL;
+    if (ng>0) {
+      // Obtain constraint Jacobian at reference point (including structure)
+      g_iRow_part = new Index[nz_jac_g_part];
+      g_jCol_part = new Index[nz_jac_g_part];
+      retval1 = partnlp_->eval_jac_g(num_proc_, proc_id_, nx, xref, new_x,
+                                     ng, ng_first, ng_last, nz_jac_g_part,
+                                     g_iRow_part, g_jCol_part, NULL);
+      MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+      ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                       "In TNLP derivative test: Jacobian structure could not be evaluated.");
+      // Correct counting if required to C-style
+      if (index_style == ParTNLP::FORTRAN_STYLE) {
+        for (Index i=0; i<nz_jac_g_part; i++) {
+          g_iRow_part[i] -= 1;
+          g_jCol_part[i] -= 1;
+        }
+      }
+      // Obtain values at reference pont
+      jac_g_part = new Number[nz_jac_g_part];
+      retval1 = partnlp_->eval_jac_g(num_proc_, proc_id_, nx, xref, new_x,
+                                     ng, ng_first, ng_last, nz_jac_g_part,
+                                     NULL, NULL, jac_g_part);
+      MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+      ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                       "In TNLP derivative test: Jacobian values could not be evaluated at reference point.");
+    }
+
+    // Space for the perturbed point
+    Number* xpert = new Number[nx];
+    IpBlasDcopy(nx, xref, 1, xpert, 1);
+
+    // Space for constraints at perturbed point
+    Number* gpert_part = NULL;
+    if (ng_part>0) {
+      gpert_part = new Number[ng_part];
+    }
+
+    if (deriv_test == FIRST_ORDER_TEST || deriv_test == SECOND_ORDER_TEST) {
+      jnlst_->Printf(J_SUMMARY, J_NLP,
+                     "Starting derivative checker for first derivatives.\n\n");
+
+      // Now go through all variables and check the partial derivatives
+      const Index ivar_first = Max(0, deriv_test_start_index);
+      for (Index ivar=ivar_first; ivar<nx; ivar++) {
+        Number this_perturbation =
+          derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
+        xpert[ivar] = xref[ivar] + this_perturbation;
+
+        Number fpert;
+        new_x = true;
+        retval1 = partnlp_->eval_f(num_proc_, proc_id_, nx, nx_first, nx_last,
+                                   xpert, new_x, f1);
+        MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+        ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                         "In TNLP derivative test: f could not be evaluated at perturbed point.");
+        // sum up all returned objective function values
+        MPI_Allreduce(&f1, &fpert, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+
+        new_x = false;
+
+        jnlst_->StartDistributedOutput();
+        if (ivar >= nx_first-index_correction &&
+            ivar <= nx_last-index_correction) {
+
+          Number deriv_approx = (fpert - fref)/this_perturbation;
+          Number deriv_exact = grad_f_part[ivar-start_pos];
+          Number rel_error =
+            fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+          char cflag=' ';
+          if (rel_error >= derivative_test_tol_) {
+            cflag='*';
+            nerrors++;
+          }
+          if (cflag != ' ' || derivative_test_print_all_) {
+            jnlst_->Printf(J_WARNING, J_NLP,
+                           "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n",
+                           cflag, ivar+index_correction,
+                           deriv_exact, deriv_approx, rel_error);
+          }
+        }
+        jnlst_->FinishDistributedOutput();
+
+        if (ng>0) {
+          retval1 = partnlp_->eval_g(num_proc_, proc_id_, nx, xpert, new_x,
+                                     ng, ng_first, ng_last, gpert_part);
+          MPI_Allreduce(&retval1, &retval, 1, MPI_INT, MPI_LAND, MPI_COMM_WORLD);
+          ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                           "In TNLP derivative test: g could not be evaluated at reference point.");
+
+          jnlst_->StartDistributedOutput();
+          for (Index icon=ng_first-index_correction;
+               icon<=ng_last-index_correction; icon++) {
+            Index icon_part = icon-(ng_first-index_correction);
+            Number deriv_approx =
+              (gpert_part[icon_part] - gref_part[icon_part])/this_perturbation;
+            Number deriv_exact = 0.;
+            bool found = false;
+            for (Index i=0; i<nz_jac_g_part; i++) {
+              if (g_iRow_part[i]==icon_part && g_jCol_part[i]==ivar) {
+                found = true;
+                deriv_exact += jac_g_part[i];
+              }
+            }
+
+            Number rel_error =
+              fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+            char cflag=' ';
+            if (rel_error >= derivative_test_tol_) {
+              cflag='*';
+              nerrors++;
+            }
+            char sflag=' ';
+            if (found) {
+              sflag = 'v';
+            }
+            if (cflag != ' ' || derivative_test_print_all_) {
+              jnlst_->Printf(J_WARNING, J_NLP,
+                             "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
+                             cflag, icon+index_correction, ivar+index_correction,
+                             deriv_exact, sflag, deriv_approx, rel_error);
+            }
+          }
+          jnlst_->FinishDistributedOutput();
+        }
+
+        xpert[ivar] = xref[ivar];
+      }
+    }
+
+#if 0
+    const Number zero = 0.;
+    if (deriv_test == SECOND_ORDER_TEST || deriv_test == ONLY_SECOND_ORDER_TEST) {
+      jnlst_->Printf(J_SUMMARY, J_NLP,
+                     "Starting derivative checker for second derivatives.\n\n");
+
+      // Get sparsity structure of Hessian
+      Index* h_iRow = new Index[nz_hess_lag];
+      Index* h_jCol = new Index[nz_hess_lag];
+      retval = tnlp_->eval_h(nx, NULL, false, 0., ng, NULL, false,
+                             nz_hess_lag, h_iRow, h_jCol, NULL);
+      ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                       "In TNLP derivative test: Hessian structure could not be evaluated.");
+
+      if (index_style == TNLP::FORTRAN_STYLE) {
+        for (Index i=0; i<nz_hess_lag; i++) {
+          h_iRow[i] -= 1;
+          h_jCol[i] -= 1;
+        }
+      }
+      Number* h_values = new Number[nz_hess_lag];
+
+      Number* lambda = NULL;
+      if (ng>0) {
+        lambda = new Number[ng];
+        IpBlasDcopy(ng, &zero, 0, lambda, 1);
+      }
+      Number* gradref = new Number[nx]; // gradient of objective or constraint at reference point
+      Number* gradpert = new Number[nx]; // gradient of objective or constraint at perturbed point
+      Number* jacpert = new Number[nz_jac_g];
+
+      // Check all Hessians
+      const Index icon_first = Max(-1, deriv_test_start_index);
+      for (Index icon=icon_first; icon<ng; icon++) {
+        Number objfact = 0.;
+        if (icon == -1) {
+          objfact = 1.;
+          IpBlasDcopy(nx, grad_f, 1, gradref, 1);
+        }
+        else {
+          lambda[icon] = 1.;
+          IpBlasDcopy(nx, &zero, 0, gradref, 1);
+          for (Index i=0; i<nz_jac_g; i++) {
+            if (g_iRow[i]==icon) {
+              gradref[g_jCol[i]] += jac_g[i];
+            }
+          }
+        }
+        // Hessian at reference point
+        new_x = true;
+        bool new_y = true;
+        retval = tnlp_->eval_h(nx, xref, new_x, objfact, ng, lambda, new_y,
+                               nz_hess_lag, NULL, NULL, h_values);
+        new_x = false;
+        new_y = false;
+        ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                         "In TNLP derivative test: Hessian could not be evaluated at reference point.");
+
+        for (Index ivar=0; ivar<nx; ivar++) {
+          Number this_perturbation =
+            derivative_test_perturbation_*Max(1.,fabs(xref[ivar]));
+          xpert[ivar] = xref[ivar] + this_perturbation;
+
+          new_x = true;
+          if (icon==-1) {
+            // we are looking at the objective function
+            retval = tnlp_->eval_grad_f(nx, xpert, new_x, gradpert);
+            ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                             "In TNLP derivative test: grad_f could not be evaluated at perturbed point.");
+          }
+          else {
+            // this is the icon-th constraint
+            retval = tnlp_->eval_jac_g(nx, xpert, new_x, ng,
+                                       nz_jac_g, NULL, NULL, jacpert);
+            ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
+                             "In TNLP derivative test: Jacobian values could not be evaluated at reference point.");
+            // ok, now we need to filter the gradient of the icon-th constraint
+            IpBlasDcopy(nx, &zero, 0, gradpert, 1);
+            IpBlasDcopy(nx, &zero, 0, gradref, 1);
+            for (Index i=0; i<nz_jac_g; i++) {
+              if (g_iRow[i]==icon) {
+                gradpert[g_jCol[i]] += jacpert[i];
+                gradref[g_jCol[i]] += jac_g[i];
+              }
+            }
+          }
+          new_x = false;
+
+          for (Index ivar2=0; ivar2<nx; ivar2++) {
+            Number deriv_approx = (gradpert[ivar2] - gradref[ivar2])/this_perturbation;
+            Number deriv_exact = 0.;
+            bool found = false;
+            for (Index i=0; i<nz_hess_lag; i++) {
+              if ( (h_iRow[i]==ivar && h_jCol[i]==ivar2) ||
+                   (h_jCol[i]==ivar && h_iRow[i]==ivar2) ) {
+                deriv_exact += h_values[i];
+                found = true;
+              }
+            }
+            Number rel_error =
+              fabs(deriv_approx-deriv_exact)/Max(fabs(deriv_approx),1.);
+            char cflag=' ';
+            if (rel_error >= derivative_test_tol_) {
+              cflag='*';
+              nerrors++;
+            }
+            char sflag = ' ';
+            if (found) {
+              sflag = 'v';
+            }
+            if (cflag != ' ' || derivative_test_print_all_) {
+              if (icon==-1) {
+                jnlst_->Printf(J_WARNING, J_NLP,
+                               "%c             obj_hess[%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
+                               cflag, ivar+index_correction, ivar2+index_correction,
+                               deriv_exact, sflag, deriv_approx, rel_error);
+              }
+              else {
+                jnlst_->Printf(J_WARNING, J_NLP,
+                               "%c %5d-th constr_hess[%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n",
+                               cflag, icon+index_correction, ivar+index_correction, ivar2+index_correction,
+                               deriv_exact, sflag, deriv_approx, rel_error);
+              }
+            }
+
+          }
+
+          xpert[ivar] = xref[ivar];
+        }
+
+        if (icon>=0) {
+          lambda[icon] = 0.;
+        }
+      }
+
+      delete [] h_iRow;
+      delete [] h_jCol;
+      delete [] h_values;
+      delete [] lambda;
+      delete [] gradref;
+      delete [] gradpert;
+      delete [] jacpert;
+    }
+#endif
+
+    delete [] xref;
+    delete [] xref_part;
+    delete [] gref_part;
+    delete [] grad_f_part;
+    delete [] xpert;
+    delete [] g_iRow_part;
+    delete [] g_jCol_part;
+    delete [] jac_g_part;
+    delete [] gpert_part;
+
+    int toterrors;
+    MPI_Reduce(&nerrors, &toterrors, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    if (proc_id_ == 0) {
+      if (toterrors==0) {
+        jnlst_->Printf(J_SUMMARY, J_NLP,
+                       "\nNo errors detected by derivative checker.\n\n");
+      }
+      else {
+        jnlst_->Printf(J_WARNING, J_NLP,
+                       "\nDerivative checker detected %d error(s).\n\n", toterrors);
+      }
+    }
+
+    return retval;
+  }
+
 
 } // namespace Ipopt
