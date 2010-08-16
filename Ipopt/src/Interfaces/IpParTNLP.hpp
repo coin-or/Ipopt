@@ -280,7 +280,7 @@ namespace Ipopt
      *  processor is responsible for).  The user can partition the
      *  computation in any way, as long as the sum of all matrices
      *  from all processors give the overal Hessian matrix.  Note that
-     *  non-zero positions do not have to be disjunct amoung
+     *  non-zero positions do not have to be disjunct among
      *  processors.
      */
     virtual bool eval_h(Index num_proc, Index proc_id,
