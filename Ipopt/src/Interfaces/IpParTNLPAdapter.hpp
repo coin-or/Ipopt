@@ -1,4 +1,4 @@
-// Copyright (C) 2009 International Business Machines and others.
+// Copyright (C) 2009, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -46,6 +46,7 @@ namespace Ipopt
     /**@name Exceptions */
     //@{
     DECLARE_STD_EXCEPTION(INVALID_PARTNLP);
+    DECLARE_STD_EXCEPTION(ERROR_IN_PARTNLP_DERIVATIVE_TEST);
     //@}
 
     /** @name ParTNLPAdapter Initialization. */
@@ -156,6 +157,19 @@ namespace Ipopt
       RELAX_BOUNDS
     };
 
+    /** Enum for specifying which derivative test is to be performed. */
+    enum DerivativeTestEnum
+    {
+      NO_TEST=0,
+      FIRST_ORDER_TEST,
+      SECOND_ORDER_TEST,
+      ONLY_SECOND_ORDER_TEST
+    };
+
+    /** Method for performing the derivative test */
+    bool CheckDerivatives(DerivativeTestEnum deriv_test,
+                          Index deriv_test_start_index);
+
     /** @name Methods for IpoptType */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
@@ -206,6 +220,21 @@ namespace Ipopt
     FixedVariableTreatmentEnum fixed_variable_treatment_;
     /* Determines relaxation of fixing bound for RELAX_BOUNDS. */
     Number bound_relax_factor_;
+    /** Enum indicating whether and which derivative test should be
+     *  performed at starting point. */
+    DerivativeTestEnum derivative_test_;
+    /** Size of the perturbation for the derivative test */
+    Number derivative_test_perturbation_;
+    /** Relative threshold for marking deviation from finite
+     *  difference test */
+    Number derivative_test_tol_;
+    /** Flag indicating if all test values should be printed, or only
+     *  those violating the threshold. */
+    bool derivative_test_print_all_;
+    /** Index of first quantity to be checked. */
+    Index derivative_test_first_index_;
+    /** Maximal perturbation of the initial point */
+    Number point_perturbation_radius_;
     /** Flag indicating whether the TNLP with identical structure has
      *  already been solved before. */
     bool warm_start_same_structure_;
