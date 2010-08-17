@@ -293,7 +293,7 @@ nodist_libdummy_la_SOURCES = ipoma.f
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
-IPADDLIBS = @IPADDLIBS@ $(BLAS_LIBS) $(LAPACK_LIBS) $(MUMPS_LIBS) $(HSL_LIBS) $(ADDLIBS)
+IPADDLIBS = @IPADDLIBS@ $(MUMPS_LIBS) $(HSL_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(ADDLIBS)
 CLEANFILES = ipoma.f ipo sdipo ipo.pro sdipo.pro
 all: all-am
 

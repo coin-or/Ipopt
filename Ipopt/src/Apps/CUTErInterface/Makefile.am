@@ -48,7 +48,7 @@ sdipo:
 	  touch sdipo; \
 	fi
 
-IPADDLIBS = @IPADDLIBS@ $(BLAS_LIBS) $(LAPACK_LIBS) $(MUMPS_LIBS) $(HSL_LIBS) $(ADDLIBS)
+IPADDLIBS = @IPADDLIBS@ $(MUMPS_LIBS) $(HSL_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(ADDLIBS)
 
 CLEANFILES = ipoma.f ipo sdipo ipo.pro sdipo.pro
 
