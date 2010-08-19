@@ -38,7 +38,9 @@ namespace Ipopt
     S_ = NULL;
     SmartPtr<DenseGenMatrixSpace> S_space = new DenseGenMatrixSpace(dim_S, dim_S);
     S_ = new DenseGenMatrix(GetRawPtr(S_space));
-    retval = pcalc_nonconst()->GetSchurMatrix(*data_B(), *S_);
+    SmartPtr<Matrix> S2 = GetRawPtr(S_);
+    //retval = pcalc_nonconst()->GetSchurMatrix(GetRawPtr(data_B()), dynamic_cast<Matrix*>(GetRawPtr(S_)));
+    retval = pcalc_nonconst()->GetSchurMatrix(data_B(), S2);
     S_->Print(Jnlst(),J_VECTOR,J_USER1,"S_");
 
     return retval;

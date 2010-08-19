@@ -8,6 +8,7 @@
 #include "AsIndexSchurData.hpp"
 #include "IpDenseVector.hpp"
 #include "IpDenseGenMatrix.hpp"
+//#include "IpDenseSymMatrix.hpp"
 #include "IpBlas.hpp"
 #include <vector>
 
@@ -95,32 +96,56 @@ namespace Ipopt
     return retval;    
   }
 
-  bool IndexPCalculator::GetSchurMatrix(const SchurData& B, Matrix& S)
+  bool IndexPCalculator::GetSchurMatrix(const SmartPtr<const SchurData>& B, SmartPtr<Matrix>& S)
   {  
     DBG_START_METH("IndexPCalculator::GetSchurMatrix", dbg_verbosity);
     bool retval = true;
 
+    Number* S_values;
+    if (!IsValid(S)) {
+      if ( B==data_A() ) {
+	SmartPtr<DenseSymMatrixSpace> S_sym_space = new DenseSymMatrixSpace(B->GetNRowsAdded());
+	SmartPtr<DenseSymMatrix> dS = new DenseSymMatrix(GetRawPtr(S_sym_space));
+	S_values = dS->Values();
+	S = GetRawPtr(dS);
+      }
+      else {
+	SmartPtr<DenseGenMatrixSpace> S_sym_space = new DenseGenMatrixSpace(B->GetNRowsAdded(), B->GetNRowsAdded());
+	SmartPtr<DenseGenMatrix> dS = new DenseGenMatrix(GetRawPtr(S_sym_space));
+	S_values = dS->Values();
+	S = GetRawPtr(dS);
+      }
+    }
+    else {
+      // Try DenseGenMatrix - if NULL, try DenseSymMatrix
+      SmartPtr<DenseGenMatrix> dS_gen = dynamic_cast<DenseGenMatrix*>(GetRawPtr(S));
+      if (!IsValid(dS_gen)) {
+	SmartPtr<DenseSymMatrix> dS_sym = dynamic_cast<DenseSymMatrix*>(GetRawPtr(S));
+	S_values = dS_sym->Values();
+      }
+      else {
+	S_values = dS_gen->Values();
+      }
+    }
+    /*
     DenseGenMatrix* dS = static_cast<DenseGenMatrix*>(&S);
     DBG_ASSERT(dynamic_cast<const DenseGenMatrix*>(&S));
-
+    */
     // Check whether data_A was changed from the outside
     if (ncols_!=data_A()->GetNRowsAdded()) {
 	  ncols_ = data_A()->GetNRowsAdded();
 	  ComputeP();
     }    
-    
+    /*
     DBG_ASSERT(dS->NRows()==dS->NCols());
     DBG_ASSERT(dS->NRows()==data_A()->GetNRowsAdded());
-
+    */
     std::vector<Index> indices;
     std::vector<Number> factors;
 
-    // Get pointer to matrix array; S is assumed to be of type DenseGenMatrix
-    Number* S_values = dS->Values();
-
     // Compute S = B^T*P from indices, factors and P
     const std::vector<Index>* data_A_idx = dynamic_cast<const IndexSchurData*>(GetRawPtr(data_A()))->GetColIndices();
-    const std::vector<Index>* data_B_idx = dynamic_cast<const IndexSchurData*>(&B)->GetColIndices();
+    const std::vector<Index>* data_B_idx = dynamic_cast<const IndexSchurData*>(GetRawPtr(B))->GetColIndices();
     Index col_count = 0;
     for (std::vector<Index>::const_iterator a_it=data_A_idx->begin(); a_it!=data_A_idx->end(); ++a_it) {
       cols_[*a_it]->GetSchurMatrixRows(data_B_idx, S_values+col_count*ncols_);
