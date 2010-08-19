@@ -1,0 +1,41 @@
+# Copyright (C) 2010 Jelmer Ypma. All Rights Reserved.
+# This code is published under the Common Public License.
+#
+# File:   Makevars.in
+# Author: Jelmer Ypma
+# Date:   14 April 2010
+
+
+# C++ Compiler command
+CXX =  g++
+
+# C++ Compiler options
+IPOPT_CXXFLAGS =  -O3 -fomit-frame-pointer -pipe -DNDEBUG -pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -fPIC -fexceptions 
+
+# additional C++ Compiler options for linking
+IPOPT_CXXLINKFLAGS =   -Wl,--rpath -Wl,/cvos/shared/apps/Ipopt/3.5.5-source/lib
+
+# Directory with header files
+IPOPT_INCDIR =  ${prefix}/include/coin
+
+# Directory with libipopt.a
+IPOPT_LIBDIR =  ${exec_prefix}/lib
+exec_prefix =  ${prefix}
+prefix =  /cvos/shared/apps/Ipopt/3.5.5
+
+# Libraries necessary to link with IPOPT
+IPOPT_LIBS =  -L$(IPOPT_LIBDIR) -lipopt -lm  -ldl  -L/usr/lib/gcc/x86_64-redhat-linux/3.4.6 -L/usr/lib/gcc/x86_64-redhat-linux/3.4.6/../../../../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/3.4.6/../../.. -L/lib/../lib64 -L/usr/lib/../lib64 -lfrtbegin -lg2c -lm -lgcc_s
+
+# Necessary Include dirs (we use the CYGPATH_W variables to allow
+# compilation with Windows compilers)
+IPOPT_INCL =   -I`$(CYGPATH_W) $(IPOPT_INCDIR)` $(ADDINCFLAGS)
+
+# The following is necessary under cygwin, if native compilers are used
+CYGPATH_W =  echo
+
+# Define objects for R to build
+OBJECTS = ipoptr.o IpoptRNLP.o
+
+# Convert to R macros
+PKG_LIBS = ${IPOPT_CXXLINKFLAGS} ${IPOPT_LIBS}
+PKG_CXXFLAGS = ${IPOPT_CXXFLAGS} ${IPOPT_INCL}
