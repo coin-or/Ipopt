@@ -33,7 +33,7 @@ namespace Ipopt
     /** Virtual functions overloaded from PCalculator */
     virtual bool ComputeP();
 
-    virtual bool GetSchurMatrix(const SchurData& B, Matrix& S);
+    virtual bool GetSchurMatrix(const SmartPtr<const SchurData>& B, SmartPtr<Matrix>& S);
 
     virtual void PrintImpl(const Journalist& jnlst,
 			   EJournalLevel level,

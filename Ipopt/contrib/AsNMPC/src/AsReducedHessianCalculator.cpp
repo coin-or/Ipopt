@@ -37,12 +37,19 @@ namespace Ipopt
   bool ReducedHessianCalculator::ComputeReducedHessian()
   {
     DBG_START_METH("ReducedHessianCalculator::ComputeReducedHessian", dbg_verbosity);
-
+    
     Index dim_S = hess_data_->GetNRowsAdded();
-    SmartPtr<DenseGenMatrixSpace> S_space = new DenseGenMatrixSpace(dim_S, dim_S);
-    SmartPtr<DenseGenMatrix> S = new DenseGenMatrix(GetRawPtr(S_space));
-    bool retval = pcalc_->GetSchurMatrix(*hess_data_, *S);
-
+    //SmartPtr<DenseGenMatrixSpace> S_space = new DenseGenMatrixSpace(dim_S, dim_S);
+    //SmartPtr<DenseGenMatrix> S = new DenseGenMatrix(GetRawPtr(S_space));
+    SmartPtr<Matrix> S;
+    bool retval = pcalc_->GetSchurMatrix(GetRawPtr(hess_data_), S);
+    
+    SmartPtr<DenseSymMatrix> S_sym = dynamic_cast<DenseSymMatrix*>(GetRawPtr(S));
+    if (!IsValid(S_sym)) {
+      std::exception exc;
+      throw (exc);
+    }
+    
     bool have_x_scaling, have_c_scaling, have_d_scaling;
     have_x_scaling = IpNLP().NLP_scaling()->have_x_scaling();
     have_c_scaling = IpNLP().NLP_scaling()->have_c_scaling();
@@ -75,12 +82,21 @@ namespace Ipopt
     // Unscale by objective factor and multiply by (-1)
     Number obj_scal = IpNLP().NLP_scaling()->apply_obj_scaling(1.0);
     DBG_PRINT((dbg_verbosity, "Objective scaling = %f\n", obj_scal));
-    Number* s_val = S->Values();
+    Number* s_val = S_sym->Values();
     for (Index k=0; k<(S->NRows())*(S->NCols()); ++k) {
       s_val[k] *= -obj_scal;
     }
 
     S->Print(Jnlst(),J_INSUPPRESSIBLE,J_USER1,"RedHessian unscaled");
+
+    SmartPtr<DenseGenMatrixSpace> eigenvectorspace = new DenseGenMatrixSpace(dim_S, dim_S);
+    SmartPtr<DenseGenMatrix> eigenvectors = new DenseGenMatrix(GetRawPtr(eigenvectorspace));
+    SmartPtr<DenseVectorSpace> eigenvaluesspace = new DenseVectorSpace(dim_S);
+    SmartPtr<DenseVector> eigenvalues = new DenseVector(GetRawPtr(eigenvaluesspace));
+    
+    eigenvectors->ComputeEigenVectors(*S_sym, *eigenvalues);
+    eigenvalues->Print(Jnlst(),J_INSUPPRESSIBLE,J_USER1,"Eigenvalues of reduced hessian matrix");
+
     
     return retval;
   }

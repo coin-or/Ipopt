@@ -91,29 +91,54 @@ namespace Ipopt
   }
     
   /** Function to extract a SchurMatrix corresponding to $B K^{-1} A^T$ */
-  bool StdPCalculator::GetSchurMatrix(const SchurData& B, Matrix& S)
+  bool StdPCalculator::GetSchurMatrix(const SmartPtr<const SchurData>& B, SmartPtr<Matrix>& S)
   {
     DBG_START_METH("StdPCalculator::GetSchurMatrix", dbg_verbosity);
     bool retval;
-    
+
+    Number* S_values;
+    if (!IsValid(S)) {
+      // Create new matrix. If B==A, the matrix is symmetric.
+      if ( B==data_A() ) {
+	SmartPtr<DenseSymMatrixSpace> S_sym_space = new DenseSymMatrixSpace(B->GetNRowsAdded());
+	SmartPtr<DenseSymMatrix> dS = new DenseSymMatrix(GetRawPtr(S_sym_space));
+	S_values = dS->Values();
+	S = GetRawPtr(dS);
+      }
+      else {
+	SmartPtr<DenseGenMatrixSpace> S_sym_space = new DenseGenMatrixSpace(B->GetNRowsAdded(), B->GetNRowsAdded());
+	SmartPtr<DenseGenMatrix> dS = new DenseGenMatrix(GetRawPtr(S_sym_space));
+	S_values = dS->Values();
+	S = GetRawPtr(dS);
+      }
+    }
+    else {
+      // Try DenseGenMatrix - if NULL, try DenseSymMatrix
+      SmartPtr<DenseGenMatrix> dS_gen = dynamic_cast<DenseGenMatrix*>(GetRawPtr(S));
+      if (!IsValid(dS_gen)) {
+	SmartPtr<DenseSymMatrix> dS_sym = dynamic_cast<DenseSymMatrix*>(GetRawPtr(S));
+	S_values = dS_sym->Values();
+      }
+      else {
+	S_values = dS_gen->Values();
+      }
+    }
+    /*
     DenseGenMatrix* dS = static_cast<DenseGenMatrix*>(&S);
     DBG_ASSERT(dynamic_cast<const DenseGenMatrix*>(&S));
   
     DBG_ASSERT(dS->NRows()==dS->NCols());
     DBG_ASSERT(dS->NRows()==ncols_);
-
+    */
     std::vector<Index> indices;
     std::vector<Number> factors;
 
-    // Get pointer to matrix array; S is assumed to be of type DenseGenMatrix
-    Number* S_values = dS->Values();
-    
     // Compute S = B^T*P from indices, factors and P
     Index n_ind;
     for (Index row=0; row<ncols_; ++row) {
       indices.clear();
       factors.clear();
-      B.GetMultiplyingVectors(row, indices, factors); 
+      B->GetMultiplyingVectors(row, indices, factors); 
       n_ind = indices.size();
       DBG_ASSERT(n_ind==factors.size());
       for (Index col=0; col<ncols_; ++col) {
