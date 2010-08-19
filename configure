@@ -20984,9 +20984,7 @@ COIN_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
 # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
 # best would actually to use ${libdir}, since .pc files get installed into ${libdir}/pkgconfig,
 # unfortunately, ${libdir} expands to ${exec_prefix}/lib and ${exec_prefix} to ${prefix}...
-if test -d "${prefix}"; then
-  COIN_PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
-fi
+COIN_PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
 
 
 # Check whether --with-coin-instdir or --without-coin-instdir was given.
