@@ -90,6 +90,11 @@ Contributors:
 
   contrib/AsNMPC
 
+- Jelmer Ypma (University College London)
+  R interface with examples, all files in directory (and subdirectory of)
+
+  contrib/RInterface
+
 Contributors of code that is no longer included in Ipopt distribution:
 
 - Yifan Hu (Wolfram): Contributed TAUCS interface, implemented in the files

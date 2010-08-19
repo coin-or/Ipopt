@@ -1,0 +1,3 @@
+useDynLib(ipoptr, IpoptRSolve)
+export(ipoptr, is.ipoptr, print.sparseness, plot.sparseness, make.sparse)
+S3method(print, ipoptr)

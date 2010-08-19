@@ -1,0 +1,5 @@
+This package depends on libraries that are released under different
+licenses than CPL. Make sure to check whether you are allowed to use 
+those libraries, compile and link to them, and whether you agree with 
+all the license terms of the libraries this software depends on before 
+downloading and installing.

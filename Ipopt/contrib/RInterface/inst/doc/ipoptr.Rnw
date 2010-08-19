@@ -1,0 +1,444 @@
+\documentclass[a4paper]{article}
+\usepackage[english]{babel}
+\usepackage{apacite}
+\usepackage{graphicx}
+
+\SweaveOpts{keep.source=TRUE}
+\SweaveOpts{prefix.string = figs/plot, eps = FALSE, pdf = TRUE, tikz = FALSE}
+
+%\pgfrealjobname{ipoptr}
+
+\title{Introduction to \texttt{ipoptr}: an R interface to Ipopt
+\thanks{This package should be considered in beta and comments about any aspect of the package are welcome. This document is an R vignette prepared with the aid of \texttt{Sweave}, Leisch(2002). Financial support of the UK Economic and Social Research Council through a grant (RES-589-28-0001) to the ESRC Centre for Microdata Methods and Practice (CeMMAP) is gratefully acknowledged.}}
+\author{Jelmer Ypma}
+\begin{document}
+\maketitle
+\nocite{Leisch2002}
+
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{xleftmargin=2em}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{xleftmargin=2em}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+
+
+<<setSweaveOptions,echo=FALSE>>=
+# have an (invisible) initialization noweb chunk
+# to remove the default continuation prompt '>'
+options(continue = " ")
+options(width = 60)
+
+# eliminate margin space above plots
+options(SweaveHooks=list(fig=function()
+    par(mar=c(5.1, 4.1, 1.1, 2.1))))
+@
+
+\begin{abstract}
+This document describes how to use \texttt{ipoptr}, which is an R interface to Ipopt (Interior Point Optimizer). Ipopt is an open source software package for large-scale nonlinear optimization \cite{WachterBiegler2006}. It can be used to solve general nonlinear programming problems with nonlinear constraints and lower and upper bounds for the controls. Ipopt is written in C++ and is released as open source code under the Common Public License (CPL). It is available from the COIN-OR initiative. The code has been written by Carl Laird and Andreas W\"achter, who is the COIN project leader for Ipopt. 
+\end{abstract}
+
+\section{Introduction}
+Ipopt is designed to find (local) solutions of mathematical optimization problems of the from
+\begin{eqnarray*}
+&&\min_{x \in R^n} f(x) \\
+&s.t.& g_L <= g(x) <= g_U \\
+&&     x_L <=  x   <= x_U
+\end{eqnarray*}
+where $f(x): R^n \rightarrow R$ is the objective function, and $g(x): R^n \rightarrow R^m$ are the constraint functions. The vectors $g_L$ and $g_U$ denote the lower and upper bounds on the constraints, and the vectors $x_L$ and $x_U$ are the bounds on the variables $x$. The functions $f(x)$ and $g(x)$ can be nonlinear and nonconvex, but should be twice continuously differentiable. Note that equality constraints can be formulated in the above formulation by setting the corresponding components of $g_L$ and $g_U$ to the same value.
+
+This vignette describes how to formulate minimization problems to be solved with the R interface to Ipopt. If you want to use the C++ interface directly or are interested in the Matlab interface, there are other sources of documentation avialable. Some of the information here is heavily based on the Ipopt Wiki\footnote{\texttt{https://projects.coin-or.org/Ipopt}} and generally that is a good source to find additional information, for instance on which options to use. All credit for implementing the C++ code for Ipopt should go to Andreas W\"achter and Carl Laird. Please show your appreciation by citing their paper.
+
+\section{Installation}
+Installing the \texttt{ipoptr} package is not as straightforward as most other R packages, because it depends on Ipopt, which has to be installed separately. Ipopt and the R interface to Ipopt are distributed separately because of differences in licenses between Ipopt, some of the libraries it depends on, and R. There are ways to simplify the Ipopt part of the installation by using some of the pre-compiled libraries of Ipopt with Mumps\footnote{Any help to simplify the installation process is appreciated and if someone uses the pre-compiled libraries and has a \texttt{Makefile}, please let me know.}. To install (and compile) Ipopt and the R interface a C/C++ compiler has to be available. Detailed installation instructions are available on \texttt{http://www.coin-or.org/Ipopt/documentation}. On Windows I was succesful using MSYS, on Ubuntu no additional tools were needed. 
+
+In the description of the installation of the R interface, I will assume that you have a working installation of Ipopt. You need to be able to compile R packages from source. Since Ipopt was already successfully installed, compilers are probably available. On Windows platforms Rtools is needed to compile R packages from source\footnote{\texttt{http://www.murdoch-sutherland.com/Rtools/}}. 
+
+First, a file \texttt{Makevars} in the source directory of the interface package needs to be configured for your system from the file \texttt{Makevars.in}. The \texttt{configure\_ipoptr.R} script should make this easier. Start R, go to the directory where the \texttt{ipoptr} interface is located and load the script. In the code below, you should change the directories to the correct ones for your system.
+<<configureIpoptrStep1, eval=FALSE>>=
+setwd('~/ipoptr')
+source('configure_ipoptr.R')
+@
+Running this script defines a function \texttt{configure\_ipoptr}. Run the \texttt{configure\_ipoptr} command with the directory of the Ipopt build and the directory where \texttt{ipoptr} is located as arguments, e.g.
+<<configureIpoptrStep2, eval=FALSE>>=
+configure_ipoptr( ipopt.build.dir = "/cvos/shared/apps/Ipopt/3.5.5-source",
+                  ipoptr.dir = "~/ipoptr" )
+@
+The \texttt{ipoptr.build.dir} should have a file called \texttt{Makefile} in the subdirectory \texttt{/Ipopt/examples/hs071\_cpp}. If there were no errors, then a file called \texttt{Makevars} (or \texttt{Makevars.win} if you're using Windows) has now been created in the directory \texttt{ipoptr/src}. 
+
+You can then install the package with the command
+\begin{verbatim}
+install.packages('~/ipoptr', repos=NULL, type='source')
+\end{verbatim}
+where the first argument specifies the directory where the R interface to Ipopt is located. You should now be able to load the R interface to Ipopt and read the help.
+<<testIpoptInstallation, eval=FALSE>>=
+library('ipoptr')
+?ipoptr
+@
+
+\section{Minimizing the Rosenbrock Banana function}
+As a first example we will solve an unconstrained minimization problem. The function we look at is the Rosenbrock Banana function
+\[
+f( x ) = 100 \left( x_2 - x_1^2 \right)^2 + \left(1 - x_1 \right)^2,
+\]
+which is also used as an example in the documentation for the standard R optimizer \texttt{optim}. The gradient of the objective function is given by
+\[
+\nabla f( x ) = 
+\left( \begin{array}[1]{c}
+-400 \cdot x_1 \cdot (x_2 - x_1^2) - 2 \cdot (1 - x_1) \\
+ 200 \cdot (x_2 - x_1^2)
+\end{array} \right).
+\]
+Ipopt always needs gradients to be supplied by the user. After loading the library
+<<loadLibrary>>=
+library(ipoptr)
+@
+we start by specifying the objective function and its gradient
+<<defineRosenbrockBanana>>=
+## Rosenbrock Banana function
+eval_f <- function(x) {   
+    return( 100 * (x[2] - x[1] * x[1])^2 + (1 - x[1])^2 )
+}
+
+## Gradient of Rosenbrock Banana function
+eval_grad_f <- function(x) { 
+    return( c( -400 * x[1] * (x[2] - x[1] * x[1]) - 2 * (1 - x[1]),
+                200 * (x[2] - x[1] * x[1]) ) )
+}
+@
+We define initial values
+<<setRosenbrockBananaInitialValues>>=
+# initial values
+x0 <- c( -1.2, 1 )
+@
+and then minimize the function using the \texttt{ipoptr} command. This command runs some checks on the supplied inputs and returns an object with the exit code of the solver, the optimal value of the objective function and the solution. The checks do not always return very informative messages, but usually there is something wrong with dimensions (e.g. \texttt{eval\_grad\_f} returns a vector that doesn't have the same size as \texttt{x0}). 
+<<solveRosenbrockBanana>>= 
+# solve Rosenbrock Banana function
+res <- ipoptr( x0=x0, 
+               eval_f=eval_f, 
+               eval_grad_f=eval_grad_f )
+@
+These are the minimal arguments that have to be supplied. If, like above, no Hessian is defined, Ipopt uses an approximation. We can see the results by printing the resulting object.
+<<printRosenbrockBanana>>=
+print( res )
+@
+It's advised to always check the exit code for convergence of the problem and in this case we can see that the algorithm terminated successfully. Ipopt used 47 iterations to find the solution and the optimal value of the objective function and the controls are given as well.
+
+If you do not want to, or cannot calculate the gradient analytically, you can supply a function \texttt{eval\_grad\_f} that approximates the gradient. However, this is not advisable and might result in convergence problems, for instance by not finding the minimum, or by finding the wrong minimum. We can see this from the following example where we approximate \texttt{eval\_grad\_f} using finite differences
+<<defineApproxGradF>>=
+# Approximate eval_f using finite differences
+# http://en.wikipedia.org/wiki/Numerical_differentiation
+approx_grad_f <- function( x ) {
+    minAbsValue     <- 0
+    stepSize        <- sqrt( .Machine$double.eps )
+
+    # if we evaluate at 0, we need a different step size
+    stepSizeVec     <- ifelse( abs(x) <= minAbsValue, 
+                               stepSize^3, 
+                               x * stepSize )
+    
+    x_prime <- x
+    f       <- eval_f( x )
+    grad_f  <- rep( 0, length(x) )
+    for (i in 1:length(x)) {
+        x_prime[i]      <- x[i] + stepSizeVec[i]
+        stepSizeVec[i]  <- x_prime[i] - x[i]
+
+        f_prime         <- eval_f( x_prime )
+        grad_f[i]       <- ( f_prime - f )/stepSizeVec[i]
+        x_prime[i]      <- x[i]
+    }
+    
+    return( grad_f )
+}
+@
+and using this approximation to minimize the same Rosenbrock Banana function.
+<<solveRosenbrockBananaApproximation1>>=
+# increase the maximum number of iterations
+opts <- list("tol"=1.0e-8, "max_iter"=5000)
+ 
+# solve Rosenbrock Banana function with approximated gradient
+print( ipoptr( x0=x0, 
+               eval_f=eval_f, 
+               eval_grad_f=approx_grad_f, 
+               opts=opts) )
+@
+In this case 5000 iterations are not enough to solve the minimization problem to the required tolerance. This has to do with the step size we choose to approximate the gradient
+<<showMachineEpsilon>>=
+sqrt( .Machine$double.eps )
+@
+which is of the same order of magnitude. If we decrease the tolerance, the algorithm converges, but the solution is less precise than if we supply gradients and it takes more iterations to get there.
+<<solveRosenbrockBananaApproximation2>>=
+# decrease the convergence criterium
+opts <- list("tol"=1.0e-7)
+ 
+# solve Rosenbrock Banana function with approximated gradient
+print( ipoptr( x0=x0, 
+               eval_f=eval_f, 
+               eval_grad_f=approx_grad_f, 
+               opts=opts) )
+@
+
+\section{Sparse matrix structure}
+Ipopt can handle sparseness in the Jacobian of the constraints and the Hessian. The sparseness structure should be defined in advance and stay the same throughout the minimization procedure. A sparseness structure can be defined as a list of vectors, where each vector contains the indices of the non-zero elements of one row. E.g. the matrix
+\[
+\left( \begin{array}[4]{cccc}
+. & . & . & 1 \\
+1 & 1 & . & . \\
+1 & 1 & 1 & 1
+\end{array} \right)
+\]
+has a non-zero element in position 4 in the first row. In the second row it has non-zero elements in position 1 and 2, and the third row contains non-zero elements at every position. Its structure can be defined as
+<<sparseEx1>>=
+sparse_structure <- list( c( 4 ), c( 1, 2 ), c( 1, 2, 3, 4 ) )
+@
+The function \texttt{make.sparse} can simplify this procedure
+<<sparseEx2>>=
+make.sparse( rbind( c(0, 0, 0, 1), c( 1, 1, 0, 0 ), c( 1, 1, 1, 1 ) ) )
+@
+This function takes a matrix as argument. All non-zero elements in this matrix will be defined as non-zero in the sparseness structure, \texttt{NA} or \texttt{NaN} are not allowed. The function \texttt{print.sparseness} shows the non-zero elements
+<<sparseEx3>>=
+print.sparseness( sparse_structure )
+@
+By default \texttt{print.sparseness} shows the indices of the non-zero elements in the sparse matrix. Values for the non-zero elements of a sparse matrix have to be supplied in one vector, in the same order as the the non-zero elements occur in the structure. I.e. the order of the indices matters and the values of the following two matrices should be supplied in a different order
+<<sparseEx4>>=
+print.sparseness( list( c(1,3,6,8), c(2,5), c(3,7,9) ) )
+print.sparseness( list( c(3,1,6,8), c(2,5), c(3,9,7) ) )
+@
+Since the sparseness structure defines the indices of non-zero elements by row, the order of the rows cannot be changed in the R implementation. In principle a more general order of the non-zero elements (independent of row or column) could be specified, which can be added as a feature on request. Below are two final examples on sparseness structure (see \texttt{?print.sparseness} for more options and examples)
+<<sparseEx5>>=
+# print lower-diagonal 5x5 matrix generated with make.sparse
+A_lower <- make.sparse( lower.tri( matrix(1, nrow=5, ncol=5), diag=TRUE ) )
+print.sparseness( A_lower )
+
+# print a diagonal 5x5 matrix without indices counts
+A_diag  <- make.sparse( diag(5) > 0 )
+print.sparseness( A_diag, indices=FALSE )
+@
+
+For larger matrices it is easier to plot them using the \texttt{plot.sparseness} command
+<<label=sparsefig,fig=TRUE,echo=TRUE,include=FALSE,results=hide,width=6,height=2.35>>=
+s <- do.call( "cbind", lapply( 1:5, function(i) { 
+                                       diag(5) %x% matrix(1, nrow=5, ncol=20) 
+                                    } ) )
+s <- do.call( "rbind", lapply( 1:5,  function(i) { s } ) )
+s <- cbind( matrix( 1, nrow=nrow(s), ncol=40 ), s )
+plot.sparseness( make.sparse( s ) )
+@
+The resulting sparse matrix structure from this code can be seen in figure \ref{fig:sparse}. All non-zero elements are shown as black dots by default.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=12.0cm]{figs/plot-sparsefig.pdf}
+\caption{Plot of large sparseness structure}
+\label{fig:sparse}
+\end{center}
+\end{figure}
+
+\section{Supplying the Hessian}
+Now that we know how to define a sparseness structure we can supply the Hessian to the Rosenbrock Banana function from above. Its Hessian is given by
+\[
+\nabla^2 f( x ) = \left( \begin{array}[2]{rr}
+2 - 400 \cdot (x_2 - x_1^2) + 800 x_1^2 & -400 x_1 \\
+-400 x_1 & 200 
+\end{array} \right)
+\]
+Ipopt needs the Hessian of the Lagrangian in the following form
+\[
+\sigma_f \nabla^2 f(x) + \sum_{i=1}^m \lambda_i \nabla^2 g_i(x),
+\]
+where $g_i(x)$ represents the $i$th of $m$ constraints, $\lambda_i$ are the multipliers of the constraints and $\sigma_f$ is introduced so that Ipopt can ask for the Hessian of the objective or the constraints independently if required. 
+
+In this case we don't have any constraints. The user-defined function \texttt{eval\_h} to define the Hessian takes three arguments. The first argument contains the value of the control variables, $x$, the second argument contains the multiplication factor of the Hessian of the objective function, $\sigma_f$, and the third argument contains a vector with the multipliers of the constraints, $\lambda$. We can define the structure of the Hessian and the function to evaluate the Hessian as follows
+<<defineRosenbrockBananaHessian>>=
+# The Hessian for this problem is actually dense, 
+# This is a symmetric matrix, fill the lower left triangle only.
+eval_h_structure <- list( c(1), c(1,2) )
+
+eval_h <- function( x, obj_factor, lambda ) {
+    return( obj_factor*c( 2 - 400*(x[2] - x[1]^2) + 800*x[1]^2,      # 1,1
+                          -400*x[1],                                 # 2,1
+                          200 ) )                                    # 2,2
+}
+@
+Note that we only specify the lower half of the Hessian, since it is a symmetric matrix. Also, \texttt{eval\_h} returns a vector with all the non-zero elements of the Hessian in the same order as the non-zero indices in the sparseness structure. Then we minimize the function using the \texttt{ipoptr} command
+<<solveRosenbrockBananaHessian>>=
+opts <- list("print_level"=0,
+             "file_print_level"=12,
+             "output_file"="banana.out",
+             "tol"=1.0e-8)
+             
+# solve Rosenbrock Banana function with analytic Hessian
+print( ipoptr( x0=x0, 
+               eval_f=eval_f, 
+               eval_grad_f=eval_grad_f, 
+               eval_h=eval_h,
+               eval_h_structure=eval_h_structure,
+               opts=opts) )
+@               
+Here we also supplied options to not print any intermediate information to the R screen (\texttt{print\_level=0}). Printing output to the screen directly from Ipopt does not work in all R terminals correctly, so it might be that even though you specify a positive number here, there will still be no output visible on the screen. If you want to print things to the screen, a workaround is to do this directly in the R functions you defined, such as \texttt{eval\_f}.
+
+Also, to inspect more details about the minimization we can write all the output to a file, which will be created in the current working directory. For larger problems, having a large number for \texttt{file\_print\_level} can easily generate very large files, which is probably not desirable. Many more options are available, and a full list of all the options can be found at the Ipopt website, \texttt{http://www.coin-or.org/Ipopt/documentation/node59.html\#app.options\_ref}. Options can also be supplied from an option file, which can be specified in \texttt{option\_file\_name}.
+
+\section{Adding constraints}
+To look at how we can add constraints to a problem, we take example problem number 71 from the Hock-Schittkowsky test suite, which is also used in the Ipopt C++ tutorial. The problem is
+\begin{eqnarray*}
+&&\min_{x} x_1*x_4*(x_1 + x_2 + x_3) + x_3 \\
+&s.t.& \\
+&&   x_1*x_2*x_3*x_4 >= 25 \\
+&&   x_1^2 + x_2^2 + x_3^2 + x_4^2 = 40 \\
+&&   1 <= x_1,x_2,x_3,x_4 <= 5,
+\end{eqnarray*}
+and we use $x = (1, 5, 5, 1)$ as initial values. In this problem we have one inequality constraint, one equality constraint and upper and lower bounds for all the variables. The optimal solution is $(1.00000000, 4.74299963, 3.82114998, 1.37940829)$. First we define the objective function and its gradient
+<<defineHS071>>=
+eval_f <- function( x ) { 
+    return( x[1]*x[4]*(x[1] + x[2] + x[3]) + x[3] ) 
+}
+
+eval_grad_f <- function( x ) {
+    return( c( x[1] * x[4] + x[4] * (x[1] + x[2] + x[3]),
+               x[1] * x[4],
+               x[1] * x[4] + 1.0,
+               x[1] * (x[1] + x[2] + x[3]) ) )		  
+}
+@
+Then we define a function that returns the value of the two constraints. We define the bounds of the constraints (in this case the $g_L$ and $g_U$ are $25$ and $40$) later.
+<<defineHS071constraints>>=
+# constraint functions
+eval_g <- function( x ) {
+    return( c( x[1] * x[2] * x[3] * x[4],
+               x[1]^2 + x[2]^2 + x[3]^2 + x[4]^2 ) )
+}
+@
+Then we define the structure of the Jacobian, which is a dense matrix in this case, and function to evaluate it
+<<defineHS071jacobian>>=
+eval_jac_g_structure <- list( c(1,2,3,4), c(1,2,3,4) )
+
+eval_jac_g <- function( x ) {
+    return( c ( x[2]*x[3]*x[4],
+                x[1]*x[3]*x[4],
+                x[1]*x[2]*x[4],
+                x[1]*x[2]*x[3],
+                2.0*x[1],
+                2.0*x[2],
+                2.0*x[3],
+                2.0*x[4] ) )
+}
+@
+The Hessian is also dense, but it looks slightly more complicated because we have to take into account the Hessian of the objective function and of the constraints at the same time, although you could write a function to calculate them both separately and then return the combined result in \texttt{eval\_h}.
+<<defineHS071hessian>>=
+# The Hessian for this problem is actually dense, 
+# This is a symmetric matrix, fill the lower left triangle only.
+eval_h_structure <- list( c(1), c(1,2), c(1,2,3), c(1,2,3,4) )
+
+eval_h <- function( x, obj_factor, lambda ) {
+
+    values <- numeric(10)
+    values[1] = obj_factor * (2*x[4]) # 1,1
+
+    values[2] = obj_factor * (x[4])   # 2,1
+    values[3] = 0                     # 2,2
+
+    values[4] = obj_factor * (x[4])   # 3,1
+    values[5] = 0                     # 4,2
+    values[6] = 0                     # 3,3
+
+    values[7] = obj_factor * (2*x[1] + x[2] + x[3]) # 4,1
+    values[8] = obj_factor * (x[1])                 # 4,2
+    values[9] = obj_factor * (x[1])                 # 4,3
+    values[10] = 0                                  # 4,4
+
+
+    # add the portion for the first constraint
+    values[2] = values[2] + lambda[1] * (x[3] * x[4]) # 2,1
+    
+    values[4] = values[4] + lambda[1] * (x[2] * x[4]) # 3,1
+    values[5] = values[5] + lambda[1] * (x[1] * x[4]) # 3,2
+
+    values[7] = values[7] + lambda[1] * (x[2] * x[3]) # 4,1
+    values[8] = values[8] + lambda[1] * (x[1] * x[3]) # 4,2
+    values[9] = values[9] + lambda[1] * (x[1] * x[2]) # 4,3
+
+    # add the portion for the second constraint
+    values[1] = values[1] + lambda[2] * 2 # 1,1
+    values[3] = values[3] + lambda[2] * 2 # 2,2
+    values[6] = values[6] + lambda[2] * 2 # 3,3
+    values[10] = values[10] + lambda[2] * 2 # 4,4
+
+    return ( values )
+}
+@
+After the hard part is done, we only have to define the initial values, the lower and upper bounds of the control variables, and the lower and upper bounds of the constraints. If a variable or a constraint does not have lower or upper bounds, the values \texttt{-Inf} or \texttt{Inf} can be used. If the upper and lower bounds of a constraint are equal, Ipopt recognizes this as an equality constraint and acts accordingly.
+<<solveHS071>>=
+# initial values
+x0 <- c( 1, 5, 5, 1 )
+
+# lower and upper bounds of control
+lb <- c( 1, 1, 1, 1 )
+ub <- c( 5, 5, 5, 5 )
+
+# lower and upper bounds of constraints
+constraint_lb <- c(  25, 40 )
+constraint_ub <- c( Inf, 40 )
+
+opts <- list("print_level"=0,
+             "file_print_level"=12,
+             "output_file"="hs071_nlp.out")
+  
+print( ipoptr( x0=x0, 
+               eval_f=eval_f, 
+               eval_grad_f=eval_grad_f, 
+               lb=lb, 
+               ub=ub, 
+               eval_g=eval_g, 
+               eval_jac_g=eval_jac_g, 
+               constraint_lb=constraint_lb, 
+               constraint_ub=constraint_ub, 
+               eval_jac_g_structure=eval_jac_g_structure,
+               eval_h=eval_h,
+               eval_h_structure=eval_h_structure,
+               opts=opts) )
+@
+
+\section{Using data}
+The final subject we have to cover, is how to pass data to an objective function or the constraints. This is achieved by writing a wrapper function around the objective function with the parameters as an argument, or by defining an environment that holds the data, and passing this environment to \texttt{ipoptr}. Both methods are shown in \texttt{tests/parameters.R}, here I will only show the second. 
+
+As a very simple example\footnote{A more interesting example is given in \texttt{tests/lasso.R}} suppose we want to find the minimum of
+\[
+f( x ) = a_1 x^2 + a_2 x + a_3
+\]
+for different values of the parameters $a_1$, $a_2$ and $a_3$. First we define the objective function and its gradient using, assuming that there is some variable \texttt{params} that contains the values of the parameters.
+<<defineDataFunction>>=
+eval_f <- function(x) { 
+    return( params[1]*x^2 + params[2]*x + params[3] ) 
+}
+eval_grad_f <- function(x) { 
+    return( 2*params[1]*x + params[2] ) 
+}
+@
+Then we define an environment that contains specific values of \texttt{params}
+<<defineDataEnvironment>>=
+# define a new environment that contains params
+auxdata        <- new.env()
+auxdata$params <- c(1,2,3)
+@
+In this case the values of the parameters are $a_1=1$, $a_2=2$ and $a_3=3$. To solve this we supply \texttt{auxdata} as an argument to \texttt{ipoptr}, that will take care of evaluating the functions in the correct environment, so that auxiliary data is available.
+<<solveDataEnvironment>>=
+# pass the environment that should be used to evaluate functions to ipoptr
+ipoptr( x0                 = 0, 
+        eval_f             = eval_f, 
+        eval_grad_f        = eval_grad_f, 
+        ipoptr_environment = auxdata )
+@
+
+\section{Options}
+There are many options available, all of which are described on the Ipopt website. One of the options can test whether your derivatives are correct. This option is activated by setting \texttt{derivative\_test} to \texttt{first-order} or \texttt{second-order} if you want to test second derivatives as well. This process can take quite some time. To see all the output from this process you can set \texttt{derivative\_test\_print\_all} to \texttt{yes}, preferably when writing to a file, because of the problems with displaying on some terminals mentioned above. Without this optios the derivative checker only shows those lines where an error occurs if a high enough \texttt{print\_level} is supplied.
+
+\section{Remarks}
+If you run many large optimization problems in a row on Windows, at some point you'll get errors that Mumps is running out of memory and you won't get any solutions. On Linux this same problem hasn't occurred yet.
+
+The R terminal in Windows doesn't show any output. The Linux one does.
+
+\bibliographystyle{apacite}
+\bibliography{reflist}
+
+\end{document}
