@@ -31,6 +31,7 @@ namespace Ipopt
 			      const std::string& prefix)
   {
     DBG_START_METH("ReducedHessianCalculator::InitializeImpl", dbg_verbosity);
+    options.GetBoolValue("rh_eigendecomp", compute_eigenvalues_, prefix);
     return true;
   }
 
@@ -89,14 +90,15 @@ namespace Ipopt
 
     S->Print(Jnlst(),J_INSUPPRESSIBLE,J_USER1,"RedHessian unscaled");
 
-    SmartPtr<DenseGenMatrixSpace> eigenvectorspace = new DenseGenMatrixSpace(dim_S, dim_S);
-    SmartPtr<DenseGenMatrix> eigenvectors = new DenseGenMatrix(GetRawPtr(eigenvectorspace));
-    SmartPtr<DenseVectorSpace> eigenvaluesspace = new DenseVectorSpace(dim_S);
-    SmartPtr<DenseVector> eigenvalues = new DenseVector(GetRawPtr(eigenvaluesspace));
+    if ( compute_eigenvalues_ ) {
+      SmartPtr<DenseGenMatrixSpace> eigenvectorspace = new DenseGenMatrixSpace(dim_S, dim_S);
+      SmartPtr<DenseGenMatrix> eigenvectors = new DenseGenMatrix(GetRawPtr(eigenvectorspace));
+      SmartPtr<DenseVectorSpace> eigenvaluesspace = new DenseVectorSpace(dim_S);
+      SmartPtr<DenseVector> eigenvalues = new DenseVector(GetRawPtr(eigenvaluesspace));
     
-    eigenvectors->ComputeEigenVectors(*S_sym, *eigenvalues);
-    eigenvalues->Print(Jnlst(),J_INSUPPRESSIBLE,J_USER1,"Eigenvalues of reduced hessian matrix");
-
+      eigenvectors->ComputeEigenVectors(*S_sym, *eigenvalues);
+      eigenvalues->Print(Jnlst(),J_INSUPPRESSIBLE,J_USER1,"Eigenvalues of reduced hessian matrix");
+    }
     
     return retval;
   }

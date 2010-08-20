@@ -32,8 +32,14 @@ namespace Ipopt
 
   private:
 
+    /** Pointer to Schurdata object holding the indices for selecting the free variables */
     SmartPtr<SchurData> hess_data_;
+
+    /** Pointer to the P Calculator object that returns the reduced hessian matrix */
     SmartPtr<PCalculator> pcalc_;
+
+    /** True, if option rh_eigendecomp was set to yes */
+    bool compute_eigenvalues_;
   };
 
 }
