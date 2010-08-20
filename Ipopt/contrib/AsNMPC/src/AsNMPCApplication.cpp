@@ -125,6 +125,13 @@ namespace Ipopt
 					  "useless for the use with AsNMPC. This option sets an upper bound, which the inertia correction"
 					  "may have. If any of the inertia correction values is above this bound, the AsNMPC algorithm"
 					  "is aborted.");
+    roptions->AddStringOption2(
+			       "rh_eigendecomp",
+			       "If yes, the eigenvalue decomposition of the reduced hessian matrix is computed",
+			       "no",
+			       "yes", "compute eigenvalue decomposition of reduced hessian",
+			       "no", "don't compute eigenvalue decomposition of reduced hessian",
+			       "The eigenvalue decomposition of the reduced hessian has different meanings depending on the specific problem. For parameter estimation problems, the eigenvalues are linked to the confidence interval of the parameters. See for example Victor Zavala's Phd thesis, chapter 4 for details.");
   }
 
   NmpControllerExitStatus NmpcApplication::Run()
