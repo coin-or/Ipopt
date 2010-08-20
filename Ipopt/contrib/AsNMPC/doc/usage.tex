@@ -93,6 +93,7 @@ Further options for the advanced step code are
 \item[nmpc\_boundcheck] If set to \texttt{yes}, this option turns on the bound correction algorithm within the advanced step. 
 \item[nmpc\_bound\_eps] This option sets the value by which the bounds are to be relaxed in the boundcheck mode. 
 \item[nmpc\_max\_pdpert] For certain problems, IPOPT uses inertia correction of the primal dual matrix to achieve better convergence properties. This inertia correction changes the matrix and renders it useless for the use with AsNMPC. This option sets an upper bound, which the inertia correction may have. If any of the inertia correction values is above this bound, the AsNMPC algorithm is aborted.
+\item[rh\_eigendecomp] If this option is set to yes, the reduced hessian code will compute the eigenvalue decomposition of the reduced hessian matrix. 
 \end{description}
 \bibliographystyle{plain}
 \bibliography{asnmpc}
