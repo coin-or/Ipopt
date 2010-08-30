@@ -2493,27 +2493,29 @@ namespace Ipopt
       }
     }
 
-#if 0
+#if 1
     const Number zero = 0.;
     if (deriv_test == SECOND_ORDER_TEST || deriv_test == ONLY_SECOND_ORDER_TEST) {
       jnlst_->Printf(J_SUMMARY, J_NLP,
                      "Starting derivative checker for second derivatives.\n\n");
 
       // Get sparsity structure of Hessian
-      Index* h_iRow = new Index[nz_hess_lag];
-      Index* h_jCol = new Index[nz_hess_lag];
-      retval = tnlp_->eval_h(nx, NULL, false, 0., ng, NULL, false,
-                             nz_hess_lag, h_iRow, h_jCol, NULL);
+      Index* h_iRow_part = new Index[nz_hess_lag_part];
+      Index* h_jCol_part = new Index[nz_hess_lag_part];
+      retval = partnlp_->eval_h(num_proc_,proc_id_,
+                                nx, nx_first, nx_last,NULL, false, 0.,
+                                ng, ng_first, ng_last,
+                                NULL, false, nz_hess_lag_part, h_iRow_part, h_jCol_part, NULL);
       ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
                        "In TNLP derivative test: Hessian structure could not be evaluated.");
-
-      if (index_style == TNLP::FORTRAN_STYLE) {
-        for (Index i=0; i<nz_hess_lag; i++) {
-          h_iRow[i] -= 1;
-          h_jCol[i] -= 1;
+      //TODO: Add local hessians to get global hessian
+      if (index_style == ParTNLP::FORTRAN_STYLE) {
+        for (Index i=0; i<nz_hess_lag_part; i++) {
+          h_iRow_part[i] -= 1;
+          h_jCol_part[i] -= 1;
         }
       }
-      Number* h_values = new Number[nz_hess_lag];
+      Number* h_values_part = new Number[nz_hess_lag_part];
 
       Number* lambda = NULL;
       if (ng>0) {
@@ -2522,7 +2524,7 @@ namespace Ipopt
       }
       Number* gradref = new Number[nx]; // gradient of objective or constraint at reference point
       Number* gradpert = new Number[nx]; // gradient of objective or constraint at perturbed point
-      Number* jacpert = new Number[nz_jac_g];
+      Number* jacpert = new Number[nz_jac_g_part];
 
       // Check all Hessians
       const Index icon_first = Max(-1, deriv_test_start_index);
@@ -2530,22 +2532,25 @@ namespace Ipopt
         Number objfact = 0.;
         if (icon == -1) {
           objfact = 1.;
-          IpBlasDcopy(nx, grad_f, 1, gradref, 1);
+          IpBlasDcopy(nx, grad_f_part, 1, gradref, 1);
         }
         else {
           lambda[icon] = 1.;
           IpBlasDcopy(nx, &zero, 0, gradref, 1);
-          for (Index i=0; i<nz_jac_g; i++) {
-            if (g_iRow[i]==icon) {
-              gradref[g_jCol[i]] += jac_g[i];
+          for (Index i=0; i<nz_jac_g_part; i++) {
+            if (g_iRow_part[i]==icon) {
+              gradref[g_jCol_part[i]] += jac_g_part[i];
             }
           }
         }
         // Hessian at reference point
         new_x = true;
         bool new_y = true;
-        retval = tnlp_->eval_h(nx, xref, new_x, objfact, ng, lambda, new_y,
-                               nz_hess_lag, NULL, NULL, h_values);
+        retval = partnlp_->eval_h(num_proc_,proc_id_,
+                                nx, nx_first, nx_last,xref, new_x, objfact,
+                                ng, ng_first, ng_last,
+                                lambda, new_y, nz_hess_lag_part, NULL, NULL, h_values_part);
+        // TODO: Add local hessians
         new_x = false;
         new_y = false;
         ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
@@ -2559,23 +2564,25 @@ namespace Ipopt
           new_x = true;
           if (icon==-1) {
             // we are looking at the objective function
-            retval = tnlp_->eval_grad_f(nx, xpert, new_x, gradpert);
+            retval = partnlp_->eval_grad_f(num_proc_,proc_id_,nx, nx_first, nx_last, xpert, new_x, gradpert);
             ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
                              "In TNLP derivative test: grad_f could not be evaluated at perturbed point.");
+            // TODO: distribute values (AllGather)
           }
           else {
             // this is the icon-th constraint
-            retval = tnlp_->eval_jac_g(nx, xpert, new_x, ng,
-                                       nz_jac_g, NULL, NULL, jacpert);
+            retval = partnlp_->eval_jac_g(num_proc_,proc_id_,nx, xpert, new_x,
+                                       ng, ng_first, ng_last,
+                                       nz_jac_g_part, NULL, NULL, jacpert);
             ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
                              "In TNLP derivative test: Jacobian values could not be evaluated at reference point.");
             // ok, now we need to filter the gradient of the icon-th constraint
             IpBlasDcopy(nx, &zero, 0, gradpert, 1);
             IpBlasDcopy(nx, &zero, 0, gradref, 1);
-            for (Index i=0; i<nz_jac_g; i++) {
-              if (g_iRow[i]==icon) {
-                gradpert[g_jCol[i]] += jacpert[i];
-                gradref[g_jCol[i]] += jac_g[i];
+            for (Index i=0; i<nz_jac_g_part; i++) {
+              if (g_iRow_part[i]==icon) {
+                gradpert[g_jCol_part[i]] += jacpert[i];
+                gradref[g_jCol_part[i]] += jac_g_part[i];
               }
             }
           }
@@ -2585,10 +2592,10 @@ namespace Ipopt
             Number deriv_approx = (gradpert[ivar2] - gradref[ivar2])/this_perturbation;
             Number deriv_exact = 0.;
             bool found = false;
-            for (Index i=0; i<nz_hess_lag; i++) {
-              if ( (h_iRow[i]==ivar && h_jCol[i]==ivar2) ||
-                   (h_jCol[i]==ivar && h_iRow[i]==ivar2) ) {
-                deriv_exact += h_values[i];
+            for (Index i=0; i<nz_hess_lag_part; i++) {
+              if ( (h_iRow_part[i]==ivar && h_jCol_part[i]==ivar2) ||
+                   (h_jCol_part[i]==ivar && h_iRow_part[i]==ivar2) ) {
+                deriv_exact += h_values_part[i];
                 found = true;
               }
             }
@@ -2628,16 +2635,15 @@ namespace Ipopt
         }
       }
 
-      delete [] h_iRow;
-      delete [] h_jCol;
-      delete [] h_values;
+      delete [] h_iRow_part;
+      delete [] h_jCol_part;
+      delete [] h_values_part;
       delete [] lambda;
       delete [] gradref;
       delete [] gradpert;
       delete [] jacpert;
     }
 #endif
-
     delete [] xref;
     delete [] xref_part;
     delete [] gref_part;
