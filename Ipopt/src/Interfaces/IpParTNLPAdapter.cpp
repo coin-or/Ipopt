@@ -2547,9 +2547,9 @@ namespace Ipopt
         new_x = true;
         bool new_y = true;
         retval = partnlp_->eval_h(num_proc_,proc_id_,
-                                nx, nx_first, nx_last,xref, new_x, objfact,
-                                ng, ng_first, ng_last,
-                                lambda, new_y, nz_hess_lag_part, NULL, NULL, h_values_part);
+                                  nx, nx_first, nx_last,xref, new_x, objfact,
+                                  ng, ng_first, ng_last,
+                                  lambda, new_y, nz_hess_lag_part, NULL, NULL, h_values_part);
         // TODO: Add local hessians
         new_x = false;
         new_y = false;
@@ -2572,8 +2572,8 @@ namespace Ipopt
           else {
             // this is the icon-th constraint
             retval = partnlp_->eval_jac_g(num_proc_,proc_id_,nx, xpert, new_x,
-                                       ng, ng_first, ng_last,
-                                       nz_jac_g_part, NULL, NULL, jacpert);
+                                          ng, ng_first, ng_last,
+                                          nz_jac_g_part, NULL, NULL, jacpert);
             ASSERT_EXCEPTION(retval, ERROR_IN_PARTNLP_DERIVATIVE_TEST,
                              "In TNLP derivative test: Jacobian values could not be evaluated at reference point.");
             // ok, now we need to filter the gradient of the icon-th constraint

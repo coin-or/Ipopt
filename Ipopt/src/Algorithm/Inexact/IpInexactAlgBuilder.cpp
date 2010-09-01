@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -153,6 +153,7 @@ namespace Ipopt
     SmartPtr<InexactNormalTerminationTester> NormalTester;
     SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
     bool use_unsymmetric_solver;
+    bool call_solverinterface_on_all_procs = false;
     options.GetBoolValue("use_unsymmetric_solver", use_unsymmetric_solver,
                          prefix);
     bool use_pspike = false;
@@ -231,7 +232,7 @@ namespace Ipopt
 #else
       SolverInterface = new IterativePardisoSolverInterface(*NormalTester, *pd_tester);
 #endif
-
+      call_solverinterface_on_all_procs = true;
     }
 #ifdef HAVE_PSPIKE
     else if (linear_solver=="pspike") {
@@ -239,6 +240,7 @@ namespace Ipopt
       SmartPtr<IterativeSolverTerminationTester> pd_tester =
         new InexactPDTerminationTester();
       SolverInterface = new IterativePspikeSolverInterface(*NormalTester, *pd_tester);
+      call_solverinterface_on_all_procs = true;
     }
 #endif
     else if (linear_solver=="wsmp") {
@@ -285,12 +287,14 @@ namespace Ipopt
     }
 
     SmartPtr<TSymScalingMethod> ScalingMethod;
+    bool call_scalingmethod_on_all_procs = false;
 
     std::string inexact_linear_system_scaling;
     options.GetStringValue("inexact_linear_system_scaling",
                            inexact_linear_system_scaling, prefix);
     if (inexact_linear_system_scaling=="slack-based") {
       ScalingMethod = new InexactTSymScalingMethod();
+      call_scalingmethod_on_all_procs = true;
     }
 
     SmartPtr<SymLinearSolver> ScaledSolver;
@@ -304,13 +308,10 @@ namespace Ipopt
       }
     }
     else {
-      bool call_solverinterface_on_all_procs = false;
-      if (linear_solver=="pspike") {
-        call_solverinterface_on_all_procs = true;
-      }
       ScaledSolver =
         new ParTSymLinearSolver(SolverInterface, ScalingMethod,
-                                call_solverinterface_on_all_procs);
+                                call_solverinterface_on_all_procs,
+                                call_scalingmethod_on_all_procs);
     }
 #else
     ScaledSolver = new TSymLinearSolver(SolverInterface, ScalingMethod);

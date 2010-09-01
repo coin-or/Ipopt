@@ -1,4 +1,4 @@
-// Copyright (C) 2009 International Business Machines and others.
+// Copyright (C) 2009, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -24,7 +24,9 @@ namespace Ipopt
   /** General driver for linear solvers for sparse indefinite
    *  symmetric matrices for a parallel Ipopt version.  The values of
    *  the matrix are collected on the processor with rank 0.  The
-   *  linear solver is called only on processor zero (for now).
+   *  linear solver is called on all processors (if
+   *  call_solverinterface_on_all_procs is true), or only on process
+   *  zero otherwise.
    *
    *  This interface includes a call to a method for scaling of the
    *  matrix (if given).  This class takes in the contructor a pointer
@@ -51,7 +53,8 @@ namespace Ipopt
      *  Otherwise, those methods are called only on the root node. */
     ParTSymLinearSolver(SmartPtr<SparseSymLinearSolverInterface> solver_interface,
                         SmartPtr<TSymScalingMethod> scaling_method,
-                        bool call_solverinterface_on_all_procs = false);
+                        bool call_solverinterface_on_all_procs = false,
+                        bool call_scalingmethod_on_all_procs = false);
 
     /** Destructor */
     virtual ~ParTSymLinearSolver();
@@ -213,6 +216,9 @@ namespace Ipopt
     /** Flag indicating if solver_interface methods should be called by all
      *  all processes or only by root process. */
     bool call_solverinterface_on_all_procs_;
+    /** Flag indicating if scaling_method methods should be called by all
+     *  all processes or only by root process. */
+    bool call_scalingmethod_on_all_procs_;
   };
 
 } // namespace Ipopt

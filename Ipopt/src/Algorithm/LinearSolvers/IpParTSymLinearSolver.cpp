@@ -1,4 +1,4 @@
-// Copyright (C) 2009 International Business Machines and others.
+// Copyright (C) 2009, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -23,7 +23,8 @@ namespace Ipopt
   ParTSymLinearSolver::ParTSymLinearSolver
   (SmartPtr<SparseSymLinearSolverInterface> solver_interface,
    SmartPtr<TSymScalingMethod> scaling_method,
-   bool call_solverinterface_on_all_procs /* = false */)
+   bool call_solverinterface_on_all_procs, /* = false */
+   bool call_scalingmethod_on_all_procs /* = false */)
       :
       SymLinearSolver(),
       atag_(0),
@@ -40,7 +41,8 @@ namespace Ipopt
       ajcn_(NULL),
       recvcounts_(NULL),
       displs_(NULL),
-      call_solverinterface_on_all_procs_(call_solverinterface_on_all_procs)
+      call_solverinterface_on_all_procs_(call_solverinterface_on_all_procs),
+      call_scalingmethod_on_all_procs_(call_scalingmethod_on_all_procs)
   {
     DBG_START_METH("ParTSymLinearSolver::ParTSymLinearSolver()",dbg_verbosity);
     DBG_ASSERT(IsValid(solver_interface));
@@ -77,15 +79,31 @@ namespace Ipopt
     options.GetBoolValue("warm_start_same_structure",
                          warm_start_same_structure_, prefix);
 
-    bool retval;
+    int retval;
     if (HaveIpData()) {
-      // TODO: consider call_solverinterface_on_all_procs here
-      retval = solver_interface_->Initialize(Jnlst(), IpNLP(), IpData(),
-                                             IpCq(), options, prefix);
+      if (call_solverinterface_on_all_procs_) {
+        retval = solver_interface_->Initialize(Jnlst(), IpNLP(), IpData(),
+                                               IpCq(), options, prefix);
+      }
+      else {
+        if (my_rank_==0) {
+          retval = solver_interface_->Initialize(Jnlst(), IpNLP(), IpData(),
+                                                 IpCq(), options, prefix);
+        }
+        MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      }
     }
     else {
-      // TODO: consider call_solverinterface_on_all_procs here
-      retval = solver_interface_->ReducedInitialize(Jnlst(), options, prefix);
+      if (call_solverinterface_on_all_procs_) {
+        retval = solver_interface_->ReducedInitialize(Jnlst(), options, prefix);
+      }
+      else {
+        if (my_rank_==0) {
+          retval =
+            solver_interface_->ReducedInitialize(Jnlst(), options, prefix);
+        }
+        MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      }
     }
     if (!retval) {
       return false;
@@ -99,8 +117,18 @@ namespace Ipopt
       nonzeros_compressed_=0;
       have_structure_=false;
 
-      // TODO: consider call_solverinterface_on_all_procs here
-      matrix_format_ = solver_interface_->MatrixFormat();
+      if (call_solverinterface_on_all_procs_) {
+        matrix_format_ = solver_interface_->MatrixFormat();
+      }
+      else {
+        int tmp;
+        if (my_rank_==0) {
+          matrix_format_ = solver_interface_->MatrixFormat();
+          tmp = matrix_format_;
+        }
+        MPI_Bcast(&tmp, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        matrix_format_ = (SparseSymLinearSolverInterface::EMatrixFormat)tmp;
+      }
       switch (matrix_format_) {
       case SparseSymLinearSolverInterface::CSR_Format_0_Offset:
         triplet_to_csr_converter_ = new TripletToCSRConverter(0);
@@ -153,7 +181,7 @@ namespace Ipopt
         retval = scaling_method_->ReducedInitialize(Jnlst(), options, prefix);
       }
     }
-    return retval;
+    return (bool)retval;
   }
 
   ESymSolverStatus
@@ -412,7 +440,7 @@ namespace Ipopt
         return retval;
       }
 
-      if (my_rank_==0 || call_solverinterface_on_all_procs_) {
+      if (my_rank_==0 || call_scalingmethod_on_all_procs_) {
         // Get space for the scaling factors
         delete [] scaling_factors_;
         if (IsValid(scaling_method_)) {
@@ -559,7 +587,7 @@ namespace Ipopt
 
 // todo SCATTERED scaling
     if (use_scaling_) {
-      if (my_rank_==0 || call_solverinterface_on_all_procs_) {
+      if (my_rank_==0 || call_scalingmethod_on_all_procs_) {
         IpData().TimingStats().LinearSystemScaling().Start();
         DBG_ASSERT(scaling_factors_);
         if (new_matrix || just_switched_on_scaling_) {
@@ -574,7 +602,8 @@ namespace Ipopt
             THROW_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD, "scaling_method_->ComputeSymTScalingFactors returned false.")
           }
           // complain if not in debug mode
-          if (Jnlst().ProduceOutput(J_MOREVECTOR, J_LINEAR_ALGEBRA)) {
+          if (my_rank_==0 &&
+              Jnlst().ProduceOutput(J_MOREVECTOR, J_LINEAR_ALGEBRA)) {
             for (Index i=0; i<dim_; i++) {
               Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA,
                              "scaling factor[%6d] = %22.17e\n",
