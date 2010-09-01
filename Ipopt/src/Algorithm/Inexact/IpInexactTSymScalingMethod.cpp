@@ -1,4 +1,4 @@
-// Copyright (C) 2009 International Business Machines and others.
+// Copyright (C) 2009, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -37,16 +37,21 @@ namespace Ipopt
   {
     DBG_START_METH("InexactTSymScalingMethod::ComputeTSymScalingFactors",
                    dbg_verbosity);
-
     const Index nx = IpData().curr()->x()->Dim();
     const Index ns = IpData().curr()->s()->Dim();
     const Index nc = IpData().curr()->y_c()->Dim();
     const Index nd = IpData().curr()->y_d()->Dim();
 
-    for (Index i=0; i<nx; i++) {
-      scaling_factors[i] = 1.;
+    // If scaling_factors is NULL, then we are in a parallel setting
+    // where the matrix is collected on process 0.  In this case, only
+    // process zero collects the scaling_factor entries, but all
+    // processes need to call the FillAllValuesFromVector method
+    if (scaling_factors) {
+      for (Index i=0; i<nx; i++) {
+        scaling_factors[i] = 1.;
+      }
+      scaling_factors += nx;
     }
-    scaling_factors += nx;
 
     SmartPtr<const Vector> scaling_vec = InexCq().curr_scaling_slacks();
 #ifdef HAVE_MPI
@@ -55,10 +60,12 @@ namespace Ipopt
     TripletHelper::FillValuesFromVector(ns, *scaling_vec, scaling_factors);
 #endif
 
-    scaling_factors += ns;
+    if (scaling_factors) {
+      scaling_factors += ns;
 
-    for (Index i=0; i<nc+nd; i++) {
-      scaling_factors[i] = 1.;
+      for (Index i=0; i<nc+nd; i++) {
+        scaling_factors[i] = 1.;
+      }
     }
 
     return true;

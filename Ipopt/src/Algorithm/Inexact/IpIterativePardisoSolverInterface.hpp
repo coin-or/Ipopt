@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -243,6 +243,9 @@ namespace Ipopt
                            Index nrhs,
                            double *rhs_vals);
     //@}
+
+    /** This is only required in the MPI parallel version */
+    ESymSolverStatus ExecuteParallelTasks();
 
     /** Method to easily access Inexact data */
     InexactData& InexData()

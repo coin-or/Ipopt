@@ -1,4 +1,4 @@
-// Copyright (C) 2008, 2009 International Business Machines and others.
+// Copyright (C) 2008, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -43,6 +43,17 @@
 # endif
 #endif
 
+#ifdef HAVE_MPI
+# include "IpMpi.hpp"
+
+// we define some enums here for MPI parallel tasks
+enum IterParTask {
+  PAR_TASK_EXIT=0,
+  PAR_TASK_INITIALIZE_SOLVE,
+  PAR_TASK_CLEAR,
+  PAR_TASK_TERMINATION_TEST
+};
+#endif
 
 Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
 Ipopt::IterativeSolverTerminationTester::ETerminationTest test_result_;
@@ -52,6 +63,22 @@ extern "C"
     fflush(stdout);
     fflush(stderr);
     // only do the termination test for PD system
+#ifdef HAVE_MPI
+    int my_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    // if this is process 0, we need to send the command and data around
+    if (my_rank==0) {
+      int par_task = PAR_TASK_TERMINATION_TEST;
+      MPI_Bcast(&par_task, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      int ivals[2];
+      ivals[0] = n;
+      ivals[1] = iter;
+      MPI_Bcast(ivals, 2, MPI_INT, 0, MPI_COMM_WORLD);
+      MPI_Bcast(sol, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+      MPI_Bcast(resid, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+      MPI_Bcast(&norm2_rhs, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    }
+#endif
     test_result_ = global_tester_ptr_->TestTermination(n, sol, resid, iter, norm2_rhs);
     global_tester_ptr_->GetJnlst().Printf(Ipopt::J_DETAILED, Ipopt::J_LINEAR_ALGEBRA,
                                           "Termination Tester Result = %d.\n",
@@ -148,6 +175,20 @@ namespace Ipopt
   bool IterativePardisoSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
+#ifdef HAVE_MPI
+    int my_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    if (my_rank!=0) {
+      bool retval = normal_tester_->Initialize(Jnlst(), IpNLP(), IpData(),
+                    IpCq(), options, prefix);
+      if (retval) {
+        retval = pd_tester_->Initialize(Jnlst(), IpNLP(), IpData(),
+                                        IpCq(), options, prefix);
+      }
+      return retval;
+    }
+#endif
+
     Index enum_int;
     options.GetEnumValue("pardiso_matching_strategy", enum_int, prefix);
     match_strat_ = PardisoMatchingStrategy(enum_int);
@@ -320,6 +361,66 @@ namespace Ipopt
     return retval;
   }
 
+  ESymSolverStatus IterativePardisoSolverInterface::ExecuteParallelTasks()
+  {
+    int retval = 0;
+#ifdef HAVE_MPI
+    IterativeSolverTerminationTester* tester;
+
+    // make sure we are using the right tester (needs to be in sync
+    // with code below!!!)
+    if (IsNull(InexData().normal_x()) && InexData().compute_normal()) {
+      tester = GetRawPtr(normal_tester_);
+    }
+    else {
+      tester = GetRawPtr(pd_tester_);
+    }
+    global_tester_ptr_ = tester;
+
+    // wait for tasks
+    int par_task = -1;
+    while (par_task != PAR_TASK_EXIT) {
+      MPI_Bcast(&par_task, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      switch (par_task) {
+      case PAR_TASK_EXIT:
+        // just receive the return value
+        MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        break;
+      case PAR_TASK_INITIALIZE_SOLVE: {
+          bool ret = tester->InitializeSolve();
+          ASSERT_EXCEPTION(ret, INTERNAL_ABORT,
+                           "tester->InitializeSolve(); returned false");
+          break;
+        }
+      case PAR_TASK_CLEAR:
+        tester->Clear();
+        break;
+      case PAR_TASK_TERMINATION_TEST: {
+          // receive the data for the termination tester call
+          int ivals[2];
+          MPI_Bcast(ivals, 2, MPI_INT, 0, MPI_COMM_WORLD);
+          int n = ivals[0];
+          int iter = ivals[1];
+          double* sol = new double[n];
+          MPI_Bcast(sol, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+          double* resid = new double[n];
+          MPI_Bcast(resid, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+          double norm2_rhs;
+          MPI_Bcast(&norm2_rhs, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+          // call the termination tester
+          IpoptTerminationTest(n, sol, resid, iter, norm2_rhs);
+
+          delete [] resid;
+          delete [] sol;
+          break;
+        }
+      }
+    }
+#endif
+    return (ESymSolverStatus) retval;
+  }
+
   ESymSolverStatus IterativePardisoSolverInterface::MultiSolve(bool new_matrix,
       const Index* ia,
       const Index* ja,
@@ -328,6 +429,15 @@ namespace Ipopt
       bool check_NegEVals,
       Index numberOfNegEVals)
   {
+#ifdef HAVE_MPI
+    int my_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    if (my_rank!=0) {
+      ESymSolverStatus retval = ExecuteParallelTasks();
+      return retval;
+    }
+#endif
+
     DBG_START_METH("IterativePardisoSolverInterface::MultiSolve",dbg_verbosity);
     DBG_ASSERT(!check_NegEVals || ProvidesInertia());
     DBG_ASSERT(initialized_);
@@ -362,6 +472,15 @@ namespace Ipopt
    const Index* ja)
   {
     DBG_START_METH("IterativePardisoSolverInterface::InitializeStructure",dbg_verbosity);
+    int retval;
+#ifdef HAVE_MPI
+    int my_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    if (my_rank!=0) {
+      MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      return (ESymSolverStatus)retval;
+    }
+#endif
     dim_ = dim;
     nonzeros_ = nonzeros;
 
@@ -371,14 +490,17 @@ namespace Ipopt
     a_ = new double[nonzeros_];
 
     // Do the symbolic facotrization
-    ESymSolverStatus retval = SymbolicFactorization(ia, ja);
-    if (retval != SYMSOLVER_SUCCESS) {
-      return retval;
+    retval = SymbolicFactorization(ia, ja);
+
+    if (retval == SYMSOLVER_SUCCESS) {
+      initialized_ = true;
     }
 
-    initialized_ = true;
+#ifdef HAVE_MPI
+    MPI_Bcast(&retval, 1, MPI_INT, 0, MPI_COMM_WORLD);
+#endif
 
-    return retval;
+    return (ESymSolverStatus)retval;
   }
 
   ESymSolverStatus
@@ -654,8 +776,12 @@ namespace Ipopt
     global_tester_ptr_ = tester;
 
     while (attempts<max_attempts) {
-      bool retval = tester->InitializeSolve();
-      ASSERT_EXCEPTION(retval, INTERNAL_ABORT, "tester->InitializeSolve(); returned false");
+#ifdef HAVE_MPI
+      int par_task = PAR_TASK_INITIALIZE_SOLVE;
+      MPI_Bcast(&par_task, 1, MPI_INT, 0, MPI_COMM_WORLD);
+#endif
+      bool ret = tester->InitializeSolve();
+      ASSERT_EXCEPTION(ret, INTERNAL_ABORT, "tester->InitializeSolve(); returned false");
 
       for (int i = 0; i < N; i++) {
         rhs_vals[i] = ORIG_RHS[i];
@@ -701,6 +827,10 @@ namespace Ipopt
                          "Number of iterations in Pardiso iterative solver for PD step = %d.\n", iterations_used);
         }
       }
+#ifdef HAVE_MPI
+      par_task = PAR_TASK_CLEAR;
+      MPI_Bcast(&par_task, 1, MPI_INT, 0, MPI_COMM_WORLD);
+#endif
       tester->Clear();
     }
 
@@ -747,39 +877,55 @@ namespace Ipopt
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemBackSolve().End();
     }
+    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
     if (ERROR!=0 ) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
-      return SYMSOLVER_FATAL_ERROR;
+      retval = SYMSOLVER_FATAL_ERROR;
     }
-    if (test_result_ == IterativeSolverTerminationTester::MODIFY_HESSIAN) {
+    else if (test_result_ == IterativeSolverTerminationTester::MODIFY_HESSIAN) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Termination tester requests modification of Hessian\n");
-      return SYMSOLVER_WRONG_INERTIA;
+      retval = SYMSOLVER_WRONG_INERTIA;
     }
 #if 0
     // FRANK: look at this:
-    if (test_result_ == IterativeSolverTerminationTester::CONTINUE) {
+    else if (test_result_ == IterativeSolverTerminationTester::CONTINUE) {
       if (InexData().compute_normal()) {
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Termination tester not satisfied!!! Pretend singular\n");
-        return SYMSOLVER_SINGULAR;
+        retval = SYMSOLVER_SINGULAR;
       }
     }
 #endif
-    if (test_result_ == IterativeSolverTerminationTester::TEST_2_SATISFIED) {
+    else if (test_result_ == IterativeSolverTerminationTester::TEST_2_SATISFIED) {
       // Termination Test 2 is satisfied, set the step for the primal
       // iterates to zero
       Index nvars = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
       const Number zero = 0.;
       IpBlasDcopy(nvars, &zero, 0, rhs_vals, 1);
     }
-    return SYMSOLVER_SUCCESS;
+#ifdef HAVE_MPI
+    int par_task = PAR_TASK_EXIT;
+    MPI_Bcast(&par_task, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    par_task = (int)retval;
+    MPI_Bcast(&par_task, 1, MPI_INT, 0, MPI_COMM_WORLD);
+#endif
+    return retval;
   }
 
   Index IterativePardisoSolverInterface::NumberOfNegEVals() const
   {
     DBG_START_METH("IterativePardisoSolverInterface::NumberOfNegEVals",dbg_verbosity);
+#ifdef HAVE_MPI
+    int my_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    int tmp = negevals_;
+    MPI_Bcast(&tmp, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    if (my_rank!=0) {
+      return (Index) tmp;
+    }
+#endif
     DBG_ASSERT(negevals_>=0);
     return negevals_;
   }
