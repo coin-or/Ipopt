@@ -113,6 +113,9 @@ Ipopt/contrib/MatlabInterface/examples/lasso.m -text
 Ipopt/contrib/MatlabInterface/examples/startup.m.in -text
 Ipopt/contrib/MatlabInterface/ipopt.m -text
 Ipopt/contrib/MatlabInterface/readme.html -text
+Ipopt/contrib/PetscInterface/LoadAirflowData.m -text
+Ipopt/contrib/PetscInterface/ShowSolution.m -text
+Ipopt/contrib/PetscInterface/trigrad.m -text
 Ipopt/depcomp -text
 Ipopt/doc/documentation.pdf -text
 Ipopt/doc/options.tex -text
