@@ -793,20 +793,43 @@ namespace Ipopt
     Index* iRow = new Index[n_entries];
     Index* jCol = new Index[n_entries];
 
-    SmartPtr<const ParGenMatrix> pargenmat = dynamic_cast<const ParGenMatrix*>(GetRawPtr(matrix.GetUnscaledMatrix()));
-    ASSERT_EXCEPTION(IsValid(pargenmat), UNKNOWN_MATRIX_TYPE, "Unknown matrix type passed to ParTripletHelper::FillValues_ for ScaledMatrix.  One known reason for this: The scaling of inequality constraints in the parallel version has not yet been properly implemented.  It will require to handle CompoundMatrix here.");
-    Index roffset = -pargenmat->RowStartPos();
-    FillRowCol(n_entries, *GetRawPtr(matrix.GetUnscaledMatrix()), iRow, jCol, roffset, 0);
+    SmartPtr<const Matrix> unscaled_matrix = matrix.GetUnscaledMatrix();
+    const ParGenMatrix* pargenmat = dynamic_cast<const ParGenMatrix*>(GetRawPtr(unscaled_matrix));
 
-    SmartPtr<const Vector> rowScaling = matrix.RowScaling();
-    if (IsValid(rowScaling)) {
-      Index n_local_rows = GetLocalNumberEntries(*rowScaling);
-      Number* row_scaling = new Number[n_local_rows];
-      FillLocalValuesFromVector(n_local_rows, *rowScaling, row_scaling);
-      for (Index i=0; i<n_entries; i++) {
-        values[i] *= row_scaling[iRow[i]-1];
+    if (pargenmat) {
+      // In this case we can be a bit more efficient than in the
+      // general case, such as CompoundMatrix
+      Index roffset = -pargenmat->RowStartPos();
+      FillRowCol(n_entries, *unscaled_matrix, iRow, jCol, roffset, 0);
+
+      SmartPtr<const Vector> rowScaling = matrix.RowScaling();
+      if (IsValid(rowScaling)) {
+	Index n_local_rows = GetLocalNumberEntries(*rowScaling);
+	Number* row_scaling = new Number[n_local_rows];
+	FillLocalValuesFromVector(n_local_rows, *rowScaling, row_scaling);
+	row_scaling--;
+	for (Index i=0; i<n_entries; i++) {
+	  values[i] *= row_scaling[iRow[i]];
+	}
+	row_scaling++;
+	delete [] row_scaling;
       }
-      delete [] row_scaling;
+    }
+    else {
+      FillRowCol(n_entries, *unscaled_matrix, iRow, jCol, 0, 0);
+
+      SmartPtr<const Vector> rowScaling = matrix.RowScaling();
+      if (IsValid(rowScaling)) {
+	Index n_rows = matrix.NRows();
+	Number* row_scaling = new Number[n_rows];
+	FillAllValuesFromVector(n_rows, *rowScaling, row_scaling);
+	row_scaling--;
+	for (Index i=0; i<n_entries; i++) {
+	  values[i] *= row_scaling[iRow[i]];
+	}
+	row_scaling++;
+	delete [] row_scaling;
+      }
     }
 
     SmartPtr<const Vector> colScaling = matrix.ColumnScaling();
@@ -814,9 +837,11 @@ namespace Ipopt
       Index n_cols = matrix.NCols();
       Number* col_scaling = new Number[n_cols];
       FillAllValuesFromVector(n_cols, *colScaling, col_scaling);
+      col_scaling--;
       for (Index i=0; i<n_entries; i++) {
-        values[i] *= col_scaling[jCol[i]-1];
+        values[i] *= col_scaling[jCol[i]];
       }
+      col_scaling++;
       delete [] col_scaling;
     }
 
