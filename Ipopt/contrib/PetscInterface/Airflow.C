@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <math.h>
 #include <fstream>
+#include <stdexcept>
 
 #include "libmesh.h"
 #include "mesh.h"
@@ -36,12 +37,17 @@ int main (int argc, char** argv)
 {
   {
     LibMeshInit init (argc, argv,MPI_COMM_WORLD);
-
     SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
 
     LibMeshPDEBase* pLibMeshPDE = new LibMeshPDEBase;
-    std::ifstream f("ProblemGeometry.dat",std::ios::in);
-    pLibMeshPDE->InitProblemData(f);
+    std::ifstream f("Problem.dat",std::ios::in);
+    try {
+      pLibMeshPDE->InitProblemData(f);
+    }
+    catch(std::exception& e) {
+      std::cerr << e.what() << std::endl;
+      exit(1);
+    }
     pLibMeshPDE->reinit();
     SmartPtr<ParTNLP> partnlp = new LibMeshPDENLP(*pLibMeshPDE,*(app->Jnlst()));
     SmartPtr<NLP> nlp = new ParTNLPAdapter(partnlp, ConstPtr(app->Jnlst()));
@@ -60,7 +66,7 @@ int main (int argc, char** argv)
       lm_Number MaxLowBd = aux_constr_l->max();
       // solve simulation (fixed controls)
       // Intialize the IpoptApplication and process the options
-      status = app->Initialize();
+      status = app->Initialize("simu.opt");
       if (status != Solve_Succeeded) {
         printf("\n\n*** Error during initialization!\n");
         return (int) status;
@@ -72,14 +78,14 @@ int main (int argc, char** argv)
       }
       else {
         printf("\n\n*** The problem FAILED!\n");
-	return (int)status;
+        return (int)status;
       }
 
       libMesh::NumericVector<lm_Number>* aux_constr;
       pLibMeshPDE->calcAux_constr(aux_constr);
       lm_Number MinAuxConstr = sqrt(aux_constr->min());
       //lm_Number fact = MaxLowBd/MinAuxConstr;
-      lm_Number fact = 1.0;
+      lm_Number fact = 100.0;
       if(fact>0.9)
       { 
         pLibMeshPDE->getControlVector() *= fact;
@@ -117,7 +123,7 @@ int main (int argc, char** argv)
       }
       else {
         printf("\n\n*** The problem FAILED!\n");
-	return (int)status;
+        return (int)status;
       }
       #endif
     }

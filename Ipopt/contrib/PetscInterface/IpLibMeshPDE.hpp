@@ -127,7 +127,7 @@ compute only the local contribution to the objective  */
   virtual void get_starting_point(libMesh::NumericVector<libMesh::Number>& state,
         libMesh::NumericVector<libMesh::Number>& control);
 
-  virtual void InitProblemData(const std::istream& is);
+  virtual void InitProblemData(std::istream& is);
   virtual void reinit();
   bool simulation_mode_;
 protected:
