@@ -7,7 +7,7 @@
 // Authors:  Johannes Huber     IBM        2010-09-03
 
 #include "ProblemGeometry.h"
-
+#include <stdexcept>
 
 ///////////////////////////////////////////////////////////////////////////////////
 //  ProblemGeometry::Item
@@ -84,6 +84,7 @@ ProblemGeometry::ProblemGeometry()
   _BoundCond.push_back(BC); //   Add one Dummy to start from 1 (0:Interior Point)
   _BoundCond.push_back(BC);
   NextFreeBoundaryMarker = 2;
+  _h = 0.0;
 }
 
 void ProblemGeometry::AddEquipment(const std::vector<double>& min, const std::vector<double>& max, double TempEquip, double kappa)
@@ -147,6 +148,190 @@ void ProblemGeometry::AddExhaust(const std::vector<double>& min, const std::vect
   _BoundCond.push_back(BoundaryCondition(1.0,0.0,0.0,0.0,1.0,0.0));         // Phi = 0, dT/dn = 0
   // No Control Parameter
   _Exh.push_back(item);
+}
+
+void ProblemGeometry::ReadFromStream(std::istream& is)
+{
+  static char Buf[1024];
+  int n;
+  double Vals[8];
+  _h=0;
+  while (!is.eof())
+  {
+    std::cout << "blk";
+    is >> Buf;
+    std::cout << Buf;
+    if(strlen(Buf)<1)
+      continue;
+    if(Buf[0]=='#')
+      continue;
+    n = sscanf(Buf,"h=%lf",Vals);
+    if( (n==1) )
+    {
+      _h = Vals[0];
+      break;
+    }
+    else {
+      std::cout << "WARNING while reading input file and looking for \"h=*\": Line in wrong position?" << std::endl;
+      std::cout << Buf << std::endl;
+      continue;
+    }
+  }
+
+  _RoomSize.clear();
+  while (!is.eof())
+  {
+    is >> Buf;
+    if(strlen(Buf)<1)
+      continue;
+    if(Buf[0]=='#')
+      continue;
+    n = sscanf(Buf,"Roomsize=%lf,%lf,%lf",Vals,Vals+1,Vals+2);
+    if( (n==2) || (n==3) )
+    {
+      for(int i=0;i<n;i++)
+        _RoomSize.push_back(Vals[i]);
+      break;
+    }
+    else {
+      std::cout << "WARNING while reading input file and looking for \"Roomsize=*,*[,*]\": Line in wrong position?" << std::endl;
+      std::cout << Buf << std::endl;
+      continue;
+    }
+  }
+  if(0==_RoomSize.size()) {
+    throw std::runtime_error("Can't find line \"Roomsize=*,*[,*]\"");
+  }
+  else {
+    std::cout << "Roomsize=" << _RoomSize[0] <<"," << _RoomSize[1];
+    if(_RoomSize.size()>2)
+      std::cout << "," << _RoomSize[2];
+    std::cout << std::endl;
+  }
+  
+  _Equip.clear();
+  _AC.clear();
+  _Exh.clear();
+  std::vector<double> tmp_min;
+  std::vector<double> tmp_max;
+  while (!is.eof())
+  {
+    tmp_max.clear();
+    tmp_min.clear();
+    is >> Buf;
+    std::cout << Buf << "line read" << std::endl;
+    if(strlen(Buf)<1)
+      continue;
+    if(Buf[0]=='#')
+      continue;
+
+    n = sscanf(Buf,"AC:Min=%lf,%lf,%lf;",Vals,Vals+1,Vals+2);
+    if(n>1) {
+      if(n==2) {
+        n = sscanf(Buf,"AC:Min=%lf,%lf;Max=%lf,%lf;vAC=%lf;TAC=%lf",Vals,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5);
+        if(n!=6) {
+          std::string str("Can't interpret line as AC in 2D:");
+          str += Buf;
+          throw std::runtime_error(str);
+        }
+        tmp_min.push_back(Vals[0]);
+        tmp_min.push_back(Vals[1]);
+        tmp_max.push_back(Vals[2]);
+        tmp_max.push_back(Vals[3]);
+        AddAC(tmp_min, tmp_max, Vals[4], Vals[5]);
+      }
+      else
+      {
+        n = sscanf(Buf,"AC:Min=%lf,%lf,%lf;Max=%lf,%lf,%lf;vAC=%lf;TAC=%lf",Vals,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5,Vals+6,Vals+7);
+        if(n!=8) {
+          std::string str("Can't interpret line as AC in 3D:");
+          str += Buf;
+          throw std::runtime_error(str);
+        }
+        tmp_min.push_back(Vals[0]);
+        tmp_min.push_back(Vals[1]);
+        tmp_min.push_back(Vals[2]);
+        tmp_max.push_back(Vals[3]);
+        tmp_max.push_back(Vals[4]);
+        tmp_max.push_back(Vals[5]);
+        AddAC(tmp_min, tmp_max, Vals[6], Vals[7]);
+      }
+    }
+    else {
+      n = sscanf(Buf,"Exh:Min=%lf,%lf,%lf;",Vals,Vals+1,Vals+2);
+      if(n>1) {
+        if(n==2) {
+          n = sscanf(Buf,"Exh:Min=%lf,%lf;Max=%lf,%lf",Vals,Vals+1,Vals+2,Vals+3);
+          if(n!=4) {
+            std::string str("Can't interpret line as Exh in 2D:");
+            str += Buf;
+            throw std::runtime_error(str);
+          }
+          tmp_min.push_back(Vals[0]);
+          tmp_min.push_back(Vals[1]);
+          tmp_max.push_back(Vals[2]);
+          tmp_max.push_back(Vals[3]);
+          AddExhaust(tmp_min, tmp_max);
+        }
+        else
+        {
+          n = sscanf(Buf,"Exh:Min=%lf,%lf,%lf;Max=%lf,%lf,%lf",Vals,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5);
+          if(n!=6) {
+            std::string str("Can't interpret line as Exh in 3D:");
+            str += Buf;
+            throw std::runtime_error(str);
+          }
+          tmp_min.push_back(Vals[0]);
+          tmp_min.push_back(Vals[1]);
+          tmp_min.push_back(Vals[2]);
+          tmp_max.push_back(Vals[3]);
+          tmp_max.push_back(Vals[4]);
+          tmp_max.push_back(Vals[5]);
+          AddExhaust(tmp_min, tmp_max);
+        }
+      }
+      else {
+        n = sscanf(Buf,"Equip:Min=%lf,%lf,%lf;",Vals,Vals+1,Vals+2);
+        if(n>1) {
+          if(n==2) {
+            n = sscanf(Buf,"Equip:Min=%lf,%lf;Max=%lf,%lf;TEquip=%lf;kappa=%lf",Vals,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5);
+            if(n!=6) {
+              std::string str("Can't interpret line as Equip in 2D:");
+              str += Buf;
+              throw std::runtime_error(str);
+            }
+            tmp_min.push_back(Vals[0]);
+            tmp_min.push_back(Vals[1]);
+            tmp_max.push_back(Vals[2]);
+            tmp_max.push_back(Vals[3]);
+            AddEquipment(tmp_min, tmp_max, Vals[4], Vals[5]);
+          }
+          else
+          {
+            n = sscanf(Buf,"Equip:Min=%lf,%lf,%lf;Max=%lf,%lf,%lf;TEquip=%lf;kappa=%lf",Vals,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5,Vals+6,Vals+7);
+            if(n!=8) {
+              std::string str("Can't interpret line as Equip in 3D:");
+              str += Buf;
+              throw std::runtime_error(str);
+            }
+            tmp_min.push_back(Vals[0]);
+            tmp_min.push_back(Vals[1]);
+            tmp_min.push_back(Vals[2]);
+            tmp_max.push_back(Vals[3]);
+            tmp_max.push_back(Vals[4]);
+            tmp_max.push_back(Vals[5]);
+            AddEquipment(tmp_min, tmp_max, Vals[6], Vals[7]);
+          }
+        }
+        else {
+          std::string str("Can't interpret line:");
+          str += Buf;
+          throw std::runtime_error(str);
+        }
+      }
+    }
+  }
+  std::cout << "Input file read" << std::endl;
 }
 
 int ProblemGeometry::GetBoundaryMarker(const std::vector<double>& pt)
@@ -380,15 +565,15 @@ void ProblemGeometry::Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh
   }
 }
 
-void ProblemGeometry::CreateMesh(libMesh::UnstructuredMesh* p_mesh, double h)
+void ProblemGeometry::CreateMesh(libMesh::UnstructuredMesh* p_mesh)
 {
   switch(GetDim())
   {
     case 2:
-      CreateMesh2D(p_mesh, h);
+      CreateMesh2D(p_mesh);
       break;
     case 3:
-      CreateMesh3D(p_mesh, h);
+      CreateMesh3D(p_mesh);
       break;
     default:
       std::cout << "Dimension not implemented" << std::endl;
@@ -396,7 +581,7 @@ void ProblemGeometry::CreateMesh(libMesh::UnstructuredMesh* p_mesh, double h)
   }
 }
 
-void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, double h)
+void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
 {
   tetgenio tetgen_in, tetgen_out;
   //tetgenmesh      tetgen_mesh;
@@ -404,7 +589,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, double h)
   tetgen_in.mesh_dim = 3;  // Three-dimemsional accoordinates.
   tetgen_in.numberofpointattributes = 0;  // no point attribute.
   tetgen_in.firstnumber = 0;
-//  tetgen_in.numberofcorners = 4;
+  tetgen_in.numberofcorners = 1;
   tetgenio::facet *FacWall;
   tetgenio::polygon *p;
 
@@ -435,16 +620,16 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, double h)
     NumOfWallItems[GetWallItemWall(_Exh[iItem])]++;
   
   // facet marker:0: normal boundary condition, rest increasing
-  //int iFacMakerUsed = 1;
+  int iFacMakerUsed = 1;
   tetgen_in.numberoffacets = 6+5*_Equip.size()+_AC.size()+_Exh.size();
   tetgen_in.facetlist = new tetgenio::facet[tetgen_in.numberoffacets];
-  //tetgen_in.facetmarkerlist = new int[tetgen_in.numberoffacets];
-  //memset(tetgen_in.facetmarkerlist,(int)0,tetgen_in.numberoffacets*sizeof(int));
+  tetgen_in.facetmarkerlist = new int[tetgen_in.numberoffacets];
+  memset(tetgen_in.facetmarkerlist,(int)0,tetgen_in.numberoffacets*sizeof(int));
   int iHoleInList;      // #Hole for this Facette
   int iFirstItemPt;
   // floor
   iHoleInList = 0;
-  //tetgen_in.facetmarkerlist[iFacInList] = 0;
+  tetgen_in.facetmarkerlist[iFacInList] = 0;
   FacWall = tetgen_in.facetlist+(iFacInList++);
   SetFacette(FacWall, 0, 0, 2, 6, 4,_Equip.size()); // Set Facet of wall
 
@@ -481,7 +666,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, double h)
 
   // ceiling
   iHoleInList = 0;
-  //tetgen_in.facetmarkerlist[iFacInList] = 0;
+  tetgen_in.facetmarkerlist[iFacInList] = 0;
   FacWall = tetgen_in.facetlist+(iFacInList++);
   tetgenio::init(FacWall);
   FacWall->numberofholes=0;
@@ -499,7 +684,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, double h)
   // Add wall facet
   int iWall(0);
   iHoleInList = 0;
-  //tetgen_in.facetmarkerlist[iFacInList] = 0;
+  tetgen_in.facetmarkerlist[iFacInList] = 0;
   FacWall = tetgen_in.facetlist+(iFacInList++);
   SetFacette(FacWall, 0, 0, 1, 3, 2,NumOfWallItems[iWall]);
   // Handle items, i.e. add hole in wall, add points, add facet
@@ -520,14 +705,14 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, double h)
     FacWall->holelist[3*iHoleInList+1] = 0.5*(pItem->min_[1]+pItem->max_[1]);
     FacWall->holelist[3*iHoleInList+2] = 0.5*(pItem->min_[2]+pItem->max_[2]);
     iHoleInList++;
-    //tetgen_in.facetmarkerlist[iFacInList] = iFacMakerUsed++;
+    tetgen_in.facetmarkerlist[iFacInList] = iFacMakerUsed++;
     SetFacette(tetgen_in.facetlist+(iFacInList++), iFirstItemPt, 0, 1, 3, 2);
   }
 
   // x0==_RoomSize[0]
   iWall++;
   iHoleInList = 0;
-  //tetgen_in.facetmarkerlist[iFacInList] = 0;
+  tetgen_in.facetmarkerlist[iFacInList] = 0;
   FacWall = tetgen_in.facetlist+(iFacInList++);
   SetFacette(FacWall, 0, 4, 5, 7, 6,NumOfWallItems[iWall]);
   ppItem=_ItemAtWall[iWall].begin();
@@ -547,14 +732,14 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, double h)
     FacWall->holelist[3*iHoleInList+1] = 0.5*(pItem->min_[1]+pItem->max_[1]);
     FacWall->holelist[3*iHoleInList+2] = 0.5*(pItem->min_[2]+pItem->max_[2]);
     iHoleInList++;
-    //tetgen_in.facetmarkerlist[iFacInList] = iFacMakerUsed++;
+    tetgen_in.facetmarkerlist[iFacInList] = iFacMakerUsed++;
     SetFacette(tetgen_in.facetlist+(iFacInList++), iFirstItemPt, 0, 1, 3, 2);
   }
 
   // x1==0
   iWall++;
   iHoleInList = 0;
-  //tetgen_in.facetmarkerlist[iFacInList] = 0;
+  tetgen_in.facetmarkerlist[iFacInList] = 0;
   FacWall = tetgen_in.facetlist+(iFacInList++);
   SetFacette(FacWall, 0, 0, 1, 5, 4, NumOfWallItems[iWall]);
   ppItem=_ItemAtWall[iWall].begin();
@@ -574,14 +759,14 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, double h)
     FacWall->holelist[3*iHoleInList+1] = 0.0;
     FacWall->holelist[3*iHoleInList+2] = 0.5*(pItem->min_[2]+pItem->max_[2]);
     iHoleInList++;
-    //tetgen_in.facetmarkerlist[iFacInList] = iFacMakerUsed++;
+    tetgen_in.facetmarkerlist[iFacInList] = iFacMakerUsed++;
     SetFacette(tetgen_in.facetlist+(iFacInList++), iFirstItemPt, 0, 1, 3, 2);
   }
 
   // x1==_RoomSize[1]
   iWall++;
   iHoleInList = 0;
-  //tetgen_in.facetmarkerlist[iFacInList] = 0;
+  tetgen_in.facetmarkerlist[iFacInList] = 0;
   FacWall = tetgen_in.facetlist+(iFacInList++);
   SetFacette(FacWall, 0, 2, 3, 7, 6, NumOfWallItems[iWall]);
   ppItem=_ItemAtWall[iWall].begin();
@@ -601,17 +786,17 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, double h)
     FacWall->holelist[3*iHoleInList+1] = _RoomSize[1];
     FacWall->holelist[3*iHoleInList+2] = 0.5*(pItem->min_[2]+pItem->max_[2]);
     iHoleInList++;
-    //tetgen_in.facetmarkerlist[iFacInList] = iFacMakerUsed++;
+    tetgen_in.facetmarkerlist[iFacInList] = iFacMakerUsed++;
     SetFacette(tetgen_in.facetlist+(iFacInList++), iFirstItemPt, 0, 1, 3, 2);
   }
 
   tetgenbehavior  tetgen_beh;
   char strBuf[256];
-  sprintf(strBuf,"nzQpqa%f",h*h*h);
+  sprintf(strBuf,"nzQpqa%f",_h*_h*_h);
   //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
   tetgen_beh.parse_commandline(strBuf);
   
-  bool PrintMeshingData=false;
+  bool PrintMeshingData=true;
   if(PrintMeshingData)
   {
     std::ofstream os("Mesh3DRaw.poly",std::ios::out);
@@ -626,7 +811,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, double h)
 //  tetgen_out.deinitialize();
 }
 
-void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh, double h)
+void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
 {
   assert(GetDim()==2);
   int dim = GetDim();
@@ -893,7 +1078,7 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh, double h)
     PrintTriangleMesh(tri_in, file);
   }
   char strBuf[256];
-  sprintf(strBuf,"zQnqpa%f",h*h);
+  sprintf(strBuf,"zQnqpa%f",_h*_h);
 
   triangulate(strBuf, &tri_in, &tri_out, NULL);
   //libMesh::Triangle::copy_tri_to_mesh(tri_out,*p_mesh,TRI3);

@@ -88,7 +88,7 @@ class ProblemGeometry
     std::vector<ControlParameter> _ParamIdx2BCParam;  // mapping control parameter index -> control parameter
     std::vector< std::list<Item*> > _ItemAtWall;	// Array of List of Item on each wall
     int NextFreeBoundaryMarker;                 // used to increment boundary markers when building the model (Add...)
-
+    double _h;                                   // initial discretization width (refinement not tracked) 
   public:
     ProblemGeometry();
     inline int GetDim() const {return _RoomSize.size();}
@@ -96,8 +96,9 @@ class ProblemGeometry
     void AddAC(const std::vector<double>& min, const std::vector<double>& max, double vAc, double TempAc);
     void AddExhaust(const std::vector<double>& min, const std::vector<double>& max);
 
-	  void CreateMesh(libMesh::UnstructuredMesh* p_mesh, double h);
+	  void CreateMesh(libMesh::UnstructuredMesh* p_mesh);
     const std::vector<BoundaryCondition>& GetBoundaryConditions() const { return _BoundCond; }
+    void ReadFromStream(std::istream& is);
 	  private:
     void SetBoundaryInfo( libMesh::Mesh* p_mesh );
 	  void Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh* p_mesh);
@@ -108,8 +109,8 @@ class ProblemGeometry
 	  void Triangle2Mesh(const libMesh::Triangle::triangulateio& tri, libMesh::UnstructuredMesh* p_mesh);
 	  int GetBoundaryMarker(const std::vector<double>& pt);
     int GetWall(const std::vector<double>& pt);
-    void CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, double h);
-    void CreateMesh2D(libMesh::UnstructuredMesh* p_mesh, double h);
+    void CreateMesh3D(libMesh::UnstructuredMesh* p_mesh);
+    void CreateMesh2D(libMesh::UnstructuredMesh* p_mesh);
 
   private:
     class CompareItem // Helper class, used to sort items according to their possition on the wall

@@ -7,16 +7,12 @@ LIBMESH_DIR ?= $(HOME)/Develop/libmesh/libmesh-trunk
 include $(LIBMESH_DIR)/Make.common
 
 # Add flags for compilation with Ipopt
-IPOPTDIR ?= $(HOME)/COIN-svn/OBJgcc-debug/Ipopt/branches/parallel-inexact
+#IPOPTDIR ?= $(HOME)/COIN-svn/OBJgcc-debug/Ipopt/branches/parallel-inexact
+IPOPTDIR ?= $(HOME)/COIN-svn/OBJgcc/Ipopt/branches/parallel-inexact
 libmesh_INCLUDE += -I$(IPOPTDIR)/include/coin
 
-libmesh_LIBS += -L$(IPOPTDIR)/lib/coin/ -lipopt 
-libmesh_LIBS += -L$(MUMPS_DIR)/lib -ldmumps -lmumps_common -L$(SCALPACK_DIR) -lscalapack -lblacsF77all
-libmesh_LIBS += -L$(METIS_DIR) -lmetis -L$(MUMPS_DIR)/PORD/lib -lpord
-libmesh_LIBS += -L$(HOME)/Develop/ATLAS/build/lib -llapack -lcblas -lf77blas -latlas 
-libmesh_LIBS += -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty -L$(IPOPTLIBDIR) -lipopt -L/usr/lib/atlas -llapack -lblas -L/usr/lib/atlas -llapack -lblas -L$(MUMPS_DIR)/lib -ldmumps -lmumps_common -L$(METIS_DIR) -lmetis -L$(MUMPS_DIR)/PORD/lib -lpord -L$(IPOPTLIBDIR)/ThirdParty/HSL/libcoinhsl.la -lm   -L/usr/lib -L/usr/lib/gcc/x86_64-linux-gnu/4.4.1 -L/usr/lib/gcc/x86_64-linux-gnu/4.4.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.4.1/../../.. -lmpich -lopa -lpthread -lrt -lgfortranbegin -lgfortran -lm -lgcc_s  
+libmesh_LIBS += -Wl,-rpath,$(IPOPTDIR)/lib/coin -Wl,-rpath,$(IPOPTDIR)/lib/coin/ThirdParty -L$(IPOPTDIR)/lib/coin -L$(IPOPTDIR)/lib/coin/ThirdParty -lipopt `cat $(IPOPTDIR)/share/coin/doc/Ipopt/ipopt_addlibs_cpp.txt`
 
-libmesh_LIBS += -L$(HOME)/Code/lib -lscalapack -lblacsF77all -L$(HOME)/lib -lpwsmpGNU64 $(HOME)/lib/libpardiso.so -lpthread -lgomp -lm  -ldl
 
 #libmesh_CXXFLAGS += -DCHECK_SMARTPTR
 # libmesh_CXXFLAGS = -DDEBUG  -g -ansi -pedantic -DPETSC_USE_DYNAMIC_LIBRARIES -Wno-long-long  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
