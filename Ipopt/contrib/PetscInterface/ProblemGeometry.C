@@ -159,7 +159,6 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
   while (!is.eof())
   {
     is >> Buf;
-    std::cout << Buf;
     if(strlen(Buf)<1)
       continue;
     if(Buf[0]=='#')
@@ -582,7 +581,7 @@ void ProblemGeometry::CreateMesh(libMesh::UnstructuredMesh* p_mesh)
 
 void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
 {
-  tetgenio tetgen_in, tetgen_out;
+  tetgenio tetgen_in;
   //tetgenmesh      tetgen_mesh;
 
   tetgen_in.mesh_dim = 3;  // Three-dimemsional accoordinates.
@@ -789,20 +788,38 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     SetFacette(tetgen_in.facetlist+(iFacInList++), iFirstItemPt, 0, 1, 3, 2);
   }
 
-  tetgenbehavior  tetgen_beh;
-  char strBuf[256];
-  sprintf(strBuf,"nzQpqa%f",_h*_h*_h);
-  //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
-  tetgen_beh.parse_commandline(strBuf);
+  tetgenio tetgen_out;
   
-  bool PrintMeshingData=true;
-  if(PrintMeshingData)
+  bool bCallExternal=true;
+  if(bCallExternal)
   {
     std::ofstream os("Mesh3DRaw.poly",std::ios::out);
     PrintTetgenMesh(tetgen_in, os);
+    char strBuf[256];
+    sprintf(strBuf,"-nQpqa%f",_h*_h*_h);
+    //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
+    char Buf[2014];
+    sprintf(Buf,"tetgen %s Mesh3DRaw.poly",strBuf);
+    system(Buf);
+    ReadNodeFile("Mesh3DRaw.1.node",&tetgen_out);
+    ReadEleFile("Mesh3DRaw.1.ele",&tetgen_out);
+    ReadNeighFile("Mesh3DRaw.1.neigh",&tetgen_out);
   }
-  tetrahedralize(&tetgen_beh, &tetgen_in, &tetgen_out);
-
+  else {
+    bool PrintMeshingData=true;
+    if(PrintMeshingData)
+    {
+      std::ofstream os("Mesh3DRaw.poly",std::ios::out);
+      PrintTetgenMesh(tetgen_in, os);
+    }
+    tetgenbehavior  tetgen_beh;
+    char strBuf[256];
+    sprintf(strBuf,"-nzQpqa%f",_h*_h*_h);
+    //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
+    tetgen_beh.parse_commandline(strBuf);
+    tetrahedralize(&tetgen_beh, &tetgen_in, &tetgen_out);
+  }
+  
   Tetgen2Mesh(tetgen_out, p_mesh);
   p_mesh->prepare_for_use();
 // TODO: Clearify what's going on here, why program termination?
@@ -1087,6 +1104,140 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
   libMesh::Triangle::destroy(tri_out,Triangle::OUTPUT);
 }
 
+void ProblemGeometry::ReadNodeFile(std::string str, tetgenio* tet)
+{
+  char Buf[1024];
+  double Vals[4];
+  int n_nodes, dim;
+  int read;
+
+  std::ifstream f(str.c_str(),std::ios::in);
+  f.getline(Buf,1024);
+
+  read = sscanf(Buf,"%d %d %lf %lf", &n_nodes,&dim,Vals,Vals+1);
+  if( (read<2) || (read>4) ) {
+    std::string str("Can't read header line of node file:");
+    str += Buf;
+    throw std::runtime_error(str);
+  }
+  if(dim!=3) {
+    std::string str("wrong dimension in node file:");
+    str += Buf;
+    throw std::runtime_error(str);
+  }
+  
+  tet->numberofpoints = n_nodes;
+  tet->pointlist = new double[3*tet->numberofpoints];
+  int i_node;
+  for(int iPt=0;iPt<tet->numberofpoints;iPt++)
+  {
+    f.getline(Buf,1024);
+    read = sscanf(Buf,"%d %lf %lf %lf", &i_node,Vals,Vals+1,Vals+2);
+    if( read!=4 ) {
+      std::string str("Can't read node from line:");
+      str += Buf;
+      throw std::runtime_error(str);
+    }
+    else
+    {
+      assert(iPt==i_node-1);
+      tet->pointlist[3*iPt+0] = Vals[0];
+      tet->pointlist[3*iPt+1] = Vals[1];
+      tet->pointlist[3*iPt+2] = Vals[2];
+    }
+  }
+}
+
+void ProblemGeometry::ReadEleFile(std::string str, tetgenio* tet)
+{
+  char Buf[1024];
+  int Vals[5];
+  int n_elems, n_PtsPerTet;
+  int read;
+
+  std::ifstream f(str.c_str(),std::ios::in);
+  f.getline(Buf,1024);
+
+  read = sscanf(Buf,"%d %d %d %d", &n_elems,&n_PtsPerTet,Vals,Vals+1);
+  if( (read<2) || (read>4) ) {
+    std::string str("Can't read header line of ele file:");
+    str += Buf;
+    throw std::runtime_error(str);
+  }
+  if(n_PtsPerTet!=4) {
+    std::string str("Wrong number of points per tetrahedron:");
+    str += Buf;
+    throw std::runtime_error(str);
+  }
+  
+  tet->numberoftetrahedra = n_elems;
+  tet->tetrahedronlist = new int[4*tet->numberoftetrahedra];
+  int i_elem;
+  for(int i_elem=0;i_elem<tet->numberoftetrahedra;i_elem++)
+  {
+    f.getline(Buf,1024);
+    read = sscanf(Buf,"%d %d %d %d %d", Vals,Vals+1,Vals+2,Vals+3,Vals+4);
+    if( read!=5 ) {
+      std::string str("Can't read tetrahedron from line:");
+      str += Buf;
+      throw std::runtime_error(str);
+    }
+    else
+    {
+      assert(i_elem==Vals[0]-1);
+      tet->tetrahedronlist[4*i_elem+0] = Vals[1]-1;
+      tet->tetrahedronlist[4*i_elem+1] = Vals[2]-1;
+      tet->tetrahedronlist[4*i_elem+2] = Vals[3]-1;
+      tet->tetrahedronlist[4*i_elem+3] = Vals[4]-1;
+    }
+  }
+}
+
+void ProblemGeometry::ReadNeighFile(std::string str, tetgenio* tet)
+{
+  char Buf[1024];
+  int Vals[5];
+  int n_elems, n_NeighPerTet;
+  int read;
+
+  std::ifstream f(str.c_str(),std::ios::in);
+  f.getline(Buf,1024);
+
+  read = sscanf(Buf,"%d %d", &n_elems,&n_NeighPerTet,Vals,Vals+1);
+  if( (read<2) || (read>4) ) {
+    std::string str("Can't read header line of neigh file:");
+    str += Buf;
+    throw std::runtime_error(str);
+  }
+  if(n_NeighPerTet!=4) {
+    std::string str("Wrong number of neoghnbors per tetrahedron:");
+    str += Buf;
+    throw std::runtime_error(str);
+  }
+  
+  assert(n_elems==tet->numberoftetrahedra);
+  tet->neighborlist = new int[4*tet->numberoftetrahedra];
+  int i_elem;
+  for(int i_elem=0;i_elem<tet->numberoftetrahedra;i_elem++)
+  {
+    f.getline(Buf,1024);
+    read = sscanf(Buf,"%d %d %d %d %d", Vals,Vals+1,Vals+2,Vals+3,Vals+4);
+    if( read!=5 ) {
+      std::string str("Can't read neighbors from line:");
+      str += Buf;
+      throw std::runtime_error(str);
+    }
+    else
+    {
+      assert(i_elem==Vals[0]-1);
+      tet->neighborlist[4*i_elem+0] = Vals[1]<0 ? -1 : (Vals[1]-1);
+      tet->neighborlist[4*i_elem+1] = Vals[2]<0 ? -1 : (Vals[2]-1);
+      tet->neighborlist[4*i_elem+2] = Vals[3]<0 ? -1 : (Vals[3]-1);
+      tet->neighborlist[4*i_elem+3] = Vals[4]<0 ? -1 : (Vals[4]-1);
+    }
+  }
+}
+
 // for debugging:
 void PrintTetgenMesh(const tetgenio& tet, std::ostream& os)
 {
@@ -1099,11 +1250,11 @@ void PrintTetgenMesh(const tetgenio& tet, std::ostream& os)
   tetgenio::facet *f;
   tetgenio::polygon *p;
   
-  os << tet.numberoffacets << std::endl;
+  os << tet.numberoffacets << " 1" << std::endl;
   for(int iFac=0;iFac<tet.numberoffacets;iFac++)
   {
     f = tet.facetlist+iFac;
-    os << f->numberofpolygons << " " << f->numberofholes << std::endl;
+    os << f->numberofpolygons << " " << f->numberofholes << " " << iFac << std::endl;
     for(int iPoly=0; iPoly<f->numberofpolygons; iPoly++)
     { 
       p = f->polygonlist+iPoly;

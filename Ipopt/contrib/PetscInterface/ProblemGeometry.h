@@ -99,7 +99,7 @@ class ProblemGeometry
 	  void CreateMesh(libMesh::UnstructuredMesh* p_mesh);
     const std::vector<BoundaryCondition>& GetBoundaryConditions() const { return _BoundCond; }
     void ReadFromStream(std::istream& is);
-	  private:
+  private:
     void SetBoundaryInfo( libMesh::Mesh* p_mesh );
 	  void Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh* p_mesh);
     int GetWallItemWall(const Item& item);
@@ -111,6 +111,9 @@ class ProblemGeometry
     int GetWall(const std::vector<double>& pt);
     void CreateMesh3D(libMesh::UnstructuredMesh* p_mesh);
     void CreateMesh2D(libMesh::UnstructuredMesh* p_mesh);
+    void ReadNodeFile(std::string str, tetgenio* tet);
+    void ReadEleFile(std::string str, tetgenio* tet);
+    void ReadNeighFile(std::string str, tetgenio* tet);
 
   private:
     class CompareItem // Helper class, used to sort items according to their possition on the wall
