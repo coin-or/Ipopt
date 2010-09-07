@@ -140,16 +140,22 @@ astyle:
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc
 
-if COIN_HAS_PKGCONFIG
 addlibsdir = $(DESTDIR)$(datadir)/coin/doc/Ipopt
+
+if COIN_HAS_PKGCONFIG
 	
 install-data-hook:
 	@$(mkdir_p) "$(addlibsdir)"
 	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 	$(PKG_CONFIG) --libs ipopt > $(addlibsdir)/ipopt_addlibs_cpp.txt
+else
+	
+install-data-hook:
+	@$(mkdir_p) "$(addlibsdir)"
+	echo "@PCADDLIBS@ @FLIBS@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
+endif
 
 uninstall-hook:
 	rm -f $(addlibsdir)/ipopt_addlibs_cpp.txt
-endif
 
 include BuildTools/Makemain.inc
