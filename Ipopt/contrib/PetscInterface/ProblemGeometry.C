@@ -158,7 +158,6 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
   _h=0;
   while (!is.eof())
   {
-    std::cout << "blk";
     is >> Buf;
     std::cout << Buf;
     if(strlen(Buf)<1)
