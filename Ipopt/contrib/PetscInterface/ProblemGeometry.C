@@ -1265,9 +1265,9 @@ void PrintTetgenMesh(const tetgenio& tet, std::ostream& os)
     }
     for(int iPt=0;iPt<f->numberofholes;iPt++)
     {
-      os << "1 ";
+      os << iPt+1 << " ";
       for(int iDim=0;iDim<tet.mesh_dim;iDim++)
-        os << f->holelist[iDim] << " ";
+        os << f->holelist[iPt*tet.mesh_dim+iDim] << " ";
       os << std::endl;
     }
   }
