@@ -462,7 +462,7 @@ tmpdir = tmpdir
 libipopt = libipopt.a
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc
-@COIN_HAS_PKGCONFIG_TRUE@addlibsdir = $(DESTDIR)$(datadir)/coin/doc/Ipopt
+addlibsdir = $(DESTDIR)$(datadir)/coin/doc/Ipopt
 DocFiles = README AUTHORS LICENSE
 DocInstallDir = $(datadir)/coin/doc/$(PACKAGE_NAME)
 all: all-recursive
@@ -917,8 +917,6 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-@COIN_HAS_PKGCONFIG_FALSE@install-data-hook:
-@COIN_HAS_PKGCONFIG_FALSE@uninstall-hook:
 clean: clean-recursive
 
 clean-am: clean-generic clean-libtool mostlyclean-am
@@ -1024,9 +1022,12 @@ astyle:
 @COIN_HAS_PKGCONFIG_TRUE@	@$(mkdir_p) "$(addlibsdir)"
 @COIN_HAS_PKGCONFIG_TRUE@	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 @COIN_HAS_PKGCONFIG_TRUE@	$(PKG_CONFIG) --libs ipopt > $(addlibsdir)/ipopt_addlibs_cpp.txt
+@COIN_HAS_PKGCONFIG_FALSE@install-data-hook:
+@COIN_HAS_PKGCONFIG_FALSE@	@$(mkdir_p) "$(addlibsdir)"
+@COIN_HAS_PKGCONFIG_FALSE@	echo $(MUMPS_LIBS) $(HSL_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(ADDLIBS) > $(addlibsdir)/ipopt_addlibs_cpp.txt
 
-@COIN_HAS_PKGCONFIG_TRUE@uninstall-hook:
-@COIN_HAS_PKGCONFIG_TRUE@	rm -f $(addlibsdir)/ipopt_addlibs_cpp.txt
+uninstall-hook:
+	rm -f $(addlibsdir)/ipopt_addlibs_cpp.txt
 
 install-doc: $(DocFiles)
 	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
