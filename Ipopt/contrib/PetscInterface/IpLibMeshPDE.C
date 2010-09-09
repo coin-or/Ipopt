@@ -21,7 +21,7 @@
 #include "elem.h"
 #include "linear_implicit_system.h"
 #include "nonlinear_implicit_system.h"
-
+#include "vtk_io.h"
 #include <fstream>
 
 int GetProcID();
@@ -1012,6 +1012,10 @@ void LibMeshPDEBase::Write2File( const std::string& pre_filename)
   for(unsigned int iVal=0;iVal<State.size();iVal++)
     f << State[iVal] << std::endl;
   f.close();
+
+  //filename = my_pre_filename + "State";
+  //VTKIO vtkio(mesh_);
+  //vtkio.write_equation_systems(filename,*lm_eqn_sys_);
 }
 
 void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>* pFactList)

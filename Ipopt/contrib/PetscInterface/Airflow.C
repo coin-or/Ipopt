@@ -55,15 +55,7 @@ int main (int argc, char** argv)
     { // Find initial point:
       // get bounds
       pLibMeshPDE->simulation_mode_=true;
-      AutoPtr<  NumericVector< lm_Number > > state_l = pLibMeshPDE->getStateVector().clone();
-      AutoPtr<  NumericVector< lm_Number > > state_u = pLibMeshPDE->getStateVector().clone();
-      AutoPtr<  NumericVector< lm_Number > > control_l = pLibMeshPDE->getControlVector().clone();
-      AutoPtr<  NumericVector< lm_Number > > control_u = pLibMeshPDE->getControlVector().clone();
-      AutoPtr<  NumericVector< lm_Number > > aux_constr_l = pLibMeshPDE->getAuxConstrVector().clone();
-      AutoPtr<  NumericVector< lm_Number > > aux_constr_u = pLibMeshPDE->getAuxConstrVector().clone();
       pLibMeshPDE->getControlVector() = 1.0;
-      pLibMeshPDE->get_bounds(*state_l,*state_u,*control_l,*control_u,*aux_constr_l,*aux_constr_u);
-      lm_Number MaxLowBd = aux_constr_l->max();
       // solve simulation (fixed controls)
       // Intialize the IpoptApplication and process the options
       status = app->Initialize("simu.opt");
@@ -81,12 +73,24 @@ int main (int argc, char** argv)
         return (int)status;
       }
 
+      // scale the simulation solution to satisfy inequality constraints
+      pLibMeshPDE->simulation_mode_=false;
+      AutoPtr<  NumericVector< lm_Number > > state_l = pLibMeshPDE->getStateVector().clone();
+      AutoPtr<  NumericVector< lm_Number > > state_u = pLibMeshPDE->getStateVector().clone();
+      AutoPtr<  NumericVector< lm_Number > > control_l = pLibMeshPDE->getControlVector().clone();
+      AutoPtr<  NumericVector< lm_Number > > control_u = pLibMeshPDE->getControlVector().clone();
+      AutoPtr<  NumericVector< lm_Number > > aux_constr_l = pLibMeshPDE->getAuxConstrVector().clone();
+      AutoPtr<  NumericVector< lm_Number > > aux_constr_u = pLibMeshPDE->getAuxConstrVector().clone();
+      pLibMeshPDE->get_bounds(*state_l,*state_u,*control_l,*control_u,*aux_constr_l,*aux_constr_u);
+      lm_Number MaxLowBd = aux_constr_l->max();
+
       libMesh::NumericVector<lm_Number>* aux_constr;
       pLibMeshPDE->calcAux_constr(aux_constr);
-      lm_Number MinAuxConstr = sqrt(aux_constr->min());
-      //lm_Number fact = MaxLowBd/MinAuxConstr;
-      lm_Number fact = 100.0;
-      if(fact>0.9)
+      lm_Number MinAuxConstr = aux_constr->min();
+      lm_Number fact = sqrt(MaxLowBd/MinAuxConstr);
+      fact = 2*fact;
+      printf("Scaling simulation solution with fact = %e\n", fact);
+      if(1) //fact>0.9)
       { 
         pLibMeshPDE->getControlVector() *= fact;
         pLibMeshPDE->getStateVector() *= fact;
