@@ -22,6 +22,10 @@
 #include "linear_implicit_system.h"
 #include "nonlinear_implicit_system.h"
 #include "vtk_io.h"
+#include "error_vector.h"
+#include "mesh_refinement.h"
+
+
 #include <fstream>
 
 int GetProcID();
@@ -77,139 +81,20 @@ LibMeshPDEBase::~LibMeshPDEBase()
   clear_math_obj();
 }
 
-// is not used yet
 void LibMeshPDEBase::InitProblemData(std::istream& is)
 {
+  DBG_PRINT("ibMeshPDEBase::InitProblemData called");
   PG_.ReadFromStream(is);
-#if 0  // Todo: read Data from file
-  double RoomXSize, RoomYSize, RoomZSize;
-  int example=5;
-  PG_._h=0.1;
-  std::vector<double> p1,p2;
-  std::cout << "Running example " << example << " with h=" << PG_._h << std::endl; 
-  p1.resize(2);
-  p2.resize(2);
-  switch(example)
-  {
-    case 0:
-      p1[0]=RoomXSize=1.0; p1[1]=RoomYSize=1.0;
-      PG_._RoomSize = p1;
-      p1[0]=0.0*RoomXSize; p1[1]=0.3*RoomYSize;
-      p2[0]=0.0*RoomXSize; p2[1]=0.7*RoomYSize;
-      PG_.AddAC(p1,p2,3,10);
-      p1[0]=0.0*RoomXSize; p1[1]=0.7*RoomYSize;
-      p2[0]=0.0*RoomXSize; p2[1]=0.9*RoomYSize;
-      //PG_.AddAC(p1,p2,1,10);
-      p1[0]=1.0*RoomXSize; p1[1]=0.4*RoomYSize;
-      p2[0]=1.0*RoomXSize; p2[1]=0.6*RoomYSize;
-      PG_.AddExhaust(p1,p2);
-      p1[0]=1.0*RoomXSize; p1[1]=0.7*RoomYSize;
-      p2[0]=1.0*RoomXSize; p2[1]=0.9*RoomYSize;
-      //PG_.AddExhaust(p1,p2);
-      p1[0]=0.4*RoomXSize; p1[1]=0.4*RoomYSize;
-      p2[0]=0.6*RoomXSize; p2[1]=0.5*RoomYSize;
-      PG_.AddEquipment(p1,p2,35,1);
-      p1[0]=0.4*RoomXSize; p1[1]=0.2*RoomYSize;
-      p2[0]=0.8*RoomXSize; p2[1]=0.4*RoomYSize;
-      //PG_.AddEquipment(p1,p2,35,1);
-      break;
-    case 1:   // Place a lot of AC on right wall -> the ones in the cornes are most important -> ignore the middle ones
-      p1[0]=RoomXSize=2.0; p1[1]=RoomYSize=1.0;
-      PG_._RoomSize = p1;
-      p1[0]=0.0*RoomXSize; p2[0]=0.0*RoomXSize;
-      for(int i=0;i<10;i++) {
-        p1[1]=(0.025+0.1*i)*RoomYSize; p2[1]=p1[1] + 0.05*RoomYSize;
-        PG_.AddAC(p1,p2,3,10);
-      }
-      p1[0]=1.0*RoomXSize; p1[1]=0.4*RoomYSize; p2[0]=1.0*RoomXSize; p2[1]=0.6*RoomYSize;
-      PG_.AddExhaust(p1,p2);
-      for(int i=0;i<2;i++) {
-        p1[0]=(0.2+0.4*i)*RoomXSize; p2[0]=p1[0] + 0.2*RoomXSize;
-        for(int j=0;j<2;j++) {
-          p1[1]=(0.2+0.4*j)*RoomYSize; p2[1]=p1[1] + 0.2*RoomYSize;
-          PG_.AddEquipment(p1,p2,35,1);
-        }
-      }
-      break;
-    case 2: // Test only corner clostest two AC's -> Result doesn't change to much
-      p1[0]=RoomXSize=1.0; p1[1]=RoomYSize=0.2;
-      PG_._RoomSize = p1;
-      p1[0]=0.0*RoomXSize; p2[0]=0.0*RoomXSize; p1[1]=0.025*RoomYSize; p2[1]=p1[1] + 0.05*RoomYSize;
-      PG_.AddAC(p1,p2,3,10);
-      p1[0]=0.0*RoomXSize; p2[0]=0.0*RoomXSize; p1[1]=0.925*RoomYSize; p2[1]=p1[1] + 0.05*RoomYSize;
-      PG_.AddAC(p1,p2,3,10);
-      p1[0]=1.0*RoomXSize; p1[1]=0.4*RoomYSize; p2[0]=1.0*RoomXSize; p2[1]=0.6*RoomYSize;
-      PG_.AddExhaust(p1,p2);
-      for(int i=0;i<2;i++) {
-        p1[0]=(0.2+0.4*i)*RoomXSize; p2[0]=p1[0] + 0.2*RoomXSize;
-        for(int j=0;j<2;j++) {
-          p1[1]=(0.2+0.4*j)*RoomYSize; p2[1]=p1[1] + 0.2*RoomYSize;
-          PG_.AddEquipment(p1,p2,35,1);
-        }
-      }
-      break;
-    case 3: // What, if server room isn't fully occupied? -> Turn only the AC on, that is closest to the free place 
-      p1[0]=RoomXSize=1.0; p1[1]=RoomYSize=0.2;
-      PG_._RoomSize = p1;
-      p1[0]=0.0*RoomXSize; p2[0]=0.0*RoomXSize; p1[1]=0.025*RoomYSize; p2[1]=p1[1] + 0.05*RoomYSize;
-      PG_.AddAC(p1,p2,3,10);
-      p1[0]=0.0*RoomXSize; p2[0]=0.0*RoomXSize; p1[1]=0.925*RoomYSize; p2[1]=p1[1] + 0.05*RoomYSize;
-      PG_.AddAC(p1,p2,3,10);
-      p1[0]=1.0*RoomXSize; p1[1]=0.4*RoomYSize; p2[0]=1.0*RoomXSize; p2[1]=0.6*RoomYSize;
-      PG_.AddExhaust(p1,p2);
-      for(int i=0;i<2;i++) {
-        p1[0]=(0.2+0.4*i)*RoomXSize; p2[0]=p1[0] + 0.2*RoomXSize;
-        for(int j=0;j<=i;j++) {
-          p1[1]=(0.2+0.4*j)*RoomYSize; p2[1]=p1[1] + 0.2*RoomYSize;
-          PG_.AddEquipment(p1,p2,35,1);
-        }
-      }
-      break;
-    case 4: // What, if I do it the other way arround? in fact higher velocity needed
-      p1[0]=RoomXSize=1.0; p1[1]=RoomYSize=0.2;
-      PG_._RoomSize = p1;
-      p1[0]=0.0*RoomXSize; p2[0]=0.0*RoomXSize; p1[1]=0.025*RoomYSize; p2[1]=p1[1] + 0.05*RoomYSize;
-      PG_.AddAC(p1,p2,3,10);
-      p1[0]=1.0*RoomXSize; p1[1]=0.4*RoomYSize; p2[0]=1.0*RoomXSize; p2[1]=0.6*RoomYSize;
-      PG_.AddExhaust(p1,p2);
-      for(int i=0;i<2;i++) {
-        p1[0]=(0.2+0.4*i)*RoomXSize; p2[0]=p1[0] + 0.2*RoomXSize;
-        for(int j=0;j<=i;j++) {
-          p1[1]=(0.2+0.4*j)*RoomYSize; p2[1]=p1[1] + 0.2*RoomYSize;
-          PG_.AddEquipment(p1,p2,35,1);
-        }
-      }
-      break;
-    case 5:
-      p1.resize(3); p2.resize(3);
-      p1[0]=RoomXSize=1.0; p1[1]=RoomYSize=1.0; p1[2]=RoomZSize=1.0;
-      PG_._RoomSize = p1;
-      p1[0]=0.0*RoomXSize; p1[1]=0.1*RoomYSize; p1[2]=0.2*RoomZSize;
-      p2[0]=0.0*RoomXSize; p2[1]=0.3*RoomYSize; p2[2]=0.4*RoomZSize;
-      PG_.AddAC(p1,p2,3,10);
-      p1[0]=0.0*RoomXSize; p1[1]=0.7*RoomYSize; p1[2]=0.2*RoomZSize;
-      p2[0]=0.0*RoomXSize; p2[1]=0.9*RoomYSize; p2[2]=0.3*RoomZSize;
-      //PG_.AddAC(p1,p2,1,10);
-      p1[0]=1.0*RoomXSize; p1[1]=0.1*RoomYSize; p1[2]=0.6*RoomZSize;
-      p2[0]=1.0*RoomXSize; p2[1]=0.3*RoomYSize; p2[2]=0.8*RoomZSize;
-      PG_.AddExhaust(p1,p2);
-      p1[0]=1.0*RoomXSize; p1[1]=0.7*RoomYSize; p1[2]=0.6*RoomZSize;
-      p2[0]=1.0*RoomXSize; p2[1]=0.9*RoomYSize; p2[2]=0.8*RoomZSize;
-      //PG_.AddExhaust(p1,p2);
-      p1[0]=0.6*RoomXSize; p1[1]=0.2*RoomYSize; p1[2]=0.0*RoomZSize;
-      p2[0]=0.8*RoomXSize; p2[1]=0.4*RoomYSize; p2[2]=0.6*RoomZSize;
-      //PG_.AddEquipment(p1,p2,35,1);
-      p1[0]=0.2*RoomXSize; p1[1]=0.5*RoomYSize; p1[2]=0.0*RoomZSize;
-      p2[0]=0.7*RoomXSize; p2[1]=0.85*RoomYSize; p2[2]=0.8*RoomZSize;
-      PG_.AddEquipment(p1,p2,35,1);
-      break;
-    default: std::cout << "Error: unkown constellation" << std::endl; exit(0);
-  }
-#endif
   PG_.CreateMesh(&mesh_);
 
   WriteNodeFile(mesh_, "MeshGen.node");
   WriteEleFile(mesh_, "MeshGen.ele");
+
+//  RefineMesh();
+
+//  WriteNodeFile(mesh_, "MeshGen1.node");
+//  WriteEleFile(mesh_, "MeshGen1.ele");
+  DBG_PRINT("ibMeshPDEBase::InitProblemData finished");
 }
 
 void LibMeshPDEBase::reinit()
@@ -1220,5 +1105,27 @@ void LibMeshPDEBase::calcAux_jacobian_control(libMesh::SparseMatrix<libMesh::Num
   jac_aux_control_->zero();
   jac_aux_control_->close();
   jac_control = jac_aux_control_;
-  DBG_PRINT( "LibMeshPDEBase::calcAux_jacobian_finished called" );
+  DBG_PRINT( "LibMeshPDEBase::calcAux_jacobian_control finished" );
 }
+
+void LibMeshPDEBase::RefineMesh()
+{
+  DBG_PRINT( "LibMeshPDEBase::RefineMesh called" );
+  MeshRefinement rf(mesh_);
+  rf.uniformly_refine(1);
+/*refine_fraction() = 1.0;
+  mesh_refinement.coarsen_fraction() = 0.0;
+  mesh_refinement.max_h_level() = 1;
+
+  ErrorVector error;
+  KellyErrorEstimator error_estimator;
+  error_estimator.estimate_error(systemPhi, error);
+  mesh_refinement.flag_elements_by_error_fraction (error);
+  mesh_refinement.refine_and_coarsen_elements();
+  equation_systems.reinit();
+*/
+  std::cout << "RefineMesh" << std::endl;
+  reinit();
+  DBG_PRINT( "LibMeshPDEBase::RefineMesh finished" );
+}
+

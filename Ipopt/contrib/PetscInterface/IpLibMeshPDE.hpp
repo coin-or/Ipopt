@@ -129,6 +129,8 @@ compute only the local contribution to the objective  */
 
   virtual void InitProblemData(std::istream& is);
   virtual void reinit();
+
+  void RefineMesh();
   bool simulation_mode_;
 protected:
   libMesh::SparseMatrix<libMesh::Number>* jac_control_;
