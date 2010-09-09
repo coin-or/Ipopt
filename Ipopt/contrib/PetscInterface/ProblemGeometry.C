@@ -800,7 +800,10 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
     char Buf[2014];
     sprintf(Buf,"tetgen %s Mesh3DRaw.poly",strBuf);
+    std::cout << "calling \"" << Buf << "\"...";
+    std::cout.flush();
     system(Buf);
+    std::cout << " ... finished" << std::endl;
     ReadNodeFile("Mesh3DRaw.1.node",&tetgen_out);
     ReadEleFile("Mesh3DRaw.1.ele",&tetgen_out);
     ReadNeighFile("Mesh3DRaw.1.neigh",&tetgen_out);
@@ -1272,12 +1275,13 @@ void PrintTetgenMesh(const tetgenio& tet, std::ostream& os)
     }
   }
 
-  os << "# Elements" << std::endl;
-  os << tet.numberoftetrahedra << std::endl;
+  os << "# volume holes" << std::endl << "0" << std::endl << std::endl;
+  os << "# regions" << std::endl << "0" << std::endl << std::endl;
+/*  os << tet.numberoftetrahedra << std::endl;
   for(int iEl=0;iEl<tet.numberoftetrahedra;iEl++)
     os << iEl << " " << tet.tetrahedronlist[4*iEl+0]+1 << " " << tet.tetrahedronlist[4*iEl+1]+1 << " " << tet.tetrahedronlist[4*iEl+2]+1 << " " << tet.tetrahedronlist[4*iEl+3]+1 << std::endl;
   os.flush();
-}
+*/}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // 2D
