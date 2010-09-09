@@ -19,7 +19,7 @@ ipopt_SOURCES = \
 
 ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la
 	
-LIBS = $(ASL_LIBS) $(MUMPS_LIBS) $(HSL_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(ADDLIBS)
+LIBS = $(ASL_LIBS) $(MUMPS_LIBS) $(HSL_LIBS) $(ADDLIBS) $(LAPACK_LIBS) $(BLAS_LIBS)
 
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \

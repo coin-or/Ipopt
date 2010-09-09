@@ -1022,9 +1022,10 @@ astyle:
 @COIN_HAS_PKGCONFIG_TRUE@	@$(mkdir_p) "$(addlibsdir)"
 @COIN_HAS_PKGCONFIG_TRUE@	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 @COIN_HAS_PKGCONFIG_TRUE@	$(PKG_CONFIG) --libs ipopt > $(addlibsdir)/ipopt_addlibs_cpp.txt
+#temporary hack to get addlibs file also if no pkg-config is available (points to build directories instead of installation directories)
 @COIN_HAS_PKGCONFIG_FALSE@install-data-hook:
 @COIN_HAS_PKGCONFIG_FALSE@	@$(mkdir_p) "$(addlibsdir)"
-@COIN_HAS_PKGCONFIG_FALSE@	echo $(MUMPS_LIBS) $(HSL_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(ADDLIBS) > $(addlibsdir)/ipopt_addlibs_cpp.txt
+@COIN_HAS_PKGCONFIG_FALSE@	echo $(MUMPS_LIBS) $(HSL_LIBS) $(ADDLIBS) $(LAPACK_LIBS) $(BLAS_LIBS) > $(addlibsdir)/ipopt_addlibs_cpp.txt
 
 uninstall-hook:
 	rm -f $(addlibsdir)/ipopt_addlibs_cpp.txt
