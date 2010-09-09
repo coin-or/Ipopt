@@ -94,6 +94,11 @@ Contributors:
 
   contrib/AsNMPC
 
+- Johannes Huber (IBM intern Jul-Sep 2010, otherwise University of Basel)
+  PDE constrained optimization example with generic driver code
+
+  contrib/PetscInterface
+
 Contributors of code that is no longer included in Ipopt distribution:
 
 - Yifan Hu (Wolfram): Contributed TAUCS interface, implemented in the files
