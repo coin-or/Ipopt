@@ -99,6 +99,7 @@ void LibMeshPDEBase::InitProblemData(std::istream& is)
 
 void LibMeshPDEBase::reinit()
 {
+  // initalize all members that store vectors and matrices
   clear_math_obj();
   lm_eqn_sys_ = new EquationSystems(mesh_);
   
@@ -109,9 +110,10 @@ void LibMeshPDEBase::reinit()
   lm_sys.add_variable("Phi", Utility::string_to_enum<Order>(order), Utility::string_to_enum<FEFamily>(family));
   lm_sys.attach_assemble_function(LibMeshPDEBase::assemble_Phi_PDE);
   lm_eqn_sys_->parameters.set<LibMeshPDEBase*>("LibMeshPDEBase") = this;
-  lm_eqn_sys_->parameters.set<bool>("b_struct_only") =false;
-  lm_eqn_sys_->init();
+  lm_eqn_sys_->parameters.set<bool>("b_struct_only") =false;  // true -> 0/1 values
+  lm_eqn_sys_->init(); // here the matrix and the vector for solution of the PDE is generated
 
+  // determine local and global ranges of state
   int n_state_global, n_state_local;
   int m_pde_constr_global, m_pde_constr_local;
   {
@@ -127,12 +129,14 @@ void LibMeshPDEBase::reinit()
     m_pde_constr_local = lm_sys.matrix->row_stop()-lm_sys.matrix->row_start();
   }
 
+  // determine local and global ranges of control
   int n_control_global, n_control_local;
   {
     n_control_global = PG_._ParamIdx2BCParam.size();
     n_control_local = (0==GetProcID()) ? n_control_global : 0;
   }
 
+  // create vectro and matrices for auxilliary constraints
   int m_aux_constr_global, m_aux_constr_local;
   std::list<Number> LocIneqFactList;
   InitAuxConstr(&m_aux_constr_local, &m_aux_constr_global, &LocIneqFactList);
@@ -147,7 +151,9 @@ void LibMeshPDEBase::reinit()
                 ", m_aux_constr_local: " << m_aux_constr_local << std::endl;
 
   PetscErrorCode ierr;
+   /// TODO: The following block nca probably be deleted (see tw blocks down)
   {
+    // create Petsc and libmesh vector for controls
     //lm_control_vec_ = new PetscVector<Number>::PetscVector(n_control_global,n_control_local); does NOT work, later Petsc-calls never terminate (?)
     Vec petsc_vec;
     ierr = VecCreateMPI(PETSC_COMM_WORLD,n_control_local,PETSC_DETERMINE,&petsc_vec);
@@ -157,6 +163,7 @@ void LibMeshPDEBase::reinit()
     lm_control_vec_->close();
   }
   { // TODO: analyze nonzero structure more closely to pass tight numbers to init
+    // create Jacobi matrix of PDE constraints for control variables part
     Mat petsc_mat;
     ierr = MatCreateMPIAIJ(PETSC_COMM_WORLD,m_pde_constr_local,n_control_local,PETSC_DETERMINE,PETSC_DETERMINE,64,PETSC_NULL,16,PETSC_NULL,&petsc_mat); // alloc 64 entries per row on diagonal block and 16 on the off-diagonal block 
     CHKERRV(ierr);
@@ -170,8 +177,9 @@ void LibMeshPDEBase::reinit()
     lm_control_vec_->close();
   }
   //  lm_pde_residual_vec_ = new PetscVector<Number>::PetscVector(m_pde_constr_global,m_pde_constr_local);
+  // compute actual Jacobian at Some(?) point to get distribution of rows and columns in parallel
   SparseMatrix<Number> *pde_jac_state, *pde_jac_control;
-  calcPDE_jacobians(pde_jac_state, pde_jac_control);
+  calcPDE_jacobians(pde_jac_state, pde_jac_control); // required to have something initialized (check)
   {
     // constraint values
     Vec petsc_vec;
@@ -257,6 +265,7 @@ void LibMeshPDEBase::DetroySelfOwnedLibMeshPetscVector(NumericVector<Number>*& v
   vector = NULL;
 }
 
+// call this to transfor control vector data (e.g., from Ipopt) to the PG_ data structure that is used in assembly function
 void LibMeshPDEBase::ConvertControl2PGData()
 {
 //  DBG_PRINT("LibMeshPDEBase::ConvertControl2PGData called");
@@ -908,6 +917,8 @@ void LibMeshPDEBase::Write2File( const std::string& pre_filename)
 
   WriteAirflowCSVs(my_pre_filename + "StateVolFlow.csv", my_pre_filename + "StateSurfFlow.csv");
   DBG_PRINT( "LibMeshPDEBase::Write2File finished" );
+
+  WriteAirflowTKVs("VolFlow", "SurfFlow");
 }
 
 void LibMeshPDEBase::WritePotentialCSV(const std::string& Filename)
@@ -931,6 +942,67 @@ void LibMeshPDEBase::WritePotentialCSV(const std::string& Filename)
   }
   f.close();
   DBG_PRINT( "LibMeshPDEBase::WritePotentialCSV finished" );
+}
+
+void LibMeshPDEBase::WriteAirflowTKVs(const std::string& VolumeFilename, const std::string& SurfFilename)
+{
+  DBG_PRINT( "LibMeshPDEBase::WriteAirflowCSVs called" );
+
+// AW: NEED TO ADD Y AND Z COMPONENT OF VECLOTIRY
+  const unsigned int dim = mesh_.mesh_dimension();
+  LinearImplicitSystem& system = lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
+  AutoPtr< NumericVector<Number> > pvx = system.solution->zero_clone(); // x component of velocity
+  AutoPtr< NumericVector<Number> > pvn = system.solution->zero_clone(); // number of neighboring elements (to know by how much to divide when computing average)
+  const DofMap& dof_map = system.get_dof_map();
+  FEType fe_type = dof_map.variable_type(0);
+  AutoPtr<FEBase> fe_vol (FEBase::build(dim, fe_type));  // volume object
+  QGauss qvol(dim, FIFTH);
+  fe_vol->attach_quadrature_rule (&qvol);
+  const std::vector<std::vector<RealGradient> >&  dphi_vol = fe_vol->get_dphi();
+  AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type));  // surface object
+  QGauss qface(dim-1, FIFTH);
+  fe_face->attach_quadrature_rule (&qface);
+  const std::vector<std::vector<RealGradient> >&  dphi_face = fe_face->get_dphi(); // gradeint of basis function phi at quadarture points
+  std::vector<unsigned int> dof_indices;  // mapping local index -> global index
+  std::vector<Number> tmp;
+  std::vector<Number> One;
+  MeshBase::const_element_iterator itCurEl = mesh_.active_elements_begin();
+  const MeshBase::const_element_iterator itEndEl = mesh_.active_elements_end();
+  RealGradient CurGrad;
+  for ( ; itCurEl != itEndEl; ++itCurEl) {
+    // volume air flow
+    const Elem* CurElem = *itCurEl;
+    fe_vol->reinit(CurElem); // here: Phi and DPhi (basis function) are computed for this element
+    dof_map.dof_indices(CurElem, dof_indices);   // setup local->global mapping in form of array
+    CurGrad = 0.0;
+    for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+      Number node_val = system.current_local_solution->el(dof_indices[inode]);
+      CurGrad += node_val*dphi_vol[inode][0];  // assume linear FE -> grad = const on one element
+    }
+    tmp.resize(dof_indices.size(),CurGrad(0));
+    One.resize(dof_indices.size(),1.0);
+    pvx->add_vector(tmp,dof_indices);
+    pvn->add_vector(One,dof_indices);
+  }	
+
+  pvx->close();
+  pvn->close();
+  MeshBase::node_iterator it_cur_node = mesh_.active_nodes_begin();
+  const MeshBase::node_iterator end_node = mesh_.active_nodes_end();
+  for(;it_cur_node!=end_node;it_cur_node++)
+  {
+    const Node* cur_node = *it_cur_node;
+    pvx->set( pvx->el(cur_node->id()) / pvn->el(cur_node->id()),cur_node->id() );
+  }
+  AutoPtr< NumericVector<Number> > tmpSol = system.solution->clone();
+  system.solution = pvx;
+  update();
+
+  std::string VolumeFilenameX = VolumeFilename + "Velox";
+  VTKIO vtkio(mesh_);
+  vtkio.write_equation_systems(VolumeFilenameX,*lm_eqn_sys_);
+  system.solution = tmpSol;
+  update();
 }
 
 void LibMeshPDEBase::WriteAirflowCSVs(const std::string& VolumeFilename, const std::string& SurfFilename)
@@ -961,7 +1033,7 @@ void LibMeshPDEBase::WriteAirflowCSVs(const std::string& VolumeFilename, const s
     // volume air flow
     const Elem* CurElem = *itCurEl;
     fe_vol->reinit(CurElem);
-    dof_map.dof_indices(CurElem, dof_indices);   // setup local->global mapping in form of array
+    dof_map.dof_indices(CurElem, dof_indices);   // local->global mapping in form of array
     CurGrad = 0.0;
     for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
       Number node_val = system.current_local_solution->el(dof_indices[inode]);
