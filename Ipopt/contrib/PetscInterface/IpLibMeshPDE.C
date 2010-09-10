@@ -879,6 +879,7 @@ void LibMeshPDEBase::WriteEleFile(const MeshBase& mesh, const std::string& Filen
 
 void LibMeshPDEBase::Write2File( const std::string& pre_filename)
 {
+  DBG_PRINT( "LibMeshPDEBase::Write2File called" );
   std::string my_pre_filename = pre_filename;
   if(simulation_mode_)
     my_pre_filename += "Sim";
@@ -898,9 +899,108 @@ void LibMeshPDEBase::Write2File( const std::string& pre_filename)
     f << State[iVal] << std::endl;
   f.close();
 
-  //filename = my_pre_filename + "State";
-  //VTKIO vtkio(mesh_);
-  //vtkio.write_equation_systems(filename,*lm_eqn_sys_);
+/*  filename = my_pre_filename + "State";
+  VTKIO vtkio(mesh_);
+  vtkio.write_equation_systems(filename,*lm_eqn_sys_);
+*/
+  filename = my_pre_filename + "StatePot.csv";
+  WritePotentialCSV(filename);
+
+  WriteAirflowCSVs(my_pre_filename + "StateVolFlow.csv", my_pre_filename + "StateSurfFlow.csv");
+  DBG_PRINT( "LibMeshPDEBase::Write2File finished" );
+}
+
+void LibMeshPDEBase::WritePotentialCSV(const std::string& Filename)
+{
+  DBG_PRINT( "LibMeshPDEBase::WritePotentialCSV called" );
+  std::ofstream f;
+  f.open(Filename.c_str(),std::ios::out);
+
+  std::vector<libMesh::Number> State;
+  lm_eqn_sys_->build_solution_vector(State);
+
+  const unsigned int dim = mesh_.mesh_dimension();
+  MeshBase::node_iterator it_cur_node = mesh_.active_nodes_begin();
+  const MeshBase::node_iterator end_node = mesh_.active_nodes_end();
+  for(;it_cur_node!=end_node;it_cur_node++)
+  {
+    const Node* cur_node = *it_cur_node;
+    for(int i=0;i<dim;i++)
+      f << (*cur_node)(i) << ", ";
+    f << State[cur_node->id()] << std::endl;
+  }
+  f.close();
+  DBG_PRINT( "LibMeshPDEBase::WritePotentialCSV finished" );
+}
+
+void LibMeshPDEBase::WriteAirflowCSVs(const std::string& VolumeFilename, const std::string& SurfFilename)
+{
+  DBG_PRINT( "LibMeshPDEBase::WriteAirflowCSVs called" );
+  std::ofstream VolFile;
+  VolFile.open(VolumeFilename.c_str(),std::ios::out);
+  std::ofstream SurFile;
+  SurFile.open(SurfFilename.c_str(),std::ios::out);
+
+  const unsigned int dim = mesh_.mesh_dimension();
+  LinearImplicitSystem& system = lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
+  const DofMap& dof_map = system.get_dof_map();
+  FEType fe_type = dof_map.variable_type(0);
+  AutoPtr<FEBase> fe_vol (FEBase::build(dim, fe_type));  // volume object
+  QGauss qvol(dim, FIFTH);
+  fe_vol->attach_quadrature_rule (&qvol);
+  const std::vector<std::vector<RealGradient> >&  dphi_vol = fe_vol->get_dphi();
+  AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type));  // surface object
+  QGauss qface(dim-1, FIFTH);
+  fe_face->attach_quadrature_rule (&qface);
+  const std::vector<std::vector<RealGradient> >&  dphi_face = fe_face->get_dphi();
+  std::vector<unsigned int> dof_indices;  // mapping local index -> global index
+  MeshBase::const_element_iterator itCurEl = mesh_.active_elements_begin();
+  const MeshBase::const_element_iterator itEndEl = mesh_.active_elements_end();
+  RealGradient CurGrad;
+  for ( ; itCurEl != itEndEl; ++itCurEl) {
+    // volume air flow
+    const Elem* CurElem = *itCurEl;
+    fe_vol->reinit(CurElem);
+    dof_map.dof_indices(CurElem, dof_indices);   // setup local->global mapping in form of array
+    CurGrad = 0.0;
+    for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+      Number node_val = system.current_local_solution->el(dof_indices[inode]);
+      CurGrad += node_val*dphi_vol[inode][0];  // assume linear FE -> grad = const on one element
+    }
+    Point Center = CurElem->centroid();
+    for(int i=0;i<dim;i++)
+      VolFile << Center(i) << ", ";
+    for(int i=0;i<dim-1;i++)
+      VolFile << CurGrad(i) << ", ";
+    VolFile << CurGrad(dim-1) << std::endl;
+
+    // air flow at boundary
+    for (unsigned int side=0; side<CurElem->n_sides(); side++) {
+      if (CurElem->neighbor(side) == NULL) {
+        fe_face->reinit(CurElem, side);
+        DenseVector<Number> loc_sol;
+        DenseMatrix<Number> loc_l2dphi;
+        loc_sol.resize(dof_indices.size());
+        loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
+        double GradL2=0.0;
+        for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+          loc_sol(inode) = system.current_local_solution->el(dof_indices[inode]);
+          for( unsigned short jnode=0;jnode<CurElem->n_nodes();++jnode) {
+            loc_l2dphi(inode,jnode) = dphi_face[inode][0]*dphi_face[jnode][0];
+          }
+        }
+        DenseVector<Number> tmp;
+        loc_l2dphi.vector_mult(tmp,loc_sol);
+        GradL2 = loc_sol.dot(tmp);
+        AutoPtr<Elem> Side = CurElem->build_side(side);
+        Point Center = Side->centroid();
+        for(int i=0;i<dim;i++)
+          SurFile << Center(i) << ", ";
+        SurFile << GradL2 << std::endl;
+      }
+    }
+  }
+  DBG_PRINT( "LibMeshPDEBase::WriteAirflowCSVs finished" );
 }
 
 void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>* pFactList)

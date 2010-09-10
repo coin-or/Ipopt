@@ -153,6 +153,8 @@ protected:
   void WriteNodeFile(const MeshBase& mesh, const std::string& Filename);
   void WriteElems(const MeshBase& mesh, std::ostream& os);
   void WriteEleFile(const MeshBase& mesh, const std::string& Filename);
+  void WritePotentialCSV(const std::string& Filename);
+  void WriteAirflowCSVs(const std::string& VolumeFilename, const std::string& SurfFilename);
 private:
   /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).

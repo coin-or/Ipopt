@@ -17,7 +17,7 @@
 
 int GetProcID();
 
-#define DBG_PRINT(s) {std::cout << GetProcID() << ": " << s << std::endl;}
+//#define DBG_PRINT(s) {std::cout << GetProcID() << ": " << s << std::endl;}
 #define DBG_PRINT(s) {}
 
 using namespace Ipopt;
