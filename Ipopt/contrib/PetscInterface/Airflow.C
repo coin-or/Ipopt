@@ -41,6 +41,10 @@ int main (int argc, char** argv)
 
     LibMeshPDEBase* pLibMeshPDE = new LibMeshPDEBase;
     std::ifstream f("Problem.dat",std::ios::in);
+    if(f.fail()) {
+      std::cout << "Can't open file Problem.dat" << std::endl;
+      exit(1);
+    }
     try {
       pLibMeshPDE->InitProblemData(f);
     }
