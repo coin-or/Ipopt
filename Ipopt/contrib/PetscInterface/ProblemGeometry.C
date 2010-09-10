@@ -17,7 +17,7 @@ ProblemGeometry::Item::Item(const std::vector<double>& min, const std::vector<do
   min_=min;
   max_=max;
   ValidateMinMax();
-  BoundaryMarker.resize(2*min_.size(),-1);
+  BoundaryMarker.resize(2*min_.size(),-1); // those are for floor and ceiling
 }
 
 void ProblemGeometry::Item::ValidateMinMax()
@@ -374,6 +374,7 @@ int ProblemGeometry::GetWall(const std::vector<double>& pt)
     return -1;
 }
 
+// build up _TimeAtWall member for each 4 walls
 void ProblemGeometry::ValidateItemAtWall()
 {
   // _ItemAtWall: Index: 0:x0=0, 1:x0=Max, 2:x1=0, 3:x1=Max
@@ -421,6 +422,8 @@ void ProblemGeometry::ValidateItemAtWall()
   }
 }
 
+
+// return index of wall at which item is located
 int ProblemGeometry::GetWallItemWall(const Item& item)
 {
   // Returnvalue: Min x1 -> 0, Max x1->1, Min x2 -> 2 Max x2 -> 3, Min x3 -> 4 Max x3 -> 5
@@ -437,6 +440,7 @@ int ProblemGeometry::GetWallItemWall(const Item& item)
   return -1;
 }
 
+// Update p_mesh to include BoundaryMarkers for all nodes that have Dirichlet
 void ProblemGeometry::SetBoundaryInfo(libMesh::Mesh* p_mesh)
 {
   const double eps = 1e-8;
@@ -447,9 +451,11 @@ void ProblemGeometry::SetBoundaryInfo(libMesh::Mesh* p_mesh)
   Pos.resize(GetDim());
   MeshBase::const_element_iterator el = p_mesh->active_local_elements_begin();
   const MeshBase::const_element_iterator end_el = p_mesh->active_local_elements_end();
+  // loop over all active local elements
   for ( ; el != end_el; ++el) {
     for (unsigned int side=0; side<(*el)->n_sides(); side++) {
       if ((*el)->neighbor(side) == NULL) {
+        // this is element side on boundary
         libMesh::Point Center;
         for(unsigned int iPt=0; iPt<(*el)->n_nodes();iPt++)
           if((*el)->is_node_on_side(iPt,side))
@@ -461,7 +467,7 @@ void ProblemGeometry::SetBoundaryInfo(libMesh::Mesh* p_mesh)
         assert(BoundaryMarker!=-1);
 //        p_mesh->boundary_info->add_side(*el,side,BoundaryMarker);
         
-        // mark nodes if Dirichlet cond.
+        // mark nodes if Dirichlet cond.: Those are set at points (not sides) by putting diagonals into the matrix
         if( (fabs(_BoundCond[BoundaryMarker].PhiNeumannCoef)<eps) || (fabs(_BoundCond[BoundaryMarker].TNeumannCoef)<eps) ) { 
           // mark side points
           for(unsigned int iPt=0; iPt<(*el)->n_nodes();iPt++)
@@ -820,7 +826,9 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     sprintf(strBuf,"-nzQpqa%f",_h*_h*_h);
     //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
     tetgen_beh.parse_commandline(strBuf);
-    tetrahedralize(&tetgen_beh, &tetgen_in, &tetgen_out);
+    //tetrahedralize(&tetgen_beh, &tetgen_in, &tetgen_out);
+printf("NOT WORKING\n");
+exit(-1);
   }
   
   Tetgen2Mesh(tetgen_out, p_mesh);

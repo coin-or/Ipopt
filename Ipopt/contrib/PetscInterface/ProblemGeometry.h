@@ -23,11 +23,12 @@ void PrintTriangleMesh(const libMesh::Triangle::triangulateio& tri, std::ostream
 
 class BoundaryCondition
 {
+        //Boundary Conditions:  \alpha\del \Phi/\del n + \beta \Phi = \gamma
 	public:
-	double PhiDiricheltCoef;
-	double PhiNeumannCoef;
-	double PhiRhs;
-	double TDiricheltCoef;
+	double PhiDiricheltCoef; // \beta
+	double PhiNeumannCoef;  // \alpha
+	double PhiRhs; // \gamma
+	double TDiricheltCoef;  // these three will be for temparature
 	double TNeumannCoef;
 	double TRhs;
 	BoundaryCondition() : PhiDiricheltCoef(0.0), PhiNeumannCoef(0.0), PhiRhs(0.0),
@@ -50,17 +51,19 @@ class ProblemGeometry
     class Item
     {
       public:
-        std::vector<double> min_, max_;
-        std::vector<int> BoundaryMarker;    // 0:+x0, 1:-x0, 2:+x1, 3:-x1, 4:+x2, 5:-x2
+        std::vector<double> min_, max_; // extreme corners of box (dim: 2 or 3 for 2D/3D)
+        std::vector<int> BoundaryMarker;    // [0]:+x0 (from midpoint in positive x0 direction), [1]:-x0, 2:+x1, 3:-x1, 4:+x2, 5:-x2
+                                            // dimension: 4 or 6 (number of sides of box)
+                                            // for AC: depending on which wall 
         Item(const std::vector<double>& min, const std::vector<double>& max);
 
         // Check, if pt is within epsilon of Item
         bool IsInArea(const std::vector<double>& pt, double epsilon=1e-8);
         // which item boundary is clodest to pt?
         // return value: 0:+x0, 1:-x0, 2:+x1, 3:-x1, 4:+x2, 5:-x2 (same as BoundaryMaker index)
-        int GetClosestBoundary(const std::vector<double>& pt);
+        int GetClosestBoundary(const std::vector<double>& pt); //return: which component of member BounaryMarker is closest
 
-        int GetBoundaryMarker(const std::vector<double>& pt);
+        int GetBoundaryMarker(const std::vector<double>& pt); // same as before but returns boundary marker, and -1 is not inside Item
 
       private:
         // ensures Min<=Max
@@ -74,7 +77,7 @@ class ProblemGeometry
     class ControlParameter
     {
       public:
-      int BoundaryMarker;
+      int BoundaryMarker; // same as boundary marker in tetview
       int BCParameter;  // 0:PhiDiriCoef, 1: PhiNeumCoef, 2: PhiRhs, 3:TDiriCoef, 4: TNeumCoef, 5: TiRhs
       ControlParameter(int BM, int BCP) : BoundaryMarker(BM), BCParameter(BCP) {}
     };
@@ -85,20 +88,20 @@ class ProblemGeometry
     std::vector<Item> _AC;
     std::vector<Item> _Exh;
     std::vector<BoundaryCondition> _BoundCond;  // mapping boundary marker -> boundary condition
-    std::vector<ControlParameter> _ParamIdx2BCParam;  // mapping control parameter index -> control parameter
-    std::vector< std::list<Item*> > _ItemAtWall;	// Array of List of Item on each wall
+    std::vector<ControlParameter> _ParamIdx2BCParam;  // mapping control parameter index in optimization problem numbering -> control parameter 
+    std::vector< std::list<Item*> > _ItemAtWall;	// Array of List of Item on each wall (dimension always 4: +x0 -x0 +x1 -x1)
     int NextFreeBoundaryMarker;                 // used to increment boundary markers when building the model (Add...)
     double _h;                                   // initial discretization width (refinement not tracked) 
   public:
     ProblemGeometry();
     inline int GetDim() const {return _RoomSize.size();}
-    void AddEquipment(const std::vector<double>& min, const std::vector<double>& max, double TempEquip, double kappa);
-    void AddAC(const std::vector<double>& min, const std::vector<double>& max, double vAc, double TempAc);
+    void AddEquipment(const std::vector<double>& min, const std::vector<double>& max, double TempEquip, double kappa); // TEmpEquip and kappa for T variable (later)
+    void AddAC(const std::vector<double>& min, const std::vector<double>& max, double vAc, double TempAc); // This vAc will be changed during optimization
     void AddExhaust(const std::vector<double>& min, const std::vector<double>& max);
 
 	  void CreateMesh(libMesh::UnstructuredMesh* p_mesh);
     const std::vector<BoundaryCondition>& GetBoundaryConditions() const { return _BoundCond; }
-    void ReadFromStream(std::istream& is);
+    void ReadFromStream(std::istream& is); // read Problem.dat input file
   private:
     void SetBoundaryInfo( libMesh::Mesh* p_mesh );
 	  void Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh* p_mesh);
@@ -116,7 +119,7 @@ class ProblemGeometry
     void ReadNeighFile(std::string str, tetgenio* tet);
 
   private:
-    class CompareItem // Helper class, used to sort items according to their possition on the wall
+    class CompareItem // Helper class, used to sort items according to their possition on the wall (only required for 2D)
     {
       public:
       Item* pItem;
