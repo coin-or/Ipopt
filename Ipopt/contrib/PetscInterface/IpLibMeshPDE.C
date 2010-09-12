@@ -22,6 +22,7 @@
 #include "linear_implicit_system.h"
 #include "nonlinear_implicit_system.h"
 #include "vtk_io.h"
+#include "exodusII_io.h"
 #include "error_vector.h"
 #include "mesh_refinement.h"
 
@@ -909,8 +910,11 @@ void LibMeshPDEBase::Write2File( const std::string& pre_filename)
   f.close();
 
   filename = my_pre_filename + "State";
-  VTKIO vtkio(mesh_);
-  vtkio.write_equation_systems(filename,*lm_eqn_sys_);
+  //VTKIO vtkio(mesh_);
+  //vtkio.write_equation_systems(filename,*lm_eqn_sys_);
+
+  ExodusII_IO exoio(mesh_);
+  exoio.write_equation_systems(my_pre_filename + "State.ex2", *lm_eqn_sys_);
 
 #if 0
   filename = my_pre_filename + "StatePot.csv";
