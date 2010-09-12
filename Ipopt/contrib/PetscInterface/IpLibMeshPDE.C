@@ -908,10 +908,11 @@ void LibMeshPDEBase::Write2File( const std::string& pre_filename)
     f << State[iVal] << std::endl;
   f.close();
 
-/*  filename = my_pre_filename + "State";
+  filename = my_pre_filename + "State";
   VTKIO vtkio(mesh_);
   vtkio.write_equation_systems(filename,*lm_eqn_sys_);
-*/
+
+#if 0
   filename = my_pre_filename + "StatePot.csv";
   WritePotentialCSV(filename);
 
@@ -919,6 +920,7 @@ void LibMeshPDEBase::Write2File( const std::string& pre_filename)
   DBG_PRINT( "LibMeshPDEBase::Write2File finished" );
 
   WriteAirflowTKVs("VolFlow", "SurfFlow");
+#endif
 }
 
 void LibMeshPDEBase::WritePotentialCSV(const std::string& Filename)
@@ -948,10 +950,12 @@ void LibMeshPDEBase::WriteAirflowTKVs(const std::string& VolumeFilename, const s
 {
   DBG_PRINT( "LibMeshPDEBase::WriteAirflowCSVs called" );
 
-// AW: NEED TO ADD Y AND Z COMPONENT OF VECLOTIRY
   const unsigned int dim = mesh_.mesh_dimension();
   LinearImplicitSystem& system = lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
   AutoPtr< NumericVector<Number> > pvx = system.solution->zero_clone(); // x component of velocity
+  AutoPtr< NumericVector<Number> > pvy = system.solution->zero_clone(); // y component of velocity
+  AutoPtr< NumericVector<Number> > pvz = system.solution->zero_clone(); // z component of velocity
+  AutoPtr< NumericVector<Number> > pvnorm = system.solution->zero_clone(); // norm of velocity
   AutoPtr< NumericVector<Number> > pvn = system.solution->zero_clone(); // number of neighboring elements (to know by how much to divide when computing average)
   const DofMap& dof_map = system.get_dof_map();
   FEType fe_type = dof_map.variable_type(0);
@@ -977,23 +981,45 @@ void LibMeshPDEBase::WriteAirflowTKVs(const std::string& VolumeFilename, const s
     CurGrad = 0.0;
     for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
       Number node_val = system.current_local_solution->el(dof_indices[inode]);
+printf("nodeval = %e\n", node_val);
       CurGrad += node_val*dphi_vol[inode][0];  // assume linear FE -> grad = const on one element
     }
     tmp.resize(dof_indices.size(),CurGrad(0));
-    One.resize(dof_indices.size(),1.0);
     pvx->add_vector(tmp,dof_indices);
+    tmp.resize(dof_indices.size(),CurGrad(1));
+    pvy->add_vector(tmp,dof_indices);
+    tmp.resize(dof_indices.size(),CurGrad(2));
+    pvz->add_vector(tmp,dof_indices);
+    One.resize(dof_indices.size(),1.0);
     pvn->add_vector(One,dof_indices);
   }	
 
   pvx->close();
+  pvy->close();
+  pvz->close();
   pvn->close();
+  pvnorm->close();
   MeshBase::node_iterator it_cur_node = mesh_.active_nodes_begin();
   const MeshBase::node_iterator end_node = mesh_.active_nodes_end();
   for(;it_cur_node!=end_node;it_cur_node++)
   {
     const Node* cur_node = *it_cur_node;
-    pvx->set( pvx->el(cur_node->id()) / pvn->el(cur_node->id()),cur_node->id() );
+    unsigned int id = cur_node->id();
+    double ncount = pvn->el(id);
+    double vx = pvx->el(id)/ncount;
+    double vy = pvy->el(id)/ncount;
+    double vz = pvz->el(id)/ncount;
+printf("%d pvx = %e pvy = %e pvz = %e\n", id, vx, vy ,vz);
+    pvx->set( vx, id );
+    pvy->set( vy, id );
+    pvz->set( vz, id );
+printf("pvnorm[%d] = %e\n", id, std::sqrt(vx*vx + vy*vy + vz*vz));
+    pvnorm->set( sqrt(vx*vx + vy*vy + vz*vz), id );
   }
+  pvx->close();
+  pvy->close();
+  pvz->close();
+  pvn->close();
   AutoPtr< NumericVector<Number> > tmpSol = system.solution->clone();
   system.solution = pvx;
   update();
@@ -1001,8 +1027,16 @@ void LibMeshPDEBase::WriteAirflowTKVs(const std::string& VolumeFilename, const s
   std::string VolumeFilenameX = VolumeFilename + "Velox";
   VTKIO vtkio(mesh_);
   vtkio.write_equation_systems(VolumeFilenameX,*lm_eqn_sys_);
+
+  system.solution = pvnorm;
+  update();
+  VTKIO vtkio2(mesh_);
+  vtkio2.write_equation_systems(VolumeFilename + "VeloNorm",*lm_eqn_sys_);
+
   system.solution = tmpSol;
   update();
+  VTKIO vtkio3(mesh_);
+  vtkio3.write_equation_systems(VolumeFilename + "Phi",*lm_eqn_sys_);
 }
 
 void LibMeshPDEBase::WriteAirflowCSVs(const std::string& VolumeFilename, const std::string& SurfFilename)
