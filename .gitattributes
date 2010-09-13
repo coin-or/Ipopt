@@ -119,6 +119,8 @@ Ipopt/contrib/PetscInterface/Problem0s.dat -text
 Ipopt/contrib/PetscInterface/Problem1.dat -text
 Ipopt/contrib/PetscInterface/Problem2.dat -text
 Ipopt/contrib/PetscInterface/Problem5.dat -text
+Ipopt/contrib/PetscInterface/Problem6.dat -text
+Ipopt/contrib/PetscInterface/Problem7.dat -text
 Ipopt/contrib/PetscInterface/ShowSolution.m -text
 Ipopt/contrib/PetscInterface/trigrad.m -text
 Ipopt/depcomp -text
