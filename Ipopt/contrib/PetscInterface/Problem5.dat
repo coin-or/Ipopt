@@ -1,4 +1,4 @@
-h=0.02
+h=0.05
 Roomsize=1,1,1
 
 #AC:Min=%lf,%lf,%lf;Max=%lf,%lf,%lf;vAC=%lf;TAC=%lf
