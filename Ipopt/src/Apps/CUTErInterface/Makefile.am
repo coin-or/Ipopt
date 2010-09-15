@@ -48,7 +48,7 @@ sdipo:
 	  touch sdipo; \
 	fi
 
-IPADDLIBS = @IPADDLIBS@ $(MUMPS_LIBS) $(HSL_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(ADDLIBS)
+IPADDLIBS = @IPADDLIBS@ $(IPOPTLIB_LIBS)
 
 CLEANFILES = ipoma.f ipo sdipo ipo.pro sdipo.pro
 
@@ -56,7 +56,7 @@ cuter:	ipoma.$(OBJEXT) ipo sdipo
 	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
 	  echo CUTEr environment variables not set - cannot install ipoma.f; \
 	else \
-	  echo "-L$(libdir) -lipopt $(ADDLIBS) $(CXXLIBS) $(RPATH_FLAGS)" >$$MYCUTER/double/lib/ipo.liblist ;\
+	  echo "-L$(libdir) -lipopt $(IPOPTLIB_LIBS) $(CXXLIBS) $(RPATH_FLAGS)" >$$MYCUTER/double/lib/ipo.liblist ;\
 	  if test -r $$CUTER/build/prototypes/gen.pro ; then \
 	    cp ipoma.o $(MYCUTER)/double/bin/ipoma.$(OBJEXT); \
 	    cp ipo $(MYCUTER)/bin/ipo ;\

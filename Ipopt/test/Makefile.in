@@ -60,16 +60,14 @@ nodist_hs071_c_OBJECTS = hs071_c.$(OBJEXT)
 hs071_c_OBJECTS = $(nodist_hs071_c_OBJECTS)
 am__DEPENDENCIES_1 =
 hs071_c_DEPENDENCIES = ../src/Interfaces/libipopt.la \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1)
 nodist_hs071_cpp_OBJECTS = hs071_main.$(OBJEXT) hs071_nlp.$(OBJEXT)
 hs071_cpp_OBJECTS = $(nodist_hs071_cpp_OBJECTS)
-hs071_cpp_DEPENDENCIES = ../src/Interfaces/libipopt.la \
-	$(am__DEPENDENCIES_1)
+hs071_cpp_DEPENDENCIES = ../src/Interfaces/libipopt.la
 nodist_hs071_f_OBJECTS = hs071_f.$(OBJEXT)
 hs071_f_OBJECTS = $(nodist_hs071_f_OBJECTS)
 hs071_f_DEPENDENCIES = ../src/Interfaces/libipopt.la \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -209,6 +207,9 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 IPALLLIBS = @IPALLLIBS@
+IPOPTLIB_LIBS = @IPOPTLIB_LIBS@
+IPOPTLIB_PCLIBS = @IPOPTLIB_PCLIBS@
+IPOPTLIB_PCREQUIRES = @IPOPTLIB_PCREQUIRES@
 IPOPT_SVN_REV = @IPOPT_SVN_REV@
 JAVA_HOME = @JAVA_HOME@
 JIPOPTDLL = @JIPOPTDLL@
@@ -218,7 +219,7 @@ LAPACK_LIBS = @LAPACK_LIBS@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
-LIBS = @LIBS@ $(BLAS_LIBS) $(LAPACK_LIBS) $(MUMPS_LIBS) $(HSL_LIBS)
+LIBS = @LIBS@ $(IPOPTLIB_LIBS)
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LN_S = @LN_S@
@@ -250,7 +251,6 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
 PCADDLIBS = @PCADDLIBS@
 PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
-REQUIREDPACKAGES = @REQUIREDPACKAGES@
 RPATH_FLAGS = @RPATH_FLAGS@
 SET_MAKE = @SET_MAKE@
 SHARED_FLAGS = @SHARED_FLAGS@
@@ -317,11 +317,11 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 nodist_hs071_cpp_SOURCES = hs071_main.cpp hs071_nlp.cpp hs071_nlp.hpp
-hs071_cpp_LDADD = ../src/Interfaces/libipopt.la $(ADDLIBS)
+hs071_cpp_LDADD = ../src/Interfaces/libipopt.la
 nodist_hs071_c_SOURCES = hs071_c.c
-hs071_c_LDADD = ../src/Interfaces/libipopt.la $(ADDLIBS) $(CXXLIBS)
+hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 nodist_hs071_f_SOURCES = hs071_f.f
-hs071_f_LDADD = ../src/Interfaces/libipopt.la $(FADDLIBS) $(CXXLIBS) $(ADDLIBS)
+hs071_f_LDADD = ../src/Interfaces/libipopt.la $(FADDLIBS) $(CXXLIBS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Cygwin

@@ -46,7 +46,7 @@ exec_prefix = @exec_prefix@
 prefix = @prefix@
 
 # Libraries necessary to link with IPOPT
-LIBS = -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty @ipoptlib@ @MUMPS_LIBS@ @HSL_LIBS@ @LAPACK_LIBS@ @BLAS_LIBS@ @ADDLIBS@
+LIBS = -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty @ipoptlib@ @IPOPTLIB_LIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)
