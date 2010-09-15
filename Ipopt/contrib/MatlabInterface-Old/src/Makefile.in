@@ -35,7 +35,7 @@ IPOPTLIBDIR   = @libdir@
 libdir        = @libdir@
 exec_prefix   = @exec_prefix@
 prefix        = @prefix@
-LIBS          = @ipoptlib@ @ADDLIBS@
+LIBS          = @ipoptlib@ @IPOPTLIB_LIBS@
 
 TARGET = ipopt.$(MEXSUFFIX)
 

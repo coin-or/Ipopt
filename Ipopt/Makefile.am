@@ -151,7 +151,7 @@ else
 #temporary hack to get addlibs file also if no pkg-config is available (points to build directories instead of installation directories)
 install-data-hook:
 	@$(mkdir_p) "$(addlibsdir)"
-	echo $(MUMPS_LIBS) $(HSL_LIBS) $(ADDLIBS) $(LAPACK_LIBS) $(BLAS_LIBS) > $(addlibsdir)/ipopt_addlibs_cpp.txt
+	echo $(IPOPTLIB_LIBS) > $(addlibsdir)/ipopt_addlibs_cpp.txt
 endif
 
 uninstall-hook:

@@ -104,19 +104,21 @@ AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
 #                              COIN components                              #
 #############################################################################
 
-AC_COIN_HAS_MODULE_BLAS
+AC_COIN_CHECK_LIBM(IpoptLib)
+
+AC_COIN_HAS_PACKAGE_BLAS(IpoptLib)
 if test $coin_has_blas != yes; then
   AC_MSG_ERROR([Required package BLAS not found.])
 fi
 
-AC_COIN_HAS_MODULE_LAPACK
+AC_COIN_HAS_PACKAGE_LAPACK(IpoptLib)
 if test $coin_has_lapack != yes; then
   AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
 fi
 
-AC_COIN_HAS_MODULE(ASL,   [coinasl], [required=0])
-AC_COIN_HAS_MODULE(HSL,   [coinhsl])
-AC_COIN_HAS_MODULE(Mumps, [coinmumps])
+AC_COIN_HAS_PACKAGE(ASL,   [coinasl])
+AC_COIN_HAS_PACKAGE(HSL,   [coinhsl],   [IpoptLib])
+AC_COIN_HAS_PACKAGE(Mumps, [coinmumps], [IpoptLib])
 
 #############################################################################
 #                             Stuff for examples                            #
@@ -339,10 +341,6 @@ using namespace std;])
 
 # Additional libraries and packages
 
-# We need to restore the value of LIBS before those test, otherwise libtool
-# will hick-up
-LIBS_without_ADDLIBS="$LIBS"
-
 #######
 # HSL #
 #######
@@ -394,10 +392,8 @@ AC_ARG_WITH([pardiso],
 
 if test "$use_pardiso" != "no"; then
   SAVE_LIBS="$LIBS"
-  LIBS="$use_pardiso $LIBS"
-  LIBS="$LIBS $LAPACK_LIBS $BLAS_LIBS"
-  ADDLIBS="$use_pardiso $ADDLIBS"
   PARDISO_LIB="$use_pardiso"
+  LIBS="$PARDISO_LIB $LIBS $LAPACK_LIBS $BLAS_LIBS"
 
 # ToDo put this back in
   AC_MSG_CHECKING([whether user-supplied Pardiso library \"$use_pardiso\" works])
@@ -405,23 +401,23 @@ if test "$use_pardiso" != "no"; then
               [AC_MSG_RESULT(yes)],
               [AC_MSG_ERROR([Pardiso library $use_pardiso does not seem to work])])
 
-# Test if this is the parallel version of Pardiso
   AC_DEFINE(HAVE_PARDISO,1,[Define to 1 if Pardiso is available])
   
+# Test if this is the parallel version of Pardiso
   AC_MSG_CHECKING([whether Pardiso library is the parallel version])
   AC_TRY_LINK([],[      call pardiso_exist_parallel()],
               [AC_MSG_RESULT(yes)
-               AC_DEFINE(HAVE_PARDISO_PARALLEL,1,
-                [Define to 1 if you are using the parallel version of Pardiso])],
+               AC_DEFINE(HAVE_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])],
               [AC_MSG_RESULT(no)])
   
   AC_MSG_CHECKING([whether Pardiso library is at least version 4.0])
   AC_TRY_LINK([],[      call pardiso_ipopt_newinterface()],
               [AC_MSG_RESULT(yes)
-               AC_DEFINE(HAVE_PARDISO_NEWINTERFACE,1,
-                [Define to 1 if you are using at least a 4.0 version of Pardiso])],
+               AC_DEFINE(HAVE_PARDISO_NEWINTERFACE,1,[Define to 1 if you are using at least a 4.0 version of Pardiso])],
               [AC_MSG_RESULT(no)])
   LIBS="$SAVE_LIBS"
+  IPOPTLIB_LIBS="$PARDISO_LIB $IPOPTLIB_LIBS"
+  IPOPTLIB_PCLIBS="$PARDISO_LIB $IPOPTLIB_PCLIBS"
 fi
 AC_LANG_POP([Fortran 77])
 
@@ -436,9 +432,7 @@ AC_ARG_WITH([wsmp],
 
 if test "$use_wsmp" != "no"; then
   SAVE_LIBS="$LIBS"
-  LIBS="$use_wsmp $LIBS"
-  LIBS="$LIBS $BLAS_LIBS"
-  ADDLIBS="$use_wsmp $ADDLIBS"
+  LIBS="$LIBS $use_wsmp $BLAS_LIBS"
 
   AC_LANG_PUSH([Fortran 77])
   AC_MSG_CHECKING([whether user-supplied WSMP library \"$use_wsmp\" works])
@@ -450,6 +444,8 @@ if test "$use_wsmp" != "no"; then
   AC_DEFINE(HAVE_WSMP,1,
             [Define to 1 if WSMP is available])
   LIBS="$SAVE_LIBS"
+  IPOPTLIB_LIBS="$use_wsmp $IPOPTLIB_LIBS"
+  IPOPTLIB_PCLIBS="$use_wsmp $IPOPTLIB_PCLIBS"
 fi
 
 # Check if at least one linear solver was found
@@ -620,6 +616,7 @@ AC_SUBST(MEXSUFFIX)
 ##########
 # ASTYLE #
 ##########
+
 ASTYLE=astyle
 AC_SUBST(ASTYLE)
 ASTYLEFLAGS="--mode=c --indent=spaces=2 --indent-cases --indent-namespaces --min-conditional-indent=1 --brackets=linux --brackets=break-closing --convert-tabs"
@@ -691,7 +688,7 @@ fi
 AC_LANG_PUSH(C)
 AC_COIN_CHECK_HEADER([windows.h])
 AC_COIN_CHECK_HEADER([dlfcn.h])
-AC_CHECK_LIB(dl,[dlopen],[ADDLIBS="$ADDLIBS -ldl"; LIBS="$LIBS -ldl"],[])
+AC_CHECK_LIB(dl,[dlopen],[IPOPTLIB_LIBS="$IPOPTLIB_LIBS -ldl"; IPOPTLIB_PCLIBS="$IPOPTLIB_PCLIBS -ldl"],[])
 
 case $build in
   *-cygwin* |  *-mingw*)

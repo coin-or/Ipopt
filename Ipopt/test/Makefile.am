@@ -15,13 +15,13 @@ AUTOMAKE_OPTIONS = foreign
 noinst_PROGRAMS = hs071_cpp hs071_c hs071_f
 
 nodist_hs071_cpp_SOURCES = hs071_main.cpp hs071_nlp.cpp hs071_nlp.hpp
-hs071_cpp_LDADD = ../src/Interfaces/libipopt.la $(ADDLIBS)
+hs071_cpp_LDADD = ../src/Interfaces/libipopt.la
 
 nodist_hs071_c_SOURCES = hs071_c.c
-hs071_c_LDADD = ../src/Interfaces/libipopt.la $(ADDLIBS) $(CXXLIBS)
+hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 
 nodist_hs071_f_SOURCES = hs071_f.f
-hs071_f_LDADD = ../src/Interfaces/libipopt.la $(FADDLIBS) $(CXXLIBS) $(ADDLIBS)
+hs071_f_LDADD = ../src/Interfaces/libipopt.la $(FADDLIBS) $(CXXLIBS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Cygwin
@@ -33,7 +33,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src/Common` \
 
 AM_FFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src/Interfaces`
 
-LIBS += $(BLAS_LIBS) $(LAPACK_LIBS) $(MUMPS_LIBS) $(HSL_LIBS)
+LIBS += $(IPOPTLIB_LIBS)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

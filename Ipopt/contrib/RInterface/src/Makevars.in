@@ -24,7 +24,7 @@ exec_prefix = @exec_prefix@
 prefix = @prefix@
 
 # Libraries necessary to link with IPOPT
-IPOPT_LIBS = @ipoptlib@
+IPOPT_LIBS = @ipoptlib@ @IPOPTLIB_LIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)

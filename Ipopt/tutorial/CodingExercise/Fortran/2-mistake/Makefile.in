@@ -38,18 +38,18 @@ F77 = @F77@
 FFLAGS = @FFLAGS@
 
 # additional Fortran Compiler options for linking
-F77LINKFLAGS = @RPATH_FLAGS@
+F77LINKFLAGS = @RPATH_FLAGS@ -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty
 
 # Directory with include file
 IPOPTINCDIR = @includedir@/coin
 
 # Directory with libipopt.a
-IPOPTLIBDIR = @libdir@
+IPOPTLIBDIR = @libdir@/coin
 exec_prefix = @exec_prefix@
 prefix = @prefix@
 
 # Libraries necessary to link with IPOPT
-LIBS = @ipoptlib@ @FADDLIBS@ @CXXLIBS@
+LIBS = @ipoptlib@ @IPOPTLIB_LIBS@ @CXXLIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)
