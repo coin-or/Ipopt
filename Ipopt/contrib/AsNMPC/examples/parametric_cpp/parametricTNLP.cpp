@@ -158,9 +158,9 @@ bool ParametricTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
 }
 
 bool ParametricTNLP::eval_h(Index n, const Number* x, bool new_x,
-		       Number obj_factor, Index m, const Number* lambda,
-		       bool new_lambda, Index nele_hess, Index* iRow,
-		       Index* jCol, Number* values)
+			    Number obj_factor, Index m, const Number* lambda,
+			    bool new_lambda, Index nele_hess, Index* iRow,
+			    Index* jCol, Number* values)
 {
   if (values == NULL) {
     iRow[0] = 1;
@@ -189,13 +189,13 @@ bool ParametricTNLP::eval_h(Index n, const Number* x, bool new_x,
 }
 
 bool ParametricTNLP::get_var_con_metadata(Index n,
-				      StringMetaDataMapType& var_string_md,
-				      IntegerMetaDataMapType& var_integer_md,
-                                      NumericMetaDataMapType& var_numeric_md,
-                                      Index m,
-                                      StringMetaDataMapType& con_string_md,
-                                      IntegerMetaDataMapType& con_integer_md,
-                                      NumericMetaDataMapType& con_numeric_md)
+					  StringMetaDataMapType& var_string_md,
+					  IntegerMetaDataMapType& var_integer_md,
+					  NumericMetaDataMapType& var_numeric_md,
+					  Index m,
+					  StringMetaDataMapType& con_string_md,
+					  IntegerMetaDataMapType& con_integer_md,
+					  NumericMetaDataMapType& con_numeric_md)
 {
   /* In this function, the indices for the parametric computations are set.
    * To keep track of the parameters, each parameter gets an index from 1 to n_parameters. 
@@ -225,7 +225,7 @@ bool ParametricTNLP::get_var_con_metadata(Index n,
 
   /* 3. nmpc_state_values_1: In this list of Numbers (=doubles), the perturbed
    *    values for the parameters are set.
-  */
+   */
   std::vector<Number> nmpc_state_value_1(n,0);
   nmpc_state_value_1[3] = eta_1_perturbed_value_;
   nmpc_state_value_1[4] = eta_2_perturbed_value_;
@@ -262,5 +262,34 @@ void ParametricTNLP::finalize_solution(SolverReturn status,
 	 "                Nominal                    Perturbed\n");
   for (Index k=0; k<(Index) nmpc_sol_vec.size(); ++k) {
     printf("x[%3d]   % .23f   % .23f\n", k, x[k], nmpc_sol_vec[k]);
+  }
+}
+
+void ParametricTNLP::finalize_metadata(Index n,
+				       const StringMetaDataMapType& var_string_md,
+				       const IntegerMetaDataMapType& var_integer_md,
+				       const NumericMetaDataMapType& var_numeric_md,
+				       Index m,
+				       const StringMetaDataMapType& con_string_md,
+				       const IntegerMetaDataMapType& con_integer_md,
+				       const NumericMetaDataMapType& con_numeric_md)
+{
+  // bound multipliers for lower and upper bounds 
+  printf("\nDual bound multipliers:\n");
+  NumericMetaDataMapType::const_iterator z_L_solution = var_numeric_md.find("nmpc_sol_state_1_z_L"); 
+  NumericMetaDataMapType::const_iterator z_U_solution = var_numeric_md.find("nmpc_sol_state_1_z_U"); 
+  if (z_L_solution!=var_numeric_md.end() && z_U_solution!=var_numeric_md.end()) {
+    for (Index k=0; k<n; ++k) {
+      printf("z_L[%d] = %f      z_U[%d] = %f\n", k, z_L_solution->second[k], k, z_U_solution->second[k]);
+    }
+  }
+
+  // constraint mutlipliers
+  printf("\nConstraint multipliers:\n");
+  NumericMetaDataMapType::const_iterator lambda_solution = con_numeric_md.find("nmpc_sol_state_1");
+  if (lambda_solution!=con_numeric_md.end()) {
+    for (Index k=0; k<m; ++k) {
+      printf("lambda[%d] = %f\n", k, lambda_solution->second[k]);
+    }
   }
 }
