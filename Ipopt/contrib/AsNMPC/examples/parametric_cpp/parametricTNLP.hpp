@@ -84,6 +84,17 @@ namespace Ipopt
 				   Number obj_value,
 				   const IpoptData* ip_data,
 				   IpoptCalculatedQuantities* ip_cq);
+
+    /** This method is called just before finalize solution. It returns the parametric solution of the 
+     *  dual variables and bound multipliers. */
+    virtual void finalize_metadata(Index n,
+				   const StringMetaDataMapType& var_string_md,
+				   const IntegerMetaDataMapType& var_integer_md,
+				   const NumericMetaDataMapType& var_numeric_md,
+				   Index m,
+				   const StringMetaDataMapType& con_string_md,
+				   const IntegerMetaDataMapType& con_integer_md,
+				   const NumericMetaDataMapType& con_numeric_md);
     //@}
 
   private:

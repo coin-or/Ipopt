@@ -143,7 +143,8 @@ namespace Ipopt
     bool nmpc_internal_abort, redhess_internal_abort;
     Options()->GetBoolValue("nmpc_internal_abort", nmpc_internal_abort, "");
     Options()->GetBoolValue("redhess_internal_abort", redhess_internal_abort, "");
-    
+
+    // Check for perturbation of primal dual system
     Number max_pdpert;
     Options()->GetNumericValue("nmpc_max_pdpert", max_pdpert, "");
     Number pdpert_x, pdpert_s, pdpert_c, pdpert_d;
