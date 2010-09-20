@@ -29,6 +29,8 @@
 
 #include <fstream>
 
+//#define SCALE_AUX_BOUNDS
+
 int GetProcID();
 
 //#define DBG_PRINT(s) {std::cout << GetProcID() << ":" << s << std::endl;}
@@ -194,11 +196,17 @@ void LibMeshPDEBase::reinit()
     CHKERRV(ierr);
     PetscScalar *Vals;
     VecGetArray(petsc_vec1,&Vals);
+#ifdef SCALE_AUX_BOUNDS
     std::list<Number>::iterator it = LocIneqFactList.begin();
     std::cout << "LocIneqFactList.size=" << LocIneqFactList.size() << std::endl;
     for ( unsigned int iVal=0; iVal<LocIneqFactList.size(); ++iVal, ++it) {
       Vals[iVal] = min_airflow * (*it);
     }
+#else
+    for ( unsigned int iVal=0; iVal<LocIneqFactList.size(); ++iVal) {
+      Vals[iVal] = min_airflow;
+    }
+#endif
     std::cout << "Checkpoint 1" << std::endl;
     VecRestoreArray(petsc_vec1,&Vals);
     lm_aux_constr_vec_low_bd_ = new PetscVector<Number>::PetscVector(petsc_vec1);
@@ -764,13 +772,23 @@ void LibMeshPDEBase::calc_hessians(Number /*sigma*/, libMesh::DenseVector<Number
             DenseMatrix<Number> loc_l2dphi;
             loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
             DenseVector<Number> tmp;
+#ifndef SCALE_AUX_BOUNDS
+	    Number SideFact = 0.0;
+	    for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+	      SideFact += JxW_face[qp];
+	    }
+#endif
             for (unsigned int qp=0; qp<qface.n_points(); qp++) {
               for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
                 for ( unsigned short jnode=0;jnode<=inode;++jnode) { // only lower triangle
                   loc_l2dphi(inode,jnode) = dphi_face[inode][qp]*dphi_face[jnode][qp];
                 }
               }
+#ifdef SCALE_AUX_BOUNDS
               loc_l2dphi *= 2.0*lambda_aux(i_aux_constr)*JxW_face[qp];
+#else
+              loc_l2dphi *= 2.0*lambda_aux(i_aux_constr)*JxW_face[qp]/SideFact;
+#endif
               hess_state_state_->add_matrix(loc_l2dphi,dof_indices);
             }
           }
@@ -1197,7 +1215,8 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
           loc_sol.resize(dof_indices.size());
           loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
           double GradL2=0.0;
-          for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+	  Number SideFact = 0.0;
+	  for (unsigned int qp=0; qp<qface.n_points(); qp++) {
             for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
               loc_sol(inode) = system.current_local_solution->el(dof_indices[inode]);
               for ( unsigned short jnode=0;jnode<CurElem->n_nodes();++jnode) {
@@ -1207,8 +1226,13 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
             DenseVector<Number> tmp;
             loc_l2dphi.vector_mult(tmp,loc_sol);
             GradL2 += JxW_face[qp]*loc_sol.dot(tmp);
+	    SideFact += JxW_face[qp];
           }
+#ifdef SCALE_AUX_BOUNDS
           lm_aux_constr_vec_->set(i_aux_constr,GradL2);
+#else
+          lm_aux_constr_vec_->set(i_aux_constr,GradL2/SideFact);
+#endif
           ++i_aux_constr;
         }
       }
@@ -1266,6 +1290,12 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
             loc_sol.resize(dof_indices.size());
             loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
             DenseVector<Number> tmp;
+#ifndef SCALE_AUX_BOUNDS
+	    Number SideFact = 0.0;
+	    for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+	      SideFact += JxW_face[qp];
+	    }
+#endif
             for (unsigned int qp=0; qp<qface.n_points(); qp++) {
               for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
                 loc_sol(inode) = system.current_local_solution->el(dof_indices[inode]);
@@ -1275,7 +1305,11 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
               }
               loc_l2dphi.vector_mult(tmp,loc_sol);
               for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+#ifdef SCALE_AUX_BOUNDS
                 jac_aux_state_->add(i_aux_constr,dof_indices[inode],2.0*JxW_face[qp]*tmp(inode));
+#else
+                jac_aux_state_->add(i_aux_constr,dof_indices[inode],2.0*JxW_face[qp]*tmp(inode)/SideFact);
+#endif
               }
             }
           }
